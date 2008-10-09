@@ -2,7 +2,7 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <book lang="en-US">
 <title>The Developer's Guide</title>
-<subtitle>Version 3.5.0</subtitle>
+<subtitle>Version 3.5.1</subtitle>
 <bookinfo>
 <copyright>
 <year>2008</year>
@@ -17,7 +17,7 @@
 <para/>
 <para>SIMPLY RICH</para>
 <para>ZKTM</para>
-<para>September 2008</para>
+<para>October 2008</para>
 <para>Potix Corporation</para>
 <para>Revision 223</para>
 <para/>
@@ -2987,7 +2987,7 @@
 <para>If you want to look into the component of an included page, macro components are usually a better option. Refer to the Macro Components section in the ZK User Interface Markup Language chapter.</para></sect3></sect2><sect2><title>The style Component</title>
 <para>The style component is used to specify CSS styles in a ZUML page. The simplest format is as follows.</para>
 <programlisting>&lt;style&gt;<inlinegraphic fileref="images/100000000000002900000018A07459D1.png" align="right"/>&#13;.blue {&#13;color: white; background-color: blue;&#13;}&#13;&lt;/style&gt;&#13;&lt;button label="OK" sclass="blue"/&gt;&#13;</programlisting>
-<para>Tip: To configure a style sheet for the whole application, specify theme-uri in zk.xml, refer to Appendix B in the Developer's Reference for details. To configure a style sheet for a language, use the language addon, refer to the Component Development Guide.</para>
+<para>Tip: To configure a style sheet for the whole application, specify theme-uri in zk.xml, refer to the Themes section in the Internationalization chpater, or Appendix B in the Developer's Reference for details. To configure a style sheet for a language, use the language addon, refer to the Component Development Guide.</para>
 <para>Sometimes it is better to store all CSS definitions in an independent file, say my.css. Then, we could reference it by use of the style component as follows.</para>
 <programlisting>&lt;style src="/my.css"/&gt;&#13;</programlisting>
 <para>The above statement actually sends the following HTML tags<footnote>
@@ -3872,9 +3872,288 @@
 </footnote>. Thus, you could add listener either to the radio group or to each radio button.</para>
 <programlisting>&lt;radiogroup onCheck="fruit.value = self.selectedItem.label"&gt;&#13;    &lt;radio label="Apple"/&gt;    &#13;    &lt;radio label="Orange"/&gt;    &#13;&lt;/radiogroup&gt;&#13;You have selected : &lt;label id="fruit"/&gt;&#13;</programlisting>
 <para>The above sample has the same effect as follows.</para>
-<programlisting>&lt;radiogroup&gt;&#13;    &lt;radio label="Apple" onCheck="fruit.value = self.label"/&gt;    &#13;    &lt;radio label="Orange" onCheck="fruit.value = self.label"/&gt;    &#13;&lt;/radiogroup&gt;&#13;You have selected : &lt;label id="fruit"/&gt;&#13;</programlisting></sect3></sect2></sect1></chapter>
+<programlisting>&lt;radiogroup&gt;&#13;    &lt;radio label="Apple" onCheck="fruit.value = self.label"/&gt;    &#13;    &lt;radio label="Orange" onCheck="fruit.value = self.label"/&gt;    &#13;&lt;/radiogroup&gt;&#13;You have selected : &lt;label id="fruit"/&gt;&#13;</programlisting></sect3></sect2></sect1><sect1><title/></sect1></chapter>
 <chapter>
-<title>8. ZUML with the XHTML Component Set</title>
+<title>8. Data Binding</title><sect1><title>Basic Concept</title>
+<para>Data binding is a mechanism that automates the data-copy plumbing codes between UI components and the data source. Application developers only have to tell data binding manager about the associations between UI components and the data source. Then, data -binding manager will do the loading (load data from the data source to UI components)and saving (save data from UI component into the data source) job automatically. </para></sect1><sect1><title>Adding a Data Source</title>
+<para>First of all, we have to define a data source as a data bean. In this example, we use <code>Person</code> class as an example that holds the information of a person, say, first name, and last name.</para>
+<programlisting>Person.java&#13;&#13;public class Person {&#13;private String _firstName="";&#13;private String _lastName="";&#13;&#13;//getter and setters&#13;public void setFirstName(String firstName) {&#13;_firstName = firstName;&#13;}&#13;public String getFirstName() {&#13;return _firstName;&#13;}&#13;public void setLastName(String lastName) {&#13;_lastName = lastName;&#13;}&#13;public String getLastName() {&#13;return _lastName;&#13;}&#13;public void setFullName(String f) {&#13;//do nothing.&#13;}&#13;public String getFullName() {&#13;return _firstName + " " + _lastName;&#13;}&#13;}&#13;</programlisting>
+<para>
+<code/>
+</para>
+<para>
+<code>Then, declare a data source in the page as follows,</code>
+</para>
+<programlisting>&lt;zscript&gt;&#13;//prepare the example person object&#13;Person person = new Person();&#13;person.setFirstName("Tom");&#13;person.setLastName("Hanks");&#13;&lt;/zscript&gt;&#13;</programlisting></sect1><sect1><title>Activates Data Binding Manager</title>
+<para>Activates Data Binding Manager by defining the page Initializer at the top of the page.</para>
+<programlisting>&lt;?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?&gt;&#13;</programlisting>
+<para>This initiator class do following things:</para>
+<orderedlist>
+<listitem>
+<para>Creates an <code>AnnotateDataBinder</code> instance.</para>
+</listitem>
+<listitem>
+<para>Sets the <code>AnnotateDataBinder</code> instance as a variable with the name "binder" stored in the component as specified in <code>arg0</code> "component-path".(if arg0 is not specified, use <code>Page</code> instead.)</para>
+</listitem>
+<listitem>
+<para>Calls <code>DataBinder.loadAll()</code> to initiate all UI components from the associated data source.</para>
+</listitem>
+</orderedlist></sect1><sect1><title>Associate UI Components with Data Source</title>
+<para>After adding source data, activating data-binding manager, you have to define required UI objects, and associate them with the data source. Use ZUML annotation expression to tell data-binding manager the relationship between the data source and UI components. Its usage is very straightforward, simply declare the annotation into the component's attribute directly.</para>
+<para>
+<code>&lt;component-name </code>
+<code>attribute-name="@{bean-name.attribute-name}</code>
+<code>"</code>
+<code>/&gt;</code>
+</para>
+<itemizedlist>
+<listitem>
+<para>
+<code>component-name</code> represents a UI component</para>
+</listitem>
+<listitem>
+<para>
+<code>attribute-name</code> represents an attribute of UI component or the data source</para>
+</listitem>
+<listitem>
+<para>
+<code>bean-name </code>represents a data source</para>
+</listitem>
+</itemizedlist>
+<para>
+<code>We use </code>
+<code>Grid</code>
+<code> as an example, and associate it with the data source, a </code>
+<code>Person</code>
+<code> instance. </code>
+<code>In this example, data-binding manager will automates the synchronization between UI components and the data source automatically.</code>
+</para>
+<programlisting>&lt;?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?&gt;&#13;&#13;&lt;window&gt;&#13;&lt;zscript&gt;&#13;//prepare the example person object&#13;Person person = new Person();&#13;person.setFirstName("George");&#13;person.setLastName("Bush");&#13;&lt;/zscript&gt;&#13;&#13;&lt;grid width="400px"&gt;&#13;&lt;rows&gt;&#13;&lt;row&gt; First Name: &lt;textbox value="@{person.firstName}"/&gt;&lt;/row&gt;&#13;&lt;row&gt; Last Name: &lt;textbox value="@{person.lastName}"/&gt;&lt;/row&gt;&#13;&lt;row&gt; Full Name: &lt;label value="@{person.fullName}"/&gt;&lt;/row&gt;&#13;&lt;/rows&gt;&#13;&lt;/grid&gt;&#13;&lt;/window&gt;&#13;</programlisting></sect1><sect1><title>When to Load Data from Data Source to UI</title>
+<para>
+<code>Data Binding Manager is triggered by events, or users' activities. Thus,</code>
+<code> </code>
+<code>you must specify events in the ZUML annotation expression with </code>
+<code>load-when</code>
+<code> tag expression to tell Data Binding Manager when to load data from data source into the component's attribute. </code>
+</para>
+<para>
+<code>&lt;component-name attribute-name="@{bean-name.attribute-name, </code>
+</para>
+<para>
+<code/>
+<code>load-when='component-id.event-name'}</code>
+<code>"</code>
+<code>/&gt;</code>
+</para>
+<itemizedlist>
+<listitem>
+<para>
+<code>component-id</code> represents the ID of a UI component</para>
+</listitem>
+<listitem>
+<para>
+<code>event-name</code>
+<code> represents the event name</code>
+</para>
+</listitem>
+</itemizedlist>
+<para>
+<code>Multiple definition is allowed and would be called one by one. </code>
+</para>
+<para>
+<code>In the following example, we demonstrate an example that the fullname of a Person will be updated automatically once his/her first name or last name has been modified. </code>
+</para>
+<para>
+<code>Data Binding Manager will re-load </code>
+<code>value</code>
+<code> of </code>
+<code>Label </code>
+<code>whose id is</code>
+<code> </code>
+<code>fullName,</code>
+<code> from </code>
+<code>person.fullName</code>
+<code> when the either the value of </code>
+<code>Textbox</code>
+<code> whose id is </code>
+<code>firstName</code>
+<code> or </code>
+<code>lastName</code>
+<code> has been changed, in other words, </code>
+<code>onChange</code>
+<code> event is triggered. </code>
+</para>
+<programlisting>&lt;?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?&gt;&#13;&#13;&lt;window&gt;&#13;&lt;zscript&gt;&#13;//prepare the example person object&#13;Person person = new Person();&#13;person.setFirstName("George");&#13;person.setLastName("Bush");&#13;&lt;/zscript&gt;&#13;&#13;&lt;grid width="400px"&gt;&#13;&lt;rows&gt;&#13;&lt;row&gt; First Name: &#13;&lt;textbox id="firstName" value="@{person.firstName}"/&gt;&#13;        &lt;/row&gt;        &#13;&lt;row&gt; Last Name: &#13;&lt;textbox id="lastName" value="@{person.lastName}"/&gt;&#13;        &lt;/row&gt;        &#13;&lt;row&gt; Full Name: &#13;&lt;label id="fullName" value="@{person.fullName,&#13;load-when='firstName.onChange,lastName.onChange'}"/&gt;&#13;        &lt;/row&gt;        &#13;&lt;/rows&gt;&#13;&lt;/grid&gt;&#13;&#13;&lt;/window&gt;&#13;</programlisting></sect1><sect1><title>When to Save Data from UI Components to the Data Source</title>
+<para>
+<code>Data Binding Manager is triggered by events, or users' activities. Thus, you must</code>
+<code> specify events in the ZUML annotation expression with </code>
+<code>save-when</code>
+<code> tag expression to tell Data Binding Manager when to save the attribute of the component into the data source. </code>
+</para>
+<para>
+<code>&lt;component-name attribute-name="@{bean-name.attribute-name,</code>
+<code>load-when='component-id.event-name</code>
+<code>'</code>
+<code>}</code>
+<code>"/&gt;</code>
+</para>
+<para>
+<code/>
+</para>
+<itemizedlist>
+<listitem>
+<para>
+<code>component-id</code> represents the ID of a UI component</para>
+</listitem>
+<listitem>
+<para>
+<code>event-name</code>
+<code> represents the event name</code>
+</para>
+</listitem>
+</itemizedlist>
+<para>
+<code>Multiple definition is allowed and would be called one by one. </code>
+</para>
+<para>
+<code>In the following example, Data Binding Manager will save the attribute "</code>
+<code>value</code>
+<code>" of </code>
+<code>Textbox</code>
+<code> "</code>
+<code>firstName</code>
+<code>" into "</code>
+<code>person.firstName</code>
+<code>" when the </code>
+<code>Textbox</code>
+<code> itself fires "</code>
+<code>onChange</code>
+<code>" event. </code>
+</para>
+<programlisting>&lt;?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"?&gt;&#13;&#13;&lt;window width="500px"&gt;&#13;&lt;zscript&gt;&#13;    Person person = new Person();    &#13;    person.setFirstName("Bill");    &#13;    person.setLastName("Gates");    &#13;&lt;/zscript&gt;&#13;&#13;&lt;listbox&gt;&#13;    &lt;listhead&gt;    &#13;&lt;listheader label="First Name" width="100px"/&gt;&#13;&lt;listheader label="Last Name" width="100px"/&gt;&#13;&lt;listheader label="Full Name" width="100px"/&gt;&#13;&lt;/listhead&gt;&#13;&lt;listitem&gt;&#13;&lt;listcell&gt;&#13;&lt;textbox id="firstName" value="@{person.firstName, save-when='self.onChange'}"/&gt;&#13;&lt;/listcell&gt;&#13;&lt;listcell&gt;&#13;&lt;textbox id="lastName" value="@{person.lastName, save-when='self.onChange'}"/&gt;&#13;&lt;/listcell&gt;&#13;&lt;listcell label="@{person.fullName}"/&gt;&#13;&lt;/listitem&gt;&#13;&lt;/listbox&gt;&#13;&lt;/window&gt;&#13;</programlisting></sect1><sect1><title>Associate the Same Data Source with Multiple UI Components</title>
+<para>
+<code>One data source could be associated with multiple UI components. Once the data source had been modified, those associated UI components will be updated automatically by Data Binding Manager. </code>
+</para>
+<para>
+<code>In the following example. we use ZUML annotation expression to associate a data source, a </code>
+<code>Person</code>
+<code> instance, "</code>
+<code>selected</code>
+<code>" with multiple UI components, including </code>
+<code>Listbox</code>
+<code>, and </code>
+<code>Grid</code>
+<code>. Once the user selects an item in the </code>
+<code>Listbox</code>
+<code>, the </code>
+<code>Grid</code>
+<code> will display information of the selected person accordingly.</code>
+</para>
+<programlisting>&lt;?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"?&gt;&#13;&#13;&lt;window width="500px"&gt;&#13;&lt;zscript&gt;&#13;    //prepare the example person     &#13;Person selected = new Person();&#13;&lt;/zscript&gt;&#13;&#13;&lt;listbox rows="4" selectedItem="@{selected}"&gt;&#13;&lt;listhead&gt;&#13;&lt;listheader label="First Name" width="100px"/&gt;&#13;        &lt;listheader label="Last Name" width="100px"/&gt;        &#13;&lt;listheader label="Full Name" width="100px"/&gt;&#13;&lt;/listhead&gt;&#13;&lt;listitem&gt;&#13;&lt;listcell label="George"/&gt;&#13;&lt;listcell label="Bush"/&gt;&#13;&lt;/listitem&gt;&#13;&lt;listitem&gt;&#13;&lt;listcell label="Bill"/&gt;&#13;&lt;listcell label="Gates"/&gt;&#13;&lt;/listitem&gt;&#13;&lt;/listbox&gt;&#13;&lt;!-- show the detail of the selected person --&gt;&#13;&lt;grid&gt;&#13;&lt;rows&gt;&#13;&lt;row&gt;First Name: &lt;textbox value="@{selected.firstName}"/&gt;&lt;/row&gt;&#13;&lt;row&gt;Last Name: &lt;textbox value="@{selected.lastName}"/&gt;&lt;/row&gt;&#13;&lt;/rows&gt;&#13;&lt;/grid&gt;&#13;&lt;/window&gt;&#13;</programlisting></sect1><sect1><title>Associate UI Components with a Collection</title>
+<para>
+<code>It can be very useful to associate a collection with a UI components, and Data Binding Manager will convert the collection into UI components accordingly. </code>
+</para>
+<orderedlist>
+<listitem>
+<para>Prepare the data source of Collection</para>
+</listitem>
+<listitem>
+<para>Associate the collection with <code>model</code> attribute of those supported UI components, ex. <code>Listbox</code>, <code>Grid</code>, and <code>Tree</code>.</para>
+</listitem>
+<listitem>
+<para>Define a template of UI component</para>
+<orderedlist>
+<listitem>
+<para>Define a variable, whatever you want, to represent each instance in the Collection with <code>sel</code>
+<code>f</code> attribute.</para>
+<para>&lt;component-name self="@{each='variable-name'}"/&gt;</para>
+<para>The variable-name could only be seen by component-name and its child components.</para>
+</listitem>
+<listitem>
+<para>Associate UI components with the variable</para>
+<para>&lt;component-name attribute-name="@{variable-name.attribute-name}"/&gt;</para>
+</listitem>
+</orderedlist>
+</listitem>
+</orderedlist>
+<para/>
+<para>
+<code>In the following example, we demonstrate how to associate a collection with </code>
+<code>Listbox</code>
+<code> to display a list of persons. </code>
+</para>
+<programlisting>&lt;?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"?&gt;&#13;&#13;&lt;window width="500px"&gt;&#13;&lt;zscript&gt;&#13;    //prepare the example persons List    &#13;int count = 30;&#13;List persons = new ArrayList();&#13;for(int j= 0; j &amp;lt; count; ++j) {&#13;Person personx = new Person();&#13;     personx.setFirstName("Tom"+j);    &#13;personx.setLastName("Hanks"+j); &#13;persons.add(personx);&#13;}&#13;&lt;/zscript&gt;&#13;&#13;&lt;listbox rows="4" model="@{persons}"&gt;&#13;&lt;listhead&gt;&#13;&lt;listheader label="First Name" width="100px"/&gt;&#13;&lt;listheader label="Last Name" width="100px"/&gt;&#13;&lt;listheader label="Full Name" width="100px"/&gt;&#13;&lt;/listhead&gt;&#13;&lt;listitem self="@{each='person'}"&gt;&#13;&lt;listcell&gt;&#13;    &lt;textbox value="@{person.firstName}"/&gt;    &#13;&lt;/listcell&gt;&#13;&lt;listcell&gt;&#13;    &lt;textbox value="@{person.lastName}"/&gt;    &#13;&lt;/listcell&gt;&#13;&lt;listcell label="@{person.fullName}"/&gt;&#13;&lt;/listitem&gt;&#13;&lt;/listbox&gt;&#13;&lt;/window&gt;&#13;</programlisting></sect1><sect1><title>Customization of Conversion between the Data Source and UI Components</title>
+<para>If you want to do the conversion between the Data Source and UI components by yourself, you could specify the class name of the converter in the <code>converter</code> tag expression to tell Data Binding Manager to use your own way to do the conversion between the data source and UI components. </para>
+<para>
+<code>&lt;component-name attribute-name="@{bean-name.attribute- name,</code>
+<code>converter='class-name'</code>
+<code>}"/&gt;</code>
+</para>
+<para>
+<code/>
+</para>
+<para>Multiple definition is NOT allowed and the later defined would override the previous defined one. </para>
+<orderedlist>
+<listitem>
+<para>Define a class that implements <code>TypeConverter </code>
+<code>with the following methods</code>
+</para>
+</listitem>
+</orderedlist>
+<itemizedlist>
+<listitem>
+<para>
+<code>coerceToUI</code>
+<code>, converts an value object into UI component attribute type.</code>
+</para>
+</listitem>
+<listitem>
+<para>
+<code>coerceToBean</code>
+<code>, c</code>
+<code>onverts an value object to bean property type.</code>
+<code> </code>
+</para>
+</listitem>
+</itemizedlist>
+<orderedlist>
+<listitem>
+<para>Specify the class name of converter into the <code>converter</code> tag expression</para>
+<para>In the following example, we demonstrate you how to convert a <code>boolean</code> value into different images instead of pure text.</para>
+<para>First of all, you have to define a class that implements <code>TypeConverter. myTypeConverter converts the boolean into different images accordingly. </code>
+</para>
+<para>
+<code/>
+</para>
+</listitem>
+</orderedlist>
+<programlisting>import org.zkoss.zkplus.databind.TypeConverter;&#13;import org.zkoss.zul.Listcell;&#13;&#13;public class myTypeConverter implements TypeConverter {&#13;public Object coerceToBean(java.lang.Object val, org.zkoss.zk.ui.Component comp) {&#13;return null;&#13;}&#13;&#13;public Object coerceToUi(java.lang.Object val, org.zkoss.zk.ui.Component comp) &#13;{&#13;boolean married = (Boolean) val;&#13;if (married)&#13;((Listcell) comp).setImage("/img/true.png");&#13;else&#13;((Listcell) comp).setImage("/img/false.png");&#13;return null;&#13;}&#13;}&#13;</programlisting>
+<para>Specify <code>myTypeConverter</code> with the <code>con</code>
+<code>vert</code> tag expression to be associated with the <code>married</code> attribute of <code>Person instance.</code> </para>
+<programlisting>&lt;?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"?&gt;&#13;&#13;&lt;window width="500px"&gt;&#13;&lt;zscript&gt;&lt;![CDATA[&#13;    //prepare the example persons List    &#13;    List persons = new ArrayList();    &#13;    persons.add(new Person("Tom", "Yeh", true));    &#13;    persons.add(new Person("Henri", "Chen", true));    &#13;    persons.add(new Person("Jumper", "Chen", false));    &#13;    persons.add(new Person("Robbie", "Cheng", false));    &#13;    ]]&gt;    &#13;&lt;/zscript&gt;&#13;&#13;    &lt;listbox rows="4" model="@{persons}"&gt;    &#13;        &lt;listhead&gt;        &#13;            &lt;listheader label="First Name" width="100px" /&gt;            &#13;            &lt;listheader label="Last Name" width="100px" /&gt;            &#13;            &lt;listheader label="Married" width="100px" /&gt;            &#13;        &lt;/listhead&gt;        &#13;        &lt;listitem self="@{each=person}"&gt;        &#13;        &lt;listcell label="@{person.firstName}"/&gt;        &#13;        &lt;listcell label="@{person.lastName}"/&gt;        &#13;&lt;listcell label="@{person.married, converter='myTypeConverter'}"/&gt;&#13;        &lt;/listitem&gt;        &#13;    &lt;/listbox&gt;    &#13;&lt;/window&gt;&#13;</programlisting>
+<para/></sect1><sect1><title>Define the Access Privilege of Data Binding Manager</title>
+<para>For better control of data-binding manager, you can set the access mode of the attribute-name of the component-name to be <code>both</code>(load/save), <code>load</code>(load Only), <code>save</code>(save Only), or <code>none</code>(neither) .</para>
+<para>
+<code/>
+<code>&lt;component-name attribute-name="@{bean-name.attribute-</code>
+<code>name,</code>
+<code>access='type-name'</code>
+<code>}"/&gt;</code>
+</para>
+<itemizedlist>
+<listitem>
+<para>
+<code>type-name</code> <code>represents a certain kind of access mode</code>
+</para>
+</listitem>
+</itemizedlist>
+<para>Multiple definition is NOT allowed and the later defined would override the previous defined one.  </para>
+<para>In the following example, if the value of <code>Textbox</code>, "<code>firstName</code>", and "<code>lastName</code>" has been modified, the value of <code>Listcell</code>, "<code>fullname</code>", will remain unchanged because Data Binding manager is informed not to update its value.</para>
+<programlisting>&lt;?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"?&gt;&#13;&#13;&lt;window width="500px"&gt;&#13;&lt;zscript&gt;&#13;    Person person = new Person();    &#13;    person.setFirstName("Bill");    &#13;    person.setLastName("Gates");    &#13;&lt;/zscript&gt;&#13;&#13;&lt;listbox&gt;&#13;    &lt;listhead&gt;    &#13;&lt;listheader label="First Name" width="100px"/&gt;&#13;&lt;listheader label="Last Name" width="100px"/&gt;&#13;&lt;listheader label="Full Name" width="100px"/&gt;&#13;&lt;/listhead&gt;&#13;&lt;listitem&gt;&#13;&lt;listcell&gt;&#13;    &lt;textbox id="firstName" value="@{person.firstName}"/&gt;    &#13;&lt;/listcell&gt;&#13;&lt;listcell&gt;&#13;    &lt;textbox id="lastName" value="@{person.lastName}"/&gt;    &#13;&lt;/listcell&gt;&#13;&lt;listcell id="fullName" label="@{person.fullName, access='none'}"/&gt;&#13;&lt;/listitem&gt;&#13;&lt;/listbox&gt;&#13;&lt;/window&gt;&#13;</programlisting>
+<para/>
+<para/></sect1></chapter>
+<chapter>
+<title>9. ZUML with the XHTML Component Set</title>
 <para>This chapter describes the set of XHTML components.</para><sect1><title>The Goal</title>
 <para>The introduction of the XHTML component set is aimed to make it easy to port existent Web pages to ZUML. The ultima goal is that all valid XHTML pages are valid ZUML pages. All Servlets handling the submitted form work as usual.</para>
 <para>Therefore, existent XHTML pages could share the most powerful advantage that ZUML pages have: rich user interfaces. The richness could be achieved in two ways. First, you could embed Java codes to manipulate XHTML components dynamically. Second, you could add off-of-shelf XUL components into existent pages, just like you add XHTML into XUL pages.</para>
@@ -4019,7 +4298,7 @@
 <para>Notice that, if you want to filter the output from include and/or forward, remember to specify the dispatcher element with REQUEST and/or INCLUDE. Consult the Java Servlet Specification for details. For example,</para>
 <programlisting>&lt;filter-mapping&gt;&lt;filter-name&gt;zkFilter&lt;/filter-name&gt;&lt;url-pattern&gt;/my/dyna/*&lt;/url-pattern&gt;        &#13;    &lt;dispatcher&gt;REQUEST&lt;/dispatcher&gt;    &#13;    &lt;dispatcher&gt;INCLUDE&lt;/dispatcher&gt;    &#13;    &lt;dispatcher&gt;FORWARD&lt;/dispatcher&gt;    &#13;    &lt;dispatcher&gt;ERROR&lt;/dispatcher&gt;&lt;/filter-mapping&gt;    &#13;</programlisting></sect2></sect1></chapter>
 <chapter>
-<title>9. Macro Components</title>
+<title>10. Macro Components</title>
 <para>There are two ways to implement a component. One is to implement a class deriving from the org.zkoss.zk.ui.AbstractComponent class. The other is to implement it by use of other components.</para>
 <para>The former one is more flexible. It requires deeper understanding of ZK, so it is usually done by component developers. It is discussed in the Component Development Guide.</para>
 <para>On the other hand, implementing a new component by use of other components is straightforward. It works like composition, macro expansion, or inline replacement. For sake of convenience, we call this kind of components as macro components., while the others are called primitive components.</para>
@@ -4159,7 +4438,7 @@
 <programlisting>Username ua = new Username();&#13;ua.setWho("Joe");&#13;ua.setParent(wnd);&#13;ua.afterCompose();&#13;</programlisting>
 <para/></sect3></sect2></sect1></chapter>
 <chapter>
-<title>10. Advanced Features</title>
+<title>11. Advanced Features</title>
 <para>This chapter describes the advance topics about components and pages.</para><sect1><title>Identify Pages</title>
 <para>All pages in the same desktop could be accessed in an event listener. For the current page of a component, you could use the getPage method in the org.zkoss.zk.ui.Component interface.</para>
 <para>To get a reference to another page, you first have to assign an identifier to the page being looked for.</para>
@@ -4501,7 +4780,7 @@
 <para>&lt;/init-param&gt;</para>
 <programlisting>&lt;/filter&gt;&#13;</programlisting></sect2></sect1></chapter>
 <chapter>
-<title>11. Performance Tips</title>
+<title>12. Performance Tips</title>
 <para>This chapter describes the tips to make your ZK application running faster.</para><sect1><title>Use Compiled Java Codes</title>
 <para>It is convenient to use zscript in ZUML, but it comes with a price: slower performance. The degradation varies from one application from another. For large website, it is suggested not to use zscript if possible.</para><sect2><title>Use the deferred Attribute</title>
 <para>If you still need to write zscript codes, you can specify the deferred attribute to defer the evaluation of zscript codes as follows.</para>
@@ -4618,7 +4897,7 @@
 <para>is equivalent to the following code snippet, if a ZUL page is used,</para>
 <programlisting>&lt;!-- a ZUL page --&gt;&#13;&lt;n:table xmlns:n="http://www.zkoss.org/2005/zk/native"&gt;&#13;    &lt;n:tr&gt;    &#13;        &lt;n:td&gt;Name&lt;/n:td&gt;        &#13;            &lt;n:td&gt;&lt;textbox/&gt;&lt;/n:td&gt;            &#13;    &lt;/n:tr&gt;    &#13;&lt;/n:table&gt;&#13;</programlisting></sect1></chapter>
 <chapter>
-<title>12. Other Devices and Output Formats</title>
+<title>13. Other Devices and Output Formats</title>
 <para>In addition to Ajax browsers, mobile devices and XML output are also supported by ZK. This chapter describes them briefly. For detailed information, you have to reference the corresponding documents.</para><sect1><title>ZK Mobile</title>
 <para>The ZK Mobile Computing is the ZK extension that enables reach of ZK applications to mobile devices with little programming. </para>
 <para>The ZK Mobile Computing is composed of two parts. In the mobile device side it is the ZK Mobile, a JavaMe Midlet thin client, that interacts with the ZK server and works as the client side user interface. In the server side it is a set of MIL (Mobile Interactive Language) components that you can control and manipulate when end users trigger actions from the mobile device. </para>
@@ -4682,7 +4961,7 @@
 <programlisting>&lt;html&gt;&#13;&lt;head&gt;&#13;&lt;META http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;&#13;&lt;title&gt;Book Info&lt;/title&gt;&#13;&lt;/head&gt;&#13;&lt;body&gt;&#13;&lt;h1&gt;Book Info&lt;/h1&gt;&#13;&lt;dl&gt;&#13;&#13;&lt;dt&gt;Title:&lt;/dt&gt;&#13;&lt;dd&gt;&#13;ZK - Ajax without the JavaScript Framework&lt;/dd&gt;&#13;&lt;dt&gt;Who is this book for:&lt;/dt&gt;&#13;&lt;dd&gt;&#13;Web application designers and programmers who wish to implement rich Ajax web applications in the simplest way.&lt;/dd&gt;&#13;&lt;dt&gt;Authors&lt;/dt&gt;&#13;&lt;dd&gt;&#13;Henri Chen and Robbie Cheng&lt;/dd&gt;&#13;&lt;/dl&gt;&#13;&lt;/body&gt;&#13;&lt;/html&gt;&#13;</programlisting>
 <para/></sect3></sect2></sect1></chapter>
 <chapter>
-<title>13. Internationalization</title>
+<title>14. Internationalization</title>
 <para>This chapter describes how to make ZK applications flexible enough to run in any locale.</para>
 <para>First of all, ZK enables developers to embed Java codes and EL expressions any way you like. You could use any Internationalization method you want, such as java.util.ResourceBundle.</para>
 <para>However, ZK has some built-in support of internationalization that you might find them useful.</para><sect1><title>Locale</title>
@@ -4854,22 +5133,119 @@
 </listitem>
 </itemizedlist></sect2></sect1><sect1><title>Messages</title>
 <para>Messages are stored in properties files which are located at the /metainfo/mesg directory of the classpath. Each module is associated with an unique name. In addition, the Locale is appended to the property file, too. For example, the message file of zk.jar for Germany messages is msgzk_de_DN.properties or msgzk_de.properties. Currently, zk.jar is only shipped with English and Chinese versions. You could add your own property files for different Locales by placing them at the /metainfo/mesg directory of the classpath.</para></sect1><sect1><title>Themes</title>
-<para>The XUL component set provides several sets of style sheet files for each browser type: smaller, larger and normal. By default, the normal set is used. You can configure WEB-INF/zk.xml to choose a different theme.</para><sect2><title>Use the Theme with Smaller Fonts</title>
+<para>The XUL component set provides several sets of style sheet files for each browser type: smaller, larger and normal. By default, the normal set is used. You can configure WEB-INF/zk.xml to choose a different theme.</para><sect2><title>Change Font Size and/or Family</title>
+<para>There are two ways to change font size and family: use the library properties and use the built-in CSS files.</para><sect3><title>Use the Library Properties</title>
+<para>The built-in them uses the following variables to control the font sizes.</para>
+<informaltable frame="all">
+<tgroup cols="3">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Default</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>org.zkoss.zul.theme.fontSizeM</para>
+</entry>
+<entry>
+<para>12px</para>
+</entry>
+<entry>
+<para>The default font size. It is used in the most components.</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>org.zkoss.zul.theme.fontSizeS</para>
+</entry>
+<entry>
+<para>11px</para>
+</entry>
+<entry>
+<para>The smaller font size used in the component that requires small fonts, such as toolbar.</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>org.zkoss.zul.theme.fontSizeXS</para>
+</entry>
+<entry>
+<para>10px</para>
+</entry>
+<entry>
+<para>The extremely small font size; rarely used.</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>org.zkoss.zul.theme.fontSizeMS</para>
+</entry>
+<entry>
+<para>11px</para>
+</entry>
+<entry>
+<para>The font size used in the menu items.</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para>To change the default value, you can specify the library properties in WEB-INF/zk.xml as follows.</para>
+<programlisting>                                    &lt;library-property&gt;&lt;name&gt;org.zkoss.zul.theme.fontSizeM&lt;/name&gt;&lt;value&gt;12px&lt;/value&gt;&lt;/library-property&gt;&lt;library-property&gt;&lt;name&gt;org.zkoss.zul.theme.fontSizeS&lt;/name&gt;&lt;value&gt;10px&lt;/value&gt;&lt;/library-property&gt;&lt;library-property&gt;&lt;name&gt;org.zkoss.zul.theme.fontSizeXS&lt;/name&gt;&lt;value&gt;9px&lt;/value&gt;&lt;/library-property&gt;                                    &#13;</programlisting>
+<para>The following built-in variables controls the font family is as follows.</para>
+<informaltable frame="all">
+<tgroup cols="2">
+<thead>
+<row>
+<entry>
+<para>Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+</row>
+</thead><tbody>
+<row>
+<entry>
+<para>org.zkoss.zul.theme.fontSizeT</para>
+</entry>
+<entry>
+<para>Default: Verdana, Tahoma, Arial, Helvetica, sans-serif</para>
+<para>The font family used for titles and captions.</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>org.zkoss.zul.theme.fontSizeC</para>
+</entry>
+<entry>
+<para>Default: Verdana, Tahoma, Arial, serif</para>
+<para>The font family used for conntents.</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title>Use the Built-in Theme with Smaller Fonts</title>
 <para>The theme with smaller fonts is called normsm*.css.dsp. You can configure WEB-INF/zk.xml to use it as follows.</para>
-<programlisting>&lt;desktop-config&gt;&lt;disable-theme-uri&gt;~./zul/css/norm*.css.dsp*&lt;/disable-theme-uri&gt;&lt;theme-uri&gt;~./zul/css/normsm*.css.dsp*&lt;/theme-uri&gt;&lt;/desktop-config&gt;        &#13;</programlisting>
-<para>Refer to the Developer's Reference for more about how to configure with WEB-INF/zk.xml.</para></sect2><sect2><title>Use the Theme with Larger Fonts</title>
+<programlisting>        &lt;desktop-config&gt;&lt;disable-theme-uri&gt;~./zul/css/norm*.css.dsp*&lt;/disable-theme-uri&gt;&lt;theme-uri&gt;~./zul/css/normsm*.css.dsp*&lt;/theme-uri&gt;&lt;/desktop-config&gt;        &#13;</programlisting>
+<para>Refer to the Developer's Reference for more about how to configure with WEB-INF/zk.xml.</para></sect3><sect3><title>Use the Built-in Theme with Larger Fonts</title>
 <para>The theme with smaller fonts is called normlg*.css.dsp. You can configure WEB-INF/zk.xml to use it as follows.</para>
-<programlisting>&lt;desktop-config&gt;&lt;disable-theme-uri&gt;~./zul/css/norm*.css.dsp*&lt;/disable-theme-uri&gt;&lt;theme-uri&gt;~./zul/css/normlg*.css.dsp*&lt;/theme-uri&gt;&lt;/desktop-config&gt;        &#13;</programlisting></sect2><sect2><title>Use the Theme that Depends on Locale</title>
+<programlisting>        &lt;desktop-config&gt;&lt;disable-theme-uri&gt;~./zul/css/norm*.css.dsp*&lt;/disable-theme-uri&gt;&lt;theme-uri&gt;~./zul/css/normlg*.css.dsp*&lt;/theme-uri&gt;&lt;/desktop-config&gt;        &#13;</programlisting></sect3><sect3><title>Use the Theme that Depends on Locale</title>
 <para>It is common to use the larger font only for Chinese locales. You can configure WEB-INF/zk.xml to use it as follows.</para>
-<programlisting>&lt;desktop-config&gt;&lt;disable-theme-uri&gt;~./zul/css/norm*.css.dsp*&lt;/disable-theme-uri&gt;&lt;theme-uri&gt;~./zul/css/norm**.css.dsp&lt;/theme-uri&gt;&lt;/desktop-config&gt;        &#13;</programlisting></sect2><sect2><title>Use Your Own Theme</title>
+<programlisting>        &lt;desktop-config&gt;&lt;disable-theme-uri&gt;~./zul/css/norm*.css.dsp*&lt;/disable-theme-uri&gt;&lt;theme-uri&gt;~./zul/css/norm**.css.dsp&lt;/theme-uri&gt;&lt;/desktop-config&gt;        &#13;</programlisting></sect3></sect2><sect2><title>Use Your Own Theme</title>
 <para>It is easy to customize the look and feel of the ZK XUL components by providing your own style sheets (CSS). You can refer to norm.css.dsp and normie.css.dsp in the zul project for examples. If you just want to change the font size, you can reference normsm.css.dsp.</para>
 <programlisting>&lt;desktop-config&gt;&#13;    &lt;theme-uri&gt;/css/my-fine-font.css&lt;/theme-uri&gt;    &#13;&lt;/desktop-config&gt;&#13;</programlisting></sect2><sect2><title>The Theme Provider</title>
 <para>If you prefer to decide the theme at the run time depending on the current user, cookie, locale or others, you can implement a theme provider. A theme provider is a class that implements the org.zkoss.zk.ui.util.ThemeProvider interface.</para>
 <programlisting>package my;&#13;public class MyThemeProvider implements ThemeProvder {&#13;        public Collection getThemeURIs(Execution exec, List uris) {        &#13;            for (Iterator it = uris.iterator(); it.hasNext();) {            &#13;                if ("~./zul/css/norm*.css.dsp*".equals(it.next()))                &#13;                    it.remove(); //remove the default theme                    &#13;            }            &#13;            HttpServletRequest req = (HttpServletRequest)exec.getNativeRequest();            &#13;            uris.add(getMyThemeURI(req));            &#13;            return uris;            &#13;        }}        &#13;</programlisting>
 <para>Then, you configure WEB-INF/zk.xml by adding the following lines.</para>
-<programlisting>&lt;desktop-config&gt;&#13;    &lt;theme-provider-class&gt;my.MyThemeProvider&lt;/theme-provider-class&gt;    &#13;&lt;/desktop-config&gt;&#13;</programlisting></sect2></sect1></chapter>
+<programlisting>&lt;desktop-config&gt;&#13;    &lt;theme-provider-class&gt;my.MyThemeProvider&lt;/theme-provider-class&gt;    &#13;&lt;/desktop-config&gt;&#13;</programlisting>
+<para>See also org.zkoss.zkdemo.userguide.FontSizeThemeProvider in zkdemo.war that decides the theme based on cookie.</para></sect2></sect1></chapter>
 <chapter>
-<title>14. Database Connectivity</title>
+<title>15. Database Connectivity</title>
 <para>This chapter describes how to make connections to database.</para><sect1><title>ZK Is Presentation-Tier Only</title>
 <para>ZK is aimed to be as thin as the presentation tier. In addition, with the server-centric approach, it executes all codes at the server, so connecting database is no different from any desktop applications. In other words, ZK doesn't change the way you access the database, no matter you use JDBC or other persistence framework, such as Hibernate<footnote>
 <para>
@@ -4949,7 +5325,139 @@
 <para>import javax.naming.InitContext;</para>
 <programlisting>import org.zkoss.util.logging.Log;&#13;import org.zkoss.zk.ui.Page;&#13;import org.zkoss.zk.ui.util.Initiator;&#13;&#13;public class TransInitiator implements Initiator {&#13;    private static final Log log = Log.lookup(TransInitiator.class);    &#13;    private Connection _conn;    &#13;    private boolean _err;    &#13;&#13;    public void doInit(Page page, Object[] args) {    &#13;        try {        &#13;            DataSource ds = (DataSource)new InitialContext()            &#13;                .lookup("java:comp/env/jdbc/MyDB");                &#13;            _conn = ds.getConnection();            &#13;        } catch (Throwable ex) {        &#13;            throw UiException.Aide.wrap(ex);            &#13;        }        &#13;    }    &#13;    public void doCatch(Throwable t) {    &#13;        if (_conn != null) {        &#13;            try {            &#13;                _err = true;                &#13;                _conn.rollback();                &#13;            } catch (SQLException ex) {            &#13;                log.warning("Unable to roll back", ex);                &#13;            }            &#13;        }        &#13;    }    &#13;    public void doFinally() {    &#13;        if (_conn != null) {        &#13;            try {            &#13;                if (!_err)                &#13;                    _conn.commit();                    &#13;            } catch (SQLException ex) {            &#13;                log.warning("Failed to commit", ex);                &#13;            } finally {            &#13;                try {                &#13;                    _conn.close();                    &#13;                } catch (SQLException ex) {                &#13;                    log.warning("Unable to close transaction", ex);                    &#13;                }                &#13;            }            &#13;        }        &#13;    }    &#13;}&#13;</programlisting></sect3></sect2></sect1></chapter>
 <chapter>
-<title>15. Portal Integration</title>
+<title>16. Hibernate Integration</title><sect1><title>What is Hibernate</title>
+<para>Hibernate is an object-relational mapping (ORM) solution for the Java language. The mainfeature of Hibernate is that it simplifies the job of accessing a database.</para></sect1><sect1><title>Installing Hibernate</title>
+<para>Before using Hibernate, you have to install it into your application first.</para>
+<orderedlist>
+<listitem>
+<para>Download <ulink url="http://www.hibernate.org/">Hibernate (http:\\www.hibernate.org)</ulink>
+</para>
+</listitem>
+<listitem>
+<para>Put *.jar files into your <code>$myApp\WEB-INF\lib\</code>
+</para>
+</listitem>
+</orderedlist>
+<para>
+<code>$myApp represents the name of your web application. ex. Event</code>
+</para></sect1><sect1><title>Configuring the ZK Configuration File</title>
+<para>To make ZK works with Hibernate smoothly, you have to use the following utilities.</para>
+<orderedlist>
+<listitem>
+<para>Create <code>zk.xml</code> under <code>$myApp\WEB-INF\</code>(if not exists)</para>
+</listitem>
+<listitem>
+<para>Copy the following lines into your <code>zk.xml</code>
+</para>
+</listitem>
+</orderedlist>
+<programlisting>                                                                                    &lt;!-- Hibernate SessionFactory lifecycle --&gt;&lt;listener&gt;&lt;description&gt;Hibernate SessionFactory lifecycle&lt;/description&gt;&lt;listener-class&gt;org.zkoss.zkplus.hibernate.HibernateSessionFactoryListener&lt;/listener-class&gt;&lt;/listener&gt;&lt;!-- Hibernate OpenSessionInView Pattern --&gt;&lt;listener&gt;&lt;description&gt;Hibernate Open Session In View life-cycle&lt;/description&gt;&lt;listener-class&gt;org.zkoss.zkplus.hibernate.OpenSessionInViewListener&lt;/listener-class&gt;&lt;/listener&gt;&lt;!-- Hibernate thread session context handler --&gt;&lt;listener&gt;&lt;description&gt;Hibernate thread session context handler&lt;/description&gt;&lt;listener-class&gt;org.zkoss.zkplus.hibernate.HibernateSessionContextListener&lt;/listener-class&gt;&lt;/listener&gt;                                                                                     &#13;</programlisting></sect1><sect1><title>Creating the Java Objects</title>
+<para>You have to create simple JavaBean class with some properties.</para>
+<orderedlist>
+<listitem>
+<para>Create your first Java class (<code>Event.java</code>)</para>
+</listitem>
+</orderedlist>
+<programlisting>package events;import java.util.Date;public class Event { private Long id; private String title; private Date date; public Event() {} public Long getId() { return id; } private void setId(Long id) { this.id = id; } public Date getDate() { return date; } public void setDate(Date date) { this.date = date; } public String getTitle() { return title; } public void setTitle(String title) { this.title = title; }}&#13;</programlisting>
+<orderedlist>
+<para/>
+<listitem>
+<para>Place this Java source file in a directory called <code>src</code> in the development folder, and in its correct package. (ex.<code>$myApp\WEB-INF\src\event\Event.java</code>)</para>
+</listitem>
+</orderedlist>
+<para>The next step is to tell Hibernate how to map this persistent class with database.</para></sect1><sect1><title>Mapping the Java Objects</title>
+<para>There are two ways to tell Hibernate how to load and store objects of the persistent class, one is using Hibernate mapping file, and the other is using Java Annotation.</para><sect2><title>Using the Mapping Files</title>
+<orderedlist>
+<listitem>
+<para>Simply create <code>Event.hbm.xml</code> for the persistent class <code>Event.java</code>.</para>
+</listitem>
+</orderedlist>
+<programlisting>&lt;?xml version="1.0"?&gt;&lt;!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd"&gt; &lt;hibernate-mapping&gt; &lt;class name="events.Event" table="EVENTS"&gt; &lt;id name="id" column="EVENT_ID"&gt; &lt;generator class="native"/&gt; &lt;/id&gt; &lt;property name="date" type="timestamp" column="EVENT_DATE"/&gt; &lt;property name="title"/&gt; &lt;/class&gt;&lt;/hibernate-mapping&gt;&#13;</programlisting>
+<orderedlist>
+<para/>
+<listitem>
+<para>Place this <code>Event.hbm.xml</code> in the directory called <code>src</code> in the development folder, and its correct package. (ex.<code>$myApp\WEB-INF\src\event\Event.hbm.xml</code>)</para>
+</listitem>
+</orderedlist></sect2><sect2><title>Using Java Annotation</title>
+<para>The benefit of using Java annotation instead of Hibernate mapping file is that no additional file is required. Simply add Java annotation on your Java class to tell Hibernate about the mappings. </para>
+<programlisting>                                                                                                                package events;import java.util.Date;import javax.persistence.Column;import javax.persistence.Entity;import javax.persistence.GeneratedValue;import javax.persistence.GenerationType;import javax.persistence.Id;import javax.persistence.Table;@Entity@Table(name="EVENTS")public class Event {private Long id;private String title;private Date date;@Id@GeneratedValue(strategy=GenerationType.SEQUENCE)@Column(name = "EVENT_ID")public Long getId() {return id;}private void setId(Long id) {this.id = id;}@Column(name = "EVENT_DATE")public Date getDate() {return date;}public void setDate(Date date) {this.date = date;}public String getTitle() {return title;}public void setTitle(String title) {this.title = title;}}                                                                                                                &#13;</programlisting>
+<para/>
+<itemizedlist>
+<listitem>
+<para>@Entity declares this class as a persistence object</para>
+</listitem>
+<listitem>
+<para>@Table(name = "EVENTS") annotation tells that the entity is mapped with the table EVENTS in the database</para>
+</listitem>
+<listitem>
+<para>@Column element is used to map the entities with the column in the database.</para>
+</listitem>
+<listitem>
+<para>@Id element defines the mapping from that property to the primary key column.</para>
+</listitem>
+</itemizedlist></sect2></sect1><sect1><title>Creating the Hibernate Configuration File</title>
+<para>The next step is to setup Hibernate to use a database. HSQL DB, a java-based SQL DBMS, can be downloaded from the HSQL DB website(<ulink url="http://hsqldb.org/">http://hsqldb.org/</ulink>). </para>
+<orderedlist>
+<listitem>
+<para>Unzip it to a directory, say <link linkend="">
+<code>c:\hsqldb</code>
+</link>
+<code>.</code>
+</para>
+</listitem>
+<listitem>
+<para>Open a command box and change to <link linkend="">
+<code>c:\hsqldb</code>
+</link>
+</para>
+</listitem>
+<listitem>
+<para>In the command prompt, execute<code> java -cp lib\hsqldb.jar org.hsqldb.Server</code>
+</para>
+</listitem>
+</orderedlist>
+<para>After installing the database, we have to setup Hibernate Configuration file. Create <code>hibernate.cfg.xml</code> in the directory called <code>src</code> in the development folder(ex.<code>$myApp\WEB-INF\src\hibernate.cfg.xml</code>). Copy the following lines into your hibernate.cfg.xml. It depends on how you map your Java objects.</para>
+<itemizedlist>
+<listitem><sect3><title>Using the Mapping Files</title></sect3></listitem>
+</itemizedlist>
+<programlisting>&lt;?xml version='1.0' encoding='utf-8'?&gt;&#13;&lt;!DOCTYPE hibernate-configuration PUBLIC&#13;"-//Hibernate/Hibernate Configuration DTD 3.0//EN"&#13;"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd"&gt;&#13;&#13;&lt;hibernate-configuration&gt;&#13;&#13;&lt;session-factory&gt;&#13;&#13;&lt;!-- Database connection settings --&gt;&#13;&lt;property name="connection.driver_class"&gt;org.hsqldb.jdbcDriver&lt;/property&gt;&#13;&lt;property name="connection.url"&gt;jdbc:hsqldb:hsql://localhost&lt;/property&gt;&#13;&lt;property name="connection.username"&gt;sa&lt;/property&gt;&#13;&lt;property name="connection.password"&gt;&lt;/property&gt;&#13;&#13;&lt;!-- JDBC connection pool (use the built-in) --&gt;&#13;&lt;property name="connection.pool_size"&gt;1&lt;/property&gt;&#13;&#13;&lt;!-- SQL dialect --&gt;&#13;&lt;property name="dialect"&gt;org.hibernate.dialect.HSQLDialect&lt;/property&gt;&#13;&#13;&lt;!-- Enable Hibernate's automatic session context management --&gt;&#13;&lt;property name="current_session_context_class"&gt;thread&lt;/property&gt;&#13;&#13;&lt;!-- Disable the second-level cache --&gt;&#13;&lt;property name="cache.provider_class"&gt;org.hibernate.cache.NoCacheProvider&lt;/property&gt;&#13;&#13;&lt;!-- Echo all executed SQL to stdout --&gt;&#13;&lt;property name="show_sql"&gt;true&lt;/property&gt;&#13;&#13;&lt;!-- Drop and re-create the database schema on startup --&gt;&#13;&lt;property name="hbm2ddl.auto"&gt;create&lt;/property&gt;&#13;&#13;&lt;mapping resource="events/Event.hbm.xml"/&gt; &#13;&#13;&lt;/session-factory&gt;&#13;&#13;</programlisting>
+<itemizedlist>
+<para>&lt;/hibernate-configuration&gt;</para>
+<listitem><sect3><title>Using Java Annotation</title></sect3></listitem>
+</itemizedlist>
+<para/>
+<programlisting>&lt;?xml version='1.0' encoding='utf-8'?&gt;&lt;!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd"&gt;&lt;hibernate-configuration&gt; &lt;session-factory&gt; &lt;!-- Database connection settings --&gt; &lt;property name="connection.driver_class"&gt;org.hsqldb.jdbcDriver&lt;/property&gt; &lt;property name="connection.url"&gt;jdbc:hsqldb:hsql://localhost&lt;/property&gt; &lt;property name="connection.username"&gt;sa&lt;/property&gt; &lt;property name="connection.password"&gt;&lt;/property&gt; &lt;!-- JDBC connection pool (use the built-in) --&gt; &lt;property name="connection.pool_size"&gt;1&lt;/property&gt; &lt;!-- SQL dialect --&gt; &lt;property name="dialect"&gt;org.hibernate.dialect.HSQLDialect&lt;/property&gt; &lt;!-- Enable Hibernate's automatic session context management --&gt; &lt;property name="current_session_context_class"&gt;thread&lt;/property&gt; &lt;!-- Disable the second-level cache --&gt; &lt;property name="cache.provider_class"&gt;org.hibernate.cache.NoCacheProvider&lt;/property&gt; &lt;!-- Echo all executed SQL to stdout --&gt; &lt;property name="show_sql"&gt;true&lt;/property&gt; &lt;!-- Drop and re-create the database schema on startup --&gt; &lt;property name="hbm2ddl.auto"&gt;create&lt;/property&gt; &#13;&lt;mapping class="events.Event"/&gt; &lt;/session-factory&gt;&lt;/hibernate-configuration&gt;&#13;</programlisting>
+<para>We continue with how to create a class to handle data accessing jobs.</para></sect1><sect1><title>Creating DAO Objects</title>
+<para>For ease of maintenance, we used to create another Java class to handle data accessing jobs. </para>
+<orderedlist>
+<listitem>
+<para>Create <code>EventDAO.java</code>
+</para>
+</listitem>
+</orderedlist>
+<programlisting>        package events;import java.util.Date;import java.util.List;import org.hibernate.Session;import org.zkoss.zkplus.hibernate.HibernateUtil;public class EventDAO { private Session _session; Session currentSession() { return _session = HibernateUtil.currentSession(); }  public void saveOrUpdate(Event anEvent, String title, Date date) { currentSession();  anEvent.setTitle(title); anEvent.setDate(date);          &#13;             _session.saveOrUpdate(anEvent); } public void delete(Event anEvent) { currentSession();             &#13;    _session.delete(anEvent); }  public Event findById(Long id) { currentSession();     &#13;        return (Event) _session.load(Event.class, id); }  public List findAll() { currentSession();          &#13;return _session.createQuery("from Event").list(); }}&#13;</programlisting>
+<orderedlist>
+<listitem>
+<para>Place this Java source file in a directory called src in the development folder, and in its correct package. (ex.<code>$myApp\WEB-INF\src\event\EventDAO.java</code>)</para>
+</listitem>
+</orderedlist></sect1><sect1><title>Accessing Persistence Objects in ZUML Page</title>
+<para>To access persistence objects in ZUML page is simple, simply declare a persistence object, and uses it to get data from database. </para>
+<orderedlist>
+<listitem>
+<para>Create a <code>event.zul</code> in the root directory of web development. (ex. <code>$myApp\event.zul</code>)</para>
+</listitem>
+</orderedlist>
+<programlisting>&lt;zk&gt;&#13;&lt;zscript&gt;&lt;![CDATA[&#13;import java.util.Date;&#13;import java.text.SimpleDateFormat;&#13;import events.Event;&#13;import events.EventDAO;&#13;&#13;//fetch all allEvents from database&#13;List allEvents = new EventDAO().findAll();&#13;&#13;]]&gt;&lt;/zscript&gt;&#13;                &lt;listbox id="lbxEvents"&gt;                &#13;    &lt;listhead&gt;    &#13;        &lt;listheader label="Title" width="200px"/&gt;        &#13;        &lt;listheader label="Date" width="100px"/&gt;        &#13;    &lt;/listhead&gt;    &#13;    &lt;listitem forEach="${allEvents}" value="${each}"&gt;    &#13;        &lt;listcell label="${each.title}"/&gt;        &#13;        &lt;zscript&gt;String datestr = new SimpleDateFormat("yyyy/MM/dd").format(each.date);&lt;/zscript&gt;        &#13;        &lt;listcell label="${datestr}"/&gt;        &#13;    &lt;/listitem&gt;    &#13;&lt;/listbox&gt;&#13;&lt;/zk&gt;&#13;</programlisting>
+<orderedlist>
+<para/>
+<listitem>
+<para>Open a browser and visit the ZUML page. (ex. <code>http://localhost:8080/event/event.zul</code>)</para>
+</listitem>
+</orderedlist>
+<para/>
+<para/></sect1></chapter>
+<chapter>
+<title>17. Portal Integration</title>
 <para>ZK provides a portlet to load ZUML pages for JSR 168 compliant portal. This portlet is called ZK portlet loader, and it is implemented as org.zkoss.zk.ui.http.DHtmlLayoutPortlet.</para><sect1><title>Configuration</title><sect2><title>WEB-INF/portlet.xml</title>
 <para>To use it, you first have to add the following definition into WEB-INF/portlet.xml. Notice that expiration-cache must be set to zero to prevent portals from caching the result.</para>
 <programlisting>&lt;portlet&gt;&#13;    &lt;description&gt;ZK loader for ZUML pages&lt;/description&gt;    &#13;    &lt;portlet-name&gt;zkPortletLoader&lt;/portlet-name&gt;    &#13;    &lt;display-name&gt;ZK Portlet Loader&lt;/display-name&gt;    &#13;&#13;    &lt;portlet-class&gt;org.zkoss.zk.ui.http.DHtmlLayoutPortlet&lt;/portlet-class&gt;    &#13;&#13;    &lt;expiration-cache&gt;0&lt;/expiration-cache&gt;    &#13;&#13;    &lt;supports&gt;    &#13;        &lt;mime-type&gt;text/html&lt;/mime-type&gt;        &#13;        &lt;portlet-mode&gt;VIEW&lt;/portlet-mode&gt;        &#13;    &lt;/supports&gt;    &#13;&#13;    &lt;supported-locale&gt;en&lt;/supported-locale&gt;    &#13;&#13;    &lt;portlet-info&gt;    &#13;        &lt;title&gt;ZK&lt;/title&gt;        &#13;        &lt;short-title&gt;ZK&lt;/short-title&gt;        &#13;        &lt;keywords&gt;ZK,ZUML&lt;/keywords&gt;        &#13;    &lt;/portlet-info&gt;    &#13;&lt;/portlet&gt;&#13;</programlisting></sect2><sect2><title>WEB-INF/web.xml</title>
@@ -4987,7 +5495,7 @@
 		</graphic>
 </para></sect2></sect1></chapter>
 <chapter>
-<title>16. Beyond ZK</title>
+<title>18. Beyond ZK</title>
 <para>In addition to processing ZUML pages, the ZK distribution included a lot of technologies and tools. This chapter provided the basic information of some of them. Interested readers might look at Javadoc for detailed API.</para><sect1><title>Logger</title>
 <para>Package: org.zkoss.util.logging.Log</para>
 <para>The logger used by ZK is based on the standard logger, java.util.Logger. However, we wrap it as org.zkoss.util.logging.Log to make it more efficient. The typical use is as follows.</para>

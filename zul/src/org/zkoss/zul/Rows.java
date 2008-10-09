@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Iterator;
 import java.util.ListIterator;
 
+import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.render.Cropper;
@@ -231,8 +232,8 @@ public class Rows extends XulElement {
 						int leng = index - prev[0], 
 							size = prev[1] - leng + 1;
 						prev[1] = leng;
-						_groupsInfo.add(idx, new int[]{index, size, prev[2]});
-						prev[2] = -1; // reset groupfoot
+						_groupsInfo.add(idx, new int[]{index, size, size > 1 ? prev[2] : -1});
+						if (size > 1) prev[2] = -1; // reset groupfoot
 					} else if (next != null) {
 						_groupsInfo.add(idx, new int[]{index, next[0] - index, -1});
 					}
@@ -274,11 +275,14 @@ public class Rows extends XulElement {
 					prev[1] += remove[1] - 1;
 				}
 				fixGroupIndex(index, -1, false);
-				_groupsInfo.remove(remove);
-				final int idx = remove[2];
-				if (idx != -1){				
-					final Component gft = (Component) getChildren().get(idx -1);
-					remove[2] = -1;
+				if (remove != null) {
+					_groupsInfo.remove(remove);
+					final int idx = remove[2];
+					if (idx != -1) {
+						removeChild((Component) getChildren().get(idx -1));
+							// Because the fixGroupIndex will skip the first groupinfo,
+							// we need to subtract 1 from the idx variable
+					}
 				}
 			} else if (hasGroup()) {
 				final int[] g = getGroupsInfoAt(index);
@@ -288,11 +292,11 @@ public class Rows extends XulElement {
 					fixGroupIndex(index, -1, false);
 				}
 				else fixGroupIndex(index, -1, false);
-			}
-			if (child instanceof Groupfoot){
-				final int[] g = getGroupsInfoAt(index);	
-				if(g != null){ // group info maybe remove cause of grouphead removed in previous op
-					g[2] = -1;
+				if (child instanceof Groupfoot){
+					final int[] g1 = getGroupsInfoAt(index);	
+					if(g1 != null){ // group info maybe remove cause of grouphead removed in previous op
+						g1[2] = -1;
+					}
 				}
 			}
 			return true;
@@ -454,6 +458,19 @@ public class Rows extends XulElement {
 	public String getZclass() {
 		return _zclass == null ? "z-rows" : super.getZclass();
 	}
+	
+	protected List newChildren() {
+		return new Children();
+	}
+	protected class Children extends AbstractComponent.Children {
+	    protected void removeRange(int fromIndex, int toIndex) {
+	        ListIterator it = listIterator(toIndex);
+	        for (int n = toIndex - fromIndex; --n >= 0;) {
+	            it.previous();
+	            it.remove();
+	        }
+	    }
+	};
 	//-- ComponentCtrl --//
 	protected Object newExtraCtrl() {
 		return new ExtraCtrl();

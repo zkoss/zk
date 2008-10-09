@@ -37,6 +37,7 @@ import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
 import org.zkoss.xml.HTMLs;
+import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
@@ -179,6 +180,17 @@ public class Listbox extends XulElement implements Paginated {
 				if (_paging != null) --sz;
 				return sz;
 			}
+			/**
+			 * override for Listgroup
+			 * @since 3.5.1
+			 */
+		    protected void removeRange(int fromIndex, int toIndex) {
+		        ListIterator it = listIterator(toIndex);
+		        for (int n = toIndex - fromIndex; --n >= 0;) {
+		            it.previous();
+		            it.remove();
+		        }
+		    }
 		};
 		_selItems = new LinkedHashSet(5);
 		_roSelItems = Collections.unmodifiableSet(_selItems);
@@ -204,6 +216,19 @@ public class Listbox extends XulElement implements Paginated {
 			}
 		};
 	}
+	
+	protected List newChildren() {
+		return new Children();
+	}
+	protected class Children extends AbstractComponent.Children {
+	    protected void removeRange(int fromIndex, int toIndex) {
+	        ListIterator it = listIterator(toIndex);
+	        for (int n = toIndex - fromIndex; --n >= 0;) {
+	            it.previous();
+	            it.remove();
+	        }
+	    }
+	};
 	/** Initializes _dataListener and register the listener to the model
 	 */
 	private void initDataListener() {
@@ -1277,8 +1302,8 @@ public class Listbox extends XulElement implements Paginated {
 							int leng = lg.getIndex() - prev[0], 
 								size = prev[1] - leng + 1;
 							prev[1] = leng;
-							_groupsInfo.add(idx, new int[]{lg.getIndex(), size, prev[2]});
-							prev[2] = -1; // reset listgroupfoot
+							_groupsInfo.add(idx, new int[]{lg.getIndex(), size, size > 1 ? prev[2] : -1});
+							if (size > 1) prev[2] = -1; // reset listgroupfoot
 						} else if (next != null) {
 							_groupsInfo.add(idx, new int[]{lg.getIndex(), next[0] - lg.getIndex(), -1});
 						} 
@@ -1421,7 +1446,13 @@ public class Listbox extends XulElement implements Paginated {
 					prev[1] += remove[1] - 1;
 				}
 				fixGroupIndex(index, -1, false);
-				_groupsInfo.remove(remove);
+				if (remove != null) {
+					_groupsInfo.remove(remove);
+					final int idx = remove[2];
+					if (idx != -1) {
+						removeChild((Component) getChildren().get(idx -1));
+					}
+				}
 			} else if (!_groupsInfo.isEmpty()) {
 				final int[] g = getGroupsInfoAt(index);
 				if (g != null) {
@@ -1429,11 +1460,12 @@ public class Listbox extends XulElement implements Paginated {
 					if (g[2] != -1) g[2]--;
 					fixGroupIndex(index, -1, false);
 				} else fixGroupIndex(index, -1, false);
+				
+				if (child instanceof Listgroupfoot) {
+					final int[] g1 = getGroupsInfoAt(index);
+					g1[2] = -1;
+				}
 			} else fixItemIndices(index, -1);
-			if (child instanceof Groupfoot){
-				final int[] g = getGroupsInfoAt(index);
-				g[2] = -1;
-			}
 			return true;
 		} else if (_paging == child) {
 			_paging = null;

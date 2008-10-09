@@ -80,7 +80,28 @@ public class Caption extends LabelImageElement {
 		final Component p = getParent();
 		return (p instanceof Window) && ((Window)p).isClosable();
 	}
-
+	/** Returns whether to display the maximizable button.
+	 * <p>Default: it returns true if the parent is window and {@link Window#isMaximizable}
+	 * is true.
+	 *
+	 * <p>It is mainly used for component implementation.
+	 * @since 3.5.1
+	 */
+	public boolean isMaximizableVisible() {
+		final Component p = getParent();
+		return (p instanceof Window) && ((Window)p).isMaximizable();
+	}
+	/** Returns whether to display the minimizable button.
+	 * <p>Default: it returns true if the parent is window and {@link Window#isMinimizable}
+	 * is true.
+	 *
+	 * <p>It is mainly used for component implementation.
+	 * @since 3.5.1
+	 */
+	public boolean isMinimizableVisible() {
+		final Component p = getParent();
+		return (p instanceof Window) && ((Window)p).isMinimizable();
+	}
 	// super
 	public String getZclass() {
 		return _zclass == null ? "z-caption" : super.getZclass();

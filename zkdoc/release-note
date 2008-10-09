@@ -36,6 +36,10 @@ ZK 3.5.1
   2138131: GenericForwardComposer throw Exception if component inexist
   2140491: Set "save-when" in Listbox selectedItem does not trigger
   2143479: Failed to invoke sendRedirect or forward in DesktopInit
+  2149043: Fisheye can't change image dynamically
+  2148979: Window: maxim and minim buttons disappear using caption
+  2150591: rm list&group, list&groupfoot should remove at the same time
+  2150566: After change the label of Listgroup, it can't open/close
 
 * Upgrade Notes
   * getMoldSclass is deprecated and replaced with getZclass since
