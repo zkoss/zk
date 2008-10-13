@@ -87,6 +87,9 @@ public class ZkFns {
 	/** Denotes whether JavaScripts are generated for this request. */
 	private static final String ATTR_DESKTOP_INFO_GENED
 		= "javax.zkoss.zk.desktopInfo.generated";
+	/** Denotes whether the unavailable message is generated for this request. */
+	private static final String ATTR_UNAVAILABLE_GENED
+		= "javax.zkoss.zk.unavail.generated";
 
 	protected ZkFns() {}
 
@@ -232,14 +235,25 @@ public class ZkFns {
 		sb.append("\n</script>\n");
 
 		final Device device = desktop.getDevice();
-		String s = device.getUnavailableMessage();
-		if (s != null)
-			sb.append("<noscript>\n").append(s).append("\n</noscript>\n");
-		s = device.getEmbedded();
+		final String s = device.getEmbedded();
 		if (s != null)
 			sb.append(s).append('\n');
 
 		return sb.toString();
+	}
+	/** Generates the unavailable message in HTML tags, if any.
+	 * @since 3.5.2
+	 */
+	public static String outHtmlUnavailable(Page page) {
+		final ServletRequest request = ServletFns.getCurrentRequest();
+		if (WebManager.getRequestLocal(request, ATTR_UNAVAILABLE_GENED) != null)
+			return ""; //nothing to generate
+		WebManager.setRequestLocal(request, ATTR_UNAVAILABLE_GENED, Boolean.TRUE);
+
+		final Device device = page.getDesktop().getDevice();
+		String s = device.getUnavailableMessage();
+		return s != null ?
+			"<noscript>\n" + s + "\n</noscript>": "";
 	}
 
 	private static void append(StringBuffer sb, JavaScript js) {
