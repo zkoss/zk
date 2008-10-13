@@ -4,6 +4,7 @@ ZK 3.5.2
 
 * Bugs
   2156410: <noscript> shall be placed inside body rather than head (FF)
+  2162808: False alarm when using xsi:schemaLocation="..."
 
 	--------
 ZK 3.5.1

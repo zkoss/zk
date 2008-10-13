@@ -812,17 +812,19 @@ public class Parser {
 						ifc = attval;
 					} else {
 						final String attpref = attrns != null ? attrns.getPrefix(): null;
-						if (!"xmlns".equals(attnm)
-						&& (attpref == null || (!"xmlns".equals(attpref)
-						&& !"xml".equals(attpref))))
+						final String atturi = attrns != null ? attrns.getURI(): "";
+						if (!"xmlns".equals(attnm) && !"xml".equals(attnm)
+						&& atturi.indexOf("w3.org") < 0
+						&& (attpref == null
+						 || (!"xmlns".equals(attpref) && !"xml".equals(attpref))))
 							warnWrongZkAttr(attr);
 					}
 				} else if (!("use".equals(attnm) && isZkAttr(langdef, attrns))) {
 					final String attpref = attrns != null ? attrns.getPrefix(): "";
-					final String attruri = attrns != null ? attrns.getURI(): "";
+					final String atturi = attrns != null ? attrns.getURI(): "";
 					if (!"xmlns".equals(attpref)
 					&& !("xmlns".equals(attnm) && "".equals(attpref))
-					&& !"http://www.w3.org/2001/XMLSchema-instance".equals(attruri)) {
+					&& !"http://www.w3.org/2001/XMLSchema-instance".equals(atturi)) {
 						final int len = attval.length();
 						if (len >= 3 && attval.charAt(0) == '@'
 						&& attval.charAt(1) == '{' && attval.charAt(len-1) == '}') { //annotation
