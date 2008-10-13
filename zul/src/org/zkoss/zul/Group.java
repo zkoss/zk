@@ -261,4 +261,16 @@ public class Group extends Row {
 		super.onChildRemoved(child);
 		invalidate();
 	}
+	//Cloneable//
+	public Object clone() {
+		final Group clone = (Group)super.clone();
+		clone.init();
+		return clone;
+	}
+	//-- Serializable --//
+	private synchronized void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+		init();
+	}
 }

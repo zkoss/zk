@@ -18,7 +18,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Iterator;
 import java.util.ListIterator;
@@ -33,7 +32,7 @@ import org.zkoss.zul.Listbox.Renderer;
  * @author jumperchen
  * @since 3.0.4
  */
-/*package*/ class ListboxDrawerEngine {
+/*package*/ class ListboxDrawerEngine implements java.io.Serializable, Cloneable {
 
 	private Listbox _listbox;
 
@@ -184,4 +183,24 @@ import org.zkoss.zul.Listbox.Renderer;
 	/*package*/ int getVisibleAmount() {
 		return _extent;
 	}
+	
+	//Cloneable//
+	public Object clone() {
+		final ListboxDrawerEngine clone;
+		try {
+			clone = (ListboxDrawerEngine)super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new InternalError();
+		}
+		clone._scrollListener = null;
+		clone.initDataListener();
+		return clone;
+	}
+	//-- Serializable --//
+	private synchronized void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+		initDataListener();
+	}
+	
 }

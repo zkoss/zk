@@ -134,12 +134,8 @@ public class Combobox extends Textbox {
 				if (_model != null) {
 					_model.removeListDataListener(_dataListener);
 				} else if (!getItems().isEmpty()) getItems().clear();
-				
-				initDataListener();
 				_model = model;
-				_model.addListDataListener(_dataListener);
-				if (model instanceof ListSubModel)
-					addEventListener(Events.ON_CHANGING, _eventListener);
+				initDataListener();
 			}
 
 			postOnInitRender(null);
@@ -175,6 +171,10 @@ public class Combobox extends Textbox {
 					}
 				}
 		};
+
+		_model.addListDataListener(_dataListener);
+		if (_model instanceof ListSubModel)
+			addEventListener(Events.ON_CHANGING, _eventListener);
 	}
 
 	/** Returns the renderer to render each row, or null if the default
@@ -606,6 +606,11 @@ public class Combobox extends Textbox {
 		final Combobox clone = (Combobox)super.clone();
 		clone._selItem = idx > -1 && clone.getItemCount() > idx ?
 			clone.getItemAtIndex(idx): null;
+		if (clone._model != null) {
+			clone._dataListener = null;
+			clone._eventListener = null;
+			clone.initDataListener();
+		}
 		return clone;
 	}
 	
@@ -625,6 +630,8 @@ public class Combobox extends Textbox {
 		final int idx = s.readInt();
 		if (idx > -1 && getItemCount() > idx)
 			_selItem = getItemAtIndex(idx);
+		
+		if (_model != null) initDataListener();
 	}
 	
 	//-- ComponentCtrl --//

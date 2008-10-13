@@ -561,9 +561,8 @@ public class Grid extends XulElement implements Paginated {
 					smartUpdate("z.model", "true");
 				}
 
-				initDataListener();
 				_model = model;
-				_model.addListDataListener(_dataListener);
+				initDataListener();
 			}
 
 			//Always syncModel because it is easier for user to enfore reload
@@ -606,6 +605,7 @@ public class Grid extends XulElement implements Paginated {
 					onListDataChange(event);
 				}
 			};
+		_model.addListDataListener(_dataListener);
 	}
 
 	/** Returns the renderer to render each row, or null if the default

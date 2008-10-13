@@ -144,10 +144,42 @@ public class Chart extends Imagemap {
 	private ChartEngine _engine; //chart engine. model and engine is related
 
 	public Chart() {
+		init();
 		setWidth("500px");
 		setHeight("250px");
 	}
+	
+	private void init() {
+		if (_smartDrawChartListener == null) {
+			_smartDrawChartListener = new EventListener() {
+				public void onEvent(Event event) {
+					if (Strings.isBlank(getType()))
+						throw new UiException("chart must specify type (pie, bar, line, ...)");
 
+					if (_model == null)
+						throw new UiException("chart must specify a data model");
+
+					if (Strings.isBlank(getWidth()))
+						throw new UiException("chart must specify width");
+						
+					if (Strings.isBlank(getHeight()))
+						throw new UiException("chart must specify height");
+						
+					try {
+						final String title = getTitle();
+						final AImage image = new AImage("chart"+new Date().getTime(), getEngine().drawChart(Chart.this));
+						setContent(image);
+					} catch(java.io.IOException ex) {
+						throw UiException.Aide.wrap(ex);
+					} finally {
+						_smartDrawChart = false;
+					}
+				}
+			};
+		}
+		addEventListener("onSmartDrawChart", _smartDrawChartListener);
+	}
+	
 	/**
 	 * Set the chart's type (Chart.PIE, Chart.BAR, Chart.LINE, etc.).
 	 *
@@ -550,14 +582,11 @@ public class Chart extends Imagemap {
 	 */
 	public void setModel(ChartModel model) {
 		if (_model != model) {
-			initDataListener();
 			if (_model != null) {
 				_model.removeChartDataListener(_dataListener);
 			}
-			if (model != null) {
-				model.addChartDataListener(_dataListener);
-			}
 			_model = model;
+			initDataListener();
 		}
 		
 		//Always redraw
@@ -654,6 +683,7 @@ public class Chart extends Imagemap {
 				}
 			};
 		}
+		_model.addChartDataListener(_dataListener);
 	}
 
 	/** Returns the renderer to render each area, or null if the default
@@ -694,34 +724,6 @@ public class Chart extends Imagemap {
 			return;
 		}
 		_smartDrawChart = true;
-		if (_smartDrawChartListener == null) {
-			_smartDrawChartListener = new EventListener() {
-				public void onEvent(Event event) {
-					if (Strings.isBlank(getType()))
-						throw new UiException("chart must specify type (pie, bar, line, ...)");
-
-					if (_model == null)
-						throw new UiException("chart must specify a data model");
-
-					if (Strings.isBlank(getWidth()))
-						throw new UiException("chart must specify width");
-						
-					if (Strings.isBlank(getHeight()))
-						throw new UiException("chart must specify height");
-						
-					try {
-						final String title = getTitle();
-						final AImage image = new AImage("chart"+new Date().getTime(), getEngine().drawChart(Chart.this));
-						setContent(image);
-					} catch(java.io.IOException ex) {
-						throw UiException.Aide.wrap(ex);
-					} finally {
-						_smartDrawChart = false;
-					}
-				}
-			};
-			addEventListener("onSmartDrawChart", _smartDrawChartListener);
-		}
 		Events.postEvent("onSmartDrawChart", this, null);
 	}
 		
@@ -757,5 +759,38 @@ public class Chart extends Imagemap {
 			return (int) (Integer.parseInt(num) * 13.3333);
 		}
 		return Integer.parseInt(str);
+	}
+
+	//Cloneable//
+	public Object clone() {
+		final Chart clone = (Chart)super.clone();
+
+		// Due to the not unique ID of the area component creating in JFreeChartEngine, we have to clear
+		// all its children first.
+		clone.getChildren().clear();
+		clone._smartDrawChartListener = null;
+		clone._smartDrawChart = false;
+		clone.init();
+		clone.smartDrawChart();
+		if (clone._model != null) {
+			clone._dataListener = null;
+			clone.initDataListener();
+		}
+		
+		return clone;
+	}
+	//-- Serializable --//
+	private synchronized void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+
+		// Due to the not unique ID of the area component creating in JFreeChartEngine, we have to clear
+		// all its children first.
+		getChildren().clear();
+		init();
+		smartDrawChart();
+		if (_model != null) {
+			initDataListener();
+		}
 	}
 }

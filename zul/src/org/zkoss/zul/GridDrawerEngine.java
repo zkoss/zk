@@ -34,7 +34,7 @@ import org.zkoss.zul.Grid.Renderer;
  * @author jumperchen
  * @since 3.0.4
  */
-/* package */class GridDrawerEngine {
+/* package */class GridDrawerEngine implements java.io.Serializable, Cloneable {
 
 	private Grid _grid;
 
@@ -182,5 +182,24 @@ import org.zkoss.zul.Grid.Renderer;
 	 */
 	/* package */int getVisibleAmount() {
 		return _extent;
+	}
+	
+	//Cloneable//
+	public Object clone() {
+		final GridDrawerEngine clone;
+		try {
+			clone = (GridDrawerEngine)super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new InternalError();
+		}
+		clone._scrollListener = null;
+		clone.initDataListener();
+		return clone;
+	}
+	//-- Serializable --//
+	private synchronized void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+		initDataListener();
 	}
 }
