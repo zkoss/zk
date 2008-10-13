@@ -168,6 +168,19 @@ public class Listgroup extends Listitem {
 		super.onChildRemoved(child);
 		invalidate();
 	}
+	//Cloneable//
+	public Object clone() {
+		final Listgroup clone = (Listgroup)super.clone();
+		clone.init();
+		return clone;
+	}
+	//-- Serializable --//
+	private synchronized void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+		init();
+	}
+	
 	//-- ComponentCtrl --//
 	protected Object newExtraCtrl() {
 		return new ExtraCtrl();

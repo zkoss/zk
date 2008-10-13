@@ -11,6 +11,7 @@ ZK 3.5.2
 * Bugs
   2156410: <noscript> shall be placed inside body rather than head (FF)
   2162808: False alarm when using xsi:schemaLocation="..."
+  2163047: Some Zul components fail to clone and serialize
 
 	--------
 ZK 3.5.1
