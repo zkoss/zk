@@ -30,6 +30,7 @@ ${z:outLangJavaScripts(null)}
 ${z:outHeaders(page)}
 </head>
 <body>
+${z:outHtmlUnavailable(page)}
 </c:if>
 ${z:redrawPageInHtml(page, null)}
 ${z:outResponseJavaScripts(arg.responses)}

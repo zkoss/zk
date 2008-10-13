@@ -216,7 +216,11 @@ public class Listbox extends XulElement implements Paginated {
 			}
 		};
 	}
-	
+
+	public String getType() {
+		return "zul.lbox.Listbox";
+	}
+
 	protected List newChildren() {
 		return new Children();
 	}

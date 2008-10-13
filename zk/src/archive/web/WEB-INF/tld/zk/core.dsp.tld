@@ -84,7 +84,16 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	Note: unlike outLangStyleSheets, it can be called without current execution.
 		</description>
 	</function>
-
+	<function>
+		<name>outHtmlUnavailable</name>
+		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
+		<function-signature>
+	java.lang.String outHtmlUnavailable(org.zkoss.zk.ui.Page)
+		</function-signature>
+		<description>
+	Generates the unavailable message in HTML tags, if any.
+		</description>
+	</function>
 	<function>
 		<name>outHeaders</name>
 		<function-class>org.zkoss.zk.fn.ZkFns</function-class>

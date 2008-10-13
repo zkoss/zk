@@ -19,7 +19,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.http;
 
 import java.util.Iterator;
-import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.ByteArrayOutputStream;
@@ -116,15 +115,15 @@ import org.zkoss.web.util.resource.ExtendletLoader;
 				String jspath = el.getAttributeValue("src");
 				if (jspath != null && jspath.length() > 0) {
 					if (jspath.startsWith("~./")) jspath = jspath.substring(2);
-					else if (jspath.charAt(0) != '/') {
-						jspath = new File(pathpref, jspath).getCanonicalPath();
-					}
+					else if (jspath.charAt(0) != '/')
+						jspath = Files.normalize(pathpref, jspath);
+
 					if (!writeResource(out, jspath))
 						log.error("Failed to load script "+jspath+", "+el.getLocator());
 				}
 
 				String s = el.getText(true);
-				if (s != null) {
+				if (s != null && s.length() > 0) {
 					write(out, s);
 					writeln(out);
 				}

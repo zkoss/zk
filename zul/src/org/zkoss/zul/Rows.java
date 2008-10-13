@@ -45,6 +45,7 @@ public class Rows extends XulElement {
 	private int _visibleItemCount;
 	
 	private transient List _groupsInfo, _groups;
+
 	public Rows() {
 		_groupsInfo = new LinkedList();
 		_groups = new AbstractList() {
@@ -59,6 +60,11 @@ public class Rows extends XulElement {
 			}
 		};
 	}
+
+	public String getType() {
+		return "zul.grid.Rows";
+	}
+
 	/** Returns the grid that contains this rows.
 	 * <p>It is the same as {@link #getParent}.
 	 */
