@@ -1,4 +1,17 @@
 	--------
+ZK 3.6.0
+* Features
+
+* Bugs
+
+	--------
+ZK 3.5.2
+* Features
+
+* Bugs
+  2156410: <noscript> shall be placed inside body rather than head (FF)
+
+	--------
 ZK 3.5.1
 * Features
   2106820: Change font size/family with system properties

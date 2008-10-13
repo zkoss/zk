@@ -30,6 +30,7 @@ ${z:outLangJavaScripts(null)}
 ${z:outHeaders(page)}
 </head>
 <body>
+${z:outHtmlUnavailable(page)}
 </c:if>
 <div${z:outPageAttrs(page)}>
 <c:forEach var="root" items="${page.roots}">${z:redraw(root, null)}</c:forEach>
