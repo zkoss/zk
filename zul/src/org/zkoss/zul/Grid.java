@@ -149,6 +149,13 @@ public class Grid extends XulElement implements Paginated {
 		};
 	}
 
+	/** Returns the component type, zul.grid.Grid.
+	 * @since 5.0.0
+	 */
+	public String getType() {
+		return "zul.grid.Grid";
+	}
+
 	/** Returns whether to grow and shrink vertical to fit their given space,
 	 * so called vertial flexibility.
 	 *
@@ -560,9 +567,8 @@ public class Grid extends XulElement implements Paginated {
 					smartUpdate("z.model", "true");
 				}
 
-				initDataListener();
 				_model = model;
-				_model.addListDataListener(_dataListener);
+				initDataListener();
 			}
 
 			//Always syncModel because it is easier for user to enfore reload
@@ -605,6 +611,7 @@ public class Grid extends XulElement implements Paginated {
 					onListDataChange(event);
 				}
 			};
+		_model.addListDataListener(_dataListener);
 	}
 
 	/** Returns the renderer to render each row, or null if the default
@@ -883,7 +890,8 @@ public class Grid extends XulElement implements Paginated {
 	private static Label newRenderLabel(String value) {
 		final Label label =
 			new Label(value != null && value.length() > 0 ? value: " ");
-		label.setPre(true); //to make sure &nbsp; is generated, and then occupies some space
+		//TODO 5:
+		//label.setPre(true); //to make sure &nbsp; is generated, and then occupies some space
 		return label;
 	}
 

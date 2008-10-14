@@ -1775,10 +1775,11 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				throw new IllegalStateException();
 			checkComodification();
 
-			removeChild(_lastRet);
-
 			if (_p == _lastRet) _p = _lastRet._next; //previous was called
 			else --_j; //next was called
+
+			removeChild(_lastRet);
+			
 			_lastRet = null;
 			++_modCntSnap;
 		}

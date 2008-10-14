@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<?page title="ZK 5 Test"?>
 <!--
 z5.zul
 
@@ -22,5 +22,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<div>
 		<label value="This is 2nd label in the inner div"/>
 		<label value="This is 3nd label in the inner div"/>
+		<include src="z5-1.zul"/>
 	</div>
 </div>

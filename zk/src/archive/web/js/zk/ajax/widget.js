@@ -28,6 +28,8 @@ zk.Widget = zk.$extends(zk.Object, {
 	//firstChild: null,
 	/** The last child widget (readonly). */
 	//lastChild: null,
+	/** The desktop that this widget belongs to (readonly). */
+	//desktop: null,
 
 	/** Whether this widget has a copy at the server (readonly). */
 	inServer: false,
@@ -81,6 +83,8 @@ zk.Widget = zk.$extends(zk.Object, {
 		sibling.previousSibling = child;
 		child.nextSibling = sibling;
 
+		child.desktop = this.desktop;
+
 		//TODO: if parent belongs to DOM
 	},
 	/** Removes the specified child.
@@ -97,6 +101,8 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (n) n.previousSibling = p;
 		else this.lastChild = p;
 		child.nextSibling = child.previousSibling = child.parent = null;
+
+		child.desktop = null;
 
 		//TODO: if parent belongs to DOM
 	},
@@ -131,21 +137,8 @@ zk.Desktop = zk.$extends(zk.Object, {
 },{
 	/** Returns the desktop of the specified ID.
 	 */
-	ofId: function (dtid) {
+	of: function (dtid) {
 		return zk.Desktop._dts[dtid];
-	},
-	/** Returns the desktop containing the specified node.
-	 */
-	of: function (n) {
-		var zdt = zk.Desktop;
-		if (zdt._ndt == 1)
-			for (dtid in zdt._dts)
-				return zdt._dts[dtid];
-
-		for (n = zkDOM.$(n); n; n = zkDOM.getParent(n)) {
-			var id = getZKAttr(n, "dtid");
-			if (id) return zdt.ofId(id);
-		}
 	},
 	_dts: {},
 	_ndt: 0

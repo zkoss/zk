@@ -47,6 +47,9 @@ public class Rows extends XulElement {
 	private transient List _groupsInfo, _groups;
 
 	public Rows() {
+		init();
+	}
+	private void init () {
 		_groupsInfo = new LinkedList();
 		_groups = new AbstractList() {
 			public int size() {
@@ -464,7 +467,18 @@ public class Rows extends XulElement {
 	public String getZclass() {
 		return _zclass == null ? "z-rows" : super.getZclass();
 	}
-	
+	//Cloneable//
+	public Object clone() {
+		final Rows clone = (Rows)super.clone();
+		clone.init();
+		return clone;
+	}
+	//-- Serializable --//
+	private synchronized void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+		init();
+	}
 	protected List newChildren() {
 		return new Children();
 	}

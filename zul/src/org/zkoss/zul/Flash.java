@@ -45,6 +45,12 @@ public class Flash extends HtmlBasedComponent {
 	
 	private String _bgcolor ="";
 	
+	/** Returns the component type, zul.extn.Flash.
+	 * @since 5.0.0
+	 */
+	public String getType() {
+		return "zul.extn.Flash";
+	}
 	/**
 	 * Gets the background color of Flash movie
 	 * @return the background color of Flash movie,[ hexadecimal RGB value] 

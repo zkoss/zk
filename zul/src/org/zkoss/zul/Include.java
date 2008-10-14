@@ -115,6 +115,13 @@ public class Include extends XulElement implements DynamicPropertied {
 		setSrc(src);
 	}
 
+	/** Returns the component type, zul.wgt.Include.
+	 * @since 5.0.0
+	 */
+	public String getType() {
+		return "zul.wgt.Include";
+	}
+
 	/**
 	 * Sets whether to show the {@link MZul#PLEASE_WAIT} message before a long operation.
 	 * This implementation will automatically use an echo event like {@link Events#echoEvent(String, org.zkoss.zk.ui.Component, String)} 
@@ -244,22 +251,16 @@ public class Include extends XulElement implements DynamicPropertied {
 	protected boolean isChildable() {
 		return false;
 	}
-	public void redraw(Writer out) throws IOException {
+	protected void redrawContent(Writer out) throws IOException {
 		final UiEngine ueng =
 			((WebAppCtrl)getDesktop().getWebApp()).getUiEngine();
 		ueng.pushOwner(this);
 		try {
-			out.write("<div id=\"");
-			out.write(getUuid());
-			out.write('"');
-//TODO: outer/inner attributes
-			out.write(">\n");
 			if (_progressStatus == 1) {
 				_progressStatus = 2;
 			} else if (_src != null && _src.length() > 0) {
 				include(out);
 			}
-			out.write("\n</div>");
 		} finally {
 			ueng.popOwner();
 		}

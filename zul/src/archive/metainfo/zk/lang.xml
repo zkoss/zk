@@ -87,6 +87,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</native-template>
 
 	<component>
+		<component-name>applet</component-name>
+		<component-class>org.zkoss.zul.Applet</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./zul/html/applet.dsp</mold-uri>
+		</mold>
+	</component>
+	<component>
 		<component-name>area</component-name>
 		<component-class>org.zkoss.zul.Area</component-class>
 		<!-- any number of molds are allowed and
