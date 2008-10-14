@@ -54,10 +54,11 @@ function newWindow(url){
 											onSelect="fnf.value = self.selectedItem.label;main.updateModel();">
 											<comboitem label="F30"/>
 											<comboitem label="F35"/>
+											<comboitem label="F36"/>
 											<comboitem label="B30"/>
+											<comboitem label="B35"/>
 											<comboitem label="Z30"/>
 											<comboitem label="Z35"/>
-											<comboitem label="B35"/>
 										</combobox>
 									</hbox>
 								</vbox>
@@ -76,10 +77,14 @@ function newWindow(url){
 						<button label="Export File Name" onClick="main.exportFileName();"/>
 						<button label="Import File Name" onClick="main.importFileName();"/>
 					</hbox>
+					<zscript>
+					org.zkoss.zkdemo.test2.FileDateCompare asc = new org.zkoss.zkdemo.test2.FileDateCompare(true),
+						 dsc = new org.zkoss.zkdemo.test2.FileDateCompare(false);
+					</zscript>
 					<listbox id="lb" mold="paging" pageSize="20" width="330px" pagingPosition="both">
 						<listhead>
-							<listheader label="Name" width="50%"/>
-							<listheader label="Date" width="50%"/>
+							<listheader label="Name" width="50%" sort="auto"/>
+							<listheader label="Date" width="50%" sortAscending="&#36;{asc}" sortDescending="&#36;{dsc}"/>
 						</listhead>
 						<attribute name="onSelect">
 							codeViewPanel.title=main.getCurrentRealFile().getAbsolutePath();

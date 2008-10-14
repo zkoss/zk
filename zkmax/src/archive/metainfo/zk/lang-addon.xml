@@ -95,6 +95,14 @@ def alert(m):
 
 	<!-- the renderer version of components -->
 	<component>
+		<component-name>applet</component-name>
+		<component-class>org.zkoss.zul.Applet</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.AppletDefault</mold-uri>
+		</mold>
+	</component>
+	<component>
 		<component-name>area</component-name>
 		<extends>area</extends>
 		<mold>
