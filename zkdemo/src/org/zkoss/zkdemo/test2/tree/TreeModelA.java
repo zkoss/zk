@@ -20,9 +20,8 @@ package org.zkoss.zkdemo.test2.tree;
 
 import java.util.ArrayList;
 
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.AbstractTreeModel;
-import org.zkoss.zul.event.TreeDataListener;
+import org.zkoss.zul.TreeModel;
 import org.zkoss.zul.event.TreeDataEvent;
 
 /**

@@ -33,7 +33,6 @@ public class HostTreeModel extends AbstractTreeModel{
 	
 	/**
 	 * Constructor
-	 * @param tree the list is contained all data of nodes.
 	 */
 	public HostTreeModel(){
 		super(new FakeRoot("Root",5));
