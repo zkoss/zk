@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.ListIterator;
 import java.io.Reader;
+import java.io.Writer;
 import java.io.IOException;
 
 import org.zkoss.idom.Document;
@@ -67,6 +68,8 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	private String _reqId;
 	/** A collection of the AU responses that shall be generated to client */
 	private Collection _resps;
+	/** The extra writer used when rendering a component. */
+	private Writer _exout;
 	/** Whether onPiggyback is checked for this execution. */
 	private boolean _piggybacked;
 
@@ -290,6 +293,12 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	}
 	public void setResponses(Collection responses) {
 		_resps = responses;
+	}
+	public Writer getExtraWriter() {
+		return _exout;
+	}
+	public void setExtraWriter(Writer out) {
+		_exout = out;
 	}
 
 	//Object//

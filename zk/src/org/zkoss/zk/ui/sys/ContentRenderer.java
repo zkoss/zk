@@ -18,6 +18,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
+import java.io.IOException;
+
 /**
  * Used with {@link org.zkoss.zk.ui.AbstractComponent#renderProperties}
  * to generate the component content that will be sent to the client.
@@ -27,13 +29,13 @@ package org.zkoss.zk.ui.sys;
  */
 public interface ContentRenderer {
 	/** Renders a string property. */
-	public void render(String name, String value);
+	public void render(String name, String value) throws IOException;
 	/** Renders an integer property. */
-	public void render(String name, int value);
+	public void render(String name, int value) throws IOException;
 	/** Renders a boolean property. */
-	public void render(String name, boolean value);
+	public void render(String name, boolean value) throws IOException;
 	/** Renders a double property. */
-	public void render(String name, double value);
+	public void render(String name, double value) throws IOException;
 	/** Renders a char property. */
-	public void render(String name, char value);
+	public void render(String name, char value) throws IOException;
 }

@@ -63,12 +63,13 @@ zkDOM = { //static methods
 		else if (sib) n = sib.nextSibling;
 		else n = parent.firstChild;
 
+		/* Turn it on if need to fix this limitation (about script)
 		if (n && !zk.gecko && n.getElementsByTagName) {
 			//ie/safari/opera doesn't run script in it, so eval manually
 			var ns = n.getElementsByTagName("script");
 			for (var j = 0, len = ns.length; j < len; ++j)
 				eval(ns[j].text);
-		}
+		}*/
 		return n;
 	},
 	/** Detaches an element.

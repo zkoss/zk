@@ -24,9 +24,12 @@ import java.io.IOException;
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.XMLs;
 
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.ContentRenderer;
 import org.zkoss.zk.ui.sys.JsContentRenderer;
 import org.zkoss.zk.ui.event.Events;
@@ -195,20 +198,30 @@ public class Label extends XulElement {
 
 	//-- super --//
 	//super//
-	protected void renderProperties(ContentRenderer renderer) {
+	protected void renderProperties(ContentRenderer renderer)
+	throws IOException {
 		super.renderProperties(renderer);
 
 		int maxlen = getMaxlength();
 		if (maxlen > 0) renderer.render("maxlength", maxlen);
 		render(renderer, "multiline", isMultiline());
-	}
-	protected void redrawContent(Writer out) throws IOException {
-		out.write("</script><span id=\"");
-		out.write(getUuid());
-		out.write("\">");
-		out.write(XMLs.encodeText(getValue()));
-		out.write("</span><script>");
-		super.redrawContent(out);
+
+		String cnt = XMLs.encodeText(getValue());
+		if (cnt.length() > 0) {
+			Execution exec = Executions.getCurrent();
+			if (exec != null) {
+				final Writer out = ((ExecutionCtrl)exec).getExtraWriter();
+				if (out != null) {
+					out.write("<span id=\"");
+					out.write(getUuid());
+					out.write("\">");
+					out.write(cnt);
+					out.write("</span>\n");
+					cnt = null;
+				}
+			}
+			render(renderer, "value", cnt);
+		}
 	}
 	/** No child is allowed.
 	 */

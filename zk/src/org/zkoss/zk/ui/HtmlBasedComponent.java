@@ -371,7 +371,16 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 		final JsContentRenderer renderer = new JsContentRenderer();
 		renderProperties(renderer);
 		out.write("\nzkau.begin('");
-		out.write(getType());
+
+		final String type = getType();
+		out.write(type);
+		final int j = type.lastIndexOf('.');
+		final String defnm = getDefinition().getName();
+		if (!defnm.equalsIgnoreCase(j >= 0 ? type.substring(j+1): type)) {
+			out.write(':');
+			out.write(defnm);
+		}
+
 		out.write("','");
 		out.write(getUuid());
 		out.write("','");
@@ -416,7 +425,8 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	 * tags and children.
 	 * @since 5.0.0
 	 */
-	protected void renderProperties(ContentRenderer renderer) {
+	protected void renderProperties(ContentRenderer renderer)
+	throws IOException {
 		super.renderProperties(renderer);
 
 		render(renderer, "tooltiptext", getTooltiptext());

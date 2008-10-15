@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Collection;
 import java.io.Writer;
+import java.io.StringWriter;
 import java.io.IOException;
 
 import javax.servlet.ServletContext;
@@ -466,6 +467,7 @@ public class HtmlPageRenders {
 		//prepare style
 		String style = page.getStyle();
 		if (style == null || style.length() == 0) {
+			style = null;
 			String wd = null, hgh = null;
 			if (owner instanceof HtmlBasedComponent) {
 				final HtmlBasedComponent hbc = (HtmlBasedComponent)owner;
@@ -482,22 +484,27 @@ public class HtmlPageRenders {
 			}
 		}
 
+		StringWriter exout = null;
+		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 		if (!au && owner == null) {
+			execCtrl.setExtraWriter(exout = new StringWriter());
 			out.write("<div");
 			writeAttr(out, "id", page.getUuid());
 			out.write(">\n<script>zk.booting=true;try{");
 		}
 		out.write("zkau.pageBegin('");
-		out.write(desktop.getId());
-		out.write("','");
 		out.write(page.getUuid());
-		out.write("','");
-		if (style != null) out.write(style);
 		out.write('\'');
-		if (contained || owner == null) {
-			out.write(',');
-			out.write(Boolean.toString(contained && !au));
+		if (style != null || owner == null) {
+			out.write(",'");
+			if (style != null) out.write(style);
+			out.write('\'');
+
 			if (owner == null) {
+				out.write(",'");
+				out.write(desktop.getId());
+				out.write("',");
+				out.write(Boolean.toString(contained && !au));
 				out.write(",'");
 				out.write(desktop.getUpdateURI(null));
 				out.write('\'');
@@ -511,6 +518,8 @@ public class HtmlPageRenders {
 		out.write("\nzkau.pageEnd();");
 		if (!au && owner == null) {
 			out.write("}finally{zk.booting=false;}</script>\n</div>");
+			execCtrl.setExtraWriter(null);
+			out.write(exout.toString());
 		}
 	}
 	private static final void writeAttr(Writer out, String name, String value)

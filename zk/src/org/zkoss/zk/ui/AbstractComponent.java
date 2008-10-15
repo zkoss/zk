@@ -1193,7 +1193,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 *
 	 * @since 5.0.0
 	 */
-	protected void renderProperties(ContentRenderer renderer) {
+	protected void renderProperties(ContentRenderer renderer)
+	throws IOException {
 		if (!ComponentsCtrl.isAutoId(_id)) //not getId() to avoid gen ID
 			render(renderer, "id", _id);
 	}
@@ -1205,7 +1206,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * @since 5.0.0
 	 */
 	protected void render(ContentRenderer renderer,
-	String name, String value) {
+	String name, String value) throws IOException {
 		if (value != null && value.length() > 0)
 			renderer.render(name, value);
 	}
@@ -1216,7 +1217,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * @since 5.0.0
 	 */
 	protected void render(ContentRenderer renderer,
-	String name, boolean value) {
+	String name, boolean value) throws IOException {
 		if (value)
 			renderer.render(name, true);
 	}
@@ -1227,7 +1228,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * @since 5.0.0
 	 */
 	protected void renderEvent(ContentRenderer renderer,
-	String evtnm) {
+	String evtnm) throws IOException {
 		if (Events.isListened(this, evtnm, false))
 			renderer.render(evtnm, Events.isListened(this, evtnm, true));
 	}
