@@ -132,27 +132,6 @@ public class Label extends XulElement {
 	public void setHyphen(boolean hyphen) {
 	}
 
-	/** Whether to generate the value directly without ID.
-	 * <p>Used only for component generated. Not for applications.
-	 * @since 3.0.0
-	 */
-	public boolean isIdRequired() {
-		final Component p = getParent();
-		return p == null || !isVisible()
-			|| !isRawLabel(p) || !Components.isAutoId(getId())
-			|| isAsapRequired(Events.ON_CLICK)
-			|| !isEmpty(getStyle()) || !isEmpty(getSclass())
-			|| !isEmpty(getContext()) || !isEmpty(getTooltip())
-			|| !isEmpty(getTooltiptext()) || !isEmpty(getPopup())
-			|| !"false".equals(getDraggable())
-			|| !"false".equals(getDroppable())
-			|| isAsapRequired(Events.ON_RIGHT_CLICK)
-			|| !isEmpty(getAction())
-			|| !isEmpty(getLeft()) || !isEmpty(getTop())
-			|| !isEmpty(getWidth()) || !isEmpty(getHeight())
-			|| isAsapRequired(Events.ON_DOUBLE_CLICK)
-			|| !"default".equals(getMold());
-	}
 	private static boolean isEmpty(String s) {
 		return s == null || s.length() == 0;
 	}
@@ -224,18 +203,12 @@ public class Label extends XulElement {
 		render(renderer, "multiline", isMultiline());
 	}
 	protected void redrawContent(Writer out) throws IOException {
-		out.write("<span>");
+		out.write("</script><span id=\"");
+		out.write(getUuid());
+		out.write("\">");
 		out.write(XMLs.encodeText(getValue()));
-		out.write("</span>");
+		out.write("</span><script>");
 		super.redrawContent(out);
-	}
-	public void redraw(Writer out) throws IOException {
-		if (isIdRequired()) {
-			super.redraw(out);
-		} else {
-			out.write(getEncodedText());
-			//no processing; direct output if not ZUL
-		}
 	}
 	/** No child is allowed.
 	 */

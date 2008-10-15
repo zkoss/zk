@@ -482,9 +482,12 @@ public class HtmlPageRenders {
 			}
 		}
 
-		out.write("<div");
-		writeAttr(out, "id", page.getUuid());
-		out.write(">\n<script>zkau.pageBegin('");
+		if (!au && owner == null) {
+			out.write("<div");
+			writeAttr(out, "id", page.getUuid());
+			out.write(">\n<script>zk.booting=true;try{");
+		}
+		out.write("zkau.pageBegin('");
 		out.write(desktop.getId());
 		out.write("','");
 		out.write(page.getUuid());
@@ -505,7 +508,10 @@ public class HtmlPageRenders {
 		for (Iterator it = page.getRoots().iterator(); it.hasNext();)
 			((ComponentCtrl)it.next()).redraw(out);
 
-		out.write("\nzkau.pageEnd();</script></div>");
+		out.write("\nzkau.pageEnd();");
+		if (!au && owner == null) {
+			out.write("}finally{zk.booting=false;}</script>\n</div>");
+		}
 	}
 	private static final void writeAttr(Writer out, String name, String value)
 	throws IOException {

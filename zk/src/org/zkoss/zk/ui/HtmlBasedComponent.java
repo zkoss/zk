@@ -366,14 +366,11 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	 * (such as paging/cropping), it could override {@link #redrawChildren}.
 	 */
 	public void redraw(final Writer out) throws IOException {
-		out.write("<div id=\"");
-		out.write(getUuid());
-		out.write("\">");
 		redrawContent(out);
 
 		final JsContentRenderer renderer = new JsContentRenderer();
 		renderProperties(renderer);
-		out.write("<script>zkau.begin('");
+		out.write("\nzkau.begin('");
 		out.write(getType());
 		out.write("','");
 		out.write(getUuid());
@@ -383,34 +380,11 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 			out.write(mold);
 		out.write("',{\n");
 		out.write(renderer.getBuffer().toString());
+		out.write("});\n");
 
-		final ChildWriter out2 = new ChildWriter(out);
-		redrawChildren(out2);
-		out2.end();
-		if (isChildable()) {
-			out.write("});</script>\n");
-		} else {
-		}
-	}
-	private static class ChildWriter extends Writer {
-		private final Writer _out;
-		private boolean _gen;
-		private ChildWriter(Writer out) {
-			_out = out;
-		}
-		public void close() throws IOException {_out.close();}
-		public void flush() throws IOException {_out.flush();}
-		public void write(char[] cbuf, int off, int len) throws IOException {
-			if (!_gen) {
-				_gen = true;
-				_out.write("});</script>\n");
-			}
-			_out.write(cbuf, off, len);
-		}
-		private void end() throws IOException {
-			_out.write(_gen ? "<script>": "});");
-			_out.write("zkau.end();</script></div>\n");
-		}
+		redrawChildren(out);
+
+		out.write("zkau.end();\n");
 	}
 	/** Redraw the content of this component.
 	 * <p>Default: does nothing.
