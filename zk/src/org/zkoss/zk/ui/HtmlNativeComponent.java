@@ -142,10 +142,13 @@ implements DynamicTag, Native {
 
 		//prolog
 		sb.append(_prolog); //no encoding
+		boolean zktagGened = false;
 		final String tn = _tag != null ? _tag.toLowerCase(): "";
-		if ("html".equals(tn) || "body".equals(tn)) {//</head> might be part of _prolog
+		if ("html".equals(tn) || "body".equals(tn)
+		|| "head".equals(tn)) {//<head> might be part of _prolog
 			final int j = indexOfHead(sb);
 			if (j >= 0) {
+				zktagGened = true;
 				final String zktags = ZkFns.outZkHtmlTags();
 				if (zktags != null)
 					sb.insert(j, zktags);
@@ -163,8 +166,8 @@ implements DynamicTag, Native {
 
 		//second half
 		helper.getSecondHalf(sb, _tag);
-		if ("html".equals(tn) || "body".equals(tn) || "head".equals(tn)) {
-			final int j = sb.indexOf("</" + _tag);
+		if (!zktagGened && ("html".equals(tn) || "body".equals(tn))) {
+			final int j = sb.lastIndexOf("</" + _tag);
 			if (j >= 0) {
 				final String zktags = ZkFns.outZkHtmlTags();
 				if (zktags != null)
@@ -181,13 +184,12 @@ implements DynamicTag, Native {
 		out.write(sb.toString());
 		sb.setLength(0);
 	}
-	/** Search </head> case-insensitive. */
+	/** Search <head> case-insensitive. */
 	private static int indexOfHead(StringBuffer sb) {
-		for (int j = 0, len = sb.length(); (j = sb.indexOf("</", j)) >= 0;) {
-			final int k = j;
-			if (j + 7 > len) break; //not found
+		for (int j = 0, len = sb.length(); (j = sb.indexOf("<", j)) >= 0;) {
+			if (j + 6 > len) break; //not found
 
-			char cc = sb.charAt(j += 2);
+			char cc = sb.charAt(++j);
 			if (cc != 'h' && cc != 'H') continue;
 			cc = sb.charAt(++j);
 			if (cc != 'e' && cc != 'E') continue;
@@ -195,8 +197,8 @@ implements DynamicTag, Native {
 			if (cc != 'a' && cc != 'A') continue;
 			cc = sb.charAt(++j);
 			if (cc != 'd' && cc != 'D') continue;
-			if (sb.charAt(++j) == '>')
-				return k;
+			j = sb.indexOf(">", j + 1);
+			return j >= 0 ? j + 1: -1;
 		}
 		return -1;
 	}
