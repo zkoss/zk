@@ -29,7 +29,6 @@ import org.zkoss.idom.Namespace;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.fn.ZkFns;
 
 /**
  * Utilities for implementing {@link org.zkoss.zk.ui.ext.Native.Helper}.
@@ -68,12 +67,5 @@ public class NativeHelpers {
 					Objects.toString(me.getValue()));
 			}
 		}
-	}
-
-	/** @deprecated As of release 3.5.0, replaced with
-	 * {@link ZkFns#outZkHtmlTags}.
-	 */
-	public static String outZKHtmlTags() {
-		return ZkFns.outZkHtmlTags();
 	}
 }

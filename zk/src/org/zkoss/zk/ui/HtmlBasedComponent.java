@@ -358,14 +358,14 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	 * then invokes {@link #renderProperties} to render component's
 	 * properties,
 	 * and {@link #redrawChildren} to redraw children (and descendants)
-	 * (by calling their {@link #redraw}.
+	 * (by calling their {@link #redraw}).
 	 *
 	 * <p>If a dervied class wants to render more content, it can override
 	 * {@link #renderProperties} or {@link #redrawContent}.
 	 * <p>If a derived class renders only a subset of its children
 	 * (such as paging/cropping), it could override {@link #redrawChildren}.
 	 */
-	public void redraw(Writer out) throws IOException {
+	public void redraw(final Writer out) throws IOException {
 		out.write("<div id=\"");
 		out.write(getUuid());
 		out.write("\">");
@@ -384,12 +384,32 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 		out.write("',{\n");
 		out.write(renderer.getBuffer().toString());
 
+		final ChildWriter out2 = new ChildWriter(out);
+		redrawChildren(out2);
+		out2.end();
 		if (isChildable()) {
 			out.write("});</script>\n");
-			redrawChildren(out);
-			out.write("<script>zkau.end();</script></div>\n");
 		} else {
-			out.write("});zkau.end();</script></div>\n");
+		}
+	}
+	private static class ChildWriter extends Writer {
+		private final Writer _out;
+		private boolean _gen;
+		private ChildWriter(Writer out) {
+			_out = out;
+		}
+		public void close() throws IOException {_out.close();}
+		public void flush() throws IOException {_out.flush();}
+		public void write(char[] cbuf, int off, int len) throws IOException {
+			if (!_gen) {
+				_gen = true;
+				_out.write("});</script>\n");
+			}
+			_out.write(cbuf, off, len);
+		}
+		private void end() throws IOException {
+			_out.write(_gen ? "<script>": "});");
+			_out.write("zkau.end();</script></div>\n");
 		}
 	}
 	/** Redraw the content of this component.
@@ -398,6 +418,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	 * before SCRIPT tag. Usually you generate the content here that
 	 * can be crawled by the search engine. For example, a label
 	 * shall generate the value here so the search engine are able to index it.
+	 * <p>Note: it is called before {@link #redrawChildren}.
 	 * @since 5.0.0
 	 * @see #redraw
 	 */

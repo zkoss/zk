@@ -803,7 +803,7 @@ import org.zkoss.zk.au.out.*;
 	/** Redraws the whole page. */
 	private static String redraw(Page page) throws IOException {
 		final StringWriter out = new StringWriter(1024*8);
-		((PageCtrl)page).redraw(null, out);
+		((PageCtrl)page).redraw(out);
 		return out.toString();
 	}
 

@@ -193,28 +193,6 @@ public class WebManager {
 	}
 
 	//-- static --//
-	/** Returns the value of the specified attribute in the request.
-	 * The implementation shall use this method instead of request.getAttribute,
-	 * since it resolves the limitation of incapability of inter-portlet
-	 * communication.
-	 *
-	 * @param name the attribute's name
-	 */
-	public static Object getRequestLocal(ServletRequest request, String name) {
-		return request.getAttribute(name);
-	}
-	/** Sets the value of the specified attribute in the request.
-	 * The implementation shall use this method instead of request.setAttribute,
-	 * since it resolves the limitation of incapability of inter-portlet
-	 * communication.
-	 * @param name the attribute's name
-	 * @param value the attribute's value
-	 */
-	public static
-	void setRequestLocal(ServletRequest request, String name, Object value) {
-		request.setAttribute(name, value);
-	}
-
 	/** Register a listener to the specified context such that
 	 * it will be invoked if the corresponding {@link WebManager} is created.
 	 *
@@ -312,10 +290,10 @@ public class WebManager {
 	 */
 	public Desktop getDesktop(Session sess, ServletRequest request,
 	ServletResponse response, String path, boolean autocreate) {
-		Desktop desktop = (Desktop)getRequestLocal(request, ATTR_DESKTOP);
+		Desktop desktop = (Desktop)request.getAttribute(ATTR_DESKTOP);
 		if (desktop == null && autocreate) {
 			if (D.ON && log.debugable()) log.debug("Create desktop for "+path);
-			setRequestLocal(request, ATTR_DESKTOP,
+			request.setAttribute(ATTR_DESKTOP,
 				desktop = newDesktop(sess, request, response, path));
 		}
 		return desktop;
@@ -349,10 +327,10 @@ public class WebManager {
 	public static void setDesktop(HttpServletRequest request,
 	Desktop desktop) {
 		/*if (D.ON) {
-			final Desktop dt = (Desktop)getRequestLocal(ATTR_DESKTOP);
+			final Desktop dt = (Desktop)request.getAttribute(ATTR_DESKTOP);
 			assert dt == null || dt == desktop: "old:"+dt+", new:"+desktop;
 		}*/
-		setRequestLocal(request, ATTR_DESKTOP, desktop);
+		request.setAttribute(ATTR_DESKTOP, desktop);
 	}
 	/** Creates a page.
 	 * It invokes {@link UiFactory#newPage}. However, it prepares

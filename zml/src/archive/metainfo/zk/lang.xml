@@ -27,19 +27,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	 -->
 	<native-namespace>true</native-namespace>
 
-	<!-- 
-		Note: '~./' means it is located in the class path starting from
-		'/metainfo/web'. For example, '~./img/abc.gif' means abc.gif located
-		at '/metainfo/web/img'.
-	-->
-	<mold>
-		<mold-name>desktop</mold-name>
-		<mold-uri>~./zml/desktop.dsp</mold-uri>
-	</mold>
-	<mold>
-		<mold-name>page</mold-name>
-		<mold-uri>~./zml/page.dsp</mold-uri>
-	</mold>
+	<page-renderer-class>org.zkoss.zml.impl.PageRenderer</page-renderer-class>
 
 	<!-- Defines the component and attribute names used to represent
 	a label when a plain text is found in ZUL XML.

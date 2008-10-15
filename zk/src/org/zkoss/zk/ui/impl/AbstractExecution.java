@@ -21,6 +21,7 @@ package org.zkoss.zk.ui.impl;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.ListIterator;
 import java.io.Reader;
@@ -64,6 +65,8 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	private final Page _creating;
 	/** The sequence ID of the current request. */
 	private String _reqId;
+	/** A collection of the AU responses that shall be generated to client */
+	private Collection _resps;
 	/** Whether onPiggyback is checked for this execution. */
 	private boolean _piggybacked;
 
@@ -79,7 +82,9 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 
 	//-- Execution --//
 	public final boolean isAsyncUpdate(Page page) {
-		return _creating == null || (page != null && _creating != page);
+		if (page != null)
+			return _creating != page;
+		return _creating == null || _ei.isEverAsyncUpdate();
 	}
 	public Desktop getDesktop() {
 		return _desktop;
@@ -278,6 +283,13 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	}
 	public String getRequestId() {
 		return _reqId;
+	}
+
+	public Collection getResponses() {
+		return _resps;
+	}
+	public void setResponses(Collection responses) {
+		_resps = responses;
 	}
 
 	//Object//

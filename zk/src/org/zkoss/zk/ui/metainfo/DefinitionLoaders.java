@@ -46,6 +46,7 @@ import org.zkoss.web.servlet.StyleSheet;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.impl.*;
 import org.zkoss.zk.ui.sys.ConfigParser;
+import org.zkoss.zk.ui.sys.PageRenderer;
 
 /**
  * Utilities to load language definitions.
@@ -229,20 +230,9 @@ public class DefinitionLoaders {
 
 			//if (log.debugable()) log.debug("Load language: "+lang+", "+ns);
 
-			final Map pagemolds = parseSimpleMolds(root);
-			final String desktopURI = (String)pagemolds.get("desktop");
-			final String pageURI = (String)pagemolds.get("page");
-			if (desktopURI == null || desktopURI.length() == 0 || pageURI == null
-			|| pageURI.length() == 0)
-				throw new UiException("Both desktop and page molds must be specified, "+root.getLocator());
-			if (desktopURI.startsWith("class:") || pageURI.startsWith("class:"))
-				throw new UiException("Both desktop and page molds don't support 'class:', "+root.getLocator());
-
-			String completeURI = (String)pagemolds.get("complete");
-			if (completeURI == null)
-				completeURI = desktopURI;
-			else if (completeURI.length() == 0)
-				throw new UiException("Empty complete mold not allowed");
+			PageRenderer pageRenderer = (PageRenderer)
+				locateClass(IDOMs.getRequiredElementValue(root, "page-renderer-class"))
+				.newInstance();
 
 			final List exts = parseExtensions(root);
 			if (exts.isEmpty())
@@ -252,7 +242,7 @@ public class DefinitionLoaders {
 			String bNative = root.getElementValue("native-namespace", true);
 
 			langdef = new LanguageDefinition(
-				deviceType, lang, ns, exts, completeURI, desktopURI, pageURI,
+				deviceType, lang, ns, exts, pageRenderer,
 				"true".equals(ignoreCase), "true".equals(bNative), locator);
 		}
 
@@ -545,10 +535,6 @@ public class DefinitionLoaders {
 	}
 	private static Map parseProps(Element elm) {
 		return IDOMs.parseParams(elm, "property", "property-name", "property-value");
-	}
-	/** Parses mold without z2c-uri. */
-	private static Map parseSimpleMolds(Element elm) {
-		return IDOMs.parseParams(elm, "mold", "mold-name", "mold-uri");
 	}
 	private static Map parseCustAttrs(Element elm) {
 		return IDOMs.parseParams(elm, "custom-attribute", "attribute-name", "attribute-value");

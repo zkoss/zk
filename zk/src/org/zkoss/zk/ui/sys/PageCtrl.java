@@ -23,24 +23,37 @@ import java.io.Writer;
 import java.io.IOException;
 
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.ZScript;
 
 /**
- * Addition interface to {@link org.zkoss.zk.ui.Page} for implementation
- * purpose.
+ * Addition interface to {@link Page} for implementation purpose.
  *
  * <p>Application developers shall never access any of this methods.
  *
  * @author tomyeh
  */
 public interface PageCtrl {
-	/** The execution attribute used to control {@link #redraw} to use
-	 * include instead of forward to redraw the page
+	/** The execution attribute used to control how to {@link #redraw}
+	 * a page. By default, the page draws the desktop with the page if
+	 * necessary (such as the top-level page and not being included).
+	 * If you prefer to draw the page only, you can set the value to
+	 * <code>page</code>.
+	 * If you prefer to draw the desktop with the page, you can set the
+	 * vallue to <code>desktop</code>.
+	 * If the page already has everything that the client expects such
+	 * as the HTML and BODY tags, you can set the value to <code>complete</code>.
+	 *
+	 * <p>Note: if {@link Page#isComplete} is true, it has the same effect
+	 * of setting {@link #ATTR_REDRAW_CONTROL} to <code>complete</code>.
+	 * 
+	 * <p>Default: null (means auto).
+	 * @since 5.0.0
 	 */
-	public static final String ATTR_REDRAW_BY_INCLUDE = "org.zkoss.zk.ui.redrawByInclude";
+	public static final String ATTR_REDRAW_CONTROL = "org.zkoss.zk.ui.page.redrawCtrl";
 
 	/** Initializes this page by assigning the info provided by
 	 * the specified {@link PageConfig}, and then adds it
@@ -143,11 +156,9 @@ public interface PageCtrl {
 	 * whether to include, instead of forward, the page content.
 	 * By default, {@link Execution#forward } is used if possible.
 	 *
-	 * @param responses a list of responses that the page has to generate
-	 * corresponding javascript to process them; or null if no such responses.
-	 * The responses is not null, if and only if the page is creating
+	 * @since 5.0.0
 	 */
-	public void redraw(Collection responses, Writer out) throws IOException;
+	public void redraw(Writer out) throws IOException;
 
 	//-- Used for component implementation --//
 	/** Adds a root component to a page.

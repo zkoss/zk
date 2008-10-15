@@ -18,6 +18,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
+import java.util.Collection;
+
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
@@ -138,6 +140,11 @@ public interface ExecutionCtrl {
 	 */
 	public void addDateHeader(String name, long value);
 
+	/** Sets the content type.
+	 * @since 5.0.0
+	 */
+	public void setContentType(String contentType);
+
 	/** @deprecated As of release 3.0.7, replaced with {@link org.zkoss.zk.ui.Execution#getAttribute}.
 	 */
 	public Object getRequestAttribute(String name);
@@ -168,4 +175,15 @@ public interface ExecutionCtrl {
 	 * @since 3.0.5
 	 */
 	public String getRequestId();
+
+	/** Returns the collection of the AU responses ({@link org.zkoss.zk.au.AuResponse})
+	 * that shall be generated to the output, or null if not available.
+	 * @since 5.0.0
+	 */
+	public Collection getResponses();
+	/** Sets the collection of the AU responses ({@link org.zkoss.zk.au.AuResponse})
+	 * that shall be generated to the output.
+	 * @since 5.0.0
+	 */
+	public void setResponses(Collection responses);
 }

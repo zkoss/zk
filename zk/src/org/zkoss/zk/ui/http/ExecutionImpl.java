@@ -389,6 +389,10 @@ public class ExecutionImpl extends AbstractExecution {
 		if (_response instanceof HttpServletResponse)
 			((HttpServletResponse)_response).addDateHeader(name, value);
 	}
+	public void setContentType(String contentType) {
+		if (_response instanceof HttpServletResponse)
+			((HttpServletResponse)_response).setContentType(contentType);
+	}
 
 	/** @deprecated As of release 3.0.7, replaced with {@link org.zkoss.zk.ui.Execution#getAttribute}.
 	 */

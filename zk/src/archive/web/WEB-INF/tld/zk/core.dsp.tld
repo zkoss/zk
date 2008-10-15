@@ -14,53 +14,16 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <taglib>
 	<uri>http://www.zkoss.org/dsp/zk/core</uri>
 	<description>
-	Methods and actions for ZK in DSP/ZUML
+	Methods and actions of ZK utilities
 	</description>
 
 	<!--         -->
 	<!-- Imports -->
 	<!--         -->
-	<import>
-		<import-name>ZkFns</import-name>
-		<import-class>org.zkoss.zk.fn.ZkFns</import-class>
-	</import>
 
 	<!--           -->
 	<!-- Functions -->
 	<!--           -->
-	<function>
-		<name>redraw</name>
-		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
-		<function-signature>
-	void redraw(org.zkoss.zk.ui.Component, java.io.Writer)
-		</function-signature>
-		<description>
-	Redraw the specified component.
-		</description>
-	</function>
-
-	<function>
-		<name>outResponseJavaScripts</name>
-		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
-		<function-signature>
-	java.lang.String outResponseJavaScripts(java.util.Collection);
-		</function-signature>
-		<description>
-	Returns javascript to handle the specified responses.
-		</description>
-	</function>
-
-	<function>
-		<name>outLangJavaScripts</name>
-		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
-		<function-signature>
-	java.lang.String outLangJavaScripts(java.lang.String)
-		</function-signature>
-		<description>
-	Returns HTML tags to include all JavaScripts used by all languages.
-	The argument is ignored (since 3.5.0; reserved for backward compatible).
-		</description>
-	</function>
 	<function>
 		<name>outLangStyleSheets</name>
 		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
@@ -84,68 +47,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	Note: unlike outLangStyleSheets, it can be called without current execution.
 		</description>
 	</function>
-	<function>
-		<name>outHtmlUnavailable</name>
-		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
-		<function-signature>
-	java.lang.String outHtmlUnavailable(org.zkoss.zk.ui.Page)
-		</function-signature>
-		<description>
-	Generates the unavailable message in HTML tags, if any.
-		</description>
-	</function>
-	<function>
-		<name>outHeaders</name>
-		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
-		<function-signature>
-	java.lang.String outHeaders(org.zkoss.zk.ui.Page)
-		</function-signature>
-		<description>
-	Returns the content that will be placed inside the header element
-	of the specified page.
-		</description>
-	</function>
-	<function>
-		<name>outRootAttributes</name>
-		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
-		<function-signature>
-	java.lang.String outRootAttributes(org.zkoss.zk.ui.Page)
-		</function-signature>
-		<description>
-	Returns the content that will be placed as the attributes of
-	the root element of the specified page.
-		</description>
-	</function>
-	<function>
-		<name>outContentType</name>
-		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
-		<function-signature>
-	java.lang.String outContentType(org.zkoss.zk.ui.Page)
-		</function-signature>
-		<description>
-	Returns the content type.
-		</description>
-	</function>
-	<function>
-		<name>outDocType</name>
-		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
-		<function-signature>
-	java.lang.String outDocType(org.zkoss.zk.ui.Page)
-		</function-signature>
-		<description>
-	Returns the doc type.
-		</description>
-	</function>
-	<function>
-		<name>outFirstLine</name>
-		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
-		<function-signature>
-	java.lang.String outFirstLine(org.zkoss.zk.ui.Page)
-		</function-signature>
-		<description>
-	Returns the first line to be generated to the output.
-		</description>
-	</function>
 
 	<function>
 		<name>toAbsoluteURI</name>
@@ -167,50 +68,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</function-signature>
 		<description>
 	Returns date relevant labels in JavaScript.
-		</description>
-	</function>
-
-	<function>
-		<name>redrawPageInHtml</name>
-		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
-		<function-signature>
-	void redrawPageInHtml(org.zkoss.zk.ui.Page, java.io.Writer)
-		</function-signature>
-		<description>
-	Generates the HTML content representing a page to the specified writer.
-		</description>
-	</function>
-
-	<function>
-		<name>outZkHtmlTags</name>
-		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
-		<function-signature>
-	java.lang.String outZkHtmlTags()
-		</function-signature>
-		<description>
-	Returns the ZK HTML content representing a desktop.
-	It is required only if redrawPageInHtml might not be called
-		</description>
-	</function>
-
-	<function>
-		<name>noCSSAttrs</name>
-		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
-		<function-signature>
-	java.lang.String noCSSAttrs(java.lang.String)
-		</function-signature>
-		<description>
-	Removes the class and style attributes from the specified one.
-		</description>
-	</function>
-	<function>
-		<name>outCSSAttrs</name>
-		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
-		<function-signature>
-	java.lang.String outCSSAttrs(java.lang.String)
-		</function-signature>
-		<description>
-	Returns only the class and style attributes from the specified one.
 		</description>
 	</function>
 </taglib>

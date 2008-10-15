@@ -421,8 +421,10 @@ public class UiEngineImpl implements UiEngine {
 				//(example: ZUL's include).
 				//If so, we cannot generate the responses in the page.
 				//Rather, we shall add them to the async update.
+			else
+				execCtrl.setResponses(responses);
 
-			((PageCtrl)page).redraw(responses, out);
+			((PageCtrl)page).redraw(out);
 		} catch (Throwable ex) {
 			cleaned = true;
 			final List errs = new LinkedList();

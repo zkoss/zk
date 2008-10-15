@@ -5,6 +5,8 @@ ZK 5.0.0
 * Bugs
 
 * Upgrade Notes
+  + LanguageDefinition: getCompleteURI, getDesktopURI and getPageURI
+    are replaced by getPageRenderer.
 
 	--------
 ZK 3.6.0

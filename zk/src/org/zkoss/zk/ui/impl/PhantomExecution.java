@@ -182,6 +182,9 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 	public void addDateHeader(String name, long value) {
 		throw new UnsupportedOperationException();
 	}
+	public void setContentType(String contentType) {
+		throw new UnsupportedOperationException();
+	}
 
 	/** @deprecated As of release 3.0.7, replaced with {@link org.zkoss.zk.ui.Execution#getAttribute}.
 	 */

@@ -67,10 +67,10 @@ public interface Execution  {
 	 * @return whether the specified page is being asynchronous updated
 	 * by this execution.
 	 * If the specified page is null, this method returns
-	 * whether this execution is asynchronous updating a page
-	 * (rather than creating/loading a new page).
-	 * Each execution remembers the page being creating.
-	 * All other pages are consided as being asynchronous updated.
+	 * whether this execution is an asynchronous update
+	 * (rather than a request starting a new desktop).<br/>
+	 * Note: since 5.0.0, isAsyncUpdate(null) return if the fisrt execution
+	 * is caused by aysnchronous update (not just the current execution).
 	 */
 	public boolean isAsyncUpdate(Page page);
 

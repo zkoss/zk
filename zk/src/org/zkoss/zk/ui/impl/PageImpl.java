@@ -81,6 +81,7 @@ import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.Names;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.IdGenerator;
+import org.zkoss.zk.ui.sys.PageRenderer;
 import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.au.out.AuSetTitle;
 import org.zkoss.zk.scripting.Interpreter;
@@ -114,8 +115,6 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	private static final Log _zklog = Log.lookup("org.zkoss.zk.log");
     private static final long serialVersionUID = 20070413L;
 
-	/** URI for redrawing as a desktop or part of another desktop. */
-	private final ExValue _cplURI, _dkURI, _pgURI;
 	/** The component that includes this page, or null if not included. */
 	private transient Component _owner;
 	/** Used to retore _owner. */
@@ -189,9 +188,6 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		init();
 
 		_langdef = langdef;
-		_cplURI = new ExValue(_langdef.getCompleteURI(), String.class);
-		_dkURI = new ExValue(_langdef.getDesktopURI(), String.class);
-		_pgURI = new ExValue(_langdef.getPageURI(), String.class);
 		_compdefs = compdefs != null ? compdefs:
 			new ComponentDefinitionMap(
 				_langdef.getComponentDefinitionMap().isCaseInsensitive());
@@ -215,9 +211,6 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		init();
 
 		_langdef = richlet.getLanguageDefinition();
-		_cplURI = new ExValue(_langdef.getCompleteURI(), String.class);
-		_dkURI = new ExValue(_langdef.getDesktopURI(), String.class);
-		_pgURI = new ExValue(_langdef.getPageURI(), String.class);
 		_compdefs = new ComponentDefinitionMap(
 			_langdef.getComponentDefinitionMap().isCaseInsensitive());
 		_path = path != null ? path: "";
@@ -785,38 +778,12 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		return _fellows.containsKey(compId);
 	}
 
-	public void redraw(Collection responses, Writer out) throws IOException {
+	public void redraw(Writer out)
+	throws IOException {
 //		if (log.debugable()) log.debug("Redrawing page: "+this+", roots="+_roots);
 
 		final Execution exec = getExecution();
-		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
-		final boolean asyncUpdate = execCtrl.getVisualizer().isEverAsyncUpdate();
-		final boolean proxy = isProxy(exec);
-		final boolean bIncluded = asyncUpdate || exec.isIncluded()
-			|| exec.getAttribute(ATTR_REDRAW_BY_INCLUDE) != null
-			|| proxy;
-		final String uri = (String)
-			(_complete ? _cplURI: bIncluded ? _pgURI: _dkURI)
-				.getValue(_langdef.getEvaluator(), this);
-				//desktop and page URI is defined in language
-
-		if (bIncluded)
-			exec.setAttribute("org.zkoss.zk.ui.page.included", Boolean.TRUE);
-			//maintain original state since desktop.dsp will include page.dsp
-
-		final Map attrs = new HashMap(8);
-		attrs.put("page", this);
-		attrs.put("asyncUpdate", Boolean.valueOf(asyncUpdate));
-			//whether it is caused by AU request
-		attrs.put("proxy", Boolean.valueOf(proxy));
-			//whether it is caused by ZK Proxy
-		attrs.put("embed", Boolean.valueOf(asyncUpdate || proxy));
-			//if embed, not to generate JavaScript and CSS
-		attrs.put("responses",
-			responses != null ? responses: Collections.EMPTY_LIST);
-		if (bIncluded) {
-			exec.include(out, uri, attrs, Execution.PASS_THRU_ATTR);
-		} else {
+		if (!exec.isAsyncUpdate(null) && !exec.isIncluded()) {
 //FUTURE: Consider if config.isKeepDesktopAcrossVisits() implies cacheable
 //Why yes: the client doesn't need to ask the server for updated content
 //Why no: browsers seems fail to handle DHTML correctly (when BACK to
@@ -826,6 +793,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 					_desktop.getDevice().isCacheable();
 			if (!cacheable) {
 				//Bug 1520444
+				final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 				execCtrl.setHeader("Pragma", "no-cache");
 				execCtrl.addHeader("Cache-Control", "no-cache");
 				execCtrl.addHeader("Cache-Control", "no-store");
@@ -839,16 +807,11 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 				execCtrl.setHeader("Expires", "-1");
 
 				exec.setAttribute(Attributes.NO_CACHE, Boolean.TRUE);
-				//so ZkFns.outLangJavaScripts generates zk.keepDesktop correctly
+				//so HtmlPageRenderers.outLangJavaScripts generates zk.keepDesktop correctly
 			}
-			exec.forward(out, uri, attrs, Execution.PASS_THRU_ATTR);
-				//Don't use include. Otherwise, headers will be gone.
 		}
-	}
-	/** Tests if the request is sent by ZK Proxy. */
-	private static boolean isProxy(Execution exec) {
-		final String ua = exec.getHeader("User-Agent");
-		return ua != null && ua.indexOf("ZK Proxy") >= 0;
+
+		_langdef.getPageRenderer().render(this, out);
 	}
 
 	public final Namespace getNamespace() {

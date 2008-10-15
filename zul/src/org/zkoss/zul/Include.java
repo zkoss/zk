@@ -251,7 +251,7 @@ public class Include extends XulElement implements DynamicPropertied {
 	protected boolean isChildable() {
 		return false;
 	}
-	protected void redrawContent(Writer out) throws IOException {
+	protected void redrawChildren(Writer out) throws IOException {
 		final UiEngine ueng =
 			((WebAppCtrl)getDesktop().getWebApp()).getUiEngine();
 		ueng.pushOwner(this);

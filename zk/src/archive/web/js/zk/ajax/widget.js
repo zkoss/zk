@@ -28,8 +28,8 @@ zk.Widget = zk.$extends(zk.Object, {
 	//firstChild: null,
 	/** The last child widget (readonly). */
 	//lastChild: null,
-	/** The desktop that this widget belongs to (readonly). */
-	//desktop: null,
+	/** The page that this widget belongs to (readonly). */
+	//page: null,
 
 	/** Whether this widget has a copy at the server (readonly). */
 	inServer: false,

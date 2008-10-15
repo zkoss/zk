@@ -536,8 +536,12 @@ public interface Page extends IdSpace {
 	 * For example, for HTML browsers, the page will generate
 	 * the HTML, HEAD and BODY tags.
 	 *
-	 * <p>Default: false. It means that we assume a page is complete
-	 * if and only if it is <em>not</em> included by other page.
+	 * <p>It is meaningful only if it is the top-level page (i.e.,
+	 * not included by the <code>include</code> component).
+	 *
+	 * <p>Default: false. It means ZK loader will enclose
+	 * the page content with HTML/HEAD/BODY if necessary (such as
+	 * not included by other Servlet).
 	 *
 	 * <p>If you have a page that has a complete HTML page and
 	 * it is included by other page, you have to specify the complete flag
