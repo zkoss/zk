@@ -47,7 +47,7 @@ function cancelUpload() {
 function init() {
 	var el = document.getElementById("form");
 	el.action = parent.zk.getUpdateURI(
-		"/upload?dtid=${param.dtid}&uuid=${param.uuid}");
+		"/upload?dtid=${param.dtid}&uuid=${param.uuid}&maxsize=${param.maxsize}");
 	if (parent.zk.ie) {
 		var cave = parent.$e("${param.uuid}!cave");
 		if (cave)
