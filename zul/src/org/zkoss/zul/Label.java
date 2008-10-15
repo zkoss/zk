@@ -210,7 +210,8 @@ public class Label extends XulElement {
 		if (cnt.length() > 0) {
 			Execution exec = Executions.getCurrent();
 			if (exec != null) {
-				final Writer out = ((ExecutionCtrl)exec).getExtraWriter();
+				final Writer out =
+					((ExecutionCtrl)exec).getVisualizer().getExtraWriter();
 				if (out != null) {
 					out.write("<span id=\"");
 					out.write(getUuid());

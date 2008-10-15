@@ -152,9 +152,8 @@ public interface PageCtrl {
 
 	/** Redraws the whole page into the specified output.
 	 *
-	 * <p>You could use {@link #ATTR_REDRAW_BY_INCLUDE} to control
-	 * whether to include, instead of forward, the page content.
-	 * By default, {@link Execution#forward } is used if possible.
+	 * <p>You could use {@link #ATTR_REDRAW_CONTROL} to control
+	 * how to render manually.
 	 *
 	 * @since 5.0.0
 	 */

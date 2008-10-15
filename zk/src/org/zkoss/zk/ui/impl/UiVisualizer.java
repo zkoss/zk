@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.LinkedHashMap;
 import java.util.HashMap;
 import java.util.Arrays;
+import java.io.Writer;
 import java.io.StringWriter;
 import java.io.IOException;
 
@@ -63,9 +64,8 @@ import org.zkoss.zk.au.out.*;
 /*package*/ class UiVisualizer implements Visualizer {
 //	private static final Log log = Log.lookup(UiVisualizer.class);
 
-	/** The first exec info that causes a chain of executions (never null).
-	 */
-	private final UiVisualizer _1stec;
+	/** The parent exec info. */
+	private final UiVisualizer _parent;
 
 	/** The associated execution. */
 	private final Execution _exec;
@@ -85,10 +85,10 @@ import org.zkoss.zk.au.out.*;
 	private Map _idChgd;
 	/** A map of responses being added(Component/Page, Map(key, List/TimedValue(AuResponse))). */
 	private Map _responses;
-	/** A stack of components that are including new pages (and then
+	/** the component that is including a new page (and then
 	 * become the owner of the new page, if any).
 	 */
-	private final List _owners;
+	private Component _owner;
 	/** Time stamp for smart update and responses (see {@link TimedValue}). */
 	private int _timed;
 	/** if not null, it means the current executing is aborting
@@ -96,7 +96,9 @@ import org.zkoss.zk.au.out.*;
 	 * on {@link org.zkoss.zk.ui.sys.UiEngine}.
 	 */
 	private AbortingReason _aborting;
-	/** Whether the first execution (_1stec) is for async-update. */
+	/** The extra writer used when rendering a component. */
+	private Writer _exout;
+	/** Whether the first execution is for async-update. */
 	private final boolean _1stau;
 	/** Whether it is in recovering. */
 	private final boolean _recovering;
@@ -116,10 +118,9 @@ import org.zkoss.zk.au.out.*;
 	 */
 	public UiVisualizer(Execution exec, boolean asyncUpdate, boolean recovering) {
 		_exec = exec;
-		_1stec = this;
+		_parent = null;
 		_1stau = asyncUpdate;
 		_recovering = recovering;
-		_owners = new LinkedList();
 	}
 	/**
 	 * Creates the following execution.
@@ -127,10 +128,9 @@ import org.zkoss.zk.au.out.*;
 	 */
 	public UiVisualizer(UiVisualizer parent, Execution exec) {
 		_exec = exec;
-		_1stec = parent._1stec;
+		_parent = parent;
 		_1stau = parent._1stau;
 		_recovering = false;
-		_owners = null;
 	}
 
 	//-- Visualizer --//
@@ -144,9 +144,17 @@ import org.zkoss.zk.au.out.*;
 		if (!_1stau) return false;
 
 //		if (D.ON && log.finerable()) log.finer("Add to 1st au: "+responses);
+		UiVisualizer root = getRoot();
 		for (Iterator it = responses.iterator(); it.hasNext();)
-			_1stec.addResponse(null, (AuResponse)it.next());
+			root.addResponse(null, (AuResponse)it.next());
 		return true;
+	}
+	private UiVisualizer getRoot() {
+		for (UiVisualizer uv = this;;) {
+			if (uv._parent == null)
+				return uv;
+			uv = uv._parent;
+		}
 	}
 	public boolean isRecovering() {
 		return _recovering;
@@ -809,22 +817,20 @@ import org.zkoss.zk.au.out.*;
 
 	/** Called before a component redraws itself if the component might
 	 * include another page.
+	 * @return the previous owner
+	 * @since 5.0.0
 	 */
-	public void pushOwner(Component comp) {
-		_1stec._owners.add(0, comp);
-	}
-	/** Called after a component redraws itself if it ever calls
-	 * {@link #pushOwner}.
-	 */
-	public void popOwner() {
-		_1stec._owners.remove(0);
+	public Component setOwner(Component comp) {
+		Component old = _owner;
+		_owner = comp;
+		return old;
 	}
 	/** Returns the owner component for this execution, or null if
 	 * this execution is not owned by any component.
-	 * The owner is the top of the stack pushed by {@link #pushOwner}.
+	 * The owner is the top of the stack pushed by {@link #getOwner}.
 	 */
 	public Component getOwner() {
-		return _1stec._owners.isEmpty() ? null: (Component)_1stec._owners.get(0);
+		return _owner;
 	}
 
 	/** Used to hold smart update and response with a time stamp.
@@ -919,5 +925,12 @@ import org.zkoss.zk.au.out.*;
 	 */
 	public boolean isAborting() {
 		return _aborting != null && _aborting.isAborting();
+	}
+	public Writer getExtraWriter() {
+		return _exout != null || _parent == null ?
+			_exout: _parent.getExtraWriter();
+	}
+	public void setExtraWriter(Writer out) {
+		_exout = out;
 	}
 }

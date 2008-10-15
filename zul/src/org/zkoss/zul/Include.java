@@ -34,6 +34,7 @@ import org.zkoss.web.Attributes;
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
@@ -254,7 +255,7 @@ public class Include extends XulElement implements DynamicPropertied {
 	protected void redrawChildren(Writer out) throws IOException {
 		final UiEngine ueng =
 			((WebAppCtrl)getDesktop().getWebApp()).getUiEngine();
-		ueng.pushOwner(this);
+		Component old = ueng.setOwner(this);
 		try {
 			if (_progressStatus == 1) {
 				_progressStatus = 2;
@@ -262,7 +263,7 @@ public class Include extends XulElement implements DynamicPropertied {
 				include(out);
 			}
 		} finally {
-			ueng.popOwner();
+			ueng.setOwner(old);
 		}
 	}
 	private void include(Writer out) throws IOException {

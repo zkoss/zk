@@ -246,4 +246,17 @@ public class ZkFns {
 		_datejs = new CacheMap(8);
 		_datejs.setLifetime(24*60*60*1000);
 	}
+
+	/** Generates and returns the ZK specific HTML tags for
+	 * a desktop.
+	 * If you want to generate HTML HEAD and BODY tags by yourself in
+	 * a non-ZUML page (e.g., JSP or DSP), you can invoke this method at
+	 * the location you want (such as inside the HTML HEAD tag).
+	 *
+	 * @return the string holding the HTML tags, or null if already generated.
+	 * @since 3.5.0
+	 */
+ 	public static String outZkHtmlTags() {
+ 		return HtmlPageRenders.outZkTags(Executions.getCurrent());
+ 	}
 }

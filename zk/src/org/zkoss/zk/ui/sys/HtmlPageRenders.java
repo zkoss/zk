@@ -29,6 +29,7 @@ import java.io.Writer;
 import java.io.StringWriter;
 import java.io.IOException;
 
+import javax.servlet.ServletRequest;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -47,7 +48,6 @@ import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.ThemeProvider;
@@ -86,6 +86,7 @@ public class HtmlPageRenders {
 		= "javax.zkoss.zk.unavail.generated";
 
 	/** Sets the content type to the specified execution for the given page.
+	 * @param exec the execution (never null)
 	 */
 	public static final void setContentType(Execution exec, Page page) {
 		String contentType = ((PageCtrl)page).getContentType();
@@ -124,6 +125,7 @@ public class HtmlPageRenders {
 		return s;
 	}
 	/** Generates the unavailable message in HTML tags, if any.
+	 * @param exec the execution (never null)
 	 */
 	public static String outUnavailable(Execution exec) {
 		if (exec.getAttribute(ATTR_UNAVAILABLE_GENED) != null)
@@ -143,6 +145,7 @@ public class HtmlPageRenders {
 	}
 
 	/** Returns JavaScript for handling the specified response.
+	 * @param exec the execution (never null)
 	 */
 	public static final
 	String outResponseJavaScripts(Execution exec) {
@@ -175,10 +178,9 @@ public class HtmlPageRenders {
 	/** Returns HTML tags to include all JavaScript files and codes that are
 	 * required when loading a ZUML page (never null).
 	 *
-	 * <p>Note: it assumes {@link Executions#getCurrent} is available.
-	 *
 	 * <p>FUTURE CONSIDERATION: we might generate the inclusion on demand
 	 * instead of all at once.
+	 * @param exec the execution (never null)
 	 */
 	public static final String outLangJavaScripts(Execution exec) {
 		if (exec.getAttribute(ATTR_LANG_JS_GENED) != null)
@@ -272,8 +274,6 @@ public class HtmlPageRenders {
 	/** Returns HTML tags to include all style sheets that are
 	 * defined in all languages (never null).
 	 *
-	 * <p>Note: it assumes {@link Executions#getCurrent} is available.
-	 *
 	 * <p>In addition to style sheets defined in lang.xml and lang-addon.xml,
 	 * it also include:
 	 * <ol>
@@ -282,6 +282,7 @@ public class HtmlPageRenders {
 	 *
 	 * <p>FUTURE CONSIDERATION: we might generate the inclusion on demand
 	 * instead of all at once.
+	 * @param exec the execution (never null)
 	 */
 	public static final String outLangStyleSheets(Execution exec) {
 		if (exec.getAttribute(ATTR_LANG_CSS_GENED) != null)
@@ -301,7 +302,7 @@ public class HtmlPageRenders {
 	 * <p>Unlike {@link #outLangStyleSheets}, it uses the current
 	 *  servlet context
 	 * to look for the style sheets. Thus, this method can be used even
-	 * if the current execution is not available ({@link Executions#getCurrent}
+	 * if the current execution is not available ({@link org.zkoss.zk.ui.Executions#getCurrent}
 	 * can be null).
 	 *
 	 * <p>In summary:<br/>
@@ -309,16 +310,20 @@ public class HtmlPageRenders {
 	 * templates, while {@link #outDeviceStyleSheets} is used by DSP/JSP
 	 * that does nothing with ZUML pages (i.e., not part of an execution).
 	 *
+	 * @param exec the execution. Note: Unlike other methods,
+	 * exec could be null when calling this method.
 	 * @param deviceType the device type, such as ajax.
 	 * It can not be null.
 	 */
 	public static final
 	String outDeviceStyleSheets(Execution exec, String deviceType) {
-		if (exec.getAttribute(ATTR_LANG_CSS_GENED) != null)
+		//Don't use exec.getAttribute since it might be null
+		ServletRequest request = ServletFns.getCurrentRequest();
+		if (request.getAttribute(ATTR_LANG_CSS_GENED) != null)
 			return ""; //nothing to generate
 		if (deviceType == null)
 			throw new IllegalArgumentException();
-		exec.setAttribute(ATTR_LANG_CSS_GENED, Boolean.TRUE);
+		request.setAttribute(ATTR_LANG_CSS_GENED, Boolean.TRUE);
 
 		final StringBuffer sb = new StringBuffer(256);
 
@@ -346,6 +351,7 @@ public class HtmlPageRenders {
 
 	/** Returns a list of {@link StyleSheet} that shall be generated
 	 * to the client for the specified execution.
+	 * @param exec the execution (never null)
 	 */
 	public static final List getStyleSheets(Execution exec) {
 		//Process all languages
@@ -447,6 +453,7 @@ public class HtmlPageRenders {
 
 	/** Returns the HTML content representing a page.
 	 * @param au whether it is caused by aynchrous update
+	 * @param exec the execution (never null)
 	 */
 	public static final
 	void outPageContent(Execution exec, Page page, Writer out, boolean au)
@@ -487,7 +494,7 @@ public class HtmlPageRenders {
 		StringWriter exout = null;
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 		if (!au && owner == null) {
-			execCtrl.setExtraWriter(exout = new StringWriter());
+			execCtrl.getVisualizer().setExtraWriter(exout = new StringWriter());
 			out.write("<div");
 			writeAttr(out, "id", page.getUuid());
 			out.write(">\n<script>zk.booting=true;try{");
@@ -518,7 +525,7 @@ public class HtmlPageRenders {
 		out.write("\nzkau.pageEnd();");
 		if (!au && owner == null) {
 			out.write("}finally{zk.booting=false;}</script>\n</div>");
-			execCtrl.setExtraWriter(null);
+			execCtrl.getVisualizer().setExtraWriter(null);
 			out.write(exout.toString());
 		}
 	}
@@ -534,6 +541,7 @@ public class HtmlPageRenders {
 	 * It must be called if {@link #outPageInHtml} might not be called.
 	 * On the other hand, {@link #outDesktopInfo} does nothing if
 	 * {@link #outPageInHtml} was called.
+	 * @param exec the execution (never null)
 	 */
 	private static final String outDesktopInfo(Execution exec) {
 		if (exec.getAttribute(ATTR_DESKTOP_INFO_GENED) != null)
@@ -555,14 +563,12 @@ public class HtmlPageRenders {
 	 * with special component such as org.zkoss.zhtml.Head, such that
 	 * the result HTML page is legal.
 	 *
+	 * @param exec the execution. Note: Unlike other methods,
+	 * exec could be null when calling this method.
 	 * @return the string holding the HTML tags, or null if already generated.
 	 */
-	public static String outZkTags() {
-		final Execution exec = Executions.getCurrent();
-		if (exec == null)
-			return "";
-
-		if (exec.getAttribute("zkHtmlTagsGened") != null)
+	public static String outZkTags(Execution exec) {
+		if (exec == null || exec.getAttribute("zkHtmlTagsGened") != null)
 			return null;
 		exec.setAttribute("zkHtmlTagsGened", Boolean.TRUE);
 

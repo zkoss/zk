@@ -72,12 +72,18 @@ public interface UiEngine {
 	 *
 	 * <p>If a new page is created, the specified component will become
 	 * the owner of the new page.
+	 *
+	 * <p>It must reset the owner in the finally clause.
+	 * <pre><code>old = ue.setOwner(this);
+	 *try{
+	 *  ...
+	 *} finally {
+	 *  ue.setOwner(old);
+	 *}</code></pre>
+	 * @return the previous owner
+	 * @since 5.0.0
 	 */
-	public void pushOwner(Component comp);
-	/** Called after a component redraws itself if it ever calls
-	 * {@link #pushOwner}.
-	 */
-	public void popOwner();
+	public Component setOwner(Component comp);
 
 	/** Returns if this component needs to be redrawn.
 	 * <p>Note:

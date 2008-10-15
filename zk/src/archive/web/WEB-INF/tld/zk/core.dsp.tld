@@ -61,6 +61,19 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</function>
 
 	<function>
+		<name>outZkHtmlTags</name>
+		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
+		<function-signature>
+	java.lang.String outZkHtmlTags()
+		</function-signature>
+		<description>
+	Generates and returns the ZK specific HTML tags for the HTML output.
+	If you want to generate HTML HEAD and BODY tags by yourself, you
+	can invoke this method in the HTML HEAD tag.
+		</description>
+	</function>
+
+	<function>
 		<name>outLocaleJavaScript</name>
 		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
 		<function-signature>

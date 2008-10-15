@@ -233,11 +233,8 @@ public class UiEngineImpl implements UiEngine {
 			throw new IllegalStateException("Components can be accessed only in event listeners");
 		return (UiVisualizer)execCtrl.getVisualizer();
 	}
-	public void pushOwner(Component comp) {
-		getCurrentVisualizer().pushOwner(comp);
-	}
-	public void popOwner() {
-		getCurrentVisualizer().popOwner();
+	public Component setOwner(Component comp) {
+		return getCurrentVisualizer().setOwner(comp);
 	}
 	public boolean isInvalidated(Component comp) {
 		return getCurrentVisualizer().isInvalidated(comp);

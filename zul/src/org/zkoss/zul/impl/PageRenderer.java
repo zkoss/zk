@@ -19,6 +19,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul.impl;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.io.Writer;
 import java.io.IOException;
 
@@ -26,6 +27,7 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.sys.PageCtrl;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
 /**
  * The page render for ZUL pages.
@@ -112,6 +114,10 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 	protected void renderComplete(Execution exec, Page page, Writer out)
 	throws IOException {
 		HtmlPageRenders.setContentType(exec, page);
-		//TODO
+
+		for (Iterator it = page.getRoots().iterator(); it.hasNext();)
+			((ComponentCtrl)it.next()).redraw(out);
+
+		write(out, HtmlPageRenders.outZkTags(exec)); //might null
 	}
 }

@@ -38,7 +38,7 @@ import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.ext.DynamicTag;
 import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.impl.NativeHelpers;
-import org.zkoss.zk.ui.sys.HtmlPageRenders;
+import org.zkoss.zk.fn.ZkFns;
 
 /**
  * A comonent used to represent XML elements that are associated
@@ -149,11 +149,13 @@ implements DynamicTag, Native {
 
 		//prolog
 		sb.append(_prolog); //no encoding
+		boolean zktagGened = false;
 		final String tn = _tag != null ? _tag.toLowerCase(): "";
 		if ("html".equals(tn) || "body".equals(tn)) {//</head> might be part of _prolog
 			final int j = indexOfHead(sb);
 			if (j >= 0) {
-				final String zktags = HtmlPageRenders.outZkTags();
+				zktagGened = true;
+				final String zktags = ZkFns.outZkHtmlTags();
 				if (zktags != null)
 					sb.insert(j, zktags);
 			}
@@ -173,10 +175,11 @@ implements DynamicTag, Native {
 
 		//second half
 		helper.getSecondHalf(sb, _tag);
-		if ("html".equals(tn) || "body".equals(tn) || "head".equals(tn)) {
+		if (!zktagGened
+		&& ("html".equals(tn) || "body".equals(tn) || "head".equals(tn))) {
 			final int j = sb.indexOf("</" + _tag);
 			if (j >= 0) {
-				final String zktags = HtmlPageRenders.outZkTags();
+				final String zktags = ZkFns.outZkHtmlTags();
 				if (zktags != null)
 					sb.insert(j, zktags);
 			}
