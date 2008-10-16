@@ -47,7 +47,7 @@ public class MacroDefinition extends ComponentDefinitionImpl {
 	}
 
 	public boolean isMacro() {
-		return _macroURI != null;
+		return true;
 	}
 	public String getMacroURI() {
 		return _macroURI;
