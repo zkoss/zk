@@ -2600,8 +2600,11 @@ zkau.cmd1 = {
 		}
 	},
 	closeErrbox: function (uuid, cmp) {
-		if (zkau.valid)
-			zkau.valid.closeErrbox(uuid, false, true);
+		if (zkau.valid) {
+			var uuids = uuid.trim().split(',');
+			for (var i = uuids.length; --i >= 0;)
+				zkau.valid.closeErrbox(uuids[i], false, true);
+		}
 	},
 	submit: function (uuid, cmp) {
 		setTimeout(function (){if (cmp && cmp.submit) cmp.submit();}, 50);

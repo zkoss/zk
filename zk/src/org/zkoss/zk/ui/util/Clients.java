@@ -18,6 +18,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.util;
 
+import java.util.Iterator;
+import java.util.List;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.au.AuResponse;
@@ -88,6 +91,20 @@ public class Clients {
 	public static final void closeErrorBox(Component owner) {
 		response(new AuCloseErrorBox(owner));
 	}
+	
+	/** Closes all the error boxes at the browser belonging to
+	 * the specified components within a list, if any.
+	 * @since 3.6.0
+	 */
+	public static final void closeErrorBox(List comps) {
+		StringBuffer sb = new StringBuffer();
+		for (Iterator it = comps.iterator(); it.hasNext();)
+			sb.append(((Component)it.next()).getUuid()).append(",");
+		if (sb.length() > 0)
+			sb.delete(sb.length() - 1, sb.length());
+		response(new AuCloseErrorBox(sb.toString()));
+	}
+	
 	/** Submits the form with the specified ID.
 	 */
 	public static final void submitForm(String formId) {
