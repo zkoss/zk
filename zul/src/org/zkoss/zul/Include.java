@@ -116,13 +116,6 @@ public class Include extends XulElement implements DynamicPropertied {
 		setSrc(src);
 	}
 
-	/** Returns the component type, zul.wgt.Include.
-	 * @since 5.0.0
-	 */
-	public String getType() {
-		return "zul.wgt.Include";
-	}
-
 	/**
 	 * Sets whether to show the {@link MZul#PLEASE_WAIT} message before a long operation.
 	 * This implementation will automatically use an echo event like {@link Events#echoEvent(String, org.zkoss.zk.ui.Component, String)} 

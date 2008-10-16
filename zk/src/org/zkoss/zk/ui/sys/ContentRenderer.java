@@ -38,4 +38,10 @@ public interface ContentRenderer {
 	public void render(String name, double value) throws IOException;
 	/** Renders a char property. */
 	public void render(String name, char value) throws IOException;
+	/** Renders the value directly.
+	 * It depends on the implementation.
+	 * For {@link JsContentRenderer}, value must be a valid JavaScript
+	 * snippet.
+	 */
+	public void renderDirectly(String name, Object value);
 }

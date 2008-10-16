@@ -511,7 +511,7 @@ public class HtmlPageRenders {
 				out.write(",'");
 				out.write(desktop.getId());
 				out.write("',");
-				out.write(Boolean.toString(contained && !au));
+				out.write(contained && !au ? '1': '0');
 				out.write(",'");
 				out.write(desktop.getUpdateURI(null));
 				out.write('\'');

@@ -18,6 +18,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
+import org.zkoss.lang.Objects;
+
 /**
  * An implementation of {@link ContentRenderer} that renders
  * the content as a JavaScript property (i.e., name: 'value').
@@ -78,7 +80,7 @@ public class JsContentRenderer implements ContentRenderer {
 	 */
 	public void render(String name, boolean value) {
 		renderName(name);
-		_buf.append(value);
+		_buf.append(value ? '1': '0'); //to save bandwidth
 	}
 	/** Renders a double property.
 	 * @param name the property name. Note: it must be a legal JavaScript
@@ -105,5 +107,12 @@ public class JsContentRenderer implements ContentRenderer {
 		case '\f': _buf.append('\\'); value = 'f'; break;
 		}
 		_buf.append(value).append('\'');
+	}
+
+	/** Renders the JavaScript code snippet.
+	 */
+	public void renderDirectly(String name, Object value) {
+		renderName(name);
+		_buf.append(Objects.toString(value));
 	}
 }

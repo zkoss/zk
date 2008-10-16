@@ -59,10 +59,10 @@ implements ComponentDefinition, java.io.Serializable {
 	private EvaluatorRef _evalr;
 	/** Either String or Class. */
 	private Object _implcls;
-	/** A map of molds (String mold, ExValue moldURI). */
+	/** A map of (String mold, [String widget, ExValue z2cURI]). */
 	private Map _molds;
-	/** A map of z2cs (String mold, ExValue). */
-	private Map _z2cs;
+	/** The default widget type. */
+	private String _defWgtType;
 	/** A map of custom attributs (String name, ExValue value). */
 	private Map _custAttrs;
 	/** A list of {@link Property}. */
@@ -136,6 +136,7 @@ implements ComponentDefinition, java.io.Serializable {
 	 * as part of a page definition
 	 * @param pgdef the page definition. It is null if it is defined
 	 * as part of a language definition.
+	 * @param macroURI the URI of the ZUML page to representing this macro.
 	 * @since 3.0.0
 	 */
 	public static final ComponentDefinition newMacroDefinition(
@@ -417,28 +418,21 @@ implements ComponentDefinition, java.io.Serializable {
 		return propmap;
 	}
 
-	public void addMold(String name, String moldURI, String z2cURI) {
-		if (moldURI == null || moldURI.length() == 0 || name == null
-		|| name.length() == 0)
+	public void addMold(String name, String widgetType, String z2cURI) {
+		if (name == null || name.length() == 0)
 			throw new IllegalArgumentException();
 
 		if (_molds == null)
-			_molds = new HashMap(4);
-		_molds.put(name, new ExValue(moldURI, String.class));
+			_molds = new HashMap(2);
 
-		if (z2cURI != null) {
-			if (_z2cs == null)
-				_z2cs = new HashMap(4);
-			_z2cs.put(name, new ExValue(z2cURI, String.class));
+		final Object[] old = (Object[])_molds.get(name);
+		ExValue z2cval = z2cURI != null ? new ExValue(z2cURI, String.class): null;
+		if (old != null) {
+			if (widgetType != null) old[0] = widgetType;
+			if (z2cval != null) old[1] = z2cval;
+		} else {
+			_molds.put(name, new Object[] {widgetType, z2cval});
 		}
-	}
-	public String getMoldURI(Component comp, String name) {
-		if (_molds == null)
-			return null;
-
-		final ExValue mold = (ExValue)_molds.get(name);
-		return mold == null ? null:
-			toAbsoluteURI((String)mold.getValue(_evalr, comp));
 	}
 	public boolean hasMold(String name) {
 		return _molds != null && _molds.containsKey(name);
@@ -447,11 +441,29 @@ implements ComponentDefinition, java.io.Serializable {
 		return _molds != null ?
 			_molds.keySet(): (Collection)Collections.EMPTY_LIST;
 	}
-
-	public String getZ2CURI(Component comp, String name) {
-		final ExValue z2c = (ExValue)_z2cs.get(name);
-		return z2c != null ?
-			toAbsoluteURI((String)z2c.getValue(_evalr, comp)): null;
+	public String getWidgetType(String moldName) {
+		if (_molds != null) {
+			final Object[] info = (Object[])_molds.get(moldName);
+			if (info != null) return (String)info[0];
+		}
+		return null;
+	}
+	public String getDefaultWidgetType() {
+		return _defWgtType;
+	}
+	public void setDefaultWidgetType(String widgetType) {
+		_defWgtType = widgetType;
+	}
+	public String getZ2CURI(Component comp, String moldName) {
+		if (_molds != null) {
+			final Object[] info = (Object[])_molds.get(moldName);
+			if (info != null) {
+				final ExValue z2c = (ExValue)info[1];
+				if (z2c != null)
+					return toAbsoluteURI((String)z2c.getValue(_evalr, comp));
+			}
+		}
+		return null;
 	}
 
 	private String toAbsoluteURI(String uri) {

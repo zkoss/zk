@@ -47,12 +47,6 @@ public class Applet extends XulElement implements DynamicPropertied {
 	private String _name = "";
 	private Map _params = new HashMap();
 
-	/** Returns the component type, zul.extn.Applet.
-	 * @since 5.0.0
-	 */
-	public String getType() {
-		return "zul.extn.Applet";
-	}
 	public String getCode() {
 		return _code;
 	}

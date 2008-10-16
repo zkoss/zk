@@ -372,15 +372,11 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 		renderProperties(renderer);
 		out.write("\nzkau.begin('");
 
-		final String type = getType();
-		out.write(type);
-		final int j = type.lastIndexOf('.');
-		final String defnm = getDefinition().getName();
-		if (!defnm.equalsIgnoreCase(j >= 0 ? type.substring(j+1): type)) {
-			out.write(':');
-			out.write(defnm);
-		}
+		final String type = getWidgetType();
+		if (type == null)
+			throw new UiException("Widget type required for "+this+" with the "+getMold()+" mold");
 
+		out.write(type);
 		out.write("','");
 		out.write(getUuid());
 		out.write("','");

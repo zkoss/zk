@@ -413,13 +413,19 @@ public class ComponentsCtrl {
 		public Component newInstance(Class cls) {
 			throw new UnsupportedOperationException();
 		}
-		public void addMold(String name, String moldURI, String z2cURI) {
+		public void addMold(String name, String widgetType, String z2cURI) {
 			throw new UnsupportedOperationException();
 		}
-		public String getMoldURI(Component comp, String name) {
+		public String getWidgetType(String moldName) {
 			return null;
 		}
-		public String getZ2CURI(Component comp, String name) {
+		public String getDefaultWidgetType() {
+			return null;
+		}
+		public void setDefaultWidgetType(String widgetType) {
+			throw new UnsupportedOperationException();
+		}
+		public String getZ2CURI(Component comp, String moldName) {
 			return null;
 		}
 		public boolean hasMold(String name) {

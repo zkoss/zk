@@ -88,11 +88,11 @@ implements DynamicTag, Native {
 		_epilog = epilog != null ? epilog: "";
 	}
 
-	/** Returns the component type, zk.Native.
+	/** Returns the widget type, "#n".
 	 * @since 5.0.0
 	 */
-	public String getType() {
-		return "zk.Native";
+	public String getWidgetType() {
+		return "#n";
 	}
 	/** Returns the tag name, or null if plain text.
 	 */

@@ -7,6 +7,9 @@ ZK 5.0.0
 * Upgrade Notes
   + LanguageDefinition: getCompleteURI, getDesktopURI and getPageURI
     are replaced by getPageRenderer.
+  + Mold URIs are no longer stored in ComponentDefinition.
+    Rather, they are in a new class, WidgetDefinition.
+  + Macro URI is no longer supported.
 
 	--------
 ZK 3.6.0

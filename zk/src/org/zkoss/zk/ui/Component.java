@@ -57,11 +57,13 @@ import org.zkoss.zk.scripting.Namespace;
  * @author tomyeh
  */
 public interface Component extends java.io.Serializable, Cloneable {
-	/** Returns the component type.
+	/** Returns the widget type (aka., the widget name), or null
+	 * if not available.
 	 * For example, "zul.wnd.Window".
+	 * <p>Note: for Ajax devices, the widget type must be non-null.
 	 * @since 5.0.0
 	 */
-	public String getType();
+	public String getWidgetType();
 
 	/** Returns the component definition of this component (never null).
 	 */

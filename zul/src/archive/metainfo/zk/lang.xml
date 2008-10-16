@@ -66,7 +66,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<!-- Defines the templat for macro components -->
 	<macro-template>
 		<macro-class>org.zkoss.zk.ui.HtmlMacroComponent</macro-class>
-		<macro-uri>~./zul/html/macro.dsp</macro-uri>
 	</macro-template>
 	<!-- Defines the template for the Native namespace
 		[Optional] Define it only if the Native namespace is supported.
@@ -78,9 +77,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>applet</component-name>
 		<component-class>org.zkoss.zul.Applet</component-class>
+		<widget-name>zul.extn.Applet</widget-name>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/applet.dsp</mold-uri>
+			<!-- a mold can have a different widget name
+			<widget-name>other.name</widget-name>
+			-->
 		</mold>
 	</component>
 	<component>
@@ -229,7 +232,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Caption</component-class>
 		<mold>
 			<mold-name>default</mold-name>
+			<!--
  			<mold-uri>${self.legend ? '~./zul/html/caption-legend.dsp': '~./zul/html/caption.dsp'}</mold-uri>
+ 			-->
 		</mold>
 		<preserve-blank/>
 	</component>
@@ -302,6 +307,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>div</component-name>
 		<component-class>org.zkoss.zul.Div</component-class>
+		<widget-name>zul.wgt.Div</widget-name>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/div.dsp</mold-uri>
@@ -434,6 +440,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>include</component-name>
 		<component-class>org.zkoss.zul.Include</component-class>
+		<widget-name>zul.wgt.Include</widget-name>
 	</component>
 	<component>
 		<component-name>intbox</component-name>
@@ -446,6 +453,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>label</component-name>
 		<component-class>org.zkoss.zul.Label</component-class>
+		<widget-name>zul.wgt.Label</widget-name>
 		<text-as>value</text-as>
 		<mold>
 			<mold-name>default</mold-name>
@@ -516,7 +524,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Listitem</component-class>
 		<mold>
 			<mold-name>default</mold-name>
+			<!--
 			<mold-uri>${self.listbox.mold == 'select' ? '~./zul/html/listitem-select.dsp': '~./zul/html/listitem.dsp'}</mold-uri>
+			-->
 		</mold>
 	</component>
 	<component>
@@ -540,7 +550,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Menubar</component-class>
 		<mold>
 			<mold-name>default</mold-name>
+			<!--
 			<mold-uri>${self.orient == 'horizontal' ? '~./zul/html/hmenubar2.dsp' : '~./zul/html/vmenubar2.dsp'}</mold-uri>
+			-->
 		</mold>
 	</component>
 	<component>
@@ -719,7 +731,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Tabbox</component-class>
 		<mold>
 			<mold-name>default</mold-name>
+			<!--
 			<mold-uri>${self.orient == 'vertical' ? '~./zul/html/vtabbox2.dsp': '~./zul/html/tabbox2.dsp'}</mold-uri>
+			-->
 		</mold>
 		<mold>
 			<mold-name>accordion</mold-name>
@@ -735,7 +749,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Tabs</component-class>
 		<mold>
 			<mold-name>default</mold-name>
+			<!--
 			<mold-uri>${self.parent.orient == 'vertical' ? '~./zul/html/vtabs2.dsp': '~./zul/html/tabs2.dsp'}</mold-uri>
+			-->
 		</mold>
 	</component>
 	<component>
@@ -743,7 +759,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Tab</component-class>
 		<mold>
 			<mold-name>default</mold-name>
+			<!--
 			<mold-uri>${self.tabbox.orient == 'vertical' ? '~./zul/html/vtab2.dsp': '~./zul/html/tab2.dsp'}</mold-uri>
+			-->
 		</mold>
 		<preserve-blank/>
 	</component>
@@ -752,7 +770,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Tabpanels</component-class>
 		<mold>
 			<mold-name>default</mold-name>
+			<!--
 			<mold-uri>${self.parent.orient == 'vertical' ? '~./zul/html/vtabpanels2.dsp' : '~./zul/html/tabpanels2.dsp'}</mold-uri>
+			-->
 		</mold>
 	</component>
 	<component>
@@ -760,7 +780,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Tabpanel</component-class>
 		<mold>
 			<mold-name>default</mold-name>
+			<!--
 			<mold-uri>${self.tabbox.mold == 'accordion' ? '~./zul/html/tabpanel-accd2.dsp' : self.tabbox.mold == 'accordion-lite' ? '~./zul/html/tabpanel-accd2-lite.dsp' : self.tabbox.orient == 'vertical' ? '~./zul/html/vtabpanel2.dsp': '~./zul/html/tabpanel2.dsp'}</mold-uri>
+			-->
 		</mold>
 		<preserve-blank/>
 	</component>

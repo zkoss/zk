@@ -18,6 +18,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
+import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
 
 /**
@@ -62,5 +63,10 @@ public class XmlContentRenderer implements ContentRenderer {
 	 */
 	public void render(String name, char value) {
 		HTMLs.appendAttribute(_buf, name, "" + value);
+	}
+	/** Renders the value by converting it to string.
+	 */
+	public void renderDirectly(String name, Object value) {
+		render(name, Objects.toString(value));
 	}
 }

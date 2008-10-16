@@ -124,6 +124,8 @@ zk.Widget = zk.$extends(zk.Object, {
 
 /** A ZK desktop. */
 zk.Desktop = zk.$extends(zk.Object, {
+	/** The type (always "#d")(readonly). */
+	type: "#d",
 	$init: function (dtid, updateURI) {
 		var zdt = zk.Desktop, dt = zdt._dts[dtid];
 		if (!dt) {
@@ -146,10 +148,15 @@ zk.Desktop = zk.$extends(zk.Object, {
 
 /** A ZK page. */
 zk.Page = zk.$extends(zk.Object, {
-	$init: function (pgid) {
+	/** The type (always "#p")(readonly). */
+	type: "#p",
+	/** The style (readonly). */
+	style: "width:100%;height:100%",
+	$init: function (pgid, contained) {
 		this.id = pgid;
-		this.node = zkDOM.$(pgid);
-		zk.Page.contained.add(this, true);
+		this.node = zkDOM.$(pgid); //might null
+		if (contained)
+			zk.Page.contained.add(this, true);
 	}
 },{
 	/** An list of contained page (i.e., standalone but not covering

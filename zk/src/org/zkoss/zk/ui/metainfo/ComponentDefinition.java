@@ -227,27 +227,31 @@ public interface ComponentDefinition extends Cloneable {
 	 */
 	public Component newInstance(Class cls);
 
-	/** Adds a mold based on an URI.
+	/** Adds the ZCS-toCSS convert for the specified mold.
 	 *
-	 * @param moldURI an URI of the mold; never null nor empty.
-	 * It might contain XEL expressions.
+	 * @param name the mold name.
+	 * @param widgetType the widget type (aka., name).
+	 * Ingored if null.
 	 * @param z2cURI the URI of ZCS-to-CSS converter.
 	 * It might contain XEL expressions.
 	 * Ignored if null.
-	 * @since 3.5.1
+	 * @since 5.0.0
 	 */
-	public void addMold(String name, String moldURI, String z2cURI);
-
-	/** Returns the URI (String) of the mold, or null if no such mold available.
-	 *
-	 * <p>If the mold URI contains an expression, it will be evaluated first
-	 * before returning.
-	 *
-	 * @param name the mold name
-	 * @return an URI in String
-	 * @see org.zkoss.zk.ui.AbstractComponent#redraw
+	public void addMold(String name, String widgetType, String z2cURI);
+	/** Returns the widget name assoicated with specified mold,
+	 * or null if not available.
+	 * @param moldName the mold name
+	 * @since 5.0.0
 	 */
-	public String getMoldURI(Component comp, String name);
+	public String getWidgetType(String moldName);
+	/** Returns the default widget type, or null if not available.
+	 * @since 5.0.0
+	 */
+	public String getDefaultWidgetType();
+	/** Sets the default widget type.
+	 * @since 5.0.0
+	 */
+	public void setDefaultWidgetType(String widgetType);
 	/** Returns the URI of the ZCS-to-CSS converter for the specified mold.
 	 *
 	 * <p>ZCS is ZK cacasding style that allows developers to customize
@@ -256,15 +260,14 @@ public interface ComponentDefinition extends Cloneable {
 	 * <p>If the URI contains an expression, it will be evaluated first
 	 * before returning.
 	 *
-	 * @param name the mold name
+	 * @param moldName the mold name
 	 * @since 3.5.1
 	 */
-	public String getZ2CURI(Component comp, String name);
+	public String getZ2CURI(Component comp, String moldName);
 	/** Returns whether the specified mold exists.
 	 */
 	public boolean hasMold(String name);
-	/** Returns a readonly collection of mold names supported by
-	 * this definition.
+	/** Returns a readonly collection of the names of the mold.
 	 */
 	public Collection getMoldNames();
 

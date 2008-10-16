@@ -409,13 +409,31 @@ public class DefinitionLoaders {
 			if (s != null && !"false".equals(s))
 				compdef.setBlankPreserved(true);
 
+			String wgtnm = el.getElementValue("widget-name", true);
+			WidgetDefinition wgtdef = null;
+			if (wgtnm != null) {
+				wgtdef = getWidgetDefinition(langdef, wgtnm);
+				compdef.setDefaultWidgetType(wgtnm);
+			}
+
 			for (Iterator i = el.getElements("mold").iterator(); i.hasNext();) {
 				final Element e = (Element)i.next();
 				final String nm = IDOMs.getRequiredElementValue(e, "mold-name");
-				final String val = IDOMs.getRequiredElementValue(e, "mold-uri");
 				final String z2c = e.getElementValue("z2c-uri", true);
-				compdef.addMold(nm, val,
-					z2c != null && z2c.length() > 0 ? z2c: null);
+				final String uri = e.getElementValue("mold-uri", true);
+				final String w = e.getElementValue("widget-name", true);
+				noEL("mold-uri", uri, e); //5.0 limitation
+
+				compdef.addMold(nm, w != null ? w: wgtnm, z2c);
+
+				WidgetDefinition wd =
+					w !=  null ? getWidgetDefinition(langdef, w): wgtdef;
+				if (uri != null) {
+					if (wd != null)
+						wd.addMold(nm, uri);
+					else
+						log.warning("mold-uri for "+name+" ignored because widget-name is required, "+e.getLocator());
+				}
 			}
 
 			for (Iterator e = parseCustAttrs(el).entrySet().iterator(); e.hasNext();) {
@@ -430,6 +448,15 @@ public class DefinitionLoaders {
 
 			parseAnnots(compdef, el);
 		}
+	}
+	private static WidgetDefinition getWidgetDefinition(
+	LanguageDefinition langdef, String wgtnm) {
+		if (langdef.hasWidgetDefinition(wgtnm))
+			return langdef.getWidgetDefinition(wgtnm);
+
+		WidgetDefinition wgtdef = new WidgetDefinitionImpl(wgtnm);
+		langdef.addWidgetDefinition(wgtdef);
+		return wgtdef;
 	}
 	private static Class locateClass(String clsnm) throws Exception {
 		try {
@@ -487,8 +514,7 @@ public class DefinitionLoaders {
 		el = el.getElement("macro-template");
 		if (el != null) {
 			langdef.setMacroTemplate(
-				locateClass(IDOMs.getRequiredElementValue(el, "macro-class")),
-				IDOMs.getRequiredElementValue(el, "macro-uri"));
+				locateClass(IDOMs.getRequiredElementValue(el, "macro-class")));
 		}
 	}
 	private static

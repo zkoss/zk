@@ -453,16 +453,12 @@ public class Parser {
 
 		pgdef.addComponentDefinition(compdef);
 
-		String moldnm = (String)params.remove("moldName");
-		if (moldnm == null) moldnm = (String)params.remove("mold-name"); //backward comaptible (2.4.x)
-		noEL("moldName", moldnm, pi);
 		String moldURI = (String)params.remove("moldURI");
 		if (moldURI == null) moldURI = (String)params.remove("mold-uri"); //backward comaptible (2.4.x)
-		String z2cURI = (String)params.remove("z2cURI");
-		if (!isEmpty(moldURI))
-			compdef.addMold(isEmpty(moldnm) ? "default": moldnm,
-				moldURI.startsWith("class:") ? moldURI: toAbsoluteURI(moldURI, true),
-				z2cURI);
+		if (!isEmpty(moldURI)) {
+			throw new UnsupportedOperationException("moldURI not supported in 5.0. Use lang-addon.xml instead");
+		}
+
 		for (Iterator e = params.entrySet().iterator(); e.hasNext();) {
 			final Map.Entry me = (Map.Entry)e.next();
 			compdef.addProperty((String)me.getKey(), (String)me.getValue());

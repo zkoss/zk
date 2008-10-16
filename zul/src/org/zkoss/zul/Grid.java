@@ -149,13 +149,6 @@ public class Grid extends XulElement implements Paginated {
 		};
 	}
 
-	/** Returns the component type, zul.grid.Grid.
-	 * @since 5.0.0
-	 */
-	public String getType() {
-		return "zul.grid.Grid";
-	}
-
 	/** Returns whether to grow and shrink vertical to fit their given space,
 	 * so called vertial flexibility.
 	 *

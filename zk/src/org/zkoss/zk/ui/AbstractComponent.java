@@ -426,16 +426,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	//-- Extra utlities --//
-	/** Returns the mold URI based on {@link #getMold}
-	 * and the molds defined in the component definition
-	 * ({@link ComponentDefinition}).
-	 *
-	 * <p>Used only for component implementation.
-	 */
-	protected String getMoldURI() {
-		return _def.getMoldURI(this, getMold());
-	}
-
 	/** Returns the UI engine based on {@link #_page}'s getDesktop().
 	 * Don't call this method when _page is null.
 	 */
@@ -1165,6 +1155,16 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return null;
 	}
 
+	/** Returns the widget type, or null if not defined.
+	 * <p>Default: return the widget type based on the current mold
+	 * (by use of {@link ComponentDefinition#getWidgetType}, or null
+	 * if not found.
+	 * @since 5.0.0
+	 */
+	public String getWidgetType() {
+		final String widgetType = _def.getWidgetType(getMold());
+		return widgetType != null ? widgetType: _def.getDefaultWidgetType();
+	}
 	/** Returns the mold used to render this component.
 	 * Default: "default"
 	 */

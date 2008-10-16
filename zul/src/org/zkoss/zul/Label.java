@@ -53,13 +53,6 @@ public class Label extends XulElement {
 		setValue(value);
 	}
 
-	/** Returns the component type, zul.wgt.Label.
-	 * @since 5.0.0
-	 */
-	public String getType() {
-		return "zul.wgt.Label";
-	}
-
 	/** Returns the value.
 	 * <p>Default: "".
 	 */

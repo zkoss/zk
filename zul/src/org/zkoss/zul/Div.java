@@ -38,13 +38,6 @@ import org.zkoss.zul.impl.XulElement;
 public class Div extends XulElement {
 	private String _align;
 
-	/** Returns the component type, zul.wgt.Div.
-	 * @since 5.0.0
-	 */
-	public String getType() {
-		return "zul.wgt.Div";
-	}
-
 	/** Returns the alignment.
 	 * <p>Default: null (use browser default).
 	 */
@@ -64,7 +57,8 @@ public class Div extends XulElement {
 	}
 
 	//super//
-	protected void renderProperties(ContentRenderer renderer) {
+	protected void renderProperties(ContentRenderer renderer)
+	throws java.io.IOException {
 		super.renderProperties(renderer);
 
 		render(renderer, "align", getAlign());

@@ -63,6 +63,8 @@ public class LanguageDefinition {
 	private static final Map _ldefsByExt = new HashMap();
 	/** A map of (String deviceType, List(LanguageDefinition). */
 	private static final Map _ldefsByClient = new HashMap();
+	/** A map of (String widgetName, WidgetDefinition). */
+	private static final Map _wgtdefs = new HashMap();
 
 	/** The namespace for ZK. It is mainly used to resolve special components
 	 * and attributes, such as zscript and use.
@@ -128,7 +130,7 @@ public class LanguageDefinition {
 	/** The label template. */
 	private LabelTemplate _labeltmpl;
 	/** The macro template. */
-	private MacroTemplate _macrotmpl;
+	private Class _macrocls;
 	/** The native component definition. */
 	private ComponentDefinition _nativedef;
 	/** The evaluator. */
@@ -441,7 +443,35 @@ public class LanguageDefinition {
 	/** Adds a component definition.
 	 */
 	public void addComponentDefinition(ComponentDefinition compdef) {
+		if (compdef == null)
+			throw new IllegalArgumentException();
 		_compdefs.add(compdef);
+	}
+
+	/** Returns whether the specified widget is defined.
+	 * @since 5.0.0
+	 */
+	public boolean hasWidgetDefinition(String name) {
+		return _wgtdefs.containsKey(name);
+	}
+	/** Returns the widget of the specified name.
+	 *
+	 * @exception DefinitionNotFoundException is thrown if the definition
+	 * is not found
+	 * @since 5.0.0
+	 */
+	public WidgetDefinition getWidgetDefinition(String name) {
+		final WidgetDefinition wgtdef =
+			(WidgetDefinition)_wgtdefs.get(name);
+		if (wgtdef == null)
+			throw new DefinitionNotFoundException("Widget definition not found: "+name);
+		return wgtdef;
+	}
+	/** Adds a widget definition.
+	 * @since 5.0.0
+	 */
+	public void addWidgetDefinition(WidgetDefinition wgtdef) {
+		_wgtdefs.put(wgtdef.getName(), wgtdef);
 	}
 
 	/** Adds the script that shall execute when a page's interpreter
@@ -571,29 +601,33 @@ public class LanguageDefinition {
 
 	/** Sets the macro template.
 	 *
-	 * @param moldURI the mold URI.
+	 * @since 5.0.0
 	 */
-	public void setMacroTemplate(Class klass, String moldURI) {
-		_macrotmpl = klass != null ? new MacroTemplate(klass, moldURI): null;
+	public void setMacroTemplate(Class klass) {
+		if (klass == null || !Component.class.isAssignableFrom(klass)
+		|| !Macro.class.isAssignableFrom(klass))
+			throw new IllegalArgumentException("Illegal macro class: "+klass);
+		_macrocls = klass;
 	}
 	/** Returns the component definition for the specified condition.
 	 *
 	 * @param pgdef the page definition the macro definitioin belongs to.
 	 * If null, it belongs to this language definition.
+	 * @param macroURI the ZUML page's URI that is used to render
+	 * instances of this macro definition.
 	 * @exception UnsupportedOperationException if this language doesn't
 	 * support the macros
 	 * @since 3.0.0
 	 */
 	public ComponentDefinition getMacroDefinition(
 	String name, String macroURI, boolean inline, PageDefinition pgdef) {
-		if (_macrotmpl == null)
+		if (_macrocls == null)
 			throw new UiException("Macro not supported by "+this);
 
 		final ComponentDefinition compdef =
 			ComponentDefinitionImpl.newMacroDefinition(
 				pgdef != null ? null: this, pgdef,
-				name, _macrotmpl.klass, macroURI, inline);
-		compdef.addMold("default", _macrotmpl.moldURI, null);
+				name, _macrocls, macroURI, inline);
 		return compdef;
 	}
 
@@ -723,19 +757,6 @@ public class LanguageDefinition {
 		return "[LanguageDefinition: "+_name+']';
 	}
 
-	private static class MacroTemplate {
-		private final Class klass;
-		private final String moldURI;
-		private MacroTemplate(Class klass, String moldURI) {
-			if (moldURI == null || moldURI.length() == 0)
-				throw new IllegalArgumentException("Macro mold UI required");
-			if (klass == null || !Component.class.isAssignableFrom(klass)
-			|| !Macro.class.isAssignableFrom(klass))
-				throw new IllegalArgumentException("Illegal macro class: "+klass);
-			this.klass = klass;
-			this.moldURI = moldURI;
-		}
-	}
 	private class LabelTemplate {
 		/** The component definition. */
 		private ComponentDefinition _compdef;
