@@ -33,4 +33,12 @@ public class AuWrongValue extends AuResponse {
 	public AuWrongValue(Component comp, String message) {
 		super("wrongValue", comp, new String[] {comp.getUuid(), message});
 	}
+	/**
+	 * Constructor for multiple wrong values.
+	 * @param deta a string array, the data in the array shall be ["uuid1, uuid2", "message1", "message2"]
+	 * @since 3.6.0
+	 */
+	public AuWrongValue(String[] deta) {
+		super("wrongValue", deta);
+	}
 }

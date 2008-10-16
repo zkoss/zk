@@ -219,12 +219,13 @@ zkVld.strict = function (id) {
 	return null;
 };
 /** creates an error message box. */
-zkVld.errbox = function (id, html) {
+zkVld.errbox = function (id, html, multiple) {
 	id = $uuid(id);
 	var cmp = $e(id);
 	if (cmp && zk.isRealVisible(cmp, true)) {
 		zkVld._errInfo = {id: id, html: html};
-		setTimeout(zkVld._errbox, 5);
+		if (multiple) zkVld._errbox();
+		else setTimeout(zkVld._errbox, 5);
 	}
 	zkVld.validating = false;
 };

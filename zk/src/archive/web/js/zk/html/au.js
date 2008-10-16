@@ -2396,18 +2396,19 @@ zkau.cmd0 = { //no uuid at all
 };
 zkau.cmd1 = {
 	wrongValue: function (uuid, cmp, dt1) {
-		if (cmp) {
-			cmp = $real(cmp); //refer to INPUT (e.g., datebox)
-
-			//we have to update default value so validation will be done again
-			var old = cmp.value;
-			cmp.defaultValue = old + "_err"; //enforce to validate
-			if (old != cmp.value) cmp.value = old; //Bug 1490079 (FF only)
-
-			if (zkau.valid) zkau.valid.errbox(cmp.id, dt1);
-			else zk.alert(dt1);
-		} else if (!uuid) { //keep silent if component (of uuid) not exist (being detaced)
-			zk.alert(dt1);
+		for (var uuids = uuid.split(","), i = 0, j = uuids.length; i < j; i++) {
+			cmp = $e(uuids[i]);
+			if (cmp) {
+				cmp = $real(cmp); //refer to INPUT (e.g., datebox)
+				//we have to update default value so validation will be done again
+				var old = cmp.value;
+				cmp.defaultValue = old + "_err"; //enforce to validate
+				if (old != cmp.value) cmp.value = old; //Bug 1490079 (FF only)
+				if (zkau.valid) zkau.valid.errbox(cmp.id, arguments[i+2], true);
+				else zk.alert(arguments[i+2]);
+			} else if (!uuids[i]) { //keep silent if component (of uuid) not exist (being detaced)
+				zk.alert(arguments[i+2]);
+			}
 		}
 	},
 	setAttr: function (uuid, cmp, nm, val) {

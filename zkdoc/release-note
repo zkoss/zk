@@ -4,6 +4,7 @@ ZK 3.6.0
 	2100105: Applet zul Component
 	2062056: Max Upload Size for FileUpload
 	2025262: A way to close a group of ErrorBoxes
+	1733461: throw new WrongValuesException(WrongValueException[])
 
 * Bugs
 
