@@ -202,8 +202,27 @@
 	font-size: 1px; line-height: 1px;
 }
 .z-menu-separator-inner {
-	display: block; font-size: 1px; line-height: 1px; margin: 2px 3px; background-color: #e0e0e0;
-	border-bottom: 1px solid #fff; overflow: hidden; width: auto;
+	display: block;
+	overflow: hidden;
+	border-width:1px;
+	border-style:none none solid;
+	border-color:#eee;
+	background-color: #e0e0e0;
+	margin: 2px 3px;
+	width: auto;
+}
+.z-menubar-hor .z-menu-separator-inner {
+	font-size: ${fontSizeM}; margin: 2px 3px; width: 2px;
+	border-style: none solid none none;
+	background-color:#ddd;
+}
+.z-menubar-ver .z-menu-separator-inner {
+	font-size: 1px; line-height: 1px;
+	background-color:#ccc;
+}
+.z-menu-popup .z-menu-separator-inner {
+	font-size: 1px; line-height: 1px;
+	border-color:#fff;
 }
 
 <%-- Menupopup--%>

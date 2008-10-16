@@ -1,11 +1,13 @@
 	--------
 ZK 3.6.0
 * Features
+	1733461: throw new WrongValuesException(WrongValueException[])
 	1874325: Listbox add a setSelectedItems(Set)
-	2100105: Applet zul Component
+	2041682: Add 'separator' to menubar and toolbar
 	2062056: Max Upload Size for FileUpload
 	2025262: A way to close a group of ErrorBoxes
-	1733461: throw new WrongValuesException(WrongValueException[])
+	2100105: Applet zul Component
+	
 
 * Bugs
 

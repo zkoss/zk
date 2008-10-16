@@ -37,4 +37,7 @@ public class Menuseparator extends XulElement {
 	public boolean isChildable() {
 		return false;
 	}
+	public boolean isPopup(){
+		return getParent() instanceof Menupopup;
+	}
 }
