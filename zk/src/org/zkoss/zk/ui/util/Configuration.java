@@ -139,7 +139,7 @@ public class Configuration {
 	/** Whether to debug JavaScript. */
 	private boolean _debugJS;
 
-	/** Contructor.
+	/** Constructor.
 	 */
 	public Configuration() {
 		_resendDelay = getInitResendDelay();
@@ -324,7 +324,7 @@ public class Configuration {
 		_eis.removeEventInterceptor(klass);
 	}
 
-	/** Contructs a list of {@link EventThreadInit} instances and invokes
+	/** Constructs a list of {@link EventThreadInit} instances and invokes
 	 * {@link EventThreadInit#prepare} for
 	 * each relevant listener registered by {@link #addListener}.
 	 *
@@ -408,7 +408,7 @@ public class Configuration {
 	 * @param comp the component which the event is targeting
 	 * @param evt the event to process
 	 * @param errs a list of exceptions (java.lang.Throwable) if any exception
-	 * occured before this method is called, or null if no exeption at all.
+	 * occurred before this method is called, or null if no exception at all.
 	 * Note: you can manipulate the list directly to add or clean up exceptions.
 	 * For example, if exceptions are fixed correctly, you can call errs.clear()
 	 * such that no error message will be displayed at the client.
@@ -525,7 +525,7 @@ public class Configuration {
 		}
 	}
 
-	/** Contructs a list of {@link EventThreadResume} instances and invokes
+	/** Constructs a list of {@link EventThreadResume} instances and invokes
 	 * {@link EventThreadResume#beforeResume} for each relevant
 	 * listener registered by {@link #addListener}.
 	 *
@@ -813,7 +813,7 @@ public class Configuration {
 	 * @param exec the execution that is being destroyed
 	 * @param parent the previous execution, or null if no previous at all
 	 * @param errs a list of exceptions (java.lang.Throwable) if any exception
-	 * occured before this method is called, or null if no exeption at all.
+	 * occurred before this method is called, or null if no exception at all.
 	 * Note: you can manipulate the list directly to add or clean up exceptions.
 	 * For example, if exceptions are fixed correctly, you can call errs.clear()
 	 * such that no error message will be displayed at the client.
@@ -836,7 +836,7 @@ public class Configuration {
 	 *
  	 * <p>Used only internally.
 	 *
-	 * <p>If any of them throws an exception, the exception is propogated to
+	 * <p>If any of them throws an exception, the exception is propagated to
 	 * the caller.
 	 *
 	 * @exception UiException if it is rejected by the interceptor.
@@ -852,12 +852,12 @@ public class Configuration {
 			}
 		}
 	}
-	/** Invokes {@link RequestInterceptor#request} for each relevant listner
+	/** Invokes {@link RequestInterceptor#request} for each relevant listener
 	 * registered by {@link #addListener}.
 	 *
  	 * <p>Used only internally.
 	 *
-	 * <p>If any of them throws an exception, the exception is propogated to
+	 * <p>If any of them throws an exception, the exception is propagated to
 	 * the caller.
 	 *
 	 * @exception UiException if it is rejected by the interceptor.
@@ -876,7 +876,7 @@ public class Configuration {
 	}
 
 	/** Invokes {@link UiLifeCycle#afterComponentAttached}
-	 * when a compnent is attached to a page.
+	 * when a component is attached to a page.
 	 * @since 3.0.6
 	 */
 	public void afterComponentAttached(Component comp, Page page) {
@@ -890,7 +890,7 @@ public class Configuration {
 		}
 	}
 	/** Invokes {@link UiLifeCycle#afterComponentDetached}
-	 * when a compnent is detached from a page.
+	 * when a component is detached from a page.
 	 * @since 3.0.6
 	 */
 	public void afterComponentDetached(Component comp, Page prevpage) {
@@ -904,7 +904,7 @@ public class Configuration {
 		}
 	}
 	/** Invokes {@link UiLifeCycle#afterComponentMoved}
-	 * when a compnent is moved (aka., page changed).
+	 * when a component is moved (aka., page changed).
 	 * @since 3.0.6
 	 */
 	public void afterComponentMoved(Component parent, Component child, Component prevparent) {
@@ -1143,7 +1143,7 @@ public class Configuration {
 		return _sesscachecls;
 	}
 
-	/** Specifies the maximal allowed time to process events, in miliseconds.
+	/** Specifies the maximal allowed time to process events, in milliseconds.
 	 * ZK will keep processing the requests sent from
 	 * the client until all requests are processed, or the maximal allowed
 	 * time expires.
@@ -1159,7 +1159,7 @@ public class Configuration {
 	public void setMaxProcessTime(int time) {
 		_maxProcTime = time;
 	}
-	/** Returns the maximal allowed time to process events, in miliseconds.
+	/** Returns the maximal allowed time to process events, in milliseconds.
 	 * It is always positive
 	 */
 	public int getMaxProcessTime() {
@@ -1171,7 +1171,7 @@ public class Configuration {
 	 * <p>Default: 5120.
 	 *
 	 * @param sz the maximal allowed upload size.
-	 * A negative value indicates therre is no limit.
+	 * A negative value indicates there is no limit.
 	 */
 	public void setMaxUploadSize(int sz) {
 		_maxUploadSize = sz;
@@ -1203,7 +1203,7 @@ public class Configuration {
 		_charsetUpload = charset != null && charset.length() > 0 ? charset: "UTF-8";
 	}
 	/** Returns the finder that is used to decide the character set
-	 * for the uploaded text filie(s), or null if not available.
+	 * for the uploaded text file(s), or null if not available.
 	 *
 	 * <p>Default: null
 	 * @since 3.0.0
@@ -1213,7 +1213,7 @@ public class Configuration {
 		return _charsetFinderUpload;
 	}
 	/** Sets the finder that is used to decide the character set
-	 * for the uploaded text filie(s), or null if not available.
+	 * for the uploaded text file(s), or null if not available.
 	 *
 	 * <p>It has the higher priority than {@link #setUploadCharset}.
 	 * In other words, {@link #getUploadCharset} is used only if
@@ -1247,7 +1247,7 @@ public class Configuration {
 	}
 
 	/** Specifies the time, in milliseconds, before ZK Client Engine shows
-	 * a dialog to prompt users that the request is in processming.
+	 * a dialog to prompt users that the request is in processing.
 	 *
 	 * <p>Default: 900
 	 */
@@ -1255,13 +1255,13 @@ public class Configuration {
 		_promptDelay = minisecs;
 	}
 	/** Returns the time, in milliseconds, before ZK Client Engine shows
-	 * a dialog to prompt users that the request is in processming.
+	 * a dialog to prompt users that the request is in processing.
 	 */
 	public int getProcessingPromptDelay() {
 		return _promptDelay;
 	}
 	/** Specifies the time, in milliseconds, before ZK Client Engine shows
-	 * the tooltip when a user moves the mouse over particual UI components.
+	 * the tooltip when a user moves the mouse over particular UI components.
 	 *
 	 * <p>Default: 800
 	 */
@@ -1269,7 +1269,7 @@ public class Configuration {
 		_tooltipDelay = minisecs;
 	}
 	/** Returns the time, in milliseconds, before ZK Client Engine shows
-	 * the tooltip when a user moves the mouse over particual UI components.
+	 * the tooltip when a user moves the mouse over particular UI components.
 	 */
 	public int getTooltipDelay() {
 		return _tooltipDelay;

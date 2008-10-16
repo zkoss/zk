@@ -160,7 +160,6 @@ public class Listbox extends XulElement implements Paginated {
 	private int _visibleItemCount;
 	
 	public Listbox() {
-		setSclass("listbox");
 		init();
 	}
 	private void init() {
