@@ -523,6 +523,8 @@ implements ComponentDefinition, java.io.Serializable {
 				s.writeObject(o.getClass());
 			}
 		}
+
+		//Note: _z2cs is serializable
 		s.writeObject(null);
 	}
 	private synchronized void readObject(java.io.ObjectInputStream s)
@@ -571,6 +573,8 @@ implements ComponentDefinition, java.io.Serializable {
 			compdef._props = new LinkedList(_props);
 		if (_molds != null)
 			compdef._molds = new HashMap(_molds);
+		if (_z2cs != null)
+			compdef._z2cs = new HashMap(_z2cs);
 		if (_custAttrs != null)
 			compdef._custAttrs = new HashMap(_custAttrs);
 		return compdef;
