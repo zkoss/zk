@@ -58,7 +58,7 @@ public class Head extends AbstractTag {
 	 */
 	/*package*/ static void addZkHtmlTags(StringBuffer buf, String tag) {
 		final String zktags = ZkFns.outZkHtmlTags();
-		if (zktags != null) {
+		if (zktags != null && zktags.length() > 0) {
 			int j = buf.indexOf("<" + tag);
 			if (j >= 0) {
 				j += tag.length() + 1;

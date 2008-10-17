@@ -30,9 +30,11 @@ ${z:outLangJavaScripts(null)}
 ${z:outHeaders(page)}
 </head>
 <body>
-${z:outHtmlUnavailable(page)}
 </c:if>
 <div${z:outPageAttrs(page)}>
 <c:forEach var="root" items="${page.roots}">${z:redraw(root, null)}</c:forEach>
 </div>
+<c:if test="${!arg.embed}">
+${z:outHtmlUnavailable(page)}
+</c:if>
 ${z:outResponseJavaScripts(arg.responses)}

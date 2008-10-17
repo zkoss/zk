@@ -257,7 +257,7 @@ public class ZkFns extends DspFns {
 		final Device device = page.getDesktop().getDevice();
 		String s = device.getUnavailableMessage();
 		return s != null ?
-			"<noscript>\n" + s + "\n</noscript>": "";
+			"<noscript>" + s + "</noscript>": "";
 	}
 
 	private static void append(StringBuffer sb, JavaScript js) {

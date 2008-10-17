@@ -72,6 +72,18 @@ div.z-debugbox {
 }
 
 <%-- General --%>
+.noscript {<%-- the content of noscript --%>
+	position: absolute; z-index: 22000;
+	top: 0; left: 0; width: 100%; height: 100%;
+	filter: alpha(opacity=60); opacity: .6; hasLayout: -1;
+	background: #E0E1E3; text-align: center;
+}
+.noscript p {
+	background: white; color: black; font-weight: bold;
+	margin: 10% 15%; padding: 10px 0; border: 1px solid black;
+	filter: alpha(opacity=100); opacity: 1;
+}
+
 .z-label, .z-radio, .z-chkbox, .z-slider-pp, input.button, input.file, 
 .z-loading,.z-errbox {
 	font-family: ${fontFamilyC};
