@@ -74,8 +74,8 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 			+"<title>");
 		write(out, page.getTitle());
 		out.write("</title>\n");
-		out.write(HtmlPageRenders.outLangStyleSheets(exec));
-		out.write(HtmlPageRenders.outLangJavaScripts(exec));
+		out.write(HtmlPageRenders.outLangStyleSheets(exec, null, null));
+		out.write(HtmlPageRenders.outLangJavaScripts(exec, null, null));
 		out.write(pageCtrl.getHeaders());
 		out.write("</head>\n");
 
@@ -101,8 +101,8 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 	protected void renderPage(Execution exec, Page page, Writer out, boolean au)
 	throws IOException {
 		if (!au) {
-			out.write(HtmlPageRenders.outLangStyleSheets(exec));
-			out.write(HtmlPageRenders.outLangJavaScripts(exec));
+			out.write(HtmlPageRenders.outLangStyleSheets(exec, null, null));
+			out.write(HtmlPageRenders.outLangJavaScripts(exec, null, null));
 		}
 
 		HtmlPageRenders.outPageContent(exec, page, out, au);
@@ -118,6 +118,6 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 		for (Iterator it = page.getRoots().iterator(); it.hasNext();)
 			((ComponentCtrl)it.next()).redraw(out);
 
-		write(out, HtmlPageRenders.outZkTags(exec)); //might null
+		write(out, HtmlPageRenders.outZkTags(exec, null, null)); //might null
 	}
 }

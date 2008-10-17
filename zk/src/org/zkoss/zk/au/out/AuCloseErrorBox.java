@@ -31,10 +31,20 @@ import org.zkoss.zk.au.AuResponse;
  * @since 3.0.0
  */
 public class AuCloseErrorBox extends AuResponse {
+	
+	/**
+	 * @param uuid the uuid of the components whose error box, if any,
+	 * shall be closed. It can be more than one component, For example, if the uuid
+	 * has many components, it shall be the format as "cmp1,cmp2,cmp3,...".
+	 * @since 3.6.0
+	 */
+	public AuCloseErrorBox(String uuid) {
+		super("closeErrbox", uuid); //component-independent
+	}
 	/**
 	 * @param comp the component whose error box, if any, shall be closed.
 	 */
 	public AuCloseErrorBox(Component comp) {
-		super("closeErrbox", comp.getUuid()); //component-independent
+		this(comp.getUuid()); //component-independent
 	}
 }

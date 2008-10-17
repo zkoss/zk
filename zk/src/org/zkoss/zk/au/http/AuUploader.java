@@ -279,7 +279,13 @@ public class AuUploader implements AuProcessor {
 		sfu.setProgressListener(fty.new ProgressCallback());
 
 		final Configuration conf = desktop.getWebApp().getConfiguration();
-		final int maxsz = conf.getMaxUploadSize();
+		int maxsz = conf.getMaxUploadSize();
+		try {
+			final int maxsz1 = Integer.parseInt(request.getParameter("maxsize"));
+			if (maxsz > maxsz1 && maxsz1 > -1)
+				maxsz = maxsz1;
+		} catch (NumberFormatException e) {}
+		
 		sfu.setSizeMax(maxsz >= 0 ? 1024L*maxsz: -1);
 
 		for (Iterator it = sfu.parseRequest(request).iterator(); it.hasNext();) {

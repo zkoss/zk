@@ -24,30 +24,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<!--           -->
 	<!-- Functions -->
 	<!--           -->
-	<function>
-		<name>outLangStyleSheets</name>
-		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
-		<function-signature>
-	java.lang.String outLangStyleSheets()
-		</function-signature>
-		<description>
-	Returns HTML tags to include all style sheets used by all languages.
-	Note: it cannot be called without current execution. In other words,
-	it is used to design component templates.
-		</description>
-	</function>
-	<function>
-		<name>outDeviceStyleSheets</name>
-		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
-		<function-signature>
-	java.lang.String outDeviceStyleSheets(java.lang.String deviceType)
-		</function-signature>
-		<description>
-	Returns HTML tags to include all style sheets used by the specified device.
-	Note: unlike outLangStyleSheets, it can be called without current execution.
-		</description>
-	</function>
-
+	<!-- ZUML Functions -->
 	<function>
 		<name>toAbsoluteURI</name>
 		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
@@ -60,27 +37,43 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</description>
 	</function>
 
+	<!-- DSP Functions -->
+	<function>
+		<name>outDeviceStyleSheets</name>
+		<function-class>org.zkoss.zk.fn.DspFns</function-class>
+		<function-signature>
+	java.lang.String outDeviceStyleSheets(java.lang.String)
+		</function-signature>
+		<description>
+	Returns HTML tags to include all style sheets used by the specified device.
+	This method is designed to use with DSP pages.
+	@param deviceType the device type. If null, ajax is assumed.
+		</description>
+	</function>
 	<function>
 		<name>outZkHtmlTags</name>
-		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
+		<function-class>org.zkoss.zk.fn.DspFns</function-class>
 		<function-signature>
-	java.lang.String outZkHtmlTags()
+	java.lang.String outZkHtmlTags(java.lang.String)
 		</function-signature>
 		<description>
 	Generates and returns the ZK specific HTML tags for the HTML output.
 	If you want to generate HTML HEAD and BODY tags by yourself, you
 	can invoke this method in the HTML HEAD tag.
+	This method is designed to use with DSP pages.
+	@param deviceType the device type. If null, ajax is assumed.
 		</description>
 	</function>
 
 	<function>
 		<name>outLocaleJavaScript</name>
-		<function-class>org.zkoss.zk.fn.ZkFns</function-class>
+		<function-class>org.zkoss.zk.fn.DspFns</function-class>
 		<function-signature>
 	java.lang.String outLocaleJavaScript()
 		</function-signature>
 		<description>
 	Returns date relevant labels in JavaScript.
+	This method is designed to use with DSP pages.
 		</description>
 	</function>
 </taglib>

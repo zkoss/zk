@@ -29,10 +29,7 @@ import java.io.Writer;
 import java.io.StringWriter;
 import java.io.IOException;
 
-import javax.servlet.ServletRequest;
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.zkoss.lang.Strings;
 import org.zkoss.util.logging.Log;
@@ -55,10 +52,9 @@ import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
-import org.zkoss.zk.ui.http.WebManager;
-import org.zkoss.zk.ui.http.ExecutionImpl;
 import org.zkoss.zk.ui.impl.Attributes;
 import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.device.Devices;
 import org.zkoss.zk.device.Device;
 
 /**
@@ -181,16 +177,24 @@ public class HtmlPageRenders {
 	 * <p>FUTURE CONSIDERATION: we might generate the inclusion on demand
 	 * instead of all at once.
 	 * @param exec the execution (never null)
+	 * @param wapp the Web application.
+	 * If null, exec.getDesktop().getWebApp() is used.
+	 * So you have to specify it if the execution is not associated
+	 * with desktop (a fake execution).
+	 * @param deviceType the device type, such as ajax.
+	 * If null, exec.getDesktop().getDeviceType() is used.
+	 * So you have to specify it if the execution is not associated
+	 * with desktop (a fake execution).
 	 */
-	public static final String outLangJavaScripts(Execution exec) {
+	public static final
+	String outLangJavaScripts(Execution exec, WebApp wapp, String deviceType) {
 		if (exec.getAttribute(ATTR_LANG_JS_GENED) != null)
 			return ""; //nothing to generate
 		exec.setAttribute(ATTR_LANG_JS_GENED, Boolean.TRUE);
 
-		final Desktop desktop = exec.getDesktop();
-		final WebApp wapp = desktop.getWebApp();
+		if (wapp == null) wapp = exec.getDesktop().getWebApp();
+		if (deviceType == null) deviceType = exec.getDesktop().getDeviceType();
 		final Configuration config = wapp.getConfiguration();
-		final String deviceType = desktop.getDeviceType();
 
 		final StringBuffer sb = new StringBuffer(1536);
 
@@ -264,7 +268,7 @@ public class HtmlPageRenders {
 
 		sb.append("\n</script>\n");
 
-		final Device device = desktop.getDevice();
+		final Device device = Devices.getDevice(deviceType);
 		final String s = device.getEmbedded();
 		if (s != null)
 			sb.append(s).append('\n');
@@ -283,14 +287,24 @@ public class HtmlPageRenders {
 	 * <p>FUTURE CONSIDERATION: we might generate the inclusion on demand
 	 * instead of all at once.
 	 * @param exec the execution (never null)
+	 * @param wapp the Web application.
+	 * If null, exec.getDesktop().getWebApp() is used.
+	 * So you have to specify it if the execution is not associated
+	 * with desktop (a fake execution).
+	 * @param deviceType the device type, such as ajax.
+	 * If null, exec.getDesktop().getDeviceType() is used.
+	 * So you have to specify it if the execution is not associated
+	 * with desktop (a fake execution).
 	 */
-	public static final String outLangStyleSheets(Execution exec) {
+	public static final String outLangStyleSheets(Execution exec,
+	WebApp wapp, String deviceType) {
 		if (exec.getAttribute(ATTR_LANG_CSS_GENED) != null)
 			return ""; //nothing to generate
 		exec.setAttribute(ATTR_LANG_CSS_GENED, Boolean.TRUE);
 
 		final StringBuffer sb = new StringBuffer(512);
-		for (Iterator it = getStyleSheets(exec).iterator(); it.hasNext();)
+		for (Iterator it = getStyleSheets(exec, wapp, deviceType).iterator();
+		it.hasNext();)
 			append(sb, (StyleSheet)it.next(), exec, null);
 
 		if (sb.length() > 0) sb.append('\n');
@@ -310,57 +324,48 @@ public class HtmlPageRenders {
 	 * templates, while {@link #outDeviceStyleSheets} is used by DSP/JSP
 	 * that does nothing with ZUML pages (i.e., not part of an execution).
 	 *
-	 * @param exec the execution. Note: Unlike other methods,
-	 * exec could be null when calling this method.
+	 * @param exec the execution (never null)
+	 * @param wapp the Web application.
+	 * If null, exec.getDesktop().getWebApp() is used.
+	 * So you have to specify it if the execution is not associated
+	 * with desktop (a fake execution).
 	 * @param deviceType the device type, such as ajax.
-	 * It can not be null.
+	 * If null, exec.getDesktop().getDeviceType() is used.
+	 * So you have to specify it if the execution is not associated
+	 * with desktop (a fake execution).
 	 */
 	public static final
-	String outDeviceStyleSheets(Execution exec, String deviceType) {
+	String outDeviceStyleSheets(Execution exec, WebApp wapp, String deviceType) {
 		//Don't use exec.getAttribute since it might be null
-		ServletRequest request = ServletFns.getCurrentRequest();
-		if (request.getAttribute(ATTR_LANG_CSS_GENED) != null)
+		if (exec.getAttribute(ATTR_LANG_CSS_GENED) != null)
 			return ""; //nothing to generate
-		if (deviceType == null)
-			throw new IllegalArgumentException();
-		request.setAttribute(ATTR_LANG_CSS_GENED, Boolean.TRUE);
+		exec.setAttribute(ATTR_LANG_CSS_GENED, Boolean.TRUE);
 
 		final StringBuffer sb = new StringBuffer(256);
-
-		final ServletContext svlctx = ServletFns.getCurrentServletContext();
-		final Configuration config =
-			WebManager.getWebManager(svlctx).getWebApp().getConfiguration();
-
-		final boolean fake = exec == null;
-		if (fake)//it shall be null, but, just in case,
-			ExecutionsCtrl.setCurrent(
-				exec = new ExecutionImpl(
-					svlctx, (HttpServletRequest)ServletFns.getCurrentRequest(),
-					(HttpServletResponse)ServletFns.getCurrentResponse(),
-					null, null));
-		try {
-			final List ss = getStyleSheets0(exec, config, deviceType);
-			for (Iterator it = ss.iterator(); it.hasNext();)
-				append(sb, (StyleSheet)it.next(), exec, null);
-			return sb.toString();
-		} finally {
-			if (fake)
-				ExecutionsCtrl.setCurrent(null);
-		}
+		final List ss = getStyleSheets(exec, wapp, deviceType);
+		for (Iterator it = ss.iterator(); it.hasNext();)
+			append(sb, (StyleSheet)it.next(), exec, null);
+		return sb.toString();
 	}
 
 	/** Returns a list of {@link StyleSheet} that shall be generated
 	 * to the client for the specified execution.
 	 * @param exec the execution (never null)
+	 * @param wapp the Web application.
+	 * If null, exec.getDesktop().getWebApp() is used.
+	 * So you have to specify it if the execution is not associated
+	 * with desktop (a fake execution).
+	 * @param deviceType the device type, such as ajax.
+	 * If null, exec.getDesktop().getDeviceType() is used.
+	 * So you have to specify it if the execution is not associated
+	 * with desktop (a fake execution).
 	 */
-	public static final List getStyleSheets(Execution exec) {
-		//Process all languages
-		final Desktop desktop = exec.getDesktop();
-		return getStyleSheets0(exec, desktop.getWebApp().getConfiguration(),
-			desktop.getDeviceType());
-	}
-	private static final List getStyleSheets0(Execution exec,
-	Configuration config, String deviceType) {
+	public static final
+	List getStyleSheets(Execution exec, WebApp wapp, String deviceType) {
+		if (wapp == null) wapp = exec.getDesktop().getWebApp();
+		if (deviceType == null) deviceType = exec.getDesktop().getDeviceType();
+
+		final Configuration config = wapp.getConfiguration();
 		final Set disabled = config.getDisabledThemeURIs();
 		final List sses = new LinkedList(); //a list of StyleSheet
 		for (Iterator it = LanguageDefinition.getByDeviceType(deviceType).iterator();
@@ -537,24 +542,9 @@ public class HtmlPageRenders {
 		out.write(XMLs.encodeAttribute(value));
 		out.write('"');
 	}
-	/** Returns the desktop info to render a desktop.
-	 * It must be called if {@link #outPageInHtml} might not be called.
-	 * On the other hand, {@link #outDesktopInfo} does nothing if
-	 * {@link #outPageInHtml} was called.
-	 * @param exec the execution (never null)
-	 */
-	private static final String outDesktopInfo(Execution exec) {
-		if (exec.getAttribute(ATTR_DESKTOP_INFO_GENED) != null)
-			return ""; //nothing to generate
-		exec.setAttribute(ATTR_DESKTOP_INFO_GENED, Boolean.TRUE);
 
-		final Desktop desktop = exec.getDesktop();
-		return "<script>zkau.desktopBegin('"+desktop.getId()+"','"
-			+desktop.getUpdateURI(null)+"');</script>\n";
-	}
-
-	/** Generates and returns the ZK specific HTML tags for
-	 * a desktop.
+	/** Generates and returns the ZK specific HTML tags such as stylesheet
+	 * and JavaScript.
 	 *
 	 * <p>For each desktop, we have to generate a set of HTML tags
 	 * to load ZK Client engine, style sheets and so on.
@@ -563,20 +553,36 @@ public class HtmlPageRenders {
 	 * with special component such as org.zkoss.zhtml.Head, such that
 	 * the result HTML page is legal.
 	 *
-	 * @param exec the execution. Note: Unlike other methods,
-	 * exec could be null when calling this method.
+	 * @param exec the execution (never null)
 	 * @return the string holding the HTML tags, or null if already generated.
+	 * @param wapp the Web application.
+	 * If null, exec.getDesktop().getWebApp() is used.
+	 * So you have to specify it if the execution is not associated
+	 * with desktop (a fake execution).
+	 * @param deviceType the device type, such as ajax.
+	 * If null, exec.getDesktop().getDeviceType() is used.
+	 * So you have to specify it if the execution is not associated
+	 * with desktop (a fake execution).
 	 */
-	public static String outZkTags(Execution exec) {
-		if (exec == null || exec.getAttribute("zkHtmlTagsGened") != null)
+	public static
+	String outZkTags(Execution exec, WebApp wapp, String deviceType) {
+		if (exec.getAttribute("zkHtmlTagsGened") != null)
 			return null;
 		exec.setAttribute("zkHtmlTagsGened", Boolean.TRUE);
 
 		final StringBuffer sb = new StringBuffer(512).append('\n')
-			.append(outLangStyleSheets(exec))
-			.append(outLangJavaScripts(exec))
-			.append(outDesktopInfo(exec))
-			.append(outResponseJavaScripts(exec));
+			.append(outLangStyleSheets(exec, wapp, deviceType))
+			.append(outLangJavaScripts(exec, wapp, deviceType));
+
+		final Desktop desktop = exec.getDesktop();
+		if (desktop != null) {
+			sb.append("<script>zkau.desktopBegin('")
+				.append(desktop.getId()).append("','")
+				.append(desktop.getUpdateURI(null))
+				.append("');</script>\n");
+		}
+
+		sb.append(outResponseJavaScripts(exec));
 		return sb.toString();
 	}
 }

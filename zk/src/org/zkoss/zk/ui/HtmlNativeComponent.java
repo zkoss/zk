@@ -33,12 +33,13 @@ import org.zkoss.xml.HTMLs;
 import org.zkoss.xml.XMLs;
 import org.zkoss.idom.Namespace;
 
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
+import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zk.ui.ext.DynamicTag;
 import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.impl.NativeHelpers;
-import org.zkoss.zk.fn.ZkFns;
 
 /**
  * A comonent used to represent XML elements that are associated
@@ -156,7 +157,8 @@ implements DynamicTag, Native {
 			final int j = indexOfHead(sb);
 			if (j >= 0) {
 				zktagGened = true;
-				final String zktags = ZkFns.outZkHtmlTags();
+				final String zktags =
+					HtmlPageRenders.outZkTags(Executions.getCurrent(), null, null);
 				if (zktags != null)
 					sb.insert(j, zktags);
 			}
@@ -179,7 +181,8 @@ implements DynamicTag, Native {
 		if (!zktagGened && ("html".equals(tn) || "body".equals(tn))) {
 			final int j = sb.lastIndexOf("</" + _tag);
 			if (j >= 0) {
-				final String zktags = ZkFns.outZkHtmlTags();
+				final String zktags =
+					HtmlPageRenders.outZkTags(Executions.getCurrent(), null, null);
 				if (zktags != null)
 					sb.insert(j, zktags);
 			}

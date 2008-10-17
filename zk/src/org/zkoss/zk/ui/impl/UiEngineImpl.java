@@ -1096,6 +1096,28 @@ public class UiEngineImpl implements UiEngine {
 						new AuWrongValue(comp, Exceptions.getMessage(wve)));
 				return;
 			}
+		} else if (ex instanceof WrongValuesException) {
+			final WrongValuesException wve = (WrongValuesException)ex;
+			final WrongValueException[] wves = wve.getWrongValueExceptions();
+			final StringBuffer uuids = new StringBuffer();
+			final LinkedList msgs = new LinkedList();
+			for (int i = 0; i < wves.length; i++) {
+				final Component comp = wves[i].getComponent();
+				if (comp != null) {
+					wves[i] = ((ComponentCtrl)comp).onWrongValue(wves[i]);
+					if (wves[i] != null) {
+						uuids.append(comp.getUuid()).append(",");
+						msgs.add(Exceptions.getMessage(wves[i]));
+					}
+				}
+			}
+			if (uuids.length() > 0) {
+				uuids.delete(uuids.length() - 1, uuids.length());
+			}
+			msgs.addFirst(uuids.toString());
+			uv.addResponse("wrongValue",
+				new AuWrongValue((String[])msgs.toArray(new String[]{})));
+			return;
 		}
 
 		errs.add(err);
