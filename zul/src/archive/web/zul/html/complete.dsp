@@ -27,5 +27,6 @@ ${z:outDocType(page)}
 
 <c:if test="${!arg.embed}">
 ${z:outZkHtmlTags()}
+${z:outHtmlUnavailable(page)}
 </c:if>
 ${z:outResponseJavaScripts(zk_argResponses)}
