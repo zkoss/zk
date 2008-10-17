@@ -1,6 +1,7 @@
 	--------
 ZK 3.5.2
 * Features
+  2173627: A way to specify where to gen ZK tags in JSP (incl zul)
 
 * Bugs
   2156410: <noscript> shall be placed inside body rather than head (FF)
