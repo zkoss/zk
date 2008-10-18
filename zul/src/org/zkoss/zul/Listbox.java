@@ -159,7 +159,6 @@ public class Listbox extends XulElement implements Paginated {
 	private int _visibleItemCount;
 	
 	public Listbox() {
-		setSclass("listbox");
 		init();
 	}
 	private void init() {
@@ -802,7 +801,18 @@ public class Listbox extends XulElement implements Paginated {
 	public void setSelectedItem(Listitem item) {
 		selectItem(item);
 	}
-
+	/**  Selects the given listitems.
+	 * @since 3.6.0
+	 */
+	public void setSelectedItems(Set Listitems) {
+		if(!isMultiple())
+			throw new WrongValueException("Listbox must allow multiple selections.");
+		
+		Iterator listItemsAll = Listitems.iterator();
+		while(listItemsAll.hasNext()){
+			addItemToSelection((Listitem)listItemsAll.next());
+		}
+	}
 	/** Returns all selected items.
 	 *
 	 * <p>Note: if live data is used ({@link #getModel} is not null),

@@ -26,7 +26,7 @@ import java.util.Collection;
  *
  * @author tomyeh
  * @since 5.0.0
- * @see LanguageDefinition#getWidgetDefinition.
+ * @see LanguageDefinition#getWidgetDefinition
  */
 public interface WidgetDefinition {
 	/** Returns the widget name (aka., type).

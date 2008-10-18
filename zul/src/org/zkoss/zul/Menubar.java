@@ -94,7 +94,7 @@ public class Menubar extends XulElement {
 				("vertical".equals(getOrient()) ? "-ver" : "-hor") : super.getZclass();
 	}
 	public boolean insertBefore(Component child, Component insertBefore) {
-		if (!(child instanceof Menu) && !(child instanceof Menuitem))
+		if (!(child instanceof Menu) && !(child instanceof Menuitem) && !(child instanceof Menuseparator))
 			throw new UiException("Unsupported child for menubar: "+child);
 		return super.insertBefore(child, insertBefore);
 	}

@@ -35,6 +35,7 @@ import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.ext.client.Updatable;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.UploadEvent;
+import org.zkoss.zk.ui.util.Configuration;
 
 import org.zkoss.zul.impl.FileuploadDlg;
 
@@ -70,7 +71,26 @@ public class Fileupload extends HtmlBasedComponent { //not XulElement since not 
 	private int _maxnum = 1;
 	/** Wether to treat the uploaded file(s) as binary. */
 	private boolean _native;
-
+	private int _maxsize = -1;
+	
+	/**
+	 * Returns the maximal allowed upload size of the component, in kilobytes, or 
+	 * a negative value if no limit.
+	 * @since 3.6.0
+	 */
+	public int getMaxsize() {
+		return _maxsize;
+	}
+	/**
+	 * Sets the maximal allowed upload size of the component, in kilobytes.
+	 * <p>Note: {@link Configuration#setMaxUploadSize(int)} is also allowed to limit the size,
+	 * if the maximal size of the component is bigger than that.
+	 * @since 3.6.0
+	 */
+	public void setMaxsize(int maxsize) {
+		if (maxsize < 0) maxsize = -1;
+		_maxsize = maxsize;
+	}
 	/** No child is allowed. */
 	protected boolean isChildable() {
 		return false;
@@ -276,6 +296,27 @@ public class Fileupload extends HtmlBasedComponent { //not XulElement since not 
 	public static
 	Media[] get(String message, String title, int max, boolean alwaysNative)
 	throws InterruptedException {
+		return get(message, title, max, -1, alwaysNative);
+	}
+	/** Opens a modal dialog to upload multiple files with
+	 * the specified message, title and options.
+	 *
+	 * @param max the maximal allowed number that an user can upload
+	 * at once. If nonpositive, 1 is assumed.
+	 * If max is larger than 1000, 1000 is assumed.
+	 * @param maxsize the maximal upload size of the component.
+	 * @param alwaysNative  whether to treat the uploaded files as binary
+	 * stream, regardless its content type.
+	 * If false (the default), it will convert to
+	 * {@link org.zkoss.image.Image}, {@link org.zkoss.sound.Audio},
+	 * binary stream, or text files depending on the content type.
+	 * @return an array of files that an users has uploaded,
+	 * or null if uploaded.
+	 * @since 3.6.0
+	 */
+	public static
+	Media[] get(String message, String title, int max, int maxsize, boolean alwaysNative)
+	throws InterruptedException {
 		final Map params = new HashMap(8);
 		final Execution exec = Executions.getCurrent();
 		params.put("message", message == null ?
@@ -284,7 +325,8 @@ public class Fileupload extends HtmlBasedComponent { //not XulElement since not 
 			Messages.get(MZul.UPLOAD_TITLE): title);
 		params.put("max", new Integer(max == 0 ? 1 : max > 1000 ? 1000: max < -1000 ? -1000 : max));
 		params.put("native", Boolean.valueOf(alwaysNative));
-
+		params.put("maxsize", String.valueOf(maxsize));
+		
 		final FileuploadDlg dlg = (FileuploadDlg)
 			exec.createComponents(
 				_templ, null, params);

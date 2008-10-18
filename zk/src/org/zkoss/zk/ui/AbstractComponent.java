@@ -1188,7 +1188,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/** Called by ({@link ComponentCtrl#redraw}) to render the
 	 * properties, excluding the enclosing tag and children.
 	 *
-	 * <p>Note: it doesn't render {@link #getType}, {@link #getUuid}
+	 * <p>Note: it doesn't render {@link #getWidgetType}, {@link #getUuid}
 	 * and {@link #getMold}, which are caller's job.
 	 *
 	 * @since 5.0.0

@@ -54,8 +54,8 @@ public class JspFns {
  	String deviceType) {
  		Execution old = Executions.getCurrent();
  		Execution exec = new ExecutionImpl(ctx, request, response, null, null); 
- 		((ExecutionCtrl)exec).onActivate();
 		ExecutionsCtrl.setCurrent(exec);
+ 		((ExecutionCtrl)exec).onActivate();
 		try {
 			return HtmlPageRenders.outZkTags(exec,
 				WebManager.getWebManager(ctx).getWebApp(),
@@ -68,7 +68,7 @@ public class JspFns {
 	/** Returns HTML tags to include style sheets of the specified device
 	 * of the current application (never null).
 	 *
-	 * <p>It is the same as {@link JspPage#outDeviceStyleSheets}
+	 * <p>It is the same as {@link DspFns#outDeviceStyleSheets}
 	 * except this method is used for JSP pages.
 	 * @param deviceType the device type. If null, ajax is assumed.
 	 */
@@ -78,11 +78,13 @@ public class JspFns {
  		Execution old = Executions.getCurrent();
  		Execution exec = new ExecutionImpl(ctx, request, response, null, null); 
 		ExecutionsCtrl.setCurrent(exec);
+ 		((ExecutionCtrl)exec).onActivate();
 		try {
 			return HtmlPageRenders.outDeviceStyleSheets(exec,
 				WebManager.getWebManager(ctx).getWebApp(),
 				deviceType != null ? deviceType: "ajax");
 		} finally {
+			((ExecutionCtrl)exec).onDeactivate();
 			ExecutionsCtrl.setCurrent(old);
 		}
  	}

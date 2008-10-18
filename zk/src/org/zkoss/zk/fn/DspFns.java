@@ -44,7 +44,7 @@ import org.zkoss.zk.ui.sys.HtmlPageRenders;
  * For ZUML pages, use {@link ZkFns} instead.
  * 
  * @author tomyeh
- * @since 5.0.0
+ * @since 3.5.2
  */
 public class DspFns {
 	/** Generates and returns the ZK specific HTML tags such as stylesheet
@@ -78,7 +78,7 @@ public class DspFns {
 	public static final String outDeviceStyleSheets(String deviceType) {
 		final Execution exec = Executions.getCurrent();
  		if (exec != null)
-			HtmlPageRenders.outDeviceStyleSheets(exec, null, null);
+			return HtmlPageRenders.outDeviceStyleSheets(exec, null, null);
 
 	 	return JspFns.outDeviceStyleSheets(
 			ServletFns.getCurrentServletContext(),
