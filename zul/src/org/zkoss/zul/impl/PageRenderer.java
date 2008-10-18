@@ -80,8 +80,8 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 		out.write("</head>\n");
 
 		out.write("<body>\n");
-		writeln(out, HtmlPageRenders.outUnavailable(exec));
 		HtmlPageRenders.outPageContent(exec, page, out, false);
+		writeln(out, HtmlPageRenders.outUnavailable(exec));
 		out.write(HtmlPageRenders.outResponseJavaScripts(exec));
 		out.write("\n</body>\n</html>\n");
 	}
@@ -106,6 +106,8 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 		}
 
 		HtmlPageRenders.outPageContent(exec, page, out, au);
+		if (!au && ((PageCtrl)page).getOwner() == null)
+			writeln(out, HtmlPageRenders.outUnavailable(exec));
 		out.write(HtmlPageRenders.outResponseJavaScripts(exec));
 	}
 	/** Renders the page if {@link Page#isComplete} is true.
@@ -119,5 +121,6 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 			((ComponentCtrl)it.next()).redraw(out);
 
 		write(out, HtmlPageRenders.outZkTags(exec, null, null)); //might null
+		writeln(out, HtmlPageRenders.outUnavailable(exec));
 	}
 }
