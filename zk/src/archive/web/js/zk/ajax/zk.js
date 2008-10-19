@@ -71,6 +71,19 @@ Array.prototype.add = function (o, overwrite) {
 
 //zk//
 zk = { //static methods
+	/** The ZK version. */
+	//version: '5.0.0',
+	/** The ZK build number. */
+	//build: '0',
+	/** The processing prompt delay. */
+	//procDelay: 0,
+	/** The tooltip delay. */
+	//tipDelay: 0,
+	/** The resend delay. */
+	//resendDelay: 0,
+	/** Whether ZK is loading a JavaScript file or other resources. */
+	loading: 0,
+
 	/** Declares a package.
 	 * It is similar to Java's package statement.
 	 * <p>Example:
@@ -180,16 +193,16 @@ zk = { //static methods
 	},
 	_debug0: function () {
 		if (zk._msg) {
-			var console = zkDOM.$("zk_dbg");
+			var console = zkDom.$("zk_dbg");
 			if (!console) {
 				console = document.createElement("DIV");
 				document.body.appendChild(console);
 				var html =
 '<div id="zk_dbgbox" style="text-align:right;width:50%;right:0;bottom:0;position:absolute">'
-+'<button onclick="zkDOM.detach(\'zk_dbgbox\')" style="font-size:9px">X</button><br/>'
++'<button onclick="zkDom.detach(\'zk_dbgbox\')" style="font-size:9px">X</button><br/>'
 +'<textarea id="zk_dbg" style="width:100%" rows="10"></textarea></div>';
-				zkDOM.setOuterHTML(console, html);
-				console = zkDOM.$("zk_dbg");
+				zkDom.setOuterHTML(console, html);
+				console = zkDom.$("zk_dbg");
 			}
 			console.value = console.value + zk._msg + '\n';
 			console.scrollTop = console.scrollHeight;

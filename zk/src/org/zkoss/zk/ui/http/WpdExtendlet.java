@@ -89,18 +89,15 @@ import org.zkoss.web.util.resource.ExtendletLoader;
 		response.flushBuffer();
 	}
 	private byte[] parse(InputStream is, String path) throws Exception {
-		final ByteArrayOutputStream out = new ByteArrayOutputStream(1024*8);
 		final Element root = new SAXBuilder(true, false, true).build(is).getRootElement();
 		final String name = IDOMs.getRequiredAttributeValue(root, "name");
 		final String lang = IDOMs.getRequiredAttributeValue(root, "language");
 
-		final StringBuffer sb = new StringBuffer(256);
-		sb.append("_z='").append(name)
-			.append("';if(!zk.$import(_z)){zk.$package(_z);\n");
-		write(out, sb);
+		final ByteArrayOutputStream out = new ByteArrayOutputStream(1024*8);
+		write(out, "_z='");
+		write(out, name);
+		write(out, "';if(!zk.$import(_z)){try{zk.$package(_z);\n");
 
-		sb.append(";zkPkg.end('")
-			.append(lang).append("',_z,[");
 		final String pathpref = path.substring(0, path.lastIndexOf('/') + 1);
 		for (Iterator it = root.getElements().iterator(); it.hasNext();) {
 			final Element el = (Element)it.next();
@@ -110,7 +107,6 @@ import org.zkoss.web.util.resource.ExtendletLoader;
 				final String jspath = pathpref + wgtnm + ".js"; //eg: /js/zul/wgt/Div.js
 				if (!writeResource(out, jspath))
 					log.error("Failed to load widget "+wgtnm+": "+jspath+" not found, "+el.getLocator());
-				sb.append('\'').append(wgtnm).append("',");
 			} else if ("script".equals(elnm)) {
 				String jspath = el.getAttributeValue("src");
 				if (jspath != null && jspath.length() > 0) {
@@ -131,10 +127,7 @@ import org.zkoss.web.util.resource.ExtendletLoader;
 				log.warning("Unknown element "+elnm+", "+el.getLocator());
 			}
 		}
-		if (sb.length() > 0 && sb.charAt(sb.length() - 1) == ',')
-			sb.setLength(sb.length() - 1);
-		sb.append("]);}");
-		write(out, sb);
+		write(out, "\n}finally{zkPkg.end(_z);}}");
 		return out.toByteArray();
 	}
 	private boolean writeResource(OutputStream out, String path)
@@ -151,12 +144,12 @@ import org.zkoss.web.util.resource.ExtendletLoader;
 		final byte[] bs = s.getBytes("UTF-8");
 		out.write(bs, 0, bs.length);
 	}
-	private static void write(OutputStream out, StringBuffer sb)
+	/*private static void write(OutputStream out, StringBuffer sb)
 	throws IOException {
 		final byte[] bs = sb.toString().getBytes("UTF-8");
 		out.write(bs, 0, bs.length);
 		sb.setLength(0);
-	}
+	}*/
 	private void writeln(OutputStream out) throws IOException {
 		final byte[] lf = {'\n'};
 		out.write(lf, 0, 1);

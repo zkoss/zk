@@ -131,8 +131,6 @@ public class Configuration {
 	private boolean _useEvtThd = true;
 	/** keep-across-visits. */
 	private boolean _keepDesktop;
-	/** Whether to disable components that don't belong to the modal window. */
-	private boolean _disableBehindModal;
 	/** Whether to keep the session alive when receiving onTimer.
 	 */
 	private boolean _timerKeepAlive;
@@ -1505,22 +1503,14 @@ public class Configuration {
 		return _useEvtThd;
 	}
 
-	/** Returns whether to disable the components that don't belong to
-	 * the active modal window.
-	 *
-	 * <p>Default: false (ZK 3.0.3 or earlier, the default is true).
-	 * @since 2.4.1
+	/** @deprecated since 5.0.0
 	 */
 	public boolean isDisableBehindModalEnabled() {
-		return _disableBehindModal;
+		return false;
 	}
-	/** Sets whether to disable the components that don't belong to
-	 * the active modal window.
-	 *
-	 * @since 2.4.1
+	/** @deprecated since 5.0.0
 	 */
 	public void enableDisableBehindModal(boolean enable) {
-		_disableBehindModal = enable;
 	}
 
 	/** Returns the monitor for this application, or null if not set.

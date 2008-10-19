@@ -132,7 +132,7 @@ zk.Desktop = zk.$extends(zk.Object, {
 			this.id = dtid;
 			this.updateURI = updateURI;
 			zdt._dts[dtid] = this;
-			++zdt._ndt;
+			if (!zdt._dt) zdt._dt = this; //default desktop
 		} else if (updateURI)
 			dt.updateURI = updateURI;
 	}
@@ -140,10 +140,9 @@ zk.Desktop = zk.$extends(zk.Object, {
 	/** Returns the desktop of the specified ID.
 	 */
 	of: function (dtid) {
-		return zk.Desktop._dts[dtid];
+		return dtid ? zk.Desktop._dts[dtid]: zk.Desktop._dt;
 	},
-	_dts: {},
-	_ndt: 0
+	_dts: {}
 });
 
 /** A ZK page. */
@@ -154,7 +153,7 @@ zk.Page = zk.$extends(zk.Object, {
 	style: "width:100%;height:100%",
 	$init: function (pgid, contained) {
 		this.id = pgid;
-		this.node = zkDOM.$(pgid); //might null
+		this.node = zkDom.$(pgid); //might null
 		if (contained)
 			zk.Page.contained.add(this, true);
 	}

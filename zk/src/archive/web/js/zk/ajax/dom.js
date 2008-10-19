@@ -14,7 +14,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-zkDOM = { //static methods
+zkDom = { //static methods
 	/** Returns the DOM element with the specified ID. */
 	$: function(id) {
 		if (id && id.id) id = id.id;
@@ -33,15 +33,15 @@ zkDOM = { //static methods
 	 * @return the new node (actually the first new node, if multiple)
 	 */
 	setOuterHTML: function(n, html) {
-		n = zkDOM.$(n);
+		n = zkDom.$(n);
 		var parent = n.parentNode, sib = n.previousSibling;
 
 		if (zk.ie) {
-			var tn = zkDOM.tag(n);
+			var tn = zkDom.tag(n);
 			if (tn == "TD" || tn == "TH" || tn == "TABLE" || tn == "TR"
 			|| tn == "CAPTION" || tn == "TBODY" || tn == "THEAD"
 			|| tn == "TFOOT" || tn == "COLGROUP" || tn == "COL") {
-				var ns = zkDOM._tblNewElems(html);
+				var ns = zkDom._tblNewElems(html);
 				var nsib = n.nextSibling;
 				parent.removeChild(n);
 
@@ -76,13 +76,38 @@ zkDOM = { //static methods
 	 * @param n the element, or the element's ID.
 	 */
 	detach: function (n) {
-		n = zkDOM.$(n);
+		n = zkDom.$(n);
 		if (n && n.parentNode) n.parentNode.removeChild(n);
+	},
+
+	enableESC: function () {
+		//TODO
+	},
+	disableESC: function () {
+		//TODO
+	},
+
+	/** Shows the progress box to notify user ZK Client is busy.
+	 */
+	progressbox: function (id, msg, mask) {
+		if (mask && zk.Page.contained.length) {
+			//TODO: apply a mask for each contained page
+			//return;
+		}
+
+		var html = '<div id="'+id+'"';
+		if (mask) html += '><div id="zk_mask" class="z-modal-mask"></div';
+		html += '><div class="z-loading"><div class="z-loading-indicator">'
+			+'<img class="z-loading-icon" alt="..." src="'+zkCom.getUpdateURI('/web/img/spacer.gif')+'"/> '
+			+msg+'</div></div></div>'
+		var n = document.createElement("DIV");
+		document.body.appendChild(n);
+		zkDom.setOuterHTML(n, html);
 	}
 };
 
 if (zk.ie) {
-	zkDOM._tagOfHtml = function (html) {
+	zkDom._tagOfHtml = function (html) {
 		if (!html) return "";
 	
 		var j = html.indexOf('<') + 1, k = j, len = j ? html.length: 0;
@@ -93,8 +118,8 @@ if (zk.ie) {
 		}
 		throw "Unknown tag in "+html;
 	};
-	zkDOM._tblNewElems = function (html) {
-		var level, tag = zkDOM._tagOfHtml(html);
+	zkDom._tblNewElems = function (html) {
+		var level, tag = zkDom._tagOfHtml(html);
 		switch (tag) {
 		case "TABLE":
 			level = 0;
@@ -129,7 +154,7 @@ if (zk.ie) {
 			//IE creates extra tbody if add COLGROUP
 			//However, the following skip is dirty-fix, assuming html doesn't
 			//contain TBODY (unless it is the first tag)
-			var nt = zkDOM.tag(n);
+			var nt = zkDom.tag(n);
 			if (nt == tag || nt != "TBODY")
 				ns.push(n);
 			el.removeChild(n);

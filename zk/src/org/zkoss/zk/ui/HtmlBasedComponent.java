@@ -370,7 +370,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 
 		final JsContentRenderer renderer = new JsContentRenderer();
 		renderProperties(renderer);
-		out.write("\nzkau.begin('");
+		out.write("\nzkbg('");
 
 		final String type = getWidgetType();
 		if (type == null)
@@ -389,7 +389,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 
 		redrawChildren(out);
 
-		out.write("zkau.end();\n");
+		out.write("zke();\n");
 	}
 	/** Redraw the content of this component.
 	 * <p>Default: does nothing.

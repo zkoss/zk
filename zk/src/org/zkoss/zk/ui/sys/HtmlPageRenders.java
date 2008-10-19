@@ -206,27 +206,34 @@ public class HtmlPageRenders {
 			append(sb, (JavaScript)it.next());
 
 		sb.append("\n<script>\n")
-			.append("zk_ver='").append(wapp.getVersion())
-			.append("';\nzk.build='").append(wapp.getBuild())
-			.append("';\nzk_procto=")
-				.append(config.getProcessingPromptDelay())
-			.append(";\nzk_tipto=")
-				.append(config.getTooltipDelay())
-			.append(";\nzk_resndto=")
-				.append(config.getResendDelay())
-			.append(";\n");
+			.append("zkver('").append(wapp.getVersion())
+			.append("','").append(wapp.getBuild())
+			.append('\'');
 
+		for (Iterator it = LanguageDefinition.getByDeviceType(deviceType).iterator();
+		it.hasNext();) {
+			final LanguageDefinition langdef = (LanguageDefinition)it.next();
+			final Set mods = langdef.getJavaScriptModules().entrySet();
+			if (!mods.isEmpty())
+				for (Iterator e = mods.iterator(); e.hasNext();) {
+					final Map.Entry me = (Map.Entry)e.next();
+					sb.append(",'").append(me.getKey())
+					  .append("','").append(me.getValue()).append('\'');
+				}
+		}
+
+		sb.append(");\nzkopt({pd:")
+			.append(config.getProcessingPromptDelay())
+			.append(",td:").append(config.getTooltipDelay())
+			.append(",rd:").append(config.getResendDelay());
 		if (config.isDebugJS())
-			sb.append("zk.debugJS=true;\n");
-		if (config.isDisableBehindModalEnabled())
-			sb.append("zk.dbModal=true;\n");
-
+			sb.append(",dj:1");
 		if (config.isKeepDesktopAcrossVisits()
 		|| exec.getAttribute(Attributes.NO_CACHE) == null)
-			sb.append("zk.keepDesktop=true;\n");
-
+			sb.append(",kd:1");
 		if (config.getPerformanceMeter() != null)
-			sb.append("zk.pfmeter=true;\n");
+			sb.append(",pf:1");
+		sb.append("});\n");
 
 		final int[] cers = config.getClientErrorReloadCodes();
 		if (cers.length > 0) {
@@ -240,29 +247,8 @@ public class HtmlPageRenders {
 				}
 			}
 			if (k != sb.length()) {
-				sb.insert(k, "zkau.setErrorURI(");
+				sb.insert(k, "zkau.errorURI(");
 				sb.append(");\n");
-			}
-		}
-
-		for (Iterator it = LanguageDefinition.getByDeviceType(deviceType).iterator();
-		it.hasNext();) {
-			final LanguageDefinition langdef = (LanguageDefinition)it.next();
-
-			//Generate module versions
-			final Set mods = langdef.getJavaScriptModules().entrySet();
-			if (!mods.isEmpty()) {
-				final int k = sb.length();
-				for (Iterator e = mods.iterator(); e.hasNext();) {
-					final Map.Entry me = (Map.Entry)e.next();
-					if (k != sb.length()) sb.append(',');
-					sb.append('\'').append(me.getKey())
-						.append("','").append(me.getValue()).append('\'');
-				}
-				if (k != sb.length()) {
-					sb.insert(k, "zkPkg.setVersion(");
-					sb.append(");");
-				}
 			}
 		}
 
@@ -502,9 +488,9 @@ public class HtmlPageRenders {
 			execCtrl.getVisualizer().setExtraWriter(exout = new StringWriter());
 			out.write("<div");
 			writeAttr(out, "id", page.getUuid());
-			out.write(">\n<script>zk.booting=true;try{");
+			out.write(">\n<script>zkcrbg();try{");
 		}
-		out.write("zkau.pageBegin('");
+		out.write("zkpgbg('");
 		out.write(page.getUuid());
 		out.write('\'');
 		if (style != null || owner == null) {
@@ -527,9 +513,9 @@ public class HtmlPageRenders {
 		for (Iterator it = page.getRoots().iterator(); it.hasNext();)
 			((ComponentCtrl)it.next()).redraw(out);
 
-		out.write("\nzkau.pageEnd();");
+		out.write("\nzkpge();");
 		if (!au && owner == null) {
-			out.write("}finally{zk.booting=false;}</script>\n</div>");
+			out.write("}finally{zkcre();}</script>\n</div>");
 			execCtrl.getVisualizer().setExtraWriter(null);
 			out.write(exout.toString());
 		}
@@ -576,7 +562,7 @@ public class HtmlPageRenders {
 
 		final Desktop desktop = exec.getDesktop();
 		if (desktop != null) {
-			sb.append("<script>zkau.desktopBegin('")
+			sb.append("<script>zkdtbg('")
 				.append(desktop.getId()).append("','")
 				.append(desktop.getUpdateURI(null))
 				.append("');</script>\n");
