@@ -139,10 +139,10 @@ zk = { //static methods
 
 		for (var p in baseClass.prototype) { //inherit non-static
 			var cc = p.charAt(0);
-			if (cc != '$' || p == '$init') {
+			if (cc != '$' || p == '$init' || p == '$instanceof') {
 				var m = baseClass.prototype[p];
 				jclass.prototype[p] = m;
-				if (cc != '_' && typeof m == 'function') //not private method
+				if (cc != '_' && typeof m == 'function' && p != "$instanceof") //not private method
 					jclass.prototype['$' + p ] = m;
 			}
 		}
@@ -152,6 +152,11 @@ zk = { //static methods
 
 		for (var p in staticMethods)
 			jclass[p] = staticMethods[p];
+
+		jclass.prototype.$class = jclass;
+		jclass.superclass = baseClass;
+		jclass.isInstance = baseClass.isInstance;
+		jclass.isAssignableFrom = baseClass.isAssignableFrom;
 		return jclass;
 	},
 
@@ -236,5 +241,26 @@ zk.air = zk.agent.indexOf("adobeair") >= 0;
 /** The Object class that all other classes are extended from. */
 zk.Object = function () {};
 zk.Object.prototype = {
-	$init: zk.$void
+	$init: zk.$void,
+	/** The class of this object belongs to. */
+	$class: zk.Object,
+	/** Determines if this object is an instance of the specified class. */
+	$instanceof: function (cls) {
+		if (cls)
+			for (var c = this.$class; c; c = c.superclass)
+				if (c == cls)
+					return true;
+		return false;
+	}
+};
+/** Determines if the specified object is an instance of this class. */
+zk.Object.isInstance = function (o) {
+	return o && o.$instanceof && o.$instanceof(this);
+};
+/** Determines if this class is a super class of the specified class. */
+zk.Object.isAssignableFrom = function (cls) {
+	for (; cls; cls = cls.superclass)
+		if (this == cls)
+			return true;
+	return false;
 };

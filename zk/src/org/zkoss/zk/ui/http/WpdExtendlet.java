@@ -29,6 +29,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.zkoss.lang.Exceptions;
 import org.zkoss.io.Files;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.ResourceCache;
@@ -42,6 +43,9 @@ import org.zkoss.web.util.resource.Extendlet;
 import org.zkoss.web.util.resource.ExtendletContext;
 import org.zkoss.web.util.resource.ExtendletConfig;
 import org.zkoss.web.util.resource.ExtendletLoader;
+
+import org.zkoss.zk.ui.metainfo.LanguageDefinition;
+import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 
 /**
  * The extendlet to handle WPD (Widget Package Descriptor).
@@ -92,6 +96,7 @@ import org.zkoss.web.util.resource.ExtendletLoader;
 		final Element root = new SAXBuilder(true, false, true).build(is).getRootElement();
 		final String name = IDOMs.getRequiredAttributeValue(root, "name");
 		final String lang = IDOMs.getRequiredAttributeValue(root, "language");
+		final LanguageDefinition langdef = LanguageDefinition.lookup(lang);
 
 		final ByteArrayOutputStream out = new ByteArrayOutputStream(1024*8);
 		write(out, "_z='");
@@ -104,17 +109,15 @@ import org.zkoss.web.util.resource.ExtendletLoader;
 			final String elnm = el.getName();
 			if ("widget".equals(elnm)) {
 				final String wgtnm = IDOMs.getRequiredAttributeValue(el, "name");
-				final String jspath = pathpref + wgtnm + ".js"; //eg: /js/zul/wgt/Div.js
-				if (!writeResource(out, jspath))
+				final String jspath = wgtnm + ".js"; //eg: /js/zul/wgt/Div.js
+				if (writeResource(out, jspath, pathpref))
+					writeMolds(out, langdef, name+'.'+wgtnm, pathpref);
+				else
 					log.error("Failed to load widget "+wgtnm+": "+jspath+" not found, "+el.getLocator());
 			} else if ("script".equals(elnm)) {
 				String jspath = el.getAttributeValue("src");
 				if (jspath != null && jspath.length() > 0) {
-					if (jspath.startsWith("~./")) jspath = jspath.substring(2);
-					else if (jspath.charAt(0) != '/')
-						jspath = Files.normalize(pathpref, jspath);
-
-					if (!writeResource(out, jspath))
+					if (!writeResource(out, jspath, pathpref))
 						log.error("Failed to load script "+jspath+", "+el.getLocator());
 				}
 
@@ -130,8 +133,35 @@ import org.zkoss.web.util.resource.ExtendletLoader;
 		write(out, "\n}finally{zkPkg.end(_z);}}");
 		return out.toByteArray();
 	}
-	private boolean writeResource(OutputStream out, String path)
+	private void writeMolds(OutputStream out,
+	LanguageDefinition langdef, String wgtnm, String pathpref) {
+		try {
+			write(out, "_zm=");
+			write(out, wgtnm);
+			write(out, ".molds={};");
+			WidgetDefinition wgtdef = langdef.getWidgetDefinition(wgtnm);
+			for (Iterator it = wgtdef.getMoldNames().iterator(); it.hasNext();) {
+				final String mold = (String)it.next();
+				final String uri = wgtdef.getMoldURI(mold);
+				if (uri != null) {
+					write(out, "_zm['");
+					write(out, mold);
+					write(out, "']=");
+					if (!writeResource(out, uri, pathpref))
+						log.error("Failed to load mold "+mold+" for widget "+wgtnm+". Cause: "+uri+" not found");
+					write(out, ";\n");
+				}
+			}
+		} catch (Throwable ex) {
+			log.error("Failed to load molds for widget "+wgtnm+".\nCause: "+Exceptions.getMessage(ex));
+		}
+	}
+	private boolean writeResource(OutputStream out, String path, String pathpref)
 	throws IOException {
+		if (path.startsWith("~./")) path = path.substring(2);
+		else if (path.charAt(0) != '/')
+			path = Files.normalize(pathpref, path);
+
 		final InputStream is = _webctx.getResourceAsStream(path);
 		if (is == null)
 			return false;

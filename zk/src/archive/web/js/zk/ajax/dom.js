@@ -22,7 +22,7 @@ zkDom = { //static methods
 			id ? document.getElementById(id): null: id;
 			//strange but getElementById("") fails in IE7
 	},
-	getParent: function (n) {
+	parent: function (n) {
 		return n.parentNode; //TODO: handle vparent
 	},
 	/** Returns the tag name of the specified node. */
@@ -80,11 +80,91 @@ zkDom = { //static methods
 		if (n && n.parentNode) n.parentNode.removeChild(n);
 	},
 
-	enableESC: function () {
-		//TODO
+	/** Listens a browser event.
+	 */
+	listen: function (el, evtnm, fn) {
+		if (el.addEventListener)
+			el.addEventListener(evtnm, fn, false);
+		else /*if (el.attachEvent)*/
+			el.attachEvent('on' + evtnm, fn);
+
+		//Bug 1811352
+		if ("submit" == evtnm && zkDom.tag(el) == "FORM") {
+			if (!el._submfns) el._submfns = [];
+			el._submfns.push(fn);
+		}
 	},
+	/** Un-listens a browser event.
+	 */
+	unlisten: function (el, evtnm, fn) {
+		if (el.removeEventListener)
+			el.removeEventListener(evtnm, fn, false);
+		else if (el.detachEvent) {
+			try {
+				el.detachEvent('on' + evtnm, fn);
+			} catch (e) {
+			}
+		}
+
+		//Bug 1811352
+		if ("submit" == evtnm && zkDom.tag(el) == "FORM" && el._submfns)
+			el._submfns.remove(fn);
+	},
+
+	/** Enables ESC (default behavior). */
+	enableESC: function () {
+		if (zkDom._noESC) {
+			zkDom.unlisten(document, "keydown", zkDom._noESC);
+			delete zkDom._noESC;
+		}
+		if (zkDom._onErrChange) {
+			window.onerror = zkDom._oldOnErr;
+			if (zkDom._oldOnErr) delete zkDom._oldOnErr;
+			delete zkDom._onErrChange;
+		}
+	},
+	/** Disables ESC (so loading won't be aborted). */
 	disableESC: function () {
-		//TODO
+		if (!zkDom._noESC) {
+			zkDom._noESC = function (evt) {
+				if (!evt) evt = window.event;
+				if (evt.keyCode == 27) {
+					if (evt.preventDefault) {
+						evt.preventDefault();
+						evt.stopPropagation();
+					} else {
+						evt.returnValue = false;
+						evt.cancelBubble = true;
+					}
+					return false;//eat
+				}
+				return true;
+			};
+			zkDom.listen(document, "keydown", zkDom._noESC);
+
+			//FUTURE: onerror not working in Safari and Opera
+			//if error occurs, loading will be never ended, so try to ignore
+			//we cannot use zkDom.listen. reason: no way to get back msg...(FF)
+			zkDom._oldOnErr = window.onerror;
+			zkDom._onErrChange = true;
+			window.onerror =
+		function (msg, url, lineno) {
+			//We display errors only for local class web resource
+			//It is annoying to show error if google analytics's js not found
+			var au = zkau.uri();
+			if (au && url.indexOf(location.host) >= 0) {
+				var v = au.lastIndexOf(';');
+				v = v >= 0 ? au.substring(0, v): au;
+				if (url.indexOf(v + "/web/") >= 0) {
+					msg = mesg.FAILED_TO_LOAD + url + "\n" + mesg.FAILED_TO_LOAD_DETAIL
+						+ "\n" + mesg.CAUSE + msg+" (line "+lineno + ")";
+					if (zk.error) zk.error(msg);
+					else alert(msg);
+					return true;
+				}
+			}
+		};
+		}
 	},
 
 	/** Shows the progress box to notify user ZK Client is busy.

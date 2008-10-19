@@ -515,9 +515,10 @@ public class HtmlPageRenders {
 
 		out.write("\nzkpge();");
 		if (!au && owner == null) {
-			out.write("}finally{zkcre();}</script>\n</div>");
 			execCtrl.getVisualizer().setExtraWriter(null);
+			out.write("}finally{zkcre();}</script>\n");
 			out.write(exout.toString());
+			out.write("</div>");
 		}
 	}
 	private static final void writeAttr(Writer out, String name, String value)

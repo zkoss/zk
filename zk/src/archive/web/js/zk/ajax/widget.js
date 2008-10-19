@@ -32,12 +32,15 @@ zk.Widget = zk.$extends(zk.Object, {
 	//page: null,
 
 	/** Whether this widget has a copy at the server (readonly). */
-	inServer: false,
+	//inServer: false,
 
 	/** Constructor. */
 	$init: function (uuid, mold) {
 		this.uuid = uuid ? uuid: zk.Widget.nextUuid();
 		this.mold = mold ? mold: "default";
+	},
+	redraw: function () {
+		return this.$class.molds[this.mold].call(this);
 	},
 	/** Appends a child widget.
 	 */
@@ -135,28 +138,52 @@ zk.Desktop = zk.$extends(zk.Object, {
 			if (!zdt._dt) zdt._dt = this; //default desktop
 		} else if (updateURI)
 			dt.updateURI = updateURI;
+
+		zdt.cleanup();
 	}
 },{
 	/** Returns the desktop of the specified ID.
 	 */
 	of: function (dtid) {
-		return dtid ? zk.Desktop._dts[dtid]: zk.Desktop._dt;
+		return dtid ? typeof dtid == 'string' ?
+			zk.Desktop._dts[dtid]: dtid: zk.Desktop._dt;
+	},
+	/** Remove desktops that are no longer valid.
+	 */
+	cleanup: function () {
+		var zdt = zk.Desktop, dts = zdt._dts;
+		if (zdt._dt && zdt._dt.pgid && !zkDom.$(zdt._dt.pgid)) //removed
+			zdt._dt = null;
+		for (var dtid in dts) {
+			var dt = dts[dtid];
+			if (dt.pgid && !zkDom.$(dt.pgid)) //removed
+				delete dts[dtid];
+			else if (!zdt._dt)
+				zdt._dt = dt;
+		}
 	},
 	_dts: {}
 });
 
 /** A ZK page. */
-zk.Page = zk.$extends(zk.Object, {
+zk.Page = zk.$extends(zk.Widget, {//unlik server, we derive from Widget!
 	/** The type (always "#p")(readonly). */
 	type: "#p",
 	/** The style (readonly). */
 	style: "width:100%;height:100%",
 	$init: function (pgid, contained) {
-		this.id = pgid;
+		this.uuid = pgid;
 		this.node = zkDom.$(pgid); //might null
 		if (contained)
 			zk.Page.contained.add(this, true);
+	},
+	redraw: function () {
+		var html = '<div id="' + this.uuid + '" style="' + this.style + '">';
+		for (var w = this.firstChild; w; w = w.nextSibling)
+			html += w.redraw();
+		return html + '</div>';
 	}
+
 },{
 	/** An list of contained page (i.e., standalone but not covering
 	 * the whole browser window.

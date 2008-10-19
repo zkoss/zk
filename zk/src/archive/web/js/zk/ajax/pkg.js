@@ -23,13 +23,16 @@ zkPkg = {
 			zk._updCnt();
 		} else {
 			try {
-				zk.enableESC();
+				zkDom.enableESC();
 
 				//TODO: remove masks for contained pages
 
 				zkDom.detach("zk_loadprog");
 			} catch (ex) {
 			}
+
+			for (var fn, aflds = zkPkg._aflds; fn = aflds.shift();)
+				fn();
 		}
 	},
 	/** Loads the specified package.
@@ -69,6 +72,19 @@ zkPkg = {
 		document.getElementsByTagName("HEAD")[0].appendChild(e);
 	},
 	_pkgLds: {},
+
+	/** Adds a function that shall be executed after loaded.
+	 * If zk.loading is true, it is executed immediately.
+	 * @return if it was added successfully.
+	 * If fn was added, nothing is changed and false is returned.
+	 */
+	addAfterLoad: function (fn) {
+		if (zk.loading)
+			return zkPkg._aflds.add(fn, true);
+		fn();
+		return false;
+	},
+	_aflds: [],
 
 	_updCnt: function () {
 		try {

@@ -310,7 +310,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<widget-name>zul.wgt.Div</widget-name>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/div.dsp</mold-uri>
+			<mold-uri>mold/div.js</mold-uri>
 		</mold>
 		<preserve-blank/>
 	</component>
@@ -457,7 +457,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<text-as>value</text-as>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/label.dsp</mold-uri>
+			<mold-uri>mold/label.js</mold-uri>
 		</mold>
 	</component>
 	<component>
