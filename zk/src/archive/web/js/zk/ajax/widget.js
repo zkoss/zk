@@ -40,7 +40,8 @@ zk.Widget = zk.$extends(zk.Object, {
 		this.mold = mold ? mold: "default";
 	},
 	redraw: function () {
-		return this.$class.molds[this.mold].call(this);
+		var s = this.$class.molds[this.mold].call(this);
+		return this.prolog ? this.prolog + s: s;
 	},
 	/** Appends a child widget.
 	 */
