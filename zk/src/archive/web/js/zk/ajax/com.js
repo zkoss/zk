@@ -21,7 +21,7 @@ zkCom = {
 	 * @param ignoreSessId whether to handle the session ID in the base URI
 	 */
 	getUpdateURI: function (uri, dtid, ignoreSessId) {
-		var au = zk.Desktop.of(dtid).updateURI;
+		var au = zk.Desktop.$(dtid).updateURI;
 		if (!uri) return au;
 
 		if (uri.charAt(0) != '/') uri = '/' + uri;

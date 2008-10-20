@@ -409,4 +409,16 @@ public class Files {
 		sb.delete(k, j);
 		return k;
 	}
+
+	/** Writes the specified string buffer to the specified writer.
+	 * Use this method instead of out.write(sb.toString()), if sb.length()
+	 * is large.
+	 * @since 5.0.0
+	 */
+	public static final void write(Writer out, StringBuffer sb)
+	throws IOException {
+		//Don't convert sb to String to save the memory use
+		for (int j = 0, len = sb.length(); j < len; ++j)
+			out.write(sb.charAt(j));
+	}
 }

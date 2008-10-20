@@ -71,6 +71,7 @@ import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
 import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zk.ui.util.Condition;
 import org.zkoss.zk.ui.util.PageSerializationListener;
+import org.zkoss.zk.ui.ext.Includer;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
@@ -919,6 +920,8 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		if (_owner != null)
 			throw new IllegalStateException("owner can be set only once");
 		_owner = comp;
+		if (_owner instanceof Includer)
+			((Includer)_owner).setChildPage(this);
 	}
 
  	public Component getDefaultParent() {
@@ -936,7 +939,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		_desktop = desktop;
 
 		if (_ownerUuid != null) {
-			_owner = _desktop.getComponentByUuid(_ownerUuid);
+			setOwner(_desktop.getComponentByUuid(_ownerUuid));
 			_ownerUuid = null;
 		}
 

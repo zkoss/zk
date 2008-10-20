@@ -22,17 +22,21 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
 import java.io.Writer;
+import java.io.StringWriter;
 import java.io.IOException;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.lang.Strings;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.mesg.Messages;
+import org.zkoss.io.Files;
 import org.zkoss.util.logging.Log;
 
 import org.zkoss.web.Attributes;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -40,8 +44,10 @@ import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.ext.DynamicPropertied;
+import org.zkoss.zk.ui.ext.Includer;
 
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.mesg.MZul;
@@ -81,7 +87,7 @@ import org.zkoss.zul.mesg.MZul;
  * <li>{@link Include} could include anything include ZUML, JSP or any other
  * servlet, while a macro component could embed only a ZUML page.</li>
  * <li>If {@link Include} includes a ZUML page, a
- * {@link org.zkoss.zk.ui.Page} instance is created as a child
+ * {@link Page} instance is created as a child
  * of {@link Include}. On the other hand, a macro component makes
  * the created components as the direct children -- i.e.,
  * you can browse them with {@link org.zkoss.zk.ui.Component#getChildren}.</li>
@@ -101,10 +107,12 @@ import org.zkoss.zul.mesg.MZul;
  * @author tomyeh
  * @see Iframe
  */
-public class Include extends XulElement implements DynamicPropertied {
+public class Include extends XulElement implements DynamicPropertied, Includer {
 	private static final Log log = Log.lookup(Include.class);
 	private String _src;
 	private Map _dynams;
+	/** The child page. Note: it is recovered by PageImpl. */
+	private transient Page _childpg;
 	private boolean _localized;
 	private boolean _progressing;
 	/** 0: not yet handled, 1: wait for echoEvent, 2: done. */
@@ -193,6 +201,14 @@ public class Include extends XulElement implements DynamicPropertied {
 		}
 	}
 
+	//Includer//
+	public Page getChildPage() {
+		return _childpg;
+	}
+	public void setChildPage(Page page) {
+		_childpg = page;
+	}
+
 	//DynamicPropertied//
 	/** Returns whether a dynamic property is defined.
 	 */
@@ -253,7 +269,28 @@ public class Include extends XulElement implements DynamicPropertied {
 			if (_progressStatus == 1) {
 				_progressStatus = 2;
 			} else if (_src != null && _src.length() > 0) {
-				include(out);
+				final StringWriter sw = new StringWriter();
+				include(sw);
+				if (getChildPage() != null) {
+					Files.write(out, sw.getBuffer());
+				} else { //not ZUL page, so it must be HTML fragment
+					final Writer extout =
+					((ExecutionCtrl)getDesktop().getExecution())
+						.getVisualizer().getExtraWriter();
+					if (extout != null) {
+						extout.write("<span id=\"");
+						extout.write(getUuid());
+						extout.write("\">");
+						Files.write(extout, sw.getBuffer());
+						extout.write("</span>");
+					} else {
+						out.write("_zkws[0].props.content='");
+						final StringBuffer sb = new StringBuffer(1024);
+						Strings.appendEscape(sb, sw.getBuffer(), "'\\\n\r\t\f");
+						Files.write(out, sb);
+						out.write("';");
+					}
+				}
 			}
 		} finally {
 			ueng.setOwner(old);

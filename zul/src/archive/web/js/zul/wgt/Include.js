@@ -21,6 +21,9 @@ zul.wgt.Include = zk.$extends(zk.Widget, {
 		html += '>';
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			html += w.redraw();
+		if (this.content) html += this.content;
 		return html + '</div>';
 	}
+}, {
+	embedAs: 'content' //retrieve zkDom.$() as value
 });

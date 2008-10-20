@@ -15,6 +15,30 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 zkUtil = { //static methods
+	//HTML/XML
+	/** Encodes a message into a valid XML format. */
+	encodeXML: function (txt, multiline) {
+		var out = "";
+		if (txt)
+			for (var j = 0, tl = txt.length; j < tl; ++j) {
+				var cc = txt.charAt(j);
+				switch (cc) {
+				case '<': out += "&lt;"; break;
+				case '>': out += "&gt;"; break;
+				case '&': out += "&amp;"; break;
+				case '"': out += "&quot;"; break;
+				case '\n':
+					if (multiline) {
+						out += "<br/>";
+						break;
+					}
+				default:
+					out += cc;
+				}
+			}
+		return out;
+	},
+
 	/** Returns the current time (new Date().getTime()).
 	 * It is a number starting from 01/01/1970.
 	 */

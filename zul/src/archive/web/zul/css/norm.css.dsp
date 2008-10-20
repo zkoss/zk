@@ -66,6 +66,13 @@ tr.gamma {background: #F4F4F4;}
 td.gamma {background: #F4F4F4;}
 
 <%-- ZK JavaScript debug box --%>
+div.z-error {
+	position:absolute; z-index:99000;
+	width:550px; border:1px solid #963; background-color:#fc9
+}
+.z-error-msg {
+	border: 1px inset;
+}
 div.z-debugbox {
 	border: 1px solid #77c;	position: absolute;
 	width: 60%; z-index: 99000; background: white;

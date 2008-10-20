@@ -145,7 +145,7 @@ zk.Desktop = zk.$extends(zk.Object, {
 },{
 	/** Returns the desktop of the specified ID.
 	 */
-	of: function (dtid) {
+	$: function (dtid) {
 		return dtid ? typeof dtid == 'string' ?
 			zk.Desktop._dts[dtid]: dtid: zk.Desktop._dt;
 	},

@@ -180,6 +180,36 @@ zk = { //static methods
 	},
 
 	//DEBUG//
+	/** Generates an error message. */
+	error: function (msg) {
+		if (!zk.booted) {
+			setTimeout(function () {zk.error(msg)}, 100);
+			return;
+		}
+
+		if (!zk._errcnt) zk._errcnt = 1;
+		var id = "zk_err" + zk._errcnt++,
+			x = (zk._errcnt * 5) % 50, y = (zk._errcnt * 5) % 50,
+			box = document.createElement("DIV");
+		document.body.appendChild(box);
+		var html =
+	 '<div class="z-error" style="left:'+(zkDom.innerX()+x)+'px;top:'+(zkDom.innerY()+y)
+	+'px;" id="'+id+'"><table cellpadding="2" cellspacing="2" width="100%"><tr valign="top">'
+	+'<td width="20pt"><button onclick="zkau.sendRedraw()">redraw</button>'
+	+'<button onclick="zkDom.detach(\''+id+'\')">close</button></td>'
+	+'<td class="z-error-msg">'+zkUtil.encodeXML(msg, true) //Bug 1463668: security
+	+'</td></tr></table></div>';
+		zkDom.outerHTML(box, html);
+
+		//TODO: draggable box
+		//box = zkDom.$e(id); //we have to retrieve back
+	},
+	/** Closes all error box (zk.error).
+	 */
+	errorDismiss: function () {
+		for (var j = zk._errcnt; j; --j)
+			zkDom.detach("zk_err" + j);
+	},
 	/** Generates a message for debugging purpose. */
 	debug: function (msg/*, ...*/) {
 		var a = arguments;
@@ -206,7 +236,7 @@ zk = { //static methods
 '<div id="zk_dbgbox" style="text-align:right;width:50%;right:0;bottom:0;position:absolute">'
 +'<button onclick="zkDom.detach(\'zk_dbgbox\')" style="font-size:9px">X</button><br/>'
 +'<textarea id="zk_dbg" style="width:100%" rows="10"></textarea></div>';
-				zkDom.setOuterHTML(console, html);
+				zkDom.outerHTML(console, html);
 				console = zkDom.$("zk_dbg");
 			}
 			console.value = console.value + zk._msg + '\n';

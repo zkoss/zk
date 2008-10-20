@@ -32,6 +32,7 @@ import java.io.IOException;
 import javax.servlet.ServletContext;
 
 import org.zkoss.lang.Strings;
+import org.zkoss.io.Files;
 import org.zkoss.util.logging.Log;
 import org.zkoss.web.fn.ServletFns;
 import org.zkoss.web.servlet.JavaScript;
@@ -161,10 +162,10 @@ public class HtmlPageRenders {
 			final String[] data = response.getData();
 			final int datanum = data != null ? data.length: 0;
 			for (int j = 0; j < datanum; ++j) {
-				sb.append(",\"");
+				sb.append(",'");
 				if (data[j] != null)
-					sb.append(Strings.escape(data[j], "\"\\\n\r"));
-				sb.append('"');
+					sb.append(Strings.escape(data[j], "'\\\n\r\t\f"));
+				sb.append('\'');
 			}
 			sb.append(");\n");
 		}
@@ -494,7 +495,7 @@ public class HtmlPageRenders {
 			extout = out;
 			out = new StringWriter();
 
-			out.write("\n<script>zkcrbg();try{");
+			out.write("\n<script>zknewbg();try{");
 			execCtrl.getVisualizer().setExtraWriter(extout);
 		}
 		out.write("zkpgbg('");
@@ -525,16 +526,10 @@ public class HtmlPageRenders {
 			execCtrl.getVisualizer().setExtraWriter(null);
 
 			//Note: we switched extout and out (so extout is the real out)
-			write(extout, ((StringWriter)out).getBuffer());
-			extout.write("}finally{zkcre();}</script>\n");
+			Files.write(extout, ((StringWriter)out).getBuffer());
+			extout.write("}finally{zknewe();}</script>\n");
 			extout.write("</div>");
 		}
-	}
-	private static final void write(Writer out, StringBuffer sb)
-	throws IOException {
-		//Don't convert sb to String to save the memory use
-		for (int j = 0, len = sb.length(); j < len; ++j)
-			out.write(sb.charAt(j));
 	}
 	private static final void writeAttr(Writer out, String name, String value)
 	throws IOException {

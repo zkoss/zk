@@ -303,6 +303,36 @@ public class Strings {
 			j = k + 1;
 		}
 	}
+	/** Escapes (aka. quote) the special characters with backslash
+	 * and appends it the specified string buffer.
+	 *
+	 * @param dst the destination buffer to append to.
+	 * @param src the source buffer to escape from.
+	 * @since 5.0.0
+	 */
+	public static final StringBuffer
+	appendEscape(StringBuffer dst, StringBuffer src, String specials) {
+		if (src == null)
+			return dst;
+
+		for (int j = 0, len = src.length();;) {
+			int k = j;
+			for (; k < len && specials.indexOf(src.charAt(k)) < 0; ++k)
+				;
+			if (k >= len)
+				return dst.append(src.substring(j));
+
+			char cc = src.charAt(k);
+			switch (cc) {
+			case '\n': cc = 'n'; break;
+			case '\t': cc = 't'; break;
+			case '\r': cc = 'r'; break;
+			case '\f': cc = 'f'; break;
+			}
+			dst.append(src.substring(j, k)).append('\\').append(cc);
+			j = k + 1;
+		}
+	}
 	/** Un-escape the quoted string.
 	 * @see #escape
 	 * @see #appendEscape

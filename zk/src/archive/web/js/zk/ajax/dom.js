@@ -22,17 +22,50 @@ zkDom = { //static methods
 			id ? document.getElementById(id): null: id;
 			//strange but getElementById("") fails in IE7
 	},
-	parent: function (n) {
-		return n.parentNode; //TODO: handle vparent
-	},
 	/** Returns the tag name of the specified node. */
 	tag: function (n) {
 		return n && n.tagName ? n.tagName.toUpperCase(): "";
 	},
+
+	/** Returns the x coordination of the visible part. */
+	innerX: function () {
+		return window.pageXOffset
+			|| document.documentElement.scrollLeft
+			|| document.body.scrollLeft || 0;
+	},
+	/** Returns the y coordination of the visible part. */
+	innerY: function () {
+		return window.pageYOffset
+			|| document.documentElement.scrollTop
+			|| document.body.scrollTop || 0;
+	},
+	/** Returns the width of the visible part. */
+	innerWidth: function () {
+		return typeof window.innerWidth == "number" ? window.innerWidth:
+			document.compatMode == "CSS1Compat" ?
+				document.documentElement.clientWidth: document.body.clientWidth;
+	},
+	/** Returns the height of the visible part. */
+	innerHeight: function () {
+		return typeof window.innerHeight == "number" ? window.innerHeight:
+			document.compatMode == "CSS1Compat" ?
+				document.documentElement.clientHeight: document.body.clientHeight;
+	},
+	/** Returns the page total width. */
+	pageWidth: function () {
+		var a = document.body.scrollWidth, b = document.body.offsetWidth;
+		return a > b ? a: b;
+	},
+	/** Returns the page total height. */
+	pageHeight: function () {
+		var a = document.body.scrollHeight, b = document.body.offsetHeight;
+		return a > b ? a: b;
+	},
+
 	/** Replaces the outer of the specified element with the HTML content.
 	 * @return the new node (actually the first new node, if multiple)
 	 */
-	setOuterHTML: function(n, html) {
+	outerHTML: function(n, html) {
 		n = zkDom.$(n);
 		var parent = n.parentNode, sib = n.previousSibling;
 
@@ -182,7 +215,7 @@ zkDom = { //static methods
 			+msg+'</div></div></div>'
 		var n = document.createElement("DIV");
 		document.body.appendChild(n);
-		zkDom.setOuterHTML(n, html);
+		zkDom.outerHTML(n, html);
 	}
 };
 
