@@ -41,7 +41,7 @@ Copyright (C) 2002-2006 Potix Corporation. All Rights Reserved.
 <!-- ====== -->
 <target name="deploy.export" depends="config.build" if="src.export.dir.exist">
 	<copy todir="${dist.export.dir}" preservelastmodified="yes">
-		<fileset dir="${src.export.dir}" excludes="**/CVS/**"/>
+		<fileset dir="${src.export.dir}"/>
 	</copy>
 </target>
 
@@ -161,7 +161,7 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 	<jar jarfile="${out.dir}/${jar.name}" manifest="${manifest.mf}">
 		<fileset dir="${out.dir}" excludes="${exclude.list}"/>
 		<fileset dir="${src.archive.dir}" includes="**"
-		 excludes="META-INF/MANIFEST.MF, **/CVS/**, ${zipjs}/**"/>
+		 excludes="META-INF/MANIFEST.MF, ${zipjs}/**, ${zipcss}/**"/>
 		<fileset dir="${codegen.archive.dir}" includes="**"
 		 excludes="META-INF/MANIFEST.MF"/>
 	</jar>
@@ -178,7 +178,7 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 	<jar jarfile="${out.dir}/${jar.name}" manifest="${manifest.mf}">
 		<fileset dir="${outv.dir}" excludes="${exclude.list}, ${jad.name}"/>
 		<fileset dir="${src.archive.dir}" includes="**"
-		 excludes="META-INF/MANIFEST.MF, META-INF/${jad.name}, **/CVS/**, ${zipjs}/**"/>
+		 excludes="META-INF/MANIFEST.MF, META-INF/${jad.name}, ${zipjs}/**, ${zipcss}/**"/>
 		<fileset dir="${codegen.archive.dir}" includes="**"
 		 excludes="META-INF/MANIFEST.MF"/>
 	</jar>
@@ -216,7 +216,7 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 	<war warfile="${out.dir}/${war.name}" webxml="${src.web.xml}"
 	manifest="${war.dir}/META-INF/MANIFEST.MF">
 		<fileset dir="${war.dir}" includes="**"
-		 excludes="WEB-INF/web.xml, META-INF/MANIFEST.MF, **/CVS/**, **/_notes/**, **/_raw/**"/>
+		 excludes="WEB-INF/web.xml, META-INF/MANIFEST.MF"/>
 		<fileset dir="${dist.export.dir}" includes="${import.libs}"/>
 		<fileset dir="${dist.lib.ext.dir}" includes="${import.libs}"/>
 
@@ -234,7 +234,7 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 		<fileset dir="${dist.lib.dir}" includes="${ear.libs}"/>
 		<fileset dir="${src.archive.dir}"
 		 includes="META-INF/**"
-		 excludes="META-INF/MANIFEST.MF, META-INF/application.xml, **/CVS/**"/>
+		 excludes="META-INF/MANIFEST.MF, META-INF/application.xml"/>
 	</ear>
 </target>
 
@@ -277,7 +277,7 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 <!-- ========= -->
 <target name="deploy.test" depends="config" if="dist.test.dir.exist">
 	<copy todir="${jboss.app.test.dir}" preservelastmodified="yes">
-		<fileset dir="${dist.test.dir}" includes="**" excludes="**/CVS/**"/>
+		<fileset dir="${dist.test.dir}" includes="**"/>
 	</copy>
 </target>
 <target name="utest" depends="build, deploy.test">
