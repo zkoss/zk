@@ -482,13 +482,20 @@ public class HtmlPageRenders {
 			}
 		}
 
-		StringWriter exout = null;
+		Writer extout = null;
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 		if (!au && owner == null) {
-			execCtrl.getVisualizer().setExtraWriter(exout = new StringWriter());
 			out.write("<div");
 			writeAttr(out, "id", page.getUuid());
-			out.write(">\n<script>zkcrbg();try{");
+			out.write(">");
+
+			//switch out and extout since we have to generate extra
+			//content fist (so JS can reference)
+			extout = out;
+			out = new StringWriter();
+
+			out.write("\n<script>zkcrbg();try{");
+			execCtrl.getVisualizer().setExtraWriter(extout);
 		}
 		out.write("zkpgbg('");
 		out.write(page.getUuid());
@@ -516,10 +523,18 @@ public class HtmlPageRenders {
 		out.write("\nzkpge();");
 		if (!au && owner == null) {
 			execCtrl.getVisualizer().setExtraWriter(null);
-			out.write("}finally{zkcre();}</script>\n");
-			out.write(exout.toString());
-			out.write("</div>");
+
+			//Note: we switched extout and out (so extout is the real out)
+			write(extout, ((StringWriter)out).getBuffer());
+			extout.write("}finally{zkcre();}</script>\n");
+			extout.write("</div>");
 		}
+	}
+	private static final void write(Writer out, StringBuffer sb)
+	throws IOException {
+		//Don't convert sb to String to save the memory use
+		for (int j = 0, len = sb.length(); j < len; ++j)
+			out.write(sb.charAt(j));
 	}
 	private static final void writeAttr(Writer out, String name, String value)
 	throws IOException {
