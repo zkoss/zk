@@ -39,10 +39,25 @@ function _zkbeg(w) {
 function _zkend() {
 	var w = _zkws.shift();
 	if (!_zkws.length) {
-		_zkld(w);
+		_zkld(w); //OK to load JS before document.readyState complete
 
 		_zkcrs.push([zkcurdt, w]);
-		zkPkg.addAfterLoad(_zkafld);
+
+		if (zk.creating) {
+			if (document.readyState) {
+				var tid = setInterval( function(){
+					if (/loaded|complete/.test(document.readyState)) {
+						clearInterval(tid);
+						_zkattach();
+					}
+				}, 50);
+			} else //gecko
+				setTimeout(_zkattach, 100);
+				//don't count on DOMContentLoaded since the page might
+				//be loaded by another ajax solution (i.e., portal)
+				//Also, Bug 1619959: FF not fire it if in 2nd iframe
+		} else
+			_zkattach();
 	}
 }
 
@@ -112,8 +127,11 @@ function zkopt(opts) {
 }
 
 //Internal Use//
-/** Used internally. */
-function _zkafld() {
+/** Used internally to redraw and attach. */
+function _zkattach() {
+	zkPkg.addAfterLoad(_zkattach0);
+}
+function _zkattach0() {
 	for (var inf; inf = _zkcrs.shift();) {
 		var dt = inf[0], wginf = inf[1];
 
