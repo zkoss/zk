@@ -34,7 +34,16 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 					<span id="${self.uuid}!inner" class="${c:cat(look,'inner')}">
 				</c:otherwise>
 			</c:choose>
-				<span class="${c:cat(look,'text')}">${self.imgTag}<c:out value="${self.label}"/></span>
+				<span class="${c:cat(look,'text')}">
+			<c:choose>
+				<c:when test="${empty self.label and empty self.imgTag}" >
+					&#160;
+				</c:when>
+				<c:otherwise>
+					${self.imgTag}<c:out value="${self.label}"/>
+				</c:otherwise>
+			</c:choose>
+				</span>
 			</span>
 		</em>
 	</a>

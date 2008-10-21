@@ -300,6 +300,36 @@ zkTabs2 = {
 			};
 		zk.addInit(meta.initscroll, false, meta.id);
 	},
+	_showbutton : function(cmp) {
+		var tbx =$parentByType(cmp, "Tabbox2"),
+			zcls = getZKAttr(tbx, "zcls");
+		if (zk.hasClass(tbx, zcls + "-scrolling")) {
+			if (zkTabbox2._isVert(tbx)) {//vertical
+				zk.addClass($e(cmp.id,"header"), zcls + "-v-headerbtn");
+				zk.addClass($e(cmp.id,"down"), zcls + "-v-scrolldown");
+				zk.addClass($e(cmp.id,"up"), zcls + "-v-scrollup");
+			}else {//horizontal
+				zk.addClass($e(cmp.id,"header"), zcls + "-headerbtn");
+				zk.addClass($e(cmp.id,"right"), zcls + "-scrollright");
+				zk.addClass($e(cmp.id,"left"), zcls + "-scrollleft");
+			}
+		}
+	},
+	_hidebutton : function(cmp) {
+		var tbx =$parentByType(cmp, "Tabbox2"),
+			zcls = getZKAttr(tbx, "zcls");
+		if (!zk.hasClass(tbx, zcls + "-scrolling")) {
+			if (zkTabbox2._isVert(tbx)) {//vertical
+				zk.rmClass($e(cmp.id,"header"), zcls + "-v-headerbtn");
+				zk.rmClass($e(cmp.id,"down"), zcls + "-v-scrolldown");
+				zk.rmClass($e(cmp.id,"up"), zcls + "-v-scrollup");
+			}else {//horizontal
+				zk.rmClass($e(cmp.id,"header"), zcls + "-headerbtn");
+				zk.rmClass($e(cmp.id,"right"), zcls + "-scrollright");
+				zk.rmClass($e(cmp.id,"left"), zcls + "-scrollleft");
+			}
+		}
+	},
 	onVisi: function(cmp) {
 		if (zkTabbox2._isVert($parent($e(cmp.id)))) {
 			cmp.style.height = "";
@@ -351,6 +381,7 @@ zkTabs2 = {
 				if (zk.hasClass(tabbox, zcls + "-scrolling")) { //already in scrolling status
 					if (cldheight <= (headheight+18)) {
 						zk.rmClass(tabbox, zcls + "-scrolling", true);
+						zkTabs2._hidebutton(tbsdiv)
 						header.style.height= tabbox.offsetHeight-2 + "px";
 						header.scrollTop = 0;
 					}
@@ -388,6 +419,7 @@ zkTabs2 = {
 				}else { // not enough tab to scroll
 					if (cldheight > (headheight - 18)) {
 						zk.addClass(tabbox, zcls + "-scrolling", true);
+						zkTabs2._showbutton(tbsdiv);
 						header.style.height = tabbox.offsetHeight - 36 + "px";
 						if (way == "end") {
 							var d = cldheight - header.offsetHeight - header.scrollTop + 2;
@@ -406,6 +438,7 @@ zkTabs2 = {
 				if (zk.hasClass(tabbox, zcls + "-scrolling")) { //already in scrolling status
 					if (cldwidth <= (headwidth)) {
 						zk.rmClass(tabbox, zcls + "-scrolling", true);
+						zkTabs2._hidebutton(tbsdiv);
 						header.style.width = tabbox.offsetWidth - 2 + "px";
 						header.scrollLeft = 0;
 					}
@@ -441,6 +474,7 @@ zkTabs2 = {
 				else { // not enough tab to scroll
 					if (cldwidth > (headwidth - 10)) {
 						zk.addClass(tabbox, zcls + "-scrolling", true);
+						zkTabs2._showbutton(tbsdiv);
 						var caveul = $e(getZKAttr(tabbox, "tabs"),"cave");
 						caveul.style.width = "5000px";
 						header.style.width = tabbox.offsetWidth - 38 + "px";

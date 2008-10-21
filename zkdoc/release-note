@@ -22,6 +22,8 @@ ZK 3.5.2
   2162808: False alarm when using xsi:schemaLocation="..."
   2163047: Some Zul components fail to clone and serialize
   2165067: Fail to remove children via invoking it.previous()
+  2182062: Scroll button show in nested tabbox
+  2182111: tab strange when label is null
 
 	--------
 ZK 3.5.1
