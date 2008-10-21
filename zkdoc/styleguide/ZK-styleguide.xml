@@ -1,23 +1,13 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
-<book lang="en-US">
-<title>ZK Style Guide</title>
-<subtitle>Version 3.0.4</subtitle>
-<bookinfo>
-<copyright>
-<year>2008</year>
-<holder>Potix Corporation. All rights reserved.</holder>
-</copyright>
-</bookinfo>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<article lang="en-US">
 <para>
-<graphic fileref="">2
-			
-		</graphic>
+<inlinegraphic fileref="embedded:Graphic3" width="4.548cm" depth="1.927cm"/>
 </para>
 <para>SIMPLY RICH</para>
 <para>ZKTM</para>
 <para/>
-<para>April 2008</para>
+<para>October 2008</para>
 <para>Potix Corporation</para>
 <para/>
 <para/>
@@ -27,4674 +17,533 @@
 <para>Potix Corporation may have patents, patent applications, copyright or other intellectual property rights covering the subject matter of this document. The furnishing of this document does not give you any license to these patents, copyrights or other intellectual property.</para>
 <para>Potix Corporation reserves the right to make changes in the product design without reservation and without notification to its users.</para>
 <para>The Potix logo and ZK are trademarks of Potix Corporation.</para>
-<para>All other product names are trademarks, registered trademarks, or trade names of their respective owners.</para>
-<chapter>
-<title>1. XUL Components</title>
-<para/><sect1><title>Bandbox</title>
-<para>
-<graphic fileref="components/images/bandbox.jpg">2
-			
-		</graphic>Bandbox is composed of two parts, an input box and a <link linkend="">popup</link>.</para><sect2><title>Input Box</title>
-<para>
-<graphic fileref="components/images/bandbox-span.jpg">2
-			
-		</graphic>
-</para>
-<para/>
-<para/>
+<para>All other product names are trademarks, registered trademarks, or trade names of their respective owners.</para><sect1><title>1. Introduction</title>
+<para>Welcome to ZK, the simplest way to make Rich Web Applications.</para>
+<para>The Style Guide describes the styling concepts and design of ZK. For installation refer to the Quick Start Guide. For concepts, features, refer to the Developer's Guide. For a full description of component properties and methods refer to the Developer's Reference.</para>
+<para>This chapter describes the CSS naming pattern and styling concepts of ZK.</para><sect2><title>ZK Class Concept</title>cept<para>        ZK Class concept was introduced in ZK 3.5.0 version, it is a naming pattern, it appends some regular patterns for client action (please refer to the next section) , like click, focus, mouse-over, mouse-out, and so on. ZK Class is also used for changing mold of components, and can be used to separate the two same components with different theme without any conflict.</para>
+<para>        For example, there is a Button component and its ZK Class is called “z-button”, when user mouse is over the button, the ZK Class of the component will be appended with “-over” by ZK client engine, then the full ZK Class will be “z-button-over” so that we can easily customize a specific component theme for special purpose.</para></sect2><sect2><title>DOM Naming Structure</title>
+<para>        The naming pattern of the DOM structure is used to describe the components which are composed of more than one part. The following recommended naming patterns are to clarify the DOM structure of ZK components, not a limitation.</para>
+<para/><sect3><title>Layout Elements:</title>
 <informaltable frame="all">
-<tgroup cols="3"><tbody>
+<tgroup cols="2"><tbody>
 <row>
 <entry>
-<para>CSS Definition</para>
+<orderedlist>
+<listitem>
+<para>-outer: </para>
+<para>the exterior of the specified component (ends with !chdextr) like splitter in vbox and hbox </para>
+</listitem>
+<listitem>
+<para>-body: </para>
+<para>the body content, like grid, tree, listbox, and so on.</para>
+</listitem>
+<listitem>
+<para>-header: </para>
+<para>the header content, like grid, tree, listbox, and so on.</para>
+</listitem>
+<listitem>
+<para>-inner: </para>
+<para>the interior of the specified component, like slider and tab.</para>
+</listitem>
+<listitem>
+<para>-cnt: </para>
+<para>like window's contentSclass or groupbox's contentSclass</para>
+</listitem>
+<listitem>
+<para>-footer: </para>
+<para>describes the footer content, like grid, tree, listbox, and so on.</para>
+</listitem>
+</orderedlist>
+<para>Negative option:</para>
+<orderedlist>
+<listitem>
+<para>-noheader:</para>
+<para>no header element.</para>
+</listitem>
+<listitem>
+<para>-noborder: </para>
+<para>no border element.</para>
+</listitem>
+<listitem>
+<para>-nofooter: </para>
+<para>no footer element.</para>
+</listitem>
+</orderedlist>
+<para/>
 </entry>
 <entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
 <para>
-<code>span.bandbox</code>
-</para>
-</entry>
-<entry>
-<para>The outline of combbox</para>
-</entry>
-<entry>
-<para>
-<code>border: 0; </code>
-</para>
-<para>
-<code>padding: 0; </code>
-</para>
-<para>
-<code>margin: 0; </code>
-</para>
-<para>
-<code>white-space: nowrap;</code>
+<inlinegraphic fileref="embedded:graphics20" width="8.598cm" depth="9.417cm"/>
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable>
-<para/>
-<para/></sect2></sect1><sect1><title>Bandpopup</title>
-<para>
-<graphic fileref="components/images/bandbox.jpg">2
-			
-		</graphic>Bandpopup is the popup of bandbox.</para><sect2><title>Popup</title>
-<para>
-<graphic fileref="components/images/bandbox-pp.jpg">2
-			
-		</graphic>
-</para>
-<para/>
+</informaltable></sect3><sect3><title>Other Elements:</title>
 <informaltable frame="all">
-<tgroup cols="3"><tbody>
+<tgroup cols="1"><tbody>
 <row>
 <entry>
-<para>CSS Definition</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>div.bandboxpp</code>
-</para>
-</entry>
-<entry>
-<para>Popup of bandbox</para>
-</entry>
-<entry>
-<para>
-<code>display: block; </code>
-</para>
-<para>
-<code>position: absolute; </code>
-</para>
-<para>
-<code>z-index: 88000;</code>
-</para>
-<para>
-<code>background: white; </code>
-</para>
-<para>
-<code>border: 1px solid black; </code>
-</para>
-<para>
-<code>padding: 2px;</code>
-</para>
-<para>
-<code>font-size: x-small;</code>
-</para>
+<orderedlist>
+<listitem>
+<para>-faker:</para>
+<para>faker element to mark a reference point at browser side, like grid, listbox, and tree.</para>
+</listitem>
+<listitem>
+<para>-text:</para>
+<para>text area.</para>
+</listitem>
+<listitem>
+<para>-inp:</para>
+<para>input element.</para>
+</listitem>
+<listitem>
+<para>-sep:</para>
+<para>separator element.</para>
+</listitem>
+<listitem>
+<para>-img:</para>
+<para>image area.</para>
+</listitem>
+<listitem>
+<para>-pp:</para>
+<para>pop-up element, like datebox, combobox, and so on.</para>
+</listitem>
+<listitem>
+<para>-btn:</para>
+<para>a button or an icon.</para>
+</listitem>
+</orderedlist>
 </entry>
 </row></tbody></tgroup>
-</informaltable>
-<para/><sect3><title>Customize the Background</title>
-<para>The way to customize the background color of popup is to change the background attribute of div.comboboxpp.</para>
-<para>
-<graphic fileref="components/images/bandbox-pp-green.jpg">2
-			
-		</graphic>
-</para>
-<programlisting>div.bandboxpp{&#13;    background: #EEF3E2;    &#13;</programlisting></sect3></sect2></sect1><sect1><title>Button</title>
-<para>
-<graphic fileref="components/images/button.jpg">2
-			
-		</graphic>A button.</para>
-<para>
-<graphic fileref="components/images/button-btn.jpg">2
-			
-		</graphic>
-</para>
-<para/>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
+</informaltable></sect3><sect3><title>Tool Icons:</title>Tool Icons:<informaltable frame="all">
+<tgroup cols="4"><tbody>
 <row>
 <entry>
-<para>CSS Definition</para>
+<para>Usage</para>
 </entry>
 <entry>
-<para>Description</para>
+<para>Switch</para>
 </entry>
 <entry>
-<para>Default Values</para>
+<para>Resize</para>
+</entry>
+<entry>
+<para>Split</para>
 </entry>
 </row>
 <row>
 <entry>
-<para>
-<code>button</code>
-</para>
+<para>Postfix</para>
 </entry>
 <entry>
-<para>The button</para>
+<orderedlist>
+<listitem>
+<para>-close:</para>
+<para>describes an icon which is  closed, like tree, group, an  so on.</para>
+</listitem>
+<listitem>
+<para>-collapse:</para>
+<para>describes a collapsible icon, like panel.</para>
+</listitem>
+<listitem>
+<para>-collapsed:</para>
+<para>describes a collapsible icon which is collapsed, like panel.</para>
+</listitem>
+<listitem>
+<para>-expand:</para>
+<para>describes an expandable icon, like panel.</para>
+</listitem>
+<listitem>
+<para>-expanded:</para>
+<para>describes an expandable icon which is expanded, like panel.</para>
+</listitem>
+</orderedlist>
 </entry>
 <entry>
-<para>
-<code>font-family: Verdana, Tahoma, Arial, serif;</code>
-</para>
-<para>
-<code>font-size: small; font-weight: normal;</code>
-</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable>
-<para/></sect1><sect1><title>Calendar</title>
-<para>
-<graphic fileref="components/images/calendar.gif">2
-			
-		</graphic>Calendar is stuck by Javascript.</para><sect2><title>Calendar</title>
-<para>The calendar is constructed by the three HTML tables as follows.</para>
-<para>
-<graphic fileref="components/images/calendar-outline.gif">2
-			
-		</graphic>
-</para>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
-<row>
-<entry>
-<para>CSS Definition</para>
+<orderedlist>
+<listitem>
+<para>-maximize:</para>
+<para>describes a maximizable icon.</para>
+</listitem>
+<listitem>
+<para>-maximized:</para>
+<para>describes a maximizable icon which is maximized.</para>
+</listitem>
+<listitem>
+<para>-minimize:</para>
+<para>describes a minimizable icon.</para>
+</listitem>
+<listitem>
+<para>-minimized:</para>
+<para>describes a minimizable icon which is minimized.</para>
+</listitem>
+</orderedlist>
 </entry>
 <entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>table.calendar</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>The outline of calendar</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background: white; border: 1px solid #7F9DB9;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>table.calyear</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>The outline of elect year</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background: #eaf0f4; border: 1px</code>
-<code> solid; border-color: #f8fbff #aca899 #aca899 #f8fbff;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>table.calmon</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>The outline of elect mon</code>
-<code>th</code>
-</para>
-</entry>
-<entry>
-<para>
-<code/>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>table.calday</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>The outline of elect day</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>border: 1px solid #ddd;</code>
-</para>
+<orderedlist>
+<listitem>
+<para>-split:</para>
+<para>describes a splittable icon.</para>
+</listitem>
+<listitem>
+<para>-ns:</para>
+<para>describes a non-splittable icon.</para>
+</listitem>
+</orderedlist>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect2><sect2><title>Year</title>
-<para>
-<graphic fileref="components/images/calendar-year.gif">2
-			
-		</graphic>
-</para>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
-<row>
-<entry>
-<para>CSS Definition</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>table.calyear td</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>The description </code>
-<code>of year</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>font-size: small; font-weight: bold; text-align: center; </code>
-<code>white-space: nowrap;</code>
-</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable></sect2><sect2><title>Month</title>
-<para>
-<graphic fileref="components/images/calendar-month.gif">2
-			
-		</graphic>
-</para>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
-<row>
-<entry>
-<para>CSS Definition</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>table.calmon td</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>The outline of elect mon</code>
-<code>th</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>font-size: x-small; color: #35254F; text-align: center;</code>
-</para>
-<para>
-<code>cursor: pointer; text-decoration: none;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>table.calmon td.seld</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>The outline of selected day</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background: #bbd1ed; border: 1px solid #aac6e9;</code>
-</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable>
-<para/></sect2><sect2><title>Day in Header</title>
-<para>
-<graphic fileref="components/images/calendar-dow.gif">2
-			
-		</graphic>
-</para>
-<para/>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
-<row>
-<entry>
-<para>CSS Definition</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>tr.caldow</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>The row outline of day of work</code>
-</para>
-</entry>
-<entry>
-<para>
-<code/>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>tr.caldow td</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>The outline of day of work</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>font-size: x-small; color: #333; font-weight: bold;</code>
-</para>
-<para>
-<code>padding: 1px 2px; background: #e8e8f0; text-align: center;</code>
-</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable></sect2><sect2><title>Day in Body</title>
-<para/>
-<para>
-<graphic fileref="components/images/calendar-day.gif">2
-			
-		</graphic>
-</para>
-<para/>
-<para/>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
-<row>
-<entry>
-<para>CSS Definition</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>tr.calday td</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>The outline of elect </code>
-<code>day</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>font-size: x-small; color: #35254F; text-align: center;</code>
-</para>
-<para>
-<code>cursor: pointer; text-decoration: none;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>tr.calday td a</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>The outline of 'a' tag of elect </code>
-<code>day</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>font-size: x-small; color: #35254F; text-align: center;</code>
-</para>
-<para>
-<code>cursor: pointer; text-decoration: none;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>tr.calday td a:visited</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>The outline of 'a' tag of elect day </code>
-<code>at visited time</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>font-size: x-small; color: #35254F; text-align: center;</code>
-</para>
-<para>
-<code>cursor: pointer; text-decoration: none;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>tr.calday td a:hover</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>The outline of </code>
-<code>hover day</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>text-decoration: underline;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>tr.calday td</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>The outline of elect day</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>padding: 1px 3px;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>tr.calday td.seld</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>The outline of selected day</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background: #bbd1ed; border: 1px solid #aac6e9;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>tr.calday td.dis</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>The outline of disabled day</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>color: #888;</code>
-</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable>
-<para/><sect3><title>Customize the background of Calendar</title>
-<para>The way to customize the background of Calendar is change color as follows.</para>
-<para>
-<graphic fileref="components/images/custom-calendar.gif">2
-			
-		</graphic>
-</para>
-<para>table.calyear {</para>
-<programlisting>    background: #F8AAFF; border: 1px solid;    &#13;</programlisting></sect3></sect2></sect1><sect1><title>Caption</title>
-<para>
-<graphic fileref="components/images/caption.jpg">2
-			
-		</graphic>A Caption.</para><sect2><title/>
-<para>
-<graphic fileref="components/images/caption-class.jpg">2
-			
-		</graphic>
-</para>
-<para/>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
-<row>
-<entry>
-<para>CSS Definition</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>legend</code>
-</para>
-</entry>
-<entry>
-<para>Text of caption with groupbox</para>
-</entry>
-<entry>
-<para>
-<code>font-size: xx-small;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>td.caption</code>
-</para>
-</entry>
-<entry>
-<para>Text of caption</para>
-</entry>
-<entry>
-<para>
-<code>font-size: xx-small;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.caption</code>
-</para>
-</entry>
-<entry>
-<para>Caption</para>
-</entry>
-<entry>
-<para>
-<code>font-size: xx-small;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.caption input, </code>
-</para>
-</entry>
-<entry>
-<para>Text of input in caption</para>
-</entry>
-<entry>
-<para>
-<code>font-size: xx-small;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.caption td</code>
-</para>
-</entry>
-<entry>
-<para>Text of td in caption</para>
-</entry>
-<entry>
-<para>
-<code>font-size: xx-small;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.caption button</code>
-</para>
-</entry>
-<entry>
-<para>Text of button in caption</para>
-</entry>
-<entry>
-<para>
-<code>font-size: xx-small;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.caption a</code>
-</para>
-</entry>
-<entry>
-<para>Text of a in caption</para>
-</entry>
-<entry>
-<para>
-<code>font-size: xx-small;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.caption a:visited</code>
-</para>
-</entry>
-<entry>
-<para>Visited text style of a in caption</para>
-</entry>
-<entry>
-<para>
-<code>font-size: xx-small;</code>
-</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable>
-<para/></sect2></sect1><sect1><title>Checkbox</title>
-<para>
-<graphic fileref="components/images/checkbox.jpg">2
-			
-		</graphic>A checkbox.</para><sect2><title>Check Box</title>
-<para>
-<graphic fileref="components/images/checkbox-input.jpg">2
-			
-		</graphic>
-</para>
-<para/>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
-<row>
-<entry>
-<para>CSS Definition</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>input</code>
-</para>
-</entry>
-<entry>
-<para>The input</para>
-</entry>
-<entry>
-<para>
-<code>font-family: Verdana, Tahoma, Arial, serif;</code>
-</para>
-<para>
-<code>font-size: small; font-weight: normal;</code>
-</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable>
-<para/></sect2></sect1><sect1><title/></sect1><sect1><title>Combobox</title>
-<para>
-<graphic fileref="components/images/combobox.jpg">2
-			
-		</graphic>Combobox is composed of two parts, an input box and a popup.</para><sect2><title>Input Box</title>
-<para>
-<graphic fileref="components/images/combobox-input.jpg">2
-			
-		</graphic>
-</para>
-<para/>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
-<row>
-<entry>
-<para>CSS Definition</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>span.combobox</code>
-</para>
-</entry>
-<entry>
-<para>The outline of combbox</para>
-</entry>
-<entry>
-<para>
-<code>border: 0; </code>
-</para>
-<para>
-<code>padding: 0; </code>
-</para>
-<para>
-<code>margin: 0; </code>
-</para>
-<para>
-<code>white-space: nowrap;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>span.rbtnbk</code>
-</para>
-</entry>
-<entry>
-<para>Button at the right edge</para>
-</entry>
-<entry>
-<para>
-<code>background-image: url(${c:encodeURL('~./zul/img/btnbk.gif')}); </code>
-</para>
-<para>
-<code>background-repeat: no-repeat;</code>
-</para>
-<para>
-<code>border: 1px solid #7f9db9; </code>
-</para>
-<para>
-<code>border-left: none;</code>
-</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable>
-<para/><sect3><title>Customize the Button</title>
-<para>The way to customize the button of combobox is to change the image as follows.</para>
-<para>
-<graphic fileref="components/images/combobox-btn.jpg">2
-			
-		</graphic> </para>
-<programlisting>span.rbtnbk{&#13;    background-image: url(/zkdemo/green.jpg);    &#13;}&#13;</programlisting></sect3></sect2><sect2><title>Popup</title>
-<para>
-<graphic fileref="components/images/combobox-with-pp.jpg">2
-			
-		</graphic>
-</para>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
-<row>
-<entry>
-<para>CSS Definition</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>div.comboboxpp</code>
-</para>
-</entry>
-<entry>
-<para>Popup of combobox</para>
-</entry>
-<entry>
-<para>
-<code>display: block; </code>
-</para>
-<para>
-<code>position: absolute; </code>
-</para>
-<para>
-<code>z-index: 88000;</code>
-</para>
-<para>
-<code>background: white; </code>
-</para>
-<para>
-<code>border: 1px solid black; </code>
-</para>
-<para>
-<code>padding: 2px;</code>
-</para>
-<para>
-<code>font-size: x-small;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.comboboxpp td</code>
-</para>
-</entry>
-<entry>
-<para>Label in the popup</para>
-</entry>
-<entry>
-<para>
-<code>white-space: nowrap; </code>
-</para>
-<para>
-<code>font-size: x-small;</code>
-</para>
-<para>
-<code>cursor: pointer;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.comboboxpp td span</code>
-</para>
-</entry>
-<entry>
-<para>Descriptions in the popup</para>
-</entry>
-<entry>
-<para>
-<code>color: #888;</code>
-</para>
-<para>
-<code>font-size: xx-small; </code>
-</para>
-<para>
-<code>padding-left: 6px;</code>
-</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable>
-<para/><sect3><title>Customize the Background</title>
-<para>The way to customize the background color of popup is to change the background attribute of div.comboboxpp.</para>
-<para>
-<graphic fileref="components/images/comboboxpp.jpg">2
-			
-		</graphic>
-</para>
-<programlisting>div.comboboxpp{&#13;    background: #EEF3E2;    &#13;</programlisting></sect3></sect2></sect1><sect1><title>Datebox</title>
-<para>
-<graphic fileref="components/images/datebox.gif">2
-			
-		</graphic>Datebox is composed of two parts, an input box and a popup.</para><sect2><title>Input Box</title>
-<para>
-<graphic fileref="components/images/datebox-inp.gif">2
-			
-		</graphic>
-</para>
-<para/>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
-<row>
-<entry>
-<para>CSS Definition</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>span.datebox</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>The outline of datebox</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>border: 0; padding: 0; margin: 0; white-space: nowrap;</code>
-</para>
-<para>
-<code/>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.dateboxinp</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>The outline of datebox's input</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background: #FFF url(</code>
-<code>${c:encodeURL('~./zul/img/grid/text-bg.gif')}</code>
-<code>) repeat-x 0 0;</code>
-</para>
-<para>
-<code>repeat-x scroll 0pt;</code>
-</para>
-<para>
-<code>border:1px solid #7F9DB9;</code>
-</para>
-<para>
-<code/>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>span.</code>
-<code>rbtnbk</code>
-<code> </code>
-</para>
-</entry>
-<entry>
-<para>
-<code>The outline of datebox's button</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image: url(</code>
-<code>${c:encodeURL('~./zul/img/btnbk.gif')}</code>
-<code>); background-repeat: no-repeat;</code>
-</para>
-<para>
-<code>border: 1px solid #7f9db9; border-left: none;</code>
-</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable></sect2><sect2><title>Popup</title>
-<para/></sect2><sect2><title>
-
-</title></sect2><sect2><title/>
-<graphic fileref="components/images/datebox-pp.gif">2
-			
-		</graphic>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
-<row>
-<entry>
-<para>CSS Definition</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>div.dateboxpp</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>The outline of datebox's popup</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>display: block; position: absolute; z-index: 88000;</code>
-</para>
-<para>
-<code>background: white; border: 1px solid black; padding: 2px;</code>
-</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable>
-<para>Note: If you want to know the detail of Calendar CSS, please refer to <link linkend="">Calendar</link> component. </para></sect2><sect2><title>Datebox with Constraint</title>
-<para>
-<graphic fileref="components/images/datebox-constraint.gif">2
-			
-		</graphic>
-</para>
-<para/>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
-<row>
-<entry>
-<para>CSS Definition</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.</code>
-<code>text-invalid</code>
-<code> </code>
-</para>
-</entry>
-<entry>
-<para>
-<code>The outline of datebox</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background: #FFF url(</code>
-<code>${c:encodeURL('~./zul/img/grid/text-bg-invalid.gif')}</code>
-<code>) repeat-x 0 0;</code>
-</para>
-<para>
-<code>border: 1px solid #DD7870;</code>
-</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable>
-<para/><sect3><title>Customize the outline of Datebox</title>
-<para>The way to customize the outline of Datebox is change the code as follows.</para>
-<para>
-<graphic fileref="components/images/custom-datebox.gif">2
-			
-		</graphic>
-</para>
-<programlisting>span.datebox {&#13;    border:3px solid green;    &#13;    padding:1px 0px;    &#13;</programlisting>
-<para>}</para></sect3><sect3><title>Customize the background of Datebox's popup</title>
-<para>The way to customize the background of Datebox's popup is change color as follows.</para>
-<para>
-<graphic fileref="components/images/custom-datebox-pp.gif">2
-			
-		</graphic>
-</para>
-<programlisting>div.dateboxpp {&#13;    background: lightblue;    &#13;</programlisting></sect3></sect2></sect1><sect1><title/></sect1><sect1><title>Fileupload</title>
-<para/>
-<para>Fileupload is a modal window with iframe, label, button and input fileupload</para><sect2><title>
-Modal Window</title>
-<graphic fileref="components/images/fileupload.png">2
-			
-		</graphic></sect2><sect2><title>
-
-</title>
-<graphic fileref="components/images/fileupload-desc.png">2
-			
-		</graphic>
-<para>&lt;window title="fileupload demo" border="normal"&gt;</para>
-<para>&lt;button label="Upload"&gt;</para>
-<para>&lt;attribute name="onClick"&gt;{</para>
-<para>Object media = Fileupload.get();</para>
-<para>if (media instanceof org.zkoss.image.Image) {</para>
-<para>Image image = new Image();</para>
-<para>image.setContent(media);</para>
-<para>image.setParent(pics);</para>
-<para>} else if (media != null)</para>
-<para>Messagebox.show("Not an image: "+media, "Error", Messagebox.OK, Messagebox.ERROR);</para>
-<para>}&lt;/attribute&gt;</para>
-<para>&lt;/button&gt;</para>
-<para>&lt;vbox id="pics"/&gt;</para>
-<para>&lt;/window&gt;</para>
-<para/></sect2><sect2><title>Fileupload embedded</title></sect2><sect2><title>
-
-</title>
-<graphic fileref="components/images/fileupload-embed.png">2
-			
-		</graphic>
-<programlisting>&lt;window title="fileupload demo" border="normal"&gt;&#13;    &lt;fileupload onUpload="handle(event)"/&gt;    &#13;&lt;/window&gt;&#13;</programlisting></sect2></sect1><sect1><title/></sect1><sect1><title>Grid</title>
-<para>Grid has two molds default and paging.</para>
-<para>
-<graphic fileref="components/images/grid.gif">2
-			
-		</graphic>
-</para>
-<para>In default mold, Grid is composed of three parts, header part, body part, and footer part as follows.</para>
-<para>
-<graphic fileref="components/images/grid-des.gif">2
-			
-		</graphic>
-</para>
-<para/>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
-<row>
-<entry>
-<para>CSS Definition</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>div.grid</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>The outline of grid</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background: #DAE7F6; border: 1px solid #7F9DB9; overflow: hidden;</code>
-</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable><sect2><title>Header part</title>
-<para>
-<graphic fileref="components/images/grid-header.gif">2
-			
-		</graphic>
-</para>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
-<row>
-<entry>
-<para>CSS Definition</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>div.grid-head</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>The outline of header</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>border: 0; overflow: hidden; width: 100%;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>div.grid-head tr</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>TR tag</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>border: 0; overflow: hidden; width: 100%;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>div.grid-head th</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>TH tag</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>overflow: hidden; border: 1px solid;</code>
-</para>
-<para>
-<code>border-color: #DAE7F6 #9EB6CE #9EB6CE #DAE7F6;</code>
-</para>
-<para>
-<code>white-space: nowrap; padding: 2px;</code>
-</para>
-<para>
-<code>font-size: small; font-weight: normal;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>div.head-cell-inner</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>The content of the header</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>font-size: small; font-weight: normal; font-family: Tahoma, Garamond, Century, Arial, serif;</code>
-</para>
-<para>
-<code>border: 0; margin: 0; padding: 0;</code>
-</para>
-<para>
-<code>overflow: hidden;</code>
-</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable></sect2><sect2><title>Body part</title>
-<para/></sect2><sect2><title>
-
-</title>
-<graphic fileref="components/images/grid-body.gif">2
-			
-		</graphic>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
-<row>
-<entry>
-<para>CSS Definition</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>div.grid-body</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>The outline of body</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background: white; border: 0; overflow: auto; width: 100%;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>table.grid-btable</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>TABLE tag</code>
-</para>
-</entry>
-<entry>
-<para>
-<code/>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>tr.grid</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>TR tag</code>
-</para>
-</entry>
-<entry>
-<para>
-<code/>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>td.gc</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>TD tag</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>padding: 2px; overflow: hidden;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>div.gc</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>The content of the body</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>font-size: small; font-weight: normal; color: black;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>div.cell-inner</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>The content of the body</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>border: 0; margin: 0; padding: 0;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>td.grid td.gc</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>TD tag</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background: white; border-top: none; border-left: 1px solid white;</code>
-</para>
-<para>
-<code>border-right: 1px solid #CCC; border-bottom: 1px solid #DDD;</code>
-</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable></sect2><sect2><title>Footer part</title>
-<para/></sect2><sect2><title>
-
-</title>
-<graphic fileref="components/images/grid-footer.gif">2
-			
-		</graphic>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
-<row>
-<entry>
-<para>CSS Definition</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>div.grid-foot</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>The outline of footer</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>border: 0; overflow: hidden; width: 100%;</code>
-</para>
-<para>
-<code>background: #DAE7F6; border-top: 1px solid #9EB6CE;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>div.foot-cell-inner</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>The content of footer</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>border: 0; margin: 0; padding: 0;</code>
-</para>
-<para>
-<code>overflow: hidden;</code>
-</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable></sect2><sect2><title/></sect2></sect1><sect1><title>Groupbox 3D</title>
-<para>
-<graphic fileref="components/images/groupbox-3d.gif">2
-			
-		</graphic>
-</para>
-<para>In 3d mold, Groupbox is composed of three parts, title part, content part, and shadow part.</para>
-<para/><sect2><title>Title part</title>
-<para>
-<graphic fileref="components/images/groupbox-3d-title.gif">2
-			
-		</graphic>
-</para>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
-<row>
-<entry>
-<para>CSS Definition</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>td.groupbox-3d-tl</code>
-</para>
-</entry>
-<entry>
-<para>The left corner of title</para>
-</entry>
-<entry>
-<para>
-<code>background-image: url(</code>
-<code>${c:encodeURL('~./zul/img/tab/3d-tl-uns.gif')}</code>
-<code>);</code>
-</para>
-<para>width: 5px; height: 5px;</para>
-<para>
-<code/>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>td.groupbox-3d-tm</code>
-</para>
-</entry>
-<entry>
-<para>The top outline of title</para>
-</entry>
-<entry>
-<para>background-image: url(${c:encodeURL('~./zul/img/tab/3d-tm-uns.gif')});</para>
-<para>height: 5px;</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>td.groupbox-3d-tr</code>
-</para>
-</entry>
-<entry>
-<para>The right corner of title</para>
-</entry>
-<entry>
-<para>background-image: url(${c:encodeURL('~./zul/img/tab/3d-tr-uns.gif')});</para>
-<para>width: 5px; height: 5px;</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>td.groupbox-3d-ml</para>
-</entry>
-<entry>
-<para>The left outline of title</para>
-</entry>
-<entry>
-<para>background-image: url(${c:encodeURL('~./zul/img/tab/3d-ml-uns.gif')});</para>
-<para>width: 5px;</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>td.groupbox-3d-mm</para>
-</entry>
-<entry>
-<para>The center of title</para>
-</entry>
-<entry>
-<para>background-image: url(${c:encodeURL('~./zul/img/tab/3d-mm-uns.gif')});</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>td.groupbox-3d-b</para>
-</entry>
-<entry>
-<para>The bottom outline of title</para>
-</entry>
-<entry>
-<para>background-image: url(${c:encodeURL('~./zul/img/tab/3d-b.gif')});</para>
-<para>height: 1px;</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable>
-<para/></sect2><sect2><title>Content part</title><sect3><title>
-<graphic fileref="components/images/groupbox-3d-content.gif">2
-			
-		</graphic>
-</title>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
-<row>
-<entry>
-<para>CSS Definition</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>div.gc-default</code>
-</para>
-</entry>
-<entry>
-<para>The content outline of title</para>
-</entry>
-<entry>
-<para>
-<code>border: 1px solid #5C6C7C; padding: 5px;</code>
-</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable></sect3></sect2><sect2><title>Shadow part</title><sect3><title>
-<graphic fileref="components/images/groupbox-3d-shadow.gif">2
-			
-		</graphic>
-</title>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
-<row>
-<entry>
-<para>CSS Definition</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>td.groupbox-3d-shdl</code>
-</para>
-</entry>
-<entry>
-<para>The left corner of shadow</para>
-</entry>
-<entry>
-<para>
-<code>background-image: url(</code>
-<code>${c:encodeURL('~./img/shdlf.gif')}</code>
-<code>);</code>
-</para>
-<para>width: 6px; height: 6px;</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>td.groupbox-3d-shdm</code>
-</para>
-</entry>
-<entry>
-<para>The center outline of shadow</para>
-</entry>
-<entry>
-<para>background-image: url(${c:encodeURL('~./img/shdmd.gif')});</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>td.groupbox-3d-shdr</code>
-</para>
-</entry>
-<entry>
-<para>The right corner of shadow</para>
-</entry>
-<entry>
-<para>background-image: url(${c:encodeURL('~./img/shdrg.gif')});</para>
-<para>width: 6px; height: 6px;</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable></sect3></sect2></sect1><sect1><title>Groupbox</title>
-<para>Groupbox has two molds default and 3d.</para>
-<para>
-<graphic fileref="components/images/groupbox-default.gif">2
-			
-		</graphic>
-</para>
-<para>In default mold, Groupbox is composed of two HTML tag as follows.</para>
-<para>
-<graphic fileref="components/images/groupbox-default-des.gif">2
-			
-		</graphic>
-</para>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
-<row>
-<entry>
-<para>CSS Definition</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>legend</code>
-</para>
-</entry>
-<entry>
-<para>The legend tag</para>
-</entry>
-<entry>
-<para>
-<code/>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>fieldset</code>
-<code> </code>
-</para>
-</entry>
-<entry>
-<para>The fieldset tag</para>
-</entry>
-<entry>
-<para/>
-</entry>
-</row></tbody></tgroup>
-</informaltable></sect1><sect1><title>Intbox</title>
-<para>
-<graphic fileref="components/images/intbox.gif">2
-			
-		</graphic>Intbox is an input box.</para><sect2><title>Input Box</title>
-<para>
-<graphic fileref="components/images/intbox-des.gif">2
-			
-		</graphic>
-</para></sect2><sect2><title>Input Box with Constraint</title>
-<para>
-<graphic fileref="components/images/intbox-constraint-des.gif">2
-			
-		</graphic>
-</para>
-<para/>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
-<row>
-<entry>
-<para>CSS Definition</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.text</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>The outline of intbox</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background: #FFF url(</code>
-<code>${c:encodeURL('~./zul/img/grid/text-bg.gif')}</code>
-<code>) repeat-x 0 0;</code>
-</para>
-<para>
-<code>repeat-x scroll 0pt;</code>
-</para>
-<para>
-<code>border:1px solid #7F9DB9;</code>
-</para>
-<para>
-<code/>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.</code>
-<code>text-invalid</code>
-<code> </code>
-</para>
-</entry>
-<entry>
-<para>
-<code>The outline of intbox</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background: #FFF url(</code>
-<code>${c:encodeURL('~./zul/img/grid/text-bg-invalid.gif')}</code>
-<code>) repeat-x 0 0;</code>
-</para>
-<para>
-<code>border: 1px solid #DD7870;</code>
-</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable>
-<para/><sect3><title>Customize the background of Intbox</title>
-<para>The way to customize the background of Intbox is change color as follows.</para>
-<para>
-<graphic fileref="components/images/custom-intbox.gif">2
-			
-		</graphic>
-</para>
-<programlisting>.text{&#13;    background: gray;    &#13;}&#13;</programlisting></sect3><sect3><title>Customize the constraint of Intbox</title>
-<para>The way to customize the border of Intbox is change color as follows.</para>
-<para>
-<graphic fileref="components/images/custom-intbox-constraint.gif">2
-			
-		</graphic>
-</para>
-<programlisting>.text-invalid{&#13;    border: 1px solid black;    &#13;</programlisting></sect3></sect2></sect1><sect1><title>Longbox</title>
-<para>
-<graphic fileref="components/images/intbox.gif">2
-			
-		</graphic>Longbox is an input box.</para><sect2><title>Input Box</title>
-<para>
-<graphic fileref="components/images/intbox-des.gif">2
-			
-		</graphic>
-</para></sect2><sect2><title>Input Box with Constraint</title>
-<para>
-<graphic fileref="components/images/intbox-constraint-des.gif">2
-			
-		</graphic>
-</para>
-<para/>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
-<row>
-<entry>
-<para>CSS Definition</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.text</code>
-</para>
-</entry>
-<entry>
-<para>The outline of longbox</para>
-</entry>
-<entry>
-<para>
-<code>background: #FFF url(</code>
-<code>${c:encodeURL('~./zul/img/grid/text-bg.gif')}</code>
-<code>) repeat-x 0 0;</code>
-</para>
-<para>
-<code>repeat-x scroll 0pt;</code>
-</para>
-<para>
-<code>border:1px solid #7F9DB9;</code>
-</para>
-<para>
-<code/>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.</code>
-<code>text-invalid</code>
-<code> </code>
-</para>
-</entry>
-<entry>
-<para>The outline of longbox</para>
-</entry>
-<entry>
-<para>
-<code>background: #FFF url(</code>
-<code>${c:encodeURL('~./zul/img/grid/text-bg-invalid.gif')}</code>
-<code>) repeat-x 0 0;</code>
-</para>
-<para>
-<code>border: 1px solid #DD7870;</code>
-</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable>
-<para/><sect3><title>Customize the background and font color of Longbox</title>
-<para>The way to customize the background of Longbox is change color as follows.</para>
-<para>
-<graphic fileref="components/images/longbox-bw.png">2
-			
-		</graphic>
-</para>
-<programlisting>.text{&#13;    background: black;    &#13;color: white;&#13;font-weight: bold;&#13;}&#13;</programlisting></sect3><sect3><title>Customize the disabled Longbox</title>
-<para>The way to customize the border and background of disabled Longbox.</para>
-<para>
-<graphic fileref="components/images/longbox-red.png">2
-			
-		</graphic>
-</para>
-<programlisting>.text-disd{&#13;    border: 1px solid black;    &#13;    background: red;    &#13;</programlisting>
-<para>}</para></sect3><sect3><title>Customize the constraint of Longbox</title>
-<para>The way to customize the border of Longbox is change color as follows.</para>
-<para>
-<graphic fileref="components/images/custom-intbox-constraint.gif">2
-			
-		</graphic>
-</para>
-<programlisting>.text-invalid{&#13;    border: 1px solid black;    &#13;</programlisting></sect3></sect2></sect1><sect1><title>Menupopup</title>
-<para>
-<graphic fileref="components/images/menupopup.png">2
-			
-		</graphic>Combobox is composed of two parts, anchor tags and a div.</para><sect2><title>Input Box</title>
-<para>
-<graphic fileref="components/images/menupopup-des.png">2
-			
-		</graphic>
-</para>
-<para>
-<graphic fileref="components/images/menupopup-td.png">2
-			
-		</graphic>
-</para>
-<para>
-<graphic fileref="components/images/menupopup-menu1.png">2
-			
-		</graphic>
-</para>
-<para/>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
-<row>
-<entry>
-<para>CSS Definition</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>div.menupopup</code>
-</para>
-</entry>
-<entry>
-<para>The outline of menupopup</para>
-</entry>
-<entry>
-<para>
-<code>cursor: pointer;</code>
-</para>
-<para>
-<code>background: #e9effa;</code>
-</para>
-<para>
-<code>padding: 1px;</code>
-</para>
-<para>
-<code>background: #f0f5ff;</code>
-</para>
-<para>
-<code>display: block;</code>
-</para>
-<para>
-<code>position: absolute;</code>
-</para>
-<para>
-<code>z-index: 88000;</code>
-</para>
-<para>
-<code>border: 1px outset;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>div.menupopup td</code>
-</para>
-</entry>
-<entry>
-<para>The table cell to layout menu</para>
-</entry>
-<entry>
-<para>
-<code>white-space: nowrap;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>div.menupopup a</code>
-</para>
-</entry>
-<entry>
-<para>The menupopup buttons</para>
-</entry>
-<entry>
-<para>
-<code>color: black;</code>
-</para>
-<para>
-<code>text-decoration: none;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>td.menu1</code>
-</para>
-</entry>
-<entry>
-<para>The icon or space witch is front of menuitem</para>
-</entry>
-<entry>
-<para>
-<code>width: 11px;</code>
-</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable>
-<para/><sect3><title>Customize the Background of Menupopup</title>
-<para>The way to customize the background of menupopup is change color as follows.</para>
-<para>
-<graphic fileref="components/images/custom-menupopup.png">2
-			
-		</graphic> </para>
-<programlisting>div.menupopup {&#13;    background:#77DD77;    &#13;}&#13;</programlisting></sect3><sect3><title>Customize the Background of menu1</title>
-<para>The way to customize the background of menu1 is change color as follows.</para>
-<para>
-<graphic fileref="components/images/custom-menupopup-menu1.png">2
-			
-		</graphic>
-</para>
-<para>td.menu1 {</para>
-<para>background-color:red;</para></sect3></sect2></sect1><sect1><title>Menuseparator</title>
-<para>
-<graphic fileref="components/images/menuseparator.png">2
-			
-		</graphic>Menuseparator is a line to separate menuitem.</para><sect2><title/>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
-<row>
-<entry>
-<para>CSS Definition</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>td.menusp</code>
-</para>
-</entry>
-<entry>
-<para>The outline of menuseparator</para>
-</entry>
-<entry>
-<para>
-<code>height: 7px;</code>
-</para>
-<para>
-<code>background-image: url(${c:encodeURL('~./zul/img/menu/sep.gif')});</code>
-</para>
-<para>
-<code>background-repeat: no-repeat;</code>
-</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable>
-<para/><sect3><title>Customize the Background and Height of Menuseparator</title>
-<para>The way to customize the background and height of menuseparator is change color and height as follows.</para>
-<para>
-<graphic fileref="components/images/custom-menuseparator.png">2
-			
-		</graphic> </para>
-<programlisting>td.menusp {&#13;    background-color:green;    &#13;    height:15px;    &#13;}&#13;</programlisting>
-<para/></sect3></sect2></sect1><sect1><title>Separator</title>
-<para>
-<graphic fileref="">2
-			
-		</graphic>
-<graphic fileref="">2
-			
-		</graphic>
-</para>
-<para/>
-<para/>
-<para>There are vertical and horizontal separators.</para>
-<para>
-<graphic fileref="">2
-			
-		</graphic>
-</para>
-<para/>
-<para>
-<graphic fileref="">2
-			
-		</graphic>
-</para>
-<para/>
-<para/>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
-<row>
-<entry>
-<para>CSS Definition</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>div.hsep, div.hsep-bar</code>
-</para>
-</entry>
-<entry>
-<para>Background of horizontal separator</para>
-</entry>
-<entry>
-<para>
-<code>height: 7px; overflow: hidden;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>span.vsep, span.vsep-bar</code>
-</para>
-</entry>
-<entry>
-<para>Background of vertical separator</para>
-</entry>
-<entry>
-<para>
-<code>display:-moz-inline-box;</code>
-</para>
-<para>
-<code>display: inline-block;</code>
-</para>
-<para>
-<code>width: 10px; overflow: hidden;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>div.hsep-bar</code>
-</para>
-</entry>
-<entry>
-<para>Outline of horizontal separator bar</para>
-</entry>
-<entry>
-<para>
-<code>background-image: url(${c:encodeURL('~./img/dot.gif')});</code>
-</para>
-<para>
-<code>background-position: center left; background-repeat: repeat-x;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>span.vsep-bar</code>
-</para>
-</entry>
-<entry>
-<para>Outline of vertical separator bar</para>
-</entry>
-<entry>
-<para>
-<code>background-image: url(${c:encodeURL('~./img/dot.gif')});</code>
-</para>
-<para>
-<code>background-position: top center; background-repeat: repeat-y;</code>
-</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable></sect1><sect1><title>Tabbox – Vertical </title>
-<para>
-<graphic fileref="components/images/tabbox-ver.png">2
-			
-		</graphic>
-</para>
-<para>The style of vertical tabbox include 4 parts, style of panel, tabs corner, selected tab and non-selected tab.</para><sect2><title>Style of Panel</title>
-<para>
-<graphic fileref="components/images/tabbox-ver-body.png">2
-			
-		</graphic>
-</para>
-<para/>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
-<row>
-<entry>
-<para>CSS Definition</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.</code>
-<code>tabpanels_scalss</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>the style of a tab panel</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>border-bottom:1px solid #5C6C7C;</code>
-</para>
-<para>
-<code>border-right:1px solid #5C6C7C;</code>
-</para>
-<para>
-<code>border-top:1px solid #5C6C7C;</code>
-</para>
-<para>
-<code>padding:5px;</code>
-</para>
-<para>
-<code/>
-</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable>
-<para/></sect2><sect2><title>Style of Tabs Corner</title>
-<para/>
-<para>
-<graphic fileref="components/images/tabbox-ver-corner.png">2
-			
-		</graphic>
-</para>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
-<row>
-<entry>
-<para>CSS Definition</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.</code>
-<code>tabs_sclass</code>
-</para>
-<para>
-<code>.tab-v3d-first1 </code>
-</para>
-</entry>
-<entry>
-<para>
-<code>The top corner</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/v3d-first1.gif);</code>
-</para>
-<para>
-<code>height:1px;</code>
-</para>
-<para>
-<code>width:3px;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.</code>
-<code>tabs_class</code>
-</para>
-<para>
-<code>.tab-v3d-first2</code>
-<code> </code>
-</para>
-</entry>
-<entry>
-<para>
-<code>The line of top corner</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/v3d-first2.gif);</code>
-</para>
-<para>
-<code>height:3px;</code>
-</para>
-<para>
-<code>width:3px;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.</code>
-<code>tabs_class</code>
-</para>
-<para>
-<code>.tab-v3d-last1 </code>
-</para>
-</entry>
-<entry>
-<para>
-<code>The line of right corner</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/v3d-last1.gif);</code>
-</para>
-<para>
-<code>height:3px;</code>
-</para>
-<para>
-<code>width:3px;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.</code>
-<code>tabs_class</code>
-</para>
-<para>
-<code>.tab-v3d-last2 </code>
-</para>
-</entry>
-<entry>
-<para>
-<code>The right corner</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/v3d-last2.gif);</code>
-</para>
-<para>
-<code>height:1px;</code>
-</para>
-<para>
-<code>width:3px;</code>
-</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable>
-<para/></sect2><sect2><title>
-Style of Selected Tab</title>
-<graphic fileref="components/images/tabbox-ver-tab-sel.png">2
-			
-		</graphic>
-<para/>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
-<row>
-<entry>
-<para>CSS Definition</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.</code>
-<code>tab-v3d-tl-sel </code>
-</para>
-</entry>
-<entry>
-<para>
-<code>Top-left corner</code>
-<code> of a selected tab</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/v3d-tl-sel.gif);</code>
-</para>
-<para>
-<code>height:5px;</code>
-</para>
-<para>
-<code>width:5px;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.tab-v3d-tm-sel</code>
-<code> </code>
-</para>
-</entry>
-<entry>
-<para>
-<code>Top-middle line</code>
-<code> of a selected tab</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/v3d-tm-sel.gif);</code>
-</para>
-<para>
-<code>height:5px;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.tab-v3d-tr-sel</code>
-<code> </code>
-</para>
-</entry>
-<entry>
-<para>
-<code>Top-right corner</code>
-<code> of a selected tab</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/v3d-tr-sel.gif);</code>
-</para>
-<para>
-<code>height:5px;</code>
-</para>
-<para>
-<code>width:3px;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.</code>
-<code>tab-v3d-ml-sel</code>
-<code> </code>
-</para>
-</entry>
-<entry>
-<para>
-<code>Middle-left </code>
-<code>of a selected tab</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/v3d-ml-sel.gif);</code>
-</para>
-<para>
-<code>width:5px;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.tab-v3d-mm-sel</code>
-<code> </code>
-</para>
-</entry>
-<entry>
-<para>
-<code>Middle-middle of a selected tab</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/v3d-mm-sel.gif);</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.tab-v3d-mr-sel</code>
-<code> </code>
-</para>
-</entry>
-<entry>
-<para>
-<code>Middle-right </code>
-<code>of a selected tab</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/v3d-mr-sel.gif);</code>
-</para>
-<para>
-<code>width:3px;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.tab-v3d-bl-sel </code>
-</para>
-</entry>
-<entry>
-<para>
-<code>bottom-left </code>
-<code>of a selected tab</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/v3d-bl-sel.gif);</code>
-</para>
-<para>
-<code>height:5px;</code>
-</para>
-<para>
-<code>width:5px;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.tab-v3d-bm-sel </code>
-</para>
-</entry>
-<entry>
-<para>
-<code>bottom-middle </code>
-<code>of a selected tab</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/v3d-bm-sel.gif);</code>
-</para>
-<para>
-<code>height:5px;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.tab-v3d-br-sel</code>
-<code> </code>
-</para>
-</entry>
-<entry>
-<para>
-<code>bottom-right </code>
-<code>of a selected tab</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/v3d-br-sel.gif);</code>
-</para>
-<para>
-<code>height:5px;</code>
-</para>
-<para>
-<code>width:3px;</code>
-</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable>
-<para/></sect2><sect2><title>Style of Non-Selected Tab</title>
-<para>
-<graphic fileref="components/images/tabbox-ver-tab-dissel.png">2
-			
-		</graphic>
-</para>
-<para/>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
-<row>
-<entry>
-<para>CSS Definition</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.</code>
-<code>tab-v3d-tl-uns </code>
-</para>
-</entry>
-<entry>
-<para>
-<code>Top-left corner</code>
-<code> of a non-selected tab</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/v3d-tl-uns.gif);</code>
-</para>
-<para>
-<code>height:5px;</code>
-</para>
-<para>
-<code>width:5px;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.tab-v3d-tm-uns</code>
-<code> </code>
-</para>
-</entry>
-<entry>
-<para>
-<code>Top-middle line</code>
-<code> of a non-selected tab</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/v3d-tm-uns.gif);</code>
-</para>
-<para>
-<code>height:5px;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.tab-v3d-tr-uns</code>
-<code> </code>
-</para>
-</entry>
-<entry>
-<para>
-<code>Top-right corner</code>
-<code> of a non-selected tab</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/v3d-tr-uns.gif);</code>
-</para>
-<para>
-<code>height:5px;</code>
-</para>
-<para>
-<code>width:3px;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.</code>
-<code>tab-v3d-ml-uns</code>
-<code> </code>
-</para>
-</entry>
-<entry>
-<para>
-<code>Middle-left </code>
-<code>of a non-selected tab</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/v3d-ml-uns.gif);</code>
-</para>
-<para>
-<code>width:5px;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.tab-v3d-mm-uns</code>
-<code> </code>
-</para>
-</entry>
-<entry>
-<para>
-<code>Middle-middle of a non-selected tab</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/v3d-mm-uns.gif);</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.tab-v3d-mr-uns</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>Middle-right </code>
-<code>of a non-selected tab</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/v3d-mr-uns.gif);</code>
-</para>
-<para>
-<code>width:3px;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.tab-v3d-bl-uns</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>bottom-left </code>
-<code>of a non-selected tab</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/v3d-bl-uns.gif);</code>
-</para>
-<para>
-<code>height:5px;</code>
-</para>
-<para>
-<code>width:5px;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.tab-v3d-bm-uns</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>bottom-middle </code>
-<code>of a non-selected tab</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/v3d-bm-uns.gif);</code>
-</para>
-<para>
-<code>height:5px;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.tab-v3d-br-uns</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>bottom-right </code>
-<code>of a non-selected tab</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/v3d-br-uns.gif);</code>
-</para>
-<para>
-<code>height:5px;</code>
-</para>
-<para>
-<code>width:3px;</code>
-</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable>
-<para/><sect3><title>Customize the panel style</title>
-<para>
-<graphic fileref="components/images/tabbox-ver-body-1.png">2
-			
-		</graphic>
-</para>
-<para>The way to customize the background and border of a vertical tabbox is declaring the style as following.</para>
-<para>1.include style and assign sclass of tabpanels</para>
-<programlisting>&lt;style src="~./mytab.css.dsp"/&gt;&#13;&lt;tabbox width="400px" orient="vertical"&gt;&#13;&lt;tabs width="50px"&gt;&#13;&lt;tab label="Tab 1" /&gt;&#13;&lt;tab label="Tab 2" /&gt;&#13;&lt;/tabs&gt;&#13;&lt;tabpanels sclass="mytp" height="200px"&gt;&#13;&lt;tabpanel &gt;This is panel 1&lt;/tabpanel&gt;&#13;&lt;tabpanel &gt;This is panel 2 The second panel&lt;/tabpanel&gt;&#13;&lt;/tabpanels&gt;&#13;&lt;/tabbox&gt;&#13;</programlisting></sect3><sect3><title>2.Add mytab.css.dsp in class path/web/</title>
-<programlisting>&lt;%@ page contentType="text/css;charset=UTF-8" %&gt;&#13;&lt;%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %&gt;&#13;.mytp {&#13;background-color:#FFEEB6;&#13;border-top:1px solid #FFBB47;&#13;border-bottom:1px solid #FFBB47;&#13;border-right:3px solid #FFBB47;&#13;    }    &#13;</programlisting>
-<para/></sect3><sect3><title>Customize the corner style</title>
-<para>
-<graphic fileref="components/images/tabbox-ver-corner-1.png">2
-			
-		</graphic>
-</para>
-<para>The way to customize the tabs corner of vertical tabbox is declaring the style as following.</para>
-<para>1.assign sclass of tabs</para>
-<programlisting>&lt;style src="~./mytab.css.dsp"/&gt;&#13;&lt;tabbox width="400px" orient="vertical"&gt;&#13;&lt;tabs width="50px" sclass="mytabs"&gt;&#13;&lt;tab label="Tab 1" /&gt;&#13;&lt;tab label="Tab 2" /&gt;&#13;&lt;/tabs&gt;&#13;&lt;tabpanels sclass="mytp" height="200px"&gt;&#13;&lt;tabpanel &gt;This is panel 1&lt;/tabpanel&gt;&#13;&lt;tabpanel &gt;This is panel 2 The second panel&lt;/tabpanel&gt;&#13;&lt;/tabpanels&gt;&#13;&lt;/tabbox&gt;&#13;</programlisting></sect3><sect3><title>2.append customized css into mytab.css.dsp in class path/web/</title>
-<programlisting>.mytabs .tab-v3d-first1{&#13;background-image:url(${c:encodeURL('/tabbox-ver/mytab-first1.gif')});&#13;height:2px;&#13;width:6px;&#13;}&#13;.mytabs .tab-v3d-first2{&#13;background-image:url(${c:encodeURL('/tabbox-ver/mytab-first2.gif')});&#13;height:1px;&#13;width:6px;&#13;}&#13;.mytabs .tab-v3d-last1{&#13;background-image:url(${c:encodeURL('/tabbox-ver/mytab-last1.gif')});&#13;height:1px;&#13;width:6px;&#13;}&#13;.mytabs .tab-v3d-last2{&#13;background-image:url(${c:encodeURL('/tabbox-ver/mytab-last2.gif')});&#13;height:2px;&#13;width:6px;&#13;}&#13;</programlisting>
-<para>3.Design the image files of above style (mytab-first1.gif, mytab-first2.gif, mytab-last1.gif, mytab-last2.gif). And put these files in the application folder(ex, /tabbox-ver. It depends on you design)</para></sect3><sect3><title>Customize the selected tab style</title>
-<para>
-<graphic fileref="components/images/tabbox-ver-tab-sel-1.png">2
-			
-		</graphic>
-</para>
-<para>The way to customize the selected of vertical Tabbox is declaring the style as following.</para></sect3><sect3><title>1.append customized css into mytab.css.dsp in class path/web/</title>
-<para/>
-<para>
-<code>.mytabs</code>
-<code> .tab-v3d-tl-sel{</code>
-</para>
-<para>
-<code>background-image : url(${c:encodeURL('/tabbox-ver/mytab-tl-sel.gif')});</code>
-</para>
-<para>
-<code>height:5px;</code>
-</para>
-<para>
-<code>width:5px;</code>
-</para>
-<para>
-<code>} </code>
-</para>
-<para>
-<code>.mytabs</code>
-<code> .tab-v3d-tm-sel{</code>
-</para>
-<para>
-<code>background-image : url(${c:encodeURL('/tabbox-ver/mytab-tm-sel.gif')});</code>
-</para>
-<para>
-<code>height:5px;</code>
-</para>
-<para>
-<code>} </code>
-</para>
-<para>
-<code>.mytabs</code>
-<code> .tab-v3d-tr-sel{</code>
-</para>
-<para>
-<code>background-image : url(${c:encodeURL('/tabbox-ver/mytab-tr-sel.gif')});</code>
-</para>
-<para>
-<code>height:5px;</code>
-</para>
-<para>
-<code>width:6px;</code>
-</para>
-<para>
-<code>} </code>
-</para>
-<para>
-<code>.mytabs</code>
-<code> .tab-v3d-ml-sel{</code>
-</para>
-<para>
-<code>background-image : url(${c:encodeURL('/tabbox-ver/mytab-ml-sel.gif')});</code>
-</para>
-<para>
-<code>width:5px;</code>
-</para>
-<para>
-<code>} </code>
-</para>
-<para>
-<code>.mytabs</code>
-<code> .tab-v3d-mm-sel{</code>
-</para>
-<para>
-<code>background-image : url(${c:encodeURL('/tabbox-ver/mytab-mm-sel.gif')});</code>
-</para>
-<para>
-<code>} </code>
-</para>
-<para>
-<code>.mytabs</code>
-<code> .tab-v3d-mr-sel{</code>
-</para>
-<para>
-<code>background-image : url(${c:encodeURL('/tabbox-ver/mytab-mr-sel.gif')});</code>
-</para>
-<para>
-<code>width:6px;</code>
-</para>
-<para>
-<code>} </code>
-</para>
-<para>
-<code>.mytabs</code>
-<code> .tab-v3d-bl-sel{</code>
-</para>
-<para>
-<code>background-image : url(${c:encodeURL('/tabbox-ver/mytab-bl-sel.gif')});</code>
-</para>
-<para>
-<code>height:5px;</code>
-</para>
-<para>
-<code>width:5px;</code>
-</para>
-<para>
-<code>} </code>
-</para>
-<para>
-<code>.mytabs</code>
-<code> .tab-v3d-bm-sel{</code>
-</para>
-<para>
-<code>background-image : url(${c:encodeURL('/tabbox-ver/mytab-bm-sel.gif')});</code>
-</para>
-<para>
-<code>height:5px;</code>
-</para>
-<para>
-<code>} </code>
-</para>
-<para>
-<code>.mytabs</code>
-<code> .tab-v3d-br-sel{</code>
-</para>
-<para>
-<code>background-image : url(${c:encodeURL('/tabbox-ver/mytab-br-sel.gif')});</code>
-</para>
-<para>
-<code>height:5px;</code>
-</para>
-<para>
-<code>width:6px;</code>
-</para>
-<para>
-<code>} </code>
-</para>
-<para>2.Design the image files of above style. And put these files in the application folder(ex, /tabbox-ver. It depends on you design)</para></sect3><sect3><title>Customize the non-selected tab style</title>
-<para>
-<graphic fileref="components/images/tabbox-ver-tab-dissel-1.png">2
-			
-		</graphic>
-</para>
-<para>The way to customize the non-selected of Tabbox is declaring the style as following.</para></sect3><sect3><title>1.append customized css into mytab.css.dsp in class path/web/</title>
-<para/>
-<para/>
-<para>
-<code>.mytabs</code>
-<code> .tab-v3d-tl-uns{</code>
-</para>
-<para>
-<code>background-image : url(${c:encodeURL('/tabbox-ver/mytab-tl-uns.gif')});</code>
-</para>
-<para>
-<code>height:5px;</code>
-</para>
-<para>
-<code>width:5px;</code>
-</para>
-<para>
-<code>} </code>
-</para>
-<para>
-<code>.mytabs</code>
-<code> .tab-v3d-tm-uns{</code>
-</para>
-<para>
-<code>background-image : url(${c:encodeURL('/tabbox-ver/mytab-tm-uns.gif')});</code>
-</para>
-<para>
-<code>width:5px;</code>
-</para>
-<para>
-<code>} </code>
-</para>
-<para>
-<code>.mytabs</code>
-<code> .tab-v3d-tr-uns{</code>
-</para>
-<para>
-<code>background-image : url(${c:encodeURL('/tabbox-ver/mytab-tr-uns.gif')});</code>
-</para>
-<para>
-<code>height:5px;</code>
-</para>
-<para>
-<code>width:6px;</code>
-</para>
-<para>
-<code>} </code>
-</para>
-<para>
-<code>.mytabs</code>
-<code> .tab-v3d-ml-uns{</code>
-</para>
-<para>
-<code>background-image : url(${c:encodeURL('/tabbox-ver/mytab-ml-uns.gif')});</code>
-</para>
-<para>
-<code>width:5px;</code>
-</para>
-<para>
-<code>} </code>
-</para>
-<para>
-<code>.mytabs</code>
-<code> .tab-v3d-mm-uns{</code>
-</para>
-<para>
-<code>background-image : url(${c:encodeURL('/tabbox-ver/mytab-mm-uns.gif')});</code>
-</para>
-<para>
-<code>} </code>
-</para>
-<para>
-<code>.mytabs</code>
-<code> .tab-v3d-mr-uns{</code>
-</para>
-<para>
-<code>background-image : url(${c:encodeURL('/tabbox-ver/mytab-mr-uns.gif')});</code>
-</para>
-<para>
-<code>width:6px;</code>
-</para>
-<para>
-<code>} </code>
-</para>
-<para>
-<code>.mytabs</code>
-<code> .tab-v3d-bl-uns{</code>
-</para>
-<para>
-<code>background-image : url(${c:encodeURL('/tabbox-ver/mytab-bl-uns.gif')});</code>
-</para>
-<para>
-<code>height:5px;</code>
-</para>
-<para>
-<code>width:5px;</code>
-</para>
-<para>
-<code>} </code>
-</para>
-<para>
-<code>.mytabs</code>
-<code> .tab-v3d-bm-uns{</code>
-</para>
-<para>
-<code>background-image : url(${c:encodeURL('/tabbox-ver/mytab-bm-uns.gif')});</code>
-</para>
-<para>
-<code>height:5px;</code>
-</para>
-<para>
-<code>} </code>
-</para>
-<para>
-<code>.mytabs</code>
-<code> .tab-v3d-br-uns{</code>
-</para>
-<para>
-<code>background-image : url(${c:encodeURL('/tabbox-ver/mytab-br-uns.gif')});</code>
-</para>
-<para>
-<code>height:5px;</code>
-</para>
-<para>
-<code>width:6px;</code>
-</para>
-<para>
-<code>}</code>
-</para>
-<para>3.Design the image files of above style. And put these files in the application folder(ex, /tabbox-ver. It depends on you design)</para></sect3></sect2></sect1><sect1><title>Tabbox – Horizontal </title>
-<para>
-<graphic fileref="components/images/tabbox-hor.png">2
-			
-		</graphic>
-</para>
-<para>The style of horizontal tabbox include 4 parts, style of panel, tabs corner, selected tab and non-selected tab.</para><sect2><title>Style of Panel</title>
-<para>
-<graphic fileref="components/images/tabbox-hor-body.png">2
-			
-		</graphic>
-</para>
-<para/>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
-<row>
-<entry>
-<para>CSS Definition</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.</code>
-<code>tabpanels_scalss</code>
-</para>
-<para>
-<code>.tabpanel</code>
-</para>
-<para>
-<code>.tababpanel-hr</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>the style of a tab panel</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>border-bottom:1px solid #5C6C7C;</code>
-</para>
-<para>
-<code>border-left:1px solid #5C6C7C;</code>
-</para>
-<para>
-<code>border-right:1px solid #5C6C7C;</code>
-</para>
-<para>
-<code>padding:5px;</code>
-</para>
-<para>
-<code/>
-</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable>
-<para/></sect2><sect2><title>Style of Tabs Corner</title>
-<para/>
-<para>
-<graphic fileref="components/images/tabbox-hor-corner.png">2
-			
-		</graphic>
-</para>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
-<row>
-<entry>
-<para>CSS Definition</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.</code>
-<code>tabs_sclass</code>
-</para>
-<para>
-<code>.tab-3d-first1 </code>
-</para>
-</entry>
-<entry>
-<para>
-<code>The left corner</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-first1.gif);</code>
-</para>
-<para>
-<code>height:3px;</code>
-</para>
-<para>
-<code>width:1px;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.</code>
-<code>tabs_class</code>
-</para>
-<para>.tab-3d-first2 </para>
-</entry>
-<entry>
-<para>
-<code>The line of left corner</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-first2.gif);</code>
-</para>
-<para>
-<code>height:3px;</code>
-</para>
-<para>
-<code>width:3px;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.</code>
-<code>tabs_class</code>
-</para>
-<para>.tab-3d-last1 </para>
-</entry>
-<entry>
-<para>
-<code>The line of right corner</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-last1.gif);</code>
-</para>
-<para>
-<code>height:3px;</code>
-</para>
-<para>
-<code>width:3px;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.</code>
-<code>tabs_class</code>
-</para>
-<para>.tab-3d-last2 </para>
-</entry>
-<entry>
-<para>
-<code>The right corner</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-last2.gif);</code>
-</para>
-<para>
-<code>height:3px;</code>
-</para>
-<para>
-<code>width:1px;</code>
-</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable>
-<para/></sect2><sect2><title>
-Style of Selected Tab</title>
-<graphic fileref="components/images/tabbox-hor-tab-sel.png">2
-			
-		</graphic>
-<para/>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
-<row>
-<entry>
-<para>CSS Definition</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.</code>
-<code>tab-3d-tl-sel </code>
-</para>
-</entry>
-<entry>
-<para>
-<code>Top-left corner</code>
-<code> of a selected tab</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-tl-sel.gif);</code>
-</para>
-<para>
-<code>height:5px;</code>
-</para>
-<para>
-<code>width:5px;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.tab-3d-tm-sel</code>
-<code> </code>
-</para>
-</entry>
-<entry>
-<para>
-<code>Top-middle line</code>
-<code> of a selected tab</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-tm-sel.gif);</code>
-</para>
-<para>
-<code>height:5px;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.tab-3d-tr-sel</code>
-<code> </code>
-</para>
-</entry>
-<entry>
-<para>
-<code>Top-right corner</code>
-<code> of a selected tab</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-tr-sel.gif);</code>
-</para>
-<para>
-<code>height:5px;</code>
-</para>
-<para>
-<code>width:5px;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.</code>
-<code>tab-3d-ml-sel</code>
-<code> </code>
-</para>
-</entry>
-<entry>
-<para>
-<code>Middle-left </code>
-<code>of a selected tab</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-ml-sel.gif);</code>
-</para>
-<para>
-<code>width:5px;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.tab-3d-mm-sel</code>
-<code> </code>
-</para>
-</entry>
-<entry>
-<para>
-<code>Middle-middle of a selected tab</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-mm-sel.gif);</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.tab-3d-mr-sel</code>
-<code> </code>
-</para>
-</entry>
-<entry>
-<para>
-<code>Middle-right </code>
-<code>of a selected tab</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-mr-sel.gif);</code>
-</para>
-<para>
-<code>width:5px;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.tab-3d-bl-sel </code>
-</para>
-</entry>
-<entry>
-<para>
-<code>bottom-left </code>
-<code>of a selected tab</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-bl-sel.gif);</code>
-</para>
-<para>
-<code>height:3px;</code>
-</para>
-<para>
-<code>width:5px;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.tab-3d-bm-sel </code>
-</para>
-</entry>
-<entry>
-<para>
-<code>bottom-middle </code>
-<code>of a selected tab</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-bm-sel.gif);</code>
-</para>
-<para>
-<code>height:3px;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.tab-3d-br-sel</code>
-<code> </code>
-</para>
-</entry>
-<entry>
-<para>
-<code>bottom-right </code>
-<code>of a selected tab</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-br-sel.gif);</code>
-</para>
-<para>
-<code>height:3px;</code>
-</para>
-<para>
-<code>width:5px;</code>
-</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable>
-<para/></sect2><sect2><title>Style of Non-Selected Tab</title>
-<para>
-<graphic fileref="components/images/tabbox-hor-tab-dissel.png">2
-			
-		</graphic>
-</para>
-<para/>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
-<row>
-<entry>
-<para>CSS Definition</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.</code>
-<code>tab-3d-tl-uns </code>
-</para>
-</entry>
-<entry>
-<para>
-<code>Top-left corner</code>
-<code> of a non-selected tab</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-tl-uns.gif);</code>
-</para>
-<para>
-<code>height:5px;</code>
-</para>
-<para>
-<code>width:5px;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.tab-3d-tm-uns</code>
-<code> </code>
-</para>
-</entry>
-<entry>
-<para>
-<code>Top-middle line</code>
-<code> of a non-selected tab</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-tm-uns.gif);</code>
-</para>
-<para>
-<code>height:5px;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.tab-3d-tr-uns</code>
-<code> </code>
-</para>
-</entry>
-<entry>
-<para>
-<code>Top-right corner</code>
-<code> of a non-selected tab</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-tr-uns.gif);</code>
-</para>
-<para>
-<code>height:5px;</code>
-</para>
-<para>
-<code>width:5px;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.</code>
-<code>tab-3d-ml-uns</code>
-<code> </code>
-</para>
-</entry>
-<entry>
-<para>
-<code>Middle-left </code>
-<code>of a non-selected tab</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-ml-uns.gif);</code>
-</para>
-<para>
-<code>width:5px;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.tab-3d-mm-uns</code>
-<code> </code>
-</para>
-</entry>
-<entry>
-<para>
-<code>Middle-middle of a non-selected tab</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-mm-uns.gif);</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.tab-3d-mr-uns</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>Middle-right </code>
-<code>of a non-selected tab</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-mr-uns.gif);</code>
-</para>
-<para>
-<code>width:5px;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.tab-3d-bl-uns</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>bottom-left </code>
-<code>of a non-selected tab</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-bl-uns.gif);</code>
-</para>
-<para>
-<code>height:3px;</code>
-</para>
-<para>
-<code>width:5px;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.tab-3d-bm-uns</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>bottom-middle </code>
-<code>of a non-selected tab</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-bm-uns.gif);</code>
-</para>
-<para>
-<code>height:3px;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.tab-3d-br-uns</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>bottom-right </code>
-<code>of a non-selected tab</code>
-</para>
-</entry>
-<entry>
-<para>
-<code>background-image:url(/zkdemo/zkau/web/zul/img/tab/3d-br-uns.gif);</code>
-</para>
-<para>
-<code>height:3px;</code>
-</para>
-<para>
-<code>width:5px;</code>
-</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable>
-<para/><sect3><title>Customize the panel style</title>
-<para>
-<graphic fileref="components/images/tabbox-hor-body-1.png">2
-			
-		</graphic>
-</para>
-<para>The way to customize the background and border of Tabbox is declaring the style as following.</para>
-<para>1.include style and assign sclass of tabpanels</para>
-<programlisting>&lt;style src="~./mytab.css.dsp"/&gt;&#13;&lt;tabbox width="400px"&gt;&#13;&lt;tabs&gt;&#13;&lt;tab label="Tab 1" /&gt;&#13;&lt;tab label="Tab 2" /&gt;&#13;&lt;/tabs&gt;&#13;&lt;tabpanels sclass="mytp" height="300px"&gt;&#13;&lt;tabpanel &gt;This is panel 1&lt;/tabpanel&gt;&#13;&lt;tabpanel &gt;This is panel 2 The second panel&lt;/tabpanel&gt;&#13;&lt;/tabpanels&gt;&#13;&lt;/tabbox&gt;&#13;</programlisting></sect3><sect3><title>2.Add mytab.css.dsp in class path/web/</title>
-<programlisting>&lt;%@ page contentType="text/css;charset=UTF-8" %&gt;&#13;&lt;%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %&gt;&#13;.mytp .tabpanel .tabpanel-hr{&#13;background-color:#EBEBFF;&#13;border-bottom:3px solid #FFBB47;&#13;border-right:1px solid #FFBB47;&#13;border-left:1px solid #FFBB47;&#13;}&#13;</programlisting>
-<para/></sect3><sect3><title>Customize the corner style</title>
-<para>
-<graphic fileref="components/images/tabbox-hor-corner-1.png">2
-			
-		</graphic>The way to customize the tabs corner of Tabbox is declaring the style as following.</para>
-<para>1.assign sclass of tabs</para>
-<programlisting>&lt;style src="~./mytab.css.dsp"/&gt;&#13;&lt;tabbox width="400px" &gt;&#13;&lt;tabs sclass="mytabs"&gt;&#13;&lt;tab label="Tab 1" /&gt;&#13;&lt;tab label="Tab 2" /&gt;&#13;&lt;/tabs&gt;&#13;&lt;tabpanels sclass="mytp" height="300px"&gt;&#13;&lt;tabpanel &gt;This is panel 1&lt;/tabpanel&gt;&#13;&lt;tabpanel &gt;This is panel 2 The second panel&lt;/tabpanel&gt;&#13;&lt;/tabpanels&gt;&#13;&lt;/tabbox&gt;&#13;</programlisting></sect3><sect3><title>2.append customized css into mytab.css.dsp in class path/web/</title>
-<programlisting>.mytabs .tab-3d-first1{&#13;background-image:url(${c:encodeURL('/tabbox/mytab-first1.gif')});&#13;height:6px;&#13;width:2px;&#13;}&#13;.mytabs .tab-3d-first2{&#13;background-image:url(${c:encodeURL('/tabbox/mytab-first2.gif')});&#13;height:6px;&#13;width:1px;&#13;}&#13;.mytabs .tab-3d-last1{&#13;background-image:url(${c:encodeURL('/tabbox/mytab-last1.gif')});&#13;height:6px;&#13;width:1px;&#13;}&#13;.mytabs .tab-3d-last2{&#13;background-image:url(${c:encodeURL('/tabbox/mytab-last2.gif')});&#13;height:6px;&#13;width:2px;&#13;}&#13;</programlisting>
-<para>3.Design the image files of above style (mytab-first1.gif, mytab-first2.gif, mytab-last1.gif, mytab-last2.gif). And put these files in the application folder(ex, /tabbox. It depends on you design)</para></sect3><sect3><title>Customize the selected tab style</title>
-<para>
-<graphic fileref="components/images/tabbox-hor-tab-sel-1.png">2
-			
-		</graphic>The way to customize the selected of Tabbox is declaring the style as following.</para></sect3><sect3><title>1.append customized css into mytab.css.dsp in class path/web/</title>
-<para/>
-<programlisting>.mytabs .tab-3d-m{&#13;height:22px;&#13;} &#13;.mytabs .tab-3d-tl-sel{&#13;background-image : url(${c:encodeURL('/tabbox/mytab-tl-sel.gif')});&#13;height:5px;&#13;width:5px;&#13;} &#13;.mytabs .tab-3d-tm-sel{&#13;background-image : url(${c:encodeURL('/tabbox/mytab-tm-sel.gif')});&#13;height:5px;&#13;} &#13;.mytabs .tab-3d-tr-sel{&#13;background-image : url(${c:encodeURL('/tabbox/mytab-tr-sel.gif')});&#13;height:5px;&#13;width:5px;&#13;} &#13;.mytabs .tab-3d-ml-sel{&#13;background-image : url(${c:encodeURL('/tabbox/mytab-ml-sel.gif')});&#13;width:5px;&#13;} &#13;.mytabs .tab-3d-mm-sel{&#13;background-image : url(${c:encodeURL('/tabbox/mytab-mm-sel.gif')});&#13;} &#13;.mytabs .tab-3d-mr-sel{&#13;background-image : url(${c:encodeURL('/tabbox/mytab-mr-sel.gif')});&#13;width:5px;&#13;} &#13;.mytabs .tab-3d-bl-sel{&#13;background-image : url(${c:encodeURL('/tabbox/mytab-bl-sel.gif')});&#13;height:6px;&#13;width:5px;&#13;} &#13;.mytabs .tab-3d-bm-sel{&#13;background-image : url(${c:encodeURL('/tabbox/mytab-bm-sel.gif')});&#13;height:6px;&#13;} &#13;.mytabs .tab-3d-br-sel{&#13;background-image : url(${c:encodeURL('/tabbox/mytab-br-sel.gif')});&#13;height:6px;&#13;width:5px;&#13;</programlisting>
-<para>
-<code>} </code>
-</para>
-<para>2.Design the image files of above style. And put these files in the application folder(ex, /tabbox. It depends on you design)</para></sect3><sect3><title>Customize the non-selected tab style</title>
-<para>
-<graphic fileref="components/images/tabbox-hor-tab-dissel-1.png">2
-			
-		</graphic>The way to customize the non-selected of Tabbox is declaring the style as following.</para></sect3><sect3><title>1.append customized css into mytab.css.dsp in class path/web/</title>
-<para/>
-<para/>
-<programlisting>.mytabs .tab-3d-tl-uns{&#13;background-image : url(${c:encodeURL('/tabbox/mytab-tl-uns.gif')});&#13;height:5px;&#13;width:5px;&#13;} &#13;.mytabs .tab-3d-tm-uns{&#13;background-image : url(${c:encodeURL('/tabbox/mytab-tm-uns.gif')});&#13;width:5px;&#13;} &#13;.mytabs .tab-3d-tr-uns{&#13;background-image : url(${c:encodeURL('/tabbox/mytab-tr-uns.gif')});&#13;height:5px;&#13;width:5px;&#13;} &#13;.mytabs .tab-3d-ml-uns{&#13;background-image : url(${c:encodeURL('/tabbox/mytab-ml-uns.gif')});&#13;width:5px;&#13;} &#13;.mytabs .tab-3d-mm-uns{&#13;background-image : url(${c:encodeURL('/tabbox/mytab-mm-uns.gif')});&#13;} &#13;.mytabs .tab-3d-mr-uns{&#13;background-image : url(${c:encodeURL('/tabbox/mytab-mr-uns.gif')});&#13;width:5px;&#13;} &#13;.mytabs .tab-3d-bl-uns{&#13;background-image : url(${c:encodeURL('/tabbox/mytab-bl-uns.gif')});&#13;height:6px;&#13;width:5px;&#13;} &#13;.mytabs .tab-3d-bm-uns{&#13;background-image : url(${c:encodeURL('/tabbox/mytab-bm-uns.gif')});&#13;height:6px;&#13;} &#13;.mytabs .tab-3d-br-uns{&#13;background-image : url(${c:encodeURL('/tabbox/mytab-br-uns.gif')});&#13;height:6px;&#13;width:5px;&#13;</programlisting>
-<para>
-<code>}</code>
-</para>
-<para>3.Design the image files of above style. And put these files in the application folder(ex, /tabbox. It depends on you design)</para></sect3></sect2></sect1><sect1><title>Timebox</title>
-<para>
-<graphic fileref="components/images/timeBox-jeff.png">2
-			
-		</graphic>Timebox is composed of 2 span, an input box and an image.</para><sect2><title>Input Box</title>
-<para>
-<graphic fileref="components/images/timeBox-des-Jeff.png">2
-			
-		</graphic>
-</para>
-<para/>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
-<row>
-<entry>
-<para>CSS Definition</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.text</code>
-</para>
-</entry>
-<entry>
-<para>The outline of timebox</para>
-</entry>
-<entry>
-<para>
-<code>background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg.gif')}) repeat-x 0 0;</code>
-</para>
-<para>
-<code/>
-</para>
-<para>
-<code>border: 1px solid #7F9DB9;</code>
-</para>
-<para>
-<code/>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>span.rbtnbk</code>
-</para>
-</entry>
-<entry>
-<para>Button at the right edge</para>
-</entry>
-<entry>
-<para>
-<code>background-image: url(${c:encodeURL('~./zul/img/btnbk.gif')}); </code>
-</para>
-<para>
-<code/>
-</para>
-<para>
-<code>background-repeat: no-repeat;</code>
-</para>
-<para>
-<code/>
-</para>
-<para>
-<code>border: 1px solid #7f9db9; </code>
-</para>
-<para>
-<code/>
-</para>
-<para>
-<code>border-left: none;</code>
-</para>
-<para>
-<code/>
-</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable>
-<para/><sect3><title>Customize the Button</title>
-<para>The way to customize the button of combobox is to disable the image and change color as follows.</para>
-<para>
-<graphic fileref="components/images/custom_timeBox-jeff.png">2
-			
-		</graphic> </para>
-<programlisting>span.rbtnbk{&#13;    background-image:url();    &#13;    background-color:pink;    &#13;</programlisting></sect3></sect2></sect1><sect1><title>Toolbarbutton in Caption</title>
-<para>
-<graphic fileref="components/images/toolbarbutton-caption-desc.png">2
-			
-		</graphic>Toolbarbutton in window caption is composed of two parts, anchor tags and a div.</para><sect2><title>Toolbarbutton in Caption</title>
-<para>
-<graphic fileref="components/images/toolbarbutton-caption-desc2.png">2
-			
-		</graphic>
-</para>
-<para/>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
-<row>
-<entry>
-<para>CSS Definition</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>td.mwt-embedded a,</code>
-</para>
-<para>
-<code>td.mwt-embedded a:visited, td.mwt-embedded a:hover </code>
-</para>
-</entry>
-<entry>
-<para>toolbar used in embedded window</para>
-</entry>
-<entry>
-<para>
-<code>color: #222222;</code>
-</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable>
-<para/><sect3><title>Customize ToolbarButton in Caption</title>
-<para>The way to customize the toolbarbutton in Caption, changing background and font colors when hover over text.</para>
-<para>Normal:</para>
-<para>
-<graphic fileref="components/images/toolbarbutton-caption-custom.png">2
-			
-		</graphic> Hover:</para>
-<para>
-<graphic fileref="components/images/toolbarbutton-caption-custom-hover.png">2
-			
-		</graphic>
-</para>
-<para/>
-<para>td.mwt-embedded a</para>
-<para>{</para>
-<para>color:red;</para>
-<para>background: yellow;</para>
-<para>padding: 2px;</para>
-<para>}</para>
-<para>td.mwt-embedded a:hover</para>
-<para>{</para>
-<para>color:green;</para>
-<para>background: blue;</para>
-<para>padding: 2px;</para>
-<para>}</para>
-<para/></sect3></sect2></sect1><sect1><title>Basic Toolbar with Toolbarbutton</title>
-<para>
-<graphic fileref="components/images/toolbar-norz.png">2
-			
-		</graphic>Toolbar with Toolbarbutton is composed of two parts, anchor tags and a div.</para><sect2><title>Toolbar with Toolbarbutton</title>
-<para>
-<graphic fileref="components/images/toolbar-desc.png">2
-			
-		</graphic>
-</para>
-<para/>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
-<row>
-<entry>
-<para>CSS Definition</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.toolbar</code>
-</para>
-</entry>
-<entry>
-<para>The toolbar</para>
-</entry>
-<entry>
-<para>
-<code>padding: 1px; </code>
-</para>
-<para>
-<code>background: #e0eaf7; border: 1px solid;</code>
-</para>
-<para>
-<code>border-color: #f8fbff #aca899 #aca899 #f8fbff;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>.toolbar a</code>
-</para>
-</entry>
-<entry>
-<para>The toolbar buttons</para>
-</entry>
-<entry>
-<para>
-<code>font-family: Tahoma, Arial, Helvetica, sans-serif;</code>
-</para>
-<para>
-<code>font-size: x-small; </code>
-</para>
-<para>
-<code>font-weight: normal; </code>
-</para>
-<para>
-<code>color: black;</code>
-</para>
-<para>
-<code>background: #e0eaf7; </code>
-</para>
-<para>
-<code>border: 1px solid #e0eaf7;</code>
-</para>
-<para>
-<code>text-decoration: none;</code>
-</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable>
-<para/><sect3><title>Customize Toolbar with ToolbarButton</title>
-<para>The way to customize the toolbar with toolbarbutton, changing background and font colors when hover over text.</para>
-<para>Normal:</para>
-<para>
-<graphic fileref="components/images/toolbarbutton.png">2
-			
-		</graphic> Hover:</para>
-<para>
-<graphic fileref="components/images/toolbarbutton-hover.png">2
-			
-		</graphic>
-</para>
-<para/>
-<programlisting>&#13;.toolbar{&#13;    background:red none repeat scroll 0% 50%;    &#13;}&#13;.toolbar a{&#13;    background:blue;    &#13;    border:blue;    &#13;    color:white;    &#13;}&#13;.toolbar a:hover{&#13;    background:white;    &#13;    border:white;    &#13;    color:blue;    &#13;}&#13;</programlisting></sect3></sect2></sect1><sect1><title>Tree</title>
-<para>
-<graphic fileref="components/images/tree.png">2
-			
-		</graphic>
-</para><sect2><title>Icon Style CSS Class</title>
-<para/>
-<para>
-<graphic fileref="components/images/tree-icon-des.png">2
-			
-		</graphic>
-</para>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
-<row>
-<entry>
-<para>CSS Definition</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>tree-root-open </code>
-</para>
-</entry>
-<entry>
-<para>The icon used to represent the open state for tree items at the root level. </para>
-</entry>
-<entry>
-<para>
-<code>width: 18px; min-height: 18px; height: 100%;</code>
-</para>
-<para>
-<code>background-image: url(${c:encodeURL('~./zul/img/tree/open.png')});</code>
-</para>
-<para>
-<code>background-repeat: no-repeat;</code>
-</para>
-<para>
-<code>display:-moz-inline-box; vertical-align:top;</code>
-</para>
-<para>
-<code>display:inline-block;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>tree-root-close </code>
-</para>
-</entry>
-<entry>
-<para>The icon used to represent the close state for tree items at the root level. </para>
-</entry>
-<entry>
-<para>
-<code>width: 18px; min-height: 18px; height: 100%;</code>
-</para>
-<para>
-<code>background-image: url(${c:encodeURL('~./zul/img/tree/close.png')});</code>
-</para>
-<para>
-<code>background-repeat: no-repeat;</code>
-</para>
-<para>
-<code>display:-moz-inline-box; vertical-align:top;</code>
-</para>
-<para>
-<code>display:inline-block;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>tree-tee-open </code>
-</para>
-</entry>
-<entry>
-<para>The icon used to represent the open state for tree items that have next siblings. </para>
-</entry>
-<entry>
-<para>
-<code>width: 18px; min-height: 18px; height: 100%;</code>
-</para>
-<para>
-<code>background-image: url(${c:encodeURL('~./zul/img/tree/open.png')});</code>
-</para>
-<para>
-<code>background-repeat: no-repeat;</code>
-</para>
-<para>
-<code>display:-moz-inline-box; vertical-align:top;</code>
-</para>
-<para>
-<code>display:inline-block;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>tree-tee-close </code>
-</para>
-</entry>
-<entry>
-<para>The icon used to represent the close state for tree items at have next siblings. </para>
-</entry>
-<entry>
-<para>
-<code>width: 18px; min-height: 18px; height: 100%;</code>
-</para>
-<para>
-<code>background-image: url(${c:encodeURL('~./zul/img/tree/close.png')});</code>
-</para>
-<para>
-<code>background-repeat: no-repeat;</code>
-</para>
-<para>
-<code>display:-moz-inline-box; vertical-align:top;</code>
-</para>
-<para>
-<code>display:inline-block;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>tree-last-open </code>
-</para>
-</entry>
-<entry>
-<para>The icon used to represent the open state for tree items that don't have next siblings. </para>
-</entry>
-<entry>
-<para>
-<code>width: 18px; min-height: 18px; height: 100%;</code>
-</para>
-<para>
-<code>background-image: url(${c:encodeURL('~./zul/img/tree/open.png')});</code>
-</para>
-<para>
-<code>background-repeat: no-repeat;</code>
-</para>
-<para>
-<code>display:-moz-inline-box; vertical-align:top;</code>
-</para>
-<para>
-<code>display:inline-block;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>tree-last-close </code>
-</para>
-</entry>
-<entry>
-<para>The icon used to represent the close state for tree items at don't have next siblings. </para>
-</entry>
-<entry>
-<para>
-<code>width: 18px; min-height: 18px; height: 100%;</code>
-</para>
-<para>
-<code>background-image: url(${c:encodeURL('~./zul/img/tree/close.png')});</code>
-</para>
-<para>
-<code>background-repeat: no-repeat;</code>
-</para>
-<para>
-<code>display:-moz-inline-box; vertical-align:top;</code>
-</para>
-<para>
-<code>display:inline-block;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>tree-tee </code>
-</para>
-</entry>
-<entry>
-<para>The icon used to represent the T-shape icon. </para>
-</entry>
-<entry>
-<para>
-<code>width: 18px; min-height: 18px; height: 100%;</code>
-</para>
-<para>
-<code>display:-moz-inline-box; vertical-align:top;</code>
-</para>
-<para>
-<code>display:inline-block;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>tree-vbar </code>
-</para>
-</entry>
-<entry>
-<para>The icon used to represent the |-shape (vertical bar) icon. </para>
-</entry>
-<entry>
-<para>
-<code>width: 18px; min-height: 18px; height: 100%;</code>
-</para>
-<para>
-<code>display:-moz-inline-box; vertical-align:top;</code>
-</para>
-<para>
-<code>display:inline-block;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>tree-last </code>
-</para>
-</entry>
-<entry>
-<para>The icon used to represent the L-shape icon -- no next sibling. </para>
-</entry>
-<entry>
-<para>
-<code>width: 18px; min-height: 18px; height: 100%;</code>
-</para>
-<para>
-<code>display:-moz-inline-box; vertical-align:top;</code>
-</para>
-<para>
-<code>display:inline-block;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>tree-spacer </code>
-</para>
-</entry>
-<entry>
-<para>The icon used to represent the blank icon. </para>
-</entry>
-<entry>
-<para>
-<code>width: 18px; min-height: 18px; height: 100%;</code>
-</para>
-<para>
-<code>display:-moz-inline-box; vertical-align:top;</code>
-</para>
-<para>
-<code>display:inline-block;</code>
-</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable>
-<para>To switch to another built in style( the style used prior 3.0), set iconSclass to “dottree.”</para>
-<programlisting>&lt;zk&gt;&#13;    &lt;window&gt;    &#13;        &lt;window title="tree demo" border="normal"&gt;        &#13;            &lt;tree iconSclass="dottree" id="tree" width="90%" rows="5"&gt;            &#13;            ...            &#13;</programlisting></sect2><sect2><title/></sect2><sect2><title>
-
-</title></sect2><sect2>
-<graphic fileref="components/images/tree-dottree.png">2
-			
-		</graphic><title>Various Treeitem Style – Selected, Focused, Hover</title>
-<para>
-<graphic fileref="components/images/tree-item-1.png">2
-			
-		</graphic>
-<graphic fileref="components/images/tree-item-2.png">2
-			
-		</graphic>
-</para>
-<para>
-<graphic fileref="components/images/tree-item-des.png">2
-			
-		</graphic>
-</para>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
-<row>
-<entry>
-<para>CSS Definition</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>tr.item, tr.item a, tr.item a:visited </code>
-</para>
-</entry>
-<entry>
-<para>Item visited</para>
-</entry>
-<entry>
-<para>
-<code>font-size: small; font-weight: normal; color: black;</code>
-</para>
-<para>
-<code>text-decoration: none;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>tr.item a:hover</code>
-</para>
-</entry>
-<entry>
-<para>Item hover</para>
-</entry>
-<entry>
-<para>
-<code>text-decoration: underline;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>tr.seld, td.seld </code>
-</para>
-</entry>
-<entry>
-<para>Item selected</para>
-</entry>
-<entry>
-<para>
-<code>background: #b3c8e8; border: 1px solid #6f97d2;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>tr.overd, td.overd </code>
-</para>
-</entry>
-<entry>
-<para>Item onmouseover</para>
-</entry>
-<entry>
-<para>
-<code>background: #D3EFFA;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>tr.overseld, td.overseld </code>
-</para>
-</entry>
-<entry>
-<para>Item selected and onmouseover</para>
-</entry>
-<entry>
-<para>
-<code>background: #82D5F8;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>tr.focusd</code>
-</para>
-</entry>
-<entry>
-<para>Item focused</para>
-</entry>
-<entry>
-<para>
-<code>background-image: url(${c:encodeURL('~./zul/img/focusd.gif')});</code>
-</para>
-<para>
-<code>background-repeat: no-repeat;</code>
-</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable>
-<para/></sect2><sect2><title>Treeitem Style – Font Style</title>
-<para>
-<graphic fileref="components/images/treeitem-innercell.png">2
-			
-		</graphic>
-</para>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
-<row>
-<entry>
-<para>CSS Definition</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>div.foot-cell-inner, div.cell-inner, div.head-cell-inner</code>
-</para>
-</entry>
-<entry>
-<para>Tree item inner cell</para>
-</entry>
-<entry>
-<para>
-<code>overflow:hidden; border: 0; margin: 0; padding: 0;</code>
-</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable>
-<para/><sect3><title>Customize the font of treeitem</title>
-<programlisting>...&#13;&lt;style&gt;&#13;div.cell-inner{&#13;    font-family: cursive;    &#13;    color:red;    &#13;}&#13;&lt;/style&gt;&#13;&lt;tree id="tree"&gt;&#13;</programlisting></sect3><sect3><title/></sect3><sect3><title>Customize Tree Headers</title>
-<informaltable frame="all">
-<tgroup cols="3"><tbody>
-<row>
-<entry>
-<para>CSS Definition</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-<entry>
-<para>Default Values</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>div.tree-head</code>
-</para>
-</entry>
-<entry>
-<para>Tree header</para>
-</entry>
-<entry>
-<para>
-<code>border: 0; </code>
-</para>
-<para>
-<code>overflow: hidden; </code>
-</para>
-<para>
-<code>width: 100%;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>div.tree-head tr</code>
-</para>
-</entry>
-<entry>
-<para>Tree header - tr</para>
-</entry>
-<entry>
-<para>
-<code>background-image: url(${c:encodeURL('~./zul/img/grid/s_hd.gif')});</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>div.tree-head th</code>
-</para>
-</entry>
-<entry>
-<para>Tree header - th</para>
-</entry>
-<entry>
-<para>
-<code>overflow: hidden; </code>
-</para>
-<para>
-<code>border: 1px solid;</code>
-</para>
-<para>
-<code>border-color: #DAE7F6 #9EB6CE #9EB6CE #DAE7F6;</code>
-</para>
-<para>
-<code>white-space: nowrap; </code>
-</para>
-<para>
-<code>padding: 2px;</code>
-</para>
-<para>
-<code>font-size: small; </code>
-</para>
-<para>
-<code>font-weight: normal;</code>
-</para>
-</entry>
-</row>
-<row>
-<entry>
-<para>
-<code>div.head-cell-inner</code>
-</para>
-</entry>
-<entry>
-<para>The cell of tree header</para>
-</entry>
-<entry>
-<para>
-<code>font-size: small; font-weight: normal; font-family: Tahoma, Garamond, Century, Arial, serif;</code>
-</para>
+</informaltable></sect3></sect2><sect2><title>DOM Naming Position</title>
+<para>        The naming position is used to locate which edge of the component should be, it usually expresses a circle corner of the component, such as Button, Groupbox, Window, and so on.</para><sect3><title>Region:</title>Region:<informaltable frame="all">
+<tgroup cols="1"><tbody>
+<row>
+<entry>
+<orderedlist>
+<listitem>
+<para>-ver:</para>
+<para>vertical aspect, like menubar.</para>
+</listitem>
+<listitem>
+<para>-hor:</para>
+<para>horizontal aspect, like menubar.</para>
+</listitem>
+<listitem>
+<para>-start:</para>
+<para>beginning aspect, like toolbar.</para>
+</listitem>
+<listitem>
+<para>-center:</para>
+<para>center aspect, like toolbar.</para>
+</listitem>
+<listitem>
+<para>-end:</para>
+<para>ending aspect, like toolbar.</para>
+</listitem>
+</orderedlist>
 </entry>
 </row></tbody></tgroup>
 </informaltable></sect3><sect3><title>
-<graphic fileref="components/images/tree-headers.png">2
-			
-		</graphic>Customize the style of tree header</title>
-<programlisting>...&#13;&lt;style&gt;&#13;div.head-cell-inner {&#13;    color: red;    &#13;    font-size: 16px;    &#13;    font-weight: 900;    &#13;}&#13;div.tree-head th{&#13;    border: dotted 2px purple;    &#13;    background-color: #00FF00;    &#13;}&#13;div.tree-head{&#13;    border: solid 2px orange;    &#13;}&#13;&lt;/style&gt;&#13;&lt;tree id="tree"&gt;<inlinegraphic fileref="components/images/tree-header-result.png" align="right"/>&#13;</programlisting></sect3><sect3><title/></sect3><sect3><title>Customize Tree Headers</title>
+<anchor id="_3x3 grid"/>Parts: (3 x 3 grid)</title>Parts: (3 x 3 grid)<informaltable frame="all">
+<tgroup cols="4">
+<colspec colnum="1" colname="c1"/>
+<colspec colnum="2" colname="c2"/>
+<colspec colnum="3" colname="c3"/>
+<colspec colnum="4" colname="c4"/><tbody>
+<row>
+<entry>
+<para>-tl: Top Left</para>
+</entry>
+<entry>
+<para>-tm: Top Middle</para>
+</entry>
+<entry>
+<para>-tr: Top Right</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>-cl: Center Left</para>
+</entry>
+<entry>
+<para>-cm: Center Middle</para>
+</entry>
+<entry>
+<para>-cr: Center Right</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>-bl: Bottom Left</para>
+</entry>
+<entry>
+<para>-bm: Bottom Middle</para>
+</entry>
+<entry>
+<para>-br: Bottom Right</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title>Compass:</title>Compass:<informaltable frame="all">
+<tgroup cols="4">
+<colspec colnum="1" colname="c1"/>
+<colspec colnum="2" colname="c2"/>
+<colspec colnum="3" colname="c3"/>
+<colspec colnum="4" colname="c4"/><tbody>
+<row>
+<entry namest="c1" nameend="c3">
+<para>-north</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>-west</para>
+</entry>
+<entry>
+<para>-center</para>
+</entry>
+<entry>
+<para>-east</para>
+</entry>
+</row>
+<row>
+<entry namest="c1" nameend="c3">
+<para>-south</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3></sect2><sect2><title>DOM Event Effect</title>DOM Event Effect<orderedlist>
+<listitem>
+<para>These postfix string are appended to component's class name by ZK client engine. </para>
+</listitem>
+</orderedlist>
+<orderedlist>
+<listitem/>
+</orderedlist>
+<orderedlist>
+<listitem>
+<para>The appending order MUST follow the priority as follow</para>
+</listitem>
+</orderedlist>
+<informaltable frame="all">
+<tgroup cols="4">
+<colspec colnum="1" colname="c1"/>
+<colspec colnum="2" colname="c2"/>
+<colspec colnum="3" colname="c3"/>
+<colspec colnum="4" colname="c4"/><tbody>
+<row>
+<entry>
+<para>Priority 1</para>
+</entry>
+<entry>
+<para>Priority 2</para>
+</entry>
+<entry>
+<para>Priority 3</para>
+</entry>
+</row>
+<row>
+<entry>
+<orderedlist>
+<listitem>
+<para>-clk:</para>
+<para>clicked event.</para>
+</listitem>
+<listitem>
+<para>-focus:</para>
+<para>focused event.</para>
+</listitem>
+<listitem>
+<para>-over:</para>
+<para>mouse over event.</para>
+</listitem>
+<listitem>
+<para>-drag:</para>
+<para>dragged event.</para>
+</listitem>
+<listitem>
+<para>-drop:</para>
+<para>dropped event.</para>
+</listitem>
+</orderedlist>
+</entry>
+<entry>
+<orderedlist>
+<listitem>
+<para>-seld:</para>
+<para>selected event.</para>
+</listitem>
+<listitem>
+<para>-ck:</para>
+<para>checked event.</para>
+</listitem>
+<listitem>
+<para>-unck:</para>
+<para>unchecked event.</para>
+</listitem>
+</orderedlist>
+</entry>
+<entry>
+<orderedlist>
+<listitem>
+<para>-disd:</para>
+<para>disabled event.</para>
+</listitem>
+<listitem>
+<para>-visi:</para>
+<para>visited event.</para>
+</listitem>
+<listitem>
+<para>-hide:</para>
+<para>hidden event.</para>
+</listitem>
+</orderedlist>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect2><sect2><title>Action Image Indexing</title>
+<para>        The CSS background of the action event of the DOM element is to use an arranged image composed of the following descriptions.</para>
+<informaltable frame="all">
+<tgroup cols="6"><tbody>
+<row>
+<entry>
+<para>Normal (Open)</para>
+</entry>
+<entry>
+<para>Hover</para>
+</entry>
+<entry>
+<para>Click, Select, and Drag.</para>
+</entry>
+<entry>
+<para>Focus</para>
+</entry>
+<entry>
+<para>Focus and Hover</para>
+</entry>
+<entry>
+<para>Disable</para>
+</entry>
+</row>
+<row>
+<entry>
+<para> Close</para>
+</entry>
+<entry>
+<para>  Same as above</para>
+</entry>
+<entry>
+<para>Same as above</para>
+</entry>
+<entry>
+<para>Same as above</para>
+</entry>
+<entry>
+<para>Same as above</para>
+</entry>
+<entry>
+<para>Same as above</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para>For example,</para>
+<para>        This icon is a timebox image.</para>
 <para>
-<graphic fileref="components/images/tree-foot-.png">2
-			
-		</graphic>
+<inlinegraphic fileref="embedded:graphics25" width="12.465cm" depth="7.028cm"/>
 </para>
 <para/>
+<para/>
+<para/>
+<para>        This icon is a tree toggle image.</para>
+<para/>
+<para>
+<inlinegraphic fileref="embedded:graphics30" width="6.166cm" depth="4.737cm"/>
+</para>
+<para/></sect2></sect1><sect1><title>2. XUL Components</title><sect2><title>Button</title>
+<para>Button is made by <link linkend="">3*3 grid</link> style,  the background and text can be customized by users.</para>
+<para/><sect3><title>Mold: Default</title>
+<para>Structure:</para>
+<informaltable frame="all">
+<tgroup cols="2"><tbody>
+<row>
+<entry>
+<para>Overview</para>
+</entry>
+<entry>
+<para/>
+</entry>
+</row>
+<row>
+<entry>
+<para/>
+<para>
+<inlinegraphic fileref="embedded:graphics1" width="2.225cm" depth="0.929cm"/>
+</para>
+</entry>
+<entry>
+<para>
+<inlinegraphic fileref="embedded:graphics2" width="10.851cm" depth="5.947cm"/>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para>Events:</para>
+<informaltable frame="all">
+<tgroup cols="3">
+<colspec colnum="1" colname="c1"/>
+<colspec colnum="2" colname="c2"/>
+<colspec colnum="3" colname="c3"/><tbody>
+<row>
+<entry>
+<para>Action:</para>
+</entry>
+<entry>
+<para>Normal (Open)</para>
+</entry>
+<entry>
+<para>Hover</para>
+</entry>
+<entry>
+<para>Click, Select, and Drag.</para>
+</entry>
+<entry>
+<para>Focus</para>
+</entry>
+<entry>
+<para>Focus and Hover</para>
+</entry>
+<entry>
+<para>Disable</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>CSS naming:</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>-over</para>
+</entry>
+<entry>
+<para>-clk</para>
+</entry>
+<entry>
+<para>-focus</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>-disd</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>Supported</para>
+</entry>
+<entry>
+<para>V</para>
+</entry>
+<entry>
+<para>V</para>
+</entry>
+<entry>
+<para>V</para>
+</entry>
+<entry>
+<para>V</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para>!</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para>        Note: An exclamation mark(!) means the action effect uses CSS opacity to do it, not CSS background-position.</para>
+<para>CSS Specification:</para>
 <informaltable frame="all">
 <tgroup cols="3"><tbody>
 <row>
 <entry>
-<para>CSS Definition</para>
+<para>Class Name</para>
 </entry>
 <entry>
 <para>Description</para>
@@ -4705,47 +554,1042 @@ Style of Selected Tab</title>
 </row>
 <row>
 <entry>
-<para>
-<code>div.tree-foot</code>
-</para>
+<para>.z-button</para>
 </entry>
 <entry>
-<para>Tree footer</para>
+<para>Font size and color</para>
 </entry>
 <entry>
+<para>font-family: ${fontFamilyT};</para>
+<para>font-size: ${fontSizeM}; </para>
+<para>color: black;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.z-button .z-button-tl, </para>
+<para>.z-button .z-button-tr, </para>
+<para>.z-button .z-button-bl, </para>
+<para>.z-button .z-button-br</para>
+</entry>
+<entry>
+<para>Corner graph</para>
+</entry>
+<entry>
+<para>background-image:url(${c:encodeURL('~./zul/img/button/z-btn-trendy-corner.gif')});</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.z-button .z-button-tm, </para>
+<para>.z-button .z-button-bm</para>
+</entry>
+<entry>
+<para>Top and bottom edge</para>
+</entry>
+<entry>
+<para>background-image:url(${c:encodeURL('~./zul/img/button/z-btn-trendy-x.gif')});</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.z-button .z-button-cl, </para>
+<para>.z-button .z-button-cr</para>
+</entry>
+<entry>
+<para>Right and left edge</para>
+</entry>
+<entry>
+<para>background-image:url(${c:encodeURL('~./zul/img/button/z-btn-trendy-y.gif')});</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.z-button .z-button-cm</para>
+</entry>
+<entry>
+<para>Center image</para>
+</entry>
+<entry>
+<para>background-image:url(${c:encodeURL('~./zul/img/button/z-btn-trendy-ctr.gif')});</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/>
+<para>Example:</para>
+<informaltable frame="all">
+<tgroup cols="1"><tbody>
+<row>
+<entry>
+<para>&lt;style&gt;</para>
+<para>.z-button .z-button-tl, .z-button .z-button-tr, .z-button .z-button-bl, .z-button .z-button-br,</para>
+<para>.z-button .z-button-tm, .z-button .z-button-bm, .z-button .z-button-cl, .z-button .z-button-cr {</para>
+<para>    background-image:none; background-color:#008bb6; </para>
 <para>
-<code>border: 0; </code>
+<inlinegraphic fileref="embedded:graphics3" width="2.887cm" depth="1.165cm"/>}</para>
+<para>.z-button .z-button-cm { </para>
+<para>    background-image:none; background-color:#c1c2c3; </para>
+<para>} </para>
+<para>&lt;/style&gt;</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/>
+<informaltable frame="all">
+<tgroup cols="1"><tbody>
+<row>
+<entry>
+<para>&lt;style&gt;.z-button .z-button-tl, .z-button .z-button-tr, .z-button .z-button-bl, .z-button .z-button-br,.z-button .z-button-tm, .z-button .z-button-bm, .z-button .z-button-cl, .z-button .z-button-cr, .z-button .z-button-cm { background-image:none;} &lt;/style&gt;&lt;button tooltiptext="Here is a button" image="<ulink url="http://www.freebuttons.com/freebuttons/Alien/AlienDd5.gif">http://www.freebuttons.com/freebuttons/Alien/AlienDd5.gif</ulink>"/&gt;</para>
+<para>
+<inlinegraphic fileref="embedded:graphics4" width="3.573cm" depth="2.038cm"/>
 </para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3></sect2><sect2><title>Window</title>
+<para>Window is made by <link linkend="">3*3 grid</link> style,  the background and text can be customized by users.</para>
+<para/><sect3><title>Mold: Default (embedded)</title>(embedded)<para>Structure:</para>
+<informaltable frame="all">
+<tgroup cols="1"><tbody>
+<row>
+<entry>
+<para>Overview</para>
+</entry>
+</row>
+<row>
+<entry>
+<para/>
 <para>
-<code>overflow: hidden; </code>
-</para>
-<para>
-<code>width: 100%;;</code>
+<inlinegraphic fileref="embedded:graphics11" width="5.504cm" depth="1.483cm"/>
 </para>
 </entry>
 </row>
 <row>
 <entry>
 <para>
-<code>div.foot-cell-inner</code>
+<inlinegraphic fileref="embedded:graphics21" width="14.408cm" depth="4.568cm"/>
 </para>
 </entry>
+</row>
+<row>
 <entry>
-<para>Cell of tree footer</para>
-</entry>
-<entry>
 <para>
-<code>border: 0; </code>
-</para>
-<para>
-<code>margin: 0; </code>
-</para>
-<para>
-<code>padding: 0;</code>
+<inlinegraphic fileref="embedded:graphics10" width="13.521cm" depth="6.298cm"/>
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3><sect3><title>Customize the style of tree header</title>
-<programlisting>    ...    &#13;    &lt;style&gt;    &#13;        div.tree-foot, div.foot-cell-inner{        &#13;            background-color: red;            &#13;            color:white;            &#13;        }        &#13;    &lt;/style&gt;    &#13;</programlisting>
-<para>&lt;tree id="tree" width="300px" rows="5"&gt;</para></sect3></sect2></sect1></chapter>
-</book>
+</informaltable>
+<para>Events:</para>
+<informaltable frame="all">
+<tgroup cols="3">
+<colspec colnum="1" colname="c1"/>
+<colspec colnum="2" colname="c2"/>
+<colspec colnum="3" colname="c3"/><tbody>
+<row>
+<entry>
+<para>Action:</para>
+</entry>
+<entry>
+<para>Normal (Open)</para>
+</entry>
+<entry>
+<para>Hover</para>
+</entry>
+<entry>
+<para>Click, Select, and Drag.</para>
+</entry>
+<entry>
+<para>Focus</para>
+</entry>
+<entry>
+<para>Focus and Hover</para>
+</entry>
+<entry>
+<para>Disable</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>CSS naming:</para>
+</entry>
+<entry>
+<para>-embedded</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+</row>
+<row>
+<entry>
+<para>Supported</para>
+</entry>
+<entry>
+<para>V</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+</row>
+<row>
+<entry>
+<para>CSS naming:</para>
+</entry>
+<entry>
+<para>-close</para>
+<para>-maximize</para>
+<para>-maximized</para>
+<para>-minimize</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+</row>
+<row>
+<entry>
+<para>Supported</para>
+</entry>
+<entry>
+<para>V</para>
+</entry>
+<entry>
+<para>V</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para>        </para>
+<para>CSS Specification:</para>
+<informaltable frame="all">
+<tgroup cols="3"><tbody>
+<row>
+<entry>
+<para>Class Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Default Values</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.z-window-embedded-tl </para>
+</entry>
+<entry>
+<para>Top Left</para>
+</entry>
+<entry>
+<para>background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-l.png')}) no-repeat 0 0;</para>
+<para>border-bottom: 1px solid #538BA2;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.z-window-embedded-tm </para>
+</entry>
+<entry>
+<para>Top Middle</para>
+</entry>
+<entry>
+<para>background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-m.png')}) repeat-x 0 0;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.z-window-embedded-tr</para>
+</entry>
+<entry>
+<para>Top Right</para>
+</entry>
+<entry>
+<para>background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-r.png')}) no-repeat right 0;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.z-window-embedded-header</para>
+</entry>
+<entry>
+<para>The color and font size of the header</para>
+</entry>
+<entry>
+<para>color: #222222; font-family: ${fontFamilyC}; font-size: ${fontSizeM}; font-weight: normal;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.z-window-embedded-header a, .z-window-embedded-header a:visited, .z-window-embedded-header a:hover</para>
+</entry>
+<entry>
+<para>A tag action</para>
+</entry>
+<entry>
+<para>color: #222222</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.z-window-embedded-cnt</para>
+</entry>
+<entry>
+<para>The content of the window</para>
+</entry>
+<entry>
+<para>margin: 0; padding: 3px; border: 1px solid #538BA2;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.z-window-embedded-cnt-noborder</para>
+</entry>
+<entry>
+<para>The content of the window without border</para>
+</entry>
+<entry>
+<para>Border: 0;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.z-window-embedded-tool</para>
+</entry>
+<entry>
+<para>The background image of the tool</para>
+</entry>
+<entry>
+<para>overflow: hidden; width: 15px; height: 15px; float: right; cursor: pointer;</para>
+<para>background: transparent url(${c:encodeURL('~./zul/img/panel/tool-btn.gif')}) no-repeat;</para>
+<para>margin-left: 2px;</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/>
+<para>Example:</para>
+<informaltable frame="all">
+<tgroup cols="1"><tbody>
+<row>
+<entry>
+<para>&lt;style&gt;.z-window-embedded-tl {  background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-l-ol.png')}) no-repeat 0 0;  border-bottom: 1px solid #0B5CA0;}.z-window-embedded-tm {  background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-m-ol.png')}) repeat-x 0 0;}.z-window-embedded-tr {  background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-r-ol.png')}) no-repeat right 0;}.z-window-embedded-cnt {  border:1px solid #2c70a9;}&lt;/style&gt;</para>
+<para>
+<inlinegraphic fileref="embedded:graphics31" width="5.504cm" depth="1.43cm"/>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title>Mold: Default (popup)</title>(popup)<para>Structure:</para>
+<informaltable frame="all">
+<tgroup cols="1"><tbody>
+<row>
+<entry>
+<para>Overview</para>
+</entry>
+</row>
+<row>
+<entry>
+<para/>
+<para>
+<inlinegraphic fileref="embedded:graphics41" width="5.557cm" depth="1.8cm"/>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<inlinegraphic fileref="embedded:graphics5" width="14.622cm" depth="4.64cm"/>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<inlinegraphic fileref="embedded:graphics111" width="12.029cm" depth="6.088cm"/>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para>Events:</para>
+<informaltable frame="all">
+<tgroup cols="3">
+<colspec colnum="1" colname="c1"/>
+<colspec colnum="2" colname="c2"/>
+<colspec colnum="3" colname="c3"/><tbody>
+<row>
+<entry>
+<para>Action:</para>
+</entry>
+<entry>
+<para>Normal (Open)</para>
+</entry>
+<entry>
+<para>Hover</para>
+</entry>
+<entry>
+<para>Click, Select, and Drag.</para>
+</entry>
+<entry>
+<para>Focus</para>
+</entry>
+<entry>
+<para>Focus and Hover</para>
+</entry>
+<entry>
+<para>Disable</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>CSS naming:</para>
+</entry>
+<entry>
+<para>-popup</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+</row>
+<row>
+<entry>
+<para>Supported</para>
+</entry>
+<entry>
+<para>V</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+</row>
+<row>
+<entry>
+<para>CSS naming:</para>
+</entry>
+<entry>
+<para>-close</para>
+<para>-maximize</para>
+<para>-maximized</para>
+<para>-minimize</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+</row>
+<row>
+<entry>
+<para>Supported</para>
+</entry>
+<entry>
+<para>V</para>
+</entry>
+<entry>
+<para>V</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para>        </para>
+<para>CSS Specification:</para>
+<informaltable frame="all">
+<tgroup cols="3"><tbody>
+<row>
+<entry>
+<para>Class Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Default Values</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.z-window-popup-tl </para>
+</entry>
+<entry>
+<para>Top Left</para>
+</entry>
+<entry>
+<para>background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-l-ol.png')}) no-repeat 0 0;</para>
+<para>border-bottom: 1px solid #0B5CA0;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.z-window-popup-tm </para>
+</entry>
+<entry>
+<para>Top Middle</para>
+</entry>
+<entry>
+<para>background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-m-ol.png')}) repeat-x 0 0;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.z-window-popup-tr</para>
+</entry>
+<entry>
+<para>Top Right</para>
+</entry>
+<entry>
+<para>background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-r-ol.png')}) no-repeat right 0;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.z-window-popup-header</para>
+</entry>
+<entry>
+<para>The color and font size of the header</para>
+</entry>
+<entry>
+<para>color: #FFFFFF; font-family: ${fontFamilyC}; font-size: ${fontSizeM}; font-weight: normal;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.z-window-popup-tm-noheader</para>
+</entry>
+<entry>
+<para>No header</para>
+</entry>
+<entry>
+<para>background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-m-ol.png')}) repeat-x 0 0;</para>
+<para>overflow: hidden; zoom: 1; font-size: 0pt; height: 5px; line-height: 0pt;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.z-window-popup-header a, .z-window-popup-header a:visited, .z-window-popup-header a:hover,</para>
+<para>.z-window-popup-header .z-caption a, .z-window-popup-header .z-caption a:visited, .z-window-popup-header .z-caption a:hover</para>
+</entry>
+<entry>
+<para>A tag action</para>
+</entry>
+<entry>
+<para>color: #FFFFFF</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.z-window-popup-cnt</para>
+</entry>
+<entry>
+<para>The content of the window</para>
+</entry>
+<entry>
+<para>margin: 0; padding: 4px; overflow: hidden; zoom: 1; background: white;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.z-window-popup-cnt-noborder</para>
+</entry>
+<entry>
+<para>The content of the window without border</para>
+</entry>
+<entry>
+<para>Border: 0;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.z-window-popup-tool</para>
+</entry>
+<entry>
+<para>The background image of the tool</para>
+</entry>
+<entry>
+<para>overflow: hidden; width: 15px; height: 15px; float: right; cursor: pointer;</para>
+<para>background: transparent url(${c:encodeURL('~./zul/img/panel/tool-btn-ol.gif')}) no-repeat;</para>
+<para>margin-left: 2px;</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/>
+<para>Example:</para>
+<informaltable frame="all">
+<tgroup cols="1"><tbody>
+<row>
+<entry>
+<para>&lt;style&gt;.z-window-popup-tl {  background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-l.png')}) no-repeat 0 0;  border-bottom: 1px solid #538BA2;}.z-window-popup-tm {  background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-m.png')}) repeat-x 0 0;}.z-window-popup-tr {  background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-r.png')}) no-repeat right 0;}.z-window-popup-cnt {  border:1px solid #538BA2;}&lt;/style&gt;</para>
+<para>
+<inlinegraphic fileref="embedded:graphics6" width="5.425cm" depth="1.721cm"/>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable></sect3><sect3><title>Mold: Default (overlapped, highlighted, and modal)</title>(overlapped, highlighted, and modal)<para>Structure:</para>
+<informaltable frame="all">
+<tgroup cols="1"><tbody>
+<row>
+<entry>
+<para>Overview</para>
+</entry>
+</row>
+<row>
+<entry>
+<para/>
+<para>
+<inlinegraphic fileref="embedded:graphics7" width="9.395cm" depth="2.366cm"/>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<inlinegraphic fileref="embedded:graphics8" width="16.881cm" depth="6.924cm"/>
+</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>
+<inlinegraphic fileref="embedded:graphics12" width="13.204cm" depth="6.563cm"/>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para>Events:</para>
+<informaltable frame="all">
+<tgroup cols="7"><tbody>
+<row>
+<entry>
+<para>Action:</para>
+</entry>
+<entry>
+<para>Normal (Open)</para>
+</entry>
+<entry>
+<para>Hover</para>
+</entry>
+<entry>
+<para>Click, Select, and Drag.</para>
+</entry>
+<entry>
+<para>Focus</para>
+</entry>
+<entry>
+<para>Focus and Hover</para>
+</entry>
+<entry>
+<para>Disable</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>CSS naming:</para>
+</entry>
+<entry>
+<para>-overlapped</para>
+<para>-modal</para>
+<para>-highlight</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+</row>
+<row>
+<entry>
+<para>Supported</para>
+</entry>
+<entry>
+<para>V</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+</row>
+<row>
+<entry>
+<para>CSS naming:</para>
+</entry>
+<entry>
+<para>-close</para>
+<para>-maximize</para>
+<para>-maximized</para>
+<para>-minimize</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+</row>
+<row>
+<entry>
+<para>Supported</para>
+</entry>
+<entry>
+<para>V</para>
+</entry>
+<entry>
+<para>V</para>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+<entry>
+<para/>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para>        </para>
+<para>CSS Specification:</para>
+<informaltable frame="all">
+<tgroup cols="3"><tbody>
+<row>
+<entry>
+<para>Class Name</para>
+</entry>
+<entry>
+<para>Description</para>
+</entry>
+<entry>
+<para>Default Values</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.z-window-modal-tl, .z-window-highlighted-tl, .z-window-overlapped-tl </para>
+</entry>
+<entry>
+<para>Top Left</para>
+</entry>
+<entry>
+<para>background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-l-ol.png')}) no-repeat 0 0;</para>
+<para>border-bottom: 1px solid #0B5CA0;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.z-window-modal-tm, .z-window-highlighted-tm, .z-window-overlapped-tm</para>
+</entry>
+<entry>
+<para>Top Middle</para>
+</entry>
+<entry>
+<para>background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-m-ol.png')}) repeat-x 0 0;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.z-window-modal-tr, .z-window-highlighted-tr, .z-window-overlapped-tr</para>
+</entry>
+<entry>
+<para>Top Right</para>
+</entry>
+<entry>
+<para>background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-r-ol.png')}) no-repeat right 0;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.z-window-modal-cl, .z-window-highlighted-cl, .z-window-overlapped-cl</para>
+</entry>
+<entry>
+<para>Center Left</para>
+</entry>
+<entry>
+<para>background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-lr-ol.png')}) repeat-y 0 0; </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.z-window-modal-cm, .z-window-highlighted-cm, .z-window-overlapped-cm</para>
+</entry>
+<entry>
+<para>Center Middle</para>
+</entry>
+<entry>
+<para>border:1px solid #0B5CA0; padding: 0; margin:0 ; background: #5EABDB;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>z-window-modal-cr, .z-window-highlighted-cr, .z-window-overlapped-cr</para>
+</entry>
+<entry>
+<para>Center Right</para>
+</entry>
+<entry>
+<para>background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-lr-ol.png')}) repeat-y right 0;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.z-window-modal-bl, .z-window-highlighted-bl, .z-window-overlapped-bl</para>
+</entry>
+<entry>
+<para>Bottom Left</para>
+</entry>
+<entry>
+<para>background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-l-ol.png')}) no-repeat 0 bottom; </para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.z-window-modal-bm, .z-window-highlighted-bm, .z-window-overlapped-bm</para>
+</entry>
+<entry>
+<para>Bottom Middle</para>
+</entry>
+<entry>
+<para>background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-m-ol.png')}) repeat-x 0 bottom;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.z-window-modal-br, .z-window-highlighted-br, .z-window-overlapped-br</para>
+</entry>
+<entry>
+<para>Bottom Right</para>
+</entry>
+<entry>
+<para>background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-r-ol.png')}) no-repeat right bottom;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.z-window-modal-header, .z-window-overlapped-header, .z-window-highlighted-header</para>
+</entry>
+<entry>
+<para>The color and font size of the header</para>
+</entry>
+<entry>
+<para>color: #FFFFFF; font-family: ${fontFamilyC}; font-size: ${fontSizeM}; font-weight: normal;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.z-window-modal-tm-noheader, .z-window-highlighted-tm-noheader,        .z-window-overlapped-tm-noheader</para>
+</entry>
+<entry>
+<para>No header</para>
+</entry>
+<entry>
+<para>background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-m-ol.png')}) repeat-x 0 0;</para>
+<para>        overflow: hidden; zoom: 1; font-size: 0pt; height: 5px; line-height: 0pt;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.z-window-modal-header a, .z-window-modal-header a:visited, .z-window-modal-header a:hover,</para>
+<para>.z-window-modal-header .z-caption a, .z-window-modal-header .z-caption a:visited, .z-window-modal-header .z-caption a:hover,</para>
+<para>.z-window-highlighted-header a, .z-window-highlighted-header a:visited, .z-window-highlighted-header a:hover,</para>
+<para>.z-window-highlighted-header .z-caption a, .z-window-highlighted-header .z-caption a:visited, .z-window-highlighted-header .z-caption a:hover,</para>
+<para>.z-window-overlapped-header a, .z-window-overlapped-header a:visited, .z-window-overlapped-header a:hover,</para>
+<para>.z-window-overlapped-header .z-caption a, .z-window-overlapped-header .z-caption a:visited, .z-window-overlapped-header .z-caption a:hover</para>
+</entry>
+<entry>
+<para>A tag action</para>
+</entry>
+<entry>
+<para>color: #FFFFFF</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.z-window-modal-cnt, .z-window-highlighted-cnt</para>
+</entry>
+<entry>
+<para>The content of the window</para>
+</entry>
+<entry>
+<para>margin: 0; padding: 2px; background: white; overflow: hidden; zoom: 1;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.z-window-overlapped-cnt</para>
+</entry>
+<entry>
+<para>The content of the window</para>
+</entry>
+<entry>
+<para>margin: 0; padding: 4px; overflow: hidden; zoom: 1; background: white;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.z-window-modal-cnt-noborder, .z-window-highlighted-cnt-noborder, .z-window-overlapped-cnt-noborder</para>
+</entry>
+<entry>
+<para>The content of the window without border</para>
+</entry>
+<entry>
+<para>border: 0;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.z-window-modal-cm-noborder, .z-window-highlighted-cm-noborder,        .z-window-overlapped-cm-noborder</para>
+</entry>
+<entry>
+<para>The center middle of the window without border</para>
+</entry>
+<entry>
+<para>border: 0; padding: 0; margin:0 ; background: #5EABDB;</para>
+</entry>
+</row>
+<row>
+<entry>
+<para>.z-window-modal-tool, .z-window-overlapped-tool,</para>
+<para>.z-window-highlighted-tool</para>
+</entry>
+<entry>
+<para>The background image of the tool</para>
+</entry>
+<entry>
+<para>overflow: hidden; width: 15px; height: 15px; float: right; cursor: pointer;</para>
+<para>background: transparent url(${c:encodeURL('~./zul/img/panel/tool-btn-ol.gif')}) no-repeat;</para>
+<para>margin-left: 2px;</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/>
+<para>Example:</para>
+<informaltable frame="all">
+<tgroup cols="1"><tbody>
+<row>
+<entry>
+<para>&lt;style&gt;.z-window-overlapped-tl {  background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-l.png')}) no-repeat 0 0;}.z-window-overlapped-tm {  background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-m.png')}) repeat-x 0 0;}.z-window-overlapped-tr {  background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-r.png')}) no-repeat right 0;}.z-window-overlapped-cnt {  border:1px solid #538BA2;}.z-window-overlapped-cl {  background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-lr.png')}) repeat-y 0 0; }.z-window-overlapped-cm {  border: 0;  border-top: 1px solid #538BA2;}.z-window-overlapped-cr {  background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-lr.png')}) repeat-y right 0;}.z-window-overlapped-bl {  background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-l.png')}) no-repeat 0 bottom;}.z-window-overlapped-bm {  background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-m.png')}) repeat-x 0 bottom;}.z-window-overlapped-br {  background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-r.png')}) no-repeat right bottom;}&lt;/style&gt;</para>
+<para>
+<inlinegraphic fileref="embedded:graphics9" width="8.15cm" depth="1.985cm"/>
+</para>
+</entry>
+</row></tbody></tgroup>
+</informaltable>
+<para/></sect3></sect2></sect1><para>ZK: Style Guide        Page 24 of 24        Potix Corporation</para>
+</article>
