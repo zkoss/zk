@@ -17,13 +17,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 /** Begins the creating of new page(s). */
 function zknewbg() {
 	zk.creating = true;
+	zk.startProcessing(600);
 }
 /** Ends the creating of new page(s). */
 function zknewe() {
-	if (!zk.loading) {
-		zk.booted = true;
-		zk.creating = false;
-	}
+	zk.creating = false;
 	_zkws = []; //clean up if failed
 	zkcurdt = null;
 }
@@ -44,8 +42,10 @@ function _zkend() {
 		_zkcrs.push([zkcurdt, w]);
 
 		if (zk.creating) {
-			if (document.readyState) {
-				var tid = setInterval( function(){
+			if (zk.booted)
+				_zkattach();
+			else if (document.readyState) {
+				var tid = setInterval(function(){
 					if (/loaded|complete/.test(document.readyState)) {
 						clearInterval(tid);
 						_zkattach();
@@ -57,7 +57,7 @@ function _zkend() {
 				//be loaded by another ajax solution (i.e., portal)
 				//Also, Bug 1619959: FF not fire it if in 2nd iframe
 		} else
-			_zkattach();
+			_zkcreate();
 	}
 }
 
@@ -127,20 +127,39 @@ function zkopt(opts) {
 }
 
 //Internal Use//
+function _zkinit() {
+	zk.booted = true;
+
+	//TODO: listen document events
+}
 /** Used internally to redraw and attach. */
 function _zkattach() {
 	zkPkg.addAfterLoad(_zkattach0);
 }
 function _zkattach0() {
+	if (!zk.booted)
+		_zkinit();
+
 	for (var inf; inf = _zkcrs.shift();) {
 		var dt = inf[0], wginf = inf[1];
 
-		var wgt = _zkcreate(null, wginf);
+		var wgt = _zkcreate1(null, wginf);
 		zkDom.outerHTML(zkDom.$(wgt.uuid), wgt.redraw());
+	}
+
+	zk.endProcessing();
+}
+/** Used internally to create the widget tree based on _zkcrs. */
+function _zkcreate() {
+	zkPkg.addAfterLoad(_zkcreate0);
+}
+function _zkcreate0() {
+	for (var inf; inf = _zkcrs.shift();) {
+		_zkcreate1(null, inf[1]); //TODO : add result to a list
 	}
 }
 /** Used internally to create the widget tree. */
-function _zkcreate(parent, wginf) {
+function _zkcreate1(parent, wginf) {
 	var wgt;
 	if (wginf.type == "#p") {
 		wgt = new zk.Page(wginf.uuid, wginf.contained);
@@ -170,7 +189,7 @@ function _zkcreate(parent, wginf) {
 
 	for (var j = 0, childs = wginf.children, len = childs.length;
 	j < len; ++j)
-		_zkcreate(wgt, childs[j]);
+		_zkcreate1(wgt, childs[j]);
 
 	return wgt;
 }

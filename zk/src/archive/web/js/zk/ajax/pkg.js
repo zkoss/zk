@@ -24,10 +24,7 @@ zkPkg = {
 		} else {
 			try {
 				zkDom.enableESC();
-
-				//TODO: remove masks for contained pages
-
-				zkDom.detach("zk_loadprog");
+				zkDom.cleanAllProgress("zk_loadprog");
 			} catch (ex) {
 			}
 

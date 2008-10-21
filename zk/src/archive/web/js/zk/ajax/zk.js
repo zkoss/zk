@@ -81,8 +81,15 @@ zk = { //static methods
 	//tipDelay: 0,
 	/** The resend delay. */
 	//resendDelay: 0,
-	/** Whether ZK is loading a JavaScript file or other resources. */
+	/** # of JS files being loaded. */
 	loading: 0,
+
+	/** Whether ZK is creating a new page. */
+	//creating: 0,
+	/** Whether ZK has created at least one page. */
+	//booted: 0,
+	/** Whether ZK is processing something (such as creating, doing AU). */
+	//processing: 0,
 
 	/** Declares a package.
 	 * It is similar to Java's package statement.
@@ -177,6 +184,35 @@ zk = { //static methods
 	/** Returns whether a character is a white space. */
 	isWhitespace: function (cc) {
 		return cc == ' ' || cc == '\t' || cc == '\n' || cc == '\r';
+	},
+
+	//Processing//
+	/** Set a flag, zk.processing, that it starts an processing.
+	 * It also shows a message to indicate "processing" after the specified timeout.
+	 */
+	startProcessing: function (timeout) {
+		zk.processing = true;
+		if (timeout > 0) setTimeout(zk._showproc, timeout);
+		else zk._showproc();
+	},
+	/** Clear a flag, zk.processing, to indicate the processing is done.
+	 * It also removes the message indicating "processing".
+	 */
+	endProcessing: function() {
+		zk.processing = false;
+		zkDom.cleanAllProgress("zk_proc");
+	},
+	/** Shows the message of zk.startProcessing. */
+	_showproc: function () {
+		if (zk.processing && !zk.loading) {
+			if (zkDom.$("zk_proc") || zkDom.$("zk_showBusy"))
+				return;
+
+			var msg;
+			try {msg = mesg.PLEASE_WAIT;} catch (e) {msg = "Processing...";}
+				//when the first boot, mesg might not be ready
+			zkDom.progressbox("zk_proc", msg, !zk.booted);
+		}
 	},
 
 	//DEBUG//

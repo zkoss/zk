@@ -107,6 +107,7 @@ div.z-debugbox {
 .z-loading {
 	position: absolute; z-index: 21000; background-color: #6eadff; cursor: wait;
 	white-space: nowrap; border: 1px solid #83B5F7; padding:3px;
+	left: 0; top: 0;
 }
 .z-loading-indicator {
 	color: #102B6D; border:1px solid #83B5F7; background-color: #FFF; 

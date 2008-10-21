@@ -201,6 +201,7 @@ zkDom = { //static methods
 	},
 
 	/** Shows the progress box to notify user ZK Client is busy.
+	 * @see zk.showProcess
 	 */
 	progressbox: function (id, msg, mask) {
 		if (mask && zk.Page.contained.length) {
@@ -208,14 +209,21 @@ zkDom = { //static methods
 			//return;
 		}
 
-		var html = '<div id="'+id+'"';
-		if (mask) html += '><div id="zk_mask" class="z-modal-mask"></div';
-		html += '><div class="z-loading"><div class="z-loading-indicator">'
-			+'<img class="z-loading-icon" alt="..." src="'+zkCom.getUpdateURI('/web/img/spacer.gif')+'"/> '
+		var style = ' style="left:'+zkDom.innerX()+'px;top:'+zkDom.innerY()+'px"',
+		html = '<div id="'+id+'"';
+		if (mask) html += '><div id="zk_mask" class="z-modal-mask"'+style+'></div';
+		html += '><div class="z-loading"'+style
+			+'><div class="z-loading-indicator"><img class="z-loading-icon" alt="..." src="'
+			+zkCom.getUpdateURI('/web/img/spacer.gif')+'"/> '
 			+msg+'</div></div></div>'
 		var n = document.createElement("DIV");
 		document.body.appendChild(n);
 		zkDom.outerHTML(n, html);
+	},
+	cleanAllProgress: function (id) {
+		zkDom.detach(id);
+
+		//TODO: remove the mask for each contained page
 	}
 };
 
