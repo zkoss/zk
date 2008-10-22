@@ -18,16 +18,21 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.servlet.dsp;
 
+import java.util.Map;
 import java.io.Writer;
 import java.io.IOException;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.zkoss.util.resource.Locator;
+import org.zkoss.web.servlet.Servlets;
+import org.zkoss.web.servlet.BufferedResponse;
+import org.zkoss.web.servlet.http.Encodes;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.FunctionMapper;
 import org.zkoss.xel.ExpressionFactory;
@@ -44,9 +49,9 @@ import org.zkoss.web.servlet.xel.RequestXelResolver;
 public class ServletDspContext implements DspContext {
 	private final Locator _locator;
 	private final ServletContext _ctx;
-	private final HttpServletRequest _request;
-	private final HttpServletResponse _response;
-	private Writer _out;
+	/*package*/ final HttpServletRequest _request;
+	/*package*/ final HttpServletResponse _response;
+	/*package*/ Writer _out;
 	private VariableResolver _resolver;
 	private ExpressionFactory _expf;
 
@@ -92,6 +97,19 @@ public class ServletDspContext implements DspContext {
 	}
 	public void setOut(Writer out) {
 		_out = out;
+	}
+	public String encodeURL(String uri)
+	throws ServletException, IOException {
+		return Encodes.encodeURL(_ctx, _request, _response, uri);
+	}
+	public void include(String uri, Map params)
+	throws ServletException, IOException {
+		Servlets.include(_ctx, _request,
+			BufferedResponse.getInstance(_response, _out),
+			uri, params, Servlets.PASS_THRU_ATTR);
+	}
+	public boolean isIncluded() {
+		return Servlets.isIncluded(_request);
 	}
 
 	//-- XelContext --//

@@ -22,9 +22,6 @@ import java.util.Map;
 import java.io.Writer;
 import java.io.IOException;
 
-import org.zkoss.web.servlet.Servlets;
-import org.zkoss.web.servlet.BufferedResponse;
-import org.zkoss.web.servlet.http.Encodes;
 import org.zkoss.web.servlet.dsp.*;
 import org.zkoss.web.servlet.dsp.action.Action;
 import org.zkoss.web.servlet.dsp.action.ActionContext;
@@ -98,23 +95,19 @@ class ActionContextImpl implements ActionContext {
 	public void include(String uri, Map params)
 	throws DspException, IOException {
 		try {
-			Servlets.include(_ic.dc.getServletContext(),
-				_ic.dc.getRequest(),
-				BufferedResponse.getInstance(_ic.dc.getResponse(), _ic.dc.getOut()),
-				uri, params, Servlets.PASS_THRU_ATTR);
+			_ic.dc.include(uri, params);
 		} catch (javax.servlet.ServletException ex) {
 			throw new DspException(ex);
 		}
 	}
 	public boolean isIncluded() {
-		return Servlets.isIncluded(_ic.dc.getRequest());
+		return _ic.dc.isIncluded();
 	}
 
 	public String encodeURL(String uri)
-	throws DspException {
+	throws DspException, IOException {
 		try {
-			return Encodes.encodeURL(_ic.dc.getServletContext(),
-				_ic.dc.getRequest(), _ic.dc.getResponse(), uri);
+			return _ic.dc.encodeURL(uri);
 		} catch (javax.servlet.ServletException ex) {
 			throw new DspException(ex);
 		}

@@ -52,6 +52,7 @@ import org.zkoss.web.servlet.xel.RequestContext;
 import org.zkoss.web.servlet.xel.RequestXelResolver;
 import org.zkoss.web.servlet.xel.AttributesMap;
 import org.zkoss.web.util.resource.ClassWebResource;
+import org.zkoss.web.util.resource.Extendlet;
 
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.Component;
@@ -221,11 +222,13 @@ public class ExecutionImpl extends AbstractExecution {
 			WebManager.getWebManager(_ctx).getClassWebResource();
 		final String attrnm = include ?
 			"org.zkoss.web.servlet.include": "org.zkoss.web.servlet.forward";
-		if (!isZumlExtendlet(cwr, page)) {
+		if (isDirectInclude(cwr, page)) {
 			Object old = null;
 			if (mode == PASS_THRU_ATTR) {
 				old = _request.getAttribute(Attributes.ARG);
-				_request.setAttribute(Attributes.ARG, params);
+				if (params != null)
+					_request.setAttribute(Attributes.ARG, params);
+					//If params=null, use the 'inherited' one (same as Servlets.include)
 			}
 
 			_request.setAttribute(attrnm, Boolean.TRUE);
@@ -242,12 +245,18 @@ public class ExecutionImpl extends AbstractExecution {
 		}
 		return true;
 	}
-	/** Returns whether the specified extension is served by
-	 * {@link ZumlExtendlet}.
+	/** Returns whether the page can be directly included.
 	 */
-	private static boolean isZumlExtendlet(ClassWebResource cwr, String path) {
+	private static boolean isDirectInclude(ClassWebResource cwr, String path) {
 		final String ext = Servlets.getExtension(path);
-		return ext != null && cwr.getExtendlet(ext) instanceof ZumlExtendlet;
+		final Extendlet extlet = ext != null ? cwr.getExtendlet(ext): null;
+		if (extlet != null) {
+			try {
+				return extlet.getFeature(Extendlet.ALLOW_DIRECT_INCLUDE);
+			} catch (Throwable ex) { //backward compatibility
+			}
+		}
+		return true;
 	}
 	public void include(String page)
 	throws IOException {
