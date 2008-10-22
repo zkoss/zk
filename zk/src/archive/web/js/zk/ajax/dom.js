@@ -209,16 +209,25 @@ zkDom = { //static methods
 			//return;
 		}
 
-		var style = ' style="left:'+zkDom.innerX()+'px;top:'+zkDom.innerY()+'px"',
-		html = '<div id="'+id+'"';
+		var x = zkDom.innerX(), y = zkDom.innerY(),
+			style = ' style="left:'+x+'px;top:'+y+'px"',
+			html = '<div id="'+id+'"';
 		if (mask) html += '><div id="zk_mask" class="z-modal-mask"'+style+'></div';
-		html += '><div class="z-loading"'+style
+		html += '><div id="zk_prgtxt" class="z-loading"'+style
 			+'><div class="z-loading-indicator"><img class="z-loading-icon" alt="..." src="'
-			+zkCom.getUpdateURI('/web/img/spacer.gif')+'"/> '
+			+zkau.comURI('/web/img/spacer.gif')+'"/> '
 			+msg+'</div></div></div>'
 		var n = document.createElement("DIV");
 		document.body.appendChild(n);
 		zkDom.outerHTML(n, html);
+
+		if (mask) { //center it
+			n = zkDom.$('zk_prgtxt');
+			if (n) {
+				n.style.left = (zkDom.innerWidth() - n.offsetWidth) / 2 + x + "px";
+				n.style.top = (zkDom.innerHeight() - n.offsetHeight) / 2 + y + "px";
+			}
+		}
 	},
 	cleanAllProgress: function (id) {
 		zkDom.detach(id);

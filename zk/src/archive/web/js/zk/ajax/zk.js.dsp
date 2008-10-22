@@ -23,7 +23,6 @@ if (!window.zk) {
 <c:include page="~./js/zk/ajax/lang/mesg*.js"/>
 <c:include page="~./js/zk/ajax/util.js"/>
 <c:include page="~./js/zk/ajax/dom.js"/>
-<c:include page="~./js/zk/ajax/com.js"/>
 <c:include page="~./js/zk/ajax/widget.js"/>
 <c:include page="~./js/zk/ajax/pkg.js"/>
 <c:include page="~./js/zk/ajax/create.js"/>
