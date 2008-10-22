@@ -24,8 +24,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:set var="scroll" value="tabs" unless="${self.tabbox.tabscroll}"/>
 
 <div id="${self.uuid}" class="${c:cat(look,scroll)}" z.type="zul.tab2.Tabs2"${self.outerAttrs}${self.innerAttrs}>
-	<div id="${self.uuid}!right" class="${c:cat3(look,'scroll','right')}" ></div>
-	<div id="${self.uuid}!left" class="${c:cat3(look,'scroll','left')}" ></div>
+	<div id="${self.uuid}!right" ></div>
+	<div id="${self.uuid}!left" ></div>
 	<div id="${self.uuid}!header" class="${c:cat(look,'header')}" >
 		<ul id="${self.uuid}!cave" class="${c:cat(look,'ul')}" >
 			<c:forEach var="child" items="${self.children}">
@@ -35,6 +35,5 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<div id="${self.uuid}!clear" class="z-clear"> </div>
 		</ul>
 	</div>
-	<div id="${self.uuid}!line" class="${c:cat(look,'space')}" ></div>	
+	<div id="${self.uuid}!line" class="${c:cat(look,'space')}" ></div>
 </div>
-	

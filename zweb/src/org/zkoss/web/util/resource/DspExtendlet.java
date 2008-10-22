@@ -40,7 +40,7 @@ import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.http.Https;
 import org.zkoss.web.servlet.dsp.Interpreter;
 import org.zkoss.web.servlet.dsp.Interpretation;
-import org.zkoss.web.servlet.dsp.ServletDspContext;
+import org.zkoss.web.servlet.dsp.ExtendletDspContext;
 
 /**
  * The DSP resource processor ({@link Extendlet}) used to parse
@@ -69,6 +69,9 @@ import org.zkoss.web.servlet.dsp.ServletDspContext;
 		final int checkPeriod = loader.getCheckPeriod();
 		_cache.setCheckPeriod(checkPeriod >= 0 ? checkPeriod: 60*60*1000); //1hr
 	}
+	public boolean getFeature(int feature) {
+		return feature == ALLOW_DIRECT_INCLUDE;
+	}
 	public void service(HttpServletRequest request,
 	HttpServletResponse response, String path, String extra)
 	throws ServletException, IOException {
@@ -83,9 +86,7 @@ import org.zkoss.web.servlet.dsp.ServletDspContext;
 		StringWriter sw =
 			_webctx.shallCompress(request, get2ndExtension(path)) ?
 				new StringWriter(4096): null;
-		cnt.interpret(new ServletDspContext(
-			_webctx.getServletContext(), request, response,
-			sw, _webctx.getLocator()));
+		cnt.interpret(new ExtendletDspContext(_webctx, request, response, sw));
 
 		if (sw != null) {
 			final String result = sw.toString();

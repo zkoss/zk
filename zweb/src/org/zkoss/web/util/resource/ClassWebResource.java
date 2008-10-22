@@ -45,6 +45,7 @@ import org.zkoss.util.media.ContentTypes;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.util.resource.Locators;
 
+import org.zkoss.web.Attributes;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.Charsets;
 import org.zkoss.web.servlet.http.Https;
@@ -605,6 +606,43 @@ public class ClassWebResource {
 		public RequestDispatcher getRequestDispatcher(String uri) {
 //			if (D.ON && log.debugable()) log.debug("getRequestDispatcher: "+uri);
 			return _ctx.getRequestDispatcher(_mappingURI + PATH_PREFIX + uri);
+		}
+		public void include(HttpServletRequest request,
+		HttpServletResponse response, String uri, Map params)
+		throws ServletException, IOException {
+			if (uri.startsWith("~./") && uri.indexOf('?') < 0
+			&& isDirectInclude(uri)) {
+				Object old = request.getAttribute(Attributes.ARG);
+				if (params != null)
+					request.setAttribute(Attributes.ARG, params);
+					//If params=null, use the 'inherited' one (same as Servlets.include)
+
+				final String attrnm = "org.zkoss.web.servlet.include";
+				request.setAttribute(attrnm, Boolean.TRUE);
+					//so Servlets.isIncluded returns correctly
+				try {
+					service(request, response, uri.substring(2));
+				} finally {
+					request.removeAttribute(attrnm);
+					request.setAttribute(Attributes.ARG, old);
+				}
+			} else {
+				Servlets.include(_ctx, request, response,
+					uri, params, Servlets.PASS_THRU_ATTR);
+			}
+		}
+		/** Returns whether the page can be directly included.
+		 */
+		private boolean isDirectInclude(String path) {
+			final String ext = Servlets.getExtension(path);
+			final Extendlet extlet = ext != null ? getExtendlet(ext): null;
+			if (extlet != null) {
+				try {
+					return extlet.getFeature(Extendlet.ALLOW_DIRECT_INCLUDE);
+				} catch (Throwable ex) { //backward compatibility
+				}
+			}
+			return true;
 		}
 		public URL getResource(String uri) {
 			if (_debugJS && "js".equals(Servlets.getExtension(uri))) {

@@ -282,7 +282,7 @@ public class AuUploader implements AuProcessor {
 		int maxsz = conf.getMaxUploadSize();
 		try {
 			final int maxsz1 = Integer.parseInt(request.getParameter("maxsize"));
-			if (maxsz > maxsz1 && maxsz1 > -1)
+			if (maxsz1 > -1)
 				maxsz = maxsz1;
 		} catch (NumberFormatException e) {}
 		

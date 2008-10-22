@@ -76,6 +76,7 @@ public class Fileupload extends HtmlBasedComponent { //not XulElement since not 
 	/**
 	 * Returns the maximal allowed upload size of the component, in kilobytes, or 
 	 * a negative value if no limit.
+	 * <p> Default: -1.
 	 * @since 3.6.0
 	 */
 	public int getMaxsize() {
@@ -84,7 +85,7 @@ public class Fileupload extends HtmlBasedComponent { //not XulElement since not 
 	/**
 	 * Sets the maximal allowed upload size of the component, in kilobytes.
 	 * <p>Note: {@link Configuration#setMaxUploadSize(int)} is also allowed to limit the size,
-	 * if the maximal size of the component is bigger than that.
+	 * if the maximal size is -1.
 	 * @since 3.6.0
 	 */
 	public void setMaxsize(int maxsize) {

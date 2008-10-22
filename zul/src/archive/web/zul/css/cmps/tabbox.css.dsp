@@ -59,7 +59,7 @@
 	padding-bottom:2px;
 }
 
-.z-tabbox-scrolltabs .z-tabbox-ul{
+.z-tabbox-ul{
 	background:#CEDFF5 url(${c:encodeURL('~./zul/img/tab2/tab-strip-bg.png')}) repeat-x scroll center bottom;
 	padding-left:0px;
 	padding-top:1px;
@@ -231,12 +231,12 @@
 	background-position:right -201px;
 	cursor:default;
 }
-.z-tabbox-scrolling .z-tabbox-header{
+.z-tabbox-headerbtn{
 	margin-left: 18px;
 	margin-right: 18px;
 }
 
-.z-tabbox-scrolling .z-tabbox-scrollright{
+.z-tabbox-scrollright{
 	background:transparent url(${c:encodeURL('~./zul/img/tab2/scroll-right.png')}) no-repeat scroll 0 0;
 	border-bottom:1px solid #8DB2E3;
 	cursor:pointer;
@@ -248,11 +248,11 @@
 	height:25px;
 }
 
-.z-tabbox-scrolling .z-tabbox-scrollright:hover{
+.z-tabbox-scrollright:hover{
 	background-position:-18px 0;
 }
 
-.z-tabbox-scrolling .z-tabbox-scrollleft{
+.z-tabbox-scrollleft{
 	background:transparent url(${c:encodeURL('~./zul/img/tab2/scroll-left.png')}) no-repeat scroll -18px 0;
 	border-bottom:1px solid #8DB2E3;
 	cursor:pointer;
@@ -264,7 +264,7 @@
 	height:25px;
 }
 
-.z-tabbox-scrolling .z-tabbox-scrollleft:hover{
+.z-tabbox-scrollleft:hover{
 	background-position:0px 0;
 }
 <%-- Tabbox vertical --%>
@@ -441,11 +441,11 @@
 }
 .z-tabbox-scrolling .z-tabbox-v-tabs{
 }
-.z-tabbox-scrolling .z-tabbox-v-header{
+.z-tabbox-v-headerbtn{
 	margin-top:18px;
 	margin-bottom:18px;
 }
-.z-tabbox-scrolling .z-tabbox-v-scrollup{
+.z-tabbox-v-scrollup{
 	background:transparent url(${c:encodeURL('~./zul/img/tab2/scroll-up.png')}) no-repeat scroll 1px -18px;
 	border-right:1px solid #8DB2E3;
 	cursor:pointer;
@@ -457,7 +457,7 @@
 	width:100%;
 	display:block;
 }
-.z-tabbox-scrolling .z-tabbox-v-scrolldown{
+.z-tabbox-v-scrolldown{
 	background:transparent url(${c:encodeURL('~./zul/img/tab2/scroll-down.png')}) no-repeat scroll 1px 0;
 	border-right:1px solid #8DB2E3;
 	cursor:pointer;
@@ -469,10 +469,10 @@
 	width:100%;
 	display:block;
 }
-.z-tabbox-scrolling .z-tabbox-v-scrollup:hover{
+.z-tabbox-v-scrollup:hover{
 	background-position:1px 0px;
 }
-.z-tabbox-scrolling .z-tabbox-v-scrolldown:hover{
+.z-tabbox-v-scrolldown:hover{
 	background-position:1px -18px;
 }
 <%-- Tabpanels Tabpanel --%>

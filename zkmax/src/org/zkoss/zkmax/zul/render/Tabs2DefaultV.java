@@ -48,19 +48,17 @@ public class Tabs2DefaultV implements ComponentRenderer {
 			.writeln(">");
 			wh.write("<ul id=\""+self.getUuid()+"!ul\"")
 				.write(" class=\""+look+"si\"")
-				.write(">");			
-				wh.writeChildren(self);				
+				.write(">");
+				wh.writeChildren(self);
 				wh.write("<li id=\""+self.getUuid()+"!edge\"")
 					.write(" class=\""+look+"edge\"")
 					.writeln("</li>");
 			wh.write("</ul>");
 		wh.write("</div>");
-		wh.write("<div id=\""+self.getUuid()+"!up\"")
-			.write(" class=\""+look+"scrollup\" > </div>");
-		wh.write("<div id=\""+self.getUuid()+"!down\"")
-			.write(" class=\""+look+"scrolldown\" > </div>");
+		wh.write("<div id=\""+self.getUuid()+"!up\" </div>");
+		wh.write("<div id=\""+self.getUuid()+"!down\" </div>");
 		wh.write("</div>");
 		wh.write("<div id=\""+self.getUuid()+"!line\"")
-			.write(" class=\""+look+"space\" ></div>");			
+			.write(" class=\""+look+"space\" ></div>");
 	}
 }

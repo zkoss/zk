@@ -20,7 +20,7 @@ package org.zkoss.web.util.resource;
 
 import java.util.Map;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.IOException;
 import java.net.URL;
 
 import javax.servlet.ServletContext;
@@ -59,13 +59,13 @@ public interface ExtendletContext {
 	 *
 	 * @param uri it must be empty or starts with "/". It might contain
 	 * "*" for current browser code and Locale.
-	 * @return the complete URI (excluding the machine name).
+	 * @return the complete URL (excluding the machine name).
 	 * It includes the context path and the servelt to interpret
 	 * this extended resource.
 	 */
 	public String encodeURL(ServletRequest request,
 	ServletResponse response, String uri)
-	throws ServletException, UnsupportedEncodingException;
+	throws ServletException, IOException;
 	/** Returns  the encoded URL for send redirect.
 	 * The URL is also encoded with HttpServletResposne.encodeRedirectURL.
 	 */
@@ -75,6 +75,18 @@ public interface ExtendletContext {
 	 * the resource located at the given path, or null if not found.
 	 */
 	public RequestDispatcher getRequestDispatcher(String uri);
+
+	/** Includes the specified page.
+	 *
+	 * <p>Note: if you want to include the content into a different
+	 * writer, you have to use {@link org.zkoss.web.servlet.BufferedResponse}
+	 * to 'wrap' the writer in the response.
+	 *
+	 * @since 3.5.2 
+	 */
+	public void include(HttpServletRequest request,
+	HttpServletResponse response, String uri, Map params)
+	throws ServletException, IOException;
 
 	/** Returns the URL of the specified URI, or null if not found.
 	 *

@@ -86,6 +86,9 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
 		final int checkPeriod = loader.getCheckPeriod();
 		_cache.setCheckPeriod(checkPeriod >= 0 ? checkPeriod: 60*60*1000); //1hr
 	}
+	public boolean getFeature(int feature) {
+		return false; //not support ALLOW_DIRECT_INCLUDE
+	}
 	public void service(HttpServletRequest request,
 	HttpServletResponse response, String path, String extra)
 	throws ServletException, IOException {
