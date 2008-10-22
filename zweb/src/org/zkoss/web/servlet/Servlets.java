@@ -673,6 +673,10 @@ public class Servlets {
 	throws IOException, ServletException {
 //		if (D.ON && log.debugable()) log.debug("Including "+uri+" at "+ctx);
 
+		//Note: we don't optimize the include to call ClassWebResource here
+		//since 1) it is too low level (might have some risk)
+		//2) no clean way to access ClassWebResouce here
+
 		//20050606: Tom Yeh
 		//We have to set this special attribute for jetty
 		//Otherwise, if including a page crossing context might not return

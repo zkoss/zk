@@ -106,7 +106,7 @@ public interface ActionContext {
 	 *
 	 * <p>Finally, the uri is encoded by HttpServletResponse.encodeURL.
 	 */
-	public String encodeURL(String uri) throws DspException;
+	public String encodeURL(String uri) throws DspException, IOException;
 
 	/** Returns the line number of this action.
 	 * It is used for throwing exception and debug purpose.
