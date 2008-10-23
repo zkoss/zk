@@ -24,7 +24,18 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		<div>
 		Column 1-1: The left-top box. To know whether a splitter
 		is collapsed, you can listen to the onOpen event.
-		<button label="change style" onClick='s1.sclass = s2.sclass = "splitter".equals(s1.sclass) ? "splitter-os":"splitter"'/>
+		<button label="change style">
+			<attribute name="onClick">
+			if ("z-splitter-ver".equals(s1.getZclass()))
+				s1.setZclass("z-splitter-os-ver");
+			else
+				s1.setZclass("z-splitter-ver");
+			if ("z-splitter-hor".equals(s2.getZclass()))
+				s2.setZclass("z-splitter-os-hor");
+			else
+				s2.setZclass("z-splitter-hor");
+			</attribute>
+		</button>
 		</div>
 		<splitter id="s1" collapse="after"/>
 		<div>

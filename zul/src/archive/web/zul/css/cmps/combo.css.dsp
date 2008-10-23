@@ -182,7 +182,7 @@
 	background: white; border: 1px solid #888888; padding: 2px;
 	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
 }
-.z-datebox-pp table.calyear {
+.z-datebox-pp .z-datebox-calyear {
 	background: #d8e8f0;
 }
 
