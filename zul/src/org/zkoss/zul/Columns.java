@@ -244,7 +244,7 @@ public class Columns extends HeadersElement {
 	/**
 	 * @since 3.5.0
 	 */
-	public final class Columnmenupopup extends Menupopup {
+	private final class Columnmenupopup extends Menupopup {
 		private transient Component _ref;
 		private Columnmenupopup(Columns cols) {
 			init(cols);

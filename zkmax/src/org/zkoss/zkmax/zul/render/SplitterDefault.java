@@ -37,8 +37,7 @@ public class SplitterDefault implements ComponentRenderer {
 		final Splitter self = (Splitter)comp;
 		wh.write("<div id=\"").write(self.getUuid()).write("\" z.type=\"zul.box.Splt\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
-		wh.write("<span id=\"").write(self.getUuid()).write("!btn\" style=\"display:none\" ");
-		wh.write("class=\"").write(self.getZclass()).write("-btn-l\""); 
+		wh.write("<span id=\"").write(self.getUuid()).write("!btn\" style=\"display:none\"");
 		wh.write("></span>");
 		wh.write("</div>");
 	}

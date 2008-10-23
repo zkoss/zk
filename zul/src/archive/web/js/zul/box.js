@@ -102,9 +102,11 @@ zkSplt.init = function (cmp) {
 	//Only Splitter invalidated if sclass is changed, so we have to
 	//change chdextr (see Bug 1921830)
 		if (vert) p = p.parentNode; //TR
-		if (p && p.id.endsWith("!chdextr"))
-			//p.className = getZKAttr(cmp, "zcls") + "-outer"; 
-			zk.addClass(cmp, getZKAttr(cmp, "zcls") + "-outer");
+		if (p && p.id.endsWith("!chdextr")) {
+			p.className = getZKAttr(cmp, "zcls") + "-outer";
+			if (vert)
+				cmp.parentNode.className = getZKAttr(cmp, "zcls") + "-outer-td";
+		}
 	}
 	var snap = function (x, y) {return zkSplt._snap(cmp, x, y);};
 	var drag = zkSplt._drags[cmp.id] = {
@@ -176,31 +178,22 @@ zkSplt.setAttr = function (cmp, nm, val) {
 	return false;
 };
 zkSplt._fixbtn = function (cmp) {
-	var btn = $e(cmp.id + "!btn");
-	var colps = getZKAttr(cmp, "colps");
+	var btn = $e(cmp.id + "!btn"),
+		colps = getZKAttr(cmp, "colps");
 	if (!colps || "none" == colps) {
 		btn.style.display = "none";
 	} else {
-		zcls = getZKAttr(cmp, "zcls");
-		var vert = getZKAttr(cmp, "vert");
-		var before = colps == "before";		
+		var zcls = getZKAttr(cmp, "zcls"),
+			vert = getZKAttr(cmp, "vert"),
+			before = colps == "before";		
 		if (getZKAttr(cmp, "open") == "false") before = !before;
 
-		if (vert && before && !zk.hasClass(btn, zcls+"-btn-t")) {		
-			zk.rmClass(btn, zcls + "-btn-b");
-			zk.addClass(btn, zcls + "-btn-t");
-		}
-		else if(vert && !before && !zk.hasClass(btn, zcls+"-btn-b")) {			
-			zk.rmClass(btn, zcls+"-btn-t");
-			zk.addClass(btn, zcls+"-btn-b");
-		}		
-		else if(!vert && before && !zk.hasClass(btn, zcls+"-btn-l")) {
-			zk.rmClass(btn, zcls+"-btn-r");
-			zk.addClass(btn, zcls+"-btn-l");
-		}
-		else if(!vert && !before && !zk.hasClass(btn, zcls+"-btn-r")) {
-			zk.rmClass(btn, zcls+"-btn-l");
-			zk.addClass(btn, zcls+"-btn-r");
+		if (vert) {
+			zk.rmClass(btn, zcls + "-btn-" + (before ? "b" : "t"));
+			zk.addClass(btn, zcls + "-btn-" + (before ? "t" : "b"));
+		} else {			
+			zk.rmClass(btn, zcls + "-btn-" + (before ? "r" : "l"));
+			zk.addClass(btn, zcls + "-btn-" + (before ? "l" : "r"));
 		}
 		btn.style.display = "";
 	}
