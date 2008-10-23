@@ -6,10 +6,12 @@
 	Description:
 		
 	History:
-		Mon Sep 29 17:17:32     2008, Created by tomyeh
+		Mon Sep 29 17:17:32	 2008, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+Some of the codes are adopted from http://prototype.conio.net and http://script.aculo.us
 
 {{IS_RIGHT
 }}IS_RIGHT
@@ -60,6 +62,118 @@ zkDom = { //static methods
 	pageHeight: function () {
 		var a = document.body.scrollHeight, b = document.body.offsetHeight;
 		return a > b ? a: b;
+	},
+
+	/** Returns the cumulative offset of the specified element.
+	 */
+	cmOffset: function(element) {
+		var valueT = 0, valueL = 0, operaBug, el = element.parentNode;
+		//Fix gecko difference, the offset of gecko excludes its border-width when its CSS position is relative or absolute
+		if (zk.gecko) {
+			while (el && el != document.body) {
+				var style = zkDom.getStyle(el, "position");
+				if (style == "relative" || style == "absolute") {
+					valueT += zk.parseInt(zkDom.getStyle(el, "border-top-width"));
+					valueL += zk.parseInt(zkDom.getStyle(el, "border-left-width"));
+				}
+				el = el.offsetParent;
+			}
+		}
+
+		do {
+			//Bug 1577880: fix originated from http://dev.rubyonrails.org/ticket/4843
+			if (zkDom.getStyle(element, "position") == 'fixed') {
+				valueT += zk.innerY() + element.offsetTop;
+				valueL += zk.innerX() + element.offsetLeft;
+				break;
+			} else {
+				//Fix opera bug. If the parent of "INPUT" or "SPAN" element is "DIV" 
+				// and the scrollTop of "DIV" element is more than 0, the offsetTop of "INPUT" or "SPAN" element always is wrong.
+				if (zk.opera) { 
+					if (operaBug && element.nodeName == "DIV" && element.scrollTop != 0)
+						valueT += element.scrollTop || 0;
+					operaBug = element.nodeName == "SPAN" || element.nodeName == "INPUT";
+				}
+				valueT += element.offsetTop || 0;
+				valueL += element.offsetLeft || 0;
+				//Bug 1721158: In FF, element.offsetParent is null in this case
+				element = zk.gecko && element != document.body ? zkDom.offsetParent(element): element.offsetParent;
+			}
+		} while (element);
+		return [valueL, valueT];
+	},
+	/** Returns the offset parent.
+	 */
+	offsetParent: function(element) {
+		if (element.offsetParent) return element.offsetParent;
+		if (element == document.body) return element;
+
+		while ((element = element.parentNode) && element != document.body)
+			if (element.style && zkDom.getStyle(element, 'position') != 'static') //in IE, style might not be available
+				return element;
+
+		return document.body;
+	},
+	/** Returns the style. In addition to element.style, it also
+	 * checked CSS styles that are applicated to the specified element.
+	 */
+	getStyle: function(element, style) {
+		element = zkDom.$(element);
+		if (['float','cssFloat'].contains(style))
+			style = (typeof element.style.styleFloat != 'undefined' ? 'styleFloat' : 'cssFloat');
+		style = style.camelize();
+		var value = element.style[style];
+		if (!value) {
+			if (document.defaultView && document.defaultView.getComputedStyle) {
+				var css = document.defaultView.getComputedStyle(element, null);
+				value = css ? css[style] : null;
+			} else if (element.currentStyle) {
+				value = element.currentStyle[style];
+			}
+		}
+	
+		if (value == 'auto' && ['width','height'].contains(style) && element.getStyle('display') != 'none')
+			value = element['offset'+style.capitalize()] + 'px';
+	
+		if (zk.opera && ['left', 'top', 'right', 'bottom'].contains(style)
+		&& zkDom.getStyle(element, 'position') == 'static') value = 'auto';
+
+		if(style == 'opacity') {
+			if(value) return parseFloat(value);
+			if(value = (element.getStyle('filter') || '').match(/alpha\(opacity=(.*)\)/)
+			&& value[1]) return parseFloat(value[1]) / 100;
+			return 1.0;
+		}
+		return value == 'auto' ? null : value;
+	},
+
+	/** Sets the style.
+	*/
+	setStyle: function(element, style) {
+		element = zkDom.$(element);
+		for (var name in style) {
+			var value = style[name];
+			if(name == 'opacity') {
+				if (value == 1) {
+					value = (/gecko/.test(zk.userAgent) &&
+						!/konqueror|safari|khtml/.test(zk.userAgent)) ? 0.999999 : 1.0;
+					if(zk.ie)
+						element.style.filter = element.getStyle('filter').replace(/alpha\([^\)]*\)/gi,'');
+				} else if(value === '') {
+					if(zk.ie)
+						element.style.filter = element.getStyle('filter').replace(/alpha\([^\)]*\)/gi,'');
+				} else {
+					if(value < 0.00001) value = 0;
+					if(zk.ie)
+						element.style.filter = element.getStyle('filter').replace(/alpha\([^\)]*\)/gi,'') +
+							'alpha(opacity='+value*100+')';
+				}
+			} else if(['float','cssFloat'].contains(name))
+				name = (typeof element.style.styleFloat != 'undefined') ? 'styleFloat' : 'cssFloat';
+
+			element.style[name.camelize()] = value;
+		}
+		return element;
 	},
 
 	/** Replaces the outer of the specified element with the HTML content.

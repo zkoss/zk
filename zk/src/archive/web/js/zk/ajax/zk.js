@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Mon Sep 29 17:17:26     2008, Created by tomyeh
+		Mon Sep 29 17:17:26 2008, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
@@ -28,6 +28,17 @@ String.prototype.trim = function () {
 	while (k >= j && this.charAt(k) <= ' ')
 		--k;
 	return j > k ? "": this.substring(j, k + 1);
+};
+String.prototype.camelize = function() {
+	var parts = this.split('-'), len = parts.length;
+	if (len == 1) return parts[0];
+
+	var camelized = this.charAt(0) == '-' ?
+		parts[0].charAt(0).toUpperCase() + parts[0].substring(1): parts[0];
+
+	for (var i = 1; i < len; i++)
+		camelized += parts[i].charAt(0).toUpperCase() + parts[i].substring(1);
+	return camelized;
 };
 
 //Array//
@@ -259,7 +270,7 @@ zk = { //static methods
 		}
 
 		zk._msg = zk._msg ? zk._msg + msg: msg;
-		zk._msg +=  '\n';
+		zk._msg += '\n';
 		setTimeout(zk._debug0, 600);
 	},
 	_debug0: function () {
