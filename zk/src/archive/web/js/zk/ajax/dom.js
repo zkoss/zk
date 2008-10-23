@@ -14,6 +14,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 Some of the codes are adopted from http://prototype.conio.net and http://script.aculo.us
 
 {{IS_RIGHT
+	This program is distributed under GPL Version 2.0 in the hope that
+	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
 zkDom = { //static methods
