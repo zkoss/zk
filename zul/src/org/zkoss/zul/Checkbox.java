@@ -183,10 +183,7 @@ public class Checkbox extends LabelImageElement {
 	 * 
 	 */
 	public String getZclass() {
-		String scls = super.getZclass();
-		if (scls == null)
-			scls = "z-chkbox";
-		return scls;
+		return _zclass == null ? "z-chkbox" : super.getZclass();
 	}
 	//-- ComponentCtrl --//
 	protected Object newExtraCtrl() {
