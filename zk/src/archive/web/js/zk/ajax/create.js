@@ -109,7 +109,7 @@ function zkver() {
 	zk.build = args[1];
 
 	for (var j = 2; j < len; j += 2)
-		zkPkg.version(args[j], args[j + 1]);
+		zPkg.version(args[j], args[j + 1]);
 	return;
 }
 
@@ -136,7 +136,7 @@ function _zkinit() {
 }
 /** Used internally to redraw and attach. */
 function _zkattach() {
-	zkPkg.addAfterLoad(_zkattach0);
+	zPkg.addAfterLoad(_zkattach0);
 }
 function _zkattach0() {
 	if (!zk.booted)
@@ -146,14 +146,14 @@ function _zkattach0() {
 		var dt = inf[0], wginf = inf[1];
 
 		var wgt = _zkcreate1(null, wginf);
-		zkDom.outerHTML(zkDom.$(wgt.uuid), wgt.redraw());
+		zDom.outerHTML(zDom.$(wgt.uuid), wgt.redraw());
 	}
 
 	zk.endProcessing();
 }
 /** Used internally to create the widget tree based on _zkcrs. */
 function _zkcreate() {
-	zkPkg.addAfterLoad(_zkcreate0);
+	zPkg.addAfterLoad(_zkcreate0);
 }
 function _zkcreate0() {
 	for (var inf; inf = _zkcrs.shift();) {
@@ -177,7 +177,7 @@ function _zkcreate1(parent, wginf) {
 
 		//embedAs means value from element's text
 		if (embedAs && !props[embedAs]) {
-			var embed = zkDom.$(uuid);
+			var embed = zDom.$(uuid);
 			if (embed)
 				props[embedAs] = embed.innerHTML;
 		}
@@ -199,7 +199,7 @@ function _zkcreate1(parent, wginf) {
 function _zkld(w) {
 	var type = w.type; j = type.lastIndexOf('.');
 	if (j >= 0)
-		zkPkg.load(type.substring(0, j), zkcurdt);
+		zPkg.load(type.substring(0, j), zkcurdt);
 	for (var children = w.children, len = children.length, j = 0; j < len;++j)
 		_zkld(children[j]);
 }

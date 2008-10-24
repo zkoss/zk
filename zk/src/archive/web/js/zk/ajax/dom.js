@@ -18,7 +18,7 @@ Some of the codes are adopted from http://prototype.conio.net and http://script.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-zkDom = { //static methods
+zDom = { //static methods
 	/** Returns the DOM element with the specified ID, or null if not found.
 	 * A shortcut of document.getElementById.
 	 */
@@ -70,8 +70,8 @@ zkDom = { //static methods
 
 	/** Scrolls the browser window to the specified element. */
 	scrollTo: function (element) {
-		element = zkDom.$(element);
-		var pos = zkDom.cmOffset(element);
+		element = zDom.$(element);
+		var pos = zDom.cmOffset(element);
 		scrollTo(pos[0], pos[1]);
 		return element;
 	},
@@ -79,15 +79,15 @@ zkDom = { //static methods
 	/** Returns the cumulative offset of the specified element.
 	 */
 	cmOffset: function (element) {
-		element = zkDom.$(element);
+		element = zDom.$(element);
 		var valueT = 0, valueL = 0, operaBug, el = element.parentNode;
 		//Fix gecko difference, the offset of gecko excludes its border-width when its CSS position is relative or absolute
 		if (zk.gecko) {
 			while (el && el != document.body) {
-				var style = zkDom.getStyle(el, "position");
+				var style = zDom.getStyle(el, "position");
 				if (style == "relative" || style == "absolute") {
-					valueT += zk.parseInt(zkDom.getStyle(el, "border-top-width"));
-					valueL += zk.parseInt(zkDom.getStyle(el, "border-left-width"));
+					valueT += zk.parseInt(zDom.getStyle(el, "border-top-width"));
+					valueL += zk.parseInt(zDom.getStyle(el, "border-left-width"));
 				}
 				el = el.offsetParent;
 			}
@@ -95,7 +95,7 @@ zkDom = { //static methods
 
 		do {
 			//Bug 1577880: fix originated from http://dev.rubyonrails.org/ticket/4843
-			if (zkDom.getStyle(element, "position") == 'fixed') {
+			if (zDom.getStyle(element, "position") == 'fixed') {
 				valueT += zk.innerY() + element.offsetTop;
 				valueL += zk.innerX() + element.offsetLeft;
 				break;
@@ -110,7 +110,7 @@ zkDom = { //static methods
 				valueT += element.offsetTop || 0;
 				valueL += element.offsetLeft || 0;
 				//Bug 1721158: In FF, element.offsetParent is null in this case
-				element = zk.gecko && element != document.body ? zkDom.offsetParent(element): element.offsetParent;
+				element = zk.gecko && element != document.body ? zDom.offsetParent(element): element.offsetParent;
 			}
 		} while (element);
 		return [valueL, valueT];
@@ -118,12 +118,12 @@ zkDom = { //static methods
 	/** Returns the offset parent.
 	 */
 	offsetParent: function (element) {
-		element = zkDom.$(element);
+		element = zDom.$(element);
 		if (element.offsetParent) return element.offsetParent;
 		if (element == document.body) return element;
 
 		while ((element = element.parentNode) && element != document.body)
-			if (element.style && zkDom.getStyle(element, 'position') != 'static') //in IE, style might not be available
+			if (element.style && zDom.getStyle(element, 'position') != 'static') //in IE, style might not be available
 				return element;
 
 		return document.body;
@@ -132,7 +132,7 @@ zkDom = { //static methods
 	 * checked CSS styles that are applicated to the specified element.
 	 */
 	getStyle: function(element, style) {
-		element = zkDom.$(element);
+		element = zDom.$(element);
 		if (['float','cssFloat'].contains(style))
 			style = (typeof element.style.styleFloat != 'undefined' ? 'styleFloat' : 'cssFloat');
 		style = style.camelize();
@@ -150,7 +150,7 @@ zkDom = { //static methods
 			value = element['offset'+style.capitalize()] + 'px';
 	
 		if (zk.opera && ['left', 'top', 'right', 'bottom'].contains(style)
-		&& zkDom.getStyle(element, 'position') == 'static') value = 'auto';
+		&& zDom.getStyle(element, 'position') == 'static') value = 'auto';
 
 		if(style == 'opacity') {
 			if(value) return parseFloat(value);
@@ -164,7 +164,7 @@ zkDom = { //static methods
 	/** Sets the style.
 	*/
 	setStyle: function(element, style) {
-		element = zkDom.$(element);
+		element = zDom.$(element);
 		for (var name in style) {
 			var value = style[name];
 			if(name == 'opacity') {
@@ -194,15 +194,15 @@ zkDom = { //static methods
 	 * @return the new node (actually the first new node, if multiple)
 	 */
 	outerHTML: function(n, html) {
-		n = zkDom.$(n);
+		n = zDom.$(n);
 		var parent = n.parentNode, sib = n.previousSibling;
 
 		if (zk.ie) {
-			var tn = zkDom.tag(n);
+			var tn = zDom.tag(n);
 			if (tn == "TD" || tn == "TH" || tn == "TABLE" || tn == "TR"
 			|| tn == "CAPTION" || tn == "TBODY" || tn == "THEAD"
 			|| tn == "TFOOT" || tn == "COLGROUP" || tn == "COL") {
-				var ns = zkDom._tblNewElems(html);
+				var ns = zDom._tblNewElems(html);
 				var nsib = n.nextSibling;
 				parent.removeChild(n);
 
@@ -237,7 +237,7 @@ zkDom = { //static methods
 	 * @param n the element, or the element's ID.
 	 */
 	detach: function (n) {
-		n = zkDom.$(n);
+		n = zDom.$(n);
 		if (n && n.parentNode) n.parentNode.removeChild(n);
 	},
 
@@ -250,7 +250,7 @@ zkDom = { //static methods
 			el.attachEvent('on' + evtnm, fn);
 
 		//Bug 1811352
-		if ("submit" == evtnm && zkDom.tag(el) == "FORM") {
+		if ("submit" == evtnm && zDom.tag(el) == "FORM") {
 			if (!el._submfns) el._submfns = [];
 			el._submfns.push(fn);
 		}
@@ -268,26 +268,26 @@ zkDom = { //static methods
 		}
 
 		//Bug 1811352
-		if ("submit" == evtnm && zkDom.tag(el) == "FORM" && el._submfns)
+		if ("submit" == evtnm && zDom.tag(el) == "FORM" && el._submfns)
 			el._submfns.remove(fn);
 	},
 
 	/** Enables ESC (default behavior). */
 	enableESC: function () {
-		if (zkDom._noESC) {
-			zkDom.unlisten(document, "keydown", zkDom._noESC);
-			delete zkDom._noESC;
+		if (zDom._noESC) {
+			zDom.unlisten(document, "keydown", zDom._noESC);
+			delete zDom._noESC;
 		}
-		if (zkDom._onErrChange) {
-			window.onerror = zkDom._oldOnErr;
-			if (zkDom._oldOnErr) delete zkDom._oldOnErr;
-			delete zkDom._onErrChange;
+		if (zDom._onErrChange) {
+			window.onerror = zDom._oldOnErr;
+			if (zDom._oldOnErr) delete zDom._oldOnErr;
+			delete zDom._onErrChange;
 		}
 	},
 	/** Disables ESC (so loading won't be aborted). */
 	disableESC: function () {
-		if (!zkDom._noESC) {
-			zkDom._noESC = function (evt) {
+		if (!zDom._noESC) {
+			zDom._noESC = function (evt) {
 				if (!evt) evt = window.event;
 				if (evt.keyCode == 27) {
 					if (evt.preventDefault) {
@@ -301,13 +301,13 @@ zkDom = { //static methods
 				}
 				return true;
 			};
-			zkDom.listen(document, "keydown", zkDom._noESC);
+			zDom.listen(document, "keydown", zDom._noESC);
 
 			//FUTURE: onerror not working in Safari and Opera
 			//if error occurs, loading will be never ended, so try to ignore
-			//we cannot use zkDom.listen. reason: no way to get back msg...(FF)
-			zkDom._oldOnErr = window.onerror;
-			zkDom._onErrChange = true;
+			//we cannot use zDom.listen. reason: no way to get back msg...(FF)
+			zDom._oldOnErr = window.onerror;
+			zDom._onErrChange = true;
 			window.onerror =
 		function (msg, url, lineno) {
 			//We display errors only for local class web resource
@@ -337,7 +337,7 @@ zkDom = { //static methods
 			//return;
 		}
 
-		var x = zkDom.innerX(), y = zkDom.innerY(),
+		var x = zDom.innerX(), y = zDom.innerY(),
 			style = ' style="left:'+x+'px;top:'+y+'px"',
 			idtxt = id + 't';
 			html = '<div id="'+id+'"';
@@ -348,25 +348,25 @@ zkDom = { //static methods
 			+msg+'</div></div></div>'
 		var n = document.createElement("DIV");
 		document.body.appendChild(n);
-		zkDom.outerHTML(n, html);
+		zDom.outerHTML(n, html);
 
 		if (mask) { //center it
-			n = zkDom.$(idtxt);
+			n = zDom.$(idtxt);
 			if (n) {
-				n.style.left = (zkDom.innerWidth() - n.offsetWidth) / 2 + x + "px";
-				n.style.top = (zkDom.innerHeight() - n.offsetHeight) / 2 + y + "px";
+				n.style.left = (zDom.innerWidth() - n.offsetWidth) / 2 + x + "px";
+				n.style.top = (zDom.innerHeight() - n.offsetHeight) / 2 + y + "px";
 			}
 		}
 	},
 	cleanAllProgress: function (id) {
-		zkDom.detach(id);
+		zDom.detach(id);
 
 		//TODO: remove the mask for each contained page
 	}
 };
 
 if (zk.ie) {
-	zkDom._tagOfHtml = function (html) {
+	zDom._tagOfHtml = function (html) {
 		if (!html) return "";
 	
 		var j = html.indexOf('<') + 1, k = j, len = j ? html.length: 0;
@@ -377,8 +377,8 @@ if (zk.ie) {
 		}
 		throw "Unknown tag in "+html;
 	};
-	zkDom._tblNewElems = function (html) {
-		var level, tag = zkDom._tagOfHtml(html);
+	zDom._tblNewElems = function (html) {
+		var level, tag = zDom._tagOfHtml(html);
 		switch (tag) {
 		case "TABLE":
 			level = 0;
@@ -413,7 +413,7 @@ if (zk.ie) {
 			//IE creates extra tbody if add COLGROUP
 			//However, the following skip is dirty-fix, assuming html doesn't
 			//contain TBODY (unless it is the first tag)
-			var nt = zkDom.tag(n);
+			var nt = zDom.tag(n);
 			if (nt == tag || nt != "TBODY")
 				ns.push(n);
 			el.removeChild(n);

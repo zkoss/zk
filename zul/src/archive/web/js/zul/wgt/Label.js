@@ -19,5 +19,5 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 zul.wgt.Label = zk.$extends(zk.Widget, {
 	value: ''
 }, {
-	embedAs: 'value' //retrieve zkDom.$() as value
+	embedAs: 'value' //retrieve zDom.$() as value
 });

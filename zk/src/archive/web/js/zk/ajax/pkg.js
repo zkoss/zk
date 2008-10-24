@@ -2,7 +2,7 @@
 
 {{IS_NOTE
 	Purpose:
-		zkPkg: the package utilities
+		zPkg: the package utilities
 	Description:
 		
 	History:
@@ -16,7 +16,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-zkPkg = {
+zPkg = {
 	/** Called after the whole package is declared.
 	 * It must be the last statement in a JavaScript file.
 	 */
@@ -25,12 +25,12 @@ zkPkg = {
 			zk._updCnt();
 		} else {
 			try {
-				zkDom.enableESC();
-				zkDom.cleanAllProgress("zk_loadprog");
+				zDom.enableESC();
+				zDom.cleanAllProgress("zk_loadprog");
 			} catch (ex) {
 			}
 
-			for (var fn, aflds = zkPkg._aflds; fn = aflds.shift();)
+			for (var fn, aflds = zPkg._aflds; fn = aflds.shift();)
 				fn();
 		}
 	},
@@ -38,7 +38,7 @@ zkPkg = {
 	 * @param dtid the desktop ID. If null, the first desktop is used.
 	 */
 	load: function (pkg, dtid) {
-		var pkglds = zkPkg._pkgLds;
+		var pkglds = zPkg._pkgLds;
 		if (pkglds[pkg]) return;
 
 		pkglds[pkg] = true;
@@ -48,14 +48,14 @@ zkPkg = {
 		//Bug 1815074: IE bug: zk.ald might be called before appendChild returns
 
 		if (zk.loading++) {
-			zkPkg._updCnt();
+			zPkg._updCnt();
 		} else {
-			zkDom.disableESC();
-			setTimeout(zkPkg._pgbox, 350);
+			zDom.disableESC();
+			setTimeout(zPkg._pgbox, 350);
 		}
 
 		var modver = pkg.indexOf('.');
-		if (modver) modver = zkPkg.version(pkg.substring(0, modver));
+		if (modver) modver = zPkg.version(pkg.substring(0, modver));
 		if (!modver) modver = zk.build;
 
 		var e = document.createElement("script"),
@@ -79,7 +79,7 @@ zkPkg = {
 	 */
 	addAfterLoad: function (fn) {
 		if (zk.loading)
-			return zkPkg._aflds.add(fn, true);
+			return zPkg._aflds.add(fn, true);
 		fn();
 		return false;
 	},
@@ -87,16 +87,16 @@ zkPkg = {
 
 	_updCnt: function () {
 		try {
-			var n = zkDom.$("zk_loadcnt");
+			var n = zDom.$("zk_loadcnt");
 			if (n) n.innerHTML = "" + zk.loading;
 		} catch (ex) {
 		}
 	},
 	_pgbox: function () {
 		if (zk.loading || window.dbg_progressbox) { //dbg_progressbox: debug purpose
-			var n = zkDom.$("zk_loadprog");
+			var n = zDom.$("zk_loadprog");
 			if (!n)
-				zkDom.progressbox("zk_loadprog",
+				zDom.progressbox("zk_loadprog",
 					'Loading (<span id="zk_loadcnt">'+zk.loading+'</span>)',
 					true);
 		}	
@@ -108,9 +108,9 @@ zkPkg = {
 	 */
 	version: function (pkg, ver) {
 		if (arguments.length <= 1)
-			return zkPkg._pkgVers[pkg];
+			return zPkg._pkgVers[pkg];
 
-		zkPkg._pkgVers[pkg] = ver;
+		zPkg._pkgVers[pkg] = ver;
 	},
 	_pkgVers: {}
 };

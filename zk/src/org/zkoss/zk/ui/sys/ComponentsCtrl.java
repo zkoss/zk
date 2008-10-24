@@ -298,7 +298,7 @@ public class ComponentsCtrl {
 			if (val == null || (val instanceof Number)) {
 				sb.append(val);
 			} else if (val instanceof Component) {
-				sb.append(" zkDom.$('")
+				sb.append(" zDom.$('")
 					.append(Strings.escape(((Component)val).getUuid(), "'\\"))
 					.append("')");
 			} else if (val instanceof Date) {

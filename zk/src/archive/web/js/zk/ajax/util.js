@@ -16,7 +16,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-zkUtil = { //static methods
+zUtil = { //static methods
 	//HTML/XML
 	/** Encodes a message into a valid XML format. */
 	encodeXML: function (txt, multiline) {

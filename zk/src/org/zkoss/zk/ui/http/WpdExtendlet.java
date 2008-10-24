@@ -133,7 +133,7 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 				log.warning("Unknown element "+elnm+", "+el.getLocator());
 			}
 		}
-		write(out, "\n}finally{zkPkg.end(_z);}}");
+		write(out, "\n}finally{zPkg.end(_z);}}");
 		return out.toByteArray();
 	}
 	private void writeMolds(OutputStream out,

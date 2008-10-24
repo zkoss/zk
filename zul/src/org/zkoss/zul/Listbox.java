@@ -804,13 +804,11 @@ public class Listbox extends XulElement implements Paginated {
 	/**  Selects the given listitems.
 	 * @since 3.6.0
 	 */
-	public void setSelectedItems(Set Listitems) {
+	public void setSelectedItems(Set listItems) {
 		if(!isMultiple())
 			throw new WrongValueException("Listbox must allow multiple selections.");
-		
-		Iterator listItemsAll = Listitems.iterator();
-		while(listItemsAll.hasNext()){
-			addItemToSelection((Listitem)listItemsAll.next());
+		for (Iterator it = listItems.iterator(); it.hasNext();) {
+			addItemToSelection((Listitem)it.next());
 		}
 	}
 	/** Returns all selected items.

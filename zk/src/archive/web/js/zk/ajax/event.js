@@ -16,7 +16,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-zkEvt = {
+zEvt = {
 	BACKSPACE: 8,
 	TAB:       9,
 	RETURN:   13,
@@ -62,9 +62,9 @@ zkEvt = {
 		if (evt.ctrlKey) extra += "c";
 		if (evt.shiftKey) extra += "s";
 
-		var ofs = zkDom.cmOffset(target);
-		var x = zkEvt.x(evt) - ofs[0];
-		var y = zkEvt.y(evt) - ofs[1];
+		var ofs = zDom.cmOffset(target);
+		var x = zEvt.x(evt) - ofs[0];
+		var y = zEvt.y(evt) - ofs[1];
 		return [x, y, extra];
 	},
 	/** Returns the X coordinate of the mouse pointer. */

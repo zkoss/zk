@@ -213,18 +213,18 @@ zk = { //static methods
 	 */
 	endProcessing: function() {
 		zk.processing = false;
-		zkDom.cleanAllProgress("zk_proc");
+		zDom.cleanAllProgress("zk_proc");
 	},
 	/** Shows the message of zk.startProcessing. */
 	_showproc: function () {
 		if (zk.processing && !zk.loading) {
-			if (zkDom.$("zk_proc") || zkDom.$("zk_showBusy"))
+			if (zDom.$("zk_proc") || zDom.$("zk_showBusy"))
 				return;
 
 			var msg;
 			try {msg = mesg.PLEASE_WAIT;} catch (e) {msg = "Processing...";}
 				//when the first boot, mesg might not be ready
-			zkDom.progressbox("zk_proc", msg, !zk.booted);
+			zDom.progressbox("zk_proc", msg, !zk.booted);
 		}
 	},
 
@@ -242,22 +242,22 @@ zk = { //static methods
 			box = document.createElement("DIV");
 		document.body.appendChild(box);
 		var html =
-	 '<div class="z-error" style="left:'+(zkDom.innerX()+x)+'px;top:'+(zkDom.innerY()+y)
+	 '<div class="z-error" style="left:'+(zDom.innerX()+x)+'px;top:'+(zDom.innerY()+y)
 	+'px;" id="'+id+'"><table cellpadding="2" cellspacing="2" width="100%"><tr valign="top">'
 	+'<td width="20pt"><button onclick="zkau.sendRedraw()">redraw</button>'
-	+'<button onclick="zkDom.detach(\''+id+'\')">close</button></td>'
-	+'<td class="z-error-msg">'+zkUtil.encodeXML(msg, true) //Bug 1463668: security
+	+'<button onclick="zDom.detach(\''+id+'\')">close</button></td>'
+	+'<td class="z-error-msg">'+zUtil.encodeXML(msg, true) //Bug 1463668: security
 	+'</td></tr></table></div>';
-		zkDom.outerHTML(box, html);
+		zDom.outerHTML(box, html);
 
 		//TODO: draggable box
-		//box = zkDom.$e(id); //we have to retrieve back
+		//box = zDom.$e(id); //we have to retrieve back
 	},
 	/** Closes all error box (zk.error).
 	 */
 	errorDismiss: function () {
 		for (var j = zk._errcnt; j; --j)
-			zkDom.detach("zk_err" + j);
+			zDom.detach("zk_err" + j);
 	},
 	/** Generates a message for debugging purpose. */
 	debug: function (msg/*, ...*/) {
@@ -277,16 +277,16 @@ zk = { //static methods
 	},
 	_debug0: function () {
 		if (zk._msg) {
-			var console = zkDom.$("zk_dbg");
+			var console = zDom.$("zk_dbg");
 			if (!console) {
 				console = document.createElement("DIV");
 				document.body.appendChild(console);
 				var html =
 '<div id="zk_dbgbox" style="text-align:right;width:50%;right:0;bottom:0;position:absolute">'
-+'<button onclick="zkDom.detach(\'zk_dbgbox\')" style="font-size:9px">X</button><br/>'
++'<button onclick="zDom.detach(\'zk_dbgbox\')" style="font-size:9px">X</button><br/>'
 +'<textarea id="zk_dbg" style="width:100%" rows="10"></textarea></div>';
-				zkDom.outerHTML(console, html);
-				console = zkDom.$("zk_dbg");
+				zDom.outerHTML(console, html);
+				console = zDom.$("zk_dbg");
 			}
 			console.value = console.value + zk._msg + '\n';
 			console.scrollTop = console.scrollHeight;

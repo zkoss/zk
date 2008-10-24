@@ -27,5 +27,5 @@ zul.wgt.Include = zk.$extends(zk.Widget, {
 		return html + '</div>';
 	}
 }, {
-	embedAs: 'content' //retrieve zkDom.$() as value
+	embedAs: 'content' //retrieve zDom.$() as value
 });

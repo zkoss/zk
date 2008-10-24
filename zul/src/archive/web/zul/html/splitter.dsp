@@ -16,4 +16,4 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<div id="${self.uuid}" z.type="zul.box.Splt"${self.outerAttrs}${self.innerAttrs}><span id="${self.uuid}!btn" style="display:none" class="${self.zclass}-btn-l"></span></div>
+<div id="${self.uuid}" z.type="zul.box.Splt"${self.outerAttrs}${self.innerAttrs}><span id="${self.uuid}!btn" style="display:none"></span></div>
