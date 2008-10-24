@@ -95,32 +95,41 @@ implements Condition, java.io.Serializable {
 
 	/** Resolves the method. */
 	private final void resolve(Class cls) {
-		final String mtdnm = Classes.toMethodName(_name, "set");
-		if (_value.isExpression()) {
-			_mtds = Classes.getCloseMethods(cls, mtdnm, new Class[] {null});
-			if (_mtds.length == 0) {
-				if (!DynamicPropertied.class.isAssignableFrom(cls))
-					throw new PropertyNotFoundException("Method "+mtdnm+" not found for "+cls); 
-				_mtds = null;
-			} else if (_mtds.length == 1) {
-				_mtd = _mtds[0];
-				_mtds = null;
-			}
-		} else {
-		//Note: String has higher priority
-			try {
-				_mtd = Classes.getCloseMethod(
-					cls, mtdnm, new Class[] {String.class});
-			} catch (NoSuchMethodException ex) {
+		if (_lastcls == cls) return;
+
+		//Note: we have to synchronized since metainfo is shared
+		//(unless it is initialized at the constructor)
+		synchronized (this) {
+			if (_lastcls == cls) return;
+
+			final String mtdnm = Classes.toMethodName(_name, "set");
+			if (_value.isExpression()) {
+				_mtds = Classes.getCloseMethods(cls, mtdnm, new Class[] {null});
+				if (_mtds.length == 0) {
+					if (!DynamicPropertied.class.isAssignableFrom(cls))
+						throw new PropertyNotFoundException("Method "+mtdnm+" not found for "+cls); 
+					_mtds = null;
+				} else if (_mtds.length == 1) {
+					_mtd = _mtds[0];
+					_mtds = null;
+				}
+			} else {
+			//Note: String has higher priority
 				try {
 					_mtd = Classes.getCloseMethod(
-						cls, mtdnm, new Class[] {null});
-				} catch (NoSuchMethodException e2) {
-					if (!DynamicPropertied.class.isAssignableFrom(cls))
-						throw new PropertyNotFoundException("Method, "+mtdnm+", not found for "+cls);
-					_mtd = null;
+						cls, mtdnm, new Class[] {String.class});
+				} catch (NoSuchMethodException ex) {
+					try {
+						_mtd = Classes.getCloseMethod(
+							cls, mtdnm, new Class[] {null});
+					} catch (NoSuchMethodException e2) {
+						if (!DynamicPropertied.class.isAssignableFrom(cls))
+							throw new PropertyNotFoundException("Method, "+mtdnm+", not found for "+cls);
+						_mtd = null;
+					}
 				}
 			}
+			_lastcls = cls;
 		}
 	}
 
@@ -147,11 +156,7 @@ implements Condition, java.io.Serializable {
 			return; //ignored
 
 		try {
-			final Class cls = comp.getClass();
-			if (_lastcls != cls) {
-				resolve(cls);
-				_lastcls = cls;
-			}
+			resolve(comp.getClass());
 
 			//Note: if _mtd and _mtds are both null, it must be dyna-attr
 			//However, if dyna-attr, _mtd or _mtds might not be null
