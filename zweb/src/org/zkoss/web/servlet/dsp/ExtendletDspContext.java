@@ -37,12 +37,20 @@ import org.zkoss.web.servlet.BufferedResponse;
  */
 public class ExtendletDspContext extends ServletDspContext {
 	private final ExtendletContext _webctx;
+	private final String _dir;
 
 	public ExtendletDspContext(ExtendletContext webctx,
 	HttpServletRequest request, HttpServletResponse response,
-	Writer out) {
+	String path, Writer out) {
 		super(webctx.getServletContext(), request, response, out, webctx.getLocator());
 		_webctx = webctx;
+
+		if (path != null) {
+			int j = path.lastIndexOf('/');
+			_dir = j > 0 ? "~." + path.substring(0, j + 1): null;
+		} else {
+			_dir = null;
+		}
 	}
 
 	public String encodeURL(String uri)
@@ -51,6 +59,11 @@ public class ExtendletDspContext extends ServletDspContext {
 	}
 	public void include(String uri, Map params)
 	throws ServletException, IOException {
+		if (_dir != null && uri != null && uri.length() > 0) {
+			char cc = uri.charAt(0);
+			if (cc != '~' && cc != '/')
+				uri = _dir + uri;
+		}
 		_webctx.include(_request,
 			(HttpServletResponse)BufferedResponse.getInstance(_response, _out),
 			uri, params);
