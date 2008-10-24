@@ -14,6 +14,7 @@ ZK 3.5.2
   2182111: tab strange when label is null
   2188572: forEachStatus sample code does not work
   2182972: issue with overlapped window, no title or border
+  2154611: Menuitem in Menubar - quirks
 
 	--------
 ZK 3.5.1

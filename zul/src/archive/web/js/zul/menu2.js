@@ -422,7 +422,8 @@ zkMenuit2 = { //menuitem
 				zk.progress();
 				overwrite = true;
 			}
-			if (cmp.id != anc.id) zk.go(anc.href, overwrite, t); // Bug #1886352
+			if (zk.ie && zkMenu2.isTop(cmp) && cmp.id != anc.id) zk.go(anc.href, overwrite, t);
+				// Bug #1886352 and #2154611 
 			//Note: we cannot eat onclick. or, <a> won't work
 		}
 		if (!getZKAttr(cmp, "pop")) // Bug 1852304 
