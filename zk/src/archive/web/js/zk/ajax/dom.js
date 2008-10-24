@@ -19,7 +19,9 @@ Some of the codes are adopted from http://prototype.conio.net and http://script.
 }}IS_RIGHT
 */
 zkDom = { //static methods
-	/** Returns the DOM element with the specified ID. */
+	/** Returns the DOM element with the specified ID, or null if not found.
+	 * A shortcut of document.getElementById.
+	 */
 	$: function(id) {
 		if (id && id.id) id = id.id;
 		return typeof id == 'string' ?
@@ -33,25 +35,25 @@ zkDom = { //static methods
 
 	/** Returns the x coordination of the visible part. */
 	innerX: function () {
-		return window.pageXOffset
+		return pageXOffset
 			|| document.documentElement.scrollLeft
 			|| document.body.scrollLeft || 0;
 	},
 	/** Returns the y coordination of the visible part. */
 	innerY: function () {
-		return window.pageYOffset
+		return pageYOffset
 			|| document.documentElement.scrollTop
 			|| document.body.scrollTop || 0;
 	},
 	/** Returns the width of the visible part. */
 	innerWidth: function () {
-		return typeof window.innerWidth == "number" ? window.innerWidth:
+		return typeof innerWidth == "number" ? innerWidth:
 			document.compatMode == "CSS1Compat" ?
 				document.documentElement.clientWidth: document.body.clientWidth;
 	},
 	/** Returns the height of the visible part. */
 	innerHeight: function () {
-		return typeof window.innerHeight == "number" ? window.innerHeight:
+		return typeof innerHeight == "number" ? innerHeight:
 			document.compatMode == "CSS1Compat" ?
 				document.documentElement.clientHeight: document.body.clientHeight;
 	},
@@ -66,9 +68,18 @@ zkDom = { //static methods
 		return a > b ? a: b;
 	},
 
+	/** Scrolls the browser window to the specified element. */
+	scrollTo: function (element) {
+		element = zkDom.$(element);
+		var pos = zkDom.cmOffset(element);
+		scrollTo(pos[0], pos[1]);
+		return element;
+	},
+
 	/** Returns the cumulative offset of the specified element.
 	 */
-	cmOffset: function(element) {
+	cmOffset: function (element) {
+		element = zkDom.$(element);
 		var valueT = 0, valueL = 0, operaBug, el = element.parentNode;
 		//Fix gecko difference, the offset of gecko excludes its border-width when its CSS position is relative or absolute
 		if (zk.gecko) {
@@ -106,7 +117,8 @@ zkDom = { //static methods
 	},
 	/** Returns the offset parent.
 	 */
-	offsetParent: function(element) {
+	offsetParent: function (element) {
+		element = zkDom.$(element);
 		if (element.offsetParent) return element.offsetParent;
 		if (element == document.body) return element;
 
@@ -327,9 +339,10 @@ zkDom = { //static methods
 
 		var x = zkDom.innerX(), y = zkDom.innerY(),
 			style = ' style="left:'+x+'px;top:'+y+'px"',
+			idtxt = id + 't';
 			html = '<div id="'+id+'"';
 		if (mask) html += '><div id="zk_mask" class="z-modal-mask"'+style+'></div';
-		html += '><div id="zk_prgtxt" class="z-loading"'+style
+		html += '><div id="'+idtxt+'" class="z-loading"'+style
 			+'><div class="z-loading-indicator"><img class="z-loading-icon" alt="..." src="'
 			+zkau.comURI('/web/img/spacer.gif')+'"/> '
 			+msg+'</div></div></div>'
@@ -338,7 +351,7 @@ zkDom = { //static methods
 		zkDom.outerHTML(n, html);
 
 		if (mask) { //center it
-			n = zkDom.$('zk_prgtxt');
+			n = zkDom.$(idtxt);
 			if (n) {
 				n.style.left = (zkDom.innerWidth() - n.offsetWidth) / 2 + x + "px";
 				n.style.top = (zkDom.innerHeight() - n.offsetHeight) / 2 + y + "px";
