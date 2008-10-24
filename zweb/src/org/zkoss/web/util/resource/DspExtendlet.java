@@ -86,7 +86,7 @@ import org.zkoss.web.servlet.dsp.ExtendletDspContext;
 		StringWriter sw =
 			_webctx.shallCompress(request, get2ndExtension(path)) ?
 				new StringWriter(4096): null;
-		cnt.interpret(new ExtendletDspContext(_webctx, request, response, sw));
+		cnt.interpret(new ExtendletDspContext(_webctx, request, response, path, sw));
 
 		if (sw != null) {
 			final String result = sw.toString();

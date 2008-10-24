@@ -610,6 +610,7 @@ public class ClassWebResource {
 		public void include(HttpServletRequest request,
 		HttpServletResponse response, String uri, Map params)
 		throws ServletException, IOException {
+			//Note: it is caller's job to convert related path to ~./
 			if (uri.startsWith("~./") && uri.indexOf('?') < 0
 			&& isDirectInclude(uri)) {
 				Object old = request.getAttribute(Attributes.ARG);
