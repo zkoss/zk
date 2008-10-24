@@ -46,12 +46,14 @@ public class Window2Default implements ComponentRenderer {
 		final Caption caption = self.getCaption();
 		final String title = self.getTitle();
 		final boolean isFrame = !self.inEmbedded() && !self.inPopup();
-		final boolean hasBorder = "normal".equals(self.getBorder());
+		final String noBorder = !"normal".equals(self.getBorder()) ? "-noborder" : "";
 		String wcExtStyle = "";
 		if (caption != null || title.length() > 0) {
-			wh.write("<div class=\"").write(zcls).write("-tl\"><div class=\"")
-				.write(zcls).write("-tr\"><div class=\"").write(zcls).write("-tm\"><div id=\"")
-				.write(uuid).write("!caption\" class=\"").write(zcls).write("-header\">");
+			wh.write("<div class=\"").write(zcls).write("-tl").write(noBorder)
+				.write("\"><div class=\"").write(zcls).write("-tr").write(noBorder)
+				.write("\"><div class=\"").write(zcls).write("-tm").write(noBorder)
+				.write("\"><div id=\"").write(uuid).write("!caption\" class=\"")
+				.write(zcls).write("-header\">");
 			if (caption == null) {
 				if (self.isClosable())
 					wh.write("<div id=\"").write(uuid).write("!close\" class=\"").write(zcls).write("-tool ").write(zcls).write("-close\"></div>");
@@ -70,24 +72,24 @@ public class Window2Default implements ComponentRenderer {
 			wh.write("</div></div></div></div>");
 			wcExtStyle = "border-top:0;";
 		} else if (isFrame) {
-			wh.write("<div class=\"").write(zcls).write("-tl\"><div class=\"")
-				.write(zcls).write("-tr\"><div class=\"").write(zcls)
-				.write("-tm-noheader\"></div></div></div>");
+			wh.write("<div class=\"").write(zcls).write("-tl").write(noBorder)
+				.write("\"><div class=\"").write(zcls).write("-tr").write(noBorder)
+				.write("\"><div class=\"").write(zcls).write("-tm").write(noBorder)
+				.write("-noheader\"></div></div></div>");
 		}
 		wh.write("<div id=\"").write(uuid).write("!bwrap\" class=\"").write(zcls).write("-body\">");
 		if (isFrame) {
-			wh.write("<div class=\"").write(zcls).write("-cl\"><div class=\"").write(zcls)
-				.write("-cr\"><div class=\"").write(zcls).write("-cm");
-			if (!hasBorder) wh.write("-noborder");
-			wh.write("\">");
+			wh.write("<div class=\"").write(zcls).write("-cl").write(noBorder)
+				.write("\"><div class=\"").write(zcls).write("-cr").write(noBorder)
+				.write("\"><div class=\"").write(zcls).write("-cm").write(noBorder)
+				.write("\">");
 		}
 		final String cs = self.getContentStyle();
 		if(cs != null){
 			wcExtStyle += cs;
 		}
 		wh.write("<div id=\"").write(uuid).write("!cave\" class=\"");
-		wh.write(self.getContentSclass()).write(" ").write(zcls).write("-cnt");
-		if (!hasBorder) wh.write("-noborder");
+		wh.write(self.getContentSclass()).write(" ").write(zcls).write("-cnt").write(noBorder);
 		wh.write("\"").writeAttr("style", wcExtStyle);
 		wh.write(">");
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
@@ -96,10 +98,12 @@ public class Window2Default implements ComponentRenderer {
 				wh.write(child);
 		}
 		wh.write("</div>");
-		if (isFrame)
-			wh.write("</div></div></div><div class=\"").write(zcls)
-				.write("-bl\"><div class=\"").write(zcls).write("-br\"><div class=\"")
-				.write(zcls).write("-bm\"></div></div></div>");
+		if (isFrame) {
+			wh.write("</div></div></div><div class=\"").write(zcls).write("-bl")
+				.write(noBorder).write("\"><div class=\"").write(zcls).write("-br")
+				.write(noBorder).write("\"><div class=\"").write(zcls).write("-bm")
+				.write(noBorder).write("\"></div></div></div>");
+		}
 		wh.write("</div></div>");	
 	}
 }
