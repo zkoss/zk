@@ -39,10 +39,10 @@ function submitUpload() {
 			it might mis-behave if user clicks it after submitting
 		--%>
 
-	parent.zkau.beginUpload(wndid);
+	parent.zAu.beginUpload(wndid);
 }
 function cancelUpload() {
-	parent.setTimeout("zkau.endUpload();zkau.sendOnClose('${param.uuid}');", 100);
+	parent.setTimeout("zAu.endUpload();zAu.sendOnClose('${param.uuid}');", 100);
 }
 function init() {
 	var el = document.getElementById("form");

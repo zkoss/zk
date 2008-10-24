@@ -91,7 +91,7 @@ div.z-debugbox {
 	filter: alpha(opacity=100); opacity: 1;
 }
 
-.z-label, .z-radio, .z-chkbox, .z-slider-pp, input.button, input.file, 
+.z-label, .z-radio-cnt, .z-chkbox-cnt, .z-slider-pp, input.button, input.file, 
 .z-loading,.z-errbox {
 	font-family: ${fontFamilyC};
 	font-size: ${fontSizeM}; font-weight: normal;

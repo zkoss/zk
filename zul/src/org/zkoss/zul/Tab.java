@@ -207,11 +207,8 @@ public class Tab extends LabelImageElement {
 	}
 
 	// -- super --//
-	public String getZclass(){				
-		String scls = super.getZclass();
-		if (scls == null)
-			scls = "z-tab";
-		return scls;
+	public String getZclass() {
+		return _zclass == null ? "z-tab" : super.getZclass();
 	}
 
 	// -- Component --//

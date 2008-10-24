@@ -38,15 +38,15 @@ ${z:outDeviceStyleSheets('ajax')}
 </body>
 <script type="text/javascript">
 <!--
-	parent.zkau.endUpload();
+	parent.zAu.endUpload();
 
-<%-- NOTE: we cannot execute zkau.sendUpdateResult in this frame with Firefox,
+<%-- NOTE: we cannot execute zAu.sendUpdateResult in this frame with Firefox,
 	because this frame will be removed and it will cause the following error
 	if we try to insert some elements (some kind of NullPointerException
 	"Component returned failure code: 0x80004005 (NS_ERROR_FAILURE) [nsIXMLHttpRequest.open]"
 --%>
-	var cmdUpdate = "zkau.sendUpdateResult('${arg.uuid}', '${arg.contentId}');";
-	var cmdClose = "zkau.sendOnClose('${arg.uuid}');";
+	var cmdUpdate = "zAu.sendUpdateResult('${arg.uuid}', '${arg.contentId}');";
+	var cmdClose = "zAu.sendOnClose('${arg.uuid}');";
 
 	<%-- exec at the parent's scope --%>
 	function exec(cmd) {

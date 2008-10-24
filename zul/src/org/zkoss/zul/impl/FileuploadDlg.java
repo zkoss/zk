@@ -47,7 +47,7 @@ public class FileuploadDlg extends Window {
 		onClose();
 	}
 	public void onClose() {
-		response("endUpload", new AuScript(null, "zkau.endUpload()"));
+		response("endUpload", new AuScript(null, "zAu.endUpload()"));
 		detach();
 	}
 

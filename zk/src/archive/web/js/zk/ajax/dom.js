@@ -162,6 +162,7 @@ zDom = { //static methods
 	},
 
 	/** Sets the style.
+	 * @param style a map of styles to update (String name, String value).
 	*/
 	setStyle: function(element, style) {
 		element = zDom.$(element);
@@ -312,7 +313,7 @@ zDom = { //static methods
 		function (msg, url, lineno) {
 			//We display errors only for local class web resource
 			//It is annoying to show error if google analytics's js not found
-			var au = zkau.uri();
+			var au = zAu.comURI();
 			if (au && url.indexOf(location.host) >= 0) {
 				var v = au.lastIndexOf(';');
 				v = v >= 0 ? au.substring(0, v): au;
@@ -344,7 +345,7 @@ zDom = { //static methods
 		if (mask) html += '><div id="zk_mask" class="z-modal-mask"'+style+'></div';
 		html += '><div id="'+idtxt+'" class="z-loading"'+style
 			+'><div class="z-loading-indicator"><img class="z-loading-icon" alt="..." src="'
-			+zkau.comURI('/web/img/spacer.gif')+'"/> '
+			+zAu.comURI('/web/img/spacer.gif')+'"/> '
 			+msg+'</div></div></div>'
 		var n = document.createElement("DIV");
 		document.body.appendChild(n);
@@ -420,26 +421,4 @@ if (zk.ie) {
 		}
 		return ns;
 	};
-}
-
-/** Returns the ZK attribute of the specified name.
- */
-function getZKAttr(el, nm) {
-	//20061120:
-	//1) getAttributeNS doesn't work properly to retrieve attribute back
-	//2) setAttribute("z:nm", val) doesn't work in Safari
-	try {
-		return el && el.getAttribute ? el.getAttribute("z." + nm): null;
-	} catch (e) {
-		return null; //IE6: failed if el is TABLE and attribute not there
-	}
-}
-/** Sets the ZK attribute of the specified name with the specified value.
- */
-function setZKAttr(el, nm, val) {
-	if (el && el.setAttribute) el.setAttribute("z." + nm, val);
-}
-function rmZKAttr(el, nm) {
-	if (el && el.removeAttribute) el.removeAttribute("z." + nm);
-	else setZKAttr(el, nm, "");
 }

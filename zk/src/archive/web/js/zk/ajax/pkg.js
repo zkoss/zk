@@ -67,7 +67,7 @@ zPkg = {
 		if (modver) uri = "/web/_zv" + modver + "/js" + uri;
 		else uri = "/web/js" + uri;
 
-		e.src = zkau.comURI(uri, dtid);
+		e.src = zAu.comURI(uri, dtid);
 		document.getElementsByTagName("HEAD")[0].appendChild(e);
 	},
 	_pkgLds: {},

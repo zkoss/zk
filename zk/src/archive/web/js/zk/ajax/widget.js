@@ -120,6 +120,17 @@ zk.Widget = zk.$extends(zk.Object, {
 		zk.debug("attach", this.uuid, id);
 	}
 }, {
+	/** Returns the widget of the specified ID, or null if not found,
+	 * or the widget is attached to the DOM tree.
+	 * <p>Note: null is returned if the widget is not attached to the DOM tree
+	 * (i.e., not associated with an DOM element).
+	 */
+	$: function (uuid) {
+		//No map from uuid to widget directly. rather, go thru DOM
+		var n = zDom.$(uuid);
+		return n ? n.z_wgt: null;
+	},
+
 	/** Returns the next unquie widget UUID.
 	 */
 	nextUuid: function () {
@@ -132,12 +143,15 @@ zk.Widget = zk.$extends(zk.Object, {
 zk.Desktop = zk.$extends(zk.Object, {
 	/** The type (always "#d")(readonly). */
 	type: "#d",
+	/** The AU request that shall be sent. Used by au.js */
+	_aureqs: [],
+
 	$init: function (dtid, updateURI) {
-		var zdt = zk.Desktop, dt = zdt._dts[dtid];
+		var zdt = zk.Desktop, dt = zdt.all[dtid];
 		if (!dt) {
 			this.id = dtid;
 			this.updateURI = updateURI;
-			zdt._dts[dtid] = this;
+			zdt.all[dtid] = this;
 			if (!zdt._dt) zdt._dt = this; //default desktop
 		} else if (updateURI)
 			dt.updateURI = updateURI;
@@ -149,12 +163,14 @@ zk.Desktop = zk.$extends(zk.Object, {
 	 */
 	$: function (dtid) {
 		return dtid ? typeof dtid == 'string' ?
-			zk.Desktop._dts[dtid]: dtid: zk.Desktop._dt;
+			zk.Desktop.all[dtid]: dtid: zk.Desktop._dt;
 	},
+	/** A map of (String dtid, zk.Desktop dt) (readonly). */
+	all: {},
 	/** Remove desktops that are no longer valid.
 	 */
 	cleanup: function () {
-		var zdt = zk.Desktop, dts = zdt._dts;
+		var zdt = zk.Desktop, dts = zdt.all;
 		if (zdt._dt && zdt._dt.pgid && !zDom.$(zdt._dt.pgid)) //removed
 			zdt._dt = null;
 		for (var dtid in dts) {
@@ -164,8 +180,7 @@ zk.Desktop = zk.$extends(zk.Object, {
 			else if (!zdt._dt)
 				zdt._dt = dt;
 		}
-	},
-	_dts: {}
+	}
 });
 
 /** A ZK page. */

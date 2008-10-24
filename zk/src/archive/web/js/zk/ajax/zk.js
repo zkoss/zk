@@ -244,7 +244,7 @@ zk = { //static methods
 		var html =
 	 '<div class="z-error" style="left:'+(zDom.innerX()+x)+'px;top:'+(zDom.innerY()+y)
 	+'px;" id="'+id+'"><table cellpadding="2" cellspacing="2" width="100%"><tr valign="top">'
-	+'<td width="20pt"><button onclick="zkau.sendRedraw()">redraw</button>'
+	+'<td width="20pt"><button onclick="zAu.sendRedraw()">redraw</button>'
 	+'<button onclick="zDom.detach(\''+id+'\')">close</button></td>'
 	+'<td class="z-error-msg">'+zUtil.encodeXML(msg, true) //Bug 1463668: security
 	+'</td></tr></table></div>';

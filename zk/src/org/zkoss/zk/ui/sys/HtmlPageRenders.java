@@ -248,7 +248,7 @@ public class HtmlPageRenders {
 				}
 			}
 			if (k != sb.length()) {
-				sb.insert(k, "zkau.errorURI(");
+				sb.insert(k, "zAu.errorURI(");
 				sb.append(");\n");
 			}
 		}

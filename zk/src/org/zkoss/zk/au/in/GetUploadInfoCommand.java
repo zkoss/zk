@@ -50,7 +50,7 @@ public class GetUploadInfoCommand extends Command {
 		final Integer p = (Integer)dt.getAttribute(Attributes.UPLOAD_PERCENT);
 		final Long cb = (Long)dt.getAttribute(Attributes.UPLOAD_SIZE);
 		final AuScript response = new AuScript(null,
-			"zkau.updateUploadInfo("
+			"zAu.updateUploadInfo("
 				+(p != null ? p.intValue(): 0)+','
 				+(cb != null ? cb.longValue(): 0)+')');
 		Executions.getCurrent()

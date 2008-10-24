@@ -145,10 +145,7 @@ public class Radio extends Checkbox {
 	 * 
 	 */
 	public String getZclass() {
-		String scls = super.getZclass();
-		if (scls == null)
-			scls = "z-radio";
-		return scls;
+		return _zclass == null ? "z-radio" : super.getZclass();
 	}
 	//-- Component --//
 	public void setParent(Component parent) {
