@@ -207,10 +207,7 @@ public class ForEachImpl implements ForEach {
 			throw new IllegalStateException("Iterate twice not allowed");
 
 		if (_status == null) {
-			//Bug 1786154: we have to prepare _status first since _expr,
-			//_begin or _end might depend on it
-			setupStatus();
-
+			//Bug 2188572: we have to evaluate _expr before setupStatus
 			final Object o;
 			if (_expr == null || _expr.length == 0) {
 				o = null;
@@ -222,11 +219,15 @@ public class ForEachImpl implements ForEach {
 					ary[j] = eval(_expr[j]);
 				o = ary;
 			}
+
 			if (o == null) {
 				_done = true;
-				restoreStatus();
 				return false;
 			}
+
+			//Bug 1786154: we have to prepare _status first since _expr,
+			//_begin or _end might depend on it
+			setupStatus();
 
 			Integer ibeg = (Integer)eval(_begin);
 			int vbeg = ibeg != null ? ibeg.intValue(): 0;
