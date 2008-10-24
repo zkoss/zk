@@ -317,10 +317,7 @@ public class Label extends XulElement {
 	 * <p>Default: "z-label"
 	 */
 	public String getZclass() {
-		String scls = super.getZclass();
-		if (scls == null)
-			scls = "z-label";
-		return scls;
+		return _zclass == null ? "z-label" : super.getZclass();
 	}
 	//-- Component --//
 	public void invalidate() {
