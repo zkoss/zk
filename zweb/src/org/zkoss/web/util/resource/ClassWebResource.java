@@ -530,7 +530,7 @@ public class ClassWebResource {
 			if ("js".equals(ext)) {
 				//Don't sendError. Reason: 1) IE waits and no onerror fired
 				//2) better to debug (user will tell us what went wrong)
-				data = ("(zk.error?zk.error:alert)('"+pi+" not found');").getBytes();
+				data = ("(window.zk&&zk.error?zk.error:alert)('"+pi+" not found');").getBytes();
 					//FUTURE: zweb shall not depend on zk
 			} else {
 				if (Servlets.isIncluded(request)) log.error("Resource not found: "+pi);
