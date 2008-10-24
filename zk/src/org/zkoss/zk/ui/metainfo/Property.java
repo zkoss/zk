@@ -131,25 +131,6 @@ implements Condition, java.io.Serializable {
 		_value.setRawValue(value);
 	}
 
-	/** Resolves the method. */
-	private final void resolve(Class cls) {
-		final String mtdnm = Classes.toMethodName(_name, "set");
-		if (_value != null && _value.isExpression()) {
-			_mtds = Classes.getCloseMethods(cls, mtdnm, new Class[] {null});
-			if (_mtds.length == 0) {
-				if (!DynamicPropertied.class.isAssignableFrom(cls))
-					throw new PropertyNotFoundException("Method "+mtdnm+" not found for "+cls); 
-				_mtds = null;
-			} else if (_mtds.length == 1) {
-				_mtd = _mtds[0];
-				_mtds = null;
-			}
-		} else {
-		//Note: String has higher priority
-			_mtd = resolveMethod0(cls, mtdnm);
-		}
-	}
-
 	/** Evaluates the value to an Object.
 	 * Note: it does NOT call {@link #isEffective} and it doesn't coerce
 	 * the result (i.e., Object.class is assumed).
@@ -189,52 +170,91 @@ implements Condition, java.io.Serializable {
 	 * <p>Note: this method does nothing if {@link #isEffective} returns false.
 	 */
 	public void assign(Component comp) {
-		if (!isEffective(comp))
-			return; //ignored
-
-		try {
-			final Class cls = comp.getClass();
-			if (_lastcls != cls) {
-				resolve(cls);
-				_lastcls = cls;
+		if (isEffective(comp)) {
+			try {
+				assign0(comp);
+			} catch (Exception ex) {
+				log.error("Failed to assign "+this+" to "+comp+"\n"+Exceptions.getMessage(ex));
+				throw UiException.Aide.wrap(ex);
 			}
-
-			//Note: if _mtd and _mtds are both null, it must be dyna-attr
-			//However, if dyna-attr, _mtd or _mtds might not be null
-			final Class type =
-				_mtd != null ? _mtd.getParameterTypes()[0]: Object.class;
-			if (_value != null) _value.setExpectedType(type);
-			Object val = getValue(comp);
-
-			final Method mtd;
-			if (_mtd != null) {
-				mtd = _mtd;
-			} else if (_mtds == null) {
-				//it must be dynamic attribute
-				((DynamicPropertied)comp).setDynamicProperty(_name, val);
-				return; //done
-			} else if (val == null) { //_mtds != null but val == null
-				mtd = _mtds[0];
-				val = Classes.coerce(mtd.getParameterTypes()[0], val);
-			} else { //_mtds != null && val != null
-				for (int j = 0; ; ++j) {
-					if (j == _mtds.length) {
-						mtd = _mtds[0];
-						val = Classes.coerce(mtd.getParameterTypes()[0], val);
-						break; //pick randomly
-					}
-					if (_mtds[j].getParameterTypes()[0].isInstance(val)) {
-						mtd = _mtds[j];
-						break; //found
-					}
+		}
+	}
+	private Object[] resolve(Class cls) {
+		Method mtd = null;
+		Method[] mtds = null;
+		final String mtdnm = Classes.toMethodName(_name, "set");
+		if (_value != null && _value.isExpression()) {
+			mtds = Classes.getCloseMethods(cls, mtdnm, new Class[] {null});
+			if (mtds.length == 0) {
+				if (!DynamicPropertied.class.isAssignableFrom(cls))
+					throw new PropertyNotFoundException("Method "+mtdnm+" not found for "+cls); 
+				mtds = null;
+			} else if (mtds.length == 1) {
+				mtd = mtds[0];
+				mtds = null;
+			}
+		} else {
+		//Note: String has higher priority
+			mtd = resolveMethod0(cls, mtdnm);
+		}
+		return new Object[] {mtd, mtds};
+	}
+	private void assign0(Component comp) throws Exception {
+		//Note: we have to synchronize since metainfo is shared
+		//(unless it is initialized at the constructor)
+		final Class cls = comp.getClass();
+		if (_lastcls == cls) {
+			assign1(comp, _mtd, _mtds);
+		} else if (_lastcls == null) { //first tiime
+			synchronized (this) {
+				if (_lastcls == null) { //not being initialized
+					final Object[] mi = resolve(cls);
+					_mtd = (Method)mi[0];
+					_mtds = (Method[])mi[1];
+					_lastcls = cls;
 				}
 			}
-
-			mtd.invoke(comp, new Object[] {val});
-		} catch (Exception ex) {
-			log.error("Failed to assign "+this+" to "+comp+"\n"+Exceptions.getMessage(ex));
-			throw UiException.Aide.wrap(ex);
+			assign0(comp); //do again (recursive)
+		} else { //two or more diff comp classes (use="${x?a:b}")
+			//We don't cache methods for 2nd class (only cache 1st)
+			final Object[] mi = resolve(cls);
+			assign1(comp, (Method)mi[0], (Method[])mi[1]);
 		}
+	}
+	private void assign1(Component comp, Method mtd, Method[] mtds)
+	throws Exception {
+		//Note: if mtd and mtds are both null, it must be dyna-attr
+		//However, if dyna-attr, mtd or mtds might not be null
+		final Class type =
+			mtd != null ? mtd.getParameterTypes()[0]: Object.class;
+		if (_value != null) _value.setExpectedType(type);
+		Object val = getValue(comp);
+
+		final Method m;
+		if (mtd != null) {
+			m = mtd;
+		} else if (mtds == null) {
+			//it must be dynamic attribute
+			((DynamicPropertied)comp).setDynamicProperty(_name, val);
+			return; //done
+		} else if (val == null) { //mtds != null but val == null
+			m = mtds[0];
+			val = Classes.coerce(m.getParameterTypes()[0], val);
+		} else { //mtds != null && val != null
+			for (int j = 0; ; ++j) {
+				if (j == mtds.length) {
+					m = mtds[0];
+					val = Classes.coerce(m.getParameterTypes()[0], val);
+					break; //pick randomly
+				}
+				if (mtds[j].getParameterTypes()[0].isInstance(val)) {
+					m = mtds[j];
+					break; //found
+				}
+			}
+		}
+
+		m.invoke(comp, new Object[] {val});
 	}
 
 	public boolean isEffective(Component comp) {
