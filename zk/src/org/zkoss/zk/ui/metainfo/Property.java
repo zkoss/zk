@@ -203,9 +203,7 @@ implements Condition, java.io.Serializable {
 		//Note: we have to synchronize since metainfo is shared
 		//(unless it is initialized at the constructor)
 		final Class cls = comp.getClass();
-		if (_lastcls == cls) {
-			assign1(comp, _mtd, _mtds);
-		} else if (_lastcls == null) { //first tiime
+		if (_lastcls == null) { //first tiime
 			synchronized (this) {
 				if (_lastcls == null) { //not being initialized
 					final Object[] mi = resolve(cls);
@@ -214,15 +212,20 @@ implements Condition, java.io.Serializable {
 					_lastcls = cls;
 				}
 			}
-			assign0(comp); //do again (recursive)
+		}
+
+		Method mtd;
+		Method[] mtds;
+		if (_lastcls == cls) {
+			mtd = _mtd;
+			mtds = _mtds;
 		} else { //two or more diff comp classes (use="${x?a:b}")
 			//We don't cache methods for 2nd class (only cache 1st)
 			final Object[] mi = resolve(cls);
-			assign1(comp, (Method)mi[0], (Method[])mi[1]);
+			mtd = (Method)mi[0];
+			mtds = (Method[])mi[1];
 		}
-	}
-	private void assign1(Component comp, Method mtd, Method[] mtds)
-	throws Exception {
+
 		//Note: if mtd and mtds are both null, it must be dyna-attr
 		//However, if dyna-attr, mtd or mtds might not be null
 		final Class type =
