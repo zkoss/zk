@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-2197450.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Sun Oct 26 19:44:10     2008, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+<zscript>
+void dump(Label i) {
+	String value = "";
+	for (Component r = page.firstRoot; r != null; r = r.nextSibling)
+		value += " " + r.id +",";
+	i.value = value;
+}
+</zscript>
+
+<window id="win1" title="win1" border="normal" width="200px">Click
+<button label="test" onClick="dump(i1)"/>
+and you shall see "win1, win2, win3,"
+<separator/>
+<label id="i1"/>
+<separator/>
+Then, click <button label="test2" onClick="win2.detach();dump(i2)"/>
+and you shall see "win1, win3,"
+<separator/>
+<label id="i2"/>
+</window>
+<window id="win2" title="win2" width="200px">Hello, 2nd World!</window>
+<window id="win3" title="win3" border="normal" width="200px">Hello, 3rd World!
+</window>
+</zk>

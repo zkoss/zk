@@ -102,7 +102,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 //	private static final Log log = Log.lookup(AbstractComponent.class);
     private static final long serialVersionUID = 20070920L;
 
-	private transient Page _page;
+	/*package*/ transient Page _page;
 	private String _id;
 	private String _uuid;
 	private transient ComponentDefinition _def;
@@ -121,13 +121,13 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private transient List _apiChildren;
 	private transient AbstractComponent _parent;
 	/** The next sibling. */
-	private transient AbstractComponent _next;
+	/*package*/ transient AbstractComponent _next;
 	/** The previous sibling. */
-	private transient AbstractComponent _prev;
+	/*package*/ transient AbstractComponent _prev;
 	/** The first child. */
-	private transient AbstractComponent _first;
+	/*package*/ transient AbstractComponent _first;
 	/** The last child. */
-	private transient AbstractComponent _last;
+	/*package*/ transient AbstractComponent _last;
 	/** # of children. */
 	private int _nChild;
 	/** The modification count used to avoid co-modification of _next, _prev..

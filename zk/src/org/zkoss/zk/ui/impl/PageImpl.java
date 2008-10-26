@@ -19,10 +19,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.impl;
 
 import java.util.Iterator;
-import java.util.ListIterator;
 import java.util.List;
 import java.util.LinkedList;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -59,6 +57,7 @@ import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.AbstractPage;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.event.EventListener;
@@ -109,10 +108,10 @@ import org.zkoss.zk.scripting.util.AbstractNamespace;
  *
  * @author tomyeh
  */
-public class PageImpl implements Page, PageCtrl, java.io.Serializable {
+public class PageImpl extends AbstractPage implements java.io.Serializable {
 	private static final Log log = Log.lookup(PageImpl.class);
 	private static final Log _zklog = Log.lookup("org.zkoss.zk.log");
-    private static final long serialVersionUID = 20070413L;
+    private static final long serialVersionUID = 20081026L;
 
 	/** URI for redrawing as a desktop or part of another desktop. */
 	private final ExValue _cplURI, _dkURI, _pgURI;
@@ -127,11 +126,6 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	private String _zslang;
 	/** A list of deferred zscript [Component parent, {@link ZScript}]. */
 	private List _zsDeferred;
-	/** A list of root components. */
-	private final List _roots = new LinkedList();
-	private transient List _roRoots;
-	/** A map of fellows. */
-	private transient Map _fellows;
 	/** A map of attributes. */
 	private transient Map _attrs;
 	/** A map of event listener: Map(evtnm, List(EventListener)). */
@@ -226,11 +220,9 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	/** Initialized the page when contructed or deserialized.
 	 */
 	protected void init() {
-		_ips = new LinkedHashMap(3);
+		_ips = new LinkedHashMap(4);
 		_ns = new NS();
-		_roRoots = Collections.unmodifiableList(_roots);
 		_attrs = new HashMap();
-		_fellows = new HashMap();
 	}
 
 	/** Returns the UI engine.
@@ -303,10 +295,6 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		}
 	}
 
-	public Collection getRoots() {
-		return _roRoots;
-	}
-
 	public Map getAttributes(int scope) {
 		switch (scope) {
 		case DESKTOP_SCOPE:
@@ -363,11 +351,6 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 
 	public void invalidate() {
 		getUiEngine().addInvalidate(this);
-	}
-	public void removeComponents() {
-		for (Iterator it = new ArrayList(getRoots()).iterator();
-		it.hasNext();)
-			((Component)it.next()).detach();
 	}
 
 	public Class resolveClass(String clsnm) throws ClassNotFoundException {
@@ -541,22 +524,6 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		return false;
 	}
 
-	public Component getFellow(String compId) {
-		final Component comp = (Component)_fellows.get(compId);
-		if (comp == null)
-			if (compId != null && ComponentsCtrl.isAutoId(compId))
-				throw new ComponentNotFoundException(MZk.AUTO_ID_NOT_LOCATABLE, compId);
-			else
-				throw new ComponentNotFoundException("Fellow component not found: "+compId);
-		return comp;
-	}
-	public Component getFellowIfAny(String compId) {
-		return (Component)_fellows.get(compId);
-	}
-	public Collection getFellows() {
-		return Collections.unmodifiableCollection(_fellows.values());
-	}
-
 	public boolean isComplete() {
 		return _complete;
 	}
@@ -638,6 +605,8 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		}
 	}
 	public void destroy() {
+		super.destroy();
+
 		for (Iterator it = getLoadedInterpreters().iterator(); it.hasNext();) {
 			final Interpreter ip = (Interpreter)it.next();
 			try {
@@ -649,9 +618,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		_ips.clear();
 
 		//theorectically, the following is not necessary, but, to be safe...
-		_roots.clear();
 		_attrs.clear();
-		_fellows = new HashMap(1); //not clear() since # of fellows might huge
 		_ips = null; //not clear since it is better to NPE than memory leak
 		_desktop = null;
 		_owner = _defparent = null;
@@ -724,70 +691,8 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 	public final Desktop getDesktop() {
 		return _desktop;
 	}
-	public void addRoot(Component comp) {
-		assert D.OFF || comp.getParent() == null;
-		for (Iterator it = _roots.iterator(); it.hasNext();)
-			if (comp == it.next())
-				return;
-		_roots.add(comp);
-	}
-	public void removeRoot(Component comp) {
-		for (Iterator it = _roots.iterator(); it.hasNext();)
-			if (comp == it.next()) {
-				it.remove();
-				return;
-			}
-	}
-	public void moveRoot(Component comp, Component refRoot) {
-		if (comp.getPage() != this || comp.getParent() != null)
-			return; //nothing to do
-
-		boolean added = false, found = false;
-		for (ListIterator it = _roots.listIterator(); it.hasNext();) {
-			final Object o = it.next();
-			if (o == comp) {
-				if (!added) {
-					if (!it.hasNext()) return; //last
-					if (it.next() == refRoot) return; //same position
-					it.previous(); it.previous(); it.next(); //restore cursor
-				}
-				it.remove();
-				found = true;
-				if (added || refRoot == null) break; //done
-			} else if (o == refRoot) {
-				it.previous();
-				it.add(comp);
-				it.next();
-				added = true;
-				if (found) break; //done
-			}
-		}
-
-		if (!added) _roots.add(comp);
-	}
-
-	public void addFellow(Component comp) {
-		final String compId = comp.getId();
-		assert D.OFF || !ComponentsCtrl.isAutoId(compId);
-
-		final Object old = _fellows.put(compId, comp);
-		if (old != comp) { //possible due to recursive call
-			if (old != null) {
-				_fellows.put(((Component)old).getId(), old); //recover
-				throw new InternalError("Called shall prevent replicated ID for roots");
-			}
-		}
-	}
-	public void removeFellow(Component comp) {
-		_fellows.remove(comp.getId());
-	}
-	public boolean hasFellow(String compId) {
-		return _fellows.containsKey(compId);
-	}
 
 	public void redraw(Collection responses, Writer out) throws IOException {
-//		if (log.debugable()) log.debug("Redrawing page: "+this+", roots="+_roots);
-
 		final Execution exec = getExecution();
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 		final boolean asyncUpdate = execCtrl.getVisualizer().isEverAsyncUpdate();
@@ -966,7 +871,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
  	}
 
 	public void sessionWillPassivate(Desktop desktop) {
-		for (Iterator it = _roots.iterator(); it.hasNext();)
+		for (Iterator it = getRoots().iterator(); it.hasNext();)
 			((ComponentCtrl)it.next()).sessionWillPassivate(this);
 	}
 	public void sessionDidActivate(Desktop desktop) {
@@ -977,7 +882,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 			_ownerUuid = null;
 		}
 
-		for (Iterator it = _roots.iterator(); it.hasNext();)
+		for (Iterator it = getRoots().iterator(); it.hasNext();)
 			((ComponentCtrl)it.next()).sessionDidActivate(this);
 
 		initVariables(); //since some variables depend on desktop
@@ -1103,7 +1008,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 
 		final String pid = (String)s.readObject();
 		if (pid != null)
-			_defparent = fixDefaultParent(_roots, pid);
+			_defparent = fixDefaultParent(getRoots(), pid);
 
 		Serializables.smartRead(s, _attrs);
 		didDeserialize(_attrs.values());
@@ -1131,8 +1036,6 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 			_ns.setVariable(nm, val, true);
 			didDeserialize(val);
 		}
-
-		fixFellows(_roots);
 
 		//Handles interpreters
 		for (;;) {
@@ -1162,16 +1065,6 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 			"session", "sessionScope", "execution"};
 		for (int j = 0; j < nms.length; ++j)
 			_nonSerNames.add(nms[j]);
-	}
-	private final void fixFellows(Collection c) {
-		for (Iterator it = c.iterator(); it.hasNext();) {
-			final Component comp = (Component)it.next();
-			final String compId = comp.getId();
-			if (!ComponentsCtrl.isAutoId(compId))
-				addFellow(comp);
-			if (!(comp instanceof IdSpace))
-				fixFellows(comp.getChildren()); //recursive
-		}
 	}
 	private static final
 	Component fixDefaultParent(Collection c, String uuid) {
@@ -1205,7 +1098,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 			return _vars.keySet();
 		}
 		public boolean containsVariable(String name, boolean local) {
-			return _vars.containsKey(name) || _fellows.containsKey(name)
+			return _vars.containsKey(name) || hasFellow(name)
 				|| resolveVariable(name) != null;
 		}
 		public Object getVariable(String name, boolean local) {
@@ -1213,7 +1106,7 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 			if (val != null || _vars.containsKey(name))
 				return val;
 
-			val = _fellows.get(name);
+			val = getFellowIfAny(name);
 			return val != null ? val: resolveVariable(name);
 		}
 		public void setVariable(String name, Object value, boolean local) {
