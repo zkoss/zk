@@ -60,6 +60,7 @@ zAu = { //static methods
 	},
 
 	/** Returns whether any AU request is in processing.
+	 * <p>Note: zk.processing represents both AU and other processing
 	 */
 	processing: function () {
 		return zAu._cmdsQue.length || zAu._areq || zAu._preqInf
@@ -71,9 +72,12 @@ zAu = { //static methods
 	 * @param timeout if non-negative, it is used when zAu.asap is true.
 	 */
 	asapTimeout: function (wgt, evtnm, timeout) {
+		wgt = zk.Widget.$(wgt);
+		if (!wgt || !wgt.inServer) return -1;
+
 		var asap = zAu.asap(wgt, evtnm), fmt;
 		if (!asap && evtnm == "onChange") {
-			fmt = getZKAttr(wgt, "srvald");
+			fmt = wgt.srvald;
 			if (fmt) { //srvald specified
 				fmt = fmt == "fmt";
 				asap = !fmt; //if not fmt (and not null), it means server-side validation required
@@ -86,7 +90,8 @@ zAu = { //static methods
 	 * the specified event.
 	 */
 	asap: function (wgt, evtnm) {
-		return zk.Widget.$(wgt).evtnm == "true" ;
+		wgt = zk.Widget.$(wgt);
+		return wgt && wgt.evtnm == "true" && wgt.inServer;
 	},
 
 	/** Asks the server to update the result (for file uploading).

@@ -26,4 +26,5 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		onClick="new Label(&quot;[1.1]&quot;).setPageBefore(page, l1)"/>
 	<button label="move [2] before [1]" onClick="l1.setPageBefore(page, l0)"/>
 	<button label="move [1] to end" onClick="l0.setPageBefore(page, null)"/>
+	<button label="redraw" onClick="page.invalidate()"/>
 </zk>

@@ -19,15 +19,15 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 if (!window.zk) {
-<c:include page="~./js/zk/ajax/zk.js"/>
-<c:include page="~./js/zk/ajax/lang/mesg*.js"/>
-<c:include page="~./js/zk/ajax/util.js"/>
-<c:include page="~./js/zk/ajax/dom.js"/>
-<c:include page="~./js/zk/ajax/event.js"/>
-<c:include page="~./js/zk/ajax/widget.js"/>
-<c:include page="~./js/zk/ajax/pkg.js"/>
-<c:include page="~./js/zk/ajax/create.js"/>
-<c:include page="~./js/zk/ajax/au.js"/>
+<c:include page="zk.js"/>
+<c:include page="lang/mesg*.js"/>
+<c:include page="util.js"/>
+<c:include page="dom.js"/>
+<c:include page="event.js"/>
+<c:include page="widget.js"/>
+<c:include page="pkg.js"/>
+<c:include page="create.js"/>
+<c:include page="au.js"/>
 
 ${z:outLocaleJavaScript()}
 }

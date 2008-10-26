@@ -163,6 +163,14 @@ public interface Page extends IdSpace {
 	/** Returns a readonly list of the root components.
 	 */
 	public Collection getRoots();
+	/** Returns the first root component.
+	 * @since 3.5.2
+	 */
+	public Component getFirstRoot();
+	/** Returns the last root component.
+	 * @since 3.5.2
+	 */
+	public Component getLastRoot();
 
 	/** Used with {@link #getAttribute} and relevants to denote
 	 * custom attributes shared by the same page.

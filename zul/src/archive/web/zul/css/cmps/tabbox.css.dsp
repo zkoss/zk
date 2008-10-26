@@ -60,7 +60,7 @@
 }
 
 .z-tabbox-ul{
-	background:#CEDFF5 url(${c:encodeURL('~./zul/img/tab2/tab-strip-bg.png')}) repeat-x scroll center bottom;
+	background:#C7E3F3 url(${c:encodeURL('~./zul/img/tab2/tab-strip-bg.png')}) repeat-x scroll center top;
 	padding-left:0px;
 	padding-top:1px;
 	list-style-image:none;

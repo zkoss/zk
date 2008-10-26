@@ -78,4 +78,8 @@ public interface IdSpace {
 	 * @since 3.0.6
 	 */
 	public Collection getFellows();
+	/** Returns whether a fellow exists with the specified component ID.
+	 * @since 5.0.0
+	 */
+	public boolean hasFellow(String compId);
 }
