@@ -39,5 +39,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<h:li><toolbarbutton label="FCKeditor" onClick="doSelect(&quot;zf1&quot;)"/></h:li>
 		<h:li><toolbarbutton label="Google Maps" onClick="doSelect(&quot;zf3&quot;)"/></h:li>
 		<h:li><toolbarbutton label="SIMILE Timeline" onClick="doSelect(&quot;zf4&quot;)"/></h:li>
+		<h:li><toolbarbutton label="SIMILE Timeplot" onClick="doSelect(&quot;zf5&quot;)"/></h:li>
 	</h:ul>
 </window>
