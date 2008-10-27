@@ -18,6 +18,7 @@ ZK 3.5.2
   2197450: getNextSibling() not maintained in root components
   2186722: Typo in window code sample
   2199361: Failed to create components in Initiator.init()
+  2198961: AuUploader ignores 'nextURI' parameter
 
 	--------
 ZK 3.5.1
