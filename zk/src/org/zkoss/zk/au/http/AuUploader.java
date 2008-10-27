@@ -77,8 +77,7 @@ public class AuUploader implements AuProcessor {
 	HttpServletRequest request, HttpServletResponse response, String pathInfo)
 	throws ServletException, IOException {
 		final Map attrs = new HashMap();
-		String alert = null, uuid = null,
-			nextURI = "~./zul/html/fileupload-done.html.dsp";
+		String alert = null, uuid = null, nextURI = null;
 		try {
 			if (!isMultipartContent(request)) {
 				alert = "enctype must be multipart/form-data";
@@ -96,11 +95,7 @@ public class AuUploader implements AuProcessor {
 						final Desktop desktop = ((WebAppCtrl)sess.getWebApp())
 							.getDesktopCache(sess).getDesktop(dtid);
 						final Map params = parseRequest(request, desktop);
-
-						final String uri = (String)params.get("nextURI");
-						if (uri != null && uri.length() != 0)
-							nextURI = uri;
-
+						nextURI = (String)params.get("nextURI");
 						processItems(desktop, params, attrs);
 					}
 				}
@@ -111,6 +106,9 @@ public class AuUploader implements AuProcessor {
 				if (uuid != null)
 					attrs.put("uuid", uuid);
 			}
+			if (nextURI == null)
+				nextURI = request.getParameter("nextURI");
+
 			if (ex instanceof ComponentNotFoundException) {
 				alert = Messages.get(MZk.UPDATE_OBSOLETE_PAGE, uuid);
 			} else {
@@ -122,6 +120,8 @@ public class AuUploader implements AuProcessor {
 			attrs.put("alert", alert);
 		if (D.ON && log.finerable()) log.finer(attrs);
 
+		if (nextURI == null || nextURI.length() == 0)
+			nextURI = "~./zul/html/fileupload-done.html.dsp";
 		Servlets.forward(ctx, request, response,
 			nextURI, attrs, Servlets.PASS_THRU_ATTR);
 	}
