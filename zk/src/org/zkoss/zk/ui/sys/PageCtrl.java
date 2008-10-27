@@ -55,9 +55,26 @@ public interface PageCtrl {
 	 */
 	public static final String ATTR_REDRAW_CONTROL = "org.zkoss.zk.ui.page.redrawCtrl";
 
+	/** Pre-initializes this page.
+	 * It initializes {@link org.zkoss.zk.ui.Page#getDesktop},
+	 * but it doesn't add this page to the desktop yet
+	 * (which is done by {@link #init}).
+	 *
+	 * <p>Note: it is called before 
+	 * {@link org.zkoss.zk.ui.util.Initiator#doInit} and {@link #init}.
+	 * Since {@link org.zkoss.zk.ui.Page#getDesktop} is initialized in this
+	 * method, it is OK to create components in 
+	 * {@link org.zkoss.zk.ui.util.Initiator#doInit}.
+	 *
+	 * @since 3.5.2
+	 */
+	public void preInit();
 	/** Initializes this page by assigning the info provided by
 	 * the specified {@link PageConfig}, and then adds it
 	 * to a desktop (by use of {@link Execution#getDesktop}).
+	 *
+	 * <p>Note: this method is called after {@link #preInit} and
+	 * {@link org.zkoss.zk.ui.util.Initiator#doInit}.
 	 *
 	 * <p>This method shall be called only after the current execution
 	 * is activated.
