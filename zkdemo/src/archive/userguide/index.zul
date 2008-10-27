@@ -52,6 +52,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 						<treeitem id="lsplt" label="Splitters" value="/userguide/layout/splitter.zul"/>
 						<treeitem id="layout" label="Border layout" value="/userguide/layout/borderlayout.zul"/>
 						<treeitem id="columnlayout" label="Column layout" value="/userguide/layout/columnlayout.zul"/>
+						<treeitem id="tablelayout" label="Table layout" value="/userguide/layout/tablelayout.zul"/>
+						<treeitem id="portallayout" label="Portal layout" value="/userguide/layout/portallayout.zul"/>
 						<treeitem id="l2" label="Tabboxes" value="/userguide/layout/tabbox.zul"/>
 						<treeitem id="l3" label="More tabboxes" value="/userguide/layout/moreTabbox.zul"/>
 						<treeitem id="l4" label="Groupbox" value="/userguide/layout/groupbox.zul"/>
