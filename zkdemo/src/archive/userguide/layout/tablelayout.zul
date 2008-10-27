@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+tablelayout.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Oct 27 16:37:57     2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo" use="org.zkoss.zkdemo.userguide.DemoWindow" xmlns:h="http://www.w3.org/1999/xhtml">
+	<html><![CDATA[
+	<h4>Tablelayout</h4>
+	<p>Tablelayout is a container as an HTML table whose columns can be specified, and rowspan and colspan of
+	its child can also be specified to create complex layouts within the table.</p>
+	]]></html>
+	<groupbox mold="3d" width="100%">
+		<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
+		<window id="view">
+		</window>
+	</groupbox>
+	<groupbox id="tryView" mold="3d" open="false" width="100%">
+		<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
+		<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="20" width="100%">
+			<attribute name="value"><![CDATA[
+<zk>
+	<tablelayout columns="3">
+		<tablechildren rowspan="2">
+			<panel border="normal">
+				<panelchildren>1</panelchildren>
+			</panel>
+		</tablechildren>
+		<tablechildren colspan="2">
+			<panel border="normal">
+				<panelchildren>2</panelchildren>
+			</panel>
+		</tablechildren>
+		<tablechildren>
+			<panel border="normal">
+				<panelchildren>3</panelchildren>
+			</panel>
+		</tablechildren>
+		<tablechildren>
+			<panel border="normal">
+				<panelchildren>4</panelchildren>
+			</panel>
+		</tablechildren>
+		<tablechildren>
+			<panel border="normal">
+				<panelchildren>5</panelchildren>
+			</panel>
+		</tablechildren>
+		<tablechildren>
+			<panel border="normal">
+				<panelchildren>6</panelchildren>
+			</panel>
+		</tablechildren>
+		<tablechildren>
+			<panel border="normal">
+				<panelchildren>7</panelchildren>
+			</panel>
+		</tablechildren>
+	</tablelayout>
+</zk>
+			]]></attribute>
+		</textbox>
+	</groupbox>
+</window>
