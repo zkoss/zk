@@ -17,6 +17,7 @@ ZK 3.5.2
   2154611: Menuitem in Menubar - quirks
   2197450: getNextSibling() not maintained in root components
   2186722: Typo in window code sample
+  2199361: Failed to create components in Initiator.init()
 
 	--------
 ZK 3.5.1

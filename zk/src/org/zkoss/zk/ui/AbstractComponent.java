@@ -62,7 +62,6 @@ import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
-import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
@@ -281,7 +280,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (is instanceof Component)
 			((AbstractComponent)is).bindToIdSpace(comp);
 		else if (is != null)
-			((PageCtrl)is).addFellow(comp);
+			((AbstractPage)is).addFellow(comp);
 	}
 	private static final IdSpace getSpaceOwnerOfParent(Component comp) {
 		final Component parent = comp.getParent();
@@ -301,7 +300,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (is instanceof Component)
 			((AbstractComponent)is).unbindFromIdSpace(compId);
 		else if (is != null)
-			((PageCtrl)is).removeFellow(comp);
+			((AbstractPage)is).removeFellow(comp);
 	}
 	/** Checks the uniqueness in ID space when changing ID. */
 	private static void checkIdSpaces(final AbstractComponent comp, String newId) {
@@ -317,7 +316,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			if (((AbstractComponent)is)._spaceInfo.fellows.containsKey(newId))
 				throw new UiException("Not unique in the ID space of "+is);
 		} else if (is != null) {
-			if (((PageCtrl)is).hasFellow(newId))
+			if (is.hasFellow(newId))
 				throw new UiException("Not unique in the ID space of "+is);
 		}
 	}
@@ -330,7 +329,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (is instanceof Component)
 			addToIdSpacesDown(comp, (Component)is);
 		else if (is != null)
-			addToIdSpacesDown(comp, (PageCtrl)is);
+			addToIdSpacesDown(comp, (AbstractPage)is);
 	}
 	/** comp's ID might be auto id. */
 	private static void addToIdSpacesDown(Component comp, Component owner) {
@@ -342,7 +341,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				addToIdSpacesDown((Component)it.next(), owner); //recursive
 	}
 	/** comp's ID might be auto id. */
-	private static void addToIdSpacesDown(Component comp, PageCtrl owner) {
+	private static void addToIdSpacesDown(Component comp, AbstractPage owner) {
 		if (!(comp instanceof NonFellow)
 		&& !ComponentsCtrl.isAutoId(getIdDirectly(comp)))
 			owner.addFellow(comp);
@@ -365,7 +364,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (is instanceof Component)
 			removeFromIdSpacesDown(comp, (Component)is);
 		else if (is != null)
-			removeFromIdSpacesDown(comp, (PageCtrl)is);
+			removeFromIdSpacesDown(comp, (AbstractPage)is);
 	}
 	private static void removeFromIdSpacesDown(Component comp, Component owner) {
 		final String compId = getIdDirectly(comp);
@@ -376,7 +375,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			for (Iterator it = comp.getChildren().iterator(); it.hasNext();)
 				removeFromIdSpacesDown((Component)it.next(), owner); //recursive
 	}
-	private static void removeFromIdSpacesDown(Component comp, PageCtrl owner) {
+	private static void removeFromIdSpacesDown(Component comp, AbstractPage owner) {
 		if (!(comp instanceof NonFellow)
 		&& !ComponentsCtrl.isAutoId(getIdDirectly(comp)))
 			owner.removeFellow(comp);
@@ -391,7 +390,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (is instanceof Component)
 			checkIdSpacesDown(comp, ((AbstractComponent)is)._spaceInfo);
 		else if (is != null)
-			checkIdSpacesDown(comp, (PageCtrl)is);
+			checkIdSpacesDown(comp, (AbstractPage)is);
 	}
 	/** Checks comp and its descendants for the specified SpaceInfo. */
 	private static void checkIdSpacesDown(Component comp, SpaceInfo si) {
@@ -404,14 +403,14 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				checkIdSpacesDown((Component)it.next(), si); //recursive
 	}
 	/** Checks comp and its descendants for the specified page. */
-	private static void checkIdSpacesDown(Component comp, PageCtrl pageCtrl) {
+	private static void checkIdSpacesDown(Component comp, AbstractPage page) {
 		final String compId = getIdDirectly(comp);
 		if (!(comp instanceof NonFellow)
-		&& !ComponentsCtrl.isAutoId(compId) && pageCtrl.hasFellow(compId))
-			throw new UiException("Not unique in the ID space of "+pageCtrl+": "+compId);
+		&& !ComponentsCtrl.isAutoId(compId) && page.hasFellow(compId))
+			throw new UiException("Not unique in the ID space of "+page+": "+compId);
 		if (!(comp instanceof IdSpace))
 			for (Iterator it = comp.getChildren().iterator(); it.hasNext();)
-				checkIdSpacesDown((Component)it.next(), pageCtrl); //recursive
+				checkIdSpacesDown((Component)it.next(), page); //recursive
 	}
 
 	/** Bind comp to this ID space (owned by this component).
@@ -477,7 +476,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				if (_page != null && _page.getDesktop() != page.getDesktop())
 					throw new UiException("The new page must be in the same desktop: "+page);
 					//Not allow developers to access two desktops simutaneously
-				checkIdSpacesDown(this, (PageCtrl)page);
+				checkIdSpacesDown(this, (AbstractPage)page);
 
 				//No need to check UUID since checkIdSpacesDown covers it
 				//-- a page is an ID space
@@ -492,7 +491,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (!samepg)
 			setPage0(page); //UUID might be changed here
 		if (page != null && (samepg || refRoot != null))
-			((PageCtrl)page).moveRoot(this, refRoot);
+			((AbstractPage)page).moveRoot(this, refRoot);
 
 		if (!samepg && _page != null) addToIdSpacesDown(this);
 
@@ -548,7 +547,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		//detach
 		final boolean bRoot = _parent == null;
 		if (_page != null) {
-			if (bRoot) ((PageCtrl)_page).removeRoot(this);
+			if (bRoot) ((AbstractPage)_page).removeRoot(this);
 			if (page == null) {
 				((DesktopCtrl)_page.getDesktop()).removeComponent(this);
 			}
@@ -558,7 +557,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		_page = page;
 
 		if (_page != null) {
-			if (bRoot) ((PageCtrl)_page).addRoot(this); //Not depends on uuid
+			if (bRoot) ((AbstractPage)_page).addRoot(this); //Not depends on uuid
 			final Desktop desktop = _page.getDesktop();
 			if (oldpage == null) {
 				if (_uuid == null || _uuid == ComponentsCtrl.ANONYMOUS_ID
@@ -664,6 +663,13 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				return (IdSpace)p;
 		} while ((p = p.getParent()) != null);
 		return _page;
+	}
+	public boolean hasFellow(String compId) {
+		if (this instanceof IdSpace)
+			return _spaceInfo.fellows.containsKey(compId);
+
+		final IdSpace idspace = getSpaceOwner();
+		return idspace != null && idspace.hasFellow(compId);
 	}
 	public Component getFellow(String compId) {
 		if (this instanceof IdSpace) {
@@ -822,7 +828,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			_parent = null; //op.removeChild assumes _parent not changed yet
 		} else {
 			if (_page != null)
-				((PageCtrl)_page).removeRoot(this); //Not depends on uuid
+				((AbstractPage)_page).removeRoot(this); //Not depends on uuid
 		}
 
 		//call insertBefore and set _parent

@@ -358,6 +358,7 @@ public class UiEngineImpl implements UiEngine {
 			//2) we add variable resolvers before init because
 			//init's zscirpt might depend on it.
 			if (pagedef != null) {
+				((PageCtrl)page).preInit();
 				pagedef.initXelContext(page);
 
 				final Initiators inits = Initiators.doInit(pagedef, page);

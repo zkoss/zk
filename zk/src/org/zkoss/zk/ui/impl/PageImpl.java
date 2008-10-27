@@ -532,7 +532,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	}
 
 	//-- PageCtrl --//
-	public void init(PageConfig config) {
+	public void preInit() {
 		if (_desktop != null)
 			throw new IllegalStateException("Don't init twice");
 
@@ -540,6 +540,9 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		_desktop = exec.getDesktop();
 		if (_desktop == null)
 			throw new IllegalArgumentException("null desktop");
+	}
+	public void init(PageConfig config) {
+		final Execution exec = Executions.getCurrent();
 
 		initVariables();
 
