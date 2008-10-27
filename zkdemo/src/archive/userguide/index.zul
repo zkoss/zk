@@ -135,6 +135,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 						<treeitem id="zf1" label="FCKeditor" value="/userguide/zkforge/fckeditor.zul"/>
 						<treeitem id="zf3" label="Google Maps" value="/userguide/zkforge/gmaps.zul"/>
 						<treeitem id="zf4" label="SIMILE Timeline" value="/userguide/zkforge/timeline.zul"/>
+						<treeitem id="zf5" label="SIMILE Timeplot" value="/userguide/zkforge/timeplot.zul"/>
 					</treechildren>
 				</treeitem>
 			</treechildren>
