@@ -24,7 +24,7 @@ zk.Slider = zClass.create();
 
 zk.Slider.prototype = {	
 	initialize: function (comp) {
-		this.id = comp.id;
+		this.id = $uuid(comp);
 		zkau.setMeta(comp, this);
 		this.init(comp);
 	},
@@ -41,7 +41,7 @@ zk.Slider.prototype = {
 	init: function(cmp) {
 		this.cleanup();
 		
-		this.element = $e(this.id);
+		this.element = cmp;
 		if (!this.element) return; //removed
 
 		this.button = $e(this.id+"!btn");
@@ -122,7 +122,7 @@ zk.Slider.prototype = {
 			if (this.slidetip)
 				this.slidetip.innerHTML = getZKAttr(this.element, "slidingtext").replace(/\{0\}/g, pos);
 			if (zkau.asap(this.element, "onScrolling"))
-				zkau.send({uuid: this.element.id, 
+				zkau.send({uuid: this.id, 
 					cmd: "onScrolling", data: [pos], ignorable: true},
 					100);
 		}
@@ -132,7 +132,8 @@ zk.Slider.prototype = {
 		var curpos = this._curpos();
 		if (pos != curpos) {
 			setZKAttr(this.element, "curpos", pos);
-			zkau.sendasap({uuid: this.element.id, cmd: "onScroll", data: [pos]});
+			if (zkau.asap(this.element, "onScroll"))
+				zkau.send({uuid: this.id, cmd: "onScroll", data: [pos]});
 		}
 		this._fixPos();
 		this.button.title = pos;
@@ -192,8 +193,9 @@ zkSld = {
 		if (meta) meta.init();
 		else new zk.Slider(cmp);
 		
-		var btn = $e(cmp.id + "!btn"),
-			inner = $e(cmp.id + "!inner");
+		var uuid = $uuid(cmp),
+			btn = $e(uuid + "!btn"),
+			inner = $e(uuid + "!inner");
 		if (vert) {
 			var het = cmp.clientHeight - 14;
 			inner.style.height = het + "px";

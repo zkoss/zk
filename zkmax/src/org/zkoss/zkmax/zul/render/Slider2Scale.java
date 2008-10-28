@@ -39,14 +39,13 @@ public class Slider2Scale implements ComponentRenderer {
 		final String uuid = self.getUuid();
 		final String zcls = self.getZclass();
 
-		wh.write("<div class=\"").write(zcls).write("-tick\">")
-			.write("<div id=\"").write(uuid).write("\"")
+		wh.write("<div id=\"").write(uuid).write("\" class=\"").write(zcls).write("-tick\">")
+			.write("<div id=\"").write(uuid).write("!real\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
 			.write(" z.type=\"zul.sld.Sld\">")
 			.write("<div class=\"").write(zcls).write("-end\">")
-			.write("<div id=\"").write(uuid).write("!inner\" class=\"").write(zcls).write("-inner\">")
+			.write("<div id=\"").write(uuid).write("!inner\" class=\"").write(zcls).write("-center\">")
 			.write("<div id=\"").write(uuid).write("!btn\" class=\"").write(zcls).write("-btn\"></div>")
-			.write("<a class=\"").write(zcls).write("-focus\" href=\"#\" tabindex=\"-1\" hidefocus=\"on\"></a>")
 			.write("</div></div></div></div>");
 	}
 
