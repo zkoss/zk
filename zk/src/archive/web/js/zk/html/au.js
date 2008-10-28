@@ -75,7 +75,7 @@ zkau.initZIndex = 30; // less than 30 is used for Component developer.
 zkau.topZIndex = zkau.initZIndex; //topmost z-index for overlap/popup/modal
 zkau.topZIndexStep = 3; // the step of topmost z-index for overlap/popup/modal
 zkau.floats = []; //popup of combobox, bandbox, datebox...
-zkau._onsends = []; //JS called before zkau._sendNow
+zkau._onsends = []; //JS called before zkau.sendNow
 zkau._seqId = 1; //1-999
 zkau._dtids = []; //an array of desktop IDs
 zkau._uris = {}; //a map of update engine's URIs ({dtid, uri})
@@ -524,7 +524,7 @@ zkau._send = function (dtid, evt, timeout) {
 };
 /** @param timeout if undefined or negative, it won't be sent. */
 zkau._send2 = function (dtid, timeout) {
-	if (dtid && timeout >= 0) setTimeout("zkau._sendNow('"+dtid+"')", timeout);
+	if (dtid && timeout >= 0) setTimeout("zkau.sendNow('"+dtid+"')", timeout);
 };
 /** Sends a request before any pending events.
  * @param timout milliseconds.
@@ -548,13 +548,13 @@ zkau.sendAhead = function (evt, timeout) {
 	}
 	zkau._send2(dtid, timeout);
 };
-zkau._sendNow = function (dtid) {
+zkau.sendNow = function (dtid) {
 	var es = zkau._events(dtid);
 	if (es.length == 0)
 		return; //nothing to do
 
 	if (zk.loading) {
-		zk.addInit(function () {zkau._sendNow(dtid);});
+		zk.addInit(function () {zkau.sendNow(dtid);});
 		return; //wait
 	}
 
