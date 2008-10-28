@@ -51,6 +51,14 @@ import org.zkoss.zk.ui.DesktopUnavailableException;
  * @since 3.0.0
  */
 public interface ServerPush {
+	/** Returns if the working thread of the server push is active.
+	 * In other words, it is true if it is between
+	 * {@link org.zkoss.zk.ui.Executions#activate} and
+	 * {@link org.zkoss.zk.ui.Executions#deactivate}.
+	 * @since 3.5.2
+	 */
+	public boolean isActive();
+
 	/** Stats and initializes the server-push controller.
 	 * One server-push controller is associated with exactly one desktop.
 	 *
@@ -120,9 +128,12 @@ public interface ServerPush {
 	throws InterruptedException, DesktopUnavailableException;
 	/** Deactvates the current thread (which must be a server-push thread).
 	 *
+	 * @param stop whether to stop after deactivate
+	 * @return true if it is stopped
 	 * @see #activate
+	 * @since 3.5.2
 	 */
-	public void deactivate();
+	public boolean deactivate(boolean stop);
 
 	/** Called when {@link org.zkoss.zk.ui.event.Events#ON_PIGGYBACK}
 	 * is received. The invocation is <i>passive</i> (i.e., triggered by

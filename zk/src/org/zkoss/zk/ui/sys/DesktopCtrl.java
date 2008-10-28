@@ -348,4 +348,22 @@ if (c.isEmpty()) {
 	 * @since 3.5.0
 	 */
 	public void setResponseId(int resId);
+
+	/** Activates the server push.
+	 * It is called by {@link org.zkoss.zk.ui.Executions#activate}.
+	 *
+	 * <p>Note: the server push must be enabled first (by use of
+	 * {@link Desktop#enableServerPush}).
+	 *
+	 * @param timeout the maximum time to wait in milliseconds.
+	 * Ingored (i.e., never timeout) if non-positive.
+	 * @since 3.5.2
+	 */
+	public boolean activateServerPush(long timeout)
+	throws InterruptedException;
+	/** Deactivates the server push.
+	 * It is called by {@link org.zkoss.zk.ui.Executions#deactivate}.
+	 * @since 3.5.2
+	 */
+	public void deactivateServerPush();
 }

@@ -100,8 +100,10 @@ public class PollingServerPush implements ServerPush {
 			"zkCpsp.stop('" + _desktop.getId() + "');";
 	}
 
-
 	//ServerPush//
+	public boolean isActive() {
+		return _active != null;
+	}
 	public void start(Desktop desktop) {
 		if (_desktop != null) {
 			log.warning("Ignored: Sever-push already started");
@@ -119,19 +121,11 @@ public class PollingServerPush implements ServerPush {
 
 		final boolean inexec = Executions.getCurrent() != null;
 		if (inexec) //Bug 1815480: don't send if timeout
-			Clients.response(new AuScript(null, getStopScript()));
+			stopClientPush();
 
 		_desktop = null; //to cause DesktopUnavailableException being thrown
+		wakePending();
 
-		synchronized (_pending) {
-			for (Iterator it = _pending.iterator(); it.hasNext();) {
-				final ThreadInfo info = (ThreadInfo)it.next();
-				synchronized (info) {
-					info.notify();
-				}
-			}
-			_pending.clear();
-		}
 		//if inexec, either in working thread, or other event listener
 		//if in working thread, we cannot notify here (too early to wake).
 		//if other listener, no need notify (since onPiggyback not running)
@@ -141,6 +135,21 @@ public class PollingServerPush implements ServerPush {
 			}
 		}
 	}
+	private void stopClientPush() {
+		Clients.response(new AuScript(null, getStopScript()));
+	}
+	private void wakePending() {
+		synchronized (_pending) {
+			for (Iterator it = _pending.iterator(); it.hasNext();) {
+				final ThreadInfo info = (ThreadInfo)it.next();
+				synchronized (info) {
+					info.notify();
+				}
+			}
+			_pending.clear();
+		}
+	}
+
 	/** Sets the delay between each polling request.
 	 * <p>Default: use the preference called
 	 * <code>PollingServerPush.delay.min</code>
@@ -253,14 +262,24 @@ public class PollingServerPush implements ServerPush {
 		//Note: we don't mimic inEventListener since 1) ZK doesn't assume it
 		//2) Window depends on it
 	}
-	public void deactivate() {
+	public boolean deactivate(boolean stop) {
+		boolean stopped = false;
 		if (_active != null &&
 		Thread.currentThread().equals(_active.thread)) {
 			if (--_active.nActive <= 0) {
+				if (stop)
+					stopClientPush();
+
 				_carryOver.cleanup();
 				_carryOver = null;
 				_active.nActive = 0; //just in case
 				_active = null;
+
+				if (stop) {
+					wakePending();
+					_desktop = null;
+					stopped = true;
+				}
 
 				//wake up onPiggyback
 				synchronized (_mutex) {
@@ -272,6 +291,7 @@ public class PollingServerPush implements ServerPush {
 					//activate again, before onPiggback polls next _pending
 			}
 		}
+		return stopped;
 	}
 
 	/** The info of a server-push thread.

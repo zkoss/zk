@@ -898,6 +898,12 @@ zkWnd2._doModal = function (cmp, replace) {
 		}
 		zk.setVParent(cmp);
 	}
+	
+	if (replace) {
+		zkWnd2._float(cmp);
+		return;
+	}
+	
 	zkWnd2._center(cmp, zi, pos); //called even if pos not defined
 		//show dialog first to have better response.
 	
@@ -911,11 +917,6 @@ zkWnd2._doModal = function (cmp, replace) {
 		} else if (top > 100){
 			cmp.style.top = "100px";
 		}
-	}
-	
-	if (replace) {
-		zkWnd2._float(cmp);
-		return;
 	}
 	
 	zkWnd2._show(cmp); //unlike other mode, it must be visible
