@@ -558,28 +558,19 @@ public void run() {
 	 * enabled for this desktop yet ({@link Desktop#enableServerPush}).
 	 * @since 3.0.0
 	 * @see #activate(Desktop)
+	 * @see #deactivate
 	 */
 	public static final boolean activate(Desktop desktop, long timeout)
 	throws InterruptedException, DesktopUnavailableException {
-		final ServerPush spush = ((DesktopCtrl)desktop).getServerPush();
-		if (spush == null)
-			if (desktop.isAlive())
-				throw new IllegalStateException("Before activation, the server push must be enabled for "+desktop);
-			else
-				throw new DesktopUnavailableException("Stopped");
-
-		if (Events.inEventListener())
-			throw new IllegalStateException("No need to invoke Executions.activate() in an event listener");
-
-		return spush.activate(timeout);
+		return ((DesktopCtrl)desktop).activateServerPush(timeout);
 	}
 	/** Deactivates a server-push thread.
 	 * @since 3.0.0
+	 * @see #activate(Desktop)
+	 * @see #activate(Desktop, long)
 	 */
 	public static final void deactivate(Desktop desktop) {
-		final ServerPush spush = ((DesktopCtrl)desktop).getServerPush();
-		if (spush != null)
-			spush.deactivate();
+		((DesktopCtrl)desktop).deactivateServerPush();
 	}
 
 	private static final UiEngine getUiEngine(Desktop desktop) {
