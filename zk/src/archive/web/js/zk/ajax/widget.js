@@ -118,6 +118,18 @@ zk.Widget = zk.$extends(zk.Object, {
 	 */
 	attach: function (id, options) {
 		zk.debug("attach", this.uuid, id);
+	},
+
+	//AU
+	/** Sends an AU request to the server.
+	 * Note: the request is ignored if it is not in server, or not belongs
+	 * to a desktop.
+	 */
+	send: function (aureq, timeout) {
+		if (this.inServer && this.desktop) {
+			aureq.wgt = this;
+			zAu.send(aureq, timeout);
+		}
 	}
 }, {
 	/** Returns the widget of the specified ID, or null if not found,

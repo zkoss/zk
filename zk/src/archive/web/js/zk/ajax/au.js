@@ -47,65 +47,6 @@ zAu = { //static methods
 			prefix + uri + suffix;
 	},
 
-	//Send Utilities//
-	/** Adds a callback to be called before sending ZK request.
-	 * @param func the function call
-	 */
-	addOnSend: function (func) {
-		zAu._onsends.push(func);
-	},
-	/** Removes a onSend callback. */
-	removeOnSend: function (func) {
-		zAu._onsends.remove(func);
-	},
-
-	/** Returns whether any AU request is in processing.
-	 * <p>Note: zk.processing represents both AU and other processing
-	 */
-	processing: function () {
-		return zAu._cmdsQue.length || zAu._areq || zAu._preqInf
-			|| zAu._doingCmds;
-	},
-	/** Returns the timeout of the specified AU request.
-	 * It is mainly used to generate the timeout argument of zAu.send.
-	 *
-	 * @param timeout if non-negative, it is used when zAu.asap is true.
-	 */
-	asapTimeout: function (wgt, evtnm, timeout) {
-		wgt = zk.Widget.$(wgt);
-		if (!wgt || !wgt.inServer) return -1;
-
-		var asap = zAu.asap(wgt, evtnm), fmt;
-		if (!asap && evtnm == "onChange") {
-			fmt = wgt.srvald;
-			if (fmt) { //srvald specified
-				fmt = fmt == "fmt";
-				asap = !fmt; //if not fmt (and not null), it means server-side validation required
-			}
-		}
-		return asap ? timeout >= 0 ? timeout: 38:
-			fmt ? 350: -1; //if fmt we have to send it but not OK to a bit delay
-	},
-	/** Returns whether any non-deferrable listener is registered for
-	 * the specified event.
-	 */
-	asap: function (wgt, evtnm) {
-		wgt = zk.Widget.$(wgt);
-		return wgt && wgt.evtnm == "true" && wgt.inServer;
-	},
-
-	/** Asks the server to update the result (for file uploading).
-	 * @param wgt the widget or the widget ID.
-	 */
-	sendUpdateResult: function (wgt, updatableId) {
-		zAu.send({wgt: wgt, cmd: "updateResult", data: [updatableId]}, -1);
-	},
-	/** Asks the server to remove a component.
-	 */
-	sendRemove: function (wgt) {
-		zAu.send({wgt: wgt, cmd: "remove"}, 5);
-	},
-
 	//Error Handling//
 	/** Confirms the user how to handle an error.
 	 * Default: it shows up a message asking the user whether to retry.
@@ -149,7 +90,161 @@ zAu = { //static methods
 	},
 	_eru: {},
 
-	////ajax resend mechanism////
+	////Ajax Send////
+	/** Adds a callback to be called before sending ZK request.
+	 * @param func the function call
+	 */
+	addOnSend: function (func) {
+		zAu._onsends.push(func);
+	},
+	/** Removes a onSend callback. */
+	removeOnSend: function (func) {
+		zAu._onsends.remove(func);
+	},
+
+	/** Returns whether any AU request is in processing.
+	 * <p>Note: zk.processing (which is a variable) represents both AU
+	 * and other processing, while zAu.processing() (which is a function)
+	 * represents AU only.
+	 */
+	processing: function () {
+		return zAu._cmdsQue.length || zAu._areq || zAu._preqInf
+			|| zAu._doingCmds;
+	},
+	/** Sends a request to the client
+	 * @param timout milliseconds.
+	 * If negative, it won't be sent until next non-negative event
+	 */
+	send: function (aureq, timeout) {
+		if (timeout < 0) aureq.implicit = true;
+	
+		if (aureq.wgt) {
+			zAu._send(aureq.wgt.desktop, aureq, timeout);
+		} else if (aureq.dt) {
+			zAu._send(aureq.dt, aureq, timeout);
+		} else {
+			var ds = zk.Desktop.all;
+			for (var dtid in ds)
+				zAu._send(ds[dtid], aureq, timeout);
+		}
+	},
+	/** Sends a request before any pending events.
+	 * @param timout milliseconds.
+	 * If undefined or negative, it won't be sent until next non-negative event
+	 * Note: Unlike zAu.send, it considered undefined as not sending now
+	 * (reason: backward compatible)
+	 */
+	sendAhead: function (aureq, timeout) {
+		var dtid;
+		if (aureq.uuid) {
+			zAu._events(dtid = zAu.dtid(aureq.uuid)).unshift(aureq);
+		} else if (aureq.dtid) {
+			zAu._events(dtid = aureq.dtid).unshift(aureq);
+		} else {
+			var ds = zAu._dtids;
+			for (var j = ds.length; --j >= 0; ++j) {
+				zAu._events(ds[j]).unshift(aureq);
+				zAu._send2(ds[j], timeout); //Spec: don't convert unefined to 0 for timeout
+			}
+			return;
+		}
+		zAu._send2(dtid, timeout);
+	},
+
+	////Ajax receive////
+	/** Parses a XML response and pushes the parsed commands to the queue.
+	 * @return false if no command found at all
+	 */
+	pushXmlResp: function (dt, req) {
+		var xml = req.responseXML;
+		if (!xml) {
+			if (zk.pfmeter) zAu.pfdone(dt, zAu._pfGetIds(req));
+			return false; //invalid
+		}
+	
+		var cmds = [],
+			rs = xml.getElementsByTagName("r"),
+			rid = xml.getElementsByTagName("rid");
+		if (zk.pfmeter) {
+			cmds.dt = dt;
+			cmds.pfIds = zAu._pfGetIds(req);
+		}
+	
+		if (rid && rid.length) {
+			rid = $int(zk.getElementValue(rid[0])); //response ID
+			if (!isNaN(rid)) cmds.rid = rid;
+		}
+	
+		for (var j = 0, rl = rs ? rs.length: 0; j < rl; ++j) {
+			var cmd = rs[j].getElementsByTagName("c")[0],
+				data = rs[j].getElementsByTagName("d");
+	
+			if (!cmd) {
+				zk.error(mesg.ILLEGAL_RESPONSE+"Command required");
+				continue;
+			}
+	
+			cmds.push(cmd = {cmd: zk.getElementValue(cmd)});
+			cmd.data = [];
+			for (var k = data ? data.length: 0; --k >= 0;)
+				cmd.data[k] = zk.getElementValue(data[k]);
+		}
+	
+		zAu._cmdsQue.push(cmds);
+		return true;
+	},
+	/** Registers a script that will be evaluated when the next response is back.
+	 * Note: it executes only once, so you have to register again if necessary.
+	 * @param script a piece of JavaScript, or a function
+	 */
+	addOnResponse: function (script) {
+		zAu._js4resps.push(script);
+	},
+	/** Process the response response commands.
+	 */
+	doCmds: function () {
+		//avoid reentry since it calls loadAndInit, and loadAndInit call this
+		if (zAu._doingCmds) {
+			setTimeout(zAu.doCmds, 10);
+		} else {
+			zAu._doingCmds = true;
+			try {
+				zAu._doCmds0();
+			} finally {
+				zAu._doingCmds = false;
+	
+				if (zAu._checkProgress())
+					zAu.doneTime = $now();
+			}
+		}
+	},
+	/** Process a command.
+	 */
+	process: function (cmd, data) {
+		//I. process commands that data[0] is not UUID
+		var fn = zAu.cmd0[cmd];
+		if (fn) {
+			fn.apply(zAu, data);
+			return;
+		}
+	
+		//I. process commands that require uuid
+		if (!data || !data.length) {
+			onProcessError("ILLEGAL_RESPONSE", "uuid is required for ", cmd);
+			return;
+		}
+	
+		fn = zAu.cmd1[cmd];
+		if (fn) {
+			data.splice(1, 0, $e(data[0])); //insert wgt
+			fn.apply(zAu, data);
+			return;
+		}
+	
+		onProcessError("ILLEGAL_RESPONSE", "Unknown command: ", cmd);
+	},
+
+	//ajax internal//
 	_cmdsQue: [], //response commands in XML
 	_onsends: [], //JS called before 	_sendNow
 	_seqId: 1, //1-999
@@ -286,70 +381,7 @@ zAu = { //static methods
 		zAu.doCmds();
 		zAu._checkProgress();
 	},
-	/** Parses a XML response and pushes the parsed commands to the queue.
-	 * @return false if no command found at all
-	 */
-	pushXmlResp: function (dt, req) {
-		var xml = req.responseXML;
-		if (!xml) {
-			if (zk.pfmeter) zAu.pfdone(dt, zAu._pfGetIds(req));
-			return false; //invalid
-		}
-	
-		var cmds = [],
-			rs = xml.getElementsByTagName("r"),
-			rid = xml.getElementsByTagName("rid");
-		if (zk.pfmeter) {
-			cmds.dt = dt;
-			cmds.pfIds = zAu._pfGetIds(req);
-		}
-	
-		if (rid && rid.length) {
-			rid = $int(zk.getElementValue(rid[0])); //response ID
-			if (!isNaN(rid)) cmds.rid = rid;
-		}
-	
-		for (var j = 0, rl = rs ? rs.length: 0; j < rl; ++j) {
-			var cmd = rs[j].getElementsByTagName("c")[0],
-				data = rs[j].getElementsByTagName("d");
-	
-			if (!cmd) {
-				zk.error(mesg.ILLEGAL_RESPONSE+"Command required");
-				continue;
-			}
-	
-			cmds.push(cmd = {cmd: zk.getElementValue(cmd)});
-			cmd.data = [];
-			for (var k = data ? data.length: 0; --k >= 0;)
-				cmd.data[k] = zk.getElementValue(data[k]);
-		}
-	
-		zAu._cmdsQue.push(cmds);
-		return true;
-	},
 
-	/** Sends a request to the client
-	 * @param timout milliseconds.
-	 * If negative, it won't be sent until next non-negative event
-	 */
-	send: function (aureq, timeout) {
-		if (timeout < 0) aureq.implicit = true;
-	
-		if (aureq.uuid) {
-			zAu._send(zAu.dtid(aureq.uuid), aureq, timeout);
-		} else if (aureq.dtid) {
-			zAu._send(aureq.dtid, aureq, timeout);
-		} else {
-			var ds = zAu._dtids;
-			for (var j = 0, dl = ds.length; j < dl; ++j)
-				zAu._send(ds[j], aureq, timeout);
-		}
-	},
-	/** A shortcut of zAu.send(aureq, zAu.asapTimeout(aureq.uuid, aureq.cmd, timeout)).
-	 */
-	sendasap: function (aureq, timeout) {
-		zAu.send(aureq, zAu.asapTimeout(aureq.uuid, aureq.cmd, timeout));
-	},
 	_send: function (dtid, aureq, timeout) {
 		if (aureq.ctl) {
 			//Don't send the same request if it is in processing
@@ -382,28 +414,6 @@ zAu = { //static methods
 	/** @param timeout if undefined or negative, it won't be sent. */
 	_send2: function (dtid, timeout) {
 		if (dtid && timeout >= 0) setTimeout("zAu._sendNow('"+dtid+"')", timeout);
-	},
-	/** Sends a request before any pending events.
-	 * @param timout milliseconds.
-	 * If undefined or negative, it won't be sent until next non-negative event
-	 * Note: Unlike zAu.send, it considered undefined as not sending now
-	 * (reason: backward compatible)
-	 */
-	sendAhead: function (aureq, timeout) {
-		var dtid;
-		if (aureq.uuid) {
-			zAu._events(dtid = zAu.dtid(aureq.uuid)).unshift(aureq);
-		} else if (aureq.dtid) {
-			zAu._events(dtid = aureq.dtid).unshift(aureq);
-		} else {
-			var ds = zAu._dtids;
-			for (var j = ds.length; --j >= 0; ++j) {
-				zAu._events(ds[j]).unshift(aureq);
-				zAu._send2(ds[j], timeout); //Spec: don't convert unefined to 0 for timeout
-			}
-			return;
-		}
-		zAu._send2(dtid, timeout);
 	},
 	_sendNow: function (dtid) {
 		var es = zAu._events(dtid);
@@ -526,37 +536,12 @@ zAu = { //static methods
 		return false;
 	}: zk.$void,
 
-	/** Registers a script that will be evaluated when the next response is back.
-	 * Note: it executes only once, so you have to register again if necessary.
-	 * @param script a piece of JavaScript, or a function
-	 */
-	addOnResponse: function (script) {
-		zAu._js4resps.push(script);
-	},
 	/** Evaluates scripts registered by addOnResponse. */
 	_evalOnResponse: function () {
 		while (zAu._js4resps.length)
 			setTimeout(zAu._js4resps.shift(), 0);
 	},
 	
-	/** Process the response response commands.
-	 */
-	doCmds: function () {
-		//avoid reentry since it calls loadAndInit, and loadAndInit call this
-		if (zAu._doingCmds) {
-			setTimeout(zAu.doCmds, 10);
-		} else {
-			zAu._doingCmds = true;
-			try {
-				zAu._doCmds0();
-			} finally {
-				zAu._doingCmds = false;
-	
-				if (zAu._checkProgress())
-					zAu.doneTime = $now();
-			}
-		}
-	},
 	_doCmds0: function () {
 		var ex, j = 0, que = zAu._cmdsQue, rid = zAu._resId;
 		for (; j < que.length; ++j) {
@@ -632,31 +617,6 @@ zAu = { //static methods
 				zAu._evalOnResponse();
 		}
 		return true;
-	},
-	/** Process a command.
-	 */
-	process: function (cmd, data) {
-		//I. process commands that data[0] is not UUID
-		var fn = zAu.cmd0[cmd];
-		if (fn) {
-			fn.apply(zAu, data);
-			return;
-		}
-	
-		//I. process commands that require uuid
-		if (!data || !data.length) {
-			onProcessError("ILLEGAL_RESPONSE", "uuid is required for ", cmd);
-			return;
-		}
-	
-		fn = zAu.cmd1[cmd];
-		if (fn) {
-			data.splice(1, 0, $e(data[0])); //insert wgt
-			fn.apply(zAu, data);
-			return;
-		}
-	
-		onProcessError("ILLEGAL_RESPONSE", "Unknown command: ", cmd);
 	},
 	
 	/** Cleans up if we detect obsolete or other severe errors. */
