@@ -358,9 +358,9 @@ public class SimpleSession implements Session, SessionCtrl {
 	}
 	public void recover(Object nativeSession) {
 		if (_invalidated)
-			throw new IllegalStateException("Recover an invalidated session, "+this);
+			log.warning("Recover an invalidated session, "+this);
 
-		_invalid = false; //Just in case
+		_invalidated = _invalid = false;
 		if (_navsess == null)
 			sessionDidActivate((HttpSession)nativeSession);
 		else
