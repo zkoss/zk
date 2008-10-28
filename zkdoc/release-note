@@ -48,6 +48,7 @@ ZK 3.5.2
   2186722: Typo in window code sample
   2199361: Failed to create components in Initiator.init()
   2198961: AuUploader ignores 'nextURI' parameter
+  2202620: Comet unable to stop in the comet thread
 
 	--------
 ZK 3.5.1

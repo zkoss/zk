@@ -46,6 +46,7 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ComponentNotFoundException;
+import org.zkoss.zk.ui.DesktopUnavailableException;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.DesktopCleanup;
@@ -148,6 +149,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private int _resId; //so next will be 1
 	/** Whether any onPiggyback listener is registered. */
 	private boolean _piggybackListened;
+	/** Whether the server push shall stop after deactivate. */
+	private boolean _spushShallStop;
 
 	/**
 	 * @param updateURI the URI to access the update engine (no expression allowed).
@@ -852,6 +855,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 					throw UiException.Aide.wrap(ex, "Unable to instantiate "+cls);
 				}
 				_spush.start(this);
+			} else if (_spush.isActive()) {
+				_spushShallStop = true;
 			} else {
 				_spush.stop();
 				_spush = null;
@@ -878,6 +883,26 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 	public ServerPush getServerPush() {
 		return _spush;
+	}
+	public boolean activateServerPush(long timeout)
+	throws InterruptedException {
+		if (_spush == null)
+			if (isAlive())
+				throw new IllegalStateException("Before activation, the server push must be enabled for "+this);
+			else
+				throw new DesktopUnavailableException("Stopped");
+
+		if (Events.inEventListener())
+			throw new IllegalStateException("No need to invoke Executions.activate() in an event listener");
+
+		return _spush.activate(timeout);
+	}
+	public void deactivateServerPush() {
+		if (_spush != null)
+			if (_spush.deactivate(_spushShallStop)) {
+				_spushShallStop = false;
+				_spush = null;
+			}
 	}
 	public void setServerPushDelay(int min, int max, int factor) {
 		if (_spush == null)

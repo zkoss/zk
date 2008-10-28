@@ -53,8 +53,8 @@ public class Tabs2Default implements ComponentRenderer {
 			String uuid = self.getUuid();
 			wh.write("<div id=\""+uuid+"\" class=\"").write(look+scroll).write("\" z.type=\"zul.tab2.Tabs2\"")
 			    .write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln('>');
-			    wh.write("<div id=\""+uuid+"!right").writeln("\" </div>");
-				wh.write("<div id=\""+uuid+"!left").writeln("\" </div>");
+			    wh.write("<div id=\""+uuid+"!right").writeln("\" />");
+				wh.write("<div id=\""+uuid+"!left").writeln("\" />");
 			    wh.write("<div id=\""+uuid+"!header\"").writeln(" class=\""+look+"header\" >");
 				    wh.writeln("<ul id=\""+uuid+"!cave\" class=\""+look+"ul\" >");
 				    	wh.writeChildren(self);

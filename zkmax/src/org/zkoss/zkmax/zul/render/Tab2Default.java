@@ -71,7 +71,7 @@ public class Tab2Default implements ComponentRenderer {
 				if(self.isClosable()){
 					wh.writeln("<a class=\""+look+"close\" id=\""+uuid+"!close\" onclick=\"return false;\" />");
 				}
-				wh.writeln("<a class=\""+look+"a\" id=\""+uuid+"a\"  onclick=\"return false;\" href=\"#\">");
+				wh.writeln("<a class=\""+look+"a\" id=\""+uuid+"!a\"  onclick=\"return false;\" href=\"#\">");
 					wh.writeln("<em id=\""+uuid+"!em\" class=\""+look+"em\" >");
 						if(self.isClosable()){
 							wh.writeln("<span id=\""+uuid+"\" class=\""+look+"inner"+" "+look+"innerclose\" >");

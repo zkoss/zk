@@ -135,12 +135,12 @@ public class Checkbox extends LabelImageElement {
 	//-- super --//
 	/** Returns the Style of checkbox label
 	 *
-	 * <p>Default: "z-chkbox"
+	 * <p>Default: "z-checkbox"
 	 * <p>Since 3.5.1
 	 * 
 	 */
 	public String getZclass() {
-		return _zclass == null ? "z-chkbox" : super.getZclass();
+		return _zclass == null ? "z-checkbox" : super.getZclass();
 	}
 	//-- ComponentCtrl --//
 	protected Object newExtraCtrl() {
