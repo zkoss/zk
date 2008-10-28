@@ -267,13 +267,15 @@ public class PollingServerPush implements ServerPush {
 		if (_active != null &&
 		Thread.currentThread().equals(_active.thread)) {
 			if (--_active.nActive <= 0) {
+				if (stop)
+					stopClientPush();
+
 				_carryOver.cleanup();
 				_carryOver = null;
 				_active.nActive = 0; //just in case
 				_active = null;
 
 				if (stop) {
-					stopClientPush();
 					wakePending();
 					_desktop = null;
 					stopped = true;
