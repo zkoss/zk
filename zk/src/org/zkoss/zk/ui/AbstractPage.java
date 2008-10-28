@@ -107,10 +107,12 @@ implements Page, PageCtrl, java.io.Serializable {
 	public void addRoot(Component comp) {
 		assert D.OFF || comp.getParent() == null;
 
+		final AbstractComponent nc = (AbstractComponent)comp;
+		assert D.OFF || (_firstRoot != nc && nc._next == null && nc._prev == null);
+
 		//Note: addRoot is called by AbstractComponent
 		//and it doesn't need to handle comp's _page
 
-		final AbstractComponent nc = (AbstractComponent)comp;
 		if (_lastRoot == null) {
 			_firstRoot = _lastRoot = nc;
 			nc._next = nc._prev = null;
@@ -125,7 +127,12 @@ implements Page, PageCtrl, java.io.Serializable {
 	public void removeRoot(Component comp) {
 		assert D.OFF || (comp.getParent() == null && comp.getPage() == this);
 
-		final AbstractComponent oc = (AbstractComponent)comp;
+		//Note: when AbstractComponent.setPage0 is called, parent is already
+		//null. Thus, we have to check if it is a root component
+		AbstractComponent oc = (AbstractComponent)comp;
+		if (_firstRoot != oc && oc._next == null && oc._prev == null)
+			return;
+
 		setNext(oc._prev, oc._next);
 		setPrev(oc._next, oc._prev);
 		oc._next = oc._prev = null;
