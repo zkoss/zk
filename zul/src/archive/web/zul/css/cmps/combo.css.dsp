@@ -28,7 +28,10 @@
 	background: #ECEAE4;
 }
 .z-combobox .z-combobox-img {
-	background: transparent url(${c:encodeURL('~./zul/img/button/combobtn.gif')}) no-repeat 0 0;
+	background-color : transparent;
+	background-image : url(${c:encodeURL('~./zul/img/button/combobtn.gif')});
+	background-position : 0 0;
+	background-repeat : no-repeat;
 	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0; 
 	border-bottom: 1px solid #7F9DB9;
 }
@@ -107,7 +110,10 @@
 	background: #ECEAE4;
 }
 .z-bandbox .z-bandbox-img {
-	background: transparent url(${c:encodeURL('~./zul/img/button/bandbtn.gif')}) no-repeat 0 0;
+	background-color : transparent;
+	background-image : url(${c:encodeURL('~./zul/img/button/bandbtn.gif')});
+	background-position : 0 0;
+	background-repeat : no-repeat;
 	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0; 
 	border-bottom: 1px solid #86A4BE;
 }
@@ -160,7 +166,10 @@
 	background: #ECEAE4;
 }
 .z-datebox .z-datebox-img {
-	background: transparent url(${c:encodeURL('~./zul/img/button/datebtn.gif')}) no-repeat 0 0;
+	background-color : transparent;
+	background-image : url(${c:encodeURL('~./zul/img/button/datebtn.gif')});
+	background-position : 0 0;
+	background-repeat : no-repeat;
 	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0; 
 	border-bottom: 1px solid #86A4BE;
 }
@@ -210,7 +219,10 @@
 	background: #ECEAE4;
 }
 .z-timebox .z-timebox-img {
-	background: transparent url(${c:encodeURL('~./zul/img/button/timebtn.gif')}) no-repeat 0 0;
+	background-color : transparent;
+	background-image : url(${c:encodeURL('~./zul/img/button/timebtn.gif')});
+	background-position : 0 0;
+	background-repeat : no-repeat;
 	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0; 
 	border-bottom: 1px solid #86A4BE;
 }
@@ -251,7 +263,10 @@
 	background: #ECEAE4;
 }
 .z-spinner .z-spinner-img {
-	background: transparent url(${c:encodeURL('~./zul/img/button/timebtn.gif')}) no-repeat 0 0;
+	background-color : transparent;
+	background-image : url(${c:encodeURL('~./zul/img/button/timebtn.gif')});
+	background-position : 0 0;
+	background-repeat : no-repeat;
 	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0; 
 	border-bottom: 1px solid #86A4BE;
 }
