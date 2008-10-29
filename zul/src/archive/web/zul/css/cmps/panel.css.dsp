@@ -117,7 +117,10 @@
 <%-- Panel Tool --%>
 .z-panel-tool {
 	overflow: hidden; width: 15px; height: 15px; float: right; cursor: pointer;
-	background: transparent url(${c:encodeURL('~./zul/img/panel/tool-btn.gif')}) no-repeat;
+	background-color : transparent;
+	background-image : url(${c:encodeURL('~./zul/img/panel/tool-btn.gif')});
+	background-position : 0 0;
+	background-repeat : no-repeat;
 	margin-left: 2px;
 }
 .z-panel-toggle {

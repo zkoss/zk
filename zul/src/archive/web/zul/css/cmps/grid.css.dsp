@@ -125,7 +125,10 @@ td.z-group-inner {
 	position: relative;
 }
 .z-column-btn {
-	background: #DDEEFB url(${c:encodeURL('~./zul/img/grid/hd-btn.gif')}) no-repeat left center;
+	background-color : #DDEEFB;
+	background-image : url(${c:encodeURL('~./zul/img/grid/hd-btn.gif')});
+	background-repeat : no-repeat;
+	background-position : left center;
 	display: none; position: absolute; width: 14px; right: 0; top: 0; z-index: 2;
 	cursor: pointer;
 }
