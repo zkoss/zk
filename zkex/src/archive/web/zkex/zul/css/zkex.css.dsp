@@ -181,7 +181,6 @@
 }
 tr.z-row td.z-detail-outer {
 	background: #bae2f0 url(${c:encodeURL('~./zul/img/grid/detail-bg.gif')}) repeat-y left;
-	//background: #EFF8FB url(${c:encodeURL('~./zul/img/grid/ms_hd.gif')}) repeat-y right;
 	vertical-align: top; border-top: none; border-left: 1px solid white;
 	border-right: 1px solid #CCC; border-bottom: 1px solid #DDD;
 }
