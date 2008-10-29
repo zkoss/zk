@@ -548,19 +548,22 @@ zkau.sendAhead = function (evt, timeout) {
 	}
 	zkau._send2(dtid, timeout);
 };
+/** Sends any queued event of the specified desktop.
+ * @return false if no queued event at all.
+ */
 zkau.sendNow = function (dtid) {
 	var es = zkau._events(dtid);
 	if (es.length == 0)
-		return; //nothing to do
+		return false; //nothing to do
 
 	if (zk.loading) {
 		zk.addInit(function () {zkau.sendNow(dtid);});
-		return; //wait
+		return true; //wait
 	}
 
 	if (zkau._areq || zkau._preqInf) { //send ajax request one by one
 		zkau._sendPending = true;
-		return;
+		return true; //wait
 	}
 
 	//callback (fckez uses it to ensure its value is sent back correctly
@@ -610,6 +613,7 @@ zkau.sendNow = function (dtid) {
 			ctli: ctli, ctlc: ctlc, implicit: implicit, ignorable: ignorable,
 			tmout: 0
 		});
+	return true;
 };
 zkau._sendNow2 = function(reqInf) {
 	var req = zkau.ajaxRequest(),
