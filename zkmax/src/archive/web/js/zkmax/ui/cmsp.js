@@ -28,8 +28,8 @@ zk.override(zkau, "ignoreESC", zkCmsp,
 zkCmsp.start = function (dtid) {
 	++zkCmsp._nStart;
 	zkCmsp._start[dtid] = true;
-	zkau.sendNow(dtid);
-	setTimeout(function () {zkCmsp._send(dtid);}, 850);
+	setTimeout(function () {zkCmsp._send(dtid);},
+		zkau.sendNow(dtid) ? 900: 50);
 		//Delay it a bit so zkau.sendNow has time to send any pending status back
 };
 
