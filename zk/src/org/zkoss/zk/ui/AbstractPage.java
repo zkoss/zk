@@ -108,7 +108,8 @@ implements Page, PageCtrl, java.io.Serializable {
 		assert D.OFF || comp.getParent() == null;
 
 		final AbstractComponent nc = (AbstractComponent)comp;
-		assert D.OFF || (_firstRoot != nc && nc._next == null && nc._prev == null);
+		if (_firstRoot == nc || nc._next != null || nc._prev != null)
+			return; //ignore if added twice
 
 		//Note: addRoot is called by AbstractComponent
 		//and it doesn't need to handle comp's _page
