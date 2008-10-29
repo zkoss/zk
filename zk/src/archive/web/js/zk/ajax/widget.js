@@ -120,12 +120,12 @@ zk.Widget = zk.$extends(zk.Object, {
 		zk.debug("attach", this.uuid, id);
 	},
 
-	//AU
-	/** Sends an AU request to the server.
-	 * Note: the request is ignored if it is not in server, or not belongs
-	 * to a desktop.
+	//ZK event//
+	/** Fires a Widget event.
+	 * Note: the event will be sent to the server if it is in server
+	 * (@{link #inServer}), and belongs to a desktop.
 	 */
-	send: function (aureq, timeout) {
+	fire: function (aureq, timeout) {
 		if (this.inServer && this.desktop) {
 			aureq.wgt = this;
 			zAu.send(aureq, timeout);
@@ -219,4 +219,34 @@ zk.Page = zk.$extends(zk.Widget, {//unlik server, we derive from Widget!
 	 * the whole browser window.
 	 */
 	contained: []
+});
+
+/** A widget event, fired by {@link zk.Widget#fire}.
+ * It is an application-level event that is used by application to
+ * hook the listeners to.
+ * On the other hand, a DOM event ({@link zEvt}) is the low-level event
+ * listened by the implementation of a widget.
+ */
+zk.Event = zk.$extends(zk.Object, {
+	/** The target widget. */
+	//target: null,
+	/** The event name. */
+	//name: null,
+	/** The extra data, which could be anything. */
+	//data: null,
+	/** Whether this event is an implicit event, i.e., whether it is implicit
+	 * to users (so no progressing bar).
+	 */
+	//implicit: false,
+	/** Whether this event is ignorable, i.e., whether to ignore any error
+	 * of sending this event back the server.
+	 * An ignorable event is also an imiplicit event
+	 */
+	//ignorable: false
+
+	$init: function (target, name, data) {
+		this.target = target;
+		this.name = name;
+		this.data = data ? data: null;
+	}
 });

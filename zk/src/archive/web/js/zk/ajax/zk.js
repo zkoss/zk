@@ -66,7 +66,7 @@ Array.prototype.contains = function (o) {
 	return false;
 };
 /** Adds the specified object to the end of the array.
- * @param overwrite overwrite if the object is already in the array.
+ * @param overwrite whether to overwrite if the object is already in the array.
  * @return true if added successfully.
  */
 Array.prototype.add = function (o, overwrite) {
@@ -246,7 +246,7 @@ zk = { //static methods
 	+'px;" id="'+id+'"><table cellpadding="2" cellspacing="2" width="100%"><tr valign="top">'
 	+'<td width="20pt"><button onclick="zAu.sendRedraw()">redraw</button>'
 	+'<button onclick="zDom.detach(\''+id+'\')">close</button></td>'
-	+'<td class="z-error-msg">'+zUtil.encodeXML(msg, true) //Bug 1463668: security
+	+'<td class="z-error-msg">'+zUtl.encodeXML(msg, true) //Bug 1463668: security
 	+'</td></tr></table></div>';
 		zDom.outerHTML(box, html);
 

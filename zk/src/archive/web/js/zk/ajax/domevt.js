@@ -1,8 +1,8 @@
-/* event.js
+/* domevt.js
 
 {{IS_NOTE
 	Purpose:
-		ZK Event Handling
+		DOM Event Handling
 	Description:
 		
 	History:
@@ -17,19 +17,24 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 zEvt = {
-	BACKSPACE: 8,
-	TAB:       9,
-	RETURN:   13,
-	ESC:      27,
-	LEFT:     37,
-	UP:       38,
-	RIGHT:    39,
-	DOWN:     40,
-	DELETE:   46,
-	HOME:     36,
-	END:      35,
-	PAGEUP:   33,
-	PAGEDOWN: 34,
+	BS:		8,
+	TAB:	9,
+	ENTER:	13,
+	SHIFT:	16,
+	CTRL:	17,
+	ALT:	18,
+	ESC:	27,
+	LFT:	37,
+	UP:		38,
+	RGH:	39,
+	DN:		40,
+	INS:	45,
+	DEL:	46,
+	HOME:	36,
+	END:	35,
+	PGUP:	33,
+	PGDN:	34,
+	F1:		112,
 
 	/** Returns the target element of the event. */
 	target: function(event) {
@@ -50,7 +55,7 @@ zEvt = {
 
 	//Mouse Info//
 	/** Returns if it is the left click. */
-	isLeftClick: function(event) {
+	leftClick: function(event) {
 		return (((event.which) && (event.which == 1)) ||
 		((event.button) && (event.button == 1)));
 	},

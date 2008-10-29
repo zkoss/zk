@@ -91,15 +91,21 @@ zAu = { //static methods
 	_eru: {},
 
 	////Ajax Send////
-	/** Adds a callback to be called before sending ZK request.
-	 * @param func the function call
+	/** Adds a watch.
+	 * @param name the watch name. Currently, it supports only onSend,
+	 * which is called before sending the AU request(s).
+	 * @param overwrite whether to overwrite if the function was added.
+	 * @return true if added successfully.
 	 */
-	addOnSend: function (func) {
-		zAu._onsends.push(func);
+	watch: function (name, watch, overwrite) {
+		return zAu._watches.watch(name, watch, overwrite);
 	},
-	/** Removes a onSend callback. */
-	removeOnSend: function (func) {
-		zAu._onsends.remove(func);
+	/** Removes a watch.
+	 * @return whether the watch has been removed successfully.
+	 * It returns false if the watch was not added before.
+	 */
+	unwatch: function (name, watch) {
+		return zAu._watches.unwatch(name, watch);
 	},
 
 	/** Returns whether any AU request is in processing.
@@ -246,7 +252,7 @@ zAu = { //static methods
 
 	//ajax internal//
 	_cmdsQue: [], //response commands in XML
-	_onsends: [], //JS called before 	_sendNow
+	_watches: new zk.Watches(),
 	_seqId: 1, //1-999
 
 	/** IE6 sometimes remains readyState==1 (reason unknown), so resend. */
@@ -431,12 +437,10 @@ zAu = { //static methods
 		}
 	
 		//callback (fckez uses it to ensure its value is sent back correctly
-		for (var j = 0, ol = zAu._onsends.length; j < ol; ++j) {
-			try {
-				zAu._onsends[j](implicit); //it might add more events
-			} catch (e) {
-				zk.error(e.message);
-			}
+		try {
+			zAu._watches.call('onSend', implicit);
+		} catch (e) {
+			zk.error(e.message);
 		}
 	
 		//bug 1721809: we cannot filter out ctl even if zAu.processing

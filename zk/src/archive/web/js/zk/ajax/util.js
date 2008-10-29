@@ -16,7 +16,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-zUtil = { //static methods
+zUtl = { //static methods
 	//HTML/XML
 	/** Encodes a message into a valid XML format. */
 	encodeXML: function (txt, multiline) {
@@ -66,5 +66,19 @@ zUtil = { //static methods
 		for (var j = arguments.length; --j >= 3;)
 			args.unshift(arguments[j]);
 		setInterval(function () {method.apply(obj, args)}, period);
+	},
+	/** Returns whether the first argument is the same, or an ancestor
+	 * of the second argument.
+	 * <p>It assumes the second argument has either a method called getParent
+	 * or a property called parent, that refer to
+	 * its parent (or null if it has no parent).
+	 * <p>If p is null, it is always return true;
+	 */
+	isAncestor: function (p, c) {
+		if (!p) return true;
+		for (; c; c = c.getParent ? c.getParent(): c.parent)
+			if (p == c)
+				return true;
+		return false;
 	}
 };
