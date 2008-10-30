@@ -188,6 +188,7 @@ tr.z-row td.z-detail-outer {
 	border-right: 1px solid #CCC; border-bottom: 1px solid #DDD;
 }
 .z-detail-img {
+	background-image: url(${c:encodeURL('~./zul/img/grid/row-expand.gif')});
 	width: 100%; height: 18px; background-position: 4px 2px;
 	background-repeat: no-repeat; background-color: transparent; 
 }

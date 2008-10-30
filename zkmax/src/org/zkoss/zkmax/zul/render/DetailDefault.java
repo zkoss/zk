@@ -43,11 +43,7 @@ public class DetailDefault implements ComponentRenderer {
 		wh.write("<div id=\"").write(uuid).write("\" z.type=\"zkex.zul.detail.Detail\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 		wh.write("<div id=\"").write(uuid).write("!img\" class=\"").write(self.getZclass())
-			.write("-img\"");
-		if (self.getImage() != null)
-			wh.write(" style=\"background-image:url(").write(exec.encodeURL(self.getImage()))
-				.write(")\"");
-		wh.write("></div><div id=\"").write(uuid).write("!cave\" style=\"").write(self.getContentStyle())
+			.write("-img\"></div><div id=\"").write(uuid).write("!cave\" style=\"").write(self.getContentStyle())
 			.write("\" class=\"").write(self.getContentSclass()).write("\">")
 			.writeChildren(self).write("</div></div>");
 	}

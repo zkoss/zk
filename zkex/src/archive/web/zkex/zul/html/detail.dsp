@@ -18,7 +18,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <div id="${self.uuid}" z.type="zkex.zul.detail.Detail" ${self.outerAttrs}${self.innerAttrs}>
-<div id="${self.uuid}!img" class="${self.zclass}-img" <c:if test="${!empty self.image}">style="background-image:url(${c:encodeURL(self.image)})"</c:if>></div>
+<div id="${self.uuid}!img" class="${self.zclass}-img"></div>
 <div id="${self.uuid}!cave" style="${self.contentStyle}" class="${self.contentSclass}">
 	<c:forEach var="child" items="${self.children}">
   ${z:redraw(child, null)}
