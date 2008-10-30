@@ -52,7 +52,7 @@ public class PanelDefault implements ComponentRenderer {
 		if (self.isFramable()) {
 			wh.write("<div class=\"").write(zcls).write("-tl");
 			if (caption == null && noTitle)
-				wh.write(' ').write(zcls).write("-header-noheader");
+				wh.write(' ').write(zcls).write("-noheader");
 			wh.write("\"><div class=\"").write(zcls).write("-tr\"><div class=\"").write(zcls)
 				.write("-tm\">");
 		}
