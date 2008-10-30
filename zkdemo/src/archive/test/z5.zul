@@ -18,12 +18,14 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <div>
-	<label value="This is the first label." onClick=""/>
+	<label value="This is the first label."/>
 	<div>
 		This is 2nd label in the inner div
 		<label value="This is 3nd label in the inner div"/>
 		<include src="z5-1.zul" height="auto"/>
 		<include src="z5-2.html" height="auto"/>
 	</div>
+	<label value="Click Me" style="border:1px solid #233;padding:0 2px"
+		onClick='self.value += "!"'/>
 	End of file
 </div>

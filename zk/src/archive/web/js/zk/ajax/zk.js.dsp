@@ -27,7 +27,7 @@ if (!window.zk) {
 <c:include page="watch.js"/>
 <c:include page="widget.js"/>
 <c:include page="pkg.js"/>
-<c:include page="create.js"/>
+<c:include page="boot.js"/>
 <c:include page="au.js"/>
 
 ${z:outLocaleJavaScript()}

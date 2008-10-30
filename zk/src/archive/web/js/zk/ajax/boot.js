@@ -1,4 +1,4 @@
-/* create.js
+/* boot.js
 
 {{IS_NOTE
 	Purpose:
@@ -50,6 +50,7 @@ function _zkend() {
 				var tid = setInterval(function(){
 					if (/loaded|complete/.test(document.readyState)) {
 						clearInterval(tid);
+						if (!zk.booted) _zkinit();
 						_zkattach();
 					}
 				}, 50);
@@ -129,27 +130,34 @@ function zkopt(opts) {
 }
 
 //Internal Use//
-function _zkinit() {
-	zk.booted = true;
-
-	//TODO: listen document events
-}
 /** Used internally to redraw and attach. */
 function _zkattach() {
 	zPkg.addAfterLoad(_zkattach0);
 }
+function _zkinit() {
+	zk.booted = true;
+
+	//TODO more listener
+	zEvt.listen(document, "click", _zkDocLClick);
+}
 function _zkattach0() {
-	if (!zk.booted)
-		_zkinit();
+	if (!zk.booted) _zkinit();
 
 	for (var inf; inf = _zkcrs.shift();) {
 		var dt = inf[0], wginf = inf[1];
 
 		var wgt = _zkcreate1(null, wginf);
 		zDom.outerHTML(zDom.$(wgt.uuid), wgt.redraw());
+		_zkattach1(wgt);
 	}
 
 	zk.endProcessing();
+}
+function _zkattach1(wgt) {
+	var n = zDom.$(wgt.uuid);
+	if (n) n.z_wgt = wgt;
+	for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
+		_zkattach1(wgt);
 }
 /** Used internally to create the widget tree based on _zkcrs. */
 function _zkcreate() {
@@ -206,3 +214,20 @@ function _zkld(w) {
 
 /** Used internally. */
 var _zkws = [], zkcurdt, _zkcrs = []; //used to load widget
+
+//Event Handler//
+function _zkDocLClick(evt) {
+	if (!evt) evt = window.event;
+
+	if (evt.which == 1 || (evt.button == 0 || evt.button == 1)) {
+		var wgt = zEvt.widget(evt);
+		for (; wgt; wgt = wgt.parent)
+			if (wgt.onClick != zk.undefined) {
+zk.debug("click", wgt.uuid, wgt.type);
+				wgt.fire2("onClick");
+				return;
+			}
+		//no need to Event.stop
+	}
+	//don't return anything. Otherwise, it replaces event.returnValue in IE (Bug 1541132)
+};

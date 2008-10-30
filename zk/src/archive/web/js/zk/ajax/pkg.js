@@ -19,13 +19,14 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 zPkg = {
 	/** Called after the whole package is declared.
 	 * It must be the last statement in a JavaScript file.
+	 * @param pkg the package name
 	 */
 	end: function (pkg) {
 		if (--zk.loading) {
 			zk._updCnt();
 		} else {
 			try {
-				zDom.enableESC();
+				zEvt.enableESC();
 				zDom.cleanAllProgress("zk_loadprog");
 			} catch (ex) {
 			}
@@ -35,6 +36,7 @@ zPkg = {
 		}
 	},
 	/** Loads the specified package.
+	 * @param pkg the package name
 	 * @param dtid the desktop ID. If null, the first desktop is used.
 	 */
 	load: function (pkg, dtid) {
@@ -50,7 +52,7 @@ zPkg = {
 		if (zk.loading++) {
 			zPkg._updCnt();
 		} else {
-			zDom.disableESC();
+			zEvt.disableESC();
 			setTimeout(zPkg._pgbox, 350);
 		}
 

@@ -131,16 +131,63 @@ zk.Widget = zk.$extends(zk.Object, {
 	/** Fires a Widget event.
 	 * Note: the event will be sent to the server if it is in server
 	 * (@{link #inServer}), and belongs to a desktop.
+	 *
+	 * @param evt an instance of zk.Event
+	 * @param timeout the delay before sending the non-deferrable AU request
+	 * (if necessary).
+	 * If not specified or negative, it is decided automatically.
+	 * It is ignored if no non-deferrable listener is registered at the server.
 	 */
 	fire: function (evt, timeout) {
-		evt.target = this;
+		var lsns = this._lsns[name],
+			len = lsns ? lsns.length: 0;
+		if (len) {
+			for (var j = 0; j < len;) {
+				var o = lsns[j++];
+				o[name].apply(o, evt);
+				if (evt.stop) return; //no more processing
+			}
+		}
+
 		if (this.inServer && this.desktop) {
 			var ies = this.importantEvents,
-				evtnm = evt.name;
-			if (this[evtnm] != zk.undefined
+				evtnm = evt.name,
+				asap = this[evtnm];
+			if (asap != zk.undefined
 			|| (ies != null && ies.contains(evtnm)))
-				zAu.send(evt, timeout);
+				zAu.send(evt,
+					asap ? timeout >= 0 ? timeout: 38: this.auDelay());
 		}
+	},
+	/** A simpler way to fire an event. */
+	fire2: function (evtnm, data, implicit, ignorable) {
+		this.fire(new zk.Event(this, evtnm, data, implicit, ignorable));
+	},
+	/** Adds a listener to the specified event.
+	 * The listener must have a method having the same name as the event.
+	 * For example, if wgt.listen("onChange", lsn) is called, then
+	 * lsn.onChange(evt) will be called when onChange event is fired
+	 * (by {@link zk.Widget#fire}.
+	 * @param overwrite whether to overwrite if the watch was added.
+	 * @return true if added successfully.
+	 */
+	listen: function (evtnm, listener, overwrite) {
+		var lsns = this._lsns[name];
+		if (!lsns) lsns = this._lsns[name] = [];
+		lsns.add(listener, overwrite);
+	},
+	/** Removes a listener from the sepcified event.
+	 */
+	unlisten: function (evtnm, listener) {
+		var lsns = this._lsns[name];
+		return lsns && lsns.remove(watch);
+	},
+	_lsns: {}, //listeners Map(evtnm,listener)
+	/** Returns the delay before sending a deferrable event.
+	 * <p>Default: -1.
+	 */
+	auDelay: function () {
+		return -1;
 	}
 }, {
 	/** Returns the widget of the specified ID, or null if not found,
@@ -254,10 +301,16 @@ zk.Event = zk.$extends(zk.Object, {
 	 * An ignorable event is also an imiplicit event
 	 */
 	//ignorable: false
+	/** Whether to stop the event propogation.
+	 * Note: it won't be sent to the server if stop is true.
+	 */
+	//stop: false,
 
-	$init: function (target, name, data) {
+	$init: function (target, name, data, implicit, ignorable) {
 		this.target = target;
 		this.name = name;
 		this.data = data ? data: null;
+		this.implicit = implicit;
+		this.ignorable = ignorable;
 	}
 });

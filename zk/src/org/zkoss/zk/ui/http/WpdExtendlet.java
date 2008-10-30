@@ -104,7 +104,7 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 		final ByteArrayOutputStream out = new ByteArrayOutputStream(1024*8);
 		write(out, "_z='");
 		write(out, name);
-		write(out, "';if(!zk.$import(_z)){try{zk.$package(_z);\n");
+		write(out, "';if(!zk.$import(_z)){try{_zpk=zk.$package(_z);\n");
 
 		final String pathpref = path.substring(0, path.lastIndexOf('/') + 1);
 		for (Iterator it = root.getElements().iterator(); it.hasNext();) {
@@ -113,9 +113,15 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 			if ("widget".equals(elnm)) {
 				final String wgtnm = IDOMs.getRequiredAttributeValue(el, "name");
 				final String jspath = wgtnm + ".js"; //eg: /js/zul/wgt/Div.js
-				if (writeResource(out, jspath, pathpref))
-					writeMolds(out, langdef, name+'.'+wgtnm, pathpref);
-				else
+				if (writeResource(out, jspath, pathpref)) {
+					write(out, "(_zwg=_zpk.");
+					write(out, wgtnm);
+					write(out, ").prototype.type='");
+					final String fullnm = name + "." + wgtnm;
+					write(out, fullnm);
+					write(out, "';");
+					writeMolds(out, langdef, fullnm, pathpref);
+				} else
 					log.error("Failed to load widget "+wgtnm+": "+jspath+" not found, "+el.getLocator());
 			} else if ("script".equals(elnm)) {
 				String jspath = el.getAttributeValue("src");
@@ -127,7 +133,7 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 				String s = el.getText(true);
 				if (s != null && s.length() > 0) {
 					write(out, s);
-					writeln(out);
+					write(out, "\n;"); //might terminate with //, or not with ;
 				}
 			} else {
 				log.warning("Unknown element "+elnm+", "+el.getLocator());
@@ -139,9 +145,7 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 	private void writeMolds(OutputStream out,
 	LanguageDefinition langdef, String wgtnm, String pathpref) {
 		try {
-			write(out, "_zm=");
-			write(out, wgtnm);
-			write(out, ".molds={};");
+			write(out, "_zm=_zwg.molds={};");
 			WidgetDefinition wgtdef = langdef.getWidgetDefinition(wgtnm);
 			for (Iterator it = wgtdef.getMoldNames().iterator(); it.hasNext();) {
 				final String mold = (String)it.next();
@@ -170,7 +174,7 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 			return false;
 
 		Files.copy(out, is);
-		writeln(out);
+		write(out, "\n;"); //might terminate with //, or not with ;
 		return true;
 	}
 	private void write(OutputStream out, String s) throws IOException {
