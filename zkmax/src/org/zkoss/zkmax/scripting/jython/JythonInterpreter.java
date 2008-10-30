@@ -46,11 +46,15 @@ public class JythonInterpreter extends GenericInterpreter {
 	}
 
 	protected Object get(String name) {
-		return _ip.get(name, Object.class);
+		//Bug 2208873: Don't use _ip.get(String, Object) since it
+		//doesn't handle null well
+		PyObject val = _ip.get(name);
+		return val != null ? Py.tojava(val, Object.class): null;
 	}
 
 	protected void set(String name, Object value) {
-		_ip.set(name, value);
+		if (value == null) _ip.set(name, (PyObject)null);
+		else _ip.set(name, value);
 	}
 
 	protected void unset(String name) {

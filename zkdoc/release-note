@@ -5,6 +5,7 @@ ZK 3.0.9
 * Bugs
   2165067: Fail to remove children via invoking it.previous()
   2198961: AuUploader ignores 'nextURI' parameter
+  2208873: fail to loop an array declared in zsciprt using python
 
 	--------
 ZK 3.0.8
