@@ -109,12 +109,12 @@ public class Treerow extends XulElement {
 		return ti != null ? ti.getTooltiptext(): null;
 	}
 
-	protected boolean isAsapRequired(String evtnm) {
+	/*obsolete: protected boolean isAsapRequired(String evtnm) {
 		if (!Events.ON_OPEN.equals(evtnm))
 			return super.isAsapRequired(evtnm);
 		final Treeitem ti = (Treeitem)getParent();
 		return ti != null && ti.isAsapRequired(evtnm);
-	}
+	}*/
 
 	//-- Component --//
 	/** Returns whether this is visible.

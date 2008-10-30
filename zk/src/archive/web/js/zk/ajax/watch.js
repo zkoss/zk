@@ -24,10 +24,20 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  * For example, zAu.watch("onSend", o) where
  * o must have a method called onSend. Then, when the onSend action occurs,
  * o.onSend() will be invoked.
+ *
+ * <p>Note: the watches are shared by the whole client engine, so be careful
+ * to avoid the conflict of action names. Here is a list of all action
+ * names.
+ * <dl>
+ * <dt>onSend(implicit)</dt>
+ * <dd>It is called before sending the AU request to the server.
+ * The implicit argument indicates whether all AU requests being
+ * sent are implicit.</dd>
+ * </dl>
  */
-zk.Watches = zk.$extends(zk.Object, {
+zWatch = {
 	/** Adds a watch.
-	 * @param name the watch name. Currently, it supports only onSend,
+	 * @param name the action name. Currently, it supports only onSend,
 	 * which is called before sending the AU request(s).
 	 * @param overwrite whether to overwrite if the watch was added.
 	 * @return true if added successfully.
@@ -92,4 +102,4 @@ zk.Watches = zk.$extends(zk.Object, {
 	},
 
 	_wts: {}
-});
+};

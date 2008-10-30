@@ -1194,6 +1194,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/** Called by ({@link ComponentCtrl#redraw}) to render the
 	 * properties, excluding the enclosing tag and children.
 	 *
+	 * <p>Default: it renders {@link #getId} if it was assigned,
+	 * and event names if listened (and listed in {@link #getClientEvents}).
+	 *
 	 * <p>Note: it doesn't render {@link #getWidgetType}, {@link #getUuid}
 	 * and {@link #getMold}, which are caller's job.
 	 *
@@ -1203,6 +1206,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	throws IOException {
 		if (!ComponentsCtrl.isAutoId(_id)) //not getId() to avoid gen ID
 			render(renderer, "id", _id);
+
+		for (Iterator it = getClientEvents().iterator(); it.hasNext();) {
+			final String evtnm = (String)it.next();
+			if (Events.isListened(this, evtnm, false))
+				renderer.render(evtnm, Events.isListened(this, evtnm, true));
+		}
 	}
 	/** An utility to be called by {@link #renderProperties} to
 	 * render a string-value property.
@@ -1228,44 +1237,28 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			renderer.render(name, true);
 	}
 
-	/** An utility to be called by {@link #renderProperties} to render
-	 * an event registered by listener(s).
-	 * @param evtnm the event name
+	/** Returns a collection of event names that the client might send to
+	 * this component.
+	 * <p>Default: an empty collection.
+	 * The deriving class might override it to specify what events
+	 * that the client might send.
+	 *
+	 * <p>Because getClientEvents().contains() will be called, it is
+	 * better to use java.util.Set if a lot of events are returned.
 	 * @since 5.0.0
 	 */
-	protected void renderEvent(ContentRenderer renderer,
-	String evtnm) throws IOException {
-		if (Events.isListened(this, evtnm, false))
-			renderer.render(evtnm, Events.isListened(this, evtnm, true));
+	protected Collection getClientEvents() {
+		return Collections.EMPTY_LIST;
 	}
 
 	//Event//
-	/** Returns if any non-deferrable (ASAP) event listener is registered
-	 * for the specified event.
-	 * Returns true if you want the component (on the server)
-	 * to process the event immediately.
-	 *
-	 * <p>Default: return true if any non-deferable event listener of
-	 * the specified event is found. In other words, it returns
-	 * {@link Events#isListened} with asap = true.
-	 *
-	 * <p>This method is moved from {@link HtmlBasedComponent} to
-	 * {@link AbstractComponent} since 3.0.0.
-	 *
-	 * @param evtnm the event name, such as onClick
-	 * @since 3.0.0
-	 */
-	protected boolean isAsapRequired(String evtnm) {
-		return Events.isListened(this, evtnm, true);
-	}
-
 	public boolean addEventListener(String evtnm, EventListener listener) {
 		if (evtnm == null || listener == null)
 			throw new IllegalArgumentException("null");
 		if (!Events.isValid(evtnm))
 			throw new IllegalArgumentException("Invalid event name: "+evtnm);
 
-		final boolean oldasap = isAsapRequired(evtnm);
+		final boolean oldasap = Events.isListened(this, evtnm, true);
 
 		if (_listeners == null) _listeners = new HashMap(8);
 
@@ -1283,14 +1276,15 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		final Desktop desktop = getDesktop();
 		if (desktop != null) {
-			if (Events.ON_CLIENT_INFO.equals(evtnm))
+			if (Events.ON_CLIENT_INFO.equals(evtnm)) {
 				response("clientInfo", new AuClientInfo(desktop));
-			if (Events.ON_PIGGYBACK.equals(evtnm))
+			} else if (Events.ON_PIGGYBACK.equals(evtnm)) {
 				((DesktopCtrl)desktop).onPiggybackListened(this, true);
-
-			final boolean asap = isAsapRequired(evtnm);
-			if (l.size() == 1 || oldasap != asap)
-				smartUpdate(evtnm, asap);
+			} else if (getClientEvents().contains(evtnm)) {
+				final boolean asap = Events.isListened(this, evtnm, true);
+				if (l.size() == 1 || oldasap != asap)
+					smartUpdate(evtnm, asap);
+			}
 		}
 		return true;
 	}
@@ -1299,7 +1293,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			throw new IllegalArgumentException("null");
 
 		if (_listeners != null) {
-			final boolean oldasap = isAsapRequired(evtnm);
+			final boolean oldasap = Events.isListened(this, evtnm, true);
 			final List l = (List)_listeners.get(evtnm);
 			if (l != null) {
 				for (Iterator it = l.iterator(); it.hasNext();) {
@@ -1314,10 +1308,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 						if (desktop != null) {
 							onListenerChange(desktop, false);
 
-							if (l.isEmpty() && !Events.isListened(this, evtnm, false))
-								smartUpdate(evtnm, null); //no listener at all
-							else if (oldasap != isAsapRequired(evtnm))
-								smartUpdate(evtnm, !oldasap);
+							if (getClientEvents().contains(evtnm)) {
+								if (l.isEmpty() && !Events.isListened(this, evtnm, false))
+									smartUpdate(evtnm, null); //no listener at all
+								else if (oldasap != Events.isListened(this, evtnm, true))
+									smartUpdate(evtnm, !oldasap);
+							}
 						}
 						return true;
 					}

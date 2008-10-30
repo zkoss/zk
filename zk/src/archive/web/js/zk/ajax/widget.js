@@ -41,6 +41,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		this.uuid = uuid ? uuid: zk.Widget.nextUuid();
 		this.mold = mold ? mold: "default";
 	},
+	/** Generates the HTML content. */
 	redraw: function () {
 		var s = this.$class.molds[this.mold].call(this);
 		return this.prolog ? this.prolog + s: s;
@@ -121,14 +122,24 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 
 	//ZK event//
+	/** An array of important events. An import event is an event
+	 * that must be sent to the server even without event listener.
+	 * It is usually about state-updating, such as onChange and onSelect.
+	 * <p>Default: null if no event at all.
+	 */
+	//importantEvents: null,
 	/** Fires a Widget event.
 	 * Note: the event will be sent to the server if it is in server
 	 * (@{link #inServer}), and belongs to a desktop.
 	 */
-	fire: function (aureq, timeout) {
+	fire: function (evt, timeout) {
+		evt.target = this;
 		if (this.inServer && this.desktop) {
-			aureq.wgt = this;
-			zAu.send(aureq, timeout);
+			var ies = this.importantEvents,
+				evtnm = evt.name;
+			if (this[evtnm] != zk.undefined
+			|| (ies != null && ies.contains(evtnm)))
+				zAu.send(evt, timeout);
 		}
 	}
 }, {

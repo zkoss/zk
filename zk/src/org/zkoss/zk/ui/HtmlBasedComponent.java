@@ -18,6 +18,9 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui;
 
+import java.util.Collection;
+import java.util.Set;
+import java.util.HashSet;
 import java.io.Writer;
 import java.io.IOException;
 
@@ -71,6 +74,17 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	private int _zIndex = -1;
 	/** The prolog content that shall be generated before real content. */
 	private String _prolog;
+
+	/** The client events returned by {@link #getClientEvents}.
+	 * @since 5.0.0
+	 */
+	protected static final Set _clientEvents;
+	static {
+		_clientEvents = new HashSet(4);
+		_clientEvents.add(Events.ON_CLICK);
+		_clientEvents.add(Events.ON_DOUBLE_CLICK);
+		_clientEvents.add(Events.ON_RIGHT_CLICK);
+	}
 
 	protected HtmlBasedComponent() {
 	}
@@ -440,10 +454,15 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 		if (zi >= 0) renderer.render("zIndex", zi);
 
 		render(renderer, "prolog", _prolog);
+	}
 
-		renderEvent(renderer, Events.ON_CLICK);
-		renderEvent(renderer, Events.ON_DOUBLE_CLICK);
-		renderEvent(renderer, Events.ON_RIGHT_CLICK);
+	/** Returns a collection of event names that the client might send to
+	 * this component.
+	 * <p>Default: onClick, onDoubleClick, onRightClick.
+	 * @since 5.0.0
+	 */
+	protected Collection getClientEvents() {
+		return _clientEvents;
 	}
 
 	//--ComponentCtrl--//

@@ -24,8 +24,8 @@ if (!window.zk) {
 <c:include page="util.js"/>
 <c:include page="dom.js"/>
 <c:include page="domevt.js"/>
-<c:include page="widget.js"/>
 <c:include page="watch.js"/>
+<c:include page="widget.js"/>
 <c:include page="pkg.js"/>
 <c:include page="create.js"/>
 <c:include page="au.js"/>

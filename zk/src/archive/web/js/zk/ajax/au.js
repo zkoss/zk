@@ -56,6 +56,8 @@ zAu = { //static methods
 		return zk.confirm((msg?msg:msgCode)+'\n'+mesg.TRY_AGAIN+(msg2?"\n\n("+msg2+")":""));
 	},
 	/** Handles the error caused by processing the response.
+	 * Overrides this method if you prefer to show it differently.
+	 *
 	 * @param msgCode the error message code.
 	 * It is either an index of mesg (e.g., "FAILED_TO_PROCESS"),
 	 * or an error message
@@ -63,7 +65,7 @@ zAu = { //static methods
 	 * @param cmd the command (optional)
 	 * @param ex the exception (optional)
 	 */
-	onError: function (msgCode, msg2, cmd, ex) {
+	showError: function (msgCode, msg2, cmd, ex) {
 		var msg = mesg[msgCode];
 		zk.error((msg?msg:msgCode)+'\n'+(msg2?msg2:"")+(cmd?cmd:"")+(ex?"\n"+ex.message:""));
 	},
@@ -91,23 +93,6 @@ zAu = { //static methods
 	_eru: {},
 
 	////Ajax Send////
-	/** Adds a watch.
-	 * @param name the watch name. Currently, it supports only onSend,
-	 * which is called before sending the AU request(s).
-	 * @param overwrite whether to overwrite if the function was added.
-	 * @return true if added successfully.
-	 */
-	watch: function (name, watch, overwrite) {
-		return zAu._watches.watch(name, watch, overwrite);
-	},
-	/** Removes a watch.
-	 * @return whether the watch has been removed successfully.
-	 * It returns false if the watch was not added before.
-	 */
-	unwatch: function (name, watch) {
-		return zAu._watches.unwatch(name, watch);
-	},
-
 	/** Returns whether any AU request is in processing.
 	 * <p>Note: zk.processing (which is a variable) represents both AU
 	 * and other processing, while zAu.processing() (which is a function)
@@ -117,7 +102,15 @@ zAu = { //static methods
 		return zAu._cmdsQue.length || zAu._areq || zAu._preqInf
 			|| zAu._doingCmds;
 	},
-	/** Sends a request to the client
+	/** Sends an AU request to the server
+	 * <p>Watches:
+	 * <dl>
+	 * <dt>onSend(implicit)</dt>
+	 * <dd>It is called before sending the AU request to the server.
+	 * The implicit argument indicates whether all AU requests being
+	 * sent are implicit.</dd>
+	 * </dl>
+	 *
 	 * @param timout milliseconds.
 	 * If negative, it won't be sent until next non-negative event
 	 */
@@ -236,7 +229,7 @@ zAu = { //static methods
 	
 		//I. process commands that require uuid
 		if (!data || !data.length) {
-			onProcessError("ILLEGAL_RESPONSE", "uuid is required for ", cmd);
+			zAu.showError("ILLEGAL_RESPONSE", "uuid is required for ", cmd);
 			return;
 		}
 	
@@ -247,12 +240,11 @@ zAu = { //static methods
 			return;
 		}
 	
-		onProcessError("ILLEGAL_RESPONSE", "Unknown command: ", cmd);
+		zAu.showError("ILLEGAL_RESPONSE", "Unknown command: ", cmd);
 	},
 
 	//ajax internal//
 	_cmdsQue: [], //response commands in XML
-	_watches: new zk.Watches(),
 	_seqId: 1, //1-999
 
 	/** IE6 sometimes remains readyState==1 (reason unknown), so resend. */
@@ -438,7 +430,7 @@ zAu = { //static methods
 	
 		//callback (fckez uses it to ensure its value is sent back correctly
 		try {
-			zAu._watches.call('onSend', implicit);
+			zWatch.call('onSend', implicit);
 		} catch (e) {
 			zk.error(e.message);
 		}
@@ -612,7 +604,7 @@ zAu = { //static methods
 				try {
 					zAu.process(cmd.cmd, cmd.data);
 				} catch (e) {
-					onProcessError("FAILED_TO_PROCESS", null, cmd.cmd, e);
+					zAu.showError("FAILED_TO_PROCESS", null, cmd.cmd, e);
 					throw e;
 				}
 			}

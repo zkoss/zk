@@ -350,9 +350,9 @@ public class Treeitem extends XulElement {
 	//-- super --//
 
 	//this is declared to make it accessible to Treerow
-	protected boolean isAsapRequired(String evtnm) {
+	/*obsolete protected boolean isAsapRequired(String evtnm) {
 		return super.isAsapRequired(evtnm);
-	}
+	}*/
 	public void smartUpdate(String attr, String value) {
 		if (_treerow != null) _treerow.smartUpdate(attr, value);
 	}
