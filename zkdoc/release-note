@@ -20,6 +20,7 @@ ZK 3.5.2
   2199361: Failed to create components in Initiator.init()
   2198961: AuUploader ignores 'nextURI' parameter
   2202620: Comet unable to stop in the comet thread
+  2208873: fail to loop an array declared in zsciprt using python
 
 	--------
 ZK 3.5.1
