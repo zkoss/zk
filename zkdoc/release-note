@@ -4,6 +4,7 @@ ZK 3.5.2
   2173627: A way to specify where to gen ZK tags in JSP (incl zul)
   2173943: Enhance the generation of noscript (unavailable message)
   2188951: Provide layout(template)-injection page composition
+  2086692: Data binder should have access to the composer
 
 * Bugs
   2154845: tab switch in Java - setImage makes layout go crazy

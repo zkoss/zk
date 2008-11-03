@@ -1,0 +1,11 @@
+<zk>
+You shall see a border layout under this statement where "North" in north, "South" in south, "West"
+in west, "East" in east, and "Center" in center region.
+<borderlayout height="80%" width="100%">
+  <north self="@{insert(north)}"/>
+  <south self="@{insert(south)}"/>
+  <center self="@{insert(center)}"/>
+  <west self="@{insert(west}"/>
+  <east self="@{insert(east)}"/>
+</borderlayout>
+</zk>
