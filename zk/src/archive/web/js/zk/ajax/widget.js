@@ -114,11 +114,34 @@ zk.Widget = zk.$extends(zk.Object, {
 		//TODO: if parent belongs to DOM
 	},
 
-	/** Attaches the widget to the DOM tree.
-	 * @param id the DOM element's ID.
+	/** Replaces the specified DOM element with this widget.
+	 * @param desktop the desktop the DOM element belongs to.
+	 * Optional. If null, ZK will decide it automatically.
 	 */
-	attach: function (id, options) {
-		zk.debug("attach", this.uuid, id);
+	replace: function (n, desktop) {
+		if (n.z_wgt) n.z_wgt.detach(); //detach first
+		zDom.outerHTML(zDom.$(n), this.redraw());
+		this.attach(desktop);
+	},
+	/** Attaches the widget to the DOM tree.
+	 * @param desktop the desktop the DOM element belongs to.
+	 * Optional. If null, ZK will decide it automatically.
+	 */
+	attach: function (desktop) {
+		var n = zDom.$(this.uuid);
+		if (n) {
+			n.z_wgt = this;
+			this.node = n;
+			if (!desktop) desktop = zk.Desktop.ofNode(n);
+			this.desktop = desktop;
+		}
+		for (var wgt = this.firstChild; wgt; wgt = wgt.nextSibling)
+			wgt.attach(desktop);
+	},
+	/** Detaches the widget from the DOM tree.
+	 */
+	detach: function () {
+		//TOD
 	},
 
 	//ZK event//
@@ -198,7 +221,11 @@ zk.Widget = zk.$extends(zk.Object, {
 	$: function (uuid) {
 		//No map from uuid to widget directly. rather, go thru DOM
 		var n = zDom.$(uuid);
-		return n ? n.z_wgt: null;
+		for (; n; n = n.parentNode) {
+			var wgt = n.z_wgt;
+			if (wgt) return wgt;
+		}
+		return null;
 	},
 
 	/** Returns the next unquie widget UUID.
@@ -222,6 +249,7 @@ zk.Desktop = zk.$extends(zk.Object, {
 			this.id = dtid;
 			this.updateURI = updateURI;
 			zdt.all[dtid] = this;
+			++zdt._ndt;
 			if (!zdt._dt) zdt._dt = this; //default desktop
 		} else if (updateURI)
 			dt.updateURI = updateURI;
@@ -229,14 +257,30 @@ zk.Desktop = zk.$extends(zk.Object, {
 		zdt.cleanup();
 	}
 },{
-	/** Returns the desktop of the specified ID.
+	/** Returns the desktop of the specified desktop ID.
 	 */
 	$: function (dtid) {
 		return dtid ? typeof dtid == 'string' ?
 			zk.Desktop.all[dtid]: dtid: zk.Desktop._dt;
 	},
+	/** Returns the desktop that the specified element belongs to.
+	 */
+	ofNode: function (n) {
+		var zdt = zk.Desktop, dts = zdt.all;
+		if (zdt._ndt > 1) {
+			var wgt = zk.Widget.$(n);
+			if (wgt)
+				for (; wgt; wgt = wgt.parent)
+					if (wgt.desktop)
+						return wgt.desktop;
+		}
+		if (zdt._dt) return zdt._dt;
+		for (var dtid in dts)
+			return dts[dtid];
+	},
 	/** A map of (String dtid, zk.Desktop dt) (readonly). */
 	all: {},
+	_ndt: 0,
 	/** Remove desktops that are no longer valid.
 	 */
 	cleanup: function () {
@@ -245,9 +289,10 @@ zk.Desktop = zk.$extends(zk.Object, {
 			zdt._dt = null;
 		for (var dtid in dts) {
 			var dt = dts[dtid];
-			if (dt.pgid && !zDom.$(dt.pgid)) //removed
+			if (dt.pgid && !zDom.$(dt.pgid)) { //removed
 				delete dts[dtid];
-			else if (!zdt._dt)
+				--zdt._ndt;
+			} else if (!zdt._dt)
 				zdt._dt = dt;
 		}
 	}
@@ -261,7 +306,8 @@ zk.Page = zk.$extends(zk.Widget, {//unlik server, we derive from Widget!
 	style: "width:100%;height:100%",
 	$init: function (pgid, contained) {
 		this.uuid = pgid;
-		this.node = zDom.$(pgid); //might null
+		var n = this.node = zDom.$(pgid); //might null
+		if (n) n.z_wgt = this;
 		if (contained)
 			zk.Page.contained.add(this, true);
 	},

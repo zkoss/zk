@@ -69,18 +69,18 @@ zDom = { //static methods
 	},
 
 	/** Scrolls the browser window to the specified element. */
-	scrollTo: function (element) {
-		element = zDom.$(element);
-		var pos = zDom.cmOffset(element);
+	scrollTo: function (n) {
+		n = zDom.$(n);
+		var pos = zDom.cmOffset(n);
 		scrollTo(pos[0], pos[1]);
-		return element;
+		return n;
 	},
 
 	/** Returns the cumulative offset of the specified element.
 	 */
-	cmOffset: function (element) {
-		element = zDom.$(element);
-		var valueT = 0, valueL = 0, operaBug, el = element.parentNode;
+	cmOffset: function (n) {
+		n = zDom.$(n);
+		var valueT = 0, valueL = 0, operaBug, el = n.parentNode;
 		//Fix gecko difference, the offset of gecko excludes its border-width when its CSS position is relative or absolute
 		if (zk.gecko) {
 			while (el && el != document.body) {
@@ -95,66 +95,66 @@ zDom = { //static methods
 
 		do {
 			//Bug 1577880: fix originated from http://dev.rubyonrails.org/ticket/4843
-			if (zDom.getStyle(element, "position") == 'fixed') {
-				valueT += zk.innerY() + element.offsetTop;
-				valueL += zk.innerX() + element.offsetLeft;
+			if (zDom.getStyle(n, "position") == 'fixed') {
+				valueT += zk.innerY() + n.offsetTop;
+				valueL += zk.innerX() + n.offsetLeft;
 				break;
 			} else {
-				//Fix opera bug. If the parent of "INPUT" or "SPAN" element is "DIV" 
-				// and the scrollTop of "DIV" element is more than 0, the offsetTop of "INPUT" or "SPAN" element always is wrong.
+				//Fix opera bug. If the parent of "INPUT" or "SPAN" n is "DIV" 
+				// and the scrollTop of "DIV" n is more than 0, the offsetTop of "INPUT" or "SPAN" n always is wrong.
 				if (zk.opera) { 
-					if (operaBug && element.nodeName == "DIV" && element.scrollTop != 0)
-						valueT += element.scrollTop || 0;
-					operaBug = element.nodeName == "SPAN" || element.nodeName == "INPUT";
+					if (operaBug && n.nodeName == "DIV" && n.scrollTop != 0)
+						valueT += n.scrollTop || 0;
+					operaBug = n.nodeName == "SPAN" || n.nodeName == "INPUT";
 				}
-				valueT += element.offsetTop || 0;
-				valueL += element.offsetLeft || 0;
-				//Bug 1721158: In FF, element.offsetParent is null in this case
-				element = zk.gecko && element != document.body ? zDom.offsetParent(element): element.offsetParent;
+				valueT += n.offsetTop || 0;
+				valueL += n.offsetLeft || 0;
+				//Bug 1721158: In FF, n.offsetParent is null in this case
+				n = zk.gecko && n != document.body ? zDom.offsetParent(n): n.offsetParent;
 			}
-		} while (element);
+		} while (n);
 		return [valueL, valueT];
 	},
 	/** Returns the offset parent.
 	 */
-	offsetParent: function (element) {
-		element = zDom.$(element);
-		if (element.offsetParent) return element.offsetParent;
-		if (element == document.body) return element;
+	offsetParent: function (n) {
+		n = zDom.$(n);
+		if (n.offsetParent) return n.offsetParent;
+		if (n == document.body) return n;
 
-		while ((element = element.parentNode) && element != document.body)
-			if (element.style && zDom.getStyle(element, 'position') != 'static') //in IE, style might not be available
-				return element;
+		while ((n = n.parentNode) && n != document.body)
+			if (n.style && zDom.getStyle(n, 'position') != 'static') //in IE, style might not be available
+				return n;
 
 		return document.body;
 	},
-	/** Returns the style. In addition to element.style, it also
+	/** Returns the style. In addition to n.style, it also
 	 * checked CSS styles that are applicated to the specified element.
 	 */
-	getStyle: function(element, style) {
-		element = zDom.$(element);
+	getStyle: function(n, style) {
+		n = zDom.$(n);
 		if (['float','cssFloat'].contains(style))
-			style = (typeof element.style.styleFloat != 'undefined' ? 'styleFloat' : 'cssFloat');
+			style = (typeof n.style.styleFloat != 'undefined' ? 'styleFloat' : 'cssFloat');
 		style = style.camelize();
-		var value = element.style[style];
+		var value = n.style[style];
 		if (!value) {
 			if (document.defaultView && document.defaultView.getComputedStyle) {
-				var css = document.defaultView.getComputedStyle(element, null);
+				var css = document.defaultView.getComputedStyle(n, null);
 				value = css ? css[style] : null;
-			} else if (element.currentStyle) {
-				value = element.currentStyle[style];
+			} else if (n.currentStyle) {
+				value = n.currentStyle[style];
 			}
 		}
 	
-		if (value == 'auto' && ['width','height'].contains(style) && element.getStyle('display') != 'none')
-			value = element['offset'+style.capitalize()] + 'px';
+		if (value == 'auto' && ['width','height'].contains(style) && n.getStyle('display') != 'none')
+			value = n['offset'+style.capitalize()] + 'px';
 	
 		if (zk.opera && ['left', 'top', 'right', 'bottom'].contains(style)
-		&& zDom.getStyle(element, 'position') == 'static') value = 'auto';
+		&& zDom.getStyle(n, 'position') == 'static') value = 'auto';
 
 		if(style == 'opacity') {
 			if(value) return parseFloat(value);
-			if(value = (element.getStyle('filter') || '').match(/alpha\(opacity=(.*)\)/)
+			if(value = (n.getStyle('filter') || '').match(/alpha\(opacity=(.*)\)/)
 			&& value[1]) return parseFloat(value[1]) / 100;
 			return 1.0;
 		}
@@ -164,8 +164,8 @@ zDom = { //static methods
 	/** Sets the style.
 	 * @param style a map of styles to update (String name, String value).
 	*/
-	setStyle: function(element, style) {
-		element = zDom.$(element);
+	setStyle: function(n, style) {
+		n = zDom.$(n);
 		for (var name in style) {
 			var value = style[name];
 			if(name == 'opacity') {
@@ -173,22 +173,22 @@ zDom = { //static methods
 					value = (/gecko/.test(zk.userAgent) &&
 						!/konqueror|safari|khtml/.test(zk.userAgent)) ? 0.999999 : 1.0;
 					if(zk.ie)
-						element.style.filter = element.getStyle('filter').replace(/alpha\([^\)]*\)/gi,'');
+						n.style.filter = n.getStyle('filter').replace(/alpha\([^\)]*\)/gi,'');
 				} else if(value === '') {
 					if(zk.ie)
-						element.style.filter = element.getStyle('filter').replace(/alpha\([^\)]*\)/gi,'');
+						n.style.filter = n.getStyle('filter').replace(/alpha\([^\)]*\)/gi,'');
 				} else {
 					if(value < 0.00001) value = 0;
 					if(zk.ie)
-						element.style.filter = element.getStyle('filter').replace(/alpha\([^\)]*\)/gi,'') +
+						n.style.filter = n.getStyle('filter').replace(/alpha\([^\)]*\)/gi,'') +
 							'alpha(opacity='+value*100+')';
 				}
 			} else if(['float','cssFloat'].contains(name))
-				name = (typeof element.style.styleFloat != 'undefined') ? 'styleFloat' : 'cssFloat';
+				name = (typeof n.style.styleFloat != 'undefined') ? 'styleFloat' : 'cssFloat';
 
-			element.style[name.camelize()] = value;
+			n.style[name.camelize()] = value;
 		}
-		return element;
+		return n;
 	},
 
 	/** Replaces the outer of the specified element with the HTML content.
