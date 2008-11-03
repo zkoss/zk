@@ -17,7 +17,17 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 zul.wgt.Label = zk.$extends(zk.Widget, {
-	value: ''
+	value: '',
+
+	//super//
+	setAttr: function (nm, val) {
+		if ("value" == nm) {
+			this.value = val;
+			if (this.node)
+				this.node.innerHTML = val;
+		} else
+			$setAttr(nm, val);
+	}
 }, {
 	embedAs: 'value' //retrieve zDom.$() as value
 });

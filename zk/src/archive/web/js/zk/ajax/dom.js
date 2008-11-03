@@ -194,7 +194,7 @@ zDom = { //static methods
 	/** Replaces the outer of the specified element with the HTML content.
 	 * @return the new node (actually the first new node, if multiple)
 	 */
-	outerHTML: function(n, html) {
+	setOuterHTML: function(n, html) {
 		n = zDom.$(n);
 		var parent = n.parentNode, sib = n.previousSibling;
 
@@ -262,7 +262,7 @@ zDom = { //static methods
 			+msg+'</div></div></div>'
 		var n = document.createElement("DIV");
 		document.body.appendChild(n);
-		zDom.outerHTML(n, html);
+		zDom.setOuterHTML(n, html);
 
 		if (mask) { //center it
 			n = zDom.$(idtxt);

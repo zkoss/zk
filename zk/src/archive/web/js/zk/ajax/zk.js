@@ -81,6 +81,10 @@ Array.prototype.add = function (o, overwrite) {
 	this.push(o);
 	return true;
 };
+/** Clones this array. */
+Array.prototype.clone = function() {
+	return [].concat(this);
+};
 
 //zk//
 zk = { //static methods
@@ -154,12 +158,12 @@ zk = { //static methods
 	$extends: function (baseClass, methods, staticMethods) {
 	//Note: we cannot use extends due to IE and Safari
 		var jclass = function() {
-			this.$init.apply(this, arguments);
+			this.construct.apply(this, arguments);
 		};
 
 		for (var p in baseClass.prototype) { //inherit non-static
 			var cc = p.charAt(0);
-			if (cc != '$' || p == '$init' || p == '$instanceof') {
+			if (cc != '$' || p == '$instanceof') {
 				var m = baseClass.prototype[p];
 				jclass.prototype[p] = m;
 				if (cc != '_' && typeof m == 'function' && p != "$instanceof") //not private method
@@ -189,6 +193,7 @@ zk = { //static methods
 	$abstract: function () {
 		throw "abstract method";
 	},
+
 	/** parse a string to an integer. */
 	parseInt: function (v, b) {
 		v = v ? parseInt(v, b || 10): 0;
@@ -248,7 +253,7 @@ zk = { //static methods
 	+'<button onclick="zDom.detach(\''+id+'\')">close</button></td>'
 	+'<td class="z-error-msg">'+zUtl.encodeXML(msg, true) //Bug 1463668: security
 	+'</td></tr></table></div>';
-		zDom.outerHTML(box, html);
+		zDom.setOuterHTML(box, html);
 
 		//TODO: draggable box
 		//box = zDom.$e(id); //we have to retrieve back
@@ -285,7 +290,7 @@ zk = { //static methods
 '<div id="zk_dbgbox" style="text-align:right;width:50%;right:0;bottom:0;position:absolute">'
 +'<button onclick="zDom.detach(\'zk_dbgbox\')" style="font-size:9px">X</button><br/>'
 +'<textarea id="zk_dbg" style="width:100%" rows="10"></textarea></div>';
-				zDom.outerHTML(console, html);
+				zDom.setOuterHTML(console, html);
 				console = zDom.$("zk_dbg");
 			}
 			console.value = console.value + zk._msg + '\n';
@@ -320,7 +325,7 @@ zk.air = zk.agent.indexOf("adobeair") >= 0;
 /** The Object class that all other classes are extended from. */
 zk.Object = function () {};
 zk.Object.prototype = {
-	$init: zk.$void,
+	construct: zk.$void,
 	/** The class of this object belongs to. */
 	$class: zk.Object,
 	/** Determines if this object is an instance of the specified class. */

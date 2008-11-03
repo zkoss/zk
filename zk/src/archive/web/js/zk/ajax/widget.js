@@ -37,7 +37,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	//inServer: false,
 
 	/** Constructor. */
-	$init: function (uuid, mold) {
+	construct: function (uuid, mold) {
 		this.uuid = uuid ? uuid: zk.Widget.nextUuid();
 		this.mold = mold ? mold: "default";
 	},
@@ -120,7 +120,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	 */
 	replace: function (n, desktop) {
 		if (n.z_wgt) n.z_wgt.detach(); //detach first
-		zDom.outerHTML(zDom.$(n), this.redraw());
+		zDom.setOuterHTML(zDom.$(n), this.redraw());
 		this.attach(desktop);
 	},
 	/** Attaches the widget to the DOM tree.
@@ -211,6 +211,14 @@ zk.Widget = zk.$extends(zk.Object, {
 	 */
 	auDelay: function () {
 		return -1;
+	},
+	/** Sets an attribute that is caused by an AU response (smartUpdate).
+	 */
+	setAttr: function (nm, val) {
+	},
+	/** Removes an attribute that is caused by an AU response (smartUpdate)
+	 */
+	rmAttr: function (nm, val) {
 	}
 }, {
 	/** Returns the widget of the specified ID, or null if not found,
@@ -243,7 +251,7 @@ zk.Desktop = zk.$extends(zk.Object, {
 	/** The AU request that shall be sent. Used by au.js */
 	_aureqs: [],
 
-	$init: function (dtid, updateURI) {
+	construct: function (dtid, updateURI) {
 		var zdt = zk.Desktop, dt = zdt.all[dtid];
 		if (!dt) {
 			this.id = dtid;
@@ -304,7 +312,7 @@ zk.Page = zk.$extends(zk.Widget, {//unlik server, we derive from Widget!
 	type: "#p",
 	/** The style (readonly). */
 	style: "width:100%;height:100%",
-	$init: function (pgid, contained) {
+	construct: function (pgid, contained) {
 		this.uuid = pgid;
 		var n = this.node = zDom.$(pgid); //might null
 		if (n) n.z_wgt = this;
@@ -323,40 +331,4 @@ zk.Page = zk.$extends(zk.Widget, {//unlik server, we derive from Widget!
 	 * the whole browser window.
 	 */
 	contained: []
-});
-
-/** A widget event, fired by {@link zk.Widget#fire}.
- * It is an application-level event that is used by application to
- * hook the listeners to.
- * On the other hand, a DOM event ({@link zEvt}) is the low-level event
- * listened by the implementation of a widget.
- */
-zk.Event = zk.$extends(zk.Object, {
-	/** The target widget. */
-	//target: null,
-	/** The event name. */
-	//name: null,
-	/** The extra data, which could be anything. */
-	//data: null,
-	/** Whether this event is an implicit event, i.e., whether it is implicit
-	 * to users (so no progressing bar).
-	 */
-	//implicit: false,
-	/** Whether this event is ignorable, i.e., whether to ignore any error
-	 * of sending this event back the server.
-	 * An ignorable event is also an imiplicit event
-	 */
-	//ignorable: false
-	/** Whether to stop the event propogation.
-	 * Note: it won't be sent to the server if stop is true.
-	 */
-	//stop: false,
-
-	$init: function (target, name, data, implicit, ignorable) {
-		this.target = target;
-		this.name = name;
-		this.data = data ? data: null;
-		this.implicit = implicit;
-		this.ignorable = ignorable;
-	}
 });

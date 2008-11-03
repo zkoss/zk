@@ -16,6 +16,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
+/** DOM Event Utilities. */
 zEvt = {
 	BS:		8,
 	TAB:	9,

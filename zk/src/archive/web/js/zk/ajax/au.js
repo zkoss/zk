@@ -53,7 +53,7 @@ zAu = { //static methods
 	 */
 	confirmRetry: function (msgCode, msg2) {
 		var msg = mesg[msgCode];
-		return zk.confirm((msg?msg:msgCode)+'\n'+mesg.TRY_AGAIN+(msg2?"\n\n("+msg2+")":""));
+		return zUtl.confirm((msg?msg:msgCode)+'\n'+mesg.TRY_AGAIN+(msg2?"\n\n("+msg2+")":""));
 	},
 	/** Handles the error caused by processing the response.
 	 * Overrides this method if you prefer to show it differently.
@@ -102,6 +102,16 @@ zAu = { //static methods
 		return zAu._cmdsQue.length || zAu._areq || zAu._preqInf
 			|| zAu._doingCmds;
 	},
+	/** Checks whether to turn off the progress prompt.
+	 * @return true if the processing is done
+	 */
+	_ckProcessng: function () {
+		if (zAu.processing())
+			return false;
+		zk.endProcessing();
+		return true;
+	},
+
 	/** Sends an AU request to the server
 	 * <p>Watches:
 	 * <dl>
@@ -109,6 +119,9 @@ zAu = { //static methods
 	 * <dd>It is called before sending the AU request to the server.
 	 * The implicit argument indicates whether all AU requests being
 	 * sent are implicit.</dd>
+	 * <dt>onResponse()</dt>
+	 * <dd>It is called after the response of the AU request
+	 * has been sent back from the server, and processed.</dd>
 	 * </dl>
 	 *
 	 * @param timout milliseconds.
@@ -116,15 +129,14 @@ zAu = { //static methods
 	 */
 	send: function (aureq, timeout) {
 		if (timeout < 0) aureq.implicit = true;
-	
-		if (aureq.wgt) {
-			zAu._send(aureq.wgt.desktop, aureq, timeout);
-		} else if (aureq.dt) {
-			zAu._send(aureq.dt, aureq, timeout);
+
+		var t = aureq.target;
+		if (t) {
+			zAu._send(t.type == '#d' ? t: t.desktop, aureq, timeout);
 		} else {
-			var ds = zk.Desktop.all;
-			for (var dtid in ds)
-				zAu._send(ds[dtid], aureq, timeout);
+			var dts = zk.Desktop.all;
+			for (var dtid in dts)
+				zAu._send(dts[dtid], aureq, timeout);
 		}
 	},
 	/** Sends a request before any pending events.
@@ -134,20 +146,20 @@ zAu = { //static methods
 	 * (reason: backward compatible)
 	 */
 	sendAhead: function (aureq, timeout) {
-		var dtid;
-		if (aureq.uuid) {
-			zAu._events(dtid = zAu.dtid(aureq.uuid)).unshift(aureq);
-		} else if (aureq.dtid) {
-			zAu._events(dtid = aureq.dtid).unshift(aureq);
+		var t = aureq.target;
+		if (t) {
+			var dt = t.type == '#d' ? t: t.desktop;
+			dt._aureqs.unshift(aureq);
+			zAu._send2(dt, timeout);
 		} else {
-			var ds = zAu._dtids;
-			for (var j = ds.length; --j >= 0; ++j) {
-				zAu._events(ds[j]).unshift(aureq);
-				zAu._send2(ds[j], timeout); //Spec: don't convert unefined to 0 for timeout
+			var dts = zk.Desktop.all;
+			for (var dtid in dts) {
+				var dt = dts[dtid];
+				dt._aureqs.unshift(aureq);
+				zAu._send2(dt, timeout); //Spec: don't convert unefined to 0 for timeout
 			}
 			return;
 		}
-		zAu._send2(dtid, timeout);
 	},
 
 	////Ajax receive////
@@ -170,7 +182,7 @@ zAu = { //static methods
 		}
 	
 		if (rid && rid.length) {
-			rid = $int(zk.getElementValue(rid[0])); //response ID
+			rid = zk.parseInt(zUtl.getElementValue(rid[0])); //response ID
 			if (!isNaN(rid)) cmds.rid = rid;
 		}
 	
@@ -183,21 +195,14 @@ zAu = { //static methods
 				continue;
 			}
 	
-			cmds.push(cmd = {cmd: zk.getElementValue(cmd)});
+			cmds.push(cmd = {cmd: zUtl.getElementValue(cmd)});
 			cmd.data = [];
 			for (var k = data ? data.length: 0; --k >= 0;)
-				cmd.data[k] = zk.getElementValue(data[k]);
+				cmd.data[k] = zUtl.getElementValue(data[k]);
 		}
 	
 		zAu._cmdsQue.push(cmds);
 		return true;
-	},
-	/** Registers a script that will be evaluated when the next response is back.
-	 * Note: it executes only once, so you have to register again if necessary.
-	 * @param script a piece of JavaScript, or a function
-	 */
-	addOnResponse: function (script) {
-		zAu._js4resps.push(script);
 	},
 	/** Process the response response commands.
 	 */
@@ -212,8 +217,8 @@ zAu = { //static methods
 			} finally {
 				zAu._doingCmds = false;
 	
-				if (zAu._checkProgress())
-					zAu.doneTime = $now();
+				if (zAu._ckProcessng())
+					zAu.doneTime = zUtl.now();
 			}
 		}
 	},
@@ -235,7 +240,7 @@ zAu = { //static methods
 	
 		fn = zAu.cmd1[cmd];
 		if (fn) {
-			data.splice(1, 0, $e(data[0])); //insert wgt
+			data.splice(1, 0, zk.Widget.$(data[0])); //insert wgt
 			fn.apply(zAu, data);
 			return;
 		}
@@ -332,7 +337,7 @@ zAu = { //static methods
 	
 						if (!zAu._ignorable && !zAu._unloading) {
 							var msg = req.statusText;
-							if (confirmRetry("FAILED_TO_RESPONSE", req.status+(msg?": "+msg:""))) {
+							if (zAu.confirmRetry("FAILED_TO_RESPONSE", req.status+(msg?": "+msg:""))) {
 								zAu._areqTry = 2; //one more try
 								zAu._areqResend(reqInf);
 								return;
@@ -360,7 +365,7 @@ zAu = { //static methods
 				zAu._errcode = "[Receive] " + msg;
 				//if (e.fileName) zAu._errcode += ", "+e.fileName;
 				//if (e.lineNumber) zAu._errcode += ", "+e.lineNumber;
-				if (confirmRetry("FAILED_TO_RESPONSE", (msg&&msg.indexOf("NOT_AVAILABLE")<0?msg:""))) {
+				if (zAu.confirmRetry("FAILED_TO_RESPONSE", (msg&&msg.indexOf("NOT_AVAILABLE")<0?msg:""))) {
 					zAu._areqResend(reqInf);
 					return;
 				}
@@ -377,17 +382,17 @@ zAu = { //static methods
 		}
 	
 		zAu.doCmds();
-		zAu._checkProgress();
+		zAu._ckProcessng();
 	},
 
-	_send: function (dtid, aureq, timeout) {
+	_send: function (dt, aureq, timeout) {
 		if (aureq.ctl) {
 			//Don't send the same request if it is in processing
 			if (zAu._areqInf && zAu._areqInf.ctli == aureq.uuid
 			&& zAu._areqInf.ctlc == aureq.cmd)
 				return;
 	
-			var t = $now();
+			var t = zUtl.now();
 			if (zAu._ctli == aureq.uuid && zAu._ctlc == aureq.cmd //Bug 1797140
 			&& t - zAu._ctlt < 390)
 				return; //to prevent key stroke are pressed twice (quickly)
@@ -402,35 +407,36 @@ zAu = { //static methods
 			zAu._ctlc = aureq.cmd;
 		}
 	
-		zAu._events(dtid).push(aureq);
+		dt._aureqs.push(aureq);
 	
 		//Note: we don't send immediately (Bug 1593674)
 		//Note: Unlike sendAhead and _send2, if timeout is undefined,
 		//it is considered as 0.
-		zAu._send2(dtid, timeout ? timeout: 0);
+		zAu._send2(dt, timeout ? timeout: 0);
 	},
 	/** @param timeout if undefined or negative, it won't be sent. */
-	_send2: function (dtid, timeout) {
-		if (dtid && timeout >= 0) setTimeout("zAu._sendNow('"+dtid+"')", timeout);
+	_send2: function (dt, timeout) {
+		if (dt && timeout >= 0)
+			setTimeout(function(){zAu._sendNow(dt);}, timeout);
 	},
-	_sendNow: function (dtid) {
-		var es = zAu._events(dtid);
+	_sendNow: function (dt) {
+		var es = dt._aureqs;
 		if (es.length == 0)
 			return; //nothing to do
 	
 		if (zk.loading) {
-			zk.addInit(function () {zAu._sendNow(dtid);});
+			zkPkg.addAfterLoad(function(){zAu._sendNow(dt);});
 			return; //wait
 		}
-	
+
 		if (zAu._areq || zAu._preqInf) { //send ajax request one by one
 			zAu._sendPending = true;
 			return;
 		}
-	
-		//callback (fckez uses it to ensure its value is sent back correctly
+
+		//notify watches (fckez uses it to ensure its value is sent back correctly
 		try {
-			zWatch.call('onSend', implicit);
+			zWatch.call('onSend', -1, implicit);
 		} catch (e) {
 			zk.error(e.message);
 		}
@@ -447,8 +453,8 @@ zAu = { //static methods
 					implicit = false;
 			}
 			if (aureq.ctl && !ctli) {
-				ctli = aureq.uuid;
-				ctlc = aureq.cmd;
+				ctli = aureq.target.uuid;
+				ctlc = aureq.name;
 			}
 		}
 		zAu._ignorable = ignorable;
@@ -456,8 +462,9 @@ zAu = { //static methods
 		//Consider XML (Pros: ?, Cons: larger packet)
 		var content = "";
 		for (var j = 0, el = es.length; el; ++j, --el) {
-			var aureq = es.shift();
-			content += "&cmd."+j+"="+aureq.cmd+"&uuid."+j+"="+(aureq.uuid?aureq.uuid:'');
+			var aureq = es.shift(),
+				t = aureq.target;
+			content += "&cmd."+j+"="+aureq.name+"&uuid."+j+"="+(t.uuid?t.uuid:'');
 			if (aureq.data)
 				for (var k = 0, dl = aureq.data.length; k < dl; ++k) {
 					var data = aureq.data[k];
@@ -468,16 +475,16 @@ zAu = { //static methods
 	
 		if (content)
 			zAu._sendNow2({
-				sid: zAu._seqId, uri: zAu.comURI(null, dtid),
-				dtid: dtid, content: "dtid=" + dtid + content,
-				ctli: ctli, ctlc: ctlc, implicit: implicit, ignorable: ignorable,
-				tmout: 0
+				sid: zAu._seqId, uri: zAu.comURI(null, dt),
+				dt: dt, content: "dtid=" + dt.id + content,
+				ctli: ctli, ctlc: ctlc, implicit: implicit,
+				ignorable: ignorable, tmout: 0
 			});
 	},
 	_sendNow2: function(reqInf) {
-		var req = zAu.ajaxRequest(),
+		var req = zUtl.newAjax(),
 			uri = zAu._useQS(reqInf) ? reqInf.uri + '?' + reqInf.content: null;
-		zAu.sentTime = $now(); //used by server-push (zkex)
+		zAu.sentTime = zUtl.now(); //used by server-push (zkex)
 		try {
 			req.onreadystatechange = zAu._onRespReady;
 			req.open("POST", uri ? uri: reqInf.uri, true);
@@ -488,17 +495,17 @@ zAu = { //static methods
 				delete zAu._errcode;
 			}
 	
-			if (zk.pfmeter) zAu._pfsend(reqInf.dtid, req);
+			if (zk.pfmeter) zAu._pfsend(reqInf.dt, req);
 	
 			zAu._areq = req;
 			zAu._areqInf = reqInf;
-			if (zk_resndto > 0)
-				zAu._areqInf.tfn = setTimeout(zAu._areqTmout, zk_resndto + reqInf.tmout);
+			if (zk.resendDelay > 0)
+				zAu._areqInf.tfn = setTimeout(zAu._areqTmout, zk.resendDelay + reqInf.tmout);
 	
 			if (uri) req.send(null);
 			else req.send(reqInf.content);
 	
-			if (!reqInf.implicit) zk.progress(zk_procto); //wait a moment to avoid annoying
+			if (!reqInf.implicit) zk.startProcessing(zk.procDelay); //wait a moment to avoid annoying
 		} catch (e) {
 			//handle error
 			try {
@@ -509,7 +516,7 @@ zAu = { //static methods
 			if (!reqInf.ignorable && !zAu._unloading) {
 				var msg = e.message;
 				zAu._errcode = "[Send] " + msg;
-				if (confirmRetry("FAILED_TO_SEND", msg)) {
+				if (zAu.confirmRetry("FAILED_TO_SEND", msg)) {
 					zAu._areqResend(reqInf);
 					return;
 				}
@@ -532,12 +539,6 @@ zAu = { //static methods
 		return false;
 	}: zk.$void,
 
-	/** Evaluates scripts registered by addOnResponse. */
-	_evalOnResponse: function () {
-		while (zAu._js4resps.length)
-			setTimeout(zAu._js4resps.shift(), 0);
-	},
-	
 	_doCmds0: function () {
 		var ex, j = 0, que = zAu._cmdsQue, rid = zAu._resId;
 		for (; j < que.length; ++j) {
@@ -561,7 +562,7 @@ zAu = { //static methods
 				try {
 					if (zAu._doCmds1(cmds)) { //done
 						j = -1; //start over
-						if (zk.pfmeter) zAu.pfdone(cmds.dtid, cmds.pfIds);
+						if (zk.pfmeter) zAu.pfdone(cmds.dt, cmds.pfIds);
 					} else { //not done yet (=zk.loading)
 						zAu._resId = oldrid; //restore
 						que.splice(j, 0, cmds); //put it back
@@ -610,7 +611,7 @@ zAu = { //static methods
 			}
 		} finally {
 			if (processed && (!cmds || !cmds.length))
-				zAu._evalOnResponse();
+				zWatch.call('onResponse', 0); //use setTimeout
 		}
 		return true;
 	},
@@ -654,120 +655,295 @@ zAu = { //static methods
 		zk.insertHTMLBeforeEnd(n, html);
 		if (lc) zAu._initSibs(lc, null, true);
 		else zAu._initChildren(n);
+	}
+};
+
+//Commands//
+zAu.cmd0 = { //no uuid at all
+	bookmark: function (dt0) {
+		zAu.history.bookmark(dt0);
 	},
-	
-	/** Sets an attribute (the default one). */
-	setAttr: function (wgt, name, value) {
-		wgt = zAu._attr(wgt, name);
-	
-		if ("visibility" == name) {
-			zk.setVisible(wgt, value == "true");
-		} else if ("value" == name) {
-			if (value != wgt.value) {
-				wgt.value = value;
-				if (wgt == zAu.currentFocus && wgt.select) wgt.select();
-					//fix a IE bug that cursor disappear if input being
-					//changed is onfocus
+	obsolete: function (dt0, dt1) { //desktop timeout
+		zAu._cleanupOnFatal();
+		zk.error(dt1);
+	},
+	alert: function (msg) {
+		zk.alert(msg);
+	},
+	redirect: function (url, target) {
+		try {
+			zk.go(url, false, target);
+		} catch (ex) {
+			if (!zAu.confirmClose) throw ex;
+		}
+	},
+	title: function (dt0) {
+		document.title = dt0;
+	},
+	script: function (dt0) {
+		eval(dt0);
+	},
+	echo: function (dtid) {
+		zAu.send({dtid: dtid, cmd: "dummy", ignorable: true});
+	},
+	clientInfo: function (dtid) {
+		zAu._cInfoReg = true;
+		zAu.send({dtid: dtid, cmd: "onClientInfo", data: [
+			new Date().getTimezoneOffset(),
+			screen.width, screen.height, screen.colorDepth,
+			zk.innerWidth(), zk.innerHeight(), zk.innerX(), zk.innerY()
+		]});
+	},
+	download: function (url) {
+		if (url) {
+			var ifr = zDom.$('zk_download');
+			if (ifr) {
+				ifr.src = url; //It is OK to reuse the same iframe
+			} else {
+				var html = '<iframe src="'+url+'" id="zk_download" name="zk_download" style="display:none;width:0;height:0;border:0"></iframe>';
+				zk.insertHTMLBeforeEnd(document.body, html);
 			}
-			if (wgt.defaultValue != wgt.value)
-				wgt.defaultValue = wgt.value;
-		} else if ("checked" == name) {
-			value = "true" == value || "checked" == value;
-			if (value != wgt.checked)
-				wgt.checked = value;
-			if (wgt.defaultChecked != wgt.checked)
-				wgt.defaultChecked = wgt.checked;
-			//we have to update defaultChecked because click a radio
-			//might cause another to unchecked, but browser doesn't
-			//maintain defaultChecked
-		} else if ("selectAll" == name && $tag(wgt) == "SELECT") {
-			value = "true" == value;
-			for (var j = 0, ol = wgt.options.length; j < ol; ++j)
-				wgt.options[j].selected = value;
-		} else if ("style" == name) {
-			zk.setStyle(wgt, value);
-		} else if (name.startsWith("z.")) { //ZK attributes
-			setZKAttr(wgt, name.substring(2), value);
-		} else {
-			var j = name.indexOf('.'); 
-			if (j >= 0) {
-				if ("style" != name.substring(0, j)) {
-					zk.error(mesg.UNSUPPORTED+name);
+		}
+	},
+	print: function () {
+		window.print();
+	},
+	scrollBy: function (x, y) {
+		window.scrollBy(x, y);
+	},
+	scrollTo: function (x, y) {
+		window.scrollTo(x, y);
+	},
+	resizeBy: function (x, y) {
+		window.resizeBy(x, y);
+	},
+	resizeTo: function (x, y) {
+		window.resizeTo(x, y);
+	},
+	moveBy: function (x, y) {
+		window.moveBy(x, y);
+	},
+	moveTo: function (x, y) {
+		window.moveTo(x, y);
+	},
+	cfmClose: function (msg) {
+		zAu.confirmClose = msg;
+	},
+	showBusy: function (msg, open) {
+		//close first (since users might want close and show diff message)
+		var n = zDom.$("zk_showBusy");
+		if (n) {
+			n.parentNode.removeChild(n);
+			zk.restoreDisabled();
+		}
+
+		if (open == "true") {
+			n = zDom.$("zk_loadprog");
+			if (n) n.parentNode.removeChild(n);
+			n = zDom.$("zk_prog");
+			if (n) n.parentNode.removeChild(n);
+			n = zDom.$("zk_showBusy");
+			if (!n) {
+				msg = msg == "" ? mesg.PLEASE_WAIT : msg;
+				Boot_progressbox("zk_showBusy", msg,
+					0, 0, true, true);
+				zk.disableAll();
+			}
+		}
+	}
+};
+zAu.cmd1 = {
+	wrongValue: function (uuid, cmp, dt1) {
+		for (var uuids = uuid.split(","), i = 0, j = uuids.length; i < j; i++) {
+			cmp = zDom.$(uuids[i]);
+			if (cmp) {
+				cmp = $real(cmp); //refer to INPUT (e.g., datebox)
+				//we have to update default value so validation will be done again
+				var old = cmp.value;
+				cmp.defaultValue = old + "_err"; //enforce to validate
+				if (old != cmp.value) cmp.value = old; //Bug 1490079 (FF only)
+				if (zAu.valid) zAu.valid.errbox(cmp.id, arguments[i+2], true);
+				else zk.alert(arguments[i+2]);
+			} else if (!uuids[i]) { //keep silent if component (of uuid) not exist (being detaced)
+				zk.alert(arguments[i+2]);
+			}
+		}
+	},
+	setAttr: function (uuid, wgt, nm, val) {
+		if (val == null && arguments.length <= 4) { //single null value
+			zAu.cmd1.rmAttr(uuid, wgt, nm);
+			return;
+		}
+		for (var len = arguments.length, j = 3; j < len;)
+			wgt.setAttr(nm, arguments[j++]);
+	},
+	rmAttr: function (uuid, wgt, nm) {
+		wgt.rmAttr(nm);
+	},
+	outer: function (uuid, cmp, html) {
+		zk.unsetChildVParent(cmp, true); //OK to hide since it will be replaced
+		var fns = zk.find(cmp, "onOuter"),
+			cf = zAu.currentFocus, cfid;
+		if (cf && zk.isAncestor(cmp, cf, true)) {
+			cfid = cf.id
+			zAu.currentFocus = null;
+		} else
+			cf = null;
+
+		zk.cleanupAt(cmp);
+		var from = cmp.previousSibling, from2 = cmp.parentNode,
+			to = cmp.nextSibling;
+		zk.setOuterHTML(cmp, html);
+		if (from) zAu._initSibs(from, to, true);
+		else zAu._initChildren(from2, to);
+
+		if (zAu.valid) zAu.valid.fixerrboxes();
+
+		if (cf && !zAu.currentFocus)
+			if (cfid) zk.focus(zDom.$(cfid));
+			// else zk.focusDown(zDom.$(uuid)); fails in grid with paging
+
+		if (fns) {
+			var ls = zk.find(cmp);
+			if (zk.debugJS) {
+				var fs = ls["onOuter"];
+				if (fs && fs.length) //some register
+					zk.error("Registering onOuter in init not allowed");
+			}
+			ls["onOuter"] = fns;
+		}
+		zk.fire(cmp, "onOuter");
+	},
+	addAft: function (uuid, cmp, html) {
+		//Bug 1939059: This is a dirty fix. Refer to AuInsertBefore
+		//Format: comp-uuid:pg-uuid (if native root)
+		if (!cmp) {
+			var j = uuid.indexOf(':');
+			if (j >= 0) { //native root
+				cmp = zDom.$(uuid.substring(0, j)); //try comp (though not possible)
+				if (!cmp) {
+					uuid = uuid.substring(j + 1); //try page
+					cmp = zDom.$(uuid);
+					if (!cmp) cmp = document.body;
+					zAu.cmd1.addChd(uuid, cmp, html);
 					return;
 				}
-				name = name.substring(j + 1).camelize();
-				if (typeof(wgt.style[name]) == "boolean") //just in case
-					value = "true" == value || name == value;
-				wgt.style[name] = value;
-	
-				if ("width" == name && (!value || value.indexOf('%') < 0) //don't handle width with %
-				&& !getZKAttr(wgt, "float")) {
-					var ext = $e(wgt.id + "!chdextr");
-					if (ext && $tag(ext) == "TD" && ext.colSpan == 1)
-						ext.style.width = value;
-				}
-				return;
 			}
-	
-			if (name == "disabled" || name == "href")
-				zAu.setStamp(wgt, name);
-				//mark when this attribute is set (change or not), so
-				//modal dialog and other know how to process it
-				//--
-				//Better to call setStamp always but, to save memory,...
-	
-			//Firefox cannot handle many properties well with getAttribute/setAttribute,
-			//such as selectedIndex, scrollTop...
-			var old = "class" == name ? wgt.className:
-				"selectedIndex" == name ? wgt.selectedIndex:
-				"disabled" == name ? wgt.disabled:
-				"readOnly" == name ? wgt.readOnly:
-				"scrollTop" == name ? wgt.scrollTop:
-				"scrollLeft" == name ? wgt.scrollLeft:
-					wgt.getAttribute(name);
-	
-			//Note: "true" != true (but "123" = 123)
-			//so we have take care of boolean
-			if (typeof(old) == "boolean")
-				value = "true" == value || name == value; //e.g, reaonly="readOnly"
-	
-			if (old != value) {
-				if ("selectedIndex" == name) wgt.selectedIndex = value;
-				else if ("class" == name) wgt.className = value;
-				else if ("disabled" == name) wgt.disabled = value;
-				else if ("readOnly" == name) wgt.readOnly = value;
-				else if ("scrollTop" == name) wgt.scrollTop = value;
-				else if ("scrollLeft" == name) wgt.scrollLeft = value;
-				else wgt.setAttribute(name, value);
+		}
+
+		var v = zk.isVParent(cmp);
+		if (v) zk.unsetVParent(cmp);
+		var n = $childExterior(cmp);
+		var to = n.nextSibling;
+		zk.insertHTMLAfter(n, html);
+		zAu._initSibs(n, to, true);
+		if (v) zk.setVParent(cmp);
+	},
+	addBfr: function (uuid, cmp, html) {
+		var v = zk.isVParent(cmp);
+		if (v) zk.unsetVParent(cmp);
+		var n = $childExterior(cmp);
+		var to = n.previousSibling;
+		zk.insertHTMLBefore(n, html);
+		zAu._initSibs(n, to, false);
+		if (v) zk.setVParent(cmp);
+	},
+	addChd: function (uuid, cmp, html) {
+		/* To add the first child properly, it checks as follows.
+		//1) a function called addFirstChild
+		2) uuid + "!cave" (as parent)
+		3) an attribute called z.cave to hold id (as parent)
+		4) uuid + "!child" (as next sibling)
+		5) uuid + "!real" (as parent)
+		 */
+		//if (zk.eval(cmp, "addFirstChild", html))
+		//	return;
+
+		var n = zDom.$(uuid + "!cave");
+		if (!n) {
+			n = getZKAttr(cmp, "cave");
+			if (n) n = zDom.$(n);
+		}
+		if (n) { //as last child of n
+			zAu._insertAndInitBeforeEnd(n, html);
+			return;
+		}
+
+		n = zDom.$(uuid + "!child");
+		if (n) { //as previous sibling of n
+			var to = n.previousSibling;
+			zk.insertHTMLBefore(n, html);
+			zAu._initSibs(n, to, false);
+			return;
+		}
+
+		cmp = $real(cmp); //go into the real tag (e.g., tabpanel)
+		zAu._insertAndInitBeforeEnd(cmp, html);
+	},
+	rm: function (uuid, cmp) {
+		//NOTE: it is possible the server asking removing a non-exist cmp
+		//so keep silent if not found
+		if (cmp) {
+			zk.unsetChildVParent(cmp, true); //OK to hide since it will be removed
+
+			zk.cleanupAt(cmp);
+			cmp = $childExterior(cmp);
+			zk.remove(cmp);
+			zAu.hideCovered(); // Bug #1858838
+		}
+		if (zAu.valid) zAu.valid.fixerrboxes();
+	},
+	focus: function (uuid, cmp) {
+		if (!zk.eval(cmp, "focus")) {
+			//Bug 1936366: endModal uses timer, so canFocus might be false
+			//when this method is called
+			setTimeout(function (){
+				if (!zAu.canFocus(cmp, true)) return;
+
+				zAu.autoZIndex(cmp); //some, say, window, not listen to onfocus
+				cmp = $real(cmp); //focus goes to inner tag
+				zk.asyncFocus(cmp.id, 35);
+				}, 30); //wnd.js uses 20
+		}
+	},
+	closeErrbox: function (uuid, cmp) {
+		if (zAu.valid) {
+			var uuids = uuid.trim().split(',');
+			for (var i = uuids.length; --i >= 0;)
+				zAu.valid.closeErrbox(uuids[i], false, true);
+		}
+	},
+	submit: function (uuid, cmp) {
+		setTimeout(function (){if (cmp && cmp.submit) cmp.submit();}, 50);
+	},
+	invoke: function (uuid, cmp, func, arg0, arg1, arg2) {
+		zk.eval(cmp, func, null, arg0, arg1, arg2);
+	},
+	popup: function (uuid, cmp, mode, x, y) {
+		var type = $type(cmp);
+		if (type) {
+			if (mode == "0") { //close
+				zAu.closeFloatsOf(cmp);
+			} else {
+				var ref;
+				if (mode == "1") { //ref
+					ref = zDom.$(x);
+					if (ref) {
+						var ofs = zPos.cumulativeOffset(zDom.$(x));
+						x = ofs[0];
+						y = ofs[1] + zk.offsetHeight(ref);
+					}
+				}
+				cmp.style.position = "absolute";
+				zk.setVParent(cmp); //FF: Bug 1486840, IE: Bug 1766244
+				zAu._autopos(cmp, $int(x), $int(y));
+				zk.eval(cmp, "context", type, ref);
 			}
 		}
 	},
-	_attr: function (wgt, name) {
-		var real = $real(wgt);
-		if (real != wgt && real) {
-			if (name.startsWith("on")) return real;
-				//Client-side-action must be done at the inner tag
-	
-			switch ($tag(real)) {
-			case "INPUT":
-			case "TEXTAREA":
-				switch(name) {
-				case "name": case "value": case "defaultValue":
-				case "checked": case "defaultChecked":
-				case "cols": case "size": case "maxlength":
-				case "type": case "disabled": case "readOnly":
-				case "rows":
-					return real;
-				}
-				break;
-			case "IMG":
-				switch (name) {
-				case "align": case "alt": case "border":
-				case "hspace": case "vspace": case "src":
-					return real;
-				}
-			}
-		}
-		return wgt;
+	echo2: function (uuid, cmp, evtnm, data) {
+		zAu.send(
+			{uuid: uuid, cmd: "echo",
+				data: data != null ? [evtnm, data]: [evtnm], ignorable: true});
 	}
 };

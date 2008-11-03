@@ -40,6 +40,14 @@ zUtl = { //static methods
 			}
 		return out;
 	},
+	/** Returns the element's value (by catenate all CDATA and text).
+	 */
+	getElementValue: function (el) {
+		var txt = ""
+		for (el = el.firstChild; el; el = el.nextSibling)
+			if (el.data) txt += el.data;
+		return txt;
+	},
 
 	/** Returns the current time (new Date().getTime()).
 	 * It is a number starting from 01/01/1970.
@@ -80,5 +88,40 @@ zUtl = { //static methods
 			if (p == c)
 				return true;
 		return false;
+	},
+
+	/** To confirm the user for an activity.
+	 */
+	confirm: function (msg) {
+		zk.alerting = true;
+		try {
+			return confirm(msg);
+		} finally {
+			try {zk.alerting = false;} catch (e) {} //doc might be unloaded
+		}
+	},
+	/** To prevent onblur if alert is shown.
+	 * Note: browser will change the focus back, so it is safe to ingore.
+	 */
+	alert: function (msg) {
+		zk.alerting = true;
+		try {
+			alert(msg);
+		} finally {
+			try {zk.alerting = false;} catch (e) {} //doc might be unloaded
+		}
+	},
+
+	/** Instantiates an Ajax request. */
+	newAjax: function () {
+		if (window.XMLHttpRequest) {
+			return new XMLHttpRequest();
+		} else {
+			try {
+				return new ActiveXObject('Msxml2.XMLHTTP');
+			} catch (e2) {
+				return new ActiveXObject('Microsoft.XMLHTTP');
+			}
+		}
 	}
 };

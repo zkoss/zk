@@ -2,7 +2,7 @@
 
 {{IS_NOTE
 	Purpose:
-		Action and Watch
+		ZK Event and Watch/Action
 	Description:
 		
 	History:
@@ -16,6 +16,41 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
+/** A widget event, fired by {@link zk.Widget#fire}.
+ * It is an application-level event that is used by application to
+ * hook the listeners to.
+ * On the other hand, a DOM event ({@link zEvt}) is the low-level event
+ * listened by the implementation of a widget.
+ */
+zk.Event = zk.$extends(zk.Object, {
+	/** The target widget. */
+	//target: null,
+	/** The event name. */
+	//name: null,
+	/** The extra data, which could be anything. */
+	//data: null,
+	/** Whether this event is an implicit event, i.e., whether it is implicit
+	 * to users (so no progressing bar).
+	 */
+	//implicit: false,
+	/** Whether this event is ignorable, i.e., whether to ignore any error
+	 * of sending this event back the server.
+	 * An ignorable event is also an imiplicit event
+	 */
+	//ignorable: false
+	/** Whether to stop the event propogation.
+	 * Note: it won't be sent to the server if stop is true.
+	 */
+	//stop: false,
+
+	construct: function (target, name, data, implicit, ignorable) {
+		this.target = target;
+		this.name = name;
+		this.data = data ? data: null;
+		this.implicit = implicit;
+		this.ignorable = ignorable;
+	}
+});
 
 /** An utility to manage a collection of watches.
  * A watch is any JavaScript object used to 'watch' an action, such as onSize,
@@ -61,8 +96,10 @@ zWatch = {
 		delete this._wts[name];
 	},
 	/** Calls all watches of the specified name.
+	 * @param timeout when to call the watch. If positive or zero,
+	 * setTimeout is used. Otherwise, it is called
 	 */
-	call: function (name, vararg) {
+	call: function (name, timeout, vararg) {
 		var wts = this._wts[name],
 			len = wts ? wts.length: 0;
 		if (len) {
@@ -70,6 +107,15 @@ zWatch = {
 			for (var j = 1, l = arguments.length; j < l;)
 				args.push(arguments[j]);
 
+			if (timeout >= 0) {
+				for (var j = 0; j < len;) {
+					var o = wts[j++];
+					setTimeout(function(){o[name].call(o, args)}, timeout);
+				}
+				return;
+			}
+
+			wts = wts.clone(); //make a copy since unwatch might be called
 			for (var j = 0; j < len;) {
 				var o = wts[j++];
 				o[name].call(o, args);
@@ -85,7 +131,7 @@ zWatch = {
 	 * <p>In other words, if the specified origin is not the ancestor
 	 * of a watch, the watch won't be called.
 	 */
-	callDown: function (name, origin, vararg) {
+	callDown: function (name, timeout, origin, vararg) {
 		var wts = this._wts[name],
 			len = wts ? wts.length: 0;
 		if (len) {
@@ -93,6 +139,16 @@ zWatch = {
 			for (var j = 2, l = arguments.length; j < l;)
 				args.push(arguments[j]);
 
+			if (timeout >= 0) {
+				for (var j = 0; j < len;) {
+					var o = wts[j++];
+					if (zUtl.isAncestor(origin, o))
+					setTimeout(function(){o[name].call(o, args)}, timeout);
+				}
+				return;
+			}
+
+			wts = wts.clone(); //make a copy since unwatch might be called
 			for (var j = 0; j < len;) {
 				var o = wts[j++];
 				if (zUtl.isAncestor(origin, o))
