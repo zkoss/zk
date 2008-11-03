@@ -837,6 +837,7 @@ public class Parser {
 
 		//FUTURE: handling the namespace of if and unless
 		final String attnm = IDOMs.getRequiredAttributeValue(el, "name");
+		noEmpty("name", attnm, el);
 		final String trim = el.getAttributeValue("trim");
 		noEL("trim", trim, el);
 		final String attval = el.getText(trim != null && "true".equals(trim));
