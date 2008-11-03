@@ -66,10 +66,6 @@ span.z-tree-root-close, span.z-tree-tee-close, span.z-tree-last-close {
 }
 
 <%-- Treecol, Treefooter, and Treecell--%>
-div.z-tree-col-cnt {
-	font-size: ${fontSizeM}; font-weight: normal;
-	font-family: ${fontFamilyT};
-}
 div.z-tree-footer-cnt, div.z-tree-cell-cnt, div.z-tree-col-cnt {
 	border: 0; margin: 0; padding: 0;
 	font-family: ${fontFamilyC};
