@@ -1744,21 +1744,9 @@ zk.scrollIntoView = function (outer, inner) {
  * @param target the target frame (ignored if overwrite is true
  */
 zk.go = function (url, overwrite, target) {
-	var bProgress = !zk.opera && !zk.keepDesktop
-		&& location.href.indexOf('#') < 0; //whether to show progress
-		//we don't show progress for opera, since user might press BACK to
-		//return this page (and found the progress dlg remains on browse)
-		//
-		//Bug 1773575: with # and the same url, no redraw
-	if (bProgress && url) {
-		bProgress =	url.indexOf("://") < 0 && !url.startsWith("mailto:")
-			&& !url.startsWith("javascript:") && !url.startsWith("about:");
-	}
 	if (!url) {
-		if (bProgress) zk.progress(); //BACK button issue
 		location.reload();
 	} else if (overwrite) {
-		if (bProgress) zk.progress();
 		location.replace(url);
 	} else if (target) {
 		//we have to process query string because browser won't do it
@@ -1775,14 +1763,12 @@ zk.go = function (url, overwrite, target) {
 		frm.action = url;
 		frm.method = "GET";
 		frm.target = target;
-		if (url && !zk.isNewWindow(url, target) && bProgress)
+		if (url && !zk.isNewWindow(url, target))
 			zk.progress();
 		frm.submit();
 	} else {
-		if (bProgress) zk.progress();
 		location.href = url;
 	}
-	if (bProgress) zk.progressDone(); // Bug #1843032
 };
 /** Tests whether a new window will be opened.
  * More precisely, whether the current document won't be changed.
