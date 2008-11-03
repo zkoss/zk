@@ -494,7 +494,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 */
 	public void addProperty(String name, String value, ConditionImpl cond) {
 		if (name == null || name.length() == 0)
-			throw new IllegalArgumentException("name");
+			throw new IllegalArgumentException("name cannot be empty");
 
 		if (_props == null)
 			_props = new LinkedList();
@@ -508,7 +508,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 */
 	public void addProperty(String name, NativeInfo value, ConditionImpl cond) {
 		if (name == null || name.length() == 0)
-			throw new IllegalArgumentException("name");
+			throw new IllegalArgumentException("name cannot be empty");
 
 		if (_props == null)
 			_props = new LinkedList();
