@@ -240,42 +240,6 @@ zDom = { //static methods
 	detach: function (n) {
 		n = zDom.$(n);
 		if (n && n.parentNode) n.parentNode.removeChild(n);
-	},
-
-	/** Shows the progress box to notify user ZK Client is busy.
-	 * @see zk.showProcess
-	 */
-	progressbox: function (id, msg, mask) {
-		if (mask && zk.Page.contained.length) {
-			//TODO: apply a mask for each contained page
-			//return;
-		}
-
-		var x = zDom.innerX(), y = zDom.innerY(),
-			style = ' style="left:'+x+'px;top:'+y+'px"',
-			idtxt = id + 't';
-			html = '<div id="'+id+'"';
-		if (mask) html += '><div id="zk_mask" class="z-modal-mask"'+style+'></div';
-		html += '><div id="'+idtxt+'" class="z-loading"'+style
-			+'><div class="z-loading-indicator"><img class="z-loading-icon" alt="..." src="'
-			+zAu.comURI('/web/img/spacer.gif')+'"/> '
-			+msg+'</div></div></div>'
-		var n = document.createElement("DIV");
-		document.body.appendChild(n);
-		zDom.setOuterHTML(n, html);
-
-		if (mask) { //center it
-			n = zDom.$(idtxt);
-			if (n) {
-				n.style.left = (zDom.innerWidth() - n.offsetWidth) / 2 + x + "px";
-				n.style.top = (zDom.innerHeight() - n.offsetHeight) / 2 + y + "px";
-			}
-		}
-	},
-	cleanAllProgress: function (id) {
-		zDom.detach(id);
-
-		//TODO: remove the mask for each contained page
 	}
 };
 

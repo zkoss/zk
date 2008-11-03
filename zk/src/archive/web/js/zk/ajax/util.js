@@ -112,6 +112,74 @@ zUtl = { //static methods
 		}
 	},
 
+	/** Shows the progress box to notify user ZK Client is busy.
+	 * @see zk.startProcessing
+	 */
+	progressbox: function (id, msg, mask) {
+		if (mask && zk.Page.contained.length) {
+			//TODO: apply a mask for each contained page
+			//return;
+		}
+
+		var x = zDom.innerX(), y = zDom.innerY(),
+			style = ' style="left:'+x+'px;top:'+y+'px"',
+			idtxt = id + 't';
+			html = '<div id="'+id+'"';
+		if (mask) html += '><div id="zk_mask" class="z-modal-mask"'+style+'></div';
+		html += '><div id="'+idtxt+'" class="z-loading"'+style
+			+'><div class="z-loading-indicator"><img class="z-loading-icon" alt="..." src="'
+			+zAu.comURI('/web/img/spacer.gif')+'"/> '
+			+msg+'</div></div></div>'
+		var n = document.createElement("DIV");
+		document.body.appendChild(n);
+		zDom.setOuterHTML(n, html);
+
+		if (mask) { //center it
+			n = zDom.$(idtxt);
+			if (n) {
+				n.style.left = (zDom.innerWidth() - n.offsetWidth) / 2 + x + "px";
+				n.style.top = (zDom.innerHeight() - n.offsetHeight) / 2 + y + "px";
+			}
+		}
+	},
+	/** Removes all progress boxed of the specified ID. */
+	cleanAllProgress: function (id) {
+		zDom.detach(id);
+
+		//TODO: remove the mask for each contained page
+	},
+
+	//HTTP//
+	/** Go to the specified uri.
+	 * @param overwrite whether to overwrite the history
+	 * @param target the target frame (ignored if overwrite is true
+	 */
+	go: function (url, overwrite, target) {
+		if (!url) {
+			location.reload();
+		} else if (overwrite) {
+			location.replace(url);
+		} else if (target) {
+			//we have to process query string because browser won't do it
+			//even if we use insertHTMLBeforeEnd("<form...")
+			var frm = document.createElement("FORM");
+			document.body.appendChild(frm);
+			var j = url.indexOf('?');
+			if (j > 0) {
+				var qs = url.substring(j + 1);
+				url = url.substring(0, j);
+				zk.queryToHiddens(frm, qs);
+			}
+			frm.name = "go";
+			frm.action = url;
+			frm.method = "GET";
+			frm.target = target;
+			frm.submit();
+		} else {
+			location.href = url;
+		}
+	},
+
 	/** Instantiates an Ajax request. */
 	newAjax: function () {
 		if (window.XMLHttpRequest) {

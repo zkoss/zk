@@ -313,7 +313,7 @@ zAu = { //static methods
 					zAu._errcode = req.status;
 					var eru = zk.eru['e' + req.status];
 					if (typeof eru == "string") {
-						zk.go(eru);
+						zUtl.go(eru);
 					} else {
 					//handle MSIE's buggy HTTP status codes
 					//http://msdn2.microsoft.com/en-us/library/aa385465(VS.85).aspx
@@ -672,7 +672,7 @@ zAu.cmd0 = { //no uuid at all
 	},
 	redirect: function (url, target) {
 		try {
-			zk.go(url, false, target);
+			zUtl.go(url, false, target);
 		} catch (ex) {
 			if (!zAu.confirmClose) throw ex;
 		}
@@ -745,8 +745,7 @@ zAu.cmd0 = { //no uuid at all
 			n = zDom.$("zk_showBusy");
 			if (!n) {
 				msg = msg == "" ? mesg.PLEASE_WAIT : msg;
-				Boot_progressbox("zk_showBusy", msg,
-					0, 0, true, true);
+				zUtl.progressbox("zk_showBusy", msg, true);
 				zk.disableAll();
 			}
 		}

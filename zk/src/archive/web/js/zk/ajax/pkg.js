@@ -27,7 +27,7 @@ zPkg = {
 		} else {
 			try {
 				zEvt.enableESC();
-				zDom.cleanAllProgress("zk_loadprog");
+				zUtl.cleanAllProgress("zk_loadprog");
 			} catch (ex) {
 			}
 
@@ -98,7 +98,7 @@ zPkg = {
 		if (zk.loading || window.dbg_progressbox) { //dbg_progressbox: debug purpose
 			var n = zDom.$("zk_loadprog");
 			if (!n)
-				zDom.progressbox("zk_loadprog",
+				zUtl.progressbox("zk_loadprog",
 					'Loading (<span id="zk_loadcnt">'+zk.loading+'</span>)',
 					true);
 		}	

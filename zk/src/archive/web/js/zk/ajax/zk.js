@@ -218,7 +218,7 @@ zk = { //static methods
 	 */
 	endProcessing: function() {
 		zk.processing = false;
-		zDom.cleanAllProgress("zk_proc");
+		zUtl.cleanAllProgress("zk_proc");
 	},
 	/** Shows the message of zk.startProcessing. */
 	_showproc: function () {
@@ -229,7 +229,7 @@ zk = { //static methods
 			var msg;
 			try {msg = mesg.PLEASE_WAIT;} catch (e) {msg = "Processing...";}
 				//when the first boot, mesg might not be ready
-			zDom.progressbox("zk_proc", msg, !zk.booted);
+			zUtl.progressbox("zk_proc", msg, !zk.booted);
 		}
 	},
 
