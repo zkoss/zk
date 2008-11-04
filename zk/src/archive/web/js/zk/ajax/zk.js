@@ -252,7 +252,7 @@ zk = { //static methods
 	 '<div class="z-error" style="left:'+(zDom.innerX()+x)+'px;top:'+(zDom.innerY()+y)
 	+'px;" id="'+id+'"><table cellpadding="2" cellspacing="2" width="100%"><tr valign="top">'
 	+'<td width="20pt"><button onclick="zAu.sendRedraw()">redraw</button>'
-	+'<button onclick="zDom.detach(\''+id+'\')">close</button></td>'
+	+'<button onclick="zDom.remove(\''+id+'\')">close</button></td>'
 	+'<td class="z-error-msg">'+zUtl.encodeXML(msg, true) //Bug 1463668: security
 	+'</td></tr></table></div>';
 		zDom.setOuterHTML(box, html);
@@ -264,7 +264,7 @@ zk = { //static methods
 	 */
 	errorDismiss: function () {
 		for (var j = zk._errcnt; j; --j)
-			zDom.detach("zk_err" + j);
+			zDom.remove("zk_err" + j);
 	},
 	/** Generates a message for debugging purpose. */
 	debug: function (msg/*, ...*/) {
@@ -290,7 +290,7 @@ zk = { //static methods
 				document.body.appendChild(console);
 				var html =
 '<div id="zk_dbgbox" style="text-align:right;width:50%;right:0;bottom:0;position:absolute">'
-+'<button onclick="zDom.detach(\'zk_dbgbox\')" style="font-size:9px">X</button><br/>'
++'<button onclick="zDom.remove(\'zk_dbgbox\')" style="font-size:9px">X</button><br/>'
 +'<textarea id="zk_dbg" style="width:100%" rows="10"></textarea></div>';
 				zDom.setOuterHTML(console, html);
 				console = zDom.$("zk_dbg");

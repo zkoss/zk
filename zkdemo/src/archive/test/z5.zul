@@ -35,6 +35,16 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<label value="insert" style="border:1px solid #233;padding:0 2px"
 		onClick='inner.insertBefore(new Label("Insert "+ ++cnt),
 			inner.children.empty ? null: inner.children.get(0))'/>
+	<label value="remove first" style="border:1px solid #233;padding:0 2px">
+		<attribute name="onClick">
+		if (!inner.children.empty) inner.firstChild.detach();
+		</attribute>
+	</label>
+	<label value="remove last" style="border:1px solid #233;padding:0 2px">
+		<attribute name="onClick">
+		if (!inner.children.empty) inner.lastChild.detach();
+		</attribute>
+	</label>
 	<div id="inner" style="border:1px solid #449"/>
 	End of file
 </div>

@@ -766,6 +766,7 @@ zAu.cmd1 = {
 			else if (p) p.lastChild = newwgt;
 
 			newwgt.replaceHTML(wgt.uuid, wgt.desktop);
+
 			//TODO: if (zAu.valid) zAu.valid.fixerrboxes();
 			if (cf && !zk.currentFocus && cfid) zUtl.focus(cfid);
 		};
@@ -809,50 +810,21 @@ zAu.cmd1 = {
 		zAu._initSibs(n, to, false);
 		if (v) zk.setVParent(cmp);
 	},
-	addChd: function (uuid, cmp, html) {
-		/* To add the first child properly, it checks as follows.
-		//1) a function called addFirstChild
-		2) uuid + "!cave" (as parent)
-		3) an attribute called z.cave to hold id (as parent)
-		4) uuid + "!child" (as next sibling)
-		5) uuid + "!real" (as parent)
-		 */
-		//if (zk.eval(cmp, "addFirstChild", html))
-		//	return;
-
-		var n = zDom.$(uuid + "!cave");
-		if (!n) {
-			n = getZKAttr(cmp, "cave");
-			if (n) n = zDom.$(n);
+	addChd: function (uuid, wgt, code) {
+		_zkauf = function (child) {
+			wgt.appendChildHTML(child);
+		};
+		try {
+			eval(code);
+		} finally {
+			_zkauf = null;
 		}
-		if (n) { //as last child of n
-			zAu._insertAndInitBeforeEnd(n, html);
-			return;
-		}
-
-		n = zDom.$(uuid + "!child");
-		if (n) { //as previous sibling of n
-			var to = n.previousSibling;
-			zk.insertHTMLBefore(n, html);
-			zAu._initSibs(n, to, false);
-			return;
-		}
-
-		cmp = $real(cmp); //go into the real tag (e.g., tabpanel)
-		zAu._insertAndInitBeforeEnd(cmp, html);
 	},
-	rm: function (uuid, cmp) {
+	rm: function (uuid, wgt) {
 		//NOTE: it is possible the server asking removing a non-exist cmp
 		//so keep silent if not found
-		if (cmp) {
-			zk.unsetChildVParent(cmp, true); //OK to hide since it will be removed
-
-			zk.cleanupAt(cmp);
-			cmp = $childExterior(cmp);
-			zk.remove(cmp);
-			zAu.hideCovered(); // Bug #1858838
-		}
-		if (zAu.valid) zAu.valid.fixerrboxes();
+		if (wgt) wgt.detach(true);
+		//TODO if (zAu.valid) zAu.valid.fixerrboxes();
 	},
 	focus: function (uuid, cmp) {
 		if (!zk.eval(cmp, "focus")) {

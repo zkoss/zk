@@ -113,7 +113,6 @@ function zkver() {
 
 	for (var j = 2; j < len; j += 2)
 		zPkg.version(args[j], args[j + 1]);
-	return;
 }
 
 /** Sets the options. */

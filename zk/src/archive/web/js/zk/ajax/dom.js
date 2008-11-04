@@ -234,10 +234,87 @@ zDom = { //static methods
 		}*/
 		return n;
 	},
+	/** Inserts an unparsed HTML immediately before the specified element.
+	 * @param el the sibling before which to insert
+	 */
+	insertHTMLBefore: function (el, html) {
+		if (zk.ie) {
+			switch (zDom.tag(el)) { //exclude TABLE
+			case "TD": case "TH": case "TR": case "CAPTION": case "COLGROUP":
+			case "TBODY": case "THEAD": case "TFOOT":
+				var ns = zDom._tblNewElems(html);
+				var p = el.parentNode;
+				for (var j = 0, nl = ns.length; j < nl; ++j)
+					p.insertBefore(ns[j], el);
+				return;
+			}
+		}
+		el.insertAdjacentHTML('beforeBegin', html);
+	},
+	/** Inserts an unparsed HTML immediately before the ending element.
+	 */
+	insertHTMLBeforeEnd: function (el, html) {
+		if (zk.ie) {
+			var tn = zDom.tag(el);
+			switch (tn) {
+			case "TABLE": case "TR":
+			case "TBODY": case "THEAD": case "TFOOT": case "COLGROUP":
+			/*case "TH": case "TD": case "CAPTION":*/ //no need to handle them
+				var ns = zDom._tblNewElems(html);
+				if (tn == "TABLE" && ns.length && zDom.tag(ns[0]) == "TR") {
+					var bd = el.tBodies;
+					if (!bd || !bd.length) {
+						bd = document.createElement("TBODY");
+						el.appendChild(bd);
+						el = bd;
+					} else {
+						el = bd[bd.length - 1];
+					}
+				}
+				for (var j = 0, nl = ns.length; j < nl; ++j)
+					el.appendChild(ns[j]);
+				return;
+			}
+		}
+		el.insertAdjacentHTML("beforeEnd", html);
+	},
+	/** Inserts an unparsed HTML immediately after the specified element.
+	 * @param el the sibling after which to insert
+	 */
+	insertHTMLAfter: function (el, html) {
+		if (zk.ie) {
+			switch (zDom.tag(el)) { //exclude TABLE
+			case "TD": case "TH": case "TR": case "CAPTION":
+			case "TBODY": case "THEAD": case "TFOOT":
+			case "COLGROUP": case "COL":
+				var ns = zDom._tblNewElems(html);
+				var sib = el.nextSibling;
+				var p = el.parentNode;
+				for (var j = 0, nl = ns.length; j < nl; ++j)
+					if (sib != null) p.insertBefore(ns[j], sib);
+					else p.appendChild(ns[j]);
+				return;
+			}
+		}
+		el.insertAdjacentHTML('afterEnd', html);
+	},
+
+	/** Inserts a node after another.
+	 */
+	insertAfter: function (el, ref) {
+		var sib = ref.nextSibling;
+		if (sib) ref.parentNode.insertBefore(el, sib);
+		else ref.parentNode.appendChild(el);
+	},
+	/** Inserts a node before another.
+	 */
+	insertBefore: function (el, ref) {
+		ref.parentNode.insertBefore(el, ref);
+	},
 	/** Detaches an element.
 	 * @param n the element, or the element's ID.
 	 */
-	detach: function (n) {
+	remove: function (n) {
 		n = zDom.$(n);
 		if (n && n.parentNode) n.parentNode.removeChild(n);
 	},
@@ -330,7 +407,7 @@ zDom = { //static methods
 		} catch (e) {
 			return [0, 0];
 		}
-	},
+	}
 };
 
 if (zk.ie) {
@@ -387,5 +464,38 @@ if (zk.ie) {
 			el.removeChild(n);
 		}
 		return ns;
+	};
+} else if (!HTMLElement.prototype.insertAdjacentHTML) { //none-IE
+	//insertAdjacentHTML
+	HTMLElement.prototype.insertAdjacentHTML = function (sWhere, sHTML) {
+		var r = this.ownerDocument.createRange(), df;
+
+		switch (String(sWhere).toLowerCase()) {  // convert to string and unify case
+		case "beforebegin":
+			r.setStartBefore(this);
+			df = r.createContextualFragment(sHTML);
+			this.parentNode.insertBefore(df, this);
+			break;
+
+		case "afterbegin":
+			r.selectNodeContents(this);
+			r.collapse(true);
+			df = r.createContextualFragment(sHTML);
+			this.insertBefore(df, this.firstChild);
+			break;
+
+		case "beforeend":
+			r.selectNodeContents(this);
+			r.collapse(false);
+			df = r.createContextualFragment(sHTML);
+			this.appendChild(df);
+			break;
+
+		case "afterend":
+			r.setStartAfter(this);
+			df = r.createContextualFragment(sHTML);
+			zk.insertAfter(df, this);
+			break;
+		}
 	};
 }

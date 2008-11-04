@@ -123,7 +123,7 @@ zUtl = { //static methods
 	},
 	/** Removes all progress boxed of the specified ID. */
 	cleanAllProgress: function (id) {
-		zDom.detach(id);
+		zDom.remove(id);
 
 		//TODO: remove the mask for each contained page
 	},
@@ -140,7 +140,7 @@ zUtl = { //static methods
 			location.replace(url);
 		} else if (target) {
 			//we have to process query string because browser won't do it
-			//even if we use insertHTMLBeforeEnd("<form...")
+			//even if we use zDom.insertHTMLBeforeEnd("<form...")
 			var frm = document.createElement("FORM");
 			document.body.appendChild(frm);
 			var j = url.indexOf('?');
