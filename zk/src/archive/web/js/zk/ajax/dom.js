@@ -2,9 +2,9 @@
 
 {{IS_NOTE
 	Purpose:
-		
+	
 	Description:
-		
+	
 	History:
 		Mon Sep 29 17:17:32	 2008, Created by tomyeh
 }}IS_NOTE
@@ -145,10 +145,10 @@ zDom = { //static methods
 				value = n.currentStyle[style];
 			}
 		}
-	
+
 		if (value == 'auto' && ['width','height'].contains(style) && n.getStyle('display') != 'none')
 			value = n['offset'+style.capitalize()] + 'px';
-	
+
 		if (zk.opera && ['left', 'top', 'right', 'bottom'].contains(style)
 		&& zDom.getStyle(n, 'position') == 'static') value = 'auto';
 
@@ -240,13 +240,103 @@ zDom = { //static methods
 	detach: function (n) {
 		n = zDom.$(n);
 		if (n && n.parentNode) n.parentNode.removeChild(n);
-	}
+	},
+
+	//dialog//
+	/** To confirm the user for an activity.
+	 */
+	confirm: function (msg) {
+		zk.alerting = true;
+		try {
+			return confirm(msg);
+		} finally {
+			try {zk.alerting = false;} catch (e) {} //doc might be unloaded
+		}
+	},
+	/** To prevent onblur if alert is shown.
+	 * Note: browser will change the focus back, so it is safe to ingore.
+	 */
+	alert: function (msg) {
+		zk.alerting = true;
+		try {
+			alert(msg);
+		} finally {
+			try {zk.alerting = false;} catch (e) {} //doc might be unloaded
+		}
+	},
+
+	//focus/select//
+	/** Focus the element without looking down, and do it timeout later. */
+	asyncFocus: function (id, timeout) {
+		setTimeout("zDom.focus('"+id+"')", timeout > 0? timeout: 0);
+			//Workaround for an IE bug: we have to set focus twice since
+			//the first one might fail (even we prolong the timeout to 1 sec)
+	},
+	/** Focus to the specified component w/o throwing exception. */
+	focus: function (n) {
+		n = zDom.$(n);
+		if (n && n.focus)
+			try {
+				n.focus();
+			} catch (e) {
+				setTimeout(function() {
+					try {
+						n.focus();
+					} catch (e) {
+						setTimeout(function() {try {n.focus();} catch (e) {}}, 100);
+					}
+				}, 0);
+			} //IE throws exception if failed to focus in some cases
+	},
+
+	/** Select the text of the element after the specified timeout.
+	 */
+	asyncSelect: function (id, timeout) {
+		setTimeout("zDom.select('"+id+"')", timeout > 0? timeout: 0);
+	},
+	/** Select to the specified component w/o throwing exception. */
+	select: function (n) {
+		n = zDom.$(n);
+		if (n && n.select)
+			try {
+				n.select();
+			} catch (e) {
+				setTimeout(function() {
+					try {n.select();} catch (e) {}
+				}, 0);
+			} //IE throws exception when select() in some cases
+	},
+	/** Returns the selection range of the specified input control.
+	 * Note: if the function occurs some error, it always return [0, 0];
+	 */
+	getSelectionRange: function(inp) {
+		try {
+			if (document.selection != null && inp.selectionStart == null) { //IE	
+				var range = document.selection.createRange(); 
+				var rangetwo = inp.createTextRange(); 
+				var stored_range = ""; 
+				if(inp.type.toLowerCase() == "text"){
+					stored_range = rangetwo.duplicate();
+				}else{
+					 stored_range = range.duplicate(); 
+					 stored_range.moveToElementText(inp); 
+				}
+				stored_range.setEndPoint('EndToEnd', range); 
+				var start = stored_range.text.length - range.text.length;		
+				return [start, start + range.text.length];
+			} else { //Gecko
+				return [inp.selectionStart, inp.selectionEnd];
+			}
+		} catch (e) {
+			return [0, 0];
+		}
+	},
 };
 
 if (zk.ie) {
 	zDom._tagOfHtml = function (html) {
 		if (!html) return "";
-	
+
 		var j = html.indexOf('<') + 1, k = j, len = j ? html.length: 0;
 		for (; k < len; ++k) {
 			var cc = html.charAt(k);
@@ -284,7 +374,7 @@ if (zk.ie) {
 		el.innerHTML = html;
 		while (--level >= 0)
 			el = el.firstChild;
-		
+	
 		//detach from parent and return
 		var ns = [];
 		for (var n; n = el.firstChild;) {

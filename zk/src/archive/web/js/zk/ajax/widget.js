@@ -118,8 +118,8 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * @param desktop the desktop the DOM element belongs to.
 	 * Optional. If null, ZK will decide it automatically.
 	 */
-	replace: function (n, desktop) {
-		if (n.z_wgt) n.z_wgt.detach(); //detach first
+	replaceHTML: function (n, desktop) {
+		if (n.z_wgt) n.z_wgt.detach(false); //detach first (w/o removal)
 		zDom.setOuterHTML(zDom.$(n), this.redraw());
 		this.attach(desktop);
 	},
@@ -133,15 +133,40 @@ zk.Widget = zk.$extends(zk.Object, {
 			n.z_wgt = this;
 			this.node = n;
 			if (!desktop) desktop = zk.Desktop.ofNode(n);
-			this.desktop = desktop;
 		}
+		this.desktop = desktop;
+
 		for (var wgt = this.firstChild; wgt; wgt = wgt.nextSibling)
 			wgt.attach(desktop);
 	},
 	/** Detaches the widget from the DOM tree.
+	 * @param remove whether to remove the associated node
 	 */
-	detach: function () {
-		//TOD
+	detach: function (remove) {
+		var n = this.node;
+		if (n) {
+			n.z_wgt = null;
+			this.node = null;
+		}
+		this.desktop = null;
+
+		for (var wgt = this.firstChild; wgt; wgt = wgt.nextSibling)
+			wgt.detach(false);
+
+		if (remove) zDom.detach(n);
+	},
+
+	/** Sets the focus to this widget.
+	 * <p>Default: call child widget's focus until it returns true,
+	 * or no child at all.
+	 * @return whether the focus is gained to this widget.
+	 */
+	focus: function () {
+		if (this.desktop)
+			for (var w = this.firstChild; w; w = w.nextSibling)
+				if (w.focus())
+					return true;
+		return false;
 	},
 
 	//ZK event//
@@ -212,6 +237,8 @@ zk.Widget = zk.$extends(zk.Object, {
 	auDelay: function () {
 		return -1;
 	},
+
+	//AU//
 	/** Sets an attribute that is caused by an AU response (smartUpdate).
 	 */
 	setAttr: function (nm, val) {

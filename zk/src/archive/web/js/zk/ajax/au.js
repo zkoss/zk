@@ -4,7 +4,7 @@
 	Purpose:
 		ZK Client Engine
 	Description:
-		
+	
 	History:
 		Mon Sep 29 17:17:37     2008, Created by tomyeh
 }}IS_NOTE
@@ -53,7 +53,7 @@ zAu = { //static methods
 	 */
 	confirmRetry: function (msgCode, msg2) {
 		var msg = mesg[msgCode];
-		return zUtl.confirm((msg?msg:msgCode)+'\n'+mesg.TRY_AGAIN+(msg2?"\n\n("+msg2+")":""));
+		return zDom.confirm((msg?msg:msgCode)+'\n'+mesg.TRY_AGAIN+(msg2?"\n\n("+msg2+")":""));
 	},
 	/** Handles the error caused by processing the response.
 	 * Overrides this method if you prefer to show it differently.
@@ -172,7 +172,7 @@ zAu = { //static methods
 			if (zk.pfmeter) zAu.pfdone(dt, zAu._pfGetIds(req));
 			return false; //invalid
 		}
-	
+
 		var cmds = [],
 			rs = xml.getElementsByTagName("r"),
 			rid = xml.getElementsByTagName("rid");
@@ -180,27 +180,27 @@ zAu = { //static methods
 			cmds.dt = dt;
 			cmds.pfIds = zAu._pfGetIds(req);
 		}
-	
+
 		if (rid && rid.length) {
 			rid = zk.parseInt(zUtl.getElementValue(rid[0])); //response ID
 			if (!isNaN(rid)) cmds.rid = rid;
 		}
-	
+
 		for (var j = 0, rl = rs ? rs.length: 0; j < rl; ++j) {
 			var cmd = rs[j].getElementsByTagName("c")[0],
 				data = rs[j].getElementsByTagName("d");
-	
+
 			if (!cmd) {
 				zk.error(mesg.ILLEGAL_RESPONSE+"Command required");
 				continue;
 			}
-	
+
 			cmds.push(cmd = {cmd: zUtl.getElementValue(cmd)});
 			cmd.data = [];
 			for (var k = data ? data.length: 0; --k >= 0;)
 				cmd.data[k] = zUtl.getElementValue(data[k]);
 		}
-	
+
 		zAu._cmdsQue.push(cmds);
 		return true;
 	},
@@ -216,7 +216,7 @@ zAu = { //static methods
 				zAu._doCmds0();
 			} finally {
 				zAu._doingCmds = false;
-	
+
 				if (zAu._ckProcessng())
 					zAu.doneTime = zUtl.now();
 			}
@@ -231,20 +231,20 @@ zAu = { //static methods
 			fn.apply(zAu, data);
 			return;
 		}
-	
+
 		//I. process commands that require uuid
 		if (!data || !data.length) {
 			zAu.showError("ILLEGAL_RESPONSE", "uuid is required for ", cmd);
 			return;
 		}
-	
+
 		fn = zAu.cmd1[cmd];
 		if (fn) {
 			data.splice(1, 0, zk.Widget.$(data[0])); //insert wgt
 			fn.apply(zAu, data);
 			return;
 		}
-	
+
 		zAu.showError("ILLEGAL_RESPONSE", "Unknown command: ", cmd);
 	},
 
@@ -290,19 +290,19 @@ zAu = { //static methods
 			if (req && req.readyState == 4) {
 				zAu._areq = zAu._areqInf = null;
 				if (reqInf.tfn) clearTimeout(reqInf.tfn); //stop timer
-	
+
 				if (zk.pfmeter) zAu.pfrecv(reqInf.dt, zAu._pfGetIds(req));
-	
+
 				if (zAu._revertpending) zAu._revertpending();
 					//revert any pending when the first response is received
-	
+
 				var sid = req.getResponseHeader("ZK-SID");
 				if (req.status == 200) { //correct
 					if (sid && sid != zAu._seqId) {
 						zAu._errcode = "ZK-SID " + (sid ? "mismatch": "required");
 						return;
 					} //if sid null, always process (usually for error msg)
-	
+
 					if (zAu.pushXmlResp(reqInf.dt, req)) { //valid response
 						//advance SID to avoid receive the same response twice
 						if (sid && ++zAu._seqId > 999) zAu._seqId = 1;
@@ -334,7 +334,7 @@ zAu = { //static methods
 								return;
 							}
 						}
-	
+
 						if (!zAu._ignorable && !zAu._unloading) {
 							var msg = req.statusText;
 							if (zAu.confirmRetry("FAILED_TO_RESPONSE", req.status+(msg?": "+msg:""))) {
@@ -343,7 +343,7 @@ zAu = { //static methods
 								return;
 							}
 						}
-	
+
 						zAu._cleanupOnFatal(zAu._ignorable);
 					}
 				}
@@ -351,13 +351,13 @@ zAu = { //static methods
 		} catch (e) {
 			if (!window.zAu)
 				return; //the doc has been unloaded
-	
+
 			zAu._areq = zAu._areqInf = null;
 			try {
 				if(req && typeof req.abort == "function") req.abort();
 			} catch (e2) {
 			}
-	
+
 			//NOTE: if connection is off and req.status is accessed,
 			//Mozilla throws exception while IE returns a value
 			if (!zAu._ignorable && !zAu._unloading) {
@@ -372,7 +372,7 @@ zAu = { //static methods
 			}
 			zAu._cleanupOnFatal(zAu._ignorable);
 		}
-	
+
 		//handle pending ajax send
 		if (zAu._sendPending && !zAu._areq && !zAu._preqInf) {
 			zAu._sendPending = false;
@@ -380,7 +380,7 @@ zAu = { //static methods
 			for (var dtid in dts)
 				zAu._send2(dts[dtid], 0);
 		}
-	
+
 		zAu.doCmds();
 		zAu._ckProcessng();
 	},
@@ -391,24 +391,24 @@ zAu = { //static methods
 			if (zAu._areqInf && zAu._areqInf.ctli == aureq.uuid
 			&& zAu._areqInf.ctlc == aureq.cmd)
 				return;
-	
+
 			var t = zUtl.now();
 			if (zAu._ctli == aureq.uuid && zAu._ctlc == aureq.cmd //Bug 1797140
 			&& t - zAu._ctlt < 390)
 				return; //to prevent key stroke are pressed twice (quickly)
-	
+
 			//Note: it is still possible to queue two ctl with same uuid and cmd,
 			//if the first one was not sent yet and the second one is generated
 			//after 390ms.
 			//However, it is rare so no handle it
-	
+
 			zAu._ctlt = t;
 			zAu._ctli = aureq.uuid;
 			zAu._ctlc = aureq.cmd;
 		}
-	
+
 		dt._aureqs.push(aureq);
-	
+
 		//Note: we don't send immediately (Bug 1593674)
 		//Note: Unlike sendAhead and _send2, if timeout is undefined,
 		//it is considered as 0.
@@ -423,7 +423,7 @@ zAu = { //static methods
 		var es = dt._aureqs;
 		if (es.length == 0)
 			return; //nothing to do
-	
+
 		if (zk.loading) {
 			zkPkg.afterLoad(function(){zAu._sendNow(dt);});
 			return; //wait
@@ -440,9 +440,9 @@ zAu = { //static methods
 		} catch (e) {
 			zk.error(e.message);
 		}
-	
+
 		//bug 1721809: we cannot filter out ctl even if zAu.processing
-	
+
 		//decide implicit and ignorable
 		var implicit = true, ignorable = true, ctli, ctlc;
 		for (var j = es.length; --j >= 0;) {
@@ -458,7 +458,7 @@ zAu = { //static methods
 			}
 		}
 		zAu._ignorable = ignorable;
-	
+
 		//Consider XML (Pros: ?, Cons: larger packet)
 		var content = "";
 		for (var j = 0, el = es.length; el; ++j, --el) {
@@ -472,7 +472,7 @@ zAu = { //static methods
 						+ (data != null ? encodeURIComponent(data): '_z~nil');
 				}
 		}
-	
+
 		if (content)
 			zAu._sendNow2({
 				sid: zAu._seqId, uri: zAu.comURI(null, dt),
@@ -494,17 +494,17 @@ zAu = { //static methods
 				req.setRequestHeader("ZK-Error-Report", zAu._errcode);
 				delete zAu._errcode;
 			}
-	
+
 			if (zk.pfmeter) zAu._pfsend(reqInf.dt, req);
-	
+
 			zAu._areq = req;
 			zAu._areqInf = reqInf;
 			if (zk.resendDelay > 0)
 				zAu._areqInf.tfn = setTimeout(zAu._areqTmout, zk.resendDelay + reqInf.tmout);
-	
+
 			if (uri) req.send(null);
 			else req.send(reqInf.content);
-	
+
 			if (!reqInf.implicit) zk.startProcessing(zk.procDelay); //wait a moment to avoid annoying
 		} catch (e) {
 			//handle error
@@ -512,7 +512,7 @@ zAu = { //static methods
 				if(typeof req.abort == "function") req.abort();
 			} catch (e2) {
 			}
-	
+
 			if (!reqInf.ignorable && !zAu._unloading) {
 				var msg = e.message;
 				zAu._errcode = "[Send] " + msg;
@@ -546,19 +546,19 @@ zAu = { //static methods
 				zk.addInit(zAu.doCmds); //wait until the loading is done
 				return;
 			}
-	
+
 			var cmds = que[j];
 			if (rid == cmds.rid || !rid || !cmds.rid //match
 			|| zAu._dtids.length > 1) { //ignore multi-desktops (risky but...)
 				que.splice(j, 1);
-	
+
 				var oldrid = rid;
 				if (cmds.rid) {
 					if ((rid = cmds.rid + 1) >= 1000)
 						rid = 1; //1~999
 					zAu._resId = rid;
 				}
-	
+
 				try {
 					if (zAu._doCmds1(cmds)) { //done
 						j = -1; //start over
@@ -575,7 +575,7 @@ zAu = { //static methods
 				}
 			}
 		}
-	
+
 		if (que.length) { //sequence is wrong => enforce to run if timeout
 			setTimeout(function () {
 				if (que.length && rid == zAu._resId) {
@@ -590,7 +590,7 @@ zAu = { //static methods
 				}
 			}, 3600);
 		}
-	
+
 		if (ex) throw ex;
 	},
 	_doCmds1: function (cmds) {
@@ -599,7 +599,7 @@ zAu = { //static methods
 			while (cmds && cmds.length) {
 				if (zk.loading)
 					return false;
-	
+
 				processed = true;
 				var cmd = cmds.shift();
 				try {
@@ -615,7 +615,7 @@ zAu = { //static methods
 		}
 		return true;
 	},
-	
+
 	/** Cleans up if we detect obsolete or other severe errors. */
 	_cleanupOnFatal: function (ignorable) {
 		for (var uuid in zAu._metas) {
@@ -623,38 +623,6 @@ zAu = { //static methods
 			if (meta && meta.cleanupOnFatal)
 				meta.cleanupOnFatal(ignorable);
 		}
-	},
-	
-	/** Invoke zk.initAt for siblings. Note: from and to are excluded. */
-	_initSibs: function (from, to, next) {
-		for (;;) {
-			from = next ? from.nextSibling: from.previousSibling;
-			if (!from || from == to) break;
-			zk.initAt(from);
-		}
-	},
-	/** Invoke zk.initAt for all children. Note: to is excluded. */
-	_initChildren: function (n, to) {
-		for (n = n.firstChild; n && n != to; n = n.nextSibling)
-			zk.initAt(n);
-	},
-	/** Invoke inserHTMLBeforeEnd and then zk.initAt.
-	 */
-	_insertAndInitBeforeEnd: function (n, html) {
-		if ($tag(n) == "TABLE" && zk.tagOfHtml(html) == "TR") {
-			if (!n.tBodies || !n.tBodies.length) {
-				var m = document.createElement("TBODY");
-				n.appendChild(m);
-				n = m;
-			} else {
-				n = n.tBodies[0];
-			}
-		}
-	
-		var lc = n.lastChild;
-		zk.insertHTMLBeforeEnd(n, html);
-		if (lc) zAu._initSibs(lc, null, true);
-		else zAu._initChildren(n);
 	}
 };
 
@@ -668,7 +636,7 @@ zAu.cmd0 = { //no uuid at all
 		zk.error(dt1);
 	},
 	alert: function (msg) {
-		zUtl.alert(msg);
+		zDom.alert(msg);
 	},
 	redirect: function (url, target) {
 		try {
@@ -762,9 +730,9 @@ zAu.cmd1 = {
 				cmp.defaultValue = old + "_err"; //enforce to validate
 				if (old != cmp.value) cmp.value = old; //Bug 1490079 (FF only)
 				if (zAu.valid) zAu.valid.errbox(cmp.id, arguments[i+2], true);
-				else zUtl.alert(arguments[i+2]);
+				else zDom.alert(arguments[i+2]);
 			} else if (!uuids[i]) { //keep silent if component (of uuid) not exist (being detaced)
-				zUtl.alert(arguments[i+2]);
+				zDom.alert(arguments[i+2]);
 			}
 		}
 	},
@@ -779,39 +747,33 @@ zAu.cmd1 = {
 	rmAttr: function (uuid, wgt, nm) {
 		wgt.rmAttr(nm);
 	},
-	outer: function (uuid, cmp, html) {
-		zk.unsetChildVParent(cmp, true); //OK to hide since it will be replaced
-		var fns = zk.find(cmp, "onOuter"),
-			cf = zAu.currentFocus, cfid;
-		if (cf && zk.isAncestor(cmp, cf, true)) {
+	outer: function (uuid, wgt, code) {
+		var cf = zk.currentFocus, cfid;
+		if (cf && zUtl.isAncestor(cmp, cf, true)) {
 			cfid = cf.id
-			zAu.currentFocus = null;
+			zk.currentFocus = null;
 		} else
 			cf = null;
 
-		zk.cleanupAt(cmp);
-		var from = cmp.previousSibling, from2 = cmp.parentNode,
-			to = cmp.nextSibling;
-		zk.setOuterHTML(cmp, html);
-		if (from) zAu._initSibs(from, to, true);
-		else zAu._initChildren(from2, to);
+		_zkauf = function (newwgt) {
+			var p = newwgt.parent = wgt.parent,
+				s = newwgt.previousSibling = wgt.previousSibling;
+			if (s) s.nextSibling = newwgt;
+			else if (p) p.firstChild = newwgt;
 
-		if (zAu.valid) zAu.valid.fixerrboxes();
+			s = newwgt.nextSibling = wgt.nextSibling;
+			if (s) s.previousSibling = newwgt;
+			else if (p) p.lastChild = newwgt;
 
-		if (cf && !zAu.currentFocus)
-			if (cfid) zk.focus(zDom.$(cfid));
-			// else zk.focusDown(zDom.$(uuid)); fails in grid with paging
-
-		if (fns) {
-			var ls = zk.find(cmp);
-			if (zk.debugJS) {
-				var fs = ls["onOuter"];
-				if (fs && fs.length) //some register
-					zk.error("Registering onOuter in init not allowed");
-			}
-			ls["onOuter"] = fns;
+			newwgt.replaceHTML(wgt.uuid, wgt.desktop);
+			//TODO: if (zAu.valid) zAu.valid.fixerrboxes();
+			if (cf && !zk.currentFocus && cfid) zUtl.focus(cfid);
+		};
+		try {
+			eval(code);
+		} finally {
+			_zkauf = null;
 		}
-		zk.fire(cmp, "onOuter");
 	},
 	addAft: function (uuid, cmp, html) {
 		//Bug 1939059: This is a dirty fix. Refer to AuInsertBefore

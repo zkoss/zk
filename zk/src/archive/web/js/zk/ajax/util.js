@@ -90,28 +90,7 @@ zUtl = { //static methods
 		return false;
 	},
 
-	/** To confirm the user for an activity.
-	 */
-	confirm: function (msg) {
-		zk.alerting = true;
-		try {
-			return confirm(msg);
-		} finally {
-			try {zk.alerting = false;} catch (e) {} //doc might be unloaded
-		}
-	},
-	/** To prevent onblur if alert is shown.
-	 * Note: browser will change the focus back, so it is safe to ingore.
-	 */
-	alert: function (msg) {
-		zk.alerting = true;
-		try {
-			alert(msg);
-		} finally {
-			try {zk.alerting = false;} catch (e) {} //doc might be unloaded
-		}
-	},
-
+	//progress//
 	/** Shows the progress box to notify user ZK Client is busy.
 	 * @see zk.startProcessing
 	 */

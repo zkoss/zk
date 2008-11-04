@@ -107,6 +107,8 @@ zk = { //static methods
 	//booted: 0,
 	/** Whether ZK is processing something (such as creating, doing AU). */
 	//processing: 0,
+	/** The DOM element that gains the focus. */
+	//currentFocus: null,
 
 	/** Declares a package.
 	 * It is similar to Java's package statement.
