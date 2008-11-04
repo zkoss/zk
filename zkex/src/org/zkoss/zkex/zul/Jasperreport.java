@@ -58,6 +58,7 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
+import org.zkoss.zul.Iframe;
 import org.zkoss.zul.impl.Utils;
 
 /**
@@ -71,7 +72,7 @@ import org.zkoss.zul.impl.Utils;
  * @author gracelin
  * @since 3.0.2
  */
-public class Jasperreport extends HtmlBasedComponent {
+public class Jasperreport extends Iframe {
 	private static final Log log = Log.lookup(Jasperreport.class);
 	private static final long serialVersionUID = 20080117L;
 
