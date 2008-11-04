@@ -776,30 +776,36 @@ zAu.cmd1 = {
 			_zkauf = null;
 		}
 	},
-	addAft: function (uuid, cmp, html) {
+	addAft: function (uuid, wgt, code) {
 		//Bug 1939059: This is a dirty fix. Refer to AuInsertBefore
 		//Format: comp-uuid:pg-uuid (if native root)
-		if (!cmp) {
+		if (!wgt) {
 			var j = uuid.indexOf(':');
 			if (j >= 0) { //native root
-				cmp = zDom.$(uuid.substring(0, j)); //try comp (though not possible)
-				if (!cmp) {
+				wgt = zk.Widget.$(uuid.substring(0, j)); //try comp (though not possible)
+				if (!wgt) {
 					uuid = uuid.substring(j + 1); //try page
-					cmp = zDom.$(uuid);
-					if (!cmp) cmp = document.body;
-					zAu.cmd1.addChd(uuid, cmp, html);
+					wgt = zk.Widget.$(uuid);
+					if (!wgt) wgt = document.body;
+					zAu.cmd1.addChd(uuid, wgt, code);
 					return;
 				}
 			}
 		}
 
-		var v = zk.isVParent(cmp);
-		if (v) zk.unsetVParent(cmp);
-		var n = $childExterior(cmp);
-		var to = n.nextSibling;
-		zk.insertHTMLAfter(n, html);
-		zAu._initSibs(n, to, true);
-		if (v) zk.setVParent(cmp);
+		var p = wgt.parent;
+		wgt = wgt.nextSibling;
+		if (wgt) {
+			_zkauf = function (child) {
+				p.insertBefore(child, wgt);
+			};
+			try {
+				eval(code);
+			} finally {
+				_zkauf = null;
+			}
+		} else
+			zAu.cmd1.addChd(p.uuid, p, code);
 	},
 	addBfr: function (uuid, cmp, html) {
 		var v = zk.isVParent(cmp);
@@ -812,7 +818,7 @@ zAu.cmd1 = {
 	},
 	addChd: function (uuid, wgt, code) {
 		_zkauf = function (child) {
-			wgt.appendChildHTML(child);
+			wgt.appendChild(child);
 		};
 		try {
 			eval(code);
