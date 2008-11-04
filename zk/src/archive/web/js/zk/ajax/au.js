@@ -425,7 +425,7 @@ zAu = { //static methods
 			return; //nothing to do
 	
 		if (zk.loading) {
-			zkPkg.addAfterLoad(function(){zAu._sendNow(dt);});
+			zkPkg.afterLoad(function(){zAu._sendNow(dt);});
 			return; //wait
 		}
 
@@ -660,15 +660,15 @@ zAu = { //static methods
 
 //Commands//
 zAu.cmd0 = { //no uuid at all
-	bookmark: function (dt0) {
-		zAu.history.bookmark(dt0);
+	bookmark: function (bk) {
+		zHistory.bookmark(bk);
 	},
 	obsolete: function (dt0, dt1) { //desktop timeout
 		zAu._cleanupOnFatal();
 		zk.error(dt1);
 	},
 	alert: function (msg) {
-		zk.alert(msg);
+		zUtl.alert(msg);
 	},
 	redirect: function (url, target) {
 		try {
@@ -762,9 +762,9 @@ zAu.cmd1 = {
 				cmp.defaultValue = old + "_err"; //enforce to validate
 				if (old != cmp.value) cmp.value = old; //Bug 1490079 (FF only)
 				if (zAu.valid) zAu.valid.errbox(cmp.id, arguments[i+2], true);
-				else zk.alert(arguments[i+2]);
+				else zUtl.alert(arguments[i+2]);
 			} else if (!uuids[i]) { //keep silent if component (of uuid) not exist (being detaced)
-				zk.alert(arguments[i+2]);
+				zUtl.alert(arguments[i+2]);
 			}
 		}
 	},

@@ -46,7 +46,7 @@ zk.Event = zk.$extends(zk.Object, {
 	construct: function (target, name, data, implicit, ignorable) {
 		this.target = target;
 		this.name = name;
-		this.data = data ? data: null;
+		this.data = typeof data == 'string' ? [data]: data ? data: null;
 		this.implicit = implicit;
 		this.ignorable = ignorable;
 	}
@@ -143,7 +143,7 @@ zWatch = {
 				for (var j = 0; j < len;) {
 					var o = wts[j++];
 					if (zUtl.isAncestor(origin, o))
-					setTimeout(function(){o[name].call(o, args)}, timeout);
+						setTimeout(function(){o[name].call(o, args)}, timeout);
 				}
 				return;
 			}

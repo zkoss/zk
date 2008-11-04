@@ -152,11 +152,10 @@ public class HtmlPageRenders {
 		execCtrl.setResponses(null);
 
 		final StringBuffer sb = new StringBuffer(256)
-			.append("\n<script>")
-			.append("zk.addInit(function(){\n");
+			.append("\n<script>zkafter(function(){\n");
 		for (Iterator it = responses.iterator(); it.hasNext();) {
 			final AuResponse response = (AuResponse)it.next();
-			sb.append("zk.process('").append(response.getCommand())
+			sb.append("zAu.process('").append(response.getCommand())
 				.append("'");
 
 			final String[] data = response.getData();
