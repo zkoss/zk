@@ -66,8 +66,8 @@
 .z-menu-disd *, .z-menu-item-disd * {
 	color: gray!important; cursor: default!important;
 }
-.z-menu-btn-clk .z-menu-btn-m, .z-menu-btn-seld .z-menu-btn-m,
-.z-menu-item-btn-clk .z-menu-item-btn-m, .z-menu-item-btn-seld .z-menu-item-btn-m {
+.z-menu-btn-seld .z-menu-btn-m,
+.z-menu-item-btn-seld .z-menu-item-btn-m {
 	background-position: 0 -126px;
 }
 .z-menu-btn .z-menu-btn-m,
@@ -101,7 +101,7 @@
 	background: #DDEEFB url(${c:encodeURL('~./zul/img/menu2/item-over.gif')}) repeat-x 0 0;
 	border: 1px solid #A8D8EB; padding: 0;
 }
-.z-menu-item-over .z-menu-cnt, .z-menu-over .z-menu-item-cnt {
+.z-menu-popup .z-menu-item-over .z-menu-item-cnt, .z-menu-popup .z-menu-over .z-menu-cnt {
 	color:#233d6d;
 }
 .z-menu-item-img, .z-menu-img {
@@ -178,26 +178,26 @@
 	background-repeat : repeat-x; 
 	background-position : 0 -42px;
 }
-.z-menubar-hor .z-menu-btn-clk .z-menu-btn-l, .z-menubar-hor .z-menu-btn-seld .z-menu-btn-l,
-.z-menubar-ver .z-menu-btn-clk .z-menu-btn-l, .z-menubar-ver .z-menu-btn-seld .z-menu-btn-l,
-.z-menubar-hor .z-menu-item-btn-clk .z-menu-item-btn-l, .z-menubar-hor .z-menu-item-btn-seld .z-menu-item-btn-l,
-.z-menubar-ver .z-menu-item-btn-clk .z-menu-item-btn-l, .z-menubar-ver .z-menu-item-btn-seld .z-menu-item-btn-l {
+.z-menubar-hor .z-menu-btn-seld .z-menu-btn-l,
+.z-menubar-ver .z-menu-btn-seld .z-menu-btn-l,
+.z-menubar-hor .z-menu-item-btn-seld .z-menu-item-btn-l,
+.z-menubar-ver .z-menu-item-btn-seld .z-menu-item-btn-l {
 	background-image : url(${c:encodeURL('~./zul/img/button/tb-btn-side.png')});
 	background-repeat : no-repeat; 
 	background-position :0 -63px;
 }
-.z-menubar-hor .z-menu-btn-clk .z-menu-btn-r, .z-menubar-hor .z-menu-btn-seld .z-menu-btn-r,
-.z-menubar-ver .z-menu-btn-clk .z-menu-btn-r, .z-menubar-ver .z-menu-btn-seld .z-menu-btn-r,
-.z-menubar-hor .z-menu-item-btn-clk .z-menu-item-btn-r, .z-menubar-hor .z-menu-item-btn-seld .z-menu-item-btn-r,
-.z-menubar-ver .z-menu-item-btn-clk .z-menu-item-btn-r, .z-menubar-ver .z-menu-item-btn-seld .z-menu-item-btn-r {
+.z-menubar-hor .z-menu-btn-seld .z-menu-btn-r,
+.z-menubar-ver .z-menu-btn-seld .z-menu-btn-r,
+.z-menubar-hor .z-menu-item-btn-seld .z-menu-item-btn-r,
+.z-menubar-ver .z-menu-item-btn-seld .z-menu-item-btn-r {
 	background-image : url(${c:encodeURL('~./zul/img/button/tb-btn-side.png')});
 	background-repeat : no-repeat; 
 	background-position : 0 -84px;
 }
-.z-menubar-hor .z-menu-btn-clk .z-menu-btn-m, .z-menubar-hor .z-menu-btn-seld .z-menu-btn-m,
-.z-menubar-ver .z-menu-btn-clk .z-menu-btn-m, .z-menubar-ver .z-menu-btn-seld .z-menu-btn-m,
-.z-menubar-hor .z-menu-item-btn-clk .z-menu-item-btn-m, .z-menubar-hor .z-menu-item-btn-seld .z-menu-item-btn-m,
-.z-menubar-ver .z-menu-item-btn-clk .z-menu-item-btn-m, .z-menubar-ver .z-menu-item-btn-seld .z-menu-item-btn-m {
+.z-menubar-hor .z-menu-btn-seld .z-menu-btn-m,
+.z-menubar-ver .z-menu-btn-seld .z-menu-btn-m,
+.z-menubar-hor .z-menu-item-btn-seld .z-menu-item-btn-m,
+.z-menubar-ver .z-menu-item-btn-seld .z-menu-item-btn-m {
 	background-image : url(${c:encodeURL('~./zul/img/button/tb-btn-side.png')});
 	background-repeat : repeat-x; 
 	background-position : 0 -105px;
