@@ -193,14 +193,28 @@ zk = { //static methods
 		throw "abstract method";
 	},
 
-	/** parse a string to an integer. */
+	/** Parse a string to an integer. */
 	parseInt: function (v, b) {
 		v = v ? parseInt(v, b || 10): 0;
 		return isNaN(v) ? 0: v;
 	},
+	/** Tests if the character is 0, 1, ... or 9. */
+	isDigit: function (c) {
+		return c >= '0' && c <= '9';
+	},
 	/** Returns whether a character is a white space. */
 	isWhitespace: function (cc) {
 		return cc == ' ' || cc == '\t' || cc == '\n' || cc == '\r';
+	},
+
+	/** Assigns a value to the specified property.
+	 * If setX is defined (assumes name is x), <code>o.setX(value)</code> is called.
+	 * If not defined, <code>o[name] = value</code> is called.
+	 */
+	assign: function (o, name, value) {
+		var m = o['set' + name.charAt(0).toUpperCase() + name.substring(1)];
+		if (m) m.call(o, value);
+		else o[name] = value;
 	},
 
 	//Processing//

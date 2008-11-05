@@ -21,7 +21,6 @@ package org.zkoss.zul;
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
 
-import org.zkoss.zk.ui.sys.ContentRenderer;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -57,7 +56,7 @@ public class Div extends XulElement {
 	}
 
 	//super//
-	protected void renderProperties(ContentRenderer renderer)
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 

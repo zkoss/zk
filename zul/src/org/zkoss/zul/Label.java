@@ -1,20 +1,16 @@
 /* Label.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Wed Jun  8 18:53:53     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
-{{IS_RIGHT
 	This program is distributed under GPL Version 2.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
-}}IS_RIGHT
 */
 package org.zkoss.zul;
 
@@ -30,8 +26,6 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
-import org.zkoss.zk.ui.sys.ContentRenderer;
-import org.zkoss.zk.ui.sys.JsContentRenderer;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 
@@ -188,7 +182,7 @@ public class Label extends XulElement {
 
 	//-- super --//
 	//super//
-	protected void renderProperties(ContentRenderer renderer)
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws IOException {
 		super.renderProperties(renderer);
 

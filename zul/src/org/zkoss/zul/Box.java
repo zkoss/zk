@@ -1,20 +1,16 @@
 /* Box.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Mon Jun 20 21:51:32     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
-{{IS_RIGHT
 	This program is distributed under GPL Version 2.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
-}}IS_RIGHT
 */
 package org.zkoss.zul;
 
@@ -128,44 +124,10 @@ public class Box extends XulElement {
 		if (spacing != null && spacing.length() == 0) spacing = null;
 		if (!Objects.equals(_spacing, spacing)) {
 			_spacing = spacing;
-			smartUpdate("spacing", _spacing);
+			smartUpdate("spacing", getSpacing());
 		}
 	}
 
-	/** Returns the vertical alignment of the adjacent cells of a box
-	 * (top, middle or bottom).
-	 * <p>Default: null (i.e., use the browser default, usually middle).
-	 * @deprecated As of release 3.0.0, since it is not compliant to XUL.
-	 * Use {@link #getAlign} and {@link #getPack} instead.
-	 */
-	public String getValign() {
-		return toValign(isVertical() ? getPack(): getAlign());
-	}
-	/** Sets the vertical alignment of the adjacent cells of a box.
-	 *
-	 * @param valign the vertical alignment: top, middle and bottom.
-	 * @deprecated As of release 3.0.0, since it is not compliant to XUL.
-	 * Use {@link #setAlign} and {@link #setPack} instead.
-	 */
-	public void setValign(String valign) {
-		valign = valign == null ? null:
-			"top".equals(valign) ? "start": 
-			"middle".equals(valign) ? "center":
-			"bottom".equals(valign) ? "end": valign;
-
-		if (isVertical()) setPack(valign);
-		else setAlign(valign);
-	}
-	private static String toValign(String v) {
-		return v == null ? null: "start".equals(v) ? "top": 
-			"center".equals(v) ? "middle":
-			"end".equals(v) ? "bottom": v;
-	}
-	private static String toHalign(String v) {
-		return v == null ? null: "start".equals(v) ? "left": 
-			"end".equals(v) ? "right": v;
-	}
-	
 	/** Returns the alignment of cells of a box in the 'opposite' direction
 	 * (<i>null</i>, start, center, end).
 	 *
@@ -212,7 +174,7 @@ public class Box extends XulElement {
 		if (align != null && align.length() == 0) align = null;
 		if (!Objects.equals(_align, align)) {
 			_align = align;
-			smartUpdate("valign", toValign(align));
+			smartUpdate("align", getAlign());
 		}
 	}
 	/** Returns the alignment of cells of this box
@@ -258,7 +220,7 @@ public class Box extends XulElement {
 		if (pack != null && pack.length() == 0) pack = null;
 		if (!Objects.equals(_pack, pack)) {
 			_pack = pack;
-			smartUpdate("pack", _pack); //generated to all cells
+			smartUpdate("pack", getPack());
 		}
 	}
 
@@ -325,5 +287,14 @@ public class Box extends XulElement {
 	//-- super --//
 	public String getZclass() {
 		return _zclass == null ? "z-box" : super.getZclass();
+	}
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		render(renderer, "spacing", getSpacing());
+		render(renderer, "align", getAlign());
+		render(renderer, "pack", getPack());
+		render(renderer, "widths", getWidths());
 	}
 }

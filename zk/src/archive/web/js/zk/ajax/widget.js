@@ -32,6 +32,8 @@ zk.Widget = zk.$extends(zk.Object, {
 	/** Whether this widget has a copy at the server (readonly). */
 	//inServer: false,
 
+	_visible: true,
+
 	/** Constructor. */
 	construct: function (uuid, mold) {
 		this.uuid = uuid ? uuid: zk.Widget.nextUuid();
@@ -111,10 +113,38 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 	},
 
+	/** Returns whether this widget is visible. */
+	isVisible: function () {
+		return this._visible;
+	},
+	/** Sets whether this widget is visible. */
+	setVisible: function (visible) {
+		this._visible = visible;
+		var n = this.node;
+		if (n) n.style.display = visible ? '': 'none';
+	},
+
 	/** Generates the HTML content. */
 	redraw: function () {
 		var s = this.$class.molds[this.mold].call(this);
 		return this.prolog ? this.prolog + s: s;
+	},
+	/** An utilities to generate the attributes used in the enclosing tag
+	 * of the HTML content.
+	 * <p>Default: generate id, style and class.
+	 */
+	getOuterAttrs: function (opts) {
+		var html = !opts || !opts.noId ? ' id="' + this.uuid + '"': '',
+			s = !opts || !opts.noStyle ? this.style: '';
+		if (!this.isVisible()) s = 'display:none;' + (s ? s: '');
+		if (s) html += ' style="' + s + '"';
+
+		if (!opts || opts.noClass) {
+			var zs = this.zclass, ss = this.sclass;
+			ss = zs ? ss ? ss + ' ' + zs: zs: ss ? ss: '';
+			if (ss) html += ' class="' + ss + '"';
+		}
+		return html;
 	},
 
 	/** Replaces the specified DOM element with the HTML content
@@ -284,14 +314,16 @@ zk.Widget = zk.$extends(zk.Object, {
 
 	//AU//
 	/** Sets an attribute that is caused by an AU response (smartUpdate).
+	 * <p>Default: <code>zk.assign(this, nm, val)</code>
 	 */
 	setAttr: function (nm, val) {
-		//TODO
+		zk.assign(this, nm, val);
 	},
 	/** Removes an attribute that is caused by an AU response (smartUpdate)
+	 * <p>Default: a shortcut of <code>this.setAttr(nm, null)</code>
 	 */
-	rmAttr: function (nm, val) {
-		//TODO
+	rmAttr: function (nm) {
+		this.setAttr(nm, null);
 	}
 }, {
 	/** Returns the widget of the specified ID, or null if not found,

@@ -210,11 +210,8 @@ function _zkcreate(parent, wginf) {
 	}
 
 	//assign properties
-	for (var p in props) {
-		var m = wgt['set' + p.charAt(0).toUpperCase() + p.substring(1)];
-		if (m) m(props[p]);
-		else wgt[p] = props[p];
-	}
+	for (var p in props)
+		zk.assign(wgt, p, props[p]);
 
 	for (var j = 0, childs = wginf.children, len = childs.length;
 	j < len; ++j)

@@ -45,6 +45,11 @@ zUtl = { //static methods
 		return txt;
 	},
 
+	/** The same as ' cellpadding="0" cellspacing="0"'. */
+ 	cellps0: ' cellpadding="0" cellspacing="0"',
+ 	/** The same as '<img style="height:0;width:0"/>'. */
+ 	img0: '<img style="height:0;width:0"/>',
+ 
 	/** Returns the current time (new Date().getTime()).
 	 * It is a number starting from 01/01/1970.
 	 */

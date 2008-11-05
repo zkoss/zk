@@ -19,9 +19,5 @@ zul.box.Box = zk.$extends(zk.Widget, {
 	setAttr: function (nm, val) {
 		//TODO
 		$setAttr(nm, val);
-	},
-	rmAttr: function (nm) {
-		//TODO
-		$rmAttr(nm);
 	}
 });

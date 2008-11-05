@@ -13,7 +13,5 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
 function () {
-	var html = '<span id="' + this.uuid + '"';
-	if (this.style) html += ' style="' + this.style + '"';
-	return html+'>'+this.value+'</span>';
+	return '<span' + this.getOuterAttrs() + '>' + this.value + '</span>';
 }
