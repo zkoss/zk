@@ -1,20 +1,16 @@
 /* WpdExtendlet.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Mon Oct  6 10:47:11     2008, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
-{{IS_RIGHT
 	This program is distributed under GPL Version 2.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
-}}IS_RIGHT
 */
 package org.zkoss.zk.ui.http;
 
@@ -154,8 +150,12 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 					write(out, "_zm['");
 					write(out, mold);
 					write(out, "']=");
-					if (!writeResource(out, uri, pathpref))
+					if (!writeResource(out, uri, pathpref)) {
+						write(out, "zk.$void;zk.error('");
+						write(out, uri);
+						write(out, " not found')");
 						log.error("Failed to load mold "+mold+" for widget "+wgtnm+". Cause: "+uri+" not found");
+					}
 					write(out, ";\n");
 				}
 			}

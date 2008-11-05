@@ -1,20 +1,16 @@
 /* pkg.js
 
-{{IS_NOTE
 	Purpose:
 		zPkg: the package utilities
 	Description:
 		
 	History:
 		Tue Oct  7 16:32:04     2008, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
-{{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
-	it will be useful, but WITHOUT ANY WARRANTY.
-}}IS_RIGHT
+This program is distributed under GPL Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
 */
 zPkg = {
 	/** Called after the whole package is declared.
@@ -23,7 +19,7 @@ zPkg = {
 	 */
 	end: function (pkg) {
 		if (--zk.loading) {
-			zk._updCnt();
+			zPkg._updCnt();
 		} else {
 			try {
 				zEvt.enableESC();

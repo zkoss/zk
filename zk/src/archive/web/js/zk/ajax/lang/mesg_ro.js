@@ -1,20 +1,16 @@
 /* mesg_ro.js "charset=utf-8"
 
-{{IS_NOTE
 	Purpose:
 		Locale dependent message
 	Description:
 		
 	History:
 		Feb 02, 2007, Created by Calin Vaida
-}}IS_NOTE
 
 Copyright (C) 2005-2007 Potix Corporation. All Rights Reserved.
 
-{{IS_RIGHT
 	This program is distributed under GPL Version 2.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
-}}IS_RIGHT
 */
 mesg = {};
 mesg.NOT_FOUND = "Nu s-a găsit: ";

@@ -1,20 +1,16 @@
 /* zkevt.js
 
-{{IS_NOTE
 	Purpose:
 		ZK Event and Watch/Action
 	Description:
 		
 	History:
 		Wed Oct 29 11:55:58     2008, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
-{{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
-	it will be useful, but WITHOUT ANY WARRANTY.
-}}IS_RIGHT
+This program is distributed under GPL Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
 */
 /** A widget event, fired by {@link zk.Widget#fire}.
  * It is an application-level event that is used by application to

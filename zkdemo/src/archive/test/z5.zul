@@ -30,21 +30,27 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		onClick='self.value += "!"'/>
 	<label value="invalidate" style="border:1px solid #233;padding:0 2px"
 		onClick='self.value += "#";self.invalidate();'/>
+
+	Div:
+	<div id="div" style="border:1px solid #449"/>
 	<label value="append" style="border:1px solid #233;padding:0 2px"
-		onClick='new Label("Append "+ ++cnt).setParent(inner)'/>
+		onClick='new Label("Append "+ ++cnt).setParent(div)'/>
 	<label value="insert" style="border:1px solid #233;padding:0 2px"
-		onClick='inner.insertBefore(new Label("Insert "+ ++cnt),
-			inner.children.empty ? null: inner.children.get(0))'/>
-	<label value="remove first" style="border:1px solid #233;padding:0 2px">
-		<attribute name="onClick">
-		if (!inner.children.empty) inner.firstChild.detach();
-		</attribute>
-	</label>
-	<label value="remove last" style="border:1px solid #233;padding:0 2px">
-		<attribute name="onClick">
-		if (!inner.children.empty) inner.lastChild.detach();
-		</attribute>
-	</label>
-	<div id="inner" style="border:1px solid #449"/>
+		onClick='div.insertBefore(new Label("Insert "+ ++cnt),
+			div.children.empty ? null: div.children.get(0))'/>
+	<label value="remove first" style="border:1px solid #233;padding:0 2px"
+		onClick="if (!div.children.empty) div.firstChild.detach();"/>
+	<label value="remove last" style="border:1px solid #233;padding:0 2px"
+		onClick="if (!div.children.empty) div.lastChild.detach();"/>
+
+	Vbox:
+	<vbox id="vbox"/>
+	<label value="insert" style="border:1px solid #233;padding:0 2px"
+		onClick='vbox.insertBefore(new Label("Insert "+ ++cnt),
+			vbox.children.empty ? null: vbox.children.get(0))'/>
+	<label value="remove first" style="border:1px solid #233;padding:0 2px"
+		onClick="if (!vbox.children.empty) vbox.firstChild.detach();"/>
+	<label value="remove last" style="border:1px solid #233;padding:0 2px"
+		onClick="if (!vbox.children.empty) vbox.lastChild.detach();"/>
 	End of file
 </div>

@@ -128,7 +128,7 @@ public class Box extends XulElement {
 		if (spacing != null && spacing.length() == 0) spacing = null;
 		if (!Objects.equals(_spacing, spacing)) {
 			_spacing = spacing;
-			invalidate();
+			smartUpdate("spacing", _spacing);
 		}
 	}
 
@@ -209,10 +209,10 @@ public class Box extends XulElement {
 	 * @since 3.0.0
 	 */
 	public void setAlign(String align) {
+		if (align != null && align.length() == 0) align = null;
 		if (!Objects.equals(_align, align)) {
 			_align = align;
-			if (isVertical()) invalidate();
-			else smartUpdate("valign", toValign(align));
+			smartUpdate("valign", toValign(align));
 		}
 	}
 	/** Returns the alignment of cells of this box
@@ -255,9 +255,10 @@ public class Box extends XulElement {
 	 * @since 3.0.0
 	 */
 	public void setPack(String pack) {
+		if (pack != null && pack.length() == 0) pack = null;
 		if (!Objects.equals(_pack, pack)) {
 			_pack = pack;
-			invalidate(); //generated to all cells
+			smartUpdate("pack", _pack); //generated to all cells
 		}
 	}
 
@@ -309,7 +310,7 @@ public class Box extends XulElement {
 		final String[] sizes = Utils.stringToArray(widths, null);
 		if (!Objects.equals(sizes, _sizes)) {
 			_sizes = sizes;
-			invalidate();
+			smartUpdate("widths", getWidths());
 		}
 	}
 	/** Sets the widths/heights, which is a list of numbers separated

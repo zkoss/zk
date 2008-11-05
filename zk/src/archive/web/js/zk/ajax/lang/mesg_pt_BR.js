@@ -1,20 +1,16 @@
 /* mesg.js "charset=utf-8"
 
-{{IS_NOTE
 	Purpose:
 		Locale dependent message
 	Description:
 		
 	History:
 		October 5, 2006 by Airton Carrara
-}}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
-{{IS_RIGHT
 	This program is distributed under GPL Version 2.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
-}}IS_RIGHT
 */
 mesg = {};
 mesg.NOT_FOUND = "Não encontrado: ";

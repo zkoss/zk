@@ -1,20 +1,16 @@
 /* mesg.js "charset=utf-8"
 
-{{IS_NOTE
 	Purpose:
 		Locale dependent message
 	Description:
 		
 	History:
 		Mon Aug	07 16:43:18     2006, Created by: Daniel Octavio Ruiz Rodriguez aztekinetix@gmail.com
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
-{{IS_RIGHT
 	This program is distributed under GPL Version 2.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
-}}IS_RIGHT
 */
 mesg = {};
 mesg.NOT_FOUND = "No encontrado: ";

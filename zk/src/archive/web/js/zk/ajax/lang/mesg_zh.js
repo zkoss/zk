@@ -1,20 +1,16 @@
 /* mesg_zh.js "charset=utf-8"
 
-{{IS_NOTE
 	Purpose:
 		Locale dependent message
 	Description:
 		
 	History:
 		Fri Jun 10 15:56:48     2005, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
-{{IS_RIGHT
 	This program is distributed under GPL Version 2.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
-}}IS_RIGHT
 */
 mesg = {};
 mesg.NOT_FOUND = "找不到：";

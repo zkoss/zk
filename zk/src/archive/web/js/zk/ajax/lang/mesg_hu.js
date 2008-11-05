@@ -1,20 +1,16 @@
 /* mesg_hu.js "charset=utf-8"
 
-{{IS_NOTE
   Purpose:
     Locale dependent message
   Description:
 
   History:
     Aug 31, 2007, Andreas Klein - andiklein at idatso dot com
-}}IS_NOTE
 
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
-{{IS_RIGHT
   This program is distributed under GPL Version 2.0 in the hope that
   it will be useful, but WITHOUT ANY WARRANTY.
-}}IS_RIGHT
 */
 mesg = {};
 mesg.NOT_FOUND = "Nem található: ";

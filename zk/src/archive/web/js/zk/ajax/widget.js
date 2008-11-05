@@ -1,20 +1,16 @@
 /* widget.js
 
-{{IS_NOTE
 	Purpose:
 		Widget - the UI object at the client
 	Description:
 		
 	History:
 		Tue Sep 30 09:23:56     2008, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
-{{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
-	it will be useful, but WITHOUT ANY WARRANTY.
-}}IS_RIGHT
+This program is distributed under GPL Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
 */
 zk.Widget = zk.$extends(zk.Object, {
 	/** The UUID (readonly if inServer). */
@@ -290,10 +286,12 @@ zk.Widget = zk.$extends(zk.Object, {
 	/** Sets an attribute that is caused by an AU response (smartUpdate).
 	 */
 	setAttr: function (nm, val) {
+		//TODO
 	},
 	/** Removes an attribute that is caused by an AU response (smartUpdate)
 	 */
 	rmAttr: function (nm, val) {
+		//TODO
 	}
 }, {
 	/** Returns the widget of the specified ID, or null if not found,
