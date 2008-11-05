@@ -793,28 +793,24 @@ zAu.cmd1 = {
 			}
 		}
 
-		var p = wgt.parent;
-		wgt = wgt.nextSibling;
-		if (wgt) {
-			_zkauf = function (child) {
-				p.insertBefore(child, wgt);
-			};
-			try {
-				eval(code);
-			} finally {
-				_zkauf = null;
-			}
-		} else
-			zAu.cmd1.addChd(p.uuid, p, code);
+		_zkauf = function (child) {
+			wgt.parent.insertBefore(child, wgt.nextSibling);
+		};
+		try {
+			eval(code);
+		} finally {
+			_zkauf = null;
+		}
 	},
-	addBfr: function (uuid, cmp, html) {
-		var v = zk.isVParent(cmp);
-		if (v) zk.unsetVParent(cmp);
-		var n = $childExterior(cmp);
-		var to = n.previousSibling;
-		zk.insertHTMLBefore(n, html);
-		zAu._initSibs(n, to, false);
-		if (v) zk.setVParent(cmp);
+	addBfr: function (uuid, wgt, code) {
+		_zkauf = function (child) {
+			wgt.parent.insertBefore(child, wgt);
+		};
+		try {
+			eval(code);
+		} finally {
+			_zkauf = null;
+		}
 	},
 	addChd: function (uuid, wgt, code) {
 		_zkauf = function (child) {
@@ -829,7 +825,15 @@ zAu.cmd1 = {
 	rm: function (uuid, wgt) {
 		//NOTE: it is possible the server asking removing a non-exist cmp
 		//so keep silent if not found
-		if (wgt) wgt.detach(true);
+		if (wgt) {
+			var p = wgt.parent;
+			if (p) p.removeChild(wgt);
+			else {
+				p = wgt.node;
+				wgt.unbind_();
+				zDom.remove(p);
+			}
+		}
 		//TODO if (zAu.valid) zAu.valid.fixerrboxes();
 	},
 	focus: function (uuid, cmp) {

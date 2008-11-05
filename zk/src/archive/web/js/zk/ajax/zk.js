@@ -168,7 +168,7 @@ zk = { //static methods
 			if (cc != '$' || p == '$instanceof') {
 				var m = baseClass.prototype[p];
 				jclass.prototype[p] = m;
-				if (cc != '_' && typeof m == 'function' && p != "$instanceof") //not private method
+				if (cc != '_' && cc != '$' && typeof m == 'function') //not private method
 					jclass.prototype['$' + p ] = m;
 			}
 		}
