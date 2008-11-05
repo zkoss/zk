@@ -31,25 +31,25 @@ zDom = { //static methods
 
 	/** Returns the x coordination of the visible part. */
 	innerX: function () {
-		return pageXOffset
+		return window.pageXOffset
 			|| document.documentElement.scrollLeft
 			|| document.body.scrollLeft || 0;
 	},
 	/** Returns the y coordination of the visible part. */
 	innerY: function () {
-		return pageYOffset
+		return window.pageYOffset
 			|| document.documentElement.scrollTop
 			|| document.body.scrollTop || 0;
 	},
 	/** Returns the width of the visible part. */
 	innerWidth: function () {
-		return typeof innerWidth == "number" ? innerWidth:
+		return typeof window.innerWidth == "number" ? window.innerWidth:
 			document.compatMode == "CSS1Compat" ?
 				document.documentElement.clientWidth: document.body.clientWidth;
 	},
 	/** Returns the height of the visible part. */
 	innerHeight: function () {
-		return typeof innerHeight == "number" ? innerHeight:
+		return typeof window.innerHeight == "number" ? window.innerHeight:
 			document.compatMode == "CSS1Compat" ?
 				document.documentElement.clientHeight: document.body.clientHeight;
 	},
