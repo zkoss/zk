@@ -191,6 +191,8 @@ public interface UiEngine {
 	 * @param pagedef the page definition (never null).
 	 * @param page the page. Ignored if parent is specified (and
 	 * parent's page is used).
+	 * If both page and parent are null, the created components won't belong
+	 * to any page.
 	 * @param parent the parent component, or null if no parent compoent.
 	 * If parent is specified, page is ignored.
 	 * @param arg a map of parameters that is accessible by the arg variable
