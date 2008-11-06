@@ -137,23 +137,6 @@ public class Jasperreport extends HtmlBasedComponent {
 	}
 
 	/**
-	 * Returns the attributes for generating the HTML tags.
-	 */
-	public String getOuterAttrs() {
-		final String attrs = super.getOuterAttrs();
-		if (_src == null)
-			return attrs;
-
-		final StringBuffer sb = new StringBuffer(80).append(attrs);
-		StringTokenizer st = new StringTokenizer(_src, ".");
-		HTMLs.appendAttribute(sb, "src", Utils.getDynamicMediaURI(this,
-			_medver++, st.nextToken(),
-			_type.equals("jxl") ? "xls": _type));
-
-		return sb.toString();
-	}
-
-	/**
 	 * Returns the JasperReports Parameters.
 	 * <p>Default: null.
 	 */

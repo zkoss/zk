@@ -395,25 +395,7 @@ public abstract class LayoutRegion extends XulElement {
 			throw new UiException("Wrong parent: "+parent);
 		super.setParent(parent);
 	}
-	public String getOuterAttrs() {
-		final StringBuffer sb = new StringBuffer(80).append(super
-				.getOuterAttrs());
-		appendAsapAttr(sb, Events.ON_OPEN);
-		appendAsapAttr(sb, Events.ON_SIZE);
-		HTMLs.appendAttribute(sb, "z.cid", getChildren().isEmpty() ? "zk_n_a"
-				: ((Component) getChildren().get(0)).getUuid());
-		HTMLs.appendAttribute(sb, "z.pos", getPosition());
-		HTMLs.appendAttribute(sb, "z.flex", isFlex());
-		HTMLs.appendAttribute(sb, "z.mars", getMargins());
-		HTMLs.appendAttribute(sb, "z.cmars", getCmargins());
-		HTMLs.appendAttribute(sb, "z.colps", isCollapsible());
-		HTMLs.appendAttribute(sb, "z.open", isOpen());
-		HTMLs.appendAttribute(sb, "z.splt", isSplittable());
-		HTMLs.appendAttribute(sb, "z.maxs", getMaxsize());
-		HTMLs.appendAttribute(sb, "z.mins", getMinsize());
-		HTMLs.appendAttribute(sb, "z.autoscl", isAutoscroll());
-		return sb.toString();
-	}
+
 	//-- ComponentCtrl --//
 	protected Object newExtraCtrl() {
 		return new ExtraCtrl();

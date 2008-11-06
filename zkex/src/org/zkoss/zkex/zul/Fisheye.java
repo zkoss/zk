@@ -104,13 +104,6 @@ public class Fisheye extends XulElement {
 		throw new UnsupportedOperationException("readonly");
 	}
 	
-	public String getOuterAttrs() {
-		String outer = super.getOuterAttrs();
-		if (!Strings.isBlank(_label))
-			outer += " z.label=\"true\"";
-		return outer;
-	}
-	
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Fisheyebar))
 			throw new UiException("Unsupported parent for fisheye: "+parent);

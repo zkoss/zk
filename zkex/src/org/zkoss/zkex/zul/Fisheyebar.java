@@ -179,19 +179,6 @@ public class Fisheyebar extends XulElement {
 	public String getZclass() {
 		return _zclass == null ? "z-fisheyebar" : super.getZclass();
 	}
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(256).append(super.getOuterAttrs());
-		HTMLs.appendAttribute(sb, "z.itemwidth", _itemwd);
-		HTMLs.appendAttribute(sb, "z.itemheight", _itemhgh);
-		HTMLs.appendAttribute(sb, "z.itemmaxwidth", _itemmaxwd);
-		HTMLs.appendAttribute(sb, "z.itemmaxheight", _itemmaxhgh);
-		HTMLs.appendAttribute(sb, "z.itempadding", _itemPadding);
-		HTMLs.appendAttribute(sb, "z.attachedge", _attachEdge);
-		HTMLs.appendAttribute(sb, "z.labeledge", _labelEdge);
-		HTMLs.appendAttribute(sb, "z.orient", _orient);
-		return sb.toString();
-	}
 	public void onChildAdded(Component child) {
 		super.onChildAdded(child);
 		smartUpdate("z.childchg", true);

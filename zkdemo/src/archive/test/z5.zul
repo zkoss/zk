@@ -3,19 +3,14 @@
 <!--
 z5.zul
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Fri Oct 10 11:37:37     2008, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
-
-{{IS_RIGHT
-}}IS_RIGHT
 -->
 <div>
 	<zscript>int cnt = 0;</zscript>
