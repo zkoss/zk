@@ -123,26 +123,96 @@ zk.Widget = zk.$extends(zk.Object, {
 		var n = this.node;
 		if (n) n.style.display = visible ? '': 'none';
 	},
+	/** Returns the style of this widget. */
+	getStyle: function () {
+		return this._style;
+	},
+	/** Sets the style of this widget. */
+	setStyle: function (style) {
+		this._style = style;
+		this.updateDomStyle_();
+	},
+	/** Returns the zclass (the mold's style class) of this widget. */
+	getZclass: function () {
+		return this._zclass;
+	},
+	/** Sets the zclass of this widget. */
+	setZclass: function (zclass) {
+		this._zclass = zclass;
+		this.updateDomClass_();
+	},
 
 	/** Generates the HTML content. */
 	redraw: function () {
 		var s = this.$class.molds[this.mold].call(this);
 		return this.prolog ? this.prolog + s: s;
 	},
+
+	/** Updates the DOM element's class.
+	 */
+	updateDomClass_: function () {
+		var n = this.node;
+		if (n) n.className = this.getDomClass_();
+	},
+	/** Updates the DOM element's style.
+	 */
+	updateDomStyle_: function () {
+		var n = this.node;
+		if (n) n.style = this.getDomStyle_();
+	},
+
+	/** Returns the style used for the DOM element.
+	 * <p>Default: it is a catenation of style, width, visible and height.
+	 * @param opts specify properties to exclude. If omitted, it means all.
+	 * For example, you don't want width to generate, call
+	 * getDomStyle_({noWidth: 1});
+	 */
+	getDomStyle_: function (opts) {
+		var html = '';
+		if (!this.isVisible() && (!opts || !opts.noVisible))
+			html = 'display:none;';
+		if (!opts || !opts.noStyle) {
+			var s = this.getStyle(); 
+			if (s) {
+				html += s;
+				if (s.charAt(s.length - 1) != ';') html += ';';
+			}
+		}
+		return html;
+	},
+	/** Returns the class name used for the DOM element.
+	 * <p>Default: it is a catenation of {@link #getZclass} and {@link #sclass}.
+	 * @param opts specify properties to exclude. If omitted, it means all.
+	 * For example, you don't want zclass to generate, call
+	 * getDomClass_({noZclass: 1});
+	 */
+	getDomClass_: function (opts) {
+		var html = '';
+		if (!opts || !opts.noSclass) {
+			var s = this.sclass;
+			if (s) html = s;
+		}
+		if (!opts || !opts.noZclass) {
+			var s = this.getZclass();
+			if (s) html += (html ? ' ': '') + s;
+		}
+		return html;
+	},
 	/** An utilities to generate the attributes used in the enclosing tag
 	 * of the HTML content.
 	 * <p>Default: generate id, style and class.
+	 * For example, you don't want class to generate, call
+	 * getDomClass_({noClass: 1});
 	 */
-	getOuterAttrs: function (opts) {
-		var html = !opts || !opts.noId ? ' id="' + this.uuid + '"': '',
-			s = !opts || !opts.noStyle ? this.style: '';
-		if (!this.isVisible()) s = 'display:none;' + (s ? s: '');
-		if (s) html += ' style="' + s + '"';
-
+	getOuterAttrs_: function (opts) {
+		var html = !opts || !opts.noId ? ' id="' + this.uuid + '"': '';
+		if (!opts || !opts.noStyle) {
+			var s = this.getDomStyle_();
+			if (s) html += ' style="' + s + '"';
+		}
 		if (!opts || opts.noClass) {
-			var zs = this.zclass, ss = this.sclass;
-			ss = zs ? ss ? ss + ' ' + zs: zs: ss ? ss: '';
-			if (ss) html += ' class="' + ss + '"';
+			var s = this.getDomClass_();
+			if (s) html += ' class="' + s + '"';
 		}
 		return html;
 	},
@@ -314,10 +384,10 @@ zk.Widget = zk.$extends(zk.Object, {
 
 	//AU//
 	/** Sets an attribute that is caused by an AU response (smartUpdate).
-	 * <p>Default: <code>zk.assign(this, nm, val)</code>
+	 * <p>Default: <code>zk.set(this, nm, val)</code>
 	 */
 	setAttr: function (nm, val) {
-		zk.assign(this, nm, val);
+		zk.set(this, nm, val);
 	},
 	/** Removes an attribute that is caused by an AU response (smartUpdate)
 	 * <p>Default: a shortcut of <code>this.setAttr(nm, null)</code>
@@ -415,17 +485,16 @@ zk.Desktop = zk.$extends(zk.Object, {
 zk.Page = zk.$extends(zk.Widget, {//unlik server, we derive from Widget!
 	/** The type (always "#p")(readonly). */
 	type: "#p",
-	/** The style (readonly). */
-	style: "width:100%;height:100%",
+
+	_style: "width:100%;height:100%",
+
 	construct: function (pgid, contained) {
 		this.uuid = pgid;
-		var n = this.node = zDom.$(pgid); //might null
-		if (n) n.z_wgt = this;
 		if (contained)
 			zk.Page.contained.add(this, true);
 	},
 	redraw: function () {
-		var html = '<div id="' + this.uuid + '" style="' + this.style + '">';
+		var html = '<div id="' + this.uuid + '" style="' + this.getStyle() + '">';
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			html += w.redraw();
 		return html + '</div>';

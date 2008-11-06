@@ -68,11 +68,7 @@ function _zkpop() {
 function zkpgbg(pgid, style, dtid, contained, updateURI) {
 	var props = {};
 	if (style) props.style = style;
-	if (dtid) {
-		var dt = zkdtbg(dtid, updateURI);
-		dt.pgid = pgid;
-		props.desktop = dt;
-	}
+	if (dtid) zkdtbg(dtid, updateURI).pgid = pgid;
 	_zkpush({type: "#p", uuid: pgid, contained: contained, props: props});
 }
 /** Ends the creation of a page.
@@ -192,6 +188,7 @@ function _zkcreate(parent, wginf) {
 	var wgt, props = wginf.props;
 	if (wginf.type == "#p") {
 		wgt = new zk.Page(wginf.uuid, wginf.contained);
+		wgt.inServer = true;
 		if (parent) parent.appendChild(wgt);
 	} else {
 		var cls = zk.$import(wginf.type),
@@ -211,7 +208,7 @@ function _zkcreate(parent, wginf) {
 
 	//assign properties
 	for (var p in props)
-		zk.assign(wgt, p, props[p]);
+		zk.set(wgt, p, props[p]);
 
 	for (var j = 0, childs = wginf.children, len = childs.length;
 	j < len; ++j)

@@ -90,7 +90,7 @@ public class Separator extends XulElement {
 	public void setBar(boolean bar) {
 		if (_bar != bar) {
 			_bar = bar;
-			smartUpdate("class", getZclass());
+			smartUpdate("bar", isBar());
 		}
 	}
 
@@ -151,10 +151,6 @@ public class Separator extends XulElement {
 	}
 	
 	// super
-	public String getZclass() {
-		return _zclass == null ? "z-separator" + (isVertical() ? "-ver" + (isBar() ? "-bar" : "") :
-			"-hor" + (isBar() ? "-bar" : "")) : super.getZclass();
-	}
 
 	//-- Component --//
 	/** Default: not childable.
@@ -168,5 +164,6 @@ public class Separator extends XulElement {
 
 		render(renderer, "spacing", getSpacing());
 		render(renderer, "orient", getOrient());
+		render(renderer, "bar", isBar());
 	}
 }

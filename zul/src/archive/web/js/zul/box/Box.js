@@ -18,6 +18,6 @@ zul.box.Box = zk.$extends(zk.Widget, {
 	//super//
 	setAttr: function (nm, val) {
 		//TODO
-		$setAttr(nm, val);
+		this.$super('setAttr', nm, val);
 	}
 });

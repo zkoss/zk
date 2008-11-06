@@ -149,24 +149,19 @@ zk = { //static methods
 	},
 
 	/** Declares a class that extendss the specified base class.
-	 * @param baseClass the base class.
+	 * @param superclass the super class.
 	 * @param methods the non-static methods
 	 * @param staticMethods the static methods.
 	 */
-	$extends: function (baseClass, methods, staticMethods) {
+	$extends: function (superclass, methods, staticMethods) {
 	//Note: we cannot use extends due to IE and Safari
 		var jclass = function() {
 			this.construct.apply(this, arguments);
 		};
 
-		for (var p in baseClass.prototype) { //inherit non-static
-			var cc = p.charAt(0);
-			if (cc != '$' || p == '$instanceof') {
-				var m = baseClass.prototype[p];
-				jclass.prototype[p] = m;
-				if (cc != '_' && cc != '$' && typeof m == 'function') //not private method
-					jclass.prototype['$' + p ] = m;
-			}
+		for (var p in superclass.prototype) { //inherit non-static
+			var m = superclass.prototype[p];
+			jclass.prototype[p] = m;
 		}
 
 		for (var p in methods)
@@ -176,9 +171,10 @@ zk = { //static methods
 			jclass[p] = staticMethods[p];
 
 		jclass.prototype.$class = jclass;
-		jclass.superclass = baseClass;
-		jclass.isInstance = baseClass.isInstance;
-		jclass.isAssignableFrom = baseClass.isAssignableFrom;
+		jclass.prototype._$super = superclass.prototype;
+		jclass.superclass = superclass;
+		jclass.isInstance = superclass.isInstance;
+		jclass.isAssignableFrom = superclass.isAssignableFrom;
 		return jclass;
 	},
 
@@ -211,10 +207,23 @@ zk = { //static methods
 	 * If setX is defined (assumes name is x), <code>o.setX(value)</code> is called.
 	 * If not defined, <code>o[name] = value</code> is called.
 	 */
-	assign: function (o, name, value) {
+	set: function (o, name, value) {
 		var m = o['set' + name.charAt(0).toUpperCase() + name.substring(1)];
 		if (m) m.call(o, value);
 		else o[name] = value;
+	},
+	/** Retrieves a value from the specified property.
+	 * If getX or isX is defined (assume name is x), <code>o.isX()</code>
+	 * or <code>o.getX()</code> is returned.
+	 * If not defined, <code>o[name]</code> is returned.
+	 */
+	get: function (o, name) {
+		var nm = name.charAt(0).toUpperCase() + name.substring(1);
+			m = o['get' + nm];
+		if (m) return m.call(o);
+		m = o['is' + nm];
+		if (m) return m.call(o);
+		return o[name];
 	},
 
 	//Processing//
@@ -348,6 +357,41 @@ zk.Object.prototype = {
 				if (c == cls)
 					return true;
 		return false;
+	},
+	/** Calls a method in the super class.
+	 * @param mtdnm the method name
+	 */
+	$super: function (mtdnm, vararg) {
+		var args = [];
+		for (var j = 0, len = arguments.length; ++j < len;)
+			args[j - 1] = arguments[j];
+
+		var supers = this._$supers;
+		if (!supers) supers = this._$supers = {};
+
+		//locate the method
+		var old = supers[mtdnm], m, p, oldmtd;
+		if (old) {
+			oldmtd = old[mtdnm];
+			p = old;
+		} else {
+			oldmtd = this[mtdnm];
+			p = this;
+		}
+		while (p = p._$super) {
+			if (oldmtd != p[mtdnm]) {
+				m = p[mtdnm];
+				if (m) supers[mtdnm] = p;
+				break;
+			}
+		}
+		if (!m) throw mtdnm + " not in superclass";
+
+		try {
+			m.apply(this, args);
+		} finally {
+			m[mtdnm] = old; //restore
+		}
 	}
 };
 /** Determines if the specified object is an instance of this class. */

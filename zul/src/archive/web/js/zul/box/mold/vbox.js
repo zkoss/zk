@@ -13,7 +13,7 @@ This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function () {
-	var html = '<table' + this.getOuterAttrs() + zUtl.cellps0 + '>',
+	var html = '<table' + this.getOuterAttrs_() + zUtl.cellps0 + '>',
 		spacing = this.spacing,
 		spacing0 = spacing && spacing.startsWith('0')
 			&& (spacing.length == 1 || zk.isDigit(spacing.charAt(1))),
