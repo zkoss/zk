@@ -38,8 +38,4 @@ public class Hbox extends Box {
 	public Hbox(Component[] children) {
 		super("horizontal", children);
 	}
-	//-- super --//
-	public String getZclass() {
-		return _zclass == null ? "z-hbox" : super.getZclass();
-	}
 }

@@ -21,26 +21,15 @@ package org.zkoss.zul;
 import java.util.Iterator;
 
 import org.zkoss.xml.HTMLs;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Events;
 
 import org.zkoss.zul.impl.XulElement;
 
 /**
  * A tab panel.
- *
- * <p>Default {@link #getSclass}:
- * <table border="1" cellspacing="0">
- * <tr>
- * <td>sclass</td><td>tabbox's mold</td>
- * <td>tabbox's orient {@link Tabbox#getOrient}</td>
- * </tr>
- * <tr><td>tabpanel</td><td>default</td><td>horizontal</td></tr>
- * <tr><td>tabpanel-<em>something</em></td><td><em>something</em></td><td>horizontal</td></tr>
- * <tr><td>vtabpanel</td><td>default</td><td>vertical</td></tr>
- * <tr><td>vtabpanel-<em>something</em></td><td><em>something</em></td><td>vertical</td></tr>
- * </table>
+ * <p>Default {@link #getZclass}: z-tabpanel. (since 3.5.0)
  *
  * @author tomyeh
  */
@@ -90,22 +79,32 @@ public class Tabpanel extends XulElement {
 
 	//-- super --//
 	public String getOuterAttrs() {
-		final String attrs = super.getOuterAttrs();
+		final StringBuffer sb = new StringBuffer(64).append(super
+				.getOuterAttrs());
 		final String clkattrs = getAllOnClickAttrs();
-		return clkattrs == null ? attrs: attrs + clkattrs;
+		if (clkattrs != null)
+			sb.append(clkattrs);
+		HTMLs.appendAttribute(sb, "z.box", getTabbox().getUuid());
+		return sb.toString();
 	}
 	/** Returns the style class.
 	 *
 	 * @since 3.5.0
 	 */
-	public String getZclass(){
+	public String getZclass() {
+		if (_zclass != null) return super.getZclass();
+		final Tabbox tabbox = getTabbox();
+		final String added = tabbox != null ? tabbox.inAccordionMold() ? "-" + tabbox.getMold() :
+				tabbox.isVertical() ? "-ver" : "" : "";
+		return "z-tabpanel" + added;
+		/**
 		if (_zclass != null) return _zclass;
 		final Tabbox tabbox = getTabbox();
 		final boolean vert = tabbox != null && tabbox.isVertical();
 		final String mold = tabbox != null ? tabbox.getMold(): null;
 		return mold == null || "default".equals(mold) ?
 			(vert ? "z-vtabpanel": "z-tabpanel") :
-			(vert ? "z-vtabpanel-": "z-tabpanel-") + mold;
+			(vert ? "z-vtabpanel-": "z-tabpanel-") + mold;*/
 	}
 
 	//-- Component --//

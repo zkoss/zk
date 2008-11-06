@@ -777,12 +777,12 @@ public class UiEngineImpl implements UiEngine {
 		//Note: we add taglib, stylesheets and var-resolvers to the page
 		//it might cause name pollution but we got no choice since they
 		//are used as long as components created by this method are alive
-		if (page != null)
-			pagedef.initXelContext(page);
+		if (curpg != null)
+			pagedef.initXelContext(curpg);
 
 		//Note: the forward directives are ignore in this case
 
-		final Initiators inits = Initiators.doInit(pagedef, page);
+		final Initiators inits = Initiators.doInit(pagedef, curpg);
 		try {
 			final Component[] comps = execCreate(
 				new CreateInfo(

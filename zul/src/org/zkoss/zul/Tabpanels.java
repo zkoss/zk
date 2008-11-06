@@ -26,18 +26,7 @@ import org.zkoss.zul.impl.XulElement;
 /**
  * A collection of tab panels.
  *
- * <p>Default {@link #getSclass}:
- * <table border="1" cellspacing="0">
- * <tr>
- * <td>sclass</td><td>tabbox's mold</td>
- * <td>tabbox's orient {@link Tabbox#getOrient}</td>
- * </tr>
- * <tr><td>tabpanels</td><td>default</td><td>horizontal</td></tr>
- * <tr><td>tabpanels-<em>something</em></td><td><em>something</em></td><td>horizontal</td></tr>
- * <tr><td>vtabpanels</td><td>default</td><td>vertical</td></tr>
- * <tr><td>vtabpanels-<em>something</em></td><td><em>something</em></td><td>vertical</td></tr>
- * </table>
- *
+ * <p>Default {@link #getZclass}: z-tabpanels. (since 3.5.0)
  * @author tomyeh
  */
 public class Tabpanels extends XulElement {
@@ -66,12 +55,11 @@ public class Tabpanels extends XulElement {
 	 * @since 3.5.0
 	 * <p>Note: the default style class is always "z-tabpanels".
 	 */
-	public String getZclass(){		
+	public String getZclass() {
+		if (_zclass != null) return super.getZclass();
 		final Tabbox tabbox = getTabbox();
-		final boolean vert = tabbox != null && tabbox.isVertical();
-		final String mold = tabbox != null ? tabbox.getMold(): null;
-		return mold == null || "default".equals(mold) ?
-				vert ? "z-vtabpanels": "z-tabpanels":
-				(vert ? "z-vtabpanels-": "z-tabpanels-")+mold;
+		final String added = tabbox != null ? tabbox.inAccordionMold() ? "-" + tabbox.getMold() :
+			tabbox.isVertical() ? "-ver" : "" : "";
+		return "z-tabpanels" + added;
 	}	
 }

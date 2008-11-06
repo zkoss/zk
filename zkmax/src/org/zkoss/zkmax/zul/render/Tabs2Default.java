@@ -15,7 +15,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	This program is distributed under GPL Version 2.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
-*/
+ */
 package org.zkoss.zkmax.zul.render;
 
 import java.io.IOException;
@@ -28,8 +28,8 @@ import org.zkoss.zul.Tabbox;
 import org.zkoss.zul.Tabs;
 
 /**
- * {@link Tabs}'s default mold.
- * It forwards to {@link Tabs2DefaultV} if the orient is vertical.
+ * {@link Tabs}'s default mold. It forwards to {@link Tabs2DefaultV} if the
+ * orient is vertical.
  * 
  * @author RyanWu
  * 
@@ -39,30 +39,32 @@ public class Tabs2Default implements ComponentRenderer {
 	private final Tabs2DefaultV _vtabs = new Tabs2DefaultV();
 
 	public void render(Component comp, Writer out) throws IOException {
-		final Tabs self = (Tabs)comp;
+		final Tabs self = (Tabs) comp;
 		final Tabbox tabbox = self.getTabbox();
 
-		if("vertical".equals(tabbox.getOrient())) {
+		if ("vertical".equals(tabbox.getOrient())) {
 			_vtabs.render(comp, out);
 			return;
 		}
 
 		final SmartWriter wh = new SmartWriter(out);
-		final String look = tabbox.getTabLook() + '-';
-		final String scroll = tabbox.isTabscroll() ? "scrolltabs" : "tabs" ;
-			String uuid = self.getUuid();
-			wh.write("<div id=\""+uuid+"\" class=\"").write(look+scroll).write("\" z.type=\"zul.tab2.Tabs2\"")
-			    .write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln('>');
-			    wh.write("<div id=\""+uuid+"!right").writeln("\"></div>");
-				wh.write("<div id=\""+uuid+"!left").writeln("\"></div>");
-			    wh.write("<div id=\""+uuid+"!header\"").writeln(" class=\""+look+"header\" >");
-				    wh.writeln("<ul id=\""+uuid+"!cave\" class=\""+look+"ul\" >");
-				    	wh.writeChildren(self);
-				    	wh.writeln("<li id=\""+uuid+"!edge\" class=\""+look+"edge\" ></li>");
-				    	wh.writeln("<div id=\""+uuid+"!clear\" class=\"z-clear\"></div>");
-				    wh.writeln("</ul>");
-			    wh.writeln("</div>");
-			    wh.writeln("<div id=\""+uuid+"!line\" class=\""+look+"space\" ></div>");
-			wh.writeln("</div>");
+		final String zcs = self.getZclass() + '-';
+		final String uuid = self.getUuid();
+		wh.write("<div id=\"" + uuid + "\"").write(" z.type=\"zul.tab2.Tabs2\"").write(self.getOuterAttrs())
+				.write(self.getInnerAttrs()).writeln('>');
+		wh.write("<div id=\"" + uuid + "!right").writeln("\"></div>");
+		wh.write("<div id=\"" + uuid + "!left").writeln("\"></div>");
+		wh.write("<div id=\"" + uuid + "!header\"").writeln(
+				" class=\"" + zcs + "header\" >");
+		wh.writeln("<ul id=\"" + uuid + "!cave\" class=\"" + zcs + "cnt\" >");
+		wh.writeChildren(self);
+		wh.writeln("<li id=\"" + uuid + "!edge\" class=\"" + zcs
+				+ "edge\" ></li>");
+		wh.writeln("<div id=\"" + uuid + "!clear\" class=\"z-clear\"></div>");
+		wh.writeln("</ul>");
+		wh.writeln("</div>");
+		wh.writeln("<div id=\"" + uuid + "!line\" class=\"" + zcs
+				+ "space\" ></div>");
+		wh.writeln("</div>");
 	}
 }

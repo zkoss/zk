@@ -55,40 +55,31 @@ public class Tab2Default implements ComponentRenderer {
 		}
 
 		final SmartWriter wh = new SmartWriter(out);
-		final String look = tabbox.getTabLook() + '-';
-		final Tabpanel panel = self.getLinkedPanel();
-			String uuid = self.getUuid();
-			wh.write("<li id=\""+uuid+"\""); 
-				if (!Strings.isBlank(self.getHeight())){
-					wh.write("style=\"height:"+self.getHeight()+";\"");
-				}
-				wh.write("z.type=\"Tab2\"").write(self.getOuterAttrs()).write(self.getInnerAttrs())
-					.write(" z.sel=\"").write(self.isSelected()).write("\" z.box=\"")
-					.write(tabbox.getUuid()).write("\" z.panel=\"")
-					.write(panel==null?"":panel.getUuid()).write("\" ")
-					.write("z.disabled=\"").write(self.isDisabled())
-					.writeln("\">");
-				if(self.isClosable()){
-					wh.writeln("<a class=\""+look+"close\" id=\""+uuid+"!close\" onclick=\"return false;\" />");
-				}
-				wh.writeln("<a class=\""+look+"a\" id=\""+uuid+"!a\"  onclick=\"return false;\" href=\"#\">");
-					wh.writeln("<em id=\""+uuid+"!em\" class=\""+look+"em\" >");
-						if(self.isClosable()){
-							wh.writeln("<span id=\""+uuid+"\" class=\""+look+"inner"+" "+look+"innerclose\" >");
-						}else{
-							wh.writeln("<span id=\""+uuid+"\" class=\""+look+"inner\">");
-						}
-							wh.write("<span class=\""+look+"text\">");
-						if ("".equals(self.getLabel())&& self.getImgTag() == null) {							
-							wh.write("&#160;");
-						} else {
-							wh.write(self.getImgTag());
-							new Out(self.getLabel()).render(out);
-						}
-							wh.writeln("</span>");
-						wh.writeln("</span>");
-					wh.writeln("</em>");
-				wh.writeln("</a>");
-			wh.writeln("</li>");
+		final String zcs = self.getZclass() + '-';
+		final String uuid = self.getUuid();
+		wh.write("<li id=\"").write(uuid).write("\" z.type=\"Tab2\"").write(self.getOuterAttrs())
+			.write(self.getInnerAttrs()).write('>');
+		if (self.isClosable()) {
+			wh.write("<a class=\"").write(zcs).write("close\" id=\"").write(uuid)
+				.write("!close\" onclick=\"return false;\"/>");
+		}
+		wh.write("<a class=\"").write(zcs).write("body\" id=\"").write(uuid)
+			.writeln("!a\"  onclick=\"return false;\" href=\"#\">")
+			.writeln("<em id=\"").write(uuid).write("!em\">");
+		if (self.isClosable()) {
+			wh.write("<span id=\"").write(uuid).write("!inner\" class=\"")
+				.write(zcs).write("inner ").write(zcs).write("close-inner\">");
+		} else {
+			wh.write("<span id=\"").write(uuid).write("!inner\" class=\"").write(zcs).write("inner\">");
+		}
+		wh.writeln("<span class=\"").write(zcs).write("text\">");
+		final String imgTag = self.getImgTag(), label = self.getLabel();
+		if ("".equals(label) && imgTag == null) {
+			wh.write("&#160;");
+		} else {
+			wh.write(imgTag);
+			new Out(label).render(out);
+		}
+		wh.writeln("</span></span></em></a></li>");
 	}
 }

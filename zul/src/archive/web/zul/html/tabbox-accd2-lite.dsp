@@ -19,6 +19,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<div id="${self.uuid}"${self.outerAttrs}${self.innerAttrs} z.accd="true" z.tabscroll="false" z.type="zul.tab2.Tabbox2">
+<div id="${self.uuid}"${self.outerAttrs}${self.innerAttrs} z.type="zul.tab2.Tabbox2">
 ${z:redraw(self.tabpanels, null)}
 </div>

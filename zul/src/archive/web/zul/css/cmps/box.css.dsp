@@ -4,7 +4,7 @@
 td.z-hbox-sep {
 	width: 0.3em; padding: 0; margin: 0;
 }
-tr.z-vbox-sep, tr.z-box-sep {
+tr.z-vbox-sep {
 	height: 0.3em; padding: 0; margin: 0;
 }
 

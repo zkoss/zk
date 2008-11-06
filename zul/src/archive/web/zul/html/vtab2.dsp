@@ -18,29 +18,27 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<c:set var="wd" value="width:${self.width}" unless="${empty self.width}"/>
-<c:set var="look" value="${self.tabbox.tabLook}-"/>
-
-<li id="${self.uuid}" ${c:attr('style',wd)} z.type="Tab2"${self.outerAttrs} z.sel="${self.selected}" z.box="${self.tabbox.uuid}" z.panel="${self.linkedPanel.uuid}" z.disabled="${self.disabled}">	
+<c:set var="zcs" value="${self.zclass}-"/>
+<li id="${self.uuid}" z.type="Tab2"${self.outerAttrs}${self.innerAttrs}>	
 	<c:choose>
 		<c:when test="${self.closable}">
-			<a id="${self.uuid}!close" class="${c:cat(look,'close')}"  ></a>		
+			<a id="${self.uuid}!close" class="${c:cat(zcs,'close')}"  ></a>		
 		</c:when>
 		<c:otherwise>
-			<a class="${c:cat(look,'noclose')}" ></a>		
+			<a class="${c:cat(zcs,'noclose')}" ></a>	
 		</c:otherwise>
 	</c:choose>			
-	<a class="${c:cat(look,"a")}" id="${self.uuid}!real"${self.innerAttrs}>
-		<em id="${self.uuid}!em" class="${c:cat(look,'em')}">	 	
+	<a class="${c:cat(zcs,"body")}" id="${self.uuid}!real">
+		<em id="${self.uuid}!em">	 	
 				<c:choose>
 					<c:when test="${self.closable}">
-						<span id="${self.uuid}!inner" class="${c:cat(look,'inner')} ${c:cat(look,'innerclose')}">
+						<span id="${self.uuid}!inner" class="${c:cat(zcs,'inner')} ${c:cat(zcs,'close-inner')}">
 					</c:when>
 					<c:otherwise>
-						<span id="${self.uuid}!inner" class="${c:cat(look,'inner')}">
+						<span id="${self.uuid}!inner" class="${c:cat(zcs,'inner')}">
 					</c:otherwise>
 				</c:choose>		
-				<span class="${c:cat(look,'text')}">
+				<span class="${c:cat(zcs,'text')}">
 					${self.imgTag}<c:out value="${self.label}"/>
 				</span>
 			</span>
