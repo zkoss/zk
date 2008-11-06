@@ -50,7 +50,7 @@ public class Tabbox2Default implements ComponentRenderer {
 		
 			wh.write("<div id=\"").write(self.getUuid()).write("\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
-			.writeln(" z.max=\"true\" z.type=\"zul.tab2.Tabbox2\">")
+			.writeln(" z.type=\"zul.tab2.Tabbox2\">")
 			.writeln(tabs)
 			.writeln(self.getTabpanels())
 			.write("</div>");

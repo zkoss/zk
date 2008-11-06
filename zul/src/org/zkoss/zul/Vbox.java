@@ -37,9 +37,4 @@ public class Vbox extends Box {
 	public Vbox(Component[] children) {
 		super(children);
 	}
-
-	//-- super --//
-	public String getZclass() {
-		return _zclass == null ? "z-vbox" : super.getZclass();
-	}
 }

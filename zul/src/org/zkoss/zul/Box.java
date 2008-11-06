@@ -34,7 +34,7 @@ import org.zkoss.zul.impl.Utils;
 
 /**
  * A box.
- *<p>Default {@link #getZclass}: z-box.(since 3.5.0)
+ *<p>Default {@link #getZclass}: z-vbox.(since 3.5.0)
  * @author tomyeh
  */
 public class Box extends XulElement {
@@ -430,7 +430,7 @@ public class Box extends XulElement {
 
 	//-- super --//
 	public String getZclass() {
-		return _zclass == null ? "z-box" : super.getZclass();
+		return _zclass == null ? isVertical() ? "z-vbox" : "z-hbox" : super.getZclass();
 	}
 	//-- Component --//
 	public boolean insertBefore(Component newChild, Component refChild) {

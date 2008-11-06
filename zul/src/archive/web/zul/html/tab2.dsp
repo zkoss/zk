@@ -18,23 +18,22 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
-<c:set var="look" value="${self.tabbox.tabLook}-"/>
-<c:set var="hghStyle" value="height:${self.height}" unless="${empty self.height}"/>
-<li id="${self.uuid}" ${c:attr('style',hghStyle)} z.type="Tab2"${self.outerAttrs}${self.innerAttrs} z.sel="${self.selected}" z.box="${self.tabbox.uuid}" z.panel="${self.linkedPanel.uuid}" z.disabled="${self.disabled}">
+<c:set var="zcs" value="${self.zclass}-"/>
+<li id="${self.uuid}" z.type="Tab2"${self.outerAttrs}${self.innerAttrs}>
 		<c:if test="${self.closable}">
-			<a class="${c:cat(look,'close')}" id="${self.uuid}!close" onclick="return false;"/>
+			<a class="${c:cat(zcs,'close')}" id="${self.uuid}!close" onclick="return false;"/>
 		</c:if>
-		<a class="${c:cat(look,'a')}" id="${self.uuid}!a"  onclick="return false;" href="#">
-			<em id="${self.uuid}!em" class="${c:cat(look,'em')}">
+		<a class="${c:cat(zcs,'body')}" id="${self.uuid}!a"  onclick="return false;" href="#">
+			<em id="${self.uuid}!em">
 			<c:choose>
 				<c:when test="${self.closable}">
-					<span id="${self.uuid}!inner" class="${c:cat(look,'inner')} ${c:cat(look,'innerclose')}">
+					<span id="${self.uuid}!inner" class="${c:cat(zcs,'inner')} ${c:cat(zcs,'close-inner')}">
 				</c:when>
 				<c:otherwise>
-					<span id="${self.uuid}!inner" class="${c:cat(look,'inner')}">
+					<span id="${self.uuid}!inner" class="${c:cat(zcs,'inner')}">
 				</c:otherwise>
 			</c:choose>
-				<span class="${c:cat(look,'text')}">
+				<span class="${c:cat(zcs,'text')}">
 			<c:choose>
 				<c:when test="${empty self.label and empty self.imgTag}" >
 					&#160;

@@ -56,7 +56,6 @@ public class Tabpanel2Default implements ComponentRenderer {
 
 		wh.write("<div id=\"").write(self.getUuid()).write('"')
 			.write(" z.type=\"zul.tab2.Tabpanel2\"")
-			.write(" z.box=\""+tabbox.getUuid()+"\"")
 			.write(self.getOuterAttrs())
 			.write('>')
 			.write("<div id=\"").write(self.getUuid()).write("!real\" ")

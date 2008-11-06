@@ -37,28 +37,27 @@ public class Tabs2DefaultV implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
 		final SmartWriter wh = new SmartWriter(out);
 		final Tabs self = (Tabs)comp;
-		final String look = self.getTabbox().getTabLook() + '-';
-		wh.write("<div id=\""+self.getUuid()+"\" class=\""+look+"tabs\"")
+		final String zcs = self.getZclass() + '-';
+		wh.write("<div id=\""+self.getUuid()+"\" ")
 			.write("z.type=\"zul.tab2.Tabs2\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
 			.writeln(">");
 		
 		wh.write("<div id=\""+self.getUuid()+"!header\"")
-			.write(" class=\""+look+"header\"")
+			.write(" class=\""+zcs+"header\"")
 			.writeln(">");
 			wh.write("<ul id=\""+self.getUuid()+"!ul\"")
-				.write(" class=\""+look+"si\"")
+				.write(" class=\""+zcs+"cnt\"")
 				.write(">");
 				wh.writeChildren(self);
 				wh.write("<li id=\""+self.getUuid()+"!edge\"")
-					.write(" class=\""+look+"edge\"")
-					.writeln("</li>");
+					.write(" class=\""+zcs+"edge\"></li>");
 			wh.write("</ul>");
 		wh.write("</div>");
-		wh.write("<div id=\""+self.getUuid()+"!up\" </div>");
-		wh.write("<div id=\""+self.getUuid()+"!down\" </div>");
+		wh.write("<div id=\""+self.getUuid()+"!up\"> </div>");
+		wh.write("<div id=\""+self.getUuid()+"!down\"> </div>");
 		wh.write("</div>");
 		wh.write("<div id=\""+self.getUuid()+"!line\"")
-			.write(" class=\""+look+"space\" ></div>");
+			.write(" class=\""+zcs+"space\" ></div>");
 	}
 }

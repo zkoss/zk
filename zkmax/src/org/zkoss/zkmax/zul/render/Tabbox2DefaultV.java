@@ -21,7 +21,6 @@ package org.zkoss.zkmax.zul.render;
 import java.io.IOException;
 import java.io.Writer;
 
-import org.zkoss.lang.Strings;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.render.SmartWriter;
@@ -40,15 +39,11 @@ public class Tabbox2DefaultV implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Tabbox self = (Tabbox) comp;
 		final Tabs tabs = self.getTabs();		
-		wh.write("<div id=\"").write(self.getUuid()).write('"')
-			.write(self.getOuterAttrs()).write(self.getInnerAttrs());
-			if (!Strings.isBlank(self.getHeight())){
-				wh.write(" style=\"height:"+self.getHeight()+";\"");
-			}
-			wh.writeln(" z.type=\"zul.tab2.Tabbox2\">");
-			wh.write(tabs);
-			wh.write(self.getTabpanels());
-			wh.writeln("<div class=\"z-clear\" ></div>");
-		wh.writeln("</div>");		
+		wh.write("<div id=\"").write(self.getUuid()).write("\"").write(self.getOuterAttrs())
+				.write(self.getInnerAttrs()).write(" z.type=\"zul.tab2.Tabbox2\">");
+		wh.write(tabs);
+		wh.write(self.getTabpanels());
+		wh.writeln("<div class=\"z-clear\" ></div>");
+		wh.writeln("</div>");
 	}
 }
