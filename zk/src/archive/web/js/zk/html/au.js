@@ -1380,7 +1380,7 @@ zkau._onDocMouseout = function (evt) {
 };
 /** window.onresize */
 zkau._onResize = function () {
-	if (zk.booting)
+	if (!zk.booted)
 		return; //IE6: it sometimes fires an "extra" onResize in loading
 
 	//Tom Yeh: 20051230:

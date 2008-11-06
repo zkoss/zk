@@ -19,7 +19,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 //zk//
 if (!window.zk) { //avoid eval twice
 zk = {};
-zk.booting = true; //denote ZK is booting
+zk.booting = true; //deprecated (use !zk.booted instead)
 
 ////
 //Customization
@@ -1378,8 +1378,8 @@ zk._progress = function () {
 			try {msg = mesg.PLEASE_WAIT;} catch (e) {msg = "Processing...";}
 				//when the first boot, mesg might not be ready
 
-			if (zk.dbModal && zk.booting) {zk.disableAll();}
-			AU_progressbar("zk_prog", msg, zk.booting);
+			if (zk.dbModal && !zk.booted) {zk.disableAll();}
+			AU_progressbar("zk_prog", msg, !zk.booted);
 			zk.progressPrompted = true;
 		}
 	}
@@ -1513,7 +1513,7 @@ zk.debug = zk.message;
 
 /** Error message must be a popup. */
 zk.error = function (msg) {
-	if (zk.booting) {
+	if (!zk.booted) {
 		setTimeout(function () {zk.error(msg)}, 100);
 		return;
 	}
@@ -1583,7 +1583,7 @@ zk._onload = function () {
 	//However, IE has bug to order JavaScript properly if zk._load is used
 	zk.progress(600);
 	zk.addInitLater(zk.progressDone);
-	zk.addInitLater(function() {zk.booting = false;});
+	zk.addInitLater(function() {zk.booting = false; zk.booted = true;});
 	zk.initAt(document.body);
 };
 

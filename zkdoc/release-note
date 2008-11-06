@@ -21,6 +21,7 @@ ZK 3.0.8
   2114380: Filedownload bug with WebSphere 5.1.1
   2099562: [Opera] progressbar flattened when value = zero
   2139857: Components.addForward shall handle cascade $ name pattern
+  2224964: FileUpload hang in IE on 1st click
 
 * Bugs
   2051014: NPE error with ZK + Tomcat Clusteriing
