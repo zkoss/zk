@@ -761,17 +761,16 @@ public class UiEngineImpl implements UiEngine {
 		} else if (page != null) {
 			parent = ((PageCtrl)page).getDefaultParent();
 		}
-		if (page == null)
-			page = getCurrentPage(exec);
 
+		final Page curpg = page != null ? page: getCurrentPage(exec);
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 		if (!execCtrl.isActivated())
 			throw new IllegalStateException("Not activated yet");
 
 		final Page old = execCtrl.getCurrentPage();
+		if (curpg != null && curpg != old)
+			execCtrl.setCurrentPage(curpg);
 		final PageDefinition olddef = execCtrl.getCurrentPageDefinition();
-		if (page != null && page != old)
-			execCtrl.setCurrentPage(page);
 		execCtrl.setCurrentPageDefinition(pagedef);
 		exec.pushArg(arg != null ? arg: Collections.EMPTY_MAP);
 

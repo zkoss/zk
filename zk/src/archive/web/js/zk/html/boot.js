@@ -19,7 +19,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 //zk//
 if (!window.zk) { //avoid eval twice
 zk = {};
-zk.booting = true; //denote ZK is booting
+zk.booting = true; //deprecated (use !zk.booted instead)
 
 ////
 //Customization
@@ -1517,8 +1517,8 @@ zk._progress = function () {
 			var msg;
 			try {msg = mesg.PLEASE_WAIT;} catch (e) {msg = "Processing...";}
 				//when the first boot, mesg might not be ready
-			if (zk.dbModal && zk.booting) {zk.disableAll();}
-			AU_progressbar("zk_prog", msg, zk.booting);
+			if (zk.dbModal && !zk.booted) {zk.disableAll();}
+			AU_progressbar("zk_prog", msg, !zk.booted);
 			zk.progressPrompted = true;
 		}
 	}
@@ -1652,7 +1652,7 @@ zk.debug = zk.message;
 
 /** Error message must be a popup. */
 zk.error = function (msg) {
-	if (zk.booting) {
+	if (!zk.booted) {
 		setTimeout(function () {zk.error(msg)}, 100);
 		return;
 	}
@@ -1722,7 +1722,8 @@ zk.bootDone = function () {
 		for (var dtids = zkau._dtids, j = dtids.length; --j >=0;)
 			zkau.pfdone(dtids[j], dtids[j]);
 	zk.progressDone();
-	zk.booting = false;;
+	zk.booting = false;
+	zk.booted = true;
 	zkau.onURLChange();
 };
 zk._onload = function () {
