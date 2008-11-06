@@ -106,12 +106,6 @@ public class Portallayout extends XulElement {
 		super.onChildRemoved(child);
 		smartUpdate("z.childchg", true);
 	}
-	public String getOuterAttrs() {
-		final StringBuffer sb =
-			new StringBuffer(64).append(super.getOuterAttrs());
-		appendAsapAttr(sb, ZkMaxEvents.ON_PORTAL_MOVE);
-		return sb.toString();
-	}
 	static {
 		new PortalMoveCommand(ZkMaxEvents.ON_PORTAL_MOVE, 0);
 	}
