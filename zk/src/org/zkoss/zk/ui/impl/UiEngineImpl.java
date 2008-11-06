@@ -782,7 +782,7 @@ public class UiEngineImpl implements UiEngine {
 
 		//Note: the forward directives are ignore in this case
 
-		final Initiators inits = Initiators.doInit(pagedef, curpg);
+		final Initiators inits = Initiators.doInit(pagedef, page);
 		try {
 			final Component[] comps = execCreate(
 				new CreateInfo(
