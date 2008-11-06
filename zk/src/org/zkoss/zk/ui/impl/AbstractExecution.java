@@ -111,9 +111,12 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 		return _curpage;
 	}
 	public final void setCurrentPage(Page curpage) {
-		if (_curpage != null && curpage != null && _curpage != curpage
-		&& _curpage.getDesktop() != curpage.getDesktop())
-			throw new IllegalStateException("Change current page to another desktop? "+curpage);
+		if (_curpage != null && curpage != null && _curpage != curpage) {
+			Desktop _curdt = _curpage.getDesktop(),
+				curdt = curpage.getDesktop();
+			if (_curdt != null && curdt != null && _curdt != curdt)
+				throw new IllegalStateException("Change current page to another desktop? "+curpage);
+		}
 		_curpage = curpage;
 	}
 	public PageDefinition getCurrentPageDefinition() {
