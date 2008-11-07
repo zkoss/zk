@@ -209,6 +209,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	cp dist/lib/zkex.jar dist/lib/zkmax.jar dist/lib/zkplus.jar /tmp/zk/$binnm/dist/lib/
 	cp dist/lib/fckez.jar dist/lib/gmapsz.jar /tmp/zk/$binnm/dist/lib/zkforge
 	cp dist/lib/timelinez.jar /tmp/zk/$binnm/dist/lib/zkforge
+	cp dist/lib/timeplotz.jar /tmp/zk/$binnm/dist/lib/zkforge
 	chmod 644 /tmp/zk/$binnm/dist/lib/*.jar
 	chmod 644 /tmp/zk/$binnm/dist/lib/*/*.jar
 
@@ -298,6 +299,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 		cd zkforge
 		rm fckez.jar
 		rm timelinez.jar
+		rm timeplotz.jar
 
 		cd /tmp/zk
 

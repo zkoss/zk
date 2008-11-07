@@ -18,6 +18,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.util;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.LinkedList;
+
 /**
  * Generic utilities.
  *
@@ -52,29 +56,74 @@ public class Utils {
 			if (j >= len) return 0; //no such portion
 		}
 
-		String s = version.substring(j, nextVerSeparator(version, j));
+		return convertSubversion(
+			version.substring(j, nextVerSeparator(version, j)));
+	}
+	/** Parses the specified version into an array of integer.
+	 * For example, parseVersion("3.5.2") will return [3, 5, 2].
+	 * @since 3.5.2
+	 */
+	public static final int[] parseVersion(String version) {
+		final List vers = new LinkedList();
+		for (int j = 0, len = version.length(); j < len;) {
+			int k = nextVerSeparator(version, j);
+			vers.add(new Integer(convertSubversion(version.substring(j, k))));
+			j = k + 1;
+		}
+
+		final int[] ivs = new int[vers.size()];
+		int j = 0;
+		for (Iterator it = vers.iterator(); it.hasNext();)
+			ivs[j++] = ((Integer)it.next()).intValue();
+		return ivs;
+	}
+	/** Compares two version.
+	 * @return 0 if equals, 1 if the first one is larger, -1 if smaller.
+	 * @since 3.5.2
+	 */
+	public static final int compareVersion(int[] v1, int[] v2) {
+		for (int j = 0;; ++j) {
+			if (j == v1.length) {
+				for (; j < v2.length; ++j) {
+					if (v2[j] > 0) return -1;
+					if (v2[j] < 0) return 1;
+				}
+				return 0;
+			}
+			if (j == v2.length) {
+				for (; j < v1.length; ++j) {
+					if (v1[j] > 0) return 1;
+					if (v1[j] < 0) return -1;
+				}
+				return 0;
+			}
+			if (v1[j] > v2[j]) return 1;
+			if (v1[j] < v2[j]) return -1;
+		}
+	}
+	private static final int convertSubversion(String subver) {
 		try {
-			return Integer.parseInt(s);
+			return Integer.parseInt(subver);
 		} catch (Throwable ex) { //eat
 		}
 
-		s = s.toLowerCase();
-		final int base;
-		if (s.startsWith("rc")) {
+		subver = subver.toLowerCase();
+		final int base, j;
+		if (subver.startsWith("rc")) {
 			base = -100;
 			j = 2;
-		} else if (s.startsWith("beta")) {
+		} else if (subver.startsWith("beta")) {
 			base = -300;
 			j = 4;
-		} else if (s.startsWith("alpha")) {
+		} else if (subver.startsWith("alpha")) {
 			base = -500;
 			j = 5;
 		} else {
 			return 0; //unknown
 		}
-		if (j < s.length()) {
+		if (j < subver.length()) {
 			try {
-				return base + Integer.parseInt(s.substring(j));
+				return base + Integer.parseInt(subver.substring(j));
 			} catch (Throwable ex) { //eat
 			}
 		}
