@@ -24,8 +24,6 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Iterator;
 import java.net.URL;
-import java.io.Writer;
-import java.io.IOException;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
@@ -403,43 +401,6 @@ public class WebManager {
 		} finally {
 			ExecutionsCtrl.setCurrent(exec);
 			desktopCtrl.setExecution(exec);
-		}
-	}
-
-	/** A 'fake' execution for creating a new page and desktop.
-	 * It doesn't have UiVisualizer and UiEngine.
-	 */
-	private static class DonutExecution extends ExecutionImpl {
-		public DonutExecution(ServletContext ctx, HttpServletRequest request,
-		HttpServletResponse response, Desktop desktop) {
-			super(ctx, request, response, desktop, null);
-		}
-		public void sendRedirect(String uri) { //getUiEngine not ready yet
-			try {
-				((HttpServletResponse)getNativeResponse()).sendRedirect(
-					uri != null ? uri: "");
-				setVoided(true);
-			} catch (IOException ex) {
-				throw new UiException(ex);
-			}
-		}
-		public void sendRedirect(String uri, String target) {
-			sendRedirect(uri); //target is ignored (not supported)
-		}
-		public void forward(Writer out, String page, Map params, int mode)
-		throws IOException {
-			final Execution exec = ExecutionsCtrl.getCurrent();
-			ExecutionsCtrl.setCurrent(null);
-				//It is fake one and shall not be re-used by forward
-			try {
-				super.forward(out, page, params, mode);
-			} finally {
-				ExecutionsCtrl.setCurrent(exec);
-			}
-		}
-		public void include(Writer out, String page, Map params, int mode)
-		throws IOException {
-			throw new IllegalStateException("include not allowd in DesktopInit");
 		}
 	}
 }

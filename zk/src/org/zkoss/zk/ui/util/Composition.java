@@ -65,7 +65,7 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  * ...
  * </pre>
  * Where the arg0 ~ argx you can give zul template uri. This implementation use Excecutions.createComponents()
- * to create them and then do the real composition in the {@link InitiatorExt#doAfterCompose(Page, Component[]).</li>
+ * to create them and then do the real composition in the {@link InitiatorExt#doAfterCompose(Page, Component[])}.</li>
  * <li>If more than one "define" components with the same joinId, they are attached onto the "insert" component
  * in the sequence of the definition.</li>
  * <li>If a "define" component cannot find the corresponding "insert" component, it will be simply detached from the page.</li>  

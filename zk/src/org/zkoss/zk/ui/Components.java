@@ -69,7 +69,43 @@ public class Components {
 	public static void sort(List list, Comparator cpr) {
 		sort(list, 0, list.size(), cpr);
 	}
-	
+
+	/** Replaces a component with another.
+	 * @param oldc the component to remove.
+	 * @param newc the component to add
+	 * @exception IllegalArgumentException if oldc's parent and page are
+	 * both null.
+	 * @since 3.5.2
+	 */
+	public static void replace(Component oldc, Component newc) {
+		final Component p = oldc.getParent(),
+			sib = oldc.getNextSibling();
+		if (p != null) {
+			oldc.detach();
+			p.insertBefore(newc, sib);
+		} else {
+			final Page page = oldc.getPage();
+			if (page == null)
+				throw new IllegalArgumentException("Neither child nor attached, "+oldc);
+			oldc.detach();
+			if (newc.getParent() != null)
+				newc.detach();
+			newc.setPageBefore(page, sib);
+		}
+	}
+	/** Replaces all children of the specified component.
+	 * It is the same as
+	 * <pre><code>parent.getChildren().clear();
+	 *parent.getChildren().addAll(newChildren);
+	 *</code></pre>
+	 * @since 3.5.2
+	 */
+	public static
+	void replaceChildren(Component parent, Collection newChildren) {
+		final Collection children = parent.getChildren();
+		children.clear();
+		children.addAll(newChildren);
+	}
 	/**
 	 * Sorts the components in the list.
 	 * @param list the list to be sorted

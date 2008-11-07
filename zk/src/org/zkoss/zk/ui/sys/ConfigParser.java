@@ -73,24 +73,14 @@ public class ConfigParser {
 		if (el == null)
 			return true; //version is optional (3.0.5)
 
-		if (_zkver == null) {
-			//no need to worry synchronization since we init zkver (not _zkver)
-			final int[] zkver = new int[MAX_VERSION_SEGMENT];
-			for (int j = 0; j < MAX_VERSION_SEGMENT; ++j)
-				zkver[j] = Utils.getSubversion(Version.UID, j);
-			_zkver = zkver;
-		}
+		if (_zkver == null)
+			_zkver = Utils.parseVersion(Version.UID);
 
 		final String reqzkver = el.getElementValue("zk-version", true);
-		if (reqzkver != null) {
-			for (int j = 0; j < MAX_VERSION_SEGMENT; ++j) {
-				int v = Utils.getSubversion(reqzkver, j);
-				if (v < _zkver[j]) break; //ok
-				if (v > _zkver[j]) {//failed
-					log.info("Ignore "+url+"\nCause: ZK version must be "+reqzkver+" or later, not "+Version.UID);
-					return false;
-				}
-			}
+		if (reqzkver != null
+		&& Utils.compareVersion(_zkver,	Utils.parseVersion(reqzkver)) < 0) {
+			log.info("Ignore "+url+"\nCause: ZK version must be "+reqzkver+" or later, not "+Version.UID);
+			return false;
 		}
 
 		final String clsnm = el.getElementValue("version-class", true);

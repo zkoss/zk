@@ -758,18 +758,23 @@ public class UiEngineImpl implements UiEngine {
 		if (parent != null) {
 			if (parent.getPage() != null)
 				page = parent.getPage();
+			if (page == null)
+				page = getCurrentPage(exec);
 		} else if (page != null) {
 			parent = ((PageCtrl)page).getDefaultParent();
 		}
 
-		final Page curpg = page != null ? page: getCurrentPage(exec);
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 		if (!execCtrl.isActivated())
 			throw new IllegalStateException("Not activated yet");
 
+		final boolean fakepg = page == null;
+		if (fakepg) page = new PageImpl(pagedef);
+
+		final Desktop desktop = exec.getDesktop();
 		final Page old = execCtrl.getCurrentPage();
-		if (curpg != null && curpg != old)
-			execCtrl.setCurrentPage(curpg);
+		if (page != null && page != old)
+			execCtrl.setCurrentPage(page);
 		final PageDefinition olddef = execCtrl.getCurrentPageDefinition();
 		execCtrl.setCurrentPageDefinition(pagedef);
 		exec.pushArg(arg != null ? arg: Collections.EMPTY_MAP);
@@ -777,19 +782,28 @@ public class UiEngineImpl implements UiEngine {
 		//Note: we add taglib, stylesheets and var-resolvers to the page
 		//it might cause name pollution but we got no choice since they
 		//are used as long as components created by this method are alive
-		if (curpg != null)
-			pagedef.initXelContext(curpg);
+		if (fakepg) ((PageCtrl)page).preInit();
+		pagedef.initXelContext(page);
 
 		//Note: the forward directives are ignore in this case
 
-		final Initiators inits = Initiators.doInit(pagedef, curpg);
+		final Initiators inits = Initiators.doInit(pagedef, page);
 		try {
+			if (fakepg) pagedef.init(page, false);
+
 			final Component[] comps = execCreate(
 				new CreateInfo(
-					((WebAppCtrl)exec.getDesktop().getWebApp()).getUiFactory(),
+					((WebAppCtrl)desktop.getWebApp()).getUiFactory(),
 					exec, page),
 				pagedef, parent);
 			inits.doAfterCompose(page, comps);
+
+			if (fakepg)
+				for (int j = 0; j < comps.length; ++j) {
+					comps[j].detach();
+					if (parent != null)
+						parent.appendChild(comps[j]);
+				}
 			return comps;
 		} catch (Throwable ex) {
 			inits.doCatch(ex);
@@ -800,6 +814,14 @@ public class UiEngineImpl implements UiEngine {
 			execCtrl.setCurrentPageDefinition(olddef); //restore it
 
 			inits.doFinally();
+
+			if (fakepg) {
+				try {
+					((DesktopCtrl)desktop).removePage(page);
+				} catch (Throwable ex) {
+					log.warningBriefly(ex);
+				}
+			}
 		}
 	}
 
