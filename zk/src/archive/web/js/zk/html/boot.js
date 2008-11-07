@@ -851,6 +851,10 @@ zk.ald = function (jscnt) {
 			zk.error("Failed to count. "+ex.message);
 		}
 	} else {
+		// reset the status of loading JS file first, otherwise, it will cause zk.load() out of sync. 
+		zk._jsmap = {};
+		zk._jscnt = 0;
+		
 		try {
 			zk.enableESC();
 
@@ -877,10 +881,6 @@ zk.ald = function (jscnt) {
 		}
 		
 		if (zk._ready) zk._evalInit(); //zk._loadAndInit might not finish
-		
-		// reset the status of loading JS file
-		zk._jsmap = {};
-		zk._jscnt = 0;
 	}
 };
 zk._updCnt = function () {
