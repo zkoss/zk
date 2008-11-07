@@ -192,7 +192,13 @@ zDom = { //static methods
 	parseStyle: function (style) {
 		var map = {};
 		if (style) {
-			//TODO
+			var pairs = style.split(';');
+			for (var j = 0, len = pairs.length; j < len;) {
+				var v = pairs[j++].split(':'),
+					nm = v.length > 0 ? v[0].trim(): '';
+				if (nm)
+					map[nm] = v.length > 1 ? v[1].trim(): '';
+			}
 		}
 		return map;
 	},

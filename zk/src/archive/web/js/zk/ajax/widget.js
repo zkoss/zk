@@ -143,6 +143,47 @@ zk.Widget = zk.$extends(zk.Object, {
 		var n = this.node;
 		if (n) n.style.height = height ? height: '';
 	},
+	/** Returns the zIndex of this widget. */
+	getZIndex: function () {
+		return this._zIndex;
+	},
+	/** Sets the zIndex of this widget. */
+	setZIndex: function (zIndex) {
+		this._zIndex = zIndex;
+		var n = this.node;
+		if (n) n.style.zIndex = zIndex >= 0 ? zIndex: '';
+	},
+	/** Returns the left of this widget. */
+	getLeft: function () {
+		return this._left;
+	},
+	/** Sets the left of this widget. */
+	setLeft: function (left) {
+		this._left = left;
+		var n = this.node;
+		if (n) n.style.left = left ? left: '';
+	},
+	/** Returns the right of this widget. */
+	getRight: function () {
+		return this._right;
+	},
+	/** Sets the right of this widget. */
+	setRight: function (right) {
+		this._right = right;
+		var n = this.node;
+		if (n) n.style.right = right ? right: '';
+	},
+	/** Returns the tooltip text of this widget. */
+	getTooltiptext: function () {
+		return this._tooltiptext;
+	},
+	/** Sets the tooltip text of this widget. */
+	setTooltiptext: function (tooltiptext) {
+		this._tooltiptext = tooltiptext;
+		var n = this.node;
+		if (n) n.title = tooltiptext ? tooltiptext: '';
+	},
+
 	/** Returns the style of this widget. */
 	getStyle: function () {
 		return this._style;
@@ -200,11 +241,23 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 		if (!no || !no.width) {
 			var s = this.getWidth();
-			html += 'width:' + s + ';';
+			if (s) html += 'width:' + s + ';';
 		}
 		if (!no || !no.height) {
 			var s = this.getHeight();
-			html += 'width:' + s + ';';
+			if (s) html += 'height:' + s + ';';
+		}
+		if (!no || !no.left) {
+			var s = this.getLeft();
+			if (s) html += 'left:' + s + ';';
+		}
+		if (!no || !no.right) {
+			var s = this.getRight();
+			if (s) html += 'right:' + s + ';';
+		}
+		if (!no || !no.zIndex) {
+			var s = this.getZIndex();
+			if (s >= 0) html += 'zIndex:' + s + ';';
 		}
 		return html;
 	},
@@ -229,7 +282,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	/** An utilities to generate the attributes used in the enclosing tag
 	 * of the HTML content.
-	 * <p>Default: generate id, style and class.
+	 * <p>Default: generate id, style, class, tooltiptext.
 	 * @param no specify properties to exclude. If omitted, it means none.
 	 * For example, you don't want DOM class and style to generate, call
 	 * getDomClass_({domclass: 1, style: 1});
@@ -243,6 +296,10 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (!no || !no.domclass) {
 			var s = this.getDomClass_();
 			if (s) html += ' class="' + s + '"';
+		}
+		if (!no || !no.tooltiptext) {
+			var s = this.getTooltiptext();
+			if (s) html += ' title="' + s + '"';
 		}
 		return html;
 	},

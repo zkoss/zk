@@ -181,7 +181,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 			tooltiptext = null;
 		if (!Objects.equals(_tooltiptext, tooltiptext)) {
 			_tooltiptext = tooltiptext;
-			smartUpdate("title", getTooltiptext());
+			smartUpdate("tooltiptext", getTooltiptext());
 		}
 	}
 

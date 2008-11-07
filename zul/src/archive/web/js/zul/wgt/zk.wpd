@@ -16,10 +16,4 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<widget name="Include"/>
 	<widget name="Label"/>
 	<widget name="Separator"/>
-	<!-- any number of JavaScript files 
-		1. src is optional. it could be relative, absolute and ~./
-		2. you can embed JavaScript codes in <script></script>
-		3. the order is important
-	<script src="../ext/foo.js"/>
-	-->
 </package>
