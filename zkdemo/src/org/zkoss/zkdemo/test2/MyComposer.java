@@ -19,11 +19,12 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zkdemo.test2;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.util.Composer;
 import org.zkoss.zul.Window;
 
 /**
- * Test of Composer.
+ * Test of Composer and {@link Components#wireVariables(Component, Object)}.
  *
  * @author tomyeh
  */
@@ -32,5 +33,9 @@ public class MyComposer implements Composer {
 		final Window w = (Window)comp;
 		w.setTitle("Composer: "+w.getTitle());
 		w.setBorder("normal");
+		Components.wireVariables(comp, this);
+	}
+	public String getHello() {
+		return "Hello! ZK.";
 	}
 }
