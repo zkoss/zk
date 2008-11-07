@@ -35,7 +35,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	_visible: true,
 
 	/** Constructor. */
-	construct: function (uuid, mold) {
+	$init: function (uuid, mold) {
 		this.uuid = uuid ? uuid: zk.Widget.nextUuid();
 		this.mold = mold ? mold: "default";
 	},
@@ -123,6 +123,26 @@ zk.Widget = zk.$extends(zk.Object, {
 		var n = this.node;
 		if (n) n.style.display = visible ? '': 'none';
 	},
+	/** Returns the width of this widget. */
+	getWidth: function () {
+		return this._width;
+	},
+	/** Sets the width of this widget. */
+	setWidth: function (width) {
+		this._width = width;
+		var n = this.node;
+		if (n) n.style.width = width ? width: '';
+	},
+	/** Returns the height of this widget. */
+	getHeight: function () {
+		return this._height;
+	},
+	/** Sets the height of this widget. */
+	setHeight: function (height) {
+		this._height = height;
+		var n = this.node;
+		if (n) n.style.height = height ? height: '';
+	},
 	/** Returns the style of this widget. */
 	getStyle: function () {
 		return this._style;
@@ -158,41 +178,50 @@ zk.Widget = zk.$extends(zk.Object, {
 	 */
 	updateDomStyle_: function () {
 		var n = this.node;
-		if (n) n.style = this.getDomStyle_();
+		if (n) zDom.setStyle(n, zDom.parseStyle(this.getDomStyle_()));
 	},
 
 	/** Returns the style used for the DOM element.
 	 * <p>Default: it is a catenation of style, width, visible and height.
-	 * @param opts specify properties to exclude. If omitted, it means all.
+	 * @param no specify properties to exclude. If omitted, it means none.
 	 * For example, you don't want width to generate, call
-	 * getDomStyle_({noWidth: 1});
+	 * getDomStyle_({width: true});
 	 */
-	getDomStyle_: function (opts) {
+	getDomStyle_: function (no) {
 		var html = '';
-		if (!this.isVisible() && (!opts || !opts.noVisible))
+		if (!this.isVisible() && (!no || !no.visible))
 			html = 'display:none;';
-		if (!opts || !opts.noStyle) {
+		if (!no || !no.style) {
 			var s = this.getStyle(); 
 			if (s) {
 				html += s;
 				if (s.charAt(s.length - 1) != ';') html += ';';
 			}
 		}
+		if (!no || !no.width) {
+			var s = this.getWidth();
+			html += 'width:' + s + ';';
+		}
+		if (!no || !no.height) {
+			var s = this.getHeight();
+			html += 'width:' + s + ';';
+		}
 		return html;
 	},
+
 	/** Returns the class name used for the DOM element.
 	 * <p>Default: it is a catenation of {@link #getZclass} and {@link #sclass}.
-	 * @param opts specify properties to exclude. If omitted, it means all.
+	 * @param no specify properties to exclude. If omitted, it means none.
 	 * For example, you don't want zclass to generate, call
-	 * getDomClass_({noZclass: 1});
+	 * getDomClass_({zclass: true});
 	 */
-	getDomClass_: function (opts) {
+	getDomClass_: function (no) {
 		var html = '';
-		if (!opts || !opts.noSclass) {
+		if (!no || !no.sclass) {
 			var s = this.sclass;
 			if (s) html = s;
 		}
-		if (!opts || !opts.noZclass) {
+		if (!no || !no.zclass) {
 			var s = this.getZclass();
 			if (s) html += (html ? ' ': '') + s;
 		}
@@ -201,16 +230,17 @@ zk.Widget = zk.$extends(zk.Object, {
 	/** An utilities to generate the attributes used in the enclosing tag
 	 * of the HTML content.
 	 * <p>Default: generate id, style and class.
-	 * For example, you don't want class to generate, call
-	 * getDomClass_({noClass: 1});
+	 * @param no specify properties to exclude. If omitted, it means none.
+	 * For example, you don't want DOM class and style to generate, call
+	 * getDomClass_({domclass: 1, style: 1});
 	 */
-	getOuterAttrs_: function (opts) {
-		var html = !opts || !opts.noId ? ' id="' + this.uuid + '"': '';
-		if (!opts || !opts.noStyle) {
+	getOuterAttrs_: function (no) {
+		var html = !no || !no.id ? ' id="' + this.uuid + '"': '';
+		if (!no || !no.style) {
 			var s = this.getDomStyle_();
 			if (s) html += ' style="' + s + '"';
 		}
-		if (!opts || opts.noClass) {
+		if (!no || !no.domclass) {
 			var s = this.getDomClass_();
 			if (s) html += ' class="' + s + '"';
 		}
@@ -426,7 +456,7 @@ zk.Desktop = zk.$extends(zk.Object, {
 	/** The AU request that shall be sent. Used by au.js */
 	_aureqs: [],
 
-	construct: function (dtid, updateURI) {
+	$init: function (dtid, updateURI) {
 		var zdt = zk.Desktop, dt = zdt.all[dtid];
 		if (!dt) {
 			this.id = dtid;
@@ -488,7 +518,7 @@ zk.Page = zk.$extends(zk.Widget, {//unlik server, we derive from Widget!
 
 	_style: "width:100%;height:100%",
 
-	construct: function (pgid, contained) {
+	$init: function (pgid, contained) {
 		this.uuid = pgid;
 		if (contained)
 			zk.Page.contained.add(this, true);

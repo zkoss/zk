@@ -537,7 +537,7 @@ public class Parser {
 	}
 	/** Checks whether the value is an empty string.
 	 * Note: Like {@link #noEL}, it is OK to be null!!
-	 * To check neither null nor empty, use IDOMs.getRequiredAttribute.
+	 * To check neither null nor empty, use IDOMs.getRequiredXxx.
 	 */
 	private static void noEmpty(String nm, String val, Item item)
 	throws UiException {
@@ -921,6 +921,7 @@ public class Parser {
 			}
 
 		final String attnm = IDOMs.getRequiredAttributeValue(el, "name");
+		noEmpty("name", attnm, el);
 		final ConditionImpl cond = ConditionImpl.getInstance(
 				el.getAttributeValue("if"), el.getAttributeValue("unless"));
 		if (bNativeContent) {

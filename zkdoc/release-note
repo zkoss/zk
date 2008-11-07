@@ -32,6 +32,8 @@ ZK 3.5.2
 * Features
   2173627: A way to specify where to gen ZK tags in JSP (incl zul)
   2173943: Enhance the generation of noscript (unavailable message)
+  2188951: Provide layout(template)-injection page composition
+  2086692: Data binder should have access to the composer
 
 * Bugs
   2154845: tab switch in Java - setImage makes layout go crazy
@@ -49,6 +51,9 @@ ZK 3.5.2
   2199361: Failed to create components in Initiator.init()
   2198961: AuUploader ignores 'nextURI' parameter
   2202620: Comet unable to stop in the comet thread
+  2208873: fail to loop an array declared in zsciprt using python
+  2227929: createComponents(String, Map) shall not add to current page
+  2224964: FileUpload hang in IE on 1st click
 
 	--------
 ZK 3.5.1

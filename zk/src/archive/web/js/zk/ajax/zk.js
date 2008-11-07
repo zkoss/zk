@@ -156,7 +156,7 @@ zk = { //static methods
 	$extends: function (superclass, methods, staticMethods) {
 	//Note: we cannot use extends due to IE and Safari
 		var jclass = function() {
-			this.construct.apply(this, arguments);
+			this.$init.apply(this, arguments);
 		};
 
 		for (var p in superclass.prototype) { //inherit non-static
@@ -347,7 +347,7 @@ zk.air = zk.agent.indexOf("adobeair") >= 0;
 /** The Object class that all other classes are extended from. */
 zk.Object = function () {};
 zk.Object.prototype = {
-	construct: zk.$void,
+	$init: zk.$void,
 	/** The class of this object belongs to. */
 	$class: zk.Object,
 	/** Determines if this object is an instance of the specified class. */

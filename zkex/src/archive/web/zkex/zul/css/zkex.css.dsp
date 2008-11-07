@@ -7,7 +7,10 @@
 }
 .z-border-layout-tool {
 	overflow: hidden; width: 15px; height: 15px; float: right; cursor: pointer;
-	background: transparent url(${c:encodeURL('~./zul/img/panel/tool-btn.gif')}) no-repeat;
+	background-color : transparent;
+	background-image : url(${c:encodeURL('~./zul/img/panel/tool-btn.gif')});
+	background-position : 0 0;
+	background-repeat : no-repeat;
 	margin-left: 2px;
 }
 <%-- LayoutRegion --%>
@@ -181,11 +184,11 @@
 }
 tr.z-row td.z-detail-outer {
 	background: #bae2f0 url(${c:encodeURL('~./zul/img/grid/detail-bg.gif')}) repeat-y left;
-	//background: #EFF8FB url(${c:encodeURL('~./zul/img/grid/ms_hd.gif')}) repeat-y right;
 	vertical-align: top; border-top: none; border-left: 1px solid white;
 	border-right: 1px solid #CCC; border-bottom: 1px solid #DDD;
 }
 .z-detail-img {
+	background-image: url(${c:encodeURL('~./zul/img/grid/row-expand.gif')});
 	width: 100%; height: 18px; background-position: 4px 2px;
 	background-repeat: no-repeat; background-color: transparent; 
 }

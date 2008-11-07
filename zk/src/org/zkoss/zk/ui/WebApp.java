@@ -53,6 +53,8 @@ public interface WebApp extends Locator {
 
 	/** Returns the ZK version, such as "1.1.0" and "2.0.0".
 	 * @see #getSubversion
+	 * @see org.zkoss.util.Utils#parseVersion
+	 * @see org.zkoss.util.Utils#compareVersion
 	 */
 	public String getVersion();
 	/** Returns the build identifier, such as 2007121316.

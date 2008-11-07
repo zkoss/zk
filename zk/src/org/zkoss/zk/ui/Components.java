@@ -69,7 +69,43 @@ public class Components {
 	public static void sort(List list, Comparator cpr) {
 		sort(list, 0, list.size(), cpr);
 	}
-	
+
+	/** Replaces a component with another.
+	 * @param oldc the component to remove.
+	 * @param newc the component to add
+	 * @exception IllegalArgumentException if oldc's parent and page are
+	 * both null.
+	 * @since 3.5.2
+	 */
+	public static void replace(Component oldc, Component newc) {
+		final Component p = oldc.getParent(),
+			sib = oldc.getNextSibling();
+		if (p != null) {
+			oldc.detach();
+			p.insertBefore(newc, sib);
+		} else {
+			final Page page = oldc.getPage();
+			if (page == null)
+				throw new IllegalArgumentException("Neither child nor attached, "+oldc);
+			oldc.detach();
+			if (newc.getParent() != null)
+				newc.detach();
+			newc.setPageBefore(page, sib);
+		}
+	}
+	/** Replaces all children of the specified component.
+	 * It is the same as
+	 * <pre><code>parent.getChildren().clear();
+	 *parent.getChildren().addAll(newChildren);
+	 *</code></pre>
+	 * @since 3.5.2
+	 */
+	public static
+	void replaceChildren(Component parent, Collection newChildren) {
+		final Collection children = parent.getChildren();
+		children.clear();
+		children.addAll(newChildren);
+	}
 	/**
 	 * Sorts the components in the list.
 	 * @param list the list to be sorted
@@ -310,6 +346,10 @@ public class Components {
 	 * 
 	 * <p>Note that fellow components are looked up first, then the space owner
 	 * ancestors<p>
+	 * <p>since 3.5.2, the controller would be assigned as a variable of the given idspace 
+	 * per the naming convention composed of the idspace id and controller Class name. e.g.
+	 * if the idspace id is "xwin" and the controller class is 
+	 * org.zkoss.MyController, then the variable name would be "xwin$MyController"</p>
 	 * 
 	 * <p>This is useful in writing controller code in MVC design practice. You
 	 * can wire the components into the controller object per the
@@ -335,6 +375,11 @@ public class Components {
 	 * value, the field is then assigned the resolved variable object.
 	 * </p> 
 	 * 
+	 * <p>since 3.5.2, the controller would be assigned as a variable of the given component
+	 * per the naming convention composed of the component id and controller Class name. e.g.
+	 * if the component id is "xwin" and the controller class is 
+	 * org.zkoss.MyController, then the variable name would be "xwin$MyController"</p>
+	 *
 	 * <p>This is useful in writing controller code in MVC design practice. You
 	 * can wire the embedded objects, components, and accessible variables into 
 	 * the controller object per the components' id and variables' name and do 
@@ -361,6 +406,12 @@ public class Components {
 	 * field name of the controller object. If the field name matches the name
 	 * of the resolved variable object with correct field type and null field
 	 * value, the field is then assigned the resolved variable object.</p> 
+	 *
+	 * <p>since 3.5.2, the controller would be assigned as a variable of the given page 
+	 * per the naming convention composed of the page id and controller Class name. e.g.
+	 * if the page id is "xpage" and the controller class is 
+	 * org.zkoss.MyController, then the variable name would be "xpage$MyController"</p>
+	 *
 	 * <p>Since 3.0.8, if the method name of field name matches the ZK implicit
 	 * object name, ZK implicit object will be wired in, too.</p> 
 	 * <p>This is useful in writing controller code in MVC design practice. You
@@ -468,6 +519,7 @@ public class Components {
 			//inject space owner ancestors
 			IdSpace xidspace = idspace;
 			if (xidspace instanceof Component) {
+				((Component)xidspace).setVariable(varname(((Component)idspace).getId(), _controller.getClass()), _controller, true);
 				while (true) {
 					final Component parent = ((Component)xidspace).getParent();
 					if (parent == null) {//hit page
@@ -478,13 +530,16 @@ public class Components {
 					injectFellow(xidspace);
 				}
 			} else {
+				((Page)xidspace).setVariable(varname(((Component)idspace).getId(), _controller.getClass()), _controller);
 				injectFellow((Page) idspace);
 			}
 		}
 		public void wireVariables(Page page) {
+			page.setVariable(varname(page.getId(), _controller.getClass()), _controller);
 			myWireVariables(page);
 		}
 		public void wireVariables(Component comp) {
+			comp.setVariable(varname(comp.getId(), _controller.getClass()), _controller, true);
 			myWireVariables(comp);
 		}
 		private void myWireVariables(Object x) {
@@ -730,6 +785,12 @@ public class Components {
 			if ("arg".equals(fdname))
 				return EXECUTION.getArg();
 			return null;
+		}
+		
+		private String varname(String id, Class cls) {
+			final String clsname = cls.getName();
+			int j = clsname.lastIndexOf('.');
+			return id + "$" + (j >= 0 ? clsname.substring(j+1) : clsname);
 		}
 
 		//Proxy to read current execution

@@ -39,7 +39,7 @@ zk.Event = zk.$extends(zk.Object, {
 	 */
 	//stop: false,
 
-	construct: function (target, name, data, implicit, ignorable) {
+	$init: function (target, name, data, implicit, ignorable) {
 		this.target = target;
 		this.name = name;
 		this.data = typeof data == 'string' ? [data]: data ? data: null;

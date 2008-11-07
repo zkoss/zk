@@ -159,7 +159,7 @@ zDom = { //static methods
 
 	/** Sets the style.
 	 * @param style a map of styles to update (String name, String value).
-	*/
+	 */
 	setStyle: function(n, style) {
 		n = zDom.$(n);
 		for (var name in style) {
@@ -185,6 +185,16 @@ zDom = { //static methods
 			n.style[name.camelize()] = value;
 		}
 		return n;
+	},
+	/** Parses a string-type style into a map of styles
+	 * that can be used with {@link #setStyle}.
+	 */
+	parseStyle: function (style) {
+		var map = {};
+		if (style) {
+			//TODO
+		}
+		return map;
 	},
 
 	/** Replaces the outer of the specified element with the HTML content.
