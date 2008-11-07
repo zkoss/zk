@@ -38,26 +38,27 @@ public class Tabs2DefaultV implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Tabs self = (Tabs)comp;
 		final String zcs = self.getZclass() + '-';
+		final String uuid = self.getUuid();
 		wh.write("<div id=\""+self.getUuid()+"\" ")
 			.write("z.type=\"zul.tab2.Tabs2\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
 			.writeln(">");
 		
-		wh.write("<div id=\""+self.getUuid()+"!header\"")
+		wh.write("<div id=\""+uuid+"!header\"")
 			.write(" class=\""+zcs+"header\"")
 			.writeln(">");
-			wh.write("<ul id=\""+self.getUuid()+"!ul\"")
+			wh.write("<ul id=\""+uuid+"!ul\"")
 				.write(" class=\""+zcs+"cnt\"")
 				.write(">");
 				wh.writeChildren(self);
-				wh.write("<li id=\""+self.getUuid()+"!edge\"")
+				wh.write("<li id=\""+uuid+"!edge\"")
 					.write(" class=\""+zcs+"edge\"></li>");
 			wh.write("</ul>");
 		wh.write("</div>");
-		wh.write("<div id=\""+self.getUuid()+"!up\"> </div>");
-		wh.write("<div id=\""+self.getUuid()+"!down\"> </div>");
+		wh.write("<div id=\""+uuid+"!up\"> </div>");
+		wh.write("<div id=\""+uuid+"!down\"> </div>");
+		wh.write("<div id=\""+uuid+"!line\"")
+		.write(" class=\""+zcs+"space\" ></div>");
 		wh.write("</div>");
-		wh.write("<div id=\""+self.getUuid()+"!line\"")
-			.write(" class=\""+zcs+"space\" ></div>");
 	}
 }
