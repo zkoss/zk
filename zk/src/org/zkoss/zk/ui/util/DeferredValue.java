@@ -19,7 +19,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.util;
 
 /**
- * Used with {@link org.zkoss.zk.ui.sys.ComponentCtrl#smartUpdateDeferred(String, DeferredValue)}
+ * Used with {@link org.zkoss.zk.ui.AbstractComponent#smartUpdate}
  * to represent a value that shall be evaluated only in the rendering phase
  * (rather than in the event processing phase).
  *

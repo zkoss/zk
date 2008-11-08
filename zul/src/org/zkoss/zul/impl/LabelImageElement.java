@@ -150,7 +150,7 @@ public class LabelImageElement extends LabelElement {
 		if (_hoverimg != null || !Objects.equals(_hoversrc, src)) {
 			_hoversrc = src;
 			_hoverimg = null;
-			smartUpdateDeferred("z.hvig", new EncodedHoverURL());
+			smartUpdate("z.hvig", new EncodedHoverURL());
 		}
 	}
 	/** Sets the content of the hover image directly.
@@ -168,7 +168,7 @@ public class LabelImageElement extends LabelElement {
 			_hoverimg = image;
 			_hoversrc = null;
 			if (_hoverimg != null) _hoverimgver++; //enforce browser to reload image
-			smartUpdateDeferred("z.hvig", new EncodedHoverURL());
+			smartUpdate("z.hvig", new EncodedHoverURL());
 		}
 	}
 	/** Sets the content of the hover image directly with the rendered image.

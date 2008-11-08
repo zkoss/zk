@@ -557,7 +557,7 @@ public class Grid extends XulElement implements Paginated {
 						_rows.getChildren().clear();
 				} else {
 					if (_rows != null) _rows.getChildren().clear(); //Bug 1807414
-					smartUpdate("z.model", "true");
+					smartUpdate("z.model", true);
 				}
 
 				_model = model;
@@ -577,7 +577,7 @@ public class Grid extends XulElement implements Paginated {
 			_model.removeListDataListener(_dataListener);
 			_model = null;
 			if (_rows != null) _rows.getChildren().clear();
-			smartUpdate("z.model", null);
+			smartUpdate("z.model", false);
 		}
 	}
 	/** Sets the groups model associated with this grid.

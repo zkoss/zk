@@ -137,9 +137,9 @@ public class Listitem extends XulElement {
 			final Listbox listbox = getListbox();
 			if (listbox != null)
 				if (listbox.inSelectMold())
-					smartUpdate("value", Objects.toString(_value));
+					smartUpdate("value", _value);
 				else if (listbox.getName() != null)
-					smartUpdate("z.value", Objects.toString(_value));
+					smartUpdate("z.value", _value);
 		}
 	}
 
@@ -285,6 +285,13 @@ public class Listitem extends XulElement {
 			}
 		}
 		return super.setVisible(visible);
+	}
+
+	protected void smartUpdate(String name, Object value) { //make it accessible in this package
+		super.smartUpdate(name, value);
+	}
+	protected void smartUpdate(String name, boolean value) { //make it accessible in this package
+		super.smartUpdate(name, value);
 	}
 
 	//-- Component --//

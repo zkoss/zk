@@ -94,7 +94,7 @@ public class AuWriters {
 		out.write("\n<r><c>");
 		out.write(response.getCommand());
 		out.write("</c>");
-		final String[] data = response.getData();
+		final String[] data = response.getEncodedData();
 		if (data != null) {
 			for (int j = 0; j < data.length; ++j) {
 				out.write("\n<d>");

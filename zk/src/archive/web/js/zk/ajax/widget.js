@@ -117,12 +117,29 @@ zk.Widget = zk.$extends(zk.Object, {
 	isVisible: function () {
 		return this._visible;
 	},
-	/** Sets whether this widget is visible. */
+	/** Sets whether this widget is visible.
+	 * <p>Deriving note: it invokes {@link #setChildDomVisible_}
+	 * to chage the visibility of the DOM node, if it has parent.
+	 * So, override {@link #setChildDomVisible_} if you eclose
+	 * with addition tags (such as TD).
+	 */
 	setVisible: function (visible) {
 		this._visible = visible;
 		var n = this.node;
-		if (n) n.style.display = visible ? '': 'none';
+		if (n) {
+			var p = this.parent;
+			if (p) p.setChildDomVisible_(this, visible);
+			else n.style.display = visible ? '': 'none';
+		}
 	},
+	/** Sets the visibility of the DOM node of the specified child.
+	 * When it is called, this.node must be non-null.
+	 * @see #setVisible
+	 */
+	setChildDomVisible_: function (child, visible) {
+		child.node.style.display = visible ? '': 'none';
+	},
+
 	/** Returns the width of this widget. */
 	getWidth: function () {
 		return this._width;
@@ -475,12 +492,6 @@ zk.Widget = zk.$extends(zk.Object, {
 	 */
 	setAttr: function (nm, val) {
 		zk.set(this, nm, val);
-	},
-	/** Removes an attribute that is caused by an AU response (smartUpdate)
-	 * <p>Default: a shortcut of <code>this.setAttr(nm, null)</code>
-	 */
-	rmAttr: function (nm) {
-		this.setAttr(nm, null);
 	}
 }, {
 	/** Returns the widget of the specified ID, or null if not found,

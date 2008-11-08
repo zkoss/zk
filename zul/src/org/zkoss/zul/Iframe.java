@@ -135,7 +135,7 @@ public class Iframe extends XulElement {
 	public void setAutohide(boolean autohide) {
 		if (_autohide != autohide) {
 			_autohide = autohide;
-			smartUpdate("z.autohide", _autohide ? "true": null);
+			smartUpdate("z.autohide", _autohide);
 		}
 	}
 
@@ -160,7 +160,7 @@ public class Iframe extends XulElement {
 		if (_media != null || !Objects.equals(_src, src)) {
 			_src = src;
 			_media = null;
-			smartUpdateDeferred("src", new EncodedSrc()); //Bug 1850895
+			smartUpdate("src", new EncodedSrc()); //Bug 1850895
 		}
 	}
 	/** Returns the encoded src ({@link #getSrc}).
@@ -188,7 +188,7 @@ public class Iframe extends XulElement {
 				//if the component is invalidated or overlapped wnd (Bug 1896797)
 			_src = null;
 			if (_media != null) ++_medver; //enforce browser to reload
-			smartUpdateDeferred("src", new EncodedSrc()); //Bug 1850895
+			smartUpdate("src", new EncodedSrc()); //Bug 1850895
 		}
 	}
 	/** Returns the content set by {@link #setContent}.

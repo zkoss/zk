@@ -32,6 +32,6 @@ import org.zkoss.zk.au.AuResponse;
  */
 public class AuMoveBy extends AuResponse {
 	public AuMoveBy(int x, int y) {
-		super("moveBy", new String[] {Integer.toString(x), Integer.toString(y)});
+		super("moveBy", new Integer[] {new Integer(x), new Integer(y)});
 	}
 }

@@ -249,12 +249,7 @@ public class UiEngineImpl implements UiEngine {
 			throw new IllegalArgumentException();
 		getCurrentVisualizer().addInvalidate(comp);
 	}
-	public void addSmartUpdate(Component comp, String attr, String value) {
-		if (comp == null)
-			throw new IllegalArgumentException();
-		getCurrentVisualizer().addSmartUpdate(comp, attr, value);
-	}
-	public void addSmartUpdate(Component comp, String attr, DeferredValue value) {
+	public void addSmartUpdate(Component comp, String attr, Object value) {
 		if (comp == null)
 			throw new IllegalArgumentException();
 		getCurrentVisualizer().addSmartUpdate(comp, attr, value);

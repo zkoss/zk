@@ -62,7 +62,7 @@ public class Timer extends HtmlBasedComponent {
 			throw new WrongValueException("Negative delay is not allowed: "+delay);
 		if (delay != _delay) {
 			_delay = delay;
-			smartUpdate("z.delay", Integer.toString(_delay));
+			smartUpdate("z.delay", _delay);
 			if (_running)
 				smartUpdate("z.init", true); //init
 		}
@@ -78,7 +78,7 @@ public class Timer extends HtmlBasedComponent {
 	public void setRepeats(boolean repeats) {
 		if (_repeats != repeats) {
 			_repeats = repeats;
-			smartUpdate("z.repeats", Boolean.toString(_repeats));
+			smartUpdate("z.repeats", _repeats);
 			if (_running)
 				smartUpdate("z.init", true); //init
 		}

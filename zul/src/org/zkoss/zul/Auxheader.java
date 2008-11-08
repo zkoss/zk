@@ -65,7 +65,7 @@ public class Auxheader extends HeaderElement {
 			final Execution exec = Executions.getCurrent();
 			if (exec != null && exec.isExplorer())
 				invalidate();
-			else smartUpdate("colspan", Integer.toString(_colspan));
+			else smartUpdate("colspan", _colspan);
 		}
 	}
 
@@ -86,7 +86,7 @@ public class Auxheader extends HeaderElement {
 			final Execution exec = Executions.getCurrent();
 			if (exec != null && exec.isExplorer())
 				invalidate();
-			else smartUpdate("rowspan", Integer.toString(_rowspan));
+			else smartUpdate("rowspan", _rowspan);
 		}
 	}
 

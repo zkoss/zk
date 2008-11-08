@@ -114,7 +114,7 @@ public class Textbox extends InputElement {
 			if (_rows > 1)
 				setMultiline(true); //auto-enable
 
-			smartUpdate("rows", Integer.toString(_rows));
+			smartUpdate("rows", _rows);
 		}
 	}
 	/** Returns whether it is multiline.

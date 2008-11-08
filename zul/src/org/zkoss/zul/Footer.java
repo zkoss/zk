@@ -94,7 +94,7 @@ public class Footer  extends LabelImageElement {
 	public void setSpan(int span) {
 		if (_span != span) {
 			_span = span;
-			smartUpdate("colspan", Integer.toString(_span));
+			smartUpdate("colspan", _span);
 		}
 	}
 

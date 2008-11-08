@@ -29,6 +29,6 @@ import org.zkoss.zk.au.AuResponse;
  */
 public class AuShowBusy extends AuResponse {
 	public AuShowBusy(String mesg, boolean open) {
-		super("showBusy", new String [] {mesg != null ? mesg: "", Boolean.toString(open)});
+		super("showBusy", new Object [] {mesg != null ? mesg: "", Boolean.valueOf(open)});
 	}
 }

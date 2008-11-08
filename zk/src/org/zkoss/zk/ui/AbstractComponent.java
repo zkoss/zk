@@ -29,6 +29,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Date;
 import java.io.IOException;
 
 import org.zkoss.lang.D;
@@ -53,7 +54,6 @@ import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.ui.ext.NonFellow;
 import org.zkoss.zk.ui.util.ComponentSerializationListener;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
-import org.zkoss.zk.ui.util.DeferredValue;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
@@ -1071,7 +1071,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		final boolean old = _visible;
 		if (old != visible) {
 			_visible = visible;
-			smartUpdate("visibility", _visible);
+			smartUpdate("visible", _visible);
 		}
 		return old;
 	}
@@ -1083,7 +1083,30 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (_page != null)
 			getThisUiEngine().addInvalidate(this);
 	}
-	public void response(String key, AuResponse response) {
+
+	/** Causes a response to be sent to the client.
+	 *
+	 * <p>If {@link AuResponse#getDepends} is not null, the response
+	 * depends on the existence of the returned componet.
+	 * In other words, the response is removed if the component is removed.
+	 * If it is null, the response is component-independent and it is
+	 * always sent to the client.
+	 *
+	 * <p>Unlike {@link #smartUpdate}, responses are sent even if
+	 * {@link Component#invalidate()} was called.
+	 * Typical examples include setting the focus, selecting the text and so on.
+	 *
+	 * <p>It can be called only in the request-processing and event-processing
+	 * phases; excluding the redrawing phase.
+	 *
+	 * @param key could be anything.
+	 * The second invocation of this method
+	 * in the same execution with the same key will override the previous one.
+	 * However, if key is null, it won't override any other. All responses
+	 * with key == null will be sent.
+	 * @since 5.0.0 (become protected)
+	 */
+	protected void response(String key, AuResponse response) {
 		//if response not depend on this component, it must be generated
 		if (_page != null) {
 			getThisUiEngine().addResponse(key, response);
@@ -1094,34 +1117,114 @@ implements Component, ComponentCtrl, java.io.Serializable {
 					.getUiEngine().addResponse(key, response);
 		}
 	}
-	public void smartUpdate(String attr, String value) {
-		if (_page != null) getThisUiEngine().addSmartUpdate(this, attr, value);
-	}
-	/** Smart-updates a property with a deferred value.
-	 * A deferred value is used to encapsulate a value that shall be retrieved
-	 * only in the rendering phase.
+
+	/** Smart-updates a property of the widget at the client
+	 * with the specified value.
 	 *
-	 * @since 3.0.1
+	 * <p>The second invocation with the same property will replace the previous
+	 * call. In other words, the same property will be set only once in
+	 * each execution.
+	 *
+	 * <p>This method has no effect if {@link #invalidate()} is ever invoked
+	 * (in the same execution), since {@link #invalidate()} assumes
+	 * the whole content shall be redrawn and all smart updates to
+	 * this components can be ignored,
+	 *
+	 * <p>Once {@link #invalidate} is called, all invocations to {@link #smartUpdate}
+	 * will then be ignored, and {@link #redraw} will be invoked later.
+	 *
+	 * <p>It can be called only in the request-processing and event-processing
+	 * phases; excluding the redrawing phase.
+	 *
+	 * <p>There are two ways to draw a component, one is to invoke
+	 * {@link Component#invalidate()}, and the other is {@link #smartUpdate}.
+	 * While {@link Component#invalidate()} causes the whole content to redraw,
+	 * {@link #smartUpdate} let component developer control which part
+	 * to redraw.
+	 *
+	 * @param value the new value.
+	 * If it is {@link org.zkoss.zk.ui.util.DeferredValue}, the value
+	 * will be retrieved (by calling {@link org.zkoss.zk.ui.util.DeferredValue#getValue})
+	 * in the rendering phase. It is useful if the value can not be determined now.
+	 * <p>For some old application servers (example, Webshpere 5.1),
+	 * {@link Execution#encodeURL} cannot be called in the event processing
+	 * thread. So, the developers have to use {@link org.zkoss.zk.ui.util.DeferredValue}
+	 * or disable the use of the event processing thread
+	 * (by use of <code>disable-event-thread</code> in zk.xml).
+	 * @since 5.0.0 (become protected)
+	 * @see #smartUpdate(String, Object[])
 	 */
-	public void smartUpdateDeferred(String attr, DeferredValue value) {
+	protected void smartUpdate(String attr, Object value) {
 		if (_page != null) getThisUiEngine().addSmartUpdate(this, attr, value);
 	}
-	public void smartUpdateValues(String attr, Object[] values) {
+	/** Smart-updates a property of the widget at the client
+	 * with an array of values.
+	 *
+	 * @param values an array of values.
+	 * If it is {@link org.zkoss.zk.ui.util.DeferredValue}, the value
+	 * will be retrieved (by calling {@link org.zkoss.zk.ui.util.DeferredValue#getValue})
+	 * in the rendering phase. It is useful if the value can not be determined now.
+	 * @since 3.5.0
+	 * @see #smartUpdate(String, Object)
+	 */
+	protected void smartUpdate(String attr, Object[] values) {
 		if (_page != null) getThisUiEngine().addSmartUpdate(this, attr, values);
 	}
 	/** A special smart-update that update a value in int.
-	 * <p>It will invoke {@link #smartUpdate(String,String)} to update
+	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
 	 * the attribute eventually.
 	 */
-	public void smartUpdate(String attr, int value) {
-		smartUpdate(attr, Integer.toString(value));
+	protected void smartUpdate(String attr, int value) {
+		smartUpdate(attr, new Integer(value));
+	}
+	/** A special smart-update that update a value in long.
+	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
+	 * the attribute eventually.
+	 */
+	protected void smartUpdate(String attr, long value) {
+		smartUpdate(attr, new Long(value));
+	}
+	/** A special smart-update that update a value in byte.
+	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
+	 * the attribute eventually.
+	 */
+	protected void smartUpdate(String attr, byte value) {
+		smartUpdate(attr, new Byte(value));
+	}
+	/** A special smart-update that update a value in character.
+	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
+	 * the attribute eventually.
+	 */
+	protected void smartUpdate(String attr, char value) {
+		smartUpdate(attr, new Character(value));
 	}
 	/** A special smart-update that update a value in boolean.
-	 * <p>It will invoke {@link #smartUpdate(String,String)} to update
+	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
 	 * the attribute eventually.
 	 */
-	public void smartUpdate(String attr, boolean value) {
-		smartUpdate(attr, Boolean.toString(value));
+	protected void smartUpdate(String attr, boolean value) {
+		smartUpdate(attr, new Boolean(value));
+	}
+	/** A special smart-update that update a value in float.
+	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
+	 * the attribute eventually.
+	 */
+	protected void smartUpdate(String attr, float value) {
+		smartUpdate(attr, new Float(value));
+	}
+	/** A special smart-update that update a value in double.
+	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
+	 * the attribute eventually.
+	 */
+	protected void smartUpdate(String attr, double value) {
+		smartUpdate(attr, new Double(value));
+	}
+	/** A special smart-update that update a value in Date.
+	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
+	 * the attribute eventually.
+	 */
+	protected void smartUpdate(String attr, Date value) {
+		smartUpdate(attr, value);
 	}
 
 	public void detach() {
@@ -1310,7 +1413,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 							if (getClientEvents().contains(evtnm)) {
 								if (l.isEmpty() && !Events.isListened(this, evtnm, false))
-									smartUpdate(evtnm, null); //no listener at all
+									smartUpdate(evtnm, (Object)null); //no listener at all
 								else if (oldasap != Events.isListened(this, evtnm, true))
 									smartUpdate(evtnm, !oldasap);
 							}

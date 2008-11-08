@@ -45,7 +45,6 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.util.DeferredValue;
 import org.zkoss.zk.ui.ext.render.Cropper;
 import org.zkoss.zk.ui.sys.Visualizer;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
@@ -217,19 +216,7 @@ import org.zkoss.zk.au.out.*;
 	 * Meaningful only if {@link #addInvalidate(Component)} is not called in this
 	 * execution
 	 */
-	public void addSmartUpdate(Component comp, String attr, String value) {
-		final Map respmap = getAttrRespMap(comp, attr);
-		if (respmap != null)
-			respmap.put(attr, new TimedValue(_timed++, comp, attr, value));
-	}
-	/** Smart updates an attribute of a component with a deferred value.
-	 * A deferred value is used to encapsulate a value that shall be retrieved
-	 * only in the rendering phase.
-	 *
-	 * @since 3.0.1
-	 * @see Component#smartUpdate(String, DeferredValue);
-	 */
-	public void addSmartUpdate(Component comp, String attr, DeferredValue value) {
+	public void addSmartUpdate(Component comp, String attr, Object value) {
 		final Map respmap = getAttrRespMap(comp, attr);
 		if (respmap != null)
 			respmap.put(attr, new TimedValue(_timed++, comp, attr, value));
@@ -842,26 +829,14 @@ import org.zkoss.zk.au.out.*;
 			_timed = timed;
 			_response = response;
 		}
-		private TimedValue(int timed, Component comp, String name, String value) {
+		private TimedValue(int timed, Component comp, String name, Object value) {
 			_timed = timed;
-			if (value != null)
-				_response = new AuSetAttribute(comp, name, value);
-			else
-				_response = new AuRemoveAttribute(comp, name);
-		}
-		private TimedValue(int timed, Component comp, String name, DeferredValue value) {
-			_timed = timed;
-			if (value != null)
-				_response = new AuSetAttribute(comp, name, value);
-			else
-				_response = new AuRemoveAttribute(comp, name);
+			_response = new AuSetAttribute(comp, name, value);
 		}
 		private TimedValue(int timed, Component comp, String name, Object[] values) {
 			_timed = timed;
-			if (values == null || values.length == 0)
-				_response = new AuRemoveAttribute(comp, name);
-			else
-				_response = new AuSetAttribute(comp, name, values);
+			_response = new AuSetAttribute(comp, name,
+				values == null || values.length == 0 ? null: values);
 		}
 		public String toString() {
 			return '(' + _timed + ":" + _response + ')';

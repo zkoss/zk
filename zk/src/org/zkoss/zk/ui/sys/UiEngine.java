@@ -32,7 +32,6 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Richlet;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.SuspendNotAllowedException;
-import org.zkoss.zk.ui.util.DeferredValue;
 import org.zkoss.zk.ui.ext.Native;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.au.AuResponse;
@@ -105,31 +104,21 @@ public interface UiEngine {
 	 */
 	public void addInvalidate(Component comp);
 	/** Smart updates an attribute of a component.
-	 * Called when {@link ComponentCtrl#smartUpdate(String,String)} is called.
+	 * Called by {@link org.zkoss.zk.ui.AbstractComponent#smartUpdate(String,Object)}.
 	 *
 	 * <p>The second invocation of this method
 	 * in the same execution with the same attr will override the previous one.
 	 */
-	public void addSmartUpdate(Component comp, String attr, String value);
-	/** Smart updates an attribute of a component with a deferred value.
-	 * A deferred value is used to encapsulate a value that shall be retrieved
-	 * only in the rendering phase.
-	 *
-	 * @since 3.0.1
-	 * @see ComponentCtrl#smartUpdateDeferred(String, DeferredValue)
-	 */
-	public void addSmartUpdate(Component comp, String attr, DeferredValue value);
+	public void addSmartUpdate(Component comp, String attr, Object value);
 	/** Smart updates an attribute of a component with an array of values.
-	 * Each element of values must be an instance of String or
-	 * {@link DeferredValue}.
+	 * Called by {@link org.zkoss.zk.ui.AbstractComponent#smartUpdate(String,Object[])}.
 	 *
 	 * @since 3.0.5
-	 * @see ComponentCtrl#smartUpdateValues(String, Object[])
 	 */
 	public void addSmartUpdate(Component comp, String attr, Object[] values);
 	/** Adds a response which will be sent to client at the end
 	 * of the execution.
-	 * Called when {@link ComponentCtrl#response} is called.
+	 * Called by {@link org.zkoss.zk.ui.AbstractComponent#response}.
 	 *
 	 * <p>Note: {@link Execution#addAuResponse} is a shortcut to this method,
 	 * and it is used by application developers.

@@ -158,7 +158,7 @@ public class HtmlPageRenders {
 			sb.append("zAu.process('").append(response.getCommand())
 				.append("'");
 
-			final String[] data = response.getData();
+			final String[] data = response.getEncodedData();
 			final int datanum = data != null ? data.length: 0;
 			for (int j = 0; j < datanum; ++j) {
 				sb.append(",'");

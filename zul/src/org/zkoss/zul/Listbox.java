@@ -459,8 +459,8 @@ public class Listbox extends XulElement implements Paginated {
 	public void setTabindex(int tabindex) throws WrongValueException {
 		if (_tabindex != tabindex) {
 			_tabindex = tabindex;
-			if (tabindex < 0) smartUpdate("tabindex", null);
-			else smartUpdate("tabindex", Integer.toString(_tabindex));
+			if (tabindex < 0) smartUpdate("tabindex", (Object)null);
+			else smartUpdate("tabindex", _tabindex);
 		}
 	}
 
@@ -480,12 +480,7 @@ public class Listbox extends XulElement implements Paginated {
 
 		if (_rows != rows) {
 			_rows = rows;
-
-			if (inSelectMold()) {
-				smartUpdate("size", _rows > 0 ? Integer.toString(_rows): null);
-			} else {
-				smartUpdate("z.size", Integer.toString(_rows));
-			}
+			smartUpdate("size", _rows);
 		}
 	}
 
@@ -645,7 +640,7 @@ public class Listbox extends XulElement implements Paginated {
 			item.setSelectedDirectly(true);
 			_selItems.add(item);
 			if (inSelectMold())
-				smartUpdate("selectedIndex", Integer.toString(_jsel));
+				smartUpdate("selectedIndex", _jsel);
 			else
 				smartUpdate("select", item.getUuid());
 				//Bug 1734950: don't count on index (since it may change)
@@ -759,7 +754,7 @@ public class Listbox extends XulElement implements Paginated {
 			_selItems.clear();
 			_jsel = -1;
 			if (inSelectMold())
-				smartUpdate("selectedIndex", "-1");
+				smartUpdate("selectedIndex", -1);
 			else
 				smartUpdate("select", "");
 				//Bug 1734950: don't count on index (since it may change)
@@ -778,7 +773,7 @@ public class Listbox extends XulElement implements Paginated {
 				item.setSelectedDirectly(true);
 			}
 			_jsel = _items.isEmpty() ? -1: 0;
-			smartUpdate("selectAll", "true");
+			smartUpdate("selectAll", true);
 		}
 	}
 
@@ -1126,7 +1121,7 @@ public class Listbox extends XulElement implements Paginated {
 		return !_groupsInfo.isEmpty();
 	}
 	//-- Component --//
-	public void smartUpdate(String attr, String value) {
+	protected void smartUpdate(String attr, Object value) {
 		if (!_noSmartUpdate) super.smartUpdate(attr, value);
 	}
 	public void onChildAdded(Component child) {
@@ -1721,7 +1716,7 @@ public class Listbox extends XulElement implements Paginated {
 				} else {
 					getItems().clear(); //Bug 1807414
 					if (!inSelectMold())
-						smartUpdate("z.model", "true");
+						smartUpdate("z.model", true);
 				}
 
 				_model = model;
@@ -1742,7 +1737,7 @@ public class Listbox extends XulElement implements Paginated {
 			_model = null;
 			getItems().clear();
 			if (!inSelectMold())
-				smartUpdate("z.model", null);
+				smartUpdate("z.model", (Object)null);
 		}
 	}
 	/** Sets the groups model associated with this list box.

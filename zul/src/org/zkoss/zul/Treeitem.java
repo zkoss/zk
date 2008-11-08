@@ -138,7 +138,7 @@ public class Treeitem extends XulElement {
 		if (_loaded != loaded) {
 			_loaded = loaded;
 			if (_treerow != null)
-				_treerow.smartUpdate("z.lod", _loaded ? "": "t");
+				_treerow.smartUpdate("z.lod", !_loaded);
 		}
 	}
 	
@@ -353,7 +353,7 @@ public class Treeitem extends XulElement {
 	/*obsolete protected boolean isAsapRequired(String evtnm) {
 		return super.isAsapRequired(evtnm);
 	}*/
-	public void smartUpdate(String attr, String value) {
+	protected void smartUpdate(String attr, Object value) {
 		if (_treerow != null) _treerow.smartUpdate(attr, value);
 	}
 

@@ -34,7 +34,6 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.ext.render.Cropper;
-import org.zkoss.zk.ui.sys.ComponentCtrl;
 
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.ext.Paginal;
@@ -262,12 +261,12 @@ public class Treechildren extends XulElement {
 	public String getZclass() {
 		return _zclass == null ? "z-tree-children" : super.getZclass();
 	}
-	public void smartUpdate(String name, String value) {
+	protected void smartUpdate(String name, Object value) {
 		Component comp = getParent();
 		if (comp instanceof Treeitem)
-			comp = ((Treeitem)comp).getTreerow();
-		if (comp != null)
-			((ComponentCtrl)comp).smartUpdate(name, value);
+			((Treeitem)comp).getTreerow().smartUpdate(name, value);
+		else
+			((Tree)comp).smartUpdate(name, value);
 	}
 	/** Returns an iterator to iterate thru all visible children.
 	 * Unlike {@link #getVisibleItemCount}, it handles only the direct children.

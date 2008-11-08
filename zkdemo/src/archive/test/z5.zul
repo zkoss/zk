@@ -46,6 +46,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<label value="insert" style="border:1px solid #233;padding:0 2px"
 		onClick='vbox.insertBefore(new Label("Insert "+ ++cnt),
 			vbox.children.empty ? null: vbox.children.get(0))'/>
+	<label value="hide/show first" style="border:1px solid #233;padding:0 2px"
+		onClick="if (!vbox.children.empty) vbox.firstChild.visible = !vbox.firstChild.visible;"/>
 	<label value="remove first" style="border:1px solid #233;padding:0 2px"
 		onClick="if (!vbox.children.empty) vbox.firstChild.detach();"/>
 	<label value="remove last" style="border:1px solid #233;padding:0 2px"

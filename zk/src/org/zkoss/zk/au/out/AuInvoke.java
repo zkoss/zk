@@ -80,7 +80,7 @@ public class AuInvoke extends AuResponse {
 	 */
 	public AuInvoke(Component comp, String function, boolean arg) {
 		super("invoke", comp,
-			new String[] {comp.getUuid(), function, arg ? "true": "false"});
+			new Object[] {comp.getUuid(), function, Boolean.valueOf(arg)});
 	}
 	/** Construct AuInvoke to call a client function with three arguments,
 	 * the component itself, arg1 and arg2.

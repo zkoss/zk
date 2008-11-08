@@ -193,8 +193,20 @@ zAu = { //static methods
 
 			cmds.push(cmd = {cmd: zUtl.getElementValue(cmd)});
 			cmd.data = [];
-			for (var k = data ? data.length: 0; --k >= 0;)
-				cmd.data[k] = zUtl.getElementValue(data[k]);
+			for (var k = data ? data.length: 0; --k >= 0;) {
+				var d = zUtl.getElementValue(data[k]);
+				switch (d.charAt(0)) {
+				case 'c': case 's': d = d.substring(1); break;
+				case 'n': d = null; break;
+				case '1': d = true; break;
+				case '0': d = false; break;
+				case 'i': case 'l': case 'b':
+					d = parseInt(d.substring(1)); break;
+				case 'd': case 'f':
+					d = parseFloat(d.substring(1)); break;
+				}
+				cmd.data[k] = d;
+			}
 		}
 
 		zAu._cmdsQue.push(cmds);
@@ -733,15 +745,8 @@ zAu.cmd1 = {
 		}
 	},
 	setAttr: function (uuid, wgt, nm, val) {
-		if (val == null && arguments.length <= 4) { //single null value
-			zAu.cmd1.rmAttr(uuid, wgt, nm);
-			return;
-		}
 		for (var len = arguments.length, j = 3; j < len;)
 			wgt.setAttr(nm, arguments[j++]);
-	},
-	rmAttr: function (uuid, wgt, nm) {
-		wgt.rmAttr(nm);
 	},
 	outer: function (uuid, wgt, code) {
 		var cf = zk.currentFocus, cfid;

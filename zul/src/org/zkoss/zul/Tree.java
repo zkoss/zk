@@ -445,7 +445,7 @@ public class Tree extends XulElement implements Paginated {
 
 		if (_rows != rows) {
 			_rows = rows;
-			smartUpdate("z.size", Integer.toString(_rows));
+			smartUpdate("z.size", _rows);
 		}
 	}
 
@@ -814,7 +814,7 @@ public class Tree extends XulElement implements Paginated {
 				first = false;
 			}
 		}
-		smartUpdate("selectAll", "true");
+		smartUpdate("selectAll", true);
 	}
 
 
@@ -907,7 +907,7 @@ public class Tree extends XulElement implements Paginated {
 	public String getZclass() {
 		return _zclass == null ? "z-tree" : super.getZclass();
 	}
-	public void smartUpdate(String attr, String value) {
+	protected void smartUpdate(String attr, Object value) {
 		if (!_noSmartUpdate) super.smartUpdate(attr, value);
 	}
 	public boolean insertBefore(Component newChild, Component refChild) {

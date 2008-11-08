@@ -13,5 +13,5 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
 function () {
-	return '<span' + this.getOuterAttrs_() + '>' + this.value + '</span>';
+	return '<span' + this.getOuterAttrs_() + '>' + this.getValue() + '</span>';
 }

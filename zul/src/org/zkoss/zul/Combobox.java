@@ -548,11 +548,11 @@ public class Combobox extends Textbox {
 	}
 	public void onChildAdded(Component child) {
 		super.onChildAdded(child);
-		smartUpdate("repos", "true");
+		smartUpdate("repos", true);
 	}
 	public void onChildRemoved(Component child) {
 		super.onChildRemoved(child);
-		smartUpdate("repos", "true");
+		smartUpdate("repos", true);
 	}
 	
 	/*package*/ final void reIndex() {

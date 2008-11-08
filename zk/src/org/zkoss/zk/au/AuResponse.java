@@ -44,22 +44,20 @@ public class AuResponse {
 	private final Object _depends;
 	/** Either String or DeferredValue. */
 	protected Object[] _data;
-	/** Data that has been evaluated. */
-	private String[] _evdata;
 
 	/** Constructs a component-independent response.
 	 */
 	protected AuResponse(String cmd) {
-		this(cmd, (Component)null, (String[])null);
+		this(cmd, (Component)null, (Object[])null);
 	}
 	/** Constructs a component-independent response.
 	 */
-	protected AuResponse(String cmd, String data) {
+	protected AuResponse(String cmd, Object data) {
 		this(cmd, (Component)null, data);
 	}
 	/** Constructs a component-independent response.
 	 */
-	protected AuResponse(String cmd, String[] data) {
+	protected AuResponse(String cmd, Object[] data) {
 		this(cmd, (Component)null, data);
 	}
 	/** Constructs a response with one or zero data.
@@ -76,64 +74,22 @@ public class AuResponse {
 	 *
 	 * @param data specifies the data to be sent. If null, no data at all.
 	 */
-	protected AuResponse(String cmd, Component depends, String data) {
-		this(cmd, depends, data != null ? new String[] {data}: null);
+	protected AuResponse(String cmd, Component depends, Object data) {
+		this(cmd, depends, data != null ? new Object[] {data}: null);
 	}
 	/** Constructs a response with multiple data.
-	 */
-	protected AuResponse(String cmd, Component depends, String[] data) {
-		this(cmd, depends, (Object[])data);
-	}
-	/** Constructs a response with single data.
-	 */
-	protected AuResponse(String cmd, Page depends, String data) {
-		this(cmd, depends,  data != null ? new String[] {data}: null);
-	}
-	/** Constructs a response with multiple data.
-	 */
-	protected AuResponse(String cmd, Page depends, String[] data) {
-		this(cmd, depends, (Object[])data);
-	}
-
-	/** Constructs a component-independent deferred response.
-	 * @since 3.0.5
-	 */
-	protected AuResponse(String cmd, DeferredValue data) {
-		this(cmd, (Component)null, data);
-	}
-	/** Constructs a component-independent response.
-	 * @since 3.0.5
-	 */
-	protected AuResponse(String cmd, Object[] data) {
-		this(cmd, (Component)null, data);
-	}
-	/** Constructs a response with one or zero deferred data.
-	 * @since 3.0.5
-	 */
-	protected AuResponse(String cmd, Component depends, DeferredValue data) {
-		this(cmd, depends, data != null ? new DeferredValue[] {data}: null);
-	}
-	/** Constructs a response with multiple data.
-	 * @param data an array of data (null to ignore).
-	 * Each element must be an instance of String, {@link DeferredValue}
-	 * or null.
-	 * @exception IllegalArgumentException if an element of data
-	 * is neither String nor DeferredValue.
-	 * @since 3.0.5
 	 */
 	protected AuResponse(String cmd, Component depends, Object[] data) {
 		if (cmd == null || cmd.length() == 0)
 			throw new IllegalArgumentException("cmd");
-		checkData(data);
 		_cmd = cmd;
 		_depends = depends;
 		_data = data;
 	}
-	/** Constructs a response with single deferred data.
-	 * @since 3.0.5
+	/** Constructs a response with single data.
 	 */
-	protected AuResponse(String cmd, Page depends, DeferredValue data) {
-		this(cmd, depends,  data != null ? new DeferredValue[] {data}: null);
+	protected AuResponse(String cmd, Page depends, Object data) {
+		this(cmd, depends, data != null ? new Object[] {data}: null);
 	}
 	/** Constructs a response with multiple data.
 	 * @param data an array of data (null to ignore).
@@ -146,18 +102,9 @@ public class AuResponse {
 	protected AuResponse(String cmd, Page depends, Object[] data) {
 		if (cmd == null || cmd.length() == 0)
 			throw new IllegalArgumentException("cmd");
-		checkData(data);
 		_cmd = cmd;
 		_depends = depends;
 		_data = data;
-	}
-	private static void checkData(Object[] data) {
-		if (data != null && !(data instanceof String[])
-		&& !(data instanceof DeferredValue[]))
-			for (int j = data.length; --j >= 0;)
-				if (data[j] != null && !(data[j] instanceof String)
-				&& !(data[j] instanceof DeferredValue))
-					throw new IllegalArgumentException("Data "+j+" cannot be "+data[j].getClass());
 	}
 
 	/** Returns the command of this response (never null).
@@ -167,30 +114,32 @@ public class AuResponse {
 	}
 	/** Returns the evaluated result of the associated data of
 	 * this response (might be null).
+	 * 
 	 * <p>Note: when this method is called, {@link DeferredValue}
 	 * will be evaluated. Thus, don't call it until the rendering phase.
 	 * If you want to access it other than the render phase,
 	 * use {@link #getRawData} instead.
 	 * <p>Note: it is a readonly array. Don't change its value.
 	 * @see #getRawData
+	 * @since 5.0.0
 	 */
-	public String[] getData() {
-		if (_data == null || (_data instanceof String[]))
-			return (String[])_data;
+	public String[] getEncodedData() {
+		if (_data == null)
+			return null;
 
-		if (_evdata == null) {
-			_evdata = new String[_data.length];
-			for (int j = 0; j < _data.length; ++j) {
-				final Object d = _data[j];
-				_evdata[j] = d instanceof DeferredValue ?
-					((DeferredValue)d).getValue(): (String)d;
-			}
+		final String[] encdata = new String[_data.length];
+		for (int j = 0; j < _data.length; ++j) {
+			Object d = _data[j];
+			if (d instanceof DeferredValue)
+				d = ((DeferredValue)d).getValue();
+			encdata[j] = Utils.encode(d);
 		}
-		return _evdata;
+		return encdata;
 	}
 	/** Returns the associated data of this response in the original
 	 * format (might be null).
 	 * <p>Note: it is a readonly array. Don't change its value.
+	 * @see #getEncodedData
 	 * @since 3.0.5
 	 */
 	public Object[] getRawData() {

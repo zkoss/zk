@@ -160,7 +160,7 @@ public class Image extends XulElement {
 		if (_image != null || !Objects.equals(_src, src)) {
 			_src = src;
 			_image = null;
-			smartUpdateDeferred("src", new EncodedURL()); //Bug 1850895
+			smartUpdate("src", new EncodedURL()); //Bug 1850895
 		}
 	}
 	/** Sets the content directly.
@@ -178,7 +178,7 @@ public class Image extends XulElement {
 			_image = image;
 			_src = null;
 			if (_image != null) ++_imgver; //enforce browser to reload image
-			smartUpdateDeferred("src", new EncodedURL()); //Bug 1850895
+			smartUpdate("src", new EncodedURL()); //Bug 1850895
 		}
 	}
 	/** Sets the content directly with the rendered image.
@@ -252,7 +252,7 @@ public class Image extends XulElement {
 		if (_hoverimg != null || !Objects.equals(_hoversrc, src)) {
 			_hoversrc = src;
 			_hoverimg = null;
-			smartUpdateDeferred("z.hvig", new getEncodedHoverURL());
+			smartUpdate("z.hvig", new getEncodedHoverURL());
 		}
 	}
 	/** Sets the content of the hover image directly.
@@ -271,7 +271,7 @@ public class Image extends XulElement {
 			_hoverimg = image;
 			_hoversrc = null;
 			if (_hoverimg != null) _hoverimgver++; //enforce browser to reload image
-			smartUpdateDeferred("z.hvig", new getEncodedHoverURL());
+			smartUpdate("z.hvig", new getEncodedHoverURL());
 		}
 	}
 	/** Sets the content of the hover image directly with the rendered image.

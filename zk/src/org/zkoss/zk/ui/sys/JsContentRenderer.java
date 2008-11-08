@@ -80,7 +80,7 @@ public class JsContentRenderer implements ContentRenderer {
 	 */
 	public void render(String name, boolean value) {
 		renderName(name);
-		_buf.append(value ? '1': '0'); //to save bandwidth
+		_buf.append(value ? "true": "false");
 	}
 	/** Renders a double property.
 	 * @param name the property name. Note: it must be a legal JavaScript

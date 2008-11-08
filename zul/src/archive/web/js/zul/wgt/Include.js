@@ -13,15 +13,33 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
 zul.wgt.Include = zk.$extends(zul.Widget, {
+	/** Returns the content of this include.
+	 */
+	getContent: function () {
+		var v = this._content;
+		return v ? v: '';
+	},
+	/** Sets the content of this include.
+	 */
+	setContent: function(content) {
+		if (content == null) content = '';
+		if (this._content != content) {
+			this._content = content;
+			var n = this.node;
+			if (n) n.node.innerHTML = this.getContent();
+		}
+	},
+
+	//super//
 	redraw: function () {
 		var html = '<div id="' + this.uuid + '"';
 		if (this.style) html += ' style="' + this.style + '"';
 		html += '>';
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			html += w.redraw();
-		if (this.content) html += this.content;
+		html += this.getContent();
 		return html + '</div>';
 	}
 }, {
-	embedAs: 'content' //retrieve zDom.$() as value
+	embedAs: 'content' //retrieve zDom.$() as content
 });

@@ -161,8 +161,8 @@ public class Listheader extends HeaderElement {
 	 */
 	public void setSortAscending(Comparator sorter) {
 		if (!Objects.equals(_sortAsc, sorter)) {
-			if (sorter == null) smartUpdate("z.asc", null);
-			else if (_sortAsc == null) smartUpdate("z.asc", "true");
+			if (sorter == null) smartUpdate("z.asc", (Object)null);
+			else if (_sortAsc == null) smartUpdate("z.asc", true);
 			_sortAsc = sorter;
 		}
 	}
@@ -195,8 +195,8 @@ public class Listheader extends HeaderElement {
 	 */
 	public void setSortDescending(Comparator sorter) {
 		if (!Objects.equals(_sortDsc, sorter)) {
-			if (sorter == null) smartUpdate("z.dsc", null);
-			else if (_sortDsc == null) smartUpdate("z.dsc", "true");
+			if (sorter == null) smartUpdate("z.dsc", (Object)null);
+			else if (_sortDsc == null) smartUpdate("z.dsc", true);
 			_sortDsc = sorter;
 		}
 	}

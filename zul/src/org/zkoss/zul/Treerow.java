@@ -158,4 +158,11 @@ public class Treerow extends XulElement {
 			throw new UiException("Unsupported child for tree row: "+child);
 		return super.insertBefore(child, insertBefore);
 	}
+
+	protected void smartUpdate(String name, Object value) { //make it accessible in this package
+		super.smartUpdate(name, value);
+	}
+	protected void smartUpdate(String name, boolean value) { //make it accessible in this package
+		super.smartUpdate(name, value);
+	}
 }

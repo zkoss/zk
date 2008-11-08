@@ -130,7 +130,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 			_zIndex = zIndex;
 			int zi = getZIndex();
 			if (zi < 0)
-				smartUpdate("zIndex", null);
+				smartUpdate("zIndex", (Object)null);
 			else
 				smartUpdate("zIndex", zi);
 		}

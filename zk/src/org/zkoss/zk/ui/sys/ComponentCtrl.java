@@ -119,87 +119,6 @@ public interface ComponentCtrl {
 	 */
 	public void onPageDetached(Page page);
 
-	/** Smart-updates a property with the specified value.
-	 * Called by component developers to do precise-update.
-	 *
-	 * <p>The second invocation with the same property will replace the previous
-	 * call. In other words, the same property will be set only once in
-	 * each execution.
-	 *
-	 * <p>This method has no effect if {@link Component#invalidate()} is ever invoked
-	 * (in the same execution), since {@link Component#invalidate()} assumes
-	 * the whole content shall be redrawn and all smart updates to
-	 * this components can be ignored,
-	 *
-	 * <p>Once this method is called, all invocations to {@link #smartUpdate}
-	 * will then be ignored, and {@link #redraw} will be invoked later.
-	 *
-	 * <p>It can be called only in the request-processing and event-processing
-	 * phases; excluding the redrawing phase.
-	 *
-	 * <p>There are two ways to draw a component, one is to invoke
-	 * {@link Component#invalidate()}, and the other is {@link #smartUpdate}.
-	 * While {@link Component#invalidate()} causes the whole content to redraw,
-	 * {@link #smartUpdate} let component developer control which part
-	 * to redraw.
-	 *
-	 * @param value the new value. If null, it means removing the property.
-	 * @since 3.5.0
-	 * @see #smartUpdateDeferred
-	 * @see #smartUpdateValues
-	 */
-	public void smartUpdate(String attr, String value);
-	/** Smart-updates a property with a deferred value.
-	 * A deferred value is used to encapsulate a value that shall be retrieved
-	 * only in the rendering phase.
-	 * In other words, {@link DeferredValue#getValue} won't be called until
-	 * the rendering phase. On the other hand, this method is usually called
-	 * in the event processing phase.
-	 *
-	 * <p>For some old application servers (example, Webshpere 5.1),
-	 * {@link Execution#encodeURL} cannot be called in the event processing
-	 * thread. So, the developers have to use {@link DeferredValue}
-	 * or disable the use of the event processing thread
-	 * (by use of <code>disable-event-thread</code> in zk.xml).
-	 *
-	 * @since 3.5.0
-	 * @see #smartUpdate
-	 * @see #smartUpdateValues
-	 */
-	public void smartUpdateDeferred(String attr, DeferredValue value);
-	/** Smart-updates a property with an array of values.
-	 *
-	 * @param values an array of values. Any of them must be an instance
-	 * of String or {@link DeferredValue}.
-	 * @since 3.5.0
-	 * @see #smartUpdate
-	 * @see #smartUpdateDeferred
-	 */
-	public void smartUpdateValues(String attr, Object[] values);
-	/** Causes a response to be sent to the client.
-	 *
-	 * <p>If {@link AuResponse#getDepends} is not null, the response
-	 * depends on the existence of the returned componet.
-	 * In other words, the response is removed if the component is removed.
-	 * If it is null, the response is component-independent and it is
-	 * always sent to the client.
-	 *
-	 * <p>Unlike {@link #smartUpdate}, responses are sent even if
-	 * {@link Component#invalidate()} was called.
-	 * Typical examples include setting the focus, selecting the text and so on.
-	 *
-	 * <p>It can be called only in the request-processing and event-processing
-	 * phases; excluding the redrawing phase.
-	 *
-	 * @param key could be anything.
-	 * The second invocation of this method
-	 * in the same execution with the same key will override the previous one.
-	 * However, if key is null, it won't override any other. All responses
-	 * with key == null will be sent.
-	 * @since 3.5.0
-	 */
-	public void response(String key, AuResponse response);
-
 	/** Returns the event handler of the specified name, or null
 	 * if not found.
 	 */
@@ -350,8 +269,9 @@ public interface ComponentCtrl {
 	/** Render (aka., redraw) this component and all its descendants.
 	 *
 	 * <p>It is called in the redrawing phase by the kernel, so it is too late
-	 * to call {@link Component#invalidate()}, {@link #smartUpdate}
-	 * or {@link #response} in this method.
+	 * to call {@link Component#invalidate()},
+	 * {@link org.zkoss.zk.ui.AbstractComponent#smartUpdate}
+	 * or {@link org.zkoss.zk.ui.AbstractComponent#response} in this method.
 	 * @since 5.0.0
 	 */
 	public void redraw(Writer out) throws IOException;

@@ -32,6 +32,6 @@ import org.zkoss.zk.au.AuResponse;
  */
 public class AuScrollBy extends AuResponse {
 	public AuScrollBy(int x, int y) {
-		super("scrollBy", new String[] {Integer.toString(x), Integer.toString(y)});
+		super("scrollBy", new Integer[] {new Integer(x), new Integer(y)});
 	}
 }

@@ -28,14 +28,16 @@ import org.zkoss.zk.ui.util.DeferredValue;
  * data[1]: the attribute name<br/>
  * data[2]: the attribute value
  *
- * <p>If val is null, it is the same as {@link AuRemoveAttribute}.
- * 
  * @author tomyeh
  * @since 3.0.0
  */
 public class AuSetAttribute extends AuResponse {
-	public AuSetAttribute(Component comp, String attr, String val) {
-		super("setAttr", comp, new String[] {comp.getUuid(), attr, val});
+	/** Construct an instance for miscellanous values, such as Boolean,
+	 * Integer and so on.
+	 * @since 5.0.0
+	 */
+	public AuSetAttribute(Component comp, String attr, Object val) {
+		super("setAttr", comp, new Object[] {comp.getUuid(), attr, val});
 	}
 	public AuSetAttribute(Component comp, String attr, DeferredValue val) {
 		super("setAttr", comp, new Object[] {comp.getUuid(), attr, val});

@@ -166,8 +166,8 @@ public class Toolbarbutton extends LabelImageElement {
 	public void setTabindex(int tabindex) throws WrongValueException {
 		if (_tabindex != tabindex) {
 			_tabindex = tabindex;
-			if (tabindex < 0) smartUpdate("tabindex", null);
-			else smartUpdate("tabindex", Integer.toString(_tabindex));
+			if (tabindex < 0) smartUpdate("tabindex", (Object)null);
+			else smartUpdate("tabindex", _tabindex);
 		}
 	}
 

@@ -32,6 +32,6 @@ import org.zkoss.zk.au.AuResponse;
  */
 public class AuResizeTo extends AuResponse {
 	public AuResizeTo(int x, int y) {
-		super("resizeTo", new String[] {Integer.toString(x), Integer.toString(y)});
+		super("resizeTo", new Integer[] {new Integer(x), new Integer(y)});
 	}
 }

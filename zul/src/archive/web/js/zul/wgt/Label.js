@@ -13,16 +13,21 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
 zul.wgt.Label = zk.$extends(zul.Widget, {
-	value: '',
-
-	//super//
-	setAttr: function (nm, val) {
-		if ("value" == nm) {
-			this.value = val;
-			if (this.node)
-				this.node.innerHTML = val;
-		} else
-			$setAttr(nm, val);
+	/** Returns the value of this label.
+	 */
+	getValue: function () {
+		var v = this._value;
+		return v ? v: '';
+	},
+	/** Sets the value of this label.
+	 */
+	setValue: function(val) {
+		if (val == null) val = '';
+		if (this._value != val) {
+			this._value = val;
+			var n = this.node;
+			if (n) n.node.innerHTML = this.getValue();
+		}
 	}
 }, {
 	embedAs: 'value' //retrieve zDom.$() as value
