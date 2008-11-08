@@ -31,18 +31,18 @@ ${z:outDeviceStyleSheets('ajax')}
  --%>
 <script type="text/javascript">
 <!--
+var _zuuid = '${c:eatQuot(param.uuid)}';
 function submitUpload() {
-	var wndid = '${param.uuid}';
-	var img = parent.$e(wndid + '!img');
+	var img = parent.$e(_zuuid + '!img');
 	if (img) img.parentNode.removeChild(img);
 		<%-- Bug 1578549: we have to remove the closable button first, since
 			it might mis-behave if user clicks it after submitting
 		--%>
 
-	parent.zAu.beginUpload(wndid);
+	parent.zkau.beginUpload(_zuuid);
 }
 function cancelUpload() {
-	parent.setTimeout("zAu.endUpload();zAu.sendOnClose('${param.uuid}');", 100);
+	parent.setTimeout(function(){zkau.endUpload();zkau.sendOnClose(_zuuid);}, 100);
 }
 function init() {
 	if (!parent.zk || !parent.zk.booted) {
@@ -54,9 +54,9 @@ function init() {
 
 	var el = document.getElementById("form");
 	el.action = parent.zk.getUpdateURI(
-		"/upload?dtid=${param.dtid}&uuid=${param.uuid}&maxsize=${param.maxsize}");
+		"/upload?dtid=${c:eatQuot(param.dtid)}&uuid=" + _zuuid + "&maxsize=${c:eatQuot(param.maxsize)}");
 	if (parent.zk.ie) {
-		var cave = parent.$e("${param.uuid}!cave");
+		var cave = parent.$e(_zuuid + "!cave");
 		if (cave)
 			document.body.style.backgroundColor = parent.Element.getStyle(cave, "background-color") || "";
 	}
@@ -104,7 +104,7 @@ function adjustHgh(table) {
 	<%-- change the following if you want the return URI to be different from the default
 	<input type="hidden" name="nextURI" value="~./zul/html/fileupload-done.html.dsp"/>
 	--%>
-	<input type="hidden" name="native" value="${param.native}"/>
+	<input type="hidden" name="native" value="${c:eatQuot(param.native)}"/>
 
 	<div style="overflow-y:auto;overflow-x:hidden;width:100%;height:${param.max > 3 ? '100px' : ''};">
 	<table id="upload-list" border="0" width="100%">

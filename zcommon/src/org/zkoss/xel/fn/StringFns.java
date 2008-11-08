@@ -19,6 +19,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.xel.fn;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.util.logging.Log;
 
 /**
  * Functions to manipulate strings in EL.
@@ -26,6 +27,8 @@ import org.zkoss.lang.Objects;
  * @author tomyeh
  */
 public class StringFns {
+	private static Log log = Log.lookup(StringFns.class);
+
 	/** Catenates two strings.
 	 * Note: null is considered as empty.
 	 */
@@ -73,5 +76,34 @@ public class StringFns {
 		for (int j = 0; (j = sb.indexOf(from, j)) >= 0;) {
 			sb.replace(j, j += len, to);
 		}
+	}
+
+	/** Eliminates single and double quotations to avoid JavaScript
+	 * injection.
+	 * It eliminates all quotations. In other words, the specified string
+	 * shall NOT contain any quotations.
+	 *
+	 * <p>It is used to avoid JavaScript injection.
+	 * For exmple, in DSP or JSP pages, the following codes is better
+	 * to escape with this method.
+	 * <code><input value="${c:eatQuot(param.some)}"/></code>
+	 *
+	 * @since 3.5.2
+	 */
+	public static String eatQuot(String s) {
+		final int len = s != null ? s.length(): 0;
+		StringBuffer sb = null;
+		for (int j = 0; j < len; ++j) {
+			final char cc = s.charAt(j);
+			if (cc == '\'' || cc == '"') {
+				if (sb == null) {
+					log.warning("JavaScript Injection? Unexpected string detected: "+s);
+					sb = new StringBuffer(len);
+					if (j > 0) sb.append(s.substring(0, j));
+				}
+			} else if (sb != null)
+				sb.append(cc);
+		}
+		return sb != null ? sb.toString(): s;
 	}
 }
