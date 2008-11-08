@@ -106,11 +106,8 @@ zk.Widget = zk.$extends(zk.Object, {
 		else this.lastChild = p;
 		child.nextSibling = child.previousSibling = child.parent = null;
 
-		if (child.desktop) {
-			n = child.node;
-			child.unbind_();
-			zDom.remove(n);
-		}
+		if (child.desktop)
+			this.removeChildHTML_(child, p);
 	},
 
 	/** Returns whether this widget is visible. */
@@ -368,6 +365,13 @@ zk.Widget = zk.$extends(zk.Object, {
 		else
 			zDom.insertHTMLBeforeEnd(this.node, child.redraw());
 		child.bind_(desktop);
+	},
+	/** Removes the HTML content generated of the specified child widget.
+	 */
+	removeChildHTML_: function (child, prevsib) {
+		var n = child.node;
+		child.unbind_();
+		zDom.remove(n);
 	},
 
 	/** Binds (aka., attaches) the widget to the DOM tree.

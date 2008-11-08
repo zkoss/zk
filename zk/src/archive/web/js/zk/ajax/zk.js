@@ -390,7 +390,7 @@ zk.Object.prototype = {
 		try {
 			m.apply(this, args);
 		} finally {
-			m[mtdnm] = old; //restore
+			supers[mtdnm] = old; //restore
 		}
 	}
 };

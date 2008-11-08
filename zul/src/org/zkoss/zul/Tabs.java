@@ -82,12 +82,6 @@ public class Tabs extends XulElement {
 			}
 		}
 	}
-	protected String getRealSclass() {
-		final String scls = super.getRealSclass();
-		final Tabbox tabbox = getTabbox();
-		final String added = tabbox != null && tabbox.isTabscroll() ? getZclass() +  "-scroll" : "";
-		return scls != null && scls.length() > 0 ? scls + " " + added : added;
-	}
 	public String getZclass() {
 		if (_zclass != null) return super.getZclass();
 		final Tabbox tabbox = getTabbox();
