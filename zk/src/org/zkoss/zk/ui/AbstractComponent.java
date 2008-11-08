@@ -1289,7 +1289,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				throw new UiException("Unknown mold: "+mold
 					+", while allowed include "+_def.getMoldNames());
 			_mold = mold;
-			smartUpdate("mold", _mold);
+			invalidate();
 		}
 	}
 

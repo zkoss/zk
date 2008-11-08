@@ -13,11 +13,9 @@ This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function () {
-	var html = '<div id="' + this.uuid + '"';
-	if (this.style) html += ' style="' + this.style + '"';
-	html += '>';
+	var html = '<table' + this.getOuterAttrs_() + zUtl.cellps0 + '><tr>';
 
 	for (var w = this.firstChild; w; w = w.nextSibling)
-		html += w.redraw();
-	return html + '</div>';
+		html += this.encloseChildHTML_(w);
+	return html + '</tr></table>';
 }

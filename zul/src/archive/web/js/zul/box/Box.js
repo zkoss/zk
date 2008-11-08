@@ -70,7 +70,17 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				if (pre) html = this._spacingHTML(pre) + html;
 			}
 		} else {
-			//TODO
+			html = '<td id="' + child.uuid + '$chdex"';
+			if (!child.isVisible())
+				html += ' style="display:none"';
+			html += '>' + childhtml + '</td>';
+
+			if (child.nextSibling)
+				html += this._spacingHTML(child);
+			else if (last) {
+				var pre = child.previousSibling;
+				if (pre) html = this._spacingHTML(pre) + html;
+			}
 		}
 		return html;
 	},
@@ -78,12 +88,15 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		var spacing = this.spacing,
 			spacing0 = spacing && spacing.startsWith('0')
 				&& (spacing.length == 1 || zk.isDigit(spacing.charAt(1))),
-		spstyle = spacing ? 'height:' + spacing: ''
-		html = '<tr id="' + child.uuid + '$chdex2" class="'
-			+ this.getZclass() + '-sep"';
+			vert = this.isVertical(),
+			spstyle = spacing ? (vert?'height:':'width:') + spacing: '';
+
+		html = '<t' + (vert?'r':'d') + ' id="' + child.uuid
+			+ '$chdex2" class="' + this.getZclass() + '-sep"';
 		var s = spstyle;
 		if (spacing0 || !child.isVisible()) s = 'display:none' + s;
 		if (s) html += ' style="' + s + '"';
-		return html + '><td>' + zUtl.img0 + '</td></tr>';
+		return html + '>' + (vert?'<td>':'') + zUtl.img0
+			+ (vert?'</td></tr>':'</td>');
 	}
 });
