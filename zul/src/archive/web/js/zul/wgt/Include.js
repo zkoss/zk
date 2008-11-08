@@ -26,7 +26,7 @@ zul.wgt.Include = zk.$extends(zul.Widget, {
 		if (this._content != content) {
 			this._content = content;
 			var n = this.node;
-			if (n) n.node.innerHTML = this.getContent();
+			if (n) n.innerHTML = this.getContent();
 		}
 	},
 
