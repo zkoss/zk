@@ -41,10 +41,6 @@ div.z-grid-header .z-column-sort-dsc div.z-column-cnt {
 	background-position: 99% center;
 	background-repeat: no-repeat;
 }
-div.z-column-cnt {
-	font-size: ${fontSizeM}; font-weight: normal;
-	font-family: ${fontFamilyC};
-}
 div.z-grid-body {
 	background: white; border: 0; overflow: auto; width: 100%;
 }
@@ -78,13 +74,13 @@ tr.z-grid-faker, tr.z-grid-faker th, tr.z-grid-faker div {
 	padding-top: 0 !important;	padding-right: 0 !important; padding-bottom: 0 !important;padding-left: 0 !important;			
 	margin-top: 0 !important; margin-right : 0 !important;margin-bottom: 0 !important;margin-left: 0 !important;  	
 } <%-- these above css cannot be overrided--%>
-td.z-row-inner, td.z-group-inner, td.z-group-foot-inner {
-	padding: 2px; overflow: hidden; 
+td.z-row-inner, td.z-group-foot-inner {
+	padding: 2px; overflow: hidden;
 }
-div.z-row-cnt, div.z-group-cnt, div.z-group-foot-cnt {
-	font-size: ${fontSizeM}; font-weight: normal; color: black;
+div.z-row-cnt {
+	color: black;
 }
-tr.z-row td.z-row-inner, tr.z-row td.z-group-inner, tr.z-row td.z-group-foot-inner {
+tr.z-row td.z-row-inner {
 	background: white; border-top: none; border-left: 1px solid white;
 	border-right: 1px solid #CCC; border-bottom: 1px solid #DDD;
 }
@@ -92,20 +88,18 @@ tr.z-grid-odd td.z-row-inner, tr.z-grid-odd {
 	background: #F0FAFF;
 }
 <%-- Group --%>
-tr.z-group{
+tr.z-group {
 	background: #E9F2FB url(${c:encodeURL('~./zul/img/grid/group_bg.gif')}) repeat-x 0 0;
 }
 td.z-group-inner {
-	padding-top: 2px;
+	padding: 2px; overflow: hidden;
 	border-top: 2px solid #81BAF5;
-	border-bottom: 1px solid #bcd2ef;	
+	border-bottom: 1px solid #bcd2ef;
+	color: #3764a0; font: normal ${fontSizeM} ${fontFamilyT};font-weight:bold;	
 }
 .z-group-inner .z-group-cnt span, .z-group-inner .z-group-cnt {
 	color:#3764a0; font: normal ${fontSizeM} ${fontFamilyT};
 	padding: 4px 2px; width: auto;font-weight:bold;
-}
-.z-group-inner {
-	color: #3764a0; font: normal ${fontSizeM} ${fontFamilyT};font-weight:bold;
 }
 .z-group-img {
 	width: 18px; min-height: 18px; height: 100%;
@@ -131,7 +125,10 @@ td.z-group-inner {
 	position: relative;
 }
 .z-column-btn {
-	background: #DDEEFB url(${c:encodeURL('~./zul/img/grid/hd-btn.gif')}) no-repeat left center;
+	background-color : #DDEEFB;
+	background-image : url(${c:encodeURL('~./zul/img/grid/hd-btn.gif')});
+	background-repeat : no-repeat;
+	background-position : left center;
 	display: none; position: absolute; width: 14px; right: 0; top: 0; z-index: 2;
 	cursor: pointer;
 }

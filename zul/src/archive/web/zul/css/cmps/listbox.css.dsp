@@ -38,10 +38,6 @@ div.z-listbox-header th.z-list-header-sort-dsc div.z-list-header-cnt {
 	background-position: 99% center;
 	background-repeat: no-repeat;
 }
-div.z-list-header-cnt {
-	font-size: ${fontSizeM}; font-weight: normal;
-	font-family: ${fontFamilyT};
-}
 div.z-listbox-body {
 	background: white; border: 0; overflow: auto; width: 100%; position: relative;
 }

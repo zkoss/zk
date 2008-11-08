@@ -29,10 +29,7 @@
 	border: 1px solid #B1CBD5; border-top: 0 none; overflow: hidden; background: white;
 	position: relative;
 }
-.z-panel-bbar .z-toolbar {
-	border: 1px solid #B1CBD5; border-top: 0 none; overflow: hidden; padding: 2px;
-}
-.z-panel-tbar .z-toolbar {
+.z-panel-bbar .z-toolbar, .z-panel-tbar .z-toolbar {
 	border: 1px solid #B1CBD5; border-top: 0 none; overflow: hidden; padding: 2px;
 }
 .z-panel-tbar .z-toolbar {
@@ -60,10 +57,10 @@
 	background: transparent url(${c:encodeURL('~./zul/img/panel/panel-corners.png')}) no-repeat right 0;
 	zoom: 1; padding-right: 6px;
 }
-.z-panel-header-noheader {
+.z-panel-noheader {
 	border-bottom: 0px;
 }
-.z-panel-header-noheader .z-panel-tm {
+.z-panel-noheader .z-panel-tm {
 	height: 6px; font-size: 0; line-height: 0;
 }
 .z-panel-bm {
@@ -105,19 +102,22 @@
 .z-panel-noborder .z-panel-children-noborder {
 	border-width: 0;
 }
-.z-panel-noborder .z-panel-header-noborder{
+.z-panel-noborder .z-panel-header-noborder {
 	border-width: 0; border-bottom: 1px solid #B1CBD5;
 }
 .z-panel-noborder .z-panel-tbar-noborder .z-toolbar {
 	border-width: 0; border-bottom: 1px solid #B1CBD5;
 }
-.z-panel-noborder .z-panel-bbar-noborder .z-toolbar{
+.z-panel-noborder .z-panel-bbar-noborder .z-toolbar {
 	border-width: 0; border-top: 1px solid #B1CBD5;
 }
 <%-- Panel Tool --%>
 .z-panel-tool {
 	overflow: hidden; width: 15px; height: 15px; float: right; cursor: pointer;
-	background: transparent url(${c:encodeURL('~./zul/img/panel/tool-btn.gif')}) no-repeat;
+	background-color : transparent;
+	background-image : url(${c:encodeURL('~./zul/img/panel/tool-btn.gif')});
+	background-position : 0 0;
+	background-repeat : no-repeat;
 	margin-left: 2px;
 }
 .z-panel-toggle {

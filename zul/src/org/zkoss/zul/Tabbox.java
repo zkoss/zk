@@ -30,7 +30,6 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Deferrable;
-import org.zkoss.zk.au.out.AuInvoke;
 
 import org.zkoss.zul.impl.XulElement;
 
@@ -52,7 +51,6 @@ import org.zkoss.zul.impl.XulElement;
  * <dd>The accordion tabbox.</dd>
  * </dl>
  * 
- * <p>
  * <p>Default {@link #getZclass}: z-tabbox. (since 3.5.0)
  * 
  * @author tomyeh
@@ -67,8 +65,7 @@ public class Tabbox extends XulElement {
 	/** The event listener used to listen onSelect for each tab. */
 	/* package */transient EventListener _listener;
 
-	public Tabbox() {				
-		setZclass("z-tabbox");
+	public Tabbox() {
 		init();
 	}
 	
@@ -271,9 +268,13 @@ public class Tabbox extends XulElement {
 		return "vertical".equals(getOrient());
 	}
 
+	public String getZclass() {
+		return  _zclass == null ? "z-tabbox" + (inAccordionMold() ? "-" + getMold() : isVertical() ? "-ver" : "") :
+				super.getZclass();
+	}
+	
 	/**
-	 * Returns the look of the {@link Tab} and {@link Tabbox}. 
-	 * @since 3.5.0
+	 * @deprecated As of release 3.5.2
 	 */
 	public String getTabLook() {		
 		String scls = getZclass();		
@@ -283,7 +284,6 @@ public class Tabbox extends XulElement {
 		}else{
 			return scls;
 		}
-		
 		
 	}
 

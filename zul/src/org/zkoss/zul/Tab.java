@@ -21,6 +21,7 @@ package org.zkoss.zul;
 import java.util.Set;
 import java.util.Iterator;
 
+import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
@@ -43,9 +44,7 @@ public class Tab extends LabelImageElement {
 
 	private boolean _disabled;
 
-	public Tab() {
-		setZclass("z-tab");
-	}
+	public Tab() {}		
 
 	public Tab(String label) {
 		this();
@@ -63,6 +62,7 @@ public class Tab extends LabelImageElement {
 			throw new UnsupportedOperationException("Set Tabs' width instead");
 		}
 	}
+	
 	/**
 	 * Returns whether this tab is closable. If closable, a button is displayed
 	 * and the onClose event is sent if an user clicks the button.
@@ -208,7 +208,11 @@ public class Tab extends LabelImageElement {
 
 	// -- super --//
 	public String getZclass() {
-		return _zclass == null ? "z-tab" : super.getZclass();
+		if (_zclass != null) return super.getZclass();
+		final Tabbox tabbox = getTabbox();
+		final String added = tabbox != null ? tabbox.inAccordionMold() ? "-" + tabbox.getMold() :
+			tabbox.isVertical() ? "-ver" : "" : "";
+		return "z-tab" + added;
 	}
 
 	// -- Component --//

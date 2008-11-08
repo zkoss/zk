@@ -20,7 +20,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <c:set var="zcls" value="${self.zclass}"/>
 <div id="${self.uuid}" z.type="zul.panel.Panel" z.autoz="true"${self.outerAttrs}${self.innerAttrs}>
 		<c:if test="${self.framable}">
-<div class="${zcls}-tl <c:if test="${empty self.caption and empty self.title}">${zcls}-header-noheader</c:if>"><div class="${zcls}-tr"><div class="${zcls}-tm">
+<div class="${zcls}-tl <c:if test="${empty self.caption and empty self.title}">${zcls}-noheader</c:if>"><div class="${zcls}-tr"><div class="${zcls}-tm">
 		</c:if>
 		<c:if test="${!empty self.caption or !empty self.title}">
 <div id="${self.uuid}!caption" class="${zcls}-header <c:if test="${!self.framable && self.border != 'normal'}">${zcls}-header-noborder</c:if>">

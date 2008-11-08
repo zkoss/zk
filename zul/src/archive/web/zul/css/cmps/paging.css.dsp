@@ -115,21 +115,33 @@
 
 <%-- Mouseover --%>
 .z-paging-btn-over .z-paging-btn-l {
-	background: url(${c:encodeURL('~./zul/img/button/tb-btn-side.png')}) no-repeat 0 0;
+	background-image : url(${c:encodeURL('~./zul/img/button/tb-btn-side.png')});
+	background-repeat : no-repeat;
+	background-position : 0 0;
 }
 .z-paging-btn-over .z-paging-btn-r {
-	background: url(${c:encodeURL('~./zul/img/button/tb-btn-side.png')}) no-repeat 0 -21px;
+	background-image : url(${c:encodeURL('~./zul/img/button/tb-btn-side.png')});
+	background-repeat : no-repeat;
+	background-position : 0 -21px;
 }
 .z-paging-btn-over .z-paging-btn-m {
-	background: url(${c:encodeURL('~./zul/img/button/tb-btn-side.png')}) repeat-x 0 -42px;
+	background-image : url(${c:encodeURL('~./zul/img/button/tb-btn-side.png')});
+	background-repeat : repeat-x;
+	background-position : 0 -42px;
 }
 <%-- Click --%>
 .z-paging-btn-clk .z-paging-btn-l {
-	background: url(${c:encodeURL('~./zul/img/button/tb-btn-side.png')}) no-repeat 0 -63px;
+	background-image : url(${c:encodeURL('~./zul/img/button/tb-btn-side.png')});
+	background-repeat : no-repeat;
+	background-position : 0 -63px;
 }
 .z-paging-btn-clk .z-paging-btn-r {
-	background: url(${c:encodeURL('~./zul/img/button/tb-btn-side.png')}) no-repeat 0 -84px;
+	background-image : url(${c:encodeURL('~./zul/img/button/tb-btn-side.png')});
+	background-repeat : no-repeat;
+	background-position : 0 -84px;
 }
 .z-paging-btn-clk .z-paging-btn-m {
-	background: url(${c:encodeURL('~./zul/img/button/tb-btn-side.png')}) repeat-x 0 -105px;
+	background-image : url(${c:encodeURL('~./zul/img/button/tb-btn-side.png')});
+	background-repeat : repeat-x;
+	background-position : 0 -105px;
 }

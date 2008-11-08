@@ -45,7 +45,6 @@ import org.zkoss.zul.impl.XulElement;
  * @since 3.5.0
  */
 public class Detail extends XulElement {
-	private static final String DEFAULT_IMAGE = "~./zul/img/grid/row-expand.gif";
 	private boolean _open;
 	private String _img;
 	/** The style used for the content block. */
@@ -91,25 +90,16 @@ public class Detail extends XulElement {
 		}
 	}
 	/**
-	 * Returns the URI of the button image.
+	 * @deprecated As of release 3.5.2
 	 */
 	public String getImage() {
-		return _img != null ?  _img: DEFAULT_IMAGE;
+		return null;
 	}
 	
 	/** 
-	 * Sets the URI of the button image.
-	 * 
-	 * @param img the URI of the button image. If null or empty, the default
-	 * URI is used.
+	 * @deprecated As of release 3.5.2
 	 */
 	public void setImage(String img) {
-		if (img != null && (img.length() == 0 || DEFAULT_IMAGE.equals(img)))
-			img = null;
-		if (!Objects.equals(_img, img)) {
-			_img = img;
-			invalidate();
-		}
 	}
 	
 	/**

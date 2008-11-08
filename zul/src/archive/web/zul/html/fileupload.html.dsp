@@ -45,6 +45,13 @@ function cancelUpload() {
 	parent.setTimeout("zAu.endUpload();zAu.sendOnClose('${param.uuid}');", 100);
 }
 function init() {
+	if (!parent.zk || !parent.zk.booted) {
+		setTimeout(init, 100);
+		return;
+	}
+
+	parent.zk.listen(document, "keydown", onDocKeydown);
+
 	var el = document.getElementById("form");
 	el.action = parent.zk.getUpdateURI(
 		"/upload?dtid=${param.dtid}&uuid=${param.uuid}&maxsize=${param.maxsize}");
@@ -85,7 +92,6 @@ function adjustHgh(table) {
 	table.parentNode.style.height = table.rows.length > 3 ? "100px" : "";
 	if (parent.zk.opera) table.parentNode.style.overflow = "auto";
 }
-parent.zk.listen(document, "keydown", onDocKeydown);
 // -->
 </script>
 </head>
