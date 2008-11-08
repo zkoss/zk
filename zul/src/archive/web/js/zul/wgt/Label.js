@@ -28,6 +28,12 @@ zul.wgt.Label = zk.$extends(zul.Widget, {
 			var n = this.node;
 			if (n) n.innerHTML = this.getValue();
 		}
+	},
+
+	//super//
+	getZclass: function () {
+		var zcs = this._zclass;
+		return zcs != null ? zcs: "z-label";
 	}
 }, {
 	embedAs: 'value' //retrieve zDom.$() as value

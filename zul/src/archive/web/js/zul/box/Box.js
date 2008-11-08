@@ -21,20 +21,34 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	},
 
 	//super//
+	getZclass: function () {
+		var zcs = this._zclass;
+		return zcs != null ? zcs: this.isVertical() ? "z-vbox" : "z-hbox";
+	},
+
 	setChildDomVisible_: function (child, visible) {
 		this.$super('setChildDomVisible_', child, visible);
-		var n = zDom.$(child.uuid + '$chdex');
-		if (n) n.style.display = visible ? '': 'none';
-		n = zDom.$(child.uuid + '$chdex2');
-		if (n) n.style.display = visible ? '': 'none';
+		this._fixChildDomVisible(child, visible);
 	},
 	replaceChildHTML_: function (child, n, desktop) {
 		this.$super('replaceChildHTML_', child, n, desktop);
+		this._fixChildDomVisible(child, visible);
+	},
+	_fixChildDomVisible: function (child, visible) {
 		var n = zDom.$(child.uuid + '$chdex');
 		if (n) n.style.display = visible ? '': 'none';
 		n = zDom.$(child.uuid + '$chdex2');
 		if (n) n.style.display = visible ? '': 'none';
+
+		if (this.lastChild == child) {
+			n = child.previousSibling;
+			if (n) {
+				n = zDom.$(n + '$chdex2')
+				if (n) n.style.display = visible ? '': 'none';
+			}
+		}
 	},
+
 	insertChildHTML_: function (child, before, desktop) {
 		if (before) {
 			zDom.insertHTMLBefore(zDom.$(before.uuid + "$chdex"), this.encloseChildHTML_(child));

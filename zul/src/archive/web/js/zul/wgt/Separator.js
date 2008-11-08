@@ -19,11 +19,5 @@ zul.wgt.Separator = zk.$extends(zul.Widget, {
 		return zs ? zs: "z-separator" +
 			(this.vertical ? "-ver" + (this.bar ? "-bar" : "") :
 				"-hor" + (this.bar ? "-bar" : ""))
-	},
-	setAttr: function (nm, val) {
-		this.$super('setAttr', nm, val);
-
-		var n = this.node;
-		if (n) n.className = this.getRealClass();
 	}
 });

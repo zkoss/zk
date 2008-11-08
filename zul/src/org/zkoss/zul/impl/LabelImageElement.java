@@ -59,8 +59,6 @@ public class LabelImageElement extends LabelElement {
 	 * <p>Calling this method implies setImageContent(null).
 	 * In other words, the last invocation of {@link #setImage} overrides
 	 * the previous {@link #setImageContent}, if any.
-	 * <p>If src is changed, the component's inner is invalidate.
-	 * Thus, you want to smart-update, you have to override this method.
 	 * @see #setImageContent(Image)
 	 * @see #setImageContent(RenderedImage)
 	 */
@@ -69,7 +67,7 @@ public class LabelImageElement extends LabelElement {
 		if (_image != null || !Objects.equals(_src, src)) {
 			_src = src;
 			_image = null;
-			invalidate();
+			smartUpdate("image", new EncodedImageURL());
 		}
 	}
 	/** @deprecated As of release 3.5.0, it is redudant since
@@ -99,7 +97,7 @@ public class LabelImageElement extends LabelElement {
 			_image = image;
 			_src = null;
 			if (_image != null) _imgver++; //enforce browser to reload image
-			invalidate();
+			smartUpdate("image", new EncodedImageURL());
 		}
 	}
 	/** Sets the content directly with the rendered image.
@@ -150,7 +148,7 @@ public class LabelImageElement extends LabelElement {
 		if (_hoverimg != null || !Objects.equals(_hoversrc, src)) {
 			_hoversrc = src;
 			_hoverimg = null;
-			smartUpdate("z.hvig", new EncodedHoverURL());
+			smartUpdate("hoverImage", new EncodedHoverURL());
 		}
 	}
 	/** Sets the content of the hover image directly.
@@ -168,7 +166,7 @@ public class LabelImageElement extends LabelElement {
 			_hoverimg = image;
 			_hoversrc = null;
 			if (_hoverimg != null) _hoverimgver++; //enforce browser to reload image
-			smartUpdate("z.hvig", new EncodedHoverURL());
+			smartUpdate("hoverImage", new EncodedHoverURL());
 		}
 	}
 	/** Sets the content of the hover image directly with the rendered image.
@@ -197,63 +195,19 @@ public class LabelImageElement extends LabelElement {
 	public boolean isImageAssigned() {
 		return _src != null || _image != null;
 	}
-	/** Returns the HTML IMG tag for the image part, or null
-	 * if no image is assigned ({@link #isImageAssigned})
-	 *
-	 * <p>Used only for component development, not for application developers.
-	 *
-	 * <p>Note: the component template shall use this method to
-	 * generate the HTML tag, instead of using {@link #getImage}.
-	 */
-	public String getImgTag() {
-		return getImgTag(null, false);
-	}
-	/** Utilities to implement {@link #getImgTag}.
-	 * By default, {@link #getImgTag()} is the same as getImageTag(null, false).
-	 * <p>Used only for component developements; not by app developers.
-	 *
-	 * @param sclass the style class of the generated image.
-	 * @param enforce whether to generate an empty pixel if no image is assigned.
-	 * By default, null is returned. However, if you prefer to generate
-	 * an image tag with an empty pixel, you can specify true here.
-	 * @since 3.5.0
-	 */
-	protected String getImgTag(String sclass, boolean enforce) {
-		if (!enforce && _src == null && _image == null)
-			return null;
-
-		final StringBuffer sb = new StringBuffer(64)
-			.append("<img src=\"")
-			.append(getEncodedImageURL(enforce))
-			.append("\" align=\"absmiddle\" id=\"")
-			.append(getUuid()).append("!hvig\"");
-		HTMLs.appendAttribute(sb, "class", sclass);
-		sb.append("/>");
-
-		final String label = getLabel();
-		if (label != null && label.length() > 0)
-			sb.append(' '); //keep a space
-		return sb.toString();
-	}
 	/** Returns the encoded URL for the image ({@link #getImage}
 	 * or {@link #getImageContent}), or null if no image.
 	 * <p>Used only for component developements; not by app developers.
 	 * <p>Note: this method can be invoked only if execution is not null.
-	 * @since 3.5.0
 	 */
-	public String getEncodedImageURL() {
-		return getEncodedImageURL(false);
-	}
-	private String getEncodedImageURL(boolean enforce) {
+	private String getEncodedImageURL() {
 		if (_image != null)
 			return Utils.getDynamicMediaURI( //already encoded
 				this, _imgver, "c/" + _image.getName(), _image.getFormat());
 
 		final Desktop dt = getDesktop(); //it might not belong to any desktop
-		return dt != null ?
-			_src != null ? dt.getExecution().encodeURL(_src):
-			enforce ? dt.getExecution().encodeURL("~./img/spacer.gif"):
-				null: null;
+		return dt != null && _src != null ?
+			dt.getExecution().encodeURL(_src): null;
 	}
 	/** Returns the encoded URL for the hover image or null if not
 	 * available.
@@ -269,6 +223,14 @@ public class LabelImageElement extends LabelElement {
 			dt.getExecution().encodeURL(_hoversrc): null;
 	}
 
+	//super//
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		render(renderer, "image", getEncodedImageURL());
+		render(renderer, "hoverImage", getEncodedHoverURL());
+	}
 	//-- ComponentCtrl --//
 	protected Object newExtraCtrl() {
 		return new ExtraCtrl();
@@ -289,6 +251,11 @@ public class LabelImageElement extends LabelElement {
 				}
 			}
 			return _image;
+		}
+	}
+	private class EncodedImageURL implements org.zkoss.zk.ui.util.DeferredValue {
+		public String getValue() {
+			return getEncodedImageURL();
 		}
 	}
 	private class EncodedHoverURL implements org.zkoss.zk.ui.util.DeferredValue {

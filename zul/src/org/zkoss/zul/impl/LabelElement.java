@@ -43,7 +43,15 @@ abstract public class LabelElement extends XulElement {
 		if (label == null) label = "";
 		if (!Objects.equals(_label, label)) {
 			_label = label;
-			invalidate();
+			smartUpdate("label", getLabel());
 		}
+	}
+
+	//super//
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		render(renderer, "label", getLabel());
 	}
 }

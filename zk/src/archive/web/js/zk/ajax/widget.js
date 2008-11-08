@@ -488,15 +488,8 @@ zk.Widget = zk.$extends(zk.Object, {
 	 */
 	auDelay: function () {
 		return -1;
-	},
-
-	//AU//
-	/** Sets an attribute that is caused by an AU response (smartUpdate).
-	 * <p>Default: <code>zk.set(this, nm, val)</code>
-	 */
-	setAttr: function (nm, val) {
-		zk.set(this, nm, val);
 	}
+
 }, {
 	/** Returns the widget of the specified ID, or null if not found,
 	 * or the widget is attached to the DOM tree.

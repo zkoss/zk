@@ -62,7 +62,7 @@ public class Button extends LabelImageElement {
 	public void setDisabled(boolean disabled) {
 		if (_disabled != disabled) {
 			_disabled = disabled;
-			invalidate();
+			smartUpdate("disabled", isDisabled());
 		}
 	}
 
@@ -82,7 +82,7 @@ public class Button extends LabelImageElement {
 
 		if (!Objects.equals(_dir, dir)) {
 			_dir = dir;
-			invalidate();
+			smartUpdate("dir", getDir());
 		}
 	}
 	/** Returns the orient.
@@ -100,7 +100,7 @@ public class Button extends LabelImageElement {
 
 		if (!Objects.equals(_orient, orient)) {
 			_orient = orient;
-			invalidate();
+			smartUpdate("orient", getOrient());
 		}
 	}
 
@@ -120,7 +120,7 @@ public class Button extends LabelImageElement {
 			href = null;
 		if (!Objects.equals(_href, href)) {
 			_href = href;
-			smartUpdate("z.href", new EncodedHref()); //Bug 1850895
+			smartUpdate("href", new EncodedHref()); //Bug 1850895
 		}
 	}
 
@@ -143,7 +143,7 @@ public class Button extends LabelImageElement {
 
 		if (!Objects.equals(_target, target)) {
 			_target = target;
-			smartUpdate("z.target", _target);
+			smartUpdate("target", getTarget());
 		}
 	}
 	/** Returns the tab order of this component.
@@ -157,8 +157,7 @@ public class Button extends LabelImageElement {
 	public void setTabindex(int tabindex) throws WrongValueException {
 		if (_tabindex != tabindex) {
 			_tabindex = tabindex;
-			if (tabindex < 0) smartUpdate("tabindex", (Object)null);
-			else smartUpdate("tabindex", _tabindex);
+			smartUpdate("tabindex", getTabindex());
 		}
 	}
 
@@ -169,9 +168,19 @@ public class Button extends LabelImageElement {
 	}
 
 	//-- super --//
-	public String getZclass() {
-		return _zclass == null ? "z-button" : super.getZclass();
-	}	
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		int v = getTabindex();
+		if (v >= 0)
+			renderer.render("tabindex", v);
+		render(renderer, "disabled", true);
+		render(renderer, "dir", getDir());
+		render(renderer, "orient", getOrient());
+		render(renderer, "href", getEncodedHref());
+		render(renderer, "target", getTarget());
+	}
 
 	//Component//
 	/** No child is allowed.

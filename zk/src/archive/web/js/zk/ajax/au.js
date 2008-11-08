@@ -746,7 +746,7 @@ zAu.cmd1 = {
 	},
 	setAttr: function (uuid, wgt, nm, val) {
 		for (var len = arguments.length, j = 3; j < len;)
-			wgt.setAttr(nm, arguments[j++]);
+			zk.set(wgt, nm, arguments[j++]);
 	},
 	outer: function (uuid, wgt, code) {
 		var cf = zk.currentFocus, cfid;

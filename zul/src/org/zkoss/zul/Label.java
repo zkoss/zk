@@ -172,15 +172,6 @@ public class Label extends XulElement {
 	}
 
 	//-- super --//
-	/** Returns the Style of label
-	 *
-	 * <p>Default: "z-label"
-	 */
-	public String getZclass() {
-		return _zclass == null ? "z-label" : super.getZclass();
-	}
-
-	//-- super --//
 	//super//
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws IOException {

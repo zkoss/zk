@@ -285,9 +285,6 @@ public class Box extends XulElement {
 	}
 
 	//-- super --//
-	public String getZclass() {
-		return _zclass == null ? isVertical() ? "z-vbox" : "z-hbox" : super.getZclass();
-	}
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
 		super.renderProperties(renderer);
