@@ -17,14 +17,14 @@ function () {
 		tabi = this.tabindex;
 	tabi = tabi >= 0 ? ' tabindex="' + tabi + '"': '';
 
-	var html = '<span' + this.getDomAttrs_({style:1,domclass:1})
+	var html = '<span' + this.domAttrs_({style:1,domclass:1})
 		+ ' class="' + zcls + '"';
 	if (!this.isVisible()) html += ' style="display:none"';
 	html += '><table id="' + this.uuid +'$box"' + zUtl.cellps0;
 	if (tabi && !zk.gecko && !zk.safari) html += tabi;
-	var s = this.getDomStyle_();
+	var s = this.domStyle_();
 	if (s) html += ' style="' + s + '"';
-	s = this.getDomClass_();
+	s = this.domClass_();
 	if (s) html += ' class="' + s + '"';
 
 	var btn = '<button id="' + this.uuid + '$btn" class="' + zcls + '"',
@@ -41,7 +41,7 @@ function () {
 	html += '<tr><td class="' + zcls + '-cl">';
 	if (zk.ie) html += btn;
 	html += '</td><td class="' + zcls + '-cm">'
-		+ this._getDomContent()
+		+ this._domContent()
 		+ '</td><td class="' + zcls + '-cr"><i class="' + zcls
 		+ '"></i></td></tr>';
 

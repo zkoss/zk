@@ -31,11 +31,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</vbox>
 	<splitter collapse="before"/>
 	<div>
-	Column 2: it has a textbox: <textbox/>
+	Column 2: this is column 2.
+	<separator/>
 	And more text to it multiple lines.
 	</div>
 	<div>
-	Column 3: also with a textbox: <textbox/>
+	Column 3: it has a button <button label="nothing"/>
 	</div>
 </hbox>
 

@@ -13,7 +13,10 @@ This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function () {
-	var html = '<table' + this.getDomAttrs_() + zUtl.cellps0 + '><tr>';
+	var html = '<table' + this.domAttrs_() + zUtl.cellps0 + '><tr',
+		v = this.getAlign();
+	if (v) html += ' valign="' + zul.box.Box._toValign(v) +'"';
+	html += '>';
 
 	for (var w = this.firstChild; w; w = w.nextSibling)
 		html += this.encloseChildHTML_(w);

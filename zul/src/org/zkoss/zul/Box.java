@@ -290,8 +290,11 @@ public class Box extends XulElement {
 		super.renderProperties(renderer);
 
 		render(renderer, "spacing", getSpacing());
-		render(renderer, "align", getAlign());
-		render(renderer, "pack", getPack());
 		render(renderer, "widths", getWidths());
+
+		String s = getAlign();
+		if (!"start".equals(s)) render(renderer, "align", s);
+		s = getPack();
+		if (!"start".equals(s)) render(renderer, "pack", s);
 	}
 }

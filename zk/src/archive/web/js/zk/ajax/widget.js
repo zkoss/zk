@@ -227,22 +227,22 @@ zk.Widget = zk.$extends(zk.Object, {
 	 */
 	updateDomClass_: function () {
 		var n = this.node;
-		if (n) n.className = this.getDomClass_();
+		if (n) n.className = this.domClass_();
 	},
 	/** Updates the DOM element's style.
 	 */
 	updateDomStyle_: function () {
 		var n = this.node;
-		if (n) zDom.setStyle(n, zDom.parseStyle(this.getDomStyle_()));
+		if (n) zDom.setStyle(n, zDom.parseStyle(this.domStyle_()));
 	},
 
 	/** Returns the style used for the DOM element.
 	 * <p>Default: it is a catenation of style, width, visible and height.
 	 * @param no specify properties to exclude. If omitted, it means none.
 	 * For example, you don't want width to generate, call
-	 * getDomStyle_({width: true});
+	 * domStyle_({width: true});
 	 */
-	getDomStyle_: function (no) {
+	domStyle_: function (no) {
 		var html = '';
 		if (!this.isVisible() && (!no || !no.visible))
 			html = 'display:none;';
@@ -280,9 +280,9 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * <p>Default: it is a catenation of {@link #getZclass} and {@link #sclass}.
 	 * @param no specify properties to exclude. If omitted, it means none.
 	 * For example, you don't want zclass to generate, call
-	 * getDomClass_({zclass: true});
+	 * domClass_({zclass: true});
 	 */
-	getDomClass_: function (no) {
+	domClass_: function (no) {
 		var html = '';
 		if (!no || !no.sclass) {
 			var s = this.sclass;
@@ -299,16 +299,16 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * <p>Default: generate id, style, class, tooltiptext.
 	 * @param no specify properties to exclude. If omitted, it means none.
 	 * For example, you don't want DOM class and style to generate, call
-	 * getDomClass_({domclass: 1, style: 1});
+	 * domClass_({domclass: 1, style: 1});
 	 */
-	getDomAttrs_: function (no) {
+	domAttrs_: function (no) {
 		var html = !no || !no.id ? ' id="' + this.uuid + '"': '';
 		if (!no || !no.style) {
-			var s = this.getDomStyle_();
+			var s = this.domStyle_();
 			if (s) html += ' style="' + s + '"';
 		}
 		if (!no || !no.domclass) {
-			var s = this.getDomClass_();
+			var s = this.domClass_();
 			if (s) html += ' class="' + s + '"';
 		}
 		if (!no || !no.tooltiptext) {

@@ -13,7 +13,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
 function () {
-	var html = '<div' + this.getDomAttrs_() + '>';
+	var html = '<div' + this.domAttrs_() + '>';
 	for (var w = this.firstChild; w; w = w.nextSibling)
 		html += w.redraw();
 	return html + '</div>';

@@ -706,9 +706,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>splitter</component-name>
 		<component-class>org.zkoss.zul.Splitter</component-class>
+		<widget-name>zul.box.Splitter</widget-name>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/splitter.dsp</mold-uri>
+			<mold-uri>mold/splitter.js</mold-uri>
 		</mold>
 	</component>
 	<component>

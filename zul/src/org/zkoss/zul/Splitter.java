@@ -104,7 +104,7 @@ public class Splitter extends XulElement {
 
 		if (!Objects.equals(_collapse, collapse)) {
 			_collapse = collapse;
-			smartUpdate("z.colps", collapse);
+			smartUpdate("collapse", collapse);
 		}
 	}
 
@@ -120,16 +120,11 @@ public class Splitter extends XulElement {
 	public void setOpen(boolean open) {
 		if (_open != open) {
 			_open = open;
-			smartUpdate("z.open", open);
+			smartUpdate("open", open);
 		}
 	}
 
 	//super//
-	public String getZclass() {
-		return _zclass == null ? "z-splitter" +
-				("vertical".equals(getOrient()) ? "-ver" : "-hor") : super.getZclass();
-	}
-	
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Box))
 			throw new UiException("Wrong parent: "+parent);
@@ -139,6 +134,14 @@ public class Splitter extends XulElement {
 	 */
 	protected boolean isChildable() {
 		return false;
+	}
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		if (!isOpen()) renderer.render("open", false);
+		String s = getCollapse();
+		if (!"none".equals(s)) render(renderer, "collapse", s);
 	}
 
 	//-- ComponentCtrl --//

@@ -14,10 +14,49 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 zul.box.Box = zk.$extends(zul.Widget, {
 	mold: 'vertical',
+	_align: 'start',
+	_pack: 'start',
 
 	/** Returns if it is a vertical box. */
 	isVertical: function () {
 		return 'vertical' == this.mold;
+	},
+	/** Returns the orient. */
+	getOrient: function () {
+		return this.mold;
+	},
+
+	/** Returns the align of this button.
+	 */
+	getAlign: function () {
+		return this._align;
+	},
+	/** Sets the align of this button.
+	 */
+	setAlign: function(align) {
+		if (this._align != align) {
+			this._align = align;
+			var n = this.node;
+			if (n) {
+				//TODO
+			}
+		}
+	},
+	/** Returns the pack of this button.
+	 */
+	getPack: function () {
+		return this._pack;
+	},
+	/** Sets the pack of this button.
+	 */
+	setPack: function(pack) {
+		if (this._pack != pack) {
+			this._pack = pack;
+			var n = this.node;
+			if (n) {
+				//TODO
+			}
+		}
 	},
 
 	//super//
@@ -112,5 +151,14 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		if (s) html += ' style="' + s + '"';
 		return html + '>' + (vert?'<td>':'') + zUtl.img0
 			+ (vert?'</td></tr>':'</td>');
+	},
+	_childOuterAttrs: function (child) {
+	},
+	_childInnerAttrs: function (child) {
+	}
+},{
+	_toValign: function (v) {
+		return v ? "start" == v ? "top": "center" == v ? "middle":
+			"end" == v ? "bottom": v: null;
 	}
 });

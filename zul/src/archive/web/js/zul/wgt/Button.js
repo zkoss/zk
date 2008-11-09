@@ -98,9 +98,9 @@ zul.wgt.Button = zk.$extends(zul.Widget, {
 	_updateDomContent: function () {
 		var n = zDom.$(this.uuid + '$box');
 		if (n)
-			n.tBodies[0].rows[1].cells[1].innerHTML = this._getDomContent();
+			n.tBodies[0].rows[1].cells[1].innerHTML = this._domContent();
 	},
-	_getDomContent: function () {
+	_domContent: function () {
 		var label = zUtl.encodeXML(this.getLabel()),
 			img = this.getImage();
 		if (!img) return label;
