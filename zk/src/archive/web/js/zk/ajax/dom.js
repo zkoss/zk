@@ -28,6 +28,14 @@ zDom = { //static methods
 	tag: function (n) {
 		return n && n.tagName ? n.tagName.toUpperCase(): "";
 	},
+	/** Returns whether a DOM element is visible.
+	 * Returns false if not exist.
+	 * Returns true if no style.
+	 * @param strict whether the visibility property must not be hidden, too
+	 */
+	isVisible: function (n, strict) {
+		return n && (!n.style || (n.style.display != "none" && (!strict || n.style.visibility != "hidden")));
+	},
 
 	/** Returns the x coordination of the visible part. */
 	innerX: function () {
@@ -70,6 +78,52 @@ zDom = { //static methods
 		var pos = zDom.cmOffset(n);
 		scrollTo(pos[0], pos[1]);
 		return n;
+	},
+
+	/** A map of the margin styles. */
+	margins: {l: "margin-left", r: "margin-right", t: "margin-top", b: "margin-bottom"},
+	/** A map of the border styles. */
+	borders: {l: "border-left-width", r: "border-right-width", t: "border-top-width", b: "border-bottom-width"},
+	/** A map of the padding styles. */
+	paddings: {l: "padding-left", r: "padding-right", t: "padding-top", b: "padding-bottom"},
+	/** Returns the summation of the specified styles.
+	 *  For example,
+	 * zDom.sumStyles(el, "lr", zDom.paddings) sums the style values of
+	 * zDom.paddings['l'] and zDom.paddings['r'].
+	 *
+	 * @param areas the areas is abbreviation for left "l", right "r", top "t", and bottom "b".
+	 * So you can specify to be "lr" or "tb" or more.
+	 * @param styles {@link #paddings} or {@link #borders}. 
+	 */
+	sumStyles: function (el, areas, styles) {
+		var val = 0;
+		for (var i = 0, l = areas.length; i < l; i++){
+			 var w = zk.parseInt(zDom.getStyle(el, styles[areas.charAt(i)]));
+			 if (!isNaN(w)) val += w;
+		}
+		return val;
+	},
+	/**
+	 * Returns the revised size, which subtracted the size of its CSS border or padding, for the specified element.
+	 * @param {Number} size original size of the specified element. 
+	 * @param {Boolean} isHgh if true it will be "tb" top and bottom.
+	 * @return {Number}
+	 */
+	revisedSize: function (el, size, isHgh) {
+		size -= isHgh ? zDom.frameHeight(el): zDom.frameWidth(el);
+		return size < 0 ? 0: size;
+	},
+	/**
+	 * Returns the number of the padding width and the border width from the specified element.  
+	 */
+	frameWidth: function (el) {
+		return zDom.sumStyles(el, "lr", zDom.borders) + zDom.sumStyles(el, "lr", zDom.paddings);
+	},
+	/**
+	 * Returns the number of the padding height and the border height from the specified element.  
+	 */
+	frameHeight: function (el) {
+		return zDom.sumStyles(el, "tb", zDom.borders) + zDom.sumStyles(el, "tb", zDom.paddings);
 	},
 
 	/** Returns the cumulative offset of the specified element.

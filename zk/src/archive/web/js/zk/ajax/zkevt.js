@@ -74,13 +74,12 @@ zWatch = {
 	/** Adds a watch.
 	 * @param name the action name. Currently, it supports only onSend,
 	 * which is called before sending the AU request(s).
-	 * @param overwrite whether to overwrite if the watch was added.
 	 * @return true if added successfully.
 	 */
-	watch: function (name, watch, overwrite) {
+	watch: function (name, watch) {
 		var wts = this._wts[name];
 		if (!wts) wts = this._wts[name] = [];
-		wts.add(watch, overwrite);
+		wts.add(watch, true);
 	},
 	/** Removes a watch.
 	 * @return whether the watch has been removed successfully.
@@ -103,23 +102,22 @@ zWatch = {
 		var wts = this._wts[name],
 			len = wts ? wts.length: 0;
 		if (len) {
-			var args = [];
+			var args = [], o;
 			for (var j = 1, l = arguments.length; j < l;)
-				args.push(arguments[j]);
+				args.push(arguments[j++]);
 
+			wts = wts.clone(); //make a copy since unwatch might be called
 			if (timeout >= 0) {
-				for (var j = 0; j < len;) {
-					var o = wts[j++];
-					setTimeout(function(){o[name].call(o, args)}, timeout);
-				}
+				setTimeout(
+				function () {
+					while (o = wts.shift())
+						o[name].apply(o, args);
+				}, timeout);
 				return;
 			}
 
-			wts = wts.clone(); //make a copy since unwatch might be called
-			for (var j = 0; j < len;) {
-				var o = wts[j++];
-				o[name].call(o, args);
-			}
+			while (o = wts.shift())
+				o[name].apply(o, args);
 		}
 	},
 	/** Calls all descendant watches of the specified name.
@@ -137,23 +135,26 @@ zWatch = {
 		if (len) {
 			var args = [];
 			for (var j = 2, l = arguments.length; j < l;)
-				args.push(arguments[j]);
+				args.push(arguments[j++]);
+
+			var found = [], o;
+			for (var j = 0; j < len;) {
+				o = wts[j++];
+				if (zUtl.isAncestor(origin, o))
+					found.push(o);
+			}
 
 			if (timeout >= 0) {
-				for (var j = 0; j < len;) {
-					var o = wts[j++];
-					if (zUtl.isAncestor(origin, o))
-						setTimeout(function(){o[name].call(o, args)}, timeout);
-				}
+				setTimeout(
+				function () {
+					while (o = found.shift())
+						o[name].apply(o, args);
+				}, timeout);
 				return;
 			}
 
-			wts = wts.clone(); //make a copy since unwatch might be called
-			for (var j = 0; j < len;) {
-				var o = wts[j++];
-				if (zUtl.isAncestor(origin, o))
-					o[name].call(o, args);
-			}
+			while (o = found.shift())
+				o[name].apply(o, args);
 		}
 	},
 

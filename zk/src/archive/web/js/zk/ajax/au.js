@@ -755,8 +755,8 @@ zAu.cmd1 = {
 	},
 	outer: function (uuid, wgt, code) {
 		var cf = zk.currentFocus, cfid;
-		if (cf && zUtl.isAncestor(cmp, cf, true)) {
-			cfid = cf.id
+		if (cf && zUtl.isAncestor(wgt, cf, true)) {
+			cfid = cf.node.id;
 			zk.currentFocus = null;
 		} else
 			cf = null;

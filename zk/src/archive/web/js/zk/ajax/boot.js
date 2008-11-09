@@ -165,14 +165,21 @@ function _zkldnew() {
 function _zkldnew0() {
 	if (!zk.booted) _zkinit();
 
+	var ws = [];
 	for (var inf; inf = _zkcrs.shift();) {
 		var dt = inf[0],
 			wgt = _zkcreate(null, inf[1]);
 		wgt.replaceHTML(wgt.uuid, dt);
+		ws.push(wgt);
 	}
 
 	for (var fn, afcrs = _zkafcrs; fn = afcrs.shift();)
 		fn();
+
+	while (wgt = ws.shift()) {
+		zWatch.callDown('beforeSize', 0, wgt);
+		zWatch.callDown('onSize', 5, wgt);
+	}
 
 	zk.endProcessing();
 }

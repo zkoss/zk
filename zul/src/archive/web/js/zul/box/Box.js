@@ -111,10 +111,10 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	encloseChildHTML_: function (child, last) {
 		var html, childhtml = child.redraw();
 		if (this.isVertical()) {
-			html = '<tr id="' + child.uuid + '$chdex"';
-			if (!child.isVisible())
-				html += ' style="display:none"';
-			html += '><td>' + childhtml + '</td></tr>';
+			html = '<tr id="' + child.uuid + '$chdex"'
+				+ this._childOuterAttrs(child)
+				+ '><td' + this._childInnerAttrs(child)
+				+ '>' + childhtml + '</td></tr>';
 
 			if (child.nextSibling)
 				html += this._spacingHTML(child);
@@ -123,10 +123,10 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				if (pre) html = this._spacingHTML(pre) + html;
 			}
 		} else {
-			html = '<td id="' + child.uuid + '$chdex"';
-			if (!child.isVisible())
-				html += ' style="display:none"';
-			html += '>' + childhtml + '</td>';
+			html = '<td id="' + child.uuid + '$chdex"'
+				+ this._childOuterAttrs(child)
+				+ this._childInnerAttrs(child)
+				+ '>' + childhtml + '</td>';
 
 			if (child.nextSibling)
 				html += this._spacingHTML(child);
@@ -153,12 +153,106 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			+ (vert?'</td></tr>':'</td>');
 	},
 	_childOuterAttrs: function (child) {
+		var html = '';
+		if (child.$instanceof(zul.box.Splitter))
+			html = ' class="' + child.getZclass() + '-outer"';
+		else if (this.isVertical()) {
+			var v = this.getPack();
+			if (v) html = ' valign="' + zul.box.Box._toValign(v) + '"';
+		} else
+			return '';
+
+		if (!child.isVisible()) html += ' style="display:none"';
+		return html;
 	},
 	_childInnerAttrs: function (child) {
-	}
+		var html = '',
+			vert = this.isVertical();
+		if (vert && child.$instanceof(zul.box.Splitter))
+			return ' class="' + child.getZclass() + '-outer-td"';
+
+		var v = vert ? this.getAlign(): this.getPack();
+		if (v) html += ' align="' + zul.box.Box._toHalign(v) + '"'
+
+		if (!vert && !child.isVisible()) html += ' style="display:none"';
+		return html;
+	},
+
+	bind_: function (desktop) {
+		//watch before bind_, so the parent's onXxx will be called first
+		zWatch.watch("onSize", this);
+		zWatch.watch("onVisible", this);
+		zWatch.watch("onHide", this);
+
+		this.$super('bind_', desktop);
+	},
+	unbind_: function () {
+		zWatch.unwatch("onSize", this);
+		zWatch.unwatch("onVisible", this);
+		zWatch.unwatch("onHide", this);
+
+		this.$super('unbind_');
+	},
+	onSize: _zkf = function () {
+		for (var c = this.firstChild;; c = c.nextSibling) {
+			if (!c) return; //no splitter
+			if (c.$instanceof(zul.box.Splitter))
+				break;
+		}
+
+		var vert = this.isVertical(), node = this.node;
+
+		//Bug 1916473: with IE, we have make the whole table to fit the table
+		//since IE won't fit it even if height 100% is specified
+		if (zk.ie) {
+			var p = node.parentNode;
+			if (zDom.tag(p) == "TD") {
+				var nm = vert ? "height": "width",
+					sz = vert ? p.clientHeight: p.clientWidth;
+				if ((node.style[nm] == "100%" || this._box100) && sz) {
+					node.style[nm] = sz + "px";
+					this._box100 = true;
+				}
+			}
+		}
+
+		//Note: we have to assign width/height fisrt
+		//Otherwise, the first time dragging the splitter won't be moved
+		//as expected (since style.width/height might be "")
+
+		var nd = vert ? node.rows: node.rows[0].cells,
+			total = vert ? node.offsetHeight : node.offsetWidth;
+
+		for (var i = nd.length; --i >= 0;) {
+			var d = nd[i];
+			if (zDom.isVisible(d))
+				if (vert) {
+					var diff = d.offsetHeight;
+					if(d.id) { //TR
+						//Bug 1917905: we have to manipulate height of TD in Safari
+						if (d.cells.length) {
+							var c = d.cells[0];
+							c.style.height = zDom.revisedSize(c, i ? diff: total, true) + "px";
+						}
+						d.style.height = ""; //just-in-case
+					}
+					total -= diff;
+				} else {
+					var diff = d.offsetWidth;
+					if(d.id) //TD
+						d.style.width = zDom.revisedSize(d, i ? diff: total) + "px";
+					total -= diff;
+				}
+		}
+	},
+	onVisible: _zkf,
+	onHide: _zkf
 },{
 	_toValign: function (v) {
 		return v ? "start" == v ? "top": "center" == v ? "middle":
 			"end" == v ? "bottom": v: null;
+	},
+	_toHalign: function (v) {
+		return v ? "start" == v ? "left": "end" == v ? "right": v: null;
 	}
 });

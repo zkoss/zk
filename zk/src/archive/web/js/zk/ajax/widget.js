@@ -110,6 +110,12 @@ zk.Widget = zk.$extends(zk.Object, {
 			this.removeChildHTML_(child, p);
 	},
 
+	/** Returns if a widget is really visible (all ancestors are visible). */
+	isRealVisible: function () {
+		for (var wgt = this; wgt; wgt = wgt.parent)
+			if (!wgt.isVisible()) return false;
+		return true;
+	},
 	/** Returns whether this widget is visible. */
 	isVisible: function () {
 		return this._visible;
@@ -468,13 +474,12 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * For example, if wgt.listen("onChange", lsn) is called, then
 	 * lsn.onChange(evt) will be called when onChange event is fired
 	 * (by {@link zk.Widget#fire}.
-	 * @param overwrite whether to overwrite if the watch was added.
 	 * @return true if added successfully.
 	 */
-	listen: function (evtnm, listener, overwrite) {
+	listen: function (evtnm, listener) {
 		var lsns = this._lsns[evtnm];
 		if (!lsns) lsns = this._lsns[evtnm] = [];
-		lsns.add(listener, overwrite);
+		lsns.add(listener, true);
 	},
 	/** Removes a listener from the sepcified event.
 	 */

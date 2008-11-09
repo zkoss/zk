@@ -287,19 +287,14 @@ zk = { //static methods
 			zDom.remove("zk_err" + j);
 	},
 	/** Generates a message for debugging purpose. */
-	debug: function (msg/*, ...*/) {
-		var a = arguments;
-		if (a.length > 1) {
-			var m = "";
-			for (var i = 0, len = a.length; i < len; i++) {
-				if (m) m += ", ";
-				m += a[i];
-			}
-			msg = m;
+	debug: function (vararg) {
+		var ars = arguments, msg = '';
+		for (var j = 0, len = ars.length; j < len; j++) {
+			if (msg) msg += ", ";
+			msg += ars[j];
 		}
 
-		zk._msg = zk._msg ? zk._msg + msg: msg;
-		zk._msg += '\n';
+		zk._msg = (zk._msg ? zk._msg + msg: msg) + '\n';
 		setTimeout(zk._debug0, 600);
 	},
 	_debug0: function () {
@@ -309,13 +304,13 @@ zk = { //static methods
 				console = document.createElement("DIV");
 				document.body.appendChild(console);
 				var html =
-'<div id="zk_dbgbox" style="text-align:right;width:50%;right:0;bottom:0;position:absolute">'
+'<div id="zk_dbgbox" style="text-align:right;width:50%;right:10px;bottom:5px;position:absolute">'
 +'<button onclick="zDom.remove(\'zk_dbgbox\')" style="font-size:9px">X</button><br/>'
 +'<textarea id="zk_dbg" style="width:100%" rows="10"></textarea></div>';
 				zDom.setOuterHTML(console, html);
 				console = zDom.$("zk_dbg");
 			}
-			console.value = console.value + zk._msg + '\n';
+			console.value += zk._msg;
 			console.scrollTop = console.scrollHeight;
 			zk._msg = null;
 		}
