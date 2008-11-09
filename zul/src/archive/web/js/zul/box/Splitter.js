@@ -172,12 +172,12 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 });
 
 if (zk.ie) {
-	zul.box.Spitter.onover = function (evt) {
+	zul.box.Splitter.onover = function (evt) {
 		if (!evt) evt = window.event;
 		var wgt = zEvt.widget(evt);
 		zDom.addClass(wgt.button, wgt.getZclass() + '-btn-visi');
 	};
-	zul.box.Spitter.onover = function (evt) {
+	zul.box.Splitter.onout = function (evt) {
 		if (!evt) evt = window.event;
 		var wgt = zEvt.widget(evt);
 		zDom.rmClass(wgt.button, wgt.getZclass() + '-btn-visi');
