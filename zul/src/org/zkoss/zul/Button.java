@@ -175,9 +175,12 @@ public class Button extends LabelImageElement {
 		int v = getTabindex();
 		if (v >= 0)
 			renderer.render("tabindex", v);
-		render(renderer, "disabled", true);
-		render(renderer, "dir", getDir());
-		render(renderer, "orient", getOrient());
+		String s = getDir();
+		if (!"normal".equals(s)) render(renderer, "dir", s);
+		s = getOrient();
+		if (!"horizontal".equals(s)) render(renderer, "orient", s);
+
+		render(renderer, "disabled", isDisabled());
 		render(renderer, "href", getEncodedHref());
 		render(renderer, "target", getTarget());
 	}

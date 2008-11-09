@@ -124,6 +124,34 @@ zDom = { //static methods
 
 		return document.body;
 	},
+
+	//class and style//
+	/** Returns whether it is part of the class name
+	 * of the specified element.
+	 */
+	hasClass: function (el, clsnm) {
+		var cn = el ? el.className: "";
+		return cn && (' '+cn+' ').indexOf(' '+clsnm+' ') != -1;
+	},
+	/** Adds the specified class name to the class name of the specified element.
+	 */
+	addClass: function (el, clsnm) {
+		if (!zDom.hasClass(el, clsnm)) {
+			var cn = el.className;
+			if (cn.length) cn += ' ';
+			el.className = cn + clsnm;
+		}
+	},
+	/** Removes the specified class name from the the class name of the specified
+	 * element.
+	 */
+	rmClass: function (el, clsnm) {
+		if (zDom.hasClass(el, clsnm)) {
+			var re = new RegExp('(?:^|\\s+)' + clsnm + '(?:\\s+|$)', "g");
+			el.className = el.className.replace(re, " ").trim();
+		}
+	},
+
 	/** Returns the style. In addition to n.style, it also
 	 * checked CSS styles that are applicated to the specified element.
 	 */
@@ -357,6 +385,7 @@ zDom = { //static methods
 	//focus/select//
 	/** Focus the element without looking down, and do it timeout later. */
 	asyncFocus: function (id, timeout) {
+		if (id.id) id = id.id;
 		setTimeout("zDom.focus('"+id+"')", timeout > 0? timeout: 0);
 			//Workaround for an IE bug: we have to set focus twice since
 			//the first one might fail (even we prolong the timeout to 1 sec)
@@ -381,6 +410,7 @@ zDom = { //static methods
 	/** Select the text of the element after the specified timeout.
 	 */
 	asyncSelect: function (id, timeout) {
+		if (id.id) id = id.id;
 		setTimeout("zDom.select('"+id+"')", timeout > 0? timeout: 0);
 	},
 	/** Select to the specified component w/o throwing exception. */
@@ -419,6 +449,48 @@ zDom = { //static methods
 		} catch (e) {
 			return [0, 0];
 		}
+	},
+
+	//selection//
+	clearSelection: function () {
+		try{
+			if (window["getSelection"]) { 
+				if (zk.safari) window.getSelection().collapse();
+				else window.getSelection().removeAllRanges();
+			} else if (document.selection) {
+				if (document.selection.empty) document.selection.empty();
+				else if (document.selection.clear) document.selection.clear();
+			}
+			return true;
+		} catch (e){
+			return false;
+		}
+	},
+	/** Disable whether the specified element is selectable. */
+	disableSelection: function (el) {
+		el = zDom.$(el);
+		if (el)
+			if (zk.gecko)
+				el.style.MozUserSelect = "none";
+			else if (zk.safari)
+				el.style.KhtmlUserSelect = "none"; 
+			else if (zk.ie)
+				el.onselectstart = function (evt) {
+					if (!evt) evt = window.event;
+					var n = Event.element(evt), tag = $tag(n);
+					return tag == "TEXTAREA" || tag == "INPUT" && (n.type == "text" || n.type == "password");
+				};
+	},
+	/** Enables whether the specified element is selectable. */
+	enableSelection: function (el) {
+		el = zDom.$(el);
+		if (el)
+			if (zk.gecko)
+				el.style.MozUserSelect = ""; 
+			else if (zk.safari)
+				el.style.KhtmlUserSelect = "";
+			else if (zk.ie)
+				el.onselectstart = null;
 	}
 };
 

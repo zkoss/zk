@@ -70,7 +70,7 @@ zEvt = {
 		if (evt.ctrlKey) extra += "c";
 		if (evt.shiftKey) extra += "s";
 
-		var ofs = zDom.cmOffset(target);
+		var ofs = zDom.cmOffset(target ? target: zEvt.target(evt));
 		var x = zEvt.x(evt) - ofs[0];
 		var y = zEvt.y(evt) - ofs[1];
 		return [x, y, extra];
@@ -182,5 +182,29 @@ zEvt = {
 			}
 		};
 		}
+	},
+
+	//event handler//
+	/** The default onfocus. */
+	onfocus: function (evt) {
+		if (!evt) evt = window.event;
+		var wgt = zEvt.widget(evt);
+		zk.currentFocus = wgt;
+
+		//TODO: handle zIndex, close floats
+
+		if (wgt.isListen('onFocus'))
+			wgt.fire2("onFocus");
+	},
+	/** The default onblur. */
+	onblur: function (evt) {
+		if (!evt) evt = window.event;
+		var wgt = zEvt.widget(evt);
+		zk.currentFocus = null;
+
+		//TODO: handle validation
+
+		if (wgt.isListen('onBlur'))
+			wgt.fire2("onBlur");
 	}
  };

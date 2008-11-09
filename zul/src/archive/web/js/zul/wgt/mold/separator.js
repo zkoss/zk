@@ -14,5 +14,5 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 function () {
 	var tag = this.vertical ? 'span': 'div';
-	return '<' + tag + this.getOuterAttrs_() + '>' + zUtl.img0 + '</' + tag + '>';
+	return '<' + tag + this.getDomAttrs_() + '>' + zUtl.img0 + '</' + tag + '>';
 }

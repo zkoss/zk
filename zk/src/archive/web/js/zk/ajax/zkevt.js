@@ -25,26 +25,30 @@ zk.Event = zk.$extends(zk.Object, {
 	//name: null,
 	/** The extra data, which could be anything. */
 	//data: null,
-	/** Whether this event is an implicit event, i.e., whether it is implicit
-	 * to users (so no progressing bar).
-	 */
-	//implicit: false,
-	/** Whether this event is ignorable, i.e., whether to ignore any error
+	/** Options.
+	 * <dl>
+	 * <dt>implicit</dt>
+	 * <dd>Whether this event is an implicit event, i.e., whether it is implicit
+	 * to users (so no progressing bar).</dd>
+	 * <dt>ignorable</dt>
+	 * <dd>Whether this event is ignorable, i.e., whether to ignore any error
 	 * of sending this event back the server.
-	 * An ignorable event is also an imiplicit event
+	 * An ignorable event is also an imiplicit event.</dd>
+	 * <dt>ctl</dt>
+	 * <dd>Whether it is a control, such as onClick, rather than
+	 * a notification for status change.</dd>
+	 * </dl>
 	 */
-	//ignorable: false
 	/** Whether to stop the event propogation.
 	 * Note: it won't be sent to the server if stop is true.
 	 */
 	//stop: false,
 
-	$init: function (target, name, data, implicit, ignorable) {
+	$init: function (target, name, data, opts) {
 		this.target = target;
 		this.name = name;
 		this.data = typeof data == 'string' ? [data]: data ? data: null;
-		this.implicit = implicit;
-		this.ignorable = ignorable;
+		this.opts = opts;
 	}
 });
 

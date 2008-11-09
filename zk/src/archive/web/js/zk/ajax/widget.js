@@ -301,7 +301,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * For example, you don't want DOM class and style to generate, call
 	 * getDomClass_({domclass: 1, style: 1});
 	 */
-	getOuterAttrs_: function (no) {
+	getDomAttrs_: function (no) {
 		var html = !no || !no.id ? ' id="' + this.uuid + '"': '';
 		if (!no || !no.style) {
 			var s = this.getDomStyle_();
@@ -460,8 +460,8 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 	},
 	/** A simpler way to fire an event. */
-	fire2: function (evtnm, data, implicit, ignorable) {
-		this.fire(new zk.Event(this, evtnm, data, implicit, ignorable));
+	fire2: function (evtnm, data, opts) {
+		this.fire(new zk.Event(this, evtnm, data, opts));
 	},
 	/** Adds a listener to the specified event.
 	 * The listener must have a method having the same name as the event.
@@ -472,15 +472,22 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * @return true if added successfully.
 	 */
 	listen: function (evtnm, listener, overwrite) {
-		var lsns = this._lsns[name];
-		if (!lsns) lsns = this._lsns[name] = [];
+		var lsns = this._lsns[evtnm];
+		if (!lsns) lsns = this._lsns[evtnm] = [];
 		lsns.add(listener, overwrite);
 	},
 	/** Removes a listener from the sepcified event.
 	 */
 	unlisten: function (evtnm, listener) {
-		var lsns = this._lsns[name];
+		var lsns = this._lsns[evtnm];
 		return lsns && lsns.remove(watch);
+	},
+	/** Returns if a listener is registered or the specified event.
+	 */
+	isListen: function (evtnm) {
+		if (this[evtnm]) return true;
+		var lsns = this._lsns[evtnm];
+		return lsns && lsns.length;
 	},
 	_lsns: {}, //listeners Map(evtnm,listener)
 	/** Returns the delay before sending a deferrable event.

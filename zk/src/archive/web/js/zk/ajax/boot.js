@@ -153,6 +153,7 @@ function _zkinit() {
 
 	//TODO more listener
 	zEvt.listen(document, "click", _zkDocLClick);
+	zEvt.listen(document, "dblclick", _zkDocDClick);
 
 	for (var fn, afbts = _zkafbts; fn = afbts.shift();)
 		fn();
@@ -234,12 +235,28 @@ function _zkDocLClick(evt) {
 
 	if (evt.which == 1 || (evt.button == 0 || evt.button == 1)) {
 		var wgt = zEvt.widget(evt);
-		for (; wgt; wgt = wgt.parent)
-			if (wgt.onClick != zk.undefined) {
-				wgt.fire2("onClick");
+		for (; wgt; wgt = wgt.parent) {
+			if (wgt.href) {
+				zUtl.go(href, false, wgt.target, "target");
+				return; //done
+			}
+			if (wgt.isListen('onClick')) {
+				wgt.fire2("onClick", zEvt.mouseData(evt, wgt.node), {ctl:true});
 				return;
 			}
+		}
 		//no need to Event.stop
 	}
 	//don't return anything. Otherwise, it replaces event.returnValue in IE (Bug 1541132)
-};
+}
+/** Handles the double click. */
+function _zkDocDClick(evt) {
+	if (!evt) evt = window.event;
+
+	var wgt = zEvt.widget(evt);
+	for (; wgt; wgt = wgt.parent)
+		if (wgt.isListen('onDoubleClick')) {
+			wgt.fire2("onDoubleClick", zEvt.mouseData(evt, wgt.node), {ctl:true});
+			return;
+		}
+}

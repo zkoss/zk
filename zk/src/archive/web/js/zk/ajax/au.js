@@ -124,7 +124,11 @@ zAu = { //static methods
 	 * If negative, it won't be sent until next non-negative event
 	 */
 	send: function (aureq, timeout) {
-		if (timeout < 0) aureq.implicit = true;
+		if (timeout < 0) {
+			var opts = aureq.opts;
+			if (!opts) opts = aureq.opts = {};
+			opts.implicit = true;
+		}
 
 		var t = aureq.target;
 		if (t) {
@@ -394,7 +398,8 @@ zAu = { //static methods
 	},
 
 	_send: function (dt, aureq, timeout) {
-		if (aureq.ctl) {
+		var opts = aureq.opts;
+		if (opts && opts.ctl) {
 			//Don't send the same request if it is in processing
 			if (zAu._areqInf && zAu._areqInf.ctli == aureq.uuid
 			&& zAu._areqInf.ctlc == aureq.cmd)
@@ -454,13 +459,13 @@ zAu = { //static methods
 		//decide implicit and ignorable
 		var implicit = true, ignorable = true, ctli, ctlc;
 		for (var j = es.length; --j >= 0;) {
-			var aureq = es[j];
-			if (implicit && !aureq.ignorable) { //ignorable implies implicit
+			var aureq = es[j], opts = aureq.opts;
+			if (implicit && (!opts || !opts.ignorable)) { //ignorable implies implicit
 				ignorable = false;
-				if (!aureq.implicit)
+				if (!opts || !opts.implicit)
 					implicit = false;
 			}
-			if (aureq.ctl && !ctli) {
+			if (opts && opts.ctl && !ctli) {
 				ctli = aureq.target.uuid;
 				ctlc = aureq.name;
 			}

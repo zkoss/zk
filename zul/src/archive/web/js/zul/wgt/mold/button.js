@@ -13,11 +13,39 @@ This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function () {
-	var html = '<span' + this.getOuterAttrs_() + '><table id="' +
-		+ this.uuid +'$box"' + zUtl.cellps0,
-		v = this.tabindex;
-	if (v >= 0 && !zk.gecko && !zk.safari)
-		html += ' tabindex="' + v + '"';
-	html += '><tr><td>';
-	return html + this.getLabel() + '</td></tr></table></span>';
+	var zcls = this.getZclass(),
+		tabi = this.tabindex;
+	tabi = tabi >= 0 ? ' tabindex="' + tabi + '"': '';
+
+	var html = '<span' + this.getDomAttrs_({style:1,domclass:1})
+		+ ' class="' + zcls + '"';
+	if (!this.isVisible()) html += ' style="display:none"';
+	html += '><table id="' + this.uuid +'$box"' + zUtl.cellps0;
+	if (tabi && !zk.gecko && !zk.safari) html += tabi;
+	var s = this.getDomStyle_();
+	if (s) html += ' style="' + s + '"';
+	s = this.getDomClass_();
+	if (s) html += ' class="' + s + '"';
+
+	var btn = '<button id="' + this.uuid + '$btn" class="' + zcls + '"',
+	s = this.isDisabled();
+	if (s) btn += ' disabled="disabled"';
+	if (tabi && (zk.gecko || zk.safari)) btn += tabi;
+	btn += '></button>';
+
+	html += '><tr><td class="' + zcls + '-tl">';
+	if (!zk.ie) html += btn;
+	html += '</td><td class="' + zcls + '-tm"></td>'
+		+ '<td class="' + zcls + '-tr"></td></tr>';
+
+	html += '<tr><td class="' + zcls + '-cl">';
+	if (zk.ie) html += btn;
+	html += '</td><td class="' + zcls + '-cm">'
+		+ this._getDomContent()
+		+ '</td><td class="' + zcls + '-cr"><i class="' + zcls
+		+ '"></i></td></tr>';
+
+	return html + '<tr><td class="' + zcls + '-bl"></td>'
+		+ '<td class="' + zcls + '-bm"></td>'
+		+ '<td class="' + zcls + '-br"></td></tr></table></span>';
 }
