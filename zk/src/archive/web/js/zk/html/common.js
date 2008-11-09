@@ -2182,26 +2182,20 @@ zk.getIntAttr = function (el, nm) {
 };
 
 //selection//
-zk.clearSelection = function(){
+zk.clearSelection = function () {
 	try{
-		if(window["getSelection"]){ 
-			if(zk.safari){
-				window.getSelection().collapse();
-			}else{
-				window.getSelection().removeAllRanges();
-			}
-		}else if(document.selection){
-			if(document.selection.empty){
-				document.selection.empty();
-			}else if(document.selection.clear){
-				document.selection.clear();
-			}
+		if (window["getSelection"]) {
+			if (zk.safari) window.getSelection().collapse();
+			else window.getSelection().removeAllRanges();
+		} else if (document.selection) {
+			if (document.selection.empty) document.selection.empty();
+			else if(document.selection.clear) document.selection.clear();
 		}
 		return true;
 	} catch (e){
 		return false;
 	}
-}
+};
 /** Disable whether the specified element is selectable. */
 zk.disableSelection = function (el) {
 	el = $e(el);
@@ -2228,20 +2222,6 @@ zk.enableSelection = function (el) {
 		else if (zk.ie)
 			el.onselectstart = null;
 };
-/** Clears selection, if any. */
-zk.clearSelection = function (){
-	try {
-		if (window["getSelection"]){ 
-			if (zk.safari) window.getSelection().collapse();
-			else window.getSelection().removeAllRanges();
-		} else if (document.selection){
-			if (document.selection.empty) document.selection.empty();
-			else if(document.selection.clear) document.selection.clear();
-		}
-	} catch (e){ //ignore
-	}
-}
-
 
 /*Float: used to be added to zkau.floats
  * Derives must provide an implementation of _close(el).
