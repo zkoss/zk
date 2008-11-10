@@ -18,7 +18,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <hbox height="300px" width="100%" style="border:1px solid blue">
-	<vbox height="100%">
+	<vbox width="100%" height="100%">
 	Column 1-1: a lot of text here, try to split over multiple lines.
 	Then we can see the effect.
 		<splitter collapse="after"/>
@@ -32,7 +32,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<splitter collapse="before"/>
 	<div>
 	Column 2: this is column 2.
-	<separator/>
 	And more text to it multiple lines.
 	</div>
 	<div>

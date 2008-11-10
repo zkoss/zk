@@ -228,19 +228,19 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			if (zDom.isVisible(d))
 				if (vert) {
 					var diff = d.offsetHeight;
-					if(d.id) { //TR
+					if(d.id && !d.id.endsWith("$chdex2")) { //TR
 						//Bug 1917905: we have to manipulate height of TD in Safari
 						if (d.cells.length) {
 							var c = d.cells[0];
-							c.style.height = zDom.revisedSize(c, i ? diff: total, true) + "px";
+							c.style.height = zDom.revisedHeight(c, i ? diff: total) + "px";
 						}
 						d.style.height = ""; //just-in-case
 					}
 					total -= diff;
 				} else {
 					var diff = d.offsetWidth;
-					if(d.id) //TD
-						d.style.width = zDom.revisedSize(d, i ? diff: total) + "px";
+					if(d.id && !d.id.endsWith("$chdex2")) //TD
+						d.style.width = zDom.revisedWidth(d, i ? diff: total) + "px",
 					total -= diff;
 				}
 		}

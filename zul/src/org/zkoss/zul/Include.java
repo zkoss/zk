@@ -280,7 +280,7 @@ public class Include extends XulElement implements DynamicPropertied, Includer {
 						Files.write(extout, sw.getBuffer());
 						extout.write("</span>");
 					} else {
-						out.write("_zkws[0].props.content='");
+						out.write("zkbTop().props.content='");
 						final StringBuffer sb = new StringBuffer(1024);
 						Strings.appendEscape(sb, sw.getBuffer(), "'\\\n\r\t\f");
 						Files.write(out, sb);
