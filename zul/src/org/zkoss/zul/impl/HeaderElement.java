@@ -27,7 +27,7 @@ import org.zkoss.zk.ui.UiException;
  *
  * @author tomyeh
  */
-abstract public class HeaderElement extends LabelImageElement {
+abstract public class HeaderElement extends LabelImageElement implements org.zkoss.zul.impl.api.HeaderElement{
 	private String _align, _valign;
 
 	/** Returns the horizontal alignment of this column.

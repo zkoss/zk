@@ -31,7 +31,7 @@ import org.zkoss.zul.impl.XulElement;
  * @author gracelin
  * @since 3.5.0
  */
-public class Columnchildren extends XulElement {
+public class Columnchildren extends XulElement implements org.zkoss.zkex.zul.api.Columnchildren {
 
 	public Columnchildren() {
 	}

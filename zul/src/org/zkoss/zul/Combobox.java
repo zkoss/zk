@@ -78,7 +78,7 @@ import org.zkoss.zul.impl.Utils;
  * @author tomyeh
  * @see Comboitem
  */
-public class Combobox extends Textbox {
+public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 	private static final Log log = Log.lookup(Combobox.class);
 	private boolean _autodrop, _autocomplete, _btnVisible = true;
 	private transient Comboitem _selItem;
@@ -457,13 +457,25 @@ public class Combobox extends Textbox {
 	public Comboitem getItemAtIndex(int index) {
 		return (Comboitem)getItems().get(index);
 	}
-
+	/** Returns the item at the specified index.
+	 * @since 3.5.2
+	 */
+	public org.zkoss.zul.api.Comboitem getItemAtIndexApi(int index) {
+		return getItemAtIndex(index);
+	}
+	
 	/** Appends an item.
 	 */
 	public Comboitem appendItem(String label) {
 		final Comboitem item = new Comboitem(label);
 		item.setParent(this);
 		return item;
+	}
+	/** Appends an item.
+	 * @since 3.5.2
+	 */
+	public org.zkoss.zul.api.Comboitem appendItemApi(String label) {
+		return appendItem(label);
 	}
 	/**  Removes the child item in the list box at the given index.
 	 * @return the removed item.
@@ -473,13 +485,26 @@ public class Combobox extends Textbox {
 		removeChild(item);
 		return item;
 	}
-
+	/**  Removes the child item in the list box at the given index.
+	 * @return the removed item.
+	 * @since 3.5.2
+	 */
+	public org.zkoss.zul.api.Comboitem removeItemAtApi(int index) {
+		return removeItemAt(index);
+	}
 	/** Returns the selected item.
 	 * @since 2.4.0
 	 */
 	public Comboitem getSelectedItem() {
 		return _selItem;
 	}
+	/** Returns the selected item.
+	 * @since 3.5.2
+	 */
+	public org.zkoss.zul.api.Comboitem getSelectedItemApi() {
+		return getSelectedItem();
+	}
+
 	
 	/**  Deselects the currently selected items and selects the given item.
 	 * <p>Note: if the label of comboitem has the same more than one, the first 
@@ -489,6 +514,16 @@ public class Combobox extends Textbox {
 	 */
 	public void setSelectedItem(Comboitem item) {
 		setSelectedIndex(getItems().indexOf(item));
+	}
+	/**  Deselects the currently selected items and selects the given item.
+	 * <p>Note: if the label of comboitem has the same more than one, the first 
+	 * comboitem will be selected at client side, it is a limitation of {@link Combobox}
+	 * and it is different from {@link Listbox}.</p>
+	 * @since 3.5.2
+	 */
+	public void setSelectedItemApi(org.zkoss.zul.api.Comboitem itemApi) {
+		Comboitem item = (Comboitem) itemApi;
+		setSelectedItem(item);
 	}
 	
 	/** Deselects the currently selected items and selects

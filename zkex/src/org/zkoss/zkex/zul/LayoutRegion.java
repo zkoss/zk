@@ -35,7 +35,7 @@ import org.zkoss.zul.impl.Utils;
  * @author jumperchen
  * @since 3.0.0
  */
-public abstract class LayoutRegion extends XulElement {
+public abstract class LayoutRegion extends XulElement implements org.zkoss.zkex.zul.api.LayoutRegion {
 
 	private boolean _flex;
 

@@ -51,7 +51,7 @@ import org.zkoss.zul.ext.Constrainted;
  * @author tomyeh
  */
 abstract public class InputElement extends XulElement
-implements Constrainted {
+implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	private static final Log log = Log.lookup(InputElement.class);
 
 	/** The value. */

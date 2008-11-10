@@ -38,7 +38,7 @@ import org.zkoss.zul.au.out.AuPopup;
  *
  * @author tomyeh
  */
-public class Popup extends XulElement {
+public class Popup extends XulElement implements org.zkoss.zul.api.Popup {
 	public Popup() {
 		super.setVisible(false);
 	}

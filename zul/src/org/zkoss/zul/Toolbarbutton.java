@@ -38,7 +38,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  *
  * @author tomyeh
  */
-public class Toolbarbutton extends LabelImageElement {
+public class Toolbarbutton extends LabelImageElement implements org.zkoss.zul.api.Toolbarbutton {
 	private String _orient = "horizontal", _dir = "normal";
 	private String _href, _target;
 	private int _tabindex = -1;

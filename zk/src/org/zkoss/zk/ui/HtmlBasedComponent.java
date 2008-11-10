@@ -55,7 +55,7 @@ import org.zkoss.zk.fn.ZkFns;
  *
  * @author tomyeh
  */
-abstract public class HtmlBasedComponent extends AbstractComponent {
+abstract public class HtmlBasedComponent extends AbstractComponent implements org.zkoss.zk.ui.api.HtmlBasedComponent{
 	private String _tooltiptext;
 	/** The width. */
 	private String _width;

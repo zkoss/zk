@@ -42,7 +42,7 @@ import org.zkoss.zul.impl.Utils;
  *
  * @author tomyeh
  */
-public class Row extends XulElement {
+public class Row extends XulElement implements org.zkoss.zul.api.Row {
 	private Object _value;
 	private String _align, _valign;
 	private int[] _spans;
@@ -63,11 +63,24 @@ public class Row extends XulElement {
 	public Detail getDetailChild() {
 		return _detail;
 	}
-	
+	/**
+	 * Returns the child detail component.
+	 * @since 3.5.2
+	 */
+	public org.zkoss.zul.api.Detail getDetailChildApi() {
+		return getDetailChild();
+	}
 	/** Returns the grid that contains this row. */
 	public Grid getGrid() {
 		final Component parent = getParent();
 		return parent != null ? (Grid)parent.getParent(): null;
+	}
+
+	/** Returns the grid that contains this row. 
+	 * @since 3.5.2
+	 * */
+	public org.zkoss.zul.api.Grid getGridApi() {		
+		return getGrid();
 	}
 
 	/** Returns the horizontal alignment of the whole row.
@@ -226,7 +239,13 @@ public class Row extends XulElement {
 		final Rows rows = (Rows) getParent();
 		return (rows != null) ? rows.getGroup(getIndex()) : null;
 	}
-	
+	/**
+	 * Returns the group that this row belongs to, or null.
+	 * @since 3.5.2
+	 */
+	public org.zkoss.zul.api.Group getGroupApi() {
+		return getGroup();
+	}
 	/** Returns the HTML attributes for the child of the specified index.
 	 */
 	public String getChildAttrs(int index) {

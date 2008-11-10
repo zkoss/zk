@@ -39,7 +39,7 @@ import org.zkoss.zul.mesg.MZul;
  * @author gracelin
  * @since 3.5.0
  */
-public class Spinner extends NumberInputElement {
+public class Spinner extends NumberInputElement implements org.zkoss.zul.api.Spinner {
 	private int _step = 1;
 	private boolean _btnVisible = true;
 

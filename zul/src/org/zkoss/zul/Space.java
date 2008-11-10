@@ -27,7 +27,7 @@ import org.zkoss.zk.ui.WrongValueException;
  *
  * @author tomyeh
  */
-public class Space extends Separator {
+public class Space extends Separator implements org.zkoss.zul.api.Space {
 	public Space() {
 		try {
 			setOrient("vertical");

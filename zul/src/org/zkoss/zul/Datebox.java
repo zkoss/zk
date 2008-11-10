@@ -51,7 +51,7 @@ import org.zkoss.zul.impl.Utils;
  * <p>Default {@link #getZclass}: z-datebox.(since 3.5.0)
  * @author tomyeh
  */
-public class Datebox extends FormatInputElement {
+public class Datebox extends FormatInputElement implements org.zkoss.zul.api.Datebox {
 	private TimeZone _tzone;
 	private boolean _lenient = true;
 	private boolean _compact, _btnVisible = true;

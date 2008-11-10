@@ -41,7 +41,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * @author tomyeh
  */
-public class Calendar extends XulElement {
+public class Calendar extends XulElement implements org.zkoss.zul.api.Calendar {
 	private TimeZone _tzone;
 	private Date _value;
 	/** The name. */

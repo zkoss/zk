@@ -34,7 +34,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  * <p>Default {@link #getZclass}: z-button.(since 3.5.0)
  * @author tomyeh
  */
-public class Button extends LabelImageElement {
+public class Button extends LabelImageElement implements org.zkoss.zul.api.Button {
 	private String _orient = "horizontal", _dir = "normal";
 	private String _href, _target;
 	private int _tabindex = -1;

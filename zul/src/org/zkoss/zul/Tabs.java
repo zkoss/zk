@@ -36,7 +36,7 @@ import org.zkoss.zul.impl.XulElement;
  * <p>Default {@link #getZclass}: z-tabs. (since 3.5.2)
  * @author tomyeh
  */
-public class Tabs extends XulElement {
+public class Tabs extends XulElement implements org.zkoss.zul.api.Tabs {
 	
 	private String _align = "start";
 	/** Returns the tabbox owns this component.
@@ -44,6 +44,13 @@ public class Tabs extends XulElement {
 	 */
 	public Tabbox getTabbox() {
 		return (Tabbox)getParent();
+	}
+	/** Returns the tabbox owns this component.
+	 * <p>It is the same as {@link #getParent}.
+	 * @since 3.5.2
+	 */
+	public org.zkoss.zul.api.Tabbox getTabboxApi() {
+		return getTabbox();
 	}
 	public String getWidth() {
 		String width = super.getWidth();

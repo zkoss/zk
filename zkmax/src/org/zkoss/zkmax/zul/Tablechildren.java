@@ -36,7 +36,7 @@ import org.zkoss.zul.impl.XulElement;
  * @author robbiecheng
  * @since 3.5.0
  */
-public class Tablechildren extends XulElement{
+public class Tablechildren extends XulElement implements org.zkoss.zkmax.zul.api.Tablechildren {
 	private int _colspan = 1, _rowspan = 1;
 	
 	public Tablechildren() {

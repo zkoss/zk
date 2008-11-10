@@ -44,7 +44,7 @@ import org.zkoss.zul.impl.XulElement;
  * 
  * @author tomyeh
  */
-public class Splitter extends XulElement {
+public class Splitter extends XulElement implements org.zkoss.zul.api.Splitter {
 	private String _collapse = "none";
 	private boolean _open = true;
 

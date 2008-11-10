@@ -32,7 +32,7 @@ import org.zkoss.zul.impl.XulElement;
  * @author jumperchen
  * @since 3.5.0
  */
-public class Portalchildren extends XulElement {
+public class Portalchildren extends XulElement implements org.zkoss.zkmax.zul.api.Portalchildren {
 	/** disable smartUpdate; usually caused by the client. */
 	private boolean _noSmartUpdate;
 	

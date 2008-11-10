@@ -37,7 +37,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  * 
  * @author tomyeh
  */
-public class Listfooter extends LabelImageElement {
+public class Listfooter extends LabelImageElement implements org.zkoss.zul.api.Listfooter {
 	private int _span = 1;
 
 	public Listfooter() {
@@ -55,6 +55,12 @@ public class Listfooter extends LabelImageElement {
 	public Listbox getListbox() {
 		final Component comp = getParent();
 		return comp != null ? (Listbox)comp.getParent(): null;
+	}
+	/** Returns the listbox that this belongs to.
+	 * @since 3.5.2
+	 */
+	public org.zkoss.zul.api.Listbox getListboxApi() {
+		return getListbox();
 	}
 	/** Returns the column index, starting from 0.
 	 */
@@ -81,6 +87,13 @@ public class Listfooter extends LabelImageElement {
 			}
 		}
 		return null;
+	}
+	/** Returns the list header that is in the same column as
+	 * this footer, or null if not available.
+	 * @since 3.5.2
+	 */
+	public org.zkoss.zul.api.Listheader getListheaderApi() {
+		return getListheader();
 	}
 
 	/** Returns number of columns to span this footer.

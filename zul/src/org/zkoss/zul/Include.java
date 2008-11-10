@@ -100,7 +100,7 @@ import org.zkoss.zul.mesg.MZul;
  * @author tomyeh
  * @see Iframe
  */
-public class Include extends XulElement implements DynamicPropertied {
+public class Include extends XulElement implements DynamicPropertied, org.zkoss.zul.api.Include {
 	private static final Log log = Log.lookup(Include.class);
 	private String _src;
 	private Map _dynams;

@@ -39,7 +39,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  *
  * @author tomyeh
  */
-public class Checkbox extends LabelImageElement {
+public class Checkbox extends LabelImageElement implements org.zkoss.zul.api.Checkbox {
 	/** The name. */
 	private String _name;
 	private int _tabindex = -1;

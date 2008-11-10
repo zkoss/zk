@@ -31,7 +31,7 @@ import org.zkoss.zul.impl.NumberInputElement;
  *
  * @author tomyeh
  */
-public class Decimalbox extends NumberInputElement {
+public class Decimalbox extends NumberInputElement implements org.zkoss.zul.api.Decimalbox {
 	/** Used with {@link #setScale} to denote that the scale is decided by
 	 * what user has entered.
 	 */

@@ -44,7 +44,7 @@ import org.zkoss.zul.ext.Paginal;
  *
  * @author tomyeh
  */
-public class Treechildren extends XulElement {
+public class Treechildren extends XulElement implements org.zkoss.zul.api.Treechildren {
 	private static final String VISIBLE_ITEM = "org.zkoss.zul.Treechildren.visibleItem";
 
 	private int _visibleItemCount;
@@ -55,6 +55,12 @@ public class Treechildren extends XulElement {
 			if (p instanceof Tree)
 				return (Tree)p;
 		return null;
+	}
+	/** Returns the {@link Tree} instance containing this element.
+	 * @since 3.5.2
+	 */
+	public org.zkoss.zul.api.Tree getTreeApi() {
+		return getTree();
 	}
 	/** Returns the {@link Treerow} that is associated with
 	 * this treechildren, or null if no such treerow.
@@ -69,7 +75,17 @@ public class Treechildren extends XulElement {
 		return parent instanceof Treeitem ?
 			((Treeitem)parent).getTreerow(): null;
 	}
-
+	/** Returns the {@link Treerow} that is associated with
+	 * this treechildren, or null if no such treerow.
+	 * In other words, it is {@link Treeitem#getTreerow} of
+	 * {@link #getParent}.
+	 *
+	 * @since 3.5.2
+	 * @see Treerow#getLinkedTreechildren
+	 */
+	public org.zkoss.zul.api.Treerow getLinkedTreerowApi() {
+		return getLinkedTreerow();
+	}
 	/** Returns whether this is visible.
 	 * <p>Besides depends on {@link #setVisible}, it also depends on
 	 * whether all its ancestors is open.

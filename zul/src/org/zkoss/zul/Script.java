@@ -54,7 +54,7 @@ import org.zkoss.zk.ui.UiException;
  *
  * @author tomyeh
  */
-public class Script extends AbstractComponent {
+public class Script extends AbstractComponent implements org.zkoss.zul.api.Script {
 	private String _src, _type = "text/javascript", _charset;
 	private String _content;
 	private boolean _defer;

@@ -56,7 +56,7 @@ import org.zkoss.zul.impl.XulElement;
  * 
  * @author tomyeh
  */
-public class Tabbox extends XulElement {
+public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 	private transient Tabs _tabs;
 	private transient Tabpanels _tabpanels;
 	private transient Tab _seltab;
@@ -87,14 +87,26 @@ public class Tabbox extends XulElement {
 	public Tabs getTabs() {
 		return _tabs;
 	}
-
+	/**
+	 * Returns the tabs that this tabbox owns.
+	 * @since 3.5.2
+	 */
+	public org.zkoss.zul.api.Tabs getTabsApi() {
+		return getTabs();
+	};
 	/**
 	 * Returns the tabpanels that this tabbox owns.
 	 */
 	public Tabpanels getTabpanels() {
 		return _tabpanels;
 	}
-
+	/**
+	 * Returns the tabpanels that this tabbox owns.
+	 * @since 3.5.2
+	 */
+	public org.zkoss.zul.api.Tabpanels getTabpanelsApi() {
+		return getTabpanels();
+	}
 	/**
 	 * Returns whether the tab scrolling is enabled. 
 	 * Default: true.
@@ -162,7 +174,13 @@ public class Tabbox extends XulElement {
 	public Tabpanel getSelectedPanel() {
 		return _seltab != null ? _seltab.getLinkedPanel() : null;
 	}
-
+	/**
+	 * Returns the selected tab panel.
+	 * @since 3.5.2
+	 */
+	public org.zkoss.zul.api.Tabpanel getSelectedPanelApi() {
+		return getSelectedPanel();
+	}
 	/**
 	 * Sets the selected tab panel.
 	 */
@@ -173,6 +191,15 @@ public class Tabbox extends XulElement {
 		if (tab != null)
 			setSelectedTab(tab);
 	}
+	/**
+	 * Sets the selected tab panel.
+	 * @param panelApi assume as a {@link org.zkoss.zul.Tabpanel}   
+	 * @since 3.5.2
+	 */
+	public void setSelectedPanelApi(org.zkoss.zul.api.Tabpanel panelApi) {
+		Tabpanel panel = (Tabpanel) panelApi;
+		setSelectedPanel(panel);
+	}
 
 	/**
 	 * Returns the selected tab.
@@ -180,12 +207,28 @@ public class Tabbox extends XulElement {
 	public Tab getSelectedTab() {
 		return _seltab;
 	}
-
+	/**
+	 * Returns the selected tab.
+	 * @since 3.5.2
+	 */
+	public org.zkoss.zul.api.Tab getSelectedTabApi() {
+		return getSelectedTab();
+	}
 	/**
 	 * Sets the selected tab.
 	 */
 	public void setSelectedTab(Tab tab) {
 		selectTabDirectly(tab, false);
+	}
+	
+	/**
+	 * Sets the selected tab.	 
+	 * @param tabApi assume as a {@link org.zkoss.zul.Tab}   
+	 * @since 3.5.2
+	 */
+	public void setSelectedTabApi(org.zkoss.zul.api.Tab tabApi) {
+		Tab tab = (Tab) tabApi;
+		setSelectedTab(tab);
 	}
 
 	/** Sets the selected tab. */
