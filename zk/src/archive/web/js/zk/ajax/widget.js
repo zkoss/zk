@@ -509,8 +509,20 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * (i.e., not associated with an DOM element).
 	 */
 	$: function (uuid) {
-		//No map from uuid to widget directly. rather, go thru DOM
-		var n = zDom.$(uuid);
+		//1. No map from uuid to widget directly. rather, go thru DOM
+		//2. We have to remove '$*' since $chdex is parentNode!
+		var n;
+		if (typeof uuid == 'string') {
+			var j = uuid.lastIndexOf('$');
+			n = zDom.$(j >= 0 ? uuid.substring(0, j): uuid);
+		} else {
+			n = uuid;
+			uuid = n.id;
+			if (uuid) {
+				var j = uuid.lastIndexOf('$');
+				if (j >= 0) n = zDom.$(uuid.substring(0, j));
+			}
+		}
 		for (; n; n = n.parentNode) {
 			var wgt = n.z_wgt;
 			if (wgt) return wgt;

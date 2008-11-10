@@ -103,7 +103,7 @@ zWatch = {
 			len = wts ? wts.length: 0;
 		if (len) {
 			var args = [], o;
-			for (var j = 1, l = arguments.length; j < l;)
+			for (var j = 2, l = arguments.length; j < l;)
 				args.push(arguments[j++]);
 
 			wts = wts.clone(); //make a copy since unwatch might be called
@@ -134,7 +134,7 @@ zWatch = {
 			len = wts ? wts.length: 0;
 		if (len) {
 			var args = [];
-			for (var j = 2, l = arguments.length; j < l;)
+			for (var j = 3, l = arguments.length; j < l;)
 				args.push(arguments[j++]);
 
 			var found = [], o;

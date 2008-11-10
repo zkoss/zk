@@ -104,13 +104,19 @@ zDom = { //static methods
 		return val;
 	},
 	/**
-	 * Returns the revised size, which subtracted the size of its CSS border or padding, for the specified element.
-	 * @param {Number} size original size of the specified element. 
-	 * @param {Boolean} isHgh if true it will be "tb" top and bottom.
-	 * @return {Number}
+	 * Returns the revised width, which subtracted the size of its CSS border or padding, for the specified element.
+	 * @param size original size of the specified element. 
 	 */
-	revisedSize: function (el, size, isHgh) {
-		size -= isHgh ? zDom.frameHeight(el): zDom.frameWidth(el);
+	revisedWidth: function (el, size) {
+		size -= zDom.frameWidth(el);
+		return size < 0 ? 0: size;
+	},
+	/**
+	 * Returns the revised width, which subtracted the size of its CSS border or padding, for the specified element.
+	 * @param size original size of the specified element. 
+	 */
+	revisedHeight: function (el, size, isHgh) {
+		size -= zDom.frameHeight(el);
 		return size < 0 ? 0: size;
 	},
 	/**

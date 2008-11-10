@@ -761,7 +761,7 @@ zAu.cmd1 = {
 		} else
 			cf = null;
 
-		_zkauf = function (newwgt) {
+		zAu.stub = function (newwgt) {
 			var p = newwgt.parent = wgt.parent,
 				s = newwgt.previousSibling = wgt.previousSibling;
 			if (s) s.nextSibling = newwgt;
@@ -779,7 +779,7 @@ zAu.cmd1 = {
 		try {
 			eval(code);
 		} finally {
-			_zkauf = null;
+			zAu.stub = null;
 		}
 	},
 	addAft: function (uuid, wgt, code) {
@@ -799,33 +799,33 @@ zAu.cmd1 = {
 			}
 		}
 
-		_zkauf = function (child) {
+		zAu.stub = function (child) {
 			wgt.parent.insertBefore(child, wgt.nextSibling);
 		};
 		try {
 			eval(code);
 		} finally {
-			_zkauf = null;
+			zAu.stub = null;
 		}
 	},
 	addBfr: function (uuid, wgt, code) {
-		_zkauf = function (child) {
+		zAu.stub = function (child) {
 			wgt.parent.insertBefore(child, wgt);
 		};
 		try {
 			eval(code);
 		} finally {
-			_zkauf = null;
+			zAu.stub = null;
 		}
 	},
 	addChd: function (uuid, wgt, code) {
-		_zkauf = function (child) {
+		zAu.stub = function (child) {
 			wgt.appendChild(child);
 		};
 		try {
 			eval(code);
 		} finally {
-			_zkauf = null;
+			zAu.stub = null;
 		}
 	},
 	rm: function (uuid, wgt) {
