@@ -57,7 +57,7 @@ import org.zkoss.zul.mesg.MZul;
  * @author Dennis Chen
  * @since 3.0.0
  */
-public class Timebox extends InputElement {
+public class Timebox extends InputElement implements org.zkoss.zul.api.Timebox {
 	private TimeZone _tzone;
 	private boolean _btnVisible = true;
 	

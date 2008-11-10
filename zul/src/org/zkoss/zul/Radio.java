@@ -40,7 +40,7 @@ import org.zkoss.zk.ui.UiException;
  *
  * @author tomyeh
  */
-public class Radio extends Checkbox {
+public class Radio extends Checkbox implements org.zkoss.zul.api.Radio {
 	private String _value = "";
 
 	public Radio() {
@@ -66,6 +66,17 @@ public class Radio extends Checkbox {
 				return (Radiogroup)q;
 			p = q;
 		}
+	}
+	/** Returns {@link Radiogroup} that this radio button belongs to.
+	 * It is the nearest ancestor {@link Radiogroup}.
+	 * In other words, it searches up the parent, parent's parent
+	 * and so on for any {@link Radiogroup} instance.
+	 * If found this radio belongs the found radiogroup.
+	 * If not, this radio itself is a group.
+	 * @since 3.5.2
+	 */
+	public org.zkoss.zul.api.Radiogroup getRadiogroupApi() {
+		return getRadiogroup();
 	}
 
 	/** Returns whether it is selected.

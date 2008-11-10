@@ -72,7 +72,7 @@ import org.zkoss.zul.impl.Utils;
  * @author gracelin
  * @since 3.0.2
  */
-public class Jasperreport extends Iframe {
+public class Jasperreport extends Iframe implements org.zkoss.zkex.zul.api.Jasperreport {
 	private static final Log log = Log.lookup(Jasperreport.class);
 	private static final long serialVersionUID = 20080117L;
 

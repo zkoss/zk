@@ -44,7 +44,7 @@ import java.util.ArrayList;
  * The generic captcha component. 
  * @author henrichen
  */
-public class Captcha extends org.zkoss.zul.Image {
+public class Captcha extends org.zkoss.zul.Image implements org.zkoss.zul.api.Captcha {
 	//control variable
 	private boolean _smartDrawCaptcha; //whether post the smartDraw event already?
 	private transient EventListener _smartDrawCaptchaListener; //the smartDrawListner

@@ -38,7 +38,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * @author tomyeh
  */
-public class Menubar extends XulElement {
+public class Menubar extends XulElement implements org.zkoss.zul.api.Menubar {
 	private boolean _autodrop;
 	private String _orient = "horizontal";
 

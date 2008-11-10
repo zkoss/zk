@@ -26,7 +26,7 @@ import org.zkoss.zk.ui.Component;
  *
  * @author tomyeh
  */
-public class Vbox extends Box {
+public class Vbox extends Box implements org.zkoss.zul.api.Vbox {
 	public Vbox() {
 	}
 	/** Constructor a vertical box by assigning an array of children.

@@ -43,7 +43,7 @@ import org.zkoss.zul.mesg.MZul;
  *
  * @author tomyeh
  */
-public class Columns extends HeadersElement {
+public class Columns extends HeadersElement implements org.zkoss.zul.api.Columns {
 	private String _mpop = "none";
 	private transient Menupopup _menupopup;
 	private boolean _columnshide = true;
@@ -54,6 +54,13 @@ public class Columns extends HeadersElement {
 	 */
 	public Grid getGrid() {
 		return (Grid)getParent();
+	}
+	/** Returns the grid that it belongs to.
+	 * <p>It is the same as {@link #getParent}.
+	 * @since 3.5.2
+	 */
+	public org.zkoss.zul.api.Grid getGridApi() {
+		return getGrid();
 	}
 
 	/**
@@ -152,7 +159,17 @@ public class Columns extends HeadersElement {
 	public void setPopup(Menupopup mpop) {
 		setPopup(mpop != null ? "uuid(" + mpop.getUuid() + ")": null);
 	}
-
+	/** Sets the UUID of the popup menu that should appear
+	 * when the user clicks on the element.
+	 *
+	 * <p>Note: it actually invokes
+	 * <code>setMenupopup("uuid(" + menupop.getUuid() + ")")</code>
+	 * @since 3.5.2
+	 * @see #setMenupopup(String)
+	 */
+	public void setPopupApi(org.zkoss.zul.api.Menupopup mpopApi) {
+		setPopup((Menupopup) mpopApi);		
+	}
 	/**
 	 * @since 3.5.0
 	 */

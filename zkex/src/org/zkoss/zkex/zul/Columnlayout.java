@@ -34,7 +34,7 @@ import org.zkoss.zul.impl.XulElement;
  * @author gracelin
  * @since 3.5.0
  */
-public class Columnlayout extends XulElement {
+public class Columnlayout extends XulElement implements org.zkoss.zkex.zul.api.Columnlayout {
 
 	public Columnlayout() {
 	}

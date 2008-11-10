@@ -35,7 +35,7 @@ import org.zkoss.zul.impl.XulElement;
  * @author jumperchen
  * @since 3.5.0
  */
-public class Fisheyebar extends XulElement {
+public class Fisheyebar extends XulElement implements org.zkoss.zkex.zul.api.Fisheyebar {
 	private int _itemwd = 50, _itemhgh = 50,
 	_itemmaxwd = 200, _itemmaxhgh = 200, _itemPadding = 10;
 	private String _orient = "horizontal", _attachEdge = "center",

@@ -34,7 +34,7 @@ import org.zkoss.zk.ui.UiException;
  * @author robbiecheng
  * @since 3.5.0
  */
-public class Groupfoot extends Row{
+public class Groupfoot extends Row implements org.zkoss.zul.api.Groupfoot {
 	public Groupfoot() {
 	}
 	public Groupfoot(String label) {

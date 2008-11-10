@@ -43,7 +43,7 @@ import org.zkoss.zul.impl.XulElement;
  * @author jumperchen
  * @since 3.5.0
  */
-public class Portallayout extends XulElement {
+public class Portallayout extends XulElement implements org.zkoss.zkmax.zul.api.Portallayout {
 
 	public Portallayout() {
 	}

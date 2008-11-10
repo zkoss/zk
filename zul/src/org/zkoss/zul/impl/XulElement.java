@@ -51,7 +51,7 @@ import org.zkoss.zul.event.ZulEvents;
  * @since 3.0.6 supports onCancel event.
  * @since 3.0.6 supports onCtrlKey event.
  */
-abstract public class XulElement extends HtmlBasedComponent {
+abstract public class XulElement extends HtmlBasedComponent implements org.zkoss.zul.impl.api.XulElement {
 	static {
 		//register commands
 		new ColSizeCommand(ZulEvents.ON_COL_SIZE, 0);

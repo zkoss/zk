@@ -29,7 +29,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * @author tomyeh
  */
-public class Bandpopup extends XulElement {
+public class Bandpopup extends XulElement implements org.zkoss.zul.api.Bandpopup {
 	public Bandpopup() {
 	}
 

@@ -37,7 +37,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  * 
  * @author tomyeh
  */
-public class Treefooter extends LabelImageElement {
+public class Treefooter extends LabelImageElement implements org.zkoss.zul.api.Treefooter {
 	private int _span = 1;
 
 	public Treefooter() {
@@ -55,6 +55,12 @@ public class Treefooter extends LabelImageElement {
 	public Tree getTree() {
 		final Component comp = getParent();
 		return comp != null ? (Tree)comp.getParent(): null;
+	}
+	/** Returns the tree that it belongs to.
+	 * @since 3.5.2
+	 */
+	public org.zkoss.zul.api.Tree getTreeApi() {
+		return getTree();
 	}
 	/** Returns the column index, starting from 0.
 	 */
@@ -81,6 +87,13 @@ public class Treefooter extends LabelImageElement {
 			}
 		}
 		return null;
+	}
+	/** Returns the tree header that is in the same column as
+	 * this footer, or null if not available.
+	 * @since 3.5.2
+	 */
+	public org.zkoss.zul.api.Treecol getTreecolApi() {
+		return getTreecol();
 	}
 
 	/** Returns number of columns to span this footer.

@@ -33,7 +33,7 @@ import org.zkoss.zul.ext.Paginated;
  *
  * @author tomyeh
  */
-public class Paging extends XulElement implements Paginal {
+public class Paging extends XulElement implements org.zkoss.zul.api.Paging, Paginal {
 	/** # of items per page. */
 	private int _pgsz = 20;
 	/** total # of items. */

@@ -29,7 +29,7 @@ import org.zkoss.zul.impl.XulElement;
  * <p>Default {@link #getZclass}: z-tabpanels. (since 3.5.0)
  * @author tomyeh
  */
-public class Tabpanels extends XulElement {
+public class Tabpanels extends XulElement implements org.zkoss.zul.api.Tabpanels {
 	public Tabpanels() {
 	}
 
@@ -39,7 +39,13 @@ public class Tabpanels extends XulElement {
 	public Tabbox getTabbox() {
 		return (Tabbox)getParent();
 	}
-
+	/**
+	 * Returns the tabbox owns this component.
+	 * @since 3.5.2
+	 */
+	public org.zkoss.zul.api.Tabbox getTabboxApi() {
+		return getTabbox();
+	}
 	//-- Component --//
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Tabbox))

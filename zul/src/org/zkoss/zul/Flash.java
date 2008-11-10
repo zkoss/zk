@@ -30,7 +30,7 @@ import org.zkoss.zk.ui.HtmlBasedComponent;
  * @author Jeff
  * @since 3.0.0
  */
-public class Flash extends HtmlBasedComponent {
+public class Flash extends HtmlBasedComponent implements org.zkoss.zul.api.Flash {
 
 
 	private static final long serialVersionUID = 1L;

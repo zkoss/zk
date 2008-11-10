@@ -35,7 +35,7 @@ import org.zkoss.zul.impl.HeaderElement;
  * @author tomyeh
  * @since 3.0.0
  */
-public class Auxheader extends HeaderElement {
+public class Auxheader extends HeaderElement implements org.zkoss.zul.api.Auxheader {
 	private int _colspan = 1, _rowspan = 1;
 
 	public Auxheader() {

@@ -26,7 +26,7 @@ package org.zkoss.zkex.zul;
  * @author jumperchen
  * @since 3.0.0
  */
-public class East extends LayoutRegion {
+public class East extends LayoutRegion implements org.zkoss.zkex.zul.api.East {
 	public East() {
 		setCmargins("0,5,5,0");
 	}

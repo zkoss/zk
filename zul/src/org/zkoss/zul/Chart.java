@@ -70,7 +70,7 @@ import java.util.TimeZone;
  * @see ChartModel
  * @author henrichen
  */
-public class Chart extends Imagemap {
+public class Chart extends Imagemap implements org.zkoss.zul.api.Chart {
 	//chart type
 	public static final String PIE = "pie";
 	public static final String RING = "ring";

@@ -43,7 +43,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * @author tomyeh
  */
-public class Radiogroup extends XulElement {
+public class Radiogroup extends XulElement implements org.zkoss.zul.api.Radiogroup {
 	private String _orient = "horizontal";
 	/** The name of all child radio buttons. */
 	private String _name;
@@ -88,6 +88,12 @@ public class Radiogroup extends XulElement {
 		if (radio == null)
 			throw new IndexOutOfBoundsException(index+" out of 0.."+(cur.value-1));
 		return radio;
+	}
+	/** Returns the radio button at the specified index.
+	 * @since 3.5.2
+	 */
+	public org.zkoss.zul.api.Radio getItemAtIndexApi(int index) {
+		return getItemAtIndex(index);
 	}
 	private static Radio getAt(Component comp, MutableInteger cur, int index) {
 		for (Iterator it = comp.getChildren().iterator(); it.hasNext();) {
@@ -143,6 +149,12 @@ public class Radiogroup extends XulElement {
 	public Radio getSelectedItem() {
 		return _jsel >= 0 ? getItemAtIndex(_jsel): null;
 	}
+	/** Returns the selected radio button.
+	 * @since 3.5.2
+	 */
+	public org.zkoss.zul.api.Radio getSelectedItemApi() {
+		return getSelectedItem();
+	}
 	/**  Deselects all of the currently selected radio buttons and selects
 	 * the given radio button.
 	 */
@@ -155,6 +167,15 @@ public class Radiogroup extends XulElement {
 			item.setSelected(true);
 		}
 	}
+	/**  Deselects all of the currently selected radio buttons and selects
+	 * the given radio button.
+	 * @param itemApi assume as a {@link org.zkoss.zul.Radio}   
+	 * @since 3.5.2
+	 */
+	public void setSelectedItemApi(org.zkoss.zul.api.Radio itemApi) {
+		Radio item = (Radio) itemApi;
+		setSelectedItemApi(item);		
+	}
 
 	/** Appends a radio button.
 	 */
@@ -165,6 +186,12 @@ public class Radiogroup extends XulElement {
 		item.setParent(this);
 		return item;
 	}
+	/** Appends a radio button.
+	 * @since 3.5.2
+	 */
+	public org.zkoss.zul.api.Radio appendItemApi(String label, String value) {
+		return appendItem(label, value);
+	}
 	/**  Removes the child radio button in the list box at the given index.
 	 * @return the removed radio button.
 	 */
@@ -172,6 +199,13 @@ public class Radiogroup extends XulElement {
 		final Radio item = getItemAtIndex(index);
 		removeChild(item);
 		return item;
+	}
+	/**  Removes the child radio button in the list box at the given index.
+	 * @return the removed radio button.
+	 * @since 3.5.2
+	 */
+	public org.zkoss.zul.api.Radio removeItemAtApi(int index) {
+		return removeItemAt(index);
 	}
 
 	/** Returns the name of this group of radio buttons.

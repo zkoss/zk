@@ -36,7 +36,7 @@ import org.zkoss.zk.ui.ext.render.DynamicMedia;
  * 
  * @author tomyeh
  */
-public class LabelImageElement extends LabelElement {
+public class LabelImageElement extends LabelElement implements org.zkoss.zul.impl.api.LabelImageElement{
 	private String _src;
 	/** The image. _src and _image cannot be both non-null. */
 	private Image _image;
