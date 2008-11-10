@@ -177,6 +177,16 @@ zk = { //static methods
 		jclass.isAssignableFrom = superclass.isAssignableFrom;
 		return jclass;
 	},
+	/** Provides the default values for the specified optios.
+	 * @param opts the options (a map) (could be null)
+	 * @param defaults the default values (a map) (cannot be null)
+	 */
+	$default: function (opts, defaults) {
+		opts = opts || {};
+		for (var p in defaults)
+			if (opts[p] == null)
+				opts[p] = defaults[p]
+	},
 
 	/** A does-nothing function. */
 	$void: function() {
