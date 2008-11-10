@@ -1,14 +1,16 @@
-/* FacadeInvoker.java
+/* FusionInvoker.java
 
 {{IS_NOTE
 
 	Purpose: 
+
 	Description: 
+
 	History:
-	2001/11/27 20:06:18, Create, Tom M. Yeh.
+		Tue Nov 4 14:45:31     2008, Created by Flyworld
 }}IS_NOTE
 
-Copyright (C) 2001 Potix Corporation. All Rights Reserved.
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
 	This program is distributed under GPL Version 2.0 in the hope that
@@ -64,18 +66,16 @@ public class FusionInvoker implements InvocationHandler {
 			throws Throwable {
 		Object result = null;
 		try {
-			System.out.println("1--->" + method.toString());
 			Class cls = _target.getClass();
 
 			if (!method.getDeclaringClass().isAssignableFrom(cls)) {
-				System.out.println("--> not found");
 				Iterator itr = _targetClass.iterator();
 
 				while (itr.hasNext()) {
 					Class _cls = itr.next().getClass();
-					if (method.getDeclaringClass().isAssignableFrom(_cls)) {												
-			            Object targetObj = _cls.newInstance();
-			            result = method.invoke(targetObj, args);
+					if (method.getDeclaringClass().isAssignableFrom(_cls)) {
+						Object targetObj = _cls.newInstance();
+						result = method.invoke(targetObj, args);
 					}
 				}
 			} else {
