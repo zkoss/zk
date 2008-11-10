@@ -26,6 +26,7 @@ ZK 3.5.2
   2227929: createComponents(String, Map) shall not add to current page
   2224964: FileUpload hang in IE on 1st click
   2241429: Cross-Site Scripting Vulnerability in ZK
+  2233787: No selected item in radiogroup if select by arrow key
 
 	--------
 ZK 3.5.1

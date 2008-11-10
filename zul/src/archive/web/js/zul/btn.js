@@ -171,7 +171,9 @@ zkCkbox.rmAttr = function (cmp, nm) {
 /** Handles onclick for checkbox and radio. */
 zkCkbox.onclick = function (evt) {
 	if (!evt) evt = window.event;
-	var real = $real(Event.element(evt)),
+	var real = $real(zk.gecko2Only ? evt.currentTarget : Event.element(evt)),
+	//bug #2233787 : this is a bug of firefox 2,
+	//                           it need get currentTarget
 		newval = real.checked;
 	if (newval != real.defaultChecked) { //changed
 		// bug #1893575 : we have to clean all of the radio at the same group.
