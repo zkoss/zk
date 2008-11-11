@@ -449,7 +449,7 @@ zAu = { //static methods
 
 		//notify watches (fckez uses it to ensure its value is sent back correctly
 		try {
-			zWatch.call('onSend', -1, implicit);
+			zWatch.fire('onSend', -1, implicit);
 		} catch (e) {
 			zk.error(e.message);
 		}
@@ -624,7 +624,7 @@ zAu = { //static methods
 			}
 		} finally {
 			if (processed && (!cmds || !cmds.length))
-				zWatch.call('onResponse', 0); //use setTimeout
+				zWatch.fire('onResponse', 0); //use setTimeout
 		}
 		return true;
 	},

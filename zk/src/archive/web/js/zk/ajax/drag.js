@@ -17,7 +17,8 @@ This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 zk.Draggable = zk.$extends(zk.Object, {
-	$init: function(node, opts) {
+	$init: function(wgt, node, opts) {
+		this.widget = wgt;
 		this.node = node = zDom.$(node);
 
 		opts = zk.$default(opts, {
@@ -32,59 +33,38 @@ zk.Draggable = zk.$extends(zk.Object, {
 			overlay: false
 		});
 
+		var zdg = zk.Draggable;
 		if (opts.reverteffect == null)
-			opts.reverteffect = function(node, top_offset, left_offset) {
-				var orgpos = node.style.position, //Bug 1538506
-					dur = Math.sqrt(Math.abs(top_offset^2)+Math.abs(left_offset^2))*0.02;
-				new zk.Effect.move(node, { x: -left_offset, y: -top_offset,
-					duration: dur, queue: {scope:'_draggable', position:'end'}});
-
-				//Bug 1538506: a strange bar appear in IE
-				setTimeout(function () {
-					zk.Dragdrop.restorePosition(node, orgpos);
-				}, dur * 1000 + 10);
-			};
+			opts.reverteffect = zdg.defaultRevertEffect;
 		if (opts.endeffect == null) {
-			opts.endeffect = function(node) {
-				var toOpacity = typeof node._opacity == 'number' ? node._opacity : 1.0;
-				new zk.Effect.opacity(node, {duration:0.2, from:0.7,
-					to:toOpacity, queue: {scope:'_draggable', position:'end'},
-					afterFinish: function () { 
-						zk.Draggable._dragging[node] = false;
-					}
-				});
-			};
+			opts.endeffect = zdg.defaultEndEffect;
 			if (opts.starteffect == null)
-				opts.starteffect = function (node) {
-					node._opacity = zDom.getOpacity(node);
-					zk.Draggable._dragging[node] = true;
-					new zk.Effect.opacity(node, {duration:0.2, from:node._opacity, to:0.7}); 
-				}
+				opts.starteffect = zdg.defaultStartEffect;
 		}
 
 
 		if(opts.handle) this.handle = zDom.$(opts.handle);
-		if(!this.handle) this.handle = this.node;
+		if(!this.handle) this.handle = node;
 
 		if(opts.scroll && !opts.scroll.scrollTo && !opts.scroll.outerHTML) {
 			opts.scroll = zDom.$(opts.scroll);
-			this._isScrollChild = zUtl.isAncestor(opts.scroll, this.node);
+			this._isScrollChild = zUtl.isAncestor(opts.scroll, node);
 		}
 
 		this.delta = this._currentDelta();
 		this.opts = opts;
 		this.dragging = false;   
 
-		this.handle.z_draggable = this;
-		zEvt.listen(this.handle, "mousedown", zk.Draggable.onMouseDown);
+		zEvt.listen(this.handle, "mousedown",
+			this._ondown = this.proxy(this.ondown));
 
-		zk.Draggable.register(this);
+		zdg.register(this);
 	},
 	/** Destroys this draggable object. */
 	destroy: function() {
-		this.handle.z_draggable = null;
-		zEvt.unlisten(this.handle, "mousedown", zk.Draggable.onMouseDown);
+		zEvt.unlisten(this.handle, "mousedown", this._ondown);
 		zk.Draggable.unregister(this);
+		this.node = this.widget = this.handle = null;
 	},
 
 	/** [left, right] of this node. */
@@ -95,11 +75,11 @@ zk.Draggable = zk.$extends(zk.Object, {
 
 	startDrag: function(evt) {
 		//disable selection
-		zk.disableSelection(document.body); // Bug #1820433
+		zDom.disableSelection(document.body); // Bug #1820433
 		if (this.opts.overlay) { // Bug #1911280
 			this.domOverlay = document.createElement("DIV");
 			document.body.appendChild(this.domOverlay);
-			zk.setOuterHTML(this.domOverlay, '<div class="z-dd-overlay" id="zk_dd_overlay"></div>');
+			zDom.setOuterHTML(this.domOverlay, '<div class="z-dd-overlay" id="zk_dd_overlay"></div>');
 			this.domOverlay = zDom.$("zk_dd_overlay");
 			if (zk.gecko) this.domOverlay.style.MozUserSelect = "none";
 			this.domOverlay.style.width = zDom.pageWidth() + "px";
@@ -107,21 +87,23 @@ zk.Draggable = zk.$extends(zk.Object, {
 		}
 		this.dragging = true;
 
+		var node = this.node;
 		if(this.opts.ghosting) {
 			var ghosting = true;
-			if (typeof this.opts.ghosting == 'function') ghosting = this.opts.ghosting(this, true, evt);
+			if (typeof this.opts.ghosting == 'function')
+				ghosting = this.opts.ghosting(this, true, evt);
 			if (ghosting) {
-				this._clone = this.node.cloneNode(true);
-				this.z_orgpos = this.node.style.position; //Bug 1514789
+				this._clone = node.cloneNode(true);
+				this.z_orgpos = node.style.position; //Bug 1514789
 				if (this.z_orgpos != 'absolute')
-					zDom.absolutize(this.node);
-				this.node.parentNode.insertBefore(this._clone, this.node);
+					zDom.absolutize(node);
+				node.parentNode.insertBefore(this._clone, node);
 			}
 		}
 
 		if(this.opts.zIndex) { //after ghosting
-			this.originalZ = zk.parseInt(zDom.getStyle(this.node,'z-index'));
-			this.node.style.zIndex = this.opts.zIndex;
+			this.originalZ = zk.parseInt(zDom.getStyle(node,'z-index'));
+			node.style.zIndex = this.opts.zIndex;
 		}
 
 		if(this.opts.scroll) {
@@ -136,7 +118,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 		}
 
 		if(this.opts.starteffect)
-			this.opts.starteffect(this.node, this.handle);
+			this.opts.starteffect(this);
 	},
 
 	updateDrag: function(evt, pointer) {
@@ -182,14 +164,17 @@ zk.Draggable = zk.$extends(zk.Object, {
 		//enable selection back and clear selection if any
 		zDom.enableSelection(document.body);
 		setTimeout(zDom.clearSelection, 0);
+
+		var node = this.node;
 		if(this.opts.ghosting) {
 			//Tom M. Yeh: Potix: ghosting is controllable
 			var ghosting = true;
-			if (typeof this.opts.ghosting == 'function') ghosting = this.opts.ghosting(this, false);
+			if (typeof this.opts.ghosting == 'function')
+				ghosting = this.opts.ghosting(this, false);
 			if (ghosting) {
 				if (this.z_orgpos != "absolute") { //Tom M. Yeh, Potix: Bug 1514789
-					zDom.relativize(this.node);
-					this.node.style.position = this.z_orgpos;
+					zDom.relativize(node);
+					node.style.position = this.z_orgpos;
 				}
 				zDom.remove(this._clone);
 				this._clone = null;
@@ -199,27 +184,29 @@ zk.Draggable = zk.$extends(zk.Object, {
 		var pointer = [zEvt.x(evt), zEvt.y(evt)]; //Tom M. Yeh, Potix: add pointer
 		var revert = this.opts.revert;
 		if(revert && typeof revert == 'function')
-			revert = revert(this.node, pointer, evt); //Tom M. Yeh, Potix: add pointer
+			revert = revert(this, pointer, evt); //Tom M. Yeh, Potix: add pointer
 
 		var d = this._currentDelta();
 		if(revert && this.opts.reverteffect) {
-			this.opts.reverteffect(this.node, 
-			d[1]-this.delta[1], d[0]-this.delta[0]);
+			this.opts.reverteffect(this,
+				d[1]-this.delta[1], d[0]-this.delta[0]);
 		} else {
 			this.delta = d;
 		}
 
 		if(this.opts.zIndex)
-			this.node.style.zIndex = this.originalZ;
+			node.style.zIndex = this.originalZ;
 
 		if(this.opts.endeffect) 
-			this.opts.endeffect(this.node, evt); //Tom M. Yeh, Potix: add evt
+			this.opts.endeffect(this, evt); //Tom M. Yeh, Potix: add evt
 
 		zk.Draggable.deactivate(this);
 	},
 
-	mouseDown: function (evt) {
-		if(zk.Draggable._dragging[this.node] || !zEvt.leftClick(evt))
+	ondown: function (evt) {
+		var node = this.node,
+			zdg = zk.Draggable;
+		if(zdg._dragging[node] || !zEvt.leftClick(evt))
 			return;
 
 		// abort on form elements, fixes a Firefox issue
@@ -229,18 +216,18 @@ zk.Draggable = zk.$extends(zk.Object, {
 			return;
 
 		//Skip popup/dropdown (of combobox and others)
-		for (var n = src; n && n != this.node; n = n.parentNode)
+		for (var n = src; n && n != node; n = n.parentNode)
 			if (zDom.getStyle(n, 'position') == 'absolute')
 				return;
 
 		var pointer = [zEvt.x(evt), zEvt.y(evt)];
-		if (this.opts.ignoredrag && this.opts.ignoredrag(this.node, pointer, evt))
+		if (this.opts.ignoredrag && this.opts.ignoredrag(this, pointer, evt))
 			return;
 
-		var pos = zDom.cfOffset(this.node);
+		var pos = zDom.cmOffset(node);
 		this.offset = [pointer[0] - pos[0], pointer[1] - pos[1]];
 
-		zk.Draggable.activate(this);
+		zdg.activate(this);
 
 		//Bug 1845026
 		//We need to ensure that the onBlur evt is fired before the onSelect evt for consistent among four browsers. 
@@ -271,9 +258,10 @@ zk.Draggable = zk.$extends(zk.Object, {
 	},
 
 	draw: function(point, evt) {
-		var pos = zDom.cmOffset(this.node);
+		var node = this.node,
+			pos = zDom.cmOffset(node);
 		if(this.opts.ghosting) {
-			var r = zDom.scrollOffset(this.node);
+			var r = zDom.cmScrollOffset(node);
 			pos[0] += r[0] - this._innerOfs[0]; pos[1] += r[1] - this._innerOfs[1];
 		}
 
@@ -285,20 +273,19 @@ zk.Draggable = zk.$extends(zk.Object, {
 			pos[1] -= this.opts.scroll.scrollTop-this.originalScrollTop;
 		}
 
-		var p = [0,1].map(function(i){ 
-		return (point[i]-pos[i]-this.offset[i]) 
-		}.bind(this));
+		var p = [point[0]-pos[0]-this.offset[0],
+			point[1]-pos[1]-this.offset[1]];
 
 		if(this.opts.snap)
 			if(typeof this.opts.snap == 'function') {
-				p = this.opts.snap(p[0],p[1],this);
+				p = this.opts.snap(this,p[0],p[1],this);
 			} else {
 				if(this.opts.snap instanceof Array) {
-					p = p.map( function(v, i) {
-			  		return Math.round(v/this.opts.snap[i])*this.opts.snap[i] }.bind(this))
+					p = [Math.round(p[0]/this.opts.snap[0])*this.opts.snap[0],
+						Math.round(p[1]/this.opts.snap[1])*this.opts.snap[1]];
 				} else {
-					p = p.map( function(v) {
-					return Math.round(v/this.opts.snap)*this.opts.snap }.bind(this))
+					p = [Math.round(p[0]/this.opts.snap)*this.opts.snap,
+						Math.round(p[1]/this.opts.snap)*this.opts.snap];
 				}
 			}
 
@@ -307,7 +294,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 			p[0] -= this.z_scrl[0]; p[1] -= this.z_scrl[1];
 		}
 
-		var style = this.node.style;
+		var style = node.style;
 		if (typeof this.opts.draw == 'function') {
 			this.opts.draw(this, p, evt);
 		} else if (typeof this.opts.constraint == 'function') {
@@ -336,7 +323,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 		if(speed[0] || speed[1]) {
 			this.scrollSpeed = [speed[0]*this.opts.scrollSpeed,speed[1]*this.opts.scrollSpeed];
 			this.lastScrolled = new Date();
-			this.scrollInterval = setInterval(this.scroll.bind(this), 10);
+			this.scrollInterval = setInterval(this.proxy(this.scroll), 10);
 		}
 	},
 
@@ -358,14 +345,15 @@ zk.Draggable = zk.$extends(zk.Object, {
 
 		this._updateInnerOfs();
 		if (this._isScrollChild) {
-			zk.Draggable._lastScrollPointer = zk.Draggable._lastScrollPointer || z$A(zk.Draggable._lastPointer);
-			zk.Draggable._lastScrollPointer[0] += this.scrollSpeed[0] * delta / 1000;
-			zk.Draggable._lastScrollPointer[1] += this.scrollSpeed[1] * delta / 1000;
-			if (zk.Draggable._lastScrollPointer[0] < 0)
-				zk.Draggable._lastScrollPointer[0] = 0;
-			if (zk.Draggable._lastScrollPointer[1] < 0)
-				zk.Draggable._lastScrollPointer[1] = 0;
-			this.draw(zk.Draggable._lastScrollPointer);
+			var zdg = zk.Draggable;
+			zdg._lastScrollPointer = zdg._lastScrollPointer || zdg._lastPointer;
+			zdg._lastScrollPointer[0] += this.scrollSpeed[0] * delta / 1000;
+			zdg._lastScrollPointer[1] += this.scrollSpeed[1] * delta / 1000;
+			if (zdg._lastScrollPointer[0] < 0)
+				zdg._lastScrollPointer[0] = 0;
+			if (zdg._lastScrollPointer[1] < 0)
+				zdg._lastScrollPointer[1] = 0;
+			this.draw(zdg._lastScrollPointer);
 		}
 
 		if(this.opts.change) this.opts.change(this);
@@ -396,29 +384,69 @@ zk.Draggable = zk.$extends(zk.Object, {
 			}
 		}
 		return {top: T, left: L, width: W, height: H };
+	},
+
+	//Utilities//
+	/** Prepares to ghost the element (this.node) to a DIV.
+	 * It is used when you want to ghost with a div.
+	 * @return the offset of dg.element.
+	 */
+	beginGhostToDIV: function () {
+		zk.dragging = true;
+		this.delta = this._currentDelta();
+		this.z_elorg = this.node;
+
+		var ofs = zDom.cmOffset(this.node);
+		this.z_scrl = zDom.cmScrollOffset(this.node);
+		this.z_scrl[0] -= zDom.innerX(); this.z_scrl[1] -= zDom.innerY();
+			//Store scrolling offset since zDraggable.draw not handle DIV well
+
+		ofs[0] -= this.z_scrl[0]; ofs[1] -= this.z_scrl[1];
+		return ofs;
+	},
+	/** Returns the origin element before ghosted.
+	 * <p>Note: the ghosted DIV is this.node.
+	 * It is called between beginGhostToDIV and endGhostToDIV
+	 */
+	getGhostOrgin: function () {
+		return this.z_elorg;
+	},
+	/** Clean and remove the ghosted DIV.
+	 */
+	endGhostToDIV: function () {
+		setTimeout("zk.dragging=false", 0);
+			//we have to reset it later since onclick is fired later (after onmouseup)
+		if (this.z_elorg && this.node != this.z_elorg) {
+			zDom.remove(this.node);
+			this.node = this.z_elorg;
+			delete this.z_elorg;
+		}
 	}
 },{ //static
 	_drags: [],
+	_dragging: [],
 
 	register: function(draggable) {
 		var zdg = zk.Draggable;
 		if(zdg._drags.length == 0) {
-			zEvt.listen(document, "mouseup", zdg.onDocMouseUp);
-			zEvt.listen(document, "mousemove", zdg.onDocMouseMove);
-			zEvt.listen(document, "keypress", zdg.onDocKeypress);
+			zEvt.listen(document, "mouseup", zdg.ondocmouseup);
+			zEvt.listen(document, "mousemove", zdg.ondocmousemove);
+			zEvt.listen(document, "keypress", zdg.ondockeypress);
 		}
 		zdg._drags.push(draggable);
 	},
 	unregister: function(draggable) {
+		var zdg = zk.Draggable;
 		zdg._drags.remove(draggable);
 		if(zdg._drags.length == 0) {
-			zEvt.unlisten(document, "mouseup", zdg.onDocMouseUp);
-			zEvt.unlisten(document, "mousemove", zdg.onDocMouseMove);
-			zEvt.unlisten(document, "keypress", zdg.onDocKeypress);
+			zEvt.unlisten(document, "mouseup", zdg.ondocmouseup);
+			zEvt.unlisten(document, "mousemove", zdg.ondocmousemove);
+			zEvt.unlisten(document, "keypress", zdg.ondockeypress);
 		}
 	},
 
 	activate: function(draggable) {
+		var zdg = zk.Draggable;
 		if(zk.opera || draggable.opts.delay) { 
 			zdg._timeout = setTimeout(function() { 
 				zk.Draggable._timeout = null; 
@@ -431,11 +459,12 @@ zk.Draggable = zk.$extends(zk.Object, {
 		}
 	},
 	deactivate: function() {
-		zdg.activeDraggable = null;
+		zk.Draggable.activeDraggable = null;
 	},
 
-	onDocMouseMove: function(evt) {
+	ondocmousemove: function(evt) {
 		if (!evt) evt = window.event;
+		var zdg = zk.Draggable;
 		if(!zdg.activeDraggable) return;
 		var pointer = [zEvt.x(evt), zEvt.y(evt)];
 		// Mozilla-based browsers fire successive mousemove events with
@@ -447,8 +476,9 @@ zk.Draggable = zk.$extends(zk.Object, {
 		zdg._lastPointer = pointer;
 		zdg.activeDraggable.updateDrag(evt, pointer);
 	},
-	onDocMouseUp: function(evt) {
+	ondocmouseup: function(evt) {
 		if (!evt) evt = window.event;
+		var zdg = zk.Draggable;
 		if(zdg._timeout) { 
 			clearTimeout(zdg._timeout); 
 			zdg._timeout = null; 
@@ -459,8 +489,9 @@ zk.Draggable = zk.$extends(zk.Object, {
 		zdg.activeDraggable.endDrag(evt);
 		zdg.activeDraggable = null;
 	},
-	onDocKeypress: function(evt) {
+	ondockeypress: function(evt) {
 		if (!evt) evt = window.event;
+		var zdg = zk.Draggable;
 		if(zdg.activeDraggable)
 			zdg.activeDraggable.keyPress(evt);
 	},
@@ -479,12 +510,34 @@ zk.Draggable = zk.$extends(zk.Object, {
 	}: function () {
 		el.style.position = pos;
 	},
-	onMouseDown: function (evt) {
-		if (!evt) evt = window.event;
-		for (var n = zEvt.target(evt); n; n = n.parentNode)
-			if (n.z_draggable) {
-				n.z_draggable.mouseDown(evt);
-				return;
+
+	//default effect//
+	defaultStartEffect: function (draggable) {
+		var node = draggable.node;
+		node._opacity = zDom.getOpacity(node);
+		zk.Draggable._dragging[node] = true;
+		new zk.Effect.opacity(node, {duration:0.2, from:node._opacity, to:0.7}); 
+	},
+	defafultEndEffect: function(draggable) {
+		var node = draggable.node,
+			toOpacity = typeof node._opacity == 'number' ? node._opacity : 1.0;
+		new zk.Effect.opacity(node, {duration:0.2, from:0.7,
+			to:toOpacity, queue: {scope:'_draggable', position:'end'},
+			afterFinish: function () { 
+				zk.Draggable._dragging[node] = false;
 			}
+		});
+	},
+	defaultRevertEffect: function(draggable, top_offset, left_offset) {
+		var node = draggable.node,
+			orgpos = node.style.position, //Bug 1538506
+			dur = Math.sqrt(Math.abs(top_offset^2)+Math.abs(left_offset^2))*0.02;
+		new zk.Effect.move(node, { x: -left_offset, y: -top_offset,
+			duration: dur, queue: {scope:'_draggable', position:'end'}});
+
+		//Bug 1538506: a strange bar appear in IE
+		setTimeout(function () {
+			zk.Dragdrop.restorePosition(node, orgpos);
+		}, dur * 1000 + 10);
 	}
 });

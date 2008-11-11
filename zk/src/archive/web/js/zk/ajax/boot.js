@@ -184,8 +184,8 @@ function _zkLdNew0() {
 		fn();
 
 	while (wgt = ws.shift()) {
-		zWatch.callDown('beforeSize', -1, wgt);
-		zWatch.callDown('onSize', 5, wgt);
+		zWatch.fireDown('beforeSize', -1, wgt);
+		zWatch.fireDown('onSize', 5, wgt);
 	}
 
 	zk.endProcessing();
@@ -312,8 +312,8 @@ function _zkDocDidResize () {
 
 	//TODO: _doClientInfo
 
-	zWatch.call('beforeSize');
-	zWatch.call('onSize');
+	zWatch.fire('beforeSize');
+	zWatch.fire('onSize');
 	_zkbResz.lastTime = zUtl.now() + 8;
 };
 var _zkbResz = {};

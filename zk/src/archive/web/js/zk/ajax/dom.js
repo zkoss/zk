@@ -133,8 +133,11 @@ zDom = { //static methods
 	},
 
 	/** Calculates the cumulative scroll offset of an element in nested scrolling containers.
+	 * Adds the cumulative scrollLeft and scrollTop of an element and all its parents.
+	 * Used for calculating the scroll offset of an element that is in more than one scroll container (e.g., a draggable in a scrolling container which is itself part of a scrolling document).
+	 * Note that all values are returned as numbers only although they are expressed in pixels.
 	 */
-	scrollOffset: function(el) {
+	cmScrollOffset: function(el) {
 		var valueT = 0, valueL = 0, tag = zDom.tag(el);
 		do {
 			//Fix opera bug (see the page function)
@@ -150,7 +153,9 @@ zDom = { //static methods
 		} while (el);
 		return [valueL, valueT];
 	},
-	/** Returns the cumulative offset of the specified element.
+	/** Returns the offsets of element from the top left corner of the document.
+	 * Adds the cumulative offsetLeft and offsetTop of an element and all its parents.
+	 * Note that all values are returned as numbers only although they are expressed in pixels.
 	 */
 	cmOffset: function (el) {
 		el = zDom.$(el);
@@ -449,8 +454,8 @@ zDom = { //static methods
 	getInlineOpacity: function(el){
 	  return zDom.$(el).style.opacity || '';
 	},
-	/** Forces an element to re-render. */
-	forceRerender: function(el) {
+	/** Forces an element to redraw (aka., re-render). */
+	redraw: function(el) {
 		try {
 			el = zDom.$(el);
 			var n = document.createTextNode(' ');
@@ -585,6 +590,21 @@ zDom = { //static methods
 	remove: function (n) {
 		n = zDom.$(n);
 		if (n && n.parentNode) n.parentNode.removeChild(n);
+	},
+
+	/** Returns the next sibling with the specified tag name, or null if not found.
+	 */
+	nextSibling: function (el, tagName) {
+		while (el && (el = el.nextSibling) != null && zDom.tag(el) != tagName)
+			;
+		return el;
+	},
+	/** Returns the next sibling with the specified tag name, or null if not found.
+	 */
+	previousSibling: function (el, tagName) {
+		while (el && (el = el.previousSibling) != null && zDom.tag(el) != tagName)
+			;
+		return el;
 	},
 
 	//dialog//

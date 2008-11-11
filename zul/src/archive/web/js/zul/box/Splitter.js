@@ -87,12 +87,21 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		zEvt.listen(btn, "click", zul.box.Splitter.onclick);
 
 		this._fixbtn();
+
+		var zulsplt = zul.box.Splitter;
+		this._drag = new zk.Draggable(this, this.node, {
+			constraint: this.getOrient(), ignoredrag: zulsplt._ignoresizing,
+			ghosting: zulsplt._ghostsizing, overlay: true,
+			snap: zulsplt._snap, endeffect: zulsplt._endDrag});
 	},
 	unbind_: function () {
 		zWatch.unwatch("onSize", this);
 		zWatch.unwatch("beforeSize", this);
 		zWatch.unwatch("onVisible", this);
 
+		this._snapx = null;
+		this._drag.destroy();
+		this._drag = null;
 		this.$super('unbind_');
 	},
 
@@ -160,14 +169,139 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	onSize: _zkf,
 	beforeSize: function () {
 		this.node.style[this.isVertical() ? "width": "height"] = "";
-	}
+	},
 
+	_fixszAll: function () {
+		//1. find the topmost box
+		var box = this.parent;
+		if (box) zul.box.Splitter._fixKidSplts(box.node);
+		else this._fixsz();
+	}
 },{
 	onclick: function (evt) {
 		if (!evt) evt = window.event;
 		var wgt = zEvt.widget(evt);
 		zDom.rmClass(wgt.button, wgt.getZclass() + "-btn-visi");
 		wgt.setOpen(!wgt.isOpen());
+	},
+
+	//drag&drop
+	_ignoresizing: function (draggable, pointer, event) {
+		var wgt = draggable.widget;
+		if (!wgt.isOpen()) return true;
+
+		var run = draggable.run = {},
+			node = wgt.node;
+		run.org = zDom.cmOffset(node);
+		var nd = zDom.$(node.id + "$chdex"),
+			tn = zDom.tag(nd),
+			zulsplt = zul.box.Splitter;
+		run.prev = zulsplt._prev(nd, tn);
+		run.next = zulsplt._next(nd, tn);
+		run.z_offset = zDom.cmOffset(node);
+		return false;
+	},
+	_ghostsizing: function (draggable, ghosting, pointer) {
+		if (ghosting) {
+			var pointer = draggable.beginGhostToDIV(),
+				node = draggable.node;
+			var html = '<div id="zk_ddghost" style="background:#AAA;position:absolute;top:'
+				+pointer[1]+'px;left:'+pointer[0]+'px;width:'
+				+zDom.offsetWidth(node)+'px;height:'+zDom.offsetHeight(node)
+				+'px;"><img src="'+zAu.comURI('/web/img/spacer.gif')
+						+'"/></div>';
+			document.body.insertAdjacentHTML("afterbegin", html);
+			draggable.node = zDom.$("zk_ddghost");
+		} else
+			draggable.endGhostToDIV();
+	},
+	_endDrag: function (draggable) {
+		var wgt = draggable.widget,
+			node = wgt.node,
+			zulsplt = zul.box.Splitter,
+			flInfo = zulsplt._fixLayout(wgt),
+			run = draggable.run, diff, fd;
+
+		if (wgt.isVertical()) {
+			diff = run.z_point[1];
+			fd = "height";
+
+			//We adjust height of TD if vert
+			if (run.next && run.next.cells.length) run.next = run.next.cells[0];
+			if (run.prev && run.prev.cells.length) run.prev = run.prev.cells[0];
+		} else {
+			diff = run.z_point[0];
+			fd = "width";
+		}
+		if (!diff) return; //nothing to do
+
+		if (run.next) zWatch.fireDown('beforeSize', -1, run.next);
+		if (run.prev) zWatch.fireDown('beforeSize', -1, run.prev);
+		
+		if (run.next) {
+			var s = zk.parseInt(run.next.style[fd]);
+			s -= diff;
+			if (s < 0) s = 0;
+			run.next.style[fd] = s + "px";
+		}
+		if (run.prev) {
+			var s = zk.parseInt(run.prev.style[fd]);
+			s += diff;
+			if (s < 0) s = 0;
+			run.prev.style[fd] = s + "px";
+		}
+
+		if (run.next) zWatch.fireDown('onSize', -1, run.next);
+		if (run.prev) zWatch.fireDown('onSize', -1, run.prev);
+
+		zulsplt._unfixLayout(flInfo);
+			//Stange (not know the cause yet): we have to put it
+			//befor _fixszAll and after onSizeAt
+
+		wgt._fixszAll();
+			//fix all splitter's size because table might be with %
+
+		draggable.run = null;//free memory
+	},
+	_snap: function (draggable, x, y) {
+		var run = draggable.run,
+			wgt = draggable.widget;
+		if (wgt.isVertical()) {
+			if (y <= run.z_offset[1] - run.prev.offsetHeight) {
+				y = run.z_offset[1] - run.prev.offsetHeight;
+			} else {
+				var max = run.z_offset[1] + run.next.offsetHeight - wgt.node.offsetHeight;
+				if (y > max) y = max;
+			}
+		} else {
+			if (x <= run.z_offset[0] - run.prev.offsetWidth) {
+				x = run.z_offset[0] - run.prev.offsetWidth;
+			} else {
+				var max = run.z_offset[0] + run.next.offsetWidth - wgt.node.offsetWidth;
+				if (x > max) x = max;
+			}
+		}
+		run.z_point = [x - run.z_offset[0], y - run.z_offset[1]];
+
+		return [x, y];
+	},
+
+	_next: function (n, tn) {
+		return zDom.nextSibling(zDom.nextSibling(n, tn), tn);
+	},
+	_prev: function (n, tn) {
+		return zDom.previousSibling(zDom.previousSibling(n, tn), tn);
+	},
+
+	_fixKidSplts: function (n) {
+		if (zDom.isVisible(n)) {
+			var wgt = n.z_wgt; //don't use zk.Widget.$ since we check each node
+			if (wgt && wgt.$instanceof('zul.box.Splitter'))
+				wgt._fixsz();
+
+			for (n = n.firstChild; n; n = n.nextSibling)
+				this._fixKidSplts(n);
+		}
 	}
 });
 
@@ -183,3 +317,18 @@ if (zk.ie) {
 		zDom.rmClass(wgt.button, wgt.getZclass() + '-btn-visi');
 	};
 }
+/** Use fix table layout */
+if (zk.opera) { //only opera needs it
+	zul.box.Splitter._fixLayout = function (wgt) {
+		var box = wgt.parent.node;
+		if (box.style.tableLayout != "fixed") {
+			var fl = [box, box.style.tableLayout];
+			box.style.tableLayout = "fixed";
+			return fl;
+		}
+	};
+	zul.box.Splitter._unfixLayout = function (fl) {
+		if (fl) fl[0].style.tableLayout = fl[1];
+	};
+} else
+	zul.box.Splitter._fixLayout = zul.box.Splitter._unfixLayout = zk.$void;

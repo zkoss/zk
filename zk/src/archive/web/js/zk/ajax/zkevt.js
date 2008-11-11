@@ -98,7 +98,7 @@ zWatch = {
 	 * @param timeout when to call the watch. If positive or zero,
 	 * setTimeout is used. Otherwise, it is called
 	 */
-	call: function (name, timeout, vararg) {
+	fire: function (name, timeout, vararg) {
 		var wts = this._wts[name],
 			len = wts ? wts.length: 0;
 		if (len) {
@@ -129,7 +129,7 @@ zWatch = {
 	 * <p>In other words, if the specified origin is not the ancestor
 	 * of a watch, the watch won't be called.
 	 */
-	callDown: function (name, timeout, origin, vararg) {
+	fireDown: function (name, timeout, origin, vararg) {
 		var wts = this._wts[name],
 			len = wts ? wts.length: 0;
 		if (len) {

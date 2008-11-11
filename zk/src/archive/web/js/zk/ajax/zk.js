@@ -185,7 +185,8 @@ zk = { //static methods
 		opts = opts || {};
 		for (var p in defaults)
 			if (opts[p] == null)
-				opts[p] = defaults[p]
+				opts[p] = defaults[p];
+		return opts;
 	},
 
 	/** A does-nothing function. */
@@ -397,6 +398,21 @@ zk.Object.prototype = {
 		} finally {
 			supers[mtdnm] = old; //restore
 		}
+	},
+
+	/** Proxies a member function such that it can be called without
+	 * <code>this</code>.
+	 * @param f a member of this object
+	 * @return a function that can be called not in the context
+	 * of this object (i.e., without <code>this</code>)
+	 */
+	proxy: function (f) {
+//		if (!f)
+//			throw "function required";
+		var o = this;
+		return function () {
+			f.apply(o, arguments);
+		};
 	}
 };
 /** Determines if the specified object is an instance of this class. */
