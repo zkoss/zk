@@ -198,6 +198,8 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			zulsplt = zul.box.Splitter;
 		run.prev = zulsplt._prev(nd, tn);
 		run.next = zulsplt._next(nd, tn);
+		run.prevwgt = wgt.previousSibling;
+		run.nextwgt = wgt.nextSibling;
 		run.z_offset = zDom.cmOffset(node);
 		return false;
 	},
@@ -235,8 +237,8 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		}
 		if (!diff) return; //nothing to do
 
-		if (run.next) zWatch.fireDown('beforeSize', -1, run.next);
-		if (run.prev) zWatch.fireDown('beforeSize', -1, run.prev);
+		if (run.nextwgt) zWatch.fireDown('beforeSize', -1, run.nextwgt);
+		if (run.prevwgt) zWatch.fireDown('beforeSize', -1, run.prevwgt);
 		
 		if (run.next) {
 			var s = zk.parseInt(run.next.style[fd]);
@@ -251,8 +253,8 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			run.prev.style[fd] = s + "px";
 		}
 
-		if (run.next) zWatch.fireDown('onSize', -1, run.next);
-		if (run.prev) zWatch.fireDown('onSize', -1, run.prev);
+		if (run.nextwgt) zWatch.fireDown('onSize', -1, run.nextwgt);
+		if (run.prevwgt) zWatch.fireDown('onSize', -1, run.prevwgt);
 
 		zulsplt._unfixLayout(flInfo);
 			//Stange (not know the cause yet): we have to put it
@@ -295,12 +297,13 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 
 	_fixKidSplts: function (n) {
 		if (zDom.isVisible(n)) {
-			var wgt = n.z_wgt; //don't use zk.Widget.$ since we check each node
-			if (wgt && wgt.$instanceof('zul.box.Splitter'))
+			var wgt = n.z_wgt, //don't use zk.Widget.$ since we check each node
+				zulsplt = zul.box.Splitter;
+			if (wgt && wgt.$instanceof(zulsplt))
 				wgt._fixsz();
 
 			for (n = n.firstChild; n; n = n.nextSibling)
-				this._fixKidSplts(n);
+				zulsplt._fixKidSplts(n);
 		}
 	}
 });
