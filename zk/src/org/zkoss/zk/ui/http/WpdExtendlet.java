@@ -116,7 +116,9 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 					final String fullnm = name + "." + wgtnm;
 					write(out, fullnm);
 					write(out, "';");
-					writeMolds(out, langdef, fullnm, pathpref);
+					if (langdef.hasWidgetDefinition(fullnm))
+						writeMolds(out, langdef, fullnm, pathpref);
+						//Note: widget defiition not available if it is a base type (such as zul.Widget)
 				} else
 					log.error("Failed to load widget "+wgtnm+": "+jspath+" not found, "+el.getLocator());
 			} else if ("script".equals(elnm)) {
@@ -141,8 +143,8 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 	private void writeMolds(OutputStream out,
 	LanguageDefinition langdef, String wgtnm, String pathpref) {
 		try {
-			write(out, "_zm=_zwg.molds={};");
 			WidgetDefinition wgtdef = langdef.getWidgetDefinition(wgtnm);
+			write(out, "_zm=_zwg.molds={};");
 			for (Iterator it = wgtdef.getMoldNames().iterator(); it.hasNext();) {
 				final String mold = (String)it.next();
 				final String uri = wgtdef.getMoldURI(mold);
