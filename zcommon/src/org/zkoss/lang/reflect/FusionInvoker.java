@@ -17,74 +17,99 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
  */
-/**
- * @author Ryan Wu
- * @since 3.5.2
- */
+
 package org.zkoss.lang.reflect;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Method;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
+/**
+ * The fusion invocation handler. Like the dynamic proxy pattern, this fusion
+ * invocation handler is used to wrap two or more instance into one object.
+ * <p>
+ * This invocation handler assumes the object being wrapped has all methods of
+ * these instance (aka, targets), and it might invoke the correspond methods
+ * <p>
+ * It happens when you need to provide a proxy object form two or more instance.
+ * <p>
+ * Example:
+ * 
+ * <pre>
+ * &lt;code&gt; class A {
+ *   public void f() {...}
+ * }
+ * class B {
+ *   public void f2() {...}
+ * }
+ * interface IA {
+ *   public void f();
+ * }
+ * interface IB {
+ *   public void f2();
+ * }
+ * &lt;/code&gt;
+ * then, you could create a proxy object:
+ * &lt;code&gt; Object obj = FusionInvoker.newInstance(new Object[] {A, B });
+ * &lt;/code&gt;
+ * then use the proxy object anywhere.
+ * &lt;code&gt;
+ *  IA ia = (IA) obj;
+ *  ia.f();
+ *  IB ib = (IB) obj;
+ *  ib.f2();
+ *  &lt;/code&gt;
+ * </pre>
+ * 
+ * @author RyanWu
+ * @since 3.5.2
+ * */
 public class FusionInvoker implements InvocationHandler {
-	private Object _target;
-	private static Set _targetClass = new HashSet();
+	private Object[] _targets;
 
-	public FusionInvoker() {
+	/** Use {@link #newInstance(Object[])} instead. */
+	protected FusionInvoker(Object[] targets) {
+		_targets = targets;
 	}
 
-	protected FusionInvoker(Object target) {
-		_target = target;
+	/** Use for only two object, see {@link #newInstance(Object[])}.*/
+	public static Object newInstance(Object target1, Object target2) {
+		return newInstance(new Object[] { target1, target2 });
 	}
 
-	public static Object newInstance(Object target) {
-		return Proxy.newProxyInstance(Thread.currentThread()
-				.getContextClassLoader(), target.getClass().getInterfaces(),
-				new FusionInvoker(target));
-	}
-
+	/**
+	 * Creates an object that contains the all interfaces by wrapping giving
+	 * object, targets.
+	 * <p>
+	 * Usage shortcut: FusionInvoker.newInstance(new Object[] { Object a, Object
+	 * b });
+	 * 
+	 * @param targets
+	 *            the objects need to wrapped
+	 */
 	public static Object newInstance(Object[] targets) {
-		Set _targets = new HashSet();
+		Set targetClasses = new HashSet();
 		for (int i = 0; i < targets.length; i++) {
-			_targetClass.add(targets[i]);
 			Class[] allClass = targets[i].getClass().getInterfaces();
 			for (int j = 0; j < allClass.length; j++) {
-				_targets.add(allClass[j]);
+				targetClasses.add(allClass[j]);
 			}
 		}
 		return Proxy.newProxyInstance(Thread.currentThread()
-				.getContextClassLoader(), (Class[]) _targets
-				.toArray(new Class[] {}), new FusionInvoker(targets[0]));
+				.getContextClassLoader(), (Class[]) targetClasses
+				.toArray(new Class[targetClasses.size()]), new FusionInvoker(
+				targets));
 	}
 
-	// -- InvocationInvoker --//
+	// -- InvocationHandler --//
 	public Object invoke(Object proxy, Method method, Object[] args)
 			throws Throwable {
-		Object result = null;
-		try {
-			Class cls = _target.getClass();
-
-			if (!method.getDeclaringClass().isAssignableFrom(cls)) {
-				Iterator itr = _targetClass.iterator();
-
-				while (itr.hasNext()) {
-					Class _cls = itr.next().getClass();
-					if (method.getDeclaringClass().isAssignableFrom(_cls)) {
-						Object targetObj = _cls.newInstance();
-						result = method.invoke(targetObj, args);
-					}
-				}
-			} else {
-				result = method.invoke(_target, args);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return result;
-
+		Class cls = method.getDeclaringClass();
+		for (int i = 0; i < _targets.length; ++i)
+			if (cls.isInstance(_targets[i]))
+				return method.invoke(_targets[i], args);
+		throw new InternalError("Unknown method " + method);
 	}
 }
