@@ -35,8 +35,7 @@ package org.zkoss.zk.ui.api;
  * 
  * @author tomyeh
  */
-public interface HtmlBasedComponent extends
-		org.zkoss.zk.ui.api.AbstractComponent {
+public interface HtmlBasedComponent {
 	/**
 	 * Returns the left position.
 	 */

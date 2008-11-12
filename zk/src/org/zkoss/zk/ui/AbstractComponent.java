@@ -1172,12 +1172,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		onListenerChange(page.getDesktop(), false);
 	}
 
-	/** Default: null (no propagation at all).
-	 */
-	public Component getPropagatee(String evtnm) {
-		return null;
-	}
-
 	/** Returns the mold used to render this component.
 	 * Default: "default"
 	 */
