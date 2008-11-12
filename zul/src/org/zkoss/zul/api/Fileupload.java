@@ -30,7 +30,8 @@ import org.zkoss.zk.ui.event.UploadEvent;
  * <h3>1. Open as a modal dialog:</h3>
  * 
  * <p>
- * You don't create {@link Fileupload} directly. Rather, use {@link org.zkoss.zul.Fileupload#get()} or
+ * You don't create {@link Fileupload} directly. Rather, use
+ * {@link org.zkoss.zul.Fileupload#get()} or
  * {@link org.zkoss.zul.Fileupload#get(String, String)}.
  * 
  * <h3>2. Embed as part of the page:</h3>
@@ -44,11 +45,12 @@ import org.zkoss.zk.ui.event.UploadEvent;
  * 
  * <p>
  * A non-XUL extension.
+ * 
  * @since 3.5.2
  * @author tomyeh
  * @see org.zkoss.zul.Filedownload
  */
-public interface Fileupload extends org.zkoss.zk.ui.api.HtmlBasedComponent { 
+public interface Fileupload extends org.zkoss.zk.ui.api.HtmlBasedComponent {
 
 	/**
 	 * Returns the maximal allowed number of files to upload.
@@ -96,17 +98,5 @@ public interface Fileupload extends org.zkoss.zk.ui.api.HtmlBasedComponent {
 	 * @see org.zkoss.zk.ui.util.Configuration#setUploadCharsetFinder
 	 */
 	public void setNative(boolean alwaysNative);
-
-	/**
-	 * Hanldes the onClose event which is sent when file(s) is uploaded or when
-	 * the cancel button is pressed.
-	 * 
-	 * <p>
-	 * By default, it simply invalidates itself, i.e., all fields are cleared.
-	 * If you want to do something different, you can intercept the onClose
-	 * event.
-	 * 
-	 */
-	public void onClose();
 
 }

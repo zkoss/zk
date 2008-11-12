@@ -24,7 +24,6 @@ import org.zkoss.zul.impl.CaptchaEngine;
 import java.awt.Font;
 import java.util.List;
 
-
 /**
  * The generic captcha component.
  * 
@@ -90,19 +89,9 @@ public interface Captcha extends org.zkoss.zul.api.Image {
 	public int getBgRGB();
 
 	/**
-	 * Override super class to prepare the int width.
-	 */
-	public void setWidth(String w);
-
-	/**
 	 * Get the captcha int width in pixel; to be used by the derived subclass.
 	 */
 	public int getIntWidth();
-
-	/**
-	 * Override super class to prepare the int height.
-	 */
-	public void setHeight(String h);
 
 	/**
 	 * Get the captcha int height in pixel; to be used by the derived subclass.

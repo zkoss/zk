@@ -425,18 +425,6 @@ public interface Window extends org.zkoss.zul.impl.api.XulElement {
 	public void setPosition(String pos);
 
 	/**
-	 * Process the onClose event sent when the close button is pressed.
-	 * <p>
-	 * Default: detach itself.
-	 */
-	public void onClose();
-
-	/**
-	 * Process the onModal event by making itself a modal window.
-	 */
-	public void onModal() throws InterruptedException;
-
-	/**
 	 * Returns the CSS style for the content block of the window.
 	 */
 	public String getContentStyle();

@@ -37,24 +37,6 @@ import org.zkoss.util.Locales;
 public interface Jasperreport extends org.zkoss.zul.api.Iframe {
 
 	/**
-	 * Returns the source (jasper file).
-	 * 
-	 * @return src The compiled file (jasper file).
-	 */
-	public String getSrc();
-
-	/**
-	 * Sets the source (jasper file).
-	 * <p>
-	 * If src is changed, the whole component is invalidate.
-	 * 
-	 * @param src
-	 *            The compiled file (jasper file). If null or empty, nothing is
-	 *            included.
-	 */
-	public void setSrc(String src);
-
-	/**
 	 * Returns the JasperReports Parameters.
 	 * <p>
 	 * Default: null.

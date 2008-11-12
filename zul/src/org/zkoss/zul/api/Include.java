@@ -150,29 +150,4 @@ public interface Include extends org.zkoss.zul.impl.api.XulElement,
 	 */
 	public void setSrc(String src) throws WrongValueException;
 
-	/**
-	 * Returns whether a dynamic property is defined.
-	 */
-	public boolean hasDynamicProperty(String name);
-
-	/**
-	 * Returns the parameter associated with the specified name, or null if not
-	 * found.
-	 * 
-	 * @see #setDynamicProperty
-	 */
-	public Object getDynamicProperty(String name);
-
-	/**
-	 * Adds a dynamic property that will be passed to the included page via the
-	 * request's attribute.
-	 * 
-	 * <p>
-	 * For example, if setDynamicProperty("abc", new Integer(4)) is called, then
-	 * the included page can retrived the abc property by use of
-	 * <code>${reqestScope.abc}</code>
-	 * 
-	 */
-	public void setDynamicProperty(String name, Object value);
-
 }

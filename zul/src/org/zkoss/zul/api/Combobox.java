@@ -126,13 +126,6 @@ public interface Combobox extends Textbox {
 			InstantiationException, java.lang.reflect.InvocationTargetException;
 
 	/**
-	 * Handles a private event, onInitRender. It is used only for
-	 * implementation, and you rarely need to invoke it explicitly.
-	 * 
-	 */
-	public void onInitRender(Event data);
-
-	/**
 	 * Returns whether to automatically drop the list if users is changing this
 	 * text box.
 	 * <p>

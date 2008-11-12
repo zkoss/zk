@@ -403,12 +403,6 @@ public interface Grid extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	public String getInnerWidth();
 
 	/**
-	 * Handles a private event, onInitRender. It is used only for
-	 * implementation, and you rarely need to invoke it explicitly.
-	 */
-	public void onInitRender();
-
-	/**
 	 * Renders the specified {@link Row} if not loaded yet, with
 	 * {@link #getRowRenderer}.
 	 * 
