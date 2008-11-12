@@ -37,6 +37,14 @@ import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.Objects;
+import org.zkoss.lang.$boolean;
+import org.zkoss.lang.$int;
+import org.zkoss.lang.$short;
+import org.zkoss.lang.$byte;
+import org.zkoss.lang.$float;
+import org.zkoss.lang.$double;
+import org.zkoss.lang.$long;
+import org.zkoss.lang.$char;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
 import org.zkoss.io.PrintWriterX;
@@ -1175,56 +1183,56 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * the attribute eventually.
 	 */
 	protected void smartUpdate(String attr, int value) {
-		smartUpdate(attr, new Integer(value));
+		smartUpdate(attr, new $int(value));
 	}
 	/** A special smart-update that update a value in long.
 	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
 	 * the attribute eventually.
 	 */
 	protected void smartUpdate(String attr, long value) {
-		smartUpdate(attr, new Long(value));
+		smartUpdate(attr, new $long(value));
 	}
 	/** A special smart-update that update a value in byte.
 	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
 	 * the attribute eventually.
 	 */
 	protected void smartUpdate(String attr, byte value) {
-		smartUpdate(attr, new Byte(value));
+		smartUpdate(attr, new $byte(value));
 	}
 	/** A special smart-update that update a value in character.
 	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
 	 * the attribute eventually.
 	 */
 	protected void smartUpdate(String attr, char value) {
-		smartUpdate(attr, new Character(value));
+		smartUpdate(attr, new $char(value));
 	}
 	/** A special smart-update that update a value in boolean.
 	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
 	 * the attribute eventually.
 	 */
 	protected void smartUpdate(String attr, boolean value) {
-		smartUpdate(attr, new Boolean(value));
+		smartUpdate(attr, new $boolean(value));
 	}
 	/** A special smart-update that update a value in float.
 	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
 	 * the attribute eventually.
 	 */
 	protected void smartUpdate(String attr, float value) {
-		smartUpdate(attr, new Float(value));
+		smartUpdate(attr, new $float(value));
 	}
 	/** A special smart-update that update a value in double.
 	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
 	 * the attribute eventually.
 	 */
 	protected void smartUpdate(String attr, double value) {
-		smartUpdate(attr, new Double(value));
+		smartUpdate(attr, new $double(value));
 	}
 	/** A special smart-update that update a value in Date.
 	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
 	 * the attribute eventually.
 	 */
 	protected void smartUpdate(String attr, Date value) {
-		smartUpdate(attr, value);
+		smartUpdate(attr, (Object)value);
 	}
 
 	public void detach() {

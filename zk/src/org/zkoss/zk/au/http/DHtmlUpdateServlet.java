@@ -456,14 +456,14 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			final String errmsg = Exceptions.getMessage(ex);
 			if (ex instanceof CommandNotFoundException) log.debug(errmsg);
 			else log.warningBriefly(ex);
-			responseError(request, response, errmsg);
+			responseError(request, response, desktop, errmsg);
 			return;
 		}
 
 		if (aureqs.isEmpty()) {
 			final String errmsg = "Illegal request: cmd required";
 			log.debug(errmsg);
-			responseError(request, response, errmsg);
+			responseError(request, response, desktop, errmsg);
 			return;
 		}
 
@@ -495,7 +495,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 		if (!"rmDesktop".equals(cmdId) && !Events.ON_RENDER.equals(cmdId)
 		&& !Events.ON_TIMER.equals(cmdId) && !"dummy".equals(cmdId)) {//possible in FF due to cache
-			String uri = Devices.getTimeoutURI(getDeviceType(request));
+			final String deviceType = getDeviceType(request);
+			String uri = Devices.getTimeoutURI(deviceType);
 			final AuResponse resp;
 			if (uri != null) {
 				if (uri.length() != 0)
@@ -505,7 +506,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				resp = new AuObsolete(
 					dtid, Messages.get(MZk.UPDATE_OBSOLETE_PAGE, dtid));
 			}
-			out.write(resp);
+			out.write(Devices.getDevice(deviceType).getMarshaller(), resp);
 		}
 
 		out.close(request, response);
@@ -554,10 +555,11 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	/** Generates a response for an error message.
 	 */
 	private static void responseError(HttpServletRequest request,
-	HttpServletResponse response, String errmsg) throws IOException {
+	HttpServletResponse response, Desktop desktop, String errmsg)
+	throws IOException {
 		//Don't use sendError because Browser cannot handle UTF-8
 		AuWriter out = AuWriters.newInstance().open(request, response, 0);
-		out.write(new AuAlert(errmsg));
+		out.write(desktop.getDevice().getMarshaller(), new AuAlert(errmsg));
 		out.close(request, response);
 	}
 }

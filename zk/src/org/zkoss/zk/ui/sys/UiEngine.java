@@ -108,6 +108,9 @@ public interface UiEngine {
 	 *
 	 * <p>The second invocation of this method
 	 * in the same execution with the same attr will override the previous one.
+	 *
+	 * @param value the value. To represent a primitive value, use
+	 * {@link org.zkoss.lang.$int}, {@link org.zkoss.lang.$short} and so on.
 	 */
 	public void addSmartUpdate(Component comp, String attr, Object value);
 	/** Smart updates an attribute of a component with an array of values.

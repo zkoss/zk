@@ -199,15 +199,16 @@ zAu = { //static methods
 			cmd.data = [];
 			for (var k = data ? data.length: 0; --k >= 0;) {
 				var d = zUtl.getElementValue(data[k]);
-				switch (d.charAt(0)) {
+				switch (d.charAt(0).toLowerCase()) {
 				case 'c': case 's': d = d.substring(1); break;
 				case 'n': d = null; break;
-				case '1': d = true; break;
-				case '0': d = false; break;
-				case 'i': case 'l': case 'b':
+				case '1': case '3': d = true; break;
+				case '0': case '2': d = false; break;
+				case 'i': case 'l': case 'b': case 'h':
 					d = parseInt(d.substring(1)); break;
 				case 'd': case 'f':
 					d = parseFloat(d.substring(1)); break;
+				case 't': d = new Date(parseInt(d.substring(1))); break;
 				}
 				cmd.data[k] = d;
 			}

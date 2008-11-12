@@ -22,6 +22,15 @@ import java.util.Map;
 import java.util.HashMap;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.lang.$boolean;
+import org.zkoss.lang.$int;
+import org.zkoss.lang.$short;
+import org.zkoss.lang.$byte;
+import org.zkoss.lang.$float;
+import org.zkoss.lang.$double;
+import org.zkoss.lang.$long;
+import org.zkoss.lang.$char;
+import org.zkoss.lang.$primitive;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
@@ -51,6 +60,9 @@ public class AuResponse {
 		this(cmd, (Component)null, (Object[])null);
 	}
 	/** Constructs a component-independent response.
+	 *
+	 * @param data the data. It can be null, String, Date, primitive
+	 * types ({@link $boolean}, {@link $int}...), and an array of the above time.
 	 */
 	protected AuResponse(String cmd, Object data) {
 		this(cmd, (Component)null, data);
@@ -123,7 +135,7 @@ public class AuResponse {
 	 * @see #getRawData
 	 * @since 5.0.0
 	 */
-	public String[] getEncodedData() {
+	public String[] getEncodedData(Marshaller marshaller) {
 		if (_data == null)
 			return null;
 
@@ -132,7 +144,42 @@ public class AuResponse {
 			Object d = _data[j];
 			if (d instanceof DeferredValue)
 				d = ((DeferredValue)d).getValue();
-			encdata[j] = Utils.encode(d);
+			if (d instanceof $primitive) {
+				if (d instanceof $int) {
+					encdata[j] = marshaller.marshal((($int)d).value);
+					continue;
+				}
+				if (d instanceof $boolean) {
+					encdata[j] = marshaller.marshal((($boolean)d).value);
+					continue;
+				}
+				if (d instanceof $short) {
+					encdata[j] = marshaller.marshal((($short)d).value);
+					continue;
+				}
+				if (d instanceof $long) {
+					encdata[j] = marshaller.marshal((($long)d).value);
+					continue;
+				}
+				if (d instanceof $double) {
+					encdata[j] = marshaller.marshal((($double)d).value);
+					continue;
+				}
+				if (d instanceof $float) {
+					encdata[j] = marshaller.marshal((($float)d).value);
+					continue;
+				}
+				if (d instanceof $byte) {
+					encdata[j] = marshaller.marshal((($byte)d).value);
+					continue;
+				}
+				if (d instanceof $char) {
+					encdata[j] = marshaller.marshal((($char)d).value);
+					continue;
+				}
+				throw new InternalError("Unknow primitive "+d.getClass());
+			}
+			encdata[j] = marshaller.marshal(d);
 		}
 		return encdata;
 	}

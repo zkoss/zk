@@ -28,8 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.zkoss.web.servlet.http.Https;
 
-import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.sys.DesktopCtrl;
+import org.zkoss.zk.au.Marshaller;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuWriter;
 import org.zkoss.zk.au.AuWriters;
@@ -103,12 +102,14 @@ public class HttpAuWriter implements AuWriter{
 	public void writeResponseId(int resId) throws IOException {
 		AuWriters.writeResponseId(_out, resId);
 	}
-	public void write(AuResponse response) throws IOException {
-		AuWriters.write(_out, response);
+	public void write(Marshaller marshaller, AuResponse response)
+	throws IOException {
+		AuWriters.write(marshaller, _out, response);
 	}
-	public void write(Collection responses) throws IOException {
+	public void write(Marshaller marshaller,Collection responses)
+	throws IOException {
 		for (Iterator it = responses.iterator(); it.hasNext();)
-			write((AuResponse)it.next());
+			write(marshaller, (AuResponse)it.next());
 	}
 
 }

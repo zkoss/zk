@@ -87,14 +87,15 @@ public class AuWriters {
 		out.write("</rid>\n");
 	}
 	/** Writes a XML fragment representing the response to the output.
-	 * @since 3.5.0
+	 * @since 5.0.0
 	 */
-	public static void write(Writer out, AuResponse response)
+	public static
+	void write(Marshaller marshaller, Writer out, AuResponse response)
 	throws IOException {
 		out.write("\n<r><c>");
 		out.write(response.getCommand());
 		out.write("</c>");
-		final String[] data = response.getEncodedData();
+		final String[] data = response.getEncodedData(marshaller);
 		if (data != null) {
 			for (int j = 0; j < data.length; ++j) {
 				out.write("\n<d>");

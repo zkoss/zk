@@ -18,6 +18,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
+import java.util.Date;
 import java.io.IOException;
 
 /**
@@ -30,15 +31,32 @@ import java.io.IOException;
 public interface ContentRenderer {
 	/** Renders a string property. */
 	public void render(String name, String value) throws IOException;
+	/** Renders a Date property. */
+	public void render(String name, Date value) throws IOException;
+	/** Renders an arbitrary object property.
+	 * What type of suppoted objects depends on the implementation.
+	 * However, the following types are always supported:
+	 * null, String, Date, the wrapper of primitives, and
+	 * an array of the above types.
+	 */
+	public void render(String name, Object value) throws IOException;
 	/** Renders an integer property. */
 	public void render(String name, int value) throws IOException;
+	/** Renders a short property. */
+	public void render(String name, short value) throws IOException;
+	/** Renders a long property. */
+	public void render(String name, long value) throws IOException;
+	/** Renders a byte property. */
+	public void render(String name, byte value) throws IOException;
 	/** Renders a boolean property. */
 	public void render(String name, boolean value) throws IOException;
 	/** Renders a double property. */
 	public void render(String name, double value) throws IOException;
+	/** Renders a float property. */
+	public void render(String name, float value) throws IOException;
 	/** Renders a char property. */
 	public void render(String name, char value) throws IOException;
-	/** Renders the value directly.
+	/** Renders the value directly without encapsulation or conversion.
 	 * It depends on the implementation.
 	 * For {@link JsContentRenderer}, value must be a valid JavaScript
 	 * snippet.

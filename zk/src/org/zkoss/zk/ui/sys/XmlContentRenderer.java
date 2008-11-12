@@ -18,6 +18,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
+import java.util.Date;
+
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
 
@@ -37,10 +39,53 @@ public class XmlContentRenderer implements ContentRenderer {
 	public StringBuffer getBuffer() {
 		return _buf;
 	}
+	/** Renders a String property.
+	 * @param name the property name. Note: it must be a legal XML
+	 * attribute name.
+	 */
 	public void render(String name, String value) {
 		HTMLs.appendAttribute(_buf, name, value, false);
 	}
+	/** Renders a Date property.
+	 * @param name the property name. Note: it must be a legal XML
+	 * attribute name.
+	 */
+	public void render(String name, Date value) {
+		HTMLs.appendAttribute(_buf, name, Objects.toString(value), false);
+	}
+	/** Renders an Object property.
+	 * @param name the property name. Note: it must be a legal XML
+	 * attribute name.
+	 */
+	public void render(String name, Object value) {
+		HTMLs.appendAttribute(_buf, name, Objects.toString(value), false);
+	}
+	/** Renders a date property.
+	 * @param name the property name. Note: it must be a legal XML
+	 * attribute name.
+	 */
 	public void render(String name, int value) {
+		HTMLs.appendAttribute(_buf, name, value);
+	}
+	/** Renders a long property.
+	 * @param name the property name. Note: it must be a legal XML
+	 * attribute name.
+	 */
+	public void render(String name, long value) {
+		HTMLs.appendAttribute(_buf, name, value);
+	}
+	/** Renders a short property.
+	 * @param name the property name. Note: it must be a legal XML
+	 * attribute name.
+	 */
+	public void render(String name, short value) {
+		HTMLs.appendAttribute(_buf, name, value);
+	}
+	/** Renders a byte property.
+	 * @param name the property name. Note: it must be a legal XML
+	 * attribute name.
+	 */
+	public void render(String name, byte value) {
 		HTMLs.appendAttribute(_buf, name, value);
 	}
 	/** Renders a boolean property.
@@ -51,15 +96,22 @@ public class XmlContentRenderer implements ContentRenderer {
 		HTMLs.appendAttribute(_buf, name, value);
 	}
 	/** Renders a double property.
-	 * @param name the property name. Note: it must be a legal JavaScript
-	 * variable name.
+	 * @param name the property name. Note: it must be a legal XML
+	 * attribute name.
 	 */
 	public void render(String name, double value) {
 		HTMLs.appendAttribute(_buf, name, value);
 	}
+	/** Renders a float property.
+	 * @param name the property name. Note: it must be a legal XML
+	 * attribute name.
+	 */
+	public void render(String name, float value) {
+		HTMLs.appendAttribute(_buf, name, value);
+	}
 	/** Renders a char property.
-	 * @param name the property name. Note: it must be a legal JavaScript
-	 * variable name.
+	 * @param name the property name. Note: it must be a legal XML
+	 * attribute name.
 	 */
 	public void render(String name, char value) {
 		HTMLs.appendAttribute(_buf, name, "" + value);

@@ -861,7 +861,8 @@ public class UiEngineImpl implements UiEngine {
 	}
 	private boolean isReqDup0(Execution exec, AuWriter out, String sid)
 	throws IOException {
-		final Object[] resInfo = (Object[])((DesktopCtrl)exec.getDesktop())
+		final Desktop desktop = exec.getDesktop();
+		final Object[] resInfo = (Object[])((DesktopCtrl)desktop)
 			.getLastResponse(out.getChannel(), sid);
 		if (resInfo != null) {
 			if (log.debugable()) {
@@ -871,7 +872,7 @@ public class UiEngineImpl implements UiEngine {
 			}
 
 			out.writeResponseId(((Integer)resInfo[0]).intValue());
-			out.write((Collection)resInfo[1]);
+			out.write(desktop.getDevice().getMarshaller(), (Collection)resInfo[1]);
 			return true; //replicate
 		}
 		return false;
@@ -904,7 +905,7 @@ public class UiEngineImpl implements UiEngine {
 				out.getChannel(), execCtrl.getRequestId(),
 				new Object[] {new Integer(resId), responses});
 			out.writeResponseId(resId);
-			out.write(responses);
+			out.write(desktop.getDevice().getMarshaller(), responses);
 
 			cleaned = true;
 			desktopCtrl.invokeExecutionCleanups(exec, null, null);
@@ -1035,7 +1036,7 @@ public class UiEngineImpl implements UiEngine {
 			desktopCtrl.responseSent(out.getChannel(), sid,
 				new Object[] {new Integer(resId), responses});
 			out.writeResponseId(resId);
-			out.write(responses);
+			out.write(desktop.getDevice().getMarshaller(), responses);
 
 //			if (log.debugable())
 //				if (responses.size() < 5 || log.finerable()) log.finer("Responses: "+responses);

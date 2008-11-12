@@ -21,6 +21,7 @@ package org.zkoss.zk.device;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.sys.ServerPush;
+import org.zkoss.zk.au.Marshaller;
 
 /**
  * Represents a client device.
@@ -158,6 +159,13 @@ public interface Device {
 	 * @since 3.0.6
 	 */
 	public String getEmbedded();
+
+	/** Returns the marshaller to marshall the object between the
+	 * client and server.
+	 * <p>Currently, it is used only by {@link org.zkoss.zk.au.AuResponse}.
+	 * @since 5.0.0
+	 */
+	public Marshaller getMarshaller();
 
 	/** Initializes the device.
 	 * A device is created for each desktop, and this method is called

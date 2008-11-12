@@ -20,6 +20,8 @@ package org.zkoss.zk.device;
 
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.sys.ServerPush;
+import org.zkoss.zk.au.Marshaller;
+import org.zkoss.zk.au.SimpleMarshaller;
 
 /**
  * A skeletal implementation of {@link Device}.
@@ -31,6 +33,7 @@ abstract public class GenericDevice implements Device {
 	private String _type, _uamsg, _tmoutURI;
 	private Class _spushcls;
 	private String _embed;
+	private Marshaller _marshaller;
 
 	//Device//
 	public boolean isSupported(int func) {
@@ -91,12 +94,31 @@ abstract public class GenericDevice implements Device {
 		return _embed;
 	}
 
+	/** Returns the marshaller to marshall the object between the
+	 * client and server.
+	 * <p>Default: returns the object created by {@link #newMarshaller}.
+	 * <p>Derived class don't override this method directly.
+	 * Rather, overrides {@link #newMarshaller}.
+	 * @since 5.0.0
+	 */
+	public Marshaller getMarshaller() {
+		return _marshaller;
+	}
+	/** Instantiates a marshaller for {@link #getMarshaller}.
+	 *
+	 * <p>Default: an instance of {@link SimpleMarshaller}.
+	 */
+	public Marshaller newMarshaller() {
+		return new SimpleMarshaller();
+	}
+
 	public void init(String type, DeviceConfig config) {
 		_type = type;
 		_uamsg = config.getUnavailableMessage();
 		_tmoutURI = config.getTimeoutURI();
 		_spushcls = config.getServerPushClass();
 		_embed = config.getEmbedded();
+		_marshaller = newMarshaller();
 	}
 	public void sessionWillPassivate(Desktop desktop) {
 	}

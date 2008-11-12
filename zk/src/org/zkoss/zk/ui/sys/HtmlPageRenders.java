@@ -55,6 +55,7 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.impl.Attributes;
 import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.au.Marshaller;
 import org.zkoss.zk.device.Devices;
 import org.zkoss.zk.device.Device;
 
@@ -153,12 +154,13 @@ public class HtmlPageRenders {
 
 		final StringBuffer sb = new StringBuffer(256)
 			.append("\n<script>zkafter(function(){\n");
+		final Marshaller marshaller = exec.getDesktop().getDevice().getMarshaller();
 		for (Iterator it = responses.iterator(); it.hasNext();) {
 			final AuResponse response = (AuResponse)it.next();
 			sb.append("zAu.process('").append(response.getCommand())
 				.append("'");
 
-			final String[] data = response.getEncodedData();
+			final String[] data = response.getEncodedData(marshaller);
 			final int datanum = data != null ? data.length: 0;
 			for (int j = 0; j < datanum; ++j) {
 				sb.append(",'");

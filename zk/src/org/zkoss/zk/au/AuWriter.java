@@ -66,8 +66,10 @@ public interface AuWriter {
 	public void writeResponseId(int resId) throws IOException;
 	/** Generates the specified the response to the output.
 	 */
-	public void write(AuResponse response) throws IOException;
+	public void write(Marshaller marshaller, AuResponse response)
+	throws IOException;
 	/** Generates a list of responses to the output.
 	 */
-	public void write(Collection responses) throws IOException;
+	public void write(Marshaller marshaller, Collection responses)
+	throws IOException;
 }
