@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+checkmarks.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jan 11 11:29:47     2006, Created by tomyeh
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo" use="org.zkoss.zkdemo.userguide.DemoWindow">
+	<html><![CDATA[
+	<h4>Listboxes with checkmarks</h4>
+	<p>The checkmark attribute controls whether to display a checkbox,
+	if multiple selection, or a radio button, if single selection,
+	in front of each list items</p>
+	]]></html>
+	<groupbox mold="3d" width="100%">
+		<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
+		<window id="view">
+		</window>
+	</groupbox>
+	<groupbox id="tryView" mold="3d" open="false" width="100%">
+		<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
+		<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
+			<attribute name="value"><![CDATA[
+<window title="Checkmark" border="normal">
+	<button label="Toggle checkmark" onClick="box.checkmark = !box.checkmark"/>
+	<button label="Toggle multiple" onClick="box.multiple = !box.multiple"/>
+	<separator bar="true"/>
+	<listbox id="box" width="460px" multiple="true" checkmark="true">
+		<listhead>
+			<listheader label="Name"/>
+			<listheader label="Gender"/>
+			<listheader label="Age"/>
+			<listheader label="Description"/>
+		</listhead>
+		<listitem>
+			<listcell label="Mary"/>
+			<listcell label="FEMALE"/>
+			<listcell label="18"/>
+			<listcell label="A young lady."/>
+		</listitem>
+		<listitem>
+			<listcell label="John"/>
+			<listcell label="MALE"/>
+			<listcell label="20"/>
+			<listcell label="A college student."/>
+		</listitem>
+		<listitem>
+			<listcell label="Jane"/>
+			<listcell label="FEMALE"/>
+			<listcell label="32"/>
+			<listcell label="A remarkable artist."/>
+		</listitem>
+		<listitem>
+			<listcell label="Henry"/>
+			<listcell label="MALE"/>
+			<listcell label="29"/>
+			<listcell label="A graduate."/>
+		</listitem>
+	</listbox>		
+</window>
+			]]></attribute>
+		</textbox>
+	</groupbox>
+</window>

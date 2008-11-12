@@ -154,7 +154,7 @@ public class Tabs extends XulElement implements org.zkoss.zul.api.Tabs {
 		if (tabbox != null)
 			((Tab)child).removeEventListener(Events.ON_SELECT, tabbox._listener);
 
-		if (tabbox == null && !tabbox.inAccordionMold() && getMold().equals("v30"))
+		if (tabbox == null && !tabbox.inAccordionMold())
 			smartUpdate("z.init", true); //fixWidth
 	}
 	public void onChildAdded(Component child) {
@@ -164,7 +164,7 @@ public class Tabs extends XulElement implements org.zkoss.zul.api.Tabs {
 		if (tabbox != null)
 			((Tab)child).addEventListener(Events.ON_SELECT, tabbox._listener);
 		//
-		if (tabbox == null || !tabbox.inAccordionMold() && getMold().equals("v30") )
+		if (tabbox == null || !tabbox.inAccordionMold())
 			smartUpdate("z.init", true); //fixWidth
 	}
 		

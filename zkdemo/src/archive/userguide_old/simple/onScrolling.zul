@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+input.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct  4 11:31:13     2005, Created by henrichen
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo" use="org.zkoss.zkdemo.userguide.DemoWindow">
+	<html><![CDATA[
+		<h4>The onScrolling event</h4>
+		<p>Sometimes computer has to reponse immediately when user is sliding the slider. The onScrolling event
+		is used to serve such requirements.</p>
+		<p>Try to slide and see how the image size is being changed under onScrolling event.</p>
+	]]></html>
+	<groupbox mold="3d" width="100%">
+		<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
+		<window id="view">
+		</window>
+	</groupbox>
+	<groupbox id="tryView" mold="3d" open="false" width="100%">
+		<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
+		<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="20" width="100%">
+			<attribute name="value"><![CDATA[
+<window title="The onScrolling event" border="normal">
+	<vbox>
+		<slider id="slider1" onScrolling="zooming(slider1, img1)" onScroll="zooming(slider1, img1)"/>
+		<image id="img1" src="/img/sun.jpg" width="10px"/>
+		<separator bar="true"/>
+		<slider id="slider2" onScrolling="zooming(slider2, img2)" onScroll="zooming(slider2, img2)" width="200px" mold="sphere"/>
+		<image id="img2" src="/img/sun.jpg" width="10px"/>
+	</vbox>
+	<zscript>
+	void zooming(Slider slider, Image img) {
+		int v = event.getPos();
+		img.setWidth((v*3 + 10) + "px");
+	}
+	</zscript>
+</window>
+			]]></attribute>
+		</textbox>
+	</groupbox>
+</window>

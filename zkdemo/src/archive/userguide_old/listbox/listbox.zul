@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+hello.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct  4 11:31:13     2005, Created by henrichen
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo" use="org.zkoss.zkdemo.userguide.DemoWindow">
+	<html><![CDATA[
+		<h4>Listboxes</h4>
+		<p>listbox provides an option lists for the end user to pick an option from.</p>
+	]]></html>
+	<groupbox mold="3d" width="100%">
+		<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
+		<window id="view">
+		</window>
+	</groupbox>
+	<groupbox id="tryView" mold="3d" open="false" width="100%">
+		<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
+		<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
+			<attribute name="value"><![CDATA[
+<window title="Listbox" border="normal">
+	<vbox>
+		<listbox rows="1" mold="select">
+			<listitem label="option1"/>
+			<listitem label="option2"/>
+			<listitem label="option3"/>
+		</listbox>		
+
+		<separator bar="true"/>
+		<listbox width="250px">
+			<listhead sizable="true">
+				<listheader label="Name" sort="auto"/>
+				<listheader label="Gender" sort="auto"/>
+			</listhead>
+			<listitem>
+				<listcell label="Mary"/>
+				<listcell label="female"/>
+			</listitem>
+			<listitem>
+				<listcell label="John"/>
+				<listcell label="male"/>
+			</listitem>
+			<listitem>
+				<listcell label="Jane"/>
+				<listcell label="female"/>
+			</listitem>
+			<listitem>
+				<listcell label="Henry"/>
+				<listcell label="male"/>
+			</listitem>
+		</listbox>		
+	</vbox>
+</window>
+			]]></attribute>
+		</textbox>
+	</groupbox>
+</window>

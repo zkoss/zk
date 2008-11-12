@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+localization.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct  4 11:31:13     2005, Created by henrichen
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo" use="org.zkoss.zkdemo.userguide.DemoWindow" xmlns:h="http://www.w3.org/1999/xhtml">
+	<html><![CDATA[
+<h4>Localization</h4>
+<p>Localization is supported via an EL function "l" of taglib, meaning label. All labels are
+defined in the WEB-INF/i3-label.properties of the war file, and developers just specify the 
+following line in the .zul page to retrive the localized text.</p>
+<pre><code>
+&lt;?taglib uri=&quot;http://www.zkoss.org/dsp/web/core&quot; prefix=&quot;c&quot; ?&gt;
+
+</code></pre>
+<p>The EL &#36;{c:l('key')} would retrive the keyed label based on the browser's preferred language setting.</p>
+
+<p>In i3-label.properties, developers might define:</p>
+
+<pre><code>
+username=Username
+password=Password
+</code></pre>
+
+<p>In i3-label_ja_JP.properties (for Japanese), developers might define:</p>
+
+<pre><code>
+username=ユーザー名
+password=パスワード
+</code></pre>
+
+<p>Try to change your browser's preferred language to Japanese or other language, reload this page, and see what happened</p>
+	]]></html>
+	<groupbox mold="3d" width="100%">
+		<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
+		<window id="view">
+		</window>
+	</groupbox>
+	<groupbox id="tryView" mold="3d" open="false" width="100%">
+		<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
+		<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
+			<attribute name="value"><![CDATA[
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<window title="Localization" border="normal">
+	<grid>
+		<rows>
+			<row>
+	&#36;{c:l('username')}<textbox/>
+			</row>
+			<row>
+	&#36;{c:l('password')}<textbox/>
+			</row>
+		</rows>
+	</grid>
+</window>
+			]]></attribute>
+		</textbox>
+	</groupbox>
+</window>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+menu.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct  4 11:31:13     2005, Created by henrichen
+}}IS_NOTE
+
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo" use="org.zkoss.zkdemo.userguide.DemoWindow">
+	<html><![CDATA[
+		<h4>Menu</h4>
+		<p>Menu is the way for an end user to issue an application function.</p>
+	]]></html>
+	<groupbox mold="3d" width="100%">
+		<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
+		<window id="view">
+		</window>
+	</groupbox>
+	<groupbox id="tryView" mold="3d" open="false" width="100%">
+		<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
+		<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="20" width="100%">
+			<attribute name="value"><![CDATA[
+<window title="Menu" border="normal">
+	<menubar id="menubar">
+		<menu label="File" src="/img/m1.gif" >
+			<menupopup>
+				<menuitem src="/img/m1.gif" label="New" onClick="alert(self.label)"/>
+				<menuitem src="/img/m2.gif" label="Open" onClick="alert(self.label)"/>
+				<menuitem src="/img/m3.gif" label="Save" onClick="alert(self.label)"/>
+				<menuseparator/>
+				<menuitem label="Exit" onClick="alert(self.label)"/>
+			</menupopup>
+		</menu>
+		<menu label="Help">
+			<menupopup>
+				<menuitem label="Index" onClick="alert(self.label)"/>
+				<menu label="About">
+					<menupopup>
+						<menuitem label="About ZK" onClick="alert(self.label)"/>
+						<menuitem label="About Potix" onClick="alert(self.label)"/>
+					</menupopup>
+				</menu>
+			</menupopup>
+		</menu>
+		<menu src="/img/m2.gif">
+			<menupopup>
+				<menuitem label="Index" onClick="alert(self.label)"/>
+			</menupopup>
+		</menu>
+	</menubar>
+</window>
+			]]></attribute>
+		</textbox>
+	</groupbox>
+</window>
