@@ -98,13 +98,4 @@ public interface Checkbox extends org.zkoss.zul.impl.api.LabelImageElement {
 	 * Sets the tab order of this component.
 	 */
 	public void setTabindex(int tabindex) throws WrongValueException;
-
-	/**
-	 * Returns the attributes used by the embedded HTML LABEL tag. It returns
-	 * text-relevant styles only.
-	 * <p>
-	 * Used only by component developer.
-	 */
-	public String getLabelAttrs();
-
 }

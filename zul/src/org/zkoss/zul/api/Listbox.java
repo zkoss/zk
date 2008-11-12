@@ -549,14 +549,6 @@ public interface Listbox extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 */
 	public boolean hasGroup();
 
-	/**
-	 * Returns an iterator to iterate thru all visible children. Unlike
-	 * {@link #getVisibleItemCount}, it handles only the direct children.
-	 * Component developer only.
-	 * 
-	 */
-	public Iterator getVisibleChildrenIterator();
-
 	// -- ListModel dependent codes --//
 	/**
 	 * Returns the model associated with this list box, or null if this list box

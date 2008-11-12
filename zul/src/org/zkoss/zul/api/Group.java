@@ -83,16 +83,6 @@ public interface Group extends Row {
 	public void setOpen(boolean open);
 
 	/**
-	 * Returns the HTML IMG tag for the image part, or null if no image is
-	 * assigned.
-	 * 
-	 * <p>
-	 * Used only for component template, not for application developers.
-	 * 
-	 */
-	public String getImgTag();
-
-	/**
 	 * Returns the value of the {@link Label} it contains, or null if no such
 	 * cell.
 	 */
