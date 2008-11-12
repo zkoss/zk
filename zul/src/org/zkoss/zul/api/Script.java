@@ -63,7 +63,7 @@ package org.zkoss.zul.api;
  * @author tomyeh
  * @since 3.5.2
  */
-public interface Script extends org.zkoss.zk.ui.api.AbstractComponent {
+public interface Script {
 
 	/**
 	 * Returns the type of this client script.

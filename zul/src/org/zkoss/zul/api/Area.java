@@ -26,7 +26,7 @@ import org.zkoss.zk.ui.Component;
  * @author tomyeh
  * @since 3.5.2
  */
-public interface Area extends org.zkoss.zk.ui.api.AbstractComponent {
+public interface Area {
 	/**
 	 * Returns the text as the tooltip.
 	 * <p>

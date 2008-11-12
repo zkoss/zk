@@ -34,9 +34,9 @@ package org.zkoss.zk.ui.api;
  * </ul>
  * 
  * @author tomyeh
+ * @since 3.5.2
  */
-public interface HtmlBasedComponent extends
-		org.zkoss.zk.ui.api.AbstractComponent {
+public interface HtmlBasedComponent {
 	/**
 	 * Returns the left position.
 	 */
@@ -119,7 +119,6 @@ public interface HtmlBasedComponent extends
 	 * default style won't be applied at all. If you want to perform small
 	 * adjustments, use {@link #setSclass} instead.
 	 * 
-	 * @since 3.5.1
 	 * @see org.zkoss.zk.ui.HtmlBasedComponent#getSclass
 	 * @see org.zkoss.zk.ui.HtmlBasedComponent#getRealSclass
 	 */
@@ -129,7 +128,6 @@ public interface HtmlBasedComponent extends
 	 * Sets the ZK Cascading Style class(es) for this component. It usually
 	 * depends on the implementation of the mold (@{link #getMold}).
 	 * 
-	 * @since 3.5.0
 	 * @see org.zkoss.zk.ui.HtmlBasedComponent#setSclass
 	 * @see org.zkoss.zk.ui.HtmlBasedComponent#getZclass
 	 */
@@ -232,81 +230,6 @@ public interface HtmlBasedComponent extends
 	 * 
 	 * @param focus
 	 *            whether to set focus. If false, this method has no effect.
-	 * @since 3.0.5
 	 */
 	public void setFocus(boolean focus);
-
-	/**
-	 * Returns the exterior attributes for generating the enclosing HTML tag;
-	 * never return null.
-	 * 
-	 * <p>
-	 * Used only by component developers.
-	 * 
-	 * <p>
-	 * Default: Generates the tooltip text, style, sclass, draggable and
-	 * droppable attribute if necessary. In other words, the corresponding
-	 * attribute is generated if {@link #getTooltiptext},
-	 * {@link org.zkoss.zk.ui.HtmlBasedComponent#getRealStyle},
-	 * {@link #getSclass},
-	 * {@link org.zkoss.zk.ui.HtmlBasedComponent#getDraggable},
-	 * {@link org.zkoss.zk.ui.HtmlBasedComponent#getDroppable} are defined.
-	 * 
-	 * <p>
-	 * You have to call both {@link #getOuterAttrs} and {@link #getInnerAttrs}
-	 * to generate complete attributes.
-	 * 
-	 * <p>
-	 * For simple components that all attributes are put on the outest HTML
-	 * element, all you need is as follows.
-	 * 
-	 * <pre>
-	 * &lt;code&gt;&lt;xx id=&quot;${self.uuid}&quot;${self.outerAttrs}${self.innerAttrs}&gt;&lt;/code&gt;
-	 * </pre>
-	 * 
-	 * <p>
-	 * If you want to put attributes in a nested HTML element, you shall use the
-	 * following pattern. Notice: if {@link #getInnerAttrs} in a different tag,
-	 * the tag must be named with "${self.uuid}!real".
-	 * 
-	 * <pre>
-	 * &lt;code&gt;&lt;xx id=&quot;${self.uuid}&quot;${self.outerAttrs}&gt;
-	 * &lt;yy id=&quot;${self.uuid}!real&quot;${self.innerAttrs}&gt;...
-	 * /code&gt;
-	 * </pre>
-	 * 
-	 * <p>
-	 * Note: This class handles non-deferrable event listeners automatically.
-	 * However, you have to invoke
-	 * {@link org.zkoss.zk.ui.HtmlBasedComponent#appendAsapAttr} for each event
-	 * the component handles in {@link #getOuterAttrs} as follows.
-	 * 
-	 * <pre>
-	 * &lt;code&gt;
-	 * appendAsapAttr(sb, Events.ON_OPEN);
-	 *  appendAsapAttr(sb, Events.ON_CHANGE);
-	 * /code&gt;
-	 * </pre>
-	 * 
-	 * <p>
-	 * Theorectically, you could put any attributes in either
-	 * {@link #getInnerAttrs} or {@link #getOuterAttrs}. However, zkau.js
-	 * assumes all attributes are put at the outer one. If you want something
-	 * different, you have to provide your own setAttr (refer to how checkbox is
-	 * implemented).
-	 */
-	public String getOuterAttrs();
-
-	/**
-	 * Returns the interior attributes for generating the inner HTML tag; never
-	 * return null.
-	 * 
-	 * <p>
-	 * Used only by component developers.
-	 * 
-	 * <p>
-	 * Default: empty string. Refer to {@link #getOuterAttrs} for more details.
-	 */
-	public String getInnerAttrs();
-
 }

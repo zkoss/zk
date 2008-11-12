@@ -71,10 +71,11 @@ public interface Listheader extends org.zkoss.zul.impl.api.HeaderElement {
 	 * 
 	 * <p>
 	 * If "auto" is specified, it will call {@link #setSortAscending} and/or
-	 * {@link #setSortDescending} are called with {@link org.zkoss.zul.ListitemComparator}, if
-	 * {@link #getSortDescending} and/or {@link #getSortAscending} are null. If
-	 * you assigned a comparator to them, it won't be affected. The auto created
-	 * comparator is case-insensitive.
+	 * {@link #setSortDescending} are called with
+	 * {@link org.zkoss.zul.ListitemComparator}, if {@link #getSortDescending}
+	 * and/or {@link #getSortAscending} are null. If you assigned a comparator
+	 * to them, it won't be affected. The auto created comparator is
+	 * case-insensitive.
 	 * 
 	 * <p>
 	 * If "none" is specified, both {@link #setSortAscending} and
@@ -94,10 +95,12 @@ public interface Listheader extends org.zkoss.zul.impl.api.HeaderElement {
 	 * @param sorter
 	 *            the comparator used to sort the ascending order. If you are
 	 *            using the group feature, you can pass an instance of
-	 *            {@link org.zkoss.zul.GroupComparator} to have a better control. If an
-	 *            instance of {@link org.zkoss.zul.GroupComparator} is passed,
-	 *            {@link org.zkoss.zul.GroupComparator#compareGroup} is used to group
-	 *            elements, and {@link org.zkoss.zul.GroupComparator#compare} is used to sort
+	 *            {@link org.zkoss.zul.GroupComparator} to have a better
+	 *            control. If an instance of
+	 *            {@link org.zkoss.zul.GroupComparator} is passed,
+	 *            {@link org.zkoss.zul.GroupComparator#compareGroup} is used to
+	 *            group elements, and
+	 *            {@link org.zkoss.zul.GroupComparator#compare} is used to sort
 	 *            elements with a group. Otherwise, {@link Comparator#compare}
 	 *            is used to group elements and sort elements within a group.
 	 */
@@ -122,10 +125,12 @@ public interface Listheader extends org.zkoss.zul.impl.api.HeaderElement {
 	 * @param sorter
 	 *            the comparator used to sort the ascending order. If you are
 	 *            using the group feature, you can pass an instance of
-	 *            {@link org.zkoss.zul.GroupComparator} to have a better control. If an
-	 *            instance of {@link org.zkoss.zul.GroupComparator} is passed,
-	 *            {@link org.zkoss.zul.GroupComparator#compareGroup} is used to group
-	 *            elements, and {@link org.zkoss.zul.GroupComparator#compare} is used to sort
+	 *            {@link org.zkoss.zul.GroupComparator} to have a better
+	 *            control. If an instance of
+	 *            {@link org.zkoss.zul.GroupComparator} is passed,
+	 *            {@link org.zkoss.zul.GroupComparator#compareGroup} is used to
+	 *            group elements, and
+	 *            {@link org.zkoss.zul.GroupComparator#compare} is used to sort
 	 *            elements with a group. Otherwise, {@link Comparator#compare}
 	 *            is used to group elements and sort elements within a group.
 	 */
@@ -171,9 +176,9 @@ public interface Listheader extends org.zkoss.zul.impl.api.HeaderElement {
 	 * {@link Grid#getModel} is null).
 	 * 
 	 * <p>
-	 * On the other hand, it invokes {@link org.zkoss.zul.ListModelExt#sort} to sort the list
-	 * item, if live data (i.e., {@link Listbox#getModel} is not null). In other
-	 * words, if you use the live data, you have to implement
+	 * On the other hand, it invokes {@link org.zkoss.zul.ListModelExt#sort} to
+	 * sort the list item, if live data (i.e., {@link Listbox#getModel} is not
+	 * null). In other words, if you use the live data, you have to implement
 	 * {@link org.zkoss.zul.ListModelExt} to sort the live data explicitly.
 	 * 
 	 * @param ascending
@@ -200,12 +205,5 @@ public interface Listheader extends org.zkoss.zul.impl.api.HeaderElement {
 	 * @return whether the rows are sorted.
 	 */
 	public boolean sort(boolean ascending, boolean force);
-
-	// -- event listener --//
-	/**
-	 * It invokes {@link #sort(boolean)} to sort list items and maintain
-	 * {@link #getSortDirection}.
-	 */
-	public void onSort();
 
 }

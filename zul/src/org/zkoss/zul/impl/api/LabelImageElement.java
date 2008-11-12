@@ -9,6 +9,7 @@ import org.zkoss.image.Images;
  * {@link #getImage}).
  * 
  * @author tomyeh
+ * @since 3.5.2
  */
 public interface LabelImageElement extends LabelElement {
 	/**
@@ -58,8 +59,6 @@ public interface LabelImageElement extends LabelElement {
 	 * <p>
 	 * If you want more control such as different format, quality, and naming,
 	 * you can use {@link Images} directly.
-	 * 
-	 * @since 3.0.7
 	 */
 	public void setImageContent(RenderedImage image);
 
@@ -78,8 +77,6 @@ public interface LabelImageElement extends LabelElement {
 	 * mouse is moving over this component.
 	 * <p>
 	 * Default: null.
-	 * 
-	 * @since 3.5.0
 	 */
 	public String getHoverImage();
 
@@ -90,8 +87,6 @@ public interface LabelImageElement extends LabelElement {
 	 * Calling this method implies setHoverImageContent(null). In other words,
 	 * the last invocation of {@link #setHoverImage} overrides the previous
 	 * {@link #setHoverImageContent}, if any.
-	 * 
-	 * @since 3.5.0
 	 */
 	public void setHoverImage(String src);
 
@@ -108,7 +103,6 @@ public interface LabelImageElement extends LabelElement {
 	 * 
 	 * @param image
 	 *            the image to display.
-	 * @since 3.5.0
 	 */
 	public void setHoverImageContent(Image image);
 
@@ -124,50 +118,6 @@ public interface LabelImageElement extends LabelElement {
 	 * <p>
 	 * If you want more control such as different format, quality, and naming,
 	 * you can use {@link Images} directly.
-	 * 
-	 * @since 3.5.0
 	 */
 	public void setHoverImageContent(RenderedImage image);
-
-	/**
-	 * Sets the content of the hover image directly with the rendered image. The
-	 * hover image is used when the mouse is moving over this component.
-	 * 
-	 * <p>
-	 * It actually encodes the rendered image to an PNG image (
-	 * {@link org.zkoss.image.Image}) with {@link Images#encode}, and then
-	 * invoke {@link #setHoverImageContent(org.zkoss.image.Image)}.
-	 * 
-	 * <p>
-	 * If you want more control such as different format, quality, and naming,
-	 * you can use {@link Images} directly.
-	 * 
-	 * @since 3.5.0
-	 */
-	public boolean isImageAssigned();
-
-	/**
-	 * Returns the HTML IMG tag for the image part, or null if no image is
-	 * assigned ({@link #isImageAssigned})
-	 * 
-	 * <p>
-	 * Used only for component development, not for application developers.
-	 * 
-	 * <p>
-	 * Note: the component template shall use this method to generate the HTML
-	 * tag, instead of using {@link #getImage}.
-	 */
-	public String getImgTag();
-
-	/**
-	 * Returns the encoded URL for the image ({@link #getImage} or
-	 * {@link #getImageContent}), or null if no image.
-	 * <p>
-	 * Used only for component developements; not by app developers.
-	 * <p>
-	 * Note: this method can be invoked only if execution is not null.
-	 * 
-	 * @since 3.5.0
-	 */
-	public String getEncodedImageURL();
 }

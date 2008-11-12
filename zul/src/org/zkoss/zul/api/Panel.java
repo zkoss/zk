@@ -295,13 +295,6 @@ public interface Panel extends org.zkoss.zul.impl.api.XulElement {
 	public boolean addToolbarApi(String name, Toolbar toolbar);
 
 	/**
-	 * Process the onClose event sent when the close button is pressed.
-	 * <p>
-	 * Default: detach itself.
-	 */
-	public void onClose();
-
-	/**
 	 * Returns the top toolbar of this panel.
 	 */
 	public org.zkoss.zul.api.Toolbar getTopToolbarApi();

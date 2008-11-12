@@ -83,7 +83,7 @@ package org.zkoss.zul.api;
  * @author tomyeh
  * @since 3.5.2
  */
-public interface Style extends org.zkoss.zk.ui.api.AbstractComponent {
+public interface Style {
 
 	/**
 	 * Sets whether to load an external Style Sheet dynamically.

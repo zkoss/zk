@@ -22,8 +22,9 @@ package org.zkoss.zul.impl.api;
  * A skeletal implementation for a header.
  * 
  * @author tomyeh
+ * @since 3.5.2
  */
-abstract public interface HeaderElement extends LabelImageElement {
+public interface HeaderElement extends LabelImageElement {
 	/**
 	 * Returns the horizontal alignment of this column.
 	 * <p>
@@ -47,18 +48,4 @@ abstract public interface HeaderElement extends LabelImageElement {
 	 * Sets the vertical alignment of this grid.
 	 */
 	public void setValign(String valign);
-
-	/**
-	 * Returns the attributes used to generate HTML TD tag for each cell of the
-	 * rows contained in the parent control, e.g.,
-	 * {@link org.zkoss.zul.Listcell}.
-	 * <p>
-	 * Used by component developers.
-	 */
-	public String getColAttrs();
-
-	// -- super --//
-	public boolean setVisible(boolean visible);
-
-	public String getOuterAttrs();
 }
