@@ -150,11 +150,12 @@ abstract public interface InputElement extends XulElement, Constrainted {
 	 * {@link org.zkoss.zul.Intbox#getValue}.
 	 * 
 	 * <p>
-	 * It invokes {@link org.zkoss.zul.impl.InputElement#checkUserError} to ensure no user error.
+	 * It invokes {@link org.zkoss.zul.impl.InputElement#checkUserError} to
+	 * ensure no user error.
 	 * 
 	 * <p>
-	 * It invokes {@link org.zkoss.zul.impl.InputElement#coerceToString} to convert the stored value into a
-	 * string.
+	 * It invokes {@link org.zkoss.zul.impl.InputElement#coerceToString} to
+	 * convert the stored value into a string.
 	 * 
 	 * @exception WrongValueException
 	 *                if user entered a wrong value
@@ -167,8 +168,9 @@ abstract public interface InputElement extends XulElement, Constrainted {
 	 * {@link org.zkoss.zul.Intbox#setValue}.
 	 * 
 	 * <p>
-	 * It invokes {@link org.zkoss.zul.impl.InputElement#coerceFromString} fisrt and then {@link org.zkoss.zul.impl.InputElement#validate}.
-	 * Derives might override them for type conversion and special validation.
+	 * It invokes {@link org.zkoss.zul.impl.InputElement#coerceFromString} fisrt
+	 * and then {@link org.zkoss.zul.impl.InputElement#validate}. Derives might
+	 * override them for type conversion and special validation.
 	 * 
 	 * @param value
 	 *            the value; If null, it is considered as empty.
@@ -233,16 +235,10 @@ abstract public interface InputElement extends XulElement, Constrainted {
 	// -- Constrainted --//
 	public void setConstraint(String constr);
 
-	public void setConstraint(Constraint constr);
-
-	public String getInnerAttrs();
-
-	public String getOuterAttrs();
-
 	/**
 	 * Returns the raw value directly with checking whether any error message
-	 * not yet fixed. In other words, it does NOT invoke {@link org.zkoss.zul.impl.InputElement#checkUserError}
-	 * .
+	 * not yet fixed. In other words, it does NOT invoke
+	 * {@link org.zkoss.zul.impl.InputElement#checkUserError} .
 	 * 
 	 * <p>
 	 * Note: if the user entered an incorrect value (i.e., caused
@@ -257,7 +253,8 @@ abstract public interface InputElement extends XulElement, Constrainted {
 
 	/**
 	 * Returns the text directly without checking whether any error message not
-	 * yet fixed. In other words, it does NOT invoke {@link org.zkoss.zul.impl.InputElement#checkUserError}.
+	 * yet fixed. In other words, it does NOT invoke
+	 * {@link org.zkoss.zul.impl.InputElement#checkUserError}.
 	 * 
 	 * <p>
 	 * Note: if the user entered an incorrect value (i.e., caused
@@ -347,11 +344,5 @@ abstract public interface InputElement extends XulElement, Constrainted {
 	 * Used only for component generation. Not for applications.
 	 */
 	public String getAreaText();
-
-	// -- Component --//
-	/** Not childable. */
-	public boolean isChildable();
-
-	public WrongValueException onWrongValue(WrongValueException ex);
 
 }

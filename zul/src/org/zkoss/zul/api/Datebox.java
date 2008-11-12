@@ -34,6 +34,7 @@ import org.zkoss.zk.ui.WrongValueException;
  * your own default format.
  * <p>
  * Default {@link #getZclass}: z-datebox.(since 3.5.0)
+ * 
  * @since 3.5.2
  * @author tomyeh
  */
@@ -86,24 +87,6 @@ public interface Datebox extends org.zkoss.zul.impl.api.FormatInputElement {
 	 * 
 	 */
 	public void setButtonVisible(boolean visible);
-
-	/**
-	 * Returns the URI of the button image.
-	 * <p>
-	 * Default: null. (since 3.5.0)
-	 * 
-	 * @deprecated As of release 3.5.0
-	 */
-	public String getImage();
-
-	/**
-	 * Sets the URI of the button image.
-	 * 
-	 * @param img
-	 *            the URI of the button image.
-	 * @deprecated As of release 3.5.0
-	 */
-	public void setImage(String img);
 
 	/**
 	 * Returns the value (in Date), might be null unless a constraint stops it.

@@ -49,13 +49,6 @@ public interface Tab extends org.zkoss.zul.impl.api.LabelImageElement {
 	public void setClosable(boolean closable);
 
 	/**
-	 * Process the onClose event sent when the close button is pressed.
-	 * <p>
-	 * Default: detach itself and the corresponding {@link Tabpanel}.
-	 */
-	public void onClose();
-
-	/**
 	 * Returns the tabbox owns this component.
 	 */
 	public org.zkoss.zul.api.Tabbox getTabboxApi();

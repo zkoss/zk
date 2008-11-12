@@ -42,17 +42,4 @@ public interface Progressmeter extends org.zkoss.zul.impl.api.XulElement {
 	 */
 	public int getValue();
 
-	/**
-	 * Returns the style class of the SPAN tag that representing the progress
-	 * status.
-	 * 
-	 * <p>
-	 * It is equivalent to "pmc-img", where pmc is assumed to be the return
-	 * value of {@link #getSclass}. If {@link #getSclass} returns null,
-	 * "progressmeter-img" is assumed.
-	 * 
-	 * @deprecated As of release 3.5.0
-	 */
-	public String getIconSclass();
-
 }

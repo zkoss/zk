@@ -106,16 +106,6 @@ public interface HtmlBasedComponent extends
 	public void setTooltiptext(String tooltiptext);
 
 	/**
-	 * @deprecated As of release 3.5.1, replaced with {@link #getZclass}.
-	 */
-	public String getMoldSclass();
-
-	/**
-	 * @deprecated As of release 3.5.1, replaced with {@link #setZclass}.
-	 */
-	public void setMoldSclass(String moldSclass);
-
-	/**
 	 * Returns the ZK Cascading Style class(es) for this component. It usually
 	 * depends on the implementation of the mold (@{link #getMold}).
 	 * 
@@ -256,9 +246,11 @@ public interface HtmlBasedComponent extends
 	 * <p>
 	 * Default: Generates the tooltip text, style, sclass, draggable and
 	 * droppable attribute if necessary. In other words, the corresponding
-	 * attribute is generated if {@link #getTooltiptext}, {@link org.zkoss.zk.ui.HtmlBasedComponent#getRealStyle},
-	 * {@link #getSclass}, {@link org.zkoss.zk.ui.HtmlBasedComponent#getDraggable}, {@link org.zkoss.zk.ui.HtmlBasedComponent#getDroppable} are
-	 * defined.
+	 * attribute is generated if {@link #getTooltiptext},
+	 * {@link org.zkoss.zk.ui.HtmlBasedComponent#getRealStyle},
+	 * {@link #getSclass},
+	 * {@link org.zkoss.zk.ui.HtmlBasedComponent#getDraggable},
+	 * {@link org.zkoss.zk.ui.HtmlBasedComponent#getDroppable} are defined.
 	 * 
 	 * <p>
 	 * You have to call both {@link #getOuterAttrs} and {@link #getInnerAttrs}
@@ -285,8 +277,9 @@ public interface HtmlBasedComponent extends
 	 * 
 	 * <p>
 	 * Note: This class handles non-deferrable event listeners automatically.
-	 * However, you have to invoke {@link org.zkoss.zk.ui.HtmlBasedComponent#appendAsapAttr} for each event the
-	 * component handles in {@link #getOuterAttrs} as follows.
+	 * However, you have to invoke
+	 * {@link org.zkoss.zk.ui.HtmlBasedComponent#appendAsapAttr} for each event
+	 * the component handles in {@link #getOuterAttrs} as follows.
 	 * 
 	 * <pre>
 	 * &lt;code&gt;

@@ -71,24 +71,6 @@ public interface Bandbox extends Textbox {
 	public void setButtonVisible(boolean visible);
 
 	/**
-	 * Returns the image URI that is displayed as the button to open
-	 * {@link Bandpopup}. Default: null. (since 3.5.0)
-	 * 
-	 * @deprecated As of release 3.5.0
-	 */
-	public String getImage();
-
-	/**
-	 * Sets the image URI that is displayed as the button to open
-	 * {@link Bandpopup}.
-	 * 
-	 * @param img
-	 *            the image URI.
-	 * @deprecated As of release 3.5.0
-	 */
-	public void setImage(String img);
-
-	/**
 	 * Drops down or closes the child.
 	 * 
 	 * @see #open
@@ -107,15 +89,5 @@ public interface Bandbox extends Textbox {
 	 * 
 	 */
 	public void close();
-
-	/**
-	 * Bandbox can't be enabled the multiline functionality.
-	 */
-	public void setMultiline(boolean multiline);
-
-	/**
-	 * Bandbox can't be enabled the rows functionality.
-	 */
-	public void setRows(int rows);
 
 }

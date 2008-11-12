@@ -86,8 +86,7 @@ public interface Tree extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 * @param pgi
 	 *            the paging controller. If null and {@link #getMold} is
 	 *            "paging", a paging controller is created automatically as a
-	 *            child component (see {@link #getPagingChildApi}
-	 *            ).
+	 *            child component (see {@link #getPagingChildApi} ).
 	 * 
 	 */
 	public void setPaginal(Paginal pgi);
@@ -387,61 +386,10 @@ public interface Tree extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	/**
 	 * Clears all child tree items ({@link Treeitem}.
 	 * <p>
-	 * Note: after clear, {@link #getTreechildrenApi} won't be null, but it has no
-	 * child
+	 * Note: after clear, {@link #getTreechildrenApi} won't be null, but it has
+	 * no child
 	 */
 	public void clear();
-
-	/**
-	 * Returns the style class prefix used to generate the icons of this tree.
-	 * 
-	 * <p>
-	 * Default: tree.</br> Another builtin style class: dottree (the style used
-	 * prior 3.0).
-	 * 
-	 * <p>
-	 * Assume that the icon style class is <code>tree</code>, then the following
-	 * style classes are used for the icons of each tree item:
-	 * <dl>
-	 * <dt>tree-root-open</dt>
-	 * <dd>The icon used to represent the open state for tree items at the root
-	 * level.</dd>
-	 * <dt>tree-root-close</dt>
-	 * <dd>The icon used to represent the close state for tree items at the root
-	 * level.</dd>
-	 * <dt>tree-tee-open</dt>
-	 * <dd>The icon used to represent the open state for tree items that have
-	 * next siblings.</dd>
-	 * <dt>tree-tee-close</dt>
-	 * <dd>The icon used to represent the close state for tree items at have
-	 * next siblings.</dd>
-	 * <dt>tree-last-open</dt>
-	 * <dd>The icon used to represent the open state for tree items that don't
-	 * have next siblings.</dd>
-	 * <dt>tree-last-close</dt>
-	 * <dd>The icon used to represent the close state for tree items at don't
-	 * have next siblings.</dd>
-	 * <dt>tree-tee</dt>
-	 * <dd>The icon used to represent the T-shape icon.</dd>
-	 * <dt>tree-vbar</dt>
-	 * <dd>The icon used to represent the |-shape (vertical bar) icon.</dd>
-	 * <dt>tree-last</dt>
-	 * <dd>The icon used to represent the L-shape icon -- no next sibling.</dd>
-	 * <dt>tree-spacer</dt>
-	 * <dd>The icon used to represent the blank icon.</dd>
-	 * </dl>
-	 * 
-	 * @deprecated As of release 3.5.0, replaced with {@link #getZclass()}
-	 */
-	public String getIconSclass();
-
-	/**
-	 * Sets the style class prefix used to generate the icons of this tree.
-	 * 
-	 * @see #getIconSclass
-	 * @deprecated As of release 3.5.0, replaced with {@link #setZclass(String)}
-	 */
-	public void setIconSclass(String scls);
 
 	/**
 	 * Sets the tree model associated with this tree.

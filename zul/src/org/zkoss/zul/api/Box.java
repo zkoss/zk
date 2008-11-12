@@ -86,27 +86,6 @@ public interface Box extends org.zkoss.zul.impl.api.XulElement {
 	public void setSpacing(String spacing);
 
 	/**
-	 * Returns the vertical alignment of the adjacent cells of a box (top,
-	 * middle or bottom).
-	 * <p>
-	 * Default: null (i.e., use the browser default, usually middle).
-	 * 
-	 * @deprecated As of release 3.0.0, since it is not compliant to XUL. Use
-	 *             {@link #getAlign} and {@link #getPack} instead.
-	 */
-	public String getValign();
-
-	/**
-	 * Sets the vertical alignment of the adjacent cells of a box.
-	 * 
-	 * @param valign
-	 *            the vertical alignment: top, middle and bottom.
-	 * @deprecated As of release 3.0.0, since it is not compliant to XUL. Use
-	 *             {@link #setAlign} and {@link #setPack} instead.
-	 */
-	public void setValign(String valign);
-
-	/**
 	 * Returns the alignment of cells of a box in the 'opposite' direction
 	 * (<i>null</i>, start, center, end).
 	 * 
