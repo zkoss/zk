@@ -30,6 +30,7 @@ package org.zkoss.zul.api;
  * Default {@link #getZclass}: z-list-footer.(since 3.5.0)
  * 
  * @author tomyeh
+ * @since 3.5.2
  */
 public interface Listfooter extends org.zkoss.zul.impl.api.LabelImageElement {
 	/**

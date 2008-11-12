@@ -22,10 +22,11 @@ package org.zkoss.zul.api;
  * Space is a {@link Separator} with the orient default to "horizontal".
  * 
  * <p>
- * In other words, &lt;space&gt; is equivalent to &lt;separator
- * orient="horizontal"&gt;
+ * In other words, <space> is equivalent to <separator
+ * orient="horizontal">
  * 
  * @author tomyeh
+ * @since 3.5.2
  */
 public interface Space extends Separator {
 

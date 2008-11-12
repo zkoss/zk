@@ -38,9 +38,4 @@ public interface Area {
 	 * Sets the text as the tooltip.
 	 */
 	public void setTooltiptext(String tooltiptext);
-
-	// -- super --//
-	public void setId(String id);
-
-	public void setParent(Component parent);
 }

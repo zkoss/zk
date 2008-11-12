@@ -29,6 +29,7 @@ import org.zkoss.zk.ui.WrongValueException;
  * if any, must be a radio group.
  * 
  * @author tomyeh
+ * @since 3.5.2
  */
 public interface Radiogroup extends org.zkoss.zul.impl.api.XulElement {
 

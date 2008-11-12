@@ -49,7 +49,7 @@ import org.zkoss.zul.event.ListDataEvent;
  * {@link ListModel#getElementAt}. If not assigned, the default renderer, which
  * assumes a label per combo item, is used. In other words, the default renderer
  * adds a label to a row by calling toString against the object returned by
- * {@link ListModel#getElementAt}. (since 3.0.2)
+ * {@link ListModel#getElementAt}.
  * 
  * <p>
  * Note: to have better performance, onOpen is sent only if a non-deferrable

@@ -44,11 +44,4 @@ public interface Paging extends org.zkoss.zul.impl.api.XulElement, Paginal {
 	 * page available.
 	 */
 	public void setAutohide(boolean autohide);
-
-	/**
-	 * Returns the HTML tags of paging information.
-	 * 
-	 */
-	public String getInfoTags();
-
 }

@@ -34,6 +34,7 @@ package org.zkoss.zul.api;
  * Default {@link #getZclass}: z-menu-popup. (since 3.5.0)
  * 
  * @author tomyeh
+ * @since 3.5.2
  */
 public interface Menupopup extends Popup {
 

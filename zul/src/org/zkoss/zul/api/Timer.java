@@ -31,6 +31,7 @@ import org.zkoss.zk.ui.WrongValueException;
  * Notice that the timer won't fire any event until it is attached to a page.
  * 
  * @author tomyeh
+ * @since 3.5.2
  */
 public interface Timer extends org.zkoss.zk.ui.api.HtmlBasedComponent {
 

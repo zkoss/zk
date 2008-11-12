@@ -29,7 +29,7 @@ import org.zkoss.image.Images;
  * Note: IE 5.5/6 (not 7) has a bug that failed to render PNG with alpha
  * transparency. See http://homepage.ntlworld.com/bobosola/index.htm for
  * details. Thus, if you want to display such image, you have to use the
- * alphafix mold. <code>&lt;image mold="alphafix"/&gt;</code>
+ * alphafix mold. <code><image mold="alphafix"/></code>
  * 
  * @author tomyeh
  * @since 3.5.2

@@ -191,7 +191,8 @@ public class Paging extends XulElement implements org.zkoss.zul.api.Paging, Pagi
 
 	/**
 	 * Returns the HTML tags of paging information.
-	 * 
+	 * <p>Default: <code>active-page-number / total-numbers-of-pages</code>
+	 * <p>Developers can override this method to show different information.
 	 * @since 3.5.0
 	 */
 	public String getInfoTags() {

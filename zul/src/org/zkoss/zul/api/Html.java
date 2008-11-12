@@ -29,22 +29,22 @@ package org.zkoss.zul.api;
  * {@link #getTooltip} and so on.
  * 
  * <pre>
- * &lt;code&gt;&lt;html style=&quot;border: 1px solid blue&quot;&gt;&lt;![CDATA[
- * &lt;ul&gt;
- *  &lt;li&gt;It is in a SPAN tag.&lt;/li&gt;
- * &lt;/ul&gt;
- * ]&gt;&lt;/html&gt;&lt;/code&gt;
+ * <code><html style=&quot;border: 1px solid blue&quot;><![CDATA[
+ * <ul>
+ *  <li>It is in a SPAN tag.</li>
+ * </ul>
+ * ]></html></code>
  * </pre>
  * 
  * <p>
  * The generated HTML tags will look like:
  * 
  * <pre>
- * &lt;code&gt;&lt;SPAN id=&quot;xxx&quot; style=&quot;border: 1px solid blue&quot;&gt;
- * &lt;ul&gt;
- *  &lt;li&gt;It is in a SPAN tag.&lt;/li&gt;
- * &lt;/ul&gt;
- * lt;/SPAN&gt;&lt;/code&gt;
+ * <code><SPAN id=&quot;xxx&quot; style=&quot;border: 1px solid blue&quot;>
+ * <ul>
+ *  <li>It is in a SPAN tag.</li>
+ * </ul>
+ * </SPAN></code>
  * </pre>
  * 
  * <p>
@@ -52,17 +52,17 @@ package org.zkoss.zul.api;
  * incorrect.
  * 
  * <pre>
- * &lt;code&gt;&lt;html&gt;&lt;![CDATA[
- * &lt;table&gt;
- *  &lt;tr&gt;
- *   &lt;td&gt; &lt;-- Incomplete since it is inside SPAN --&gt;
- * ]&gt;&lt;/html&gt;
- * lt;textbox/&gt;
- * lt;html&gt;&lt;![CDATA[
- *   &lt;/td&gt;
- *  &lt;/tr&gt;
- * &lt;/table&gt;
- * ]&gt;&lt;/html&gt;&lt;/code&gt;
+ * <code><html><![CDATA[
+ * <table>
+ *  <tr>
+ *   <td> <-- Incomplete since it is inside SPAN -->
+ * ]></html>
+ * <textbox/>
+ * <html><![CDATA[
+ *   </td>
+ *  </tr>
+ * </table>
+ * ]></html></code>
  * </pre>
  * 
  * <p>
@@ -74,6 +74,7 @@ package org.zkoss.zul.api;
  * A non-XUL extension.
  * 
  * @author tomyeh
+ * @since 3.5.2
  */
 public interface Html extends org.zkoss.zul.impl.api.XulElement {
 

@@ -23,7 +23,7 @@ package org.zkoss.zul.api;
  * 
  * <p>
  * An extension. It has the same effect as
- * <code>&lt;h:span xmlns:h="http://www.w3.org/1999/xhtml"&gt;</code>.
+ * <code><h:span xmlns:h="http://www.w3.org/1999/xhtml"></code>.
  * 
  * @author tomyeh
  * @since 3.5.2

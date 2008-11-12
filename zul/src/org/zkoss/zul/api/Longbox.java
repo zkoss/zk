@@ -26,6 +26,7 @@ import org.zkoss.zk.ui.WrongValueException;
  * Default {@link #getZclass}: z-longbox.(since 3.5.0)
  * 
  * @author tomyeh
+ * @since 3.5.2
  */
 public interface Longbox extends org.zkoss.zul.impl.api.NumberInputElement {
 

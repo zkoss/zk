@@ -29,6 +29,7 @@ package org.zkoss.zul.api;
  * 
  * @author tomyeh
  * @see Combobox
+ * @since 3.5.2
  */
 public interface Comboitem extends org.zkoss.zul.impl.api.LabelImageElement {
 

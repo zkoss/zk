@@ -26,6 +26,7 @@ import org.zkoss.zk.ui.WrongValueException;
  * Default {@link #getZclass}: z-doublebox.(since 3.5.0)
  * 
  * @author henrichen
+ * @since 3.5.2
  */
 public interface Doublebox extends org.zkoss.zul.impl.api.NumberInputElement {
 

@@ -42,6 +42,7 @@ import org.zkoss.zk.ui.WrongValueException;
  * </ol>
  * 
  * @author tomyeh
+ * @since 3.5.2
  */
 public interface Splitter extends org.zkoss.zul.impl.api.XulElement {
 
