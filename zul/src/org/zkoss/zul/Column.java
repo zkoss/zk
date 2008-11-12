@@ -248,7 +248,8 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 		if (cmpr == null) return false;
 
 		final Grid grid = getGrid();
-		if (grid == null) return false;
+		final Rows rows = grid.getRows();
+		if (grid == null || rows == null) return false;
 
 		//comparator might be zscript
 		final HashMap backup = new HashMap();
@@ -354,7 +355,8 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 					throw new UiException("GroupsModel must be implemented in "+model.getClass().getName());
 				((GroupsListModel)model).group(cmpr, ascending, index);
 			} else { // not live data
-				final Rows rows = grid.getRows();		
+				final Rows rows = grid.getRows();
+				if (rows == null) return false;//Avoid grid with null group		
 				if (rows.hasGroup()) {
 					final List groups = new ArrayList(rows.getGroups());
 					for (Iterator it = groups.iterator(); it.hasNext();)
