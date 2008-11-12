@@ -152,10 +152,4 @@ public interface Tabbox extends org.zkoss.zul.impl.api.XulElement {
 	 */
 	public String getTabLook();
 
-	// -- Component --//
-	/**
-	 * Auto-creates {@link Tabpanel} and select one of tabs if necessary.
-	 */
-	public void onCreate();
-
 }

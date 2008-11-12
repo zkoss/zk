@@ -20,7 +20,6 @@ package org.zkoss.zul.api;
 
 import org.zkoss.zk.ui.WrongValueException;
 
-
 /**
  * A textbox.
  * 
@@ -55,13 +54,6 @@ public interface Textbox extends org.zkoss.zul.impl.api.InputElement {
 	public void setValue(String value) throws WrongValueException;
 
 	/**
-	 * Returns the type.
-	 * <p>
-	 * Default: text.
-	 */
-	public String getType();
-
-	/**
 	 * Sets the type.
 	 * 
 	 * @param type
@@ -84,17 +76,8 @@ public interface Textbox extends org.zkoss.zul.impl.api.InputElement {
 	public void setRows(int rows) throws WrongValueException;
 
 	/**
-	 * Returns whether it is multiline.
-	 * <p>
-	 * Default: false.
-	 */
-	public boolean isMultiline();
-
-	/**
 	 * Sets whether it is multiline.
 	 */
 	public void setMultiline(boolean multiline);
 
-	// -- super --//
-	public String getZclass();
 }

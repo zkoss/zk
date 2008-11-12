@@ -64,16 +64,6 @@ public interface Rows extends org.zkoss.zul.impl.api.XulElement {
 	public int getVisibleItemCount();
 
 	/**
-	 * @deprecated As of release As of release 3.5.1
-	 */
-	public int getVisibleBegin();
-
-	/**
-	 * @deprecated As of release As of release 3.5.1
-	 */
-	public int getVisibleEnd();
-
-	/**
 	 * Returns an iterator to iterate thru all visible children. Unlike
 	 * {@link #getVisibleItemCount}, it handles only the direct children.
 	 * Component developer only.

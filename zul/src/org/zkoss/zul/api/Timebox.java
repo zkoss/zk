@@ -83,24 +83,6 @@ public interface Timebox extends org.zkoss.zul.impl.api.InputElement {
 	public void setButtonVisible(boolean visible);
 
 	/**
-	 * Returns the URI of the button image.
-	 * <p>
-	 * Default: null. (since 3.5.0)
-	 * 
-	 * @deprecated As of release 3.5.0
-	 */
-	public String getImage();
-
-	/**
-	 * Sets the URI of the button image.
-	 * 
-	 * @param img
-	 *            the URI of the button image.
-	 * @deprecated As of release 3.5.0
-	 */
-	public void setImage(String img);
-
-	/**
 	 * Returns the time zone that this time box belongs to, or null if the
 	 * default time zone is used.
 	 * <p>

@@ -121,18 +121,6 @@ public interface Listitem extends org.zkoss.zul.impl.api.XulElement {
 	public void setLabel(String label);
 
 	/**
-	 * @deprecated As of release 3.5.0, it is redundant since it is the same
-	 *             {@link #getImage}.
-	 */
-	public String getSrc();
-
-	/**
-	 * @deprecated As of release 3.5.0, it is redundant since it is the same
-	 *             {@link #getSrc}.
-	 */
-	public void setSrc(String src);
-
-	/**
 	 * Returns the image of the {@link Listcell} it contains.
 	 */
 	public String getImage();
@@ -152,7 +140,5 @@ public interface Listitem extends org.zkoss.zul.impl.api.XulElement {
 	 * 
 	 */
 	public boolean isLoaded();
-
-	public boolean setVisible(boolean visible);
 
 }

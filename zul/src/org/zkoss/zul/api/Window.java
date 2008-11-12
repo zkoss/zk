@@ -463,38 +463,4 @@ public interface Window extends org.zkoss.zul.impl.api.XulElement {
 	 */
 	public void setContentSclass(String scls);
 
-	/**
-	 * Returns the style class used for the title.
-	 * 
-	 * <p>
-	 * It returns "wt-<i>sclass</i>" is returned, where <i>sclass</i> is the
-	 * value returned by {@link #getSclass}.
-	 * 
-	 * @deprecated As of release 3.5.0
-	 */
-	public String getTitleSclass();
-
-	public String getZclass();
-
-	public boolean insertBefore(Component child, Component insertBefore);
-
-	public void onChildRemoved(Component child);
-
-	public void setPage(Page page);
-
-	public void setParent(Component parent);
-
-	/**
-	 * Changes the visibility of the window.
-	 * 
-	 * <p>
-	 * Note: If a modal dialog becomes invisible, the modal state will be ended
-	 * automatically. In other words, the mode ({@link #getMode}) will become
-	 * {@link org.zkoss.zul.Window#OVERLAPPED} and the suspending thread is resumed.
-	 */
-	public boolean setVisible(boolean visible);
-
-	public void setDraggable(String draggable);
-
-	public Object clone();
 }

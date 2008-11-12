@@ -523,16 +523,6 @@ public interface Listbox extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	public int getVisibleItemCount();
 
 	/**
-	 * @deprecated As of release As of release 3.5.1
-	 */
-	public int getVisibleBegin();
-
-	/**
-	 * @deprecated As of release As of release 3.5.1
-	 */
-	public int getVisibleEnd();
-
-	/**
 	 * Returns the style class for the odd rows.
 	 * <p>
 	 * Default: {@link #getZclass()}-odd. (since 3.5.0)

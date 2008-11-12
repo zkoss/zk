@@ -38,7 +38,7 @@ import java.util.Set;
  * Example:
  * 
  * <pre>
- * &lt;code&gt; class A {
+ * <code>class A {
  *   public void f() {...}
  * }
  * class B {
@@ -50,17 +50,17 @@ import java.util.Set;
  * interface IB {
  *   public void f2();
  * }
- * &lt;/code&gt;
+ * </code>
  * then, you could create a proxy object:
- * &lt;code&gt; Object obj = FusionInvoker.newInstance(new Object[] {A, B });
- * &lt;/code&gt;
+ * <code> Object obj = FusionInvoker.newInstance(new Object[] {A, B });
+ * </code>
  * then use the proxy object anywhere.
- * &lt;code&gt;
+ * <code>
  *  IA ia = (IA) obj;
  *  ia.f();
  *  IB ib = (IB) obj;
  *  ib.f2();
- *  &lt;/code&gt;
+ *  </code>
  * </pre>
  * 
  * @author RyanWu

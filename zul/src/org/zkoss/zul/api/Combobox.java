@@ -207,24 +207,6 @@ public interface Combobox extends Textbox {
 	public void setButtonVisible(boolean visible);
 
 	/**
-	 * Returns the URI of the button image.
-	 * <p>
-	 * Default: null. (since 3.5.0)
-	 * 
-	 * @deprecated As of release 3.5.0
-	 */
-	public String getImage();
-
-	/**
-	 * Sets the URI of the button image.
-	 * 
-	 * @param img
-	 *            the URI of the button image.
-	 * @deprecated As of release 3.5.0
-	 */
-	public void setImage(String img);
-
-	/**
 	 * Returns a 'live' list of all {@link Comboitem}. By live we mean you can
 	 * add or remove them directly with the List interface.
 	 * 

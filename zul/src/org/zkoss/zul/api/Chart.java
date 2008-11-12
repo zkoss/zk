@@ -183,19 +183,9 @@ public interface Chart extends Imagemap {
 	public String getTitle();
 
 	/**
-	 * Override super class to prepare the int width.
-	 */
-	public void setWidth(String w);
-
-	/**
 	 * Get the chart int width in pixel; to be used by the derived subclass.
 	 */
 	public int getIntWidth();
-
-	/**
-	 * Override super class to prepare the int height.
-	 */
-	public void setHeight(String h);
 
 	/**
 	 * Get the chart int width in pixel; to be used by the derived subclass.

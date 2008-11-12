@@ -34,18 +34,6 @@ public interface LabelImageElement extends LabelElement {
 	public void setImage(String src);
 
 	/**
-	 * @deprecated As of release 3.5.0, it is redudant since it is the same as
-	 *             {@link #getImage}
-	 */
-	public String getSrc();
-
-	/**
-	 * @deprecated As of release 3.5.0, it is redudant since it is the same as
-	 *             {@link #setImage}
-	 */
-	public void setSrc(String src);
-
-	/**
 	 * Sets the content directly.
 	 * <p>
 	 * Default: null.

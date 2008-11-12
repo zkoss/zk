@@ -172,18 +172,6 @@ public interface Treeitem extends org.zkoss.zul.impl.api.XulElement {
 	public void setLabel(String label);
 
 	/**
-	 * @deprecated As of release 3.5.0, it is redundant since it the same as
-	 *             {@link #getImage}.
-	 */
-	public String getSrc();
-
-	/**
-	 * @deprecated As of release 3.5.0, it is redundant since it the same as
-	 *             {@link #setImage}.
-	 */
-	public void setSrc(String src);
-
-	/**
 	 * Returns the image of the {@link Treecell} it contains.
 	 */
 	public String getImage();
