@@ -63,7 +63,7 @@ public class Separator extends XulElement {
 
 		if (!Objects.equals(_orient, orient)) {
 			_orient = orient;
-			smartUpdate("orient", getOrient());
+			smartUpdate("orient", _orient);
 		}
 	}
 	/** Returns whether it is a horizontal separator.
@@ -90,7 +90,7 @@ public class Separator extends XulElement {
 	public void setBar(boolean bar) {
 		if (_bar != bar) {
 			_bar = bar;
-			smartUpdate("bar", isBar());
+			smartUpdate("bar", _bar);
 		}
 	}
 
@@ -110,7 +110,7 @@ public class Separator extends XulElement {
 
 		if (!Objects.equals(_spacing, spacing)) {
 			_spacing = spacing;
-			smartUpdate("spacing", getSpacing());
+			smartUpdate("spacing", _spacing);
 		}
 	}
 
@@ -150,7 +150,12 @@ public class Separator extends XulElement {
 		return null;
 	}
 	
-	// super
+	//super//
+	public String getZclass() {
+		return _zclass != null ? _zclass:
+			"z-separator" + (isVertical() ? "-ver" + (isBar() ? "-bar" : "") :
+				"-hor" + (isBar() ? "-bar" : ""));
+	}
 
 	//-- Component --//
 	/** Default: not childable.
@@ -162,8 +167,8 @@ public class Separator extends XulElement {
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 
-		render(renderer, "spacing", getSpacing());
-		render(renderer, "orient", getOrient());
-		render(renderer, "bar", isBar());
+		render(renderer, "spacing", _spacing);
+		render(renderer, "orient", _orient);
+		render(renderer, "bar", _bar);
 	}
 }

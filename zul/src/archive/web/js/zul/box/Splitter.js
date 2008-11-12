@@ -67,6 +67,12 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		return zcls ? zcls:
 			"z-splitter" + (this.isVertical() ? "-ver" : "-hor");
 	},
+	setZclass: function (zcls) {
+		this.$super('setZclass', zcls);
+		if (this.node)
+			this._fixDomClass(true);
+	},
+
 	bind_: function (desktop) {
 		//watch before bind_, so the parent's onXxx will be called first
 		zWatch.watch("onSize", this);
@@ -75,9 +81,14 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 
 		this.$super('bind_', desktop);
 
-		var btn = this.button = zDom.$(this.uuid + '$btn');
-		this.node.style.cursor = this.isOpen() ?
-			this.isVertical() ? "s-resize": "e-resize": "default";
+		this._fixDomClass();
+			//Bug 1921830: if spiltter is invalidated...
+
+		var node = this.node,
+			vert = this.isVertical();
+			btn = this.button = zDom.$(this.uuid + '$btn');
+		node.style.cursor = this.isOpen() ?
+			vert ? "s-resize": "e-resize": "default";
 		btn.style.cursor = "pointer";
 
 		if (zk.ie) {
@@ -89,7 +100,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		this._fixbtn();
 
 		var zulsplt = zul.box.Splitter;
-		this._drag = new zk.Draggable(this, this.node, {
+		this._drag = new zk.Draggable(this, node, {
 			constraint: this.getOrient(), ignoredrag: zulsplt._ignoresizing,
 			ghosting: zulsplt._ghostsizing, overlay: true,
 			snap: zulsplt._snap, endeffect: zulsplt._endDrag});
@@ -105,6 +116,21 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		this.$super('unbind_');
 	},
 
+	/** Fixed DOM class for the enclosing TR/TD tag. */
+	_fixDomClass: function (inner) {
+		p = this.node.parentNode;
+		if (p) {
+			var vert = this.isVertical(),
+				zcls = this.getZclass();;
+			if (vert) p = p.parentNode; //TR
+			if (p && p.id.endsWith("$chdex")) {
+				p.className = zcls + "-outer";
+				if (vert)
+					this.node.parentNode.className = zcls + "-outer-td";
+			}
+		}
+		if (inner) this._fixbtn();
+	},
 	_fixbtn: function () {
 		var btn = this.button,
 			colps = this.getCollapse();

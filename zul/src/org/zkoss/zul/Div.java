@@ -51,7 +51,7 @@ public class Div extends XulElement {
 
 		if (!Objects.equals(_align, align)) {
 			_align = align;
-			smartUpdate("align", getAlign());
+			smartUpdate("align", _align);
 		}
 	}
 
@@ -60,6 +60,6 @@ public class Div extends XulElement {
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 
-		render(renderer, "align", getAlign());
+		render(renderer, "align", _align);
 	}
 }

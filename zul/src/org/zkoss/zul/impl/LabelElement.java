@@ -43,7 +43,7 @@ abstract public class LabelElement extends XulElement {
 		if (label == null) label = "";
 		if (!Objects.equals(_label, label)) {
 			_label = label;
-			smartUpdate("label", getLabel());
+			smartUpdate("label", _label);
 		}
 	}
 
@@ -52,6 +52,6 @@ abstract public class LabelElement extends XulElement {
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 
-		render(renderer, "label", getLabel());
+		render(renderer, "label", _label);
 	}
 }

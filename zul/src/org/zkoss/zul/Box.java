@@ -124,7 +124,7 @@ public class Box extends XulElement {
 		if (spacing != null && spacing.length() == 0) spacing = null;
 		if (!Objects.equals(_spacing, spacing)) {
 			_spacing = spacing;
-			smartUpdate("spacing", getSpacing());
+			smartUpdate("spacing", _spacing);
 		}
 	}
 
@@ -174,7 +174,7 @@ public class Box extends XulElement {
 		if (align != null && align.length() == 0) align = null;
 		if (!Objects.equals(_align, align)) {
 			_align = align;
-			smartUpdate("align", getAlign());
+			smartUpdate("align", _align);
 		}
 	}
 	/** Returns the alignment of cells of this box
@@ -220,7 +220,7 @@ public class Box extends XulElement {
 		if (pack != null && pack.length() == 0) pack = null;
 		if (!Objects.equals(_pack, pack)) {
 			_pack = pack;
-			smartUpdate("pack", getPack());
+			smartUpdate("pack", _pack);
 		}
 	}
 
@@ -289,12 +289,13 @@ public class Box extends XulElement {
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 
-		render(renderer, "spacing", getSpacing());
+		render(renderer, "spacing", _spacing);
 		render(renderer, "widths", getWidths());
 
-		String s = getAlign();
-		if (!"start".equals(s)) render(renderer, "align", s);
-		s = getPack();
-		if (!"start".equals(s)) render(renderer, "pack", s);
+		if (!"start".equals(_align)) render(renderer, "align", _align);
+		if (!"start".equals(_pack)) render(renderer, "pack", _pack);
+	}
+	public String getZclass() {
+		return _zclass != null ? _zclass: isVertical() ? "z-vbox" : "z-hbox";
 	}
 }

@@ -49,8 +49,21 @@ public class Splitter extends XulElement {
 	private boolean _open = true;
 
 	public Splitter() {
-	}	
-	
+	}
+	/** Returns if the orientation of this splitter is vertical.
+	 * @since 5.0.0
+	 */
+	public boolean isVertical() {
+		final Box box = (Box)getParent();
+		return box == null || box.isVertical();
+	}
+	/** Returns if the orientation of this splitter is horizontal.
+	 * @since 5.0.0
+	 */
+	public boolean isHorizontal() {
+		final Box box = (Box)getParent();
+		return box != null && box.isHorizontal();
+	}
 	/** Returns the orientation of the splitter.
 	 * It is the same as the parent's orientation ({@link Box#getOrient}.
 	 */
@@ -139,9 +152,12 @@ public class Splitter extends XulElement {
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 
-		if (!isOpen()) renderer.render("open", false);
-		String s = getCollapse();
-		if (!"none".equals(s)) render(renderer, "collapse", s);
+		render(renderer, "open", _open);
+		if (!"none".equals(_collapse)) render(renderer, "collapse", _collapse);
+	}
+	public String getZclass() {
+		return _zclass != null ? _zclass:
+			"z-splitter" + (isVertical() ? "-ver" : "-hor");
 	}
 
 	//-- ComponentCtrl --//

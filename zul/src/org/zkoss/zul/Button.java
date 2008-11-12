@@ -62,7 +62,7 @@ public class Button extends LabelImageElement {
 	public void setDisabled(boolean disabled) {
 		if (_disabled != disabled) {
 			_disabled = disabled;
-			smartUpdate("disabled", isDisabled());
+			smartUpdate("disabled", _disabled);
 		}
 	}
 
@@ -82,7 +82,7 @@ public class Button extends LabelImageElement {
 
 		if (!Objects.equals(_dir, dir)) {
 			_dir = dir;
-			smartUpdate("dir", getDir());
+			smartUpdate("dir", _dir);
 		}
 	}
 	/** Returns the orient.
@@ -100,7 +100,7 @@ public class Button extends LabelImageElement {
 
 		if (!Objects.equals(_orient, orient)) {
 			_orient = orient;
-			smartUpdate("orient", getOrient());
+			smartUpdate("orient", _orient);
 		}
 	}
 
@@ -143,7 +143,7 @@ public class Button extends LabelImageElement {
 
 		if (!Objects.equals(_target, target)) {
 			_target = target;
-			smartUpdate("target", getTarget());
+			smartUpdate("target", _target);
 		}
 	}
 	/** Returns the tab order of this component.
@@ -157,7 +157,7 @@ public class Button extends LabelImageElement {
 	public void setTabindex(int tabindex) throws WrongValueException {
 		if (_tabindex != tabindex) {
 			_tabindex = tabindex;
-			smartUpdate("tabindex", getTabindex());
+			smartUpdate("tabindex", _tabindex);
 		}
 	}
 
@@ -172,17 +172,17 @@ public class Button extends LabelImageElement {
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 
-		int v = getTabindex();
-		if (v >= 0)
-			renderer.render("tabindex", v);
-		String s = getDir();
-		if (!"normal".equals(s)) render(renderer, "dir", s);
-		s = getOrient();
-		if (!"horizontal".equals(s)) render(renderer, "orient", s);
+		if (_tabindex >= 0)
+			renderer.render("tabindex", _tabindex);
+		if (!"normal".equals(_dir)) render(renderer, "dir", _dir);
+		if (!"horizontal".equals(_orient)) render(renderer, "orient", _orient);
 
-		render(renderer, "disabled", isDisabled());
+		render(renderer, "disabled", _disabled);
 		render(renderer, "href", getEncodedHref());
-		render(renderer, "target", getTarget());
+		render(renderer, "target", _target);
+	}
+	public String getZclass() {
+		return _zclass != null ? _zclass: "z-button";
 	}
 
 	//Component//

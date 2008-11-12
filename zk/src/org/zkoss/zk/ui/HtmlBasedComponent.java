@@ -99,7 +99,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	public void setLeft(String left) {
 		if (!Objects.equals(_left, left)) {
 			_left = left;
-			smartUpdate("left", getLeft());
+			smartUpdate("left", _left);
 		}
 	}
 	/** Returns the top position.
@@ -112,7 +112,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	public void setTop(String top) {
 		if (_top != top) {
 			_top = top;
-			smartUpdate("top", getTop());
+			smartUpdate("top", _top);
 		}
 	}
 	/** Returns the Z index.
@@ -128,11 +128,10 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 			_zIndex = -1;
 		if (_zIndex != zIndex) {
 			_zIndex = zIndex;
-			int zi = getZIndex();
-			if (zi < 0)
+			if (_zIndex < 0)
 				smartUpdate("zIndex", (Object)null);
 			else
-				smartUpdate("zIndex", zi);
+				smartUpdate("zIndex", _zIndex);
 		}
 	}
 	/** Returns the height. If null, the best fit is used.
@@ -148,7 +147,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 			height = null;
 		if (!Objects.equals(_height, height)) {
 			_height = height;
-			smartUpdate("height", getHeight());
+			smartUpdate("height", _height);
 		}
 	}
 	/** Returns the width. If null, the best fit is used.
@@ -164,7 +163,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 			width = null;
 		if (!Objects.equals(_width, width)) {
 			_width = width;
-			smartUpdate("width", getWidth());
+			smartUpdate("width", _width);
 		}
 	}
 
@@ -181,21 +180,11 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 			tooltiptext = null;
 		if (!Objects.equals(_tooltiptext, tooltiptext)) {
 			_tooltiptext = tooltiptext;
-			smartUpdate("tooltiptext", getTooltiptext());
+			smartUpdate("tooltiptext", _tooltiptext);
 		}
 	}
 
-	/** @deprecated As of release 3.5.1, replaced with {@link #getZclass}.
-	 */
-	public String getMoldSclass() {
-		return getZclass();
-	}
-	/** @deprecated As of release 3.5.1, replaced with {@link #setZclass}.
-	 */
-	public void setMoldSclass(String moldSclass) {
-		setZclass(moldSclass);
-	}
-	 /**
+	/**
 	  * Returns the ZK Cascading Style class(es) for this component.
 	  * It usually depends on the implementation of the mold (@{link #getMold}).
 	  *
@@ -214,7 +203,6 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	 public String getZclass() {
 		 return _zclass;
 	 }
-	 
 	 /**
 	  * Sets the ZK Cascading Style class(es) for this component.
 	  * It usually depends on the implementation of the mold (@{link #getMold}).
@@ -227,7 +215,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 		if (zclass != null && zclass.length() == 0) zclass = null;
 		if (!Objects.equals(_zclass, zclass)) {
 			_zclass = zclass;
-			smartUpdate("zclass", getZclass());
+			smartUpdate("zclass", _zclass);
 		}
 	 }
 	/** Returns the CSS class.
@@ -255,7 +243,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 		if (sclass != null && sclass.length() == 0) sclass = null;
 		if (!Objects.equals(_sclass, sclass)) {
 			_sclass = sclass;
-			smartUpdate("sclass", getSclass());
+			smartUpdate("sclass", _sclass);
 		}
 	}
 	/** Sets the CSS class. This method is a bit confused with Java's class,
@@ -278,7 +266,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 		if (style != null && style.length() == 0) style = null;
 		if (!Objects.equals(_style, style)) {
 			_style = style;
-			smartUpdate("style", getStyle());
+			smartUpdate("style", _style);
 		}
 	}
 
@@ -439,19 +427,18 @@ abstract public class HtmlBasedComponent extends AbstractComponent {
 	throws IOException {
 		super.renderProperties(renderer);
 
-		render(renderer, "tooltiptext", getTooltiptext());
-		render(renderer, "width", getWidth());
-		render(renderer, "height", getHeight());
-		render(renderer, "sclass", getSclass());
-		render(renderer, "zclass", getZclass());
-		render(renderer, "style", getStyle());
-		render(renderer, "left", getLeft());
-		render(renderer, "top", getTop());
+		render(renderer, "tooltiptext", _tooltiptext);
+		render(renderer, "width", _width);
+		render(renderer, "height", _height);
+		render(renderer, "sclass", _sclass);
+		render(renderer, "zclass", _zclass);
+		render(renderer, "style", _style);
+		render(renderer, "left", _left);
+		render(renderer, "top", _top);
 		render(renderer, "draggble", _draggable); //getDraggable is final
 		render(renderer, "droppable", _droppable);  //getDroppable is final
 
-		int zi = getZIndex();
-		if (zi >= 0) renderer.render("zIndex", zi);
+		if (_zIndex >= 0) renderer.render("zIndex", _zIndex);
 
 		render(renderer, "prolog", _prolog);
 	}

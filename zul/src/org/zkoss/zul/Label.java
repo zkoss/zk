@@ -60,7 +60,7 @@ public class Label extends XulElement {
 			value = "";
 		if (!Objects.equals(_value, value)) {
 			_value = value;
-			smartUpdate("value", getValue());
+			smartUpdate("value", _value);
 		}
 	}
 
@@ -76,7 +76,7 @@ public class Label extends XulElement {
 		if (maxlength < 0) maxlength = 0;
 		if (_maxlength != maxlength) {
 			_maxlength = maxlength;
-			smartUpdate("maxlength", getMaxlength());
+			smartUpdate("maxlength", _maxlength);
 		}
 	}
 	/** Returns whether to preserve the new line and the white spaces at the
@@ -91,7 +91,7 @@ public class Label extends XulElement {
 	public void setMultiline(boolean multiline) {
 		if (_multiline != multiline) {
 			_multiline = multiline;
-			smartUpdate("multiline", isMultiline());
+			smartUpdate("multiline", _multiline);
 		}
 	}
 	/** @deprecated As of release 5.0.0, use CSS instead.
@@ -171,17 +171,15 @@ public class Label extends XulElement {
 		return sb != null ? sb.toString(): _value;
 	}
 
-	//-- super --//
 	//super//
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws IOException {
 		super.renderProperties(renderer);
 
-		int maxlen = getMaxlength();
-		if (maxlen > 0) renderer.render("maxlength", maxlen);
-		render(renderer, "multiline", isMultiline());
+		if (_maxlength > 0) renderer.render("maxlength", _maxlength);
+		render(renderer, "multiline", _multiline);
 
-		String cnt = XMLs.encodeText(getValue());
+		String cnt = XMLs.encodeText(_value);
 		if (cnt.length() > 0) {
 			Execution exec = Executions.getCurrent();
 			if (exec != null) {
@@ -198,6 +196,9 @@ public class Label extends XulElement {
 			}
 			render(renderer, "value", cnt);
 		}
+	}
+	public String getZclass() {
+		return _zclass != null ? _zclass: "z-label";
 	}
 	/** No child is allowed.
 	 */
