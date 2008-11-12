@@ -331,13 +331,16 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * the parent is already in the DOM tree).
 	 * On the other hand, this method is used to replace a branch of
 	 * the DOM tree (that is usually not part of widgets).
+	 * <p>The most common use is to re-render a widget that is already
+	 * attached: <code>wgt.replaceHTML(wgt.node);</code>.
 	 * @param desktop the desktop the DOM element belongs to.
 	 * Optional. If null, ZK will decide it automatically.
 	 */
 	replaceHTML: function (n, desktop) {
+		if (!desktop && n.z_wgt == this) desktop = this.desktop;
+
 		var p = this.parent;
-		if (p)
-			p.replaceChildHTML_(this, n, desktop);
+		if (p) p.replaceChildHTML_(this, n, desktop);
 		else {
 			if (n.z_wgt) n.z_wgt.unbind_(); //unbind first (w/o removal)
 			zDom.setOuterHTML(n, this.redraw());

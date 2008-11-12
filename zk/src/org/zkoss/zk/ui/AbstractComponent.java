@@ -1317,6 +1317,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	throws IOException {
 		if (!ComponentsCtrl.isAutoId(_id)) //not getId() to avoid gen ID
 			render(renderer, "id", _id);
+		if (!_visible) renderer.render("visible", false);
 
 		for (Iterator it = getClientEvents().iterator(); it.hasNext();) {
 			final String evtnm = (String)it.next();

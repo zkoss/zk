@@ -152,7 +152,7 @@ public class Splitter extends XulElement {
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 
-		render(renderer, "open", _open);
+		if (!_open) renderer.render("open", false);
 		if (!"none".equals(_collapse)) render(renderer, "collapse", _collapse);
 	}
 	public String getZclass() {
