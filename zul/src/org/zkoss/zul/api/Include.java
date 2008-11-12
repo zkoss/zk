@@ -40,14 +40,14 @@ import org.zkoss.zul.mesg.MZul;
  * use the query string:
  * 
  * <pre>
- * &lt;code&gt;&lt;include src=&quot;/WEB-INF/mypage?arg=something&quot;/&gt;&lt;/code&gt;
+ * <code><include src=&quot;/WEB-INF/mypage?arg=something&quot;/></code>
  * </pre>
  * 
  * <p>
  * Second, since ZK 3.0.4, you can use {@link #setDynamicProperty}, or, in ZUL,
  * 
  * <pre>
- * &lt;code&gt;&lt;include src=&quot;/WEB-INF/mypage&quot; arg=&quot;something&quot;/&gt;&lt;/code&gt;
+ * <code><include src=&quot;/WEB-INF/mypage&quot; arg=&quot;something&quot;/></code>
  * </pre>
  * 
  * <p>
@@ -86,7 +86,7 @@ import org.zkoss.zul.mesg.MZul;
  * 
  * <p>
  * In additions to macro and {@link Include}, you can use the fulfill attribute
- * as follows: <code>&lt;div fulfill="=/my/foo.zul"&gt;...&lt;/div&gt;
+ * as follows: <code><div fulfill="=/my/foo.zul">...</div>
  * 
  * @author tomyeh
  * @see Iframe

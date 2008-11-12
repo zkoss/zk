@@ -45,20 +45,20 @@ package org.zkoss.zul.api;
  * Method 1: Specify the URL of the CSS file
  * 
  * <pre>
- * &lt;code&gt;&lt;style src=&quot;my.css&quot;/&gt;
- * &lt;/code&gt;
+ * <code><style src=&quot;my.css&quot;/>
+ * </code>
  * </pre>
  * 
  * <p>
  * Method 2: Specify the CSS directly
  * 
  * <pre>
- * &lt;code&gt;&lt;style&gt;
+ * <code><style>
  * .mycls {
  *  border: 1px outset #777;
  * }
- * lt;/style&gt;
- * &lt;/code&gt;
+ * </style>
+ * </code>
  * </pre>
  * 
  * <p>
@@ -66,14 +66,14 @@ package org.zkoss.zul.api;
  * ).
  * 
  * <pre>
- * &lt;code&gt;&lt;style&gt;
- * &lt;attribute name=&quot;content&quot;&gt;
+ * <code><style>
+ * <attribute name=&quot;content&quot;>
  * .mycls {
  *  border: 1px outset #777;
  * }
- * &lt;/attribute&gt;
- * lt;/style&gt;
- * &lt;/code&gt;
+ * </attribute>
+ * </style>
+ * </code>
  * </pre>
  * 
  * <p>

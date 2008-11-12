@@ -64,10 +64,8 @@ public interface Fileupload extends org.zkoss.zk.ui.api.HtmlBasedComponent {
 	 * Default: 1.
 	 * 
 	 * @param maxnum
-	 *            the maximal allowed number (positive or negative). Since
-	 *            3.0.2, the value can be negative, which means no limitation at
-	 *            all and the end user can upload any numbers he wants (since
-	 *            3.0.2)
+	 *            the maximal allowed number (positive or negative). The value can be negative, which means no limitation at
+	 *            all and the end user can upload any numbers he wants 
 	 * @exception WrongValueException
 	 *                if non-positive, or it exceeds 1000
 	 */

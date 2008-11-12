@@ -23,7 +23,7 @@ package org.zkoss.zul.api;
  * 
  * <p>
  * An extension. It has the same effect as
- * <code>&lt;h:div xmlns:h="http://www.w3.org/1999/xhtml"&gt;</code>. Note: a
+ * <code><h:div xmlns:h="http://www.w3.org/1999/xhtml"></code>. Note: a
  * {@link Window} without title and caption has the same visual effect as
  * {@link Div}, but {@link Div} doesn't implement IdSpace. In other words,
  * {@link Div} won't affect the uniqueness of identifiers.
