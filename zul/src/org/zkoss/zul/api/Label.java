@@ -151,7 +151,4 @@ public interface Label extends org.zkoss.zul.impl.api.XulElement {
 	 * 
 	 */
 	public boolean isIdRequired();
-
-	public String getEncodedText();
-
 }

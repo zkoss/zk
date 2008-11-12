@@ -24,8 +24,9 @@ import org.zkoss.zk.ui.WrongValueException;
  * A skeletal implementation for an input box with format.
  * 
  * @author tomyeh
+ * @since 3.5.2
  */
-abstract public interface FormatInputElement extends InputElement {
+public interface FormatInputElement extends InputElement {
 	/**
 	 * Returns the format.
 	 * <p>

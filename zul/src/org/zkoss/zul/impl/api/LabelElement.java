@@ -4,6 +4,7 @@ package org.zkoss.zul.impl.api;
  * A XUL element with a label.
  * 
  * @author tomyeh
+ * @since 3.5.2
  */
 public interface LabelElement extends XulElement {
 	/**

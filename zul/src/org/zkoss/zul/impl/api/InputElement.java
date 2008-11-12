@@ -28,8 +28,9 @@ import org.zkoss.zul.ext.Constrainted;
  * Events: onChange, onChanging, onFocus, onBlur, and onSelection.<br/>
  * 
  * @author tomyeh
+ * @since 3.5.2
  */
-abstract public interface InputElement extends XulElement, Constrainted {
+public interface InputElement extends XulElement, Constrainted {
 	/**
 	 * Returns whether it is disabled.
 	 * <p>
@@ -126,7 +127,6 @@ abstract public interface InputElement extends XulElement, Constrainted {
 	 *            (such as {@link org.zkoss.zul.Intbox#getValue}) won't check
 	 *            the value again. Note: when an input element is constrcuted,
 	 *            the initial value is assumed to be "not-validated-yet".
-	 * @since 3.0.1
 	 */
 	public void clearErrorMessage(boolean revalidateRequired);
 

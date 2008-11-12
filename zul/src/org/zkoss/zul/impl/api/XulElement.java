@@ -9,17 +9,13 @@ import org.zkoss.zul.Popup;
  * 	onOK, onCacnel and onCtrlKey.<br/>
  * 
  * @author tomyeh
- * @since 3.0.6 supports onOK event.
- * @since 3.0.6 supports onCancel event.
- * @since 3.0.6 supports onCtrlKey event.
+ * @since 3.5.2
  */
 public interface XulElement extends org.zkoss.zk.ui.api.HtmlBasedComponent{
 	/**
 	 * Returns what keystrokes to intercept.
 	 * <p>
 	 * Default: null.
-	 * 
-	 * @since 3.0.6
 	 */
 	public String getCtrlKeys();
 
@@ -77,8 +73,6 @@ public interface XulElement extends org.zkoss.zk.ui.api.HtmlBasedComponent{
 	 * <p>
 	 * Note: it doesn't support Ctrl+Alt, Shift+Ctrl, Shift+Alt or
 	 * Shift+Ctrl+Alt.
-	 * 
-	 * @since 3.0.6
 	 */
 	public void setCtrlKeys(String ctrlKeys) throws UiException;
 
@@ -139,7 +133,6 @@ public interface XulElement extends org.zkoss.zk.ui.api.HtmlBasedComponent{
 	 * Note: it actually invokes
 	 * <code>setContext("uuid(" + popup.getUuid() + ")")</code>
 	 * 
-	 * @since 3.0.2
 	 * @see #setContext(String)
 	 */
 	public void setContext(Popup popup);
@@ -186,7 +179,6 @@ public interface XulElement extends org.zkoss.zk.ui.api.HtmlBasedComponent{
 	 * Note: it actually invokes
 	 * <code>setPopup("uuid(" + popup.getUuid() + ")")</code>
 	 * 
-	 * @since 3.0.2
 	 * @see #setPopup(String)
 	 */
 	public void setPopup(Popup popup);
@@ -234,7 +226,6 @@ public interface XulElement extends org.zkoss.zk.ui.api.HtmlBasedComponent{
 	 * Note: it actually invokes
 	 * <code>setTooltip("uuid(" + popup.getUuid() + ")")</code>
 	 * 
-	 * @since 3.0.2
 	 * @see #setTooltip(String)
 	 */
 	public void setTooltip(Popup popup);

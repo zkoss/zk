@@ -32,8 +32,9 @@ import org.zkoss.math.RoundingModes;
  * A skeletal implementation for number-type input box.
  * 
  * @author tomyeh
+ * @since 3.5.2
  */
-abstract public interface NumberInputElement extends FormatInputElement {
+public interface NumberInputElement extends FormatInputElement {
 
 	/**
 	 * Sets the rounding mode. Note: You cannot change the rounding mode unless
