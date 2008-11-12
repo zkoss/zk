@@ -74,6 +74,7 @@ package org.zkoss.zul.api;
  * A non-XUL extension.
  * 
  * @author tomyeh
+ * @since 3.5.2
  */
 public interface Html extends org.zkoss.zul.impl.api.XulElement {
 

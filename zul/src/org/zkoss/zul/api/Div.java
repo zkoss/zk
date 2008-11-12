@@ -29,6 +29,7 @@ package org.zkoss.zul.api;
  * {@link Div} won't affect the uniqueness of identifiers.
  * 
  * @author tomyeh
+ * @since 3.5.2
  */
 public interface Div extends org.zkoss.zul.impl.api.XulElement {
 	/**

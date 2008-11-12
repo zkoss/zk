@@ -26,6 +26,7 @@ package org.zkoss.zul.api;
  * orient="horizontal"&gt;
  * 
  * @author tomyeh
+ * @since 3.5.2
  */
 public interface Space extends Separator {
 

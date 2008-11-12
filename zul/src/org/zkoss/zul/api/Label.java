@@ -143,12 +143,4 @@ public interface Label extends org.zkoss.zul.impl.api.XulElement {
 	 * maxlength.
 	 */
 	public void setHyphen(boolean hyphen);
-
-	/**
-	 * Whether to generate the value directly without ID.
-	 * <p>
-	 * Used only for component generated. Not for applications.
-	 * 
-	 */
-	public boolean isIdRequired();
 }

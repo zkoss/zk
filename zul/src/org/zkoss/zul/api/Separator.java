@@ -93,6 +93,4 @@ public interface Separator extends org.zkoss.zul.impl.api.XulElement {
 	 *            the spacing (such as "0", "5px", "3pt" or "1em")
 	 */
 	public void setSpacing(String spacing);
-
-	public boolean isSpaceWithMargin();
 }

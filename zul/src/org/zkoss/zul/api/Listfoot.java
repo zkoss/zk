@@ -29,6 +29,7 @@ package org.zkoss.zul.api;
  * Default {@link #getZclass}: z-list-foot.(since 3.5.0)
  * 
  * @author tomyeh
+ * @since 3.5.2
  */
 public interface Listfoot extends org.zkoss.zul.impl.api.XulElement {
 	/**

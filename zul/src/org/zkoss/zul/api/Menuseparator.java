@@ -25,6 +25,7 @@ package org.zkoss.zul.api;
  * Default {@link #getZclass}: z-menu-separator. (since 3.5.0)
  * 
  * @author tomyeh
+ * @since 3.5.2
  */
 public interface Menuseparator extends org.zkoss.zul.impl.api.XulElement {
 

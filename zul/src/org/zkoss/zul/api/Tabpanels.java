@@ -52,6 +52,7 @@ package org.zkoss.zul.api;
  * </table>
  * 
  * @author tomyeh
+ * @since 3.5.2
  */
 public interface Tabpanels extends org.zkoss.zul.impl.api.XulElement {
 

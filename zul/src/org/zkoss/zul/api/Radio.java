@@ -34,6 +34,7 @@ package org.zkoss.zul.api;
  * </ol>
  * 
  * @author tomyeh
+ * @since 3.5.2
  */
 public interface Radio extends Checkbox {
 

@@ -28,6 +28,7 @@ import org.zkoss.zk.ui.WrongValueException;
  * vertical, z-menubar-ver will be added.(since 3.5.0)
  * 
  * @author tomyeh
+ * @since 3.5.2
  */
 public interface Menubar extends org.zkoss.zul.impl.api.XulElement {
 
@@ -46,6 +47,11 @@ public interface Menubar extends org.zkoss.zul.impl.api.XulElement {
 	 */
 	public void setOrient(String orient) throws WrongValueException;
 
+	/** Returns whether to automatically drop down menus if user moves mouse
+	 * over it.
+	 * <p>Default: false.
+	 */
+	public boolean isAutodrop();
 	/**
 	 * Sets whether to automatically drop down menus if user moves mouse over
 	 * it.

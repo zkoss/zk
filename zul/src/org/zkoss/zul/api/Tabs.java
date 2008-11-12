@@ -24,6 +24,7 @@ import org.zkoss.zk.ui.WrongValueException;
  * A collection of tabs ({@link Tab}).
  * 
  * @author tomyeh
+ * @since 3.5.2
  */
 public interface Tabs extends org.zkoss.zul.impl.api.XulElement {
 
@@ -43,8 +44,6 @@ public interface Tabs extends org.zkoss.zul.impl.api.XulElement {
 	 * <p>
 	 * Note: only the default mold supports it (not supported in mold accordion
 	 * and version 3.5).
-	 * 
-	 * @since 3.0.0
 	 */
 	public String getAlign();
 
@@ -54,7 +53,6 @@ public interface Tabs extends org.zkoss.zul.impl.api.XulElement {
 	 * 
 	 * @param align
 	 *            must be "start" or "center" or "end".
-	 * @since 3.0.0
 	 */
 	public void setAlign(String align) throws WrongValueException;
 
