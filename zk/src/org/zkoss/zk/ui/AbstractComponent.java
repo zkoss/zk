@@ -1152,28 +1152,19 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * thread. So, the developers have to use {@link org.zkoss.zk.ui.util.DeferredValue}
 	 * or disable the use of the event processing thread
 	 * (by use of <code>disable-event-thread</code> in zk.xml).
+	 * <p>In addition, the value can be any kind of objects that
+	 * the client accepts. For Ajax devices, it could be String,
+	 * Date, the wrapper of primitives (such as Boolean), primitives
+	 * (wrapped with {@link $boolean} and so on), and an array of above types.
 	 * @since 5.0.0 (become protected)
-	 * @see #smartUpdate(String, Object[])
 	 */
 	protected void smartUpdate(String attr, Object value) {
 		if (_page != null) getThisUiEngine().addSmartUpdate(this, attr, value);
 	}
-	/** Smart-updates a property of the widget at the client
-	 * with an array of values.
-	 *
-	 * @param values an array of values.
-	 * If it is {@link org.zkoss.zk.ui.util.DeferredValue}, the value
-	 * will be retrieved (by calling {@link org.zkoss.zk.ui.util.DeferredValue#getValue})
-	 * in the rendering phase. It is useful if the value can not be determined now.
-	 * @since 3.5.0
-	 * @see #smartUpdate(String, Object)
-	 */
-	protected void smartUpdate(String attr, Object[] values) {
-		if (_page != null) getThisUiEngine().addSmartUpdate(this, attr, values);
-	}
 	/** A special smart-update that update a value in int.
 	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
 	 * the attribute eventually.
+	 * @since 5.0.0
 	 */
 	protected void smartUpdate(String attr, int value) {
 		smartUpdate(attr, new $int(value));
@@ -1181,6 +1172,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/** A special smart-update that update a value in long.
 	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
 	 * the attribute eventually.
+	 * @since 5.0.0
 	 */
 	protected void smartUpdate(String attr, long value) {
 		smartUpdate(attr, new $long(value));
@@ -1188,6 +1180,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/** A special smart-update that update a value in byte.
 	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
 	 * the attribute eventually.
+	 * @since 5.0.0
 	 */
 	protected void smartUpdate(String attr, byte value) {
 		smartUpdate(attr, new $byte(value));
@@ -1195,6 +1188,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/** A special smart-update that update a value in character.
 	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
 	 * the attribute eventually.
+	 * @since 5.0.0
 	 */
 	protected void smartUpdate(String attr, char value) {
 		smartUpdate(attr, new $char(value));
@@ -1202,6 +1196,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/** A special smart-update that update a value in boolean.
 	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
 	 * the attribute eventually.
+	 * @since 5.0.0
 	 */
 	protected void smartUpdate(String attr, boolean value) {
 		smartUpdate(attr, new $boolean(value));
@@ -1209,6 +1204,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/** A special smart-update that update a value in float.
 	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
 	 * the attribute eventually.
+	 * @since 5.0.0
 	 */
 	protected void smartUpdate(String attr, float value) {
 		smartUpdate(attr, new $float(value));
@@ -1216,6 +1212,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/** A special smart-update that update a value in double.
 	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
 	 * the attribute eventually.
+	 * @since 5.0.0
 	 */
 	protected void smartUpdate(String attr, double value) {
 		smartUpdate(attr, new $double(value));
@@ -1223,6 +1220,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/** A special smart-update that update a value in Date.
 	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
 	 * the attribute eventually.
+	 * @since 5.0.0
 	 */
 	protected void smartUpdate(String attr, Date value) {
 		smartUpdate(attr, (Object)value);

@@ -20,7 +20,6 @@ package org.zkoss.zk.au.out;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.au.AuResponse;
-import org.zkoss.zk.ui.util.DeferredValue;
 
 /**
  * A response to set the attribute of the specified component at the client.
@@ -34,25 +33,14 @@ import org.zkoss.zk.ui.util.DeferredValue;
 public class AuSetAttribute extends AuResponse {
 	/** Construct an instance for miscellanous values, such as Boolean,
 	 * Integer and so on.
+	 * @param val the value. It could be null, String, Date,
+	 * {@link org.zkoss.zk.ui.util.DeferredValue}, primitives
+	 * (such as Boolean and {@link org.zkoss.zk.device.marshal.$boolean})
+	 * and an array of above types.
+	 * Different devices might support more types.
 	 * @since 5.0.0
 	 */
 	public AuSetAttribute(Component comp, String attr, Object val) {
 		super("setAttr", comp, new Object[] {comp.getUuid(), attr, val});
-	}
-	public AuSetAttribute(Component comp, String attr, DeferredValue val) {
-		super("setAttr", comp, new Object[] {comp.getUuid(), attr, val});
-	}
-	public AuSetAttribute(Component comp, String attr, Object[] values) {
-		super("setAttr", comp, toData(comp, attr, values));
-	}
-	private static final
-	Object[] toData(Component comp, String attr, Object[] values) {
-		final int len = values != null ? values.length: 0;
-		final Object[] data = new Object[len + 2];
-		data[0] = comp.getUuid();
-		data[1] = attr;
-		for (int j = 0; j < len; ++j)
-			data[j + 2] = values[j];
-		return data;
 	}
 }

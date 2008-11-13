@@ -110,15 +110,9 @@ public interface UiEngine {
 	 * in the same execution with the same attr will override the previous one.
 	 *
 	 * @param value the value. To represent a primitive value, use
-	 * {@link org.zkoss.lang.$int}, {@link org.zkoss.lang.$short} and so on.
+	 * {@link org.zkoss.zk.device.marshal.$int}, {@link org.zkoss.zk.device.marshal.$short} and so on.
 	 */
 	public void addSmartUpdate(Component comp, String attr, Object value);
-	/** Smart updates an attribute of a component with an array of values.
-	 * Called by {@link org.zkoss.zk.ui.AbstractComponent#smartUpdate(String,Object[])}.
-	 *
-	 * @since 3.0.5
-	 */
-	public void addSmartUpdate(Component comp, String attr, Object[] values);
 	/** Adds a response which will be sent to client at the end
 	 * of the execution.
 	 * Called by {@link org.zkoss.zk.ui.AbstractComponent#response}.

@@ -223,16 +223,6 @@ import org.zkoss.zk.au.out.*;
 		if (respmap != null)
 			respmap.put(attr, new TimedValue(_timed++, comp, attr, value));
 	}
-	/** Smart updates a component's attribute with an array of values.
-	 * Meaningful only if {@link #addInvalidate(Component)} is not called in this
-	 * execution
-	 * @since 3.0.5
-	 */
-	public void addSmartUpdate(Component comp, String attr, Object[] values) {
-		final Map respmap = getAttrRespMap(comp, attr);
-		if (respmap != null)
-			respmap.put(attr, new TimedValue(_timed++, comp, attr, values));
-	}
 	/** Returns the response map for the specified attribute, or null if
 	 * nothing to do.
 	 */
@@ -834,11 +824,6 @@ import org.zkoss.zk.au.out.*;
 		private TimedValue(int timed, Component comp, String name, Object value) {
 			_timed = timed;
 			_response = new AuSetAttribute(comp, name, value);
-		}
-		private TimedValue(int timed, Component comp, String name, Object[] values) {
-			_timed = timed;
-			_response = new AuSetAttribute(comp, name,
-				values == null || values.length == 0 ? null: values);
 		}
 		public String toString() {
 			return '(' + _timed + ":" + _response + ')';

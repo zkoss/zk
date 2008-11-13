@@ -25,7 +25,7 @@ package org.zkoss.zk.ui.api;
  * <p>
  * It supports
  * <ul>
- * <li>{@link #getSclass} and {@link #getStyle}.</li>
+ * <li>{@link #getSclass}, {@link #getZclass}, and {@link #getStyle}.</li>
  * <li>{@link #getWidth}, {@link #getHeight}, {@link #getLeft}, {@link #getTop},
  * {@link #getZIndex}</li>
  * <li>{@link #focus}</li>
@@ -118,7 +118,6 @@ public interface HtmlBasedComponent extends org.zkoss.zk.ui.Component {
 	 * adjustments, use {@link #setSclass} instead.
 	 * 
 	 * @see org.zkoss.zk.ui.HtmlBasedComponent#getSclass
-	 * @see org.zkoss.zk.ui.HtmlBasedComponent#getRealSclass
 	 */
 	public String getZclass();
 
@@ -145,7 +144,6 @@ public interface HtmlBasedComponent extends org.zkoss.zk.ui.Component {
 	 * {@link #getSclass}, unless you override it. To replace the default style
 	 * completely, use {@link #setZclass} instead.
 	 * 
-	 * @see org.zkoss.zk.ui.HtmlBasedComponent#getRealSclass
 	 * @see org.zkoss.zk.ui.HtmlBasedComponent#getZclass
 	 */
 	public String getSclass();

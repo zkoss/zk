@@ -25,7 +25,6 @@ import java.util.Map;
 import java.io.Writer;
 import java.io.IOException;
 
-import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WrongValueException;
@@ -35,12 +34,10 @@ import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zk.ui.metainfo.EventHandler;
 import org.zkoss.zk.ui.metainfo.AnnotationMap;
 import org.zkoss.zk.ui.metainfo.EventHandlerMap;
-import org.zkoss.zk.ui.util.DeferredValue;
-import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.Command;
 
 /**
- * An addition interface to {@link org.zkoss.zk.ui.Component}
+ * An addition interface to {@link Component}
  * that is used for implementation or tools.
  *
  * <p>Application developers rarely need to access methods in this interface.
