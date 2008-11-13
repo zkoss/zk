@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.zkoss.web.servlet.http.Https;
 
-import org.zkoss.zk.au.Marshaller;
+import org.zkoss.zk.device.marshal.Marshaller;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuWriter;
 import org.zkoss.zk.au.AuWriters;

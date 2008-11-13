@@ -25,6 +25,7 @@ import org.zkoss.idom.Verifier;
 
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.au.http.HttpAuWriter;
+import org.zkoss.zk.device.marshal.Marshaller;
 
 /**
  * Utilities to instantiate an implmentation of {@link AuWriter}.

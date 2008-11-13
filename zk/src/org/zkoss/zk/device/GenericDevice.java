@@ -20,8 +20,8 @@ package org.zkoss.zk.device;
 
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.sys.ServerPush;
-import org.zkoss.zk.au.Marshaller;
-import org.zkoss.zk.au.SimpleMarshaller;
+import org.zkoss.zk.device.marshal.Marshaller;
+import org.zkoss.zk.device.marshal.SimpleMarshaller;
 
 /**
  * A skeletal implementation of {@link Device}.

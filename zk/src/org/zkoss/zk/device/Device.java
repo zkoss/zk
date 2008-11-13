@@ -21,7 +21,7 @@ package org.zkoss.zk.device;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.sys.ServerPush;
-import org.zkoss.zk.au.Marshaller;
+import org.zkoss.zk.device.marshal.Marshaller;
 
 /**
  * Represents a client device.
