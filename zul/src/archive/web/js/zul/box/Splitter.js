@@ -34,13 +34,41 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	},
 	/** Sets whther it is open.
 	 */
-	setOpen: function(open) {
+	setOpen: function(open, fromServer) {
 		if (this._open != open) {
 			this._open = open;
-			var n = this.node;
-			if (n) {
-				//TODO
+
+			var node = this.node;
+			if (!node) return;
+			var colps = this.getCollapse();
+			if (!colps || "none" == colps) return; //nothing to do
+
+			var nd = zDom.$(node.id + "$chdex"),
+				tn = zDom.tag(nd),
+				vert = this.isVertical(),
+				zulsplt = zul.box.Splitter,
+				sib = colps == "before" ? zulsplt._prev(nd, tn): zulsplt._next(nd, tn),
+				fd = vert ? "height": "width", diff;
+			if (sib) {
+				zUtl.setVisible(sib, open, true); //fire onVisible/onHide
+				diff = zk.parseInt(sib.style[fd]);
 			}
+
+			sib = colps == "before" ? zulsplt._next(nd, tn): zulsplt._prev(nd, tn);
+			if (sib) {
+				diff = $int(sib.style[fd]) + (open ? -diff: diff);
+				if (diff < 0) diff = 0;
+				sib.style[fd] = diff + "px";
+				zk.onSizeAt(sib);
+			}
+
+			node.style.cursor = !open ? "default" : vert ? "s-resize": "e-resize";
+			this._fixNSDomClass();
+
+			this._fixbtn();
+			this._fixszAll();
+
+			if (!fromServer) this.fire2('onOpen', open);
 		}
 	},
 	/** Returns the collapse of this button.
@@ -85,6 +113,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			//Bug 1921830: if spiltter is invalidated...
 
 		var node = this.node,
+			zulsplt = zul.box.Splitter;
 			vert = this.isVertical();
 			btn = this.button = zDom.$(this.uuid + '$btn');
 		node.style.cursor = this.isOpen() ?
@@ -92,18 +121,26 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		btn.style.cursor = "pointer";
 
 		if (zk.ie) {
-			zEvt.listen(btn, "mouseover", zul.box.Splitter.onover);
-			zEvt.listen(btn, "mouseout", zul.box.Splitter.onout);
+			zEvt.listen(btn, "mouseover", zulsplt.onover);
+			zEvt.listen(btn, "mouseout", zulsplt.onout);
 		}
-		zEvt.listen(btn, "click", zul.box.Splitter.onclick);
+		zEvt.listen(btn, "click", zulsplt.onclick);
 
 		this._fixbtn();
 
-		var zulsplt = zul.box.Splitter;
 		this._drag = new zk.Draggable(this, node, {
 			constraint: this.getOrient(), ignoredrag: zulsplt._ignoresizing,
 			ghosting: zulsplt._ghostsizing, overlay: true,
 			snap: zulsplt._snap, endeffect: zulsplt._endDrag});
+
+		var nd = zDom.$(node.id + "$chdex"), tn = zDom.tag(nd),
+			colps = this.getCollapse();
+		if (!colps || "none" == colps) return; //nothing to do
+
+		var sib = colps == "before" ? zulsplt._prev(nd, tn): zulsplt._next(nd, tn);
+		zDom.setVisible(sib, false, false); //no onHide at bind_
+
+		this._fixNSDomClass();
 	},
 	unbind_: function () {
 		zWatch.unwatch("onSize", this);
@@ -130,6 +167,15 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			}
 		}
 		if (inner) this._fixbtn();
+	},
+	_fixNSDomClass = function () {
+		var node = this.node,
+			zcls = this.getZclass(),
+			open = this.isOpen();
+		if(open && zDom.hasClass(node, zcls+"-ns"))
+			zk.rmClass(node, zcls+"-ns");
+		else if (!open && !zDom.hasClass(node, zcls+"-ns"))
+			zk.addClass(node, zcls+"-ns");
 	},
 	_fixbtn: function () {
 		var btn = this.button,
