@@ -34,7 +34,7 @@ import org.zkoss.zul.impl.XulElement;
  * @author robbiecheng
  * @since 3.5.0
  */
-public class Tablelayout extends XulElement{
+public class Tablelayout extends XulElement implements org.zkoss.zkmax.zul.api.Tablelayout {
 	private int _columns = 1;
 	
 	public Tablelayout() {

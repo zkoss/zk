@@ -69,7 +69,7 @@ import org.zkoss.zk.ui.UiException;
  * @author jumperchen
  * @since 3.0.0
  */
-public class Borderlayout extends HtmlBasedComponent {
+public class Borderlayout extends HtmlBasedComponent implements org.zkoss.zkex.zul.api.Borderlayout {
 
 	/**
 	 * The north layout constraint (top of container).

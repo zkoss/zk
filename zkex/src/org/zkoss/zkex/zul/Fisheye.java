@@ -33,7 +33,7 @@ import org.zkoss.zul.impl.XulElement;
  * @author jumperchen
  * @since 3.5.0
  */
-public class Fisheye extends XulElement {
+public class Fisheye extends XulElement implements org.zkoss.zkex.zul.api.Fisheye {
 	private String _image, _label = "";
 
 	public Fisheye() {
