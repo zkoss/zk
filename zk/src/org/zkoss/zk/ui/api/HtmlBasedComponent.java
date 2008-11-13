@@ -28,15 +28,13 @@ package org.zkoss.zk.ui.api;
  * <li>{@link #getSclass} and {@link #getStyle}.</li>
  * <li>{@link #getWidth}, {@link #getHeight}, {@link #getLeft}, {@link #getTop},
  * {@link #getZIndex}</li>
- * <li>{@link #getOuterAttrs}</li>
- * <li>{@link #getInnerAttrs}</li>
  * <li>{@link #focus}</li>
  * </ul>
  * 
  * @author tomyeh
  * @since 3.5.2
  */
-public interface HtmlBasedComponent {
+public interface HtmlBasedComponent extends org.zkoss.zk.ui.Component {
 	/**
 	 * Returns the left position.
 	 */
