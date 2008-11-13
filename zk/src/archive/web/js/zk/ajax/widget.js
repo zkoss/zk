@@ -461,7 +461,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 
 		if (this.inServer && this.desktop) {
-			var ies = this.importantEvents,
+			var ies = this.importantEvents_,
 				evtnm = evt.name,
 				asap = this[evtnm];
 			if (asap != zk.undefined

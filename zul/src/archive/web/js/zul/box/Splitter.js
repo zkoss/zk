@@ -15,6 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.box.Splitter = zk.$extends(zul.Widget, {
 	_collapse: "none",
 	_open: true,
+	importantEvents_: ['onOpen'],
 
 	/** Returns if it is a vertical box. */
 	isVertical: function () {
