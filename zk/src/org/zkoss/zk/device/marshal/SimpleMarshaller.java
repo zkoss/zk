@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-package org.zkoss.zk.au;
+package org.zkoss.zk.device.marshal;
 
 import java.util.Date;
 import org.zkoss.lang.Objects;
@@ -39,6 +39,25 @@ public class SimpleMarshaller implements Marshaller {
 			return "I" + o;
 		if (o instanceof Boolean)
 			return ((Boolean)o).booleanValue() ? "3": "2";
+		if (o instanceof $primitive) {
+			if (o instanceof $int)
+				return marshal((($int)o).value);
+			if (o instanceof $boolean)
+				return marshal((($boolean)o).value);
+			if (o instanceof $short)
+				return marshal((($short)o).value);
+			if (o instanceof $long)
+				return marshal((($long)o).value);
+			if (o instanceof $double)
+				return marshal((($double)o).value);
+			if (o instanceof $float)
+				return marshal((($float)o).value);
+			if (o instanceof $byte)
+				return marshal((($byte)o).value);
+			if (o instanceof $char)
+				return marshal((($char)o).value);
+			throw new InternalError("Unknow primitive "+o.getClass());
+		}
 		if (o instanceof Date)
 			return "t" + ((Date)o).getTime();
 		if (o instanceof Character)

@@ -37,14 +37,6 @@ import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.Objects;
-import org.zkoss.lang.$boolean;
-import org.zkoss.lang.$int;
-import org.zkoss.lang.$short;
-import org.zkoss.lang.$byte;
-import org.zkoss.lang.$float;
-import org.zkoss.lang.$double;
-import org.zkoss.lang.$long;
-import org.zkoss.lang.$char;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
 import org.zkoss.io.PrintWriterX;
@@ -93,6 +85,7 @@ import org.zkoss.zk.au.out.AuClientInfo;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.scripting.util.SimpleNamespace;
+import org.zkoss.zk.device.marshal.*;
 
 /**
  * A skeletal implementation of {@link Component}. Though it is OK
@@ -1264,12 +1257,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 */
 	public void onPageDetached(Page page) {
 		onListenerChange(page.getDesktop(), false);
-	}
-
-	/** Default: null (no propagation at all).
-	 */
-	public Component getPropagatee(String evtnm) {
-		return null;
 	}
 
 	/** Returns the widget type, or null if not defined.

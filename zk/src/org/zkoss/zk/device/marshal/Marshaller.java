@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-package org.zkoss.zk.au;
+package org.zkoss.zk.device.marshal;
 
 /**
  * A marshaller used to marshall data between the client and the server.
@@ -26,6 +26,12 @@ package org.zkoss.zk.au;
 public interface Marshaller {
 	/** Marshall an Object to an intermediate format that
 	 * can be transfer to the client.
+	 *
+	 * <p>To marshal a primitive, such as boolean, you can use
+	 * {@link #marshal(boolean)} or wrap it with {@link $boolean}
+	 * and then invoke {@link #marshal(Object)}.
+	 * The later is convenient if you have an array of daa that
+	 * could be objects and primitives.
 	 *
 	 * @param o the object to marshal. What kid of objects can be
 	 * passed depends on the device's capability.
