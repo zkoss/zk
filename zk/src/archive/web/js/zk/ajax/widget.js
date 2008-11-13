@@ -127,12 +127,14 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * with addition tags (such as TD).
 	 */
 	setVisible: function (visible) {
-		this._visible = visible;
-		var n = this.node;
-		if (n) {
-			var p = this.parent;
-			if (p) p.setChildDomVisible_(this, visible);
-			else n.style.display = visible ? '': 'none';
+		if (this._visible != visible) {
+			this._visible = visible;
+			var n = this.node;
+			if (n) {
+				var p = this.parent;
+				if (p) p.setChildDomVisible_(this, visible);
+				else zDom.setVisible(n, visible, this);
+			}
 		}
 	},
 	/** Sets the visibility of the DOM node of the specified child.
@@ -140,7 +142,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * @see #setVisible
 	 */
 	setChildDomVisible_: function (child, visible) {
-		child.node.style.display = visible ? '': 'none';
+		zDom.setVisible(child.node, visible, this);
 	},
 
 	/** Returns the width of this widget. */
@@ -514,10 +516,10 @@ zk.Widget = zk.$extends(zk.Object, {
 	$: function (uuid) {
 		//1. No map from uuid to widget directly. rather, go thru DOM
 		//2. We have to remove '$*' since $chdex is parentNode!
+		if (!uuid) return null;
 		var n;
 		if (typeof uuid == 'string') {
-			var j = uuid.lastIndexOf('$');
-			n = zDom.$(j >= 0 ? uuid.substring(0, j): uuid);
+			n = zDom.$(zk.Widget.$(uuid));
 		} else {
 			n = uuid;
 			uuid = n.id;
@@ -531,6 +533,13 @@ zk.Widget = zk.$extends(zk.Object, {
 			if (wgt) return wgt;
 		}
 		return null;
+	},
+	/** Converts an ID (of a DOM element) to UUID.
+	 * It actually removes '$*'.
+	 */
+	uuid: function (id) {
+		var j = id.lastIndexOf('$');
+		return j >= 0 ? id.substring(0, j): id;
 	},
 
 	/** Returns the next unquie widget UUID.

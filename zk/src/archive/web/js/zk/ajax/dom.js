@@ -36,6 +36,27 @@ zDom = { //static methods
 	isVisible: function (n, strict) {
 		return n && (!n.style || (n.style.display != "none" && (!strict || n.style.visibility != "hidden")));
 	},
+	/** Returns if a DOM element is real visible (i.e., all ancestors are visible).
+	 */
+	isRealVisible: function (n, strict) {
+		for (; n; n = n.parentNode) //TODO: consider v-parent
+			if (!zDom.isVisible(n, strict))
+				return false;
+		return true;
+	},
+	/** Sets whether to make a DOM element visible.
+	 */
+	setVisible: function (n, visible, objFireWatch) {
+		if (objFireWatch && !zDom.isRealVisible(n.parentNode))
+			objFireWatch = null;
+		if (objFireWatch && !visible)
+			zWatch.fireDown('onHide', -1, objFireWatch);
+
+		n.style.display = visible ? '': 'none';
+
+		if (objFireWatch && visible)
+			zWatch.fireDown('onVisible', -1, objFireWatch);
+	},
 
 	/** Returns the x coordination of the visible part. */
 	innerX: function () {
