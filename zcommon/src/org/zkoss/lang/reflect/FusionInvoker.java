@@ -38,7 +38,7 @@ import java.util.Set;
  * Example:
  * 
  * <pre>
- * <code>class A {
+ * &lt;code&gt;class A {
  *   public void f() {...}
  * }
  * class B {
@@ -50,17 +50,17 @@ import java.util.Set;
  * interface IB {
  *   public void f2();
  * }
- * </code>
+ * &lt;/code&gt;
  * then, you could create a proxy object:
- * <code> Object obj = FusionInvoker.newInstance(new Object[] {A, B });
- * </code>
+ * &lt;code&gt; Object obj = FusionInvoker.newInstance(new Object[] {A, B });
+ * &lt;/code&gt;
  * then use the proxy object anywhere.
- * <code>
+ * &lt;code&gt;
  *  IA ia = (IA) obj;
  *  ia.f();
  *  IB ib = (IB) obj;
  *  ib.f2();
- *  </code>
+ *  &lt;/code&gt;
  * </pre>
  * 
  * @author RyanWu
@@ -74,7 +74,7 @@ public class FusionInvoker implements InvocationHandler {
 		_targets = targets;
 	}
 
-	/** Use for only two object, see {@link #newInstance(Object[])}.*/
+	/** Use for only two object, see {@link #newInstance(Object[])}. */
 	public static Object newInstance(Object target1, Object target2) {
 		return newInstance(new Object[] { target1, target2 });
 	}

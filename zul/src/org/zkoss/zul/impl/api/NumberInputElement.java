@@ -18,15 +18,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zul.impl.api;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.NumberFormat;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-
-import org.zkoss.lang.JVMs;
-import org.zkoss.util.Locales;
-import org.zkoss.math.RoundingModes;
+import java.math.BigDecimal; //for javadoc
+import org.zkoss.math.RoundingModes;//for javadoc
 
 /**
  * A skeletal implementation for number-type input box.

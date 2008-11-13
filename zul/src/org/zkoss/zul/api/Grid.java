@@ -21,14 +21,13 @@ package org.zkoss.zul.api;
 import java.util.Collection;
 import java.util.Set;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zul.GroupsModel;
 import org.zkoss.zul.ListModel;
 import org.zkoss.zul.RowRenderer;
 import org.zkoss.zul.ext.Paginal;
 import org.zkoss.zul.ext.Paginated;
-import org.zkoss.zul.event.ListDataEvent;
+import org.zkoss.zul.event.ListDataEvent;//for javadoc
 
 /**
  * A grid is an element that contains both rows and columns elements. It is used

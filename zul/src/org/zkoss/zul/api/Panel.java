@@ -18,10 +18,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zul.api;
 
-import org.zkoss.zk.ui.IdSpace;
-import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.event.MinimizeEvent;
-
+import org.zkoss.zk.ui.IdSpace;//for javadoc
+import org.zkoss.zk.ui.event.MinimizeEvent;//for javadoc
 /**
  * Panel is a container that has specific functionality and structural
  * components that make it the perfect building block for application-oriented

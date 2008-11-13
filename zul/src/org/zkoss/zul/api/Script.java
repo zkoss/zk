@@ -33,18 +33,18 @@ package org.zkoss.zul.api;
  * Method 1: Specify the URL of the JS file
  * 
  * <pre>
- * <code><script type=&quot;text/javascript&quot; src=&quot;my.js&quot;/>
- * </code>
+ * &lt;code&gt;&lt;script type=&quot;text/javascript&quot; src=&quot;my.js&quot;/&gt;
+ * &lt;/code&gt;
  * </pre>
  * 
  * <p>
  * Method 2: Specify the JavaScript codes directly
  * 
  * <pre>
- * <code><script type=&quot;text/javascript&quot;>
+ * &lt;code&gt;&lt;script type=&quot;text/javascript&quot;&gt;
  * some_js_at_browser();
- * </script>
- * </code>
+ * &lt;/script&gt;
+ * &lt;/code&gt;
  * </pre>
  * 
  * <p>
@@ -52,12 +52,12 @@ package org.zkoss.zul.api;
  * {@link #setContent}).
  * 
  * <pre>
- * <code><script type=&quot;text/javascript&quot;>
- * <attribute name=&quot;content&quot;>
+ * &lt;code&gt;&lt;script type=&quot;text/javascript&quot;&gt;
+ * &lt;attribute name=&quot;content&quot;&gt;
  *  some_js_at_browser();
- * </attribute>
- * </script>
- * </code>
+ * &lt;/attribute&gt;
+ * &lt;/script&gt;
+ * &lt;/code&gt;
  * </pre>
  * 
  * @author tomyeh

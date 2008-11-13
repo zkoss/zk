@@ -2,16 +2,18 @@ package org.zkoss.zul.impl.api;
 
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.Popup;
+
 /**
  * The fundamental class for XUL elements.
- *
- * <p>Events:<br/>
- * 	onOK, onCacnel and onCtrlKey.<br/>
+ * 
+ * <p>
+ * Events:<br/>
+ * onOK, onCacnel and onCtrlKey.<br/>
  * 
  * @author tomyeh
  * @since 3.5.2
  */
-public interface XulElement extends org.zkoss.zk.ui.api.HtmlBasedComponent{
+public interface XulElement extends org.zkoss.zk.ui.api.HtmlBasedComponent {
 	/**
 	 * Returns what keystrokes to intercept.
 	 * <p>

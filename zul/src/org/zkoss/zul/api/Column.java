@@ -19,8 +19,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul.api;
 
 import java.util.Comparator;
-import org.zkoss.zk.ui.Components;
-import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.Components;//for javadoc
 import org.zkoss.zk.ui.WrongValueException;
 
 /**
@@ -75,10 +74,12 @@ public interface Column extends org.zkoss.zul.impl.api.HeaderElement {
 	 * @param sorter
 	 *            the comparator used to sort the ascending order. If you are
 	 *            using the group feature, you can pass an instance of
-	 *            {@link org.zkoss.zul.GroupComparator} to have a better control. If an
-	 *            instance of {@link org.zkoss.zul.GroupComparator} is passed,
-	 *            {@link org.zkoss.zul.GroupComparator#compareGroup} is used to group
-	 *            elements, and {@link org.zkoss.zul.GroupComparator#compare} is used to sort
+	 *            {@link org.zkoss.zul.GroupComparator} to have a better
+	 *            control. If an instance of
+	 *            {@link org.zkoss.zul.GroupComparator} is passed,
+	 *            {@link org.zkoss.zul.GroupComparator#compareGroup} is used to
+	 *            group elements, and
+	 *            {@link org.zkoss.zul.GroupComparator#compare} is used to sort
 	 *            elements with a group. Otherwise, {@link Comparator#compare}
 	 *            is used to group elements and sort elements within a group.
 	 */
@@ -103,10 +104,12 @@ public interface Column extends org.zkoss.zul.impl.api.HeaderElement {
 	 * @param sorter
 	 *            the comparator used to sort the ascending order. If you are
 	 *            using the group feature, you can pass an instance of
-	 *            {@link org.zkoss.zul.GroupComparator} to have a better control. If an
-	 *            instance of {@link org.zkoss.zul.GroupComparator} is passed,
-	 *            {@link org.zkoss.zul.GroupComparator#compareGroup} is used to group
-	 *            elements, and {@link org.zkoss.zul.GroupComparator#compare} is used to sort
+	 *            {@link org.zkoss.zul.GroupComparator} to have a better
+	 *            control. If an instance of
+	 *            {@link org.zkoss.zul.GroupComparator} is passed,
+	 *            {@link org.zkoss.zul.GroupComparator#compareGroup} is used to
+	 *            group elements, and
+	 *            {@link org.zkoss.zul.GroupComparator#compare} is used to sort
 	 *            elements with a group. Otherwise, {@link Comparator#compare}
 	 *            is used to group elements and sort elements within a group.
 	 */
@@ -137,10 +140,10 @@ public interface Column extends org.zkoss.zul.impl.api.HeaderElement {
 	 * (i.e., {@link Grid#getModel} is null).
 	 * 
 	 * <p>
-	 * On the other hand, it invokes {@link org.zkoss.zul.ListModelExt#sort} to sort the rows,
-	 * if live data (i.e., {@link Grid#getModel} is not null). In other words,
-	 * if you use the live data, you have to implement {@link org.zkoss.zul.ListModelExt} to
-	 * sort the live data explicitly.
+	 * On the other hand, it invokes {@link org.zkoss.zul.ListModelExt#sort} to
+	 * sort the rows, if live data (i.e., {@link Grid#getModel} is not null). In
+	 * other words, if you use the live data, you have to implement
+	 * {@link org.zkoss.zul.ListModelExt} to sort the live data explicitly.
 	 * 
 	 * @param ascending
 	 *            whether to use {@link #getSortAscending}. If the corresponding

@@ -1,12 +1,9 @@
 package org.zkoss.zul.api;
 
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.IdSpace;
-import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.IdSpace;//for javadoc
 import org.zkoss.zk.ui.SuspendNotAllowedException;
-import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.MinimizeEvent;
+import org.zkoss.zk.ui.event.Events;//for javadoc
+import org.zkoss.zk.ui.event.MinimizeEvent;//for javadoc
 
 /**
  * A generic window.
@@ -35,9 +32,10 @@ import org.zkoss.zk.ui.event.MinimizeEvent;
  * <p>
  * <code>onClose</code> is sent when the close button is pressed (if
  * {@link #isClosable} is true). The window has to detach or hide the window. By
- * default, {@link org.zkoss.zul.Window#onClose} detaches the window. To prevent it from detached,
- * you have to call {@link org.zkoss.zk.ui.event.Event#stopPropagation} to
- * prevent {@link org.zkoss.zul.Window#onClose} is called.
+ * default, {@link org.zkoss.zul.Window#onClose} detaches the window. To prevent
+ * it from detached, you have to call
+ * {@link org.zkoss.zk.ui.event.Event#stopPropagation} to prevent
+ * {@link org.zkoss.zul.Window#onClose} is called.
  * 
  * <p>
  * On the other hand, <code>onOpen</code> is sent when a popup window (i.e.,

@@ -18,8 +18,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zul.impl.api;
 
-import org.zkoss.zul.event.ZulEvents;
-
 /**
  * A skeletal implementation for headers, the parent of a group of
  * {@link HeaderElement}.
