@@ -43,7 +43,7 @@ import org.zkoss.zul.impl.Utils;
  *
  * @author tomyeh
  */
-public class Image extends XulElement {
+public class Image extends XulElement implements org.zkoss.zul.api.Image{
 	private String _align, _border, _hspace, _vspace;
 	private String _src;
 	/** The image. _src and _image cannot be nonnull at the same time.  */

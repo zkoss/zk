@@ -36,7 +36,7 @@ import org.zkoss.zul.impl.Utils;
  * <p>Default {@link #getZclass}: z-menu-item. (since 3.5.0)
  * @author tomyeh
  */
-public class Menuitem extends LabelImageElement {
+public class Menuitem extends LabelImageElement implements org.zkoss.zul.api.Menuitem {
 	private String _value = "";
 	private String _href, _target;
 	private boolean _autocheck, _checked;
@@ -76,10 +76,6 @@ public class Menuitem extends LabelImageElement {
 
 	public String getZclass() {
 		return _zclass == null ? "z-menu-item" : super.getZclass();
-	}
-	
-	public String getImgTag() {
-		return getImgTag(getZclass() + "-img", true);
 	}
 	
 	/**

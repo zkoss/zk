@@ -50,7 +50,7 @@ import org.zkoss.zul.impl.HeaderElement;
  * <p>Default {@link #getZclass}: z-list-header.(since 3.5.0)
  * @author tomyeh
  */
-public class Listheader extends HeaderElement {
+public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listheader {
     private static final long serialVersionUID = 20060731L;
 
 	private String _sortDir = "natural";
@@ -87,6 +87,12 @@ public class Listheader extends HeaderElement {
 	public Listbox getListbox() {
 		final Component comp = getParent();
 		return comp != null ? (Listbox)comp.getParent(): null;
+	}
+	/** Returns the listbox that this belongs to.
+	 * @since 3.5.2
+	 */
+	public org.zkoss.zul.api.Listbox getListboxApi() {
+		return getListbox();
 	}
 
 	/** Returns the sort direction.

@@ -36,7 +36,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  *
  * @author tomyeh
  */
-public class Footer  extends LabelImageElement {
+public class Footer  extends LabelImageElement implements org.zkoss.zul.api.Footer {
 	private int _span = 1;
 
 	public Footer() {
@@ -54,6 +54,12 @@ public class Footer  extends LabelImageElement {
 	public Grid getGrid() {
 		final Component comp = getParent();
 		return comp != null ? (Grid)comp.getParent(): null;
+	}
+	/** Returns the grid that this belongs to.
+	 * @since 3.5.2
+	 */
+	public org.zkoss.zul.api.Grid getGridApi() {
+		return getGrid();
 	}
 	/** Returns the column index, starting from 0.
 	 */
@@ -81,7 +87,14 @@ public class Footer  extends LabelImageElement {
 		}
 		return null;
 	}
-
+	/** Returns the column that is in the same column as
+	 * this footer, or null if not available.
+	 * @since 3.5.2
+	 */
+	public org.zkoss.zul.api.Column getColumnApi() {
+		return getColumn();
+	}
+	
 	/** Returns number of columns to span this footer.
 	 * Default: 1.
 	 */

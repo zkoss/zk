@@ -107,7 +107,7 @@ import org.zkoss.zul.impl.XulElement;
  * @see ListitemRenderer
  * @see ListitemRendererExt
  */
-public class Listbox extends XulElement implements Paginated {
+public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.Listbox {
 	private static final Log log = Log.lookup(Listbox.class);
 
 	private static final String ATTR_ON_INIT_RENDER_POSTED =
@@ -272,11 +272,25 @@ public class Listbox extends XulElement implements Paginated {
 	public Listhead getListhead() {
 		return _listhead;
 	}
+	/** Returns {@link Listhead} belonging to this listbox, or null
+	 * if no list headers at all.
+	 * @since 3.5.2
+	 */
+	public org.zkoss.zul.api.Listhead getListheadApi() {
+		return getListhead();
+	}
 	/** Returns {@link Listfoot} belonging to this listbox, or null
 	 * if no list footers at all.
 	 */
 	public Listfoot getListfoot() {
 		return _listfoot;
+	}
+	/** Returns {@link Listfoot} belonging to this listbox, or null
+	 * if no list footers at all.
+	 * @since 3.5.2
+	 */
+	public org.zkoss.zul.api.Listfoot getListfootApi() {		
+		return getListfoot();
 	}
 	/** Returns a collection of heads, including {@link #getListhead}
 	 * and auxiliary heads ({@link Auxhead}) (never null).
@@ -605,10 +619,28 @@ public class Listbox extends XulElement implements Paginated {
 	public Listitem getItemAtIndex(int index) {
 		return (Listitem)_items.get(index);
 	}
+	/** Returns the item at the specified index.
+	 *
+	 * <p>Note: if live data is used ({@link #getModel} is not null),
+	 * the returned item might NOT be loaded yet.
+	 * To ensure it is loaded, you have to invoke {@link #renderItem}.
+	 * @since 3.5.2
+	 */
+	public org.zkoss.zul.api.Listitem getItemAtIndexApi(int index) {		
+		return getItemAtIndex(index);
+	}
 	/** Returns the index of the specified item, or -1 if not found.
 	 */
 	public int getIndexOfItem(Listitem item) {
 		return item == null ? -1: item.getIndex();
+	}
+	/** Returns the index of the specified item, or -1 if not found.
+	 * @param itemApi assume as a {@link org.zkoss.zul.Listitem}   
+	 * @since 3.5.2
+	 */
+	public int getIndexOfItemApi(org.zkoss.zul.api.Listitem itemApi) {
+		Listitem item = (Listitem) itemApi;
+		return getIndexOfItem(item);
 	}
 
 	/** Returns the index of the selected item (-1 if no one is selected).
@@ -675,6 +707,16 @@ public class Listbox extends XulElement implements Paginated {
 				setSelectedIndex(item.getIndex());
 		}
 	}
+	/**  Deselects all of the currently selected items and selects
+	 * the given item.
+	 * <p>It is the same as {@link #setSelectedItem}.
+	 * @param itemApi assume as a {@link org.zkoss.zul.Listitem}   
+	 * @since 3.5.2
+	 */
+	public void selectItemApi(org.zkoss.zul.api.Listitem itemApi) {
+		Listitem item = (Listitem) itemApi;
+		selectItem(item);
+	}
 	/** Selects the given item, without deselecting any other items
 	 * that are already selected..
 	 */
@@ -700,6 +742,15 @@ public class Listbox extends XulElement implements Paginated {
 			}
 		}
 	}
+	/** Selects the given item, without deselecting any other items
+	 * that are already selected..
+	 * @param itemApi assume as a {@link org.zkoss.zul.Listitem}   
+	 * @since 3.5.2
+	 */
+	public void addItemToSelectionApi(org.zkoss.zul.api.Listitem itemApi) {
+		Listitem item = (Listitem) itemApi;
+		addItemToSelection(item);
+	}
 	/**  Deselects the given item without deselecting other items.
 	 */
 	public void removeItemFromSelection(Listitem item) {
@@ -724,6 +775,14 @@ public class Listbox extends XulElement implements Paginated {
 			}
 		}
 	}
+	/**  Deselects the given item without deselecting other items.
+	 * @param itemApi assume as a {@link org.zkoss.zul.Listitem}   
+	 * @since 3.5.2
+	 */
+	public void removeItemFromSelectionApi(org.zkoss.zul.api.Listitem itemApi) {
+		Listitem item = (Listitem) itemApi;
+		removeItemFromSelection(item);
+	}
 	/** Note: we have to update all selection at once, since addItemToSelection
 	 * and removeItemFromSelection might be called interchangeably.
 	 */
@@ -742,6 +801,16 @@ public class Listbox extends XulElement implements Paginated {
 	public void toggleItemSelection(Listitem item) {
 		if (item.isSelected()) removeItemFromSelection(item);
 		else addItemToSelection(item);
+	}
+	/** If the specified item is selected, it is deselected.
+	 * If it is not selected, it is selected. Other items in the list box
+	 * that are selected are not affected, and retain their selected state.
+	 * @param itemApi assume as a {@link org.zkoss.zul.Listitem}   
+	 * @since 3.5.2
+	 */
+	public void toggleItemSelectionApi(org.zkoss.zul.api.Listitem itemApi) {
+			Listitem item = (Listitem) itemApi;	
+			toggleItemSelection(item);
 	}
 	/** Clears the selection.
 	 */
@@ -789,6 +858,16 @@ public class Listbox extends XulElement implements Paginated {
 				(Listitem)_selItems.iterator().next():
 				getItemAtIndex(_jsel): null;
 	}
+	/** Returns the selected item.
+	 *
+	 * <p>Note: if live data is used ({@link #getModel} is not null),
+	 * the returned item might NOT be loaded yet.
+	 * To ensure it is loaded, you have to invoke {@link #renderItem}.
+	 * @since 3.5.2
+	 */
+	public org.zkoss.zul.api.Listitem getSelectedItemApi() {
+		return getSelectedItem();
+	}
 	/**  Deselects all of the currently selected items and selects
 	 * the given item.
 	 * <p>It is the same as {@link #selectItem}.
@@ -796,6 +875,18 @@ public class Listbox extends XulElement implements Paginated {
 	public void setSelectedItem(Listitem item) {
 		selectItem(item);
 	}
+
+	/**  Deselects all of the currently selected items and selects
+	 * the given item.
+	 * <p>It is the same as {@link #selectItem}.
+	 * @param itemApi assume as a {@link org.zkoss.zul.Listitem}
+	 * @since 3.5.2
+	 */
+	public void setSelectedItemApi(org.zkoss.zul.api.Listitem itemApi) {
+		Listitem item = (Listitem) itemApi;	
+		selectItem(item);
+	}
+
 	/**  Selects the given listitems.
 	 * @since 3.6.0
 	 */
@@ -833,6 +924,16 @@ public class Listbox extends XulElement implements Paginated {
 		item.setParent(this);
 		return item;
 	}
+	/** Appends an item.
+	 *
+	 * <p>Note: if live data is used ({@link #getModel} is not null),
+	 * the returned item might NOT be loaded yet.
+	 * To ensure it is loaded, you have to invoke {@link #renderItem}.
+	 * @since 3.5.2
+	 */
+	public org.zkoss.zul.api.Listitem appendItemApi(String label, String value) {		
+		return appendItem(label, value);
+	}
 	/**  Removes the child item in the list box at the given index.
 	 *
 	 * <p>Note: if live data is used ({@link #getModel} is not null),
@@ -845,6 +946,17 @@ public class Listbox extends XulElement implements Paginated {
 		final Listitem item = getItemAtIndex(index);
 		removeChild(item);
 		return item;
+	}
+	/**  Removes the child item in the list box at the given index.
+	 *
+	 * <p>Note: if live data is used ({@link #getModel} is not null),
+	 * the returned item might NOT be loaded yet.
+	 * To ensure it is loaded, you have to invoke {@link #renderItem}.
+	 * @since 3.5.2
+	 * @return the removed item.
+	 */
+	public org.zkoss.zul.api.Listitem removeItemAtApi(int index) {		
+		return removeItemAt(index);
 	}
 
 	//--Paging--//
@@ -980,10 +1092,24 @@ public class Listbox extends XulElement implements Paginated {
 	public Paging getPagingChild() {
 		return _paging;
 	}
+	/** Returns the child paging controller that is created automatically,
+	 * or null if mold is not "paging", or the controller is specified externally
+	 * by {@link #setPaginal}.
+	 * @since 3.5.2
+	 */
+	public org.zkoss.zul.api.Paging getPagingChildApi() {
+		return getPagingChild();
+	}
 	/** @deprecated As of release 3.0.7, replaced with {@link #getPagingChild}
 	 * to avoid the confusion with {@link #getPaginal}.
 	 */
 	public Paging getPaging() {
+		return getPagingChild();
+	}
+	/** 
+	 * @since 3.5.2
+	 */
+	public org.zkoss.zul.api.Paging getPagingApi() {		
 		return getPagingChild();
 	}
 	/** Returns the page size, aka., the number items per page.
@@ -1040,6 +1166,16 @@ public class Listbox extends XulElement implements Paginated {
 			if (pg != getActivePage())
 				setActivePage(pg);
 		}	
+	}
+	/** Sets the active page in which the specified item is.
+	 * The active page will become the page that contains the specified item.
+	 * @param itemApi assume as a {@link org.zkoss.zul.Listitem}   
+	 * @since 3.5.2
+	 * @see #setActivePage(int)
+	 */
+	public void setActivePage(org.zkoss.zul.api.Listitem itemApi) {
+		Listitem item = (Listitem) itemApi;	
+		setActivePage(item);
 	}
 
 	/** Returns whether this listbox is in the paging mold.
@@ -2183,6 +2319,22 @@ public class Listbox extends XulElement implements Paginated {
 			}
 		}
 		return li;
+	}
+	/** Renders the specified {@link Listitem} if not loaded yet,
+	 * with {@link #getItemRenderer}.
+	 *
+	 * <p>It does nothing if {@link #getModel} returns null.
+	 * In other words, it is meaningful only if live data model is used.
+	 * @param itemApi assume as a {@link org.zkoss.zul.Listitem}   
+	 * @since 3.5.2
+	 * @see #renderItems
+	 * @see #renderAll
+	 * @return the list item being passed to this method
+	 */
+	public org.zkoss.zul.api.Listitem renderItemApi(
+			org.zkoss.zul.api.Listitem itemApi) {
+				Listitem item = (Listitem) itemApi;
+		return renderItem(item);
 	}
 	/** Renders all {@link Listitem} if not loaded yet,
 	 * with {@link #getItemRenderer}.

@@ -33,7 +33,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * @author tomyeh
  */
-public class Tabpanel extends XulElement {
+public class Tabpanel extends XulElement implements org.zkoss.zul.api.Tabpanel {
 	public Tabpanel() {
 	}
 
@@ -42,6 +42,13 @@ public class Tabpanel extends XulElement {
 	public Tabbox getTabbox() {
 		final Tabpanels panels = (Tabpanels)getParent();
 		return panels != null ? panels.getTabbox(): null;
+	}
+	/**
+	 * Returns the tabbox owns this component.
+	 * @since 3.5.2
+	 */
+	public org.zkoss.zul.api.Tabbox getTabboxApi() {
+		return getTabbox();
 	}
 	/** Returns the tab associated with this tab panel.
 	 */
@@ -56,6 +63,12 @@ public class Tabpanel extends XulElement {
 			}
 		}
 		return null;
+	}
+	/** Returns the tab associated with this tab panel.
+	 * @since 3.5.2
+	 */
+	public org.zkoss.zul.api.Tab getLinkedTabApi() {
+		return getLinkedTab();
 	}
 	/** Returns whether this tab panel is selected.
 	 */

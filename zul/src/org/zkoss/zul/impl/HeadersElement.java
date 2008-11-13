@@ -26,7 +26,7 @@ import org.zkoss.zul.event.ZulEvents;
  *
  * @author tomyeh
  */
-abstract public class HeadersElement extends XulElement {
+abstract public class HeadersElement extends XulElement implements org.zkoss.zul.impl.api.HeadersElement{
 	private boolean _sizable;
 
 	/** Returns whether the width of the child column is sizable.

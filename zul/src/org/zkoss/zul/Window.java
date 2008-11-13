@@ -77,7 +77,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * @author tomyeh
  */
-public class Window extends XulElement implements IdSpace {
+public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Window {
 	private static final Log log = Log.lookup(Window.class);
 	private static String _onshow = null;
 	private transient Caption _caption;
@@ -356,6 +356,13 @@ public class Window extends XulElement implements IdSpace {
 	 */
 	public Caption getCaption() {
 		return _caption;
+	}
+	/** Returns the caption of this window.
+	 *
+	 * @since 3.5.2
+	 */
+	public org.zkoss.zul.api.Caption getCaptionApi() {
+		return getCaption();
 	}
 
 	/** Returns the border.
@@ -888,4 +895,5 @@ public class Window extends XulElement implements IdSpace {
 			}
 		}
 	}
+
 }

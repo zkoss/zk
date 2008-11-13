@@ -33,7 +33,7 @@ import org.zkoss.zul.ext.Paginated;
  *
  * @author tomyeh
  */
-public class Paging extends XulElement implements Paginal {
+public class Paging extends XulElement implements org.zkoss.zul.api.Paging, Paginal {
 	/** # of items per page. */
 	private int _pgsz = 20;
 	/** total # of items. */
@@ -162,7 +162,8 @@ public class Paging extends XulElement implements Paginal {
 
 	/**
 	 * Returns the HTML tags of paging information.
-	 * 
+	 * <p>Default: <code>active-page-number / total-numbers-of-pages</code>
+	 * <p>Developers can override this method to show different information.
 	 * @since 3.5.0
 	 */
 	public String getInfoTags() {

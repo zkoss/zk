@@ -36,7 +36,7 @@ import org.zkoss.zul.impl.XulElement;
  * 
  * @author tomyeh
  */
-public class Label extends XulElement {
+public class Label extends XulElement implements org.zkoss.zul.api.Label {
 	private String _value = "";
 	private int _maxlength;
 	private boolean _multiline;

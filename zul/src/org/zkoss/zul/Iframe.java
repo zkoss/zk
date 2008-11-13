@@ -40,7 +40,7 @@ import org.zkoss.zul.impl.Utils;
  * @author tomyeh
  * @see Include
  */
-public class Iframe extends XulElement {
+public class Iframe extends XulElement implements org.zkoss.zul.api.Iframe {
 	private String _align, _name;
 	private String _src, _scrolling = "auto";
 	/** The media. _src and _media cannot be nonnull at the same time. */

@@ -40,7 +40,7 @@ import org.zkoss.zul.impl.XulElement;
  * @author jumperchen
  * @since 3.5.0
  */
-public class Listgroup extends Listitem {
+public class Listgroup extends Listitem implements org.zkoss.zul.api.Listgroup {
 	private boolean _open = true;
 	private transient List _items;
 	public Listgroup() {
@@ -130,6 +130,13 @@ public class Listgroup extends Listitem {
 		if (index < 0) return null;
 		final Listbox lb = (Listbox)getParent();
 		return (Listfoot) lb.getChildren().get(index);
+	}
+	/**
+	 * Returns the Listfoot, if any. Otherwise, null is returned.
+	 * @since 3.5.2
+	 */
+	public org.zkoss.zul.api.Listfoot getListfootApi() {
+		return getListfoot();
 	}
 	/** Returns whether this container is open.
 	 * <p>Default: true.

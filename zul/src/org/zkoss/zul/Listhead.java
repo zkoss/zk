@@ -36,12 +36,19 @@ import org.zkoss.zul.impl.HeadersElement;
  *
  * @author tomyeh
  */
-public class Listhead extends HeadersElement {
+public class Listhead extends HeadersElement implements org.zkoss.zul.api.Listhead {
 	/** Returns the list box that it belongs to.
 	 * <p>It is the same as {@link #getParent}.
 	 */
 	public Listbox getListbox() {
 		return (Listbox)getParent();
+	}
+	/** Returns the list box that it belongs to.
+	 * <p>It is the same as {@link #getParent}.
+	 * @since 3.5.2
+	 */
+	public org.zkoss.zul.api.Listbox getListboxApi() {
+		return getListbox();
 	}
 
 	//super//

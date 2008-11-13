@@ -63,7 +63,7 @@ import org.zkoss.zul.impl.FileuploadDlg;
  * @author tomyeh
  * @see Filedownload
  */
-public class Fileupload extends HtmlBasedComponent { //not XulElement since not applicable
+public class Fileupload extends HtmlBasedComponent implements org.zkoss.zul.api.Fileupload { //not XulElement since not applicable
 	private static String _templ = "~./zul/html/fileuploaddlg.zul";
 
 	//Used when embedded as a component

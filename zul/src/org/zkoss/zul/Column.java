@@ -56,7 +56,7 @@ import org.zkoss.zul.mesg.MZul;
  *
  * @author tomyeh
  */
-public class Column extends HeaderElement {
+public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 	private String _sortDir = "natural";
 	private Comparator _sortAsc, _sortDsc;
 
@@ -94,6 +94,12 @@ public class Column extends HeaderElement {
 	public Grid getGrid() {
 		final Component parent = getParent();
 		return parent != null ? (Grid)parent.getParent(): null;
+	}
+	/** Returns the grid that contains this column.
+	 * @since 3.5.2 
+	 * */
+	public org.zkoss.zul.api.Grid getGridApi() {		
+		return getGrid();
 	}
 
 	/** Returns the sort direction.
@@ -242,7 +248,8 @@ public class Column extends HeaderElement {
 		if (cmpr == null) return false;
 
 		final Grid grid = getGrid();
-		if (grid == null) return false;
+		final Rows rows = grid.getRows();
+		if (grid == null || rows == null) return false;
 
 		//comparator might be zscript
 		final HashMap backup = new HashMap();
@@ -348,7 +355,8 @@ public class Column extends HeaderElement {
 					throw new UiException("GroupsModel must be implemented in "+model.getClass().getName());
 				((GroupsListModel)model).group(cmpr, ascending, index);
 			} else { // not live data
-				final Rows rows = grid.getRows();		
+				final Rows rows = grid.getRows();
+				if (rows == null) return false;//Avoid grid with null group		
 				if (rows.hasGroup()) {
 					final List groups = new ArrayList(rows.getGroups());
 					for (Iterator it = groups.iterator(); it.hasNext();)

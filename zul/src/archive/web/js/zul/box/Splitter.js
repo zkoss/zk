@@ -47,19 +47,31 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 				tn = zDom.tag(nd),
 				vert = this.isVertical(),
 				zulsplt = zul.box.Splitter,
-				sib = colps == "before" ? zulsplt._prev(nd, tn): zulsplt._next(nd, tn),
+				before = colps == "before",
+				sib = before ? zulsplt._prev(nd, tn): zulsplt._next(nd, tn),
+				sibwgt = zk.Widget.$(sib),
 				fd = vert ? "height": "width", diff;
 			if (sib) {
-				zUtl.setVisible(sib, open, true); //fire onVisible/onHide
+				zDom.setVisible(sib, open, sibwgt); //fire onVisible/onHide
+				sibwgt.parent._fixChildDomVisible(sibwgt, open);
+
 				diff = zk.parseInt(sib.style[fd]);
+
+				if (!before && sibwgt && !sibwgt.nextSibling) {
+					var sp = zDom.$(this.uuid + '$chdex2');
+					if (sp) {
+						zDom.setVisible(sp, open);
+						diff += zk.parseInt(sp.style[fd]);
+					}
+				}
 			}
 
-			sib = colps == "before" ? zulsplt._next(nd, tn): zulsplt._prev(nd, tn);
+			sib = before ? zulsplt._next(nd, tn): zulsplt._prev(nd, tn);
 			if (sib) {
-				diff = $int(sib.style[fd]) + (open ? -diff: diff);
+				diff = zk.parseInt(sib.style[fd]) + (open ? -diff: diff);
 				if (diff < 0) diff = 0;
 				sib.style[fd] = diff + "px";
-				zk.onSizeAt(sib);
+				zWatch.fireDown('onSize', -1, sibwgt);
 			}
 
 			node.style.cursor = !open ? "default" : vert ? "s-resize": "e-resize";
@@ -133,14 +145,18 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			ghosting: zulsplt._ghostsizing, overlay: true,
 			snap: zulsplt._snap, endeffect: zulsplt._endDrag});
 
-		var nd = zDom.$(node.id + "$chdex"), tn = zDom.tag(nd),
-			colps = this.getCollapse();
-		if (!colps || "none" == colps) return; //nothing to do
+		if (!this.isOpen()) {
+			var nd = zDom.$(node.id + "$chdex"), tn = zDom.tag(nd),
+				colps = this.getCollapse();
+			if (!colps || "none" == colps) return; //nothing to do
 
-		var sib = colps == "before" ? zulsplt._prev(nd, tn): zulsplt._next(nd, tn);
-		zDom.setVisible(sib, false, false); //no onHide at bind_
+			var sib = colps == "before" ? zulsplt._prev(nd, tn): zulsplt._next(nd, tn);
+			zDom.setVisible(sib, false); //no onHide at bind_
+			var sibwgt = zk.Widget.$(sib);
+			sibwgt.parent._fixChildDomVisible(sibwgt, false);
 
-		this._fixNSDomClass();
+			this._fixNSDomClass();
+		}
 	},
 	unbind_: function () {
 		zWatch.unwatch("onSize", this);
@@ -168,14 +184,14 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		}
 		if (inner) this._fixbtn();
 	},
-	_fixNSDomClass = function () {
+	_fixNSDomClass: function () {
 		var node = this.node,
 			zcls = this.getZclass(),
 			open = this.isOpen();
 		if(open && zDom.hasClass(node, zcls+"-ns"))
-			zk.rmClass(node, zcls+"-ns");
+			zDom.rmClass(node, zcls+"-ns");
 		else if (!open && !zDom.hasClass(node, zcls+"-ns"))
-			zk.addClass(node, zcls+"-ns");
+			zDom.addClass(node, zcls+"-ns");
 	},
 	_fixbtn: function () {
 		var btn = this.button,
@@ -330,7 +346,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 
 		zulsplt._unfixLayout(flInfo);
 			//Stange (not know the cause yet): we have to put it
-			//befor _fixszAll and after onSizeAt
+			//befor _fixszAll and after onSize
 
 		wgt._fixszAll();
 			//fix all splitter's size because table might be with %

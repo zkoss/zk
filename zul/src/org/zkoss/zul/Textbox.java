@@ -31,7 +31,7 @@ import org.zkoss.zul.impl.InputElement;
  * <p>Default {@link #getZclass}: z-textbox.(since 3.5.0)
  * @author tomyeh
  */
-public class Textbox extends InputElement {
+public class Textbox extends InputElement implements org.zkoss.zul.api.Textbox{
 	private String _type = "text";
 	private int _rows = 1;
 	private boolean _multiline;

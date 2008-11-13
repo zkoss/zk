@@ -33,7 +33,7 @@ import org.zkoss.zk.ui.Component;
  * @author robbiecheng
  * @since 3.5.0
  */
-public class Listgroupfoot extends Listitem{
+public class Listgroupfoot extends Listitem implements org.zkoss.zul.api.Listgroupfoot {
 	public Listgroupfoot() {
 	}
 	public Listgroupfoot(String label) {

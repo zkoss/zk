@@ -31,7 +31,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  *
  * @author tomyeh
  */
-public class Caption extends LabelImageElement {
+public class Caption extends LabelImageElement implements org.zkoss.zul.api.Caption {
 	public Caption() {
 	}
 	public Caption(String label) {

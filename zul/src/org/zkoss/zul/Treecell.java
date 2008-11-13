@@ -39,7 +39,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  * <p>Default {@link #getZclass}: z-tree-cell.(since 3.5.0)
  * @author tomyeh
  */
-public class Treecell extends LabelImageElement {
+public class Treecell extends LabelImageElement implements org.zkoss.zul.api.Treecell {
 	private static final String ROOT_OPEN = "root-open";
 	private static final String ROOT_CLOSE = "root-close";
 	private static final String LAST_OPEN = "last-open";
@@ -72,7 +72,12 @@ public class Treecell extends LabelImageElement {
 				return (Tree)n;
 		return null;
 	}
-
+	/** Return the tree that owns this cell.
+	 * @since 3.5.2
+	 */
+	public org.zkoss.zul.api.Tree getTreeApi() {
+		return getTree();
+	}
 	/** Returns the tree col associated with this cell, or null if not available.
 	 */
 	public Treecol getTreecol() {
@@ -87,6 +92,12 @@ public class Treecell extends LabelImageElement {
 			}
 		}
 		return null;
+	}
+	/** Returns the tree col associated with this cell, or null if not available.
+	 * @since 3.5.2
+	 */
+	public org.zkoss.zul.api.Treecol getTreecolApi() {
+		return getTreecol();
 	}
 	/** Returns the column index of this cell, starting from 0.
 	 */
