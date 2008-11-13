@@ -27,6 +27,9 @@ String.prototype.trim = function () {
 		--k;
 	return j > k ? "": this.substring(j, k + 1);
 };
+/** onverts a string separated by dashes into a camelCase equivalent.
+ * For instance, 'foo-bar' would be converted to 'fooBar'.
+ */
 String.prototype.camelize = function() {
 	var parts = this.split('-'), len = parts.length;
 	if (len == 1) return parts[0];
@@ -37,6 +40,19 @@ String.prototype.camelize = function() {
 	for (var i = 1; i < len; i++)
 		camelized += parts[i].charAt(0).toUpperCase() + parts[i].substring(1);
 	return camelized;
+};
+/** Increase a value to the first character of the string, and
+ * return the increased string.
+ * For example, 'a'.increase(2) is 'c' (same as 'a' + 2 in Java)
+ */
+String.prototype.increase = function (diff) {
+	return String.fromCharCode(this.charCodeAt(0) + diff)
+};
+/** Returns the difference of the character's values (charCodeAt).
+ * For instance, 'a'.subtract('b') is -1 (same as 'a' - 'b' in Java).
+ */
+String.prototype.subtract = function (cc) {
+	return this.charCodeAt(0) - cc.charCodeAt(0);
 };
 
 //Array//

@@ -29,9 +29,6 @@ import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.au.Command;
 import org.zkoss.zk.au.in.GenericCommand;
 import org.zkoss.zul.Popup;
@@ -67,12 +64,8 @@ abstract public class XulElement extends HtmlBasedComponent implements org.zkoss
 	private String _ctx;
 	/** The tooltip ID that will be shown when mouse-over. */
 	private String _tooltip;
-	/** The action. */
-	private String _action;
 	/** What control and function keys to intercepts. */
 	private String _ctrlKeys;
-	/** The value passed to the client; parsed from _ctrlKeys. */
-	private String _ctkeys;
 
 
 	/** Returns what keystrokes to intercept.
@@ -137,95 +130,9 @@ abstract public class XulElement extends HtmlBasedComponent implements org.zkoss
 		if (ctrlKeys != null && ctrlKeys.length() == 0)
 			ctrlKeys = null;
 		if (!Objects.equals(_ctrlKeys, ctrlKeys)) {
-			parseCtrlKeys(ctrlKeys);
-			smartUpdate("z.ctkeys", _ctkeys);
+			_ctrlKeys = ctrlKeys;
+			smartUpdate("ctrlKeys", _ctrlKeys);
 		}
-	}
-	private void parseCtrlKeys(String keys) throws UiException {
-		if (keys == null || keys.length() == 0) {
-			_ctrlKeys = _ctkeys = null;
-			return;
-		}
-
-		final StringBuffer sbctl = new StringBuffer(),
-			sbsft = new StringBuffer(), sbalt = new StringBuffer(),
-			sbext = new StringBuffer();
-		StringBuffer sbcur = null;
-		for (int j = 0, len = keys.length(); j < len; ++j) {
-			char cc = keys.charAt(j);
-			switch (cc) {
-			case '^':
-			case '$':
-			case '@':
-				if (sbcur != null)
-					throw new WrongValueException("Combination of Shift, Alt and Ctrl not supported: "+keys);
-				sbcur = cc == '^' ? sbctl: cc == '@' ? sbalt: sbsft;
-				break;
-			case '#':
-				{
-					int k = j + 1;
-					for (; k < len; ++k) {
-						final char c2 = (char)keys.charAt(k);
-						if ((c2 > 'Z' || c2 < 'A') 	&& (c2 > 'z' || c2 < 'a')
-						&& (c2 > '9' || c2 < '0'))
-							break;
-					}
-					if (k == j + 1)
-						throw new WrongValueException(MCommon.UNEXPECTED_CHARACTER, new Object[] {new Character(cc), keys});
-
-					final String s = keys.substring(j+1, k).toLowerCase();
-					if ("pgup".equals(s)) cc = 'A';
-					else if ("pgdn".equals(s)) cc = 'B';
-					else if ("end".equals(s)) cc = 'C';
-					else if ("home".equals(s)) cc = 'D';
-					else if ("left".equals(s)) cc = 'E';
-					else if ("up".equals(s)) cc = 'F';
-					else if ("right".equals(s)) cc = 'G';
-					else if ("down".equals(s)) cc = 'H';
-					else if ("ins".equals(s)) cc = 'I';
-					else if ("del".equals(s)) cc = 'J';
-					else if (s.length() > 1 && s.charAt(0) == 'f') {
-						final int v;
-						try {
-							v = Integer.parseInt(s.substring(1));
-						} catch (Throwable ex) {
-							throw new WrongValueException("Unknown #"+s+" in "+keys);
-						}
-						if (v == 0 || v > 12)
-							throw new WrongValueException("Unsupported function key: #f"+v);
-						cc = (char)('O' + v); //'P': F1, 'Q': F2... 'Z': F12
-					} else
-						throw new WrongValueException("Unknown #"+s+" in "+keys);
-
-					if (sbcur == null) sbext.append(cc);
-					else {
-						sbcur.append(cc);
-						sbcur = null;
-					}
-					j = k - 1;
-				}
-				break;
-			default:
-				if (sbcur == null || ((cc > 'Z' || cc < 'A') 
-				&& (cc > 'z' || cc < 'a') && (cc > '9' || cc < '0')))
-					throw new WrongValueException(MCommon.UNEXPECTED_CHARACTER, new Object[] {new Character(cc), keys});
-				if (sbcur == sbsft)
-					throw new WrongValueException("$a - $z not supported ("+keys+"). Supported includes $#f1, $#home and so on.");
-
-				if (cc <= 'Z' && cc >= 'A')
-					cc = (char)(cc + ('a' - 'A')); //to lower case
-				sbcur.append(cc);
-				sbcur = null;
-				break;
-			}
-		}
-
-		_ctkeys = new StringBuffer()
-			.append('^').append(sbctl).append(';')
-			.append('@').append(sbalt).append(';')
-			.append('$').append(sbsft).append(';')
-			.append('#').append(sbext).append(';').toString();
-		_ctrlKeys = keys;
 	}
 
 	/** Returns the ID of the popup ({@link Popup}) that should appear
@@ -269,7 +176,7 @@ abstract public class XulElement extends HtmlBasedComponent implements org.zkoss
 	public void setContext(String context) {
 		if (!Objects.equals(_ctx, context)) {
 			_ctx = context;
-			smartUpdate("z.ctx", _ctx);
+			smartUpdate("context", _ctx);
 		}
 	}
 	/** Sets the UUID of the popup that should appear 
@@ -313,7 +220,7 @@ abstract public class XulElement extends HtmlBasedComponent implements org.zkoss
 	public void setPopup(String popup) {
 		if (!Objects.equals(_popup, popup)) {
 			_popup = popup;
-			smartUpdate("z.pop", _popup);
+			smartUpdate("popup", _popup);
 		}
 	}
 	/** Sets the UUID of the popup that should appear
@@ -358,7 +265,7 @@ abstract public class XulElement extends HtmlBasedComponent implements org.zkoss
 	public void setTooltip(String tooltip) {
 		if (!Objects.equals(_tooltip, tooltip)) {
 			_tooltip = tooltip;
-			smartUpdate("z.tip", _tooltip);
+			smartUpdate("tooltip", _tooltip);
 		}
 	}
 	/** Sets the UUID of the popup that should be used
@@ -373,125 +280,24 @@ abstract public class XulElement extends HtmlBasedComponent implements org.zkoss
 		setTooltip(popup != null ? "uuid(" + popup.getUuid() + ")": null);
 	}
 
-	/** Returns the client-side action (CSA).
-	 * <p>The format: <br>
-	 * action1: javascript1; javascript2; action2: javascript3
-	 *
-	 * <p>You could specify any action as long as JavaScript supports,
-	 * such as onfocus, onblur, onmouseover and onmousout.
+	/** @deprecated since 5.0.0, use atXxx instead (such as atMouseUp).
 	 */
 	public String getAction() {
-		return _action;
+		return null;
 	}
-	/** Sets the client-side action.
+	/** @deprecated since 5.0.0, use atXxx instead (such as atMouseUp).
 	 */
 	public void setAction(String action) {
-		if (action != null && action.length() == 0) action = null;
-		if (!Objects.equals(_action, action)) {
-			_action = action;
-			invalidate();
-				//action is rarely changed dynamically, so we
-				//don't use smartUpdate (it requires two for-loop to
-				//replace and remove actions)
-		}
 	}
 
-	/** Returns the HTML attributes representing the client-side action,
-	 * or "" if no client-side action is defined.
-	 * Used only for component development.
-	 *
-	 * <p>Override this method if you want to customize the generation
-	 * of the client-side action (though rarely).
-	 *
-	 * @since 3.0.0
-	 */
-	protected String getActionAttrs() {
-		if (_action == null)
-			return "";
+	//super//
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
 
-		//To have smaller footprint for each component, we don't cache
-		//the parsed result
-		final StringBuffer sb = new StringBuffer(100);
-		for (Iterator it = parseAction(_action).entrySet().iterator();
-		it.hasNext();) {
-			final Map.Entry me = (Map.Entry)it.next();
-			HTMLs.appendAttribute(sb,
-				(String)me.getKey(), toJavaScript((String)me.getValue()));
-		}
-		return sb.toString();
-	}
-
-	/** Returns a map of actions (String name, String javascript).
-	 */
-	private static final Map parseAction(String action) {
-		//1. Look for the first ':'
-		final Map map = new HashMap();
-		int k = action.indexOf(':');
-		if (k < 0) throw new WrongValueException("Unknown action: "+action);
-
-		int j = 0, len = action.length();
-		for (;;) {
-			String actnm = action.substring(j, k).trim();
-			if (actnm.length() == 0) throw new WrongValueException("Unknown action: "+action);
-
-			//2. next ':'
-			int l;
-			char quote = (char)0; //no quote
-			for (j = ++k; ; ++k) {
-				if (k >= len) {
-					l = len; //next ':'
-					break;
-				}
-
-				final char cc = action.charAt(k);
-				if (cc == '\\')
-					continue;
-
-				if (quote != (char)0) {
-					if (quote == cc)
-						quote = (char)0;
-				} else if (cc == '\'' || cc == '"') {
-					quote = cc;
-				} else if (cc == ';') {
-					l = Strings.skipWhitespaces(action, k + 1);
-					for (; l < len; ++l) {
-						final char c2 = action.charAt(l);
-						if ((c2 < 'a' || c2 > 'z') && (c2 < 'A' || c2 > 'Z'))
-							break; //inner loop
-					}
-
-					l = Strings.skipWhitespaces(action, l);
-					if (l >= len) {
-						k = len;
-						break; //no more action
-					}
-					if (action.charAt(l) == ':') {
-						++k; //after ';'
-						break; //found (and there is another action)
-					}
-
-					k = l - 1; //since l point the next non-apha
-				}
-			}
-
-			//3. generate it
-			final String val = action.substring(j, k).trim();
-			if (val.length() > 0) {
-				String nm = actnm.toLowerCase();
-				if ("onshow".equals(nm) || "onhide".equals(nm))
-					actnm = "z.c" + nm;
-				map.put(actnm, val);
-			}
-
-			if (l >= len) return map; //done
-			j = k;
-			k = l;
-		}
-	}
-	/** Converts an action to JavaScript by interpreting #{} properly.
-	 */
-	private final String toJavaScript(String action) {
-		return action != null ?
-			ComponentsCtrl.parseClientScript(this, action): null;
+		render(renderer, "popup", _popup);
+		render(renderer, "context", _ctx);
+		render(renderer, "tooltip", _tooltip);
+		render(renderer, "ctrlKeys", _ctrlKeys);
 	}
 }

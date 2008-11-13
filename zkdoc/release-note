@@ -13,6 +13,8 @@ ZK 5.0.0
   + disable-behind-modal is deprecated (always false)
   + PageCtrl: addRoot, removeRoot, moveRoot, addFellow and removeFellow
     are removed
+  + The client-side action has been replaced with the custom JavaScript
+  	events.
 
 	--------
 ZK 3.6.0

@@ -438,7 +438,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * It is usually about state-updating, such as onChange and onSelect.
 	 * <p>Default: null if no event at all.
 	 */
-	//importantEvents: null,
+	//importantEvents_: null,
 	/** Fires a Widget event.
 	 * Note: the event will be sent to the server if it is in server
 	 * (@{link #inServer}), and belongs to a desktop.
@@ -519,7 +519,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (!uuid) return null;
 		var n;
 		if (typeof uuid == 'string') {
-			n = zDom.$(zk.Widget.$(uuid));
+			n = zDom.$(zk.Widget.uuid(uuid));
 		} else {
 			n = uuid;
 			uuid = n.id;
