@@ -236,7 +236,7 @@ public interface Panel extends org.zkoss.zul.impl.api.XulElement {
 	 * 
 	 * <p>
 	 * You can intercept the default behavior by either overriding
-	 * {@link #onClose}, or listening the onClose event.
+	 * {@link org.zkoss.zul.Panel#onClose}, or listening the onClose event.
 	 * 
 	 * <p>
 	 * Note: the close button won't be displayed if no title or caption at all.
