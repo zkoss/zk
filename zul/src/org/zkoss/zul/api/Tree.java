@@ -20,11 +20,10 @@ package org.zkoss.zul.api;
 
 import java.util.Set;
 import java.util.Collection;
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zul.TreeModel;
 import org.zkoss.zul.TreeitemRenderer;
-import org.zkoss.zul.event.TreeDataEvent;
+import org.zkoss.zul.event.TreeDataEvent;//for javadoc
 import org.zkoss.zul.ext.Paginal;
 import org.zkoss.zul.ext.Paginated;
 

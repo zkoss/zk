@@ -2,8 +2,7 @@ package org.zkoss.zul.impl.api;
 
 import java.awt.image.RenderedImage;
 import org.zkoss.image.Image;
-import org.zkoss.image.Images;
-
+import org.zkoss.image.Images; //for javadoc
 /**
  * A XUL element with a label ({@link #getLabel}) and an image (
  * {@link #getImage}).

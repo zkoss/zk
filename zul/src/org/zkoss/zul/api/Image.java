@@ -20,7 +20,7 @@ package org.zkoss.zul.api;
 
 import java.awt.image.RenderedImage;
 
-import org.zkoss.image.Images;
+import org.zkoss.image.Images;//for javadoc
 
 /**
  * An image.

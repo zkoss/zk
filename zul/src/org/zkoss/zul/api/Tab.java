@@ -44,7 +44,7 @@ public interface Tab extends org.zkoss.zul.impl.api.LabelImageElement {
 	 * Default: false.
 	 * <p>
 	 * You can intercept the default behavior by either overriding
-	 * {@link #onClose}, or listening the onClose event.
+	 * {@link org.zkoss.zul.Tab#onClose}, or listening the onClose event.
 	 */
 	public void setClosable(boolean closable);
 

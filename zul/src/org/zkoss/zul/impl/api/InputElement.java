@@ -19,7 +19,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul.impl.api;
 
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zul.Constraint;
 import org.zkoss.zul.ext.Constrainted;
 
 /**

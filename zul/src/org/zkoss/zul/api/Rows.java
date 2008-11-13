@@ -19,7 +19,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul.api;
 
 import java.util.List;
-import java.util.Iterator;
 
 /**
  * Defines the rows of a grid. Each child of a rows element should be a

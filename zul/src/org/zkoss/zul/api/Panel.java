@@ -18,10 +18,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  */
 package org.zkoss.zul.api;
 
-import org.zkoss.zk.ui.IdSpace;
-import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.event.MinimizeEvent;
-
+import org.zkoss.zk.ui.IdSpace;//for javadoc
+import org.zkoss.zk.ui.event.MinimizeEvent;//for javadoc
 /**
  * Panel is a container that has specific functionality and structural
  * components that make it the perfect building block for application-oriented
@@ -236,7 +234,7 @@ public interface Panel extends org.zkoss.zul.impl.api.XulElement {
 	 * 
 	 * <p>
 	 * You can intercept the default behavior by either overriding
-	 * {@link #onClose}, or listening the onClose event.
+	 * {@link org.zkoss.zul.Panel#onClose}, or listening the onClose event.
 	 * 
 	 * <p>
 	 * Note: the close button won't be displayed if no title or caption at all.

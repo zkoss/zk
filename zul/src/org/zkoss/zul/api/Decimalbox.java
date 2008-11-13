@@ -69,8 +69,8 @@ public interface Decimalbox extends org.zkoss.zul.impl.api.NumberInputElement {
 
 	/**
 	 * Returns the scale for the decimal number storing in this component, or
-	 * {@link org.zkoss.zul.Decimalbox#AUTO} if the scale is decided automatically (based on what user
-	 * has entered).
+	 * {@link org.zkoss.zul.Decimalbox#AUTO} if the scale is decided
+	 * automatically (based on what user has entered).
 	 * 
 	 * <p>
 	 * Default: {@link org.zkoss.zul.Decimalbox#AUTO}.
@@ -79,8 +79,8 @@ public interface Decimalbox extends org.zkoss.zul.impl.api.NumberInputElement {
 
 	/**
 	 * Returns the scale for the decimal number storing in this component, or
-	 * {@link org.zkoss.zul.Decimalbox#AUTO} if the scale is decided automatically (based on what user
-	 * has entered).
+	 * {@link org.zkoss.zul.Decimalbox#AUTO} if the scale is decided
+	 * automatically (based on what user has entered).
 	 * 
 	 * <p>
 	 * Default: {@link org.zkoss.zul.Decimalbox#AUTO}.

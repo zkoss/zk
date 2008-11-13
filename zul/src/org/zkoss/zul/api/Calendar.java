@@ -20,7 +20,7 @@ package org.zkoss.zul.api;
 
 import java.util.Date;
 import java.util.TimeZone;
-import org.zkoss.util.TimeZones;
+import org.zkoss.util.TimeZones; //for javadoc
 
 /**
  * A calendar.
