@@ -272,7 +272,7 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 		final String[] sizes = Utils.stringToArray(widths, null);
 		if (!Objects.equals(sizes, _sizes)) {
 			_sizes = sizes;
-			smartUpdate("widths", getWidths());
+			smartUpdate("_sizes", _sizes);
 		}
 	}
 	/** Sets the widths/heights, which is a list of numbers separated
@@ -290,7 +290,7 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 		super.renderProperties(renderer);
 
 		render(renderer, "spacing", _spacing);
-		render(renderer, "widths", getWidths());
+		render(renderer, "_sizes", _sizes);
 
 		if (!"start".equals(_align)) render(renderer, "align", _align);
 		if (!"start".equals(_pack)) render(renderer, "pack", _pack);

@@ -72,7 +72,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 				diff = zk.parseInt(sib.style[fd]) + (open ? -diff: diff);
 				if (diff < 0) diff = 0;
 				sib.style[fd] = diff + "px";
-				zWatch.fireDown('onSize', -1, sibwgt);
+				if (open) zWatch.fireDown('onSize', -1, sibwgt);
 			}
 
 			node.style.cursor = !open ? "default" : vert ? "s-resize": "e-resize";
@@ -168,6 +168,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		this._drag.destroy();
 		this._drag = null;
 		this.$super('unbind_');
+		this._dragged = false; //reset (not being dragged)
 	},
 
 	/** Fixed DOM class for the enclosing TR/TD tag. */
@@ -351,7 +352,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 
 		wgt._fixszAll();
 			//fix all splitter's size because table might be with %
-
+		wgt._dragged = true; //indicate it has been dragged (used by Box.js)
 		draggable.run = null;//free memory
 	},
 	_snap: function (draggable, x, y) {

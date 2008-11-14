@@ -112,8 +112,11 @@ zk.Widget = zk.$extends(zk.Object, {
 
 	/** Returns if a widget is really visible (all ancestors are visible). */
 	isRealVisible: function () {
-		for (var wgt = this; wgt; wgt = wgt.parent)
+		for (var wgt = this; wgt; wgt = wgt.parent) {
 			if (!wgt.isVisible()) return false;
+			var n = wgt.node;
+			if (n && !zDom.isVisible(n)) return false; //possible (such as in a hbox)
+		}
 		return true;
 	},
 	/** Returns whether this widget is visible. */

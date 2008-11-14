@@ -167,15 +167,30 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	},
 	_childInnerAttrs: function (child) {
 		var html = '',
-			vert = this.isVertical();
-		if (vert && child.$instanceof(zul.box.Splitter))
-			return ' class="' + child.getZclass() + '-outer-td"';
+			vert = this.isVertical(),
+			zulsplt = zul.box.Splitter;
+		if (child.$instanceof(zulsplt))
+			return vert ? ' class="' + child.getZclass() + '-outer-td"':
+				child.isVisible() ? '': ' style="display:none"';
 
 		var v = vert ? this.getAlign(): this.getPack();
 		if (v) html += ' align="' + zul.box.Box._toHalign(v) + '"'
 
-		if (!vert && !child.isVisible()) html += ' style="display:none"';
-		return html;
+		var style = '', szes = this._sizes;
+		if (szes) {
+			for (var j = 0, len = szes.length, c = this.firstChild;
+			c && j < len; c = c.nextSibling) {
+				if (child == c) {
+					style = (vert ? 'height:':'width:') + szes[j];
+					break;
+				}
+				if (!c.$instanceof(zulsplt))
+					++j;
+			}
+		}
+
+		if (!vert && !child.isVisible()) style += ';display:none';
+		return style ? html + ' style="' + style + '"': html;
 	},
 
 	bind_: function (desktop) {
@@ -194,9 +209,11 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		this.$super('unbind_');
 	},
 	onSize: _zkf = function () {
+		if (!this.isRealVisible()) return;
+
 		for (var c = this.firstChild;; c = c.nextSibling) {
 			if (!c) return; //no splitter
-			if (c.$instanceof(zul.box.Splitter))
+			if (c._dragged) //whether the splitter has been dragged
 				break;
 		}
 
@@ -240,7 +257,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				} else {
 					var diff = d.offsetWidth;
 					if(d.id && !d.id.endsWith("$chdex2")) //TD
-						d.style.width = zDom.revisedWidth(d, i ? diff: total) + "px",
+						d.style.width = zDom.revisedWidth(d, i ? diff: total) + "px";
 					total -= diff;
 				}
 		}

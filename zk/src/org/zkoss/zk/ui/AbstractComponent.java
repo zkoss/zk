@@ -1323,6 +1323,18 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			renderer.render(name, value);
 	}
 	/** An utility to be called by {@link #renderProperties} to
+	 * render a string-value property.
+	 * It ignores if value is null.
+	 * If you want to render it even if null, invoke
+	 * {@link ContentRenderer#render(String, Object)} directly.
+	 * @since 5.0.0
+	 */
+	protected void render(ContentRenderer renderer,
+	String name, Object value) throws IOException {
+		if (value != null)
+			renderer.render(name, value);
+	}
+	/** An utility to be called by {@link #renderProperties} to
 	 * render a boolean-value property if it is true.
 	 * If you want to render it no matter true or false, use
 	 * {@link ContentRenderer#render(String, boolean)} directly.
