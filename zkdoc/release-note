@@ -41,6 +41,8 @@ ZK 3.5.2
   2241429: Cross-Site Scripting Vulnerability in ZK
   2233787: No selected item in radiogroup if select by arrow key
   2261249: the bug of Grid with sorting
+  2280308: WrongValueException message is disappearing...
+  2280258: Setting the widths property of hbox with splitter is wrong
 
 
 	--------

@@ -363,7 +363,7 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 				.append(((Splitter)child).getZclass())
 				.append("-outer-td\"");
 			return sb.toString();
-		}
+		} else if (child instanceof Splitter) return sb.toString(); // nothing do to.
 
 		final String align = toHalign(vert ? _align: _pack);
 		if (align != null && align.length() > 0) {
