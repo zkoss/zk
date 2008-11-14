@@ -160,7 +160,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			var v = this.getPack();
 			if (v) html = ' valign="' + zul.box.Box._toValign(v) + '"';
 		} else
-			return '';
+			return ''; //if hoz and not splitter, display handled in _childInnerAttrs
 
 		if (!child.isVisible()) html += ' style="display:none"';
 		return html;
@@ -171,6 +171,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			zulsplt = zul.box.Splitter;
 		if (child.$instanceof(zulsplt))
 			return vert ? ' class="' + child.getZclass() + '-outer-td"': '';
+				//spliter's display handled in _childOuterAttrs
 
 		var v = vert ? this.getAlign(): this.getPack();
 		if (v) html += ' align="' + zul.box.Box._toHalign(v) + '"'
