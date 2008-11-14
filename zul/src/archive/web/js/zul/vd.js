@@ -260,6 +260,15 @@ zkVld._errbox = function () {
 	if (!zkVld._cnt) zkVld._cnt = 0;
 	box.style.zIndex = $int(Element.getStyle(box ,"z-index")) + (++zkVld._cnt);
 	if (cmp) {
+		if (!cmp._focusFn) { // Bug 2280308
+			cmp._focusFn = function (e) {
+				var box = $e(boxid);
+				if (box) {
+					setTimeout(function() {zkVld.syncErrBox(box)});
+				}		
+			};
+		}
+		zk.listen(cmp, "focus", cmp._focusFn);
 		zkVld.syncErrBox(box);
 	} else {
 		box.style.display = "block"; //we need to calculate the size
@@ -299,13 +308,16 @@ zkVld.closeErrbox = function (box, remaingError, coerce) {
 		id = $uuid(boxid);
 	}
 
+	var cmp = $e(id);
 	if (!remaingError) {
-		var cmp = $e(id);
 		if (cmp) {
 			zk.rmClass($real(cmp), getZKAttr(cmp, "zcls") + "-text-invalid");
 		}
 	}
-
+	if (cmp._focusFn) { // Bug 2280308
+		zk.unlisten(cmp, "focus", cmp._focusFn);
+		cmp._focusFn = null;
+	}
 	if (box) {
 		zul.cleanMovable(box.id);
 		if (zk.ie6Only) {
