@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B35-2280258.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Nov 14 10:04:06     2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+You should see the width of the cell is as well as its label.
+<hbox style="border:1px solid #336" widths="30px, 50px">
+30px
+<splitter/>
+50px
+</hbox>
+</zk>
