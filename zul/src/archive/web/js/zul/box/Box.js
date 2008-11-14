@@ -170,8 +170,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			vert = this.isVertical(),
 			zulsplt = zul.box.Splitter;
 		if (child.$instanceof(zulsplt))
-			return vert ? ' class="' + child.getZclass() + '-outer-td"':
-				child.isVisible() ? '': ' style="display:none"';
+			return vert ? ' class="' + child.getZclass() + '-outer-td"': '';
 
 		var v = vert ? this.getAlign(): this.getPack();
 		if (v) html += ' align="' + zul.box.Box._toHalign(v) + '"'
