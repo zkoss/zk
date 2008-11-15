@@ -211,9 +211,10 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	onSize: _zkf = function () {
 		if (!this.isRealVisible()) return;
 
+		var zulsplt = zul.box.Splitter;
 		for (var c = this.firstChild;; c = c.nextSibling) {
 			if (!c) return; //no splitter
-			if (c._dragged) //whether the splitter has been dragged
+			if (c.$instanceof(zulsplt)) //whether the splitter has been dragged
 				break;
 		}
 
