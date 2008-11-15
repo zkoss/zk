@@ -125,7 +125,7 @@ zEvt = {
 
 		//Bug 1811352
 		if ("submit" == evtnm && zDom.tag(el) == "FORM" && el._submfns)
-			el._submfns.remove(fn);
+			el._submfns.$remove(fn);
 	},
 
 	/** Enables ESC (default behavior). */

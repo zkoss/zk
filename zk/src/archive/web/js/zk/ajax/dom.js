@@ -28,6 +28,13 @@ zDom = { //static methods
 	tag: function (n) {
 		return n && n.tagName ? n.tagName.toUpperCase(): "";
 	},
+
+	hide: function(n) {
+		n.style.display = 'none';
+	},
+	show: function() {
+		n.style.display = '';
+	},
 	/** Returns whether a DOM element is visible.
 	 * Returns false if not exist.
 	 * Returns true if no style.
@@ -118,7 +125,7 @@ zDom = { //static methods
 	 */
 	sumStyles: function (el, areas, styles) {
 		var val = 0;
-		for (var i = 0, l = areas.length; i < l; i++){
+		for (var i = 0, len = areas.length; i < len; i++){
 			 var w = zk.parseInt(zDom.getStyle(el, styles[areas.charAt(i)]));
 			 if (!isNaN(w)) val += w;
 		}
@@ -141,7 +148,7 @@ zDom = { //static methods
 		return size < 0 ? 0: size;
 	},
 	/**
-	 * Returns the number of the padding width and the border width from the specified element.  
+	 * Returns the number of the padding width and the border width from the specified element.
 	 */
 	frameWidth: function (el) {
 		return zDom.sumStyles(el, "lr", zDom.borders) + zDom.sumStyles(el, "lr", zDom.paddings);
@@ -158,29 +165,27 @@ zDom = { //static methods
 	 * Used for calculating the scroll offset of an element that is in more than one scroll container (e.g., a draggable in a scrolling container which is itself part of a scrolling document).
 	 * Note that all values are returned as numbers only although they are expressed in pixels.
 	 */
-	cmScrollOffset: function(el) {
-		var valueT = 0, valueL = 0, tag = zDom.tag(el);
+	scrollOffset: function(el) {
+		var t = 0, l = 0, tag = zDom.tag(el);
 		do {
 			//Fix opera bug (see the page function)
-			// If tag is "IMG" or "TR", the "DIV" el's scrollTop should be ignored.
-			// Because the offsetTop of el "IMG" or "TR" is excluded its scrollTop.  
+			// If tag is "IMG" or "TR", the "DIV" element's scrollTop should be ignored.
+			// Because the offsetTop of element "IMG" or "TR" is excluded its scrollTop.  
 			var t2 = zDom.tag(el);
 			if (!zk.opera || t2 == 'BODY'
 			|| (tag != "TR" && tag != "IMG"  && t2 == 'DIV')) { 
-				valueT += el.scrollTop  || 0;
-				valueL += el.scrollLeft || 0;
+				t += el.scrollTop  || 0;
+				l += el.scrollLeft || 0;
 			}
 			el = el.parentNode;
 		} while (el);
-		return [valueL, valueT];
+		return [l, t];
 	},
 	/** Returns the offsets of element from the top left corner of the document.
 	 * Adds the cumulative offsetLeft and offsetTop of an element and all its parents.
 	 * Note that all values are returned as numbers only although they are expressed in pixels.
 	 */
 	cmOffset: function (el) {
-		el = zDom.$(el);
-
 		//fix safari's bug: TR has no offsetXxx
 		if (zk.safari && zDom.tag(el) === "TR" && el.cells.length)
 			el = el.cells[0];
@@ -195,15 +200,15 @@ zDom = { //static methods
 		return ofs;
 	},
 	_cmOffset: function (el) {
-		var valueT = 0, valueL = 0, operaBug;
+		var t = 0, l = 0, operaBug;
 		//Fix gecko difference, the offset of gecko excludes its border-width when its CSS position is relative or absolute
 		if (zk.gecko) {
 			var p = el.parentNode;
 			while (p && p != document.body) {
 				var style = zDom.getStyle(p, "position");
 				if (style == "relative" || style == "absolute") {
-					valueT += zk.parseInt(zDom.getStyle(p, "border-top-width"));
-					valueL += zk.parseInt(zDom.getStyle(p, "border-left-width"));
+					t += zk.parseInt(zDom.getStyle(p, "border-top-width"));
+					l += zk.parseInt(zDom.getStyle(p, "border-left-width"));
 				}
 				p = p.offsetParent;
 			}
@@ -212,62 +217,61 @@ zDom = { //static methods
 		do {
 			//Bug 1577880: fix originated from http://dev.rubyonrails.org/ticket/4843
 			if (zDom.getStyle(el, "position") == 'fixed') {
-				valueT += zk.innerY() + el.offsetTop;
-				valueL += zk.innerX() + el.offsetLeft;
+				t += zk.innerY() + el.offsetTop;
+				l += zk.innerX() + el.offsetLeft;
 				break;
 			} else {
 				//Fix opera bug. If the parent of "INPUT" or "SPAN" is "DIV" 
 				// and the scrollTop of "DIV" is more than 0, the offsetTop of "INPUT" or "SPAN" always is wrong.
 				if (zk.opera) { 
 					if (operaBug && el.nodeName == "DIV" && el.scrollTop != 0)
-						valueT += el.scrollTop || 0;
+						t += el.scrollTop || 0;
 					operaBug = el.nodeName == "SPAN" || el.nodeName == "INPUT";
 				}
-				valueT += el.offsetTop || 0;
-				valueL += el.offsetLeft || 0;
+				t += el.offsetTop || 0;
+				l += el.offsetLeft || 0;
 				//Bug 1721158: In FF, el.offsetParent is null in this case
 				el = zk.gecko && el != document.body ?
 					zDom.offsetParent(el): el.offsetParent;
 			}
 		} while (el);
-		return [valueL, valueT];
+		return [l, t];
 	},
 
 	/** Make the position of the element as absolute. */
 	absolutize: function(el) {
-		el = zDom.$(el);
 		if (el.style.position == 'absolute') return;
 
-		var offsets = zDom._posOffset(el);
-		var top = offsets[1];
-		var left = offsets[0];
+		var offsets = zDom._posOffset(el),
+			left = offsets[0], top = offsets[1],
+			st = el.style;
 		/* Bug 1591389
 		var width   = el.clientWidth;
 		var height  = el.clientHeight;
 		*/
 
-		el.z_orgLeft = left - parseFloat(el.style.left  || 0);
-		el.z_orgTop = top  - parseFloat(el.style.top || 0);
+		el._$orgLeft = left - parseFloat(st.left  || 0);
+		el._$orgTop = top  - parseFloat(st.top || 0);
 		/* Bug 1591389
-		el._originalWidth = el.style.width;
-		el._originalHeight = el.style.height;
+		el._$orgWd = st.width;
+		el._$orgHgh = st.height;
 		*/
-		el.style.position = 'absolute';
-		el.style.top = top + 'px';
-		el.style.left = left + 'px';
+		st.position = 'absolute';
+		st.top = top + 'px';
+		st.left = left + 'px';
 		/* Bug 1591389
-		el.style.width = width + 'px';
-		el.style.height = height + 'px';
+		st.width = width + 'px';
+		st.height = height + 'px';
 		*/
 	},
 	_posOffset: function(el) {
 		if (zk.safari && zDom.tag(el) === "TR" && el.cells.length)
 			el = el.cells[0];
 
-		var valueT = 0, valueL = 0;
+		var t = 0, l = 0;
 		do {
-			valueT += el.offsetTop  || 0;
-			valueL += el.offsetLeft || 0;
+			t += el.offsetTop  || 0;
+			l += el.offsetLeft || 0;
 			//Bug 1721158: In FF, el.offsetParent is null in this case
 			el = zk.gecko && el != document.body ?
 				zDom.offsetParent(el): el.offsetParent;
@@ -277,28 +281,27 @@ zDom = { //static methods
 				if (p == 'relative' || p == 'absolute') break;
 			}
 		} while (el);
-		return [valueL, valueT];
+		return [l, t];
 	},
 	/** Make the position of the element as relative. */
 	relativize: function(el) {
-		el = zDom.$(el);
 		if (el.style.position == 'relative') return;
 
-		el.style.position = 'relative';
-		var top  = parseFloat(el.style.top  || 0) - (el.z_orgTop || 0);
-		var left = parseFloat(el.style.left || 0) - (el.z_orgLeft || 0);
+		var st = el.style;
+		st.position = 'relative';
+		var top  = parseFloat(st.top  || 0) - (el._$orgTop || 0),
+			left = parseFloat(st.left || 0) - (el._$orgLeft || 0);
 
-		el.style.top = top + 'px';
-		el.style.left = left + 'px';
+		st.top = top + 'px';
+		st.left = left + 'px';
 		/* Bug 1591389
-		el.style.height = el._originalHeight;
-		el.style.width = el._originalWidth;
+		st.height = el._$orgHgh;
+		st.width = el._$orgWd;
 		*/
 	},
 
 	/** Returns the offset parent. */
 	offsetParent: function (el) {
-		el = zDom.$(el);
 		if (el.offsetParent) return el.offsetParent;
 		if (el == document.body) return el;
 
@@ -308,54 +311,77 @@ zDom = { //static methods
 
 		return document.body;
 	},
-	/** Return el.offsetWidth, which solving Safari's bug.
-	 * Meaningful only if el is TR).
+	/** Return element's offsetWidth, which solving Safari's bug.
+	 * Meaningful only if element is TR).
 	 */
 	offsetWidth: function (el) {
 		if (!el) return 0;
 		if (!zk.safari || zDom.tag(el) != "TR") return el.offsetWidth;
 
 		var wd = 0;
-		for (var j = el.cells.length; --j >= 0;)
-			wd += el.cells[j].offsetWidth;
+		for (var cells = el.cells, j = cells.length; --j >= 0;)
+			wd += cells[j].offsetWidth;
 		return wd;
 	},
-	/** Return el.offsetHeight, which solving Safari's bug. */
+	/** Return element.offsetHeight, which solving Safari's bug. */
 	offsetHeight: function (el) {
 		if (!el) return 0;
 		if (!zk.safari || zDom.tag(el) != "TR") return el.offsetHeight;
 
 		var hgh = 0;
-		for (var j = el.cells.length; --j >= 0;) {
-			var h = el.cells[j].offsetHeight;
+		for (var cells = el.cells, j = cells.length; --j >= 0;) {
+			var h = cells[j].offsetHeight;
 			if (h > hgh) hgh = h;
 		}
 		return hgh;
 	},
 
 	/* Returns the X/Y coordinates of element relative to the viewport. */
-	viewportOffset: function(forElement) {
-		var valueT = 0, valueL = 0;
-	
-		var el = forElement;
+	viewportOffset: function(el) {
+		var t = 0, l = 0, p = el;
 		do {
-			valueT += el.offsetTop  || 0;
-			valueL += el.offsetLeft || 0;
+			t += p.offsetTop  || 0;
+			l += p.offsetLeft || 0;
 
 			// Safari fix
-			if (el.offsetParent==document.body)
-			if (zDom.getStyle(el,'position')=='absolute') break;
+			if (p.offsetParent==document.body)
+			if (zDom.getStyle(p, 'position')=='absolute') break;
 	
-		} while (el = el.offsetParent);
+		} while (p = p.offsetParent);
 
-		el = forElement;
 		do {
-			if (!window.opera || el.tagName=='BODY') {
-				valueT -= el.scrollTop  || 0;
-				valueL -= el.scrollLeft || 0;
+			if (!zk.opera || el.tagName=='BODY') {
+				t -= el.scrollTop  || 0;
+				l -= el.scrollLeft || 0;
 			}
 		} while (el = el.parentNode);
-		return [valueL, valueT];
+		return [l, t];
+	},
+
+	getDimensions: function (el) {
+		var display = zDom.getStyle(el,  'display');
+		if (display != 'none' && display != null) // Safari bug
+			return {width: zDom.offsetWidth(el), height: zDom.offsetHeight(el),
+				top: zDom.offsetTop(el), left: zDom.offsetLeft(el)};
+
+	// All *Width and *Height properties give 0 on elements with display none,
+	// so enable the el temporarily
+		var st = el.style,
+			originalVisibility = st.visibility,
+			originalPosition = st.position,
+			originalDisplay = st.display;
+		st.visibility = 'hidden';
+		st.position = 'absolute';
+		st.display = 'block';
+		var originalWidth = el.clientWidth,
+			originalHeight = el.clientHeight,
+			originalTop = el.offsetTop,
+			originalLeft = el.offsetLeft;
+		st.display = originalDisplay;
+		st.position = originalPosition;
+		st.visibility = originalVisibility;
+		return {width: originalWidth, height: originalHeight,
+			top: originalTop, left: originalLeft};
 	},
 
 	//class and style//
@@ -363,7 +389,7 @@ zDom = { //static methods
 	 * of the specified element.
 	 */
 	hasClass: function (el, clsnm) {
-		var cn = el ? el.className: "";
+		var cn = el ? el.className: '';
 		return cn && (' '+cn+' ').indexOf(' '+clsnm+' ') != -1;
 	},
 	/** Adds the specified class name to the class name of the specified element.
@@ -388,41 +414,41 @@ zDom = { //static methods
 	/** Returns the style. In addition to n.style, it also
 	 * checked CSS styles that are applicated to the specified element.
 	 */
-	getStyle: function(n, style) {
-		n = zDom.$(n);
-		if (['float','cssFloat'].contains(style))
-			style = (typeof n.style.styleFloat != 'undefined' ? 'styleFloat' : 'cssFloat');
-		style = style.camelize();
-		var value = n.style[style];
+	getStyle: function(el, style) {
+		var st = el.style;
+		if (['float','cssFloat'].$contains(style))
+			style = (typeof st.styleFloat != 'undefined' ? 'styleFloat' : 'cssFloat');
+		style = style.$camel();
+		var value = st[style];
 		if (!value) {
 			if (document.defaultView && document.defaultView.getComputedStyle) {
-				var css = document.defaultView.getComputedStyle(n, null);
+				var css = document.defaultView.getComputedStyle(el, null);
 				value = css ? css[style] : null;
-			} else if (n.currentStyle) {
-				value = n.currentStyle[style];
+			} else if (el.currentStyle) {
+				value = el.currentStyle[style];
 			}
 		}
 
-		if (value == 'auto' && ['width','height'].contains(style) && n.getStyle('display') != 'none')
-			value = n['offset'+style.capitalize()] + 'px';
+		if (value == 'auto' && ['width','height'].$contains(style)
+		&& zDom.getStyle(el, 'display') != 'none')
+			value = el['offset'+style.capitalize()] + 'px';
 
-		if (zk.opera && ['left', 'top', 'right', 'bottom'].contains(style)
-		&& zDom.getStyle(n, 'position') == 'static') value = 'auto';
+		if (zk.opera && ['left', 'top', 'right', 'bottom'].$contains(style)
+		&& zDom.getStyle(el, 'position') == 'static') value = 'auto';
 
 		if(style == 'opacity') {
 			if(value) return parseFloat(value);
-			if(value = (n.getStyle('filter') || '').match(/alpha\(opacity=(.*)\)/)
+			if(value = (zDom.getStyle(el, 'filter') || '').match(/alpha\(opacity=(.*)\)/)
 			&& value[1]) return parseFloat(value[1]) / 100;
 			return 1.0;
 		}
 		return value == 'auto' ? null : value;
 	},
-
 	/** Sets the style.
 	 * @param style a map of styles to update (String name, String value).
 	 */
-	setStyle: function(n, style) {
-		n = zDom.$(n);
+	setStyle: function(el, style) {
+		var st = el.style;
 		for (var name in style) {
 			var value = style[name];
 			if(name == 'opacity') {
@@ -430,22 +456,21 @@ zDom = { //static methods
 					value = (/gecko/.test(zk.userAgent) &&
 						!/konqueror|safari|khtml/.test(zk.userAgent)) ? 0.999999 : 1.0;
 					if(zk.ie)
-						n.style.filter = n.getStyle('filter').replace(/alpha\([^\)]*\)/gi,'');
+						st.filter = zDom.getStyle(el, 'filter').replace(/alpha\([^\)]*\)/gi,'');
 				} else if(value === '') {
 					if(zk.ie)
-						n.style.filter = n.getStyle('filter').replace(/alpha\([^\)]*\)/gi,'');
+						st.filter = zDom.getStyle(el, 'filter').replace(/alpha\([^\)]*\)/gi,'');
 				} else {
 					if(value < 0.00001) value = 0;
 					if(zk.ie)
-						n.style.filter = n.getStyle('filter').replace(/alpha\([^\)]*\)/gi,'') +
+						st.filter = zDom.getStyle(el, 'filter').replace(/alpha\([^\)]*\)/gi,'') +
 							'alpha(opacity='+value*100+')';
 				}
-			} else if(['float','cssFloat'].contains(name))
-				name = (typeof n.style.styleFloat != 'undefined') ? 'styleFloat' : 'cssFloat';
+			} else if(['float','cssFloat'].$contains(name))
+				name = (typeof st.styleFloat != 'undefined') ? 'styleFloat' : 'cssFloat';
 
-			n.style[name.camelize()] = value;
+			st[name.$camel()] = value;
 		}
-		return n;
 	},
 	/** Parses a string-type style into a map of styles
 	 * that can be used with {@link #setStyle}.
@@ -464,25 +489,72 @@ zDom = { //static methods
 		return map;
 	},
 	/** Returns the opacity style of the specified element, including CSS class. */
-	getOpacity: function(el){
-		return zDom.$(el).getStyle('opacity');
+	getOpacity: function (el) {
+		return zDom.getStyle(el, 'opacity');
 	},
 	/** Sets the opacity style of the specified element. */
 	setOpacity: function(el, value){
-		return zDom.$(el).setStyle({opacity:value});
+		zDom.setStyle(el, {opacity:value});
 	},
-	/** Returns the opacity style defined in element.style, excluding CSS class. */
-	getInlineOpacity: function(el){
-	  return zDom.$(el).style.opacity || '';
-	},
-	/** Forces an element to redraw (aka., re-render). */
-	redraw: function(el) {
+
+	/** Forces an element to re-render. */
+	rerender: function(el) {
+		el = zDom.$(el);
 		try {
-			el = zDom.$(el);
 			var n = document.createTextNode(' ');
 			el.appendChild(n);
 			el.removeChild(n);
-		} catch(e) {}
+		} catch(e) {
+		}
+	},
+
+	cleanWhitespace: function (el) {
+		for (var node = el.firstChild; node;) {
+			var nextNode = node.nextSibling;
+			if (node.nodeType == 3 && !/\S/.test(node.nodeValue))
+				el.removeChild(node);
+			node = nextNode;
+		}
+	},
+
+	makePositioned: function (el) {
+		var pos = zDom.getStyle(el,  'position');
+		if (pos == 'static' || !pos) {
+			el._$positioned = true;
+			el.style.position = 'relative';
+			// Opera returns the offset relative to the positioning context, when an
+			// element is position relative but top and left have not been defined
+			if (zk.opera)
+				el.style.top = el.style.left = 0;
+		}
+	},
+	undoPositioned: function (el) {
+		if (el._$positioned) {
+			el._$positioned = undefined;
+			var st = el.style;
+			st.position = st.top = st.left = st.bottom = st.right = '';
+		}
+	},
+	makeClipping: function (el) {
+		if (!el._$clipping) {
+			var st = el.style;
+			el._$clipping = true;
+			el._$overflow = st.overflow;
+			el._$overflowX = st.overflowX;
+			el._$overflowY = st.overflowY;
+			if (zDom.getStyle(el, 'overflow') != 'hidden')
+				st.overflow = 'hidden';
+		}
+	},
+	undoClipping: function (el) {
+		if (el._$clipping) {
+		//Bug 1822717 and 1882277
+			var st = el.style;
+			st.overflow = el._$overflow;
+			st.overflowX = el._$overflowX;
+			st.overflowY = el._$overflowY;
+			el._$clipping = el._$overflow = el._$overflowX = el._$overflowY = undefined;
+		}
 	},
 
 	/** Replaces the outer of the specified element with the HTML content.
@@ -697,7 +769,7 @@ zDom = { //static methods
 	/** Returns the selection range of the specified input control.
 	 * Note: if the function occurs some error, it always return [0, 0];
 	 */
-	getSelectionRange: function(inp) {
+	selectionRange: function(inp) {
 		try {
 			if (document.selection != null && inp.selectionStart == null) { //IE
 				var range = document.selection.createRange(); 
@@ -852,3 +924,36 @@ if (zk.ie) {
 		}
 	};
 }
+
+zk.Color = zk.$extends(zk.Object, {
+	/** A 3-element array, [r, g, b]. */
+	//rgb: null;
+	$init: function (color) {
+		var rgb = this.rgb = [0, 0, 0];
+		if(color.slice(0,4) == 'rgb(') {  
+			var cols = color.slice(4,color.length-1).split(',');  
+			for (var j = 0, len = cols.length; j < len; j++)
+				rgb[j] = parseInt(cols[j]); //dec
+		} else if(color.slice(0,1) == '#') {  
+			if (color.length == 4) {
+				for(var j = 0; j < 3; j++) {
+					var cc = color.charAt(j + 1);
+					rgb[j] = parseInt(cc + cc, 16); //hex
+				}
+			} else if(color.length == 7) {
+				for(var j = 0, i = 1; j < 3; j++, i += 2)
+					rgb[j] = parseInt(color.substring(i, i+2), 16); //hex
+			}  
+		}
+	},
+	/** Converts the color to #xxxxxx. */
+	toString: function () {
+		var s = '#';
+		for (var j = 0; j < 3;) {
+			var v = this.rgb[j++];;
+			if (v < 16) s += '0';
+			s += new Number(v).toString(16);
+		}
+		return s;
+	}
+});

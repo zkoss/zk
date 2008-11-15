@@ -468,7 +468,7 @@ zk.Widget = zk.$extends(zk.Object, {
 				evtnm = evt.name,
 				asap = this[evtnm];
 			if (asap != zk.undefined
-			|| (ies != null && ies.contains(evtnm)))
+			|| (ies != null && ies.$contains(evtnm)))
 				zAu.send(evt,
 					asap ? timeout >= 0 ? timeout: 38: this.auDelay());
 		}
@@ -487,13 +487,13 @@ zk.Widget = zk.$extends(zk.Object, {
 	listen: function (evtnm, listener) {
 		var lsns = this._lsns[evtnm];
 		if (!lsns) lsns = this._lsns[evtnm] = [];
-		lsns.add(listener, true);
+		lsns.$add(listener);
 	},
 	/** Removes a listener from the sepcified event.
 	 */
 	unlisten: function (evtnm, listener) {
 		var lsns = this._lsns[evtnm];
-		return lsns && lsns.remove(watch);
+		return lsns && lsns.$remove(watch);
 	},
 	/** Returns if a listener is registered or the specified event.
 	 */
@@ -625,7 +625,7 @@ zk.Page = zk.$extends(zk.Widget, {//unlik server, we derive from Widget!
 	$init: function (pgid, contained) {
 		this.uuid = pgid;
 		if (contained)
-			zk.Page.contained.add(this, true);
+			zk.Page.contained.$add(this);
 	},
 	redraw: function () {
 		var html = '<div id="' + this.uuid + '" style="' + this.getStyle() + '">';

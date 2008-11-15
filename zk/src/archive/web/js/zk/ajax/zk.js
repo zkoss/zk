@@ -12,92 +12,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-//String//
-String.prototype.startsWith = function (prefix) {
-	return this.substring(0,prefix.length) == prefix;
-};
-String.prototype.endsWith = function (suffix) {
-	return this.substring(this.length-suffix.length) == suffix;
-};
-String.prototype.trim = function () {
-	var j = 0, tl = this.length, k = tl - 1;
-	while (j < tl && this.charAt(j) <= ' ')
-		++j;
-	while (k >= j && this.charAt(k) <= ' ')
-		--k;
-	return j > k ? "": this.substring(j, k + 1);
-};
-/** onverts a string separated by dashes into a camelCase equivalent.
- * For instance, 'foo-bar' would be converted to 'fooBar'.
- */
-String.prototype.camelize = function() {
-	var parts = this.split('-'), len = parts.length;
-	if (len == 1) return parts[0];
-
-	var camelized = this.charAt(0) == '-' ?
-		parts[0].charAt(0).toUpperCase() + parts[0].substring(1): parts[0];
-
-	for (var i = 1; i < len; i++)
-		camelized += parts[i].charAt(0).toUpperCase() + parts[i].substring(1);
-	return camelized;
-};
-/** Increase a value to the first character of the string, and
- * return the increased string.
- * For example, 'a'.increase(2) is 'c' (same as 'a' + 2 in Java)
- */
-String.prototype.increase = function (diff) {
-	return String.fromCharCode(this.charCodeAt(0) + diff)
-};
-/** Returns the difference of the character's values (charCodeAt).
- * For instance, 'a'.subtract('b') is -1 (same as 'a' - 'b' in Java).
- */
-String.prototype.subtract = function (cc) {
-	return this.charCodeAt(0) - cc.charCodeAt(0);
-};
-
-//Array//
-/** Removes the specified object from the array if any.
- * Returns false if not found.
- */
-Array.prototype.remove = function (o) {
-	for (var j = 0, tl = this.length; j < tl; ++j) {
-		if (o == this[j]) {
-			this.splice(j, 1);
-			return true;
-		}
-	}
-	return false;
-};
-/** Returns whether the array contains the specified object.
- */
-Array.prototype.contains = function (o) {
-	for (var j = 0, tl = this.length; j < tl; ++j) {
-		if (o == this[j])
-			return true;
-	}
-	return false;
-};
-/** Adds the specified object to the end of the array.
- * @param overwrite whether to overwrite if the object is already in the array.
- * @return true if added successfully.
- */
-Array.prototype.add = function (o, overwrite) {
-	if (overwrite)
-		for (var j = 0, tl = this.length; j < tl; ++j) {
-			if (o == this[j]) {
-				this[j] = o;
-				return false;
-			}
-		}
-
-	this.push(o);
-	return true;
-};
-/** Clones this array. */
-Array.prototype.clone = function() {
-	return [].concat(this);
-};
-
 //zk//
 zk = { //static methods
 	/** The ZK version. */
@@ -175,16 +89,9 @@ zk = { //static methods
 			this.$init.apply(this, arguments);
 		};
 
-		for (var p in superclass.prototype) { //inherit non-static
-			var m = superclass.prototype[p];
-			jclass.prototype[p] = m;
-		}
-
-		for (var p in methods)
-			jclass.prototype[p] = methods[p];
-
-		for (var p in staticMethods)
-			jclass[p] = staticMethods[p];
+		zk.$copy(jclass.prototype, superclass.prototype); //inherit non-static
+		zk.$copy(jclass.prototype, methods);
+		zk.$copy(jclass, staticMethods);
 
 		jclass.prototype.$class = jclass;
 		jclass.prototype._$super = superclass.prototype;
@@ -203,6 +110,13 @@ zk = { //static methods
 			if (opts[p] == null)
 				opts[p] = defaults[p];
 		return opts;
+	},
+	/** Copies the values from one map to anther.
+	 */
+	$copy: function (dst, src) {
+		for (var p in src)
+			dst[p] = src[p];
+		return dst;
 	},
 
 	/** A does-nothing function. */
@@ -343,6 +257,95 @@ zk = { //static methods
 		}
 	}
 };
+
+//String//
+zk.$copy(String.prototype, {
+	startsWith: function (prefix) {
+		return this.substring(0,prefix.length) == prefix;
+	},
+	endsWith: function (suffix) {
+		return this.substring(this.length-suffix.length) == suffix;
+	},
+	trim: function () {
+		var j = 0, tl = this.length, k = tl - 1;
+		while (j < tl && this.charAt(j) <= ' ')
+			++j;
+		while (k >= j && this.charAt(k) <= ' ')
+			--k;
+		return j > k ? "": this.substring(j, k + 1);
+	},
+	/** onverts a string separated by dashes into a camelCase equivalent.
+	 * For instance, 'foo-bar' would be converted to 'fooBar'.
+	 */
+	$camel: function() {
+		var parts = this.split('-'), len = parts.length;
+		if (len == 1) return parts[0];
+
+		var camelized = this.charAt(0) == '-' ?
+			parts[0].charAt(0).toUpperCase() + parts[0].substring(1): parts[0];
+
+		for (var i = 1; i < len; i++)
+			camelized += parts[i].charAt(0).toUpperCase() + parts[i].substring(1);
+		return camelized;
+	},
+	/** Increase a value to the first character of the string, and
+	 * return the increased string.
+	 * For example, 'a'.$inc(2) is 'c' (same as 'a' + 2 in Java)
+	 */
+	$inc: function (diff) {
+		return String.fromCharCode(this.charCodeAt(0) + diff)
+	},
+	/** Returns the difference of the character's values (charCodeAt).
+	 * For instance, 'a'.$sub('b') is -1 (same as 'a' - 'b' in Java).
+	 */
+	$sub: function (cc) {
+		return this.charCodeAt(0) - cc.charCodeAt(0);
+	}
+});
+
+//Array//
+zk.$copy(Array.prototype, {
+	/** Removes the specified object from the array if any.
+	 * Returns false if not found.
+	 */
+	$remove: function (o) {
+		for (var j = 0, tl = this.length; j < tl; ++j) {
+			if (o == this[j]) {
+				this.splice(j, 1);
+				return true;
+			}
+		}
+		return false;
+	},
+	/** Returns whether the array contains the specified object.
+	 */
+	$contains: function (o) {
+		for (var j = 0, tl = this.length; j < tl; ++j) {
+			if (o == this[j])
+				return true;
+		}
+		return false;
+	},
+	/** Adds the specified object to the end of the array.
+	 * @param overwrite whether to overwrite if the object is already in the array.
+	 * @return true if added successfully.
+	 */
+	$add: function (o, overwrite) {
+		if (overwrite)
+			for (var j = 0, tl = this.length; j < tl; ++j) {
+				if (o == this[j]) {
+					this[j] = o;
+					return false;
+				}
+			}
+		this.push(o);
+		return true;
+	},
+	/** Clones this array. */
+	$clone: function() {
+		return [].concat(this);
+	}
+});
 
 zk.agent = navigator.userAgent.toLowerCase();
 zk.safari = zk.agent.indexOf("safari") >= 0;

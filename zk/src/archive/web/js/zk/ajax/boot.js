@@ -28,7 +28,7 @@ function zknewe() {
 function _zkbPush(w) {
 	w.children = [];
 	if (_zkbWgts.length > 0)
-		_zkbWgts[0].children.add(w);
+		_zkbWgts[0].children.$add(w);
 	_zkbWgts.unshift(w);
 }
 /** Used internally. */
@@ -134,7 +134,7 @@ function zkopt(opts) {
  */
 function zkafter(fn) {
 	if (!zk.booted)
-		return _zkafcrs.add(fn, true);
+		return _zkafcrs.$add(fn, true);
 	fn();
 	return true;
 }
@@ -146,7 +146,7 @@ var _zkafcrs = [];
  */
 function zkafterBoot(fn) {
 	if (!zk.booted)
-		return _zkafbts.add(fn, true);
+		return _zkafbts.$add(fn, true);
 	fn();
 	return true;
 }

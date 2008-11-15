@@ -79,7 +79,7 @@ zWatch = {
 	watch: function (name, watch) {
 		var wts = this._wts[name];
 		if (!wts) wts = this._wts[name] = [];
-		wts.add(watch, true);
+		wts.$add(watch);
 	},
 	/** Removes a watch.
 	 * @return whether the watch has been removed successfully.
@@ -87,7 +87,7 @@ zWatch = {
 	 */
 	unwatch: function (name, watch) {
 		var wts = this._wts[name];
-		return wts && wts.remove(watch);
+		return wts && wts.$remove(watch);
 	},
 	/** Remove all watches of the specified name.
 	 */
@@ -106,7 +106,7 @@ zWatch = {
 			for (var j = 2, l = arguments.length; j < l;)
 				args.push(arguments[j++]);
 
-			wts = wts.clone(); //make a copy since unwatch might be called
+			wts = wts.$clone(); //make a copy since unwatch might be called
 			if (timeout >= 0) {
 				setTimeout(
 				function () {

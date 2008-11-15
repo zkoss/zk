@@ -878,9 +878,9 @@ zAu.cmd1 = {
 				if (mode == "1") { //ref
 					ref = zDom.$(x);
 					if (ref) {
-						var ofs = zPos.cumulativeOffset(zDom.$(x));
+						var ofs = zDom.cmOffset(zDom.$(x));
 						x = ofs[0];
-						y = ofs[1] + zk.offsetHeight(ref);
+						y = ofs[1] + zDom.offsetHeight(ref);
 					}
 				}
 				cmp.style.position = "absolute";

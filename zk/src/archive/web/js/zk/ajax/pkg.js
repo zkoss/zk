@@ -18,7 +18,7 @@ zPkg = {
 	 * @param pkg the package name
 	 */
 	end: function (pkg) {
-		if (zPkg._lding.remove(pkg)) {
+		if (zPkg._lding.$remove(pkg)) {
 			if (!zPkg._updCnt()) {
 				try {
 					zEvt.enableESC();
@@ -80,7 +80,7 @@ zPkg = {
 	 */
 	afterLoad: function (fn) {
 		if (zk.loading)
-			return zPkg._aflds.add(fn, true);
+			return zPkg._aflds.$add(fn);
 		fn();
 		return true;
 	},

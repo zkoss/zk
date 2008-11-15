@@ -1,4 +1,4 @@
-/* dragdrop.js
+/* drag.js
 
 	Purpose:
 		
@@ -69,8 +69,8 @@ zk.Draggable = zk.$extends(zk.Object, {
 
 	/** [left, right] of this node. */
 	_currentDelta: function() {
-		return [zk.parseInt(zDom.getStyle(this.node,'left')),
-			zk.parseInt(zDom.getStyle(this.node,'top'))];
+		return [zk.parseInt(zDom.getStyle(this.node, 'left')),
+			zk.parseInt(zDom.getStyle(this.node, 'top'))];
 	},
 
 	startDrag: function(evt) {
@@ -102,7 +102,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 		}
 
 		if(this.opts.zIndex) { //after ghosting
-			this.originalZ = zk.parseInt(zDom.getStyle(node,'z-index'));
+			this.originalZ = zk.parseInt(zDom.getStyle(node, 'z-index'));
 			node.style.zIndex = this.opts.zIndex;
 		}
 
@@ -133,7 +133,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 
 			var p;
 			if (this.opts.scroll == window) {
-				with(this._getWindowScroll(this.opts.scroll)) { p = [ left, top, left+width, top+height ]; }
+				with(this._getWindowScroll(this.opts.scroll)) { p = [ left, top, left+width, top+height ];}
 			} else {
 				p = zDom.viewportOffset(this.opts.scroll);
 				p[0] += this.opts.scroll.scrollLeft + this._innerOfs[0];
@@ -261,7 +261,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 		var node = this.node,
 			pos = zDom.cmOffset(node);
 		if(this.opts.ghosting) {
-			var r = zDom.cmScrollOffset(node);
+			var r = zDom.scrollOffset(node);
 			pos[0] += r[0] - this._innerOfs[0]; pos[1] += r[1] - this._innerOfs[1];
 		}
 
@@ -383,7 +383,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 				H = body.offsetHeight
 			}
 		}
-		return {top: T, left: L, width: W, height: H };
+		return {top: T, left: L, width: W, height: H};
 	},
 
 	//Utilities//
@@ -397,7 +397,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 		this.z_elorg = this.node;
 
 		var ofs = zDom.cmOffset(this.node);
-		this.z_scrl = zDom.cmScrollOffset(this.node);
+		this.z_scrl = zDom.scrollOffset(this.node);
 		this.z_scrl[0] -= zDom.innerX(); this.z_scrl[1] -= zDom.innerY();
 			//Store scrolling offset since zDraggable.draw not handle DIV well
 
@@ -437,7 +437,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 	},
 	unregister: function(draggable) {
 		var zdg = zk.Draggable;
-		zdg._drags.remove(draggable);
+		zdg._drags.$remove(draggable);
 		if(zdg._drags.length == 0) {
 			zEvt.unlisten(document, "mouseup", zdg.ondocmouseup);
 			zEvt.unlisten(document, "mousemove", zdg.ondocmousemove);
@@ -501,7 +501,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 		if (pos != 'absolute' && pos != 'relative') {
 			var p = el.parentNode;
 			var n = el.nextSibling;
-			zk.remove(el);
+			zDom.remove(el);
 			el.style.position = pos;
 			if (n) p.insertBefore(el, n);
 			else p.appendChild(el);
@@ -514,14 +514,14 @@ zk.Draggable = zk.$extends(zk.Object, {
 	//default effect//
 	defaultStartEffect: function (draggable) {
 		var node = draggable.node;
-		node._opacity = zDom.getOpacity(node);
+		node._$opacity = zDom.getOpacity(node);
 		zk.Draggable._dragging[node] = true;
-		new zk.Effect.opacity(node, {duration:0.2, from:node._opacity, to:0.7}); 
+		new zEffect.Opacity(node, {duration:0.2, from:node._$opacity, to:0.7}); 
 	},
 	defafultEndEffect: function(draggable) {
 		var node = draggable.node,
-			toOpacity = typeof node._opacity == 'number' ? node._opacity : 1.0;
-		new zk.Effect.opacity(node, {duration:0.2, from:0.7,
+			toOpacity = typeof node._$opacity == 'number' ? node._$opacity : 1.0;
+		new zEffect.Opacity(node, {duration:0.2, from:0.7,
 			to:toOpacity, queue: {scope:'_draggable', position:'end'},
 			afterFinish: function () { 
 				zk.Draggable._dragging[node] = false;
@@ -532,7 +532,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 		var node = draggable.node,
 			orgpos = node.style.position, //Bug 1538506
 			dur = Math.sqrt(Math.abs(top_offset^2)+Math.abs(left_offset^2))*0.02;
-		new zk.Effect.move(node, { x: -left_offset, y: -top_offset,
+		new zEffect.Move(node, { x: -left_offset, y: -top_offset,
 			duration: dur, queue: {scope:'_draggable', position:'end'}});
 
 		//Bug 1538506: a strange bar appear in IE

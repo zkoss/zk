@@ -67,7 +67,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 					var v = zk.parseInt(s.substring(1));
 					if (v == 0 || v > 12)
 						throw "Unsupported function key: #f" + v;
-					cc = 'O'.increase(v); //'P': F1, 'Q': F2... 'Z': F12
+					cc = 'O'.$inc(v); //'P': F1, 'Q': F2... 'Z': F12
 				} else
 					throw "Unknown #"+s+" in "+keys;
 
@@ -83,7 +83,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 					throw "$a - $z not supported (found in "+keys+"). Allowed: $#f1, $#home and so on.";
 
 				if (cc <= 'Z' && cc >= 'A')
-					cc = cc.increase('a'.subtract('A')); //to lower case
+					cc = cc.$inc('a'.$sub('A')); //to lower case
 				parsed[which] += cc;
 				which = 0;
 				break;

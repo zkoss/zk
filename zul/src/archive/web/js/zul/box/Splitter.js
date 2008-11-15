@@ -386,7 +386,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	},
 
 	_fixKidSplts: function (n) {
-		if (zDom.isVisible(n)) {
+		if (zDom.isVisible(n)) { //n might not be an element
 			var wgt = n.z_wgt, //don't use zk.Widget.$ since we check each node
 				zulsplt = zul.box.Splitter;
 			if (wgt && wgt.$instanceof(zulsplt))
