@@ -110,7 +110,7 @@ zEffect = {
 				zDom.show(e); 
 			};
 		if (!opts.afterFinishInternal)
-			afterFinishInternal: function(effect) {
+			afterFinishInternal = function(effect) {
 				zDom.undoClipping(effect.element);
 			};
 		return new zEffect.Scale(element, 100, opts);

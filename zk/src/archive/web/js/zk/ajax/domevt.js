@@ -107,8 +107,8 @@ zEvt = {
 
 		//Bug 1811352
 		if ("submit" == evtnm && zDom.tag(el) == "FORM") {
-			if (!el._submfns) el._submfns = [];
-			el._submfns.push(fn);
+			if (!el._$submfns) el._$submfns = [];
+			el._$submfns.push(fn);
 		}
 	},
 	/** Un-listens a browser event.
@@ -124,8 +124,8 @@ zEvt = {
 		}
 
 		//Bug 1811352
-		if ("submit" == evtnm && zDom.tag(el) == "FORM" && el._submfns)
-			el._submfns.$remove(fn);
+		if ("submit" == evtnm && zDom.tag(el) == "FORM" && el._$submfns)
+			el._$submfns.$remove(fn);
 	},
 
 	/** Enables ESC (default behavior). */

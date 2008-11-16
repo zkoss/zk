@@ -68,10 +68,11 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 
 	/** Appends a child widget.
+	 * @return whether the widget was added successfully
 	 */
 	appendChild: function (child) {
 		if (child == this.lastChild)
-			return;
+			return false;
 
 		if (child.parent)
 			child.parent.removeChild(child);
@@ -92,17 +93,17 @@ zk.Widget = zk.$extends(zk.Object, {
 
 		var dt = this.desktop;
 		if (dt) this.insertChildHTML_(child, null, dt);	
+		return true;
 	},
 	/** Inserts a child widget before the specified one.
+	 * @return whether the widget was added successfully
 	 */
 	insertBefore: function (child, sibling) {
-		if (!sibling || sibling.parent != this) {
-			this.appendChild(child);
-			return;
-		}
+		if (!sibling || sibling.parent != this)
+			return this.appendChild(child);
 
 		if (child == sibling || child.nextSibling == sibling)
-			return;
+			return false;
 
 		if (child.parent)
 			child.parent.removeChild(child);
@@ -123,14 +124,15 @@ zk.Widget = zk.$extends(zk.Object, {
 
 		var dt = this.desktop;
 		if (dt) this.insertChildHTML_(child, sibling, dt);
+		return true;
 	},
 	/** Removes the specified child.
 	 */
 	removeChild: function (child) {
 		if (!child.parent)
-			return;
+			return false;
 		if (this != child.parent)
-			throw "Not a child: "+child;
+			return false;
 
 		var p = child.previousSibling, n = child.nextSibling;
 		if (p) p.nextSibling = n;
@@ -141,6 +143,7 @@ zk.Widget = zk.$extends(zk.Object, {
 
 		if (child.desktop)
 			this.removeChildHTML_(child, p);
+		return true;
 	},
 
 	/** Returns if a widget is really visible (all ancestors are visible). */
@@ -369,13 +372,17 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * the parent is already in the DOM tree).
 	 * On the other hand, this method is used to replace a branch of
 	 * the DOM tree (that is usually not part of widgets).
-	 * <p>The most common use is to re-render a widget that is already
-	 * attached: <code>wgt.replaceHTML(wgt.node);</code>.
 	 * @param desktop the desktop the DOM element belongs to.
 	 * Optional. If null, ZK will decide it automatically.
 	 */
 	replaceHTML: function (n, desktop) {
-		if (!desktop && n.z_wgt == this) desktop = this.desktop;
+		if (!desktop) desktop = this.desktop;
+
+		var cf = zk.currentFocus;
+		if (cf && zUtl.isAncestor(this, cf, true)) {
+			zk.currentFocus = null;
+		} else
+			cf = null;
 
 		var p = this.parent;
 		if (p) p.replaceChildHTML_(this, n, desktop);
@@ -384,6 +391,15 @@ zk.Widget = zk.$extends(zk.Object, {
 			zDom.setOuterHTML(n, this.redraw());
 			this.bind_(desktop);
 		}
+
+		//TODO: if (zAu.valid) zAu.valid.fixerrboxes();
+		if (cf && !zk.currentFocus) cf.focus();
+	},
+	/** Re-render the DOM content of this widget.
+	 * It is the same as <code>this.replaceHTML(this.node)</code>
+	 */
+	rerender: function () {
+		if (this.node) this.replaceHTML(this.node);
 	},
 
 	/** Replace the specified DOM element with the HTML content generated
@@ -461,10 +477,13 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * @return whether the focus is gained to this widget.
 	 */
 	focus: function () {
-		if (this.desktop)
+		if (this.node) {
+			if (zDom.focus(this.node))
+				return true;
 			for (var w = this.firstChild; w; w = w.nextSibling)
 				if (w.focus())
 					return true;
+		}
 		return false;
 	},
 

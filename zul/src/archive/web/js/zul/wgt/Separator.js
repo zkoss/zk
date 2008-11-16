@@ -15,8 +15,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.wgt.Separator = zk.$extends(zul.Widget, {
 	/** Returns the zclass. */
 	getZclass: function () {
-		var zs = this.zclass;
-		return zs ? zs: "z-separator" +
+		var zcls = this.zclass;
+		return zcls ? zcls: "z-separator" +
 			(this.vertical ? "-ver" + (this.bar ? "-bar" : "") :
 				"-hor" + (this.bar ? "-bar" : ""))
 	}

@@ -413,7 +413,7 @@ zk.Object.prototype = {
 		if (!m) throw mtdnm + " not in superclass";
 
 		try {
-			m.apply(this, args);
+			return m.apply(this, args);
 		} finally {
 			supers[mtdnm] = old; //restore
 		}
@@ -430,7 +430,7 @@ zk.Object.prototype = {
 //			throw "function required";
 		var o = this;
 		return function () {
-			f.apply(o, arguments);
+			return f.apply(o, arguments);
 		};
 	}
 };

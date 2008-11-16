@@ -41,7 +41,7 @@ function () {
 	html += '<tr><td class="' + zcls + '-cl">';
 	if (zk.ie) html += btn;
 	html += '</td><td class="' + zcls + '-cm">'
-		+ this._domContent()
+		+ this.domContent_()
 		+ '</td><td class="' + zcls + '-cr"><i class="' + zcls
 		+ '"></i></td></tr>';
 

@@ -12,42 +12,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.wgt.Button = zk.$extends(zul.Widget, {
+zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	_orient: "horizontal",
 	_dir: "normal",
 	/** Indicates it handles click by itself. */
 	click: true,
 
-	/** Returns the label of this button.
-	 */
-	getLabel: function () {
-		var v = this._label;
-		return v ? v: '';
-	},
-	/** Sets the label of this button.
-	 */
-	setLabel: function(label) {
-		if (label == null) label = '';
-		if (this._label != label) {
-			this._label = label;
-			var n = this.node;
-			if (n) this._updateDomContent();
-		}
-	},
-	/** Returns the image of this button.
-	 */
-	getImage: function () {
-		return this._image;
-	},
-	/** Sets the image of this button.
-	 */
-	setImage: function(image) {
-		if (this._image != image) {
-			this._image = image;
-			var n = this.node;
-			if (n) this._updateDomContent();
-		}
-	},
 	/** Returns the orient of this button.
 	 */
 	getOrient: function () {
@@ -59,7 +29,7 @@ zul.wgt.Button = zk.$extends(zul.Widget, {
 		if (this._orient != orient) {
 			this._orient = orient;
 			var n = this.node;
-			if (n) this._updateDomContent();
+			if (n) this.updateDomContent_();
 		}
 	},
 	/** Returns the dir of this button.
@@ -73,7 +43,7 @@ zul.wgt.Button = zk.$extends(zul.Widget, {
 		if (this._dir != dir) {
 			this._dir = dir;
 			var n = this.node;
-			if (n) this._updateDomContent();
+			if (n) this.updateDomContent_();
 		}
 	},
 	/** Returns whether this button is disabled
@@ -93,14 +63,18 @@ zul.wgt.Button = zk.$extends(zul.Widget, {
 		}
 	},
 
-	//private//
+	//super//
+	focus: function () {
+		return zDom.focus(this.ebtn);
+	},
+
 	/** Updates the label and image. */
-	_updateDomContent: function () {
+	updateDomContent_: function () {
 		var n = zDom.$(this.uuid + '$box');
 		if (n)
-			n.tBodies[0].rows[1].cells[1].innerHTML = this._domContent();
+			n.tBodies[0].rows[1].cells[1].innerHTML = this.domContent_();
 	},
-	_domContent: function () {
+	domContent_: function () {
 		var label = zUtl.encodeXML(this.getLabel()),
 			img = this.getImage();
 		if (!img) return label;
@@ -111,7 +85,6 @@ zul.wgt.Button = zk.$extends(zul.Widget, {
 			label + space + img: img + space + label;
 	},
 
-	//super//
 	getZclass: function () {
 		var zcls = this._zclass;
 		return zcls != null ? zcls: "z-button";
@@ -123,56 +96,69 @@ zul.wgt.Button = zk.$extends(zul.Widget, {
 
 		var zulbtn = zul.wgt.Button,
 			n = zDom.$(this.uuid + '$box');
-		this.box = n;
+		this.ebox = n;
 		zDom.disableSelection(n);
 		zEvt.listen(n, "mousedown", zulbtn.ondown);
 		zEvt.listen(n, "mouseup", zulbtn.onup);
 		zEvt.listen(n, "mouseover", zulbtn.onover);
 		zEvt.listen(n, "mouseout", zulbtn.onout);
 
-		this.button = n = zDom.$(this.uuid + '$btn');
+		this.ebtn = n = zDom.$(this.uuid + '$btn');
 		zEvt.listen(n, "focus", zulbtn.onfocus);
 		zEvt.listen(n, "blur", zulbtn.onblur);
 	},
 	unbind_: function () {
+		var zulbtn = zul.wgt.Button,
+			n = this.ebox;
+		if (n) {
+			zEvt.unlisten(n, "mousedown", zulbtn.ondown);
+			zEvt.unlisten(n, "mouseup", zulbtn.onup);
+			zEvt.unlisten(n, "mouseover", zulbtn.onover);
+			zEvt.unlisten(n, "mouseout", zulbtn.onout);
+		}
+		n = this.ebtn;
+		if (n) {
+			zEvt.unlisten(n, "focus", zulbtn.onfocus);
+			zEvt.unlisten(n, "blur", zulbtn.onblur);
+		}
 		//no need to unlisten since DOM elements are GCed
 		this.$super('unbind_');
-		this.box = this.button = null;
+		this.ebox = this.ebtn = null;
 	}
 },{
 	onover: function (evt) {
 		if (!evt) evt = window.event;
 		var wgt = zEvt.widget(evt);
-		zDom.addClass(wgt.box, wgt.getZclass() + "-over");
+		zDom.addClass(wgt.ebox, wgt.getZclass() + "-over");
 	},
 	onout: function (evt) {
 		if (!evt) evt = window.event;
 		var wgt = zEvt.widget(evt);
 		if (wgt != zul.wgt.Button._curdn)
-			zDom.rmClass(wgt.box, wgt.getZclass() + "-over");
+			zDom.rmClass(wgt.ebox, wgt.getZclass() + "-over");
 	},
 	onfocus: function (evt) {
 		if (!evt) evt = window.event;
 		if (!zDom.tag(zEvt.target(evt))) return; // Firefox 2 will cause a focus error when resize browser.
 
 		var wgt = zEvt.widget(evt);
-		zDom.addClass(wgt.box, wgt.getZclass() + "-focus");
+		zDom.addClass(wgt.ebox, wgt.getZclass() + "-focus");
 		zEvt.onfocus(evt);
 	},
 	onblur: function (evt) {
 		if (!evt) evt = window.event;
 		var wgt = zEvt.widget(evt);
-		zDom.rmClass(wgt.box, wgt.getZclass() + "-focus");
+		zDom.rmClass(wgt.ebox, wgt.getZclass() + "-focus");
 		zEvt.onblur(evt);
 	},
 	ondown: function (evt) {
 		if (!evt) evt = window.event;
 		var wgt = zEvt.widget(evt),
-			box = wgt.box,
+			box = wgt.ebox,
 			zcls = wgt.getZclass();
 		zDom.addClass(box, zcls + "-clk");
 		zDom.addClass(box, zcls + "-over");
-		zDom.asyncFocus(wgt.button, 30);
+		zDom.asyncFocus(wgt.ebtn, 30);
 
 		var zulbtn = zul.wgt.Button;
 		zulbtn._curdn = wgt;
@@ -185,7 +171,7 @@ zul.wgt.Button = zk.$extends(zul.Widget, {
 			wgt = zulbtn._curdn;
 		if (wgt) {
 			zulbtn._curdn = null;
-			var box = wgt.box,
+			var box = wgt.ebox,
 				zcls = wgt.getZclass();
 			zDom.rmClass(box, zcls + "-clk");
 			zDom.rmClass(box, zcls + "-over");

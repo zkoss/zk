@@ -164,6 +164,16 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		zWatch.unwatch("beforeSize", this);
 		zWatch.unwatch("onVisible", this);
 
+		var zulsplt = zul.box.Splitter,
+			btn = this.button;
+		if (btn) {
+			if (zk.ie) {
+				zEvt.unlisten(btn, "mouseover", zulsplt.onover);
+				zEvt.unlisten(btn, "mouseout", zulsplt.onout);
+			}
+			zEvt.unlisten(btn, "click", zulsplt.onclick);
+		}
+
 		this._snapx = null;
 		this._drag.destroy();
 		this._drag = null;

@@ -754,13 +754,6 @@ zAu.cmd1 = {
 		zk.set(wgt, nm, val);
 	},
 	outer: function (uuid, wgt, code) {
-		var cf = zk.currentFocus, cfid;
-		if (cf && zUtl.isAncestor(wgt, cf, true)) {
-			cfid = cf.node.id;
-			zk.currentFocus = null;
-		} else
-			cf = null;
-
 		zAu.stub = function (newwgt) {
 			var p = newwgt.parent = wgt.parent,
 				s = newwgt.previousSibling = wgt.previousSibling;
@@ -772,9 +765,6 @@ zAu.cmd1 = {
 			else if (p) p.lastChild = newwgt;
 
 			newwgt.replaceHTML(wgt.uuid, wgt.desktop);
-
-			//TODO: if (zAu.valid) zAu.valid.fixerrboxes();
-			if (cf && !zk.currentFocus && cfid) zUtl.focus(cfid);
 		};
 		try {
 			eval(code);

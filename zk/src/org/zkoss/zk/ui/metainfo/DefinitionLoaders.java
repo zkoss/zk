@@ -421,13 +421,13 @@ public class DefinitionLoaders {
 				final String nm = IDOMs.getRequiredElementValue(e, "mold-name");
 				final String z2c = e.getElementValue("z2c-uri", true);
 				final String uri = e.getElementValue("mold-uri", true);
-				final String w = e.getElementValue("widget-name", true);
+				final String wn = e.getElementValue("widget-name", true);
 				noEL("mold-uri", uri, e); //5.0 limitation
 
-				compdef.addMold(nm, w != null ? w: wgtnm, z2c);
+				compdef.addMold(nm, wn != null ? wn: wgtnm, z2c);
 
 				WidgetDefinition wd =
-					w !=  null ? getWidgetDefinition(langdef, w): wgtdef;
+					wn !=  null ? getWidgetDefinition(langdef, wn): wgtdef;
 				if (uri != null) {
 					if (wd != null)
 						wd.addMold(nm, uri);

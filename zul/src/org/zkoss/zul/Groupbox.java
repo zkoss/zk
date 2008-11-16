@@ -40,7 +40,7 @@ public class Groupbox extends XulElement implements org.zkoss.zul.api.Groupbox {
 	/** The style used for the content block. */
 	private String _cntStyle;
 	/** The style class used for the content block. */
-	private String _cntscls;
+	private String _cntSclass;
 	private Boolean _legend;
 	private boolean _open = true, _closable = true;
 	
@@ -68,7 +68,7 @@ public class Groupbox extends XulElement implements org.zkoss.zul.api.Groupbox {
 	public void setOpen(boolean open) {
 		if (_open != open) {
 			_open = open;
-			smartUpdate("z.open", _open);
+			smartUpdate("open", _open);
 		}
 	}
 
@@ -86,10 +86,19 @@ public class Groupbox extends XulElement implements org.zkoss.zul.api.Groupbox {
 	public void setClosable(boolean closable) {
 		if (_closable != closable) {
 			_closable = closable;
-			smartUpdate("z.closable", closable);
+			smartUpdate("closable", closable);
 		}
 	}
 	// super
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		render(renderer, "contentStyle", _cntStyle);
+		render(renderer, "contentSclass", _cntSclass);
+		if (!_open) renderer.render("open", false);
+		if (!_closable) renderer.render("closable", false);
+	}
 	public String getZclass() {
 		return _zclass == null ? isLegend() ? "z-fieldset" : "z-groupbox" : super.getZclass();
 	}
@@ -108,14 +117,14 @@ public class Groupbox extends XulElement implements org.zkoss.zul.api.Groupbox {
 	public void setContentStyle(String style) {
 		if (!Objects.equals(_cntStyle, style)) {
 			_cntStyle = style;
-			smartUpdate("z.cntStyle", _cntStyle);
+			smartUpdate("contentStyle", _cntStyle);
 		}
 	}
 	/** Returns the style class used for the content block of the groupbox.
 	 * Used only if {@link #getMold} is not default.
 	 */
 	public String getContentSclass() {
-		return _cntscls;
+		return _cntSclass;
 	}
 	/** Sets the style class used for the content block.
 	 *
@@ -123,9 +132,9 @@ public class Groupbox extends XulElement implements org.zkoss.zul.api.Groupbox {
 	 * @since 3.0.0
 	 */
 	public void setContentSclass(String scls) {
-		if (!Objects.equals(_cntscls, scls)) {
-			_cntscls = scls;
-			invalidate();
+		if (!Objects.equals(_cntSclass, scls)) {
+			_cntSclass = scls;
+			smartUpdate("contentSclass", _cntSclass);
 		}
 	}
 
@@ -191,17 +200,14 @@ public class Groupbox extends XulElement implements org.zkoss.zul.api.Groupbox {
 			insertBefore = getFirstChild();
 				//always makes caption as the first child
 			_caption = (Caption)child;
-			invalidate();
 		} else if (insertBefore instanceof Caption) {
 			throw new UiException("caption must be the first child");
 		}
 		return super.insertBefore(child, insertBefore);
 	}
 	public void onChildRemoved(Component child) {
-		if (child instanceof Caption) {
+		if (child instanceof Caption)
 			_caption = null;
-			invalidate();
-		}
 		super.onChildRemoved(child);
 	}
 

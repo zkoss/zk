@@ -580,11 +580,13 @@ zDom = { //static methods
 				n.outerHTML = html;
 		} if (n.outerHTML)
 			n.outerHTML = html;
-		else { //non-IE
-			var range = document.createRange();
-			range.setStartBefore(n);
-			var df = range.createContextualFragment(html);
-			parent.replaceChild(df, n);
+		else if (zk.gecko2Only && zDom.tag(n) == 'LEGEND') {
+			//A dirty fix (not work if html is not LEGEND
+			n.innerHTML = zDom._removeOuter(html);
+		} else { //non-IE
+			var range = n.ownerDocument.createRange();
+			range.selectNodeContents(n);
+			parent.replaceChild(range.createContextualFragment(html), n);
 		}
 
 		if (!html) n = null;
@@ -599,6 +601,10 @@ zDom = { //static methods
 				eval(ns[j].text);
 		}*/
 		return n;
+	},
+	_removeOuter: function (html) {
+		var j = html.indexOf('>') + 1, k = html.lastIndexOf('<');
+		return k >= j ? html.substring(j, k): html;
 	},
 	/** Inserts an unparsed HTML immediately before the specified element.
 	 * @param el the sibling before which to insert
@@ -731,21 +737,25 @@ zDom = { //static methods
 			//Workaround for an IE bug: we have to set focus twice since
 			//the first one might fail (even we prolong the timeout to 1 sec)
 	},
-	/** Focus to the specified component w/o throwing exception. */
+	/** Focus to the specified component w/o throwing exception.
+	 * @return whether n.focus() exists
+	 */
 	focus: function (n) {
 		n = zDom.$(n);
-		if (n && n.focus)
-			try {
-				n.focus();
-			} catch (e) {
-				setTimeout(function() {
-					try {
-						n.focus();
-					} catch (e) {
-						setTimeout(function() {try {n.focus();} catch (e) {}}, 100);
-					}
-				}, 0);
-			} //IE throws exception if failed to focus in some cases
+		if (!n || !n.focus) return true;
+
+		try {
+			n.focus();
+		} catch (e) {
+			setTimeout(function() {
+				try {
+					n.focus();
+				} catch (e) {
+					setTimeout(function() {try {n.focus();} catch (e) {}}, 100);
+				}
+			}, 0);
+		} //IE throws exception if failed to focus in some cases
+		return true;
 	},
 
 	/** Select the text of the element after the specified timeout.
