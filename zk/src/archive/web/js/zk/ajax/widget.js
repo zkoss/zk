@@ -39,6 +39,34 @@ zk.Widget = zk.$extends(zk.Object, {
 		this.uuid = uuid ? uuid: zk.Widget.nextUuid();
 		this.mold = mold ? mold: "default";
 	},
+
+	getSpaceOwner: function () {
+		for (var w = this; w; w = w.parent)
+			if (w._fellows) return w;
+		return null;
+	},
+	getFellow: function (id) {
+		var ow = this.getSpaceOwner();
+		return ow != null ? ow._fellows[id]: null;
+	},
+	getId: function () {
+		return this._id;
+	},
+	setId: function (id) {
+		var ow = this.getSpaceOwner();
+		var old = this._id;
+		if (ow && old) delete ow._fellows[id];
+		this._id = id;
+		if (ow && id) ow._fellows[id] = this;
+	},
+	_addIdSpaceDown: function (spowner, wgt) {
+		if (wgt._id)
+			spowner._fellows[wgt._id] = wgt;
+		if (!wgt._fellows)
+			for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
+				this._addIdSpaceDown(spowner, wgt);
+	},
+
 	/** Appends a child widget.
 	 */
 	appendChild: function (child) {
@@ -58,10 +86,12 @@ zk.Widget = zk.$extends(zk.Object, {
 			this.firstChild = this.lastChild = child;
 		}
 
+		var spowner = this.getSpaceOwner();
+		if (spowner != null)
+			this._addIdSpaceDown(spowner, child);
+
 		var dt = this.desktop;
-		if (dt)
-			this.insertChildHTML_(child, null, dt);
-			
+		if (dt) this.insertChildHTML_(child, null, dt);	
 	},
 	/** Inserts a child widget before the specified one.
 	 */
@@ -87,9 +117,12 @@ zk.Widget = zk.$extends(zk.Object, {
 		sibling.previousSibling = child;
 		child.nextSibling = sibling;
 
+		var spowner = this.getSpaceOwner();
+		if (spowner != null)
+			this._addIdSpaceDown(spowner, child);
+
 		var dt = this.desktop;
-		if (dt)
-			this.insertChildHTML_(child, sibling, dt);
+		if (dt) this.insertChildHTML_(child, sibling, dt);
 	},
 	/** Removes the specified child.
 	 */
@@ -621,6 +654,7 @@ zk.Page = zk.$extends(zk.Widget, {//unlik server, we derive from Widget!
 	type: "#p",
 
 	_style: "width:100%;height:100%",
+	_fellows: {},
 
 	$init: function (pgid, contained) {
 		this.uuid = pgid;
