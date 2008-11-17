@@ -682,9 +682,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>space</component-name>
 		<component-class>org.zkoss.zul.Space</component-class>
+		<widget-name>zul.wgt.Space</widget-name>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/separator.dsp</mold-uri>
+			<mold-uri>mold/space.js</mold-uri>
 		</mold>
 	</component>
 	<component>

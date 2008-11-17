@@ -114,54 +114,11 @@ public class Separator extends XulElement implements org.zkoss.zul.api.Separator
 		}
 	}
 
-	//-- super --//
-	public String getWidth() {
-		final String wd = super.getWidth();
-		return isHorizontal() || (wd != null && wd.length() > 0)
-			|| isPercentInFF() ? wd: _spacing;
-	}
-	public String getHeight() {
-		final String hgh = super.getHeight();
-		return isVertical() || (hgh != null && hgh.length() > 0)
-			|| isPercentInFF() ? hgh: _spacing;
-	}
-	/** Bug 1526742: FF ignores the width if % is specified.
-	 * In this case we have to use margin instead.
-	 */
-	private boolean isPercentInFF() {
-		if (_spacing != null && _spacing.endsWith("%")) {
-			final Execution exec = Executions.getCurrent();
-			return exec != null && exec.isGecko();
-		}
-		return false;
-	}
-	/** Bug 1526742: split % to half (20% -> 10%), if % and FF.
-	 */
-	private String splitPercentInFF() {
-		if (isPercentInFF()) {
-			try {
-				int v = Integer.parseInt(
-					_spacing.substring(0, _spacing.length() - 1).trim());
-				if (v > 0)
-					return v > 1 ? (v / 2) + "%": "1%";
-			} catch (Throwable ex) { //ignore if not recognizable
-			}
-		}
-		return null;
-	}
-	
 	//super//
 	public String getZclass() {
 		return _zclass != null ? _zclass:
 			"z-separator" + (isVertical() ? "-ver" + (isBar() ? "-bar" : "") :
 				"-hor" + (isBar() ? "-bar" : ""));
-	}
-
-	//-- Component --//
-	/** Default: not childable.
-	 */
-	public boolean isChildable() {
-		return false;
 	}
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
@@ -170,5 +127,12 @@ public class Separator extends XulElement implements org.zkoss.zul.api.Separator
 		render(renderer, "spacing", _spacing);
 		render(renderer, "orient", _orient);
 		render(renderer, "bar", _bar);
+	}
+
+	//-- Component --//
+	/** Default: not childable.
+	 */
+	public boolean isChildable() {
+		return false;
 	}
 }
