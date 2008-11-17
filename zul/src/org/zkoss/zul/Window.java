@@ -91,7 +91,7 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 	/** The style used for the content block. */
 	private String _cntStyle;
 	/** The style class used for the content block. */
-	private String _cntscls;
+	private String _cntSclass;
 	/** How to position the window. */
 	private String _pos;
 	/** Whether to show a close button. */
@@ -187,7 +187,7 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 				_minimized = false;
 				setVisible0(true); //avoid dead loop
 			}
-			smartUpdate("z.maximized", _maximized);
+			smartUpdate("maximized", _maximized);
 		}
 	}
 	/**
@@ -212,7 +212,7 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 	public void setMaximizable(boolean maximizable) {
 		if (_maximizable != maximizable) {
 			_maximizable = maximizable;
-			invalidate();
+			smartUpdate("maximizable", _maximizable);
 		}
 	}
 
@@ -240,7 +240,7 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 				_maximized = false;
 				setVisible0(false); //avoid dead loop
 			} else setVisible0(true);
-			smartUpdate("z.minimized", _minimized);
+			smartUpdate("minimized", _minimized);
 		}
 	}
 	/**
@@ -267,7 +267,7 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 	public void setMinimizable(boolean minimizable) {
 		if (_minimizable != minimizable) {
 			_minimizable = minimizable;
-			invalidate();
+			smartUpdate("minimizable", _minimizable);
 		}
 	}
 	/**
@@ -280,7 +280,7 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 		if (minheight < 0) minheight = 100;
 		if (_minheight != minheight) {
 			_minheight = minheight;
-			smartUpdate("z.minheight", _minheight);
+			smartUpdate("minheight", _minheight);
 		}
 	}
 	/**
@@ -301,7 +301,7 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 		if (minwidth < 0) minwidth = 200;
 		if (_minwidth != minwidth) {
 			_minwidth = minwidth;
-			smartUpdate("z.minwidth", _minwidth);
+			smartUpdate("minwidth", _minwidth);
 		}
 	}
 	/**
@@ -386,7 +386,7 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 			border = "none";
 		if (!Objects.equals(_border, border)) {
 			_border = border;
-			invalidate();
+			smartUpdate("border", border);
 		}
 	}
 
@@ -407,8 +407,7 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 			title = "";
 		if (!Objects.equals(_title, title)) {
 			_title = title;
-			if (_caption != null) _caption.invalidate();
-			else invalidate();
+			smartUpdate("title", title);
 		}
 	}
 
@@ -544,7 +543,6 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 			int oldmode = _mode;
 			boolean oldvisi = isVisible();
 
-			invalidate();
 			setVisible(true); //if MODAL, it must be visible; vice versa
 
 			try {
@@ -603,7 +601,7 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 		if (_mode != mode) {
 			if (_mode == MODAL) leaveModal();
 			_mode = mode;
-			invalidate();
+			smartUpdate("mode", _mode);
 		}
 		setVisible(true);
 	}
@@ -611,12 +609,16 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 	/** Set mode to MODAL and suspend this thread. */
 	private void enterModal() throws InterruptedException {
 		_mode = MODAL;
+		smartUpdate("mode", _mode);
+
 		//no need to synchronized (_mutex) because no racing is possible
 		Executions.wait(_mutex);
 	}
 	/** Resumes the suspendded thread and set mode to OVERLAPPED. */
 	private void leaveModal() {
 		_mode = OVERLAPPED;
+		smartUpdate("mode", _mode);
+
 		Executions.notifyAll(_mutex);
 	}
 	/** Makes sure it is not draggable. */
@@ -649,7 +651,7 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 	public void setClosable(boolean closable) {
 		if (_closable != closable) {
 			_closable = closable;
-			invalidate(); //re-init is required
+			smartUpdate("closable", closable); //re-init is required
 		}
 	}
 	/** Returns whether the window is sizable.
@@ -664,7 +666,7 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 	public void setSizable(boolean sizable) {
 		if (_sizable != sizable) {
 			_sizable = sizable;
-			smartUpdate("z.sizable", sizable);
+			smartUpdate("sizable", sizable);
 		}
 	}
 	/** Returns how to position the window at the client screen.
@@ -705,8 +707,7 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 	public void setPosition(String pos) {
 		//Note: we always update since the window might be dragged by an user
 		_pos = pos;
-		if (_mode != EMBEDDED)
-			smartUpdate("z.pos", pos);
+		smartUpdate("position", pos);
 	}
 
 	/** Process the onClose event sent when the close button is pressed.
@@ -733,7 +734,7 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 	public void setContentStyle(String style) {
 		if (!Objects.equals(_cntStyle, style)) {
 			_cntStyle = style;
-			smartUpdate("z.cntStyle", _cntStyle);
+			smartUpdate("contentStyle", _cntStyle);
 		}
 	}
 
@@ -742,7 +743,7 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 	 * @see #setContentSclass
 	 */
 	public String getContentSclass() {
-		return _cntscls;
+		return _cntSclass;
 	}
 	/** Sets the style class used for the content block.
 	 *
@@ -750,25 +751,36 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 	 * @since 3.0.0
 	 */
 	public void setContentSclass(String scls) {
-		if (!Objects.equals(_cntscls, scls)) {
-			_cntscls = scls;
-			invalidate();
+		if (!Objects.equals(_cntSclass, scls)) {
+			_cntSclass = scls;
+			smartUpdate("contentSclass", scls);
 		}
 	}
 
-	/** Returns the style class used for the title.
-	 *
-	 * <p>It returns "wt-<i>sclass</i>" is returned,
-	 * where <i>sclass</i> is the value returned by {@link #getSclass}.
-	 * @deprecated As of release 3.5.0
-	 */
-	public String getTitleSclass() {
-		return null;
-	}
-	
 	// super
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		render(renderer, "title", _title);
+		render(renderer, "maximized", _maximized);
+		render(renderer, "maximizable", _maximizable);
+		render(renderer, "minimized", _minimized);
+		render(renderer, "minimizable", _minimizable);
+		render(renderer, "closable", _closable);
+		render(renderer, "sizable", _sizable);
+		render(renderer, "position", _pos);
+		render(renderer, "contentStyle", _cntStyle);
+		render(renderer, "contentSclass", _cntSclass);
+		if (_minheight != 100) renderer.render("minheight", _minheight);
+		if (_minwidth != 200) renderer.render("minwidth", _minwidth);
+		if (!"none".equals(_border)) renderer.render("border", _border);
+
+		if (_mode != EMBEDDED) renderer.render("mode", modeToString(_mode));
+			//render mode as the last property
+	}
 	public String getZclass() {
-		return _zclass == null ? "z-window-" + getMode() : super.getZclass();
+		return _zclass != null ? _zclass: "z-window-" + getMode();
 	}
 
 	//-- Component --//
@@ -779,17 +791,14 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 			insertBefore = getFirstChild();
 				//always makes caption as the first child
 			_caption = (Caption)child;
-			invalidate();
 		} else if (insertBefore instanceof Caption) {
 			throw new UiException("caption must be the first child");
 		}
 		return super.insertBefore(child, insertBefore);
 	}
 	public void onChildRemoved(Component child) {
-		if (child instanceof Caption) {
+		if (child instanceof Caption)
 			_caption = null;
-			invalidate();
-		}
 		super.onChildRemoved(child);
 	}
 
@@ -822,10 +831,12 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 		if (!visible && (_mode == MODAL || _mode == HIGHLIGHTED)) {
 			if (_mode == MODAL)
 				leaveModal();
-			else _mode = OVERLAPPED;
-			invalidate();
+			else {
+				_mode = OVERLAPPED;
+				smartUpdate("mode", _mode);
+			}
 		} else if ( _mode != EMBEDDED) {
-			smartUpdate("z.visible", visible);
+			smartUpdate("visible", visible);
 		}
 		return super.setVisible(visible);
 	}
@@ -887,10 +898,9 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 				_visible = false;
 				if (_mode == MODAL) {
 					leaveModal();
-					invalidate();
 				} else if (_mode == HIGHLIGHTED) {
 					_mode = OVERLAPPED; // according to leaveModal()
-					invalidate();
+					smartUpdate("mode", _mode);
 				}
 			}
 		}

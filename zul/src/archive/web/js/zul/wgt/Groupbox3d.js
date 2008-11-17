@@ -46,7 +46,6 @@ zul.wgt.Groupbox3d = zk.$extends(zul.wgt.Groupbox, {
 	unbind_: function () {
 		this.epanel = e.ecave = e.esdw = null;
 
-		//no need to unlisten since DOM elements are GCed
 		this.$super('unbind_');
 	},
 
