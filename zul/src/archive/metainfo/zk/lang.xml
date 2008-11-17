@@ -926,9 +926,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>window</component-name>
 		<component-class>org.zkoss.zul.Window</component-class>
+		<widget-name>zul.wnd.Window</widget-name>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/window2.dsp</mold-uri>
+			<mold-uri>mold/window.js</mold-uri>
 		</mold>
 		<preserve-blank/>
 	</component>
