@@ -2730,8 +2730,8 @@ anima = {
 				if (!pos) pos = "topleft"
 				zEffect.MoveBy(n, 0, 0, {
 					duration:dur ? dur/1000: 0.6, name: "MoveBy",
-					beforeStart: anima._beforeAnimaHide,
-					afterFinish: anima._afterAnimaHide,
+					beforeStart: anima._beforeAnimaVisi,
+					afterFinish: anima._afterAnimaVisi,
 					afterSetup: function(effect) {
 						if (pos.indexOf("left") > -1) {
 							effect.options.x = effect.originalLeft;
