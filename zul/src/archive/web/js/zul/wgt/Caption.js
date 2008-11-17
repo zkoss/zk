@@ -41,7 +41,6 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 		if (n && parent.$instanceof(zul.wgt.Groupbox))
 			zEvt.unlisten(n, "click", zul.wgt.Caption.ongbclk);
 
-		//no need to unlisten since DOM elements are GCed
 		this.$super('unbind_');
 	},
 

@@ -121,9 +121,9 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			zEvt.unlisten(n, "focus", zulbtn.onfocus);
 			zEvt.unlisten(n, "blur", zulbtn.onblur);
 		}
-		//no need to unlisten since DOM elements are GCed
-		this.$super('unbind_');
+
 		this.ebox = this.ebtn = null;
+		this.$super('unbind_');
 	}
 },{
 	onover: function (evt) {
