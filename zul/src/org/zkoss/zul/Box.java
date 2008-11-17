@@ -357,14 +357,12 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 	 */
 	public String getChildInnerAttrs(Component child) {
 		final boolean vert = isVertical();
-		final StringBuffer sb = new StringBuffer(64);
-		if (vert && child instanceof Splitter) {
-			sb.append(" class=\"")
-				.append(((Splitter)child).getZclass())
-				.append("-outer-td\"");
-			return sb.toString();
-		} else if (child instanceof Splitter) return sb.toString(); // nothing do to.
+		if (child instanceof Splitter)
+			return vert ? " class=\"" + ((Splitter)child).getZclass()
+					+ "-outer-td\"": "";
+				//no need to handle visible here (see getChildOuterAttrs)
 
+		final StringBuffer sb = new StringBuffer(64);
 		final String align = toHalign(vert ? _align: _pack);
 		if (align != null && align.length() > 0) {
 			HTMLs.appendAttribute(sb, "align", align);
