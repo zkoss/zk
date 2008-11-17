@@ -18,7 +18,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <c:set var="zcls" value="${self.zclass}"/>
-<c:set var="titlesc" value="${self.titleSclass}"/>
 <c:set var="noborder" value="${'normal' != self.border ? '-noborder' : ''}"/>
 <div id="${self.uuid}" z.type="zul.wnd2.Wnd2" z.autoz="true"${self.outerAttrs}${self.innerAttrs}>
 <c:choose>
