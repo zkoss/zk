@@ -22,6 +22,7 @@ if (!window.zk) {
 <c:include page="domevt.js"/>
 <c:include page="drag.js"/>
 <c:include page="effect.js"/>
+<c:include page="anima.js"/>
 <c:include page="zkevt.js"/>
 <c:include page="widget.js"/>
 <c:include page="pkg.js"/>

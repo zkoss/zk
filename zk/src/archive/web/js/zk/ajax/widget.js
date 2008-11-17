@@ -160,28 +160,42 @@ zk.Widget = zk.$extends(zk.Object, {
 		return this._visible;
 	},
 	/** Sets whether this widget is visible.
-	 * <p>Deriving note: it invokes {@link #setChildDomVisible_}
-	 * to chage the visibility of the DOM node, if it has parent.
-	 * So, override {@link #setChildDomVisible_} if you eclose
-	 * with addition tags (such as TD).
+	 * <p>Component Implementation Node:
+	 * <ul><li>You might override {@link #onChildVisible}
+	 * to change the related DOM element, such as the additional
+	 * enclosing tags.</li>
+	 * <li>If you want to change the visibility of a child DOM element,
+	 * use {@link #setDomVisible}</li>
+	 * </ul>
 	 */
 	setVisible: function (visible) {
 		if (this._visible != visible) {
 			this._visible = visible;
+
+			var p = this.parent;
+			if (p && visible) p.onChildVisible(this, true); //becoming visible
+
 			var n = this.node;
-			if (n) {
-				var p = this.parent;
-				if (p) p.setChildDomVisible_(this, visible);
-				else zDom.setVisible(n, visible, this);
-			}
+			if (n) this.setDomVisible(n, visible);
+
+			if (p && !visible) p.onChildVisible(this, false); //become invisible
 		}
 	},
-	/** Sets the visibility of the DOM node of the specified child.
-	 * When it is called, this.node must be non-null.
-	 * @see #setVisible
+	/** Changes the visibility of a child DOM content of this widget.
+	 * Like {@link #setVisible}, it fires onVisible, if becoming visible,
+	 * and onHide, if becoming invisible
 	 */
-	setChildDomVisible_: function (child, visible) {
-		zDom.setVisible(child.node, visible, this);
+	setDomVisible: function (n, visible) {
+		if (!visible) zWatch.fireDown('onHide', -1, this);
+		n.style.display = visible ? '': 'none';
+		if (visible) zWatch.fireDown('onVisible', -1, this);
+	},
+	/** Called when a child's visiblity is changed or going to change.
+	 * <p>Default: does nothing.
+	 * Deriving class might override it to change the visibility
+	 * of the encosing tag, if any.
+	 */
+	onChildVisible: function (child, visible) {
 	},
 
 	/** Returns the width of this widget. */

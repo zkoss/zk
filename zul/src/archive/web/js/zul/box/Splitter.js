@@ -53,7 +53,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 				sibwgt = zk.Widget.$(sib),
 				fd = vert ? "height": "width", diff;
 			if (sib) {
-				zDom.setVisible(sib, open, sibwgt); //fire onVisible/onHide
+				sibwgt.setDomVisible(sib, open); //fire onVisible/onHide
 				sibwgt.parent._fixChildDomVisible(sibwgt, open);
 
 				diff = zk.parseInt(sib.style[fd]);
@@ -61,7 +61,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 				if (!before && sibwgt && !sibwgt.nextSibling) {
 					var sp = zDom.$(this.uuid + '$chdex2');
 					if (sp) {
-						zDom.setVisible(sp, open);
+						sp.style.display = open ? '': 'none'; //no onVisible/onHide
 						diff += zk.parseInt(sp.style[fd]);
 					}
 				}
@@ -152,7 +152,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			if (!colps || "none" == colps) return; //nothing to do
 
 			var sib = colps == "before" ? zulsplt._prev(nd, tn): zulsplt._next(nd, tn);
-			zDom.setVisible(sib, false); //no onHide at bind_
+			zDom.hide(sib); //no onHide at bind_
 			var sibwgt = zk.Widget.$(sib);
 			sibwgt.parent._fixChildDomVisible(sibwgt, false);
 

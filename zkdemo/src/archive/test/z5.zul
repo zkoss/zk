@@ -59,7 +59,15 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<separator bar="true"/>
 
 	<groupbox width="200px">
-		<caption label="Groupbox">
+		<caption image="/img/inet.png" label="Groupbox">
+			<button label="Label" onClick='self.parent.label += "!"'/>
+		</caption>
+		This is a group box
+		<button label="a button"/>
+		More in a group box
+	</groupbox>
+	<groupbox width="200px" mold="3d">
+		<caption image="/img/inet.png" label="Groupbox 3d">
 			<button label="Label" onClick='self.parent.label += "!"'/>
 		</caption>
 		This is a group box

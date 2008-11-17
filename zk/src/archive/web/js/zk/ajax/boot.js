@@ -301,7 +301,7 @@ function _zkDocDidResize () {
 	if (!_zkbResz.time) return; //already handled
 
 	var now = zUtl.now();
-	if (zk.loading /*TODO|| anima.count*/ || now < _zkbResz.time) {
+	if (zk.loading || zAnima.count || now < _zkbResz.time) {
 		setTimeout(_zkDocDidResize, 10);
 		return;
 	}

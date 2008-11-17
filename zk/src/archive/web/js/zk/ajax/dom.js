@@ -29,10 +29,10 @@ zDom = { //static methods
 		return n && n.tagName ? n.tagName.toUpperCase(): "";
 	},
 
-	hide: function(n) {
+	hide: function (n) {
 		n.style.display = 'none';
 	},
-	show: function() {
+	show: function (n) {
 		n.style.display = '';
 	},
 	/** Returns whether a DOM element is visible.
@@ -50,19 +50,6 @@ zDom = { //static methods
 			if (!zDom.isVisible(n, strict))
 				return false;
 		return true;
-	},
-	/** Sets whether to make a DOM element visible.
-	 */
-	setVisible: function (n, visible, objFireWatch) {
-		if (objFireWatch && !zDom.isRealVisible(n.parentNode))
-			objFireWatch = null;
-		if (objFireWatch && !visible)
-			zWatch.fireDown('onHide', -1, objFireWatch);
-
-		n.style.display = visible ? '': 'none';
-
-		if (objFireWatch && visible)
-			zWatch.fireDown('onVisible', -1, objFireWatch);
 	},
 
 	/** Returns the x coordination of the visible part. */
@@ -134,17 +121,25 @@ zDom = { //static methods
 	/**
 	 * Returns the revised width, which subtracted the size of its CSS border or padding, for the specified element.
 	 * @param size original size of the specified element. 
+	 * @param excludeMargin excludes the margins. You rarely need this unless
+	 * size is in term of the parent
 	 */
-	revisedWidth: function (el, size) {
+	revisedWidth: function (el, size, excludeMargin) {
 		size -= zDom.frameWidth(el);
+		if (size > 0 && excludeMargin)
+			size -= zDom.sumStyles(el, "lr", zDom.margins);
 		return size < 0 ? 0: size;
 	},
 	/**
 	 * Returns the revised width, which subtracted the size of its CSS border or padding, for the specified element.
 	 * @param size original size of the specified element. 
+	 * @param excludeMargin excludes the margins. You rarely need this unless
+	 * size is in term of the parent
 	 */
-	revisedHeight: function (el, size, isHgh) {
+	revisedHeight: function (el, size, excludeMargin) {
 		size -= zDom.frameHeight(el);
+		if (size > 0 && excludeMargin)
+			size -= zDom.sumStyles(el, "tb", zDom.margins);
 		return size < 0 ? 0: size;
 	},
 	/**
@@ -158,6 +153,26 @@ zDom = { //static methods
 	 */
 	frameHeight: function (el) {
 		return zDom.sumStyles(el, "tb", zDom.borders) + zDom.sumStyles(el, "tb", zDom.paddings);
+	},
+	/** Returns the maximal allowed height of the specified element.
+	 * In other words, it is the client height of the parent minus all sibling's.
+	 */
+	vflexHeight: function (el) {
+		var hgh = el.parentNode.clientHeight;
+		if (zk.ie6Only) { //IE6's clientHeight is wrong
+			var ref = el.parentNode;
+			var h = ref.style.height;
+			if (h && h.endsWith("px")) {
+				h = zDom.revisedHeight(ref, zk.parseInt(h));
+				if (h && h < hgh) hgh = h;
+			}
+		}
+
+		for (var p = el; p = p.previousSibling;)
+			if (p.offsetHeight && zDom.isVisible(p)) hgh -= p.offsetHeight; //may undefined
+		for (var p = el; p = p.nextSibling;)
+			if (p.offsetHeight && zDom.isVisible(p)) hgh -= p.offsetHeight; //may undefined
+		return hgh;
 	},
 
 	/** Calculates the cumulative scroll offset of an element in nested scrolling containers.
@@ -334,6 +349,20 @@ zDom = { //static methods
 			if (h > hgh) hgh = h;
 		}
 		return hgh;
+	},
+	/** Returns el.offsetTop, which solving Safari's bug. */
+	offsetTop: function (el) {
+		if (!el) return 0;
+		if (zk.safari && $tag(el) === "TR" && el.cells.length)
+			el = el.cells[0];
+		return el.offsetTop;
+	},
+	/** Returns el.offsetLeft, which solving Safari's bug. */
+	offsetLeft: function (el) {
+		if (!el) return 0;
+		if (zk.safari && $tag(el) === "TR" && el.cells.length)
+			el = el.cells[0];
+		return el.offsetLeft;
 	},
 
 	/* Returns the X/Y coordinates of element relative to the viewport. */

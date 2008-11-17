@@ -46,7 +46,7 @@ zUtl = { //static methods
 	},
 
 	/** The same as ' cellpadding="0" cellspacing="0"'. */
- 	cellps0: ' cellpadding="0" cellspacing="0"',
+ 	cellps0: ' cellpadding="0" cellspacing="0" border="0"',
  	/** The same as '<img style="height:0;width:0"/>'. */
  	img0: '<img style="height:0;width:0"/>',
  
@@ -55,26 +55,6 @@ zUtl = { //static methods
 	 */
 	now: function () {
 		return new Date().getTime();
-	},
-	/** Executes a method after the specified delay (milliseconds).
-	 * It is the same as window.setTimeout except <code>this</code> refers
-	 * to the specified object, <code>obj</code>.
-	 */
-	setTimeout: function (obj, method, timeout/*, ...*/) {
-		var args = [];
-		for (var j = arguments.length; --j >= 3;)
-			args.unshift(arguments[j]);
-		setTimeout(function () {method.apply(obj, args)}, timeout);
-	},
-	/** Schedules a method or repeated execution.
-	 * It is the same as window.setInterval exception <code>this</code> refers
-	 * to the specified object, <code>obj</code>.
-	 */
-	setInterval: function (obj, method, period/*, ...*/) {
-		var args = [];
-		for (var j = arguments.length; --j >= 3;)
-			args.unshift(arguments[j]);
-		setInterval(function () {method.apply(obj, args)}, period);
 	},
 	/** Returns whether the first argument is the same, or an ancestor
 	 * of the second argument.

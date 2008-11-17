@@ -15,6 +15,9 @@ Copyright (c) 2005, 2006 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.
 This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+/** The low level animation effect.
+ * You don't use this class. Rather, use {@link zAnima} instead.
+ */
 zEffect = {
 	fade: function(element, opts) {
 		element = zDom.$(element);
@@ -379,7 +382,7 @@ zEffect._Base = zk.$extends(zk.Object, {
 		this.finishOn = this.startOn + (this.opts.duration*1000);
 		this.event('beforeStart');
 
-		if(!this.opts.sync) zEffect._Queue.$add(this);
+		if(!this.opts.sync) zEffect._Queue.add(this);
 	},
 	loop: function(timePos) {
 		if(timePos >= this.startOn) {
@@ -418,7 +421,7 @@ zEffect._Base = zk.$extends(zk.Object, {
 	},
 	cancel: function() {
 		if(!this.opts.sync)
-			zEffect._Queue.$remove(this);
+			zEffect._Queue.remove(this);
 		this.state = 'finished';
 	},
 	event: function(eventName) {

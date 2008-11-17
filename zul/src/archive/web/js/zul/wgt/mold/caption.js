@@ -19,8 +19,34 @@ function () {
 			html += w.redraw();
 		return html + '</legend>';
 	}
-	var html = '<div' + this.domAttrs_() + '>';
+
+	var zcls = this.getZclass(),
+		cnt = this.domContent_(),
+		parent = this.parent;
+		puuid = parent.uuid,
+		pzcls = parent.getZclass(),
+		html = '<table' + this.domAttrs_() + zUtl.cellps0
+			+ ' width="100%"><tr valign="middle"><td align="left" class="'
+			+ zcls + '-l">' + (cnt?cnt:'&nbsp;') //Bug 1688261: nbsp required
+			+ '</td><td align="right" class="' + zcls
+			+ '-r" id="' + this.uuid + '$cave">';
 	for (var w = this.firstChild; w; w = w.nextSibling)
 		html += w.redraw();
-	return html + '</div>';
+
+	html += '</td>';
+	if (this._isMinimizeVisible())
+		html += '<td width="16"><div id="' + puuid + '$min" class="'
+			+ pzcls + '-tool ' + pzcls +'-minimize"></div></td>';
+	if (this._isMaximizeVisible()) {
+		html += '<td width="16"><div id="' + puuid + '$max" class="'
+			+ pzcls + '-tool ' + pzcls + '-maximize';
+		if (parent.isMaximized())
+			html += ' ' + pzcls + '-maximized';
+		html += '"></div></td>';
+	}
+	if (this._isCloseVisible())
+		html += '<td width="16"><div id="' + puuid + '$close" class="'
+			+ pzcls + '-tool ' + pzcls + '-close"></div></td>';
+
+	return html + '</tr></table>';
 }

@@ -27,7 +27,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 			if (this.node) {
 				zDom[open ? 'rmClass': 'addClass'](this.node, this.getZclass() + "-collapsed");
 				if (!fromServer) this.fire2('onOpen', open);
-				if (open) zWatch.fireDown('onSize', -1, this);
+				zWatch.fireDown(open ? 'onVisible': 'onHide', -1, this);
 			}
 		}
 	},
@@ -43,7 +43,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	setContentStyle: function (style) {
 		if (this._cntStyle != style) {
 			this._cntStyle = style;
-			//TODO
+			//TODO: call Groupbox3d.onSize (_fixHgh)
 		}
 	},
 	getContentSclass: function () {
@@ -52,7 +52,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	setContentSclass: function (sclass) {
 		if (this._cntSclass != sclass) {
 			this._cntSclass = sclass;
-			//TODO
+			//TODO: call Groupbox3d.onSize (_fixHgh)
 		}
 	},
 
