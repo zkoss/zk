@@ -13,10 +13,12 @@ This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 zul.wgt.Groupbox = zk.$extends(zul.Widget, {
-	legend: true,
 	_open: true,
 	_closable: true,
 
+	isLegend: function () {
+		return this.mold == 'default';
+	},
 	isOpen: function () {
 		return this._open;
 	},
@@ -25,9 +27,15 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 			this._open = open;
 
 			if (this.node) {
-				zDom[open ? 'rmClass': 'addClass'](this.node, this.getZclass() + "-collapsed");
+				var panel = this.epanel;
+				if (panel) { //!legend
+					if (open) zAnima.slideDown(this, panel, {afterAnima: this._afterSlideDown});
+					else zAnima.slideUp(this, panel, {beforeAnima: this._beforeSlideUp});
+				} else {
+					zDom[open ? 'rmClass': 'addClass'](this.node, this.getZclass() + "-collapsed");
+					zWatch.fireDown(open ? 'onVisible': 'onHide', -1, this);
+				}
 				if (!fromServer) this.fire2('onOpen', open);
-				zWatch.fireDown(open ? 'onVisible': 'onHide', -1, this);
 			}
 		}
 	},
@@ -60,9 +68,37 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		var html = ' class="', s = this._cntSclass;
 		if (s) html += s + ' ';
 		html += this.getZclass() + '-cnt"';
+
 		s = this._cntStyle;
+		if (!this.isLegend() && this.caption) s = 'border-top:0;' + (s ? s: '');
 		if (s) html += ' style="' + s + '"';
 		return html;
+	},
+
+	//watch//
+	onSize: function () {
+		var n = this.ecave;
+		if (n) {
+			var hgh = this.node.style.height;
+			if (hgh && hgh != "auto") {
+				if (zk.ie6Only) n.style.height = "";
+				n.style.height =
+					zDom.revisedHeight(zDom.vflexHeight(n.parentNode), true);
+					//we use n.parentNode(=this.epanel) to calc vflex,
+					//so we have to subtract margin, too
+			}
+		}
+		var sdw = this.esdw;
+		if (sdw)
+			sdw.style.display =
+				zk.parseInt(zDom.getStyle(n, "border-bottom-width")) ? "": "none";
+			//if no border-bottom, hide the shadow
+	},
+	_afterSlideDown: function (n) {
+		zWatch.fireDown("onVisible", -1, this);
+	},
+	_beforeSlideUp: function (n) {
+		zWatch.fireDown("onHide", -1, this);
 	},
 
 	//super//
@@ -78,7 +114,24 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	},
 	getZclass: function () {
 		var zcls = this._zclass;
-		return zcls ? zcls: "z-fieldset";
+		return zcls ? zcls: this.isLegend() ? "z-fieldset": "z-groupbox";
+	},
+	bind_: function (desktop) {
+		this.$super('bind_', desktop);
+
+		if (!this.isLegend()) {
+			var uuid = this.uuid;
+			this.epanel = zDom.$(uuid + '$panel');
+			this.ecave = zDom.$(uuid + '$cave');
+			this.esdw = zDom.$(uuid + '$sdw');
+
+			this.onSize(); //fix height and shadow
+		}
+	},
+	unbind_: function () {
+		this.epanel = this.ecave = this.esdw = null;
+
+		this.$super('unbind_');
 	},
 
 	appendChild: function (child) {

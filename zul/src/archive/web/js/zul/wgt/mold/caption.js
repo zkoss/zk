@@ -13,7 +13,8 @@ This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function () {
-	if (this.parent.legend) {
+	var parent = this.parent;
+	if (parent.isLegend && parent.isLegend()) {
 		var html = '<legend' + this.domAttrs_() + '>' + this.domContent_();
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			html += w.redraw();
@@ -22,7 +23,6 @@ function () {
 
 	var zcls = this.getZclass(),
 		cnt = this.domContent_(),
-		parent = this.parent;
 		puuid = parent.uuid,
 		pzcls = parent.getZclass(),
 		html = '<table' + this.domAttrs_() + zUtl.cellps0

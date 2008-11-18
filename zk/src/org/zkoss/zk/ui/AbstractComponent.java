@@ -1281,8 +1281,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			if (!_def.hasMold(mold))
 				throw new UiException("Unknown mold: "+mold
 					+", while allowed include "+_def.getMoldNames());
+			final String oldtype = getWidgetType();
 			_mold = mold;
-			invalidate();
+			if (Objects.equals(oldtype, getWidgetType()))
+				smartUpdate("mold", _mold);
+			else
+				invalidate();
 		}
 	}
 

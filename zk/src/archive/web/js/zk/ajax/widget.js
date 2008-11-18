@@ -32,12 +32,23 @@ zk.Widget = zk.$extends(zk.Object, {
 	/** Whether this widget has a copy at the server (readonly). */
 	//inServer: false,
 
-	_visible: true,
+	visible: true,
 
 	/** Constructor. */
 	$init: function (uuid, mold) {
 		this.uuid = uuid ? uuid: zk.Widget.nextUuid();
 		this.mold = mold ? mold: "default";
+	},
+
+	getMold: function () {
+		return this.mold;
+	},
+	setMold: function (mold) {
+		if (mold != this.mold) {
+			this.mold = mold;
+			var n = this.node;
+			if (n) this.rerender();
+		}
 	},
 
 	getSpaceOwner: function () {
@@ -157,7 +168,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	/** Returns whether this widget is visible. */
 	isVisible: function () {
-		return this._visible;
+		return this.visible;
 	},
 	/** Sets whether this widget is visible.
 	 * <p>Component Implementation Node:
@@ -169,8 +180,8 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * </ul>
 	 */
 	setVisible: function (visible) {
-		if (this._visible != visible) {
-			this._visible = visible;
+		if (this.visible != visible) {
+			this.visible = visible;
 
 			var p = this.parent;
 			if (p && visible) p.onChildVisible(this, true); //becoming visible
