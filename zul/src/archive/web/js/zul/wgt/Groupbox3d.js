@@ -22,8 +22,8 @@ zul.wgt.Groupbox3d = zk.$extends(zul.wgt.Groupbox, {
 
 			var panel = this.epanel;
 			if (panel) {
-				if (open) zAnima.slideDown(this, panel, null, 0);
-				else zAnima.slideUp(this, panel, null, 0);
+				if (open) zAnima.slideDown(this, panel, {afterAnima: this._afterSlideDown});
+				else zAnima.slideUp(this, panel, {beforeAnima: this._beforeSlideUp});
 
 				if (!fromServer) this.fire2('onOpen', open);
 			}
@@ -67,6 +67,12 @@ zul.wgt.Groupbox3d = zk.$extends(zul.wgt.Groupbox, {
 			sdw.style.display =
 				zk.parseInt(zDom.getStyle(n, "border-bottom-width")) ? "": "none";
 			//if no border-bottom, hide the shadow
+	},
+	_afterSlideDown: function (n) {
+		zWatch.fireDown("onVisible", -1, this);
+	},
+	_beforeSlideUp: function (n) {
+		zWatch.fireDown("onHide", -1, this);
 	},
 
 	//private//

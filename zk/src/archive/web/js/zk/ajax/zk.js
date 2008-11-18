@@ -144,11 +144,22 @@ zk = { //static methods
 		return cc == ' ' || cc == '\t' || cc == '\n' || cc == '\r';
 	},
 
-	/** Assigns a value to the specified property.
+	/** Assigns a value to the specified property, or assigns
+	 * a map of properties.
 	 * If setX is defined (assumes name is x), <code>o.setX(value)</code> is called.
 	 * If not defined, <code>o[name] = value</code> is called.
+	 * <p>Example,<code>zk.set(o, 'value', 12)</code><br/>
+	 * <code>zk.set(o, {value: 12, type: 'jet'});</code>
 	 */
 	set: function (o, name, value) {
+		if (arguments.length == 2) {
+			for (var p in name)
+				zk._set(o, p, name[p]);
+			return;
+		}
+		zk._set(o, name, value);
+	},
+	_set: function (o, name, value) {
 		var m = o['set' + name.charAt(0).toUpperCase() + name.substring(1)];
 		if (m) m.call(o, value);
 		else o[name] = value;
