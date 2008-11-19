@@ -562,7 +562,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			if (asap != zk.undefined
 			|| (ies != null && ies.$contains(evtnm)))
 				zAu.send(evt,
-					asap ? timeout >= 0 ? timeout: 38: this.auDelay());
+					asap ? timeout >= 0 ? timeout: 38: this.getAuDelay());
 		}
 	},
 	/** A simpler way to fire an event. */
@@ -598,8 +598,28 @@ zk.Widget = zk.$extends(zk.Object, {
 	/** Returns the delay before sending a deferrable event.
 	 * <p>Default: -1.
 	 */
-	auDelay: function () {
+	getAuDelay: function () {
 		return -1;
+	},
+
+	//DOM event handling//
+	/** Callback this method if you listen onfocus. */
+	domFocus: function () {
+		zk.currentFocus = this;
+
+		//TODO: handle zIndex, close floats
+
+		if (this.isListen('onFocus'))
+			this.fire2("onFocus");
+	},
+	/** Callback this method if you listen onblur. */
+	domBlur: function () {
+		zk.currentFocus = null;
+
+		//TODO: handle validation
+
+		if (this.isListen('onBlur'))
+			this.fire2("onBlur");
 	}
 
 }, {
@@ -631,28 +651,17 @@ zk.Widget = zk.$extends(zk.Object, {
 		return null;
 	},
 
-	//DOM event//
-	doMouseDown: function (wgt) {
-		if (wgt.canFocus()) {
+	//Event Handling//
+	/** This method is always called unless you invoke zEvt.stop
+	 * in onmousedown listener. Thus, Callback this method only if it
+	 * is this case.
+	 * @param wgt the widget which might be null if not click on any widget
+	 */
+	domMouseDown: function (wgt) {
+		if (!wgt || wgt.canFocus()) {
 			zk.currentFocus = wgt;
 			//TODO: close floats, and fix z-index
 		}
-	},
-	doFocus: function (wgt) {
-		zk.currentFocus = wgt;
-
-		//TODO: handle zIndex, close floats
-
-		if (wgt.isListen('onFocus'))
-			wgt.fire2("onFocus");
-	},
-	doBlur: function (wgt) {
-		zk.currentFocus = null;
-
-		//TODO: handle validation
-
-		if (wgt.isListen('onBlur'))
-			wgt.fire2("onBlur");
 	},
 
 	//uuid//
@@ -666,7 +675,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	/** Returns the next unquie widget UUID.
 	 */
 	nextUuid: function () {
-		return "_z_" + this._nextUuid++;
+		return "_z_" + zk.Widget._nextUuid++;
 	},
 	_nextUuid: 0
 });

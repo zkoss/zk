@@ -223,28 +223,28 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this.$super('bind_', desktop);
 
 		var uuid = this. uuid,
-			zulwnd = zul.wnd.Window;
+			$Window = this.$class;
 		for (var nms = ['close', 'max', 'min'], j = 3; --j >=0;) {
 			var nm = nms[j],
 				n = this['e' + nm ] = zDom.$(uuid + '$' + nm);
 			if (n) {
-				zEvt.listen(n, 'click', zulwnd[nm + 'click']);
-				zEvt.listen(n, 'mouseover', zulwnd[nm + 'over']);
-				zEvt.listen(n, 'mouseout', zulwnd[nm + 'out']);
+				zEvt.listen(n, 'click', $Window[nm + 'click']);
+				zEvt.listen(n, 'mouseover', $Window[nm + 'over']);
+				zEvt.listen(n, 'mouseout', $Window[nm + 'out']);
 				if (!n.style.cursor) n.style.cursor = "default";
 			}
 		}
 	},
 	unbind_: function () {
-		var zulwnd = zul.wnd.Window;
+		var $Window = this.$class;
 		for (var nms = ['close', 'max', 'min'], j = 3; --j >=0;) {
 			var nm = nms[j],
 				n = this['e' + nm ];
 			if (n) {
 				this['e' + nm ] = null;
-				zEvt.unlisten(n, 'click', zulwnd[nm + 'click']);
-				zEvt.unlisten(n, 'mouseover', zulwnd[nm + 'over']);
-				zEvt.unlisten(n, 'mouseout', zulwnd[nm + 'out']);
+				zEvt.unlisten(n, 'click', $Window[nm + 'click']);
+				zEvt.unlisten(n, 'mouseover', $Window[nm + 'over']);
+				zEvt.unlisten(n, 'mouseout', $Window[nm + 'out']);
 			}
 		}
 		this.$super('unbind_');

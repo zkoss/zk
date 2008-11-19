@@ -13,7 +13,7 @@ This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 //zk//
-zk = { //static methods
+zk = { //static members
 	/** The ZK version. */
 	//version: '5.0.0',
 	/** The ZK build number. */
@@ -80,22 +80,25 @@ zk = { //static methods
 
 	/** Declares a class that extendss the specified base class.
 	 * @param superclass the super class.
-	 * @param methods the non-static methods
-	 * @param staticMethods the static methods.
+	 * @param members the non-static members
+	 * @param staticMembers the static members.
 	 */
-	$extends: function (superclass, methods, staticMethods) {
+	$extends: function (superclass, members, staticMembers) {
 	//Note: we cannot use extends due to IE and Safari
 		var jclass = function() {
 			this.$init.apply(this, arguments);
 		};
 
 		zk.$copy(jclass.prototype, superclass.prototype); //inherit non-static
-		zk.$copy(jclass.prototype, methods);
+		zk.$copy(jclass.prototype, members);
 
-		for (var p in superclass) //inherit static methods
-			if (p != 'prototype')
-				jclass[p] = superclass[p];
-		zk.$copy(jclass, staticMethods);
+		for (var p in superclass) //inherit static methods only
+			if (p != 'prototype') {
+				var v = superclass[p];
+				if (typeof v == 'function')
+					jclass[p] = v;
+			}
+		zk.$copy(jclass, staticMembers);
 
 		jclass.prototype.$class = jclass;
 		jclass.prototype._$super = superclass.prototype;

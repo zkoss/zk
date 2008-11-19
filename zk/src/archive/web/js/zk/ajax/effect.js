@@ -34,7 +34,6 @@ zEffect = {
 			};
 		return new zEffect.Opacity(element,opts);
 	},
-
 	appear: function(element, opts) {
 		element = zDom.$(element);
 		opts = zk.$default(opts, {to: 1.0});

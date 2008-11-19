@@ -168,8 +168,8 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	_childInnerAttrs: function (child) {
 		var html = '',
 			vert = this.isVertical(),
-			zulsplt = zul.box.Splitter;
-		if (child.$instanceof(zulsplt))
+			$Splitter = zul.box.Splitter;
+		if (child.$instanceof($Splitter))
 			return vert ? ' class="' + child.getZclass() + '-outer-td"': '';
 				//spliter's display handled in _childOuterAttrs
 
@@ -184,7 +184,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 					style = (vert ? 'height:':'width:') + szes[j];
 					break;
 				}
-				if (!c.$instanceof(zulsplt))
+				if (!c.$instanceof($Splitter))
 					++j;
 			}
 		}
@@ -211,10 +211,10 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	onSize: _zkf = function () {
 		if (!this.isRealVisible()) return;
 
-		var zulsplt = zul.box.Splitter;
+		var $Splitter = zul.box.Splitter;
 		for (var c = this.firstChild;; c = c.nextSibling) {
 			if (!c) return; //no splitter
-			if (c.$instanceof(zulsplt)) //whether the splitter has been dragged
+			if (c.$instanceof($Splitter)) //whether the splitter has been dragged
 				break;
 		}
 

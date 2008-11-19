@@ -255,7 +255,8 @@ var _zkbWgts = [], zkcurdt, _zkbcrs = []; //used to load widget
 function _zkDocKeyDown(evt) {
 }
 function _zkDocMouseDown(evt) {
-	zk.Widget.doMouseDown(zk.Widget.$(evt), evt);
+	var $Widget = zk.Widget;
+	$Widget.domMouseDown($Widget.$(evt));
 }
 function _zkDocMouseOver(evt) {
 }

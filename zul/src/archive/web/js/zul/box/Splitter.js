@@ -47,9 +47,9 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			var nd = zDom.$(node.id + "$chdex"),
 				tn = zDom.tag(nd),
 				vert = this.isVertical(),
-				zulsplt = zul.box.Splitter,
+				$Splitter = this.$class,
 				before = colps == "before",
-				sib = before ? zulsplt._prev(nd, tn): zulsplt._next(nd, tn),
+				sib = before ? $Splitter._prev(nd, tn): $Splitter._next(nd, tn),
 				sibwgt = zk.Widget.$(sib),
 				fd = vert ? "height": "width", diff;
 			if (sib) {
@@ -67,7 +67,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 				}
 			}
 
-			sib = before ? zulsplt._next(nd, tn): zulsplt._prev(nd, tn);
+			sib = before ? $Splitter._next(nd, tn): $Splitter._prev(nd, tn);
 			if (sib) {
 				diff = zk.parseInt(sib.style[fd]) + (open ? -diff: diff);
 				if (diff < 0) diff = 0;
@@ -126,7 +126,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			//Bug 1921830: if spiltter is invalidated...
 
 		var node = this.node,
-			zulsplt = zul.box.Splitter;
+			$Splitter = this.$class;
 			vert = this.isVertical();
 			btn = this.button = zDom.$(this.uuid + '$btn');
 		node.style.cursor = this.isOpen() ?
@@ -134,24 +134,24 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		btn.style.cursor = "pointer";
 
 		if (zk.ie) {
-			zEvt.listen(btn, "mouseover", zulsplt.onover);
-			zEvt.listen(btn, "mouseout", zulsplt.onout);
+			zEvt.listen(btn, "mouseover", $Splitter.onover);
+			zEvt.listen(btn, "mouseout", $Splitter.onout);
 		}
-		zEvt.listen(btn, "click", zulsplt.onclick);
+		zEvt.listen(btn, "click", $Splitter.onclick);
 
 		this._fixbtn();
 
 		this._drag = new zk.Draggable(this, node, {
-			constraint: this.getOrient(), ignoredrag: zulsplt._ignoresizing,
-			ghosting: zulsplt._ghostsizing, overlay: true,
-			snap: zulsplt._snap, endeffect: zulsplt._endDrag});
+			constraint: this.getOrient(), ignoredrag: $Splitter._ignoresizing,
+			ghosting: $Splitter._ghostsizing, overlay: true,
+			snap: $Splitter._snap, endeffect: $Splitter._endDrag});
 
 		if (!this.isOpen()) {
 			var nd = zDom.$(node.id + "$chdex"), tn = zDom.tag(nd),
 				colps = this.getCollapse();
 			if (!colps || "none" == colps) return; //nothing to do
 
-			var sib = colps == "before" ? zulsplt._prev(nd, tn): zulsplt._next(nd, tn);
+			var sib = colps == "before" ? $Splitter._prev(nd, tn): $Splitter._next(nd, tn);
 			zDom.hide(sib); //no onHide at bind_
 			var sibwgt = zk.Widget.$(sib);
 			sibwgt.parent._fixChildDomVisible(sibwgt, false);
@@ -164,14 +164,14 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		zWatch.unwatch("beforeSize", this);
 		zWatch.unwatch("onVisible", this);
 
-		var zulsplt = zul.box.Splitter,
+		var $Splitter = this.$class,
 			btn = this.button;
 		if (btn) {
 			if (zk.ie) {
-				zEvt.unlisten(btn, "mouseover", zulsplt.onover);
-				zEvt.unlisten(btn, "mouseout", zulsplt.onout);
+				zEvt.unlisten(btn, "mouseover", $Splitter.onover);
+				zEvt.unlisten(btn, "mouseout", $Splitter.onout);
 			}
-			zEvt.unlisten(btn, "click", zulsplt.onclick);
+			zEvt.unlisten(btn, "click", $Splitter.onclick);
 		}
 
 		this._snapx = null;
@@ -273,7 +273,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	_fixszAll: function () {
 		//1. find the topmost box
 		var box = this.parent;
-		if (box) zul.box.Splitter._fixKidSplts(box.node);
+		if (box) this.$class._fixKidSplts(box.node);
 		else this._fixsz();
 	}
 },{
@@ -293,9 +293,9 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		run.org = zDom.cmOffset(node);
 		var nd = zDom.$(node.id + "$chdex"),
 			tn = zDom.tag(nd),
-			zulsplt = zul.box.Splitter;
-		run.prev = zulsplt._prev(nd, tn);
-		run.next = zulsplt._next(nd, tn);
+			$Splitter = zul.box.Splitter;
+		run.prev = $Splitter._prev(nd, tn);
+		run.next = $Splitter._next(nd, tn);
 		run.prevwgt = wgt.previousSibling;
 		run.nextwgt = wgt.nextSibling;
 		run.z_offset = zDom.cmOffset(node);
@@ -318,8 +318,8 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	_endDrag: function (draggable) {
 		var wgt = draggable.widget,
 			node = wgt.node,
-			zulsplt = zul.box.Splitter,
-			flInfo = zulsplt._fixLayout(wgt),
+			$Splitter = zul.box.Splitter,
+			flInfo = $Splitter._fixLayout(wgt),
 			run = draggable.run, diff, fd;
 
 		if (wgt.isVertical()) {
@@ -354,7 +354,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		if (run.nextwgt) zWatch.fireDown('onSize', -1, run.nextwgt);
 		if (run.prevwgt) zWatch.fireDown('onSize', -1, run.prevwgt);
 
-		zulsplt._unfixLayout(flInfo);
+		$Splitter._unfixLayout(flInfo);
 			//Stange (not know the cause yet): we have to put it
 			//befor _fixszAll and after onSize
 
@@ -395,12 +395,12 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	_fixKidSplts: function (n) {
 		if (zDom.isVisible(n)) { //n might not be an element
 			var wgt = n.z_wgt, //don't use zk.Widget.$ since we check each node
-				zulsplt = zul.box.Splitter;
-			if (wgt && wgt.$instanceof(zulsplt))
+				$Splitter = zul.box.Splitter;
+			if (wgt && wgt.$instanceof($Splitter))
 				wgt._fixsz();
 
 			for (n = n.firstChild; n; n = n.nextSibling)
-				zulsplt._fixKidSplts(n);
+				$Splitter._fixKidSplts(n);
 		}
 	}
 });

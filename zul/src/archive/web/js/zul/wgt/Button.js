@@ -94,32 +94,32 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 
 		if (this.isDisabled()) return;
 
-		var zulbtn = zul.wgt.Button,
+		var $Button = zul.wgt.Button,
 			n = zDom.$(this.uuid + '$box');
 		this.ebox = n;
 		zDom.disableSelection(n);
-		zEvt.listen(n, "mousedown", zulbtn.ondown);
-		zEvt.listen(n, "mouseup", zulbtn.onup);
-		zEvt.listen(n, "mouseover", zulbtn.onover);
-		zEvt.listen(n, "mouseout", zulbtn.onout);
+		zEvt.listen(n, "mousedown", $Button.ondown);
+		zEvt.listen(n, "mouseup", $Button.onup);
+		zEvt.listen(n, "mouseover", $Button.onover);
+		zEvt.listen(n, "mouseout", $Button.onout);
 
 		this.ebtn = n = zDom.$(this.uuid + '$btn');
-		zEvt.listen(n, "focus", zulbtn.onfocus);
-		zEvt.listen(n, "blur", zulbtn.onblur);
+		zEvt.listen(n, "focus", $Button.onfocus);
+		zEvt.listen(n, "blur", $Button.onblur);
 	},
 	unbind_: function () {
-		var zulbtn = zul.wgt.Button,
+		var $Button = zul.wgt.Button,
 			n = this.ebox;
 		if (n) {
-			zEvt.unlisten(n, "mousedown", zulbtn.ondown);
-			zEvt.unlisten(n, "mouseup", zulbtn.onup);
-			zEvt.unlisten(n, "mouseover", zulbtn.onover);
-			zEvt.unlisten(n, "mouseout", zulbtn.onout);
+			zEvt.unlisten(n, "mousedown", $Button.ondown);
+			zEvt.unlisten(n, "mouseup", $Button.onup);
+			zEvt.unlisten(n, "mouseover", $Button.onover);
+			zEvt.unlisten(n, "mouseout", $Button.onout);
 		}
 		n = this.ebtn;
 		if (n) {
-			zEvt.unlisten(n, "focus", zulbtn.onfocus);
-			zEvt.unlisten(n, "blur", zulbtn.onblur);
+			zEvt.unlisten(n, "focus", $Button.onfocus);
+			zEvt.unlisten(n, "blur", $Button.onblur);
 		}
 
 		this.ebox = this.ebtn = null;
@@ -140,12 +140,12 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 
 		var wgt = zk.Widget.$(evt);
 		zDom.addClass(wgt.ebox, wgt.getZclass() + "-focus");
-		zk.Widget.doFocus(wgt);
+		wgt.domFocus();
 	},
 	onblur: function (evt) {
 		var wgt = zk.Widget.$(evt);
 		zDom.rmClass(wgt.ebox, wgt.getZclass() + "-focus");
-		zk.Widget.doBlur(wgt);
+		wgt.domBlur();
 	},
 	ondown: function (evt) {
 		var wgt = zk.Widget.$(evt),
@@ -155,20 +155,20 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		zDom.addClass(box, zcls + "-over");
 		zDom.asyncFocus(wgt.ebtn, 30);
 
-		var zulbtn = zul.wgt.Button;
-		zulbtn._curdn = wgt;
-		zEvt.listen(document.body, "mouseup", zulbtn.onup);
+		var $Button = zul.wgt.Button;
+		$Button._curdn = wgt;
+		zEvt.listen(document.body, "mouseup", $Button.onup);
 	},
 	onup: function (evt) {
-		var zulbtn = zul.wgt.Button,
-			wgt = zulbtn._curdn;
+		var $Button = zul.wgt.Button,
+			wgt = $Button._curdn;
 		if (wgt) {
-			zulbtn._curdn = null;
+			$Button._curdn = null;
 			var box = wgt.ebox,
 				zcls = wgt.getZclass();
 			zDom.rmClass(box, zcls + "-clk");
 			zDom.rmClass(box, zcls + "-over");
 		}
-		zEvt.unlisten(document.body, "mouseup", zulbtn.onup);
+		zEvt.unlisten(document.body, "mouseup", $Button.onup);
 	}
 });
