@@ -1286,9 +1286,10 @@ zk._cleanupAt = function (n) {
 		zk._szcmps.remove(n.id);
 		zk._bfszcmps.remove(n.id);
 		zk._scrlcmps.remove(n.id);
-		zk.unAll(n); // since 3.5.0
 	}
-
+	// bug #2313106 whatever it is, we shall invoke zk.unAll()
+	zk.unAll(n); // since 3.5.0
+	
 	for (n = n.firstChild; n; n = n.nextSibling)
 		if (n.nodeType == 1) zk._cleanupAt(n); //recursive for child component
 };
