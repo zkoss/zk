@@ -62,8 +62,7 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 	}
 },{
 	ongbclk: function (evt) {
-		if (!evt) evt = window.event;
-		var wgt = zEvt.widget(evt);
+		var wgt = zk.Widget.$(evt);
 		if (wgt && wgt.$instanceof(zul.wgt.Caption)) { //caption
 			wgt = wgt.parent; //Groupbox
 			wgt.setOpen(!wgt.isOpen());

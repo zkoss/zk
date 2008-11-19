@@ -91,13 +91,15 @@ zk = { //static methods
 
 		zk.$copy(jclass.prototype, superclass.prototype); //inherit non-static
 		zk.$copy(jclass.prototype, methods);
+
+		for (var p in superclass) //inherit static methods
+			if (p != 'prototype')
+				jclass[p] = superclass[p];
 		zk.$copy(jclass, staticMethods);
 
 		jclass.prototype.$class = jclass;
 		jclass.prototype._$super = superclass.prototype;
 		jclass.superclass = superclass;
-		jclass.isInstance = superclass.isInstance;
-		jclass.isAssignableFrom = superclass.isAssignableFrom;
 		return jclass;
 	},
 	/** Provides the default values for the specified optios.

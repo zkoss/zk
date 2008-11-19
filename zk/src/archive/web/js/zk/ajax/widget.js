@@ -511,6 +511,21 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 		return false;
 	},
+	/** Checks if this widget can gain the focus.
+	 * <p>Default: return false if it is not a descendant of zk.currentModal.
+	 */
+	canFocus: function (checkOnly) {
+		var modal = zk.currentModal;
+		if (modal && !zUtl.isAncestor(modal, this)) {
+			if (!checkOnly) {
+				var cf = zk.currentFocus;
+				if (cf && !zUtl.isAncestor(modal, cf))
+					modal.focus();
+			}
+			return false;
+		}
+		return true;
+	},
 
 	//ZK event//
 	/** An array of important events. An import event is an event
@@ -592,17 +607,18 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * or the widget is attached to the DOM tree.
 	 * <p>Note: null is returned if the widget is not attached to the DOM tree
 	 * (i.e., not associated with an DOM element).
+	 * @param n an element, an element's ID, or an event (actually with
+	 * the target property)
 	 */
-	$: function (uuid) {
-		//1. No map from uuid to widget directly. rather, go thru DOM
+	$: function (n) {
+		//1. No map from element to widget directly. rather, go thru DOM
 		//2. We have to remove '$*' since $chdex is parentNode!
-		if (!uuid) return null;
-		var n;
-		if (typeof uuid == 'string') {
-			n = zDom.$(zk.Widget.uuid(uuid));
+		if (!n) return null;
+		if (typeof n == 'string') {
+			n = zDom.$(zk.Widget.uuid(n));
 		} else {
-			n = uuid;
-			uuid = n.id;
+			n = n.target || n.srcElement || n; //check DOM event first
+			var uuid = n.id;
 			if (uuid) {
 				var j = uuid.lastIndexOf('$');
 				if (j >= 0) n = zDom.$(uuid.substring(0, j));
@@ -614,6 +630,32 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 		return null;
 	},
+
+	//DOM event//
+	doMouseDown: function (wgt) {
+		if (wgt.canFocus()) {
+			zk.currentFocus = wgt;
+			//TODO: close floats, and fix z-index
+		}
+	},
+	doFocus: function (wgt) {
+		zk.currentFocus = wgt;
+
+		//TODO: handle zIndex, close floats
+
+		if (wgt.isListen('onFocus'))
+			wgt.fire2("onFocus");
+	},
+	doBlur: function (wgt) {
+		zk.currentFocus = null;
+
+		//TODO: handle validation
+
+		if (wgt.isListen('onBlur'))
+			wgt.fire2("onBlur");
+	},
+
+	//uuid//
 	/** Converts an ID (of a DOM element) to UUID.
 	 * It actually removes '$*'.
 	 */
@@ -621,7 +663,6 @@ zk.Widget = zk.$extends(zk.Object, {
 		var j = id.lastIndexOf('$');
 		return j >= 0 ? id.substring(0, j): id;
 	},
-
 	/** Returns the next unquie widget UUID.
 	 */
 	nextUuid: function () {

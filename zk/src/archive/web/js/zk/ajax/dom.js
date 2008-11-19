@@ -856,8 +856,7 @@ zDom = { //static methods
 				el.style.KhtmlUserSelect = "none"; 
 			else if (zk.ie)
 				el.onselectstart = function (evt) {
-					if (!evt) evt = window.event;
-					var n = zEvt.element(evt), tag = zDom.tag(n);
+					var n = zEvt.target(evt), tag = zDom.tag(n);
 					return tag == "TEXTAREA" || tag == "INPUT" && (n.type == "text" || n.type == "password");
 				};
 	},

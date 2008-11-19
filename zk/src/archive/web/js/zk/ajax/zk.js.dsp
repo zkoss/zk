@@ -19,11 +19,10 @@ if (!window.zk) {
 <c:include page="lang/mesg*.js"/>
 <c:include page="utl.js"/>
 <c:include page="dom.js"/>
-<c:include page="domevt.js"/>
+<c:include page="evt.js"/>
 <c:include page="drag.js"/>
 <c:include page="effect.js"/>
 <c:include page="anima.js"/>
-<c:include page="zkevt.js"/>
 <c:include page="widget.js"/>
 <c:include page="pkg.js"/>
 <c:include page="boot.js"/>

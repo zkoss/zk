@@ -255,8 +255,7 @@ var _zkbWgts = [], zkcurdt, _zkbcrs = []; //used to load widget
 function _zkDocKeyDown(evt) {
 }
 function _zkDocMouseDown(evt) {
-	if (!evt) evt = window.event;
-	zk.Event.doMouseDown(zEvt.widget(evt), evt);
+	zk.Widget.doMouseDown(zk.Widget.$(evt), evt);
 }
 function _zkDocMouseOver(evt) {
 }
@@ -265,8 +264,8 @@ function _zkDocMouseOut(evt) {
 function _zkDocClick(evt) {
 	if (!evt) evt = window.event;
 
-	if (evt.which == 1 || (evt.button == 0 || evt.button == 1)) {
-		var wgt = zEvt.widget(evt);
+	if (zEvt.leftClick(evt)) {
+		var wgt = zk.Widget.$(evt);
 		for (; wgt; wgt = wgt.parent) {
 			if (wgt.href) {
 				zUtl.go(href, false, wgt.target, "target");
@@ -284,7 +283,7 @@ function _zkDocClick(evt) {
 function _zkDocDblClick(evt) {
 	if (!evt) evt = window.event;
 
-	var wgt = zEvt.widget(evt);
+	var wgt = zk.Widget.$(evt);
 	for (; wgt; wgt = wgt.parent)
 		if (wgt.isListen('onDoubleClick')) {
 			wgt.fire2("onDoubleClick", zEvt.mouseData(evt, wgt.node), {ctl:true});

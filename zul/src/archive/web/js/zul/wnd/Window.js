@@ -251,60 +251,51 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	}
 },{ //static
 	closeclick: function (evt) {
-		if (!evt) evt = window.event;
-		var wnd = zEvt.widget(evt);
+		var wnd = zk.Widget.$(evt);
 		wnd.fire2('onClose');
 		zEvt.stop(evt);
 	},
 	closeover: function (evt) {
-		if (!evt) evt = window.event;
-		var wnd = zEvt.widget(evt),
+		var wnd = zk.Widget.$(evt),
 			zcls = wnd.getZclass();
 		zDom.addClass(wnd.eclose, zcls + '-close-over');
 	},
 	closeout: function (evt) {
-		if (!evt) evt = window.event;
-		var wnd = zEvt.widget(evt),
+		var wnd = zk.Widget.$(evt),
 			zcls = wnd.getZclass();
 		zDom.rmClass(wnd.eclose, zcls + '-close-over');
 	},
 	maxclick: function (evt) {
-		if (!evt) evt = window.event;
-		var wnd = zEvt.widget(evt);
+		var wnd = zk.Widget.$(evt);
 		//TODO: handle popup since evt stopped
 		zEvt.stop(evt);
 	},
 	maxover: function (evt) {
-		if (!evt) evt = window.event;
-		var wnd = zEvt.widget(evt),
+		var wnd = zk.Widget.$(evt),
 			zcls = wnd.getZclass();
 		if (wnd.isMaximized())
 			zDom.addClass(wnd.emax, zcls + '-maximized-over');
 		zDom.addClass(wnd.emax, zcls + '-maximize-over');
 	},
 	maxout: function (evt) {
-		if (!evt) evt = window.event;
-		var wnd = zEvt.widget(evt),
+		var wnd = zk.Widget.$(evt),
 			zcls = wnd.getZclass();
 		if (wnd.isMaximized())
 			zDom.rmClass(wnd.emax, zcls + '-maximized-over');
 		zDom.rmClass(wnd.emax, zcls + '-maximize-over');
 	},
 	minclick: function (evt) {
-		if (!evt) evt = window.event;
-		var wnd = zEvt.widget(evt);
+		var wnd = zk.Widget.$(evt);
 		//TODO: handle popup since evt stopped
 		zEvt.stop(evt);
 	},
 	minover: function (evt) {
-		if (!evt) evt = window.event;
-		var wnd = zEvt.widget(evt),
+		var wnd = zk.Widget.$(evt),
 			zcls = wnd.getZclass();
 		zDom.addClass(wnd.emin, zcls + '-minimize-over');
 	},
 	minout: function (evt) {
-		if (!evt) evt = window.event;
-		var wnd = zEvt.widget(evt),
+		var wnd = zk.Widget.$(evt),
 			zcls = wnd.getZclass();
 		zDom.rmClass(wnd.emin, zcls + '-minimize-over');
 	}

@@ -278,8 +278,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	}
 },{
 	onclick: function (evt) {
-		if (!evt) evt = window.event;
-		var wgt = zEvt.widget(evt);
+		var wgt = zk.Widget.$(evt);
 		zDom.rmClass(wgt.button, wgt.getZclass() + "-btn-visi");
 		wgt.setOpen(!wgt.isOpen());
 	},
@@ -408,13 +407,11 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 
 if (zk.ie) {
 	zul.box.Splitter.onover = function (evt) {
-		if (!evt) evt = window.event;
-		var wgt = zEvt.widget(evt);
+		var wgt = zk.Widget.$(evt);
 		zDom.addClass(wgt.button, wgt.getZclass() + '-btn-visi');
 	};
 	zul.box.Splitter.onout = function (evt) {
-		if (!evt) evt = window.event;
-		var wgt = zEvt.widget(evt);
+		var wgt = zk.Widget.$(evt);
 		zDom.rmClass(wgt.button, wgt.getZclass() + '-btn-visi');
 	};
 }

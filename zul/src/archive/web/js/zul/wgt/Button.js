@@ -127,33 +127,28 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	}
 },{
 	onover: function (evt) {
-		if (!evt) evt = window.event;
-		var wgt = zEvt.widget(evt);
+		var wgt = zk.Widget.$(evt);
 		zDom.addClass(wgt.ebox, wgt.getZclass() + "-over");
 	},
 	onout: function (evt) {
-		if (!evt) evt = window.event;
-		var wgt = zEvt.widget(evt);
+		var wgt = zk.Widget.$(evt);
 		if (wgt != zul.wgt.Button._curdn)
 			zDom.rmClass(wgt.ebox, wgt.getZclass() + "-over");
 	},
 	onfocus: function (evt) {
-		if (!evt) evt = window.event;
-		if (!zDom.tag(zEvt.element(evt))) return; // Firefox 2 will cause a focus error when resize browser.
+		if (!zDom.tag(zEvt.target(evt))) return; // Firefox 2 will cause a focus error when resize browser.
 
-		var wgt = zEvt.widget(evt);
+		var wgt = zk.Widget.$(evt);
 		zDom.addClass(wgt.ebox, wgt.getZclass() + "-focus");
-		zEvt.onfocus(evt);
+		zk.Widget.doFocus(wgt);
 	},
 	onblur: function (evt) {
-		if (!evt) evt = window.event;
-		var wgt = zEvt.widget(evt);
+		var wgt = zk.Widget.$(evt);
 		zDom.rmClass(wgt.ebox, wgt.getZclass() + "-focus");
-		zEvt.onblur(evt);
+		zk.Widget.doBlur(wgt);
 	},
 	ondown: function (evt) {
-		if (!evt) evt = window.event;
-		var wgt = zEvt.widget(evt),
+		var wgt = zk.Widget.$(evt),
 			box = wgt.ebox,
 			zcls = wgt.getZclass();
 		zDom.addClass(box, zcls + "-clk");
@@ -165,8 +160,6 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		zEvt.listen(document.body, "mouseup", zulbtn.onup);
 	},
 	onup: function (evt) {
-		if (!evt) evt = window.event;
-
 		var zulbtn = zul.wgt.Button,
 			wgt = zulbtn._curdn;
 		if (wgt) {
