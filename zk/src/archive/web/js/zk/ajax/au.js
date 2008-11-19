@@ -44,7 +44,7 @@ zAu = { //static methods
 	},
 
 	//Error Handling//
-	/** Confirms the user how to handle an error.
+	/** Confirms the user how to handle a communication error.
 	 * Default: it shows up a message asking the user whether to retry.
 	 */
 	confirmRetry: function (msgCode, msg2) {

@@ -50,6 +50,33 @@ zk.Event = zk.$extends(zk.Object, {
 		this.data = typeof data == 'string' ? [data]: data ? data: null;
 		this.opts = opts;
 	}
+},{
+	//default envent handler
+	canFocus: function (wgt, checkOnly) {
+		var modal = zk.currentModal;
+		if (modal && !zUtl.isAncestor(modal, wgt)) {
+			if (!checkOnly) {
+				var cf = zk.currentFocus;
+				if (cf && !zUtl.isAncestor(modal, cf))
+					modal.focus();
+			}
+			return false;
+		}
+		return true;
+	},
+	doMouseDown: function (wgt, evt) {
+		var zkevt = zk.Event;
+		if (zkevt.canFocus(wgt)) {
+			zk.currentFocus = wgt;
+			//TODO: close floats, and fix z-index
+		}
+	},
+	doFocus: function (wgt, evt) {
+		zk.currentFocus = wgt;
+	},
+	doBlur: function (wgt, evt) {
+		zk.currentFocus = null;
+	}
 });
 
 /** An utility to manage a collection of watches.

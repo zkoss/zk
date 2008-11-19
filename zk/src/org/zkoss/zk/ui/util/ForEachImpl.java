@@ -373,20 +373,6 @@ public class ForEachImpl implements ForEach {
 					throw new UnsupportedOperationException();
 				}
 			};
-		} else if (o instanceof float[]) {
-			final float[] ary = (float[])o;
-			_it = new Iterator() {
-				private int _j = begin;
-				public boolean hasNext() {
-					return _j < ary.length;
-				}
-				public Object next() {
-					return new Float(ary[_j++]);
-				}
-				public void remove() {
-					throw new UnsupportedOperationException();
-				}
-			};
 		} else if (o instanceof double[]) {
 			final double[] ary = (double[])o;
 			_it = new Iterator() {
@@ -401,6 +387,20 @@ public class ForEachImpl implements ForEach {
 					throw new UnsupportedOperationException();
 				}
 			};
+		} else if (o instanceof float[]) {
+			final float[] ary = (float[])o;
+			_it = new Iterator() {
+				private int _j = begin;
+				public boolean hasNext() {
+					return _j < ary.length;
+				}
+				public Object next() {
+					return new Float(ary[_j++]);
+				}
+				public void remove() {
+					throw new UnsupportedOperationException();
+				}
+			};
 		} else if (o instanceof char[]) {
 			final char[] ary = (char[])o;
 			_it = new Iterator() {
@@ -410,6 +410,20 @@ public class ForEachImpl implements ForEach {
 				}
 				public Object next() {
 					return new Character(ary[_j++]);
+				}
+				public void remove() {
+					throw new UnsupportedOperationException();
+				}
+			};
+		} else if (o instanceof boolean[]) {
+			final boolean[] ary = (boolean[])o;
+			_it = new Iterator() {
+				private int _j = begin;
+				public boolean hasNext() {
+					return _j < ary.length;
+				}
+				public Object next() {
+					return Boolean.valueOf(ary[_j++]);
 				}
 				public void remove() {
 					throw new UnsupportedOperationException();

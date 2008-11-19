@@ -139,7 +139,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	},
 	onfocus: function (evt) {
 		if (!evt) evt = window.event;
-		if (!zDom.tag(zEvt.target(evt))) return; // Firefox 2 will cause a focus error when resize browser.
+		if (!zDom.tag(zEvt.element(evt))) return; // Firefox 2 will cause a focus error when resize browser.
 
 		var wgt = zEvt.widget(evt);
 		zDom.addClass(wgt.ebox, wgt.getZclass() + "-focus");

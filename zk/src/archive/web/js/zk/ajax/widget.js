@@ -172,7 +172,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	/** Sets whether this widget is visible.
 	 * <p>Component Implementation Node:
-	 * <ul><li>You might override {@link #onChildVisible}
+	 * <ul><li>You might override {@link #onChildVisible_}
 	 * to change the related DOM element, such as the additional
 	 * enclosing tags.</li>
 	 * <li>If you want to change the visibility of a child DOM element,
@@ -184,12 +184,12 @@ zk.Widget = zk.$extends(zk.Object, {
 			this.visible = visible;
 
 			var p = this.parent;
-			if (p && visible) p.onChildVisible(this, true); //becoming visible
+			if (p && visible) p.onChildVisible_(this, true); //becoming visible
 
 			var n = this.node;
 			if (n) this.setDomVisible(n, visible);
 
-			if (p && !visible) p.onChildVisible(this, false); //become invisible
+			if (p && !visible) p.onChildVisible_(this, false); //become invisible
 		}
 	},
 	/** Changes the visibility of a child DOM content of this widget.
@@ -206,7 +206,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * Deriving class might override it to change the visibility
 	 * of the encosing tag, if any.
 	 */
-	onChildVisible: function (child, visible) {
+	onChildVisible_: function (child, visible) {
 	},
 
 	/** Returns the width of this widget. */

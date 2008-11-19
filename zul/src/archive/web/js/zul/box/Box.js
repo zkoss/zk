@@ -65,8 +65,8 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		return zcs != null ? zcs: this.isVertical() ? "z-vbox" : "z-hbox";
 	},
 
-	onChildVisible: function (child, visible) {
-		this.$super('onChildVisible', child, visible);
+	onChildVisible_: function (child, visible) {
+		this.$super('onChildVisible_', child, visible);
 		if (this.node) this._fixChildDomVisible(child, visible);
 	},
 	replaceChildHTML_: function (child, n, desktop) {

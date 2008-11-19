@@ -75,15 +75,10 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	/** The prolog content that shall be generated before real content. */
 	private String _prolog;
 
-	/** The client events returned by {@link #getClientEvents}.
-	 * @since 5.0.0
-	 */
-	protected static final Set _clientEvents;
 	static {
-		_clientEvents = new HashSet(4);
-		_clientEvents.add(Events.ON_CLICK);
-		_clientEvents.add(Events.ON_DOUBLE_CLICK);
-		_clientEvents.add(Events.ON_RIGHT_CLICK);
+		addClientEvent(HtmlBasedComponent.class, Events.ON_CLICK);
+		addClientEvent(HtmlBasedComponent.class, Events.ON_DOUBLE_CLICK);
+		addClientEvent(HtmlBasedComponent.class, Events.ON_RIGHT_CLICK);
 	}
 
 	protected HtmlBasedComponent() {
@@ -441,15 +436,6 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 		if (_zIndex >= 0) renderer.render("zIndex", _zIndex);
 
 		render(renderer, "prolog", _prolog);
-	}
-
-	/** Returns a collection of event names that the client might send to
-	 * this component.
-	 * <p>Default: onClick, onDoubleClick, onRightClick.
-	 * @since 5.0.0
-	 */
-	protected Collection getClientEvents() {
-		return _clientEvents;
 	}
 
 	//--ComponentCtrl--//

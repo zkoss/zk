@@ -397,12 +397,6 @@ public class Treeitem extends XulElement implements org.zkoss.zul.api.Treeitem {
 		if (dropable != null)
 			throw new UnsupportedOperationException("Use Treerow.setDroppable() instead");
 	}
-	/** Not callable. Use {@link Treerow#setAction} instead.
-	 */
-	public void setAction(String action) {
-		if (action != null)
-			throw new UnsupportedOperationException("Use Treerow.setAction() instead");
-	}
 
 	public boolean setVisible(boolean visible) {
 		if (isVisible() != visible && _treerow != null) 

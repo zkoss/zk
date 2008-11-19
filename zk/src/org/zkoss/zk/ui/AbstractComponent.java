@@ -99,6 +99,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 //	private static final Log log = Log.lookup(AbstractComponent.class);
     private static final long serialVersionUID = 20070920L;
 
+	/** Map(Class, Set(String evtnm)). */
+	private static final Map _clientEvents = new HashMap(128);
+
 	/*package*/ transient Page _page;
 	private String _id;
 	private String _uuid;
@@ -1352,16 +1355,66 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 	/** Returns a collection of event names that the client might send to
 	 * this component.
-	 * <p>Default: an empty collection.
-	 * The deriving class might override it to specify what events
-	 * that the client might send.
+	 * <p>Default: return the collection of events
+	 * added by {@link #getClientEvent}.
 	 *
-	 * <p>Because getClientEvents().contains() will be called, it is
-	 * better to use java.util.Set if a lot of events are returned.
+	 * <p>Instead of overriding this method, it is suggested
+	 * to invoke {@link #addClientEvent} in the <code>static</code> statement.
+	 * The deriving class might override it to specify what events
+	 * that the client might send. For example,
+	 * <pre><code>public MyComponent extend HtmlBasedComponent {
+	 *  static {
+	 *    addClientEvent(MyComponent.class, "onOpen");
+	 *  }</code></pre>
+	 *
 	 * @since 5.0.0
 	 */
 	protected Collection getClientEvents() {
+		for (Class cls = getClass(); cls != null; cls = cls.getSuperclass()) {
+			Set events;
+			synchronized (_clientEvents) {
+				events = (Set)_clientEvents.get(cls);
+			}
+			if (events != null) return events;
+		}
 		return Collections.EMPTY_LIST;
+	}
+	/** Adds an event that the client might send to the server.
+	 * It must be called when loading the class (i.e., in <code>static {}</code>).
+	 * It cannot be called after that.
+	 * @param cls the component's class (implementation class).
+	 * @since 5.0.0
+	 */
+	protected static void addClientEvent(Class cls, String evtnm) {
+		Set events;
+		synchronized (_clientEvents) {
+			events = (Set)_clientEvents.get(cls);
+		}
+
+		//It is OK to race there
+		final boolean first = events == null;
+		if (first) {
+			//for better performance, we pack all event names of super
+			//classes, though it costs more memory
+			events = new HashSet(8);
+			for (Class c = cls ; c != null; c = c.getSuperclass()) {
+				Set evts;
+				synchronized (_clientEvents) {
+					evts = (Set)_clientEvents.get(c);
+				}
+				if (evts != null) {
+					events.addAll(evts);
+					break;
+				}
+			}
+		}
+
+		events.add(evtnm);
+		
+		if (first)
+			synchronized (_clientEvents) {
+				_clientEvents.put(cls, events);
+			}
 	}
 
 	//Event//

@@ -158,8 +158,17 @@ function _zkSysInit() {
 	zk.booted = true;
 
 	//TODO more listener
-	zEvt.listen(document, "click", _zkDocLClick);
-	zEvt.listen(document, "dblclick", _zkDocDClick);
+	zEvt.listen(document, "keydown", _zkDocKeyDown);
+
+	zEvt.listen(document, "mousedown", _zkDocMouseDown);
+	zEvt.listen(document, "mouseover", _zkDocMouseOver);
+	zEvt.listen(document, "mouseout", _zkDocMouseOut);
+
+	zEvt.listen(document, "click", _zkDocClick);
+	zEvt.listen(document, "dblclick", _zkDocDblClick);
+	zEvt.listen(document, "contextmenu", _zkDocCtxMenu);
+
+	zEvt.listen(window, "scroll", _zkDocScroll);
 	zEvt.listen(window, "resize", _zkDocResize);
 
 	for (var fn, afbts = _zkafbts; fn = afbts.shift();)
@@ -243,7 +252,17 @@ function _zkLdJS(w) {
 var _zkbWgts = [], zkcurdt, _zkbcrs = []; //used to load widget
 
 //Event Handler//
-function _zkDocLClick(evt) {
+function _zkDocKeyDown(evt) {
+}
+function _zkDocMouseDown(evt) {
+	if (!evt) evt = window.event;
+	zk.Event.doMouseDown(zEvt.widget(evt), evt);
+}
+function _zkDocMouseOver(evt) {
+}
+function _zkDocMouseOut(evt) {
+}
+function _zkDocClick(evt) {
 	if (!evt) evt = window.event;
 
 	if (evt.which == 1 || (evt.button == 0 || evt.button == 1)) {
@@ -262,8 +281,7 @@ function _zkDocLClick(evt) {
 	}
 	//don't return anything. Otherwise, it replaces event.returnValue in IE (Bug 1541132)
 }
-/** Handles the double click. */
-function _zkDocDClick(evt) {
+function _zkDocDblClick(evt) {
 	if (!evt) evt = window.event;
 
 	var wgt = zEvt.widget(evt);
@@ -273,8 +291,10 @@ function _zkDocDClick(evt) {
 			return;
 		}
 }
-
-/** window.onresize */
+function _zkDocCtxMenu(evt) {
+}
+function _zkDocScroll() {
+}
 function _zkDocResize() {
 	if (!zk.booted)
 		return; //IE6: it sometimes fires an "extra" onResize in loading

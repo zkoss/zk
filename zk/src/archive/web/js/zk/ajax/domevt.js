@@ -34,13 +34,24 @@ zEvt = {
 	F1:		112,
 
 	/** Returns the target element of the event. */
-	target: function(event) {
+	element: function(event) {
 		return event.target || event.srcElement;
 	},
 	/** Returns the target widget (zk.Widget) of the event. */
 	widget: function (event) {
-		for (var n = zEvt.target(event); n; n = n.parentNode)
-			if (n.z_wgt) return n.z_wgt;
+		for (var n = zEvt.element(event), w; n; n = n.parentNode) {
+			w = n.z_wgt;
+			if (w) return w;
+
+			w = n.id;
+			if (w) {
+				w = zDom.$(zk.Widget.uuid(w));
+				if (w) {
+					w = w.z_wgt;
+					if (w) return w;
+				}
+			}
+		}
 		return null;
 	},
 	/** Stops the event propogation. */
@@ -70,7 +81,7 @@ zEvt = {
 		if (evt.ctrlKey) extra += "c";
 		if (evt.shiftKey) extra += "s";
 
-		var ofs = zDom.cmOffset(target ? target: zEvt.target(evt));
+		var ofs = zDom.cmOffset(target ? target: zEvt.element(evt));
 		var x = zEvt.x(evt) - ofs[0];
 		var y = zEvt.y(evt) - ofs[1];
 		return [x, y, extra];

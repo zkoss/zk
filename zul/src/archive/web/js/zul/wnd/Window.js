@@ -221,10 +221,91 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 	bind_: function (desktop) {
 		this.$super('bind_', desktop);
-		//TODO
+
+		var uuid = this. uuid,
+			zulwnd = zul.wnd.Window;
+		for (var nms = ['close', 'max', 'min'], j = 3; --j >=0;) {
+			var nm = nms[j],
+				n = this['e' + nm ] = zDom.$(uuid + '$' + nm);
+			if (n) {
+				zEvt.listen(n, 'click', zulwnd[nm + 'click']);
+				zEvt.listen(n, 'mouseover', zulwnd[nm + 'over']);
+				zEvt.listen(n, 'mouseout', zulwnd[nm + 'out']);
+				if (!n.style.cursor) n.style.cursor = "default";
+			}
+		}
 	},
 	unbind_: function () {
-		//TODO
+		var zulwnd = zul.wnd.Window;
+		for (var nms = ['close', 'max', 'min'], j = 3; --j >=0;) {
+			var nm = nms[j],
+				n = this['e' + nm ];
+			if (n) {
+				this['e' + nm ] = null;
+				zEvt.unlisten(n, 'click', zulwnd[nm + 'click']);
+				zEvt.unlisten(n, 'mouseover', zulwnd[nm + 'over']);
+				zEvt.unlisten(n, 'mouseout', zulwnd[nm + 'out']);
+			}
+		}
 		this.$super('unbind_');
+	}
+},{ //static
+	closeclick: function (evt) {
+		if (!evt) evt = window.event;
+		var wnd = zEvt.widget(evt);
+		wnd.fire2('onClose');
+		zEvt.stop(evt);
+	},
+	closeover: function (evt) {
+		if (!evt) evt = window.event;
+		var wnd = zEvt.widget(evt),
+			zcls = wnd.getZclass();
+		zDom.addClass(wnd.eclose, zcls + '-close-over');
+	},
+	closeout: function (evt) {
+		if (!evt) evt = window.event;
+		var wnd = zEvt.widget(evt),
+			zcls = wnd.getZclass();
+		zDom.rmClass(wnd.eclose, zcls + '-close-over');
+	},
+	maxclick: function (evt) {
+		if (!evt) evt = window.event;
+		var wnd = zEvt.widget(evt);
+		//TODO: handle popup since evt stopped
+		zEvt.stop(evt);
+	},
+	maxover: function (evt) {
+		if (!evt) evt = window.event;
+		var wnd = zEvt.widget(evt),
+			zcls = wnd.getZclass();
+		if (wnd.isMaximized())
+			zDom.addClass(wnd.emax, zcls + '-maximized-over');
+		zDom.addClass(wnd.emax, zcls + '-maximize-over');
+	},
+	maxout: function (evt) {
+		if (!evt) evt = window.event;
+		var wnd = zEvt.widget(evt),
+			zcls = wnd.getZclass();
+		if (wnd.isMaximized())
+			zDom.rmClass(wnd.emax, zcls + '-maximized-over');
+		zDom.rmClass(wnd.emax, zcls + '-maximize-over');
+	},
+	minclick: function (evt) {
+		if (!evt) evt = window.event;
+		var wnd = zEvt.widget(evt);
+		//TODO: handle popup since evt stopped
+		zEvt.stop(evt);
+	},
+	minover: function (evt) {
+		if (!evt) evt = window.event;
+		var wnd = zEvt.widget(evt),
+			zcls = wnd.getZclass();
+		zDom.addClass(wnd.emin, zcls + '-minimize-over');
+	},
+	minout: function (evt) {
+		if (!evt) evt = window.event;
+		var wnd = zEvt.widget(evt),
+			zcls = wnd.getZclass();
+		zDom.rmClass(wnd.emin, zcls + '-minimize-over');
 	}
 });

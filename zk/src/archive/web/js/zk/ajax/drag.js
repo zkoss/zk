@@ -210,7 +210,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 			return;
 
 		// abort on form elements, fixes a Firefox issue
-		var src = zEvt.target(evt)
+		var src = zEvt.element(evt)
 			tag = zDom.tag(src);
 		if(tag=='INPUT' || tag=='SELECT' || tag=='OPTION' || tag=='BUTTON' || tag=='TEXTAREA')
 			return;
@@ -233,7 +233,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 		//We need to ensure that the onBlur evt is fired before the onSelect evt for consistent among four browsers. 
 		if (zk.currentFocus) {
 			var f = zk.currentFocus.node;
-			if (f && zEvt.target(evt) != f && typeof f.blur == "function")
+			if (f && zEvt.element(evt) != f && typeof f.blur == "function")
 				f.blur();
 		}
 

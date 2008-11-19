@@ -83,9 +83,11 @@ zUtl = { //static methods
 
 		var x = zDom.innerX(), y = zDom.innerY(),
 			style = ' style="left:'+x+'px;top:'+y+'px"',
-			idtxt = id + 't';
+			idtxt = id + '$t',
+			idmsk = id + '$m',
 			html = '<div id="'+id+'"';
-		if (mask) html += '><div id="zk_mask" class="z-modal-mask"'+style+'></div';
+		if (mask)
+			html += '><div id="' + idmsk + '" class="z-modal-mask"'+style+'></div';
 		html += '><div id="'+idtxt+'" class="z-loading"'+style
 			+'><div class="z-loading-indicator"><img class="z-loading-icon" alt="..." src="'
 			+zAu.comURI('/web/img/spacer.gif')+'"/> '
@@ -95,21 +97,29 @@ zUtl = { //static methods
 		zDom.setOuterHTML(n, html);
 
 		if (mask) { //center it
-			n = zDom.$(idtxt);
-			if (n) {
-				n.style.left = (zDom.innerWidth() - n.offsetWidth) / 2 + x + "px";
-				n.style.top = (zDom.innerHeight() - n.offsetHeight) / 2 + y + "px";
-			}
+			n = zDom.$(idmsk);
+			zEvt.listen(n, "mousemove", zEvts.stop);
+			zEvt.listen(n, "click", zEvts.stop);
 		}
+
+		n = zDom.$(idtxt);
+		if (mask && n) { //center
+			n.style.left = (zDom.innerWidth() - n.offsetWidth) / 2 + x + "px";
+			n.style.top = (zDom.innerHeight() - n.offsetHeight) / 2 + y + "px";
+		}
+		n.style.visibility = "visible";
 	},
 	/** Removes all progress boxed of the specified ID. */
 	cleanAllProgress: function (id) {
+		var n = zDom.$(id + '$m');
+		if (n) {
+			zEvt.unlisten(n, "mousemove", zEvts.stop);
+			zEvt.unlisten(n, "click", zEvts.stop);
+		}
 		zDom.remove(id);
 
 		//TODO: remove the mask for each contained page
 	},
-
-	//Event Listener//
 
 	//HTTP//
 	/** Go to the specified uri.

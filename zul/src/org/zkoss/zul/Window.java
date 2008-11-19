@@ -140,6 +140,10 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 	 */
 	private static final int HIGHLIGHTED = 4;
 
+	static {
+		addClientEvent(Window.class, Events.ON_CLOSE);
+	}
+
 	public Window() {
 		init();
 	}
