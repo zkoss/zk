@@ -316,37 +316,37 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * domStyle_({width: true});
 	 */
 	domStyle_: function (no) {
-		var html = '';
+		var style = '';
 		if (!this.isVisible() && (!no || !no.visible))
-			html = 'display:none;';
+			style = 'display:none;';
 		if (!no || !no.style) {
 			var s = this.getStyle(); 
 			if (s) {
-				html += s;
-				if (s.charAt(s.length - 1) != ';') html += ';';
+				style += s;
+				if (s.charAt(s.length - 1) != ';') style += ';';
 			}
 		}
 		if (!no || !no.width) {
 			var s = this.getWidth();
-			if (s) html += 'width:' + s + ';';
+			if (s) style += 'width:' + s + ';';
 		}
 		if (!no || !no.height) {
 			var s = this.getHeight();
-			if (s) html += 'height:' + s + ';';
+			if (s) style += 'height:' + s + ';';
 		}
 		if (!no || !no.left) {
 			var s = this.getLeft();
-			if (s) html += 'left:' + s + ';';
+			if (s) style += 'left:' + s + ';';
 		}
 		if (!no || !no.right) {
 			var s = this.getRight();
-			if (s) html += 'right:' + s + ';';
+			if (s) style += 'right:' + s + ';';
 		}
 		if (!no || !no.zIndex) {
 			var s = this.getZIndex();
-			if (s >= 0) html += 'zIndex:' + s + ';';
+			if (s >= 0) style += 'zIndex:' + s + ';';
 		}
-		return html;
+		return style;
 	},
 
 	/** Returns the class name used for the DOM element.
@@ -356,16 +356,16 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * domClass_({zclass: true});
 	 */
 	domClass_: function (no) {
-		var html = '';
+		var scls = '';
 		if (!no || !no.sclass) {
 			var s = this.sclass;
-			if (s) html = s;
+			if (s) scls = s;
 		}
 		if (!no || !no.zclass) {
 			var s = this.getZclass();
-			if (s) html += (html ? ' ': '') + s;
+			if (s) scls += (scls ? ' ': '') + s;
 		}
-		return html;
+		return scls;
 	},
 	/** An utilities to generate the attributes used in the enclosing tag
 	 * of the HTML content.

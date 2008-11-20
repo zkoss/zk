@@ -605,7 +605,7 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 		if (_mode != mode) {
 			if (_mode == MODAL) leaveModal();
 			_mode = mode;
-			smartUpdate("mode", _mode);
+			smartUpdate("mode", modeToString(_mode));
 		}
 		setVisible(true);
 	}
@@ -613,7 +613,7 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 	/** Set mode to MODAL and suspend this thread. */
 	private void enterModal() throws InterruptedException {
 		_mode = MODAL;
-		smartUpdate("mode", _mode);
+		smartUpdate("mode", modeToString(_mode));
 
 		//no need to synchronized (_mutex) because no racing is possible
 		Executions.wait(_mutex);
@@ -621,7 +621,7 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 	/** Resumes the suspendded thread and set mode to OVERLAPPED. */
 	private void leaveModal() {
 		_mode = OVERLAPPED;
-		smartUpdate("mode", _mode);
+		smartUpdate("mode", modeToString(_mode));
 
 		Executions.notifyAll(_mutex);
 	}
@@ -837,7 +837,7 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 				leaveModal();
 			else {
 				_mode = OVERLAPPED;
-				smartUpdate("mode", _mode);
+				smartUpdate("mode", modeToString(_mode));
 			}
 		} else if ( _mode != EMBEDDED) {
 			smartUpdate("visible", visible);
@@ -904,7 +904,7 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 					leaveModal();
 				} else if (_mode == HIGHLIGHTED) {
 					_mode = OVERLAPPED; // according to leaveModal()
-					smartUpdate("mode", _mode);
+					smartUpdate("mode", modeToString(_mode));
 				}
 			}
 		}

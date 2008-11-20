@@ -31,10 +31,18 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			this._mode = mode;
 
 			var n = this.node;
-			if (n) {
-				//TODO
-			}
+			if (n)
+				this['do' + mode.charAt(0).toUpperCase() + mode.substring(1)]();
 		}
+	},
+	doOverlapped: function () {
+	},
+	doPopup: function () {
+	},
+	doHilighted: _zkf = function () {
+	},
+	doModal: _zkf,
+	doEmbedded: function () {
 	},
 
 	getTitle: function () {
@@ -223,6 +231,16 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			return true;
 		}
 		return false;
+	},
+	domStyle_: function (no) {
+		var style = this.$super('domStyle_', no),
+			visible = this.isVisible();
+		if ((!no || !no.visible) && visible && this.isMinimized())
+			style = 'display:none;'+style;
+		if (this.getMode() != 'embedded')
+			style = (visible ? "position:absolute;visibility:hidden;" : "position:absolute;")
+				+style;
+		return style;
 	},
 	bind_: function (desktop) {
 		this.$super('bind_', desktop);
