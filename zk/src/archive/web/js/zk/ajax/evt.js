@@ -79,16 +79,23 @@ zEvt = {
 	 */
 	mouseData: function (evt, target) {
 		if (!evt) evt = window.evt;
-		var extra = "";
-		if (evt.altKey) extra += "a";
-		if (evt.ctrlKey) extra += "c";
-		if (evt.shiftKey) extra += "s";
-
-		var ofs = zDom.cmOffset(target ? target: zEvt.target(evt));
-		var x = zEvt.x(evt) - ofs[0];
-		var y = zEvt.y(evt) - ofs[1];
-		return [x, y, extra];
+		var ofs = zDom.cmOffset(target ? target: zEvt.target(evt)),
+			x = zEvt.x(evt) - ofs[0],
+			y = zEvt.y(evt) - ofs[1];
+		return [x, y, zEvt._keyInfo(evt)];
 	},
+	keyData: function (evt) {
+		if (!evt) evt = window.evt;
+		return [zEvt.keyCode(evt), zEvt.charCode(evt), zEvt._keyInfo(evt)];
+	},
+	_keyInfo: function (evt) {
+		var extra = "";
+		if (evt.altKey) extra += 'a';
+		if (evt.ctrlKey) extra += 'c';
+		if (evt.shiftKey) extra += 's';
+		return extra;
+	},
+
 	/** Returns the X coordinate of the mouse pointer. */
 	x: function (evt) {
 		if (!evt) evt = window.evt;

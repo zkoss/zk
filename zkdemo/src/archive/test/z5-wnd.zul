@@ -24,8 +24,14 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		<button label="right,bottom" onClick="win.position = &quot;right,bottom&quot;;"/>
 		<button label="center" onClick="win.position = &quot;center&quot;;"/>
 	</window>
-	<button label="Overlap" onClick="win.doOverlapped();"/>
-	<button label="Popup" onClick="win.doPopup();"/>
-	<button label="Embed" onClick="win.doEmbedded();"/>
-	<button label="Toggle Visible" onClick="win.visible = !win.visible"/>
+	<button label="Overlap" onClick="win.doOverlapped();"
+		onFocus="l.value = self.label"/>
+	<button label="Popup" onClick="win.doPopup();"
+		onFocus="l.value = self.label"/>
+	<button label="Embed" onClick="win.doEmbedded();"
+		onFocus="l.value = self.label"/>
+	<button label="Toggle Visible" onClick="win.visible = !win.visible"
+		onFocus="l.value = self.label"/>
+	<separator/>
+	Focus: <label id="l"/>
 </window>

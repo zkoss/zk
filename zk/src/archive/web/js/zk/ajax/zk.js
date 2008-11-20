@@ -89,8 +89,10 @@ zk = { //static members
 			this.$init.apply(this, arguments);
 		};
 
-		zk.$copy(jclass.prototype, superclass.prototype); //inherit non-static
-		zk.$copy(jclass.prototype, members);
+		var thisprototype = jclass.prototype,
+			superprototype = superclass.prototype;
+		zk.$copy(thisprototype, superprototype); //inherit non-static
+		zk.$copy(thisprototype, members);
 
 		for (var p in superclass) //inherit static methods only
 			if (p != 'prototype') {
@@ -100,8 +102,8 @@ zk = { //static members
 			}
 		zk.$copy(jclass, staticMembers);
 
-		jclass.prototype.$class = jclass;
-		jclass.prototype._$super = superclass.prototype;
+		thisprototype.$class = jclass;
+		thisprototype._$super = superprototype;
 		jclass.superclass = superclass;
 		return jclass;
 	},

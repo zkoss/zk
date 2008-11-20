@@ -36,6 +36,7 @@ zk.Widget = zk.$extends(zk.Object, {
 
 	/** Constructor. */
 	$init: function (uuid, mold) {
+		this._lsns = {}; //listeners Map(evtnm,listener)
 		this.uuid = uuid ? uuid: zk.Widget.nextUuid();
 		this.mold = mold ? mold: "default";
 	},
@@ -480,6 +481,21 @@ zk.Widget = zk.$extends(zk.Object, {
 
 		for (var wgt = this.firstChild; wgt; wgt = wgt.nextSibling)
 			wgt.bind_(desktop);
+
+		for (var $Widget = zk.Widget, lsns = this._lsns,
+		evts = zk.Widget._domevts, j = evts.length; --j >= 0;) {
+			var evt = evts[j],
+				ls = lsns[evt];
+			if (!ls || !ls.length) {
+				if (!this.inServer) continue; //nothing to do
+				if (this[evt] == null) continue; //nothing to do
+			}
+			var e = evt.substring(2).toLowerCase(),
+				regevts = this._regevts;
+			if (regevts) regevts.push(e);
+			else this._regevts = [e];
+			zEvt.listen(n, e, $Widget._domEvtToZK);
+		}
 	},
 	/** Detaches the widget from the DOM tree.
 	 * @param remove whether to remove the associated node
@@ -491,6 +507,13 @@ zk.Widget = zk.$extends(zk.Object, {
 			this.node = null;
 		}
 		this.desktop = null;
+
+		var regevts = this._regevts;
+		if (regevts) {
+			this._regevts = null;
+			for (var $Widget = zk.Widget, evt; evt = regevts.shift();)
+				zEvt.unlisten(n, evt, $Widget._domEvtToZK);
+		}
 
 		for (var wgt = this.firstChild; wgt; wgt = wgt.nextSibling)
 			wgt.unbind_();
@@ -545,21 +568,21 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * It is ignored if no non-deferrable listener is registered at the server.
 	 */
 	fire: function (evt, timeout) {
-		var lsns = this._lsns[name],
+		var evtnm = evt.name,
+			lsns = this._lsns[evtnm],
 			len = lsns ? lsns.length: 0;
 		if (len) {
 			for (var j = 0; j < len;) {
 				var o = lsns[j++];
-				o[name].apply(o, evt);
+				o[evtnm].call(o, evt);
 				if (evt.stop) return; //no more processing
 			}
 		}
 
 		if (this.inServer && this.desktop) {
 			var ies = this.importantEvents_,
-				evtnm = evt.name,
 				asap = this[evtnm];
-			if (asap != zk.undefined
+			if (asap != null
 			|| (ies != null && ies.$contains(evtnm)))
 				zAu.send(evt,
 					asap ? timeout >= 0 ? timeout: 38: this.getAuDelay());
@@ -594,7 +617,6 @@ zk.Widget = zk.$extends(zk.Object, {
 		var lsns = this._lsns[evtnm];
 		return lsns && lsns.length;
 	},
-	_lsns: {}, //listeners Map(evtnm,listener)
 	/** Returns the delay before sending a deferrable event.
 	 * <p>Default: -1.
 	 */
@@ -603,23 +625,23 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 
 	//DOM event handling//
-	/** Callback this method if you listen onfocus. */
+	/** Callback this method if you listen DOM onfocus. */
 	domFocus: function () {
 		zk.currentFocus = this;
 
 		//TODO: handle zIndex, close floats
 
 		if (this.isListen('onFocus'))
-			this.fire2("onFocus");
+			this.fire2('onFocus');
 	},
-	/** Callback this method if you listen onblur. */
+	/** Callback this method if you listen DOM onblur. */
 	domBlur: function () {
 		zk.currentFocus = null;
 
 		//TODO: handle validation
 
 		if (this.isListen('onBlur'))
-			this.fire2("onBlur");
+			this.fire2('onBlur');
 	}
 
 }, {
@@ -663,6 +685,22 @@ zk.Widget = zk.$extends(zk.Object, {
 			//TODO: close floats, and fix z-index
 		}
 	},
+	_domEvtToZK: function (evt) {
+		if (!evt) evt = window.evt;
+		var $Widget = zk.Widget,
+			wgt = $Widget.$(evt),
+			type = evt.type;
+		if (type.startsWith('mouse'))
+			wgt.fire2('onMouse' + type.charAt(5).toUpperCase() + type.substring(6),
+				zEvt.mouseData(evt));
+		else if (type.startsWth('key'))
+			wgt.fire2('onKey' + type.charAt(3).toUpperCase() + type.substring(4),
+				zEvt.keyData(evt));
+		else wgt.fire2('on' + type.charAt(0).toUpperCase() + type.substring(1));
+	},
+	_domevts: ['onMouseOver','onMouseOut', 'onMouseDown', 'onMouseUp',
+		'onMouseMove', 'onKeyDown', 'onKeyPress', 'onKeyUp'],
+		//onFocus, onBlur, onClick, onDoubleClick, onChange are fired by widget
 
 	//uuid//
 	/** Converts an ID (of a DOM element) to UUID.
@@ -685,9 +723,10 @@ zk.Desktop = zk.$extends(zk.Object, {
 	/** The type (always "#d")(readonly). */
 	type: "#d",
 	/** The AU request that shall be sent. Used by au.js */
-	_aureqs: [],
 
 	$init: function (dtid, updateURI) {
+		this._aureqs = [];
+
 		var zdt = zk.Desktop, dt = zdt.all[dtid];
 		if (!dt) {
 			this.id = dtid;
@@ -748,12 +787,12 @@ zk.Page = zk.$extends(zk.Widget, {//unlik server, we derive from Widget!
 	type: "#p",
 
 	_style: "width:100%;height:100%",
-	_fellows: {},
 
 	$init: function (pgid, contained) {
-		this.uuid = pgid;
-		if (contained)
-			zk.Page.contained.$add(this);
+		this.$super('$init', pgid);
+
+		this._fellows = {};
+		if (contained) zk.Page.contained.$add(this);
 	},
 	redraw: function () {
 		var html = '<div id="' + this.uuid + '" style="' + this.getStyle() + '">';

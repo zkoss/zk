@@ -18,6 +18,11 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	_minheight: 100,
 	_minwidth: 200,
 
+	$init: function (uuid, mold) {
+		this.$super('$init', uuid, mold);
+		this._fellows = [];
+	},
+
 	getMode: function () {
 		return this._mode;
 	},

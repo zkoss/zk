@@ -40,6 +40,11 @@ public class Button extends LabelImageElement implements org.zkoss.zul.api.Butto
 	private int _tabindex = -1;
 	private boolean _disabled;
 
+	static {
+		addClientEvent(Button.class, Events.ON_FOCUS);
+		addClientEvent(Button.class, Events.ON_BLUR);
+	}
+
 	public Button() {
 	}
 	public Button(String label) {
