@@ -83,7 +83,8 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 			if (hgh && hgh != "auto") {
 				if (zk.ie6Only) n.style.height = "";
 				n.style.height =
-					zDom.revisedHeight(zDom.vflexHeight(n.parentNode), true);
+					zDom.revisedHeight(n, zDom.vflexHeight(n.parentNode), true)
+					+ "px";
 					//we use n.parentNode(=this.epanel) to calc vflex,
 					//so we have to subtract margin, too
 			}
