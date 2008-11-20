@@ -394,11 +394,9 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		final String dtid = request.getParameter("dtid");
 		if (dtid == null) {
 			//Bug 1929139: incomplete request (IE only)
-			final boolean ie = Servlets.isExplorer(request);
-			if (!ie || log.debugable()) {
+			if (log.debugable()) {
 				final String msg = "Incomplete request\n"+Servlets.getDetail(request);
-				if (ie) log.debug(msg);
-				else log.warning(msg); //impossible, so warning
+				log.debug(msg);
 			}
 
 			response.sendError(467, "Incomplete request");
