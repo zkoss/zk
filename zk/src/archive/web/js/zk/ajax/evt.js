@@ -70,10 +70,15 @@ zEvt = {
 	},
 
 	//Mouse Info//
-	/** Returns if it is the left click. */
+	/** Returns if the left button is clicked. */
 	leftClick: function(evt) {
 		if (!evt) evt = window.evt;
 		return evt.which == 1 || evt.button == 0 || evt.button == 1;
+	},
+	/** Returns if the right button is clicked. */
+	rightClick: function (evt) {
+		if (!evt) evt = window.evt;
+		return evt.which == 3 || evt.button == 2;
 	},
 	/** Returns the mouse status.
 	 */
@@ -89,11 +94,23 @@ zEvt = {
 		return [zEvt.keyCode(evt), zEvt.charCode(evt), zEvt._keyInfo(evt)];
 	},
 	_keyInfo: function (evt) {
-		var extra = "";
-		if (evt.altKey) extra += 'a';
-		if (evt.ctrlKey) extra += 'c';
-		if (evt.shiftKey) extra += 's';
+		var extra = {};
+		extra.toString = zEvt._keyInfoToString;
+		extra.altKey = evt.altKey;
+		extra.ctrlKey = evt.ctrlKey;
+		extra.shiftKey = evt.shiftKey;
+		extra.leftClick = zEvt.leftClick(evt);
+		extra.rightClick = zEvt.rightClick(evt);
 		return extra;
+	},
+	_keyInfoToString: function () {
+		var s = "";
+		if (this.altKey) s += 'a';
+		if (this.ctrlKey) s += 'c';
+		if (this.shiftKey) s += 's';
+		if (this.leftClick) s += 'l';
+		if (this.rightClick) s += 'r';
+		return s;
 	},
 
 	/** Returns the X coordinate of the mouse pointer. */
@@ -110,7 +127,10 @@ zEvt = {
 	},
 
 	//Key Info//
-	/** Returns the char code. */
+	/** Returns the char code.
+	 * <p>You might use String.fromCharCode() to convert it to a character,
+	 * such as 65 to 'a'
+	 */
 	charCode: function(evt) {
 		if (!evt) evt = window.evt;
 		return evt.charCode || evt.keyCode;

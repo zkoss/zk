@@ -46,6 +46,12 @@ public class MouseEvent extends Event {
 	 * It might be returned as part of {@link #getKeys}.
 	 */
 	public static final int SHIFT_KEY = 0x004;
+	/** Indicatees whether the left button is clicked.
+	 */
+	public static final int LEFT_CLICK = 0x100;
+	/** Indicatees whether the right button is clicked.
+	 */
+	public static final int RIGHT_CLICK = 0x200;
 
 	/** Construct a mouse relevant event with coordination or area.
 	 */
@@ -62,7 +68,7 @@ public class MouseEvent extends Event {
 	/** Constructs a mouse relevant event.
 	 *
 	 * @param keys a combination of {@link #CTRL_KEY}, {@link #SHIFT_KEY}
-	 * and {@link #ALT_KEY}.
+	 * {@link #ALT_KEY}, {@link #LEFT_CLICK} and {@link #RIGHT_CLICK}.
 	 */
 	public MouseEvent(String name, Component target, int x, int y, int keys) {
 		super(name, target);
@@ -104,7 +110,7 @@ public class MouseEvent extends Event {
 	/** Returns what keys were pressed when the mouse is clicked, or 0 if
 	 * none of them was pressed.
 	 * It is a combination of {@link #CTRL_KEY}, {@link #SHIFT_KEY}
-	 * and {@link #ALT_KEY}.
+	 * {@link #ALT_KEY}, {@link #LEFT_CLICK} and {@link #RIGHT_CLICK}.
 	 */
 	public final int getKeys() {
 		return _keys;

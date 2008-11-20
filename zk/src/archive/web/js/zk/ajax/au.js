@@ -482,6 +482,7 @@ zAu = { //static methods
 			if (aureq.data)
 				for (var k = 0, dl = aureq.data.length; k < dl; ++k) {
 					var data = aureq.data[k];
+					if (data.toString) data = data.toString();
 					content += "&data."+j+"="
 						+ (data != null ? encodeURIComponent(data): '_z~nil');
 				}
