@@ -66,7 +66,8 @@ zkBox.onVisi = zkBox.onHide = zkBox.onSize = function (cmp) {
 	//as expected (since style.width/height might be "")
 
 	var nd = vert ? cmp.rows : cmp.rows[0].cells,
-		total = vert ? cmp.offsetHeight : cmp.offsetWidth;
+		total = vert ? zk.revisedSize(cmp, cmp.offsetHeight, true) :
+					zk.revisedSize(cmp, cmp.offsetWidth);
 
 	for (var i = nd.length; --i >= 0;) {
 		var d = nd[i];
