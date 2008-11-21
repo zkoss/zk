@@ -165,7 +165,7 @@ public class Iframe extends XulElement implements org.zkoss.zul.api.Iframe {
 	}
 	/** Returns the encoded src ({@link #getSrc}).
 	 */
-	private String getEncodedSrc() {
+	protected String getEncodedSrc() {
 		final Desktop dt = getDesktop();
 		return _media != null ? getMediaSrc(): //already encoded
 			dt != null ? dt.getExecution().encodeURL(

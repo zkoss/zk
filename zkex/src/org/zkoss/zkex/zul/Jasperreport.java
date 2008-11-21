@@ -53,6 +53,7 @@ import org.zkoss.util.media.Media;
 import org.zkoss.util.logging.Log;
 import org.zkoss.xml.HTMLs;
 
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.HtmlBasedComponent;
@@ -136,24 +137,21 @@ public class Jasperreport extends Iframe implements org.zkoss.zkex.zul.api.Jaspe
 			invalidate();
 		}
 	}
-
-	/**
-	 * Returns the attributes for generating the HTML tags.
-	 */
-	public String getOuterAttrs() {
-		final String attrs = super.getOuterAttrs();
-		if (_src == null)
-			return attrs;
-
-		final StringBuffer sb = new StringBuffer(80).append(attrs);
-		StringTokenizer st = new StringTokenizer(_src, ".");
-		HTMLs.appendAttribute(sb, "src", Utils.getDynamicMediaURI(this,
-			_medver++, st.nextToken(),
-			_type.equals("jxl") ? "xls": _type));
-
-		return sb.toString();
+	
+	public void setContent(Media media) {
+		throw new UnsupportedOperationException("readonly");
 	}
-
+	
+	protected String getEncodedSrc() {
+		if (_src == null) {
+			final Desktop dt = getDesktop();
+			return 	dt != null ? dt.getExecution().encodeURL("~./img/spacer.gif"):  "";
+		} else {
+			StringTokenizer st = new StringTokenizer(_src, ".");
+			return Utils.getDynamicMediaURI(this, _medver++, st.nextToken(),
+						_type.equals("jxl") ? "xls": _type);
+		}
+	}
 	/**
 	 * Returns the JasperReports Parameters.
 	 * <p>Default: null.
@@ -293,8 +291,7 @@ public class Jasperreport extends Iframe implements org.zkoss.zkex.zul.api.Jaspe
 	 * A utility class to implement {@link #getExtraCtrl}. It is used only by
 	 * component developers.
 	 */
-	protected class ExtraCtrl extends HtmlBasedComponent.ExtraCtrl implements
-			DynamicMedia {
+	protected class ExtraCtrl extends Iframe.ExtraCtrl {
 		// -- DynamicMedia --//
 		public Media getMedia(String pathInfo) {
 			int indexOfImg = pathInfo.lastIndexOf(IMAGE_DIR);
