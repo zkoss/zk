@@ -42,7 +42,7 @@ function submitUpload() {
 	parent.zkau.beginUpload(_zuuid);
 }
 function cancelUpload() {
-	parent.setTimeout(function(){zkau.endUpload();zkau.sendOnClose(_zuuid);}, 100);
+	parent.setTimeout(function(){parent.zkau.endUpload();parent.zkau.sendOnClose(_zuuid);}, 100);
 }
 function init() {
 	if (!parent.zk || !parent.zk.booted) {
@@ -91,6 +91,7 @@ function deleteUpload(img) {
 function adjustHgh(table) {
 	table.parentNode.style.height = table.rows.length > 3 ? "100px" : "";
 	if (parent.zk.opera) table.parentNode.style.overflow = "auto";
+	table.parentNode.scrollTop = table.parentNode.scrollHeight;
 }
 // -->
 </script>
