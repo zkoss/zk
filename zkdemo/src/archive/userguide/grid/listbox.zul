@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+listbox.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Nov 17 16:26:39     2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo" apply="org.zkoss.zkdemo.userguide.DemoWindowComposer">
+	<html><![CDATA[
+      	<h4>Listboxes</h4>
+   		<p>Listbox provides an option lists for the end user to pick an option from.</p>
+	]]></html>
+	<separator/>
+	<tabbox width="100%" tabscroll="false">
+		<tabs>
+			<tab id="demoView" label="Demo"/>
+			<tab id="srcView" label="View Source"/>
+		</tabs>
+		<tabpanels>
+			<tabpanel>
+				<window id="view">
+				</window>
+			</tabpanel>
+			
+			<tabpanel>
+				<panel>
+					<panelchildren>
+						<textbox id="codeView" class="code" rows="20" width="95%">
+			<attribute name="value"><![CDATA[
+<window title="Listbox" border="normal">
+<vbox width="100%">
+	<listbox rows="1" mold="select">
+		<listitem label="Inbox"/>
+		<listitem label="Received"/>
+		<listitem label="Draft"/>
+	</listbox>		
+
+	<separator bar="true"/>
+	<listbox fixedLayout="true">
+		<listhead sizable="true">
+			<listheader align="center" width="40px"
+				image="/img/label_important.png" />
+			<listheader align="center" width="40px" image="/img/doc.png" />
+			<listheader align="center" width="40px"
+				image="/img/mail_attachment.png" />
+			<listheader label="Subject" sort="auto"/>
+			<listheader label="Received" sort="auto"/>
+		</listhead>
+		<listitem height="28px">
+			<listcell image="/img/up-sign.gif" />
+			<listcell image="/img/sent.png" />
+			<listcell image="/img/attachment.gif" />
+			<listcell label="ZK Jet 0.8.0 is released" />
+			<listcell label="2008/11/17 17:41:29" />
+		</listitem>
+		<listitem height="28px">
+			<listcell image="/img/down-sign.gif" />
+			<listcell image="/img/received.png" />
+			<listcell image="/img/attachment.gif" />
+			<listcell label="URLs for iPhone-Optimized Google Sites" />
+			<listcell label="2008/11/17 15:56:37" />
+		</listitem>
+		<listitem height="28px">
+			<listcell label="&#160;" />
+			<listcell image="/img/mail_read.png" />
+			<listcell label="&#160;" />
+			<listcell label="Style Guide for ZK 3.5 released" />
+			<listcell label="2008/11/14 13:23:07" />
+		</listitem>
+		<listitem height="28px">
+			<listcell image="/img/up-sign.gif" />
+			<listcell image="/img/sent.png" />
+			<listcell label="&#160;" />
+			<listcell label="ZK Studio 0.9.0 released." />
+			<listcell label="2008/11/16 10:26:37" />
+		</listitem>
+	</listbox>
+</vbox>
+</window>
+			]]></attribute>
+						</textbox>
+					</panelchildren>
+					<toolbar mold="panel">
+						<button id="reloadBtn" label="Reload" height="18px"/>
+						<button id="tryBtn" label="Try me!"/>
+					</toolbar>
+				</panel>
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+</window>

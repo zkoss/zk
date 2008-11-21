@@ -295,4 +295,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		</listener-class>
 	</listener>
 	 -->	
+	<!-- ZK Demo properties loader -->
+	<listener>
+		<description>ZK Demo properties loader</description>
+		<listener-class>
+			org.zkoss.zkdemo.userguide.DemoWebAppInit
+		</listener-class>
+	</listener>
 </zk>

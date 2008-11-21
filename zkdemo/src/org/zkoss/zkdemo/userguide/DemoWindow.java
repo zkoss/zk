@@ -30,6 +30,7 @@ public class DemoWindow extends Window {
 	public void onCreate() {
 		final Include inc = new Include();
 		inc.setSrc("/userguide/bar.zul");
+		inc.setStyle("float:right");
 		insertBefore(inc, getFirstChild());
 	}
 }

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+index.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Nov 11 12:27:05     2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<?page id="userGuide" title="ZK Live Demo"?>
+<?link  rel="stylesheet" type="text/css" href="~./zul/css/ext.css.dsp"?>
+<?component name="category" inline="true" macroURI="/userguide/macros/category.zul"?>
+<?component name="categorybar" extends="div" moldURI="/userguide/macros/categorybar.dsp"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk>
+<script><![CDATA[
+function onSelect(cmp) {
+	var parent = cmp.parentNode;
+	for (var cn = zk.childNodes(parent, zkCategoryBar._isLegalType), len = cn.length; --len >= 0;){
+		if (cn[len] == cmp)
+			zk.addClass(cn[len], "demo-seld");
+		else
+			zk.rmClass(cn[len], "demo-seld");
+	}
+}
+zkCategoryBar = {
+	init: function (cmp) {
+		zk.listen($e(cmp, "right"), "mouseover", this.onClickArrow);
+		zk.listen($e(cmp, "right"), "mouseout", this.stop);
+		zk.listen($e(cmp, "left"), "mouseover", this.onClickArrow);
+		zk.listen($e(cmp, "left"), "mouseout", this.stop);
+	},
+	onSize: function (cmp) {
+		this._forceStyle(cmp, "");
+		this._forceStyle(cmp, zk.revisedSize(cmp, cmp.offsetWidth) + "px");
+		var body = $e(cmp, "body");
+		this._forceStyle(body, zk.revisedSize(body, cmp.offsetWidth) + "px");
+		this._checkScrolling(cmp, body);
+	},
+	_forceStyle: function (cmp, value) {
+		cmp.style.width = zk.ie6Only ? "0px" : "";
+		cmp.style.width = value;
+	},
+	_isLegalType: function (n) {return (n.id);},
+	_checkScrolling: function (cmp, body) {
+		var cave = $e(cmp, "cave"),
+		 	chd = zk.childNodes(cave, zkCategoryBar._isLegalType),
+		 	headwidth = body.offsetWidth,
+		 	chdwidth = 0;
+		chd.forEach(function(n) { chdwidth += $int(n.offsetWidth) + 2;});
+		
+		if (cmp._scrolling) {
+			if (chdwidth <= (headwidth)) {
+				cmp._scrolling = false;
+				this._fixButton(cmp);
+				body.scrollLeft = 0;
+			} else {
+				var size = body.offsetWidth - $e(cmp, "right").offsetWidth
+				- $e(cmp, "left").offsetWidth - 4;
+				if (size < 0) size = 0;
+				body.style.width = size + "px";
+			}
+		} else {
+			if (chdwidth > (headwidth - 10)) {
+				cmp._scrolling = true;
+				this._fixButton(cmp);
+				var size = body.offsetWidth - $e(cmp, "right").offsetWidth
+					- $e(cmp, "left").offsetWidth - 4;
+				if (size < 0) size = 0;
+				body.style.width = size + "px";
+				cave.style.width = "5000px";
+			}
+		}
+	},
+	_fixButton : function(cmp) {
+		var zcls = getZKAttr(cmp, "zcls");
+		zk[cmp._scrolling ? "addClass" : "rmClass"]($e(cmp, "body"), zcls + "-body-scroll");
+		zk[cmp._scrolling ? "addClass" : "rmClass"]($e(cmp, "right"), zcls + "-right-scroll");
+		zk[cmp._scrolling ? "addClass" : "rmClass"]($e(cmp, "left"), zcls + "-left-scroll");
+	},
+	onClickArrow: function (evt) {
+		var btn = zkau.evtel(evt),
+			cmp = $outer(btn),
+			body = $e(cmp, "body"),
+			chd = zk.childNodes($e(cmp, "cave"), zkCategoryBar._isLegalType),
+			scl = body.scrollLeft;
+		if (!chd.length) return;
+		
+		if (btn.id.endsWith("!right")) {
+			var hosw = body.offsetWidth;
+			for (var i = 0, count = chd.length; i < count; i++) {
+				if (chd[i].offsetLeft + chd[i].offsetWidth > scl + hosw) {
+					move = chd[i].offsetLeft + chd[i].offsetWidth - scl - hosw + 2;
+					if (move == 0 || move == null || isNaN(move))
+						return;
+					zkCategoryBar.scroll(cmp, move, btn, true);
+					return;
+				};
+			};
+		} else { //Scroll to next left tab
+			if (scl == chd[0].offsetLeft) {
+				clearInterval(zkCategoryBar.run);
+				return;
+			}
+			for (var i = 0, count = chd.length; i < count; i++) {
+				if (chd[i].offsetLeft > scl) {
+					if (zk.previousSibling(chd[i], "DIV") == null)  return;
+					move = scl - zk.previousSibling(chd[i], "DIV").offsetLeft + 2;
+					if (isNaN(move)) return;
+					zkCategoryBar.scroll(cmp, move, btn);
+					return;
+				};
+			};
+			move = scl - chd[chd.length-1].offsetLeft + 2;
+			if (isNaN(move)) return;
+			zkCategoryBar.scroll(cmp, move, btn);
+		}
+	},
+	stop: function () {
+		clearInterval(zkCategoryBar.run);
+	},
+	scroll: function(cmp, move, btn, isRight) {
+		if (move <= 0) return;
+		var step, body = $e(cmp, "body");
+		step = move <= 60 ? 5 : eval(5 * ($int(move / 60) + 1));
+		clearInterval(zkCategoryBar.run);
+		zkCategoryBar.run = setInterval(function() {
+			if (move == 0) {
+				zkCategoryBar.onClickArrow(btn);
+				return;
+			} else {
+				move < step ? zkCategoryBar.goscroll(body, isRight, move) :
+						zkCategoryBar.goscroll(body, isRight, step);
+				move = move - step;
+				move = move < 0 ? 0 : move;
+			}
+		}, 20);
+	},
+	goscroll: function(body, isRight, step) {
+		body.scrollLeft = isRight ? (body.scrollLeft + step) : (body.scrollLeft - step);
+		body.scrollLeft = (body.scrollLeft <= 0 ? 0 : body.scrollLeft);
+	}
+};
+]]></script>
+<zscript><![CDATA[
+	String[] data1 = new String[]{};
+	Sessions.getCurrent().setAttribute("gmapsKey","ABQIAAAAILP5Cp3mR13Ms11HaBuzWBTLPA6PTtQmiJSMwMajm4VWxfOvHxSXiT5RrAMrjNuFifcEnG0wBQ5Z8g");
+]]></zscript>
+<borderlayout id="main" apply="org.zkoss.zkdemo.userguide.MainLayoutComposer">
+	<north border="none" size="100px" sclass="demo-header" collapsible="true">
+		<div>
+			<div sclass="demo-logo" onClick='Executions.sendRedirect("http://www.zkoss.org")'>
+				<image width="80px" height="65px" src="/img/ZK-Logo.gif"/>
+			</div>
+			<categorybar zclass="demo-categorybar" id="header">
+				<category forEach="${main.categories}" id="${each.id}" src="${c:browser('ie6-') ? each.iconIE6 : each.icon}" label="${each.label}"/>
+			</categorybar>
+		</div>
+	</north>
+	<west title="ZK ${desktop.webApp.version} Live Demo" size="250px" flex="true" splittable="true"
+		minsize="150" maxsize="500" collapsible="true">
+		<panel>
+			<toolbar>
+				<label value="Search:"/><textbox id="searchBox" sclass="demo-search-inp"/>
+			</toolbar>
+			<panelchildren>
+				<listbox id="itemList" oddRowSclass="non-odd" sclass="demo-items"
+					itemRenderer="${main.itemRenderer}" model="${main.selectedModel}" fixedLayout="true" vflex="true">					
+				</listbox>
+			</panelchildren>
+		</panel>
+	</west>
+	<center autoscroll="true" flex="true">
+		<include style="padding:3px;" id="xcontents" />
+	</center>
+</borderlayout>
+<script if="${desktop.execution.serverName == &quot;www.zkoss.org&quot; or desktop.execution.serverName == &quot;www.potix.com&quot;}">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script if="${desktop.execution.serverName == &quot;www.zkoss.org&quot; or desktop.execution.serverName == &quot;www.potix.com&quot;}">
+var pageTracker = _gat._getTracker("UA-121377-3");
+pageTracker._setDomainName("zkoss.org");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+</zk>

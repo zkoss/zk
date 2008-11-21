@@ -1,0 +1,231 @@
+/* MainLayoutComposer.java
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Nov 12, 2008 3:10:06 PM , Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+	This program is distributed under GPL Version 2.0 in the hope that
+	it will be useful, but WITHOUT ANY WARRANTY.
+}}IS_RIGHT
+ */
+package org.zkoss.zkdemo.userguide;
+
+import java.util.LinkedList;
+import java.util.Map;
+
+import org.zkoss.lang.reflect.FusionInvoker;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.ComponentNotFoundException;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.ForwardEvent;
+import org.zkoss.zk.ui.event.InputEvent;
+import org.zkoss.zk.ui.event.OpenEvent;
+import org.zkoss.zk.ui.event.SelectEvent;
+import org.zkoss.zk.ui.metainfo.ComponentInfo;
+import org.zkoss.zk.ui.util.ComposerExt;
+import org.zkoss.zk.ui.util.GenericForwardComposer;
+import org.zkoss.zkex.zul.Borderlayout;
+import org.zkoss.zul.Div;
+import org.zkoss.zul.Include;
+import org.zkoss.zul.ListModel;
+import org.zkoss.zul.ListModelList;
+import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Listcell;
+import org.zkoss.zul.Listitem;
+import org.zkoss.zul.ListitemRenderer;
+import org.zkoss.zul.Textbox;
+
+/**
+ * @author jumperchen
+ * 
+ */
+public class MainLayoutComposer extends GenericForwardComposer implements
+	MainLayoutAPI, ComposerExt {
+	Textbox searchBox;
+
+	Listbox itemList;
+
+	Borderlayout main;
+	
+	Include xcontents;
+	
+	Div header;
+
+	Div _selected;
+
+	public MainLayoutComposer() {
+		initKey();
+	}
+
+	private Map getCategoryMap() {
+		return DemoWebAppInit.getCateMap();
+	}
+
+	private void initKey() {
+		// We have to decide the key of Google Maps since we have a demo using
+		// it.
+		// This key is used by zkdemo/userguide/index.zul to generate a proper
+		// script
+		final Execution exec = Executions.getCurrent();
+		final String sn = exec.getServerName();
+		final int sp = exec.getServerPort();
+
+		// To add more keys: http://www.google.com/apis/maps/signup.html
+
+		String gkey = null;
+		if (sn.indexOf("www.potix.com") >= 0) { // http://www.potix.com/
+			gkey = "ABQIAAAAmGxmYR57XDAbAumS9tV5fxRYCo_4ZGj_-54kHesWSk0nMkbs4xTpq0zo9O75_ZqvsSLGY2YkC7jjNg";
+		} else if (sn.indexOf("www.zkoss.org") >= 0) { // http://www.zkoss.org/
+			gkey = "ABQIAAAAmGxmYR57XDAbAumS9tV5fxQXyylOlR69a1vFTcUcpV6DXdesOBSMEHfkewcSzwEwBT7UzVx8ep8vjA";
+		} else if (sn.indexOf("zkoss.org") >= 0) { // http://www.zkoss.org/
+			gkey = "ABQIAAAAakIm31AXAvNGFHV8i1Tx8RSF4KLGEmvBsS1z1zAsQZvbQceuNRQBsm65qGaXpTWjZsc2bl-hm2Vyfw";
+		} else if (sn.indexOf("localhost") >= 0) { // localhost
+			if (sp == 80) // http://localhost/
+				gkey = "ABQIAAAAmGxmYR57XDAbAumS9tV5fxT2yXp_ZAY8_ufC3CFXhHIE1NvwkxRUITTZ-rzsyEVih16Hn3ApyUpSkA";
+			else if (sp == 8080) // http://localhost:8080
+				gkey = "ABQIAAAAmGxmYR57XDAbAumS9tV5fxTwM0brOpm-All5BF6PoaKBxRWWERSynObNOWSyMNmLGAMZAO1WkDUubA";
+			else if (sp == 7799)
+				gkey = "ABQIAAAAmGxmYR57XDAbAumS9tV5fxTT6-Op-9nAQgn7qnDG0QjE8aldaBRU1BQK2ADNWCt1BR2yg4ghOM6YIA";
+		}
+
+		if (gkey != null)
+			exec.getDesktop().getSession().setAttribute("gmapsKey", gkey);
+	}
+
+	public void onCategorySelect(ForwardEvent event) {
+		Div div = (Div) event.getOrigin().getTarget();
+		if (_selected != div)
+			_selected = div;
+		itemList.setModel(getSelectedModel());
+	}
+
+	public void onSelect$itemList(SelectEvent event) {
+		Listitem item = itemList.getSelectedItem();
+		if (item != null) {
+			xcontents.setSrc((String) item.getValue());
+		}
+	}
+
+	public void onMainCreate(Event event) {
+		final Execution exec = Executions.getCurrent();
+		String id = exec.getParameter("id");
+		Listitem item = null;
+		if (id != null) {
+			try {
+				item = (Listitem) main.getFellow(id);
+			} catch (ComponentNotFoundException ex) { // ignore
+			}
+		}
+
+		if (item == null) {
+			item = (Listitem) main.getFellow("f1");
+			if (_selected == null) {
+				_selected = (Div) header.getFirstChild();
+				String scls = _selected.getSclass();
+				if (scls == null) scls = "";
+				_selected.setSclass(scls + " demo-seld");
+			}
+		}		
+		xcontents.setSrc((String) item.getValue());
+
+		itemList.selectItem(item);
+	}
+
+	public void onChanging$searchBox(InputEvent event) {
+		String key = event.getValue();
+		LinkedList item = new LinkedList();
+		DemoItem[] items = getItems();
+
+		if (key.trim().length() != 0) {
+			for (int i = 0; i < items.length; i++) {
+				if (items[i].getLabel().toLowerCase()
+						.indexOf(key.toLowerCase()) != -1)
+					item.add(items[i]);
+			}
+			itemList.setModel(new ListModelList(item));
+		} else itemList.setModel(new ListModelList(items));
+	}
+
+	private DemoItem[] getItems() {
+		LinkedList items = new LinkedList();
+		Category[] categories = getCategories();
+		for (int i = 0; i < categories.length; i++) {
+			items.addAll(categories[i].getItems());
+		}
+		return (DemoItem[]) items.toArray(new DemoItem[] {});
+	}
+
+	public Category[] getCategories() {
+		return (Category[]) getCategoryMap().values()
+				.toArray(new Category[] {});
+	}
+
+	public ListitemRenderer getItemRenderer() {
+		return _defRend;
+	}
+
+	private static final ListitemRenderer _defRend = new ListitemRenderer() {
+		public void render(Listitem item, Object data) {
+			DemoItem di = (DemoItem) data;
+			Listcell lc = new Listcell();
+			item.setValue(di.getFile());
+			lc.setHeight("30px");
+			if (Executions.getCurrent().isBrowser("ie6-")) {
+				lc.setImage(di.getIconIE6());
+			} else {
+				lc.setImage(di.getIcon());
+			}
+			item.setId(di.getId());
+			lc.setLabel(di.getLabel());
+			lc.setParent(item);
+		}
+	};
+
+	private Category getCategory(String cateId) {
+		return (Category) getCategoryMap().get(cateId);
+	}
+
+	public ListModel getSelectedModel() {
+		Category cate = _selected == null ? getCategories()[0] :
+				getCategory(_selected.getId());
+		return new ListModelList(cate.getItems());
+	}
+
+	// Composer Implementation
+	public void doAfterCompose(Component comp) throws Exception {
+		super.doAfterCompose(comp);
+		Events.postEvent("onMainCreate", comp, null);
+	}
+
+	public ComponentInfo doBeforeCompose(Page page, Component parent,
+			ComponentInfo compInfo) {
+		return compInfo;
+	}
+
+	public void doBeforeComposeChildren(Component comp) throws Exception {
+		bindComponent(comp);
+		Object obj = FusionInvoker.newInstance(new Object[] { comp, this });
+		comp.setVariable("main", obj, true);
+		main = (Borderlayout) comp;
+	}
+
+	public boolean doCatch(Throwable ex) throws Exception {
+		ex.printStackTrace();
+		return false;
+	}
+
+	public void doFinally() throws Exception {
+	}
+}
