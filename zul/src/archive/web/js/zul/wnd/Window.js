@@ -47,6 +47,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	doEmbedded: function () {
 	},
 	_doOverOrPopup: function () {
+		this._updateDomOuter();
+
 		var pos = this.getPosition(),
 			isV = this._shallVParent(),
 			n = this.node;
@@ -97,9 +99,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	setTitle: function (title) {
 		if (this._title != title) {
 			this._title = title;
-
-			var n = this.node;
-			if (n) ;//TODO
+			this._updateDomOuter();
 		}
 	},
 	getBorder: function () {
@@ -108,9 +108,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	setBorder: function (border) {
 		if (this._border != border) {
 			this._border = border;
-
-			var n = this.node;
-			if (n) ;//TODO
+			this._updateDomOuter();
 		}
 	},
 	getPosition: function () {
@@ -154,9 +152,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	setClosable: function (closable) {
 		if (this._closable != closable) {
 			this._closable = closable;
-
-			var n = this.node;
-			if (n) ;//TODO
+			this._updateDomOuter();
 		}
 	},
 	isSizable: function () {
@@ -165,9 +161,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	setSizable: function (sizable) {
 		if (this._sizable != sizable) {
 			this._sizable = sizable;
-
-			var n = this.node;
-			if (n) ;//TODO
+			this._updateDomOuter();
 		}
 	},
 	isMaximized: function () {
@@ -176,9 +170,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	setMaximized: function (maximized) {
 		if (this._maximized != maximized) {
 			this._maximized = maximized;
-
-			var n = this.node;
-			if (n) ;//TODO
+			this._updateDomOuter();
 		}
 	},
 	isMaximizable: function () {
@@ -187,9 +179,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	setMaximizable: function (maximizable) {
 		if (this._maximizable != maximizable) {
 			this._maximizable = maximizable;
-
-			var n = this.node;
-			if (n) ;//TODO
+			this._updateDomOuter();
 		}
 	},
 	isMinimized: function () {
@@ -198,9 +188,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	setMinimized: function (minimized) {
 		if (this._minimized != minimized) {
 			this._minimized = minimized;
-
-			var n = this.node;
-			if (n) ;//TODO
+			this._updateDomOuter();
 		}
 	},
 	isMinimizable: function () {
@@ -209,9 +197,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	setMinimizable: function (minimizable) {
 		if (this._minimizable != minimizable) {
 			this._minimizable = minimizable;
-
-			var n = this.node;
-			if (n) ;//TODO
+			this._updateDomOuter();
 		}
 	},
 
@@ -221,9 +207,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	setContentStyle: function (style) {
 		if (this._cntStyle != style) {
 			this._cntStyle = style;
-
-			var n = this.node;
-			if (n) ;//TODO
+			this._updateDomOuter();
 		}
 	},
 	getContentSclass: function () {
@@ -232,10 +216,12 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	setContentSclass: function (sclass) {
 		if (this._cntSclass != sclass) {
 			this._cntSclass = sclass;
-
-			var n = this.node;
-			if (n) ;//TODO
+			this._updateDomOuter();
 		}
+	},
+
+	_updateDomOuter: function () {
+		if (this.node) this.rerender(zk.Skipper.nonCaptionSkipper);
 	},
 
 	//super//
@@ -288,8 +274,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				+style;
 		return style;
 	},
-	bind_: function (desktop) {
-		this.$super('bind_', desktop);
+	bind_: function (desktop, skipper) {
+		this.$super('bind_', desktop, skipper);
 
 		var uuid = this. uuid,
 			$Window = this.$class;
@@ -304,7 +290,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			}
 		}
 	},
-	unbind_: function () {
+	unbind_: function (skipper) {
 		var $Window = this.$class;
 		for (var nms = ['close', 'max', 'min'], j = 3; --j >=0;) {
 			var nm = nms[j],
@@ -316,7 +302,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				zEvt.unlisten(n, 'mouseout', $Window[nm + 'out']);
 			}
 		}
-		this.$super('unbind_');
+		this.$super('unbind_', skipper);
 	}
 },{ //static
 	closeclick: function (evt) {

@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-function () {
+function (skipper) {
 	var zcls = this.getZclass(),
 		uuid = this.uuid,
 		title = this.getTitle(),
@@ -70,9 +70,10 @@ function () {
 	if (wcExtStyle) html += ' style="' + wcExtStyle +'"';
 	html += '>';
 
-	for (var w = this.firstChild; w; w = w.nextSibling)
-		if (w != caption)
-			html += w.redraw();
+	if (!skipper)
+		for (var w = this.firstChild; w; w = w.nextSibling)
+			if (w != caption)
+				html += w.redraw();
 
 	html += '</div>';
 

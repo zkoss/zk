@@ -214,6 +214,14 @@ zk = { //static members
 		}
 	},
 
+	//status
+	/** Modal windows. */
+	modal: [],
+	/** Overlapped windows. */
+	overlapped: [],
+	/** Popup windos. */
+	popup: [],
+
 	//DEBUG//
 	/** Generates an error message. */
 	error: function (msg) {

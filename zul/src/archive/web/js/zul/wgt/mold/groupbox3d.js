@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-function () {
+function (skipper) {
 	var html = '<div' + this.domAttrs_() + '>',
 		zcls = this.getZclass(),
 		uuid = this.uuid;
@@ -27,9 +27,10 @@ function () {
 	if (!this.isOpen()) html += ' style="display:none"';
 	html += '><div id="' + uuid + '$cave"' + this._contentAttrs() + '>';
 
-	for (var w = this.firstChild; w; w = w.nextSibling)
-		if (w != cap)
-			html += w.redraw();
+	if (!skipper)
+		for (var w = this.firstChild; w; w = w.nextSibling)
+			if (w != cap)
+				html += w.redraw();
 	return html + '</div></div>'
 		//shadow
 		+ '<div id="' + uuid + '$sdw" class="' + zcls +'-bl"><div class="' + zcls

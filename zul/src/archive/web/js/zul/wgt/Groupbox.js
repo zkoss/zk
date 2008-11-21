@@ -43,7 +43,10 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		return this._closable;
 	},
 	setClosable: function (closable) {
-		this._closable = closable;
+		if (this._closable != closable) {
+			this._closable = closable;
+			this._updateDomOuter();
+		}
 	},
 	getContentStyle: function () {
 		return this._cntStyle;
@@ -51,7 +54,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	setContentStyle: function (style) {
 		if (this._cntStyle != style) {
 			this._cntStyle = style;
-			//TODO: call Groupbox3d.onSize (_fixHgh)
+			this._updateDomOuter();
 		}
 	},
 	getContentSclass: function () {
@@ -60,10 +63,13 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	setContentSclass: function (sclass) {
 		if (this._cntSclass != sclass) {
 			this._cntSclass = sclass;
-			//TODO: call Groupbox3d.onSize (_fixHgh)
+			this._updateDomOuter();
 		}
 	},
 
+	_updateDomOuter: function () {
+		if (this.node) this.rerender(zk.Skipper.nonCaptionSkipper);
+	},
 	_contentAttrs: function () {
 		var html = ' class="', s = this._cntSclass;
 		if (s) html += s + ' ';
@@ -117,8 +123,8 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		var zcls = this._zclass;
 		return zcls ? zcls: this.isLegend() ? "z-fieldset": "z-groupbox";
 	},
-	bind_: function (desktop) {
-		this.$super('bind_', desktop);
+	bind_: function (desktop, skipper) {
+		this.$super('bind_', desktop, skipper);
 
 		if (!this.isLegend()) {
 			var uuid = this.uuid;
@@ -129,10 +135,10 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 			this.onSize(); //fix height and shadow
 		}
 	},
-	unbind_: function () {
+	unbind_: function (skipper) {
 		this.epanel = this.ecave = this.esdw = null;
 
-		this.$super('unbind_');
+		this.$super('unbind_', skipper);
 	},
 
 	appendChild: function (child) {

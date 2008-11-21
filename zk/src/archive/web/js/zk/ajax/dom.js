@@ -19,7 +19,6 @@ zDom = { //static methods
 	 * A shortcut of document.getElementById.
 	 */
 	$: function(id) {
-		if (id && id.id) id = id.id;
 		return typeof id == 'string' ?
 			id ? document.getElementById(id): null: id;
 			//strange but getElementById("") fails in IE7
@@ -46,7 +45,7 @@ zDom = { //static methods
 	/** Returns if a DOM element is real visible (i.e., all ancestors are visible).
 	 */
 	isRealVisible: function (n, strict) {
-		for (; n; n = n.parentNode) //TODO: consider v-parent
+		for (; n; n = zDom.parentNode(n))
 			if (!zDom.isVisible(n, strict))
 				return false;
 		return true;
@@ -117,6 +116,33 @@ zDom = { //static methods
 			 if (!isNaN(w)) val += w;
 		}
 		return val;
+	},
+
+	/**
+	 * Returns the revised position, which subtracted the offset of its scrollbar,
+	 * for the specified element.
+	 * @param {Object} el
+	 * @param {Array} ofs [left, top];
+	 * @return {Array} [left, top];
+	 */
+	revisedOffset: function (el, ofs) {
+		if(!ofs) {
+			if (el.getBoundingClientRect){ // IE and FF3
+				var b = el.getBoundingClientRect();
+				return [b.left + zDom.innerX() - el.ownerDocument.documentElement.clientLeft,
+					b.top + zDom.innerY() - el.ownerDocument.documentElement.clientTop];
+				// IE adds the HTML element's border, by default it is medium which is 2px
+				// IE 6 and 7 quirks mode the border width is overwritable by the following css html { border: 0; }
+				// IE 7 standards mode, the border is always 2px
+				// This border/offset is typically represented by the clientLeft and clientTop properties
+				// However, in IE6 and 7 quirks mode the clientLeft and clientTop properties are not updated when overwriting it via CSS
+				// Therefore this method will be off by 2px in IE while in quirksmode
+			}
+			ofs = zDom.cmOffset(el);
+		}
+		var scrolls = zDom.scrollOffset(el);
+		scrolls[0] -= zDom.innerX(); scrolls[1] -= zDom.innerY(); 
+		return [ofs[0] - scrolls[0], ofs[1] - scrolls[1]];
 	},
 	/**
 	 * Returns the revised width, which subtracted the size of its CSS border or padding, for the specified element.
@@ -206,7 +232,8 @@ zDom = { //static methods
 			el = el.cells[0];
 
 		//fix gecko and safari's bug: if not visible before, offset is wrong
-		if (zDom.isVisible(el) || zDom.offsetWidth(el))
+		if (!(zk.gecko || zk.safari)
+		|| zDom.isVisible(el) || zDom.offsetWidth(el))
 			return zDom._cmOffset(el);
 
 		el.style.display = "";
@@ -733,6 +760,42 @@ zDom = { //static methods
 		while (el && (el = el.previousSibling) != null && zDom.tag(el) != tagName)
 			;
 		return el;
+	},
+
+	/** Returns the parent node including the virtual parent. */
+	parentNode: function (el) {
+		return el.z_vp || el.parentNode;
+	},
+	vparent: function (el) {
+		return el.z_vp;
+	},
+	makeVParent: function (el) {
+		if (el.z_vp) return; //called twice
+
+		var sib = el.nextSibling, p = el.parentNode, id = el.id;
+		if (!id) throw "id required";
+
+		if (sib) {
+			var agtx = document.createElement("SPAN");
+			agtx.id = id + "$agtx";
+			agtx.style.display = "none";
+			p.insertBefore(agtx, sib);
+		}
+
+		el.z_vp = p;
+		document.body.appendChild(el);
+	},
+	unmakeVParent: function (el) {
+		var p = el.parentNode, id = el.id;
+		el.z_vp = null;
+		if (p) {
+			var sib = $e(id + "!agtx");
+			if (sib) {
+				p.insertBefore(n, sib);
+				zDom.remove(sib);
+			} else
+				p.appendChild(n);
+		}
 	},
 
 	//dialog//
