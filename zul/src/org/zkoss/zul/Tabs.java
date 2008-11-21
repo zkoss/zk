@@ -161,7 +161,17 @@ public class Tabs extends XulElement implements org.zkoss.zul.api.Tabs {
 		if (tabbox == null || !tabbox.inAccordionMold())
 			smartUpdate("z.init", true); //fixWidth
 	}
-		
+	public void invalidate() {
+		Tabbox tabbox = getTabbox();
+		if (tabbox != null && tabbox.isVertical()) {
+			
+			// Bug 2313445 for vtabs2.dsp, it needs to put a div outside root div 
+			// to show the separator bar.
+			tabbox.invalidate();		
+		} else {
+			super.invalidate();
+		}
+	}
 	/** Invalidates the tabbox if it is accordion.
 	 */
 	private static void invalidateIfAccordion(Tabbox tabbox) {

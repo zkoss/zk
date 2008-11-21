@@ -33,5 +33,5 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<%-- Button --%>
 	<div id="${self.uuid}!up" ></div>
 	<div id="${self.uuid}!down" ></div>
-	<div id="${self.uuid}!line" class="${c:cat(zcs,'space')}" ></div>
 </div>
+<div id="${self.uuid}!line" class="${c:cat(zcs,'space')}" > </div>

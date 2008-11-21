@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+comet.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Nov 20 11:28:15     2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window id="demo" apply="org.zkoss.zkdemo.userguide.DemoWindowComposer">
+	<html><![CDATA[
+		<h4>Comet Server Push</h4>
+	]]></html>See the <toolbarbutton id="target" label="org.zkoss.zkdemo.userguide.CometServerPush" popup="details"/> implementation.
+	<separator/>
+	<popup id="details" fulfill="target.onClick" width="550px">
+	<div style="border:1px solid #538BA2; background: #FFF;">
+		<html><![CDATA[
+<pre style='color:#000000;background:#ffffff;'><span style='color:#7f0055; font-weight:bold; '>public</span> <span style='color:#7f0055; font-weight:bold; '>class</span> CometServerPush {
+    <span style='color:#7f0055; font-weight:bold; '>private</span> <span style='color:#7f0055; font-weight:bold; '>static</span> <span style='color:#7f0055; font-weight:bold; '>String</span>[] news = <span style='color:#7f0055; font-weight:bold; '>new</span> <span style='color:#7f0055; font-weight:bold; '>String</span>[] {
+        <span style='color:#2a00ff; '>"Potix (ZK) forms partnership with Centigrade"</span>,
+        <span style='color:#2a00ff; '>"ZK Jet 0.8.0 version is released"</span>,
+        <span style='color:#2a00ff; '>"Style Guide for ZK 3.5 released "</span>,
+        <span style='color:#2a00ff; '>"ZK STudio 0.9.0 released"</span>,
+        <span style='color:#2a00ff; '>"Potix Named as </span><span style='color:#2a00ff; '>\"</span><span style='color:#2a00ff; '>Red Herring 100 Awards 2008</span><span style='color:#2a00ff; '>\"</span><span style='color:#2a00ff; '> Finalist"</span>,
+        <span style='color:#2a00ff; '>"ZK With Spring JPA And A Model-View-Controller Pattern"</span>,
+        <span style='color:#2a00ff; '>"Use Theme Tool to Customize your Own Theme"</span>
+    };
+    <span style='color:#7f0055; font-weight:bold; '>public</span> <span style='color:#7f0055; font-weight:bold; '>static</span> <span style='color:#7f0055; font-weight:bold; '>void</span> start(<span style='color:#7f0055; font-weight:bold; '>Component</span> info) <span style='color:#7f0055; font-weight:bold; '>throws</span> <span style='color:#7f0055; font-weight:bold; '>InterruptedException</span> {
+        <span style='color:#7f0055; font-weight:bold; '>final</span> Desktop desktop = Executions.getCurrent().getDesktop();
+        <span style='color:#7f0055; font-weight:bold; '>if</span> (desktop.isServerPushEnabled()) {
+            Messagebox.show(<span style='color:#2a00ff; '>"Already started"</span>);
+        } <span style='color:#7f0055; font-weight:bold; '>else</span> {
+            desktop.enableServerPush(<span style='color:#7f0055; font-weight:bold; '>true</span>);
+            <span style='color:#7f0055; font-weight:bold; '>new</span> WorkingThread(info).start();
+        }
+    }
+
+    <span style='color:#7f0055; font-weight:bold; '>public</span> <span style='color:#7f0055; font-weight:bold; '>static</span> <span style='color:#7f0055; font-weight:bold; '>void</span> stop() <span style='color:#7f0055; font-weight:bold; '>throws</span> <span style='color:#7f0055; font-weight:bold; '>InterruptedException</span> {
+        <span style='color:#7f0055; font-weight:bold; '>final</span> Desktop desktop = Executions.getCurrent().getDesktop();
+        <span style='color:#7f0055; font-weight:bold; '>if</span> (desktop.isServerPushEnabled()) {
+            desktop.enableServerPush(<span style='color:#7f0055; font-weight:bold; '>false</span>);
+        } <span style='color:#7f0055; font-weight:bold; '>else</span> {
+            Messagebox.show(<span style='color:#2a00ff; '>"Already stopped"</span>);
+        }
+    }
+
+    <span style='color:#7f0055; font-weight:bold; '>private</span> <span style='color:#7f0055; font-weight:bold; '>static</span> <span style='color:#7f0055; font-weight:bold; '>class</span> WorkingThread <span style='color:#7f0055; font-weight:bold; '>extends</span> <span style='color:#7f0055; font-weight:bold; '>Thread</span> {
+        <span style='color:#7f0055; font-weight:bold; '>private</span> <span style='color:#7f0055; font-weight:bold; '>final</span> Desktop _desktop;
+
+        <span style='color:#7f0055; font-weight:bold; '>private</span> <span style='color:#7f0055; font-weight:bold; '>int</span> count = 0;
+        
+        <span style='color:#7f0055; font-weight:bold; '>private</span> <span style='color:#7f0055; font-weight:bold; '>final</span> <span style='color:#7f0055; font-weight:bold; '>Component</span> _info;
+
+        <span style='color:#7f0055; font-weight:bold; '>private</span> WorkingThread(<span style='color:#7f0055; font-weight:bold; '>Component</span> info) {
+            _desktop = info.getDesktop();
+            _info = info;
+        }
+
+        <span style='color:#7f0055; font-weight:bold; '>public</span> <span style='color:#7f0055; font-weight:bold; '>void</span> run() {
+            <span style='color:#7f0055; font-weight:bold; '>try</span> {
+                <span style='color:#7f0055; font-weight:bold; '>while</span> (<span style='color:#7f0055; font-weight:bold; '>true</span>) {
+                    Executions.activate(_desktop);
+                    <span style='color:#7f0055; font-weight:bold; '>try</span> {
+                        <span style='color:#7f0055; font-weight:bold; '>Label</span> label = <span style='color:#7f0055; font-weight:bold; '>new</span> <span style='color:#7f0055; font-weight:bold; '>Label</span>();
+                        <span style='color:#7f0055; font-weight:bold; '>synchronized</span>(<span style='color:#7f0055; font-weight:bold; '>this</span>) {
+                            label.setValue(news[count++]);
+                            <span style='color:#7f0055; font-weight:bold; '>if</span> (count == 7) count =0;
+                        }
+                        label.setSclass(<span style='color:#2a00ff; '>"comet-news"</span>);
+                        <span style='color:#7f0055; font-weight:bold; '>if</span> ( _info.getFirstChild() == <span style='color:#7f0055; font-weight:bold; '>null</span>) {
+                             _info.appendChild(label);
+                        } <span style='color:#7f0055; font-weight:bold; '>else</span> {
+                            _info.insertBefore(label, _info.getFirstChild());
+                        }
+                         _info.insertBefore(<span style='color:#7f0055; font-weight:bold; '>new</span> Separator(), _info.getFirstChild());
+                        <span style='color:#7f0055; font-weight:bold; '>if</span> (_info.getChildren().size() > 12) {
+                            _info.getLastChild().detach();
+                            _info.getLastChild().detach();
+                        }
+                    } <span style='color:#7f0055; font-weight:bold; '>finally</span> {
+                        Executions.deactivate(_desktop);
+                    }
+                    Threads.sleep(1000);
+                }
+            } <span style='color:#7f0055; font-weight:bold; '>catch</span> (<span style='color:#7f0055; font-weight:bold; '>InterruptedException</span> ex) {
+                <span style='color:#7f0055; font-weight:bold; '>System</span>.out.println(<span style='color:#2a00ff; '>"The server push thread interrupted"</span>);
+            }
+        }
+    }
+}
+</pre>
+		]]></html>
+		</div>
+	</popup>	
+	<separator/>
+	<tabbox width="100%" tabscroll="false">
+		<tabs>
+			<tab id="demoView" label="Demo"/>
+			<tab id="srcView" label="View Source"/>
+		</tabs>
+		<tabpanels>
+			<tabpanel>
+				<window id="view">
+				</window>
+			</tabpanel>
+			
+			<tabpanel>
+				<panel>
+					<panelchildren>
+						<textbox id="codeView" class="code" rows="20" width="95%">
+			<attribute name="value"><![CDATA[
+<zk>
+	<style dynamic="true">
+		.comet-news {
+			color: #0A94F3;
+		}
+	</style>
+	<window> Please press the "Start" button to see the demo "Comet Server Push".
+	<button label="Start" onClick="org.zkoss.zkdemo.userguide.CometServerPush.start(info)"/>
+	<button label="Stop" onClick="org.zkoss.zkdemo.userguide.CometServerPush.stop()"/>
+	<separator/>
+	<div id="info" style="border: 1px solid #C6C105; background:#E1DC16; overflow: hidden; padding: 0 10px;" height="150px" width="400px"/> </window>
+</zk>
+			]]></attribute>
+						</textbox>
+					</panelchildren>
+					<toolbar mold="panel">
+						<button id="reloadBtn" label="Reload" height="18px"/>
+						<button id="tryBtn" label="Try me!"/>
+					</toolbar>
+				</panel>
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+</window>

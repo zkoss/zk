@@ -239,7 +239,8 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		//as expected (since style.width/height might be "")
 
 		var nd = vert ? node.rows: node.rows[0].cells,
-			total = vert ? node.offsetHeight : node.offsetWidth;
+			total = vert ? zDom.revisedHeight(node, node.offsetHeight):
+				zDom.revisedWidth(node, node.offsetWidth);
 
 		for (var i = nd.length; --i >= 0;) {
 			var d = nd[i];

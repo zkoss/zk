@@ -27,22 +27,68 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		return this._mode;
 	},
 	setMode: function (mode) {
-		if (this._mode != mode) {
-			this._mode = mode;
-
-			var n = this.node;
-			if (n)
-				this['do' + mode.charAt(0).toUpperCase() + mode.substring(1)]();
-		}
+		this['do' + mode.charAt(0).toUpperCase() + mode.substring(1)]();
 	},
 	doOverlapped: function () {
+		if (this._setMode('overlapped')) {
+			this._doOverOrPopup();
+			zk.overlapped.push(this);
+		}
 	},
 	doPopup: function () {
+		if (this._setMode('popup')) {
+			this._doOverOrPopup();
+			zk.popup.push(this);
+		}
 	},
 	doHilighted: _zkf = function () {
 	},
 	doModal: _zkf,
 	doEmbedded: function () {
+	},
+	_doOverOrPopup: function () {
+		var pos = this.getPosition(),
+			isV = this._shallVParent(),
+			n = this.node;
+		if (!pos && isV && !n.style.top && !n.style.left) {		
+			var xy = zDom.revisedOffset(n);
+			n.style.left = xy[0] + "px";
+			n.style.top = xy[1] + "px";
+		} else if (pos == "parent" && isV) {
+			var xy = zk.revisedOffset(n.parentNode),
+				left = zk.parseInt(n.style.left), top = zk.parseInt(n.style.top);
+			this._offset = xy;
+			n.style.left = xy[0] + zk.parseInt(n.style.left) + "px";
+			n.style.top = xy[1] + zk.parseInt(n.style.top) + "px";
+		}
+
+		if (isV) zDom.makeVParent(n);
+		//if (pos) this._position(pos);
+
+//		if (this.isVisible()) //TO getZKAttr(visible...
+			n.style.visibility = 'visible';
+		zDom.show(n);
+	},
+	_setMode: function (mode) {
+		if (this._mode != mode) {
+			var n = this.node;
+			if (n) this._cleanMode();
+			this._mode = mode;
+			if (n) return true;
+		}
+		return false;
+	},
+	_cleanMode: function () {
+		switch (this.getMode()) {
+		case 'overlapped': zk.overlapped.$remove(this); break;
+		case 'popup': zk.popup.$remove(this); break;
+		}
+	},
+	_shallVParent: function () {
+		for (var wgt = this; wgt = wgt.parent;)
+			if (wgt._mode && wgt._mode != 'embedded')
+				return false;
+		return true;
 	},
 
 	getTitle: function () {
