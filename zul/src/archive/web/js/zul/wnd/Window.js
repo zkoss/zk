@@ -21,33 +21,32 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	$init: function (uuid, mold) {
 		this.$super('$init', uuid, mold);
 		this._fellows = [];
+		this.listen('onClose', this, -1000);
 	},
 
 	getMode: function () {
 		return this._mode;
 	},
 	setMode: function (mode) {
-		this['do' + mode.charAt(0).toUpperCase() + mode.substring(1)]();
+		this._setMode(mode);
 	},
 	doOverlapped: function () {
-		if (this._setMode('overlapped')) {
-			this._doOverOrPopup();
-			zk.overlapped.push(this);
-		}
+		this._setMode('overlapped');
 	},
 	doPopup: function () {
-		if (this._setMode('popup')) {
-			this._doOverOrPopup();
-			zk.popup.push(this);
-		}
+		this._setMode('popup');
 	},
-	doHilighted: _zkf = function () {
+	doHilighted: function () {
+		this._setMode('hilighted');
 	},
-	doModal: _zkf,
+	doModal: function () {
+		this._setMode('modal');
+	},
 	doEmbedded: function () {
+		this._setMode('embedded');
 	},
-	_doOverOrPopup: function () {
-		this._updateDomOuter();
+	_doOverOrPopup: function (binding) {
+		if (!binding) this._updateDomOuter();
 
 		var pos = this.getPosition(),
 			isV = this._shallVParent(),
@@ -69,16 +68,47 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 
 //		if (this.isVisible()) //TO getZKAttr(visible...
 			n.style.visibility = 'visible';
-		zDom.show(n);
+
+		this._makeFloat();
+
+		if (this.isVisible())
+			zDom.show(n);
+
+		this._syncShadow();
 	},
-	_setMode: function (mode) {
-		if (this._mode != mode) {
+	_syncShadow: function () {
+		if (this._mode == 'embedded') {
+			if (this._shadow) {
+				this._shadow.destroy();
+				this._shadow = null;
+			}
+		} else {
+			if (!this._shadow) this._shadow = new zEffect.Shadow(this.node);
+			this._shadow.sync();
+		}
+	},
+	_hideShadow: function () {
+		var shadow = this._shadow;
+		if (shadow) shadow.hide();
+	},
+	_setMode: function (mode, binding) {
+		if (!binding) {
+			if (this._mode == mode) return;
 			var n = this.node;
 			if (n) this._cleanMode();
 			this._mode = mode;
-			if (n) return true;
+			if (!n) return;
 		}
-		return false;
+
+		switch (mode) {
+		case 'overlapped':
+			this._doOverOrPopup(binding);
+			zk.overlapped.push(this);
+			break;
+		case 'popup':
+			this._doOverOrPopup(binding);
+			zk.popup.push(this);
+		}
 	},
 	_cleanMode: function () {
 		switch (this.getMode()) {
@@ -91,6 +121,21 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			if (wgt._mode && wgt._mode != 'embedded')
 				return false;
 		return true;
+	},
+	_makeFloat: function () {
+		var handle = this.ecap;
+		if (handle) {
+			handle.style.cursor = "move";
+			var $Window = zul.wnd.Window;
+			this._drag = new zk.Draggable(this, null, {
+				handle: handle, overlay: true,
+				starteffect: $Window._startmove,
+				//TODO change: zkau.hideCovered,
+				ghosting: $Window._ghostmove,
+				ignoredrag: $Window._ignoremove,
+				endeffect: $Window._aftermove});
+			//we don't use options.change because it is called too frequently
+		}
 	},
 
 	getTitle: function () {
@@ -224,6 +269,12 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		if (this.node) this.rerender(zk.Skipper.nonCaptionSkipper);
 	},
 
+	//event handler//
+	onClose: function () {
+		if (!this.inServer) //let server handle if in server
+			this.parent.removeChild(this); //default: remove
+	},
+
 	//super//
 	focus: function () {
 		if (this.node) {
@@ -279,6 +330,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 
 		var uuid = this. uuid,
 			$Window = this.$class;
+		this.ecap = zDom.$(uuid + '$cap');
+
 		for (var nms = ['close', 'max', 'min'], j = 3; --j >=0;) {
 			var nm = nms[j],
 				n = this['e' + nm ] = zDom.$(uuid + '$' + nm);
@@ -289,8 +342,17 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				if (!n.style.cursor) n.style.cursor = "default";
 			}
 		}
+
+		if (this._mode != 'embedded')
+			this._setMode(this._mode, true);
 	},
 	unbind_: function (skipper) {
+		if (this._shadow) {
+			this._shadow.destroy();
+			this._shadow = null;
+		}
+		zDom.undoVParent(this.node);
+
 		var $Window = this.$class;
 		for (var nms = ['close', 'max', 'min'], j = 3; --j >=0;) {
 			var nm = nms[j],
@@ -353,5 +415,65 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		var wnd = zk.Widget.$(evt),
 			zcls = wnd.getZclass();
 		zDom.rmClass(wnd.emin, zcls + '-minimize-over');
+	},
+
+	//drag
+	_startmove: function (dg) {
+		//Bug #1568393: we have to change the percetage to the pixel.
+		var el = dg.node;
+		if(el.style.top && el.style.top.indexOf("%") >= 0)
+			 el.style.top = el.offsetTop + "px";
+		if(el.style.left && el.style.left.indexOf("%") >= 0)
+			 el.style.left = el.offsetLeft + "px";
+		//TODO var real = $real(handle);
+		//zkau.closeFloats(real, handle);
+	},
+	_ghostmove: function (dg, ghosting, pointer) {
+		if (ghosting) {
+			var wnd = dg.widget,
+				el = dg.node;
+			wnd._hideShadow();
+			var ofs = dg.beginGhostToDIV(),
+				title = zDom.firstChild(el, "DIV"),
+				fakeTitle = title.cloneNode(true);
+			var html = '<div id="zk_wndghost" class="z-window-move-ghost" style="position:absolute;top:'
+				+ofs[1]+'px;left:'+ofs[0]+'px;width:'
+				+zDom.offsetWidth(el)+'px;height:'+zDom.offsetHeight(el)
+				+'px;z-index:'+el.style.zIndex+'"><ul></ul></div></div>';
+			document.body.insertAdjacentHTML("afterbegin", html);
+			dg._wndoffs = ofs;
+			el.style.visibility = "hidden";
+			var h = el.offsetHeight - title.offsetHeight;
+			el = dg.node = zDom.$("zk_wndghost");
+			el.firstChild.style.height = zDom.revisedHeight(el.firstChild, h) + "px";
+			el.insertBefore(fakeTitle, dg.node.firstChild);
+		} else {
+			var org = dg.getGhostOrgin();
+			if (org) {
+				var el = dg.node;
+				org.style.top = org.offsetTop + el.offsetTop - dg._wndoffs[1] + "px";
+				org.style.left = org.offsetLeft + el.offsetLeft - dg._wndoffs[0] + "px";
+			}
+			dg.endGhostToDIV();
+			document.body.style.cursor = "";
+		}
+	},
+	_ignoremove: function (dg, pointer, evt) {
+		var target = zEvt.target(evt),
+			el = dg.node;
+		if (!target || target.id.indexOf("$close") > -1 || target.id.indexOf("$min") > -1
+		|| target.id.indexOf("$max") > -1)
+			return true; //ignore special buttons
+		if (!dg.widget.isSizable()
+		|| (el.offsetTop + 4 < pointer[1] && el.offsetLeft + 4 < pointer[0] 
+		&& el.offsetLeft + el.offsetWidth - 4 > pointer[0]))
+			return false; //accept if not sizable or not on border
+		return true;
+	},
+	_aftermove: function (dg, evt) {
+		dg.node.style.visibility = "";
+		dg.widget._syncShadow();
+
+		//TODO zkau.sendOnMove(cmp, zEvt.keyMetaData(evt));
 	}
 });

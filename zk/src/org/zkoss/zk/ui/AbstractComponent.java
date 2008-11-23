@@ -1314,7 +1314,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		for (Iterator it = getClientEvents().iterator(); it.hasNext();) {
 			final String evtnm = (String)it.next();
 			if (Events.isListened(this, evtnm, false))
-				renderer.render(evtnm, Events.isListened(this, evtnm, true));
+				renderer.render('$' + evtnm, Events.isListened(this, evtnm, true));
+					//$onClick and so on
 		}
 	}
 	/** An utility to be called by {@link #renderProperties} to

@@ -19,7 +19,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zk.Draggable = zk.$extends(zk.Object, {
 	$init: function(wgt, node, opts) {
 		this.widget = wgt;
-		this.node = node = zDom.$(node);
+		this.node = node = node ? zDom.$(node): wgt.node;
 
 		opts = zk.$default(opts, {
 			handle: false,
@@ -389,7 +389,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 	//Utilities//
 	/** Prepares to ghost the element (this.node) to a DIV.
 	 * It is used when you want to ghost with a div.
-	 * @return the offset of dg.element.
+	 * @return the offset of dg.node.
 	 */
 	beginGhostToDIV: function () {
 		zk.dragging = true;

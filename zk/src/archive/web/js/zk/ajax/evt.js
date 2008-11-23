@@ -38,23 +38,6 @@ zEvt = {
 		if (!evt) evt = window.evt;
 		return evt.target || evt.srcElement;
 	},
-	/** Returns the target widget (zk.Widget) of the event. */
-	widget: function (evt) {
-		for (var n = zEvt.target(evt), w; n; n = n.parentNode) {
-			w = n.z_wgt;
-			if (w) return w;
-
-			w = n.id;
-			if (w) {
-				w = zDom.$(zk.Widget.uuid(w));
-				if (w) {
-					w = w.z_wgt;
-					if (w) return w;
-				}
-			}
-		}
-		return null;
-	},
 	/** Stops the event propogation. */
 	stop: function(evt) {
 		if (!evt) evt = window.evt;
@@ -87,15 +70,15 @@ zEvt = {
 		var ofs = zDom.cmOffset(target ? target: zEvt.target(evt)),
 			x = zEvt.x(evt) - ofs[0],
 			y = zEvt.y(evt) - ofs[1];
-		return [x, y, zEvt._keyInfo(evt)];
+		return [x, y, zEvt.keyMetaData(evt)];
 	},
 	keyData: function (evt) {
 		if (!evt) evt = window.evt;
-		return [zEvt.keyCode(evt), zEvt.charCode(evt), zEvt._keyInfo(evt)];
+		return [zEvt.keyCode(evt), zEvt.charCode(evt), zEvt.keyMetaData(evt)];
 	},
-	_keyInfo: function (evt) {
+	keyMetaData: function (evt) {
 		var extra = {};
-		extra.toString = zEvt._keyInfoToString;
+		extra.toString = zEvt.keyMetaDataToString;
 		extra.altKey = evt.altKey;
 		extra.ctrlKey = evt.ctrlKey;
 		extra.shiftKey = evt.shiftKey;
@@ -103,7 +86,7 @@ zEvt = {
 		extra.rightClick = zEvt.rightClick(evt);
 		return extra;
 	},
-	_keyInfoToString: function () {
+	keyMetaDataToString: function () {
 		var s = "";
 		if (this.altKey) s += 'a';
 		if (this.ctrlKey) s += 'c';

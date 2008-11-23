@@ -104,7 +104,7 @@ zAnima = {
 							effect.opts.y = effect.originalTop;
 							effect.originalTop = 0;
 						}
-						zDom.show(effect.element);
+						zDom.show(effect.node);
 					}
 				}));
 			}
@@ -248,7 +248,7 @@ zAnima = {
 	},
 	_defOpts: {
 		beforeStart: function (ef) {
-			var n = ef.element || ef.effects[0].element;
+			var n = ef.node || ef.effects[0].node;
 			if (n) {
 				++zAnima.count;
 				var opts = ef.opts,
@@ -257,7 +257,7 @@ zAnima = {
 			}
 		},
 		afterFinish: function (ef) {
-			var n = ef.element || ef.effects[0].element;
+			var n = ef.node || ef.effects[0].node;
 			if (n) {
 				--zAnima.count;
 				n._$animating = null;

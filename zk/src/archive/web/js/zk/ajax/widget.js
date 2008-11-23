@@ -607,7 +607,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			len = lsns ? lsns.length: 0;
 		if (len) {
 			for (var j = 0; j < len;) {
-				var o = lsns[j++];
+				var o = lsns[j++][1];
 				o[evtnm].call(o, evt);
 				if (evt.stop) return; //no more processing
 			}
@@ -615,7 +615,7 @@ zk.Widget = zk.$extends(zk.Object, {
 
 		if (this.inServer && this.desktop) {
 			var ies = this.importantEvents_,
-				asap = this[evtnm];
+				asap = this['$' + evtnm];
 			if (asap != null
 			|| (ies != null && ies.$contains(evtnm)))
 				zAu.send(evt,
@@ -631,12 +631,20 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * For example, if wgt.listen("onChange", lsn) is called, then
 	 * lsn.onChange(evt) will be called when onChange event is fired
 	 * (by {@link zk.Widget#fire}.
-	 * @return true if added successfully.
+	 * @param priority the higher the number, the earlier it is called.
+	 * Zero is assumed if omitted.
 	 */
-	listen: function (evtnm, listener) {
-		var lsns = this._lsns[evtnm];
-		if (!lsns) lsns = this._lsns[evtnm] = [];
-		lsns.$add(listener);
+	listen: function (evtnm, listener, priority) {
+		if (!priority) priority = 0;
+		var info = [priority, listener],
+			lsns = this._lsns[evtnm];
+		if (!lsns) lsns = this._lsns[evtnm] = [info];
+		else
+			for (var j = lsns.length; --j >= 0;)
+				if (lsns[j][0] >= priority) {
+					lsns.$addAt(j + 1, info);
+					break;
+				}
 
 		var n = this.node;
 		if (n) {
@@ -650,12 +658,17 @@ zk.Widget = zk.$extends(zk.Object, {
 	 */
 	unlisten: function (evtnm, listener) {
 		var lsns = this._lsns[evtnm];
-		return lsns && lsns.$remove(watch);
+		for (var j = lsns ? lsns.length: 0; --j >= 0;)
+			if (lsns[j][1] == listener) {
+				lsns.$removeAt(j);
+				return true;
+			}
+		return false;
 	},
 	/** Returns if a listener is registered or the specified event.
 	 */
 	isListen: function (evtnm) {
-		if (this[evtnm]) return true;
+		if (this['$' + evtnm]) return true;
 		var lsns = this._lsns[evtnm];
 		return lsns && lsns.length;
 	},
@@ -870,27 +883,21 @@ zk.Skipper = zk.$extends(zk.Object, {
 	skip: function (wgt, skipId) {
 		if (!skipId) skipId = wgt.uuid + '$cave';
 		var skip = zDom.$(skipId);
-		if (skip) {
-			var skipInfo = {id: skipId, elements: []};
-			var elements = skipInfo.elements;
-			for (var el = skip.firstChild; el;) {
-				var nxt = el.nextSibling;
-				elements.push(el);
-				skip.removeChild(el);
-				el = nxt;
-			}
-			if (elements.length) return skipInfo;
+		if (skip && skip.firstChild) {
+			zDom.remove(skip);
+			return skip;
 		}
 		return null;
 	},
 	/** Restores the children being skipped by {@link #skip}.
 	 */
-	restore: function (wgt, skipInfo) {
-		if (skipInfo) {
-			var skip = zDom.$(skipInfo.id),
-				elements = skipInfo.elements, el;
-			while (el = elements.shift())
-				skip.appendChild(el);
+	restore: function (wgt, skip) {
+		if (skip) {
+			var loc = zDom.$(skip.id);
+			for (var el; el = skip.firstChild;) {
+				skip.removeChild(el);
+				loc.appendChild(el);
+			}
 		}
 	}
 });

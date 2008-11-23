@@ -60,8 +60,8 @@ img {border: 0;}
 </c:choose>
 
 <%-- DSP --%>
-a.gamma {color: #000000; text-decoration: none;}
-a.gamma:hover {color: #000000; text-decoration: underline;}
+a.gamma {color: #000; text-decoration: none;}
+a.gamma:hover {color: #000; text-decoration: underline;}
 tr.gamma {background: #F4F4F4;}
 td.gamma {background: #F4F4F4;}
 
@@ -70,12 +70,24 @@ div.z-error {
 	position:absolute; z-index:99000;
 	width:550px; border:1px solid #963; background-color:#fc9
 }
-.z-error-msg {
-	border: 1px inset;
+div.z-error a {
+	color: #555; text-decoration: none; font-size: ${fontSizeS};
+	background-color: #ffd4a4; padding: 1px 3px;
+	border: 1px solid #766;
+	border-left: 1px solid #a89a9a; border-top: 1px solid #a89a9a;
 }
-div.z-debugbox {
-	border: 1px solid #77c;	position: absolute;
-	width: 60%; z-index: 99000; background: white;
+.z-error-msg {
+	border: 1px inset; background-color: #f0c088;
+}
+div.z-debug {
+	text-align:right; width:50%; right:10px; bottom:5px;
+	position:absolute; z-index: 99000;
+}
+div.z-debug textarea {
+	width: 100%
+}
+div.z-debug button {
+	font-size: ${fontSizeXS};
 }
 
 <%-- General --%>

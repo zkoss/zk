@@ -27,7 +27,7 @@ zEffect = {
 		if (!opts.afterFinishInternal)
 			opts.afterFinishInternal = function(effect) { 
 				if(effect.opts.to==0) {
-					var e = effect.element;
+					var e = effect.node;
 					zDom.hide(e);
 					zDom.setStyle(e, {opacity: oldOpacity}); 
 				}
@@ -42,12 +42,12 @@ zEffect = {
 		
 		if (!opts.afterFinishInternal)
 			opts.afterFinishInternal = function(effect) { 
-				zDom.rerender(effect.element);
+				zDom.rerender(effect.node);
 				// force Safari to render floated elements properly
 			};
 		if (!opts.beforeSetup)
 			opts.beforeSetup = function(effect) {
-				var e = effect.element;
+				var e = effect.node;
 				zDom.setOpacity(e, effect.opts.from);
 				zDom.show(e);
 			};
@@ -67,11 +67,11 @@ zEffect = {
 		opts = zk.$default(opts, {duration: 1.0});
 		if (!opts.beforeSetupInternal)
 			opts.beforeSetupInternal = function(effect) {
-				zDom.absolutize(effect.effects[0].element)
+				zDom.absolutize(effect.effects[0].node)
 			};
 		if (!opts.afterFinishInternal)
 			opts.afterFinishInternal = function(effect) {
-				var e = effect.effects[0].element;
+				var e = effect.effects[0].node;
 				zDom.hide(e);
 				zDom.setStyle(e, oldStyle);
 			};
@@ -89,7 +89,7 @@ zEffect = {
 			{scaleContent: false, scaleX: false, restoreAfterFinish: true});
 		if (!opts.afterFinishInternal)
 			opts.afterFinishInternal = function(effect) {
-				var e = effect.element;
+				var e = effect.node;
 				zDom.hide(e);
 				zDom.undoClipping(e);
 			};
@@ -106,14 +106,14 @@ zEffect = {
 			restoreAfterFinish: true});
 		if (!opts.afterSetup)
 			opts.afterSetup = function(effect) {
-				var e = effect.element;
+				var e = effect.node;
 				zDom.makeClipping(e);
 				zDom.setStyle(e, {height: '0px'});
 				zDom.show(e); 
 			};
 		if (!opts.afterFinishInternal)
 			afterFinishInternal = function(effect) {
-				zDom.undoClipping(effect.element);
+				zDom.undoClipping(effect.node);
 			};
 		return new zEffect.Scale(element, 100, opts);
 	},
@@ -125,17 +125,17 @@ zEffect = {
 			duration: 0.4, from: 0, transition: zEffect._Tranx.flicker});
 		if (!opts.afterFinishInternal)
 			opts.afterFinishInternal = function(effect) {
-				new zEffect.Scale(effect.element, 1, { 
+				new zEffect.Scale(effect.node, 1, { 
 					duration: 0.3, scaleFromCenter: true,
 					scaleX: false, scaleContent: false,
 					restoreAfterFinish: true,
 					beforeSetup: function(effect) {
-						var e = effect.element;
+						var e = effect.node;
 						zDom.makePositioned(e);
 						zDom.makeClipping(e);
 					},
 					afterFinishInternal: function(effect) {
-						var e = effect.element;
+						var e = effect.node;
 						zDom.hide(e);
 						zDom.undoClipping(e);
 						zDom.undoPositioned(e);
@@ -155,11 +155,11 @@ zEffect = {
 		opts = zk.$default(opts, {duration: 0.5});
 		if (!opts.beforeSetup)
 			opts.beforeSetup = function(effect) {
-				zDom.makePositioned(effect.effects[0].element);
+				zDom.makePositioned(effect.effects[0].node);
 			};
 		if (!opts.afterFinishInternal)
 			opts.afterFinishInternal = function(effect) {
-				var e = effect.effects[0].element;
+				var e = effect.effects[0].node;
 				zDom.hide(e);
 				zDom.undoPositioned(e);
 				zDom.setStyle(e, oldStyle);
@@ -196,15 +196,15 @@ zEffect = {
 		opts = zk.$default(opts, {duration: 0.5});
 		if (!opts.beforeSetup)
 			opts.beforeSetup = function(effect) {
-				zDom.makePositioned(effect.effects[0].element); 
+				zDom.makePositioned(effect.effects[0].node); 
 			};
 		if (!opts.beforeFinishInternal)
 			opts.beforeFinishInternal = function (effect) {
-				zDom.hide(effect.effects[0].element);
+				zDom.hide(effect.effects[0].node);
 			};
 		if (!opts.afterFinishInternal)
 			opts.afterFinishInternal = function(effect) {
-				var e = effect.effects[0].element;
+				var e = effect.effects[0].node;
 				zDom.undoPositioned(e)
 				zDom.setStyle(e, oldStyle);
 			}; 
@@ -246,13 +246,13 @@ zEffect = {
 		opts = zk.$default(opts, {duration: 0.5});
 		if (!opts.beforeSetup)
 			opts.beforeSetup = function(effect) {
-				var e = effect.effects[0].element;
+				var e = effect.effects[0].node;
 				zDom.show(e);
 				zDom.makePositioned(e);
 			};
 		if (!opts.afterFinishInternal)
 			opts.afterFinishInternal = function(effect) {
-				var e = effect.effects[0].element;
+				var e = effect.effects[0].node;
 				zDom.undoPositioned(e);
 				zDom.setStyle(e, oldStyle);
 			};
@@ -279,7 +279,7 @@ zEffect = {
 		});
 		if (!opts.afterSetup)
 			opts.afterSetup = function(effect) {
-				var e = effect.element;
+				var e = effect.node;
 				zDom.makePositioned(e);
 				switch (anchor) {
 				case 't':
@@ -308,15 +308,15 @@ zEffect = {
 			};
 		if (!opts.afterUpdateInternal)
 			opts.afterUpdateInternal = function(effect){
-				var e = effect.element;
+				var e = effect.node;
 				if (anchor == 'b')
-					zDom.setStyle(e, {top: (orig.ot - zk.parseInt(effect.element.style.height)) + 'px'});
+					zDom.setStyle(e, {top: (orig.ot - zk.parseInt(effect.node.style.height)) + 'px'});
 				else if (anchor == 'r')
-					zDom.setStyle(e, {left: (orig.ol - zk.parseInt(effect.element.style.width)) + 'px'});
+					zDom.setStyle(e, {left: (orig.ol - zk.parseInt(effect.node.style.width)) + 'px'});
 			};
 		if (!opts.afterFinishInternal)
 			opts.afterFinishInternal = function(effect) {
-				var e = effect.element;
+				var e = effect.node;
 				zDom.undoClipping(e);
 				zDom.undoPositioned(e);
 				zDom.setStyle(e, {top: orig.t, left: orig.l});
@@ -338,7 +338,7 @@ zEffect = {
 			restoreAfterFinish: true});
 		if (!opts.beforeStartInternal)
 			opts.beforeStartInternal = function(effect) {
-				var e = effect.element;
+				var e = effect.node;
 				zDom.makePositioned(e);
 				zDom.makeClipping(e);
 				zDom.show(e);
@@ -349,19 +349,19 @@ zEffect = {
 			};
 		if (!opts.afterUpdateInternal)
 			opts.afterUpdateInternal = function (effect) {
-				var e = effect.element;
+				var e = effect.node;
 				if (anchor == 'b')
-					zDom.setStyle(e, {top: (orig.ot + orig.oh - zk.parseInt(effect.element.style.height)) + 'px'});
+					zDom.setStyle(e, {top: (orig.ot + orig.oh - zk.parseInt(effect.node.style.height)) + 'px'});
 				else if (anchor == 'r')
-					zDom.setStyle(e, {left: (orig.ol + orig.ow - zk.parseInt(effect.element.style.width)) + 'px'});
+					zDom.setStyle(e, {left: (orig.ol + orig.ow - zk.parseInt(effect.node.style.width)) + 'px'});
 			};
 		if (!opts.beforeFinishInternal)
 			opts.beforeFinishInternal = function (effect) {
-				zDom.hide(effect.element);
+				zDom.hide(effect.node);
 			};
 		if (!opts.afterFinishInternal)
 			opts.afterFinishInternal = function (effect) {
-				var e = effect.element;
+				var e = effect.node;
 				zDom.undoClipping(e);
 				zDom.undoPositioned(e);
 				zDom.setStyle(e, {top: orig.t, left: orig.l});
@@ -452,7 +452,7 @@ zEffect.Parallel = zk.$extends(zEffect._Base, {
 
 zEffect.Opacity = zk.$extends(zEffect._Base, {
 	$init: function(element, opts) {
-		var e = this.element = zDom.$(element);
+		var e = this.node = zDom.$(element);
 		// make this work on IE on elements without 'layout'
 		if(zk.ie && (!e.currentStyle.hasLayout))
 			zDom.setStyle(e, {zoom: 1});
@@ -461,13 +461,13 @@ zEffect.Opacity = zk.$extends(zEffect._Base, {
 		this.start(opts);
 	},
 	update: function(position) {
-		zDom.setOpacity(this.element, position);
+		zDom.setOpacity(this.node, position);
 	}
 });
 
 zEffect.Move = zk.$extends(zEffect._Base, {
 	$init: function(element, opts) {
-		this.element = zDom.$(element);
+		this.node = zDom.$(element);
 		opts = zk.$default(opts, {x: 0, y: 0, mode: 'relative'});
 		this.start(opts);
 	},
@@ -476,7 +476,7 @@ zEffect.Move = zk.$extends(zEffect._Base, {
 	// relative element that does not have top/left explicitly set.
 	// ==> Always set top and left for position relative elements in your stylesheets 
 	// (to 0 if you do not need them) 
-		var e = this.element;
+		var e = this.node;
 		zDom.makePositioned(e);
 		this.originalLeft = parseFloat(zDom.getStyle(e, 'left') || '0');
 		this.originalTop = parseFloat(zDom.getStyle(e, 'top')  || '0');
@@ -487,7 +487,7 @@ zEffect.Move = zk.$extends(zEffect._Base, {
 		}
 	},
 	update: function(position) {
-		zDom.setStyle(this.element, {
+		zDom.setStyle(this.node, {
 			left: Math.round(this.opts.x  * position + this.originalLeft) + 'px',
 			top:  Math.round(this.opts.y  * position + this.originalTop)  + 'px'
 		});
@@ -496,7 +496,7 @@ zEffect.Move = zk.$extends(zEffect._Base, {
 
 zEffect.Scale = zk.$extends(zEffect._Base, {
 	$init: function(element, percent, opts) {
-		this.element = zDom.$(element);
+		this.node = zDom.$(element);
 		opts = zk.$default(opts, {
 			scaleX: true,
 			scaleY: true,
@@ -509,9 +509,9 @@ zEffect.Scale = zk.$extends(zEffect._Base, {
 		this.start(opts);
 	},
 	setup: function() {
-		var el = this.element;
+		var el = this.node;
 		this.restoreAfterFinish = this.opts.restoreAfterFinish || false;
-		this.elementPositioning = zDom.getStyle(el, 'position');
+		this.nodePositioning = zDom.getStyle(el, 'position');
 		
 		this.originalStyle = {};
 		for (var j = 0, styles=['top','left','width','height','fontSize'],
@@ -547,12 +547,12 @@ zEffect.Scale = zk.$extends(zEffect._Base, {
 	update: function(position) {
 		var currentScale = (this.opts.scaleFrom/100.0) + (this.factor * position);
 		if(this.opts.scaleContent && this.fontSize)
-			zDom.setStyle(this.element, {fontSize: this.fontSize * currentScale + this.fontSizeType});
+			zDom.setStyle(this.node, {fontSize: this.fontSize * currentScale + this.fontSizeType});
 		this.setDimensions(this.dims[0] * currentScale, this.dims[1] * currentScale);
 	},
 	finish: function(position) {
 		if(this.restoreAfterFinish)
-			zDom.setStyle(this.element, this.originalStyle);
+			zDom.setStyle(this.node, this.originalStyle);
 	},
 	setDimensions: function(height, width) {
 		var d = {};
@@ -561,7 +561,7 @@ zEffect.Scale = zk.$extends(zEffect._Base, {
 		if(this.opts.scaleFromCenter) {
 			var topd = (height - this.dims[0])/2;
 			var leftd = (width  - this.dims[1])/2;
-			if(this.elementPositioning == 'absolute') {
+			if(this.nodePositioning == 'absolute') {
 				if(this.opts.scaleY) d.top = this.originalTop-topd + 'px';
 				if(this.opts.scaleX) d.left = this.originalLeft-leftd + 'px';
 			} else {
@@ -569,18 +569,18 @@ zEffect.Scale = zk.$extends(zEffect._Base, {
 				if(this.opts.scaleX) d.left = -leftd + 'px';
 			}
 		}
-		zDom.setStyle(this.element, d);
+		zDom.setStyle(this.node, d);
 	}
 });
 
 zEffect.ScrollTo = zk.$extends(zEffect._Base, {
 	$init: function(element, opts) {
-		this.element = zDom.$(element);
+		this.node = zDom.$(element);
 		this.start(opts || {});
 	},
 	setup: function() {
 		var innerY = zDom.innerY(),
-			offsets = zDom.cmOffset(this.element);
+			offsets = zDom.cmOffset(this.node);
 		if(this.opts.offset) offsets[1] += this.opts.offset;
 		var max = window.innerHeight ? 
 			window.height - window.innerHeight :
@@ -687,3 +687,138 @@ zEffect._defOpts = {
   delay:      0.0,
   queue:      'parallel'
 };
+
+zEffect.Shadow = zk.$extends(zk.Object, {
+	/**
+	 * Initial the Shadow object for the specified component.
+	 * 
+	 * @param element a ZK client component.
+	 * @param opts The options
+	 * <p>Alowed options:
+	 * <ul>
+	 * <li>mode: The shadow display mode.  Supports the following options:
+	 *  <ul><li>shade: Shadow displays on both sides and bottom only (by default)</li>
+	 *  <li>frame: Shadow displays equally on all four sides</li>
+	 *  <li>drop: Traditional bottom-right drop shadow</li></ul></li>
+	 * <li>diameter: The diameter of the offset of the shadow from the element (defaults to 4)</li>
+	 * <li>autoShow: true to show the shadow in the initial phase. (default: false)</li>
+	 * </ul>
+	 */
+	$init: function (element, opts) {
+		opts = this.opts = zk.copy(this.opts, zk.$default(opts, {
+			diameter: 4, mode: "shade", autoShow: false
+		}));
+		var sdwid = element.id + "$sdw",
+			template = zk.ie ? '<div id="'+sdwid+'" class="z-ie-shadow"></div>' :
+				'<div id="'+sdwid+'" class="z-shadow"><div class="z-shadow-t"><div class="z-shadow-tl"></div><div class="z-shadow-tm"></div><div class="z-shadow-tr"></div></div><div class="z-shadow-c"><div class="z-shadow-cl"></div><div class="z-shadow-cm"></div><div class="z-shadow-cr"></div></div><div class="z-shadow-b"><div class="z-shadow-bl"></div><div class="z-shadow-bm"></div><div class="z-shadow-br"></div></div></div>',
+			o = opts.diameter,
+			d = {l: -o, t: o-1, h: 0, w:0},
+			rad = Math.floor(opts.diameter/2);
+		switch (opts.mode.toLowerCase()) {
+		case "shade":
+			d.w = o*2;
+			if(zk.ie) {
+				d.l -= rad - 1;
+				d.t -= opts.diameter + rad;
+				d.w -= opts.diameter + (rad + 1);
+				d.h -= 1;
+			}
+			break;
+		case "drop":
+			d.l = -d.l;
+			if (zk.ie)
+				d.l = d.t = d.w = d.h = -rad;
+			break;
+		case "frame":
+			d.w = d.h = (o*2);
+			d.t = d.l;
+			d.t += 1;
+			d.h -= 2;
+			if (zk.ie) {
+				d.t = d.l = d.t - rad;
+				d.h = d.w = d.w - (opts.diameter + rad + 1);
+			}
+			break;
+		};
+		this.delta = d;
+		this.node = element;
+		element.parentNode.insertAdjacentHTML("afterbegin", template);
+		this.shadow = zDom.$(sdwid);
+		if (opts.autoShow === true) this.show();
+	},
+	/** Removes the shadow. */
+	destroy: function () {
+		zDom.remove(this.shadow);
+		zDom.remove(this._toplayer);
+		this.node = this.shadow = this._toplayer = null;
+	},
+	/** Hides the shadow, no matter the element is visible or not.
+	 */
+	hide: function(){
+		this.shadow.style.display = "none";
+		if (this._toplayer) this._toplayer.style.display = "none";
+	},
+	/**
+	 * Synchronizes the state of the element with the shadow,
+	 * such as visiblity and position.
+	 * In other words, if the element is visible, the shadow becomes
+	 * visible.
+	 */
+	sync: function () {
+		if (!this.node || !zDom.isVisible(this.node)) {
+			this.hide();
+			return false;
+		}
+		if (zDom.nextSibling(this.shadow, "DIV")!= this.node)
+			this.node.parentNode.insertBefore(this.shadow, this.node);
+		this.shadow.style.zIndex = zk.parseInt(zDom.getStyle(this.node, "zIndex"))-1;
+		if (zk.ie) 
+			this.shadow.style.filter = "progid:DXImageTransform.Microsoft.alpha(opacity=50) "
+				+ "progid:DXImageTransform.Microsoft.Blur(pixelradius="+(this.opts.diameter)+")";
+		this._recalc(this.node.offsetLeft, this.node.offsetTop, this.node.offsetWidth,
+			this.node.offsetHeight);
+		this.shadow.style.display = "block";
+		if (this._toplayer) this._toplayer.style.display = "block";
+		return true;
+	},
+	_recalc : function(l, t, w, h){
+		var d = this.delta, r = this.shadow, s = r.style, width = (w + d.w), height = (h + d.h),
+			widths = width +"px", heights = height + "px";
+		s.left = (l + d.l) + "px";
+		s.top = (t + d.t) + "px";
+		if(s.width != widths || s.height != heights) {
+			s.width = widths;
+			s.height = heights;
+			if(!zk.ie) {
+				var c = r.childNodes;
+				// the 12 number means the both height the top side shadow and the bottom side shadow.
+				c[1].style.height = Math.max(0, (height - 12))+ "px";
+				
+				// the 12 number means the both width the left side shadow and the right side shadow.
+				c[0].childNodes[1].style.width = c[1].childNodes[1].style.width = c[2].childNodes[1].style.width = Math.max(0, (width - 12)) + "px";;
+			}
+		}
+		if(zk.ie6Only && this.node) {
+			var toplayer = this._toplayer;
+			if(!toplayer) {
+				this._toplayer = zDom.makeTopLayer(this.node);
+				var zIndex = zk.parseInt(this.node.style.zIndex)-2;
+				this._toplayer.style.zIndex = zIndex > 0 ? zIndex: 0;
+			}
+			var st = toplayer.style;
+			st.left = l +"px";
+			st.top = t +"px";
+			st.width = w +"px";
+			st.height = h +"px";
+			st.zIndex = zk.parseInt(zDom.getStyle(this.node, "zIndex"))-2; // re-index
+		}
+	},
+	/**
+	 * Returns the delta of the shadow.
+	 * The delta is a map of {l: left, t: top, w: width, h: height}
+	 * to specify the delta values for left, top, width and height.
+	 */
+	getDelta: function () {
+		return this.delta;
+	}
+});

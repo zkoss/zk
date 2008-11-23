@@ -91,8 +91,8 @@ zk = { //static members
 
 		var thisprototype = jclass.prototype,
 			superprototype = superclass.prototype;
-		zk.$copy(thisprototype, superprototype); //inherit non-static
-		zk.$copy(thisprototype, members);
+		zk.copy(thisprototype, superprototype); //inherit non-static
+		zk.copy(thisprototype, members);
 
 		for (var p in superclass) //inherit static methods only
 			if (p != 'prototype') {
@@ -100,7 +100,7 @@ zk = { //static members
 				if (typeof v == 'function')
 					jclass[p] = v;
 			}
-		zk.$copy(jclass, staticMembers);
+		zk.copy(jclass, staticMembers);
 
 		thisprototype.$class = jclass;
 		thisprototype._$super = superprototype;
@@ -120,7 +120,8 @@ zk = { //static members
 	},
 	/** Copies the values from one map to anther.
 	 */
-	$copy: function (dst, src) {
+	copy: function (dst, src) {
+		if (!dst) dst = {};
 		for (var p in src)
 			dst[p] = src[p];
 		return dst;
@@ -237,15 +238,22 @@ zk = { //static members
 		document.body.appendChild(box);
 		var html =
 	 '<div class="z-error" style="left:'+(zDom.innerX()+x)+'px;top:'+(zDom.innerY()+y)
-	+'px;" id="'+id+'"><table cellpadding="2" cellspacing="2" width="100%"><tr valign="top">'
-	+'<td width="20pt"><button onclick="zAu.sendRedraw()">redraw</button>'
-	+'<button onclick="zDom.remove(\''+id+'\')">close</button></td>'
-	+'<td class="z-error-msg">'+zUtl.encodeXML(msg, true) //Bug 1463668: security
+	+'px;" id="'+id+'"><table cellpadding="2" cellspacing="2" width="100%"><tr>'
+	+'<td align="right"><div id="'+id
+	+'$p"><a href="javascript:zAu.sendRedraw()">redraw</a>&nbsp;'
+	+'<a href="javascript:zDom.remove(\''+id+'\')">close</a></div></td></tr>'
+	+'<tr valign="top"><td class="z-error-msg">'+zUtl.encodeXML(msg, true) //Bug 1463668: security
 	+'</td></tr></table></div>';
 		zDom.setOuterHTML(box, html);
 
-		//TODO: draggable box
-		//box = zDom.$e(id); //we have to retrieve back
+		box = zDom.$(id); //we have to retrieve back
+		try {
+			new zk.Draggable(null, box, {
+				handle: zDom.$(id+'$p'), zIndex: box.style.zIndex,
+				starteffect: zk.$void, starteffect: zk.$void,
+				endeffect: zk.$void});
+		} catch (e) {
+		}
 	},
 	/** Closes all error box (zk.error).
 	 */
@@ -271,9 +279,9 @@ zk = { //static members
 				console = document.createElement("DIV");
 				document.body.appendChild(console);
 				var html =
-'<div id="zk_dbgbox" style="text-align:right;width:50%;right:10px;bottom:5px;position:absolute">'
-+'<button onclick="zDom.remove(\'zk_dbgbox\')" style="font-size:9px">X</button><br/>'
-+'<textarea id="zk_dbg" style="width:100%" rows="10"></textarea></div>';
+	'<div id="zk_dbgbox" class="z-debug">'
+	+'<button onclick="zDom.remove(\'zk_dbgbox\')">X</button><br/>'
+	+'<textarea id="zk_dbg" rows="10"></textarea></div>';
 				zDom.setOuterHTML(console, html);
 				console = zDom.$("zk_dbg");
 			}
@@ -285,7 +293,7 @@ zk = { //static members
 };
 
 //String//
-zk.$copy(String.prototype, {
+zk.copy(String.prototype, {
 	startsWith: function (prefix) {
 		return this.substring(0,prefix.length) == prefix;
 	},
@@ -330,7 +338,7 @@ zk.$copy(String.prototype, {
 });
 
 //Array//
-zk.$copy(Array.prototype, {
+zk.copy(Array.prototype, {
 	/** Removes the specified object from the array if any.
 	 * Returns false if not found.
 	 */
@@ -344,6 +352,7 @@ zk.$copy(Array.prototype, {
 		return false;
 	},
 	/** Returns whether the array contains the specified object.
+	 * @return true if it was removed successfully
 	 */
 	$contains: function (o) {
 		for (var j = 0, tl = this.length; j < tl; ++j) {
@@ -366,6 +375,23 @@ zk.$copy(Array.prototype, {
 			}
 		this.push(o);
 		return true;
+	},
+	/** Inserts at the specified location.
+	 */
+	$addAt: function (j, o) {
+		var l = this.length;
+		if (j >= l) this.push(o);
+		else this.spice(j, 0, o);
+	},
+	/** Removes at the specified location.
+	 * @return true if it was removed successfully
+	 */
+	$removeAt: function (j) {
+		if (j < this.length) {
+			this.spice(j, 1);
+			return true;
+		}
+		return false;
 	},
 	/** Clones this array. */
 	$clone: function() {

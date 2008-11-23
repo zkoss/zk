@@ -761,6 +761,18 @@ zDom = { //static methods
 			;
 		return el;
 	},
+	firstChild: function (el, tagName, descendant) {
+		for (var n = el.firstChild; n; n = n.nextSibling)
+			if (zDom.tag(n) == tagName)
+				return n;
+
+		if (descendant)
+			for (var n = el.firstChild; n; n = n.nextSibling) {
+				var chd = zDom.firstChild(n, tagName, descendant);
+				if (chd) return chd;
+			}
+		return null;
+	},
 
 	/** Returns the parent node including the virtual parent. */
 	parentNode: function (el) {
@@ -769,30 +781,35 @@ zDom = { //static methods
 	vparent: function (el) {
 		return el.z_vp;
 	},
+	/**Position an element able to apear above others.
+	 * It doesn't change style.position (which is caller's job).
+	 * Rather, it changes its parent to document.body.
+	 * Remember to call {@link #undoVParent} (at least, in {@link #unbind_})
+	 * if you called this method.
+	 */
 	makeVParent: function (el) {
 		if (el.z_vp) return; //called twice
 
 		var sib = el.nextSibling, p = el.parentNode, id = el.id;
 		if (!id) throw "id required";
 
-		if (sib) {
-			var agtx = document.createElement("SPAN");
-			agtx.id = id + "$agtx";
-			agtx.style.display = "none";
-			p.insertBefore(agtx, sib);
-		}
+		var agtx = p.z_vpagtx = document.createElement("SPAN");
+		agtx.id = id + "$agtx";
+		agtx.style.display = "none";
+		if (sib) p.insertBefore(agtx, sib);
+		else p.appendChild(agtx);
 
 		el.z_vp = p;
 		document.body.appendChild(el);
 	},
-	unmakeVParent: function (el) {
-		var p = el.parentNode, id = el.id;
-		el.z_vp = null;
+	undoVParent: function (el) {
+		var p = el.z_vp;
 		if (p) {
-			var sib = $e(id + "!agtx");
-			if (sib) {
-				p.insertBefore(n, sib);
-				zDom.remove(sib);
+			var agtx = el.z_vpagtx;
+			el.z_vp = el.z_vpagtx = null;
+			if (agtx) {
+				p.insertBefore(n, agtx);
+				zDom.remove(agtx);
 			} else
 				p.appendChild(n);
 		}
@@ -937,6 +954,28 @@ zDom = { //static methods
 };
 
 if (zk.ie) {
+	if (zk.ie6Only) {
+		/**
+		 * Creates and returns an iframe that makes an element above other
+		 * elements. The iframe is used to resolve the layer bug of IE6:
+		 * SELECT's dropdown above every DOM element.
+		 * @param id ID of the iframe. If omitted, it is el.id + '$ifr'.
+		 */
+		zDom.makeTopLayer = function (el, id) {
+			var ifr = document.createElement('iframe');
+			ifr.id = id || (el.id + "$ifr");
+			ifr.frameBorder = "no";
+			ifr.src="javascript:false";
+			ifr.style.cssText = "position:absolute;visibility:visible;overflow:hidden;filter:alpha(opacity=0);display:block";
+			ifr.style.width = el.offsetWidth + "px";
+			ifr.style.height = el.offsetHeight + "px";
+			ifr.style.top = el.style.top;
+			ifr.style.left = el.style.left;
+			el.parentNode.appendChild(ifr);
+			return ifr;
+		};
+	}
+
 	zDom._tagOfHtml = function (html) {
 		if (!html) return "";
 

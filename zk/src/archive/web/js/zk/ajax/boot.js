@@ -255,8 +255,11 @@ var _zkbWgts = [], zkcurdt, _zkbcrs = []; //used to load widget
 function _zkDocKeyDown(evt) {
 }
 function _zkDocMouseDown(evt) {
-	var $Widget = zk.Widget;
-	$Widget.domMouseDown($Widget.$(evt));
+	var tag = zDom.tag(zEvt.target(evt));
+	if (!tag || (tag != "HTML" && tag != "BODY")) { //not click on scrollbar
+		var $Widget = zk.Widget;
+		$Widget.domMouseDown($Widget.$(evt));
+	}
 }
 function _zkDocMouseOver(evt) {
 }
