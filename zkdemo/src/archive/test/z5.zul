@@ -76,6 +76,16 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		More in a group box
 	</groupbox>
 
+	<separator/>
+	<label id="l"/>
+	<zscript><![CDATA[
+	l.value = "<ul><li>A label with HTML content</li></ul>";
+	]]></zscript>
+	<html><![CDATA[
+	<ul>
+		<li>This is the content of the html component</li>
+	</ul>
+	]]></html>
 	<separator bar="true"/>
 	End of file
 </div>

@@ -191,7 +191,7 @@ public class Label extends XulElement implements org.zkoss.zul.api.Label {
 					out.write("\">");
 					out.write(cnt);
 					out.write("</span>\n");
-					cnt = null;
+					cnt = null; //means already generated
 				}
 			}
 			render(renderer, "value", cnt);

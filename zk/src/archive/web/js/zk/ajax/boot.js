@@ -255,8 +255,8 @@ var _zkbWgts = [], zkcurdt, _zkbcrs = []; //used to load widget
 function _zkDocKeyDown(evt) {
 }
 function _zkDocMouseDown(evt) {
-	var tag = zDom.tag(zEvt.target(evt));
-	if (!tag || (tag != "HTML" && tag != "BODY")) { //not click on scrollbar
+	var target = zEvt.target(evt);
+	if (target != document.body && target != document.body.parentNode) { //not click on scrollbar
 		var $Widget = zk.Widget;
 		$Widget.domMouseDown($Widget.$(evt));
 	}

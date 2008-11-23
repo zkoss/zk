@@ -20,4 +20,5 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<widget name="Space"/>
 	<widget name="Caption"/>
 	<widget name="Groupbox"/>
+	<widget name="Html"/>
 </package>

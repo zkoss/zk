@@ -395,10 +395,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>html</component-name>
 		<component-class>org.zkoss.zul.Html</component-class>
+		<widget-name>zul.wgt.Html</widget-name>
 		<text-as>content</text-as><!-- treat text within the element as the content property -->
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/html.dsp</mold-uri>
+			<mold-uri>mold/html.js</mold-uri>
 		</mold>
 	</component>
 	<component>

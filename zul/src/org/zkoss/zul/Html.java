@@ -18,7 +18,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.io.Writer;
+
 import org.zkoss.lang.Objects;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -95,11 +100,34 @@ public class Html extends XulElement implements org.zkoss.zul.api.Html {
 		if (content == null) content = "";
 		if (!Objects.equals(_content, content)) {
 			_content = content;
-			invalidate();
+			smartUpdate("content", _content);
 		}
 	}
 
-	//-- Component --//
+	//super//
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		String cnt = _content;
+		if (cnt.length() > 0) {
+			Execution exec = Executions.getCurrent();
+			if (exec != null) {
+				final Writer out =
+					((ExecutionCtrl)exec).getVisualizer().getExtraWriter();
+				if (out != null) {
+					out.write("<span id=\"");
+					out.write(getUuid());
+					out.write("\">");
+					out.write(cnt);
+					out.write("</span>\n");
+					cnt = null; //means already generated
+				}
+			}
+			render(renderer, "content", cnt);
+		}
+	}
+
 	/** Default: not childable.
 	 */
 	protected boolean isChildable() {
