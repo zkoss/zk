@@ -801,9 +801,9 @@ zEffect.Shadow = zk.$extends(zk.Object, {
 		if(zk.ie6Only && this.node) {
 			var toplayer = this._toplayer;
 			if(!toplayer) {
-				this._toplayer = zDom.makeTopLayer(this.node);
+				toplayer = this._toplayer = zDom.makeTopLayer(this.node);
 				var zIndex = zk.parseInt(this.node.style.zIndex)-2;
-				this._toplayer.style.zIndex = zIndex > 0 ? zIndex: 0;
+				toplayer.style.zIndex = zIndex > 0 ? zIndex: 0;
 			}
 			var st = toplayer.style;
 			st.left = l +"px";

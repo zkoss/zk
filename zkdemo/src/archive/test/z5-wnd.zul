@@ -30,6 +30,13 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<button label="Popup" onClick="win.doPopup();"/>
 	<button label="Embed" onClick="win.doEmbedded();"/>
 	<button label="Toggle Visible" onClick="win.visible = !win.visible"/>
+	<html><![CDATA[
+	<select>
+		<option>Option 1</option>
+		<option>Option 2</option>
+		<option>Option 3</option>
+	</select>
+	]]></html>
 
 	<window border="normal" title="Overlapped" width="200px" mode="overlapped">
 		This is a overlapped window
