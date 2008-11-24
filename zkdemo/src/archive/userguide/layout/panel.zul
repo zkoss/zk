@@ -99,11 +99,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 				<columnchildren width="130px">
 					<panel height="260px" width="100%">
 						<panelchildren>
-							<borderlayout width="100%" style="background:#E4F3F4">
-								<north size="120px" border="none" style="background:#E4F3F4">
+							<borderlayout width="100%" style="background:transparent">
+								<north size="120px" border="none" style="background:transparent">
 							<image src="/img/msn1.gif"/>	
 								</north>
-								<south size="120px"  border="none" style="background:#E4F3F4">
+								<south size="120px"  border="none" style="background:transparent">
 							<image src="/img/msn2.gif"/>
 								</south>
 								</borderlayout>
@@ -166,8 +166,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 						</textbox>
 					</panelchildren>
 					<toolbar mold="panel">
-						<button id="reloadBtn" label="Reload" height="18px"/>
 						<button id="tryBtn" label="Try me!"/>
+						<button id="reloadBtn" label="Reload" height="18px"/>
 					</toolbar>
 				</panel>
 			</tabpanel>

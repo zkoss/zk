@@ -76,8 +76,8 @@ Source from <a href="misc/immigration.txt" target="zkdemo">immigration.txt</a> a
 						</textbox>
 					</panelchildren>
 					<toolbar mold="panel">
-						<button id="reloadBtn" label="Reload" height="18px"/>
 						<button id="tryBtn" label="Try me!"/>
+						<button id="reloadBtn" label="Reload" height="18px"/>
 					</toolbar>
 				</panel>
 			</tabpanel>

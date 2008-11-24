@@ -52,11 +52,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		        &lt;/tr&gt;
 		        &lt;tr&gt;
 		            &lt;td&gt;Jone&lt;/td&gt;
-		            &lt;td&gt;Lin&lt;/td&gt;
+		            &lt;td&gt;Hayes&lt;/td&gt;
 		        &lt;/tr&gt;
 		        &lt;tr&gt;
 		            &lt;td&gt;Mary&lt;/td&gt;
-		            &lt;td&gt;Wang&lt;/td&gt;
+		            &lt;td&gt;Bally&lt;/td&gt;
 		        &lt;/tr&gt;
 		    &lt;/tbody&gt;
 		&lt;/table&gt;
@@ -68,8 +68,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 						</textbox>
 					</panelchildren>
 					<toolbar mold="panel">
-						<button id="reloadBtn" label="Reload" height="18px"/>
 						<button id="tryBtn" label="Try me!"/>
+						<button id="reloadBtn" label="Reload" height="18px"/>
 					</toolbar>
 				</panel>
 			</tabpanel>
