@@ -20,8 +20,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <window id="demo" apply="org.zkoss.zkdemo.userguide.DemoWindowComposer">
 	<html><![CDATA[
 		<h4>Radio and Checkboxes</h4>
-	<p>Radiogroup and radio are used to select one option among a group of options.<br />
-	Checkbox is usually used for mutiple choices.<br />
+	<p>Radiogroup and radio allow one and only one choice amongst mutually exclusive options.<br />
+	Checkbox allows mutiple choices. 
+	
+	<br />
 	</p>
 	]]></html>
 	<separator/>
