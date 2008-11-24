@@ -1162,7 +1162,8 @@ zkau._onDocMousedown = function (evt) {
 	if (!evt) evt = window.event;
 
 	var el = Event.element(evt);
-	if (!zkau.canFocus(el)) return;
+	if (el == document.body || el == document.body.parentNode //scrollbar
+	|| !zkau.canFocus(el)) return;
 
 	zkau._savepos(evt);
 

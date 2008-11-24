@@ -783,7 +783,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			parent != null ?
 				parent.getSpaceOwner() !=
 					(_parent != null ? _parent.getSpaceOwner(): _page):
-				_page != null;
+				_page != null || _parent.getSpaceOwner() != null;
 
 		if (idSpaceChanged) removeFromIdSpacesDown(this);
 
