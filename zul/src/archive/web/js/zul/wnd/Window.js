@@ -22,6 +22,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this.$super('$init', uuid, mold);
 		this._fellows = [];
 		this.listen('onClose', this, -1000);
+		this._zIndex = 100;
 	},
 
 	getMode: function () {
@@ -83,7 +84,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				this._shadow = null;
 			}
 		} else {
-			if (!this._shadow) this._shadow = new zEffect.Shadow(this.node);
+			if (!this._shadow)
+				this._shadow = new zEffect.Shadow(this.node, {overlay:true});
 			this._shadow.sync();
 		}
 	},
@@ -130,11 +132,9 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			this._drag = new zk.Draggable(this, null, {
 				handle: handle, overlay: true,
 				starteffect: $Window._startmove,
-				//TODO change: zkau.hideCovered,
 				ghosting: $Window._ghostmove,
 				ignoredrag: $Window._ignoremove,
 				endeffect: $Window._aftermove});
-			//we don't use options.change because it is called too frequently
 		}
 	},
 

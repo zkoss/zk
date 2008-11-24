@@ -250,15 +250,15 @@ zk.Widget = zk.$extends(zk.Object, {
 		var n = this.node;
 		if (n) n.style.left = left ? left: '';
 	},
-	/** Returns the right of this widget. */
-	getRight: function () {
-		return this._right;
+	/** Returns the top of this widget. */
+	getTop: function () {
+		return this._top;
 	},
-	/** Sets the right of this widget. */
-	setRight: function (right) {
-		this._right = right;
+	/** Sets the top of this widget. */
+	setTop: function (top) {
+		this._top = top;
 		var n = this.node;
-		if (n) n.style.right = right ? right: '';
+		if (n) n.style.top = top ? top: '';
 	},
 	/** Returns the tooltip text of this widget. */
 	getTooltiptext: function () {
@@ -338,13 +338,13 @@ zk.Widget = zk.$extends(zk.Object, {
 			var s = this.getLeft();
 			if (s) style += 'left:' + s + ';';
 		}
-		if (!no || !no.right) {
-			var s = this.getRight();
-			if (s) style += 'right:' + s + ';';
+		if (!no || !no.top) {
+			var s = this.getTop();
+			if (s) style += 'top:' + s + ';';
 		}
 		if (!no || !no.zIndex) {
 			var s = this.getZIndex();
-			if (s >= 0) style += 'zIndex:' + s + ';';
+			if (s >= 0) style += 'z-index:' + s + ';';
 		}
 		return style;
 	},
@@ -741,7 +741,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 	},
 	_domEvtToZK: function (evt) {
-		if (!evt) evt = window.evt;
+		if (!evt) evt = window.event;
 		var $Widget = zk.Widget,
 			wgt = $Widget.$(evt),
 			type = evt.type;

@@ -136,11 +136,11 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			zDom.rmClass(wgt.ebox, wgt.getZclass() + "-over");
 	},
 	onfocus: function (evt) {
-		if (!zDom.tag(zEvt.target(evt))) return; // Firefox 2 will cause a focus error when resize browser.
-
 		var wgt = zk.Widget.$(evt);
-		zDom.addClass(wgt.ebox, wgt.getZclass() + "-focus");
-		wgt.domFocus();
+		if (wgt) { //FF2 will cause a focus error when resize browser.
+			zDom.addClass(wgt.ebox, wgt.getZclass() + "-focus");
+			wgt.domFocus();
+		}
 	},
 	onblur: function (evt) {
 		var wgt = zk.Widget.$(evt);

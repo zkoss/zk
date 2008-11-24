@@ -701,12 +701,12 @@ zEffect.Shadow = zk.$extends(zk.Object, {
 	 *  <li>frame: Shadow displays equally on all four sides</li>
 	 *  <li>drop: Traditional bottom-right drop shadow</li></ul></li>
 	 * <li>diameter: The diameter of the offset of the shadow from the element (defaults to 4)</li>
-	 * <li>autoShow: true to show the shadow in the initial phase. (default: false)</li>
+	 * <li>overlay: whether to create a overlay (see {@link zDom#makeOverlay})</li>
 	 * </ul>
 	 */
 	$init: function (element, opts) {
 		opts = this.opts = zk.copy(this.opts, zk.$default(opts, {
-			diameter: 4, mode: "shade", autoShow: false
+			diameter: 4, mode: "shade"
 		}));
 		var sdwid = element.id + "$sdw",
 			template = zk.ie ? '<div id="'+sdwid+'" class="z-ie-shadow"></div>' :
@@ -744,19 +744,18 @@ zEffect.Shadow = zk.$extends(zk.Object, {
 		this.node = element;
 		element.parentNode.insertAdjacentHTML("afterbegin", template);
 		this.shadow = zDom.$(sdwid);
-		if (opts.autoShow === true) this.show();
 	},
 	/** Removes the shadow. */
 	destroy: function () {
 		zDom.remove(this.shadow);
-		zDom.remove(this._toplayer);
-		this.node = this.shadow = this._toplayer = null;
+		zDom.remove(this.ifroverlay);
+		this.node = this.shadow = this.ifroverlay = null;
 	},
 	/** Hides the shadow, no matter the element is visible or not.
 	 */
 	hide: function(){
 		this.shadow.style.display = "none";
-		if (this._toplayer) this._toplayer.style.display = "none";
+		if (this.ifroverlay) this.ifroverlay.style.display = "none";
 	},
 	/**
 	 * Synchronizes the state of the element with the shadow,
@@ -765,20 +764,21 @@ zEffect.Shadow = zk.$extends(zk.Object, {
 	 * visible.
 	 */
 	sync: function () {
-		if (!this.node || !zDom.isVisible(this.node)) {
+		var node = this.node;
+		if (!node || !zDom.isVisible(node)) {
 			this.hide();
 			return false;
 		}
-		if (zDom.nextSibling(this.shadow, "DIV")!= this.node)
-			this.node.parentNode.insertBefore(this.shadow, this.node);
-		this.shadow.style.zIndex = zk.parseInt(zDom.getStyle(this.node, "zIndex"))-1;
+		if (zDom.nextSibling(this.shadow, "DIV")!= node)
+			node.parentNode.insertBefore(this.shadow, node);
+		this.shadow.style.zIndex = zk.parseInt(zDom.getStyle(node, "zIndex"));
 		if (zk.ie) 
 			this.shadow.style.filter = "progid:DXImageTransform.Microsoft.alpha(opacity=50) "
 				+ "progid:DXImageTransform.Microsoft.Blur(pixelradius="+(this.opts.diameter)+")";
-		this._recalc(this.node.offsetLeft, this.node.offsetTop, this.node.offsetWidth,
-			this.node.offsetHeight);
+		this._recalc(node.offsetLeft, node.offsetTop, node.offsetWidth,
+			node.offsetHeight);
 		this.shadow.style.display = "block";
-		if (this._toplayer) this._toplayer.style.display = "block";
+		if (this.ifroverlay) this.ifroverlay.style.display = "block";
 		return true;
 	},
 	_recalc : function(l, t, w, h){
@@ -798,19 +798,20 @@ zEffect.Shadow = zk.$extends(zk.Object, {
 				c[0].childNodes[1].style.width = c[1].childNodes[1].style.width = c[2].childNodes[1].style.width = Math.max(0, (width - 12)) + "px";;
 			}
 		}
-		if(zk.ie6Only && this.node) {
-			var toplayer = this._toplayer;
-			if(!toplayer) {
-				toplayer = this._toplayer = zDom.makeTopLayer(this.node);
-				var zIndex = zk.parseInt(this.node.style.zIndex)-2;
-				toplayer.style.zIndex = zIndex > 0 ? zIndex: 0;
-			}
-			var st = toplayer.style;
+
+		var node = this.node;
+		if(this.opts.overlay && node) {
+			var ifroverlay = this.ifroverlay;
+			if(!ifroverlay)
+				ifroverlay = this.ifroverlay =
+					zDom.makeOverlay(node, node.id + '$sdwovl', this.shadow);
+
+			var st = ifroverlay.style;
 			st.left = l +"px";
 			st.top = t +"px";
 			st.width = w +"px";
 			st.height = h +"px";
-			st.zIndex = zk.parseInt(zDom.getStyle(this.node, "zIndex"))-2; // re-index
+			st.zIndex = zk.parseInt(zDom.getStyle(node, "zIndex"));
 		}
 	},
 	/**

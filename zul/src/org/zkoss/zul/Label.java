@@ -56,8 +56,7 @@ public class Label extends XulElement implements org.zkoss.zul.api.Label {
 	/** Sets the value.
 	 */
 	public void setValue(String value) {
-		if (value == null)
-			value = "";
+		if (value == null) value = "";
 		if (!Objects.equals(_value, value)) {
 			_value = value;
 			smartUpdate("value", _value);
@@ -131,46 +130,6 @@ public class Label extends XulElement implements org.zkoss.zul.api.Label {
 		return langdef != null && langdef.isRawLabel();
 	}
 
-	/** Returns the text for generating HTML content.
-	 */
-	private String getEncodedText() {
-		StringBuffer sb = null;
-		final int len = _value.length();
-		if (_multiline) {
-			int outcnt = Integer.MAX_VALUE/2; //avoid overflow (algorithm issue)
-			if (_maxlength > 0 && _maxlength < outcnt) outcnt = _maxlength;
-
-			for (int j = 0, k;; j = k + 1) {
-				k = _value.indexOf('\n', j);
-				if (k < 0) {
-					final int v = j + outcnt;
-					sb = XMLs.encodeText(sb, _value, j, len > v ? v: len);
-					break; //done
-				}
-
-				if (sb == null) {
-					assert j == 0;
-					sb = new StringBuffer(len + 10);
-				}
-
-				final int l = k > j && _value.charAt(k - 1) == '\r' ? k - 1: k;
-				final int v = l - j;
-				if (v >= outcnt) {
-					sb = XMLs.encodeText(sb, _value, j, j + outcnt);
-					break; //done
-				}
-
-				outcnt -= v;
-				sb = XMLs.encodeText(sb, _value, j, l);
-				sb.append("<br/>");
-			}
-		} else {
-			sb = XMLs.encodeText(sb, _value, 0,
-				_maxlength > 0 && len > _maxlength ? _maxlength: len);
-		}
-		return sb != null ? sb.toString(): _value;
-	}
-
 	//super//
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws IOException {
@@ -179,8 +138,8 @@ public class Label extends XulElement implements org.zkoss.zul.api.Label {
 		if (_maxlength > 0) renderer.render("maxlength", _maxlength);
 		render(renderer, "multiline", _multiline);
 
-		String cnt = XMLs.encodeText(_value);
-		if (cnt.length() > 0) {
+		if (_value.length() > 0) {
+			boolean outed = false;
 			Execution exec = Executions.getCurrent();
 			if (exec != null) {
 				final Writer out =
@@ -189,12 +148,13 @@ public class Label extends XulElement implements org.zkoss.zul.api.Label {
 					out.write("<span id=\"");
 					out.write(getUuid());
 					out.write("\">");
-					out.write(cnt);
+					out.write(XMLs.encodeText(_value));
+						//encode required since it might not be valid HTML
 					out.write("</span>\n");
-					cnt = null; //means already generated
+					outed = true;
 				}
 			}
-			render(renderer, "value", cnt);
+			if (!outed) render(renderer, "value", _value); //no need to encode
 		}
 	}
 	public String getZclass() {

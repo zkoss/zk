@@ -478,8 +478,6 @@ zk.Object.prototype = {
 	 * of this object (i.e., without <code>this</code>)
 	 */
 	proxy: function (f) {
-//		if (!f)
-//			throw "function required";
 		var o = this;
 		return function () {
 			return f.apply(o, arguments);

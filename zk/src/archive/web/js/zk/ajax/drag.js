@@ -56,13 +56,13 @@ zk.Draggable = zk.$extends(zk.Object, {
 		this.dragging = false;   
 
 		zEvt.listen(this.handle, "mousedown",
-			this._ondown = this.proxy(this.ondown));
+			this._onhandledown = this.proxy(this.onhandledown));
 
 		zdg.register(this);
 	},
 	/** Destroys this draggable object. */
 	destroy: function() {
-		zEvt.unlisten(this.handle, "mousedown", this._ondown);
+		zEvt.unlisten(this.handle, "mousedown", this._onhandledown);
 		zk.Draggable.unregister(this);
 		this.node = this.widget = this.handle = null;
 	},
@@ -87,7 +87,8 @@ zk.Draggable = zk.$extends(zk.Object, {
 		}
 		this.dragging = true;
 
-		var node = this.node;
+		var node = this.node,
+			zdg = zk.Draggable;
 		if(this.opts.ghosting) {
 			var ghosting = true;
 			if (typeof this.opts.ghosting == 'function')
@@ -98,6 +99,18 @@ zk.Draggable = zk.$extends(zk.Object, {
 				if (this.z_orgpos != 'absolute')
 					zDom.absolutize(node);
 				node.parentNode.insertBefore(this._clone, node);
+			}
+			node = this.node;
+		}
+
+		if (this.opts.overlay) {
+			var defOverlay = zdg._ifroverlay;
+			if (defOverlay.parentNode)
+				this._ifroverlay = zDom.makeOverlay(node, node.id + '$ddovlifr');
+			else {
+				this._ifroverlay = defOverlay;
+				this._syncOverlay();
+				node.parentNode.insertBefore(this._ifroverlay, node);
 			}
 		}
 
@@ -120,13 +133,24 @@ zk.Draggable = zk.$extends(zk.Object, {
 		if(this.opts.starteffect)
 			this.opts.starteffect(this);
 	},
+	_syncOverlay: function () {
+		if (this._ifroverlay) {
+			var node = this.node,
+				st = this._ifroverlay.style;
+			st.left = node.offsetLeft + "px";
+			st.top = node.offsetTop + "px";
+			st.width = node.offsetWidth + "px";
+			st.height = node.offsetHeight + "px";
+		}
+	},
 
 	updateDrag: function(evt, pointer) {
 		if(!this.dragging) this.startDrag(evt);
 		this._updateInnerOfs();
 
 		this.draw(pointer, evt);
-		if(this.opts.change) this.opts.change(this, pointer, evt); //Tom M Yeh, Potix: add pointer
+		if (this.opts.change) this.opts.change(this, pointer, evt);
+		this._syncOverlay();
 
 		if(this.opts.scroll) {
 			this.stopScrolling();
@@ -165,14 +189,18 @@ zk.Draggable = zk.$extends(zk.Object, {
 		zDom.enableSelection(document.body);
 		setTimeout(zDom.clearSelection, 0);
 
+		if (this._ifroverlay) {
+			zDom.remove(this._ifroverlay);
+			this._ifroverlay = null;
+		}
+
 		var node = this.node;
 		if(this.opts.ghosting) {
-			//Tom M. Yeh: Potix: ghosting is controllable
 			var ghosting = true;
 			if (typeof this.opts.ghosting == 'function')
 				ghosting = this.opts.ghosting(this, false);
 			if (ghosting) {
-				if (this.z_orgpos != "absolute") { //Tom M. Yeh, Potix: Bug 1514789
+				if (this.z_orgpos != "absolute") { //Bug 1514789
 					zDom.relativize(node);
 					node.style.position = this.z_orgpos;
 				}
@@ -181,10 +209,10 @@ zk.Draggable = zk.$extends(zk.Object, {
 			}
 		}
 
-		var pointer = [zEvt.x(evt), zEvt.y(evt)]; //Tom M. Yeh, Potix: add pointer
+		var pointer = [zEvt.x(evt), zEvt.y(evt)];
 		var revert = this.opts.revert;
 		if(revert && typeof revert == 'function')
-			revert = revert(this, pointer, evt); //Tom M. Yeh, Potix: add pointer
+			revert = revert(this, pointer, evt);
 
 		var d = this._currentDelta();
 		if(revert && this.opts.reverteffect) {
@@ -198,25 +226,25 @@ zk.Draggable = zk.$extends(zk.Object, {
 			node.style.zIndex = this.originalZ;
 
 		if(this.opts.endeffect) 
-			this.opts.endeffect(this, evt); //Tom M. Yeh, Potix: add evt
+			this.opts.endeffect(this, evt);
 
 		zk.Draggable.deactivate(this);
 	},
 
-	ondown: function (evt) {
+	onhandledown: function (evt) {
 		var node = this.node,
 			zdg = zk.Draggable;
 		if(zdg._dragging[node] || !zEvt.leftClick(evt))
 			return;
 
 		// abort on form elements, fixes a Firefox issue
-		var src = zEvt.target(evt)
-			tag = zDom.tag(src);
+		var target = zEvt.target(evt)
+			tag = zDom.tag(target);
 		if(tag=='INPUT' || tag=='SELECT' || tag=='OPTION' || tag=='BUTTON' || tag=='TEXTAREA')
 			return;
 
 		//Skip popup/dropdown (of combobox and others)
-		for (var n = src; n && n != node; n = n.parentNode)
+		for (var n = target; n && n != node; n = n.parentNode)
 			if (zDom.getStyle(n, 'position') == 'absolute')
 				return;
 
@@ -233,14 +261,13 @@ zk.Draggable = zk.$extends(zk.Object, {
 		//We need to ensure that the onBlur evt is fired before the onSelect evt for consistent among four browsers. 
 		if (zk.currentFocus) {
 			var f = zk.currentFocus.node;
-			if (f && zEvt.target(evt) != f && typeof f.blur == "function")
+			if (f && target != f && typeof f.blur == "function")
 				f.blur();
 		}
-
 		zEvt.stop(evt);
 
 		//Mousedown is eaten above (so do the default behavior)
-		//TODO: zkau.autoZIndex(src, false, true);
+		//TODO: zkau.autoZIndex(target, false, true);
 	},
 	keyPress: function(evt) {
 		if(zEvt.keyCode(evt) == zEvt.ESC) {
@@ -425,6 +452,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 },{ //static
 	_drags: [],
 	_dragging: [],
+	_ifroverlay: zDom.makeOverlay(null, 'z_ddifrovl'),
 
 	register: function(draggable) {
 		var zdg = zk.Draggable;
@@ -463,9 +491,10 @@ zk.Draggable = zk.$extends(zk.Object, {
 	},
 
 	ondocmousemove: function(evt) {
-		if (!evt) evt = window.event;
 		var zdg = zk.Draggable;
 		if(!zdg.activeDraggable) return;
+
+		if (!evt) evt = window.event;
 		var pointer = [zEvt.x(evt), zEvt.y(evt)];
 		// Mozilla-based browsers fire successive mousemove events with
 		// the same coordinates, prevent needless redrawing (moz bug?)

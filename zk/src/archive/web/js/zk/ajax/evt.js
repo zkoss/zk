@@ -35,12 +35,12 @@ zEvt = {
 
 	/** Returns the target element of the event. */
 	target: function(evt) {
-		if (!evt) evt = window.evt;
+		if (!evt) evt = window.event;
 		return evt.target || evt.srcElement;
 	},
 	/** Stops the event propogation. */
 	stop: function(evt) {
-		if (!evt) evt = window.evt;
+		if (!evt) evt = window.event;
 		if (evt.preventDefault) {
 			evt.preventDefault();
 			evt.stopPropagation();
@@ -55,25 +55,25 @@ zEvt = {
 	//Mouse Info//
 	/** Returns if the left button is clicked. */
 	leftClick: function(evt) {
-		if (!evt) evt = window.evt;
+		if (!evt) evt = window.event;
 		return evt.which == 1 || evt.button == 0 || evt.button == 1;
 	},
 	/** Returns if the right button is clicked. */
 	rightClick: function (evt) {
-		if (!evt) evt = window.evt;
+		if (!evt) evt = window.event;
 		return evt.which == 3 || evt.button == 2;
 	},
 	/** Returns the mouse status.
 	 */
 	mouseData: function (evt, target) {
-		if (!evt) evt = window.evt;
+		if (!evt) evt = window.event;
 		var ofs = zDom.cmOffset(target ? target: zEvt.target(evt)),
 			x = zEvt.x(evt) - ofs[0],
 			y = zEvt.y(evt) - ofs[1];
 		return [x, y, zEvt.keyMetaData(evt)];
 	},
 	keyData: function (evt) {
-		if (!evt) evt = window.evt;
+		if (!evt) evt = window.event;
 		return [zEvt.keyCode(evt), zEvt.charCode(evt), zEvt.keyMetaData(evt)];
 	},
 	keyMetaData: function (evt) {
@@ -98,13 +98,13 @@ zEvt = {
 
 	/** Returns the X coordinate of the mouse pointer. */
 	x: function (evt) {
-		if (!evt) evt = window.evt;
+		if (!evt) evt = window.event;
 		return evt.pageX || (evt.clientX +
 			(document.documentElement.scrollLeft || document.body.scrollLeft));
   	},
 	/** Returns the Y coordinate of the mouse pointer. */
 	y: function(evt) {
-		if (!evt) evt = window.evt;
+		if (!evt) evt = window.event;
 		return evt.pageY || (evt.clientY +
 			(document.documentElement.scrollTop || document.body.scrollTop));
 	},
@@ -115,12 +115,12 @@ zEvt = {
 	 * such as 65 to 'a'
 	 */
 	charCode: function(evt) {
-		if (!evt) evt = window.evt;
+		if (!evt) evt = window.event;
 		return evt.charCode || evt.keyCode;
 	},
 	/** Returns the key code. */
 	keyCode: function(evt) {
-		if (!evt) evt = window.evt;
+		if (!evt) evt = window.event;
 		var k = evt.keyCode || evt.charCode;
 		return zk.safari ? (this.safariKeys[k] || k) : k;
 	},

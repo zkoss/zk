@@ -815,6 +815,36 @@ zDom = { //static methods
 		}
 	},
 
+	/**
+	 * Creates and returns an overlay (actually, an iframe) that makes
+	 * an element (with position:absolute) shown above others.
+	 * The iframe is used to resolve the layer issue:
+	 * IE6: SELECT's dropdown above any other DOM element, all browser:
+	 * PDF iframe above any other DOM element.
+	 * @param el the element to retrieve the dimensions.
+	 * If omitted, the overlay is not appended to the DOM tree.
+	 * @param id ID of the iframe. If omitted and el is specified,
+	 * it is el.id + '$ifrovl'. If both el and id are omitted, 'z_ifrovl'
+	 * is assumed.
+	 * @param ref whether to insert the DOM element before.
+	 * If omitted, el is assumed.
+	 */
+	makeOverlay: function (el, id, ref) {
+		var ifr = document.createElement('iframe');
+		ifr.id = id || (el ? el.id + "$ifrovl": 'z_ifrovl');
+		ifr.frameBorder = "no";
+		ifr.src="";
+		ifr.style.cssText = "position:absolute;visibility:visible;overflow:hidden;filter:alpha(opacity=0);display:block;border";
+		if (el) {
+			ifr.style.width = el.offsetWidth + "px";
+			ifr.style.height = el.offsetHeight + "px";
+			ifr.style.top = el.style.top;
+			ifr.style.left = el.style.left;
+			el.parentNode.insertBefore(ifr, ref || el);
+		}	
+		return ifr;
+	},
+
 	//dialog//
 	/** To confirm the user for an activity.
 	 */
@@ -954,28 +984,6 @@ zDom = { //static methods
 };
 
 if (zk.ie) {
-	if (zk.ie6Only) {
-		/**
-		 * Creates and returns an iframe that makes an element above other
-		 * elements. The iframe is used to resolve the layer bug of IE6:
-		 * SELECT's dropdown above every DOM element.
-		 * @param id ID of the iframe. If omitted, it is el.id + '$ifr'.
-		 */
-		zDom.makeTopLayer = function (el, id) {
-			var ifr = document.createElement('iframe');
-			ifr.id = id || (el.id + "$ifr");
-			ifr.frameBorder = "no";
-			ifr.src="javascript:false";
-			ifr.style.cssText = "position:absolute;visibility:visible;overflow:hidden;filter:alpha(opacity=0);display:block";
-			ifr.style.width = el.offsetWidth + "px";
-			ifr.style.height = el.offsetHeight + "px";
-			ifr.style.top = el.style.top;
-			ifr.style.left = el.style.left;
-			el.parentNode.appendChild(ifr);
-			return ifr;
-		};
-	}
-
 	zDom._tagOfHtml = function (html) {
 		if (!html) return "";
 

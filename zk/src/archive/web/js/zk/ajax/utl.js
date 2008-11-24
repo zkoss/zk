@@ -98,8 +98,8 @@ zUtl = { //static methods
 
 		if (mask) { //center it
 			n = zDom.$(idmsk);
-			zEvt.listen(n, "mousemove", zEvts.stop);
-			zEvt.listen(n, "click", zEvts.stop);
+			zEvt.listen(n, "mousemove", zEvt.stop);
+			zEvt.listen(n, "click", zEvt.stop);
 		}
 
 		n = zDom.$(idtxt);
@@ -113,8 +113,8 @@ zUtl = { //static methods
 	cleanAllProgress: function (id) {
 		var n = zDom.$(id + '$m');
 		if (n) {
-			zEvt.unlisten(n, "mousemove", zEvts.stop);
-			zEvt.unlisten(n, "click", zEvts.stop);
+			zEvt.unlisten(n, "mousemove", zEvt.stop);
+			zEvt.unlisten(n, "click", zEvt.stop);
 		}
 		zDom.remove(id);
 

@@ -22,7 +22,6 @@ zul.wgt.Html = zk.$extends(zul.Widget, {
 		if (this._content != content) {
 			this._content = content;
 			var n = this.node;
-			var n = this.node;
 			if (n) n.innerHTML = content;
 		}
 	}
