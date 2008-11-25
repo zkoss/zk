@@ -15,6 +15,8 @@ ZK 5.0.0
     are removed
   + The client-side action has been replaced with the custom JavaScript
   	events.
+  + Overlapped window in overlapped won't be cropped
+    In older version, developers have to specify overflow:visible
   + The default z-index of windows is 100 (rather than 0).
 
 	--------

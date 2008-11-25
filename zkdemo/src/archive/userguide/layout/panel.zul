@@ -17,27 +17,19 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window id="demo" apply="org.zkoss.zkdemo.userguide.DemoWindowComposer">
+<window id="demo" use="org.zkoss.zkdemo.userguide.DemoWindow" xmlns:h="http://www.w3.org/1999/xhtml">
 	<html><![CDATA[
-		<h4>Panel</h4>
-		<p>This is a MSN-like demo created by Panel component.</p>
+	<h4>Panel</h4>
+	<p>This is a MSN-like demo created by Panel component.</p>
 	]]></html>
-	<separator/>
-	<tabbox width="100%" tabscroll="false">
-		<tabs>
-			<tab id="demoView" label="Demo"/>
-			<tab id="srcView" label="View Source"/>
-		</tabs>
-		<tabpanels>
-			<tabpanel>
-				<window id="view">
-				</window>
-			</tabpanel>
-			
-			<tabpanel>
-				<panel>
-					<panelchildren>
-						<textbox id="codeView" class="code" rows="20" width="95%">
+	<groupbox mold="3d" width="100%">
+		<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
+		<window id="view">
+		</window>
+	</groupbox>
+	<groupbox id="tryView" mold="3d" open="false" width="100%">
+		<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
+		<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="20" width="100%">
 			<attribute name="value"><![CDATA[
 <zk>
 	<style dynamic="true">
@@ -48,7 +40,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			color: #2C559C; font: italic Tahoma, Arial, Helvetica, sans-serif;
 		}
 	</style>
-	<panel id="panel" framable="true" width="500px" height="400px"
+	<panel id="panel" framable="true" width="500px" height="550px"
 		title="Panel"
 		maximizable="true" minimizable="true" border="normal"
 		collapsible="true" closable="true">
@@ -83,27 +75,27 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		<panelchildren>
 			<columnlayout>
 				<columnchildren width="100%">
-					<panel height="260px">
+					<panel height="400px">
 						<panelchildren>
 							<borderlayout>
 							<center flex="true">
 								<div id="viewer" style="overflow:auto;"/>
 							</center>
 							<south splittable="true" size="25%"  flex="true">
-								<textbox id="text" multiline="true" width="98%" style="margin:0px" value="Hi, I am Jumper. (Please press the OK Button)"/>
+								<textbox id="text" multiline="true" width="98%" style="margin:0px" />
 							</south>
 							</borderlayout>
 						</panelchildren>
 					</panel>
 				</columnchildren>
 				<columnchildren width="130px">
-					<panel height="260px" width="100%">
+					<panel height="400px" width="100%">
 						<panelchildren>
-							<borderlayout width="100%" style="background:transparent">
-								<north size="120px" border="none" style="background:transparent">
+							<borderlayout width="100%" style="background:#E4F3F4">
+								<north size="120px" border="none" style="background:#E4F3F4">
 							<image src="/img/msn1.gif"/>	
 								</north>
-								<south size="120px"  border="none" style="background:transparent">
+								<south size="120px"  border="none" style="background:#E4F3F4">
 							<image src="/img/msn2.gif"/>
 								</south>
 								</borderlayout>
@@ -163,14 +155,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	</panel>
 </zk>
 			]]></attribute>
-						</textbox>
-					</panelchildren>
-					<toolbar mold="panel">
-						<button id="tryBtn" label="Try me!"/>
-						<button id="reloadBtn" label="Reload" height="18px"/>
-					</toolbar>
-				</panel>
-			</tabpanel>
-		</tabpanels>
-	</tabbox>
+		</textbox>
+	</groupbox>
 </window>

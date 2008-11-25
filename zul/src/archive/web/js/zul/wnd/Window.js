@@ -17,11 +17,13 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	_border: 'none',
 	_minheight: 100,
 	_minwidth: 200,
+	importantEvents_: {onMove:1, onZIndex:1}, //shared by all instances
 
 	$init: function (uuid, mold) {
 		this.$super('$init', uuid, mold);
 		this._fellows = [];
 		this.listen('onClose', this, -1000);
+		this.listen('onMove', this, -1000);
 		this._zIndex = 100;
 	},
 
@@ -46,11 +48,32 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	doEmbedded: function () {
 		this._setMode('embedded');
 	},
+	_setMode: function (mode, binding) {
+		if (binding) {
+			if (mode != 'embedded') zWatch.watch('onFloatUp', this);
+		} else { 
+			var oldm = this._mode;
+			if (oldm == mode) return;
+			this._mode = mode;
+			if (!this.node) return;
+
+			if (mode == 'embedded') zWatch.unwatch('onFloatUp', this);
+			else if (oldm == 'embedded') zWatch.watch('onFloatUp', this);
+		}
+
+
+		switch (mode) {
+		case 'overlapped':
+		case 'popup':
+			this._doOverOrPopup(binding);
+			break;
+		}
+	},
 	_doOverOrPopup: function (binding) {
 		if (!binding) this._updateDomOuter();
 
 		var pos = this.getPosition(),
-			isV = this._shallVParent(),
+			isV = this._mode != 'embedded',
 			n = this.node;
 		if (!pos && isV && !n.style.top && !n.style.left) {		
 			var xy = zDom.revisedOffset(n);
@@ -60,14 +83,14 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			var xy = zk.revisedOffset(n.parentNode),
 				left = zk.parseInt(n.style.left), top = zk.parseInt(n.style.top);
 			this._offset = xy;
-			n.style.left = xy[0] + zk.parseInt(n.style.left) + "px";
-			n.style.top = xy[1] + zk.parseInt(n.style.top) + "px";
+			n.style.left = (xy[0] + zk.parseInt(n.style.left)) + "px";
+			n.style.top = (xy[1] + zk.parseInt(n.style.top)) + "px";
 		}
 
-		if (isV) zDom.makeVParent(n);
-		//if (pos) this._position(pos);
+		if (isV) zDom.makeVParent(n); //OK to make vparent twice
+		this._updateDomPos();
 
-//		if (this.isVisible()) //TO getZKAttr(visible...
+		if (this.isVisible())
 			n.style.visibility = 'visible';
 
 		this._makeFloat();
@@ -93,24 +116,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		var shadow = this._shadow;
 		if (shadow) shadow.hide();
 	},
-	_setMode: function (mode, binding) {
-		if (!binding) {
-			if (this._mode == mode) return;
-			var n = this.node;
-			if (n) this._cleanMode();
-			this._mode = mode;
-			if (!n) return;
-		}
-
-		switch (mode) {
-		case 'overlapped':
-		case 'popup':
-			this._doOverOrPopup(binding);
-			break;
-		}
-	},
-	_cleanMode: function () {
-	},
 	_shallVParent: function () {
 		for (var wgt = this; wgt = wgt.parent;)
 			if (wgt._mode && wgt._mode != 'embedded')
@@ -129,6 +134,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				ignoredrag: $Window._ignoremove,
 				endeffect: $Window._aftermove});
 		}
+	},
+	_updateDomPos: function () {
 	},
 
 	getTitle: function () {
@@ -157,7 +164,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			this._pos = pos;
 
 			var n = this.node;
-			if (n) ;//TODO
+			if (n) this._updateDomPos();
 		}
 	},
 
@@ -267,11 +274,34 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		if (!this.inServer) //let server handle if in server
 			this.parent.removeChild(this); //default: remove
 	},
+	onMove: function (evt) {
+		this._left = evt.data[0];
+		this._top = evt.data[1];
+	},
 	onFloatUp: function (wgt) {
 		//TODO
 	},
 
+	_fireOnMove: function (keys) {
+		var pos = this._pos, node = this.node,
+			x = zk.parseInt(node.style.left),
+			y = zk.parseInt(node.style.top);
+		if (pos == 'parent') {
+			var vparent = zDom.vparent(node);
+			if (vparent) {
+				var ofs = zDom.reviseOffset(vparent);
+				x -= ofs[0];
+				y -= ofs[1];
+			}
+		}
+		this.fire('onMove', [x + 'px', y + 'px', keys ? keys: ''], {ignorable: true});
+	},
+
 	//super//
+	setVisible: function (visible, fromServer) {
+		this.$super('setVisible', visible, fromServer);
+		this._syncShadow();
+	},
 	focus: function () {
 		if (this.node) {
 			var cap = this.caption;
@@ -339,8 +369,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			}
 		}
 
-		zWatch.watch('onFloatUp', this);
-
 		if (this._mode != 'embedded')
 			this._setMode(this._mode, true);
 	},
@@ -351,7 +379,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		}
 		zDom.undoVParent(this.node);
 
-		zWatch.unwatch('onFloatUp', this);
+		zWatch.unwatch('onFloatUp', this); //ok even if not watch yet
 
 		var $Window = this.$class;
 		for (var nms = ['close', 'max', 'min'], j = 3; --j >=0;) {
@@ -369,7 +397,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 },{ //static
 	closeclick: function (evt) {
 		var wnd = zk.Widget.$(evt);
-		wnd.fire2('onClose');
+		wnd.fire('onClose');
 		zEvt.stop(evt);
 	},
 	closeover: function (evt) {
@@ -472,8 +500,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 	_aftermove: function (dg, evt) {
 		dg.node.style.visibility = "";
-		dg.widget._syncShadow();
-
-		//TODO zkau.sendOnMove(cmp, zEvt.keyMetaData(evt));
+		var wgt = dg.widget;
+		wgt._syncShadow();
+		wgt._fireOnMove('onMove', zEvt.keyMetaData(evt));
 	}
 });

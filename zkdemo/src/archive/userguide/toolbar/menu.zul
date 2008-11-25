@@ -4,90 +4,63 @@
 menu.zul
 
 {{IS_NOTE
-        Purpose:
-
-        Description:
-
-        History:
-                Thu Nov 13 16:07:16 TST 2008, Created by Flyworld
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Oct  4 11:31:13     2005, Created by henrichen
 }}IS_NOTE
 
-Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<window id="demo" apply="org.zkoss.zkdemo.userguide.DemoWindowComposer">
+<window id="demo" use="org.zkoss.zkdemo.userguide.DemoWindow">
 	<html><![CDATA[
 		<h4>Menu</h4>
-	    <p>Menu is a way for an end user to issue an application function.</p>
+		<p>Menu is the way for an end user to issue an application function.</p>
 	]]></html>
-	<separator />
-	<tabbox width="100%" tabscroll="false">
-		<tabs>
-			<tab id="demoView" label="Demo"/>
-			<tab id="srcView" label="View Source"/>
-		</tabs>
-		<tabpanels>
-			<tabpanel>
-				<window id="view">
-				</window>
-			</tabpanel>
-			
-			<tabpanel>
-				<panel>
-					<panelchildren>
-						<textbox id="codeView" class="code" rows="20" width="95%">
+	<groupbox mold="3d" width="100%">
+		<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
+		<window id="view">
+		</window>
+	</groupbox>
+	<groupbox id="tryView" mold="3d" open="false" width="100%">
+		<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
+		<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="20" width="100%">
 			<attribute name="value"><![CDATA[
-<zk>
-	<menubar id="menubar" width="180px">
-		<menu label="File" src="/img/Briefcase-16x16.png">
+<window title="Menu" border="normal">
+	<menubar id="menubar">
+		<menu label="File" src="/img/m1.gif" >
 			<menupopup>
-				<menuitem src="/img/BriefcaseSpark-16x16.png" label="New"
-					onClick="alert(self.label)" />
-				<menuitem src="/img/BriefcaseOpen-16x16.png" label="Open"
-					onClick="alert(self.label)" />
-				<menuitem src="/img/DisketteBlack-16x16.png" label="Save"
-					onClick="alert(self.label)" />
-				<menuseparator />
-				<menuitem label="Exit" onClick="alert(self.label)" />
+				<menuitem src="/img/m1.gif" label="New" onClick="alert(self.label)"/>
+				<menuitem src="/img/m2.gif" label="Open" onClick="alert(self.label)"/>
+				<menuitem src="/img/m3.gif" label="Save" onClick="alert(self.label)"/>
+				<menuseparator/>
+				<menuitem label="Exit" onClick="alert(self.label)"/>
 			</menupopup>
 		</menu>
 		<menu label="Help">
 			<menupopup>
-				<menuitem label="Index" onClick="alert(self.label)" />
+				<menuitem label="Index" onClick="alert(self.label)"/>
 				<menu label="About">
 					<menupopup>
-						<menuitem label="About ZK"
-							onClick="alert(self.label)" />
-						<menuitem label="About Potix"
-							onClick="alert(self.label)" />
+						<menuitem label="About ZK" onClick="alert(self.label)"/>
+						<menuitem label="About Potix" onClick="alert(self.label)"/>
 					</menupopup>
 				</menu>
 			</menupopup>
 		</menu>
-		<menu src="/img/Spyglass-16x16.png">
+		<menu src="/img/m2.gif">
 			<menupopup>
-				<menuitem label="Index" onClick="alert(self.label)" />
+				<menuitem label="Index" onClick="alert(self.label)"/>
 			</menupopup>
 		</menu>
 	</menubar>
-	<checkbox label="Vertical orient">
-		<attribute name="onCheck">
-			menubar.orient= self.checked ? "vertical" : "horizontal";
-			menubar.width = self.checked ? "70px" : "180px";
-		</attribute>
-	</checkbox>
-</zk>
+</window>
 			]]></attribute>
-						</textbox>
-					</panelchildren>
-					<toolbar mold="panel">
-						<button id="tryBtn" label="Try me!"/>
-						<button id="reloadBtn" label="Reload" height="18px"/>
-					</toolbar>
-				</panel>
-			</tabpanel>
-		</tabpanels>
-	</tabbox>
+		</textbox>
+	</groupbox>
 </window>

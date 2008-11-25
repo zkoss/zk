@@ -808,10 +808,10 @@ zDom = { //static methods
 			var agtx = el.z_vpagtx;
 			el.z_vp = el.z_vpagtx = null;
 			if (agtx) {
-				p.insertBefore(n, agtx);
+				p.insertBefore(el, agtx);
 				zDom.remove(agtx);
 			} else
-				p.appendChild(n);
+				p.appendChild(el);
 		}
 	},
 

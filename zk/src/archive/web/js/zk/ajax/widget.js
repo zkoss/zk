@@ -588,9 +588,9 @@ zk.Widget = zk.$extends(zk.Object, {
 	/** An array of important events. An import event is an event
 	 * that must be sent to the server even without event listener.
 	 * It is usually about state-updating, such as onChange and onSelect.
-	 * <p>Default: null if no event at all.
+	 * <p>Default: null.
 	 */
-	//importantEvents_: null,
+	//importantEvents_: nulll, //shared by all instances of the same class
 	/** Fires a Widget event.
 	 * Note: the event will be sent to the server if it is in server
 	 * (@{link #inServer}), and belongs to a desktop.
@@ -601,7 +601,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * If not specified or negative, it is decided automatically.
 	 * It is ignored if no non-deferrable listener is registered at the server.
 	 */
-	fire: function (evt, timeout) {
+	fireX: function (evt, timeout) {
 		var evtnm = evt.name,
 			lsns = this._lsns[evtnm],
 			len = lsns ? lsns.length: 0;
@@ -616,15 +616,14 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (this.inServer && this.desktop) {
 			var ies = this.importantEvents_,
 				asap = this['$' + evtnm];
-			if (asap != null
-			|| (ies != null && ies.$contains(evtnm)))
+			if (asap != null || (ies != null && ies[evtnm]))
 				zAu.send(evt,
 					asap ? timeout >= 0 ? timeout: 38: this.getAuDelay());
 		}
 	},
 	/** A simpler way to fire an event. */
-	fire2: function (evtnm, data, opts) {
-		this.fire(new zk.Event(this, evtnm, data, opts));
+	fire: function (evtnm, data, opts) {
+		this.fireX(new zk.Event(this, evtnm, data, opts));
 	},
 	/** Adds a listener to the specified event.
 	 * The listener must have a method having the same name as the event.
@@ -679,6 +678,8 @@ zk.Widget = zk.$extends(zk.Object, {
 		return -1;
 	},
 
+	//ZK event handling//
+
 	//DOM event handling//
 	/** Callback this method if you listen DOM onfocus. */
 	domFocus: function () {
@@ -687,7 +688,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		//TODO: handle zIndex, close floats
 
 		if (this.isListen('onFocus'))
-			this.fire2('onFocus');
+			this.fire('onFocus');
 	},
 	/** Callback this method if you listen DOM onblur. */
 	domBlur: function () {
@@ -696,7 +697,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		//TODO: handle validation
 
 		if (this.isListen('onBlur'))
-			this.fire2('onBlur');
+			this.fire('onBlur');
 	}
 
 }, {
@@ -746,12 +747,12 @@ zk.Widget = zk.$extends(zk.Object, {
 			wgt = $Widget.$(evt),
 			type = evt.type;
 		if (type.startsWith('mouse'))
-			wgt.fire2('onMouse' + type.charAt(5).toUpperCase() + type.substring(6),
+			wgt.fire('onMouse' + type.charAt(5).toUpperCase() + type.substring(6),
 				zEvt.mouseData(evt));
 		else if (type.startsWth('key'))
-			wgt.fire2('onKey' + type.charAt(3).toUpperCase() + type.substring(4),
+			wgt.fire('onKey' + type.charAt(3).toUpperCase() + type.substring(4),
 				zEvt.keyData(evt));
-		else wgt.fire2('on' + type.charAt(0).toUpperCase() + type.substring(1));
+		else wgt.fire('on' + type.charAt(0).toUpperCase() + type.substring(1));
 	},
 	_domevts: ['onMouseOver','onMouseOut', 'onMouseDown', 'onMouseUp',
 		'onMouseMove', 'onKeyDown', 'onKeyPress', 'onKeyUp'],

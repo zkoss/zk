@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-include.zul
+audio.zul
 
 {{IS_NOTE
 	Purpose:
@@ -9,7 +9,7 @@ include.zul
 	Description:
 		
 	History:
-		Tue Oct  4 11:31:13     2005, Created by henrichen
+		Mon Nov 21 21:40:37     2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -19,8 +19,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 -->
 <window id="demo" use="org.zkoss.zkdemo.userguide.DemoWindow">
 	<html><![CDATA[
-		<h4>Include</h4>
-		<p>include component provides the facility that develper can "include" other pages easily.</p>
+		<h4>Audio Demo</h4>
+		<p>Uploads an audio and plays it at the browser.</p>
 	]]></html>
 	<groupbox mold="3d" width="100%">
 		<caption label="View"><button label="Reload" height="18px" use="org.zkoss.zkdemo.userguide.ReloadButton"/></caption>
@@ -29,11 +29,22 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</groupbox>
 	<groupbox id="tryView" mold="3d" open="false" width="100%">
 		<caption label="Source"><button label="Try me!" use="org.zkoss.zkdemo.userguide.TryMeButton"/></caption>
-		<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="15" width="100%">
+		<textbox id="codeView" use="org.zkoss.zkdemo.userguide.CodeView" class="code" rows="10" width="100%">
 			<attribute name="value"><![CDATA[
-<window title="Include" border="normal" width="300px">
-	Hello, World!
-	<include src="/userguide/misc/includedHello.zul"/>
+<window title="Audio" border="normal">
+	<audio id="audio" height="40"/>
+	<separator/>
+	<button label="Upload">
+		<attribute name="onClick">{
+	Object media = Fileupload.get();
+	if (media instanceof org.zkoss.sound.Audio)
+		audio.setContent(media);
+	else if (media != null)
+		Messagebox.show("Not an audio: "+media, "Error", Messagebox.OK, Messagebox.ERROR);
+		}</attribute>
+	</button>
+	<button label="Play" onClick="audio.play()"/>
+	<button label="Stop" onClick="audio.stop()"/>
 </window>
 			]]></attribute>
 		</textbox>

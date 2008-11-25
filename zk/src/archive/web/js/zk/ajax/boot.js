@@ -275,7 +275,7 @@ function _zkDocClick(evt) {
 				return; //done
 			}
 			if (wgt.isListen('onClick')) {
-				wgt.fire2("onClick", zEvt.mouseData(evt, wgt.node), {ctl:true});
+				wgt.fire("onClick", zEvt.mouseData(evt, wgt.node), {ctl:true});
 				return;
 			}
 		}
@@ -289,7 +289,7 @@ function _zkDocDblClick(evt) {
 	var wgt = zk.Widget.$(evt);
 	for (; wgt; wgt = wgt.parent)
 		if (wgt.isListen('onDoubleClick')) {
-			wgt.fire2("onDoubleClick", zEvt.mouseData(evt, wgt.node), {ctl:true});
+			wgt.fire("onDoubleClick", zEvt.mouseData(evt, wgt.node), {ctl:true});
 			return;
 		}
 }
