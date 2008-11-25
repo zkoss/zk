@@ -23,6 +23,7 @@ Rights Reserved.
 <window id="demo" apply="org.zkoss.zkdemo.userguide.DemoWindowComposer">
 	<html><![CDATA[
 		<h4>Complex Borderlayout</h4>
+		<p>A complex example for use of borderlayout.</p>
 	]]></html>
 	<separator/>
 	<tabbox width="100%" tabscroll="false">
@@ -211,8 +212,8 @@ Rights Reserved.
 						</textbox>
 					</panelchildren>
 					<toolbar mold="panel">
-						<button id="reloadBtn" label="Reload" height="18px"/>
 						<button id="tryBtn" label="Try me!"/>
+						<button id="reloadBtn" label="Reload" height="18px"/>
 					</toolbar>
 				</panel>
 			</tabpanel>

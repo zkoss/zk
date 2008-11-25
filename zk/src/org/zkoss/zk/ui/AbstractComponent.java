@@ -810,7 +810,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			parent != null ?
 				parent.getSpaceOwner() !=
 					(_parent != null ? _parent.getSpaceOwner(): _page):
-				_page != null;
+				_page != null || _parent.getSpaceOwner() != null;
 
 		if (idSpaceChanged) removeFromIdSpacesDown(this);
 
@@ -1033,10 +1033,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			//such that deriving is easy to override
 	}
 	public boolean removeChild(Component child) {
-		if (child.getParent() != this)
+		final AbstractComponent oc = (AbstractComponent)child;
+		if (oc._parent != this)
 			return false; //nothing to do
 
-		final AbstractComponent oc = (AbstractComponent)child;
 		setNext(oc._prev, oc._next);
 		setPrev(oc._next, oc._prev);
 		oc._next = oc._prev = null;

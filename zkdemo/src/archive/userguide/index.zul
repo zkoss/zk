@@ -151,15 +151,11 @@ zkCategoryBar = {
 	}
 };
 ]]></script>
-<zscript><![CDATA[
-	String[] data1 = new String[]{};
-	Sessions.getCurrent().setAttribute("gmapsKey","ABQIAAAAILP5Cp3mR13Ms11HaBuzWBTLPA6PTtQmiJSMwMajm4VWxfOvHxSXiT5RrAMrjNuFifcEnG0wBQ5Z8g");
-]]></zscript>
 <borderlayout id="main" apply="org.zkoss.zkdemo.userguide.MainLayoutComposer">
 	<north border="none" size="100px" sclass="demo-header" collapsible="true">
 		<div>
-			<div sclass="demo-logo" onClick='Executions.sendRedirect("http://www.zkoss.org")'>
-				<image width="80px" height="65px" src="/img/ZK-Logo.gif"/>
+			<div sclass="demo-logo pointer" onClick='Executions.sendRedirect("http://www.zkoss.org")'>
+				<image width="80px" height="65px" src="/img/ZK-logo.png"/>
 			</div>
 			<categorybar zclass="demo-categorybar" id="header">
 				<category forEach="${main.categories}" id="${each.id}" src="${c:browser('ie6-') ? each.iconIE6 : each.icon}" label="${each.label}"/>
