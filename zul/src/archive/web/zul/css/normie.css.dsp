@@ -105,16 +105,16 @@ span.z-dottree-last-open, span.z-dottree-last-close, span.z-dottree-tee, span.z-
 <c:if test="${c:browser('ie6-')}">
 <%-- ZK Massagebox norm.css.dsp--%>
 .z-msgbox-question {
-	background-image: url(${c:encodeURL('~./zul/img/msgbox/question.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/msgbox/QuestionmarkButton-32x32.gif')});
 }
 .z-msgbox-exclamation {
-	background-image: url(${c:encodeURL('~./zul/img/msgbox/exclamation.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/msgbox/WarningTriangle-32x32.gif')});
 }
 .z-msgbox-imformation {
-	background-image: url(${c:encodeURL('~./zul/img/msgbox/information.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/msgbox/InfoButton-32x32.gif')});
 }
 .z-msgbox-error {
-	background-image: url(${c:encodeURL('~./zul/img/msgbox/error.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/msgbox/StopSign-32x32.gif')});
 }
 <%-- box.css.dsp --%>
 .z-splitter-ver-btn-l, .z-splitter-hor-btn-l {
@@ -273,5 +273,18 @@ span.z-vfiletree-tee, span.z-vfiletree-last {
 }
 .z-window-modal-tr, .z-window-highlighted-tr, .z-window-overlapped-tr, .z-window-popup-tr {
 	background-image: url(${c:encodeURL('~./zul/img/wnd2/wtp-r-ol.gif')})
+}
+<%-- grid.css.dsp --%>
+.z-columns-menu-grouping .z-menu-item-img {
+	background-image:  url(${c:encodeURL('~./zul/img/grid/Group-16x16.gif')});
+}
+.z-columns-menu-asc .z-menu-item-img {
+	background-image:  url(${c:encodeURL('~./zul/img/grid/AZArrowUp-16x16.gif')});
+}
+.z-columns-menu-desc .z-menu-item-img {
+	background-image:  url(${c:encodeURL('~./zul/img/grid/AZArrowDown-16x16.gif')});
+}
+.z-columns-menu-columns .z-menu-img {
+	background-image:  url(${c:encodeURL('~./zul/img/grid/Columns-16x16.gif')});
 }
 </c:if>

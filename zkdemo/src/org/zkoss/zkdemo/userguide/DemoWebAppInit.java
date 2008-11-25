@@ -46,6 +46,8 @@ public class DemoWebAppInit implements WebAppInit {
 
 	final static String CATEGORY_TYPE = "CATEGORY";
 	
+	final static String LINK_TYPE = "LINK";
+	
 	private static Map _cateMap = new LinkedHashMap () {
 		 public Object remove(Object key) {
 			 throw new UnsupportedOperationException();
@@ -84,7 +86,14 @@ public class DemoWebAppInit implements WebAppInit {
 						log.error("This category has no enough argument: size less than 3, for example, CATEGORY,IconURL,Label");
 						continue;
 					}
-					Category cate = new Category(key, vals[1].trim(), vals[2].trim());
+					Category cate = new Category(key, vals[1].trim(), vals[2].trim(), null);
+					_cateMap.put(key, cate);
+				} else if (LINK_TYPE.equals(arg0) ) {
+					if (vals.length < 4) {
+						log.error("This category has no enough argument: size less than 4, for example, LINK,IconURL,Label,Href");
+						continue;
+					}
+					Category cate = new Category(key, vals[1].trim(), vals[2].trim(), vals[3].trim());
 					_cateMap.put(key, cate);
 				} else {
 					Category cate = (Category) _cateMap.get(arg0);

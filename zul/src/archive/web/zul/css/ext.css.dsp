@@ -163,9 +163,15 @@ ul {
 	background:transparent url(${c:encodeURL('/img/category-over.png')}) no-repeat scroll 0 0;
 }
 .demo-search-inp {
-    padding: 2px 0 1px 15px;
+    padding: 2px 0 1px 18px;
 	background: white url(${c:encodeURL('/img/search.png')}) no-repeat scroll 0 0;
 }
+<c:if test="${c:browser('ie6-')}">
+.demo-search-inp {
+    padding: 2px 0 1px 18px;
+	background: white url(${c:encodeURL('/img/search.gif')}) no-repeat scroll 0 0;
+}
+</c:if>
 .demo-category {
 	margin-top: 10px; float:left; height: 80px; width: 90px;
 }
@@ -192,4 +198,7 @@ ul {
 }
 .demo-main-desc {
 	padding-bottom: 5px;
+}
+.pointer {
+	cursor:pointer;
 }

@@ -66,6 +66,7 @@ ZK 3.5.2
   2313106: Fail to invalidate cmp inside borderlayout if flex=true...
   2313445: It looks like strange after invalidate verticle tabs.
   2217915: filedownload doesn't work when opera opera 9.5.x
+  2337652: ID space cleanup problem if not attached to a page
 
 	--------
 ZK 3.5.1
@@ -108,7 +109,7 @@ ZK 3.5.1
   2150566: After change the label of Listgroup, it can't open/close
 
 * Upgrade Notes
-  + getMoldSclass is deprecated and replaced with getZclass since
+  * getMoldSclass is deprecated and replaced with getZclass since
     we are going to provide ZK Cascading Classes that allow developers
     to configure the CSS with the component name.
 

@@ -50,12 +50,11 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  * 
  * <p>This Composition manager is useful when you need to do layout injection or you want to 
  * design a common page template across multiple pages.<p>
- * 
  * <ul>
  * <li>You first design a template with "insert" components telling where the insert points are.
  * Each insert component has to be given a distinguish joinId in a page(e.g. &lt;window self="@{insert(content)}"/>; 
  * here the "content" is the joinId).</li>
- *  * <li>Then in the real page, you have root "define" components telling which "define" 
+ * <li>Then in the real page, you have root "define" components telling which "define" 
  *  components are to be attach onto the "insert" component with the same joinId 
  *  (e.g. &lt;label self="@{define(content)}"; here the "content" is the joinId).</li>
  * <li>This Composition class is designed as a page {@link Initiator} and a {@link InitiatorExt}, so 
@@ -66,9 +65,13 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  * </pre>
  * Where the arg0 ~ argx you can give zul template uri. This implementation use Excecutions.createComponents()
  * to create them and then do the real composition in the {@link InitiatorExt#doAfterCompose(Page, Component[])}.</li>
- * <li>If more than one "define" components with the same joinId, they are attached onto the "insert" component
+ * <li>If more than one "define" components have the same joinId, they are attached onto the "insert" component
  * in the sequence of the definition.</li>
- * <li>If a "define" component cannot find the corresponding "insert" component, it will be simply detached from the page.</li>  
+ * <li>If a "define" component cannot find the corresponding "insert" component, it will be simply detached from the page.</li>
+ * <li>Also you can prepare a parent component and pass it in via 
+ * Execution.getCurrent().setAttribute(Composition.PARENT, parent) then
+ * this implementation will attach finally composed root components as the children of the provided parent.</li>
+ * <li>If you did not provide the parent component, the finally composed root components are attached directly to the current page.</li>  
  * </ul>
  * 
  * @author henrichen
@@ -76,7 +79,8 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  */
 public class Composition implements Initiator, InitiatorExt {
 	private static final String RESOLVE_COMPOSITION = "zk.ui.util.RESOLVE_COMPOSITION";
-
+	public static final String PARENT = "zk.ui.util.PARENT";
+	
 	public void doAfterCompose(Page page) throws Exception {
 		//never called here
 	}
@@ -96,39 +100,46 @@ public class Composition implements Initiator, InitiatorExt {
 		if (exec.getAttribute(RESOLVE_COMPOSITION) == null) {
 			exec.setAttribute(RESOLVE_COMPOSITION, this);
 		}
+		final Component parent = (Component) exec.getAttribute(PARENT);
 		for (int j=0; j < args.length; ++j) {
-			Executions.createComponents((String)args[j], null, null);
+			exec.createComponents((String)args[j], parent, null);
 		}
 	}
 
 	public void doAfterCompose(Page page, Component[] comps) throws Exception {
 		final Execution exec = Executions.getCurrent();
+
 		//resolve only once in the last page
 		if (exec.getAttribute(RESOLVE_COMPOSITION) != this) {
 			return;
 		}
 		exec.removeAttribute(RESOLVE_COMPOSITION);
-
+		
 		// resolve insert components
 		final Map insertMap = new HashMap(); //(insert name, insert component)
-		resolveInsertComponents(page.getRoots(), insertMap);
+		final Component parent = (Component) exec.getAttribute(PARENT);
+		final Collection roots = parent == null ? page.getRoots() : parent.getChildren();
+		resolveInsertComponents(roots, insertMap);
 
-		// join "define" components as children of "insert" component
-		Component comp = page.getFirstRoot();
-		do {
-			final Component nextRoot = comp.getNextSibling();
-			final Annotation annt = ((ComponentCtrl)comp).getAnnotation("define");
-			if (annt != null) {
-				final String joinId = annt.getAttribute("value");
-				final Component insertComp = (Component) insertMap.get(joinId);
-				if (insertComp != null) {
-					comp.setParent(insertComp);
-				} else {
-					comp.detach(); //no where to insert
+		if (!roots.isEmpty()) {
+			Component comp = (Component) roots.iterator().next();
+			
+			// join "define" components as children of "insert" component
+			do {
+				final Component nextRoot = comp.getNextSibling();
+				final Annotation annt = ((ComponentCtrl)comp).getAnnotation("define");
+				if (annt != null) {
+					final String joinId = annt.getAttribute("value");
+					final Component insertComp = (Component) insertMap.get(joinId);
+					if (insertComp != null) {
+						comp.setParent(insertComp);
+					} else {
+						comp.detach(); //no where to insert
+					}
 				}
-			}
-			comp = nextRoot;
-		} while (comp != null);
+				comp = nextRoot;
+			} while (comp != null);
+		}
 	}
 	
 	private void resolveInsertComponents(Collection comps, Map map) {

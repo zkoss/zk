@@ -20,8 +20,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <window id="demo" apply="org.zkoss.zkdemo.userguide.DemoWindowComposer">
 	<html><![CDATA[
 	<h4>Comboboxes</h4>
-	<p>Combobox is a special text box that allows user to select
-	the text from a list of combobox items.<br />
+	<p>A combination of a text box with a listbox, which allows the user to select items from the list or enter a new value.<br />
 	Press Alt+DOWN to drop the list, then use UP and DOWN to select
 	an item.</p>
 	]]></html>
@@ -61,11 +60,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		</combobox>
 		Combobox with description and icons:
 		<combobox>
-			<comboitem label="Simple and Rich" image="/img/coffee.gif"
+			<comboitem label="Simple and Rich" image="/img/GoldBar-32x32.gif"
 				description="The simplest way to make Web applications rich" />
-			<comboitem label="Cool!" image="/img/corner.gif"
+			<comboitem label="Cool!" image="/img/CogwheelEye-32x32.gif"
 				description="The coolest technology" />
-			<comboitem label="Ajax and RIA" image="/img/cubfirs.gif"
+			<comboitem label="Ajax and RIA" image="/img/WindowGlobe-32x32.gif"
 				description="Rich Internet Application by Ajax" />
 		</combobox>
 	</vbox>
@@ -117,8 +116,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 						</textbox>
 					</panelchildren>
 					<toolbar mold="panel">
-						<button id="reloadBtn" label="Reload" height="18px"/>
 						<button id="tryBtn" label="Try me!"/>
+						<button id="reloadBtn" label="Reload" height="18px"/>
 					</toolbar>
 				</panel>
 			</tabpanel>

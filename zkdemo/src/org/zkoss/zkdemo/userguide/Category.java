@@ -29,8 +29,9 @@ public class Category {
 	private String _icon;
 	private String _iconIE6;
 	private String _label;
+	private String _href;
 	private List _items;
-	public Category(String id, String icon, String label) {
+	public Category(String id, String icon, String label, String href) {
 		_id = id;
 		_icon = icon;
 		if (icon != null) _iconIE6 = icon.replaceAll(".png", ".gif");
@@ -40,9 +41,13 @@ public class Category {
 				throw new UnsupportedOperationException();
 			}
 		};
+		_href = href;
 	}
 	public void addItem(DemoItem item) {
 		_items.add(item);
+	}
+	public String getHref() {
+		return _href;
 	}
 	public List getItems() {
 		return _items;
