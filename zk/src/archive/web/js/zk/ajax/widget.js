@@ -728,17 +728,6 @@ zk.Widget = zk.$extends(zk.Object, {
 		return null;
 	},
 
-	/** Closes all floating widgets including popup, menu and so on.
-	 * @param wgt the widget being clicked on. If omitted, all floating
-	 * widgets must be closed.
-	 */
-	closeFloats: function (wgt) {
-		for (var ws = zk.popups.$clone(), w; w = ws.shift();)
-			w.closeFloats(wgt);
-		for (var ws = zk.floating.$clone(), w; w = ws.shift();)
-			w.closeFloats(wgt);
-	},
-
 	//Event Handling//
 	/** This method is always called unless you invoke zEvt.stop
 	 * in onmousedown listener. Thus, Callback this method only if it
@@ -748,8 +737,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	domMouseDown: function (wgt) {
 		if (!wgt || wgt.canFocus()) {
 			zk.currentFocus = wgt;
-			//TODO: fix z-index
-			zk.Widget.closeFloats(wgt);
+			zWatch.fire('onFloatUp', -1, wgt);
 		}
 	},
 	_domEvtToZK: function (evt) {

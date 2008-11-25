@@ -22,15 +22,16 @@ zk.Draggable = zk.$extends(zk.Object, {
 		this.node = node = node ? zDom.$(node): wgt.node;
 
 		opts = zk.$default(opts, {
-			handle: false,
+//			handle: false,
 			zIndex: 1000,
-			revert: false,
-			scroll: false,
+//			revert: false,
+//			scroll: false,
 			scrollSensitivity: 20,
 			scrollSpeed: 15,
-			snap: false, //false, or xy or [x,y] or function(x,y){ return [x,y] }
-			delay: 0,
-			overlay: false
+//			snap: false, //false, or xy or [x,y] or function(x,y){ return [x,y] }
+//			overlay: false, //a DIV to cover the whole browser window
+//			stackup: false, //a IFRAME to stack up the element being dragged
+			delay: 0
 		});
 
 		var zdg = zk.Draggable;
@@ -77,13 +78,14 @@ zk.Draggable = zk.$extends(zk.Object, {
 		//disable selection
 		zDom.disableSelection(document.body); // Bug #1820433
 		if (this.opts.overlay) { // Bug #1911280
-			this.domOverlay = document.createElement("DIV");
-			document.body.appendChild(this.domOverlay);
-			zDom.setOuterHTML(this.domOverlay, '<div class="z-dd-overlay" id="zk_dd_overlay"></div>');
-			this.domOverlay = zDom.$("zk_dd_overlay");
-			if (zk.gecko) this.domOverlay.style.MozUserSelect = "none";
-			this.domOverlay.style.width = zDom.pageWidth() + "px";
-			this.domOverlay.style.height = zDom.pageHeight() + "px";
+			this._overlay = document.createElement("DIV");
+			document.body.appendChild(this._overlay);
+			this._overlay = zDom.setOuterHTML(this._overlay,
+				'<div class="z-dd-overlay" id="zk_dd_overlay"></div>');
+			zDom.disableSelection(this._overlay);
+			var st = this._overlay.style;
+			st.width = zDom.pageWidth() + "px";
+			st.height = zDom.pageHeight() + "px";
 		}
 		this.dragging = true;
 
@@ -103,14 +105,14 @@ zk.Draggable = zk.$extends(zk.Object, {
 			node = this.node;
 		}
 
-		if (this.opts.overlay) {
-			var defOverlay = zdg._ifroverlay;
-			if (defOverlay.parentNode)
-				this._ifroverlay = zDom.makeOverlay(node, node.id + '$ddovlifr');
+		if (this.opts.stackup) {
+			var defStackup = zdg._stackup;
+			if (defStackup.parentNode)
+				this._stackup = zDom.makeStackup(node, node.id + '$ddstk');
 			else {
-				this._ifroverlay = defOverlay;
-				this._syncOverlay();
-				node.parentNode.insertBefore(this._ifroverlay, node);
+				this._stackup = defStackup;
+				this._syncStackup();
+				node.parentNode.insertBefore(this._stackup, node);
 			}
 		}
 
@@ -133,10 +135,10 @@ zk.Draggable = zk.$extends(zk.Object, {
 		if(this.opts.starteffect)
 			this.opts.starteffect(this);
 	},
-	_syncOverlay: function () {
-		if (this._ifroverlay) {
+	_syncStackup: function () {
+		if (this._stackup) {
 			var node = this.node,
-				st = this._ifroverlay.style;
+				st = this._stackup.style;
 			st.left = node.offsetLeft + "px";
 			st.top = node.offsetTop + "px";
 			st.width = node.offsetWidth + "px";
@@ -150,7 +152,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 
 		this.draw(pointer, evt);
 		if (this.opts.change) this.opts.change(this, pointer, evt);
-		this._syncOverlay();
+		this._syncStackup();
 
 		if(this.opts.scroll) {
 			this.stopScrolling();
@@ -182,16 +184,18 @@ zk.Draggable = zk.$extends(zk.Object, {
 
 	finishDrag: function(evt, success) {
 		this.dragging = false;
-		if (this.domOverlay) zDom.remove(this.domOverlay);
-		delete this.domOverlay;
+		if (this._overlay) {
+			zDom.remove(this._overlay);
+			delete this._overlay;
+		}
 
 		//enable selection back and clear selection if any
 		zDom.enableSelection(document.body);
 		setTimeout(zDom.clearSelection, 0);
 
-		if (this._ifroverlay) {
-			zDom.remove(this._ifroverlay);
-			this._ifroverlay = null;
+		if (this._stackup) {
+			zDom.remove(this._stackup);
+			delete this._stackup;
 		}
 
 		var node = this.node;
@@ -452,7 +456,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 },{ //static
 	_drags: [],
 	_dragging: [],
-	_ifroverlay: zDom.makeOverlay(null, 'z_ddifrovl'),
+	_stackup: zDom.makeStackup(null, 'z_ddstkup'),
 
 	register: function(draggable) {
 		var zdg = zk.Draggable;

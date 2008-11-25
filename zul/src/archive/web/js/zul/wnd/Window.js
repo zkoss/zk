@@ -85,7 +85,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			}
 		} else {
 			if (!this._shadow)
-				this._shadow = new zEffect.Shadow(this.node, {overlay:true});
+				this._shadow = new zEffect.Shadow(this.node, {stackup:true});
 			this._shadow.sync();
 		}
 	},
@@ -104,19 +104,12 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 
 		switch (mode) {
 		case 'overlapped':
-			this._doOverOrPopup(binding);
-			zk.overlapped.push(this);
-			break;
 		case 'popup':
 			this._doOverOrPopup(binding);
-			zk.popup.push(this);
+			break;
 		}
 	},
 	_cleanMode: function () {
-		switch (this.getMode()) {
-		case 'overlapped': zk.overlapped.$remove(this); break;
-		case 'popup': zk.popup.$remove(this); break;
-		}
 	},
 	_shallVParent: function () {
 		for (var wgt = this; wgt = wgt.parent;)
@@ -130,7 +123,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			handle.style.cursor = "move";
 			var $Window = zul.wnd.Window;
 			this._drag = new zk.Draggable(this, null, {
-				handle: handle, overlay: true,
+				handle: handle, overlay: true, stackup: true,
 				starteffect: $Window._startmove,
 				ghosting: $Window._ghostmove,
 				ignoredrag: $Window._ignoremove,
@@ -269,20 +262,13 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		if (this.node) this.rerender(zk.Skipper.nonCaptionSkipper);
 	},
 
-	//interfaces//
-	/** Called when {@link zk.Widget$closeFloats} is called, and
-	 * if this is a popup.
-	 * @param wgt the widget being clicked on. If omitted, all floating
-	 * widgets must be closed.
-	 */
-	closeFloats: function (wgt) {
-		//TODO
-	},
-
 	//event handler//
 	onClose: function () {
 		if (!this.inServer) //let server handle if in server
 			this.parent.removeChild(this); //default: remove
+	},
+	onFloatUp: function (wgt) {
+		//TODO
 	},
 
 	//super//
@@ -353,6 +339,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			}
 		}
 
+		zWatch.watch('onFloatUp', this);
+
 		if (this._mode != 'embedded')
 			this._setMode(this._mode, true);
 	},
@@ -362,6 +350,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			this._shadow = null;
 		}
 		zDom.undoVParent(this.node);
+
+		zWatch.unwatch('onFloatUp', this);
 
 		var $Window = this.$class;
 		for (var nms = ['close', 'max', 'min'], j = 3; --j >=0;) {

@@ -68,16 +68,16 @@ td.gamma {background: #F4F4F4;}
 <%-- ZK JavaScript debug box --%>
 div.z-error {
 	position:absolute; z-index:99000;
-	width:550px; border:1px solid #963; background-color:#fc9
+	width:550px; border:1px solid #963; background-color:#fcc090
 }
 div.z-error a {
 	color: #555; text-decoration: none; font-size: ${fontSizeS};
-	background-color: #ffd4a4; padding: 1px 3px;
+	background-color: #ffd8a8; padding: 1px 3px;
 	border: 1px solid #766;
 	border-left: 1px solid #a89a9a; border-top: 1px solid #a89a9a;
 }
 .z-error-msg {
-	border: 1px inset; background-color: #f0c088;
+	border: 1px inset; background-color: #fc9;
 }
 div.z-debug {
 	text-align:right; width:50%; right:10px; bottom:5px;

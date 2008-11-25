@@ -816,22 +816,25 @@ zDom = { //static methods
 	},
 
 	/**
-	 * Creates and returns an overlay (actually, an iframe) that makes
+	 * Creates and returns a 'stackup' (actually, an iframe) that makes
 	 * an element (with position:absolute) shown above others.
-	 * The iframe is used to resolve the layer issue:
-	 * IE6: SELECT's dropdown above any other DOM element, all browser:
-	 * PDF iframe above any other DOM element.
+	 * The stackup is used to resolve the layer issues:
+	 * <ul>
+	 * <li>IE6: SELECT's dropdown above any other DOM element</li>
+	 * <li>All browser: PDF iframe above any other DOM element.
+	 * However, this approach works only in FF and IE.</li<
+	 * </ul>
 	 * @param el the element to retrieve the dimensions.
-	 * If omitted, the overlay is not appended to the DOM tree.
+	 * If omitted, the stackup is not appended to the DOM tree.
 	 * @param id ID of the iframe. If omitted and el is specified,
-	 * it is el.id + '$ifrovl'. If both el and id are omitted, 'z_ifrovl'
+	 * it is el.id + '$ifrstk'. If both el and id are omitted, 'z_ifrstk'
 	 * is assumed.
 	 * @param ref whether to insert the DOM element before.
 	 * If omitted, el is assumed.
 	 */
-	makeOverlay: function (el, id, ref) {
+	makeStackup: function (el, id, ref) {
 		var ifr = document.createElement('iframe');
-		ifr.id = id || (el ? el.id + "$ifrovl": 'z_ifrovl');
+		ifr.id = id || (el ? el.id + "$ifrstk": 'z_ifrstk');
 		ifr.frameBorder = "no";
 		ifr.src="";
 		ifr.style.cssText = "position:absolute;visibility:visible;overflow:hidden;filter:alpha(opacity=0);display:block;border";

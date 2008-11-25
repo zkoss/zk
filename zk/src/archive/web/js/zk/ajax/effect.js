@@ -701,7 +701,7 @@ zEffect.Shadow = zk.$extends(zk.Object, {
 	 *  <li>frame: Shadow displays equally on all four sides</li>
 	 *  <li>drop: Traditional bottom-right drop shadow</li></ul></li>
 	 * <li>diameter: The diameter of the offset of the shadow from the element (defaults to 4)</li>
-	 * <li>overlay: whether to create a overlay (see {@link zDom#makeOverlay})</li>
+	 * <li>stackup: whether to create a stackup (see {@link zDom#makeStackup})</li>
 	 * </ul>
 	 */
 	$init: function (element, opts) {
@@ -748,14 +748,14 @@ zEffect.Shadow = zk.$extends(zk.Object, {
 	/** Removes the shadow. */
 	destroy: function () {
 		zDom.remove(this.shadow);
-		zDom.remove(this.ifroverlay);
-		this.node = this.shadow = this.ifroverlay = null;
+		zDom.remove(this.stackup);
+		this.node = this.shadow = this.stackup = null;
 	},
 	/** Hides the shadow, no matter the element is visible or not.
 	 */
 	hide: function(){
 		this.shadow.style.display = "none";
-		if (this.ifroverlay) this.ifroverlay.style.display = "none";
+		if (this.stackup) this.stackup.style.display = "none";
 	},
 	/**
 	 * Synchronizes the state of the element with the shadow,
@@ -778,7 +778,7 @@ zEffect.Shadow = zk.$extends(zk.Object, {
 		this._recalc(node.offsetLeft, node.offsetTop, node.offsetWidth,
 			node.offsetHeight);
 		this.shadow.style.display = "block";
-		if (this.ifroverlay) this.ifroverlay.style.display = "block";
+		if (this.stackup) this.stackup.style.display = "block";
 		return true;
 	},
 	_recalc : function(l, t, w, h){
@@ -800,13 +800,13 @@ zEffect.Shadow = zk.$extends(zk.Object, {
 		}
 
 		var node = this.node;
-		if(this.opts.overlay && node) {
-			var ifroverlay = this.ifroverlay;
-			if(!ifroverlay)
-				ifroverlay = this.ifroverlay =
-					zDom.makeOverlay(node, node.id + '$sdwovl', this.shadow);
+		if(this.opts.stackup && node) {
+			var stackup = this.stackup;
+			if(!stackup)
+				stackup = this.stackup =
+					zDom.makeStackup(node, node.id + '$sdwstk', this.shadow);
 
-			var st = ifroverlay.style;
+			var st = stackup.style;
 			st.left = l +"px";
 			st.top = t +"px";
 			st.width = w +"px";

@@ -216,14 +216,6 @@ zk = { //static members
 	},
 
 	//status
-	/** Modal windows. */
-	modal: [],
-	/** Overlapped windows. */
-	overlapped: [],
-	/** Popup windos. */
-	popup: [],
-	/** Floating widgets other than popup. */
-	floating: [],
 
 	//DEBUG//
 	/** Generates an error message. */
@@ -246,9 +238,8 @@ zk = { //static members
 	+'<a href="javascript:zDom.remove(\''+id+'\')">close</a></div></td></tr>'
 	+'<tr valign="top"><td class="z-error-msg">'+zUtl.encodeXML(msg, true) //Bug 1463668: security
 	+'</td></tr></table></div>';
-		zDom.setOuterHTML(box, html);
+		box = zDom.setOuterHTML(box, html);
 
-		box = zDom.$(id); //we have to retrieve back
 		try {
 			new zk.Draggable(null, box, {
 				handle: zDom.$(id+'$p'), zIndex: box.style.zIndex,
