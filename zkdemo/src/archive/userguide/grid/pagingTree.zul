@@ -111,6 +111,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		<radio label="bottom" checked="true" />
 		<radio label="both" />
 	</radiogroup>
+	<separator/>
+	<button label="Change Paging Mold">
+		<attribute name="onClick">
+		tree.pagingChild.mold = "os".equals(tree.pagingChild.mold) ? "default" : "os";
+		</attribute>
+	</button>
 	<zscript>					
 	import org.zkoss.zkdemo.test2.tree.BinaryTreeModel;
 	

@@ -244,3 +244,11 @@ zkPg = {
 		zk.unlisten(document.body, "mouseup", zkPg.onup);
 	}
 };
+//Paging-os//
+zkPgOS = {
+	go: function (anc, pgno) {
+		var cmp = $parentByType(anc, "PgOS");
+		if (cmp)
+			zkau.send({uuid: cmp.id, cmd: "onPaging", data: [pgno]});
+	}
+};
