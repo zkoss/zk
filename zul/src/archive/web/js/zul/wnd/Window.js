@@ -269,6 +269,16 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		if (this.node) this.rerender(zk.Skipper.nonCaptionSkipper);
 	},
 
+	//interfaces//
+	/** Called when {@link zk.Widget$closeFloats} is called, and
+	 * if this is a popup.
+	 * @param wgt the widget being clicked on. If omitted, all floating
+	 * widgets must be closed.
+	 */
+	closeFloats: function (wgt) {
+		//TODO
+	},
+
 	//event handler//
 	onClose: function () {
 		if (!this.inServer) //let server handle if in server

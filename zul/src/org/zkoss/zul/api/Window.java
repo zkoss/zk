@@ -6,7 +6,7 @@ import org.zkoss.zk.ui.event.Events;//for javadoc
 import org.zkoss.zk.ui.event.MinimizeEvent;//for javadoc
 
 /**
- * A generic window.
+ * A window.
  * 
  * <p>
  * Unlike other elements, each {@link Window} is an independent ID space (by

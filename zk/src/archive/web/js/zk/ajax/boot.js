@@ -157,7 +157,6 @@ var _zkafbts = [];
 function _zkSysInit() {
 	zk.booted = true;
 
-	//TODO more listener
 	zEvt.listen(document, "keydown", _zkDocKeyDown);
 
 	zEvt.listen(document, "mousedown", _zkDocMouseDown);

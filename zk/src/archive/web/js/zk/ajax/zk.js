@@ -222,6 +222,8 @@ zk = { //static members
 	overlapped: [],
 	/** Popup windos. */
 	popup: [],
+	/** Floating widgets other than popup. */
+	floating: [],
 
 	//DEBUG//
 	/** Generates an error message. */

@@ -41,7 +41,7 @@ import org.zkoss.zk.ui.event.MinimizeEvent;
 import org.zkoss.zul.impl.XulElement;
 
 /**
- * A generic window.
+ * A window.
  *
  * <p>Unlike other elements, each {@link Window} is an independent ID space
  * (by implementing {@link IdSpace}).
@@ -840,8 +840,6 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 				_mode = OVERLAPPED;
 				smartUpdate("mode", modeToString(_mode));
 			}
-		} else if ( _mode != EMBEDDED) {
-			smartUpdate("visible", visible);
 		}
 		return super.setVisible(visible);
 	}
