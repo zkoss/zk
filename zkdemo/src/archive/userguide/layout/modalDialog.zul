@@ -58,7 +58,7 @@ closable=<span style='color:#2a00ff; '>"</span><span style='color:#2a00ff; '>tru
 <button label="Hello.doModal">
 	<attribute name="onClick">{
 		final Window win = (Window) Executions.createComponents(
-				"/userguide/modal/hello-template.zul", null, null);
+				"/userguide/layout/hello-template.zul", null, null);
 		win.setMaximizable(true);
 		win.doModal();
 	}</attribute>

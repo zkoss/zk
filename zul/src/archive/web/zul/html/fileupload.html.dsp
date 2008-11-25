@@ -68,7 +68,8 @@ function onDocKeydown(evt) {
 		cancelUpload();
 }
 function addUpload(img) {
-	img.src = parent.zk.rename(img.src, "delete");
+	parent.zk.rmClass(img, "z-fileupload-add");
+	parent.zk.addClass(img, "z-fileupload-delete");
 	img.onclick = function () {deleteUpload(img)};
 	
 	// due to the runtime error of IE, we cannot use the tr.innerHTML method.  
@@ -78,7 +79,7 @@ function addUpload(img) {
 	td.innerHTML = table.rows.length;
 	td.align = "right";
 	tr.insertCell(1).innerHTML = '<input class="file" type="file" id="file" name="file"/>' +
-		'<img src="${c:encodeURL('~./zul/img/fileupload/add.png')}" onclick="addUpload(this);" />';
+		'<img src="${c:encodeURL('~./img/spacer.gif')}" class="z-fileupload-add" onclick="addUpload(this);" />';
 	adjustHgh(table);
 }
 function deleteUpload(img) {
@@ -114,7 +115,7 @@ function adjustHgh(table) {
 <c:forEach var="cnt" begin="1" end="${maxcnt}" varStatus="s">
 	<tr>
 		<td align="right"><c:if test="${unlimited || maxcnt gt 2}">${cnt}</c:if></td>
-		<td><input class="file" type="file" id="file" name="file"/><c:if test="${unlimited && s.index == maxcnt}"><img src="${c:encodeURL('~./zul/img/fileupload/add.png')}" onclick='addUpload(this);'"/></c:if><c:if test="${unlimited && s.index < maxcnt}"><img src="${c:encodeURL('~./zul/img/fileupload/delete.png')}" onclick='deleteUpload(this);'"/></c:if></td>
+		<td><input class="file" type="file" id="file" name="file"/><c:if test="${unlimited && s.index == maxcnt}"><img src="${c:encodeURL('~./img/spacer.gif')}" class="z-fileupload-add" onclick='addUpload(this);'"/></c:if><c:if test="${unlimited && s.index < maxcnt}"><img src="${c:encodeURL('~./img/spacer.gif')}" class="z-fileupload-delete" onclick='deleteUpload(this);'"/></c:if></td>
 	</tr>
 </c:forEach>
 	</table>

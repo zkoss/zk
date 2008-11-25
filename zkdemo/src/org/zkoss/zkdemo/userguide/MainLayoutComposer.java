@@ -108,7 +108,13 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 		Div div = (Div) event.getOrigin().getTarget();
 		if (_selected != div)
 			_selected = div;
-		itemList.setModel(getSelectedModel());
+		
+		String href = getCategory(_selected.getId()).getHref();
+		if (href != null) {
+			Executions.getCurrent().sendRedirect(href);
+		} else {
+			itemList.setModel(getSelectedModel());
+		}
 	}
 
 	public void onSelect$itemList(SelectEvent event) {

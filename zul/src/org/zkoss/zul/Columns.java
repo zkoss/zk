@@ -275,7 +275,8 @@ public class Columns extends HeadersElement implements org.zkoss.zul.api.Columns
 				}
 			});
 			if(WebApps.getFeature("professional") && cols._columnsgroup) {
-				Menuitem group = new Menuitem(Messages.get(MZul.GRID_GROUP), "~./zul/img/grid/grouping.gif");
+				Menuitem group = new Menuitem(Messages.get(MZul.GRID_GROUP));
+				group.setSclass(cols.getZclass() + "-menu-grouping");
 				group.addEventListener(Events.ON_CLICK, new EventListener(){
 					public void onEvent(Event event) throws Exception {
 						if (_ref instanceof Column) {
@@ -289,14 +290,16 @@ public class Columns extends HeadersElement implements org.zkoss.zul.api.Columns
 				});
 				group.setParent(this);
 			}
-			final Menuitem asc = new Menuitem(Messages.get(MZul.GRID_ASC), "~./zul/img/grid/hd-asc.gif");
+			final Menuitem asc = new Menuitem(Messages.get(MZul.GRID_ASC));
+			asc.setSclass(cols.getZclass() + "-menu-asc");
 			asc.addEventListener(Events.ON_CLICK, new EventListener(){
 				public void onEvent(Event event) throws Exception {
 					if (_ref instanceof Column) ((Column) _ref).sort(true);
 				}
 			});
 			asc.setParent(this);
-			final Menuitem des = new Menuitem(Messages.get(MZul.GRID_DESC), "~./zul/img/grid/hd-desc.gif");
+			final Menuitem des = new Menuitem(Messages.get(MZul.GRID_DESC));
+			des.setSclass(cols.getZclass() + "-menu-desc");
 			des.addEventListener(Events.ON_CLICK, new EventListener(){
 				public void onEvent(Event event) throws Exception {
 					if (_ref instanceof Column) ((Column) _ref).sort(false);
@@ -304,7 +307,8 @@ public class Columns extends HeadersElement implements org.zkoss.zul.api.Columns
 			});
 			des.setParent(this);
 			if (cols._columnshide) {
-				final Menu columns = new Menu(Messages.get(MZul.GRID_COLUMNS) , "~./zul/img/grid/columns.gif");
+				final Menu columns = new Menu(Messages.get(MZul.GRID_COLUMNS));
+				columns.setSclass(cols.getZclass() + "-menu-columns");
 				final Menupopup menupop = new Menupopup();
 				menupop.setParent(columns);
 				columns.setParent(this);
