@@ -20,7 +20,13 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <window id="demo" apply="org.zkoss.zkdemo.userguide.DemoWindowComposer">
 	<html><![CDATA[
       	<h4>Listboxes</h4>
-   		<p>Listbox provides an option lists for the end user to pick an option from.</p>
+   		<p>Listbox allows any one of the options to be focused or highlighted depends on the mold specified. It supports mouseless entry.</p>
+		<a href="javascript:;" onclick="if (!zk.isVisible($e('infos'))) {anima.slideDown($e('infos'));} else {anima.slideUp($e('infos'));}">More..</a>
+		<ul style="display:none" id="infos"><li>UP and DOWN to move the selection up and down one list item.</li>
+      <li>PgUp and PgDn to move the selection up and down in a step of one page.</li>
+      <li>HOME to move the selection to the first item, and END to the last item.</li>
+      <li>Ctrl+UP and Ctrl+DOWN to move the focus up and down one list item without changing the selection.</li>
+      <li>SPACE to select the item of the focus.</li></ul>
 	]]></html>
 	<separator/>
 	<tabbox width="100%" tabscroll="false">
