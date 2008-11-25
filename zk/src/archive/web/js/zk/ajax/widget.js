@@ -177,10 +177,10 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * to change the related DOM element, such as the additional
 	 * enclosing tags.</li>
 	 * <li>If you want to change the visibility of a child DOM element,
-	 * use {@link #setDomVisible}</li>
+	 * use {@link #setDomVisible_}</li>
 	 * </ul>
 	 */
-	setVisible: function (visible) {
+	setVisible: function (visible, fromServer) {
 		if (this.visible != visible) {
 			this.visible = visible;
 
@@ -188,7 +188,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			if (p && visible) p.onChildVisible_(this, true); //becoming visible
 
 			var n = this.node;
-			if (n) this.setDomVisible(n, visible);
+			if (n) this.setDomVisible_(n, visible, fromServer);
 
 			if (p && !visible) p.onChildVisible_(this, false); //become invisible
 		}
@@ -197,10 +197,16 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * Like {@link #setVisible}, it fires onVisible, if becoming visible,
 	 * and onHide, if becoming invisible
 	 */
-	setDomVisible: function (n, visible) {
-		if (!visible) zWatch.fireDown('onHide', -1, this);
+	setDomVisible_: function (n, visible/*, fromServer*/) {
+		var parent = this.parent,
+			parentVisible = !parent || parent.isRealVisible();
+		if (!visible && parentVisible)
+			zWatch.fireDown('onHide', -1, this);
+
 		n.style.display = visible ? '': 'none';
-		if (visible) zWatch.fireDown('onVisible', -1, this);
+
+		if (visible && parentVisible)
+			zWatch.fireDown('onVisible', -1, this);
 	},
 	/** Called when a child's visiblity is changed or going to change.
 	 * <p>Default: does nothing.
@@ -701,6 +707,8 @@ zk.Widget = zk.$extends(zk.Object, {
 	}
 
 }, {
+	/** A list of floating widgets. */
+	floating: [],
 	/** Returns the widget of the specified ID, or null if not found,
 	 * or the widget is attached to the DOM tree.
 	 * <p>Note: null is returned if the widget is not attached to the DOM tree

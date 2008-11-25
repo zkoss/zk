@@ -53,7 +53,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 				sibwgt = zk.Widget.$(sib),
 				fd = vert ? "height": "width", diff;
 			if (sib) {
-				sibwgt.setDomVisible(sib, open); //fire onVisible/onHide
+				sibwgt.setDomVisible_(sib, open); //fire onVisible/onHide
 				sibwgt.parent._fixChildDomVisible(sibwgt, open);
 
 				diff = zk.parseInt(sib.style[fd]);

@@ -20,7 +20,8 @@ function (skipper) {
 
 	if (cap)
 		html += '<div class="' + zcls + '-tl"><div class="' + zcls
-			+ '-tr"><div class="' + zcls + '-tm"><div class="zcls-header">'
+			+ '-tr"><div class="' + zcls + '-tm"><div class="'
+			+ zcls + '-header">'
 			+ cap.redraw() + '</div></div></div></div>';
 
 	html += '<div id="' + uuid + '$panel" class="' + zcls + '-body"';

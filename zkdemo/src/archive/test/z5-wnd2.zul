@@ -37,8 +37,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		<option>Option 3</option>
 	</select>
 	]]></html>
-
-	<window border="normal" title="Overlapped" width="200px" mode="overlapped">
+	<separator bar="true"/>
+	<window id="w2" border="normal" title="Overlapped" width="200px" mode="overlapped">
 		This is a overlapped window
 		<groupbox mold="3d" height="100px">
 			<caption label="3d groupbox"/>
@@ -54,4 +54,5 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			<button label="Popup" onClick="w211.doPopup()"/>
 		</window>
 	</window>
+	<button label="Visible 2nd" onClick="w2.visible = !w2.visible"/>
 </window>

@@ -74,7 +74,6 @@ import org.zkoss.zul.impl.XulElement;
  * The application cannot prevent the window from being hidden.
  * 
  * <p>Default {@link #getZclass}: z-window-{@link #getMode()}.(since 3.5.0)
- * <p>Default zIndex: 100.
  * @author tomyeh
  */
 public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Window {
@@ -146,7 +145,6 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 
 	public Window() {
 		init();
-		setZIndex(100);
 	}
 	/**
 	 * @param title the window title (see {@link #setTitle}).

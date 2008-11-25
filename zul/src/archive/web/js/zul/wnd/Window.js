@@ -24,7 +24,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this._fellows = [];
 		this.listen('onClose', this, -1000);
 		this.listen('onMove', this, -1000);
-		this._zIndex = 100;
+		this._zIndex = 0;
 	},
 
 	getMode: function () {
@@ -49,18 +49,12 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this._setMode('embedded');
 	},
 	_setMode: function (mode, binding) {
-		if (binding) {
-			if (mode != 'embedded') zWatch.watch('onFloatUp', this);
-		} else { 
+		if (!binding) {
 			var oldm = this._mode;
 			if (oldm == mode) return;
 			this._mode = mode;
 			if (!this.node) return;
-
-			if (mode == 'embedded') zWatch.unwatch('onFloatUp', this);
-			else if (oldm == 'embedded') zWatch.watch('onFloatUp', this);
 		}
-
 
 		switch (mode) {
 		case 'overlapped':
@@ -70,7 +64,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		}
 	},
 	_doOverOrPopup: function (binding) {
-		if (!binding) this._updateDomOuter();
+		if (!binding) this._updateDomOuter(); //unbind_ and bind_
 
 		var pos = this.getPosition(),
 			isV = this._mode != 'embedded',
@@ -90,13 +84,15 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		if (isV) zDom.makeVParent(n); //OK to make vparent twice
 		this._updateDomPos();
 
-		if (this.isVisible())
-			n.style.visibility = 'visible';
+		var visible = this.isRealVisible();
+		if (visible) n.style.visibility = 'visible';
 
 		this._makeFloat();
 
-		if (this.isVisible())
+		if (visible) {
+			this._fixZIndex();
 			zDom.show(n);
+		}
 
 		this._syncShadow();
 	},
@@ -136,6 +132,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		}
 	},
 	_updateDomPos: function () {
+		//TODO
+	},
+	_fixZIndex: function () {
+		//TODO
 	},
 
 	getTitle: function () {
@@ -298,10 +298,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 
 	//super//
-	setVisible: function (visible, fromServer) {
-		this.$super('setVisible', visible, fromServer);
-		this._syncShadow();
-	},
 	focus: function () {
 		if (this.node) {
 			var cap = this.caption;
@@ -369,17 +365,21 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			}
 		}
 
-		if (this._mode != 'embedded')
+		if (this._mode != 'embedded') {
+			zWatch.watch('onFloatUp', this);
 			this._setMode(this._mode, true);
+			zk.Widget.floating.push(this);
+		}
 	},
 	unbind_: function (skipper) {
+		//we don't check this._mode here since it might be already changed
 		if (this._shadow) {
 			this._shadow.destroy();
 			this._shadow = null;
 		}
 		zDom.undoVParent(this.node);
-
-		zWatch.unwatch('onFloatUp', this); //ok even if not watch yet
+		zWatch.unwatch('onFloatUp', this);
+		zk.Widget.floating.$remove(this);
 
 		var $Window = this.$class;
 		for (var nms = ['close', 'max', 'min'], j = 3; --j >=0;) {

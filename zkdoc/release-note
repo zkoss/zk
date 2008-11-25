@@ -17,7 +17,6 @@ ZK 5.0.0
   	events.
   + Overlapped window in overlapped won't be cropped
     In older version, developers have to specify overflow:visible
-  + The default z-index of windows is 100 (rather than 0).
 
 	--------
 ZK 3.6.0
