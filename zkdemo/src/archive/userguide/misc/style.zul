@@ -20,9 +20,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <window id="demo" apply="org.zkoss.zkdemo.userguide.DemoWindowComposer">
 	<html><![CDATA[
 	<h4>Custom Style</h4>
-	<p>CSS style sheet, class attribute, and style attribute are supported.<br />
-	Developers use the style components as follows to specify what style sheet
-	to load, or specify the styles directly.  Like HTML, it affects all
+	<p>CSS(Cascading Style Sheet), class attribute, and style attribute are supported.<br />
+	Developers use style components as follows to specify which style sheet
+	to be loaded.  Like HTML, it affects all
 	components in the same desktop.<br />
 	For more information, see our <a href="http://www.zkoss.org/doc/styleguide/ch01s01.html">Style Guide#ZK Class Concept</a>
 	</p>
