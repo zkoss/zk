@@ -34,6 +34,7 @@ import org.zkoss.zk.ui.event.InputEvent;
 import org.zkoss.zk.ui.event.OpenEvent;
 import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.util.ComposerExt;
 import org.zkoss.zk.ui.util.GenericForwardComposer;
 import org.zkoss.zkex.zul.Borderlayout;
@@ -114,6 +115,8 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 			Executions.getCurrent().sendRedirect(href);
 		} else {
 			itemList.setModel(getSelectedModel());
+			if (Executions.getCurrent().isBrowser("ie6-"))
+				Clients.evalJavaScript("fixImage4IE6();");
 		}
 	}
 
@@ -162,6 +165,14 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 			}
 			itemList.setModel(new ListModelList(item));
 		} else itemList.setModel(new ListModelList(items));
+		String deselect = _selected != null ? "onSelect($e('"+ _selected.getUuid() + "'), true);" : "";
+		if (Executions.getCurrent().isBrowser("ie6-")) {
+			itemList.renderAll();
+			Clients.evalJavaScript(deselect + "fixImage4IE6();");
+		} else {
+			Clients.evalJavaScript(deselect);
+		}
+		_selected = null;
 	}
 
 	private DemoItem[] getItems() {
@@ -188,11 +199,7 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 			Listcell lc = new Listcell();
 			item.setValue(di.getFile());
 			lc.setHeight("30px");
-			if (Executions.getCurrent().isBrowser("ie6-")) {
-				lc.setImage(di.getIconIE6());
-			} else {
-				lc.setImage(di.getIcon());
-			}
+			lc.setImage(di.getIcon());
 			item.setId(di.getId());
 			lc.setLabel(di.getLabel());
 			lc.setParent(item);

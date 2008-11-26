@@ -27,14 +27,12 @@ import java.util.List;
 public class Category {
 	private String _id;
 	private String _icon;
-	private String _iconIE6;
 	private String _label;
 	private String _href;
 	private List _items;
 	public Category(String id, String icon, String label, String href) {
 		_id = id;
 		_icon = icon;
-		if (icon != null) _iconIE6 = icon.replaceAll(".png", ".gif");
 		_label = label; 
 		_items = new LinkedList() {
 			public Object remove(int index) {
@@ -58,9 +56,6 @@ public class Category {
 	}
 	public String getIcon() {
 		return _icon;
-	}
-	public String getIconIE6() {
-		return _iconIE6;
 	}
 	public String getLabel() {
 		return _label;
