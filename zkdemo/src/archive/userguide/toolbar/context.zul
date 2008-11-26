@@ -20,7 +20,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <window id="demo" apply="org.zkoss.zkdemo.userguide.DemoWindowComposer">
 	<html><![CDATA[
 		<h4>Context Menu</h4>
-	    <p>Demonstrates context menu usage and its responses to right clicks.<br />
+	    <p>Demonstrate context menu usage and its responses to right clicks.<br />
 			A conext menu can be any popup or menupopup component. To enable a context menu, assign the id of the popup component to the context attribute.</p>
 	]]></html>
 	<separator />
