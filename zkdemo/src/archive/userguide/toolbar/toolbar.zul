@@ -50,7 +50,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<panel id="panel" title="ZK Desktop" height="350px" width="400px"
 		border="normal">
 		<panelchildren>
-			<image src="/img/castle.png" />
+			<image src="/img/castle.png" height="330px" width="398px"/>
 		</panelchildren>
 		<toolbar id="tb" sclass="vista" height="20px"
 			style="background:#000000 url(/zk35/img/bar.png) repeat-x 0 0;padding-top:7px"
