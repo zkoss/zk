@@ -36,6 +36,7 @@ ZK 3.5.2
   2217915: filedownload doesn't work when opera opera 9.5.x
   2337652: ID space cleanup problem if not attached to a page
   2319972: Tree with checkmarks shows layout quirks
+  2349456: It's not possible to navigate a listbox with keyboard only
 
 * Upgrade Notes
   + Revert the original mold of Paging as os mold.
