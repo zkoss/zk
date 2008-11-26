@@ -667,10 +667,10 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 		return false;
 	},
-	/** Checks if this widget can gain the focus.
+	/** Checks if this widget can be activated (gaining focus and so on).
 	 * <p>Default: return false if it is not a descendant of zk.currentModal.
 	 */
-	canFocus: function (checkOnly) {
+	canActivate: function (checkOnly) {
 		var modal = zk.currentModal;
 		if (modal && !zUtl.isAncestor(modal, this)) {
 			if (!checkOnly) {
@@ -783,8 +783,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	/** Callback this method if you listen DOM onfocus. */
 	domFocus: function () {
 		zk.currentFocus = this;
-
-		//TODO: handle zIndex, close floats
+		zWatch.fire('onFloatUp', -1, this);
 
 		if (this.isListen('onFocus'))
 			this.fire('onFocus');
@@ -840,7 +839,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * @param wgt the widget which might be null if not click on any widget
 	 */
 	domMouseDown: function (wgt) {
-		if (!wgt || wgt.canFocus()) {
+		if (!wgt || wgt.canActivate()) {
 			zk.currentFocus = wgt;
 			if (wgt) zWatch.fire('onFloatUp', -1, wgt);
 		}

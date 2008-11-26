@@ -836,10 +836,10 @@ zAu.cmd1 = {
 	},
 	focus: function (uuid, cmp) {
 		if (!zk.eval(cmp, "focus")) {
-			//Bug 1936366: endModal uses timer, so canFocus might be false
+			//Bug 1936366: endModal uses timer, so canActivate might be false
 			//when this method is called
 			setTimeout(function (){
-				if (!zAu.canFocus(cmp, true)) return;
+				if (!zAu.canActivate(cmp, true)) return;
 
 				zAu.autoZIndex(cmp); //some, say, window, not listen to onfocus
 				cmp = $real(cmp); //focus goes to inner tag

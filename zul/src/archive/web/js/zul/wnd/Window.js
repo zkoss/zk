@@ -19,8 +19,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	_minwidth: 200,
 	importantEvents_: {onMove:1, onZIndex:1}, //shared by all instances
 
-	$init: function (uuid, mold) {
-		this.$super('$init', uuid, mold);
+	$init: function () {
+		this.$supers('$init', arguments);
 		this._fellows = [];
 		this.listen('onClose', this, -1000);
 		this.listen('onMove', this, -1000);
@@ -316,7 +316,11 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	//super//
 	setDomVisible_: function (n, visible) {
 		if (this._mode != 'embedded') n.style.visibility = 'visible';
-		this.$super('setDomVisible_', n, visible);
+		this.$supers('setDomVisible_', arguments);
+		this._syncShadow();
+	},
+	setZIndex: function () {
+		this.$supers('setZIndex', arguments);
 		this._syncShadow();
 	},
 	focus: function () {
@@ -335,7 +339,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 
 	appendChild: function (child) {
-		if (this.$super('appendChild', child)) {
+		if (this.$supers('appendChild', arguments)) {
 			if (child.$instanceof(zul.wgt.Caption))
 				this.caption = child;
 			return true;
@@ -343,7 +347,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		return false;
 	},
 	insertBefore: function (child, sibling) {
-		if (this.$super('insertBefore', child, sibling)) {
+		if (this.$supers('insertBefore', arguments)) {
 			if (child.$instanceof(zul.wgt.Caption))
 				this.caption = child;
 			return true;
@@ -351,7 +355,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		return false;
 	},
 	removeChild: function (child) {
-		if (this.$super('removeChild', child)) {
+		if (this.$supers('removeChild', arguments)) {
 			if (child == this.caption)
 				this.caption = null;
 			return true;
@@ -359,7 +363,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		return false;
 	},
 	domStyle_: function (no) {
-		var style = this.$super('domStyle_', no),
+		var style = this.$supers('domStyle_', arguments),
 			visible = this.isVisible();
 		if ((!no || !no.visible) && visible && this.isMinimized())
 			style = 'display:none;'+style;
@@ -369,7 +373,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		return style;
 	},
 	bind_: function (desktop, skipper) {
-		this.$super('bind_', desktop, skipper);
+		this.$supers('bind_', arguments);
 
 		var uuid = this. uuid,
 			$Window = this.$class;
