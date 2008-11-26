@@ -242,7 +242,8 @@ zk.Event = zk.$extends(zk.Object, {
 	$init: function (target, name, data, opts) {
 		this.target = target;
 		this.name = name;
-		this.data = typeof data == 'string' ? [data]: data ? data: null;
+		this.data = data == null ? null:
+			data.splice && data.$add ? data: [data]; //test if array
 		this.opts = opts;
 	}
 });

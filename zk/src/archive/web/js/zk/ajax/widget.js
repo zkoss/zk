@@ -186,24 +186,57 @@ zk.Widget = zk.$extends(zk.Object, {
 
 			var p = this.parent;
 			if (p && visible) p.onChildVisible_(this, true); //becoming visible
-
-			var n = this.node;
-			if (n) this._setNodeVisible(n, visible);
-
+			if (this.node) this._setVisible(visible);
 			if (p && !visible) p.onChildVisible_(this, false); //become invisible
 		}
 	},
-	_setNodeVisible: function (n, visible) {
+	_setVisible: function (visible) {
 		var parent = this.parent,
-			parentVisible = !parent || parent.isRealVisible();
-		if (!visible && parentVisible)
-			zWatch.fireDown('onHide', -1, this);
-		this.setDomVisible_(n, visible);
-		if (visible && parentVisible)
+			parentVisible = !parent || parent.isRealVisible(),
+			node = this.node,
+			floating = this._floating;
+
+		if (!parentVisible) {
+			if (!floating) this.setDomVisible_(node, visible);
+			return;
+		}
+
+		if (visible) {
+			var zi;
+			if (floating)
+				this.setZIndex(zi = this._topZIndex());
+
+			this.setDomVisible_(node, true);
+
+			//from parent to child
+			for (var fs = zk.Widget._floating, j = 0, fl = fs.length; j < fl; ++j) {
+				var w = fs[j].widget;
+				if (this != w && zUtl.isAncestor(this, w) && w.isVisible()) {
+					zi = zi >= 0 ? ++zi: w._topZIndex();
+					var n = fs[j].node;
+					if (n != w.node) w.setFloatZIndex_(n, zi); //only a portion
+					else w.setZIndex(zi);
+
+					w.setDomVisible_(n, true);
+				}
+			}
+
 			zWatch.fireDown('onVisible', -1, this);
+		} else {
+			zWatch.fireDown('onHide', -1, this);
+
+			for (var fs = zk.Widget._floating, j = fs.length; --j >= 0;) {
+				var w = fs[j].widget;
+				if (this != w && zUtl.isAncestor(this, w) && w.isVisible())
+					w.setDomVisible_(fs[j].node, false);
+			}
+
+			this.setDomVisible_(node, false);
+		}
 	},
 	/** Changes the visibility of a child DOM content of this widget.
-	 * <p>Default: change n.style.display directly
+	 * <p>Default: change n.style.display directly.
+	 * <p>Note: if {@link #setFloating_} was called, n could be opts.node.
 	 */
 	setDomVisible_: function (n, visible) {
 		n.style.display = visible ? '': 'none';
@@ -214,6 +247,40 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * of the encosing tag, if any.
 	 */
 	onChildVisible_: function (child, visible) {
+	},
+	/** Makes the specified widget as topmost.
+	 * It does nothig if it is not floating ({@link #setFloating_}).
+	 */
+	setTopmost: function () {
+		var n = this.node;
+		if (n && this._floating) {
+			var zi = this._topZIndex();
+			this.setZIndex(zi);
+
+			for (var fs = zk.Widget._floating, j = 0, fl = fs.length; j < fl; ++j) {
+				var w = fs[j].widget;
+				if (this != w && zUtl.isAncestor(this, w) && w.isVisible()) {
+					var n = fs[j].node
+					if (n != w.node) w.setFloatZIndex_(n, ++zi); //only a portion
+					else w.setZIndex(++zi);
+				}
+			}
+		}
+	},
+	/** Returns the topmost z-index for this widget.*/
+	_topZIndex: function () {
+		var zi = 0;
+		for (var fs = zk.Widget._floating, j = fs.length; --j >= 0;) {
+			var w = fs[j].widget;
+			if (w._zIndex >= zi && !zUtl.isAncestor(this, w) && w.isVisible())
+				zi = w._zIndex + 1;
+		}
+		return zi;
+	},
+	/** Returns if this is floating
+	 */
+	isFloating_: function () {
+		return this._floating;
 	},
 	/** Sets a flag to indicate if this widget is floating (i.e., vparent)
 	 */
@@ -257,11 +324,20 @@ zk.Widget = zk.$extends(zk.Object, {
 	getZIndex: function () {
 		return this._zIndex;
 	},
-	/** Sets the zIndex of this widget. */
-	setZIndex: function (zIndex) {
-		this._zIndex = zIndex;
-		var n = this.node;
-		if (n) n.style.zIndex = zIndex >= 0 ? zIndex: '';
+	/** Sets the zIndex of this widget.
+	 * <p>Unlike {@link #setLeft} and others, it fires onZIndex event
+	 * if fromServer is false.
+	 */
+	setZIndex: function (zIndex, fromServer) {
+		if (this._zIndex != zIndex) {
+			this._zIndex = zIndex;
+			var n = this.node;
+			if (n) {
+				n.style.zIndex = zIndex >= 0 ? zIndex: '';
+				if (!fromServer)
+					this.fire('onZIndex', zIndex, {ignorable: true});
+			}
+		}
 	},
 	/** Returns the left of this widget. */
 	getLeft: function () {
@@ -766,7 +842,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	domMouseDown: function (wgt) {
 		if (!wgt || wgt.canFocus()) {
 			zk.currentFocus = wgt;
-			zWatch.fire('onFloatUp', -1, wgt);
+			if (wgt) zWatch.fire('onFloatUp', -1, wgt);
 		}
 	},
 	_domEvtToZK: function (evt) {

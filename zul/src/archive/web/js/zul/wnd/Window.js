@@ -90,7 +90,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this._makeFloat();
 
 		if (visible) {
-			this._fixZIndex();
+			this.setTopmost();
 			zDom.show(n);
 		}
 
@@ -132,9 +132,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		}
 	},
 	_updateDomPos: function () {
-		//TODO
-	},
-	_fixZIndex: function () {
 		//TODO
 	},
 
@@ -279,7 +276,26 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this._top = evt.data[1];
 	},
 	onFloatUp: function (wgt) {
-		//TODO
+		if (!this.isVisible() || this._mode == 'embedded')
+			return; //just in case
+
+		if (this._mode == 'popup') {
+			for (var floatFound; wgt; wgt = wgt.parent) {
+				if (wgt == this) {
+					if (!floatFound) this.setTopmost();
+					return;
+				}
+				floatFound = floatFound || wgt.isFloating_();
+			}
+			this.setVisible(false);
+			this.fire('onOpen', false);
+		} else
+			for (; wgt; wgt = wgt.parent) {
+				if (wgt == this) 
+					this.setTopmost();
+				if (wgt.isFloating_())
+					return;
+			}
 	},
 
 	_fireOnMove: function (keys) {
@@ -299,6 +315,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 
 	//super//
 	setDomVisible_: function (n, visible) {
+		if (this._mode != 'embedded') n.style.visibility = 'visible';
 		this.$super('setDomVisible_', n, visible);
 		this._syncShadow();
 	},
@@ -371,8 +388,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 
 		if (this._mode != 'embedded') {
 			zWatch.watch('onFloatUp', this);
-			this._setMode(this._mode, true);
 			this.setFloating_(true);
+			this._setMode(this._mode, true);
 		}
 	},
 	unbind_: function (skipper) {

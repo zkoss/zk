@@ -270,8 +270,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 		}
 		zEvt.stop(evt);
 
-		//Mousedown is eaten above (so do the default behavior)
-		//TODO: zkau.autoZIndex(target, false, true);
+		zk.Widget.domMouseDown(this.widget); //since event is stopped
 	},
 	keyPress: function(evt) {
 		if(zEvt.keyCode(evt) == zEvt.ESC) {
