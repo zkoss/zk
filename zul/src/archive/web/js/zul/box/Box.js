@@ -194,12 +194,11 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	},
 
 	bind_: function (desktop) {
-		//watch before bind_, so the parent's onXxx will be called first
+		this.$super('bind_', desktop);
+
 		zWatch.watch("onSize", this);
 		zWatch.watch("onVisible", this);
 		zWatch.watch("onHide", this);
-
-		this.$super('bind_', desktop);
 	},
 	unbind_: function () {
 		zWatch.unwatch("onSize", this);

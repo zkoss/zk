@@ -134,7 +134,7 @@ function zkopt(opts) {
  */
 function zkafter(fn) {
 	if (!zk.booted)
-		return _zkafcrs.$add(fn, true);
+		return _zkafcrs.$add(fn);
 	fn();
 	return true;
 }
@@ -146,7 +146,7 @@ var _zkafcrs = [];
  */
 function zkafterBoot(fn) {
 	if (!zk.booted)
-		return _zkafbts.$add(fn, true);
+		return _zkafbts.$add(fn);
 	fn();
 	return true;
 }

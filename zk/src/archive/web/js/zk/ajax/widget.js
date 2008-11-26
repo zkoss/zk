@@ -188,25 +188,25 @@ zk.Widget = zk.$extends(zk.Object, {
 			if (p && visible) p.onChildVisible_(this, true); //becoming visible
 
 			var n = this.node;
-			if (n) this.setDomVisible_(n, visible, fromServer);
+			if (n) this._setNodeVisible(n, visible);
 
 			if (p && !visible) p.onChildVisible_(this, false); //become invisible
 		}
 	},
-	/** Changes the visibility of a child DOM content of this widget.
-	 * Like {@link #setVisible}, it fires onVisible, if becoming visible,
-	 * and onHide, if becoming invisible
-	 */
-	setDomVisible_: function (n, visible/*, fromServer*/) {
+	_setNodeVisible: function (n, visible) {
 		var parent = this.parent,
 			parentVisible = !parent || parent.isRealVisible();
 		if (!visible && parentVisible)
 			zWatch.fireDown('onHide', -1, this);
-
-		n.style.display = visible ? '': 'none';
-
+		this.setDomVisible_(n, visible);
 		if (visible && parentVisible)
 			zWatch.fireDown('onVisible', -1, this);
+	},
+	/** Changes the visibility of a child DOM content of this widget.
+	 * <p>Default: change n.style.display directly
+	 */
+	setDomVisible_: function (n, visible) {
+		n.style.display = visible ? '': 'none';
 	},
 	/** Called when a child's visiblity is changed or going to change.
 	 * <p>Default: does nothing.
@@ -214,6 +214,23 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * of the encosing tag, if any.
 	 */
 	onChildVisible_: function (child, visible) {
+	},
+	/** Sets a flag to indicate if this widget is floating (i.e., vparent)
+	 */
+	setFloating_: function (floating, opts) {
+		if (this._floating != floating) {
+			var $Widget = zk.Widget;
+			if (floating) {
+				var inf = {widget: this, node: opts && opts.node? opts.node: this.node};
+				$Widget._floating.$add(inf, $Widget._floatOrder); //parent first
+				this._floating = true;
+			} else {
+				for (var fs = $Widget._floating, j = fs.length; --j >= 0;)
+					if (fs[j].widget == this)
+						fs.$removeAt(j);
+				this._floating = false;
+			}
+		}
 	},
 
 	/** Returns the width of this widget. */
@@ -707,8 +724,11 @@ zk.Widget = zk.$extends(zk.Object, {
 	}
 
 }, {
-	/** A list of floating widgets. */
-	floating: [],
+	_floating: [], //[{widget,node}]
+	_floatOrder: function (a, b) {
+		return zUtl.isAncestor(a.widget, b.widget);
+	},
+
 	/** Returns the widget of the specified ID, or null if not found,
 	 * or the widget is attached to the DOM tree.
 	 * <p>Note: null is returned if the widget is not attached to the DOM tree

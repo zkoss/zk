@@ -355,33 +355,45 @@ zk.copy(Array.prototype, {
 		return false;
 	},
 	/** Adds the specified object to the end of the array.
-	 * @param overwrite whether to overwrite if the object is already in the array.
+	 * @param fn the function to test whether to add the object to.
+	 * If omitted, the object is appended (aka., push).
+	 * If a function, fn(o, ary[j]) is called from the first location
+	 * to the last, and the object is
+	 * inserted in front of the location that the function returns true.
+	 * If fn is true, it overwrites if the object is already in the array.
+	 * The object is appended if no matches at all.
 	 * @return true if added successfully.
 	 */
-	$add: function (o, overwrite) {
-		if (overwrite)
-			for (var j = 0, tl = this.length; j < tl; ++j) {
-				if (o == this[j]) {
-					this[j] = o;
-					return false;
+	$add: function (o, fn) {
+		if (fn) {
+			for (var tl = this.length, j = 0; j < tl; ++j) {
+				if (fn == true) {
+					if (o == this[j]) {
+						this[j] = o;
+						return false;
+					}
+				} else if (fn(o, this[j])) {
+					this.splice(j, 0, o);
+					return true;
 				}
 			}
-		this.push(o);
-		return true;
+		}
+ 		this.push(o);
+ 		return true;
 	},
 	/** Inserts at the specified location.
 	 */
 	$addAt: function (j, o) {
 		var l = this.length;
 		if (j >= l) this.push(o);
-		else this.spice(j, 0, o);
+		else this.splice(j, 0, o);
 	},
 	/** Removes at the specified location.
 	 * @return true if it was removed successfully
 	 */
 	$removeAt: function (j) {
 		if (j < this.length) {
-			this.spice(j, 1);
+			this.splice(j, 1);
 			return true;
 		}
 		return false;
@@ -430,12 +442,19 @@ zk.Object.prototype = {
 	},
 	/** Calls a method in the super class.
 	 * @param mtdnm the method name
+	 * @see #$supers
 	 */
 	$super: function (mtdnm, vararg) {
 		var args = [];
-		for (var j = 0, len = arguments.length; ++j < len;)
-			args[j - 1] = arguments[j];
-
+		for (var j = arguments.length; --j > 0;)
+			args.unshift(arguments[j]);
+		return this.$supers(mtdnm, args);
+	},
+	/** Calls a method in the super class with an array of arguments.
+	 * It is like Function's apply() that takes an array of arguments.
+	 * @see #$super
+	 */
+	$supers: function (mtdnm, args) {
 		var supers = this._$supers;
 		if (!supers) supers = this._$supers = {};
 
@@ -448,14 +467,15 @@ zk.Object.prototype = {
 			oldmtd = this[mtdnm];
 			p = this;
 		}
-		while (p = p._$super) {
+		for (;;) {
+			if (!(p = p._$super))
+				throw mtdnm + " not in superclass";
 			if (oldmtd != p[mtdnm]) {
 				m = p[mtdnm];
 				if (m) supers[mtdnm] = p;
 				break;
 			}
 		}
-		if (!m) throw mtdnm + " not in superclass";
 
 		try {
 			return m.apply(this, args);

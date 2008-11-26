@@ -267,6 +267,8 @@ zk.Event = zk.$extends(zk.Object, {
  */
 zWatch = {
 	/** Adds a watch.
+	 * Note: the order is parent-first, so the invocation ({@link #fire})
+	 * is from the parent to the child.
 	 * @param name the action name. Currently, it supports only onSend,
 	 * which is called before sending the AU request(s).
 	 * @return true if added successfully.
@@ -274,7 +276,7 @@ zWatch = {
 	watch: function (name, watch) {
 		var wts = this._wts[name];
 		if (!wts) wts = this._wts[name] = [];
-		wts.$add(watch);
+		wts.$add(watch, zUtl.isAncestor); //parent first
 	},
 	/** Removes a watch.
 	 * @return whether the watch has been removed successfully.

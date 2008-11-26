@@ -115,12 +115,11 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	},
 
 	bind_: function (desktop) {
-		//watch before bind_, so the parent's onXxx will be called first
+		this.$super('bind_', desktop);
+
 		zWatch.watch("onSize", this);
 		zWatch.watch("beforeSize", this);
 		zWatch.watch("onVisible", this);
-
-		this.$super('bind_', desktop);
 
 		this._fixDomClass();
 			//Bug 1921830: if spiltter is invalidated...

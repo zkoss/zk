@@ -70,6 +70,9 @@ zUtl = { //static methods
 				return true;
 		return false;
 	},
+	isDescendant: function (c, p) {
+		return zUtl.isAncestor(p, c);
+	},
 
 	//progress//
 	/** Shows the progress box to notify user ZK Client is busy.

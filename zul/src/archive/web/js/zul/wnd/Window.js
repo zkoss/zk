@@ -298,6 +298,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 
 	//super//
+	setDomVisible_: function (n, visible) {
+		this.$super('setDomVisible_', n, visible);
+		this._syncShadow();
+	},
 	focus: function () {
 		if (this.node) {
 			var cap = this.caption;
@@ -368,7 +372,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		if (this._mode != 'embedded') {
 			zWatch.watch('onFloatUp', this);
 			this._setMode(this._mode, true);
-			zk.Widget.floating.push(this);
+			this.setFloating_(true);
 		}
 	},
 	unbind_: function (skipper) {
@@ -379,7 +383,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		}
 		zDom.undoVParent(this.node);
 		zWatch.unwatch('onFloatUp', this);
-		zk.Widget.floating.$remove(this);
+		this.setFloating_(false);
 
 		var $Window = this.$class;
 		for (var nms = ['close', 'max', 'min'], j = 3; --j >=0;) {
