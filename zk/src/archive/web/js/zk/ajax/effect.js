@@ -698,8 +698,8 @@ zEffect.Shadow = zk.$extends(zk.Object, {
 	 * <ul>
 	 * <li>mode: The shadow display mode.  Supports the following options:
 	 *  <ul><li>shade: Shadow displays on both sides and bottom only (by default)</li>
-	 *  <li>frame: Shadow displays equally on all four sides</li>
-	 *  <li>drop: Traditional bottom-right drop shadow</li></ul></li>
+	 *   <li>frame: Shadow displays equally on all four sides</li>
+	 *   <li>drop: Traditional bottom-right drop shadow</li></ul></li>
 	 * <li>diameter: The diameter of the offset of the shadow from the element (defaults to 4)</li>
 	 * <li>stackup: whether to create a stackup (see {@link zDom#makeStackup})</li>
 	 * </ul>
@@ -709,7 +709,7 @@ zEffect.Shadow = zk.$extends(zk.Object, {
 			diameter: 4, mode: "shade"
 		}));
 		var sdwid = element.id + "$sdw",
-			template = zk.ie ? '<div id="'+sdwid+'" class="z-ie-shadow"></div>' :
+			html = zk.ie ? '<div id="'+sdwid+'" class="z-ie-shadow"></div>' :
 				'<div id="'+sdwid+'" class="z-shadow"><div class="z-shadow-t"><div class="z-shadow-tl"></div><div class="z-shadow-tm"></div><div class="z-shadow-tr"></div></div><div class="z-shadow-c"><div class="z-shadow-cl"></div><div class="z-shadow-cm"></div><div class="z-shadow-cr"></div></div><div class="z-shadow-b"><div class="z-shadow-bl"></div><div class="z-shadow-bm"></div><div class="z-shadow-br"></div></div></div>',
 			o = opts.diameter,
 			d = {l: -o, t: o-1, h: 0, w:0},
@@ -742,7 +742,7 @@ zEffect.Shadow = zk.$extends(zk.Object, {
 		};
 		this.delta = d;
 		this.node = element;
-		element.parentNode.insertAdjacentHTML("afterbegin", template);
+		element.parentNode.insertAdjacentHTML("afterBegin", html);
 		this.shadow = zDom.$(sdwid);
 	},
 	/** Removes the shadow. */
@@ -821,5 +821,86 @@ zEffect.Shadow = zk.$extends(zk.Object, {
 	 */
 	getDelta: function () {
 		return this.delta;
+	},
+	/** Returns the lowest level of element.
+	 */
+	getBottomElement: function () {
+		return this.stackup || this.shadow;
+	}
+});
+
+/** A mask covers the browser window fully. */
+zEffect.FullMask = zk.$extends(zk.Object, {
+	/**
+	 * @param opts The options
+	 * <p>Alowed options:
+	 * <ul>
+	 * <li>mask: the mask element if the mask was created. Default: create a new one.</li>
+	 * <li>anchor: whether to insert the mask before</li>
+	 * <li>id: the mask ID. Default: z_mask</li>
+	 * <li>zIndex: z-index to assign. Default: defined in z-modal-mask</li>
+	 * </ul>
+	 */
+	$init: function (opts) {
+		opts = opts || {};
+		var mask = this.mask = opts.mask;
+		if (this.mask) {
+			if (opts.anchor)
+				opts.anchor.parentNode.insertBefore(mask, opts.anchor);
+			if (opts.id)
+				mask.id = opts.id;
+			if (opts.zIndex != null)
+				mask.style.zIndex = opts.zIndex;
+		} else {
+			var maskId = opts.id || 'z_mask',
+				html = '<div id="' + maskId + '" class="z-modal-mask"';
+			if (opts.zIndex != null)
+				html += ' style="z-index:' + opts.zIndex +'"';
+			html += '></div>'
+			if (opts.anchor)
+				opts.anchor.insertAdjacentHTML('beforeBegin', html);
+			else
+				document.body.insertAdjacentHTML('beforeEnd', html);
+			mask = this.mask = zDom.$(maskId);
+		}
+		if (opts.stackup)
+			this.stackup = zDom.makeStackup(mask, mask.id + '$mkstk');
+
+		this._sync();
+		zEvt.listen(mask, "mousemove", zEvt.stop);
+		zEvt.listen(mask, "click", zEvt.stop);
+		this._onMove = this.proxy(this._sync)
+		zEvt.listen(window, "resize", this._onMove);
+		zEvt.listen(window, "scroll", this._onMove);
+	},
+	destroy: function () {
+		var mask = this.mask;
+		zEvt.unlisten(mask, "mousemove", zEvt.stop);
+		zEvt.unlisten(mask, "click", zEvt.stop);
+		zEvt.listen(window, "resize", this._onMove);
+		zEvt.listen(window, "scroll", this._onMove);
+		zDom.remove(mask);
+		zDom.remove(this.stackup);
+		this._onMove = this.mask = this.stackup = null;
+	},
+	/** Position a mask to cover the whole browser window. */
+	_sync: function () {
+		var n = this.mask;
+		var ofs = zDom.toStyleOffset(n, zDom.innerX(), zDom.innerY()),
+			st = n.style;
+		st.left = ofs[0] + "px";
+		st.top = ofs[1] + "px";
+		st.width = zDom.innerWidth() + "px";
+		st.height = zDom.innerHeight() + "px";
+		st.display = "block";
+
+		n = this.stackup;
+		if (n) {
+			n = n.style;
+			n.left = st.left;
+			n.top = st.top;
+			n.width = st.width;
+			n.height = st.height;
+		}
 	}
 });

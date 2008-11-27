@@ -909,7 +909,7 @@ zk.Desktop = zk.$extends(zk.Object, {
 		} else if (updateURI)
 			dt.updateURI = updateURI;
 
-		zdt.cleanup();
+		zdt.destroy();
 	}
 },{
 	/** Returns the desktop of the specified desktop ID.
@@ -938,7 +938,7 @@ zk.Desktop = zk.$extends(zk.Object, {
 	_ndt: 0,
 	/** Remove desktops that are no longer valid.
 	 */
-	cleanup: function () {
+	destroy: function () {
 		var zdt = zk.Desktop, dts = zdt.all;
 		if (zdt._dt && zdt._dt.pgid && !zDom.$(zdt._dt.pgid)) //removed
 			zdt._dt = null;

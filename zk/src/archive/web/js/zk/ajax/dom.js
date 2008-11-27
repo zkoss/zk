@@ -200,6 +200,74 @@ zDom = { //static methods
 			if (p.offsetHeight && zDom.isVisible(p)) hgh -= p.offsetHeight; //may undefined
 		return hgh;
 	},
+	/** Converts from absolute coordination to style's coordination.
+	 */
+	toStyleOffset: function (el, x, y) {
+		var oldx = el.style.left, oldy = el.style.top,
+			resetFirst = zk.opera || zk.air;
+		//Opera:
+		//1)we have to reset left/top. Or, the second call position wrong
+		//test case: Tooltips and Popups
+		//2)we cannot assing "", either
+		//test case: menu
+		//IE/gecko fix: auto causes toStyleOffset incorrect
+		if (resetFirst || el.style.left == "" || el.style.left == "auto")
+			el.style.left = "0";
+		if (resetFirst || el.style.top == "" || el.style.top == "auto")
+			el.style.top = "0";
+
+		var ofs1 = zDom.cmOffset(el);
+		var x2 = zk.parseInt(el.style.left), y2 = zk.parseInt(el.style.top);
+		ofs1 = [x - ofs1[0] + x2, y  - ofs1[1] + y2];
+
+		el.style.left = oldx; el.style.top = oldy; //restore
+		return ofs1;
+	},
+	/** Center the specified element.
+	 * @param flags a combination of center, left, right, top and bottom.
+	 * If omitted, center is assigned.
+	 */
+	center: function (el, flags) {
+		var wdgap = zDom.offsetWidth(el),
+			hghgap = zDom.offsetHeight(el);
+
+		if ((!wdgap || !hghgap) && !zDom.isVisible(el)) {
+			el.style.top = "-10000px"; //avoid annoying effect
+			el.style.display = "block"; //we need to calculate the size
+			wdgap = zDom.offsetWidth(el);
+			hghgap = zDom.offsetHeight(el),
+			el.style.display = "none"; //avoid Firefox to display it too early
+		}
+
+		var left = zDom.innerX(), top = zDom.innerY();
+		var x, y, skipx, skipy;
+
+		wdgap = zDom.innerWidth() - wdgap;
+		if (!flags) x = left + wdgap / 2;
+		else if (flags.indexOf("left") >= 0) x = left;
+		else if (flags.indexOf("right") >= 0) x = left + wdgap - 1; //just in case
+		else if (flags.indexOf("center") >= 0) x = left + wdgap / 2;
+		else {
+			x = 0; skipx = true;
+		}
+
+		hghgap = zDom.innerHeight() - hghgap;
+		if (!flags) y = top + hghgap / 2;
+		else if (flags.indexOf("top") >= 0) y = top;
+		else if (flags.indexOf("bottom") >= 0) y = top + hghgap - 1; //just in case
+		else if (flags.indexOf("center") >= 0) y = top + hghgap / 2;
+		else {
+			y = 0; skipy = true;
+		}
+
+		if (x < left) x = left;
+		if (y < top) y = top;
+
+		var ofs = zDom.toStyleOffset(el, x, y);	
+
+		if (!skipx) el.style.left = ofs[0] + "px";
+		if (!skipy) el.style.top =  ofs[1] + "px";
+	},
 
 	/** Calculates the cumulative scroll offset of an element in nested scrolling containers.
 	 * Adds the cumulative scrollLeft and scrollTop of an element and all its parents.
@@ -829,10 +897,10 @@ zDom = { //static methods
 	 * @param id ID of the iframe. If omitted and el is specified,
 	 * it is el.id + '$ifrstk'. If both el and id are omitted, 'z_ifrstk'
 	 * is assumed.
-	 * @param ref whether to insert the DOM element before.
+	 * @param anchor whether to insert the DOM element before.
 	 * If omitted, el is assumed.
 	 */
-	makeStackup: function (el, id, ref) {
+	makeStackup: function (el, id, anchor) {
 		var ifr = document.createElement('iframe');
 		ifr.id = id || (el ? el.id + "$ifrstk": 'z_ifrstk');
 		ifr.frameBorder = "no";
@@ -843,7 +911,7 @@ zDom = { //static methods
 			ifr.style.height = el.offsetHeight + "px";
 			ifr.style.top = el.style.top;
 			ifr.style.left = el.style.left;
-			el.parentNode.insertBefore(ifr, ref || el);
+			el.parentNode.insertBefore(ifr, anchor || el);
 		}	
 		return ifr;
 	},

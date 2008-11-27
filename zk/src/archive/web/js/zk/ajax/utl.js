@@ -97,13 +97,9 @@ zUtl = { //static methods
 			+msg+'</div></div></div>'
 		var n = document.createElement("DIV");
 		document.body.appendChild(n);
-		zDom.setOuterHTML(n, html);
+		n = zDom.setOuterHTML(n, html);
 
-		if (mask) { //center it
-			n = zDom.$(idmsk);
-			zEvt.listen(n, "mousemove", zEvt.stop);
-			zEvt.listen(n, "click", zEvt.stop);
-		}
+		if (mask) n.z_mask = new zEffect.FullMask({mask: zDom.$(idmsk)});
 
 		n = zDom.$(idtxt);
 		if (mask && n) { //center
@@ -113,13 +109,12 @@ zUtl = { //static methods
 		n.style.visibility = "visible";
 	},
 	/** Removes all progress boxed of the specified ID. */
-	cleanAllProgress: function (id) {
-		var n = zDom.$(id + '$m');
+	destroyProgressbox: function (id) {
+		var n = zDom.$(id);
 		if (n) {
-			zEvt.unlisten(n, "mousemove", zEvt.stop);
-			zEvt.unlisten(n, "click", zEvt.stop);
+			if (n.z_mask) n.z_mask.destroy();
+			zDom.remove(n);
 		}
-		zDom.remove(id);
 
 		//TODO: remove the mask for each contained page
 	},

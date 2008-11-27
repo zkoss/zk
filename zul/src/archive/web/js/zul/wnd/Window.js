@@ -59,38 +59,81 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		switch (mode) {
 		case 'overlapped':
 		case 'popup':
-			this._doOverOrPopup(binding);
+			this._doOverlapped(binding);
 			break;
+		case 'modal':
+		case 'hilighted':
+			this._doModal(binding);
 		}
 	},
-	_doOverOrPopup: function (binding) {
+	_doOverlapped: function (binding) {
 		if (!binding) this._updateDomOuter(); //unbind_ and bind_
 
 		var pos = this.getPosition(),
-			isV = this._mode != 'embedded',
 			n = this.node;
-		if (!pos && isV && !n.style.top && !n.style.left) {		
+		if (!pos && !n.style.top && !n.style.left) {		
 			var xy = zDom.revisedOffset(n);
 			n.style.left = xy[0] + "px";
 			n.style.top = xy[1] + "px";
-		} else if (pos == "parent" && isV) {
-			var xy = zk.revisedOffset(n.parentNode),
-				left = zk.parseInt(n.style.left), top = zk.parseInt(n.style.top);
-			this._offset = xy;
-			n.style.left = (xy[0] + zk.parseInt(n.style.left)) + "px";
-			n.style.top = (xy[1] + zk.parseInt(n.style.top)) + "px";
-		}
+		} else if (pos == "parent")
+			this._posByParent();
 
-		if (isV) zDom.makeVParent(n); //OK to make vparent twice
+		zDom.makeVParent(n); //OK to make vparent twice
 		this._updateDomPos();
 
 		var realVisible = this.isRealVisible();
 		if (realVisible) n.style.visibility = 'visible';
 
-		this._makeFloat();
-
 		if (realVisible) this.setTopmost();
 		this._syncShadow();
+
+		this._makeFloat();
+	},
+	_doModal: function (binding) {
+		if (!binding) this._updateDomOuter(); //unbind_ and bind_
+
+		var pos = this.getPosition(),
+			n = this.node;
+		if (pos == "parent") this._posByParent();
+
+		zDom.makeVParent(n); //OK to make vparent twice
+		this._updateDomPos(true);
+
+		if (!pos) { //adjust y (to upper location)
+			var top = zk.parseInt(n.style.top), y = zDom.innerY();
+			if (y) {
+				var y1 = top - y;
+				if (y1 > 100) n.style.top = top - (y1 - 100) + "px";
+			} else if (top > 100)
+				n.style.top = "100px";
+		}
+
+		//Note: modal must be visible
+		n.style.visibility = 'visible';
+
+		this.setTopmost();
+		this._syncShadow();
+
+		this._mask = new zEffect.FullMask({
+			id: this.uuid + "$mask",
+			anchor: this._shadow.getBottomElement() || n,
+				//bug 1510218: we have to make it as a sibling
+			zIndex: this._zIndex,
+			stackup: zk.ie6Only});
+
+		this._prevfocus = zk.currentFocus; //store
+		this.focus();
+
+		this._makeFloat();
+	},
+	/** Must be called before calling makeVParent. */
+	_posByParent: function () {
+		var n = this.node,
+			ofs = zDom.revisedOffset(n.parentNode),
+			left = zk.parseInt(n.style.left), top = zk.parseInt(n.style.top);
+		this._offset = ofs;
+		n.style.left = ofs[0] + zk.parseInt(n.style.left) + "px";
+		n.style.top = ofs[1] + zk.parseInt(n.style.top) + "px";
 	},
 	_syncShadow: function () {
 		if (this._mode == 'embedded') {
@@ -108,12 +151,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		var shadow = this._shadow;
 		if (shadow) shadow.hide();
 	},
-	_shallVParent: function () {
-		for (var wgt = this; wgt = wgt.parent;)
-			if (wgt._mode && wgt._mode != 'embedded')
-				return false;
-		return true;
-	},
 	_makeFloat: function () {
 		var handle = this.ecap;
 		if (handle) {
@@ -127,8 +164,26 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				endeffect: $Window._aftermove});
 		}
 	},
-	_updateDomPos: function () {
-		//TODO
+	_updateDomPos: function (force) {
+		var n = this.node, pos = this._pos;
+		if (pos == "parent"/*handled by the caller*/ || (!pos && !force))
+			return;
+
+		n.style.position = "absolute"; //just in case
+		zDom.center(n, pos);
+		var sdw = this._shadow;
+		if (pos && sdw) {
+			var d = sdw.getDelta(), l = n.offsetLeft, t = n.offsetTop, w = n.offsetWidth,
+				h = n.offsetHeight, st = n.style; 
+			if (pos.indexOf("left") >= 0 && d.l < 0) st.left = l - d.l + "px";
+			else if (pos.indexOf("right") >= 0)
+				st.left = l - (zk.ie ? Math.round((Math.abs(d.l) + d.w)/2) : Math.round((d.l + d.w)/2)) - 1 + "px";
+
+			if (pos.indexOf("top") >= 0 && d.t < 0) st.top = t - d.t + "px";
+			else if (pos.indexOf("bottom") >= 0)
+				st.top = t - (zk.ie ? Math.round((Math.abs(d.t) + d.h)/2) + 1 : Math.round((d.t + d.h)/2)) - 1 + "px";
+		}
+		//TODO zkau.sendOnMove(n);
 	},
 
 	getTitle: function () {
@@ -157,7 +212,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			this._pos = pos;
 
 			var n = this.node;
-			if (n) this._updateDomPos();
+			if (n) {
+				this._updateDomPos(); //TODO: handle pos = 'parent'
+				this._syncShadow();
+			}
 		}
 	},
 
@@ -488,7 +546,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				+ofs[1]+'px;left:'+ofs[0]+'px;width:'
 				+zDom.offsetWidth(el)+'px;height:'+zDom.offsetHeight(el)
 				+'px;z-index:'+el.style.zIndex+'"><ul></ul></div></div>';
-			document.body.insertAdjacentHTML("afterbegin", html);
+			document.body.insertAdjacentHTML("afterBegin", html);
 			dg._wndoffs = ofs;
 			el.style.visibility = "hidden";
 			var h = el.offsetHeight - title.offsetHeight;

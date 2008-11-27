@@ -22,7 +22,7 @@ zPkg = {
 			if (!zPkg._updCnt()) {
 				try {
 					zEvt.enableESC();
-					zUtl.cleanAllProgress("zk_loadprog");
+					zUtl.destroyProgressbox("zk_loadprog");
 				} catch (ex) {
 				}
 

@@ -200,7 +200,7 @@ zk = { //static members
 	 */
 	endProcessing: function() {
 		zk.processing = false;
-		zUtl.cleanAllProgress("zk_proc");
+		zUtl.destroyProgressbox("zk_proc");
 	},
 	/** Shows the message of zk.startProcessing. */
 	_showproc: function () {

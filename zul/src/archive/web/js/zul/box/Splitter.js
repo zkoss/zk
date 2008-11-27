@@ -309,7 +309,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 				+zDom.offsetWidth(node)+'px;height:'+zDom.offsetHeight(node)
 				+'px;"><img src="'+zAu.comURI('/web/img/spacer.gif')
 						+'"/></div>';
-			document.body.insertAdjacentHTML("afterbegin", html);
+			document.body.insertAdjacentHTML("afterBegin", html);
 			draggable.node = zDom.$("zk_ddghost");
 		} else
 			draggable.endGhostToDIV();
