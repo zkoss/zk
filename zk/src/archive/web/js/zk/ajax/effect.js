@@ -765,7 +765,7 @@ zEffect.Shadow = zk.$extends(zk.Object, {
 	 */
 	sync: function () {
 		var node = this.node;
-		if (!node || !zDom.isVisible(node)) {
+		if (!node || !zDom.isVisible(node, true)) {
 			this.hide();
 			return false;
 		}

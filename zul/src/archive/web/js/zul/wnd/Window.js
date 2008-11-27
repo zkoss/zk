@@ -17,7 +17,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	_border: 'none',
 	_minheight: 100,
 	_minwidth: 200,
-	importantEvents_: {onMove:1, onZIndex:1}, //shared by all instances
+	importantEvents_: {onMove:1, onZIndex:1, onOpen:1}, //shared by all instances
 
 	$init: function () {
 		this.$supers('$init', arguments);
@@ -84,16 +84,12 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		if (isV) zDom.makeVParent(n); //OK to make vparent twice
 		this._updateDomPos();
 
-		var visible = this.isRealVisible();
-		if (visible) n.style.visibility = 'visible';
+		var realVisible = this.isRealVisible();
+		if (realVisible) n.style.visibility = 'visible';
 
 		this._makeFloat();
 
-		if (visible) {
-			this.setTopmost();
-			zDom.show(n);
-		}
-
+		if (realVisible) this.setTopmost();
 		this._syncShadow();
 	},
 	_syncShadow: function () {
@@ -314,8 +310,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 
 	//super//
-	setDomVisible_: function (n, visible) {
-		if (this._mode != 'embedded') n.style.visibility = 'visible';
+	setDomVisible_: function () {
 		this.$supers('setDomVisible_', arguments);
 		this._syncShadow();
 	},
@@ -372,7 +367,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				+style;
 		return style;
 	},
-	bind_: function (desktop, skipper) {
+	bind_: function () {
 		this.$supers('bind_', arguments);
 
 		var uuid = this. uuid,
@@ -396,7 +391,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			this._setMode(this._mode, true);
 		}
 	},
-	unbind_: function (skipper) {
+	unbind_: function () {
 		//we don't check this._mode here since it might be already changed
 		if (this._shadow) {
 			this._shadow.destroy();
@@ -417,7 +412,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				zEvt.unlisten(n, 'mouseout', $Window[nm + 'out']);
 			}
 		}
-		this.$super('unbind_', skipper);
+		this.$supers('unbind_', arguments);
 	}
 },{ //static
 	closeclick: function (evt) {

@@ -211,13 +211,13 @@ zk.Widget = zk.$extends(zk.Object, {
 			//from parent to child
 			for (var fs = zk.Widget._floating, j = 0, fl = fs.length; j < fl; ++j) {
 				var w = fs[j].widget;
-				if (this != w && zUtl.isAncestor(this, w) && w.isVisible()) {
+				if (this != w && this._floatVisibleDependent(w)) {
 					zi = zi >= 0 ? ++zi: w._topZIndex();
 					var n = fs[j].node;
 					if (n != w.node) w.setFloatZIndex_(n, zi); //only a portion
 					else w.setZIndex(zi);
 
-					w.setDomVisible_(n, true);
+					w.setDomVisible_(n, true, {visibility:1});
 				}
 			}
 
@@ -227,19 +227,30 @@ zk.Widget = zk.$extends(zk.Object, {
 
 			for (var fs = zk.Widget._floating, j = fs.length; --j >= 0;) {
 				var w = fs[j].widget;
-				if (this != w && zUtl.isAncestor(this, w) && w.isVisible())
-					w.setDomVisible_(fs[j].node, false);
+				if (this != w && this._floatVisibleDependent(w))
+					w.setDomVisible_(fs[j].node, false, {visibility:1});
 			}
 
 			this.setDomVisible_(node, false);
 		}
 	},
+	/** Returns if the widget's visibility depends this widget.
+	 */
+	_floatVisibleDependent: function (wgt) {
+		for (; wgt; wgt = wgt.parent)
+			if (wgt == this) return true;
+			else if (!wgt.isVisible()) break;
+		return false;
+	},
 	/** Changes the visibility of a child DOM content of this widget.
 	 * <p>Default: change n.style.display directly.
 	 * <p>Note: if {@link #setFloating_} was called, n could be opts.node.
 	 */
-	setDomVisible_: function (n, visible) {
-		n.style.display = visible ? '': 'none';
+	setDomVisible_: function (n, visible, opts) {
+		if (!opts || opts.display)
+			n.style.display = visible ? '': 'none';
+		if (opts && opts.visibility)
+			n.style.visibility = visible ? 'visible': 'hidden';
 	},
 	/** Called when a child's visiblity is changed or going to change.
 	 * <p>Default: does nothing.
