@@ -18,6 +18,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 zk.Draggable = zk.$extends(zk.Object, {
 	$init: function(wgt, node, opts) {
+		var zdg = zk.Draggable;
+		if (!zdg._stackup) {
+		//IE: if we don't insert stackup at beginning, dragging is slow
+			var n = zdg._stackup = zDom.makeStackup(null, 'z_ddstkup');
+			zDom.hide(n);
+			document.body.appendChild(n);
+		}
+
 		this.widget = wgt;
 		this.node = node = node ? zDom.$(node): wgt.node;
 
@@ -34,7 +42,6 @@ zk.Draggable = zk.$extends(zk.Object, {
 			delay: 0
 		});
 
-		var zdg = zk.Draggable;
 		if (opts.reverteffect == null)
 			opts.reverteffect = zdg.defaultRevertEffect;
 		if (opts.endeffect == null) {
@@ -107,7 +114,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 
 		if (this.opts.stackup) {
 			var defStackup = zdg._stackup;
-			if (defStackup.parentNode)
+			if (zDom.isVisible(defStackup)) //in use
 				this._stackup = zDom.makeStackup(node, node.id + '$ddstk');
 			else {
 				this._stackup = defStackup;
@@ -139,6 +146,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 		if (this._stackup) {
 			var node = this.node,
 				st = this._stackup.style;
+			st.display = 'block';
 			st.left = node.offsetLeft + "px";
 			st.top = node.offsetTop + "px";
 			st.width = node.offsetWidth + "px";
@@ -193,8 +201,10 @@ zk.Draggable = zk.$extends(zk.Object, {
 		zDom.enableSelection(document.body);
 		setTimeout(zDom.clearSelection, 0);
 
-		if (this._stackup) {
-			zDom.remove(this._stackup);
+		var stackup = this._stackup;
+		if (stackup) {
+			if (stackup == zk.Draggable._stackup) zDom.hide(stackup);
+			else zDom.remove(stackup);
 			delete this._stackup;
 		}
 
@@ -455,7 +465,6 @@ zk.Draggable = zk.$extends(zk.Object, {
 },{ //static
 	_drags: [],
 	_dragging: [],
-	_stackup: zDom.makeStackup(null, 'z_ddstkup'),
 
 	register: function(draggable) {
 		var zdg = zk.Draggable;

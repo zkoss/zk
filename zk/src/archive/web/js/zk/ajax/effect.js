@@ -173,19 +173,19 @@ zEffect = {
 		anchor = anchor || 't';
 		element = zDom.$(element);
 
-		var movement, s = element.style;
+		var movement, st = element.style;
 		switch (anchor) {
 		case 't':
-			movement = {x: 0, y: -zk.parseInt(s.height), sync: true};
+			movement = {x: 0, y: -zk.parseInt(st.height), sync: true};
 			break;
 		case 'b':
-			movement = {x: 0, y: zk.parseInt(s.height), sync: true};
+			movement = {x: 0, y: zk.parseInt(st.height), sync: true};
 			break;
 		case 'l':
-			movement = {x: -zk.parseInt(s.width), y: 0, sync: true};
+			movement = {x: -zk.parseInt(st.width), y: 0, sync: true};
 			break;
 		case 'r':
-			movement = {x: zk.parseInt(s.width), y: 0, sync: true};
+			movement = {x: zk.parseInt(st.width), y: 0, sync: true};
 			break;
 		}
 
@@ -219,26 +219,26 @@ zEffect = {
 			left: zDom.getStyle(element, 'left'),
 			opacity: element.style.opacity || ''};
 
-		var movement, s = element.style;
+		var movement, st = element.style;
 		switch (anchor) {
 		case 't':
-			var t = zk.parseInt(s.top), h = zk.parseInt(s.height);
-			s.top = t - h + "px";
+			var t = zk.parseInt(st.top), h = zk.parseInt(st.height);
+			st.top = t - h + "px";
 			movement = {x: 0, y: h, sync: true};
 			break;
 		case 'b':
-			var t = zk.parseInt(s.top), h = zk.parseInt(s.height);
-			s.top = t + h + "px";
+			var t = zk.parseInt(st.top), h = zk.parseInt(st.height);
+			st.top = t + h + "px";
 			movement = {x: 0, y: -h, sync: true};
 			break;
 		case 'l':
-			var l = zk.parseInt(s.left), w = zk.parseInt(s.width);
-			s.left = l - w + "px";
+			var l = zk.parseInt(st.left), w = zk.parseInt(st.width);
+			st.left = l - w + "px";
 			movement = {x: w, y: 0, sync: true};
 			break;
 		case 'r':
-			var l = zk.parseInt(s.left), w = zk.parseInt(s.width);
-			s.left = l + w + "px";
+			var l = zk.parseInt(st.left), w = zk.parseInt(st.width);
+			st.left = l + w + "px";
 			movement = {x: -w, y: 0, sync: true};
 			break; 
 		}
@@ -782,13 +782,13 @@ zEffect.Shadow = zk.$extends(zk.Object, {
 		return true;
 	},
 	_recalc : function(l, t, w, h){
-		var d = this.delta, r = this.shadow, s = r.style, width = (w + d.w), height = (h + d.h),
+		var d = this.delta, r = this.shadow, st = r.style, width = (w + d.w), height = (h + d.h),
 			widths = width +"px", heights = height + "px";
-		s.left = (l + d.l) + "px";
-		s.top = (t + d.t) + "px";
-		if(s.width != widths || s.height != heights) {
-			s.width = widths;
-			s.height = heights;
+		st.left = (l + d.l) + "px";
+		st.top = (t + d.t) + "px";
+		if(st.width != widths || st.height != heights) {
+			st.width = widths;
+			st.height = heights;
 			if(!zk.ie) {
 				var c = r.childNodes;
 				// the 12 number means the both height the top side shadow and the bottom side shadow.
@@ -806,7 +806,7 @@ zEffect.Shadow = zk.$extends(zk.Object, {
 				stackup = this.stackup =
 					zDom.makeStackup(node, node.id + '$sdwstk', this.shadow);
 
-			var st = stackup.style;
+			st = stackup.style;
 			st.left = l +"px";
 			st.top = t +"px";
 			st.width = w +"px";

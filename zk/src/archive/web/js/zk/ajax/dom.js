@@ -905,14 +905,14 @@ zDom = { //static methods
 		ifr.id = id || (el ? el.id + "$ifrstk": 'z_ifrstk');
 		ifr.frameBorder = "no";
 		ifr.src="";
-		ifr.style.cssText = "position:absolute;visibility:visible;overflow:hidden;filter:alpha(opacity=0);display:block;border";
+		ifr.style.cssText = 'position:absolute;visibility:visible;overflow:hidden;filter:alpha(opacity=0);border:0;display:block';
 		if (el) {
 			ifr.style.width = el.offsetWidth + "px";
 			ifr.style.height = el.offsetHeight + "px";
 			ifr.style.top = el.style.top;
 			ifr.style.left = el.style.left;
 			el.parentNode.insertBefore(ifr, anchor || el);
-		}	
+		}
 		return ifr;
 	},
 
