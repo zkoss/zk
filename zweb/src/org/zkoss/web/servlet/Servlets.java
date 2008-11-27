@@ -274,6 +274,7 @@ public class Servlets {
 	 * Allowed values include "robot", "ie", "ie6", "ie6-", "ie7", "ie8",
 	 * "ie7-", "gecko", "gecko2", "gecko3", "gecko2-",
 	 * "opara", "safari",
+	 * ("air", "iphone", "ipod" since 3.5.2),
 	 * "mil", "hil", "mil-".<br/>
 	 * Note: "ie6-" means Internet Explorer 6 only; not Internet Explorer 7
 	 * or other.
@@ -294,6 +295,10 @@ public class Servlets {
 
 		if ("safari".equals(type)) return isSafari(userAgent);
 		if ("opera".equals(type)) return isOpera(userAgent);
+
+		if ("air".equals(type)) return isAir(userAgent);
+		if ("iphone".equals(type)) return isIphone(userAgent);
+		if ("ipod".equals(type)) return isIpod(userAgent);
 
 		if ("mil".equals(type)) return isMilDevice(userAgent);
 		if ("mil-".equals(type)) return isMilDevice(userAgent) && !isHilDevice(userAgent);
@@ -459,6 +464,70 @@ public class Servlets {
 		userAgent = userAgent.toLowerCase();
 		return userAgent.indexOf("safari") >= 0;
 	}
+
+	/** Returns whether the browser is iPhone.
+	 * @since 3.5.2
+	 */
+	public static final boolean isIphone(ServletRequest req) {
+		return (req instanceof HttpServletRequest)
+			&& isIphone(((HttpServletRequest)req).getHeader("user-agent"));
+	}
+	/** Returns whether the browser is iPhone.
+	 *
+	 * @param userAgent represents a client.
+	 * For HTTP clients, It is the user-agent header.
+	 * @since 3.5.2
+	 */
+	public static final boolean isIphone(String userAgent) {
+		if (userAgent == null)
+			return false;
+
+		userAgent = userAgent.toLowerCase();
+		return userAgent.indexOf("iPhone") >= 0;
+	}
+
+	/** Returns whether the browser is iPod.
+	 * @since 3.5.2
+	 */
+	public static final boolean isIpod(ServletRequest req) {
+		return (req instanceof HttpServletRequest)
+			&& isIpod(((HttpServletRequest)req).getHeader("user-agent"));
+	}
+	/** Returns whether the browser is iPod.
+	 *
+	 * @param userAgent represents a client.
+	 * For HTTP clients, It is the user-agent header.
+	 * @since 3.5.2
+	 */
+	public static final boolean isIpod(String userAgent) {
+		if (userAgent == null)
+			return false;
+
+		userAgent = userAgent.toLowerCase();
+		return userAgent.indexOf("iPod") >= 0;
+	}
+
+	/** Returns whether the browser is AIR.
+	 * @since 3.5.2
+	 */
+	public static final boolean isAir(ServletRequest req) {
+		return (req instanceof HttpServletRequest)
+			&& isAir(((HttpServletRequest)req).getHeader("user-agent"));
+	}
+	/** Returns whether the browser is AIR.
+	 *
+	 * @param userAgent represents a client.
+	 * For HTTP clients, It is the user-agent header.
+	 * @since 3.5.2
+	 */
+	public static final boolean isAir(String userAgent) {
+		if (userAgent == null)
+			return false;
+
+		userAgent = userAgent.toLowerCase();
+		return userAgent.indexOf("adobeair") >= 0;
+	}
+	
 	/** Returns whether the browser is Opera.
 	 */
 	public static final boolean isOpera(ServletRequest req) {
