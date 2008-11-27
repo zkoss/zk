@@ -50,6 +50,13 @@ zDom = { //static methods
 				return false;
 		return true;
 	},
+	isAncestor: function (p, c) {
+		if (!p) return true;
+		for (; c; c = zDom.parentNode(c))
+			if (p == c)
+				return true;
+		return false;
+	},
 
 	/** Returns the x coordination of the visible part. */
 	innerX: function () {
@@ -905,6 +912,7 @@ zDom = { //static methods
 		ifr.id = id || (el ? el.id + "$ifrstk": 'z_ifrstk');
 		ifr.frameBorder = "no";
 		ifr.src="";
+		ifr.tabIndex = -1;
 		ifr.style.cssText = 'position:absolute;visibility:visible;overflow:hidden;filter:alpha(opacity=0);border:0;display:block';
 		if (el) {
 			ifr.style.width = el.offsetWidth + "px";
@@ -952,7 +960,9 @@ zDom = { //static methods
 	 */
 	focus: function (n) {
 		n = zDom.$(n);
-		if (!n || !n.focus) return true;
+		if (!n || !n.focus) return false;
+		var tag = zDom.tag(n);
+		if (tag != 'BUTTON' && tag != 'INPUT' && tag != 'SELECT') return false;
 
 		try {
 			n.focus();

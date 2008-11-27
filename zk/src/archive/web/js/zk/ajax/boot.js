@@ -257,12 +257,14 @@ function _zkDocMouseDown(evt) {
 	var target = zEvt.target(evt);
 	if (target != document.body && target != document.body.parentNode) { //not click on scrollbar
 		var $Widget = zk.Widget;
-		$Widget.domMouseDown($Widget.$(evt));
+		$Widget.domMouseDown($Widget.$(evt, true)); //null if mask
 	}
 }
 function _zkDocMouseOver(evt) {
+	//TODO
 }
 function _zkDocMouseOut(evt) {
+	//TODO
 }
 function _zkDocClick(evt) {
 	if (!evt) evt = window.event;

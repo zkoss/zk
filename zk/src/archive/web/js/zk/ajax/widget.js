@@ -669,27 +669,36 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * @return whether the focus is gained to this widget.
 	 */
 	focus: function () {
-		if (this.node && this.isRealVisible() && this.canActivate(true)) {
+		if (this.node && this.isVisible() && this.canActivate({checkOnly:true})) {
 			if (zDom.focus(this.node)) {
+				zk.currentFocus = this;
 				this.setTopmost();
 				return true;
 			}
 			for (var w = this.firstChild; w; w = w.nextSibling)
-				if (w.focus())
+				if (w.isVisible() && w.focus())
 					return true;
 		}
 		return false;
 	},
 	/** Checks if this widget can be activated (gaining focus and so on).
 	 * <p>Default: return false if it is not a descendant of zk.currentModal.
+	 * <p>Allowed Options:
+	 * <ul>
+	 * <li>checkOnly: not to change focus back to modal dialog if unable
+	 * to activate.</li>
+	 * </ul>
 	 */
-	canActivate: function (checkOnly) {
+	canActivate: function (opts) {
 		var modal = zk.currentModal;
 		if (modal && !zUtl.isAncestor(modal, this)) {
-			if (!checkOnly) {
+			if (!opts || !opts.checkOnly) {
 				var cf = zk.currentFocus;
-				if (cf && !zUtl.isAncestor(modal, cf))
-					modal.focus();
+				//Note: browser might change focus later, so delay a bit
+				setTimeout(function () {
+					if (cf && zUtl.isAncestor(modal, cf)) cf.focus();
+					else modal.focus();
+				}, 0);
 			}
 			return false;
 		}
@@ -795,11 +804,14 @@ zk.Widget = zk.$extends(zk.Object, {
 	//DOM event handling//
 	/** Callback this method if you listen DOM onfocus. */
 	domFocus: function () {
+		if (!this.canActivate()) return false;
+
 		zk.currentFocus = this;
 		zWatch.fire('onFloatUp', -1, this);
 
 		if (this.isListen('onFocus'))
 			this.fire('onFocus');
+		return true;
 	},
 	/** Callback this method if you listen DOM onblur. */
 	domBlur: function () {
@@ -823,8 +835,11 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * (i.e., not associated with an DOM element).
 	 * @param n an element, an element's ID, or an event (actually with
 	 * the target property)
+	 * @param strict the element must be a child element (in the DOM tree)
+	 * Mask, shadow are sibling in the DOM tree (but their ID actually
+	 * identifies the widget).
 	 */
-	$: function (n) {
+	$: function (n, strict) {
 		//1. No map from element to widget directly. rather, go thru DOM
 		//2. We have to remove '$*' since $chdex is parentNode!
 		n = typeof n == 'string' ? zDom.$(n):
@@ -837,8 +852,9 @@ zk.Widget = zk.$extends(zk.Object, {
 			if (id) {
 				var j = id.lastIndexOf('$');
 				if (j >= 0) {
-					n = zDom.$(id.substring(0, j));
-					return n ? n.z_wgt: null; //with '$', assume child node
+					var n2 = zDom.$(id.substring(0, j));
+					return n2 && (!strict || zDom.isAncestor(n2, n)) ?
+						n2.z_wgt: null; //with '$', assume child node
 				}
 			}
 		}
@@ -852,7 +868,15 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * @param wgt the widget which might be null if not click on any widget
 	 */
 	domMouseDown: function (wgt) {
-		if (!wgt || wgt.canActivate()) {
+		var modal = zk.currentModal;
+		if (modal && !wgt) {
+			var cf = zk.currentFocus;
+			//Note: browser might change focus later, so delay a bit
+			setTimeout(function () {
+				if (cf && zUtl.isAncestor(modal, cf)) cf.focus();
+				else modal.focus();
+			}, 0);
+		} else if (!wgt || wgt.canActivate()) {
 			zk.currentFocus = wgt;
 			if (wgt) zWatch.fire('onFloatUp', -1, wgt);
 		}

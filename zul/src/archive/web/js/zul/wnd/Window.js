@@ -121,6 +121,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			zIndex: this._zIndex,
 			stackup: zk.ie6Only});
 
+		this._prevmodal = zk.currentModal;
+		zk.currentModal = this;
 		this._prevfocus = zk.currentFocus; //store
 		this.focus();
 

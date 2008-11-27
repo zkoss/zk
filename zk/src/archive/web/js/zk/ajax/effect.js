@@ -853,7 +853,7 @@ zEffect.FullMask = zk.$extends(zk.Object, {
 				mask.style.zIndex = opts.zIndex;
 		} else {
 			var maskId = opts.id || 'z_mask',
-				html = '<div id="' + maskId + '" class="z-modal-mask"';
+				html = '<div id="' + maskId + '" class="z-modal-mask"';//FF: don't add tabIndex
 			if (opts.zIndex != null)
 				html += ' style="z-index:' + opts.zIndex +'"';
 			html += '></div>'
@@ -867,6 +867,7 @@ zEffect.FullMask = zk.$extends(zk.Object, {
 			this.stackup = zDom.makeStackup(mask, mask.id + '$mkstk');
 
 		this._sync();
+
 		zEvt.listen(mask, "mousemove", zEvt.stop);
 		zEvt.listen(mask, "click", zEvt.stop);
 		this._onMove = this.proxy(this._sync)
@@ -877,8 +878,8 @@ zEffect.FullMask = zk.$extends(zk.Object, {
 		var mask = this.mask;
 		zEvt.unlisten(mask, "mousemove", zEvt.stop);
 		zEvt.unlisten(mask, "click", zEvt.stop);
-		zEvt.listen(window, "resize", this._onMove);
-		zEvt.listen(window, "scroll", this._onMove);
+		zEvt.unlisten(window, "resize", this._onMove);
+		zEvt.unlisten(window, "scroll", this._onMove);
 		zDom.remove(mask);
 		zDom.remove(this.stackup);
 		this._onMove = this.mask = this.stackup = null;
