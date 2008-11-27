@@ -669,9 +669,11 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * @return whether the focus is gained to this widget.
 	 */
 	focus: function () {
-		if (this.node) {
-			if (zDom.focus(this.node))
+		if (this.node && this.isRealVisible() && this.canActivate(true)) {
+			if (zDom.focus(this.node)) {
+				this.setTopmost();
 				return true;
+			}
 			for (var w = this.firstChild; w; w = w.nextSibling)
 				if (w.focus())
 					return true;

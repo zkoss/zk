@@ -760,6 +760,14 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 		}
 	}
 
+	/** Makes this window as topmost.
+	 * It has no effect if this window is embedded.
+	 * @since 5.0.0
+	 */
+	public void setTopmost() {
+		smartUpdate("topmost", true);
+	}
+
 	// super
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {

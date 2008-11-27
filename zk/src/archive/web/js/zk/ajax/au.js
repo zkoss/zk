@@ -197,25 +197,26 @@ zAu = { //static methods
 
 			cmds.push(cmd = {cmd: zUtl.getElementValue(cmd)});
 			cmd.data = [];
-			for (var k = data ? data.length: 0; --k >= 0;) {
-				var d = zUtl.getElementValue(data[k]);
-				switch (d.charAt(0).toLowerCase()) {
-				case 'c': case 's': d = d.substring(1); break;
-				case 'n': d = null; break;
-				case '1': case '3': d = true; break;
-				case '0': case '2': d = false; break;
-				case 'i': case 'l': case 'b': case 'h':
-					d = parseInt(d.substring(1)); break;
-				case 'd': case 'f':
-					d = parseFloat(d.substring(1)); break;
-				case 't': d = new Date(parseInt(d.substring(1))); break;
-				}
-				cmd.data[k] = d;
-			}
+			for (var cd = cmd.data, k = data ? data.length: 0; --k >= 0;)
+				cd.unshift(zAu._decodeData(zUtl.getElementValue(data[k])));
 		}
 
 		zAu._cmdsQue.push(cmds);
 		return true;
+	},
+	_decodeData: function (d) {
+		switch (d.charAt(0).toLowerCase()) {
+		case 'c': case 's': d = d.substring(1); break;
+		case 'n': d = null; break;
+		case '1': case '3': d = true; break;
+		case '0': case '2': d = false; break;
+		case 'i': case 'l': case 'b': case 'h':
+			d = parseInt(d.substring(1)); break;
+		case 'd': case 'f':
+			d = parseFloat(d.substring(1)); break;
+		case 't': d = new Date(parseInt(d.substring(1))); break;
+		}
+		return d;
 	},
 	/** Process the response response commands.
 	 */
@@ -235,9 +236,15 @@ zAu = { //static methods
 			}
 		}
 	},
-	/** Process a command.
-	 */
-	process: function (cmd, data) {
+	/** Process a command (encoded). */
+	process: function (cmd, varags) {
+		var data = [];
+		for (var j = arguments.length; --j > 0;)
+			data.unshift(zAu._decodeData(arguments[j]));
+		zAu._process(cmd, data);
+	},
+	/** Process a command (decoded). */
+	_process: function (cmd, data) {
 		//I. process commands that data[0] is not UUID
 		var fn = zAu.cmd0[cmd];
 		if (fn) {
@@ -618,7 +625,7 @@ zAu = { //static methods
 				processed = true;
 				var cmd = cmds.shift();
 				try {
-					zAu.process(cmd.cmd, cmd.data);
+					zAu._process(cmd.cmd, cmd.data);
 				} catch (e) {
 					zAu.showError("FAILED_TO_PROCESS", null, cmd.cmd, e);
 					throw e;
@@ -834,18 +841,8 @@ zAu.cmd1 = {
 		}
 		//TODO if (zAu.valid) zAu.valid.fixerrboxes();
 	},
-	focus: function (uuid, cmp) {
-		if (!zk.eval(cmp, "focus")) {
-			//Bug 1936366: endModal uses timer, so canActivate might be false
-			//when this method is called
-			setTimeout(function (){
-				if (!zAu.canActivate(cmp, true)) return;
-
-				zAu.autoZIndex(cmp); //some, say, window, not listen to onfocus
-				cmp = $real(cmp); //focus goes to inner tag
-				zk.asyncFocus(cmp.id, 35);
-				}, 30); //wnd.js uses 20
-		}
+	focus: function (uuid, wgt) {
+		wgt.focus();
 	},
 	closeErrbox: function (uuid, cmp) {
 		if (zAu.valid) {
