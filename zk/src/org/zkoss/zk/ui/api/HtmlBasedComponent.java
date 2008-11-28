@@ -66,6 +66,16 @@ public interface HtmlBasedComponent extends org.zkoss.zk.ui.Component {
 	 * Sets the Z index.
 	 */
 	public void setZIndex(int zIndex);
+	/** Returns the Z index.
+	 * It is the same as {@link #getZIndex}.
+	 * @since 3.5.2
+	 */
+	public int getZindex();
+	/** Sets the Z index.
+	 * It is the same as {@link #setZIndex}.
+	 * @since 3.5.2
+	 */
+	public void setZindex(int zIndex);
 
 	/**
 	 * Returns the height. If null, the best fit is used.
