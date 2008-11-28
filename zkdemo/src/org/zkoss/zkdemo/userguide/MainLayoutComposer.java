@@ -168,7 +168,11 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 		DemoItem di = (DemoItem) item.getValue();
 		_selected = (Div) main.getFellow(di.getCateId());
 		String deselect = _selected != null ? "onSelect($e('"+ _selected.getUuid() + "'));" : "";
-		Clients.evalJavaScript(deselect);
+		if (Executions.getCurrent().isBrowser("ie6-")) {
+			Clients.evalJavaScript(deselect + "fixImage4IE6();");
+		} else {
+			Clients.evalJavaScript(deselect);
+		}
 	}
 	public void onChanging$searchBox(InputEvent event) {
 		String key = event.getValue();
