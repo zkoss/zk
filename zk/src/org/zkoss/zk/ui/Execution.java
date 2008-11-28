@@ -782,8 +782,7 @@ public interface Execution  {
 	 * Allowed values include "robot", "ie", "ie6", "ie6-", "ie7", "ie8",
 	 * "ie7-", "gecko", "gecko2", "gecko3", "gecko2-",
 	 * "opara", "safari",
-	 * ("air", "iphone", "ipod" since 3.5.2),
-	 * "mil", "hil", "mil-".<br/>
+	 * "mil", "hil", "mil-". Otherwise, it matches whether the type exist or not.<br/>
 	 * Note: "ie6-" means Internet Explorer 6 only; not Internet Explorer 7
 	 * or other.
 	 * @since 3.5.1
@@ -816,18 +815,6 @@ public interface Execution  {
 	 * @since 3.5.1
 	 */
 	public boolean isOpera();
-	/** Returns whether the client is iPhone.
-	 * @since 3.5.2
-	 */
-	public boolean isIphone();
-	/** Returns whether the client is iPod.
-	 * @since 3.5.2
-	 */
-	public boolean isIpod();
-	/** Returns whether the client is AIR.
-	 * @since 3.5.2
-	 */
-	public boolean isAir();
 	/** Returns whether the client is a mobile device supporting MIL
 	 * (Mobile Interactive Language).
 	 * @since 2.4.1

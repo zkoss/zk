@@ -160,15 +160,6 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 	public boolean isSafari() {
 		return false;
 	}
-	public boolean isIphone() {
-		return false;
-	}
-	public boolean isIpod() {
-		return false;
-	}
-	public boolean isAir() {
-		return false;
-	}
 	public boolean isMilDevice() {
 		return false;
 	}
