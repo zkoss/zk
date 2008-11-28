@@ -38,6 +38,8 @@ ZK 3.5.2
   2173943: Enhance the generation of noscript (unavailable message)
   2188951: Provide layout(template)-injection page composition
   2086692: Data binder should have access to the composer
+  2314150: Execution.isBrowser(type) should be able to detect iphone..
+  2354640: lang-addon.xml supports library-property
 
 * Bugs
   2154845: tab switch in Java - setImage makes layout go crazy
@@ -68,7 +70,13 @@ ZK 3.5.2
   2313445: It looks like strange after invalidate verticle tabs.
   2217915: filedownload doesn't work when opera opera 9.5.x
   2337652: ID space cleanup problem if not attached to a page
+  2319972: Tree with checkmarks shows layout quirks
+  2349456: It's not possible to navigate a listbox with keyboard only
 
+* Upgrade Notes
+  + Revert the original mold of Paging as os mold.
+  + Revert the original mold of Button as os mold.
+	
 	--------
 ZK 3.5.1
 * Features

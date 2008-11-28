@@ -31,9 +31,9 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.ForwardEvent;
 import org.zkoss.zk.ui.event.InputEvent;
-import org.zkoss.zk.ui.event.OpenEvent;
 import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.util.ComposerExt;
 import org.zkoss.zk.ui.util.GenericForwardComposer;
 import org.zkoss.zkex.zul.Borderlayout;
@@ -114,6 +114,8 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 			Executions.getCurrent().sendRedirect(href);
 		} else {
 			itemList.setModel(getSelectedModel());
+			if (Executions.getCurrent().isBrowser("ie6-"))
+				Clients.evalJavaScript("fixImage4IE6();");
 		}
 	}
 
@@ -126,11 +128,21 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 
 	public void onMainCreate(Event event) {
 		final Execution exec = Executions.getCurrent();
-		String id = exec.getParameter("id");
+		final String id = exec.getParameter("id");
 		Listitem item = null;
 		if (id != null) {
 			try {
-				item = (Listitem) main.getFellow(id);
+				final LinkedList list = new LinkedList();
+				final DemoItem[] items = getItems();
+				for (int i = 0; i < items.length; i++) {
+					if (items[i].getId().equals(id))
+						list.add(items[i]);
+				}
+				if (!list.isEmpty()) {
+					itemList.setModel(new ListModelList(list));
+					itemList.renderAll();
+					item = (Listitem) main.getFellow(id);
+				}
 			} catch (ComponentNotFoundException ex) { // ignore
 			}
 		}
@@ -162,6 +174,14 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 			}
 			itemList.setModel(new ListModelList(item));
 		} else itemList.setModel(new ListModelList(items));
+		String deselect = _selected != null ? "onSelect($e('"+ _selected.getUuid() + "'), true);" : "";
+		if (Executions.getCurrent().isBrowser("ie6-")) {
+			itemList.renderAll();
+			Clients.evalJavaScript(deselect + "fixImage4IE6();");
+		} else {
+			Clients.evalJavaScript(deselect);
+		}
+		_selected = null;
 	}
 
 	private DemoItem[] getItems() {
@@ -188,11 +208,7 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 			Listcell lc = new Listcell();
 			item.setValue(di.getFile());
 			lc.setHeight("30px");
-			if (Executions.getCurrent().isBrowser("ie6-")) {
-				lc.setImage(di.getIconIE6());
-			} else {
-				lc.setImage(di.getIcon());
-			}
+			lc.setImage(di.getIcon());
 			item.setId(di.getId());
 			lc.setLabel(di.getLabel());
 			lc.setParent(item);

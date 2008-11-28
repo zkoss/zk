@@ -20,10 +20,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <window id="demo" apply="org.zkoss.zkdemo.userguide.DemoWindowComposer">
 	<html><![CDATA[
 		<h4>Fileupload</h4>
-		<p>Another frequently used modal window. It provides the facility for
-		 an end user to upload a file from its client computer to the server.</p>
-		<p>Try to press the "Upload" button and the fileupload modal window will
-		 open. Select an image file to upload and see what happened 
+		<p>Another frequently used modal window. It facilitates uploading files from client computer to the server.</p>
+		<p>Try to press the "Upload" button and the fileupload modal window will open. Select an image file to upload and see what happened 
 		 (The image will be shown on the demo window).</p>
 	]]></html>
 	<separator />

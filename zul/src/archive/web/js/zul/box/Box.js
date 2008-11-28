@@ -13,17 +13,17 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
 zul.box.Box = zk.$extends(zul.Widget, {
-	mold: 'vertical',
+	_mold: 'vertical',
 	_align: 'start',
 	_pack: 'start',
 
 	/** Returns if it is a vertical box. */
 	isVertical: function () {
-		return 'vertical' == this.mold;
+		return 'vertical' == this._mold;
 	},
 	/** Returns the orient. */
 	getOrient: function () {
-		return this.mold;
+		return this._mold;
 	},
 
 	/** Returns the align of this button.

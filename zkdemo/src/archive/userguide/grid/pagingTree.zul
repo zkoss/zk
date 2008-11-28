@@ -20,8 +20,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <window id="demo" apply="org.zkoss.zkdemo.userguide.DemoWindowComposer">
 	<html><![CDATA[
   		<h4>Paging with Tree</h4>
-		<p>It is better to display large number of data in multiple pages by specifying
-		the paging mold.</p>
+		<p>Alike Paging controls with Grid and Listbox, paging are supported by tree by setting mold="paging".<a href="javascript:;" onclick="if (!zk.isVisible($e('infos'))) {anima.slideDown($e('infos'));} else {anima.slideUp($e('infos'));}">More..</a></p>
+		<p style="display:none" id="infos">It is better to display a large number of data across multiple pages by specifying the paging mold. You can also specify the paging position to be either top, bottom, or both</p>
 	]]></html>
 	See the <toolbarbutton id="target" label="org.zkoss.zkdemo.test2.tree.BinaryTreeModel" popup="details"/>
 	and the <toolbarbutton id="target2" label="org.zkoss.zkdemo.userguide.BigList" popup="details2"/> implementation.
@@ -111,6 +111,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		<radio label="bottom" checked="true" />
 		<radio label="both" />
 	</radiogroup>
+	<separator/>
+	<button label="Change Paging Mold">
+		<attribute name="onClick">
+		tree.pagingChild.mold = "os".equals(tree.pagingChild.mold) ? "default" : "os";
+		</attribute>
+	</button>
 	<zscript>					
 	import org.zkoss.zkdemo.test2.tree.BinaryTreeModel;
 	

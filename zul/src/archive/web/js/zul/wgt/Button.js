@@ -15,8 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	_orient: "horizontal",
 	_dir: "normal",
-	/** Indicates it handles click by itself. */
-	click: true,
+	_tabindex: -1,
 
 	/** Returns the orient of this button.
 	 */
@@ -57,20 +56,20 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		if (this._disabled != disabled) {
 			this._disabled = disabled;
 			var n = this.node;
-			if (n) {
-				//TODO
-			}
+			if (n)
+				if (this._mold == 'os') this.node.disabled = true;
+				else this.updateDomContent_();
 		}
 	},
 
 	//super//
 	focus: function () {
-		return zDom.focus(this.ebtn);
+		return zDom.focus(this._mold == 'os' ? this.node: this.ebtn);
 	},
 
 	/** Updates the label and image. */
 	updateDomContent_: function () {
-		var n = zDom.$(this.uuid + '$box');
+		var n = this._mold == 'os' ? this.node: zDom.$(this.uuid + '$box');
 		if (n)
 			n.tBodies[0].rows[1].cells[1].innerHTML = this.domContent_();
 	},
@@ -84,39 +83,57 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		return this.getDir() == 'reverse' ?
 			label + space + img: img + space + label;
 	},
+	domAttrs_: function () {
+		var html = this.$supers('domAttrs_', arguments);
+		if (this._mold == 'os') {
+			if (this._disabled) html += ' disabled="disabled"';
+			if (this._tabindex >= 0) html += ' tabindex="' + this._tabindex +'"';
+		}
+		return html;
+	},
 
 	getZclass: function () {
 		var zcls = this._zclass;
-		return zcls != null ? zcls: "z-button";
+		return zcls != null ? zcls: this._mold == 'os' ? "z-button-os": "z-button";
 	},
 	bind_: function (desktop) {
 		this.$super('bind_', desktop);
 
-		if (this.isDisabled()) return;
+		var $Button = zul.wgt.Button, n;
+		if (this._mold == 'os') {
+			n = this.node;
+		} else {
+			if (this._disabled) return;
 
-		var $Button = zul.wgt.Button,
 			n = zDom.$(this.uuid + '$box');
-		this.ebox = n;
-		zDom.disableSelection(n);
-		zEvt.listen(n, "mousedown", $Button.ondown);
-		zEvt.listen(n, "mouseup", $Button.onup);
-		zEvt.listen(n, "mouseover", $Button.onover);
-		zEvt.listen(n, "mouseout", $Button.onout);
+			this.ebox = n;
+			zDom.disableSelection(n);
+			zEvt.listen(n, "mousedown", $Button.ondown);
+			zEvt.listen(n, "mouseup", $Button.onup);
+			zEvt.listen(n, "mouseover", $Button.onover);
+			zEvt.listen(n, "mouseout", $Button.onout);
 
-		this.ebtn = n = zDom.$(this.uuid + '$btn');
+			this.ebtn = n = zDom.$(this.uuid + '$btn');
+		}
+
 		zEvt.listen(n, "focus", $Button.onfocus);
 		zEvt.listen(n, "blur", $Button.onblur);
 	},
 	unbind_: function () {
-		var $Button = zul.wgt.Button,
+		var $Button = zul.wgt.Button, n;
+		if (this._mold == 'os') {
+			n = this.node;
+		} else {
 			n = this.ebox;
-		if (n) {
-			zEvt.unlisten(n, "mousedown", $Button.ondown);
-			zEvt.unlisten(n, "mouseup", $Button.onup);
-			zEvt.unlisten(n, "mouseover", $Button.onover);
-			zEvt.unlisten(n, "mouseout", $Button.onout);
+			if (n) {
+				zEvt.unlisten(n, "mousedown", $Button.ondown);
+				zEvt.unlisten(n, "mouseup", $Button.onup);
+				zEvt.unlisten(n, "mouseover", $Button.onover);
+				zEvt.unlisten(n, "mouseout", $Button.onout);
+			}
+			n = this.ebtn;
 		}
-		n = this.ebtn;
+
 		if (n) {
 			zEvt.unlisten(n, "focus", $Button.onfocus);
 			zEvt.unlisten(n, "blur", $Button.onblur);
@@ -137,12 +154,14 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	},
 	onfocus: function (evt) {
 		var wgt = zk.Widget.$(evt);
-		if (wgt && wgt.domFocus()) //FF2 will cause a focus error when resize browser.
+		if (wgt && wgt.domFocus() //FF2 will cause a focus error when resize browser.
+		&& wgt._mold != 'os')
 			zDom.addClass(wgt.ebox, wgt.getZclass() + "-focus");
 	},
 	onblur: function (evt) {
 		var wgt = zk.Widget.$(evt);
-		zDom.rmClass(wgt.ebox, wgt.getZclass() + "-focus");
+		if (wgt._mold != 'os')
+			zDom.rmClass(wgt.ebox, wgt.getZclass() + "-focus");
 		wgt.domBlur();
 	},
 	ondown: function (evt) {

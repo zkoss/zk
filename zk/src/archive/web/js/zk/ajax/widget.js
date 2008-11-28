@@ -38,15 +38,15 @@ zk.Widget = zk.$extends(zk.Object, {
 	$init: function (uuid, mold) {
 		this._lsns = {}; //listeners Map(evtnm,listener)
 		this.uuid = uuid ? uuid: zk.Widget.nextUuid();
-		this.mold = mold ? mold: "default";
+		this._mold = mold ? mold: "default";
 	},
 
 	getMold: function () {
-		return this.mold;
+		return this._mold;
 	},
 	setMold: function (mold) {
-		if (mold != this.mold) {
-			this.mold = mold;
+		if (mold != this._mold) {
+			this._mold = mold;
 			var n = this.node;
 			if (n) this.rerender();
 		}
@@ -332,14 +332,15 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (n) n.style.height = height ? height: '';
 	},
 	/** Returns the zIndex of this widget. */
-	getZIndex: function () {
+	getZIndex: _zkf = function () {
 		return this._zIndex;
 	},
+	getZindex: _zkf,
 	/** Sets the zIndex of this widget.
 	 * <p>Unlike {@link #setLeft} and others, it fires onZIndex event
 	 * if fromServer is false.
 	 */
-	setZIndex: function (zIndex, fromServer) {
+	setZIndex: _zkf = function (zIndex, fromServer) {
 		if (this._zIndex != zIndex) {
 			this._zIndex = zIndex;
 			var n = this.node;
@@ -350,6 +351,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			}
 		}
 	},
+	setZindex: _zkf,
 	/** Returns the left of this widget. */
 	getLeft: function () {
 		return this._left;
@@ -402,7 +404,7 @@ zk.Widget = zk.$extends(zk.Object, {
 
 	/** Generates the HTML content. */
 	redraw: function (skipper) {
-		var s = this.$class.molds[this.mold].call(this, skipper);
+		var s = this.$class.molds[this._mold].call(this, skipper);
 		return this.prolog ? this.prolog + s: s;
 	},
 

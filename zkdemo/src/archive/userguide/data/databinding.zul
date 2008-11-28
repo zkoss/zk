@@ -20,13 +20,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<html><![CDATA[
 		<h4>Annotate Data Binding</h4>
 		<p>This example demostrates how to bind data beans to ZK components via annotation.</p>
-		<p>In this example, we have a Person bean with firstName and lastName fields and
-		associated setters and getters methods.
-	]]>
-	</html>
-	<hbox>
-		Take a look of the source code of <toolbarbutton id="target" label="Person.java" popup="details"/>and see how easy it can be.
-	</hbox>
+	]]></html>
+	<hbox>The Person bean declared with firstName and lastName fields and associated setters and getters methods. This is the source code of <toolbarbutton id="target" label="Person.java" popup="details"/>. </hbox>
 	<separator />
 	<popup id="details" fulfill="target.onClick" width="450px">
 	<div style="border:1px solid #538BA2; background: #FFF; ">

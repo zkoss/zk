@@ -1029,6 +1029,15 @@ public class Components {
 			public boolean isOpera() {
 				return exec().isOpera();
 			}
+			public boolean isIphone() {
+				return exec().isIphone();
+			}
+			public boolean isIpod() {
+				return exec().isIpod();
+			}
+			public boolean isAir() {
+				return exec().isAir();
+			}
 
 			public boolean isForwarded() {
 				return exec().isForwarded();

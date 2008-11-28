@@ -21,8 +21,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<html><![CDATA[
 		<h4>Messagebox</h4>
 		<p>Messagebox is used to show messages to 
-		the end user or users waiting for responses.</p>
-		<p>Click on each button to see modal messagebox in different configuration.</p>
+		the end user or users awaiting responses.</p>
+		<p>Click on each buttons below to see modal messagebox with different configuration.</p>
 	]]></html>
 	<separator/>
 	<tabbox width="100%" tabscroll="false">

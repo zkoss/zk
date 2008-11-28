@@ -22,7 +22,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
      	<h4>Live data</h4>
    		<p>Tree supports "load on demend" feature via a TreeModel interface. 
    		This feature will not load data into the tree until it is necessary</p>
-   		<p>Try to open the tree node and see how the value is dynamically loaded into.</p>
+   		<p>Try to expand the tree node and observe the values loaded dynamically.</p>
 	]]></html>
 	See the <toolbarbutton id="target" label="org.zkoss.zkdemo.test2.tree.BinaryTreeModel" popup="details"/>
 	and the <toolbarbutton id="target2" label="org.zkoss.zkdemo.userguide.BigList" popup="details2"/> implementation.
