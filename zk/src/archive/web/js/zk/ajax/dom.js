@@ -865,11 +865,9 @@ zDom = { //static methods
 	makeVParent: function (el) {
 		if (el.z_vp) return; //called twice
 
-		var sib = el.nextSibling, p = el.parentNode, id = el.id;
-		if (!id) throw "id required";
-
-		var agtx = p.z_vpagtx = document.createElement("SPAN");
-		agtx.id = id + "$agtx";
+		var sib = el.nextSibling,
+			p = el.parentNode,
+			agtx = el.z_vpagtx = document.createElement("SPAN");
 		agtx.style.display = "none";
 		if (sib) p.insertBefore(agtx, sib);
 		else p.appendChild(agtx);
