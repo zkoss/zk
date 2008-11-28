@@ -114,7 +114,7 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 		}
 		String href = getCategory(_selected.getId()).getHref();
 		if (href != null) {
-			Executions.getCurrent().sendRedirect(href);
+			Executions.getCurrent().sendRedirect(href, "zkdemo");
 		} else {
 			itemList.setModel(getSelectedModel());
 			if (Executions.getCurrent().isBrowser("ie6-"))
