@@ -106,9 +106,12 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 
 	public void onCategorySelect(ForwardEvent event) {
 		Div div = (Div) event.getOrigin().getTarget();
-		if (_selected != div)
+		Listitem item = null;
+		if (_selected != div) {
 			_selected = div;
-		
+		} else {
+			item = itemList.getSelectedItem();
+		}
 		String href = getCategory(_selected.getId()).getHref();
 		if (href != null) {
 			Executions.getCurrent().sendRedirect(href);
@@ -116,13 +119,18 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 			itemList.setModel(getSelectedModel());
 			if (Executions.getCurrent().isBrowser("ie6-"))
 				Clients.evalJavaScript("fixImage4IE6();");
+			if (item != null) {
+				itemList.renderAll();
+				((Listitem)itemList.getFellow(item.getId())).setSelected(true);
+			}
 		}
 	}
 
 	public void onSelect$itemList(SelectEvent event) {
 		Listitem item = itemList.getSelectedItem();
 		if (item != null) {
-			xcontents.setSrc((String) item.getValue());
+			setSelectedCategory(item);
+			xcontents.setSrc(((DemoItem) item.getValue()).getFile());
 		}
 	}
 
@@ -142,6 +150,7 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 					itemList.setModel(new ListModelList(list));
 					itemList.renderAll();
 					item = (Listitem) main.getFellow(id);
+					setSelectedCategory(item);
 				}
 			} catch (ComponentNotFoundException ex) { // ignore
 			}
@@ -149,18 +158,18 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 
 		if (item == null) {
 			item = (Listitem) main.getFellow("f1");
-			if (_selected == null) {
-				_selected = (Div) header.getFirstChild();
-				String scls = _selected.getSclass();
-				if (scls == null) scls = "";
-				_selected.setSclass(scls + " demo-seld");
-			}
+			setSelectedCategory(item);
 		}		
-		xcontents.setSrc((String) item.getValue());
+		xcontents.setSrc(((DemoItem) item.getValue()).getFile());
 
 		itemList.selectItem(item);
 	}
-
+	private void setSelectedCategory(Listitem item) {
+		DemoItem di = (DemoItem) item.getValue();
+		_selected = (Div) main.getFellow(di.getCateId());
+		String deselect = _selected != null ? "onSelect($e('"+ _selected.getUuid() + "'));" : "";
+		Clients.evalJavaScript(deselect);
+	}
 	public void onChanging$searchBox(InputEvent event) {
 		String key = event.getValue();
 		LinkedList item = new LinkedList();
@@ -206,7 +215,7 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 		public void render(Listitem item, Object data) {
 			DemoItem di = (DemoItem) data;
 			Listcell lc = new Listcell();
-			item.setValue(di.getFile());
+			item.setValue(di);
 			lc.setHeight("30px");
 			lc.setImage(di.getIcon());
 			item.setId(di.getId());

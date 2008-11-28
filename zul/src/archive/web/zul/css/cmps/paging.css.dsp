@@ -150,7 +150,7 @@
 	background: white; padding: 5px; zoom:1;
 }
 .z-paging-os .z-paging-os-cnt {
-	padding: 2px 5px;
+	padding: 2px 3px;
 	background-color:#C7E5F1;
 	background-image:url(${c:encodeURL('~./zul/img/grid/s_hd.gif')});
 	background-repeat:repeat-x;
