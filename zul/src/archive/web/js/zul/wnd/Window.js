@@ -31,44 +31,29 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		return this._mode;
 	},
 	setMode: function (mode) {
-		this._setMode(mode);
+		if (this._mode != mode) {
+			this._mode = mode;
+			if (this.node)
+				this._updateDomOuter();
+		}
 	},
 	doOverlapped: function () {
-		this._setMode('overlapped');
+		this.setMode('overlapped');
 	},
 	doPopup: function () {
-		this._setMode('popup');
+		this.setMode('popup');
 	},
 	doHilighted: function () {
-		this._setMode('hilighted');
+		this.setMode('hilighted');
 	},
 	doModal: function () {
-		this._setMode('modal');
+		this.setMode('modal');
 	},
 	doEmbedded: function () {
-		this._setMode('embedded');
+		this.setMode('embedded');
 	},
-	_setMode: function (mode, binding) {
-		if (!binding) {
-			var oldm = this._mode;
-			if (oldm == mode) return;
-			this._mode = mode;
-			if (!this.node) return;
-		}
 
-		switch (mode) {
-		case 'overlapped':
-		case 'popup':
-			this._doOverlapped(binding);
-			break;
-		case 'modal':
-		case 'hilighted':
-			this._doModal(binding);
-		}
-	},
-	_doOverlapped: function (binding) {
-		if (!binding) this._updateDomOuter(); //unbind_ and bind_
-
+	_doOverlapped: function () {
 		var pos = this.getPosition(),
 			n = this.node;
 		if (!pos && !n.style.top && !n.style.left) {		
@@ -89,9 +74,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 
 		this._makeFloat();
 	},
-	_doModal: function (binding) {
-		if (!binding) this._updateDomOuter(); //unbind_ and bind_
-
+	_doModal: function () {
 		var pos = this.getPosition(),
 			n = this.node;
 		if (pos == "parent") this._posByParent();
@@ -109,22 +92,27 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		}
 
 		//Note: modal must be visible
-		n.style.visibility = 'visible';
+		var realVisible = this.isRealVisible();
+		if (realVisible) n.style.visibility = 'visible';
 
-		this.setTopmost();
+		if (realVisible) this.setTopmost();
 		this._syncShadow();
+		this._syncMask();
 
 		this._mask = new zEffect.FullMask({
 			id: this.uuid + "$mask",
-			anchor: this._shadow.getBottomElement() || n,
+			anchor: this._shadow.getBottomElement(),
 				//bug 1510218: we have to make it as a sibling
 			zIndex: this._zIndex,
-			stackup: zk.ie6Only});
+			stackup: zk.ie6Only,
+			visible: realVisible});
 
-		this._prevmodal = zk.currentModal;
-		zk.currentModal = this;
-		this._prevfocus = zk.currentFocus; //store
-		this.focus();
+		if (realVisible) {
+			this._prevmodal = zk.currentModal;
+			zk.currentModal = this;
+			this._prevfocus = zk.currentFocus; //store
+			this.focus();
+		}
 
 		this._makeFloat();
 	},
@@ -149,13 +137,16 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			this._shadow.sync();
 		}
 	},
+	_syncMask: function () {
+		if (this._mask) this._mask.sync(this._shadow.getBottomElement());
+	},
 	_hideShadow: function () {
 		var shadow = this._shadow;
 		if (shadow) shadow.hide();
 	},
 	_makeFloat: function () {
 		var handle = this.ecap;
-		if (handle) {
+		if (handle && !this._drag) {
 			handle.style.cursor = "move";
 			var $Window = zul.wnd.Window;
 			this._drag = new zk.Draggable(this, null, {
@@ -373,10 +364,12 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	setDomVisible_: function () {
 		this.$supers('setDomVisible_', arguments);
 		this._syncShadow();
+		this._syncMask();
 	},
 	setZIndex: function () {
 		this.$supers('setZIndex', arguments);
 		this._syncShadow();
+		this._syncMask();
 	},
 	focus: function () {
 		if (this.node) {
@@ -445,18 +438,32 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			}
 		}
 
-		if (this._mode != 'embedded') {
+		var mode = this._mode;
+		if (mode != 'embedded') {
 			zWatch.watch('onFloatUp', this);
 			this.setFloating_(true);
-			this._setMode(this._mode, true);
+
+			if (mode == 'modal' || mode == 'hilighted') this._doModal();
+			else this._doOverlapped();
 		}
 	},
 	unbind_: function () {
+		this.node.style.visibility = 'hidden'; //avoid unpleasant effect
+
 		//we don't check this._mode here since it might be already changed
 		if (this._shadow) {
 			this._shadow.destroy();
 			this._shadow = null;
 		}
+		if (this._drag) {
+			this._drag.destroy();
+			this._drag = null;
+		}
+		if (this._mask) {
+			this._mask.destroy();
+			this._mask = null;
+		}
+
 		zDom.undoVParent(this.node);
 		zWatch.unwatch('onFloatUp', this);
 		this.setFloating_(false);

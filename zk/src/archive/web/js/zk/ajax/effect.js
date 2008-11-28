@@ -754,8 +754,8 @@ zEffect.Shadow = zk.$extends(zk.Object, {
 	/** Hides the shadow, no matter the element is visible or not.
 	 */
 	hide: function(){
-		this.shadow.style.display = "none";
-		if (this.stackup) this.stackup.style.display = "none";
+		this.shadow.style.display = 'none';
+		if (this.stackup) this.stackup.style.display = 'none';
 	},
 	/**
 	 * Synchronizes the state of the element with the shadow,
@@ -839,6 +839,7 @@ zEffect.FullMask = zk.$extends(zk.Object, {
 	 * <li>anchor: whether to insert the mask before</li>
 	 * <li>id: the mask ID. Default: z_mask</li>
 	 * <li>zIndex: z-index to assign. Default: defined in z-modal-mask</li>
+	 * <li>visible: whether it is visible.</li>
 	 * </ul>
 	 */
 	$init: function (opts) {
@@ -847,15 +848,19 @@ zEffect.FullMask = zk.$extends(zk.Object, {
 		if (this.mask) {
 			if (opts.anchor)
 				opts.anchor.parentNode.insertBefore(mask, opts.anchor);
-			if (opts.id)
-				mask.id = opts.id;
-			if (opts.zIndex != null)
-				mask.style.zIndex = opts.zIndex;
+			if (opts.id) mask.id = opts.id;
+			if (opts.zIndex != null) mask.style.zIndex = opts.zIndex;
+			if (opts.visible == false) mask.style.display = 'none';
 		} else {
 			var maskId = opts.id || 'z_mask',
 				html = '<div id="' + maskId + '" class="z-modal-mask"';//FF: don't add tabIndex
-			if (opts.zIndex != null)
-				html += ' style="z-index:' + opts.zIndex +'"';
+			if (opts.zIndex != null || opts.visible == false) {
+				html += ' style="';
+				if (opts.zIndex != null) html += 'z-index:' + opts.zIndex;
+				if (opts.visible == false) html += ';display:none';
+				html +='"';
+			}
+
 			html += '></div>'
 			if (opts.anchor)
 				opts.anchor.insertAdjacentHTML('beforeBegin', html);
@@ -866,26 +871,55 @@ zEffect.FullMask = zk.$extends(zk.Object, {
 		if (opts.stackup)
 			this.stackup = zDom.makeStackup(mask, mask.id + '$mkstk');
 
-		this._sync();
+		this._syncPos();
 
 		zEvt.listen(mask, "mousemove", zEvt.stop);
 		zEvt.listen(mask, "click", zEvt.stop);
-		this._onMove = this.proxy(this._sync)
-		zEvt.listen(window, "resize", this._onMove);
-		zEvt.listen(window, "scroll", this._onMove);
+		this._onPos = this.proxy(this._syncPos)
+		zEvt.listen(window, "resize", this._onPos);
+		zEvt.listen(window, "scroll", this._onPos);
 	},
 	destroy: function () {
 		var mask = this.mask;
 		zEvt.unlisten(mask, "mousemove", zEvt.stop);
 		zEvt.unlisten(mask, "click", zEvt.stop);
-		zEvt.unlisten(window, "resize", this._onMove);
-		zEvt.unlisten(window, "scroll", this._onMove);
+		zEvt.unlisten(window, "resize", this._onPos);
+		zEvt.unlisten(window, "scroll", this._onPos);
 		zDom.remove(mask);
 		zDom.remove(this.stackup);
-		this._onMove = this.mask = this.stackup = null;
+		this._onPos = this.mask = this.stackup = null;
+	},
+	/** Hides the mask. */
+	hide: function () {
+		this.mask.style.display = 'none';
+		if (this.stackup) this.stackup.style.display = 'none';
+	},
+	/** Synchronize with the specified element with the same visibility
+	 * and z-index. */
+	sync: function (el) {
+		if (!zDom.isVisible(el, true)) {
+			this.hide();
+			return;
+		}
+
+		if (this.mask.nextSibling != el) {
+			var p = el.parentNode;
+			p.insertBefore(this.mask, el);
+			if (this.stackup)
+				p.insertBefore(this.stackup, this.mask);
+		}
+
+		var st = this.mask.style;
+		st.display = '';
+		st.zIndex = el.style.zIndex;
+		if (this.stackup) {
+			st = this.stackup.style;
+			st.display = '';
+			st.zIndex = el.style.zIndex;
+		}
 	},
 	/** Position a mask to cover the whole browser window. */
-	_sync: function () {
+	_syncPos: function () {
 		var n = this.mask;
 		var ofs = zDom.toStyleOffset(n, zDom.innerX(), zDom.innerY()),
 			st = n.style;

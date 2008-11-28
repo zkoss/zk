@@ -25,6 +25,7 @@ import org.zkoss.util.logging.Log;
 import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Executions;
@@ -531,7 +532,14 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 	public void doModal()
 	throws InterruptedException, SuspendNotAllowedException {
 		Desktop desktop = getDesktop();
-		if (desktop == null) desktop = Executions.getCurrent().getDesktop();
+		if (desktop == null) {
+			handleFailedModal(_mode, isVisible());
+			throw new SuspendNotAllowedException("Not attached, "+this);
+		}
+		if (!Components.isRealVisible(getParent())) {
+			handleFailedModal(_mode, isVisible());
+			throw new SuspendNotAllowedException("Parent not visible, "+this);
+		}
 		if (!desktop.getWebApp().getConfiguration().isEventThreadEnabled()) {
 			handleFailedModal(_mode, isVisible());
 			throw new SuspendNotAllowedException("Event processing thread is disabled");
@@ -602,9 +610,11 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 	/* Set non-modal mode. */
 	private void setNonModalMode(int mode) {
 		if (_mode != mode) {
-			if (_mode == MODAL) leaveModal();
-			_mode = mode;
-			smartUpdate("mode", modeToString(_mode));
+			if (_mode == MODAL) leaveModal(mode);
+			else {
+				_mode = mode;
+				smartUpdate("mode", modeToString(_mode));
+			}
 		}
 		setVisible(true);
 	}
@@ -618,8 +628,8 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 		Executions.wait(_mutex);
 	}
 	/** Resumes the suspendded thread and set mode to OVERLAPPED. */
-	private void leaveModal() {
-		_mode = OVERLAPPED;
+	private void leaveModal(int mode) {
+		_mode = mode;
 		smartUpdate("mode", modeToString(_mode));
 
 		Executions.notifyAll(_mutex);
@@ -817,13 +827,13 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 		super.setPage(page);
 
 		if (page == null && _mode == MODAL)
-			leaveModal();
+			leaveModal(OVERLAPPED);
 	}
 	public void setParent(Component parent) {
 		super.setParent(parent);
 
 		if (_mode == MODAL && getPage() == null)
-			leaveModal();
+			leaveModal(OVERLAPPED);
 	}
 
 	/** Changes the visibility of the window.
@@ -840,12 +850,14 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 	}
 	private boolean setVisible0(boolean visible) {
 		if (!visible && (_mode == MODAL || _mode == HIGHLIGHTED)) {
-			if (_mode == MODAL)
-				leaveModal();
-			else {
-				_mode = OVERLAPPED;
-				smartUpdate("mode", modeToString(_mode));
+			if (_mode == MODAL) {
+				//Hide first to avoid unpleasant effect
+				super.setVisible(false);
+				leaveModal(OVERLAPPED);
+				return true;
 			}
+			_mode = OVERLAPPED;
+			smartUpdate("mode", modeToString(_mode));
 		}
 		return super.setVisible(visible);
 	}
@@ -906,7 +918,7 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 			if (_minimized) {
 				_visible = false;
 				if (_mode == MODAL) {
-					leaveModal();
+					leaveModal(OVERLAPPED);
 				} else if (_mode == HIGHLIGHTED) {
 					_mode = OVERLAPPED; // according to leaveModal()
 					smartUpdate("mode", modeToString(_mode));

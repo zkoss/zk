@@ -872,6 +872,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (modal && !wgt) {
 			var cf = zk.currentFocus;
 			//Note: browser might change focus later, so delay a bit
+			//(it doesn't work if we stop event instead of delay - IE)
 			setTimeout(function () {
 				if (cf && zUtl.isAncestor(modal, cf)) cf.focus();
 				else modal.focus();

@@ -162,6 +162,10 @@ public class Components {
 
 	/** Returns whether this component is real visible (all its parents
 	 * are visible).
+	 * <p>Note: true is returned if comp is null.
+	 * In other words, it can be used to examine parent's real visibity
+	 * even if it is a root component,
+	 * such as <code>Components.isRealVisible(getParent())</code>.
 	 * @see Component#isVisible
 	 */
 	public static boolean isRealVisible(Component comp) {
