@@ -372,6 +372,21 @@ public class DefinitionLoaders {
 		parseMacroTemplate(langdef, root);
 		parseNativeTemplate(langdef, root);
 
+		for (Iterator it = root.getElements("library-property").iterator();
+		it.hasNext();) {
+			final Element el = (Element)it.next();
+			final String nm = IDOMs.getRequiredElementValue(el, "name");
+			final String val = IDOMs.getRequiredElementValue(el, "value");
+			Library.setProperty(nm, val);
+		}
+		for (Iterator it = root.getElements("system-property").iterator();
+		it.hasNext();) {
+			final Element el = (Element)it.next();
+			final String nm = IDOMs.getRequiredElementValue(el, "name");
+			final String val = IDOMs.getRequiredElementValue(el, "value");
+			System.setProperty(nm, val);
+		}
+
 		for (Iterator it = root.getElements("javascript").iterator();
 		it.hasNext();) {
 			final Element el = (Element)it.next();
