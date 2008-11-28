@@ -121,7 +121,6 @@ if (zk.ie) {
 }
 zkButtonOS = {
 	init: function (cmp) {
-		if (getZKAttr(cmp, "disd")) cmp.disabled = true;
 		zk.listen(cmp, "click", zkau.onclick);
 		zk.listen(cmp, "dblclick", zkau.ondblclick);
 			//we have to handle here since _onDocDClick won't receive it
