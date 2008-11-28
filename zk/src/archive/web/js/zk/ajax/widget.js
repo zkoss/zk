@@ -32,6 +32,9 @@ zk.Widget = zk.$extends(zk.Object, {
 	/** Whether this widget has a copy at the server (readonly). */
 	//inServer: false,
 
+	/** whether to remove and add from DOM tree when moving a widget. */
+	//domDependent_: false,
+
 	visible: true,
 
 	/** Constructor. */
@@ -86,8 +89,10 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (child == this.lastChild)
 			return false;
 
-		if (child.parent)
+		if (child.parent) {
+			if (this._moveChild(child)) return true; //done
 			child.parent.removeChild(child);
+		}
 
 		child.parent = this;
 		var p = this.lastChild;
@@ -117,8 +122,10 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (child == sibling || child.nextSibling == sibling)
 			return false;
 
-		if (child.parent)
+		if (child.parent) {
+			if (this._moveChild(child, sibling)) return true;
 			child.parent.removeChild(child);
+		}
 
 		child.parent = this;
 		var p = sibling.previousSibling;
@@ -155,6 +162,26 @@ zk.Widget = zk.$extends(zk.Object, {
 
 		if (child.desktop)
 			this.removeChildHTML_(child, p);
+		return true;
+	},
+	_moveChild: function (child, moveBefore) {
+		var node, kidnode; 
+		if (child._floating || child.domDependent_ || this.domDependent_
+		|| !(node = this.node) || !(kidnode = child.node))
+			return false;
+
+		var dt = this.desktop, kiddt = child.desktop;
+		child.node = this.node = child.desktop = this.desktop = null; //to avoid bind_ and unbind_
+		try {
+			child.parent.removeChild(child);
+			this.insertBefore(child, moveBefore);
+
+			zDom.remove(kidnode);
+			node.parentNode.insertBefore(kidnode, moveBefore ? moveBefore.node: null);
+		} finally {
+			this.desktop = dt; child.desktop = kiddt;
+			this.node = node; child.node = kidnode;
+		}
 		return true;
 	},
 

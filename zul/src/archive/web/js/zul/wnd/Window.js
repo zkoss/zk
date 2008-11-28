@@ -109,9 +109,9 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 
 		if (realVisible) {
 			this._prevmodal = zk.currentModal;
-			zk.currentModal = this;
+			var modal = zk.currentModal = this;
 			this._prevfocus = zk.currentFocus; //store
-			this.focus();
+			setTimeout(function(){modal.focus();}, 0);
 		}
 
 		this._makeFloat();
@@ -467,6 +467,14 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		zDom.undoVParent(this.node);
 		zWatch.unwatch('onFloatUp', this);
 		this.setFloating_(false);
+
+		if (zk.currentModal == this) {
+			zk.currentModal = this._prevmodal;
+			var prevfocus = this._prevfocus;
+			if (prevfocus) //restore
+				setTimeout(function () {prevfocus.focus();}, 0);
+			this._prevfocus = this._prevmodal = null;
+		}
 
 		var $Window = this.$class;
 		for (var nms = ['close', 'max', 'min'], j = 3; --j >=0;) {

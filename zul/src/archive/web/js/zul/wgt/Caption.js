@@ -14,6 +14,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 	//super//
+	domDependent_: true, //DOM content depends on parent
+
 	getZclass: function () {
 		var zcls = this._zclass;
 		return zcls != null ? zcls: "z-caption";
