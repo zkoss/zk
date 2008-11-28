@@ -312,7 +312,7 @@ zk.Shadow.prototype = {
 		s.top = (t + d.t) + "px";
 		if(s.width != widths || s.height != heights) {
 			s.width = widths;
-			s.height = heights;
+			s.height = zk.ie ? Math.abs(h + d.h) + "px" : heights; // Bug 2355376 (IE only)
 			if(!zk.ie) {
 				var c = r.childNodes;
 				// the 12 number means the both height the top side shadow and the bottom side shadow.

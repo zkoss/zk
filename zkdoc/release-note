@@ -41,6 +41,7 @@ ZK 3.5.2
   2337652: ID space cleanup problem if not attached to a page
   2319972: Tree with checkmarks shows layout quirks
   2349456: It's not possible to navigate a listbox with keyboard only
+  2355376: IE fail in some special case
 	
 	--------
 ZK 3.5.1
