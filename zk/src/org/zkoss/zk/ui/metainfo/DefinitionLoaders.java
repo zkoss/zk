@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.Enumeration;
 import java.net.URL;
 
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Locator;
@@ -261,6 +262,21 @@ public class DefinitionLoaders {
 		parseDynamicTag(langdef, root);
 		parseMacroTemplate(langdef, root);
 		parseNativeTemplate(langdef, root);
+
+		for (Iterator it = root.getElements("library-property").iterator();
+		it.hasNext();) {
+			final Element el = (Element)it.next();
+			final String nm = IDOMs.getRequiredElementValue(el, "name");
+			final String val = IDOMs.getRequiredElementValue(el, "value");
+			Library.setProperty(nm, val);
+		}
+		for (Iterator it = root.getElements("system-property").iterator();
+		it.hasNext();) {
+			final Element el = (Element)it.next();
+			final String nm = IDOMs.getRequiredElementValue(el, "name");
+			final String val = IDOMs.getRequiredElementValue(el, "value");
+			System.setProperty(nm, val);
+		}
 
 		for (Iterator it = root.getElements("javascript").iterator();
 		it.hasNext();) {
