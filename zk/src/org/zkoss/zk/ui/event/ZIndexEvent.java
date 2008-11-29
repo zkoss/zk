@@ -30,10 +30,6 @@ import org.zkoss.zk.au.AuRequests;
  * Represents an event caused by a component whose z-index is modified
  * by the client.
  *
- * <p>Component Implementation Note:<br/>
- * A z-indexed component must implement {@link org.zkoss.zk.ui.ext.client.ZIndexed}
- * for the returned object of {@link org.zkoss.zk.ui.sys.ComponentCtrl#getExtraCtrl}.
- * 
  * @author tomyeh
  */
 public class ZIndexEvent  extends Event {

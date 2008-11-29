@@ -1357,7 +1357,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/** Returns a collection of event names that the client might send to
 	 * this component.
 	 * <p>Default: return the collection of events
-	 * added by {@link #getClientEvent}.
+	 * added by {@link #getClientEvents}.
 	 *
 	 * <p>Instead of overriding this method, it is suggested
 	 * to invoke {@link #addClientEvent} in the <code>static</code> statement.
@@ -1822,7 +1822,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/** Processes an AU request.
 	 *
 	 * <p>Default: it convests the request to an event (by
-	 * {@link Event#newInstance}) and then posts the event
+	 * {@link Event#getEvent}) and then posts the event
 	 * (by {@link Events#postEvent}).
 	 * @since 5.0.0
 	 */

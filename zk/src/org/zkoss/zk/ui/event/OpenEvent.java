@@ -18,7 +18,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
+import org.zkoss.lang.Objects;
+
+import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.AuRequests;
 
 /**
  * Represents an event cause by user's openning or closing
@@ -36,12 +42,31 @@ import org.zkoss.zk.ui.Component;
  * And, the server can not prevent the client from opening or closing.
  * 
  * @author tomyeh
- * @see org.zkoss.zk.ui.ext.client.Openable
  */
 public class OpenEvent extends Event {
 	private final boolean _open;
 	private final Component _ref;
 	private final Object _val;
+
+	/** Converts an AU request to an open event.
+	 * @since 5.0.0
+	 */
+	public static final OpenEvent getOpenEvent(AuRequest request) {
+		final Component comp = request.getComponent();
+		if (comp == null)
+			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, request);
+		final String[] data = request.getData();
+		if (data == null || data.length < 1 || data.length > 3)
+			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
+				new Object[] {Objects.toString(data), request});
+
+		final boolean open = "true".equals(data[0]);
+		final Component ref = data.length >= 2 && data[1] != null ?
+			request.getDesktop().getComponentByUuidIfAny(data[1]): null;
+		return new OpenEvent(request.getName(), comp, open, ref,
+			data.length == 3 ? data[2]: null);
+			//FUTURE: support non-String value (by coerce to comp.value.class)
+	}
 
 	/** Constructs an onOpen event.
 	 * @param open whether the new status is open

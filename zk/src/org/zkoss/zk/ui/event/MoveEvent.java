@@ -29,10 +29,6 @@ import org.zkoss.zk.au.AuRequests;
 /**
  * Represents an event caused by a component being moved.
  *
- * <p>Component Implementation Note:<br/>
- * A movable component must implement {@link org.zkoss.zk.ui.ext.client.Movable}
- * for the returned object of {@link org.zkoss.zk.ui.sys.ComponentCtrl#getExtraCtrl}.
- * 
  * @author tomyeh
  */
 public class MoveEvent extends Event {

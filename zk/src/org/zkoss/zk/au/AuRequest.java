@@ -39,8 +39,8 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  * A request sent from the client to the server.
  *
  * <p>Notice that {@link #activate} must be called in the activated execution.
- * Before calling this method, {@link #getPage}, {@link #getComponent}
- * and {@link #getCommand()} cannot be called.
+ * Before calling this method, {@link #getPage} and {@link #getComponent}
+ * cannot be called.
  *
  * @author tomyeh
  */
