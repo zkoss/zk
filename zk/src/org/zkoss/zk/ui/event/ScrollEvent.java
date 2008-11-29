@@ -18,17 +18,38 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
+import org.zkoss.lang.Objects;
+
+import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.AuRequests;
 
 /**
  * Represents an event caused by that user is scrolling or
  * has scrolled at the client.
  * 
  * @author tomyeh
- * @see org.zkoss.zk.ui.ext.client.Scrollable
  */
 public class ScrollEvent extends Event {
 	private final int _pos;
+
+	/** Converts an AU request to a scroll event.
+	 * @since 5.0.0
+	 */
+	public static final ScrollEvent getScrollEvent(AuRequest request) {
+		final Component comp = request.getComponent();
+		if (comp == null)
+			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, request);
+		final String[] data = request.getData();
+		if (data == null || data.length != 1)
+			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
+				new Object[] {Objects.toString(data), request});
+
+		final int newpos = Integer.parseInt(data[0]);
+		return new ScrollEvent(request.getName(), comp, newpos);
+	}
 
 	/** Constructs an scroll-relevant event.
 	 * @param pos the new position
