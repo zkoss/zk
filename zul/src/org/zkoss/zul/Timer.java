@@ -22,6 +22,7 @@ import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.HtmlBasedComponent;
+import org.zkoss.zk.ui.event.Events;
 
 /**
  * Fires one or more {@link org.zkoss.zk.ui.event.Event} after
@@ -126,17 +127,17 @@ public class Timer extends HtmlBasedComponent implements org.zkoss.zul.api.Timer
 	}
 
 	//-- ComponentCtrl --//
-	protected Object newExtraCtrl() {
-		return new ExtraCtrl();
-	}
-	/** A utility class to implement {@link #getExtraCtrl}.
-	 * It is used only by component developers.
+	/** Processes an AU request.
+	 *
+	 * <p>Default: in addition to what are handled by {@link HtmlBasedComponent#process},
+	 * it also handles onOpen.
+	 * @since 5.0.0
 	 */
-	protected class ExtraCtrl extends HtmlBasedComponent.ExtraCtrl
-	implements org.zkoss.zk.ui.ext.client.Timer {
-		//Timer//
-		public void onTimer() {
+	public void process(org.zkoss.zk.au.AuRequest request, boolean everError) {
+		final String name = request.getName();
+		if (name.equals(Events.ON_TIMER)) {
 			if (!_repeats) stop(); //Bug 1829397
 		}
+		super.process(request, everError);
 	}
 }

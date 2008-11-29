@@ -18,20 +18,41 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
+import org.zkoss.lang.Objects;
+
+import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.AuRequests;
 
 /**
  * Represents an event caused by a component being maximized.
  *
- * <p>Component Implementation Note:<br/>
- * A maximizable component must implement {@link org.zkoss.zk.ui.ext.client.Maximizable}
- * for the returned object of {@link org.zkoss.zk.ui.sys.ComponentCtrl#getExtraCtrl}.
  * @author jumperchen
  * @since 3.5.0
  */
 public class MaximizeEvent extends Event {
 	private final String _width, _height, _left, _top;
 	private final boolean _maximized;
+
+	/** Converts an AU request to a maximize event.
+	 * @since 5.0.0
+	 */
+	public static final MaximizeEvent getMaximizeEvent(AuRequest request) {
+		final Component comp = request.getComponent();
+		if (comp == null)
+			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, request);
+		final String[] data = request.getData();
+		if (data == null || data.length != 5)
+			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
+				new Object[] {Objects.toString(data), request});
+
+		final boolean maximized = "true".equals(data[4]);
+		return new MaximizeEvent(request.getName(), comp,
+			data[0], data[1], data[2], data[3], maximized);
+	}
+
 	public MaximizeEvent(String name, Component target, String left, String top,
 			String width, String height, boolean maximized) {
 		super(name, target);

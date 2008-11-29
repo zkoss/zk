@@ -53,16 +53,16 @@ import org.zkoss.zk.fn.ZkFns;
 abstract public class HtmlBasedComponent extends AbstractComponent implements org.zkoss.zk.ui.api.HtmlBasedComponent{
 	private String _tooltiptext;
 	/** The width. */
-	private String _width;
+	protected String _width;
 	/** The height. */
-	private String _height;
+	protected String _height;
 	/** The CSS class. */
 	private String _sclass;
 	/** The ZK CSS class. */
 	protected String _zclass;
 	/** The CSS style. */
 	private String _style;
-	private String _left, _top;
+	protected String _left, _top;
 	/** The draggable. */
 	private String _draggable;
 	/** The droppable. */

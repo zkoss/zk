@@ -33,8 +33,6 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.SuspendNotAllowedException;
 import org.zkoss.zk.ui.IdSpace;
-import org.zkoss.zk.ui.ext.client.Maximizable;
-import org.zkoss.zk.ui.ext.client.Minimizable;
 import org.zkoss.zk.ui.event.*;
 
 import org.zkoss.zul.impl.XulElement;
@@ -908,23 +906,22 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 			OpenEvent evt = OpenEvent.getOpenEvent(request);
 			setVisible(evt.isOpen());
 			Events.postEvent(evt);
-		} else
-			super.process(request, everError);
-	}
-	protected Object newExtraCtrl() {
-		return new ExtraCtrl();
-	}
-	/** A utility class to implement {@link #getExtraCtrl}.
-	 * It is used only by component developers.
-	 */
-	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements Maximizable, Minimizable {
-		public void setMaximizedByClient(boolean maximized) {
-			_maximized = maximized;
+		} else if (name.equals(Events.ON_MAXIMIZE)) {
+			MaximizeEvent evt = MaximizeEvent.getMaximizeEvent(request);
+			_left = evt.getLeft();
+			_top = evt.getTop();
+			_width = evt.getWidth();
+			_height = evt.getHeight();
+			_maximized = evt.isMaximized();
 			if (_maximized) _visible = true;
-		}
-		public void setMinimizedByClient(boolean minimized) {
-			_minimized = minimized;
+			Events.postEvent(evt);
+		} else if (name.equals(Events.ON_MINIMIZE)) {
+			MinimizeEvent evt = MinimizeEvent.getMinimizeEvent(request);
+			_left = evt.getLeft();
+			_top = evt.getTop();
+			_width = evt.getWidth();
+			_height = evt.getHeight();
+			_minimized = evt.isMinimized();
 			if (_minimized) {
 				_visible = false;
 				if (_mode == MODAL) {
@@ -934,7 +931,8 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 					smartUpdate("mode", modeToString(_mode));
 				}
 			}
-		}
+			Events.postEvent(evt);
+		} else
+			super.process(request, everError);
 	}
-
 }

@@ -25,8 +25,6 @@ import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.*;
-import org.zkoss.zk.ui.ext.client.Maximizable;
-import org.zkoss.zk.ui.ext.client.Minimizable;
 import org.zkoss.zk.ui.ext.client.Updatable;
 import org.zkoss.zul.impl.XulElement;
 
@@ -557,6 +555,24 @@ public class Panel extends XulElement implements org.zkoss.zul.api.Panel {
 			OpenEvent evt = OpenEvent.getOpenEvent(request);
 			_open = evt.isOpen();
 			Events.postEvent(evt);
+		} else if (name.equals(Events.ON_MAXIMIZE)) {
+			MaximizeEvent evt = MaximizeEvent.getMaximizeEvent(request);
+			_left = evt.getLeft();
+			_top = evt.getTop();
+			_width = evt.getWidth();
+			_height = evt.getHeight();
+			_maximized = evt.isMaximized();
+			if (_maximized) _visible = true;
+			Events.postEvent(evt);
+		} else if (name.equals(Events.ON_MINIMIZE)) {
+			MinimizeEvent evt = MinimizeEvent.getMinimizeEvent(request);
+			_left = evt.getLeft();
+			_top = evt.getTop();
+			_width = evt.getWidth();
+			_height = evt.getHeight();
+			_minimized = evt.isMinimized();
+			if (_minimized) _visible = false;
+			Events.postEvent(evt);
 		} else
 			super.process(request, everError);
 	}
@@ -568,15 +584,7 @@ public class Panel extends XulElement implements org.zkoss.zul.api.Panel {
 	 * It is used only by component developers.
 	 */
 	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements Maximizable, Minimizable, Updatable {
-		public void setMaximizedByClient(boolean maximized) {
-			_maximized = maximized;
-			if (_maximized) _visible = true;
-		}
-		public void setMinimizedByClient(boolean minimized) {
-			_minimized = minimized;
-			if (_minimized) _visible = false;
-		}
+	implements Updatable {
 		public void setResult(Object result) {
 			Object[] r = ((Object[]) result);
 			_noSmartUpdate = ((Boolean) r[0]).booleanValue();
