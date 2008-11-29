@@ -946,22 +946,22 @@ zDom = { //static methods
 	},
 
 	//focus/select//
-	/** Focus the element without looking down, and do it timeout later. */
-	asyncFocus: function (id, timeout) {
-		if (id.id) id = id.id;
-		setTimeout("zDom.focus('"+id+"')", timeout > 0? timeout: 0);
-			//Workaround for an IE bug: we have to set focus twice since
-			//the first one might fail (even we prolong the timeout to 1 sec)
-	},
 	/** Focus to the specified component w/o throwing exception.
-	 * @return whether n.focus() exists
+	 * @return whether focus is allowed. Currently, it accepts only
+	 * BUTTON, INPUT, SELECT and IFRAME.
 	 */
-	focus: function (n) {
+	focus: function (n, timeout) {
 		n = zDom.$(n);
-		if (!n || !n.focus) return false;
+		if (!n || typeof n.focus != 'function') return false;
 		var tag = zDom.tag(n);
-		if (tag != 'BUTTON' && tag != 'INPUT' && tag != 'SELECT') return false;
+		if (tag != 'BUTTON' && tag != 'INPUT' && tag != 'SELECT'
+		&& tag != 'IFRAME') return false;
 
+		if (timeout >= 0) setTimeout(function() {zDom._focus(n);}, timeout);
+		else zDom._focus(n);
+		return true;
+	},
+	_focus: function (n) {
 		try {
 			n.focus();
 		} catch (e) {
@@ -973,26 +973,25 @@ zDom = { //static methods
 				}
 			}, 0);
 		} //IE throws exception if failed to focus in some cases
-		return true;
 	},
 
-	/** Select the text of the element after the specified timeout.
-	 */
-	asyncSelect: function (id, timeout) {
-		if (id.id) id = id.id;
-		setTimeout("zDom.select('"+id+"')", timeout > 0? timeout: 0);
-	},
 	/** Select to the specified component w/o throwing exception. */
-	select: function (n) {
+	select: function (n, timeout) {
 		n = zDom.$(n);
-		if (n && n.select)
-			try {
-				n.select();
-			} catch (e) {
-				setTimeout(function() {
-					try {n.select();} catch (e) {}
-				}, 0);
-			} //IE throws exception when select() in some cases
+		if (!n || typeof n.select != 'function') return false;
+
+		if (timeout >= 0) setTimeout(function() {zDom._select(n);}, timeout);
+		else zDom._select(n);
+		return true;
+	},
+	_select: function (n) {
+		try {
+			n.select();
+		} catch (e) {
+			setTimeout(function() {
+				try {n.select();} catch (e) {}
+			}, 0);
+		} //IE throws exception when select() in some cases
 	},
 	/** Returns the selection range of the specified input control.
 	 * Note: if the function occurs some error, it always return [0, 0];

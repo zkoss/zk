@@ -111,7 +111,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			this._prevmodal = zk.currentModal;
 			var modal = zk.currentModal = this;
 			this._prevfocus = zk.currentFocus; //store
-			setTimeout(function(){modal.focus();}, 0);
+			this.focus(0);
 		}
 
 		this._makeFloat();
@@ -371,13 +371,13 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this._syncShadow();
 		this._syncMask();
 	},
-	focus: function () {
+	focus: function (timeout) {
 		if (this.node) {
 			var cap = this.caption;
 			for (var w = this.firstChild; w; w = w.nextSibling)
-				if (w != cap && w.focus())
+				if (w != cap && w.focus(timeout))
 					return true;
-			return cap && cap.focus();
+			return cap && cap.focus(timeout);
 		}
 		return false;
 	},
@@ -471,8 +471,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		if (zk.currentModal == this) {
 			zk.currentModal = this._prevmodal;
 			var prevfocus = this._prevfocus;
-			if (prevfocus) //restore
-				setTimeout(function () {prevfocus.focus();}, 0);
+			if (prevfocus) prevfocus.focus(0);
 			this._prevfocus = this._prevmodal = null;
 		}
 

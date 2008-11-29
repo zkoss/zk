@@ -109,13 +109,13 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	},
 
 	//super//
-	focus: function () {
+	focus: function (timeout) {
 		if (this.node) {
 			var cap = this.caption;
 			for (var w = this.firstChild; w; w = w.nextSibling)
-				if (w != cap && w.focus())
+				if (w != cap && w.focus(timeout))
 					return true;
-			return cap && cap.focus();
+			return cap && cap.focus(timeout);
 		}
 		return false;
 	},

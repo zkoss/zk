@@ -63,15 +63,15 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	},
 
 	//super//
-	focus: function () {
-		return zDom.focus(this._mold == 'os' ? this.node: this.ebtn);
+	focus: function (timeout) {
+		return zDom.focus(this.ebtn ? this.ebtn: this.node, timeout);
 	},
 
 	/** Updates the label and image. */
 	updateDomContent_: function () {
-		var n = this._mold == 'os' ? this.node: zDom.$(this.uuid + '$box');
-		if (n)
-			n.tBodies[0].rows[1].cells[1].innerHTML = this.domContent_();
+		var n = this.ebox;
+		if (n) n.tBodies[0].rows[1].cells[1].innerHTML = this.domContent_();
+		else this.node.innertHTML = this.domContent_();
 	},
 	domContent_: function () {
 		var label = zUtl.encodeXML(this.getLabel()),
@@ -170,7 +170,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			zcls = wgt.getZclass();
 		zDom.addClass(box, zcls + "-clk");
 		zDom.addClass(box, zcls + "-over");
-		zDom.asyncFocus(wgt.ebtn, 30);
+		zDom.focus(wgt.ebtn, 30);
 
 		var $Button = zul.wgt.Button;
 		$Button._curdn = wgt;

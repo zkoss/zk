@@ -697,15 +697,15 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * or no child at all.
 	 * @return whether the focus is gained to this widget.
 	 */
-	focus: function () {
+	focus: function (timeout) {
 		if (this.node && this.isVisible() && this.canActivate({checkOnly:true})) {
-			if (zDom.focus(this.node)) {
+			if (zDom.focus(this.node, timeout)) {
 				zk.currentFocus = this;
 				this.setTopmost();
 				return true;
 			}
 			for (var w = this.firstChild; w; w = w.nextSibling)
-				if (w.isVisible() && w.focus())
+				if (w.isVisible() && w.focus(timeout))
 					return true;
 		}
 		return false;
@@ -724,10 +724,8 @@ zk.Widget = zk.$extends(zk.Object, {
 			if (!opts || !opts.checkOnly) {
 				var cf = zk.currentFocus;
 				//Note: browser might change focus later, so delay a bit
-				setTimeout(function () {
-					if (cf && zUtl.isAncestor(modal, cf)) cf.focus();
-					else modal.focus();
-				}, 0);
+				if (cf && zUtl.isAncestor(modal, cf)) cf.focus(0);
+				else modal.focus(0);
 			}
 			return false;
 		}
@@ -902,10 +900,8 @@ zk.Widget = zk.$extends(zk.Object, {
 			var cf = zk.currentFocus;
 			//Note: browser might change focus later, so delay a bit
 			//(it doesn't work if we stop event instead of delay - IE)
-			setTimeout(function () {
-				if (cf && zUtl.isAncestor(modal, cf)) cf.focus();
-				else modal.focus();
-			}, 0);
+			if (cf && zUtl.isAncestor(modal, cf)) cf.focus(0);
+			else modal.focus(0);
 		} else if (!wgt || wgt.canActivate()) {
 			zk.currentFocus = wgt;
 			if (wgt) zWatch.fire('onFloatUp', -1, wgt);
