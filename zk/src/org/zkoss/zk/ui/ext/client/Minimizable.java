@@ -24,7 +24,7 @@ package org.zkoss.zk.ui.ext.client;
  * @author jumperchen
  * @since 3.5.0
  */
-public interface Minimizable extends Sizable, Movable {
+public interface Minimizable {
 
 	/** Sets the minimized of the component, caused by user's activity at
 	 * the client.

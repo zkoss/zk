@@ -34,10 +34,9 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
-import org.zkoss.zk.au.in.*;
 
 /**
- * A request sent from the client to {@link org.zkoss.zk.ui.sys.UiEngine}.
+ * A request sent from the client to the server.
  *
  * <p>Notice that {@link #activate} must be called in the activated execution.
  * Before calling this method, {@link #getPage}, {@link #getComponent}
@@ -46,98 +45,73 @@ import org.zkoss.zk.au.in.*;
  * @author tomyeh
  */
 public class AuRequest {
+	/** Indicates whether it can be ignored by the server when the server
+	 * receives the same requests consecutively.</dd>
+	 */
+	public static final int BUSY_IGNORE = 0x0001;
+	/**
+	 * Indicates Whether it can be ignored by the server when the server
+	 * receives the same requests that was not processed yet.</dd>
+	 */
+	public static final int REPEAT_IGNORE = 0x0002;
+	/** Indicates whether it can be ignored by the server when the server
+	 * receives the same requests consecutively.</dd>
+	 */
+	public static final int DUPLICATE_IGNORE = 0x0004;
+
+	private final String _name;
 	private final Desktop _desktop;
+	private final int _opts;
 	private Page _page;
 	private Component _comp;
-	private Command _cmd;
 	private final String[] _data;
 	/** Component's UUID. Used only if _comp is not specified directly. */
 	private String _uuid;
-	/** Command's ID. Used only if _cmd is not specified directly. */
-	private String _cmdId;
-
-	//-- static --//
-	private static final Map _cmds = new HashMap();
-
-	/** Returns whether the specified request name is valid.
-	 * A request is a  event that are sent from the browser.
-	 *
-	 * <p>An request name is the ID of a command
-	 * ({@link Command#getId}) which starts with "on".
-	 */
-	public static final boolean hasRequest(String cmdnm) {
-		return _cmds.containsKey(cmdnm);
-	}
-	/** Returns the command of the specified name.
-	 * It looks for the global commands only.
-	 * For component-specific commands, use {@link ComponentCtrl#getCommand}.
-	 * @exception CommandNotFoundException if the command is not found
-	 */
-	public static final Command getCommand(String name) {
-		final Command cmd = (Command)_cmds.get(name);
-		if (cmd == null)
-			throw new CommandNotFoundException("Unknown command: "+name);
-		return cmd;
-	}
-	/** Adds a new command. Called only by Command's contructor. */
-	/*package*/ static final void addCommand(Command cmd) {
-		if (_cmds.put(cmd.getId(), cmd) != null)
-			throw new InternalError("Replicated command: "+cmd);
-	}
 
 	/** Constructor for a request sent from a component.
 	 *
 	 * @param desktop the desktop containing the component; never null.
 	 * @param uuid the component ID (never null)
-	 * @param cmdId the command ID; never null.
+	 * @param name the name of the request (aka., command ID); never null.
 	 * @param data the data; might be null.
-	 * @since 3.0.5
+	 * @param opts a combination of {@link #BUSY_IGNORE},
+	 * {@link #DUPLICATE_IGNORE} and {@link #REPEAT_IGNORE}.
+	 * @since 5.0.0
 	 */
-	public AuRequest(Desktop desktop, String uuid, String cmdId, String[] data) {
-		if (desktop == null || uuid == null || cmdId == null)
+	public AuRequest(Desktop desktop, String uuid,
+	String name, String[] data, int opts) {
+		if (desktop == null || uuid == null || name == null)
 			throw new IllegalArgumentException();
 		_desktop = desktop;
 		_uuid = uuid;
-		_cmdId = cmdId;
+		_name = name;
 		_data = data;
-	}
-	/** Constructor for a request sent from a component.
-	 *
-	 * @param desktop the desktop containing the component; never null.
-	 * @param uuid the component ID (never null)
-	 * @param cmd the command; never null.
-	 * @param data the data; might be null.
-	 */
-	public AuRequest(Desktop desktop, String uuid, Command cmd, String[] data) {
-		if (desktop == null || uuid == null || cmd == null)
-			throw new IllegalArgumentException();
-		_desktop = desktop;
-		_uuid = uuid;
-		_cmd = cmd;
-		_data = data;
+		_opts = opts;
 	}
 	/** Constructor for a general request sent from client.
 	 * This is usully used to ask server to log or report status.
 	 *
-	 * @param cmd the command; never null.
+	 * @param name the name of the request (aka., command ID); never null.
 	 * @param data the data; might be null.
+	 * @since 5.0.0
 	 */
-	public AuRequest(Desktop desktop, Command cmd, String[] data) {
-		if (desktop == null || cmd == null)
+	public AuRequest(Desktop desktop, String name, String[] data, int opts) {
+		if (desktop == null || name == null)
 			throw new IllegalArgumentException();
 		_desktop = desktop;
-		_cmd = cmd;
+		_name = name;
 		_data = data;
+		_opts = opts;
 	}
 
 	/** Activates this request.
 	 * <p>It can be accessed only in the activated execution.
-	 * Before calling this method, {@link #getPage}, {@link #getComponent}
-	 * and {@link #getCommand} cannot be called.
+	 * Before calling this method, {@link #getPage} and {@link #getComponent}
+	 * cannot be called.
 	 * @since 3.0.5
 	 */
 	public void activate()
-	throws ComponentNotFoundException, CommandNotFoundException {
+	throws ComponentNotFoundException {
 		if (_uuid != null) {
 			_comp = _desktop.getComponentByUuidIfAny(_uuid);
 
@@ -150,16 +124,22 @@ public class AuRequest {
 			}
 			_uuid = null;
 		}
-
-		if (_cmdId != null) {
-			if (_comp != null)
-				_cmd = ((ComponentCtrl)_comp).getCommand(_cmdId);
-			if (_cmd == null)
-				_cmd = AuRequest.getCommand(_cmdId);
-			_cmdId = null;
-		}
 	}
 
+	/** Returns the name (aka., the command ID).
+	 * @since 5.0.0
+	 */
+	public String getName() {
+		return _name;
+	}
+	/** Returns the options,
+	 * a combination of {@link #BUSY_IGNORE},
+	 * {@link #DUPLICATE_IGNORE} and {@link #REPEAT_IGNORE}.
+	 * @since 5.0.0
+	 */
+	public int getOptions() {
+		return _opts;
+	}
 	/** Returns the desktop; never null.
 	 */
 	public Desktop getDesktop() {
@@ -185,11 +165,6 @@ public class AuRequest {
 	public String getComponentUuid() {
 		return _comp != null ? _comp.getUuid(): _uuid;
 	}
-	/** Returns the command; never null.
-	 */
-	public Command getCommand() {
-		return _cmd;
-	}
 	/** Returns the data of the command, might be null.
 	 */
 	public String[] getData() {
@@ -201,82 +176,11 @@ public class AuRequest {
 		return this == o;
 	}
 	public String toString() {
-		final String cmdId = _cmd!=null ? _cmd.getId(): _cmdId;
 		if (_comp != null)
-			return "[comp="+_comp+", cmd="+cmdId+']';
+			return "[comp="+_comp+", cmd="+_name+']';
 		else if (_page != null)
-			return "[page="+_page+", cmd="+cmdId+']';
+			return "[page="+_page+", cmd="+_name+']';
 		else
-			return "[uuid="+_uuid+", cmd="+cmdId+']';
-	}
-
-	//-- predefined commands --//
-	static {
-		new BookmarkChangedCommand(Events.ON_BOOKMARK_CHANGE,
-			Command.IGNORE_OLD_EQUIV);
-		new URIChangedCommand(Events.ON_URI_CHANGE,
-			Command.IGNORE_OLD_EQUIV);
-		new CheckCommand(Events.ON_CHECK, 0);
-		new ClientInfoCommand(Events.ON_CLIENT_INFO, Command.IGNORE_OLD_EQUIV);
-		new UpdateResultCommand("updateResult", 0);
-		new DropCommand(Events.ON_DROP, 0);
-
-		new DummyCommand("dummy",
-			Command.IGNORABLE|Command.IGNORE_OLD_EQUIV|Command.SKIP_IF_EVER_ERROR);
-		new EchoCommand("echo", Command.SKIP_IF_EVER_ERROR);
-
-		new ErrorCommand(Events.ON_ERROR, Command.IGNORE_OLD_EQUIV);
-
-		new GenericCommand(Events.ON_BLUR, Command.IGNORE_OLD_EQUIV);
-		new GenericCommand(Events.ON_CLOSE, 0);
-		new GenericCommand(Events.ON_FOCUS, Command.IGNORE_OLD_EQUIV);
-		new GenericCommand(Events.ON_NOTIFY, 0);
-		new GenericCommand(Events.ON_SORT,
-			Command.SKIP_IF_EVER_ERROR|Command.IGNORE_OLD_EQUIV);
-		new TimerCommand(Events.ON_TIMER, Command.IGNORE_OLD_EQUIV);
-		new GenericCommand(Events.ON_USER, 0);
-
-		new GetUploadInfoCommand("getUploadInfo", Command.IGNORABLE);
-
-		new InputCommand(Events.ON_CHANGE, Command.IGNORE_IMMEDIATE_OLD_EQUIV);
-		new InputCommand(Events.ON_CHANGING,
-			Command.SKIP_IF_EVER_ERROR|Command.IGNORABLE);
-
-		new KeyCommand(Events.ON_CANCEL,
-			Command.SKIP_IF_EVER_ERROR|Command.CTRL_GROUP);
-		new KeyCommand(Events.ON_CTRL_KEY,
-			Command.SKIP_IF_EVER_ERROR|Command.CTRL_GROUP);
-		new KeyCommand(Events.ON_OK,
-			Command.SKIP_IF_EVER_ERROR|Command.CTRL_GROUP);
-
-		new MoveCommand(Events.ON_MOVE, Command.IGNORE_OLD_EQUIV);
-		new SizeCommand(Events.ON_SIZE, Command.IGNORE_OLD_EQUIV);
-		new MinMaximizeCommand(Events.ON_MAXIMIZE, Command.IGNORE_OLD_EQUIV);
-		new MinMaximizeCommand(Events.ON_MINIMIZE, Command.IGNORE_OLD_EQUIV);
-		new InnerWidthCommand("onInnerWidth", Command.IGNORE_OLD_EQUIV);
-
-		new MouseCommand(Events.ON_CLICK,
-			Command.SKIP_IF_EVER_ERROR|Command.CTRL_GROUP);
-		new MouseCommand(Events.ON_DOUBLE_CLICK,
-			Command.SKIP_IF_EVER_ERROR|Command.CTRL_GROUP);
-		new MouseCommand(Events.ON_RIGHT_CLICK,
-			Command.SKIP_IF_EVER_ERROR|Command.CTRL_GROUP);
-
-		new OpenCommand(Events.ON_OPEN, 0);
-		new RemoveCommand("remove", 0);
-		new RedrawCommand("redraw", 0);
-		new RemoveDesktopCommand("rmDesktop", 0);
-		new RenderCommand(Events.ON_RENDER, Command.IGNORE_OLD_EQUIV);
-			//z.loaded is set only if replied from server, so it is OK
-			//to drop if any previous -- which means users are scrolling fast
-
-		new ScrollCommand(Events.ON_SCROLLING,
-			Command.SKIP_IF_EVER_ERROR|Command.IGNORABLE);
-		new ScrollCommand(Events.ON_SCROLL, Command.IGNORE_IMMEDIATE_OLD_EQUIV);
-
-		new SelectCommand(Events.ON_SELECT, 0);
-		new SelectionCommand(Events.ON_SELECTION, Command.IGNORE_OLD_EQUIV);
-
-		new ZIndexCommand(Events.ON_Z_INDEX, Command.IGNORE_OLD_EQUIV);
+			return "[uuid="+_uuid+", cmd="+_name+']';
 	}
 }

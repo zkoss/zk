@@ -72,6 +72,7 @@ import org.zkoss.zk.ui.sys.EventProcessingThread;
 import org.zkoss.zk.ui.sys.IdGenerator;
 import org.zkoss.zk.ui.sys.ServerPush;
 import org.zkoss.zk.ui.impl.EventInterceptors;
+import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.out.AuBookmark;
 import org.zkoss.zk.device.Device;
 import org.zkoss.zk.device.Devices;
@@ -440,6 +441,16 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 	public void setExecution(Execution exec) {
 		_exec = exec;
+	}
+	/** Processes an AU request.
+	 *
+	 * <p>Default: it convests the request to an event (by
+	 * {@link Event#getEvent}) and then posts the event
+	 * (by {@link Events#postEvent}).
+	 * @since 5.0.0
+	 */
+	public void process(AuRequest request, boolean everError) {
+		Events.postEvent(Event.getEvent(request));
 	}
 
 	public int getNextKey() {

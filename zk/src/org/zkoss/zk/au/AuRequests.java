@@ -1,22 +1,18 @@
-/* Commands.java
+/* AuRequests.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
-		Sun Oct  2 11:48:07     2005, Created by tomyeh
-}}IS_NOTE
+		Sat Nov 29 21:34:32     2008, Created by tomyeh
 
-Copyright (C) 2004 Potix Corporation. All Rights Reserved.
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
-{{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
-	it will be useful, but WITHOUT ANY WARRANTY.
-}}IS_RIGHT
+This program is distributed under GPL Version 2.0 in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
 */
-package org.zkoss.zk.au.in;
+package org.zkoss.zk.au;
 
 import java.util.Set;
 import java.util.LinkedHashSet;
@@ -25,15 +21,15 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.MouseEvent;
-import org.zkoss.zk.au.AuRequest;
 
 /**
- * Utilities to implement {@link org.zkoss.zk.au.Command}.
- *
+ * Utilities to convert {@link AuRequest} to {@link org.zkoss.zk.ui.event.Event}
+ * or its deriving classes.
+ * 
  * @author tomyeh
- * @since 3.0.0
+ * @since 5.0.0
  */
-public class Commands {
+public class AuRequests {
 	/** Converts the data of the specified request to a set of Component.
 	 * The data is assumed to contain a list of item ID in the
 	 * comman-separated format
@@ -68,15 +64,9 @@ public class Commands {
 	public static int parseKeys(String flags) {
 		int keys = 0;
 		if (flags != null) {
-			for (int j = flags.length(); --j >= 0;) {
-				switch (flags.charAt(j)) {
-				case 'a': keys |= MouseEvent.ALT_KEY; break;
-				case 'c': keys |= MouseEvent.CTRL_KEY; break;
-				case 's': keys |= MouseEvent.SHIFT_KEY; break;
-				case 'l': keys |= MouseEvent.LEFT_CLICK; break;
-				case 'r': keys |= MouseEvent.RIGHT_CLICK; break;
-				}
-			}
+			if (flags.indexOf("a") >= 0) keys |= MouseEvent.ALT_KEY;
+			if (flags.indexOf("c") >= 0) keys |= MouseEvent.CTRL_KEY;
+			if (flags.indexOf("s") >= 0) keys |= MouseEvent.SHIFT_KEY;
 		}
 		return keys;
 	}

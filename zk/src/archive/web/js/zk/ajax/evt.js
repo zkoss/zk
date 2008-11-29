@@ -232,7 +232,21 @@ zk.Event = zk.$extends(zk.Object, {
 	 * <dt>ctl</dt>
 	 * <dd>Whether it is a control, such as onClick, rather than
 	 * a notification for status change.</dd>
+	 * <dt>$busyIgnore</dt>
+	 * <dd>Whether it can be ignored by the server when the server
+	 * is busy.</dd>
+	 * <dt>$repeatIgnore</dt>
+	 * <dd>Whether it can be ignored by the server when the server
+	 * receives the same requests consecutively.</dd>
+	 * <dt>$duplicateIgnore</dt>
+	 * <dd>Whether it can be ignored by the server when the server
+	 * receives the same requests that was not processed yet.</dd>
 	 * </dl>
+	 * <p>Note: in addition, to specify$busyIgnore, $repeatIgnore
+	 * and $duplicateIgnore in opts, they are determinted by
+	 * {@link zk.Event#serverOptions}. You can add your own events to
+	 * {@link zk.Event#busyIngores}, {@link zk.Event#duplicateIgnores}
+	 * or {@link zk.Event#repleatIgnores}. Or, You might replace it with yours.
 	 */
 	/** Whether to stop the event propogation.
 	 * Note: it won't be sent to the server if stop is true.
@@ -245,6 +259,40 @@ zk.Event = zk.$extends(zk.Object, {
 		this.data = data == null ? null:
 			data.splice && data.$add ? data: [data]; //test if array
 		this.opts = opts;
+	}
+},{
+	duplicateIgnores: {
+		onBookmarkChange: true, onURIChange: true, onClientInfo: true,
+		onError: true, onBlur: true, onFocus: true, onSort: true,
+		onTimer: true, onMove: true, onSize: true, onZIndex: true,
+		onMaximize: true, onMinimize: true, onOpen: true,
+		onRender: true, onSelect: true
+	},
+	/** A map of event names that can be ignored by the server when
+	 *  the server is busy (i.e., $busyIgnore).
+	 */
+	busyIgnores: {
+		dummy: true, getUploadInfo: true, onChanging: true, onScrolling: true
+	},
+	repeatIgnores: {
+		onChange: true, onScroll: true, onCheck: true
+	},
+	/** Returns a string to represent the server options.
+	 * <ul>
+	 * <li>b: $busyIgnore</li>
+	 * <li>r: $repeatIgnore</li>
+	 * <li>d: $duplicateIgnore</li>
+	 * </ul>
+	 */
+	serverOptions: function (evtnm, opts) {
+		var $Event = zk.Event, so = '';
+		if ((opts && opts.$duplicateIgnore) || $Event.duplicateIgnores[evtnm])
+			so = 'd';
+		if ((opts && opts.$repeatIgnore) || $Event.repeatIgnores[evtnm])
+			so += 'r';
+		if ((opts && opts.$busyIgnore) || $Event.busyIgnores[evtnm])
+			so += 'b'
+		return so;
 	}
 });
 

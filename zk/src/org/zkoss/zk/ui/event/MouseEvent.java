@@ -18,7 +18,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
+import org.zkoss.lang.Objects;
+import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.AuRequests;
 
 /**
  * Represents an event cause by mouse activitly.
@@ -52,6 +57,29 @@ public class MouseEvent extends Event {
 	/** Indicatees whether the right button is clicked.
 	 */
 	public static final int RIGHT_CLICK = 0x200;
+
+	/** Converts an AU request to a mouse event.
+	 * @since 5.0.0
+	 */
+	public static MouseEvent getMouseEvent(AuRequest request) {
+		final Component comp = request.getComponent();
+		if (comp == null)
+			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, request);
+		final String[] data = request.getData();
+		if (data != null && data.length != 1 && data.length != 2 && data.length != 3)
+			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
+				new Object[] {Objects.toString(data), request});
+		final String name = request.getName();
+
+		return
+			data == null || data.length == 0 ?
+				new MouseEvent(name, comp):			//no area, no coord
+			data.length == 1 ?
+				new MouseEvent(name, comp, data[0]):	//by area
+				new MouseEvent(name, comp,			//by coord
+					Integer.parseInt(data[0]), Integer.parseInt(data[1]),
+					data.length == 2 ? 0: AuRequests.parseKeys(data[2]));
+	}
 
 	/** Construct a mouse relevant event with coordination or area.
 	 */

@@ -33,8 +33,6 @@ import org.zkoss.lang.Exceptions;
 import org.zkoss.util.logging.Log;
 import org.zkoss.xml.HTMLs;
 
-import org.zkoss.zk.au.Command;
-import org.zkoss.zk.au.in.GenericCommand;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;

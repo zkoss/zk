@@ -27,16 +27,12 @@ import java.io.IOException;
 import org.zkoss.lang.Objects;
 
 import org.zkoss.zk.ui.AbstractComponent;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.ext.client.Movable;
-import org.zkoss.zk.ui.ext.client.Sizable;
-import org.zkoss.zk.ui.ext.client.ZIndexed;
+import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.ui.ext.render.PrologAllowed;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ContentRenderer;
 import org.zkoss.zk.ui.sys.JsContentRenderer;
+import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.out.AuFocus;
 import org.zkoss.zk.fn.ZkFns;
 
@@ -439,6 +435,35 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	}
 
 	//--ComponentCtrl--//
+	/** Processes an AU request.
+	 *
+	 * <p>Default: it handles onClick, onDoubleClick, onRightClick
+	 * onMove, onSize, onZIndex.
+	 * @since 5.0.0
+	 */
+	public void process(AuRequest request, boolean everError) {
+		final String name = request.getName();
+		if (name.equals(Events.ON_CLICK)
+		|| name.equals(Events.ON_DOUBLE_CLICK)
+		|| name.equals(Events.ON_RIGHT_CLICK)) {
+			Events.postEvent(MouseEvent.getMouseEvent(request));
+		} else if (name.equals(Events.ON_MOVE)) {
+			MoveEvent evt = MoveEvent.getMoveEvent(request);
+			_left = evt.getLeft();
+			_top = evt.getTop();
+			Events.postEvent(evt);
+		} else if (name.equals(Events.ON_SIZE)) {
+			SizeEvent evt = SizeEvent.getSizeEvent(request);
+			_width = evt.getWidth();
+			_height = evt.getHeight();
+			Events.postEvent(evt);
+		} else if (name.equals(Events.ON_Z_INDEX)) {
+			ZIndexEvent evt = ZIndexEvent.getZIndexEvent(request);
+			_zIndex = evt.getZIndex();
+			Events.postEvent(evt);
+		} else
+			super.process(request, everError);
+	}
 	/** Used by {@link #getExtraCtrl} to create a client control.
 	 * It is used only by component developers.
 	 *
@@ -454,25 +479,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	 * override {@link #newExtraCtrl} to return an instance that extends from
 	 * this interface.
 	 */
-	protected class ExtraCtrl implements Movable, Sizable, ZIndexed, PrologAllowed {
-		//-- Movable --//
-		public void setLeftByClient(String left) {
-			_left =left;
-		}
-		public void setTopByClient(String top) {
-			_top = top;
-		}
-		//-- Sizable --//
-		public void setWidthByClient(String width) {
-			_width = width;
-		}
-		public void setHeightByClient(String height) {
-			_height = height;
-		}
-		//-- ZIndexed --//
-		public void setZIndexByClient(int zIndex) {
-			_zIndex = zIndex;
-		}
+	protected class ExtraCtrl implements PrologAllowed {
 		//-- PrologAware --//
 		public void setPrologContent(String prolog) {
 			_prolog = prolog;

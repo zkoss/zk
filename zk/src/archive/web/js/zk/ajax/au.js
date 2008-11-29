@@ -135,8 +135,10 @@ zAu = { //static methods
 			zAu._send(t.type == '#d' ? t: t.desktop, aureq, timeout);
 		} else {
 			var dts = zk.Desktop.all;
-			for (var dtid in dts)
-				zAu._send(dts[dtid], aureq, timeout);
+			for (var dtid in dts) {
+				var dt = aureq.target = dts[dtid];
+				zAu._send(dt, aureq, timeout);
+			}
 		}
 	},
 	/** Sends a request before any pending events.
@@ -154,7 +156,7 @@ zAu = { //static methods
 		} else {
 			var dts = zk.Desktop.all;
 			for (var dtid in dts) {
-				var dt = dts[dtid];
+				var dt = aureq.target = dts[dtid];
 				dt._aureqs.unshift(aureq);
 				zAu._send2(dt, timeout); //Spec: don't convert unefined to 0 for timeout
 			}
@@ -481,11 +483,15 @@ zAu = { //static methods
 		zAu._ignorable = ignorable;
 
 		//Consider XML (Pros: ?, Cons: larger packet)
-		var content = "";
+		var content = "", $Event = zk.Event;
 		for (var j = 0, el = es.length; el; ++j, --el) {
 			var aureq = es.shift(),
-				t = aureq.target;
-			content += "&cmd."+j+"="+aureq.name+"&uuid."+j+"="+(t.uuid?t.uuid:'');
+				evtnm = aureq.name,
+				so = $Event.serverOptions(evtnm, aureq.opts);
+			if (so) content += '&so.'+j+'='+so;
+			content += "&cmd."+j+"="+evtnm
+				+"&uuid."+j+"="+(aureq.target.uuid||'');
+
 			if (aureq.data)
 				for (var k = 0, dl = aureq.data.length; k < dl; ++k) {
 					var data = aureq.data[k];

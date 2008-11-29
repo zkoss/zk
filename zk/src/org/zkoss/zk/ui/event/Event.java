@@ -20,6 +20,7 @@ package org.zkoss.zk.ui.event;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.au.AuRequest;
 
 /**
  * An event sent to the event handler of a component.
@@ -32,6 +33,17 @@ public class Event {
 	private final Component _target;
 	private final Object _data;
 	private boolean _propagatable = true;
+
+	/** Creates an instance of {@link Event} based on the specified request.
+	 */
+	public static Event getEvent(AuRequest request) {
+		final String[] data = request.getData();
+		final String name = request.getName();
+		final Component comp = request.getComponent();
+		return data == null || data.length == 0 ? new Event(name, comp):
+			data.length == 1 ? new Event(name, comp, data[0]):
+				new Event(name, comp, data);
+	}
 
 	/** Constructs a simple event.
 	 * @param target the component to receive this event,

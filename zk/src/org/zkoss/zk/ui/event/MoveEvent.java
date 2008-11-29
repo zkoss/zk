@@ -18,7 +18,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
+import org.zkoss.lang.Objects;
+
+import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.AuRequests;
 
 /**
  * Represents an event caused by a component being moved.
@@ -45,6 +51,22 @@ public class MoveEvent extends Event {
 	 * It might be returned as part of {@link #getKeys}.
 	 */
 	public static final int SHIFT_KEY = MouseEvent.SHIFT_KEY;
+
+	/** Converts an AU request to a move event.
+	 * @since 5.0.0
+	 */
+	public static final MoveEvent getMoveEvent(AuRequest request) {
+		final Component comp = request.getComponent();
+		if (comp == null)
+			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, request);
+		final String[] data = request.getData();
+		if (data == null || data.length != 3)
+			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
+				new Object[] {Objects.toString(data), request});
+
+		return new MoveEvent(request.getName(), comp,
+			data[0], data[1], AuRequests.parseKeys(data[2]));
+	}
 
 	/** Constructs a mouse relevant event.
 	 */

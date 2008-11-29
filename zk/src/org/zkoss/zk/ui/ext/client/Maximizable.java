@@ -24,7 +24,7 @@ package org.zkoss.zk.ui.ext.client;
  * @author jumperchen
  * @since 3.5.0
  */
-public interface Maximizable extends Sizable, Movable {
+public interface Maximizable {
 
 	/** Sets the maximized of the component, caused by user's activity at
 	 * the client.

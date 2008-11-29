@@ -32,6 +32,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.util.EventInterceptor;
+import org.zkoss.zk.au.AuRequest;
 
 /**
  * An addition interface to {@link Desktop}
@@ -366,4 +367,19 @@ if (c.isEmpty()) {
 	 * @since 3.5.2
 	 */
 	public void deactivateServerPush();
+
+	/** Processes an AU request.
+	 *
+	 * <p>To send reponses to the client, use
+	 * {@link org.zkoss.zk.ui.AbstractComponent#smartUpdate},
+	 * {@link org.zkoss.zk.ui.AbstractComponent#response}
+	 * or {@link Component#invalidate()}.
+	 * To process the AU requests sent from the client, override this
+	 * method.
+	 *
+	 * @param everError whether any error ever occured before
+	 * processing this request.
+	 * @since 5.0.0
+	 */
+	public void process(AuRequest request, boolean everError);
 }

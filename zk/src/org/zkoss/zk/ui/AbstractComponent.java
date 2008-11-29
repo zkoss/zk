@@ -79,7 +79,7 @@ import org.zkoss.zk.ui.metainfo.EventHandler;
 import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zk.ui.impl.ListenerIterator;
 import org.zkoss.zk.fn.ZkFns;
-import org.zkoss.zk.au.Command;
+import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.out.AuClientInfo;
 import org.zkoss.zk.scripting.Namespace;
@@ -1819,17 +1819,15 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return ex;
 	}
 
-	/** Returns the command of the specified command ID, or null if not found.
-	 * It searches only the command specific to this component.
-	 * For global commands, use {@link org.zkoss.zk.au.AuRequest#getCommand}
-	 * instead.
-	 * <p>Default: does nothing but return null.
+	/** Processes an AU request.
 	 *
-	 * @since 3.0.5
-	 * @see org.zkoss.zk.au.ComponentCommand
+	 * <p>Default: it convests the request to an event (by
+	 * {@link Event#newInstance}) and then posts the event
+	 * (by {@link Events#postEvent}).
+	 * @since 5.0.0
 	 */
-	public Command getCommand(String cmdId) {
-		return null;
+	public void process(AuRequest request, boolean everError) {
+		Events.postEvent(Event.getEvent(request));
 	}
 
 	//-- Object --//

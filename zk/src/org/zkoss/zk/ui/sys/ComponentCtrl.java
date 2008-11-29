@@ -34,7 +34,7 @@ import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zk.ui.metainfo.EventHandler;
 import org.zkoss.zk.ui.metainfo.AnnotationMap;
 import org.zkoss.zk.ui.metainfo.EventHandlerMap;
-import org.zkoss.zk.au.Command;
+import org.zkoss.zk.au.AuRequest;
 
 /**
  * An addition interface to {@link Component}
@@ -252,17 +252,6 @@ public interface ComponentCtrl {
 	 */
 	public WrongValueException onWrongValue(WrongValueException ex);
 
-	/** Returns the component-specific command of the specified command ID,
-	 * or null if not found.
-	 * It searches only the command specific to this component.
-	 * For global commands, use {@link org.zkoss.zk.au.AuRequest#getCommand}
-	 * instead.
-	 *
-	 * @since 3.0.5
-	 * @see org.zkoss.zk.au.ComponentCommand
-	 */
-	public Command getCommand(String cmdId);
-
 	/** Render (aka., redraw) this component and all its descendants.
 	 *
 	 * <p>It is called in the redrawing phase by the kernel, so it is too late
@@ -272,4 +261,19 @@ public interface ComponentCtrl {
 	 * @since 5.0.0
 	 */
 	public void redraw(Writer out) throws IOException;
+
+	/** Processes an AU request.
+	 *
+	 * <p>To send reponses to the client, use
+	 * {@link org.zkoss.zk.ui.AbstractComponent#smartUpdate},
+	 * {@link org.zkoss.zk.ui.AbstractComponent#response}
+	 * or {@link Component#invalidate()}.
+	 * To process the AU requests sent from the client, override this
+	 * method.
+	 *
+	 * @param everError whether any error ever occured before
+	 * processing this request.
+	 * @since 5.0.0
+	 */
+	public void process(AuRequest request, boolean everError);
 }

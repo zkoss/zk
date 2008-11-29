@@ -65,8 +65,6 @@ import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuWriter;
 import org.zkoss.zk.au.AuWriters;
-import org.zkoss.zk.au.Command;
-import org.zkoss.zk.au.CommandNotFoundException;
 import org.zkoss.zk.au.out.AuObsolete;
 import org.zkoss.zk.au.out.AuAlert;
 import org.zkoss.zk.au.out.AuSendRedirect;
@@ -446,15 +444,24 @@ public class DHtmlUpdateServlet extends HttpServlet {
 						if ("_z~nil".equals(data[k]))
 							data[k] = null;
 				}
+				final String sso = request.getParameter("so."+j);
+				int so = 0;
+				if (sso != null) {
+					for (int k = sso.length(); --k >= 0;) {
+						final char cc = sso.charAt(k);
+						if (cc == 'd') so |= AuRequest.DUPLICATE_IGNORE;
+						else if (cc == 'r') so |= AuRequest.REPEAT_IGNORE;
+						else if (cc == 'b') so |= AuRequest.BUSY_IGNORE;
+						else throw new ServletException("Unknown server options: "+sso);
+					}
+				}
 				aureqs.add(uuid == null || uuid.length() == 0 ? 
-					new AuRequest(desktop, AuRequest.getCommand(cmdId), data):
-					new AuRequest(desktop, uuid, cmdId, data));
+					new AuRequest(desktop, cmdId, data, so):
+					new AuRequest(desktop, uuid, cmdId, data, so));
 			}
 		} catch (Throwable ex) {
-			final String errmsg = Exceptions.getMessage(ex);
-			if (ex instanceof CommandNotFoundException) log.debug(errmsg);
-			else log.warningBriefly(ex);
-			responseError(request, response, desktop, errmsg);
+			log.warningBriefly(ex);
+			responseError(request, response, desktop, Exceptions.getMessage(ex));
 			return;
 		}
 
