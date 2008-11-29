@@ -23,8 +23,7 @@ import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.ext.client.Checkable;
-import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.*;
 
 import org.zkoss.zul.impl.LabelImageElement;
 
@@ -43,7 +42,8 @@ public class Checkbox extends LabelImageElement implements org.zkoss.zul.api.Che
 	/** The name. */
 	private String _name;
 	private int _tabindex = -1;
-	private boolean _checked;
+	/** Whether it is checked. */
+	/*package*/ boolean _checked;
 	private boolean _disabled;
 
 	public Checkbox() {
@@ -142,18 +142,21 @@ public class Checkbox extends LabelImageElement implements org.zkoss.zul.api.Che
 	public String getZclass() {
 		return _zclass == null ? "z-checkbox" : super.getZclass();
 	}
+
 	//-- ComponentCtrl --//
-	protected Object newExtraCtrl() {
-		return new ExtraCtrl();
-	}
-	/** A utility class to implement {@link #getExtraCtrl}.
-	 * It is used only by component developers.
+	/** Processes an AU request.
+	 *
+	 * <p>Default: in addition to what are handled by {@link LabelImageElement#process},
+	 * it also handles onCheck.
+	 * @since 5.0.0
 	 */
-	protected class ExtraCtrl extends LabelImageElement.ExtraCtrl
-	implements Checkable {
-		//-- Checkable --//
-		public void setCheckedByClient(boolean checked) {
-			_checked = checked;
-		}
+	public void process(org.zkoss.zk.au.AuRequest request, boolean everError) {
+		final String name = request.getName();
+		if (name.equals(Events.ON_CHECK)) {
+			CheckEvent evt = CheckEvent.getCheckEvent(request);
+			_checked = evt.isChecked();
+			Events.postEvent(evt);
+		} else
+			super.process(request, everError);
 	}
 }

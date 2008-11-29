@@ -18,19 +18,43 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
+import org.zkoss.lang.Objects;
+
+import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.AuRequests;
 
 /**
  * Represents an event cause by user's input something at the client.
  * 
  * @author tomyeh
- * @see org.zkoss.zk.ui.ext.client.InputableX
- * @see org.zkoss.zk.ui.ext.client.Inputable
  */
 public class InputEvent extends Event {
 	private final String _val;
 	private final boolean _selbk;
 	private final int _start;
+
+	/** Converts an AU request to an input event.
+	 * @since 5.0.0
+	 */
+	public static final InputEvent getInputEvent(AuRequest request) {
+		final Component comp = request.getComponent();
+		if (comp == null)
+			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, request);
+		final String[] data = request.getData();
+		if (data == null || (data.length != 1 && data.length != 3))
+			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
+				new Object[] {Objects.toString(data), request});
+
+		final String newval = data[0];
+		if (data.length == 1)
+			return new InputEvent(request.getName(), comp, newval, false, 0);
+		else 
+			return new InputEvent(request.getName(), comp, newval,
+				"true".equals(data[1]), Integer.parseInt(data[2]));
+	}
 
 	/** Constructs a input-relevant event.
 	 * @param val the new value

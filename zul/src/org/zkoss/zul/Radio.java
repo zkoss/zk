@@ -23,6 +23,7 @@ import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.*;
 
 /**
  * A radio button.
@@ -109,11 +110,12 @@ public class Radio extends Checkbox implements org.zkoss.zul.api.Radio {
 			if (checked) {
 				final Radio sib = group.getSelectedItem();
 				if (sib != null && sib != this) {
-					if (byclient)
-						((ExtraCtrl)sib.getExtraCtrl()).setCheckedByClient(false);
-					else
+					if (byclient) {
+						sib._checked = false;
+					} else {
 						sib.setChecked(false); //and fixSelectedIndex
-					return;
+						return;
+					}
 				}
 			}
 			group.fixSelectedIndex();
@@ -171,17 +173,18 @@ public class Radio extends Checkbox implements org.zkoss.zul.api.Radio {
 	}
 
 	//-- ComponentCtrl --//
-	protected Object newExtraCtrl() {
-		return new ExtraCtrl();
-	}
-	/** A utility class to implement {@link #getExtraCtrl}.
-	 * It is used only by component developers.
+	/** Processes an AU request.
+	 *
+	 * @since 5.0.0
 	 */
-	protected class ExtraCtrl extends Checkbox.ExtraCtrl {
-		//-- Checkable --//
-		public void setCheckedByClient(boolean checked) {
-			super.setCheckedByClient(checked);
-			fixSiblings(checked, true);
-		}
+	public void process(org.zkoss.zk.au.AuRequest request, boolean everError) {
+		final String name = request.getName();
+		if (name.equals(Events.ON_CHECK)) {
+			CheckEvent evt = CheckEvent.getCheckEvent(request);
+			_checked = evt.isChecked();
+			fixSiblings(_checked, true);
+			Events.postEvent(evt);
+		} else
+			super.process(request, everError);
 	}
 }

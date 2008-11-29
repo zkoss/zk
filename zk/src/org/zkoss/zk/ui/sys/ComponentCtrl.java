@@ -234,8 +234,7 @@ public interface ComponentCtrl {
 	 * requires some special controls, it could return an object that
 	 * implements one or several interfaces in the org.zkoss.zk.ui.ext.render
 	 * and org.zkoss.zk.ui.ext.client packages.
-	 * For example, {@link org.zkoss.zk.ui.ext.render.Cropper}
-	 * and {@link org.zkoss.zk.ui.ext.client.InputableX}.
+	 * For example, {@link org.zkoss.zk.ui.ext.render.Cropper}.
 	 */
 	public Object getExtraCtrl();
 

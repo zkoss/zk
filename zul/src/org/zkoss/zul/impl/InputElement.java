@@ -29,9 +29,7 @@ import org.zkoss.util.logging.Log;
 
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zk.ui.ext.client.InputableX;
-import org.zkoss.zk.ui.ext.client.Errorable;
-import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.au.out.AuSetAttribute;
 import org.zkoss.zk.scripting.Namespace;
@@ -621,26 +619,28 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	}
 
 	//-- ComponentCtrl --//
-	protected Object newExtraCtrl() {
-		return new ExtraCtrl();
-	}
 	public WrongValueException onWrongValue(WrongValueException ex) {
 		_errmsg = Exceptions.getMessage(ex);
 		return showCustomError(ex);
 	}
-
-	/** A utility class to implement {@link #getExtraCtrl}.
-	 * It is used only by component developers.
+	/** Processes an AU request.
+	 *
+	 * <p>Default: in addition to what are handled by {@link XulElement#process},
+	 * it also handles onChange, onChanging and onError.
+	 * @since 5.0.0
 	 */
-	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements InputableX, Errorable {
-		//-- InputableX --//
-		public boolean setTextByClient(String value) throws WrongValueException {
+	public void process(org.zkoss.zk.au.AuRequest request, boolean everError) {
+		final String name = request.getName();
+		if (name.equals(Events.ON_CHANGE)) {
+			InputEvent evt = InputEvent.getInputEvent(request);
+			final String value = evt.getValue();
+
 			_txtByClient = value;
 			try {
 				final Object oldval = _value;
 				setText(value); //always since it might have func even not change
-				return oldval != _value; //test if modifed
+				if (oldval == _value)
+					return; //Bug 1881557: don't post event if not modified
 			} catch (WrongValueException ex) {
 				_errmsg = ex.getMessage();
 					//we have to 'remember' the error, so next call to getValue
@@ -649,11 +649,16 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 			} finally {
 				_txtByClient = null;
 			}
-		}
 
-		//-- Errorable --//
-		public void setErrorByClient(String value, String msg) {
+			Events.postEvent(evt);
+		} else if (name.equals(Events.ON_CHANGING)) {
+			Events.postEvent(InputEvent.getInputEvent(request));
+		} else if (name.equals(Events.ON_ERROR)) {
+			ErrorEvent evt = ErrorEvent.getErrorEvent(request);
+			final String msg = evt.getMessage();
 			_errmsg = msg != null && msg.length() > 0 ? msg: null;
-		}
+			Events.postEvent(evt);
+		} else
+			super.process(request, everError);
 	}
 }

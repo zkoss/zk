@@ -24,7 +24,7 @@ import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.ext.client.Checkable;
+import org.zkoss.zk.ui.event.*;
 
 import org.zkoss.zul.impl.LabelImageElement;
 import org.zkoss.zul.impl.Utils;
@@ -206,17 +206,20 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zul.api.Men
 	}
 
 	//-- ComponentCtrl --//
-	protected Object newExtraCtrl() {
-		return new ExtraCtrl();
-	}
-	/** A utility class to implement {@link #getExtraCtrl}.
-	 * It is used only by component developers.
+	/** Processes an AU request.
+	 *
+	 * <p>Default: in addition to what are handled by {@link LabelImageElement#process},
+	 * it also handles onCheck.
+	 * @since 5.0.0
 	 */
-	protected class ExtraCtrl extends LabelImageElement.ExtraCtrl
-	implements Checkable {
-		//-- Checkable --//
-		public void setCheckedByClient(boolean checked) {
-			setChecked(checked);
-		}
+	public void process(org.zkoss.zk.au.AuRequest request, boolean everError) {
+		final String name = request.getName();
+		if (name.equals(Events.ON_CHECK)) {
+			CheckEvent evt = CheckEvent.getCheckEvent(request);
+			_checked = evt.isChecked();
+			if (_checked) _checkmark = true;
+			Events.postEvent(evt);
+		} else
+			super.process(request, everError);
 	}
 }

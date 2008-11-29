@@ -18,17 +18,38 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
+import org.zkoss.lang.Objects;
+
+import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.AuRequests;
 
 /**
  * Represents an event cause by user's entering a wrong data
  * or clearing the last wrong data.
  * 
  * @author tomyeh
- * @see org.zkoss.zk.ui.ext.client.Errorable
  */
 public class ErrorEvent extends InputEvent {
 	private final String _msg;
+
+	/** Converts an AU request to an error event.
+	 * @since 5.0.0
+	 */
+	public static final ErrorEvent getErrorEvent(AuRequest request) {
+		final Component comp = request.getComponent();
+		if (comp == null)
+			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, request);
+		final String[] data = request.getData();
+		if (data == null || data.length != 2)
+			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
+				new Object[] {Objects.toString(data), request});
+
+		final String newval = data[0], msg = data[1];
+		return new ErrorEvent(request.getName(), comp, newval, msg);
+	}
 
 	/** Constructs an error-relevant event.
 	 * @param val the new value
