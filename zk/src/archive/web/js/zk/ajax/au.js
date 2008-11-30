@@ -42,6 +42,17 @@ zAu = { //static methods
 			  prefix + uri.substring(0, l) + suffix + uri.substring(l):
 			prefix + uri + suffix;
 	},
+	/** Called when the client info is changed. */
+	clientInfoChange: function () {
+		if (zAu._cInfoReg)
+			setTimeout(zAu._fireClientInfo, 20);
+				//we cannot pass zAu.cmd0.clientInfo directly
+				//otherwise, FF will pass 1 as the firt argument,
+				//i.e., it is equivalent to zAu.cmd0.clientInfo(1)
+	},
+	_fireClientInfo: function () {
+		zAu.cmd0.clientInfo();
+	},
 
 	//Error Handling//
 	/** Confirms the user how to handle a communication error.
@@ -680,15 +691,14 @@ zAu.cmd0 = { //no uuid at all
 		eval(dt0);
 	},
 	echo: function (dtid) {
-		zAu.send({dtid: dtid, cmd: "dummy", ignorable: true});
+		zAu.send(new zk.Event(zk.Desktop.$(dtid), "dummy", null, {ignorable: true}));
 	},
 	clientInfo: function (dtid) {
 		zAu._cInfoReg = true;
-		zAu.send({dtid: dtid, cmd: "onClientInfo", data: [
-			new Date().getTimezoneOffset(),
+		zAu.send(new zk.Event(zk.Desktop.$(dtid), "onClientInfo", 
+			[new Date().getTimezoneOffset(),
 			screen.width, screen.height, screen.colorDepth,
-			zk.innerWidth(), zk.innerHeight(), zk.innerX(), zk.innerY()
-		]});
+			zDom.innerWidth(), zDom.innerHeight(), zDom.innerX(), zDom.innerY()]));
 	},
 	download: function (url) {
 		if (url) {
@@ -885,9 +895,8 @@ zAu.cmd1 = {
 			}
 		}
 	},
-	echo2: function (uuid, cmp, evtnm, data) {
-		zAu.send(
-			{uuid: uuid, cmd: "echo",
-				data: data != null ? [evtnm, data]: [evtnm], ignorable: true});
+	echo2: function (uuid, wgt, evtnm, data) {
+		zAu.send(new zk.Event(wgt, "echo",
+			data != null ? [evtnm, data]: [evtnm], {ignorable: true}));
 	}
 };

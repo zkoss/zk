@@ -333,7 +333,7 @@ function _zkDocDidResize () {
 	_zkbResz.lastTime = now + 1000;
 		//ignore following for a while if processing (in slow machine)
 
-	//TODO: _doClientInfo
+	zAu.clientInfoChange();
 
 	zWatch.fire('beforeSize');
 	zWatch.fire('onSize');

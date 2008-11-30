@@ -19,7 +19,15 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.event;
 
 import java.util.TimeZone;
+
+import org.zkoss.lang.Objects;
 import org.zkoss.util.TimeZones;
+
+import org.zkoss.zk.mesg.MZk;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.AuRequests;
 
 /**
  * The onClientInfo event is used to notify the client's information, such
@@ -38,6 +46,22 @@ public class ClientInfoEvent extends Event {
 	private final TimeZone _timeZone;
 	private final int _scrnwd, _scrnhgh, _colorDepth;
 	private final int _dtwd, _dthgh, _dtx, _dty;
+
+	/** Converts an AU request to a client-info event.
+	 * @since 5.0.0
+	 */
+	public static final ClientInfoEvent getClientInfoEvent(AuRequest request) {
+		final String[] data = request.getData();
+		if (data == null || data.length != 8)
+			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
+				new Object[] {Objects.toString(data), request});
+		//Note: ClientInfoEvent is a broadcast event
+		return new ClientInfoEvent(request.getName(),
+			Integer.parseInt(data[0]), Integer.parseInt(data[1]),
+			Integer.parseInt(data[2]), Integer.parseInt(data[3]),
+			Integer.parseInt(data[4]), Integer.parseInt(data[5]),
+			Integer.parseInt(data[6]), Integer.parseInt(data[7]));
+	}
 
 	/** Constructs an event to hold the client-info.
 	 *

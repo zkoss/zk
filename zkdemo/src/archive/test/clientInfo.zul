@@ -17,12 +17,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<grid onClientInfo="onClientInfo(event)">
-	<rows>
-		<row>Time Zone <label id="tm"/></row>
-		<row>Screen <label id="scrn"/></row>
-		<row>Browser <label id="brw"/></row>
-		</rows>
+<window title="Client Info" onClientInfo="onClientInfo(event)">
+	<vbox>
+		<hbox>Time Zone <label id="tm"/></hbox>
+		<hbox>Screen <label id="scrn"/></hbox>
+		<hbox>Browser <label id="brw"/></hbox>
+	</vbox>
 		
 	<zscript>
 	void onClientInfo(ClientInfoEvent evt) {
@@ -31,4 +31,4 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		brw.setValue(evt.getDesktopWidth()+"x"+evt.getDesktopHeight());
 	}
 	</zscript>
-</grid>
+</window>

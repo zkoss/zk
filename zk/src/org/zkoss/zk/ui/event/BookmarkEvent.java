@@ -18,6 +18,15 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
+import org.zkoss.lang.Objects;
+
+import org.zkoss.zk.mesg.MZk;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.sys.DesktopCtrl;
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.AuRequests;
+
 /** The bookmark udpate event used with <code>onBookmarkChange</code>
  * to notify that user pressed BACK, FORWARD or others
  * that causes the bookmark changed (but still in the same desktop).
@@ -31,6 +40,19 @@ package org.zkoss.zk.ui.event;
 public class BookmarkEvent extends Event {
 	/** The bookmark name. */
 	private final String _bookmark;
+
+	/** Converts an AU request to a bookmark event.
+	 * @since 5.0.0
+	 */
+	public static final BookmarkEvent getBookmarkEvent(AuRequest request) {
+		final String[] data = request.getData();
+		if (data == null || data.length != 1)
+			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
+				new Object[] {Objects.toString(data), request});
+		final String nm = data[0];
+		((DesktopCtrl)request.getDesktop()).setBookmarkByClient(nm);
+		return new BookmarkEvent(request.getName(), nm);
+	}
 
 	public BookmarkEvent(String name, String bookmark) {
 		super(name, null);

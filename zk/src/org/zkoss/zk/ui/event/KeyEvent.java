@@ -18,7 +18,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
+import org.zkoss.lang.Objects;
+
+import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.AuRequests;
 
 /**
  * Represents a key pressed by the user.
@@ -50,6 +56,25 @@ public class KeyEvent extends Event {
 
 	public static final int INSERT = 45;
 	public static final int DELETE = 46;
+
+	/** Converts an AU request to a key event.
+	 * @since 5.0.0
+	 */
+	public static final KeyEvent getKeyEvent(AuRequest request) {
+		final Component comp = request.getComponent();
+		if (comp == null)
+			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, request);
+		final String[] data = request.getData();
+		if (data == null || (data.length != 4 && data.length != 5))
+			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
+				new Object[] {Objects.toString(data), request});
+		final Component ref = data.length == 5 && data[4] != null ?
+				request.getDesktop().getComponentByUuidIfAny(data[4]): null;
+				
+		return new KeyEvent(request.getName(), comp,
+			Integer.parseInt(data[0]), "true".equals(data[1]),
+			"true".equals(data[2]), "true".equals(data[3]), ref);
+	}
 
 	private final int _keyCode;
 	private final boolean _ctrlKey, _shiftKey, _altKey;

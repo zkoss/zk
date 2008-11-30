@@ -56,8 +56,7 @@ import org.zkoss.zk.ui.util.UiLifeCycle;
 import org.zkoss.zk.ui.util.Monitor;
 import org.zkoss.zk.ui.util.DesktopSerializationListener;
 import org.zkoss.zk.ui.util.EventInterceptor;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.sys.SessionCtrl;
@@ -450,7 +449,18 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	 * @since 5.0.0
 	 */
 	public void process(AuRequest request, boolean everError) {
-		Events.postEvent(Event.getEvent(request));
+		final String name = request.getName();
+		if (Events.ON_BOOKMARK_CHANGE.equals(name)) {
+			BookmarkEvent evt = BookmarkEvent.getBookmarkEvent(request);
+			Events.postEvent(evt);
+			Events.postEvent(new BookmarkEvent("onBookmarkChanged", evt.getBookmark()));
+				//backward compatible
+		} else if (Events.ON_URI_CHANGE.equals(name)) {
+			Events.postEvent(URIEvent.getURIEvent(request));
+		} else if (Events.ON_CLIENT_INFO.equals(name)) {
+			Events.postEvent(ClientInfoEvent.getClientInfoEvent(request));
+		} else
+			Events.postEvent(Event.getEvent(request));
 	}
 
 	public int getNextKey() {
