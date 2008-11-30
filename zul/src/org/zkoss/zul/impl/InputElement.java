@@ -633,8 +633,8 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 		final String name = request.getName();
 		if (name.equals(Events.ON_CHANGE)) {
 			InputEvent evt = InputEvent.getInputEvent(request);
-			final String value = evt.getValue();
 
+			final String value = evt.getValue();
 			_txtByClient = value;
 			try {
 				final Object oldval = _value;

@@ -28,9 +28,8 @@ import org.zkoss.util.Locales;
 import org.zkoss.util.TimeZones;
 import org.zkoss.xml.HTMLs;
 
-import org.zkoss.zk.ui.ext.client.InputableX;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.*;
 
 import org.zkoss.zul.impl.XulElement;
 
@@ -150,25 +149,29 @@ public class Calendar extends XulElement implements org.zkoss.zul.api.Calendar {
 	}
 
 	//-- ComponentCtrl --//
-	protected Object newExtraCtrl() {
-		return new ExtraCtrl();
-	}
-	/** A utility class to implement {@link #getExtraCtrl}.
-	 * It is used only by component developers.
+	/** Processes an AU request.
+	 *
+	 * <p>Default: in addition to what are handled by {@link XulElement#process},
+	 * it also handles onChange, onChanging and onError.
+	 * @since 5.0.0
 	 */
-	protected class ExtraCtrl extends XulElement.ExtraCtrl implements InputableX {
-		//-- InputableX --//
-		public boolean setTextByClient(String value) throws WrongValueException {
+	public void process(org.zkoss.zk.au.AuRequest request, boolean everError) {
+		final String name = request.getName();
+		if (name.equals(Events.ON_CHANGE)) {
+			InputEvent evt = InputEvent.getInputEvent(request);
+
+			final String value = evt.getValue();
 			try {
 				final Date newval = getDateFormat().parse(value);
-				if (!Objects.equals(_value, newval)) {
-					_value = newval;
-					return true;
-				}
-				return false;
+				if (Objects.equals(_value, newval))
+					return; //not post event
+				_value = newval;
 			} catch (ParseException ex) {
 				throw new InternalError(value);
 			}
-		}
+
+			Events.postEvent(evt);
+		} else
+			super.process(request, everError);
 	}
 }

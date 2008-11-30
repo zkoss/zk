@@ -21,7 +21,13 @@ package org.zkoss.zk.ui.event;
 import java.util.Set;
 import java.util.Collections;
 
+import org.zkoss.lang.Objects;
+
+import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.AuRequests;
 
 /**
  * Represents an event cause by user's the list selection is changed
@@ -32,6 +38,23 @@ import org.zkoss.zk.ui.Component;
 public class SelectEvent extends Event {
 	private final Set _selectedItems;
 	private final Component _ref;
+
+	/** Converts an AU request to a select event.
+	 * @since 5.0.0
+	 */
+	public static final SelectEvent getSelectEvent(AuRequest request) {
+		final Component comp = request.getComponent();
+		if (comp == null)
+			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, request);
+		final Set items = AuRequests.convertToItems(request);
+		final String[] data = request.getData();
+		if (data == null || (data.length != 1 && data.length != 2))
+			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
+				new Object[] {Objects.toString(data), request});
+		final Component ref = data.length == 2 && data[1] != null ?
+			request.getDesktop().getComponentByUuidIfAny(data[1]): null;
+		return new SelectEvent(request.getName(), comp, items, ref);
+	}
 
 	/** Constructs a selection event.
 	 * @param selectedItems a set of items that shall be selected.

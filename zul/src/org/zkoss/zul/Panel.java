@@ -25,7 +25,6 @@ import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.*;
-import org.zkoss.zk.ui.ext.client.Updatable;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -535,6 +534,7 @@ public class Panel extends XulElement implements org.zkoss.zul.api.Panel {
 			_fbar = (Toolbar) getChildren().get(_fbar.getParent()
 					.getChildren().indexOf(_fbar));
 	}
+
 	//-- Serializable --//
 	private synchronized void readObject(java.io.ObjectInputStream s)
 	throws java.io.IOException, ClassNotFoundException {
@@ -577,25 +577,18 @@ public class Panel extends XulElement implements org.zkoss.zul.api.Panel {
 			super.process(request, everError);
 	}
 
-	protected Object newExtraCtrl() {
-		return new ExtraCtrl();
-	}
-	/** A utility class to implement {@link #getExtraCtrl}.
-	 * It is used only by component developers.
-	 */
-	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements Updatable {
-		public void setResult(Object result) {
-			Object[] r = ((Object[]) result);
-			_noSmartUpdate = ((Boolean) r[0]).booleanValue();
-			_noSmartParent = (Component) r[1];
-		}
-	}
-
 	protected void addMoved(Component oldparent, Page oldpg, Page newpg) {
 		if (!_noSmartUpdate || _noSmartParent != getParent()) {
 			super.addMoved(oldparent, oldpg, newpg);
 		}
 	}
 
+	/** Sets whether to disable the smart update.
+	 * <p>Used only for component development.
+	 * @since 5.0.0
+	 */
+	public void disableSmartUpdate(boolean noSmartUpdate, Component noSmartParent) {
+		_noSmartUpdate = noSmartUpdate;
+		_noSmartParent = noSmartParent;
+	}
 }

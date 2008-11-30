@@ -22,8 +22,7 @@ import java.util.List;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zkmax.au.in.PortalMoveCommand;
-import org.zkoss.zkmax.event.ZkMaxEvents;
+import org.zkoss.zkmax.event.*;
 import org.zkoss.zul.Panel;
 import org.zkoss.zul.impl.XulElement;
 
@@ -106,7 +105,34 @@ public class Portallayout extends XulElement implements org.zkoss.zkmax.zul.api.
 		super.onChildRemoved(child);
 		smartUpdate("z.childchg", true);
 	}
-	static {
-		new PortalMoveCommand(ZkMaxEvents.ON_PORTAL_MOVE, 0);
+
+	/** Processes an AU request.
+	 *
+	 * <p>Default: in addition to what are handled by {@link XulElement#process},
+	 * it also handles onPortalMove.
+	 * @since 5.0.0
+	 */
+	public void process(org.zkoss.zk.au.AuRequest request, boolean everError) {
+		final String name = request.getName();
+		if (name.equals(ZkMaxEvents.ON_PORTAL_MOVE)) {
+			PortalMoveEvent evt = PortalMoveEvent.getPortalMoveEvent(request);
+			try {
+				evt.getFrom().disableSmartUpdate(true);
+				final Portalchildren to = evt.getTo();
+				to.disableSmartUpdate(true);
+				final Pannel dragged = evt.getDragged();
+				dragged.disableSmartUpdate(true, to);
+				final int droppedIndex = evt.getDroppedIndex();
+				to.insertBefore(dragged,
+					droppedIndex < to.getChildren().size() ?
+						(Component)to.getChildren().get(droppedIndex) : null);
+			} finally {
+				evt.getDragged().disableSmartUpdate(false, null);
+				evt.getFrom().disableSmartUpdate(false);
+				evt.getTo().disableSmartUpdate(false);
+			}
+			Events.postEvent(evt);
+		} else
+			super.process(request, everError);
 	}
 }

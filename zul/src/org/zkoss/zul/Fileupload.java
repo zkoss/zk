@@ -32,10 +32,10 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.ext.client.Updatable;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.au.AuRequests;
 
 import org.zkoss.zul.impl.FileuploadDlg;
 
@@ -157,24 +157,21 @@ public class Fileupload extends HtmlBasedComponent implements org.zkoss.zul.api.
 	}
 
 	//-- ComponentCtrl --//
-	protected Object newExtraCtrl() {
-		return new ExtraCtrl();
-	}
-	/** A utility class to implement {@link #getExtraCtrl}.
-	 * It is used only by component developers.
+	/** Processes an AU request.
+	 *
+	 * <p>Default: in addition to what are handled by {@link HtmlBasedComponent#process},
+	 * it also handles updateResult.
+	 * @since 5.0.0
 	 */
-	protected class ExtraCtrl extends HtmlBasedComponent.ExtraCtrl implements Updatable {
-		//-- Updatable --//
-		/** Updates the result from the client.
-		 * Callback by the system only. Don't invoke it directly.
-		 *
-		 * @param result a list of media instances, or null
-		 */
-		public void setResult(Object result) {
+	public void process(org.zkoss.zk.au.AuRequest request, boolean everError) {
+		final String name = request.getName();
+		if (name.equals("updateResult")) {
 			Events.postEvent(
 				new UploadEvent(Events.ON_UPLOAD, Fileupload.this,
-				FileuploadDlg.parseResult((List)result)));
-		}
+				FileuploadDlg.parseResult(
+					(List)AuRequests.getUpdateResult(request))));
+		} else
+			super.process(request, everError);
 	}
 
 	/////Open as a Modal Dialog/////

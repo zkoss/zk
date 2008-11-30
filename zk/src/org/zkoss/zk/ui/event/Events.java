@@ -101,7 +101,8 @@ public class Events {
 	 * used to denote the close button is pressed.
 	 */
 	public static final String ON_CLOSE = "onClose";
-	/** The onRender event (used with {@link org.zkoss.zk.ui.ext.client.RenderOnDemand}).
+	/** The onRender request.
+	 * There is no event associated with this AU request.
 	 */
 	public static final String ON_RENDER = "onRender";
 	/** The onTimer event (used with {@link Event}).

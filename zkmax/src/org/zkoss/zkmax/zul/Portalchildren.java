@@ -71,15 +71,12 @@ public class Portalchildren extends XulElement implements org.zkoss.zkmax.zul.ap
 			layout.smartUpdate("z.reset", true);
 		}
 	}
-	
-	// -- ComponentCtrl --//
-	protected Object newExtraCtrl() {
-		return new ExtraCtrl();
-	}
-	protected class ExtraCtrl extends XulElement.ExtraCtrl implements Updatable {
-		
-		public void setResult(Object result) {
-			_noSmartUpdate = ((Boolean) result).booleanValue();
-		}
+
+	/** Sets whether to disable the smart update.
+	 * <p>Used only for component development.
+	 * @since 5.0.0
+	 */
+	public void disableSmartUpdate(boolean noSmartUpdate) {
+		_noSmartUpdate = noSmartUpdate;
 	}
 }

@@ -39,13 +39,8 @@ import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.ext.client.Selectable;
-import org.zkoss.zk.ui.ext.client.InnerWidth;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Events;
-
-//import org.zkoss.zul.Listbox.Renderer;
+import org.zkoss.zk.ui.event.*;
+import org.zkoss.zk.au.AuRequests;
 
 import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.event.TreeDataEvent;
@@ -54,6 +49,7 @@ import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.ext.Paginal;
 import org.zkoss.zul.ext.Paginated;
 import org.zkoss.zul.impl.XulElement;
+
 
 /**
  *  A container which can be used to hold a tabular
@@ -1241,10 +1237,6 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	}
 
 	//-- ComponentCtrl --//
-	protected Object newExtraCtrl() {
-		return new ExtraCtrl();
-	}
-	
 	/*
 	 * Handles when the tree model's content changed 
 	 * <p>Author: jeffliu
@@ -1847,19 +1839,17 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	
 	// AREA JEFF ADDED END
 	
-	/** A utility class to implement {@link #getExtraCtrl}.
-	 * It is used only by component developers.
+	/** Processes an AU request.
+	 *
+	 * <p>Default: in addition to what are handled by {@link XulElement#process},
+	 * it also handles onSelect.
+	 * @since 5.0.0
 	 */
-	
-	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements InnerWidth, Selectable {
-		//InnerWidth//
-		public void setInnerWidthByClient(String width) {
-			_innerWidth = width == null ? "100%": width;
-		}
-
-		//-- Selectable --//
-		public void selectItemsByClient(Set selItems) {
+	public void process(org.zkoss.zk.au.AuRequest request, boolean everError) {
+		final String name = request.getName();
+		if (name.equals(Events.ON_SELECT)) {
+			SelectEvent evt = SelectEvent.getSelectEvent(request);
+			Set selItems = evt.getSelectedItems();
 			_noSmartUpdate = true;
 			try {
 				if (!_multiple || selItems == null || selItems.size() <= 1) {
@@ -1879,8 +1869,15 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 			} finally {
 				_noSmartUpdate = false;
 			}
-		}
+
+			Events.postEvent(evt);
+		} else if (name.equals("onInnerWidth")) {
+			final String width = AuRequests.getInnerWidth(request);
+			_innerWidth = width == null ? "100%": width;
+		} else
+			super.process(request, everError);
 	}
+
 	/** An iterator used by _heads.
 	 */
 	private class Iter implements Iterator {

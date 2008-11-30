@@ -41,13 +41,9 @@ import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.ext.client.InnerWidth;
-import org.zkoss.zk.ui.ext.client.RenderOnDemand;
-import org.zkoss.zk.ui.ext.client.Selectable;
+import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.ui.ext.render.Cropper;
+import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
 import org.zkoss.zul.event.PagingEvent;
@@ -2505,26 +2501,66 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 	}
 
 	//-- ComponentCtrl --//
-	protected Object newExtraCtrl() {
-		return new ExtraCtrl();
-	}
-	/** A utility class to implement {@link #getExtraCtrl}.
-	 * It is used only by component developers.
+	/** Processes an AU request.
+	 *
+	 * <p>Default: in addition to what are handled by {@link XulElement#process},
+	 * it also handles onSelect.
+	 * @since 5.0.0
 	 */
-	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements InnerWidth, Selectable, Cropper, RenderOnDemand {
-		//InnerWidth//
-		public void setInnerWidthByClient(String width) {
-			_innerWidth = width == null ? "100%": width;
-		}
+	public void process(org.zkoss.zk.au.AuRequest request, boolean everError) {
+		final String name = request.getName();
+		if (name.equals(Events.ON_SELECT)) {
+			SelectEvent evt = SelectEvent.getSelectEvent(request);
+			Set selItems = evt.getSelectedItems();
+			_noSmartUpdate = true;
+			try {
+				final boolean paging = inPagingMold();
+				if (!_multiple
+				|| (!paging && (selItems == null || selItems.size() <= 1))) {
+					final Listitem item =
+						selItems != null && selItems.size() > 0 ?
+							(Listitem)selItems.iterator().next(): null;
+					selectItem(item);
+				} else {
+					int from, to;
+					if (paging) {
+						final Paginal pgi = getPaginal();
+						int pgsz = pgi.getPageSize();
+						from = pgi.getActivePage() * pgsz;
+						to = from + pgsz; //excluded
+					} else {
+						from = to = 0;
+					}
 
-		//RenderOnDemand//
-		public void renderItems(Set items) {
+					int j = 0;
+					for (Iterator it = _items.iterator(); it.hasNext(); ++j) {
+						final Listitem item = (Listitem)it.next();
+						if (selItems.contains(item)) {
+							addItemToSelection(item);
+						} else if (!paging) {
+							removeItemFromSelection(item);
+						} else {
+							final int index = item.getIndex();
+							if (index >= from && index < to)
+								removeItemFromSelection(item);
+						}
+					}
+				}
+			} finally {
+				_noSmartUpdate = false;
+			}
+
+			Events.postEvent(evt);
+		} else if (name.equals("onInnerWidth")) {
+			final String width = AuRequests.getInnerWidth(request);
+			_innerWidth = width == null ? "100%": width;
+		} else if (name.equals(Events.ON_RENDER)) {
+			final Set items = AuRequests.convertToItems(request);
 			int cnt = items.size();
 			if (cnt == 0)
 				return; //nothing to do
-			cnt = 20 - cnt;
 
+			cnt = 20 - cnt;
 			if (cnt > 0 && _preloadsz > 0) { //Feature 1740072: pre-load
 				if (cnt > _preloadsz) cnt = _preloadsz; //at most 8 more to load
 
@@ -2557,8 +2593,17 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 			}
 
 			Listbox.this.renderItems(items);
-		}
-
+		} else
+			super.process(request, everError);
+	}
+	protected Object newExtraCtrl() {
+		return new ExtraCtrl();
+	}
+	/** A utility class to implement {@link #getExtraCtrl}.
+	 * It is used only by component developers.
+	 */
+	protected class ExtraCtrl extends XulElement.ExtraCtrl
+	implements Cropper {
 		//--Cropper--//
 		public boolean isCropper() {
 			return (inPagingMold() && getPageSize() <= getItemCount())
@@ -2602,47 +2647,6 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 					item = (Listitem) item.getNextSibling();
 			}
 			return avail;
-		}
-
-		//-- Selectable --//
-		public void selectItemsByClient(Set selItems) {
-			_noSmartUpdate = true;
-			try {
-				final boolean paging = inPagingMold();
-				if (!_multiple
-				|| (!paging && (selItems == null || selItems.size() <= 1))) {
-					final Listitem item =
-						selItems != null && selItems.size() > 0 ?
-							(Listitem)selItems.iterator().next(): null;
-					selectItem(item);
-				} else {
-					int from, to;
-					if (paging) {
-						final Paginal pgi = getPaginal();
-						int pgsz = pgi.getPageSize();
-						from = pgi.getActivePage() * pgsz;
-						to = from + pgsz; //excluded
-					} else {
-						from = to = 0;
-					}
-
-					int j = 0;
-					for (Iterator it = _items.iterator(); it.hasNext(); ++j) {
-						final Listitem item = (Listitem)it.next();
-						if (selItems.contains(item)) {
-							addItemToSelection(item);
-						} else if (!paging) {
-							removeItemFromSelection(item);
-						} else {
-							final int index = item.getIndex();
-							if (index >= from && index < to)
-								removeItemFromSelection(item);
-						}
-					}
-				}
-			} finally {
-				_noSmartUpdate = false;
-			}
 		}
 	}
 	/** An iterator used by _heads.

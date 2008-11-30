@@ -17,6 +17,9 @@ package org.zkoss.zk.au;
 import java.util.Set;
 import java.util.LinkedHashSet;
 
+import org.zkoss.lang.Objects;
+
+import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.UiException;
@@ -69,5 +72,32 @@ public class AuRequests {
 			if (flags.indexOf("s") >= 0) keys |= MouseEvent.SHIFT_KEY;
 		}
 		return keys;
+	}
+
+	/** Returns the inner width of an AU request representing the update
+	 * of inner width.
+	 */
+	public static String getInnerWidth(AuRequest request)
+	throws UiException {
+		final String[] data = request.getData();
+		if (data == null || data.length != 1)
+			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
+				new Object[] {Objects.toString(data), request});
+		return data[0];
+	}
+
+	/** Returns the result of an AU request representing the update result.
+	 */
+	public static Object getUpdateResult(AuRequest request)
+	throws UiException {
+		final String[] data = request.getData();
+		if (data == null || data.length != 1)
+			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
+				new Object[] {Objects.toString(data), request});
+
+		final Object result = request.getDesktop().removeAttribute(data[0]);
+		if (result == null)
+			throw new UiException("Content not found: "+data[0]);
+		return result;
 	}
 }

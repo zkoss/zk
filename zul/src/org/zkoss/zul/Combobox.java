@@ -31,11 +31,7 @@ import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.InputEvent;
-import org.zkoss.zk.ui.ext.client.Selectable;
+import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
@@ -639,17 +635,23 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 	}
 	
 	//-- ComponentCtrl --//
-	protected Object newExtraCtrl() {
-		return new ExtraCtrl();
-	}
-	/** A utility class to implement {@link #getExtraCtrl}.
-	 * It is used only by component developers.
+	/** Processes an AU request.
+	 *
+	 * <p>Default: in addition to what are handled by {@link Textbox#process},
+	 * it also handles onOpen and onSelect.
+	 * @since 5.0.0
 	 */
-	protected class ExtraCtrl extends Textbox.ExtraCtrl
-	implements Selectable {
-		public void selectItemsByClient(Set selItems) {
+	public void process(org.zkoss.zk.au.AuRequest request, boolean everError) {
+		final String name = request.getName();
+		if (name.equals(Events.ON_OPEN)) {
+			Events.postEvent(OpenEvent.getOpenEvent(request));
+		}else if (name.equals(Events.ON_SELECT)) {
+			SelectEvent evt = SelectEvent.getSelectEvent(request);
+			Set selItems = evt.getSelectedItems();
 			_selItem = selItems != null && !selItems.isEmpty()?
 				(Comboitem)selItems.iterator().next(): null;
-		}
+			Events.postEvent(evt);
+		} else
+			super.process(request, everError);
 	}
 }

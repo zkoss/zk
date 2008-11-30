@@ -218,8 +218,7 @@ public interface ComponentCtrl {
 	 *
 	 * <p>Application developers need NOT to access this method.
 	 *
-	 * <p>There are two set of extra controls: org.zkoss.zk.ui.ext.client
-	 * and org.zkoss.zk.ui.ext.render.
+	 * <p>There are a set of extra controls: org.zkoss.zk.ui.ext.render.
 	 *
 	 * <p>The first package is used if the content of a component can be changed
 	 * by the user at the client. It is so-called the client controls.
@@ -233,7 +232,7 @@ public interface ComponentCtrl {
 	 * @return null if no special handling required. If the component
 	 * requires some special controls, it could return an object that
 	 * implements one or several interfaces in the org.zkoss.zk.ui.ext.render
-	 * and org.zkoss.zk.ui.ext.client packages.
+	 * package.
 	 * For example, {@link org.zkoss.zk.ui.ext.render.Cropper}.
 	 */
 	public Object getExtraCtrl();
