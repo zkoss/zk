@@ -339,6 +339,19 @@ public class DataBinder implements java.io.Serializable {
 		return attrMap != null ?  (Collection) attrMap.values() : null;
 	}
 	
+	/** Return all Bindings covered by this DataBinder
+	 * @return all Bindings covered by this DataBinder.
+	 * @since 3.5.2
+	 */
+	public Collection getAllBindings() {
+		final List bindings = new ArrayList(_compBindingMap.size() * 2);
+		for (final Iterator it = _compBindingMap.values().iterator(); it.hasNext();) {
+			final Map map = (Map) it.next();
+			bindings.addAll(map.values());
+		}
+		return bindings;
+	}
+	
 	/** Whether this component associated with any bindings.
 	 */
 	public boolean existsBindings(Component comp) {
