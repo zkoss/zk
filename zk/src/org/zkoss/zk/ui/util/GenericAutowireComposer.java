@@ -191,7 +191,13 @@ abstract public class GenericAutowireComposer extends GenericComposer implements
 		}
 	}
 	
-	/** I shall be cloned if associated component is cloned */
+	/** Internal use only. Call-back method of CloneComposerListener. You shall 
+	 * not call this method directly. Clone this Composer when its applied 
+	 * component is cloned.
+	 * @param comp the clone of the applied component
+	 * @return A clone of this Composer. 
+	 * @since 3.5.2
+	 */
 	public Object clone(Component comp) {
 		try {
 			final Execution exec = Executions.getCurrent();
