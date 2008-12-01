@@ -54,7 +54,7 @@ public class DemoWindowComposer extends GenericForwardComposer {
 		if (Library.getProperty("org.zkoss.zkdemo.theme.silvergray") != null) {
 			String cookie = FontSizeThemeProvider.getSkinCookie(Executions.getCurrent());
 			boolean isDefault = !"silvergray".equals(cookie);
-			String img = isDefault ? "/img/ButtonGray.png" : "/img/ButtonBlue.png";
+			String img = isDefault ? "/img/Centigrade-Widget-Icons/ButtonGray.png" : "/img/Centigrade-Widget-Icons/ButtonBlue.png";
 			Image skin = new Image(img);
 			skin.setSclass("pointer");
 			skin.setTooltiptext(isDefault ? "Gray Theme" : "Blue Theme");
