@@ -202,6 +202,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/button2.dsp</mold-uri>
 		</mold>
+		<mold>
+			<mold-name>os</mold-name>
+			<mold-uri>~./zul/html/button.dsp</mold-uri>
+		</mold>
 	</component>
 	<component>
 		<component-name>box</component-name>
@@ -584,6 +588,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/paging.dsp</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>os</mold-name>
+			<mold-uri>~./zul/html/paging-os.dsp</mold-uri>
 		</mold>
 	</component>
 	<component>

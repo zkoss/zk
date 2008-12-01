@@ -119,7 +119,15 @@ if (zk.ie) {
 		}
 	};
 }
-
+zkButtonOS = {
+	init: function (cmp) {
+		zk.listen(cmp, "click", zkau.onclick);
+		zk.listen(cmp, "dblclick", zkau.ondblclick);
+			//we have to handle here since _onDocDClick won't receive it
+		zk.listen(cmp, "focus", zkau.onfocus);
+		zk.listen(cmp, "blur", zkau.onblur);
+	}
+};
 //toolbarbutton
 zkTbtn = {
 	init: function (cmp) {

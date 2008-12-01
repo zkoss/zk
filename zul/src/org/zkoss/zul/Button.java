@@ -175,7 +175,8 @@ public class Button extends LabelImageElement implements org.zkoss.zul.api.Butto
 		return scls == null ? added : scls + " " + added;
 	}
 	public String getZclass() {
-		return _zclass == null ? "z-button" : super.getZclass();
+		String added = "os".equals(getMold()) ? "-os" : "";
+		return _zclass == null ? "z-button" + added : super.getZclass();
 	}
 	
 	public String getOuterAttrs() {
@@ -183,8 +184,13 @@ public class Button extends LabelImageElement implements org.zkoss.zul.api.Butto
 			new StringBuffer(64).append(super.getOuterAttrs());
 		HTMLs.appendAttribute(sb, "z.href", getEncodedHref());
 		HTMLs.appendAttribute(sb, "z.target", getTarget());
-		if (isDisabled())
-			HTMLs.appendAttribute(sb, "z.disd", true);
+		boolean isOS = "os".equals(getMold());
+		if (isDisabled()) {
+			if (isOS)
+				HTMLs.appendAttribute(sb, "disabled",  "disabled");
+			else
+				HTMLs.appendAttribute(sb, "z.disd", true);
+		}
 
 		appendAsapAttr(sb, Events.ON_FOCUS);
 		appendAsapAttr(sb, Events.ON_BLUR);
@@ -192,8 +198,8 @@ public class Button extends LabelImageElement implements org.zkoss.zul.api.Butto
 		appendAsapAttr(sb, Events.ON_DOUBLE_CLICK);
 		if (_tabindex >= 0) {
 			Execution exec = Executions.getCurrent();
-			if (!exec.isGecko() && !exec.isSafari())
-			HTMLs.appendAttribute(sb, "tabindex", _tabindex);
+			if (isOS || (!exec.isGecko() && !exec.isSafari()))
+				HTMLs.appendAttribute(sb, "tabindex", _tabindex);
 		}
 		
 		return sb.toString();

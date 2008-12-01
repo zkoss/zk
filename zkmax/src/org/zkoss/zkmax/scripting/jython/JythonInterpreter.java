@@ -28,10 +28,12 @@ public class JythonInterpreter extends GenericInterpreter {
 	//super//
 	public void init(Page owner, String zslang) {
 		super.init(owner, zslang);
-
+		if (System.getProperty("python.home") == null)
+			System.setProperty("python.home", System.getProperty("java.io.tmpdir"));
+		
 		PySystemState.initialize();
-		PySystemState.add_extdir(owner.getDesktop().getWebApp().getRealPath("/WEB-INF/lib"));
-		PySystemState.add_extdir(owner.getDesktop().getWebApp().getRealPath("/WEB-INF/classes"));
+		PySystemState.add_extdir(owner.getDesktop().getWebApp().getRealPath("/WEB-INF/lib"), true);
+		PySystemState.add_classdir(owner.getDesktop().getWebApp().getRealPath("/WEB-INF/classes"));
 		_ip = new PythonInterpreter(new Variables());
 	}
 

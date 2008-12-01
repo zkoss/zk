@@ -157,6 +157,10 @@ def alert(m):
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.Button2Default</mold-uri>
 		</mold>
+		<mold>
+			<mold-name>os</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.ButtonOS</mold-uri>
+		</mold>
 	</component>
 	<component>
 		<component-name>borderlayout</component-name>
@@ -632,6 +636,10 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>class:org.zkoss.zkmax.zul.render.PagingDefault</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>os</mold-name>
+			<mold-uri>class:org.zkoss.zkmax.zul.render.PagingOS</mold-uri>
 		</mold>
 	</component>
 	<component>

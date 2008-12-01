@@ -20,8 +20,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <window id="demo" apply="org.zkoss.zkdemo.userguide.DemoWindowComposer">
 	<html><![CDATA[
   		<h4>Paging with Grid</h4>
-		<p>It is better to display large number of data in multiple pages by specifying
-		the paging mold.</p>
+		<p>Grid allows contents to be displayed across several pages, this is achieved by setting mold="paging".<a href="javascript:;" onclick="if (!zk.isVisible($e('infos'))) {anima.slideDown($e('infos'));} else {anima.slideUp($e('infos'));}">More..</a></p>
+
+		<p style="display:none" id="infos">It is better to display a large number of data across multiple pages by specifying the paging mold. You can also specify the paging position to be either top, bottom, or both</p>
 	]]></html>
 	<separator/>
 	<tabbox width="100%" tabscroll="false">
@@ -48,6 +49,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		<radio label="bottom" checked="true" />
 		<radio label="both" />
 	</radiogroup>
+	<separator/>
+	<button label="Change Paging Mold">
+		<attribute name="onClick">
+		grid.pagingChild.mold = "os".equals(grid.pagingChild.mold) ? "default" : "os";
+		</attribute>
+	</button>
 	<grid id="grid" mold="paging" pageSize="5">
 		<columns>
 			<column label="Index"/>

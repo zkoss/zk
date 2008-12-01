@@ -20,8 +20,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <window id="demo" apply="org.zkoss.zkdemo.userguide.DemoWindowComposer">
 	<html><![CDATA[
 		<h4>Sliders</h4>
-		<p>slider is the kind of control to change an index number within a range.</p>
-		<p>Try to slide and see how the image size is changed.</p>
+		<p>A control that enables the user to set a value in a certain range</p>
+		<p>Slide and see changes to the image size.</p>
 	]]></html>
 	<separator />
 	<tabbox width="100%" tabscroll="false">

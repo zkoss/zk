@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B35-2349456.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Nov 26 17:04:53     2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<window title="Live Data" border="normal">
+<zscript><![CDATA[
+String[] data = new String[30];
+for(int j=0; j < data.length; ++j) {
+data[ j ] = "option "+j;
+}
+ListModel strset = new SimpleListModel(data);
+]]></zscript>
+After this page display, you should be able to navigate the listbox via pressing the DOWN/UP button. 
+<listbox id="list" width="200px" rows="10" model="${strset}">
+<listhead>
+<listheader label="Load on Demend" sort="auto"/>
+</listhead>
+<zscript>
+list.setSelectedItem(list.getItemAtIndex(0));
+list.focus();
+</zscript>
+</listbox>
+</window>

@@ -20,7 +20,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <window id="demo" apply="org.zkoss.zkdemo.userguide.DemoWindowComposer">
 	<html><![CDATA[
 	    <h4>Borderlayout</h4>
-		<p>A container with splittable and collapsable regions.</p>
+		<p>A container with splittable and collapsable regions. Note that any region can have one child component only.</p>
 	]]></html>
 	<separator/>
 	<tabbox width="100%" tabscroll="false">

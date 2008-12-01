@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B35-2319972.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Nov 26 16:36:27     2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+	The indentation of the non-checkable item should be the same as the checkable item.
+	<button label="Toggle checkmark" onClick="tree.checkmark = !tree.checkmark;"/>
+	<button label="Toggle multiple" onClick="tree.multiple = !tree.multiple;"/>
+	<tree id="tree" fixedLayout="true" multiple="true" checkmark="true">
+		<treecols>
+			<treecol label="Name"/>
+			<treecol label="Description"/>
+		</treecols>
+		<treechildren>
+			<treeitem>
+				<treerow>
+					<treecell label="Item 1"/>
+					<treecell label="Item 1 description"/>
+				</treerow>
+			</treeitem>
+			<treeitem>
+				<treerow>
+					<treecell label="Item 2"/>
+					<treecell label="Item 2 description"/>
+				</treerow>
+				<treechildren>
+					<treeitem checkable="false">
+						<treerow>
+							<treecell label="Item 2.1"/>
+						</treerow>
+						<treechildren>
+							<treeitem>
+								<treerow>
+									<treecell label="Item 2.1.1"/>
+								</treerow>
+							</treeitem>
+							<treeitem>
+								<treerow>
+									<treecell label="Item 2.1.2"/>
+								</treerow>
+							</treeitem>
+						</treechildren>
+					</treeitem>
+					<treeitem>
+						<treerow>
+							<treecell label="Item 2.2"/>
+							<treecell label="Item 2.2 is something who cares"/>
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</treeitem>
+			<treeitem label="Item 3"  checkable="false"/>
+		</treechildren>
+	</tree>
+</zk>

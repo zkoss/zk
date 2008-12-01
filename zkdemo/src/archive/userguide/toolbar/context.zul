@@ -20,8 +20,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <window id="demo" apply="org.zkoss.zkdemo.userguide.DemoWindowComposer">
 	<html><![CDATA[
 		<h4>Context Menu</h4>
-	    <p>Demostrates how to use context menu and how to listen right click.<br />
-			A conext menu can be any popup or menupopup component. To enable a context menu, just assign the id of the popup component to the context attribute</p>
+	    <p>Demonstrate context menu usage and its responses to right clicks.<br />
+			A conext menu can be any popup or menupopup component. To enable a context menu, assign the id of the popup component to the context attribute.</p>
 	]]></html>
 	<separator />
 	<tabbox width="100%" tabscroll="false">
@@ -45,12 +45,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		Right click the profile picture.
 		<image src="/img/msn2.gif" context="editPopup" />
 		<menupopup id="editPopup">
-			<menuitem label="Message" />
+			<menuitem src="/img/Centigrade-Widget-Icons/Bubble-16x16.png" label="Message" />
 			<menuseparator />
-			<menuitem src="/img/info.gif" label="Profile" />
-			<menuitem src="/img/mailto.gif" label="Mail to" />
+			<menuitem src="/img/Centigrade-Widget-Icons/UserProfileMale-16x16.png" label="Profile" />
+			<menuitem src="/img/Centigrade-Widget-Icons/Envelope-16x16.png" label="Mail to" />
 			<menuseparator />
-			<menu label="Group" src="/img/group.gif">
+			<menu label="Group" src="/img/Centigrade-Widget-Icons/CasualUsers-16x16.png">
 				<menupopup>
 					<menu label="Add to...">
 						<menupopup>
@@ -78,8 +78,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 					</menu>
 				</menupopup>
 			</menu>
-			<menuitem label="Block" src="/img/block.gif" />
-			<menuitem label="Remove contant" src="/img/delete.gif" />
+			<menuitem label="Block" src="/img/Centigrade-Widget-Icons/CasualUserMaleProhibition-16x16.png" />
+			<menuitem label="Remove contant" src="/img/Centigrade-Widget-Icons/DeleteCross-16x16.png" />
 		</menupopup>
 	</vbox>
 </zk>

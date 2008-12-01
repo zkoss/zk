@@ -274,7 +274,7 @@ public class Servlets {
 	 * Allowed values include "robot", "ie", "ie6", "ie6-", "ie7", "ie8",
 	 * "ie7-", "gecko", "gecko2", "gecko3", "gecko2-",
 	 * "opara", "safari",
-	 * "mil", "hil", "mil-".<br/>
+	 * "mil", "hil", "mil-". Otherwise, it matches whether the type exist or not.<br/>
 	 * Note: "ie6-" means Internet Explorer 6 only; not Internet Explorer 7
 	 * or other.
 	 * @param userAgent represents a client.
@@ -300,7 +300,7 @@ public class Servlets {
 		if ("hil".equals(type)) return isHilDevice(userAgent);
 
 		if ("robot".equals(type)) return isRobot(userAgent);
-		return false;
+		return userAgent != null && type != null && userAgent.toLowerCase().indexOf(type.toLowerCase()) > -1;
 	}
 	/** Returns whether the client is a robot (such as Web crawlers).
 	 *
@@ -459,6 +459,7 @@ public class Servlets {
 		userAgent = userAgent.toLowerCase();
 		return userAgent.indexOf("safari") >= 0;
 	}
+	
 	/** Returns whether the browser is Opera.
 	 */
 	public static final boolean isOpera(ServletRequest req) {

@@ -25,14 +25,12 @@ public class DemoItem {
 	private String _id;
 	private String _cateId;
 	private String _icon;
-	private String _iconIE6;
 	private String _file;
 	private String _label;
 	public DemoItem(String id, String cateId, String file, String icon, String label) {
 		_id = id;
 		_cateId = cateId;
 		_icon = icon;
-		if (icon != null) _iconIE6 = icon.replaceAll(".png", ".gif");
 		_file = file;
 		_label = label;
 	}
@@ -44,9 +42,6 @@ public class DemoItem {
 	}
 	public String getIcon() {
 		return _icon;
-	}
-	public String getIconIE6() {
-		return _iconIE6;
 	}
 	public String getFile() {
 		return _file;

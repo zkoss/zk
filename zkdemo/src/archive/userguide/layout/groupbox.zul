@@ -19,9 +19,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 <window id="demo" apply="org.zkoss.zkdemo.userguide.DemoWindowComposer">
 	<html><![CDATA[
-		<h4>More groupboxes</h4>
-		<p>Groupbox is used to visually group components into a box with an optional title. 
-		3d-type groupbox got one more function that end user can "close" or "open" it 
+		<h4>Groupbox</h4>
+		<p>Used to group components into a box with an optional title. 
+		3d mold groupbox allow users to "collapse" it 
 		by clicking on the title bar.</p>
 	]]></html>
 	<separator/>
@@ -43,7 +43,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			<attribute name="value"><![CDATA[
 <zk>
 	<groupbox id="gb" mold="3d" width="300px">
-	  <caption image="/img/ShoppingCart-16x16.png" label="Enable Backups"/>
+	  <caption image="/img/Centigrade-Widget-Icons/FileDrawer-16x16.png" label="Enable Backups"/>
 	  <hbox>
 	    <label value="Directory:"/>
 	    <textbox/>

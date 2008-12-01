@@ -16,6 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import org.zkoss.mesg.Messages;
 import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WrongValueException;
@@ -23,6 +24,7 @@ import org.zkoss.zk.ui.event.Events;
 
 import org.zkoss.zul.event.PagingEvent;
 import org.zkoss.zul.impl.XulElement;
+import org.zkoss.zul.mesg.MZul;
 import org.zkoss.zul.ext.Paginal;
 import org.zkoss.zul.ext.Paginated;
 
@@ -206,10 +208,65 @@ public class Paging extends XulElement implements org.zkoss.zul.api.Paging, Pagi
 			.append(" / ").append(_ttsz).append(" ]</div>");
 		return sb.toString();
 	}
+	
+	/** Returns the inner HTML tags of this component.
+	 * <p>Used only for component development. Not accessible by
+	 * application developers.
+	 * @since 3.5.2
+	 */
+	public String getInnerTags() {
+		final StringBuffer sb = new StringBuffer(512);
 
+		int half = _pginc / 2;
+		int begin, end = _actpg + half - 1;
+		if (end >= _npg) {
+			end = _npg - 1;
+			begin = end - _pginc + 1;
+			if (begin < 0) begin = 0;
+		} else {
+			begin = _actpg - half;
+			if (begin < 0) begin = 0;
+			end = begin + _pginc - 1;
+			if (end >= _npg) end = _npg - 1;
+		}
+		String zcs = getZclass();
+		if (_actpg > 0) {
+			if (begin > 0) //show first
+				appendAnchor(zcs, sb, Messages.get(MZul.FIRST), 0);
+			appendAnchor(zcs, sb, Messages.get(MZul.PREV), _actpg - 1);
+		}
+
+		boolean bNext = _actpg < _npg - 1;
+		for (; begin <= end; ++begin) {
+			if (begin == _actpg) {
+				appendAnchor(zcs, sb, Integer.toString(begin + 1), begin, true); //sb.append(begin + 1).append("&nbsp;");
+			} else {
+				appendAnchor(zcs, sb, Integer.toString(begin + 1), begin);
+			}
+		}
+
+		if (bNext) {
+			appendAnchor(zcs, sb, Messages.get(MZul.NEXT), _actpg + 1);
+			if (end < _npg - 1) //show last
+				appendAnchor(zcs, sb, Messages.get(MZul.LAST), _npg - 1);
+		}
+		if (_detailed)
+			sb.append("<span>[").append(_actpg * _pgsz + 1).append('/')
+				.append(_ttsz).append("]</span>");
+		return sb.toString();
+	}
+	private static final void appendAnchor(String zclass, StringBuffer sb, String label, int val) {
+		appendAnchor(zclass, sb, label, val, false);
+	}
+	private static final void appendAnchor(String zclass, StringBuffer sb, String label, int val, boolean seld) {
+		zclass += "-cnt" + (seld ? " " + zclass + "-seld" : "");
+		sb.append("<a class=\"").append(zclass).append("\" href=\"javascript:;\" onclick=\"zkPgOS.go(this,")
+			.append(val).append(")\">").append(label).append("</a>&nbsp;");
+	}
 	// super
 	public String getZclass() {
-		return _zclass == null ?  "z-paging" : super.getZclass();
+		String added = "os".equals(getMold()) ? "-os" : "";
+		return _zclass == null ? "z-paging" + added : super.getZclass();
 	}
 	public String getOuterAttrs() {
 		final StringBuffer sb = new StringBuffer(64).append(super

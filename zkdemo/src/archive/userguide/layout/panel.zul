@@ -113,24 +113,22 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			</columnlayout>
 		</panelchildren>
 		<toolbar>
-			<menubar id="menubar">
-				<menu label="File">
+			<menubar id="menubar" width="180px">
+				<menu label="Project" src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png">
 					<menupopup>
-						<menuitem label="New" image="/img/m1.gif"
+						<menuitem src="/img/Centigrade-Widget-Icons/BriefcaseSpark-16x16.png" label="New"
 							onClick="alert(self.label)" />
-						<menuitem label="Open" image="/img/m2.gif"
+						<menuitem src="/img/Centigrade-Widget-Icons/BriefcaseOpen-16x16.png" label="Open"
 							onClick="alert(self.label)" />
-						<menuitem label="Save" image="/img/m3.gif"
+						<menuitem src="/img/Centigrade-Widget-Icons/DisketteBlack-16x16.png" label="Save"
 							onClick="alert(self.label)" />
 						<menuseparator />
-						<menuitem label="Exit"
-							onClick="alert(self.label)" />
+						<menuitem label="Exit" src="/img/Centigrade-Widget-Icons/DoorOpen-16x16.png" onClick="alert(self.label)" />
 					</menupopup>
 				</menu>
-				<menu label="Help">
+				<menu label="Help" src="/img/Centigrade-Widget-Icons/QuestionmarkButton-16x16.png">
 					<menupopup>
-						<menuitem label="Index"
-							onClick="alert(self.label)" />
+						<menuitem label="Index" onClick="alert(self.label)" />
 						<menu label="About">
 							<menupopup>
 								<menuitem label="About ZK"
@@ -139,6 +137,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 									onClick="alert(self.label)" />
 							</menupopup>
 						</menu>
+					</menupopup>
+				</menu>
+				<menu src="/img/Centigrade-Widget-Icons/Spyglass-16x16.png">
+					<menupopup>
+						<menuitem label="Index" onClick="alert(self.label)" />
 					</menupopup>
 				</menu>
 			</menubar>

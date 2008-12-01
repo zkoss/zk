@@ -163,22 +163,22 @@ public class Treecell extends LabelImageElement implements org.zkoss.zul.api.Tre
 			final StringBuffer sb = new StringBuffer(80);
 			if (tree != null) {
 				if (tree.isCheckmark()) {
-					if(item.isCheckable()) {
-						sb.append("<input type=\"")
-							.append(tree.isMultiple() ? "checkbox": "radio")
-							.append('"');
-						if (item.isDisabled())
-							sb.append(" disabled=\"disabled\"");
-						if (item.isSelected())
-							sb.append(" checked=\"checked\"");
-						if (!tree.isMultiple())
-							sb.append(" name=\"").append(tree.getUuid()).append("\"");
+					final boolean isCheckable = item.isCheckable();
+					sb.append("<input type=\"")
+						.append(tree.isMultiple() ? "checkbox": "radio")
+						.append('"');
+					if (!isCheckable || item.isDisabled())
+						sb.append(" disabled=\"disabled\"");
+					if (item.isSelected())
+						sb.append(" checked=\"checked\"");
+					if (!tree.isMultiple())
+						sb.append(" name=\"").append(tree.getUuid()).append("\"");
+					if (!isCheckable)
+						sb.append(" style=\"visibility:hidden;\"  z.fc=\"t\"/>");
+					else 
 						//NOTE: use Treerow's uuid! NOT Treeitem's!
 						sb.append(" id=\"").append(getParent().getUuid())
 							.append("!cm\" z.type=\"Tcfc\"/>");
-					} else {
-						sb.append("<span class=\"checkmark-spacer\" z.fc=\"t\"></span>");
-					}
 				}
 			}
 			String iconScls = null;

@@ -224,6 +224,17 @@ div.z-drop-cnt {
 	font-size: ${fontSizeM};
 	font-weight: normal; font-family: ${fontFamilyC};
 }
+<%-- ZK Fileupload --%>
+.z-fileupload-add {
+	background-image: url(${c:encodeURL('~./zul/img/fileupload/add.png')});
+	width: 16px;
+	height: 16px;	
+}
+.z-fileupload-delete {
+	background-image: url(${c:encodeURL('~./zul/img/fileupload/delete.png')});
+	width: 16px;
+	height: 16px;	
+}
 <%-- ZK Massagebox --%>
 .z-msgbox{
 	display:-moz-inline-box; display:inline-block;
@@ -232,16 +243,16 @@ div.z-drop-cnt {
 	width: 32px; height: 32px;
 }
 .z-msgbox-question {
-	background-image: url(${c:encodeURL('~./zul/img/msgbox/question.png')});
+	background-image: url(${c:encodeURL('~./zul/img/msgbox/QuestionmarkButton-32x32.png')});
 }
 .z-msgbox-exclamation {
-	background-image: url(${c:encodeURL('~./zul/img/msgbox/exclamation.png')});
+	background-image: url(${c:encodeURL('~./zul/img/msgbox/WarningTriangle-32x32.png')});
 }
 .z-msgbox-imformation {
-	background-image: url(${c:encodeURL('~./zul/img/msgbox/information.png')});
+	background-image: url(${c:encodeURL('~./zul/img/msgbox/InfoButton-32x32.png')});
 }
 .z-msgbox-error {
-	background-image: url(${c:encodeURL('~./zul/img/msgbox/error.png')});
+	background-image: url(${c:encodeURL('~./zul/img/msgbox/StopSign-32x32.png')});
 }
 
 <%-- ZK error message box --%>

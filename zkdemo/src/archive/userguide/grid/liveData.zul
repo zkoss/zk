@@ -22,7 +22,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
       	<h4>Live data</h4>
    		<p>Listbox supports "load on demend" feature via a ListModel interface. 
    		This feature will not load data into the listbox until it is necessary</p>
-   		<p>Try to scroll the listbox down and see how the value is dynamically loaded into.</p>
+   		<p>Scroll the listbox downwards and observe the values loaded dynamically.</p>
 	]]></html>
 	<separator/>
 	<tabbox width="100%" tabscroll="false">

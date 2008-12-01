@@ -145,3 +145,29 @@
 	background-repeat : repeat-x;
 	background-position : 0 -105px;
 }
+<%-- os mold --%>
+.z-paging-os {
+	background: white; padding: 5px; zoom:1;
+}
+.z-paging-os .z-paging-os-cnt {
+	padding: 2px 3px;
+	background-color:#C7E5F1;
+	background-image:url(${c:encodeURL('~./zul/img/grid/s_hd.gif')});
+	background-repeat:repeat-x;
+	border: 1px solid #DAE7F6;
+	font-size: ${fontSizeS}; color: #1725A0; font-weight: normal;
+	text-decoration: none;
+}
+.z-paging-os .z-paging-os-cnt:hover {
+	color: red;
+}
+.z-paging-os .z-paging-os-seld {
+	font-size: ${fontSizeS}; color: white; font-weight: bold;
+	background-image:url(${c:encodeURL('~./zul/img/grid/paging-os-seld.gif')});
+}
+.z-paging-os .z-paging-os-seld:hover {
+	color: #403E39;
+}
+.z-paging-os span {
+	font-size: ${fontSizeS}; color: #555; font-weight: normal;
+}

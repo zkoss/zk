@@ -141,3 +141,15 @@ a.z-column-btn:hover {
 .z-column-over {
 	background: #B9EBFF url(${c:encodeURL('~./zul/img/grid/column-over.gif')}) repeat-x 0 0;
 }
+.z-columns-menu-grouping .z-menu-item-img {
+	background-image:  url(${c:encodeURL('~./zul/img/grid/Group-16x16.png')});
+}
+.z-columns-menu-asc .z-menu-item-img {
+	background-image:  url(${c:encodeURL('~./zul/img/grid/AZArrowUp-16x16.png')});
+}
+.z-columns-menu-desc .z-menu-item-img {
+	background-image:  url(${c:encodeURL('~./zul/img/grid/AZArrowDown-16x16.png')});
+}
+.z-columns-menu-columns .z-menu-img {
+	background-image:  url(${c:encodeURL('~./zul/img/grid/Columns-16x16.png')});
+}

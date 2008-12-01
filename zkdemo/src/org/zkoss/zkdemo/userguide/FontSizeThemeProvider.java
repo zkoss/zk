@@ -29,13 +29,14 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.util.ThemeProvider;
 
 /**
- * @author Dennis.Chen
+ * @author Dennis.Chen / Jumper Chen
  *
  */
 public class FontSizeThemeProvider implements ThemeProvider{
 
 	private static String _cssPrefix = "~./zul/css/norm";
-	private static String _cookieName = "zkdemotfs";
+	private static String _fsCookieName = "zkdemotfs";
+	private static String _skinCookieName = "zkdemoskin";
 	
 	public Collection getThemeURIs(Execution exe, List uris) {
 		int size = uris.size();
@@ -45,6 +46,10 @@ public class FontSizeThemeProvider implements ThemeProvider{
 				uri = _cssPrefix+getFontSizeCookie(exe)+uri.substring(_cssPrefix.length());
 				uris.set(i,uri);
 			}
+		}
+		if ("silvergray".equals(getSkinCookie(exe))) {
+			uris.add("~./silvergray/color.css.dsp");
+			uris.add("~./silvergray/img.css.dsp");
 		}
 		return uris;
 	}
@@ -58,7 +63,7 @@ public class FontSizeThemeProvider implements ThemeProvider{
 		Cookie[] cookies = ((HttpServletRequest)exe.getNativeRequest()).getCookies();
 		if(cookies!=null){
 			for(int i=0;i<cookies.length;i++){
-				if(_cookieName.equals(cookies[i].getName())){
+				if(_fsCookieName.equals(cookies[i].getName())){
 					String fs = cookies[i].getValue();
 					if("lg".equals(fs)){
 						return "lg";
@@ -83,11 +88,38 @@ public class FontSizeThemeProvider implements ThemeProvider{
 		}else if("sm".equals(fontSize)){
 			fs = "sm";
 		}
-		Cookie cookie = new Cookie(_cookieName,fs);
+		Cookie cookie = new Cookie(_fsCookieName,fs);
 		cookie.setMaxAge(60*60*24*30);//store 30 days
 		String cp = exe.getContextPath();
 		cookie.setPath(cp);
 		((HttpServletResponse)exe.getNativeResponse()).addCookie(cookie);
 	}
 
+	/**
+	 * get skin value from cookie
+	 */
+	public static String getSkinCookie(Execution exe) {
+		Cookie[] cookies = ((HttpServletRequest)exe.getNativeRequest()).getCookies();
+		if(cookies!=null){
+			for(int i=0;i<cookies.length;i++){
+				if(_skinCookieName.equals(cookies[i].getName())){
+					String fs = cookies[i].getValue();
+					if (fs != null)
+						return fs;
+				}
+			}
+		}
+		return "";
+	}
+
+	/**
+	 * set skin value to cookie
+	 */
+	public static void setSkinCookie(Execution exe,String skin){
+		Cookie cookie = new Cookie(_skinCookieName, skin);
+		cookie.setMaxAge(60*60*24*30);//store 30 days
+		String cp = exe.getContextPath();
+		cookie.setPath(cp);
+		((HttpServletResponse)exe.getNativeResponse()).addCookie(cookie);
+	}
 }

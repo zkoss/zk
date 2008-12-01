@@ -1022,6 +1022,7 @@ public class Components {
 			public boolean isExplorer7() {
 				return exec().isExplorer7();
 			}
+			
 			public boolean isOpera() {
 				return exec().isOpera();
 			}

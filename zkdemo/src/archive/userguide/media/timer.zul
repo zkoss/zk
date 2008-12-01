@@ -20,7 +20,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <window id="demo" apply="org.zkoss.zkdemo.userguide.DemoWindowComposer">
 	<html><![CDATA[
 		<h4>Timer</h4>
-		<p>Timer is an invisible component that is used to periodically 
+		<p>Timer is a non-visible component that is used to periodically 
 		refresh information constantly (e.g. show the newest stock index, etc.).</p>
 	]]></html>
 	<separator />

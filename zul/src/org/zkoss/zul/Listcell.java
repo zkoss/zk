@@ -187,20 +187,20 @@ public class Listcell extends LabelImageElement implements org.zkoss.zul.api.Lis
 				.append("\" align=\"absmiddle\"/>");
 			}
 			if (listbox.isCheckmark()) {
-				if (item.isCheckable()) {
-					sb.append("<input type=\"").append(listbox.isMultiple() ? "checkbox": "radio")
-						.append('"');
-					if (item.isDisabled())
-						sb.append(" disabled=\"disabled\"");
-					if (item.isSelected())
-						sb.append(" checked=\"checked\"");
-					if (!listbox.isMultiple()) 
-						sb.append(" name=\"").append(listbox.getUuid()).append("\"");
+				final boolean isCheckable = item.isCheckable();
+				sb.append("<input type=\"").append(listbox.isMultiple() ? "checkbox": "radio")
+					.append('"');
+				if (!isCheckable || item.isDisabled())
+					sb.append(" disabled=\"disabled\"");
+				if (item.isSelected())
+					sb.append(" checked=\"checked\"");
+				if (!listbox.isMultiple()) 
+					sb.append(" name=\"").append(listbox.getUuid()).append("\"");
+				if (!isCheckable)
+					sb.append(" style=\"visibility:hidden;\"/>");
+				else
 					sb.append(" id=\"").append(item.getUuid())
 						.append("!cm\" z.type=\"Lcfc\"/>");
-				} else {
-					sb.append("<span class=\"checkmark-spacer\"></span>");
-				}
 				return sb.toString();
 			} else if (sb.length() > 0) return sb.toString();
 		}

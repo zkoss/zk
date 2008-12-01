@@ -20,8 +20,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <window id="demo" apply="org.zkoss.zkdemo.userguide.DemoWindowComposer">
 	<html><![CDATA[
 		<h4>Tooltips and Popup</h4>
-	    <p>Demostrates how to use customized tooltip and popup menu. <br />
-		Tooltips and popup menus can be any popup or menupopup components./p>
+	    <p>Demonstrate usage of customized tooltip and popup menu. <br />
+		Tooltips and popup menus can be any popup or menupopup components.</p>
 	]]></html>
 	<separator />
 	<tabbox width="100%" tabscroll="false">
@@ -50,34 +50,34 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			<listheader label="Operation" width="200px" />
 			<listheader label="Contants" sort="auto" />
 		</listhead>
-		<listitem tooltip="any">
+		<listitem tooltip="msg">
 			<listcell label=" Mouse hover - tooltip " />
 			<listcell>
 				<hbox>
 					<image src="/img/msn1.gif" class="profile" />
-					<image src="/img/live-on.gif" class="p-data" />
+					<image src="/img/Centigrade-Widget-Icons/CasualUserMale-16x16.png" class="p-data" />
 					<vbox class="p-data">
-						<label value="Tom" />
-						<label value="Tomcat@hotmail.com" />
+						<label value="Male" />
+						<label value="Male@hotmail.com" />
 					</vbox>
 				</hbox>
 			</listcell>
 		</listitem>
-		<listitem popup="any">
+		<listitem popup="msg">
 			<listcell label="Click - popup" />
 			<listcell>
 				<hbox>
 					<image src="/img/msn1.gif" class="profile" />
-					<image src="/img/live-on.gif" class="p-data" />
+					<image src="/img/Centigrade-Widget-Icons/CasualUserFemale-16x16.png" class="p-data" />
 					<vbox class="p-data">
-						<label value="ZK" />
-						<label value="ZKisgood@hotmail.com" />
+						<label value="Female" />
+						<label value="Female@hotmail.com" />
 					</vbox>
 				</hbox>
 			</listcell>
 		</listitem>
 	</listbox>
-	<popup id="any" width="300px">
+	<popup id="msg" width="300px">
 		<vbox>
 			This user is online now !
 			<toolbarbutton label="Mail him/her"/>

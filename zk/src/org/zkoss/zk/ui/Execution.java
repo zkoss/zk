@@ -782,7 +782,7 @@ public interface Execution  {
 	 * Allowed values include "robot", "ie", "ie6", "ie6-", "ie7", "ie8",
 	 * "ie7-", "gecko", "gecko2", "gecko3", "gecko2-",
 	 * "opara", "safari",
-	 * "mil", "hil", "mil-".<br/>
+	 * "mil", "hil", "mil-". Otherwise, it matches whether the type exist or not.<br/>
 	 * Note: "ie6-" means Internet Explorer 6 only; not Internet Explorer 7
 	 * or other.
 	 * @since 3.5.1
@@ -811,7 +811,7 @@ public interface Execution  {
 	/** Returns whether the client is Safari.
 	 */
 	public boolean isSafari();
-	/** Returns whether the client is Safari.
+	/** Returns whether the client is Opera.
 	 * @since 3.5.1
 	 */
 	public boolean isOpera();

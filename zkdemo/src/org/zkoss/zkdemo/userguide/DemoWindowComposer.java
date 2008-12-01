@@ -18,14 +18,19 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkdemo.userguide;
 
+import org.zkoss.lang.Library;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
+import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Path;
 import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.util.GenericForwardComposer;
 import org.zkoss.zul.Button;
-import org.zkoss.zul.Include;
+import org.zkoss.zul.Div;
+import org.zkoss.zul.Image;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
@@ -43,9 +48,29 @@ public class DemoWindowComposer extends GenericForwardComposer {
 		super.doAfterCompose(comp);
 		((Window)comp).setContentSclass("demo-main-cnt");
 		((Window)comp).setSclass("demo-main");
-		final Include inc = new Include();
-		inc.setSrc("/userguide/bar.zul");
+		final Div inc = new Div();
+		Executions.createComponents("/userguide/bar.zul", inc, null);
 		inc.setStyle("float:right");
+		if (Library.getProperty("org.zkoss.zkdemo.theme.silvergray") != null) {
+			String cookie = FontSizeThemeProvider.getSkinCookie(Executions.getCurrent());
+			boolean isDefault = !"silvergray".equals(cookie);
+			String img = isDefault ? "/img/ButtonGray.png" : "/img/ButtonBlue.png";
+			Image skin = new Image(img);
+			skin.setSclass("pointer");
+			skin.setTooltiptext(isDefault ? "Gray Theme" : "Blue Theme");
+			skin.addEventListener(Events.ON_CLICK, new EventListener() {
+
+				public void onEvent(Event event) throws Exception {
+					Image skin = (Image)event.getTarget();
+					Execution exec = Executions.getCurrent();
+					boolean isDefault = skin.getSrc().indexOf("ButtonGray") < 0;
+					FontSizeThemeProvider.setSkinCookie(exec, isDefault ? "" : "silvergray");
+					exec.sendRedirect("");
+				}
+				
+			});
+			inc.insertBefore(skin, inc.getFirstChild());
+		}
 		comp.insertBefore(inc, comp.getFirstChild());
 		if (view != null) execute();
 	}

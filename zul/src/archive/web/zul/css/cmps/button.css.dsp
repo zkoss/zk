@@ -183,3 +183,8 @@ span.z-button {
 .z-button-clk .z-button-cr {
 	background-position:-9px 0px;
 }
+<%-- os mold --%>
+.z-button-os {
+	font-family: ${fontFamilyC};
+	font-size: ${fontSizeM}; font-weight: normal;
+}
