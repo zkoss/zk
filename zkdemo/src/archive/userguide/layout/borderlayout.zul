@@ -111,12 +111,12 @@ Rights Reserved.
 						<rows>
 							<row><div><toolbarbutton label="Functional Designs"/>(<toolbarbutton label="Releases"/>, <toolbarbutton label="Designs"/>, Product Overview)</div></row>
 							<row><div><toolbarbutton label="Technical Docs"/></div></row>
-							<row><div><image src="/img/calendar.png"/><separator orient="vertical"/><toolbarbutton label="Project Calendar"/></div></row>
-							<row><div><image src="/img/doc.png"/><separator orient="vertical"/><toolbarbutton label="Developer's Refenence"/></div></row>
-							<row><div><image src="/img/doc.png"/><separator orient="vertical"/><toolbarbutton label="Developer's Guide"/></div></row>
-							<row><div><image src="/img/doc.png"/><separator orient="vertical"/><toolbarbutton label="Component Guide"/></div></row>
-							<row><div><image src="/img/doc.png"/><separator orient="vertical"/><toolbarbutton label="Style Guide"/></div></row>
-							<row><div><image src="/img/received.png"/><separator orient="vertical"/><toolbarbutton label="Mailing Lists"/></div></row>
+							<row><div><image src="/img/Centigrade-Widget-Icons/Calendar-16x16.png"/><separator orient="vertical"/><toolbarbutton label="Project Calendar"/></div></row>
+							<row><div><image src="/img/Centigrade-Widget-Icons/BookBlue-16x16.png"/><separator orient="vertical"/><toolbarbutton label="Developer's Refenence"/></div></row>
+							<row><div><image src="/img/Centigrade-Widget-Icons/BookGreen-16x16.png"/><separator orient="vertical"/><toolbarbutton label="Developer's Guide"/></div></row>
+							<row><div><image src="/img/Centigrade-Widget-Icons/BookBrown-16x16.png"/><separator orient="vertical"/><toolbarbutton label="Component Guide"/></div></row>
+							<row><div><image src="/img/Centigrade-Widget-Icons/Booklet-16x16.png"/><separator orient="vertical"/><toolbarbutton label="Style Guide"/></div></row>
+							<row><div><image src="/img/Centigrade-Widget-Icons/Envelope-16x16.png"/><separator orient="vertical"/><toolbarbutton label="Mailing Lists"/></div></row>
 						</rows>
 						</grid>
 					</panelchildren>

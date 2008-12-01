@@ -27,6 +27,7 @@ import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.event.BookmarkEvent;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.ForwardEvent;
@@ -125,7 +126,26 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 			}
 		}
 	}
-
+	public void onBookmarkChange$main(BookmarkEvent event) {
+		String id = event.getBookmark();
+		if (id != null) {
+			final DemoItem[] items = getItems();
+			for (int i = 0; i < items.length; i++) {
+				if (items[i].getId().equals(id)) {
+					_selected = (Div)main.getFellow(items[i].getCateId());
+					itemList.setModel(getSelectedModel());
+					itemList.renderAll();
+					Listitem item = ((Listitem)itemList.getFellow(id));
+					item.setSelected(true);
+					itemList.invalidate();
+					setSelectedCategory(item);
+					xcontents.setSrc(((DemoItem) item.getValue()).getFile());
+					return;
+				}
+			}
+		}
+		
+	}
 	public void onSelect$itemList(SelectEvent event) {
 		Listitem item = itemList.getSelectedItem();
 		if (item != null) {
@@ -173,6 +193,7 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 		} else {
 			Clients.evalJavaScript(deselect);
 		}
+		item.getDesktop().setBookmark(item.getId());
 	}
 	public void onChanging$searchBox(InputEvent event) {
 		String key = event.getValue();

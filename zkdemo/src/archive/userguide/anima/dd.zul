@@ -48,22 +48,22 @@ by dragging list items around.</p>
 			oddRowSclass="non-odd" fixedLayout="true" droppable="true"
 			onDrop="movel(event.dragged)">
 			<listitem draggable="true">
-				<listcell src="/img/Briefcase-16x16.png" label="ZK Forge" />
+				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Forge" />
 			</listitem>
 			<listitem draggable="true">
-				<listcell src="/img/Briefcase-16x16.png" label="ZK Mobile" />
+				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Mobile" />
 			</listitem>
 			<listitem draggable="true">
-				<listcell src="/img/Briefcase-16x16.png" label="ZK GWT" />
+				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK GWT" />
 			</listitem>
 			<listitem draggable="true">
-				<listcell src="/img/Briefcase-16x16.png" label="ZK JSF" />
+				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK JSF" />
 			</listitem>
 			<listitem draggable="true">
-				<listcell src="/img/Briefcase-16x16.png" label="ZK JSP" />
+				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK JSP" />
 			</listitem>
 			<listitem draggable="true">
-				<listcell src="/img/Briefcase-16x16.png" label="ZK Spring" />
+				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Spring" />
 			</listitem>
 		</listbox>
 		<separator />
@@ -71,10 +71,10 @@ by dragging list items around.</p>
 			oddRowSclass="non-odd" fixedLayout="true"
 			multiple="true" droppable="true" onDrop="mover(event.dragged)">
 			<listitem draggable="true">
-				<listcell src="/img/Briefcase-16x16.png" label="ZK" />
+				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK" />
 			</listitem>
 			<listitem draggable="true">
-				<listcell src="/img/Briefcase-16x16.png" label="ZK Studio" />
+				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Studio" />
 			</listitem>
 		</listbox>
 	</hbox>

@@ -58,7 +58,7 @@
 					<textbox width="150px" value="info@zkoss.org"
 						constraint="/\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*([,;]\s*\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*)*/: Please enter real e-mail address" />
 					<hbox>
-						<image src="/img/help.gif" tooltip="mail"
+						<image src="/img/Centigrade-Widget-Icons/QuestionmarkButton-16x16.png" tooltip="mail"
 							style="cursor: help" />
 						<label value="Move mouse Over Me!"
 							tooltip="mail" />
@@ -68,9 +68,9 @@
 			<row>
 				Subject :
 				<hbox>
-					<textbox value="I want to buy ZK" width="150px" />
+					<textbox value="I love ZK" width="150px" />
 					<hbox>
-						<image src="/img/help.gif" popup="title"
+						<image src="/img/Centigrade-Widget-Icons/QuestionmarkButton-16x16.png" popup="title"
 							style="cursor:pointer" />
 						<label value="Click Me!" popup="title" />
 					</hbox>
