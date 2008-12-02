@@ -314,7 +314,7 @@ zkVld.closeErrbox = function (box, remaingError, coerce) {
 			zk.rmClass($real(cmp), getZKAttr(cmp, "zcls") + "-text-invalid");
 		}
 	}
-	if (cmp._focusFn) { // Bug 2280308
+	if (cmp && cmp._focusFn) { // Bug 2280308
 		zk.unlisten(cmp, "focus", cmp._focusFn);
 		cmp._focusFn = null;
 	}
