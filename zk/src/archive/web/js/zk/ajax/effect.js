@@ -143,7 +143,7 @@ zEffect = {
 					}
 				});
 			}
-		return new zk.eff.Appear(element, opts);
+		return appear(element, opts);
 	},
 
 	dropOut: function(element, opts) {
