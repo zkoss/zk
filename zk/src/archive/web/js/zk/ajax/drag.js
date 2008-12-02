@@ -557,12 +557,12 @@ zk.Draggable = zk.$extends(zk.Object, {
 		var node = draggable.node;
 		node._$opacity = zDom.getOpacity(node);
 		zk.Draggable._dragging[node] = true;
-		new zEffect.Opacity(node, {duration:0.2, from:node._$opacity, to:0.7}); 
+		new zk.eff.Opacity(node, {duration:0.2, from:node._$opacity, to:0.7}); 
 	},
 	defafultEndEffect: function(draggable) {
 		var node = draggable.node,
 			toOpacity = typeof node._$opacity == 'number' ? node._$opacity : 1.0;
-		new zEffect.Opacity(node, {duration:0.2, from:0.7,
+		new zk.eff.Opacity(node, {duration:0.2, from:0.7,
 			to:toOpacity, queue: {scope:'_draggable', position:'end'},
 			afterFinish: function () { 
 				zk.Draggable._dragging[node] = false;
@@ -573,7 +573,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 		var node = draggable.node,
 			orgpos = node.style.position, //Bug 1538506
 			dur = Math.sqrt(Math.abs(top_offset^2)+Math.abs(left_offset^2))*0.02;
-		new zEffect.Move(node, { x: -left_offset, y: -top_offset,
+		new zk.eff.Move(node, { x: -left_offset, y: -top_offset,
 			duration: dur, queue: {scope:'_draggable', position:'end'}});
 
 		//Bug 1538506: a strange bar appear in IE

@@ -224,18 +224,24 @@ public class HtmlPageRenders {
 				}
 		}
 
-		sb.append(");\nzkopt({pd:")
-			.append(config.getProcessingPromptDelay())
-			.append(",td:").append(config.getTooltipDelay())
-			.append(",rd:").append(config.getResendDelay());
-		if (config.isDebugJS())
-			sb.append(",dj:1");
+		sb.append(");");
+		final int jdot = sb.length();
+		int v = config.getProcessingPromptDelay();
+		if (v != 900) sb.append(",pd:").append(v);
+		v = config.getTooltipDelay();
+		if (v != 800) sb.append(",td:").append(v);
+		v = config.getResendDelay();
+		if (v >= 0) sb.append(",rd:").append(v);
+		if (config.isDebugJS()) sb.append(",dj:1");
 		if (config.isKeepDesktopAcrossVisits()
 		|| exec.getAttribute(Attributes.NO_CACHE) == null)
 			sb.append(",kd:1");
 		if (config.getPerformanceMeter() != null)
 			sb.append(",pf:1");
-		sb.append("});\n");
+		if (sb.length() > jdot) {
+			sb.replace(jdot, jdot + 1, "\nzkopt({");
+			sb.append("});\n");
+		}
 
 		final int[] cers = config.getClientErrorReloadCodes();
 		if (cers.length > 0) {

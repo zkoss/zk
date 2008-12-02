@@ -93,7 +93,7 @@ zAnima = {
 				var dir = opts ? opts.dir: 0;
 				if (!dir) dir = "lt"
 
-  				new zEffect.Move(n, 0, 0, zAnima._mergeOpts(widget, opts, {
+  				new zk.eff.Move(n, 0, 0, zAnima._mergeOpts(widget, opts, {
 					duration: 0.6,
 					afterSetup: function(effect) {
 						if (dir.indexOf('l') >= 0) {

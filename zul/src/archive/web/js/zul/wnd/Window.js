@@ -99,7 +99,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this._syncShadow();
 		this._syncMask();
 
-		this._mask = new zEffect.FullMask({
+		this._mask = new zk.eff.FullMask({
 			id: this.uuid + "$mask",
 			anchor: this._shadow.getBottomElement(),
 				//bug 1510218: we have to make it as a sibling
@@ -133,7 +133,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			}
 		} else {
 			if (!this._shadow)
-				this._shadow = new zEffect.Shadow(this.node, {stackup:true});
+				this._shadow = new zk.eff.Shadow(this.node, {stackup:true});
 			this._shadow.sync();
 		}
 	},

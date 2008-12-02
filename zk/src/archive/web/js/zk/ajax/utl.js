@@ -99,7 +99,7 @@ zUtl = { //static methods
 		document.body.appendChild(n);
 		n = zDom.setOuterHTML(n, html);
 
-		if (mask) n.z_mask = new zEffect.FullMask({mask: zDom.$(idmsk)});
+		if (mask) n.z_mask = new zk.eff.FullMask({mask: zDom.$(idmsk)});
 
 		n = zDom.$(idtxt);
 		if (mask && n) { //center

@@ -32,7 +32,7 @@ zEffect = {
 					zDom.setStyle(e, {opacity: oldOpacity}); 
 				}
 			};
-		return new zEffect.Opacity(element,opts);
+		return new zk.eff.Opacity(element,opts);
 	},
 	appear: function(element, opts) {
 		element = zDom.$(element);
@@ -51,7 +51,7 @@ zEffect = {
 				zDom.setOpacity(e, effect.opts.from);
 				zDom.show(e);
 			};
-		return new zEffect.Opacity(element,opts);
+		return new zk.eff.Opacity(element,opts);
 	},
 
 	puff: function(element, opts) {
@@ -75,10 +75,10 @@ zEffect = {
 				zDom.hide(e);
 				zDom.setStyle(e, oldStyle);
 			};
-		return new zEffect.Parallel(
-			[ new zEffect.Scale(element, 200, 
+		return new zk.eff.Parallel(
+			[ new zk.eff.Scale(element, 200, 
 				{sync: true, scaleFromCenter: true, scaleContent: true, restoreAfterFinish: true}),
-				new zEffect.Opacity(element, {sync: true, to: 0.0}) ],
+				new zk.eff.Opacity(element, {sync: true, to: 0.0}) ],
 			opts);
 	},
 
@@ -93,7 +93,7 @@ zEffect = {
 				zDom.hide(e);
 				zDom.undoClipping(e);
 			};
-		return new zEffect.Scale(element, 0, opts);
+		return new zk.eff.Scale(element, 0, opts);
 	},
 	blindDown: function(element, opts) {
 		element = zDom.$(element);
@@ -115,7 +115,7 @@ zEffect = {
 			afterFinishInternal = function(effect) {
 				zDom.undoClipping(effect.node);
 			};
-		return new zEffect.Scale(element, 100, opts);
+		return new zk.eff.Scale(element, 100, opts);
 	},
 
 	switchOff: function(element, opts) {
@@ -125,7 +125,7 @@ zEffect = {
 			duration: 0.4, from: 0, transition: zEffect._Tranx.flicker});
 		if (!opts.afterFinishInternal)
 			opts.afterFinishInternal = function(effect) {
-				new zEffect.Scale(effect.node, 1, { 
+				new zk.eff.Scale(effect.node, 1, { 
 					duration: 0.3, scaleFromCenter: true,
 					scaleX: false, scaleContent: false,
 					restoreAfterFinish: true,
@@ -143,7 +143,7 @@ zEffect = {
 					}
 				});
 			}
-		return new zEffect.Appear(element, opts);
+		return new zk.eff.Appear(element, opts);
 	},
 
 	dropOut: function(element, opts) {
@@ -164,9 +164,9 @@ zEffect = {
 				zDom.undoPositioned(e);
 				zDom.setStyle(e, oldStyle);
 			};
-		return new zEffect.Parallel(
-			[new zEffect.Move(element, {x: 0, y: 100, sync: true}), 
-			new zEffect.Opacity(element, { sync: true, to: 0.0})], opts);
+		return new zk.eff.Parallel(
+			[new zk.eff.Move(element, {x: 0, y: 100, sync: true}), 
+			new zk.eff.Opacity(element, { sync: true, to: 0.0})], opts);
 	},
 
 	slideOut: function(element, anchor, opts) {
@@ -208,8 +208,8 @@ zEffect = {
 				zDom.undoPositioned(e)
 				zDom.setStyle(e, oldStyle);
 			}; 
-		return new zEffect.Parallel(
-			[new zEffect.Move(element, movement)], opts);
+		return new zk.eff.Parallel(
+			[new zk.eff.Move(element, movement)], opts);
 	},
 	slideIn: function(element, anchor, opts) {
 		anchor = anchor || 't';
@@ -256,8 +256,8 @@ zEffect = {
 				zDom.undoPositioned(e);
 				zDom.setStyle(e, oldStyle);
 			};
-		return new zEffect.Parallel(
-			[new zEffect.Move(element, movement)], opts);
+		return new zk.eff.Parallel(
+			[new zk.eff.Move(element, movement)], opts);
 	},
 
 	slideDown: function(element, anchor, opts) {
@@ -321,7 +321,7 @@ zEffect = {
 				zDom.undoPositioned(e);
 				zDom.setStyle(e, {top: orig.t, left: orig.l});
 			};
-		return new zEffect.Scale(element, 100, opts);
+		return new zk.eff.Scale(element, 100, opts);
 	},
 	slideUp: function(element, anchor, opts) {
 		anchor = anchor || 't';
@@ -366,11 +366,12 @@ zEffect = {
 				zDom.undoPositioned(e);
 				zDom.setStyle(e, {top: orig.t, left: orig.l});
 			};
-		return new zEffect.Scale(element, zk.opera ? 0 : 1, opts);
+		return new zk.eff.Scale(element, zk.opera ? 0 : 1, opts);
 	}
 };
 
-zEffect._Base = zk.$extends(zk.Object, {
+zk.eff = {}
+zk.eff.Base_ = zk.$extends(zk.Object, {
 	position: null,
 	start: function(opts) {
 		this.opts = zk.$default(opts, zEffect._defOpts);
@@ -430,7 +431,7 @@ zEffect._Base = zk.$extends(zk.Object, {
 	}
 });
 
-zEffect.Parallel = zk.$extends(zEffect._Base, {
+zk.eff.Parallel = zk.$extends(zk.eff.Base_, {
 	$init: function(effects, opts) {
 		this._effects = effects || [];
 		this.start(opts);
@@ -450,7 +451,7 @@ zEffect.Parallel = zk.$extends(zEffect._Base, {
 	}
 });
 
-zEffect.Opacity = zk.$extends(zEffect._Base, {
+zk.eff.Opacity = zk.$extends(zk.eff.Base_, {
 	$init: function(element, opts) {
 		var e = this.node = zDom.$(element);
 		// make this work on IE on elements without 'layout'
@@ -465,7 +466,7 @@ zEffect.Opacity = zk.$extends(zEffect._Base, {
 	}
 });
 
-zEffect.Move = zk.$extends(zEffect._Base, {
+zk.eff.Move = zk.$extends(zk.eff.Base_, {
 	$init: function(element, opts) {
 		this.node = zDom.$(element);
 		opts = zk.$default(opts, {x: 0, y: 0, mode: 'relative'});
@@ -494,7 +495,7 @@ zEffect.Move = zk.$extends(zEffect._Base, {
 	}
 });
 
-zEffect.Scale = zk.$extends(zEffect._Base, {
+zk.eff.Scale = zk.$extends(zk.eff.Base_, {
 	$init: function(element, percent, opts) {
 		this.node = zDom.$(element);
 		opts = zk.$default(opts, {
@@ -573,7 +574,7 @@ zEffect.Scale = zk.$extends(zEffect._Base, {
 	}
 });
 
-zEffect.ScrollTo = zk.$extends(zEffect._Base, {
+zk.eff.ScrollTo = zk.$extends(zk.eff.Base_, {
 	$init: function(element, opts) {
 		this.node = zDom.$(element);
 		this.start(opts || {});
@@ -688,7 +689,7 @@ zEffect._defOpts = {
   queue:      'parallel'
 };
 
-zEffect.Shadow = zk.$extends(zk.Object, {
+zk.eff.Shadow = zk.$extends(zk.Object, {
 	/**
 	 * Initial the Shadow object for the specified component.
 	 * 
@@ -830,7 +831,7 @@ zEffect.Shadow = zk.$extends(zk.Object, {
 });
 
 /** A mask covers the browser window fully. */
-zEffect.FullMask = zk.$extends(zk.Object, {
+zk.eff.FullMask = zk.$extends(zk.Object, {
 	/**
 	 * @param opts The options
 	 * <p>Alowed options:
