@@ -116,6 +116,12 @@ span.z-dottree-last-open, span.z-dottree-last-close, span.z-dottree-tee, span.z-
 .z-msgbox-error {
 	background-image: url(${c:encodeURL('~./zul/img/msgbox/StopSign-32x32.gif')});
 }
+.z-fileupload-add {
+	background-image: url(${c:encodeURL('~./zul/img/fileupload/add.gif')});	
+}
+.z-fileupload-delete {
+	background-image: url(${c:encodeURL('~./zul/img/fileupload/delete.gif')});
+}
 <%-- box.css.dsp --%>
 .z-splitter-ver-btn-l, .z-splitter-hor-btn-l {
 	background-image: url(${c:encodeURL('~./zul/img/splt/colps-l.gif')});

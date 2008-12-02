@@ -396,7 +396,7 @@ ul ul ul li	{list-style: url(${c:encodeURL('/img/z-bullet3.gif')}) square}
 		minsize="150" maxsize="500" collapsible="true">
 		<panel>
 			<toolbar>
-				<label value="Search:"/><textbox id="searchBox" sclass="demo-search-inp"/>
+				<label value="Search:"/><textbox id="searchBox" ctrlKeys="#down#up" focus="true" sclass="demo-search-inp"/>
 			</toolbar>
 			<panelchildren>
 				<listbox id="itemList" oddRowSclass="non-odd" sclass="demo-items"

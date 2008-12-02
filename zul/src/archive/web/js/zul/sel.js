@@ -206,7 +206,8 @@ zk.Selectable.prototype = {
 	onKeydown: function (evt) {
 		var meta = zkau.getMeta($uuid(Event.element(evt)));
 		if (meta)
-			meta.dokeydown(evt, meta._focusItem || $e(getZKAttr(meta.element, "selId")));
+			meta.dokeydown(evt, $e(meta._focusItem) || $e(getZKAttr(meta.element, "selId")));
+				// sometimes the _focusItem is out of date;
 	},
 	cleanup: function ()  {
 		if (this.fnSubmit)

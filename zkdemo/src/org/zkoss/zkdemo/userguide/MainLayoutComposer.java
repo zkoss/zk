@@ -19,6 +19,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zkdemo.userguide;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import org.zkoss.lang.reflect.FusionInvoker;
@@ -32,6 +33,7 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.ForwardEvent;
 import org.zkoss.zk.ui.event.InputEvent;
+import org.zkoss.zk.ui.event.KeyEvent;
 import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.util.Clients;
@@ -140,6 +142,7 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 					itemList.invalidate();
 					setSelectedCategory(item);
 					xcontents.setSrc(((DemoItem) item.getValue()).getFile());
+					itemList.focus();
 					return;
 				}
 			}
@@ -148,7 +151,14 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 	}
 	public void onSelect$itemList(SelectEvent event) {
 		Listitem item = itemList.getSelectedItem();
+		 
 		if (item != null) {
+			
+			// sometimes the item is unloaded.
+			if (!item.isLoaded()) {
+				itemList.renderItem(item);
+			}
+			
 			setSelectedCategory(item);
 			xcontents.setSrc(((DemoItem) item.getValue()).getFile());
 		}
@@ -194,6 +204,27 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 			Clients.evalJavaScript(deselect);
 		}
 		item.getDesktop().setBookmark(item.getId());
+	}
+	public void onCtrlKey$searchBox(KeyEvent event) {
+		int keyCode = event.getKeyCode();
+		List items = itemList.getItems();
+		if (items.isEmpty()) return;
+		Listitem item = null;
+		switch (keyCode) {
+		case 38: // UP
+			item = itemList.getItemAtIndex(items.size() -1);
+			itemList.setSelectedItem(item);
+			break;
+		case 40: // DOWN
+			item = itemList.getItemAtIndex(0);
+			itemList.setSelectedItem(item);
+			break;
+		}
+		if (item != null) {
+			setSelectedCategory(item);
+			xcontents.setSrc(((DemoItem) item.getValue()).getFile());
+			itemList.focus();
+		}
 	}
 	public void onChanging$searchBox(InputEvent event) {
 		String key = event.getValue();
