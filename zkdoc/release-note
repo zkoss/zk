@@ -44,6 +44,7 @@ ZK 3.5.2
   2349456: It's not possible to navigate a listbox with keyboard only
   2355376: IE fail in some special case
   2241309: Clone component shall clone GenericAutowireComposer as well
+  2355943: Default content font-family (fontFamilyC) in Linux
   
 	--------
 ZK 3.5.1

@@ -21,7 +21,7 @@
 
 <c:set var="fontFamilyT" value="Verdana, Tahoma, Arial, Helvetica, sans-serif"
 	scope="request" if="${empty fontFamilyT}"/><%-- title --%>
-<c:set var="fontFamilyC" value="Verdana, Tahoma, Arial, serif"
+<c:set var="fontFamilyC" value="Verdana, Tahoma, Arial, Helvetica, sans-serif"
 	scope="request" if="${empty fontFamilyC}"/><%-- content --%>
 
 html, body {height:100%}
