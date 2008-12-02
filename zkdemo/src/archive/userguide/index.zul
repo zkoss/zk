@@ -33,7 +33,7 @@ if (zk.ie6Only) {
 	var PNG_FILTER = "progid:" + ALPHA_IMAGE_LOADER + "(src='%1',sizingMethod='%2')";
 	
 	// these file name should be fixed
-	var FILE_NAME = "24x24.png|32x32.png|48x48.png|ButtonBlue.png|ButtonGray.png|small.png|small-sel.png"
+	var FILE_NAME = "24x24.png|32x32.png|48x48.png|128x128.png|ButtonBlue.png|ButtonGray.png|small.png|small-sel.png"
 				  + "|normal.png|normal-sel.png|large.png|large-sel.png";
 	
 	//regular expression version of the above
