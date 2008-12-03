@@ -135,10 +135,11 @@ zk.Cal.prototype = {
 		for (var j = 0; j < 12; ++j) {
 			el = $e(this.id + "!m" + j);
 			if (el) { //omitted if compact
-				if(m==j) 
-					zk.addClass(el, zcls+"-seld");
-				else
-					zk.rmClass(el, zcls+"-seld");
+				if (m == j) {
+					zk.addClass(el, zcls + "-seld");
+					zk.rmClass(el, zcls + "-over");
+				} else 
+					zk.rmClass(el, zcls + "-seld") ;
 				el.setAttribute("zk_mon", j);
 			}
 		}
