@@ -368,6 +368,9 @@ ul ul ul li	{list-style: url(${c:encodeURL('/img/z-bullet3.gif')}) square}
 .demo-items {
 	border: none; background: white;
 }
+.demo-items .z-listbox-body {
+	overflow-x: hidden;
+}
 .demo-items .z-list-cell-cnt img {
 	width:24px;
 	height:24px;
@@ -397,7 +400,7 @@ ul ul ul li	{list-style: url(${c:encodeURL('/img/z-bullet3.gif')}) square}
 		</div>
 	</north>
 	<west title="ZK ${desktop.webApp.version} Live Demo" size="250px" flex="true" splittable="true"
-		minsize="150" maxsize="500" collapsible="true">
+		minsize="210" maxsize="500" collapsible="true">
 		<panel>
 			<toolbar>
 				<label value="Search:"/><textbox id="searchBox" ctrlKeys="#down#up" focus="true" sclass="demo-search-inp"/>
