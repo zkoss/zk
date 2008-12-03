@@ -17,7 +17,7 @@ div.z-tree-header th.z-tree-col, div.z-tree-header th.z-auxheader {
 	white-space: nowrap; padding: 2px;
 	font-size: ${fontSizeM}; font-weight: normal;
 }
-div.z-tree-body {
+div.z-tree-body, div.z-dottree-body, div.z-filetree-body, div.z-vfiletree-body {
 	background: white; border: 0; overflow: auto; width: 100%; position: relative;
 }
 div.z-tree-pgi-b {

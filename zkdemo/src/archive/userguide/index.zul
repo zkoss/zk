@@ -368,6 +368,10 @@ ul ul ul li	{list-style: url(${c:encodeURL('/img/z-bullet3.gif')}) square}
 .demo-items {
 	border: none; background: white;
 }
+.demo-items .z-list-cell-cnt img {
+	width:24px;
+	height:24px;
+}
 .demo-items .z-list-cell-cnt {
 	padding-left: 5px;
 }
