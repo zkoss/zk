@@ -666,15 +666,7 @@ public class Window extends XulElement implements IdSpace {
 		super.onChildRemoved(child);
 	}
 
-	public void setPage(Page page) {
-		super.setPage(page);
-
-		if (page == null && _mode == MODAL)
-			leaveModal();
-	}
-	public void setParent(Component parent) {
-		super.setParent(parent);
-
+	public void onPageDetached(Page page) {
 		if (_mode == MODAL && getPage() == null)
 			leaveModal();
 	}
