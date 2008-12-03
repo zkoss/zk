@@ -21,6 +21,7 @@ package org.zkoss.xel.el;
 import org.zkoss.xel.Expression;
 import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.xel.XelContext;
+import org.zkoss.xel.FunctionMapper;
 import org.zkoss.xel.XelException;
 
 import org.zkforge.apache.commons.el.ExpressionEvaluatorImpl;
@@ -48,9 +49,10 @@ public class ELFactory implements ExpressionFactory {
 	public Expression parseExpression(XelContext xelc, String expression,
 	Class expectedType)
 	throws XelException {
+		FunctionMapper mapper = xelc != null ? xelc.getFunctionMapper(): null;
 		return new ELXelExpression(
-			_eval.parseExpression(expression, expectedType,
-				xelc != null ? xelc.getFunctionMapper(): null));
+			_eval.parseExpression(expression, expectedType, mapper),
+			expression, mapper, expectedType);
 	}
 	public Object evaluate(XelContext xelc, String expression,
 	Class expectedType)

@@ -19,6 +19,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zkmax.xel.el;
 
 import org.zkoss.xel.Expression;
+import org.zkoss.xel.FunctionMapper;
 import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.XelException;
@@ -50,10 +51,12 @@ public class ApacheELFactory implements ExpressionFactory {
 	public Expression parseExpression(XelContext xelc, String expression,
 	Class expectedType)
 	throws XelException {
+		FunctionMapper mapper = xelc != null ? xelc.getFunctionMapper(): null;
 		try {
 			return new ELXelExpression(
 				_eval.parseExpression(expression, expectedType,
-					xelc != null ? new XelELMapper(xelc.getFunctionMapper()): null));
+					mapper != null ? new XelELMapper(mapper): null),
+					expression, mapper, expectedType);
 		} catch (ELException ex) {
 			throw new XelException("Failed to parse "+expression, ex);
 		}

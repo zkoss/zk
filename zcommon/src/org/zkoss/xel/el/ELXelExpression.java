@@ -20,6 +20,7 @@ package org.zkoss.xel.el;
 
 import org.zkoss.xel.Expression;
 import org.zkoss.xel.XelContext;
+import org.zkoss.xel.FunctionMapper;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.XelException;
 
@@ -33,15 +34,31 @@ import org.zkforge.apache.commons.el.ExpressionApi;
  */
 public class ELXelExpression implements Expression {
 	private final ExpressionApi _expr;
+	private final String _rawexpr;
+	private final FunctionMapper _mapper;
+	private final Class _expected;
 	/**
 	 * @param expr the expression. It cannot be null.
 	 */
-	public ELXelExpression(ExpressionApi expr) {
+	public ELXelExpression(ExpressionApi expr,
+	String rawexpr, FunctionMapper mapper, Class expectedType) {
 		if (expr == null)
 			throw new IllegalArgumentException();
+		_rawexpr = rawexpr;
 		_expr = expr;
+		_mapper = mapper;
+		_expected = expectedType;
 	}
 	public Object evaluate(XelContext ctx) {
+		//Test case: B30-1957661.zul where a function mapper is created
+		//by zscript so it is different from one page to page
+		//In this case, we cannot reuse parsed expression.
+		//
+		//Note: if nfm is null, we consider it as not-change since DSP
+		//doesn't save function mapper when evaluating
+		final FunctionMapper nfm = ctx.getFunctionMapper();
+		if (nfm != null && _mapper != nfm)
+			return new ELFactory().evaluate(ctx, _rawexpr, _expected);
 		return _expr.evaluate(ctx.getVariableResolver());
 	}
 
