@@ -10,6 +10,7 @@ ZK 3.5.2
   2354769: Add the ZK 3.0.x button mold for ZK 3.5.x
   2354768: Add the ZK 3.0.x paging mold for ZK 3.5.x
   2368975: Data binder provide getAllBindings() to ease getting all
+  2386550: ZK Component Interface
   
 * Bugs
   2154845: tab switch in Java - setImage makes layout go crazy
