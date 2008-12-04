@@ -231,7 +231,9 @@ public class Tab extends LabelImageElement implements org.zkoss.zul.api.Tab {
 			sb.append(clkattrs);
 		HTMLs.appendAttribute(sb, "z.sel", isSelected());
 		HTMLs.appendAttribute(sb, "z.box", getTabbox().getUuid());
-		HTMLs.appendAttribute(sb, "z.panel", getLinkedPanel().getUuid());
+		final Tabpanel panel = getLinkedPanel();
+		if (panel != null)
+			HTMLs.appendAttribute(sb, "z.panel", panel.getUuid());
 		HTMLs.appendAttribute(sb, "z.disabled", isDisabled());
 		return sb.toString();
 	}

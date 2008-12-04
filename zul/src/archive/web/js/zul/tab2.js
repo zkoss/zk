@@ -199,6 +199,8 @@ zkTab2 = {
 
 		//accordion: we must go to panel firs, and then browse its sibling
 		var panel = $e(getZKAttr(tab, "panel"));
+		if (!panel) return false;
+		
 		for (var node = panel; node = node.nextSibling;)
 			if (getZKAttr($real(node), "animating"))
 				return true;
