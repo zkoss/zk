@@ -1250,6 +1250,16 @@ zkLit.init = function (cmp) {
 	zk.listen(cmp, "keyup", zkLibox.onkeyup);
 	zkLit.stripe(cmp);
 };
+/**
+ * @since 3.5.2
+ */
+zkLit.focus = function (cmp) {
+	var meta = zkau.getMeta(getZKAttr(cmp, "rid"));
+	if (meta) {
+		meta._focusItem = cmp;
+		meta._refocus();
+	}
+};
 zkLit.setAttr = function (cmp, nm, val) {
 	if (nm == "visibility") {// Bug #1836257
 		var meta = zkau.getMeta(getZKAttr(cmp, "rid"));
