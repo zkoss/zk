@@ -1,4 +1,4 @@
-/* ELXelExpression.java
+/* OldELXelExpression.java
 
 {{IS_NOTE
 	Purpose:
@@ -18,39 +18,51 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.xel.el;
 
+import org.zkoss.lang.Objects;
 import org.zkoss.xel.Expression;
 import org.zkoss.xel.XelContext;
 import org.zkoss.xel.FunctionMapper;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.XelException;
 
-import org.zkforge.apache.commons.el.ELExpression;
+import org.zkforge.apache.commons.el.ExpressionApi;
 
 /** 
  * A XEL expression that is based on a EL expression.
  *
  * @author tomyeh
  */
-/*package*/ class ELXelExpression implements Expression {
-	private final ELExpression _expr;
+/*package*/ class OldELXelExpression implements Expression {
+	private final ExpressionApi _expr;
+	private final String _rawexpr;
+	private final FunctionMapper _mapper;
+	private final Class _expected;
 	/**
 	 * @param expr the expression. It cannot be null.
 	 */
-	public ELXelExpression(ELExpression expr) {
+	public OldELXelExpression(ExpressionApi expr,
+	String rawexpr, FunctionMapper mapper, Class expectedType) {
 		if (expr == null)
 			throw new IllegalArgumentException();
+		_rawexpr = rawexpr;
 		_expr = expr;
+		_mapper = mapper;
+		_expected = expectedType;
 	}
 	public Object evaluate(XelContext ctx) {
 		//Test case: B30-1957661.zul where a function mapper is created
 		//by zscript so it is different from one page to page
-		return _expr.evaluate(ctx.getVariableResolver(), ctx.getFunctionMapper());
+		//In this case, we cannot reuse parsed expression.
+		final FunctionMapper nfm = ctx.getFunctionMapper();
+		if (!Objects.equals(_mapper, nfm))
+			return new ELFactory().evaluate(ctx, _rawexpr, _expected);
+		return _expr.evaluate(ctx.getVariableResolver());
 	}
 
 	//Object//
 	public boolean equals(Object o) {
-		return o instanceof ELXelExpression &&
-			((ELXelExpression)o)._expr.equals(_expr);
+		return o instanceof OldELXelExpression &&
+			((OldELXelExpression)o)._expr.equals(_expr);
 	}
 	public int hashCode() {
 		return _expr.hashCode();
@@ -59,3 +71,4 @@ import org.zkforge.apache.commons.el.ELExpression;
 		return _expr.toString();
 	}
 }
+

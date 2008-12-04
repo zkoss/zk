@@ -21,6 +21,7 @@ package org.zkoss.web.servlet.dsp.impl;
 import java.io.Writer;
 
 import org.zkoss.xel.XelContext;
+import org.zkoss.xel.FunctionMapper;
 import org.zkoss.xel.util.SimpleXelContext;
 
 import org.zkoss.web.servlet.dsp.*;
@@ -34,7 +35,7 @@ import org.zkoss.web.servlet.dsp.action.Action;
 class InterpretContext {
 	final DspContext dc;
 	final InterpretResolver resolver;
-	final XelContext xelc;
+	XelContext xelc;
 	/** The action being processing, or null if no such action. */
 	Action action;
 
@@ -43,6 +44,10 @@ class InterpretContext {
 	InterpretContext(DspContext dc) {
 		this.dc = dc;
 		this.resolver = new InterpretResolver(dc.getVariableResolver());
-		this.xelc = new SimpleXelContext(this.resolver, null);
+	}
+	void init(FunctionMapper mapper) {
+		if (this.xelc != null)
+			throw new IllegalArgumentException();
+		this.xelc = new SimpleXelContext(this.resolver, mapper);
 	}
 }

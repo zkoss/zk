@@ -28,7 +28,7 @@
 	<dependency>
       <groupId>org.zkoss.zkforge.el</groupId>
       <artifactId>zcommons-el</artifactId>
-      <version>1.0.1</version>
+      <version>1.0.2</version>
     </dependency>
   </dependencies>
 </project> 
