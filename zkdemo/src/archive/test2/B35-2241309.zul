@@ -1,0 +1,16 @@
+<window id="myWindow" title="My First Window" border="normal" width="500px">
+<html><![CDATA[
+<ol>
+<li>You shall see two buttons "Ok" and "Ok2".</li>
+<li>Press "Ok2" button, and you shall see the "Ok2" changed to "NewLabel".</li>
+<li>Done</li>
+</ol>
+]]></html>
+	<button id="btn1" label="Ok" apply="org.zkoss.zkdemo.test2.B2241309Composer"/>
+	<zscript><![CDATA[
+		Button btn2 = btn1.clone();
+		btn2.setId("btn2");
+		btn2.setLabel("Ok2");
+		btn2.setParent(myWindow);
+	]]></zscript>
+</window>

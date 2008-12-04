@@ -20,29 +20,31 @@ package org.zkoss.xel.el;
 
 import org.zkoss.xel.Expression;
 import org.zkoss.xel.XelContext;
+import org.zkoss.xel.FunctionMapper;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.XelException;
 
-import org.zkforge.apache.commons.el.ExpressionApi;
+import org.zkforge.apache.commons.el.ELExpression;
 
-/**
+/** 
  * A XEL expression that is based on a EL expression.
  *
  * @author tomyeh
- * @since 3.0.0
  */
-public class ELXelExpression implements Expression {
-	private final ExpressionApi _expr;
+/*package*/ class ELXelExpression implements Expression {
+	private final ELExpression _expr;
 	/**
 	 * @param expr the expression. It cannot be null.
 	 */
-	public ELXelExpression(ExpressionApi expr) {
+	public ELXelExpression(ELExpression expr) {
 		if (expr == null)
 			throw new IllegalArgumentException();
 		_expr = expr;
 	}
 	public Object evaluate(XelContext ctx) {
-		return _expr.evaluate(ctx.getVariableResolver());
+		//Test case: B30-1957661.zul where a function mapper is created
+		//by zscript so it is different from one page to page
+		return _expr.evaluate(ctx.getVariableResolver(), ctx.getFunctionMapper());
 	}
 
 	//Object//

@@ -55,10 +55,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			<listcell>
 				<hbox>
 					<image src="/img/msn1.gif" class="profile" />
-					<image src="/img/live-on.gif" class="p-data" />
+					<image src="/img/Centigrade-Widget-Icons/CasualUserMale-16x16.png" class="p-data" />
 					<vbox class="p-data">
-						<label value="Tom" />
-						<label value="Tomcat@hotmail.com" />
+						<label value="Male" />
+						<label value="Male@hotmail.com" />
 					</vbox>
 				</hbox>
 			</listcell>
@@ -68,10 +68,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			<listcell>
 				<hbox>
 					<image src="/img/msn1.gif" class="profile" />
-					<image src="/img/live-on.gif" class="p-data" />
+					<image src="/img/Centigrade-Widget-Icons/CasualUserFemale-16x16.png" class="p-data" />
 					<vbox class="p-data">
-						<label value="ZK" />
-						<label value="ZKisgood@hotmail.com" />
+						<label value="Female" />
+						<label value="Female@hotmail.com" />
 					</vbox>
 				</hbox>
 			</listcell>

@@ -125,6 +125,20 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 				smartUpdate("zIndex", _zIndex);
 		}
 	}
+	/** Returns the Z index.
+	 * It is the same as {@link #getZIndex}.
+	 * @since 3.5.2
+	 */
+	public int getZindex() {
+		return getZIndex();
+	}
+	/** Sets the Z index.
+	 * It is the same as {@link #setZIndex}.
+	 * @since 3.5.2
+	 */
+	public void setZindex(int zIndex) {
+		setZIndex(zIndex);
+	}
 	/** Returns the height. If null, the best fit is used.
 	 * <p>Default: null.
 	 */

@@ -27,8 +27,14 @@
 }
 .z-window-modal-tl, .z-window-highlighted-tl, .z-window-overlapped-tl, .z-window-popup-tl,
 .z-window-modal-tl-noborder, .z-window-highlighted-tl-noborder, .z-window-overlapped-tl-noborder, .z-window-popup-tl-noborder {
-	background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-l-ol.png')}) no-repeat 0 0;
 	padding-left: 6px; zoom: 1;
+}
+.z-window-modal-tl, .z-window-highlighted-tl, .z-window-overlapped-tl,
+.z-window-modal-tl-noborder, .z-window-highlighted-tl-noborder, .z-window-overlapped-tl-noborder, .z-window-popup-tl-noborder {
+	background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-l-ol.png')}) no-repeat 0 0;
+}
+.z-window-popup-tl {
+	background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-l-pop.png')}) no-repeat 0 0;
 }
 .z-window-embedded-tm, .z-window-embedded-tm-noborder {
 	background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-m.png')}) repeat-x 0 0;
@@ -36,8 +42,14 @@
 }
 .z-window-modal-tm, .z-window-highlighted-tm, .z-window-overlapped-tm, .z-window-popup-tm,
 .z-window-modal-tm-noborder, .z-window-highlighted-tm-noborder, .z-window-overlapped-tm-noborder, .z-window-popup-tm-noborder {
-	background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-m-ol.png')}) repeat-x 0 0;
 	overflow: hidden; zoom: 1;
+}
+.z-window-modal-tm, .z-window-highlighted-tm, .z-window-overlapped-tm, 
+.z-window-modal-tm-noborder, .z-window-highlighted-tm-noborder, .z-window-overlapped-tm-noborder, .z-window-popup-tm-noborder {
+	background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-m-ol.png')}) repeat-x 0 0;
+}
+.z-window-popup-tm {
+	background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-m-pop.png')}) repeat-x 0 0;
 }
 .z-window-embedded-tr, .z-window-embedded-tr-noborder {
 	background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-r.png')}) no-repeat right 0;
@@ -45,8 +57,14 @@
 }
 .z-window-modal-tr, .z-window-highlighted-tr, .z-window-overlapped-tr, .z-window-popup-tr,
 .z-window-modal-tr-noborder, .z-window-highlighted-tr-noborder, .z-window-overlapped-tr-noborder, .z-window-popup-tr-noborder {
-	background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-r-ol.png')}) no-repeat right 0;
 	padding-right: 6px;
+}
+.z-window-modal-tr, .z-window-highlighted-tr, .z-window-overlapped-tr,
+.z-window-modal-tr-noborder, .z-window-highlighted-tr-noborder, .z-window-overlapped-tr-noborder, .z-window-popup-tr-noborder {
+	background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-r-ol.png')}) no-repeat right 0;
+}
+.z-window-popup-tr {
+	background: transparent url(${c:encodeURL('~./zul/img/wnd2/wtp-r-pop.png')}) no-repeat right 0;
 }
 .z-window-modal-tm-noheader, .z-window-highlighted-tm-noheader,
 	.z-window-overlapped-tm-noheader, .z-window-popup-tm-noheader {
@@ -145,8 +163,16 @@
 	background-repeat : no-repeat;
 	margin-left: 2px;
 }
+.z-window-popup-tool {
+	overflow: hidden; width: 15px; height: 15px; float: right; cursor: pointer;
+	background-color : transparent;
+	background-image : url(${c:encodeURL('~./zul/img/panel/tool-btn-pp.gif')});
+	background-position : 0 0;
+	background-repeat : no-repeat;
+	margin-left: 2px;
+}
 .z-window-modal-tool, .z-window-overlapped-tool,
-	.z-window-popup-tool, .z-window-highlighted-tool {
+	.z-window-highlighted-tool {
 	overflow: hidden; width: 15px; height: 15px; float: right; cursor: pointer;
 	background-color : transparent;
 	background-image : url(${c:encodeURL('~./zul/img/panel/tool-btn-ol.gif')});

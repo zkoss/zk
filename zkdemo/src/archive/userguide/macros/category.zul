@@ -17,7 +17,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-<div id="${arg.id}" sclass="demo-category pointer" forward="main.onCategorySelect"
+<div id="${arg.id}" style="" sclass="demo-category pointer" forward="main.onCategorySelect"
 	action="onmouseover:zk.addClass(this, 'demo-over'); onmouseout:zk.rmClass(this, 'demo-over'); onclick:if(zkau.insamepos(event)) onSelect(this)">
 	<image sclass="demo-category-img" tooltiptext="${arg.label}" src="${arg.src}" action="onmousedown:return false;"/>
+	<separator height="1px"/>
+	<label sclass="demo-category-text" value="${arg.label}"/>
 </div>

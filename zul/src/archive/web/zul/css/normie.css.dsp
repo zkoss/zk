@@ -33,44 +33,57 @@ option {
 
 <%-- tree.css.dsp, listbox.css.dsp, and grid.css.dsp --%>
 <c:if test="${c:browser('ie6-')}">
-div.z-listbox, div.z-tree, div.z-dottree, div.z-grid {
+div.z-listbox, div.z-tree, div.z-dottree, div.z-filetree, div.z-vfiletree, div.z-grid {
 	position:relative; <%-- Bug 1914215 and Bug 1914054 --%>
 }
 </c:if>
-div.z-tree-header, div.z-listbox-header, div.z-grid-header, div.z-tree-footer, div.z-listbox-footer,
+div.z-tree-header, div.z-dottree-header, div.z-filetree-header, div.z-vfiletree-header,
+div.z-listbox-header, div.z-grid-header, div.z-tree-footer, div.z-listbox-footer,
 	div.z-grid-footer {<%-- always used. --%>
 	position:relative;
 	<%-- Bug 1712708 and 1926094:  we have to specify position:relative --%>
 }
 div.z-tree-header th.z-tree-col, div.z-tree-header th.z-auxheader,
+div.z-dottree-header th.z-tree-col, div.z-dottree-header th.z-auxheader,
+div.z-filetree-header th.z-tree-col, div.z-filetree-header th.z-auxheader,
+div.z-vfiletree-header th.z-tree-col, div.z-vfiletree-header th.z-auxheader,
 div.z-listbox-header th.z-list-header, div.z-listbox-header th.z-auxheader,
 div.z-grid-header th.z-column, div.z-grid-header th.z-auxheader {
 	text-overflow: ellipsis;
 }
-div.z-tree-col-cnt, div.z-list-header-cnt, div.z-column-cnt, .z-auxheader-cnt {
+div.z-tree-col-cnt, div.z-dottree-col-cnt, div.z-filetree-col-cnt, div.z-vfiletree-col-cnt, 
+div.z-list-header-cnt, div.z-column-cnt, .z-auxheader-cnt {
 	white-space: nowrap;
 	<%-- Bug #1839960  --%>
 }
 div.z-footer-cnt, div.z-row-cnt, div.z-group-cnt, div.z-group-foot-cnt, div.z-column-cnt,
-div.z-tree-footer-cnt, div.z-tree-cell-cnt, div.z-tree-col-cnt, .z-auxheader-cnt,
-div.z-list-footer-cnt, div.z-list-cell-cnt, div.z-list-header-cnt {
+div.z-tree-footer-cnt, div.z-tree-cell-cnt, div.z-tree-col-cnt,
+div.z-dottree-footer-cnt, div.z-dottree-cell-cnt, div.z-dottree-col-cnt,
+div.z-filetree-footer-cnt, div.z-filetree-cell-cnt, div.z-filetree-col-cnt,
+div.z-vfiletree-footer-cnt, div.z-vfiletree-cell-cnt, div.z-vfiletree-col-cnt, 
+.z-auxheader-cnt, div.z-list-footer-cnt, div.z-list-cell-cnt, div.z-list-header-cnt {
 	position: relative;
 	<%-- Bug #1825896  --%>
 }
-div.z-row-cnt, div.z-group-cnt, div.z-group-foot-cnt, div.z-tree-cell-cnt, div.z-list-cell-cnt {
+div.z-row-cnt, div.z-group-cnt, div.z-group-foot-cnt,div.z-list-cell-cnt,
+div.z-tree-cell-cnt, div.z-dottree-cell-cnt, div.z-filetree-cell-cnt, div.z-vfiletree-cell-cnt {
 	width: 100%;
 }
-div.z-tree-body, div.z-dottree-body, div.z-listbox-body, div.z-grid-body {<%-- always used. --%>
+div.z-tree-body, div.z-dottree-body, div.z-filetree-body, div.z-vfiletree-body, div.z-listbox-body, div.z-grid-body {<%-- always used. --%>
 	position: relative;
 	<%-- Bug 1766244: we have to specify position:relative with overflow:auto --%>
 }
-tr.z-grid-faker, tr.z-listbox-faker, tr.z-tree-faker, tr.z-dottree-faker { 
+tr.z-grid-faker, tr.z-listbox-faker, tr.z-tree-faker, tr.z-dottree-faker, tr.z-filetree-faker, tr.z-vfiletree-faker { 
 	position: absolute; top: -1000px; left: -1000px;<%-- fixed a white line for IE --%> 
 }
 span.z-tree-root-open, span.z-tree-root-close, span.z-tree-tee-open, span.z-tree-tee-close, 
 span.z-tree-last-open, span.z-tree-last-close, span.z-tree-tee, span.z-tree-vbar, span.z-tree-last, span.z-tree-spacer,
 span.z-dottree-root-open, span.z-dottree-root-close, span.z-dottree-tee-open, span.z-dottree-tee-close, 
-span.z-dottree-last-open, span.z-dottree-last-close, span.z-dottree-tee, span.z-dottree-vbar, span.z-dottree-last, span.z-dottree-spacer {
+span.z-dottree-last-open, span.z-dottree-last-close, span.z-dottree-tee, span.z-dottree-vbar, span.z-dottree-last, span.z-dottree-spacer,
+span.z-filetree-root-open, span.z-filetree-root-close, span.z-filetree-tee-open, span.z-filetree-tee-close, 
+span.z-filetree-last-open, span.z-filetree-last-close, span.z-filetree-tee, span.z-filetree-vbar, span.z-filetree-last, span.z-filetree-spacer,
+span.z-vfiletree-root-open, span.z-vfiletree-root-close, span.z-vfiletree-tee-open, span.z-vfiletree-tee-close, 
+span.z-vfiletree-last-open, span.z-vfiletree-last-close, span.z-vfiletree-tee, span.z-vfiletree-vbar, span.z-vfiletree-last, span.z-vfiletree-spacer {
 	height: 18px;
 }
 
@@ -115,6 +128,12 @@ span.z-dottree-last-open, span.z-dottree-last-close, span.z-dottree-tee, span.z-
 }
 .z-msgbox-error {
 	background-image: url(${c:encodeURL('~./zul/img/msgbox/StopSign-32x32.gif')});
+}
+.z-fileupload-add {
+	background-image: url(${c:encodeURL('~./zul/img/fileupload/add.gif')});	
+}
+.z-fileupload-delete {
+	background-image: url(${c:encodeURL('~./zul/img/fileupload/delete.gif')});
 }
 <%-- box.css.dsp --%>
 .z-splitter-ver-btn-l, .z-splitter-hor-btn-l {

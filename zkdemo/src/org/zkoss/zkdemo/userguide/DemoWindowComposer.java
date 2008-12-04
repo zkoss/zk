@@ -18,6 +18,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkdemo.userguide;
 
+import org.zkoss.lang.Library;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Execution;
@@ -50,20 +51,19 @@ public class DemoWindowComposer extends GenericForwardComposer {
 		final Div inc = new Div();
 		Executions.createComponents("/userguide/bar.zul", inc, null);
 		inc.setStyle("float:right");
-		if (Path.getComponent("//userGuide/main").getAttribute("zkdemo-theme") != null) {
+		if (Library.getProperty("org.zkoss.zkdemo.theme.silvergray") != null) {
 			String cookie = FontSizeThemeProvider.getSkinCookie(Executions.getCurrent());
-			String img = "silvergray".equals(cookie) ? "/img/skin.gif" : "/img/silvergray-skin.gif" ;
+			boolean isDefault = !"silvergray".equals(cookie);
+			String img = isDefault ? "/img/Centigrade-Widget-Icons/ButtonGray.png" : "/img/Centigrade-Widget-Icons/ButtonBlue.png";
 			Image skin = new Image(img);
 			skin.setSclass("pointer");
-			skin.setTooltiptext("silvergray".equals(cookie) ? "Blue Theme" : "Gray Theme");
+			skin.setTooltiptext(isDefault ? "Gray Theme" : "Blue Theme");
 			skin.addEventListener(Events.ON_CLICK, new EventListener() {
 
 				public void onEvent(Event event) throws Exception {
 					Image skin = (Image)event.getTarget();
 					Execution exec = Executions.getCurrent();
-					boolean isDefault = skin.getSrc().indexOf("silvergray") < 0;
-					skin.setTooltiptext(isDefault ? "Blue Theme" : "Gray Theme");
-					skin.setSrc(isDefault ? "/img/silvergray-skin.gif" : "/img/skin.gif");
+					boolean isDefault = skin.getSrc().indexOf("ButtonGray") < 0;
 					FontSizeThemeProvider.setSkinCookie(exec, isDefault ? "" : "silvergray");
 					exec.sendRedirect("");
 				}

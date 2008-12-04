@@ -46,19 +46,19 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			<panelchildren>
 				<listbox id="left" multiple="true" height="300px" oddRowSclass="non-odd"  fixedLayout="true" checkmark="true">
 					<listitem selected="true">
-						<listcell src="/img/Briefcase-16x16.png" label="ZK Forge"/>
+						<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Forge"/>
 					</listitem>
 					<listitem>
-						<listcell src="/img/Briefcase-16x16.png" label="ZK Mobile"/>
+						<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Mobile"/>
 					</listitem>
 					<listitem>
-						<listcell src="/img/Briefcase-16x16.png" label="ZK GWT"/>
+						<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK GWT"/>
 					</listitem>
 					<listitem>
-						<listcell src="/img/Briefcase-16x16.png" label="ZK JSF"/>
+						<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK JSF"/>
 					</listitem>
 					<listitem>
-						<listcell src="/img/Briefcase-16x16.png" label="ZK JSP"/>
+						<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK JSP"/>
 					</listitem>
 				</listbox>
 			</panelchildren>
@@ -67,7 +67,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<columnchildren width="100px">
 		<panel>
 			<panelchildren style="margin: 70px 34px;">
-				<image src="/img/right-sign.gif" tooltiptext="Add Project">
+				<image sclass="pointer" src="/img/Centigrade-Widget-Icons/ButtonArrowRightDouble-32x32.png" tooltiptext="Add Project">
 					<attribute name="onClick">
 						Set items = left.getSelectedItems();
 						if (items.isEmpty()) {
@@ -83,7 +83,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 					</attribute>
 				</image>
 				<separator height="15px"/>
-				<image src="/img/left-sign.gif"  tooltiptext="Remove Project">
+				<image sclass="pointer" src="/img/Centigrade-Widget-Icons/ButtonArrowLeftDouble-32x32.png"  tooltiptext="Remove Project">
 					<attribute name="onClick">
 						Set items = right.getSelectedItems();
 						if (items.isEmpty()) {
@@ -106,13 +106,13 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			<panelchildren>
 				<listbox id="right" multiple="true"  height="300px" oddRowSclass="non-odd"  fixedLayout="true" checkmark="true">
 					<listitem>
-						<listcell src="/img/Briefcase-16x16.png" label="ZK"/>
+						<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK"/>
 					</listitem>
 					<listitem>
-						<listcell src="/img/Briefcase-16x16.png" label="ZK Studio"/>
+						<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Studio"/>
 					</listitem>
 					<listitem>
-						<listcell src="/img/Briefcase-16x16.png" label="ZK Spring"/>
+						<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Spring"/>
 					</listitem>
 				</listbox>			
 			</panelchildren>

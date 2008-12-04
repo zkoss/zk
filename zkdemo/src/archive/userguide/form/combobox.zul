@@ -60,11 +60,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		</combobox>
 		Combobox with description and icons:
 		<combobox>
-			<comboitem label="Simple and Rich" image="/img/GoldBar-32x32.gif"
+			<comboitem label="Simple and Rich" image="/img/Centigrade-Widget-Icons/GoldBar-32x32.gif"
 				description="The simplest way to make Web applications rich" />
-			<comboitem label="Cool!" image="/img/CogwheelEye-32x32.gif"
+			<comboitem label="Cool!" image="/img/Centigrade-Widget-Icons/CogwheelEye-32x32.gif"
 				description="The coolest technology" />
-			<comboitem label="Ajax and RIA" image="/img/WindowGlobe-32x32.gif"
+			<comboitem label="Ajax and RIA" image="/img/Centigrade-Widget-Icons/WindowGlobe-32x32.gif"
 				description="Rich Internet Application by Ajax" />
 		</combobox>
 	</vbox>

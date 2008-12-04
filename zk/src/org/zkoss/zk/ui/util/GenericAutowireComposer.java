@@ -43,6 +43,8 @@ import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.xel.Evaluator;
 
@@ -91,7 +93,10 @@ import org.zkoss.zk.xel.Evaluator;
  * @since 3.0.6
  * @see org.zkoss.zk.ui.Components#wireFellows
  */
-abstract public class GenericAutowireComposer extends GenericComposer {
+abstract public class GenericAutowireComposer extends GenericComposer implements ComponentCloneListener {
+	private static final String COMPOSER_CLONE = "COMPOSER_CLONE";
+	private static final String ON_CLONE_DO_AFTER_COMPOSE = "onCLONE_DO_AFTER_COMPOSE";
+	
 	/** Implicit Object; the applied component itself. 
 	 * @since 3.0.7
 	 */ 
@@ -183,6 +188,43 @@ abstract public class GenericAutowireComposer extends GenericComposer {
 			throw UiException.Aide.wrap(e);
 		} catch (Exception e) {
 			//ignore
+		}
+	}
+	
+	/** Internal use only. Call-back method of CloneComposerListener. You shall 
+	 * not call this method directly. Clone this Composer when its applied 
+	 * component is cloned.
+	 * @param comp the clone of the applied component
+	 * @return A clone of this Composer. 
+	 * @since 3.5.2
+	 */
+	public Object clone(Component comp) {
+		try {
+			final Execution exec = Executions.getCurrent();
+			final int idcode = System.identityHashCode(comp);
+			Composer composerClone = (Composer) exec.getAttribute(COMPOSER_CLONE+idcode);
+			if (composerClone == null) {
+				composerClone = (Composer) Classes.newInstance(getClass(), null);
+				exec.setAttribute(COMPOSER_CLONE+idcode, composerClone);
+				
+				//cannot call doAfterCompose directly because the clone 
+				//component might not be attach to Page yet
+				comp.addEventListener(ON_CLONE_DO_AFTER_COMPOSE, new CloneDoAfterCompose());
+				Events.postEvent(new Event(ON_CLONE_DO_AFTER_COMPOSE, comp, composerClone));
+			}
+			return composerClone;
+		} catch (Exception ex) {
+			throw UiException.Aide.wrap(ex);
+		}
+	}
+	
+	//doAfterCompose, called once after clone
+	private static class CloneDoAfterCompose implements EventListener {
+		public void onEvent(Event event) throws Exception {
+			final Component clone = (Component) event.getTarget();
+			final GenericAutowireComposer composerClone = (GenericAutowireComposer) event.getData(); 
+			composerClone.doAfterCompose(clone);
+			clone.removeEventListener(ON_CLONE_DO_AFTER_COMPOSE, this);
 		}
 	}
 }

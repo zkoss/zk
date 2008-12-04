@@ -17,6 +17,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <?page id="userGuide" title="ZK Live Demo"?>
+<?init class="org.zkoss.zkdemo.userguide.MainLayoutInit" ?>
 <?link  rel="stylesheet" type="text/css" href="~./zul/css/ext.css.dsp"?>
 <?component name="category" inline="true" macroURI="/userguide/macros/category.zul"?>
 <?component name="categorybar" extends="div" moldURI="/userguide/macros/categorybar.dsp"?>
@@ -31,25 +32,27 @@ if (zk.ie6Only) {
 	var ALPHA_IMAGE_LOADER = "DXImageTransform.Microsoft.AlphaImageLoader";
 	var PNG_FILTER = "progid:" + ALPHA_IMAGE_LOADER + "(src='%1',sizingMethod='%2')";
 	
+	// these file name should be fixed
+	var FILE_NAME = "24x24.png|32x32.png|48x48.png|128x128.png|ButtonBlue.png|ButtonGray.png|small.png|small-sel.png"
+				  + "|normal.png|normal-sel.png|large.png|large-sel.png";
+	
 	//regular expression version of the above
-	var PNG = new RegExp(String(".png").replace(/([\/()[\]{}|*+-.,^$?\\])/g, "\\$1"), "i");
+	var PNG = new RegExp(String(FILE_NAME).replace(/([\/()[\]{}*+-.,^$?\\])/g, "\\$1"), "i");
 	var filtered = [];
 
 	function fixImage(element) {
-		if (PNG.test(element.src)) {
-			// we have to preserve width and height
-			var image = new Image(element.width, element.height);
-			image.onload = function() {
-				element.width = image.width;
-				element.height = image.height;
-				image = null;
-			};
-			image.src = element.src;
-			// store the original url (we'll put it back when it's printed)
-			element.pngSrc = element.src;
-			// add the AlphaImageLoader thingy
-			addFilter(element);
-		}
+		// we have to preserve width and height
+		var image = new Image(element.width, element.height);
+		image.onload = function() {
+			element.width = image.width;
+			element.height = image.height;
+			image = null;
+		};
+		image.src = element.src;
+		// store the original url (we'll put it back when it's printed)
+		element.pngSrc = element.src;
+		// add the AlphaImageLoader thingy
+		addFilter(element);
 	};
 	var printing = false;
 	zk.listen(window, "beforeprint", function() {
@@ -93,11 +96,14 @@ if (zk.ie6Only) {
 	function fixImage4IE6() {
 		var images = document.getElementsByTagName("img");
 		for (var len = images.length; --len >= 0; ) {
-			fixImage(images[len]);
-			zk.listen(images[len], "propertychange", function() {
-		   	if (!printing && event.propertyName == "src" &&
-		     images[len].src.indexOf(BLANK_GIF) == -1) fixImage(element);
-		 	});
+			if (PNG.test(images[len].src)) {
+				fixImage(images[len]);
+				zk.listen(images[len], "propertychange", function() {
+			   	if (!printing && event.propertyName == "src" &&
+			   			event.srcElement.src.indexOf(BLANK_GIF) == -1 &&
+			   			PNG.test(event.srcElement.src)) fixImage(event.srcElement);
+			 	});
+			}
 		}
 	};
 }
@@ -105,15 +111,17 @@ if (zk.ie6Only) {
 <script><![CDATA[
 function onSelect(cmp, deselect) {
 	var parent = cmp.parentNode;
-	for (var cn = zk.childNodes(parent, zkCategoryBar._isLegalType), len = cn.length; --len >= 0;){
+	for (var cn = zk.childNodes(parent, zkCategoryBar._isLegalType), len = cn.length; --len >= 0;) {
 		if (!deselect && cn[len] == cmp)
 			zk.addClass(cn[len], "demo-seld");
 		else
 			zk.rmClass(cn[len], "demo-seld");
 	}
+	if (!deselect) zkCategoryBar.onScrollTo(cmp);
 }
 zkCategoryBar = {
 	init: function (cmp) {
+		zk.disableSelection(cmp);
 		zk.listen($e(cmp, "right"), "mouseover", this.onClickArrow);
 		zk.listen($e(cmp, "right"), "mouseout", this.stop);
 		zk.listen($e(cmp, "left"), "mouseover", this.onClickArrow);
@@ -173,6 +181,19 @@ zkCategoryBar = {
 		zk[cmp._scrolling ? "addClass" : "rmClass"]($e(cmp, "right"), zcls + "-right-scroll");
 		zk[cmp._scrolling ? "addClass" : "rmClass"]($e(cmp, "left"), zcls + "-left-scroll");
 	},
+	onScrollTo: function (cmp) {
+		var parent = $outer(cmp.parentNode),
+			body = $e(parent, "body"),
+			osl = cmp.offsetLeft,
+			tosw = cmp.offsetWidth,
+			scl = body.scrollLeft,
+			hosw = body.offsetWidth;
+		if (osl < scl) {
+			this.scroll(parent, scl - osl + 2, false, false, true);
+		} else if (osl + tosw > scl + hosw) {
+			this.scroll(parent, osl + tosw - scl - hosw + 2, false, true, true);			
+		}
+	},
 	onClickArrow: function (evt) {
 		var btn = zkau.evtel(evt),
 			cmp = $outer(btn),
@@ -214,14 +235,16 @@ zkCategoryBar = {
 	stop: function () {
 		clearInterval(zkCategoryBar.run);
 	},
-	scroll: function(cmp, move, btn, isRight) {
+	scroll: function(cmp, move, btn, isRight, stopPropagate) {
 		if (move <= 0) return;
 		var step, body = $e(cmp, "body");
 		step = move <= 60 ? 5 : eval(5 * ($int(move / 60) + 1));
 		clearInterval(zkCategoryBar.run);
 		zkCategoryBar.run = setInterval(function() {
 			if (move == 0) {
-				zkCategoryBar.onClickArrow(btn);
+				if (!stopPropagate)
+					zkCategoryBar.onClickArrow(btn);
+				else clearInterval(zkCategoryBar.run);
 				return;
 			} else {
 				move < step ? zkCategoryBar.goscroll(body, isRight, move) :
@@ -253,11 +276,14 @@ ul {
 	margin-top: 5px;
 	margin-bottom: 5px;
 }
-ul li	{list-style: url(${c:encodeURL(c:browser('ie6-') ? '/img/z-bullet1.gif' : '/img/Bullet-10x10.png')}) disc}
+a, a:visited {
+	color:#008bb6;
+}
+ul li	{list-style: url(${c:encodeURL(c:browser('ie6-') ? '/img/z-bullet1.gif' : '/img/Centigrade-Widget-Icons/Bullet-10x10.png')}) disc}
 ul ul li	{list-style: url(${c:encodeURL('/img/z-bullet2.gif')}) circle}
 ul ul ul li	{list-style: url(${c:encodeURL('/img/z-bullet3.gif')}) square}
 .demo-header .z-north-body {
-	background:transparent url(${c:encodeURL('/img/category-bg.png')}) repeat-x scroll 0 0;
+	background:transparent url(${c:encodeURL( c:property('org.zkoss.zkdemo.theme.cookie') != 'silvergray' ? '/img/category-bg.png' : '/img/Centigrade-Widget-Icons/GradientGray.png')}) repeat-x scroll 0 0;
 }
 .demo-categorybar {
 	position: relative;
@@ -277,11 +303,11 @@ ul ul ul li	{list-style: url(${c:encodeURL('/img/z-bullet3.gif')}) square}
 }
 .demo-categorybar-right-scroll {
 	background-color: transparent;
-	background-image: url(${c:encodeURL('~./zul/img/tab2/scroll-right.png')});
+	background-image: url(${c:encodeURL( c:property('org.zkoss.zkdemo.theme.cookie') != 'silvergray' ? '/img/scroll-right.png' : '/img/g-scroll-right.png')});
 	background-repeat: no-repeat;
 	background-attachment: scroll;
 	background-position: 0 0;
-	border-bottom:1px solid #8DB2E3;
+	border-bottom:1px solid ${c:property('org.zkoss.zkdemo.theme.cookie') != 'silvergray' ? '#8DB2E3' : '#B7B7B7'};
 	cursor:pointer;
 	position:absolute;
 	right:0;
@@ -295,11 +321,11 @@ ul ul ul li	{list-style: url(${c:encodeURL('/img/z-bullet3.gif')}) square}
 }
 .demo-categorybar-left-scroll {
 	background-color: transparent;
-	background-image: url(${c:encodeURL('~./zul/img/tab2/scroll-left.png')});
+	background-image: url(${c:encodeURL( c:property('org.zkoss.zkdemo.theme.cookie') != 'silvergray' ? '/img/scroll-left.png' : '/img/g-scroll-left.png')});
 	background-repeat: no-repeat;
 	background-attachment: scroll;
 	background-position: -18px 0;
-	border-bottom:1px solid #8DB2E3;
+	border-bottom:1px solid ${c:property('org.zkoss.zkdemo.theme.cookie') != 'silvergray' ? '#8DB2E3' : '#B7B7B7'};
 	cursor:pointer;
 	left:0;
 	position:absolute;
@@ -312,13 +338,13 @@ ul ul ul li	{list-style: url(${c:encodeURL('/img/z-bullet3.gif')}) square}
 	background-position:0px 0;
 }
 .demo-seld {
-	background:transparent url(${c:encodeURL('/img/category-seld.png')}) no-repeat scroll 0 0;
+	background:transparent url(${c:encodeURL(c:property('org.zkoss.zkdemo.theme.cookie') != 'silvergray' ? '/img/category-seld.png' : '/img/g-category-seld.png')}) no-repeat scroll 0 0;
 }
 .demo-over.demo-seld {
-	background:transparent url(${c:encodeURL('/img/category-over-seld.png')}) no-repeat scroll 0 0;
+	background:transparent url(${c:encodeURL(c:property('org.zkoss.zkdemo.theme.cookie') != 'silvergray' ? '/img/category-over-seld.png' : '/img/g-category-over-seld.png')}) no-repeat scroll 0 0;
 }
 .demo-over {
-	background:transparent url(${c:encodeURL('/img/category-over.png')}) no-repeat scroll 0 0;
+	background:transparent url(${c:encodeURL(c:property('org.zkoss.zkdemo.theme.cookie') != 'silvergray' ? '/img/category-over.png' : '/img/g-category-over.png')}) no-repeat scroll 0 0;
 }
 .demo-search-inp {
     padding: 2px 0 1px 18px;
@@ -326,21 +352,28 @@ ul ul ul li	{list-style: url(${c:encodeURL('/img/z-bullet3.gif')}) square}
 }
 .demo-category {
 	margin-top: 10px; float:left; height: 80px; width: 90px;
+	text-align:center;
 }
 .demo-category-img {
-	padding: 0 7px;
-	width: 76px;
-	height: 80px;
+	width: 48px;
+	height: 48px;
+}
+.demo-category-text {
+	color: #1c5178; font-size:10px
 }
 .demo-logo {
-	margin: 0;
+	padding: 10px 10px 0 10px;
 	float:left;
-}
-.demo-logo img {
-	padding: 15px;
 }
 .demo-items {
 	border: none; background: white;
+}
+.demo-items .z-listbox-body {
+	overflow-x: hidden;
+}
+.demo-items .z-list-cell-cnt img {
+	width:24px;
+	height:24px;
 }
 .demo-items .z-list-cell-cnt {
 	padding-left: 5px;
@@ -359,7 +392,7 @@ ul ul ul li	{list-style: url(${c:encodeURL('/img/z-bullet3.gif')}) square}
 	<north border="none" size="100px" sclass="demo-header" collapsible="true">
 		<div>
 			<div sclass="demo-logo pointer" onClick='Executions.sendRedirect("http://www.zkoss.org")'>
-				<image width="80px" height="65px" src="/img/ZK-logo.png"/>
+				<image width="90px" height="80px" src="/img/ZK-Logo.gif"/>
 			</div>
 			<categorybar zclass="demo-categorybar" id="header">
 				<category forEach="${main.categories}" id="${each.id}" src="${each.icon}" label="${each.label}"/>
@@ -367,10 +400,10 @@ ul ul ul li	{list-style: url(${c:encodeURL('/img/z-bullet3.gif')}) square}
 		</div>
 	</north>
 	<west title="ZK ${desktop.webApp.version} Live Demo" size="250px" flex="true" splittable="true"
-		minsize="150" maxsize="500" collapsible="true">
+		minsize="210" maxsize="500" collapsible="true">
 		<panel>
 			<toolbar>
-				<label value="Search:"/><textbox id="searchBox" sclass="demo-search-inp"/>
+				<label value="Search:"/><textbox id="searchBox" ctrlKeys="#down#up" focus="true" sclass="demo-search-inp"/>
 			</toolbar>
 			<panelchildren>
 				<listbox id="itemList" oddRowSclass="non-odd" sclass="demo-items"

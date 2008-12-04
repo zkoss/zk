@@ -441,15 +441,6 @@ public class ExecutionImpl extends AbstractExecution {
 	public boolean isSafari() {
 		return Servlets.isSafari(_request);
 	}
-	public boolean isIphone() {
-		return Servlets.isIphone(_request);
-	}
-	public boolean isIpod() {
-		return Servlets.isIpod(_request);
-	}
-	public boolean isAir() {
-		return Servlets.isAir(_request);
-	}
 	public boolean isMilDevice() {
 		return Servlets.isMilDevice(_request);
 	}

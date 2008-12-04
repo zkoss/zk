@@ -819,15 +819,7 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 		super.onChildRemoved(child);
 	}
 
-	public void setPage(Page page) {
-		super.setPage(page);
-
-		if (page == null && _mode == MODAL)
-			leaveModal(OVERLAPPED);
-	}
-	public void setParent(Component parent) {
-		super.setParent(parent);
-
+	public void onPageDetached(Page page) {
 		if (_mode == MODAL && getPage() == null)
 			leaveModal(OVERLAPPED);
 	}

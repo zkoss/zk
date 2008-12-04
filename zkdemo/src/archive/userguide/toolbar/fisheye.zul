@@ -47,18 +47,18 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			onCheck='fsb.orient=self.checked?"vertical":"horizontal"' />
 		<separator bar="true" />
 		<fisheyebar id="fsb" style="position:absolute;margin:80px 150px;"
-			attachEdge="top">
-			<fisheye image="/img/FolderABlue-256x256.png" label="Web Browser"
+			attachEdge="top" itemWidth="80" itemHeight="80" itemMaxHeight="160" itemMaxWidth="160">
+			<fisheye image="/img/Centigrade-Widget-Icons/FolderABlue-128x128.png" label="Folder"
 				onClick="alert(self.label)" />
-			<fisheye image="/img/ReadingGlass-256x256.png" label="Calendar"
+			<fisheye image="/img/Centigrade-Widget-Icons/ReadingGlass-128x128.png" label="Reading Glasses"
 				onClick="alert(self.label)" />
-			<fisheye image="/img/Briefcase-256x256.png" label="Email"
+			<fisheye image="/img/Centigrade-Widget-Icons/Briefcase-128x128.png" label="Project"
 				onClick="alert(self.label)" />
-			<fisheye image="/img/MailboxFlag-256x256.png"
-				label="Text Editor" onClick="alert(self.label)" />
-			<fisheye image="/img/Printer-256x256.png"
-				label="Software Update" onClick="alert(self.label)" />
-			<fisheye image="/img/Spyglass-256x256.png" label="Users"
+			<fisheye image="/img/Centigrade-Widget-Icons/MailboxFlag-128x128.png"
+				label="Email" onClick="alert(self.label)" />
+			<fisheye image="/img/Centigrade-Widget-Icons/Globe-128x128.png"
+				label="Globe" onClick="alert(self.label)" />
+			<fisheye image="/img/Centigrade-Widget-Icons/Spyglass-128x128.png" label="Spyglass"
 				onClick="alert(self.label)" />
 		</fisheyebar>
 	</div>

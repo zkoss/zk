@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+service.zul
+
+{{IS_NOTE
+	Purpose:
+		Zul Editor for ZK Firefox Extension
+	Description:
+		
+	History:
+		Fri Nov 7 20:46:27     2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+	<zscript>
+	String zulData = Executions.getCurrent().getParameter("zulData");
+	try {
+		Component cmp = Executions.createComponentsDirectly(zulData, "zul", null, null);
+		if (cmp != null) cmp.setPage(page);
+	} catch (Exception e) { 
+		if (zulData == null || "".equals(zulData.trim()))
+			return; // nothing to do.
+			
+		java.io.ByteArrayOutputStream arrayOutputStream = new java.io.ByteArrayOutputStream(); 
+		e.printStackTrace(new java.io.PrintStream(arrayOutputStream));
+		byte[] bytes = arrayOutputStream.toByteArray();
+		
+		Window win = new Window();
+		win.setTitle("Some Error caused by the code!");
+		win.setBorder("normal");
+		win.setPage(page);
+		Label l = new Label(zulData);
+		l.setPre(true);
+		l.setParent(win);
+		new Separator().setParent(win);
+		final Toolbarbutton btn = new Toolbarbutton("See exception details...");
+		btn.setParent(win);
+		btn.addEventListener(Events.ON_CLICK, new org.zkoss.zk.ui.event.EventListener() {
+			public void onEvent(Event event) throws Exception {
+				if (btn.getAttribute("printed") == null) {
+					btn.setAttribute("printed", Boolean.TRUE);
+					new Separator().setParent(win);
+					Div div = new Div();
+					new Label(new String(bytes)).setParent(div);
+					div.setParent(win);
+					div.setId("details");
+					div.setStyle("border:1px solid blue; padding: 5px;");
+				} else {
+					Div div = (Div)btn.getFellow("details");
+					div.setVisible(!div.isVisible());
+				}
+			}
+		});
+	}
+	</zscript>
+	<script if="${desktop.execution.serverName == &quot;www.zkoss.org&quot; or desktop.execution.serverName == &quot;www.potix.com&quot;}">
+	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+	</script>
+	<script if="${desktop.execution.serverName == &quot;www.zkoss.org&quot; or desktop.execution.serverName == &quot;www.potix.com&quot;}">
+	var pageTracker = _gat._getTracker("UA-121377-3");
+	pageTracker._setDomainName("zkoss.org");
+	pageTracker._initData();
+	pageTracker._trackPageview();
+	</script>
+</zk>

@@ -19,6 +19,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zkdemo.userguide;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import org.zkoss.lang.reflect.FusionInvoker;
@@ -27,10 +28,12 @@ import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.event.BookmarkEvent;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.ForwardEvent;
 import org.zkoss.zk.ui.event.InputEvent;
+import org.zkoss.zk.ui.event.KeyEvent;
 import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.util.Clients;
@@ -106,23 +109,58 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 
 	public void onCategorySelect(ForwardEvent event) {
 		Div div = (Div) event.getOrigin().getTarget();
-		if (_selected != div)
+		Listitem item = null;
+		if (_selected != div) {
 			_selected = div;
-		
+		} else {
+			item = itemList.getSelectedItem();
+		}
 		String href = getCategory(_selected.getId()).getHref();
 		if (href != null) {
-			Executions.getCurrent().sendRedirect(href);
+			Executions.getCurrent().sendRedirect(href, "zkdemo");
 		} else {
 			itemList.setModel(getSelectedModel());
 			if (Executions.getCurrent().isBrowser("ie6-"))
 				Clients.evalJavaScript("fixImage4IE6();");
+			if (item != null) {
+				itemList.renderAll();
+				((Listitem)itemList.getFellow(item.getId())).setSelected(true);
+			}
 		}
 	}
-
+	public void onBookmarkChange$main(BookmarkEvent event) {
+		String id = event.getBookmark();
+		if (id != null) {
+			final DemoItem[] items = getItems();
+			for (int i = 0; i < items.length; i++) {
+				if (items[i].getId().equals(id)) {
+					_selected = (Div)main.getFellow(items[i].getCateId());
+					itemList.setModel(getSelectedModel());
+					itemList.renderAll();
+					Listitem item = ((Listitem)itemList.getFellow(id));
+					item.setSelected(true);
+					itemList.invalidate();
+					setSelectedCategory(item);
+					xcontents.setSrc(((DemoItem) item.getValue()).getFile());
+					itemList.focus();
+					return;
+				}
+			}
+		}
+		
+	}
 	public void onSelect$itemList(SelectEvent event) {
 		Listitem item = itemList.getSelectedItem();
+		 
 		if (item != null) {
-			xcontents.setSrc((String) item.getValue());
+			
+			// sometimes the item is unloaded.
+			if (!item.isLoaded()) {
+				itemList.renderItem(item);
+			}
+			
+			setSelectedCategory(item);
+			xcontents.setSrc(((DemoItem) item.getValue()).getFile());
 		}
 	}
 
@@ -142,6 +180,7 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 					itemList.setModel(new ListModelList(list));
 					itemList.renderAll();
 					item = (Listitem) main.getFellow(id);
+					setSelectedCategory(item);
 				}
 			} catch (ComponentNotFoundException ex) { // ignore
 			}
@@ -149,18 +188,44 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 
 		if (item == null) {
 			item = (Listitem) main.getFellow("f1");
-			if (_selected == null) {
-				_selected = (Div) header.getFirstChild();
-				String scls = _selected.getSclass();
-				if (scls == null) scls = "";
-				_selected.setSclass(scls + " demo-seld");
-			}
+			setSelectedCategory(item);
 		}		
-		xcontents.setSrc((String) item.getValue());
+		xcontents.setSrc(((DemoItem) item.getValue()).getFile());
 
 		itemList.selectItem(item);
 	}
-
+	private void setSelectedCategory(Listitem item) {
+		DemoItem di = (DemoItem) item.getValue();
+		_selected = (Div) main.getFellow(di.getCateId());
+		String deselect = _selected != null ? "onSelect($e('"+ _selected.getUuid() + "'));" : "";
+		if (Executions.getCurrent().isBrowser("ie6-")) {
+			Clients.evalJavaScript(deselect + "fixImage4IE6();");
+		} else {
+			Clients.evalJavaScript(deselect);
+		}
+		item.getDesktop().setBookmark(item.getId());
+	}
+	public void onCtrlKey$searchBox(KeyEvent event) {
+		int keyCode = event.getKeyCode();
+		List items = itemList.getItems();
+		if (items.isEmpty()) return;
+		Listitem item = null;
+		switch (keyCode) {
+		case 38: // UP
+			item = itemList.getItemAtIndex(items.size() -1);
+			itemList.setSelectedItem(item);
+			break;
+		case 40: // DOWN
+			item = itemList.getItemAtIndex(0);
+			itemList.setSelectedItem(item);
+			break;
+		}
+		if (item != null) {
+			setSelectedCategory(item);
+			xcontents.setSrc(((DemoItem) item.getValue()).getFile());
+			itemList.focus();
+		}
+	}
 	public void onChanging$searchBox(InputEvent event) {
 		String key = event.getValue();
 		LinkedList item = new LinkedList();
@@ -206,7 +271,7 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 		public void render(Listitem item, Object data) {
 			DemoItem di = (DemoItem) data;
 			Listcell lc = new Listcell();
-			item.setValue(di.getFile());
+			item.setValue(di);
 			lc.setHeight("30px");
 			lc.setImage(di.getIcon());
 			item.setId(di.getId());
