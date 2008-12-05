@@ -1262,7 +1262,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 	/** Returns the widget class (aka., widget type), or null if not defined.
 	 * <p>Default: return the widget class based on the current mold
-	 * (by use of {@link ComponentDefinition#getWidgetClass}, or null
+	 * (by use of {@link ComponentDefinition#getWidgetClass}), or null
 	 * if not found.
 	 * @since 5.0.0
 	 */

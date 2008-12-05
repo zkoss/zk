@@ -58,13 +58,14 @@ zk = {
 		for (var p in superclass) //inherit static methods only
 			if (p != 'prototype') {
 				var v = superclass[p];
-				if (typeof v == 'function')
+				if (typeof v == 'function' && !v.$class) //function but not an object
 					jclass[p] = v;
 			}
 		zk.copy(jclass, staticMembers);
 
 		thisprototype.$class = jclass;
 		thisprototype._$super = superprototype;
+		jclass.$class = zk.Class;
 		jclass.superclass = superclass;
 		return jclass;
 	},
@@ -318,10 +319,14 @@ zk.Object.prototype = {
 	$init: zk.$void,
 	$class: zk.Object,
 	$instanceof: function (cls) {
-		if (cls)
-			for (var c = this.$class; c; c = c.superclass)
+		if (cls) {
+			var c = this.$class;
+			if (c == zk.Class)
+				return this == zk.Object || this == zk.Class; //follow Java
+			for (; c; c = c.superclass)
 				if (c == cls)
 					return true;
+		}
 		return false;
 	},
 	$super: function (mtdnm, vararg) {
@@ -367,12 +372,23 @@ zk.Object.prototype = {
 		};
 	}
 };
-zk.Object.isInstance = function (o) {
-	return o && o.$instanceof && o.$instanceof(this);
+
+//Class//
+zk.Class = function () {}
+zk.Class.superclass = zk.Object;
+_zkf = {
+	$class: zk.Class,
+	isInstance: function (o) {
+		return o && o.$instanceof && o.$instanceof(this);
+	},
+	isAssignableFrom: function (cls) {
+		for (; cls; cls = cls.superclass)
+			if (this == cls)
+				return true;
+		return false;
+	},
+	$instanceof: zk.Object.prototype.$instanceof
 };
-zk.Object.isAssignableFrom = function (cls) {
-	for (; cls; cls = cls.superclass)
-		if (this == cls)
-			return true;
-	return false;
-};
+zk.copy(zk.Class, _zkf);
+zk.copy(zk.Object, _zkf);
+_zkf = null;
