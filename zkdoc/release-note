@@ -48,6 +48,7 @@ ZK 3.5.2
   2355943: Default content font-family (fontFamilyC) in Linux
   2376488: DateBox parsing problem
   2383106: Back button and form values reset not recognized
+  2388345: Defect in use of forEach, arrays and data binding
   
 	--------
 ZK 3.5.1

@@ -1912,6 +1912,8 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 			if (_model != null) {
 				if ((renderer instanceof ListitemRendererExt)
 				|| (_renderer instanceof ListitemRendererExt)) {
+					//bug# 2388345, a new renderer that might new own Listitem, shall clean all Listitems first
+					getItems().clear();
 					syncModel(-1, -1); //we have to recreate all
 				} else if (getAttribute(ATTR_ON_INIT_RENDER_POSTED) == null) {
 					unloadAll();

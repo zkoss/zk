@@ -1,4 +1,4 @@
-/* GenericComposer.java
+/* Composistion.java
 
 {{IS_NOTE
 	Purpose:

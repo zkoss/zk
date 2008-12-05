@@ -663,6 +663,8 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 			if (_model != null) {
 				if ((renderer instanceof RowRendererExt)
 				|| (_renderer instanceof RowRendererExt)) {
+					//bug# 2388345, a new renderer that might new own Row, shall clean all Row first
+					getRows().getChildren().clear();
 					syncModel(-1, -1); //we have to recreate all
 				} else if (getAttribute(ATTR_ON_INIT_RENDER_POSTED) == null) {
 					unloadAll();
