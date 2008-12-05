@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-2227929.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Nov  6 12:52:18     2008, Created by tomyeh
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+-->
+<window border="normal">
+	Click
+	<button label="Create">
+		<attribute name="onClick"><![CDATA[
+	newc = execution.createComponents("B30-2227929-inc.zul", null);
+		]]></attribute>
+	</button>
+	and you shall see nothing happen.
+	Then click <button label="Attach" onClick="newc[0].setParent(self.parent)"/>
+	and you shall see a group of components are appended
+</window>
