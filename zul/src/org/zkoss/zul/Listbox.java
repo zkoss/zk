@@ -1327,14 +1327,24 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 		if (newChild instanceof Listitem) {
 			if (newChild instanceof Listgroup && inSelectMold())
 				throw new UnsupportedOperationException("Unsupported Listgroup in Select mold!");
+
+			final boolean isReorder = newChild.getParent() == this;
 			if (newChild instanceof Listgroupfoot){
 				if (!hasGroup())
 					throw new UiException("Listgroupfoot cannot exist alone, you have to add a Listgroup first");
 				if (refChild == null){
 					if (getLastChild() instanceof Listgroupfoot)
 						throw new UiException("Only one Goupfooter is allowed per Listgroup");
+					if (isReorder) {
+						final int idx = ((Listgroupfoot)newChild).getIndex();				
+						final int[] ginfo = getGroupsInfoAt(idx);
+						if (ginfo != null) {
+							ginfo[1]--; 
+							ginfo[2] = -1;
+						}
+					}
 					final int[] g = (int[]) _groupsInfo.get(getGroupCount()-1);
-					g[2] = ((Listitem)getItems().get(getItems().size() - 1)).getIndex();
+					g[2] = ((Listitem)getItems().get(getItems().size() - (isReorder ? 2 : 1))).getIndex();
 				} else if (refChild instanceof Listitem) {
 					final int idx = ((Listitem)refChild).getIndex();				
 					final int[] g = getGroupsInfoAt(idx);
@@ -1345,6 +1355,14 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 					if (idx != (g[0] + g[1]))
 						throw new UiException("Listgroupfoot must be placed after the last Row of the Listgroup");
 					g[2] = idx-1;
+					if (isReorder) {
+						final int nindex = ((Listgroupfoot) newChild).getIndex();				
+						final int[] ginfo = getGroupsInfoAt(nindex);
+						if (ginfo != null) {
+							ginfo[1]--; 
+							ginfo[2] = -1;
+						}
+					}
 				} else if (refChild.getPreviousSibling() instanceof Listitem) {
 					final int idx = ((Listitem)refChild.getPreviousSibling()).getIndex();				
 					final int[] g = getGroupsInfoAt(idx);
@@ -1355,6 +1373,14 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 					if (idx + 1  != (g[0] + g[1]))
 						throw new UiException("Listgroupfoot must be placed after the last Row of the Listgroup");
 					g[2] = idx;
+					if (isReorder) {
+						final int nindex = ((Listgroupfoot) newChild).getIndex();				
+						final int[] ginfo = getGroupsInfoAt(nindex);
+						if (ginfo != null) {
+							ginfo[1]--; 
+							ginfo[2] = -1;
+						}
+					}
 				}
 			}		
 			//first: listhead or auxhead
@@ -1381,7 +1407,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 						//otherwise: use min(jfrom, jto)
 				if (fixFrom < 0) newItem.setIndexDirectly(_items.size() - 1);
 				else fixGroupIndex(fixFrom,
-					jfrom >=0 && jto >= 0 ? jfrom > jto ? jfrom: jto: -1, true);
+					jfrom >=0 && jto >= 0 ? jfrom > jto ? jfrom: jto: -1, !isReorder);
 
 				//Maintain selected
 				final int newIndex = newItem.getIndex();
