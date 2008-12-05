@@ -98,6 +98,18 @@ if [ "$target" == "official" ] ; then
 	./build clean zkdemo zkdemos
 	./build zkdemo zkdemos
 fi
+if [ "$target" == "daily" ] ; then
+	rm -rf dist/lib/zkdemo*.war
+	cp -f zkdemo/war.libs.all zkdemo/war.libs
+	./build clean zkdemo
+	./build zkdemo
+
+	mv dist/lib/zkdemo.war dist/lib/zkdemo-all.war
+
+	cp -f zkdemo/war.libs.minimal zkdemo/war.libs
+	./build clean zkdemo
+	./build zkdemo
+fi
 
 #Prepare the source codes
 if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
@@ -337,10 +349,11 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 
 	if [ "$target" == "official" ] ; then
 		mv dist/lib/zkdemos.ear /tmp/zk/$demonm/zkdemos-min.ear
-		mv dist/lib/zkdemo-all.war /tmp/zk/$demonm/zkdemo.war
 		mv dist/lib/zkdemos-all.ear /tmp/zk/$demonm/zkdemos.ear
 	fi
 
+	mv dist/lib/zkdemo-all.war /tmp/zk/$demonm/zkdemo.war
+		
 	cd /tmp/zk
 	find -name .svn | xargs rm -rf
 
