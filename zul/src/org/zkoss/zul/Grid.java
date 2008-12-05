@@ -563,8 +563,20 @@ public class Grid extends XulElement implements Paginated {
 	 * @exception UiException if failed to initialize with the model
 	 */
 	public void setRowRenderer(RowRenderer renderer) {
-		_renderer = renderer;
+		if (_renderer != renderer) {
+			_renderer = renderer;
+
+			if (_model != null) {
+				if ((renderer instanceof RowRendererExt)
+				|| (_renderer instanceof RowRendererExt)) {
+					//bug# 2388345, a new renderer that might new own Row, shall clean all Row first
+					getRows().getChildren().clear();
+					syncModel(-1, -1); //we have to recreate all
+				}
+			}
+		}
 	}
+	
 	/** Sets the renderer by use of a class name.
 	 * It creates an instance automatically.
 	 */

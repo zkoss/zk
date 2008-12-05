@@ -1393,7 +1393,18 @@ public class Listbox extends XulElement implements Paginated {
 	 * @exception UiException if failed to initialize with the model
 	 */
 	public void setItemRenderer(ListitemRenderer renderer) {
-		_renderer = renderer;
+		if (_renderer != renderer) {
+			_renderer = renderer;
+
+			if (_model != null) {
+				if ((renderer instanceof ListitemRendererExt)
+				|| (_renderer instanceof ListitemRendererExt)) {
+					//bug# 2388345, a new renderer that might new own Listitem, shall clean all Listitems first
+					getItems().clear();
+					syncModel(-1,-1);
+				}
+			}
+		}
 	}
 	/** Sets the renderer by use of a class name.
 	 * It creates an instance automatically.
