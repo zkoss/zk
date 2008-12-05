@@ -1260,15 +1260,15 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		onListenerChange(page.getDesktop(), false);
 	}
 
-	/** Returns the widget type, or null if not defined.
-	 * <p>Default: return the widget type based on the current mold
-	 * (by use of {@link ComponentDefinition#getWidgetType}, or null
+	/** Returns the widget class (aka., widget type), or null if not defined.
+	 * <p>Default: return the widget class based on the current mold
+	 * (by use of {@link ComponentDefinition#getWidgetClass}, or null
 	 * if not found.
 	 * @since 5.0.0
 	 */
-	public String getWidgetType() {
-		final String widgetType = _def.getWidgetType(getMold());
-		return widgetType != null ? widgetType: _def.getDefaultWidgetType();
+	public String getWidgetClass() {
+		final String widgetClass = _def.getWidgetClass(getMold());
+		return widgetClass != null ? widgetClass: _def.getDefaultWidgetClass();
 	}
 	/** Returns the mold used to render this component.
 	 * Default: "default"
@@ -1284,9 +1284,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			if (!_def.hasMold(mold))
 				throw new UiException("Unknown mold: "+mold
 					+", while allowed include "+_def.getMoldNames());
-			final String oldtype = getWidgetType();
+			final String oldtype = getWidgetClass();
 			_mold = mold;
-			if (Objects.equals(oldtype, getWidgetType()))
+			if (Objects.equals(oldtype, getWidgetClass()))
 				smartUpdate("mold", _mold);
 			else
 				invalidate();
@@ -1300,7 +1300,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * <p>Default: it renders {@link #getId} if it was assigned,
 	 * and event names if listened (and listed in {@link #getClientEvents}).
 	 *
-	 * <p>Note: it doesn't render {@link #getWidgetType}, {@link #getUuid}
+	 * <p>Note: it doesn't render {@link #getWidgetClass}, {@link #getUuid}
 	 * and {@link #getMold}, which are caller's job.
 	 *
 	 * @since 5.0.0

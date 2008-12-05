@@ -89,10 +89,10 @@ implements DynamicTag, Native {
 		_epilog = epilog != null ? epilog: "";
 	}
 
-	/** Returns the widget type, "#n".
+	/** Returns the widget class, "#n".
 	 * @since 5.0.0
 	 */
-	public String getWidgetType() {
+	public String getWidgetClass() {
 		return "#n";
 	}
 	/** Returns the tag name, or null if plain text.

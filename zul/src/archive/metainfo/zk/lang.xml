@@ -78,12 +78,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>applet</component-name>
 		<component-class>org.zkoss.zul.Applet</component-class>
-		<widget-name>zul.extn.Applet</widget-name>
+		<widget-class>zul.extn.Applet</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>~./zul/html/applet.dsp</mold-uri>
 			<!-- a mold can have a different widget name
-			<widget-name>other.name</widget-name>
+			<widget-class>other.name</widget-class>
 			-->
 		</mold>
 	</component>
@@ -191,7 +191,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>button</component-name>
 		<component-class>org.zkoss.zul.Button</component-class>
-		<widget-name>zul.wgt.Button</widget-name>
+		<widget-class>zul.wgt.Button</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/button.js</mold-uri>
@@ -204,7 +204,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>box</component-name>
 		<component-class>org.zkoss.zul.Box</component-class>
-		<widget-name>zul.box.Box</widget-name>
+		<widget-class>zul.box.Box</widget-class>
 		<mold>
 			<mold-name>horizontal</mold-name>
 			<mold-uri>mold/hbox.js</mold-uri>
@@ -233,7 +233,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>caption</component-name>
 		<component-class>org.zkoss.zul.Caption</component-class>
-		<widget-name>zul.wgt.Caption</widget-name>
+		<widget-class>zul.wgt.Caption</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
  			<mold-uri>mold/caption.js</mold-uri>
@@ -309,7 +309,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>div</component-name>
 		<component-class>org.zkoss.zul.Div</component-class>
-		<widget-name>zul.wgt.Div</widget-name>
+		<widget-class>zul.wgt.Div</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/div.js</mold-uri>
@@ -372,7 +372,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>groupbox</component-name>
 		<component-class>org.zkoss.zul.Groupbox</component-class>
-		<widget-name>zul.wgt.Groupbox</widget-name>
+		<widget-class>zul.wgt.Groupbox</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/groupbox.js</mold-uri>
@@ -386,7 +386,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>hbox</component-name>
 		<component-class>org.zkoss.zul.Hbox</component-class>
-		<widget-name>zul.box.Box</widget-name>
+		<widget-class>zul.box.Box</widget-class>
 		<mold>
 			<mold-name>horizontal</mold-name>
 			<mold-uri>mold/hbox.js</mold-uri>
@@ -399,7 +399,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>html</component-name>
 		<component-class>org.zkoss.zul.Html</component-class>
-		<widget-name>zul.wgt.Html</widget-name>
+		<widget-class>zul.wgt.Html</widget-class>
 		<text-as>content</text-as><!-- treat text within the element as the content property -->
 		<mold>
 			<mold-name>default</mold-name>
@@ -441,7 +441,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>include</component-name>
 		<component-class>org.zkoss.zul.Include</component-class>
-		<widget-name>zul.wgt.Include</widget-name>
+		<widget-class>zul.wgt.Include</widget-class>
 	</component>
 	<component>
 		<component-name>intbox</component-name>
@@ -454,7 +454,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>label</component-name>
 		<component-class>org.zkoss.zul.Label</component-class>
-		<widget-name>zul.wgt.Label</widget-name>
+		<widget-class>zul.wgt.Label</widget-class>
 		<text-as>value</text-as>
 		<mold>
 			<mold-name>default</mold-name>
@@ -665,7 +665,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>separator</component-name>
 		<component-class>org.zkoss.zul.Separator</component-class>
-		<widget-name>zul.wgt.Separator</widget-name>
+		<widget-class>zul.wgt.Separator</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/separator.js</mold-uri>
@@ -690,7 +690,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>space</component-name>
 		<component-class>org.zkoss.zul.Space</component-class>
-		<widget-name>zul.wgt.Space</widget-name>
+		<widget-class>zul.wgt.Space</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/space.js</mold-uri>
@@ -716,7 +716,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>splitter</component-name>
 		<component-class>org.zkoss.zul.Splitter</component-class>
-		<widget-name>zul.box.Splitter</widget-name>
+		<widget-class>zul.box.Splitter</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/splitter.js</mold-uri>
@@ -921,7 +921,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>vbox</component-name>
 		<component-class>org.zkoss.zul.Vbox</component-class>
-		<widget-name>zul.box.Box</widget-name>
+		<widget-class>zul.box.Box</widget-class>
 		<mold>
 			<mold-name>horizontal</mold-name>
 			<mold-uri>mold/hbox.js</mold-uri>
@@ -934,7 +934,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>window</component-name>
 		<component-class>org.zkoss.zul.Window</component-class>
-		<widget-name>zul.wnd.Window</widget-name>
+		<widget-class>zul.wnd.Window</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/window.js</mold-uri>

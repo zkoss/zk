@@ -63,7 +63,7 @@ public class LanguageDefinition {
 	private static final Map _ldefsByExt = new HashMap();
 	/** A map of (String deviceType, List(LanguageDefinition). */
 	private static final Map _ldefsByClient = new HashMap();
-	/** A map of (String widgetName, WidgetDefinition). */
+	/** A map of (String widgetClass, WidgetDefinition). */
 	private static final Map _wgtdefs = new HashMap();
 
 	/** The namespace for ZK. It is mainly used to resolve special components
@@ -449,29 +449,33 @@ public class LanguageDefinition {
 	}
 
 	/** Returns whether the specified widget is defined.
+	 * @param widgetClass the name of the widget class (JavaScript class),
+	 * including the package name.
 	 * @since 5.0.0
 	 */
-	public boolean hasWidgetDefinition(String name) {
-		return _wgtdefs.containsKey(name);
+	public boolean hasWidgetDefinition(String widgetClass) {
+		return _wgtdefs.containsKey(widgetClass);
 	}
-	/** Returns the widget of the specified name.
+	/** Returns the widget of the specified class name.
 	 *
+	 * @param widgetClass the name of the widget class (JavaScript class),
+	 * including the package name.
 	 * @exception DefinitionNotFoundException is thrown if the definition
 	 * is not found
 	 * @since 5.0.0
 	 */
-	public WidgetDefinition getWidgetDefinition(String name) {
+	public WidgetDefinition getWidgetDefinition(String widgetClass) {
 		final WidgetDefinition wgtdef =
-			(WidgetDefinition)_wgtdefs.get(name);
+			(WidgetDefinition)_wgtdefs.get(widgetClass);
 		if (wgtdef == null)
-			throw new DefinitionNotFoundException("Widget definition not found: "+name);
+			throw new DefinitionNotFoundException("Widget definition not found: "+widgetClass);
 		return wgtdef;
 	}
 	/** Adds a widget definition.
 	 * @since 5.0.0
 	 */
 	public void addWidgetDefinition(WidgetDefinition wgtdef) {
-		_wgtdefs.put(wgtdef.getName(), wgtdef);
+		_wgtdefs.put(wgtdef.getWidgetClass(), wgtdef);
 	}
 
 	/** Adds the script that shall execute when a page's interpreter
@@ -574,7 +578,7 @@ public class LanguageDefinition {
 	 */
 	public void addStyleSheet(StyleSheet ss) {
 		if (ss == null)
-			throw new IllegalArgumentException("null ss");
+			throw new IllegalArgumentException();
 		synchronized (_ss) {
 			_ss.add(ss);
 		}

@@ -51,10 +51,10 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 		_props.put("includer", this);
 	}
 
-	/** Returns the component type, "#m".
+	/** Returns the component class (aka., widget type), "#m".
 	 * @since 5.0.0
 	 */
-	public String getWidgetType() {
+	public String getWidgetClass() {
 		return "#m";
 	}
 

@@ -230,7 +230,7 @@ public interface ComponentDefinition extends Cloneable {
 	/** Adds the ZCS-toCSS convert for the specified mold.
 	 *
 	 * @param name the mold name.
-	 * @param widgetType the widget type (aka., name).
+	 * @param widgetType the widget class (aka., name).
 	 * Ingored if null.
 	 * @param z2cURI the URI of ZCS-to-CSS converter.
 	 * It might contain XEL expressions.
@@ -238,20 +238,23 @@ public interface ComponentDefinition extends Cloneable {
 	 * @since 5.0.0
 	 */
 	public void addMold(String name, String widgetType, String z2cURI);
-	/** Returns the widget name assoicated with specified mold,
+	/** Returns the widget class assoicated with specified mold,
 	 * or null if not available.
+	 * The returned widget class includes the package name (JavaScript class).
 	 * @param moldName the mold name
 	 * @since 5.0.0
 	 */
-	public String getWidgetType(String moldName);
-	/** Returns the default widget type, or null if not available.
+	public String getWidgetClass(String moldName);
+	/** Returns the default widget class, or null if not available.
 	 * @since 5.0.0
 	 */
-	public String getDefaultWidgetType();
-	/** Sets the default widget type.
+	public String getDefaultWidgetClass();
+	/** Sets the default widget class.
+	 * @param widgetClass the name of the widget class (JavaScript class),
+	 * including the package name.
 	 * @since 5.0.0
 	 */
-	public void setDefaultWidgetType(String widgetType);
+	public void setDefaultWidgetClass(String widgetClass);
 	/** Returns the URI of the ZCS-to-CSS converter for the specified mold.
 	 *
 	 * <p>ZCS is ZK cacasding style that allows developers to customize

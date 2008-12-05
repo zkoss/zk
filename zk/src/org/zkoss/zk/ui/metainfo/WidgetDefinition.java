@@ -29,9 +29,9 @@ import java.util.Collection;
  * @see LanguageDefinition#getWidgetDefinition
  */
 public interface WidgetDefinition {
-	/** Returns the widget name (aka., type).
+	/** Returns the widget class (a JavaScript class).
 	 */
-	public String getName();
+	public String getWidgetClass();
 	/** Returns a collection of the mold names that have the molde URL.
 	 */
 	public Collection getMoldNames();

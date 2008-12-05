@@ -379,11 +379,11 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 		renderProperties(renderer);
 		out.write("\nzkbg('");
 
-		final String type = getWidgetType();
-		if (type == null)
-			throw new UiException("Widget type required for "+this+" with the "+getMold()+" mold");
+		final String wgtcls = getWidgetClass();
+		if (wgtcls == null)
+			throw new UiException("Widget class required for "+this+" with the "+getMold()+" mold");
 
-		out.write(type);
+		out.write(wgtcls);
 		out.write("','");
 		out.write(getUuid());
 		out.write("','");

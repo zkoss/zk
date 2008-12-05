@@ -61,8 +61,8 @@ implements ComponentDefinition, java.io.Serializable {
 	private Object _implcls;
 	/** A map of (String mold, [String widget, ExValue z2cURI]). */
 	private Map _molds;
-	/** The default widget type. */
-	private String _defWgtType;
+	/** The default widget class. */
+	private String _defWgtClass;
 	/** A map of custom attributs (String name, ExValue value). */
 	private Map _custAttrs;
 	/** A list of {@link Property}. */
@@ -441,18 +441,18 @@ implements ComponentDefinition, java.io.Serializable {
 		return _molds != null ?
 			_molds.keySet(): (Collection)Collections.EMPTY_LIST;
 	}
-	public String getWidgetType(String moldName) {
+	public String getWidgetClass(String moldName) {
 		if (_molds != null) {
 			final Object[] info = (Object[])_molds.get(moldName);
 			if (info != null) return (String)info[0];
 		}
 		return null;
 	}
-	public String getDefaultWidgetType() {
-		return _defWgtType;
+	public String getDefaultWidgetClass() {
+		return _defWgtClass;
 	}
-	public void setDefaultWidgetType(String widgetType) {
-		_defWgtType = widgetType;
+	public void setDefaultWidgetClass(String widgetClass) {
+		_defWgtClass = widgetClass;
 	}
 	public String getZ2CURI(Component comp, String moldName) {
 		if (_molds != null) {

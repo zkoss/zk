@@ -425,11 +425,11 @@ public class DefinitionLoaders {
 			if (s != null && !"false".equals(s))
 				compdef.setBlankPreserved(true);
 
-			String wgtnm = el.getElementValue("widget-name", true);
+			String wgtnm = el.getElementValue("widget-class", true);
 			WidgetDefinition wgtdef = null;
 			if (wgtnm != null) {
 				wgtdef = getWidgetDefinition(langdef, wgtnm);
-				compdef.setDefaultWidgetType(wgtnm);
+				compdef.setDefaultWidgetClass(wgtnm);
 			}
 
 			for (Iterator i = el.getElements("mold").iterator(); i.hasNext();) {
@@ -437,7 +437,7 @@ public class DefinitionLoaders {
 				final String nm = IDOMs.getRequiredElementValue(e, "mold-name");
 				final String z2c = e.getElementValue("z2c-uri", true);
 				final String uri = e.getElementValue("mold-uri", true);
-				final String wn = e.getElementValue("widget-name", true);
+				final String wn = e.getElementValue("widget-class", true);
 				noEL("mold-uri", uri, e); //5.0 limitation
 
 				compdef.addMold(nm, wn != null ? wn: wgtnm, z2c);
@@ -448,7 +448,7 @@ public class DefinitionLoaders {
 					if (wd != null)
 						wd.addMold(nm, uri);
 					else
-						log.warning("mold-uri for "+name+" ignored because widget-name is required, "+e.getLocator());
+						log.warning("mold-uri for "+name+" ignored because widget-class is required, "+e.getLocator());
 				}
 			}
 

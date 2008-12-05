@@ -34,18 +34,18 @@ import org.zkoss.zk.ui.UiException;
  * @since 5.0.0
  */
 public class WidgetDefinitionImpl implements WidgetDefinition {
-	/** The widget name. */
-	private final String _name;
+	/** The widget class. */
+	private final String _class;
 	/** A map of molds (String mold, String moldURI). */
 	private Map _molds;
 
-	public WidgetDefinitionImpl(String name) {
-		_name = name;
+	public WidgetDefinitionImpl(String klass) {
+		_class = klass;
 	}
 
 	//WidgetDefinition//
-	public String getName() {
-		return _name;
+	public String getWidgetClass() {
+		return _class;
 	}
 	public void addMold(String name, String moldURI) {
 		if (moldURI == null || moldURI.length() == 0 || name == null
@@ -57,10 +57,10 @@ public class WidgetDefinitionImpl implements WidgetDefinition {
 		Object old = _molds.put(name, moldURI);
 		if (old != null && !Objects.equals(old, moldURI)) {
 			_molds.put(name, old);
-			throw new UiException("Different mold URIs, "+old+" and "+moldURI+" cannot be mapped to the same widget, "+_name);
-			//We assume mold URI can be decided by widget type and mold
+			throw new UiException("Different mold URIs, "+old+" and "+moldURI+" cannot be mapped to the same widget, "+_class);
+			//We assume mold URI can be decided by widget class and mold
 			//(no need of component definition), so we must prevent
-			//misuse (such as overriding with a diff URI but same widget type)
+			//misuse (such as overriding with a diff URI but same widget class)
 		}
 	}
 	public String getMoldURI(String name) {
