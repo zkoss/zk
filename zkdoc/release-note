@@ -47,6 +47,7 @@ ZK 3.5.2
   2241309: Clone component shall clone GenericAutowireComposer as well
   2355943: Default content font-family (fontFamilyC) in Linux
   2376488: DateBox parsing problem
+  2383106: Back button and form values reset not recognized
   
 	--------
 ZK 3.5.1

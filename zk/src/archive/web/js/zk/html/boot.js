@@ -1040,7 +1040,7 @@ zk._loadAndInit = function (inf) {
 		var n = inf.stk.pop();
 		if (n.nodeType == 1) {
 			try { 
-				if (zk.gecko) {
+				if (!zk.ie) {
 	//FF remembers the previous value that user entered when reload
 	//We have to reset them because the server doesn't know any of them
 					switch ($tag(n)) {
@@ -1048,6 +1048,7 @@ zk._loadAndInit = function (inf) {
 						if (n.type == "checkbox" || n.type == "radio") {
 							if (n.checked != n.defaultChecked)
 								n.checked = n.defaultChecked;
+							if (zk.opera) zk.setOuterHTML(n, zk.getOuterHTML(n));
 							break;
 						}
 						if (n.type != "text" && n.type != "password") break;
@@ -1062,7 +1063,7 @@ zk._loadAndInit = function (inf) {
 							n.selected = n.defaultSelected;
 						//break;
 					}
-				} else if (zk.ie) {
+				} else {
 					switch ($tag(n)) {
 					case "A": //Bug 1635685 and 1612312
 					case "AREA": //Bug 1896749
