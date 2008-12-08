@@ -199,7 +199,7 @@ public class Button extends LabelImageElement implements org.zkoss.zul.api.Butto
 	}
 
 	private class EncodedHref implements org.zkoss.zk.ui.util.DeferredValue {
-		public String getValue() {
+		public Object getValue() {
 			return getEncodedHref();
 		}
 	}

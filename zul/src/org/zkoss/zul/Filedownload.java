@@ -178,7 +178,7 @@ public class Filedownload {
 			}
 			_path = sb.toString();
 		}
-		public String getValue() {
+		public Object getValue() {
 			return Executions.getCurrent().getDesktop()
 				.getDownloadMediaURI(_media, _path);
 		}

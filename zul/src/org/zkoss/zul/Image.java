@@ -324,12 +324,12 @@ public class Image extends XulElement implements org.zkoss.zul.api.Image{
 	}
 
 	private class EncodedURL implements org.zkoss.zk.ui.util.DeferredValue {
-		public String getValue() {
+		public Object getValue() {
 			return getEncodedURL();
 		}
 	}
 	private class getEncodedHoverURL implements org.zkoss.zk.ui.util.DeferredValue {
-		public String getValue() {
+		public Object getValue() {
 			return getgetEncodedHoverURL();
 		}
 	}

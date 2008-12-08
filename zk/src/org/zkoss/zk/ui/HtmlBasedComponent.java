@@ -361,20 +361,20 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	//-- rendering --//
 	/** Redraws this component and all its decendants.
 	 * <p>Default: It generates DIV tag to enclose all information.
-	 * To generate all information, it first invokes {@link #redrawContent}
-	 * then invokes {@link #renderProperties} to render component's
+	 * To generate all information, it first invokes
+	 * {@link #renderProperties} to render component's
 	 * properties,
-	 * and {@link #redrawChildren} to redraw children (and descendants)
+	 * and  then {@link #redrawChildren} to redraw children (and descendants)
 	 * (by calling their {@link #redraw}).
 	 *
-	 * <p>If a dervied class wants to render more content, it can override
-	 * {@link #renderProperties} or {@link #redrawContent}.
+	 * <p>If a dervied class wants to render more properties, it can override
+	 * {@link #renderProperties}.
 	 * <p>If a derived class renders only a subset of its children
 	 * (such as paging/cropping), it could override {@link #redrawChildren}.
+	 * <p>If a deriving class wants to do something before
+	 * {@link #renderProperties}, it has to override {@link #redraw}.
 	 */
 	public void redraw(final Writer out) throws IOException {
-		redrawContent(out);
-
 		final JsContentRenderer renderer = new JsContentRenderer();
 		renderProperties(renderer);
 		out.write("\nzkbg('");
@@ -397,18 +397,6 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 		redrawChildren(out);
 
 		out.write("zke();\n");
-	}
-	/** Redraw the content of this component.
-	 * <p>Default: does nothing.
-	 * <p>It is designed to allow derived class to insert more information
-	 * before SCRIPT tag. Usually you generate the content here that
-	 * can be crawled by the search engine. For example, a label
-	 * shall generate the value here so the search engine are able to index it.
-	 * <p>Note: it is called before {@link #redrawChildren}.
-	 * @since 5.0.0
-	 * @see #redraw
-	 */
-	protected void redrawContent(Writer out) throws IOException {
 	}
 	/** Redraws childrens (and then recursively descandants).
 	 * <p>Default: it invokes {@link #redraw} for all its children.

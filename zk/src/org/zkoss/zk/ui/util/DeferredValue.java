@@ -30,6 +30,7 @@ public interface DeferredValue {
 	/** Returns the value.
 	 * It is called to retrieve the real value
 	 * by the ZK engine in the rendering phase.
+	 * @since 5.0.0 (return type becomes Object)
 	 */
-	public String getValue();
+	public Object getValue();
 }

@@ -230,7 +230,7 @@ public class Iframe extends XulElement implements org.zkoss.zul.api.Iframe {
 	}
 
 	private class EncodedSrc implements org.zkoss.zk.ui.util.DeferredValue {
-		public String getValue() {
+		public Object getValue() {
 			return getEncodedSrc();
 		}
 	}

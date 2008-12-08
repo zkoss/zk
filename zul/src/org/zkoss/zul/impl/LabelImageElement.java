@@ -255,12 +255,12 @@ public class LabelImageElement extends LabelElement implements org.zkoss.zul.imp
 		}
 	}
 	private class EncodedImageURL implements org.zkoss.zk.ui.util.DeferredValue {
-		public String getValue() {
+		public Object getValue() {
 			return getEncodedImageURL();
 		}
 	}
 	private class EncodedHoverURL implements org.zkoss.zk.ui.util.DeferredValue {
-		public String getValue() {
+		public Object getValue() {
 			return getEncodedHoverURL();
 		}
 	}
