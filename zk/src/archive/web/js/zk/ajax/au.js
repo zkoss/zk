@@ -870,8 +870,11 @@ zAu.cmd1 = {
 	submit: function (uuid, cmp) {
 		setTimeout(function (){if (cmp && cmp.submit) cmp.submit();}, 50);
 	},
-	invoke: function (uuid, cmp, func, arg0, arg1, arg2) {
-		zk.eval(cmp, func, null, arg0, arg1, arg2);
+	invoke: function (uuid, wgt, func, vararg) {
+		var args = [];
+		for (var j = arguments.length; --j > 2;)
+			args.unshift(arguments[j]);
+		wgt[func].apply(wgt, args);
 	},
 	popup: function (uuid, cmp, mode, x, y) {
 		var type = $type(cmp);
