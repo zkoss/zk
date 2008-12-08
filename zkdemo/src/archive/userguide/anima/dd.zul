@@ -42,50 +42,52 @@ by dragging list items around.</p>
 						<textbox id="codeView" class="code" rows="20" width="95%">
 			<attribute name="value"><![CDATA[
 <zk>
-	Drag Project To Check List
+	Drag project to other list or same list for reorder
 	<hbox>
-		<listbox id="left" height="200px" width="200px"
-			oddRowSclass="non-odd" fixedLayout="true" droppable="true"
-			onDrop="movel(event.dragged)">
-			<listitem draggable="true">
+		<listbox id="left" height="200px" width="200px" onDrop="move(event.dragged)" droppable="true"
+			oddRowSclass="non-odd" fixedLayout="true">
+			<listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
 				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Forge" />
 			</listitem>
-			<listitem draggable="true">
+			<listitem draggable="true" droppable="true" onDrop="move(event.dragged)"> 
 				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Mobile" />
 			</listitem>
-			<listitem draggable="true">
+			<listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
 				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK GWT" />
 			</listitem>
-			<listitem draggable="true">
+			<listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
 				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK JSF" />
 			</listitem>
-			<listitem draggable="true">
+			<listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
 				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK JSP" />
 			</listitem>
-			<listitem draggable="true">
+			<listitem draggable="true" droppable="true" onDrop="move(event.dragged)">
 				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Spring" />
 			</listitem>
 		</listbox>
 		<separator />
 		<listbox id="right" height="200px" width="200px"
-			oddRowSclass="non-odd" fixedLayout="true"
-			multiple="true" droppable="true" onDrop="mover(event.dragged)">
-			<listitem draggable="true">
+			oddRowSclass="non-odd" fixedLayout="true" onDrop="move(event.dragged)" droppable="true"
+			multiple="true" >
+			<listitem draggable="true"  droppable="true" onDrop="move(event.dragged)">
 				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK" />
 			</listitem>
-			<listitem draggable="true">
+			<listitem draggable="true"  droppable="true" onDrop="move(event.dragged)">
 				<listcell src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" label="ZK Studio" />
 			</listitem>
 		</listbox>
 	</hbox>
 	<zscript>
-	void mover(Component dragged) {
-		if (dragged instanceof Listitem)   
-		right.appendChild(dragged);
-	}
-	void movel(Component dragged) {
-		if (dragged instanceof Listitem)   
-		left.appendChild(dragged);
+	void move(Component dragged) {
+		if (self instanceof Listitem) {
+			if (dragged.getParent().getId().equals("right")) {
+				self.parent.insertBefore(dragged, self.getNextSibling());
+			} else {
+				self.parent.insertBefore(dragged, self.getNextSibling());
+			}
+		} else {
+			self.appendChild(dragged);
+		}
 	}
 	</zscript>
 </zk>
