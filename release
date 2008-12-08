@@ -373,7 +373,7 @@ if [ "$target" == "official" ]; then
 	done
 
 	cd /tmp/zk/doc
-	cp -rP $htmldocdir/devref $htmldocdir/devguide $htmldocdir/devref-single $htmldocdir/devguide-single .
+	cp -rP $htmldocdir/devref $htmldocdir/devguide $htmldocdir/devref-single $htmldocdir/devguide-single $htmldocdir/styleguide $htmldocdir/styleguide-single .
 	find -name .svn | xargs rm -rf
 
 	echo Output zk-devref-$ver.zip
