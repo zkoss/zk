@@ -23,6 +23,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 use="org.zkoss.zul.impl.FileuploadDlg">
 	<label value="${arg.message}"/>
 	<!-- Note: 100% becomes too big in IE6 -->
-	<iframe id="${self.parent.uuid}!iframe" width="97%" style="border: 1px solid #aaa"
+	<iframe width="97%" style="border: 1px solid #aaa"
 	src="~./zul/html/fileupload.html.dsp?dtid=${self.desktop.id}&amp;uuid=${self.parent.uuid}&amp;max=${arg.max}&amp;native=${arg.native}"/>
 </window>
