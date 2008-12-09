@@ -56,6 +56,7 @@ import org.zkoss.zk.ui.util.UiLifeCycle;
 import org.zkoss.zk.ui.util.Monitor;
 import org.zkoss.zk.ui.util.DesktopSerializationListener;
 import org.zkoss.zk.ui.util.EventInterceptor;
+import org.zkoss.zk.ui.util.AuRequestProcessor;
 import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
 import org.zkoss.zk.ui.sys.PageCtrl;
@@ -92,7 +93,7 @@ import org.zkoss.zk.device.DeviceNotFoundException;
  */
 public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private static final Log log = Log.lookup(DesktopImpl.class);
-    private static final long serialVersionUID = 20080509L;
+    private static final long serialVersionUID = 20081209L;
 
 	/** Represents media stored with {@link #getDownloadMediaURI}.
 	 * It must be distinguishable from component's ID.
@@ -142,7 +143,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private transient ServerPush _spush;
 	/** The event interceptors. */
 	private final EventInterceptors _eis = new EventInterceptors();
-	private transient List _dtCleans, _execInits, _execCleans, _uiCycles;
+	private transient List _dtCleans, _execInits, _execCleans,
+		_uiCycles, _auProcs;
 	private transient Map _lastRes;
 	private static final int MAX_RESPONSE_ID = 999;
 	/** The response sequence ID. */
@@ -441,14 +443,12 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	public void setExecution(Execution exec) {
 		_exec = exec;
 	}
-	/** Processes an AU request.
-	 *
-	 * <p>Default: it convests the request to an event (by
-	 * {@link Event#getEvent}) and then posts the event
-	 * (by {@link Events#postEvent}).
-	 * @since 5.0.0
-	 */
 	public void process(AuRequest request, boolean everError) {
+		if (_auProcs != null)
+			for (Iterator it = _auProcs.iterator(); it.hasNext();)
+				if (((AuRequestProcessor)it.next()).process(request, everError))
+					return; //done
+
 		final String name = request.getName();
 		if (Events.ON_BOOKMARK_CHANGE.equals(name)) {
 			BookmarkEvent evt = BookmarkEvent.getBookmarkEvent(request);
@@ -604,6 +604,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		Serializables.smartWrite(s, _execCleans);
 		willSerialize(_uiCycles);
 		Serializables.smartWrite(s, _uiCycles);
+		willSerialize(_auProcs);
+		Serializables.smartWrite(s, _auProcs);
 
 		s.writeBoolean(_spush != null);
 	}
@@ -638,6 +640,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		didDeserialize(_execCleans);
 		_uiCycles = (List)Serializables.smartRead(s, _uiCycles);
 		didDeserialize(_uiCycles);
+		_auProcs = (List)Serializables.smartRead(s, _auProcs);
+		didDeserialize(_auProcs);
 
 		if (s.readBoolean())
 			enableServerPush(true);
@@ -683,6 +687,11 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			added = true;
 		}
 
+		if (listener instanceof AuRequestProcessor) {
+			_auProcs = addListener0(_auProcs, listener);
+			added = true;
+		}
+
 		if (!added)
 			throw new IllegalArgumentException("Unknown listener: "+listener);
 	}
@@ -712,6 +721,10 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 		if (listener instanceof UiLifeCycle
 		&& removeListener0(_uiCycles, listener))
+			found = true;
+
+		if (listener instanceof AuRequestProcessor
+		&& removeListener0(_auProcs, listener))
 			found = true;
 		return found;
 	}

@@ -370,15 +370,26 @@ if (c.isEmpty()) {
 
 	/** Processes an AU request.
 	 *
+	 * <p>To override the default processing, register an AU request process
+	 * by invoking {@link Desktop#addListener}.
+	 *
+	 * <p>Default: it invokes the registered AU request processor
+	 * ({@link Desktop#addListener}) one-by-one, until
+	 * the first one returns true.
+	 * If none of them returns true, it handles special requests, including
+	 * onBookmarkChange, onURIChange and onClientInfo.
+	 * If the request is not one of above, it converts the request to
+	 * an event (by {@link Event#getEvent}) and then posts the event
+	 * (by {@link Events#postEvent}).
+	 *
 	 * <p>To send reponses to the client, use
 	 * {@link org.zkoss.zk.ui.AbstractComponent#smartUpdate},
 	 * {@link org.zkoss.zk.ui.AbstractComponent#response}
 	 * or {@link Component#invalidate()}.
-	 * To process the AU requests sent from the client, override this
-	 * method.
 	 *
-	 * @param everError whether any error ever occured before
-	 * processing this request.
+	 * @param everError if any error ever occured before
+	 * processing this request. In other words, indicates if the previous
+	 * request causes any exception.
 	 * @since 5.0.0
 	 */
 	public void process(AuRequest request, boolean everError);

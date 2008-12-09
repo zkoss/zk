@@ -733,12 +733,6 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 
 	//ZK event//
-	/** An array of important events. An import event is an event
-	 * that must be sent to the server even without event listener.
-	 * It is usually about state-updating, such as onChange and onSelect.
-	 * <p>Default: null.
-	 */
-	//importantEvents_: nulll, //shared by all instances of the same class
 	/** Fires a Widget event.
 	 * Note: the event will be sent to the server if it is in server
 	 * (@{link #inServer}), and belongs to a desktop.

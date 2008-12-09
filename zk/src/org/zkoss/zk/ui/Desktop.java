@@ -294,7 +294,8 @@ public interface Desktop {
 	 * {@link org.zkoss.zk.ui.util.ExecutionInit},
 	 * {@link org.zkoss.zk.ui.util.ExecutionCleanup},
 	 * {@link org.zkoss.zk.ui.util.UiLifeCycle},
-	 * and/or {@link EventInterceptor}.<br/>
+	 * {@link EventInterceptor}
+	 * and/or {@link org.zkoss.zk.ui.util.AuRequestProcessor}.<br/>
 	 * Note: {@link org.zkoss.zk.ui.event.EventThreadInit},
 	 * {@link org.zkoss.zk.ui.event.EventThreadCleanup},
 	 * {@link org.zkoss.zk.ui.event.EventThreadSuspend} and
