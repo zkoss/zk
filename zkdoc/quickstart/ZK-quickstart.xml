@@ -2,10 +2,10 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <book lang="en-US">
 <title>The Quick Start Guide</title>
-<subtitle>Version 3.5.1</subtitle>
+<subtitle>Version 3.6.0</subtitle>
 <bookinfo>
 <copyright>
-<year>2008</year>
+<year>2007</year>
 <holder>Potix Corporation. All rights reserved.</holder>
 </copyright>
 </bookinfo>
@@ -127,8 +127,8 @@
 </thead><tbody>
 <row>
 <entry>
-<para>zk-bin-std-3.5.1.tar.gz</para>
-<para>zk-bin-std-3.5.1.zip</para>
+<para>zk-bin-std-3.6.0.tar.gz</para>
+<para>zk-bin-std-3.6.0.zip</para>
 </entry>
 <entry>
 <para>The binary distribution of ZK with the minimal set of libraries that you need to enrich your Web applications with ZK.</para>
@@ -137,8 +137,8 @@
 </row>
 <row>
 <entry>
-<para>zk-bin—prof-3.5.1.tar.gz</para>
-<para>zk-bin-prof-3.5.1.zip</para>
+<para>zk-bin—prof-3.6.0.tar.gz</para>
+<para>zk-bin-prof-3.6.0.zip</para>
 </entry>
 <entry>
 <para>The binary distribution of ZK, including the standard edition, JFreeChart, Google Maps, Jasper Reports, and layout components.</para>
@@ -147,8 +147,8 @@
 </row>
 <row>
 <entry>
-<para>zk-bin-3.5.1.tar.gz</para>
-<para>zk-bin-3.5.1.zip</para>
+<para>zk-bin-3.6.0.tar.gz</para>
+<para>zk-bin-3.6.0.zip</para>
 </entry>
 <entry>
 <para>The binary distribution of ZK, including the professional edition, accessibility, the performance version of ZUL (zkmax.jar), and versatile plug-ins, such as Ruby, Groovy, JavaScript, MVEL and OGNL.</para>
@@ -157,7 +157,7 @@
 </row>
 <row>
 <entry>
-<para>zk-demo-3.5.1.zip</para>
+<para>zk-demo-3.6.0.zip</para>
 </entry>
 <entry>
 <para>Standalone zkdemo application in WAR and EAR format, and the source codes of zkdemo.</para>
@@ -166,7 +166,7 @@
 </row>
 <row>
 <entry>
-<para>zk-javadoc-3.5.1.zip</para>
+<para>zk-javadoc-3.6.0.zip</para>
 </entry>
 <entry>
 <para>The Java API document of ZK framework.</para>
@@ -174,7 +174,7 @@
 </row>
 <row>
 <entry>
-<para>zk-src-3.5.1.tar.gz</para>
+<para>zk-src-3.6.0.tar.gz</para>
 </entry>
 <entry>
 <para>The source codes of ZK framework.</para>
@@ -189,7 +189,7 @@
 <para>If you want to run the demo in your local server, you can follow the following steps.</para>
 <orderedlist>
 <listitem>
-<para>Download zk-demo-3.5.1.zip from <ulink url="http://sourceforge.net/project/showfiles.php?group_id=152762&amp;package_id=169309">here (sourceforge.net)</ulink>.</para>
+<para>Download zk-demo-3.6.0.zip from <ulink url="http://sourceforge.net/project/showfiles.php?group_id=152762&amp;package_id=169309">here (sourceforge.net)</ulink>.</para>
 </listitem>
 <listitem>
 <para>After uncompressing the file, you can deploy zkdemo.war or zkdemo.ear to your Web or application server.Most Web or application servers have a management console that allows you to deploy an application painlessly. Consult the corresponding manuals, or you can visit <ulink url="http://en.wikibooks.org/wiki/ZK/How-Tos#Installation_and_Configuration">http://en.wikibooks.org/wiki/ZK/How-Tos#Installation_and_Configuration</ulink>, where the ZK community maintains the installation guides for many Web or application servers.For Tomcat server, you can copy it directly to the $TOMCAT_DIR/webapps directory, and then Tomcat will start the deployment automatically.</para>
@@ -208,7 +208,7 @@
 <para>To bundle ZK libraries with the WAR file (the Web application)</para>
 <orderedlist>
 <listitem>
-<para>Uncompress zk-bin-3.5.1.zip or zk-bin-3.5.1.tar.gz</para>
+<para>Uncompress zk-bin-3.6.0.zip or zk-bin-3.6.0.tar.gz</para>
 </listitem>
 <listitem>
 <para>Copy dist/lib/*.jar, dist/lib/zkforge/*.jar, and dist/lib/ext/*.jar to the /WEB-INF/lib directory in your Web application.Libraries in dist/lib/zkforge and dist/lib/ext are optional. If you want to minimize the footprint of your Web application, refer to the next chapter for the description of these libraries.</para>
@@ -217,7 +217,7 @@
 <para>To bundle ZK libraries with the EAR file (the Java EE application)</para>
 <orderedlist>
 <listitem>
-<para>Uncompress zk-bin-3.5.1.zip or zk-bin-3.5.1.tar.gz</para>
+<para>Uncompress zk-bin-3.6.0.zip or zk-bin-3.6.0.tar.gz</para>
 </listitem>
 <listitem>
 <para>Copy dist/lib/*.jar, dist/lib/zkforge/*.jar, and dist/lib/ext/*.jar to the root directory in your Java EE application.Libraries in dist/lib/zkforge and dist/lib/ext are optional. If you want to minimize the footprint of your Web application, refer to the next chapter for the description of these libraries.</para>
@@ -233,7 +233,7 @@
 <para>Stop Tomcat.</para>
 </listitem>
 <listitem>
-<para>Uncompress zk-bin-3.5.1.zip or zk-bin-3.5.1.tar.gz</para>
+<para>Uncompress zk-bin-3.6.0.zip or zk-bin-3.6.0.tar.gz</para>
 </listitem>
 <listitem>
 <para>Copy dist/lib/*.jar, dist/lib/zkforge/*.jar, and dist/lib/ext/*.jar to $TOMCAT_HOME<footnote>
@@ -263,7 +263,7 @@
 <para>Stop Jetty.</para>
 </listitem>
 <listitem>
-<para>Uncompress zk-bin-3.5.1.zip or zk-bin-3.5.1.tar.gz</para>
+<para>Uncompress zk-bin-3.6.0.zip or zk-bin-3.6.0.tar.gz</para>
 </listitem>
 <listitem>
 <para>Copy dist/lib/*.jar, dist/lib/zkforge/*.jar, and dist/lib/ext/*.jar to $JETTY_HOME/ext Libraries in dist/zkforge and dist/lib/ext are optional. If you want to minimize the footprint of your Web server, refer to the next chapter for the description of these libraries.</para>
@@ -288,7 +288,7 @@
 <para>To open the connection under zscript, you have to put MySQL JDBC driver (mysql-connector-*.jar) under the $TOMCAT_DIR/common/lib directory.</para></sect1></chapter>
 <chapter>
 <title>4. The Content of Binary Distribution</title>
-<para>This chapter describes the content of zk-bin-3.5.1.zip.</para><sect1><title>/doc</title>
+<para>This chapter describes the content of zk-bin-3.6.0.zip.</para><sect1><title>/doc</title>
 <para>This directory holds the documents including copyrights and release notes.</para></sect1><sect1><title>/dist/lib</title>
 <para>This directory holds the binary libraries required to run ZK.</para></sect1><sect1><title>/dist/lib/zkforge</title>
 <para>This directory holds the components from ZK Forge, such as FCKeditor. It is optional depending on whether you need them.</para>
@@ -411,7 +411,7 @@
 </entry>
 <entry>
 <para>Required if you want scripting in Ruby (<ulink url="http://jruby.codehaus.org/">JRuby</ulink>).</para>
-<para>Version: <ulink url="http://jruby.codehaus.org/">JRuby</ulink> 1.1.2 (jruby-complete)</para>
+<para>Version: <ulink url="http://jruby.codehaus.org/">JRuby</ulink> 1.1.5 (jruby-complete)</para>
 <para>[not available in the standard and professional edition]</para>
 </entry>
 </row>
@@ -457,12 +457,12 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable></sect1><sect1><title>/dist/src</title>
-<para>This directory holds the source codes in JAR format. These JAR files are used for debugging in IDE, such as Eclipse. You cannot build the binary libraries from these. Rather, download and uncompress zk-src-3.5.1.tar.gz.</para></sect1><sect1><title>/dist/xsd</title>
+<para>This directory holds the source codes in JAR format. These JAR files are used for debugging in IDE, such as Eclipse. You cannot build the binary libraries from these. Rather, download and uncompress zk-src-3.6.0.tar.gz.</para></sect1><sect1><title>/dist/xsd</title>
 <para>This directory holds the XSD files that might be useful to develop ZK applications.</para></sect1><sect1><title>/dist/WEB-INF</title>
 <para>This directory holds the TLD files. These TLD files are part of JAR files so they are loaded automatically. We put them here mainly for your reference only.</para></sect1></chapter>
 <chapter>
 <title>5. The Content of Demo Distribution</title>
-<para>This chapter describes the content of zk-demo-3.5.1.zip.</para><sect1><title>/</title>
+<para>This chapter describes the content of zk-demo-3.6.0.zip.</para><sect1><title>/</title>
 <para>This directory holds the executable: zkdemo.war, zkdemo-min.war, zkdemos.ear and zkdemos-min.ear. Refer to the Installation chapter for details.</para></sect1><sect1><title>/zkdemo</title>
 <para>This directory holds the source codes of the live demo.</para></sect1><sect1><title>/MyApp</title>
 <para>This directory holds an empty Web application which you can start your new Web application from.</para></sect1></chapter>

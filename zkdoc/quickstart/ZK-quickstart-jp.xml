@@ -2,10 +2,10 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <book lang="en-US">
 <title>クイックスタートガイド</title>
-<subtitle>Version 3.5.1</subtitle>
+<subtitle>Version 3.6.0</subtitle>
 <bookinfo>
 <copyright>
-<year>2008</year>
+<year>2007</year>
 <holder>Potix Corporation. All rights reserved.</holder>
 </copyright>
 </bookinfo>
@@ -131,11 +131,11 @@
 <para>
 <code>zk-bin-</code>
 <code>std</code>
-<code>-3.5.1</code>
+<code>-3.6.0</code>
 <code>.tar.gz　</code>
 <code>zk-</code>
 <code>bin-std-</code>
-<code>3.5.1</code>
+<code>3.6.0</code>
 <code>.zip</code>
 </para>
 </entry>
@@ -149,11 +149,11 @@
 <para>
 <code>zk-bin-</code>
 <code>prof</code>
-<code>-3.5.1</code>
+<code>-3.6.0</code>
 <code>.tar.gz　</code>
 <code>zk-</code>
 <code>bin-prof-</code>
-<code>3.5.1</code>
+<code>3.6.0</code>
 <code>.zip</code>
 </para>
 </entry>
@@ -165,9 +165,9 @@
 <row>
 <entry>
 <para>
-<code>zk-bin-3.5.1</code>
+<code>zk-bin-3.6.0</code>
 <code>.tar.gz</code>
-<code>zk-bin-3.5.1</code>
+<code>zk-bin-3.6.0</code>
 <code>.zip</code>
 </para>
 </entry>
@@ -180,7 +180,7 @@
 <entry>
 <para>
 <code>Zk-demo-</code>
-<code>3.5.1</code>
+<code>3.6.0</code>
 <code>.zip</code>
 </para>
 </entry>
@@ -193,7 +193,7 @@
 <entry>
 <para>
 <code>Zk-</code>
-<code>javadoc-3.5.1.</code>
+<code>javadoc-3.6.0.</code>
 <code>zip</code>
 </para>
 </entry>
@@ -205,7 +205,7 @@
 <entry>
 <para>
 <code>Zk-</code>
-<code>src-3.5.1.</code>
+<code>src-3.6.0.</code>
 <code>tar.gz</code>
 </para>
 </entry>
@@ -231,7 +231,7 @@
 <ulink url="http://sourceforge.net/project/showfiles.php?group_id=152762&amp;package_id=169309">orge.net</ulink>
 <ulink url="http://sourceforge.net/project/showfiles.php?group_id=152762&amp;package_id=169309"> から次のファイルをダウンロードします： </ulink>
 <ulink url="http://sourceforge.net/project/showfiles.php?group_id=152762&amp;package_id=169309">
-<code>zk-demo-3.5.1.zip</code>
+<code>zk-demo-3.6.0.zip</code>
 </ulink>
 </para>
 </listitem>
@@ -268,8 +268,8 @@
 <para>
 <code>zk-</code>
 <code>bin-</code>
-<code>3.5.1</code>
-<code>.zip</code> または<code> zk-bin-3.5.1</code>
+<code>3.6.0</code>
+<code>.zip</code> または<code> zk-bin-3.6.0</code>
 <code>.tar.gz</code>を解凍します。</para>
 </listitem>
 <listitem>
@@ -286,8 +286,8 @@
 <orderedlist>
 <listitem>
 <para>
-<code>zk-bin-3.5.1</code>
-<code>.zip</code> か <code>zk-bin-3.5.1</code>
+<code>zk-bin-3.6.0</code>
+<code>.zip</code> か <code>zk-bin-3.6.0</code>
 <code>.tar.gz</code>を解凍します。</para>
 </listitem>
 <listitem>
@@ -312,8 +312,8 @@
 </listitem>
 <listitem>
 <para>
-<code>zk-bin-3.5.1</code>
-<code>.zip </code>もしくは <code>zk-bin-3.5.1</code>
+<code>zk-bin-3.6.0</code>
+<code>.zip </code>もしくは <code>zk-bin-3.6.0</code>
 <code>.tar.gz</code>を解凍します。</para>
 </listitem>
 <listitem>
@@ -354,8 +354,8 @@
 </listitem>
 <listitem>
 <para>
-<code>zk-bin-3.5.1</code>
-<code>.zip</code> もしくは <code>zk-bin-3.5.1</code>
+<code>zk-bin-3.6.0</code>
+<code>.zip</code> もしくは <code>zk-bin-3.6.0</code>
 <code>.tar.gz</code>を解凍します。</para>
 </listitem>
 <listitem>
@@ -385,7 +385,7 @@
 <code>$TOMCAT_DIR/common/lib</code>に置かなければなりません。</para></sect1></chapter>
 <chapter>
 <title>4. ZKパッケージ</title>
-<para>この章は<code>zk-bin-3.5.1</code>
+<para>この章は<code>zk-bin-3.6.0</code>
 <code>.zip</code>について説明します。</para><sect1><title>/doc</title>
 <para>コピーライト・リリースノート等ドキュメントはこのフォルダに入っています。</para></sect1><sect1><title>/dist/lib</title>
 <para>ZKを実行するのに必要なライブラリーはこのフォルダにあります。</para></sect1><sect1><title>/dist/lib/zkforge</title>
@@ -531,7 +531,7 @@
 </entry>
 <entry>
 <para>Ruby (<ulink url="http://jruby.codehaus.org/">JRuby</ulink>) でスクリプトを作成する場合に使う</para>
-<para>Version: <ulink url="http://jruby.codehaus.org/">JRuby</ulink> 1.1.2 (jruby-complete)</para>
+<para>Version: <ulink url="http://jruby.codehaus.org/">JRuby</ulink> 1.1.5 (jruby-complete)</para>
 <para>[スタンダード版・Pro版には入っておりません]</para>
 </entry>
 </row>
@@ -586,13 +586,13 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable></sect1><sect1><title>/dist/src</title>
-<para>Eclipse等IDEをデバッグするに使うソースコードはJARファイルの形で保存されています。これらのファイルからバイナリライブラリーを編集することはできません。編集する場合は<code>zk-src-3.5.1</code>
+<para>Eclipse等IDEをデバッグするに使うソースコードはJARファイルの形で保存されています。これらのファイルからバイナリライブラリーを編集することはできません。編集する場合は<code>zk-src-3.6.0</code>
 <code>.tar.gz</code>をダウンロードし、解凍してください。</para></sect1><sect1><title>/dist/xsd</title>
 <para>ZKアプリケーションを開発する際便利なXSDファイルはこちらです。</para></sect1><sect1><title>/dist/WEB-INF</title>
 <para>ZKアプリケーションを開発する際便利なTLDファイルはこのフォルダに入っています。</para></sect1></chapter>
 <chapter>
 <title>5. デモパッケージ</title>
-<para>この章はzk-demo-3.5.1.zipについて説明します。</para><sect1><title>/</title>
+<para>この章はzk-demo-3.6.0.zipについて説明します。</para><sect1><title>/</title>
 <para>
 <code>zkdemo.war</code>
 <code>、</code>
