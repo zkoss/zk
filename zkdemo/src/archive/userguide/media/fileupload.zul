@@ -45,10 +45,13 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<button label="Upload">
 		<attribute name="onClick">{
 			Object media = Fileupload.get(-1);
-			if (media instanceof org.zkoss.image.Image) {
-				Image image = new Image();
-				image.setContent(media);
-				image.setParent(pics);
+			if (media instanceof org.zkoss.util.media.Media[]) {
+				org.zkoss.util.media.Media[] medias = (org.zkoss.util.media.Media [])media;
+				for (int i = 0; i &lt; medias.length; i++) {
+					Image image = new Image();
+					image.setContent(medias[i]);
+					image.setParent(pics);
+				}
 			} else if (media != null)
 				Messagebox.show("Not an image: "+media, "Error", Messagebox.OK, Messagebox.ERROR);
 		}</attribute>

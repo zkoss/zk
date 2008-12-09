@@ -70,6 +70,7 @@ public class Parser {
 		final RootNode root = new RootNode();
 		parse0(ctx, root, 0, content.length());
 
+		root.setFunctionMapper(ctx.getFunctionMapper());
 		if (!ctx.pageDefined) {
 			//We always create a page definition
 			final ActionNode action = new ActionNode(Page.class, 0);

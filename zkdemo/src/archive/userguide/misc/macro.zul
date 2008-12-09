@@ -29,7 +29,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		Take a look of the <toolbarbutton id="target" label="includedMacro.zul" popup="details"/>and see how easy it can be.
 	</hbox>
 	<separator />
-	<popup id="details" fulfill="target.onClick" width="480px">
+	<popup id="details" fulfill="target.onClick" width="550px">
 	<div style="border:1px solid #538BA2; background: #FFF; ">
 		<html><![CDATA[
 <pre style='color:#000000;background:#ffffff;'><span style='color:#7f0055; '>&lt;</span><span style='color:#7f0055; '>groupbox</span> id=<span style='color:#2a00ff; '>"</span><span style='color:#2a00ff; '>gb</span><span style='color:#2a00ff; '>"</span> mold=<span style='color:#2a00ff; '>"</span><span style='color:#2a00ff; '>3d</span><span style='color:#2a00ff; '>"</span> width=<span style='color:#2a00ff; '>"</span><span style='color:#2a00ff; '>200px</span><span style='color:#2a00ff; '>"</span><span style='color:#7f0055; '>></span>
@@ -37,10 +37,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	    .desc { color:#008bb6;font-weight:bold;font-family:times New Roman; } 
 	    .pic { width:80px; height:80px; }
 	<span style='color:#7f0055; '>&lt;/</span><span style='color:#7f0055; '>style</span><span style='color:#7f0055; '>></span>
-	<span style='color:#7f0055; '>&lt;</span><span style='color:#7f0055; '>caption</span> label=<span style='color:#2a00ff; '>"</span><span style='color:#2a00ff; '>${empty arg.title ? 'No Title': arg.title}</span><span style='color:#2a00ff; '>"</span> <span style='color:#7f0055; '>/></span>
+	<span style='color:#7f0055; '>&lt;</span><span style='color:#7f0055; '>caption</span> label=<span style='color:#2a00ff; '>"</span><span style='color:#2a00ff; '>&#36;{empty arg.title ? 'No Title': arg.title}</span><span style='color:#2a00ff; '>"</span> <span style='color:#7f0055; '>/></span>
 	<span style='color:#7f0055; '>&lt;</span><span style='color:#7f0055; '>hbox</span><span style='color:#7f0055; '>></span>
-	    <span style='color:#7f0055; '>&lt;</span><span style='color:#7f0055; '>label</span> class=<span style='color:#2a00ff; '>"</span><span style='color:#2a00ff; '>desc</span><span style='color:#2a00ff; '>"</span> value=<span style='color:#2a00ff; '>"</span><span style='color:#2a00ff; '>${empty arg.desc ? 'This Product have no description.': arg.desc}</span><span style='color:#2a00ff; '>"</span> <span style='color:#7f0055; '>/></span>
-	    <span style='color:#7f0055; '>&lt;</span><span style='color:#7f0055; '>image</span> class=<span style='color:#2a00ff; '>"</span><span style='color:#2a00ff; '>pic</span><span style='color:#2a00ff; '>"</span> src=<span style='color:#2a00ff; '>"</span><span style='color:#2a00ff; '>${arg.img}</span><span style='color:#2a00ff; '>"</span> <span style='color:#7f0055; '>/></span>
+	    <span style='color:#7f0055; '>&lt;</span><span style='color:#7f0055; '>label</span> class=<span style='color:#2a00ff; '>"</span><span style='color:#2a00ff; '>desc</span><span style='color:#2a00ff; '>"</span> value=<span style='color:#2a00ff; '>"</span><span style='color:#2a00ff; '>&#36;{empty arg.desc ? 
+	    		'This Product have no description.': arg.desc}</span><span style='color:#2a00ff; '>"</span> <span style='color:#7f0055; '>/></span>
+	    <span style='color:#7f0055; '>&lt;</span><span style='color:#7f0055; '>image</span> class=<span style='color:#2a00ff; '>"</span><span style='color:#2a00ff; '>pic</span><span style='color:#2a00ff; '>"</span> src=<span style='color:#2a00ff; '>"</span><span style='color:#2a00ff; '>&#36;{arg.img}</span><span style='color:#2a00ff; '>"</span> <span style='color:#7f0055; '>/></span>
 	<span style='color:#7f0055; '>&lt;/</span><span style='color:#7f0055; '>hbox</span><span style='color:#7f0055; '>></span>
 <span style='color:#7f0055; '>&lt;/</span><span style='color:#7f0055; '>groupbox</span><span style='color:#7f0055; '>></span>
 </pre>

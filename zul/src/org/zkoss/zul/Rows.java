@@ -191,16 +191,25 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 			throw new UiException("Unsupported child for rows: "+child);
 		Row newItem = (Row) child;
 		final int jfrom = hasGroup() && newItem.getParent() == this ? newItem.getIndex(): -1;	
-		
+
+		final boolean isReorder = child.getParent() == this;
 		if (newItem instanceof Groupfoot){
 			if (!hasGroup())
 				throw new UiException("Groupfoot cannot exist alone, you have to add a Group first");
-			if (refChild == null){
+			if (refChild == null) {
 				if (getLastChild() instanceof Groupfoot)
 					throw new UiException("Only one Goupfooter is allowed per Group");
+				if (isReorder) {
+					final int idx = newItem.getIndex();				
+					final int[] ginfo = getGroupsInfoAt(idx);
+					if (ginfo != null) {
+						ginfo[1]--; 
+						ginfo[2] = -1;
+					}
+				}
 				final int[] g = (int[]) _groupsInfo.get(getGroupCount()-1);
-				g[2] = getChildren().size() - 1;		
-			}else{
+				g[2] = getChildren().size() - (isReorder ? 2 : 1);
+			} else {
 				final int idx = ((Row)refChild).getIndex();				
 				final int[] g = getGroupsInfoAt(idx);
 				if (g == null)
@@ -210,6 +219,14 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 				if (idx != (g[0] + g[1]))
 					throw new UiException("Groupfoot must be placed after the last Row of the Group");
 				g[2] = idx-1;
+				if (isReorder) {
+					final int nindex = newItem.getIndex();				
+					final int[] ginfo = getGroupsInfoAt(nindex);
+					if (ginfo != null) {
+						ginfo[1]--; 
+						ginfo[2] = -1;
+					}
+				}
 			}							
 		}
 		if (super.insertBefore(child, refChild)) {
@@ -218,7 +235,7 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 					jto = refChild instanceof Row ? ((Row)refChild).getIndex(): -1,
 					fixFrom = jfrom < 0 || (jto >= 0 && jfrom > jto) ? jto: jfrom;
 				if (fixFrom >= 0) fixGroupIndex(fixFrom,
-					jfrom >=0 && jto >= 0 ? jfrom > jto ? jfrom: jto: -1, true);
+					jfrom >=0 && jto >= 0 ? jfrom > jto ? jfrom: jto: -1, !isReorder);
 			}
 			if (newItem instanceof Group) {
 				Group group = (Group) newItem;

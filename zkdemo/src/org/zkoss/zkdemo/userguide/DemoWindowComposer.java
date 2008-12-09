@@ -54,7 +54,7 @@ public class DemoWindowComposer extends GenericForwardComposer {
 		if (Library.getProperty("org.zkoss.zkdemo.theme.silvergray") != null) {
 			String cookie = FontSizeThemeProvider.getSkinCookie(Executions.getCurrent());
 			boolean isDefault = !"silvergray".equals(cookie);
-			String img = isDefault ? "/img/ButtonGray.png" : "/img/ButtonBlue.png";
+			String img = isDefault ? "/img/Centigrade-Widget-Icons/ButtonGray.png" : "/img/Centigrade-Widget-Icons/ButtonBlue.png";
 			Image skin = new Image(img);
 			skin.setSclass("pointer");
 			skin.setTooltiptext(isDefault ? "Gray Theme" : "Blue Theme");
@@ -76,7 +76,14 @@ public class DemoWindowComposer extends GenericForwardComposer {
 	}
 	public void execute() {
 		Components.removeAllChildren(view);
-		Executions.createComponentsDirectly(codeView.getValue(), "zul", view, null);
+		String code = codeView.getValue();
+		try {
+			Executions.createComponentsDirectly(code, "zul", view, null);
+		} catch (RuntimeException e) {
+			if ("true".equalsIgnoreCase(System.getProperty("zkdemo.debug")))
+				System.out.println("\n Error caused by zkdemo at : " + new java.util.Date() + "\n code: " + code);
+			throw e;
+		}
 	}
 	public void onClick$reloadBtn(Event event) {
 		demoView.setSelected(true);

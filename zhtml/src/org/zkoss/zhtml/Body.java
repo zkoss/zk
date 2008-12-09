@@ -39,26 +39,20 @@ public class Body extends AbstractTag {
 	}
 
 	//-- super --//
-	public void setParent(Component parent) {
-		final Page old = getPage();
-		super.setParent(parent);
-		fixDefaultParent(getPage(), old);
+	public void onPageAttached(Page newpage, Page oldpage) {
+		fixDefaultParent(newpage, oldpage);
 	}
-	public void setPage(Page page) {
-		final Page old = getPage();
-		super.setPage(page);
-		fixDefaultParent(page, old);
+	public void onPageDetached(Page page) {
+		fixDefaultParent(null, page);
 	}
 	private void fixDefaultParent(Page page, Page old) {
-		if (page != old) {
-			if (old != null) {
-				final PageCtrl oldc = (PageCtrl)old;
-				if (oldc.getDefaultParent() == this)
-					oldc.setDefaultParent(null);
-			}
-			if (page != null)
-				((PageCtrl)page).setDefaultParent(this);
+		if (old != null) {
+			final PageCtrl oldc = (PageCtrl)old;
+			if (oldc.getDefaultParent() == this)
+				oldc.setDefaultParent(null);
 		}
+		if (page != null)
+			((PageCtrl)page).setDefaultParent(this);
 	}
 
 	//--Component-//

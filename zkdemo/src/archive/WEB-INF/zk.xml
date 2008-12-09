@@ -246,7 +246,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		Default: Verdana, Tahoma, Arial, serif.
 	<library-property>
 		<name>org.zkoss.zul.theme.fontFamilyC</name>
-		<value>Verdana, Tahoma, Arial, serif</value>
+		<value>Verdana, Tahoma, Arial, Helvetica, sans-serif</value>
 	</library-property>
 	-->
 

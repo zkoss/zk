@@ -23,6 +23,7 @@ import java.io.IOException;
 
 import org.zkoss.util.logging.Log;
 
+import org.zkoss.xel.FunctionMapper;
 import org.zkoss.web.servlet.xel.RequestContexts;
 import org.zkoss.web.servlet.dsp.*;
 
@@ -34,7 +35,13 @@ import org.zkoss.web.servlet.dsp.*;
 class RootNode extends Node implements Interpretation {
 //	private static final Log log = Log.lookup(RootNode.class);
 
+	private FunctionMapper _mapper;
+
 	RootNode() {
+	}
+
+	void setFunctionMapper(FunctionMapper mapper) {
+		_mapper = mapper;
 	}
 
 	//-- Node --//
@@ -42,6 +49,8 @@ class RootNode extends Node implements Interpretation {
 	throws DspException, IOException {
 		if (_children == null)
 			return;
+
+		ic.init(_mapper);
 		for (Iterator it = _children.iterator(); it.hasNext();) {
 			((Node)it.next()).interpret(ic);
 		}

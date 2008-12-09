@@ -34,7 +34,6 @@ import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.BufferedResponse;
 import org.zkoss.web.servlet.http.Encodes;
 import org.zkoss.xel.VariableResolver;
-import org.zkoss.xel.FunctionMapper;
 import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.xel.Expressions;
 
@@ -112,7 +111,6 @@ public class ServletDspContext implements DspContext {
 		return Servlets.isIncluded(_request);
 	}
 
-	//-- XelContext --//
 	public Writer getOut() throws IOException {
 		return _out != null ? _out: _response.getWriter();
 	}
@@ -139,8 +137,5 @@ public class ServletDspContext implements DspContext {
 		if (_expf == null)
 			_expf = Expressions.newExpressionFactory(); //TODO: expfcls
 		return _expf;
-	}
-	public FunctionMapper getFunctionMapper() {
-		return null;
 	}
 }

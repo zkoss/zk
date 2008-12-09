@@ -18,9 +18,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.xel.el;
 
+import org.zkoss.lang.Classes;
 import org.zkoss.xel.Expression;
 import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.xel.XelContext;
+import org.zkoss.xel.FunctionMapper;
 import org.zkoss.xel.XelException;
 
 import org.zkforge.apache.commons.el.ExpressionEvaluatorImpl;
@@ -35,6 +37,9 @@ import org.zkforge.apache.commons.el.ExpressionEvaluatorImpl;
  * @since 3.0.0
  */
 public class ELFactory implements ExpressionFactory {
+	/** Used to denote the version of zcommons-el. */
+	private static final boolean _v102;
+
 	private final ExpressionEvaluatorImpl _eval;
 
 	public ELFactory() {
@@ -48,9 +53,14 @@ public class ELFactory implements ExpressionFactory {
 	public Expression parseExpression(XelContext xelc, String expression,
 	Class expectedType)
 	throws XelException {
-		return new ELXelExpression(
-			_eval.parseExpression(expression, expectedType,
-				xelc != null ? xelc.getFunctionMapper(): null));
+		if (_v102)
+			return new ELXelExpression(
+				_eval.parseExpression(expression, expectedType));
+
+		FunctionMapper mapper = xelc != null ? xelc.getFunctionMapper(): null;
+		return new OldELXelExpression(
+			_eval.parseExpression(expression, expectedType, mapper),
+			expression, mapper, expectedType);
 	}
 	public Object evaluate(XelContext xelc, String expression,
 	Class expectedType)
@@ -58,5 +68,15 @@ public class ELFactory implements ExpressionFactory {
 		return _eval.evaluate(expression, expectedType,
 			xelc != null ? xelc.getVariableResolver(): null,
 			xelc != null ? xelc.getFunctionMapper(): null);
+	}
+
+	static {
+		boolean v102 = false;
+		try {
+			Classes.forNameByThread("org.zkforge.apache.commons.el.ELExpression");
+			v102 = true;
+		} catch (Throwable e) {
+		}
+		_v102 = v102;
 	}
 }

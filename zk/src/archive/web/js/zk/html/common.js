@@ -1977,8 +1977,30 @@ zk.parseDate = function (txt, fmt, strict) {
 	if (!fmt) fmt = "yyyy/MM/dd";
 	var val = new Date();
 	var y = val.getFullYear(), m = val.getMonth(), d = val.getDate();
-
-	var ts = txt.split(/\W+/);
+	
+	var	ts = [], mindex = fmt.indexOf("MMM"), ary = [];
+	for (var i = 0, j = txt.length; i < j; i++) {
+		var c = txt.charAt(i);
+		if (c.match(/\d/)) {
+			ary.push(c);
+		} else if (mindex > -1 && mindex <= i) {
+			if (c.match(/\w/)) {
+				ary.push(c);
+			} else {
+				if (c.charCodeAt() < 128) {
+					if (ary.length) {
+						ts.push(ary.join(""));
+						ary = [];
+					}
+				} else 
+					ary.push(c);					
+			}
+		} else if (ary.length) {
+			ts.push(ary.join(""));
+			ary = [];
+		}
+	}
+	if (ary.length) ts.push(ary.join(""));
 	for (var i = 0, j = 0, fl = fmt.length; j < fl; ++j) {
 		var cc = fmt.charAt(j);
 		if ((cc >= 'a' && cc <= 'z') || (cc >= 'A' && cc <= 'Z')) {
@@ -2008,13 +2030,16 @@ zk.parseDate = function (txt, fmt, strict) {
 				if (y < 100) y += y > 29 ? 1900 : 2000;
 				break;
 			case 'M':
-				if (len == 3 && token){
-					for (var index = zk.SMON.length; --index >= 0;) 
-						if (zk.SMON[index].toLowerCase() === token.toLowerCase()) {
-							m = index;
-							break;
-						}
-					break;
+				var mon = txt.substring(j);
+				for (var index = zk.SMON.length; --index >= 0;) {
+					if (mon.toLowerCase().startsWith(zk.SMON[index].toLowerCase())) {
+						token = zk.SMON[index];
+						m = index;
+						break;
+					}
+				}
+				if (len == 3 && token) {
+					break; // nothing to do.
 				}else if (len <= 2) {
 					if (nosep && token.length > 2) {
 						ts[--i] = token.substring(2);

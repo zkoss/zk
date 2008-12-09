@@ -24,3 +24,7 @@ commons-logging.jar
 itext.jar
 jxl.jar
 poi.jar
+groovy.jar
+jruby.jar
+js.jar
+jython.jar

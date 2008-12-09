@@ -163,8 +163,16 @@
 	background-repeat : no-repeat;
 	margin-left: 2px;
 }
+.z-window-popup-tool {
+	overflow: hidden; width: 15px; height: 15px; float: right; cursor: pointer;
+	background-color : transparent;
+	background-image : url(${c:encodeURL('~./zul/img/panel/tool-btn-pp.gif')});
+	background-position : 0 0;
+	background-repeat : no-repeat;
+	margin-left: 2px;
+}
 .z-window-modal-tool, .z-window-overlapped-tool,
-	.z-window-popup-tool, .z-window-highlighted-tool {
+	.z-window-highlighted-tool {
 	overflow: hidden; width: 15px; height: 15px; float: right; cursor: pointer;
 	background-color : transparent;
 	background-image : url(${c:encodeURL('~./zul/img/panel/tool-btn-ol.gif')});

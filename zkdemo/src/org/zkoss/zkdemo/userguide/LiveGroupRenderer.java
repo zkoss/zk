@@ -36,7 +36,7 @@ public class LiveGroupRenderer implements RowRenderer {
       Div div = new Div();
       Image icon = new Image();
       icon.setStyle("padding: 0px 10px");
-      icon.setSrc("/img/EnvelopeOpen-16x16.png");
+      icon.setSrc("/img/Centigrade-Widget-Icons/EnvelopeOpen-16x16.png");
       div.appendChild(icon);
       new Label(ary[0]).setParent(div);
       row.appendChild(div);

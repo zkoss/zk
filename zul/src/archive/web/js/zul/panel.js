@@ -220,6 +220,11 @@ zkPanel = {
 				} else {
 					zk.addClass(cmp, cls + "-collapsed");
 					zkPanel.hideShadow(cmp);
+					
+					// windows 2003 with IE6 will cause an error when user toggles the panel in portallayout.
+					if (zk.ie6Only && !cmp.style.width)
+						cmp.runtimeStyle.width = "100%";
+						
 					anima.slideUp(bwrap);
 				}
 	

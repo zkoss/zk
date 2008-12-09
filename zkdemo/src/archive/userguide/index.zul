@@ -33,7 +33,7 @@ if (zk.ie6Only) {
 	var PNG_FILTER = "progid:" + ALPHA_IMAGE_LOADER + "(src='%1',sizingMethod='%2')";
 	
 	// these file name should be fixed
-	var FILE_NAME = "24x24.png|32x32.png|48x48.png|ButtonBlue.png|ButtonGray.png|small.png|small-sel.png"
+	var FILE_NAME = "24x24.png|32x32.png|48x48.png|128x128.png|ButtonBlue.png|ButtonGray.png|small.png|small-sel.png"
 				  + "|normal.png|normal-sel.png|large.png|large-sel.png";
 	
 	//regular expression version of the above
@@ -368,6 +368,13 @@ ul ul ul li	{list-style: url(${c:encodeURL('/img/z-bullet3.gif')}) square}
 .demo-items {
 	border: none; background: white;
 }
+.demo-items .z-listbox-body {
+	overflow-x: hidden;
+}
+.demo-items .z-list-cell-cnt img {
+	width:24px;
+	height:24px;
+}
 .demo-items .z-list-cell-cnt {
 	padding-left: 5px;
 }
@@ -393,10 +400,10 @@ ul ul ul li	{list-style: url(${c:encodeURL('/img/z-bullet3.gif')}) square}
 		</div>
 	</north>
 	<west title="ZK ${desktop.webApp.version} Live Demo" size="250px" flex="true" splittable="true"
-		minsize="150" maxsize="500" collapsible="true">
+		minsize="210" maxsize="500" collapsible="true">
 		<panel>
 			<toolbar>
-				<label value="Search:"/><textbox id="searchBox" sclass="demo-search-inp"/>
+				<label value="Search:"/><textbox id="searchBox" ctrlKeys="#down#up" focus="true" sclass="demo-search-inp"/>
 			</toolbar>
 			<panelchildren>
 				<listbox id="itemList" oddRowSclass="non-odd" sclass="demo-items"
