@@ -132,6 +132,17 @@ zk = {
 	},
 	/** Shows the message of zk.startProcessing. */
 	_showproc: function () {
+		//it might be called before doc ready
+		if (!zk.booted && document.readyState
+		&& !/loaded|complete/.test(document.readyState)) {
+			var tid = setInterval(function(){
+				if (/loaded|complete/.test(document.readyState)) {
+					clearInterval(tid);
+					zk._showproc();
+				}
+			});
+			return;
+		}
 		if (zk.processing && !zk.loading) {
 			if (zDom.$("zk_proc") || zDom.$("zk_showBusy"))
 				return;

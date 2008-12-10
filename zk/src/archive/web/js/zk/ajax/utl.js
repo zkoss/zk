@@ -92,8 +92,7 @@ zUtl = { //static methods
 		if (mask)
 			html += '><div id="' + idmsk + '" class="z-modal-mask"'+style+'></div';
 		html += '><div id="'+idtxt+'" class="z-loading"'+style
-			+'><div class="z-loading-indicator"><img class="z-loading-icon" alt="..." src="'
-			+zAu.comURI('/web/img/spacer.gif')+'"/> '
+			+'><div class="z-loading-indicator"><span class="z-loading-icon"></span> '
 			+msg+'</div></div></div>'
 		var n = document.createElement("DIV");
 		document.body.appendChild(n);
