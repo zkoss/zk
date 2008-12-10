@@ -1202,7 +1202,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * @since 5.0.0
 	 */
 	protected void smartUpdate(String attr, boolean value) {
-		smartUpdate(attr, new $boolean(value));
+		smartUpdate(attr, $boolean.valueOf(value));
 	}
 	/** A special smart-update that update a value in float.
 	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update

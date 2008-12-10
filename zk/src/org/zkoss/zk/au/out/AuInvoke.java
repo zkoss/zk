@@ -20,6 +20,7 @@ package org.zkoss.zk.au.out;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.device.marshal.*;
 
 /**
  * A response to ask the client to execute the specified client function.
@@ -38,31 +39,25 @@ import org.zkoss.zk.au.AuResponse;
  * @since 3.0.0
  */
 public class AuInvoke extends AuResponse {
-	/** Construct AuInvoke to call a client function with one argument,
-	 * the component itself.
+	/** Construct AuInvoke to call the peer widget's member function with
+	 * no argument.
 	 *
-	 * <p>In other words, it invokes (assume Type is the comp's z.type)<br/>
-	 * <code>zkType.function(comp)</code>
-	 *
-	 * @param comp the component that this script depends on.
+	 * @param comp the component that the widget is associated with.
 	 * It cannot be null.
 	 * @param function the function name
 	 */
 	public AuInvoke(Component comp, String function) {
 		super("invoke", comp, new String[] {comp.getUuid(), function});
 	}
-	/** Construct AuInvoke to call a client function with two arguments,
-	 * the component itself and arg.
+	/** Construct AuInvoke to call the peer widget's member function with
+	 * one argument.
 	 *
-	 * <p>In other words, it invokes (assume Type is the comp's z.type)<br/>
-	 * <code>zkType.function(comp, arg)</code>
-	 *
-	 * @param comp the component that this script depends on.
+	 * @param comp the component that the widget is associated with.
 	 * It cannot be null.
 	 * @param function the function name
-	 * @param arg the additional argument It could be null, String, Date,
+	 * @param arg the additional argument. It could be null, String, Date,
 	 * {@link org.zkoss.zk.ui.util.DeferredValue}, primitives
-	 * (such as Boolean and {@link org.zkoss.zk.device.marshal.$boolean})
+	 * (such as Boolean and {@link $boolean})
 	 * and an array of above types.
 	 * Different devices might support more types.
 	 * @since 5.0.0
@@ -71,18 +66,55 @@ public class AuInvoke extends AuResponse {
 		super("invoke", comp,
 			new Object[] {comp.getUuid(), function, arg});
 	}
-	/** Construct AuInvoke to call a client function with three arguments,
-	 * the component itself, arg1 and arg2.
+	/** Construct AuInvoke to call the peer widget's member function with
+	 * one boolean argument.
 	 *
-	 * <p>In other words, it invokes (assume Type is the comp's z.type)<br/>
-	 * <code>zkType.function(comp, arg1, arg2)</code>
-	 *
-	 * @param comp the component that this script depends on.
+	 * @param comp the component that the widget is associated with.
 	 * It cannot be null.
 	 * @param function the function name
-	 * @param arg1 the additional argument It could be null, String, Date,
+	 * @param arg the additional argument.
+	 * Different devices might support more types.
+	 * @since 5.0.0
+	 */
+	public AuInvoke(Component comp, String function, boolean arg) {
+		super("invoke", comp,
+			new Object[] {comp.getUuid(), function, $boolean.valueOf(arg)});
+	}
+	/** Construct AuInvoke to call the peer widget's member function with
+	 * one int argument.
+	 *
+	 * @param comp the component that the widget is associated with.
+	 * It cannot be null.
+	 * @param function the function name
+	 * @param arg the additional argument.
+	 * @since 5.0.0
+	 */
+	public AuInvoke(Component comp, String function, int arg) {
+		super("invoke", comp,
+			new Object[] {comp.getUuid(), function, new $int(arg)});
+	}
+	/** Construct AuInvoke to call the peer widget's member function with
+	 * one double argument.
+	 *
+	 * @param comp the component that the widget is associated with.
+	 * It cannot be null.
+	 * @param function the function name
+	 * @param arg the additional argument.
+	 * @since 5.0.0
+	 */
+	public AuInvoke(Component comp, String function, double arg) {
+		super("invoke", comp,
+			new Object[] {comp.getUuid(), function, new $double(arg)});
+	}
+	/** Construct AuInvoke to call the peer widget's member function with
+	 * two arguments.
+	 *
+	 * @param comp the component that the widget is associated with.
+	 * It cannot be null.
+	 * @param function the function name
+	 * @param arg1 the additional argument. It could be null, String, Date,
 	 * {@link org.zkoss.zk.ui.util.DeferredValue}, primitives
-	 * (such as Boolean and {@link org.zkoss.zk.device.marshal.$boolean})
+	 * (such as Boolean and {@link $boolean})
 	 * and an array of above types.
 	 * Different devices might support more types.
 	 * @param arg2 the 2nd additional argument.
@@ -92,18 +124,15 @@ public class AuInvoke extends AuResponse {
 		super("invoke", comp, new Object[] {comp.getUuid(), function,
 			arg1, arg2});
 	}
-	/** Construct AuInvoke to call a client function with four arguments,
-	 * the component itself, arg1, arg2 and arg3.
+	/** Construct AuInvoke to call the peer widget's member function with
+	 * three arguments.
 	 *
-	 * <p>In other words, it invokes (assume Type is the comp's z.type)<br/>
-	 * <code>zkType.function(comp, arg1, arg2, arg3)</code>
-	 *
-	 * @param comp the component that this script depends on.
+	 * @param comp the component that the widget is associated with.
 	 * It cannot be null.
 	 * @param function the function name
 	 * @param arg1 the additional argument. It could be null, String, Date,
 	 * {@link org.zkoss.zk.ui.util.DeferredValue}, primitives
-	 * (such as Boolean and {@link org.zkoss.zk.device.marshal.$boolean})
+	 * (such as Boolean and {@link $boolean})
 	 * and an array of above types.
 	 * Different devices might support more types.
 	 * @param arg2 the 2nd additional argument.
@@ -115,18 +144,15 @@ public class AuInvoke extends AuResponse {
 		super("invoke", comp, new Object[] {comp.getUuid(), function,
 			arg1, arg2, arg3});
 	}
-	/** Construct AuInvoke to call a client function with four arguments,
-	 * the component itself, arg1, arg2 and arg3.
+	/** Construct AuInvoke to call the peer widget's member function with
+	 * an array of arguments.
 	 *
-	 * <p>In other words, it invokes (assume Type is the comp's z.type)<br/>
-	 * <code>zkType.function(comp, arg1, arg2, arg3)</code>
-	 *
-	 * @param comp the component that this script depends on.
+	 * @param comp the component that the widget is associated with.
 	 * It cannot be null.
 	 * @param function the function name
 	 * @param args the additional arguments. It could be null, String, Date,
 	 * {@link org.zkoss.zk.ui.util.DeferredValue}, primitives
-	 * (such as Boolean and {@link org.zkoss.zk.device.marshal.$boolean})
+	 * (such as Boolean and {@link $boolean})
 	 * and an array of above types.
 	 * Different devices might support more types.
 	 * @since 5.0.0

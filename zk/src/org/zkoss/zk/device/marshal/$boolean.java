@@ -23,6 +23,24 @@ package org.zkoss.zk.device.marshal;
  */
 public class $boolean implements java.io.Serializable, $primitive {
 	public final boolean value;
+
+	/** The <code>$boolean</code> object corresponding to the primitive 
+	 * value <code>true</code>. 
+	 */
+	public static final $boolean TRUE = new $boolean(true);
+
+	/** The <code>$boolean</code> object corresponding to the primitive 
+	 * value <code>false</code>. 
+	 */
+	public static final $boolean FALSE = new $boolean(false);
+
+
+	/** Returns {@link $boolean} representing the specified value.
+	 */
+	public static $boolean valueOf(boolean value) {
+		return value ? TRUE: FALSE;
+	}
+
 	public $boolean(boolean value) {
 		this.value = value;
 	}
