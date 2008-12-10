@@ -791,11 +791,7 @@ zAu.cmd1 = {
 
 			newwgt.replaceHTML(wgt.uuid, wgt.desktop);
 		};
-		try {
-			eval(code);
-		} finally {
-			zAu.stub = null;
-		}
+		eval(code);
 	},
 	addAft: function (uuid, wgt, code) {
 		//Bug 1939059: This is a dirty fix. Refer to AuInsertBefore
@@ -817,31 +813,19 @@ zAu.cmd1 = {
 		zAu.stub = function (child) {
 			wgt.parent.insertBefore(child, wgt.nextSibling);
 		};
-		try {
-			eval(code);
-		} finally {
-			zAu.stub = null;
-		}
+		eval(code);
 	},
 	addBfr: function (uuid, wgt, code) {
 		zAu.stub = function (child) {
 			wgt.parent.insertBefore(child, wgt);
 		};
-		try {
-			eval(code);
-		} finally {
-			zAu.stub = null;
-		}
+		eval(code);
 	},
 	addChd: function (uuid, wgt, code) {
 		zAu.stub = function (child) {
 			wgt.appendChild(child);
 		};
-		try {
-			eval(code);
-		} finally {
-			zAu.stub = null;
-		}
+		eval(code);
 	},
 	rm: function (uuid, wgt) {
 		//NOTE: it is possible the server asking removing a non-exist cmp

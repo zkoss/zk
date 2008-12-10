@@ -561,6 +561,9 @@ zk.Widget = zk.$extends(zk.Object, {
 
 		//TODO: if (zAu.valid) zAu.valid.fixerrboxes();
 		if (cf && !zk.currentFocus) cf.focus();
+
+		zWatch.fireDown('beforeSize', -1, this);
+		zWatch.fireDown('onSize', 5, this);
 	},
 	/** Re-render the DOM content of this widget.
 	 * It is the same as <code>this.replaceHTML(this.node)</code>

@@ -13,5 +13,8 @@ This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function () {
-	return '<button' + this.domAttrs_() + '>' + this.domContent_() + '</button>';
+	var html = this.domAttrs_(), tabi = this._tabindex;
+	if (this._disabled) html += ' disabled="disabled"';
+	if (tabi >= 0) html += ' tabindex="' + tabi +'"';
+	return '<button' + html + '>' + this.domContent_() + '</button>';
 }

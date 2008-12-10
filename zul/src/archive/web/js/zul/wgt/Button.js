@@ -58,7 +58,23 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			var n = this.node;
 			if (n)
 				if (this._mold == 'os') this.node.disabled = true;
-				else this.updateDomContent_();
+				else this.rerender();
+		}
+	},
+	/** Returns whether this button is disabled
+	 */
+	getTabindex: function () {
+		return this._tabindex;
+	},
+	/** Sets whether this button is disabled
+	 */
+	setTabindex: function(tabindex) {
+		if (this._tabindex != tabindex) {
+			this._tabindex = tabindex;
+			var n = this.node;
+			if (n)
+				if (this._mold == 'os') this.node.tabIndex = tabindex;
+				else this.rerender();
 		}
 	},
 
@@ -82,14 +98,6 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		var space = "vertical" == this.getOrient() ? '<br/>': ' ';
 		return this.getDir() == 'reverse' ?
 			label + space + img: img + space + label;
-	},
-	domAttrs_: function () {
-		var html = this.$supers('domAttrs_', arguments);
-		if (this._mold == 'os') {
-			if (this._disabled) html += ' disabled="disabled"';
-			if (this._tabindex >= 0) html += ' tabindex="' + this._tabindex +'"';
-		}
-		return html;
 	},
 
 	getZclass: function () {

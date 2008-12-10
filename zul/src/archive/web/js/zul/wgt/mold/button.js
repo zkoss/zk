@@ -14,7 +14,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 function () {
 	var zcls = this.getZclass(),
-		tabi = this.tabindex;
+		tabi = this._tabindex;
 	tabi = tabi >= 0 ? ' tabindex="' + tabi + '"': '';
 
 	var html = '<span' + this.domAttrs_({style:1,domclass:1})
