@@ -18,11 +18,11 @@ import org.zkoss.zk.au.AuRequest;
 
 /**
  * The AU request processor.
- * It is used to change how a desktop handles an AU request.
- * To register a processotr, invoke {@link org.zkoss.zk.ui.Desktop#addListener}.
+ * It is used to customize how a desktop handles an AU request.
  * When an AU request is received, {@link org.zkoss.zk.ui.sys.DesktopCtrl#process} invokes
- * the registered processotr one-by-one, until {@link #process}
+ * the registered processtor one-by-one, until {@link #process}
  * return true.
+ * To register a processotr, invoke {@link org.zkoss.zk.ui.Desktop#addListener}.
  *
  * @author tomyeh
  * @since 5.0.0

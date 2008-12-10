@@ -98,6 +98,18 @@ if [ "$target" == "official" ] ; then
 	./build clean zkdemo zkdemos
 	./build zkdemo zkdemos
 fi
+if [ "$target" == "daily" ] ; then
+	rm -rf dist/lib/zkdemo*.war
+	cp -f zkdemo/war.libs.all zkdemo/war.libs
+	./build clean zkdemo
+	./build zkdemo
+
+	mv dist/lib/zkdemo.war dist/lib/zkdemo-all.war
+
+	cp -f zkdemo/war.libs.minimal zkdemo/war.libs
+	./build clean zkdemo
+	./build zkdemo
+fi
 
 #Prepare the source codes
 if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
@@ -337,10 +349,11 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 
 	if [ "$target" == "official" ] ; then
 		mv dist/lib/zkdemos.ear /tmp/zk/$demonm/zkdemos-min.ear
-		mv dist/lib/zkdemo-all.war /tmp/zk/$demonm/zkdemo.war
 		mv dist/lib/zkdemos-all.ear /tmp/zk/$demonm/zkdemos.ear
 	fi
 
+	mv dist/lib/zkdemo-all.war /tmp/zk/$demonm/zkdemo.war
+		
 	cd /tmp/zk
 	find -name .svn | xargs rm -rf
 
@@ -360,7 +373,7 @@ if [ "$target" == "official" ]; then
 	done
 
 	cd /tmp/zk/doc
-	cp -rP $htmldocdir/devref $htmldocdir/devguide $htmldocdir/devref-single $htmldocdir/devguide-single .
+	cp -rP $htmldocdir/devref $htmldocdir/devguide $htmldocdir/devref-single $htmldocdir/devguide-single $htmldocdir/styleguide $htmldocdir/styleguide-single .
 	find -name .svn | xargs rm -rf
 
 	echo Output zk-devref-$ver.zip
@@ -373,6 +386,11 @@ if [ "$target" == "official" ]; then
 	zip -qr9 zk-devguide-$ver.zip zk-devguide-$ver
 	rm -rf zk-devguide-$ver
 
+	echo Output zk-styleguide-$ver.zip
+	mv styleguide zk-styleguide-$ver
+	zip -qr9 zk-styleguide-$ver.zip zk-styleguide-$ver
+	rm -rf zk-styleguide-$ver
+
 	echo Output zk-devref-single-$ver.zip
 	mv devref-single zk-devref-single-$ver
 	zip -qr9 zk-devref-single-$ver.zip zk-devref-single-$ver
@@ -382,14 +400,21 @@ if [ "$target" == "official" ]; then
 	mv devguide-single zk-devguide-single-$ver
 	zip -qr9 zk-devguide-single-$ver.zip zk-devguide-single-$ver
 	rm -rf zk-devguide-single-$ver
+
+	echo Output zk-styleguide-single-$ver.zip
+	mv styleguide-single zk-styleguide-single-$ver
+	zip -qr9 zk-styleguide-single-$ver.zip zk-styleguide-single-$ver
+	rm -rf zk-styleguide-single-$ver
 elif [ "$target" == "daily" ]; then
 	mkdir -p /tmp/zk/$docnm/devguide
 	mkdir -p /tmp/zk/$docnm/devref
+	mkdir -p /tmp/zk/$docnm/styleguide
 
 	cd $maindir
 	cp zkdoc/*/ZK-quickstart*.pdf /tmp/zk/$docnm
 	cp -rp zkdoc/devguide/*.odt zkdoc/devguide/images /tmp/zk/$docnm/devguide
 	cp -rp zkdoc/devref/*.odt zkdoc/devref/images /tmp/zk/$docnm/devref
+	cp -rp zkdoc/styleguide/ZK-styleguide.pdf /tmp/zk/$docnm/styleguide
 	cp zkdoc/release-note zkdoc/COPYING /tmp/zk/$docnm
 	cd /tmp/zk
 	find -name .svn | xargs rm -rf

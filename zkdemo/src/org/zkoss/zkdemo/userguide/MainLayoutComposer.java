@@ -142,7 +142,7 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 					itemList.invalidate();
 					setSelectedCategory(item);
 					xcontents.setSrc(((DemoItem) item.getValue()).getFile());
-					itemList.focus();
+					item.focus();
 					return;
 				}
 			}
@@ -223,7 +223,7 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 		if (item != null) {
 			setSelectedCategory(item);
 			xcontents.setSrc(((DemoItem) item.getValue()).getFile());
-			itemList.focus();
+			item.focus();
 		}
 	}
 	public void onChanging$searchBox(InputEvent event) {
