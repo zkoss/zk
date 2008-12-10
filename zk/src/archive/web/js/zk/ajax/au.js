@@ -458,8 +458,8 @@ zAu = { //static methods
 		if (es.length == 0)
 			return; //nothing to do
 
-		if (zk.loading) {
-			zkPkg.afterLoad(function(){zAu._sendNow(dt);});
+		if (zk.bootstrapping) {
+			zkAfterBs(function(){zAu._sendNow(dt);});
 			return; //wait
 		}
 
@@ -581,8 +581,8 @@ zAu = { //static methods
 	_doCmds0: function () {
 		var ex, j = 0, que = zAu._cmdsQue, rid = zAu._resId;
 		for (; j < que.length; ++j) {
-			if (zk.loading) {
-				zk.addInit(zAu.doCmds); //wait until the loading is done
+			if (zk.bootstrapping) {
+				zkAfterBs(zAu.doCmds); //wait until the loading is done
 				return;
 			}
 
@@ -602,10 +602,10 @@ zAu = { //static methods
 					if (zAu._doCmds1(cmds)) { //done
 						j = -1; //start over
 						if (zk.pfmeter) zAu.pfdone(cmds.dt, cmds.pfIds);
-					} else { //not done yet (=zk.loading)
+					} else { //not done yet (=zk.boostrapping)
 						zAu._resId = oldrid; //restore
 						que.splice(j, 0, cmds); //put it back
-						zk.addInit(zAu.doCmds);
+						zkAfterBs(zAu.doCmds);
 						return;
 					}
 				} catch (e) {
@@ -636,7 +636,7 @@ zAu = { //static methods
 		var processed;
 		try {
 			while (cmds && cmds.length) {
-				if (zk.loading)
+				if (zk.bootstrapping)
 					return false;
 
 				processed = true;

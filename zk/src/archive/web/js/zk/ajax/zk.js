@@ -123,34 +123,36 @@ zk = {
 	//Processing//
 	startProcessing: function (timeout) {
 		zk.processing = true;
-		if (timeout > 0) setTimeout(zk._showproc, timeout);
-		else zk._showproc();
+		setTimeout(zk.sysInited ? zk._showproc: zk._showprocmk, timeout > 0 ? timeout: 0);
+			//Note: zk.sysInited might be cleared before _showproc
 	},
 	endProcessing: function() {
 		zk.processing = false;
 		zUtl.destroyProgressbox("zk_proc");
 	},
-	/** Shows the message of zk.startProcessing. */
-	_showproc: function () {
+	_showprocmk: function () {
 		//it might be called before doc ready
-		if (!zk.booted && document.readyState
+		if (document.readyState
 		&& !/loaded|complete/.test(document.readyState)) {
 			var tid = setInterval(function(){
 				if (/loaded|complete/.test(document.readyState)) {
 					clearInterval(tid);
-					zk._showproc();
+					zk._showprocmk();
 				}
-			});
+			}, 0);
 			return;
 		}
-		if (zk.processing && !zk.loading) {
+		zk._showproc(true);
+	},
+	_showproc: function (mask) {
+		if (zk.processing) {
 			if (zDom.$("zk_proc") || zDom.$("zk_showBusy"))
 				return;
 
 			var msg;
 			try {msg = mesg.PLEASE_WAIT;} catch (e) {msg = "Processing...";}
 				//when the first boot, mesg might not be ready
-			zUtl.progressbox("zk_proc", msg, !zk.booted);
+			zUtl.progressbox("zk_proc", msg, mask);
 		}
 	},
 
@@ -158,7 +160,7 @@ zk = {
 
 	//DEBUG//
 	error: function (msg) {
-		if (!zk.booted) {
+		if (!zk.sysInited) {
 			setTimeout(function () {zk.error(msg)}, 100);
 			return;
 		}
