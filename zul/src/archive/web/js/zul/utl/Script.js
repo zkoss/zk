@@ -18,9 +18,15 @@ zul.utl.Script = zk.$extends(zk.Widget, {
 	getContent: function () {
 		return this._content;
 	},
-	/** Sets the content of JavaScript codes to execute.
+	/** Sets the content of JavaScript code snippet to execute.
 	 * <p>Note: the codes won't be evaluated until it is attached the
-	 * DOM tree. In additions, it executes only once.
+	 * DOM tree. If it is attached, the JavaScript code sippet is executed
+	 * immediately. In additions, it executes only once.
+	 * <p>When the JavaScript code snipped is executed, you can access
+	 * this widget by use of <code>this</code>. In other words,
+	 * it was executed in the context of a member method of this widget.
+	 * @param cnt the content. It could be a String instance, or
+	 * a Function instance.
 	 */
 	setContent: function (cnt) {
 		this._content = cnt;
@@ -34,7 +40,7 @@ zul.utl.Script = zk.$extends(zk.Widget, {
 	/** Returns the src of the JavaScript file.
 	 */
 	getSrc: function () {
-		return _src;
+		return this._src;
 	},
 	/** Sets the src (URI) of the JavaScript file.
 	 */
@@ -72,7 +78,8 @@ zul.utl.Script = zk.$extends(zk.Widget, {
 	redraw: function () {
 		return '';
 	},
-	bind_: function (desktop) {
+	bind_: function () {
+		this.$supers('bind_', arguments);
 		this._run();
 	}
 });

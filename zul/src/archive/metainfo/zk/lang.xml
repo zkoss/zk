@@ -814,10 +814,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>timer</component-name>
 		<component-class>org.zkoss.zul.Timer</component-class>
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/timer.dsp</mold-uri>
-		</mold>
+		<widget-class>zul.utl.Timer</widget-class>
 	</component>
 	<component>
 		<component-name>toolbar</component-name>

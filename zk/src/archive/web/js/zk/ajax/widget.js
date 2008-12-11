@@ -636,23 +636,26 @@ zk.Widget = zk.$extends(zk.Object, {
 			n.z_wgt = this;
 			this.node = n;
 			if (!desktop) desktop = zk.Desktop.ofNode(n);
-		}
+		} else
+			zk.Widget._binds[this.uuid] = this;
+
 		this.desktop = desktop;
 
 		for (var child = this.firstChild; child; child = child.nextSibling)
 			if (!skipper || !skipper.skipped(this, child))
 				child.bind_(desktop); //don't pass skipper
 
-		for (var lsns = this._lsns,
-		evts = zk.Widget._domevts, j = evts.length; --j >= 0;) {
-			var evtnm = evts[j],
-				ls = lsns[evtnm];
-			if (!ls || !ls.length) {
-				if (!this.inServer) continue; //nothing to do
-				if (this[evtnm] == null) continue; //nothing to do
+		if (n)
+			for (var lsns = this._lsns,
+			evts = zk.Widget._domevts, j = evts.length; --j >= 0;) {
+				var evtnm = evts[j],
+					ls = lsns[evtnm];
+				if (!ls || !ls.length) {
+					if (!this.inServer) continue; //nothing to do
+					if (this[evtnm] == null) continue; //nothing to do
+				}
+				this.listenDomEvent(n, evtnm);
 			}
-			this.listenDomEvent(n, evtnm);
-		}
 	},
 	/** Detaches the widget from the DOM tree.
 	 * @param remove whether to remove the associated node
@@ -664,14 +667,18 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (n) {
 			n.z_wgt = null;
 			this.node = null;
-		}
+		} else
+			delete zk.Widget._binds[this.uuid];
+
 		this.desktop = null;
 
-		var regevts = this._regevts;
-		if (regevts) {
-			this._regevts = null;
-			for (var evtnm; evtnm = regevts.shift();)
-				this.unlistenDomEvent_(n, evtnm);
+		if (n) {
+			var regevts = this._regevts;
+			if (regevts) {
+				this._regevts = null;
+				for (var evtnm; evtnm = regevts.shift();)
+					this.unlistenDomEvent_(n, evtnm);
+			}
 		}
 
 		for (var child = this.firstChild; child; child = child.nextSibling)
@@ -866,8 +873,13 @@ zk.Widget = zk.$extends(zk.Object, {
 	$: function (n, strict) {
 		//1. No map from element to widget directly. rather, go thru DOM
 		//2. We have to remove '$*' since $chdex is parentNode!
-		n = typeof n == 'string' ? zDom.$(n):
-			n ? n.target || n.srcElement || n: n; //check DOM event first
+		if (typeof n == 'string') {
+			var id = n;
+			n = zDom.$(n);
+			if (!n) return zk.Widget._binds[id];
+		} else if (n)
+			n = n.target || n.srcElement || n; //check DOM event first
+
 		for (; n; n = zDom.parentNode(n)) {
 			var wgt = n.z_wgt;
 			if (wgt) return wgt;
@@ -884,6 +896,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 		return null;
 	},
+	_binds: {}, //Map(uuid, wgt): bind but no node
 
 	//Event Handling//
 	/** This method is always called unless you invoke zEvt.stop
