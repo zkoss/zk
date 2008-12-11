@@ -15,14 +15,14 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 <window title="Test of a big list of groupbox">
 	<zscript>
-		data = new byte[600];
+		data = new byte[500];
 	</zscript>
 	<groupbox width="200px" forEach="${data}">
 		<caption image="/img/inet.png" label="Groupbox ${forEachStatus.index}">
-			<button label="Label" onClick='self.parent.label += "!"'/>
+			<button label="Label" onClick='self.parent.label += "!"' mold="os"/>
 		</caption>
 		This is a group box
-		<button label="a button"/>
+		<button label="a button" mold="os"/>
 		More in a group box
 	</groupbox>
 </window>

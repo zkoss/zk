@@ -14,7 +14,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 zul.utl.Timer = zk.$extends(zk.Widget, {
 	_running: true,
-	_delay: 0;
+	_delay: 0,
 
 	isRepeats: function () {
 		return this._repeats;

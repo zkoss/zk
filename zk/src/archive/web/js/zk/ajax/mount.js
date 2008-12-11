@@ -131,49 +131,49 @@ zkm = {
 
 		if (cfi.creating) { //creating a new page
 			if (zk.sysInited)
-				zkm.load();
+				zkm.mtNew();
 			else if (document.readyState) {
 				var tid = setInterval(function(){
 					if (/loaded|complete/.test(document.readyState)) {
 						clearInterval(tid);
-						zkm.load();
+						zkm.mtNew();
 					}
 				}, 50);
 			} else //gecko
-				setTimeout(zkm.load, 120);
+				setTimeout(zkm.mtNew, 120);
 				//don't count on DOMContentLoaded since the page might
 				//be loaded by another ajax solution (i.e., portal)
 				//Also, Bug 1619959: FF not fire it if in 2nd iframe
 		} else { //AU
 			var stub = cfi.stub;
 			cfi.stub = null;
-			zkm.auNew(stub);
+			zkm.mtAU(stub);
 		}
 	},
-	/** create for browser loading. */
-	load: function() {
-		zk.afterLoad(zkm.load0);
+	/** mount for browser loading new page. */
+	mtNew: function() {
+		zk.afterLoad(zkm.mtNew0);
 	},
-	load0: function() {
+	mtNew0: function() {
 		if (!zk.sysInited) zkm.sysInit();
 
 		var inf = zkm._crInf0.shift();
 		if (inf) {
 			zkm._crInf1.push([inf[0], zkm.create(null, inf[1])]);
-			zkm.exec(zkm.load0);
+			zkm.exec(zkm.mtNew0);
 			return;
 		}
 
-		zkm.load1();
+		zkm.mtNew1();
 	},
-	load1: function() {
+	mtNew1: function() {
 		var inf = zkm._crInf1.shift();
 		if (inf) {
 			var wgt = inf[1];
 			wgt.replaceHTML(wgt.uuid, inf[0]);
 
 			if (zkm._crInf1.length) {
-				zkm.exec(zkm.load1);
+				zkm.exec(zkm.mtNew1);
 				return;
 			}
 		}
@@ -185,11 +185,11 @@ zkm = {
 		zk.endProcessing();
 	},
 
-	/** create for AU cmds. */
-	auNew: function (stub) {
-		zk.afterLoad(function () {zkm.auNew0(stub);});
+	/** mount for AU responses. */
+	mtAU: function (stub) {
+		zk.afterLoad(function () {zkm.mtAU0(stub);});
 	},
-	auNew0: function (stub) {
+	mtAU0: function (stub) {
 		for (var cfi = zkm._crInf0, inf; inf = cfi.shift();)
 			stub(zkm.create(null, inf[1]));
 		zk.mounting = false;
