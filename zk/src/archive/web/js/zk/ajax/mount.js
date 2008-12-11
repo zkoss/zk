@@ -104,18 +104,18 @@ zkm = {
 		zk.sysInited = true;
 		zkm.sysInit = null; //free
 
-		zEvt.listen(document, "keydown", _zkDocKeyDown);
+		zEvt.listen(document, "keydown", zkm.docKeyDown);
 
-		zEvt.listen(document, "mousedown", _zkDocMouseDown);
-		zEvt.listen(document, "mouseover", _zkDocMouseOver);
-		zEvt.listen(document, "mouseout", _zkDocMouseOut);
+		zEvt.listen(document, "mousedown", zkm.docMouseDown);
+		zEvt.listen(document, "mouseover", zkm.docMouseOver);
+		zEvt.listen(document, "mouseout", zkm.docMouseOut);
 
-		zEvt.listen(document, "click", _zkDocClick);
-		zEvt.listen(document, "dblclick", _zkDocDblClick);
-		zEvt.listen(document, "contextmenu", _zkDocCtxMenu);
+		zEvt.listen(document, "click", zkm.docClick);
+		zEvt.listen(document, "dblclick", zkm.docDblClick);
+		zEvt.listen(document, "contextmenu", zkm.docCtxMenu);
 
-		zEvt.listen(window, "scroll", _zkDocScroll);
-		zEvt.listen(window, "resize", _zkDocResize);
+		zEvt.listen(window, "scroll", zkm.docScroll);
+		zEvt.listen(window, "resize", zkm.docResize);
 	},
 	mount: function() {
 		var cfi = zkm._crInf0;
@@ -251,98 +251,99 @@ zkm = {
 	_wgts: [],
 	_crInf0: [], //create info
 	_crInf1: [], //create info
-	_afMts: [] //afterMount funcs
-};
-zke = zkpge = zkm.pop;
+	_afMts: [], //afterMount funcs
 
-//Event Handler//
-function _zkDocKeyDown(evt) {
-	//TODO
-}
-function _zkDocMouseDown(evt) {
-	var target = zEvt.target(evt);
-	if (target != document.body && target != document.body.parentNode) { //not click on scrollbar
-		var $Widget = zk.Widget;
-		$Widget.domMouseDown($Widget.$(evt, true)); //null if mask
-	}
-}
-function _zkDocMouseOver(evt) {
-	//TODO
-}
-function _zkDocMouseOut(evt) {
-	//TODO
-}
-function _zkDocClick(evt) {
-	if (!evt) evt = window.event;
+	//Event Handler//
+	docKeyDown: function (evt) {
+		//TODO
+	},
+	docMouseDown: function (evt) {
+		var target = zEvt.target(evt);
+		if (target != document.body && target != document.body.parentNode) { //not click on scrollbar
+			var $Widget = zk.Widget;
+			$Widget.domMouseDown($Widget.$(evt, true)); //null if mask
+		}
+	},
+	docMouseOver: function (evt) {
+		//TODO
+	},
+	docMouseOut: function (evt) {
+		//TODO
+	},
+	docClick: function (evt) {
+		if (!evt) evt = window.event;
 
-	if (zEvt.leftClick(evt)) {
-		var wgt = zk.Widget.$(evt);
-		for (; wgt; wgt = wgt.parent) {
-			if (wgt.href) {
-				zUtl.go(href, false, wgt.target, "target");
-				return; //done
+		if (zEvt.leftClick(evt)) {
+			var wgt = zk.Widget.$(evt);
+			for (; wgt; wgt = wgt.parent) {
+				if (wgt.href) {
+					zUtl.go(href, false, wgt.target, "target");
+					return; //done
+				}
+				if (wgt.isListen('onClick')) {
+					wgt.fire("onClick", zEvt.mouseData(evt, wgt.node), {ctl:true});
+					return;
+				}
 			}
-			if (wgt.isListen('onClick')) {
-				wgt.fire("onClick", zEvt.mouseData(evt, wgt.node), {ctl:true});
+			//no need to Event.stop
+		}
+		//don't return anything. Otherwise, it replaces event.returnValue in IE (Bug 1541132)
+	},
+	docDblClick: function (evt) {
+		if (!evt) evt = window.event;
+
+		var wgt = zk.Widget.$(evt);
+		for (; wgt; wgt = wgt.parent)
+			if (wgt.isListen('onDoubleClick')) {
+				wgt.fire("onDoubleClick", zEvt.mouseData(evt, wgt.node), {ctl:true});
 				return;
 			}
-		}
-		//no need to Event.stop
-	}
-	//don't return anything. Otherwise, it replaces event.returnValue in IE (Bug 1541132)
-}
-function _zkDocDblClick(evt) {
-	if (!evt) evt = window.event;
-
-	var wgt = zk.Widget.$(evt);
-	for (; wgt; wgt = wgt.parent)
-		if (wgt.isListen('onDoubleClick')) {
-			wgt.fire("onDoubleClick", zEvt.mouseData(evt, wgt.node), {ctl:true});
-			return;
-		}
-}
-function _zkDocCtxMenu(evt) {
-}
-function _zkDocScroll() {
-}
-function _zkDocResize() {
-	if (!zk.sysInited || zk.mounting)
-		return; //IE6: it sometimes fires an "extra" onResize in loading
+	},
+	docCtxMenu: function (evt) {
+	},
+	docScroll: function () {
+	},
+	docResize: function () {
+		if (!zk.sysInited || zk.mounting)
+			return; //IE6: it sometimes fires an "extra" onResize in loading
 
 	//Tom Yeh: 20051230:
 	//1. In certain case, IE will keep sending onresize (because
 	//grid/listbox may adjust size, which causes IE to send onresize again)
-	//To avoid this endless loop, we ignore onresize a whilf if _reszfn
-	//is called
+	//To avoid this endless loop, we ignore onresize a while if docResize
+	//was called
 	//
 	//2. IE keeps sending onresize when dragging the browser's border,
 	//so we have to filter (most of) them out
 
-	var now = zUtl.now();
-	if (_zkbResz.lastTime && now < _zkbResz.lastTime)
-		return; //ignore resize for a while (since zk.onSizeAt might trigger onsize)
+		var now = zUtl.now(), resz = zkm._resz;
+		if (resz.lastTime && now < resz.lastTime)
+			return; //ignore resize for a while (since zk.onSizeAt might trigger onsize)
 
-	var delay = zk.ie ? 250: 50;
-	_zkbResz.time = now + delay - 1; //handle it later
-	setTimeout(_zkDocDidResize, delay);
-}
-function _zkDocDidResize () {
-	if (!_zkbResz.time) return; //already handled
+		var delay = zk.ie ? 250: 50;
+		resz.time = now + delay - 1; //handle it later
+		setTimeout(zkm.docDidResize, delay);
+	},
+	docDidResize: function () {
+		var resz = zkm._resz;
+		if (!resz.time) return; //already handled
 
-	var now = zUtl.now();
-	if (zk.loading || zAnima.count || now < _zkbResz.time) {
-		setTimeout(_zkDocDidResize, 10);
-		return;
-	}
+		var now = zUtl.now();
+		if (zk.loading || zAnima.count || now < resz.time) {
+			setTimeout(zkm.docDidResize, 10);
+			return;
+		}
 
-	_zkbResz.time = null; //handled
-	_zkbResz.lastTime = now + 1000;
-		//ignore following for a while if processing (in slow machine)
-
-	zAu.clientInfoChange();
-
-	zWatch.fire('beforeSize');
-	zWatch.fire('onSize');
-	_zkbResz.lastTime = zUtl.now() + 8;
+		resz.time = null; //handled
+		resz.lastTime = now + 1000;
+			//ignore following for a while if processing (in slow machine)
+	
+		zAu.clientInfoChange();
+	
+		zWatch.fire('beforeSize');
+		zWatch.fire('onSize');
+		resz.lastTime = zUtl.now() + 8;
+	},
+	_resz: {}
 };
-var _zkbResz = {};
+zke = zkpge = zkm.pop;
