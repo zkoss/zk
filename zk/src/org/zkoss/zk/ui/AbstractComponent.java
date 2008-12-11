@@ -30,6 +30,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Date;
+import java.io.Writer;
 import java.io.IOException;
 
 import org.zkoss.lang.D;
@@ -65,6 +66,7 @@ import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.IdGenerator;
 import org.zkoss.zk.ui.sys.Names;
 import org.zkoss.zk.ui.sys.ContentRenderer;
+import org.zkoss.zk.ui.sys.JsContentRenderer;
 import org.zkoss.zk.ui.metainfo.AnnotationMap;
 import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.metainfo.EventHandlerMap;
@@ -1294,6 +1296,65 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	//-- in the redrawing phase --//
+	/** Redraws this component and all its decendants.
+	 * <p>Default: It uses {@link JsContentRenderer} to render all information
+	 * in JavaScript codes. For devices that don't support JavaScript,
+	 * it must override this method.
+	 *
+	 * To generate all information, it first invokes
+	 * {@link #renderProperties} to render component's
+	 * properties,
+	 * and  then {@link #redrawChildren} to redraw children (and descendants)
+	 * (by calling their {@link #redraw}).
+	 *
+	 * <p>If a dervied class wants to render more properties, it can override
+	 * {@link #renderProperties}.
+	 * <p>If a derived class renders only a subset of its children
+	 * (such as paging/cropping), it could override {@link #redrawChildren}.
+	 * <p>If a deriving class wants to do something before
+	 * {@link #renderProperties}, it has to override {@link #redraw}.
+	 * <p>If a deriving class doesn't want to render in JavaScript codes,
+	 * it has to override {@link #redraw} with the proper implementation
+	 * of {@link ContentRenderer}.
+	 */
+	public void redraw(final Writer out) throws IOException {
+		final JsContentRenderer renderer = new JsContentRenderer();
+		renderProperties(renderer);
+		out.write("\nzkbg('");
+
+		final String wgtcls = getWidgetClass();
+		if (wgtcls == null)
+			throw new UiException("Widget class required for "+this+" with the "+getMold()+" mold");
+
+		out.write(wgtcls);
+		out.write("','");
+		out.write(getUuid());
+		out.write("','");
+		final String mold = getMold();
+		if (!"default".equals(mold))
+			out.write(mold);
+		out.write("',{\n");
+		out.write(renderer.getBuffer().toString());
+		out.write("});\n");
+
+		redrawChildren(out);
+
+		out.write("zke();\n");
+	}
+	/** Redraws childrens (and then recursively descandants).
+	 * <p>Default: it invokes {@link #redraw} for all its children.
+	 * <p>If a derived class renders only a subset of its children
+	 * (such as paging/cropping), it could override {@link #redrawChildren}.
+	 * @since 5.0.0
+	 * @see #redraw
+	 */
+	protected void redrawChildren(Writer out) throws IOException {
+		for (Component child = getFirstChild(); child != null;) {
+			Component next = child.getNextSibling();
+			((ComponentCtrl)child).redraw(out);
+			child = next;
+		}
+	}
 	/** Called by ({@link ComponentCtrl#redraw}) to render the
 	 * properties, excluding the enclosing tag and children.
 	 *

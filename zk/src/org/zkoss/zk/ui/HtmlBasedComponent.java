@@ -21,7 +21,6 @@ package org.zkoss.zk.ui;
 import java.util.Collection;
 import java.util.Set;
 import java.util.HashSet;
-import java.io.Writer;
 import java.io.IOException;
 
 import org.zkoss.lang.Objects;
@@ -31,7 +30,6 @@ import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.ui.ext.render.PrologAllowed;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ContentRenderer;
-import org.zkoss.zk.ui.sys.JsContentRenderer;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.out.AuFocus;
 import org.zkoss.zk.fn.ZkFns;
@@ -359,59 +357,6 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	}
 
 	//-- rendering --//
-	/** Redraws this component and all its decendants.
-	 * <p>Default: It generates DIV tag to enclose all information.
-	 * To generate all information, it first invokes
-	 * {@link #renderProperties} to render component's
-	 * properties,
-	 * and  then {@link #redrawChildren} to redraw children (and descendants)
-	 * (by calling their {@link #redraw}).
-	 *
-	 * <p>If a dervied class wants to render more properties, it can override
-	 * {@link #renderProperties}.
-	 * <p>If a derived class renders only a subset of its children
-	 * (such as paging/cropping), it could override {@link #redrawChildren}.
-	 * <p>If a deriving class wants to do something before
-	 * {@link #renderProperties}, it has to override {@link #redraw}.
-	 */
-	public void redraw(final Writer out) throws IOException {
-		final JsContentRenderer renderer = new JsContentRenderer();
-		renderProperties(renderer);
-		out.write("\nzkbg('");
-
-		final String wgtcls = getWidgetClass();
-		if (wgtcls == null)
-			throw new UiException("Widget class required for "+this+" with the "+getMold()+" mold");
-
-		out.write(wgtcls);
-		out.write("','");
-		out.write(getUuid());
-		out.write("','");
-		final String mold = getMold();
-		if (!"default".equals(mold))
-			out.write(mold);
-		out.write("',{\n");
-		out.write(renderer.getBuffer().toString());
-		out.write("});\n");
-
-		redrawChildren(out);
-
-		out.write("zke();\n");
-	}
-	/** Redraws childrens (and then recursively descandants).
-	 * <p>Default: it invokes {@link #redraw} for all its children.
-	 * <p>If a derived class renders only a subset of its children
-	 * (such as paging/cropping), it could override {@link #redrawChildren}.
-	 * @since 5.0.0
-	 * @see #redraw
-	 */
-	protected void redrawChildren(Writer out) throws IOException {
-		for (Component child = getFirstChild(); child != null;) {
-			Component next = child.getNextSibling();
-			((ComponentCtrl)child).redraw(out);
-			child = next;
-		}
-	}
 	/** Renders the content of this component, excluding the enclosing
 	 * tags and children.
 	 * @since 5.0.0

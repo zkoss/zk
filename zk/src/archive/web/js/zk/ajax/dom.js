@@ -822,6 +822,17 @@ zDom = { //static methods
 		if (n && n.parentNode) n.parentNode.removeChild(n);
 	},
 
+	/** Appends a JavaScript node.
+	 * @param charset the charset. UTF-8 is assumed if omitted.
+	 */
+	appendScript: function (src, charset) {
+		var e = document.createElement("script");
+		e.type = "text/javascript";
+		e.charset = charset ? charset: "UTF-8";
+		e.src = src;
+		document.getElementsByTagName("HEAD")[0].appendChild(e);
+	},
+
 	/** Returns the next sibling with the specified tag name, or null if not found.
 	 */
 	nextSibling: function (el, tagName) {

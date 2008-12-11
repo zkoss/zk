@@ -21,66 +21,73 @@ import java.util.Iterator;
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
 
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.AbstractComponent;
-import org.zkoss.zk.ui.UiException;
 
 /**
  * A component to represent script codes running at the client.
- * It is the same as HTML SCRIPT tag.
+ * It is similar to HTML SCRIPT tag, except it is not evaluated immediately.
+ * Rather, it is evaluated after all widgets are created.
  *
  * <p>Note: it is the scripting codes running at the client, not at the
  * server. Don't confuse it with the <code>zscript</code> element.
  *
  * <p>There are three formats when used in a ZUML page:
  *
- * <p>Method 1: Specify the URL of the JS file
- * <pre><code>&lt;script type="text/javascript" src="my.js"/&gt;
+ * <p>Format 1: Specify the URL of the JS file
+ * <pre><code>&lt;script src="my.js"/&gt;
  * </code></pre>
  *
- * <p>Method 2: Specify the JavaScript codes directly
- * <pre><code>&lt;script type="text/javascript"&gt;
+ * <p>Format 2: Specify the JavaScript codes directly
+ * <pre><code>&lt;script&gt;
  * some_js_at_browser();
  *&lt;/script&gt;
  * </code></pre>
  *
- * <p>Method 3: Specify the JavaScript codes by use of the content
+ * <p>Format 3: Specify the JavaScript codes by use of the content
  * property ({@link #setContent}).
- * <pre><code>&lt;script type="text/javascript"&gt;
+ * <pre><code>&lt;script&gt;
  * &lt;attribute name="content"&gt;
  *  some_js_at_browser();
  * &lt;/attribute&gt;
  *&lt;/script&gt;
  * </code></pre>
  *
+ * <p>Notice that, since 5.0, the JavaScript codes are evaluated after
+ * the widgets are created. In other words, it is always deferred.
+ * For format 2 and 3, JavaScript codes are evaluated as a method of
+ * this widget. Thus, you can access this widget with <code>this</code>
+ *
+ * <p>Notice that JavaScript codes specified in Format 1 might be evaluated
+ * later than codes in other formats since it takes another HTTP request to
+ * load the JavaScript file.
+ *
+ * <p>If this is an issue, you can use ZHTML's script component, or
+ * specify it in language addon.
+ *
+ * <pre><code>&lt:script xmlns:h="http://www.w3.org/1999/xhtml" src="${c:encodeURL('/js/mine.js')}" /&gt;
+ * //Note: encodeURL is required for ZHTML component set
+ *</code></pre>
+ *
  * @author tomyeh
  */
 public class Script extends AbstractComponent implements org.zkoss.zul.api.Script {
-	private String _src, _type = "text/javascript", _charset;
+	private String _src, _charset;
 	private String _content;
-	private boolean _defer;
 
 	public Script() {
 	}
 
-	/** Returns the type of this client script.
-	 * <p>Default: text/javascript.
+	/** @deprecated As of release 5.0.0, it is meaningless since
+	 * text/javascript is always assumed.
 	 */
 	public String getType() {
-		return _type;
+		return "text/javascript";
 	}
-	/** Sets the type of this client script.
-	 * For JavaScript, it is <code>text/javascript</code>
-	 *
-	 * <p>Note: this property is NOT optional. You must specify one.
+	/** @deprecated As of release 5.0.0, it is meaningless since
+	 * text/javascript is always assumed.
 	 */
 	public void setType(String type) {
-		if (type == null || type.length() == 0)
-			throw new IllegalArgumentException("non-empty is required");
-
-		if (!Objects.equals(_type, type)) {
-			_type = type;
-			invalidate();
-		}
 	}
 	/** Returns the character enconding of the source.
 	 * It is used with {@link #getSrc}.
@@ -99,7 +106,7 @@ public class Script extends AbstractComponent implements org.zkoss.zul.api.Scrip
 
 		if (!Objects.equals(_charset, charset)) {
 			_charset = charset;
-			invalidate();
+			smartUpdate("charset", _charset);
 		}
 	}
 
@@ -124,24 +131,20 @@ public class Script extends AbstractComponent implements org.zkoss.zul.api.Scrip
 
 		if (!Objects.equals(_src, src)) {
 			_src = src;
-			invalidate();
+			smartUpdate("src", new EncodedSrcURL());
 		}
 	}
 
-	/** Returns whether to defer the execution of the script codes.
-	 *
-	 * <p>Default: false.
+	/** @deprecated As of release 5.0.0, it is meaningless since it is always
+	 * deferred
 	 */
 	public boolean isDefer() {
-		return _defer;
+		return true;
 	}
-	/** Sets whether to defer the execution of the script codes.
+	/** @deprecated As of release 5.0.0, it is meaningless since it is always
+	 * deferred
 	 */
 	public void setDefer(boolean defer) {
-		if (_defer != defer) {
-			_defer = defer;
-			invalidate();
-		}
 	}
 
 	/** Returns the content of the script element.
@@ -167,7 +170,7 @@ public class Script extends AbstractComponent implements org.zkoss.zul.api.Scrip
 
 		if (!Objects.equals(_content, content)) {
 			_content = content;
-			invalidate();
+			smartUpdate("content", _content);
 		}
 	}
 
@@ -176,27 +179,27 @@ public class Script extends AbstractComponent implements org.zkoss.zul.api.Scrip
 	protected boolean isChildable() {
 		return false;
 	}
-	public void redraw(java.io.Writer out) throws java.io.IOException {
-		final StringBuffer sb = new StringBuffer(256).append("\n<script");
-		HTMLs.appendAttribute(sb, "id",  getUuid());
-		HTMLs.appendAttribute(sb, "type",  _type);
-		HTMLs.appendAttribute(sb, "charset",  _charset);
+	//super//
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
 
-		if (_src != null)
-			HTMLs.appendAttribute(sb, "src",
-				getDesktop().getExecution().encodeURL(_src));
+		if (_content != null)
+			renderer.renderDirectly("content", "function(){\n" + _content + '}');
+		render(renderer, "src", getEncodedSrcURL());
+		render(renderer, "charset", _charset);
+	}
 
-		if (_defer)
-			sb.append(" defer=\"defer\"");
+	private String getEncodedSrcURL() {
+		if (_src == null)
+			return null;
 
-		out.write(sb.append(">\n").toString());
-
-		final String content = getContent();
-		if (content != null) {
-			out.write(content);
-			out.write('\n');
+		final Desktop dt = getDesktop(); //it might not belong to any desktop
+		return dt != null ? dt.getExecution().encodeURL(_src): null;
+	}
+	private class EncodedSrcURL implements org.zkoss.zk.ui.util.DeferredValue {
+		public Object getValue() {
+			return getEncodedSrcURL();
 		}
-
-		out.write("</script>");
 	}
 }

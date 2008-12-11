@@ -58,7 +58,7 @@ zPkg = {
 
 		var e = document.createElement("script"),
 			uri = pkg.replace(/\./g, '/') + "/zk.wpd";
-		e.type = "text/javascript" ;
+		e.type = "text/javascript";
 		e.charset = "UTF-8";
 
 		if (uri.charAt(0) != '/') uri = '/' + uri;

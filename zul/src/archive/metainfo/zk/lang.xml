@@ -660,6 +660,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>script</component-name>
 		<component-class>org.zkoss.zul.Script</component-class>
+		<widget-class>zul.utl.Script</widget-class>
 		<text-as>content</text-as><!-- treat text within the element as the content property -->
 	</component>
 	<component>

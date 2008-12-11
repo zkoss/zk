@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+z5-script.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Dec 11 15:53:47     2008, Created by tomyeh
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+-->
+<window title="Test of JavaScript">
+	<label id="inf"/>
+	<separator bar="true"/>
+	<script>
+	var inf = this.getFellow('inf'); //this is the script widget
+	var btn = new zul.wgt.Button();
+	btn.setLabel('Test');
+	btn.listen('onClick', btn);
+	btn.onClick = function () {
+		inf.setValue(inf.getValue() + '+');
+	}
+	this.parent.appendChild(btn);
+	</script>
+	<script src="z5-script.js"/>
+	<script>
+	var btn = new zul.wgt.Button(),
+		wnd = this.getSpaceOwner();
+	btn.setLabel('Add');
+	btn.listen('onClick', btn);
+	btn.onClick = function () {
+		appendTo(wnd);
+	}
+	this.parent.appendChild(btn);
+	</script>
+</window>

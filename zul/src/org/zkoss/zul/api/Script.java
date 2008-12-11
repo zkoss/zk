@@ -65,19 +65,13 @@ package org.zkoss.zul.api;
  */
 public interface Script {
 
-	/**
-	 * Returns the type of this client script.
-	 * <p>
-	 * Default: text/javascript.
+	/** @deprecated As of release 5.0.0, it is meaningless since
+	 * text/javascript is always assumed.
 	 */
 	public String getType();
 
-	/**
-	 * Sets the type of this client script. For JavaScript, it is
-	 * <code>text/javascript</code>
-	 * 
-	 * <p>
-	 * Note: this property is NOT optional. You must specify one.
+	/** @deprecated As of release 5.0.0, it is meaningless since
+	 * text/javascript is always assumed.
 	 */
 	public void setType(String type);
 
@@ -116,16 +110,13 @@ public interface Script {
 	 */
 	public void setSrc(String src);
 
-	/**
-	 * Returns whether to defer the execution of the script codes.
-	 * 
-	 * <p>
-	 * Default: false.
+	/** @deprecated As of release 5.0.0, it is meaningless since it is always
+	 * deferred
 	 */
 	public boolean isDefer();
 
-	/**
-	 * Sets whether to defer the execution of the script codes.
+	/** @deprecated As of release 5.0.0, it is meaningless since it is always
+	 * deferred
 	 */
 	public void setDefer(boolean defer);
 
