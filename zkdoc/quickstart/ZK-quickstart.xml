@@ -5,20 +5,18 @@
 <subtitle>Version 3.6.0</subtitle>
 <bookinfo>
 <copyright>
-<year>2007</year>
+<year>2008</year>
 <holder>Potix Corporation. All rights reserved.</holder>
 </copyright>
 </bookinfo>
 <para>
-<graphic fileref="">2
-			
-		</graphic>
+<graphic fileref=""/>
 </para>
 <para>SIMPLY RICH</para>
 <para>ZKTM</para>
 <para/>
 <para/>
-<para>October 2008</para>
+<para>December 2008</para>
 <para>Potix Corporation</para>
 <para/>
 <para/>
@@ -113,6 +111,10 @@
 </para></sect1></chapter>
 <chapter>
 <title>1. What to Download</title>
+<para>Download ZK Library:</para>
+<para>
+<ulink url="http://www.zkoss.org/download/zk.dsp">http://www.zkoss.org/download/zk.dsp</ulink>
+</para>
 <informaltable frame="all">
 <tgroup cols="2">
 <thead>
@@ -200,92 +202,182 @@
 </orderedlist>
 </chapter>
 <chapter>
-<title>3. Installation</title>
+<title>3. Begin Your First ZK Project</title>
 <para>ZK consists of several libraries (the JAR files). There are two alternatives to install them.</para>
 <para>First, you can bundle them with your Web application. In other words, copy them to the WEB-INF/lib directory of your Web application. The benefit is that you can deploy your Web application to any Web server without configuring the Web server.</para>
-<para>Second, you can install them to your Web or application server. In other words, copy them to the shared directory of the Web or application server (for Tomcat, it is shared/lib). The benefit is that all Web applications deployed to the server can use ZK without bundled with ZK libraries. </para><sect1><title>Alternative 1: Bundle ZK into Your Web Application</title>
-<para>By copying ZK libraries to your Web application (WEB-INF/lib), you can deploy your Web application to any Web or application server without configuring the server.</para>
-<para>To bundle ZK libraries with the WAR file (the Web application)</para>
-<orderedlist>
+<para>Second, you can install them to your Web or application server. In other words, copy them to your Web application directory (for Tomcat, it is $TOMCAT_HOME/webapps/$PROJECT_NAME/WEB-INF/lib). </para>
+<para/>
+<itemizedlist>
 <listitem>
-<para>Uncompress zk-bin-3.6.0.zip or zk-bin-3.6.0.tar.gz</para>
-</listitem>
-<listitem>
-<para>Copy dist/lib/*.jar, dist/lib/zkforge/*.jar, and dist/lib/ext/*.jar to the /WEB-INF/lib directory in your Web application.Libraries in dist/lib/zkforge and dist/lib/ext are optional. If you want to minimize the footprint of your Web application, refer to the next chapter for the description of these libraries.</para>
-</listitem>
-</orderedlist>
-<para>To bundle ZK libraries with the EAR file (the Java EE application)</para>
-<orderedlist>
-<listitem>
-<para>Uncompress zk-bin-3.6.0.zip or zk-bin-3.6.0.tar.gz</para>
-</listitem>
-<listitem>
-<para>Copy dist/lib/*.jar, dist/lib/zkforge/*.jar, and dist/lib/ext/*.jar to the root directory in your Java EE application.Libraries in dist/lib/zkforge and dist/lib/ext are optional. If you want to minimize the footprint of your Web application, refer to the next chapter for the description of these libraries.</para>
-</listitem>
-</orderedlist></sect1><sect1><title>Alternative 2: Install ZK to Be Shared by All Web Applications</title>
-<para>The way to install ZK libraries to the shared directory varies from one Web server to another.</para>
-<para>Install ZK on Tomcat</para>
-<orderedlist>
-<listitem>
-<para>Download Tomcat from <ulink url="http://tomcat.apache.org/">http://tomcat.apache.org</ulink> and install it, if you haven't installed it yet.</para>
-</listitem>
-<listitem>
-<para>Stop Tomcat.</para>
-</listitem>
-<listitem>
-<para>Uncompress zk-bin-3.6.0.zip or zk-bin-3.6.0.tar.gz</para>
-</listitem>
-<listitem>
-<para>Copy dist/lib/*.jar, dist/lib/zkforge/*.jar, and dist/lib/ext/*.jar to $TOMCAT_HOME<footnote>
-<para>$TOMCAT_HOME is where you installed Tomcat.</para>
-</footnote>/shared/libLibraries in dist/lib/zkforge and dist/lib/ext are optional. If you want to minimize the footprint of your Web server, refer to the next chapter for the description of these libraries.</para>
-</listitem>
-<listitem>
-<para>Re-start Tomcat.</para>
-</listitem>
-</orderedlist>
-<para>Then, you can deploy your Web application, e.g., demo/bin/zkdemo-min.war, to Tomcat. It can be done by use of the Tomcat manager, or by copying it to $TOMCAT_HOME/webapps directly. If you prefer to copy directly, you have to stop Tomcat first. After deployed, you can run your Web application by visiting the corresponding URL, e.g.,<ulink url="http://localhost/zkdemo/userguide"> </ulink>
-<ulink url="http://localhost/zkdemo/userguide">http://localhost:8080/zkdemo/userguide</ulink>
-<ulink url="http://localhost/zkdemo/userguide">,</ulink> depending on the configuration of your Web server. </para>
-<para>Note: Tomcat 6.x, by default, doesn't load any classes from the shared/lib directory. To enable it, you have to specify the following in the conf/catalina.properties file:</para>
 <para>
-<link linkend="">shared.loader=${catalina.base}/shared/lib/*.jar</link>
+<ulink url="http://www.zkoss.org/download/zk.dsp">Download ZK Library:</ulink>
 </para>
-<para>Install ZK on Jetty</para>
+<para>
+<ulink url="http://www.zkoss.org/download/zk.dsp">http://www.zkoss.org/download/zk.dsp</ulink>
+</para>
+</listitem>
+<listitem>
+<para>Create project </para>
+<para>Create a development directory under $TOMCAT_HOME/webapps. The structure of development directory is shown below:(ex.zkdemo) </para>
+<para/>
+<para>
+<code>+zkdemo</code>
+</para>
+<para>
+<code>+WEB-INF</code>
+</para>
+<para>
+<code>web.xml</code>
+</para>
+<para>
+<code>index.zul</code>
+</para>
+</listitem>
+<listitem>
+<para>Unzip ZK libraryUnzip zk-bin-prof-xxx.zip or zk-bin-prof-xxx.tar.gz (ex. zk-bin-prof-x.x.x.zip) </para>
+</listitem>
+<listitem>
+<para>Deploy ZK libraryCopy the following jar files to the $TOMCAT_HOME/webapps/$PROJECT_NAME/WEB-INF/lib (ex.zkdemo/WEB-INF/lib) </para>
 <orderedlist>
-<listitem>
-<para>Download Jetty from <ulink url="http://www.mortbay.org/jetty/index.html">http://www.mortbay.org/jetty/index.html</ulink> and install it<footnote>
-<para>Refer to <ulink url="http://docs.codehaus.org/display/JETTY/Jetty+Documentation">http://docs.codehaus.org/display/JETTY/Jetty+Documentation</ulink>
+<para>
+<code>dist/lib/*.jar </code>
 </para>
-</footnote>, if you haven't installed it yet.</para>
-</listitem>
-<listitem>
-<para>Stop Jetty.</para>
-</listitem>
-<listitem>
-<para>Uncompress zk-bin-3.6.0.zip or zk-bin-3.6.0.tar.gz</para>
-</listitem>
-<listitem>
-<para>Copy dist/lib/*.jar, dist/lib/zkforge/*.jar, and dist/lib/ext/*.jar to $JETTY_HOME/ext Libraries in dist/zkforge and dist/lib/ext are optional. If you want to minimize the footprint of your Web server, refer to the next chapter for the description of these libraries.</para>
-</listitem>
-<listitem>
-<para>Re-start Jetty.</para>
-</listitem>
+<para>
+<code>dist/lib/zkforge/*.jar </code>
+</para>
+<para>
+<code>dist/lib/ext/*.jar </code>
+</para>
 </orderedlist>
-<para>Then, you can deploy your Web application, e.g., demo/bin/zkdemo-min.war, to Jetty by copying it to $JETTY_HOME/webapps directly. After deployed, you can run your Web application by visiting the corresponding URL, e.g.,<ulink url="http://localhost/zkdemo/userguide"> </ulink>
-<ulink url="http://localhost/zkdemo/userguide">http://localhost:8080/zkdemo/userguide</ulink>
-<ulink url="http://localhost/zkdemo/userguide">,</ulink> depending on the configuration of your Web server.</para></sect1><sect1><title>Working with MySQL<footnote>
+</listitem>
+<listitem>
+<para>Create web.xmlCreate web.xml under $TOMCAT_HOME/webapps/zkdemo, and Copy the following lines into web.xml </para>
+<para/>
 <para>
-<ulink url="http://mysql.com/">http://ww.mysql.com</ulink>
+<code>&lt;!-- ZK --&gt;</code>
 </para>
-</footnote>
-</title>
-<footnote>
 <para>
-<ulink url="http://mysql.com/">http://ww.mysql.com</ulink>
+<code>&lt;listener&gt;</code>
 </para>
-</footnote>
-<para>To open the connection under zscript, you have to put MySQL JDBC driver (mysql-connector-*.jar) under the $TOMCAT_DIR/common/lib directory.</para></sect1></chapter>
+<para>
+<code>&lt;description&gt;Used to clean up when a session is destroyed&lt;/description&gt;</code>
+</para>
+<para>
+<code>&lt;display-name&gt;ZK Session Cleaner&lt;/display-name&gt;</code>
+</para>
+<para>
+<code>&lt;listener-class&gt;org.zkoss.zk.ui.http.HttpSessionListener&lt;/listener-class&gt;</code>
+</para>
+<para>
+<code>&lt;/listener&gt;</code>
+</para>
+<para/>
+<para>
+<code>&lt;servlet&gt;</code>
+</para>
+<para>
+<code>&lt;description&gt;ZK loader for ZUML pages&lt;/description&gt;</code>
+</para>
+<para>
+<code>&lt;servlet-name&gt;zkLoader&lt;/servlet-name&gt;</code>
+</para>
+<para>
+<code>&lt;servlet-class&gt;org.zkoss.zk.ui.http.DHtmlLayoutServlet&lt;/servlet-class&gt;</code>
+</para>
+<para>
+<code>&lt;init-param&gt;</code>
+</para>
+<para>
+<code>&lt;param-name&gt;update-uri&lt;/param-name&gt;</code>
+</para>
+<para>
+<code>&lt;param-value&gt;/zkau&lt;/param-value&gt;</code>
+</para>
+<para>
+<code>&lt;/init-param&gt;</code>
+</para>
+<para>
+<code>&lt;load-on-startup&gt;1&lt;/load-on-startup&gt;</code>
+</para>
+<para>
+<code>&lt;/servlet&gt;</code>
+</para>
+<para>
+<code>&lt;servlet-mapping&gt;</code>
+</para>
+<para>
+<code>&lt;servlet-name&gt;zkLoader&lt;/servlet-name&gt;</code>
+</para>
+<para>
+<code>&lt;url-pattern&gt;*.zul&lt;/url-pattern&gt;</code>
+</para>
+<para>
+<code>&lt;/servlet-mapping&gt;</code>
+</para>
+<para>
+<code>&lt;servlet-mapping&gt;</code>
+</para>
+<para>
+<code>&lt;servlet-name&gt;zkLoader&lt;/servlet-name&gt;</code>
+</para>
+<para>
+<code>&lt;url-pattern&gt;*.zhtml&lt;/url-pattern&gt;</code>
+</para>
+<para>
+<code>&lt;/servlet-mapping&gt;</code>
+</para>
+<para/>
+<para>
+<code>&lt;servlet&gt;</code>
+</para>
+<para>
+<code>&lt;description&gt;The asynchronous update engine for ZK&lt;/description&gt;</code>
+</para>
+<para>
+<code>&lt;servlet-name&gt;auEngine&lt;/servlet-name&gt; </code>
+</para>
+<para>
+<code>&lt;servlet-class&gt;org.zkoss.zk.au.http.DHtmlUpdateServlet&lt;/servlet-class&gt;</code>
+</para>
+<para>
+<code>&lt;/servlet&gt;</code>
+</para>
+<para>
+<code>&lt;servlet-mapping&gt;</code>
+</para>
+<para>
+<code>&lt;servlet-name&gt;auEngine&lt;/servlet-name&gt;</code>
+</para>
+<para>
+<code>&lt;url-pattern&gt;/zkau/*&lt;/url-pattern&gt;</code>
+</para>
+<para>
+<code>&lt;/servlet-mapping&gt;</code>
+</para>
+</listitem>
+<listitem>
+<para>Create first ZUL FileCreate index.zul under $TOMCAT_HOME/webapps/zkdemo/, and copy the following lines into it. </para>
+<para/>
+<para>
+<code>&lt;window title="My First window" border="normal" width="200px"&gt;</code>
+</para>
+<para>
+<code>Hello, World!</code>
+</para>
+<para>
+<code>&lt;/window&gt;</code>
+</para>
+<para/>
+</listitem>
+<listitem>
+<para>Start TomcatExecute $TOMCAT_HOME/bin/start.bat to activate Tomcat.(ex. C:\Program Files\apache-tomcat-5.5.23\bin\start.bat) </para>
+</listitem>
+<listitem>
+<para>Browse zkdemoBrowse to http://localhost/zkdemo/ or http://localhost:8080/zkdemo/ depending on your configuration for Tomcat. </para>
+</listitem>
+</itemizedlist>
+<para/>
+</chapter>
 <chapter>
 <title>4. The Content of Binary Distribution</title>
 <para>This chapter describes the content of zk-bin-3.6.0.zip.</para><sect1><title>/doc</title>
@@ -411,7 +503,7 @@
 </entry>
 <entry>
 <para>Required if you want scripting in Ruby (<ulink url="http://jruby.codehaus.org/">JRuby</ulink>).</para>
-<para>Version: <ulink url="http://jruby.codehaus.org/">JRuby</ulink> 1.1.5 (jruby-complete)</para>
+<para>Version: <ulink url="http://jruby.codehaus.org/">JRuby</ulink> 1.1.2 (jruby-complete)</para>
 <para>[not available in the standard and professional edition]</para>
 </entry>
 </row>
@@ -475,9 +567,7 @@
 <programlisting>&lt;window title="My First window" border="normal" width="200px"&gt;&#13;    Hello, World!    &#13;&lt;/window&gt;&#13;</programlisting>
 <para>Then, the result is depicted as follow.</para>
 <para>
-<graphic fileref="images/hello.gif">2
-			
-		</graphic>Notice that, though the content of hello.zul is very similar to XUL<footnote>
+<graphic fileref="images/hello.gif"/>Notice that, though the content of hello.zul is very similar to XUL<footnote>
 <para>http://xul.sourceforge.net/mozilla.html</para>
 </footnote>, it is actually written in ZUML. ZK Loader parses it into a valid HTML page which can be interpreted correctly by a regular browser, such as Internet Explorer and Mozilla Firefox. Refer to the Developer's Guide for more details.</para></sect1></chapter>
 </book>
