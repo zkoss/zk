@@ -58,23 +58,22 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			var n = this.node;
 			if (n)
 				if (this._mold == 'os') this.node.disabled = true;
-				else this.rerender();
+				else this.rerender(); //bind and unbind required
 		}
 	},
-	/** Returns whether this button is disabled
+	/** Returns the tab index
 	 */
 	getTabindex: function () {
 		return this._tabindex;
 	},
-	/** Sets whether this button is disabled
+	/** Sets the tab index
 	 */
 	setTabindex: function(tabindex) {
 		if (this._tabindex != tabindex) {
 			this._tabindex = tabindex;
 			var n = this.node;
 			if (n)
-				if (this._mold == 'os') this.node.tabIndex = tabindex;
-				else this.rerender();
+				(this.ebtn || this.node).tabIndex = tabindex;
 		}
 	},
 
