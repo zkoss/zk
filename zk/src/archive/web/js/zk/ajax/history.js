@@ -62,7 +62,7 @@ zHistory = {
 };
 
 zHistory._curbk = "";
-zkAfterBs(function () { // Bug 1847708
+zk.afterMount(function () { // Bug 1847708
 	zHistory.checkBookmark(); // We don't need to wait for the first time.
 	setInterval("zHistory.checkBookmark()", 250);
 	//Though IE use history.html, timer is still required 

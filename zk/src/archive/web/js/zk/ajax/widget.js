@@ -987,11 +987,11 @@ zk.Desktop = zk.$extends(zk.Object, {
 	 */
 	destroy: function () {
 		var zdt = zk.Desktop, dts = zdt.all;
-		if (zdt._dt && zdt._dt.pgid && !zDom.$(zdt._dt.pgid)) //removed
+		if (zdt._dt && zdt._dt.pguid && !zDom.$(zdt._dt.pguid)) //removed
 			zdt._dt = null;
 		for (var dtid in dts) {
 			var dt = dts[dtid];
-			if (dt.pgid && !zDom.$(dt.pgid)) { //removed
+			if (dt.pguid && !zDom.$(dt.pguid)) { //removed
 				delete dts[dtid];
 				--zdt._ndt;
 			} else if (!zdt._dt)
@@ -1007,8 +1007,8 @@ zk.Page = zk.$extends(zk.Widget, {//unlik server, we derive from Widget!
 
 	_style: "width:100%;height:100%",
 
-	$init: function (pgid, contained) {
-		this.$super('$init', pgid);
+	$init: function (pguid, contained) {
+		this.$super('$init', pguid);
 
 		this._fellows = {};
 		if (contained) zk.Page.contained.$add(this);

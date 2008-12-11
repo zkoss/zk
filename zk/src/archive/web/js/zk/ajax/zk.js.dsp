@@ -25,7 +25,7 @@ if (!window.zk) {
 <c:include page="anima.js"/>
 <c:include page="widget.js"/>
 <c:include page="pkg.js"/>
-<c:include page="boot.js"/>
+<c:include page="mount.js"/>
 <c:include page="history.js"/>
 <c:include page="au.js"/>
 

@@ -153,7 +153,7 @@ public class HtmlPageRenders {
 		execCtrl.setResponses(null);
 
 		final StringBuffer sb = new StringBuffer(256)
-			.append("\n<script>zkAfterBs(function(){\n");
+			.append("\n<script>zkam(function(){\n");
 		final Marshaller marshaller = exec.getDesktop().getDevice().getMarshaller();
 		for (Iterator it = responses.iterator(); it.hasNext();) {
 			final AuResponse response = (AuResponse)it.next();
