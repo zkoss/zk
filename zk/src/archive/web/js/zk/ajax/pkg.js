@@ -70,20 +70,6 @@ zPkg = {
 	},
 	_lded: {}, //loaded
 	_lding: [], //loading
-
-	/** Adds a function that shall be executed after loaded.
-	 * If zk.loading is true, it is executed immediately (and returns true).
-	 * @param fn the function to execute. Note: unlike watch, it executes
-	 * only once.
-	 * @return if it was added successfully.
-	 * If fn was added, nothing is changed and false is returned.
-	 */
-	afterLoad: function (fn) {
-		if (zk.loading)
-			return zPkg._aflds.$add(fn);
-		fn();
-		return true;
-	},
 	_aflds: [],
 
 	_ldmsg: function () {
@@ -124,4 +110,9 @@ zPkg = {
 		zPkg._pkgVers[pkg] = ver;
 	},
 	_pkgVers: {}
+};
+zk.afterLoad = function (fn) { //part of zk
+	if (zk.loading)
+		return zPkg._aflds.$add(fn);
+	fn();
 };

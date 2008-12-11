@@ -50,6 +50,7 @@ function zkver() {
 	for (var j = 2; j < len; j += 2)
 		zPkg.version(args[j], args[j + 1]);
 }
+
 function zkopt(opts) {
 	for (var nm in opts) {
 		var val = opts[nm];
@@ -68,9 +69,8 @@ function zkam(fn) {
 	if (zk.mounting)
 		return zkm._afMts.$add(fn);
 	fn();
-	return true;
 }
-zk.afterMount = zkam;
+zk.afterMount = zkam; //part of zk
 
 /** Used internally. */
 zkm = {
@@ -152,7 +152,7 @@ zkm = {
 	},
 	/** create for browser loading. */
 	load: function() {
-		zPkg.afterLoad(zkm.load0);
+		zk.afterLoad(zkm.load0);
 	},
 	load0: function() {
 		if (!zk.sysInited) zkm.sysInit();
@@ -187,7 +187,7 @@ zkm = {
 
 	/** create for AU cmds. */
 	auNew: function (stub) {
-		zPkg.afterLoad(function () {zkm.auNew0(stub);});
+		zk.afterLoad(function () {zkm.auNew0(stub);});
 	},
 	auNew0: function (stub) {
 		for (var cfi = zkm._crInf0, inf; inf = cfi.shift();)
