@@ -503,13 +503,16 @@ zAu = { //static methods
 			content += "&cmd."+j+"="+evtnm
 				+"&uuid."+j+"="+(aureq.target.uuid||'');
 
-			if (aureq.data)
-				for (var k = 0, dl = aureq.data.length; k < dl; ++k) {
-					var data = aureq.data[k];
-					if (data.toString) data = data.toString();
+			var data = aureq.data;
+			if (data && data.marshal) data = data.marshal();
+			if (data != null) {
+				if (!data.$array) data = [data];
+				for (var k = 0, dl = data.length; k < dl; ++k) {
+					var d = data[j];
 					content += "&data."+j+"="
-						+ (data != null ? encodeURIComponent(data): '_z~nil');
+						+ (d != null ? encodeURIComponent(d): '_z~nil');
 				}
+			}
 		}
 
 		if (content)

@@ -357,7 +357,12 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				y -= ofs[1];
 			}
 		}
-		this.fire('onMove', [x + 'px', y + 'px', keys ? keys: ''], {ignorable: true});
+		this.fire('onMove', {
+			x: x + 'px',
+			y: y + 'px',
+			keys: keys,
+			marshal: zul.wnd.Window._onMoveMarshal
+		}, {ignorable: true});
 	},
 
 	//super//
@@ -537,6 +542,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		var wnd = zk.Widget.$(evt),
 			zcls = wnd.getZclass();
 		zDom.rmClass(wnd.emin, zcls + '-minimize-over');
+	},
+
+	_onMoveMarshal: function () {
+		return [this.x, this.y, this.keys.marshal()];
 	},
 
 	//drag

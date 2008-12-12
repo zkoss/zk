@@ -258,6 +258,7 @@ zk.copy(String.prototype, {
 
 //Array//
 zk.copy(Array.prototype, {
+	$array: true, //indicate it is an array
 	$contains: function (o) {
 		for (var j = 0, tl = this.length; j < tl; ++j) {
 			if (o == this[j])

@@ -12,7 +12,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	This program is distributed under GPL Version 2.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
-/** DOM Event Utilities. */
 zEvt = {
 	BS:		8,
 	TAB:	9,
@@ -21,24 +20,22 @@ zEvt = {
 	CTRL:	17,
 	ALT:	18,
 	ESC:	27,
+	PGUP:	33,
+	PGDN:	34,
+	END:	35,
+	HOME:	36,
 	LFT:	37,
 	UP:		38,
 	RGH:	39,
 	DN:		40,
 	INS:	45,
 	DEL:	46,
-	HOME:	36,
-	END:	35,
-	PGUP:	33,
-	PGDN:	34,
 	F1:		112,
 
-	/** Returns the target element of the event. */
 	target: function(evt) {
 		if (!evt) evt = window.event;
 		return evt.target || evt.srcElement;
 	},
-	/** Stops the event propogation. */
 	stop: function(evt) {
 		if (!evt) evt = window.event;
 		if (evt.preventDefault) {
@@ -52,41 +49,51 @@ zEvt = {
 		}
 	},
 
-	//Mouse Info//
-	/** Returns if the left button is clicked. */
 	leftClick: function(evt) {
 		if (!evt) evt = window.event;
 		return evt.which == 1 || evt.button == 0 || evt.button == 1;
 	},
-	/** Returns if the right button is clicked. */
 	rightClick: function (evt) {
 		if (!evt) evt = window.event;
 		return evt.which == 3 || evt.button == 2;
 	},
-	/** Returns the mouse status.
-	 */
 	mouseData: function (evt, target) {
 		if (!evt) evt = window.event;
-		var ofs = zDom.cmOffset(target ? target: zEvt.target(evt)),
-			x = zEvt.x(evt) - ofs[0],
-			y = zEvt.y(evt) - ofs[1];
-		return [x, y, zEvt.keyMetaData(evt)];
+		var ofs = zDom.cmOffset(target ? target: zEvt.target(evt));
+		return {
+			x: zEvt.x(evt) - ofs[0],
+			y: zEvt.y(evt) - ofs[1],
+			keys: zEvt.keyMetaData(evt),
+			marshal: zEvt._mouseDataMarshal
+		};
 	},
 	keyData: function (evt) {
 		if (!evt) evt = window.event;
-		return [zEvt.keyCode(evt), zEvt.charCode(evt), zEvt.keyMetaData(evt)];
+		return {
+			keyCode: zEvt.keyCode(evt),
+			charCode: zEvt.charCode(evt),
+			keys: zEvt.keyMetaData(evt),
+			marshal: zEvt._keyDataMarshal
+		};
 	},
 	keyMetaData: function (evt) {
-		var extra = {};
-		extra.toString = zEvt.keyMetaDataToString;
-		extra.altKey = evt.altKey;
-		extra.ctrlKey = evt.ctrlKey;
-		extra.shiftKey = evt.shiftKey;
-		extra.leftClick = zEvt.leftClick(evt);
-		extra.rightClick = zEvt.rightClick(evt);
-		return extra;
+		if (!evt) evt = window.event;
+		return {
+			altKey: evt.altKey,
+			ctrlKey: evt.ctrlKey,
+			shiftKey: evt.shiftKey,
+			leftClick: zEvt.leftClick(evt),
+			rightClick: zEvt.rightClick(evt),
+			marshal: zEvt._keyMetaDataMarshal
+		};
 	},
-	keyMetaDataToString: function () {
+	_mouseDataMarshal: function () {
+		return [this.x, this.y, this.keys.marshal()];
+	},
+	_keyDataMarshal: function () {
+		return [this.keyCode, this.charCode, this.keys.marshal()];
+	},
+	_keyMetaDataMarshal: function () {
 		var s = "";
 		if (this.altKey) s += 'a';
 		if (this.ctrlKey) s += 'c';
@@ -96,51 +103,33 @@ zEvt = {
 		return s;
 	},
 
-	/** Returns the X coordinate of the mouse pointer. */
 	x: function (evt) {
 		if (!evt) evt = window.event;
 		return evt.pageX || (evt.clientX +
 			(document.documentElement.scrollLeft || document.body.scrollLeft));
   	},
-	/** Returns the Y coordinate of the mouse pointer. */
 	y: function(evt) {
 		if (!evt) evt = window.event;
 		return evt.pageY || (evt.clientY +
 			(document.documentElement.scrollTop || document.body.scrollTop));
 	},
 
-	//Key Info//
-	/** Returns the char code.
-	 * <p>You might use String.fromCharCode() to convert it to a character,
-	 * such as 65 to 'a'
-	 */
 	charCode: function(evt) {
 		if (!evt) evt = window.event;
 		return evt.charCode || evt.keyCode;
 	},
-	/** Returns the key code. */
 	keyCode: function(evt) {
 		if (!evt) evt = window.event;
 		var k = evt.keyCode || evt.charCode;
 		return zk.safari ? (this.safariKeys[k] || k) : k;
 	},
 
-	/** Listens a browser event.
-	 */
 	listen: function (el, evtnm, fn) {
 		if (el.addEventListener)
 			el.addEventListener(evtnm, fn, false);
 		else /*if (el.attachEvent)*/
 			el.attachEvent('on' + evtnm, fn);
-
-		//Bug 1811352
-		if ("submit" == evtnm && zDom.tag(el) == "FORM") {
-			if (!el._$submfns) el._$submfns = [];
-			el._$submfns.push(fn);
-		}
 	},
-	/** Un-listens a browser event.
-	 */
 	unlisten: function (el, evtnm, fn) {
 		if (el.removeEventListener)
 			el.removeEventListener(evtnm, fn, false);
@@ -150,13 +139,8 @@ zEvt = {
 			} catch (e) {
 			}
 		}
-
-		//Bug 1811352
-		if ("submit" == evtnm && zDom.tag(el) == "FORM" && el._$submfns)
-			el._$submfns.$remove(fn);
 	},
 
-	/** Enables ESC (default behavior). */
 	enableESC: function () {
 		if (zDom._noESC) {
 			zEvt.unlisten(document, "keydown", zDom._noESC);
@@ -168,7 +152,6 @@ zEvt = {
 			delete zDom._onErrChange;
 		}
 	},
-	/** Disables ESC (so loading won't be aborted). */
 	disableESC: function () {
 		if (!zDom._noESC) {
 			zDom._noESC = function (evt) {
@@ -218,8 +201,6 @@ zk.Event = zk.$extends(zk.Object, {
 	//target: null,
 	/** The event name. */
 	//name: null,
-	/** The extra data, which could be anything. */
-	//data: null,
 	/** Options.
 	 * <dl>
 	 * <dt>implicit</dt>
@@ -256,8 +237,7 @@ zk.Event = zk.$extends(zk.Object, {
 	$init: function (target, name, data, opts) {
 		this.target = target;
 		this.name = name;
-		this.data = data == null ? null:
-			data.splice && data.$add ? data: [data]; //test if array
+		this.data = data;
 		this.opts = opts;
 	}
 },{
