@@ -368,7 +368,7 @@ zAu = { //static methods
 							}
 						}
 
-						if (!zAu._ignorable && !zAu._unloading) {
+						if (!zAu._ignorable && !zk.unloading) {
 							var msg = req.statusText;
 							if (zAu.confirmRetry("FAILED_TO_RESPONSE", req.status+(msg?": "+msg:""))) {
 								zAu._areqTry = 2; //one more try
@@ -393,7 +393,7 @@ zAu = { //static methods
 
 			//NOTE: if connection is off and req.status is accessed,
 			//Mozilla throws exception while IE returns a value
-			if (!zAu._ignorable && !zAu._unloading) {
+			if (!zAu._ignorable && !zk.unloading) {
 				var msg = e.message;
 				zAu._errcode = "[Receive] " + msg;
 				//if (e.fileName) zAu._errcode += ", "+e.fileName;
@@ -552,7 +552,7 @@ zAu = { //static methods
 			} catch (e2) {
 			}
 
-			if (!reqInf.ignorable && !zAu._unloading) {
+			if (!reqInf.ignorable && !zk.unloading) {
 				var msg = e.message;
 				zAu._errcode = "[Send] " + msg;
 				if (zAu.confirmRetry("FAILED_TO_SEND", msg)) {
@@ -681,7 +681,7 @@ zAu.cmd0 = { //no uuid at all
 		try {
 			zUtl.go(url, false, target);
 		} catch (ex) {
-			if (!zAu.confirmClose) throw ex;
+			if (!zk.confirmClose) throw ex;
 		}
 	},
 	title: function (dt0) {
@@ -734,7 +734,7 @@ zAu.cmd0 = { //no uuid at all
 		window.moveTo(x, y);
 	},
 	cfmClose: function (msg) {
-		zAu.confirmClose = msg;
+		zk.confirmClose = msg;
 	},
 	showBusy: function (msg, open) {
 		//close first (since users might want close and show diff message)

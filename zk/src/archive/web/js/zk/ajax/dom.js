@@ -15,15 +15,11 @@ Some of the codes are adopted from http://prototype.conio.net and http://script.
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
 zDom = { //static methods
-	/** Returns the DOM element with the specified ID, or null if not found.
-	 * A shortcut of document.getElementById.
-	 */
 	$: function(id) {
 		return typeof id == 'string' ?
 			id ? document.getElementById(id): null: id;
 			//strange but getElementById("") fails in IE7
 	},
-	/** Returns the tag name of the specified node. */
 	tag: function (n) {
 		return n && n.tagName ? n.tagName.toUpperCase(): "";
 	},
@@ -695,6 +691,8 @@ zDom = { //static methods
 		n = zDom.$(n);
 		var parent = n.parentNode, sib = n.previousSibling;
 
+		zDom.unfixDom(n); //undo fix of browser issues
+
 		if (zk.ie) {
 			var tn = zDom.tag(n);
 			if (tn == "TD" || tn == "TH" || tn == "TABLE" || tn == "TR"
@@ -723,6 +721,8 @@ zDom = { //static methods
 		if (!html) n = null;
 		else if (sib) n = sib.nextSibling;
 		else n = parent.firstChild;
+
+		zDom.fixDom(n);  //fix browser issues
 
 		/* Turn it on if need to fix this limitation (about script)
 		if (n && !zk.gecko && n.getElementsByTagName) {
@@ -1073,7 +1073,9 @@ zDom = { //static methods
 };
 
 if (zk.ie) {
-	zDom._tagOfHtml = function (html) {
+  zk.copy(zDom, {
+	//fix TABLE issue
+	_tagOfHtml: function (html) {
 		if (!html) return "";
 
 		var j = html.indexOf('<') + 1, k = j, len = j ? html.length: 0;
@@ -1083,8 +1085,8 @@ if (zk.ie) {
 				return html.substring(j, k).toUpperCase();
 		}
 		throw "Unknown tag in "+html;
-	};
-	zDom._tblNewElems = function (html) {
+	},
+	_tblNewElems: function (html) {
 		var level, tag = zDom._tagOfHtml(html);
 		switch (tag) {
 		case "TABLE":
@@ -1126,7 +1128,8 @@ if (zk.ie) {
 			el.removeChild(n);
 		}
 		return ns;
-	};
+	}
+  });
 } else if (!HTMLElement.prototype.insertAdjacentHTML) { //none-IE
 	//insertAdjacentHTML
 	HTMLElement.prototype.insertAdjacentHTML = function (sWhere, sHTML) {
@@ -1161,6 +1164,65 @@ if (zk.ie) {
 		}
 	};
 }
+
+//fix DOM
+zk.copy(zDom,
+  zk.ie ? {
+	fixDom: function (n) {
+		if (n) {
+			zDom._fxns.push(n);
+			setTimeout(zDom._fixDom, 100);
+		}
+	},
+	unfixDom: function (n) {
+		if (n && !zDom._fxns.$remove(n))
+			setTimeout(function() {zDom._unfixDom(n);}, 1000);
+	},
+	_fxns: [], //what to fix
+	_fixDom: function () {
+		var n = zDom._fxns.shift();
+		if (n) {
+			zDom._fixBU(n.getElementsByTagName("A")); //Bug 1635685, 1612312
+			zDom._fixBU(n.getElementsByTagName("AREA")); //Bug 1896749
+
+			if (zDom._fxns.length) setTimeout(zDom._fixDom, 300);
+		}
+	},
+	_unfixDom: function (n) {
+		if (n) {
+			zDom._unfixBU(n.getElementsByTagName("A"));
+			zDom._unfixBU(n.getElementsByTagName("AREA"));
+		}
+	},
+	_fixBU: function (ns) {
+		for (var j = ns.length; --j >= 0;) {
+			var n = ns[j];
+			if (!n.z_fixed && n.href.indexOf("javascript:") >= 0) {
+				n.z_fixed = true;
+				zk.listen(n, "click", zDom._doSkipBfUnload);
+			}
+		}
+	},
+	_unfixBU: function (ns) {
+		for (var j = ns.length; --j >= 0;) {
+			var n = ns[j];
+			if (n.z_fixed) {
+				n.z_fixed = false;
+				zk.unlisten(n, "click", zDom._doSkipBfUnload);
+			}
+		}
+	},
+	_doSkipBfUnload: function () {
+		zk.skipBfUnload = true;
+		setTimeout(zDom._unSkipBfUnload, 0); //restore
+	},
+	_unSkipBfUnload: function () {
+		zk.skipBfUnload = false;
+	}
+  }: {
+	fixDom: zk.$void,
+	unfixDom: zk.$void
+  });
 
 zk.Color = zk.$extends(zk.Object, {
 	/** A 3-element array, [r, g, b]. */

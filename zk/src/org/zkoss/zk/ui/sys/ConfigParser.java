@@ -279,7 +279,6 @@ public class ConfigParser {
 
 			} else if ("client-config".equals(elnm)) { //since 3.0.0
 			//client-config
-			//  disable-behind-modal
 			//  keep-across-visits
 			//  processing-prompt-delay
 			//	error-reload
@@ -515,10 +514,6 @@ public class ConfigParser {
 		String s = conf.getElementValue("keep-across-visits", true);
 		if (s != null)
 			config.setKeepDesktopAcrossVisits(!"false".equals(s));
-
-		s = conf.getElementValue("disable-behind-modal", true);
-		if (s != null && !"false".equals(s))
-			log.warning("disable-behind-modal is deprecated");
 
 		s = conf.getElementValue("debug-js", true);
 		if (s != null) config.setDebugJS(!"false".equals(s));

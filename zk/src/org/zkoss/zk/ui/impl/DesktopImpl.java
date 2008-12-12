@@ -459,6 +459,12 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			Events.postEvent(URIEvent.getURIEvent(request));
 		} else if (Events.ON_CLIENT_INFO.equals(name)) {
 			Events.postEvent(ClientInfoEvent.getClientInfoEvent(request));
+		} else if ("rmDesktop".equals(name)) {
+			((WebAppCtrl)request.getDesktop().getWebApp())
+				.getUiEngine().setAbortingReason(
+					new org.zkoss.zk.ui.impl.AbortByRemoveDesktop());
+				//to avoid surprise, we don't remove it now
+				//rather, it is done by AbortByRemoveDesktop.getResponse
 		} else
 			Events.postEvent(Event.getEvent(request));
 	}

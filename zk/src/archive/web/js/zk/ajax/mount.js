@@ -116,6 +116,12 @@ zkm = {
 
 		zEvt.listen(window, "scroll", zkm.docScroll);
 		zEvt.listen(window, "resize", zkm.docResize);
+
+		zkm._oldUnload = window.onunload;
+		window.onunload = zkm.wndUnload; //unable to use zk.listen
+
+		zkm._oldBfUnload = window.onbeforeunload;
+		window.onbeforeunload = zkm.wndBfUnload;
 	},
 	mount: function() {
 		var cfi = zkm._crInf0;
@@ -329,7 +335,7 @@ zkm = {
 		if (!resz.time) return; //already handled
 
 		var now = zUtl.now();
-		if (zk.loading || zAnima.count || now < resz.time) {
+		if (zk.mounting || zPkg.loading || zAnima.count || now < resz.time) {
 			setTimeout(zkm.docDidResize, 10);
 			return;
 		}
@@ -344,6 +350,62 @@ zkm = {
 		zWatch.fire('onSize');
 		resz.lastTime = zUtl.now() + 8;
 	},
-	_resz: {}
+	_resz: {},
+
+	wndUnload: function () {
+		zk.unloading = true; //to disable error message
+
+		//20061109: Tom Yeh: Failed to disable Opera's cache, so it's better not
+		//to remove the desktop.
+		//Good news: Opera preserves the most udpated content, when BACK to
+		//a cached page, its content. OTOH, IE/FF/Safari cannot.
+		//Note: Safari won't send rmDesktop when onunload is called
+		var bRmDesktop = !zk.opera && !zk.keepDesktop;
+		if (bRmDesktop || zk.pfmeter) {
+			try {
+				var dts = zk.Desktop.all;
+				for (var dtid in dts) {
+					var req = zUtl.newAjax(),
+						content = "dtid="+dtid+"&cmd.0="+
+							(bRmDesktop?"rmDesktop":"dummy"),
+						dt = dts[dtid],
+						uri = zAu.comURI(null, dt);
+					req.open("POST", zk.ie ? uri+"?"+content: uri, true);
+					req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+					if (zk.pfmeter) zAu._pfsend(dtid, req, true);
+					if (zk.ie) req.send(null);
+					else req.send(content);
+				}
+			} catch (e) { //silent
+			}
+		}
+
+		if (zkm._oldUnload) zkm._oldUnload.apply(window, arguments);
+	},
+	wndBfUnload: function () {
+		if (!zk.skipBfUnload) {
+			if (zk.confirmClose)
+				return zk.confirmClose;
+
+			for (var bfs = zkm._bfs, j = 0; j < bfs.length; ++j) {
+				var s = bfs[j]();
+				if (s) return s;
+			}
+		}
+
+		if (zkm._oldBfUnload) {
+			var s = zkm._oldBfUnload.apply(window, arguments);
+			if (s) return s;
+		}
+
+		zk.unloading = true; //FF3 aborts ajax before calling window.onunload
+		//Return nothing
+	},
+	_bfs: []
 };
 zke = zkpge = zkm.pop;
+
+zk.beforeUnload = function (fn, opts) { //part of zk
+	if (opts && opts.remove) zkm._bfs.$remove(fn);
+	else zkm._bfs.push(fn);
+};

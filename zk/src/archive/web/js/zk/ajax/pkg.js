@@ -13,6 +13,8 @@ This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 zPkg = {
+	loading: 0,
+
 	/** Called after the whole package is declared.
 	 * It must be the last statement in a JavaScript file.
 	 * @param pkg the package name
@@ -81,16 +83,16 @@ zPkg = {
 		return msg;
 	},
 	_updCnt: function () {
-		zk.loading = zPkg._lding.length;
+		zPkg.loading = zPkg._lding.length;
 		try {
 			var n = zDom.$("zk_loadcnt");
 			if (n) n.innerHTML = zPkg._ldmsg();
 		} catch (ex) {
 		}
-		return zk.loading;
+		return zPkg.loading;
 	},
 	_pgbox: function () {
-		if (zk.loading || window.dbg_progressbox) { //dbg_progressbox: debug purpose
+		if (zPkg.loading || window.dbg_progressbox) { //dbg_progressbox: debug purpose
 			var n = zDom.$("zk_loadprog");
 			if (!n)
 				zUtl.progressbox("zk_loadprog",
@@ -112,7 +114,7 @@ zPkg = {
 	_pkgVers: {}
 };
 zk.afterLoad = function (fn) { //part of zk
-	if (zk.loading)
+	if (zPkg.loading)
 		return zPkg._aflds.$add(fn);
 	fn();
 };

@@ -17,7 +17,6 @@ zk = {
 	procDelay: 900,
 	tipDelay: 800,
 	resendDelay: -1,
-	loading: 0,
 
 	/** Whether ZK is creating a new page. */
 	//creating: 0,
@@ -404,4 +403,3 @@ _zkf = {
 };
 zk.copy(zk.Class, _zkf);
 zk.copy(zk.Object, _zkf);
-_zkf = null;
