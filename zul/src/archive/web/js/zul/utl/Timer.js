@@ -22,8 +22,7 @@ zul.utl.Timer = zk.$extends(zk.Widget, {
 	setRepeats: function (repeats) {
 		if (this._repeats != repeats) {
 			this._repeats = repeats;
-			if (this.parent && this.parent.node)
-				this._run();
+			if (this.desktop) this._sync();
 		}
 	},
 	getDelay: function () {
@@ -32,8 +31,7 @@ zul.utl.Timer = zk.$extends(zk.Widget, {
 	setDelay: function (delay) {
 		if (this._delay != delay) {
 			this._delay = delay;
-			if (this.parent && this.parent.node)
-				this._run();
+			if (this.desktop) this._sync();
 		}
 	},
 	isRunning: function () {
@@ -42,8 +40,7 @@ zul.utl.Timer = zk.$extends(zk.Widget, {
 	setRunning: function (running) {
 		if (this._running != running) {
 			this._running = running;
-			if (this.parent && this.parent.node)
-				this._run();
+			if (this.desktop) this._sync();
 		}
 	},
 	play: function () {
@@ -53,7 +50,7 @@ zul.utl.Timer = zk.$extends(zk.Widget, {
 		this.setRunning(false);
 	},
 
-	_run: function () {
+	_sync: function () {
 		this._stop();
 		this._play();
 	},

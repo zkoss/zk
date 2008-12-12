@@ -32,8 +32,8 @@ zul.utl.Script = zk.$extends(zk.Widget, {
 		this._content = cnt;
 		if (cnt) {
 			this._fn = typeof cnt == 'function' ? cnt: new Function(cnt);
-			if (this.parent && this.parent.node) //check parent since no this.node
-				this._run();
+			if (this.desktop) //check parent since no this.node
+				this._exec();
 		} else
 			this._fn = null;
 	},
@@ -48,8 +48,8 @@ zul.utl.Script = zk.$extends(zk.Widget, {
 		this._src = src;
 		if (src) {
 			this._srcrun = false;
-			if (this.parent && this.parent.node)
-				this._run();
+			if (this.desktop)
+				this._exec();
 		}
 	},
 
@@ -62,7 +62,7 @@ zul.utl.Script = zk.$extends(zk.Widget, {
 		this._charset = charset;
 	},
 
-	_run: function () {
+	_exec: function () {
 		var wgt = this, fn = this._fn;
 		if (fn) {
 			this._fn = null; //run only once
@@ -80,6 +80,6 @@ zul.utl.Script = zk.$extends(zk.Widget, {
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
-		this._run();
+		this._exec();
 	}
 });
