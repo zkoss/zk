@@ -48,7 +48,7 @@ function zkver() {
 	zk.build = args[1];
 
 	for (var j = 2; j < len; j += 2)
-		zPkg.version(args[j], args[j + 1]);
+		zPkg.setVersion(args[j], args[j + 1]);
 }
 
 function zkopt(opts) {

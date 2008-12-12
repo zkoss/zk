@@ -15,10 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zPkg = {
 	loading: 0,
 
-	/** Called after the whole package is declared.
-	 * It must be the last statement in a JavaScript file.
-	 * @param pkg the package name
-	 */
+	/** Called after the whole package is declared. */
 	end: function (pkg) {
 		if (zPkg._lding.$remove(pkg)) {
 			if (!zPkg._updCnt()) {
@@ -34,11 +31,7 @@ zPkg = {
 		} else //specified in lang.xml (or in HTML directly)
 			zPkg._lded[pkg] = true;
 	},
-	/** Loads the specified package.
-	 * @param pkg the package name
-	 * @param dtid the desktop ID. If null, the first desktop is used.
-	 */
-	load: function (pkg, dtid) {
+	load: function (pkg, dt) {
 		var pkglds = zPkg._lded;
 		if (pkglds[pkg]) return;
 
@@ -55,7 +48,7 @@ zPkg = {
 		}
 
 		var modver = pkg.indexOf('.');
-		if (modver) modver = zPkg.version(pkg.substring(0, modver));
+		if (modver) modver = zPkg.getVersion(pkg.substring(0, modver));
 		if (!modver) modver = zk.build;
 
 		var e = document.createElement("script"),
@@ -67,7 +60,7 @@ zPkg = {
 		if (modver) uri = "/web/_zv" + modver + "/js" + uri;
 		else uri = "/web/js" + uri;
 
-		e.src = zAu.comURI(uri, dtid);
+		e.src = zAu.comURI(uri, dt);
 		document.getElementsByTagName("HEAD")[0].appendChild(e);
 	},
 	_lded: {}, //loaded
@@ -101,14 +94,10 @@ zPkg = {
 		}	
 	},
 
-	/** Returns or sets the package's version.
-	 * <p>If there is only one argument, it must be the package name
-	 * and this method returns its version.
-	 */
-	version: function (pkg, ver) {
-		if (arguments.length <= 1)
-			return zPkg._pkgVers[pkg];
-
+	getVersion: function (pkg) {
+		return zPkg._pkgVers[pkg];
+	},
+	setVersion: function (pkg, ver) {
 		zPkg._pkgVers[pkg] = ver;
 	},
 	_pkgVers: {}
