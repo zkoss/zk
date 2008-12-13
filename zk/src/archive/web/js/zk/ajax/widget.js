@@ -40,6 +40,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	/** Constructor. */
 	$init: function (uuid, mold) {
 		this._lsns = {}; //listeners Map(evtnm,listener)
+		this._$lsns = {}; //listners registered by server Map(evtnm, fn)
 		this.uuid = uuid ? uuid: zk.Widget.nextUuid();
 		this._mold = mold ? mold: "default";
 	},
@@ -759,8 +760,8 @@ zk.Widget = zk.$extends(zk.Object, {
 			len = lsns ? lsns.length: 0;
 		if (len) {
 			for (var j = 0; j < len;) {
-				var o = lsns[j++][1];
-				o[evtnm].call(o, evt);
+				var inf = lsns[j++], o = inf[1];
+				(inf[2] || o[evtnm]).call(o, evt);
 				if (evt.stop) return; //no more processing
 			}
 		}
@@ -782,18 +783,20 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * For example, if wgt.listen("onChange", lsn) is called, then
 	 * lsn.onChange(evt) will be called when onChange event is fired
 	 * (by {@link zk.Widget#fire}.
+	 * @param fn the function to call back. If null, listner[evtnm] is
+	 * assumed.
 	 * @param priority the higher the number, the earlier it is called.
 	 * Zero is assumed if omitted.
 	 */
-	listen: function (evtnm, listener, priority) {
+	listen: function (evtnm, listener, fn, priority) {
 		if (!priority) priority = 0;
-		var info = [priority, listener],
+		var inf = [priority, listener, fn],
 			lsns = this._lsns[evtnm];
-		if (!lsns) lsns = this._lsns[evtnm] = [info];
+		if (!lsns) lsns = this._lsns[evtnm] = [inf];
 		else
 			for (var j = lsns.length; --j >= 0;)
 				if (lsns[j][0] >= priority) {
-					lsns.$addAt(j + 1, info);
+					lsns.$addAt(j + 1, inf);
 					break;
 				}
 
@@ -807,10 +810,10 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	/** Removes a listener from the sepcified event.
 	 */
-	unlisten: function (evtnm, listener) {
+	unlisten: function (evtnm, listener, fn) {
 		var lsns = this._lsns[evtnm];
 		for (var j = lsns ? lsns.length: 0; --j >= 0;)
-			if (lsns[j][1] == listener) {
+			if (lsns[j][1] == listener && lsns[j][2] == fn) {
 				lsns.$removeAt(j);
 				return true;
 			}
@@ -823,6 +826,25 @@ zk.Widget = zk.$extends(zk.Object, {
 		var lsns = this._lsns[evtnm];
 		return lsns && lsns.length;
 	},
+	/** Sets the listener with a two-element array.
+	 * It is designed to be called by the peer component.
+	 * @param inf a two-element array where the first element is
+	 * the event name, and the second element is the function.
+	 */
+	setListener: function (inf) {
+		var evtnm = inf[0], fn = inf[1],
+			lsns = this._$lsns;
+			oldfn = lsns[evtnm];
+		if (oldfn) { //unlisten first
+			delete lsns[evtnm];
+			this.unlisten(evtnm, this, oldfn);
+		}
+		if (fn) {
+			if (typeof fn != 'function') fn = new Function(fn);
+			this.listen(evtnm, this, lsns[evtnm] = fn);
+		}
+	},
+
 	/** Returns the delay before sending a deferrable event.
 	 * <p>Default: -1.
 	 */

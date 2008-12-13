@@ -5,7 +5,7 @@
 Purpose:
 Description:
 History:
-C91/01/08 10:37:16, reate, Tom M. Yeh
+	2002/01/08 10:37:16, Create, Tom M. Yeh
 }}IS_NOTE
 
 Copyright (C) 2001 Potix Corporation. All Rights Reserved.

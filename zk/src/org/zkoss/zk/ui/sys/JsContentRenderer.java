@@ -307,4 +307,13 @@ public class JsContentRenderer implements ContentRenderer {
 			throw new UnsupportedOperationException("Only String or null allowed, not "+value.toString());
 		_buf.append((String)value);
 	}
+
+	/** Renders the JavaScript code snippet for an event listener
+	 * for the peer widget.
+	 */
+	public void renderWidgetListener(String name, String script) {
+		renderName("listener");
+		_buf.append("['").append(name).append("',function(event){\n")
+			.append(script).append("\n}]");
+	}
 }

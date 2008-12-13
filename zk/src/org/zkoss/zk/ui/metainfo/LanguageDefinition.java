@@ -77,6 +77,12 @@ public class LanguageDefinition {
 	 * @since 3.0.0
 	 */
 	public static final String NATIVE_NAMESPACE = "http://www.zkoss.org/2005/zk/native";
+	/*** The namespace for ZK client namespace. It is used to specify
+	 * the client attributes, such as the event listener.
+	 * @since 5.0.0
+	 */
+	public static final String CLIENT_NAMESPACE = "http://www.zkoss.org/2005/zk/client";
+
 	/** The namespace for ZK native namespace prefix.
 	 * If a namespace starts with {@link #NATIVE_NAMESPACE_PREFIX} ("native:"),
 	 * it means it is also a native space ({@link #NATIVE_NAMESPACE}

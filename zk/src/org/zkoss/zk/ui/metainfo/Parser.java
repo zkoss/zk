@@ -766,10 +766,10 @@ public class Parser {
 			it.hasNext();) {
 				final Attribute attr = (Attribute)it.next();
 				final Namespace attrns = attr.getNamespace();
+				final String attURI = attrns != null ? attrns.getURI(): "";
 				final String attnm = attr.getLocalName();
 				final String attval = attr.getValue();
-				if (attrns != null
-				&& LanguageDefinition.ANNO_NAMESPACE.equals(attrns.getURI())) {
+				if (LanguageDefinition.ANNO_NAMESPACE.equals(attURI)) {
 					if (bzk) warnWrongZkAttr(attr);
 					else {
 						if (attrAnnHelper == null)
@@ -807,20 +807,18 @@ public class Parser {
 					} else if ("when".equals(attnm)) {
 						ifc = attval;
 					} else {
-						final String attpref = attrns != null ? attrns.getPrefix(): null;
-						final String atturi = attrns != null ? attrns.getURI(): "";
+						final String attPref = attrns != null ? attrns.getPrefix(): null;
 						if (!"xmlns".equals(attnm) && !"xml".equals(attnm)
-						&& atturi.indexOf("w3.org") < 0
-						&& (attpref == null
-						 || (!"xmlns".equals(attpref) && !"xml".equals(attpref))))
+						&& attURI.indexOf("w3.org") < 0
+						&& (attPref == null
+						 || (!"xmlns".equals(attPref) && !"xml".equals(attPref))))
 							warnWrongZkAttr(attr);
 					}
 				} else if (!("use".equals(attnm) && isZkAttr(langdef, attrns))) {
-					final String attpref = attrns != null ? attrns.getPrefix(): "";
-					final String atturi = attrns != null ? attrns.getURI(): "";
-					if (!"xmlns".equals(attpref)
-					&& !("xmlns".equals(attnm) && "".equals(attpref))
-					&& !"http://www.w3.org/2001/XMLSchema-instance".equals(atturi)) {
+					final String attPref = attrns != null ? attrns.getPrefix(): "";
+					if (!"xmlns".equals(attPref)
+					&& !("xmlns".equals(attnm) && "".equals(attPref))
+					&& !"http://www.w3.org/2001/XMLSchema-instance".equals(attURI)) {
 						final int len = attval.length();
 						if (len >= 3 && attval.charAt(0) == '@'
 						&& attval.charAt(1) == '{' && attval.charAt(len-1) == '}') { //annotation
@@ -920,7 +918,11 @@ public class Parser {
 				break;
 			}
 
-		final String attnm = IDOMs.getRequiredAttributeValue(el, "name");
+		final Attribute attr = el.getAttributeItem(null, "name", 0); //by local name
+		if (attr == null)
+			throw new UiException("The name attribute required, "+el.getLocator());
+
+		final String attnm = attr.getValue();
 		noEmpty("name", attnm, el);
 		final ConditionImpl cond = ConditionImpl.getInstance(
 				el.getAttributeValue("if"), el.getAttributeValue("unless"));
@@ -937,7 +939,7 @@ public class Parser {
 			final String trim = el.getAttributeValue("trim");
 			noEL("trim", trim, el);
 			final String attval = el.getText(trim != null && "true".equals(trim));
-			addAttribute(parent, null, attnm, attval, cond);
+			addAttribute(parent, attr.getNamespace(), attnm, attval, cond);
 		}
 
 		annHelper.applyAnnotations(parent, attnm, true);
@@ -1083,7 +1085,13 @@ public class Parser {
 		if (Events.isValid(name)) {
 			boolean bZkAttr = attrns == null;
 			if (!bZkAttr) {
-				String pref = attrns.getPrefix(), uri = attrns.getURI();
+				final String uri = attrns.getURI();
+				if (LanguageDefinition.CLIENT_NAMESPACE.equals(uri)) {
+					compInfo.addWidgetListener(name, value, cond);
+					return;
+				}
+
+				final String pref = attrns.getPrefix();
 				LanguageDefinition langdef = compInfo.getLanguageDefinition();
 				if (langdef == null)
 					bZkAttr = true;

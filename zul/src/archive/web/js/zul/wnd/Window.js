@@ -22,8 +22,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	$init: function () {
 		this.$supers('$init', arguments);
 		this._fellows = [];
-		this.listen('onClose', this, -1000);
-		this.listen('onMove', this, -1000);
+		this.listen('onClose', this, null, -1000);
+		this.listen('onMove', this, null, -1000);
 		this._zIndex = 0;
 	},
 

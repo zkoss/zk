@@ -116,11 +116,17 @@ public interface ComponentCtrl {
 	 */
 	public void onPageDetached(Page page);
 
-	/** Returns the event handler of the specified name, or null
+	/** Returns the event listener of the specified name, or null
 	 * if not found.
+	 * @see Component#getWidgetListener
 	 */
 	public ZScript getEventHandler(String evtnm);
 	/** Adds an event handler.
+	 * Note: it is OK to add multiple event handlers to the same event.
+	 * They are evaluated one-by-one.
+	 * On the other hand, {@link Component#setWidgetListener} will
+	 * overwrite the pevious listener if the event name is the same.
+	 * @see Component#setWidgetListener
 	 */
 	public void addEventHandler(String name, EventHandler evthd);
 	/** Adds a map of event handlers which is shared by other components.
@@ -130,11 +136,13 @@ public interface ComponentCtrl {
 	 * The caller shall not change annots after the invocation, too
 	 *
 	 * @param evthds a map of event handler
+	 * @see Component#setWidgetListener
 	 */
 	public void addSharedEventHandlerMap(EventHandlerMap evthds);
 	/** Returns a readonly collection of event names (String), or
 	 * an empty collection if no event name is registered.
 	 *
+	 * @see Component#getWidgetListenerNames
 	 * @since 3.0.2
 	 */
 	public Set getEventHandlerNames();

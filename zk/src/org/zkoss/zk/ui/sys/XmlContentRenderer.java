@@ -121,4 +121,10 @@ public class XmlContentRenderer implements ContentRenderer {
 	public void renderDirectly(String name, Object value) {
 		render(name, Objects.toString(value));
 	}
+
+	/** It is the same as <code>render(name, script)</code>.
+	 */
+	public void renderWidgetListener(String name, String script) {
+		render(name, script);
+	}
 }

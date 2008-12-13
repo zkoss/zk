@@ -21,6 +21,7 @@ package org.zkoss.zk.ui;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Iterator;
 
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
@@ -775,6 +776,28 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * and the language definition ({@link org.zkoss.zk.ui.metainfo.LanguageDefinition}).
 	 */
 	public void applyProperties();
+
+	/*** Sets or remove an event listener of the peer widget.
+	 * If there is an event listener associated with the same event,
+	 * the previous one will be replaced and returned.
+	 *
+	 * @param evtnm the event name, such as onClick
+	 * @param script the script to handle the event. If null, the event
+	 * handler is removed.
+	 * @return the previous script if any
+	 * @since 5.0.0
+	 */
+	public String setWidgetListener(String evtnm, String script);
+	/** Returns the script of the client event, or null if not found.
+	 * @since 5.0.0
+	 */
+	public String getWidgetListener(String evtnm);
+	/** Returns a readonly collection of event names (String) that
+	 * the listener of the peer widget are assigned, or
+	 * an empty collection if none is registered.
+	 * @since 5.0.0
+	 */
+	public Set getWidgetListenerNames();
 
 	/** Clones the component.
 	 * All of its children is cloned.

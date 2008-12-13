@@ -197,43 +197,6 @@ zEvt = {
  * listened by the implementation of a widget.
  */
 zk.Event = zk.$extends(zk.Object, {
-	/** The target widget. */
-	//target: null,
-	/** The event name. */
-	//name: null,
-	/** Options.
-	 * <dl>
-	 * <dt>implicit</dt>
-	 * <dd>Whether this event is an implicit event, i.e., whether it is implicit
-	 * to users (so no progressing bar).</dd>
-	 * <dt>ignorable</dt>
-	 * <dd>Whether this event is ignorable, i.e., whether to ignore any error
-	 * of sending this event back the server.
-	 * An ignorable event is also an imiplicit event.</dd>
-	 * <dt>ctl</dt>
-	 * <dd>Whether it is a control, such as onClick, rather than
-	 * a notification for status change.</dd>
-	 * <dt>$busyIgnore</dt>
-	 * <dd>Whether it can be ignored by the server when the server
-	 * is busy.</dd>
-	 * <dt>$repeatIgnore</dt>
-	 * <dd>Whether it can be ignored by the server when the server
-	 * receives the same requests consecutively.</dd>
-	 * <dt>$duplicateIgnore</dt>
-	 * <dd>Whether it can be ignored by the server when the server
-	 * receives the same requests that was not processed yet.</dd>
-	 * </dl>
-	 * <p>Note: in addition, to specify$busyIgnore, $repeatIgnore
-	 * and $duplicateIgnore in opts, they are determinted by
-	 * {@link zk.Event#serverOptions}. You can add your own events to
-	 * {@link zk.Event#busyIngores}, {@link zk.Event#duplicateIgnores}
-	 * or {@link zk.Event#repleatIgnores}. Or, You might replace it with yours.
-	 */
-	/** Whether to stop the event propogation.
-	 * Note: it won't be sent to the server if stop is true.
-	 */
-	//stop: false,
-
 	$init: function (target, name, data, opts) {
 		this.target = target;
 		this.name = name;

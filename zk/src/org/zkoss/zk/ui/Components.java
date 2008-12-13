@@ -44,10 +44,12 @@ import org.zkoss.lang.Classes;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
 import org.zkoss.xel.VariableResolver;
+
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.xel.Evaluator;
+import org.zkoss.zk.ui.event.Events;
 
 /**
  * Utilities to access {@link Component}.
@@ -458,8 +460,7 @@ public class Components {
 		for (int j = 0; j < mtds.length; ++j) {
 			final Method md = mtds[j];
 			String mdname = md.getName();
-			if (mdname.length() > 5 && mdname.startsWith("on") 
-			&& Character.isUpperCase(mdname.charAt(2))) {
+			if (Events.isValid(mdname)) {
 				Component xcomp = comp;
 				int k = 0;
 				do { //handle cascade $. e.g. onClick$btn$win1

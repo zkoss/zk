@@ -29,6 +29,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Date;
 import java.io.Writer;
 import java.io.IOException;
@@ -152,6 +153,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private AnnotationMap _annots;
 	/** A map of event handler to handle events. */
 	private EventHandlerMap _evthds;
+	/** A map of client event hanlders, Map(String evtnm, String script). */
+	private Map _wgtlsns;
 	/** A map of forward conditions:
 	 * Map(String orgEvt, [listener, List([target or targetPath,targetEvent])]).
 	 */
@@ -702,6 +705,27 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return _last;
 	}
 
+	public String setWidgetListener(String evtnm, String script) {
+		if (evtnm == null)
+			throw new IllegalArgumentException();
+
+		final String old;
+		if (script != null) {
+			if (_wgtlsns == null) _wgtlsns = new LinkedHashMap();
+			old = (String)_wgtlsns.put(evtnm, script);
+		} else
+			old = _wgtlsns != null ? (String)_wgtlsns.remove(evtnm): null;
+		if (!Objects.equals(script, old))
+			smartUpdateWidgetListener(evtnm, script);
+		return old;
+	}
+	public String getWidgetListener(String evtnm) {
+		return _wgtlsns != null ? (String)_wgtlsns.get(evtnm): null;
+	}
+	public Set getWidgetListenerNames() {
+		return _wgtlsns != null ? _wgtlsns.keySet(): Collections.EMPTY_SET;
+	}
+
 	public Map getAttributes(int scope) {
 		switch (scope) {
 		case SPACE_SCOPE:
@@ -1166,7 +1190,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	protected void smartUpdate(String attr, Object value) {
 		if (_page != null) getThisUiEngine().addSmartUpdate(this, attr, value);
 	}
-	/** A special smart-update that update a value in int.
+	/** A special smart update to update a value in int.
 	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
 	 * the attribute eventually.
 	 * @since 5.0.0
@@ -1174,7 +1198,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	protected void smartUpdate(String attr, int value) {
 		smartUpdate(attr, new $int(value));
 	}
-	/** A special smart-update that update a value in long.
+	/** A special smart update to update a value in long.
 	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
 	 * the attribute eventually.
 	 * @since 5.0.0
@@ -1182,7 +1206,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	protected void smartUpdate(String attr, long value) {
 		smartUpdate(attr, new $long(value));
 	}
-	/** A special smart-update that update a value in byte.
+	/** A special smart update to update a value in byte.
 	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
 	 * the attribute eventually.
 	 * @since 5.0.0
@@ -1190,7 +1214,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	protected void smartUpdate(String attr, byte value) {
 		smartUpdate(attr, new $byte(value));
 	}
-	/** A special smart-update that update a value in character.
+	/** A special smart update to update a value in character.
 	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
 	 * the attribute eventually.
 	 * @since 5.0.0
@@ -1198,7 +1222,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	protected void smartUpdate(String attr, char value) {
 		smartUpdate(attr, new $char(value));
 	}
-	/** A special smart-update that update a value in boolean.
+	/** A special smart update to update a value in boolean.
 	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
 	 * the attribute eventually.
 	 * @since 5.0.0
@@ -1206,7 +1230,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	protected void smartUpdate(String attr, boolean value) {
 		smartUpdate(attr, $boolean.valueOf(value));
 	}
-	/** A special smart-update that update a value in float.
+	/** A special smart update to update a value in float.
 	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
 	 * the attribute eventually.
 	 * @since 5.0.0
@@ -1214,7 +1238,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	protected void smartUpdate(String attr, float value) {
 		smartUpdate(attr, new $float(value));
 	}
-	/** A special smart-update that update a value in double.
+	/** A special smart update to update a value in double.
 	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
 	 * the attribute eventually.
 	 * @since 5.0.0
@@ -1222,13 +1246,32 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	protected void smartUpdate(String attr, double value) {
 		smartUpdate(attr, new $double(value));
 	}
-	/** A special smart-update that update a value in Date.
+	/** A special smart update to update a value in Date.
 	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
 	 * the attribute eventually.
 	 * @since 5.0.0
 	 */
 	protected void smartUpdate(String attr, Date value) {
 		smartUpdate(attr, (Object)value);
+	}
+	/** A special smart update to update an event listener for the
+	 * peer widget.
+	 * By default, it assumes the peer widget has a method called
+	 * <code>setListener<code> and it will be invoked as follows.
+	 *
+	 * <pre><code>wgt.setListener([evtnm, script]);</code></pre>
+	 *
+	 * <p>Devices that supports it in another way have to override this
+	 * method. Devices that don't support it have to override this method
+	 * to throw UnsupportedOperationException.
+	 *
+	 * @param evtnm the event name, such as onClick
+	 * @param script the script. If null, it means to remove the event
+	 * listener from the peer widget
+	 * @since 5.0.0
+	 */
+	protected void smartUpdateWidgetListener(String evtnm, String script) {
+		smartUpdate("listener", new String[] {evtnm, script});
 	}
 
 	public void detach() {
@@ -1378,6 +1421,13 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				renderer.render('$' + evtnm, Events.isListened(this, evtnm, true));
 					//$onClick and so on
 		}
+
+		if (_wgtlsns != null)
+			for (Iterator it = _wgtlsns.entrySet().iterator(); it.hasNext();) {
+				final Map.Entry me = (Map.Entry)it.next();
+				renderer.renderWidgetListener(
+					(String)me.getKey(), (String)me.getValue());
+			}
 	}
 	/** An utility to be called by {@link #renderProperties} to
 	 * render a string-value property.
@@ -2070,6 +2120,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			clone._annots = (AnnotationMap)_annots.clone();
 		if (!_evthdsShared && _evthds != null)
 			clone._evthds = (EventHandlerMap)_evthds.clone();
+		if (_wgtlsns != null)
+			clone._wgtlsns = new LinkedHashMap(_wgtlsns);
 
 		//2. clone children (deep cloning)
 		cloneChildren(clone);

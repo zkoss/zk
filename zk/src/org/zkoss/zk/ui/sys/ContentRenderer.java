@@ -62,4 +62,9 @@ public interface ContentRenderer {
 	 * snippet.
 	 */
 	public void renderDirectly(String name, Object value);
+	/** Renders an event listener for the peer widget.
+	 * @param name the event name, such as onClick (never null)
+	 * @param script the script (never null)
+	 */
+	public void renderWidgetListener(String name, String script);
 }

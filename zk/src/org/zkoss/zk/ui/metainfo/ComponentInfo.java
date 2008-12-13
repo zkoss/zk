@@ -73,8 +73,10 @@ implements Cloneable, Condition, java.io.Externalizable {
 	private ExValue _implcls;
 	/** A list of {@link Property}, or null if no property at all. */
 	private List _props;
-	/** A Map of event handler to handle events. */
+	/** A Map of event handlers to handle events. */
 	private EventHandlerMap _evthds;
+	/** A list of event listeners for the peer widget. */
+	private List _wgtlsns;
 	/** the annotation map. Note: it doesn't include what are defined in _compdef. */
 	private AnnotationMap _annots;
 	/** The tag name for the dyanmic tag. Used only if this implements {@link DynamicTag}*/
@@ -170,6 +172,8 @@ implements Cloneable, Condition, java.io.Externalizable {
 			_props = new LinkedList(compInfo._props);
 		if (compInfo._evthds != null)
 			_evthds = (EventHandlerMap)compInfo._evthds.clone();
+		if (compInfo._wgtlsns != null)
+			_wgtlsns = new LinkedList(compInfo._wgtlsns);
 	}
 
 	/** Returns the language definition that {@link #getComponentDefinition}
@@ -542,6 +546,16 @@ implements Cloneable, Condition, java.io.Externalizable {
 	public Set getEventHandlerNames() {
 		return _evthds != null ? _evthds.getEventNames(): Collections.EMPTY_SET;
 	}
+	/** Adds an event listener for the peer widget.
+	 * @since 5.0.0
+	 */
+	public void addWidgetListener(String name, String script, ConditionImpl cond) {
+		final WidgetListener evthd =
+			new WidgetListener(_evalr, name, script, cond);
+		if (_wgtlsns == null)
+			_wgtlsns = new LinkedList();
+		_wgtlsns.add(evthd);
+	}
 	/** Sets the effectiveness condition.
 	 */
 	public void setCondition(ConditionImpl cond) {
@@ -727,12 +741,13 @@ implements Cloneable, Condition, java.io.Externalizable {
 		if (_evthds != null)
 			((ComponentCtrl)comp).addSharedEventHandlerMap(_evthds);
 
-		if (_props != null) {
-			for (Iterator it = _props.iterator(); it.hasNext();) {
-				final Property prop = (Property)it.next();
-				prop.assign(comp);
-			}
-		}
+		if (_wgtlsns != null)
+			for (Iterator it = _wgtlsns.iterator(); it.hasNext();)
+				((WidgetListener)it.next()).assign(comp);
+
+		if (_props != null)
+			for (Iterator it = _props.iterator(); it.hasNext();)
+				((Property)it.next()).assign(comp);
 	}
 
 	/** Evaluates and retrieves properties to the specified map from
@@ -925,6 +940,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 		out.writeObject(_implcls);
 		out.writeObject(_props);
 		out.writeObject(_evthds);
+		out.writeObject(_wgtlsns);
 		out.writeObject(_annots);
 		out.writeObject(_tag);
 		out.writeObject(_cond);
@@ -954,6 +970,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 		_implcls = (ExValue)in.readObject();
 		_props = (List)in.readObject();
 		_evthds = (EventHandlerMap)in.readObject();
+		_wgtlsns = (List)in.readObject();
 		_annots = (AnnotationMap)in.readObject();
 		_tag = (String)in.readObject();
 		_cond = (ConditionImpl)in.readObject();
