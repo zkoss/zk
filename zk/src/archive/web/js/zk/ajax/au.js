@@ -508,7 +508,7 @@ zAu = { //static methods
 			if (data != null) {
 				if (!data.$array) data = [data];
 				for (var k = 0, dl = data.length; k < dl; ++k) {
-					var d = data[j];
+					var d = data[k];
 					content += "&data."+j+"="
 						+ (d != null ? encodeURIComponent(d): '_z~nil');
 				}

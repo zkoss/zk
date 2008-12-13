@@ -125,7 +125,7 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 	 * when user clicks outside of the window.
 	 */
 	private static final int POPUP = 3;
-	/** Makes the window as hilighted.
+	/** Makes the window as highlighted.
 	 * Its visual effect is the same as {@link #MODAL}.
 	 * However, from the server side's viewpoint, it is similar to
 	 * {@link #OVERLAPPED}. The execution won't be suspended when

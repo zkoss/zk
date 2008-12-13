@@ -43,8 +43,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	doPopup: function () {
 		this.setMode('popup');
 	},
-	doHilighted: function () {
-		this.setMode('hilighted');
+	doHighlighted: function () {
+		this.setMode('highlighted');
 	},
 	doModal: function () {
 		this.setMode('modal');
@@ -448,7 +448,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			zWatch.watch('onFloatUp', this);
 			this.setFloating_(true);
 
-			if (mode == 'modal' || mode == 'hilighted') this._doModal();
+			if (mode == 'modal' || mode == 'highlighted') this._doModal();
 			else this._doOverlapped();
 		}
 	},
@@ -605,6 +605,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		dg.node.style.visibility = "";
 		var wgt = dg.widget;
 		wgt._syncShadow();
-		wgt._fireOnMove('onMove', zEvt.keyMetaData(evt));
+		wgt._fireOnMove(zEvt.keyMetaData(evt));
 	}
 });
