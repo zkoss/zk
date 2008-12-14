@@ -335,13 +335,4 @@ public interface InputElement extends XulElement, Constrainted {
 	 *            the end position of the text (excluded)
 	 */
 	public void setSelectionRange(int start, int end);
-
-	/**
-	 * Returns the text for HTML AREA (Internal Use Only).
-	 * 
-	 * <p>
-	 * Used only for component generation. Not for applications.
-	 */
-	public String getAreaText();
-
 }

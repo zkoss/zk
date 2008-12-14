@@ -18,8 +18,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import org.zkoss.xml.HTMLs;
-
 import org.zkoss.zk.ui.WrongValueException;
 
 import org.zkoss.zul.impl.InputElement;
@@ -93,7 +91,7 @@ public class Textbox extends InputElement implements org.zkoss.zul.api.Textbox{
 
 		if (!_type.equals(type)) {
 			_type = type;
-			invalidate();
+			smartUpdate("type", type);
 		}
 	}
 
@@ -128,12 +126,20 @@ public class Textbox extends InputElement implements org.zkoss.zul.api.Textbox{
 	public void setMultiline(boolean multiline) {
 		if (_multiline != multiline) {
 			_multiline = multiline;
-			invalidate(); //different element
+			smartUpdate("multiline", multiline);
 		}
 	}
 
 	//-- super --//
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		if (_multiline) renderer.render("multiline", _multiline);
+		if (_rows > 1) renderer.render("rows", _rows);
+		if (!"text".equals(_type)) renderer.render("type", _type);
+	}
 	public String getZclass() {
-		return _zclass == null ? "z-textbox" : super.getZclass();
+		return _zclass != null ? _zclass: "z-textbox";
 	}
 }

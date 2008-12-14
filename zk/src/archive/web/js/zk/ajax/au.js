@@ -223,9 +223,9 @@ zAu = { //static methods
 		case 'n': d = null; break;
 		case '1': case '3': d = true; break;
 		case '0': case '2': d = false; break;
-		case 'i': case 'l': case 'b': case 'h':
+		case 'i': case 'l': case 'b': case 'h': case 'j':
 			d = parseInt(d.substring(1)); break;
-		case 'd': case 'f':
+		case 'd': case 'f': case 'k':
 			d = parseFloat(d.substring(1)); break;
 		case 't': d = new Date(parseInt(d.substring(1))); break;
 		}

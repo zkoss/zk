@@ -17,7 +17,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<label value="This is the first label with tooltiptext." tooltiptext="This is tooltip"/>
 	<div>
 		This is 2nd label in the inner div
-		<label value="This is 3nd label in the inner div"/>
+		<textbox value="init"/>
+		<textbox value="&lt;" rows="5"/>
+		This is 3nd label in the inner div
 		<include src="z5-1.zul" height="auto"/>
 		<include src="z5-2.html" height="auto"/>
 	</div>

@@ -798,9 +798,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>textbox</component-name>
 		<component-class>org.zkoss.zul.Textbox</component-class>
+		<widget-class>zul.inp.Textbox</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/textbox.dsp</mold-uri>
+			<mold-uri>mold/textbox.js</mold-uri>
 		</mold>
 	</component>
 	<component>

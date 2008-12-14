@@ -110,14 +110,9 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 				final String wgtnm = IDOMs.getRequiredAttributeValue(el, "name");
 				final String jspath = wgtnm + ".js"; //eg: /js/zul/wgt/Div.js
 				if (writeResource(out, jspath, pathpref)) {
-					write(out, "(_zwg=_zpk.");
-					write(out, wgtnm);
-					write(out, ").prototype.type='");
-					final String fullnm = name + "." + wgtnm;
-					write(out, fullnm);
-					write(out, "';");
-					if (langdef.hasWidgetDefinition(fullnm))
-						writeMolds(out, langdef, fullnm, pathpref);
+					final String wgtflnm = name + "." + wgtnm;
+					if (langdef.hasWidgetDefinition(wgtflnm))
+						writeMolds(out, langdef, wgtnm, wgtflnm, pathpref);
 						//Note: widget defiition not available if it is a base type (such as zul.Widget)
 				} else
 					log.error("Failed to load widget "+wgtnm+": "+jspath+" not found, "+el.getLocator());
@@ -140,11 +135,13 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 		write(out, "\n}finally{zPkg.end(_z);}}");
 		return out.toByteArray();
 	}
-	private void writeMolds(OutputStream out,
-	LanguageDefinition langdef, String wgtnm, String pathpref) {
+	private void writeMolds(OutputStream out, LanguageDefinition langdef,
+	String wgtnm, String wgtflnm, String pathpref) {
 		try {
-			WidgetDefinition wgtdef = langdef.getWidgetDefinition(wgtnm);
-			write(out, "_zm=_zwg.molds={};");
+			WidgetDefinition wgtdef = langdef.getWidgetDefinition(wgtflnm);
+			write(out, "_zm=_zpk.");
+			write(out, wgtnm);
+			write(out, ".molds={};");
 			for (Iterator it = wgtdef.getMoldNames().iterator(); it.hasNext();) {
 				final String mold = (String)it.next();
 				final String uri = wgtdef.getMoldURI(mold);
@@ -156,13 +153,13 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 						write(out, "zk.$void;zk.error('");
 						write(out, uri);
 						write(out, " not found')");
-						log.error("Failed to load mold "+mold+" for widget "+wgtnm+". Cause: "+uri+" not found");
+						log.error("Failed to load mold "+mold+" for widget "+wgtflnm+". Cause: "+uri+" not found");
 					}
 					write(out, ";\n");
 				}
 			}
 		} catch (Throwable ex) {
-			log.error("Failed to load molds for widget "+wgtnm+".\nCause: "+Exceptions.getMessage(ex));
+			log.error("Failed to load molds for widget "+wgtflnm+".\nCause: "+Exceptions.getMessage(ex));
 		}
 	}
 	private boolean writeResource(OutputStream out, String path, String pathpref)

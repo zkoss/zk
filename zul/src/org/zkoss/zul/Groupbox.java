@@ -32,6 +32,8 @@ import org.zkoss.zul.impl.XulElement;
  * <p>Default {@link #getZclass}: "z-fieldset". If {@link #getMold()} is 3d,
  * "z-groupbox" is assumed.(since 3.5.0)
  *
+ * <p>Events: onOpen.
+ *
  * @author tomyeh
  */
 public class Groupbox extends XulElement implements org.zkoss.zul.api.Groupbox {
@@ -42,7 +44,11 @@ public class Groupbox extends XulElement implements org.zkoss.zul.api.Groupbox {
 	private String _cntSclass;
 	private Boolean _legend;
 	private boolean _open = true, _closable = true;
-	
+
+	static {
+		addClientEvent(Groupbox.class, Events.ON_OPEN);
+	}
+
 	/** Returns the caption of this groupbox.
 	 */
 	public Caption getCaption() {

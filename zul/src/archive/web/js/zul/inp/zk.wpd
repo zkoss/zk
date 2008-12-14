@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- zk.wpd
+	Purpose:
+		
+	Description:
+		
+	History:
+		Sat Dec 13 23:31:35     2008, Created by tomyeh
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+-->
+
+<package name="zul.inp" language="xul/html">
+	<widget name="InputWidget"/>
+	<widget name="Textbox"/>
+</package>

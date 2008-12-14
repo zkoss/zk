@@ -119,12 +119,6 @@ public interface Include extends org.zkoss.zul.impl.api.XulElement,
 	public boolean getProgressing();
 
 	/**
-	 * Internal use only.
-	 * 
-	 */
-	public void onEchoInclude();
-
-	/**
 	 * Returns the src.
 	 * <p>
 	 * Default: null.

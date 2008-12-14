@@ -36,7 +36,8 @@ public interface Marshaller {
 	 * @param o the object to marshal. What kid of objects can be
 	 * passed depends on the device's capability.
 	 * However, the following objects are supporteed by all kind of
-	 * devices: null, a String instance, a Date instance, the wrapper
+	 * devices: null, a String instance, a Date instance,
+	 * a BigDecimal instance, a BigInteger instance, the wrapper
 	 * class of all primitive objects, an array of these kind of
 	 * objects, and an array of primitives (boolean, int...).
 	 */

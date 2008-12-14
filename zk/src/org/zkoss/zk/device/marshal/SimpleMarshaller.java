@@ -15,6 +15,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 package org.zkoss.zk.device.marshal;
 
 import java.util.Date;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
 import org.zkoss.lang.Objects;
 
 /**
@@ -60,6 +63,10 @@ public class SimpleMarshaller implements Marshaller {
 		}
 		if (o instanceof Date)
 			return "t" + ((Date)o).getTime();
+		if (o instanceof BigDecimal)
+			return "K" + o;
+		if (o instanceof BigInteger)
+			return "J" + o;
 		if (o instanceof Character)
 			return "C" + o;
 		if (o instanceof Long)

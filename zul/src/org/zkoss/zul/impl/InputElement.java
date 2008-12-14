@@ -21,8 +21,6 @@ package org.zkoss.zul.impl;
 import java.util.HashMap;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.xml.HTMLs;
-import org.zkoss.xml.XMLs;
 
 import org.zkoss.lang.Exceptions;
 import org.zkoss.util.logging.Log;
@@ -46,11 +44,21 @@ import org.zkoss.zul.ext.Constrainted;
  * A skeletal implementation of an input box.
  * <p>Events: onChange, onChanging, onFocus, onBlur, and onSelection.<br/>
  * 
+ * <p>Events: onChange, onChanging, onFocus, onBlur, onSelection.
+ *
  * @author tomyeh
  */
 abstract public class InputElement extends XulElement
 implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	private static final Log log = Log.lookup(InputElement.class);
+
+	static {
+		addClientEvent(InputElement.class, Events.ON_CHANGE);
+		addClientEvent(InputElement.class, Events.ON_CHANGING);
+		addClientEvent(InputElement.class, Events.ON_FOCUS);
+		addClientEvent(InputElement.class, Events.ON_BLUR);
+		addClientEvent(InputElement.class, Events.ON_SELECTION);
+	}
 
 	/** The value. */
 	private Object _value;
@@ -96,7 +104,7 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	public void setReadonly(boolean readonly) {
 		if (_readonly != readonly) {
 			_readonly = readonly;
-			smartUpdate("readOnly", _readonly);
+			smartUpdate("readonly", _readonly);
 		}
 	}
 
@@ -237,10 +245,10 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 		if (!Objects.equals(_value, val)) {
 			_value = val;
 
-			final String fmtval = coerceToString(_value);
-			if (_txtByClient == null || !Objects.equals(_txtByClient, fmtval)) {
+			if (_txtByClient == null
+			|| !Objects.equals(_txtByClient, coerceToString(_value))) {
 				_txtByClient = null; //only once
-				smartUpdate("value", fmtval);
+				smartUpdate("value", _value);
 				//Note: we have to disable the sending back of the value
 				//Otherwise, it cause Bug 1488579's problem 3.
 				//Reason: when user set a value to correct one and set
@@ -249,14 +257,13 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 		} else if (_txtByClient != null) {
 			//value equals but formatted result might differ because
 			//our parse is more fault tolerant
-			final String fmtval = coerceToString(_value);
-			if (!Objects.equals(_txtByClient, fmtval)) {
+			if (!Objects.equals(_txtByClient, coerceToString(_value))) {
 				_txtByClient = null; //only once
-				smartUpdate("value", fmtval);
+				smartUpdate("value", _value);
 					//being sent back to the server.
 			}
 		} else if (errFound) {
-			smartUpdate("value", coerceToString(_value));
+			smartUpdate("value", _value);
 				//Bug 1876292: make sure client see the updated value
 		}
 	}
@@ -351,7 +358,7 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	public void setMaxlength(int maxlength) {
 		if (_maxlength != maxlength) {
 			_maxlength = maxlength;
-			invalidate();
+			smartUpdate("maxlength", maxlength);
 		}
 	}
 	/** Returns the cols.
@@ -414,20 +421,11 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 		if (!Objects.equals(_constr, constr)) {
 			_constr = constr;
 			_valided = false;
-			invalidate();
+			invalidate(); //TODO
 		}
 	}
 	public final Constraint getConstraint() {
 		return _constr;
-	}
-
-	/** Converts the client validation to JavaScript.
-	 */
-	private final String toJavaScript(String script) {
-		return script != null ?
-			script.indexOf('(') >= 0 ?
-				ComponentsCtrl.parseClientScript(this, script):
-				script: null;
 	}
 
 	/** Returns the value in the targeting type.
@@ -498,7 +496,7 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 		if (_errmsg != null || !Objects.equals(_value, value)) {
 			clearErrorMessage(true);
 			_value = value;
-			smartUpdate("value", coerceToString(_value));
+			smartUpdate("value", _value);
 		}
 	}
 	/** Sets the value directly.
@@ -604,14 +602,6 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 			setText(coerceToString(_value));
 	}
 
-	/** Returns the text for HTML AREA (Internal Use Only).
-	 *
-	 * <p>Used only for component generation. Not for applications.
-	 */
-	public String getAreaText() {
-		return XMLs.encodeText(coerceToString(_value));
-	}
-
 	//-- Component --//
 	/** Not childable. */
 	protected boolean isChildable() {
@@ -660,5 +650,17 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 			Events.postEvent(evt);
 		} else
 			super.process(request, everError);
+	}
+	//super//
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+		render(renderer, "value", _value);
+		render(renderer, "readonly", _readonly);
+		render(renderer, "disabled", _disabled);
+		render(renderer, "name", _name);
+		if (_maxlength > 0) renderer.render("maxlength", _maxlength);
+		if (_cols > 0) renderer.render("cols", _cols);
+		if (_tabindex >= 0) renderer.render("tabindex", _tabindex);
 	}
 }

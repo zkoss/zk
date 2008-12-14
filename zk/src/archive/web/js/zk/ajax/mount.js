@@ -184,8 +184,15 @@ zkm = {
 			}
 		}
 
-		for (var fn, afcrs = zkm._afMts; fn = afcrs.shift();)
+		zk.afterLoad(zkm.mtNew2); //bind might load packages
+	},
+	mtNew2: function () {
+		var fn = zkm._afMts.shift();
+		if (fn) {
 			fn();
+			zk.afterLoad(zkm.mtNew2); //fn might load packages
+			return;
+		}
 
 		zk.mounting = false;
 		zk.endProcessing();

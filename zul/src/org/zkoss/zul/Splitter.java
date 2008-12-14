@@ -47,6 +47,10 @@ public class Splitter extends XulElement implements org.zkoss.zul.api.Splitter {
 	private String _collapse = "none";
 	private boolean _open = true;
 
+	static {
+		addClientEvent(Splitter.class, Events.ON_OPEN);
+	}
+
 	public Splitter() {
 	}
 	/** Returns if the orientation of this splitter is vertical.

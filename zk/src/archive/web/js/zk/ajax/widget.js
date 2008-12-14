@@ -974,10 +974,6 @@ zk.Widget = zk.$extends(zk.Object, {
 
 /** A ZK desktop. */
 zk.Desktop = zk.$extends(zk.Object, {
-	/** The type (always "#d")(readonly). */
-	type: "#d",
-	/** The AU request that shall be sent. Used by au.js */
-
 	$init: function (dtid, updateURI) {
 		this._aureqs = [];
 
@@ -1037,9 +1033,6 @@ zk.Desktop = zk.$extends(zk.Object, {
 
 /** A ZK page. */
 zk.Page = zk.$extends(zk.Widget, {//unlik server, we derive from Widget!
-	/** The type (always "#p")(readonly). */
-	type: "#p",
-
 	_style: "width:100%;height:100%",
 
 	$init: function (pguid, contained) {

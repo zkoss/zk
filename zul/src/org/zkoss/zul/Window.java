@@ -138,6 +138,9 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 
 	static {
 		addClientEvent(Window.class, Events.ON_CLOSE);
+		addClientEvent(Window.class, Events.ON_MOVE);
+		addClientEvent(Window.class, Events.ON_OPEN);
+		addClientEvent(Window.class, Events.ON_Z_INDEX);
 	}
 
 	public Window() {
