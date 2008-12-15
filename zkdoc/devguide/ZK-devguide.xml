@@ -2,10 +2,10 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <book lang="en-US">
 <title>The Developer's Guide</title>
-<subtitle>Version 3.5.1</subtitle>
+<subtitle>Version 3.5.3</subtitle>
 <bookinfo>
 <copyright>
-<year>2008</year>
+<year>2007</year>
 <holder>Potix Corporation. All rights reserved.</holder>
 </copyright>
 </bookinfo>
@@ -1931,7 +1931,7 @@
 <para>wc for window content, while wt for window title.</para>
 </footnote>, the sclass property and the border property together and separating them with dash (-). In this example, sclass is embedded since it is an embedded window and no explicit sclass is assigned (so the default sclass is used).</para></sect2><sect2><title>Overlapped, Popup, Modal, Highlighted and Embedded</title>
 <para>A window could be in one of four different modes: overlapped, popup, modal, highlighted and embedded. By default, it is in the embedded mode. You could change the mode by use of the doOverlapped, doPopup, doModal, doHighlighted, and doEmbedded methods, depicted as follows.</para>
-<programlisting>&lt;zk&gt;&#13;    &lt;window id="win" title="Hi!" border="normal" width="200px"&gt;    &#13;        &lt;caption&gt;        &#13;            &lt;toolbarbutton label="Close" onClick="win.setVisible(false)"/&gt;            &#13;        &lt;/caption&gt;        &#13;        &lt;checkbox label="Hello, Wolrd!"/&gt;        &#13;    &lt;/window&gt;    &#13;        &#13;    &lt;button label="Overlap" onClick="win.doOverlapped();"/&gt;    &#13;    &lt;button label="Popup" onClick="win.doPopup();"/&gt;    &#13;    &lt;button label="Modal" onClick="win.doModal();"/&gt;    &#13;    &lt;button label="Embed" onClick="win.doEmbedded();"/&gt;    &#13;    &lt;button label="Highlighted" onClick="win.doHighlighed();"/&gt;    &#13;&lt;/zk&gt;&#13;</programlisting><sect3><title>Embedded</title>
+<programlisting>&lt;zk&gt;&#13;    &lt;window id="win" title="Hi!" border="normal" width="200px"&gt;    &#13;        &lt;caption&gt;        &#13;            &lt;toolbarbutton label="Close" onClick="win.setVisible(false)"/&gt;            &#13;        &lt;/caption&gt;        &#13;        &lt;checkbox label="Hello, Wolrd!"/&gt;        &#13;    &lt;/window&gt;    &#13;        &#13;    &lt;button label="Overlap" onClick="win.doOverlapped();"/&gt;    &#13;    &lt;button label="Popup" onClick="win.doPopup();"/&gt;    &#13;    &lt;button label="Modal" onClick="win.doModal();"/&gt;    &#13;    &lt;button label="Embed" onClick="win.doEmbedded();"/&gt;    &#13;    &lt;button label="Highlighted" onClick="win.doHighlighted();"/&gt;    &#13;&lt;/zk&gt;&#13;</programlisting><sect3><title>Embedded</title>
 <para>An embedded window is placed inline with other components. In this mode, you cannot change its position, since the position is decided by the browser.</para></sect3><sect3><title>Overlapped</title>
 <para>An overlapped window is overlapped with other components, such that users could drag it around and developer could set its position by the setLeft and setTop methods.</para>
 <para>In addition to doOverlapped, you can use the mode property as follows.</para>
@@ -5330,12 +5330,11 @@
 <para>Before using Hibernate, you have to install it into your application first.</para>
 <orderedlist>
 <listitem>
-<para>Download <ulink url="http://www.hibernate.org/">Hibernate (http:\\www.hibernate.org)</ulink>
+<para>Download <ulink url="http://www.hibernate.org/">Hibernate (http://www.hibernate.org)</ulink>
 </para>
 </listitem>
 <listitem>
-<para>Put *.jar files into your <code>$myApp\WEB-INF\lib\</code>
-</para>
+<para>Put *.jar files into your $myApp/WEB-INF/lib/</para>
 </listitem>
 </orderedlist>
 <para>
@@ -5344,25 +5343,25 @@
 <para>To make ZK works with Hibernate smoothly, you have to use the following utilities.</para>
 <orderedlist>
 <listitem>
-<para>Create <code>zk.xml</code> under <code>$myApp\WEB-INF\</code>(if not exists)</para>
+<para>Create <code>zk.xml</code> under <code>$myApp/WEB-INF/</code>(if not exists)</para>
 </listitem>
 <listitem>
 <para>Copy the following lines into your <code>zk.xml</code>
 </para>
 </listitem>
 </orderedlist>
-<programlisting>                                                                                    &lt;!-- Hibernate SessionFactory lifecycle --&gt;&lt;listener&gt;&lt;description&gt;Hibernate SessionFactory lifecycle&lt;/description&gt;&lt;listener-class&gt;org.zkoss.zkplus.hibernate.HibernateSessionFactoryListener&lt;/listener-class&gt;&lt;/listener&gt;&lt;!-- Hibernate OpenSessionInView Pattern --&gt;&lt;listener&gt;&lt;description&gt;Hibernate Open Session In View life-cycle&lt;/description&gt;&lt;listener-class&gt;org.zkoss.zkplus.hibernate.OpenSessionInViewListener&lt;/listener-class&gt;&lt;/listener&gt;&lt;!-- Hibernate thread session context handler --&gt;&lt;listener&gt;&lt;description&gt;Hibernate thread session context handler&lt;/description&gt;&lt;listener-class&gt;org.zkoss.zkplus.hibernate.HibernateSessionContextListener&lt;/listener-class&gt;&lt;/listener&gt;                                                                                     &#13;</programlisting></sect1><sect1><title>Creating the Java Objects</title>
+<programlisting>&lt;!-- Hibernate SessionFactory lifecycle →&#13;&lt;listener&gt;&#13;&lt;description&gt;Hibernate SessionFactory lifecycle&lt;/description&gt;&#13;&lt;listener-class&gt;org.zkoss.zkplus.hibernate.HibernateSessionFactoryListener&lt;/listener-class&gt;&#13;&lt;/listener&gt;&#13;&#13;&lt;!-- Hibernate OpenSessionInView Pattern →&#13;&lt;listener&gt;&#13;&lt;description&gt;Hibernate Open Session In View life-cycle&lt;/description&gt;&#13;&lt;listener-class&gt;org.zkoss.zkplus.hibernate.OpenSessionInViewListener&lt;/listener-class&gt;&#13;&lt;/listener&gt;&#13;&#13;&lt;!-- Hibernate thread session context handler →&#13;&lt;listener&gt;&#13;&lt;description&gt;Hibernate thread session context handler&lt;/description&gt;&#13;&lt;listener-class&gt;org.zkoss.zkplus.hibernate.HibernateSessionContextListener&lt;/listener-class&gt;&#13;&lt;/listener&gt; &#13;</programlisting></sect1><sect1><title>Creating the Java Objects</title>
 <para>You have to create simple JavaBean class with some properties.</para>
 <orderedlist>
 <listitem>
 <para>Create your first Java class (<code>Event.java</code>)</para>
 </listitem>
 </orderedlist>
-<programlisting>package events;import java.util.Date;public class Event { private Long id; private String title; private Date date; public Event() {} public Long getId() { return id; } private void setId(Long id) { this.id = id; } public Date getDate() { return date; } public void setDate(Date date) { this.date = date; } public String getTitle() { return title; } public void setTitle(String title) { this.title = title; }}&#13;</programlisting>
+<programlisting>package events;&#13;&#13;import java.util.Date;&#13;&#13;public class Event {&#13;    private Long id;    &#13;    private String title;    &#13;    private Date date;    &#13;        &#13;    public Event() {}    &#13;        public Long getId() {        &#13;            return id;            &#13;    }    &#13;    private void setId(Long id) {    &#13;        this.id = id;        &#13;    }    &#13;    public Date getDate() {    &#13;        return date;        &#13;    }    &#13;    public void setDate(Date date) {    &#13;        this.date = date;        &#13;    }    &#13;    public String getTitle() {    &#13;        return title;        &#13;    }    &#13;    public void setTitle(String title) {    &#13;        this.title = title;        &#13;    }    &#13;}&#13;</programlisting>
 <orderedlist>
 <para/>
 <listitem>
-<para>Place this Java source file in a directory called <code>src</code> in the development folder, and in its correct package. (ex.<code>$myApp\WEB-INF\src\event\Event.java</code>)</para>
+<para>You have to compile the Java source, and place the class file in a directory called <code>classes</code> in the Web development folder, and in its correct package. (ex.<code>$myApp/WEB-INF/classes/event/Event.class</code>)</para>
 </listitem>
 </orderedlist>
 <para>The next step is to tell Hibernate how to map this persistent class with database.</para></sect1><sect1><title>Mapping the Java Objects</title>
@@ -5372,15 +5371,26 @@
 <para>Simply create <code>Event.hbm.xml</code> for the persistent class <code>Event.java</code>.</para>
 </listitem>
 </orderedlist>
-<programlisting>&lt;?xml version="1.0"?&gt;&lt;!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd"&gt; &lt;hibernate-mapping&gt; &lt;class name="events.Event" table="EVENTS"&gt; &lt;id name="id" column="EVENT_ID"&gt; &lt;generator class="native"/&gt; &lt;/id&gt; &lt;property name="date" type="timestamp" column="EVENT_DATE"/&gt; &lt;property name="title"/&gt; &lt;/class&gt;&lt;/hibernate-mapping&gt;&#13;</programlisting>
+<programlisting>&lt;?xml version="1.0"?&gt;&#13;&lt;!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN""http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd"&gt;&#13;&#13;&lt;hibernate-mapping&gt;&#13;    &lt;class name="events.Event" table="EVENTS"&gt;    &#13;        &lt;id name="id" column="EVENT_ID"&gt;        &#13;            &lt;generator class="native"/&gt;            &#13;        &lt;/id&gt;        &#13;            &lt;property name="date" type="timestamp" column="EVENT_DATE"/&gt;            &#13;            &lt;property name="title"/&gt;            &#13;    &lt;/class&gt;    &#13;&lt;/hibernate-mapping&gt;&#13;</programlisting>
 <orderedlist>
 <para/>
 <listitem>
-<para>Place this <code>Event.hbm.xml</code> in the directory called <code>src</code> in the development folder, and its correct package. (ex.<code>$myApp\WEB-INF\src\event\Event.hbm.xml</code>)</para>
+<para>Place this <code>Event.hbm.xml</code> in the directory called <code>src</code> in the development folder, and its correct package. (ex.<code>$myApp/WEB-INF/src/event/Event.hbm.xml</code>)</para>
 </listitem>
 </orderedlist></sect2><sect2><title>Using Java Annotation</title>
 <para>The benefit of using Java annotation instead of Hibernate mapping file is that no additional file is required. Simply add Java annotation on your Java class to tell Hibernate about the mappings. </para>
-<programlisting>                                                                                                                package events;import java.util.Date;import javax.persistence.Column;import javax.persistence.Entity;import javax.persistence.GeneratedValue;import javax.persistence.GenerationType;import javax.persistence.Id;import javax.persistence.Table;@Entity@Table(name="EVENTS")public class Event {private Long id;private String title;private Date date;@Id@GeneratedValue(strategy=GenerationType.SEQUENCE)@Column(name = "EVENT_ID")public Long getId() {return id;}private void setId(Long id) {this.id = id;}@Column(name = "EVENT_DATE")public Date getDate() {return date;}public void setDate(Date date) {this.date = date;}public String getTitle() {return title;}public void setTitle(String title) {this.title = title;}}                                                                                                                &#13;</programlisting>
+<programlisting>package events;&#13;&#13;import java.util.Date;&#13;&#13;import javax.persistence.Column;&#13;import javax.persistence.Entity;&#13;import javax.persistence.GeneratedValue;&#13;import javax.persistence.GenerationType;&#13;import javax.persistence.Id;&#13;import javax.persistence.Table;&#13;</programlisting>
+<para/>
+<para>@Entity</para>
+<para>@Table(name="EVENTS")</para>
+<programlisting>public class Event {&#13;    private Long id;    &#13;    private String title;    &#13;    private Date date;    &#13;</programlisting>
+<para/>
+<para>@Id</para>
+<para>@GeneratedValue(strategy=GenerationType.SEQUENCE)</para>
+<para>@Column(name = "EVENT_ID")</para>
+<programlisting>public Long getId() {&#13;        return id;        &#13;    }    &#13;    private void setId(Long id) {    &#13;        this.id = id;        &#13;    }    &#13;</programlisting>
+<para>@Column(name = "EVENT_DATE")</para>
+<programlisting>public Date getDate() {&#13;        return date;        &#13;    }    &#13;    public void setDate(Date date) {    &#13;        this.date = date;        &#13;    }    &#13;    public String getTitle() {    &#13;        return title;        &#13;    }    &#13;    public void setTitle(String title) {    &#13;        this.title = title;        &#13;    }    &#13;}&#13;</programlisting>
 <para/>
 <itemizedlist>
 <listitem>
@@ -5399,24 +5409,17 @@
 <para>The next step is to setup Hibernate to use a database. HSQL DB, a java-based SQL DBMS, can be downloaded from the HSQL DB website(<ulink url="http://hsqldb.org/">http://hsqldb.org/</ulink>). </para>
 <orderedlist>
 <listitem>
-<para>Unzip it to a directory, say <link linkend="">
-<code>c:\hsqldb</code>
-</link>
-<code>.</code>
-</para>
+<para>Unzip it to a directory, say c:/hsqldb.</para>
 </listitem>
 <listitem>
-<para>Open a command box and change to <link linkend="">
-<code>c:\hsqldb</code>
-</link>
-</para>
+<para>Open a command box and change to c:/hsqldb</para>
 </listitem>
 <listitem>
-<para>In the command prompt, execute<code> java -cp lib\hsqldb.jar org.hsqldb.Server</code>
+<para>In the command prompt, execute<code> java -cp lib/hsqldb.jar org.hsqldb.Server</code>
 </para>
 </listitem>
 </orderedlist>
-<para>After installing the database, we have to setup Hibernate Configuration file. Create <code>hibernate.cfg.xml</code> in the directory called <code>src</code> in the development folder(ex.<code>$myApp\WEB-INF\src\hibernate.cfg.xml</code>). Copy the following lines into your hibernate.cfg.xml. It depends on how you map your Java objects.</para>
+<para>After installing the database, we have to setup Hibernate Configuration file. Create <code>hibernate.cfg.xml</code> in the directory called <code>src</code> in the development folder(ex.<code>$myApp/WEB-INF/src/hibernate.cfg.xml</code>). Copy the following lines into your hibernate.cfg.xml. It depends on how you map your Java objects.</para>
 <itemizedlist>
 <listitem><sect3><title>Using the Mapping Files</title></sect3></listitem>
 </itemizedlist>
@@ -5426,7 +5429,9 @@
 <listitem><sect3><title>Using Java Annotation</title></sect3></listitem>
 </itemizedlist>
 <para/>
-<programlisting>&lt;?xml version='1.0' encoding='utf-8'?&gt;&lt;!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd"&gt;&lt;hibernate-configuration&gt; &lt;session-factory&gt; &lt;!-- Database connection settings --&gt; &lt;property name="connection.driver_class"&gt;org.hsqldb.jdbcDriver&lt;/property&gt; &lt;property name="connection.url"&gt;jdbc:hsqldb:hsql://localhost&lt;/property&gt; &lt;property name="connection.username"&gt;sa&lt;/property&gt; &lt;property name="connection.password"&gt;&lt;/property&gt; &lt;!-- JDBC connection pool (use the built-in) --&gt; &lt;property name="connection.pool_size"&gt;1&lt;/property&gt; &lt;!-- SQL dialect --&gt; &lt;property name="dialect"&gt;org.hibernate.dialect.HSQLDialect&lt;/property&gt; &lt;!-- Enable Hibernate's automatic session context management --&gt; &lt;property name="current_session_context_class"&gt;thread&lt;/property&gt; &lt;!-- Disable the second-level cache --&gt; &lt;property name="cache.provider_class"&gt;org.hibernate.cache.NoCacheProvider&lt;/property&gt; &lt;!-- Echo all executed SQL to stdout --&gt; &lt;property name="show_sql"&gt;true&lt;/property&gt; &lt;!-- Drop and re-create the database schema on startup --&gt; &lt;property name="hbm2ddl.auto"&gt;create&lt;/property&gt; &#13;&lt;mapping class="events.Event"/&gt; &lt;/session-factory&gt;&lt;/hibernate-configuration&gt;&#13;</programlisting>
+<programlisting>&lt;?xml version='1.0' encoding='utf-8'?&gt;&#13;&lt;!DOCTYPE hibernate-configuration PUBLIC&#13;"-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd"&gt;&#13;&#13;&lt;hibernate-configuration&gt;&#13;    &lt;session-factory&gt;    &#13;    &lt;!-- Database connection settings →    &#13;    &lt;property name="connection.driver_class"&gt;org.hsqldb.jdbcDriver&lt;/property&gt;    &#13;    &lt;property name="connection.url"&gt;jdbc:hsqldb:hsql://localhost&lt;/property&gt;    &#13;    &lt;property name="connection.username"&gt;sa&lt;/property&gt;    &#13;    &lt;property name="connection.password"&gt;&lt;/property&gt;    &#13;&#13;    &lt;!-- JDBC connection pool (use the built-in) →    &#13;    &lt;property name="connection.pool_size"&gt;1&lt;/property&gt;    &#13;    &lt;!-- SQL dialect →    &#13;    &lt;property name="dialect"&gt;org.hibernate.dialect.HSQLDialect&lt;/property&gt;    &#13;&#13;    &lt;!-- Enable Hibernate's automatic session context management →    &#13;    &lt;property name="current_session_context_class"&gt;thread&lt;/property&gt;    &#13;    &lt;!-- Disable the second-level cache →    &#13;    &lt;property    &#13;    name="cache.provider_class"&gt;org.hibernate.cache.NoCacheProvider&lt;/property&gt;    &#13;    &lt;!-- Echo all executed SQL to stdout →    &#13;    &lt;property name="show_sql"&gt;true&lt;/property&gt;    &#13;    &lt;!-- Drop and re-create the database schema on startup →    &#13;    &lt;property name="hbm2ddl.auto"&gt;create&lt;/property&gt;    &#13;</programlisting>
+<para>&lt;mapping class="events.Event"/&gt;</para>
+<programlisting>&lt;/session-factory&gt;&#13;&lt;/hibernate-configuration&gt;&#13;</programlisting>
 <para>We continue with how to create a class to handle data accessing jobs.</para></sect1><sect1><title>Creating DAO Objects</title>
 <para>For ease of maintenance, we used to create another Java class to handle data accessing jobs. </para>
 <orderedlist>
@@ -5435,16 +5440,16 @@
 </para>
 </listitem>
 </orderedlist>
-<programlisting>        package events;import java.util.Date;import java.util.List;import org.hibernate.Session;import org.zkoss.zkplus.hibernate.HibernateUtil;public class EventDAO { private Session _session; Session currentSession() { return _session = HibernateUtil.currentSession(); }  public void saveOrUpdate(Event anEvent, String title, Date date) { currentSession();  anEvent.setTitle(title); anEvent.setDate(date);          &#13;             _session.saveOrUpdate(anEvent); } public void delete(Event anEvent) { currentSession();             &#13;    _session.delete(anEvent); }  public Event findById(Long id) { currentSession();     &#13;        return (Event) _session.load(Event.class, id); }  public List findAll() { currentSession();          &#13;return _session.createQuery("from Event").list(); }}&#13;</programlisting>
+<programlisting>package events;&#13;&#13;import java.util.Date;&#13;import java.util.List;&#13;&#13;import org.hibernate.Session;&#13;import org.zkoss.zkplus.hibernate.HibernateUtil;&#13;&#13;public class EventDAO {&#13;    Session currentSession() {    &#13;        return HibernateUtil.currentSession();        &#13;    }    &#13;    public void saveOrUpdate(Event anEvent, String title, Date date) {    &#13;        Session sess = currentSession();        &#13;        anEvent.setTitle(title);        &#13;        anEvent.setDate(date);        &#13;        sess.saveOrUpdate(anEvent);        &#13;    }    &#13;    public void delete(Event anEvent) {    &#13;        Session sess = currentSession();        &#13;        sess.delete(anEvent);        &#13;    }    &#13;    public Event findById(Long id) {    &#13;        Session sess = currentSession();        &#13;        return (Event) sess.load(Event.class, id);        &#13;    }    &#13;    public List findAll() {    &#13;        Session sess = currentSession();        &#13;        return sess.createQuery("from Event").list();        &#13;    }    &#13;}&#13;</programlisting>
 <orderedlist>
 <listitem>
-<para>Place this Java source file in a directory called src in the development folder, and in its correct package. (ex.<code>$myApp\WEB-INF\src\event\EventDAO.java</code>)</para>
+<para>You have to compile the Java source, and place the class file in a directory called <code>classes</code> in the Web development folder, and in its correct package. (ex.<code>$myApp/WEB-INF/classes/event/EventDAO.class</code>)</para>
 </listitem>
 </orderedlist></sect1><sect1><title>Accessing Persistence Objects in ZUML Page</title>
 <para>To access persistence objects in ZUML page is simple, simply declare a persistence object, and uses it to get data from database. </para>
 <orderedlist>
 <listitem>
-<para>Create a <code>event.zul</code> in the root directory of web development. (ex. <code>$myApp\event.zul</code>)</para>
+<para>Create a <code>event.zul</code> in the root directory of web development. (ex. <code>$myApp/event.zul</code>)</para>
 </listitem>
 </orderedlist>
 <programlisting>&lt;zk&gt;&#13;&lt;zscript&gt;&lt;![CDATA[&#13;import java.util.Date;&#13;import java.text.SimpleDateFormat;&#13;import events.Event;&#13;import events.EventDAO;&#13;&#13;//fetch all allEvents from database&#13;List allEvents = new EventDAO().findAll();&#13;&#13;]]&gt;&lt;/zscript&gt;&#13;                &lt;listbox id="lbxEvents"&gt;                &#13;    &lt;listhead&gt;    &#13;        &lt;listheader label="Title" width="200px"/&gt;        &#13;        &lt;listheader label="Date" width="100px"/&gt;        &#13;    &lt;/listhead&gt;    &#13;    &lt;listitem forEach="${allEvents}" value="${each}"&gt;    &#13;        &lt;listcell label="${each.title}"/&gt;        &#13;        &lt;zscript&gt;String datestr = new SimpleDateFormat("yyyy/MM/dd").format(each.date);&lt;/zscript&gt;        &#13;        &lt;listcell label="${datestr}"/&gt;        &#13;    &lt;/listitem&gt;    &#13;&lt;/listbox&gt;&#13;&lt;/zk&gt;&#13;</programlisting>
@@ -5457,7 +5462,184 @@
 <para/>
 <para/></sect1></chapter>
 <chapter>
-<title>17. Portal Integration</title>
+<title>17. Spring Integration</title><sect1><title>What is Spring</title>
+<para>
+<ulink url="http://www.springframework.org/">Spring</ulink> is a platform for building Java application, and it includes many easy-to-use solutions for building web-based application.</para></sect1><sect1><title>Prerequisites of Using Spring</title>
+<para>Before you have to finish the following prerequisites:</para><sect2><title>Copy spring.jar into your Web library</title>
+<para>Before using Spring, you have to download it, and put the jar file into the directory of your web application. </para>
+<orderedlist>
+<listitem>
+<para>Download Spring<ulink url="http://www.hibernate.org/"> library (</ulink>
+<ulink url="http://www.springframework.org/download">http://www.springframework.org/download</ulink>
+<ulink url="http://www.hibernate.org/">)</ulink>
+</para>
+</listitem>
+<listitem>
+<para>Put spring.jar into your <code>$myApp/WEB-INF/lib/</code>
+</para>
+<orderedlist>
+<para>
+<code>$myApp represents the name of your web application.</code>
+</para>
+</orderedlist>
+</listitem>
+</orderedlist></sect2><sect2><title>Configure <code>web.xml</code>
+</title>
+<para>
+<code>In your web.xml, you have to def</code>
+<code>ine</code>
+<code> </code>
+<code>org.springframework.web.context.ContextLoaderListener</code>
+<code>, and to specify the location of the configuration file to load bean definitions.</code>
+</para>
+<programlisting>&lt;context-param&gt; &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt; &lt;param-value&gt;/WEB-INF/applicationContext.xml&lt;/param-value&gt;&lt;/context-param&gt;&lt;listener&gt;&lt;listener-class&gt;org.springframework.web.context.ContextLoaderListener&lt;/listener-class&gt;&lt;/listener&gt;&#13;</programlisting></sect2><sect2><title>Create Spring Configuration File</title>
+<para>Define bean definitions in <code>applicationContext.xml</code> file, and put it into your <code>WEB-INF</code> directory.</para>
+<programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd"&gt;&lt;beans&gt; &lt;bean id="DataSource" class="test.DataSourceImpl"/&gt;&lt;/beans&gt;&#13;</programlisting></sect2><sect2><title>Creating Spring Bean Class</title>
+<para>
+<code>For OOP programming, you have to define a DataSource interface:</code>
+</para>
+<para>
+<code>DataSource.java</code>
+</para>
+<programlisting>package test;public interface DataSource{ java.util.List getElementsList();} &#13;</programlisting>
+<para>
+<code>and its implementation:</code>
+</para>
+<para>
+<code>DataSourceImpl.java</code>
+</para>
+<programlisting>package test;import java.util.*;public class DataSourceImpl implements DataSource{ public List getElementsList() {&#13;                                             List list = new ArrayList();list.add("Tom");list.add("Henri");list.add("Jim");return list; }}                                             &#13;</programlisting></sect2></sect1><sect1><title>Accessing Spring Bean in the ZUML page</title>
+<para>There are two ways to access Spring-Managed beans in your ZUML page. One is using <code>variable-resolver</code>, and the other is using <code>SpringUtil</code>. Which to use depends on your usage, in the ZUML page, we suggest you to use <code>variable-resolver</code>. </para><sect2><title>
+<code>Using </code>
+<code>variable-Resolver</code>
+</title>
+<para>Simply declare the <code>variable-resolver</code> for <code>org.zkoss.zkplus.spring.DelegatingVariableResolver</code> on top of your ZUML page, then, in the rest of your page, you can access any Spring-Managed beans directly using its bean-id.</para>
+<programlisting>&lt;?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?&gt; &lt;window&gt; &lt;grid&gt; &lt;rows&gt; &lt;row forEach="${DataSource.elementsList}"&gt; &lt;label value="${each}"/&gt; &lt;/row&gt; &lt;/rows&gt; &lt;/grid&gt; &lt;/window&gt;&#13;</programlisting>
+<para>
+<code>variable-resolver </code>will look-up the bean named <code>DataSource</code> automatically for you, and returned a list to the <code>forEach</code> loop.</para></sect2><sect2><title>Using <code>SpringUtil</code>
+</title>
+<para>
+<code>org.zkoss.zkplus.spring.SpringUtil</code> is a utility class which allows you to get Spring-managed beans with ease. </para>
+<programlisting>&lt;window&gt; &lt;zscript&gt; import org.zkoss.zkplus.spring.SpringUtil; import test.*;  DataScource dataSource = SpringUtil.getBean("DataSource"); List list = dataSource.getElementsList(); &lt;/zscript&gt;  &lt;grid&gt; &lt;rows&gt; &lt;row forEach="${list}"&gt; &lt;label value="${each}"/&gt; &lt;/row&gt; &lt;/rows&gt; &lt;/grid&gt; &lt;/window&gt;&#13;</programlisting>
+<para>Where the <code>forEach</code> loop is looping over the collection to print the <code>${each}</code> attribute on each object in the collection.</para></sect2></sect1><sect1><title>Spring Security</title>
+<para>Spring Security 2.0 is the next generation security system for the Spring Framework. It has added many new features since its predecessor Acegi Security System. </para><sect2><title>Running a sample application</title>
+<orderedlist>
+<listitem>
+<para>Download the war file</para>
+<para>
+<ulink url="http://downloads.sourceforge.net/zkforge/zkspringsec2.war">http://downloads.sourceforge.net/zkforge/zkspringsec2.war</ulink>
+</para>
+<para>The tutorial sample is borrowed from Spring Security 2.0, and has been modified to work with ZK seamlessly.</para>
+</listitem>
+<listitem>
+<para>Deploy the war file</para>
+</listitem>
+</orderedlist>
+<itemizedlist>
+<listitem>
+<para>Tomcat 5.5 and above.</para>
+</listitem>
+</itemizedlist>
+<para>Copy <code>zkspringsec2.war</code> to the <code>$Tomcat_Home/webapps/ </code>folder of Tomcat server and restart Tomcat. </para>
+<orderedlist>
+<listitem>
+<para>Use your browser to visit:</para>
+<para>
+<ulink url="http://localhost:8080/zkspringsec2/">http://localhost:8080/zkspringsec2/</ulink>
+</para>
+<para>username/password is rod/koala </para>
+</listitem>
+</orderedlist></sect2><sect2><title>Prerequisites of using Spring Security</title>
+<para>To make Spring Security work with ZK properly, you have to copy the following jars to <code>/WEB-INF/lib</code>
+<code>.</code>
+</para>
+<itemizedlist>
+<listitem>
+<para>
+<code>ZK Spring Integration Library jar file</code>
+</para>
+</listitem>
+</itemizedlist>
+<programlisting>zkspring.jar&#13;</programlisting>
+<itemizedlist>
+<listitem>
+<para>Spring Security library jar files</para>
+</listitem>
+</itemizedlist>
+<programlisting>aopalliance-1.0.jar&#13;aspectjrt-1.5.4.jar&#13;commons-codec-1.3.jar&#13;commons-collections-3.2.jar&#13;commons-lang.jar&#13;commons-logging-1.1.1.jar&#13;jstl-1.1.2.jar&#13;log4j-1.2.14.jar&#13;spring-security-acl-2.0.3.jar&#13;spring-security-core-2.0.3.jar&#13;spring-security-core-tiger-2.0.3.jar&#13;spring-security-taglibs-2.0.3.jar&#13;spring.jar&#13;standard-1.1.2.jar&#13;</programlisting></sect2><sect2><title>Configure the /WEB-INF/web.xml file</title>
+<para>To make Tomcat work with Spring Security properly, you shall specify the location of spring-security configuration file, and define listener of spring, and filter of spring-security as follows: </para>
+<programlisting>&lt;!--&#13;- Location of the XML file that defines the root application context&#13;- Applied by ContextLoaderListener.&#13;--&gt;&#13;</programlisting>
+<para>&lt;context-param&gt;</para>
+<para>&lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;</para>
+<para>&lt;param-value&gt;</para>
+<para>...</para>
+<para>/WEB-INF/applicationContext-security.xml</para>
+<para>&lt;/param-value&gt;</para>
+<para>&lt;/context-param&gt;</para>
+<programlisting>&#13;&lt;!--&#13;- Loads the root application context of this web app at startup.&#13;- The application context is then available via&#13;- WebApplicationContextUtils.getWebApplicationContext(servletContext).&#13;--&gt;&#13;&lt;listener&gt;&#13;</programlisting>
+<para>&lt;listener-class&gt;org.springframework.web.context.ContextLoaderListener&lt;/listener-class&gt;</para>
+<para>&lt;/listener&gt; </para>
+<programlisting>&lt;!--&#13;- Spring Security Filter Chains&#13;--&gt;&#13;</programlisting>
+<para>&lt;filter&gt;</para>
+<para>&lt;filter-name&gt;springSecurityFilterChain&lt;/filter-name&gt;</para>
+<para>&lt;filter-class&gt;org.springframework.web.filter.DelegatingFilterProxy&lt;/filter-class&gt;</para>
+<para>&lt;/filter&gt;</para></sect2><sect2><title>
+<code>Create </code>
+<code>/WEB-INF/applicationContext-security.xml</code>
+</title>
+<para>
+<code>Create </code>
+<code>application-security.xml</code>
+<code> file under $myApp</code>
+<code>/WEB-INF/</code>
+<code>. This file include required dentitions of spring-security. </code>
+</para>
+<programlisting>&lt;!--&#13;- Spring namespace-based configuration&#13;--&gt;&#13;&lt;beans:beans xmlns="http://www.springframework.org/schema/security"&#13;xmlns:beans="http://www.springframework.org/schema/beans"&#13;xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&#13;xsi:schemaLocation="http://www.springframework.org/schema/beans &#13;http://www.springframework.org/schema/beans/spring-beans-2.0.xsd&#13;http://www.springframework.org/schema/security &#13;http://www.springframework.org/schema/security/spring-security-2.0.1.xsd"&gt;&#13;&#13;&lt;!--&#13;- Enable the @Secured annotation to secure service layer methods&#13;--&gt;&#13;&lt;global-method-security secured-annotations="enabled"&gt;&#13;&lt;/global-method-security&gt;&#13;&#13;&lt;!--&#13;- Secure the page per the URL pattern&#13;--&gt;&#13;&lt;http auto-config="true"&gt;&#13;&lt;intercept-url pattern="/secure/extreme/**" access="ROLE_SUPERVISOR"/&gt;&#13;&lt;intercept-url pattern="/secure/**" access="IS_AUTHENTICATED_REMEMBERED" /&gt;&#13;&lt;intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" /&gt;&#13;&#13;&lt;!-- use own login page rather than the default one --&gt;&#13;&lt;form-login login-page="/login.zul"/&gt;&#13;&lt;/http&gt;&#13;&#13;&lt;!--&#13;Usernames/Passwords are&#13;rod/koala&#13;dianne/emu&#13;scott/wombat&#13;peter/opal&#13;--&gt;&#13;&lt;authentication-provider&gt;&#13;&lt;password-encoder hash="md5"/&gt;&#13;&lt;user-service&gt;&#13;&lt;user name="rod" password="a564de63c2d0da68cf47586ee05984d7" authorities="ROLE_SUPERVISOR, ROLE_USER, ROLE_TELLER" /&gt;&#13;&lt;user name="dianne" password="65d15fe9156f9c4bbffd98085992a44e" authorities="ROLE_USER,ROLE_TELLER" /&gt;&#13;&lt;user name="scott" password="2b58af6dddbd072ed27ffc86725d7d3a" authorities="ROLE_USER" /&gt;&#13;&lt;user name="peter" password="22b5c9accc6e1ba628cedc63a72d57f8" authorities="ROLE_USER" /&gt;&#13;&lt;/user-service&gt;&#13;&lt;/authentication-provider&gt;&#13;&lt;/beans:beans&gt;&#13;</programlisting></sect2><sect2><title>
+<code>Def</code>
+<code>ine which service to be secured</code>
+</title>
+<para>
+<code>Use Spring Security annotation </code>
+<code>@Secured</code>
+<code> to protect the calling of a business service as follows: </code>
+</para>
+<programlisting>public interface BankService {@Secured("IS_AUTHENTICATED_ANONYMOUSLY")public Account readAccount(Long id);@Secured("IS_AUTHENTICATED_ANONYMOUSLY")public Account[] findAccounts();@Secured("ROLE_TELLER")public Account post(Account account, double amount);}&#13;</programlisting></sect2><sect2><title>
+<code>Def</code>
+<code>ine which ZK event to be secured</code>
+</title>
+<para>
+<code>In /WEB-INF/applicationContext-security.xml, define required configurations of the namespace of zk, and specify which ZK event to secure as follows,</code>
+</para>
+<programlisting>&lt;!--&#13;- Spring namespace-based configuration&#13;--&gt;&#13;&lt;beans:beans xmlns="http://www.springframework.org/schema/security"&#13;xmlns:zksp="http://www.zkoss.org/2008/zkspring"&#13;xmlns:beans="http://www.springframework.org/schema/beans"&#13;xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&#13;xsi:schemaLocation="http://www.springframework.org/schema/beans &#13;http://www.springframework.org/schema/beans/spring-beans-2.0.xsd&#13;http://www.springframework.org/schema/security &#13;http://www.springframework.org/schema/security/spring-security-2.0.1.xsd&#13;http://www.zkoss.org/2008/zkspring&#13;http://www.zkoss.org/2008/zkspring/zkspring.xsd"&gt;&#13;                &#13;&lt;http ...&gt;&#13;...&#13;&lt;/http&gt;&#13;... &#13;&#13;&lt;!--&#13;- Secure the ZK event processing per the event name and ZK component path pattern&#13;--&gt;&#13;</programlisting>
+<para>&lt;zksp:zk-event login-template-close-delay="5"&gt;</para>
+<para>&lt;zksp:intercept-event event="onClick" path="//**/btn_*" access="ROLE_TELLER"/&gt;</para>
+<para>&lt;zksp:intercept-event path="/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/&gt;</para>
+<para>&lt;/zksp:zk-event&gt;</para>
+<programlisting>&#13;&lt;/beans:beans&gt;&#13;</programlisting>
+<itemizedlist>
+<listitem>
+<para>xmlns:zksp="http://www.zkoss.org/2008/zkspring tells the Spring Security engine that we will use the ZK Spring namespace configuration and define the name space to zksp.</para>
+</listitem>
+<listitem>
+<para>http://www.zkoss.org/2008/zkspring http://www.zkoss.org/2008/zkspring/zkspring.xsd tells the Spring Security engine where to find such ZK Spring namespace configuration schema.</para>
+</listitem>
+<listitem>
+<para>&lt;zksp:zk-event&gt; tells the Spring Security engine we want to secure ZK event processing. This will configure the necessary listeners , filters, and Spring beans automatically. In this example, login-template-close-delay="5" tells ZK to CLOSE the login window automatically in five(5) seconds if login successfully; zero(0) means close the login window immediately; and a negative value means wait for users operation.</para>
+</listitem>
+<listitem>
+<para>&lt;zksp:intercept-event event="onClick" path="//**/btn_*" access="ROLE_TELLER"/&gt; tells the Spring Security engine which ZK event and components we want to secure. In this example, it says that any onClick event that is fired to the ZK components whose id starts with btn_ will be checked againt the ROLE_TELLER authority.</para>
+</listitem>
+<listitem>
+<para>&lt;zksp:intercept-event path="/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/&gt; tells that all anonymous users can access to all events and all components.</para>
+</listitem>
+</itemizedlist></sect2><sect2><title>The ZUML Page</title>
+<para>In the following example, ZK prompts end user to login when he/she attempts to change the balance of account since the <code>onClick</code> event of <code>Button</code> component has been secured by Spring-Security. </para>
+<para>&lt;?variable-resolver class="org.zkoss.spring.DelegatingVariableResolver"?&gt;</para>
+<programlisting>&lt;zk&gt;&#13;&lt;window title="Accouts" border="normal" width="500px"&gt;&#13;&lt;zscript&gt;&lt;![CDATA[&#13;void adjBalance(Button btn) {&#13;double bal = new Double((String)btn.getAttribute("bal")).doubleValue();&#13;//get the account object&#13;bigbank.Account a = bankService.readAccount(btn.getAttribute("aid"));&#13;//change the account balance&#13;bankService.post(a, bal);&#13;//update the account balance on the browser&#13;btn.getFellow("bal_"+a.getId()).setValue(""+a.getBalance());&#13;}&#13;]]&gt;&#13;&lt;/zscript&gt;&#13;&lt;grid&gt;&#13;&lt;rows&gt;&#13;&lt;row forEach="${accounts}"&gt;&#13;&lt;label value="${each.id}"/&gt;&#13;&lt;label value="${each.holder}"/&gt;&#13;&lt;label id="bal_${each.id}" value="${each.balance}"/&gt;&#13;&lt;button id="btn_m20_${each.id}" label="-$20" onClick="adjBalance(self)"&gt;&#13;&lt;custom-attributes aid="${each.id}" bal="-20"/&gt;&#13;&lt;/button&gt; &#13;&lt;button id="btn_m5_${each.id}" label="-$5" onClick="adjBalance(self)"&gt; &#13;&lt;custom-attributes aid="${each.id}" bal="-5"/&gt;&#13;&lt;/button&gt; &#13;...................&#13;&lt;/row&gt;&#13;&lt;/rows&gt;&#13;&lt;/grid&gt;&#13;&lt;/window&gt;&#13;&lt;button label="Home" href="/index.zul"/&gt;&#13;&lt;button label="Logout" href="/j_spring_security_logout"/&gt;&#13;&lt;/zk&gt;&#13;</programlisting>
+<para/>
+<para/></sect2></sect1></chapter>
+<chapter>
+<title>18. Portal Integration</title>
 <para>ZK provides a portlet to load ZUML pages for JSR 168 compliant portal. This portlet is called ZK portlet loader, and it is implemented as org.zkoss.zk.ui.http.DHtmlLayoutPortlet.</para><sect1><title>Configuration</title><sect2><title>WEB-INF/portlet.xml</title>
 <para>To use it, you first have to add the following definition into WEB-INF/portlet.xml. Notice that expiration-cache must be set to zero to prevent portals from caching the result.</para>
 <programlisting>&lt;portlet&gt;&#13;    &lt;description&gt;ZK loader for ZUML pages&lt;/description&gt;    &#13;    &lt;portlet-name&gt;zkPortletLoader&lt;/portlet-name&gt;    &#13;    &lt;display-name&gt;ZK Portlet Loader&lt;/display-name&gt;    &#13;&#13;    &lt;portlet-class&gt;org.zkoss.zk.ui.http.DHtmlLayoutPortlet&lt;/portlet-class&gt;    &#13;&#13;    &lt;expiration-cache&gt;0&lt;/expiration-cache&gt;    &#13;&#13;    &lt;supports&gt;    &#13;        &lt;mime-type&gt;text/html&lt;/mime-type&gt;        &#13;        &lt;portlet-mode&gt;VIEW&lt;/portlet-mode&gt;        &#13;    &lt;/supports&gt;    &#13;&#13;    &lt;supported-locale&gt;en&lt;/supported-locale&gt;    &#13;&#13;    &lt;portlet-info&gt;    &#13;        &lt;title&gt;ZK&lt;/title&gt;        &#13;        &lt;short-title&gt;ZK&lt;/short-title&gt;        &#13;        &lt;keywords&gt;ZK,ZUML&lt;/keywords&gt;        &#13;    &lt;/portlet-info&gt;    &#13;&lt;/portlet&gt;&#13;</programlisting></sect2><sect2><title>WEB-INF/web.xml</title>
@@ -5495,7 +5677,7 @@
 		</graphic>
 </para></sect2></sect1></chapter>
 <chapter>
-<title>18. Beyond ZK</title>
+<title>19. Beyond ZK</title>
 <para>In addition to processing ZUML pages, the ZK distribution included a lot of technologies and tools. This chapter provided the basic information of some of them. Interested readers might look at Javadoc for detailed API.</para><sect1><title>Logger</title>
 <para>Package: org.zkoss.util.logging.Log</para>
 <para>The logger used by ZK is based on the standard logger, java.util.Logger. However, we wrap it as org.zkoss.util.logging.Log to make it more efficient. The typical use is as follows.</para>
