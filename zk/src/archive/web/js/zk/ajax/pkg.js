@@ -104,6 +104,6 @@ zPkg = {
 };
 zk.afterLoad = function (fn) { //part of zk
 	if (zPkg.loading)
-		return zPkg._aflds.$add(fn);
+		return zPkg._aflds.push(fn);
 	fn();
 };

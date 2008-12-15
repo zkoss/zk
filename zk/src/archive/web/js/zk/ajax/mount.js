@@ -67,7 +67,7 @@ function zkopt(opts) {
 
 function zkam(fn) {
 	if (zk.mounting)
-		return zkm._afMts.$add(fn);
+		return zkm._afMts.push(fn);
 	fn();
 }
 zk.afterMount = zkam; //part of zk
@@ -77,7 +77,7 @@ zkm = {
 	push: function(w) {
 		w.children = [];
 		if (zkm._wgts.length > 0)
-			zkm._wgts[0].children.$add(w);
+			zkm._wgts[0].children.push(w);
 		zkm._wgts.unshift(w);
 	},
 	pop: function() {

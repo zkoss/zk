@@ -113,21 +113,6 @@ zAu = {
 		return true;
 	},
 
-	/** Sends an AU request to the server
-	 * <p>Watches:
-	 * <dl>
-	 * <dt>onSend(implicit)</dt>
-	 * <dd>It is called before sending the AU request to the server.
-	 * The implicit argument indicates whether all AU requests being
-	 * sent are implicit.</dd>
-	 * <dt>onResponse()</dt>
-	 * <dd>It is called after the response of the AU request
-	 * has been sent back from the server, and processed.</dd>
-	 * </dl>
-	 *
-	 * @param timout milliseconds.
-	 * If negative, it won't be sent until next non-negative event
-	 */
 	send: function (aureq, timeout) {
 		if (timeout < 0) {
 			var opts = aureq.opts;
@@ -430,8 +415,7 @@ zAu = {
 
 			//Note: it is still possible to queue two ctl with same uuid and cmd,
 			//if the first one was not sent yet and the second one is generated
-			//after 390ms.
-			//However, it is rare so no handle it
+			//after 390ms. However, it is rare so no handle it
 
 			zAu._ctlt = t;
 			zAu._ctli = aureq.uuid;
@@ -441,8 +425,7 @@ zAu = {
 		dt._aureqs.push(aureq);
 
 		//Note: we don't send immediately (Bug 1593674)
-		//Note: Unlike sendAhead and _send2, if timeout is undefined,
-		//it is considered as 0.
+		//Note: Unlike sendAhead and _send2, if timeout omitted, 0 assumed
 		zAu._send2(dt, timeout ? timeout: 0);
 	},
 	/** @param timeout if undefined or negative, it won't be sent. */

@@ -262,7 +262,7 @@ zWatch = {
 		var wts = this._wts[name],
 			len = wts ? wts.length: 0;
 		if (len) {
-			var args = [];
+			var args = [origin]; //origin as 1st
 			for (var j = 3, l = arguments.length; j < l;)
 				args.push(arguments[j++]);
 

@@ -1041,7 +1041,7 @@ zk.Page = zk.$extends(zk.Widget, {//unlik server, we derive from Widget!
 		this.$super('$init', pguid);
 
 		this._fellows = {};
-		if (contained) zk.Page.contained.$add(this);
+		if (contained) zk.Page.contained.push(this);
 	},
 	redraw: function () {
 		var html = '<div id="' + this.uuid + '" style="' + this.getStyle() + '">';
