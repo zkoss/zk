@@ -417,8 +417,11 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	/** Sets the style of this widget. */
 	setStyle: function (style) {
-		this._style = style;
-		this.updateDomStyle_();
+		if (this._style != style) {
+			this._style = style;
+			if (this.node)
+				this.updateDomStyle_();
+		}
 	},
 	/** Returns the zclass (the mold's style class) of this widget. */
 	getZclass: function () {
@@ -445,8 +448,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	/** Updates the DOM element's style.
 	 */
 	updateDomStyle_: function () {
-		var n = this.node;
-		if (n) zDom.setStyle(n, zDom.parseStyle(this.domStyle_()));
+		zDom.setStyle(this.node, zDom.parseStyle(this.domStyle_()));
 	},
 
 	/** Returns the style used for the DOM element.
@@ -858,7 +860,7 @@ zk.Widget = zk.$extends(zk.Object, {
 
 	//DOM event handling//
 	/** Callback this method if you listen DOM onfocus. */
-	domFocus: function () {
+	domFocus_: function () {
 		if (!this.canActivate()) return false;
 
 		zk.currentFocus = this;
@@ -869,7 +871,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		return true;
 	},
 	/** Callback this method if you listen DOM onblur. */
-	domBlur: function () {
+	domBlur_: function () {
 		zk.currentFocus = null;
 
 		//TODO: handle validation

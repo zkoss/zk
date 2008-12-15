@@ -49,56 +49,28 @@ zAu = {
 	},
 
 	//Error Handling//
-	/** Confirms the user how to handle a communication error.
-	 * Default: it shows up a message asking the user whether to retry.
-	 */
 	confirmRetry: function (msgCode, msg2) {
 		var msg = mesg[msgCode];
 		return zDom.confirm((msg?msg:msgCode)+'\n'+mesg.TRY_AGAIN+(msg2?"\n\n("+msg2+")":""));
 	},
-	/** Handles the error caused by processing the response.
-	 * Overrides this method if you prefer to show it differently.
-	 *
-	 * @param msgCode the error message code.
-	 * It is either an index of mesg (e.g., "FAILED_TO_PROCESS"),
-	 * or an error message
-	 * @param msg2 the additional message (optional)
-	 * @param cmd the command (optional)
-	 * @param ex the exception (optional)
-	 */
 	showError: function (msgCode, msg2, cmd, ex) {
 		var msg = mesg[msgCode];
 		zk.error((msg?msg:msgCode)+'\n'+(msg2?msg2:"")+(cmd?cmd:"")+(ex?"\n"+ex.message:""));
 	},
-	/** Sets the URI for an error code.
-	 * If the length of  arguments is 1, then the argument must be
-	 * the error code, and this method returns its URI (or null
-	 * if not available).
-	 * <p>If the length is larger than 1, they must be paired and
-	 * the first element of the pair must be the package name,
-	 * and the second is the version.
-	 */
-	errorURI: function (code, uri) {
-		var args = arguments, len = args.length;
-		if (len == 1)
-			return zAu._eru['e' + code];
-
+	getErrorURI: function (code) {
+		return zAu._eru['e' + code];
+	}
+	setErrorURI: function (code, uri) {
 		if (len > 2) {
 			for (var j = 0; j < len; j += 2)
-				zAu.errorURI(args[j], args[j + 1]);
+				zAu.setErrorURI(args[j], args[j + 1]);
 			return;
 		}
-
 		zAu._eru['e' + code] = uri;
 	},
 	_eru: {},
 
 	////Ajax Send////
-	/** Returns whether any AU request is in processing.
-	 * <p>Note: zk.processing (which is a variable) represents both AU
-	 * and other processing, while zAu.processing() (which is a function)
-	 * represents AU only.
-	 */
 	processing: function () {
 		return zAu._cmdsQue.length || zAu._areq || zAu._preqInf
 			|| zAu._doingCmds;
@@ -131,12 +103,6 @@ zAu = {
 			}
 		}
 	},
-	/** Sends a request before any pending events.
-	 * @param timout milliseconds.
-	 * If undefined or negative, it won't be sent until next non-negative event
-	 * Note: Unlike zAu.send, it considered undefined as not sending now
-	 * (reason: backward compatible)
-	 */
 	sendAhead: function (aureq, timeout) {
 		var t = aureq.target;
 		if (t) {
@@ -148,16 +114,13 @@ zAu = {
 			for (var dtid in dts) {
 				var dt = aureq.target = dts[dtid];
 				dt._aureqs.unshift(aureq);
-				zAu._send2(dt, timeout); //Spec: don't convert unefined to 0 for timeout
+				zAu._send2(dt, timeout);
 			}
 			return;
 		}
 	},
 
 	////Ajax receive////
-	/** Parses a XML response and pushes the parsed commands to the queue.
-	 * @return false if no command found at all
-	 */
 	pushXmlResp: function (dt, req) {
 		var xml = req.responseXML;
 		if (!xml) {
@@ -213,8 +176,6 @@ zAu = {
 		}
 		return v;
 	},
-	/** Process the response response commands.
-	 */
 	doCmds: function () {
 		//avoid reentry since it calls loadAndInit, and loadAndInit call this
 		if (zAu._doingCmds) {
@@ -231,7 +192,6 @@ zAu = {
 			}
 		}
 	},
-	/** Process a command (encoded). */
 	process: function (cmd, varags) {
 		var data = [];
 		for (var j = arguments.length; --j > 0;)
@@ -326,7 +286,7 @@ zAu = {
 					}
 				} else if (!sid || sid == zAu._seqId) { //ignore only if out-of-seq (note: 467 w/o sid)
 					zAu._errcode = req.status;
-					var eru = zk.eru['e' + req.status];
+					var eru = zAu._eru['e' + req.status];
 					if (typeof eru == "string") {
 						zUtl.go(eru);
 					} else {
@@ -424,12 +384,11 @@ zAu = {
 
 		dt._aureqs.push(aureq);
 
-		//Note: we don't send immediately (Bug 1593674)
-		//Note: Unlike sendAhead and _send2, if timeout omitted, 0 assumed
-		zAu._send2(dt, timeout ? timeout: 0);
+		zAu._send2(dt, timeout);
+			//Note: we don't send immediately (Bug 1593674)
 	},
-	/** @param timeout if undefined or negative, it won't be sent. */
 	_send2: function (dt, timeout) {
+		if (!timeout) timeout = 0;
 		if (dt && timeout >= 0)
 			setTimeout(function(){zAu._sendNow(dt);}, timeout);
 	},

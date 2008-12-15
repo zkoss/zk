@@ -131,19 +131,22 @@ zUtl = { //static methods
 		} else if (target) {
 			//we have to process query string because browser won't do it
 			//even if we use zDom.insertHTMLBeforeEnd("<form...")
-			var frm = document.createElement("FORM");
-			document.body.appendChild(frm);
-			var j = url.indexOf('?');
-			if (j > 0) {
-				var qs = url.substring(j + 1);
-				url = url.substring(0, j);
-				zk.queryToHiddens(frm, qs);
+			try {
+				var frm = document.createElement("FORM");
+				document.body.appendChild(frm);
+				var j = url.indexOf('?');
+				if (j > 0) {
+					var qs = url.substring(j + 1);
+					url = url.substring(0, j);
+					zk.queryToHiddens(frm, qs);
+				}
+				frm.name = "go";
+				frm.action = url;
+				frm.method = "GET";
+				frm.target = target;
+				frm.submit();
+			} catch (e) { //happens if popup block
 			}
-			frm.name = "go";
-			frm.action = url;
-			frm.method = "GET";
-			frm.target = target;
-			frm.submit();
 		} else {
 			location.href = url;
 		}

@@ -161,7 +161,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	},
 	_doFocus: function (evt) {
 		var wgt = zk.Widget.$(evt);
-		if (wgt && wgt.domFocus() //FF2 will cause a focus error when resize browser.
+		if (wgt && wgt.domFocus_() //FF2 will cause a focus error when resize browser.
 		&& wgt._mold != 'os')
 			zDom.addClass(wgt.ebox, wgt.getZclass() + "-focus");
 	},
@@ -169,7 +169,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		var wgt = zk.Widget.$(evt);
 		if (wgt._mold != 'os')
 			zDom.rmClass(wgt.ebox, wgt.getZclass() + "-focus");
-		wgt.domBlur();
+		wgt.domBlur_();
 	},
 	_doDown: function (evt) {
 		var wgt = zk.Widget.$(evt),
