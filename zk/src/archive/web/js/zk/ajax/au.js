@@ -218,18 +218,21 @@ zAu = { //static methods
 		return true;
 	},
 	_decodeData: function (d) {
+		var v = d.substring(1);
 		switch (d.charAt(0).toLowerCase()) {
-		case 'c': case 's': d = d.substring(1); break;
-		case 'n': d = null; break;
-		case '1': case '3': d = true; break;
-		case '0': case '2': d = false; break;
-		case 'i': case 'l': case 'b': case 'h': case 'j':
-			d = parseInt(d.substring(1)); break;
-		case 'd': case 'f': case 'k':
-			d = parseFloat(d.substring(1)); break;
-		case 't': d = new Date(parseInt(d.substring(1))); break;
+		case 'c': case 's': return v;
+		case 'n': return null;
+		case '1': case '3': return true;
+		case '0': case '2': return false;
+		case 'i': case 'l': case 'b': case 'h':
+			return parseInt(v);
+		case 'd': case 'f':
+			return parseFloat(v);
+		case 't': return new Date(parseInt(v));
+		case 'j': return new zk.BigInteger(v);
+		case 'k': return new zk.BigDecimal(v);
 		}
-		return d;
+		return v;
 	},
 	/** Process the response response commands.
 	 */

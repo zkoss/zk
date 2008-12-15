@@ -460,7 +460,7 @@ public class Components {
 		for (int j = 0; j < mtds.length; ++j) {
 			final Method md = mtds[j];
 			String mdname = md.getName();
-			if (Events.isValid(mdname)) {
+			if (mdname.length() >= 5 && Events.isValid(mdname)) { //onX$Y
 				Component xcomp = comp;
 				int k = 0;
 				do { //handle cascade $. e.g. onClick$btn$win1

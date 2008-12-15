@@ -17,6 +17,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 if (!window.zk) {
 <c:include page="zk.js"/>
 <c:include page="lang/mesg*.js"/>
+<c:include page="math.js"/>
 <c:include page="utl.js"/>
 <c:include page="dom.js"/>
 <c:include page="evt.js"/>
