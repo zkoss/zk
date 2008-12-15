@@ -17,7 +17,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	_border: 'none',
 	_minheight: 100,
 	_minwidth: 200,
-	importantEvents_: {onMove:1, onZIndex:1, onOpen:1}, //shared by all instances
 
 	$init: function () {
 		this.$supers('$init', arguments);
@@ -148,7 +147,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		var handle = this.ecap;
 		if (handle && !this._drag) {
 			handle.style.cursor = "move";
-			var $Window = zul.wnd.Window;
+			var $Window = this.$class;
 			this._drag = new zk.Draggable(this, null, {
 				handle: handle, overlay: true, stackup: true,
 				starteffect: $Window._startmove,
@@ -492,8 +491,12 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			}
 		}
 		this.$supers('unbind_', arguments);
+	},
+	isImportantEvent_: function (evtnm) {
+		return this.$class._impEvts[evtnm];
 	}
 },{ //static
+	_impEvts: {onMove:1, onZIndex:1, onOpen:1},
 	closeclick: function (evt) {
 		var wnd = zk.Widget.$(evt);
 		wnd.fire('onClose');

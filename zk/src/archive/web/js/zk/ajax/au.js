@@ -12,13 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	This program is distributed under GPL Version 2.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
-zAu = { //static methods
-	//General//
-	/** Returns the URI to communicate with the server.
-	 * @param uri the URI. If null, the base URI is returned.
-	 * @param dt the desktop or its ID. If null, the first desktop is used.
-	 * @param ignoreSessId whether to handle the session ID in the base URI
-	 */
+zAu = {
 	comURI: function (uri, dt, ignoreSessId) {
 		var au = zk.Desktop.$(dt).updateURI;
 		if (!uri) return au;
@@ -42,8 +36,8 @@ zAu = { //static methods
 			  prefix + uri.substring(0, l) + suffix + uri.substring(l):
 			prefix + uri + suffix;
 	},
-	/** Called when the client info is changed. */
-	clientInfoChange: function () {
+	/** Called by mount.js when onReSize */
+	_onClientInfo: function () {
 		if (zAu._cInfoReg)
 			setTimeout(zAu._fireClientInfo, 20);
 				//we cannot pass zAu.cmd0.clientInfo directly

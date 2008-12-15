@@ -185,8 +185,10 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		this._$doFocus = this._$doBlur = this.einp = null;
 		this.$supers('unbind_', arguments);
 	},
+	isImportantEvent_: function (evtnm) {
+		return 'onChange' == evtnm;
+	}
 
-	importantEvents_: {onChange:1}
 },{
 	_doSelect: function (evt) {
 		var wgt = zk.Widget.$(evt);

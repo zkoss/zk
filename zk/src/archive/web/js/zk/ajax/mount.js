@@ -350,9 +350,9 @@ zkm = {
 		resz.time = null; //handled
 		resz.lastTime = now + 1000;
 			//ignore following for a while if processing (in slow machine)
-	
-		zAu.clientInfoChange();
-	
+
+		zAu._onClientInfo();
+
 		zWatch.fire('beforeSize');
 		zWatch.fire('onSize');
 		resz.lastTime = zUtl.now() + 8;

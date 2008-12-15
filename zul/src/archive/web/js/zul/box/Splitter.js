@@ -15,7 +15,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.box.Splitter = zk.$extends(zul.Widget, {
 	_collapse: "none",
 	_open: true,
-	importantEvents_: {onOpen:1},
 
 	/** Returns if it is a vertical box. */
 	isVertical: function () {
@@ -274,7 +273,12 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		var box = this.parent;
 		if (box) this.$class._fixKidSplts(box.node);
 		else this._fixsz();
+	},
+
+	isImportantEvent_: function (evtnm) {
+		return 'onOpen' == evtnm;
 	}
+
 },{
 	onclick: function (evt) {
 		var wgt = zk.Widget.$(evt);
