@@ -190,12 +190,6 @@ zEvt = {
 	}
 };
 
-/** A widget event, fired by {@link zk.Widget#fire}.
- * It is an application-level event that is used by application to
- * hook the listeners to.
- * On the other hand, a DOM event ({@link zEvt}) is the low-level event
- * listened by the implementation of a widget.
- */
 zk.Event = zk.$extends(zk.Object, {
 	$init: function (target, name, data, opts) {
 		this.target = target;
@@ -211,23 +205,13 @@ zk.Event = zk.$extends(zk.Object, {
 		onMaximize: true, onMinimize: true, onOpen: true,
 		onRender: true, onSelect: true
 	},
-	/** A map of event names that can be ignored by the server when
-	 *  the server is busy (i.e., $busyIgnore).
-	 */
 	busyIgnores: {
 		dummy: true, getUploadInfo: true, onChanging: true, onScrolling: true
 	},
 	repeatIgnores: {
 		onChange: true, onScroll: true, onCheck: true
 	},
-	/** Returns a string to represent the server options.
-	 * <ul>
-	 * <li>b: $busyIgnore</li>
-	 * <li>r: $repeatIgnore</li>
-	 * <li>d: $duplicateIgnore</li>
-	 * </ul>
-	 */
-	serverOptions: function (evtnm, opts) {
+	serverOption: function (evtnm, opts) {
 		var $Event = zk.Event, so = '';
 		if ((opts && opts.$duplicateIgnore) || $Event.duplicateIgnores[evtnm])
 			so = 'd';
@@ -239,54 +223,19 @@ zk.Event = zk.$extends(zk.Object, {
 	}
 });
 
-/** An utility to manage a collection of watches.
- * A watch is any JavaScript object used to 'watch' an action, such as onSize,
- * The watch must implement a method having
- * the same as the action name.
- * For example, zAu.watch("onSend", o) where
- * o must have a method called onSend. Then, when the onSend action occurs,
- * o.onSend() will be invoked.
- *
- * <p>Note: the watches are shared by the whole client engine, so be careful
- * to avoid the conflict of action names. Here is a list of all action
- * names.
- * <dl>
- * <dt>onSend(implicit)</dt>
- * <dd>It is called before sending the AU request to the server.
- * The implicit argument indicates whether all AU requests being
- * sent are implicit.</dd>
- * </dl>
- */
 zWatch = {
-	/** Adds a watch.
-	 * Note: the order is parent-first, so the invocation ({@link #fire})
-	 * is from the parent to the child.
-	 * @param name the action name. Currently, it supports only onSend,
-	 * which is called before sending the AU request(s).
-	 * @return true if added successfully.
-	 */
-	watch: function (name, watch) {
+	listen: function (name, o) {
 		var wts = this._wts[name];
 		if (!wts) wts = this._wts[name] = [];
-		wts.$add(watch, zUtl.isAncestor); //parent first
+		wts.$add(o, zUtl.isAncestor); //parent first
 	},
-	/** Removes a watch.
-	 * @return whether the watch has been removed successfully.
-	 * It returns false if the watch was not added before.
-	 */
-	unwatch: function (name, watch) {
+	unlisten: function (name, o) {
 		var wts = this._wts[name];
-		return wts && wts.$remove(watch);
+		return wts && wts.$remove(o);
 	},
-	/** Remove all watches of the specified name.
-	 */
-	unwatchAll: function (name) {
+	unlistenAll: function (name) {
 		delete this._wts[name];
 	},
-	/** Calls all watches of the specified name.
-	 * @param timeout when to call the watch. If positive or zero,
-	 * setTimeout is used. Otherwise, it is called
-	 */
 	fire: function (name, timeout, vararg) {
 		var wts = this._wts[name],
 			len = wts ? wts.length: 0;
@@ -309,15 +258,6 @@ zWatch = {
 				o[name].apply(o, args);
 		}
 	},
-	/** Calls all descendant watches of the specified name.
-	 * By descendant we mean the watch is the same or an descendant of
-	 * the specified origin.
-	 * <p>Note: it assumes the watch's parent can be retrieved by either
-	 * the method called <code>getParent</code>, or the
-	 * property called <code>parent</code>.
-	 * <p>In other words, if the specified origin is not the ancestor
-	 * of a watch, the watch won't be called.
-	 */
 	fireDown: function (name, timeout, origin, vararg) {
 		var wts = this._wts[name],
 			len = wts ? wts.length: 0;

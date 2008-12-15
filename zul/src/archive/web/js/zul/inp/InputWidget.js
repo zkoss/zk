@@ -144,6 +144,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	doBlur_: function (evt) {
 		//TODO
+		zDom.rmClass(this.einp, this.getZclass() + '-focus');
 	},
 
 	//super//

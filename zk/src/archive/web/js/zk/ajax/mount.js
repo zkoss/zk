@@ -353,8 +353,8 @@ zkm = {
 
 		zAu._onClientInfo();
 
-		zWatch.fire('beforeSize');
-		zWatch.fire('onSize');
+		zWatch.fire('beforeSize'); //notify all
+		zWatch.fire('onSize'); //notify all
 		resz.lastTime = zUtl.now() + 8;
 	},
 	_resz: {},

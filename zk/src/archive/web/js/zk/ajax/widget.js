@@ -862,7 +862,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (!this.canActivate()) return false;
 
 		zk.currentFocus = this;
-		zWatch.fire('onFloatUp', -1, this);
+		zWatch.fire('onFloatUp', -1, this); //notify all
 
 		if (this.isListen('onFocus'))
 			this.fire('onFocus');
@@ -938,7 +938,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			else modal.focus(0);
 		} else if (!wgt || wgt.canActivate()) {
 			zk.currentFocus = wgt;
-			if (wgt) zWatch.fire('onFloatUp', -1, wgt);
+			if (wgt) zWatch.fire('onFloatUp', -1, wgt); //notify all
 		}
 	},
 	_domEvtToZK: function (evt) {

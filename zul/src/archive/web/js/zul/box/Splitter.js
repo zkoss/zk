@@ -116,9 +116,9 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	bind_: function (desktop) {
 		this.$super('bind_', desktop);
 
-		zWatch.watch("onSize", this);
-		zWatch.watch("beforeSize", this);
-		zWatch.watch("onVisible", this);
+		zWatch.listen("onSize", this);
+		zWatch.listen("beforeSize", this);
+		zWatch.listen("onVisible", this);
 
 		this._fixDomClass();
 			//Bug 1921830: if spiltter is invalidated...
@@ -158,9 +158,9 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		}
 	},
 	unbind_: function () {
-		zWatch.unwatch("onSize", this);
-		zWatch.unwatch("beforeSize", this);
-		zWatch.unwatch("onVisible", this);
+		zWatch.unlisten("onSize", this);
+		zWatch.unlisten("beforeSize", this);
+		zWatch.unlisten("onVisible", this);
 
 		var $Splitter = this.$class,
 			btn = this.button;
