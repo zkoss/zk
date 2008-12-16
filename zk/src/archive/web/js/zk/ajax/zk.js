@@ -381,17 +381,15 @@ zk.Object.prototype = {
 	proxy: function (f, nm) {
 		if (nm) {
 			var fpx = this[nm];
-			if (fpx && fpx.$proxied === f) return fpx;
+			if (fpx) return fpx;
 		}
 
-		var o = this;
-		var fpx = function () {
+		var o = this,
+			fpx = function () {
 			return f.apply(o, arguments);
 		};
-		if (nm) (this[nm] = fpx).$proxied = f;
+		if (nm) this[nm] = fpx;
 		return fpx;
-	},
-	_proxy: function (f, nm) {
 	}
 };
 
