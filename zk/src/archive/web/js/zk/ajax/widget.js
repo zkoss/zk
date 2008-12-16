@@ -13,31 +13,8 @@ This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 zk.Widget = zk.$extends(zk.Object, {
-	/** The UUID (readonly if inServer). */
-	//uuid: null,
-	/** The next sibling (readonly). */
-	//nextSibling: null,
-	/** The previous sibling widget (readonly). */
-	//previousSibling: null,
-	/** The parent (readonly).
-	 */
-	//parent: null,
-	/** The first child widget (readonly). */
-	//firstChild: null,
-	/** The last child widget (readonly). */
-	//lastChild: null,
-	/** The page that this widget belongs to (readonly). */
-	//page: null,
+	_visible: true,
 
-	/** Whether this widget has a copy at the server (readonly). */
-	//inServer: false,
-
-	/** whether to remove and add from DOM tree when moving a widget. */
-	//domDependent_: false,
-
-	visible: true,
-
-	/** Constructor. */
 	$init: function (uuid, mold) {
 		this._lsns = {}; //listeners Map(evtnm,listener)
 		this._$lsns = {}; //listners registered by server Map(evtnm, fn)
@@ -50,6 +27,8 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	setMold: function (mold) {
 		if (mold != this._mold) {
+			if (!this.$class.molds[mold])
+				throw 'Unknown mold: ' + mold;
 			this._mold = mold;
 			var n = this.node;
 			if (n) this.rerender();
@@ -61,10 +40,11 @@ zk.Widget = zk.$extends(zk.Object, {
 			if (w._fellows) return w;
 		return null;
 	},
-	getFellow: function (id) {
+	getFellow: _zkf = function (id) {
 		var ow = this.getSpaceOwner();
 		return ow != null ? ow._fellows[id]: null;
 	},
+	fellow: _zkf,
 	getId: function () {
 		return this._id;
 	},
@@ -165,9 +145,12 @@ zk.Widget = zk.$extends(zk.Object, {
 			this.removeChildHTML_(child, p);
 		return true;
 	},
+	domMovable_: function () {
+		return true;
+	},
 	_moveChild: function (child, moveBefore) {
 		var node, kidnode; 
-		if (child._floating || child.domDependent_ || this.domDependent_
+		if (child._floating || !child.domMovable_() || !this.domMovable_()
 		|| !(node = this.node) || !(kidnode = child.node))
 			return false;
 
@@ -197,7 +180,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	/** Returns whether this widget is visible. */
 	isVisible: function () {
-		return this.visible;
+		return this._visible;
 	},
 	/** Sets whether this widget is visible.
 	 * <p>Component Implementation Node:
@@ -209,8 +192,8 @@ zk.Widget = zk.$extends(zk.Object, {
 	 * </ul>
 	 */
 	setVisible: function (visible, fromServer) {
-		if (this.visible != visible) {
-			this.visible = visible;
+		if (this._visible != visible) {
+			this._visible = visible;
 
 			var p = this.parent;
 			if (p && visible) p.onChildVisible_(this, true); //becoming visible
