@@ -537,6 +537,28 @@ zDom = { //static methods
 			el.className = el.className.replace(re, " ").trim();
 		}
 	},
+	
+	_txtstyles: ["color", "background-color", "background",	"white-space"],
+	
+	/** Returns the text-relevant style (same as HTMLs.getTextRelevantStyle).
+	 * @param incwd whether to include width
+	 * @param inchgh whether to include height
+	 */
+	getTextStyle: function (style, incwd, inchgh) {
+		var ts = "";
+		for (var j = 0, k = 0; k >= 0; j = k + 1) {
+			k = style.indexOf(';', j);
+			var s = k >= 0 ? style.substring(j, k): style.substring(j);
+			var l = s.indexOf(':');
+			var nm = l < 0 ? s.trim(): s.substring(0, l).trim();
+	
+			if (nm.startsWith("font")  || nm.startsWith("text")
+			|| this._txtstyles.$contains(nm)
+			|| (incwd && nm == "width") || (inchgh && nm == "height"))
+				ts += s + ';';
+		}
+		return ts;
+	},
 
 	/** Returns the style. In addition to n.style, it also
 	 * checked CSS styles that are applicated to the specified element.

@@ -251,9 +251,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>checkbox</component-name>
 		<component-class>org.zkoss.zul.Checkbox</component-class>
+		<widget-class>zul.wgt.Checkbox</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/checkbox.dsp</mold-uri>
+			<mold-uri>mold/checkbox.js</mold-uri>
 		</mold>
 	</component>
 	<component>

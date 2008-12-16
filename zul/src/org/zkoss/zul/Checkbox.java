@@ -45,7 +45,13 @@ public class Checkbox extends LabelImageElement implements org.zkoss.zul.api.Che
 	/** Whether it is checked. */
 	/*package*/ boolean _checked;
 	private boolean _disabled;
-
+	
+	static {
+		addClientEvent(Checkbox.class, Events.ON_CHECK);
+		addClientEvent(Checkbox.class, Events.ON_FOCUS);
+		addClientEvent(Checkbox.class, Events.ON_BLUR);
+	}
+	
 	public Checkbox() {
 	}
 	public Checkbox(String label) {
@@ -140,9 +146,21 @@ public class Checkbox extends LabelImageElement implements org.zkoss.zul.api.Che
 	 * 
 	 */
 	public String getZclass() {
-		return _zclass == null ? "z-checkbox" : super.getZclass();
+		return _zclass == null ? "z-checkbox" : _zclass;
 	}
+	
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
 
+		if (_tabindex >= 0)
+			renderer.render("tabindex", _tabindex);
+
+		render(renderer, "disabled", _disabled);
+		render(renderer, "name", _name);
+		if (_checked)
+			render(renderer, "checked", _checked);
+	}
 	//-- ComponentCtrl --//
 	/** Processes an AU request.
 	 *
