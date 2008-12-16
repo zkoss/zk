@@ -59,7 +59,7 @@ zAu = {
 	},
 	getErrorURI: function (code) {
 		return zAu._eru['e' + code];
-	}
+	},
 	setErrorURI: function (code, uri) {
 		if (len > 2) {
 			for (var j = 0; j < len; j += 2)
@@ -192,14 +192,13 @@ zAu = {
 			}
 		}
 	},
-	process: function (cmd, varags) {
+	process: function (cmd, varags) { //by server only (encoded)
 		var data = [];
 		for (var j = arguments.length; --j > 0;)
 			data.unshift(zAu._decodeData(arguments[j]));
 		zAu._process(cmd, data);
 	},
-	/** Process a command (decoded). */
-	_process: function (cmd, data) {
+	_process: function (cmd, data) { //decoded
 		//I. process commands that data[0] is not UUID
 		var fn = zAu.cmd0[cmd];
 		if (fn) {
@@ -257,8 +256,7 @@ zAu = {
 				zAu._sendNow2(reqInf);
 		}
 	},
-	/** Called when the response is received from _areq.
-	 */
+	/** Called when the response is received from _areq. */
 	_onRespReady: function () {
 		try {
 			var req = zAu._areq, reqInf = zAu._areqInf;
@@ -718,7 +716,7 @@ zAu.cmd1 = {
 		}
 	},
 	setAttr: function (uuid, wgt, nm, val) {
-		zk.set(wgt, nm, val);
+		zk.set(wgt, nm, val, true); //4th arg: fromServer
 	},
 	outer: function (uuid, wgt, code) {
 		zAu.stub = function (newwgt) {

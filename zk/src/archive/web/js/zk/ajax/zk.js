@@ -97,17 +97,17 @@ zk = {
 		return cc == ' ' || cc == '\t' || cc == '\n' || cc == '\r';
 	},
 
-	set: function (o, name, value) {
+	set: function (o, name, value, extra) {
 		if (arguments.length == 2) {
 			for (var p in name)
 				zk._set(o, p, name[p]);
 			return;
 		}
-		zk._set(o, name, value);
+		zk._set(o, name, value, extra);
 	},
-	_set: function (o, name, value) {
+	_set: function (o, name, value, extra) {
 		var m = o['set' + name.charAt(0).toUpperCase() + name.substring(1)];
-		if (m) m.call(o, value);
+		if (m) m.call(o, value, extra);
 		else o[name] = value;
 	},
 	get: function (o, name) {
