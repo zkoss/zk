@@ -876,19 +876,18 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 
 		zEvt.listen(mask, "mousemove", zEvt.stop);
 		zEvt.listen(mask, "click", zEvt.stop);
-		this._onPos = this.proxy(this._syncPos)
-		zEvt.listen(window, "resize", this._onPos);
-		zEvt.listen(window, "scroll", this._onPos);
+		zEvt.listen(window, "resize", this.proxy(this._syncPos, '_pxSyncPos'));
+		zEvt.listen(window, "scroll", this._pxSyncPos);
 	},
 	destroy: function () {
 		var mask = this.mask;
 		zEvt.unlisten(mask, "mousemove", zEvt.stop);
 		zEvt.unlisten(mask, "click", zEvt.stop);
-		zEvt.unlisten(window, "resize", this._onPos);
-		zEvt.unlisten(window, "scroll", this._onPos);
+		zEvt.unlisten(window, "resize", this._pxSyncPos);
+		zEvt.unlisten(window, "scroll", this._pxSyncPos);
 		zDom.remove(mask);
 		zDom.remove(this.stackup);
-		this._onPos = this.mask = this.stackup = null;
+		this.mask = this.stackup = null;
 	},
 	/** Hides the mask. */
 	hide: function () {

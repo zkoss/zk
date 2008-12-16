@@ -378,9 +378,12 @@ zk.Object.prototype = {
 		}
 	},
 
-	proxy: function (f) {
-		var o = this;
-		return function () {
+	proxy: function (f, nm) {
+		var o = this[nm];
+		if (o) return o;
+
+		o = this;
+		return this[nm] = function () {
 			return f.apply(o, arguments);
 		};
 	}

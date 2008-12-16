@@ -56,15 +56,14 @@ zul.utl.Timer = zk.$extends(zk.Widget, {
 	},
 	_play: function () {
 		if (this._running) {
-			this._tmfnpx = this.proxy(this._tmfn);
+			var fn = this.proxy(this._tmfn);
 			if (this._repeats)
-				this._iid = setInterval(this._tmfnpx, this._delay);
+				this._iid = setInterval(fn, this._delay);
 			else
-				this._tid = setTimeout(this._tmfnpx, this._delay);
+				this._tid = setTimeout(fn, this._delay);
 		}
 	},
 	_stop: function () {
-		this._tmfnpx = null;
 		var id = this._iid;
 		if (id) {
 			this._iid = null;

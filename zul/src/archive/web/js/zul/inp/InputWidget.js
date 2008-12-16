@@ -167,8 +167,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		this.$supers('bind_', arguments);
 		var inp = this.einp = zDom.$(this.uuid + '$inp') || this.node,
 			$InputWidget = zul.inp.InputWidget;
-		zEvt.listen(inp, "focus", this._$doFocus = this.proxy(this.doFocus_));
-		zEvt.listen(inp, "blur", this._$doBlur = this.proxy(this.doBlur_));
+		zEvt.listen(inp, "focus", this.proxy(this.doFocus_, '_pxFocus'));
+		zEvt.listen(inp, "blur", this.proxy(this.doBlur_, '_pxBlur'));
 		zEvt.listen(inp, "select", $InputWidget._doSelect);
 		zEvt.listen(inp, "keydown", $InputWidget._doKeyDown);
 		if (zDom.tag(inp) == 'TEXTAREA')
@@ -180,8 +180,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	unbind_: function () {
 		var inp = this.einp,
 			$InputWidget = zul.inp.InputWidget;
-		zEvt.unlisten(inp, "focus", this._$doFocus);
-		zEvt.unlisten(inp, "blur", this._$doBlur);
+		zEvt.unlisten(inp, "focus", this._pxFocus);
+		zEvt.unlisten(inp, "blur", this._pxBlur);
 		zEvt.unlisten(inp, "select", $InputWidget._doSelect);
 		zEvt.unlisten(inp, "keydown", $InputWidget._doKeyDown);
 		if (zDom.tag(inp) == 'TEXTAREA')
@@ -189,7 +189,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 
 		//TODO: clean up errorbox
 
-		this._$doFocus = this._$doBlur = this.einp = null;
+		this.einp = null;
 		this.$supers('unbind_', arguments);
 	},
 	isImportantEvent_: function (evtnm) {
