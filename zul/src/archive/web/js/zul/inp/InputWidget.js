@@ -148,6 +148,21 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 
 	//super//
+	domClass_: function (no) {
+		var sc = this.$supers('domClass_', arguments),
+			zcls = this.getZclass();
+		if (!no || !no.zclass) {
+			if (this._disabled)
+				sc += ' ' + zcls + '-disd';
+		}
+		if (!no || !no.input) {
+			if (this._disabled)
+				sc += ' ' + zcls + '-text-disd';
+			if (this._readonly)
+				sc += ' ' + zcls + '-readonly';
+		}
+		return sc;
+	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
 		var inp = this.einp = zDom.$(this.uuid + '$inp') || this.node,
@@ -158,15 +173,6 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		zEvt.listen(inp, "keydown", $InputWidget._doKeyDown);
 		if (zDom.tag(inp) == 'TEXTAREA')
 			zEvt.listen(inp, "keyup", $InputWidget._doKeyUp);
-
-		var zcls = this.getZclass();
-		if (this._disabled) {
-			zDom.addClass(this.node, zcls + '-disd');
-			zDom.addClass(this.einp, zcls + '-text-disd');
-		}
-		if (this._readonly)
-			zDom.addClass(this.einp, zcls + '-readonly');
-
 	//Bug 1486556: we have to enforce zkTxbox to send value back for validating
 	//at the server
 	//TODO
