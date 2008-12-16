@@ -293,10 +293,8 @@ zkm = {
 					zUtl.go(href, false, wgt.target, "target");
 					return; //done
 				}
-				if (wgt.isListen('onClick')) {
-					wgt.fire("onClick", zEvt.mouseData(evt, wgt.node), {ctl:true});
+				if (wgt.doClick_(evt))
 					return;
-				}
 			}
 			//no need to Event.stop
 		}

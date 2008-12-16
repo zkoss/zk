@@ -857,9 +857,16 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 
 	//ZK event handling//
+	doClick_: function (evt) {
+		if (this.isListen('onClick')) {
+			this.fire("onClick", zEvt.mouseData(evt, this.node), {ctl:true});
+			return true;
+		}
+		return false;
+	},
 
 	//DOM event handling//
-	/** Callback this method if you listen DOM onfocus. */
+	/** A utility to call if you listen DOM onfocus. */
 	domFocus_: function () {
 		if (!this.canActivate()) return false;
 
@@ -870,7 +877,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			this.fire('onFocus');
 		return true;
 	},
-	/** Callback this method if you listen DOM onblur. */
+	/** A Callback this method if you listen DOM onblur. */
 	domBlur_: function () {
 		zk.currentFocus = null;
 
