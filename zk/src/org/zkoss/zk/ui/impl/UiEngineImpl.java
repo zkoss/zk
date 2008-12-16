@@ -930,6 +930,7 @@ public class UiEngineImpl implements UiEngine {
 				exec.setAttribute("javax.servlet.error.exception", err);
 				exec.setAttribute("javax.servlet.error.exception_type", err.getClass());
 				exec.setAttribute("javax.servlet.error.status_code", new Integer(500));
+				exec.setAttribute("javax.servlet.error.error_page", location);
 
 				//Future: consider to go thru UiFactory for the richlet
 				//for the error page.

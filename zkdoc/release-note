@@ -2,6 +2,7 @@
 ZK 3.0.9
 * Features
   2354640: lang-addon.xml supports library-property
+  2433264: Able to access the URI of the error page
 
 * Bugs
   2165067: Fail to remove children via invoking it.previous()
