@@ -1,6 +1,7 @@
 	--------
 ZK 3.5.3
 * Features
+  2433264: Able to access the URI of the error page
 
 * Bugs
 
