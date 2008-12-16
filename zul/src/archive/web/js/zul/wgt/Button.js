@@ -98,6 +98,14 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		return this.getDir() == 'reverse' ?
 			label + space + img: img + space + label;
 	},
+	domClass_: function (no) {
+		var scls = this.$super('domClass_', no);
+		if (this._disabled && (!no || !no.zclass)) {
+			var s = this.getZclass();
+			if (s) scls += (scls ? ' ': '') + s + '-disd';
+		}
+		return scls;
+	},
 
 	getZclass: function () {
 		var zcls = this._zclass;
@@ -148,6 +156,11 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 
 		this.ebox = this.ebtn = null;
 		this.$super('unbind_');
+	},
+	doClick_: function (evt) {
+		if (!this._disabled && this.isListen('onClick'))
+			this.fire("onClick", zEvt.mouseData(evt, this.node), {ctl:true});
+		return true;
 	}
 },{
 	_doOver: function (evt) {
