@@ -620,8 +620,20 @@ zk.Widget = zk.$extends(zk.Object, {
 	 */
 	removeChildHTML_: function (child, prevsib) {
 		var n = child.node;
+		if (!n) this._prepareRemove(n = []);
+
 		child.unbind_();
-		zDom.remove(n);
+
+		if (n.$array)
+			for (var j = n.length; --j >= 0;)
+				zDom.remove(n[j]);
+		else
+			zDom.remove(n);
+	},
+	_prepareRemove: function (ary) {
+		for (var w = this.firstChild; w; w = w.nextSibling)
+			if (w.node) ary.push(w.node);
+			else w._prepareRemove(ary);
 	},
 
 	/** Binds (aka., attaches) the widget to the DOM tree.
