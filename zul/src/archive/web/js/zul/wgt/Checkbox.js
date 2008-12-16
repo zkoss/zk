@@ -13,7 +13,6 @@ This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
-	_dir: "normal",
 	_tabindex: -1,
 	
 	/** Returns whether this button is disabled.
