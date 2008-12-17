@@ -171,7 +171,14 @@ public class Radio extends Checkbox implements org.zkoss.zul.api.Radio {
 			if (newgp != null) newgp.fixOnAdd(this);
 		}
 	}
-
+	
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+		if (_value != null)
+			render(renderer, "value", _value);
+	}
+	
 	//-- ComponentCtrl --//
 	/** Processes an AU request.
 	 *

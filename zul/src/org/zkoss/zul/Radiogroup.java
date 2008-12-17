@@ -278,7 +278,14 @@ public class Radiogroup extends XulElement implements org.zkoss.zul.api.Radiogro
 		return Strings.encode(new StringBuffer(16).append("_pg"),
 			System.identityHashCode(this)).toString();
 	}
-
+	
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+		if (_name != null)
+			render(renderer, "name", _name);
+	}
+	
 	//Cloneable//
 	public Object clone() {
 		final Radiogroup clone = (Radiogroup)super.clone();

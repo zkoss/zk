@@ -22,4 +22,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<widget name="Checkbox"/>
 	<widget name="Groupbox"/>
 	<widget name="Html"/>
+	<widget name="Radio"/>
+	<widget name="Radiogroup"/>
 </package>
