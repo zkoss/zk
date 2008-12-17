@@ -15,37 +15,18 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 	_value: '',
 	
-	/** Returns {@link Radiogroup} that this radio button belongs to.
-	 * It is the nearest ancestor {@link Radiogroup}.
-	 * In other words, it searches up the parent, parent's parent
-	 * and so on for any {@link Radiogroup} instance.
-	 * If found this radio belongs the found radiogroup.
-	 * If not, this radio itself is a group.
-	 */
 	getRadiogroup: function (parent) {
 		var wgt = parent || this.parent;
 		for (; wgt; wgt = wgt.parent)
 			if (wgt.$instanceof(zul.wgt.Radiogroup)) return wgt;
 		return null;
 	},
-
-	/** Returns whether it is selected.
-	 * <p>Default: false.
-	 * <p>Don't override this. Override {@link #isChecked} instead.
-	 */
 	isSelected: function () {
 		return this.isChecked();
 	},
-	/** Sets whether it is selected.
-	 * <p>Don't override this. Override {@link #setChecked} instead.
-	 * <p>The same as {@link #setChecked}.
-	 */
 	setSelected: function (selected, fromServer) {
 		this.setChecked(selected, fromServer);
 	},
-	/** Sets the radio is checked and unchecked the others in the same radio
-	 * group ({@link Radiogroup}.
-	 */
 	setChecked: function (checked, fromServer) {
 		if (checked != this.isChecked()) {
 			this.$super('setChecked', checked, fromServer);
@@ -63,53 +44,28 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 					}
 				}
 				if (group) 
-					group.fixSelectedIndex_();
+					group._fixSelectedIndex();
 			}
 		}
 	},
-
-	/** Returns the value.
-	 * <p>Default: "".
-	 */
 	getValue: function () {
 		return this._value;
 	},
-	/** Sets the value.
-	 * @param value the value; If null, it is considered as empty.
-	 */
 	setValue: function (value) {
 		if (value == null)
 			value = "";
 		if (this._value != value)
 			this._value = value;
 	},
-
-	/** Returns the name of this radio button.
-	 * <p>Don't use this method if your application is purely based
-	 * on ZK's event-driven model.
-	 * <p>It is readonly, and it is generated automatically
-	 * to be the same as its parent's name ({@link Radiogroup#getName}).
-	 */
 	getName: function () {
 		var group = this.getRadiogroup();
 		return group != null ? group.getName(): this.uuid;
 	},
-
-	/** Returns the inner attributes for generating the HTML radio tag
-	 * (the name and value attribute).
-	 * <p>Used only by component developers.
-	 */
 	contentAttrs_: function () {
 		var html = this.$super('contentAttrs_');
 		html += ' value="' + this.getValue() + '"';
 		return html;
 	},
-	/** Returns the Style of radio label
-	 *
-	 * <p>Default: "z-radio"
-	 * <p>Since 3.5.1
-	 * 
-	 */
 	getZclass: function () {
 		var zcls = this._zclass;
 		return zcls != null ? zcls: "z-radio";
