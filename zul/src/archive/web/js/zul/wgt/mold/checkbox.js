@@ -16,7 +16,7 @@ function () {
 	var uuid = this.uuid,
 		zcls = this.getZclass();
 	return '<span' + this.domAttrs_({disabled: 1, checked: 1, tabindex: 1}) + '>'
-		 + '<input type="checkbox" id="' + uuid + '$real"' + this._contentAttrs()
-		 + '/><label for="' + uuid + '$real"' + this._labelAttrs()
+		 + '<input type="checkbox" id="' + uuid + '$real"' + this.contentAttrs_()
+		 + '/><label for="' + uuid + '$real"' + this.labelAttrs_()
 		 + ' class="' + zcls + '-cnt">' + this.domContent_() + '</label></span>';	
 }

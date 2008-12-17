@@ -34,7 +34,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 	 * <p>Default: false.
 	 */
 	isChecked: function () {
-		return _checked;
+		return this._checked;
 	},
 	/** Sets whether it is checked.
 	 */
@@ -71,7 +71,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 	 * @param name the name of this component.
 	 */
 	setName: function (name) {
-		if (name != null && name.length() == 0) name = null;
+		if (!name) name = null;
 		if (this._name != name) {
 			this._name = name;
 			if (this.ereal)
@@ -97,8 +97,8 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		var zcls = this._zclass;
 		return zcls != null ? zcls: "z-checkbox";
 	},
-	_contentAttrs: function () {
-		var html = '', v = this._name;
+	contentAttrs_: function () {
+		var html = '', v = this.getName(); // cannot use this._name for radio
 		if (v)
 			html += ' name="' + v + '"';
 		if (this._disabled)
@@ -110,7 +110,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 			html += ' tabindex="' + v + '"';
 		return html;
 	},
-	_labelAttrs: function () {
+	labelAttrs_: function () {
 		var style = zDom.getTextStyle(this.domStyle_());
 		return style ? ' style="' + style + '"' : "";
 	},
@@ -151,16 +151,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		var wgt = zk.Widget.$(zk.gecko2Only ? evt.currentTarget : evt);
 			// bug #2233787 : this is a bug of firefox 2, it need get currentTarget
 		var newval = wgt.ereal.checked;
-		if (newval != wgt.ereal.defaultChecked) { //changed
-			// bug #1893575 : we have to clean all of the radio at the same group.
-			// in addition we can filter unnecessary onCheck with defaultChecked
-			if (wgt.ereal.type == "radio") {
-				var nms = document.getElementsByName(wgt.ereal.name);
-				for (var i = nms.length; --i >= 0;)
-					nms[i].defaultChecked = false;
-			}
-			wgt.ereal.defaultChecked = newval;
-			wgt.fire('onCheck', newval);
-		}
+		if (newval != wgt.ereal.defaultChecked) //changed
+			wgt.setChecked(newval);
 	}
 });
