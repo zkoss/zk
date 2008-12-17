@@ -71,7 +71,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	},
 	replaceChildHTML_: function (child, n, desktop) {
 		this.$super('replaceChildHTML_', child, n, desktop);
-		this._fixChildDomVisible(child, visible);
+		this._fixChildDomVisible(child, child._visible);
 	},
 	_fixChildDomVisible: function (child, visible) {
 		var n = zDom.$(child.uuid + '$chdex');
