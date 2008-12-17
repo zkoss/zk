@@ -122,10 +122,8 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		this.ereal = zDom.$(this.uuid + '$real');
 
 		zEvt.listen(this.ereal, "click", $Checkbox.doClick);
-		this._onFocus = this.proxy(this.domFocus_);
-		this._onBlur = this.proxy(this.domBlur_);
-		zEvt.listen(this.ereal, "focus", this._onFocus);
-		zEvt.listen(this.ereal, "blur", this._onBlur);
+		zEvt.listen(this.ereal, "focus", this.proxy(this.domFocus_, '_fxFocus'));
+		zEvt.listen(this.ereal, "blur", this.proxy(this.domBlur_, '_fxBlur'));
 	},
 	unbind_: function () {
 		var $Checkbox = zul.wgt.Checkbox,
@@ -133,11 +131,11 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		
 		if (n) {
 			zEvt.unlisten(n, "mousedown", $Checkbox.doClick);			
-			zEvt.unlisten(n, "focus", this._onFocus);
-			zEvt.unlisten(n, "blur", this._onBlur);
+			zEvt.unlisten(n, "focus", this._fxFocus);
+			zEvt.unlisten(n, "blur", this._fxBlur);
 		}
 
-		this.ereal = this._onFocus = this._onBlur = null;
+		this.ereal = null;
 		this.$super('unbind_');
 	},
 	updateDomStyle_: function () {

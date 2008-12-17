@@ -119,9 +119,9 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 			newParent = newParent ? this.getRadiogroup(newParent) : null;
 		if (oldParent != newParent) {
 			if (oldParent && oldParent.$instanceof(zul.wgt.Radiogroup))
-				oldParent.fixOnRemove_(this); 
+				oldParent._fixOnRemove(this); 
 			if (newParent && newParent.$instanceof(zul.wgt.Radiogroup))
-				newParent.fixOnAdd_(this); 
+				newParent._fixOnAdd(this); 
 		}
 	}
 });

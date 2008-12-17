@@ -158,7 +158,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		this.$super('unbind_');
 	},
 	doClick_: function (evt) {
-		if (!this._disabled && this.isListen('onClick'))
+		if (!this._disabled)
 			this.fire("onClick", zEvt.mouseData(evt, this.node), {ctl:true});
 		return true;
 	}

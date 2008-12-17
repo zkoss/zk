@@ -148,18 +148,16 @@ zul.wgt.Radiogroup = zk.$extends(zul.Widget, {
 	},
 
 	//utilities for radio//
-	/** Called when a radio is added to this group.
-	 */
-	fixOnAdd_: function (child) {
+	/** Called when a radio is added to this group. */
+	_fixOnAdd: function (child) {
 		if (this._jsel >= 0 && child.isSelected()) {
 			child.setSelected(false); //it will call fixSelectedIndex_()
 		} else {
 			this.fixSelectedIndex_();
 		}
 	},
-	/** Called when a radio is removed from this group.
-	 */
-	fixOnRemove_: function (child) {
+	/** Called when a radio is removed from this group. */
+	_fixOnRemove: function (child) {
 		if (child.isSelected()) {
 			this._jsel = -1;
 		} else if (this._jsel > 0) { //excluding 0
