@@ -162,7 +162,7 @@ public class Radiogroup extends XulElement implements org.zkoss.zul.api.Radiogro
 		if (item == null) {
 			setSelectedIndex(-1);
 		} else {
-			if (item.getParent() != this)
+			if (item.getRadiogroup() != this)
 				throw new UiException("Not a child: "+item);
 			item.setSelected(true);
 		}
