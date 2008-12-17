@@ -79,23 +79,10 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
  */
 public class DHtmlLayoutServlet extends HttpServlet {
 	private static final Log log = Log.lookup(DHtmlLayoutServlet.class);
-	private static final String ATTR_LAYOUT_SERVLET
-		= "org.zkoss.zk.ui.http.LayoutServlet";
 
 	private ServletContext _ctx;
 	private WebManager _webman;
 	private boolean _compress = true;
-
-	/** Returns the layout servlet of the specified application, or
-	 * null if not loaded yet.
-	 * Note: if the layout servlet is not loaded, it returns null.
-	 * @since 3.0.2
-	 */
-	public static DHtmlLayoutServlet getLayoutServlet(WebApp wapp) {
-		return (DHtmlLayoutServlet)
-			((ServletContext)wapp.getNativeContext())
-				.getAttribute(ATTR_LAYOUT_SERVLET);
-	}
 
 	//Servlet//
 	public void init(ServletConfig config) throws ServletException {
@@ -114,28 +101,27 @@ public class DHtmlLayoutServlet extends HttpServlet {
 			_compress = "true".equals(param);
 
 		_ctx = config.getServletContext();
-		if (WebManager.getWebManagerIfAny(_ctx) != null)
-			throw new ServletException("Only one layout servlet is allowed in one context: "+_ctx);
-
-		String updateURI = config.getInitParameter("update-uri");
-		if (updateURI == null
-		|| (updateURI = updateURI.trim()).length() == 0
-		|| updateURI.charAt(0) != '/')
-			throw new ServletException("The update-uri parameter must be specified and starts with /");
-		if (updateURI.indexOf(';') >= 0 || updateURI.indexOf('?') >= 0)
-			throw new ServletException("The update-uri parameter cannot contain ';' or '?'");
-			//Jetty will encode URL by appending ';jsess..' and we have to
-			//remove it under certain situations, so not alow it
-		if (updateURI.charAt(updateURI.length() - 1) == '\\') {
-			if (updateURI.length() == 1)
-				throw new ServletException("The update-uri parameter cannot contain only '/'");
-			updateURI = updateURI.substring(0, updateURI.length() - 1);
-				//remove the trailing '\\' if any
+		_webman = WebManager.getWebManagerIfAny(_ctx);
+		if (_webman != null) {
+			log.info("Web Manager was created before ZK loader");
+		} else {
+			String updateURI = config.getInitParameter("update-uri");
+			if (updateURI == null
+			|| (updateURI = updateURI.trim()).length() == 0
+			|| updateURI.charAt(0) != '/')
+				throw new ServletException("The update-uri parameter must be specified and starts with /");
+			if (updateURI.indexOf(';') >= 0 || updateURI.indexOf('?') >= 0)
+				throw new ServletException("The update-uri parameter cannot contain ';' or '?'");
+				//Jetty will encode URL by appending ';jsess..' and we have to
+				//remove it under certain situations, so not alow it
+			if (updateURI.charAt(updateURI.length() - 1) == '\\') {
+				if (updateURI.length() == 1)
+					throw new ServletException("The update-uri parameter cannot contain only '/'");
+				updateURI = updateURI.substring(0, updateURI.length() - 1);
+					//remove the trailing '\\' if any
+			}
+			_webman = new WebManager(_ctx, updateURI);
 		}
-
-		_webman = new WebManager(_ctx, updateURI);
-
-		_ctx.setAttribute(ATTR_LAYOUT_SERVLET, this);
 	}
 	public void destroy() {
 		if (_webman != null) _webman.destroy();

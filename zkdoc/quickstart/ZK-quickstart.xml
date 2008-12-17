@@ -2,10 +2,10 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <book lang="en-US">
 <title>The Quick Start Guide</title>
-<subtitle>Version 3.5.1</subtitle>
+<subtitle>Version 3.5.3</subtitle>
 <bookinfo>
 <copyright>
-<year>2008</year>
+<year>2007</year>
 <holder>Potix Corporation. All rights reserved.</holder>
 </copyright>
 </bookinfo>
@@ -113,6 +113,10 @@
 </para></sect1></chapter>
 <chapter>
 <title>1. What to Download</title>
+<para>Download ZK Library:</para>
+<para>
+<ulink url="http://www.zkoss.org/download/zk.dsp">http://www.zkoss.org/download/zk.dsp</ulink>
+</para>
 <informaltable frame="all">
 <tgroup cols="2">
 <thead>
@@ -127,8 +131,8 @@
 </thead><tbody>
 <row>
 <entry>
-<para>zk-bin-std-3.5.1.tar.gz</para>
-<para>zk-bin-std-3.5.1.zip</para>
+<para>zk-bin-std-3.5.3.tar.gz</para>
+<para>zk-bin-std-3.5.3.zip</para>
 </entry>
 <entry>
 <para>The binary distribution of ZK with the minimal set of libraries that you need to enrich your Web applications with ZK.</para>
@@ -137,8 +141,8 @@
 </row>
 <row>
 <entry>
-<para>zk-bin—prof-3.5.1.tar.gz</para>
-<para>zk-bin-prof-3.5.1.zip</para>
+<para>zk-bin—prof-3.5.3.tar.gz</para>
+<para>zk-bin-prof-3.5.3.zip</para>
 </entry>
 <entry>
 <para>The binary distribution of ZK, including the standard edition, JFreeChart, Google Maps, Jasper Reports, and layout components.</para>
@@ -147,8 +151,8 @@
 </row>
 <row>
 <entry>
-<para>zk-bin-3.5.1.tar.gz</para>
-<para>zk-bin-3.5.1.zip</para>
+<para>zk-bin-3.5.3.tar.gz</para>
+<para>zk-bin-3.5.3.zip</para>
 </entry>
 <entry>
 <para>The binary distribution of ZK, including the professional edition, accessibility, the performance version of ZUL (zkmax.jar), and versatile plug-ins, such as Ruby, Groovy, JavaScript, MVEL and OGNL.</para>
@@ -157,7 +161,7 @@
 </row>
 <row>
 <entry>
-<para>zk-demo-3.5.1.zip</para>
+<para>zk-demo-3.5.3.zip</para>
 </entry>
 <entry>
 <para>Standalone zkdemo application in WAR and EAR format, and the source codes of zkdemo.</para>
@@ -166,7 +170,7 @@
 </row>
 <row>
 <entry>
-<para>zk-javadoc-3.5.1.zip</para>
+<para>zk-javadoc-3.5.3.zip</para>
 </entry>
 <entry>
 <para>The Java API document of ZK framework.</para>
@@ -174,7 +178,7 @@
 </row>
 <row>
 <entry>
-<para>zk-src-3.5.1.tar.gz</para>
+<para>zk-src-3.5.3.tar.gz</para>
 </entry>
 <entry>
 <para>The source codes of ZK framework.</para>
@@ -189,7 +193,7 @@
 <para>If you want to run the demo in your local server, you can follow the following steps.</para>
 <orderedlist>
 <listitem>
-<para>Download zk-demo-3.5.1.zip from <ulink url="http://sourceforge.net/project/showfiles.php?group_id=152762&amp;package_id=169309">here (sourceforge.net)</ulink>.</para>
+<para>Download zk-demo-3.5.3.zip from <ulink url="http://sourceforge.net/project/showfiles.php?group_id=152762&amp;package_id=169309">here (sourceforge.net)</ulink>.</para>
 </listitem>
 <listitem>
 <para>After uncompressing the file, you can deploy zkdemo.war or zkdemo.ear to your Web or application server.Most Web or application servers have a management console that allows you to deploy an application painlessly. Consult the corresponding manuals, or you can visit <ulink url="http://en.wikibooks.org/wiki/ZK/How-Tos#Installation_and_Configuration">http://en.wikibooks.org/wiki/ZK/How-Tos#Installation_and_Configuration</ulink>, where the ZK community maintains the installation guides for many Web or application servers.For Tomcat server, you can copy it directly to the $TOMCAT_DIR/webapps directory, and then Tomcat will start the deployment automatically.</para>
@@ -200,95 +204,185 @@
 </orderedlist>
 </chapter>
 <chapter>
-<title>3. Installation</title>
+<title>3. Begin Your First ZK Project</title>
 <para>ZK consists of several libraries (the JAR files). There are two alternatives to install them.</para>
 <para>First, you can bundle them with your Web application. In other words, copy them to the WEB-INF/lib directory of your Web application. The benefit is that you can deploy your Web application to any Web server without configuring the Web server.</para>
-<para>Second, you can install them to your Web or application server. In other words, copy them to the shared directory of the Web or application server (for Tomcat, it is shared/lib). The benefit is that all Web applications deployed to the server can use ZK without bundled with ZK libraries. </para><sect1><title>Alternative 1: Bundle ZK into Your Web Application</title>
-<para>By copying ZK libraries to your Web application (WEB-INF/lib), you can deploy your Web application to any Web or application server without configuring the server.</para>
-<para>To bundle ZK libraries with the WAR file (the Web application)</para>
-<orderedlist>
+<para>Second, you can install them to your Web or application server. In other words, copy them to your Web application directory (for Tomcat, it is $TOMCAT_HOME/webapps/$PROJECT_NAME/WEB-INF/lib). </para>
+<para/>
+<itemizedlist>
 <listitem>
-<para>Uncompress zk-bin-3.5.1.zip or zk-bin-3.5.1.tar.gz</para>
-</listitem>
-<listitem>
-<para>Copy dist/lib/*.jar, dist/lib/zkforge/*.jar, and dist/lib/ext/*.jar to the /WEB-INF/lib directory in your Web application.Libraries in dist/lib/zkforge and dist/lib/ext are optional. If you want to minimize the footprint of your Web application, refer to the next chapter for the description of these libraries.</para>
-</listitem>
-</orderedlist>
-<para>To bundle ZK libraries with the EAR file (the Java EE application)</para>
-<orderedlist>
-<listitem>
-<para>Uncompress zk-bin-3.5.1.zip or zk-bin-3.5.1.tar.gz</para>
-</listitem>
-<listitem>
-<para>Copy dist/lib/*.jar, dist/lib/zkforge/*.jar, and dist/lib/ext/*.jar to the root directory in your Java EE application.Libraries in dist/lib/zkforge and dist/lib/ext are optional. If you want to minimize the footprint of your Web application, refer to the next chapter for the description of these libraries.</para>
-</listitem>
-</orderedlist></sect1><sect1><title>Alternative 2: Install ZK to Be Shared by All Web Applications</title>
-<para>The way to install ZK libraries to the shared directory varies from one Web server to another.</para>
-<para>Install ZK on Tomcat</para>
-<orderedlist>
-<listitem>
-<para>Download Tomcat from <ulink url="http://tomcat.apache.org/">http://tomcat.apache.org</ulink> and install it, if you haven't installed it yet.</para>
-</listitem>
-<listitem>
-<para>Stop Tomcat.</para>
-</listitem>
-<listitem>
-<para>Uncompress zk-bin-3.5.1.zip or zk-bin-3.5.1.tar.gz</para>
-</listitem>
-<listitem>
-<para>Copy dist/lib/*.jar, dist/lib/zkforge/*.jar, and dist/lib/ext/*.jar to $TOMCAT_HOME<footnote>
-<para>$TOMCAT_HOME is where you installed Tomcat.</para>
-</footnote>/shared/libLibraries in dist/lib/zkforge and dist/lib/ext are optional. If you want to minimize the footprint of your Web server, refer to the next chapter for the description of these libraries.</para>
-</listitem>
-<listitem>
-<para>Re-start Tomcat.</para>
-</listitem>
-</orderedlist>
-<para>Then, you can deploy your Web application, e.g., demo/bin/zkdemo-min.war, to Tomcat. It can be done by use of the Tomcat manager, or by copying it to $TOMCAT_HOME/webapps directly. If you prefer to copy directly, you have to stop Tomcat first. After deployed, you can run your Web application by visiting the corresponding URL, e.g.,<ulink url="http://localhost/zkdemo/userguide"> </ulink>
-<ulink url="http://localhost/zkdemo/userguide">http://localhost:8080/zkdemo/userguide</ulink>
-<ulink url="http://localhost/zkdemo/userguide">,</ulink> depending on the configuration of your Web server. </para>
-<para>Note: Tomcat 6.x, by default, doesn't load any classes from the shared/lib directory. To enable it, you have to specify the following in the conf/catalina.properties file:</para>
 <para>
-<link linkend="">shared.loader=${catalina.base}/shared/lib/*.jar</link>
+<ulink url="http://www.zkoss.org/download/zk.dsp">Download ZK Library:</ulink>
 </para>
-<para>Install ZK on Jetty</para>
+<para>
+<ulink url="http://www.zkoss.org/download/zk.dsp">http://www.zkoss.org/download/zk.dsp</ulink>
+</para>
+</listitem>
+<listitem>
+<para>Create project </para>
+<para>Create a development directory under $TOMCAT_HOME/webapps. The structure of development directory is shown below:(ex.zkdemo) </para>
+<para/>
+<para>
+<code>+zkdemo</code>
+</para>
+<para>
+<code>+WEB-INF</code>
+</para>
+<para>
+<code>web.xml</code>
+</para>
+<para>
+<code>index.zul</code>
+</para>
+</listitem>
+<listitem>
+<para>Unzip ZK libraryUnzip zk-bin-prof-xxx.zip or zk-bin-prof-xxx.tar.gz (ex. zk-bin-prof-x.x.x.zip) </para>
+</listitem>
+<listitem>
+<para>Deploy ZK libraryCopy the following jar files to the $TOMCAT_HOME/webapps/$PROJECT_NAME/WEB-INF/lib (ex.zkdemo/WEB-INF/lib) </para>
 <orderedlist>
-<listitem>
-<para>Download Jetty from <ulink url="http://www.mortbay.org/jetty/index.html">http://www.mortbay.org/jetty/index.html</ulink> and install it<footnote>
-<para>Refer to <ulink url="http://docs.codehaus.org/display/JETTY/Jetty+Documentation">http://docs.codehaus.org/display/JETTY/Jetty+Documentation</ulink>
+<para>
+<code>dist/lib/*.jar </code>
 </para>
-</footnote>, if you haven't installed it yet.</para>
-</listitem>
-<listitem>
-<para>Stop Jetty.</para>
-</listitem>
-<listitem>
-<para>Uncompress zk-bin-3.5.1.zip or zk-bin-3.5.1.tar.gz</para>
-</listitem>
-<listitem>
-<para>Copy dist/lib/*.jar, dist/lib/zkforge/*.jar, and dist/lib/ext/*.jar to $JETTY_HOME/ext Libraries in dist/zkforge and dist/lib/ext are optional. If you want to minimize the footprint of your Web server, refer to the next chapter for the description of these libraries.</para>
-</listitem>
-<listitem>
-<para>Re-start Jetty.</para>
-</listitem>
+<para>
+<code>dist/lib/zkforge/*.jar </code>
+</para>
+<para>
+<code>dist/lib/ext/*.jar </code>
+</para>
 </orderedlist>
-<para>Then, you can deploy your Web application, e.g., demo/bin/zkdemo-min.war, to Jetty by copying it to $JETTY_HOME/webapps directly. After deployed, you can run your Web application by visiting the corresponding URL, e.g.,<ulink url="http://localhost/zkdemo/userguide"> </ulink>
-<ulink url="http://localhost/zkdemo/userguide">http://localhost:8080/zkdemo/userguide</ulink>
-<ulink url="http://localhost/zkdemo/userguide">,</ulink> depending on the configuration of your Web server.</para></sect1><sect1><title>Working with MySQL<footnote>
+</listitem>
+<listitem>
+<para>Create web.xmlCreate web.xml under $TOMCAT_HOME/webapps/zkdemo, and Copy the following lines into web.xml </para>
+<para/>
 <para>
-<ulink url="http://mysql.com/">http://ww.mysql.com</ulink>
+<code>&lt;!-- ZK --&gt;</code>
 </para>
-</footnote>
-</title>
-<footnote>
 <para>
-<ulink url="http://mysql.com/">http://ww.mysql.com</ulink>
+<code>&lt;listener&gt;</code>
 </para>
-</footnote>
-<para>To open the connection under zscript, you have to put MySQL JDBC driver (mysql-connector-*.jar) under the $TOMCAT_DIR/common/lib directory.</para></sect1></chapter>
+<para>
+<code>&lt;description&gt;Used to clean up when a session is destroyed&lt;/description&gt;</code>
+</para>
+<para>
+<code>&lt;display-name&gt;ZK Session Cleaner&lt;/display-name&gt;</code>
+</para>
+<para>
+<code>&lt;listener-class&gt;org.zkoss.zk.ui.http.HttpSessionListener&lt;/listener-class&gt;</code>
+</para>
+<para>
+<code>&lt;/listener&gt;</code>
+</para>
+<para/>
+<para>
+<code>&lt;servlet&gt;</code>
+</para>
+<para>
+<code>&lt;description&gt;ZK loader for ZUML pages&lt;/description&gt;</code>
+</para>
+<para>
+<code>&lt;servlet-name&gt;zkLoader&lt;/servlet-name&gt;</code>
+</para>
+<para>
+<code>&lt;servlet-class&gt;org.zkoss.zk.ui.http.DHtmlLayoutServlet&lt;/servlet-class&gt;</code>
+</para>
+<para>
+<code>&lt;init-param&gt;</code>
+</para>
+<para>
+<code>&lt;param-name&gt;update-uri&lt;/param-name&gt;</code>
+</para>
+<para>
+<code>&lt;param-value&gt;/zkau&lt;/param-value&gt;</code>
+</para>
+<para>
+<code>&lt;/init-param&gt;</code>
+</para>
+<para>
+<code>&lt;load-on-startup&gt;1&lt;/load-on-startup&gt;</code>
+</para>
+<para>
+<code>&lt;/servlet&gt;</code>
+</para>
+<para>
+<code>&lt;servlet-mapping&gt;</code>
+</para>
+<para>
+<code>&lt;servlet-name&gt;zkLoader&lt;/servlet-name&gt;</code>
+</para>
+<para>
+<code>&lt;url-pattern&gt;*.zul&lt;/url-pattern&gt;</code>
+</para>
+<para>
+<code>&lt;/servlet-mapping&gt;</code>
+</para>
+<para>
+<code>&lt;servlet-mapping&gt;</code>
+</para>
+<para>
+<code>&lt;servlet-name&gt;zkLoader&lt;/servlet-name&gt;</code>
+</para>
+<para>
+<code>&lt;url-pattern&gt;*.zhtml&lt;/url-pattern&gt;</code>
+</para>
+<para>
+<code>&lt;/servlet-mapping&gt;</code>
+</para>
+<para/>
+<para>
+<code>&lt;servlet&gt;</code>
+</para>
+<para>
+<code>&lt;description&gt;The asynchronous update engine for ZK&lt;/description&gt;</code>
+</para>
+<para>
+<code>&lt;servlet-name&gt;auEngine&lt;/servlet-name&gt; </code>
+</para>
+<para>
+<code>&lt;servlet-class&gt;org.zkoss.zk.au.http.DHtmlUpdateServlet&lt;/servlet-class&gt;</code>
+</para>
+<para>
+<code>&lt;/servlet&gt;</code>
+</para>
+<para>
+<code>&lt;servlet-mapping&gt;</code>
+</para>
+<para>
+<code>&lt;servlet-name&gt;auEngine&lt;/servlet-name&gt;</code>
+</para>
+<para>
+<code>&lt;url-pattern&gt;/zkau/*&lt;/url-pattern&gt;</code>
+</para>
+<para>
+<code>&lt;/servlet-mapping&gt;</code>
+</para>
+</listitem>
+<listitem>
+<para>Create first ZUL FileCreate index.zul under $TOMCAT_HOME/webapps/zkdemo/, and copy the following lines into it. </para>
+<para/>
+<para>
+<code>&lt;window title="My First window" border="normal" width="200px"&gt;</code>
+</para>
+<para>
+<code>Hello, World!</code>
+</para>
+<para>
+<code>&lt;/window&gt;</code>
+</para>
+<para/>
+</listitem>
+<listitem>
+<para>Start TomcatExecute $TOMCAT_HOME/bin/start.bat to activate Tomcat.(ex. C:\Program Files\apache-tomcat-5.5.23\bin\start.bat) </para>
+</listitem>
+<listitem>
+<para>Browse zkdemoBrowse to http://localhost/zkdemo/ or http://localhost:8080/zkdemo/ depending on your configuration for Tomcat. </para>
+</listitem>
+</itemizedlist>
+<para/>
+</chapter>
 <chapter>
 <title>4. The Content of Binary Distribution</title>
-<para>This chapter describes the content of zk-bin-3.5.1.zip.</para><sect1><title>/doc</title>
+<para>This chapter describes the content of zk-bin-3.5.3.zip.</para><sect1><title>/doc</title>
 <para>This directory holds the documents including copyrights and release notes.</para></sect1><sect1><title>/dist/lib</title>
 <para>This directory holds the binary libraries required to run ZK.</para></sect1><sect1><title>/dist/lib/zkforge</title>
 <para>This directory holds the components from ZK Forge, such as FCKeditor. It is optional depending on whether you need them.</para>
@@ -457,12 +551,12 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable></sect1><sect1><title>/dist/src</title>
-<para>This directory holds the source codes in JAR format. These JAR files are used for debugging in IDE, such as Eclipse. You cannot build the binary libraries from these. Rather, download and uncompress zk-src-3.5.1.tar.gz.</para></sect1><sect1><title>/dist/xsd</title>
+<para>This directory holds the source codes in JAR format. These JAR files are used for debugging in IDE, such as Eclipse. You cannot build the binary libraries from these. Rather, download and uncompress zk-src-3.5.3.tar.gz.</para></sect1><sect1><title>/dist/xsd</title>
 <para>This directory holds the XSD files that might be useful to develop ZK applications.</para></sect1><sect1><title>/dist/WEB-INF</title>
 <para>This directory holds the TLD files. These TLD files are part of JAR files so they are loaded automatically. We put them here mainly for your reference only.</para></sect1></chapter>
 <chapter>
 <title>5. The Content of Demo Distribution</title>
-<para>This chapter describes the content of zk-demo-3.5.1.zip.</para><sect1><title>/</title>
+<para>This chapter describes the content of zk-demo-3.5.3.zip.</para><sect1><title>/</title>
 <para>This directory holds the executable: zkdemo.war, zkdemo-min.war, zkdemos.ear and zkdemos-min.ear. Refer to the Installation chapter for details.</para></sect1><sect1><title>/zkdemo</title>
 <para>This directory holds the source codes of the live demo.</para></sect1><sect1><title>/MyApp</title>
 <para>This directory holds an empty Web application which you can start your new Web application from.</para></sect1></chapter>

@@ -94,13 +94,18 @@ public class WebManager {
 	private final String _updateURI;
 	private final ClassWebResource _cwr;
 
-	/** Creates a new Web
+	/** Creates the Web manager. It is singleton in a Web application
+	 * and it is created automatically by {@link DHtmlLayoutServlet},
+	 * so you rarely need to create it manually.
+	 * @since 3.5.3
 	 */
-	/*package*/ WebManager(ServletContext ctx, String updateURI) {
+	public WebManager(ServletContext ctx, String updateURI) {
 		if (log.debugable()) log.debug("Starting WebManager at "+ctx);
 
 		if (ctx == null || updateURI == null)
 			throw new IllegalArgumentException("null");
+		if (getWebManagerIfAny(ctx) != null)
+			throw new UiException("Only one Web manager is allowed in one context: "+ctx);
 
 		_ctx = ctx;
 		_updateURI = updateURI;
@@ -336,8 +341,9 @@ public class WebManager {
 	 *
 	 * <p>Note: Use this method to create a page, rather than invoking
 	 * {@link UiFactory#newPage} directly.
+	 * @since 3.5.3
 	 */
-	/*package*/ static
+	public static
 	Page newPage(UiFactory uf, RequestInfo ri, PageDefinition pagedef,
 	ServletResponse response, String path) {
 		final DesktopCtrl desktopCtrl = (DesktopCtrl)ri.getDesktop();
@@ -362,8 +368,9 @@ public class WebManager {
 	 *
 	 * <p>Note: Use this method to create a page, rather than invoking
 	 * {@link UiFactory#newPage} directly.
+	 * @since 3.5.3
 	 */
-	/*package*/ static
+	public static
 	Page newPage(UiFactory uf, RequestInfo ri, Richlet richlet,
 	ServletResponse response, String path) {
 		final DesktopCtrl desktopCtrl = (DesktopCtrl)ri.getDesktop();

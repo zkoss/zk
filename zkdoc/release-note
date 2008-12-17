@@ -33,6 +33,16 @@ ZK 3.6.0
 
 * Bugs
   
+	--------
+ZK 3.5.3
+* Features
+  2433264: Able to access the URI of the error page
+  2437121: Make DHtmlLayoutServlet as optional
+
+* Bugs
+  2386650: NullPointerException when create tabs in onTimer()
+  2432784: Tabbox error in IE7
+  2436434: Tabbox scroll to much in IE 7
 
 	--------
 ZK 3.5.2

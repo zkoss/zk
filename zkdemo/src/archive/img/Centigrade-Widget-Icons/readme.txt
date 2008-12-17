@@ -3,4 +3,4 @@ Centigrade GmbH, Germany
 http://www.centigrade.de
 Copyright 2008. All rights reserved.
 
-Usage right granted by Centigrade GmbH. Consult Centigrade GmbH at www.centigrade.de for icon usage.
+Limited usage rights granted by Centigrade. Reselling of these icons is strictly prohibited. To use or redistribute icons in this folder please consult Centigrade GmbH for licensing details (www.centigrade.de).

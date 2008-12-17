@@ -19,7 +19,7 @@ xmlns:w="http://www.zkoss.org/2005/zk/client">
 	<label id="inf2"/>
 	<separator bar="true"/>
 	<script>
-	var inf = this.fellow('inf'); //this is the script widget
+	var inf = this.getFellow('inf'); //this is the script widget
 	var btn = new zul.wgt.Button();
 	btn.setLabel('Append+');
 	btn.listen('onClick', btn);
@@ -40,11 +40,11 @@ xmlns:w="http://www.zkoss.org/2005/zk/client">
 	this.parent.appendChild(btn);
 	</script>
 	<button label="Append-"
-		w:onClick="var inf=this.fellow('inf'); inf.setValue(inf.getValue() + '-');"
+		w:onClick="var inf=this.getFellow('inf'); inf.setValue(inf.getValue() + '-');"
 		onClick='inf2.value += "-"'/>
 	<button label="Append*">
 		<attribute w:name="onClick">
-		var inf = this.fellow('inf');
+		var inf = this.getFellow('inf');
 		inf.setValue(inf.getValue() + '*');
 		</attribute>
 	</button>

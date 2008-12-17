@@ -170,7 +170,6 @@ zk.Widget = zk.$extends(zk.Object, {
 		return true;
 	},
 
-	/** Returns if a widget is really visible (all ancestors are visible). */
 	isRealVisible: function () {
 		for (var wgt = this; wgt; wgt = wgt.parent) {
 			if (!wgt.isVisible()) return false;
@@ -236,34 +235,21 @@ zk.Widget = zk.$extends(zk.Object, {
 			this.setDomVisible_(node, false);
 		}
 	},
-	/** Returns if the widget's visibility depends this widget.
-	 */
+	/** Returns if the specified widget's visibility depends this widget. */
 	_floatVisibleDependent: function (wgt) {
 		for (; wgt; wgt = wgt.parent)
 			if (wgt == this) return true;
 			else if (!wgt.isVisible()) break;
 		return false;
 	},
-	/** Changes the visibility of a child DOM content of this widget.
-	 * <p>Default: change n.style.display directly.
-	 * <p>Note: if {@link #setFloating_} was called, n could be opts.node.
-	 */
 	setDomVisible_: function (n, visible, opts) {
 		if (!opts || opts.display)
 			n.style.display = visible ? '': 'none';
 		if (opts && opts.visibility)
 			n.style.visibility = visible ? 'visible': 'hidden';
 	},
-	/** Called when a child's visiblity is changed or going to change.
-	 * <p>Default: does nothing.
-	 * Deriving class might override it to change the visibility
-	 * of the encosing tag, if any.
-	 */
 	onChildVisible_: function (child, visible) {
 	},
-	/** Makes the specified widget as topmost.
-	 * It does nothig if it is not floating ({@link #setFloating_}).
-	 */
 	setTopmost: function () {
 		var n = this.node;
 		if (n && this._floating) {
@@ -290,13 +276,9 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 		return zi;
 	},
-	/** Returns if this is floating
-	 */
 	isFloating_: function () {
 		return this._floating;
 	},
-	/** Sets a flag to indicate if this widget is floating (i.e., vparent)
-	 */
 	setFloating_: function (floating, opts) {
 		if (this._floating != floating) {
 			var $Widget = zk.Widget;
@@ -397,14 +379,25 @@ zk.Widget = zk.$extends(zk.Object, {
 				this.updateDomStyle_();
 		}
 	},
+	getSclass: function () {
+		return this._sclass;
+	},
+	setSclass: function (sclass) {
+		if (this._sclass != sclass) {
+			this._sclass = sclass;
+			this.updateDomClass_();
+		}
+	},
 	/** Returns the zclass (the mold's style class) of this widget. */
 	getZclass: function () {
 		return this._zclass;
 	},
 	/** Sets the zclass of this widget. */
 	setZclass: function (zclass) {
-		this._zclass = zclass;
-		this.updateDomClass_();
+		if (this._zclass != zclass) {
+			this._zclass = zclass;
+			this.updateDomClass_();
+		}
 	},
 
 	/** Generates the HTML content. */
@@ -413,24 +406,14 @@ zk.Widget = zk.$extends(zk.Object, {
 		return this.prolog ? this.prolog + s: s;
 	},
 
-	/** Updates the DOM element's class.
-	 */
 	updateDomClass_: function () {
 		var n = this.node;
 		if (n) n.className = this.domClass_();
 	},
-	/** Updates the DOM element's style.
-	 */
 	updateDomStyle_: function () {
 		zDom.setStyle(this.node, zDom.parseStyle(this.domStyle_()));
 	},
 
-	/** Returns the style used for the DOM element.
-	 * <p>Default: it is a catenation of style, width, visible and height.
-	 * @param no specify properties to exclude. If omitted, it means none.
-	 * For example, you don't want width to generate, call
-	 * domStyle_({width: true});
-	 */
 	domStyle_: function (no) {
 		var style = '';
 		if (!this.isVisible() && (!no || !no.visible))
@@ -465,16 +448,10 @@ zk.Widget = zk.$extends(zk.Object, {
 		return style;
 	},
 
-	/** Returns the class name used for the DOM element.
-	 * <p>Default: it is a catenation of {@link #getZclass} and {@link #sclass}.
-	 * @param no specify properties to exclude. If omitted, it means none.
-	 * For example, you don't want zclass to generate, call
-	 * domClass_({zclass: true});
-	 */
 	domClass_: function (no) {
 		var scls = '';
 		if (!no || !no.sclass) {
-			var s = this.sclass;
+			var s = this.getSclass();
 			if (s) scls = s;
 		}
 		if (!no || !no.zclass) {
