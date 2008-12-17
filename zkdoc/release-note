@@ -8,6 +8,7 @@ ZK 3.5.3
   2386650: NullPointerException when create tabs in onTimer()
   2432784: Tabbox error in IE7
   2436434: Tabbox scroll to much in IE 7
+  2439090: Groupbox onVisi not called when visible.
 
 	--------
 ZK 3.5.2

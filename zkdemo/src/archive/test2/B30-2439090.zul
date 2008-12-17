@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-2439090.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Dec 17 18:46:33     2008, Created by jumperchen
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+-->
+<tabbox width="500px">
+<tabs>
+<tab label="Tab 3" closable="true"/>
+<tab label="GroupBox onVisi not called." closable="true"/>
+<tab label="Tab 5" closable="true"/>
+</tabs>
+<tabpanels>
+<tabpanel>This is tab 3, click tab 4 to see error.</tabpanel>
+<tabpanel>
+If the groupbox show no strange, that is correct.
+<groupbox id="gb" mold="3d" width="300px" height="100px">
+<caption image="/img/Centigrade-Widget-Icons/FileDrawer-16x16.png"
+label="Enable Backups"/>
+<hbox>
+<label value="Directory:"/>
+<textbox/>
+</hbox>
+<checkbox label="Compress archived files"/>
+</groupbox>
+<checkbox label="Use 3d groupbox" checked="true"
+onCheck='gb.mold=self.checked? "3d": "default"'/>
+</tabpanel>
+<tabpanel>This is panel 5</tabpanel>
+</tabpanels>
+</tabbox>
