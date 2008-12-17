@@ -12,6 +12,7 @@ ZK 3.0.9
   2217915: filedownload doesn't work when opera opera 9.5.x
   2337652: ID space cleanup problem if not attached to a page
   2388345: Defect in use of forEach, arrays and data binding
+  2439090: Groupbox onVisi not called when visible.
 
 	--------
 ZK 3.0.8

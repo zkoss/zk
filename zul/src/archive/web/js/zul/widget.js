@@ -379,7 +379,7 @@ zkCkbox.onclick = function (cmp) {
 zkGrbox = {};
 zkCapt = {};
 
-zkGrbox.onSize = zkGrbox._fixHgh = function (cmp) {
+zkGrbox.onSize = zkGrbox.onVisi = zkGrbox._fixHgh = function (cmp) {
 	var n = $e(cmp.id + "!cave");
 	if (n) {
 		var hgh = cmp.style.height;
