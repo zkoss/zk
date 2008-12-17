@@ -287,20 +287,28 @@ zkTabs2 = {
 		zkTabs2._fixWidth(cmp.id);
 		//horizontal
 		var btn = $e(cmp.id + "!right");
-		if (btn) zk.listen(btn, "click", zkTabs2.onClickArrow);
+		zkTabs2._arrowlistener(btn);
 		btn = $e(cmp.id + "!left");
-		if (btn) zk.listen(btn, "click", zkTabs2.onClickArrow);
+		zkTabs2._arrowlistener(btn);
 		//vertical
 		btn = $e(cmp.id + "!down");
-		if (btn) zk.listen(btn, "click", zkTabs2.onClickArrow);
+		zkTabs2._arrowlistener(btn);
 		btn = $e(cmp.id + "!up");
-		if (btn) zk.listen(btn, "click", zkTabs2.onClickArrow);
+		zkTabs2._arrowlistener(btn);
+		
 		var meta = $parent(cmp);
 		if (!meta.initscroll)
 			meta.initscroll = function () {
 				zkTabs2.scrollingchk(cmp.id,"init");
 			};
 		zk.addInit(meta.initscroll, false, meta.id);
+	},
+	_arrowlistener : function(cmp) {
+		//For Bug- 2436434
+		if (cmp) {
+			zk.unlisten(cmp, "click", zkTabs2.onClickArrow);
+			zk.listen(cmp, "click", zkTabs2.onClickArrow);
+		}
 	},
 	_showbutton : function(cmp) {
 		var tbx = $parentByType(cmp, "Tabbox2"),
@@ -491,11 +499,10 @@ zkTabs2 = {
 	/** Scroll to next tab  . */
 	onClickArrow: function(evt) {
 		if (!evt) evt = window.event;
-		var ele = Event.element(evt),
+		var ele = Event.element(evt),		
 		uuid = $outer(ele).id,
 		move = 0,
 		head = $e(uuid + "!header");
-
 		//Scroll to next right tab
 		if (ele.id == uuid + "!right") {
 			var hosw = head.offsetWidth,
@@ -566,7 +573,7 @@ zkTabs2 = {
 		}
 	},
 	/** Scroll Tabs */
-	_tabscroll: function(uuid, to, move) {
+	_tabscroll: function(uuid, to, move) {		
 		if (move <= 0)
 			return;
 		var step, header = $e(uuid + "!header");

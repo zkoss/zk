@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B35-2436434.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Dec 17 09:07:26 TST 2008, Created by Flyworld
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+click add and scroll to right, IE 7 should scroll to the right position.
+<zk>
+  <hbox>
+    <button label="add" onClick="add()" />
+    <textbox id="txb" value="this is a tab" width="150px" />
+  </hbox>
+  <tabbox id="tabbox" width="200px">
+    <tabs id="tabs">
+      <tab disabled="true" label="Tab 1" closable="true" />
+      <tab label="Tab 2" closable="true" />
+      <tab label="Tab 3" closable="true" />
+    </tabs>
+    <tabpanels>
+      <tabpanel>This is panel 1</tabpanel>
+      <tabpanel>This is panel 2 The second panel</tabpanel>
+      <tabpanel>This is panel 3</tabpanel>
+    </tabpanels>
+  </tabbox>
+  <zscript><![CDATA[ //@DECLARATION 
+    void add() {
+    Tab tab = new Tab(txb.getValue());
+    tab.setClosable(true);
+    tabs.appendChild(tab);
+    }
+    ]]></zscript>
+</zk>

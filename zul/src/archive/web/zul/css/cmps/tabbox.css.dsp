@@ -250,12 +250,10 @@
 	position:relative;
 }
 </c:if>
-<%-- Disabled --%>
+<%-- Bug-2432784 
 <c:if test="${c:isExplorer7()}">
-.z-tab-disd .z-tab-body, .z-tab-disd-seld .z-tab-body {
-	zoom: 1;
-}
-</c:if>
+.z-tab-disd .z-tab-body, .z-tab-disd-seld .z-tab-body {	room:1 }</c:if>
+--%>
 .z-tab-disd .z-tab-body:hover, .z-tab-disd-seld .z-tab-body:hover {
 	background-position:0 -51px;
 } 
