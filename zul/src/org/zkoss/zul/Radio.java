@@ -160,6 +160,16 @@ public class Radio extends Checkbox implements org.zkoss.zul.api.Radio {
 	public String getZclass() {
 		return _zclass == null ? "z-radio" : _zclass;
 	}
+	
+	/** Process the onCheck event sent when the radio is checked.
+	 * @since 3.0.9
+	 */
+	public void onCheck(Event event) {
+		final Radiogroup rg = getRadiogroup();
+		if (rg != null)
+			Events.sendEvent(rg, event);
+	}
+	
 	//-- Component --//
 	public void setParent(Component parent) {
 		final Radiogroup oldgp = getRadiogroup();
