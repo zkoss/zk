@@ -13,6 +13,7 @@ ZK 3.0.9
   2337652: ID space cleanup problem if not attached to a page
   2388345: Defect in use of forEach, arrays and data binding
   2439090: Groupbox onVisi not called when visible.
+  2443726: Iframe with PDF cannot show when hidden (Firefox only)
 
 	--------
 ZK 3.0.8

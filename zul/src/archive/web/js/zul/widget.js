@@ -691,9 +691,9 @@ if (zk.ie) {
 	//2. no 2nd load so the performance not hurt
 		if (!zk.booted) cmp.src = cmp.src;
 	};
-} else if (zk.gecko) { //Bug 1692495
+} else if (zk.gecko) { //Bug 1692495 and 2443726
 	zkIfr.onVisi = function (cmp) {
-		if (cmp.src.indexOf(".xml") >= 0)
+		if (cmp.src.indexOf(".xml") >= 0 || cmp.src.indexOf(".pdf") >= 0)
 			cmp.src = cmp.src; //strange workaround: reload xml
 	};
 }
