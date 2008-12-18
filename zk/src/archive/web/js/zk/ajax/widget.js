@@ -205,7 +205,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (visible) {
 			var zi;
 			if (floating)
-				this.setZIndex(zi = this._topZIndex());
+				this._setZIndex(zi = this._topZIndex(), true);
 
 			this.setDomVisible_(node, true);
 
@@ -216,7 +216,7 @@ zk.Widget = zk.$extends(zk.Object, {
 					zi = zi >= 0 ? ++zi: w._topZIndex();
 					var n = fs[j].node;
 					if (n != w.node) w.setFloatZIndex_(n, zi); //only a portion
-					else w.setZIndex(zi);
+					else w._setZIndex(zi, true);
 
 					w.setDomVisible_(n, true, {visibility:1});
 				}
@@ -254,14 +254,14 @@ zk.Widget = zk.$extends(zk.Object, {
 		var n = this.node;
 		if (n && this._floating) {
 			var zi = this._topZIndex();
-			this.setZIndex(zi);
+			this._setZIndex(zi, true);
 
 			for (var fs = zk.Widget._floating, j = 0, fl = fs.length; j < fl; ++j) {
 				var w = fs[j].widget;
 				if (this != w && zUtl.isAncestor(this, w) && w.isVisible()) {
 					var n = fs[j].node
 					if (n != w.node) w.setFloatZIndex_(n, ++zi); //only a portion
-					else w.setZIndex(++zi);
+					else w._setZIndex(++zi, true);
 				}
 			}
 		}
@@ -295,83 +295,68 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 	},
 
-	/** Returns the width of this widget. */
 	getWidth: function () {
 		return this._width;
 	},
-	/** Sets the width of this widget. */
 	setWidth: function (width) {
 		this._width = width;
 		var n = this.node;
 		if (n) n.style.width = width ? width: '';
 	},
-	/** Returns the height of this widget. */
 	getHeight: function () {
 		return this._height;
 	},
-	/** Sets the height of this widget. */
 	setHeight: function (height) {
 		this._height = height;
 		var n = this.node;
 		if (n) n.style.height = height ? height: '';
 	},
-	/** Returns the zIndex of this widget. */
 	getZIndex: _zkf = function () {
 		return this._zIndex;
 	},
 	getZindex: _zkf,
-	/** Sets the zIndex of this widget.
-	 * <p>Unlike {@link #setLeft} and others, it fires onZIndex event
-	 * if fromServer is false.
-	 */
-	setZIndex: _zkf = function (zIndex, fromServer) {
+	setZIndex: _zkf = function (zIndex) { //2nd arg is fromServer
+		this._setZIndex(zIndex);
+	},
+	setZindex: _zkf,
+	_setZIndex: function (zIndex, fire) {
 		if (this._zIndex != zIndex) {
 			this._zIndex = zIndex;
 			var n = this.node;
 			if (n) {
 				n.style.zIndex = zIndex >= 0 ? zIndex: '';
-				if (!fromServer)
-					this.fire('onZIndex', zIndex, {ignorable: true});
+				if (fire) this.fire('onZIndex', zIndex, {ignorable: true});
 			}
 		}
 	},
-	setZindex: _zkf,
-	/** Returns the left of this widget. */
 	getLeft: function () {
 		return this._left;
 	},
-	/** Sets the left of this widget. */
 	setLeft: function (left) {
 		this._left = left;
 		var n = this.node;
 		if (n) n.style.left = left ? left: '';
 	},
-	/** Returns the top of this widget. */
 	getTop: function () {
 		return this._top;
 	},
-	/** Sets the top of this widget. */
 	setTop: function (top) {
 		this._top = top;
 		var n = this.node;
 		if (n) n.style.top = top ? top: '';
 	},
-	/** Returns the tooltip text of this widget. */
 	getTooltiptext: function () {
 		return this._tooltiptext;
 	},
-	/** Sets the tooltip text of this widget. */
 	setTooltiptext: function (tooltiptext) {
 		this._tooltiptext = tooltiptext;
 		var n = this.node;
 		if (n) n.title = tooltiptext ? tooltiptext: '';
 	},
 
-	/** Returns the style of this widget. */
 	getStyle: function () {
 		return this._style;
 	},
-	/** Sets the style of this widget. */
 	setStyle: function (style) {
 		if (this._style != style) {
 			this._style = style;
@@ -388,11 +373,9 @@ zk.Widget = zk.$extends(zk.Object, {
 			this.updateDomClass_();
 		}
 	},
-	/** Returns the zclass (the mold's style class) of this widget. */
 	getZclass: function () {
 		return this._zclass;
 	},
-	/** Sets the zclass of this widget. */
 	setZclass: function (zclass) {
 		if (this._zclass != zclass) {
 			this._zclass = zclass;
@@ -400,12 +383,10 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 	},
 
-	/** Generates the HTML content. */
 	redraw: function (skipper) {
 		var s = this.$class.molds[this._mold].call(this, skipper);
 		return this.prolog ? this.prolog + s: s;
 	},
-
 	updateDomClass_: function () {
 		var n = this.node;
 		if (n) n.className = this.domClass_();
@@ -447,7 +428,6 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 		return style;
 	},
-
 	domClass_: function (no) {
 		var scls = '';
 		if (!no || !no.sclass) {
@@ -460,16 +440,9 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 		return scls;
 	},
-	/** An utilities to generate the attributes used in the enclosing tag
-	 * of the HTML content.
-	 * <p>Default: generate id, style, class, tooltiptext.
-	 * @param no specify properties to exclude. If omitted, it means none.
-	 * For example, you don't want DOM class and style to generate, call
-	 * domClass_({domclass: 1, style: 1});
-	 */
 	domAttrs_: function (no) {
 		var html = !no || !no.id ? ' id="' + this.uuid + '"': '';
-		if (!no || !no.style) {
+		if (!no || !no.domStyle) {
 			var s = this.domStyle_();
 			if (s) html += ' style="' + s + '"';
 		}
@@ -484,18 +457,6 @@ zk.Widget = zk.$extends(zk.Object, {
 		return html;
 	},
 
-	/** Replaces the specified DOM element with the HTML content
-	 * generated this widget.
-	 * <p>In most cases, you shall use {@link #appendChild} or
-	 * {@link #insertBefore} to add a wiget to the DOM tree (if
-	 * the parent is already in the DOM tree).
-	 * On the other hand, this method is used to replace a branch of
-	 * the DOM tree (that is usually not part of widgets).
-	 * @param desktop the desktop the DOM element belongs to.
-	 * Optional. If null, ZK will decide it automatically.
-	 * @param skipper used only when {@link #rerender} is called
-	 * with a non-null skipper.
-	 */
 	replaceHTML: function (n, desktop, skipper) {
 		if (!desktop) desktop = this.desktop;
 
@@ -519,14 +480,6 @@ zk.Widget = zk.$extends(zk.Object, {
 		zWatch.fireDown('beforeSize', -1, this);
 		zWatch.fireDown('onSize', 5, this);
 	},
-	/** Re-render the DOM content of this widget.
-	 * It is the same as <code>this.replaceHTML(this.node)</code>
-	 * @param skipper ignored if null or not defined.
-	 * An instanceof {@link zk.Skipper} used to skip the rendering
-	 * a portion of the DOM content. It is useful if you want
-	 * to rerender only a small portion. For example, {@link zul.wgt.Groupbox}
-	 * uses it to avoid the re-rendering of children (except caption)
-	 */
 	rerender: function (skipper) {
 		if (this.node) {
 			var skipInfo;
@@ -538,15 +491,6 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 	},
 
-	/** Replace the specified DOM element with the HTML content generated
-	 * by the specified child widget ({@link #redraw}).
-	 * <p>Deriving classes might override this method to modify
-	 * the HTML content, such as enclosing with TD.
-	 * @param child the child widget
-	 * @param n the DOM element to replace with
-	 * @param skipper used only when {@link #rerender} is called
-	 * with a non-null skipper.
-	 */
 	replaceChildHTML_: function (child, n, desktop, skipper) {
 		if (n.z_wgt) n.z_wgt.unbind_(skipper); //unbind first (w/o removal)
 		zDom.setOuterHTML(n, child.redraw(skipper));
@@ -577,15 +521,6 @@ zk.Widget = zk.$extends(zk.Object, {
 			else w._prepareRemove(ary);
 	},
 
-	/** Binds (aka., attaches) the widget to the DOM tree.
-	 * Deriving classes might override this method to initialize the DOM
-	 * elements, such as adding a DOM event listener.
-	 *
-	 * @param desktop the desktop the DOM element belongs to.
-	 * Optional. If null, ZK will decide it automatically.
-	 * @param skipper used only when {@link #rerender} is called
-	 * with a non-null skipper.
-	 */
 	bind_: function (desktop, skipper) {
 		var n = zDom.$(this.uuid);
 		if (n) {
@@ -613,11 +548,6 @@ zk.Widget = zk.$extends(zk.Object, {
 				this.listenDomEvent(n, evtnm);
 			}
 	},
-	/** Detaches the widget from the DOM tree.
-	 * @param remove whether to remove the associated node
-	 * @param skipper used only when {@link #rerender} is called
-	 * with a non-null skipper.
-	 */
 	unbind_: function (skipper) {
 		var n = this.node;
 		if (n) {
@@ -699,16 +629,6 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 
 	//ZK event//
-	/** Fires a Widget event.
-	 * Note: the event will be sent to the server if it is in server
-	 * (@{link #inServer}), and belongs to a desktop.
-	 *
-	 * @param evt an instance of zk.Event
-	 * @param timeout the delay before sending the non-deferrable AU request
-	 * (if necessary).
-	 * If not specified or negative, it is decided automatically.
-	 * It is ignored if no non-deferrable listener is registered at the server.
-	 */
 	fireX: function (evt, timeout) {
 		var evtnm = evt.name,
 			lsns = this._lsns[evtnm],
@@ -717,7 +637,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			for (var j = 0; j < len;) {
 				var inf = lsns[j++], o = inf[1];
 				(inf[2] || o[evtnm]).call(o, evt);
-				if (evt.stop) return; //no more processing
+				if (evt._stop) return; //no more processing
 			}
 		}
 
@@ -725,26 +645,15 @@ zk.Widget = zk.$extends(zk.Object, {
 			var asap = this['$' + evtnm];
 			if (asap != null || this.isImportantEvent_(evtnm))
 				zAu.send(evt,
-					asap ? timeout >= 0 ? timeout: 38: this.getAuDelay());
+					asap ? timeout >= 0 ? timeout: 38: -1);
 		}
 	},
-	/** A simpler way to fire an event. */
-	fire: function (evtnm, data, opts) {
-		this.fireX(new zk.Event(this, evtnm, data, opts));
+	fire: function (evtnm, data, opts, timeout) {
+		this.fireX(new zk.Event(this, evtnm, data, opts), timeout);
 	},
 	isImportantEvent_: function (evtnm) {
 		return false;
 	},
-	/** Adds a listener to the specified event.
-	 * The listener must have a method having the same name as the event.
-	 * For example, if wgt.listen("onChange", lsn) is called, then
-	 * lsn.onChange(evt) will be called when onChange event is fired
-	 * (by {@link zk.Widget#fire}.
-	 * @param fn the function to call back. If null, listner[evtnm] is
-	 * assumed.
-	 * @param priority the higher the number, the earlier it is called.
-	 * Zero is assumed if omitted.
-	 */
 	listen: function (evtnm, listener, fn, priority) {
 		if (!priority) priority = 0;
 		var inf = [priority, listener, fn],
@@ -765,8 +674,6 @@ zk.Widget = zk.$extends(zk.Object, {
 				this.listenDomEvent_(n, evtnm);
 		}
 	},
-	/** Removes a listener from the sepcified event.
-	 */
 	unlisten: function (evtnm, listener, fn) {
 		var lsns = this._lsns[evtnm];
 		for (var j = lsns ? lsns.length: 0; --j >= 0;)
@@ -776,18 +683,11 @@ zk.Widget = zk.$extends(zk.Object, {
 			}
 		return false;
 	},
-	/** Returns if a listener is registered or the specified event.
-	 */
 	isListen: function (evtnm) {
 		if (this['$' + evtnm]) return true;
 		var lsns = this._lsns[evtnm];
 		return lsns && lsns.length;
 	},
-	/** Sets the listener with a two-element array.
-	 * It is designed to be called by the peer component.
-	 * @param inf a two-element array where the first element is
-	 * the event name, and the second element is the function.
-	 */
 	setListener: function (inf) {
 		var evtnm = inf[0], fn = inf[1],
 			lsns = this._$lsns;
@@ -802,13 +702,6 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 	},
 
-	/** Returns the delay before sending a deferrable event.
-	 * <p>Default: -1.
-	 */
-	getAuDelay: function () {
-		return -1;
-	},
-
 	//ZK event handling//
 	doClick_: function (evt) {
 		if (this.isListen('onClick')) {
@@ -819,7 +712,6 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 
 	//DOM event handling//
-	/** A utility to call if you listen DOM onfocus. */
 	domFocus_: function () {
 		if (!this.canActivate()) return false;
 
@@ -830,7 +722,6 @@ zk.Widget = zk.$extends(zk.Object, {
 			this.fire('onFocus');
 		return true;
 	},
-	/** A Callback this method if you listen DOM onblur. */
 	domBlur_: function () {
 		zk.currentFocus = null;
 
@@ -846,16 +737,6 @@ zk.Widget = zk.$extends(zk.Object, {
 		return zUtl.isAncestor(a.widget, b.widget);
 	},
 
-	/** Returns the widget of the specified ID, or null if not found,
-	 * or the widget is attached to the DOM tree.
-	 * <p>Note: null is returned if the widget is not attached to the DOM tree
-	 * (i.e., not associated with an DOM element).
-	 * @param n an element, an element's ID, or an event (actually with
-	 * the target property)
-	 * @param strict the element must be a child element (in the DOM tree)
-	 * Mask, shadow are sibling in the DOM tree (but their ID actually
-	 * identifies the widget).
-	 */
 	$: function (n, strict) {
 		//1. No map from element to widget directly. rather, go thru DOM
 		//2. We have to remove '$*' since $chdex is parentNode!
@@ -885,11 +766,6 @@ zk.Widget = zk.$extends(zk.Object, {
 	_binds: {}, //Map(uuid, wgt): bind but no node
 
 	//Event Handling//
-	/** This method is always called unless you invoke zEvt.stop
-	 * in onmousedown listener. Thus, Callback this method only if it
-	 * is this case.
-	 * @param wgt the widget which might be null if not click on any widget
-	 */
 	domMouseDown: function (wgt) {
 		var modal = zk.currentModal;
 		if (modal && !wgt) {
@@ -921,15 +797,10 @@ zk.Widget = zk.$extends(zk.Object, {
 		//onFocus, onBlur, onClick, onDoubleClick, onChange are fired by widget
 
 	//uuid//
-	/** Converts an ID (of a DOM element) to UUID.
-	 * It actually removes '$*'.
-	 */
 	uuid: function (id) {
 		var j = id.lastIndexOf('$');
 		return j >= 0 ? id.substring(0, j): id;
 	},
-	/** Returns the next unquie widget UUID.
-	 */
 	nextUuid: function () {
 		return "_z_" + zk.Widget._nextUuid++;
 	},

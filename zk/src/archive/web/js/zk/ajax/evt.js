@@ -196,6 +196,9 @@ zk.Event = zk.$extends(zk.Object, {
 		this.name = name;
 		this.data = data;
 		this.opts = opts;
+	},
+	stop: function () {
+		this._stop = true;
 	}
 },{
 	duplicateIgnores: {
