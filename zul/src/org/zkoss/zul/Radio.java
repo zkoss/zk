@@ -23,6 +23,8 @@ import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.Events;
 
 /**
  * A radio button.
@@ -148,7 +150,16 @@ public class Radio extends Checkbox {
 		HTMLs.appendAttribute(sb, "value",  getValue());
 		return sb.toString();
 	}
-
+	
+	/** Process the onCheck event sent when the radio is checked.
+	 * @since 3.0.9
+	 */
+	public void onCheck(Event event) {
+		final Radiogroup rg = getRadiogroup();
+		if (rg != null)
+			Events.sendEvent(rg, event);
+	}
+	
 	//-- Component --//
 	public void setParent(Component parent) {
 		final Radiogroup oldgp = getRadiogroup();
