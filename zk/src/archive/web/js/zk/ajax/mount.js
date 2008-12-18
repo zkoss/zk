@@ -26,7 +26,7 @@ function zkpgbg(pguid, style, dtid, contained, updateURI) {
 	zk.mounting = true;
 	var props = {};
 	if (style) props.style = style;
-	if (dtid) zkdtbg(dtid, updateURI).pguid = pguid;
+	if (dtid) zkdtbg(dtid, updateURI)._pguid = pguid;
 	zkm.push({type: "#p", uuid: pguid, contained: contained, props: props});
 }
 function zkbg(type, uuid, mold, props) {

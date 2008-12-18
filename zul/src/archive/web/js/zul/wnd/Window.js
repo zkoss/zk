@@ -25,6 +25,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this.listen('onClose', this, null, -1000);
 		this.listen('onMove', this, null, -1000);
 		this._zIndex = 0;
+		this._skipper = new zul.wnd.Skipper(this);
 	},
 
 	getMode: function () {
@@ -63,14 +64,14 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		} else if (pos == "parent")
 			this._posByParent();
 
-		zDom.makeVParent(n); //OK to make vparent twice
+		zDom.makeVParent(n);
+		this._syncShadow(); //create shadow
 		this._updateDomPos();
 
 		var realVisible = this.isRealVisible();
 		if (realVisible) n.style.visibility = 'visible';
 
 		if (realVisible) this.setTopmost();
-		this._syncShadow();
 
 		this._makeFloat();
 	},
@@ -79,7 +80,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			n = this.node;
 		if (pos == "parent") this._posByParent();
 
-		zDom.makeVParent(n); //OK to make vparent twice
+		zDom.makeVParent(n);
+		this._syncShadow();
 		this._updateDomPos(true);
 
 		if (!pos) { //adjust y (to upper location)
@@ -96,7 +98,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		if (realVisible) n.style.visibility = 'visible';
 
 		if (realVisible) this.setTopmost();
-		this._syncShadow();
 		this._syncMask();
 
 		this._mask = new zk.eff.FullMask({
@@ -162,12 +163,14 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		if (pos == "parent"/*handled by the caller*/ || (!pos && !force))
 			return;
 
-		n.style.position = "absolute"; //just in case
+		var st = n.style;
+		st.position = "absolute"; //just in case
+		var ol = st.left, ot = st.top;
 		zDom.center(n, pos);
 		var sdw = this._shadow;
 		if (pos && sdw) {
 			var d = sdw.getDelta(), l = n.offsetLeft, t = n.offsetTop, w = n.offsetWidth,
-				h = n.offsetHeight, st = n.style; 
+				h = n.offsetHeight; 
 			if (pos.indexOf("left") >= 0 && d.l < 0) st.left = l - d.l + "px";
 			else if (pos.indexOf("right") >= 0)
 				st.left = l - (zk.ie ? Math.round((Math.abs(d.l) + d.w)/2) : Math.round((d.l + d.w)/2)) - 1 + "px";
@@ -176,7 +179,9 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			else if (pos.indexOf("bottom") >= 0)
 				st.top = t - (zk.ie ? Math.round((Math.abs(d.t) + d.h)/2) + 1 : Math.round((d.t + d.h)/2)) - 1 + "px";
 		}
-		//TODO zkau.sendOnMove(n);
+		this._syncShadow();
+		if (ol != st.left || ot != st.top)
+			this._fireOnMove();
 	},
 
 	getTitle: function () {
@@ -205,9 +210,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			this._pos = pos;
 
 			var n = this.node;
-			if (n) {
+			if (n && this._mode != 'embedded') {
 				this._updateDomPos(); //TODO: handle pos = 'parent'
-				this._syncShadow();
 			}
 		}
 	},
@@ -310,7 +314,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 
 	_updateDomOuter: function () {
-		if (this.node) this.rerender(zk.Skipper.nonCaptionSkipper);
+		if (this.node) this.rerender(this._skipper);
 	},
 
 	//event handler//
@@ -420,7 +424,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			visible = this.isVisible();
 		if ((!no || !no.visible) && visible && this.isMinimized())
 			style = 'display:none;'+style;
-		if (this.getMode() != 'embedded')
+		if (this._mode != 'embedded')
 			style = (visible ? "position:absolute;visibility:hidden;" : "position:absolute;")
 				+style;
 		return style;
@@ -549,7 +553,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 
 	_onMoveMarshal: function () {
-		return [this.x, this.y, this.keys.marshal()];
+		return [this.x, this.y, this.keys ? this.keys.marshal(): ''];
 	},
 
 	//drag
@@ -610,5 +614,16 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		var wgt = dg.widget;
 		wgt._syncShadow();
 		wgt._fireOnMove(zEvt.keyMetaData(evt));
+	}
+});
+
+zul.wnd.Skipper = zk.$extends(zk.Skipper, {
+	$init: function (wnd) {
+		this._w = wnd;
+	},
+	restore: function () {
+		this.$supers('restore', arguments);
+		if (this._w._mode != 'embedded')
+			this._w._updateDomPos(); //skipper's size is wrong in bind_
 	}
 });

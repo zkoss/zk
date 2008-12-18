@@ -79,7 +79,11 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 
 	//super//
 	focus: function (timeout) {
-		return zDom.focus(this.ebtn ? this.ebtn: this.node, timeout);
+		if (this.isVisible() && this.canActivate({checkOnly:true})) {
+			zDom.focus(this.ebtn ? this.ebtn: this.node, timeout);
+			return true;
+		}
+		return false;
 	},
 
 	/** Updates the label and image. */

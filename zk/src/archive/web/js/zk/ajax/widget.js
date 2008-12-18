@@ -526,7 +526,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (n) {
 			n.z_wgt = this;
 			this.node = n;
-			if (!desktop) desktop = zk.Desktop.ofNode(n);
+			if (!desktop) desktop = zk.Desktop.$(n);
 		} else
 			zk.Widget._binds[this.uuid] = this;
 
@@ -578,11 +578,6 @@ zk.Widget = zk.$extends(zk.Object, {
 		zEvt.unlisten(this.node, evtnm.substring(2).toLowerCase(), fn);
 	},
 
-	/** Sets the focus to this widget.
-	 * <p>Default: call child widget's focus until it returns true,
-	 * or no child at all.
-	 * @return whether the focus is gained to this widget.
-	 */
 	focus: function (timeout) {
 		if (this.node && this.isVisible() && this.canActivate({checkOnly:true})) {
 			if (zDom.focus(this.node, timeout)) {
@@ -596,14 +591,6 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 		return false;
 	},
-	/** Checks if this widget can be activated (gaining focus and so on).
-	 * <p>Default: return false if it is not a descendant of zk.currentModal.
-	 * <p>Allowed Options:
-	 * <ul>
-	 * <li>checkOnly: not to change focus back to modal dialog if unable
-	 * to activate.</li>
-	 * </ul>
-	 */
 	canActivate: function (opts) {
 		var modal = zk.currentModal;
 		if (modal && !zUtl.isAncestor(modal, this)) {
@@ -739,7 +726,8 @@ zk.Widget = zk.$extends(zk.Object, {
 			n = zDom.$(n);
 			if (!n) return zk.Widget._binds[id];
 		} else if (n)
-			n = n.target || n.srcElement || n; //check DOM event first
+			if (zk.Widget.isInstance(n)) return n;
+			else n = n.target || n.srcElement || n; //check DOM event first
 
 		for (; n; n = zDom.parentNode(n)) {
 			var wgt = n.z_wgt;
@@ -801,61 +789,57 @@ zk.Widget = zk.$extends(zk.Object, {
 	_nextUuid: 0
 });
 
-/** A ZK desktop. */
 zk.Desktop = zk.$extends(zk.Object, {
 	$init: function (dtid, updateURI) {
 		this._aureqs = [];
 
-		var zdt = zk.Desktop, dt = zdt.all[dtid];
+		var zkdt = zk.Desktop, dts = zkdt.all, dt = dts[dtid];
 		if (!dt) {
 			this.id = dtid;
 			this.updateURI = updateURI;
-			zdt.all[dtid] = this;
-			++zdt._ndt;
-			if (!zdt._dt) zdt._dt = this; //default desktop
+			dts[dtid] = this;
+			++zkdt._ndt;
+			if (!zkdt._dt) zkdt._dt = this; //default desktop
 		} else if (updateURI)
 			dt.updateURI = updateURI;
 
-		zdt.destroy();
+		zkdt.sync();
+	},
+	_exists: function () {
+		var id = this._pguid; //_pguid not assigned at beginning
+		return !id || zDom.$(id);
 	}
 },{
-	/** Returns the desktop of the specified desktop ID.
-	 */
 	$: function (dtid) {
-		return dtid ? typeof dtid == 'string' ?
-			zk.Desktop.all[dtid]: dtid: zk.Desktop._dt;
-	},
-	/** Returns the desktop that the specified element belongs to.
-	 */
-	ofNode: function (n) {
-		var zdt = zk.Desktop, dts = zdt.all;
-		if (zdt._ndt > 1) {
-			var wgt = zk.Widget.$(n);
-			if (wgt)
-				for (; wgt; wgt = wgt.parent)
-					if (wgt.desktop)
-						return wgt.desktop;
+		var zkdt = zk.Desktop, dts = zkdt.all, w;
+		if (zkdt._ndt > 1) {
+			if (typeof dtid == 'string') {
+				w = dts[dtid];
+				if (w) return w;
+			}
+			w = zk.Widget.$(dtid);
+			if (w)
+				for (; w; w = w.parent)
+					if (w.desktop)
+						return w.desktop;
 		}
-		if (zdt._dt) return zdt._dt;
-		for (var dtid in dts)
+		if (w = zkdt._dt) return w;
+		for (dtid in dts)
 			return dts[dtid];
 	},
-	/** A map of (String dtid, zk.Desktop dt) (readonly). */
 	all: {},
 	_ndt: 0,
-	/** Remove desktops that are no longer valid.
-	 */
-	destroy: function () {
-		var zdt = zk.Desktop, dts = zdt.all;
-		if (zdt._dt && zdt._dt.pguid && !zDom.$(zdt._dt.pguid)) //removed
-			zdt._dt = null;
+	sync: function () {
+		var zkdt = zk.Desktop, dts = zkdt.all;
+		if (zkdt._dt && !zkdt._dt._exists()) //removed
+			zkdt._dt = null;
 		for (var dtid in dts) {
 			var dt = dts[dtid];
-			if (dt.pguid && !zDom.$(dt.pguid)) { //removed
+			if (!dt._exists()) { //removed
 				delete dts[dtid];
-				--zdt._ndt;
-			} else if (!zdt._dt)
-				zdt._dt = dt;
+				--zkdt._ndt;
+			} else if (!zkdt._dt)
+				zkdt._dt = dt;
 		}
 	}
 });

@@ -23,12 +23,13 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		<button label="left,center" onClick="win.position = &quot;left,center&quot;;"/>
 		<button label="right,bottom" onClick="win.position = &quot;right,bottom&quot;;"/>
 		<button label="center" onClick="win.position = &quot;center&quot;;"/>
+		<separator bar="true"/>
+		<button label="Overlapped" focus="true" onClick="win.doOverlapped();"/>
+		<button label="Highlighted" onClick="win.doHighlighted();"/>
+		<button label="Modal" onClick="win.doModal();"/>
+		<button label="Popup" onClick="win.doPopup();"/>
+		<button label="Embedded" onClick="win.doEmbedded();"/>
 	</window>
-	<button label="Overlapped" focus="true" onClick="win.doOverlapped();"/>
-	<button label="Highlighted" onClick="win.doHighlighted();"/>
-	<button label="Modal" onClick="win.doModal();"/>
-	<button label="Popup" onClick="win.doPopup();"/>
-	<button label="Embedded" onClick="win.doEmbedded();"/>
 	<button label="Toggle Visible" onClick="win.visible = !win.visible"/>
 	<html><![CDATA[
 	<select>
