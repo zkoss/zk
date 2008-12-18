@@ -33,11 +33,11 @@ zEvt = {
 	F1:		112,
 
 	target: function(evt) {
-		if (!evt) evt = window.event;
+		evt = evt || window.event;
 		return evt.target || evt.srcElement;
 	},
 	stop: function(evt) {
-		if (!evt) evt = window.event;
+		evt = evt || window.event;
 		if (evt.preventDefault) {
 			evt.preventDefault();
 			evt.stopPropagation();
@@ -50,15 +50,15 @@ zEvt = {
 	},
 
 	leftClick: function(evt) {
-		if (!evt) evt = window.event;
+		evt = evt || window.event;
 		return evt.which == 1 || evt.button == 0 || evt.button == 1;
 	},
 	rightClick: function (evt) {
-		if (!evt) evt = window.event;
+		evt = evt || window.event;
 		return evt.which == 3 || evt.button == 2;
 	},
 	mouseData: function (evt, target) {
-		if (!evt) evt = window.event;
+		evt = evt || window.event;
 		var ofs = zDom.cmOffset(target ? target: zEvt.target(evt));
 		return {
 			x: zEvt.x(evt) - ofs[0],
@@ -68,7 +68,7 @@ zEvt = {
 		};
 	},
 	keyData: function (evt) {
-		if (!evt) evt = window.event;
+		evt = evt || window.event;
 		return {
 			keyCode: zEvt.keyCode(evt),
 			charCode: zEvt.charCode(evt),
@@ -77,7 +77,7 @@ zEvt = {
 		};
 	},
 	keyMetaData: function (evt) {
-		if (!evt) evt = window.event;
+		evt = evt || window.event;
 		return {
 			altKey: evt.altKey,
 			ctrlKey: evt.ctrlKey,
@@ -104,22 +104,22 @@ zEvt = {
 	},
 
 	x: function (evt) {
-		if (!evt) evt = window.event;
+		evt = evt || window.event;
 		return evt.pageX || (evt.clientX +
 			(document.documentElement.scrollLeft || document.body.scrollLeft));
   	},
 	y: function(evt) {
-		if (!evt) evt = window.event;
+		evt = evt || window.event;
 		return evt.pageY || (evt.clientY +
 			(document.documentElement.scrollTop || document.body.scrollTop));
 	},
 
 	charCode: function(evt) {
-		if (!evt) evt = window.event;
+		evt = evt || window.event;
 		return evt.charCode || evt.keyCode;
 	},
 	keyCode: function(evt) {
-		if (!evt) evt = window.event;
+		evt = evt || window.event;
 		var k = evt.keyCode || evt.charCode;
 		return zk.safari ? (this.safariKeys[k] || k) : k;
 	},
@@ -155,7 +155,7 @@ zEvt = {
 	disableESC: function () {
 		if (!zDom._noESC) {
 			zDom._noESC = function (evt) {
-				if (!evt) evt = window.event;
+				evt = evt || window.event;
 				if (evt.keyCode == 27) {
 					zEvt.stop(evt);
 					return false;//eat

@@ -563,7 +563,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			if (regevts) {
 				this._regevts = null;
 				for (var evtnm; evtnm = regevts.shift();)
-					this.unlistenDomEvent_(n, evtnm);
+					this.domUnlisten_(evtnm, zk.Widget._domEvtToZK);
 			}
 		}
 
@@ -571,21 +571,11 @@ zk.Widget = zk.$extends(zk.Object, {
 			if (!skipper || !skipper.skipped(this, child))
 				child.unbind_(); //don't pass skipper
 	},
-	/** Listens the DOM event for firing ZK event.
-	 * It is called when a corresponding ZK event is listened.
-	 * <p>Default: fire the ZK event.
-	 * You might override it to have diffent behavior. For example,
-	 * register the event listener to a diffent node.
-	 */
-	listenDomEvent_: function (n, evtnm) {
-		var regevts = this._regevts;
-		if (regevts) regevts.push(evtnm);
-		else this._regevts = [evtnm];
-		zEvt.listen(n, evtnm.substring(2).toLowerCase(), zk.Widget._domEvtToZK);
+	domListen_: function (evtnm, fn) {
+		zEvt.listen(this.node, evtnm.substring(2).toLowerCase(), fn);
 	},
-	unlistenDomEvent_: function (n, evtnm, remove) {
-		if (remove) this._regevts.$remove(evtnm);
-		zEvt.unlisten(n, evtnm.substring(2).toLowerCase(), zk.Widget._domEvtToZK);
+	domUnlisten_: function (evtnm, fn) {
+		zEvt.unlisten(this.node, evtnm.substring(2).toLowerCase(), fn);
 	},
 
 	/** Sets the focus to this widget.
@@ -670,8 +660,12 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (n) {
 			var regevts = this._regevts;
 			if ((!regevts || !regevts.$contains(evtnm))
-			&& zk.Widget._domevts.$contains(evnm))
-				this.listenDomEvent_(n, evtnm);
+			&& zk.Widget._domevts.$contains(evnm)) {
+				var regevts = this._regevts;
+				if (regevts) regevts.push(evtnm);
+				else this._regevts = [evtnm];
+				this.domListen_(evtnm, zk.Widget._domEvtToZK);
+			}
 		}
 	},
 	unlisten: function (evtnm, listener, fn) {
@@ -780,7 +774,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 	},
 	_domEvtToZK: function (evt) {
-		if (!evt) evt = window.event;
+		evt = evt || window.event;
 		var $Widget = zk.Widget,
 			wgt = $Widget.$(evt),
 			type = evt.type;
