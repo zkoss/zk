@@ -48,14 +48,9 @@ public class Radiogroup extends XulElement implements org.zkoss.zul.api.Radiogro
 	/** The name of all child radio buttons. */
 	private String _name;
 	private int _jsel = -1;
-	private transient EventListener _listener;
 
 	public Radiogroup() {
 		_name = genGroupName();
-		init();
-	}
-	private void init() {
-		_listener = new Listener();
 	}
 
 	/** Returns the orient.
@@ -239,7 +234,6 @@ public class Radiogroup extends XulElement implements org.zkoss.zul.api.Radiogro
 		} else {
 			fixSelectedIndex();
 		}
-		child.addEventListener(Events.ON_CHECK, _listener);
 	}
 	/** Called when a radio is removed from this group.
 	 */
@@ -249,7 +243,6 @@ public class Radiogroup extends XulElement implements org.zkoss.zul.api.Radiogro
 		} else if (_jsel > 0) { //excluding 0
 			fixSelectedIndex();
 		}
-		child.removeEventListener(Events.ON_CHECK, _listener);
 	}
 	/** Fix the selected index, _jsel, assuming there are no selected one
 	 * before (and excludes) j-the radio button.
@@ -287,58 +280,7 @@ public class Radiogroup extends XulElement implements org.zkoss.zul.api.Radiogro
 	}
 	private static void fixClone(Radiogroup clone) {
 		if (clone._name.startsWith("_pg")) clone._name = clone.genGroupName();
-
-		rmListenerDown(clone, clone._listener);
-			//remove listener from children first
-
-		//create and add back listener
-		clone.init();
-		clone.afterUnmarshal();
-	}
-	private static void rmListenerDown(Component comp, EventListener listener) {
-		for (Iterator it = comp.getChildren().iterator(); it.hasNext();) {
-			final Component child = (Component)it.next();
-			if (child instanceof Radio) {
-				((Radio)child).removeEventListener(Events.ON_CHECK, listener);
-			} else if (!(child instanceof Radiogroup)) { //skip nested radiogroup
-				rmListenerDown(child, listener);
-			}
-		}
 	}
 
-	private void afterUnmarshal() {
-		addListenerDown(this, _listener);
-	}
-	private static void addListenerDown(Component comp, EventListener listener) {
-		for (Iterator it = comp.getChildren().iterator(); it.hasNext();) {
-			final Component child = (Component)it.next();
-			if (child instanceof Radio) {
-				((Radio)child).addEventListener(Events.ON_CHECK, listener);
-			} else if (!(child instanceof Radiogroup)) { //skip nested radiogroup
-				addListenerDown(child, listener);
-			}
-		}
-	}
 
-	//Serializable//
-	private synchronized void readObject(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
-		s.defaultReadObject();
-
-		init();
-		afterUnmarshal();
-		//Issue:
-		//if we re-generate the group name, client will mismatch with
-		//the server when the component is deserialized by Web Container.
-		//If we don't, the group name might be conflict when developer
-		//deserializes explicitly and add back the same desktop
-	}
-	private class Listener implements EventListener, Deferrable {
-		public void onEvent(Event event) {
-			Events.sendEvent(Radiogroup.this, event);
-		}
-		public boolean isDeferrable() {
-			return !Events.isListened(Radiogroup.this, Events.ON_CHECK, true);
-		}
-	}
 }
