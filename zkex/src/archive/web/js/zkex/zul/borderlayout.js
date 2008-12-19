@@ -884,18 +884,13 @@ zkLayoutRegionSplit2 = {
 			zkau.send({uuid: $uuid(split), cmd: "onOpen", data: [open]},
 				zkau.asapTimeout(real, "onOpen"));	
 	},
-	_ghostsizing: function (dg, ghosting, pointer) {
-		if (ghosting) {
-			var pointer = zkau.beginGhostToDIV(dg);	
-			var html = '<div id="zk_ddghost" style="background:#AAA;position:absolute;top:'
-				+pointer[1]+'px;left:'+pointer[0]+'px;width:'
-				+zk.offsetWidth(dg.element)+'px;height:'+zk.offsetHeight(dg.element)
-				+'px;cursor:'+dg.element.style.cursor+';"><img src="'+zk.getUpdateURI('/web/img/spacer.gif')
-						+'"/></div>';
-			document.body.insertAdjacentHTML("afterbegin", html);
-			dg.element = $e("zk_ddghost");
-		} else {		
-			zkau.endGhostToDIV(dg);
-		}
+	_ghostsizing: function (dg, ofs, evt) {
+		var html = '<div id="zk_ddghost" style="background:#AAA;position:absolute;top:'
+			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
+			+zk.offsetWidth(dg.element)+'px;height:'+zk.offsetHeight(dg.element)
+			+'px;cursor:'+dg.element.style.cursor+';"><img src="'+zk.getUpdateURI('/web/img/spacer.gif')
+					+'"/></div>';
+		document.body.insertAdjacentHTML("afterbegin", html);
+		return zDom.$("zk_ddghost");
 	}
 };

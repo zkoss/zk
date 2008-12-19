@@ -86,9 +86,9 @@ zkPortalLayout = {
 		}
 				
 		if (p) {
-			p.parentNode.insertBefore($e(zkau.getGhostOrgin(dg), "proxy"), match ? p : null);
+			p.parentNode.insertBefore($e(zkau.getGhosted(dg), "proxy"), match ? p : null);
 		} else {
-			$e(cns[col], "cave").insertBefore($e(zkau.getGhostOrgin(dg), "proxy"), null);
+			$e(cns[col], "cave").insertBefore($e(zkau.getGhosted(dg), "proxy"), null);
 		}
 	},
 	_ignoreMove: function (cmp, pointer, event) {
@@ -116,40 +116,40 @@ zkPortalLayout = {
 		zk.remove($e(cmp, "proxy"));
 		action.show(cmp);
 	},
-	_ghostMove: function (dg, ghosting, pointer) {
-		if (ghosting) {
-			var ofs = zkau.beginGhostToDIV(dg), title = zk.firstChild(dg.element, "DIV"),
-				fakeT = title.cloneNode(true);
-			var html = '<div id="zk_ddghost" class="z-panel-move-ghost" style="position:absolute;top:'
-				+ofs[1]+'px;left:'+ofs[0]+'px;width:'
-				+zk.offsetWidth(dg.element)+'px;height:'+zk.offsetHeight(dg.element)
-				+'px;z-index:'+dg.element.style.zIndex+'"><ul></ul></div></div>';
-			document.body.insertAdjacentHTML("afterbegin", html);
-			dg._zoffs = ofs;
-			dg._cns = zk.childNodes($real($parentByType(dg.element.parentNode, "PortalLayout")), zkPortalLayout._isLegalChild);
-			zkPortalLayout._initProxy(dg.element);
-			var h = dg.element.offsetHeight - title.offsetHeight;
-			dg.element = $e("zk_ddghost");
-			dg.element.firstChild.style.height = zk.revisedSize(dg.element.firstChild, h, true) + "px";
-			dg.element.insertBefore(fakeT, dg.element.firstChild);
-		} else {
-			zkau.endGhostToDIV(dg);
-		}
+	_ghostMove: function (dg, ofs, evt) {
+		var node = dg.node,
+			title = zk.firstChild(node, "DIV"),
+			fakeT = title.cloneNode(true);
+		var html = '<div id="zk_ddghost" class="z-panel-move-ghost" style="position:absolute;top:'
+			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
+			+zk.offsetWidth(node)+'px;height:'+zk.offsetHeight(node)
+			+'px;z-index:'+node.style.zIndex+'"><ul></ul></div></div>';
+		document.body.insertAdjacentHTML("afterbegin", html);
+		dg._zoffs = ofs;
+		dg._cns = zk.childNodes($real($parentByType(node.parentNode, "PortalLayout")), zkPortalLayout._isLegalChild);
+		zkPortalLayout._initProxy(node);
+		var h = node.offsetHeight - title.offsetHeight;
+
+		node = $e("zk_ddghost");
+		node.firstChild.style.height = zk.revisedSize(node.firstChild, h, true) + "px";
+		node.insertBefore(fakeT, node.firstChild);
+		return node;
 	},
 	_endMove: function (cmp, evt) {
 		var dg = zkPortalLayout.drags[cmp.id];
 		if (!dg) return;
-		var proxy = $e(dg.element, "proxy"),
-			fromCol = $parentByType(dg.element, "PortalChildren"),
+		var node = dg.node,
+			proxy = zDom.$(node, "proxy"),
+			fromCol = $parentByType(node, "PortalChildren"),
 			toCol = $parentByType(proxy, "PortalChildren"),
-			change = zk.nextSibling(dg.element, "DIV") != proxy;
+			change = zk.nextSibling(node, "DIV") != proxy;
 		if (change) {
-			proxy.parentNode.insertBefore(dg.element, proxy);
+			proxy.parentNode.insertBefore(node, proxy);
 			zkau.sendasap({
 				uuid: $uuid($parentByType(fromCol, "PortalLayout")),
-				cmd: "onPortalMove", data: [fromCol.id, toCol.id, dg.element.id, zkPortalLayout.indexOf(proxy)]});
+				cmd: "onPortalMove", data: [fromCol.id, toCol.id, node.id, zkPortalLayout.indexOf(proxy)]});
 		}
-		zkPortalLayout._cleanupProxy(dg.element);
+		zkPortalLayout._cleanupProxy(node);
 		dg._cns = dg._columns = null;
 	},
 	indexOf: function (el) {

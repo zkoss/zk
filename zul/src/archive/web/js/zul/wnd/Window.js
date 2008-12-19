@@ -154,6 +154,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				handle: handle, overlay: true, stackup: true,
 				starteffect: $Window._startmove,
 				ghosting: $Window._ghostmove,
+				endghosting: $Window._endghostmove,
 				ignoredrag: $Window._ignoremove,
 				endeffect: $Window._aftermove});
 		}
@@ -567,35 +568,31 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		//TODO var real = $real(handle);
 		//zkau.closeFloats(real, handle);
 	},
-	_ghostmove: function (dg, ghosting, pointer) {
-		if (ghosting) {
-			var wnd = dg.widget,
-				el = dg.node;
-			wnd._hideShadow();
-			var ofs = dg.beginGhostToDIV(),
-				title = zDom.firstChild(el, "DIV"),
-				fakeTitle = title.cloneNode(true);
-			var html = '<div id="zk_wndghost" class="z-window-move-ghost" style="position:absolute;top:'
-				+ofs[1]+'px;left:'+ofs[0]+'px;width:'
-				+zDom.offsetWidth(el)+'px;height:'+zDom.offsetHeight(el)
-				+'px;z-index:'+el.style.zIndex+'"><ul></ul></div></div>';
-			document.body.insertAdjacentHTML("afterBegin", html);
-			dg._wndoffs = ofs;
-			el.style.visibility = "hidden";
-			var h = el.offsetHeight - title.offsetHeight;
-			el = dg.node = zDom.$("zk_wndghost");
-			el.firstChild.style.height = zDom.revisedHeight(el.firstChild, h) + "px";
-			el.insertBefore(fakeTitle, dg.node.firstChild);
-		} else {
-			var org = dg.getGhostOrgin();
-			if (org) {
-				var el = dg.node;
-				org.style.top = org.offsetTop + el.offsetTop - dg._wndoffs[1] + "px";
-				org.style.left = org.offsetLeft + el.offsetLeft - dg._wndoffs[0] + "px";
-			}
-			dg.endGhostToDIV();
-			document.body.style.cursor = "";
-		}
+	_ghostmove: function (dg, ofs, evt) {
+		var wnd = dg.widget,
+			el = dg.node;
+		wnd._hideShadow();
+		var title = zDom.firstChild(el, "DIV"),
+			fakeTitle = title.cloneNode(true);
+		var html = '<div id="zk_wndghost" class="z-window-move-ghost" style="position:absolute;top:'
+			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
+			+zDom.offsetWidth(el)+'px;height:'+zDom.offsetHeight(el)
+			+'px;z-index:'+el.style.zIndex+'"><ul></ul></div></div>';
+		document.body.insertAdjacentHTML("afterBegin", html);
+		dg._wndoffs = ofs;
+		el.style.visibility = "hidden";
+		var h = el.offsetHeight - title.offsetHeight;
+		el = zDom.$("zk_wndghost");
+		el.firstChild.style.height = zDom.revisedHeight(el.firstChild, h) + "px";
+		el.insertBefore(fakeTitle, el.firstChild);
+		return el;
+	},
+	_endghostmove: function (dg, origin) {
+		var el = dg.node; //ghost
+		origin.style.top = origin.offsetTop + el.offsetTop - dg._wndoffs[1] + "px";
+		origin.style.left = origin.offsetLeft + el.offsetLeft - dg._wndoffs[0] + "px";
+
+		document.body.style.cursor = "";
 	},
 	_ignoremove: function (dg, pointer, evt) {
 		var target = zEvt.target(evt),

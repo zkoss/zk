@@ -287,7 +287,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	},
 
 	//drag&drop
-	_ignoresizing: function (draggable, pointer, event) {
+	_ignoresizing: function (draggable, pointer, evt) {
 		var wgt = draggable.widget;
 		if (!wgt.isOpen()) return true;
 
@@ -304,19 +304,15 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		run.z_offset = zDom.cmOffset(node);
 		return false;
 	},
-	_ghostsizing: function (draggable, ghosting, pointer) {
-		if (ghosting) {
-			var pointer = draggable.beginGhostToDIV(),
-				node = draggable.node;
-			var html = '<div id="zk_ddghost" style="background:#AAA;position:absolute;top:'
-				+pointer[1]+'px;left:'+pointer[0]+'px;width:'
-				+zDom.offsetWidth(node)+'px;height:'+zDom.offsetHeight(node)
-				+'px;"><img src="'+zAu.comURI('/web/img/spacer.gif')
-						+'"/></div>';
-			document.body.insertAdjacentHTML("afterBegin", html);
-			draggable.node = zDom.$("zk_ddghost");
-		} else
-			draggable.endGhostToDIV();
+	_ghostsizing: function (draggable, ofs, evt) {
+		var node = draggable.node;
+		var html = '<div id="zk_ddghost" style="background:#AAA;position:absolute;top:'
+			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
+			+zDom.offsetWidth(node)+'px;height:'+zDom.offsetHeight(node)
+			+'px;"><img src="'+zAu.comURI('/web/img/spacer.gif')
+					+'"/></div>';
+		document.body.insertAdjacentHTML("afterBegin", html);
+		return zDom.$("zk_ddghost");
 	},
 	_endDrag: function (draggable) {
 		var wgt = draggable.widget,
