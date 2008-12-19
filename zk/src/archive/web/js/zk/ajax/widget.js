@@ -844,7 +844,6 @@ zk.Desktop = zk.$extends(zk.Object, {
 	}
 });
 
-/** A ZK page. */
 zk.Page = zk.$extends(zk.Widget, {//unlik server, we derive from Widget!
 	_style: "width:100%;height:100%",
 
@@ -862,40 +861,21 @@ zk.Page = zk.$extends(zk.Widget, {//unlik server, we derive from Widget!
 	}
 
 },{
-	/** An list of contained page (i.e., standalone but not covering
-	 * the whole browser window.
-	 */
 	contained: []
 });
 
 zk.Skipper = zk.$extends(zk.Object, {
-	/** Returns whether the specified child wiget is skipped by {@link #skip}.
-	 * <p>Return if wgt.caption != child.
-	 *In other words, it skip all children except the caption.
-	 */
 	skipped: function (wgt, child) {
 		return wgt.caption != child;
 	},
-	/** Skips all or subset of the children of the specified wiget.
-	 * <p>Default: it detaches all DOM elements whose parent element
-	 * is zDOM.$(skipId).
-	 * @param skipId the ID of the element where all its child elements
-	 * shall be detached by this method, and restored later by {@link #restore}.
-	 * @return an object to represent the skipped children
-	 * (usually an array of DOM element).
-	 * This object will be passed to {@link #restore}'s skipInfo argument.
-	 */
 	skip: function (wgt, skipId) {
-		if (!skipId) skipId = wgt.uuid + '$cave';
-		var skip = zDom.$(skipId);
+		var skip = zDom.$(skipId || (wgt.uuid + '$cave'));
 		if (skip && skip.firstChild) {
 			zDom.remove(skip);
 			return skip;
 		}
 		return null;
 	},
-	/** Restores the children being skipped by {@link #skip}.
-	 */
 	restore: function (wgt, skip) {
 		if (skip) {
 			var loc = zDom.$(skip.id);
