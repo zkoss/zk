@@ -108,6 +108,9 @@ public class Locators {
 			this.stream = stream;
 			this.locale = locale;
 		}
+		public String toString() {
+			return "[l="+locale+']';
+		}
 	}
 	/** Locates the file. */
 	private static final Object
@@ -160,7 +163,7 @@ public class Locators {
 					}
 				 	l = Locales.getLocale(sb.toString(), '_');
 				} else {
-					l = Locale.ENGLISH;
+					l = null;
 				}
 
 				//return the info
