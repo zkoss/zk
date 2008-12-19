@@ -16,7 +16,8 @@ ZK 3.0.9
   2443726: Iframe with PDF cannot show when hidden (Firefox only)
   2433176: Radiogroup.getSelectedItem and Index returns first item
   2446672: toolbarbutton, disibled,can click image to fire event
-
+  2446682: Components.addForwards() occus an dead loop
+  
 	--------
 ZK 3.0.8
 * Features

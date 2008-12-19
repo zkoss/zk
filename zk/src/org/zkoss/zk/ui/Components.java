@@ -424,6 +424,9 @@ public class Components {
 								xcomp = (Component) srccomp;
 								mdname = srcevt;
 							}
+						} else {
+							//bug 2446682, consecutive '$' in event method name
+							throw new UiException("Illegal event method name(component id not specified or consecutive '$'): "+md.getName());
 						}
 					}
 				} while (k >= 3);
