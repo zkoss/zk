@@ -293,10 +293,6 @@ zDom = { //static methods
 		} while (el);
 		return [l, t];
 	},
-	/** Returns the offsets of element from the top left corner of the document.
-	 * Adds the cumulative offsetLeft and offsetTop of an element and all its parents.
-	 * Note that all values are returned as numbers only although they are expressed in pixels.
-	 */
 	cmOffset: function (el) {
 		//fix safari's bug: TR has no offsetXxx
 		if (zk.safari && zDom.tag(el) === "TR" && el.cells.length)

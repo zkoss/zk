@@ -172,7 +172,6 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			zEvt.unlisten(btn, "click", $Splitter.onclick);
 		}
 
-		this._snapx = null;
 		this._drag.destroy();
 		this._drag = null;
 		this.$super('unbind_');

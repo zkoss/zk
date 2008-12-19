@@ -30,15 +30,9 @@ zk.Draggable = zk.$extends(zk.Object, {
 		this.node = node = node ? zDom.$(node): wgt.node;
 
 		opts = zk.$default(opts, {
-//			handle: false,
 			zIndex: 1000,
-//			revert: false,
-//			scroll: false,
 			scrollSensitivity: 20,
 			scrollSpeed: 15,
-//			snap: false, //false, or xy or [x,y] or function(x,y){ return [x,y] }
-//			overlay: false, //a DIV to cover the whole browser window
-//			stackup: false, //a IFRAME to stack up the element being dragged
 			delay: 0
 		});
 
@@ -68,7 +62,6 @@ zk.Draggable = zk.$extends(zk.Object, {
 
 		zdg._register(this);
 	},
-	/** Destroys this draggable object. */
 	destroy: function() {
 		zEvt.unlisten(this.handle, "mousedown", this._pxMouseDown);
 		zk.Draggable._unregister(this);
@@ -331,7 +324,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 
 		if(this.opts.snap)
 			if(typeof this.opts.snap == 'function') {
-				p = this.opts.snap(this,p[0],p[1],this);
+				p = this.opts.snap(this,p[0],p[1]);
 			} else {
 				if(this.opts.snap instanceof Array) {
 					p = [Math.round(p[0]/this.opts.snap[0])*this.opts.snap[0],
