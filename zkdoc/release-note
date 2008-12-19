@@ -11,6 +11,7 @@ ZK 3.5.3
   2439090: Groupbox onVisi not called when visible.
   2443726: Iframe with PDF cannot show when hidden (Firefox only)
   2433176: Radiogroup.getSelectedItem and Index returns first item
+  2446672: toolbarbutton, disibled,can click image to fire event
 
 	--------
 ZK 3.5.2
