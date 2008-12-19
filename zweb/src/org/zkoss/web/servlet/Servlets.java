@@ -54,7 +54,6 @@ import org.zkoss.util.Locales;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.util.resource.Locators;
-import org.zkoss.util.resource.PropertyBundle;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.input.SAXBuilder;
 

@@ -53,9 +53,8 @@ zkPortalLayout = {
 		}
 		return cols;
 	},
-	_changeMove: function(dg, pointer, event){
-		var xy = Event.pointer(event),
-			cns = dg._cns;
+	_changeMove: function(dg, pointer){
+		var cns = dg._cns;
 			
 		if (!dg._columns)
 			dg._columns = zkPortalLayout._getColumnBoxes(cns);
@@ -64,7 +63,7 @@ zkPortalLayout = {
 			cols = dg._columns,
 			match;
 		for (var i = cols.length; col < i; col++) {
-			if ((cols[col].x + cols[col].w) > xy[0]) {
+			if ((cols[col].x + cols[col].w) > pointer[0]) {
 				match = true;
 				break;
 			}
@@ -79,7 +78,7 @@ zkPortalLayout = {
 			i < j; i++) {
 			p = panels[i];
 			var h = p.offsetHeight;
-			if (h && (zk.revisedOffset(p)[1] + (h / 2)) > xy[1]) {
+			if (h && (zk.revisedOffset(p)[1] + (h / 2)) > pointer[1]) {
 				match = true;
 				break;
 			}

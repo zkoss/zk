@@ -113,6 +113,9 @@ zEvt = {
 		return evt.pageY || (evt.clientY +
 			(document.documentElement.scrollTop || document.body.scrollTop));
 	},
+	pointer: function (evt) {
+		return [zEvt.x(evt), zEvt.y(evt)];
+	},
 
 	charCode: function(evt) {
 		evt = evt || window.event;

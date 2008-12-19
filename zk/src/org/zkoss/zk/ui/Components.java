@@ -480,6 +480,8 @@ public class Components {
 								xcomp = (Component) srccomp;
 								mdname = srcevt;
 							}
+						} else {
+							throw new UiException("Illegal event method name(component id not specified or consecutive '$'): "+md.getName());
 						}
 					}
 				} while (k >= 3);

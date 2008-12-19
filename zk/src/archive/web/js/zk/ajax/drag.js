@@ -158,7 +158,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 		this._updateInnerOfs();
 
 		this._draw(pointer, evt);
-		if (this.opts.change) this.opts.change(this, pointer, evt);
+		if (this.opts.change) this.opts.change(this, pointer);
 		this._syncStackup();
 
 		if(this.opts.scroll) {
@@ -226,7 +226,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 				this._clone = null;
 			}
 
-		var pointer = [zEvt.x(evt), zEvt.y(evt)];
+		var pointer = zEvt.pointer(evt);
 		var revert = this.opts.revert;
 		if(revert && typeof revert == 'function')
 			revert = revert(this, pointer, evt);
@@ -268,7 +268,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 			if (zDom.getStyle(n, 'position') == 'absolute')
 				return;
 
-		var pointer = [zEvt.x(evt), zEvt.y(evt)];
+		var pointer = zEvt.pointer(evt);
 		if (this.opts.ignoredrag && this.opts.ignoredrag(this, pointer, evt))
 			return;
 
@@ -324,7 +324,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 
 		if(this.opts.snap)
 			if(typeof this.opts.snap == 'function') {
-				p = this.opts.snap(this,p[0],p[1]);
+				p = this.opts.snap(this, p);
 			} else {
 				if(this.opts.snap instanceof Array) {
 					p = [Math.round(p[0]/this.opts.snap[0])*this.opts.snap[0],
@@ -350,9 +350,9 @@ zk.Draggable = zk.$extends(zk.Object, {
 			style.top  = p[1] + "px";
 		} else {
 			if((!this.opts.constraint) || (this.opts.constraint=='horizontal'))
-			style.left = p[0] + "px";
+				style.left = p[0] + "px";
 			if((!this.opts.constraint) || (this.opts.constraint=='vertical'))
-			style.top  = p[1] + "px";
+				style.top  = p[1] + "px";
 		}
 
 		if(style.visibility=="hidden") style.visibility = ""; // fix gecko rendering
@@ -374,8 +374,9 @@ zk.Draggable = zk.$extends(zk.Object, {
 	},
 
 	_scroll: function() {
-		var current = new Date();
-		var delta = current - this.lastScrolled;
+		var zdg = zk.Draggable,
+			current = new Date(),
+			delta = current - this.lastScrolled;
 		this.lastScrolled = current;
 		if(this.opts.scroll == window) {
 			with (this._getWindowScroll(this.opts.scroll)) {
@@ -391,7 +392,6 @@ zk.Draggable = zk.$extends(zk.Object, {
 
 		this._updateInnerOfs();
 		if (this._isScrollChild) {
-			var zdg = zk.Draggable;
 			zdg._lastScrollPointer = zdg._lastScrollPointer || zdg._lastPointer;
 			zdg._lastScrollPointer[0] += this.scrollSpeed[0] * delta / 1000;
 			zdg._lastScrollPointer[1] += this.scrollSpeed[1] * delta / 1000;
@@ -402,7 +402,10 @@ zk.Draggable = zk.$extends(zk.Object, {
 			this._draw(zdg._lastScrollPointer);
 		}
 
-		if(this.opts.change) this.opts.change(this);
+		if(this.opts.change) {
+			var evt = window.event;
+			this.opts.change(this, evt ? zEvt.pointer(evt): zdg._lastPointer);
+		}
 	},
 
 	_updateInnerOfs: function () {
@@ -477,7 +480,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 		if(!zdg.activeDraggable) return;
 
 		if (!evt) evt = window.event;
-		var pointer = [zEvt.x(evt), zEvt.y(evt)];
+		var pointer = zEvt.pointer(evt);
 		// Mozilla-based browsers fire successive mousemove events with
 		// the same coordinates, prevent needless redrawing (moz bug?)
 		if(zdg._lastPointer && zdg._lastPointer[0] == pointer [0]

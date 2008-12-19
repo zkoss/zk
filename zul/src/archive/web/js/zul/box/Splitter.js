@@ -360,9 +360,10 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			//fix all splitter's size because table might be with %
 		draggable.run = null;//free memory
 	},
-	_snap: function (draggable, x, y) {
+	_snap: function (draggable, pos) {
 		var run = draggable.run,
-			wgt = draggable.widget;
+			wgt = draggable.widget,
+			x = pos[0], y = pos[1];
 		if (wgt.isVertical()) {
 			if (y <= run.z_offset[1] - run.prev.offsetHeight) {
 				y = run.z_offset[1] - run.prev.offsetHeight;
