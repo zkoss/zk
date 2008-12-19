@@ -481,7 +481,7 @@ zDom = { //static methods
 		return [l, t];
 	},
 
-	getDimensions: function (el) {
+	getDimension: function (el) {
 		var display = zDom.getStyle(el,  'display');
 		if (display != 'none' && display != null) // Safari bug
 			return {width: zDom.offsetWidth(el), height: zDom.offsetHeight(el),
