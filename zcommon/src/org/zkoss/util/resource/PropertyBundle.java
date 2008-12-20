@@ -25,6 +25,7 @@ import java.lang.reflect.Method;
 
 import org.zkoss.lang.D;
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.Objects;
 import org.zkoss.util.CacheMap;
 import org.zkoss.util.Cache;
 import org.zkoss.util.Maps;
@@ -87,14 +88,15 @@ public class PropertyBundle {
 
 		//-- Object --//
 		public int hashCode() {
-			return baseName.hashCode() ^ locale.hashCode() ^ locator.hashCode();
+			return baseName.hashCode()
+				^ (locale != null ? locale.hashCode(): 0) ^ locator.hashCode();
 		}
 		public boolean equals(Object o) {
 			if (!(o instanceof Key))
 				return false;
 			Key k = (Key)o;
 			return k.baseName.equals(baseName)
-			&& k.locale.equals(locale) && k.locator.equals(locator)
+			&& Objects.equals(k.locale, locale) && k.locator.equals(locator)
 			&& k.caseInsensitive == caseInsensitive;
 		}
 	}
@@ -174,7 +176,7 @@ public class PropertyBundle {
 			final Locators.StreamLocation loc =
 			Locators.locateAsStream(baseName + ".properties", locale, locator);
 			if (loc != null) {
-				_map = new HashMap(37);
+				_map = new HashMap(32);
 				Maps.load(_map, loc.stream, caseInsensitive);
 				_locale = loc.locale;
 			} else {
@@ -201,7 +203,7 @@ public class PropertyBundle {
 	public final Map getProperties() {
 		return _map;
 	}
-	/** Returns the locale of the bundle.
+	/** Returns the locale of the bundle, or null if it is the default.
 	 * Note: it is value might not be the same as the locale being passed
 	 * to the constructor, because the contructor will do some fallback.
 	 */
