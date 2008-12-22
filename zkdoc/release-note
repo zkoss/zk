@@ -19,6 +19,7 @@ ZK 3.0.9
   2446682: Components.addForwards() occus an dead loop
   2448170: i3-label-en.properties never use
   2448099: FF only.SetAttr fail when addEventListener with $ event name
+  2448987: Unexpected ListModelList.subList() behaviour
   
 	--------
 ZK 3.0.8
