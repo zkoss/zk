@@ -33,7 +33,10 @@ import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.TimeZone;
 
 /**
@@ -49,7 +52,7 @@ import java.util.TimeZone;
  *   <tr><td>bubble</td><td>{@link XYZModel}</td><td>No</td></tr>
  *   <tr><td>candlestick</td><td>{@link HiLoModel}</td><td>No</td></tr>
  *   <tr><td>gantt</td><td>{@link GanttModel}</td><td>No</td></tr>
- *   <tr><td>hilow</td><td>{@link HiLoModel}</td><td>No</td></tr>
+ *   <tr><td>highlow</td><td>{@link HiLoModel}</td><td>No</td></tr>
  *   <tr><td>histogram</td><td>{@link XYModel}</td><td>No</td></tr>
  *   <tr><td>line</td><td>{@link CategoryModel} or {@link XYModel}</td><td>Yes</td></tr>
  *   <tr><td>pie</td><td>{@link PieModel}</td><td>Yes</td></tr>
@@ -92,6 +95,30 @@ public class Chart extends Imagemap implements org.zkoss.zul.api.Chart {
 	public static final String WAFERMAP = "wafermap"; //@since 3.5.0
 	public static final String GANTT = "gantt"; //@since 3.5.0
 	public static final String WIND = "wind"; //@since 3.5.0
+	
+	private static final Map DEFAULT_MODEL = new HashMap();
+	static {
+		DEFAULT_MODEL.put(PIE, "org.zkoss.zul.SimplePieModel");
+		DEFAULT_MODEL.put(RING, "org.zkoss.zul.SimplePieModel");
+		DEFAULT_MODEL.put(BAR, "org.zkoss.zul.SimpleCategoryModel");
+		DEFAULT_MODEL.put(LINE, "org.zkoss.zul.SimpleXYModel");
+		DEFAULT_MODEL.put(AREA, "org.zkoss.zul.SimpleXYModel");
+		DEFAULT_MODEL.put(STACKED_BAR, "org.zkoss.zul.SimpleCategoryModel");
+		DEFAULT_MODEL.put(STACKED_AREA, "org.zkoss.zul.SimpleXYModel");
+		DEFAULT_MODEL.put(WATERFALL, "org.zkoss.zul.SimpleCategoryModel");
+		DEFAULT_MODEL.put(POLAR, "org.zkoss.zul.SimpleXYModel");
+		DEFAULT_MODEL.put(SCATTER, "org.zkoss.zul.SimpleXYModel");
+		DEFAULT_MODEL.put(TIME_SERIES, "org.zkoss.zul.SimpleXYModel");
+		DEFAULT_MODEL.put(STEP, "org.zkoss.zul.SimpleXYModel");
+		DEFAULT_MODEL.put(STEP_AREA, "org.zkoss.zul.SimpleXYModel");
+		DEFAULT_MODEL.put(HISTOGRAM, "org.zkoss.zul.SimpleXYModel");
+		DEFAULT_MODEL.put(CANDLESTICK, "org.zkoss.zul.SimpleHiLoModel");
+		DEFAULT_MODEL.put(HIGHLOW, "org.zkoss.zul.SimpleHiLoModel");
+		DEFAULT_MODEL.put(BUBBLE, "org.zkoss.zul.SimpleXYZModel"); //@since 3.5.0
+//		DEFAULT_MODEL.put(WAFERMAP, "org.zkoss.zul.WaferMapModel"); //@since 3.5.0
+		DEFAULT_MODEL.put(GANTT, "org.zkoss.zul.GanttModel"); //@since 3.5.0
+		DEFAULT_MODEL.put(WIND, "org.zkoss.zul.SimpleXYZModel"); //@since 3.5.0
+	}
 	
 	//Time Series Chart Period
 	public static final String YEAR = "year";
@@ -149,6 +176,22 @@ public class Chart extends Imagemap implements org.zkoss.zul.api.Chart {
 		setHeight("250px");
 	}
 	
+	private ChartModel createDefaultModel() {
+		if (WAFERMAP.equals(getType())) {
+			return new WaferMapModel(100,100);
+		}
+		final String klass = (String) DEFAULT_MODEL.get(getType());
+		if (klass != null) {
+			try {
+				return (ChartModel) Classes.newInstanceByThread(klass);
+			} catch (Exception e) {
+				throw UiException.Aide.wrap(e);
+			}
+		} else {
+			throw new UiException("unknown chart type: "+getType());
+		}
+	}
+	
 	private void init() {
 		if (_smartDrawChartListener == null) {
 			_smartDrawChartListener = new EventListener() {
@@ -156,8 +199,9 @@ public class Chart extends Imagemap implements org.zkoss.zul.api.Chart {
 					if (Strings.isBlank(getType()))
 						throw new UiException("chart must specify type (pie, bar, line, ...)");
 
-					if (_model == null)
-						throw new UiException("chart must specify a data model");
+					if (_model == null) {
+						_model = createDefaultModel();
+					}
 
 					if (Strings.isBlank(getWidth()))
 						throw new UiException("chart must specify width");
@@ -184,7 +228,7 @@ public class Chart extends Imagemap implements org.zkoss.zul.api.Chart {
 	 * Set the chart's type (Chart.PIE, Chart.BAR, Chart.LINE, etc.).
 	 *
 	 * <p>Default: pie.
-	 
+	 *
 	 */
 	public void setType(String type) {
 		if (Objects.equals(_type, type)) {

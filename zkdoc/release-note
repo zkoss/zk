@@ -3,7 +3,8 @@ ZK 3.5.3
 * Features
   2433264: Able to access the URI of the error page
   2437121: Make DHtmlLayoutServlet as optional
-
+  2448278: Chart could provide default model
+  
 * Bugs
   2386650: NullPointerException when create tabs in onTimer()
   2432784: Tabbox error in IE7
