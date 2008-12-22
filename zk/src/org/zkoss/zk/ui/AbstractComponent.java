@@ -1306,8 +1306,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				response("clientInfo", new AuClientInfo(desktop));
 			if (Events.ON_PIGGYBACK.equals(evtnm))
 				((DesktopCtrl)desktop).onPiggybackListened(this, true);
-
-			if (!asap && isAsapRequired(evtnm))
+			
+			// Bug 2448099
+			if (evtnm.indexOf("$") == -1 && !asap && isAsapRequired(evtnm))
 				smartUpdate(getAttrOfEvent(evtnm), "true");
 		}
 		return true;
