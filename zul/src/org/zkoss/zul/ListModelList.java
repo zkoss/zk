@@ -363,7 +363,8 @@ implements ListModelExt, List, java.io.Serializable {
 
 	public List subList(int fromIndex, int toIndex) {
 		List list = _list.subList(fromIndex, toIndex);
-		return new ListModelList(list);
+		//bug 2448987: sublist must be live
+		return new ListModelList(list, true);
 	}
 	
 	public Object[] toArray() {
