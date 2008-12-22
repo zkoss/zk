@@ -706,8 +706,6 @@ zk.Widget = zk.$extends(zk.Object, {
 	domBlur_: function () {
 		zk.currentFocus = null;
 
-		//TODO: handle validation
-
 		if (this.isListen('onBlur'))
 			this.fire('onBlur');
 	}

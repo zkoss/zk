@@ -138,13 +138,41 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 
 	//dom event//
 	doFocus_: function (evt) {
-		if (!zDom.tag(zEvt.target(evt))) return; //Bug 2111900
+		if (!zDom.tag(zEvt.target(evt)) //Bug 2111900
+		|| !this.domFocus_())
+			return; 
 
+		if (this.isListen('onChanging')) {
+			this._lastChg = this.einp.value;
+			this._tidChg = setInterval(this.proxy(this._onChanging), 500);
+		}
 		zDom.addClass(this.einp, this.getZclass() + '-focus');
 	},
 	doBlur_: function (evt) {
-		//TODO
+		if (this._tidChg) {
+			clearInterval(this._tidChg);
+			this._tidChg = this._lastChg = this.valueEnter_ =
+			this.valueSel_ = null;
+		}
 		zDom.rmClass(this.einp, this.getZclass() + '-focus');
+		this.domBlur_();
+	},
+	_onChanging: function () {
+		var inp = this.einp,
+			val = this.valueEnter__ || inp.value;
+		if (this._lastChg != val) {
+			this._lastChg = val;
+			var valsel = this.valueSel_,
+				sr = zDom.selectionRange(inp);;
+			this.valueSel_ = null;
+			this.fire('onChanging', {value: val,
+				bySelectBack: valsel == val, start: sr[0],
+				marshal: this._onChangingMarshal},
+				{ignorable:1}, 100);
+		}
+	},
+	_onChangingMarshal: function () {
+		return [this.value, this.bySelectBack, this.start];
 	},
 
 	//super//
@@ -201,7 +229,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		var wgt = zk.Widget.$(evt);
 		if (wgt.isListen('onSelection')) {
 			var inp = wgt.einp,
-				sr = zDom.getSelectionRange(inp),
+				sr = zDom.selectionRange(inp),
 				b = sr[0], e = sr[1];
 			wgt.fire('onSelection', {start: b, end: e,
 				selected: inp.value.substring(b, e),

@@ -42,7 +42,6 @@ import org.zkoss.zul.ext.Constrainted;
 
 /**
  * A skeletal implementation of an input box.
- * <p>Events: onChange, onChanging, onFocus, onBlur, and onSelection.<br/>
  * 
  * <p>Events: onChange, onChanging, onFocus, onBlur, onSelection.
  *
