@@ -33,7 +33,9 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 			if (this.node) this.updateDomContent_();
 		}
 	},
-
+	isImageAssigned: function (){
+		return this._image != null;
+	},
 	updateDomContent_: function () {
 		this.rerender();
 	},

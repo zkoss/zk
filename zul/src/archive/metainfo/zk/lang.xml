@@ -836,9 +836,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>toolbarbutton</component-name>
 		<component-class>org.zkoss.zul.Toolbarbutton</component-class>
+		<widget-class>zul.wgt.Toolbarbutton</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/toolbarbutton.dsp</mold-uri>
+			<mold-uri>mold/toolbarbutton.js</mold-uri>
 		</mold>
 	</component>
 	<component>

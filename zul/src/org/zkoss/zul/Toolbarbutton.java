@@ -43,7 +43,12 @@ public class Toolbarbutton extends LabelImageElement implements org.zkoss.zul.ap
 	private String _href, _target;
 	private int _tabindex = -1;
 	private boolean _disabled = false;
-
+	
+	static {
+		addClientEvent(Toolbarbutton.class, Events.ON_FOCUS);
+		addClientEvent(Toolbarbutton.class, Events.ON_BLUR);
+	}
+	
 	public Toolbarbutton() {
 	}
 	public Toolbarbutton(String label) {
@@ -172,6 +177,26 @@ public class Toolbarbutton extends LabelImageElement implements org.zkoss.zul.ap
 	}
 
 	//-- super --//
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+			throws java.io.IOException {
+		super.renderProperties(renderer);
+		if (_href == null) {
+			renderer.render("target", "javascript:;");
+		} else {
+			render(renderer, " href", getDesktop().getExecution().encodeURL(
+					_href));
+			// When hyper to other page, we always show progress dlg
+		}
+		if (isDisabled())
+			render(renderer, "disabled", "disabled");
+		if (!"normal".equals(_dir))
+			render(renderer, "dir", _dir);
+		if (!"horizontal".equals(_orient))
+			render(renderer, "orient", _orient);
+		if (_tabindex >= 0)
+			render(renderer, "tabindex", _tabindex);
+		render(renderer, "target", _target);
+	}
 	//Component//
 	/** No child is allowed.
 	 */
