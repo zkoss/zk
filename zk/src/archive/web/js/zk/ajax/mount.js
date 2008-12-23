@@ -166,27 +166,30 @@ zkm = {
 		var inf = zkm._crInf0.shift();
 		if (inf) {
 			zkm._crInf1.push([inf[0], zkm.create(null, inf[1])]);
-			zkm.exec(zkm.mtNew0);
-			return;
+			return zkm.exec(zkm.mtNew0);
 		}
 
 		zkm.mtNew1();
 	},
 	mtNew1: function() {
+		if (zkm._crInf0.length)
+			return; //another page started
+
 		var inf = zkm._crInf1.shift();
 		if (inf) {
 			var wgt = inf[1];
 			wgt.replaceHTML(wgt.uuid, inf[0]);
 
-			if (zkm._crInf1.length) {
-				zkm.exec(zkm.mtNew1);
-				return;
-			}
+			if (zkm._crInf1.length)
+				return zkm.exec(zkm.mtNew1);
 		}
 
 		zk.afterLoad(zkm.mtNew2); //bind might load packages
 	},
 	mtNew2: function () {
+		if (zkm._crInf0.length || zkm._crInf1.length)
+			return; //another page started
+
 		var fn = zkm._afMts.shift();
 		if (fn) {
 			fn();
@@ -272,7 +275,7 @@ zkm = {
 	},
 	docMouseDown: function (evt) {
 		var target = zEvt.target(evt);
-		zk.currentPointer(zEvt.x(evt), zEvt.y(evt));
+		zk.currentPointer = zEvt.pointer(evt);
 		if (target != document.body && target != document.body.parentNode) { //not click on scrollbar
 			var $Widget = zk.Widget;
 			$Widget.domMouseDown($Widget.$(evt, true)); //null if mask
@@ -306,12 +309,24 @@ zkm = {
 
 		var wgt = zk.Widget.$(evt);
 		for (; wgt; wgt = wgt.parent)
-			if (wgt.isListen('onDoubleClick')) {
-				wgt.fire("onDoubleClick", zEvt.mouseData(evt, wgt.node), {ctl:true});
-				return;
+			if (wgt.doDoubleClick_()) {
+				zEvt.stop(evt); //prevent browser default
+				return false;
 			}
 	},
 	docCtxMenu: function (evt) {
+		if (!evt) evt = window.event;
+
+		zk.currentPointer = zEvt.pointer(evt);
+
+		var wgt = zk.Widget.$(evt);
+		for (; wgt; wgt = wgt.parent)
+			if (wgt.doRightClick_()) {
+				zEvt.stop(evt); //prevent browser default
+				return false;
+			}
+
+		return !zk.ie || evt.returnValue;
 	},
 	docScroll: function () {
 	},

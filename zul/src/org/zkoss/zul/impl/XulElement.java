@@ -137,10 +137,10 @@ abstract public class XulElement extends HtmlBasedComponent implements org.zkoss
 	 * (perhaps based on OpenEvent.getReference) by listening to the onOpen
 	 * event.
 	 *
-	 * <p>Note: To simplify the use, it ignores the ID space when locating
-	 * the component at the client. In other words, it searches for the
-	 * first component with the specified ID, no matter it is in 
-	 * the same ID space or not.
+	 * <p>Note: To simplify the use, it not only searches its ID space,
+	 * but also all ID spaces in the desktop.
+	 * It first searches its own ID space, and then the other Id spaces
+	 * in the same browser window (might have one or multiple desktops).
 	 *
 	 * <p>(since 3.0.2) If there are two components with the same ID (of course, in
 	 * different ID spaces), you can specify the UUID with the following
@@ -192,10 +192,10 @@ abstract public class XulElement extends HtmlBasedComponent implements org.zkoss
 	 * (perhaps based on OpenEvent.getReference) by listening to the onOpen
 	 * event.
 	 *
-	 * <p>Note: To simplify the use, it ignores the ID space when locating
-	 * the component at the client. In other words, it searches for the
-	 * first component with the specified ID, no matter it is in 
-	 * the same ID space or not.
+	 * <p>Note: To simplify the use, it not only searches its ID space,
+	 * but also all ID spaces in the desktop.
+	 * It first searches its own ID space, and then the other Id spaces
+	 * in the same browser window (might have one or multiple desktops).
 	 *
 	 * <p>(since 3.0.2) If there are two components with the same ID (of course, in
 	 * different ID spaces), you can specify the UUID with the following
@@ -222,7 +222,7 @@ abstract public class XulElement extends HtmlBasedComponent implements org.zkoss
 	}
 	/** Returns the ID of the popup ({@link Popup}) that should be used
 	 * as a tooltip window when the mouse hovers over the element for a moment.
-	 * The tooltip will automatically disappear when the mouse is moved.
+	 * The tooltip will automatically disappear when the mouse is moved away.
 	 *
 	 * <p>Default: null (no tooltip).
 	 */
@@ -237,10 +237,10 @@ abstract public class XulElement extends HtmlBasedComponent implements org.zkoss
 	 * (perhaps based on OpenEvent.getReference) by listening to the onOpen
 	 * event.
 	 *
-	 * <p>Note: To simplify the use, it ignores the ID space when locating
-	 * the component at the client. In other words, it searches for the
-	 * first component with the specified ID, no matter it is in 
-	 * the same ID space or not.
+	 * <p>Note: To simplify the use, it not only searches its ID space,
+	 * but also all ID spaces in the desktop.
+	 * It first searches its own ID space, and then the other Id spaces
+	 * in the same browser window (might have one or multiple desktops).
 	 *
 	 * <p>(since 3.0.2) If there are two components with the same ID (of course, in
 	 * different ID spaces), you can specify the UUID with the following
@@ -266,12 +266,12 @@ abstract public class XulElement extends HtmlBasedComponent implements org.zkoss
 		setTooltip(popup != null ? "uuid(" + popup.getUuid() + ")": null);
 	}
 
-	/** @deprecated since 5.0.0, use atXxx instead (such as atMouseUp).
+	/** @deprecated since 5.0.0, use client-side event listener instead.
 	 */
 	public String getAction() {
 		return null;
 	}
-	/** @deprecated since 5.0.0, use atXxx instead (such as atMouseUp).
+	/** @deprecated since 5.0.0, use client-side event listener instead.
 	 */
 	public void setAction(String action) {
 	}

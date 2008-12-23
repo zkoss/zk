@@ -17,6 +17,7 @@ zk = {
 	procDelay: 900,
 	tipDelay: 800,
 	resendDelay: -1,
+	currentPointer: [0, 0],
 
 	/** Whether ZK is creating a new page. */
 	//creating: 0,
@@ -118,11 +119,7 @@ zk = {
 		if (m) return m.call(o);
 		return o[name];
 	},
-	currentPointer: function (x, y) {
-		if (x != undefined) this._currentX = x;
-		if (y != undefined) this._currentY = y;
-		return [this._currentX, this._currentY];
-	},
+
 	//Processing//
 	startProcessing: function (timeout) {
 		zk.processing = true;

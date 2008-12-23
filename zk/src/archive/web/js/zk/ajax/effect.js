@@ -940,8 +940,8 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 	}
 });
 
-/** Applies the indicator mask over the specified element. */
-zk.eff.ApplyMask = zk.$extends(zk.Object, {
+/** The indicator mask over the specified element. */
+zk.eff.Mask = zk.$extends(zk.Object, {
 	$init: function(opts) {
 		opts = opts || {};
 		var anchor = (typeof opts.anchor == "string") ? zDom.$(opts.anchor) : opts.anchor;

@@ -313,12 +313,12 @@ zDom = { //static methods
 			y += dim.height - hgh;
 			break;
 		case "at_pointer":
-			var offset = zk.currentPointer();
+			var offset = zk.currentPointer;
 			x = offset[0];
 			y = offset[1];
 			break;
 		case "after_pointer":
-			var offset = zk.currentPointer();
+			var offset = zk.currentPointer;
 			x = offset[0];
 			y = offset[1] + 20;
 			break;

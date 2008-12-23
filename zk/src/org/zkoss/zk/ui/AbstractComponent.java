@@ -343,8 +343,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		&& !ComponentsCtrl.isAutoId(getIdDirectly(comp)))
 			((AbstractComponent)owner).bindToIdSpace(comp);
 		if (!(comp instanceof IdSpace))
-			for (Iterator it = comp.getChildren().iterator(); it.hasNext();)
-				addToIdSpacesDown((Component)it.next(), owner); //recursive
+			for (AbstractComponent ac = ((AbstractComponent)comp)._first;
+			ac != null; ac = ac._next)
+				addToIdSpacesDown(ac, owner); //recursive
 	}
 	/** comp's ID might be auto id. */
 	private static void addToIdSpacesDown(Component comp, AbstractPage owner) {
@@ -352,8 +353,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		&& !ComponentsCtrl.isAutoId(getIdDirectly(comp)))
 			owner.addFellow(comp);
 		if (!(comp instanceof IdSpace))
-			for (Iterator it = comp.getChildren().iterator(); it.hasNext();)
-				addToIdSpacesDown((Component)it.next(), owner); //recursive
+			for (AbstractComponent ac = ((AbstractComponent)comp)._first;
+			ac != null; ac = ac._next)
+				addToIdSpacesDown(ac, owner); //recursive
 	}
 	/** Similar to {@link #getId} except it won't generate one if not
 	 * available.
@@ -378,16 +380,18 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		&& !ComponentsCtrl.isAutoId(compId))
 			((AbstractComponent)owner).unbindFromIdSpace(compId);
 		if (!(comp instanceof IdSpace))
-			for (Iterator it = comp.getChildren().iterator(); it.hasNext();)
-				removeFromIdSpacesDown((Component)it.next(), owner); //recursive
+			for (AbstractComponent ac = ((AbstractComponent)comp)._first;
+			ac != null; ac = ac._next)
+				removeFromIdSpacesDown(ac, owner); //recursive
 	}
 	private static void removeFromIdSpacesDown(Component comp, AbstractPage owner) {
 		if (!(comp instanceof NonFellow)
 		&& !ComponentsCtrl.isAutoId(getIdDirectly(comp)))
 			owner.removeFellow(comp);
 		if (!(comp instanceof IdSpace))
-			for (Iterator it = comp.getChildren().iterator(); it.hasNext();)
-				removeFromIdSpacesDown((Component)it.next(), owner); //recursive
+			for (AbstractComponent ac = ((AbstractComponent)comp)._first;
+			ac != null; ac = ac._next)
+				removeFromIdSpacesDown(ac, owner); //recursive
 	}
 
 	/** Checks the uniqueness in ID space when changing parent. */
@@ -405,8 +409,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		&& !ComponentsCtrl.isAutoId(compId) && si.fellows.containsKey(compId))
 			throw new UiException("Not unique in the new ID space: "+compId);
 		if (!(comp instanceof IdSpace))
-			for (Iterator it = comp.getChildren().iterator(); it.hasNext();)
-				checkIdSpacesDown((Component)it.next(), si); //recursive
+			for (AbstractComponent ac = ((AbstractComponent)comp)._first;
+			ac != null; ac = ac._next)
+				checkIdSpacesDown(ac, si); //recursive
 	}
 	/** Checks comp and its descendants for the specified page. */
 	private static void checkIdSpacesDown(Component comp, AbstractPage page) {
@@ -415,8 +420,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		&& !ComponentsCtrl.isAutoId(compId) && page.hasFellow(compId))
 			throw new UiException("Not unique in the ID space of "+page+": "+compId);
 		if (!(comp instanceof IdSpace))
-			for (Iterator it = comp.getChildren().iterator(); it.hasNext();)
-				checkIdSpacesDown((Component)it.next(), page); //recursive
+			for (AbstractComponent ac = ((AbstractComponent)comp)._first;
+			ac != null; ac = ac._next)
+				checkIdSpacesDown(ac, page); //recursive
 	}
 
 	/** Bind comp to this ID space (owned by this component).
@@ -2351,8 +2357,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			//restore ID space by binding itself and all children
 			if (!ComponentsCtrl.isAutoId(getIdDirectly(this)))
 				bindToIdSpace(this);
-			for (Iterator it = getChildren().iterator(); it.hasNext();)
-				addToIdSpacesDown((Component)it.next(), this);
+			for (AbstractComponent ac = _first; ac != null; ac = ac._next)
+				addToIdSpacesDown(ac, this);
 		}
 
 		//restore _forwards
@@ -2387,13 +2393,13 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 */
 	private static final
 	void fixSpaceParentOneLevelDown(Component comp, Namespace nsparent) {
-		for (Iterator it = comp.getChildren().iterator(); it.hasNext();) {
-			final AbstractComponent child = (AbstractComponent)it.next();
+		for (AbstractComponent ac = ((AbstractComponent)comp)._first;
+		ac != null; ac = ac._next) {
 			//Others are handled by readObject
-			if (child._spaceInfo != null)
-				child._spaceInfo.ns.setParent(nsparent);
+			if (ac._spaceInfo != null)
+				ac._spaceInfo.ns.setParent(nsparent);
 			else
-				fixSpaceParentOneLevelDown(child, nsparent); //recursive
+				fixSpaceParentOneLevelDown(ac, nsparent); //recursive
 		}
 	}
 

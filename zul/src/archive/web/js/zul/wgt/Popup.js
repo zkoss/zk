@@ -38,9 +38,8 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		this.setVisible(true);
 		
 		if (this.isListen("onOpen")) {
-			
 			// use a progress bar to hide the popup
-			this.mask = new zk.eff.ApplyMask({
+			this.mask = new zk.eff.Mask({
 				id: this.uuid + "$mask",
 				anchor: this.node
 			});

@@ -15,14 +15,33 @@ it will be useful, but WITHOUT ANY WARRANTY.
 /** The base class for XUL widget (org.zkoss.zul.impl.XulElement).
  */
 zul.Widget = zk.$extends(zk.Widget, {
-	/** Returns what keystrokes to intercept.
-	 * <p>Default: null.
-	 */
+	getContext: function () {
+		return this._context;
+	},
+	setContext: function (context) {
+		if (zk.Widget.isInstance(context))
+			context = 'uuid(' + context.uuid + ')';
+		this._context = context;
+	},
+	getPopup: function () {
+		return this._popup;
+	},
+	setPopup: function (popup) {
+		if (zk.Widget.isInstance(popup))
+			popup = 'uuid(' + popup.uuid + ')';
+		this._popup = popup;
+	},
+	getTooltip: function () {
+		return this._tooltip;
+	},
+	setTooltip: function (tooltip) {
+		if (zk.Widget.isInstance(tooltip))
+			tooltip = 'uuid(' + tooltip.uuid + ')';
+		this._tooltip = tooltip;
+	},
 	getCtrlKeys: function () {
 		return this._ctrlKeys;
 	},
-	/** Sets what keystrokes to intercept.
-	 */
 	setCtrlKeys: function (keys) {
 		if (this._ctrlKeys != keys) {
 			if (!keys) {
@@ -93,5 +112,13 @@ zul.Widget = zk.$extends(zk.Widget, {
 			this._parsedCtlKeys = parsed;
 			this._ctrlKeys = keys;
 		}
+	},
+
+	//super//
+	doClick_: function () {
+		this.$supers('doClick_', arguments);
+	},
+	doRightClick_: function () {
+		this.$supers('doRightClick_', arguments);
 	}
 });

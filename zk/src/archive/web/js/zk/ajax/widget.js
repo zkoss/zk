@@ -40,26 +40,29 @@ zk.Widget = zk.$extends(zk.Object, {
 			if (w._fellows) return w;
 		return null;
 	},
-	getFellow: function (id) {
+	getFellow: function (id, global) {
 		var ow = this.getSpaceOwner();
-		return ow != null ? ow._fellows[id]: null;
+		if (!ow) return null;
+
+		var f = ow._fellows[id];
+		return f || !global ? f: zk.Widget._global[id];
 	},
 	getId: function () {
 		return this._id;
 	},
 	setId: function (id) {
-		var ow = this.getSpaceOwner();
-		var old = this._id;
-		if (ow && old) delete ow._fellows[id];
+		var $Widget = zk.Widget, old = this._id;
+		if (old) {
+			delete zk.Widget._global[id];
+			$Widget._rmIdSpace(this);
+		}
+
 		this._id = id;
-		if (ow && id) ow._fellows[id] = this;
-	},
-	_addIdSpaceDown: function (spowner, wgt) {
-		if (wgt._id)
-			spowner._fellows[wgt._id] = wgt;
-		if (!wgt._fellows)
-			for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
-				this._addIdSpaceDown(spowner, wgt);
+
+		if (id) {
+			zk.Widget._global[id] = this;
+			$Widget._addIdSpace(this);
+		}
 	},
 
 	appendChild: function (child) {
@@ -84,9 +87,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			this.firstChild = this.lastChild = child;
 		}
 
-		var spowner = this.getSpaceOwner();
-		if (spowner != null)
-			this._addIdSpaceDown(spowner, child);
+		zk.Widget._addIdSpaceDown(child);
 
 		var dt = this.desktop;
 		if (dt) this.insertChildHTML_(child, null, dt);	
@@ -117,9 +118,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		sibling.previousSibling = child;
 		child.nextSibling = sibling;
 
-		var spowner = this.getSpaceOwner();
-		if (spowner != null)
-			this._addIdSpaceDown(spowner, child);
+		zk.Widget._addIdSpaceDown(child);
 
 		var dt = this.desktop;
 		if (dt) this.insertChildHTML_(child, sibling, dt);
@@ -139,6 +138,8 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (n) n.previousSibling = p;
 		else this.lastChild = p;
 		child.nextSibling = child.previousSibling = child.parent = null;
+
+		zk.Widget._rmIdSpaceDown(child);
 
 		if (child.desktop)
 			this.removeChildHTML_(child, p);
@@ -689,7 +690,18 @@ zk.Widget = zk.$extends(zk.Object, {
 			this.fire("onClick", zEvt.mouseData(evt, this.node), {ctl:true});
 			return true;
 		}
-		return false;
+	},
+	doDoubleClick_: function (evt) {
+		if (wgt.isListen('onDoubleClick')) {
+			wgt.fire("onDoubleClick", zEvt.mouseData(evt, wgt.node), {ctl:true});
+			return true;
+		}
+	},
+	doRightClick_: function (evt) {
+		if (wgt.isListen('onRightClick')) {
+			wgt.fire("onRightClick", zEvt.mouseData(evt, wgt.node), {ctl:true});
+			return true;
+		}
 	},
 
 	//DOM event handling//
@@ -784,7 +796,52 @@ zk.Widget = zk.$extends(zk.Object, {
 	nextUuid: function () {
 		return "_z_" + zk.Widget._nextUuid++;
 	},
-	_nextUuid: 0
+	_nextUuid: 0,
+
+	_addIdSpace: function (wgt) {
+		if (wgt._fellows) wgt._fellows[wgt._id] = wgt;
+		var p = wgt.parent;
+		if (p) {
+			p = p.getSpaceOwner();
+			if (p) p._fellows[wgt._id] = wgt;
+		}
+	},
+	_rmIdSpace: function (wgt) {
+		if (wgt._fellows) delete wgt._fellows[wgt._id];
+		var p = wgt.parent;
+		if (p) {
+			p = p.getSpaceOwner();
+			if (p) delete p._fellows[wgt._id];
+		}
+	},
+	_addIdSpaceDown: function (wgt) {
+		var ow = wgt.parent;
+		ow = ow && ow.getSpaceOwner();
+		if (ow) {
+			var fn = zk.Widget._addIdSpaceDown0;
+			fn(wgt, ow, fn);
+		}
+	},
+	_addIdSpaceDown0: function (wgt, owner, fn) {
+		if (wgt._id) owner._fellows[wgt._id] = wgt;
+		for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
+			fn(wgt, owner, fn);
+	},
+	_rmIdSpaceDown: function (wgt) {
+		var ow = wgt.parent;
+		ow = ow && ow.getSpaceOwner();
+		if (ow) {
+			var fn = zk.Widget._rmIdSpaceDown0;
+			fn(wgt, ow, fn);
+		}
+	},
+	_rmIdSpaceDown0: function (wgt, owner, fn) {
+		if (wgt._id) delete owner._fellows[wgt._id];
+		for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
+			fn(wgt, owner, fn);
+	},
+
+	_global: {} //a global ID space
 });
 
 zk.Desktop = zk.$extends(zk.Object, {
@@ -802,6 +859,9 @@ zk.Desktop = zk.$extends(zk.Object, {
 			dt.updateURI = updateURI;
 
 		zkdt.sync();
+	},
+	getId: function () {
+		return this.id;
 	},
 	_exists: function () {
 		var id = this._pguid; //_pguid not assigned at beginning

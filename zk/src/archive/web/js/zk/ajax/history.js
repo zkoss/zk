@@ -40,7 +40,7 @@ zHistory = {
 	/** bookmark iframe */
 	_bkIframe: zk.ie ? function (nm) {
 		//Bug 2019171: we have to create iframe frist
-		var url = zAu.comURI("/web/js/zk/html/history.html", true),
+		var url = zAu.comURI("/web/js/zk/html/history.html", null, true),
 			ifr = $e('zk_histy');
 		if (!ifr) ifr = zk.newFrame('zk_histy', url, "display:none");
 

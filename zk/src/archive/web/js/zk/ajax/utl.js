@@ -81,11 +81,11 @@ zUtl = { //static methods
 	progressbox: function (id, msg, mask) {
 		if (mask && zk.Page.contained.length) {
 			for (var c = zk.Page.contained.length, e = zk.Page.contained[--c]; e; e = zk.Page.contained[--c]) {
-				if (e._applyMask) continue;
-				e._applyMask = new zk.eff.ApplyMask({
-					id: e.uuid + "$mask",
-					anchor: e.node
-				});
+				if (!e._applyMask)
+					e._applyMask = new zk.eff.Mask({
+						id: e.uuid + "$mask",
+						anchor: e.node
+					});
 			}
 			return;
 		}

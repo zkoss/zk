@@ -18,5 +18,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
   <separator/>
   readonly: <textbox readonly="true"/>
   <separator/>
-  onChanging: <textbox onChanging="l.value = event.value"/> <label id="l"/>
+  onChanging: <textbox onChanging="l.value = event.value" onChange='l.value = ">" + self.value + "<"'/>
+  <label id="l"/>
 </window>
