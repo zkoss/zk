@@ -202,6 +202,9 @@ zk.Event = zk.$extends(zk.Object, {
 	},
 	stop: function () {
 		this._stop = true;
+	},
+	isStopped: function () {
+		return this._stop;
 	}
 },{
 	duplicateIgnores: {

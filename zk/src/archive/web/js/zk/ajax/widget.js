@@ -615,7 +615,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			for (var j = 0; j < len;) {
 				var inf = lsns[j++], o = inf[1];
 				(inf[2] || o[evtnm]).call(o, evt);
-				if (evt._stop) return; //no more processing
+				if (evt.isStopped()) return; //no more processing
 			}
 		}
 
@@ -704,8 +704,16 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 	},
 	doMouseOver_: function (evt) {
+		if (this.isListen('onMouseOver')) {
+			this.fire("onMouseOver", zEvt.mouseData(evt, this.node));
+			return evt.isStopped();
+		}
 	},
 	doMouseOut_: function (evt) {
+		if (this.isListen('onMouseOut')) {
+			this.fire("onMouseOut", zEvt.mouseData(evt, this.node));
+			return evt.isStopped();
+		}
 	},
 
 	//DOM event handling//
@@ -788,7 +796,7 @@ zk.Widget = zk.$extends(zk.Object, {
 				zEvt.keyData(evt));
 		else wgt.fire('on' + type.charAt(0).toUpperCase() + type.substring(1));
 	},
-	_domevts: ['onMouseOver','onMouseOut', 'onMouseDown', 'onMouseUp',
+	_domevts: ['onMouseDown', 'onMouseUp',
 		'onMouseMove', 'onKeyDown', 'onKeyPress', 'onKeyUp'],
 		//onFocus, onBlur, onClick, onDoubleClick, onChange are fired by widget
 

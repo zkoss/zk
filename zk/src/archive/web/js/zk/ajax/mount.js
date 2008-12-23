@@ -315,7 +315,7 @@ zkm = {
 		if (!evt) evt = window.event;
 
 		for (var wgt = zk.Widget.$(evt); wgt; wgt = wgt.parent)
-			if (wgt.doDoubleClick_()) {
+			if (wgt.doDoubleClick_(evt)) {
 				zEvt.stop(evt); //prevent browser default
 				return false;
 			}
