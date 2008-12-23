@@ -692,16 +692,20 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 	},
 	doDoubleClick_: function (evt) {
-		if (wgt.isListen('onDoubleClick')) {
-			wgt.fire("onDoubleClick", zEvt.mouseData(evt, wgt.node), {ctl:true});
+		if (this.isListen('onDoubleClick')) {
+			this.fire("onDoubleClick", zEvt.mouseData(evt, this.node), {ctl:true});
 			return true;
 		}
 	},
 	doRightClick_: function (evt) {
-		if (wgt.isListen('onRightClick')) {
-			wgt.fire("onRightClick", zEvt.mouseData(evt, wgt.node), {ctl:true});
+		if (this.isListen('onRightClick')) {
+			this.fire("onRightClick", zEvt.mouseData(evt, this.node), {ctl:true});
 			return true;
 		}
+	},
+	doMouseOver_: function (evt) {
+	},
+	doMouseOut_: function (evt) {
 	},
 
 	//DOM event handling//

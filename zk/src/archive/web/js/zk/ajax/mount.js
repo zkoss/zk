@@ -275,24 +275,31 @@ zkm = {
 	},
 	docMouseDown: function (evt) {
 		var target = zEvt.target(evt);
-		zk.currentPointer = zEvt.pointer(evt);
+		zk.lastPointer[0] = zEvt.x(evt);
+		zk.lastPointer[1] = zEvt.y(evt);
 		if (target != document.body && target != document.body.parentNode) { //not click on scrollbar
 			var $Widget = zk.Widget;
 			$Widget.domMouseDown($Widget.$(evt, true)); //null if mask
 		}
 	},
 	docMouseOver: function (evt) {
-		//TODO
+		zk.currentPointer[0] = zEvt.x(evt);
+		zk.currentPointer[1] = zEvt.y(evt);
+
+		for (var wgt = zk.Widget.$(evt); wgt; wgt = wgt.parent)
+			if (wgt.doMouseOver_(evt))
+				return;
 	},
 	docMouseOut: function (evt) {
-		//TODO
+		for (var wgt = zk.Widget.$(evt); wgt; wgt = wgt.parent)
+			if (wgt.doMouseOut_(evt))
+				return;
 	},
 	docClick: function (evt) {
 		if (!evt) evt = window.event;
 
 		if (zEvt.leftClick(evt)) {
-			var wgt = zk.Widget.$(evt);
-			for (; wgt; wgt = wgt.parent) {
+			for (var wgt = zk.Widget.$(evt); wgt; wgt = wgt.parent) {
 				if (wgt.href) {
 					zUtl.go(href, false, wgt.target, "target");
 					return; //done
@@ -307,8 +314,7 @@ zkm = {
 	docDblClick: function (evt) {
 		if (!evt) evt = window.event;
 
-		var wgt = zk.Widget.$(evt);
-		for (; wgt; wgt = wgt.parent)
+		for (var wgt = zk.Widget.$(evt); wgt; wgt = wgt.parent)
 			if (wgt.doDoubleClick_()) {
 				zEvt.stop(evt); //prevent browser default
 				return false;
@@ -317,10 +323,10 @@ zkm = {
 	docCtxMenu: function (evt) {
 		if (!evt) evt = window.event;
 
-		zk.currentPointer = zEvt.pointer(evt);
+		zk.lastPointer[0] = zEvt.x(evt);
+		zk.lastPointer[1] = zEvt.y(evt);
 
-		var wgt = zk.Widget.$(evt);
-		for (; wgt; wgt = wgt.parent)
+		for (var wgt = zk.Widget.$(evt); wgt; wgt = wgt.parent)
 			if (wgt.doRightClick_()) {
 				zEvt.stop(evt); //prevent browser default
 				return false;

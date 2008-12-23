@@ -17,6 +17,7 @@ zk = {
 	procDelay: 900,
 	tipDelay: 800,
 	resendDelay: -1,
+	lastPointer: [0, 0],
 	currentPointer: [0, 0],
 
 	/** Whether ZK is creating a new page. */
