@@ -327,7 +327,7 @@ zkm = {
 		zk.lastPointer[1] = zEvt.y(evt);
 
 		for (var wgt = zk.Widget.$(evt); wgt; wgt = wgt.parent)
-			if (wgt.doRightClick_()) {
+			if (wgt.doRightClick_(evt)) {
 				zEvt.stop(evt); //prevent browser default
 				return false;
 			}

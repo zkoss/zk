@@ -126,7 +126,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 		}
 		return this.$supers('doClick_', arguments) || found;
 	},
-	doRightClick_: function () {
+	doRightClick_: function (evt) {
 		var found, ctx = this._context;
 		if (ctx) {
 			var w = this._smartFellow(ctx, true);

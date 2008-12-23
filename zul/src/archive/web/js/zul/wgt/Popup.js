@@ -13,24 +13,30 @@ This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 zul.wgt.Popup = zk.$extends(zul.Widget, {
-	open: function (mode, x, y, fromServer) {
-		var ref, pos, dim;
-		if (mode === "2") { //ref
-			ref = zk.Widget.$(x);
+	open: function (wgt, offset, position, fromServer) {
+		var ref = wgt, pos, dim;
+		
+		if (ref && position) {
+			if (typeof ref == 'string')
+				ref = zk.Widget.$(ref);
+				
 			if (ref) {
 				var ofs = zDom.cmOffset(ref.node);
-				pos = y;
+				pos = position;
 				dim = {
 					top: ofs[0], left: ofs[1],
 					width: zDom.offsetWidth(ref.node), height: zDom.offsetHeight(ref.node)  
 				}
 			}
-		} else {
+		} else if (offset && offset.$array) {
 			dim = {
-				top: zk.parseInt(x),
-				left:  zk.parseInt(y)
+				top: zk.parseInt(offset[0]),
+				left:  zk.parseInt(offset[1])
 			}
 		}
+		if (dim) this._open(ref, pos, dim, fromServer);
+	},
+	_open: function (ref, pos, dim, fromServer) {
 		zDom.setStyle(this.node, {position: "absolute"});
 		zDom.makeVParent(this.node);
 		zDom.autoPosition(this.node, dim, pos);
@@ -57,7 +63,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 				this._stackup.style.display = "block";
 			}
 		}
-		if (!fromServer) this.fire('onOpen', ref ? [true, ref.id] : true);
+		if (!fromServer) this.fire('onOpen', ref ? [true, ref.uuid] : true);
 		zDom.setStyle(this.node, {visibility: 'inherit'});
 	},
 	onResponse: function () {
