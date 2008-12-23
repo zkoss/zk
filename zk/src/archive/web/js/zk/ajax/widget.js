@@ -816,7 +816,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	_addIdSpaceDown: function (wgt) {
 		var ow = wgt.parent;
-		ow = ow && ow.getSpaceOwner();
+		ow = ow ? ow.getSpaceOwner(): null;
 		if (ow) {
 			var fn = zk.Widget._addIdSpaceDown0;
 			fn(wgt, ow, fn);
@@ -829,7 +829,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	_rmIdSpaceDown: function (wgt) {
 		var ow = wgt.parent;
-		ow = ow && ow.getSpaceOwner();
+		ow = ow ? ow.getSpaceOwner(): null;
 		if (ow) {
 			var fn = zk.Widget._rmIdSpaceDown0;
 			fn(wgt, ow, fn);
