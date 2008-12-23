@@ -29,7 +29,7 @@ import org.zkoss.zul.impl.LabelImageElement;
 /**
  * A tool button.
  *
- * <p>The default CSS class is "button".
+ * <p>The default CSS class is "z-toolbar-button".
  *
  * <p>Non-xul extension: Toolbarbutton supports {@link #getHref}. If {@link #getHref}
  * is not null, the onClick handler is ignored and this element is degenerated
@@ -71,7 +71,7 @@ public class Toolbarbutton extends LabelImageElement implements org.zkoss.zul.ap
 	public void setDisabled(boolean disabled) {
 		if (_disabled != disabled) {
 			_disabled = disabled;
-			invalidate();
+			smartUpdate("disabled", _disabled);
 		}
 	}
 	
@@ -98,7 +98,7 @@ public class Toolbarbutton extends LabelImageElement implements org.zkoss.zul.ap
 
 		if (!Objects.equals(_dir, dir)) {
 			_dir = dir;
-			invalidate();
+			smartUpdate("dir", _dir);
 		}
 	}
 	/** Returns the href.
@@ -115,7 +115,7 @@ public class Toolbarbutton extends LabelImageElement implements org.zkoss.zul.ap
 			href = null;
 		if (!Objects.equals(_href, href)) {
 			_href = href;
-			invalidate();
+			smartUpdate("href", _href);
 		}
 	}
 	/** Returns the orient.
@@ -133,10 +133,9 @@ public class Toolbarbutton extends LabelImageElement implements org.zkoss.zul.ap
 
 		if (!Objects.equals(_orient, orient)) {
 			_orient = orient;
-			invalidate();
+			smartUpdate("orient", _orient);
 		}
 	}
-
 	/** Returns the target frame or window.
 	 *
 	 * <p>Note: it is useful only if href ({@link #setHref}) is specified
@@ -181,9 +180,9 @@ public class Toolbarbutton extends LabelImageElement implements org.zkoss.zul.ap
 			throws java.io.IOException {
 		super.renderProperties(renderer);
 		if (_href == null) {
-			renderer.render("target", "javascript:;");
+			render(renderer, "target", _target);
 		} else {
-			render(renderer, " href", getDesktop().getExecution().encodeURL(
+			render(renderer, "href", getDesktop().getExecution().encodeURL(
 					_href));
 			// When hyper to other page, we always show progress dlg
 		}
@@ -195,7 +194,6 @@ public class Toolbarbutton extends LabelImageElement implements org.zkoss.zul.ap
 			render(renderer, "orient", _orient);
 		if (_tabindex >= 0)
 			render(renderer, "tabindex", _tabindex);
-		render(renderer, "target", _target);
 	}
 	//Component//
 	/** No child is allowed.
