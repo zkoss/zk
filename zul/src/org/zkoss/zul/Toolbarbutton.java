@@ -193,7 +193,7 @@ public class Toolbarbutton extends LabelImageElement implements org.zkoss.zul.ap
 		if (!"horizontal".equals(_orient))
 			render(renderer, "orient", _orient);
 		if (_tabindex >= 0)
-			render(renderer, "tabindex", _tabindex);
+			renderer.render("tabindex", _tabindex);
 	}
 	//Component//
 	/** No child is allowed.
