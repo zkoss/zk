@@ -179,13 +179,12 @@ public class Toolbarbutton extends LabelImageElement implements org.zkoss.zul.ap
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 			throws java.io.IOException {
 		super.renderProperties(renderer);
-		if (_href == null) {
+		if (_target != null)
 			render(renderer, "target", _target);
-		} else {
+		if (_href != null)
 			render(renderer, "href", getDesktop().getExecution().encodeURL(
 					_href));
-			// When hyper to other page, we always show progress dlg
-		}
+		// When hyper to other page, we always show progress dlg
 		if (isDisabled())
 			render(renderer, "disabled", "disabled");
 		if (!"normal".equals(_dir))

@@ -15,8 +15,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
     _orient: "horizontal",
     _dir: "normal",
-    _href: null,
-    _target: null,
     _tabindex: -1,
     _disabled: false,
     
@@ -29,8 +27,7 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
             this._disabled = disabled;
             var n = this.node;
             if (n) {
-                n.disabled = true;
-                this.rerender();
+                this.updateDomClass_();//update class and attr
             }
         }
     },
@@ -44,12 +41,12 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
             this._dir = dir;
             var n = this.node;
             if (n) 
-                this.rerender();
+                n.innerHTML = this.domContent_();
         }
     },
     
     getHref: function(){
-        return this._href == null ? "" : this._href;
+        return this._href;
     },
     
     setHref: function(href){
@@ -70,12 +67,12 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
             this._orient = orient;
             var n = this.node;
             if (n) 
-                this.rerender();
+                n.innerHTML = this.domContent_();
         }
     },
     
     getTarget: function(){
-        return this._target == null ? "" : this._target;
+        return this._target;
     },
     
     setTarget: function(target){
@@ -113,6 +110,14 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
             zEvt.listen(n, "blur", this.proxy(this.domBlur_, '_fxBlur'));
         }
     },
+    unbind_: function(){
+        var n = this.node;
+        if (n) {
+            zEvt.unlisten(n, "focus", this.proxy(this.domFocus_, '_fxFocus'));
+            zEvt.unlisten(n, "blur", this.proxy(this.domBlur_, '_fxBlur'));
+        }
+        this.$super('unbind_');
+    },
     domContent_: function(){
         var label = zUtl.encodeXML(this.getLabel()), img = this.getImage();
         if (!img) 
@@ -137,8 +142,6 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
             attr += ' target="' + this.getTarget() + '"';
         if (this.getTabindex()) 
             attr += ' tabIndex="' + this.getTabindex() + '"';
-        if (this.isDisabled()) 
-            attr += ' disabled="' + this.isDisabled() + '"';
         if (this.getHref()) 
             attr += ' href="' + this.getHref() + '"';
         else 
@@ -146,8 +149,6 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
         return attr;
     },
     doClick_: function(evt){
-        if (!evt) 
-            evt = window.event;
         if (this.isDisabled()) {
             zEvt.stop(evt);
             return;
