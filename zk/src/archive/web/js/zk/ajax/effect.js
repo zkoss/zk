@@ -939,3 +939,51 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 		}
 	}
 });
+
+/** Applies the indicator mask over the specified element. */
+zk.eff.ApplyMask = zk.$extends(zk.Object, {
+	$init: function(opts) {
+		opts = opts || {};
+		var anchor = (typeof opts.anchor == "string") ? zDom.$(opts.anchor) : opts.anchor;
+		
+		if (!anchor || !zDom.isRealVisible(anchor, true)) return; //nothing do to.
+		
+		var maskId = opts.id || 'z_applymask',
+			progbox = zDom.$(maskId);
+		
+		if (progbox) return progbox;
+		
+		var msg = opts.msg || "Loading...",
+			n = document.createElement("DIV");
+		
+		document.body.appendChild(n);
+		var xy = zDom.revisedOffset(anchor), 
+			w = zDom.offsetWidth(anchor),
+			h = zDom.offsetHeight(anchor),
+			html = '<div id="'+maskId+'" style="visibility:hidden">' 
+				+ '<div class="z-apply-mask" style="display:block;top:' + xy[1]
+				+ 'px;left:' + xy[0] + 'px;width:' + w + 'px;height:' + h + 'px;"></div>'
+				+ '<div id="'+maskId+'$z_loading" class="z-apply-loading"><div class="z-apply-loading-indicator">'
+				+ '<img class="z-apply-loading-icon" alt="..." src="'+zAu.comURI('/web/img/spacer.gif')+'"/> '
+				+ msg+ '</div></div></div>';
+		zDom.setOuterHTML(n, html);
+		var loading = zDom.$(maskId+"$z_loading"),
+			mask = this.mask = zDom.$(maskId);
+		
+		if (loading) {
+			if (loading.offsetHeight > anchor.offsetHeight) 
+				loading.style.height = zDom.revisedHeight(loading, anchor.offsetHeight) + "px";
+			if (loading.offsetWidth > anchor.offsetWidth)
+				loading.style.width = zDom.revisedWidth(loading, anchor.offsetWidth) + "px";
+			loading.style.top = (xy[1] + ((h - loading.offsetHeight) /2)) + "px";
+			loading.style.left = (xy[0] + ((w - loading.offsetWidth) /2)) + "px";
+		}
+		
+		mask.style.visibility = "";
+	},
+	destroy: function () {
+		var mask = this.mask;
+		zDom.remove(mask);
+		this.mask = null;
+	}
+});

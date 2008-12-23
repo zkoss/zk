@@ -16,7 +16,7 @@ function () {
 	var uuid = this.uuid,
 		zcls = this.getZclass(),
 		rg = this.getRadiogroup();
-	return '<span' + this.domAttrs_({disabled: 1, checked: 1, tabindex: 1}) + '>'
+	return '<span' + this.domAttrs_() + '>'
 		 + '<input type="radio" id="' + uuid + '$real"' + this.contentAttrs_()
 		 + '/><label for="' + uuid + '$real"' + this.labelAttrs_()
 		 + ' class="' + zcls + '-cnt">' + this.domContent_() + '</label>'

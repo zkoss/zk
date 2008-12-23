@@ -80,8 +80,14 @@ zUtl = { //static methods
 	 */
 	progressbox: function (id, msg, mask) {
 		if (mask && zk.Page.contained.length) {
-			//TODO: apply a mask for each contained page
-			//return;
+			for (var c = zk.Page.contained.length, e = zk.Page.contained[--c]; e; e = zk.Page.contained[--c]) {
+				if (e._applyMask) continue;
+				e._applyMask = new zk.eff.ApplyMask({
+					id: e.uuid + "$mask",
+					anchor: e.node
+				});
+			}
+			return;
 		}
 
 		var x = zDom.innerX(), y = zDom.innerY(),
@@ -115,7 +121,11 @@ zUtl = { //static methods
 			zDom.remove(n);
 		}
 
-		//TODO: remove the mask for each contained page
+		for (var c = zk.Page.contained.length, e = zk.Page.contained[--c]; e; e = zk.Page.contained[--c])
+			if (e._applyMask) {
+				e._applyMask.destroy();
+				e._applyMask = null;
+			}
 	},
 
 	//HTTP//

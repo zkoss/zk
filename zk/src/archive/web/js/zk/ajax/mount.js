@@ -272,6 +272,7 @@ zkm = {
 	},
 	docMouseDown: function (evt) {
 		var target = zEvt.target(evt);
+		zk.currentPointer(zEvt.x(evt), zEvt.y(evt));
 		if (target != document.body && target != document.body.parentNode) { //not click on scrollbar
 			var $Widget = zk.Widget;
 			$Widget.domMouseDown($Widget.$(evt, true)); //null if mask

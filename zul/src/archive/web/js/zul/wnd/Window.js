@@ -473,7 +473,9 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			this._mask.destroy();
 			this._mask = null;
 		}
-
+		
+		this.ecap = null;
+		
 		zDom.undoVParent(this.node);
 		zWatch.unlisten('onFloatUp', this);
 		this.setFloating_(false);

@@ -118,7 +118,11 @@ zk = {
 		if (m) return m.call(o);
 		return o[name];
 	},
-
+	currentPointer: function (x, y) {
+		if (x != undefined) this._currentX = x;
+		if (y != undefined) this._currentY = y;
+		return [this._currentX, this._currentY];
+	},
 	//Processing//
 	startProcessing: function (timeout) {
 		zk.processing = true;

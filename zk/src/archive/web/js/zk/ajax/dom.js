@@ -271,6 +271,72 @@ zDom = { //static methods
 		if (!skipx) el.style.left = ofs[0] + "px";
 		if (!skipy) el.style.top =  ofs[1] + "px";
 	},
+	autoPosition: function (el, dim, flags) {
+		flags = flags || "overlap";
+		var box = zDom.getDimension(el),
+			wd = box.width,
+			hgh = box.height,
+			scX = zDom.innerX(),
+			scY = zDom.innerY(),
+			scMaxX = scX + zDom.innerWidth(),
+			scMaxY = scY + zDom.innerHeight(),
+			x = dim.top,
+			y = dim.left;
+			
+		switch(flags) {
+		case "before_start":
+			y -= hgh;
+			break;
+		case "before_end":
+			y -= hgh;
+			x += dim.width - wd;
+			break;
+		case "after_start":
+			y += dim.height;
+			break;
+		case "after_end":
+			y += dim.height;
+			x += dim.width - wd;
+			break;
+		case "start_before":
+			x -= wd;
+			break;
+		case "start_after":
+			x -= wd;
+			y += dim.height - hgh;
+			break;
+		case "end_before":
+			x += dim.width;
+			break; 
+		case "end_after":
+			x += dim.width;
+			y += dim.height - hgh;
+			break;
+		case "at_pointer":
+			var offset = zk.currentPointer();
+			x = offset[0];
+			y = offset[1];
+			break;
+		case "after_pointer":
+			var offset = zk.currentPointer();
+			x = offset[0];
+			y = offset[1] + 20;
+			break;
+		default: // overlap is assumed
+			// nothing to do.
+		}
+		if (x + wd > scMaxX) x = scMaxX - wd;
+		
+		if (x < scX) x = scX;
+				
+		if (y + hgh > scMaxY) y = scMaxY - hgh;
+		
+		if (y < scY) y = scY;
+	
+		box = zDom.toStyleOffset(el, x, y);
+		el.style.left = box[0] + "px";
+		el.style.top = box[1] + "px";
+	},
 
 	/** Calculates the cumulative scroll offset of an element in nested scrolling containers.
 	 * Adds the cumulative scrollLeft and scrollTop of an element and all its parents.
@@ -447,14 +513,14 @@ zDom = { //static methods
 	/** Returns el.offsetTop, which solving Safari's bug. */
 	offsetTop: function (el) {
 		if (!el) return 0;
-		if (zk.safari && $tag(el) === "TR" && el.cells.length)
+		if (zk.safari && zDom.tag(el) === "TR" && el.cells.length)
 			el = el.cells[0];
 		return el.offsetTop;
 	},
 	/** Returns el.offsetLeft, which solving Safari's bug. */
 	offsetLeft: function (el) {
 		if (!el) return 0;
-		if (zk.safari && $tag(el) === "TR" && el.cells.length)
+		if (zk.safari && zDom.tag(el) === "TR" && el.cells.length)
 			el = el.cells[0];
 		return el.offsetLeft;
 	},
@@ -549,7 +615,7 @@ zDom = { //static methods
 			var nm = l < 0 ? s.trim(): s.substring(0, l).trim();
 	
 			if (nm.startsWith("font")  || nm.startsWith("text")
-			|| this._txtstyles.$contains(nm)
+			|| zDom._txtstyles.$contains(nm)
 			|| (incwd && nm == "width") || (inchgh && nm == "height"))
 				ts += s + ';';
 		}
@@ -875,6 +941,20 @@ zDom = { //static methods
 				var chd = zDom.firstChild(n, tagName, descendant);
 				if (chd) return chd;
 			}
+		return null;
+	},
+	lastChild: function (el, tagName, descendant) {
+		for (var n = el.lastChild; n; n = n.previousSibling)
+			if (zDom.tag(n) == tagName)
+				return n;
+	
+		if (descendant) {
+			for (var n = el.lastChild; n; n = n.previousSibling) {
+				var chd = zDom.lastChild(n, tagName, descendant);
+				if (chd)
+					return chd;
+			}
+		}
 		return null;
 	},
 
