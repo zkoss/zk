@@ -29,7 +29,7 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 	},
 	setChecked: function (checked, fromServer) {
 		if (checked != this.isChecked()) {
-			this.$super('setChecked', checked, fromServer);
+			this.$super('setChecked', arguments);
 			if (this.ereal) {
 				var group = this.getRadiogroup();
 				
@@ -62,7 +62,7 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 		return group != null ? group.getName(): this.uuid;
 	},
 	contentAttrs_: function () {
-		var html = this.$super('contentAttrs_');
+		var html = this.$super('contentAttrs_', arguments);
 		html += ' value="' + this.getValue() + '"';
 		return html;
 	},

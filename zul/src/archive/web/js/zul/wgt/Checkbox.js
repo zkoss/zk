@@ -81,7 +81,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		return style ? ' style="' + style + '"' : "";
 	},
 	bind_: function (desktop) {
-		this.$super('bind_', desktop);
+		this.$super('bind_', arguments);
 
 		var $Checkbox = zul.wgt.Checkbox;
 		
@@ -102,7 +102,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		}
 
 		this.ereal = null;
-		this.$super('unbind_');
+		this.$super('unbind_', arguments);
 	},
 	updateDomStyle_: function () {
 		zDom.setStyle(this.node, zDom.parseStyle(this.domStyle_()));

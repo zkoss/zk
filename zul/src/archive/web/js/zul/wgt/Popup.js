@@ -108,6 +108,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		
 		zWatch.unlisten('onFloatUp', this);
 		this.setFloating_(false);
+		this.$supers('unbind_', arguments);
 	},
 	onVisible: zk.ie7 ? function (wgt) {
 		var node = wgt.node,
@@ -132,7 +133,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		}
 	}: zk.$void,
 	setWidth: function (width) {
-		this.$super('setWidth', width);
+		this.$super('setWidth', arguments);
 		zWatch.fireDown('onVisible', -1, this);
 	},
 	isImportantEvent_: function (evtnm) {
