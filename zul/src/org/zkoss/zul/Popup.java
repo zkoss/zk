@@ -18,11 +18,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.*;
 
 import org.zkoss.zul.impl.XulElement;
-import org.zkoss.zul.au.out.AuPopup;
 
 /**
  * A container that is displayed as a popup.
@@ -36,6 +36,10 @@ import org.zkoss.zul.au.out.AuPopup;
  * @author tomyeh
  */
 public class Popup extends XulElement implements org.zkoss.zul.api.Popup {
+	static {
+		addClientEvent(Popup.class, Events.ON_OPEN);
+	}
+	
 	public Popup() {
 		super.setVisible(false);
 	}
@@ -55,7 +59,7 @@ public class Popup extends XulElement implements org.zkoss.zul.api.Popup {
 	 * @since 3.0.0
 	 */
 	public void open(String x, String y) {
-		response("popup", new AuPopup(this, x, y));
+		response("popup", new AuInvoke(this, "open", new Object[] {"1", x, y, "true"}));
 	}
 	/**
 	 * Opens this popup to the specified location at the client.
@@ -72,23 +76,56 @@ public class Popup extends XulElement implements org.zkoss.zul.api.Popup {
 	 * @since 3.0.0
 	 */
 	public void open(int x, int y) {
-		response("popup", new AuPopup(this, Integer.toString(x), Integer.toString(y)));
+		response("popup", new AuInvoke(this, "open",
+				new Object[] {"1", Integer.toString(x), Integer.toString(y), "true"}));
 	}
 	/**
-	 * Opens this popup right below the specified component at the cleint.
+	 * Opens this popup right below the specified component at the client.
+	 * <p>By default the position "at_pointer" is assumed.(since 5.0.0)
+	 * 
+	 * @see Popup#open(Component, String)
+	 * @param ref the reference component to position the popup.
+	 * It cannot be null.
+	 * @since 3.0.0
+	 */
+	public void open(Component ref) {
+		open(ref, "at_pointer");
+	}
+	/**
+	 * Opens this popup right below the specified component at the client.
 	 * <p>In most cases, the popup is shown automatically when specified
 	 * in the tooltip, popup and context properties
 	 * ({@link XulElement#setTooltip}, {@link XulElement#setPopup},
 	 * and {@link XulElement#setContext}).
 	 * However, if you want to show it manually, you can invoke this
 	 * method directly.
-	 *
+	 * <p> Possible values for the position attribute are:
+	 * <ul>
+	 * 	<li><b>before_start</b><br/> the popup appears above the anchor, aligned on the left.</li>
+	 *  <li><b>before_end</b><br/> the popup appears above the anchor, aligned on the right.</li>
+	 *  <li><b>after_start</b><br/> the popup appears below the anchor, aligned on the left.</li>
+	 *  <li><b>after_end</b><br/> the popup appears below the anchor, aligned on the right.</li>
+	 *  <li><b>start_before</b><br/> the popup appears to the left of the anchor, aligned on the top.</li>
+	 *  <li><b>start_after</b><br/> the popup appears to the left of the anchor, aligned on the bottom.</li>
+	 *  <li><b>end_before</b><br/> the popup appears to the right of the anchor, aligned on the top.</li>
+	 *  <li><b>end_after</b><br/> the popup appears to the right of the anchor, aligned on the bottom.</li>
+	 *  <li><b>overlap</b><br/> the popup overlaps the anchor, with the topleft 
+	 *  	corners of both the anchor and popup aligned.</li>
+	 *  <li><b>after_pointer</b><br/> the popup appears with the top aligned with
+	 *  	the bottom of the anchor, with the topleft corner of the popup at the horizontal position of the mouse pointer.</li>
+	 * </ul></p>
+	 * 
 	 * @param ref the reference component to position the popup.
-	 * It cannot be null.
-	 * @since 3.0.0
+	 * It cannot be null. 
+	 * @param position the descriptions above are for a locale where the UI is 
+	 * displayed left to right and top to bottom. In this case, before is the top,
+	 * after is the bottom, start is the left and end is the right. For right to left locales,
+	 * start is the right and end is the left. 
+	 * 
+	 * @since 5.0.0
 	 */
-	public void open(Component ref) {
-		response("popup", new AuPopup(this, ref));
+	public void open(Component ref, String position) {
+		response("popup", new AuInvoke(this, "open", new Object[] {"2", ref.getUuid(), position, "true"}));
 	}
 	/**
 	 * Closes this popup at the client.
@@ -98,11 +135,11 @@ public class Popup extends XulElement implements org.zkoss.zul.api.Popup {
 	 * @since 3.0.0
 	 */
 	public void close() {
-		response("popup", new AuPopup(this, false));
+		response("popup", new AuInvoke(this, "close", true));
 	}
 
 	//super//
-	/** Not allowd.
+	/** Not allowed.
 	 * Use {@link #open} to open, and {@link #close} to close.
 	 */
 	public boolean setVisible(boolean visible) {
