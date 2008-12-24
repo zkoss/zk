@@ -173,6 +173,27 @@ zAu = {
 		case 't': return new Date(parseInt(v));
 		case 'j': return new zk.BigInteger(v);
 		case 'k': return new zk.BigDecimal(v);
+		case '[':
+			d = v;
+			v = [];
+			var esc;
+			for (var len = d.length, j = 0, k = 0;; ++j) {
+				if (j >= len) {
+					if (len)
+						v.push(zAu._decodeData(esc || d.substring(k, j)));
+					return v;
+				}
+				var cc = d.charAt(j);
+				if (cc == '\\') {
+					if (!esc) esc = d.substring(k, j);
+					esc += d.charAt(++j);
+				} else if (cc == ',') {
+					v.push(zAu._decodeData(esc || d.substring(k, j)));
+					k = j + 1;
+					esc = null;
+				} else if (esc)
+					esc += cc;
+			}
 		}
 		return v;
 	},

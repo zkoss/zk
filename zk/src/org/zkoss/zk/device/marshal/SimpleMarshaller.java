@@ -19,6 +19,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.lang.Strings;
 
 /**
  * A simple implementation of {@link Marshaller}.
@@ -84,7 +85,7 @@ public class SimpleMarshaller implements Marshaller {
 			final Object[] ary = (Object[])o;
 			for (int j = 0; j < ary.length; ++j) {
 				if (j > 0) sb.append(',');
-				sb.append(marshal(ary[j]));
+				Strings.escape(sb, marshal(ary[j]), "\\,");
 			}
 			return sb.toString();
 		}
@@ -138,7 +139,7 @@ public class SimpleMarshaller implements Marshaller {
 			final char[] ary = (char[])o;
 			for (int j = 0; j < ary.length; ++j) {
 				if (j > 0) sb.append(',');
-				sb.append(marshal(ary[j]));
+				Strings.escape(sb, marshal(ary[j]), "\\,");
 			}
 			return sb.toString();
 		}

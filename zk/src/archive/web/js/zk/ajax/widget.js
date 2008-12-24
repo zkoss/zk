@@ -636,7 +636,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			for (var j = 0; j < len;) {
 				var inf = lsns[j++], o = inf[1];
 				(inf[2] || o[evtnm]).call(o, evt);
-				if (evt.isStopped()) return; //no more processing
+				if (evt.isStopped()) return evt; //no more processing
 			}
 		}
 
@@ -646,9 +646,10 @@ zk.Widget = zk.$extends(zk.Object, {
 				zAu.send(evt,
 					asap ? timeout >= 0 ? timeout: 38: -1);
 		}
+		return evt;
 	},
 	fire: function (evtnm, data, opts, timeout) {
-		this.fireX(new zk.Event(this, evtnm, data, opts), timeout);
+		return this.fireX(new zk.Event(this, evtnm, data, opts), timeout);
 	},
 	isImportantEvent_: function (evtnm) {
 		return false;
@@ -707,34 +708,29 @@ zk.Widget = zk.$extends(zk.Object, {
 
 	//ZK event handling//
 	doClick_: function (evt) {
-		if (this.isListen('onClick')) {
-			this.fire("onClick", zEvt.mouseData(evt, this.node), {ctl:true});
-			return evt.isStopped();
-		}
+		if (this.isListen('onClick'))
+			return this.fire('onClick', zEvt.mouseData(evt, this.node), {ctl:true})
+				.isStopped();
 	},
 	doDoubleClick_: function (evt) {
-		if (this.isListen('onDoubleClick')) {
-			this.fire("onDoubleClick", zEvt.mouseData(evt, this.node), {ctl:true});
-			return evt.isStopped();
-		}
+		if (this.isListen('onDoubleClick'))
+			return this.fire('onDoubleClick', zEvt.mouseData(evt, this.node), {ctl:true})
+				.isStopped();
 	},
 	doRightClick_: function (evt) {
-		if (this.isListen('onRightClick')) {
-			this.fire("onRightClick", zEvt.mouseData(evt, this.node), {ctl:true});
-			return evt.isStopped();
-		}
+		if (this.isListen('onRightClick'))
+			return this.fire('onRightClick', zEvt.mouseData(evt, this.node), {ctl:true})
+				.isStopped();
 	},
 	doMouseOver_: function (evt) {
-		if (this.isListen('onMouseOver')) {
-			this.fire("onMouseOver", zEvt.mouseData(evt, this.node));
-			return evt.isStopped();
-		}
+		if (this.isListen('onMouseOver'))
+			return this.fire('onMouseOver', zEvt.mouseData(evt, this.node))
+				.isStopped();
 	},
 	doMouseOut_: function (evt) {
-		if (this.isListen('onMouseOut')) {
-			this.fire("onMouseOut", zEvt.mouseData(evt, this.node));
-			return evt.isStopped();
-		}
+		if (this.isListen('onMouseOut'))
+			return this.fire('onMouseOut', zEvt.mouseData(evt, this.node))
+				.isStopped();
 	},
 
 	//DOM event handling//

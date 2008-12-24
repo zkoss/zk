@@ -283,7 +283,7 @@ implements DynamicPropertied, org.zkoss.zul.api.Include, Includer {
 					} else {
 						out.write("zkm.top().props.content='");
 						final StringBuffer sb = new StringBuffer(1024);
-						Strings.appendEscape(sb, sw.getBuffer(), "'\\\n\r\t\f");
+						Strings.escape(sb, sw.getBuffer(), "'\\\n\r\t\f");
 						Files.write(out, sb);
 						out.write("';");
 					}

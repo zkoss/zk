@@ -584,7 +584,7 @@ zDom = { //static methods
 	/** Adds the specified class name to the class name of the specified element.
 	 */
 	addClass: function (el, clsnm) {
-		if (!zDom.hasClass(el, clsnm)) {
+		if (el && !zDom.hasClass(el, clsnm)) {
 			var cn = el.className;
 			if (cn.length) cn += ' ';
 			el.className = cn + clsnm;
@@ -594,7 +594,7 @@ zDom = { //static methods
 	 * element.
 	 */
 	rmClass: function (el, clsnm) {
-		if (zDom.hasClass(el, clsnm)) {
+		if (el && zDom.hasClass(el, clsnm)) {
 			var re = new RegExp('(?:^|\\s+)' + clsnm + '(?:\\s+|$)', "g");
 			el.className = el.className.replace(re, " ").trim();
 		}
