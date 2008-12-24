@@ -65,6 +65,21 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 	},
 
+	getChildAt: function (j) {
+		if (j >= 0)
+			for (var w = this.firstChild; w; w = w.nextSibing)
+				if (--j < 0)
+					return w;
+		return null;
+	},
+	getChildIndex: function () {
+		var w = this.parent, j = 0;
+		if (w)
+			for (w = w.firstChild; w; w = w.nextSibling, ++j)
+				if (w == this)
+					return j;
+		return 0;
+	},
 	appendChild: function (child) {
 		if (child == this.lastChild)
 			return false;
