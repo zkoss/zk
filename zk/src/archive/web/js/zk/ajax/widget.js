@@ -609,7 +609,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			for (var j = 0; j < len;) {
 				var inf = lsns[j++], o = inf[1];
 				(inf[2] || o[evtnm]).call(o, evt);
-				if (evt.isStopped()) return evt; //no more processing
+				if (evt.stopped) return evt; //no more processing
 			}
 		}
 
@@ -670,19 +670,72 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 
 	//ZK event handling//
-	doClick_: _zkf = function (zevt, evt) {
-		return this.fireX(zevt).isStopped();
+	doClick_: function (evt, devt) {
+		if (!this.fireX(evt).stopped) {
+			var p = this.parent;
+			if (p) p.doClick_(evt, devt);
+		}	
 	},
-	doDoubleClick_: _zkf,
-	doRightClick_: _zkf,
-	doMouseOver_: _zkf,
-	doMouseOut_: _zkf,
-	doMouseDown_: _zkf,
-	doMouseUp_: _zkf,
-	doMouseMove_: _zkf,
-	doKeyDown_: _zkf,
-	doKeyUp_: _zkf,
-	doKeyPress_: _zkf,
+	doDoubleClick_: function (evt, devt) {
+		if (!this.fireX(evt).stopped) {
+			var p = this.parent;
+			if (p) p.doDoubleClick_(evt, devt);
+		}	
+	},
+	doRightClick_: function (evt, devt) {
+		if (!this.fireX(evt).stopped) {
+			var p = this.parent;
+			if (p) p.doRightClick_(evt, devt);
+		}	
+	},
+	doMouseOver_: function (evt, devt) {
+		if (!this.fireX(evt).stopped) {
+			var p = this.parent;
+			if (p) p.doMouseOver_(evt, devt);
+		}	
+	},
+	doMouseOut_: function (evt, devt) {
+		if (!this.fireX(evt).stopped) {
+			var p = this.parent;
+			if (p) p.doMouseOut_(evt, devt);
+		}	
+	},
+	doMouseDown_: function (evt, devt) {
+		if (!this.fireX(evt).stopped) {
+			var p = this.parent;
+			if (p) p.doMouseDown_(evt, devt);
+		}	
+	},
+	doMouseUp_: function (evt, devt) {
+		if (!this.fireX(evt).stopped) {
+			var p = this.parent;
+			if (p) p.doMouseUp_(evt, devt);
+		}	
+	},
+	doMouseMove_: function (evt, devt) {
+		if (!this.fireX(evt).stopped) {
+			var p = this.parent;
+			if (p) p.doMouseMove_(evt, devt);
+		}	
+	},
+	doKeyDown_: function (evt, devt) {
+		if (!this.fireX(evt).stopped) {
+			var p = this.parent;
+			if (p) p.doKeyDown_(evt, devt);
+		}	
+	},
+	doKeyUp_: function (evt, devt) {
+		if (!this.fireX(evt).stopped) {
+			var p = this.parent;
+			if (p) p.doKeyUp_(evt, devt);
+		}	
+	},
+	doKeyPress_: function (evt, devt) {
+		if (!this.fireX(evt).stopped) {
+			var p = this.parent;
+			if (p) p.doKeyPress_(evt, devt);
+		}	
+	},
 
 	//DOM event handling//
 	domFocus_: function () {

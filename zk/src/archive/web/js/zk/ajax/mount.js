@@ -283,109 +283,52 @@ zkm = {
 			if (target != document.body && target != document.body.parentNode) //not click on scrollbar
 				$Widget.domMouseDown(wgt); //null if mask
 
-			var zevt = new zk.Event(wgt, 'onMouseDown', zEvt.mouseData(evt, wgt.node));
-			for (; wgt; wgt = wgt.parent)
-				if (wgt.doMouseDown_(zevt, evt))
-					return;
+			wgt.doMouseDown_(new zk.Event(wgt, 'onMouseDown', zEvt.mouseData(evt, wgt.node)), evt);
 		}
 	},
 	docMouseUp: function (evt) {
 		var wgt = zk.mouseCapture;
-		if (wgt) {
-			wgt.doMouseUp_(
-				new zk.Event(wgt, 'onMouseUp', zEvt.mouseData(evt, wgt.node)),
-				evt);
-			zk.mouseCapture = null;
-			return;
-		}
-
-		wgt = zk.Widget.$(evt);
-		if (wgt) {
-			var zevt = new zk.Event(wgt, 'onMouseUp', zEvt.mouseData(evt, wgt.node));
-			for (; wgt; wgt = wgt.parent)
-				if (wgt.doMouseUp_(zevt, evt))
-					return;
-		}
+		if (wgt) zk.mouseCapture = null;
+		else wgt = zk.Widget.$(evt);
+		if (wgt)
+			wgt.doMouseUp_(new zk.Event(wgt, 'onMouseUp', zEvt.mouseData(evt, wgt.node)), evt);
 	},
 	docMouseMove: function (evt) {
 		var wgt = zk.mouseCapture;
-		if (wgt) {
-			wgt.doMouseMove_(
-				new zk.Event(wgt, 'onMouseMove', zEvt.mouseData(evt, wgt.node)),
-				evt);
-			return;
-		}
-
-		wgt = zk.Widget.$(evt);
-		if (wgt) {
-			var zevt = new zk.Event(wgt, 'onMouseMove', zEvt.mouseData(evt, wgt.node));
-			for (; wgt; wgt = wgt.parent)
-				if (wgt.doMouseMove_(zevt, evt))
-					return;
-		}
+		if (!wgt) wgt = zk.Widget.$(evt);
+		if (wgt)
+			wgt.doMouseMove_(new zk.Event(wgt, 'onMouseMove', zEvt.mouseData(evt, wgt.node)), evt);
 	},
 	docMouseOver: function (evt) {
 		zk.currentPointer[0] = zEvt.x(evt);
 		zk.currentPointer[1] = zEvt.y(evt);
 
 		var wgt = zk.Widget.$(evt);
-		if (wgt) {
-			var zevt = new zk.Event(wgt, 'onMouseOver', zEvt.mouseData(evt, wgt.node));
-			for (; wgt; wgt = wgt.parent)
-				if (wgt.doMouseOver_(zevt, evt))
-					return;
-		}
+		if (wgt)
+			wgt.doMouseOver_(new zk.Event(wgt, 'onMouseOver', zEvt.mouseData(evt, wgt.node)), evt);
 	},
 	docMouseOut: function (evt) {
 		var wgt = zk.Widget.$(evt);
-		if (wgt) {
-			var zevt = new zk.Event(wgt, 'onMouseOut', zEvt.mouseData(evt, wgt.node));
-			for (; wgt; wgt = wgt.parent)
-				if (wgt.doMouseOut_(zevt, evt))
-					return;
-		}
+		if (wgt)
+			wgt.doMouseOut_(new zk.Event(wgt, 'onMouseOut', zEvt.mouseData(evt, wgt.node)), evt);
 	},
 	docKeyDown: function (evt) {
 		var wgt = zk.Widget.$(evt);
-		if (wgt) {
-			var zevt = new zk.Event(wgt, 'onKeyDown', zEvt.keyData(evt));
-			for (; wgt; wgt = wgt.parent)
-				if (wgt.doKeyDown_(zevt, evt))
-					return;
-		}
+		if (wgt)
+			wgt.doKeyDown_(new zk.Event(wgt, 'onKeyDown', zEvt.keyData(evt)), evt);
 	},
 	docKeyUp: function (evt) {
 		var wgt = zk.keyCapture;
-		if (wgt) {
-			wgt.doMouseUp_(
-				new zk.Event(wgt, 'onKeyUp', zEvt.keyData(evt)), evt);
-			zk.keyCapture = null;
-			return;
-		}
-
-		wgt = zk.Widget.$(evt);
-		if (wgt) {
-			var zevt = new zk.Event(wgt, 'onKeyUp', zEvt.keyData(evt));
-			for (; wgt; wgt = wgt.parent)
-				if (wgt.doKeyUp_(zevt, evt))
-					return;
-		}
+		if (wgt) zk.keyCapture = null;
+		else wgt = zk.Widget.$(evt);
+		if (wgt)
+			wgt.doKeyUp_(new zk.Event(wgt, 'onKeyUp', zEvt.keyData(evt)), evt);
 	},
 	docKeyPress: function (evt) {
 		var wgt = zk.keyCapture;
-		if (wgt) {
-			wgt.doMousePress_(
-				new zk.Event(wgt, 'onKeyPress', zEvt.keyData(evt)), evt);
-			return;
-		}
-
-		wgt = zk.Widget.$(evt);
-		if (wgt) {
-			var zevt = new zk.Event(wgt, 'onKeyPress', zEvt.keyData(evt));
-			for (; wgt; wgt = wgt.parent)
-				if (wgt.doKeyPress_(zevt, evt))
-					return;
-		}
+		if (!wgt) wgt = zk.Widget.$(evt);
+		if (wgt)
+			wgt.doKeyPress_(new zk.Event(wgt, 'onKeyPress', zEvt.keyData(evt)), evt);
 	},
 	docClick: function (evt) {
 		if (zk.processing) return;
@@ -394,16 +337,16 @@ zkm = {
 		if (zEvt.leftClick(evt)) {
 			var wgt = zk.Widget.$(evt);
 			if (wgt) {
-				var zevt = new zk.Event(wgt, 'onClick', zEvt.mouseData(evt, wgt.node), {ctl:true});
-				for (; wgt; wgt = wgt.parent) {
-					if (wgt.href) {
-						zUtl.go(href, false, wgt.target, "target");
-						return; //done
-					}
-					if (wgt.doClick_(zevt, evt))
-						return;
-				}
-				//no need to Event.stop
+				var zev = new zk.Event(wgt, 'onClick', zEvt.mouseData(evt, wgt.node), {ctl:true});
+				wgt.doClick_(zev, evt);
+
+				if (!zev.stopped)
+					for (; wgt; wgt = wgt.parent)
+						if (wgt.href) {
+							zUtl.go(href, false, wgt.target, "target");
+							return; //done
+						}
+				//no need to zEvt.stop()
 			}
 		}
 		//don't return anything. Otherwise, it replaces event.returnValue in IE (Bug 1541132)
@@ -414,17 +357,17 @@ zkm = {
 
 		var wgt = zk.Widget.$(evt);
 		if (wgt) {
-			var zevt = new zk.Event(wgt, 'onDoubleClick', zEvt.mouseData(evt, wgt.node), {ctl:true});
-			for (; wgt; wgt = wgt.parent)
-				if (wgt.doDoubleClick_(zevt, evt)) {
-					zEvt.stop(evt); //prevent browser default
-					return false;
-				}
+			var zev = new zk.Event(wgt, 'onDoubleClick', zEvt.mouseData(evt, wgt.node), {ctl:true});
+			wgt.doDoubleClick_(zev, evt);
+
+			if (zev.stopped) {
+				zEvt.stop(evt); //prevent browser default
+				return false;
+			}
 		}
 	},
 	docCtxMenu: function (evt) {
 		if (zk.processing) return;
-
 		if (!evt) evt = window.event;
 
 		zk.lastPointer[0] = zEvt.x(evt);
@@ -432,12 +375,12 @@ zkm = {
 
 		var wgt = zk.Widget.$(evt);
 		if (wgt) {
-			var zevt = new zk.Event(wgt, 'onRightClick', zEvt.mouseData(evt, wgt.node), {ctl:true});
-			for (; wgt; wgt = wgt.parent)
-				if (wgt.doRightClick_(zevt, evt)) {
-					zEvt.stop(evt); //prevent browser default
-					return false;
-				}
+			var zev = new zk.Event(wgt, 'onRightClick', zEvt.mouseData(evt, wgt.node), {ctl:true});
+			wgt.doRightClick_(zev, evt);
+			if (zev.stopped) {
+				zEvt.stop(evt); //prevent browser default
+				return false;
+			}
 		}
 		return !zk.ie || evt.returnValue;
 	},

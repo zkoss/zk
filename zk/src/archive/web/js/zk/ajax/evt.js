@@ -1,4 +1,4 @@
-/* domevt.js
+/* evt.js
 
 	Purpose:
 		DOM Event, ZK Event and ZK Watch
@@ -200,11 +200,8 @@ zk.Event = zk.$extends(zk.Object, {
 		this.data = data;
 		this.opts = opts;
 	},
-	stop: function () {
-		this._stop = true;
-	},
-	isStopped: function () {
-		return this._stop;
+	stop: function (b) {
+		this.stopped = !b;
 	}
 },{
 	duplicateIgnores: {
