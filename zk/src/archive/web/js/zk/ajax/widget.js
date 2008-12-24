@@ -14,6 +14,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 zk.Widget = zk.$extends(zk.Object, {
 	_visible: true,
+	nChildren: 0,
 
 	$init: function (uuid, mold) {
 		this._lsns = {}; //listeners Map(evtnm,listener)
@@ -101,6 +102,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		} else {
 			this.firstChild = this.lastChild = child;
 		}
+		++this.nChildren;
 
 		zk.Widget._addIdSpaceDown(child);
 
@@ -133,6 +135,8 @@ zk.Widget = zk.$extends(zk.Object, {
 		sibling.previousSibling = child;
 		child.nextSibling = sibling;
 
+		++this.nChildren;
+
 		zk.Widget._addIdSpaceDown(child);
 
 		var dt = this.desktop;
@@ -153,6 +157,8 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (n) n.previousSibling = p;
 		else this.lastChild = p;
 		child.nextSibling = child.previousSibling = child.parent = null;
+
+		--this.nChildren;
 
 		zk.Widget._rmIdSpaceDown(child);
 
