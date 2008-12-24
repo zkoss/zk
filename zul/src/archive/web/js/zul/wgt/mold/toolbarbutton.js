@@ -13,7 +13,6 @@ This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function () {
-	var zcls = this.getZclass();
 	var html = '<a ' + this.domAttrs_();
 	return html + '>' + this.domContent_() + '</a>';
 }
