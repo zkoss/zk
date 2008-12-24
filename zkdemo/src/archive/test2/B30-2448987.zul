@@ -1,0 +1,22 @@
+<?page id="testZul" title=" New ZUL Title" cacheable="false" 
+	language="xul/html" zscriptLanguage="Java" contentType="text/html;charset=UTF-8"?>
+<window>
+<html><![CDATA[  
+<ol>
+<li>You shall see the listbox in the order of item4,item0,item1,item2,item3,item5,item6,item7,item8,item9</li>
+<li>Otherwise, it is a bug</li>
+<li>Done</li>
+</ol>
+]]>
+
+</html>
+<zscript><![CDATA[
+    ListModelList model = new ListModelList(new ArrayList(10), true);
+    for (int j = 0; j < 10; ++j) {
+    	model.add("item"+j);
+    }
+    List subList = model.subList(0, 5);
+    Collections.rotate(subList, +1);
+]]></zscript>
+	<listbox model="${model}"/>
+</window>

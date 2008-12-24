@@ -40,7 +40,8 @@ ZK 3.5.3
 * Features
   2433264: Able to access the URI of the error page
   2437121: Make DHtmlLayoutServlet as optional
-
+  2448278: Chart could provide default model
+  
 * Bugs
   2386650: NullPointerException when create tabs in onTimer()
   2432784: Tabbox error in IE7
@@ -48,6 +49,8 @@ ZK 3.5.3
   2446672: toolbarbutton, disibled,can click image to fire event
   2446682: Components.addForwards() occus an dead loop
   2448170: i3-label-en.properties never use
+  2448099: FF only.SetAttr fail when addEventListener with $ event name
+  2448987: Unexpected ListModelList.subList() behaviour
 
 	--------
 ZK 3.5.2
