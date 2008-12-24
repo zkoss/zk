@@ -143,13 +143,12 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
             attr += ' href="javascript:;"';
         return attr;
     },
-    doClick_: function(evt){
-        if (this.isDisabled()) {
-            zEvt.stop(evt);
+    doClick_: function(zevt, evt){
+       	zevt.stop();
+        if (this._disabled) {
+            zEvt.stop(evt); //prevent default behavior
             return;
         }
-        this.fire("onClick", zEvt.mouseData(evt, this.node), {
-            ctl: true
-        });
+        this.fireX(zevt);
     }
 });

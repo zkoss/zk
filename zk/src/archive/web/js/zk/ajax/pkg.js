@@ -32,6 +32,8 @@ zPkg = {
 			zPkg._lded[pkg] = true;
 	},
 	load: function (pkg, dt) {
+		if (!pkg) return;
+
 		var pkglds = zPkg._lded;
 		if (pkglds[pkg]) return;
 

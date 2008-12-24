@@ -74,6 +74,7 @@ import org.zkoss.zk.ui.AbstractComponent;
 public class Script extends AbstractComponent implements org.zkoss.zul.api.Script {
 	private String _src, _charset;
 	private String _content;
+	private String _packages;
 
 	public Script() {
 	}
@@ -174,6 +175,29 @@ public class Script extends AbstractComponent implements org.zkoss.zul.api.Scrip
 		}
 	}
 
+	/** Returns the list of packages to load before evaluating the script
+	 * defined in {@link #getContent}.
+	 * It is meaning only if {@link #getContent} not null.
+	 * <p>Default: null.
+	 * @since 5.0.0
+	 */
+	public String getPackages() {
+		return _packages;
+	}
+	/** Sets the list of packages to load before evaluating the script
+	 * defined in {@link #getContent}.
+	 * If more than a package to load, separate them with comma.
+	 * @since 5.0.0
+	 */
+	public void setPackages(String packages) {
+		if (packages != null && packages.length() == 0)
+			packages = null;
+
+		if (!Objects.equals(_packages, packages)) {
+			_packages = packages;
+			smartUpdate("packages", _packages);
+		}
+	}
 	//-- Component --//
 	/** Not childable. */
 	protected boolean isChildable() {
@@ -188,6 +212,7 @@ public class Script extends AbstractComponent implements org.zkoss.zul.api.Scrip
 			renderer.renderDirectly("content", "function(){\n" + _content + '}');
 		render(renderer, "src", getEncodedSrcURL());
 		render(renderer, "charset", _charset);
+		render(renderer, "packages", _packages);
 	}
 
 	private String getEncodedSrcURL() {

@@ -127,8 +127,6 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			n = zDom.$(this.uuid + '$box');
 			this.ebox = n;
 			zDom.disableSelection(n);
-			zEvt.listen(n, "mousedown", $Button._doDown);
-			zEvt.listen(n, "mouseup", $Button._doUp);
 
 			this.ebtn = n = zDom.$(this.uuid + '$btn');
 		}
@@ -137,18 +135,8 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		zEvt.listen(n, "blur", $Button._doBlur);
 	},
 	unbind_: function () {
-		var $Button = zul.wgt.Button, n;
-		if (this._mold == 'os') {
-			n = this.node;
-		} else {
-			n = this.ebox;
-			if (n) {
-				zEvt.unlisten(n, "mousedown", $Button._doDown);
-				zEvt.unlisten(n, "mouseup", $Button._doUp);
-			}
-			n = this.ebtn;
-		}
-
+		var $Button = zul.wgt.Button,
+			n = this._mold == 'os' ? this.node: this.ebtn;
 		if (n) {
 			zEvt.unlisten(n, "focus", $Button._doFocus);
 			zEvt.unlisten(n, "blur", $Button._doBlur);
@@ -157,21 +145,36 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		this.ebox = this.ebtn = null;
 		this.$super('unbind_');
 	},
-	doClick_: function (evt) {
+	doClick_: function (zevt) {
+		zevt.stop();
 		if (!this._disabled)
-			this.fire("onClick", zEvt.mouseData(evt, this.node), {ctl:true});
-		return true;
+			this.fireX(zevt);
 	},
-	doMouseOver_: function (evt) {
+	doMouseOver_: function () {
 		zDom.addClass(this.ebox, this.getZclass() + "-over");
 		this.$supers('doMouseOver_', arguments);
-		return true; //don't check parent's doMouseOver_
 	},
-	doMouseOut_: function (evt) {
+	doMouseOut_: function () {
 		if (this != zul.wgt.Button._curdn)
 			zDom.rmClass(this.ebox, this.getZclass() + "-over");
 		this.$supers('doMouseOut_', arguments);
-		return true; //don't check parent's doMouseOut_
+	},
+	doMouseDown_: function () {
+		var box = this.ebox,
+			zcls = this.getZclass();
+		zDom.addClass(box, zcls + "-clk");
+		zDom.addClass(box, zcls + "-over");
+		zDom.focus(this.ebtn, 30);
+
+		zk.capture = this; //capture mouse up
+		this.$supers('doMouseDown_', arguments);
+	},
+	doMouseUp_: function () {
+		var box = this.ebox,
+			zcls = this.getZclass();
+		zDom.rmClass(box, zcls + "-clk");
+		zDom.rmClass(box, zcls + "-over");
+		this.$supers('doMouseUp_', arguments);
 	}
 },{
 	_doFocus: function (evt) {
@@ -185,29 +188,5 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		if (wgt._mold != 'os')
 			zDom.rmClass(wgt.ebox, wgt.getZclass() + "-focus");
 		wgt.domBlur_();
-	},
-	_doDown: function (evt) {
-		var wgt = zk.Widget.$(evt),
-			box = wgt.ebox,
-			zcls = wgt.getZclass();
-		zDom.addClass(box, zcls + "-clk");
-		zDom.addClass(box, zcls + "-over");
-		zDom.focus(wgt.ebtn, 30);
-
-		var $Button = zul.wgt.Button;
-		$Button._curdn = wgt;
-		zEvt.listen(document.body, "mouseup", $Button._doUp);
-	},
-	_doUp: function (evt) {
-		var $Button = zul.wgt.Button,
-			wgt = $Button._curdn;
-		if (wgt) {
-			$Button._curdn = null;
-			var box = wgt.ebox,
-				zcls = wgt.getZclass();
-			zDom.rmClass(box, zcls + "-clk");
-			zDom.rmClass(box, zcls + "-over");
-		}
-		zEvt.unlisten(document.body, "mouseup", $Button._doUp);
 	}
 });

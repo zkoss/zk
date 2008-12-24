@@ -396,8 +396,8 @@ zk.Object.prototype = {
 
 		var o = this,
 			fpx = function () {
-			return f.apply(o, arguments);
-		};
+				return f.apply(o, arguments);
+			};
 		if (nm) this[nm] = fpx;
 		return fpx;
 	}

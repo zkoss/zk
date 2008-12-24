@@ -115,27 +115,27 @@ zul.Widget = zk.$extends(zk.Widget, {
 	},
 
 	//super//
-	doClick_: function (evt) {
-		var found, popup = this._popup;
+	doClick_: function (zevt) {
+		var popup = this._popup;
 		if (popup) {
 			var w = this._smartFellow(popup, true);
 			if (w) {
-				w.open(this, zEvt.pointer(evt));
-				found = true;
+				w.open(this, [zevt.x, zevt.y]);
+				zevt.stop();
 			}
 		}
-		return this.$supers('doClick_', arguments) || found;
+		this.$supers('doClick_', arguments);
 	},
-	doRightClick_: function (evt) {
-		var found, ctx = this._context;
+	doRightClick_: function (zevt) {
+		var ctx = this._context;
 		if (ctx) {
 			var w = this._smartFellow(ctx, true);
 			if (w) {
-				w.open(this, zEvt.pointer(evt));
-				found = true;
+				w.open(this, [zevt.x, zevt.y]);
+				zevt.stop();
 			}
 		}
-		return this.$supers('doRightClick_', arguments) || found;
+		this.$supers('doRightClick_', arguments);
 	},
 	_smartFellow: function (id) {
 		return id.startsWith('uuid(') && id.endsWith(')') ?

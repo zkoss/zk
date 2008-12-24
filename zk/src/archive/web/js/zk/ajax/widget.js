@@ -557,18 +557,6 @@ zk.Widget = zk.$extends(zk.Object, {
 		for (var child = this.firstChild; child; child = child.nextSibling)
 			if (!skipper || !skipper.skipped(this, child))
 				child.bind_(desktop); //don't pass skipper
-
-		if (n)
-			for (var lsns = this._lsns,
-			evts = zk.Widget._domevts, j = evts.length; --j >= 0;) {
-				var evtnm = evts[j],
-					ls = lsns[evtnm];
-				if (!ls || !ls.length) {
-					if (!this.inServer) continue; //nothing to do
-					if (this[evtnm] == null) continue; //nothing to do
-				}
-				this.listenDomEvent(n, evtnm);
-			}
 	},
 	unbind_: function (skipper) {
 		var n = this.node;
@@ -580,24 +568,9 @@ zk.Widget = zk.$extends(zk.Object, {
 
 		this.desktop = null;
 
-		if (n) {
-			var regevts = this._regevts;
-			if (regevts) {
-				this._regevts = null;
-				for (var evtnm; evtnm = regevts.shift();)
-					this.domUnlisten_(evtnm, zk.Widget._domEvtToZK);
-			}
-		}
-
 		for (var child = this.firstChild; child; child = child.nextSibling)
 			if (!skipper || !skipper.skipped(this, child))
 				child.unbind_(); //don't pass skipper
-	},
-	domListen_: function (evtnm, fn) {
-		zEvt.listen(this.node, evtnm.substring(2).toLowerCase(), fn);
-	},
-	domUnlisten_: function (evtnm, fn) {
-		zEvt.unlisten(this.node, evtnm.substring(2).toLowerCase(), fn);
 	},
 
 	focus: function (timeout) {
@@ -667,16 +640,6 @@ zk.Widget = zk.$extends(zk.Object, {
 				}
 
 		var n = this.node;
-		if (n) {
-			var regevts = this._regevts;
-			if ((!regevts || !regevts.$contains(evtnm))
-			&& zk.Widget._domevts.$contains(evnm)) {
-				var regevts = this._regevts;
-				if (regevts) regevts.push(evtnm);
-				else this._regevts = [evtnm];
-				this.domListen_(evtnm, zk.Widget._domEvtToZK);
-			}
-		}
 	},
 	unlisten: function (evtnm, listener, fn) {
 		var lsns = this._lsns[evtnm];
@@ -707,31 +670,19 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 
 	//ZK event handling//
-	doClick_: function (evt) {
-		if (this.isListen('onClick'))
-			return this.fire('onClick', zEvt.mouseData(evt, this.node), {ctl:true})
-				.isStopped();
+	doClick_: _zkf = function (zevt, evt) {
+		return this.fireX(zevt).isStopped();
 	},
-	doDoubleClick_: function (evt) {
-		if (this.isListen('onDoubleClick'))
-			return this.fire('onDoubleClick', zEvt.mouseData(evt, this.node), {ctl:true})
-				.isStopped();
-	},
-	doRightClick_: function (evt) {
-		if (this.isListen('onRightClick'))
-			return this.fire('onRightClick', zEvt.mouseData(evt, this.node), {ctl:true})
-				.isStopped();
-	},
-	doMouseOver_: function (evt) {
-		if (this.isListen('onMouseOver'))
-			return this.fire('onMouseOver', zEvt.mouseData(evt, this.node))
-				.isStopped();
-	},
-	doMouseOut_: function (evt) {
-		if (this.isListen('onMouseOut'))
-			return this.fire('onMouseOut', zEvt.mouseData(evt, this.node))
-				.isStopped();
-	},
+	doDoubleClick_: _zkf,
+	doRightClick_: _zkf,
+	doMouseOver_: _zkf,
+	doMouseOut_: _zkf,
+	doMouseDown_: _zkf,
+	doMouseUp_: _zkf,
+	doMouseMove_: _zkf,
+	doKeyDown_: _zkf,
+	doKeyUp_: _zkf,
+	doKeyPress_: _zkf,
 
 	//DOM event handling//
 	domFocus_: function () {
@@ -766,7 +717,8 @@ zk.Widget = zk.$extends(zk.Object, {
 			if (!n) return zk.Widget._binds[id];
 		} else if (n)
 			if (zk.Widget.isInstance(n)) return n;
-			else n = n.target || n.srcElement || n; //check DOM event first
+			else n = n.z_target || n.target || n.srcElement || n; //check DOM event first
+				//z_target: used if we have to override the default
 
 		for (; n; n = zDom.parentNode(n)) {
 			var wgt = n.z_wgt;
@@ -800,22 +752,6 @@ zk.Widget = zk.$extends(zk.Object, {
 			if (wgt) zWatch.fire('onFloatUp', -1, wgt); //notify all
 		}
 	},
-	_domEvtToZK: function (evt) {
-		evt = evt || window.event;
-		var $Widget = zk.Widget,
-			wgt = $Widget.$(evt),
-			type = evt.type;
-		if (type.startsWith('mouse'))
-			wgt.fire('onMouse' + type.charAt(5).toUpperCase() + type.substring(6),
-				zEvt.mouseData(evt));
-		else if (type.startsWth('key'))
-			wgt.fire('onKey' + type.charAt(3).toUpperCase() + type.substring(4),
-				zEvt.keyData(evt));
-		else wgt.fire('on' + type.charAt(0).toUpperCase() + type.substring(1));
-	},
-	_domevts: ['onMouseDown', 'onMouseUp',
-		'onMouseMove', 'onKeyDown', 'onKeyPress', 'onKeyUp'],
-		//onFocus, onBlur, onClick, onDoubleClick, onChange are fired by widget
 
 	//uuid//
 	uuid: function (id) {

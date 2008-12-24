@@ -83,39 +83,41 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 	bind_: function (desktop) {
 		this.$supers('bind_', arguments);
 
-		var $Checkbox = zul.wgt.Checkbox;
-		
-		this.ereal = zDom.$(this.uuid + '$real');
+		var $Checkbox = zul.wgt.Checkbox,
+			n = this.ereal = zDom.$(this.uuid + '$real');
 
-		zEvt.listen(this.ereal, "click", $Checkbox.doClick);
-		zEvt.listen(this.ereal, "focus", this.proxy(this.domFocus_, '_fxFocus'));
-		zEvt.listen(this.ereal, "blur", this.proxy(this.domBlur_, '_fxBlur'));
+		if (zk.gecko2Only)
+			zEvt.listen(n, "click", zul.wgt.Checkbox._doClick);
+			// bug #2233787 : this is a bug of firefox 2, it need get currentTarget
+		zEvt.listen(n, "focus", this.proxy(this.domFocus_, '_fxFocus'));
+		zEvt.listen(n, "blur", this.proxy(this.domBlur_, '_fxBlur'));
 	},
 	unbind_: function () {
 		var $Checkbox = zul.wgt.Checkbox,
 			n = this.ereal;
 		
-		if (n) {
-			zEvt.unlisten(n, "mousedown", $Checkbox.doClick);			
-			zEvt.unlisten(n, "focus", this._fxFocus);
-			zEvt.unlisten(n, "blur", this._fxBlur);
-		}
+		if (zk.gecko2Only)
+			zEvt.unlisten(n, "click", zul.wgt.Checkbox._doClick);
+		zEvt.unlisten(n, "focus", this._fxFocus);
+		zEvt.unlisten(n, "blur", this._fxBlur);
 
 		this.ereal = null;
 		this.$supers('unbind_', arguments);
+	},
+	doClick_: function () {
+		var newval = this.ereal.checked;
+		if (newval != this.ereal.defaultChecked) //changed
+			this.setChecked(newval);
+		return this.$supers('doClick_', arguments);
 	},
 	updateDomStyle_: function () {
 		zDom.setStyle(this.node, zDom.parseStyle(this.domStyle_()));
 		var label = zDom.firstChild(this.node, "LABEL", true);
 		if (label) zDom.setStyle(label, zDom.parseStyle(zDom.getTextStyle(this.domStyle_())));
 	}
-}, {
-	/** Handles onclick for checkbox and radio. */
-	doClick: function (evt) {
-		var wgt = zk.Widget.$(zk.gecko2Only ? evt.currentTarget : evt);
-			// bug #2233787 : this is a bug of firefox 2, it need get currentTarget
-		var newval = wgt.ereal.checked;
-		if (newval != wgt.ereal.defaultChecked) //changed
-			wgt.setChecked(newval);
-	}
 });
+if (zk.gecko2Only)
+	zul.wgt.Checkbox._doClick = function (evt) {
+		evt.z_target = evt.currentTarget;
+			//bug #2233787 : this is a bug of firefox 2, it need get currentTarget
+	};
