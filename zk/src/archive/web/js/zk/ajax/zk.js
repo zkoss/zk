@@ -46,6 +46,8 @@ zk = {
 	},
 
 	$extends: function (superclass, members, staticMembers) {
+		if (!superclass) throw 'unknown superclass';
+
 	//Note: we cannot use extends due to IE and Safari
 		var jclass = function() {
 			this.$init.apply(this, arguments);

@@ -114,7 +114,6 @@ zkm = {
 		zEvt.listen(document, "dblclick", zkm.docDblClick);
 		zEvt.listen(document, "contextmenu", zkm.docCtxMenu);
 
-		zEvt.listen(window, "scroll", zkm.docScroll);
 		zEvt.listen(window, "resize", zkm.docResize);
 
 		zkm._oldUnload = window.onunload;
@@ -296,6 +295,7 @@ zkm = {
 				return;
 	},
 	docClick: function (evt) {
+		if (zk.processing) return;
 		if (!evt) evt = window.event;
 
 		if (zEvt.leftClick(evt)) {
@@ -312,6 +312,7 @@ zkm = {
 		//don't return anything. Otherwise, it replaces event.returnValue in IE (Bug 1541132)
 	},
 	docDblClick: function (evt) {
+		if (zk.processing) return;
 		if (!evt) evt = window.event;
 
 		for (var wgt = zk.Widget.$(evt); wgt; wgt = wgt.parent)
@@ -321,6 +322,8 @@ zkm = {
 			}
 	},
 	docCtxMenu: function (evt) {
+		if (zk.processing) return;
+
 		if (!evt) evt = window.event;
 
 		zk.lastPointer[0] = zEvt.x(evt);
@@ -333,8 +336,6 @@ zkm = {
 			}
 
 		return !zk.ie || evt.returnValue;
-	},
-	docScroll: function () {
 	},
 	docResize: function () {
 		if (!zk.sysInited || zk.mounting)

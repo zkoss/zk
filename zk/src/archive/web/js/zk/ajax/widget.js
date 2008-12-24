@@ -48,16 +48,16 @@ zk.Widget = zk.$extends(zk.Object, {
 		return f || !global ? f: zk.Widget._global[id];
 	},
 	getId: function () {
-		return this._id;
+		return this.id;
 	},
 	setId: function (id) {
-		var $Widget = zk.Widget, old = this._id;
+		var $Widget = zk.Widget, old = this.id;
 		if (old) {
 			delete zk.Widget._global[id];
 			$Widget._rmIdSpace(this);
 		}
 
-		this._id = id;
+		this.id = id;
 
 		if (id) {
 			zk.Widget._global[id] = this;
@@ -688,19 +688,19 @@ zk.Widget = zk.$extends(zk.Object, {
 	doClick_: function (evt) {
 		if (this.isListen('onClick')) {
 			this.fire("onClick", zEvt.mouseData(evt, this.node), {ctl:true});
-			return true;
+			return evt.isStopped();
 		}
 	},
 	doDoubleClick_: function (evt) {
 		if (this.isListen('onDoubleClick')) {
 			this.fire("onDoubleClick", zEvt.mouseData(evt, this.node), {ctl:true});
-			return true;
+			return evt.isStopped();
 		}
 	},
 	doRightClick_: function (evt) {
 		if (this.isListen('onRightClick')) {
 			this.fire("onRightClick", zEvt.mouseData(evt, this.node), {ctl:true});
-			return true;
+			return evt.isStopped();
 		}
 	},
 	doMouseOver_: function (evt) {
@@ -811,19 +811,19 @@ zk.Widget = zk.$extends(zk.Object, {
 	_nextUuid: 0,
 
 	_addIdSpace: function (wgt) {
-		if (wgt._fellows) wgt._fellows[wgt._id] = wgt;
+		if (wgt._fellows) wgt._fellows[wgt.id] = wgt;
 		var p = wgt.parent;
 		if (p) {
 			p = p.getSpaceOwner();
-			if (p) p._fellows[wgt._id] = wgt;
+			if (p) p._fellows[wgt.id] = wgt;
 		}
 	},
 	_rmIdSpace: function (wgt) {
-		if (wgt._fellows) delete wgt._fellows[wgt._id];
+		if (wgt._fellows) delete wgt._fellows[wgt.id];
 		var p = wgt.parent;
 		if (p) {
 			p = p.getSpaceOwner();
-			if (p) delete p._fellows[wgt._id];
+			if (p) delete p._fellows[wgt.id];
 		}
 	},
 	_addIdSpaceDown: function (wgt) {
@@ -835,7 +835,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 	},
 	_addIdSpaceDown0: function (wgt, owner, fn) {
-		if (wgt._id) owner._fellows[wgt._id] = wgt;
+		if (wgt.id) owner._fellows[wgt.id] = wgt;
 		for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
 			fn(wgt, owner, fn);
 	},
@@ -848,7 +848,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 	},
 	_rmIdSpaceDown0: function (wgt, owner, fn) {
-		if (wgt._id) delete owner._fellows[wgt._id];
+		if (wgt.id) delete owner._fellows[wgt.id];
 		for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
 			fn(wgt, owner, fn);
 	},
@@ -856,8 +856,38 @@ zk.Widget = zk.$extends(zk.Object, {
 	_global: {} //a global ID space
 });
 
-zk.Desktop = zk.$extends(zk.Object, {
+zk.Page = zk.$extends(zk.Widget, {//unlik server, we derive from Widget!
+	_style: "width:100%;height:100%",
+
+	$init: function (pguid, contained) {
+		this.$super('$init', pguid);
+
+		this._fellows = {};
+		if (contained) zk.Page.contained.push(this);
+	},
+	redraw: function () {
+		var html = '<div id="' + this.uuid + '" style="' + this.getStyle() + '">';
+		for (var w = this.firstChild; w; w = w.nextSibling)
+			html += w.redraw();
+		return html + '</div>';
+	},
+	bind_: function () {
+		this.$supers('bind_', arguments);
+		this.desktop.appendChild(this);
+	},
+	unbind_: function () {
+		this.desktop.removeChild(this);
+		this.$supers('unbind_', arguments);
+	}
+
+},{
+	contained: []
+});
+
+zk.Desktop = zk.$extends(zk.Widget, {
 	$init: function (dtid, updateURI) {
+		this.$super('$init', dtid); //id also uuid
+
 		this._aureqs = [];
 
 		var zkdt = zk.Desktop, dts = zkdt.all, dt = dts[dtid];
@@ -872,13 +902,13 @@ zk.Desktop = zk.$extends(zk.Object, {
 
 		zkdt.sync();
 	},
-	getId: function () {
-		return this.id;
-	},
 	_exists: function () {
 		var id = this._pguid; //_pguid not assigned at beginning
 		return !id || zDom.$(id);
-	}
+	},
+	bind_: zk.$void,
+	unbind_: zk.$void,
+	setId: zk.$void
 },{
 	$: function (dtid) {
 		var zkdt = zk.Desktop, dts = zkdt.all, w;
@@ -912,26 +942,6 @@ zk.Desktop = zk.$extends(zk.Object, {
 				zkdt._dt = dt;
 		}
 	}
-});
-
-zk.Page = zk.$extends(zk.Widget, {//unlik server, we derive from Widget!
-	_style: "width:100%;height:100%",
-
-	$init: function (pguid, contained) {
-		this.$super('$init', pguid);
-
-		this._fellows = {};
-		if (contained) zk.Page.contained.push(this);
-	},
-	redraw: function () {
-		var html = '<div id="' + this.uuid + '" style="' + this.getStyle() + '">';
-		for (var w = this.firstChild; w; w = w.nextSibling)
-			html += w.redraw();
-		return html + '</div>';
-	}
-
-},{
-	contained: []
 });
 
 zk.Skipper = zk.$extends(zk.Object, {
