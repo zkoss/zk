@@ -25,5 +25,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<widget name="Popup"/>
 	<widget name="Radio"/>
 	<widget name="Radiogroup"/>
+	<widget name="Toolbar"/>
 	<widget name="Toolbarbutton"/>
 </package>
