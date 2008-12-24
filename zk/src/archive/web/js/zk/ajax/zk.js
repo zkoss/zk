@@ -308,6 +308,12 @@ zk.copy(Array.prototype, {
 		return [].concat(this);
 	}
 });
+if (!Array.prototype.indexOf)
+	Array.prototype.indexOf = function (o) {
+		for (var i = 0, len = this.length; i < len; i++)
+			if (this[i] == o) return i;
+		return -1;
+	};
 
 zk.agent = navigator.userAgent.toLowerCase();
 zk.safari = zk.agent.indexOf("safari") >= 0;
