@@ -279,39 +279,22 @@ public class Strings {
 			return s; //nothing changed
 		return sb.append(s.substring(j)).toString();
 	}
-	/** Escapes (aka. quote) the special characters with backslash
-	 * and appends it the specified string buffer.
+	/** @deprecated As of release 5.0.0, use {@link #escape(StringBuffer,CharSequence,String)}
+	 * instead.
 	 */
 	public static final StringBuffer
 	appendEscape(StringBuffer sb, String s, String specials) {
-		if (s == null)
-			return sb;
-
-		for (int j = 0, len = s.length();;) {
-			final int k = Strings.anyOf(s, specials, j);
-			if (k >= len)
-				return sb.append(s.substring(j));
-
-			char cc = s.charAt(k);
-			switch (cc) {
-			case '\n': cc = 'n'; break;
-			case '\t': cc = 't'; break;
-			case '\r': cc = 'r'; break;
-			case '\f': cc = 'f'; break;
-			}
-			sb.append(s.substring(j, k)).append('\\').append(cc);
-			j = k + 1;
-		}
+		return escape(sb, (CharSequence)s, specials);
 	}
 	/** Escapes (aka. quote) the special characters with backslash
 	 * and appends it the specified string buffer.
 	 *
 	 * @param dst the destination buffer to append to.
-	 * @param src the source buffer to escape from.
+	 * @param src the source to escape from.
 	 * @since 5.0.0
 	 */
-	public static final StringBuffer
-	appendEscape(StringBuffer dst, StringBuffer src, String specials) {
+	public static final
+	StringBuffer escape(StringBuffer dst, CharSequence src, String specials) {
 		if (src == null)
 			return dst;
 
@@ -320,7 +303,7 @@ public class Strings {
 			for (; k < len && specials.indexOf(src.charAt(k)) < 0; ++k)
 				;
 			if (k >= len)
-				return dst.append(src.substring(j));
+				return dst.append(src.subSequence(j, src.length()));
 
 			char cc = src.charAt(k);
 			switch (cc) {
@@ -329,13 +312,12 @@ public class Strings {
 			case '\r': cc = 'r'; break;
 			case '\f': cc = 'f'; break;
 			}
-			dst.append(src.substring(j, k)).append('\\').append(cc);
+			dst.append(src.subSequence(j, k)).append('\\').append(cc);
 			j = k + 1;
 		}
 	}
 	/** Un-escape the quoted string.
 	 * @see #escape
-	 * @see #appendEscape
 	 */
 	public static final String unescape(String s) {
 		if (s == null)
