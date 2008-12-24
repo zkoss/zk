@@ -166,7 +166,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		zDom.addClass(box, zcls + "-over");
 		zDom.focus(this.ebtn, 30);
 
-		zk.capture = this; //capture mouse up
+		zk.mouseCapture = this; //capture mouse up
 		this.$supers('doMouseDown_', arguments);
 	},
 	doMouseUp_: function () {

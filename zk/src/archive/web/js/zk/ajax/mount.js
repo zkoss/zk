@@ -290,13 +290,16 @@ zkm = {
 		}
 	},
 	docMouseUp: function (evt) {
-		if (zk.capture) {
-			zk.capture.doMouseUp_(evt);
-			zk.capture = null;
+		var wgt = zk.mouseCapture;
+		if (wgt) {
+			wgt.doMouseUp_(
+				new zk.Event(wgt, 'onMouseUp', zEvt.mouseData(evt, wgt.node)),
+				evt);
+			zk.mouseCapture = null;
 			return;
 		}
 
-		var wgt = zk.Widget.$(evt);
+		wgt = zk.Widget.$(evt);
 		if (wgt) {
 			var zevt = new zk.Event(wgt, 'onMouseUp', zEvt.mouseData(evt, wgt.node));
 			for (; wgt; wgt = wgt.parent)
@@ -305,12 +308,15 @@ zkm = {
 		}
 	},
 	docMouseMove: function (evt) {
-		if (zk.capture) {
-			zk.capture.doMouseMove_(evt);
+		var wgt = zk.mouseCapture;
+		if (wgt) {
+			wgt.doMouseMove_(
+				new zk.Event(wgt, 'onMouseMove', zEvt.mouseData(evt, wgt.node)),
+				evt);
 			return;
 		}
 
-		var wgt = zk.Widget.$(evt);
+		wgt = zk.Widget.$(evt);
 		if (wgt) {
 			var zevt = new zk.Event(wgt, 'onMouseMove', zEvt.mouseData(evt, wgt.node));
 			for (; wgt; wgt = wgt.parent)
@@ -349,7 +355,15 @@ zkm = {
 		}
 	},
 	docKeyUp: function (evt) {
-		var wgt = zk.Widget.$(evt);
+		var wgt = zk.keyCapture;
+		if (wgt) {
+			wgt.doMouseUp_(
+				new zk.Event(wgt, 'onKeyUp', zEvt.keyData(evt)), evt);
+			zk.keyCapture = null;
+			return;
+		}
+
+		wgt = zk.Widget.$(evt);
 		if (wgt) {
 			var zevt = new zk.Event(wgt, 'onKeyUp', zEvt.keyData(evt));
 			for (; wgt; wgt = wgt.parent)
@@ -358,7 +372,14 @@ zkm = {
 		}
 	},
 	docKeyPress: function (evt) {
-		var wgt = zk.Widget.$(evt);
+		var wgt = zk.keyCapture;
+		if (wgt) {
+			wgt.doMousePress_(
+				new zk.Event(wgt, 'onKeyPress', zEvt.keyData(evt)), evt);
+			return;
+		}
+
+		wgt = zk.Widget.$(evt);
 		if (wgt) {
 			var zevt = new zk.Event(wgt, 'onKeyPress', zEvt.keyData(evt));
 			for (; wgt; wgt = wgt.parent)
