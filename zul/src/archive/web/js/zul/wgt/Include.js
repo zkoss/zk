@@ -31,13 +31,12 @@ zul.wgt.Include = zk.$extends(zul.Widget, {
 	},
 
 	//super//
-	redraw: function () {
-		var html = '<div id="' + this.uuid + '"';
-		if (this.style) html += ' style="' + this.style + '"';
-		html += '>';
+	redraw: function (out) {
+		out.push('<div id="', this.uuid, '"');
+		if (this.style) out.push(' style="', this.style, '"');
+		out.push('>');
 		for (var w = this.firstChild; w; w = w.nextSibling)
-			html += w.redraw();
-		html += this.getContent();
-		return html + '</div>';
+			w.redraw(out);
+		out.push(this.getContent(), '</div>');
 	}
 });
