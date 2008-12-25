@@ -116,23 +116,27 @@ zul.Widget = zk.$extends(zk.Widget, {
 
 	//super//
 	doClick_: function (wevt) {
-		var popup = this._popup;
-		if (popup) {
-			var w = this._smartFellow(popup, true);
-			if (w) {
-				w.open(this, [wevt.x, wevt.y]);
-				wevt.stop();
+		if (!wevt._popuped) {
+			var popup = this._popup;
+			if (popup) {
+				var w = this._smartFellow(popup, true);
+				if (w) {
+					wevt._popuped = true;
+					w.open(this, [wevt.x, wevt.y]);
+				}
 			}
 		}
 		this.$supers('doClick_', arguments);
 	},
 	doRightClick_: function (wevt) {
-		var ctx = this._context;
-		if (ctx) {
-			var w = this._smartFellow(ctx, true);
-			if (w) {
-				w.open(this, [wevt.x, wevt.y]);
-				wevt.stop();
+		if (!wevt._contexted) {
+			var ctx = this._context;
+			if (ctx) {
+				var w = this._smartFellow(ctx, true);
+				if (w) {
+					wevt._contexted = true;
+					w.open(this, [wevt.x, wevt.y]);
+				}
 			}
 		}
 		this.$supers('doRightClick_', arguments);
