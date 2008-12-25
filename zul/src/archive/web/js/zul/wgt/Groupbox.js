@@ -28,7 +28,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 
 			var node = this.getNode();
 			if (node) {
-				var panel = this.epanel;
+				var panel = this.getPanelNode();
 				if (panel) { //!legend
 					if (open) zAnima.slideDown(this, panel, {afterAnima: this._afterSlideDown});
 					else zAnima.slideUp(this, panel, {beforeAnima: this._beforeSlideUp});
@@ -84,22 +84,22 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 
 	//watch//
 	onSize: function () {
-		var n = this.ecave;
-		if (n) {
-			var hgh = this.getNode().style.height;
-			if (hgh && hgh != "auto") {
+		var hgh = this.getNode().style.height;
+		if (hgh && hgh != "auto") {
+			var n = this.getCaveNode();
+			if (n) {
 				if (zk.ie6Only) n.style.height = "";
 				n.style.height =
 					zDom.revisedHeight(n, zDom.vflexHeight(n.parentNode), true)
 					+ "px";
-					//we use n.parentNode(=this.epanel) to calc vflex,
+					//we use n.parentNode(=this.getPanelNode()) to calc vflex,
 					//so we have to subtract margin, too
 			}
 		}
-		var sdw = this.esdw;
+		var sdw = this.getShadowNode();
 		if (sdw)
 			sdw.style.display =
-				zk.parseInt(zDom.getStyle(n, "border-bottom-width")) ? "": "none";
+				zk.parseInt(zDom.getStyle(this.getCaveNode(), "border-bottom-width")) ? "": "none";
 			//if no border-bottom, hide the shadow
 	},
 	_afterSlideDown: function (n) {
@@ -127,19 +127,28 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	bind_: function () {
 		this.$supers('bind_', arguments);
 
-		if (!this.isLegend()) {
-			var uuid = this.uuid;
-			this.epanel = zDom.$(uuid + '$panel');
-			this.ecave = zDom.$(uuid + '$cave');
-			this.esdw = zDom.$(uuid + '$sdw');
-
+		if (!this.isLegend())
 			this.onSize(); //fix height and shadow
-		}
 	},
 	unbind_: function () {
-		this.epanel = this.ecave = this.esdw = null;
+		this._epanel = this._ecave = this._esdw = null;
 
 		this.$supers('unbind_', arguments);
+	},
+	getPanelNode: function () {
+		var n = this._epanel;
+		if (!n) n = this._epanel = zDom.$(this.uuid + '$panel');
+		return n;
+	},
+	getCaveNode: function () {
+		var n = this._ecave;
+		if (!n) n = this._ecave = zDom.$(this.uuid + '$cave');
+		return n;
+	},
+	getShadowNode: function () {
+		var n = this._esdw;
+		if (!n) n = this._esdw = zDom.$(this.uuid + '$sdw');
+		return n;
 	},
 
 	appendChild: function (child) {
