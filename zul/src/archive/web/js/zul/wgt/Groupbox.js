@@ -124,8 +124,8 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		var zcls = this._zclass;
 		return zcls ? zcls: this.isLegend() ? "z-fieldset": "z-groupbox";
 	},
-	bind_: function (desktop, skipper) {
-		this.$super('bind_', desktop, skipper);
+	bind_: function () {
+		this.$supers('bind_', arguments);
 
 		if (!this.isLegend()) {
 			var uuid = this.uuid;
@@ -136,10 +136,10 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 			this.onSize(); //fix height and shadow
 		}
 	},
-	unbind_: function (skipper) {
+	unbind_: function () {
 		this.epanel = this.ecave = this.esdw = null;
 
-		this.$super('unbind_', skipper);
+		this.$supers('unbind_', arguments);
 	},
 
 	appendChild: function (child) {
