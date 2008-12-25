@@ -109,48 +109,51 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			zDom.remove(prevsib.uuid + '$chdex2');
 	},
 	encloseChildHTML_: function (child, last) {
-		var html, childhtml = child.redraw();
+		var out = [];//, childhtml = child.redraw();
 		if (this.isVertical()) {
-			html = '<tr id="' + child.uuid + '$chdex"'
-				+ this._childOuterAttrs(child)
-				+ '><td' + this._childInnerAttrs(child)
-				+ '>' + childhtml + '</td></tr>';
+			out.push('<tr id="', child.uuid, '$chdex"',
+				this._childOuterAttrs(child),
+				'><td', this._childInnerAttrs(child),
+				'>', childhtml, '</td></tr>');
 
 			if (child.nextSibling)
-				html += this._spacingHTML(child);
+				out.push(this._spacingHTML(child));
 			else if (last) {
 				var pre = child.previousSibling;
-				if (pre) html = this._spacingHTML(pre) + html;
+				if (pre) out.unshift(this._spacingHTML(pre));
 			}
 		} else {
-			html = '<td id="' + child.uuid + '$chdex"'
-				+ this._childOuterAttrs(child)
-				+ this._childInnerAttrs(child)
-				+ '>' + childhtml + '</td>';
+			out.push('<td id="', child.uuid, '$chdex"',
+				this._childOuterAttrs(child),
+				this._childInnerAttrs(child),
+				'>', childhtml, '</td>');
 
 			if (child.nextSibling)
-				html += this._spacingHTML(child);
+				out.push(this._spacingHTML(child));
 			else if (last) {
 				var pre = child.previousSibling;
-				if (pre) html = this._spacingHTML(pre) + html;
+				if (pre) out.unshift(this._spacingHTML(pre));
 			}
 		}
-		return html;
+		return out.join('');
 	},
 	_spacingHTML: function (child) {
-		var spacing = this.spacing,
+		var out = [],
+			spacing = this.spacing,
 			spacing0 = spacing && spacing.startsWith('0')
 				&& (spacing.length == 1 || zk.isDigit(spacing.charAt(1))),
 			vert = this.isVertical(),
 			spstyle = spacing ? (vert?'height:':'width:') + spacing: '';
 
-		html = '<t' + (vert?'r':'d') + ' id="' + child.uuid
-			+ '$chdex2" class="' + this.getZclass() + '-sep"';
+		out.push('<t', vert?'r':'d', ' id="', child.uuid,
+			'$chdex2" class="', this.getZclass(), '-sep"');
+
 		var s = spstyle;
 		if (spacing0 || !child.isVisible()) s = 'display:none' + s;
-		if (s) html += ' style="' + s + '"';
-		return html + '>' + (vert?'<td>':'') + zUtl.img0
-			+ (vert?'</td></tr>':'</td>');
+		if (s) out.push(' style="', s, '"');
+
+		out.push('>', vert?'<td>':'', zUtl.img0, vert?'</td></tr>':'</td>');
+		return out.join('');
 	},
 	_childOuterAttrs: function (child) {
 		var html = '';
