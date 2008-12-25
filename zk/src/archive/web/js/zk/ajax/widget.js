@@ -408,9 +408,9 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 	},
 
-	redraw: function () {
-		var s = this.$class.molds[this._mold].apply(this, arguments);
-		return this.prolog ? this.prolog + s: s;
+	redraw: function (out) {
+		if (this.prolog) out.push(this.prolog);
+		this.$class.molds[this._mold].apply(this, arguments);
 	},
 	updateDomClass_: function () {
 		var n = this.getNode();
@@ -783,8 +783,6 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 
 	$: function (n, strict) {
-		//1. No map from element to widget directly. rather, go thru DOM
-		//2. We have to remove '$*' since $chdex is parentNode!
 		if (typeof n == 'string') {
 			var j = n.indexOf('$');
 			return zk.Widget._binds[j >= 0 ? n.substring(0, j): n];
@@ -802,9 +800,16 @@ zk.Widget = zk.$extends(zk.Object, {
 			if (id) {
 				var j = id.indexOf('$');
 				if (j >= 0) {
-					var n2 = zDom.$(id.substring(0, j));
-					return n2 && (!strict || zDom.isAncestor(n2, n)) ?
-						n2.z_wgt: null; //with '$', assume child node
+					id = id.substring(0, j);
+					if (!strict) {
+						wgt = zk.Widget._binds[id];
+						if (wgt) return wgt;
+					}
+					var n2 = zDom.$(id);
+					if (n2 && (!strict || zDom.isAncestor(n2, n))) {
+						wgt = n2.z_wgt;
+						if (wgt) return wgt;
+					}
 				}
 			}
 		}
