@@ -405,8 +405,8 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 	},
 
-	redraw: function (skipper) {
-		var s = this.$class.molds[this._mold].call(this, skipper);
+	redraw: function () {
+		var s = this.$class.molds[this._mold].apply(this, arguments);
 		return this.prolog ? this.prolog + s: s;
 	},
 	updateDomClass_: function () {
@@ -492,7 +492,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (p) p.replaceChildHTML_(this, n, desktop, skipper);
 		else {
 			if (n.z_wgt) n.z_wgt.unbind_(skipper); //unbind first (w/o removal)
-			zDom.setOuterHTML(n, this.redraw(skipper));
+			zDom.setOuterHTML(n, this._redrawHTML(skipper));
 			this.bind_(desktop, skipper);
 		}
 
@@ -501,6 +501,11 @@ zk.Widget = zk.$extends(zk.Object, {
 
 		zWatch.fireDown('beforeSize', -1, this);
 		zWatch.fireDown('onSize', 5, this);
+	},
+	_redrawHTML: function (skipper) {
+		var out = [];
+		this.redraw(out, skipper);
+		return out.join('');
 	},
 	rerender: function (skipper) {
 		if (this.node) {
@@ -515,14 +520,14 @@ zk.Widget = zk.$extends(zk.Object, {
 
 	replaceChildHTML_: function (child, n, desktop, skipper) {
 		if (n.z_wgt) n.z_wgt.unbind_(skipper); //unbind first (w/o removal)
-		zDom.setOuterHTML(n, child.redraw(skipper));
+		zDom.setOuterHTML(n, child._redrawHTML(skipper));
 		child.bind_(desktop, skipper);
 	},
 	insertChildHTML_: function (child, before, desktop) {
 		if (before)
-			zDom.insertHTMLBefore(before.node, child.redraw());
+			zDom.insertHTMLBefore(before.node, child._redrawHTML());
 		else
-			zDom.insertHTMLBeforeEnd(this.node, child.redraw());
+			zDom.insertHTMLBeforeEnd(this.node, child._redrawHTML());
 		child.bind_(desktop);
 	},
 	removeChildHTML_: function (child, prevsib) {
@@ -872,11 +877,11 @@ zk.Page = zk.$extends(zk.Widget, {//unlik server, we derive from Widget!
 		this._fellows = {};
 		if (contained) zk.Page.contained.push(this);
 	},
-	redraw: function () {
-		var html = '<div id="' + this.uuid + '" style="' + this.getStyle() + '">';
+	redraw: function (out, skipper) {
+		out.push('<div id="', this.uuid, '" style="', this.getStyle(), '">');
 		for (var w = this.firstChild; w; w = w.nextSibling)
-			html += w.redraw();
-		return html + '</div>';
+			w.redraw(out, skipper);
+		out.push('</div>');
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
