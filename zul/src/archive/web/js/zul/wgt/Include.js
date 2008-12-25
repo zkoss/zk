@@ -40,6 +40,4 @@ zul.wgt.Include = zk.$extends(zul.Widget, {
 		html += this.getContent();
 		return html + '</div>';
 	}
-}, {
-	embedAs: 'content' //retrieve zDom.$() as content
 });

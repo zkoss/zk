@@ -25,6 +25,4 @@ zul.wgt.Html = zk.$extends(zul.Widget, {
 			if (n) n.innerHTML = content;
 		}
 	}
-}, {
-	embedAs: 'content' //retrieve zDom.$() as value
 });

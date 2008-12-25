@@ -225,12 +225,12 @@ zkm = {
 			var cls = zk.$import(wginf.type),
 				uuid = wginf.uuid,
 				wgt = new cls(uuid, wginf.mold),
-				embedAs = cls.embedAs;
+				embedAs = props.z_ea;
 			wgt.inServer = true;
 			if (parent) parent.appendChild(wgt);
 
 			//embedAs means value from element's text
-			if (embedAs && !props[embedAs]) {
+			if (embedAs) {
 				var embed = zDom.$(uuid);
 				if (embed)
 					props[embedAs] = embed.innerHTML;

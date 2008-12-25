@@ -275,11 +275,13 @@ implements DynamicPropertied, org.zkoss.zul.api.Include, Includer {
 					((ExecutionCtrl)getDesktop().getExecution())
 						.getVisualizer().getExtraWriter();
 					if (extout != null) {
-						extout.write("<span id=\"");
+						extout.write("<div id=\"");
 						extout.write(getUuid());
 						extout.write("\">");
 						Files.write(extout, sw.getBuffer());
-						extout.write("</span>");
+						extout.write("</div>");
+
+						out.write("zkm.top().props.z_ea='content';");
 					} else {
 						out.write("zkm.top().props.content='");
 						final StringBuffer sb = new StringBuffer(1024);

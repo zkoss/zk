@@ -18,6 +18,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<debug-js>true</debug-js>
 	</client-config>
 	-->
+	<!-- Tur on if you want to make your Web application crawlable by
+		search engines.
+	<client-config>
+		<crawlable>true</crawlable>
+	</client-config>
+	-->
 	<!--
 	<log>
 		<description>[Optional] Monitor i3-log.conf and register a handler for the specified log-base</description>

@@ -116,15 +116,16 @@ public class Html extends XulElement implements org.zkoss.zul.api.Html {
 				final Writer out =
 					((ExecutionCtrl)exec).getVisualizer().getExtraWriter();
 				if (out != null) {
-					out.write("<span id=\"");
+					out.write("<div id=\"");
 					out.write(getUuid());
 					out.write("\">");
 					out.write(cnt);
-					out.write("</span>\n");
+					out.write("</div>\n");
 					cnt = null; //means already generated
 				}
 			}
-			render(renderer, "content", cnt);
+			if (cnt == null) renderer.render("z_ea", "content");
+			else render(renderer, "content", cnt);
 		}
 	}
 

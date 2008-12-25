@@ -122,7 +122,7 @@ public class Configuration {
 	private int _dtTimeout = 3600, _sessDktMax = 15, _sessReqMax = 5,
 		_sessTimeout = 0, _sparThdMax = 100, _suspThdMax = -1,
 		_maxUploadSize = 5120, _maxProcTime = 3000,
-		_promptDelay = 900, _tooltipDelay = 800, _resendDelay;
+		_promptDelay = 900, _tooltipDelay = 800, _resendDelay = -1;
 	private String _charsetResp = "UTF-8", _charsetUpload = "UTF-8";
 	private CharsetFinder _charsetFinderUpload;
 	/** The event interceptors. */
@@ -136,21 +136,19 @@ public class Configuration {
 	private boolean _timerKeepAlive;
 	/** Whether to debug JavaScript. */
 	private boolean _debugJS;
+	/** Whether the ZK application is crawlable. */
+	private boolean _crawlable;
 
 	/** Constructor.
 	 */
 	public Configuration() {
-		_resendDelay = getInitResendDelay();
-	}
-	private static int getInitResendDelay() {
-		final String s = Library.getProperty(Attributes.RESEND_DELAY);
+		String s = Library.getProperty(Attributes.RESEND_DELAY);
 		try {
 			if (s != null)
-				return Integer.parseInt(s);
+				_resendDelay = Integer.parseInt(s);
 		} catch (Throwable t) {
 			log.warning("Failed to parse "+Attributes.RESEND_DELAY+"="+s);
 		}
-		return -1; //disabled
 	}
 
 	/** Returns the Web application that this configuration belongs to,
@@ -1300,6 +1298,24 @@ public class Configuration {
 	public int getResendDelay() {
 		return _resendDelay;
 	}
+	/** Returns whether this Web application is crawlable.
+	 * Make a Web application that allows search engines to crawl the application.
+	 * Notice that there is some performance loss for huge web pages.
+	 * <p>Default: false.
+	 * @since 5.0.0
+	 */
+	public boolean isCrawlable() {
+		return _crawlable;
+	}
+	/** Sets whether this Web application is crawlable.
+	 * Make a Web application that allows search engines to crawl the application.
+	 * Notice that there is some performance loss for huge web pages.
+	 * @since 5.0.0
+	 */
+	public void setCrawlable(boolean crawlable) {
+		_crawlable = crawlable;
+	}
+
 	/** Adds the URI to redirect to, when ZK Client Engine receives
 	 * an error.
 	 *

@@ -36,6 +36,4 @@ zul.wgt.Label = zk.$extends(zul.Widget, {
 		var zcs = this._zclass;
 		return zcs != null ? zcs: "z-label";
 	}
-}, {
-	embedAs: 'value' //retrieve zDom.$() as value
 });

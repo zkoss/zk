@@ -145,16 +145,17 @@ public class Label extends XulElement implements org.zkoss.zul.api.Label {
 				final Writer out =
 					((ExecutionCtrl)exec).getVisualizer().getExtraWriter();
 				if (out != null) {
-					out.write("<span id=\"");
+					out.write("<div id=\"");
 					out.write(getUuid());
 					out.write("\">");
 					out.write(XMLs.encodeText(_value));
 						//encode required since it might not be valid HTML
-					out.write("</span>\n");
+					out.write("</div>\n");
 					outed = true;
 				}
 			}
-			if (!outed) render(renderer, "value", _value); //no need to encode
+			if (outed) renderer.render("z_ea", "value");
+			else render(renderer, "value", _value); //no need to encode
 		}
 	}
 	public String getZclass() {

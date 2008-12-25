@@ -515,6 +515,9 @@ public class ConfigParser {
 		if (s != null)
 			config.setKeepDesktopAcrossVisits(!"false".equals(s));
 
+		s = conf.getElementValue("crawlable", true);
+		if (s != null) config.setCrawlable(!"false".equals(s));
+
 		s = conf.getElementValue("debug-js", true);
 		if (s != null) config.setDebugJS(!"false".equals(s));
 
