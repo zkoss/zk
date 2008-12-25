@@ -21,7 +21,7 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 		if (label == null) label = '';
 		if (this._label != label) {
 			this._label = label;
-			if (this.node) this.updateDomContent_();
+			if (this.desktop) this.updateDomContent_();
 		}
 	},
 	getImage: function () {
@@ -30,7 +30,7 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 	setImage: function(image) {
 		if (this._image != image) {
 			this._image = image;
-			if (this.node) this.updateDomContent_();
+			if (this.desktop) this.updateDomContent_();
 		}
 	},
 	getHoverImage: function () {
@@ -67,7 +67,7 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 	},
 	getImageNode_: function () {
 		if (!this._eimg && this._image)
-			this._eimg = zDom.firstChild(this.node, "IMG", true);
+			this._eimg = zDom.firstChild(this.getNode(), "IMG", true);
 		return this._eimg;
 	},
 	unbind_: function () {

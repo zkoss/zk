@@ -22,8 +22,7 @@ zul.wgt.Radiogroup = zk.$extends(zul.Widget, {
 	setOrient: function (orient) {
 		if (this._orient != orient) {
 			this._orient = orient;
-			var n = this.node;
-			if (n) this.rerender();
+			if (this.desktop) this.rerender();
 		}
 	},
 	getItemAtIndex: function (index) {

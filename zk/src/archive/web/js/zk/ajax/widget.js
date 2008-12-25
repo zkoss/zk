@@ -31,8 +31,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			if (!this.$class.molds[mold])
 				throw 'Unknown mold: ' + mold;
 			this._mold = mold;
-			var n = this.node;
-			if (n) this.rerender();
+			if (this.desktop) this.rerender();
 		}
 	},
 
@@ -172,22 +171,26 @@ zk.Widget = zk.$extends(zk.Object, {
 		return true;
 	},
 	_moveChild: function (child, moveBefore) {
-		var node, kidnode; 
 		if (child._floating || !child.domMovable_() || !this.domMovable_()
-		|| !(node = this.node) || !(kidnode = child.node))
+		|| !this.desktop || !child.desktop)
 			return false;
 
-		var dt = this.desktop, kiddt = child.desktop;
-		child.node = this.node = child.desktop = this.desktop = null; //to avoid bind_ and unbind_
+		var beforeNode = null;
+		if (moveBefore && !(beforeNode = moveBefore.getNode()))
+			return false;
+
+		var node = this._node, kidnode = child._node;
+			dt = this.desktop, kiddt = child.desktop;
+		child._node = this._node = child.desktop = this.desktop = null; //to avoid bind_ and unbind_
 		try {
 			child.parent.removeChild(child);
 			this.insertBefore(child, moveBefore);
 
 			zDom.remove(kidnode);
-			node.parentNode.insertBefore(kidnode, moveBefore ? moveBefore.node: null);
+			node.parentNode.insertBefore(kidnode, beforeNode);
 		} finally {
 			this.desktop = dt; child.desktop = kiddt;
-			this.node = node; child.node = kidnode;
+			this._node = node; child._node = kidnode;
 		}
 		return true;
 	},
@@ -195,7 +198,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	isRealVisible: function () {
 		for (var wgt = this; wgt; wgt = wgt.parent) {
 			if (!wgt.isVisible()) return false;
-			var n = wgt.node;
+			var n = wgt.getNode();
 			if (n && !zDom.isVisible(n)) return false; //possible (such as in a hbox)
 		}
 		return true;
@@ -209,14 +212,14 @@ zk.Widget = zk.$extends(zk.Object, {
 
 			var p = this.parent;
 			if (p && visible) p.onChildVisible_(this, true); //becoming visible
-			if (this.node) this._setVisible(visible);
+			if (this.desktop) this._setVisible(visible);
 			if (p && !visible) p.onChildVisible_(this, false); //become invisible
 		}
 	},
 	_setVisible: function (visible) {
 		var parent = this.parent,
 			parentVisible = !parent || parent.isRealVisible(),
-			node = this.node,
+			node = this.getNode(),
 			floating = this._floating;
 
 		if (!parentVisible) {
@@ -237,7 +240,7 @@ zk.Widget = zk.$extends(zk.Object, {
 				if (this != w && this._floatVisibleDependent(w)) {
 					zi = zi >= 0 ? ++zi: w._topZIndex();
 					var n = fs[j].node;
-					if (n != w.node) w.setFloatZIndex_(n, zi); //only a portion
+					if (n != w.getNode()) w.setFloatZIndex_(n, zi); //only a portion
 					else w._setZIndex(zi, true);
 
 					w.setDomVisible_(n, true, {visibility:1});
@@ -273,7 +276,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	onChildVisible_: function (child, visible) {
 	},
 	setTopmost: function () {
-		var n = this.node;
+		var n = this.getNode();
 		if (n && this._floating) {
 			var zi = this._topZIndex();
 			this._setZIndex(zi, true);
@@ -282,7 +285,7 @@ zk.Widget = zk.$extends(zk.Object, {
 				var w = fs[j].widget;
 				if (this != w && zUtl.isAncestor(this, w) && w.isVisible()) {
 					var n = fs[j].node
-					if (n != w.node) w.setFloatZIndex_(n, ++zi); //only a portion
+					if (n != w.getNode()) w.setFloatZIndex_(n, ++zi); //only a portion
 					else w._setZIndex(++zi, true);
 				}
 			}
@@ -305,7 +308,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (this._floating != floating) {
 			var $Widget = zk.Widget;
 			if (floating) {
-				var inf = {widget: this, node: opts && opts.node? opts.node: this.node};
+				var inf = {widget: this, node: opts && opts.node? opts.node: this.getNode()};
 				$Widget._floating.$add(inf, $Widget._floatOrder); //parent first
 				this._floating = true;
 			} else {
@@ -322,7 +325,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	setWidth: function (width) {
 		this._width = width;
-		var n = this.node;
+		var n = this.getNode();
 		if (n) n.style.width = width ? width: '';
 	},
 	getHeight: function () {
@@ -330,7 +333,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	setHeight: function (height) {
 		this._height = height;
-		var n = this.node;
+		var n = this.getNode();
 		if (n) n.style.height = height ? height: '';
 	},
 	getZIndex: _zkf = function () {
@@ -344,7 +347,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	_setZIndex: function (zIndex, fire) {
 		if (this._zIndex != zIndex) {
 			this._zIndex = zIndex;
-			var n = this.node;
+			var n = this.getNode();
 			if (n) {
 				n.style.zIndex = zIndex >= 0 ? zIndex: '';
 				if (fire) this.fire('onZIndex', zIndex, {ignorable: true});
@@ -356,7 +359,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	setLeft: function (left) {
 		this._left = left;
-		var n = this.node;
+		var n = this.getNode();
 		if (n) n.style.left = left ? left: '';
 	},
 	getTop: function () {
@@ -364,7 +367,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	setTop: function (top) {
 		this._top = top;
-		var n = this.node;
+		var n = this.getNode();
 		if (n) n.style.top = top ? top: '';
 	},
 	getTooltiptext: function () {
@@ -372,7 +375,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	setTooltiptext: function (tooltiptext) {
 		this._tooltiptext = tooltiptext;
-		var n = this.node;
+		var n = this.getNode();
 		if (n) n.title = tooltiptext ? tooltiptext: '';
 	},
 
@@ -382,7 +385,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	setStyle: function (style) {
 		if (this._style != style) {
 			this._style = style;
-			if (this.node)
+			if (this.desktop)
 				this.updateDomStyle_();
 		}
 	},
@@ -410,11 +413,11 @@ zk.Widget = zk.$extends(zk.Object, {
 		return this.prolog ? this.prolog + s: s;
 	},
 	updateDomClass_: function () {
-		var n = this.node;
+		var n = this.getNode();
 		if (n) n.className = this.domClass_();
 	},
 	updateDomStyle_: function () {
-		zDom.setStyle(this.node, zDom.parseStyle(this.domStyle_()));
+		zDom.setStyle(this.getNode(), zDom.parseStyle(this.domStyle_()));
 	},
 
 	domStyle_: function (no) {
@@ -508,11 +511,12 @@ zk.Widget = zk.$extends(zk.Object, {
 		return out.join('');
 	},
 	rerender: function (skipper) {
-		if (this.node) {
+		var n = this.getNode();
+		if (n) {
 			var skipInfo;
 			if (skipper) skipInfo = skipper.skip(this);
 
-			this.replaceHTML(this.node, null, skipper);
+			this.replaceHTML(n, null, skipper);
 
 			if (skipInfo) skipper.restore(this, skipInfo);
 		}
@@ -525,13 +529,13 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	insertChildHTML_: function (child, before, desktop) {
 		if (before)
-			zDom.insertHTMLBefore(before.node, child._redrawHTML());
+			zDom.insertHTMLBefore(before.getNode(), child._redrawHTML());
 		else
-			zDom.insertHTMLBeforeEnd(this.node, child._redrawHTML());
+			zDom.insertHTMLBeforeEnd(this.getNode(), child._redrawHTML());
 		child.bind_(desktop);
 	},
 	removeChildHTML_: function (child, prevsib) {
-		var n = child.node;
+		var n = child.getNode();
 		if (!n) this._prepareRemove(n = []);
 
 		child.unbind_();
@@ -543,20 +547,30 @@ zk.Widget = zk.$extends(zk.Object, {
 			zDom.remove(n);
 	},
 	_prepareRemove: function (ary) {
-		for (var w = this.firstChild; w; w = w.nextSibling)
-			if (w.node) ary.push(w.node);
+		for (var w = this.firstChild; w; w = w.nextSibling) {
+			var n = w.getNode();
+			if (n) ary.push(n);
 			else w._prepareRemove(ary);
+		}
+	},
+
+	getNode: function () {
+		var n = this._node;
+		if (!n && !this._nodeSolved) {
+			n = zDom.$(this.uuid);
+			if (n) {
+				n.z_wgt = this;
+				this._node = n;
+			}
+			this._nodeSolved = true;
+		}
+		return n;
 	},
 
 	bind_: function (desktop, skipper) {
-		var n = zDom.$(this.uuid);
-		if (n) {
-			n.z_wgt = this;
-			this.node = n;
-			if (!desktop) desktop = zk.Desktop.$(n);
-		} else
-			zk.Widget._binds[this.uuid] = this;
+		zk.Widget._binds[this.uuid] = this;
 
+		if (!desktop) desktop = zk.Desktop.$(this.getNode());
 		this.desktop = desktop;
 
 		for (var child = this.firstChild; child; child = child.nextSibling)
@@ -564,14 +578,16 @@ zk.Widget = zk.$extends(zk.Object, {
 				child.bind_(desktop); //don't pass skipper
 	},
 	unbind_: function (skipper) {
-		var n = this.node;
+		delete zk.Widget._binds[this.uuid];
+
+		var n = this._node;
 		if (n) {
 			n.z_wgt = null;
-			this.node = null;
-		} else
-			delete zk.Widget._binds[this.uuid];
+			this._node = null;
+		}
 
 		this.desktop = null;
+		this._nodeSolved = false;
 
 		for (var child = this.firstChild; child; child = child.nextSibling)
 			if (!skipper || !skipper.skipped(this, child))
@@ -579,8 +595,9 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 
 	focus: function (timeout) {
-		if (this.node && this.isVisible() && this.canActivate({checkOnly:true})) {
-			if (zDom.focus(this.node, timeout)) {
+		var node = this.getNode();
+		if (node && this.isVisible() && this.canActivate({checkOnly:true})) {
+			if (zDom.focus(node, timeout)) {
 				zk.currentFocus = this;
 				this.setTopmost();
 				return true;
@@ -644,8 +661,6 @@ zk.Widget = zk.$extends(zk.Object, {
 					lsns.$addAt(j + 1, inf);
 					break;
 				}
-
-		var n = this.node;
 	},
 	unlisten: function (evtnm, listener, fn) {
 		var lsns = this._lsns[evtnm];
@@ -771,12 +786,12 @@ zk.Widget = zk.$extends(zk.Object, {
 		//1. No map from element to widget directly. rather, go thru DOM
 		//2. We have to remove '$*' since $chdex is parentNode!
 		if (typeof n == 'string') {
-			var id = n;
-			n = zDom.$(n);
-			if (!n) return zk.Widget._binds[id];
-		} else if (n)
-			if (zk.Widget.isInstance(n)) return n;
-			else n = n.z_target || n.target || n.srcElement || n; //check DOM event first
+			var j = n.indexOf('$');
+			return zk.Widget._binds[j >= 0 ? n.substring(0, j): n];
+		}
+
+		if (!n || zk.Widget.isInstance(n)) return n;
+		else n = n.z_target || n.target || n.srcElement || n; //check DOM event first
 				//z_target: used if we have to override the default
 
 		for (; n; n = zDom.parentNode(n)) {
@@ -785,7 +800,7 @@ zk.Widget = zk.$extends(zk.Object, {
 
 			var id = n.id;
 			if (id) {
-				var j = id.lastIndexOf('$');
+				var j = id.indexOf('$');
 				if (j >= 0) {
 					var n2 = zDom.$(id.substring(0, j));
 					return n2 && (!strict || zDom.isAncestor(n2, n)) ?
@@ -814,7 +829,7 @@ zk.Widget = zk.$extends(zk.Object, {
 
 	//uuid//
 	uuid: function (id) {
-		var j = id.lastIndexOf('$');
+		var j = id.indexOf('$');
 		return j >= 0 ? id.substring(0, j): id;
 	},
 	nextUuid: function () {

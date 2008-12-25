@@ -795,7 +795,7 @@ zAu.cmd1 = {
 			var p = wgt.parent;
 			if (p) p.removeChild(wgt);
 			else {
-				p = wgt.node;
+				p = wgt.getNode();
 				wgt.unbind_();
 				zDom.remove(p);
 			}

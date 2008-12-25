@@ -25,7 +25,7 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
     setDisabled: function(disabled){
         if (this._disabled != disabled) {
             this._disabled = disabled;
-            if (this.node) this.updateDomClass_();//update class and attr
+            if (this.desktop) this.updateDomClass_();//update class and attr
         }
     },
     
@@ -36,9 +36,8 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
     setDir: function(dir){
         if (this._dir != dir) {
             this._dir = dir;
-            var n = this.node;
-            if (n) 
-                n.innerHTML = this.domContent_();
+            var n = this.getNode();
+            if (n) n.innerHTML = this.domContent_();
         }
     },
     
@@ -49,9 +48,8 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
     setHref: function(href){
         if (this._href != href) {
             this._href = href;
-            var n = this.node;
-            if (n) 
-                n.href = href;
+            var n = this.getNode();
+            if (n) n.href = href;
         }
     },
     
@@ -62,9 +60,8 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
     setOrient: function(orient){
         if (this._orient != orient) {
             this._orient = orient;
-            var n = this.node;
-            if (n) 
-                n.innerHTML = this.domContent_();
+            var n = this.getNode();
+            if (n) n.innerHTML = this.domContent_();
         }
     },
     
@@ -75,9 +72,8 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
     setTarget: function(target){
         if (this._target != target) {
             this._target = target;
-            var n = this.node;
-            if (n) 
-                n.target = target;
+            var n = this.getNode();
+            if (n) n.target = target;
         }
     },
     
@@ -88,9 +84,8 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
     setTabindex: function(tabindex){
         if (this._tabindex != tabindex) {
             this._tabindex = tabindex;
-            var n = this.node;
-            if (n) 
-                n.tabIndex = tabindex < 0 ? null : tabindex;
+            var n = this.getNode();
+            if (n) n.tabIndex = tabindex < 0 ? null : tabindex;
         }
     },
     // super//
@@ -101,14 +96,14 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
     // protected //
     bind_: function(desktop){
         this.$super('bind_', desktop);
-        var n = this.node;
+        var n = this.getNode();
         if (!this._disabled) {
             zEvt.listen(n, "focus", this.proxy(this.domFocus_, '_fxFocus'));
             zEvt.listen(n, "blur", this.proxy(this.domBlur_, '_fxBlur'));
         }
     },
     unbind_: function(){
-        var n = this.node;
+        var n = this.getNode();
         zEvt.unlisten(n, "focus", this._fxFocus);
         zEvt.unlisten(n, "blur", this._fxBlur);
         this.$super('unbind_');

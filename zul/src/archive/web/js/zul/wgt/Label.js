@@ -26,7 +26,7 @@ zul.wgt.Label = zk.$extends(zul.Widget, {
 		if (!value) value = '';
 		if (this._value != value) {
 			this._value = value;
-			var n = this.node;
+			var n = this.getNode();
 			if (n) n.innerHTML = zUtl.encodeXML(value);
 		}
 	},

@@ -56,7 +56,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				this.einp.disabled = disabled;
 				var zcls = this.getZclass(),
 					fnm = disabled ? 'addClass': 'rmClass';
-				zDom[fnm](this.node, zcls + '-disd');
+				zDom[fnm](this.getNode(), zcls + '-disd');
 				zDom[fnm](this.einp, zcls + '-text-disd');
 			}
 		}
@@ -193,7 +193,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
-		var inp = this.einp = zDom.$(this.uuid + '$inp') || this.node,
+		var inp = this.einp = zDom.$(this.uuid + '$inp') || this.getNode(),
 			$InputWidget = zul.inp.InputWidget;
 		zEvt.listen(inp, "focus", this.proxy(this.doFocus_, '_pxFocus'));
 		zEvt.listen(inp, "blur", this.proxy(this.doBlur_, '_pxBlur'));

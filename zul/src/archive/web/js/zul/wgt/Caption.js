@@ -34,12 +34,12 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 	bind_: function (desktop) {
 		this.$super('bind_', desktop);
 
-		var n = this.node, parent = this.parent;
+		var n = this.getNode(), parent = this.parent;
 		if (n && parent.$instanceof(zul.wgt.Groupbox))
 			zEvt.listen(n, "click", zul.wgt.Caption.ongbclk);
 	},
 	unbind_: function () {
-		var n = this.node, parent = this.parent;
+		var n = this.getNode(), parent = this.parent;
 		if (n && parent.$instanceof(zul.wgt.Groupbox))
 			zEvt.unlisten(n, "click", zul.wgt.Caption.ongbclk);
 

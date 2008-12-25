@@ -38,7 +38,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		if (this._open != open) {
 			this._open = open;
 
-			var node = this.node;
+			var node = this.getNode();
 			if (!node) return;
 			var colps = this.getCollapse();
 			if (!colps || "none" == colps) return; //nothing to do
@@ -93,8 +93,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	setCollapse: function(collapse) {
 		if (this._collapse != collapse) {
 			this._collapse = collapse;
-			var n = this.node;
-			if (n) {
+			if (this.desktop) {
 				this._fixbtn();
 				this._fixsz();
 			}
@@ -109,7 +108,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	},
 	setZclass: function (zcls) {
 		this.$super('setZclass', zcls);
-		if (this.node)
+		if (this.desktop)
 			this._fixDomClass(true);
 	},
 
@@ -123,7 +122,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		this._fixDomClass();
 			//Bug 1921830: if spiltter is invalidated...
 
-		var node = this.node,
+		var node = this.getNode(),
 			$Splitter = this.$class;
 			vert = this.isVertical();
 			btn = this.button = zDom.$(this.uuid + '$btn');
@@ -179,7 +178,8 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 
 	/** Fixed DOM class for the enclosing TR/TD tag. */
 	_fixDomClass: function (inner) {
-		p = this.node.parentNode;
+		var node = this.getNode(),
+			p = node.parentNode;
 		if (p) {
 			var vert = this.isVertical(),
 				zcls = this.getZclass();;
@@ -187,13 +187,13 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			if (p && p.id.endsWith("$chdex")) {
 				p.className = zcls + "-outer";
 				if (vert)
-					this.node.parentNode.className = zcls + "-outer-td";
+					node.parentNode.className = zcls + "-outer-td";
 			}
 		}
 		if (inner) this._fixbtn();
 	},
 	_fixNSDomClass: function () {
-		var node = this.node,
+		var node = this.getNode(),
 			zcls = this.getZclass(),
 			open = this.isOpen();
 		if(open && zDom.hasClass(node, zcls+"-ns"))
@@ -224,7 +224,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	_fixsz: _zkf = function () {
 		if (!this.isRealVisible()) return;
 
-		var node = this.node, pn = node.parentNode;
+		var node = this.getNode(), pn = node.parentNode;
 		if (pn) {
 			var btn = this.button,
 				bfcolps = "before" == this.getCollapse();
@@ -264,13 +264,13 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	onVisible: _zkf,
 	onSize: _zkf,
 	beforeSize: function () {
-		this.node.style[this.isVertical() ? "width": "height"] = "";
+		this.getNode().style[this.isVertical() ? "width": "height"] = "";
 	},
 
 	_fixszAll: function () {
 		//1. find the topmost box
 		var box = this.parent;
-		if (box) this.$class._fixKidSplts(box.node);
+		if (box) this.$class._fixKidSplts(box.getNode());
 		else this._fixsz();
 	},
 
@@ -291,7 +291,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		if (!wgt.isOpen()) return true;
 
 		var run = draggable.run = {},
-			node = wgt.node;
+			node = wgt.getNode();
 		run.org = zDom.cmOffset(node);
 		var nd = zDom.$(node.id + "$chdex"),
 			tn = zDom.tag(nd),
@@ -315,7 +315,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	},
 	_endDrag: function (draggable) {
 		var wgt = draggable.widget,
-			node = wgt.node,
+			node = wgt.getNode(),
 			$Splitter = zul.box.Splitter,
 			flInfo = $Splitter._fixLayout(wgt),
 			run = draggable.run, diff, fd;
@@ -368,14 +368,14 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			if (y <= run.z_offset[1] - run.prev.offsetHeight) {
 				y = run.z_offset[1] - run.prev.offsetHeight;
 			} else {
-				var max = run.z_offset[1] + run.next.offsetHeight - wgt.node.offsetHeight;
+				var max = run.z_offset[1] + run.next.offsetHeight - wgt.getNode().offsetHeight;
 				if (y > max) y = max;
 			}
 		} else {
 			if (x <= run.z_offset[0] - run.prev.offsetWidth) {
 				x = run.z_offset[0] - run.prev.offsetWidth;
 			} else {
-				var max = run.z_offset[0] + run.next.offsetWidth - wgt.node.offsetWidth;
+				var max = run.z_offset[0] + run.next.offsetWidth - wgt.getNode().offsetWidth;
 				if (x > max) x = max;
 			}
 		}
@@ -417,7 +417,7 @@ if (zk.ie) {
 /** Use fix table layout */
 if (zk.opera) { //only opera needs it
 	zul.box.Splitter._fixLayout = function (wgt) {
-		var box = wgt.parent.node;
+		var box = wgt.parent.getNode();
 		if (box.style.tableLayout != "fixed") {
 			var fl = [box, box.style.tableLayout];
 			box.style.tableLayout = "fixed";

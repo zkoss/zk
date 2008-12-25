@@ -26,13 +26,14 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		if (this._open != open) {
 			this._open = open;
 
-			if (this.node) {
+			var node = this.getNode();
+			if (node) {
 				var panel = this.epanel;
 				if (panel) { //!legend
 					if (open) zAnima.slideDown(this, panel, {afterAnima: this._afterSlideDown});
 					else zAnima.slideUp(this, panel, {beforeAnima: this._beforeSlideUp});
 				} else {
-					zDom[open ? 'rmClass': 'addClass'](this.node, this.getZclass() + "-collapsed");
+					zDom[open ? 'rmClass': 'addClass'](node, this.getZclass() + "-collapsed");
 					zWatch.fireDown(open ? 'onVisible': 'onHide', -1, this);
 				}
 				if (!fromServer) this.fire('onOpen', open);
@@ -68,7 +69,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	},
 
 	_updateDomOuter: function () {
-		if (this.node) this.rerender(zk.Skipper.nonCaptionSkipper);
+		if (this.desktop) this.rerender(zk.Skipper.nonCaptionSkipper);
 	},
 	_contentAttrs: function () {
 		var html = ' class="', s = this._cntSclass;
@@ -85,7 +86,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	onSize: function () {
 		var n = this.ecave;
 		if (n) {
-			var hgh = this.node.style.height;
+			var hgh = this.getNode().style.height;
 			if (hgh && hgh != "auto") {
 				if (zk.ie6Only) n.style.height = "";
 				n.style.height =
@@ -110,7 +111,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 
 	//super//
 	focus: function (timeout) {
-		if (this.node) {
+		if (this.desktop) {
 			var cap = this.caption;
 			for (var w = this.firstChild; w; w = w.nextSibling)
 				if (w != cap && w.focus(timeout))

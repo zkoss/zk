@@ -27,8 +27,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	setOrient: function(orient) {
 		if (this._orient != orient) {
 			this._orient = orient;
-			var n = this.node;
-			if (n) this.updateDomContent_();
+			if (this.desktop) this.updateDomContent_();
 		}
 	},
 	/** Returns the dir of this button.
@@ -41,8 +40,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	setDir: function(dir) {
 		if (this._dir != dir) {
 			this._dir = dir;
-			var n = this.node;
-			if (n) this.updateDomContent_();
+			if (this.desktop) this.updateDomContent_();
 		}
 	},
 	/** Returns whether this button is disabled
@@ -55,9 +53,8 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	setDisabled: function(disabled) {
 		if (this._disabled != disabled) {
 			this._disabled = disabled;
-			var n = this.node;
-			if (n)
-				if (this._mold == 'os') this.node.disabled = true;
+			if (this.desktop)
+				if (this._mold == 'os') this.getNode().disabled = true;
 				else this.rerender(); //bind and unbind required
 		}
 	},
@@ -71,16 +68,15 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	setTabindex: function(tabindex) {
 		if (this._tabindex != tabindex) {
 			this._tabindex = tabindex;
-			var n = this.node;
-			if (n)
-				(this.ebtn || this.node).tabIndex = tabindex;
+			var n = this.getNode();
+			if (n) (this.ebtn || n).tabIndex = tabindex;
 		}
 	},
 
 	//super//
 	focus: function (timeout) {
 		if (this.isVisible() && this.canActivate({checkOnly:true})) {
-			zDom.focus(this.ebtn ? this.ebtn: this.node, timeout);
+			zDom.focus(this.ebtn ? this.ebtn: this.getNode(), timeout);
 			return true;
 		}
 		return false;
@@ -90,7 +86,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	updateDomContent_: function () {
 		var n = this.ebox;
 		if (n) n.tBodies[0].rows[1].cells[1].innerHTML = this.domContent_();
-		else this.node.innertHTML = this.domContent_();
+		else this.getNode().innertHTML = this.domContent_();
 	},
 	domContent_: function () {
 		var label = zUtl.encodeXML(this.getLabel()),
@@ -120,7 +116,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 
 		var $Button = zul.wgt.Button, n;
 		if (this._mold == 'os') {
-			n = this.node;
+			n = this.getNode();
 		} else {
 			if (this._disabled) return;
 
@@ -136,7 +132,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	},
 	unbind_: function () {
 		var $Button = zul.wgt.Button,
-			n = this._mold == 'os' ? this.node: this.ebtn;
+			n = this._mold == 'os' ? this.getNode(): this.ebtn;
 		if (n) {
 			zEvt.unlisten(n, "focus", $Button._doFocus);
 			zEvt.unlisten(n, "blur", $Button._doBlur);

@@ -283,7 +283,7 @@ zkm = {
 			if (target != document.body && target != document.body.parentNode) //not click on scrollbar
 				$Widget.domMouseDown(wgt); //null if mask
 
-			wgt.doMouseDown_(new zk.Event(wgt, 'onMouseDown', zEvt.mouseData(evt, wgt.node)), evt);
+			wgt.doMouseDown_(new zk.Event(wgt, 'onMouseDown', zEvt.mouseData(evt, wgt.getNode())), evt);
 		}
 	},
 	docMouseUp: function (evt) {
@@ -291,13 +291,13 @@ zkm = {
 		if (wgt) zk.mouseCapture = null;
 		else wgt = zk.Widget.$(evt);
 		if (wgt)
-			wgt.doMouseUp_(new zk.Event(wgt, 'onMouseUp', zEvt.mouseData(evt, wgt.node)), evt);
+			wgt.doMouseUp_(new zk.Event(wgt, 'onMouseUp', zEvt.mouseData(evt, wgt.getNode())), evt);
 	},
 	docMouseMove: function (evt) {
 		var wgt = zk.mouseCapture;
 		if (!wgt) wgt = zk.Widget.$(evt);
 		if (wgt)
-			wgt.doMouseMove_(new zk.Event(wgt, 'onMouseMove', zEvt.mouseData(evt, wgt.node)), evt);
+			wgt.doMouseMove_(new zk.Event(wgt, 'onMouseMove', zEvt.mouseData(evt, wgt.getNode())), evt);
 	},
 	docMouseOver: function (evt) {
 		zk.currentPointer[0] = zEvt.x(evt);
@@ -305,12 +305,12 @@ zkm = {
 
 		var wgt = zk.Widget.$(evt);
 		if (wgt)
-			wgt.doMouseOver_(new zk.Event(wgt, 'onMouseOver', zEvt.mouseData(evt, wgt.node)), evt);
+			wgt.doMouseOver_(new zk.Event(wgt, 'onMouseOver', zEvt.mouseData(evt, wgt.getNode())), evt);
 	},
 	docMouseOut: function (evt) {
 		var wgt = zk.Widget.$(evt);
 		if (wgt)
-			wgt.doMouseOut_(new zk.Event(wgt, 'onMouseOut', zEvt.mouseData(evt, wgt.node)), evt);
+			wgt.doMouseOut_(new zk.Event(wgt, 'onMouseOut', zEvt.mouseData(evt, wgt.getNode())), evt);
 	},
 	docKeyDown: function (evt) {
 		var wgt = zk.Widget.$(evt);
@@ -336,7 +336,7 @@ zkm = {
 
 		var wgt = zk.Widget.$(evt);
 		if (wgt)
-			wgt.doClick_(new zk.Event(wgt, 'onClick', zEvt.mouseData(evt, wgt.node), {ctl:true}), evt);
+			wgt.doClick_(new zk.Event(wgt, 'onClick', zEvt.mouseData(evt, wgt.getNode()), {ctl:true}), evt);
 			//no need to zEvt.stop()
 		//don't return anything. Otherwise, it replaces event.returnValue in IE (Bug 1541132)
 	},
@@ -346,7 +346,7 @@ zkm = {
 
 		var wgt = zk.Widget.$(evt);
 		if (wgt) {
-			var wevt = new zk.Event(wgt, 'onDoubleClick', zEvt.mouseData(evt, wgt.node), {ctl:true});
+			var wevt = new zk.Event(wgt, 'onDoubleClick', zEvt.mouseData(evt, wgt.getNode()), {ctl:true});
 			wgt.doDoubleClick_(wevt, evt);
 
 			if (wevt.stopped) {
@@ -364,7 +364,7 @@ zkm = {
 
 		var wgt = zk.Widget.$(evt);
 		if (wgt) {
-			var wevt = new zk.Event(wgt, 'onRightClick', zEvt.mouseData(evt, wgt.node), {ctl:true});
+			var wevt = new zk.Event(wgt, 'onRightClick', zEvt.mouseData(evt, wgt.getNode()), {ctl:true});
 			wgt.doRightClick_(wevt, evt);
 
 			if (wevt.stopped) {

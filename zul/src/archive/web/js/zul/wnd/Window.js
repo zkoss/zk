@@ -34,7 +34,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	setMode: function (mode) {
 		if (this._mode != mode) {
 			this._mode = mode;
-			if (this.node)
+			if (this.desktop)
 				this._updateDomOuter();
 		}
 	},
@@ -56,7 +56,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 
 	_doOverlapped: function () {
 		var pos = this.getPosition(),
-			n = this.node;
+			n = this.getNode();
 		if (!pos && !n.style.top && !n.style.left) {		
 			var xy = zDom.revisedOffset(n);
 			n.style.left = xy[0] + "px";
@@ -77,7 +77,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 	_doModal: function () {
 		var pos = this.getPosition(),
-			n = this.node;
+			n = this.getNode();
 		if (pos == "parent") this._posByParent();
 
 		zDom.makeVParent(n);
@@ -119,7 +119,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 	/** Must be called before calling makeVParent. */
 	_posByParent: function () {
-		var n = this.node,
+		var n = this.getNode(),
 			ofs = zDom.revisedOffset(n.parentNode),
 			left = zk.parseInt(n.style.left), top = zk.parseInt(n.style.top);
 		this._offset = ofs;
@@ -134,7 +134,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			}
 		} else {
 			if (!this._shadow)
-				this._shadow = new zk.eff.Shadow(this.node, {stackup:true});
+				this._shadow = new zk.eff.Shadow(this.getNode(), {stackup:true});
 			this._shadow.sync();
 		}
 	},
@@ -160,7 +160,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		}
 	},
 	_updateDomPos: function (force) {
-		var n = this.node, pos = this._pos;
+		var n = this.getNode(), pos = this._pos;
 		if (pos == "parent"/*handled by the caller*/ || (!pos && !force))
 			return;
 
@@ -210,8 +210,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		if (this._pos != pos) {
 			this._pos = pos;
 
-			var n = this.node;
-			if (n && this._mode != 'embedded') {
+			if (this.desktop && this._mode != 'embedded') {
 				this._updateDomPos(); //TODO: handle pos = 'parent'
 			}
 		}
@@ -224,8 +223,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		if (this._minheight != minheight) {
 			this._minheight = minheight;
 
-			var n = this.node;
-			if (n) ;//TODO
+			//TODO
 		}
 	},
 	getMinwidth: function () {
@@ -235,8 +233,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		if (this._minwidth != minwidth) {
 			this._minwidth = minwidth;
 
-			var n = this.node;
-			if (n) ;//TODO
+			//TODO
 		}
 	},
 
@@ -315,7 +312,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 
 	_updateDomOuter: function () {
-		if (this.node) this.rerender(this._skipper);
+		if (this.desktop) this.rerender(this._skipper);
 	},
 
 	//event handler//
@@ -351,7 +348,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 
 	_fireOnMove: function (keys) {
-		var pos = this._pos, node = this.node,
+		var pos = this._pos, node = this.getNode(),
 			x = zk.parseInt(node.style.left),
 			y = zk.parseInt(node.style.top);
 		if (pos == 'parent') {
@@ -382,7 +379,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this._syncMask();
 	},
 	focus: function (timeout) {
-		if (this.node) {
+		if (this.desktop) {
 			var cap = this.caption;
 			for (var w = this.firstChild; w; w = w.nextSibling)
 				if (w != cap && w.focus(timeout))
@@ -458,7 +455,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		}
 	},
 	unbind_: function () {
-		this.node.style.visibility = 'hidden'; //avoid unpleasant effect
+		var node = this.getNode();
+		node.style.visibility = 'hidden'; //avoid unpleasant effect
 
 		//we don't check this._mode here since it might be already changed
 		if (this._shadow) {
@@ -476,7 +474,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		
 		this.ecap = null;
 		
-		zDom.undoVParent(this.node);
+		zDom.undoVParent(node);
 		zWatch.unlisten('onFloatUp', this);
 		this.setFloating_(false);
 

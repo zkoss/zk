@@ -21,11 +21,12 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 				ref = zk.Widget.$(ref);
 				
 			if (ref) {
-				var ofs = zDom.cmOffset(ref.node);
+				var refn = ref.getNode(),
+					ofs = zDom.cmOffset(refn);
 				pos = position;
 				dim = {
 					top: ofs[0], left: ofs[1],
-					width: zDom.offsetWidth(ref.node), height: zDom.offsetHeight(ref.node)  
+					width: zDom.offsetWidth(refn), height: zDom.offsetHeight(refn)  
 				}
 			}
 		} else if (offset && offset.$array) {
@@ -37,9 +38,10 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		if (dim) this._open(ref, pos, dim, fromServer);
 	},
 	_open: function (ref, pos, dim, fromServer) {
-		zDom.setStyle(this.node, {position: "absolute"});
-		zDom.makeVParent(this.node);
-		zDom.autoPosition(this.node, dim, pos);
+		var node = this.getNode();
+		zDom.setStyle(node, {position: "absolute"});
+		zDom.makeVParent(node);
+		zDom.autoPosition(node, dim, pos);
 		
 		this.setVisible(true);
 		
@@ -47,7 +49,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			// use a progress bar to hide the popup
 			this.mask = new zk.eff.Mask({
 				id: this.uuid + "$mask",
-				anchor: this.node
+				anchor: node
 			});
 			
 			// register onResponse to remove the progress bar after receiving
@@ -56,15 +58,15 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		}
 		if (zk.ie6Only) {
 			if (!this._stackup)
-				this._stackup = zDom.makeStackup(this.node, null, this.node);
+				this._stackup = zDom.makeStackup(node, null, node);
 			else {
-				this._stackup.style.top = this.node.style.top;
-				this._stackup.style.left = this.node.style.left;
+				this._stackup.style.top = node.style.top;
+				this._stackup.style.left = node.style.left;
 				this._stackup.style.display = "block";
 			}
 		}
 		if (!fromServer) this.fire('onOpen', ref ? [true, ref.uuid] : true);
-		zDom.setStyle(this.node, {visibility: 'inherit'});
+		zDom.setStyle(node, {visibility: 'inherit'});
 	},
 	onResponse: function () {
 		if (this.mask) this.mask.destroy();
@@ -76,7 +78,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			this._stackup.style.display = "none";
 		
 		this.setVisible(false);
-		zDom.undoVParent(this.node);
+		zDom.undoVParent(this.getNode());
 		this.setFloating_(false);
 		if (!fromServer) this.fire('onOpen', false);
 	},
@@ -116,7 +118,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		this.$supers('unbind_', arguments);
 	},
 	onVisible: zk.ie7 ? function (wgt) {
-		var node = wgt.node,
+		var node = wgt.getNode(),
 			wdh = node.style.width,
 			fir = zDom.firstChild(node, "DIV"),
 			last = zDom.lastChild(zDom.lastChild(node, "DIV"), "DIV"),

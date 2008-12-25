@@ -27,7 +27,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 		}
 
 		this.widget = wgt;
-		this.node = node = node ? zDom.$(node): wgt.node;
+		this.node = node = node ? zDom.$(node): wgt.getNode();
 
 		opts = zk.$default(opts, {
 			zIndex: 1000,
@@ -280,7 +280,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 		//Bug 1845026
 		//We need to ensure that the onBlur evt is fired before the onSelect evt for consistent among four browsers. 
 		if (zk.currentFocus) {
-			var f = zk.currentFocus.node;
+			var f = zk.currentFocus.getNode();
 			if (f && target != f && typeof f.blur == "function")
 				f.blur();
 		}
