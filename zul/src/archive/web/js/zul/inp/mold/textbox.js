@@ -12,8 +12,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-function () {
-	return this.isMultiline() ?
-		'<textarea' + this.domAttrs_() + this.innerAttrs_() + '>' + this._areaText() + '</textarea>':
-		'<input' + this.domAttrs_() + this.innerAttrs_() + '/>';
+function (out) {
+	if(this.isMultiline()) 
+		out.push('<textarea', this.domAttrs_(), this.innerAttrs_(), '>',
+				this._areaText(), '</textarea>');
+	else
+		out.push('<input', this.domAttrs_(), this.innerAttrs_(), '/>');
 }

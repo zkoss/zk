@@ -12,7 +12,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-function () {
-	var html = '<a ' + this.domAttrs_();
-	return html + '>' + this.domContent_() + '</a>';
+function (out) {
+	out.push('<a ', this.domAttrs_(), '>', this.domContent_(), '</a>');
 }

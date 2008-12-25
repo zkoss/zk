@@ -12,9 +12,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-function () {
-	var html = this.domAttrs_(), tabi = this._tabindex;
-	if (this._disabled) html += ' disabled="disabled"';
-	if (tabi >= 0) html += ' tabindex="' + tabi +'"';
-	return '<button' + html + '>' + this.domContent_() + '</button>';
+function (out) {
+	out.push('<button', this.domAttrs_());
+	var tabi = this._tabindex;
+	if (this._disabled) out.push(' disabled="disabled"');
+	if (tabi >= 0) out.push(' tabindex="', tabi, '"');
+	out.push('>', this.domContent_(), '</button>');
 }

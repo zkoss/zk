@@ -103,12 +103,14 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			zDom.remove(prevsib.uuid + '$chdex2');
 	},
 	encloseChildHTML_: function (child, last) {
-		var out = [];//, childhtml = child.redraw();
+		var out = [];
 		if (this.isVertical()) {
 			out.push('<tr id="', child.uuid, '$chdex"',
 				this._childOuterAttrs(child),
 				'><td', this._childInnerAttrs(child),
-				'>', childhtml, '</td></tr>');
+				'>');
+			child.redraw(out);
+			out.push('</td></tr>');
 
 			if (child.nextSibling)
 				out.push(this._spacingHTML(child));
@@ -120,7 +122,9 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			out.push('<td id="', child.uuid, '$chdex"',
 				this._childOuterAttrs(child),
 				this._childInnerAttrs(child),
-				'>', childhtml, '</td>');
+				'>');
+			child.redraw(out);
+			out.push('</td>');
 
 			if (child.nextSibling)
 				out.push(this._spacingHTML(child));

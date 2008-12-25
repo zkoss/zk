@@ -12,28 +12,30 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-function (skipper) {
-	var html = '<div' + this.domAttrs_() + '>',
-		zcls = this.getZclass(),
-		uuid = this.uuid;
+function (out, skipper) {	
+	var	zcls = this.getZclass(),
+		uuid = this.uuid,
 		cap = this.caption;
 
-	if (cap)
-		html += '<div class="' + zcls + '-tl"><div class="' + zcls
-			+ '-tr"><div class="' + zcls + '-tm"><div class="'
-			+ zcls + '-header">'
-			+ cap.redraw() + '</div></div></div></div>';
-
-	html += '<div id="' + uuid + '$panel" class="' + zcls + '-body"';
-	if (!this.isOpen()) html += ' style="display:none"';
-	html += '><div id="' + uuid + '$cave"' + this._contentAttrs() + '>';
+	out.push('<div', this.domAttrs_(), '>');
+	
+	if (cap) {
+		out.push('<div class="', zcls, '-tl"><div class="', zcls,
+				'-tr"><div class="', zcls, '-tm"><div class="', zcls, '-header">');
+		cap.redraw(out);
+		out.push('</div></div></div></div>');
+	}
+	
+	out.push('<div id="', uuid, '$panel" class="', zcls, '-body"');
+	if (!this.isOpen()) out.push(' style="display:none"');
+	out.push('><div id="', uuid, '$cave"', this._contentAttrs(), '>');
 
 	if (!skipper)
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			if (w != cap)
-				html += w.redraw();
-	return html + '</div></div>'
+				w.redraw(out);
+	out.push('</div></div>',
 		//shadow
-		+ '<div id="' + uuid + '$sdw" class="' + zcls +'-bl"><div class="' + zcls
-		+ '-br"><div class="' + zcls + '-bm"></div></div></div></div>';
+		'<div id="', uuid, '$sdw" class="', zcls, '-bl"><div class="', zcls,
+			'-br"><div class="', zcls, '-bm"></div></div></div></div>');
 }

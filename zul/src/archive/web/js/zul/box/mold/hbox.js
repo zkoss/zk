@@ -13,12 +13,13 @@ This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function () {
-	var html = '<table' + this.domAttrs_() + zUtl.cellps0 + '><tr',
-		v = this.getAlign();
-	if (v) html += ' valign="' + zul.box.Box._toValign(v) +'"';
-	html += '>';
+	out.push('<table', this.domAttrs_(), zUtl.cellps0, '><tr');
+	
+	var	v = this.getAlign();
+	if (v) out.push(' valign="', zul.box.Box._toValign(v), '"');
+	out.push('>');
 
 	for (var w = this.firstChild; w; w = w.nextSibling)
-		html += this.encloseChildHTML_(w);
-	return html + '</tr></table>';
+		out.push(this.encloseChildHTML_(w));
+	out.push('</tr></table>');
 }
