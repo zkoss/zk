@@ -74,7 +74,7 @@ public class Progressmeter extends XulElement implements org.zkoss.zul.api.Progr
 
 	//-- super --//
 	public String getZclass() {
-		return _zclass == null ? "z-progressmeter" : super.getZclass();
+		return _zclass == null ? "z-progressmeter" : _zclass;
 	}
 
 	//-- Component --//

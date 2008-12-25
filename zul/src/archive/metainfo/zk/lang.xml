@@ -361,13 +361,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>grid</component-name>
 		<component-class>org.zkoss.zul.Grid</component-class>
+		<widget-class>zul.grid.Grid</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/grid.dsp</mold-uri>
+			<mold-uri>mold/grid.js</mold-uri>
 		</mold>
 		<mold>
 			<mold-name>paging</mold-name>
-			<mold-uri>~./zul/html/grid-pg.dsp</mold-uri>
+			<mold-uri>mold/grid-pg.js</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -648,17 +649,19 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>row</component-name>
 		<component-class>org.zkoss.zul.Row</component-class>
+		<widget-class>zul.grid.Row</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/row.dsp</mold-uri>
+			<mold-uri>mold/row.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>rows</component-name>
 		<component-class>org.zkoss.zul.Rows</component-class>
+		<widget-class>zul.grid.Rows</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/rows.dsp</mold-uri>
+			<mold-uri>mold/rows.js</mold-uri>
 		</mold>
 	</component>
 	<component>

@@ -178,7 +178,7 @@ public class Borderlayout extends HtmlBasedComponent implements org.zkoss.zkex.z
 	}
 
 	public String getZclass() {
-		return _zclass == null ? "z-border-layout" : super.getZclass();
+		return _zclass == null ? "z-border-layout" : _zclass;
 	}
 	//Cloneable//
 	public Object clone() {

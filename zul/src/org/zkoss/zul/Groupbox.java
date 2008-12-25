@@ -105,7 +105,7 @@ public class Groupbox extends XulElement implements org.zkoss.zul.api.Groupbox {
 		if (!_closable) renderer.render("closable", false);
 	}
 	public String getZclass() {
-		return _zclass == null ? isLegend() ? "z-fieldset" : "z-groupbox" : super.getZclass();
+		return _zclass == null ? isLegend() ? "z-fieldset" : "z-groupbox" : _zclass;
 	}
 	
 	/** Returns the CSS style for the content block of the groupbox.

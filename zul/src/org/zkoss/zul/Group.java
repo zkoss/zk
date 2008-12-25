@@ -213,7 +213,7 @@ public class Group extends Row implements org.zkoss.zul.api.Group {
 	}
 
 	public String getZclass() {
-		return _zclass == null ? "z-group" : super.getZclass();
+		return _zclass == null ? "z-group" : _zclass;
 	}
 
 	//-- ComponentCtrl --//

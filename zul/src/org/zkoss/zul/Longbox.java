@@ -71,7 +71,7 @@ public class Longbox extends NumberInputElement implements org.zkoss.zul.api.Lon
 
 	//-- super --//
 	public String getZclass() {
-		return _zclass == null ? "z-longbox" : super.getZclass();
+		return _zclass == null ? "z-longbox" : _zclass;
 	}
 	protected Object coerceFromString(String value) throws WrongValueException {
 		final Object[] vals = toNumberOnly(value);

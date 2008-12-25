@@ -168,7 +168,7 @@ public class Bandbox extends Textbox implements org.zkoss.zul.api.Bandbox {
 
 	// super
 	public String getZclass() {
-		return _zclass == null ? "z-bandbox" : super.getZclass();
+		return _zclass == null ? "z-bandbox" : _zclass;
 	}
 
 	//-- Component --//

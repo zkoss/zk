@@ -57,6 +57,6 @@ public class Foot extends XulElement implements org.zkoss.zul.api.Foot {
 	}
 
 	public String getZclass() {
-		return _zclass == null ? "z-foot" : super.getZclass();
+		return _zclass == null ? "z-foot" : _zclass;
 	}
 }

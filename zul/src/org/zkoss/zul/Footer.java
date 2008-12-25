@@ -113,7 +113,7 @@ public class Footer  extends LabelImageElement implements org.zkoss.zul.api.Foot
 
 	//-- super --//
 	public String getZclass() {
-		return _zclass == null ? "z-footer" : super.getZclass();
+		return _zclass == null ? "z-footer" : _zclass;
 	}
 
 	//-- Component --//

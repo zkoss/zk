@@ -37,7 +37,7 @@ public class Auxhead extends XulElement implements org.zkoss.zul.api.Auxhead {
 	}
 
 	public String getZclass() {
-		return _zclass == null ? "z-auxhead" : super.getZclass();
+		return _zclass == null ? "z-auxhead" : _zclass;
 	}
 	//super//
 	public boolean insertBefore(Component child, Component insertBefore) {

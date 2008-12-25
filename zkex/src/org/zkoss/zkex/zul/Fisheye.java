@@ -85,7 +85,7 @@ public class Fisheye extends XulElement implements org.zkoss.zkex.zul.api.Fishey
 	}
 	//-- super --//
 	public String getZclass() {
-		return _zclass == null ? "z-fisheye" : super.getZclass();
+		return _zclass == null ? "z-fisheye" : _zclass;
 	}
 	protected int getRealStyleFlags() {
 		return super.getRealStyleFlags() | RS_NO_WIDTH|RS_NO_HEIGHT;

@@ -58,6 +58,6 @@ public class Listfoot extends XulElement implements org.zkoss.zul.api.Listfoot {
 		return super.insertBefore(child, insertBefore);
 	}
 	public String getZclass() {
-		return _zclass == null ? "z-list-foot" : super.getZclass();
+		return _zclass == null ? "z-list-foot" : _zclass;
 	}
 }

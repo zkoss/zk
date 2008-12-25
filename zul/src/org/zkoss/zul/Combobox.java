@@ -564,7 +564,7 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 
 	// super
 	public String getZclass() {
-		return _zclass == null ? "z-combobox" : super.getZclass();
+		return _zclass == null ? "z-combobox" : _zclass;
 	}
 
 	//-- Component --//

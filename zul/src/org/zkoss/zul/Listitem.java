@@ -96,7 +96,7 @@ public class Listitem extends XulElement implements org.zkoss.zul.api.Listitem {
 	}
 
 	public String getZclass() {
-		return _zclass == null ? "z-list-item" : super.getZclass();
+		return _zclass == null ? "z-list-item" : _zclass;
 	}
 	/** Returns whether it is checkable.
 	 * <p>Default: true.

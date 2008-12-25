@@ -42,7 +42,7 @@ import org.zkoss.zk.ui.event.Events;
 public class Menupopup extends Popup implements org.zkoss.zul.api.Menupopup {
 	//-- super --//
 	public String getZclass() {
-		return _zclass == null ? "z-menu-popup" : super.getZclass();
+		return _zclass == null ? "z-menu-popup" : _zclass;
 	}
 
 	//-- Component --//

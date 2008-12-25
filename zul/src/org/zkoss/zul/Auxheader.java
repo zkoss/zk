@@ -92,7 +92,7 @@ public class Auxheader extends HeaderElement implements org.zkoss.zul.api.Auxhea
 
 	//super//
 	public String getZclass() {
-		return _zclass == null ? "z-auxheader" : super.getZclass();
+		return _zclass == null ? "z-auxheader" : _zclass;
 	}
 
 	//Component//

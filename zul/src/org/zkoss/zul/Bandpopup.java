@@ -35,7 +35,7 @@ public class Bandpopup extends XulElement implements org.zkoss.zul.api.Bandpopup
 
 	//-- super --//
 	public String getZclass() {
-		return _zclass == null ? "z-band-popup" : super.getZclass();
+		return _zclass == null ? "z-band-popup" : _zclass;
 	}
 
 	public boolean setVisible(boolean visible) {

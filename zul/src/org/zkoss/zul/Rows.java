@@ -485,7 +485,7 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 		}
 	}
 	public String getZclass() {
-		return _zclass == null ? "z-rows" : super.getZclass();
+		return _zclass == null ? "z-rows" : _zclass;
 	}
 	//Cloneable//
 	public Object clone() {

@@ -37,7 +37,7 @@ public class Columnchildren extends XulElement implements org.zkoss.zkex.zul.api
 	}
 
 	public String getZclass() {
-		return _zclass == null ? "z-column-children" : super.getZclass();
+		return _zclass == null ? "z-column-children" : _zclass;
 	}
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Columnlayout))

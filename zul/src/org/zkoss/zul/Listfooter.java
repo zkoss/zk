@@ -114,7 +114,7 @@ public class Listfooter extends LabelImageElement implements org.zkoss.zul.api.L
 
 	//-- Component --//
 	public String getZclass() {
-		return _zclass == null ? "z-list-footer" : super.getZclass();
+		return _zclass == null ? "z-list-footer" : _zclass;
 	}
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Listfoot))

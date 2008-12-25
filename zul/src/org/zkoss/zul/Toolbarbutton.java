@@ -61,7 +61,7 @@ public class Toolbarbutton extends LabelImageElement implements org.zkoss.zul.ap
 
 	// super
 	public String getZclass() {
-		return _zclass == null ?  "z-toolbar-button" : super.getZclass();
+		return _zclass == null ?  "z-toolbar-button" : _zclass;
 	}
 	
 	/**

@@ -40,7 +40,7 @@ public class Portalchildren extends XulElement implements org.zkoss.zkmax.zul.ap
 	}
 
 	public String getZclass() {
-		return _zclass == null ? "z-portal-children" : super.getZclass();
+		return _zclass == null ? "z-portal-children" : _zclass;
 	}
 	
 	public void setParent(Component parent) {

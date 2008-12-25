@@ -177,7 +177,7 @@ public class Fisheyebar extends XulElement implements org.zkoss.zkex.zul.api.Fis
 	}
 
 	public String getZclass() {
-		return _zclass == null ? "z-fisheyebar" : super.getZclass();
+		return _zclass == null ? "z-fisheyebar" : _zclass;
 	}
 	public void onChildAdded(Component child) {
 		super.onChildAdded(child);

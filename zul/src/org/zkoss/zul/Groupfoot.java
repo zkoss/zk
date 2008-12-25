@@ -63,7 +63,7 @@ public class Groupfoot extends Row implements org.zkoss.zul.api.Groupfoot {
 	}
 
 	public String getZclass() {
-		return _zclass == null ? "z-group-foot" : super.getZclass();
+		return _zclass == null ? "z-group-foot" : _zclass;
 	}
 	private Label autoFirstCell() {
 		Component cell = getFirstChild();
