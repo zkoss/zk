@@ -1,0 +1,41 @@
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<window title="RadiogroupSelectdItemConverter" width="500px" border="normal">
+<html>
+<![CDATA[
+<ol>
+<li>Shall see two radio 'Starts with' and 'Contains'</li>
+<ll>The 'Contains' radio shall be selected</ll>
+<li>Press 'show select' button, you shall see pop up 'C'</li>
+<li>Select 'Starts with'</li>
+<li>Then press 'show select' button, you shall see pop up 'S'</li>
+<li>Done.</li> 
+</ol>
+]]>
+</html>
+<zscript>
+<![CDATA[
+   class Select {
+	   private String desc;
+	   
+	   public Select(String x) {
+		   setDesc(x);
+	   }
+	   
+	   public String getDesc() {
+		   return desc;
+	   }
+	   public void setDesc(String desc) {
+		   this.desc = desc;
+	   }
+   }
+   Select select = new Select("C");
+]]>
+</zscript>
+<radiogroup selectedItem="@{select.desc}">
+<hbox>
+<radio label="Starts with" value="S" selected="true" />
+<radio label="Contains" value="C" />
+</hbox>
+</radiogroup>
+<button label="show select" onClick='alert(""+select.getDesc())'/>
+</window>
