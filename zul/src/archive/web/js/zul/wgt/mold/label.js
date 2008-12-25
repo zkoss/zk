@@ -13,5 +13,5 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
-	out.push('<span', this.domAttrs_(), '>', this.getValue(), '</span>');
+	out.push('<span', this.domAttrs_(), '>', zUtl.encodeXML(this._value), '</span>');
 }

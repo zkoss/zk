@@ -26,7 +26,7 @@ zul.wgt.Include = zk.$extends(zul.Widget, {
 		if (this._content != content) {
 			this._content = content;
 			var n = this.getNode();
-			if (n) n.innerHTML = this.getContent();
+			if (n) n.innerHTML = content;
 		}
 	},
 
@@ -37,6 +37,6 @@ zul.wgt.Include = zk.$extends(zul.Widget, {
 		out.push('>');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
-		out.push(this.getContent(), '</div>');
+		out.push(this._content, '</div>');
 	}
 });

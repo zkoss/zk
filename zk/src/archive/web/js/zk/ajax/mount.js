@@ -224,16 +224,22 @@ zkm = {
 		} else {
 			var cls = zk.$import(wginf.type),
 				uuid = wginf.uuid,
-				wgt = new cls(uuid, wginf.mold),
-				embedAs = props.z_ea;
+				wgt = new cls(uuid, wginf.mold);
 			wgt.inServer = true;
 			if (parent) parent.appendChild(wgt);
 
 			//embedAs means value from element's text
+			var embedAs = props.z_ea;
 			if (embedAs) {
 				var embed = zDom.$(uuid);
-				if (embed)
-					props[embedAs] = embed.innerHTML;
+				if (embed) {
+					var val = embed.innerHTML;
+					if (embedAs.charAt(0) == '$') { //decode
+						embedAs = embedAs.substring(1);
+						val = zUtl.decodeXML(val);
+					}
+					props[embedAs] = val;
+				}
 			}
 		}
 

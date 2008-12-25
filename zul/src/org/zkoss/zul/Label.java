@@ -154,7 +154,7 @@ public class Label extends XulElement implements org.zkoss.zul.api.Label {
 					outed = true;
 				}
 			}
-			if (outed) renderer.render("z_ea", "value");
+			if (outed) renderer.render("z_ea", "$value"); //decode required
 			else render(renderer, "value", _value); //no need to encode
 		}
 	}

@@ -17,25 +17,51 @@ zUtl = { //static methods
 	/** Encodes a message into a valid XML format. */
 	encodeXML: function (txt, multiline) {
 		var out = "";
-		if (txt)
-			for (var j = 0, tl = txt.length; j < tl; ++j) {
-				var cc = txt.charAt(j);
-				switch (cc) {
-				case '<': out += "&lt;"; break;
-				case '>': out += "&gt;"; break;
-				case '&': out += "&amp;"; break;
-				case '"': out += "&quot;"; break;
-				case '\n':
-					if (multiline) {
-						out += "<br/>";
-						break;
-					}
-				default:
-					out += cc;
+		if (!txt) return out;
+
+		var k = 0, tl = txt.length;
+		for (var j = 0; j < tl; ++j) {
+			var cc = txt.charAt(j);
+			if (cc == '\n') {
+				if (multiline) {
+					out += txt.substring(k, j) + "<br/>\n";
+					k = j + 1;
+				}
+			} else {
+				var enc = zUtl._encs[cc];
+				if (enc) {
+					out += txt.substring(k, j) + '&' + enc + ';';
+					k = j + 1;
 				}
 			}
-		return out;
+		}
+		return !k ? txt:
+			k < tl ? out + txt.substring(k): out;
 	},
+	decodeXML: function (txt) {
+		var out = "";
+		if (!txt) return out;
+
+		var k = 0, tl = txt.length;
+		for (var j = 0; j < tl; ++j) {
+			var cc = txt.charAt(j);
+			if (cc == '&') {
+				var l = txt.indexOf(';', j + 1);
+				if (l >= 0) {
+					var dec = zUtl._decs[txt.substring(j + 1, l)];
+					if (dec) {
+						out += txt.substring(k, j) + dec;
+						k = (j = l) + 1;
+					}
+				}
+			}
+		}
+		return !k ? txt:
+			k < tl ? out + txt.substring(k): out;
+	},
+	_decs: {lt: '<', gt: '>', amp: '&', quot: '"'},
+	_encs: {},
+
 	/** Returns the element's value (by catenate all CDATA and text).
 	 */
 	getElementValue: function (el) {
@@ -173,5 +199,14 @@ zUtl = { //static methods
 				return new ActiveXObject('Microsoft.XMLHTTP');
 			}
 		}
+	},
+
+	_init: function () {
+		delete zUtl._init;
+
+		var encs = zUtl._encs, decs = zUtl._decs;
+		for (var v in decs)
+			encs[decs[v]] = v;
 	}
 };
+zUtl._init();

@@ -135,9 +135,8 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		}
 		if (!out) return oo.join('');
 
-		var i;
-		while (i = oo.shift())
-			out.push(i);
+		for (var j = 0, len = oo.length; j < len; ++j)
+			out.push(oo[j]);
 	},
 	_spacingHTML: function (child) {
 		var oo = [],
