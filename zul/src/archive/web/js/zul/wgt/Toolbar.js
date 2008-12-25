@@ -47,7 +47,7 @@ zul.wgt.Toolbar = zk.$extends(zul.Widget, {
 	},
 	insertBefore: function(child, sibling){
 		if (this.$super('insertBefore', child, sibling)) {
-			if (inPanelMold()) 
+			if (this.inPanelMold()) 
 				this.rerender();
 			return true;
 		}

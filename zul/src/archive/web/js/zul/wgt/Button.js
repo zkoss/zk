@@ -27,7 +27,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	setOrient: function(orient) {
 		if (this._orient != orient) {
 			this._orient = orient;
-			if (this.desktop) this.updateDomContent_();
+			this.updateDomContent_();
 		}
 	},
 	/** Returns the dir of this button.
@@ -40,7 +40,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	setDir: function(dir) {
 		if (this._dir != dir) {
 			this._dir = dir;
-			if (this.desktop) this.updateDomContent_();
+			this.updateDomContent_();
 		}
 	},
 	/** Returns whether this button is disabled
@@ -97,9 +97,11 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 
 	/** Updates the label and image. */
 	updateDomContent_: function () {
-		var n = this.ebox;
-		if (n) n.tBodies[0].rows[1].cells[1].innerHTML = this.domContent_();
-		else this.getNode().innertHTML = this.domContent_();
+		if (this.desktop) {
+			var n = this.ebox;
+			if (n) n.tBodies[0].rows[1].cells[1].innerHTML = this.domContent_();
+			else this.getNode().innertHTML = this.domContent_();
+		}
 	},
 	domContent_: function () {
 		var label = zUtl.encodeXML(this.getLabel()),

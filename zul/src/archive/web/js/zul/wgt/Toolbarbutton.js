@@ -24,7 +24,7 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 	setDisabled: function(disabled){
 		if (this._disabled != disabled) {
 			this._disabled = disabled;
-			if (this.desktop) this.updateDomClass_();//update class and attr
+			this.updateDomClass_();//update class and attr
 		}
 	},
 	

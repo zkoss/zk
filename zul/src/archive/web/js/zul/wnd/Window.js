@@ -34,8 +34,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	setMode: function (mode) {
 		if (this._mode != mode) {
 			this._mode = mode;
-			if (this.desktop)
-				this._updateDomOuter();
+			this._updateDomOuter();
 		}
 	},
 	doOverlapped: function () {
@@ -312,7 +311,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 
 	_updateDomOuter: function () {
-		if (this.desktop) this.rerender(this._skipper);
+		this.rerender(this._skipper);
 	},
 
 	//event handler//

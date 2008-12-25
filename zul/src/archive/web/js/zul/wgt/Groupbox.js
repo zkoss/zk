@@ -69,7 +69,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	},
 
 	_updateDomOuter: function () {
-		if (this.desktop) this.rerender(zk.Skipper.nonCaptionSkipper);
+		this.rerender(zk.Skipper.nonCaptionSkipper);
 	},
 	_contentAttrs: function () {
 		var html = ' class="', s = this._cntSclass;

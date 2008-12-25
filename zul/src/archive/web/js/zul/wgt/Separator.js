@@ -28,7 +28,7 @@ zul.wgt.Separator = zk.$extends(zul.Widget, {
 	setOrient: function(orient) {
 		if (this._orient != orient) {
 			this._orient = orient;
-			if (this.desktop) this.updateDomClass_();
+			this.updateDomClass_();
 		}
 	},
 
@@ -43,7 +43,7 @@ zul.wgt.Separator = zk.$extends(zul.Widget, {
 	setBar: function(bar) {
 		if (this._bar != bar) {
 			this._bar = bar;
-			if (this.desktop) this.updateDomClass_();
+			this.updateDomClass_();
 		}
 	},
 	/** Returns the spacing.
@@ -58,7 +58,7 @@ zul.wgt.Separator = zk.$extends(zul.Widget, {
 	setSpacing: function(spacing) {
 		if (this._spacing != spacing) {
 			this._spacing = spacing;
-			if (this.desktop) this.updateDomStyle_();
+			this.updateDomStyle_();
 		}
 	},
 

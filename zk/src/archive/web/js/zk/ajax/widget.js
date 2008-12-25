@@ -31,7 +31,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			if (!this.$class.molds[mold])
 				throw 'Unknown mold: ' + mold;
 			this._mold = mold;
-			if (this.desktop) this.rerender();
+			this.rerender();
 		}
 	},
 
@@ -385,8 +385,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	setStyle: function (style) {
 		if (this._style != style) {
 			this._style = style;
-			if (this.desktop)
-				this.updateDomStyle_();
+			this.updateDomStyle_();
 		}
 	},
 	getSclass: function () {
@@ -413,11 +412,14 @@ zk.Widget = zk.$extends(zk.Object, {
 		this.$class.molds[this._mold].apply(this, arguments);
 	},
 	updateDomClass_: function () {
-		var n = this.getNode();
-		if (n) n.className = this.domClass_();
+		if (this.desktop) {
+			var n = this.getNode();
+			if (n) n.className = this.domClass_();
+		}
 	},
 	updateDomStyle_: function () {
-		zDom.setStyle(this.getNode(), zDom.parseStyle(this.domStyle_()));
+		if (this.desktop)
+			zDom.setStyle(this.getNode(), zDom.parseStyle(this.domStyle_()));
 	},
 
 	domStyle_: function (no) {
@@ -511,14 +513,16 @@ zk.Widget = zk.$extends(zk.Object, {
 		return out.join('');
 	},
 	rerender: function (skipper) {
-		var n = this.getNode();
-		if (n) {
-			var skipInfo;
-			if (skipper) skipInfo = skipper.skip(this);
+		if (this.desktop) {
+			var n = this.getNode();
+			if (n) {
+				var skipInfo;
+				if (skipper) skipInfo = skipper.skip(this);
 
-			this.replaceHTML(n, null, skipper);
+				this.replaceHTML(n, null, skipper);
 
-			if (skipInfo) skipper.restore(this, skipInfo);
+				if (skipInfo) skipper.restore(this, skipInfo);
+			}
 		}
 	},
 
