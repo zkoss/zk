@@ -285,12 +285,12 @@ zkm = {
 			wgt = $Widget.$(evt, true);
 		zk.lastPointer[0] = zEvt.x(evt);
 		zk.lastPointer[1] = zEvt.y(evt);
-		if (wgt) {
-			if (target != document.body && target != document.body.parentNode) //not click on scrollbar
-				$Widget.domMouseDown(wgt); //null if mask
 
+		if (target != document.body && target != document.body.parentNode) //not click on scrollbar
+			$Widget.domMouseDown(wgt); //null if mask
+
+		if (wgt)
 			wgt.doMouseDown_(new zk.Event(wgt, 'onMouseDown', zEvt.mouseData(evt, wgt.getNode())), evt);
-		}
 	},
 	docMouseUp: function (evt) {
 		var wgt = zk.mouseCapture;

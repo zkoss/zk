@@ -73,6 +73,19 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		}
 	},
 
+	getHref: function () {
+		return this._href;
+	},
+	setHref: function (href) {
+		this._href = href;
+	},
+	getTarget: function () {
+		return this._target;
+	},
+	setTarget: function (target) {
+		this._target = target;
+	},
+
 	//super//
 	focus: function (timeout) {
 		if (this.isVisible() && this.canActivate({checkOnly:true})) {
@@ -142,8 +155,15 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		this.$super('unbind_');
 	},
 	doClick_: function (wevt) {
-		if (!this._disabled)
+		if (!this._disabled) {
 			this.fireX(wevt);
+
+			if (!wevt.stopped) {
+				var href = this._href;
+				if (href)
+					zUtl.go(href, false, this.getTarget(), "target");
+			}
+		}
 		//Unlike DOM, we don't proprogate to parent (so no calling $supers)
 	},
 	doMouseOver_: function () {

@@ -29,6 +29,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		onClick='self.value += "!"'/>
 	<label value="invalidate" style="border:1px solid #233;padding:0 2px"
 		onClick='self.value += "#";self.invalidate();'/>
+	<button label="go zkoss.org" href="http://www.zkoss.org"/>
+	<toolbarbutton label="hi" onClick='alert("hi")'/>
+	<toolbarbutton label="go zkoss.org" href="http://www.zkoss.org"/>
 	<separator bar="true"/>
 	Div:
 	<div id="div" style="border:1px solid #999"/>
