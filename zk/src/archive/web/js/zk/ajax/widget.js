@@ -556,7 +556,7 @@ zk.Widget = zk.$extends(zk.Object, {
 
 	getNode: function () {
 		var n = this._node;
-		if (!n && !this._nodeSolved) {
+		if (!n && this.desktop && !this._nodeSolved) {
 			n = zDom.$(this.uuid);
 			if (n) {
 				n.z_wgt = this;
