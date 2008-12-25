@@ -16,6 +16,7 @@ function (out) {
 	out.push('<table', this.domAttrs_(), zUtl.cellps0, '>');
 
 	for (var w = this.firstChild; w; w = w.nextSibling)
-		out.push(this.encloseChildHTML_(w));
+		this.encloseChildHTML_(w, false, out);
+
 	out.push('</table>');
 }

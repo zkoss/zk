@@ -102,56 +102,60 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		if (prevsib && this.lastChild == prevsib) //child is last
 			zDom.remove(prevsib.uuid + '$chdex2');
 	},
-	encloseChildHTML_: function (child, last) {
-		var out = [];
+	encloseChildHTML_: function (child, prefixSpace, out) {
+		var oo = [];
 		if (this.isVertical()) {
-			out.push('<tr id="', child.uuid, '$chdex"',
+			oo.push('<tr id="', child.uuid, '$chdex"',
 				this._childOuterAttrs(child),
 				'><td', this._childInnerAttrs(child),
 				'>');
-			child.redraw(out);
-			out.push('</td></tr>');
+			child.redraw(oo);
+			oo.push('</td></tr>');
 
 			if (child.nextSibling)
-				out.push(this._spacingHTML(child));
-			else if (last) {
+				oo.push(this._spacingHTML(child));
+			else if (prefixSpace) {
 				var pre = child.previousSibling;
-				if (pre) out.unshift(this._spacingHTML(pre));
+				if (pre) oo.unshift(this._spacingHTML(pre));
 			}
 		} else {
-			out.push('<td id="', child.uuid, '$chdex"',
+			oo.push('<td id="', child.uuid, '$chdex"',
 				this._childOuterAttrs(child),
 				this._childInnerAttrs(child),
 				'>');
-			child.redraw(out);
-			out.push('</td>');
+			child.redraw(oo);
+			oo.push('</td>');
 
 			if (child.nextSibling)
-				out.push(this._spacingHTML(child));
-			else if (last) {
+				oo.push(this._spacingHTML(child));
+			else if (prefixSpace) {
 				var pre = child.previousSibling;
-				if (pre) out.unshift(this._spacingHTML(pre));
+				if (pre) oo.unshift(this._spacingHTML(pre));
 			}
 		}
-		return out.join('');
+		if (!out) return oo.join('');
+
+		var i;
+		while (i = oo.shift())
+			out.push(i);
 	},
 	_spacingHTML: function (child) {
-		var out = [],
+		var oo = [],
 			spacing = this.spacing,
 			spacing0 = spacing && spacing.startsWith('0')
 				&& (spacing.length == 1 || zk.isDigit(spacing.charAt(1))),
 			vert = this.isVertical(),
 			spstyle = spacing ? (vert?'height:':'width:') + spacing: '';
 
-		out.push('<t', vert?'r':'d', ' id="', child.uuid,
+		oo.push('<t', vert?'r':'d', ' id="', child.uuid,
 			'$chdex2" class="', this.getZclass(), '-sep"');
 
 		var s = spstyle;
 		if (spacing0 || !child.isVisible()) s = 'display:none' + s;
-		if (s) out.push(' style="', s, '"');
+		if (s) oo.push(' style="', s, '"');
 
-		out.push('>', vert?'<td>':'', zUtl.img0, vert?'</td></tr>':'</td>');
-		return out.join('');
+		oo.push('>', vert?'<td>':'', zUtl.img0, vert?'</td></tr>':'</td>');
+		return oo.join('');
 	},
 	_childOuterAttrs: function (child) {
 		var html = '';

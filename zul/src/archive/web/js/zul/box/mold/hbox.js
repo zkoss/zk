@@ -20,6 +20,7 @@ function () {
 	out.push('>');
 
 	for (var w = this.firstChild; w; w = w.nextSibling)
-		out.push(this.encloseChildHTML_(w));
+		this.encloseChildHTML_(w, false, out);
+
 	out.push('</tr></table>');
 }
