@@ -195,7 +195,7 @@ zEvt = {
 
 zk.Event = zk.$extends(zk.Object, {
 	$init: function (target, name, data, opts) {
-		this.target = target;
+		this.currentTarget = this.target = target;
 		this.name = name;
 		this.data = data;
 		this.opts = opts;

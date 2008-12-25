@@ -334,21 +334,10 @@ zkm = {
 		if (zk.processing) return;
 		if (!evt) evt = window.event;
 
-		if (zEvt.leftClick(evt)) {
-			var wgt = zk.Widget.$(evt);
-			if (wgt) {
-				var zev = new zk.Event(wgt, 'onClick', zEvt.mouseData(evt, wgt.node), {ctl:true});
-				wgt.doClick_(zev, evt);
-
-				if (!zev.stopped)
-					for (; wgt; wgt = wgt.parent)
-						if (wgt.href) {
-							zUtl.go(href, false, wgt.target, "target");
-							return; //done
-						}
-				//no need to zEvt.stop()
-			}
-		}
+		var wgt = zk.Widget.$(evt);
+		if (wgt)
+			wgt.doClick_(new zk.Event(wgt, 'onClick', zEvt.mouseData(evt, wgt.node), {ctl:true}), evt);
+			//no need to zEvt.stop()
 		//don't return anything. Otherwise, it replaces event.returnValue in IE (Bug 1541132)
 	},
 	docDblClick: function (evt) {
@@ -357,10 +346,10 @@ zkm = {
 
 		var wgt = zk.Widget.$(evt);
 		if (wgt) {
-			var zev = new zk.Event(wgt, 'onDoubleClick', zEvt.mouseData(evt, wgt.node), {ctl:true});
-			wgt.doDoubleClick_(zev, evt);
+			var wevt = new zk.Event(wgt, 'onDoubleClick', zEvt.mouseData(evt, wgt.node), {ctl:true});
+			wgt.doDoubleClick_(wevt, evt);
 
-			if (zev.stopped) {
+			if (wevt.stopped) {
 				zEvt.stop(evt); //prevent browser default
 				return false;
 			}
@@ -375,9 +364,10 @@ zkm = {
 
 		var wgt = zk.Widget.$(evt);
 		if (wgt) {
-			var zev = new zk.Event(wgt, 'onRightClick', zEvt.mouseData(evt, wgt.node), {ctl:true});
-			wgt.doRightClick_(zev, evt);
-			if (zev.stopped) {
+			var wevt = new zk.Event(wgt, 'onRightClick', zEvt.mouseData(evt, wgt.node), {ctl:true});
+			wgt.doRightClick_(wevt, evt);
+
+			if (wevt.stopped) {
 				zEvt.stop(evt); //prevent browser default
 				return false;
 			}

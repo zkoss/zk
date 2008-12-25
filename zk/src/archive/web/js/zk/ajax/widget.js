@@ -600,8 +600,9 @@ zk.Widget = zk.$extends(zk.Object, {
 		return true;
 	},
 
-	//ZK event//
+	//widget event//
 	fireX: function (evt, timeout) {
+		evt.currentTarget = this;
 		var evtnm = evt.name,
 			lsns = this._lsns[evtnm],
 			len = lsns ? lsns.length: 0;

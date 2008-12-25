@@ -145,10 +145,10 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		this.ebox = this.ebtn = null;
 		this.$super('unbind_');
 	},
-	doClick_: function (zevt) {
-		zevt.stop();
+	doClick_: function (wevt) {
 		if (!this._disabled)
-			this.fireX(zevt);
+			this.fireX(wevt);
+		//Unlike DOM, we don't proprogate to parent (so no calling $supers)
 	},
 	doMouseOver_: function () {
 		zDom.addClass(this.ebox, this.getZclass() + "-over");
