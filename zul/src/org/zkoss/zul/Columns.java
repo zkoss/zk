@@ -181,7 +181,7 @@ public class Columns extends HeadersElement implements org.zkoss.zul.api.Columns
 	}
 	//-- Component --//
 	public String getZclass() {
-		return _zclass == null ? "z-columns" : super.getZclass();
+		return _zclass == null ? "z-columns" : _zclass;
 	}
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Grid))

@@ -67,7 +67,7 @@ public class Comboitem extends LabelImageElement implements org.zkoss.zul.api.Co
 	}
 
 	public String getZclass() {
-		return _zclass == null ? "z-combo-item" : super.getZclass();
+		return _zclass == null ? "z-combo-item" : _zclass;
 	}
 	
 	public void setLabel(String label) {

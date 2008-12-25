@@ -123,7 +123,7 @@ public class Treecol extends HeaderElement implements org.zkoss.zul.api.Treecol 
 
 	//-- super --//
 	public String getZclass() {
-		return _zclass == null ? "z-tree-col" : super.getZclass();
+		return _zclass == null ? "z-tree-col" : _zclass;
 	}
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();

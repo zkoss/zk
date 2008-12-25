@@ -77,7 +77,7 @@ public class Listcell extends LabelImageElement implements org.zkoss.zul.api.Lis
 	}
 
 	public String getZclass() {
-		return _zclass == null ? "z-list-cell" : super.getZclass();
+		return _zclass == null ? "z-list-cell" : _zclass;
 	}
 	/** Returns the list header that is in the same column as
 	 * this cell, or null if not available.

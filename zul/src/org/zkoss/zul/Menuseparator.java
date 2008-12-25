@@ -31,7 +31,7 @@ public class Menuseparator extends XulElement implements org.zkoss.zul.api.Menus
 
 	//-- Component --//
 	public String getZclass() {
-		return _zclass == null ? "z-menu-separator" : super.getZclass();
+		return _zclass == null ? "z-menu-separator" : _zclass;
 	}
 	/** Not childable. */
 	public boolean isChildable() {

@@ -134,7 +134,7 @@ public class Textbox extends InputElement implements org.zkoss.zul.api.Textbox{
 
 	//-- super --//
 	public String getZclass() {
-		return _zclass == null ? "z-textbox" : super.getZclass();
+		return _zclass == null ? "z-textbox" : _zclass;
 	}
 	public String getInnerAttrs() {
 		final String attrs = super.getInnerAttrs();

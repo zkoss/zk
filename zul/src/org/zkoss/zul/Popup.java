@@ -112,7 +112,7 @@ public class Popup extends XulElement implements org.zkoss.zul.api.Popup {
 		throw new UnsupportedOperationException("Use open/close instead");
 	}
 	public String getZclass() {
-		return _zclass == null ? "z-popup" : super.getZclass();
+		return _zclass == null ? "z-popup" : _zclass;
 	}
 	public String getOuterAttrs() {
 	//Note: don't generate z.type here because Menupopup's z.type diff

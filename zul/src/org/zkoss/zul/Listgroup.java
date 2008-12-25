@@ -156,7 +156,7 @@ public class Listgroup extends Listitem implements org.zkoss.zul.api.Listgroup {
 		}
 	}
 	public String getZclass() {
-		return _zclass == null ? "z-list-group" : super.getZclass();
+		return _zclass == null ? "z-list-group" : _zclass;
 	}
 	public String getOuterAttrs() {
 		final StringBuffer sb = new StringBuffer(64).append( super.getOuterAttrs());

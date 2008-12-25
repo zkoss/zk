@@ -214,7 +214,7 @@ public class Group extends Row implements org.zkoss.zul.api.Group {
 	}
 
 	public String getZclass() {
-		return _zclass == null ? "z-group" : super.getZclass();
+		return _zclass == null ? "z-group" : _zclass;
 	}
 	public String getOuterAttrs() {
 		final StringBuffer sb = new StringBuffer(64).append( super.getOuterAttrs());

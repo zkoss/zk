@@ -62,7 +62,7 @@ public class Listgroupfoot extends Listitem implements org.zkoss.zul.api.Listgro
 	}
 
 	public String getZclass() {
-		return _zclass == null ? "z-list-group-foot" : super.getZclass();
+		return _zclass == null ? "z-list-group-foot" : _zclass;
 	}
 	public String getOuterAttrs() {
 		final StringBuffer sb = new StringBuffer(32).append( super.getOuterAttrs());

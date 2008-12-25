@@ -127,7 +127,7 @@ public class Splitter extends XulElement implements org.zkoss.zul.api.Splitter {
 	//super//
 	public String getZclass() {
 		return _zclass == null ? "z-splitter" +
-				("vertical".equals(getOrient()) ? "-ver" : "-hor") : super.getZclass();
+				("vertical".equals(getOrient()) ? "-ver" : "-hor") : _zclass;
 	}
 	
 	public String getOuterAttrs() {

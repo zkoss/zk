@@ -254,7 +254,7 @@ public class Treecell extends LabelImageElement implements org.zkoss.zul.api.Tre
 	}
 
 	public String getZclass() {
-		return _zclass == null ? "z-tree-cell" : super.getZclass();
+		return _zclass == null ? "z-tree-cell" : _zclass;
 	}
 	/** Generates HTML tags for &lt;img&gt;.
 	 * @param button whether this is the button to toggle open/close

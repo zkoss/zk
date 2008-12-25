@@ -92,7 +92,7 @@ public class Groupbox extends XulElement implements org.zkoss.zul.api.Groupbox {
 	}
 	// super
 	public String getZclass() {
-		return _zclass == null ? isLegend() ? "z-fieldset" : "z-groupbox" : super.getZclass();
+		return _zclass == null ? isLegend() ? "z-fieldset" : "z-groupbox" : _zclass;
 	}
 	protected String getRealSclass() {
 		final String cls = super.getRealSclass();

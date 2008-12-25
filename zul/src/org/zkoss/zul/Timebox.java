@@ -183,6 +183,6 @@ public class Timebox extends InputElement implements org.zkoss.zul.api.Timebox {
 
 	// super
 	public String getZclass() {
-		return _zclass == null ?  "z-timebox" : super.getZclass();
+		return _zclass == null ?  "z-timebox" : _zclass;
 	}
 }

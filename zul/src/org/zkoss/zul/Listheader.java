@@ -394,7 +394,7 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 	}
 
 	public String getZclass() {
-		return _zclass == null ? "z-list-header" : super.getZclass();
+		return _zclass == null ? "z-list-header" : _zclass;
 	}
 
 	public String getOuterAttrs() {

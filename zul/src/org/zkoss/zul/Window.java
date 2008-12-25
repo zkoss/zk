@@ -770,7 +770,7 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 	
 	// super
 	public String getZclass() {
-		return _zclass == null ? "z-window-" + getMode() : super.getZclass();
+		return _zclass == null ? "z-window-" + getMode() : _zclass;
 	}
 
 	//-- Component --//

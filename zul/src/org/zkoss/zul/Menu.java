@@ -73,7 +73,7 @@ public class Menu extends LabelImageElement implements org.zkoss.zul.api.Menu {
 
 	//-- Component --//
 	public String getZclass() {
-		return _zclass == null ? "z-menu" : super.getZclass();
+		return _zclass == null ? "z-menu" : _zclass;
 	}
 	public String getOuterAttrs() {
 		final StringBuffer sb =

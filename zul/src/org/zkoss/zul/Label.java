@@ -317,7 +317,7 @@ public class Label extends XulElement implements org.zkoss.zul.api.Label {
 	 * <p>Default: "z-label"
 	 */
 	public String getZclass() {
-		return _zclass == null ? "z-label" : super.getZclass();
+		return _zclass == null ? "z-label" : _zclass;
 	}
 	//-- Component --//
 	public void invalidate() {

@@ -428,7 +428,7 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 
 	//-- super --//
 	public String getZclass() {
-		return _zclass == null ? isVertical() ? "z-vbox" : "z-hbox" : super.getZclass();
+		return _zclass == null ? isVertical() ? "z-vbox" : "z-hbox" : _zclass;
 	}
 	//-- Component --//
 	public boolean insertBefore(Component newChild, Component refChild) {

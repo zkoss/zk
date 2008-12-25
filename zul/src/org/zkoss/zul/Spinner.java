@@ -111,7 +111,7 @@ public class Spinner extends NumberInputElement implements org.zkoss.zul.api.Spi
 
 	// super
 	public String getZclass() {
-		return _zclass == null ?  "z-spinner" : super.getZclass();
+		return _zclass == null ?  "z-spinner" : _zclass;
 	}
 	public String getOuterAttrs() {
 		final StringBuffer sb = new StringBuffer(64).append(super

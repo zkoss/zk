@@ -127,7 +127,6 @@ public class Row extends XulElement implements org.zkoss.zul.api.Row {
 	}
 	public boolean setVisible(boolean visible) {
 		if (isVisible() != visible) {
-			smartUpdate("z.visible", visible);
 			final Rows rows = (Rows) getParent();
 			if (rows != null) {
 				final Group g = rows.getGroup(getIndex());
@@ -221,7 +220,7 @@ public class Row extends XulElement implements org.zkoss.zul.api.Row {
 	}
 
 	public String getZclass() {
-		return _zclass == null ? "z-row" : super.getZclass();
+		return _zclass == null ? "z-row" : _zclass;
 	}
 	
 	protected String getRealStyle() {

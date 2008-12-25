@@ -183,7 +183,7 @@ public class Checkbox extends LabelImageElement implements org.zkoss.zul.api.Che
 	 * 
 	 */
 	public String getZclass() {
-		return _zclass == null ? "z-checkbox" : super.getZclass();
+		return _zclass == null ? "z-checkbox" : _zclass;
 	}
 	//-- ComponentCtrl --//
 	protected Object newExtraCtrl() {

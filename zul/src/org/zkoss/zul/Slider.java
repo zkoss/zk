@@ -72,7 +72,7 @@ public class Slider extends XulElement implements org.zkoss.zul.api.Slider {
 			else
 				return name + ("horizontal".equals(getOrient()) ? "-hor" : "-ver");
 		}
-		return super.getZclass();
+		return _zclass;
 	}
 	
 	/** Returns the orient.

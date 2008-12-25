@@ -61,7 +61,7 @@ public class Listhead extends HeadersElement implements org.zkoss.zul.api.Listhe
 	}
 
 	public String getZclass() {
-		return _zclass == null ? "z-list-head" : super.getZclass();
+		return _zclass == null ? "z-list-head" : _zclass;
 	}
 	public String getOuterAttrs() {
 		final StringBuffer sb =

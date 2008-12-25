@@ -276,7 +276,7 @@ public class Treechildren extends XulElement implements org.zkoss.zul.api.Treech
 
 	//-- Component --//
 	public String getZclass() {
-		return _zclass == null ? "z-tree-children" : super.getZclass();
+		return _zclass == null ? "z-tree-children" : _zclass;
 	}
 	public void smartUpdate(String name, String value) {
 		Component comp = getParent();

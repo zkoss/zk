@@ -46,7 +46,7 @@ public class Columnlayout extends XulElement implements org.zkoss.zkex.zul.api.C
 		return super.insertBefore(child, insertBefore);
 	}
 	public String getZclass() {
-		return _zclass == null ? "z-column-layout" : super.getZclass();
+		return _zclass == null ? "z-column-layout" : _zclass;
 	}
 
 	/**

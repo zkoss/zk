@@ -89,7 +89,7 @@ public class Doublebox extends NumberInputElement implements org.zkoss.zul.api.D
 
 	//-- super --//
 	public String getZclass() {
-		return _zclass == null ? "z-doublebox" : super.getZclass();
+		return _zclass == null ? "z-doublebox" : _zclass;
 	}
 	protected Object coerceFromString(String value) throws WrongValueException {
 		final Object[] vals = toNumberOnly(value);

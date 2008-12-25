@@ -62,7 +62,7 @@ public class Treecols extends HeadersElement implements org.zkoss.zul.api.Treeco
 	}
 
 	public String getZclass() {
-		return _zclass == null ? "z-tree-cols" : super.getZclass();
+		return _zclass == null ? "z-tree-cols" : _zclass;
 	}
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Tree))

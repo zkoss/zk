@@ -469,7 +469,7 @@ public class Panel extends XulElement implements org.zkoss.zul.api.Panel {
 			+ (_open ? "" : " " + zcls + "-collapsed");
 	}
 	public String getZclass() {
-		return _zclass == null ?  "z-panel" : super.getZclass();
+		return _zclass == null ?  "z-panel" : _zclass;
 	}	
 	public String getOuterAttrs() {
 		final StringBuffer sb =

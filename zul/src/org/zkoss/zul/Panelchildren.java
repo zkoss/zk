@@ -56,7 +56,7 @@ public class Panelchildren extends XulElement implements org.zkoss.zul.api.Panel
 
 	// super
 	public String getZclass() {
-		return _zclass == null ?  "z-panel-children" : super.getZclass();
+		return _zclass == null ?  "z-panel-children" : _zclass;
 	}
 	
 	/** Returns the real style class used for the content block of the panel.

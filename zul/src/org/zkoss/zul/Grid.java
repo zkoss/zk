@@ -1219,7 +1219,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		}
 	}
 	public String getZclass() {
-		return _zclass == null ? "z-grid" : super.getZclass();
+		return _zclass == null ? "z-grid" : _zclass;
 	}
 	public String getOuterAttrs() {
 		final StringBuffer sb =

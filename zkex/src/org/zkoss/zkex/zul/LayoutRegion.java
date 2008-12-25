@@ -361,7 +361,7 @@ public abstract class LayoutRegion extends XulElement implements org.zkoss.zkex.
 		return cls != null ? cls + " " + added : added; 
 	}
 	public String getZclass() {
-		return _zclass == null ? "z-" + getPosition() : super.getZclass();
+		return _zclass == null ? "z-" + getPosition() : _zclass;
 	}
 	public void onChildRemoved(Component child) {
 		super.onChildRemoved(child);

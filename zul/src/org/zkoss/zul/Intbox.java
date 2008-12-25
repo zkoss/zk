@@ -61,7 +61,7 @@ public class Intbox extends NumberInputElement implements org.zkoss.zul.api.Intb
 
 	//-- super --//
 	public String getZclass() {
-		return _zclass == null ? "z-intbox" : super.getZclass();
+		return _zclass == null ? "z-intbox" : _zclass;
 	}
 	protected Object coerceFromString(String value) throws WrongValueException {
 		final Object[] vals = toNumberOnly(value);

@@ -46,7 +46,7 @@ public class Treefoot extends XulElement implements org.zkoss.zul.api.Treefoot {
 	}
 	//-- Component --//
 	public String getZclass() {
-		return _zclass == null ? "z-tree-foot" : super.getZclass();
+		return _zclass == null ? "z-tree-foot" : _zclass;
 	}
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Tree))

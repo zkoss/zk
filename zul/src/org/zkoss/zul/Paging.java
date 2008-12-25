@@ -266,7 +266,7 @@ public class Paging extends XulElement implements org.zkoss.zul.api.Paging, Pagi
 	// super
 	public String getZclass() {
 		String added = "os".equals(getMold()) ? "-os" : "";
-		return _zclass == null ? "z-paging" + added : super.getZclass();
+		return _zclass == null ? "z-paging" + added : _zclass;
 	}
 	public String getOuterAttrs() {
 		final StringBuffer sb = new StringBuffer(64).append(super

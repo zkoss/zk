@@ -80,7 +80,7 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zul.api.Men
 	}
 
 	public String getZclass() {
-		return _zclass == null ? "z-menu-item" : super.getZclass();
+		return _zclass == null ? "z-menu-item" : _zclass;
 	}
 	
 	public String getImgTag() {

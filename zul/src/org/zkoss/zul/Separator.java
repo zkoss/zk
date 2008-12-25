@@ -172,7 +172,7 @@ public class Separator extends XulElement implements org.zkoss.zul.api.Separator
 	// super
 	public String getZclass() {
 		return _zclass == null ? "z-separator" + (isVertical() ? "-ver" + (isBar() ? "-bar" : "") :
-			"-hor" + (isBar() ? "-bar" : "")) : super.getZclass();
+			"-hor" + (isBar() ? "-bar" : "")) : _zclass;
 	}
 
 	/** Returns whether to use margins for spacing.

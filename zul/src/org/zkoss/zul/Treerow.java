@@ -88,7 +88,7 @@ public class Treerow extends XulElement implements org.zkoss.zul.api.Treerow {
 
 	//-- Component --//
 	public String getZclass() {
-		return _zclass == null ? "z-tree-row" : super.getZclass();
+		return _zclass == null ? "z-tree-row" : _zclass;
 	}
 
 	/** Alwasys throws UnsupportedOperationException since developers shall

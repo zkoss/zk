@@ -114,7 +114,7 @@ public class Treefooter extends LabelImageElement implements org.zkoss.zul.api.T
 
 	//-- super --//
 	public String getZclass() {
-		return _zclass == null ? "z-tree-footer" : super.getZclass();
+		return _zclass == null ? "z-tree-footer" : _zclass;
 	}
 	public String getOuterAttrs() {
 		final StringBuffer sb =

@@ -106,7 +106,7 @@ public class Decimalbox extends NumberInputElement implements org.zkoss.zul.api.
 
 	//-- super --//
 	public String getZclass() {
-		return _zclass == null ? "z-decimalbox" : super.getZclass();
+		return _zclass == null ? "z-decimalbox" : _zclass;
 	}
 	protected Object coerceFromString(String value) throws WrongValueException {
 		final Object[] vals = toNumberOnly(value);

@@ -92,7 +92,7 @@ public class Toolbar extends XulElement implements org.zkoss.zul.api.Toolbar {
 	// super
 	public String getZclass() {
 		return _zclass == null ? "z-toolbar" +
-				(inPanelMold() ? "-panel" : "") : super.getZclass();
+				(inPanelMold() ? "-panel" : "") : _zclass;
 	}
 	
 

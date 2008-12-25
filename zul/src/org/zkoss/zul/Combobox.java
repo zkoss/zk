@@ -569,7 +569,7 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 
 	// super
 	public String getZclass() {
-		return _zclass == null ? "z-combobox" : super.getZclass();
+		return _zclass == null ? "z-combobox" : _zclass;
 	}
 	public String getOuterAttrs() {
 		final StringBuffer sb = new StringBuffer(64).append(super.getOuterAttrs());

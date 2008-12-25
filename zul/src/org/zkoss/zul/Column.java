@@ -444,7 +444,7 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 	}
 
 	public String getZclass() {
-		return _zclass == null ? "z-column" : super.getZclass();
+		return _zclass == null ? "z-column" : _zclass;
 	}
 	protected String getRealSclass() {
 		final String scls = super.getRealSclass();

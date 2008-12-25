@@ -2420,7 +2420,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 	}
 
 	public String getZclass() {
-		return _zclass == null ? "z-listbox" : super.getZclass();
+		return _zclass == null ? "z-listbox" : _zclass;
 	}
 	public String getOuterAttrs() {
 		final StringBuffer sb =

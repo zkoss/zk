@@ -91,7 +91,7 @@ public class Menubar extends XulElement implements org.zkoss.zul.api.Menubar {
 	//-- Component --//
 	public String getZclass() {
 		return _zclass == null ? "z-menubar" +
-				("vertical".equals(getOrient()) ? "-ver" : "-hor") : super.getZclass();
+				("vertical".equals(getOrient()) ? "-ver" : "-hor") : _zclass;
 	}
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();

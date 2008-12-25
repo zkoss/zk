@@ -120,7 +120,7 @@ public class Detail extends XulElement implements org.zkoss.zul.api.Detail {
 	}
 	//-- Component --//
 	public String getZclass() {
-		return _zclass == null ? "z-detail" : super.getZclass();
+		return _zclass == null ? "z-detail" : _zclass;
 	}
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Row))

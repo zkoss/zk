@@ -322,7 +322,7 @@ public class Datebox extends FormatInputElement implements org.zkoss.zul.api.Dat
 
 	// super
 	public String getZclass() {
-		return _zclass == null ? "z-datebox" : super.getZclass();
+		return _zclass == null ? "z-datebox" : _zclass;
 	}
 	
 	public String getOuterAttrs() {
