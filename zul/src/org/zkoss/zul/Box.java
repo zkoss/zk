@@ -296,6 +296,6 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 		if (!"start".equals(_pack)) render(renderer, "pack", _pack);
 	}
 	public String getZclass() {
-		return _zclass != null ? _zclass: isVertical() ? "z-vbox" : "z-hbox";
+		return _zclass == null ? isVertical() ? "z-vbox" : "z-hbox" : _zclass;
 	}
 }

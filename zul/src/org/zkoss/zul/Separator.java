@@ -116,9 +116,8 @@ public class Separator extends XulElement implements org.zkoss.zul.api.Separator
 
 	//super//
 	public String getZclass() {
-		return _zclass != null ? _zclass:
-			"z-separator" + (isVertical() ? "-ver" + (isBar() ? "-bar" : "") :
-				"-hor" + (isBar() ? "-bar" : ""));
+		return _zclass == null ? "z-separator" + (isVertical() ? "-ver" + (isBar() ? "-bar" : "") :
+			"-hor" + (isBar() ? "-bar" : "")) : _zclass;
 	}
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {

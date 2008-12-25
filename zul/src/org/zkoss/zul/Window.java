@@ -800,7 +800,7 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 			//render mode as the last property
 	}
 	public String getZclass() {
-		return _zclass != null ? _zclass: "z-window-" + getMode();
+		return _zclass == null ? "z-window-" + getMode() : _zclass;
 	}
 
 	//-- Component --//

@@ -159,7 +159,7 @@ public class Label extends XulElement implements org.zkoss.zul.api.Label {
 		}
 	}
 	public String getZclass() {
-		return _zclass != null ? _zclass: "z-label";
+		return _zclass == null ? "z-label" : _zclass;
 	}
 	/** No child is allowed.
 	 */

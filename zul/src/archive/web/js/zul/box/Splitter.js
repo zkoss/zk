@@ -115,6 +115,9 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	bind_: function (desktop) {
 		this.$super('bind_', desktop);
 
+		var box = this.parent;
+		if (box) box._bindWatch();
+
 		zWatch.listen("onSize", this);
 		zWatch.listen("beforeSize", this);
 		zWatch.listen("onVisible", this);

@@ -197,17 +197,22 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		return style ? html + ' style="' + style + '"': html;
 	},
 
-	bind_: function (desktop) {
-		this.$super('bind_', desktop);
-
-		zWatch.listen("onSize", this);
-		zWatch.listen("onVisible", this);
-		zWatch.listen("onHide", this);
+	//called by Splitter
+	_bindWatch: function () {
+		if (!this._watchBound) {
+			this._watchBound = true;
+			zWatch.listen("onSize", this);
+			zWatch.listen("onVisible", this);
+			zWatch.listen("onHide", this);
+		}
 	},
 	unbind_: function () {
-		zWatch.unlisten("onSize", this);
-		zWatch.unlisten("onVisible", this);
-		zWatch.unlisten("onHide", this);
+		if (this._watchBound) {
+			this._watchBound = false;
+			zWatch.unlisten("onSize", this);
+			zWatch.unlisten("onVisible", this);
+			zWatch.unlisten("onHide", this);
+		}
 
 		this.$super('unbind_');
 	},

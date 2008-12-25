@@ -44,7 +44,7 @@ public class Caption extends LabelImageElement implements org.zkoss.zul.api.Capt
 
 	// super
 	public String getZclass() {
-		return _zclass != null ? _zclass: "z-caption";
+		return _zclass == null ? "z-caption" : _zclass;
 	}
 
 	//-- Component --//

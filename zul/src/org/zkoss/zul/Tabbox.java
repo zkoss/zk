@@ -313,7 +313,7 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 
 	public String getZclass() {
 		return  _zclass == null ? "z-tabbox" + (inAccordionMold() ? "-" + getMold() : isVertical() ? "-ver" : "") :
-				_zclass;
+			_zclass;
 	}
 	
 	/**

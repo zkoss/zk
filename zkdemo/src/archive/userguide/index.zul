@@ -262,6 +262,7 @@ zkCategoryBar = {
 };
 ]]></script>
 <style>
+img { -ms-interpolation-mode:bicubic }
 body {
 	padding: 0 !important;
 }
