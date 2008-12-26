@@ -232,8 +232,23 @@ zk.Event = zk.$extends(zk.Object, {
 zWatch = {
 	listen: function (name, o) {
 		var wts = this._wts[name];
-		if (!wts) wts = this._wts[name] = [];
-		wts.$add(o, zUtl.isAncestor); //parent first
+		if (wts) {
+			var bindLevel = o.bindLevel;
+			if (bindLevel != null) {
+				for (var j = wts.length;;) {
+					if (--j < 0) {
+						wts.unshift(o);
+						break;
+					}
+					if (bindLevel >= wts[j].bindLevel) { //parent first
+						wts.$addAt(j + 1, o);
+						break;
+					}
+				}
+			} else
+				wts.push(o);
+		} else
+			wts = this._wts[name] = [o];
 	},
 	unlisten: function (name, o) {
 		var wts = this._wts[name];
@@ -243,55 +258,81 @@ zWatch = {
 		delete this._wts[name];
 	},
 	fire: function (name, timeout, vararg) {
-		var wts = this._wts[name],
-			len = wts ? wts.length: 0;
-		if (len) {
-			var args = [], o;
+		var wts = this._wts[name];
+		if (wts && wts.length) {
+			var args = [];
 			for (var j = 2, l = arguments.length; j < l;)
 				args.push(arguments[j++]);
 
-			wts = wts.$clone(); //make a copy since unwatch might be called
+			wts = wts.$clone(); //make a copy since unlisten might happen
 			if (timeout >= 0) {
 				setTimeout(
 				function () {
+					var o;
 					while (o = wts.shift())
 						o[name].apply(o, args);
 				}, timeout);
 				return;
 			}
 
+			var o;
 			while (o = wts.shift())
 				o[name].apply(o, args);
 		}
 	},
 	fireDown: function (name, timeout, origin, vararg) {
-		var wts = this._wts[name],
-			len = wts ? wts.length: 0;
-		if (len) {
+		var wts = this._wts[name];
+		if (wts && wts.length) {
+			this._sync();
+
 			var args = [origin]; //origin as 1st
 			for (var j = 3, l = arguments.length; j < l;)
 				args.push(arguments[j++]);
 
-			var found = [], o;
-			for (var j = 0; j < len;) {
-				o = wts[j++];
-				if (zUtl.isAncestor(origin, o))
-					found.push(o);
-			}
+			var found, bindLevel = origin.bindLevel;
+			if (bindLevel != null) {
+				found = [];
+				for (var j = wts.length, o; --j >= 0;) { //child first
+					o = wts[j];
+					if (bindLevel >= o.bindLevel)
+						break;//no descendant ahead
+					if (zUtl.isAncestor(origin, o))
+						found.unshift(o); //parent first
+				}
+			} else
+				found = wts.$clone(); //make a copy since unlisten might happen
 
 			if (timeout >= 0) {
 				setTimeout(
 				function () {
+					var o;
 					while (o = found.shift())
 						o[name].apply(o, args);
 				}, timeout);
 				return;
 			}
 
+			var o;
 			while (o = found.shift())
 				o[name].apply(o, args);
 		}
 	},
+	onBindLevelMove: function () {
+		this._dirty = true;
+	},
+	_sync: function () {
+		if (!this._dirty) return;
 
+		this._dirty = false;
+		for (var nm in this._wts) {
+			var wts = this._wts[name];
+			if (wts.length && wts[0].bindLevel != null)
+				wts.sort(zWatch._cmp);
+		}
+	},
+	_cmp: function (a, b) {
+		return a.bindLevel - b.bindLevel;
+	},
 	_wts: {}
 };
+zWatch.listen('onBindLevelMove', zWatch);

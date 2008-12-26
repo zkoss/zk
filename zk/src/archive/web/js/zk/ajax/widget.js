@@ -15,6 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zk.Widget = zk.$extends(zk.Object, {
 	_visible: true,
 	nChildren: 0,
+	bindLevel: -1,
 
 	$init: function (uuid, mold) {
 		this._lsns = {}; //listeners Map(evtnm,listener)
@@ -188,11 +189,22 @@ zk.Widget = zk.$extends(zk.Object, {
 
 			zDom.remove(kidnode);
 			node.parentNode.insertBefore(kidnode, beforeNode);
+
+			var v = this.bindLevel + 1;
+			if (child.bindLevel != v) {
+				this._fixBindLevel(child, v);
+				zWatch.fire('onBindLevelMove', -1, child);
+			}
 		} finally {
 			this.desktop = dt; child.desktop = kiddt;
 			this._node = node; child._node = kidnode;
 		}
 		return true;
+	},
+	_fixBindLevel: function (wgt, v) {
+		this.bindLevel = v++;
+		for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
+			this._fixBindLevel(wgt, v);
 	},
 
 	isRealVisible: function () {
@@ -251,8 +263,10 @@ zk.Widget = zk.$extends(zk.Object, {
 		} else {
 			zWatch.fireDown('onHide', -1, this);
 
-			for (var fs = zk.Widget._floating, j = fs.length; --j >= 0;) {
+			for (var fs = zk.Widget._floating, j = fs.length,
+			bindLevel = this.bindLevel; --j >= 0;) {
 				var w = fs[j].widget;
+				if (bindLevel >= w.bindLevel) break;//no descendant ahead
 				if (this != w && this._floatVisibleDependent(w))
 					w.setDomVisible_(fs[j].node, false, {visibility:1});
 			}
@@ -281,7 +295,8 @@ zk.Widget = zk.$extends(zk.Object, {
 			var zi = this._topZIndex();
 			this._setZIndex(zi, true);
 
-			for (var fs = zk.Widget._floating, j = 0, fl = fs.length; j < fl; ++j) {
+			for (var fs = zk.Widget._floating, j = 0, fl = fs.length;
+			j < fl; ++j) { //parent first
 				var w = fs[j].widget;
 				if (this != w && zUtl.isAncestor(this, w) && w.isVisible()) {
 					var n = fs[j].node
@@ -306,13 +321,24 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	setFloating_: function (floating, opts) {
 		if (this._floating != floating) {
-			var $Widget = zk.Widget;
+			var fs = zk.Widget._floating;
 			if (floating) {
-				var inf = {widget: this, node: opts && opts.node? opts.node: this.getNode()};
-				$Widget._floating.$add(inf, $Widget._floatOrder); //parent first
+				//parent first
+				var inf = {widget: this, node: opts && opts.node? opts.node: this.getNode()},
+					bindLevel = this.bindLevel;
+				for (var j = fs.length;;) {
+					if (--j < 0) {
+						fs.unshift(inf);
+						break;
+					}
+					if (bindLevel >= fs[j].widget.bindLevel) { //parent first
+						fs.$addAt(j + 1, inf);
+						break;
+					}
+				}
 				this._floating = true;
 			} else {
-				for (var fs = $Widget._floating, j = fs.length; --j >= 0;)
+				for (var j = fs.length; --j >= 0;)
 					if (fs[j].widget == this)
 						fs.$removeAt(j);
 				this._floating = false;
@@ -577,6 +603,9 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (!desktop) desktop = zk.Desktop.$(this.getNode());
 		this.desktop = desktop;
 
+		var p = this.parent;
+		this.bindLevel = p ? p.bindLevel + 1: 0;
+
 		for (var child = this.firstChild; child; child = child.nextSibling)
 			if (!skipper || !skipper.skipped(this, child))
 				child.bind_(desktop); //don't pass skipper
@@ -592,6 +621,7 @@ zk.Widget = zk.$extends(zk.Object, {
 
 		this.desktop = null;
 		this._nodeSolved = false;
+		this.bindLevel = -1;
 
 		for (var child = this.firstChild; child; child = child.nextSibling)
 			if (!skipper || !skipper.skipped(this, child))
@@ -782,10 +812,6 @@ zk.Widget = zk.$extends(zk.Object, {
 
 }, {
 	_floating: [], //[{widget,node}]
-	_floatOrder: function (a, b) {
-		return zUtl.isAncestor(a.widget, b.widget);
-	},
-
 	$: function (n, strict) {
 		if (typeof n == 'string') {
 			var j = n.indexOf('$');
@@ -906,14 +932,6 @@ zk.Page = zk.$extends(zk.Widget, {//unlik server, we derive from Widget!
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out, skipper);
 		out.push('</div>');
-	},
-	bind_: function () {
-		this.$supers('bind_', arguments);
-		this.desktop.appendChild(this);
-	},
-	unbind_: function () {
-		this.desktop.removeChild(this);
-		this.$supers('unbind_', arguments);
 	}
 
 },{
@@ -921,6 +939,7 @@ zk.Page = zk.$extends(zk.Widget, {//unlik server, we derive from Widget!
 });
 
 zk.Desktop = zk.$extends(zk.Widget, {
+	bindLevel: 0,
 	$init: function (dtid, updateURI) {
 		this.$super('$init', dtid); //id also uuid
 

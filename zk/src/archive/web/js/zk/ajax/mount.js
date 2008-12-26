@@ -14,7 +14,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 var _zbt = zUtl.now(); //JS loaded
 function zknewbg() {
-	zkm.creating = zk.mounting = true;
+	zkm.browsing = zk.mounting = true;
 	var t = 600 - (zUtl.now() - _zbt);
 	zk.startProcessing(t > 0 ? t: 0);
 }
@@ -85,7 +85,7 @@ zkm = {
 		if (!zkm._wgts.length) {
 			var cfi = zkm._crInf0;
 			cfi.push([zkm.curdt, w]);
-			cfi.creating = zkm.creating;
+			cfi.browsing = zkm.browsing;
 			cfi.stub = zAu.stub;
 			zAu.stub = null;
 			zkm.exec(zkm.mount);
@@ -97,7 +97,7 @@ zkm = {
 	end: function() {
 		zkm._wgts = [];
 		zkm._curdt = null;
-		zkm.creating = false;
+		zkm.browsing = false;
 	},
 
 	sysInit: function() {
@@ -127,29 +127,31 @@ zkm = {
 		window.onbeforeunload = zkm.wndBfUnload;
 	},
 	mount: function() {
+		//1. load JS
 		var cfi = zkm._crInf0;
 		for (var j = cfi.length; --j >= 0;) {
 			var inf = cfi[j];
 			if (!inf.jsLoad) {
 				inf.jsLoad = true;
-				zkm.pkgLoad(inf[1]); //OK to load JS before document.readyState complete
+				zkm.pkgLoad(inf[1]);
 				zkm.exec(zkm.mount);
 				return;
 			}
 		}
 
-		if (cfi.creating) { //creating a new page
+		//2. create wgt
+		if (cfi.browsing) { //browser loading
 			if (zk.sysInited)
-				zkm.mtNew();
+				zkm.mtBL();
 			else if (document.readyState) {
 				var tid = setInterval(function(){
 					if (/loaded|complete/.test(document.readyState)) {
 						clearInterval(tid);
-						zkm.mtNew();
+						zkm.mtBL();
 					}
 				}, 50);
 			} else //gecko
-				setTimeout(zkm.mtNew, 120);
+				setTimeout(zkm.mtBL, 120);
 				//don't count on DOMContentLoaded since the page might
 				//be loaded by another ajax solution (i.e., portal)
 				//Also, Bug 1619959: FF not fire it if in 2nd iframe
@@ -159,22 +161,23 @@ zkm = {
 			zkm.mtAU(stub);
 		}
 	},
-	/** mount for browser loading new page. */
-	mtNew: function() {
-		zk.afterLoad(zkm.mtNew0);
+	/** mount for browser loading */
+	mtBL: function() {
+		zk.afterLoad(zkm.mtBL0);
 	},
-	mtNew0: function() {
+	mtBL0: function() {
 		if (!zk.sysInited) zkm.sysInit();
 
 		var inf = zkm._crInf0.shift();
 		if (inf) {
-			zkm._crInf1.push([inf[0], zkm.create(null, inf[1])]);
-			return zkm.exec(zkm.mtNew0);
+			zkm._crInf1.push([inf[0], zkm.create(inf[0], inf[1])]);
+				//desktop as parent for browser loading
+			return zkm.exec(zkm.mtBL0);
 		}
 
-		zkm.mtNew1();
+		zkm.mtBL1();
 	},
-	mtNew1: function() {
+	mtBL1: function() {
 		if (zkm._crInf0.length)
 			return; //another page started
 
@@ -184,19 +187,19 @@ zkm = {
 			wgt.replaceHTML(wgt.uuid, inf[0]);
 
 			if (zkm._crInf1.length)
-				return zkm.exec(zkm.mtNew1);
+				return zkm.exec(zkm.mtBL1);
 		}
 
-		zk.afterLoad(zkm.mtNew2); //bind might load packages
+		zk.afterLoad(zkm.mtBL2); //bind might load packages
 	},
-	mtNew2: function () {
+	mtBL2: function () {
 		if (zkm._crInf0.length || zkm._crInf1.length)
 			return; //another page started
 
 		var fn = zkm._afMts.shift();
 		if (fn) {
 			fn();
-			zk.afterLoad(zkm.mtNew2); //fn might load packages
+			zk.afterLoad(zkm.mtBL2); //fn might load packages
 			return;
 		}
 
@@ -204,7 +207,7 @@ zkm = {
 		zk.endProcessing();
 	},
 
-	/** mount for AU responses. */
+	/** mount for AU */
 	mtAU: function (stub) {
 		zk.afterLoad(function () {zkm.mtAU0(stub);});
 	},

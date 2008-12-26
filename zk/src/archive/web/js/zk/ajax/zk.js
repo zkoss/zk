@@ -270,20 +270,13 @@ zk.copy(Array.prototype, {
 		}
 		return false;
 	},
-	$add: function (o, fn) {
-		if (fn) {
-			for (var tl = this.length, j = 0; j < tl; ++j) {
-				if (fn == true) {
-					if (o == this[j]) {
-						this[j] = o;
-						return false;
-					}
-				} else if (fn(o, this[j])) {
-					this.splice(j, 0, o);
-					return true;
+	$add: function (o, overwrite) {
+		if (overwrite)
+			for (var tl = this.length, j = 0; j < tl; ++j)
+				if (o == this[j]) {
+					this[j] = o;
+					return false;
 				}
-			}
-		}
  		this.push(o);
  		return true;
 	},
