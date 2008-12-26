@@ -101,7 +101,6 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 			//(getShadowNode() a bit slow due to zDom.$)
 	},
 	onVisible: _zkf,
-	onHide: _zkf,
 	_afterSlideDown: function (n) {
 		zWatch.fireDown("onVisible", -1, this);
 	},
@@ -137,7 +136,6 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		if (!this.isLegend()) {
 			zWatch.listen("onSize", this);
 			zWatch.listen("onVisible", this);
-			zWatch.listen("onHide", this);
 		}
 	},
 	unbind_: function () {
