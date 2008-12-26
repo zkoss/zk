@@ -12,10 +12,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	This program is distributed under GPL Version 2.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
-var _zbt = zUtl.now(); //JS loaded
+var _zkmt = zUtl.now(); //JS loaded
 function zknewbg() {
 	zkm.browsing = zk.mounting = true;
-	var t = 390 - (zUtl.now() - _zbt);
+	var t = 390 - (zUtl.now() - _zkmt);
 	zk.startProcessing(t > 0 ? t: 0);
 }
 function zknewe() {
@@ -31,6 +31,7 @@ function zkpgbg(pguid, style, dtid, contained, updateURI) {
 }
 function zkbg(type, uuid, mold, props) {
 	zk.mounting = true;
+	_zkmt = zUtl.now(); //AU
 	zkm.push({type: type, uuid: uuid, mold: mold, props: props});
 }
 function zkdtbg(dtid, updateURI) {
@@ -284,11 +285,11 @@ zkm = {
 
 	/** exec and delay if too busy, so progressbox has a chance to show. */
 	exec: function (fn) {
-		var t = zUtl.now(), dt = t - _zbt;
-		if (dt > 500) { //huge page
-			_zbt = t;
+		var t = zUtl.now(), dt = t - _zkmt;
+		if (dt > 300) { //huge page
+			_zkmt = t;
 			dt >>= 4;
-			setTimeout(fn, dt < 50 ? dt: 50); //breathe
+			setTimeout(fn, dt < 35 ? dt: 35); //breathe
 				//IE optimize the display if delay is too short
 		} else
 			fn();
