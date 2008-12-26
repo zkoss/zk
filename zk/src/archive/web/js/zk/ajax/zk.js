@@ -155,7 +155,9 @@ zk = {
 			var msg;
 			try {msg = mesg.PLEASE_WAIT;} catch (e) {msg = "Processing...";}
 				//when the first boot, mesg might not be ready
-			zUtl.progressbox("zk_proc", msg, mask);
+			zUtl.progressbox("zk_proc", msg, mask === true);
+				// the type of the mask variable in FF may not be true (like number),
+				// if called from the setTimeout() function.  
 		}
 	},
 
