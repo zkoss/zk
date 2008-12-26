@@ -868,9 +868,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		addMoved(op, _page, newpg); //Not depends on UUID
 		setPage0(newpg); //UUID might be changed here
 
-		if (_spaceInfo != null) //ID space owner
-			_spaceInfo.ns.setParent(
-				_parent != null ? _parent.getNamespace(): null);
+		fixSpaceParentDown(this, _parent != null ? _parent.getNamespace(): null);
 		if (idSpaceChanged) addToIdSpacesDown(this); //called after setPage
 
 		//call back UiLifeCycle
@@ -882,6 +880,13 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				desktop.getWebApp().getConfiguration().afterComponentMoved(parent, this, op);
 			}
 		}
+	}
+	private static void fixSpaceParentDown(AbstractComponent comp, Namespace ns) {
+		if (comp._spaceInfo != null) //ID space owner
+			comp._spaceInfo.ns.setParent(ns);
+		else //Bug 2468048: we have to check all children
+			for (comp = comp._first; comp != null; comp = comp._next)
+				fixSpaceParentDown(comp, ns);
 	}
 	private void afterComponentPageChanged(Page newpg, Page oldpg) {
 		if (newpg == oldpg) return;
@@ -2337,8 +2342,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (this instanceof IdSpace) {
 			_spaceInfo = new SpaceInfo(this);
 
-			//fix child's _spaceInfo's parent
-			fixSpaceParentOneLevelDown(this, _spaceInfo.ns);
+			//fix children's _spaceInfo's parent
+			for (AbstractComponent child = _first; child != null; child = child._next)
+				fixSpaceParentDown(child,  _spaceInfo.ns);
 
 			//read _spaceInfo.attrs
 			Serializables.smartRead(s, _spaceInfo.attrs);
@@ -2388,19 +2394,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private static boolean isVariableSerializable(String name, Object value) {
 		return !"spaceScope".equals(name) && !"spaceOwner".equals(name)
 			&& !(value instanceof Component);
-	}
-	/** Fixed Namespace's parent of children only one level.
-	 */
-	private static final
-	void fixSpaceParentOneLevelDown(Component comp, Namespace nsparent) {
-		for (AbstractComponent ac = ((AbstractComponent)comp)._first;
-		ac != null; ac = ac._next) {
-			//Others are handled by readObject
-			if (ac._spaceInfo != null)
-				ac._spaceInfo.ns.setParent(nsparent);
-			else
-				fixSpaceParentOneLevelDown(ac, nsparent); //recursive
-		}
 	}
 
 	/** Used to forward events (for the forward conditions).

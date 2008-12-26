@@ -523,15 +523,9 @@ zAu = {
 		for (var fn; fn = zAu._dcfns.shift();)
 			fn();
 
-		var que = zAu._cmdsQue;
-		if (!que.length) {
-			zAu._ckProcessng();
-			return true; //nothing to do
-		}
-
-		var ex, j = 0, rid = zAu._resId;
+		var ex, j = 0, que = zAu._cmdsQue, rid = zAu._resId;
 		for (; j < que.length; ++j) {
-			if (zkm.auing) return; //wait zkm.mtAU to call
+			if (zk.mounting) return; //wait zkm.mtAU to call
 
 			var cmds = que[j];
 			if (rid == cmds.rid || !rid || !cmds.rid //match
@@ -550,7 +544,7 @@ zAu = {
 						j = -1; //start over
 						if (zk.pfmeter) {
 							var fn = function () {zAu.pfdone(cmds.dt, cmds.pfIds);};
-							if (zkm.auing) zAu._dcfns.push(fn);
+							if (zk.mounting) zAu._dcfns.push(fn);
 							else fn();
 						}
 					} else { //not done yet (=zk.boostrapping)
@@ -588,7 +582,7 @@ zAu = {
 		var processed;
 		try {
 			while (cmds && cmds.length) {
-				if (zkm.auing) return false;
+				if (zk.mounting) return false;
 
 				processed = true;
 				var cmd = cmds.shift();
