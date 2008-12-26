@@ -145,9 +145,12 @@ zk = {
 			}, 0);
 			return;
 		}
-		zk._showproc(true);
+		zk._showproc0(true);
 	},
-	_showproc: function (mask) {
+	_showproc: function () {
+		zk._showproc0();
+	},
+	_showproc0: function (mask) {
 		if (zk.processing) {
 			if (zDom.$("zk_proc") || zDom.$("zk_showBusy"))
 				return;
@@ -155,9 +158,7 @@ zk = {
 			var msg;
 			try {msg = mesg.PLEASE_WAIT;} catch (e) {msg = "Processing...";}
 				//when the first boot, mesg might not be ready
-			zUtl.progressbox("zk_proc", msg, mask === true);
-				// the type of the mask variable in FF may not be true (like number),
-				// if called from the setTimeout() function.  
+			zUtl.progressbox("zk_proc", msg, mask);
 		}
 	},
 

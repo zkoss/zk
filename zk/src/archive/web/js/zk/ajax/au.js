@@ -72,17 +72,14 @@ zAu = {
 
 	////Ajax Send////
 	processing: function () {
-		return zAu._cmdsQue.length || zAu._areq || zAu._preqInf
-			|| zAu._doingCmds;
+		return zk.mounting || zAu._cmdsQue.length || zAu._areq || zAu._preqInf;
 	},
-	/** Checks whether to turn off the progress prompt.
-	 * @return true if the processing is done
-	 */
+	/** Checks whether to turn off the progress prompt. */
 	_ckProcessng: function () {
-		if (zAu.processing())
-			return false;
-		zk.endProcessing();
-		return true;
+		if (!zAu.processing()) {
+			zk.endProcessing();
+			zAu.doneTime = zUtl.now();
+		}
 	},
 
 	send: function (aureq, timeout) {
@@ -196,22 +193,6 @@ zAu = {
 			}
 		}
 		return v;
-	},
-	doCmds: function () {
-		//avoid reentry since it calls loadAndInit, and loadAndInit call this
-		if (zAu._doingCmds) {
-			setTimeout(zAu.doCmds, 10);
-		} else {
-			zAu._doingCmds = true;
-			try {
-				zAu._doCmds0();
-			} finally {
-				zAu._doingCmds = false;
-
-				if (zAu._ckProcessng())
-					zAu.doneTime = zUtl.now();
-			}
-		}
 	},
 	process: function (cmd, varags) { //by server only (encoded)
 		var data = [];
@@ -376,7 +357,6 @@ zAu = {
 		}
 
 		zAu.doCmds();
-		zAu._ckProcessng();
 	},
 
 	_send: function (dt, aureq, timeout) {
@@ -539,13 +519,19 @@ zAu = {
 		return false;
 	}: zk.$void,
 
-	_doCmds0: function () {
-		var ex, j = 0, que = zAu._cmdsQue, rid = zAu._resId;
+	doCmds: function () {
+		for (var fn; fn = zAu._dcfns.shift();)
+			fn();
+
+		var que = zAu._cmdsQue;
+		if (!que.length) {
+			zAu._ckProcessng();
+			return true; //nothing to do
+		}
+
+		var ex, j = 0, rid = zAu._resId;
 		for (; j < que.length; ++j) {
-			if (zk.mounting) {
-				zk.afterMount(zAu.doCmds); //wait until the loading is done
-				return;
-			}
+			if (zkm.auing) return; //wait zkm.mtAU to call
 
 			var cmds = que[j];
 			if (rid == cmds.rid || !rid || !cmds.rid //match
@@ -562,12 +548,15 @@ zAu = {
 				try {
 					if (zAu._doCmds1(cmds)) { //done
 						j = -1; //start over
-						if (zk.pfmeter) zAu.pfdone(cmds.dt, cmds.pfIds);
+						if (zk.pfmeter) {
+							var fn = function () {zAu.pfdone(cmds.dt, cmds.pfIds);};
+							if (zkm.auing) zAu._dcfns.push(fn);
+							else fn();
+						}
 					} else { //not done yet (=zk.boostrapping)
 						zAu._resId = oldrid; //restore
 						que.splice(j, 0, cmds); //put it back
-						zk.afterMount(zAu.doCmds);
-						return;
+						return; //wait zkm.mtAU to call
 					}
 				} catch (e) {
 					if (!ex) ex = e;
@@ -589,16 +578,17 @@ zAu = {
 					zAu.doCmds();
 				}
 			}, 3600);
-		}
+		} else
+			zAu._ckProcessng();
 
 		if (ex) throw ex;
 	},
+	_dcfns: [],
 	_doCmds1: function (cmds) {
 		var processed;
 		try {
 			while (cmds && cmds.length) {
-				if (zk.mounting)
-					return false;
+				if (zkm.auing) return false;
 
 				processed = true;
 				var cmd = cmds.shift();
@@ -820,28 +810,6 @@ zAu.cmd1 = {
 		for (var j = arguments.length; --j > 2;)
 			args.unshift(arguments[j]);
 		wgt[func].apply(wgt, args);
-	},
-	popup: function (uuid, cmp, mode, x, y) {
-		var type = $type(cmp);
-		if (type) {
-			if (mode == "0") { //close
-				zAu.closeFloatsOf(cmp);
-			} else {
-				var ref;
-				if (mode == "1") { //ref
-					ref = zDom.$(x);
-					if (ref) {
-						var ofs = zDom.cmOffset(zDom.$(x));
-						x = ofs[0];
-						y = ofs[1] + zDom.offsetHeight(ref);
-					}
-				}
-				cmp.style.position = "absolute";
-				zk.setVParent(cmp); //FF: Bug 1486840, IE: Bug 1766244
-				zAu._autopos(cmp, $int(x), $int(y));
-				zk.eval(cmp, "context", type, ref);
-			}
-		}
 	},
 	echo2: function (uuid, wgt, evtnm, data) {
 		zAu.send(new zk.Event(wgt, "echo",

@@ -60,8 +60,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<separator bar="true"/>
 	Div:
 	<div id="div" style="border:1px solid #999"/>
-	<button label="append" image="/img/m1.gif" hoverImage="/img/m2.gif"
-		onClick='new Label("Append "+ ++cnt).setParent(div)'/>
+	<button label="append 2" image="/img/m1.gif" hoverImage="/img/m2.gif"
+		onClick='new Label("Append "+ ++cnt).setParent(div);new Label("Append_ "+ ++cnt).setParent(div)'/>
 	<button label="insert"
 		onClick='div.insertBefore(new Label("Insert "+ ++cnt),
 			div.children.empty ? null: div.children.get(0))'/>

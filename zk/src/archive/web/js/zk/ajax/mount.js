@@ -14,8 +14,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 var _zbt = zUtl.now(); //JS loaded
 function zknewbg() {
-	zkm.browsing = zk.mounting = true;
-	var t = 600 - (zUtl.now() - _zbt);
+	zkm.browsing = zk.mounting = zkm.auing = true;
+	var t = 390 - (zUtl.now() - _zbt);
 	zk.startProcessing(t > 0 ? t: 0);
 }
 function zknewe() {
@@ -23,14 +23,14 @@ function zknewe() {
 }
 
 function zkpgbg(pguid, style, dtid, contained, updateURI) {
-	zk.mounting = true;
+	zk.mounting = zkm.auing = true;
 	var props = {};
 	if (style) props.style = style;
 	if (dtid) zkdtbg(dtid, updateURI)._pguid = pguid;
 	zkm.push({type: "#p", uuid: pguid, contained: contained, props: props});
 }
 function zkbg(type, uuid, mold, props) {
-	zk.mounting = true;
+	zk.mounting = zkm.auing = true;
 	zkm.push({type: type, uuid: uuid, mold: mold, props: props});
 }
 function zkdtbg(dtid, updateURI) {
@@ -203,7 +203,7 @@ zkm = {
 			return;
 		}
 
-		zk.mounting = false;
+		zk.mounting = zkm.auing = false;
 		zk.endProcessing();
 	},
 
@@ -214,7 +214,24 @@ zkm = {
 	mtAU0: function (stub) {
 		for (var cfi = zkm._crInf0, inf; inf = cfi.shift();)
 			stub(zkm.create(null, inf[1]));
+
+		zkm.auing = false;
+
+		if (!zAu.doCmds())
+			return; //wait zAu to call
+
+		zk.afterLoad(zkm.mtAU1);
+	},
+	mtAU1: function () {
+		var fn = zkm._afMts.shift();
+		if (fn) {
+			fn();
+			zk.afterLoad(zkm.mtAU1); //fn might load packages
+			return;
+		}
+
 		zk.mounting = false;
+		zAu._ckProcessng();
 	},
 
 	/** create the widget tree. */
