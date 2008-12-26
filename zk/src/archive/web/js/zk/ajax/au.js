@@ -520,6 +520,8 @@ zAu = {
 	}: zk.$void,
 
 	doCmds: function () {
+		_zkmt = zUtl.now(); //used by zkm.exec
+
 		for (var fn; fn = zAu._dcfns.shift();)
 			fn();
 

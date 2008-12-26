@@ -31,7 +31,6 @@ function zkpgbg(pguid, style, dtid, contained, updateURI) {
 }
 function zkbg(type, uuid, mold, props) {
 	zk.mounting = true;
-	_zkmt = zUtl.now(); //AU
 	zkm.push({type: type, uuid: uuid, mold: mold, props: props});
 }
 function zkdtbg(dtid, updateURI) {
