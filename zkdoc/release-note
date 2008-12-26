@@ -18,6 +18,7 @@ ZK 3.5.3
   2448099: FF only.SetAttr fail when addEventListener with $ event name
   2448987: Unexpected ListModelList.subList() behaviour
   2464484: Binding selectedItem of Radiogroup causes StackOverflowExcep  
+  2468048: Namespace is not consitent with component hierarchy
 
 	--------
 ZK 3.5.2
