@@ -96,7 +96,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 					//so we have to subtract margin, too
 			}
 		}
-		setTimeout(this.proxy(this._fixShadow), 800);
+		setTimeout(this.proxy(this._fixShadow), 500);
 			//shadow raraly needs to fix so OK to delay for better performance
 			//(getShadowNode() a bit slow due to zDom.$)
 	},
@@ -113,6 +113,10 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 			sdw.style.display =
 				zk.parseInt(zDom.getStyle(this.getCaveNode(), "border-bottom-width")) ? "": "none";
 				//if no border-bottom, hide the shadow
+	},
+	updateDomStyle_: function () {
+		this.$supers('updateDomStyle_', arguments);
+		if (this.desktop) this.onSize();
 	},
 
 	//super//
