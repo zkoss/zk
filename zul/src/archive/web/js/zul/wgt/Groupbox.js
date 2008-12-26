@@ -83,7 +83,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	},
 
 	//watch//
-	onSize: function () {
+	onSize: _zkf = function () {
 		var hgh = this.getNode().style.height;
 		if (hgh && hgh != "auto") {
 			var n = this.getCaveNode();
@@ -96,17 +96,24 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 					//so we have to subtract margin, too
 			}
 		}
-		var sdw = this.getShadowNode();
-		if (sdw)
-			sdw.style.display =
-				zk.parseInt(zDom.getStyle(this.getCaveNode(), "border-bottom-width")) ? "": "none";
-			//if no border-bottom, hide the shadow
+		setTimeout(this.proxy(this._fixShadow), 800);
+			//shadow raraly needs to fix so OK to delay for better performance
+			//(getShadowNode() a bit slow due to zDom.$)
 	},
+	onVisible: _zkf,
+	onHide: _zkf,
 	_afterSlideDown: function (n) {
 		zWatch.fireDown("onVisible", -1, this);
 	},
 	_beforeSlideUp: function (n) {
 		zWatch.fireDown("onHide", -1, this);
+	},
+	_fixShadow: function () {
+		var sdw = this.getShadowNode();
+		if (sdw)
+			sdw.style.display =
+				zk.parseInt(zDom.getStyle(this.getCaveNode(), "border-bottom-width")) ? "": "none";
+				//if no border-bottom, hide the shadow
 	},
 
 	//super//
@@ -127,8 +134,11 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	bind_: function () {
 		this.$supers('bind_', arguments);
 
-		if (!this.isLegend())
-			this.onSize(); //fix height and shadow
+		if (!this.isLegend()) {
+			zWatch.listen("onSize", this);
+			zWatch.listen("onVisible", this);
+			zWatch.listen("onHide", this);
+		}
 	},
 	unbind_: function () {
 		this._epanel = this._ecave = this._esdw = null;

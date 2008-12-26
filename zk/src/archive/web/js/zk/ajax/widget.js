@@ -266,8 +266,9 @@ zk.Widget = zk.$extends(zk.Object, {
 			for (var fs = zk.Widget._floating, j = fs.length,
 			bindLevel = this.bindLevel; --j >= 0;) {
 				var w = fs[j].widget;
-				if (bindLevel >= w.bindLevel) break;//no descendant ahead
-				if (this != w && this._floatVisibleDependent(w))
+				if (bindLevel >= w.bindLevel)
+					break; //skip non-descendant (and this)
+				if (this._floatVisibleDependent(w))
 					w.setDomVisible_(fs[j].node, false, {visibility:1});
 			}
 

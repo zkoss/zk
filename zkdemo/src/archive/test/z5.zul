@@ -93,21 +93,21 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		onClick="if (!box.children.empty) box.lastChild.detach();"/>
 	<separator bar="true"/>
 
+	<groupbox width="300px" height="200px" mold="3d">
+		<caption image="/img/inet.png" label="Groupbox 3d">
+			<button label="Label" onClick='self.parent.label += "!"'/>
+		</caption>
+		This is a group box (300x 200)
+		<button label="change mold"
+			onClick='self.parent.mold = self.parent.mold == "default" ? "3d": "default";'/>
+		More in a group box
+	</groupbox>
 	<groupbox width="200px">
 		<caption image="/img/inet.png" label="Groupbox">
 			<button label="Label" onClick='self.parent.label += "!"'/>
 		</caption>
 		This is a group box
 		<button label="a button"/>
-		More in a group box
-	</groupbox>
-	<groupbox width="200px" mold="3d">
-		<caption image="/img/inet.png" label="Groupbox 3d">
-			<button label="Label" onClick='self.parent.label += "!"'/>
-		</caption>
-		This is a group box
-		<button label="change mold"
-			onClick='self.parent.mold = self.parent.mold == "default" ? "3d": "default";'/>
 		More in a group box
 	</groupbox>
 

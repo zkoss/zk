@@ -294,8 +294,12 @@ zWatch = {
 				found = [];
 				for (var j = wts.length, o; --j >= 0;) { //child first
 					o = wts[j];
-					if (bindLevel >= o.bindLevel)
-						break;//no descendant ahead
+					var diff = bindLevel > o.bindLevel;
+					if (diff > 0) break;//nor ancestor, nor this (&sibling)
+					if (!diff && origin == o) {
+						found.unshift(o);
+						break; //found this (and no descendant ahead)
+					}
 					if (zUtl.isAncestor(origin, o))
 						found.unshift(o); //parent first
 				}
