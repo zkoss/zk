@@ -215,7 +215,7 @@ zkm = {
 		for (var cfi = zkm._crInf0, inf; inf = cfi.shift();)
 			stub(zkm.create(null, inf[1]));
 
-		if (zAu._cmdsQue.length) {
+		if (zAu._moreCmds()) {
 			zk.mounting = false;
 			zAu.doCmds();
 			return; //wait zAu to call

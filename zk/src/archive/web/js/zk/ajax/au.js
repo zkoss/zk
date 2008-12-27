@@ -601,6 +601,10 @@ zAu = {
 		}
 		return true;
 	},
+	//Used by zkm.mtAU to know any pending
+	_moreCmds: function () {
+		return zAu._cmdsQue.length
+	},
 
 	/** Cleans up if we detect obsolete or other severe errors. */
 	_cleanupOnFatal: function (ignorable) {
