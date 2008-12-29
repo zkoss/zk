@@ -48,7 +48,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		def hello = "Hello Groovy";
 				
 		def fck = new FCKeditor();
-		fck.setValue(hello)
+		fck.setCustomConfigurationsPath("/userguide/macros/fckconfig.js");
+		fck.setValue(hello);
 		fck.setParent(win);
 	</zscript>
 </window>
