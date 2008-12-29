@@ -390,6 +390,23 @@ ul ul ul li	{list-style: url(${c:encodeURL('/img/z-bullet3.gif')}) square}
 	cursor:pointer;
 }
 </style>
+<!-- Google Code for http://zkoss.org/zkdemo/userguide Conversion Page -->
+<html><![CDATA[
+<script language="JavaScript" type="text/javascript">
+<!--
+var google_conversion_id = 1067329176;
+var google_conversion_language = "en_US";
+var google_conversion_format = "1";
+var google_conversion_color = "ffffff";
+var google_conversion_label = "NDi1CN6hchCYzfj8Aw";
+//-->
+</script>
+<script language="JavaScript" src="http://www.googleadservices.com/pagead/conversion.js">
+</script>
+<noscript>
+<img height="1" width="1" border="0" src="http://www.googleadservices.com/pagead/conversion/1067329176/?label=NDi1CN6hchCYzfj8Aw&amp;script=0"/>
+</noscript>]]>
+</html>
 <borderlayout id="main" apply="org.zkoss.zkdemo.userguide.MainLayoutComposer">
 	<north border="none" size="100px" sclass="demo-header" collapsible="true">
 		<div>
