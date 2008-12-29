@@ -149,13 +149,30 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		zDom.addClass(this.einp, this.getZclass() + '-focus');
 	},
 	doBlur_: function (evt) {
-		if (this._tidChg) {
-			clearInterval(this._tidChg);
-			this._tidChg = this._lastChg = this.valueEnter_ =
-			this.valueSel_ = null;
+		this._stopOnChanging();
+		if (this.realBlur_(zk.currentFocus)) {
+			zDom.rmClass(this.einp, this.getZclass() + '-focus');
+			this._updateChange();
+			this.domBlur_();
 		}
-		zDom.rmClass(this.einp, this.getZclass() + '-focus');
-		this.domBlur_();
+	},
+	realBlur_: function (focus) {
+		return !focus || !zUtl.isAncestor(this, focus);
+	},
+	validate_: function (value) {
+	},
+	showError_: function (msg) {
+		return msg;
+	},
+	_updateChange: function () {
+		var inp = this.einp,
+			value = inp.value;
+		if (value != inp.defaultValue) {
+			var msg = this.showError_(this.validate_(value));
+			if (msg) {
+				return;
+			}
+		}
 	},
 	_onChanging: function () {
 		var inp = this.einp,
@@ -167,12 +184,19 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			this.valueSel_ = null;
 			this.fire('onChanging', {value: val,
 				bySelectBack: valsel == val, start: sr[0],
-				marshal: this._onChangingMarshal},
+				marshal: this._onChangeMarshal},
 				{ignorable:1}, 100);
 		}
 	},
-	_onChangingMarshal: function () {
+	_onChangeMarshal: function () {
 		return [this.value, this.bySelectBack, this.start];
+	},
+	_stopOnChanging: function () {
+		if (this._tidChg) {
+			clearInterval(this._tidChg);
+			this._tidChg = this._lastChg = this.valueEnter_ =
+			this.valueSel_ = null;
+		}
 	},
 
 	//super//
@@ -198,10 +222,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		zEvt.listen(inp, "focus", this.proxy(this.doFocus_, '_pxFocus'));
 		zEvt.listen(inp, "blur", this.proxy(this.doBlur_, '_pxBlur'));
 		zEvt.listen(inp, "select", $InputWidget._doSelect);
-		zEvt.listen(inp, "keydown", $InputWidget._doKeyDown);
-		if (zDom.tag(inp) == 'TEXTAREA')
-			zEvt.listen(inp, "keyup", $InputWidget._doKeyUp);
-	//Bug 1486556: we have to enforce zkTxbox to send value back for validating
+	//Bug 1486556: we have to enforce to send value back for validating
 	//at the server
 	//TODO
 	},
@@ -211,7 +232,6 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		zEvt.unlisten(inp, "focus", this._pxFocus);
 		zEvt.unlisten(inp, "blur", this._pxBlur);
 		zEvt.unlisten(inp, "select", $InputWidget._doSelect);
-		zEvt.unlisten(inp, "keydown", $InputWidget._doKeyDown);
 		if (zDom.tag(inp) == 'TEXTAREA')
 			zEvt.unlisten(inp, "keyup", $InputWidget._doKeyUp);
 
@@ -222,6 +242,26 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	isImportantEvent_: function (evtnm) {
 		return 'onChange' == evtnm;
+	},
+	doKeyDown_: function (evt) {
+		var keyCode = evt.keyCode;
+		if ((keyCode == 13 && this.isListen('onOK'))
+		|| (keyCode == 27 && this.isListen('onCancel'))) {
+			this._stopOnChanging();
+			this._updateChange();
+		}
+	},
+	doKeyUp_: function () {
+		//Support maxlength for Textarea
+		if (this.isMultiline()) {
+			var maxlen = this._maxlength;
+			if (maxlen > 0) {
+				var inp = this.einp, val = inp.value;
+				if (val != inp.defaultValue && val.length > maxlen)
+					inp.value = val.substring(0, maxlen);
+			}
+		}
+		this.$supers('doKeyUp_', arguments);
 	}
 
 },{
@@ -238,18 +278,5 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	_onSelMarshal: function () {
 		return [this.start, this.end, this.selected];
-	},
-	_doKeyDown: function (evt) {
-		//TODO
-	},
-	_doKeyUp: function (evt) {
-		//Request 1565288 and 1738246: support maxlength for Textarea
-		var wgt = zk.Widget.$(evt),
-			maxlen = wgt._maxlength;
-		if (maxlen > 0) {
-			var val = inp.value;
-			if (val != inp.defaultValue && val.length > maxlen)
-				inp.value = val.substring(0, maxlen);
-		}
 	}
 });

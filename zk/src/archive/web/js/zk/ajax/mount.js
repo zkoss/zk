@@ -66,8 +66,10 @@ function zkopt(opts) {
 }
 
 function zkam(fn) {
-	if (zk.mounting)
-		return zkm._afMts.push(fn);
+	if (zk.mounting) {
+		zkm._afMts.push(fn);
+		return true;
+	}
 	fn();
 }
 zk.afterMount = zkam; //part of zk
@@ -163,44 +165,54 @@ zkm = {
 	},
 	/** mount for browser loading */
 	mtBL: function() {
-		zk.afterLoad(zkm.mtBL0);
-	},
-	mtBL0: function() {
 		if (!zk.sysInited) zkm.sysInit();
 
-		var inf = zkm._crInf0.shift();
+		if (zPkg.loading) {
+			zk.afterLoad(zkm.mtBL);
+			return;
+		}
+
+		var crInf0 = zkm._crInf0,
+			inf = crInf0.shift();
 		if (inf) {
 			zkm._crInf1.push([inf[0], zkm.create(inf[0], inf[1])]);
 				//desktop as parent for browser loading
-			return zkm.exec(zkm.mtBL0);
+	
+			if (crInf0.length)
+				return zkm.exec(zkm.mtBL);
 		}
 
-		zkm.mtBL1();
+		zkm.mtBL0();
 	},
-	mtBL1: function() {
+	mtBL0: function() {
 		if (zkm._crInf0.length)
 			return; //another page started
 
-		var inf = zkm._crInf1.shift();
+		if (zPkg.loading) {
+			zk.afterLoad(zkm.mtBL0);
+			return;
+		}
+
+		var crInf1 = zkm._crInf1,
+			inf = crInf1.shift();
 		if (inf) {
 			var wgt = inf[1];
 			wgt.replaceHTML(wgt.uuid, inf[0]);
-
-			if (zkm._crInf1.length)
-				return zkm.exec(zkm.mtBL1);
+			return zkm.exec(zkm.mtBL0); //loop back to check if loading
 		}
 
-		zk.afterLoad(zkm.mtBL2); //bind might load packages
+		zkm.mtBL1(); //bind might load packages
 	},
-	mtBL2: function () {
+	mtBL1: function () {
 		if (zkm._crInf0.length || zkm._crInf1.length)
 			return; //another page started
 
-		var fn = zkm._afMts.shift();
-		if (fn) {
+		for (var fn; fn = zkm._afMts.shift();) {
 			fn();
-			zk.afterLoad(zkm.mtBL2); //fn might load packages
-			return;
+			if (zPkg.loading) {
+				zk.afterLoad(zkm.mtBL1); //fn might load packages
+				return;
+			}
 		}
 
 		zk.mounting = false;
@@ -209,26 +221,33 @@ zkm = {
 
 	/** mount for AU */
 	mtAU: function (stub) {
-		zk.afterLoad(function () {zkm.mtAU0(stub);});
-	},
-	mtAU0: function (stub) {
-		for (var cfi = zkm._crInf0, inf; inf = cfi.shift();)
-			stub(zkm.create(null, inf[1]));
+		if (zPkg.loading) {
+			zk.afterLoad(zkm.mtAU);
+			return;
+		}
 
-		zk.afterLoad(zkm.mtAU1);
+		var crInf0 = zkm._crInf0,
+			inf = crInf0.shift();
+		if (inf) {
+			stub(zkm.create(null, inf[1]));
+			return zkm.exec(zkm.mtAU); //loop back to check if loading
+		}
+
+		zkm.mtAU0();
 	},
-	mtAU1: function () {
+	mtAU0: function () {
 		if (zAu._moreCmds()) {
 			zk.mounting = false;
 			zAu.doCmds();
 			return; //wait zAu to call
 		}
 
-		var fn = zkm._afMts.shift();
-		if (fn) {
+		for (var fn; fn = zkm._afMts.shift();) {
 			fn();
-			zk.afterLoad(zkm.mtAU1); //fn might load packages
-			return;
+			if (zPkg.loading) {
+				zk.afterLoad(zkm.mtAU0); //fn might load packages
+				return;
+			}
 		}
 
 		zk.mounting = false;

@@ -805,7 +805,9 @@ zk.Widget = zk.$extends(zk.Object, {
 		return true;
 	},
 	domBlur_: function () {
-		zk.currentFocus = null;
+		//due to domMouseDown called, zk.currentFocus already point to the
+		//widget gaining focus
+		if (zk.currentFocus == this) zk.currentFocus = null;
 
 		if (this.isListen('onBlur'))
 			this.fire('onBlur');

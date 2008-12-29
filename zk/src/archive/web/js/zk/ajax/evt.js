@@ -13,25 +13,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
 zEvt = {
-	BS:		8,
-	TAB:	9,
-	ENTER:	13,
-	SHIFT:	16,
-	CTRL:	17,
-	ALT:	18,
-	ESC:	27,
-	PGUP:	33,
-	PGDN:	34,
-	END:	35,
-	HOME:	36,
-	LFT:	37,
-	UP:		38,
-	RGH:	39,
-	DN:		40,
-	INS:	45,
-	DEL:	46,
-	F1:		112,
-
 	target: function(evt) {
 		evt = evt || window.event;
 		return evt.target || evt.srcElement;
@@ -204,6 +185,25 @@ zk.Event = zk.$extends(zk.Object, {
 		this.stopped = !b;
 	}
 },{
+	BS:		8,
+	TAB:	9,
+	ENTER:	13,
+	SHIFT:	16,
+	CTRL:	17,
+	ALT:	18,
+	ESC:	27,
+	PGUP:	33,
+	PGDN:	34,
+	END:	35,
+	HOME:	36,
+	LFT:	37,
+	UP:		38,
+	RGH:	39,
+	DN:		40,
+	INS:	45,
+	DEL:	46,
+	F1:		112,
+
 	duplicateIgnores: {
 		onBookmarkChange: true, onURIChange: true, onClientInfo: true,
 		onError: true, onBlur: true, onFocus: true, onSort: true,
