@@ -601,7 +601,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	bind_: function (desktop, skipper) {
 		zk.Widget._binds[this.uuid] = this;
 
-		if (!desktop) desktop = zk.Desktop.$(this.getNode());
+		if (!desktop) desktop = zk.Desktop.$(this.uuid);
 		this.desktop = desktop;
 
 		var p = this.parent;
@@ -977,9 +977,12 @@ zk.Desktop = zk.$extends(zk.Widget, {
 			}
 			w = zk.Widget.$(dtid);
 			if (w)
-				for (; w; w = w.parent)
+				for (; w; w = w.parent) {
 					if (w.desktop)
 						return w.desktop;
+					if (w.$instanceof(zkdt))
+						return w;
+				}
 		}
 		if (w = zkdt._dt) return w;
 		for (dtid in dts)
