@@ -18,6 +18,10 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	_tabindex: -1,
 	_type: 'text',
 
+	$init: function () {
+		this._pxLateBlur = this.proxy(this._lateBlur);
+		this.$supers('$init', arguments);
+	},
 	getType: function () {
 		return this._type;
 	},
@@ -140,7 +144,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	doFocus_: function (evt) {
 		if (!zDom.tag(zEvt.target(evt)) //Bug 2111900
 		|| !this.domFocus_())
-			return; 
+			return;
 
 		if (this.isListen('onChanging')) {
 			this._lastChg = this.einp.value;
@@ -150,13 +154,18 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	doBlur_: function (evt) {
 		this._stopOnChanging();
-		if (this.realBlur_(zk.currentFocus)) {
-			zDom.rmClass(this.einp, this.getZclass() + '-focus');
-			this._updateChange();
-			this.domBlur_();
-		}
+
+		zDom.rmClass(this.einp, this.getZclass() + '-focus');
+		this.domBlur_();
+
+		setTimeout(this._pxLateBlur, 0);
+			//curretFocus still unknow, so wait a while to execute
 	},
-	realBlur_: function (focus) {
+	_lateBlur: function () {
+		if (this.shallUpdate_(zk.currentFocus))
+			this._updateChange();
+	},
+	shallUpdate_: function (focus) {
 		return !focus || !zUtl.isAncestor(this, focus);
 	},
 	validate_: function (value) {
@@ -175,6 +184,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 					null, -1);
 				return;
 			}
+			inp.defaultValue = val;
 			this.fire('onChange', this._onChangeData(val), null, 150);
 		}
 //TODO else zk_err => fire onError to clear message

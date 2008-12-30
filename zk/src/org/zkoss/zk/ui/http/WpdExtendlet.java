@@ -57,6 +57,7 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 	private ExtendletContext _webctx;
 	/** DSP Interpretation cache. */
 	private ResourceCache _cache;
+	private Boolean _debugJS;
 
 	public void init(ExtendletConfig config) {
 		_webctx = config.getExtendletContext();
@@ -91,7 +92,17 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 		os.write(data);
 		response.flushBuffer();
 	}
+	private boolean isDebugJS() {
+		if (_debugJS == null) {
+			final WebManager wm = WebManager.getWebManager(_webctx.getServletContext());
+			if (wm == null) return true; //just in case
+			_debugJS = Boolean.valueOf(wm.getWebApp().getConfiguration().isDebugJS());
+		}
+		return _debugJS.booleanValue();
+
+	}
 	private byte[] parse(InputStream is, String path) throws Exception {
+		final boolean debugJS = isDebugJS();
 		final Element root = new SAXBuilder(true, false, true).build(is).getRootElement();
 		final String name = IDOMs.getRequiredAttributeValue(root, "name");
 		final String lang = IDOMs.getRequiredAttributeValue(root, "language");
@@ -111,8 +122,16 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 				final String jspath = wgtnm + ".js"; //eg: /js/zul/wgt/Div.js
 				if (writeResource(out, jspath, pathpref)) {
 					final String wgtflnm = name + "." + wgtnm;
+					write(out, "_zwg=_zpk.");
+					write(out, wgtnm);
+					if (debugJS) {
+						write(out, ";_zwg.prototype.className='");
+						write(out, wgtflnm);
+						write(out, "'");
+					}
+					write(out, ";");
 					if (langdef.hasWidgetDefinition(wgtflnm))
-						writeMolds(out, langdef, wgtnm, wgtflnm, pathpref);
+						writeMolds(out, langdef, wgtflnm, pathpref);
 						//Note: widget defiition not available if it is a base type (such as zul.Widget)
 				} else
 					log.error("Failed to load widget "+wgtnm+": "+jspath+" not found, "+el.getLocator());
@@ -136,17 +155,15 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 		return out.toByteArray();
 	}
 	private void writeMolds(OutputStream out, LanguageDefinition langdef,
-	String wgtnm, String wgtflnm, String pathpref) {
+	String wgtflnm, String pathpref) {
 		try {
 			WidgetDefinition wgtdef = langdef.getWidgetDefinition(wgtflnm);
-			write(out, "_zm=_zpk.");
-			write(out, wgtnm);
-			write(out, ".molds={};");
+			write(out, "_zmd=_zwg.molds={};");
 			for (Iterator it = wgtdef.getMoldNames().iterator(); it.hasNext();) {
 				final String mold = (String)it.next();
 				final String uri = wgtdef.getMoldURI(mold);
 				if (uri != null) {
-					write(out, "_zm['");
+					write(out, "_zmd['");
 					write(out, mold);
 					write(out, "']=");
 					if (!writeResource(out, uri, pathpref)) {

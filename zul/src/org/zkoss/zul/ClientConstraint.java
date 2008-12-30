@@ -33,27 +33,23 @@ import org.zkoss.zk.ui.Component;
  * @see CustomConstraint
  */
 public interface ClientConstraint {
-	/** Returns the function name in JavaScript or a Javascript code snippet
-	 * used to validate the value at the client, or null if no client
-	 * verification is supported.
+	/** Returns the class name at client used to validate the value,
+	 * or null if no client verification is supported.
+	 * The class depends the client types. For Ajax, it must be a JavaScript
+	 * class that implements the validate method.
 	 *
-	 * <p>There are two formats of the return value:
+	 * <code>String validate(String value);</code>
 	 *
-	 * <p>Format 1:<br/>
-	 * Syntax: <i>function_name</i><br/>
-	 * Example: "zkVld.noEmpty"<br/>
-	 * What Really Happens:<br/>
-	 * <code>zkVld.noEmpty('id')</code> is called at the client side
-	 * to validate the input, where id is the component's identifier.
+	 * <p>In addition, it can also implement the showCustomError method:
 	 *
-	 * <p>Format 2:<br/>
-	 * Syntax: <i>function_name(arg1, arg2, arg3)</i><br/>
-	 * where arg could be #{<i>EL_expression</i>}<br/>
-	 * Example: "myValid(#{self},#{when},'more')"<br/>
-	 * What Really Happens:<br/>
-	 * <code>myValid($e('id'),new Date('2007/06/03'),'more')</code>
-	 * is called at the client side
-	 * to validate the input, where id is the component's identifier.
+	 * <code>void showCustomError(Widget wgt, String errmsg);</code>
+	 *
+	 * Notice that, since 5.0.0, {@link ClientConstraint} has the higher priority than
+	 * {@link CustomConstraint}. In other words, {@link CustomConstraint}
+ 	 * is ignored if both defined.
+	 *
+	 * @return the class name at client to validate.
+	 * Notice that the meaning of the return value is changed since 5.0.0.
 	 */
 	public String getClientValidation();
 	/** Returns whether the client's validation is complete.

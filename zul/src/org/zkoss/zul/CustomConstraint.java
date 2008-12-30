@@ -27,9 +27,12 @@ import org.zkoss.zk.ui.WrongValueException;
  * If this interface is implemented, the default error box won't be
  * displayed. Rather, {@link #showCustomError} is called.
  *
- * <p>Note: if this interface is implemented,
- * {@link ClientConstraint} is ignored, since all validation will be done
- * at the server.
+ * <p>Since 5.0.0, {@link ClientConstraint} has the higher priority than
+ * {@link CustomConstraint}. In other words, {@link CustomConstraint}
+ * is ignored if both defined.
+ * On the other hand, the client validation class ({@link ClientConstraint#getClientValidation})
+ * can implement the showCustomError method to do the similar job
+ * at the client.
  *
  * @author tomyeh
  * @see Constraint
