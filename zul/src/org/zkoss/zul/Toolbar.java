@@ -81,14 +81,6 @@ public class Toolbar extends XulElement implements org.zkoss.zul.api.Toolbar {
 		return "panel".equals(getMold());
 	}
 	
-	public boolean insertBefore(Component newChild, Component refChild) {
-		if (super.insertBefore(newChild, refChild)) {
-			if (inPanelMold()) invalidate();
-			return true;
-		}
-		return false;
-	}
-
 	// super
 	public String getZclass() {
 		return _zclass == null ? "z-toolbar" +
