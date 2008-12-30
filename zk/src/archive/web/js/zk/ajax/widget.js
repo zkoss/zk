@@ -93,7 +93,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	setChildren: function (children) {
 		if (children)
 			for (var j = 0, l = children.length; j < l;)
-				this.appendChild(children[j]);
+				this.appendChild(children[j++]);
 	},
 	appendChild: function (child) {
 		if (child == this.lastChild)
