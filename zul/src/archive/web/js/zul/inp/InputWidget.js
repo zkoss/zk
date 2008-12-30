@@ -166,30 +166,41 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	_updateChange: function () {
 		var inp = this.einp,
-			value = inp.value;
-		if (value != inp.defaultValue) {
-			var msg = this.showError_(this.validate_(value));
+			val = inp.value;
+		if (val != inp.defaultValue) {
+			var msg = this.showError_(this.validate_(val));
 			if (msg) {
+				this.fire('onError',
+					{value: val, message: msg, marshal: _onErrMarshal},
+					null, -1);
 				return;
 			}
+			this.fire('onChange', this._onChangeData(val), null, 150);
 		}
+//TODO else zk_err => fire onError to clear message
 	},
 	_onChanging: function () {
 		var inp = this.einp,
 			val = this.valueEnter__ || inp.value;
 		if (this._lastChg != val) {
 			this._lastChg = val;
-			var valsel = this.valueSel_,
-				sr = zDom.selectionRange(inp);;
+			var valsel = this.valueSel_;
 			this.valueSel_ = null;
-			this.fire('onChanging', {value: val,
-				bySelectBack: valsel == val, start: sr[0],
-				marshal: this._onChangeMarshal},
+			this.fire('onChanging', this._onChangeData(val, valsel == val),
 				{ignorable:1}, 100);
 		}
 	},
+	_onChangeData: function (val, selbak) {
+		return {value: val,
+				bySelectBack: selbak,
+				start: zDom.selectionRange(this.einp)[0],
+				marshal: this._onChangeMarshal}
+	},
 	_onChangeMarshal: function () {
 		return [this.value, this.bySelectBack, this.start];
+	},
+	_onErrMarshal: function () {
+		return [this.vale, this.message];
 	},
 	_stopOnChanging: function () {
 		if (this._tidChg) {
