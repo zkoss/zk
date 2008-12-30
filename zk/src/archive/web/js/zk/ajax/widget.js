@@ -16,14 +16,21 @@ zk.Widget = zk.$extends(zk.Object, {
 	_visible: true,
 	nChildren: 0,
 	bindLevel: -1,
+	_mold: 'default',
 
 	$init: function (props) {
 		this._lsns = {}; //listeners Map(evtnm,listener)
 		this._$lsns = {}; //listners registered by server Map(evtnm, fn)
 
-		zk.set(this, props);
+		if (props) {
+			var mold = props.mold;
+			if (mold) this._mold = mold;
+			delete props.mold; //avoid setMold being called
+
+			zk.set(this, props);
+		}
+
 		if (!this.uuid) this.uuid = zk.Widget.nextUuid();
-		if (!this._mold) this._mold = "default";
 	},
 
 	getMold: function () {
@@ -82,6 +89,11 @@ zk.Widget = zk.$extends(zk.Object, {
 				if (w == this)
 					return j;
 		return 0;
+	},
+	setChildren: function (children) {
+		if (children)
+			for (var j = 0, l = children.length; j < l;)
+				this.appendChild(children[j]);
 	},
 	appendChild: function (child) {
 		if (child == this.lastChild)
