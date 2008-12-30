@@ -264,7 +264,10 @@ zkm = {
 		} else {
 			var cls = zk.$import(wginf.type),
 				uuid = wginf.uuid,
-				wgt = new cls(uuid, wginf.mold);
+				opts = {uuid: uuid},
+				mold = wginf.mold;
+			if (mold) opts.mold = mold;
+			var wgt = new cls(opts);
 			wgt.inServer = true;
 			if (parent) parent.appendChild(wgt);
 

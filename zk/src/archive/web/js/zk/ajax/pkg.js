@@ -104,10 +104,17 @@ zPkg = {
 	},
 	_pkgVers: {}
 };
-zk.afterLoad = function (fn) { //part of zk
-	if (zPkg.loading) {
-		zPkg._aflds.push(fn);
-		return true;
+zk.afterLoad = function () { //part of zk
+	var ret;
+	for (var len = arguments.length, j = 0; j < len; ++j) {
+		var arg = arguments[j];
+		if (typeof arg == 'string')
+			zPkg.load(arg);
+		else if (ret || zPkg.loading) {
+			zPkg._aflds.push(arg);
+			ret = true;
+		} else
+			arg();
 	}
-	fn();
+	return ret;
 };

@@ -17,11 +17,13 @@ zk.Widget = zk.$extends(zk.Object, {
 	nChildren: 0,
 	bindLevel: -1,
 
-	$init: function (uuid, mold) {
+	$init: function (props) {
 		this._lsns = {}; //listeners Map(evtnm,listener)
 		this._$lsns = {}; //listners registered by server Map(evtnm, fn)
-		this.uuid = uuid ? uuid: zk.Widget.nextUuid();
-		this._mold = mold ? mold: "default";
+
+		zk.set(this, props);
+		if (!this.uuid) this.uuid = zk.Widget.nextUuid();
+		if (!this._mold) this._mold = "default";
 	},
 
 	getMold: function () {
@@ -924,7 +926,7 @@ zk.Page = zk.$extends(zk.Widget, {//unlik server, we derive from Widget!
 	_style: "width:100%;height:100%",
 
 	$init: function (pguid, contained) {
-		this.$super('$init', pguid);
+		this.$super('$init', {uuid: pguid});
 
 		this._fellows = {};
 		if (contained) zk.Page.contained.push(this);
@@ -943,7 +945,7 @@ zk.Page = zk.$extends(zk.Widget, {//unlik server, we derive from Widget!
 zk.Desktop = zk.$extends(zk.Widget, {
 	bindLevel: 0,
 	$init: function (dtid, updateURI) {
-		this.$super('$init', dtid); //id also uuid
+		this.$super('$init', {uuid: dtid}); //id also uuid
 
 		this._aureqs = [];
 
