@@ -322,8 +322,8 @@ public class JsContentRenderer implements ContentRenderer {
 		for (Iterator it = listeners.entrySet().iterator(); it.hasNext();) {
 			final Map.Entry me = (Map.Entry)it.next();
 			_buf.append(me.getKey()).append(":function(event){\n")
-				.append(me.getValue()).append("\n}");
+				.append(me.getValue()).append("\n},");
 		}
-		_buf.append('}');
+		_buf.setCharAt(_buf.length() - 1, '}');
 	}
 }
