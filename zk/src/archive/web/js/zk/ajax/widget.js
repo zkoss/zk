@@ -24,8 +24,10 @@ zk.Widget = zk.$extends(zk.Object, {
 
 		if (props) {
 			var mold = props.mold;
-			if (mold) this._mold = mold;
-			delete props.mold; //avoid setMold being called
+			if (mold != null) {
+				if (mold) this._mold = mold;
+				delete props.mold; //avoid setMold being called
+			}
 
 			zk.set(this, props);
 		}

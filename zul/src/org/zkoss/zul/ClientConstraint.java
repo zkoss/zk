@@ -33,37 +33,47 @@ import org.zkoss.zk.ui.Component;
  * @see CustomConstraint
  */
 public interface ClientConstraint {
-	/** Returns the class name at client used to validate the value,
-	 * or null if no client verification is supported.
-	 * The class depends the client types. For Ajax, it must be a JavaScript
-	 * class that implements the validate method.
+	/** Returns the JavaScript snippet that will be evaluated at client
+	 * to return a validator, or null if no client constraint is supported.
+	 * The validator is later used to validate an input.
 	 *
-	 * <code>String validate(String value);</code>
+	 * <p>For example,
+	 * <pre><code>String getClientConstraint() {
+	 *  return "new foo.MyValidator()";
+	 *}</code></pre>
 	 *
-	 * <p>In addition, it can also implement the showCustomError method:
+	 * <p>Instead of code snippet, it can return a String instance if
+	 * the validator is zul.inp.SimpleConstraint.
 	 *
-	 * <code>void showCustomError(Widget wgt, String errmsg);</code>
+	 * <p>For example,
+	 * <pre><code>String getClientConstraint() {
+	 *  return "'no empty'";
+	 *}</code></pre>
 	 *
-	 * Notice that, since 5.0.0, {@link ClientConstraint} has the higher priority than
+	 * <p>The validator coule implement the validate and showCustomError
+	 * methods as follow. <code>validate</code> is required,
+	 * while <code>showCustomError</code> is optional.
+	 *
+	 * <pre><code>String validate(Widget wgt, String value);</code></pre>
+	 * <pre><code>void showCustomError(Widget wgt, String errmsg);</code></pre>
+	 *
+	 * <p>Refer to <a href="http://zkwiki.zkoss.org/index.php/Zul.inp.InputWidget#setConstraint">zul.inpu.InputWidget#setContraint</a>
+	 * for details.
+	 *
+	 * <p>Notice that, since 5.0.0, {@link ClientConstraint} has the higher priority than
 	 * {@link CustomConstraint}. In other words, {@link CustomConstraint}
  	 * is ignored if both defined.
 	 *
-	 * @return the class name at client to validate.
-	 * Notice that the meaning of the return value is changed since 5.0.0.
+	 * @return the code snippet that will be evaluated at client to
+	 * return a validator.
+	 * @since 5.0.0
 	 */
-	public String getClientValidation();
-	/** Returns whether the client's validation is complete.
-	 * If true, onChange won't be sent immediately (unless onChange is listened).
-	 * If false, onChange is always sent no matter {@link #getClientValidation}
-	 * return null or not.
+	public String getClientConstraint();
+	/** Returns a list of packages separated by comma that ZK client
+	 * engine has to load before evaluating {@link #getClientConstraint}.
+	 * <p>For example,
+	 * <pre><code>com.foo,com.foo.more</code></pre>
+	 * @since 5.0.0
 	 */
-	public boolean isClientComplete();
-	/** Returns the error message when the client detects an error,
-	 * or null if not specified.
-	 *
-	 * <p>It is used only if you want to override the default error message
-	 * shown by the client. It won't affect the message caused by an exception
-	 * thrown by {@link Constraint#validate}.
-	 */
-	public String getErrorMessage(Component comp);
+	public String getClientPackages();
 }

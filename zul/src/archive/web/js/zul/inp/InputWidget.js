@@ -301,3 +301,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		return [this.start, this.end, this.selected];
 	}
 });
+
+zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
+	validate: function (wgt, val) {
+	}
+});

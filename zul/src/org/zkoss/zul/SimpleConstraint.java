@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.regex.Pattern;
 
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.Strings;
 import org.zkoss.util.Dates;
 
 import org.zkoss.zk.ui.Component;
@@ -72,6 +73,7 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 	protected int _flags;
 	private Pattern _regex;
 	private String _errmsg;
+	private String _raw;
 
 	/** Constructs a constraint with flags.
 	 *
@@ -110,6 +112,7 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 		_regex = regex == null || regex.length() == 0 ?
 			null: Pattern.compile(regex);
 		_errmsg = errmsg == null || errmsg.length() == 0 ? null: errmsg;
+		_raw = null;
 	}
 	/** Constructs a constraint with a list of constraints separated by comma.
 	 *
@@ -165,6 +168,7 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 			_flags |= parseConstraint(s.trim().toLowerCase());
 		}
 
+		_raw = constraint;
 		_regex = regex == null || regex.length() == 0 ?
 			null: Pattern.compile(regex);
 		_errmsg = errmsg == null || errmsg.length() == 0 ? null: errmsg;
@@ -215,6 +219,12 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 	 */
 	public int getFlags() {
 		return _flags;
+	}
+	/** Returns the custom error message that shall be shown if an error occurs,
+	 * or null if no custom error message specified.
+	 */
+	public String getErrorMessage(Component comp) {
+		return _errmsg;
 	}
 
 	//-- Constraint --//
@@ -316,15 +326,34 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 		throw new InternalError();
 	}
 	//ClientConstraint//
-	public String getClientValidation() {
-		return (_flags & NO_EMPTY) != 0 ? (_flags & STRICT) != 0 ? "zkVld.noEmptyAndStrict" 
-				: "zkVld.noEmpty": (_flags & STRICT) != 0 ? "zkVld.strict": null;
-			//FUTURE: support more validation in client
+	public String getClientConstraint() {
+		if (_raw != null)
+			return '\'' + Strings.escape(_raw, "\\'") + '\'';
+
+		final StringBuffer sb = new StringBuffer("new zul.inp.SimpleConstraint(");
+		if (_flags != 0 || _regex != null || _errmsg != null) {
+			sb.append(_flags);
+			if (_regex != null || _errmsg != null) {
+				sb.append(',');
+				if (_regex != null) {
+					sb.append('\'');
+					Strings.escape(sb, _regex.pattern(), "\\'");
+					sb.append('\'');
+				} else
+					sb.append("null");
+				if (_errmsg != null) {
+					sb.append(",'");
+					Strings.escape(sb, _errmsg, "\\'");
+					sb.append('\'');
+				}
+			}
+		}
+		return sb.append(")").toString();
 	}
-	public String getErrorMessage(Component comp) {
-		return _errmsg;
-	}
-	public boolean isClientComplete() {
-		return (_flags == 0 || _flags == NO_EMPTY || _flags == STRICT) && _regex == null;
+	/** Default: null (since it depends on zul.inp which is loaded for
+	* all input widgets).
+	 */
+	public String getClientPackages() {
+		return null;
 	}
 }

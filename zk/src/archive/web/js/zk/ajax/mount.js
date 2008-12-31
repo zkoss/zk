@@ -264,22 +264,34 @@ zkm = {
 		} else {
 			var cls = zk.$import(wginf.type),
 				uuid = wginf.uuid,
-				wgt = new cls({uuid: uuid, mold: wginf.mold});
+				initOpts = {uuid: uuid},
+				v = wginf.mold;
+			if (v) initOpts.mold = v;
+			var wgt = new cls(initOpts);
 			wgt.inServer = true;
 			if (parent) parent.appendChild(wgt);
 
-			//embedAs means value from element's text
-			var embedAs = props.z_ea;
-			if (embedAs) {
+			//z_ea: value embedded as element's text
+			v = props.z_ea;
+			if (v) {
+				delete props.z_ea;
 				var embed = zDom.$(uuid);
 				if (embed) {
 					var val = embed.innerHTML;
-					if (embedAs.charAt(0) == '$') { //decode
-						embedAs = embedAs.substring(1);
+					if (v.charAt(0) == '$') { //decode
+						v = v.substring(1);
 						val = zUtl.decodeXML(val);
 					}
-					props[embedAs] = val;
+					props[v] = val;
 				}
+			}
+
+			//z_al: evaluated after load
+			v = props.z_al;
+			if (v) {
+				delete props.z_al;
+				for (var p in v)
+					props[p] = v[p](); //must be func
 			}
 		}
 
@@ -297,6 +309,16 @@ zkm = {
 		var type = w.type; j = type.lastIndexOf('.');
 		if (j >= 0)
 			zPkg.load(type.substring(0, j), zkm.curdt);
+
+		//z_pk: pkgs to load
+		var pkgs = w.z_pk;
+		if (pkgs) {
+			delete w.z_pk;
+			pkgs = pkgs.split(',');
+			for (var j = 0, l = pkgs.length; j < l;)
+				zPkg.load(pkgs[j++].trim());
+		}
+
 		for (var children = w.children, len = children.length, j = 0; j < len;++j)
 			zkm.pkgLoad(children[j]);
 	},

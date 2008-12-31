@@ -67,14 +67,14 @@ zul.utl.Script = zk.$extends(zk.Widget, {
 		if (!pkgs) return this._exec0();
 
 		this.packages = null; //only once
-		for (var j = 0;;) {
-			var k = pkgs.indexOf(',', j),
-				pkg = (k >= 0 ? pkgs.substring(j, k): pkgs.substring(j)).trim();
-			if (pkg) zPkg.load(pkg);
-			if (k < 0) break;
-			j = k + 1;
-		}
-		zk.afterLoad(this.proxy(this._exec0));
+		pkgs = pkgs.split(',');
+		for (var j = 0, l = pkgs.length; j < l;)
+			zPkg.load(pkgs[j++].trim());
+
+		if (zPkg.loading)
+			zk.afterLoad(this.proxy(this._exec0));
+		else
+			this._exec0();
 	},
 	_exec0: function () {
 		var wgt = this, fn = this._fn;

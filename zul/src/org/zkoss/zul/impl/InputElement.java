@@ -661,5 +661,29 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 		if (_maxlength > 0) renderer.render("maxlength", _maxlength);
 		if (_cols > 0) renderer.render("cols", _cols);
 		if (_tabindex >= 0) renderer.render("tabindex", _tabindex);
+
+		boolean constrDone = false;
+		if (_constr instanceof ClientConstraint) {
+			final ClientConstraint cc = (ClientConstraint)_constr;
+			try {
+				render(renderer, "z_pk", cc.getClientPackages());
+
+				final String js = cc.getClientConstraint();
+				if (js != null) {
+					final char c = js.length() > 0 ? js.charAt(0): (char)0;
+					if (c != '\'' && c != '"') {
+						renderer.renderDirectly("z_al",
+							"{constraint:function(){\nreturn "+js+";}}");
+					} else {
+						renderer.renderDirectly("constraint", js);
+					}
+					constrDone = true;
+				}
+			} catch (AbstractMethodError ex) {
+				log.warning("Ignore incompatible constraint: "+cc);
+			}
+		}
+		if (!constrDone && _constr != null)
+			renderer.render("constraint", true);
 	}
 }

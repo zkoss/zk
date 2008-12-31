@@ -23,10 +23,10 @@ import org.zkoss.zk.ui.WrongValueException;
 
 /**
  * A constraint.
- * Instead of implementing this interface from scratch,
+ * Instead of implementing this interface,
  * you may use {@link SimpleConstraint} if applicable.
  *
- * <p>To have better responsiveness, you can handle more or all validations
+ * <p>To have better responsiveness, you can handle all (or some) validation
  * at the client by implementing an additional interface,
  * {@link ClientConstraint}.
  *
@@ -35,8 +35,9 @@ import org.zkoss.zk.ui.WrongValueException;
  * You can also implement {@link CustomConstraint}.
  * Then, {@link CustomConstraint#showCustomError} is called instead of
  * showing the default error box.
- * In addition, {@link ClientConstraint} is ignored in this case,
- * since all validation will be done at the server.
+ *
+ * <p>Since 5.0.0, {@link ClientConstraint} takes higher priority
+ * if both implemented.
  *
  * @author tomyeh
  * @see CustomConstraint
