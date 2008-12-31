@@ -1433,12 +1433,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 					//$onClick and so on
 		}
 
-		if (_wgtlsns != null)
-			for (Iterator it = _wgtlsns.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				renderer.renderWidgetListener(
-					(String)me.getKey(), (String)me.getValue());
-			}
+		renderer.renderWidgetListeners(_wgtlsns);
 	}
 	/** An utility to be called by {@link #renderProperties} to
 	 * render a string-value property.

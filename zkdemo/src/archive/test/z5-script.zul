@@ -20,12 +20,12 @@ xmlns:w="http://www.zkoss.org/2005/zk/client">
 	<separator bar="true"/>
 	<script>
 	var inf = this.getFellow('inf'); //this is the script widget
-	var btn = new zul.wgt.Button();
-	btn.setLabel('Append+');
-	btn.listen('onClick', btn);
-	btn.onClick = function () {
-		inf.setValue(inf.getValue() + '+');
-	}
+	var btn = new zul.wgt.Button({label: 'Append+',
+		listeners: {onClick: function () {
+				inf.setValue(inf.getValue() + '+');
+			}
+		}
+	});
 	this.parent.appendChild(btn);
 	</script>
 	<script src="z5-script.js"/>

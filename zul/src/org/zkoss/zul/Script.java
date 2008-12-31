@@ -25,48 +25,43 @@ import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.AbstractComponent;
 
 /**
- * A component to represent script codes running at the client.
+ * A component to generate script codes that will be evaluated at the client.
  * It is similar to HTML SCRIPT tag, except it is not evaluated immediately.
- * Rather, it is evaluated after all widgets are created.
+ * Rather, it is evaluated after all widgets are created and mounted
+ * to the DOM tree.
  *
- * <p>Note: it is the scripting codes running at the client, not at the
+ * <p>Note: it is the script codes running at the client, not at the
  * server. Don't confuse it with the <code>zscript</code> element.
  *
- * <p>There are three formats when used in a ZUML page:
+ * <p>There are several way to embed script codes in a ZUML page:
  *
- * <p>Format 1: Specify the URL of the JS file
+ * <p>Approach 1: Specify the URL of the JS file
  * <pre><code>&lt;script src="my.js"/&gt;
  * </code></pre>
  *
- * <p>Format 2: Specify the JavaScript codes directly
+ * <p>Approach 2: Specify the JavaScript codes directly
  * <pre><code>&lt;script&gt;
- * some_js_at_browser();
- *&lt;/script&gt;
- * </code></pre>
- *
- * <p>Format 3: Specify the JavaScript codes by use of the content
- * property ({@link #setContent}).
- * <pre><code>&lt;script&gt;
- * &lt;attribute name="content"&gt;
- *  some_js_at_browser();
- * &lt;/attribute&gt;
+ * this.getFellow('l').setValue('new value');
+ * //...
  *&lt;/script&gt;
  * </code></pre>
  *
  * <p>Notice that, since 5.0, the JavaScript codes are evaluated after
- * the widgets are created. In other words, it is always deferred.
- * For format 2 and 3, JavaScript codes are evaluated as a method of
- * this widget. Thus, you can access this widget with <code>this</code>
+ * the widgets are created and mounted. In other words, it is always deferred.
+ * Moreover, codes specified in Approach 2 are evaluated as a method of
+ * the peer widget. Thus, you can access this widget with <code>this</code>
  *
- * <p>Notice that JavaScript codes specified in Format 1 might be evaluated
+ * <p>Notice that JavaScript codes specified in Approach 1 might be evaluated
  * later than codes in other formats since it takes another HTTP request to
  * load the JavaScript file.
  *
- * <p>If this is an issue, you can use ZHTML's script component, or
+ * <p>If you want to run the codes immediately without waiting the widgets
+ * to be created, you can use the native namespace, or
  * specify it in language addon.
  *
- * <pre><code>&lt:script xmlns:h="http://www.w3.org/1999/xhtml" src="${c:encodeURL('/js/mine.js')}" /&gt;
- * //Note: encodeURL is required for ZHTML component set
+ * <pre><code>&lt:n:script xmlns:n="http://www.zkoss.org/2005/zk/native"
+ * src="${c:encodeURL('/js/mine.js')}" /&gt;
+ * //Note: encodeURL is required since it is native (i.e., generated directly)
  *</code></pre>
  *
  * @author tomyeh

@@ -18,6 +18,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
+import java.util.Map;
+import java.util.Iterator;
 import java.util.Date;
 
 import org.zkoss.lang.Objects;
@@ -308,12 +310,20 @@ public class JsContentRenderer implements ContentRenderer {
 		_buf.append((String)value);
 	}
 
-	/** Renders the JavaScript code snippet for an event listener
-	 * for the peer widget.
+	/** Renders the JavaScript code snippet for event listeners
+	 * registered for the peer widget.
 	 */
-	public void renderWidgetListener(String name, String script) {
-		renderName("listener");
-		_buf.append("['").append(name).append("',function(event){\n")
-			.append(script).append("\n}]");
+	public void renderWidgetListeners(Map listeners) {
+		if (listeners == null || listeners.isEmpty())
+			return;
+
+		renderName("listeners");
+		_buf.append('{');
+		for (Iterator it = listeners.entrySet().iterator(); it.hasNext();) {
+			final Map.Entry me = (Map.Entry)it.next();
+			_buf.append(me.getKey()).append(":function(event){\n")
+				.append(me.getValue()).append("\n}");
+		}
+		_buf.append('}');
 	}
 }

@@ -18,6 +18,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
+import java.util.Map;
+import java.util.Iterator;
 import java.util.Date;
 
 import org.zkoss.lang.Objects;
@@ -124,7 +126,10 @@ public class XmlContentRenderer implements ContentRenderer {
 
 	/** It is the same as <code>render(name, script)</code>.
 	 */
-	public void renderWidgetListener(String name, String script) {
-		render(name, script);
+	public void renderWidgetListeners(Map listeners) {
+		for (Iterator it = listeners.entrySet().iterator(); it.hasNext();) {
+			final Map.Entry me = (Map.Entry)it.next();
+			render((String)me.getKey(), me.getValue());
+		}
 	}
 }

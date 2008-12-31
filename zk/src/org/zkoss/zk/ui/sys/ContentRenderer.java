@@ -19,6 +19,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.sys;
 
 import java.util.Date;
+import java.util.Map;
 import java.io.IOException;
 
 /**
@@ -62,9 +63,11 @@ public interface ContentRenderer {
 	 * snippet.
 	 */
 	public void renderDirectly(String name, Object value);
-	/** Renders an event listener for the peer widget.
-	 * @param name the event name, such as onClick (never null)
-	 * @param script the script (never null)
+	/** Renders the JavaScript code snippet for event listeners
+	 * registered for the peer widget.
+	 * @param listeners the map of listeners to register at the peer widget.
+	 * The key is the event name, and the value the code snippet.
+	 * They are both String instances.
 	 */
-	public void renderWidgetListener(String name, String script);
+	public void renderWidgetListeners(Map listeners);
 }

@@ -725,17 +725,19 @@ zk.Widget = zk.$extends(zk.Object, {
 		var lsns = this._lsns[evtnm];
 		return lsns && lsns.length;
 	},
-	setListener: function (inf) {
-		var evtnm = inf[0], fn = inf[1],
-			lsns = this._$lsns;
-			oldfn = lsns[evtnm];
-		if (oldfn) { //unlisten first
-			delete lsns[evtnm];
-			this.unlisten(evtnm, this, oldfn);
-		}
-		if (fn) {
-			if (typeof fn != 'function') fn = new Function(fn);
-			this.listen(evtnm, this, lsns[evtnm] = fn);
+	setListeners: function (infs) {
+		var lsns = this._$lsns;
+		for (var evtnm in infs) {
+			var fn = infs[evtnm],
+				oldfn = lsns[evtnm];
+			if (oldfn) { //unlisten first
+				delete lsns[evtnm];
+				this.unlisten(evtnm, this, oldfn);
+			}
+			if (fn) {
+				if (typeof fn != 'function') fn = new Function(fn);
+				this.listen(evtnm, this, lsns[evtnm] = fn);
+			}
 		}
 	},
 

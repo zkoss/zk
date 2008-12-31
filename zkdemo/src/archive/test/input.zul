@@ -20,4 +20,14 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
   <separator/>
   onChanging: <textbox onChanging="l.value = event.value" onChange='l.value = "[" + self.value + "]"'/>
   <label id="l"/>
+
+  <separator/>
+  no empty: <textbox constraint="no empty"/>
+  <separator/>
+  email:  <textbox constraint="/.+@.+\.[a-z]+/: e-mail only"/>
+  <separator/>
+  <zscript>
+  constr = new SimpleConstraint(SimpleConstraint.NO_EMPTY, "EMPTY NOT ALLOWED");
+  </zscript>
+  no empty: <textbox constraint="${constr}"/>
 </window>
