@@ -833,9 +833,10 @@ zk.Widget = zk.$extends(zk.Object, {
 }, {
 	_floating: [], //[{widget,node}]
 	$: function (n, strict) {
+		var binds = zk.Widget._binds;
 		if (typeof n == 'string') {
 			var j = n.indexOf('$');
-			return zk.Widget._binds[j >= 0 ? n.substring(0, j): n];
+			return binds[j >= 0 ? n.substring(0, j): n];
 		}
 
 		if (!n || zk.Widget.isInstance(n)) return n;
@@ -851,16 +852,17 @@ zk.Widget = zk.$extends(zk.Object, {
 				var j = id.indexOf('$');
 				if (j >= 0) {
 					id = id.substring(0, j);
-					if (!strict) {
-						wgt = zk.Widget._binds[id];
-						if (wgt) return wgt;
-					}
-					var n2 = zDom.$(id);
-					if (n2 && (!strict || zDom.isAncestor(n2, n))) {
-						wgt = n2.z_wgt;
-						if (wgt) return wgt;
+					if (strict) {
+						var n2 = zDom.$(id);
+						if (n2) {
+							wgt = n2.z_wgt || binds[id];
+							if (wgt && zDom.isAncestor(n2, n)) return wgt;
+							continue;
+						}
 					}
 				}
+				wgt = binds[id];
+				if (wgt) return wgt;
 			}
 		}
 		return null;
