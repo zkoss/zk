@@ -29,13 +29,13 @@ import org.zkoss.zk.au.AuRequests;
  * Represents an event cause by mouse activitly.
  *
  * <p>There are two possible way to identify a mouse event.
- * One is by coordination ({@link #getX} and {@link #getY}.
+ * One is by coordinate ({@link #getX} and {@link #getY}.
  * The other is by a logical name, called area ({@link #getArea}).
  *
  * @author tomyeh
  */
 public class MouseEvent extends Event {
-	private final int _x, _y;
+	private final int _x, _y, _pgx, _pgy;
 	private final String _area;
 	private final int _keys;
 
@@ -66,7 +66,8 @@ public class MouseEvent extends Event {
 		if (comp == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, request);
 		final String[] data = request.getData();
-		if (data != null && data.length != 1 && data.length != 2 && data.length != 3)
+		if (data != null && data.length != 1 && data.length != 4
+		&& data.length != 5)
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {Objects.toString(data), request});
 		final String name = request.getName();
@@ -78,39 +79,56 @@ public class MouseEvent extends Event {
 				new MouseEvent(name, comp, data[0]):	//by area
 				new MouseEvent(name, comp,			//by coord
 					Integer.parseInt(data[0]), Integer.parseInt(data[1]),
-					data.length == 2 ? 0: AuRequests.parseKeys(data[2]));
+					Integer.parseInt(data[2]), Integer.parseInt(data[3]),
+					data.length == 4 ? 0: AuRequests.parseKeys(data[4]));
 	}
 
-	/** Construct a mouse relevant event with coordination or area.
+	/** Construct a mouse relevant event with coordinate or area.
 	 */
 	public MouseEvent(String name, Component target) {
 		super(name, target);
 		_area = null;
-		_x = _y = _keys = 0;
+		_x = _y = _pgx = _pgy = _keys = 0;
 	}
 	/** Constructs a mouse relevant event.
 	 */
-	public MouseEvent(String name, Component target, int x, int y) {
-		this(name, target, x, y, 0);
+	public MouseEvent(String name, Component target, int x, int y,
+	int pageX, int pageY) {
+		this(name, target, x, y, pageX, pageY, 0);
 	}
 	/** Constructs a mouse relevant event.
 	 *
 	 * @param keys a combination of {@link #CTRL_KEY}, {@link #SHIFT_KEY}
 	 * {@link #ALT_KEY}, {@link #LEFT_CLICK} and {@link #RIGHT_CLICK}.
 	 */
-	public MouseEvent(String name, Component target, int x, int y, int keys) {
+	public MouseEvent(String name, Component target, int x, int y,
+	int pageX, int pageY, int keys) {
 		super(name, target);
 		_x = x;
 		_y = y;
+		_pgx = pageX;
+		_pgy = pageY;
 		_area = null;
 		_keys = keys;
+	}
+	/** @deprecated As of release 5.0.0, replaced with
+	 * {@link #MouseEvent(String,Component,int,int,int,int)}.
+	 */
+	public MouseEvent(String name, Component target, int x, int y) {
+		this(name, target, x, y, x, y, 0);
+	}
+	/** @deprecated As of release 5.0.0, replaced with
+	 * {@link #MouseEvent(String,Component,int,int,int,init,int)}.
+	 */
+	public MouseEvent(String name, Component target, int x, int y, int keys) {
+		this(name, target, x, y, x, y, keys);
 	}
 	/** Constructs a mouse relevant event with a logic name called area.
 	 */
 	public MouseEvent(String name, Component target, String area) {
 		super(name, target);
 		_area = area;
-		_x = _y = _keys = 0;
+		_x = _y = _pgx = _pgy = _keys = 0;
 	}
 
 	/** Returns the logical name of the area that the click occurs, or
@@ -122,17 +140,31 @@ public class MouseEvent extends Event {
 	public String getArea() {
 		return _area;
 	}
-	/** Returns the x coordination of the mouse pointer relevant to
+	/** Returns the horizontal coordinate of the mouse pointer relevant to
 	 * the component.
 	 */
 	public final int getX() {
 		return _x;
 	}
-	/** Returns the y coordination of the mouse pointer relevant to
+	/** Returns the vertical coordinate of the mouse pointer relevant to
 	 * the component.
 	 */
 	public final int getY() {
 		return _y;
+	}
+	/** Returns the horizontal coordinate of the mouse pointer relative
+	 * to the whole document.
+	 * @since 5.0.0
+	 */
+	public final int getPageX() {
+		return _pgx;
+	}
+	/** Returns the vertical coordinate of the mouse pointer relative
+	 * to the whole document.
+	 * @since 5.0.0
+	 */
+	public final int getPageY() {
+		return _pgy;
 	}
 
 	/** Returns what keys were pressed when the mouse is clicked, or 0 if

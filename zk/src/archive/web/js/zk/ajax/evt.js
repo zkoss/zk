@@ -70,7 +70,7 @@ zEvt = {
 		};
 	},
 	_mouseDataMarshal: function () {
-		return [this.x, this.y, this.keys.marshal()];
+		return [this.x, this.y, this.pageX, this.pageY, this.keys.marshal()];
 	},
 	_keyDataMarshal: function () {
 		return [this.keyCode, this.charCode, this.keys.marshal()];
