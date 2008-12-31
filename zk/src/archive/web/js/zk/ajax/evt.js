@@ -40,10 +40,11 @@ zEvt = {
 	},
 	mouseData: function (evt, target) {
 		evt = evt || window.event;
-		var ofs = zDom.cmOffset(target ? target: zEvt.target(evt));
+		var ofs = zDom.cmOffset(target ? target: zEvt.target(evt)),
+			px = zEvt.x(evt), py = zEvt.y(evt);
 		return {
-			x: zEvt.x(evt) - ofs[0],
-			y: zEvt.y(evt) - ofs[1],
+			x: sx - ofs[0], y: sy - ofs[1],
+			pageX: px, pageY: py,
 			keys: zEvt.keyMetaData(evt),
 			marshal: zEvt._mouseDataMarshal
 		};
