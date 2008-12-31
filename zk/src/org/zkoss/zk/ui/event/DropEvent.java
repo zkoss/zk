@@ -33,11 +33,19 @@ public class DropEvent extends MouseEvent {
 
 	/** Constructs a drop event.
 	 * @param dragged The component being dragged and drop to {@link #getTarget}.
+	 * @since 5.0.0
+	 */
+	public DropEvent(String name, Component target, Component dragged,
+	int x, int y, int pageX, int pageY, int keys) {
+		super(name, target, x, y, pageX, pageY, keys);
+		_dragged = dragged;
+	}
+	/** @deprecated As of release 5.0.0, replaced with
+	 * {@link #DropEvent(String,Component,Component,int,int,int)}.
 	 */
 	public DropEvent(String name, Component target, Component dragged,
 	int x, int y, int keys) {
-		super(name, target, x, y, keys);
-		_dragged = dragged;
+		this(name, target, dragged, x, y, x, y, keys);
 	}
 	/** Returns the component being dragged and drop to {@link #getTarget}.
 	 */

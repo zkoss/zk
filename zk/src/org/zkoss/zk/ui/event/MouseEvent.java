@@ -91,6 +91,7 @@ public class MouseEvent extends Event {
 		_x = _y = _pgx = _pgy = _keys = 0;
 	}
 	/** Constructs a mouse relevant event.
+	 * @since 5.0.0
 	 */
 	public MouseEvent(String name, Component target, int x, int y,
 	int pageX, int pageY) {
@@ -100,6 +101,7 @@ public class MouseEvent extends Event {
 	 *
 	 * @param keys a combination of {@link #CTRL_KEY}, {@link #SHIFT_KEY}
 	 * {@link #ALT_KEY}, {@link #LEFT_CLICK} and {@link #RIGHT_CLICK}.
+	 * @since 5.0.0
 	 */
 	public MouseEvent(String name, Component target, int x, int y,
 	int pageX, int pageY, int keys) {
