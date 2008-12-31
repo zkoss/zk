@@ -1326,6 +1326,14 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		final String widgetClass = _def.getWidgetClass(getMold());
 		return widgetClass != null ? widgetClass: _def.getDefaultWidgetClass();
 	}
+	/** Returns whether this Web application can be crawled by search engies.
+	 * It is a shortcut of {@link org.zkoss.zk.ui.util.Configuration#isCrawlable}.
+	 * @since 5.0.0
+	 */
+	protected boolean isCrawlable() {
+		final Desktop desktop = getDesktop();
+		return desktop != null && desktop.getWebApp().getConfiguration().isCrawlable();
+	}
 	/** Returns the mold used to render this component.
 	 * Default: "default"
 	 */

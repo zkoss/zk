@@ -1298,8 +1298,7 @@ public class Configuration {
 	public int getResendDelay() {
 		return _resendDelay;
 	}
-	/** Returns whether this Web application is crawlable.
-	 * Make a Web application that allows search engines to crawl the application.
+	/** Returns whether this Web application can be crawled by search engies.
 	 * Notice that there is some performance loss for huge web pages.
 	 * <p>Default: false.
 	 * @since 5.0.0

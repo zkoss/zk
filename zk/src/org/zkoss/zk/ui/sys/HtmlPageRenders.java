@@ -498,15 +498,9 @@ public class HtmlPageRenders {
 			writeAttr(out, "id", page.getUuid());
 			out.write(">");
 
-			if (desktop.getWebApp().getConfiguration().isCrawlable()) {
-				//switch out and extout since we have to generate extra
-				//content fist (so JS can reference)
-				execCtrl.getVisualizer().setExtraWriter(extout = out);
-				out = new StringWriter();
-			}
-
+			execCtrl.getVisualizer().setExtraWriter(extout = out);
+			out = new StringWriter();
 			out.write("\n<script>zknewbg();try{");
-
 		}
 	
 		out.write("zkpgbg('");
@@ -534,14 +528,11 @@ public class HtmlPageRenders {
 
 		out.write("\nzkpge();");
 		if (standalone) {
-			if (extout != null) {
-				execCtrl.getVisualizer().setExtraWriter(null);
+			execCtrl.getVisualizer().setExtraWriter(null);
 
-				//Note: we switched extout and out (so extout is the real out)
-				Files.write(extout, ((StringWriter)out).getBuffer());
-				out = extout;
-			}
-
+			//Note: we switched extout and out (so extout is the real out)
+			Files.write(extout, ((StringWriter)out).getBuffer());
+			out = extout;
 			out.write("}finally{zknewe();}</script>\n");
 			out.write("</div>");
 		}

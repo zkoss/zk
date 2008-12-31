@@ -141,7 +141,7 @@ public class Label extends XulElement implements org.zkoss.zul.api.Label {
 		if (_value.length() > 0) {
 			boolean outed = false;
 			Execution exec = Executions.getCurrent();
-			if (exec != null) {
+			if (exec != null && isCrawlable()) {
 				final Writer out =
 					((ExecutionCtrl)exec).getVisualizer().getExtraWriter();
 				if (out != null) {

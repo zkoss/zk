@@ -33,6 +33,7 @@ import org.zkoss.web.Attributes;
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -271,18 +272,23 @@ implements DynamicPropertied, org.zkoss.zul.api.Include, Includer {
 				if (getChildPage() != null) {
 					Files.write(out, sw.getBuffer());
 				} else { //not ZUL page, so it must be HTML fragment
-					final Writer extout =
-					((ExecutionCtrl)getDesktop().getExecution())
-						.getVisualizer().getExtraWriter();
-					if (extout != null) {
-						extout.write("<div id=\"");
-						extout.write(getUuid());
-						extout.write("\">");
-						Files.write(extout, sw.getBuffer());
-						extout.write("</div>");
-
-						out.write("zkm.top().props.z_ea='content';");
-					} else {
+					boolean done = false;
+					Execution exec = Executions.getCurrent();
+					if (exec != null && isCrawlable()) {
+						final Writer extout =
+						((ExecutionCtrl)exec).getVisualizer().getExtraWriter();
+						if (extout != null) {
+							extout.write("<div id=\"");
+							extout.write(getUuid());
+							extout.write("\">");
+							Files.write(extout, sw.getBuffer());
+							extout.write("</div>");
+	
+							out.write("zkm.top().props.z_ea='content';");
+							done = true;
+						}
+					}
+					if (!done) {
 						out.write("zkm.top().props.content='");
 						final StringBuffer sb = new StringBuffer(1024);
 						Strings.escape(sb, sw.getBuffer(), "'\\\n\r\t\f");

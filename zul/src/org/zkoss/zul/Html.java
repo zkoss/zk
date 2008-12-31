@@ -112,7 +112,7 @@ public class Html extends XulElement implements org.zkoss.zul.api.Html {
 		String cnt = _content;
 		if (cnt.length() > 0) {
 			Execution exec = Executions.getCurrent();
-			if (exec != null) {
+			if (exec != null && isCrawlable()) {
 				final Writer out =
 					((ExecutionCtrl)exec).getVisualizer().getExtraWriter();
 				if (out != null) {

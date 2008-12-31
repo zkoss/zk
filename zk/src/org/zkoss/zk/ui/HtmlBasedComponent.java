@@ -359,6 +359,9 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	//-- rendering --//
 	/** Renders the content of this component, excluding the enclosing
 	 * tags and children.
+	 *
+	 * <p>See also
+	 * <a href="http://docs.zkoss.org/zk/Render_Special_Properties">Render Special Properties</a>
 	 * @since 5.0.0
 	 */
 	protected void renderProperties(ContentRenderer renderer)
