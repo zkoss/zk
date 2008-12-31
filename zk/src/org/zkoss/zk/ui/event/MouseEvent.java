@@ -118,7 +118,7 @@ public class MouseEvent extends Event {
 		this(name, target, x, y, x, y, 0);
 	}
 	/** @deprecated As of release 5.0.0, replaced with
-	 * {@link #MouseEvent(String,Component,int,int,int,init,int)}.
+	 * {@link #MouseEvent(String,Component,int,int,int,int,int)}.
 	 */
 	public MouseEvent(String name, Component target, int x, int y, int keys) {
 		this(name, target, x, y, x, y, keys);
