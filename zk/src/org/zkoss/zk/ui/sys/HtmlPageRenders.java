@@ -537,6 +537,19 @@ public class HtmlPageRenders {
 			out.write("</div>");
 		}
 	}
+	/** Generates the content of a standalone componnent that
+	 * the peer widget is not a child of the page widget at the client.
+	 */
+	public static final void outStandalone(Execution exec,
+	Component comp, Writer out) throws java.io.IOException {
+		out.write("<div id=\"");
+		out.write(comp.getUuid());
+		out.write("\"></div><script>\nzknewbg();try{\n");
+
+		((ComponentCtrl)comp).redraw(out);
+
+		out.write("\n}finally{zknewe();}\n</script>\n");
+	}
 	private static final void writeAttr(Writer out, String name, String value)
 	throws IOException {
 		out.write(' ');

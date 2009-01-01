@@ -58,7 +58,8 @@ import org.zkoss.zk.ui.impl.NativeHelpers;
  */
 public class HtmlNativeComponent extends AbstractComponent
 implements DynamicTag, Native {
-	private static Helper _helper = new HtmlHelper();
+	private static final Helper _helper = new HtmlHelper();
+	private static final String ATTR_TOP_NATIVE = "org.zkoss.zk.top-native";
 
 	private String _tag;
 	private String _prolog = "", _epilog = "";
@@ -93,7 +94,7 @@ implements DynamicTag, Native {
 	 * @since 5.0.0
 	 */
 	public String getWidgetClass() {
-		return "#n";
+		return "zk.Native";
 	}
 	/** Returns the tag name, or null if plain text.
 	 */
@@ -140,45 +141,78 @@ implements DynamicTag, Native {
 	}
 
 	public void redraw(Writer out) throws java.io.IOException {
+		final boolean root = getParent() == null;
+		final Execution exec = Executions.getCurrent();
+		if (exec == null
+		|| (!root && exec.getAttribute(ATTR_TOP_NATIVE) == null
+		 && !(_tag == null && getFirstChild() == null))) {
+			super.redraw(out);
+			return;
+		}
+
+		final RenderContext rc = new RenderContext();
+		out.write(getPrologHalf(rc));
+
+		//children
+		if (root) exec.setAttribute(ATTR_TOP_NATIVE, Boolean.TRUE);
+		for (Component child = getFirstChild(); child != null;) {
+			Component next = child.getNextSibling();
+			if (child instanceof HtmlNativeComponent) {
+				((ComponentCtrl)child).redraw(out);
+			} else {
+				exec.removeAttribute(ATTR_TOP_NATIVE);
+				HtmlPageRenders.outStandalone(exec, child, out);
+				exec.setAttribute(ATTR_TOP_NATIVE, Boolean.TRUE);
+			}
+			child = next;
+		}
+
+		out.write(getEpilogHalf(rc));
+	}
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		final RenderContext rc = new RenderContext();
+		render(renderer, "prolog", getPrologHalf(rc));
+		render(renderer, "epilog", getEpilogHalf(rc));
+	}
+	private String getPrologHalf(RenderContext rc) {
 		final StringBuffer sb = new StringBuffer(128);
 		final Helper helper = getHelper();
 			//don't use _helper directly, since the derive might override it
 
 		//first half
 		helper.getFirstHalf(sb, _tag, _props, _dns);
-		write(out, sb);
 
 		//prolog
 		sb.append(_prolog); //no encoding
-		boolean zktagGened = false;
 		final String tn = _tag != null ? _tag.toLowerCase(): "";
 		if ("html".equals(tn) || "body".equals(tn)
 		|| "head".equals(tn)) {//<head> might be part of _prolog
 			final int j = indexOfHead(sb);
 			if (j >= 0) {
-				zktagGened = true;
+				rc.zktagGened = true;
 				final String zktags =
 					HtmlPageRenders.outZkTags(Executions.getCurrent(), null, null);
 				if (zktags != null)
 					sb.insert(j, zktags);
 			}
 		}
-		write(out, sb);
 
-		//children
-		for (Component child = getFirstChild(); child != null;) {
-			Component next = child.getNextSibling();
-			((ComponentCtrl)child).redraw(out);
-			child = next;
-		}
+		return sb.toString();
+	}
+	private String getEpilogHalf(RenderContext rc) {
+		final StringBuffer sb = new StringBuffer(128);
+		final Helper helper = getHelper();
 
 		//epilog
 		sb.append(_epilog);
-		write(out, sb);
 
 		//second half
 		helper.getSecondHalf(sb, _tag);
-		if (!zktagGened && ("html".equals(tn) || "body".equals(tn))) {
+		final String tn = _tag != null ? _tag.toLowerCase(): "";
+		if (!rc.zktagGened && ("html".equals(tn) || "body".equals(tn))) {
 			final int j = sb.lastIndexOf("</" + _tag);
 			if (j >= 0) {
 				final String zktags =
@@ -187,16 +221,9 @@ implements DynamicTag, Native {
 					sb.insert(j, zktags);
 			}
 		}
-		out.write(sb.toString());
+		return sb.toString();
 	}
-	/** Writes the content of stringbuffer to the writer.
-	 * After written, stringbuffer is reset.
-	 */
-	private static void write(Writer out, StringBuffer sb)
-	throws java.io.IOException {
-		out.write(sb.toString());
-		sb.setLength(0);
-	}
+
 	/** Search <head> case-insensitive. */
 	private static int indexOfHead(StringBuffer sb) {
 		for (int j = 0, len = sb.length(); (j = sb.indexOf("<", j)) >= 0;) {
@@ -318,4 +345,7 @@ implements DynamicTag, Native {
 		for (int j = begNoLFs.length; --j >= 0;)
 			_begNoLFs.add(begNoLFs[j]);
 	}
+	private static class RenderContext {
+		boolean zktagGened;
+	};
 }

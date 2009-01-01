@@ -21,7 +21,6 @@ package org.zkoss.zk.ui;
 import java.util.Collection;
 import java.util.Set;
 import java.util.HashSet;
-import java.io.IOException;
 
 import org.zkoss.lang.Objects;
 
@@ -29,7 +28,6 @@ import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.ui.ext.render.PrologAllowed;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
-import org.zkoss.zk.ui.sys.ContentRenderer;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.out.AuFocus;
 import org.zkoss.zk.fn.ZkFns;
@@ -364,8 +362,8 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	 * <a href="http://docs.zkoss.org/zk/Render_Special_Properties">Render Special Properties</a>
 	 * @since 5.0.0
 	 */
-	protected void renderProperties(ContentRenderer renderer)
-	throws IOException {
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
 		super.renderProperties(renderer);
 
 		render(renderer, "tooltiptext", _tooltiptext);

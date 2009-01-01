@@ -451,7 +451,8 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 
 	redraw: function (out) {
-		if (this.prolog) out.push(this.prolog);
+		var s = this.prolog;
+		if (s) out.push(s);
 		this.$class.molds[this._mold].apply(this, arguments);
 	},
 	updateDomClass_: function () {
@@ -1047,3 +1048,16 @@ zk.Skipper = zk.$extends(zk.Object, {
 	}
 });
 zk.Skipper.nonCaptionSkipper = new zk.Skipper();
+
+zk.Native = zk.$extends(zk.Widget, {
+	redraw: function (out) {
+		var s = this.prolog;
+		if (s) out.push(s);
+
+		for (var w = this.firstChild; w; w = w.nextSibling)
+			w.redraw(out);
+
+		s = this.epilog;
+		if (s) out.push(s);
+	}
+});

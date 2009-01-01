@@ -65,7 +65,7 @@ zPkg = {
 		e.src = zAu.comURI(uri, dt);
 		document.getElementsByTagName("HEAD")[0].appendChild(e);
 	},
-	_lded: {}, //loaded
+	_lded: {'zk': true}, //loaded
 	_lding: [], //loading
 	_aflds: [],
 
