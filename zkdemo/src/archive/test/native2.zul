@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page complete="true"?>
+<!--
+native2.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jan  1 15:41:31     2009, Created by tomyeh
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+-->
+<html xmlns="http://www.zkoss.org/2005/zk/native"
+xmlns:u="http://www.zkoss.org/2005/zul"
+xmlns:zk="http://www.zkoss.org/2005/zk">
+ <head>
+	<title>Native Complete Page</title>
+ </head>
+ <body>
+	<zk:zscript>
+	String[] values = new String[] {"Red", "Blue", "Purple"};
+	</zk:zscript>
+	<ol>
+		<li forEach="${values}"><u:textbox value="${each}"/></li>
+	</ol>
+	<u:button label="Hi" onClick='l.value += "Hi! "'/>
+	<u:label id="l"/>
+	<u:groupbox>
+		<u:caption label="Native inside"/>
+		<ul>
+			<li forEach="${values}">${each}</li>
+		</ul>
+	</u:groupbox>
+ </body>
+</html>

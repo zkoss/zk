@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-Z30-native.zul
+native.zul
 
 {{IS_NOTE
 	Purpose:
@@ -31,11 +31,11 @@ xmlns:n="http://www.zkoss.org/2005/zk/native">
  		<n:li id="direct"><!-- it is OK to have the same ID if inine -->
 			<textbox id="tb" onChanging="i1.value = event.value"/>
 			text in between
-			<combobox id="i1"/>
+			<label id="i1"/>
 		</n:li>
   		<n:li style="color:blue">
   			Mixed with
-			<datebox onChange="tb.value = org.zkoss.lang.Objects.toString(self.value)"/>
+			<textbox onChange="tb.value = org.zkoss.lang.Objects.toString(self.value)"/>
 			<n:br/>
 			and inline text.
 		 </n:li>
