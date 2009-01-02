@@ -1181,22 +1181,25 @@ public class Parser {
 		//Optimize 3: merge to split child
 		//If there is only one native child, we make it a split child and
 		//make all its children (grand-chidren) up one level
-		if (compInfo.getChildren().size() == 1 && !compInfo.withForEach()
+		if (compInfo.getChildren().size() == 1
 		&& compInfo.getSplitChild() == null /*just in case*/) {
 			Iterator it = compInfo.getChildren().iterator();
 			final Object o = it.next();
 			if (o instanceof NativeInfo) {
 				final NativeInfo childInfo = (NativeInfo)o;
-				childInfo.setParentDirectly(null);
-				compInfo.setSplitChild(childInfo);
-				it.remove();
-
-				for (it = childInfo.getChildren().iterator(); it.hasNext();) {
-					final Object gc = it.next();
+				//FUTURE: enhance UiEngineImpl to handle split's forEach
+				if (!childInfo.withForEach()) {
+					childInfo.setParentDirectly(null);
+					compInfo.setSplitChild(childInfo);
 					it.remove();
-					compInfo.appendChildDirectly(gc);
-					if (gc instanceof ComponentInfo)
-						((ComponentInfo)gc).setParentDirectly(compInfo);
+
+					for (it = childInfo.getChildren().iterator(); it.hasNext();) {
+						final Object gc = it.next();
+						it.remove();
+						compInfo.appendChildDirectly(gc);
+						if (gc instanceof ComponentInfo)
+							((ComponentInfo)gc).setParentDirectly(compInfo);
+					}
 				}
 			}
 		}
