@@ -141,9 +141,9 @@ implements DynamicTag, Native {
 	}
 
 	public void redraw(Writer out) throws java.io.IOException {
-		final boolean root = getParent() == null;
+		final boolean root = getParent() == null && getPage().isComplete();
 		final Execution exec = Executions.getCurrent();
-		if (exec == null
+		if (exec == null || exec.isAsyncUpdate(null)
 		|| (!root && exec.getAttribute(ATTR_TOP_NATIVE) == null
 		 && !(_tag == null && getFirstChild() == null))) {
 			super.redraw(out);
