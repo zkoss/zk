@@ -561,6 +561,12 @@ implements Cloneable, Condition, java.io.Externalizable {
 	public void setCondition(ConditionImpl cond) {
 		_cond = cond;
 	}
+	/** Tests if the condition is set
+	 * @since 3.5.3
+	 */
+	public boolean withCondition() {
+		return _cond != null;
+	}
 
 	/** Returns the forEach object if the forEach attribute is defined
 	 * (or {@link #setForEach} is called).
