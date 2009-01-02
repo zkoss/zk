@@ -141,11 +141,11 @@ implements DynamicTag, Native {
 	}
 
 	public void redraw(Writer out) throws java.io.IOException {
+		//Note: _tag == null can NOT be handled specially
 		final boolean root = getParent() == null && getPage().isComplete();
 		final Execution exec = Executions.getCurrent();
 		if (exec == null || exec.isAsyncUpdate(null)
-		|| (!root && exec.getAttribute(ATTR_TOP_NATIVE) == null
-		 && !(_tag == null && getFirstChild() == null))) {
+		|| (!root && exec.getAttribute(ATTR_TOP_NATIVE) == null)) {
 			super.redraw(out);
 			return;
 		}
