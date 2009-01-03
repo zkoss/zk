@@ -490,16 +490,13 @@ public class HtmlPageRenders {
 			}
 		}
 
-		Writer extout = null;
+		StringWriter extout = null;
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 		final boolean standalone = !au && owner == null;
 		if (standalone) {
-			out.write("<div");
-			writeAttr(out, "id", page.getUuid());
-			out.write(">");
+			extout = new StringWriter();
+			execCtrl.getVisualizer().setExtraWriter(extout);
 
-			execCtrl.getVisualizer().setExtraWriter(extout = out);
-			out = new StringWriter();
 			out.write("\n<script>zknewbg();try{");
 		}
 	
@@ -527,13 +524,17 @@ public class HtmlPageRenders {
 			((ComponentCtrl)it.next()).redraw(out);
 
 		out.write("\nzkpge();");
+
 		if (standalone) {
 			execCtrl.getVisualizer().setExtraWriter(null);
 
-			//Note: we switched extout and out (so extout is the real out)
-			Files.write(extout, ((StringWriter)out).getBuffer());
-			out = extout;
 			out.write("}finally{zknewe();}</script>\n");
+
+			//Note: we switched extout and out (so extout is the real out)
+			out.write("<div");
+			writeAttr(out, "id", page.getUuid());
+			out.write(">");
+			Files.write(out, extout.getBuffer());
 			out.write("</div>");
 		}
 	}

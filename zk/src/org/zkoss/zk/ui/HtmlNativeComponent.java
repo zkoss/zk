@@ -157,7 +157,7 @@ implements DynamicTag, Native {
 		if (root) exec.setAttribute(ATTR_TOP_NATIVE, Boolean.TRUE);
 		for (Component child = getFirstChild(); child != null;) {
 			Component next = child.getNextSibling();
-			if (child instanceof HtmlNativeComponent) {
+			if (child instanceof Native) {
 				((ComponentCtrl)child).redraw(out);
 			} else {
 				exec.removeAttribute(ATTR_TOP_NATIVE);
