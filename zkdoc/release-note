@@ -17,6 +17,9 @@ ZK 5.0.0
   	events.
   + Overlapped window in overlapped won't be cropped
     In older version, developers have to specify overflow:visible
+  + org.zkoss.zul.theme.enableZKPrefix is deprecated.
+    Use the library properties, such as org.zkoss.zul.theme.fontSizeM,
+    to use the same font for ZK and non-ZK content
 
 	--------
 ZK 3.6.0

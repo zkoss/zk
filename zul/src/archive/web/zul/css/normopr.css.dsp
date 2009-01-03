@@ -3,20 +3,10 @@
 
 <c:include page="~./zul/css/norm.css.dsp"/>
 
-<c:choose>
-<c:when  test="${!empty c:property('org.zkoss.zul.theme.enableZKPrefix')}">
-.zk option {
-	font-family: ${fontFamilyC};
-	font-size: ${fontSizeXS}; font-weight: normal;
-}
-</c:when>
-<c:otherwise>
 option {
 	font-family: ${fontFamilyC};
 	font-size: ${fontSizeXS}; font-weight: normal;
 }
-</c:otherwise>
-</c:choose>
 
 <%-- Append New --%>
 .z-messagebox-btn {

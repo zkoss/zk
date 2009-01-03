@@ -42,7 +42,7 @@
 	</iframe>
 
 	<input type="image" src="/zkdemo/img/coffee.gif"/> <br/>
-	<z:datebox id="db" focus="true"/>
+	<z:textbox id="db" focus="true"/>
 	<center>
 	center something
 	</center>

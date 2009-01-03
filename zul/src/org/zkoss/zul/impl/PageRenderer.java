@@ -29,6 +29,7 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
+
 /**
  * The page render for ZUL pages.
  *
@@ -120,7 +121,7 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 		for (Iterator it = page.getRoots().iterator(); it.hasNext();)
 			((ComponentCtrl)it.next()).redraw(out);
 
-		write(out, HtmlPageRenders.outZkTags(exec, null, null)); //might null
+		write(out, HtmlPageRenders.outZkTags(exec, page.getDesktop()));
 		writeln(out, HtmlPageRenders.outUnavailable(exec));
 	}
 }

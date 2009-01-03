@@ -33,31 +33,7 @@ body {
 </c:if>
 
 <%-- paragraphs --%>
-<c:choose>
-<c:when test="${!empty c:property('org.zkoss.zul.theme.enableZKPrefix')}">
-.zk p, .zk div, .zk span, .zk label, .zk a, .zk input, .zk textarea,
-.zk button, .zk input.button, .zk input.file {
-	font-family: ${fontFamilyC};
-	font-size: ${fontSizeM}; font-weight: normal;
-}
-.zk legend {
-	font-family: ${fontFamilyT};
-	font-size: ${fontSizeM}; font-weight: normal;
-}
-.zk th {
-	font-family: ${fontFamilyT};
-	font-weight: bold; 
-}
-.zk thead tr {
-	font-family: ${fontFamilyT};
-	font-weight: bold;
-}
-.zk img {border: 0;}
-</c:when>
-<c:otherwise>
 img {border: 0;}
-</c:otherwise>
-</c:choose>
 
 <%-- DSP --%>
 a.gamma {color: #000; text-decoration: none;}

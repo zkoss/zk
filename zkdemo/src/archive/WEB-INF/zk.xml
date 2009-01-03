@@ -263,14 +263,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<value>true</value>
 	</library-property>
 	-->
-	<!-- Configure ZUL to apply the zk prefix in the CSS file (norm*.css).
-		Use this only if you want to use different fonts for ZK components
-		and the rest of your Web pages
-	<library-property>
-		<name>org.zkoss.zul.theme.enableZKPrefix</name>
-		<value>true</value>
-	</library-property>
-	-->
 	
 	<!-- Configure the Hibernate SessionFactory Lifecycle.
 	<listener>
