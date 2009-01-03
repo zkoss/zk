@@ -924,8 +924,4 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</mold>
 		<preserve-blank/>
 	</component>
-	<component>
-		<component-name>zkhead</component-name>
-		<component-class>org.zkoss.zul.Zkhead</component-class>
-	</component>
 </language>

@@ -2620,12 +2620,6 @@
 		<xs:attribute name="datasource" type="xs:string" use="optional" />
 		<xs:attribute name="type" type="jasperreportTypeAttrType" use="optional" />
 	</xs:complexType>
-	<!-- zkhead -->
-	<xs:element name="zkhead" type="zkheadType" />
-	<xs:complexType name="zkheadType">
-		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-		<xs:attributeGroup ref="abstractComponentAttrGroup" />
-	</xs:complexType>
 	<xs:simpleType name="jasperreportTypeAttrType">
 		<xs:union>
 			<xs:simpleType>

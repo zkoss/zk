@@ -4,7 +4,6 @@ ZK 3.5.3
   2433264: Able to access the URI of the error page
   2437121: Make DHtmlLayoutServlet as optional
   2448278: Chart could provide default model
-  2483396: ZUL namespace supports zkhead
   
 * Bugs
   2386650: NullPointerException when create tabs in onTimer()

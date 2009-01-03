@@ -31,8 +31,6 @@ import org.zkoss.zk.fn.ZkFns;
  * However, if you prefer to generate them in the particular location,
  * you can use this tag.
  *
- * <p>It is the same as {@link org.zkoss.zul.Zkhead}.
- *
  * @author tomyeh
  * @since 3.5.0
  */
