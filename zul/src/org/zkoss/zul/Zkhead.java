@@ -16,7 +16,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.zhtml;
+package org.zkoss.zul;
 
 import java.io.Writer;
 import java.io.IOException;
@@ -31,10 +31,10 @@ import org.zkoss.zk.fn.ZkFns;
  * However, if you prefer to generate them in the particular location,
  * you can use this tag.
  *
- * <p>It is the same as {@link org.zkoss.zul.Zkhead}.
+ * <p>It is the same as {@link org.zkoss.zhtml.Zkhead}.
  *
  * @author tomyeh
- * @since 3.5.0
+ * @since 3.5.3
  */
 public class Zkhead extends AbstractComponent {
 	public Zkhead() {
