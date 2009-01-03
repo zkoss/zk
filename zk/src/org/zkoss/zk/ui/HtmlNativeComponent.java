@@ -194,7 +194,7 @@ implements DynamicTag, Native {
 			if (j >= 0) {
 				rc.zktagGened = true;
 				final String zktags =
-					HtmlPageRenders.outZkTags(Executions.getCurrent(), null, null);
+					HtmlPageRenders.outZkTags(Executions.getCurrent(), getDesktop());
 				if (zktags != null)
 					sb.insert(j, zktags);
 			}
@@ -216,7 +216,7 @@ implements DynamicTag, Native {
 			final int j = sb.lastIndexOf("</" + _tag);
 			if (j >= 0) {
 				final String zktags =
-					HtmlPageRenders.outZkTags(Executions.getCurrent(), null, null);
+					HtmlPageRenders.outZkTags(Executions.getCurrent(), getDesktop());
 				if (zktags != null)
 					sb.insert(j, zktags);
 			}
