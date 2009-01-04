@@ -66,16 +66,13 @@ function zkopt(opts) {
 }
 
 function zkam(fn) {
-	setTimeout(function(){zk.afterMount(fn);}, 0);
-		//use timeout since it might be evaled before zknewbg
-}
-zk.afterMount = function (fn) { //part of zk
-	if (zk.mounting) {
+	if (zk.mounting || !zk.sysInited) {
 		zkm._afMts.push(fn);
 		return true;
 	}
 	fn();
 };
+zk.afterMount = zkam; //part of zk
 
 /** Used internally. */
 zkm = {

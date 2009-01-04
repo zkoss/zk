@@ -1061,7 +1061,9 @@ zDom = { //static methods
 	 */
 	focus: function (n, timeout) {
 		n = zDom.$(n);
-		if (!n || typeof n.focus != 'function') return false;
+		if (!n || !n.focus) return false;
+			//ie: INPUT's focus not function
+
 		var tag = zDom.tag(n);
 		if (tag != 'BUTTON' && tag != 'INPUT' && tag != 'SELECT'
 		&& tag != 'IFRAME') return false;
