@@ -66,13 +66,16 @@ function zkopt(opts) {
 }
 
 function zkam(fn) {
+	setTimeout(function(){zk.afterMount(fn);}, 0);
+		//use timeout since it might be evaled before zknewbg
+}
+zk.afterMount = function (fn) { //part of zk
 	if (zk.mounting) {
 		zkm._afMts.push(fn);
 		return true;
 	}
 	fn();
-}
-zk.afterMount = zkam; //part of zk
+};
 
 /** Used internally. */
 zkm = {
@@ -201,7 +204,8 @@ zkm = {
 			return zkm.exec(zkm.mtBL0); //loop back to check if loading
 		}
 
-		zkm.mtBL1(); //bind might load packages
+		setTimeout(zkm.mtBL1, 0);
+			//use timeout since there might be multiple zknewbg
 	},
 	mtBL1: function () {
 		if (zkm._crInf0.length || zkm._crInf1.length)
