@@ -76,9 +76,6 @@ public class HtmlPageRenders {
 	private static final String ATTR_LANG_JS_GENED
 		= "javax.zkoss.zk.lang.js.generated";
 		//Naming with javax to be able to shared among portlets
-	/** Denotes whether JavaScripts are generated for this request. */
-	private static final String ATTR_DESKTOP_INFO_GENED
-		= "javax.zkoss.zk.desktopInfo.generated";
 	/** Denotes whether the unavailable message is generated for this request. */
 	private static final String ATTR_UNAVAILABLE_GENED
 		= "javax.zkoss.zk.unavail.generated";
@@ -467,8 +464,6 @@ public class HtmlPageRenders {
 			//Revisit Bug 2001707: OK to use exec.isIncluded() since
 			//we use PageRenderer now (rather than Servlet's include)
 			//TODO: test again
-
-		exec.setAttribute(ATTR_DESKTOP_INFO_GENED, Boolean.TRUE);
 
 		//prepare style
 		String style = page.getStyle();

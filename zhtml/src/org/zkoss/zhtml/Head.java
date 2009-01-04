@@ -21,9 +21,15 @@ package org.zkoss.zhtml;
 import java.io.StringWriter;
 
 import org.zkoss.lang.Strings;
+
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.impl.NativeHelpers;
-import org.zkoss.zk.fn.ZkFns;
+import org.zkoss.zk.ui.sys.HtmlPageRenders;
+
 import org.zkoss.zhtml.impl.AbstractTag;
+import org.zkoss.zhtml.impl.PageRenderer;
 
 /**
  * The HEAD tag.
@@ -44,20 +50,26 @@ public class Head extends AbstractTag {
 
 	//--Component-//
 	public void redraw(java.io.Writer out) throws java.io.IOException {
+		if (!PageRenderer.isDirectContent(null))
+			throw new IllegalStateException();
+
 		final StringWriter bufout = new StringWriter();
 		super.redraw(bufout);
 		final StringBuffer buf = bufout.getBuffer();
 
-		addZkHtmlTags(buf, "head");
+		final Execution exec = Executions.getCurrent();
+		if (exec != null)
+			addZkHtmlTags(exec, getDesktop(), buf, "head");
 
 		out.write(buf.toString());
 		out.write('\n');
 	}
-	/** Adds ZkFns.outZkHtmlTags if necessary.
+	/** Adds HtmlPageRenders.outZkTags if necessary.
 	 * @param tag the tag name, such as "head" and "body"
 	 */
-	/*package*/ static void addZkHtmlTags(StringBuffer buf, String tag) {
-		final String zktags = ZkFns.outZkHtmlTags();
+	/*package*/ static void
+	addZkHtmlTags(Execution exec, Desktop desktop, StringBuffer buf, String tag) {
+		final String zktags = HtmlPageRenders.outZkTags(exec, desktop);
 		if (zktags != null && zktags.length() > 0) {
 			int j = buf.indexOf("<" + tag);
 			if (j >= 0) {

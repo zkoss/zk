@@ -19,6 +19,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zhtml;
 
 import org.zkoss.zhtml.impl.AbstractTag;
+import org.zkoss.zhtml.impl.PageRenderer;
 
 /**
  * The TITLE tag.
@@ -37,6 +38,9 @@ public class Title extends AbstractTag {
 		return true;
 	}
 	public void redraw(java.io.Writer out) throws java.io.IOException {
+		if (!PageRenderer.isDirectContent(null))
+			throw new IllegalStateException();
+
 		super.redraw(out);
 		out.write('\n');
 	}

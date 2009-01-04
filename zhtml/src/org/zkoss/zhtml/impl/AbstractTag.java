@@ -28,16 +28,23 @@ import org.zkoss.lang.Objects;
 import org.zkoss.xml.XMLs;
 import org.zkoss.xml.HTMLs;
 
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
+import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.ext.DynamicPropertied;
 import org.zkoss.zk.ui.ext.RawId;
+
+import org.zkoss.zhtml.Text;
+import org.zkoss.zhtml.Zkhead;
 
 /**
  * The raw component used to generate raw HTML elements.
@@ -163,7 +170,7 @@ implements DynamicPropertied, RawId {
 	/** Whether to hide the id attribute.
 	 * <p>Default: false.
 	 * <p>Some tags, such as {@link org.zkoss.zhtml.Html}, won't generate the id attribute.
-	 * They will override this method to return true.
+	 * They shall override this method to return true.
 	 */
 	protected boolean shallHideId() {
 		return false;
@@ -217,103 +224,72 @@ implements DynamicPropertied, RawId {
 		}
 		return old;
 	}
-	public boolean addEventListener(String evtnm, EventListener listener) {
-		final EventInfo ei;
-		for (int j = 0;; ++j) {
-			if (j >= _evts.length)
-				throw new UiException("Not supported event: "+evtnm);
-			if (_evts[j].name.equals(evtnm)) { //found
-				ei = _evts[j];
-				break;
-			}
-		}
 
-		final boolean bAddType = ei.typed && !isTypeDeclared();
-		final boolean ret = super.addEventListener(evtnm, listener);
-		if (ret) {
-			smartUpdate(ei.attr,
-				Events.isListened(this, evtnm, true) ? "true": null);
-				//Bug 1477271: Tom M Yeh: 
-				//We check non-deferable only. Otherwise, if users add a page
-				//event listener, all ZHTML will generate z.onChange.
-			if (bAddType && isTypeDeclared()) {
-				smartUpdate("z.type", "zhtml.main.Raw");
-				smartUpdate("z.init", true);
-			}
-		}
-		return ret;
-	}
-	private boolean isTypeDeclared() {
-		for (int j = 0; j < _evts.length; ++j)
-			if (_evts[j].typed
-			&& Events.isListened(this, _evts[j].name, true)) //asap only
-				return true;
-		return false;
+	/** Returns the widget class, "zk.Native".
+	 * @since 5.0.0
+	 */
+	public String getWidgetClass() {
+		return "zhtml.Widget";
 	}
 
 	public void redraw(java.io.Writer out) throws java.io.IOException {
 		if (_tagnm == null)
 			throw new UiException("The tag name is not initialized yet");
 
-		out.write('<');
-		out.write(_tagnm);
+		final Execution exec = Executions.getCurrent();
+		if (exec == null || exec.isAsyncUpdate(null)
+		|| exec.getAttribute(PageRenderer.ATTR_DIRECT_CONTENT) == null) {
+			super.redraw(out);
+			return;
+		}
 
-		boolean typeDeclared = false;
-		for (int j = 0; j < _evts.length; ++j) {
-			if (Events.isListened(this, _evts[j].name, true)) { //asap only
-				if (_evts[j].typed) typeDeclared = true;
-				out.write(' ');
-				out.write(_evts[j].attr);
-				out.write("=\"true\"");
+		out.write(getPrologHalf());
+
+		for (Component child = getFirstChild(); child != null;) {
+			Component next = child.getNextSibling();
+			if ((child instanceof AbstractTag) || (child instanceof Text)
+			|| (child instanceof Zkhead)) {
+				((ComponentCtrl)child).redraw(out);
+			} else {
+				exec.removeAttribute(PageRenderer.ATTR_DIRECT_CONTENT);
+				HtmlPageRenders.outStandalone(exec, child, out);
+				exec.setAttribute(PageRenderer.ATTR_DIRECT_CONTENT, Boolean.TRUE);
 			}
+			child = next;
 		}
 
-		if (typeDeclared)
-			out.write(" z.type=\"zhtml.main.Raw\"");
+		out.write(getEpilogHalf());
+	}
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+		render(renderer, "prolog", getPrologHalf());
+		render(renderer, "epilog", getEpilogHalf());
+	}
+	private String getPrologHalf() {
+		final StringBuffer sb = new StringBuffer(128)
+			.append('<').append(_tagnm);
 
-		if (typeDeclared || !shallHideId() || !Components.isAutoId(getUuid())) {
-			out.write(" id=\"");
-			out.write(getUuid());
-			out.write('"');
-		}
+
+		if (!shallHideId() || !Components.isAutoId(getUuid()))
+			sb.append(" id=\"").append(getUuid()).append('"');
 
 		if (_props != null) {
 			for (Iterator it = _props.entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
-				final String key = (String)me.getKey();
-				final String val = (String)me.getValue();
-				out.write(' ');
-				out.write(key);
-				out.write("=\"");
-				out.write(XMLs.encodeAttribute(val));
-				out.write('"');
+				sb.append(' ').append(me.getKey()).append("=\"")
+					.append(XMLs.encodeAttribute((String)me.getValue()))
+					.append('"');
 			}
 		}
 
-		if (isChildable()) {
-			boolean divGened = false;
-			if ("body".equals(_tagnm)) {
-				if (_props != null && _props.containsKey("class")) {
-					out.write("><div class=\"zk\">\n");
-					divGened = true;
-				} else {
-					out.write(" class=\"zk\">\n");
-				}
-			} else {
-				out.write('>');
-			}
+		if (!isChildable())
+			sb.append('/');
 
-			for (Iterator it = getChildren().iterator(); it.hasNext();)
-				((Component)it.next()).redraw(out);
-
-			if (divGened)
-				out.write("\n</div>");
-			out.write("</");
-			out.write(_tagnm);
-			out.write('>');
-		} else {
-			out.write("/>");
-		}
+		return sb.append('>').toString();
+	}
+	private String getEpilogHalf() {
+		return isChildable() ? "</" + _tagnm + '>': "";
 	}
 	protected boolean isChildable() {
 		return !HTMLs.isOrphanTag(_tagnm);
@@ -331,25 +307,4 @@ implements DynamicPropertied, RawId {
 	public String toString() {
 		return "["+_tagnm+' '+super.toString()+']';
 	}
-
-	private static class EventInfo {
-		/** The event name.
-		 */
-		private final String name;
-		/** The attribute that will be generated to the client side.
-		 */
-		private final String attr;
-		/** Whether to generate z.type
-		 */
-		private final boolean typed;
-		private EventInfo(String name, String attr, boolean typed) {
-			this.name = name;
-			this.attr = attr;
-			this.typed = typed;
-		}
-	}
-	private static final EventInfo[] _evts = {
-		new EventInfo(Events.ON_CLICK, "z.lfclk", false),
-		new EventInfo(Events.ON_CHANGE, "z.onChange", true)
-	};
 }

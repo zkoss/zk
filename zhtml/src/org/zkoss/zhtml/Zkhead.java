@@ -21,8 +21,11 @@ package org.zkoss.zhtml;
 import java.io.Writer;
 import java.io.IOException;
 
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.AbstractComponent;
-import org.zkoss.zk.fn.ZkFns;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
+import org.zkoss.zk.ui.sys.HtmlPageRenders;
 
 /**
  * The component used to generate CSS and JavaScrpt declarations.
@@ -40,7 +43,13 @@ public class Zkhead extends AbstractComponent {
 
 	//Component//
 	public void redraw(Writer out) throws IOException {
-		final String zktags = ZkFns.outZkHtmlTags();
-		if (zktags != null) out.write(zktags);
+		final Execution exec = Executions.getCurrent();
+		if (exec != null) {
+			Writer o = ((ExecutionCtrl)exec).getVisualizer().getExtraWriter();
+			if (o != null) out = o;
+
+			final String zktags = HtmlPageRenders.outZkTags(exec, getDesktop());
+			if (zktags != null) out.write(zktags);
+		}
 	}
 }

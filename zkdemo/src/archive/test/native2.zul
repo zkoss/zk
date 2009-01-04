@@ -28,7 +28,7 @@ xmlns:zk="http://www.zkoss.org/2005/zk">
 	</ol>
 	<u:button label="Hi" onClick='l.value += "Hi! "'/>
 	<u:label id="l"/>
-	<u:groupbox>
+	<u:groupbox mold="3d">
 		<u:caption label="Native inside"/>
 		<ul>
 			<li forEach="${values}">${each}</li>

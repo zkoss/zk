@@ -32,6 +32,8 @@ import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 
+import org.zkoss.zhtml.impl.PageRenderer;
+
 /**
  * Represents a piece of text (of DOM).
  *
@@ -59,7 +61,10 @@ public class Text extends AbstractComponent implements RawId {
 			value = "";
 		if (!Objects.equals(_value, value)) {
 			_value = value;
-			invalidate();
+			if (isIdRequired())
+				smartUpdate("value", _value);
+			else
+				invalidate();
 		}
 	}
 
@@ -77,20 +82,25 @@ public class Text extends AbstractComponent implements RawId {
 
 	//-- Component --//
 	public void setParent(Component parent) {
-		if (!isIdRequired()) {
-			final Component old = getParent();
-			if (old != parent) {
-				if (old != null) old.invalidate();
-				if (parent != null) parent.invalidate();
-			}
-		}
+		final Component old = getParent();
+		if (old != null && old != parent && !isIdRequired())
+			old.invalidate();
+
 		super.setParent(parent);
+
+		if (parent != null && old != parent && !isIdRequired())
+			parent.invalidate();
 	}
 	public void invalidate() {
 		if (isIdRequired()) super.invalidate();
 		else getParent().invalidate();
 	}
 	public void redraw(Writer out) throws IOException {
+		if (!PageRenderer.isDirectContent(null)) {
+			super.redraw(out);
+			return;
+		}
+
 		final boolean idRequired = isIdRequired();
 		if (idRequired) {
 			out.write("<span id=\"");

@@ -90,7 +90,7 @@ implements DynamicTag, Native {
 		_epilog = epilog != null ? epilog: "";
 	}
 
-	/** Returns the widget class, "#n".
+	/** Returns the widget class, "zk.Native".
 	 * @since 5.0.0
 	 */
 	public String getWidgetClass() {

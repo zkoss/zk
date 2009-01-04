@@ -21,12 +21,16 @@ package org.zkoss.zhtml;
 import java.util.Collection;
 import java.io.StringWriter;
 
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.impl.NativeHelpers;
+import org.zkoss.zk.ui.sys.HtmlPageRenders;
+
 import org.zkoss.zhtml.impl.AbstractTag;
-import org.zkoss.zk.fn.ZkFns;
+import org.zkoss.zhtml.impl.PageRenderer;
 
 /**
  * The BODY tag.
@@ -57,16 +61,23 @@ public class Body extends AbstractTag {
 
 	//--Component-//
 	public void redraw(java.io.Writer out) throws java.io.IOException {
+		if (!PageRenderer.isDirectContent(null))
+			throw new IllegalStateException();
+
 		final StringWriter bufout = new StringWriter();
 		super.redraw(bufout);
 		final StringBuffer buf = bufout.getBuffer();
 
-		Head.addZkHtmlTags(buf, "body");
-		final String msg = ZkFns.outHtmlUnavailable(getPage());
-		if (msg != null && msg.length() > 0) {
-			final int j = buf.lastIndexOf("</body>");
-			if (j >= 0) buf.insert(j, msg);
-			else buf.append(msg);
+		final Execution exec = Executions.getCurrent();
+		if (exec != null) {
+			Head.addZkHtmlTags(exec, getDesktop(), buf, "body");
+
+			final String msg = HtmlPageRenders.outUnavailable(exec);
+			if (msg != null && msg.length() > 0) {
+				final int j = buf.lastIndexOf("</body>");
+				if (j >= 0) buf.insert(j, msg);
+				else buf.append(msg);
+			}
 		}
 
 		out.write(buf.toString());

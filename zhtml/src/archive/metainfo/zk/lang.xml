@@ -28,7 +28,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<case-insensitive/>
 
 	<!-- use zk.js.dsp to package all common js file in one http request.-->
-	<javascript src="~./js/zk/zk.js.dsp" charset="UTF-8"/>
+	<javascript src="~./js/zk/ajax/zk.js.dsp" charset="UTF-8"/>
 
 	<!-- To have better performance with BeanShell, import most-common later -->
 	<zscript language="Java">
@@ -96,7 +96,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<!-- Defines the template for macro components -->
 	<macro-template>
 		<macro-class>org.zkoss.zk.ui.HtmlMacroComponent</macro-class>
-		<macro-uri>~./zhtml/macro.dsp</macro-uri>
 	</macro-template>
 	<!-- Defines the template for the Native namespace -->
 	<native-template>
@@ -116,7 +115,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		-->
 	</dynamic-tag>
 
-	<page-renderer-class>org.zkoss.zhtml.impl.PageRenderer</page-render-class>
+	<page-renderer-class>org.zkoss.zhtml.impl.PageRenderer</page-renderer-class>
 
 	<component>
 		<component-name>a</component-name>

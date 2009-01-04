@@ -22,8 +22,8 @@ import java.lang.Object; //since we have org.zkoss.zhtml.Object
 
 import org.zkoss.lang.Objects;
 
+import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.ext.client.InputableX;
 import org.zkoss.zhtml.impl.AbstractTag;
 
 /**
@@ -32,6 +32,7 @@ import org.zkoss.zhtml.impl.AbstractTag;
  * @author tomyeh
  */
 public class Input extends AbstractTag {
+	private transient boolean _byClient;
 
 	public Input() {
 		this("input");
@@ -52,17 +53,33 @@ public class Input extends AbstractTag {
 		setDynamicProperty("value", value);
 	}
 
-	//-- super --//
-	public Object newExtraCtrl() {
-		return new InputableX() {
-			//-- InputableX --//
-			public boolean setTextByClient(String value) throws WrongValueException {
-				if (!Objects.equals(value, getValue())) {
-					setValue(value);
-					return true;
-				}
-				return false;
+	//super//
+	protected void smartUpdate(String attr, Object value) {
+		if (!_byClient)
+			super.smartUpdate(attr, value);
+	}
+
+	/** Processes an AU request.
+	 *
+	 * <p>Default: in addition to what are handled by {@link XulElement#process},
+	 * it also handles onChange, onChanging and onError.
+	 * @since 5.0.0
+	 */
+	public void process(org.zkoss.zk.au.AuRequest request, boolean everError) {
+		final String name = request.getName();
+		if (name.equals(Events.ON_CHANGE)) {
+			InputEvent evt = InputEvent.getInputEvent(request);
+
+			final String value = evt.getValue();
+			_byClient = true;
+			try {
+				setValue(value);
+			} finally {
+				_byClient = false;
 			}
-		};
+
+			Events.postEvent(evt);
+		} else
+			super.process(request, everError);
 	}
 }
