@@ -81,6 +81,12 @@ public class Text extends AbstractComponent implements RawId {
 	}
 
 	//-- Component --//
+	/** Returns the widget class, "zhtml.Text".
+	 * @since 5.0.0
+	 */
+	public String getWidgetClass() {
+		return "zhtml.Text";
+	}
 	public void setParent(Component parent) {
 		final Component old = getParent();
 		if (old != null && old != parent && !isIdRequired())
@@ -112,6 +118,12 @@ public class Text extends AbstractComponent implements RawId {
 
 		if (idRequired)
 			out.write("</span>");
+	}
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws IOException {
+		super.renderProperties(renderer);
+
+		render(renderer, "value", _value);
 	}
 	protected boolean isChildable() {
 		return false;

@@ -225,7 +225,7 @@ implements DynamicPropertied, RawId {
 		return old;
 	}
 
-	/** Returns the widget class, "zk.Native".
+	/** Returns the widget class, "zhtml.Widget".
 	 * @since 5.0.0
 	 */
 	public String getWidgetClass() {

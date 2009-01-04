@@ -27,6 +27,8 @@ import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
 
+import org.zkoss.zhtml.impl.PageRenderer;
+
 /**
  * The component used to generate CSS and JavaScrpt declarations.
  * By default, CSS and JavaScript declarations are generated automatically
@@ -45,8 +47,8 @@ public class Zkhead extends AbstractComponent {
 	public void redraw(Writer out) throws IOException {
 		final Execution exec = Executions.getCurrent();
 		if (exec != null) {
-			Writer o = ((ExecutionCtrl)exec).getVisualizer().getExtraWriter();
-			if (o != null) out = o;
+			if (!PageRenderer.isDirectContent(exec))
+				throw new IllegalStateException();
 
 			final String zktags = HtmlPageRenders.outZkTags(exec, getDesktop());
 			if (zktags != null) out.write(zktags);

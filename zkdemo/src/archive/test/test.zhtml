@@ -50,5 +50,11 @@
 	<div>
 	<z:label value="This shall not have &lt;span&gt;"/>
 	</div>
+	<z:groupbox mold="3d" height="100px">
+		<z:caption label="zhtml inside"/>
+	<ol>
+		<li>ZHTML line 1</li>
+	</ol>
+	</z:groupbox>
 </body>
 </html>

@@ -891,9 +891,13 @@ zk.Widget = zk.$extends(zk.Object, {
 		return j >= 0 ? id.substring(0, j): id;
 	},
 	nextUuid: function () {
-		return "_z_" + zk.Widget._nextUuid++;
+		return '_z_' + zk.Widget._nextUuid++;
 	},
 	_nextUuid: 0,
+
+	isAutoId: function (id) {
+		return !id || id.startsWith('_z_') || id.startsWith('z_');
+	},
 
 	_addIdSpace: function (wgt) {
 		if (wgt._fellows) wgt._fellows[wgt.id] = wgt;
