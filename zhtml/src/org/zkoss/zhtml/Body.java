@@ -61,14 +61,14 @@ public class Body extends AbstractTag {
 
 	//--Component-//
 	public void redraw(java.io.Writer out) throws java.io.IOException {
-		if (!PageRenderer.isDirectContent(null))
+		final Execution exec = Executions.getCurrent();
+		if (!PageRenderer.isDirectContent(exec))
 			throw new IllegalStateException();
 
 		final StringWriter bufout = new StringWriter();
 		super.redraw(bufout);
 		final StringBuffer buf = bufout.getBuffer();
 
-		final Execution exec = Executions.getCurrent();
 		if (exec != null) {
 			Head.addZkHtmlTags(exec, getDesktop(), buf, "body");
 

@@ -742,6 +742,7 @@ zAu.cmd1 = {
 
 			newwgt.replaceHTML(wgt.uuid, wgt.desktop);
 		};
+		zk.mounting = true;
 		eval(code);
 	},
 	addAft: function (uuid, wgt, code) {
@@ -764,18 +765,21 @@ zAu.cmd1 = {
 		zAu.stub = function (child) {
 			wgt.parent.insertBefore(child, wgt.nextSibling);
 		};
+		zk.mounting = true;
 		eval(code);
 	},
 	addBfr: function (uuid, wgt, code) {
 		zAu.stub = function (child) {
 			wgt.parent.insertBefore(child, wgt);
 		};
+		zk.mounting = true;
 		eval(code);
 	},
 	addChd: function (uuid, wgt, code) {
 		zAu.stub = function (child) {
 			wgt.appendChild(child);
 		};
+		zk.mounting = true;
 		eval(code);
 	},
 	rm: function (uuid, wgt) {

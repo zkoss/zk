@@ -16,6 +16,7 @@ package org.zkoss.zhtml.impl;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.io.IOException;
 
@@ -120,7 +121,17 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 		for (Iterator it = page.getRoots().iterator(); it.hasNext();)
 			((ComponentCtrl)it.next()).redraw(out);
 
-		rc.render(out);
+		final String rcs = rc.complete();
+		if (rcs.length() > 0) {
+			if (out instanceof StringWriter) {
+				final StringBuffer buf = ((StringWriter)out).getBuffer();
+				final int j = buf.lastIndexOf("</body>");
+				if (j >= 0) buf.insert(j, rcs);
+				else buf.append(rcs);
+			} else {
+				out.write(rcs);
+			}
+		}
 
 		write(out, HtmlPageRenders.outZkTags(exec, page.getDesktop()));
 		writeln(out, HtmlPageRenders.outUnavailable(exec));

@@ -246,6 +246,7 @@ implements DynamicPropertied, RawId {
 		}
 
 		out.write(getPrologHalf());
+		rc.renderBegin(this, false);
 
 		for (Component child = getFirstChild(); child != null;) {
 			Component next = child.getNextSibling();
@@ -254,13 +255,16 @@ implements DynamicPropertied, RawId {
 				((ComponentCtrl)child).redraw(out);
 			} else {
 				rc.directContent = false;
+				rc.renderBegin(child, true);
 				HtmlPageRenders.outStandalone(exec, child, out);
+				rc.renderEnd(child);
 				rc.directContent = true;
 			}
 			child = next;
 		}
 
 		out.write(getEpilogHalf());
+		rc.renderEnd(this);
 	}
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {

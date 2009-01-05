@@ -1065,3 +1065,29 @@ zk.Native = zk.$extends(zk.Widget, {
 		if (s) out.push(s);
 	}
 });
+
+zk.RefWidget = zk.$extends(zk.Widget, {
+	bind_: function () {
+		var w = zk.Widget.$(this.uuid);
+		if (!w || !w.desktop) throw 'illegal: '+w;
+
+		var p = w.parent, q;
+		if (p) { //shall be a desktop
+			var dt = w.desktop, n = w._node;
+			w.desktop = w._node = null; //avoid unbind/bind
+			p.removeChild(w);
+			w.desktop = dt; w._node = n;
+		}
+
+		p = w.parent = this.parent,
+		q = w.previousSibling = this.previousSibling;
+		if (q) q.nextSibling = w;
+		else if (p) p.firstChild = w;
+
+		q = w.nextSibling = this.nextSibling;
+		if (q) q.previousSibling = w;
+		else if (p) p.lastChild = w;
+
+		//no need to call super since it is bound
+	}
+});

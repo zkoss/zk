@@ -16,8 +16,11 @@ package org.zkoss.zhtml.impl;
 
 import java.io.StringWriter;
 
+import org.zkoss.zk.ui.Component;
+
 /**
- * The render context used to render the JavaScript part.
+ * The render context used to render the additional part (JavaScript
+ * code snippet).
  *
  * @author tomyeh
  * @since 5.0.0
@@ -25,25 +28,54 @@ import java.io.StringWriter;
 public class RenderContext {
 	/** The writer to output JavaScript codes.
 	 */
-	public final StringWriter jsout = new StringWriter();
+	private final StringWriter _jsout = new StringWriter();
+
 	/** Whether to generate HTML tags directly.
 	 *
 	 * <p>If true, the HTML tag shall be generated directly to the writer
 	 * provided by {@link org.zkoss.zk.ui.sys.ComponentCtrl#redraw},
-	 * and generates JavaScript code snippet in {@link #jsout}.
+	 * and generates JavaScript code snippet in {@link #renderBegin}.
 	 *
 	 * <p>If false, ZHTML components shall generate properties by use of
 	 * {@link org.zkoss.zk.ui.sys.ContentRenderer}.
 	 */
 	public boolean directContent = true;
 
-	/** Renders the content of {@link #jsout} to the specified writer.
-	 * After rendering, {@link #jsout} is reset.
+	/** Completes the rendering by returning what are generated
+	 * by {@link #renderBegin} and {@link #renderEnd} (never null).
+	 * After rendering, the context is reset.
 	 */
-	public void render(java.io.Writer out) throws java.io.IOException {
-		final StringBuffer sb = this.jsout.getBuffer();
+	public String complete() {
+		final StringBuffer sb = _jsout.getBuffer();
 		if (sb.length() > 0) {
+			sb.insert(0, "<script>\nzkblbg(true);try{");
+			sb.append("\n}finally{zkble();}</script>");
+			final String txt = sb.toString();
 			sb.setLength(0); //reset
+			return txt;
 		}
+		return "";
+	}
+	/** Renders the beginning JavaScript code snippet for the component.
+	 * It must be called before rendering the children.
+	 *
+	 * @param lookup whether to look up instead of creating a widget.
+	 * Specifies true if the widget is created somewhere else.
+	 */
+	public void renderBegin(Component comp, boolean lookup) {
+		_jsout.write("\nzkb2('");
+		_jsout.write(comp.getUuid());
+		final String wgtcls = lookup ? "zk.RefWidget": comp.getWidgetClass();
+		if (!"zhtml.Widget".equals(wgtcls)) {
+			_jsout.write("','");
+			_jsout.write(wgtcls);
+		}
+		_jsout.write("');");
+	}
+	/** Renders the ending JavaScript code snippet for the component.
+	 * It must be called after rendering the children.
+	 */
+	public void renderEnd(Component comp) {
+		_jsout.write("zke();");
 	}
 }

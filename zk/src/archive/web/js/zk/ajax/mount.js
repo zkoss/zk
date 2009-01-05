@@ -13,25 +13,24 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
 var _zkmt = zUtl.now(); //JS loaded
-function zknewbg() {
+function zkblbg(binding) {
 	zkm.browsing = zk.mounting = true;
+	zkm.binding = binding;
 	var t = 390 - (zUtl.now() - _zkmt);
 	zk.startProcessing(t > 0 ? t: 0);
 }
-function zknewe() {
-	zkm.end(); //clean up if failed
-}
 
 function zkpgbg(pguid, style, dtid, contained, updateURI) {
-	zk.mounting = true;
 	var props = {};
 	if (style) props.style = style;
 	if (dtid) zkdtbg(dtid, updateURI)._pguid = pguid;
 	zkm.push({type: "#p", uuid: pguid, contained: contained, props: props});
 }
 function zkbg(type, uuid, mold, props) {
-	zk.mounting = true;
 	zkm.push({type: type, uuid: uuid, mold: mold, props: props});
+}
+function zkb2(uuid, type) { //zhtml
+	zkm.push({type: type||'zhtml.Widget', uuid: uuid});
 }
 function zkdtbg(dtid, updateURI) {
 	var dt = zk.Desktop.$(dtid);
@@ -86,7 +85,7 @@ zkm = {
 		var w = zkm._wgts.shift();
 		if (!zkm._wgts.length) {
 			var cfi = zkm._crInf0;
-			cfi.push([zkm.curdt, w]);
+			cfi.push([zkm.curdt, w, zkm.binding]);
 			cfi.browsing = zkm.browsing;
 			cfi.stub = zAu.stub;
 			zAu.stub = null;
@@ -99,7 +98,7 @@ zkm = {
 	end: function() {
 		zkm._wgts = [];
 		zkm._curdt = null;
-		zkm.browsing = false;
+		zkm.browsing = zkm.binding = false;
 	},
 
 	sysInit: function() {
@@ -175,7 +174,7 @@ zkm = {
 		var crInf0 = zkm._crInf0,
 			inf = crInf0.shift();
 		if (inf) {
-			zkm._crInf1.push([inf[0], zkm.create(inf[0], inf[1])]);
+			zkm._crInf1.push([inf[0], zkm.create(inf[0], inf[1]), inf[2]]);
 				//desktop as parent for browser loading
 	
 			if (crInf0.length)
@@ -197,12 +196,13 @@ zkm = {
 			inf = crInf1.shift();
 		if (inf) {
 			var wgt = inf[1];
-			wgt.replaceHTML(wgt.uuid, inf[0]);
+			if (inf[2]) wgt.bind_(inf[0]); //binding
+			else wgt.replaceHTML(wgt.uuid, inf[0]);
 			return zkm.exec(zkm.mtBL0); //loop back to check if loading
 		}
 
 		setTimeout(zkm.mtBL1, 0);
-			//use timeout since there might be multiple zknewbg
+			//use timeout since there might be multiple zkblbg
 	},
 	mtBL1: function () {
 		if (zkm._crInf0.length || zkm._crInf1.length)
@@ -257,7 +257,7 @@ zkm = {
 
 	/** create the widget tree. */
 	create: function (parent, wginf) {
-		var wgt, props = wginf.props;
+		var wgt, props = wginf.props || {};
 		if (wginf.type == "#p") {
 			wgt = new zk.Page(wginf.uuid, wginf.contained);
 			wgt.inServer = true;
@@ -537,6 +537,7 @@ zkm = {
 	},
 	_bfs: []
 };
+zkble = zkm.end;
 zke = zkpge = zkm.pop;
 
 zk.beforeUnload = function (fn, opts) { //part of zk

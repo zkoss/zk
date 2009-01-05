@@ -42,13 +42,13 @@
 	</iframe>
 
 	<input type="image" src="/zkdemo/img/coffee.gif"/> <br/>
-	<z:textbox id="db" focus="true"/>
+	<z:textbox id="db" focus="true" zk:onChange="l.value = self.value"/>
 	<center>
 	center something
 	</center>
 
 	<div>
-	<z:label value="This shall not have &lt;span&gt;"/>
+	<z:label id="l" value="a ZUL label"/>
 	</div>
 	<z:groupbox mold="3d" height="100px">
 		<z:caption label="zhtml inside"/>

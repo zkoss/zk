@@ -61,8 +61,6 @@ public class Input extends AbstractTag {
 
 	/** Processes an AU request.
 	 *
-	 * <p>Default: in addition to what are handled by {@link XulElement#process},
-	 * it also handles onChange, onChanging and onError.
 	 * @since 5.0.0
 	 */
 	public void process(org.zkoss.zk.au.AuRequest request, boolean everError) {

@@ -515,7 +515,7 @@ public class HtmlPageRenders {
 				desktop.getWebApp().getConfiguration().isCrawlable());
 			setRenderContext(exec, rc);
 
-			out.write("\n<script>zknewbg();try{");
+			out.write("\n<script>zkblbg();try{");
 		}
 	
 		out.write("zkpgbg('");
@@ -546,7 +546,7 @@ public class HtmlPageRenders {
 		if (standalone) {
 			setRenderContext(exec, null);
 
-			out.write("}finally{zknewe();}</script>\n");
+			out.write("}finally{zkble();}</script>\n");
 
 			out.write("<div");
 			writeAttr(out, "id", page.getUuid());
@@ -562,11 +562,11 @@ public class HtmlPageRenders {
 	Component comp, Writer out) throws java.io.IOException {
 		out.write("<div id=\"");
 		out.write(comp.getUuid());
-		out.write("\"></div><script>\nzknewbg();try{\n");
+		out.write("\"></div><script>\nzkblbg();try{\n");
 
 		((ComponentCtrl)comp).redraw(out);
 
-		out.write("\n}finally{zknewe();}\n</script>\n");
+		out.write("\n}finally{zkble();}\n</script>\n");
 	}
 	private static final void writeAttr(Writer out, String name, String value)
 	throws IOException {
