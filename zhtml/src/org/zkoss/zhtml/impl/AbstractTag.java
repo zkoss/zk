@@ -57,6 +57,11 @@ import org.zkoss.zhtml.Zkhead;
  */
 public class AbstractTag extends AbstractComponent
 implements DynamicPropertied, RawId {
+	static {
+		addClientEvent(AbstractTag.class, Events.ON_CLICK);
+		addClientEvent(AbstractTag.class, Events.ON_CHANGE);
+	}
+
 	/** The tag name. */
 	protected String _tagnm;
 	private Map _props;
@@ -135,7 +140,7 @@ implements DynamicPropertied, RawId {
 		if ("style".equals(name)) sval = filterStyle(sval);
 
 		setDynaProp(name, sval);
-		smartUpdate(name, sval);
+		smartUpdate("dynamicProperty", new String[] {name, sval});
 	}
 	/** Processes the style. */
 	private String filterStyle(String style) {
@@ -246,7 +251,7 @@ implements DynamicPropertied, RawId {
 		}
 
 		out.write(getPrologHalf());
-		rc.renderBegin(this, false);
+		rc.renderBegin(this, getClientEvents(), false);
 
 		for (Component child = getFirstChild(); child != null;) {
 			Component next = child.getNextSibling();
@@ -255,7 +260,7 @@ implements DynamicPropertied, RawId {
 				((ComponentCtrl)child).redraw(out);
 			} else {
 				rc.directContent = false;
-				rc.renderBegin(child, true);
+				rc.renderBegin(child, null, true);
 				HtmlPageRenders.outStandalone(exec, child, out);
 				rc.renderEnd(child);
 				rc.directContent = true;

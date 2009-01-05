@@ -29,8 +29,8 @@ function zkpgbg(pguid, style, dtid, contained, updateURI) {
 function zkbg(type, uuid, mold, props) {
 	zkm.push({type: type, uuid: uuid, mold: mold, props: props});
 }
-function zkb2(uuid, type) { //zhtml
-	zkm.push({type: type||'zhtml.Widget', uuid: uuid});
+function zkb2(uuid, type, props) { //zhtml
+	zkm.push({type: type||'zhtml.Widget', uuid: uuid, props: props});
 }
 function zkdtbg(dtid, updateURI) {
 	var dt = zk.Desktop.$(dtid);

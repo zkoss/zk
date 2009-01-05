@@ -202,9 +202,9 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	_onChangeData: function (val, selbak) {
 		return {value: val,
-				bySelectBack: selbak,
-				start: zDom.selectionRange(this.einp)[0],
-				marshal: this._onChangeMarshal}
+			bySelectBack: selbak,
+			start: zDom.selectionRange(this.einp)[0],
+			marshal: this._onChangeMarshal}
 	},
 	_onChangeMarshal: function () {
 		return [this.value, this.bySelectBack, this.start];

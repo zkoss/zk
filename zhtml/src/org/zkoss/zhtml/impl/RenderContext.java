@@ -14,9 +14,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zhtml.impl;
 
-import java.io.StringWriter;
+import java.util.Iterator;
+import java.util.Collection;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.event.Events;
 
 /**
  * The render context used to render the additional part (JavaScript
@@ -28,7 +30,7 @@ import org.zkoss.zk.ui.Component;
 public class RenderContext {
 	/** The writer to output JavaScript codes.
 	 */
-	private final StringWriter _jsout = new StringWriter();
+	private final StringBuffer _jsout = new StringBuffer();
 
 	/** Whether to generate HTML tags directly.
 	 *
@@ -46,12 +48,11 @@ public class RenderContext {
 	 * After rendering, the context is reset.
 	 */
 	public String complete() {
-		final StringBuffer sb = _jsout.getBuffer();
-		if (sb.length() > 0) {
-			sb.insert(0, "<script>\nzkblbg(true);try{");
-			sb.append("\n}finally{zkble();}</script>");
-			final String txt = sb.toString();
-			sb.setLength(0); //reset
+		if (_jsout.length() > 0) {
+			_jsout.insert(0, "<script>\nzkblbg(true);try{");
+			_jsout.append("\n}finally{zkble();}</script>");
+			final String txt = _jsout.toString();
+			_jsout.setLength(0); //reset
 			return txt;
 		}
 		return "";
@@ -59,23 +60,50 @@ public class RenderContext {
 	/** Renders the beginning JavaScript code snippet for the component.
 	 * It must be called before rendering the children.
 	 *
+	 * @param clientEvents a collection of client events.
+	 * It is ignored if lookup is true.
 	 * @param lookup whether to look up instead of creating a widget.
 	 * Specifies true if the widget is created somewhere else.
 	 */
-	public void renderBegin(Component comp, boolean lookup) {
-		_jsout.write("\nzkb2('");
-		_jsout.write(comp.getUuid());
+	public void
+	renderBegin(Component comp, Collection clientEvents, boolean lookup) {
+		_jsout.append("\nzkb2('")
+			.append(comp.getUuid());
+
 		final String wgtcls = lookup ? "zk.RefWidget": comp.getWidgetClass();
+		boolean wgtclsGened = false;
 		if (!"zhtml.Widget".equals(wgtcls)) {
-			_jsout.write("','");
-			_jsout.write(wgtcls);
+			wgtclsGened = true;
+			_jsout.append("','").append(wgtcls);
 		}
-		_jsout.write("');");
+
+		_jsout.append('\'');
+
+		if (!lookup && clientEvents != null) {
+			boolean first = true;
+			for (Iterator it = clientEvents.iterator(); it.hasNext();) {
+				final String evtnm = (String)it.next();
+				if (Events.isListened(comp, evtnm, false)) {
+					_jsout.append(',');
+					if (first) {
+						first = false;
+						if (!wgtclsGened) _jsout.append("null,");
+						_jsout.append('{');
+					}
+					_jsout.append('$').append(evtnm).append(':')
+						.append(Events.isListened(comp, evtnm, true));
+						//$onClick and so on
+				}
+			}
+			if (!first) _jsout.append('}');
+		}
+
+		_jsout.append(");");
 	}
 	/** Renders the ending JavaScript code snippet for the component.
 	 * It must be called after rendering the children.
 	 */
 	public void renderEnd(Component comp) {
-		_jsout.write("zke();");
+		_jsout.append("zke();");
 	}
 }

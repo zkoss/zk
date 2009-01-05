@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zhtml.Text = zk.$extends(zk.Widget, {
+zhtml.Text = zk.$extends(zhtml.Widget, {
 	_value: '',
 
 	/** Returns the value of this label.
