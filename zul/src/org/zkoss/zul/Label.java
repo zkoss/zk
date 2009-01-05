@@ -20,12 +20,10 @@ import java.io.IOException;
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.XMLs;
 
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.sys.ExecutionCtrl;
+import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 
@@ -140,19 +138,16 @@ public class Label extends XulElement implements org.zkoss.zul.api.Label {
 
 		if (_value.length() > 0) {
 			boolean outed = false;
-			Execution exec = Executions.getCurrent();
-			if (exec != null && isCrawlable()) {
-				final Writer out =
-					((ExecutionCtrl)exec).getVisualizer().getExtraWriter();
-				if (out != null) {
-					out.write("<div id=\"");
-					out.write(getUuid());
-					out.write("\">");
-					out.write(XMLs.encodeText(_value));
-						//encode required since it might not be valid HTML
-					out.write("</div>\n");
-					outed = true;
-				}
+			final HtmlPageRenders.RenderContext rc =
+				HtmlPageRenders.getRenderContext(null);
+			if (rc != null && rc.crawlable) {
+				rc.extra.write("<div id=\"");
+				rc.extra.write(getUuid());
+				rc.extra.write("\">");
+				rc.extra.write(XMLs.encodeText(_value));
+					//encode required since it might not be valid HTML
+				rc.extra.write("</div>\n");
+				outed = true;
 			}
 			if (outed) renderer.render("z_ea", "$value"); //decode required
 			else render(renderer, "value", _value); //no need to encode

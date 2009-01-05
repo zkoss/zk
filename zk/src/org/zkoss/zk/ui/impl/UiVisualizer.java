@@ -95,8 +95,6 @@ import org.zkoss.zk.au.out.*;
 	 * on {@link org.zkoss.zk.ui.sys.UiEngine}.
 	 */
 	private AbortingReason _aborting;
-	/** The extra writer used when rendering a component. */
-	private Writer _exout;
 	/** Whether the first execution is for async-update. */
 	private final boolean _1stau;
 	/** Whether it is in recovering. */
@@ -887,12 +885,5 @@ import org.zkoss.zk.au.out.*;
 	 */
 	public boolean isAborting() {
 		return _aborting != null && _aborting.isAborting();
-	}
-	public Writer getExtraWriter() {
-		return _exout != null || _parent == null ?
-			_exout: _parent.getExtraWriter();
-	}
-	public void setExtraWriter(Writer out) {
-		_exout = out;
 	}
 }

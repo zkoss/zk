@@ -33,7 +33,6 @@ import org.zkoss.web.Attributes;
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -41,7 +40,7 @@ import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
-import org.zkoss.zk.ui.sys.ExecutionCtrl;
+import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.ext.DynamicPropertied;
 import org.zkoss.zk.ui.ext.Includer;
@@ -273,20 +272,17 @@ implements DynamicPropertied, org.zkoss.zul.api.Include, Includer {
 					Files.write(out, sw.getBuffer());
 				} else { //not ZUL page, so it must be HTML fragment
 					boolean done = false;
-					Execution exec = Executions.getCurrent();
-					if (exec != null && isCrawlable()) {
-						final Writer extout =
-						((ExecutionCtrl)exec).getVisualizer().getExtraWriter();
-						if (extout != null) {
-							extout.write("<div id=\"");
-							extout.write(getUuid());
-							extout.write("\">");
-							Files.write(extout, sw.getBuffer());
-							extout.write("</div>");
-	
-							out.write("zkm.top().props.z_ea='content';");
-							done = true;
-						}
+					final HtmlPageRenders.RenderContext rc =
+						HtmlPageRenders.getRenderContext(null);
+					if (rc != null && rc.crawlable) {
+						rc.extra.write("<div id=\"");
+						rc.extra.write(getUuid());
+						rc.extra.write("\">");
+						Files.write(rc.extra, sw.getBuffer());
+						rc.extra.write("</div>");
+
+						out.write("zkm.top().props.z_ea='content';");
+						done = true;
 					}
 					if (!done) {
 						out.write("zkm.top().props.content='");

@@ -69,20 +69,4 @@ public interface Visualizer {
 	 * @since 3.0.2
 	 */
 	public void disable();
-
-	/** Returns the writer used to write the extra content, or null if
-	 * extra content is not allowed.
-	 * <p>Default: null.
-	 * <p>Note: the extra writer will 'inherit' from the previous
-	 * activated visualizer.
-	 * @since 5.0.0
-	 */
-	public Writer getExtraWriter();
-	/** Sets the writer used to write the extra content.
-	 * It is usually called by {@link PageRenderer} if it allows
-	 * the component to generate extra content (in addition to
-	 * {@link ComponentCtrl#redraw}).
-	 * @since 5.0.0
-	 */
-	public void setExtraWriter(Writer out);
 }

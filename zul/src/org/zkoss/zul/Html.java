@@ -21,9 +21,7 @@ package org.zkoss.zul;
 import java.io.Writer;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.sys.ExecutionCtrl;
+import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -111,18 +109,15 @@ public class Html extends XulElement implements org.zkoss.zul.api.Html {
 
 		String cnt = _content;
 		if (cnt.length() > 0) {
-			Execution exec = Executions.getCurrent();
-			if (exec != null && isCrawlable()) {
-				final Writer out =
-					((ExecutionCtrl)exec).getVisualizer().getExtraWriter();
-				if (out != null) {
-					out.write("<div id=\"");
-					out.write(getUuid());
-					out.write("\">");
-					out.write(cnt);
-					out.write("</div>\n");
-					cnt = null; //means already generated
-				}
+			final HtmlPageRenders.RenderContext rc =
+				HtmlPageRenders.getRenderContext(null);
+			if (rc != null && rc.crawlable) {
+				rc.extra.write("<div id=\"");
+				rc.extra.write(getUuid());
+				rc.extra.write("\">");
+				rc.extra.write(cnt);
+				rc.extra.write("</div>\n");
+				cnt = null; //means already generated
 			}
 			if (cnt == null) renderer.render("z_ea", "content");
 			else render(renderer, "content", cnt);
