@@ -33,11 +33,36 @@ import org.zkoss.zk.ui.sys.HtmlPageRenders;
  * @since 5.0.0
  */
 public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
-	/** An execution attribute to indicate whether to generate the content directly.
-	 * @see #isDirectContent
+	/** An execution attribute to retrieve the render context.
 	 */
-	/*package*/ static final String ATTR_DIRECT_CONTENT = "org.zkoss.zhtml.complete";
+	private static final String ATTR_RENDER_CONTEXT
+		= "org.zkoss.zhtml.renderContext";
 
+	/** Tests if it is rendering the complete page and the content shall
+	 * be generated directly.
+	 * @param exec the execution. If null, Executions.getCurrent() is assumed.
+	 * If no execution, false is returned.
+	 */
+	public static boolean isDirectContent(Execution exec) {
+		if (exec == null) {
+			exec = Executions.getCurrent();
+			if (exec == null) return false;
+		}
+		final RenderContext rc = getRenderContext(exec);
+		return rc != null && rc.directContent;
+	}
+	/** Returns the render context, or null if not available.
+	 * The render context is available only if the ZHTML page is rendered
+	 * directly (rather than via inclusion).
+	 * @param exec the execution. If null, Executions.getCurrent() is assumed.
+	 */
+	public static RenderContext getRenderContext(Execution exec) {
+		if (exec == null) exec = Executions.getCurrent();
+		return exec != null ?
+			(RenderContext)exec.getAttribute(ATTR_RENDER_CONTEXT): null;
+	}
+
+	//PageRenderer//
 	public void render(Page page, Writer out) throws IOException {
 		final Execution exec = Executions.getCurrent();
 		final String ctl =
@@ -88,24 +113,18 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 	 */
 	protected void renderComplete(Execution exec, Page page, Writer out)
 	throws IOException {
-		exec.setAttribute(ATTR_DIRECT_CONTENT, Boolean.TRUE);
+		final RenderContext rc = new RenderContext();
+		exec.setAttribute(ATTR_RENDER_CONTEXT, rc);
 		HtmlPageRenders.setContentType(exec, page);
 
 		for (Iterator it = page.getRoots().iterator(); it.hasNext();)
 			((ComponentCtrl)it.next()).redraw(out);
 
+		rc.render(out);
+
 		write(out, HtmlPageRenders.outZkTags(exec, page.getDesktop()));
 		writeln(out, HtmlPageRenders.outUnavailable(exec));
-	}
 
-	/** Tests if it is rendering the complete page and the content shall
-	 * be generated directly.
-	 * @param exec the execution. If null, Executions.getCurrent() is assumed.
-	 * If no execution, false is returned.
-	 */
-	public static boolean isDirectContent(Execution exec) {
-		if (exec == null) exec = Executions.getCurrent();
-		return exec != null && !exec.isAsyncUpdate(null)
-			&& exec.getAttribute(ATTR_DIRECT_CONTENT) != null;
+		exec.setAttribute(ATTR_RENDER_CONTEXT, null);
 	}
 }

@@ -30,7 +30,7 @@ import org.zkoss.zk.ui.WrongValueException;
  * <p>Since 5.0.0, {@link ClientConstraint} has the higher priority than
  * {@link CustomConstraint}. In other words, {@link CustomConstraint}
  * is ignored if both defined.
- * On the other hand, the client validation object ({@link ClientConstraint#getClientValidation})
+ * On the other hand, the client validation object ({@link ClientConstraint#getClientConstraint})
  * can implement the showCustomError method to do the similar job
  * at the client.
  *

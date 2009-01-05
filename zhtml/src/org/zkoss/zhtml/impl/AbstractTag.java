@@ -237,8 +237,10 @@ implements DynamicPropertied, RawId {
 			throw new UiException("The tag name is not initialized yet");
 
 		final Execution exec = Executions.getCurrent();
+		final RenderContext rc;
 		if (exec == null || exec.isAsyncUpdate(null)
-		|| exec.getAttribute(PageRenderer.ATTR_DIRECT_CONTENT) == null) {
+		|| (rc = PageRenderer.getRenderContext(exec)) == null
+		|| !rc.directContent) {
 			super.redraw(out);
 			return;
 		}
@@ -251,9 +253,9 @@ implements DynamicPropertied, RawId {
 			|| (child instanceof Zkhead)) {
 				((ComponentCtrl)child).redraw(out);
 			} else {
-				exec.removeAttribute(PageRenderer.ATTR_DIRECT_CONTENT);
+				rc.directContent = false;
 				HtmlPageRenders.outStandalone(exec, child, out);
-				exec.setAttribute(PageRenderer.ATTR_DIRECT_CONTENT, Boolean.TRUE);
+				rc.directContent = true;
 			}
 			child = next;
 		}
