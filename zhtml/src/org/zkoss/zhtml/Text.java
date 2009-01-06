@@ -23,6 +23,8 @@ import java.io.IOException;
 
 import org.zkoss.lang.Objects;
 
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.AbstractComponent;
@@ -33,6 +35,7 @@ import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 
 import org.zkoss.zhtml.impl.PageRenderer;
+import org.zkoss.zhtml.impl.RenderContext;
 
 /**
  * Represents a piece of text (of DOM).
@@ -102,7 +105,8 @@ public class Text extends AbstractComponent implements RawId {
 		else getParent().invalidate();
 	}
 	public void redraw(Writer out) throws IOException {
-		if (!PageRenderer.isDirectContent(null)) {
+		final Execution exec = Executions.getCurrent();
+		if (!PageRenderer.isDirectContent(exec)) {
 			super.redraw(out);
 			return;
 		}
@@ -118,6 +122,12 @@ public class Text extends AbstractComponent implements RawId {
 
 		if (idRequired)
 			out.write("</span>");
+
+		final RenderContext rc = PageRenderer.getRenderContext(exec);
+		if (rc != null) {
+			rc.renderBegin(this, getClientEvents(), false);
+			rc.renderEnd(this);
+		}
 	}
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws IOException {

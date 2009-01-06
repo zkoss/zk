@@ -42,8 +42,9 @@ zhtml.Widget = zk.$extends(zk.Native, {
 			}
 	},
 	doChange_: function (devt) {
-		var val = this.value;
-		if (val != this.defaultValue)
+		var n = this.getNode(),
+			val = n.value;
+		if (val != n.defaultValue)
 			this.defaultValue = val;
 		this.fire('onChange', this._onChangeData(val), null, 150);
 	},
