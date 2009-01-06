@@ -1532,7 +1532,7 @@ zkLitgp = {
 		if (nm == "z.open") {
 			zkLitgp._openItem(cmp, "true" == val, true);
 			if ("true" == val) {
-				var meta = zkau.getMeta(getZKAttr(row, "rid"));
+				var meta = zkau.getMeta(getZKAttr(cmp, "rid"));
 				if (meta) meta.stripe();
 			}
 			return true;
