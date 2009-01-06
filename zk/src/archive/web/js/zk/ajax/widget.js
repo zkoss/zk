@@ -522,7 +522,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			if (s) html += ' class="' + s + '"';
 		}
 		if (!no || !no.tooltiptext) {
-			var s = this.getTooltiptext();
+			var s = this._tooltiptext;
 			if (s) html += ' title="' + s + '"';
 		}
 		return html;

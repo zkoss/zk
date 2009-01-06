@@ -32,7 +32,10 @@ zhtml.Text = zk.$extends(zhtml.Widget, {
 	},
 
 	redraw: function (out) {
-		out.push('<span', this.domAttrs_(), '>',
-			zUtl.encodeXML(this._value), '</span>');
+		var attrs = this.domAttrs_({id:1}),
+			span = attrs || !zk.Widget.isAutoId(this.uuid);
+		if (span) out.push('<span', ' id="', this.uuid, '"', attrs, '>');
+		out.push(zUtl.encodeXML(this._value));
+		if (span) out.push('</span>');
 	}
 });

@@ -42,11 +42,13 @@ zhtml.Widget = zk.$extends(zk.Native, {
 			}
 	},
 	doChange_: function (devt) {
-		var n = this.getNode(),
-			val = n.value;
-		if (val != n.defaultValue)
-			this.defaultValue = val;
-		this.fire('onChange', this._onChangeData(val), null, 150);
+		var n = this.getNode();
+		if (n) {
+			var val = n.value;
+			if (val != n.defaultValue)
+				this.defaultValue = val;
+			this.fire('onChange', this._onChangeData(val), null, 150);
+		}
 	},
 	_onChangeData: function (val, selbak) {
 		return {value: val,
@@ -55,6 +57,12 @@ zhtml.Widget = zk.$extends(zk.Native, {
 	},
 	_onChangeMarshal: function () {
 		return [this.value, false, this.start];
+	},
+	doClick_: function (wevt) {
+		var n = this.getNode();
+		if (zDom.tag(n) != 'INPUT')
+			this.$supers('doClick_', arguments);
+		else if (!n.disabled) this.fireX(wevt); //no propagation
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
