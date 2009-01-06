@@ -2466,7 +2466,7 @@ zkau.cmd1 = {
 				if (mode == "1") { //ref
 					ref = $e(x);
 					if (ref) {
-						var ofs = Position.cumulativeOffset($e(x));
+						var ofs = zk.revisedOffset($e(x));
 						x = ofs[0];
 						y = ofs[1] + zk.offsetHeight(ref);
 					}
