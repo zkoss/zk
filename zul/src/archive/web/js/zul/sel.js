@@ -201,7 +201,10 @@ zk.Selectable.prototype = {
 	},
 	onBlur: function (evt) {
 		var meta = zkau.getMeta($uuid(Event.element(evt)));
-		if (meta) zkSel.cmonblurTo(meta._focusItem);
+		if (meta) {
+			zkSel.cmonblurTo(meta._focusItem);
+			meta._focusItem = null; // reset Bug 2465826
+		}
 	},
 	onKeydown: function (evt) {
 		var meta = zkau.getMeta($uuid(Event.element(evt)));
@@ -436,11 +439,12 @@ zk.Selectable.prototype = {
 			var r = this.bodyrows[j];
 			if (this._isFocus(r)) {
 				this._focusToAnc(r);
-				return;
+				break;
 			}
 		}
 		var focusEl = $e(this.id, "a");
-		if (focusEl) zk.asyncFocus(focusEl.id);
+		if (focusEl && zkau.canFocus(focusEl))
+			zk.asyncFocus(focusEl.id);
 		
 	},
 	/** Process the setAttr command sent from the server. */
@@ -1262,6 +1266,7 @@ zkLit.focus = function (cmp) {
 	if (meta) {
 		meta._focusItem = cmp;
 		meta._refocus();
+		return true;
 	}
 };
 zkLit.setAttr = function (cmp, nm, val) {

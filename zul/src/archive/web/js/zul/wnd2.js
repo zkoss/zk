@@ -763,6 +763,9 @@ zkWnd2._cleanMode = function (cmp) {
 	if (mode) {
 		zkWnd2._stick(cmp); //cleanup draggable or so
 		zkWnd2._clean2[cmp.id] = mode;
+		zkau._modals.remove(cmp.id);
+			// Bug 2465826 we cannot remove the id from the zkau._modals after invoking
+			// zkWnd2._cleanMode2 in a timer.
 		setTimeout("zkWnd2._cleanMode2('"+cmp.id+"')", 5);
 			//don't clean immediately since it might be replaced
 			//(due to invalidate)
@@ -901,6 +904,8 @@ zkWnd2._doModal = function (cmp, replace) {
 	
 	if (replace) {
 		zkWnd2._float(cmp);
+		if (!zkau._modals.contains(cmp.id))
+			zkau._modals.push(cmp.id); // restore the id, Bug 2465826
 		return;
 	}
 	
@@ -987,7 +992,6 @@ zkWnd2._endModal = function (uuid, replace) {
 		zk.remove(mask);
 	}
 
-	zkau._modals.remove(uuid);
 	delete zkWnd2._modal2[uuid];
 	
 	var cmp = $e(uuid);
