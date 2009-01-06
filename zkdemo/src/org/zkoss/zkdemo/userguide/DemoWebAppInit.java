@@ -66,8 +66,7 @@ public class DemoWebAppInit implements WebAppInit {
 	private void loadProperites(ServletContext context) {
 		try {
 			BufferedReader bufReader = new BufferedReader(
-					new InputStreamReader(new FileInputStream(new File(context
-							.getRealPath(PATH + CONFIG)))));
+					new InputStreamReader(context.getResourceAsStream(PATH + CONFIG)));
 
 			String prop = null;
 			while ((prop = bufReader.readLine()) != null) {
