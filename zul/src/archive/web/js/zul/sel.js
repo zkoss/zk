@@ -1183,8 +1183,12 @@ zkLibox.bodyonkeydown = function (evt) {
 /** Called when a listitem got a key stroke. */
 zkLibox.onkeydown = function (evt) {
 	if (!evt) evt = window.event;
-	var target = Event.element(evt);
-	zk.disableSelection($parentByType(target, "Libox"));
+	var target = Event.element(evt),
+		tag = $tag(target);
+		
+	// Bug 2487562
+	if (!zk.gecko3 || (tag != "INPUT" && tag != "TEXTAREA"))
+		zk.disableSelection($parentByType(target, "Libox"));
 	var meta = zkau.getMetaByType(target, "Libox");
 	return !meta || meta.dokeydown(evt, target);
 };

@@ -21,6 +21,7 @@ ZK 3.5.3
   2468048: Namespace is not consitent with component hierarchy
   2480892: Native component with forEach and non-native child incorrect
   2488792: SetOpen in Group and Listgroup are failure
+  2487562: Keyboard problem in textbox inside a listbox (Firefox 3.0.5)
 
 	--------
 ZK 3.5.2
