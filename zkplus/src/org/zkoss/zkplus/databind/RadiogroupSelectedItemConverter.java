@@ -40,7 +40,10 @@ public class RadiogroupSelectedItemConverter implements TypeConverter, java.io.S
 					}
 				} else if (!(child instanceof Radiogroup)) { //skip nested radiogroup
 					//bug 2464484
-					return coerceToUi(val, child); //recursive
+					final Object value = coerceToUi(val, child); //recursive
+					if (value != null) {
+						return value;
+					}
 				}
 			}
 		}
