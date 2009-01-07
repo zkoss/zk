@@ -31,7 +31,6 @@ import org.zkoss.lang.Objects;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.util.logging.Log;
-import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -123,8 +122,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	private int _preloadsz = 7;
 	private String _innerWidth = "100%";
 	/** ROD mold use only*/
-	private String _innerHeight = null,
-	_innerTop = "height:0px;display:none", _innerBottom = "height:0px;display:none";
+	private String _innerHeight = null;
 	private transient GridDrawerEngine _engine;
 	private boolean _fixedLayout, _vflex;
 
@@ -497,42 +495,6 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	 */
 	public String getInnerHeight() {
 		return _innerHeight;
-	}	
-	/**
-	 *Internal use only.
-	 *@since 3.0.4
-	 */
-	public void setInnerTop(String innerTop) {
-		if (innerTop == null) innerTop = "height:0px;display:none";
-		if (!Objects.equals(_innerTop, innerTop)) {
-			_innerTop = innerTop;
-			smartUpdate("z.innerTop", _innerTop);
-		}
-	}
-	/**
-	 *Internal use only.
-	 *@since 3.0.4
-	 */
-	public String getInnerTop() {
-		return _innerTop;
-	}
-	/**
-	 *Internal use only.
-	 *@since 3.0.4
-	 */
-	public void setInnerBottom(String innerBottom) {
-		if (innerBottom == null) innerBottom = "height:0px;display:none";
-		if (!Objects.equals(_innerBottom, innerBottom)) {
-			_innerBottom = innerBottom;
-			smartUpdate("z.innerBottom", _innerBottom);
-		}
-	}
-	/**
-	 *Internal use only.
-	 *@since 3.0.4
-	 */
-	public String getInnerBottom() {
-		return _innerBottom;
 	}
 	//-- ListModel dependent codes --//
 	/** Returns the model associated with this grid, or null

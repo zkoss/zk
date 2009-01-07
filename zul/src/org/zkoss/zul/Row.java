@@ -231,24 +231,6 @@ public class Row extends XulElement implements org.zkoss.zul.api.Row {
 		return getGroup();
 	}
 	//-- super --//
-	public void setStyle(String style) {
-		if (style != null && style.length() == 0) style = null;
-
-		final String s = getStyle();
-		if (!Objects.equals(s, style)) {
-			super.setStyle(style);
-			invalidate(); //yes, invalidate
-		}
-	}
-	public void setSclass(String sclass) {
-		if (sclass != null && sclass.length() == 0) sclass = null;
-
-		final String s = getSclass();
-		if (!Objects.equals(s, sclass)) {
-			super.setSclass(sclass);
-			invalidate(); //yes, invalidate
-		}
-	}
 	/** Returns the style class.
 	 * By default, it is the same as grid's stye class, unless
 	 * {@link #setSclass} is called with non-empty value.
