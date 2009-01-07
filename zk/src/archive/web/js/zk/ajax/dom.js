@@ -817,7 +817,7 @@ zDom = { //static methods
 		/* Turn it on if need to fix this limitation (about script)
 		if (n && !zk.gecko && n.getElementsByTagName) {
 			//ie/safari/opera doesn't run script in it, so eval manually
-			var ns = n.getElementsByTagName("script");
+			var ns = n.getElementsByTagName("SCRIPT");
 			for (var j = 0, len = ns.length; j < len; ++j)
 				eval(ns[j].text);
 		}*/
@@ -916,7 +916,7 @@ zDom = { //static methods
 	 * @param charset the charset. UTF-8 is assumed if omitted.
 	 */
 	appendScript: function (src, charset) {
-		var e = document.createElement("script");
+		var e = document.createElement("SCRIPT");
 		e.type = "text/javascript";
 		e.charset = charset ? charset: "UTF-8";
 		e.src = src;

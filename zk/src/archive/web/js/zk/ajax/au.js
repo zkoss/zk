@@ -755,8 +755,12 @@ zAu.cmd1 = {
 				if (!wgt) {
 					uuid = uuid.substring(j + 1); //try page
 					wgt = zk.Widget.$(uuid);
-					if (!wgt) wgt = document.body;
-					zAu.cmd1.addChd(uuid, wgt, code);
+					if (wgt) zAu.cmd1.addChd(uuid, wgt, code);
+					else {
+						zAu.stub = zAu.cmd1._addBodyChdStub;
+						zk.mounting = true;
+						eval(code);
+					}
 					return;
 				}
 			}
@@ -781,6 +785,11 @@ zAu.cmd1 = {
 		};
 		zk.mounting = true;
 		eval(code);
+	},
+	_addBodyChdStub: function (child) {
+		var n = document.createElement("SPAN");
+		document.body.appendChild(n);
+		child.replaceHTML(n);
 	},
 	rm: function (uuid, wgt) {
 		//NOTE: it is possible the server asking removing a non-exist cmp

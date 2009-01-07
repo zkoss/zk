@@ -459,7 +459,7 @@ zkm = {
 
 		var now = zUtl.now(), resz = zkm._resz;
 		if (resz.lastTime && now < resz.lastTime)
-			return; //ignore resize for a while (since zk.onSizeAt might trigger onsize)
+			return; //ignore resize for a while (since onSize might trigger onsize)
 
 		var delay = zk.ie ? 250: 50;
 		resz.time = now + delay - 1; //handle it later

@@ -549,7 +549,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (cf && !zk.currentFocus) cf.focus();
 
 		zWatch.fireDown('beforeSize', -1, this);
-		zWatch.fireDown('onSize', 5, this);
+		zWatch.fireDown('onSize', -1, this);
 	},
 	_redrawHTML: function (skipper) {
 		var out = [];
