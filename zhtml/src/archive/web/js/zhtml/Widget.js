@@ -41,13 +41,15 @@ zhtml.Widget = zk.$extends(zk.Native, {
 				n[nm] = val;
 			}
 	},
-	doChange_: function (devt) {
+	doChange_: function (devt, timeout) {
 		var n = this.getNode();
 		if (n) {
 			var val = n.value;
-			if (val != n.defaultValue)
+			if (val != n.defaultValue) {
 				this.defaultValue = val;
-			this.fire('onChange', this._onChangeData(val), null, 150);
+				this.fire('onChange', this._onChangeData(val), null,
+					timeout ? timeout: 150);
+			}
 		}
 	},
 	_onChangeData: function (val, selbak) {
@@ -66,8 +68,10 @@ zhtml.Widget = zk.$extends(zk.Native, {
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
-		if (this.$onChange)
+		if (this.$onChange) {
+			this.doChange_(null, -1);
 			zEvt.listen(this.getNode(), 'change', this.proxy(this.doChange_, '_pxChange'));
+		}
 	},
 	unbind_: function () {
 		if (this._pxChange) {

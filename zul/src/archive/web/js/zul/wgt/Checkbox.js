@@ -28,14 +28,10 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 	isChecked: function () {
 		return this._checked;
 	},
-	setChecked: function (checked, fromServer) {
+	setChecked: function (checked) {
 		if (this._checked != checked) {
 			this._checked = checked;
-			if (this.ereal) {
-				this.ereal.checked = checked;
-				this.ereal.defaultChecked = checked;
-				if (!fromServer) this.fire('onCheck', checked);
-			}
+			if (this.ereal) this.ereal.checked = checked;
 		}
 	},
 	getName: function () {
@@ -106,8 +102,11 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 	},
 	doClick_: function () {
 		var newval = this.ereal.checked;
-		if (newval != this.ereal.defaultChecked) //changed
+		if (newval != this.ereal.defaultChecked) { //changed
 			this.setChecked(newval);
+			this.ereal.defaultChecked = checked;
+			this.fire('onCheck', checked);
+		}
 		return this.$supers('doClick_', arguments);
 	},
 	updateDomStyle_: function () {
