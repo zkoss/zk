@@ -951,15 +951,15 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 		var maskId = opts.id || 'z_applymask',
 			progbox = zDom.$(maskId);
 		
-		if (progbox) return progbox;
+		if (progbox) return this;
 		
 		var msg = opts.msg || "Loading...",
 			n = document.createElement("DIV");
 		
 		document.body.appendChild(n);
-		var xy = zDom.revisedOffset(anchor), 
-			w = zDom.offsetWidth(anchor),
-			h = zDom.offsetHeight(anchor),
+		var xy = opts.offset || zDom.revisedOffset(anchor), 
+			w = opts.width || zDom.offsetWidth(anchor),
+			h = opts.height || zDom.offsetHeight(anchor),
 			html = '<div id="'+maskId+'" style="visibility:hidden">' 
 				+ '<div class="z-apply-mask" style="display:block;top:' + xy[1]
 				+ 'px;left:' + xy[0] + 'px;width:' + w + 'px;height:' + h + 'px;"></div>'
@@ -971,10 +971,10 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 			mask = this.mask = zDom.$(maskId);
 		
 		if (loading) {
-			if (loading.offsetHeight > anchor.offsetHeight) 
-				loading.style.height = zDom.revisedHeight(loading, anchor.offsetHeight) + "px";
-			if (loading.offsetWidth > anchor.offsetWidth)
-				loading.style.width = zDom.revisedWidth(loading, anchor.offsetWidth) + "px";
+			if (loading.offsetHeight > h) 
+				loading.style.height = zDom.revisedHeight(loading, h) + "px";
+			if (loading.offsetWidth > w)
+				loading.style.width = zDom.revisedWidth(loading, w) + "px";
 			loading.style.top = (xy[1] + ((h - loading.offsetHeight) /2)) + "px";
 			loading.style.left = (xy[0] + ((w - loading.offsetWidth) /2)) + "px";
 		}

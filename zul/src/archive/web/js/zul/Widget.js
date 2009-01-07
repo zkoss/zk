@@ -122,7 +122,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 				var w = this._smartFellow(popup, true);
 				if (w) {
 					wevt._popuped = true;
-					w.open(this, [wevt.data.pageX, wevt.data.pageY]);
+					w.open(this, [wevt.data.pageX, wevt.data.pageY], false, true);
 				}
 			}
 		}
@@ -135,7 +135,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 				var w = this._smartFellow(ctx, true);
 				if (w) {
 					wevt._contexted = true;
-					w.open(this, [wevt.data.pageX, wevt.data.pageY]);
+					w.open(this, [wevt.data.pageX, wevt.data.pageY], false, true);
 					wevt.stop();
 				}
 			}

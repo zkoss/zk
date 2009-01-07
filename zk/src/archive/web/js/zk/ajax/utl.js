@@ -200,7 +200,33 @@ zUtl = { //static methods
 			}
 		}
 	},
+	intsToString: function (ary) {
+		if (!ary) return "";
 
+		var sb = [];
+		for (var j = 0, k = ary.length; j < k; ++j)
+			sb.push(ary[j]);
+		return sb.join();
+	},
+	stringToInts: function (numbers, defaultValue) {
+		if (numbers == null)
+			return null;
+
+		var list = [];
+		for (var j = 0;;) {
+			var k = numbers.indexOf(',', j),
+				s = (k >= 0 ? numbers.substring(j, k): numbers.substring(j)).trim();
+			if (s.length == 0) {
+				if (k < 0) break;
+				list.push(defaultValue);
+			} else
+				list.push(zk.parseInt(s));
+
+			if (k < 0) break;
+			j = k + 1;
+		}
+		return list;
+	},
 	_init: function () {
 		delete zUtl._init;
 

@@ -183,6 +183,12 @@ zDom = { //static methods
 	frameHeight: function (el) {
 		return zDom.sumStyles(el, "tb", zDom.borders) + zDom.sumStyles(el, "tb", zDom.paddings);
 	},
+	/**
+	 * Returns the number of the scrollbar.
+	 */
+	scrollbarWidth: function (el) {
+		return (el.offsetWidth - el.clientWidth) + zDom.sumStyles(el, "lr", zDom.borders);
+	},
 	/** Returns the maximal allowed height of the specified element.
 	 * In other words, it is the client height of the parent minus all sibling's.
 	 */

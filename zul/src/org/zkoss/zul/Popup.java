@@ -59,7 +59,7 @@ public class Popup extends XulElement implements org.zkoss.zul.api.Popup {
 	 * @since 3.0.0
 	 */
 	public void open(String x, String y) {
-		response("popup", new AuInvoke(this, "open", new Object[] {null, new Object[] {x, y}, null, "true"}));
+		response("popup", new AuInvoke(this, "open", new Object[] {null, new Object[] {x, y}, null}));
 	}
 	/**
 	 * Opens this popup to the specified location at the client.
@@ -124,7 +124,7 @@ public class Popup extends XulElement implements org.zkoss.zul.api.Popup {
 	 * @since 5.0.0
 	 */
 	public void open(Component ref, String position) {
-		response("popup", new AuInvoke(this, "open", new Object[] {ref.getUuid(), null, position, "true"}));
+		response("popup", new AuInvoke(this, "open", new Object[] {ref.getUuid(), null, position}));
 	}
 	/**
 	 * Closes this popup at the client.
@@ -134,7 +134,7 @@ public class Popup extends XulElement implements org.zkoss.zul.api.Popup {
 	 * @since 3.0.0
 	 */
 	public void close() {
-		response("popup", new AuInvoke(this, "close", true));
+		response("popup", new AuInvoke(this, "close"));
 	}
 
 	//super//

@@ -13,7 +13,7 @@ This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 zul.wgt.Popup = zk.$extends(zul.Widget, {
-	open: function (wgt, offset, position, fromServer) {
+	open: function (wgt, offset, position, sendOnOpen) {
 		var ref = wgt, pos, dim;
 		
 		if (ref && position) {
@@ -35,7 +35,9 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 				left:  zk.parseInt(offset[1])
 			}
 		}
-
+		if (dim) this._open(ref, pos, dim, sendOnOpen);
+	},
+	_open: function (ref, pos, dim, sendOnOpen) {
 		var node = this.getNode();
 		zDom.setStyle(node, {position: "absolute"});
 		zDom.makeVParent(node);
@@ -63,7 +65,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 				this._stackup.style.display = "block";
 			}
 		}
-		if (!fromServer) this.fire('onOpen', ref ? [true, ref.uuid] : true);
+		if (sendOnOpen) this.fire('onOpen', ref ? [true, ref.uuid] : true);
 		zDom.setStyle(node, {visibility: 'inherit'});
 	},
 	onResponse: function () {
@@ -71,14 +73,14 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		zWatch.unlisten('onResponse', this);
 		this.mask = null;
 	},
-	close: function (fromServer) {
+	close: function (sendOnOpen) {
 		if (this._stackup)
 			this._stackup.style.display = "none";
 		
 		this.setVisible(false);
 		zDom.undoVParent(this.getNode());
 		this.setFloating_(false);
-		if (!fromServer) this.fire('onOpen', false);
+		if (sendOnOpen) this.fire('onOpen', false);
 	},
 	getZclass: function () {
 		var zcls = this._zclass;
@@ -95,7 +97,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			}
 			floatFound = floatFound || wgt.isFloating_();
 		}
-		this.close();
+		this.close(true);
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
