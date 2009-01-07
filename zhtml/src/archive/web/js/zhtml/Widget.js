@@ -64,7 +64,22 @@ zhtml.Widget = zk.$extends(zk.Native, {
 		var n = this.getNode();
 		if (zDom.tag(n) != 'INPUT')
 			this.$supers('doClick_', arguments);
-		else if (!n.disabled) this.fireX(wevt); //no propagation
+		else if (!n.disabled) {
+			if (n.type == 'checkbox')
+				this._doCheck();
+				//continue to fire onClick_ for backward compatibility
+			this.fireX(wevt); //no propagation
+		}
+	},
+	_doCheck: function (timeout) {
+		var n = this.getNode();
+		if (n) {
+			var val = n.checked;
+			if (val != n.defaultChecked) { //changed
+				n.defaultChecked = val;
+				this.fire('onCheck', val, timeout);
+			}
+		}
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
@@ -72,6 +87,8 @@ zhtml.Widget = zk.$extends(zk.Native, {
 			this.doChange_(null, -1);
 			zEvt.listen(this.getNode(), 'change', this.proxy(this.doChange_, '_pxChange'));
 		}
+		if (this.$onCheck)
+			this._doCheck(-1);
 	},
 	unbind_: function () {
 		if (this._pxChange) {

@@ -34,6 +34,11 @@ import org.zkoss.zhtml.impl.AbstractTag;
 public class Input extends AbstractTag {
 	private transient boolean _byClient;
 
+	static {
+		addClientEvent(Input.class, Events.ON_CHANGE);
+		addClientEvent(Input.class, Events.ON_CHECK);
+	}
+
 	public Input() {
 		this("input");
 	}
@@ -51,6 +56,18 @@ public class Input extends AbstractTag {
 	 */
 	public void setValue(String value) throws WrongValueException {
 		setDynamicProperty("value", value);
+	}
+
+	/** Returns if the input is checked (type: checkbox or radio).
+	 */
+	public boolean isChecked() {
+		final Boolean b = (Boolean)getDynamicProperty("checked");
+		return b != null && b.booleanValue();
+	}
+	/** Sets if the input is checked (type: checkbox or radio).
+	 */
+	public void setChecked(boolean checked) {
+		setDynamicProperty("checked", Boolean.valueOf(checked));
 	}
 
 	//super//
@@ -72,6 +89,17 @@ public class Input extends AbstractTag {
 			_byClient = true;
 			try {
 				setValue(value);
+			} finally {
+				_byClient = false;
+			}
+
+			Events.postEvent(evt);
+		} else if (name.equals(Events.ON_CHECK)) {
+			CheckEvent evt = CheckEvent.getCheckEvent(request);
+
+			_byClient = true;
+			try {
+				setChecked(evt.isChecked());
 			} finally {
 				_byClient = false;
 			}

@@ -1,6 +1,7 @@
 	--------
 ZK 5.0.0
 * Features
+  2491275: ZHTML checkbox fire onCheck (in addition to onClick)
   
 * Bugs
 

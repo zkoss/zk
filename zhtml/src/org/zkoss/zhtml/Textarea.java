@@ -26,6 +26,10 @@ import org.zkoss.zhtml.impl.AbstractTag;
  * @author tomyeh
  */
 public class Textarea extends Input {
+	static {
+		addClientEvent(Textarea.class, Events.ON_CHANGE);
+	}
+
 	public Textarea() {
 		super("textarea");
 	}

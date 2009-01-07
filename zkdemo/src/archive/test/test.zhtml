@@ -43,13 +43,14 @@
 
 	<input type="image" src="/zkdemo/img/coffee.gif"/> <br/>
 	<z:textbox id="db" focus="true" zk:onChange="l.value = self.value"/>
+	<div>
+	<z:label id="l" value="a ZUL label"/>
+	<input type="checkbox" zk:onCheck='l.value = self.checked ? "checked": "unchecked"'/>
+	</div>
 	<center>
 	center something
 	</center>
 
-	<div>
-	<z:label id="l" value="a ZUL label"/>
-	</div>
 	<z:groupbox mold="3d" height="100px">
 		<z:caption label="zhtml inside"/>
 	<ol>

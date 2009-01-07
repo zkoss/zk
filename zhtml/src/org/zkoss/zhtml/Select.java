@@ -20,12 +20,18 @@ package org.zkoss.zhtml;
 
 import org.zkoss.zhtml.impl.AbstractTag;
 
+import org.zkoss.zk.ui.event.Events;
+
 /**
  * The SELECT tag.
  * 
  * @author tomyeh
  */
 public class Select extends AbstractTag {
+	static {
+		addClientEvent(Select.class, Events.ON_CHANGE);
+	}
+
 	public Select() {
 		super("select");
 	}

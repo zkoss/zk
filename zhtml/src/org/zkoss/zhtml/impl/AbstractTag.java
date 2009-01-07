@@ -59,7 +59,6 @@ public class AbstractTag extends AbstractComponent
 implements DynamicPropertied, RawId {
 	static {
 		addClientEvent(AbstractTag.class, Events.ON_CLICK);
-		addClientEvent(AbstractTag.class, Events.ON_CHANGE);
 	}
 
 	/** The tag name. */
@@ -137,9 +136,11 @@ implements DynamicPropertied, RawId {
 			throw new WrongValueException("Attribute not allowed: "+name+"\nSpecify the ZK namespace if you want to use special ZK attributes");
 
 		String sval = Objects.toString(value);
-		if ("style".equals(name)) sval = filterStyle(sval);
-
-		setDynaProp(name, sval);
+		if ("style".equals(name)) {
+			sval = filterStyle(sval);
+			setDynaProp(name, sval);
+		} else
+			setDynaProp(name, value);
 		smartUpdate("dynamicProperty", new String[] {name, sval});
 	}
 	/** Processes the style. */
@@ -162,7 +163,7 @@ implements DynamicPropertied, RawId {
 		return style;
 	}
 	/** Set the dynamic property 'blindly'. */
-	private void setDynaProp(String name, String value) {
+	private void setDynaProp(String name, Object value) {
 		if (value == null) {
 			if (_props != null) _props.remove(name);
 		} else {
