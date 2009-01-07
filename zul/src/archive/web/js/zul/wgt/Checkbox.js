@@ -101,11 +101,11 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		this.$supers('unbind_', arguments);
 	},
 	doClick_: function () {
-		var newval = this.ereal.checked;
-		if (newval != this.ereal.defaultChecked) { //changed
-			this.setChecked(newval);
-			this.ereal.defaultChecked = checked;
-			this.fire('onCheck', checked);
+		var val = this.ereal.checked;
+		if (val != this.ereal.defaultChecked) { //changed
+			this.setChecked(val);
+			this.ereal.defaultChecked = val;
+			this.fire('onCheck', val);
 		}
 		return this.$supers('doClick_', arguments);
 	},
