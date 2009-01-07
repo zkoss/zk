@@ -223,7 +223,7 @@ zkm = {
 	/** mount for AU */
 	mtAU: function (stub) {
 		if (zPkg.loading) {
-			zk.afterLoad(zkm.mtAU);
+			zk.afterLoad(function () {zkm.mtAU(stub);});
 			return;
 		}
 
@@ -231,7 +231,8 @@ zkm = {
 			inf = crInf0.shift();
 		if (inf) {
 			stub(zkm.create(null, inf[1]));
-			return zkm.exec(zkm.mtAU); //loop back to check if loading
+			if (crInf0.length)
+				return zkm.exec(function () {zkm.mtAU(stub);}); //loop back to check if loading
 		}
 
 		zkm.mtAU0();
