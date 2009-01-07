@@ -110,7 +110,7 @@ public abstract class LayoutRegion extends XulElement implements org.zkoss.zkex.
 			border = "none";
 		if (!_border.equals(border)) {
 			_border = border;
-			smartUpdate("class", getRealSclass());
+			//smartUpdate("class", getRealSclass());
 		}
 	}
 
@@ -353,12 +353,7 @@ public abstract class LayoutRegion extends XulElement implements org.zkoss.zkex.
 			setSclass(sclass.replaceAll("(?:^|\\s+)" + cls + "(?:\\s+|$)", " ").trim());
 		}
 	}
-
-	protected String getRealSclass() {
-		final String cls = super.getRealSclass();
-		final String added = "normal".equals(getBorder()) ? "" : getZclass() + "-noborder";
-		return cls != null ? cls + " " + added : added; 
-	}
+	
 	public String getZclass() {
 		return _zclass == null ? "z-" + getPosition() : _zclass;
 	}

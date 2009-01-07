@@ -59,8 +59,8 @@ import org.zkoss.zul.Grid.Renderer;
 						if (_grid.getColumns() != null)
 							_grid.setInnerWidth(data[2]);
 						_grid.setInnerHeight(data[3]);
-						_grid.setInnerTop(data[4]);
-						_grid.setInnerBottom(data[5]);
+						//_grid.setInnerTop(data[4]);
+						//_grid.setInnerBottom(data[5]);
 						int pgsz = getRenderAmount();
 
 						final Renderer renderer = _grid.new Renderer();

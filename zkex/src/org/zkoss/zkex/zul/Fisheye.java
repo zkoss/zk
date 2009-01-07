@@ -19,8 +19,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zkex.zul;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.lang.Strings;
-import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zul.impl.XulElement;
@@ -73,22 +71,9 @@ public class Fisheye extends XulElement implements org.zkoss.zkex.zul.api.Fishey
 			invalidate();
 		}
 	}
-	protected String getRealStyle() {
-		String style = super.getRealStyle();
-		Fisheyebar bar = (Fisheyebar) getParent();
-		if (bar == null) return style;
-		final StringBuffer sb = new StringBuffer(32).append(style);
-		HTMLs.appendStyle(sb, "width", bar.getItemWidth() + "px");
-		HTMLs.appendStyle(sb, "height", bar.getItemWidth() + "px");
-		return sb.toString();
-		
-	}
 	//-- super --//
 	public String getZclass() {
 		return _zclass == null ? "z-fisheye" : _zclass;
-	}
-	protected int getRealStyleFlags() {
-		return super.getRealStyleFlags() | RS_NO_WIDTH|RS_NO_HEIGHT;
 	}
 	
 	/**

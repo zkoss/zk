@@ -260,18 +260,20 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>column</component-name>
 		<component-class>org.zkoss.zul.Column</component-class>
+		<widget-class>zul.grid.Column</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/column.dsp</mold-uri>
+			<mold-uri>mold/column.js</mold-uri>
 		</mold>
 		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>columns</component-name>
 		<component-class>org.zkoss.zul.Columns</component-class>
+		<widget-class>zul.grid.Columns</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/columns.dsp</mold-uri>
+			<mold-uri>mold/columns.js</mold-uri>
 		</mold>
 	</component>
 	<component>

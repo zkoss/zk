@@ -19,11 +19,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zkex.zul;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.ext.render.ChildChangedAware;
 import org.zkoss.zul.impl.XulElement;
 
 /** 
@@ -192,18 +190,5 @@ public class Fisheyebar extends XulElement implements org.zkoss.zkex.zul.api.Fis
 		if (!(child instanceof Fisheye))
 			throw new UiException("Unsupported child for fisheyebar: "+child);
 		return super.insertBefore(child, insertBefore);
-	}
-	//-- ComponentCtrl --//
-	protected Object newExtraCtrl() {
-		return new ExtraCtrl();
-	}
-	/** A utility class to implement {@link #getExtraCtrl}.
-	 * It is used only by component developers.
-	 */
-	protected class ExtraCtrl extends XulElement.ExtraCtrl
-	implements ChildChangedAware {
-		public boolean isChildChangedAware() {
-			return true;
-		}
 	}
 }
