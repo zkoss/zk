@@ -15,9 +15,9 @@ Some of the codes are adopted from http://prototype.conio.net and http://script.
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
 zDom = { //static methods
-	$: function(id) {
+	$: function(id, alias) {
 		return typeof id == 'string' ?
-			id ? document.getElementById(id): null: id;
+			id ? document.getElementById(id + (alias ? '$' + alias : '')): null: id;
 			//strange but getElementById("") fails in IE7
 	},
 	tag: function (n) {

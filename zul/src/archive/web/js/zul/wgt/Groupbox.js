@@ -164,15 +164,15 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	},
 
 	appendChild: function (child) {
-		if (this.$super('appendChild', child)) {
+		if (this.$supers('appendChild', arguments)) {
 			if (child.$instanceof(zul.wgt.Caption))
 				this.caption = child;
 			return true;
 		}
 		return false;
 	},
-	insertBefore: function (child, sibling) {
-		if (this.$super('insertBefore', child, sibling)) {
+	insertBefore: function (child) {
+		if (this.$supers('insertBefore', arguments)) {
 			if (child.$instanceof(zul.wgt.Caption))
 				this.caption = child;
 			return true;
@@ -180,7 +180,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		return false;
 	},
 	removeChild: function (child) {
-		if (this.$super('removeChild', child)) {
+		if (this.$supers('removeChild', arguments)) {
 			if (child == this.caption)
 				this.caption = null;
 			return true;
@@ -188,8 +188,8 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		return false;
 	},
 
-	domClass_: function (no) {
-		var html = this.$super('domClass_', no);
+	domClass_: function () {
+		var html = this.$supers('domClass_', arguments);
 		if (!this._open) {
 			if (html) html += ' ';
 			html += this.getZclass() + '-collapsed';

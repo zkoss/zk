@@ -106,14 +106,14 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		return zcls ? zcls:
 			"z-splitter" + (this.isVertical() ? "-ver" : "-hor");
 	},
-	setZclass: function (zcls) {
-		this.$super('setZclass', zcls);
+	setZclass: function () {
+		this.$supers('setZclass', arguments);
 		if (this.desktop)
 			this._fixDomClass(true);
 	},
 
-	bind_: function (desktop) {
-		this.$super('bind_', desktop);
+	bind_: function () {
+		this.$supers('bind_', arguments);
 
 		var box = this.parent;
 		if (box) box._bindWatch();
@@ -176,7 +176,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 
 		this._drag.destroy();
 		this._drag = null;
-		this.$super('unbind_');
+		this.$supers('unbind_', arguments);
 	},
 
 	/** Fixed DOM class for the enclosing TR/TD tag. */

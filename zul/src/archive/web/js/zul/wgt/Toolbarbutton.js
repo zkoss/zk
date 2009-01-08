@@ -88,8 +88,8 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		return zcls ? zcls : "z-toolbar-button";
 	},
 
-	bind_: function(desktop){
-		this.$super('bind_', desktop);
+	bind_: function(){
+		this.$supers('bind_', arguments);
 		var n = this.getNode();
 		if (!this._disabled) {
 			zEvt.listen(n, "focus", this.proxy(this.domFocus_, '_fxFocus'));
@@ -100,7 +100,7 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		var n = this.getNode();
 		zEvt.unlisten(n, "focus", this._fxFocus);
 		zEvt.unlisten(n, "blur", this._fxBlur);
-		this.$super('unbind_');
+		this.$supers('unbind_', arguments);
 	},
 	domContent_: function(){
 		var label = zUtl.encodeXML(this.getLabel()), img = this.getImage();
@@ -112,7 +112,7 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		return this.getDir() == 'reverse' ? label + space + img : img + space + label;
 	},
 	domClass_: function(no){
-		var scls = this.$super('domClass_', no);
+		var scls = this.$supers('domClass_', arguments);
 		if (this._disabled && (!no || !no.zclass)) {
 			var s = this.getZclass();
 			if (s) 
@@ -121,7 +121,7 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		return scls;
 	},
 	domAttrs_: function(no){
-		var attr = this.$super('domAttrs_', no);
+		var attr = this.$supers('domAttrs_', arguments);
 		if (this.getTarget()) 
 			attr += ' target="' + this.getTarget() + '"';
 		if (this.getTabindex()) 

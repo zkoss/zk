@@ -31,23 +31,18 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 		img = '<img src="' + img + '" align="absmiddle" />';
 		return label ? img + ' ' + label: img;
 	},
-	bind_: function (desktop) {
-		this.$super('bind_', desktop);
-
-		if (this.parent.$instanceof(zul.wgt.Groupbox)) {			
-			var n = this.getNode();
-			if (n)
-				zEvt.listen(n, "click", zul.wgt.Caption.ongbclk);
-		}
-	},
 	unbind_: function () {
 		var n = this.getNode(), parent = this.parent;
 		if (n && parent.$instanceof(zul.wgt.Groupbox))
 			zEvt.unlisten(n, "click", zul.wgt.Caption.ongbclk);
 
-		this.$super('unbind_');
+		this.$supers('unbind_', arguments);
 	},
-
+	doClick_: function () {
+		if (this.parent.$instanceof(zul.wgt.Groupbox))
+			this.parent.setOpen(!this.parent.isOpen());
+		this.$supers('doClick_', arguments);
+	},
 	//private//
 	/** Whether to generate a close button. */
 	_isCloseVisible: function () {
@@ -63,13 +58,5 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 	_isMaximizeVisible: function () {
 		var parent = this.parent;
 		return parent.isMaximizable && parent.isMaximizable();
-	}
-},{
-	ongbclk: function (evt) {
-		var wgt = zk.Widget.$(evt);
-		if (wgt && wgt.$instanceof(zul.wgt.Caption)) { //caption
-			wgt = wgt.parent; //Groupbox
-			wgt.setOpen(!wgt.isOpen());
-		}
 	}
 });

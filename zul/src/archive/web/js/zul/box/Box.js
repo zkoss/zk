@@ -60,11 +60,11 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	},
 
 	onChildVisible_: function (child, visible) {
-		this.$super('onChildVisible_', child, visible);
+		this.$supers('onChildVisible_', arguments);
 		if (this.desktop) this._fixChildDomVisible(child, visible);
 	},
-	replaceChildHTML_: function (child, n, desktop) {
-		this.$super('replaceChildHTML_', child, n, desktop);
+	replaceChildHTML_: function (child) {
+		this.$supers('replaceChildHTML_', arguments);
 		this._fixChildDomVisible(child, child._visible);
 	},
 	_fixChildDomVisible: function (child, visible) {
@@ -96,7 +96,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		child.bind_(desktop);
 	},
 	removeChildHTML_: function (child, prevsib) {
-		this.$super('removeChildHTML_', child, prevsib);
+		this.$supers('removeChildHTML_', arguments);
 		zDom.remove(child.uuid + '$chdex');
 		zDom.remove(child.uuid + '$chdex2');
 		if (prevsib && this.lastChild == prevsib) //child is last
@@ -214,7 +214,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			zWatch.unlisten("onHide", this);
 		}
 
-		this.$super('unbind_');
+		this.$supers('unbind_', arguments);
 	},
 	onSize: _zkf = function () {
 		if (!this.isRealVisible()) return;

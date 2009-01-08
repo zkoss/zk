@@ -114,7 +114,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			label + space + img: img + space + label;
 	},
 	domClass_: function (no) {
-		var scls = this.$super('domClass_', no);
+		var scls = this.$supers('domClass_', arguments);
 		if (this._disabled && (!no || !no.zclass)) {
 			var s = this.getZclass();
 			if (s) scls += (scls ? ' ': '') + s + '-disd';
@@ -126,8 +126,8 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		var zcls = this._zclass;
 		return zcls != null ? zcls: this._mold == 'os' ? "z-button-os": "z-button";
 	},
-	bind_: function (desktop) {
-		this.$super('bind_', desktop);
+	bind_: function () {
+		this.$supers('bind_', arguments);
 
 		var $Button = zul.wgt.Button, n;
 		if (this._mold == 'os') {
@@ -154,7 +154,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		}
 
 		this.ebox = this.ebtn = null;
-		this.$super('unbind_');
+		this.$supers('unbind_', arguments);
 	},
 	doClick_: function (wevt) {
 		if (!this._disabled) {
