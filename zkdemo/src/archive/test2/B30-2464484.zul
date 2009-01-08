@@ -32,10 +32,19 @@
 ]]>
 </zscript>
 <radiogroup selectedItem="@{select.desc}">
-<hbox>
-<radio label="Starts with" value="S" selected="true" />
-<radio label="Contains" value="C" />
-</hbox>
+   <grid>
+       <columns>
+           <column label="Selection"/>
+       </columns>
+       <rows>
+           <row spans="3">
+               <radio label="Starts with" value="S" selected="true"/>
+           </row>
+           <row>
+               <radio label="Contains" value="C" />
+           </row>
+       </rows>
+   </grid>
 </radiogroup>
 <button label="show select" onClick='alert(""+select.getDesc())'/>
 </window>

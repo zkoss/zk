@@ -21,6 +21,8 @@ ZK 5.0.0
   + org.zkoss.zul.theme.enableZKPrefix is deprecated.
     Use the library properties, such as org.zkoss.zul.theme.fontSizeM,
     to use the same font for ZK and non-ZK content
+  + org.zkoss.zk.MacroNoDefinitionAllowed is deprecated.
+    A dummy macro definition is used instead.
 
 	--------
 ZK 3.6.0
@@ -40,6 +42,7 @@ ZK 3.5.3
   2433264: Able to access the URI of the error page
   2437121: Make DHtmlLayoutServlet as optional
   2448278: Chart could provide default model
+  2493161: A way to instantiate a macro programmingly w/o macro declaration
   
 * Bugs
   2386650: NullPointerException when create tabs in onTimer()
@@ -56,6 +59,10 @@ ZK 3.5.3
   2464484: Binding selectedItem of Radiogroup causes StackOverflowExcep  
   2468048: Namespace is not consitent with component hierarchy
   2480892: Native component with forEach and non-native child incorrect
+  2488792: SetOpen in Group and Listgroup are failure
+  2487562: Keyboard problem in textbox inside a listbox (Firefox 3.0.5)
+  2463857: Popup window positioning problem and wierd behaviour!
+  2465826: Listbox.focus() does not work on Firefox
 
 	--------
 ZK 3.5.2
