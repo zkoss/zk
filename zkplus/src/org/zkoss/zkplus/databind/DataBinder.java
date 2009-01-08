@@ -37,6 +37,7 @@ import org.zkoss.util.ModificationException;
 import org.zkoss.zk.scripting.HierachicalAware;
 import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.scripting.Namespace;
+import org.zkoss.zk.scripting.Namespaces;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Path;
@@ -1148,11 +1149,26 @@ public class DataBinder implements java.io.Serializable {
 		} else if (beanid.startsWith(".")) { //a relative component Path: ./ or ../
 			bean = Path.getComponent(comp.getSpaceOwner(), beanid);
 		} else {
+			//VariableResolver would need such "self" information when doing
+			//variable resolving
 			final Page page = comp.getPage();
 			if (page != null)
 				bean = page.getZScriptVariable(comp.getNamespace(), beanid);
-			if (bean == null)
-				bean = comp.getVariable(beanid, false);
+			if (bean == null) {
+				final Object self = 
+					page.getNamespace().getVariableNames().contains("self") ? 
+					page.getNamespace().getVariable("self", true) : null; 
+				try {
+					page.setVariable("self", comp);
+					bean = comp.getVariable(beanid, false);
+				} finally {
+					if (self == null) {
+						page.unsetVariable("self");
+					} else {
+						page.setVariable("self", self);
+					}
+				}
+			}
 		}
 		return bean;
 	}
