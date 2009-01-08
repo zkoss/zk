@@ -221,15 +221,25 @@ abstract public class GenericInterpreter implements Interpreter {
 	 *
 	 * <p>Note: We use {@link #UNDEFINED} to denote undefined since 2.4.0,
 	 * while null is a valid value.
+	 *
+	 * @param localOnly whether to look for the current namespace only.
+	 * If false, it looks up the parent namespace, if any.
+	 * @since 3.5.3
 	 */
-	protected Object getFromNamespace(String name) {
+	protected Object getFromNamespace(String name, boolean localOnly) {
 		final Namespace ns = getCurrent();
 		if (ns != null) {
-			Object val = ns.getVariable(name, false);
-			if (val != null || ns.containsVariable(name, false))
+			Object val = ns.getVariable(name, localOnly);
+			if (val != null || ns.containsVariable(name, localOnly))
 				return val;
 		}
 		return getImplicit(name);
+	}
+	/** It is a shortcut of getFromNamespace(name, false).
+	 * @see #getFromNamespace(String, boolean)
+	 */
+	protected Object getFromNamespace(String name) {
+		return getFromNamespace(name, false);
 	}
 	private Object getImplicit(String name) {
 		if ("execution".equals(name)) {
@@ -251,14 +261,23 @@ abstract public class GenericInterpreter implements Interpreter {
 	 * @param ns the namespace to search from (never null).
 	 * Note: if {@link #getCurrent} returns null, this method simply returns
 	 * null (i.e., ignoring ns).
+	 * @param localOnly whether to look for the current namespace only.
+	 * If false, it looks up the parent namespace, if any.
+	 * @since 3.5.3
 	 */
-	protected Object getFromNamespace(Namespace ns, String name) {
+	protected Object getFromNamespace(Namespace ns, String name, boolean localOnly) {
 		if (getCurrent() != null) {
-			Object val = ns.getVariable(name, false);
-			if (val != null || ns.containsVariable(name, false))
+			Object val = ns.getVariable(name, localOnly);
+			if (val != null || ns.containsVariable(name, localOnly))
 				return val;
 		}
 		return getImplicit(name);
+	}
+	/** It is a shortcut of getFromNamespace(ns, name, false).
+	 * @see #getFromNamespace(Namespace, String, boolean)
+	 */
+	protected Object getFromNamespace(Namespace ns, String name) {
+		return getFromNamespace(ns, name, false);
 	}
 
 	//Interpreter//

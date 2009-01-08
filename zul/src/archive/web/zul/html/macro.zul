@@ -13,4 +13,4 @@ macro.zul
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 -->
-<label value="dummy macro"/>
+<label value="macro URI required"/>

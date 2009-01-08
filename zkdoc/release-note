@@ -25,6 +25,7 @@ ZK 3.5.3
   2487562: Keyboard problem in textbox inside a listbox (Firefox 3.0.5)
   2463857: Popup window positioning problem and wierd behaviour!
   2465826: Listbox.focus() does not work on Firefox
+  2493245: zscript failed badly if macro's setMacroURI before setParent
 
 	--------
 ZK 3.5.2
