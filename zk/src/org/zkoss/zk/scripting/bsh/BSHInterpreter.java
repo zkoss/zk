@@ -71,6 +71,10 @@ implements SerializableAware, HierachicalAware {
 	private bsh.Interpreter _ip;
 	private GlobalNS _bshns;
 
+	static {
+		bsh.Interpreter.LOCALSCOPING = true;
+	}
+
 	public BSHInterpreter() {
 	}
 
@@ -267,8 +271,7 @@ implements SerializableAware, HierachicalAware {
 		Namespace p = ns.getParent();
 		NameSpace bshns = //Bug 1831534: we have to pass class manager
 			new NS(p != null ? prepareNS(p): _bshns, _ip.getClassManager(), ns);
-				//Bug 1899353: we have to use _bshns instead of null
-				//Reason: unknown
+				//Bug 1899353: we have to use _bshns instead of null (Reason: unknown)
 		ns.setVariable(VAR_NS, new NSX(bshns), true);
 		return bshns;
 	}
@@ -340,7 +343,8 @@ implements SerializableAware, HierachicalAware {
 	    	super(null, classManager, name);
 	    }
 		protected Object getFromNamespace(String name) {
-			return BSHInterpreter.this.getFromNamespace(name);
+			return BSHInterpreter.this.getFromNamespace(name, true);
+				//local-only since getVariableImpl will look up its parent
 		}
 	    public void loadDefaultImports() {
 	    	BSHInterpreter.this.loadDefaultImports(this);
@@ -360,8 +364,12 @@ implements SerializableAware, HierachicalAware {
 		/** Search _ns instead. */
 		protected Object getFromNamespace(String name) {
 			final BSHInterpreter ip = getInterpreter();
-			return ip != null ? ip.getFromNamespace(_ns, name):
-				_ns.getVariable(name, false);
+			if (ip != null)
+				return ip.getFromNamespace(_ns, name, true);
+				//local-only since getVariableImpl will look up its parent
+			Object v = _ns.getVariable(name, true);
+			return v != null || _ns.containsVariable(name, true) ? v: UNDEFINED; 
+				//local-only since getVariableImpl will look up its parent
 		}
 		private BSHInterpreter getInterpreter() {
 			Page owner = _ns.getOwnerPage();
@@ -401,7 +409,7 @@ implements SerializableAware, HierachicalAware {
 	 * being serialized
 	 */
 	private static class NSX {
-		NameSpace ns;
+		final NameSpace ns;
 		private NSX(NameSpace ns) {
 			this.ns = ns;
 		}
