@@ -62,16 +62,16 @@ public class DelegatingVariableResolver implements VariableResolver {
 		if ("springContext".equals(name)) {
 			return getApplicationContext();
 		}
-		Object o = _vars.get(name);
-		if (o == null) {
+//		Object o = _vars.get(name);
+//		if (o == null) {
 			try {
-				o = getApplicationContext().getBean(name);
+				return getApplicationContext().getBean(name);
 			} catch (NoSuchBeanDefinitionException ex) {
-				o = null;
+				return null;
 			}
 //			if (o != null)
 //				_vars.put(name, o);
-		}
-		return o;
+//		}
+//		return o;
 	}
 }

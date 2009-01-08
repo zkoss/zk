@@ -51,11 +51,11 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 		_props.put("includer", this);
 	}
 
-	/** Returns the component class (aka., widget type), "#m".
+	/** Returns the component class (aka., widget type), "zk.Macro".
 	 * @since 5.0.0
 	 */
 	public String getWidgetClass() {
-		return "#m";
+		return "zk.Macro";
 	}
 
 	//-- Macro --//
@@ -92,12 +92,16 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 				_uri != null ? _uri: getDefinition().getMacroURI(), this, _props);
 		}
 	}
+	public String getMacroURI() {
+		return _uri != null ? _uri: getDefinition().getMacroURI();
+	}
 	public void setMacroURI(String uri) {
 		if (!Objects.equals(_uri, uri)) {
 			if (uri != null && uri.length() == 0)
 				throw new IllegalArgumentException("empty uri");
 			_uri = uri;
-			recreate();
+			if (getParent() != null)
+				recreate();
 		}
 	}
 	public void recreate() {

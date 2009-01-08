@@ -1066,6 +1066,15 @@ zk.Native = zk.$extends(zk.Widget, {
 	}
 });
 
+zk.Macro = zk.$extends(zk.Widget, {
+	redraw: function (out) {
+		out.push('<span', this.domAttrs_(), '>');
+		for (var w = this.firstChild; w; w = w.nextSibling)
+			w.redraw(out);
+		out.push('</span>');
+	}
+});
+
 zk.RefWidget = zk.$extends(zk.Widget, {
 	bind_: function () {
 		var w = zk.Widget.$(this.uuid);
