@@ -138,6 +138,8 @@ public class Configuration {
 	private boolean _debugJS;
 	/** Whether the ZK application is crawlable. */
 	private boolean _crawlable;
+	/** Whether to use the same UUID sequence. */
+	private boolean _repeatUuid;
 
 	/** Constructor.
 	 */
@@ -1896,6 +1898,24 @@ public class Configuration {
 	 */
 	public void setDebugJS(boolean debug) {
 		_debugJS = debug;
+	}
+
+	/** Returns whether to use the same UUID sequence for desktops after
+	 * rebooting.
+	 * <p>Default: false.
+	 * <p>Note: if the custom ID generator (org.zkoss.zk.ui.util.IdGenerator)
+	 * is used, this option is meaningless.
+	 * @since 5.0.0
+	 */
+	public boolean isRepeatUuid() {
+		return _repeatUuid;
+	}
+	/** Sets whether to use the same UUID sequence for desktops after
+	 * rebooting.
+	 * @since 5.0.0
+	 */
+	public void setRepeatUuid(boolean repeat) {
+		_repeatUuid = repeat;
 	}
 
 	/** Sets the implementation of the expression factory that shall

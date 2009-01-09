@@ -274,6 +274,7 @@ public class ConfigParser {
 			//	extendlet-check-period
 			//	theme-provider-class
 			//	theme-uri
+			//	repeat-uuid
 				parseDesktopConfig(config, el);
 				parseClientConfig(config, el); //backward compatible with 2.4
 
@@ -499,6 +500,9 @@ public class ConfigParser {
 		if (v != null)
 			Library.setProperty("org.zkoss.util.resource.extendlet.checkPeriod", v.toString());
 			//library-wide property
+
+		String s = conf.getElementValue("repeat-uuid", true);
+		if (s != null) config.setRepeatUuid(!"false".equals(s));
 	}
 	/** Parses client-config. */
 	private static void parseClientConfig(Configuration config, Element conf) {

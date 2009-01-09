@@ -15,7 +15,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<widget name="Widget"/>
 	<widget name="LabelImageWidget"/>
 
-	<!-- any number of JavaScript files 
+	<!-- any number of JavaScript files  in any order
 		1. src is optional. it could be relative, absolute and ~./
 		2. you can embed JavaScript codes in <script></script>
 		3. the order is important

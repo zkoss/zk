@@ -18,7 +18,13 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<debug-js>true</debug-js>
 	</client-config>
 	-->
-	<!-- Tur on if you want to make your Web application crawlable by
+	<!-- Turn on if you want to use the same UUID sequence for the desktops
+		after reboot. It is mainly for debugging purpose.
+	<desktop-config>
+		<repeat-uuid>true</repeat-uuid>
+	</desktop-config>
+	-->
+	<!-- Turn on if you want to make your Web application crawlable by
 		search engines.
 	<client-config>
 		<crawlable>true</crawlable>

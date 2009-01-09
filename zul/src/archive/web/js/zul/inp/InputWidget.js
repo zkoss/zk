@@ -140,6 +140,17 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		return zUtl.encodeXML(this.coerceToString_(this._value));
 	},
 
+	setConstraint: function (cst) {
+		if (typeof cst == 'string')
+			this._cst = new zul.inp.SimpleConstraint(cst);
+		else if (cst == true) //by-server
+			this._cst = true;
+		else
+			this._cst = cst;
+	},
+	getConstraint: function () {
+		return this._cst;
+	},
 	//dom event//
 	doFocus_: function (evt) {
 		if (!zDom.tag(zEvt.target(evt)) //Bug 2111900
@@ -306,10 +317,5 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	_onSelMarshal: function () {
 		return [this.start, this.end, this.selected];
-	}
-});
-
-zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
-	validate: function (wgt, val) {
 	}
 });

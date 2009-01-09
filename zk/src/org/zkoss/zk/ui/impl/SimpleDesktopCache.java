@@ -45,12 +45,14 @@ public class SimpleDesktopCache implements DesktopCache, java.io.Serializable {
 	/** Used to purge obsolete desktops. */
 	private final Cache _desktops;
 	/** The next available key. */
-	private int _nextKey = ((int)System.currentTimeMillis()) & 0xffff;
+	private int _nextKey;
 		//to reduce the chance that two browsers with the same desktop ID
 		//it is possible if we re-boot the server
 
 	public SimpleDesktopCache(Configuration config) {
 		_desktops = new Cache(config);
+		if (!config.isRepeatUuid())
+			_nextKey = ((int)System.currentTimeMillis()) & 0xffff;
 	}
 
 	//-- DesktopCache --//

@@ -14,4 +14,5 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <package name="zul.inp" language="xul/html">
 	<widget name="InputWidget"/>
 	<widget name="Textbox"/>
+	<script src="constraint.js"/>
 </package>
