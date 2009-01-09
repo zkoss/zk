@@ -30,6 +30,12 @@ zDom = { //static methods
 	show: function (n) {
 		n.style.display = '';
 	},
+	cleanVisibility: zk.opera ? function (n) {
+		n.style.visibility = "visible";
+			// visible will cause an other bug, but we need do it for Input element.
+	} : function (n) {
+		n.style.visibility = "inherit";
+	},
 	/** Returns whether a DOM element is visible.
 	 * Returns false if not exist.
 	 * Returns true if no style.

@@ -67,10 +67,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this._syncShadow(); //create shadow
 		this._updateDomPos();
 
-		var realVisible = this.isRealVisible();
-		if (realVisible) n.style.visibility = 'visible';
-
-		if (realVisible) this.setTopmost();
+		if (this.isRealVisible()) {
+			zDom.cleanVisibility(n);
+			this.setTopmost();
+		}
 
 		this._makeFloat();
 	},
@@ -94,9 +94,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 
 		//Note: modal must be visible
 		var realVisible = this.isRealVisible();
-		if (realVisible) n.style.visibility = 'visible';
-
-		if (realVisible) this.setTopmost();
+		if (realVisible) {
+			zDom.cleanVisibility(n);
+			this.setTopmost();
+		}
 		this._syncMask();
 
 		this._mask = new zk.eff.FullMask({
@@ -392,29 +393,15 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		return zcls != null ? zcls: "z-window-" + this._mode;
 	},
 
-	appendChild: function (child) {
-		if (this.$supers('appendChild', arguments)) {
-			if (child.$instanceof(zul.wgt.Caption))
-				this.caption = child;
-			return true;
-		}
-		return false;
+	onChildAdded_: function (child) {
+		this.$supers('onChildAdded_', arguments);
+		if (child.$instanceof(zul.wgt.Caption))
+			this.caption = child;
 	},
-	insertBefore: function (child, sibling) {
-		if (this.$supers('insertBefore', arguments)) {
-			if (child.$instanceof(zul.wgt.Caption))
-				this.caption = child;
-			return true;
-		}
-		return false;
-	},
-	removeChild: function (child) {
-		if (this.$supers('removeChild', arguments)) {
-			if (child == this.caption)
-				this.caption = null;
-			return true;
-		}
-		return false;
+	onChildRemoved_: function (child) {
+		this.$supers('onChildRemoved_', arguments);
+		if (child == this.caption)
+			this.caption = null;
 	},
 	domStyle_: function (no) {
 		var style = this.$supers('domStyle_', arguments),

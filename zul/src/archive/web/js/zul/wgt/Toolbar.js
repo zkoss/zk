@@ -42,15 +42,18 @@ zul.wgt.Toolbar = zk.$extends(zul.Widget, {
 		(this.inPanelMold() ? "-panel" : "");
 	},
 	// protected 
-	inPanelMold: function(){
-		return this._mold == "panel";
+    inPanelMold: function(){
+        return this._mold == "panel";
+    },
+	onChildAdded_: function(){
+		this.$supers('onChildAdded_', arguments);
+		if (this.inPanelMold()) 
+			this.rerender();
 	},
-	insertBefore: function(){
-		if (this.$supers('insertBefore', arguments)) {
-			if (this.inPanelMold()) 
-				this.rerender();
-			return true;
-		}
-		return false;
+	onChildRemoved_: function(){
+		this.$supers('onChildRemoved_', arguments);
+		if (this.inPanelMold()) 
+			this.rerender();
 	}
+	
 });

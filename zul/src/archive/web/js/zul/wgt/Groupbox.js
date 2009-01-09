@@ -163,29 +163,15 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		return n;
 	},
 
-	appendChild: function (child) {
-		if (this.$supers('appendChild', arguments)) {
-			if (child.$instanceof(zul.wgt.Caption))
-				this.caption = child;
-			return true;
-		}
-		return false;
+	onChildAdded_: function (child) {
+		this.$supers('onChildAdded_', arguments);
+		if (child.$instanceof(zul.wgt.Caption))
+			this.caption = child;
 	},
-	insertBefore: function (child) {
-		if (this.$supers('insertBefore', arguments)) {
-			if (child.$instanceof(zul.wgt.Caption))
-				this.caption = child;
-			return true;
-		}
-		return false;
-	},
-	removeChild: function (child) {
-		if (this.$supers('removeChild', arguments)) {
-			if (child == this.caption)
-				this.caption = null;
-			return true;
-		}
-		return false;
+	onChildRemoved_: function (child) {
+		this.$supers('onChildRemoved_', arguments);
+		if (child == this.caption)
+			this.caption = null;
 	},
 
 	domClass_: function () {

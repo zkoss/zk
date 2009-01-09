@@ -137,7 +137,7 @@ zUtl = { //static methods
 			n.style.left = (zDom.innerWidth() - n.offsetWidth) / 2 + x + "px";
 			n.style.top = (zDom.innerHeight() - n.offsetHeight) / 2 + y + "px";
 		}
-		n.style.visibility = "visible";
+		zDom.cleanVisibility(n);
 	},
 	/** Removes all progress boxed of the specified ID. */
 	destroyProgressbox: function (id) {
