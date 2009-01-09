@@ -23,6 +23,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<desktop-config>
 		<repeat-uuid>true</repeat-uuid>
 	</desktop-config>
+	-->
 	<!--
 	<log>
 		<description>[Optional] Monitor i3-log.conf and register a handler for the specified log-base</description>
