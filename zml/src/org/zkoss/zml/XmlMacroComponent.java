@@ -93,8 +93,12 @@ public class XmlMacroComponent extends AbstractComponent implements Macro {
 			if (uri != null && uri.length() == 0)
 				throw new IllegalArgumentException("empty uri");
 			_uri = uri;
-			recreate();
+			if (getParent() != null)
+				recreate();
 		}
+	}
+	public String getMacroURI() {
+		return _uri != null ? _uri: getDefinition().getMacroURI();
 	}
 	public void recreate() {
 		if (_inlines != null) {

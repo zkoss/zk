@@ -91,6 +91,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	end
 	</zscript>
 
+	<component><!-- Feature 2493161 -->
+		<component-name>macro</component-name>
+		<component-class>org.zkoss.zk.ui.HtmlMacroComponent</component-class>
+		<macro-uri>~./zul/html/macro.zul</macro-uri>
+	</component>
 	<component>
 		<component-name>native</component-name>
 		<component-class>org.zkoss.zml.XmlNativeComponent</component-class>
