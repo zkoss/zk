@@ -65,7 +65,7 @@ zhtml.Widget = zk.$extends(zk.Native, {
 		if (zDom.tag(n) != 'INPUT')
 			this.$supers('doClick_', arguments);
 		else if (!n.disabled) {
-			if (n.type == 'checkbox')
+			if (n.type == 'checkbox' || n.type == 'radio')
 				this._doCheck();
 				//continue to fire onClick_ for backward compatibility
 			this.fireX(wevt); //no propagation
