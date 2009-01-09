@@ -731,16 +731,7 @@ zAu.cmd1 = {
 	},
 	outer: function (uuid, wgt, code) {
 		zAu.stub = function (newwgt) {
-			var p = newwgt.parent = wgt.parent,
-				s = newwgt.previousSibling = wgt.previousSibling;
-			if (s) s.nextSibling = newwgt;
-			else if (p) p.firstChild = newwgt;
-
-			s = newwgt.nextSibling = wgt.nextSibling;
-			if (s) s.previousSibling = newwgt;
-			else if (p) p.lastChild = newwgt;
-
-			newwgt.replaceHTML(wgt.uuid, wgt.desktop);
+			wgt._replaceWgt(newwgt);
 		};
 		zk.mounting = true;
 		eval(code);

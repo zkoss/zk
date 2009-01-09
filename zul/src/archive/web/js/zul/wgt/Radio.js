@@ -70,7 +70,7 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 		var zcls = this._zclass;
 		return zcls != null ? zcls: "z-radio";
 	},
-	beforeParentChange_: function (newParent) {
+	beforeParentChanged_: function (newParent) {
 		var oldParent = this.getRadiogroup(),
 			newParent = newParent ? this.getRadiogroup(newParent) : null;
 		if (oldParent != newParent) {

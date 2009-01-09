@@ -101,12 +101,13 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (child == this.lastChild)
 			return false;
 
-		if (child.parent != this)
-			child.beforeParentChange_(this);
+		var oldpt = child.parent;
+		if (oldpt != this)
+			child.beforeParentChanged_(this);
 
-		if (child.parent) {
+		if (oldpt) {
 			if (this._moveChild(child)) return true; //done
-			child.parent.removeChild(child);
+			oldpt.removeChild(child);
 		}
 
 		child.parent = this;
@@ -124,6 +125,8 @@ zk.Widget = zk.$extends(zk.Object, {
 
 		var dt = this.desktop;
 		if (dt) this.insertChildHTML_(child, null, dt);	
+
+		this.onChildAdded_(child);
 		return true;
 	},
 	insertBefore: function (child, sibling) {
@@ -134,7 +137,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			return false;
 
 		if (child.parent != this)
-			child.beforeParentChange_(this);
+			child.beforeParentChanged_(this);
 
 		if (child.parent) {
 			if (this._moveChild(child, sibling)) return true;
@@ -157,6 +160,8 @@ zk.Widget = zk.$extends(zk.Object, {
 
 		var dt = this.desktop;
 		if (dt) this.insertChildHTML_(child, sibling, dt);
+
+		this.onChildAdded_(child);
 		return true;
 	},
 	removeChild: function (child) {
@@ -165,7 +170,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (this != child.parent)
 			return false;
 
-		child.beforeParentChange_(null);
+		child.beforeParentChanged_(null);
 
 		var p = child.previousSibling, n = child.nextSibling;
 		if (p) p.nextSibling = n;
@@ -180,9 +185,34 @@ zk.Widget = zk.$extends(zk.Object, {
 
 		if (child.desktop)
 			this.removeChildHTML_(child, p);
+		this.onChildRemoved_(child);
 		return true;
 	},
-	beforeParentChange_: function () {
+	_replaceWgt: function (newwgt) { //called by au's outer
+		var node = this.getNode(),
+			p = newwgt.parent = this.parent,
+			s = newwgt.previousSibling = this.previousSibling;
+		if (s) s.nextSibling = newwgt;
+		else if (p) p.firstChild = newwgt;
+
+		s = newwgt.nextSibling = this.nextSibling;
+		if (s) s.previousSibling = newwgt;
+		else if (p) p.lastChild = newwgt;
+
+		if (this.desktop) {
+			if (!newwgt.desktop) newwgt.desktop = this.desktop;
+			if (node) newwgt.replaceHTML(node, newwgt.desktop);
+
+			zk.Widget._fixBindLevel(newwgt, p ? p.bindLevel + 1: 0);
+			zWatch.fire('onBindLevelMove', -1, newwgt);
+		}
+
+		if (p) {
+			p.onChildRemoved_(this);
+			p.onChildAdded_(newwgt);
+		}
+	},
+	beforeParentChanged_: function () {
 	},
 	domMovable_: function () {
 		return true;
@@ -197,30 +227,31 @@ zk.Widget = zk.$extends(zk.Object, {
 			return false;
 
 		var node = this._node, kidnode = child._node;
-			dt = this.desktop, kiddt = child.desktop;
+			dt = this.desktop, kiddt = child.desktop,
+			oldpt = child.parent;
 		child._node = this._node = child.desktop = this.desktop = null; //to avoid bind_ and unbind_
 		try {
-			child.parent.removeChild(child);
+			oldpt.removeChild(child);
 			this.insertBefore(child, moveBefore);
 
 			zDom.remove(kidnode);
 			node.parentNode.insertBefore(kidnode, beforeNode);
 
+			//Not calling unbind and bind, so handle bindLevel here
 			var v = this.bindLevel + 1;
 			if (child.bindLevel != v) {
-				this._fixBindLevel(child, v);
+				zk.Widget._fixBindLevel(child, v);
 				zWatch.fire('onBindLevelMove', -1, child);
 			}
 		} finally {
 			this.desktop = dt; child.desktop = kiddt;
 			this._node = node; child._node = kidnode;
 		}
+
+		oldpt.onChildRemoved(child);
+		this.onChildAdded_(child);
+			//they are called if parent is the same
 		return true;
-	},
-	_fixBindLevel: function (wgt, v) {
-		this.bindLevel = v++;
-		for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
-			this._fixBindLevel(wgt, v);
 	},
 
 	isRealVisible: function () {
@@ -303,6 +334,10 @@ zk.Widget = zk.$extends(zk.Object, {
 			n.style.display = visible ? '': 'none';
 		if (opts && opts.visibility)
 			n.style.visibility = visible ? 'visible': 'hidden';
+	},
+	onChildAdded_: function (child) {
+	},
+	onChildRemoved_: function (child) {
 	},
 	onChildVisible_: function (child, visible) {
 	},
@@ -897,6 +932,13 @@ zk.Widget = zk.$extends(zk.Object, {
 
 	isAutoId: function (id) {
 		return !id || id.startsWith('_z_') || id.startsWith('z_');
+	},
+
+	_fixBindLevel: function (wgt, v) {
+		var $Widget = zk.Widget;
+		wgt.bindLevel = v++;
+		for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
+			$Widget._fixBindLevel(wgt, v);
 	},
 
 	_addIdSpace: function (wgt) {

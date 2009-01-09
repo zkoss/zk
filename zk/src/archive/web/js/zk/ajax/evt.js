@@ -232,7 +232,7 @@ zk.Event = zk.$extends(zk.Object, {
 
 zWatch = {
 	listen: function (name, o) {
-		var wts = this._wts[name];
+		var wts = zWatch._wts[name];
 		if (wts) {
 			var bindLevel = o.bindLevel;
 			if (bindLevel != null) {
@@ -249,17 +249,17 @@ zWatch = {
 			} else
 				wts.push(o);
 		} else
-			wts = this._wts[name] = [o];
+			wts = zWatch._wts[name] = [o];
 	},
 	unlisten: function (name, o) {
-		var wts = this._wts[name];
+		var wts = zWatch._wts[name];
 		return wts && wts.$remove(o);
 	},
 	unlistenAll: function (name) {
-		delete this._wts[name];
+		delete zWatch._wts[name];
 	},
 	fire: function (name, timeout, vararg) {
-		var wts = this._wts[name];
+		var wts = zWatch._wts[name];
 		if (wts && wts.length) {
 			var args = [];
 			for (var j = 2, l = arguments.length; j < l;)
@@ -282,9 +282,9 @@ zWatch = {
 		}
 	},
 	fireDown: function (name, timeout, origin, vararg) {
-		var wts = this._wts[name];
+		var wts = zWatch._wts[name];
 		if (wts && wts.length) {
-			this._sync();
+			zWatch._sync();
 
 			var args = [origin]; //origin as 1st
 			for (var j = 3, l = arguments.length; j < l;)
@@ -323,14 +323,14 @@ zWatch = {
 		}
 	},
 	onBindLevelMove: function () {
-		this._dirty = true;
+		zWatch._dirty = true;
 	},
 	_sync: function () {
-		if (!this._dirty) return;
+		if (!zWatch._dirty) return;
 
-		this._dirty = false;
-		for (var nm in this._wts) {
-			var wts = this._wts[name];
+		zWatch._dirty = false;
+		for (var nm in zWatch._wts) {
+			var wts = zWatch._wts[nm];
 			if (wts.length && wts[0].bindLevel != null)
 				wts.sort(zWatch._cmp);
 		}
