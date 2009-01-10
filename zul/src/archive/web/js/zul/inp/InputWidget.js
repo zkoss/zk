@@ -180,32 +180,45 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		return !focus || !zUtl.isAncestor(this, focus);
 	},
 	validate_: function (value) {
-		if (this._cst)
-			return this._cst.validate(this, value);
+		if (this._cst) {
+			zul.inp.validating = true;
+			try {
+				if (this._cst == true) { //by server
+					return; //TODO
+				}
+				return this._cst.validate(this, value);
+			} finally {
+				zul.inp.validating = false;
+			}
+		}
 	},
 	showError_: function (msg) {
-		zul.inp.errbox.show(this.uuid + '$erb', msg);
+		var eb = new zul.inp.Errbox(this, msg);
+		return eb;
 	},
 	_updateChange: function () {
+		if (zul.inp.validating) return; //avoid deadloop (when both focus and blur fields invalid)
+
 		var inp = this.einp,
 			val = inp.value;
 		if (val != this._lastValVld) {
 			this._lastValVld = val;
 			var msg = this.validate_(val);
 			if (msg) {
-				var cst = this._cst, done;
+				var cst = this._cst, errbox;
 				if (cst) {
-					done = cst.showCustomError;
-					if (done) done = !done.call(cst, this, msg);
+					errbox = cst.showCustomError;
+					if (errbox) errbox = errbox.call(cst, this, msg);
 				}
 
-				if (!done) this.showError_(msg);
+				if (!errbox) this._errbox = this.showError_(msg);
 
 				this.fire('onError',
 					{value: val, message: msg, marshal: this._onErrMarshal},
 					null, -1);
 				return;
-			}
+			} else
+				this._destroyerrbox();
 		}
 		if (val != inp.defaultValue) {
 			inp.defaultValue = val;
@@ -279,18 +292,25 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	//TODO
 	},
 	unbind_: function () {
-		var inp = this.einp,
-			$InputWidget = zul.inp.InputWidget;
-		zEvt.unlisten(inp, "focus", this._pxFocus);
-		zEvt.unlisten(inp, "blur", this._pxBlur);
-		zEvt.unlisten(inp, "select", $InputWidget._doSelect);
-		if (zDom.tag(inp) == 'TEXTAREA')
-			zEvt.unlisten(inp, "keyup", $InputWidget._doKeyUp);
+		this._destroyerrbox();
 
-		//TODO: clean up errorbox
+		var n = this.einp,
+			$InputWidget = zul.inp.InputWidget;
+		zEvt.unlisten(n, "focus", this._pxFocus);
+		zEvt.unlisten(n, "blur", this._pxBlur);
+		zEvt.unlisten(n, "select", $InputWidget._doSelect);
+		if (zDom.tag(n) == 'TEXTAREA')
+			zEvt.unlisten(n, "keyup", $InputWidget._doKeyUp);
 
 		this.einp = null;
 		this.$supers('unbind_', arguments);
+	},
+	_destroyerrbox: function () {
+		var n = this._errbox;
+		if (n) {
+			this._errbox = null;
+			n.destroy();
+		}
 	},
 	isImportantEvent_: function (evtnm) {
 		return 'onChange' == evtnm;
@@ -332,31 +352,3 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		return [this.start, this.end, this.selected];
 	}
 });
-
-zul.inp.errbox = {
-	URI: '/web/zul/img/vd/arrowU.' + (zk.ie6Only ? 'gif':'png'),
-	show: function (id, msg) {
-		var html =
-	'<div onmousedown="zul.inp.errbox._mdown()" onmouseup="zul.inp.errbox._mup()" id="'
-	+id+'" class="z-errbox"><div><table width="250" border="0" cellpadding="0" cellspacing="0"><tr valign="top">'
-	+'<td width="17"><img src="'+zAu.comURI(zul.inp.errbox.URI)+'" id="'+id
-	+'i" onclick="zul.inp.errbox._locate(this)" title="'+mesg.GOTO_ERROR_FIELD
-	+'"/></td><td>'+zUtl.encodeXML(msg, true) //Bug 1463668: security
-	+'</td><td width="16"><img src="'+zAu.comURI('/web/zul/img/vd/close-off.gif')
-	+'" onclick="zul.inp.errbox._close(this)"/>'
-	+'</td></tr></table></div></div>';
-		document.body.insertAdjacentHTML("afterBegin", html);
-		this._sync(zDom.$(id));
-	},
-	_mdown: function () {
-	},
-	_mup: function () {
-	},
-	_locate: function (n) {
-	},
-	_close: function (n) {
-	},
-	_sync: function (n) {
-		n.style.display = "block";
-	}
-}

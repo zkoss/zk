@@ -71,9 +71,13 @@ implements SerializableAware, HierachicalAware {
 	private bsh.Interpreter _ip;
 	private GlobalNS _bshns;
 
-	static {
-		bsh.Interpreter.LOCALSCOPING = true;
-	}
+	/*static {
+		bsh.Interpreter.LOCALSCOPING = false;
+			//must be false (default); otherwise, the following fails
+			//class X {
+			//  String x;
+			//  X(String v) {x = v;}
+	}*/
 
 	public BSHInterpreter() {
 	}

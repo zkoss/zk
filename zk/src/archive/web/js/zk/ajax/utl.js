@@ -88,9 +88,7 @@ zUtl = { //static methods
 		return txt;
 	},
 
-	/** The same as ' cellpadding="0" cellspacing="0"'. */
  	cellps0: ' cellpadding="0" cellspacing="0" border="0"',
- 	/** The same as '<img style="height:0;width:0"/>'. */
  	img0: '<img style="height:0;width:0"/>',
  
 	now: function () {
@@ -108,9 +106,6 @@ zUtl = { //static methods
 	},
 
 	//progress//
-	/** Shows the progress box to notify user ZK Client is busy.
-	 * @see zk.startProcessing
-	 */
 	progressbox: function (id, msg, mask) {
 		if (mask && zk.Page.contained.length) {
 			for (var c = zk.Page.contained.length, e = zk.Page.contained[--c]; e; e = zk.Page.contained[--c]) {
@@ -146,7 +141,6 @@ zUtl = { //static methods
 		}
 		zDom.cleanVisibility(n);
 	},
-	/** Removes all progress boxed of the specified ID. */
 	destroyProgressbox: function (id) {
 		var n = zDom.$(id);
 		if (n) {
@@ -162,10 +156,6 @@ zUtl = { //static methods
 	},
 
 	//HTTP//
-	/** Go to the specified uri.
-	 * @param overwrite whether to overwrite the history
-	 * @param target the target frame (ignored if overwrite is true
-	 */
 	go: function (url, overwrite, target) {
 		if (!url) {
 			location.reload();
@@ -195,7 +185,6 @@ zUtl = { //static methods
 		}
 	},
 
-	/** Instantiates an Ajax request. */
 	newAjax: function () {
 		if (window.XMLHttpRequest) {
 			return new XMLHttpRequest();

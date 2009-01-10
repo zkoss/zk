@@ -15,4 +15,5 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<widget name="InputWidget"/>
 	<widget name="Textbox"/>
 	<script src="constraint.js"/>
+	<script src="errbox.js"/>
 </package>

@@ -55,7 +55,7 @@ public interface ClientConstraint {
 	 * while <code>showCustomError</code> is optional.
 	 *
 	 * <pre><code>String validate(Widget wgt, String value);</code></pre>
-	 * <pre><code>boolean showCustomError(Widget wgt, String errmsg);</code></pre>
+	 * <pre><code>Object showCustomError(Widget wgt, String errmsg);</code></pre>
 	 *
 	 * <p>Refer to <a href="http://docs.zkoss.org/wiki/Zul.inp.InputWidget#setConstraint">zul.inpu.InputWidget#setContraint</a>
 	 * <a href="http://docs.zkoss.org/wiki/Zul.inp.SimpleConstraint">zul.inp.SimpleConstraint</a>
