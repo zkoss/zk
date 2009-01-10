@@ -279,15 +279,17 @@ zkVld._errbox = function () {
 		box._ifr = ifr;
 	}, 0);
 	zul.initMovable(box, {
-		zindex: box.style.zIndex, effecting: zkVld._fiximg, starteffect: zk.voidf,
+		zindex: box.style.zIndex, starteffect: zk.voidf,
 		endeffect: zkVld._fiximg, change: zkVld._change});
 };
-zkVld._change = zk.ie6Only ? function (dg, pointer, evt) {
-	if (dg.element._ifr) {
-		dg.element._ifr.style.top = dg.element.style.top;
-		dg.element._ifr.style.left = dg.element.style.left;
+zkVld._change = function (dg, pointer, evt) {
+	var el = dg.element;
+	if (el._ifr) {
+		el._ifr.style.top = el.style.top;
+		el._ifr.style.left = el.style.left;
 	}
-}: zk.voidf;
+	zkVld._fiximg(el);
+};
 /** box is the box element or the component's ID. 
  * 
  * @param {Object} coerce it is used to close the error box coercively. (@since 3.0.3)
