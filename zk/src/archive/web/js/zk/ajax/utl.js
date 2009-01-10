@@ -14,7 +14,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 zUtl = { //static methods
 	//HTML/XML
-	/** Encodes a message into a valid XML format. */
 	encodeXML: function (txt, multiline) {
 		var out = "";
 		if (!txt) return out;
@@ -62,8 +61,26 @@ zUtl = { //static methods
 	_decs: {lt: '<', gt: '>', amp: '&', quot: '"'},
 	_encs: {},
 
-	/** Returns the element's value (by catenate all CDATA and text).
-	 */
+	renType: function (url, type) {
+		var j = url.lastIndexOf(';');
+		var suffix;
+		if (j >= 0) {
+			suffix = url.substring(j);
+			url = url.substring(0, j);
+		} else
+			suffix = "";
+
+		j = url.lastIndexOf('.');
+		if (j < 0) j = url.length; //no extension at all
+		var	k = url.lastIndexOf('-'),
+			m = url.lastIndexOf('/'),
+			ext = j <= m ? "": url.substring(j),
+			pref = k <= m ? j <= m ? url: url.substring(0, j): url.substring(0, k);
+		if (type) type = "-" + type;
+		else type = "";
+		return pref + type + ext + suffix;
+	},
+
 	getElementValue: function (el) {
 		var txt = ""
 		for (el = el.firstChild; el; el = el.nextSibling)
@@ -76,19 +93,9 @@ zUtl = { //static methods
  	/** The same as '<img style="height:0;width:0"/>'. */
  	img0: '<img style="height:0;width:0"/>',
  
-	/** Returns the current time (new Date().getTime()).
-	 * It is a number starting from 01/01/1970.
-	 */
 	now: function () {
 		return new Date().getTime();
 	},
-	/** Returns whether the first argument is the same, or an ancestor
-	 * of the second argument.
-	 * <p>It assumes the second argument has either a method called getParent
-	 * or a property called parent, that refer to
-	 * its parent (or null if it has no parent).
-	 * <p>If p is null, it is always return true;
-	 */
 	isAncestor: function (p, c) {
 		if (!p) return true;
 		for (; c; c = c.getParent ? c.getParent(): c.parent)

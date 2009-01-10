@@ -344,6 +344,7 @@ zkm = {
 
 	//Event Handler//
 	docMouseDown: function (evt) {
+		evt = evt || window.event;
 		var target = zEvt.target(evt),
 			$Widget = zk.Widget,
 			wgt = $Widget.$(evt, true);
@@ -357,6 +358,7 @@ zkm = {
 			wgt.doMouseDown_(new zk.Event(wgt, 'onMouseDown', zEvt.mouseData(evt, wgt.getNode())), evt);
 	},
 	docMouseUp: function (evt) {
+		evt = evt || window.event;
 		var wgt = zk.mouseCapture;
 		if (wgt) zk.mouseCapture = null;
 		else wgt = zk.Widget.$(evt);
@@ -364,30 +366,47 @@ zkm = {
 			wgt.doMouseUp_(new zk.Event(wgt, 'onMouseUp', zEvt.mouseData(evt, wgt.getNode())), evt);
 	},
 	docMouseMove: function (evt) {
+		evt = evt || window.event;
 		var wgt = zk.mouseCapture;
 		if (!wgt) wgt = zk.Widget.$(evt);
 		if (wgt)
 			wgt.doMouseMove_(new zk.Event(wgt, 'onMouseMove', zEvt.mouseData(evt, wgt.getNode())), evt);
 	},
 	docMouseOver: function (evt) {
+		evt = evt || window.event;
 		zk.currentPointer[0] = zEvt.x(evt);
 		zk.currentPointer[1] = zEvt.y(evt);
 
 		var wgt = zk.Widget.$(evt);
 		if (wgt)
 			wgt.doMouseOver_(new zk.Event(wgt, 'onMouseOver', zEvt.mouseData(evt, wgt.getNode())), evt);
+
+		var target = zEvt.target(evt);
+		if (zDom.tag(target) == "IMG") {
+			var src = target.src;
+			if (src.indexOf("-off") >= 0) target.src = zUtl.renType(src, "on");
+		}
 	},
 	docMouseOut: function (evt) {
+		evt = evt || window.event;
 		var wgt = zk.Widget.$(evt);
 		if (wgt)
 			wgt.doMouseOut_(new zk.Event(wgt, 'onMouseOut', zEvt.mouseData(evt, wgt.getNode())), evt);
+
+		var target = zEvt.target(evt);
+		if (zDom.tag(target) == "IMG") {
+			var src = target.src;
+			if (src.indexOf("-on") >= 0) target.src = zUtl.renType(src, "off");
+		}
 	},
 	docKeyDown: function (evt) {
+		evt = evt || window.event;
 		var wgt = zk.Widget.$(evt);
 		if (wgt)
 			wgt.doKeyDown_(new zk.Event(wgt, 'onKeyDown', zEvt.keyData(evt)), evt);
 	},
 	docKeyUp: function (evt) {
+		evt = evt || window.event;
 		var wgt = zk.keyCapture;
 		if (wgt) zk.keyCapture = null;
 		else wgt = zk.Widget.$(evt);
@@ -395,6 +414,7 @@ zkm = {
 			wgt.doKeyUp_(new zk.Event(wgt, 'onKeyUp', zEvt.keyData(evt)), evt);
 	},
 	docKeyPress: function (evt) {
+		evt = evt || window.event;
 		var wgt = zk.keyCapture;
 		if (!wgt) wgt = zk.Widget.$(evt);
 		if (wgt)
@@ -402,8 +422,8 @@ zkm = {
 	},
 	docClick: function (evt) {
 		if (zk.processing) return;
-		if (!evt) evt = window.event;
 
+		evt = evt || window.event;
 		var wgt = zk.Widget.$(evt);
 		if (wgt)
 			wgt.doClick_(new zk.Event(wgt, 'onClick', zEvt.mouseData(evt, wgt.getNode()), {ctl:true}), evt);
@@ -412,8 +432,8 @@ zkm = {
 	},
 	docDblClick: function (evt) {
 		if (zk.processing) return;
-		if (!evt) evt = window.event;
 
+		evt = evt || window.event;
 		var wgt = zk.Widget.$(evt);
 		if (wgt) {
 			var wevt = new zk.Event(wgt, 'onDoubleClick', zEvt.mouseData(evt, wgt.getNode()), {ctl:true});
@@ -427,8 +447,8 @@ zkm = {
 	},
 	docCtxMenu: function (evt) {
 		if (zk.processing) return;
-		if (!evt) evt = window.event;
 
+		evt = evt || window.event;
 		zk.lastPointer[0] = zEvt.x(evt);
 		zk.lastPointer[1] = zEvt.y(evt);
 

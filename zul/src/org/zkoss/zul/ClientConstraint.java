@@ -55,9 +55,10 @@ public interface ClientConstraint {
 	 * while <code>showCustomError</code> is optional.
 	 *
 	 * <pre><code>String validate(Widget wgt, String value);</code></pre>
-	 * <pre><code>void showCustomError(Widget wgt, String errmsg);</code></pre>
+	 * <pre><code>boolean showCustomError(Widget wgt, String errmsg);</code></pre>
 	 *
-	 * <p>Refer to <a href="http://zkwiki.zkoss.org/index.php/Zul.inp.InputWidget#setConstraint">zul.inpu.InputWidget#setContraint</a>
+	 * <p>Refer to <a href="http://docs.zkoss.org/wiki/Zul.inp.InputWidget#setConstraint">zul.inpu.InputWidget#setContraint</a>
+	 * <a href="http://docs.zkoss.org/wiki/Zul.inp.SimpleConstraint">zul.inp.SimpleConstraint</a>
 	 * for details.
 	 *
 	 * <p>Notice that, since 5.0.0, {@link ClientConstraint} has the higher priority than

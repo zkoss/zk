@@ -180,21 +180,34 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		return !focus || !zUtl.isAncestor(this, focus);
 	},
 	validate_: function (value) {
+		if (this._cst)
+			return this._cst.validate(this, value);
 	},
 	showError_: function (msg) {
-		return msg;
+		zul.inp.errbox.show(this.uuid + '$erb', msg);
 	},
 	_updateChange: function () {
 		var inp = this.einp,
 			val = inp.value;
-		if (val != inp.defaultValue) {
-			var msg = this.showError_(this.validate_(val));
+		if (val != this._lastValVld) {
+			this._lastValVld = val;
+			var msg = this.validate_(val);
 			if (msg) {
+				var cst = this._cst, done;
+				if (cst) {
+					done = cst.showCustomError;
+					if (done) done = !done.call(cst, this, msg);
+				}
+
+				if (!done) this.showError_(msg);
+
 				this.fire('onError',
-					{value: val, message: msg, marshal: _onErrMarshal},
+					{value: val, message: msg, marshal: this._onErrMarshal},
 					null, -1);
 				return;
 			}
+		}
+		if (val != inp.defaultValue) {
 			inp.defaultValue = val;
 			this.fire('onChange', this._onChangeData(val), null, 150);
 		}
@@ -319,3 +332,31 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		return [this.start, this.end, this.selected];
 	}
 });
+
+zul.inp.errbox = {
+	URI: '/web/zul/img/vd/arrowU.' + (zk.ie6Only ? 'gif':'png'),
+	show: function (id, msg) {
+		var html =
+	'<div onmousedown="zul.inp.errbox._mdown()" onmouseup="zul.inp.errbox._mup()" id="'
+	+id+'" class="z-errbox"><div><table width="250" border="0" cellpadding="0" cellspacing="0"><tr valign="top">'
+	+'<td width="17"><img src="'+zAu.comURI(zul.inp.errbox.URI)+'" id="'+id
+	+'i" onclick="zul.inp.errbox._locate(this)" title="'+mesg.GOTO_ERROR_FIELD
+	+'"/></td><td>'+zUtl.encodeXML(msg, true) //Bug 1463668: security
+	+'</td><td width="16"><img src="'+zAu.comURI('/web/zul/img/vd/close-off.gif')
+	+'" onclick="zul.inp.errbox._close(this)"/>'
+	+'</td></tr></table></div></div>';
+		document.body.insertAdjacentHTML("afterBegin", html);
+		this._sync(zDom.$(id));
+	},
+	_mdown: function () {
+	},
+	_mup: function () {
+	},
+	_locate: function (n) {
+	},
+	_close: function (n) {
+	},
+	_sync: function (n) {
+		n.style.display = "block";
+	}
+}

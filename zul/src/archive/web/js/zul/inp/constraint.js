@@ -103,5 +103,9 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 		return flags;
 	},
 	validate: function (wgt, val) {
+		var flags = this._flags;
+		if (!val) {
+			if (flags.NO_EMPTY) return mesg.EMPTY_NOT_ALLOWED;
+		}
 	}
 });
