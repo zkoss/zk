@@ -115,7 +115,7 @@ public class DefinitionLoaders {
 	 * <p>Remember to call {@link #addAddon}, if necessary, before
 	 * calling this method.
 	 */
-	/*package*/ static void load() {
+	/*package*/ static void load() throws java.io.IOException {
 		if (!_loaded) {
 			synchronized (DefinitionLoaders.class) {
 				if (!_loaded && !_loading) {
@@ -130,7 +130,7 @@ public class DefinitionLoaders {
 			}
 		}
 	}
-	private static void load0() {
+	private static void load0() throws java.io.IOException {
 		final ClassLocator locator = new ClassLocator();
 
 		//1. parse config.xml
@@ -138,41 +138,33 @@ public class DefinitionLoaders {
 		parser.parseConfigXml(null); //only system default configs
 
 		//2. process lang.xml (no particular dependency)
-		try {
-			for (Enumeration en = locator.getResources("metainfo/zk/lang.xml");
-			en.hasMoreElements();) {
-				final URL url = (URL)en.nextElement();
-				if (log.debugable()) log.debug("Loading "+url);
-				try {
-					final Document doc = new SAXBuilder(true, false, true).build(url);
-					if (ConfigParser.checkVersion(url, doc))
-						parseLang(doc, locator, url, false);
-				} catch (Exception ex) {
-					throw UiException.Aide.wrap(ex, "Failed to load "+url);
-						//abort since it is hardly to work then
-				}
+		for (Enumeration en = locator.getResources("metainfo/zk/lang.xml");
+		en.hasMoreElements();) {
+			final URL url = (URL)en.nextElement();
+			if (log.debugable()) log.debug("Loading "+url);
+			try {
+				final Document doc = new SAXBuilder(true, false, true).build(url);
+				if (ConfigParser.checkVersion(url, doc))
+					parseLang(doc, locator, url, false);
+			} catch (Exception ex) {
+				log.error("Failed to load "+url, ex);
+				throw UiException.Aide.wrap(ex, "Failed to load "+url);
+					//abort since it is hardly to work then
 			}
-		} catch (Exception ex) {
-			throw UiException.Aide.wrap(ex); //abort
 		}
 
 		//3. process lang-addon.xml (with dependency)
-		try {
-			final List xmls = locator.getDependentXMLResources(
-				"metainfo/zk/lang-addon.xml", "addon-name", "depends");
-			for (Iterator it = xmls.iterator(); it.hasNext();) {
-				final ClassLocator.Resource res = (ClassLocator.Resource)it.next();
-				try {
-					if (ConfigParser.checkVersion(res.url, res.document))
-						parseLang(res.document, locator, res.url, true);
-				} catch (Exception ex) {
-					log.realCauseBriefly("Failed to load addon", ex);
-					//keep running
-				}
+		final List xmls = locator.getDependentXMLResources(
+			"metainfo/zk/lang-addon.xml", "addon-name", "depends");
+		for (Iterator it = xmls.iterator(); it.hasNext();) {
+			final ClassLocator.Resource res = (ClassLocator.Resource)it.next();
+			try {
+				if (ConfigParser.checkVersion(res.url, res.document))
+					parseLang(res.document, locator, res.url, true);
+			} catch (Exception ex) {
+				log.realCauseBriefly("Failed to load "+res.url, ex);
+				//keep running
 			}
-		} catch (Exception ex) {
-			log.error("Failed to load addon", ex);
-			//keep running
 		}
 
 		//4. process other addon (from addAddon)

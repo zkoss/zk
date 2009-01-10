@@ -184,22 +184,10 @@ public interface PageCtrl {
 	 * when the interpreter of the same language is being loaded.
 	 */
 	public void addDeferredZScript(Component parent, ZScript zscript);
- 	/** Returns the default parent, or null if no such parent.
- 	 * If a default parent is defined (by use of {@link #setDefaultParent}),
- 	 * {@link org.zkoss.zk.ui.Executions#createComponents(String, Component, java.util.Map)} will
- 	 * use it as the default parent, if developers didn't specify one.
+ 	/** @deprecated As of release 5.0.0, it is removed to simplify ZK.
  	 */
  	public Component getDefaultParent();
- 	/** Sets the default parent.
- 	 *
- 	 * <p>It is rarely used by application developers. Rather, it is used
- 	 * by ZHTML's body to make sure new created compnents are placed
- 	 * correctly.
- 	 *
- 	 * <p>Caller has to ensure the comp is part of the page. Otherwise,
- 	 * the result is unpreditable.
- 	 *
- 	 * @see #getDefaultParent
+ 	/** @deprecated As of release 5.0.0, it is removed to simplify ZK.
  	 */
  	public void setDefaultParent(Component comp);
 

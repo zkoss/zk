@@ -748,7 +748,7 @@ zAu.cmd1 = {
 					wgt = zk.Widget.$(uuid);
 					if (wgt) zAu.cmd1.addChd(uuid, wgt, code);
 					else {
-						zAu.stub = zAu.cmd1._addBodyChdStub;
+						zAu.stub = zAu.cmd1._asBodyChild;
 						zk.mounting = true;
 						eval(code);
 					}
@@ -758,7 +758,10 @@ zAu.cmd1 = {
 		}
 
 		zAu.stub = function (child) {
-			wgt.parent.insertBefore(child, wgt.nextSibling);
+			var p = wgt.parent;
+			p.insertBefore(child, wgt.nextSibling);
+			if (p.$instanceof(zk.Desktop))
+				zAu.cmd1._asBodyChild(child);
 		};
 		zk.mounting = true;
 		eval(code);
@@ -777,7 +780,7 @@ zAu.cmd1 = {
 		zk.mounting = true;
 		eval(code);
 	},
-	_addBodyChdStub: function (child) {
+	_asBodyChild: function (child) {
 		var n = document.createElement("SPAN");
 		document.body.appendChild(n);
 		child.replaceHTML(n);

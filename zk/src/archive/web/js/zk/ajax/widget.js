@@ -124,7 +124,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		zk.Widget._addIdSpaceDown(child);
 
 		var dt = this.desktop;
-		if (dt) this.insertChildHTML_(child, null, dt);	
+		if (dt) this.insertChildHTML_(child, null, dt);
 
 		this.onChildAdded_(child);
 		return true;

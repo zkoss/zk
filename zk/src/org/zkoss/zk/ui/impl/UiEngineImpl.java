@@ -750,8 +750,6 @@ public class UiEngineImpl implements UiEngine {
 				page = parent.getPage();
 			if (page == null)
 				page = getCurrentPage(exec);
-		} else if (page != null) {
-			parent = ((PageCtrl)page).getDefaultParent();
 		}
 
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;

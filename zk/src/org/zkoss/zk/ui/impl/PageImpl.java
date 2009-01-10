@@ -130,8 +130,6 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	private transient Map _attrs;
 	/** A map of event listener: Map(evtnm, List(EventListener)). */
 	private transient Map _listeners;
-	/** The default parent. */
-	private transient Component _defparent;
 	/** The reason to store it is PageDefinition is not serializable. */
 	private FunctionMapper _mapper;
 	/** The reason to store it is PageDefinition is not serializable. */
@@ -618,7 +616,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		_attrs.clear();
 		_ips = null; //not clear since it is better to NPE than memory leak
 		_desktop = null;
-		_owner = _defparent = null;
+		_owner = null;
 		_listeners = null;
 		_ns = null;
 		_resolvers = null;
@@ -832,11 +830,12 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			((Includer)_owner).setChildPage(this);
 	}
 
+	/** @deprecated */
  	public Component getDefaultParent() {
- 		return _defparent;
+ 		return null;
  	}
+	/** @deprecated */
  	public void setDefaultParent(Component comp) {
- 		_defparent = comp;
  	}
 
 	public void sessionWillPassivate(Desktop desktop) {
@@ -902,7 +901,6 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 
 		s.writeObject(_langdef != null ? _langdef.getName(): null);
 		s.writeObject(_owner != null ? _owner.getUuid(): null);
-		s.writeObject(_defparent != null ? _defparent.getUuid(): null);
 
 		willSerialize(_attrs.values());
 		Serializables.smartWrite(s, _attrs);
@@ -975,10 +973,6 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		_ownerUuid = (String)s.readObject();
 			//_owner is restored later when sessionDidActivate is called
 
-		final String pid = (String)s.readObject();
-		if (pid != null)
-			_defparent = fixDefaultParent(getRoots(), pid);
-
 		Serializables.smartRead(s, _attrs);
 		didDeserialize(_attrs.values());
 
@@ -1034,18 +1028,6 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			"session", "sessionScope", "execution"};
 		for (int j = 0; j < nms.length; ++j)
 			_nonSerNames.add(nms[j]);
-	}
-	private static final
-	Component fixDefaultParent(Collection c, String uuid) {
-		for (Iterator it = c.iterator(); it.hasNext();) {
-			Component comp = (Component)it.next();
-			if (uuid.equals(comp.getUuid()))
-				return comp; //found
-
-			comp = fixDefaultParent(comp.getChildren(), uuid);
-			if (comp != null) return comp;
-		}
-		return null;
 	}
 
 	//-- Object --//

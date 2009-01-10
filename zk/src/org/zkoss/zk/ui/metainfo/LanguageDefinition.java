@@ -270,7 +270,11 @@ public class LanguageDefinition {
 		return _ldefsByClient.keySet();
 	}
 	private static final void init() {
-		DefinitionLoaders.load();
+		try {
+			DefinitionLoaders.load();
+		} catch (java.io.IOException ex) {
+			throw new UiException(ex);
+		}
 	}
 
 	/** Constructs a language defintion.

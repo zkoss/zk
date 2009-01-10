@@ -42,23 +42,6 @@ public class Body extends AbstractTag {
 		super("body");
 	}
 
-	//-- super --//
-	public void onPageAttached(Page newpage, Page oldpage) {
-		fixDefaultParent(newpage, oldpage);
-	}
-	public void onPageDetached(Page page) {
-		fixDefaultParent(null, page);
-	}
-	private void fixDefaultParent(Page page, Page old) {
-		if (old != null) {
-			final PageCtrl oldc = (PageCtrl)old;
-			if (oldc.getDefaultParent() == this)
-				oldc.setDefaultParent(null);
-		}
-		if (page != null)
-			((PageCtrl)page).setDefaultParent(this);
-	}
-
 	//--Component-//
 	public void redraw(java.io.Writer out) throws java.io.IOException {
 		final Execution exec = Executions.getCurrent();
