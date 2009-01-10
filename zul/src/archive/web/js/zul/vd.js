@@ -374,12 +374,7 @@ zkVld._fiximg = function (box) {
 		} else {
 			dir = dy < 0 ? "D": "U";
 		}
-		if (zk.ie6Only){
-			img.src = zk.getUpdateURI('/web/zul/img/vd/arrow'+dir+'.gif');	
-		}else{
-			img.src = zk.getUpdateURI('/web/zul/img/vd/arrow'+dir+'.png');	
-		}
-		
+		img.src = zk.getUpdateURI('/web/zul/img/vd/arrow'+dir+(zk.ie6Only?'.gif':'.png'));
 	}
 };
 /** Makes el visible by moving away any error box covering el.
