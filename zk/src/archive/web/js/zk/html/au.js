@@ -2149,7 +2149,7 @@ zkau._ghostdrag = function (dg, ghosting, evt) {
 			if (!msg) msg = "";
 			if (msg.length > 10) msg = msg.substring(0,10) + "...";
 			var el = dg.element;
-			document.body.insertAdjacentHTML("beforeend",
+			document.body.insertAdjacentHTML("beforeEnd",
 				'<div id="zk_ddghost" class="z-drop-ghost" style="position:absolute;top:'
 				+ofs[1]+'px;left:'+ofs[0]+'px;"><div class="z-drop-cnt"><span id="zk_ddghost!img" class="z-drop-disallow"></span>&nbsp;'+msg+'</div></div>');
 		}else {
@@ -2270,7 +2270,7 @@ zkau.updateUploadInfo = function (p, cb) {
 				+'<div style="width:202px;border:1px inset"><img id="zk_upload!img" src="'+zk.getUpdateURI('/web/zk/img/prgmeter.gif')
 				+'"/></div><br/>'+mesg.FILE_SIZE+Math.round(cb/1024)+mesg.KBYTES
 				+'<br/><input type="button" value="'+mesg.CANCEL+'" onclick="zkau._cancelUpload()"</div>';
-			document.body.insertAdjacentHTML("afterbegin", html);
+			document.body.insertAdjacentHTML("afterBegin", html);
 			zk.center($e("zk_upload"));
 			img = $e("zk_upload!img");
 		}

@@ -30,13 +30,8 @@ zk.load("zul.zul"); //zul
  */
 if (!window.Validate_errorbox) { //not customized
 	window.Validate_errorbox = function (id, boxid, msg) {
-		var URI = null;
-		if (zk.ie6Only){
-			URI = '/web/zul/img/vd/arrowU.gif';
-		}else{
-			URI = '/web/zul/img/vd/arrowU.png';
-		}
-		var html =
+		var URI = '/web/zul/img/vd/arrowU.' + (zk.ie6Only ? 'gif':'png'),
+			html =
 	'<div onmousedown="zkVld._ebmdown()" onmouseup="zkVld._ebmup()" id="'
 	+boxid+'" style="display:none;position:absolute" class="z-errbox"><div>'
 	+'<table width="250" border="0" cellpadding="0" cellspacing="0"><tr valign="top">'
@@ -47,7 +42,7 @@ if (!window.Validate_errorbox) { //not customized
 	+'</td><td width="16"><img src="'+zk.getUpdateURI('/web/zul/img/vd/close-off.gif')
 	+'" onclick="zkVld._ebclose(this)" onmouseover="zkau.onimgover(this)" onmouseout="zkau.onimgout(this)"/>'
 	+'</td></tr></table></div></div>';
-		document.body.insertAdjacentHTML("afterbegin", html);
+		document.body.insertAdjacentHTML("afterBegin", html);
 		return $e(boxid);
 	};
 }

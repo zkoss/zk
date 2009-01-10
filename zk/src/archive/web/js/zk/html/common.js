@@ -268,7 +268,7 @@ zk.Shadow.prototype = {
 				break;
 		};
 		this.delta = d;
-		this.rel.parentNode.insertAdjacentHTML("afterbegin", this.template);
+		this.rel.parentNode.insertAdjacentHTML("afterBegin", this.template);
 		this.el = $e(this.id);
 		if (this.autoShow === true) this.show();
 	},
