@@ -18,18 +18,19 @@ zul.inp.Errbox = zk.$extends(zk.Object, {
 		this.widget = wgt;
 		var id = wgt.uuid + '$erb',
 			html =
-	'<div onmousedown="zul.inp.validating=true" onmouseup="zul.inp.validating=false" id="'
-	+id+'" class="z-errbox"><div><table width="250" border="0" cellpadding="0" cellspacing="0"><tr valign="top">'
-	+'<td width="17" title="'+mesg.GOTO_ERROR_FIELD
-	+'"><img id="'+id+'i" src="'+zAu.comURI(this._uri)+'"/></td><td>'
-	+zUtl.encodeXML(msg, true) //Bug 1463668: security
+	'<div onmousedown="zul.inp.validating=true" onmouseup="zul.inp.validating=false" style="display:none" id="'
+	+id+'" class="z-errbox"><div><table width="250" border="0" cellpadding="0" cellspacing="0"><tr valign="top"><td width="17" title="'
+	+mesg.GOTO_ERROR_FIELD+'"><img id="'+id+'i" src="'+zAu.comURI(this._uri)
+	+'"/></td><td>'+zUtl.encodeXML(msg, true) //Bug 1463668: security
 	+'</td><td width="16"><img id="' + id + 'c" src="'+zAu.comURI('/web/zul/img/vd/close-off.gif')
-	+'"/>'
-	+'</td></tr></table></div></div>';
+	+'"/></td></tr></table></div></div>';
 		document.body.insertAdjacentHTML("afterBegin", html);
 		var n = this.node = zDom.$(id);
 		this._sync(n);
-//		if (!zk.opera) zEffect.slideDown(n, null, {duration:0.4,y:0});
+		var f = zk.currentFocus;
+		if (f) this.onFloatUp(f); //onFloatUp alreay fired when reaching here
+
+		if (!zk.opera) zEffect.slideDown(n, {duration:0.5});
 			//if we slide, opera will slide it at the top of screen and position it
 			//later. No sure it is a bug of script.aculo.us or Opera
 
@@ -48,8 +49,6 @@ zul.inp.Errbox = zk.$extends(zk.Object, {
 		zEvt.listen(n, "click", this.proxy(this._close, '_pclose'));
 
 		zWatch.listen('onFloatUp', this);
-		var f = zk.currentFocus;
-		if (f) this.onFloatUp(f); //onFloatUp alreay fired when reaching here
 	},
 	destroy: function () {
 		delete this.widget._lastValVld; //enforce validation again

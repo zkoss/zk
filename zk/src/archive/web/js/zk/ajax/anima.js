@@ -126,8 +126,7 @@ zAnima = {
 					function () {zAnima.slideIn(widget, n, opts);});
 			} else {
 				n._$animating = "show";
-				zEffect.slideIn(n, opts?opts.anchor:null,
-					zAnima._mergeOpts(widget, opts, {duration: 0.4}));
+				zEffect.slideIn(n, zAnima._mergeOpts(widget, opts, {duration: 0.4}));
 			}
 		}
 	},
@@ -147,8 +146,7 @@ zAnima = {
 					function () {zAnima.slideOut(widget, n, opts);});
 			} else {
 				n._$animating = "hide";
-				zEffect.slideOut(n, opts?opts.anchor:null,
-					zAnima._mergeOpts(widget, opts, {duration: 0.4}));
+				zEffect.slideOut(n, zAnima._mergeOpts(widget, opts, {duration: 0.4}));
 			}
 		}
 	},
@@ -166,8 +164,7 @@ zAnima = {
 					function () {zAnima.slideDown(widget, n, opts);});
 			} else {
 				n._$animating = "show";
-				zEffect.slideDown(n, opts?opts.anchor:null,
-					zAnima._mergeOpts(widget, opts, {duration: 0.4, y:0}));
+				zEffect.slideDown(n, zAnima._mergeOpts(widget, opts, {duration: 0.4, y:0}));
 			}
 		}
 	},
@@ -187,8 +184,7 @@ zAnima = {
 					function () {zAnima.slideUp(widget, n, opts);});
 			} else {
 				n._$animating = "hide";
-				zEffect.slideUp(n, opts?opts.anchor:null,
-					zAnima._mergeOpts(widget, opts, {duration:0.4}));
+				zEffect.slideUp(n, zAnima._mergeOpts(widget, opts, {duration:0.4}));
 			}
 		}
 	},

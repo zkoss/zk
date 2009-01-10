@@ -169,8 +169,8 @@ zEffect = {
 			new zk.eff.Opacity(element, { sync: true, to: 0.0})], opts);
 	},
 
-	slideOut: function(element, anchor, opts) {
-		anchor = anchor || 't';
+	slideOut: function(element, opts) {
+		var anchor = opts ? opts.anchor || 't': 't';
 		element = zDom.$(element);
 
 		var movement, st = element.style;
@@ -211,8 +211,8 @@ zEffect = {
 		return new zk.eff.Parallel(
 			[new zk.eff.Move(element, movement)], opts);
 	},
-	slideIn: function(element, anchor, opts) {
-		anchor = anchor || 't';
+	slideIn: function(element, opts) {
+		var anchor = opts ? opts.anchor || 't': 't';
 		element = zDom.$(element);
 		var oldStyle = {
 			top: zDom.getStyle(element, 'top'),
@@ -260,8 +260,8 @@ zEffect = {
 			[new zk.eff.Move(element, movement)], opts);
 	},
 
-	slideDown: function(element, anchor, opts) {
-		anchor = anchor || 't';
+	slideDown: function(element, opts) {
+		var anchor = opts ? opts.anchor || 't': 't';
 		element = zDom.$(element);
 		zDom.cleanWhitespace(element);
 
@@ -323,8 +323,8 @@ zEffect = {
 			};
 		return new zk.eff.Scale(element, 100, opts);
 	},
-	slideUp: function(element, anchor, opts) {
-		anchor = anchor || 't';
+	slideUp: function(element, opts) {
+		var anchor = opts ? opts.anchor || 't': 't';
 		element = zDom.$(element);
 		zDom.cleanWhitespace(element);
 

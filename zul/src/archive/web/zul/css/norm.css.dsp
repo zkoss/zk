@@ -255,7 +255,7 @@ div.z-drop-cnt {
 <%-- ZK error message box --%>
 div.z-errbox {
 	margin: 0; padding: 1px; border: 1px outset #DD7870; cursor: pointer;
-	background: #ECAEA9; position: absolute; z-index: 88000; display:none;
+	background: #ECAEA9; position: absolute; z-index: 88000;
 }
 
 <%-- Progressmeter --%>
