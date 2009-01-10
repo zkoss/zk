@@ -193,8 +193,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		}
 	},
 	showError_: function (msg) {
-		var eb = new zul.inp.Errbox(this, msg);
-		return eb;
+		return new zul.inp.Errbox(this, msg);
 	},
 	_updateChange: function () {
 		if (zul.inp.validating) return; //avoid deadloop (when both focus and blur fields invalid)
@@ -203,8 +202,11 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			val = inp.value;
 		if (val != this._lastValVld) {
 			this._lastValVld = val;
+			this._destroyerrbox();
 			var msg = this.validate_(val);
 			if (msg) {
+				zDom.addClass(inp, this.getZclass() + "-text-invalid");
+
 				var cst = this._cst, errbox;
 				if (cst) {
 					errbox = cst.showCustomError;
@@ -218,7 +220,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 					null, -1);
 				return;
 			} else
-				this._destroyerrbox();
+				zDom.rmClass(inp, this.getZclass() + "-text-invalid");
 		}
 		if (val != inp.defaultValue) {
 			inp.defaultValue = val;

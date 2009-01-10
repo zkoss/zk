@@ -28,23 +28,48 @@ zul.inp.Errbox = zk.$extends(zk.Object, {
 	+'</td></tr></table></div></div>';
 		document.body.insertAdjacentHTML("afterBegin", html);
 		var n = this.node = zDom.$(id);
-		this.eimg = zDom.$(id + 'i');
 		this._sync(n);
+//		if (!zk.opera) zEffect.slideDown(n, null, {duration:0.4,y:0});
+			//if we slide, opera will slide it at the top of screen and position it
+			//later. No sure it is a bug of script.aculo.us or Opera
 
-		this._drag = new zk.Draggable(this);
+		if (zk.ie6Only) this._stackup = zDom.makeStackup(node);
+
+		this.eimg = zDom.$(id + 'i');
+		var $Errbox = zul.inp.Errbox;
+		this.drag = new zk.Draggable(this, null, {
+			starteffect: zk.$void,
+			endeffect: $Errbox._enddrag,
+			change: $Errbox._change
+		});
 
 		zEvt.listen(n, "click", this.proxy(this._clk, '_pclk'));
 		n = this.eclose = zDom.$(id + 'c');
 		zEvt.listen(n, "click", this.proxy(this._close, '_pclose'));
+
+		zWatch.listen('onFloatUp', this);
+		var f = zk.currentFocus;
+		if (f) this.onFloatUp(f); //onFloatUp alreay fired when reaching here
 	},
 	destroy: function () {
 		delete this.widget._lastValVld; //enforce validation again
+
+		zWatch.unlisten('onFloatUp', this);
 
 		var n = this.node;
 		zDom.remove(n);
 		zEvt.unlisten(n, "click", this._pclk);
 		n = this.eclose;
 		zEvt.unlisten(n, "click", this._pclose);
+
+		this.drag.destroy();
+		this.drag = null;
+
+		var stackup = this.stackup;
+		if (stackup) {
+			this.stackup = null;
+			stackup.destroy();
+		}
 
 		this.widget = this.ndoe = this.eclose = this.eimg = null;
 	},
@@ -87,17 +112,58 @@ zul.inp.Errbox = zk.$extends(zk.Object, {
 			box = this.node,
 			img = this.eimg;
 		if (ewgt && img) {
-			var cmpofs = zDom.revisedOffset(ewgt),
+			var wgtofs = zDom.revisedOffset(ewgt),
 				boxofs = zDom.revisedOffset(box);
-			var dx = boxofs[0] - cmpofs[0], dy = boxofs[1] - cmpofs[1], dir;
+			var dx = boxofs[0] - wgtofs[0], dy = boxofs[1] - wgtofs[1], dir;
 			if (dx > ewgt.offsetWidth) {
-				dir = dy < -10 ? "LD": dy > ewgt.offsetHeight + 10 ? "LU": "L";
+				dir = dy < -10 ? "LD": dy >= ewgt.offsetHeight ? "LU": "L";
 			} else if (dx < 0) {
-				dir = dy < -10 ? "RD": dy > ewgt.offsetHeight + 10 ? "RU": "R";
+				dir = dy < -10 ? "RD": dy >= ewgt.offsetHeight ? "RU": "R";
 			} else {
 				dir = dy < 0 ? "D": "U";
 			}
 			img.src = zAu.comURI('/web/zul/img/vd/arrow'+dir+(zk.ie6Only?'.gif':'.png'));	
 		}
+	},
+	onFloatUp: function (wgt) {
+		if (!zUtl.isAncestor(wgt, this.widget)) {
+			var n = wgt.getNode();
+			if (n) this._uncover(n);
+		}
+	},
+	_uncover: function (el) {
+		var elofs = zDom.cmOffset(el),
+			box = this.node,
+			boxofs = zDom.cmOffset(box);
+
+		if (zDom.isOverlapped(
+		elofs, [el.offsetWidth, el.offsetHeight],
+		boxofs, [box.offsetWidth, box.offsetHeight])) {
+			var ewgt = this.widget.getNode(), y;
+			var wgtofs = zDom.cmOffset(ewgt),
+				wgthgh = ewgt.offsetHeight,
+				wgtbtm = wgtofs[1] + wgthgh;
+			y = elofs[1] + el.offsetHeight <=  wgtbtm ? wgtbtm: wgtofs[1] - box.offsetHeight;
+				//we compare bottom because default is located below
+
+			var ofs = zDom.toStyleOffset(box, 0, y);
+			box.style.top = ofs[1] + "px";
+			this._fiximg();
+		}
+	}
+
+},{
+	_enddrag: function (dg) {
+		dg.control._fiximg();
+	},
+	_change: function (dg) {
+		var errbox = dg.control,
+			stackup = errbox.stackup;
+		if (stackup) {
+			var el = errbox.node;
+			stackup.style.top = el.style.top;
+			stackup.style.left = el.style.left;
+		}
+		errbox._fiximg();
 	}
 });

@@ -167,7 +167,7 @@ zAnima = {
 			} else {
 				n._$animating = "show";
 				zEffect.slideDown(n, opts?opts.anchor:null,
-					zAnima._mergeOpts(widget, opts, {duration: 0.4, y :0}));
+					zAnima._mergeOpts(widget, opts, {duration: 0.4, y:0}));
 			}
 		}
 	},

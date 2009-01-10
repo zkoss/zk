@@ -425,6 +425,14 @@ zDom = { //static methods
 		return [l, t];
 	},
 
+	isOverlapped: function (ofs1, dim1, ofs2, dim2) {
+		var o1x1 = ofs1[0], o1x2 = dim1[0] + o1x1,
+			o1y1 = ofs1[1], o1y2 = dim1[1] + o1y1;
+		var o2x1 = ofs2[0], o2x2 = dim2[0] + o2x1,
+			o2y1 = ofs2[1], o2y2 = dim2[1] + o2y1;
+		return o2x1 <= o1x2 && o2x2 >= o1x1 && o2y1 <= o1y2 && o2y2 >= o1y1;
+	},
+
 	/** Make the position of the element as absolute. */
 	absolutize: function(el) {
 		if (el.style.position == 'absolute') return;
