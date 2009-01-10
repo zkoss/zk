@@ -910,11 +910,11 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 		}
 
 		var st = this.mask.style;
-		st.display = '';
+		st.display = 'block';
 		st.zIndex = el.style.zIndex;
 		if (this.stackup) {
 			st = this.stackup.style;
-			st.display = '';
+			st.display = 'block';
 			st.zIndex = el.style.zIndex;
 		}
 	},
