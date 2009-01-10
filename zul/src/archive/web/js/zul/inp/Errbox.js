@@ -26,6 +26,7 @@ zul.inp.Errbox = zk.$extends(zk.Object, {
 	+'"/></td></tr></table></div></div>';
 		document.body.insertAdjacentHTML("afterBegin", html);
 		var n = this.node = zDom.$(id);
+		this.eimg = zDom.$(id + 'i'); //_sync requires it
 		this._sync(n);
 		var f = zk.currentFocus;
 		if (f) this.onFloatUp(f); //onFloatUp alreay fired when reaching here
@@ -36,7 +37,6 @@ zul.inp.Errbox = zk.$extends(zk.Object, {
 
 		if (zk.ie6Only) this._stackup = zDom.makeStackup(node);
 
-		this.eimg = zDom.$(id + 'i');
 		var $Errbox = zul.inp.Errbox;
 		this.drag = new zk.Draggable(this, null, {
 			starteffect: zk.$void,
