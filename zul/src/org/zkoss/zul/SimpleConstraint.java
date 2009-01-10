@@ -33,7 +33,7 @@ import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zul.mesg.MZul;
 
 /**
- * A simple constraint that you could build based the predefined constants.
+ * The default constraint supporting no empty, regular expressions and so on.
  *
  * <p>Depending on the component (such as {@link Intbox} and {@link Datebox},
  * you could combine the flags, such as {@link #NO_POSITIVE} + {@link #NO_ZERO}
