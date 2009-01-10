@@ -1867,7 +1867,10 @@
     <!-- tablechildren -->
 	<xs:element name="tablechildren" type="tablechildrenType" />
 	<xs:complexType name="tablechildrenType">
-		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:group ref="baseGroup" />
+			<xs:element ref="panel" />
+		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 	</xs:complexType>
     
