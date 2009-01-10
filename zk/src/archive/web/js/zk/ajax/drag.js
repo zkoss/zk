@@ -17,7 +17,7 @@ This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 zk.Draggable = zk.$extends(zk.Object, {
-	$init: function(wgt, node, opts) {
+	$init: function(control, node, opts) {
 		var zdg = zk.Draggable;
 		if (!zdg._stackup) {
 		//IE: if we don't insert stackup at beginning, dragging is slow
@@ -26,8 +26,8 @@ zk.Draggable = zk.$extends(zk.Object, {
 			document.body.appendChild(n);
 		}
 
-		this.widget = wgt;
-		this.node = node = node ? zDom.$(node): wgt.getNode();
+		this.control = control;
+		this.node = node = node ? zDom.$(node): control.node || control.getNode();
 
 		opts = zk.$default(opts, {
 			zIndex: 1000,
@@ -65,7 +65,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 	destroy: function() {
 		zEvt.unlisten(this.handle, "mousedown", this._pxMouseDown);
 		zk.Draggable._unregister(this);
-		this.node = this.widget = this.handle = null;
+		this.node = this.control = this.handle = null;
 	},
 
 	/** [left, right] of this node. */
@@ -286,7 +286,9 @@ zk.Draggable = zk.$extends(zk.Object, {
 		}
 		zEvt.stop(evt);
 
-		zk.Widget.domMouseDown(this.widget); //since event is stopped
+		var c = this.control;
+		if (c && !c.$instanceof(zk.Widget)) c = null;
+		zk.Widget.domMouseDown(c); //since event is stopped
 	},
 	_keyPress: function(evt) {
 		if(zEvt.keyCode(evt) == zEvt.ESC) {

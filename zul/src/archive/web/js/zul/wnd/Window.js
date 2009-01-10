@@ -555,7 +555,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		//zkau.closeFloats(real, handle);
 	},
 	_ghostmove: function (dg, ofs, evt) {
-		var wnd = dg.widget,
+		var wnd = dg.control,
 			el = dg.node;
 		wnd._hideShadow();
 		var title = zDom.firstChild(el, "DIV"),
@@ -586,7 +586,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		if (!target || target.id.indexOf("$close") > -1 || target.id.indexOf("$min") > -1
 		|| target.id.indexOf("$max") > -1)
 			return true; //ignore special buttons
-		if (!dg.widget.isSizable()
+		if (!dg.control.isSizable()
 		|| (el.offsetTop + 4 < pointer[1] && el.offsetLeft + 4 < pointer[0] 
 		&& el.offsetLeft + el.offsetWidth - 4 > pointer[0]))
 			return false; //accept if not sizable or not on border
@@ -594,7 +594,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 	_aftermove: function (dg, evt) {
 		dg.node.style.visibility = "";
-		var wgt = dg.widget;
+		var wgt = dg.control;
 		wgt._syncShadow();
 		wgt._fireOnMove(zEvt.keyMetaData(evt));
 	}

@@ -31,10 +31,11 @@ zul.inp.Errbox = zk.$extends(zk.Object, {
 		this.eimg = zDom.$(id + 'i');
 		this._sync(n);
 
+		this._drag = new zk.Draggable(this);
+
 		zEvt.listen(n, "click", this.proxy(this._clk, '_pclk'));
 		n = this.eclose = zDom.$(id + 'c');
 		zEvt.listen(n, "click", this.proxy(this._close, '_pclose'));
-
 	},
 	destroy: function () {
 		delete this.widget._lastValVld; //enforce validation again

@@ -290,7 +290,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 
 	//drag&drop
 	_ignoresizing: function (draggable, pointer, evt) {
-		var wgt = draggable.widget;
+		var wgt = draggable.control;
 		if (!wgt.isOpen()) return true;
 
 		var run = draggable.run = {},
@@ -317,7 +317,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		return zDom.$("zk_ddghost");
 	},
 	_endDrag: function (draggable) {
-		var wgt = draggable.widget,
+		var wgt = draggable.control,
 			node = wgt.getNode(),
 			$Splitter = zul.box.Splitter,
 			flInfo = $Splitter._fixLayout(wgt),
@@ -365,7 +365,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	},
 	_snap: function (draggable, pos) {
 		var run = draggable.run,
-			wgt = draggable.widget,
+			wgt = draggable.control,
 			x = pos[0], y = pos[1];
 		if (wgt.isVertical()) {
 			if (y <= run.z_offset[1] - run.prev.offsetHeight) {
