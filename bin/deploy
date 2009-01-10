@@ -79,6 +79,7 @@ if [ "$jar_found" = "true" ] ; then
 		f=${f%/}
 		if [ ! -f dist/lib/$f.jad ] && [ -f dist/lib/$f.jar ] ; then
 			#echo "cp dist/lib/$f.jar /usr/tomcat/shared/lib"
+			chmod 644 dist/lib/$f.jar
 			cp -p -u -v -f dist/lib/$f.jar /usr/tomcat/shared/lib
 		fi
 	done
