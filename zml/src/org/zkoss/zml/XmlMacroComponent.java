@@ -30,6 +30,7 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.ext.Macro;
 
 /**
@@ -159,6 +160,13 @@ public class XmlMacroComponent extends AbstractComponent implements Macro {
 	}
 	protected boolean isChildable() {
 		return !isInline();
+	}
+
+	public void redraw(java.io.Writer out) throws java.io.IOException {
+		//children
+		for (Component child = getFirstChild(); child != null;
+		child = child.getNextSibling())
+			((ComponentCtrl)child).redraw(out);
 	}
 
 	//Serializable//

@@ -475,11 +475,7 @@ public class DefinitionLoaders {
 		return wgtdef;
 	}
 	private static Class locateClass(String clsnm) throws Exception {
-		try {
-			return Classes.forNameByThread(clsnm);
-		} catch (ClassNotFoundException ex) {
-			throw new ClassNotFoundException("Not found: "+clsnm, ex);
-		}
+		return Classes.forNameByThread(clsnm);
 	}
 	private static void noEL(String nm, String val, Element el)
 	throws UiException {

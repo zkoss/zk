@@ -40,7 +40,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- Defines the templat for macro components -->
 	<macro-template>
 		<macro-class>org.zkoss.zml.XmlMacroComponent</macro-class>
-		<macro-uri>~./zml/macro.dsp</macro-uri>
 	</macro-template>
 	<!-- Defines the template for the Native namespace
 		[Optional] Define it only if the Native namespace is supported.

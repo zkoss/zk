@@ -36,7 +36,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.zkoss.idom.Document;
 
 import org.zkoss.zk.ui.WebApp;
-import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.UiException;
 
@@ -107,7 +107,7 @@ public class Transformer extends AbstractComponent {
 		{
 			final StringWriter sw = new StringWriter(1024);
 			for (Iterator it = getChildren().iterator(); it.hasNext();)
-				((Component)it.next()).redraw(sw);
+				((ComponentCtrl)it.next()).redraw(sw);
 			src = new StreamSource(new StringReader(sw.toString()));
 		}
 

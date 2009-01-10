@@ -95,7 +95,7 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 			out.write('\n');
 		}
 	}
-	/** Renders the page if {@link Page#isComplete} is true.
+	/** Renders the page if {@link Page#isComplete} is false.
 	 *
 	 * @param au whether it is caued by an asynchronous update
 	 */

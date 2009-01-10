@@ -20,14 +20,12 @@ package org.zkoss.zk.ui;
 
 import java.util.Collections;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.LinkedHashMap;
 import java.util.Set;
 import java.util.HashSet;
-import java.io.Writer;
 
 import org.zkoss.xml.HTMLs;
 import org.zkoss.xml.XMLs;
@@ -140,7 +138,7 @@ implements DynamicTag, Native {
 		throw new UnsupportedOperationException("Use client-dependent attribute, such as display:none");
 	}
 
-	public void redraw(Writer out) throws java.io.IOException {
+	public void redraw(java.io.Writer out) throws java.io.IOException {
 		//Note: _tag == null can NOT be handled specially
 		final boolean root = getParent() == null && getPage().isComplete();
 		final Execution exec = Executions.getCurrent();
