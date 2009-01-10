@@ -781,9 +781,7 @@ zAu.cmd1 = {
 		eval(code);
 	},
 	_asBodyChild: function (child) {
-		var n = document.createElement("SPAN");
-		document.body.appendChild(n);
-		child.replaceHTML(n);
+		child.insertHTML(document.body, "beforeEnd");
 	},
 	rm: function (uuid, wgt) {
 		//NOTE: it is possible the server asking removing a non-exist cmp
