@@ -46,13 +46,40 @@ zk = {
 	},
 
 	$extends: function (superclass, members, staticMembers) {
-		if (!superclass) throw 'unknown superclass';
+		if (!superclass)
+			throw 'unknown superclass';
 
 	//Note: we cannot use extends due to IE and Safari
 		var jclass = function() {
 			this.$init.apply(this, arguments);
 		};
 
+		if (typeof superclass == 'string') {
+			var sc = zk.$import(superclass);
+			if (!sc) {
+				sc = superclass.lastIndexOf('.');
+				if (sc > 0)  {
+					sc = superclass.substring(0, sc);
+					if (!zPkg.load(sc)) {
+						zk.afterLoad(function () {
+							sc = zk.$import(superclass);
+							if (!sc)
+								throw "unknown superclass "+superclass;
+							zk._$extends(jclass,
+								sc, members, staticMembers);
+						});
+						return jclass;
+					}
+				}
+				throw "superclass not found, "+superclass;
+			}
+			superclass = sc;
+		}
+
+		this._$extends(jclass, superclass, members, staticMembers);
+		return jclass;
+	},
+	_$extends: function (jclass, superclass, members, staticMembers) {
 		var thisprototype = jclass.prototype,
 			superprototype = superclass.prototype;
 		zk.copy(thisprototype, superprototype); //inherit non-static
@@ -70,7 +97,6 @@ zk = {
 		thisprototype._$super = superprototype;
 		jclass.$class = zk.Class;
 		jclass.superclass = superclass;
-		return jclass;
 	},
 	$default: function (opts, defaults) {
 		opts = opts || {};
