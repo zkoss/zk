@@ -62,7 +62,7 @@ zk = {
 					sc = superclass.substring(0, sc);
 					if (!zPkg.load(sc)) {
 						zk.afterLoad(function () {
-							sc = zk.$import(superclass);
+							var sc = zk.$import(superclass);
 							if (!sc)
 								throw "unknown superclass "+superclass;
 							zk._$extends(jclass,
