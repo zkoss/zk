@@ -926,8 +926,9 @@ zk.Widget = zk.$extends(zk.Object, {
 
 	//uuid//
 	uuid: function (id) {
-		var j = id.indexOf('$');
-		return j >= 0 ? id.substring(0, j): id;
+		var uuid = typeof id == 'object' ? id.id || '' : id,
+			j = uuid.indexOf('$');
+		return j >= 0 ? uuid.substring(0, j): id;
 	},
 	nextUuid: function () {
 		return '_z_' + zk.Widget._nextUuid++;

@@ -67,11 +67,11 @@ zEffect = {
 		opts = zk.$default(opts, {duration: 1.0});
 		if (!opts.beforeSetupInternal)
 			opts.beforeSetupInternal = function(effect) {
-				zDom.absolutize(effect.effects[0].node)
+				zDom.absolutize(effect._effects[0].node)
 			};
 		if (!opts.afterFinishInternal)
 			opts.afterFinishInternal = function(effect) {
-				var e = effect.effects[0].node;
+				var e = effect._effects[0].node;
 				zDom.hide(e);
 				zDom.setStyle(e, oldStyle);
 			};
@@ -155,11 +155,11 @@ zEffect = {
 		opts = zk.$default(opts, {duration: 0.5});
 		if (!opts.beforeSetup)
 			opts.beforeSetup = function(effect) {
-				zDom.makePositioned(effect.effects[0].node);
+				zDom.makePositioned(effect._effects[0].node);
 			};
 		if (!opts.afterFinishInternal)
 			opts.afterFinishInternal = function(effect) {
-				var e = effect.effects[0].node;
+				var e = effect._effects[0].node;
 				zDom.hide(e);
 				zDom.undoPositioned(e);
 				zDom.setStyle(e, oldStyle);
@@ -196,15 +196,15 @@ zEffect = {
 		opts = zk.$default(opts, {duration: 0.5});
 		if (!opts.beforeSetup)
 			opts.beforeSetup = function(effect) {
-				zDom.makePositioned(effect.effects[0].node); 
+				zDom.makePositioned(effect._effects[0].node); 
 			};
 		if (!opts.beforeFinishInternal)
 			opts.beforeFinishInternal = function (effect) {
-				zDom.hide(effect.effects[0].node);
+				zDom.hide(effect._effects[0].node);
 			};
 		if (!opts.afterFinishInternal)
 			opts.afterFinishInternal = function(effect) {
-				var e = effect.effects[0].node;
+				var e = effect._effects[0].node;
 				zDom.undoPositioned(e)
 				zDom.setStyle(e, oldStyle);
 			}; 
@@ -246,13 +246,13 @@ zEffect = {
 		opts = zk.$default(opts, {duration: 0.5});
 		if (!opts.beforeSetup)
 			opts.beforeSetup = function(effect) {
-				var e = effect.effects[0].node;
+				var e = effect._effects[0].node;
 				zDom.show(e);
 				zDom.makePositioned(e);
 			};
 		if (!opts.afterFinishInternal)
 			opts.afterFinishInternal = function(effect) {
-				var e = effect.effects[0].node;
+				var e = effect._effects[0].node;
 				zDom.undoPositioned(e);
 				zDom.setStyle(e, oldStyle);
 			};
@@ -436,8 +436,11 @@ zk.eff.Parallel = zk.$extends(zk.eff.Base_, {
 		this._effects = effects || [];
 		this.start(opts);
 	},
-	update: function(position) {
-		this._effects.invoke('render', position);
+	update: function() {
+		for (var i = 0, o = this._effects[i]; o; o = this._effects[++i]) {
+			var m = o['render'];
+			if (m) m.apply(o, arguments);
+		}
 	},
 	finish: function(position) {
 		for (var j = 0, effs = this._effects, len = effs.length; j < len;) {
@@ -743,7 +746,8 @@ zk.eff.Shadow = zk.$extends(zk.Object, {
 		};
 		this.delta = d;
 		this.node = element;
-		element.parentNode.insertAdjacentHTML("afterBegin", html);
+		
+		zDom.insertHTMLBefore(element, html);
 		this.shadow = zDom.$(sdwid);
 	},
 	/** Removes the shadow. */

@@ -133,7 +133,7 @@ public class Borderlayout extends HtmlBasedComponent implements org.zkoss.zkex.z
 	 * Re-size this layout component.
 	 */
 	public void resize() {
-		smartUpdate("z.resize", "");
+		smartUpdate("resize", true);
 	}
 
 	public boolean insertBefore(Component child, Component insertBefore) {
@@ -164,7 +164,6 @@ public class Borderlayout extends HtmlBasedComponent implements org.zkoss.zkex.z
 						+ this);
 			_center = (Center) child;
 		}
-		smartUpdate("z.chchg", true);
 		return super.insertBefore(child, insertBefore);
 	}
 	

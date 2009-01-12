@@ -244,7 +244,7 @@ zAnima = {
 	},
 	_defOpts: {
 		beforeStart: function (ef) {
-			var n = ef.node || ef.effects[0].node;
+			var n = ef.node || ef._effects[0].node;
 			if (n) {
 				++zAnima.count;
 				var opts = ef.opts,
@@ -253,7 +253,7 @@ zAnima = {
 			}
 		},
 		afterFinish: function (ef) {
-			var n = ef.node || ef.effects[0].node;
+			var n = ef.node || ef._effects[0].node;
 			if (n) {
 				--zAnima.count;
 				n._$animating = null;

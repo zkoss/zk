@@ -21,7 +21,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- Which language this addon will be added to -->
 	<language-name>xul/html</language-name>
 	
-	<stylesheet href="~./zkex/zul/css/zkex*.css.dsp*" type="text/css"/>
+	<stylesheet href="~./zkex/css/zkex*.css.dsp*" type="text/css"/>
 
 	<version>
 		<version-class>org.zkoss.zkex.Version</version-class>
@@ -36,9 +36,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>borderlayout</component-name>
 		<component-class>org.zkoss.zkex.zul.Borderlayout</component-class>
+		<widget-class>zkex.layout.Borderlayout</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zkex/zul/html/borderlayout2.dsp</mold-uri>
+			<mold-uri>mold/borderlayout.js</mold-uri>
 		</mold>
 	</component>	
 	<component>
@@ -53,9 +54,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>center</component-name>
 		<component-class>org.zkoss.zkex.zul.Center</component-class>
+		<widget-class>zkex.layout.Center</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zkex/zul/html/layoutregion2.dsp</mold-uri>
+			<mold-uri>mold/layoutregion.js</mold-uri>
 		</mold>
 		<preserve-blank/>
 	</component>
@@ -95,9 +97,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>east</component-name>
 		<component-class>org.zkoss.zkex.zul.East</component-class>
+		<widget-class>zkex.layout.East</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zkex/zul/html/layoutregion2.dsp</mold-uri>
+			<mold-uri>mold/layoutregion.js</mold-uri>
 		</mold>
 		<preserve-blank/>
 	</component>
@@ -160,27 +163,30 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>north</component-name>
 		<component-class>org.zkoss.zkex.zul.North</component-class>
+		<widget-class>zkex.layout.North</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zkex/zul/html/layoutregion2.dsp</mold-uri>
+			<mold-uri>mold/layoutregion.js</mold-uri>
 		</mold>
 		<preserve-blank/>
 	</component>	
 	<component>
 		<component-name>south</component-name>
 		<component-class>org.zkoss.zkex.zul.South</component-class>
+		<widget-class>zkex.layout.South</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zkex/zul/html/layoutregion2.dsp</mold-uri>
+			<mold-uri>mold/layoutregion.js</mold-uri>
 		</mold>
 		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>west</component-name>
 		<component-class>org.zkoss.zkex.zul.West</component-class>
+		<widget-class>zkex.layout.West</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zkex/zul/html/layoutregion2.dsp</mold-uri>
+			<mold-uri>mold/layoutregion.js</mold-uri>
 		</mold>
 		<preserve-blank/>
 	</component>

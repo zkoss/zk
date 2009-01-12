@@ -23,6 +23,7 @@ import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.*;
+import org.zkoss.zul.Window;
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.impl.Utils;
 
@@ -57,6 +58,11 @@ public abstract class LayoutRegion extends XulElement implements org.zkoss.zkex.
 	private int[] _margins = new int[] { 0, 0, 0, 0 };
 	private int[] _cmargins = new int[] { 5, 5, 5, 5 };
 
+	static {
+		addClientEvent(LayoutRegion.class, Events.ON_OPEN);
+		addClientEvent(LayoutRegion.class, Events.ON_SIZE);
+	}
+	
 	public LayoutRegion() {
 	}
 	
@@ -78,7 +84,7 @@ public abstract class LayoutRegion extends XulElement implements org.zkoss.zkex.
 	public void setTitle(String title) {
 		if (!Objects.equals(_title, title)) {
 			_title = title;
-			invalidate();
+			smartUpdate("title", _title);
 		}
 	}
 	
@@ -110,7 +116,7 @@ public abstract class LayoutRegion extends XulElement implements org.zkoss.zkex.
 			border = "none";
 		if (!_border.equals(border)) {
 			_border = border;
-			//smartUpdate("class", getRealSclass());
+			smartUpdate("border", _border);
 		}
 	}
 
@@ -129,7 +135,7 @@ public abstract class LayoutRegion extends XulElement implements org.zkoss.zkex.
 	public void setSplittable(boolean splittable) {
 		if (_splittable != splittable) {
 			_splittable = splittable;
-			smartUpdate("z.splt", _splittable);
+			smartUpdate("splittable", _splittable);
 		}
 	}
 
@@ -139,7 +145,7 @@ public abstract class LayoutRegion extends XulElement implements org.zkoss.zkex.
 	public void setMaxsize(int maxsize) {
 		if (_maxsize != maxsize) {
 			_maxsize = maxsize;
-			smartUpdate("z.maxs", _maxsize);
+			smartUpdate("maxsize", _maxsize);
 		}
 	}
 
@@ -158,7 +164,7 @@ public abstract class LayoutRegion extends XulElement implements org.zkoss.zkex.
 	public void setMinsize(int minsize) {
 		if (_minsize != minsize) {
 			_minsize = minsize;
-			smartUpdate("z.mins", _minsize);
+			smartUpdate("minsize", minsize);
 		}
 	}
 
@@ -190,7 +196,7 @@ public abstract class LayoutRegion extends XulElement implements org.zkoss.zkex.
 	public void setFlex(boolean flex) {
 		if (_flex != flex) {
 			_flex = flex;
-			invalidate();
+			smartUpdate("flex", _flex);
 		}
 	}
 
@@ -212,7 +218,7 @@ public abstract class LayoutRegion extends XulElement implements org.zkoss.zkex.
 		final int[] imargins = Utils.stringToInts(margins, 0);
 		if (!Objects.equals(imargins, _margins)) {
 			_margins = imargins;
-			smartUpdate("z.mars", Utils.intsToString(_margins));
+			smartUpdate("imargins", getMargins());
 		}
 	}
 
@@ -237,7 +243,7 @@ public abstract class LayoutRegion extends XulElement implements org.zkoss.zkex.
 		final int[] imargins = Utils.stringToInts(cmargins, 0);
 		if (!Objects.equals(imargins, _cmargins)) {
 			_cmargins = imargins;
-			smartUpdate("z.cmars", Utils.intsToString(_cmargins));
+			smartUpdate("imargins", getCmargins());
 		}
 	}
 
@@ -258,7 +264,7 @@ public abstract class LayoutRegion extends XulElement implements org.zkoss.zkex.
 	public void setCollapsible(boolean collapsible) {
 		if (collapsible != _collapsible) {
 			_collapsible = collapsible;
-			smartUpdate("z.colps", _collapsible);
+			smartUpdate("collapsible", _collapsible);
 		}
 	}
 
@@ -277,7 +283,7 @@ public abstract class LayoutRegion extends XulElement implements org.zkoss.zkex.
 	public void setAutoscroll(boolean autoscroll) {
 		if (_autoscroll != autoscroll) {
 			_autoscroll = autoscroll;
-			smartUpdate("z.autoscl", _autoscroll);
+			smartUpdate("autoscroll", _autoscroll);
 		}
 	}
 
@@ -298,7 +304,7 @@ public abstract class LayoutRegion extends XulElement implements org.zkoss.zkex.
 	public void setOpen(boolean open) {
 		if (_open != open) {
 			_open = open;
-			smartUpdate("z.open", open);
+			smartUpdate("open", open);
 		}
 	}
 
@@ -332,46 +338,9 @@ public abstract class LayoutRegion extends XulElement implements org.zkoss.zkex.
 	 * {@link UnsupportedOperationException}.
 	 */
 	abstract public String getSize();
-
-	protected void addSclass(String cls) {
-		final String sclass = getSclass();
-		if (!hasSclass(cls))
-			setSclass(sclass == null ? cls : cls + " " + sclass);
-	}
-
-	protected boolean hasSclass(String cls) {
-		String sclass = getSclass();
-		if (sclass == null)
-			sclass = "";
-		return cls == null
-				|| ((" " + sclass + " ").indexOf(" " + cls + " ") > -1);
-	}
-
-	protected void removeSclass(String cls) {
-		final String sclass = getSclass();
-		if (sclass != null && cls != null && hasSclass(cls)) {
-			setSclass(sclass.replaceAll("(?:^|\\s+)" + cls + "(?:\\s+|$)", " ").trim());
-		}
-	}
 	
 	public String getZclass() {
 		return _zclass == null ? "z-" + getPosition() : _zclass;
-	}
-	public void onChildRemoved(Component child) {
-		super.onChildRemoved(child);
-		smartUpdate("z.cid", "zk_n_a");
-		if (child instanceof Borderlayout) {
-			setFlex(false);
-			removeSclass(getZclass() + "-nested");
-		}
-	}
-	public void onChildAdded(Component child) {
-		smartUpdate("z.cid", child.getUuid());
-		super.onChildAdded(child);
-		if (child instanceof Borderlayout) {
-			setFlex(true);
-			addSclass(getZclass() + "-nested");
-		}
 	}
 
 	public boolean insertBefore(Component child, Component insertBefore) {
@@ -379,17 +348,39 @@ public abstract class LayoutRegion extends XulElement implements org.zkoss.zkex.
 			throw new UiException("Only one child is allowed: " + this);
 		return super.insertBefore(child, insertBefore);
 	}
-	public void invalidate() {
-		super.invalidate();
-		Borderlayout layout = (Borderlayout)getParent();
-		if (layout != null) layout.resize();
-	}
+	
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Borderlayout))
 			throw new UiException("Wrong parent: "+parent);
 		super.setParent(parent);
 	}
+	// super
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
 
+		render(renderer, "title", _title);
+		if (!"normal".equals(_border))
+			render(renderer, "border", _border);
+		if (_splittable)
+			render(renderer, "splittable", _splittable);
+		if (_maxsize != 2000)
+			renderer.render("maxsize", _maxsize);
+		if (_minsize != 0)
+			renderer.render("minsize", _minsize);
+		if (_flex)
+			render(renderer, "flex", _flex);
+		
+		render(renderer, "margins", getMargins());
+		render(renderer, "cmargins", getCmargins());
+
+		if (_collapsible)
+			render(renderer, "collapsible", _collapsible);
+		if (_autoscroll)
+			render(renderer, "autoscroll", _autoscroll);
+		if (!_open)
+			render(renderer, "open", _open);
+	}
 	/** Processes an AU request.
 	 *
 	 * <p>Default: in addition to what are handled by {@link XulElement#process},
