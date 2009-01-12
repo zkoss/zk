@@ -13,8 +13,8 @@ This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 zul.wgt.Popup = zk.$extends(zul.Widget, {
-	open: function (wgt, offset, position, sendOnOpen) {
-		var ref = wgt, pos, dim;
+	open: function (ref, offset, position, sendOnOpen) {
+		var pos, dim;
 		
 		if (ref && position) {
 			if (typeof ref == 'string')
@@ -40,7 +40,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		var node = this.getNode();
 		zDom.setStyle(node, {position: "absolute"});
 		zDom.makeVParent(node);
-		zDom.autoPosition(node, dim, pos);
+		zDom.position(node, dim, pos);
 		
 		this.setVisible(true);
 		

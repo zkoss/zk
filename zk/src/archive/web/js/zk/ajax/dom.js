@@ -283,8 +283,8 @@ zDom = { //static methods
 		if (!skipx) el.style.left = ofs[0] + "px";
 		if (!skipy) el.style.top =  ofs[1] + "px";
 	},
-	autoPosition: function (el, dim, flags) {
-		flags = flags || "overlap";
+	position: function (el, dim, where) {
+		where = where || "overlap";
 		var box = zDom.getDimension(el),
 			wd = box.width,
 			hgh = box.height,
@@ -295,7 +295,7 @@ zDom = { //static methods
 			x = dim.top,
 			y = dim.left;
 			
-		switch(flags) {
+		switch(where) {
 		case "before_start":
 			y -= hgh;
 			break;

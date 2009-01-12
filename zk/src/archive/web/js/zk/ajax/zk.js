@@ -85,12 +85,10 @@ zk = {
 		zk.copy(thisprototype, superprototype); //inherit non-static
 		zk.copy(thisprototype, members);
 
-		for (var p in superclass) //inherit static methods only
-			if (p != 'prototype') {
-				var v = superclass[p];
-				if (typeof v == 'function' && !v.$class) //function but not an object
-					jclass[p] = v;
-			}
+		for (var p in superclass) //inherit static members
+			if (p != 'prototype')
+				jclass[p] = superclass[p];
+
 		zk.copy(jclass, staticMembers);
 
 		thisprototype.$class = jclass;
