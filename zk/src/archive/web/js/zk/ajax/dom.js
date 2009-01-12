@@ -1279,7 +1279,7 @@ if (zk.ie) {
 		case "afterend":
 			r.setStartAfter(this);
 			df = r.createContextualFragment(sHTML);
-			zk.insertAfter(df, this);
+			zDom.insertAfter(df, this);
 			break;
 		}
 	};
