@@ -19,7 +19,6 @@ zul.inp.Errorbox = zk.$extends('zul.wgt.Popup', {
 	},
 	show: function (owner, msg) {
 		this.parent = owner; //fake
-		this.uuid = owner.uuid + '$erb';
 		this.msg = msg;
 		this.insertHTML(document.body, "beforeEnd");
 		this.open(owner, null, "end_before");
@@ -37,10 +36,10 @@ zul.inp.Errorbox = zk.$extends('zul.wgt.Popup', {
 		var uuid = this.uuid,
 			n = this.getNode();
 
-		this.earrow = zDom.$(uuid + 'a');
+		this.earrow = zDom.$(uuid + '$a');
 
 		zEvt.listen(n, "click", this.proxy(this._clk, '_pclk'));
-		n = this.eclose = zDom.$(uuid + 'c');
+		n = this.eclose = zDom.$(uuid + '$c');
 		zEvt.listen(n, "click", this.proxy(this._close, '_pclose'));
 
 		var $Errorbox = zul.inp.Errorbox;
@@ -53,13 +52,27 @@ zul.inp.Errorbox = zk.$extends('zul.wgt.Popup', {
 	unbind_: function () {
 		this._drag.destroy();
 
-		var n = this.gegtNode();
+		var n = this.getNode();
 		zEvt.unlisten(n, "click", this._pclk);
 		n = this.eclose;
 		zEvt.listen(n, "click", this._pclose);
 
 		this.$supers('unbind_', arguments);
 		this._drag = this.earrow = this.eclose = null;
+	},
+	doMouseOver_: function (evt, devt) {
+		var el = zEvt.target(devt);
+		if (el == this.eclose)
+			zDom.addClass(el, 'z-errbox-close-over');
+		else
+			this.$supers('doMouseOver_', arguments);
+	},
+	doMouseOut_: function (evt, devt) {
+		var el = zEvt.target(devt);
+		if (el == this.eclose)
+			zDom.rmClass(el, 'z-errbox-close-over');
+		else
+			this.$supers('doMouseOut_', arguments);
 	},
 	_clk: function () {
 		this.parent.focus(0);
@@ -77,16 +90,16 @@ zul.inp.Errorbox = zk.$extends('zul.wgt.Popup', {
 		var id = this.uuid;
 		out.push('<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr valign="top"><td width="17"><span id="');
 		out.push(id);
-		out.push('a" class="z-arrow" title="')
+		out.push('$a" class="z-arrow" title="')
 		out.push(zUtl.encodeXML(mesg.GOTO_ERROR_FIELD));
 		out.push('"></span></td><td width="3">');
 		out.push(zUtl.encodeXML(this.msg, true)); //Bug 1463668: security
 		out.push('</td><td width="17"><div id="');
 		out.push(id);
-		out.push('c" class="z-close z-errbox-close"></div></td></tr></table>');
+		out.push('$c" class="z-close z-errbox-close"></div></td></tr></table>');
 	},
 	onFloatUp: function (wgt) {
-		if (!wgt || wgt == this || !this.isVisible())
+		if (!wgt || wgt == this || wgt == this.parent || !this.isVisible())
 			return;
 
 		var top1 = this, top2 = wgt;
