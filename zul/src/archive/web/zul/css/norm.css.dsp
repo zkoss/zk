@@ -93,7 +93,7 @@ div.z-debug button {
 	background: #E0E1E3; <%-- #dae4f5/#e1eaf7/e3ecf7 --%>
 }
 .z-loading {
-	position: absolute; z-index: 21000; background-color: #6eadff; cursor: wait;
+	position: absolute; z-index: 99001; background-color: #6eadff; cursor: wait;
 	white-space: nowrap; border: 1px solid #83B5F7; padding:3px;
 	left: 0; top: 0;
 }

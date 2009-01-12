@@ -33,14 +33,10 @@ zul.inp.Errorbox = zk.$extends('zul.wgt.Popup', {
 	//super//
 	bind_: function () {
 		this.$supers('bind_', arguments);
-		var uuid = this.uuid,
-			n = this.getNode();
 
+		var uuid = this.uuid;
 		this.earrow = zDom.$(uuid + '$a');
-
-		zEvt.listen(n, "click", this.proxy(this._clk, '_pclk'));
-		n = this.eclose = zDom.$(uuid + '$c');
-		zEvt.listen(n, "click", this.proxy(this._close, '_pclose'));
+		this.eclose = zDom.$(uuid + '$c');
 
 		var $Errorbox = zul.inp.Errorbox;
 		this._drag = new zk.Draggable(this, null, {
@@ -56,12 +52,6 @@ zul.inp.Errorbox = zk.$extends('zul.wgt.Popup', {
 	},
 	unbind_: function () {
 		this._drag.destroy();
-
-		var n = this.getNode();
-		zEvt.unlisten(n, "click", this._pclk);
-		n = this.eclose;
-		zEvt.listen(n, "click", this._pclose);
-
 		this.$supers('unbind_', arguments);
 		this._drag = this.earrow = this.eclose = null;
 	},
@@ -79,12 +69,14 @@ zul.inp.Errorbox = zk.$extends('zul.wgt.Popup', {
 		else
 			this.$supers('doMouseOut_', arguments);
 	},
-	_clk: function () {
-		this.parent.focus(0);
-	},
-	_close: function (evt) {
-		this.parent._destroyerrbox();
-		zEvt.stop(evt); //avoid _clk being called
+	doClick_: function (evt, devt) {
+		var el = zEvt.target(devt);
+		if (el == this.eclose)
+			this.parent._destroyerrbox();
+		else {
+			this.$supers('doClick_', arguments);
+			this.parent.focus(0);
+		}
 	},
 	open: function () {
 		this.$supers('open', arguments);
@@ -104,7 +96,11 @@ zul.inp.Errorbox = zk.$extends('zul.wgt.Popup', {
 		out.push('$c" class="z-close z-errbox-close"></div></td></tr></table>');
 	},
 	onFloatUp: function (wgt) {
-		if (!wgt || wgt == this || wgt == this.parent || !this.isVisible())
+		if (wgt == this) {
+			this.setTopmost();
+			return;
+		}
+		if (!wgt || wgt == this.parent || !this.isVisible())
 			return;
 
 		var top1 = this, top2 = wgt;

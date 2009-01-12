@@ -340,8 +340,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			this.fire('onOpen', false);
 		} else
 			for (; wgt; wgt = wgt.parent) {
-				if (wgt == this) 
+				if (wgt == this) {
 					this.setTopmost();
+					return;
+				}
 				if (wgt.isFloating_())
 					return;
 			}
