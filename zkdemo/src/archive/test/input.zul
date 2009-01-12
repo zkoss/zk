@@ -32,4 +32,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
   constr = new SimpleConstraint(SimpleConstraint.NO_EMPTY, "EMPTY NOT ALLOWED");
   </zscript>
   no empty: <textbox constraint="${constr}"/>
+  <window mode="overlapped" title="overlapped 1" border="normal" width="300px" top="50px" left="100px">
+  no empty: <textbox constraint="no empty"/>
+  </window>
+  <window mode="overlapped" title="overlapped 2" border="normal" width="300px">
+  no empty: <textbox constraint="no empty"/>
+  </window>
 </window>

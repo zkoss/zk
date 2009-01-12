@@ -18,25 +18,59 @@ zul.inp.Errorbox = zk.$extends('zul.wgt.Popup', {
 		this.setWidth("260px");
 	},
 	show: function (owner, msg) {
-		this.owner = owner;
+		this.parent = owner; //fake
+		this.uuid = owner.uuid + '$erb';
 		this.msg = msg;
-		this.uuid = this.owner.uuid + '$erb';
 		this.insertHTML(document.body, "beforeEnd");
 		this.open(owner, null, "end_before");
 	},
 	destroy: function () {
 		this.close();
+		var n = this.getNode();
+		this.unbind_();
+		zDom.remove(n);
+		this.parent = null;
 	},
 	//super//
 	bind_: function () {
 		this.$supers('bind_', arguments);
-		this.earrow = zDom.$(this.uuid + 'a');
+		var uuid = this.uuid,
+			n = this.getNode();
+
+		this.earrow = zDom.$(uuid + 'a');
+
+		zEvt.listen(n, "click", this.proxy(this._clk, '_pclk'));
+		n = this.eclose = zDom.$(uuid + 'c');
+		zEvt.listen(n, "click", this.proxy(this._close, '_pclose'));
+
+		var $Errorbox = zul.inp.Errorbox;
+		this._drag = new zk.Draggable(this, null, {
+			starteffect: zk.$void,
+			endeffect: $Errorbox._enddrag,
+			change: $Errorbox._change
+		});
 	},
 	unbind_: function () {
+		this._drag.destroy();
+
+		var n = this.gegtNode();
+		zEvt.unlisten(n, "click", this._pclk);
+		n = this.eclose;
+		zEvt.listen(n, "click", this._pclose);
+
 		this.$supers('unbind_', arguments);
+		this._drag = this.earrow = this.eclose = null;
+	},
+	_clk: function () {
+		this.parent.focus(0);
+	},
+	_close: function (evt) {
+		this.parent._destroyerrbox();
+		zEvt.stop(evt); //avoid _clk being called
 	},
 	open: function () {
 		this.$supers('open', arguments);
+		this.setTopmost();
 		this._fixarrow();
 	},
 	prologHTML_: function (out) {
@@ -51,20 +85,70 @@ zul.inp.Errorbox = zk.$extends('zul.wgt.Popup', {
 		out.push(id);
 		out.push('c" class="z-close z-errbox-close"></div></td></tr></table>');
 	},
+	onFloatUp: function (wgt) {
+		if (!wgt || wgt == this || !this.isVisible())
+			return;
+
+		var top1 = this, top2 = wgt;
+		while ((top1 = top1.parent) && !top1.isFloating_())
+			;
+		for (; top2 && !top2.isFloating_(); top2 = top2.parent)
+			;
+		if (top1 == top2) { //uncover if sibling
+			var n = wgt.getNode();
+			if (n) this._uncover(n);
+		}
+	},
+	_uncover: function (el) {
+		var elofs = zDom.cmOffset(el),
+			node = this.getNode(),
+			nodeofs = zDom.cmOffset(node);
+
+		if (zDom.isOverlapped(
+		elofs, [el.offsetWidth, el.offsetHeight],
+		nodeofs, [node.offsetWidth, node.offsetHeight])) {
+			var parent = this.parent.getNode(), y;
+			var ptofs = zDom.cmOffset(parent),
+				pthgh = parent.offsetHeight,
+				ptbtm = ptofs[1] + pthgh;
+			y = elofs[1] + el.offsetHeight <=  ptbtm ? ptbtm: ptofs[1] - node.offsetHeight;
+				//we compare bottom because default is located below
+
+			var ofs = zDom.toStyleOffset(node, 0, y);
+			node.style.top = ofs[1] + "px";
+			this._fixarrow();
+		}
+	},
 	_fixarrow: function () {
-		var owner = this.owner.getNode(),
+		var parent = this.parent.getNode(),
 			node = this.getNode(),
 			arrow = this.earrow,
-			ownerofs = zDom.revisedOffset(owner),
+			ptofs = zDom.revisedOffset(parent),
 			nodeofs = zDom.revisedOffset(node);
-		var dx = nodeofs[0] - ownerofs[0], dy = nodeofs[1] - ownerofs[1], dir;
-		if (dx >= owner.offsetWidth - 2) {
-			dir = dy < -10 ? "ld": dy >= owner.offsetHeight - 2 ? "lu": "l";
+		var dx = nodeofs[0] - ptofs[0], dy = nodeofs[1] - ptofs[1], dir;
+		if (dx >= parent.offsetWidth - 2) {
+			dir = dy < -10 ? "ld": dy >= parent.offsetHeight - 2 ? "lu": "l";
 		} else if (dx < 0) {
-			dir = dy < -10 ? "rd": dy >= owner.offsetHeight - 2 ? "ru": "r";
+			dir = dy < -10 ? "rd": dy >= parent.offsetHeight - 2 ? "ru": "r";
 		} else {
 			dir = dy < 0 ? "d": "u";
 		}
 		arrow.className = 'z-arrow z-arrow-' + dir;
+	}
+},{
+	_enddrag: function (dg) {
+		var errbox = dg.control;
+		errbox.setTopmost();
+		errbox._fixarrow();
+	},
+	_change: function (dg) {
+		var errbox = dg.control,
+			stackup = errbox._stackup;
+		if (stackup) {
+			var el = errbox.getNode();
+			stackup.style.top = el.style.top;
+			stackup.style.left = el.style.left;
+		}
+		errbox._fixarrow();
 	}
 });

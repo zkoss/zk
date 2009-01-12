@@ -80,12 +80,12 @@ div.z-debug button {
 }
 
 .z-label, .z-radio-cnt, .z-checkbox-cnt, .z-slider-pp, input.button, input.file, 
-.z-loading,.z-errbox {
+.z-loading {
 	font-family: ${fontFamilyC};
 	font-size: ${fontSizeM}; font-weight: normal;
 }
 .z-modal-mask {
-	position: absolute; z-index: 20000;
+	position: absolute;
 	top: 0; left: 0; width: 100%; height: 100%;
 	filter: alpha(opacity=60); <%-- IE --%>
 	opacity: .6;
@@ -253,11 +253,6 @@ div.z-drop-cnt {
 }
 
 <%-- ZK error message box --%>
-div.z-errbox {
-	margin: 0; padding: 1px; border: 1px outset #DD7870; cursor: pointer;
-	background: #ECAEA9; position: absolute; z-index: 88000;
-}
-
 .z-arrow, div.z-close {
 	display:-moz-inline-box; display:inline-block;
 	background-repeat: no-repeat;
