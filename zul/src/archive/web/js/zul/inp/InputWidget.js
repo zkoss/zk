@@ -193,7 +193,9 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		}
 	},
 	showError_: function (msg) {
-		return new zul.inp.Errbox(this, msg);
+		var eb = new zul.inp.Errorbox();
+		eb.show(this, msg);
+		return eb;
 	},
 	_updateChange: function () {
 		if (zul.inp.validating) return; //avoid deadloop (when both focus and blur fields invalid)

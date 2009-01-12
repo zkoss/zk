@@ -106,16 +106,16 @@ span.z-vfiletree-last-open, span.z-vfiletree-last-close, span.z-vfiletree-tee, s
 <c:if test="${c:browser('ie6-')}">
 <%-- ZK Massagebox norm.css.dsp--%>
 .z-msgbox-question {
-	background-image: url(${c:encodeURL('~./zul/img/msgbox/QuestionmarkButton-32x32.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/msgbox/question2.gif')});
 }
 .z-msgbox-exclamation {
-	background-image: url(${c:encodeURL('~./zul/img/msgbox/WarningTriangle-32x32.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/msgbox/warning2.gif')});
 }
 .z-msgbox-imformation {
-	background-image: url(${c:encodeURL('~./zul/img/msgbox/InfoButton-32x32.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/msgbox/information2.gif')});
 }
 .z-msgbox-error {
-	background-image: url(${c:encodeURL('~./zul/img/msgbox/StopSign-32x32.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/msgbox/error2.gif')});
 }
 .z-fileupload-add {
 	background-image: url(${c:encodeURL('~./zul/img/fileupload/add.gif')});	
@@ -123,6 +123,29 @@ span.z-vfiletree-last-open, span.z-vfiletree-last-close, span.z-vfiletree-tee, s
 .z-fileupload-delete {
 	background-image: url(${c:encodeURL('~./zul/img/fileupload/delete.gif')});
 }
+
+.z-arrow-d {
+	background-image: url(${c:encodeURL('~./zul/img/arrowD.gif')});
+}
+.z-arrow-l {
+	background-image: url(${c:encodeURL('~./zul/img/arrowL.gif')});
+}
+.z-arrow-ld {
+	background-image: url(${c:encodeURL('~./zul/img/arrowLD.gif')});
+}
+.z-arrow-lu {
+	background-image: url(${c:encodeURL('~./zul/img/arrowLU.gif')});
+}
+.z-arrow-rd {
+	background-image: url(${c:encodeURL('~./zul/img/arrowRD.gif')});
+}
+.z-arrow-ru {
+	background-image: url(${c:encodeURL('~./zul/img/arrowRU.gif')});
+}
+.z-arrow-u {
+	background-image: url(${c:encodeURL('~./zul/img/arrowU.gif')});
+}
+
 <%-- box.css.dsp --%>
 .z-splitter-ver-btn-l, .z-splitter-hor-btn-l {
 	background-image: url(${c:encodeURL('~./zul/img/splt/colps-l.gif')});

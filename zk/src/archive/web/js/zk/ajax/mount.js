@@ -394,11 +394,12 @@ zkm = {
 		if (wgt)
 			wgt.doMouseOver_(new zk.Event(wgt, 'onMouseOver', zEvt.mouseData(evt, wgt.getNode())), evt);
 
+/*not used
 		var target = zEvt.target(evt);
 		if (zDom.tag(target) == "IMG") {
 			var src = target.src;
 			if (src.indexOf("-off") >= 0) target.src = zUtl.renType(src, "on");
-		}
+		}*/
 	},
 	docMouseOut: function (evt) {
 		evt = evt || window.event;
@@ -406,11 +407,12 @@ zkm = {
 		if (wgt)
 			wgt.doMouseOut_(new zk.Event(wgt, 'onMouseOut', zEvt.mouseData(evt, wgt.getNode())), evt);
 
+/*not used
 		var target = zEvt.target(evt);
 		if (zDom.tag(target) == "IMG") {
 			var src = target.src;
 			if (src.indexOf("-on") >= 0) target.src = zUtl.renType(src, "off");
-		}
+		}*/
 	},
 	docKeyDown: function (evt) {
 		evt = evt || window.event;

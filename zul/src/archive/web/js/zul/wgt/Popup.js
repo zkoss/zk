@@ -144,5 +144,9 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	},
 	isImportantEvent_: function (evtnm) {
 		return evtnm == "onOpen";
+	},
+	prologHTML_: function (out) {
+	},
+	epilogHTML_: function (out) {
 	}
 });

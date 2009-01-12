@@ -19,7 +19,7 @@
 }
 .z-popup .z-popup-cm {
 	background: #E5F3FB url(${c:encodeURL('~./zul/img/popup/pp-tb.png')}) repeat-x 0 -16px;
-	padding:4px 10px; overflow: hidden; zoom: 1;
+	padding:2px 3px; overflow: hidden; zoom: 1;
 }
 .z-popup .z-popup-cl {
 	background: transparent url(${c:encodeURL('~./zul/img/popup/pp-l.png')}) repeat-y 0;

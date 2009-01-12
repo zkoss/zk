@@ -240,22 +240,57 @@ div.z-drop-cnt {
 	width: 32px; height: 32px;
 }
 .z-msgbox-question {
-	background-image: url(${c:encodeURL('~./zul/img/msgbox/QuestionmarkButton-32x32.png')});
+	background-image: url(${c:encodeURL('~./zul/img/msgbox/question2.png')});
 }
 .z-msgbox-exclamation {
-	background-image: url(${c:encodeURL('~./zul/img/msgbox/WarningTriangle-32x32.png')});
+	background-image: url(${c:encodeURL('~./zul/img/msgbox/warning2.png')});
 }
 .z-msgbox-imformation {
-	background-image: url(${c:encodeURL('~./zul/img/msgbox/InfoButton-32x32.png')});
+	background-image: url(${c:encodeURL('~./zul/img/msgbox/information2.png')});
 }
 .z-msgbox-error {
-	background-image: url(${c:encodeURL('~./zul/img/msgbox/StopSign-32x32.png')});
+	background-image: url(${c:encodeURL('~./zul/img/msgbox/error2.png')});
 }
 
 <%-- ZK error message box --%>
 div.z-errbox {
 	margin: 0; padding: 1px; border: 1px outset #DD7870; cursor: pointer;
 	background: #ECAEA9; position: absolute; z-index: 88000;
+}
+
+.z-arrow, div.z-close {
+	display:-moz-inline-box; display:inline-block;
+	background-repeat: no-repeat;
+	vertical-align: top; cursor: pointer; border: 0;
+	width: 17px; height: 17px;
+}
+.z-arrow-d {
+	background-image: url(${c:encodeURL('~./zul/img/arrowD.png')});
+}
+.z-arrow-l {
+	background-image: url(${c:encodeURL('~./zul/img/arrowL.png')});
+}
+.z-arrow-ld {
+	background-image: url(${c:encodeURL('~./zul/img/arrowLD.png')});
+}
+.z-arrow-lu {
+	background-image: url(${c:encodeURL('~./zul/img/arrowLU.png')});
+}
+.z-arrow-rd {
+	background-image: url(${c:encodeURL('~./zul/img/arrowRD.png')});
+}
+.z-arrow-ru {
+	background-image: url(${c:encodeURL('~./zul/img/arrowRU.png')});
+}
+.z-arrow-u {
+	background-image: url(${c:encodeURL('~./zul/img/arrowU.png')});
+}
+
+div.z-errbox-close {
+	background-image: url(${c:encodeURL('~./zul/img/errbox/close.gif')});
+}
+div.z-errbox-close-over {
+	background-image: url(${c:encodeURL('~./zul/img/errbox/close-over.gif')});
 }
 
 <%-- Progressmeter --%>
