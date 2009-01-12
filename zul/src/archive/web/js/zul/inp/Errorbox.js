@@ -49,6 +49,11 @@ zul.inp.Errorbox = zk.$extends('zul.wgt.Popup', {
 			change: $Errorbox._change
 		});
 	},
+	setDomVisible_: function (node, visible) {
+		this.$supers('setDomVisible_', arguments);
+		var stackup = this._stackup;
+		if (stackup) stackup.style.display = visible ? '': 'none';
+	},
 	unbind_: function () {
 		this._drag.destroy();
 
