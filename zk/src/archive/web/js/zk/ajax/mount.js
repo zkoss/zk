@@ -40,6 +40,19 @@ function zkdtbg(dtid, updateURI) {
 	return dt;
 }
 
+//assign molds
+function zkmld(wgtcls, molds) {
+	if (!wgtcls.superclass) {
+		zk.afterLoad(function () {zkmld(wgtcls, molds);});
+		return;
+	}
+
+	var supermolds = wgtcls.molds;
+	if (!supermolds) supermolds = wgtcls.molds = {};
+	for (var m in molds)
+		supermolds[m] = molds[m];
+}
+
 //Init Only//
 function zkver() {
 	var args = arguments, len = args.length;

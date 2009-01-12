@@ -111,7 +111,7 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 		final ByteArrayOutputStream out = new ByteArrayOutputStream(1024*8);
 		write(out, "_z='");
 		write(out, name);
-		write(out, "';if(!zk.$import(_z)){try{_zpk=zk.$package(_z);\n");
+		write(out, "';if(!zk.$import(_z)){try{_zkpk=zk.$package(_z);\n");
 
 		final String pathpref = path.substring(0, path.lastIndexOf('/') + 1);
 		for (Iterator it = root.getElements().iterator(); it.hasNext();) {
@@ -122,14 +122,14 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 				final String jspath = wgtnm + ".js"; //eg: /js/zul/wgt/Div.js
 				if (writeResource(out, jspath, pathpref)) {
 					final String wgtflnm = name + "." + wgtnm;
-					write(out, "_zwg=_zpk.");
+					write(out, "_zkwg=_zkpk.");
 					write(out, wgtnm);
 					if (debugJS) {
-						write(out, ";_zwg.prototype.className='");
+						write(out, ";_zkwg.prototype.className='");
 						write(out, wgtflnm);
-						write(out, "'");
+						write(out, '\'');
 					}
-					write(out, ";");
+					write(out, ';');
 					if (langdef.hasWidgetDefinition(wgtflnm))
 						writeMolds(out, langdef, wgtflnm, pathpref);
 						//Note: widget defiition not available if it is a base type (such as zul.Widget)
@@ -158,12 +158,12 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 	String wgtflnm, String pathpref) {
 		try {
 			WidgetDefinition wgtdef = langdef.getWidgetDefinition(wgtflnm);
-			write(out, "_zmd=_zwg.molds={};");
+			write(out, "_zkmd={};");
 			for (Iterator it = wgtdef.getMoldNames().iterator(); it.hasNext();) {
 				final String mold = (String)it.next();
 				final String uri = wgtdef.getMoldURI(mold);
 				if (uri != null) {
-					write(out, "_zmd['");
+					write(out, "_zkmd['");
 					write(out, mold);
 					write(out, "']=");
 					if (!writeResource(out, uri, pathpref)) {
@@ -175,6 +175,7 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 					write(out, ";\n");
 				}
 			}
+			write(out, "zkmld(_zkwg,_zkmd);");
 		} catch (Throwable ex) {
 			log.error("Failed to load molds for widget "+wgtflnm+".\nCause: "+Exceptions.getMessage(ex));
 		}
@@ -204,8 +205,12 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 		sb.setLength(0);
 	}*/
 	private void writeln(OutputStream out) throws IOException {
-		final byte[] lf = {'\n'};
-		out.write(lf, 0, 1);
+		write(out, '\n');
+	}
+	private void write(OutputStream out, char cc) throws IOException {
+		assert cc < 128;
+		final byte[] bs = new byte[] {(byte)cc};
+		out.write(bs, 0, 1);
 	}
 
 	private class WpdLoader extends ExtendletLoader {
