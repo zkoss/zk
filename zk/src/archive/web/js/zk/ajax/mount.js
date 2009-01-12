@@ -133,6 +133,7 @@ zkm = {
 		zEvt.listen(document, "contextmenu", zkm.docCtxMenu);
 
 		zEvt.listen(window, "resize", zkm.docResize);
+		zEvt.listen(window, "scroll", zkm.docScroll);
 
 		zkm._oldUnload = window.onunload;
 		window.onunload = zkm.wndUnload; //unable to use zk.listen
@@ -478,6 +479,9 @@ zkm = {
 			}
 		}
 		return !zk.ie || evt.returnValue;
+	},
+	docScroll: function () {
+		zWatch.fire('onScroll'); //notify all
 	},
 	docResize: function () {
 		if (!zk.sysInited || zk.mounting)
