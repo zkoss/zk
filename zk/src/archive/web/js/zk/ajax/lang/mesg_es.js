@@ -21,10 +21,6 @@ mesg.TRY_AGAIN = "Inténtalo de nuevo?";
 mesg.UNSUPPORTED_BROWSER = "Explorador (Browser) no compatible: ";
 mesg.ILLEGAL_RESPONSE = "Respuesta no valida por parte del servidor. Por favor actualice la pagina (reload) e intente de nuevo.\n";
 mesg.FAILED_TO_PROCESS = "Fallo al procesar ";
-mesg.INVALID_STRUCTURE = "Estructura inválida: ";
-mesg.NUMBER_REQUIRED = "Debe especificar un numero, en lugar de ";
-mesg.INTEGER_REQUIRED = "Debe especificar un numero entero, en lugar de ";
-mesg.EMPTY_NOT_ALLOWED = "No se permite vacio o espacios en blanco.\n Debe especificar un valor diferente ";
 mesg.GOTO_ERROR_FIELD = "Ir al campo que contiene el error ";
 mesg.PLEASE_WAIT = "Procesando...";
 

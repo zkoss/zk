@@ -21,10 +21,6 @@ mesg.TRY_AGAIN = "Voleu provar una altra vegada?";
 mesg.UNSUPPORTED_BROWSER = "El navegador no és compatible: ";
 mesg.ILLEGAL_RESPONSE = "Resposta desconeguda enviada des del servidor. Si us plau, recarregueu i proveu una altra vegada.\n";
 mesg.FAILED_TO_PROCESS = "Ha fallat el procés ";
-mesg.INVALID_STRUCTURE = "Estructura invàlida: ";
-mesg.NUMBER_REQUIRED = "Heu d'especificar un nombre, en lloc de ";
-mesg.INTEGER_REQUIRED = "Heu d'especificar un enter, en lloc de ";
-mesg.EMPTY_NOT_ALLOWED = "Cal emplenar el camp.\nNo es pot deixar buit ni a blancs.";
 mesg.GOTO_ERROR_FIELD = "Aneu al camp erroni";
 mesg.PLEASE_WAIT = "S'està processant...";
 

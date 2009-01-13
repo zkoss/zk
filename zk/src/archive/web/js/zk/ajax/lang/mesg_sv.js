@@ -21,10 +21,6 @@ mesg.TRY_AGAIN = "Try again?";
 mesg.UNSUPPORTED_BROWSER = "Icke-supportad webbläsare: ";
 mesg.ILLEGAL_RESPONSE = "Okänt svar från server. Var god uppdatera sidan och försök igen..\n";
 mesg.FAILED_TO_PROCESS = "Kunde inte hantera ";
-mesg.INVALID_STRUCTURE = "Ogiltig struktur: ";
-mesg.NUMBER_REQUIRED = "Du måste ange en siffra, istället för ";
-mesg.INTEGER_REQUIRED = "Du måste ange ett heltal, istället för ";
-mesg.EMPTY_NOT_ALLOWED = "Blank inte tillåtet.\nDu kan inte ange annat än blanksteg";
 mesg.GOTO_ERROR_FIELD = "Gå till felaktigt fält";
 mesg.PLEASE_WAIT = "Arbetar...";
 

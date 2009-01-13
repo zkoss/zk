@@ -37,6 +37,10 @@ import org.zkoss.util.IllegalSyntaxException;
  * @author tomyeh
  */
 public class Strings {
+	/** Used with {@link #escape} to escape a string in
+	 * JavaScript. It assumes the string will be enclosed with a single quote.
+	 */
+	public static final String ESCAPE_JAVASCRIPT = "'\n\r\t\f\\";
 	/**
 	 * Returns true if the string is null or empty.
 	 */
@@ -253,6 +257,7 @@ public class Strings {
 	 *
 	 * @param s the string to process. If null, null is returned.
 	 * @param specials a string of characters that shall be escaped/quoted
+	 * To escape a string in JavaScript code snippet, you can use {@link #ESCAPE_JAVASCRIPT}.
 	 * @see #unescape
 	 */
 	public static final String escape(String s, String specials) {

@@ -21,10 +21,6 @@ mesg.TRY_AGAIN = "Try again?";
 mesg.UNSUPPORTED_BROWSER = "Nem támogatott böngésző: ";
 mesg.ILLEGAL_RESPONSE = "Ismeretlen szerver válasz. Legyen szíves az oldalt újra letölteni.\n";
 mesg.FAILED_TO_PROCESS = "Nem sikerült feldolgozni ";
-mesg.INVALID_STRUCTURE = "Érvénytelen szerkezet: ";
-mesg.NUMBER_REQUIRED = "Legyen szíves beírni egy számot, és nem ";
-mesg.INTEGER_REQUIRED = "Legyen szíves beírni egy egész számot, és nem ";
-mesg.EMPTY_NOT_ALLOWED = "Egy üres beadás nem létezik";
 mesg.GOTO_ERROR_FIELD = "Menyen a hibás bejegyzéshez";
 mesg.PLEASE_WAIT = "Feldolgozás...";
 

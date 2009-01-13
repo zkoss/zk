@@ -231,7 +231,9 @@ public class DspFns {
 	String varnm, String[] vals) {
 		sb.append("zk.").append(varnm).append("=[");
 		for (int j = 0;;) {
-			sb.append('"').append(Strings.escape(vals[j], "\\\"")).append('"');
+			sb.append('\'')
+				.append(Strings.escape(vals[j], Strings.ESCAPE_JAVASCRIPT))
+				.append('\'');
 			if (++j >= vals.length) break;
 			else sb.append(',');
 		}

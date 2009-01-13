@@ -167,7 +167,7 @@ public class HtmlPageRenders {
 			for (int j = 0; j < datanum; ++j) {
 				sb.append(",'");
 				if (data[j] != null)
-					sb.append(Strings.escape(data[j], "'\\\n\r\t\f"));
+					sb.append(Strings.escape(data[j], Strings.ESCAPE_JAVASCRIPT));
 				sb.append('\'');
 			}
 			sb.append(");\n");
@@ -253,7 +253,8 @@ public class HtmlPageRenders {
 				if (uri != null) {
 					if (k != sb.length()) sb.append(',');
 					sb.append(cers[j]).append(",'")
-						.append(Strings.escape(uri, "'\\")).append('\'');
+						.append(Strings.escape(uri, Strings.ESCAPE_JAVASCRIPT))
+						.append('\'');
 				}
 			}
 			if (k != sb.length()) {

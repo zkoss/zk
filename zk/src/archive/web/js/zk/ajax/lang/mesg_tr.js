@@ -21,10 +21,6 @@ mesg.TRY_AGAIN="Try again?";
 mesg.UNSUPPORTED_BROWSER = "Desteklenmeyen tarayıcı: ";
 mesg.ILLEGAL_RESPONSE = "Sunucudan anlaşılmayan cevap döndü. Lütfen yeniden deneyiniz.\n";
 mesg.FAILED_TO_PROCESS = "İşlem gerçekleştirilemedi ";
-mesg.INVALID_STRUCTURE = "Hatalı yapı: ";
-mesg.NUMBER_REQUIRED = "Sayı girmelisiniz, girilen :";
-mesg.INTEGER_REQUIRED = "Tam sayı girmelisiniz, girilen :";
-mesg.EMPTY_NOT_ALLOWED = "Boş değer girilemez.\nBoşluk(space) girebilirsiniz";
 mesg.GOTO_ERROR_FIELD = "Yanlış alana gidildi";
 mesg.PLEASE_WAIT = "Bekleyiniz...";
 

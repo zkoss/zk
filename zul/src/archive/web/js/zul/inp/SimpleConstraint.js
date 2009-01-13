@@ -71,60 +71,60 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 		}
 	},
 	parseConstraint_: function (cst) {
-		var flags = this._flags;
+		var f = this._flags;
 		if (cst == "no positive")
-			flags.NO_POSITIVE = true;
+			f.NO_POSITIVE = true;
 		else if (cst == "no negative")
-			flags.NO_NEGATIVE = true;
+			f.NO_NEGATIVE = true;
 		else if (cst == "no zero")
-			flags.NO_ZERO = true;
+			f.NO_ZERO = true;
 		else if (cst == "no empty")
-			flags.NO_EMPTY = true;
+			f.NO_EMPTY = true;
 		else if (cst == "no future")
-			flags.NO_FUTURE = true;
+			f.NO_FUTURE = true;
 		else if (cst == "no past")
-			flags.NO_PAST = true;
+			f.NO_PAST = true;
 		else if (cst == "no today")
-			flags.NO_TODAY = true;
+			f.NO_TODAY = true;
 		else if (cst == "strict")
-			flags.STRICT = true;
+			f.STRICT = true;
 	},
 	_cvtNum: function (v) { //compatible with server side
-		var flags = {};
+		var f = {};
 		if (v & 1)
-			flags.NO_POSITIVE = flags.NO_FUTURE = true;
+			f.NO_POSITIVE = f.NO_FUTURE = true;
 		if (v & 2)
-			flags.NO_NEGATIVE = flags.NO_PAST = true;
+			f.NO_NEGATIVE = f.NO_PAST = true;
 		if (v & 4)
-			flags.NO_ZERO = flags.NO_TODAY = true;
+			f.NO_ZERO = f.NO_TODAY = true;
 		if (v & 0x100)
-			flags.NO_EMPTY = true;
+			f.NO_EMPTY = true;
 		if (v & 0x200)
-			flags.STRICT = true;
-		return flags;
+			f.STRICT = true;
+		return f;
 	},
 	validate: function (wgt, val) {
-		var flags = this._flags,
+		var f = this._flags,
 			msg = this._errmsg;
 
 		switch (typeof val) {
 		case 'string':
-			if (flags.NO_EMPTY && (!val || !val.trim()))
-				return mesg.EMPTY_NOT_ALLOWED;
+			if (f.NO_EMPTY && (!val || !val.trim()))
+				return msgzul.EMPTY_NOT_ALLOWED;
 			var regex = this._regex;
 			if (regex && !regex.test(val))
-				return msg || mesg.ILLEGAL_VALUE;
-			if (flags.STRICT && val) {
+				return msg || msgzul.ILLEGAL_VALUE;
+			if (f.STRICT && val) {
 				//TODO VALUE_NOT_MATCHED;
 			}
 			return;
 		case 'number':
 			if (val > 0) {
-				if (flags.NO_POSITIVE) return msg || mesg.NO_POSITIVE;
+				if (f.NO_POSITIVE) return msg || this._msgNumDenied();
 			} else if (val == 0) {
-				if (flags.NO_ZERO) return msg || mesg.NO_ZERO;
+				if (f.NO_ZERO) return msg || this._msgNumDenied();
 			} else
-				if (flags.NO_NEGATIVE) return msg || mesg.NO_NEGATIVE;
+				if (f.NO_NEGATIVE) return msg || this._msgNumDenied();
 			return;
 		}
 
@@ -132,25 +132,49 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 			var today = zUtl.today(),
 				val = new Date(val.getFullYear(), val.getMonth(), val.getDate());
 			if (val > today) {
-				if (flags.NO_FUTURE) return msg || mesg.NO_FUTURE;
+				if (f.NO_FUTURE) return msg || this._msgDateDenied();
 			} else if (val == today) {
-				if (flags.NO_TODAY) return msg || mesg.NO_TODAY;
+				if (f.NO_TODAY) return msg || this._msgDateDenied();
 			} else
-				if (flags.NO_PAST) return msg || mesg.NO_PAST;
+				if (f.NO_PAST) return msg || this._msgDateDenied();
 			return;
 		}
 
 		if (val.compareTo) {
 			var b = val.compareTo(0);
 			if (b > 0) {
-				if (flags.NO_POSITIVE) return msg || mesg.NO_POSITIVE;
+				if (f.NO_POSITIVE) return msg || this._msgNumDenied();
 			} else if (b == 0) {
-				if (flags.NO_ZERO) return msg || mesg.NO_ZERO;
+				if (f.NO_ZERO) return msg || this._msgNumDenied();
 			} else
-				if (flags.NO_NEGATIVE) return msg || mesg.NO_NEGATIVE;
+				if (f.NO_NEGATIVE) return msg || this._msgNumDenied();
 			return;
 		}
 
-		if (!val && flags.NO_EMPTY) return msg || mesg.EMPTY_NOT_ALLOWED;
+		if (!val && f.NO_EMPTY) return msg || msgzul.EMPTY_NOT_ALLOWED;
+	},
+	_msgNumDenied: function () {
+		var f = this._flags;
+		if (f.NO_POSITIVE)
+			return f.NO_ZERO ?
+				f.NO_NEGATIVE ? NO_POSITIVE_NEGATIVE_ZERO: msgzul.NO_POSITIVE_ZERO:
+				f.NO_NEGATIVE ? msgzul.NO_POSITIVE_NEGATIVE: msgzul.NO_POSITIVE;
+		else if (f.NO_NEGATIVE)
+			return f.NO_ZERO ? msgzul.NO_NEGATIVE_ZERO: msgzul.NO_NEGATIVE;
+		else if (f.NO_ZERO)
+			return msgzul.NO_ZERO;
+		return msgzul.ILLEGAL_VALUE;
+	},
+	_msgDateDenied: function () {
+		var f = this._flags;
+		if (f.NO_FUTURE)
+			return f.NO_TODAY ?
+				f.NO_PAST ? NO_FUTURE_PAST_TODAY: msgzul.NO_FUTURE_TODAY:
+				f.NO_PAST ? msgzul.NO_FUTURE_PAST: msgzul.NO_FUTURE;
+		else if (f.NO_PAST)
+			return f.NO_TODAY ? msgzul.NO_PAST_TODAY: msgzul.NO_PAST;
+		else if (f.NO_TODAY)
+			return msgzul.NO_TODAY;
+		return msgzul.ILLEGAL_VALUE;
 	}
 });

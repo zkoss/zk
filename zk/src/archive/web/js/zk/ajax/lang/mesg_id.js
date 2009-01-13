@@ -21,10 +21,6 @@ mesg.TRY_AGAIN = "Try again?";
 mesg.UNSUPPORTED_BROWSER = "Browser tidak didukung: ";
 mesg.ILLEGAL_RESPONSE = "Response yang terkirim dari server tidak diketahui. Mohon diulangi lagi.\n";
 mesg.FAILED_TO_PROCESS = "Gagal untuk di-proses";
-mesg.INVALID_STRUCTURE = "Struktur tidak valid: ";
-mesg.NUMBER_REQUIRED = "Anda harus memberikan sebuah angka, bukan ";
-mesg.INTEGER_REQUIRED = "Anda harus memberikan sebuah integer, bukan ";
-mesg.EMPTY_NOT_ALLOWED = "Kosong tidak di-ijin-kan.\nAnda tidak dapat memberikan apa-apa selain spasi, atau";
 mesg.GOTO_ERROR_FIELD = "Menuju field yang error";
 mesg.PLEASE_WAIT = "Diproses...";
 

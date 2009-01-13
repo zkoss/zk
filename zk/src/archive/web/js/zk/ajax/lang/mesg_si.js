@@ -21,10 +21,6 @@ mesg.TRY_AGAIN = "Try again?";
 mesg.UNSUPPORTED_BROWSER = "Brskalnik ni prepoznan: ";
 mesg.ILLEGAL_RESPONSE = "Strežnik je poslal neznan odgovor. Prosim osvežite stran .\n";
 mesg.FAILED_TO_PROCESS = "Napaka pri obdelavi";
-mesg.INVALID_STRUCTURE = "Neveljavna oblika: ";
-mesg.NUMBER_REQUIRED = "Podati morate številko in ne ";
-mesg.INTEGER_REQUIRED = "Podati morate številko in ne ";
-mesg.EMPTY_NOT_ALLOWED = "Prazno polje ni dovoljeno.\nTudi sami presledki niso dovoljeni";
 mesg.GOTO_ERROR_FIELD = "Pojdite na napačno polje";
 mesg.PLEASE_WAIT = "Procesiram...";
 

@@ -328,7 +328,7 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 	//ClientConstraint//
 	public String getClientConstraint() {
 		if (_raw != null)
-			return '\'' + Strings.escape(_raw, "\\'") + '\'';
+			return '\'' + Strings.escape(_raw, Strings.ESCAPE_JAVASCRIPT) + '\'';
 
 		final StringBuffer sb = new StringBuffer("new zul.inp.SimpleConstraint(");
 		if (_flags != 0 || _regex != null || _errmsg != null) {
@@ -337,13 +337,13 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 				sb.append(',');
 				if (_regex != null) {
 					sb.append('\'');
-					Strings.escape(sb, _regex.pattern(), "\\'");
+					Strings.escape(sb, _regex.pattern(), Strings.ESCAPE_JAVASCRIPT);
 					sb.append('\'');
 				} else
 					sb.append("null");
 				if (_errmsg != null) {
 					sb.append(",'");
-					Strings.escape(sb, _errmsg, "\\'");
+					Strings.escape(sb, _errmsg, Strings.ESCAPE_JAVASCRIPT);
 					sb.append('\'');
 				}
 			}

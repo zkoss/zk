@@ -11,10 +11,6 @@ mesg.TRY_AGAIN = "Попробуйте снова?";
 mesg.UNSUPPORTED_BROWSER="Неподдерживаемый браузер: ";
 mesg.ILLEGAL_RESPONSE="Неизвестный ответ получен от сервера. Пожалуйста перезагрузите страницу и попробуйте вновь.\n";
 mesg.FAILED_TO_PROCESS="Не удалось обработать ";
-mesg.INVALID_STRUCTURE="Неверная структура: ";
-mesg.NUMBER_REQUIRED="Необходимо ввести число, а не ";
-mesg.INTEGER_REQUIRED="Необходимо ввести целое число, а не ";
-mesg.EMPTY_NOT_ALLOWED="Пустой ввод не разрешен";
 mesg.GOTO_ERROR_FIELD="Перемещение к неверному полю";
 mesg.PLEASE_WAIT="Обработка запроса...";
 

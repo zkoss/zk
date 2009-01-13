@@ -306,7 +306,7 @@ public class ComponentsCtrl {
 					.append(')');
 			} else { //FUTURE: regex
 				sb.append('\'')
-					.append(Strings.escape(val.toString(), "'\\"))
+					.append(Strings.escape(val.toString(), Strings.ESCAPE_JAVASCRIPT))
 					.append('\'');
 			}
 

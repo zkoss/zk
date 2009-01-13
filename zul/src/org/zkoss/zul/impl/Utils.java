@@ -182,9 +182,13 @@ public class Utils {
 	 */
 	public static final String outLocaleJavaScript() {
 		final StringBuffer sb = new StringBuffer(1024)
-			.append("zk.copy(msgzul, {");
+			.append("zk.$default(msgzul, {");
 
 		addLocaleJS(sb, "VALUE_NOT_MATCHED", MZul.VALUE_NOT_MATCHED);
+		addLocaleJS(sb, "EMPTY_NOT_ALLOWED", MZul.EMPTY_NOT_ALLOWED);
+		addLocaleJS(sb, "INTEGER_REQUIRED", MZul.INTEGER_REQUIRED);
+		addLocaleJS(sb, "NUMBER_REQUIRED", MZul.NUMBER_REQUIRED);
+		addLocaleJS(sb, "DATE_REQUIRED", MZul.DATE_REQUIRED);
 		addLocaleJS(sb, "CANCEL", MZul.CANCEL);
 
 		addLocaleJS(sb, "NO_POSITIVE_NEGATIVE_ZERO", MZul.NO_POSITIVE_NEGATIVE_ZERO);
@@ -211,7 +215,7 @@ public class Utils {
 	private static
 	void addLocaleJS(StringBuffer sb, String name, int mesgCode) {
 		sb.append('\n').append(name).append(":'");
-		Strings.escape(sb, Messages.get(mesgCode), "\\'");
+		Strings.escape(sb, Messages.get(mesgCode), Strings.ESCAPE_JAVASCRIPT);
 		sb.append("',");
 	}
 }

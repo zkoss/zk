@@ -21,10 +21,6 @@ mesg.TRY_AGAIN = "Try again?";
 mesg.UNSUPPORTED_BROWSER = "Browser nu este suportat: ";
 mesg.ILLEGAL_RESPONSE = "Răspuns necunoscut trimis de server. Vă rugăm reîncărcaţi şi încercaţi din nou.\n";
 mesg.FAILED_TO_PROCESS = "Procesare eşuată ";
-mesg.INVALID_STRUCTURE = "Structură invalidă: ";
-mesg.NUMBER_REQUIRED = "Trebuie să specificaţi un număr, în loc de ";
-mesg.INTEGER_REQUIRED = "Trebuie să specificaţi un număr întreg, în loc de ";
-mesg.EMPTY_NOT_ALLOWED = "Valoarea vidă nu este permisă.\nDeasemenea, nu puteţi specifica numai spaţii";
 mesg.GOTO_ERROR_FIELD = "Selectaţi câmpul greşit";
 mesg.PLEASE_WAIT = "Se procesează...";
 

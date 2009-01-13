@@ -21,10 +21,6 @@ mesg.TRY_AGAIN = "Try again?";
 mesg.UNSUPPORTED_BROWSER = "Niet ondersteunde Browser: ";
 mesg.ILLEGAL_RESPONSE = "Unbekend Antwoord van de Server, Aktualiseer aub de pagina en probeer opnieuw.\n";
 mesg.FAILED_TO_PROCESS = "Verwerking is fout gegaan ";
-mesg.INVALID_STRUCTURE = "Corrupte Structuur: ";
-mesg.NUMBER_REQUIRED = "U moet een getal invoeren, en niet ";
-mesg.INTEGER_REQUIRED = "U moet een geheel getal invoeren, en niet ";
-mesg.EMPTY_NOT_ALLOWED = "Geen invoer is niet toegestaan.\nAleen spaties zijn ook niet toegestaan";
 mesg.GOTO_ERROR_FIELD = "Ga naar foutief veld";
 mesg.PLEASE_WAIT = "Verwerken...";
 

@@ -21,10 +21,6 @@ mesg.TRY_AGAIN = "Try again?";
 mesg.UNSUPPORTED_BROWSER = "Този броузер не се поддържа: ";
 mesg.ILLEGAL_RESPONSE = "Проблем с отговора на сървъра. Презаредете страницата наново.\n";
 mesg.FAILED_TO_PROCESS = "Възникна проблем в процеса на работа ";
-mesg.INVALID_STRUCTURE = "Грешна структура: ";
-mesg.NUMBER_REQUIRED = "Числото трябва да е по-голямо от ";
-mesg.INTEGER_REQUIRED = "Изберете по-голямо целочислено число от";
-mesg.EMPTY_NOT_ALLOWED = "Не може да е празно или само интервали.";
 mesg.GOTO_ERROR_FIELD = "Ползване на грешно поле";
 mesg.PLEASE_WAIT = "Зарежда се...";
 

@@ -21,10 +21,6 @@ mesg.TRY_AGAIN = "Riprovare?";
 mesg.UNSUPPORTED_BROWSER = "Browser non supportato: ";
 mesg.ILLEGAL_RESPONSE = "Risposta sconosciuta inviata dal server. Per favore ricarica la pagina e riprova.\n";
 mesg.FAILED_TO_PROCESS = "Errore nell'elaborazione di ";
-mesg.INVALID_STRUCTURE = "Struttura errata: ";
-mesg.NUMBER_REQUIRED = "Devi inserire un numero al posto di ";
-mesg.INTEGER_REQUIRED = "Devi inserire un intero al posto di ";
-mesg.EMPTY_NOT_ALLOWED = "Non è permesso il campo vuoto.\nNon puoi neanche inserire solamente spazi.";
 mesg.GOTO_ERROR_FIELD = "Arrivato al campo sbagliato";
 mesg.PLEASE_WAIT = "Attendere...";
 

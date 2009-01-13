@@ -21,10 +21,6 @@ mesg.TRY_AGAIN = "Try again?";
 mesg.UNSUPPORTED_BROWSER = "Váš prohlížeč není podporován: ";
 mesg.ILLEGAL_RESPONSE = "Neznámá odpověď od serveru, opakujte prosím akci.\n";
 mesg.FAILED_TO_PROCESS = "Chyba zpracování ";
-mesg.INVALID_STRUCTURE = "Nesprávná konstrukce: ";
-mesg.NUMBER_REQUIRED = "Zadejte prosím číslo, místo ";
-mesg.INTEGER_REQUIRED = "Zadejte prosím celé číslo, místo ";
-mesg.EMPTY_NOT_ALLOWED = "Zadejte hodnotu.";
 mesg.GOTO_ERROR_FIELD = "Jdi na pole s chybou";
 mesg.PLEASE_WAIT = "Pracuji...";
 
