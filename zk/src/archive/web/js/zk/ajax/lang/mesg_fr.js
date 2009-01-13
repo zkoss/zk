@@ -13,25 +13,26 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	This program is distributed under GPL Version 2.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
-mesg = {};
-mesg.NOT_FOUND = "Pas trouvé: ";
-mesg.UNSUPPORTED = "Pas encore supporté: ";
-mesg.FAILED_TO_SEND = "Echec lors de l'envoi d'une requête vers le serveur.";
-mesg.FAILED_TO_RESPONSE = "Le serveur à échoué dans le traitement de votre requête.";
-mesg.TRY_AGAIN = "Voulez-vous essayer à nouveau?";
-mesg.UNSUPPORTED_BROWSER = "Navigateur non supporté: ";
-mesg.ILLEGAL_RESPONSE = "Réponse inconnue envoyée depuis le serveur. Rechagez cette page et essayez de nouveau.\n";
-mesg.FAILED_TO_PROCESS = "N'a pas été traité ";
-mesg.INVALID_STRUCTURE = "Structure invalide: ";
-mesg.NUMBER_REQUIRED = "Vous devez spécifier un nombre, plutôt que";
-mesg.INTEGER_REQUIRED = "Vous devez spécifier un entier, plutôt que";
-mesg.EMPTY_NOT_ALLOWED = "Champ vide non autorisé.\nVous devez spécifier une valeur";
-mesg.GOTO_ERROR_FIELD = "Allez sur le mauvais champ";
-mesg.PLEASE_WAIT = "Chargement...";
+mesg = {
+NOT_FOUND: "Pas trouvé: ",
+UNSUPPORTED: "Pas encore supporté: ",
+FAILED_TO_SEND: "Echec lors de l'envoi d'une requête vers le serveur.",
+FAILED_TO_RESPONSE: "Le serveur à échoué dans le traitement de votre requête.",
+TRY_AGAIN: "Voulez-vous essayer à nouveau?",
+UNSUPPORTED_BROWSER: "Navigateur non supporté: ",
+ILLEGAL_RESPONSE: "Réponse inconnue envoyée depuis le serveur. Rechagez cette page et essayez de nouveau.\n",
+FAILED_TO_PROCESS: "N'a pas été traité ",
+INVALID_STRUCTURE: "Structure invalide: ",
+NUMBER_REQUIRED: "Vous devez spécifier un nombre, plutôt que",
+INTEGER_REQUIRED: "Vous devez spécifier un entier, plutôt que",
+EMPTY_NOT_ALLOWED: "Champ vide non autorisé.\nVous devez spécifier une valeur",
+GOTO_ERROR_FIELD: "Allez sur le mauvais champ",
+PLEASE_WAIT: "Chargement...",
 
-mesg.FILE_SIZE = "Taille du fichier: ";
-mesg.KBYTES = "KB";
+FILE_SIZE: "Taille du fichier: ",
+KBYTES: "KB",
 
-mesg.FAILED_TO_LOAD="Erreur de chargement ";
-mesg.FAILED_TO_LOAD_DETAIL="Cela peut être dû à un problème de réseau. Rechagez cette page et essayez de nouveau.";
-mesg.CAUSE="Cause: ";
+FAILED_TO_LOAD: "Erreur de chargement ",
+FAILED_TO_LOAD_DETAIL: "Cela peut être dû à un problème de réseau. Rechagez cette page et essayez de nouveau.",
+CAUSE: "Cause: "
+};

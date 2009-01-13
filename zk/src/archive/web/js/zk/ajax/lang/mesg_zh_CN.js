@@ -12,25 +12,26 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	This program is distributed under GPL Version 2.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
-mesg = {};
-mesg.NOT_FOUND = "找不到：";
-mesg.UNSUPPORTED = "尚未支持：";
-mesg.FAILED_TO_SEND = "无法传送资料到服务器。";
-mesg.FAILED_TO_RESPONSE = "伺服器暂时无法处理你的请求。";
-mesg.TRY_AGAIN="再试一次?";
-mesg.UNSUPPORTED_BROWSER = "尚未支持你使用的浏览器：";
-mesg.ILLEGAL_RESPONSE = "无法辨识服务器传回的资料。请按重新载入，再试试。\n";
-mesg.FAILED_TO_PROCESS = "无法处理：";
-mesg.INVALID_STRUCTURE = "结构不正确：";
-mesg.NUMBER_REQUIRED = "只能输入数字，而不是 ";
-mesg.INTEGER_REQUIRED = "只能输入整数，而不是 ";
-mesg.EMPTY_NOT_ALLOWED = "不能空白，也不能只含空白字元";
-mesg.GOTO_ERROR_FIELD = "回错误栏";
-mesg.PLEASE_WAIT = "处理中，请稍候…";
+mesg = {
+NOT_FOUND: "找不到：",
+UNSUPPORTED: "尚未支持：",
+FAILED_TO_SEND: "无法传送资料到服务器。",
+FAILED_TO_RESPONSE: "伺服器暂时无法处理你的请求。",
+TRY_AGAIN="再试一次?";
+mesg.UNSUPPORTED_BROWSER: "尚未支持你使用的浏览器：",
+ILLEGAL_RESPONSE: "无法辨识服务器传回的资料。请按重新载入，再试试。\n",
+FAILED_TO_PROCESS: "无法处理：",
+INVALID_STRUCTURE: "结构不正确：",
+NUMBER_REQUIRED: "只能输入数字，而不是 ",
+INTEGER_REQUIRED: "只能输入整数，而不是 ",
+EMPTY_NOT_ALLOWED: "不能空白，也不能只含空白字元",
+GOTO_ERROR_FIELD: "回错误栏",
+PLEASE_WAIT: "处理中，请稍候…",
 
-mesg.FILE_SIZE = "文件大小：";
-mesg.KBYTES = "KB";
+FILE_SIZE: "文件大小：",
+KBYTES: "KB",
 
-mesg.FAILED_TO_LOAD="无法载入：";
-mesg.FAILED_TO_LOAD_DETAIL="可能是连线问题，请按重载再试一次。";
-mesg.CAUSE="原因：";
+FAILED_TO_LOAD: "无法载入：",
+FAILED_TO_LOAD_DETAIL: "可能是连线问题，请按重载再试一次。",
+CAUSE: "原因："
+};

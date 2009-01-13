@@ -13,25 +13,26 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	This program is distributed under GPL Version 2.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
-mesg = {};
-mesg.NOT_FOUND = "見つかりません: ";
-mesg.UNSUPPORTED = "今後サポートする予定です: ";
-mesg.FAILED_TO_SEND = "リクエストの送信に失敗しました。";
-mesg.FAILED_TO_RESPONSE = "サーバーが応答しませんでした。";
-mesg.TRY_AGAIN = "もう一度試してみますか？";
-mesg.UNSUPPORTED_BROWSER = "ご使用中のブラウザは対応しておりません: ";
-mesg.ILLEGAL_RESPONSE = "予期しない応答がありました。リロードしてから再度操作してください。\n";
-mesg.FAILED_TO_PROCESS = "処理できませんでした ";
-mesg.INVALID_STRUCTURE = "不正な構造です： ";
-mesg.NUMBER_REQUIRED = "数字を入力してください。値が無効です: ";
-mesg.INTEGER_REQUIRED = "整数を入力してください。値が無効です: ";
-mesg.EMPTY_NOT_ALLOWED = "空欄及び空白文字のみは許可されていません";
-mesg.GOTO_ERROR_FIELD = "エラーフィールドに移動します";
-mesg.PLEASE_WAIT = "ただいま処理しています";
+mesg = {
+NOT_FOUND: "見つかりません: ",
+UNSUPPORTED: "今後サポートする予定です: ",
+FAILED_TO_SEND: "リクエストの送信に失敗しました。",
+FAILED_TO_RESPONSE: "サーバーが応答しませんでした。",
+TRY_AGAIN: "もう一度試してみますか？",
+UNSUPPORTED_BROWSER: "ご使用中のブラウザは対応しておりません: ",
+ILLEGAL_RESPONSE: "予期しない応答がありました。リロードしてから再度操作してください。\n",
+FAILED_TO_PROCESS: "処理できませんでした ",
+INVALID_STRUCTURE: "不正な構造です： ",
+NUMBER_REQUIRED: "数字を入力してください。値が無効です: ",
+INTEGER_REQUIRED: "整数を入力してください。値が無効です: ",
+EMPTY_NOT_ALLOWED: "空欄及び空白文字のみは許可されていません",
+GOTO_ERROR_FIELD: "エラーフィールドに移動します",
+PLEASE_WAIT: "ただいま処理しています",
 
-mesg.FILE_SIZE = "ファイルサイズ: ";
-mesg.KBYTES = "KB";
+FILE_SIZE: "ファイルサイズ: ",
+KBYTES: "KB",
 
-mesg.FAILED_TO_LOAD="読み込みに失敗しました: ";
-mesg.FAILED_TO_LOAD_DETAIL="接続に問題がある可能性があります。リロードしてから再度操作してください。";
-mesg.CAUSE="原因： ";
+FAILED_TO_LOAD: "読み込みに失敗しました: ",
+FAILED_TO_LOAD_DETAIL: "接続に問題がある可能性があります。リロードしてから再度操作してください。",
+CAUSE: "原因： "
+};
