@@ -486,8 +486,8 @@ public class ClassWebResource {
 		}
 
 		if (is == null) {
-			pi = Servlets.locate(_ctx, request, pi, _cwc.getLocator());
-			is = getResourceAsStream(pi);
+			final String p = Servlets.locate(_ctx, request, pi, _cwc.getLocator());
+			is = getResourceAsStream(p);
 		}
 
 		byte[] data;

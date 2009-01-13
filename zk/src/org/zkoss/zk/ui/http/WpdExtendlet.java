@@ -29,6 +29,7 @@ import org.zkoss.lang.Exceptions;
 import org.zkoss.io.Files;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.ResourceCache;
+import org.zkoss.util.resource.Loader;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.util.IDOMs;
@@ -58,6 +59,7 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 	/** DSP Interpretation cache. */
 	private ResourceCache _cache;
 	private Boolean _debugJS;
+	private ThreadLocal _req = new ThreadLocal();
 
 	public void init(ExtendletConfig config) {
 		_webctx = config.getExtendletContext();
@@ -74,7 +76,13 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 	public void service(HttpServletRequest request,
 	HttpServletResponse response, String path, String extra)
 	throws ServletException, IOException {
-		byte[] data = (byte[])_cache.get(path);
+		byte[] data;
+		_req.set(request);
+		try {
+			data = (byte[])_cache.get(path);
+		} finally {
+			_req.set(null);
+		}
 		if (data == null) {
 			if (Servlets.isIncluded(request)) log.error("Failed to load the resource: "+path);
 				//It might be eaten, so log the error
@@ -101,12 +109,12 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 		return _debugJS.booleanValue();
 
 	}
-	private byte[] parse(InputStream is, String path) throws Exception {
-		final boolean debugJS = isDebugJS();
+	private Object parse(InputStream is, String path) throws Exception {
 		final Element root = new SAXBuilder(true, false, true).build(is).getRootElement();
 		final String name = IDOMs.getRequiredAttributeValue(root, "name");
 		final String lang = IDOMs.getRequiredAttributeValue(root, "language");
 		final LanguageDefinition langdef = LanguageDefinition.lookup(lang);
+		final boolean cacheable = !"false".equals(root.getAttributeValue("cacheable"));
 
 		final ByteArrayOutputStream out = new ByteArrayOutputStream(1024*8);
 		write(out, "_z='");
@@ -120,16 +128,13 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 			if ("widget".equals(elnm)) {
 				final String wgtnm = IDOMs.getRequiredAttributeValue(el, "name");
 				final String jspath = wgtnm + ".js"; //eg: /js/zul/wgt/Div.js
-				if (writeResource(out, jspath, pathpref)) {
+				if (writeResource(out, jspath, pathpref, false)) {
 					final String wgtflnm = name + "." + wgtnm;
-					write(out, "_zkwg=_zkpk.");
+					write(out, "(_zkwg=_zkpk.");
 					write(out, wgtnm);
-					if (debugJS) {
-						write(out, ";_zkwg.prototype.className='");
-						write(out, wgtflnm);
-						write(out, '\'');
-					}
-					write(out, ';');
+					write(out, ").prototype.className='");
+					write(out, wgtflnm);
+					write(out, "';");
 					if (langdef.hasWidgetDefinition(wgtflnm))
 						writeMolds(out, langdef, wgtflnm, pathpref);
 						//Note: widget defiition not available if it is a base type (such as zul.Widget)
@@ -138,7 +143,7 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 			} else if ("script".equals(elnm)) {
 				String jspath = el.getAttributeValue("src");
 				if (jspath != null && jspath.length() > 0) {
-					if (!writeResource(out, jspath, pathpref))
+					if (!writeResource(out, jspath, pathpref, true))
 						log.error("Failed to load script "+jspath+", "+el.getLocator());
 				}
 
@@ -152,7 +157,10 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 			}
 		}
 		write(out, "\n}finally{zPkg.end(_z);}}");
-		return out.toByteArray();
+
+		final byte[] bs = out.toByteArray();
+		if (cacheable) return bs;
+		return new Loader.Resource(bs, false);
 	}
 	private void writeMolds(OutputStream out, LanguageDefinition langdef,
 	String wgtflnm, String pathpref) {
@@ -166,7 +174,7 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 					write(out, "_zkmd['");
 					write(out, mold);
 					write(out, "']=");
-					if (!writeResource(out, uri, pathpref)) {
+					if (!writeResource(out, uri, pathpref, true)) {
 						write(out, "zk.$void;zk.error('");
 						write(out, uri);
 						write(out, " not found')");
@@ -180,15 +188,29 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 			log.error("Failed to load molds for widget "+wgtflnm+".\nCause: "+Exceptions.getMessage(ex));
 		}
 	}
-	private boolean writeResource(OutputStream out, String path, String pathpref)
-	throws IOException {
+	private boolean writeResource(OutputStream out, String path,
+	String pathpref, boolean locate)
+	throws IOException, ServletException {
 		if (path.startsWith("~./")) path = path.substring(2);
 		else if (path.charAt(0) != '/')
 			path = Files.normalize(pathpref, path);
 
-		final InputStream is = _webctx.getResourceAsStream(path);
-		if (is == null)
+		final InputStream is = _webctx.getResourceAsStream(
+			locate ?
+				Servlets.locate(_webctx.getServletContext(),
+					(HttpServletRequest)_req.get(), path, _webctx.getLocator()):
+				path);
+
+		if (is == null) {
+			final boolean debugJS = isDebugJS();
+			if (debugJS) write(out, "zk.debug(");
+			write(out, "'Failed to load ");
+			write(out, path);
+			write(out, '\'');
+			if (debugJS) write(out, ')');
+			write(out, ';');
 			return false;
+		}
 
 		Files.copy(out, is);
 		write(out, "\n;"); //might terminate with //, or not with ;

@@ -141,10 +141,19 @@ public class ResourceCache extends CacheMap {
 
 		//load it
 		try {
+			boolean cache;
 			final Info ri = new Info(src);
-			final Object resource = ri.getResource();
+			Object resource = ri.getResource();
+
+			if (resource instanceof Loader.Resource) {
+				final Loader.Resource lr = (Loader.Resource)resource;
+				resource = lr.resource;
+				cache = lr.cacheable;
+			} else
+				cache = resource != null;
+
 			synchronized (this) {
-				if (resource != null) {
+				if (cache) {
 					super.put(src, ri);
 				} else {
 					super.remove(src); //remove lock

@@ -109,7 +109,8 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 
 		switch (typeof val) {
 		case 'string':
-			if (!val && flags.NO_EMPTY) return mesg.EMPTY_NOT_ALLOWED;
+			if (flags.NO_EMPTY && (!val || !val.trim()))
+				return mesg.EMPTY_NOT_ALLOWED;
 			var regex = this._regex;
 			if (regex && !regex.test(val))
 				return msg || mesg.ILLEGAL_VALUE;

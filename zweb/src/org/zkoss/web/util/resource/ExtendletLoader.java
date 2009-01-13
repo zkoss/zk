@@ -89,6 +89,10 @@ abstract public class ExtendletLoader implements Loader {
 	/** It is called to parse the resource into an intermediate format
 	 * depending on {@link Extendlet}.
 	 *
+	 * <p>The object is returned directly by {@link #load}, so
+	 * you can return an instance of org.zkoss.util.resource.Loader.Resource
+	 * to have more control on {@link org.zkoss.util.resource.ResourceCache}.
+	 *
 	 * @param is the content of the resource
 	 * @param path the path of the resource
 	 */
