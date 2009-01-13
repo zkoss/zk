@@ -436,11 +436,9 @@ zk.eff.Parallel = zk.$extends(zk.eff.Base_, {
 		this._effects = effects || [];
 		this.start(opts);
 	},
-	update: function() {
-		for (var i = 0, o = this._effects[i]; o; o = this._effects[++i]) {
-			var m = o['render'];
-			if (m) m.apply(o, arguments);
-		}
+	update: function(position) {
+		for (var j = 0, effs = this._effects, len = effs.length; j < len;)
+			effs[j++].render(position);
 	},
 	finish: function(position) {
 		for (var j = 0, effs = this._effects, len = effs.length; j < len;) {
