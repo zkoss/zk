@@ -23,10 +23,13 @@ import java.util.LinkedList;
 import java.util.Iterator;
 
 import org.zkoss.lang.Strings;
+import org.zkoss.mesg.Messages;
 
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.WrongValueException;
+
+import org.zkoss.zul.mesg.MZul;
 
 /**
  * A collection of utilities.
@@ -171,5 +174,44 @@ public class Utils {
 				sb.append('.').append(format);
 		}
 		return desktop.getDynamicMediaURI(comp, sb.toString()); //already encoded
+	}
+
+	/** Generates the locale-dependent JavaScript codes, such as messages
+	 * (msgzul).
+	 * <p>It is called by zul/lang/zk.wpd.
+	 */
+	public static final String outLocaleJavaScript() {
+		final StringBuffer sb = new StringBuffer(1024)
+			.append("zk.copy(msgzul, {");
+
+		addLocaleJS(sb, "VALUE_NOT_MATCHED", MZul.VALUE_NOT_MATCHED);
+		addLocaleJS(sb, "CANCEL", MZul.CANCEL);
+
+		addLocaleJS(sb, "NO_POSITIVE_NEGATIVE_ZERO", MZul.NO_POSITIVE_NEGATIVE_ZERO);
+		addLocaleJS(sb, "NO_POSITIVE_NEGATIVE", MZul.NO_POSITIVE_NEGATIVE);
+		addLocaleJS(sb, "NO_POSITIVE_ZERO", MZul.NO_POSITIVE_ZERO);
+		addLocaleJS(sb, "NO_POSITIVE", MZul.NO_POSITIVE);
+		addLocaleJS(sb, "NO_NEGATIVE_ZERO", MZul.NO_NEGATIVE_ZERO);
+		addLocaleJS(sb, "NO_NEGATIVE", MZul.NO_NEGATIVE);
+		addLocaleJS(sb, "NO_ZERO", MZul.NO_ZERO);
+
+		addLocaleJS(sb, "NO_FUTURE_PAST_TODAY", MZul.NO_FUTURE_PAST_TODAY);
+		addLocaleJS(sb, "NO_FUTURE_PAST", MZul.NO_FUTURE_PAST);
+		addLocaleJS(sb, "NO_FUTURE_TODAY", MZul.NO_FUTURE_TODAY);
+		addLocaleJS(sb, "NO_FUTURE", MZul.NO_FUTURE);
+		addLocaleJS(sb, "NO_PAST_TODAY", MZul.NO_PAST_TODAY);
+		addLocaleJS(sb, "NO_PAST", MZul.NO_PAST);
+		addLocaleJS(sb, "NO_TODAY", MZul.NO_TODAY);
+
+		int j = sb.length() - 1;
+		if (sb.charAt(j) == ',') sb.setLength(j);
+
+		return sb.append("});").toString();
+	}
+	private static
+	void addLocaleJS(StringBuffer sb, String name, int mesgCode) {
+		sb.append('\n').append(name).append(":'");
+		Strings.escape(sb, Messages.get(mesgCode), "\\'");
+		sb.append("',");
 	}
 }

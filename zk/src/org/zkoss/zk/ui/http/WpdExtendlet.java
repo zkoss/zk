@@ -14,6 +14,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.http;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Iterator;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -25,6 +27,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.io.Files;
 import org.zkoss.util.logging.Log;
@@ -152,6 +155,34 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 					write(out, s);
 					write(out, "\n;"); //might terminate with //, or not with ;
 				}
+			} else if ("function".equals(elnm)) {
+				final String clsnm = IDOMs.getRequiredAttributeValue(el, "class");
+				final String sig = IDOMs.getRequiredAttributeValue(el, "signature");
+				final Class cls;
+				try {
+					cls = Classes.forNameByThread(clsnm);
+				} catch (ClassNotFoundException ex) {
+					log.error("Class not found: "+clsnm+", "+el.getLocator(), ex);
+					continue; //to report as many errors as possible
+				}
+
+				try {
+					final Method mtd = Classes.getMethodBySignature(cls, sig, null);
+					if ((mtd.getModifiers() & Modifier.STATIC) != 0)
+						write(out, (String)mtd.invoke(null, new Object[0]));
+					else
+						log.error("Not a static method: "+mtd);
+				} catch (NoSuchMethodException ex) {
+					log.error("Method not found in "+clsnm+": "+sig+" "+el.getLocator(), ex);
+					continue;
+				} catch (org.zkoss.util.IllegalSyntaxException ex) {
+					log.error("Illegal Signature: "+sig+" "+el.getLocator(), ex);
+					continue;
+				} catch (Throwable ex) {
+					log.error("Unable to invoke "+sig+", "+el.getLocator(), ex);
+					continue;
+				}
+
 			} else {
 				log.warning("Unknown element "+elnm+", "+el.getLocator());
 			}
@@ -217,8 +248,10 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 		return true;
 	}
 	private void write(OutputStream out, String s) throws IOException {
-		final byte[] bs = s.getBytes("UTF-8");
-		out.write(bs, 0, bs.length);
+		if (s != null) {
+			final byte[] bs = s.getBytes("UTF-8");
+			out.write(bs, 0, bs.length);
+		}
 	}
 	/*private static void write(OutputStream out, StringBuffer sb)
 	throws IOException {
