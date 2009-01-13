@@ -24,6 +24,7 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 		}
 	},
 	_init: function (cst) {
+		l_out:
 		for (var j = 0, k = 0, len = cst.length; k >= 0; j = k + 1) {
 			for (;; ++j) {
 				if (j >= len) return; //done
@@ -41,7 +42,7 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 						if (cc == '\\') ++k; //skip one
 					}
 					this._regex = new RegExp(k >= 0 ? cst.substring(j, k): cst.substring(j));
-					break;
+					continue l_out;
 				}
 				if (cc == ':') {
 					this._errmsg = cst.substring(j + 1).trim();
@@ -103,9 +104,52 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 		return flags;
 	},
 	validate: function (wgt, val) {
-		var flags = this._flags;
-		if (!val) {
-			if (flags.NO_EMPTY) return mesg.EMPTY_NOT_ALLOWED;
+		var flags = this._flags,
+			msg = this._errmsg;
+
+		switch (typeof val) {
+		case 'string':
+			if (!val && flags.NO_EMPTY) return mesg.EMPTY_NOT_ALLOWED;
+			var regex = this._regex;
+			if (regex && !regex.test(val))
+				return msg || mesg.ILLEGAL_VALUE;
+			if (flags.STRICT && val) {
+				//TODO VALUE_NOT_MATCHED;
+			}
+			return;
+		case 'number':
+			if (val > 0) {
+				if (flags.NO_POSITIVE) return msg || mesg.NO_POSITIVE;
+			} else if (val == 0) {
+				if (flags.NO_ZERO) return msg || mesg.NO_ZERO;
+			} else
+				if (flags.NO_NEGATIVE) return msg || mesg.NO_NEGATIVE;
+			return;
 		}
+
+		if (val.getFullYear) {
+			var today = zUtl.today(),
+				val = new Date(val.getFullYear(), val.getMonth(), val.getDate());
+			if (val > today) {
+				if (flags.NO_FUTURE) return msg || mesg.NO_FUTURE;
+			} else if (val == today) {
+				if (flags.NO_TODAY) return msg || mesg.NO_TODAY;
+			} else
+				if (flags.NO_PAST) return msg || mesg.NO_PAST;
+			return;
+		}
+
+		if (val.compareTo) {
+			var b = val.compareTo(0);
+			if (b > 0) {
+				if (flags.NO_POSITIVE) return msg || mesg.NO_POSITIVE;
+			} else if (b == 0) {
+				if (flags.NO_ZERO) return msg || mesg.NO_ZERO;
+			} else
+				if (flags.NO_NEGATIVE) return msg || mesg.NO_NEGATIVE;
+			return;
+		}
+
+		if (!val && flags.NO_EMPTY) return msg || mesg.EMPTY_NOT_ALLOWED;
 	}
 });

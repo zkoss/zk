@@ -315,6 +315,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			this._errbox = null;
 			n.destroy();
 		}
+		delete this._lastValVld; //cause re-valid
 	},
 	isImportantEvent_: function (evtnm) {
 		return 'onChange' == evtnm;
