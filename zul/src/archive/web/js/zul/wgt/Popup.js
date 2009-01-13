@@ -13,6 +13,7 @@ This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 zul.wgt.Popup = zk.$extends(zul.Widget, {
+	_visible: false,
 	open: function (ref, offset, position, sendOnOpen) {
 		var pos, dim;
 		
@@ -22,7 +23,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 				
 			if (ref) {
 				var refn = ref.getNode(),
-					ofs = zDom.cmOffset(refn);
+					ofs = zDom.revisedOffset(refn);
 				pos = position;
 				dim = {
 					top: ofs[0], left: ofs[1],

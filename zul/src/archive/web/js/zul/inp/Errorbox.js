@@ -16,6 +16,7 @@ zul.inp.Errorbox = zk.$extends('zul.wgt.Popup', {
 	$init: function () {
 		this.$supers('$init', arguments);
 		this.setWidth("260px");
+		this.setSclass('z-errbox');
 	},
 	show: function (owner, msg) {
 		this.parent = owner; //fake
@@ -42,6 +43,7 @@ zul.inp.Errorbox = zk.$extends('zul.wgt.Popup', {
 		this._drag = new zk.Draggable(this, null, {
 			starteffect: zk.$void,
 			endeffect: $Errorbox._enddrag,
+			ignoredrag: $Errorbox._ignoredrag,
 			change: $Errorbox._change
 		});
 	},
@@ -55,12 +57,15 @@ zul.inp.Errorbox = zk.$extends('zul.wgt.Popup', {
 		this.$supers('unbind_', arguments);
 		this._drag = this.earrow = this.eclose = null;
 	},
-	doMouseOver_: function (evt, devt) {
+	doMouseMove_: function (evt, devt) {
 		var el = zEvt.target(devt);
-		if (el == this.eclose)
-			zDom.addClass(el, 'z-errbox-close-over');
-		else
-			this.$supers('doMouseOver_', arguments);
+		if (el == this.eclose) {
+			var y = zEvt.y(devt),
+				size = zk.parseInt(zDom.getStyle(this.eclose, 'padding-right'))
+				offs = zDom.revisedOffset(this.eclose);
+			if (y >= offs[1] && y < offs[1] + size)	zDom.addClass(el, 'z-errbox-close-over');
+			else zDom.rmClass(el, 'z-errbox-close-over');
+		} else this.$supers('doMouseMove_', arguments);
 	},
 	doMouseOut_: function (evt, devt) {
 		var el = zEvt.target(devt);
@@ -71,7 +76,7 @@ zul.inp.Errorbox = zk.$extends('zul.wgt.Popup', {
 	},
 	doClick_: function (evt, devt) {
 		var el = zEvt.target(devt);
-		if (el == this.eclose)
+		if (el == this.eclose && zDom.hasClass(el, 'z-errbox-close-over'))
 			this.parent._destroyerrbox();
 		else {
 			this.$supers('doClick_', arguments);
@@ -85,15 +90,12 @@ zul.inp.Errorbox = zk.$extends('zul.wgt.Popup', {
 	},
 	prologHTML_: function (out) {
 		var id = this.uuid;
-		out.push('<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr valign="top"><td width="17"><span id="');
-		out.push(id);
-		out.push('$a" class="z-arrow" title="')
+		out.push('<div id="', id);
+		out.push('$a" class="z-errbox-left z-arrow" title="')
 		out.push(zUtl.encodeXML(mesg.GOTO_ERROR_FIELD));
-		out.push('"></span></td><td width="3">');
+		out.push('"><div id="', id, '$c" class="z-errbox-right z-errbox-close"><div class="z-errbox-center">');
 		out.push(zUtl.encodeXML(this.msg, true)); //Bug 1463668: security
-		out.push('</td><td width="17"><div id="');
-		out.push(id);
-		out.push('$c" class="z-close z-errbox-close"></div></td></tr></table>');
+		out.push('</div></div></div>');
 	},
 	onFloatUp: function (wgt) {
 		if (wgt == this) {
@@ -147,13 +149,16 @@ zul.inp.Errorbox = zk.$extends('zul.wgt.Popup', {
 		} else {
 			dir = dy < 0 ? "d": "u";
 		}
-		arrow.className = 'z-arrow z-arrow-' + dir;
+		arrow.className = 'z-errbox-left z-arrow-' + dir;
 	}
 },{
 	_enddrag: function (dg) {
 		var errbox = dg.control;
 		errbox.setTopmost();
 		errbox._fixarrow();
+	},
+	_ignoredrag: function (dg, pointer, evt) {
+		return zEvt.target(evt) == dg.control.eclose && zDom.hasClass(dg.control.eclose, 'z-errbox-close-over');
 	},
 	_change: function (dg) {
 		var errbox = dg.control,

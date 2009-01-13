@@ -253,11 +253,19 @@ div.z-drop-cnt {
 }
 
 <%-- ZK error message box --%>
-.z-arrow, div.z-close {
-	display:-moz-inline-box; display:inline-block;
+.z-errbox-center {
+	padding: 2px 3px;
+}
+.z-errbox-left {
 	background-repeat: no-repeat;
-	vertical-align: top; cursor: pointer; border: 0;
-	width: 17px; height: 17px;
+	cursor: pointer; border: 0;
+	padding-left: 17px;
+}
+.z-errbox-right {
+	background-repeat: no-repeat;
+	cursor: pointer; border: 0;
+	padding-right: 17px;
+	background-position: right 0px;
 }
 .z-arrow-d {
 	background-image: url(${c:encodeURL('~./zul/img/arrowD.png')});
@@ -280,14 +288,39 @@ div.z-drop-cnt {
 .z-arrow-u {
 	background-image: url(${c:encodeURL('~./zul/img/arrowU.png')});
 }
-
-div.z-errbox-close {
+.z-errbox-close {
 	background-image: url(${c:encodeURL('~./zul/img/errbox/close.gif')});
 }
-div.z-errbox-close-over {
+.z-errbox-close-over {
 	background-image: url(${c:encodeURL('~./zul/img/errbox/close-over.gif')});
 }
-
+.z-errbox.z-popup .z-popup-tm {
+	background-image : url(${c:encodeURL('~./zul/img/errbox/pp-tb.png')});
+}
+.z-errbox.z-popup .z-popup-tl {
+	background-image : url(${c:encodeURL('~./zul/img/errbox/pp-corners.png')});
+}
+.z-errbox.z-popup .z-popup-tr {
+	background-image : url(${c:encodeURL('~./zul/img/errbox/pp-corners.png')});
+}
+.z-errbox.z-popup .z-popup-cm {
+	background-image : url(${c:encodeURL('~./zul/img/errbox/pp-tb.png')});
+}
+.z-errbox.z-popup .z-popup-cl {
+	background-image : url(${c:encodeURL('~./zul/img/errbox/pp-l.png')});
+}
+.z-errbox.z-popup .z-popup-cr {
+	background-image : url(${c:encodeURL('~./zul/img/errbox/pp-r.png')});
+}
+.z-errbox.z-popup .z-popup-bm {
+	background-image : url(${c:encodeURL('~./zul/img/errbox/pp-tb.png')});
+}
+.z-errbox.z-popup .z-popup-bl {
+	background-image : url(${c:encodeURL('~./zul/img/errbox/pp-corners.png')});
+}
+.z-errbox.z-popup .z-popup-br {
+	background-image : url(${c:encodeURL('~./zul/img/errbox/pp-corners.png')});
+}
 <%-- Progressmeter --%>
 div.z-progressmeter {
 	background:#E0E8F3 url(${c:encodeURL('~./zk/img/prgmeter_bg.gif')}) repeat-x scroll 0 0 ;
