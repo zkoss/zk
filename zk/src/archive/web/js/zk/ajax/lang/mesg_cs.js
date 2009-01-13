@@ -27,12 +27,9 @@ mesg.INTEGER_REQUIRED = "Zadejte prosím celé číslo, místo ";
 mesg.EMPTY_NOT_ALLOWED = "Zadejte hodnotu.";
 mesg.GOTO_ERROR_FIELD = "Jdi na pole s chybou";
 mesg.PLEASE_WAIT = "Pracuji...";
-mesg.VALUE_NOT_MATCHED = "Vyberte prosím jednu z nabízených hodnot.";
 
 mesg.FILE_SIZE = "Velikost souboru: ";
 mesg.KBYTES = "KB";
-
-mesg.CANCEL="Zrušit";
 
 mesg.FAILED_TO_LOAD = "Chyba při nahrávání ";
 mesg.FAILED_TO_LOAD_DETAIL = "Chyba může být způsobena špatným připojením, zkuste obnovit stránku";

@@ -27,12 +27,9 @@ mesg.INTEGER_REQUIRED = "Debe especificar un numero entero, en lugar de ";
 mesg.EMPTY_NOT_ALLOWED = "No se permite vacio o espacios en blanco.\n Debe especificar un valor diferente ";
 mesg.GOTO_ERROR_FIELD = "Ir al campo que contiene el error ";
 mesg.PLEASE_WAIT = "Procesando...";
-mesg.VALUE_NOT_MATCHED = "Debe especificar uno de los valores de la lista desplegable.";
 
 mesg.FILE_SIZE = "Tamaño del archivo: ";
 mesg.KBYTES = "KB";
-
-mesg.CANCEL="Cancelar";
 
 mesg.FAILED_TO_LOAD="Fallo al cargar ";
 mesg.FAILED_TO_LOAD_DETAIL="Puede ser a causa de un tráfico erroneo. Podria refrescar de nuevo la página.";

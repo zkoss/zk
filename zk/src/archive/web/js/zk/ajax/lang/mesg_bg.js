@@ -27,12 +27,9 @@ mesg.INTEGER_REQUIRED = "Изберете по-голямо целочислен
 mesg.EMPTY_NOT_ALLOWED = "Не може да е празно или само интервали.";
 mesg.GOTO_ERROR_FIELD = "Ползване на грешно поле";
 mesg.PLEASE_WAIT = "Зарежда се...";
-mesg.VALUE_NOT_MATCHED = "You must specify one of values in the drop-down list.";
 
 mesg.FILE_SIZE = "Размер на файла: ";
 mesg.KBYTES = "KB";
-
-mesg.CANCEL="Откажи";
 
 mesg.FAILED_TO_LOAD="Проблем при зареждане ";
 mesg.FAILED_TO_LOAD_DETAIL="Възможно е да се дължи на лоша връзка със сървъра. Опитайте да презаредите страницата отново.";

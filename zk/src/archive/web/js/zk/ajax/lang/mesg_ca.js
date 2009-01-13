@@ -27,12 +27,9 @@ mesg.INTEGER_REQUIRED = "Heu d'especificar un enter, en lloc de ";
 mesg.EMPTY_NOT_ALLOWED = "Cal emplenar el camp.\nNo es pot deixar buit ni a blancs.";
 mesg.GOTO_ERROR_FIELD = "Aneu al camp erroni";
 mesg.PLEASE_WAIT = "S'està processant...";
-mesg.VALUE_NOT_MATCHED = "Heu d'especificar un dels valors de la llista desplegable."
 
 mesg.FILE_SIZE = "Mida de l'arxiu: ";
 mesg.KBYTES = "KB";
-
-mesg.CANCEL="Cancel·la";
 
 mesg.FAILED_TO_LOAD = "Ha fallat la càrrega ";
 mesg.FAILED_TO_LOAD_DETAIL = "Pot haver estat provocat pel mal trànsit de les comunicacions. Podríeu recarregar aquesta pàgina i provar una altra vegada.";

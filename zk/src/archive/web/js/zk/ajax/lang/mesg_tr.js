@@ -27,12 +27,9 @@ mesg.INTEGER_REQUIRED = "Tam sayı girmelisiniz, girilen :";
 mesg.EMPTY_NOT_ALLOWED = "Boş değer girilemez.\nBoşluk(space) girebilirsiniz";
 mesg.GOTO_ERROR_FIELD = "Yanlış alana gidildi";
 mesg.PLEASE_WAIT = "Bekleyiniz...";
-mesg.VALUE_NOT_MATCHED = "You must specify one of values in the drop-down list.";
 
 mesg.FILE_SIZE = "Dosya boyu: ";
 mesg.KBYTES = "KB";
-
-mesg.CANCEL="Vazgeç";
 
 mesg.FAILED_TO_LOAD = "Yükleme başarısız: ";
 mesg.FAILED_TO_LOAD_DETAIL = "Yoğunluktan kaynaklı problem oluşştu.Lütfen yeniden deneyiniz.";

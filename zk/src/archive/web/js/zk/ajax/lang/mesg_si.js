@@ -27,12 +27,9 @@ mesg.INTEGER_REQUIRED = "Podati morate številko in ne ";
 mesg.EMPTY_NOT_ALLOWED = "Prazno polje ni dovoljeno.\nTudi sami presledki niso dovoljeni";
 mesg.GOTO_ERROR_FIELD = "Pojdite na napačno polje";
 mesg.PLEASE_WAIT = "Procesiram...";
-mesg.VALUE_NOT_MATCHED = "You must specify one of values in the drop-down list.";
 
 mesg.FILE_SIZE = "Velikost datoteke: ";
 mesg.KBYTES = "KB";
-
-mesg.CANCEL="Prekliči";
 
 mesg.FAILED_TO_LOAD="Failed to load ";
 mesg.FAILED_TO_LOAD_DETAIL="It may be caused by bad traffic. You could reload this page and try again.";

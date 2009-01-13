@@ -94,6 +94,10 @@ zUtl = { //static methods
 	now: function () {
 		return new Date().getTime();
 	},
+	today: function () {
+		var d = new Date();
+		return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+	},
 	isAncestor: function (p, c) {
 		if (!p) return true;
 		for (; c; c = c.getParent ? c.getParent(): c.parent)

@@ -17,10 +17,10 @@ mesg.INTEGER_REQUIRED="يلزم وجود رقم ";
 mesg.EMPTY_NOT_ALLOWED="غير مسموح بفراغ";
 mesg.GOTO_ERROR_FIELD="اذهب الى مكان الخطأ";
 mesg.PLEASE_WAIT="من فضلك الأنتظار ...";
-mesg.VALUE_NOT_MATCHED="القيمة غير متطابقة";
+
 mesg.FILE_SIZE="حجم الملف : ";
 mesg.KBYTES="كيلو بايت ";
-mesg.CANCEL="ألغاء";
+
 mesg.FAILED_TO_LOAD="فشل فى التحميل  ";
 mesg.FAILED_TO_LOAD_DETAIL="فشل فى تحميل تفاصيل البيانات.";
 mesg.CAUSE="السبب: ";

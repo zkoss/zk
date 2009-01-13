@@ -12,11 +12,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.BigInteger = zk.$extends(zk.Object, {
+/*zk.BigInteger = zk.$extends(zk.Object, {
 	$init: function (value) {
 		this._value = value ? '' + value: '0';
 	}
-});
+});*/
 zk.BigDecimal = zk.$extends(zk.Object, {
 	_prec: 0,
 	$init: function (value) {

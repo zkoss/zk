@@ -27,12 +27,9 @@ mesg.INTEGER_REQUIRED = "只能输入整数，而不是 ";
 mesg.EMPTY_NOT_ALLOWED = "不能空白，也不能只含空白字元";
 mesg.GOTO_ERROR_FIELD = "回错误栏";
 mesg.PLEASE_WAIT = "处理中，请稍候…";
-mesg.VALUE_NOT_MATCHED = "你必需指定一个在下拉菜单里的值";
 
 mesg.FILE_SIZE = "文件大小：";
 mesg.KBYTES = "KB";
-
-mesg.CANCEL="取消";
 
 mesg.FAILED_TO_LOAD="无法载入：";
 mesg.FAILED_TO_LOAD_DETAIL="可能是连线问题，请按重载再试一次。";

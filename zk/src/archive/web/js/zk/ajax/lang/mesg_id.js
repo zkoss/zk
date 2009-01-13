@@ -27,12 +27,9 @@ mesg.INTEGER_REQUIRED = "Anda harus memberikan sebuah integer, bukan ";
 mesg.EMPTY_NOT_ALLOWED = "Kosong tidak di-ijin-kan.\nAnda tidak dapat memberikan apa-apa selain spasi, atau";
 mesg.GOTO_ERROR_FIELD = "Menuju field yang error";
 mesg.PLEASE_WAIT = "Diproses...";
-mesg.VALUE_NOT_MATCHED = "You must specify one of values in the drop-down list.";
 
 mesg.FILE_SIZE = "Ukuran File: ";
 mesg.KBYTES = "KB";
-
-mesg.CANCEL="Batal";
 
 mesg.FAILED_TO_LOAD="Failed to load ";
 mesg.FAILED_TO_LOAD_DETAIL="It may be caused by bad traffic. You could reload this page and try again.";

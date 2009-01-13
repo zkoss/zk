@@ -28,12 +28,9 @@ mesg.INTEGER_REQUIRED = "整数を入力してください。値が無効です:
 mesg.EMPTY_NOT_ALLOWED = "空欄及び空白文字のみは許可されていません";
 mesg.GOTO_ERROR_FIELD = "エラーフィールドに移動します";
 mesg.PLEASE_WAIT = "ただいま処理しています";
-mesg.VALUE_NOT_MATCHED = "プルダウンメニューにある項目を指定してください。";
 
 mesg.FILE_SIZE = "ファイルサイズ: ";
 mesg.KBYTES = "KB";
-
-mesg.CANCEL="キャンセル";
 
 mesg.FAILED_TO_LOAD="読み込みに失敗しました: ";
 mesg.FAILED_TO_LOAD_DETAIL="接続に問題がある可能性があります。リロードしてから再度操作してください。";

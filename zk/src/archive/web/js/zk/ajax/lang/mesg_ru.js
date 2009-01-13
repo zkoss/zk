@@ -17,10 +17,10 @@ mesg.INTEGER_REQUIRED="Необходимо ввести целое число, 
 mesg.EMPTY_NOT_ALLOWED="Пустой ввод не разрешен";
 mesg.GOTO_ERROR_FIELD="Перемещение к неверному полю";
 mesg.PLEASE_WAIT="Обработка запроса...";
-mesg.VALUE_NOT_MATCHED="Вы должны выбрать одно из значений в выпадающем списке.";
+
 mesg.FILE_SIZE="Размер файла: ";
 mesg.KBYTES="KB";
-mesg.CANCEL="Отмена";
+
 mesg.FAILED_TO_LOAD="Не удалось загрузить ";
 mesg.FAILED_TO_LOAD_DETAIL="Возможно, проблема с подключением к сети. Перезагрузите страницу и попробуйте снова.";
 mesg.CAUSE="Причина: ";

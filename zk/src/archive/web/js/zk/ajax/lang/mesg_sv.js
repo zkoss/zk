@@ -27,12 +27,9 @@ mesg.INTEGER_REQUIRED = "Du måste ange ett heltal, istället för ";
 mesg.EMPTY_NOT_ALLOWED = "Blank inte tillåtet.\nDu kan inte ange annat än blanksteg";
 mesg.GOTO_ERROR_FIELD = "Gå till felaktigt fält";
 mesg.PLEASE_WAIT = "Arbetar...";
-mesg.VALUE_NOT_MATCHED = "You must specify one of values in the drop-down list.";
 
 mesg.FILE_SIZE = "Filstorlek: ";
 mesg.KBYTES = "KB";
-
-mesg.CANCEL="Avbryt";
 
 mesg.FAILED_TO_LOAD = "Uppladdning misslyckades ";
 mesg.FAILED_TO_LOAD_DETAIL = "Kan ha orsakats av trafikstörning. Ladda om denna sida och försök igen.";

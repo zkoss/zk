@@ -27,12 +27,9 @@ mesg.INTEGER_REQUIRED = "You must specify an integer, rather than ";
 mesg.EMPTY_NOT_ALLOWED = "Empty is not allowed.\nYou cannot specify nothing but spaces, either";
 mesg.GOTO_ERROR_FIELD = "Go to the wrong field";
 mesg.PLEASE_WAIT = "Processing...";
-mesg.VALUE_NOT_MATCHED = "You must specify one of values in the drop-down list.";
 
 mesg.FILE_SIZE = "File size: ";
 mesg.KBYTES = "KB";
-
-mesg.CANCEL="Cancel";
 
 mesg.FAILED_TO_LOAD = "Failed to load ";
 mesg.FAILED_TO_LOAD_DETAIL = "It may be caused by bad traffic. You could reload this page and try again.";
