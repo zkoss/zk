@@ -21,7 +21,7 @@ function (out) {
 			this.domAttrs_({id: 1}), '>');
 			
 	if (this.getTitle()) {
-		out.push('<div id="', uuid, '$caption" class="', zcls, '-header">');
+		out.push('<div id="', uuid, '$cap" class="', zcls, '-header">');
 		if (noCenter) {
 			out.push('<div id="', uuid, '$btn" class="', pzcls,
 					'-tool ', zcls, '-collapse"');
@@ -41,7 +41,7 @@ function (out) {
 	if (noCenter) {
 		out.push('<div id="', uuid, '$split" class="', zcls, '-split"></div>');
 		if (this.getTitle()) {
-			out.push('<div id="', uuid, '$collapsed" class="', zcls,
+			out.push('<div id="', uuid, '$colled" class="', zcls,
 					'-collapsed" style="display:none"><div id="',
 					uuid, '$btned" class="', pzcls, '-tool ', zcls, '-expand"');
 			if (!this.isCollapsible())

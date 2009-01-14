@@ -28,7 +28,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 
 			var node = this.getNode();
 			if (node) {
-				var panel = this.getPanelNode();
+				var panel = this.getSubnode('panel');
 				if (panel) { //!legend
 					if (open) zAnima.slideDown(this, panel, {afterAnima: this._afterSlideDown});
 					else zAnima.slideUp(this, panel, {beforeAnima: this._beforeSlideUp});
@@ -86,19 +86,19 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	onSize: _zkf = function () {
 		var hgh = this.getNode().style.height;
 		if (hgh && hgh != "auto") {
-			var n = this.getCaveNode();
+			var n = this.getSubnode('cave');
 			if (n) {
 				if (zk.ie6Only) n.style.height = "";
 				n.style.height =
 					zDom.revisedHeight(n, zDom.vflexHeight(n.parentNode), true)
 					+ "px";
-					//we use n.parentNode(=this.getPanelNode()) to calc vflex,
+					//we use n.parentNode(=this.getSubnode('panel')) to calc vflex,
 					//so we have to subtract margin, too
 			}
 		}
 		setTimeout(this.proxy(this._fixShadow), 500);
 			//shadow raraly needs to fix so OK to delay for better performance
-			//(getShadowNode() a bit slow due to zDom.$)
+			//(getSubnode('sdw') a bit slow due to zDom.$)
 	},
 	onVisible: _zkf,
 	_afterSlideDown: function (n) {
@@ -108,10 +108,10 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		zWatch.fireDown("onHide", -1, this);
 	},
 	_fixShadow: function () {
-		var sdw = this.getShadowNode();
+		var sdw = this.getSubnode('sdw');
 		if (sdw)
 			sdw.style.display =
-				zk.parseInt(zDom.getStyle(this.getCaveNode(), "border-bottom-width")) ? "": "none";
+				zk.parseInt(zDom.getStyle(this.getSubnode('cave'), "border-bottom-width")) ? "": "none";
 				//if no border-bottom, hide the shadow
 	},
 	updateDomStyle_: function () {
@@ -142,27 +142,6 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 			zWatch.listen("onVisible", this);
 		}
 	},
-	unbind_: function () {
-		this._epanel = this._ecave = this._esdw = null;
-
-		this.$supers('unbind_', arguments);
-	},
-	getPanelNode: function () {
-		var n = this._epanel;
-		if (!n) n = this._epanel = zDom.$(this.uuid + '$panel');
-		return n;
-	},
-	getCaveNode: function () {
-		var n = this._ecave;
-		if (!n) n = this._ecave = zDom.$(this.uuid + '$cave');
-		return n;
-	},
-	getShadowNode: function () {
-		var n = this._esdw;
-		if (!n) n = this._esdw = zDom.$(this.uuid + '$sdw');
-		return n;
-	},
-
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 		if (child.$instanceof(zul.wgt.Caption))

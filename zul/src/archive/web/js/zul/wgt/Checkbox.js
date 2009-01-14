@@ -21,8 +21,8 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 	setDisabled: function (disabled) {
 		if (this._disabled != disabled) {
 			this._disabled = disabled;
-			if (this.ereal)
-				this.ereal.disabled = disabled;
+			if (this.getSubnode('real'))
+				this.getSubnode('real').disabled = disabled;
 		}
 	},
 	isChecked: function () {
@@ -31,7 +31,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 	setChecked: function (checked) {
 		if (this._checked != checked) {
 			this._checked = checked;
-			if (this.ereal) this.ereal.checked = checked;
+			if (this.getSubnode('real')) this.getSubnode('real').checked = checked;
 		}
 	},
 	getName: function () {
@@ -41,8 +41,8 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		if (!name) name = null;
 		if (this._name != name) {
 			this._name = name;
-			if (this.ereal)
-				this.ereal.name = name;
+			if (this.getSubnode('real'))
+				this.getSubnode('real').name = name;
 		}
 	},
 	getTabindex: function () {
@@ -51,8 +51,8 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 	setTabindex: function (tabindex) {
 		if (this._tabindex != tabindex) {
 			this._tabindex = tabindex;
-			if (this.ereal)
-				this.ereal.tabIndex = tabindex;
+			if (this.getSubnode('real'))
+				this.getSubnode('real').tabIndex = tabindex;
 		}
 	},
 	getZclass: function () {
@@ -80,7 +80,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		this.$supers('bind_', arguments);
 
 		var $Checkbox = zul.wgt.Checkbox,
-			n = this.ereal = zDom.$(this.uuid + '$real');
+			n = this.getSubnode('real');
 
 		if (zk.gecko2Only)
 			zEvt.listen(n, "click", zul.wgt.Checkbox._doClick);
@@ -90,21 +90,21 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 	},
 	unbind_: function () {
 		var $Checkbox = zul.wgt.Checkbox,
-			n = this.ereal;
+			n = this.getSubnode('real');
 		
 		if (zk.gecko2Only)
 			zEvt.unlisten(n, "click", zul.wgt.Checkbox._doClick);
 		zEvt.unlisten(n, "focus", this._fxFocus);
 		zEvt.unlisten(n, "blur", this._fxBlur);
 
-		this.ereal = null;
 		this.$supers('unbind_', arguments);
 	},
 	doClick_: function () {
-		var val = this.ereal.checked;
-		if (val != this.ereal.defaultChecked) { //changed
+		var real = this.getSubnode('real'),
+			val = real.checked;
+		if (val != real.defaultChecked) { //changed
 			this.setChecked(val);
-			this.ereal.defaultChecked = val;
+			real.defaultChecked = val;
 			this.fire('onCheck', val);
 		}
 		return this.$supers('doClick_', arguments);

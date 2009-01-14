@@ -62,12 +62,13 @@ zkex.layout.Borderlayout = zk.$extends(zul.Widget, {
 	// returns the ambit of the specified cmp for region calculation. 
 	_getAmbit: function (wgt, ignoreSplit) {
 		var region = wgt.getPosition();
-		if (region && !wgt.isOpen())
+		if (region && !wgt.isOpen()) {
+			var colled = wgt.getSubnode('colled');
 			return {
-				w: wgt.ecolled ? wgt.ecolled.offsetWidth : 0,
-				h: wgt.ecolled ? wgt.ecolled.offsetHeight : 0
+				w: colled ? colled.offsetWidth : 0,
+				h: colled ? colled.offsetHeight : 0
 			};
-		
+		}
 		var w = wgt.getWidth() || '',
 			h = wgt.getHeight() || '',
 			widx = w.indexOf('%'),
@@ -77,14 +78,14 @@ zkex.layout.Borderlayout = zk.$extends(zul.Widget, {
 			w: widx > 0 ?
 				Math.max(
 					Math.floor(this.getNode().offsetWidth * zk.parseInt(w.substring(0, widx)) / 100),
-					0) : wgt.ereal.offsetWidth, 
+					0) : wgt.getSubnode('real').offsetWidth, 
 			h: hidx > 0 ?
 				Math.max(
 					Math.floor(this.getNode().offsetHeight * zk.parseInt(h.substring(0, hidx)) / 100),
-					0) : wgt.ereal.offsetHeight
+					0) : wgt.getSubnode('real').offsetHeight
 		};
 		if (region && !ignoreSplit) {
-			var split = wgt.esplit || {offsetHeight:0, offsetWidth:0};
+			var split = wgt.getSubnode('split') || {offsetHeight:0, offsetWidth:0};
 			wgt._fixSplit();
 			switch (region) {
 				case this.$class.NORTH:
@@ -176,30 +177,33 @@ zkex.layout.Borderlayout = zk.$extends(zul.Widget, {
 	},
 	_resizeWgt: function (wgt, ambit, ignoreSplit) {
 		if (wgt.isOpen()) {
-			if (!ignoreSplit && wgt.esplit) {
+			if (!ignoreSplit && wgt.getSubnode('split')) {
 				wgt._fixSplit();
 				 ambit = this._resizeSplit(wgt, ambit);	
 			}
-			wgt.ereal.style.left = ambit.x + "px";
-			wgt.ereal.style.top = ambit.y + "px";
+			var s = wgt.getSubnode('real').style; 
+			s.left = ambit.x + "px";
+			s.top = ambit.y + "px";
 			this._resizeBody(wgt, ambit);
 		} else {
-			wgt.esplit.style.display = "none";
-			if (wgt.ecolled) {
-				wgt.ecolled.style.left = ambit.x + "px";
-				wgt.ecolled.style.top = ambit.y + "px";
-				wgt.ecolled.style.height = zDom.revisedHeight(wgt.ecolled, ambit.h) + "px";
-				wgt.ecolled.style.width = zDom.revisedWidth(wgt.ecolled, ambit.w) + "px";
+			wgt.getSubnode('split').style.display = "none";
+			var colled = wgt.getSubnode('colled');
+			if (colled) {
+				colled.style.left = ambit.x + "px";
+				colled.style.top = ambit.y + "px";
+				colled.style.height = zDom.revisedHeight(colled, ambit.h) + "px";
+				colled.style.width = zDom.revisedWidth(colled, ambit.w) + "px";
 			}
 		}
 	},
-	_resizeSplit: function (wgt, ambit) {	
-		if (!zDom.isVisible(wgt.esplit)) return ambit;
+	_resizeSplit: function (wgt, ambit) {
+		var split = wgt.getSubnode('split');
+		if (!zDom.isVisible(split)) return ambit;
 		var sAmbit = {
-				w: wgt.esplit.offsetWidth, 
-				h: wgt.esplit.offsetHeight
+				w: split.offsetWidth, 
+				h: split.offsetHeight
 			},
-			s = wgt.esplit.style;
+			s = split.style;
 		switch (wgt.getPosition()) {
 			case this.$class.NORTH:
 				ambit.h -= sAmbit.h;
@@ -233,9 +237,9 @@ zkex.layout.Borderlayout = zk.$extends(zul.Widget, {
 	_resizeBody: function (wgt, ambit) {		
 		ambit.w = Math.max(0, ambit.w);
 		ambit.h = Math.max(0, ambit.h);
-		var el = wgt.ereal,
+		var el = wgt.getSubnode('real'),
 			bodyEl = wgt.isFlex() && wgt.firstChild ?
-						wgt.firstChild.getNode() : wgt.ecave;
+						wgt.firstChild.getNode() : wgt.getSubnode('cave');
 		if (!this._ignoreResize(el, ambit.w, ambit.h)) {
 			ambit.w = zDom.revisedWidth(el, ambit.w);
 			el.style.width = ambit.w + "px";	   			
@@ -245,7 +249,7 @@ zkex.layout.Borderlayout = zk.$extends(zul.Widget, {
 			ambit.h = zDom.revisedHeight(el, ambit.h);
 			el.style.height = ambit.h + "px";
 			ambit.h = zDom.revisedHeight(bodyEl, ambit.h);
-			if (wgt.ecaption) ambit.h = Math.max(0, ambit.h - wgt.ecaption.offsetHeight);
+			if (wgt.getSubnode('cap')) ambit.h = Math.max(0, ambit.h - wgt.getSubnode('cap').offsetHeight);
 			bodyEl.style.height = ambit.h + "px";
 			if (wgt.isAutoscroll()) { 
 				bodyEl.style.overflow = "auto";				

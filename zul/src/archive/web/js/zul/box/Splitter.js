@@ -43,7 +43,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			var colps = this.getCollapse();
 			if (!colps || "none" == colps) return; //nothing to do
 
-			var nd = zDom.$(node.id + "$chdex"),
+			var nd = this.getSubnode('chdex'),
 				tn = zDom.tag(nd),
 				vert = this.isVertical(),
 				$Splitter = this.$class,
@@ -58,7 +58,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 				diff = zk.parseInt(sib.style[fd]);
 
 				if (!before && sibwgt && !sibwgt.nextSibling) {
-					var sp = zDom.$(this.uuid + '$chdex2');
+					var sp = this.getSubnode('chdex2');
 					if (sp) {
 						sp.style.display = open ? '': 'none'; //no onVisible/onHide
 						diff += zk.parseInt(sp.style[fd]);
@@ -128,7 +128,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		var node = this.getNode(),
 			$Splitter = this.$class;
 			vert = this.isVertical();
-			btn = this.button = zDom.$(this.uuid + '$btn');
+			btn = this.button = this.getSubnode('btn');
 		node.style.cursor = this.isOpen() ?
 			vert ? "s-resize": "e-resize": "default";
 		btn.style.cursor = "pointer";
@@ -147,7 +147,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			snap: $Splitter._snap, endeffect: $Splitter._endDrag});
 
 		if (!this.isOpen()) {
-			var nd = zDom.$(node.id + "$chdex"), tn = zDom.tag(nd),
+			var nd = this.getSubnode('chdex'), tn = zDom.tag(nd),
 				colps = this.getCollapse();
 			if (!colps || "none" == colps) return; //nothing to do
 
@@ -296,7 +296,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		var run = draggable.run = {},
 			node = wgt.getNode();
 		run.org = zDom.cmOffset(node);
-		var nd = zDom.$(node.id + "$chdex"),
+		var nd = wgt.getSubnode('chdex'),
 			tn = zDom.tag(nd),
 			$Splitter = zul.box.Splitter;
 		run.prev = $Splitter._prev(nd, tn);

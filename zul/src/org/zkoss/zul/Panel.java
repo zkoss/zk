@@ -66,6 +66,15 @@ public class Panel extends XulElement implements org.zkoss.zul.api.Panel {
 		_maximizable, _minimizable, _maximized, _minimized;
 	private boolean  _open = true;
 	
+
+	static {
+		addClientEvent(Panel.class, Events.ON_CLOSE);
+		addClientEvent(Panel.class, Events.ON_MOVE);
+		addClientEvent(Panel.class, Events.ON_OPEN);
+		addClientEvent(Panel.class, Events.ON_Z_INDEX);
+		addClientEvent(Panel.class, Events.ON_MAXIMIZE);
+		addClientEvent(Panel.class, Events.ON_MINIMIZE);
+	}
 	/**
 	 * Returns whether this Panel is open.
 	 * <p>Default: true.
@@ -79,7 +88,7 @@ public class Panel extends XulElement implements org.zkoss.zul.api.Panel {
 	public void setOpen(boolean open) {
 		if (_open != open) {
 			_open = open;
-			smartUpdate("z.open", _open);
+			smartUpdate("open", _open);
 		}
 	}
 	/**
@@ -97,7 +106,7 @@ public class Panel extends XulElement implements org.zkoss.zul.api.Panel {
 	public void setFramable(boolean framable) {
 		if (_framable != framable) {
 			_framable = framable;
-			invalidate();
+			smartUpdate("framable", _framable);
 		}
 	}
 	/**
@@ -109,7 +118,7 @@ public class Panel extends XulElement implements org.zkoss.zul.api.Panel {
 	public void setMovable(boolean movable) {
 		if (_movable != movable) {
 			_movable = movable;
-			invalidate();
+			smartUpdate("movable", _movable);
 		}
 	}
 	/**
@@ -149,7 +158,7 @@ public class Panel extends XulElement implements org.zkoss.zul.api.Panel {
 	public void setFloatable(boolean floatable) {
 		if (_floatable != floatable) {
 			_floatable = floatable;
-			invalidate();
+			smartUpdate("floatable", _floatable);
 		}
 	}
 	/**
@@ -179,7 +188,7 @@ public class Panel extends XulElement implements org.zkoss.zul.api.Panel {
 				_minimized = false;
 				setVisible0(true); //avoid dead loop
 			}
-			smartUpdate("z.maximized", _maximized);
+			smartUpdate("maximized", _maximized);
 		}
 	}
 	/**
@@ -202,7 +211,7 @@ public class Panel extends XulElement implements org.zkoss.zul.api.Panel {
 	public void setMaximizable(boolean maximizable) {
 		if (_maximizable != maximizable) {
 			_maximizable = maximizable;
-			invalidate();
+			smartUpdate("maximizable", _maximizable);
 		}
 	}
 
@@ -228,7 +237,7 @@ public class Panel extends XulElement implements org.zkoss.zul.api.Panel {
 				_maximized = false;
 				setVisible0(false); //avoid dead loop
 			} else setVisible0(true);
-			smartUpdate("z.minimized", _minimized);
+			smartUpdate("minimized", _minimized);
 		}
 	}
 	/**
@@ -253,7 +262,7 @@ public class Panel extends XulElement implements org.zkoss.zul.api.Panel {
 	public void setMinimizable(boolean minimizable) {
 		if (_minimizable != minimizable) {
 			_minimizable = minimizable;
-			invalidate();
+			smartUpdate("minimizable", _minimizable);
 		}
 	}
 	/**
@@ -271,7 +280,7 @@ public class Panel extends XulElement implements org.zkoss.zul.api.Panel {
 	public void setCollapsible(boolean collapsible) {
 		if (_collapsible != collapsible) {
 			_collapsible = collapsible;
-			invalidate(); //re-init is required
+			smartUpdate("collapsible", _collapsible);
 		}
 	}
 	/** Returns whether to show a close button on the title bar.
@@ -293,7 +302,7 @@ public class Panel extends XulElement implements org.zkoss.zul.api.Panel {
 	public void setClosable(boolean closable) {
 		if (_closable != closable) {
 			_closable = closable;
-			invalidate(); //re-init is required
+			smartUpdate("closable", _closable);
 		}
 	}
 	/** Returns the caption of this panel.
@@ -327,7 +336,7 @@ public class Panel extends XulElement implements org.zkoss.zul.api.Panel {
 			border = "none";
 		if (!Objects.equals(_border, border)) {
 			_border = border;
-			invalidate();
+			smartUpdate("border", _border);
 		}
 	}
 
@@ -349,8 +358,7 @@ public class Panel extends XulElement implements org.zkoss.zul.api.Panel {
 			title = "";
 		if (!Objects.equals(_title, title)) {
 			_title = title;
-			if (_caption != null) _caption.invalidate();
-			else invalidate();
+			smartUpdate("title", _title);
 		}
 	}
 	
@@ -377,11 +385,7 @@ public class Panel extends XulElement implements org.zkoss.zul.api.Panel {
 		} else {
 			throw new UiException("Uknown toolbar: "+name);
 		}
-		if(super.insertBefore(toolbar, null)) {
-			invalidate();
-			return true;
-		}
-		return false;
+		return super.insertBefore(toolbar, null);
 	}
 	/**
 	 * Adds the toolbar of the panel by these names, "tbar", "bbar", and "fbar".
@@ -495,11 +499,7 @@ public class Panel extends XulElement implements org.zkoss.zul.api.Panel {
 		} else {
 			throw new UiException("Unsupported child for Panel: " + newChild);
 		}
-		if(super.insertBefore(newChild, refChild)) {
-			invalidate();
-			return true;
-		}
-		return false;
+		return super.insertBefore(newChild, refChild);
 	}
 	public void onChildRemoved(Component child) {
 		super.onChildRemoved(child);
@@ -508,7 +508,6 @@ public class Panel extends XulElement implements org.zkoss.zul.api.Panel {
 		else if (_bbar == child) _bbar = null;
 		else if (_panelchildren == child) _panelchildren = null;
 		else if (_fbar == child) _fbar = null;
-		invalidate();
 	}
 	
 	//Cloneable//
@@ -541,7 +540,28 @@ public class Panel extends XulElement implements org.zkoss.zul.api.Panel {
 		s.defaultReadObject();
 		afterUnmarshal();
 	}
-
+	
+	// super
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+		
+		if (_title.length() > 0) render(renderer, "title", _title);
+		
+		if (_closable) render(renderer, "closable", _closable);
+		if (_floatable) render(renderer, "floatable", _floatable);
+		if (_collapsible) render(renderer, "collapsible", _collapsible);
+		if (_framable) render(renderer, "framable", _framable);
+		if (_movable) render(renderer, "movable", _movable);
+		if (_maximizable) render(renderer, "maximizable", _maximizable);
+		if (_minimizable) render(renderer, "minimizable", _minimizable);
+		if (_maximized) render(renderer, "maximized", _maximized);
+		if (_minimized) render(renderer, "minimized", _minimized);
+		if (!_open) render(renderer, "open", _open);
+		
+		if (!"none".equals(_border)) renderer.render("border", _border);
+	}
+	
 	//-- ComponentCtrl --//
 	/** Processes an AU request.
 	 *

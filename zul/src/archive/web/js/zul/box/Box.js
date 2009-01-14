@@ -68,15 +68,15 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		this._fixChildDomVisible(child, child._visible);
 	},
 	_fixChildDomVisible: function (child, visible) {
-		var n = zDom.$(child.uuid + '$chdex');
+		var n = child.getSubnode('chdex');
 		if (n) n.style.display = visible ? '': 'none';
-		n = zDom.$(child.uuid + '$chdex2');
+		n = child.getSubnode('chdex2');
 		if (n) n.style.display = visible ? '': 'none';
 
 		if (this.lastChild == child) {
 			n = child.previousSibling;
 			if (n) {
-				n = zDom.$(n + '$chdex2')
+				n = n.getSubnode('chdex2');
 				if (n) n.style.display = visible ? '': 'none';
 			}
 		}
@@ -84,7 +84,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 
 	insertChildHTML_: function (child, before, desktop) {
 		if (before) {
-			zDom.insertHTMLBefore(zDom.$(before.uuid + "$chdex"), this.encloseChildHTML_(child));
+			zDom.insertHTMLBefore(before.getSubnode('chdex'), this.encloseChildHTML_(child));
 		} else {
 			var n = this.getNode();
 			if (this.isVertical())

@@ -35,10 +35,6 @@ zul.inp.Errorbox = zk.$extends('zul.wgt.Popup', {
 	bind_: function () {
 		this.$supers('bind_', arguments);
 
-		var uuid = this.uuid;
-		this.earrow = zDom.$(uuid + '$a');
-		this.eclose = zDom.$(uuid + '$c');
-
 		var $Errorbox = zul.inp.Errorbox;
 		this._drag = new zk.Draggable(this, null, {
 			starteffect: zk.$void,
@@ -55,28 +51,28 @@ zul.inp.Errorbox = zk.$extends('zul.wgt.Popup', {
 	unbind_: function () {
 		this._drag.destroy();
 		this.$supers('unbind_', arguments);
-		this._drag = this.earrow = this.eclose = null;
+		this._drag = null;
 	},
 	doMouseMove_: function (evt, devt) {
 		var el = zEvt.target(devt);
-		if (el == this.eclose) {
+		if (el == this.getSubnode('c')) {
 			var y = zEvt.y(devt),
-				size = zk.parseInt(zDom.getStyle(this.eclose, 'padding-right'))
-				offs = zDom.revisedOffset(this.eclose);
+				size = zk.parseInt(zDom.getStyle(this.getSubnode('c'), 'padding-right'))
+				offs = zDom.revisedOffset(this.getSubnode('c'));
 			if (y >= offs[1] && y < offs[1] + size)	zDom.addClass(el, 'z-errbox-close-over');
 			else zDom.rmClass(el, 'z-errbox-close-over');
 		} else this.$supers('doMouseMove_', arguments);
 	},
 	doMouseOut_: function (evt, devt) {
 		var el = zEvt.target(devt);
-		if (el == this.eclose)
+		if (el == this.getSubnode('c'))
 			zDom.rmClass(el, 'z-errbox-close-over');
 		else
 			this.$supers('doMouseOut_', arguments);
 	},
 	doClick_: function (evt, devt) {
 		var el = zEvt.target(devt);
-		if (el == this.eclose && zDom.hasClass(el, 'z-errbox-close-over'))
+		if (el == this.getSubnode('c') && zDom.hasClass(el, 'z-errbox-close-over'))
 			this.parent._destroyerrbox();
 		else {
 			this.$supers('doClick_', arguments);
@@ -138,7 +134,7 @@ zul.inp.Errorbox = zk.$extends('zul.wgt.Popup', {
 	_fixarrow: function () {
 		var parent = this.parent.getNode(),
 			node = this.getNode(),
-			arrow = this.earrow,
+			arrow = this.getSubnode('a'),
 			ptofs = zDom.revisedOffset(parent),
 			nodeofs = zDom.revisedOffset(node);
 		var dx = nodeofs[0] - ptofs[0], dy = nodeofs[1] - ptofs[1], dir;
@@ -158,7 +154,7 @@ zul.inp.Errorbox = zk.$extends('zul.wgt.Popup', {
 		errbox._fixarrow();
 	},
 	_ignoredrag: function (dg, pointer, evt) {
-		return zEvt.target(evt) == dg.control.eclose && zDom.hasClass(dg.control.eclose, 'z-errbox-close-over');
+		return zEvt.target(evt) == dg.control.getSubnode('c') && zDom.hasClass(dg.control.getSubnode('c'), 'z-errbox-close-over');
 	},
 	_change: function (dg) {
 		var errbox = dg.control,

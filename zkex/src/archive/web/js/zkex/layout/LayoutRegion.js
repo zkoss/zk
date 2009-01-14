@@ -102,7 +102,7 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	setCollapsible: function (collapsible) {
 		if (this._collapsible != collapsible) {
 			this._collapsible = collapsible;
-			var btn = this.isOpen() ? this.ebtn : this.ebtned;
+			var btn = this.getSubnode(this.isOpen() ? 'btn' : 'btned');
 			if (btn)
 				btn.style.display = collapsible ? '' : 'none';
 		}
@@ -113,9 +113,10 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	setAutoscroll: function (autoscroll) {
 		if (this._autoscroll != autoscroll) {
 			this._autoscroll = autoscroll;
-			if (this.ecave) {
+			var cave = this.getSubnode('cave');
+			if (cave) {
 				var bodyEl = this.isFlex() && this.firstChild ?
-						this.firstChild.getNode() : this.ecave;
+						this.firstChild.getNode() : cave;
 				if (autoscroll) {
 					bodyEl.style.overflow = "auto";
 					bodyEl.style.position = "relative";
@@ -131,9 +132,43 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	isOpen: function () {
 		return this._open;
 	},
-	setOpen: function (open) {
+	setOpen: function (open, fromServer, nonAnima) {
 		if (this._open != open) {
-			this.open_(open, true);
+			this._open = open;
+			if (!this.getNode() || !this.isCollapsible())
+				return; //nothing changed
+
+			var colled = this.getSubnode('colled'),
+				real = this.getSubnode('real');
+			if (open) {
+				if (colled) {
+					if (!nonAnima) 
+						zAnima.slideOut(this, colled, {
+							anchor: this.sanchor,
+							duration: 200,
+							afterAnima: this.$class.afterSlideOut
+						});
+					else {
+						zDom[open ? 'show' : 'hide'](real);
+						zDom[!open ? 'show' : 'hide'](colled);
+						zWatch.fireDown(open ? 'onVisible' : 'onHide', -1, this);
+					}
+				}
+			} else {
+				if (colled && !nonAnima) 
+					zAnima.slideOut(this, real, {
+							anchor: this.sanchor,
+							beforeAnima: this.$class.beforeSlideOut,
+							afterAnima: this.$class.afterSlideOut
+						});
+				else {
+					if (colled)
+						zDom[!open ? 'show' : 'hide'](colled);
+					zDom[open ? 'show' : 'hide'](real);
+				}
+			}
+			if (nonAnima) this.parent.resize();
+			if (!fromServer) this.fire('onOpen', open);	
 		}
 	},
 	domClass_: function (no) {
@@ -150,31 +185,42 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	//-- super --//
 	setWidth: function (width) {
 		this._width = width;
-		if (this.ereal) this.ereal.style.width = width ? width: '';
+		var real = this.getSubnode('real');
+		if (real) real.style.width = width ? width: '';
 	},
 	setHeight: function (height) {
 		this._height = height;
-		if (this.ereal) this.ereal.style.height = height ? height: '';
+		var real = this.getSubnode('real');
+		if (real) real.style.height = height ? height: '';
 	},
 	setVisible: function (visible) {
 		if (this._visible != visible) {
 			this.$supers('setVisible', arguments);
-			if (this.ereal) {
-				this.ereal.style.display = this.ereal.parentNode.style.display;
+			var real = this.getSubnode('real');
+			if (real) {
+				real.style.display = real.parentNode.style.display;
 				this.parent.resize();
 			}
 		}
 	},	
 	updateDomClass_: function () {
-		if (this.desktop && this.ereal) {
-			this.ereal.className = this.domClass_();
-			if (this.parent) this.parent.resize();
+		if (this.desktop) {
+			var real = this.getSubnode('real');
+			if (real) {
+				real.className = this.domClass_();
+				if (this.parent) 
+					this.parent.resize();
+			}
 		}
 	},
 	updateDomStyle_: function () {
-		if (this.desktop && this.ereal) {
-			zDom.setStyle(this.ereal, zDom.parseStyle(this.domStyle_()));
-			if (this.parent) this.parent.resize();
+		if (this.desktop) {
+			var real = this.getSubnode('real');
+			if (real) {
+				zDom.setStyle(real, zDom.parseStyle(this.domStyle_()));
+				if (this.parent) 
+					this.parent.resize();
+			}
 		}
 	},
 	onChildAdded_: function (child) {
@@ -203,18 +249,13 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	bind_: function () {
 		this.$supers('bind_', arguments);
 		if (this.getPosition() != zkex.layout.Borderlayout.CENTER) {
-			this.esplit = zDom.$(this.uuid, 'split');
-			this.ebtn = zDom.$(this.uuid, 'btn');
-			if (this.ebtn) {
-				this.ebtned = zDom.$(this.uuid, "btned");
-				this.ecolled = zDom.$(this.uuid, "collapsed");
-			}
-			if (this.esplit) {
+			var split = this.getSubnode('split');			
+			if (split) {
 				this._fixSplit();
 				var vert = this._isVertical(),
 					$LayoutRegion = this.$class;
 				
-				this._drag = new zk.Draggable(this, this.esplit, {
+				this._drag = new zk.Draggable(this, split, {
 					constraint: vert ? 'vertical': 'horizontal',
 					ghosting: $LayoutRegion._ghosting,
 					snap: $LayoutRegion._snap,
@@ -223,96 +264,96 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 					ignoredrag: $LayoutRegion._ignoredrag,
 					endeffect: $LayoutRegion._endeffect					
 				});	
-				if (!this.isOpen())
-					this.open_(false, true, true);
+				if (!this.isOpen()) {
+					this._open = true;
+					this.setOpen(false, true, true);
+				}
 			}
 		}
-		var n = this.getNode();
-		this.ereal = n.firstChild;
-		this.ecaption = zDom.$(this.uuid, 'caption');
-		this.ecave = zDom.$(this.uuid, 'cave');
-		
-		if (!zDom.isVisible(this.ereal)) n.style.display = "none";
+		var n = this.getNode(),
+			real = n.firstChild;
+					
+		if (this.isOpen() && !zDom.isVisible(real)) n.style.display = "none";
 		
 		if (this.isAutoscroll()) {
 			var bodyEl = this.isFlex() && this.firstChild ?
-					this.firstChild.getNode() : this.ecave;
+					this.firstChild.getNode() : this.getSubnode('cave');
 			zEvt.listen(bodyEl, "scroll", this.proxy(this.doScroll_, '_pxDoscroll'));
 		}
 	},
 	unbind_: function () {
 		if (this.isAutoscroll()) {
 			var bodyEl = this.isFlex() && this.firstChild ?
-					this.firstChild.getNode() : this.ecave;
+					this.firstChild.getNode() : this.getSubnode('cave');
 			zEvt.unlisten(bodyEl, "scroll", this._pxDoscroll);
 		}
-		if (this.esplit) {			
+		if (this.getSubnode('split')) {			
 			if (this._drag) {
 				this._drag.destroy();
 				this._drag = null;
 			}
 		}
-		this.ecaption = this.esplit = this.ereal = this.ebtn = this.ebtned = this.ecolled = null;
 		this.$supers('unbind_', arguments);
 	},
 	doScroll_: function () {
 		zWatch.fireDown('onScroll', this);
 	},
 	doMouseOver_: function (wevt, devt) {
-		if (this.ebtn) {
+		if (this.getSubnode('btn')) {
 			var target = zEvt.target(devt);
 			switch (target) {
-				case this.ebtn:
-					zDom.addClass(this.ebtn, this.getZclass() + '-collapse-over');
+				case this.getSubnode('btn'):
+					zDom.addClass(this.getSubnode('btn'), this.getZclass() + '-collapse-over');
 					break;
-				case this.ebtned:
-					zDom.addClass(this.ebtned, this.getZclass() + '-expand-over');
+				case this.getSubnode('btned'):
+					zDom.addClass(this.getSubnode('btned'), this.getZclass() + '-expand-over');
 					// don't break
-				case this.ecolled:
-					zDom.addClass(this.ecolled, this.getZclass() + '-collapsed-over');
+				case this.getSubnode('colled'):
+					zDom.addClass(this.getSubnode('colled'), this.getZclass() + '-collapsed-over');
 					break;
 			}
 		}
 		this.$supers('doMouseOver_', arguments);
 	},
 	doMouseOut_: function (wevt, devt) {
-		if (this.ebtn) {
+		if (this.getSubnode('btn')) {
 			var target = zEvt.target(devt);
 			switch (target) {
-				case this.ebtn:
-					zDom.rmClass(this.ebtn, this.getZclass() + '-collapse-over');
+				case this.getSubnode('btn'):
+					zDom.rmClass(this.getSubnode('btn'), this.getZclass() + '-collapse-over');
 					break;
-				case this.ebtned:
-					zDom.rmClass(this.ebtned, this.getZclass() + '-expand-over');
+				case this.getSubnode('btned'):
+					zDom.rmClass(this.getSubnode('btned'), this.getZclass() + '-expand-over');
 					// don't break
-				case this.ecolled:
-					zDom.rmClass(this.ecolled, this.getZclass() + '-collapsed-over');
+				case this.getSubnode('colled'):
+					zDom.rmClass(this.getSubnode('colled'), this.getZclass() + '-collapsed-over');
 					break;
 			}
 		}
 		this.$supers('doMouseOut_', arguments);		
 	},
 	doClick_: function (wevt, devt) {
-		if (this.ebtn) {
+		if (this.getSubnode('btn')) {
 			var target = zEvt.target(devt);
 			switch (target) {
-				case this.ebtn:
-				case this.ebtned:
+				case this.getSubnode('btn'):
+				case this.getSubnode('btned'):
 					if (this._isSlide || zAnima.count) return;
-					if (this.ebtned == target) {
-						var s = this.ereal.style;
+					if (this.getSubnode('btned') == target) {
+						var s = this.getSubnode('real').style;
 						s.visibilty = "hidden";
 						s.display = "";
 						this._syncSize(true);
 						s.visibilty = "";
 						s.display = "none";
 					}
-					this.open_(!this.isOpen());
+					this.setOpen(!this.isOpen());
 					break;
-				case this.ecolled:					
+				case this.getSubnode('colled'):					
 					if (this._isSlide) return;
 					this._isSlide = true;
-					var s = this.ereal.style;
+					var real = this.getSubnode('real'),
+						s = real.style;
 					s.visibilty = "hidden";
 					s.display = "";
 					this._syncSize();
@@ -320,10 +361,10 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 					this._alignTo();
 					s.zIndex = 100;
 			
-					this.ebtn.style.display = "none"; 
+					this.getSubnode('btn').style.display = "none"; 
 					s.visibilty = "";
 					s.display = "none";
-					zAnima.slideDown(this, this.ereal, {
+					zAnima.slideDown(this, real, {
 						anchor: this.sanchor,
 						afterAnima: this.$class.afterSlideDown
 					});
@@ -334,14 +375,14 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	},
 	_doDocClick: function (evt) {
 		var target = zEvt.target(evt);
-		if (this._isSlide && !zDom.isAncestor(this.ereal, target)) {
-			if (this.ebtned == target) {
+		if (this._isSlide && !zDom.isAncestor(this.getSubnode('real'), target)) {
+			if (this.getSubnode('btned') == target) {
 				this.$class.afterSlideUp.apply(this, [target]);
-				this.open_(true, false, true);
+				this.setOpen(true, false, true);
 			} else 
 				if ((!this._isSlideUp && this.$class.uuid(target) != this.uuid) || !zAnima.count) {
 					this._isSlideUp = true;
-					zAnima.slideUp(this, this.ereal, {
+					zAnima.slideUp(this, this.getSubnode('real'), {
 						anchor: this.sanchor,
 						afterAnima: this.$class.afterSlideUp
 					});
@@ -362,7 +403,7 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			w = layout.west,
 			c = layout.center;
 		this._open = true;
-		if (n && (zDom.isVisible(n.getNode()) || zDom.isVisible(n.ecolled))) {
+		if (n && (zDom.isVisible(n.getNode()) || zDom.isVisible(n.getSubnode('colled')))) {
 			var ignoreSplit = n == this,
 				ambit = layout._getAmbit(n, ignoreSplit),
 				mars = layout._getMargins(n);
@@ -372,7 +413,7 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			cY = ambit.h + ambit.y + mars.bottom;
 			cH -= cY;
 			if (ignoreSplit) {
-				ambit.w = this.ecolled.offsetWidth;
+				ambit.w = this.getSubnode('colled').offsetWidth;
 				if (inclusive) {
 					var cmars = layout._arrayToObject(this._cmargins);
 					ambit.w += cmars.left + cmars.right;
@@ -382,7 +423,7 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				return;
 			}
 		}
-		if (s && (zDom.isVisible(s.getNode()) || zDom.isVisible(s.ecolled))) {
+		if (s && (zDom.isVisible(s.getNode()) || zDom.isVisible(s.getSubnode('colled')))) {
 			var ignoreSplit = s == this,
 				ambit = layout._getAmbit(s, ignoreSplit),
 				mars = layout._getMargins(s),
@@ -392,7 +433,7 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			ambit.y = height - total + mars.top;
 			cH -= total;
 			if (ignoreSplit) {
-				ambit.w = this.ecolled.offsetWidth;
+				ambit.w = this.getSubnode('colled').offsetWidth;
 				if (inclusive) {
 					var cmars = layout._arrayToObject(this._cmargins);
 					ambit.w += cmars.left + cmars.right;
@@ -402,7 +443,7 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				return;
 			}
 		}
-		if (w && (zDom.isVisible(w.getNode()) || zDom.isVisible(w.ecolled))) {
+		if (w && (zDom.isVisible(w.getNode()) || zDom.isVisible(w.getSubnode('colled')))) {
 			var ignoreSplit = w == this,
 				ambit = layout._getAmbit(w, ignoreSplit),
 				mars = layout._getMargins(w);
@@ -410,7 +451,7 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			ambit.x = mars.left;
 			ambit.y = cY + mars.top;
 			if (ignoreSplit) {
-				ambit.h = this.ecolled.offsetHeight
+				ambit.h = this.getSubnode('colled').offsetHeight
 				if (inclusive) {
 					var cmars = layout._arrayToObject(this._cmargins);
 					ambit.h += cmars.top + cmars.bottom;
@@ -420,7 +461,7 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				return;
 			}
 		}
-		if (e && (zDom.isVisible(e.getNode()) || zDom.isVisible(e.ecolled))) {
+		if (e && (zDom.isVisible(e.getNode()) || zDom.isVisible(e.getSubnode('colled')))) {
 			var ignoreSplit = e == this,
 				ambit = layout._getAmbit(e, ignoreSplit),
 				mars = layout._getMargins(e),
@@ -429,7 +470,7 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			ambit.x = width - total + mars.left;
 			ambit.y = cY + mars.top;
 			if (ignoreSplit) {
-				ambit.h = this.ecolled.offsetHeight
+				ambit.h = this.getSubnode('colled').offsetHeight
 				if (inclusive) {
 					var cmars = layout._arrayToObject(this._cmargins);
 					ambit.h += cmars.top + cmars.bottom;
@@ -441,11 +482,11 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		}
 	},
 	_fixSplit: function () {
-		zDom[this.isSplittable() ? 'show' : 'hide'](this.esplit);	
+		zDom[this.isSplittable() ? 'show' : 'hide'](this.getSubnode('split'));	
 	},
 	_alignTo: function () {
-		var from = this.ecolled,
-			to = this.ereal;
+		var from = this.getSubnode('colled'),
+			to = this.getSubnode('real');
 		switch (this.getPosition()) {
 			case zkex.layout.Borderlayout.NORTH:
 				to.style.top = from.offsetTop + from.offsetHeight + "px";
@@ -469,41 +510,6 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		return this.getPosition() != zkex.layout.Borderlayout.WEST &&
 				this.getPosition() != zkex.layout.Borderlayout.EAST;
 	},
-	open_: function (open, silent, nonAnima) {
-		if (!this.isCollapsible() || this.isOpen() == open)
-			return; //nothing changed
-			
-		this._open = open;
-		if (open) {
-			if (this.ecolled) {
-				if (!nonAnima) 
-					zAnima.slideOut(this, this.ecolled, {
-						anchor: this.sanchor,
-						duration: 200,
-						afterAnima: this.$class.afterSlideOut
-					});
-				else {
-					zDom[open ? 'show' : 'hide'](this.ereal);
-					zDom[!open ? 'show' : 'hide'](this.ecolled);
-					zWatch.fireDown(open ? 'onVisible' : 'onHide', -1, this);
-				}
-			}
-		} else {
-			if (this.ecolled && !nonAnima) 
-				zAnima.slideOut(this, this.ereal, {
-						anchor: this.sanchor,
-						beforeAnima: this.$class.beforeSlideOut,
-						afterAnima: this.$class.afterSlideOut
-					});
-			else {
-				if (this.ecolled)
-					zDom[!open ? 'show' : 'hide'](this.ecolled);
-				zDom[open ? 'show' : 'hide'](this.ereal);
-			}
-		}
-		if (nonAnima) this.parent.resize();
-		if (!silent) this.fire('onOpen', open);	
-	},
 	isImportantEvent_: function (evtnm) {
 		return this.$class._impEvts[evtnm];
 	}
@@ -511,7 +517,7 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	_impEvts: {onSize:1, onOpen:1},
 	// invokes border layout's renderer before the component slides out
 	beforeSlideOut: function (n) {
-		var s = this.ecolled.style;
+		var s = this.getSubnode('colled').style;
 		s.display = "";
 		s.visibility = "hidden";
 		s.zIndex = 1;
@@ -520,15 +526,16 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	// a callback function after the component slides out.
 	afterSlideOut: function (n) {
 		if (this.isOpen()) 
-			zAnima.slideIn(this, this.ereal, {
+			zAnima.slideIn(this, this.getSubnode('real'), {
 				anchor: this.sanchor,
 				afterAnima: this.$class.afterSlideIn
 			});
 		else {
-			var s = this.ecolled.style;
+			var colled = this.getSubnode('colled'),
+				s = colled.style;
 			s.zIndex = ""; // reset z-index refered to the beforeSlideOut()
 			s.visibility = "";
-			zAnima.slideIn(this, this.ecolled, {
+			zAnima.slideIn(this, colled, {
 				anchor: this.sanchor,				
 				duration: 200
 			});
@@ -549,7 +556,7 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		s.top = this._original[1];
 		n._lastSize = null;// reset size for Borderlayout
 		s.zIndex = "";
-		this.ebtn.style.display = "";
+		this.getSubnode('btn').style.display = "";
 		zEvt.unlisten(document, "click", this._pxdoDocClick);
 		this._isSlideUp = this._isSlide = false;
 	},
@@ -557,17 +564,18 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	_ignoredrag: function (dg, pointer, evt) {
 			var target = zEvt.target(evt),
 				wgt = dg.control;
-			if (!target || target != wgt.esplit) return true;
+			if (!target || target != wgt.getSubnode('split')) return true;
 			if (wgt.isSplittable() && wgt.isOpen()) {			
 				var $Layout = zkex.layout.Borderlayout,
 					pos = wgt.getPosition(),
 					maxs = wgt.getMaxsize(),
 					mins = wgt.getMinsize(),
 					ol = wgt.parent,
+					real = wgt.getSubnode('real'),
 					mars = ol._arrayToObject(wgt._margins),
-					lr = zDom.frameWidth(wgt.ereal)
+					lr = zDom.frameWidth(real)
 						+ (pos == $Layout.WEST ? mars.left : mars.right),
-					tb = zDom.frameWidth(wgt.ereal)
+					tb = zDom.frameWidth(real)
 						+ (pos == $Layout.NORTH ? mars.top : mars.bottom),
 					min = 0,
 					uuid = wgt.uuid;
@@ -579,14 +587,14 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 							if ($Layout.CENTER == r.getPosition()) {
 								var east = ol.east,
 									west = ol.west;
-								maxs = Math.min(maxs, (wgt.ereal.offsetHeight + r.ereal.offsetHeight)- min);
+								maxs = Math.min(maxs, (real.offsetHeight + r.getSubnode('real').offsetHeight)- min);
 							} else {
 								maxs = Math.min(maxs, ol.getNode().offsetHeight
-										- r.ereal.offsetHeight - r.esplit.offsetHeight
-										- wgt.esplit.offsetHeight - min); 
+										- r.getSubnode('real').offsetHeight - r.getSubnode('split').offsetHeight
+										- wgt.getSubnode('split').offsetHeight - min); 
 							}
 						} else {
-							maxs = ol.getNode().offsetHeight - wgt.esplit.offsetHeight;
+							maxs = ol.getNode().offsetHeight - wgt.getSubnode('split').offsetHeight;
 						}
 						break;				
 					case $Layout.WEST:
@@ -594,25 +602,25 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 						var r = ol.center || (pos == $Layout.WEST ? ol.east : ol.west);
 						if (r) {
 							if ($Layout.CENTER == r.getPosition()) {
-								maxs = Math.min(maxs, (wgt.ereal.offsetWidth
-										+ zDom.revisedWidth(r.ereal, r.ereal.offsetWidth))- min);
+								maxs = Math.min(maxs, (real.offsetWidth
+										+ zDom.revisedWidth(r.getSubnode('real'), r.getSubnode('real').offsetWidth))- min);
 							} else {
 								maxs = Math.min(maxs, ol.getNode().offsetWidth
-										- r.ereal.offsetWidth - r.esplit.offsetWidth - wgt.esplit.offsetWidth - min); 
+										- r.getSubnode('real').offsetWidth - r.getSubnode('split').offsetWidth - wgt.getSubnode('split').offsetWidth - min); 
 							}
 						} else {
-							maxs = ol.getNode().offsetWidth - wgt.esplit.offsetWidth;
+							maxs = ol.getNode().offsetWidth - wgt.getSubnode('split').offsetWidth;
 						}
 						break;						
 				}
-				var ofs = zDom.cmOffset(wgt.ereal);
+				var ofs = zDom.cmOffset(real);
 				dg._rootoffs = {
 					maxs: maxs,
 					mins: mins,
 					top: ofs[1],
 					left : ofs[0],
-					right : wgt.ereal.offsetWidth,
-					bottom: wgt.ereal.offsetHeight
+					right : real.offsetWidth,
+					bottom: real.offsetHeight
 				};
 				return false;
 			}
@@ -630,8 +638,8 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		
 		wgt.parent.resize();
 		wgt.fire('onSize', {
-			width: wgt.ereal.style.width,
-			height: wgt.ereal.style.height,
+			width: wgt.getSubnode('real').style.width,
+			height: wgt.getSubnode('real').style.height,
 			keys: zEvt.keyMetaData(evt),
 			marshal: wgt.$class._onSizeMarshal
 		});
@@ -644,7 +652,8 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			x = pointer[0],
 			y = pointer[1],
 			$Layout = zkex.layout.Borderlayout,
-			b = dg._rootoffs, w, h;	
+			split = wgt.getSubnode('split'),
+			b = dg._rootoffs, w, h;
 		switch (wgt.getPosition()) {
 			case $Layout.NORTH:
 				if (y > b.maxs + b.top) y = b.maxs + b.top;
@@ -653,13 +662,13 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				h = y - b.top;
 				break;				
 			case $Layout.SOUTH:
-				if (b.top + b.bottom - y - wgt.esplit.offsetHeight > b.maxs) {
-					y = b.top + b.bottom - b.maxs - wgt.esplit.offsetHeight;
+				if (b.top + b.bottom - y - split.offsetHeight > b.maxs) {
+					y = b.top + b.bottom - b.maxs - split.offsetHeight;
 					h = b.maxs;
-				} else if (b.top + b.bottom - b.mins - wgt.esplit.offsetHeight <= y) {
-					y = b.top + b.bottom - b.mins - wgt.esplit.offsetHeight;
+				} else if (b.top + b.bottom - b.mins - split.offsetHeight <= y) {
+					y = b.top + b.bottom - b.mins - split.offsetHeight;
 					h = b.mins;
-				} else h = b.top - y + b.bottom - wgt.esplit.offsetHeight;
+				} else h = b.top - y + b.bottom - split.offsetHeight;
 				w = x;
 				break;
 			case $Layout.WEST:
@@ -669,13 +678,13 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				h = y;
 				break;		
 			case $Layout.EAST:			
-				if (b.left + b.right - x - wgt.esplit.offsetWidth > b.maxs) {
-					x = b.left + b.right - b.maxs - wgt.esplit.offsetWidth;
+				if (b.left + b.right - x - split.offsetWidth > b.maxs) {
+					x = b.left + b.right - b.maxs - split.offsetWidth;
 					w = b.maxs;
-				} else if (b.left + b.right - b.mins - wgt.esplit.offsetWidth <= x) {
-					x = b.left + b.right - b.mins - wgt.esplit.offsetWidth;
+				} else if (b.left + b.right - b.mins - split.offsetWidth <= x) {
+					x = b.left + b.right - b.mins - split.offsetWidth;
 					w = b.mins;
-				} else w = b.left - x + b.right - wgt.esplit.offsetWidth;
+				} else w = b.left - x + b.right - split.offsetWidth;
 				h = y;
 				break;						
 		}

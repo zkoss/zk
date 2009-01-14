@@ -286,7 +286,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
-		var inp = this.einp = zDom.$(this.uuid + '$inp') || this.getNode(),
+		var inp = this.einp = this.getSubnode('inp') || this.getNode(),
 			$InputWidget = zul.inp.InputWidget;
 		zEvt.listen(inp, "focus", this.proxy(this.doFocus_, '_pxFocus'));
 		zEvt.listen(inp, "blur", this.proxy(this.doBlur_, '_pxBlur'));

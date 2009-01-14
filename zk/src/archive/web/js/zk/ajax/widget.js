@@ -21,7 +21,8 @@ zk.Widget = zk.$extends(zk.Object, {
 	$init: function (props) {
 		this._lsns = {}; //listeners Map(evtnm,listener)
 		this._$lsns = {}; //listners registered by server Map(evtnm, fn)
-
+		this._subnodes = {}; // store the sub nodes for the widget Map(domId, domNode)
+		
 		if (props) {
 			var mold = props.mold;
 			if (mold != null) {
@@ -640,7 +641,11 @@ zk.Widget = zk.$extends(zk.Object, {
 			else w._prepareRemove(ary);
 		}
 	},
-
+	getSubnode: function (name) {
+		var n = this._subnodes[name];
+		if (!n && this.desktop)	n = this._subnodes[name] = zDom.$(this.uuid, name);
+		return n;
+	},
 	getNode: function () {
 		var n = this._node;
 		if (!n && this.desktop && !this._nodeSolved) {
@@ -675,7 +680,9 @@ zk.Widget = zk.$extends(zk.Object, {
 			n.z_wgt = null;
 			this._node = null;
 		}
-
+		for (var el in this._subnodes)
+			this._subnodes[el] = null;
+		
 		this.desktop = null;
 		this._nodeSolved = false;
 		this.bindLevel = -1;

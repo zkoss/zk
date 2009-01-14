@@ -24,6 +24,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this._fellows = [];
 		this.listen('onClose', this, null, -1000);
 		this.listen('onMove', this, null, -1000);
+		this.listen('onZIndex', this, null, -1000);
 		this._zIndex = 0;
 		this._skipper = new zul.wnd.Skipper(this);
 	},
@@ -146,7 +147,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		if (shadow) shadow.hide();
 	},
 	_makeFloat: function () {
-		var handle = this.ecap;
+		var handle = this.getSubnode('cap');
 		if (handle && !this._drag) {
 			handle.style.cursor = "move";
 			var $Window = this.$class;
@@ -198,6 +199,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		return this._border;
 	},
 	setBorder: function (border) {
+		if (!border || '0' == border)
+			border = "none";
 		if (this._border != border) {
 			this._border = border;
 			this._updateDomOuter();
@@ -324,6 +327,25 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this._left = evt.data[0];
 		this._top = evt.data[1];
 	},
+	onZIndex: function (evt) {
+		this._syncShadow();
+		this._syncMask();
+	},
+	//watch//
+	onSize: _zkf = function () {
+		this._hideShadow();
+		if (this.isMaximized()) {
+			/** TODO 
+			 * if (this.__maximized)
+				this._syncMaximized();
+			this.__maximized = false; // avoid deadloop
+			*/
+		}
+		this._fixHgh();
+		this._fixWdh();
+		this._syncShadow();
+	},
+	onVisible: _zkf,
 	onFloatUp: function (wgt) {
 		if (!this.isVisible() || this._mode == 'embedded')
 			return; //just in case
@@ -347,6 +369,58 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				if (wgt.isFloating_())
 					return;
 			}
+	},
+	_fixWdh: zk.ie7 ? function () {
+		if (this._mode == 'embedded' || this._mode == 'popup') return;
+		var n = this.getNode(),
+			cm = this.getSubnode('cave').parentNode,
+			wdh = n.style.width,
+			tl = zDom.firstChild(n, "DIV"),
+			bl = zDom.lastChild(zDom.lastChild(n, "DIV"), "DIV");
+			
+		if (!wdh || wdh == "auto") {
+			var diff = zDom.frameWidth(cm.parentNode) + zDom.frameWidth(cm.parentNode.parentNode);
+			if (tl) {
+				tl.firstChild.firstChild.style.width = 
+					Math.max(0, cm.offsetWidth - (zDom.frameWidth(tl) + zDom.frameWidth(tl.firstChild) - diff)) + "px";
+			}
+			if (bl) {
+				bl.firstChild.firstChild.style.width =
+					Math.max(0, cm.offsetWidth - (zDom.frameWidth(bl) + zDom.frameWidth(bl.firstChild) - diff)) + "px";
+			}
+		} else {
+			if (tl) tl.firstChild.firstChild.style.width = "";
+			if (bl) bl.firstChild.firstChild.style.width = "";
+		}
+	} : zk.$void,
+	_fixHgh: function () {
+		if (!this.isRealVisible()) return;
+		var n = this.getNode(),
+			cave = this.getSubnode('cave'),
+			hgh = n.style.height;
+		if (zk.ie6Only && ((hgh && hgh != "auto" )|| cave.style.height)) cave.style.height = "0px";
+		if (hgh && hgh != "auto")
+			cave.style.height = zDom.revisedHeight(cave, n.offsetHeight - this._frameHeight(n) - 1, true) + 'px';
+	},
+	_frameHeight: function (n) {
+		var h = zDom.frameHeight(n) + this._titleHeight(n);
+	    if (this._mode != 'embedded' && this._mode != 'popup') {
+			var ft = zDom.lastChild(this.getSubnode('body'), "DIV"),
+				title = this.getSubnode('cap'),
+				cave = this.getSubnode('cave');
+	        h += ft.offsetHeight;
+			if (cave)
+				h += zDom.frameHeight(cave.parentNode);
+			if (title)
+		        h += zDom.frameHeight(title.parentNode);
+	    }
+	    return h;
+	},
+	_titleHeight: function (n) {
+		var cap = this.getSubnode('cap');
+		return cap ? cap.offsetHeight : 
+				this._mode != 'embedded' && this._mode != 'popup' ?
+					zDom.firstChild(n, "DIV").firstChild.firstChild.offsetHeight : 0;
 	},
 
 	_fireOnMove: function (keys) {
@@ -418,22 +492,11 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	bind_: function () {
 		this.$supers('bind_', arguments);
 
-		var uuid = this. uuid,
-			$Window = this.$class;
-		this.ecap = zDom.$(uuid + '$cap');
-
-		for (var nms = ['close', 'max', 'min'], j = 3; --j >=0;) {
-			var nm = nms[j],
-				n = this['e' + nm ] = zDom.$(uuid + '$' + nm);
-			if (n) {
-				zEvt.listen(n, 'click', $Window[nm + 'click']);
-				zEvt.listen(n, 'mouseover', $Window[nm + 'over']);
-				zEvt.listen(n, 'mouseout', $Window[nm + 'out']);
-				if (!n.style.cursor) n.style.cursor = "default";
-			}
-		}
+		var $Window = this.$class;
 
 		var mode = this._mode;
+		zWatch.listen('onSize', this);
+		zWatch.listen('onVisible', this);
 		if (mode != 'embedded') {
 			zWatch.listen('onFloatUp', this);
 			this.setFloating_(true);
@@ -460,10 +523,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			this._mask = null;
 		}
 		
-		this.ecap = null;
-		
 		zDom.undoVParent(node);
 		zWatch.unlisten('onFloatUp', this);
+		zWatch.unlisten('onSize', this);
+		zWatch.unlisten('onVisible', this);
 		this.setFloating_(false);
 
 		if (zk.currentModal == this) {
@@ -486,61 +549,65 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		}
 		this.$supers('unbind_', arguments);
 	},
+	doClick_: function (evt, devt) {
+		var target = zEvt.target(devt);
+		switch (target) {
+			case this.getSubnode('close'):
+				this.fire('onClose');
+				break;
+			case this.getSubnode('max'):
+				// TODO
+				break;
+			case this.getSubnode('min'):
+				// TODO 
+				// if (this.isMinimizable())
+				//	this.setMinimized(!this.isMinimized());
+				break;
+		}
+		evt.stop();
+		zEvt.stop(devt);
+		this.$supers('doClick_', arguments);
+	},
+	doMouseOver_: function (evt, devt) {
+		switch (zEvt.target(devt)) {
+			case this.getSubnode('close'):
+				zDom.addClass(this.getSubnode('close'), this.getZclass() + '-close-over');
+				break;
+			case this.getSubnode('max'):
+				var zcls = this.getZclass(),
+					added = this.isMaximized() ? ' ' + zcls + '-maximized-over' : '';
+				zDom.addClass(this.getSubnode('max'), zcls + '-maximize-over' + added);
+				break;
+			case this.getSubnode('min'):
+				zDom.addClass(this.getSubnode('min'), this.getZclass() + '-minimize-over');
+				break;	
+		}
+		this.$supers('doMouseOver_', arguments);
+	},
+	doMouseOut_: function (evt, devt) {
+		switch (zEvt.target(devt)) {
+			case this.getSubnode('close'):
+				zDom.rmClass(this.getSubnode('close'), this.getZclass() + '-close-over');
+				break;
+			case this.getSubnode('max'):
+				var zcls = this.getZclass(),
+					max = this.getSubnode('max');
+				if (this.isMaximized())
+					zDom.rmClass(max, zcls + '-maximized-over');
+				zDom.rmClass(max, zcls + '-maximize-over');
+				break;
+			case this.getSubnode('min'):
+				zDom.rmClass(this.getSubnode('min'), this.getZclass() + '-minimize-over');
+				break;
+		}
+		this.$supers('doMouseOut_', arguments);
+	},
 	isImportantEvent_: function (evtnm) {
 		return this.$class._impEvts[evtnm];
 	}
 },{ //static
-	_impEvts: {onMove:1, onZIndex:1, onOpen:1},
-	closeclick: function (evt) {
-		var wnd = zk.Widget.$(evt);
-		wnd.fire('onClose');
-		zEvt.stop(evt);
-	},
-	closeover: function (evt) {
-		var wnd = zk.Widget.$(evt),
-			zcls = wnd.getZclass();
-		zDom.addClass(wnd.eclose, zcls + '-close-over');
-	},
-	closeout: function (evt) {
-		var wnd = zk.Widget.$(evt),
-			zcls = wnd.getZclass();
-		zDom.rmClass(wnd.eclose, zcls + '-close-over');
-	},
-	maxclick: function (evt) {
-		var wnd = zk.Widget.$(evt);
-		//TODO: handle popup since evt stopped
-		zEvt.stop(evt);
-	},
-	maxover: function (evt) {
-		var wnd = zk.Widget.$(evt),
-			zcls = wnd.getZclass();
-		if (wnd.isMaximized())
-			zDom.addClass(wnd.emax, zcls + '-maximized-over');
-		zDom.addClass(wnd.emax, zcls + '-maximize-over');
-	},
-	maxout: function (evt) {
-		var wnd = zk.Widget.$(evt),
-			zcls = wnd.getZclass();
-		if (wnd.isMaximized())
-			zDom.rmClass(wnd.emax, zcls + '-maximized-over');
-		zDom.rmClass(wnd.emax, zcls + '-maximize-over');
-	},
-	minclick: function (evt) {
-		var wnd = zk.Widget.$(evt);
-		//TODO: handle popup since evt stopped
-		zEvt.stop(evt);
-	},
-	minover: function (evt) {
-		var wnd = zk.Widget.$(evt),
-			zcls = wnd.getZclass();
-		zDom.addClass(wnd.emin, zcls + '-minimize-over');
-	},
-	minout: function (evt) {
-		var wnd = zk.Widget.$(evt),
-			zcls = wnd.getZclass();
-		zDom.rmClass(wnd.emin, zcls + '-minimize-over');
-	},
-
+	_impEvts: {onMove:1, onZIndex:1, onOpen:1, onMaximize:1, onMinimize:1},
+	
 	_onMoveMarshal: function () {
 		return [this.x, this.y, this.keys ? this.keys.marshal(): ''];
 	},
@@ -583,12 +650,15 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		document.body.style.cursor = "";
 	},
 	_ignoremove: function (dg, pointer, evt) {
-		var target = zEvt.target(evt),
-			el = dg.node;
-		if (!target || target.id.indexOf("$close") > -1 || target.id.indexOf("$min") > -1
-		|| target.id.indexOf("$max") > -1)
-			return true; //ignore special buttons
-		if (!dg.control.isSizable()
+		var el = dg.node,
+			wgt = dg.control;
+		switch (zEvt.target(evt)) {
+			case wgt.getSubnode('close'):
+			case wgt.getSubnode('max'):
+			case wgt.getSubnode('min'):
+				return true; //ignore special buttons
+		}
+		if (!wgt.isSizable()
 		|| (el.offsetTop + 4 < pointer[1] && el.offsetLeft + 4 < pointer[0] 
 		&& el.offsetLeft + el.offsetWidth - 4 > pointer[0]))
 			return false; //accept if not sizable or not on border

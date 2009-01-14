@@ -56,7 +56,7 @@ function (out, skipper) {
 				'"><div class="', zcls, '-tm', noborder,
 				'-noheader"></div></div></div>');
 
-	out.push('<div id="', uuid, '$bwrap" class="', zcls, '-body">');
+	out.push('<div id="', uuid, '$body" class="', zcls, '-body">');
 
 	if (withFrame)
 		out.push('<div class="', zcls, '-cl', noborder,

@@ -30,7 +30,7 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 	setChecked: function (checked, fromServer) {
 		if (checked != this.isChecked()) {
 			this.$supers('setChecked', arguments);
-			if (this.ereal) {
+			if (this.getSubnode('real')) {
 				var group = this.getRadiogroup();
 				
 				// bug #1893575 : we have to clean all of the radio at the same group.
@@ -38,7 +38,7 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 				if (checked) {
 					for (var items = group.getItems(), i = items.length; --i >= 0;) {
 						if (items[i] != this) {
-							items[i].ereal.defaultChecked = false;
+							items[i].getSubnode('real').defaultChecked = false;
 							items[i]._checked = false;
 						}
 					}

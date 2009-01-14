@@ -45,6 +45,9 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		
 		this.setVisible(true);
 		
+		this.setFloating_(true);
+		this.setTopmost();
+		
 		if (this.isListen("onOpen")) {
 			// use a progress bar to hide the popup
 			this.mask = new zk.eff.Mask({
@@ -104,14 +107,12 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		zWatch.listen('onFloatUp', this);
 		zWatch.listen('onVisible', this);
 		this.setFloating_(true);
-		this.ecave = zDom.$(this.uuid + "$cave");
 	},
 	unbind_: function () {
 		if (this._stackup) {
 			zDom.remove(this._stackup);
 			this._stackup = null;
 		}
-		this.ecave = null;
 		
 		zWatch.unlisten('onFloatUp', this);
 		this.setFloating_(false);
@@ -122,7 +123,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			wdh = node.style.width,
 			fir = zDom.firstChild(node, "DIV"),
 			last = zDom.lastChild(zDom.lastChild(node, "DIV"), "DIV"),
-			n = wgt.ecave.parentNode;
+			n = wgt.getSubnode('cave').parentNode;
 		
 		if (!wdh || wdh == "auto") {
 			var diff = zDom.frameWidth(n.parentNode) + zDom.frameWidth(n.parentNode.parentNode);

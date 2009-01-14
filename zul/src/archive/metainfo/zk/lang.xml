@@ -604,17 +604,19 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>panel</component-name>
 		<component-class>org.zkoss.zul.Panel</component-class>
+		<widget-class>zul.panel.Panel</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/panel.dsp</mold-uri>
+			<mold-uri>mold/panel.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>panelchildren</component-name>
 		<component-class>org.zkoss.zul.Panelchildren</component-class>
+		<widget-class>zul.panel.Panelchildren</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/panelchildren.dsp</mold-uri>
+			<mold-uri>mold/panelchildren.js</mold-uri>
 		</mold>
 	</component>
 	<component>
