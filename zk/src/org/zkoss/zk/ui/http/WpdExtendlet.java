@@ -123,9 +123,10 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 		final boolean zk = "zk".equals(name);
 		final String lang = IDOMs.getRequiredAttributeValue(root, "language");
 		final LanguageDefinition langdef = LanguageDefinition.lookup(lang);
+		final String dir = path.substring(0, path.lastIndexOf('/') + 1);
 		final WpdContent wc =
 			"false".equals(root.getAttributeValue("cacheable")) ?
-				new WpdContent(): null;
+				new WpdContent(dir): null;
 
 		final ByteArrayOutputStream out = new ByteArrayOutputStream(1024*8);
 		if (!zk) {
@@ -134,14 +135,13 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 			write(out, "';if(!zk.$import(_z)){try{_zkpk=zk.$package(_z);\n");
 		}
 
-		final String pathpref = path.substring(0, path.lastIndexOf('/') + 1);
 		for (Iterator it = root.getElements().iterator(); it.hasNext();) {
 			final Element el = (Element)it.next();
 			final String elnm = el.getName();
 			if ("widget".equals(elnm)) {
 				final String wgtnm = IDOMs.getRequiredAttributeValue(el, "name");
 				final String jspath = wgtnm + ".js"; //eg: /js/zul/wgt/Div.js
-				if (writeResource(out, jspath, pathpref, false)) {
+				if (writeResource(out, jspath, dir, false)) {
 					final String wgtflnm = name + "." + wgtnm;
 					write(out, "(_zkwg=");
 					write(out, zk ? "zk.": "_zkpk.");
@@ -150,7 +150,7 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 					write(out, wgtflnm);
 					write(out, "';");
 					if (langdef.hasWidgetDefinition(wgtflnm))
-						writeMolds(out, langdef, wgtflnm, pathpref);
+						writeMolds(out, langdef, wgtflnm, dir);
 						//Note: widget defiition not available if it is a base type (such as zul.Widget)
 				} else
 					log.error("Failed to load widget "+wgtnm+": "+jspath+" not found, "+el.getLocator());
@@ -159,8 +159,8 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 				if (jspath != null && jspath.length() > 0) {
 					if (wc != null) {
 						move(wc, out);
-						wc.add(new String[] {jspath, pathpref});
-					} else if (!writeResource(out, jspath, pathpref, true)) {
+						wc.add(jspath);
+					} else if (!writeResource(out, jspath, dir, true)) {
 						log.error("Failed to load script "+jspath+", "+el.getLocator());
 					}
 				}
@@ -216,7 +216,7 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 		return out.toByteArray();
 	}
 	private void writeMolds(OutputStream out, LanguageDefinition langdef,
-	String wgtflnm, String pathpref) {
+	String wgtflnm, String dir) {
 		try {
 			WidgetDefinition wgtdef = langdef.getWidgetDefinition(wgtflnm);
 			write(out, "_zkmd={};");
@@ -227,7 +227,7 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 					write(out, "_zkmd['");
 					write(out, mold);
 					write(out, "']=");
-					if (!writeResource(out, uri, pathpref, true)) {
+					if (!writeResource(out, uri, dir, true)) {
 						write(out, "zk.$void;zk.error('");
 						write(out, uri);
 						write(out, " not found')");
@@ -242,11 +242,11 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 		}
 	}
 	private boolean writeResource(OutputStream out, String path,
-	String pathpref, boolean locate)
+	String dir, boolean locate)
 	throws IOException, ServletException {
 		if (path.startsWith("~./")) path = path.substring(2);
 		else if (path.charAt(0) != '/')
-			path = Files.normalize(pathpref, path);
+			path = Files.normalize(dir, path);
 
 		final InputStream is = _webctx.getResourceAsStream(
 			locate ?
@@ -319,15 +319,19 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 		}
 	}
 	private class WpdContent {
+		private final String _dir;
 		private final List _cnt = new LinkedList();
+		private WpdContent(String dir) {
+			_dir = dir;
+		}
 		private void add(byte[] bs) {
 			_cnt.add(bs);
 		}
 		private void add(Method mtd) {
 			_cnt.add(mtd);
 		}
-		private void add(String[] paths) {
-			_cnt.add(paths);
+		private void add(String jspath) {
+			_cnt.add(jspath);
 		}
 		private byte[] toByteArray() throws ServletException, IOException {
 			final ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -338,9 +342,9 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 				else if (o instanceof Method)
 					write(out, (Method)o);
 				else {
-					final String[] paths = (String[])o;
-					if (!writeResource(out, paths[0], paths[1], true))
-						log.error("Failed to load script "+paths[0]);
+					final String jspath = (String)o;
+					if (!writeResource(out, jspath, _dir, true))
+						log.error("Failed to load script "+jspath);
 				}
 			}
 			return out.toByteArray();
