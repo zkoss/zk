@@ -17,6 +17,8 @@ package org.zkoss.zk.ui.http;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Iterator;
+import java.util.List;
+import java.util.LinkedList;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.ByteArrayOutputStream;
@@ -79,19 +81,22 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 	public void service(HttpServletRequest request,
 	HttpServletResponse response, String path, String extra)
 	throws ServletException, IOException {
-		byte[] data;
+		final Object rawdata;
 		_req.set(request);
 		try {
-			data = (byte[])_cache.get(path);
+			rawdata = _cache.get(path);
 		} finally {
 			_req.set(null);
 		}
-		if (data == null) {
+		if (rawdata == null) {
 			if (Servlets.isIncluded(request)) log.error("Failed to load the resource: "+path);
 				//It might be eaten, so log the error
 			response.sendError(response.SC_NOT_FOUND, path);
 			return;
 		}
+
+		byte[] data = rawdata instanceof byte[] ? (byte[])rawdata:
+			((WpdContent)rawdata).toByteArray();
 
 		response.setContentType("text/javascript;charset=UTF-8");
 		if (data.length > 200) {
@@ -115,14 +120,19 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 	private Object parse(InputStream is, String path) throws Exception {
 		final Element root = new SAXBuilder(true, false, true).build(is).getRootElement();
 		final String name = IDOMs.getRequiredAttributeValue(root, "name");
+		final boolean zk = "zk".equals(name);
 		final String lang = IDOMs.getRequiredAttributeValue(root, "language");
 		final LanguageDefinition langdef = LanguageDefinition.lookup(lang);
-		final boolean cacheable = !"false".equals(root.getAttributeValue("cacheable"));
+		final WpdContent wc =
+			"false".equals(root.getAttributeValue("cacheable")) ?
+				new WpdContent(): null;
 
 		final ByteArrayOutputStream out = new ByteArrayOutputStream(1024*8);
-		write(out, "_z='");
-		write(out, name);
-		write(out, "';if(!zk.$import(_z)){try{_zkpk=zk.$package(_z);\n");
+		if (!zk) {
+			write(out, "_z='");
+			write(out, name);
+			write(out, "';if(!zk.$import(_z)){try{_zkpk=zk.$package(_z);\n");
+		}
 
 		final String pathpref = path.substring(0, path.lastIndexOf('/') + 1);
 		for (Iterator it = root.getElements().iterator(); it.hasNext();) {
@@ -133,7 +143,8 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 				final String jspath = wgtnm + ".js"; //eg: /js/zul/wgt/Div.js
 				if (writeResource(out, jspath, pathpref, false)) {
 					final String wgtflnm = name + "." + wgtnm;
-					write(out, "(_zkwg=_zkpk.");
+					write(out, "(_zkwg=");
+					write(out, zk ? "zk.": "_zkpk.");
 					write(out, wgtnm);
 					write(out, ").prototype.className='");
 					write(out, wgtflnm);
@@ -146,8 +157,12 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 			} else if ("script".equals(elnm)) {
 				String jspath = el.getAttributeValue("src");
 				if (jspath != null && jspath.length() > 0) {
-					if (!writeResource(out, jspath, pathpref, true))
+					if (wc != null) {
+						move(wc, out);
+						wc.add(new String[] {jspath, pathpref});
+					} else if (!writeResource(out, jspath, pathpref, true)) {
 						log.error("Failed to load script "+jspath+", "+el.getLocator());
+					}
 				}
 
 				String s = el.getText(true);
@@ -166,32 +181,39 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 					continue; //to report as many errors as possible
 				}
 
+				final Method mtd;
 				try {
-					final Method mtd = Classes.getMethodBySignature(cls, sig, null);
-					if ((mtd.getModifiers() & Modifier.STATIC) != 0)
-						write(out, (String)mtd.invoke(null, new Object[0]));
-					else
+					mtd = Classes.getMethodBySignature(cls, sig, null);
+					if ((mtd.getModifiers() & Modifier.STATIC) == 0) {
 						log.error("Not a static method: "+mtd);
+						continue;
+					}
 				} catch (NoSuchMethodException ex) {
 					log.error("Method not found in "+clsnm+": "+sig+" "+el.getLocator(), ex);
 					continue;
 				} catch (org.zkoss.util.IllegalSyntaxException ex) {
 					log.error("Illegal Signature: "+sig+" "+el.getLocator(), ex);
 					continue;
-				} catch (Throwable ex) {
-					log.error("Unable to invoke "+sig+", "+el.getLocator(), ex);
-					continue;
 				}
 
+				if (wc != null) {
+					move(wc, out);
+					wc.add(mtd);
+				} else {
+					write(out, mtd);
+				}
 			} else {
 				log.warning("Unknown element "+elnm+", "+el.getLocator());
 			}
 		}
-		write(out, "\n}finally{zPkg.end(_z);}}");
+		if (!zk)
+			write(out, "\n}finally{zPkg.end(_z);}}");
 
-		final byte[] bs = out.toByteArray();
-		if (cacheable) return bs;
-		return new Loader.Resource(bs, false);
+		if (wc != null) {
+			move(wc, out);
+			return wc;
+		}
+		return out.toByteArray();
 	}
 	private void writeMolds(OutputStream out, LanguageDefinition langdef,
 	String wgtflnm, String pathpref) {
@@ -267,6 +289,22 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 		final byte[] bs = new byte[] {(byte)cc};
 		out.write(bs, 0, 1);
 	}
+	private void write(OutputStream out, Method mtd) throws IOException {
+		try {
+			write(out, (String)mtd.invoke(null, new Object[0]));
+		} catch (IOException ex) {
+			throw ex;
+		} catch (Throwable ex) { //log and eat ex
+			log.error("Unable to invoke "+mtd, ex);
+		}
+	}
+	private void move(WpdContent wc, ByteArrayOutputStream out) {
+		final byte[] bs = out.toByteArray();
+		if (bs.length > 0) {
+			wc.add(bs);
+			out.reset();
+		}
+	}
 
 	private class WpdLoader extends ExtendletLoader {
 		private WpdLoader() {
@@ -278,6 +316,34 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 		}
 		protected ExtendletContext getExtendletContext() {
 			return _webctx;
+		}
+	}
+	private class WpdContent {
+		private final List _cnt = new LinkedList();
+		private void add(byte[] bs) {
+			_cnt.add(bs);
+		}
+		private void add(Method mtd) {
+			_cnt.add(mtd);
+		}
+		private void add(String[] paths) {
+			_cnt.add(paths);
+		}
+		private byte[] toByteArray() throws ServletException, IOException {
+			final ByteArrayOutputStream out = new ByteArrayOutputStream();
+			for (Iterator it = _cnt.iterator(); it.hasNext();) {
+				final Object o = it.next();
+				if (o instanceof byte[])
+					out.write((byte[])o);
+				else if (o instanceof Method)
+					write(out, (Method)o);
+				else {
+					final String[] paths = (String[])o;
+					if (!writeResource(out, paths[0], paths[1], true))
+						log.error("Failed to load script "+paths[0]);
+				}
+			}
+			return out.toByteArray();
 		}
 	}
 }

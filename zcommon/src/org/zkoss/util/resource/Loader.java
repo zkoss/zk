@@ -36,6 +36,7 @@ public interface Loader {
 	 */
 	public long getLastModified(Object src);
 	/** Loads the resource.
+	 *
 	 * <p>The returned resource could be anything. It will be returned
 	 * by {@link ResourceCache#get}.
 	 * However, if you want to have more control (e.g., whether to cache),

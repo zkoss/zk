@@ -30,8 +30,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		Use zk.load("x.y") if x.y is required only for certain language
 	-->
 
-	<!-- use zk.js.dsp to package all common js file in one http request.-->
-	<javascript src="~./js/zk/ajax/zk.js.dsp" charset="UTF-8"/>
+	<javascript src="~./js/zk/ajax/zk.wpd" charset="UTF-8"/>
 	<javascript src="~./js/zul/zk.wpd" charset="UTF-8"/>
 	<javascript src="~./js/zul/lang/zk.wpd" charset="UTF-8"/>
 

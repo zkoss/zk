@@ -27,8 +27,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 	<case-insensitive/>
 
-	<!-- use zk.js.dsp to package all common js file in one http request.-->
-	<javascript src="~./js/zk/ajax/zk.js.dsp" charset="UTF-8"/>
+	<javascript src="~./js/zk/ajax/zk.wpd" charset="UTF-8"/>
 
 	<!-- To have better performance with BeanShell, import most-common later -->
 	<zscript language="Java">
