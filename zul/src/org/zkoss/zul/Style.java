@@ -151,25 +151,21 @@ public class Style extends AbstractComponent implements org.zkoss.zul.api.Style 
 		final String encURL = getEncodedURL();
 		render(renderer, "src", encURL);
 
-		final HtmlPageRenders.RenderContext rc =
-			HtmlPageRenders.getRenderContext(null);
-		if (rc != null) {
-			final Writer out = rc.extra;
-			if (_src != null) {
-				out.write("\n<link rel=\"stylesheet\" type=\"text/css\" href=\"");
-				out.write(encURL);
-				out.write("\"/>\n");
-			} else if (_content != null) {
+		if (_content != null) {
+			final HtmlPageRenders.RenderContext rc =
+				HtmlPageRenders.getRenderContext(null);
+			if (rc != null) {
+				final Writer out = rc.extra;
 				out.write("\n<style type=\"text/css\">\n");
 				out.write(_content);
 				out.write("\n</style>\n");
-			}
 
-			render(renderer, "content", _content);
+				render(renderer, "content", _content);
 				//we have to re-gen later (in widget's redraw)
-				//(and IE cannot retrieve the content of style)
+				//(since IE cannot retrieve the content of style)
 				//
 				//both src and content are generated (src for rerender)
+			}
 		}
 	}
 

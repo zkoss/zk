@@ -35,8 +35,8 @@ zul.utl.Style = zk.$extends(zk.Widget, {
 	//super//
 	bind_: function () {
 		this.$supers('bind_', arguments);
-		if (!zk.bootstrapping)
-			this._updLink();
+		if (this._gened) this._gened = false; //<style> gened
+		else this._updLink();
 	},
 	unbind_: function () {
 		zDom.remove(this._getLink());
@@ -44,8 +44,9 @@ zul.utl.Style = zk.$extends(zk.Widget, {
 	},
 	_updLink: function () {
 		var head = this._getHead(),
-			ln = this._getLink(head);
-		this.getNode().innerHTML = '';
+			ln = this._getLink(head),
+			n = this.getNode();
+		if (n) n.innerHTML = '';
 		if (ln) ln.href = this._src;
 		else {
 			ln = document.createElement("LINK");
@@ -68,17 +69,11 @@ zul.utl.Style = zk.$extends(zk.Widget, {
 	},
 	redraw: function (out) {
 		//IE: unable to look back LINK or STYLE with ID
-		out.push('<span id="', this.uuid, '">');
-
-		if (zk.bootstrapping) {
-			if (this._content)
-				out.push('\n<style type="text/css">\n',
-					this._content, '\n</style>');
-			else if (this._src)
-				out.push('<link rel="stylesheet" type="text/css" href="',
-					this._src, '"/>'); 
+		if (zk.bootstrapping && this._content) {
+			out.push('<span style="display:none" id="',
+				this.uuid, '"><style type="text/css">\n',
+				this._content, '\n</style></span>\n');
+			this._gened = true;
 		}
-
-		out.push('</span>\n');
 	}
 });
