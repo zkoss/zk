@@ -619,15 +619,48 @@ zk.Widget = zk.$extends(zk.Object, {
 		child.bind_(desktop, skipper);
 	},
 	insertChildHTML_: function (child, before, desktop) {
-		if (before)
-			zDom.insertHTMLBefore(before.getNode(), child._redrawHTML());
+		var bfn, ben;
+		if (before) {
+			bfn = before._getBeforeNode();
+			if (!bfn) before = null;
+		}
+		if (!before)
+			for (var w = this;;) {
+				ben = w.getNode();
+				if (ben) break;
+
+				bfn = w2._getBeforeNode();
+				if (bfn) break;
+
+				if (!(w = w.parent)) {
+					ben = document.body;
+					break;
+				}
+			}
+
+		if (bfn)
+			zDom.insertHTMLBefore(bfn, child._redrawHTML());
 		else
-			zDom.insertHTMLBeforeEnd(this.getNode(), child._redrawHTML());
+			zDom.insertHTMLBeforeEnd(ben, child._redrawHTML());
 		child.bind_(desktop);
+	},
+	_getBeforeNode: function () {
+		for (var w = this; w; w = w.nextSibling) {
+			var n = w._getFirstNodeDown();
+			if (n) return n;
+		}
+	},
+	_getFirstNodeDown: function () {
+		var n = this.getNode();
+		if (n) return n;
+		for (var w = this.firstChild; w; w = w.nextSibling) {
+			n = w._getFirstNodeDown();
+			if (n) return n;
+		}
 	},
 	removeChildHTML_: function (child, prevsib) {
 		var n = child.getNode();
-		if (!n) this._prepareRemove(n = []);
+		if (!n) child._prepareRemove(n = []);
 
 		child.unbind_();
 

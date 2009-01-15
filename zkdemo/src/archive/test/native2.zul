@@ -33,5 +33,17 @@ xmlns:zk="http://www.zkoss.org/2005/zk">
 			<li forEach="${values}">${each}</li>
 		</ul>
 	</u:groupbox>
+
+	<u:style id="s1">
+	.z5 {
+		background: #555;
+		color: white;
+	}
+	</u:style>
+	<div class="z5" style="width:350px;height:150px">
+	The background shall be dark grey and text color is white.
+	<u:button label="change to lite grey and black text"
+		onClick='s1.setContent(".z5 {background: #ccc;color: black}")'/>
+	</div>
  </body>
 </html>
