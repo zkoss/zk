@@ -14,37 +14,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 zul.wgt.Popup = zk.$extends(zul.Widget, {
 	_visible: false,
-	open: function (ref, offset, position, sendOnOpen) {
-		var pos, dim;
-		
-		if (ref && position) {
-			if (typeof ref == 'string')
-				ref = zk.Widget.$(ref);
-				
-			if (ref) {
-				var refn = ref.getNode(),
-					ofs = zDom.revisedOffset(refn);
-				pos = position;
-				dim = {
-					top: ofs[0], left: ofs[1],
-					width: zDom.offsetWidth(refn), height: zDom.offsetHeight(refn)  
-				}
-			}
-		} else if (offset && offset.$array) {
-			dim = {
-				top: zk.parseInt(offset[0]),
-				left:  zk.parseInt(offset[1])
-			}
-		}
-		if (!dim) return;
+	open: function (ref, offset, position, opts) {
+		var posInfo = this._posInfo(ref, offset, position);
 
 		var node = this.getNode();
 		zDom.setStyle(node, {position: "absolute"});
 		zDom.makeVParent(node);
-		zDom.position(node, dim, pos);
+		if (posInfo)
+			zDom.position(node, posInfo.dim, posInfo.pos, opts);
 		
 		this.setVisible(true);
-		
 		this.setFloating_(true);
 		this.setTopmost();
 		
@@ -68,22 +47,51 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 				this._stackup.style.display = "block";
 			}
 		}
-		if (sendOnOpen) this.fire('onOpen', ref ? [true, ref.uuid] : true);
+		if (opts && opts.sendOnOpen) this.fire('onOpen', ref ? [true, ref.uuid] : true);
 		zDom.setStyle(node, {visibility: 'inherit'});
+	},
+	position: function (ref, offset, position, opts) {
+		var posInfo = this._posInfo(ref, offset, position);
+		if (posInfo)
+			zDom.position(this.getNode(), posInfo.dim, posInfo.pos, opts);
+	},
+	_posInfo: function (ref, offset, position, opts) {
+		var pos, dim;
+		
+		if (ref && position) {
+			if (typeof ref == 'string')
+				ref = zk.Widget.$(ref);
+				
+			if (ref) {
+				var refn = ref.getNode(),
+					ofs = zDom.revisedOffset(refn);
+				pos = position;
+				dim = {
+					top: ofs[0], left: ofs[1],
+					width: zDom.offsetWidth(refn), height: zDom.offsetHeight(refn)  
+				}
+			}
+		} else if (offset && offset.$array) {
+			dim = {
+				top: zk.parseInt(offset[0]),
+				left:  zk.parseInt(offset[1])
+			}
+		}
+		if (dim) return {pos: pos, dim: dim};
 	},
 	onResponse: function () {
 		if (this.mask) this.mask.destroy();
 		zWatch.unlisten('onResponse', this);
 		this.mask = null;
 	},
-	close: function (sendOnOpen) {
+	close: function (opts) {
 		if (this._stackup)
 			this._stackup.style.display = "none";
 		
 		this.setVisible(false);
 		zDom.undoVParent(this.getNode());
 		this.setFloating_(false);
-		if (sendOnOpen) this.fire('onOpen', false);
+		if (opts && opts.sendOnOpen) this.fire('onOpen', false);
 	},
 	getZclass: function () {
 		var zcls = this._zclass;
@@ -100,7 +108,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			}
 			floatFound = floatFound || wgt.isFloating_();
 		}
-		this.close(true);
+		this.close({sendOnOpen:true});
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);

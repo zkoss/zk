@@ -283,15 +283,11 @@ zDom = { //static methods
 		if (!skipx) el.style.left = ofs[0] + "px";
 		if (!skipy) el.style.top =  ofs[1] + "px";
 	},
-	position: function (el, dim, where) {
+	position: function (el, dim, where, opts) {
 		where = where || "overlap";
 		var box = zDom.getDimension(el),
 			wd = box.width,
 			hgh = box.height,
-			scX = zDom.innerX(),
-			scY = zDom.innerY(),
-			scMaxX = scX + zDom.innerWidth(),
-			scMaxY = scY + zDom.innerHeight(),
 			x = dim.top,
 			y = dim.left;
 			
@@ -337,13 +333,18 @@ zDom = { //static methods
 		default: // overlap is assumed
 			// nothing to do.
 		}
-		if (x + wd > scMaxX) x = scMaxX - wd;
-		
-		if (x < scX) x = scX;
-				
-		if (y + hgh > scMaxY) y = scMaxY - hgh;
-		
-		if (y < scY) y = scY;
+
+		if (!opts || !opts.overflow) {
+			var scX = zDom.innerX(),
+				scY = zDom.innerY(),
+				scMaxX = scX + zDom.innerWidth(),
+				scMaxY = scY + zDom.innerHeight();
+
+			if (x + wd > scMaxX) x = scMaxX - wd;
+			if (x < scX) x = scX;
+			if (y + hgh > scMaxY) y = scMaxY - hgh;
+			if (y < scY) y = scY;
+		}
 	
 		box = zDom.toStyleOffset(el, x, y);
 		el.style.left = box[0] + "px";

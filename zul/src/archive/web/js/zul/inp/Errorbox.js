@@ -22,7 +22,7 @@ zul.inp.Errorbox = zk.$extends('zul.wgt.Popup', {
 		this.parent = owner; //fake
 		this.msg = msg;
 		this.insertHTML(document.body, "beforeEnd");
-		this.open(owner, null, "end_before");
+		this.open(owner, null, "end_before", {overflow:true});
 	},
 	destroy: function () {
 		this.close();
@@ -42,16 +42,25 @@ zul.inp.Errorbox = zk.$extends('zul.wgt.Popup', {
 			ignoredrag: $Errorbox._ignoredrag,
 			change: $Errorbox._change
 		});
+		zWatch.listen('onScroll', this);
+	},
+	unbind_: function () {
+		this._drag.destroy();
+		zWatch.unlisten('onScroll', this);
+
+		this.$supers('unbind_', arguments);
+		this._drag = null;
+	},
+	onScroll: function (wgt) {
+		if (wgt) { //scroll requires only if inside, say, borderlayout
+			this.position(this.parent, null, "end_before", {overflow:true});
+			this._fixarrow();
+		}
 	},
 	setDomVisible_: function (node, visible) {
 		this.$supers('setDomVisible_', arguments);
 		var stackup = this._stackup;
 		if (stackup) stackup.style.display = visible ? '': 'none';
-	},
-	unbind_: function () {
-		this._drag.destroy();
-		this.$supers('unbind_', arguments);
-		this._drag = null;
 	},
 	doMouseMove_: function (evt, devt) {
 		var el = zEvt.target(devt);
