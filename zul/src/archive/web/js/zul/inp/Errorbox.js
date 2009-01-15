@@ -57,8 +57,8 @@ zul.inp.Errorbox = zk.$extends('zul.wgt.Popup', {
 		var el = zEvt.target(devt);
 		if (el == this.getSubnode('c')) {
 			var y = zEvt.y(devt),
-				size = zk.parseInt(zDom.getStyle(this.getSubnode('c'), 'padding-right'))
-				offs = zDom.revisedOffset(this.getSubnode('c'));
+				size = zk.parseInt(zDom.getStyle(el, 'padding-right'))
+				offs = zDom.revisedOffset(el);
 			if (y >= offs[1] && y < offs[1] + size)	zDom.addClass(el, 'z-errbox-close-over');
 			else zDom.rmClass(el, 'z-errbox-close-over');
 		} else this.$supers('doMouseMove_', arguments);
