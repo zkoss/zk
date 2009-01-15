@@ -742,15 +742,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>style</component-name>
 		<component-class>org.zkoss.zul.Style</component-class>
+		<widget-class>zul.utl.Style</widget-class>
 		<text-as>content</text-as><!-- treat text within the element as the content property -->
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/style.dsp</mold-uri>
-		</mold>
 	</component>
-	<!-- 	
-		  
-	-->
 	<component>
 		<component-name>tabbox</component-name>
 		<component-class>org.zkoss.zul.Tabbox</component-class>

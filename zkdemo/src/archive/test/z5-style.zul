@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+z5-style.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Jan 14 16:33:20     2009, Created by tomyeh
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+-->
+<window id="w" title="Test of the style component">
+	You shall see the background color changed when
+	pressing the buttons in order.
+        <separator/>
+        The 3rd botton work slow in IE6, IE7 and doesn't work in SA, it won't fixed.
+        <separator/>
+	<zscript><![CDATA[
+	void setStyle(String cnt) {
+		if (!w.hasFellow("style")) {
+			Style s = new Style();
+			s.setId("style");
+			s.setParent(w);
+		}
+		style.setContent(cnt);
+	}
+	]]></zscript>
+	<button label="1. change background to yellow"
+		onClick='setStyle("body {background: yellow}")'/>
+	<button label="2. change background to blue"
+		onClick='setStyle("body {background: blue}")'/>
+	<button label="3. remove the background">
+		<attribute name="onClick">
+	if (w.hasFellow("style"))
+		style.detach();
+		</attribute>
+	</button>
+	<style id="s1">
+	.z5 {
+		background: #555;
+		color: white;
+	}
+	</style>
+	<div class="z5" width="350px" height="150px">
+	The background shall be dark grey and text color is white.
+	<button label="change to lite grey and black text"
+		onClick='s1.setContent(".z5 {background: #ccc;color: black}")'/>
+	</div>
+</window>

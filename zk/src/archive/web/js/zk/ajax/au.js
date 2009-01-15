@@ -549,7 +549,7 @@ zAu = {
 							if (zk.mounting) zAu._dcfns.push(fn);
 							else fn();
 						}
-					} else { //not done yet (=zk.boostrapping)
+					} else { //not done yet (=zk.mounting)
 						zAu._resId = oldrid; //restore
 						que.splice(j, 0, cmds); //put it back
 						return; //wait zkm.mtAU to call

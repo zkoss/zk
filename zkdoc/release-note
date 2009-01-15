@@ -23,6 +23,8 @@ ZK 5.0.0
     to use the same font for ZK and non-ZK content
   + org.zkoss.zk.MacroNoDefinitionAllowed is deprecated.
     A dummy macro definition is used instead.
+  + org.zkoss.zul.Style's dynamic is deprecated since it is decided
+    automatically
 
 	--------
 ZK 3.6.0

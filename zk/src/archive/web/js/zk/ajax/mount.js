@@ -14,7 +14,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 var _zkmt = zUtl.now(); //JS loaded
 function zkblbg(binding) {
-	zkm.browsing = zk.mounting = true;
+	zk.mounting = true;
 	zkm.binding = binding;
 	var t = 390 - (zUtl.now() - _zkmt);
 	zk.startProcessing(t > 0 ? t: 0);
@@ -99,7 +99,6 @@ zkm = {
 		if (!zkm._wgts.length) {
 			var cfi = zkm._crInf0;
 			cfi.push([zkm.curdt, w, zkm.binding]);
-			cfi.browsing = zkm.browsing;
 			cfi.stub = zAu.stub;
 			zAu.stub = null;
 			zkm.exec(zkm.mount);
@@ -111,7 +110,7 @@ zkm = {
 	end: function() {
 		zkm._wgts = [];
 		zkm._curdt = null;
-		zkm.browsing = zkm.binding = false;
+		zkm.binding = false;
 	},
 
 	sysInit: function() {
@@ -155,7 +154,12 @@ zkm = {
 		}
 
 		//2. create wgt
-		if (cfi.browsing) { //browser loading
+		var stub = cfi.stub;
+		if (stub) { //AU
+			cfi.stub = null;
+			zkm.mtAU(stub);
+		} else { //browser loading
+			zk.bootstrapping = true;
 			if (zk.sysInited)
 				zkm.mtBL();
 			else if (document.readyState) {
@@ -170,10 +174,6 @@ zkm = {
 				//don't count on DOMContentLoaded since the page might
 				//be loaded by another ajax solution (i.e., portal)
 				//Also, Bug 1619959: FF not fire it if in 2nd iframe
-		} else { //AU
-			var stub = cfi.stub;
-			cfi.stub = null;
-			zkm.mtAU(stub);
 		}
 	},
 	/** mount for browser loading */
@@ -230,7 +230,7 @@ zkm = {
 			}
 		}
 
-		zk.mounting = false;
+		zk.mounting = zk.bootstrapping = false;
 		zk.endProcessing();
 	},
 
@@ -374,7 +374,7 @@ zkm = {
 	_mouseData: function (evt, wgt) {
 		var n = zEvt.target(evt);
 		if (!n || !n.id || n.id.indexOf('$') >= 0)
-			n = wgt.getNode();
+			n = wgt.getNode(); //use n if possible for better performance
 		return zEvt.mouseData(evt, n);
 	},
 	docMouseUp: function (evt) {

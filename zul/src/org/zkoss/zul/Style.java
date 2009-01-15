@@ -17,16 +17,17 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import java.util.Iterator;
+import java.io.Writer;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.util.media.Media;
 import org.zkoss.util.media.AMedia;
-import org.zkoss.xml.HTMLs;
 
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.AbstractComponent;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
+import org.zkoss.zk.ui.sys.HtmlPageRenders;
 
 import org.zkoss.zul.impl.Utils;
 
@@ -36,19 +37,7 @@ import org.zkoss.zul.impl.Utils;
  * <p>Note: a style component can appear anywhere in a ZUML page, but it
  * affects all components in the same desktop.
  *
- * <p>Note: If {@link #isDynamic} is false, the HTML STYLE
- * or LINK tag is generated to represent this component.
- * Due to IE's limitation, there is no effect if
- * the style component is added or removed dynamically
- * and if {@link #isDynamic} is false.
- *
- * <p>If {@link #isDynamic} is true, this component can be added and removed
- * dynamically and the rules will be attached and detached accordingly.
- * Note: in this case, the link is generated when this component
- * is initialized at the client, so the style will be loaded to
- * the client after all components are initialized.
- *
- * <p>There are three formats when used in a ZUML page:
+ * <p>There are two formats when used in a ZUML page:
  *
  * <p>Method 1: Specify the URL of the CSS file
  * <pre><code>&lt;style src="my.css"/&gt;
@@ -62,19 +51,8 @@ import org.zkoss.zul.impl.Utils;
  *&lt;/style&gt;
  * </code></pre>
  *
- * <p>Method 3: Specify the CSS by use of the content
- * property ({@link #setContent}).
- * <pre><code>&lt;style&gt;
- * &lt;attribute name="content"&gt;
- * .mycls {
- *  border: 1px outset #777;
- * }
- * &lt;/attribute&gt;
- *&lt;/style&gt;
- * </code></pre>
- *
- * <p>Note: if the src and content properties are both set,
- * the content property is ignored.
+ * <p>Note: if the src and content properties are both set, the later one
+ * overrides the previous one.
  *
  * @author tomyeh
  */
@@ -82,7 +60,6 @@ public class Style extends AbstractComponent implements org.zkoss.zul.api.Style 
 	private String _src;
 	/** _src and _content cannot be nonnull at the same time. */
 	private String _content;
-	private boolean _dynamic;
 	/** Count the version of {@link #_content}. */
 	private byte _cntver;
 
@@ -97,39 +74,15 @@ public class Style extends AbstractComponent implements org.zkoss.zul.api.Style 
 		setSrc(src);
 	}
 	
-	/**
-	 * Sets whether to load an external Style Sheet dynamically.
-	 * <p>Default: false.
-	 * @since 3.0.4 
-	 * @see #isDynamic
+	/** @deprecated As of release 5.0.0, it is decided automatically.
 	 */
 	public void setDynamic(boolean dynamic) {
-		if (_dynamic != dynamic) {
-			_dynamic = dynamic;
-			invalidate();
-		}
 	}
 	
-	/**
-	 * Returns whether to load an external Style Sheet dynamically.
-	 * If false, a HTML STYLE or LINK tag is generated to represent 
-	 * the content or the src.
-	 *
-	 * <p>Due to IE's limitation, there is no effect if
-	 * the style component is added or removed dynamically
-	 * and if {@link #isDynamic} is false.
-	 *
-	 * <p>If {@link #isDynamic} is true, this component can be added and removed
-	 * dynamically and the rules will be attached and detached accordingly.
-	 * Note: in this case, the HTML LINK tag is generated when this component
-	 * is initialized at the client, so the style will be loaded to
-	 * the client after all components are initialized.
-	 *
-	 * <p>Default: false.
-	 * @since 3.0.4
+	/** @deprecated As of release 5.0.0, it is decided automatically.
 	 */
 	public boolean isDynamic() {
-		return _dynamic;
+		return true;
 	}
 
 	/** Returns the URI of an external style sheet.
@@ -154,7 +107,7 @@ public class Style extends AbstractComponent implements org.zkoss.zul.api.Style 
 		if (_content != null || !Objects.equals(_src, src)) {
 			_src = src;
 			_content = null;
-			invalidate();
+			smartUpdate("src", new EncodedURL());
 		}
 	}
 
@@ -185,7 +138,38 @@ public class Style extends AbstractComponent implements org.zkoss.zul.api.Style 
 			_content = content;
 			_src = null;
 			++_cntver;
-			invalidate();
+			smartUpdate("src", new EncodedURL());
+				//AU: always uses src to solve IE/Chrome/... issue
+		}
+	}
+
+	//super//
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		final String encURL = getEncodedURL();
+		render(renderer, "src", encURL);
+
+		final HtmlPageRenders.RenderContext rc =
+			HtmlPageRenders.getRenderContext(null);
+		if (rc != null) {
+			final Writer out = rc.extra;
+			if (_src != null) {
+				out.write("\n<link rel=\"stylesheet\" type=\"text/css\" href=\"");
+				out.write(encURL);
+				out.write("\"/>\n");
+			} else if (_content != null) {
+				out.write("\n<style type=\"text/css\">\n");
+				out.write(_content);
+				out.write("\n</style>\n");
+			}
+
+			render(renderer, "content", _content);
+				//we have to re-gen later (in widget's redraw)
+				//(and IE cannot retrieve the content of style)
+				//
+				//both src and content are generated (src for rerender)
 		}
 	}
 
@@ -212,48 +196,24 @@ public class Style extends AbstractComponent implements org.zkoss.zul.api.Style 
 			return new AMedia("css", "css", "text/css;charset=UTF-8", _content);
 		}
 	}
-	public void redraw(java.io.Writer out) throws java.io.IOException {
-		if (isDynamic()) {
-//TODO
-//			super.redraw(out);
-			return;	
-		}
 
-		final boolean ie = Executions.getCurrent().isExplorer();
-		if (ie) {
-			//IE: unable to look back LINK or STYLE with ID
-			out.write("<div id=\"");
-			out.write(getUuid());
-			out.write("\">");
-		}
+	/** Returns the encoded URL of the image (never null).
+	 */
+	private String getEncodedURL() {
+		if (_content != null)
+			return Utils.getDynamicMediaURI(this, _cntver, "css", "css");
 
 		if (_src != null) {
-			out.write("\n<link rel=\"stylesheet\" type=\"text/css\" href=\"");
-			out.write(getDesktop().getExecution().encodeURL(_src));
-			if (!ie) {
-				out.write("\" id=\"");
-				out.write(getUuid());
-			}
-			out.write("\"/>");
-		} else {
-			out.write("\n<style type=\"text/css\"");
-			if (!ie) {
-				out.write(" id=\"");
-				out.write(getUuid());
-				out.write('"');
-			}
-			out.write(">\n");
-
-			final String content = getContent();
-			if (content != null) {
-				out.write(content);
-				out.write('\n');
-			}
-
-			out.write("</style>");
+			final Desktop dt = getDesktop();
+			if (dt != null)
+				return dt.getExecution().encodeURL(_src);
 		}
+		return "";
+	}
 
-		if (ie)
-			out.write("</div>\n");
+	private class EncodedURL implements org.zkoss.zk.ui.util.DeferredValue {
+		public Object getValue() {
+			return getEncodedURL();
+		}
 	}
 }
