@@ -204,7 +204,7 @@ zk = {
 	 '<div class="z-error" style="left:'+(zDom.innerX()+x)+'px;top:'+(zDom.innerY()+y)
 	+'px;" id="'+id+'"><table cellpadding="2" cellspacing="2" width="100%"><tr>'
 	+'<td align="right"><div id="'+id
-	+'$p"><a href="javascript:zAu.sendRedraw()">redraw</a>&nbsp;'
+	+'$p"><a href="javascript:zk._sendRedraw()">redraw</a>&nbsp;'
 	+'<a href="javascript:zDom.remove(\''+id+'\')">close</a></div></td></tr>'
 	+'<tr valign="top"><td class="z-error-msg">'+zUtl.encodeXML(msg, true) //Bug 1463668: security
 	+'</td></tr></table></div>';
@@ -221,6 +221,10 @@ zk = {
 	errorDismiss: function () {
 		for (var j = zk._errcnt; j; --j)
 			zDom.remove("zk_err" + j);
+	},
+	_sendRedraw: function () {
+		zk.errorDismiss();
+		zAu.send(new zk.Event(null, 'redraw'));
 	},
 	debug: function (vararg) {
 		var ars = arguments, msg = '';

@@ -436,10 +436,12 @@ zAu = {
 		for (var j = 0, el = es.length; el; ++j, --el) {
 			var aureq = es.shift(),
 				evtnm = aureq.name,
+				target = aureq.target,
 				so = $Event.serverOption(evtnm, aureq.opts);
 			if (so) content += '&so.'+j+'='+so;
-			content += "&cmd."+j+"="+evtnm
-				+"&uuid."+j+"="+(aureq.target.uuid||'');
+			content += "&cmd."+j+"="+evtnm;
+			if (target && target.uuid && !target.$instanceof(zk.Desktop))
+				content += "&uuid."+j+"="+target.uuid;
 
 			var data = aureq.data;
 			if (data && data.marshal) data = data.marshal();

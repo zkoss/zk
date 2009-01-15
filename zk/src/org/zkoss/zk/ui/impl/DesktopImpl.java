@@ -465,6 +465,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 					new org.zkoss.zk.ui.impl.AbortByRemoveDesktop());
 				//to avoid surprise, we don't remove it now
 				//rather, it is done by AbortByRemoveDesktop.getResponse
+		} else if ("redraw".equals(name)) {
+			invalidate();
 		} else
 			Events.postEvent(Event.getEvent(request));
 	}
