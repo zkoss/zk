@@ -142,6 +142,13 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 			zWatch.listen("onVisible", this);
 		}
 	},
+	unbind_: function () {
+		if (!this.isLegend()) {
+			zWatch.unlisten("onSize", this);
+			zWatch.unlisten("onVisible", this);
+		}
+		this.$supers('unbind_', arguments);
+	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 		if (child.$instanceof(zul.wgt.Caption))

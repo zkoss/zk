@@ -17,6 +17,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	nChildren: 0,
 	bindLevel: -1,
 	_mold: 'default',
+	className: 'zk.Widget',
 
 	$init: function (props) {
 		this._lsns = {}; //listeners Map(evtnm,listener)
@@ -1040,6 +1041,7 @@ zk.Widget = zk.$extends(zk.Object, {
 
 zk.Page = zk.$extends(zk.Widget, {//unlik server, we derive from Widget!
 	_style: "width:100%;height:100%",
+	className: 'zk.Page',
 
 	$init: function (pguid, contained) {
 		this.$super('$init', {uuid: pguid});
@@ -1060,6 +1062,8 @@ zk.Page = zk.$extends(zk.Widget, {//unlik server, we derive from Widget!
 
 zk.Desktop = zk.$extends(zk.Widget, {
 	bindLevel: 0,
+	className: 'zk.Desktop',
+
 	$init: function (dtid, updateURI) {
 		this.$super('$init', {uuid: dtid}); //id also uuid
 
@@ -1147,6 +1151,8 @@ zk.Skipper = zk.$extends(zk.Object, {
 zk.Skipper.nonCaptionSkipper = new zk.Skipper();
 
 zk.Native = zk.$extends(zk.Widget, {
+	className: 'zk.Native',
+
 	redraw: function (out) {
 		var s = this.prolog;
 		if (s) out.push(s);
@@ -1160,6 +1166,8 @@ zk.Native = zk.$extends(zk.Widget, {
 });
 
 zk.Macro = zk.$extends(zk.Widget, {
+	className: 'zk.Macro',
+
 	redraw: function (out) {
 		out.push('<span', this.domAttrs_(), '>');
 		for (var w = this.firstChild; w; w = w.nextSibling)

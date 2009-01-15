@@ -115,6 +115,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		}
 		
 		zWatch.unlisten('onFloatUp', this);
+		zWatch.unlisten('onVisible', this);
 		this.setFloating_(false);
 		this.$supers('unbind_', arguments);
 	},
