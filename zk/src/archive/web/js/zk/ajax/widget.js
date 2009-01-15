@@ -629,8 +629,11 @@ zk.Widget = zk.$extends(zk.Object, {
 				ben = w.getNode();
 				if (ben) break;
 
-				bfn = w._getBeforeNode();
-				if (bfn) break;
+				var w2 = w.nextSibling;
+				if (w2) {
+					bfn = w2._getBeforeNode();
+					if (bfn) break;
+				}
 
 				if (!(w = w.parent)) {
 					ben = document.body;
