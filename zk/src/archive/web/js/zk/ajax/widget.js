@@ -629,7 +629,7 @@ zk.Widget = zk.$extends(zk.Object, {
 				ben = w.getNode();
 				if (ben) break;
 
-				bfn = w2._getBeforeNode();
+				bfn = w._getBeforeNode();
 				if (bfn) break;
 
 				if (!(w = w.parent)) {
