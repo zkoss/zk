@@ -94,10 +94,8 @@ zAu = {
 			zAu._send(t.type == '#d' ? t: t.desktop, aureq, timeout);
 		} else {
 			var dts = zk.Desktop.all;
-			for (var dtid in dts) {
-				var dt = aureq.target = dts[dtid];
-				zAu._send(dt, aureq, timeout);
-			}
+			for (var dtid in dts)
+				zAu._send(dts[dtid], aureq, timeout);
 		}
 	},
 	sendAhead: function (aureq, timeout) {
@@ -109,9 +107,8 @@ zAu = {
 		} else {
 			var dts = zk.Desktop.all;
 			for (var dtid in dts) {
-				var dt = aureq.target = dts[dtid];
 				dt._aureqs.unshift(aureq);
-				zAu._send2(dt, timeout);
+				zAu._send2(dts[dtid], timeout);
 			}
 			return;
 		}
@@ -440,8 +437,7 @@ zAu = {
 				so = $Event.serverOption(evtnm, aureq.opts);
 			if (so) content += '&so.'+j+'='+so;
 			content += "&cmd."+j+"="+evtnm;
-			if (target && target.uuid && !target.$instanceof(zk.Desktop))
-				content += "&uuid."+j+"="+target.uuid;
+			if (target) content += "&uuid."+j+"="+target.uuid;
 
 			var data = aureq.data;
 			if (data && data.marshal) data = data.marshal();
