@@ -41,8 +41,6 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	setMold: function (mold) {
 		if (mold != this._mold) {
-			if (!this.$class.molds[mold])
-				throw 'Unknown mold: ' + mold;
 			this._mold = mold;
 			this.rerender();
 		}
@@ -489,7 +487,12 @@ zk.Widget = zk.$extends(zk.Object, {
 	redraw: function (out) {
 		var s = this.prolog;
 		if (s) out.push(s);
-		this.$class.molds[this._mold].apply(this, arguments);
+
+		for (var p = this, mold = this._mold; p; p = p.superclass) {
+			var f = p.$class.molds[mold];
+			if (f) return f.apply(this, arguments);
+		}
+		throw "mold "+mold+" not found in "+this.className;
 	},
 	updateDomClass_: function () {
 		if (this.desktop) {

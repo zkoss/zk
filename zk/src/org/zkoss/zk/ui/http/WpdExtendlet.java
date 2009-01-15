@@ -219,7 +219,7 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 	String wgtflnm, String dir) {
 		try {
 			WidgetDefinition wgtdef = langdef.getWidgetDefinition(wgtflnm);
-			write(out, "_zkmd={};");
+			write(out, "_zkmd=_zkwg.molds={};");
 			for (Iterator it = wgtdef.getMoldNames().iterator(); it.hasNext();) {
 				final String mold = (String)it.next();
 				final String uri = wgtdef.getMoldURI(mold);
@@ -236,7 +236,6 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 					write(out, ";\n");
 				}
 			}
-			write(out, "zkmld(_zkwg,_zkmd);");
 		} catch (Throwable ex) {
 			log.error("Failed to load molds for widget "+wgtflnm+".\nCause: "+Exceptions.getMessage(ex));
 		}
