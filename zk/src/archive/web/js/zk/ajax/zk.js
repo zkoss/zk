@@ -226,7 +226,7 @@ zk = {
 		zk.errorDismiss();
 		zAu.send(new zk.Event(null, 'redraw'));
 	},
-	debug: function (vararg) {
+	log: function (vararg) {
 		var ars = arguments, msg = '';
 		for (var j = 0, len = ars.length; j < len; j++) {
 			if (msg) msg += ", ";
@@ -234,20 +234,20 @@ zk = {
 		}
 
 		zk._msg = (zk._msg ? zk._msg + msg: msg) + '\n';
-		setTimeout(zk._debug0, 600);
+		setTimeout(zk._log0, 600);
 	},
-	_debug0: function () {
+	_log0: function () {
 		if (zk._msg) {
-			var console = zDom.$("zk_dbg");
+			var console = zDom.$("zk_log");
 			if (!console) {
 				console = document.createElement("DIV");
 				document.body.appendChild(console);
 				var html =
-	'<div id="zk_dbgbox" class="z-debug">'
-	+'<button onclick="zDom.remove(\'zk_dbgbox\')">X</button><br/>'
-	+'<textarea id="zk_dbg" rows="10"></textarea></div>';
+	'<div id="zk_logbox" class="z-log">'
+	+'<button onclick="zDom.remove(\'zk_logbox\');">X</button><br/>'
+	+'<textarea id="zk_log" rows="10"></textarea></div>';
 				zDom.setOuterHTML(console, html);
-				console = zDom.$("zk_dbg");
+				console = zDom.$("zk_log");
 			}
 			console.value += zk._msg;
 			console.scrollTop = console.scrollHeight;

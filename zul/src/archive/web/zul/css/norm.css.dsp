@@ -55,14 +55,14 @@ div.z-error a {
 .z-error-msg {
 	border: 1px inset; background-color: #fc9;
 }
-div.z-debug {
+div.z-log {
 	text-align:right; width:50%; right:10px; bottom:5px;
 	position:absolute; z-index: 99000;
 }
-div.z-debug textarea {
+div.z-log textarea {
 	width: 100%
 }
-div.z-debug button {
+div.z-log button {
 	font-size: ${fontSizeXS};
 }
 
