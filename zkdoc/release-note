@@ -6,6 +6,7 @@ ZK 3.5.3
   2448278: Chart could provide default model
   2493161: A way to instantiate a macro programmingly w/o macro declaration
   2495058: A way to use the same desktop UUID after reboot
+  2512695: Able to change UiFactory, IdGenerator.. in WebAppInit
   2494920: Enhance <listheader> auto sorting to sort on fieldnames
   2512555: Converter convert date to String with annotated format
   
