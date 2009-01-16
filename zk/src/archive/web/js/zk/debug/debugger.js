@@ -107,6 +107,9 @@ zk.debug.Debugger = zk.$extends(zk.Object, {
 		}
 	}
 });
+
+zDebug = new zk.debug.Debugger(); // global
+
 zk.debug.DefaultHandler = zk.$extends(zk.Object, {
 	$init: function () {
 		this.out = [];
