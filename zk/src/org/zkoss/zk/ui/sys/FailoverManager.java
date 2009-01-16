@@ -18,6 +18,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
+import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
@@ -54,6 +55,16 @@ import org.zkoss.zk.ui.UiException;
  * @author tomyeh
  */
 public interface FailoverManager {
+	/** Starts the failover manager.
+	 * @since 5.0.0
+	 */
+	public void start(WebApp wapp);
+	/** Stops the failover manager.
+	 * Called only if the server is about to stop.
+	 * @since 5.0.0
+	 */
+	public void stop(WebApp wapp);
+
 	/** Tests whether the specified desktop ID is recoverable.
 	 *
 	 * <p>Note: when this method called, no execution

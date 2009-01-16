@@ -48,6 +48,11 @@ import org.zkoss.zk.ui.impl.PageImpl;
 public class DumbFailoverManager implements FailoverManager {
 	private Desktop _killed;
 
+	public void start(WebApp wapp) {
+	}
+	public void stop(WebApp wapp) {
+	}
+
 	/** Drops the current desktop.
 	 *
 	 * @param recoverable whether the dropped desktop is recovable.

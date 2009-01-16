@@ -174,6 +174,10 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		_engine.start(this);
 		_provider.start(this);
 		_factory.start(this);
+		try {
+			_failover.start(this);
+		} catch (AbstractMethodError ex) { //backward compatible
+		}
 
 		_config.invokeWebAppInits();
 	}
@@ -182,9 +186,17 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 
 		_config.detroyRichlets();
 
-		getUiFactory().stop(this);
-		getDesktopCacheProvider().stop(this);
-		getUiEngine().stop(this);
+		_factory.stop(this);
+		_provider.stop(this);
+		_engine.stop(this);
+		try {
+			_failover.stop(this);
+		} catch (AbstractMethodError ex) { //backward compatible
+		}
+		_factory = null;
+		_provider = null;
+		_engine = null;
+		_failover = null;
 
 		//we don't reset _config since WebApp cannot be re-inited after stop
 	}
@@ -192,20 +204,48 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	public final UiEngine getUiEngine() {
 		return _engine;
 	}
+	public void setUiEngine(UiEngine engine) {
+		if (engine == null) throw new IllegalArgumentException();
+		_engine.stop(this);
+		_engine = engine;
+		_engine.start(this);
+	}
 	public DesktopCache getDesktopCache(Session sess) {
 		return _provider.getDesktopCache(sess);
 	}
 	public DesktopCacheProvider getDesktopCacheProvider() {
 		return _provider;
 	}
+	public void setDesktopCacheProvider(DesktopCacheProvider provider) {
+		if (provider == null) throw new IllegalArgumentException();
+		_provider.stop(this);
+		_provider = provider;
+		_provider.start(this);
+	}
 	public UiFactory getUiFactory() {
 		return _factory;
+	}
+	public void setUiFactory(UiFactory factory) {
+		if (factory == null) throw new IllegalArgumentException();
+		_factory.stop(this);
+		_factory = factory;
+		_factory.start(this);
 	}
 	public FailoverManager getFailoverManager() {
 		return _failover;
 	}
+	public void setFailoverManager(FailoverManager failover) {
+		if (failover == null) throw new IllegalArgumentException();
+		_failover.stop(this);
+		_failover = failover;
+		_failover.start(this);
+	}
 	public IdGenerator getIdGenerator() {
 		return _idgen;
+	}
+	public void setIdGenerator(IdGenerator idgen) {
+		if (idgen == null) throw new IllegalArgumentException();
+		_idgen = idgen;
 	}
 	public SessionCache getSessionCache() {
 		return _sesscache;

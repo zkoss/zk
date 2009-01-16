@@ -58,7 +58,6 @@ import org.zkoss.zk.ui.event.Events;
  */
 public class Components {
 	private static final Log log = Log.lookup(Components.class);
-
 	protected Components() {}
 
 	/** Sorts the components in the list.
@@ -488,7 +487,116 @@ public class Components {
 			}
 		}
 	}
+	
+	/**
+	 * Returns whether the given id is an implicit ZK object id.
+	 * 
+	 * @param id Component id
+	 * @return whether the given name is a implicit object.
+	 * @since 3.5.2
+	 */
+	public static boolean isImplicit(String id) {
+		return IMPLICIT_NAMES.contains(id);
+	}
 
+	private static final Set IMPLICIT_NAMES = new HashSet();
+	static {  
+		IMPLICIT_NAMES.add("application");
+		IMPLICIT_NAMES.add("applicationScope");
+		IMPLICIT_NAMES.add("arg");
+		IMPLICIT_NAMES.add("componentScope");
+		IMPLICIT_NAMES.add("desktop");
+		IMPLICIT_NAMES.add("desktopScope");
+		IMPLICIT_NAMES.add("execution");
+		IMPLICIT_NAMES.add("self");
+		IMPLICIT_NAMES.add("session");
+		IMPLICIT_NAMES.add("sessionScope");
+		IMPLICIT_NAMES.add("spaceOwner");
+		IMPLICIT_NAMES.add("spaceScope");
+		IMPLICIT_NAMES.add("page");
+		IMPLICIT_NAMES.add("pageScope");
+		IMPLICIT_NAMES.add("requestScope");
+	}
+	
+	/** Internal Use only. 
+	 * @since 3.5.3
+	 */
+	public static Object getImplicit(Component comp, String fdname) {
+		//initialize implicit objects
+		if ("self".equals(fdname))
+			return comp;
+		if ("spaceOwner".equals(fdname))
+			return comp.getSpaceOwner();
+		if ("page".equals(fdname))
+			return comp.getPage();
+		if ("desktop".equals(fdname))
+			return comp.getDesktop();
+		if ("session".equals(fdname))
+			return comp.getDesktop().getSession();
+		if ("application".equals(fdname))
+			return comp.getDesktop().getWebApp();
+		if ("componentScope".equals(fdname))
+			return comp.getAttributes();
+		if ("spaceScope".equals(fdname)) {
+			final IdSpace spaceOwner = comp.getSpaceOwner();
+			return (spaceOwner instanceof Page) ? 
+					comp.getPage().getAttributes() : ((Component)spaceOwner).getAttributes();
+		}
+		if ("pageScope".equals(fdname))
+			return comp.getPage().getAttributes();
+		if ("desktopScope".equals(fdname))
+			return comp.getDesktop().getAttributes();
+		if ("sessionScope".equals(fdname))
+			return comp.getDesktop().getSession().getAttributes();
+		if ("applicationScope".equals(fdname))
+			return comp.getDesktop().getWebApp().getAttributes();
+		if ("requestScope".equals(fdname))
+			return REQUEST_SCOPE_PROXY;
+		if ("execution".equals(fdname))
+			return EXECUTION_PROXY;
+		if ("arg".equals(fdname))
+			return EXECUTION_PROXY.getArg();
+		return null;
+	}
+
+	/** Internal Use only. 
+	 * @since 3.5.3
+	 */
+	public static Object getImplicit(Page page, String fdname) {
+		//initialize implicit objects
+		if ("self".equals(fdname))
+			return page;
+		if ("spaceOwner".equals(fdname))
+			return page;
+		if ("page".equals(fdname))
+			return page;
+		if ("desktop".equals(fdname))
+			return page.getDesktop();
+		if ("session".equals(fdname))
+			return page.getDesktop().getSession();
+		if ("application".equals(fdname))
+			return page.getDesktop().getWebApp();
+		if ("componentScope".equals(fdname))
+			return new HashMap(0);
+		if ("spaceScope".equals(fdname))
+			return page.getAttributes();
+		if ("pageScope".equals(fdname))
+			return page.getAttributes();
+		if ("desktopScope".equals(fdname))
+			return page.getDesktop().getAttributes();
+		if ("sessionScope".equals(fdname))
+			return page.getDesktop().getSession().getAttributes();
+		if ("applicationScope".equals(fdname))
+			return page.getDesktop().getWebApp().getAttributes();
+		if ("requestScope".equals(fdname))
+			return REQUEST_SCOPE_PROXY;
+		if ("execution".equals(fdname))
+			return EXECUTION_PROXY;
+		if ("arg".equals(fdname))
+			return EXECUTION_PROXY.getArg();
+		return null;
+	}
+	
 	/**
 	 * Utility class for wiring variables
 	 * @author henrichen
@@ -554,8 +662,8 @@ public class Components {
 			wireOthers(x);
 		}
 		private void wireImplicit(Object x) {
-			for (int j = 0; j < IMPLICIT_NAMES.length; ++j) {
-				final String fdname = IMPLICIT_NAMES[j];
+			for (final Iterator it= IMPLICIT_NAMES.iterator(); it.hasNext();) {
+				final String fdname = (String) it.next();
 				final Object arg = myGetImplicit(x, fdname);
 				injectByName(arg, fdname);
 			}
@@ -700,486 +808,400 @@ public class Components {
 			}
 			return false;
 		}
-		private static final String[] IMPLICIT_NAMES = {  
-			"application",
-			"applicationScope",
-			"arg",
-			"componentScope",
-			"desktop",
-			"desktopScope",
-			"execution",
-			"self",
-			"session",
-			"sessionScope",
-			"spaceOwner",
-			"spaceScope",
-			"page",
-			"pageScope",
-			"requestScope",
-		};
+		
 		private Object myGetImplicit(Object x, String fdname) {
 			return x instanceof Page ?
 				getImplicit((Page)x, fdname) : getImplicit((Component)x, fdname);
 		}
-		private Object getImplicit(Component comp, String fdname) {
-			//initialize implicit objects
-			if ("self".equals(fdname))
-				return comp;
-			if ("spaceOwner".equals(fdname))
-				return comp.getSpaceOwner();
-			if ("page".equals(fdname))
-				return comp.getPage();
-			if ("desktop".equals(fdname))
-				return comp.getDesktop();
-			if ("session".equals(fdname))
-				return comp.getDesktop().getSession();
-			if ("application".equals(fdname))
-				return comp.getDesktop().getWebApp();
-			if ("componentScope".equals(fdname))
-				return comp.getAttributes();
-			if ("spaceScope".equals(fdname)) {
-				final IdSpace spaceOwner = comp.getSpaceOwner();
-				return (spaceOwner instanceof Page) ? 
-						comp.getPage().getAttributes() : ((Component)spaceOwner).getAttributes();
-			}
-			if ("pageScope".equals(fdname))
-				return comp.getPage().getAttributes();
-			if ("desktopScope".equals(fdname))
-				return comp.getDesktop().getAttributes();
-			if ("sessionScope".equals(fdname))
-				return comp.getDesktop().getSession().getAttributes();
-			if ("applicationScope".equals(fdname))
-				return comp.getDesktop().getWebApp().getAttributes();
-			if ("requestScope".equals(fdname))
-				return REQUEST_SCOPE;
-			if ("execution".equals(fdname))
-				return EXECUTION;
-			if ("arg".equals(fdname))
-				return EXECUTION.getArg();
-			return null;
-		}
-
-		private Object getImplicit(Page page, String fdname) {
-			//initialize implicit objects
-			if ("self".equals(fdname))
-				return page;
-			if ("spaceOwner".equals(fdname))
-				return page;
-			if ("page".equals(fdname))
-				return page;
-			if ("desktop".equals(fdname))
-				return page.getDesktop();
-			if ("session".equals(fdname))
-				return page.getDesktop().getSession();
-			if ("application".equals(fdname))
-				return page.getDesktop().getWebApp();
-			if ("componentScope".equals(fdname))
-				return new HashMap(0);
-			if ("spaceScope".equals(fdname))
-				return page.getAttributes();
-			if ("pageScope".equals(fdname))
-				return page.getAttributes();
-			if ("desktopScope".equals(fdname))
-				return page.getDesktop().getAttributes();
-			if ("sessionScope".equals(fdname))
-				return page.getDesktop().getSession().getAttributes();
-			if ("applicationScope".equals(fdname))
-				return page.getDesktop().getWebApp().getAttributes();
-			if ("requestScope".equals(fdname))
-				return REQUEST_SCOPE;
-			if ("execution".equals(fdname))
-				return EXECUTION;
-			if ("arg".equals(fdname))
-				return EXECUTION.getArg();
-			return null;
-		}
-		
 		private String varname(String id, Class cls) {
 			final String clsname = cls.getName();
 			int j = clsname.lastIndexOf('.');
 			return id + "$" + (j >= 0 ? clsname.substring(j+1) : clsname);
 		}
-
-		//Proxy to read current execution
-		private static final Exec EXECUTION = new Exec();
-		private static class Exec implements Execution {
-			private static final Execution exec() {
-				return Executions.getCurrent();
-			}
-			
-			public void addAuResponse(String key, AuResponse response) {
-				exec().addAuResponse(key, response);
-			}
-
-			public Component createComponents(PageDefinition pagedef,
-					Component parent, Map arg) {
-				return exec().createComponents(pagedef, parent, arg);
-			}
-
-			public Component createComponents(String uri, Component parent, Map arg) {
-				return exec().createComponents(uri, parent, arg);
-			}
-
-			public Component[] createComponents(PageDefinition pagedef, Map arg) {
-				return exec().createComponents(pagedef, arg);
-			}
-
-			public Component[] createComponents(String uri, Map arg) {
-				return exec().createComponents(uri, arg);
-			}
-
-			public Component createComponentsDirectly(String content,
-					String extension, Component parent, Map arg) {
-				return exec().createComponentsDirectly(content, extension, parent, arg);
-			}
-
-			public Component createComponentsDirectly(Document content,
-					String extension, Component parent, Map arg) {
-				return exec().createComponentsDirectly(content, extension, parent, arg);
-			}
-
-			public Component createComponentsDirectly(Reader reader,
-					String extension, Component parent, Map arg) throws IOException {
-				return exec().createComponentsDirectly(reader, extension, parent, arg);
-			}
-
-			public Component[] createComponentsDirectly(String content,
-					String extension, Map arg) {
-				return exec().createComponentsDirectly(content, extension, arg);
-			}
-
-			public Component[] createComponentsDirectly(Document content,
-					String extension, Map arg) {
-				return exec().createComponentsDirectly(content, extension, arg);
-			}
-
-			public Component[] createComponentsDirectly(Reader reader,
-					String extension, Map arg) throws IOException {
-				return exec().createComponentsDirectly(reader, extension, arg);
-			}
-
-			public String encodeURL(String uri) {
-				return exec().encodeURL(uri);
-			}
-
-			public Object evaluate(Component comp, String expr, Class expectedType) {
-				return exec().evaluate(comp, expr, expectedType);
-			}
-
-			public Object evaluate(Page page, String expr, Class expectedType) {
-				return exec().evaluate(page, expr, expectedType);
-			}
-
-			public void forward(Writer writer, String page, Map params, int mode)
-					throws IOException {
-				exec().forward(writer, page, params, mode);
-				
-			}
-
-			public void forward(String page) throws IOException {
-				exec().forward(page);
-			}
-
-			public Map getArg() {
-				return exec().getArg();
-			}
-
-			public Object getAttribute(String name) {
-				return exec().getAttribute(name);
-			}
-
-			public Map getAttributes() {
-				return exec().getAttributes();
-			}
-
-			public String getContextPath() {
-				return exec().getContextPath();
-			}
-
-			public Desktop getDesktop() {
-				return exec().getDesktop();
-			}
-
-			public Evaluator getEvaluator(Page page, Class expfcls) {
-				return exec().getEvaluator(page, expfcls);
-			}
-
-			public Evaluator getEvaluator(Component comp, Class expfcls) {
-				return exec().getEvaluator(comp, expfcls);
-			}
-
-			public String getLocalAddr() {
-				return exec().getLocalAddr();
-			}
-
-			public String getLocalName() {
-				return exec().getLocalName();
-			}
-
-			public int getLocalPort() {
-				return exec().getLocalPort();
-			}
-
-			public Object getNativeRequest() {
-				return exec().getNativeRequest();
-			}
-
-			public Object getNativeResponse() {
-				return exec().getNativeResponse();
-			}
-
-			public PageDefinition getPageDefinition(String uri) {
-				return exec().getPageDefinition(uri);
-			}
-
-			public PageDefinition getPageDefinitionDirectly(String content,
-					String extension) {
-				return exec().getPageDefinitionDirectly(content, extension);
-			}
-
-			public PageDefinition getPageDefinitionDirectly(Document content,
-					String extension) {
-				return exec().getPageDefinitionDirectly(content, extension);
-			}
-
-			public PageDefinition getPageDefinitionDirectly(Reader reader,
-					String extension) throws IOException {
-				return exec().getPageDefinitionDirectly(reader, extension);
-			}
-
-			public String getParameter(String name) {
-				return exec().getParameter(name);
-			}
-
-			public Map getParameterMap() {
-				return exec().getParameterMap();
-			}
-
-			public String[] getParameterValues(String name) {
-				return exec().getParameterValues(name);
-			}
-
-			public String getRemoteAddr() {
-				return exec().getRemoteAddr();
-			}
-
-			public String getRemoteHost() {
-				return exec().getRemoteHost();
-			}
-
-			/** @deprecated
-			 */
-			public String getRemoteName() {
-				return exec().getRemoteName();
-			}
-
-			public String getRemoteUser() {
-				return exec().getRemoteUser();
-			}
-
-			public String getServerName() {
-				return exec().getServerName();
-			}
-
-			public int getServerPort() {
-				return exec().getServerPort();
-			}
-
-			public String getScheme() {
-				return exec().getScheme();
-			}
-
-			public String getUserAgent() {
-				return exec().getUserAgent();
-			}
-
-			public Principal getUserPrincipal() {
-				return exec().getUserPrincipal();
-			}
-
-			public VariableResolver getVariableResolver() {
-				return exec().getVariableResolver();
-			}
-
-			public void include(Writer writer, String page, Map params, int mode)
-					throws IOException {
-				exec().include(writer, page, params, mode);
-				
-			}
-
-			public void include(String page) throws IOException {
-				exec().include(page);
-			}
-
-			public boolean isAsyncUpdate(Page page) {
-				return exec().isAsyncUpdate(page);
-			}
-
-			public boolean isBrowser() {
-				return exec().isBrowser();
-			}
-			public boolean isBrowser(String type) {
-				return exec().isBrowser(type);
-			}
-
-			public boolean isExplorer() {
-				return exec().isExplorer();
-			}
-
-			public boolean isExplorer7() {
-				return exec().isExplorer7();
-			}
-			
-			public boolean isOpera() {
-				return exec().isOpera();
-			}
-
-			public boolean isForwarded() {
-				return exec().isForwarded();
-			}
-
-			public boolean isGecko() {
-				return exec().isGecko();
-			}
-			public boolean isGecko3() {
-				return exec().isGecko3();
-			}
-
-			public boolean isHilDevice() {
-				return exec().isHilDevice();
-			}
-
-			public boolean isIncluded() {
-				return exec().isIncluded();
-			}
-
-			public boolean isMilDevice() {
-				return exec().isMilDevice();
-			}
-
-			public boolean isRobot() {
-				return exec().isRobot();
-			}
-
-			public boolean isSafari() {
-				return exec().isSafari();
-			}
-
-			public boolean isUserInRole(String role) {
-				return exec().isUserInRole(role);
-			}
-
-			public boolean isVoided() {
-				return exec().isVoided();
-			}
-
-			public void popArg() {
-				exec().popArg();
-			}
-
-			public void postEvent(Event evt) {
-				exec().postEvent(evt);
-			}
-
-			public void postEvent(int priority, Event evt) {
-				exec().postEvent(priority, evt);
-			}
-
-			public void pushArg(Map arg) {
-				exec().pushArg(arg);
-			}
-
-			public void removeAttribute(String name) {
-				exec().removeAttribute(name);
-			}
-
-			public void sendRedirect(String uri) {
-				exec().sendRedirect(uri);
-			}
-
-			public void sendRedirect(String uri, String target) {
-				exec().sendRedirect(uri, target);
-			}
-
-			public void setAttribute(String name, Object value) {
-				exec().setAttribute(name, value);
-			}
-
-			public void setVoided(boolean voided) {
-				exec().setVoided(voided);
-			}
-
-			public String toAbsoluteURI(String uri, boolean skipInclude) {
-				return exec().toAbsoluteURI(uri, skipInclude);
-			}
-
-			public void addResponseHeader(String name, String value) {
-				exec().addResponseHeader(name, value);
-			}
-
-			public boolean containsResponseHeader(String name) {
-				return exec().containsResponseHeader(name);
-			}
-
-			public String getHeader(String name) {
-				return exec().getHeader(name);
-			}
-
-			public Iterator getHeaderNames() {
-				return exec().getHeaderNames();
-			}
-
-			public Iterator getHeaders(String name) {
-				return exec().getHeaders(name);
-			}
-
-			public void setResponseHeader(String name, String value) {
-				exec().setResponseHeader(name, value);
-			}
+	}
+	/** Execution Proxy */
+	public static final Exec EXECUTION_PROXY = new Exec();
+	
+	/** Request Scope Proxy */
+	public static final RequestScope REQUEST_SCOPE_PROXY = new RequestScope();
+
+	//Proxy to read current execution
+	private static class Exec implements Execution {
+		private static final Execution exec() {
+			return Executions.getCurrent();
+		}
+		
+		public void addAuResponse(String key, AuResponse response) {
+			exec().addAuResponse(key, response);
 		}
 
-		//Proxy to read current requestScope
-		private static final RequestScope REQUEST_SCOPE = new RequestScope(); 
-		private static class RequestScope implements Map {
-			private static final Map req() {
-				return Executions.getCurrent().getAttributes();
-			}
-			public void clear() {
-				req().clear();
-			}
-			public boolean containsKey(Object key) {
-				return req().containsKey(key);
-			}
-			public boolean containsValue(Object value) {
-				return req().containsValue(value);
-			}
-			public Set entrySet() {
-				return req().entrySet();
-			}
-			public Object get(Object key) {
-				return req().get(key);
-			}
-			public boolean isEmpty() {
-				return req().isEmpty();
-			}
-			public Set keySet() {
-				return req().keySet();
-			}
-			public Object put(Object key, Object value) {
-				return req().put(key, value);
-			}
-			public void putAll(Map arg0) {
-				req().putAll(arg0);
-			}
-			public Object remove(Object key) {
-				return req().remove(key);
-			}
-			public int size() {
-				return req().size();
-			}
-			public Collection values() {
-				return req().values();
-			}
+		public Component createComponents(PageDefinition pagedef,
+				Component parent, Map arg) {
+			return exec().createComponents(pagedef, parent, arg);
+		}
+
+		public Component createComponents(String uri, Component parent, Map arg) {
+			return exec().createComponents(uri, parent, arg);
+		}
+
+		public Component[] createComponents(PageDefinition pagedef, Map arg) {
+			return exec().createComponents(pagedef, arg);
+		}
+
+		public Component[] createComponents(String uri, Map arg) {
+			return exec().createComponents(uri, arg);
+		}
+
+		public Component createComponentsDirectly(String content,
+				String extension, Component parent, Map arg) {
+			return exec().createComponentsDirectly(content, extension, parent, arg);
+		}
+
+		public Component createComponentsDirectly(Document content,
+				String extension, Component parent, Map arg) {
+			return exec().createComponentsDirectly(content, extension, parent, arg);
+		}
+
+		public Component createComponentsDirectly(Reader reader,
+				String extension, Component parent, Map arg) throws IOException {
+			return exec().createComponentsDirectly(reader, extension, parent, arg);
+		}
+
+		public Component[] createComponentsDirectly(String content,
+				String extension, Map arg) {
+			return exec().createComponentsDirectly(content, extension, arg);
+		}
+
+		public Component[] createComponentsDirectly(Document content,
+				String extension, Map arg) {
+			return exec().createComponentsDirectly(content, extension, arg);
+		}
+
+		public Component[] createComponentsDirectly(Reader reader,
+				String extension, Map arg) throws IOException {
+			return exec().createComponentsDirectly(reader, extension, arg);
+		}
+
+		public String encodeURL(String uri) {
+			return exec().encodeURL(uri);
+		}
+
+		public Object evaluate(Component comp, String expr, Class expectedType) {
+			return exec().evaluate(comp, expr, expectedType);
+		}
+
+		public Object evaluate(Page page, String expr, Class expectedType) {
+			return exec().evaluate(page, expr, expectedType);
+		}
+
+		public void forward(Writer writer, String page, Map params, int mode)
+				throws IOException {
+			exec().forward(writer, page, params, mode);
+			
+		}
+
+		public void forward(String page) throws IOException {
+			exec().forward(page);
+		}
+
+		public Map getArg() {
+			return exec().getArg();
+		}
+
+		public Object getAttribute(String name) {
+			return exec().getAttribute(name);
+		}
+
+		public Map getAttributes() {
+			return exec().getAttributes();
+		}
+
+		public String getContextPath() {
+			return exec().getContextPath();
+		}
+
+		public Desktop getDesktop() {
+			return exec().getDesktop();
+		}
+
+		public Evaluator getEvaluator(Page page, Class expfcls) {
+			return exec().getEvaluator(page, expfcls);
+		}
+
+		public Evaluator getEvaluator(Component comp, Class expfcls) {
+			return exec().getEvaluator(comp, expfcls);
+		}
+
+		public String getLocalAddr() {
+			return exec().getLocalAddr();
+		}
+
+		public String getLocalName() {
+			return exec().getLocalName();
+		}
+
+		public int getLocalPort() {
+			return exec().getLocalPort();
+		}
+
+		public Object getNativeRequest() {
+			return exec().getNativeRequest();
+		}
+
+		public Object getNativeResponse() {
+			return exec().getNativeResponse();
+		}
+
+		public PageDefinition getPageDefinition(String uri) {
+			return exec().getPageDefinition(uri);
+		}
+
+		public PageDefinition getPageDefinitionDirectly(String content,
+				String extension) {
+			return exec().getPageDefinitionDirectly(content, extension);
+		}
+
+		public PageDefinition getPageDefinitionDirectly(Document content,
+				String extension) {
+			return exec().getPageDefinitionDirectly(content, extension);
+		}
+
+		public PageDefinition getPageDefinitionDirectly(Reader reader,
+				String extension) throws IOException {
+			return exec().getPageDefinitionDirectly(reader, extension);
+		}
+
+		public String getParameter(String name) {
+			return exec().getParameter(name);
+		}
+
+		public Map getParameterMap() {
+			return exec().getParameterMap();
+		}
+
+		public String[] getParameterValues(String name) {
+			return exec().getParameterValues(name);
+		}
+
+		public String getRemoteAddr() {
+			return exec().getRemoteAddr();
+		}
+
+		public String getRemoteHost() {
+			return exec().getRemoteHost();
+		}
+
+		/** @deprecated
+		 */
+		public String getRemoteName() {
+			return exec().getRemoteName();
+		}
+
+		public String getRemoteUser() {
+			return exec().getRemoteUser();
+		}
+
+		public String getServerName() {
+			return exec().getServerName();
+		}
+
+		public int getServerPort() {
+			return exec().getServerPort();
+		}
+
+		public String getScheme() {
+			return exec().getScheme();
+		}
+
+		public String getUserAgent() {
+			return exec().getUserAgent();
+		}
+
+		public Principal getUserPrincipal() {
+			return exec().getUserPrincipal();
+		}
+
+		public VariableResolver getVariableResolver() {
+			return exec().getVariableResolver();
+		}
+
+		public void include(Writer writer, String page, Map params, int mode)
+				throws IOException {
+			exec().include(writer, page, params, mode);
+			
+		}
+
+		public void include(String page) throws IOException {
+			exec().include(page);
+		}
+
+		public boolean isAsyncUpdate(Page page) {
+			return exec().isAsyncUpdate(page);
+		}
+
+		public boolean isBrowser() {
+			return exec().isBrowser();
+		}
+		public boolean isBrowser(String type) {
+			return exec().isBrowser(type);
+		}
+
+		public boolean isExplorer() {
+			return exec().isExplorer();
+		}
+
+		public boolean isExplorer7() {
+			return exec().isExplorer7();
+		}
+		
+		public boolean isOpera() {
+			return exec().isOpera();
+		}
+
+		public boolean isForwarded() {
+			return exec().isForwarded();
+		}
+
+		public boolean isGecko() {
+			return exec().isGecko();
+		}
+		public boolean isGecko3() {
+			return exec().isGecko3();
+		}
+
+		public boolean isHilDevice() {
+			return exec().isHilDevice();
+		}
+
+		public boolean isIncluded() {
+			return exec().isIncluded();
+		}
+
+		public boolean isMilDevice() {
+			return exec().isMilDevice();
+		}
+
+		public boolean isRobot() {
+			return exec().isRobot();
+		}
+
+		public boolean isSafari() {
+			return exec().isSafari();
+		}
+
+		public boolean isUserInRole(String role) {
+			return exec().isUserInRole(role);
+		}
+
+		public boolean isVoided() {
+			return exec().isVoided();
+		}
+
+		public void popArg() {
+			exec().popArg();
+		}
+
+		public void postEvent(Event evt) {
+			exec().postEvent(evt);
+		}
+
+		public void postEvent(int priority, Event evt) {
+			exec().postEvent(priority, evt);
+		}
+
+		public void pushArg(Map arg) {
+			exec().pushArg(arg);
+		}
+
+		public void removeAttribute(String name) {
+			exec().removeAttribute(name);
+		}
+
+		public void sendRedirect(String uri) {
+			exec().sendRedirect(uri);
+		}
+
+		public void sendRedirect(String uri, String target) {
+			exec().sendRedirect(uri, target);
+		}
+
+		public void setAttribute(String name, Object value) {
+			exec().setAttribute(name, value);
+		}
+
+		public void setVoided(boolean voided) {
+			exec().setVoided(voided);
+		}
+
+		public String toAbsoluteURI(String uri, boolean skipInclude) {
+			return exec().toAbsoluteURI(uri, skipInclude);
+		}
+
+		public void addResponseHeader(String name, String value) {
+			exec().addResponseHeader(name, value);
+		}
+
+		public boolean containsResponseHeader(String name) {
+			return exec().containsResponseHeader(name);
+		}
+
+		public String getHeader(String name) {
+			return exec().getHeader(name);
+		}
+
+		public Iterator getHeaderNames() {
+			return exec().getHeaderNames();
+		}
+
+		public Iterator getHeaders(String name) {
+			return exec().getHeaders(name);
+		}
+
+		public void setResponseHeader(String name, String value) {
+			exec().setResponseHeader(name, value);
+		}
+	}
+
+	//Proxy to read current requestScope
+	private static class RequestScope implements Map {
+		private static final Map req() {
+			return Executions.getCurrent().getAttributes();
+		}
+		public void clear() {
+			req().clear();
+		}
+		public boolean containsKey(Object key) {
+			return req().containsKey(key);
+		}
+		public boolean containsValue(Object value) {
+			return req().containsValue(value);
+		}
+		public Set entrySet() {
+			return req().entrySet();
+		}
+		public Object get(Object key) {
+			return req().get(key);
+		}
+		public boolean isEmpty() {
+			return req().isEmpty();
+		}
+		public Set keySet() {
+			return req().keySet();
+		}
+		public Object put(Object key, Object value) {
+			return req().put(key, value);
+		}
+		public void putAll(Map arg0) {
+			req().putAll(arg0);
+		}
+		public Object remove(Object key) {
+			return req().remove(key);
+		}
+		public int size() {
+			return req().size();
+		}
+		public Collection values() {
+			return req().values();
 		}
 	}
 }
