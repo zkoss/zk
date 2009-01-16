@@ -5,7 +5,8 @@ ZK 3.0.9
   2433264: Able to access the URI of the error page
   2493161: A way to instantiate a macro programmingly w/o macro declaration
   2494920: Enhance <listheader> auto sorting to sort on fieldnames
-
+  2512555: Converter convert date to String with annotated format
+  
 * Bugs
   2165067: Fail to remove children via invoking it.previous()
   2198961: AuUploader ignores 'nextURI' parameter
