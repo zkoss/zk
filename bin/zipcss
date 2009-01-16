@@ -80,9 +80,6 @@ function zips
 						if [ $? != 0 ] ; then
 							echo "Warning failed to compress, use copy instead: $f"
 							cvt=false
-						#else
-							#cp -pf ./"$f" $dst/${f%.css.dsp}.css.dsp
-								#always make a copy so we can use them if we want to debug them
 						fi
 					fi
 					if [ $cvt = false ] ; then

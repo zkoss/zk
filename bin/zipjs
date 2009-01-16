@@ -17,16 +17,16 @@
 #	it will be useful, but WITHOUT ANY WARRANTY.
 #}}IS_RIGHT
 #
-if [ $# != 3 ] ; then
+if [ $# != 5 ] ; then
 	echo "Usage:"
-	echo "  zipjs jarfl srcdir dstdir"
+	echo "  zipjs jarfl bshjarfl bshcmd srcdir dstdir"
 	echo
 	echo "All files are copied from one directory to another."
 	echo "The JavaScript files are compressed during copying."
 	exit 1
 fi
 
-if [ ! -d "$2" ] ; then #nothing to copy
+if [ ! -d "$4" ] ; then #nothing to copy
 	exit 0
 fi
 
@@ -34,7 +34,15 @@ jarfl="$1"
 if [ "${jarfl#/}" = "$jarfl" ] ; then
 	jarfl="$(pwd)/$jarfl"
 fi
-dstdir="$3"
+bshjar="$2"
+if [ "${bshjar#/}" = "$bshjar" ] ; then
+	bshjar="$(pwd)/$bshjar"
+fi
+bshcmd="$3"
+if [ "${bshcmd#/}" = "$bshcmd" ] ; then
+	bshcmd="$(pwd)/$bshcmd"
+fi
+dstdir="$5"
 if [ "${dstdir#/}" = "$dstdir" ] ; then
 	dstdir="$(pwd)/$dstdir"
 fi
@@ -43,10 +51,20 @@ if [ ! -f "$jarfl" ] ; then
 	echo "$jarfl not found"
 	exit 1
 fi
+if [ ! -f "$bshjar" ] ; then
+	echo "$bshjar not found"
+	exit 1
+fi
+if [ ! -f "$bshcmd" ] ; then
+	echo "$bshcmd not found"
+	exit 1
+fi
 
 #convert jarfl to window format
 if [ "$TERM" = "cygwin" ] ; then
 	jarfl=$(cygpath -wa $jarfl)
+	bshjar=$(cygpath -wa $bshjar)
+	bshcmd=$(cygpath -wa $bshcmd)
 fi
 
 failed=false
@@ -54,7 +72,7 @@ failed=false
 function zips
 {
 	local dst="$1"
-	local parent=$2
+	local parent=$4
 	for f in *; do
 		if [ "$f" != "CVS" ] ; then
 			dstfl=$dst/$f
@@ -81,7 +99,7 @@ function zips
 							echo "Warning failed to compress, use copy instead: $f"
 							cvt=false
 						else
-							cp -p ./"$f" $dst/${f%.js}.org.js
+							java -classpath $bshjar bsh.Interpreter $bshcmd "./$f" "$dst/${f%.js}.org.js"
 								#always make a copy so we can use them if we want to debug them
 						fi
 					fi
@@ -101,7 +119,7 @@ function zips
 	done
 	cd ..
 }
-cd $2
+cd $4
 zips "$dstdir"
 if [ $failed = true ] ; then
 	exit 1

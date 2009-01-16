@@ -19,6 +19,8 @@ import java.lang.reflect.Modifier;
 import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedList;
+import java.util.Map;
+import java.util.HashMap;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.ByteArrayOutputStream;
@@ -121,8 +123,9 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 		final Element root = new SAXBuilder(true, false, true).build(is).getRootElement();
 		final String name = IDOMs.getRequiredAttributeValue(root, "name");
 		final boolean zk = "zk".equals(name);
-		final String lang = IDOMs.getRequiredAttributeValue(root, "language");
-		final LanguageDefinition langdef = LanguageDefinition.lookup(lang);
+		final String lang = root.getAttributeValue("language");
+		final LanguageDefinition langdef = //optional
+			lang != null ? LanguageDefinition.lookup(lang): null;
 		final String dir = path.substring(0, path.lastIndexOf('/') + 1);
 		final WpdContent wc =
 			"false".equals(root.getAttributeValue("cacheable")) ?
@@ -135,25 +138,61 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 			write(out, "';if(!zk.$import(_z)){try{_zkpk=zk.$package(_z);\n");
 		}
 
+		final Map moldInfos = new HashMap();
 		for (Iterator it = root.getElements().iterator(); it.hasNext();) {
 			final Element el = (Element)it.next();
 			final String elnm = el.getName();
 			if ("widget".equals(elnm)) {
 				final String wgtnm = IDOMs.getRequiredAttributeValue(el, "name");
 				final String jspath = wgtnm + ".js"; //eg: /js/zul/wgt/Div.js
-				if (writeResource(out, jspath, dir, false)) {
-					final String wgtflnm = name + "." + wgtnm;
-					write(out, "(_zkwg=");
-					write(out, zk ? "zk.": "_zkpk.");
-					write(out, wgtnm);
-					write(out, ").prototype.className='");
-					write(out, wgtflnm);
-					write(out, "';");
-					if (langdef.hasWidgetDefinition(wgtflnm))
-						writeMolds(out, langdef, wgtflnm, dir);
-						//Note: widget defiition not available if it is a base type (such as zul.Widget)
-				} else
+				if (!writeResource(out, jspath, dir, false)) {
 					log.error("Failed to load widget "+wgtnm+": "+jspath+" not found, "+el.getLocator());
+					continue;
+				}
+
+				final String wgtflnm = name + "." + wgtnm;
+				write(out, "(_zkwg=");
+				write(out, zk ? "zk.": "_zkpk.");
+				write(out, wgtnm);
+				write(out, ").prototype.className='");
+				write(out, wgtflnm);
+				write(out, "';");
+				if (langdef == null || !langdef.hasWidgetDefinition(wgtflnm))
+					continue;
+
+				try {
+					WidgetDefinition wgtdef = langdef.getWidgetDefinition(wgtflnm);
+					write(out, "_zkmd=_zkwg.molds={};\n");
+					for (Iterator e = wgtdef.getMoldNames().iterator(); e.hasNext();) {
+						final String mold = (String)e.next();
+						final String uri = wgtdef.getMoldURI(mold);
+						if (uri == null) continue;
+
+						write(out, "_zkmd['");
+						write(out, mold);
+						write(out, "']=");
+
+						String[] info = (String[])moldInfos.get(uri);
+						if (info != null) { //reuse
+							write(out, "_zkpk.");
+							write(out, info[0]);
+							write(out, ".molds['");
+							write(out, info[1]);
+							write(out, "'];");
+						} else {
+							moldInfos.put(uri, new String[] {wgtnm, mold});
+							if (!writeResource(out, uri, dir, true)) {
+								write(out, "zk.$void;zk.error('");
+								write(out, uri);
+								write(out, " not found')");
+								log.error("Failed to load mold "+mold+" for widget "+wgtflnm+". Cause: "+uri+" not found");
+							}
+							write(out, ";\n");
+						}
+					}
+				} catch (Throwable ex) {
+					log.error("Failed to load molds for widget "+wgtflnm+".\nCause: "+Exceptions.getMessage(ex));
+				}
 			} else if ("script".equals(elnm)) {
 				String jspath = el.getAttributeValue("src");
 				if (jspath != null && jspath.length() > 0) {
@@ -172,7 +211,7 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 				}
 			} else if ("function".equals(elnm)) {
 				final String clsnm = IDOMs.getRequiredAttributeValue(el, "class");
-				final String sig = IDOMs.getRequiredAttributeValue(el, "signature");
+				final String mtdnm = IDOMs.getRequiredAttributeValue(el, "name");
 				final Class cls;
 				try {
 					cls = Classes.forNameByThread(clsnm);
@@ -183,16 +222,13 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 
 				final Method mtd;
 				try {
-					mtd = Classes.getMethodBySignature(cls, sig, null);
+					mtd = cls.getMethod(mtdnm, new Class[0]);
 					if ((mtd.getModifiers() & Modifier.STATIC) == 0) {
 						log.error("Not a static method: "+mtd);
 						continue;
 					}
 				} catch (NoSuchMethodException ex) {
-					log.error("Method not found in "+clsnm+": "+sig+" "+el.getLocator(), ex);
-					continue;
-				} catch (org.zkoss.util.IllegalSyntaxException ex) {
-					log.error("Illegal Signature: "+sig+" "+el.getLocator(), ex);
+					log.error("Method not found in "+clsnm+": "+mtdnm+" "+el.getLocator(), ex);
 					continue;
 				}
 
@@ -214,31 +250,6 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 			return wc;
 		}
 		return out.toByteArray();
-	}
-	private void writeMolds(OutputStream out, LanguageDefinition langdef,
-	String wgtflnm, String dir) {
-		try {
-			WidgetDefinition wgtdef = langdef.getWidgetDefinition(wgtflnm);
-			write(out, "_zkmd=_zkwg.molds={};");
-			for (Iterator it = wgtdef.getMoldNames().iterator(); it.hasNext();) {
-				final String mold = (String)it.next();
-				final String uri = wgtdef.getMoldURI(mold);
-				if (uri != null) {
-					write(out, "_zkmd['");
-					write(out, mold);
-					write(out, "']=");
-					if (!writeResource(out, uri, dir, true)) {
-						write(out, "zk.$void;zk.error('");
-						write(out, uri);
-						write(out, " not found')");
-						log.error("Failed to load mold "+mold+" for widget "+wgtflnm+". Cause: "+uri+" not found");
-					}
-					write(out, ";\n");
-				}
-			}
-		} catch (Throwable ex) {
-			log.error("Failed to load molds for widget "+wgtflnm+".\nCause: "+Exceptions.getMessage(ex));
-		}
 	}
 	private boolean writeResource(OutputStream out, String path,
 	String dir, boolean locate)

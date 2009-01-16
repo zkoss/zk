@@ -304,9 +304,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>decimalbox</component-name>
 		<component-class>org.zkoss.zul.Decimalbox</component-class>
+		<widget-class>zul.inp.Decimalbox</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/decimalbox.dsp</mold-uri>
+			<mold-uri>mold/input.js</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -322,9 +323,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>doublebox</component-name>
 		<component-class>org.zkoss.zul.Doublebox</component-class>
+		<widget-class>zul.inp.Doublebox</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/doublebox.dsp</mold-uri>
+			<mold-uri>mold/input.js</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -450,9 +452,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>intbox</component-name>
 		<component-class>org.zkoss.zul.Intbox</component-class>
+		<widget-class>zul.inp.Intbox</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/intbox.dsp</mold-uri>
+			<mold-uri>mold/input.js</mold-uri>
 		</mold>
 	</component>
 	<component>

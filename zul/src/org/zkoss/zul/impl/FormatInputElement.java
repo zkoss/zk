@@ -43,14 +43,12 @@ abstract public class FormatInputElement extends InputElement {
 		if (!Objects.equals(_format, format)) {
 			final String old = _format;
 			_format = format;
-			smartUpdate("z.fmt", getFormat());
-
-			try {
-				smartUpdate("value", getText());
-				//Yes, the value attribute is changed! (no format attr in client)
-			} catch (WrongValueException ex) {
-				//ignore it (safe because it will keep throwing exception)
-			}
+			smartUpdate("format", _format);
 		}
+	}
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+		render(renderer, "format", _format);
 	}
 }

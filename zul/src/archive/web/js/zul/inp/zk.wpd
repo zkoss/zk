@@ -13,7 +13,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 <package name="zul.inp" language="xul/html">
 	<widget name="InputWidget"/>
-	<widget name="Textbox"/>
 	<widget name="Errorbox"/>
 	<script src="SimpleConstraint.js"/>
+	<widget name="Textbox"/>
+	<widget name="FormatWidget"/>
+	<widget name="Intbox"/>
+	<widget name="Doublebox"/>
 </package>

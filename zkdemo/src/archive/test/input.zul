@@ -33,12 +33,15 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
   </zscript>
   no empty: <textbox constraint="${constr}"/>
   <window mode="overlapped" title="overlapped 1" border="normal" width="300px" top="50px" left="160px">
-  no empty: <textbox id="t" constraint="no empty"/>
-  <separator/>
-  <button label="toggle visibility" onClick="t.visible = !t.visible"/>
+	  no empty: <textbox id="t" constraint="no empty"/>
+	  <separator/>
+	  <button label="toggle visibility" onClick="t.visible = !t.visible"/>
   </window>
   <window mode="overlapped" title="overlapped 2" border="normal" width="300px">
-  no empty: <textbox constraint="no empty"/>
+	  <separator/>
+	  integer: <intbox/>
+	  <separator/>
+	  positive: <intbox constraint="no negative, no zero"/>
   </window>
   <div height="1000px">
   end-of-file

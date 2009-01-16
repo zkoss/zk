@@ -39,8 +39,10 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		if (value !== zul.inp.InputWidget._errVal
 		&& (fromServer || this._value != value)) {
 			this._value = value;
-			if (this.einp)
-				this.einp.value = this.coerceToString_(value);
+			if (this.einp) {
+				this.einp.value = value = this.coerceToString_(value);
+				if (fromServer) this.einp.defaultValue = value;
+			}
 		}
 	},
 
@@ -113,10 +115,6 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			if (this.einp)
 				this.einp.tabIndex = tabindex;
 		}
-	},
-
-	coerceToString_: function (value) {
-		return value || '';
 	},
 
 	innerAttrs_: function () {
@@ -204,7 +202,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		return value;
 	},
 	coerceToString_: function (value) {
-		return value;
+		return value || '';
 	},
 	_markError: function (val, msg) {
 		this._errmsg = msg;
