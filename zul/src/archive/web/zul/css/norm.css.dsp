@@ -65,7 +65,34 @@ div.z-log textarea {
 div.z-log button {
 	font-size: ${fontSizeXS};
 }
-
+.z-debug-domtree {
+	width:80%; right:10px; bottom:5px;
+	position:absolute; z-index: 99000; 
+	overflow: auto; color: #7D9196;
+	height: 300px; background: white;
+	padding: 2px; border: 1px solid gray;
+}
+.z-debug-domtree .z-debug-domtree-header {
+	overflow: hidden; zoom: 1; color: #403E39; font: normal ${fontSizeM} ${fontFamilyT};
+	padding: 5px 3px 4px 5px; border: 1px solid #999884; line-height: 15px; 
+	background:transparent url(${c:encodeURL('~./zk/img/debug/hd-gray.png')}) repeat-x 0 -1px;
+	font-weight:bold;
+}
+.z-debug-domtree .z-debug-domtree-body {
+	border: 1px solid #999884;
+	border-top: 0px;
+}
+.z-debug-domtree-close {
+	overflow: hidden; width: 15px; height: 15px; float: right; cursor: pointer;
+	background-color : transparent;
+	background-image : url(${c:encodeURL('~./zk/img/debug/tool-btn.gif')});
+	background-position : 0 0;
+	background-repeat : no-repeat;
+	margin-left: 2px;
+}
+.z-debug-domtree-close-over {
+	background-position: -15px 0;
+}
 <%-- General --%>
 .noscript {<%-- the content of noscript --%>
 	position: absolute; z-index: 22000;
