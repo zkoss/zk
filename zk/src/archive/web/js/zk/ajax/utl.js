@@ -136,12 +136,16 @@ zUtl = { //static methods
 		document.body.appendChild(n);
 		n = zDom.setOuterHTML(n, html);
 
-		if (mask) n.z_mask = new zk.eff.FullMask({mask: zDom.$(idmsk)});
+		var txt = zDom.$(idtxt);
+		if (mask)
+			n.z_mask = new zk.eff.FullMask({
+				mask: zDom.$(idmsk),
+				zIndex: zDom.getStyle(txt, 'z-index') - 1
+			});
 
-		n = zDom.$(idtxt);
-		if (mask && n) { //center
-			n.style.left = (zDom.innerWidth() - n.offsetWidth) / 2 + x + "px";
-			n.style.top = (zDom.innerHeight() - n.offsetHeight) / 2 + y + "px";
+		if (mask && txt) { //center
+			txt.style.left = (zDom.innerWidth() - txt.offsetWidth) / 2 + x + "px";
+			txt.style.top = (zDom.innerHeight() - txt.offsetHeight) / 2 + y + "px";
 		}
 		zDom.cleanVisibility(n);
 	},

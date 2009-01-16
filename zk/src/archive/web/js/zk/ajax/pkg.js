@@ -62,7 +62,7 @@ zPkg = {
 		zPkg._lding.unshift(pkg);
 		if (zPkg._updCnt() == 1) {
 			zEvt.disableESC();
-			setTimeout(zPkg._pgbox, 350);
+			setTimeout(zPkg._pgbox, 380);
 		}
 
 		var modver = pkg.indexOf('.');
