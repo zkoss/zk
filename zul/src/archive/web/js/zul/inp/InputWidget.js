@@ -32,11 +32,15 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	getValue: function () {
 		return this._value;
 	},
-	setValue: function (value) {
-		if (this._value != value) {
+	setValue: function (value, fromServer) {
+		if (fromServer) this.clearErrorMessage(true);
+		else value = this._validate(value);
+
+		if (value !== zul.inp.InputWidget._errVal
+		&& (fromServer || this._value != value)) {
 			this._value = value;
 			if (this.einp)
-				this.einp.value = value;
+				this.einp.value = this.coerceToString_(value);
 		}
 	},
 
@@ -147,6 +151,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			this._cst = true;
 		else
 			this._cst = cst;
+		if (this._cst) delete this._lastValVld; //revalidate required
 	},
 	getConstraint: function () {
 		return this._cst;
@@ -179,17 +184,76 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	shallUpdate_: function (focus) {
 		return !focus || !zUtl.isAncestor(this, focus);
 	},
-	validate_: function (value) {
-		if (this._cst) {
-			zul.inp.validating = true;
-			try {
-				if (this._cst == true) { //by server
-					return; //TODO
-				}
-				return this._cst.validate(this, value);
-			} finally {
-				zul.inp.validating = false;
+	getErrorMesssage: function () {
+		return this._errmsg;
+	},
+	clearErrorMessage: function (revalidate, remainError) {
+		var w = this._errbox;
+		if (w) {
+			this._errbox = null;
+			w.destroy();
+		}
+		if (!remainError) {
+			this._errmsg = null;
+			zDom.rmClass(this.einp, this.getZclass() + "-text-invalid");
+		}
+		if (revalidate)
+			delete this._lastValVld; //cause re-valid
+	},
+	coerceFromString_: function (value) {
+		return value;
+	},
+	coerceToString_: function (value) {
+		return value;
+	},
+	_markError: function (val, msg) {
+		this._errmsg = msg;
+
+		if (this.desktop) { //err not visible if not attached
+			zDom.addClass(this.einp, this.getZclass() + "-text-invalid");
+
+			var cst = this._cst, errbox;
+			if (cst) {
+				errbox = cst.showCustomError;
+				if (errbox) errbox = errbox.call(cst, this, msg);
 			}
+
+			if (!errbox) this._errbox = this.showError_(msg);
+
+			this.fire('onError',
+				{value: val, message: msg, marshal: this._onErrMarshal});
+		}
+		return zul.inp.InputWidget._errVal;
+	},
+	validate_: function (val) {
+		if (this._cst) {
+			if (this._cst == true) { //by server
+				return; //TODO
+			}
+			return this._cst.validate(this, val);
+		}
+	},
+	_validate: function (val) {
+		zul.inp.validating = true;
+		try {
+			if (typeof val == 'string' || val == null)
+				try {
+					val = this.coerceFromString_(val);
+				} catch (e) {
+					return this._markError(val, e.message);
+				}
+
+			//unlike server, validation occurs only if attached
+			if (!this.desktop) this._errmsg = null;
+			else if (val != this._lastValVld) {
+				this._lastValVld = val;
+				this.clearErrorMessage();
+				var msg = this.validate_(val);
+				if (msg) return this._markError(val, msg);
+			}
+			return val;
+		} finally {
+			zul.inp.validating = false;
 		}
 	},
 	showError_: function (msg) {
@@ -202,33 +266,11 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 
 		var inp = this.einp,
 			val = inp.value;
-		if (val != this._lastValVld) {
-			this._lastValVld = val;
-			this._destroyerrbox();
-			var msg = this.validate_(val);
-			if (msg) {
-				zDom.addClass(inp, this.getZclass() + "-text-invalid");
-
-				var cst = this._cst, errbox;
-				if (cst) {
-					errbox = cst.showCustomError;
-					if (errbox) errbox = errbox.call(cst, this, msg);
-				}
-
-				if (!errbox) this._errbox = this.showError_(msg);
-
-				this.fire('onError',
-					{value: val, message: msg, marshal: this._onErrMarshal},
-					null, -1);
-				return;
-			} else
-				zDom.rmClass(inp, this.getZclass() + "-text-invalid");
-		}
-		if (val != inp.defaultValue) {
+		if (this._validate(val) !== zul.inp.InputWidget._errVal
+		&& val != inp.defaultValue) {
 			inp.defaultValue = val;
 			this.fire('onChange', this._onChangeData(val), null, 150);
 		}
-//TODO else zk_err => fire onError to clear message
 	},
 	_onChanging: function () {
 		var inp = this.einp,
@@ -291,12 +333,9 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		zEvt.listen(inp, "focus", this.proxy(this.doFocus_, '_pxFocus'));
 		zEvt.listen(inp, "blur", this.proxy(this.doBlur_, '_pxBlur'));
 		zEvt.listen(inp, "select", $InputWidget._doSelect);
-	//Bug 1486556: we have to enforce to send value back for validating
-	//at the server
-	//TODO
 	},
 	unbind_: function () {
-		this._destroyerrbox();
+		this.clearErrorMessage(true);
 
 		var n = this.einp,
 			$InputWidget = zul.inp.InputWidget;
@@ -309,16 +348,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		this.einp = null;
 		this.$supers('unbind_', arguments);
 	},
-	_destroyerrbox: function () {
-		var n = this._errbox;
-		if (n) {
-			this._errbox = null;
-			n.destroy();
-		}
-		delete this._lastValVld; //cause re-valid
-	},
 	isImportantEvent_: function (evtnm) {
-		return 'onChange' == evtnm;
+		return 'onChange' == evtnm || 'onError' == evtnm;
 	},
 	doKeyDown_: function (evt) {
 		var keyCode = evt.keyCode;
@@ -342,6 +373,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	}
 
 },{
+	_errVal: {},
 	_doSelect: function (evt) {
 		var wgt = zk.Widget.$(evt);
 		if (wgt.isListen('onSelection')) {

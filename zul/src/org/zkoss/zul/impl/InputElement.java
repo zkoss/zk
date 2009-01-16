@@ -57,6 +57,7 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 		addClientEvent(InputElement.class, Events.ON_FOCUS);
 		addClientEvent(InputElement.class, Events.ON_BLUR);
 		addClientEvent(InputElement.class, Events.ON_SELECTION);
+		addClientEvent(InputElement.class, Events.ON_ERROR);
 	}
 
 	/** The value. */

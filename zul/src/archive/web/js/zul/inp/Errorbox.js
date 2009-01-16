@@ -82,7 +82,7 @@ zul.inp.Errorbox = zk.$extends('zul.wgt.Popup', {
 	doClick_: function (evt, devt) {
 		var el = zEvt.target(devt);
 		if (el == this.getSubnode('c') && zDom.hasClass(el, 'z-errbox-close-over'))
-			this.parent._destroyerrbox();
+			this.parent.clearErrorMessage(true, true);
 		else {
 			this.$supers('doClick_', arguments);
 			this.parent.focus(0);
