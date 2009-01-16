@@ -11,6 +11,6 @@
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 
-<package name="zk.debug" language="xul/html">
+<package name="zk.debug">
 	<script src="debugger.js"/>
 </package>
