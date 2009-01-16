@@ -119,7 +119,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		return this.$class._impEvts[evtnm];
 	}
 }, {
-	_impEvts: {onCheck:1},
+	_impEvts: {onCheck:1}
 });
 if (zk.gecko2Only)
 	zul.wgt.Checkbox._doClick = function (evt) {
