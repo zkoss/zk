@@ -82,8 +82,8 @@ public interface WebAppCtrl {
 	 */
 	public FailoverManager getFailoverManager();
 	/** Sets the failover manager for this Web application.
-	 * @param manager the failover manager
-	 * @exception IllegalArgumentException if manager is null.
+	 * @param manager the failover manager.
+	 * If null, it means no failover manager at all.
 	 * @since 3.5.3
 	 */
 	public void setFailoverManager(FailoverManager manager);
@@ -94,8 +94,8 @@ public interface WebAppCtrl {
 	 */
 	public IdGenerator getIdGenerator();
 	/** Sets the ID generator for this Web application.
-	 * @param generator the ID generator
-	 * @exception IllegalArgumentException if generator is null.
+	 * @param generator the ID generator.
+	 * If null, it means no (custom) ID generator at all.
 	 * @since 3.5.3
 	 */
 	public void setIdGenerator(IdGenerator generator);

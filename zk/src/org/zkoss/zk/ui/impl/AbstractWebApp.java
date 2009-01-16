@@ -173,9 +173,11 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		_engine.start(this);
 		_provider.start(this);
 		_factory.start(this);
-		try {
-			_failover.start(this);
-		} catch (AbstractMethodError ex) { //backward compatible
+		if (_failover != null) {
+			try {
+				_failover.start(this);
+			} catch (AbstractMethodError ex) { //backward compatible
+			}
 		}
 		_sesscache.init(this);
 
@@ -193,14 +195,16 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		_factory.stop(this);
 		_provider.stop(this);
 		_engine.stop(this);
-		try {
-			_failover.stop(this);
-		} catch (AbstractMethodError ex) { //backward compatible
+		if (_failover != null) {
+			try {
+				_failover.stop(this);
+			} catch (AbstractMethodError ex) { //backward compatible
+			}
+			_failover = null;
 		}
 		_factory = null;
 		_provider = null;
 		_engine = null;
-		_failover = null;
 		_sesscache = null;
 
 		//we don't reset _config since WebApp cannot be re-inited after stop
@@ -240,16 +244,16 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		return _failover;
 	}
 	public void setFailoverManager(FailoverManager failover) {
-		if (failover == null) throw new IllegalArgumentException();
-		_failover.stop(this);
+		if (_failover != null)
+			_failover.stop(this);
 		_failover = failover;
-		_failover.start(this);
+		if (_failover != null)
+			_failover.start(this);
 	}
 	public IdGenerator getIdGenerator() {
 		return _idgen;
 	}
 	public void setIdGenerator(IdGenerator idgen) {
-		if (idgen == null) throw new IllegalArgumentException();
 		_idgen = idgen;
 	}
 	public SessionCache getSessionCache() {
