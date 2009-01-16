@@ -165,7 +165,6 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		} else {
 			try {
 				_sesscache = (SessionCache)cls.newInstance();
-				_sesscache.init(this);
 			} catch (Exception ex) {
 				throw UiException.Aide.wrap(ex, "Unable to construct "+cls);
 			}
@@ -178,6 +177,7 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 			_failover.start(this);
 		} catch (AbstractMethodError ex) { //backward compatible
 		}
+		_sesscache.init(this);
 
 		_config.invokeWebAppInits();
 	}
@@ -186,6 +186,10 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 
 		_config.detroyRichlets();
 
+		try {
+			_sesscache.destroy(this);
+		} catch (AbstractMethodError ex) { //backward compatible
+		}
 		_factory.stop(this);
 		_provider.stop(this);
 		_engine.stop(this);
@@ -197,6 +201,7 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		_provider = null;
 		_engine = null;
 		_failover = null;
+		_sesscache = null;
 
 		//we don't reset _config since WebApp cannot be re-inited after stop
 	}
@@ -250,6 +255,12 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	public SessionCache getSessionCache() {
 		return _sesscache;
 	}
+	public void setSessionCache(SessionCache cache) {
+		if (cache == null) throw new IllegalArgumentException();
+		_sesscache.destroy(this);
+		_sesscache = cache;
+		_sesscache.init(this);
+	}		
 
 	/** Invokes {@link #getDesktopCacheProvider}'s
 	 * {@link DesktopCacheProvider#sessionWillPassivate}.

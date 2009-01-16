@@ -36,6 +36,9 @@ public class SimpleSessionCache implements SessionCache {
 
 	public void init(WebApp wapp) {
 	}
+	public void destroy(WebApp wapp) {
+	}
+
 	public void put(Session sess) {
 		final Object navsess = sess.getNativeSession();
 		if (navsess instanceof HttpSession)

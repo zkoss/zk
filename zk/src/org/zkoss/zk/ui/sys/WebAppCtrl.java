@@ -105,6 +105,12 @@ public interface WebAppCtrl {
 	 * @since 3.0.5
 	 */
 	public SessionCache getSessionCache();
+	/** Sets the session cache for this Web application.
+	 * @param cache the session cache
+	 * @exception IllegalArgumentException if cache is null.
+	 * @since 3.5.3
+	 */
+	public void setSessionCache(SessionCache cache);
 
 	/** Notification that the session is about to be passivated
 	 * (aka., serialized).
