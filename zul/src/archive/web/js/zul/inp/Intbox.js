@@ -19,7 +19,7 @@ zul.inp.Intbox = zk.$extends(zul.inp.FormatWidget, {
 		var info = zNumFormat.unformat(this._format, value),
 			val = parseInt(info.raw);
 		if (info.raw != ''+val)
-			return {error: zMsgFormat.format(msgzul.NUMER_REQUIRED, value)};
+			return {error: zMsgFormat.format(msgzul.INTEGER_REQUIRED, value)};
 
 		if (info.divscale) val = Math.round(val / Math.pow(10, info.divscale));
 		return val;

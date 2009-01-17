@@ -234,10 +234,13 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		try {
 			if (typeof val == 'string' || val == null) {
 				val = this.coerceFromString_(val);
-				var errmsg = val.error;
-				if (errmsg) {
-					this._markError(val, errmsg);
-					return val;
+				if (val) {
+					var errmsg = val.error;
+					if (errmsg) {
+						this.clearErrorMessage();
+						this._markError(val, errmsg);
+						return val;
+					}
 				}
 			}
 
@@ -268,10 +271,13 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		var inp = this.einp,
 			value = inp.value,
 			val = this._validate(value);
-		if ((!val || !val.error) && value != inp.defaultValue) {
-			this._value = val;
-			inp.defaultValue = value;
-			this.fire('onChange', this._onChangeData(value), null, 150);
+		if (!val || !val.error) {
+			value = this.coerceToString_(val);
+			if (value != inp.defaultValue) {
+				this._value = val;
+				inp.defaultValue = value;
+				this.fire('onChange', this._onChangeData(value), null, 150);
+			}
 		}
 	},
 	_onChanging: function () {
