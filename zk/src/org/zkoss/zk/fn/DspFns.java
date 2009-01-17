@@ -106,6 +106,8 @@ public class DspFns {
 			sb, "zk.PERCENT", symbols.getPercent());
 		appendAssignJavaScript(
 			sb, "zk.MINUS", symbols.getMinusSign());
+		appendAssignJavaScript(
+			sb, "zk.PER_MILL", symbols.getPerMill());
 		return sb.toString();
 	}
 	private final static

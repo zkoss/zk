@@ -36,8 +36,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		if (fromServer) this.clearErrorMessage(true);
 		else value = this._validate(value);
 
-		if (value !== zul.inp.InputWidget._errVal
-		&& (fromServer || this._value != value)) {
+		if ((!value || !value.error) && (fromServer || this._value != value)) {
 			this._value = value;
 			if (this.einp) {
 				this.einp.value = value = this.coerceToString_(value);
@@ -221,7 +220,6 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			this.fire('onError',
 				{value: val, message: msg, marshal: this._onErrMarshal});
 		}
-		return zul.inp.InputWidget._errVal;
 	},
 	validate_: function (val) {
 		if (this._cst) {
@@ -234,12 +232,14 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	_validate: function (val) {
 		zul.inp.validating = true;
 		try {
-			if (typeof val == 'string' || val == null)
-				try {
-					val = this.coerceFromString_(val);
-				} catch (e) {
-					return this._markError(val, e.message);
+			if (typeof val == 'string' || val == null) {
+				val = this.coerceFromString_(val);
+				var errmsg = val.error;
+				if (errmsg) {
+					this._markError(val, errmsg);
+					return val;
 				}
+			}
 
 			//unlike server, validation occurs only if attached
 			if (!this.desktop) this._errmsg = null;
@@ -247,7 +247,10 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				this._lastValVld = val;
 				this.clearErrorMessage();
 				var msg = this.validate_(val);
-				if (msg) return this._markError(val, msg);
+				if (msg) {
+					this._markError(val, msg);
+					return {error: msg};
+				}
 			}
 			return val;
 		} finally {
@@ -263,11 +266,12 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		if (zul.inp.validating) return; //avoid deadloop (when both focus and blur fields invalid)
 
 		var inp = this.einp,
-			val = inp.value;
-		if (this._validate(val) !== zul.inp.InputWidget._errVal
-		&& val != inp.defaultValue) {
-			inp.defaultValue = val;
-			this.fire('onChange', this._onChangeData(val), null, 150);
+			value = inp.value,
+			val = this._validate(value);
+		if ((!val || !val.error) && value != inp.defaultValue) {
+			this._value = val;
+			inp.defaultValue = value;
+			this.fire('onChange', this._onChangeData(value), null, 150);
 		}
 	},
 	_onChanging: function () {
@@ -371,7 +375,6 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	}
 
 },{
-	_errVal: {},
 	_doSelect: function (evt) {
 		var wgt = zk.Widget.$(evt);
 		if (wgt.isListen('onSelection')) {

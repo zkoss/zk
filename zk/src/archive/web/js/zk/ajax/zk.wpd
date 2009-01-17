@@ -26,7 +26,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<script src="mount.js"/>
 	<script src="history.js"/>
 	<script src="au.js"/>
-	<script src="format.js"/>
-
+	<script src="numfmt.js"/>
+	<script src="msgfmt.js"/>
+	
 	<function class="org.zkoss.zk.fn.DspFns" name="outLocaleJavaScript"/>
 </package>

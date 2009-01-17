@@ -174,9 +174,11 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		_engine.start(this);
 		_provider.start(this);
 		_factory.start(this);
-		try {
-			_failover.start(this);
-		} catch (AbstractMethodError ex) { //backward compatible
+		if (_failover != null) {
+			try {
+				_failover.start(this);
+			} catch (AbstractMethodError ex) { //backward compatible
+			}
 		}
 
 		_config.invokeWebAppInits();
@@ -189,14 +191,16 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		_factory.stop(this);
 		_provider.stop(this);
 		_engine.stop(this);
-		try {
-			_failover.stop(this);
-		} catch (AbstractMethodError ex) { //backward compatible
+		if (_failover != null) {
+			try {
+				_failover.stop(this);
+			} catch (AbstractMethodError ex) { //backward compatible
+			}
+			_failover = null;
 		}
 		_factory = null;
 		_provider = null;
 		_engine = null;
-		_failover = null;
 
 		//we don't reset _config since WebApp cannot be re-inited after stop
 	}
