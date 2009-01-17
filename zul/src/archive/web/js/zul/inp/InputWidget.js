@@ -34,7 +34,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	setValue: function (value, fromServer) {
 		if (fromServer) this.clearErrorMessage(true);
-		else value = this._validate(value);
+		else if (value == this._lastRawValVld) return; //not changed
+ 		else value = this._validate(value);
 
 		if ((!value || !value.error) && (fromServer || this._value != value)) {
 			this._value = value;
@@ -148,7 +149,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			this._cst = true;
 		else
 			this._cst = cst;
-		if (this._cst) delete this._lastValVld; //revalidate required
+		if (this._cst) delete this._lastRawValVld; //revalidate required
 	},
 	getConstraint: function () {
 		return this._cst;
@@ -174,6 +175,19 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		setTimeout(this._pxLateBlur, 0);
 			//curretFocus still unknow, so wait a while to execute
 	},
+	_doSelect: function (evt) {
+		if (this.isListen('onSelection')) {
+			var inp = this.einp,
+				sr = zDom.selectionRange(inp),
+				b = sr[0], e = sr[1];
+			this.fire('onSelection', {start: b, end: e,
+				selected: inp.value.substring(b, e),
+				marshal: this._onSelMarshal});
+		}
+	},
+	_onSelMarshal: function () {
+		return [this.start, this.end, this.selected];
+	},
 	_lateBlur: function () {
 		if (this.shallUpdate_(zk.currentFocus))
 			this._updateChange();
@@ -195,7 +209,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			zDom.rmClass(this.einp, this.getZclass() + "-text-invalid");
 		}
 		if (revalidate)
-			delete this._lastValVld; //cause re-valid
+			delete this._lastRawValVld; //cause re-valid
 	},
 	coerceFromString_: function (value) {
 		return value;
@@ -229,15 +243,16 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			return this._cst.validate(this, val);
 		}
 	},
-	_validate: function (val) {
+	_validate: function (value) {
 		zul.inp.validating = true;
 		try {
+			var val = value;
 			if (typeof val == 'string' || val == null) {
 				val = this.coerceFromString_(val);
 				if (val) {
 					var errmsg = val.error;
 					if (errmsg) {
-						this.clearErrorMessage();
+						this.clearErrorMessage(true);
 						this._markError(val, errmsg);
 						return val;
 					}
@@ -246,14 +261,14 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 
 			//unlike server, validation occurs only if attached
 			if (!this.desktop) this._errmsg = null;
-			else if (val != this._lastValVld) {
-				this._lastValVld = val;
-				this.clearErrorMessage();
+			else {
+				this.clearErrorMessage(true);
 				var msg = this.validate_(val);
 				if (msg) {
 					this._markError(val, msg);
 					return {error: msg};
-				}
+				} else
+					this._lastRawValVld = value; //raw
 			}
 			return val;
 		} finally {
@@ -269,11 +284,15 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		if (zul.inp.validating) return; //avoid deadloop (when both focus and blur fields invalid)
 
 		var inp = this.einp,
-			value = inp.value,
+			value = inp.value;
+		if (value == this._lastRawValVld)
+			return; //not changed
+
+		var wasErr = this._errmsg,
 			val = this._validate(value);
 		if (!val || !val.error) {
-			value = this.coerceToString_(val);
-			if (value != inp.defaultValue) {
+			inp.value = value = this.coerceToString_(val);
+			if (wasErr || value != inp.defaultValue) {
 				this._value = val;
 				inp.defaultValue = value;
 				this.fire('onChange', this._onChangeData(value), null, 150);
@@ -336,22 +355,18 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
-		var inp = this.einp = this.getSubnode('inp') || this.getNode(),
-			$InputWidget = zul.inp.InputWidget;
+		var inp = this.einp = this.getSubnode('inp') || this.getNode();
 		zEvt.listen(inp, "focus", this.proxy(this.doFocus_, '_pxFocus'));
 		zEvt.listen(inp, "blur", this.proxy(this.doBlur_, '_pxBlur'));
-		zEvt.listen(inp, "select", $InputWidget._doSelect);
+		zEvt.listen(inp, "select", this.proxy(this._doSelect, '_pxSelect'));
 	},
 	unbind_: function () {
 		this.clearErrorMessage(true);
 
-		var n = this.einp,
-			$InputWidget = zul.inp.InputWidget;
+		var n = this.einp;
 		zEvt.unlisten(n, "focus", this._pxFocus);
 		zEvt.unlisten(n, "blur", this._pxBlur);
-		zEvt.unlisten(n, "select", $InputWidget._doSelect);
-		if (zDom.tag(n) == 'TEXTAREA')
-			zEvt.unlisten(n, "keyup", $InputWidget._doKeyUp);
+		zEvt.unlisten(n, "select", this._pxSelect);
 
 		this.einp = null;
 		this.$supers('unbind_', arguments);
@@ -378,21 +393,5 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			}
 		}
 		this.$supers('doKeyUp_', arguments);
-	}
-
-},{
-	_doSelect: function (evt) {
-		var wgt = zk.Widget.$(evt);
-		if (wgt.isListen('onSelection')) {
-			var inp = wgt.einp,
-				sr = zDom.selectionRange(inp),
-				b = sr[0], e = sr[1];
-			wgt.fire('onSelection', {start: b, end: e,
-				selected: inp.value.substring(b, e),
-				marshal: zul.inp.InputWidget._onSelMarshal});
-		}
-	},
-	_onSelMarshal: function () {
-		return [this.start, this.end, this.selected];
 	}
 });

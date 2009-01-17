@@ -24,6 +24,10 @@ zul.inp.Intbox = zk.$extends(zul.inp.FormatWidget, {
 		if (info.divscale) val = Math.round(val / Math.pow(10, info.divscale));
 		return val;
 	},
+	coerceToString_: function (value) {
+		var fmt = this._format;
+		return fmt ? zNumFormat.format(fmt, value): value ? ''+value: '';
+	},
 	getZclass: function () {
 		var zcs = this._zclass;
 		return zcs != null ? zcs: "z-intbox";

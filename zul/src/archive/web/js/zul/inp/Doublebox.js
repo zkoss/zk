@@ -12,7 +12,18 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.inp.Doublebox = zk.$extends(zul.inp.FormatWidget, {
+zul.inp.Doublebox = zk.$extends(zul.inp.Intbox, {
+	coerceFromString_: function (value) {
+		if (!value) return null;
+
+		var info = zNumFormat.unformat(this._format, value),
+			val = parseFloat(info.raw);
+		if (info.raw != ''+val && info.raw.indexOf('e') < 0) //unable to handle 1e2
+			return {error: zMsgFormat.format(msgzul.NUMBER_REQUIRED, value)};
+
+		if (info.divscale) val = Math.round(val / Math.pow(10, info.divscale));
+		return val;
+	},
 	getZclass: function () {
 		var zcs = this._zclass;
 		return zcs != null ? zcs: "z-doublebox";

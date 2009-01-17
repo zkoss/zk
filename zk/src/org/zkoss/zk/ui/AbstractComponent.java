@@ -1455,7 +1455,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 */
 	protected void render(ContentRenderer renderer,
 	String name, Object value) throws IOException {
-		if (value != null)
+		if (value instanceof String)
+			render(renderer, name, (String)value);
+		else if (value != null)
 			renderer.render(name, value);
 	}
 	/** An utility to be called by {@link #renderProperties} to

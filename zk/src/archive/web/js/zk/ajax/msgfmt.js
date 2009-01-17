@@ -14,6 +14,29 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 zMsgFormat = {
 	format: function (msg) {
-		return msg; //TODO
+		var i = 0, sb = '';
+		for (var j = 0, len = msg.length, cc, k; j < len; ++j) {
+			cc = msg.charAt(j);
+			if (cc == '\\') {
+				if (++j >= len) break;
+				sb += msg.substring(i, j);
+				cc = msg.charAt(j);
+				switch (cc) {
+				case 'n': cc = '\n'; break;
+				case 't': cc = '\t'; break;
+				case 'r': cc = '\r'; break;
+				}
+				sb += cc;
+				i = j + 1;
+			} else if (cc == '{') {
+				k = msg.indexOf('}', j + 1);
+				if (k < 0) break;
+				sb += msg.substring(i, j)
+					+ arguments[zk.parseInt(msg.substring(j + 1, k)) + 1];
+				i = j = k + 1;
+			}
+		}
+		if (sb) sb += msg.substring(i);
+		return sb || msg;
 	}
 };

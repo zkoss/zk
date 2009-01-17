@@ -41,7 +41,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	  <separator/>
 	  integer: <intbox/>
 	  <separator/>
-	  positive: <intbox constraint="no negative, no zero"/>
+	  positive integer: <intbox constraint="no negative, no zero"/>
+	  <separator/>
+	  negative or zero double: <doublebox constraint="no positive"/>
   </window>
   <div height="1000px">
   end-of-file

@@ -128,7 +128,7 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 			return;
 		}
 
-		if (val.getFullYear) {
+		if (val && val.getFullYear) {
 			var today = zUtl.today(),
 				val = new Date(val.getFullYear(), val.getMonth(), val.getDate());
 			if (val > today) {
@@ -140,7 +140,7 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 			return;
 		}
 
-		if (val.compareTo) {
+		if (val && val.compareTo) {
 			var b = val.compareTo(0);
 			if (b > 0) {
 				if (f.NO_POSITIVE) return msg || this._msgNumDenied();

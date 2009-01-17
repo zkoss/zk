@@ -13,6 +13,10 @@ This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 zNumFormat = {
+	format: function (fmt, val) {
+		if (!val) return '';
+		return '' + val; //TODO
+	},
 	unformat: function (fmt, val) {
 		if (!val) return {raw: val, divscale: 0};
 
