@@ -47,7 +47,8 @@ zk.debug.Debugger = zk.$extends(zk.Object, {
 				+ '<div class="z-debug-domtree-close" onclick="zDom.remove(\''
 				+ this.outId + '\')" onmouseover="zDom.addClass(this, \'z-debug-domtree-close-over\');"'
 				+ ' onmouseout="zDom.rmClass(this, \'z-debug-domtree-close-over\');"></div> [' + wgt.className + '] '
-				+ wgt.uuid +'</div><div class="z-debug-domtree-body">' + handler.toHTML() + '</div>';
+				+ wgt.uuid + '&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red;">ErrorNumber: '
+				+ handler.getErrorNumber() + '</span></div><div class="z-debug-domtree-body">' + handler.toHTML() + '</div>';
 				
 		if (!isEmpty) {
 			if (zk.ie && console.offsetHeight){} 
@@ -58,8 +59,8 @@ zk.debug.Debugger = zk.$extends(zk.Object, {
 		var begin, content, deep = 0, empty;
 			
 		while (text) {
-			begin = text.indexOf('<');
 			text = text.trim();
+			begin = text.indexOf('<');
 			if (begin == 0 && text.startsWith('<!--')) {
 				begin = text.indexOf("-->");
 				if (begin != -1) {
@@ -88,6 +89,7 @@ zk.debug.Debugger = zk.$extends(zk.Object, {
 					text = text.substring(begin);
 			} else if (begin == 0) {
 				var mid = text.indexOf('>'), end = text.indexOf('/>');
+				
 				if (end >= 0 && end < mid) {
 					content = text.substring(0, end + 2);
 					handler.startTag(deep, content, true);
@@ -111,21 +113,32 @@ zk.debug.Debugger = zk.$extends(zk.Object, {
 zDebug = new zk.debug.Debugger(); // global
 
 zk.debug.DefaultHandler = zk.$extends(zk.Object, {
+	_errorNumber: 0,
 	$init: function () {
 		this.out = [];
+		this.stack = [];
 	},
 	endTag: function (deep, content, isEmpty) {
+		var startTag = this.stack.pop(),
+			endTag = content.substring(2, content.length-1);
+		if (startTag != endTag) {
+			this._errorNumber++;
+			this.out.push('<span style="color:red">Unmatched start tag : [<span style="color:blue;">&lt;',
+					startTag, '&gt;</span>], end tag : [<span style="color:blue;">&lt;/',
+					endTag, '&gt;</span>]</span><br/>');
+			return;
+		}
 		this.out.push(isEmpty ? '' : this._getSpace(deep), zUtl.encodeXML(content), '<br/>');
 	},
 	comment: function (deep, content) {
 		this.out.push(this._getSpace(deep), zUtl.encodeXML(content), '<br/>');
 	},
 	startTag: function (deep, content, isSingle, isEmpty) {
-		this.out.push(this._getSpace(deep), this._parseAttribute(content), isEmpty ? '' : '<br/>');
+		this.out.push(this._getSpace(deep), this._parseAttribute(content, isSingle), isEmpty ? '' : '<br/>');
 	},
-	_parseAttribute: function (content) {
+	_parseAttribute: function (content, isSingle) {
 		var out = [];
-		for (var odd, c, i = 0, j = content.length; i < j; i++) {
+		for (var odd, start, c, i = 0, j = content.length; i < j; i++) {
 			c = content.charAt(i);
 			switch (c) {
 				case '=':
@@ -134,10 +147,28 @@ zk.debug.DefaultHandler = zk.$extends(zk.Object, {
 					odd = false;
 					break;
 				case '<':
+					if (start) {// error caused by double '<' syntax
+						out.push('<span style="color:red;">', zUtl.encodeXML(content.substring(i)), '</span>');
+						this._errorNumber++;
+						return out.join('');
+					}
 					out.push('&lt;');
+					start = true;
 					break;
 				case '>':
+					if (!isSingle)
+						if (start)
+							this.stack.push(content.substring(1, i));
+					
 					out.push('&gt;');
+					break;
+				case ' ':
+					if (!isSingle) {
+						isSingle = true;
+						if (start)
+							this.stack.push(content.substring(1, i));
+					}
+					out.push(c);
 					break;
 				case '"':
 					if (odd) {
@@ -153,13 +184,20 @@ zk.debug.DefaultHandler = zk.$extends(zk.Object, {
 		return out.join('');
 	},
 	content: function (deep, content) {
-		this.out.push(this._getSpace(deep), zUtl.encodeXML(content), '<br/>');
+		if (content.indexOf('>') > -1)
+			this.error(content);		
+		else
+			this.out.push(this._getSpace(deep), zUtl.encodeXML(content), '<br/>');
 	},
 	error: function (content) {
-		this.out.push('<b> Error {', content, '}</b>');
+		this._errorNumber++;
+		this.out.push('<span style="color:red"> Error caused by {', zUtl.encodeXML(content), '}</span><br/>');
 	},
 	toHTML: function () {
 		return this.out.join('');
+	},
+	getErrorNumber: function () {
+		return this._errorNumber;
 	},
 	_getSpace: function (deep) {
 		var out = [];
