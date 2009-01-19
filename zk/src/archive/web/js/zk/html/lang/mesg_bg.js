@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-　　Tranlated by Boril Yonchev (yonchev@gmail.com) 28 March 2007
+　　Tranlated by Boril Yonchev (yonchev@gmail.com) 17 January 2009
 }}IS_NOTE
 
 Copyright (C) 2005-2007 Potix Corporation. All Rights Reserved.
@@ -33,7 +33,7 @@ mesg.INTEGER_REQUIRED = "Изберете по-голямо целочислен
 mesg.EMPTY_NOT_ALLOWED = "Не може да е празно или само интервали.";
 mesg.GOTO_ERROR_FIELD = "Ползване на грешно поле";
 mesg.PLEASE_WAIT = "Зарежда се...";
-mesg.VALUE_NOT_MATCHED = "You must specify one of values in the drop-down list.";
+mesg.VALUE_NOT_MATCHED = "Трябва да посочите една от стойностите в падащия списък.";
 
 mesg.FILE_SIZE = "Размер на файла: ";
 mesg.KBYTES = "KB";
