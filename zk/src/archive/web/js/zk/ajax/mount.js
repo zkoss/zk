@@ -82,6 +82,18 @@ function zkopt(opts) {
 	}
 }
 
+function zkmld(wgtcls, molds) {
+	if (!wgtcls.superclass) {
+		zk.afterLoad(function () {zkmld(wgtcls, molds);});
+		return;
+	}
+
+	var ms = wgtcls.molds = {};
+	for (var nm in molds) {
+		var fn = molds[nm];
+		ms[nm] = typeof fn == 'function' ? fn: fn[0].molds[fn[1]];
+	}		
+}
 function zkam(fn) {
 	if (zk.mounting || !zk.sysInited) {
 		zkm._afMts.push(fn);

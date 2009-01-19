@@ -162,21 +162,26 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 
 				try {
 					WidgetDefinition wgtdef = langdef.getWidgetDefinition(wgtflnm);
-					write(out, "_zkmd=_zkwg.molds={};\n");
+					boolean first = true;
 					for (Iterator e = wgtdef.getMoldNames().iterator(); e.hasNext();) {
 						final String mold = (String)e.next();
 						final String uri = wgtdef.getMoldURI(mold);
 						if (uri == null) continue;
 
+						if (first) {
+							first = false;
+							write(out, "_zkmd={};\n");
+						}
+							
 						write(out, "_zkmd['");
 						write(out, mold);
 						write(out, "']=");
 
 						String[] info = (String[])moldInfos.get(uri);
 						if (info != null) { //reuse
-							write(out, "_zkpk.");
+							write(out, "[_zkpk.");
 							write(out, info[0]);
-							write(out, ".molds['");
+							write(out, ",'");
 							write(out, info[1]);
 							write(out, "'];");
 						} else {
@@ -187,9 +192,9 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 								write(out, " not found')");
 								log.error("Failed to load mold "+mold+" for widget "+wgtflnm+". Cause: "+uri+" not found");
 							}
-							write(out, ";\n");
 						}
 					}
+					if (!first) write(out, "zkmld(_zkwg,_zkmd);");
 				} catch (Throwable ex) {
 					log.error("Failed to load molds for widget "+wgtflnm+".\nCause: "+Exceptions.getMessage(ex));
 				}
