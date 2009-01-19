@@ -989,3 +989,64 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 		this.mask = null;
 	}
 });
+
+zk.eff.Tooltip = zk.$extends(zk.Object, {
+	beforeBegin: function (ref) {
+		var overTip = this._tip == ref;
+		if (overTip) this._clearClosing(); //not close tip if over tip
+		return !overTip;//disable tip in tip
+	},
+	begin: function (tip, ref) {
+		if (this._tip != tip) {
+			this.close_();
+
+			this._inf = {
+				tip: tip, ref: ref,
+				timer: setTimeout(this.proxy(this.open_, '_pxopen'), zk.tipDelay)
+			};
+		} else
+			this._clearClosing();
+	},
+	end: function (ref) {
+		if (this._ref == ref || this._tip == ref)
+			this._tmClosing =
+				setTimeout(this.proxy(this.close_, '_pxclose'), 100);
+			//don't cloes immediate since user might move from ref to toolip
+		else
+			this._clearOpening();
+	},
+	open_: function () {
+		var inf = this._inf;
+		if (inf) {
+			var tip = this._tip = inf.tip,
+				ref = this._ref = inf.ref;
+			this._inf = null;
+			tip.open(ref, zk.currentPointer, null, {sendOnOpen:true});
+		}
+	},
+	close_: function () {
+		this._clearOpening();
+		this._clearClosing();
+
+		var tip = this._tip;
+		if (tip) {
+			this._tip = this._ref = null;
+			tip.close({sendOnOpen:true});
+		}
+	},
+	_clearOpening: function () {
+		var inf = this._inf;
+		if (inf) {
+			this._inf = null;
+			clearTimeout(inf.timer);
+		}
+	},
+	_clearClosing: function () {
+		var tmClosing = this._tmClosing;
+		if (tmClosing) {
+			this._tmClosing = null;
+			clearTimeout(tmClosing);
+		}
+	}
+});
+zTooltip = new zk.eff.Tooltip();

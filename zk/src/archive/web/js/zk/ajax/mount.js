@@ -404,6 +404,9 @@ zkm = {
 	},
 	docMouseMove: function (evt) {
 		evt = evt || window.event;
+		zk.currentPointer[0] = zEvt.x(evt);
+		zk.currentPointer[1] = zEvt.y(evt);
+
 		var wgt = zk.mouseCapture;
 		if (!wgt) wgt = zk.Widget.$(evt);
 		if (wgt)
@@ -417,26 +420,12 @@ zkm = {
 		var wgt = zk.Widget.$(evt);
 		if (wgt)
 			wgt.doMouseOver_(new zk.Event(wgt, 'onMouseOver', zkm._mouseData(evt, wgt)), evt);
-
-/*not used
-		var target = zEvt.target(evt);
-		if (zDom.tag(target) == "IMG") {
-			var src = target.src;
-			if (src.indexOf("-off") >= 0) target.src = zUtl.renType(src, "on");
-		}*/
 	},
 	docMouseOut: function (evt) {
 		evt = evt || window.event;
 		var wgt = zk.Widget.$(evt);
 		if (wgt)
 			wgt.doMouseOut_(new zk.Event(wgt, 'onMouseOut', zkm._mouseData(evt, wgt)), evt);
-
-/*not used
-		var target = zEvt.target(evt);
-		if (zDom.tag(target) == "IMG") {
-			var src = target.src;
-			if (src.indexOf("-on") >= 0) target.src = zUtl.renType(src, "off");
-		}*/
 	},
 	docKeyDown: function (evt) {
 		evt = evt || window.event;

@@ -117,34 +117,43 @@ zul.Widget = zk.$extends(zk.Widget, {
 	//super//
 	doClick_: function (wevt) {
 		if (!wevt._popuped) {
-			var popup = this._popup;
+			var popup = this._smartFellow(this._popup);
 			if (popup) {
-				var w = this._smartFellow(popup, true);
-				if (w) {
-					wevt._popuped = true;
-					w.open(this, [wevt.data.pageX, wevt.data.pageY], null, {sendOnOpen:true});
-				}
+				wevt._popuped = true;
+				popup.open(this, [wevt.data.pageX, wevt.data.pageY], null, {sendOnOpen:true});
+				wevt.stop();
 			}
 		}
 		this.$supers('doClick_', arguments);
 	},
 	doRightClick_: function (wevt) {
-		if (!wevt._contexted) {
-			var ctx = this._context;
+		if (!wevt._ctxed) {
+			var ctx = this._smartFellow(this._context);
 			if (ctx) {
-				var w = this._smartFellow(ctx, true);
-				if (w) {
-					wevt._contexted = true;
-					w.open(this, [wevt.data.pageX, wevt.data.pageY], null, {sendOnOpen:true});
-					wevt.stop();
-				}
+				wevt._ctxed = true;
+				ctx.open(this, [wevt.data.pageX, wevt.data.pageY], null, {sendOnOpen:true});
+				wevt.stop(); //prevent default context menu to appear
 			}
 		}
 		this.$supers('doRightClick_', arguments);
 	},
+	doMouseOver_: function (wevt) {
+		if (!wevt._tiped && zTooltip.beforeBegin(this)) {
+			var tip = this._smartFellow(this._tooltip);
+			if (tip) {
+				wevt._tiped = true;
+				zTooltip.begin(tip, this);
+			}
+		}
+		this.$supers('doMouseOver_', arguments);
+	},
+	doMouseOut_: function (wevt) {
+		zTooltip.end(this);
+		this.$supers('doMouseOut_', arguments);
+	},
 	_smartFellow: function (id) {
-		return id.startsWith('uuid(') && id.endsWith(')') ?
+		return id ? id.startsWith('uuid(') && id.endsWith(')') ?
 			zk.Widget.$(id.substring(5, id.length - 1)):
-			this.getFellow(id, true);
+			this.getFellow(id, true): null;
 	}
 });
