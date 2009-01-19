@@ -99,7 +99,8 @@ function zips
 							echo "Warning failed to compress, use copy instead: $f"
 							cvt=false
 						else
-							java -classpath $bshjar bsh.Interpreter $bshcmd "./$f" "$dst/${f%.js}.org.js"
+							orgfile=$(cygpath -wa $dst/${f%.js}.org.js)
+							java -classpath $bshjar bsh.Interpreter $bshcmd "./$f" "$orgfile"
 								#always make a copy so we can use them if we want to debug them
 						fi
 					fi
