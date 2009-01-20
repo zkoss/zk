@@ -269,7 +269,7 @@ zWatch = {
 			if (opts) {
 				if (opts.visible)
 					for (var j = wts.length; --j >= 0;)
-						if (!wts[j].isRealVisible())
+						if (!zWatch._visible(wts[j]))
 							wts.splice(j, 1);
 
 				if (opts.timeout >= 0) {
@@ -334,9 +334,14 @@ zWatch = {
 	_visibleChild: function (p, c) {
 		for (; c; c = c.parent) {
 			if (p == c) return true; //check parent before visible
-			if (!c.isVisible) break;
+			if (c.isVisible && !c.isVisible(true)) break;
 		}
 		return false;
+	},
+	_visible: function (w) {
+		for (; w; w = w.parent)
+			if (w.isVisible && !w.isVisible(true)) return false;
+		return true;
 	},
 	onBindLevelMove: function () {
 		zWatch._dirty = true;
