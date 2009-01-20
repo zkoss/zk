@@ -30,6 +30,7 @@ ZK 3.0.9
   2463857: Popup window positioning problem and wierd behaviour!
   2493245: zscript failed badly if macro's setMacroURI before setParent
   2522437: Error display after invalidate desktop
+  2523090: Some binding load twice when binder.loadAll()
   
 	--------
 ZK 3.0.8

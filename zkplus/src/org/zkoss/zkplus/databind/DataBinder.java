@@ -396,19 +396,25 @@ public class DataBinder implements Serializable {
 	 * @param comp the UI component to be loaded value.
 	 */
 	public void loadComponent(Component comp) {
-		if (isTemplate(comp) || comp.getPage() == null) {
-			return; //skip detached component
-		}
 		init();
-		Collection bindings = getBindings(comp);
-		if (bindings != null) {
-			loadAttrs(comp, bindings);
+		if (loadComponent0(comp)) { //skip
+			return;
 		}
-			
 		//load kids of this component
 		for(final Iterator it = comp.getChildren().iterator(); it.hasNext();) {
 			loadComponent((Component) it.next()); //recursive
 		}
+	}
+	
+	private boolean loadComponent0(Component comp) {
+		if (isTemplate(comp) || comp.getPage() == null) {
+			return true; //skip detached component
+		}
+		Collection bindings = getBindings(comp);
+		if (bindings != null) {
+			loadAttrs(comp, bindings);
+		}
+		return false;
 	}
 	
 	/** Save values from all attributes of a specified UI component to data bean properties.
@@ -435,7 +441,7 @@ public class DataBinder implements Serializable {
 		init();
 		for (final Iterator it = _compBindingMap.keySet().iterator(); it.hasNext(); ) {
 			final Component comp = (Component) it.next();
-			loadComponent(comp);
+			loadComponent0(comp);
 		}
 	}
 	

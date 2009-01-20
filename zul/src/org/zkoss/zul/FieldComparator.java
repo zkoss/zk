@@ -19,6 +19,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.zul;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,7 +41,8 @@ import org.zkoss.zk.ui.UiException;
  * @author henrichen
  * @since 3.0.9
  */
-public class FieldComparator implements Comparator {
+public class FieldComparator implements Comparator, Serializable {
+	private static final long serialVersionUID = 20090120111922L;
 	/** The field names collection. */
 	private Collection _fieldnames;
 	/** The cached field name string. */
