@@ -511,6 +511,7 @@ public class Components {
 		IMPLICIT_NAMES.add("page");
 		IMPLICIT_NAMES.add("pageScope");
 		IMPLICIT_NAMES.add("requestScope");
+		IMPLICIT_NAMES.add("param");
 	}
 	
 	/** Internal Use only. 
@@ -550,7 +551,9 @@ public class Components {
 		if ("execution".equals(fdname))
 			return EXECUTION_PROXY;
 		if ("arg".equals(fdname))
-			return EXECUTION_PROXY.getArg();
+			return ARG_PROXY;
+		if ("param".equals(fdname))
+			return PARAM_PROXY;
 		return null;
 	}
 
@@ -819,6 +822,12 @@ public class Components {
 	
 	/** Request Scope Proxy */
 	public static final RequestScope REQUEST_SCOPE_PROXY = new RequestScope();
+	
+	/** Arg Proxy */
+	public static final Arg ARG_PROXY = new Arg();
+	
+	/** Param Proxy */
+	public static final Param PARAM_PROXY = new Param();
 
 	//Proxy to read current execution
 	private static class Exec implements Execution {
@@ -1159,7 +1168,7 @@ public class Components {
 
 	//Proxy to read current requestScope
 	private static class RequestScope implements Map {
-		private static final Map req() {
+		protected Map req() {
 			return Executions.getCurrent().getAttributes();
 		}
 		public void clear() {
@@ -1197,6 +1206,18 @@ public class Components {
 		}
 		public Collection values() {
 			return req().values();
+		}
+	}
+	
+	private static class Arg extends RequestScope {
+		protected Map req() {
+			return Executions.getCurrent().getArg();
+		}
+	}
+	
+	private static class Param extends RequestScope {
+		protected Map req() {
+			return Executions.getCurrent().getParameterMap();
 		}
 	}
 }

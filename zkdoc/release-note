@@ -31,6 +31,7 @@ ZK 3.5.3
   2465826: Listbox.focus() does not work on Firefox
   2493245: zscript failed badly if macro's setMacroURI before setParent
   2522437: Error display after invalidate desktop
+  2523090: Some binding load twice when binder.loadAll()
 
 	--------
 ZK 3.5.2
