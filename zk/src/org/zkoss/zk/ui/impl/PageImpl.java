@@ -700,7 +700,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 		final boolean asyncUpdate = execCtrl.getVisualizer().isEverAsyncUpdate();
 		final boolean proxy = isProxy(exec);
-		final boolean bIncluded = asyncUpdate || exec.isIncluded()
+		boolean bIncluded = exec.isIncluded()
 			|| exec.getAttribute(ATTR_REDRAW_BY_INCLUDE) != null
 			|| proxy;
 		final String uri = (String)
@@ -708,9 +708,14 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 				.getValue(_langdef.getEvaluator(), this);
 				//desktop and page URI is defined in language
 
+		if (!bIncluded && asyncUpdate) //Bug 2522437
+			bIncluded = getOwner() != null
+				|| _desktop.getPages().iterator().next() != this;
 		if (bIncluded)
 			exec.setAttribute("org.zkoss.zk.ui.page.included", Boolean.TRUE);
 			//maintain original state since desktop.dsp will include page.dsp
+		else
+			bIncluded |= asyncUpdate;
 
 		final Map attrs = new HashMap(8);
 		attrs.put("page", this);
