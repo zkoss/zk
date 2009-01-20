@@ -55,7 +55,7 @@ zkex.layout.Borderlayout = zk.$extends(zul.Widget, {
 	},
 	unbind_: function () {
 		zWatch.unlisten("onSize", this);
-		zWatch.unlisten("onVisible", this);		
+		zWatch.unlisten("onVisible", this);
 		this.$supers('unbind_', arguments);
 	},
 	// private
@@ -73,7 +73,7 @@ zkex.layout.Borderlayout = zk.$extends(zul.Widget, {
 			h = wgt.getHeight() || '',
 			widx = w.indexOf('%'),
 			hidx = h.indexOf('%');
-			
+
 		var ambit = {
 			w: widx > 0 ?
 				Math.max(
@@ -117,7 +117,7 @@ zkex.layout.Borderlayout = zk.$extends(zul.Widget, {
 			cH = height,
 			cY = 0,
 			cX = 0;
-			
+
 		if (this.north && zDom.isVisible(this.north.getNode())) {
 			var ambit = this._getAmbit(this.north),
 				mars = this._getMargins(this.north);
@@ -179,7 +179,7 @@ zkex.layout.Borderlayout = zk.$extends(zul.Widget, {
 		if (wgt.isOpen()) {
 			if (!ignoreSplit && wgt.getSubnode('split')) {
 				wgt._fixSplit();
-				 ambit = this._resizeSplit(wgt, ambit);	
+				 ambit = this._resizeSplit(wgt, ambit);
 			}
 			var s = wgt.getSubnode('real').style; 
 			s.left = ambit.x + "px";
@@ -230,11 +230,11 @@ zkex.layout.Borderlayout = zk.$extends(zul.Widget, {
 				s.top = ambit.y + "px";
 				s.height = (ambit.h < 0 ? 0 : ambit.h) + "px";
 				ambit.x += sAmbit.w;
-				break;					
+				break;
 		}
 		return ambit;
 	},
-	_resizeBody: function (wgt, ambit) {		
+	_resizeBody: function (wgt, ambit) {
 		ambit.w = Math.max(0, ambit.w);
 		ambit.h = Math.max(0, ambit.h);
 		var el = wgt.getSubnode('real'),
@@ -242,25 +242,25 @@ zkex.layout.Borderlayout = zk.$extends(zul.Widget, {
 						wgt.firstChild.getNode() : wgt.getSubnode('cave');
 		if (!this._ignoreResize(el, ambit.w, ambit.h)) {
 			ambit.w = zDom.revisedWidth(el, ambit.w);
-			el.style.width = ambit.w + "px";	   			
+			el.style.width = ambit.w + "px";
 			ambit.w = zDom.revisedWidth(bodyEl, ambit.w);
 			bodyEl.style.width = ambit.w + "px";
-			
+
 			ambit.h = zDom.revisedHeight(el, ambit.h);
 			el.style.height = ambit.h + "px";
 			ambit.h = zDom.revisedHeight(bodyEl, ambit.h);
 			if (wgt.getSubnode('cap')) ambit.h = Math.max(0, ambit.h - wgt.getSubnode('cap').offsetHeight);
 			bodyEl.style.height = ambit.h + "px";
 			if (wgt.isAutoscroll()) { 
-				bodyEl.style.overflow = "auto";				
+				bodyEl.style.overflow = "auto";
 				bodyEl.style.position = "relative";
 			} else {
-				bodyEl.style.overflow = "hidden";							
+				bodyEl.style.overflow = "hidden";
 				bodyEl.style.position = "";
 			}
 			if (!this._isOnSize) {
-				zWatch.fireDown('beforeSize', -1, wgt);
-				zWatch.fireDown('onSize', -1, wgt);
+				zWatch.fireDown('beforeSize', null, wgt);
+				zWatch.fireDown('onSize', null, wgt);
 			}
 		}
 	},
@@ -277,7 +277,7 @@ zkex.layout.Borderlayout = zk.$extends(zul.Widget, {
 		this._resize(true);
 	},
 	onVisible: _zkf
-}, {	
+}, {
 	NORTH: "north",
 	SOUTH: "south",
 	EAST: "east",

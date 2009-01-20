@@ -258,7 +258,7 @@ zWatch = {
 	unlistenAll: function (name) {
 		delete zWatch._wts[name];
 	},
-	fire: function (name, timeout, vararg) {
+	fire: function (name, opts, vararg) {
 		var wts = zWatch._wts[name];
 		if (wts && wts.length) {
 			var args = [];
@@ -266,14 +266,21 @@ zWatch = {
 				args.push(arguments[j++]);
 
 			wts = wts.$clone(); //make a copy since unlisten might happen
-			if (timeout >= 0) {
-				setTimeout(
-				function () {
-					var o;
-					while (o = wts.shift())
-						o[name].apply(o, args);
-				}, timeout);
-				return;
+			if (opts) {
+				if (opts.visible)
+					for (var j = wts.length; --j >= 0;)
+						if (!wts[j].isRealVisible())
+							wts.splice(j, 1);
+
+				if (opts.timeout >= 0) {
+					setTimeout(
+					function () {
+						var o;
+						while (o = wts.shift())
+							o[name].apply(o, args);
+					}, opts.timeout);
+					return;
+				}
 			}
 
 			var o;
@@ -281,7 +288,7 @@ zWatch = {
 				o[name].apply(o, args);
 		}
 	},
-	fireDown: function (name, timeout, origin, vararg) {
+	fireDown: function (name, opts, origin, vararg) {
 		var wts = zWatch._wts[name];
 		if (wts && wts.length) {
 			zWatch._sync();
@@ -290,7 +297,8 @@ zWatch = {
 			for (var j = 3, l = arguments.length; j < l;)
 				args.push(arguments[j++]);
 
-			var found, bindLevel = origin.bindLevel;
+			var found, bindLevel = origin.bindLevel,
+				visibleOnly = opts && opts.visible;
 			if (bindLevel != null) {
 				found = [];
 				for (var j = wts.length, o; --j >= 0;) { //child first
@@ -301,19 +309,20 @@ zWatch = {
 						found.unshift(o);
 						break; //found this (and no descendant ahead)
 					}
-					if (zUtl.isAncestor(origin, o))
-						found.unshift(o); //parent first
+
+					var fn = visibleOnly ? zWatch._visibleChild: zUtl.isAncestor;
+					if (fn(origin, o)) found.unshift(o); //parent first
 				}
 			} else
 				found = wts.$clone(); //make a copy since unlisten might happen
 
-			if (timeout >= 0) {
+			if (opts && opts.timeout >= 0) {
 				setTimeout(
 				function () {
 					var o;
 					while (o = found.shift())
 						o[name].apply(o, args);
-				}, timeout);
+				}, opts.timeout);
 				return;
 			}
 
@@ -321,6 +330,13 @@ zWatch = {
 			while (o = found.shift())
 				o[name].apply(o, args);
 		}
+	},
+	_visibleChild: function (p, c) {
+		for (; c; c = c.parent) {
+			if (p == c) return true; //check parent before visible
+			if (!c.isVisible) break;
+		}
+		return false;
 	},
 	onBindLevelMove: function () {
 		zWatch._dirty = true;

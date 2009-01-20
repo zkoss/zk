@@ -204,7 +204,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			if (node) newwgt.replaceHTML(node, newwgt.desktop);
 
 			zk.Widget._fixBindLevel(newwgt, p ? p.bindLevel + 1: 0);
-			zWatch.fire('onBindLevelMove', -1, newwgt);
+			zWatch.fire('onBindLevelMove', null, newwgt);
 		}
 
 		if (p) {
@@ -241,7 +241,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			var v = this.bindLevel + 1;
 			if (child.bindLevel != v) {
 				zk.Widget._fixBindLevel(child, v);
-				zWatch.fire('onBindLevelMove', -1, child);
+				zWatch.fire('onBindLevelMove', null, child);
 			}
 		} finally {
 			this.desktop = dt; child.desktop = kiddt;
@@ -306,9 +306,9 @@ zk.Widget = zk.$extends(zk.Object, {
 				}
 			}
 
-			zWatch.fireDown('onVisible', -1, this);
+			zWatch.fireDown('onVisible', {visible:true}, this);
 		} else {
-			zWatch.fireDown('onHide', -1, this);
+			zWatch.fireDown('onHide', {visible:true}, this);
 
 			for (var fs = zk.Widget._floating, j = fs.length,
 			bindLevel = this.bindLevel; --j >= 0;) {
@@ -588,8 +588,8 @@ zk.Widget = zk.$extends(zk.Object, {
 		//TODO: if (zAu.valid) zAu.valid.fixerrboxes();
 		if (cf && !zk.currentFocus) cf.focus();
 
-		zWatch.fireDown('beforeSize', -1, this);
-		zWatch.fireDown('onSize', -1, this);
+		zWatch.fireDown('beforeSize', null, this);
+		zWatch.fireDown('onSize', null, this);
 	},
 	insertHTML: function (n, where, desktop) {
 		n.insertAdjacentHTML(where, this._redrawHTML());
@@ -903,7 +903,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (!this.canActivate()) return false;
 
 		zk.currentFocus = this;
-		zWatch.fire('onFloatUp', -1, this); //notify all
+		zWatch.fire('onFloatUp', null, this); //notify all
 
 		if (this.isListen('onFocus'))
 			this.fire('onFocus');
@@ -967,7 +967,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			else modal.focus(0);
 		} else if (!wgt || wgt.canActivate()) {
 			zk.currentFocus = wgt;
-			if (wgt) zWatch.fire('onFloatUp', -1, wgt); //notify all
+			if (wgt) zWatch.fire('onFloatUp', null, wgt); //notify all
 		}
 	},
 

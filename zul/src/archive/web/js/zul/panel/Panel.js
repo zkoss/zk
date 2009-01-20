@@ -37,15 +37,15 @@ zul.panel.Panel = zk.$extends(zul.Widget, {
 	setHeight: function () {
 		this.$supers('setHeight', arguments);
 		if (this.desktop) {
-			zWatch.fireDown('beforeSize', -1, this);
-			zWatch.fireDown('onSize', -1, this);
+			zWatch.fireDown('beforeSize', null, this);
+			zWatch.fireDown('onSize', null, this);
 		}
 	},
 	setWidth: function () {
 		this.$supers('setWidth', arguments);
 		if (this.desktop) {
-			zWatch.fireDown('beforeSize', -1, this);
-			zWatch.fireDown('onSize', -1, this);
+			zWatch.fireDown('beforeSize', null, this);
+			zWatch.fireDown('onSize', null, this);
 		}
 	},
 	setTop: function () {
@@ -62,8 +62,8 @@ zul.panel.Panel = zk.$extends(zul.Widget, {
 	updateDomStyle_: function () {
 		this.$supers('updateDomStyle_', arguments);
 		if (this.desktop) {
-			zWatch.fireDown('beforeSize', -1, this);
-			zWatch.fireDown('onSize', -1, this);
+			zWatch.fireDown('beforeSize', null, this);
+			zWatch.fireDown('onSize', null, this);
 		}
 	},
 	isOpen: function () {
@@ -160,11 +160,11 @@ zul.panel.Panel = zk.$extends(zul.Widget, {
 			if (node) {
 				var s = node.style, l = s.left, t = s.top, w = s.width, h = s.height;
 				if (minimized) {
-					zWatch.fireDown('onHide', -1, this);
+					zWatch.fireDown('onHide', {visible:true}, this);
 					zDom.hide(node);
 				} else {
 					zDom.show(node);
-					zWatch.fireDown('onVisible', -1, this);
+					zWatch.fireDown('onVisible', {visible:true}, this);
 				}
 				if (!fromServer) {
 					var wgt = this;
@@ -369,10 +369,10 @@ zul.panel.Panel = zk.$extends(zul.Widget, {
 		return this._zclass == null ?  "z-panel" : this._zclass;
 	},
 	_afterSlideDown: function (n) {
-		zWatch.fireDown("onVisible", -1, this);
+		zWatch.fireDown("onVisible", {visible:true}, this);
 	},
 	_beforeSlideUp: function (n) {
-		zWatch.fireDown("onHide", -1, this);
+		zWatch.fireDown("onHide", {visible:true}, this);
 	},
 	_initFloat: function () {
 		var n = this.getNode();

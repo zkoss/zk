@@ -151,7 +151,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	}: zk.$void,
 	setWidth: function (width) {
 		this.$supers('setWidth', arguments);
-		zWatch.fireDown('onVisible', -1, this);
+		zWatch.fireDown('onVisible', {visible:true}, this);
 	},
 	isImportantEvent_: function (evtnm) {
 		return evtnm == "onOpen";

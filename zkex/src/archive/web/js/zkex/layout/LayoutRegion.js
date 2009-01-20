@@ -151,7 +151,7 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 					else {
 						zDom[open ? 'show' : 'hide'](real);
 						zDom[!open ? 'show' : 'hide'](colled);
-						zWatch.fireDown(open ? 'onVisible' : 'onHide', -1, this);
+						zWatch.fireDown(open ? 'onVisible' : 'onHide', {visible:true}, this);
 					}
 				}
 			} else {
@@ -296,7 +296,7 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		this.$supers('unbind_', arguments);
 	},
 	doScroll_: function () {
-		zWatch.fireDown('onScroll', this);
+		zWatch.fireDown('onScroll', null, this);
 	},
 	doMouseOver_: function (wevt, devt) {
 		if (this.getSubnode('btn')) {
