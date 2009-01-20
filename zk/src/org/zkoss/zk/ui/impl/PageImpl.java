@@ -810,16 +810,21 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		final Execution exec = getExecution();
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 		final boolean asyncUpdate = execCtrl.getVisualizer().isEverAsyncUpdate();
-		final boolean bIncluded = asyncUpdate || exec.isIncluded()
+		boolean bIncluded = exec.isIncluded()
 			|| exec.getAttribute(ATTR_REDRAW_BY_INCLUDE) != null;
 		final String uri = (String)
 			(_complete ? _cplURI: bIncluded ? _pgURI: _dkURI)
 				.getValue(_langdef.getEvaluator(), this);
 				//desktop and page URI is defined in language
 
+		if (!bIncluded && asyncUpdate) //Bug 2522437
+			bIncluded = getOwner() != null
+				|| _desktop.getPages().iterator().next() != this;
 		if (bIncluded)
 			exec.setAttribute("org.zkoss.zk.ui.page.included", Boolean.TRUE);
 			//maintain original state since desktop.dsp will include page.dsp
+		else
+			bIncluded |= asyncUpdate;
 
 		final Map attrs = new HashMap(6);
 		attrs.put("page", this);

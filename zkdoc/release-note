@@ -29,6 +29,7 @@ ZK 3.0.9
   2487562: Keyboard problem in textbox inside a listbox (Firefox 3.0.5)
   2463857: Popup window positioning problem and wierd behaviour!
   2493245: zscript failed badly if macro's setMacroURI before setParent
+  2522437: Error display after invalidate desktop
   
 	--------
 ZK 3.0.8
