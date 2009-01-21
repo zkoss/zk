@@ -152,7 +152,7 @@ zkm = {
 		zEvt.listen(window, "scroll", zkm.docScroll);
 
 		zkm._oldUnload = window.onunload;
-		window.onunload = zkm.wndUnload; //unable to use zk.listen
+		window.onunload = zkm.wndUnload; //unable to use zEvt.listen
 
 		zkm._oldBfUnload = window.onbeforeunload;
 		window.onbeforeunload = zkm.wndBfUnload;
@@ -386,7 +386,7 @@ zkm = {
 			$Widget.domMouseDown(wgt); //null if mask
 
 		if (wgt)
-			wgt.doMouseDown_(new zk.Event(wgt, 'onMouseDown', zkm._mouseData(evt, wgt)), evt);
+			wgt.doMouseDown_(new zk.Event(wgt, 'onMouseDown', zkm._mouseData(evt, wgt), null, evt));
 	},
 	_mouseData: function (evt, wgt) {
 		var n = zEvt.target(evt);
@@ -400,7 +400,7 @@ zkm = {
 		if (wgt) zk.mouseCapture = null;
 		else wgt = zk.Widget.$(evt);
 		if (wgt)
-			wgt.doMouseUp_(new zk.Event(wgt, 'onMouseUp', zkm._mouseData(evt, wgt)), evt);
+			wgt.doMouseUp_(new zk.Event(wgt, 'onMouseUp', zkm._mouseData(evt, wgt), null, evt));
 	},
 	docMouseMove: function (evt) {
 		evt = evt || window.event;
@@ -410,7 +410,7 @@ zkm = {
 		var wgt = zk.mouseCapture;
 		if (!wgt) wgt = zk.Widget.$(evt);
 		if (wgt)
-			wgt.doMouseMove_(new zk.Event(wgt, 'onMouseMove', zkm._mouseData(evt, wgt)), evt);
+			wgt.doMouseMove_(new zk.Event(wgt, 'onMouseMove', zkm._mouseData(evt, wgt), null, evt));
 	},
 	docMouseOver: function (evt) {
 		evt = evt || window.event;
@@ -419,19 +419,19 @@ zkm = {
 
 		var wgt = zk.Widget.$(evt);
 		if (wgt)
-			wgt.doMouseOver_(new zk.Event(wgt, 'onMouseOver', zkm._mouseData(evt, wgt)), evt);
+			wgt.doMouseOver_(new zk.Event(wgt, 'onMouseOver', zkm._mouseData(evt, wgt), null, evt));
 	},
 	docMouseOut: function (evt) {
 		evt = evt || window.event;
 		var wgt = zk.Widget.$(evt);
 		if (wgt)
-			wgt.doMouseOut_(new zk.Event(wgt, 'onMouseOut', zkm._mouseData(evt, wgt)), evt);
+			wgt.doMouseOut_(new zk.Event(wgt, 'onMouseOut', zkm._mouseData(evt, wgt), null, evt));
 	},
 	docKeyDown: function (evt) {
 		evt = evt || window.event;
 		var wgt = zk.Widget.$(evt);
 		if (wgt)
-			wgt.doKeyDown_(new zk.Event(wgt, 'onKeyDown', zEvt.keyData(evt)), evt);
+			wgt.doKeyDown_(new zk.Event(wgt, 'onKeyDown', zEvt.keyData(evt), null, evt));
 	},
 	docKeyUp: function (evt) {
 		evt = evt || window.event;
@@ -439,14 +439,14 @@ zkm = {
 		if (wgt) zk.keyCapture = null;
 		else wgt = zk.Widget.$(evt);
 		if (wgt)
-			wgt.doKeyUp_(new zk.Event(wgt, 'onKeyUp', zEvt.keyData(evt)), evt);
+			wgt.doKeyUp_(new zk.Event(wgt, 'onKeyUp', zEvt.keyData(evt), null, evt));
 	},
 	docKeyPress: function (evt) {
 		evt = evt || window.event;
 		var wgt = zk.keyCapture;
 		if (!wgt) wgt = zk.Widget.$(evt);
 		if (wgt)
-			wgt.doKeyPress_(new zk.Event(wgt, 'onKeyPress', zEvt.keyData(evt)), evt);
+			wgt.doKeyPress_(new zk.Event(wgt, 'onKeyPress', zEvt.keyData(evt), null, evt));
 	},
 	docClick: function (evt) {
 		if (zk.processing) return;
@@ -455,7 +455,7 @@ zkm = {
 		if (evt.which == 1 || (evt.button == 0 || evt.button == 1)) {
 			var wgt = zk.Widget.$(evt);
 			if (wgt)
-				wgt.doClick_(new zk.Event(wgt, 'onClick', zkm._mouseData(evt, wgt), {ctl:true}), evt);
+				wgt.doClick_(new zk.Event(wgt, 'onClick', zkm._mouseData(evt, wgt), {ctl:true}, evt));
 				//no need to zEvt.stop()
 			//don't return anything. Otherwise, it replaces event.returnValue in IE (Bug 1541132)
 		}		
@@ -466,8 +466,8 @@ zkm = {
 		evt = evt || window.event;
 		var wgt = zk.Widget.$(evt);
 		if (wgt) {
-			var wevt = new zk.Event(wgt, 'onDoubleClick', zkm._mouseData(evt, wgt), {ctl:true});
-			wgt.doDoubleClick_(wevt, evt);
+			var wevt = new zk.Event(wgt, 'onDoubleClick', zkm._mouseData(evt, wgt), {ctl:true}, evt);
+			wgt.doDoubleClick_(wevt);
 
 			if (wevt.stopped) {
 				zEvt.stop(evt); //prevent browser default
@@ -484,8 +484,8 @@ zkm = {
 
 		var wgt = zk.Widget.$(evt);
 		if (wgt) {
-			var wevt = new zk.Event(wgt, 'onRightClick', zkm._mouseData(evt, wgt), {ctl:true});
-			wgt.doRightClick_(wevt, evt);
+			var wevt = new zk.Event(wgt, 'onRightClick', zkm._mouseData(evt, wgt), {ctl:true}, evt);
+			wgt.doRightClick_(wevt);
 
 			if (wevt.stopped) {
 				zEvt.stop(evt); //prevent browser default

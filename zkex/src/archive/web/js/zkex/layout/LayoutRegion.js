@@ -298,77 +298,75 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	doScroll_: function () {
 		zWatch.fireDown('onScroll', null, this);
 	},
-	doMouseOver_: function (wevt, devt) {
+	doMouseOver_: function (wevt) {
 		if (this.getSubnode('btn')) {
-			var target = zEvt.target(devt);
-			switch (target) {
-				case this.getSubnode('btn'):
-					zDom.addClass(this.getSubnode('btn'), this.getZclass() + '-collapse-over');
-					break;
-				case this.getSubnode('btned'):
-					zDom.addClass(this.getSubnode('btned'), this.getZclass() + '-expand-over');
-					// don't break
-				case this.getSubnode('colled'):
-					zDom.addClass(this.getSubnode('colled'), this.getZclass() + '-collapsed-over');
-					break;
+			switch (evt.nativeTarget) {
+			case this.getSubnode('btn'):
+				zDom.addClass(this.getSubnode('btn'), this.getZclass() + '-collapse-over');
+				break;
+			case this.getSubnode('btned'):
+				zDom.addClass(this.getSubnode('btned'), this.getZclass() + '-expand-over');
+				// don't break
+			case this.getSubnode('colled'):
+				zDom.addClass(this.getSubnode('colled'), this.getZclass() + '-collapsed-over');
+				break;
 			}
 		}
 		this.$supers('doMouseOver_', arguments);
 	},
-	doMouseOut_: function (wevt, devt) {
+	doMouseOut_: function (wevt) {
 		if (this.getSubnode('btn')) {
-			var target = zEvt.target(devt);
-			switch (target) {
-				case this.getSubnode('btn'):
-					zDom.rmClass(this.getSubnode('btn'), this.getZclass() + '-collapse-over');
-					break;
-				case this.getSubnode('btned'):
-					zDom.rmClass(this.getSubnode('btned'), this.getZclass() + '-expand-over');
-					// don't break
-				case this.getSubnode('colled'):
-					zDom.rmClass(this.getSubnode('colled'), this.getZclass() + '-collapsed-over');
-					break;
+			switch (evt.nativeTarget) {
+			case this.getSubnode('btn'):
+				zDom.rmClass(this.getSubnode('btn'), this.getZclass() + '-collapse-over');
+				break;
+			case this.getSubnode('btned'):
+				zDom.rmClass(this.getSubnode('btned'), this.getZclass() + '-expand-over');
+				// don't break
+			case this.getSubnode('colled'):
+				zDom.rmClass(this.getSubnode('colled'), this.getZclass() + '-collapsed-over');
+				break;
 			}
 		}
 		this.$supers('doMouseOut_', arguments);		
 	},
-	doClick_: function (wevt, devt) {
+	doClick_: function (wevt) {
 		if (this.getSubnode('btn')) {
-			var target = zEvt.target(devt);
+			var target = evt.nativeTarget;
 			switch (target) {
-				case this.getSubnode('btn'):
-				case this.getSubnode('btned'):
-					if (this._isSlide || zAnima.count) return;
-					if (this.getSubnode('btned') == target) {
-						var s = this.getSubnode('real').style;
-						s.visibilty = "hidden";
-						s.display = "";
-						this._syncSize(true);
-						s.visibilty = "";
-						s.display = "none";
-					}
-					this.setOpen(!this.isOpen());
-					break;
-				case this.getSubnode('colled'):					
-					if (this._isSlide) return;
-					this._isSlide = true;
-					var real = this.getSubnode('real'),
-						s = real.style;
+			case this.getSubnode('btn'):
+			case this.getSubnode('btned'):
+				if (this._isSlide || zAnima.count) return;
+				if (this.getSubnode('btned') == target) {
+					var s = this.getSubnode('real').style;
 					s.visibilty = "hidden";
 					s.display = "";
-					this._syncSize();
-					this._original = [s.left, s.top];
-					this._alignTo();
-					s.zIndex = 100;
-			
-					this.getSubnode('btn').style.display = "none"; 
+					this._syncSize(true);
 					s.visibilty = "";
 					s.display = "none";
-					zAnima.slideDown(this, real, {
-						anchor: this.sanchor,
-						afterAnima: this.$class.afterSlideDown
-					});
-					break;
+				}
+				this.setOpen(!this.isOpen());
+				break;
+			case this.getSubnode('colled'):					
+				if (this._isSlide) return;
+				this._isSlide = true;
+				var real = this.getSubnode('real'),
+					s = real.style;
+				s.visibilty = "hidden";
+				s.display = "";
+				this._syncSize();
+				this._original = [s.left, s.top];
+				this._alignTo();
+				s.zIndex = 100;
+
+				this.getSubnode('btn').style.display = "none"; 
+				s.visibilty = "";
+				s.display = "none";
+				zAnima.slideDown(this, real, {
+					anchor: this.sanchor,
+					afterAnima: this.$class.afterSlideDown
+				});
+				break;
 			}
 		}
 		this.$supers('doClick_', arguments);		
@@ -488,22 +486,22 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		var from = this.getSubnode('colled'),
 			to = this.getSubnode('real');
 		switch (this.getPosition()) {
-			case zkex.layout.Borderlayout.NORTH:
-				to.style.top = from.offsetTop + from.offsetHeight + "px";
-				to.style.left = from.offsetLeft + "px";
-				break;
-			case zkex.layout.Borderlayout.SOUTH:
-				to.style.top = from.offsetTop - to.offsetHeight + "px";
-				to.style.left = from.offsetLeft + "px";
-				break;
-			case zkex.layout.Borderlayout.WEST:
-				to.style.left = from.offsetLeft + from.offsetWidth + "px";
-				to.style.top = from.offsetTop + "px";
-				break;
-			case zkex.layout.Borderlayout.EAST:
-				to.style.left = from.offsetLeft - to.offsetWidth + "px";
-				to.style.top = from.offsetTop + "px";
-				break;
+		case zkex.layout.Borderlayout.NORTH:
+			to.style.top = from.offsetTop + from.offsetHeight + "px";
+			to.style.left = from.offsetLeft + "px";
+			break;
+		case zkex.layout.Borderlayout.SOUTH:
+			to.style.top = from.offsetTop - to.offsetHeight + "px";
+			to.style.left = from.offsetLeft + "px";
+			break;
+		case zkex.layout.Borderlayout.WEST:
+			to.style.left = from.offsetLeft + from.offsetWidth + "px";
+			to.style.top = from.offsetTop + "px";
+			break;
+		case zkex.layout.Borderlayout.EAST:
+			to.style.left = from.offsetLeft - to.offsetWidth + "px";
+			to.style.top = from.offsetTop + "px";
+			break;
 		}
 	},
 	_isVertical : function () {
@@ -580,38 +578,38 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 					min = 0,
 					uuid = wgt.uuid;
 				switch (pos) {
-					case $Layout.NORTH:	
-					case $Layout.SOUTH:
-						var r = ol.center || (pos == $Layout.NORTH ? ol.south : ol.north);
-						if (r) {
-							if ($Layout.CENTER == r.getPosition()) {
-								var east = ol.east,
-									west = ol.west;
-								maxs = Math.min(maxs, (real.offsetHeight + r.getSubnode('real').offsetHeight)- min);
-							} else {
-								maxs = Math.min(maxs, ol.getNode().offsetHeight
-										- r.getSubnode('real').offsetHeight - r.getSubnode('split').offsetHeight
-										- wgt.getSubnode('split').offsetHeight - min); 
-							}
+				case $Layout.NORTH:	
+				case $Layout.SOUTH:
+					var r = ol.center || (pos == $Layout.NORTH ? ol.south : ol.north);
+					if (r) {
+						if ($Layout.CENTER == r.getPosition()) {
+							var east = ol.east,
+								west = ol.west;
+							maxs = Math.min(maxs, (real.offsetHeight + r.getSubnode('real').offsetHeight)- min);
 						} else {
-							maxs = ol.getNode().offsetHeight - wgt.getSubnode('split').offsetHeight;
+							maxs = Math.min(maxs, ol.getNode().offsetHeight
+									- r.getSubnode('real').offsetHeight - r.getSubnode('split').offsetHeight
+									- wgt.getSubnode('split').offsetHeight - min); 
 						}
-						break;				
-					case $Layout.WEST:
-					case $Layout.EAST:
-						var r = ol.center || (pos == $Layout.WEST ? ol.east : ol.west);
-						if (r) {
-							if ($Layout.CENTER == r.getPosition()) {
-								maxs = Math.min(maxs, (real.offsetWidth
-										+ zDom.revisedWidth(r.getSubnode('real'), r.getSubnode('real').offsetWidth))- min);
-							} else {
-								maxs = Math.min(maxs, ol.getNode().offsetWidth
-										- r.getSubnode('real').offsetWidth - r.getSubnode('split').offsetWidth - wgt.getSubnode('split').offsetWidth - min); 
-							}
+					} else {
+						maxs = ol.getNode().offsetHeight - wgt.getSubnode('split').offsetHeight;
+					}
+					break;				
+				case $Layout.WEST:
+				case $Layout.EAST:
+					var r = ol.center || (pos == $Layout.WEST ? ol.east : ol.west);
+					if (r) {
+						if ($Layout.CENTER == r.getPosition()) {
+							maxs = Math.min(maxs, (real.offsetWidth
+									+ zDom.revisedWidth(r.getSubnode('real'), r.getSubnode('real').offsetWidth))- min);
 						} else {
-							maxs = ol.getNode().offsetWidth - wgt.getSubnode('split').offsetWidth;
+							maxs = Math.min(maxs, ol.getNode().offsetWidth
+									- r.getSubnode('real').offsetWidth - r.getSubnode('split').offsetWidth - wgt.getSubnode('split').offsetWidth - min); 
 						}
-						break;						
+					} else {
+						maxs = ol.getNode().offsetWidth - wgt.getSubnode('split').offsetWidth;
+					}
+					break;						
 				}
 				var ofs = zDom.cmOffset(real);
 				dg._rootoffs = {
@@ -655,38 +653,38 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			split = wgt.getSubnode('split'),
 			b = dg._rootoffs, w, h;
 		switch (wgt.getPosition()) {
-			case $Layout.NORTH:
-				if (y > b.maxs + b.top) y = b.maxs + b.top;
-				if (y < b.mins + b.top) y = b.mins + b.top;
-				w = x;
-				h = y - b.top;
-				break;				
-			case $Layout.SOUTH:
-				if (b.top + b.bottom - y - split.offsetHeight > b.maxs) {
-					y = b.top + b.bottom - b.maxs - split.offsetHeight;
-					h = b.maxs;
-				} else if (b.top + b.bottom - b.mins - split.offsetHeight <= y) {
-					y = b.top + b.bottom - b.mins - split.offsetHeight;
-					h = b.mins;
-				} else h = b.top - y + b.bottom - split.offsetHeight;
-				w = x;
-				break;
-			case $Layout.WEST:
-				if (x > b.maxs + b.left) x = b.maxs + b.left;
-				if (x < b.mins + b.left) x = b.mins + b.left;
-				w = x - b.left;
-				h = y;
-				break;		
-			case $Layout.EAST:			
-				if (b.left + b.right - x - split.offsetWidth > b.maxs) {
-					x = b.left + b.right - b.maxs - split.offsetWidth;
-					w = b.maxs;
-				} else if (b.left + b.right - b.mins - split.offsetWidth <= x) {
-					x = b.left + b.right - b.mins - split.offsetWidth;
-					w = b.mins;
-				} else w = b.left - x + b.right - split.offsetWidth;
-				h = y;
-				break;						
+		case $Layout.NORTH:
+			if (y > b.maxs + b.top) y = b.maxs + b.top;
+			if (y < b.mins + b.top) y = b.mins + b.top;
+			w = x;
+			h = y - b.top;
+			break;				
+		case $Layout.SOUTH:
+			if (b.top + b.bottom - y - split.offsetHeight > b.maxs) {
+				y = b.top + b.bottom - b.maxs - split.offsetHeight;
+				h = b.maxs;
+			} else if (b.top + b.bottom - b.mins - split.offsetHeight <= y) {
+				y = b.top + b.bottom - b.mins - split.offsetHeight;
+				h = b.mins;
+			} else h = b.top - y + b.bottom - split.offsetHeight;
+			w = x;
+			break;
+		case $Layout.WEST:
+			if (x > b.maxs + b.left) x = b.maxs + b.left;
+			if (x < b.mins + b.left) x = b.mins + b.left;
+			w = x - b.left;
+			h = y;
+			break;		
+		case $Layout.EAST:			
+			if (b.left + b.right - x - split.offsetWidth > b.maxs) {
+				x = b.left + b.right - b.maxs - split.offsetWidth;
+				w = b.maxs;
+			} else if (b.left + b.right - b.mins - split.offsetWidth <= x) {
+				x = b.left + b.right - b.mins - split.offsetWidth;
+				w = b.mins;
+			} else w = b.left - x + b.right - split.offsetWidth;
+			h = y;
+			break;						
 		}
 		dg._point = [w, h];
 		return [x, y];

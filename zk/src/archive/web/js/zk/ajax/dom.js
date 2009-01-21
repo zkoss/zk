@@ -1363,7 +1363,7 @@ zk.copy(zDom,
 			var n = ns[j];
 			if (n.z_fixed) {
 				n.z_fixed = false;
-				zk.unlisten(n, "click", zDom._doSkipBfUnload);
+				zEvt.unlisten(n, "click", zDom._doSkipBfUnload);
 			}
 		}
 	},

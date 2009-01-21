@@ -176,11 +176,13 @@ zEvt = {
 };
 
 zk.Event = zk.$extends(zk.Object, {
-	$init: function (target, name, data, opts) {
+	$init: function (target, name, data, opts, nativeEvent) {
 		this.currentTarget = this.target = target;
 		this.name = name;
 		this.data = data;
 		this.opts = opts;
+		var devt = this.nativeEvent = nativeEvent || window.event;
+		if (devt) this.nativeTarget = zEvt.target(devt);
 	},
 	stop: function (b) {
 		this.stopped = !b;

@@ -165,57 +165,49 @@ zul.menu.Menupopup = zk.$extends('zul.wgt.Popup', {
 		zWatch.unlisten('onHide', this);
 		this.$supers('unbind_', arguments);
 	},
-	doKeyDown_: function (evt, devt) {
+	doKeyDown_: function (evt) {
 		var w = this._currentChild(),
-			keycode = zEvt.keyCode(devt);
+			keycode = evt.data.keyCode;
 		switch (keycode) {
-			case 38: //UP
-			case 40: //DOWN
-				if (w) w.$class._rmActive(w);
-				w = keycode == 38 ? this._previousChild(w) : this._nextChild(w);
-				if (w) w.$class._addActive(w);
-				break;
-			case 37: //LEFT
-				this.close();
-				
-				if (this.parent.$instanceof(zul.menu.Menu) && !this.parent.isTopmost()) {
-					var pp = this.parent.parent;
-					if (pp) {
-						var anc = pp.getSubnode('a');
-						if (anc) anc.focus();
-					}
+		case 38: //UP
+		case 40: //DOWN
+			if (w) w.$class._rmActive(w);
+			w = keycode == 38 ? this._previousChild(w) : this._nextChild(w);
+			if (w) w.$class._addActive(w);
+			break;
+		case 37: //LEFT
+			this.close();
+			
+			if (this.parent.$instanceof(zul.menu.Menu) && !this.parent.isTopmost()) {
+				var pp = this.parent.parent;
+				if (pp) {
+					var anc = pp.getSubnode('a');
+					if (anc) anc.focus();
 				}
-				break;
-			case 39: //RIGHT
-				if (w && w.$instanceof(zul.menu.Menu) && w.menupopup)
-					w.menupopup.open();
-				break;
-			case 13: //ENTER
-				if (w && w.$instanceof(zul.menu.Menuitem)) {
-					w.doClick_(new zk.Event(w, 'onClick', {
-						x: 0,
-						y: 0,
-						pageX: zk.currentPointer[0],
-						pageY: zk.currentPointer[1],
-						keys: zEvt.keyMetaData(evt),
-						marshal: zEvt._mouseDataMarshal
-					}, {
-						ctl: true
-					}), devt);
-					zWatch.fire('onFloatUp', null, w); //notify all
-					this.close({sendOnOpen:true});
-				}
-				break;
+			}
+			break;
+		case 39: //RIGHT
+			if (w && w.$instanceof(zul.menu.Menu) && w.menupopup)
+				w.menupopup.open();
+			break;
+		case 13: //ENTER
+			if (w && w.$instanceof(zul.menu.Menuitem)) {
+				w.doClick_(new zk.Event(w, 'onClick', null, {
+					ctl: true
+				}, evt.nativeEvent));
+				zWatch.fire('onFloatUp', null, w); //notify all
+				this.close({sendOnOpen:true});
+			}
+			break;
 		}
-		zEvt.stop(devt);
 		evt.stop();
 		this.$supers('doKeyDown_', arguments);
 	},
-	doMouseOver_: function (evt, devt) {
+	doMouseOver_: function (evt) {
 		this._shallClose = false;
 		this.$supers('doMouseOver_', arguments);
 	},
-	doMouseOut_: function (evt, devt) {
+	doMouseOut_: function (evt) {
 		this._shallClose = true;
 		this.$supers('doMouseOut_', arguments);
 	}	

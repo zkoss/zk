@@ -62,25 +62,25 @@ zul.inp.Errorbox = zk.$extends('zul.wgt.Popup', {
 		var stackup = this._stackup;
 		if (stackup) stackup.style.display = visible ? '': 'none';
 	},
-	doMouseMove_: function (evt, devt) {
-		var el = zEvt.target(devt);
+	doMouseMove_: function (evt) {
+		var el = evt.nativeTarget;
 		if (el == this.getSubnode('c')) {
-			var y = zEvt.y(devt),
+			var y = evt.data.y,
 				size = zk.parseInt(zDom.getStyle(el, 'padding-right'))
 				offs = zDom.revisedOffset(el);
 			if (y >= offs[1] && y < offs[1] + size)	zDom.addClass(el, 'z-errbox-close-over');
 			else zDom.rmClass(el, 'z-errbox-close-over');
 		} else this.$supers('doMouseMove_', arguments);
 	},
-	doMouseOut_: function (evt, devt) {
-		var el = zEvt.target(devt);
+	doMouseOut_: function (evt) {
+		var el = evt.nativeTarget;
 		if (el == this.getSubnode('c'))
 			zDom.rmClass(el, 'z-errbox-close-over');
 		else
 			this.$supers('doMouseOut_', arguments);
 	},
-	doClick_: function (evt, devt) {
-		var el = zEvt.target(devt);
+	doClick_: function (evt) {
+		var el = evt.nativeTarget;
 		if (el == this.getSubnode('c') && zDom.hasClass(el, 'z-errbox-close-over'))
 			this.parent.clearErrorMessage(true, true);
 		else {

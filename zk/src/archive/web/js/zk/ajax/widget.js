@@ -835,70 +835,70 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 
 	//ZK event handling//
-	doClick_: function (evt, devt) {
+	doClick_: function (evt) {
 		if (!this.fireX(evt).stopped) {
 			var p = this.parent;
-			if (p) p.doClick_(evt, devt);
+			if (p) p.doClick_(evt);
 		}	
 	},
-	doDoubleClick_: function (evt, devt) {
+	doDoubleClick_: function (evt) {
 		if (!this.fireX(evt).stopped) {
 			var p = this.parent;
-			if (p) p.doDoubleClick_(evt, devt);
+			if (p) p.doDoubleClick_(evt);
 		}	
 	},
-	doRightClick_: function (evt, devt) {
+	doRightClick_: function (evt) {
 		if (!this.fireX(evt).stopped) {
 			var p = this.parent;
-			if (p) p.doRightClick_(evt, devt);
+			if (p) p.doRightClick_(evt);
 		}	
 	},
-	doMouseOver_: function (evt, devt) {
+	doMouseOver_: function (evt) {
 		if (!this.fireX(evt).stopped) {
 			var p = this.parent;
-			if (p) p.doMouseOver_(evt, devt);
+			if (p) p.doMouseOver_(evt);
 		}	
 	},
-	doMouseOut_: function (evt, devt) {
+	doMouseOut_: function (evt) {
 		if (!this.fireX(evt).stopped) {
 			var p = this.parent;
-			if (p) p.doMouseOut_(evt, devt);
+			if (p) p.doMouseOut_(evt);
 		}	
 	},
-	doMouseDown_: function (evt, devt) {
+	doMouseDown_: function (evt) {
 		if (!this.fireX(evt).stopped) {
 			var p = this.parent;
-			if (p) p.doMouseDown_(evt, devt);
+			if (p) p.doMouseDown_(evt);
 		}	
 	},
-	doMouseUp_: function (evt, devt) {
+	doMouseUp_: function (evt) {
 		if (!this.fireX(evt).stopped) {
 			var p = this.parent;
-			if (p) p.doMouseUp_(evt, devt);
+			if (p) p.doMouseUp_(evt);
 		}	
 	},
-	doMouseMove_: function (evt, devt) {
+	doMouseMove_: function (evt) {
 		if (!this.fireX(evt).stopped) {
 			var p = this.parent;
-			if (p) p.doMouseMove_(evt, devt);
+			if (p) p.doMouseMove_(evt);
 		}	
 	},
-	doKeyDown_: function (evt, devt) {
+	doKeyDown_: function (evt) {
 		if (!this.fireX(evt).stopped) {
 			var p = this.parent;
-			if (p) p.doKeyDown_(evt, devt);
+			if (p) p.doKeyDown_(evt);
 		}	
 	},
-	doKeyUp_: function (evt, devt) {
+	doKeyUp_: function (evt) {
 		if (!this.fireX(evt).stopped) {
 			var p = this.parent;
-			if (p) p.doKeyUp_(evt, devt);
+			if (p) p.doKeyUp_(evt);
 		}	
 	},
-	doKeyPress_: function (evt, devt) {
+	doKeyPress_: function (evt) {
 		if (!this.fireX(evt).stopped) {
 			var p = this.parent;
-			if (p) p.doKeyPress_(evt, devt);
+			if (p) p.doKeyPress_(evt);
 		}	
 	},
 

@@ -115,39 +115,39 @@ zul.Widget = zk.$extends(zk.Widget, {
 	},
 
 	//super//
-	doClick_: function (wevt) {
-		if (!wevt._popuped) {
+	doClick_: function (evt) {
+		if (!evt._popuped) {
 			var popup = this._smartFellow(this._popup);
 			if (popup) {
-				wevt._popuped = true;
-				popup.open(this, [wevt.data.pageX, wevt.data.pageY], null, {sendOnOpen:true});
-				wevt.stop();
+				evt._popuped = true;
+				popup.open(this, [evt.data.pageX, evt.data.pageY], null, {sendOnOpen:true});
+				evt.stop();
 			}
 		}
 		this.$supers('doClick_', arguments);
 	},
-	doRightClick_: function (wevt) {
-		if (!wevt._ctxed) {
+	doRightClick_: function (evt) {
+		if (!evt._ctxed) {
 			var ctx = this._smartFellow(this._context);
 			if (ctx) {
-				wevt._ctxed = true;
-				ctx.open(this, [wevt.data.pageX, wevt.data.pageY], null, {sendOnOpen:true});
-				wevt.stop(); //prevent default context menu to appear
+				evt._ctxed = true;
+				ctx.open(this, [evt.data.pageX, evt.data.pageY], null, {sendOnOpen:true});
+				evt.stop(); //prevent default context menu to appear
 			}
 		}
 		this.$supers('doRightClick_', arguments);
 	},
-	doMouseOver_: function (wevt) {
-		if (!wevt._tiped && zTooltip.beforeBegin(this)) {
+	doMouseOver_: function (evt) {
+		if (!evt._tiped && zTooltip.beforeBegin(this)) {
 			var tip = this._smartFellow(this._tooltip);
 			if (tip) {
-				wevt._tiped = true;
+				evt._tiped = true;
 				zTooltip.begin(tip, this);
 			}
 		}
 		this.$supers('doMouseOver_', arguments);
 	},
-	doMouseOut_: function (wevt) {
+	doMouseOut_: function (evt) {
 		zTooltip.end(this);
 		this.$supers('doMouseOut_', arguments);
 	},

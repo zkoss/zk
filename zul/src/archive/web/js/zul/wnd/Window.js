@@ -549,56 +549,54 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		}
 		this.$supers('unbind_', arguments);
 	},
-	doClick_: function (evt, devt) {
-		var target = zEvt.target(devt);
-		switch (target) {
-			case this.getSubnode('close'):
-				this.fire('onClose');
-				break;
-			case this.getSubnode('max'):
-				// TODO
-				break;
-			case this.getSubnode('min'):
-				// TODO 
-				// if (this.isMinimizable())
-				//	this.setMinimized(!this.isMinimized());
-				break;
+	doClick_: function (evt) {
+		switch (evt.nativeTarget) {
+		case this.getSubnode('close'):
+			this.fire('onClose');
+			break;
+		case this.getSubnode('max'):
+			// TODO
+			break;
+		case this.getSubnode('min'):
+			// TODO 
+			// if (this.isMinimizable())
+			//	this.setMinimized(!this.isMinimized());
+			break;
 		}
 		evt.stop();
-		zEvt.stop(devt);
 		this.$supers('doClick_', arguments);
 	},
-	doMouseOver_: function (evt, devt) {
-		switch (zEvt.target(devt)) {
-			case this.getSubnode('close'):
-				zDom.addClass(this.getSubnode('close'), this.getZclass() + '-close-over');
-				break;
-			case this.getSubnode('max'):
-				var zcls = this.getZclass(),
-					added = this.isMaximized() ? ' ' + zcls + '-maximized-over' : '';
-				zDom.addClass(this.getSubnode('max'), zcls + '-maximize-over' + added);
-				break;
-			case this.getSubnode('min'):
-				zDom.addClass(this.getSubnode('min'), this.getZclass() + '-minimize-over');
-				break;	
+	doMouseOver_: function (evt) {
+		switch (evt.nativeTarget) {
+		case this.getSubnode('close'):
+			zDom.addClass(this.getSubnode('close'), this.getZclass() + '-close-over');
+			break;
+		case this.getSubnode('max'):
+			var zcls = this.getZclass(),
+				added = this.isMaximized() ? ' ' + zcls + '-maximized-over' : '';
+			zDom.addClass(this.getSubnode('max'), zcls + '-maximize-over' + added);
+			break;
+		case this.getSubnode('min'):
+			zDom.addClass(this.getSubnode('min'), this.getZclass() + '-minimize-over');
+			break;
 		}
 		this.$supers('doMouseOver_', arguments);
 	},
-	doMouseOut_: function (evt, devt) {
-		switch (zEvt.target(devt)) {
-			case this.getSubnode('close'):
-				zDom.rmClass(this.getSubnode('close'), this.getZclass() + '-close-over');
-				break;
-			case this.getSubnode('max'):
-				var zcls = this.getZclass(),
-					max = this.getSubnode('max');
-				if (this.isMaximized())
-					zDom.rmClass(max, zcls + '-maximized-over');
-				zDom.rmClass(max, zcls + '-maximize-over');
-				break;
-			case this.getSubnode('min'):
-				zDom.rmClass(this.getSubnode('min'), this.getZclass() + '-minimize-over');
-				break;
+	doMouseOut_: function (evt) {
+		switch (evt.nativeTarget) {
+		case this.getSubnode('close'):
+			zDom.rmClass(this.getSubnode('close'), this.getZclass() + '-close-over');
+			break;
+		case this.getSubnode('max'):
+			var zcls = this.getZclass(),
+				max = this.getSubnode('max');
+			if (this.isMaximized())
+				zDom.rmClass(max, zcls + '-maximized-over');
+			zDom.rmClass(max, zcls + '-maximize-over');
+			break;
+		case this.getSubnode('min'):
+			zDom.rmClass(this.getSubnode('min'), this.getZclass() + '-minimize-over');
+			break;
 		}
 		this.$supers('doMouseOut_', arguments);
 	},
