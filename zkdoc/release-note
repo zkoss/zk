@@ -32,6 +32,7 @@ ZK 3.5.3
   2493245: zscript failed badly if macro's setMacroURI before setParent
   2522437: Error display after invalidate desktop
   2523090: Some binding load twice when binder.loadAll()
+  2525344: Exception when changing page's ID in Initiator
 
 	--------
 ZK 3.5.2
