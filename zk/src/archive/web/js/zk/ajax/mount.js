@@ -385,8 +385,11 @@ zkm = {
 		if (target != document.body && target != document.body.parentNode) //not click on scrollbar
 			$Widget.domMouseDown(wgt); //null if mask
 
-		if (wgt)
-			wgt.doMouseDown_(new zk.Event(wgt, 'onMouseDown', zkm._mouseData(evt, wgt), null, evt));
+		if (wgt) {
+			var wevt = new zk.Event(wgt, 'onMouseDown', zkm._mouseData(evt, wgt), null, evt);
+			wgt.doMouseDown_(wevt);
+			if (wevt.stopped) zEvt.stop(evt);
+		}
 	},
 	_mouseData: function (evt, wgt) {
 		var n = zEvt.target(evt);
@@ -399,8 +402,11 @@ zkm = {
 		var wgt = zk.mouseCapture;
 		if (wgt) zk.mouseCapture = null;
 		else wgt = zk.Widget.$(evt);
-		if (wgt)
-			wgt.doMouseUp_(new zk.Event(wgt, 'onMouseUp', zkm._mouseData(evt, wgt), null, evt));
+		if (wgt) {
+			var wevt = new zk.Event(wgt, 'onMouseUp', zkm._mouseData(evt, wgt), null, evt);
+			wgt.doMouseUp_(wevt);
+			if (wevt.stopped) zEvt.stop(evt);
+		}
 	},
 	docMouseMove: function (evt) {
 		evt = evt || window.event;
@@ -430,23 +436,32 @@ zkm = {
 	docKeyDown: function (evt) {
 		evt = evt || window.event;
 		var wgt = zk.Widget.$(evt);
-		if (wgt)
-			wgt.doKeyDown_(new zk.Event(wgt, 'onKeyDown', zEvt.keyData(evt), null, evt));
+		if (wgt) {
+			var wevt = new zk.Event(wgt, 'onKeyDown', zEvt.keyData(evt), null, evt);
+			wgt.doKeyDown_(wevt);
+			if (wevt.stopped) zEvt.stop(evt);
+		}
 	},
 	docKeyUp: function (evt) {
 		evt = evt || window.event;
 		var wgt = zk.keyCapture;
 		if (wgt) zk.keyCapture = null;
 		else wgt = zk.Widget.$(evt);
-		if (wgt)
-			wgt.doKeyUp_(new zk.Event(wgt, 'onKeyUp', zEvt.keyData(evt), null, evt));
+		if (wgt) {
+			var wevt = new zk.Event(wgt, 'onKeyUp', zEvt.keyData(evt), null, evt);
+			wgt.doKeyUp_(wevt);
+			if (wevt.stopped) zEvt.stop(evt);
+		}
 	},
 	docKeyPress: function (evt) {
 		evt = evt || window.event;
 		var wgt = zk.keyCapture;
 		if (!wgt) wgt = zk.Widget.$(evt);
-		if (wgt)
-			wgt.doKeyPress_(new zk.Event(wgt, 'onKeyPress', zEvt.keyData(evt), null, evt));
+		if (wgt) {
+			var wevt = new zk.Event(wgt, 'onKeyPress', zEvt.keyData(evt), null, evt);
+			wgt.doKeyPress_(wevt);
+			if (wevt.stopped) zEvt.stop(evt);
+		}
 	},
 	docClick: function (evt) {
 		if (zk.processing) return;
@@ -454,9 +469,11 @@ zkm = {
 		evt = evt || window.event;
 		if (evt.which == 1 || (evt.button == 0 || evt.button == 1)) {
 			var wgt = zk.Widget.$(evt);
-			if (wgt)
-				wgt.doClick_(new zk.Event(wgt, 'onClick', zkm._mouseData(evt, wgt), {ctl:true}, evt));
-				//no need to zEvt.stop()
+			if (wgt) {
+				var wevt = new zk.Event(wgt, 'onClick', zkm._mouseData(evt, wgt), {ctl:true}, evt)
+				wgt.doClick_(wevt);
+				if (wevt.stopped) zEvt.stop(evt);
+			}
 			//don't return anything. Otherwise, it replaces event.returnValue in IE (Bug 1541132)
 		}		
 	},
