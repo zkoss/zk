@@ -261,8 +261,8 @@ public class PageImpl implements Page, PageCtrl, java.io.Serializable {
 		return _uuid;
 	}
 	public void setId(String id) {
-		if (_desktop != null)
-			throw new UiException("Unable to change the identifier after the page is initialized");
+		if (_desktop != null && _desktop.getPages().contains(this))
+			throw new UiException("Unable to change ID after initialized");
 		if (id != null && id.length() > 0) _id = id;
 		//No need to update client since it is allowed only before init(...)
 	}
