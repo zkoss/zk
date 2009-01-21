@@ -29,6 +29,7 @@ import org.zkoss.zul.Label;
  */
 public class B2199361 implements Initiator {
 	public void doInit(Page page, Object[] args) throws Exception {
+		page.setId("abc"); //Bug 2525344
 		new Label("Hello, Initiator").setPage(page);
 	}
 	public void doAfterCompose(Page page) throws Exception {

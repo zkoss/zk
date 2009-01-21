@@ -120,7 +120,7 @@ public interface Desktop {
 	public Collection getPages();
 	/** Returns whether a page exists.
 	 */
-	public boolean hasPage(String id);
+	public boolean hasPage(String pageId);
 
 	/** Returns all custom attributes associated with this desktop.
 	 */
