@@ -266,7 +266,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		var visible = this._visible;
 		if (!strict || !visible)
 			return visible;
-		var n = wgt.getNode();
+		var n = this.getNode();
 		return !n || zDom.isVisible(n);
 	},
 	setVisible: function (visible, fromServer) {

@@ -67,7 +67,7 @@ public class Menubar extends XulElement implements org.zkoss.zul.api.Menubar {
 		
 		if (!Objects.equals(_orient, orient)) {
 			_orient = orient;
-			invalidate();
+			smartUpdate("orient", _orient);
 		}
 	}
 
@@ -84,7 +84,7 @@ public class Menubar extends XulElement implements org.zkoss.zul.api.Menubar {
 	public void setAutodrop(boolean autodrop) {
 		if (_autodrop != autodrop) {
 			_autodrop = autodrop;
-			smartUpdate("z.autodrop", autodrop);
+			smartUpdate("autodrop", autodrop);
 		}
 	}
 
@@ -98,4 +98,14 @@ public class Menubar extends XulElement implements org.zkoss.zul.api.Menubar {
 			throw new UiException("Unsupported child for menubar: "+child);
 		return super.insertBefore(child, insertBefore);
 	}
+	// super
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		if (_autodrop) render(renderer, "autodrop", _autodrop);
+		if ("vertical".equals(getOrient())) render(renderer, "orient", _orient);
+		
+	}
+	
 }

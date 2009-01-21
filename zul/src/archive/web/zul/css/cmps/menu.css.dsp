@@ -255,7 +255,8 @@
 
 <%-- Menupopup--%>
 .z-menu-popup {
-	border:	1px solid #7F9DB9;	z-index: 88000; zoom: 1; padding: 2px;
+	position: absolute; top: 0; left: 0;
+	border:	1px solid #7F9DB9; zoom: 1; padding: 2px;
 	background: #E7F3FA url(${c:encodeURL('~./zul/img/menu2/pp-bg.gif')}) repeat-y;
 }
 .z-menu-popup-cnt li {

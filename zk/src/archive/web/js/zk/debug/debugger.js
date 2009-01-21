@@ -144,7 +144,8 @@ zk.debug.DefaultHandler = zk.$extends(zk.Object, {
 				case '=':
 					out.push('=<span style="color:#0666FD">');
 					cnt = 0;
-					odd = false;
+					if (!odd)
+						odd = false;
 					break;
 				case '<':
 					if (start) {// error caused by double '<' syntax

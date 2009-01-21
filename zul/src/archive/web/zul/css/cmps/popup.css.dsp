@@ -2,7 +2,7 @@
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 
 .z-popup {
-	position: absolute; top: 0; left: 0; visibility: hidden; z-index: 88000; border: 0;
+	position: absolute; top: 0; left: 0; visibility: hidden; border: 0;
 	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
 }
 .z-popup .z-popup-tm {

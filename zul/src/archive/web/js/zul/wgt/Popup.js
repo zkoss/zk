@@ -14,6 +14,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 zul.wgt.Popup = zk.$extends(zul.Widget, {
 	_visible: false,
+	isOpen: function () {
+		return this.isVisible();
+	},
 	open: function (ref, offset, position, opts) {
 		var posInfo = this._posInfo(ref, offset, position);
 
@@ -47,8 +50,9 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 				this._stackup.style.display = "block";
 			}
 		}
+		ref = zk.Widget.$(ref); // just in case, if ref is not a kind of zul.Widget.
 		if (opts && opts.sendOnOpen) this.fire('onOpen', ref ? [true, ref.uuid] : true);
-		zDom.setStyle(node, {visibility: 'inherit'});
+		zDom.cleanVisibility(node);
 	},
 	position: function (ref, offset, position, opts) {
 		var posInfo = this._posInfo(ref, offset, position);
@@ -63,7 +67,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 				ref = zk.Widget.$(ref);
 				
 			if (ref) {
-				var refn = ref.getNode(),
+				var refn = zul.Widget.isInstance(ref) ? ref.getNode() : ref,
 					ofs = zDom.revisedOffset(refn);
 				pos = position;
 				dim = {

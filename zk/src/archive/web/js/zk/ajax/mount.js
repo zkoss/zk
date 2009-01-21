@@ -452,11 +452,13 @@ zkm = {
 		if (zk.processing) return;
 
 		evt = evt || window.event;
-		var wgt = zk.Widget.$(evt);
-		if (wgt)
-			wgt.doClick_(new zk.Event(wgt, 'onClick', zkm._mouseData(evt, wgt), {ctl:true}), evt);
-			//no need to zEvt.stop()
-		//don't return anything. Otherwise, it replaces event.returnValue in IE (Bug 1541132)
+		if (evt.which == 1 || (evt.button == 0 || evt.button == 1)) {
+			var wgt = zk.Widget.$(evt);
+			if (wgt)
+				wgt.doClick_(new zk.Event(wgt, 'onClick', zkm._mouseData(evt, wgt), {ctl:true}), evt);
+				//no need to zEvt.stop()
+			//don't return anything. Otherwise, it replaces event.returnValue in IE (Bug 1541132)
+		}		
 	},
 	docDblClick: function (evt) {
 		if (zk.processing) return;

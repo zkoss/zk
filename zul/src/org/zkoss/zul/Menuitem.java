@@ -43,6 +43,9 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zul.api.Men
 	private boolean _disabled = false;
 	private boolean _checkmark;
 
+	static {
+		addClientEvent(Menuitem.class, Events.ON_CHECK);
+	}
 	public Menuitem() {
 	}
 	public Menuitem(String label) {
@@ -70,7 +73,7 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zul.api.Men
 	public void setCheckmark(boolean checkmark) {
 		if (_checkmark != checkmark) {
 			_checkmark = checkmark;
-			invalidate();
+			smartUpdate("checkmark", checkmark);
 		}
 	}
 
@@ -85,7 +88,7 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zul.api.Men
 	public void setDisabled(boolean disabled) {
 		if (_disabled != disabled) {
 			_disabled = disabled;
-			invalidate();
+			smartUpdate("disabled", disabled);
 		}
 	}
 	
@@ -108,7 +111,10 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zul.api.Men
 	public void setValue(String value) {
 		if (value == null)
 			value = "";
-		_value = value; //no need to update client
+		if (!_value.equals(value)) {
+			_value = value;
+			smartUpdate("value", value);
+		}
 	}
 	/** Returns whether it is checked.
 	 * <p>Default: false.
@@ -123,8 +129,8 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zul.api.Men
 		if (_checked != checked) {
 			_checked = checked;
 			if (_checked)
-				setCheckmark(true);
-			invalidate();
+				_checkmark = true;
+			smartUpdate("checked", checked);
 		}
 	}
 	/** Returns whether the menuitem check mark will update each time
@@ -141,7 +147,7 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zul.api.Men
 	public void setAutocheck(boolean autocheck) {
 		if (_autocheck != autocheck) {
 			_autocheck = autocheck;
-			invalidate();
+			smartUpdate("autocheck", autocheck);
 		}
 	}
 
@@ -159,7 +165,7 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zul.api.Men
 			href = null;
 		if (!Objects.equals(_href, href)) {
 			_href = href;
-			invalidate();
+			smartUpdate("href", href);
 		}
 	}
 
@@ -203,6 +209,19 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zul.api.Men
 	/** Not childable. */
 	protected boolean isChildable() {
 		return false;
+	}
+	// super
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+		
+		if (_checkmark) render(renderer, "checkmark", _checkmark);
+		if (_disabled) render(renderer, "disabled", _disabled);
+		if (_checked) render(renderer, "checked", _checked);
+		if (_autocheck) render(renderer, "autocheck", _autocheck);
+		if (_href != null) render(renderer, "href", _href);
+		if (_target != null) render(renderer, "target", _target);
+		render(renderer, "value", _value);
 	}
 
 	//-- ComponentCtrl --//
