@@ -63,11 +63,21 @@ public interface ContentRenderer {
 	 * snippet.
 	 */
 	public void renderDirectly(String name, Object value);
-	/** Renders the JavaScript code snippet for event listeners
+	/** Renders the client code snippet for event listeners
 	 * registered for the peer widget.
 	 * @param listeners the map of listeners to register at the peer widget.
-	 * The key is the event name, and the value the code snippet.
+	 * The key is the event name (such as onClick), and the value the code
+	 * snippet (such as <code>this.getFellow('inf').setValue('new')</code>).
 	 * They are both String instances.
 	 */
 	public void renderWidgetListeners(Map listeners);
+	/** Renders the client code snippet to override the methods of
+	 * the peer widget.
+	 * @param methods the map of methods to override the peer widget.
+	 * The key is the method name (such as setValue), and the value
+	 * the method definition
+	 * (such as <code>function (value) {this.$setValue(value);}</code>).
+	 * They are both String instances.
+	 */
+	public void renderWidgetMethods(Map methods);
 }

@@ -819,18 +819,42 @@ zk.Widget = zk.$extends(zk.Object, {
 		return lsns && lsns.length;
 	},
 	setListeners: function (infs) {
-		var lsns = this._$lsns;
-		for (var evtnm in infs) {
-			var fn = infs[evtnm],
-				oldfn = lsns[evtnm];
-			if (oldfn) { //unlisten first
-				delete lsns[evtnm];
-				this.unlisten(evtnm, this, oldfn);
-			}
-			if (fn) {
-				if (typeof fn != 'function') fn = new Function(fn);
-				this.listen(evtnm, this, lsns[evtnm] = fn);
-			}
+		for (var evtnm in infs)
+			this._setListener(evtnm, infs[evtnm]);
+	},
+	setListener: function (inf) {
+		this._setListener(inf[0], inf[1]);
+	},
+	_setListener: function (evtnm, fn) {
+		var lsns = this._$lsns,
+			oldfn = lsns[evtnm];
+		if (oldfn) { //unlisten first
+			delete lsns[evtnm];
+			this.unlisten(evtnm, this, oldfn);
+		}
+		if (fn) {
+			if (typeof fn != 'function') fn = new Function(fn);
+			this.listen(evtnm, this, lsns[evtnm] = fn);
+		}
+	},
+	setMethods: function (infs) {
+		for (var mtdnm in infs)
+			this._setMethod(mtdnm, infs[mtdnm]);
+	},
+	setMethod: function (inf) {
+		this._setMethod(inf[0], inf[1]);
+	},
+	_setMethod: function (mtdnm, fn) {
+		if (fn) {
+			if (typeof fn != 'function') fn = eval(fn);
+			var oldnm = '$' + mtdnm;
+			if (!this[oldnm]) this[oldnm] = this[mtdnm]; //only once
+			this[mtdnm] = fn;
+				//use eval, since complete func decl
+		} else {
+			var oldnm = '$' + mtdnm;
+			this[mtdnm] = this[oldnm]; //restore
+			delete this[oldnm];
 		}
 	},
 

@@ -326,4 +326,20 @@ public class JsContentRenderer implements ContentRenderer {
 		}
 		_buf.setCharAt(_buf.length() - 1, '}');
 	}
+	/** Renders the JavaScript codes nippet to override the methods
+	 * of the peer widget.
+	 */
+	public void renderWidgetMethods(Map methods) {
+		if (methods == null || methods.isEmpty())
+			return;
+
+		renderName("methods");
+		_buf.append('{');
+		for (Iterator it = methods.entrySet().iterator(); it.hasNext();) {
+			final Map.Entry me = (Map.Entry)it.next();
+			_buf.append(me.getKey()).append(":\n")
+				.append(me.getValue()).append("\n,");
+		}
+		_buf.setCharAt(_buf.length() - 1, '}');
+	}
 }

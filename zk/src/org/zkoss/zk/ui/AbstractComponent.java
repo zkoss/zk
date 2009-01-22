@@ -155,6 +155,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private EventHandlerMap _evthds;
 	/** A map of client event hanlders, Map(String evtnm, String script). */
 	private Map _wgtlsns;
+	/** A map of client methods, Map(String mtdnm, String script). */
+	private Map _wgtmtds;
 	/** A map of forward conditions:
 	 * Map(String orgEvt, [listener, List([target or targetPath,targetEvent])]).
 	 */
@@ -731,6 +733,27 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return _wgtlsns != null ? _wgtlsns.keySet(): Collections.EMPTY_SET;
 	}
 
+	public String setWidgetMethod(String mtdnm, String script) {
+		if (mtdnm == null)
+			throw new IllegalArgumentException();
+
+		final String old;
+		if (script != null) {
+			if (_wgtmtds == null) _wgtmtds = new LinkedHashMap();
+			old = (String)_wgtmtds.put(mtdnm, script);
+		} else
+			old = _wgtmtds != null ? (String)_wgtmtds.remove(mtdnm): null;
+		if (!Objects.equals(script, old))
+			smartUpdateWidgetMethod(mtdnm, script);
+		return old;
+	}
+	public String getWidgetMethod(String mtdnm) {
+		return _wgtmtds != null ? (String)_wgtmtds.get(mtdnm): null;
+	}
+	public Set getWidgetMethodNames() {
+		return _wgtmtds != null ? _wgtmtds.keySet(): Collections.EMPTY_SET;
+	}
+
 	public Map getAttributes(int scope) {
 		switch (scope) {
 		case SPACE_SCOPE:
@@ -1283,6 +1306,25 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	protected void smartUpdateWidgetListener(String evtnm, String script) {
 		smartUpdate("listener", new String[] {evtnm, script});
 	}
+	/** A special smart update to update a method of the peer widget.
+	 * By default, it assumes the peer widget has a method called
+	 * <code>setMethod<code> and it will be invoked as follows.
+	 *
+	 * <pre><code>wgt.setMethod([evtnm, script]);</code></pre>
+	 *
+	 * <p>Devices that supports it in another way have to override this
+	 * method. Devices that don't support it have to override this method
+	 * to throw UnsupportedOperationException.
+	 *
+	 * @param mtdnm the method name, such as setValue
+	 * @param script the script. If null, the previous method override
+	 * will be remove. And, the method defined in original widget will
+	 * be restored.
+	 * @since 5.0.0
+	 */
+	protected void smartUpdateWidgetMethod(String mtdnm, String script) {
+		smartUpdate("method", new String[] {mtdnm, script});
+	}
 
 	public void detach() {
 		if (getParent() != null) setParent(null);
@@ -1433,6 +1475,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 
 		renderer.renderWidgetListeners(_wgtlsns);
+		renderer.renderWidgetMethods(_wgtmtds);
 	}
 	/** An utility to be called by {@link #renderProperties} to
 	 * render a string-value property.
@@ -2129,6 +2172,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			clone._evthds = (EventHandlerMap)_evthds.clone();
 		if (_wgtlsns != null)
 			clone._wgtlsns = new LinkedHashMap(_wgtlsns);
+		if (_wgtmtds != null)
+			clone._wgtmtds = new LinkedHashMap(_wgtmtds);
 
 		//2. clone children (deep cloning)
 		cloneChildren(clone);

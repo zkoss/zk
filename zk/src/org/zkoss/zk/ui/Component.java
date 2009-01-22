@@ -777,7 +777,7 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 */
 	public void applyProperties();
 
-	/*** Sets or remove an event listener of the peer widget.
+	/*** Sets or removes an event listener of the peer widget.
 	 * If there is an event listener associated with the same event,
 	 * the previous one will be replaced and returned.
 	 *
@@ -798,6 +798,49 @@ public interface Component extends java.io.Serializable, Cloneable {
 	 * @since 5.0.0
 	 */
 	public Set getWidgetListenerNames();
+
+	/*** Sets or removes the script of the method definition to override
+	 * widget's method.
+	 * If there is a method associated with the same name,
+	 * the previous one will be replaced and returned.
+	 *
+	 * <p>Notice that, unlike {@link #setWidgetListener}, if the method has been sent
+	 * to the client for update, it cannot be removed by calling this method
+	 * with a null script.
+	 * In other words, invoking this method with a null script only removes
+	 * the method overrides if it has not YET been to sent to the client.
+	 *
+	 * <p>The previous method can be accessed by this.$xxx. For example
+	 *<pre><code>function (value, fromServer) {
+	 *  this.$setValue(value, fromServer);
+	 *  if (this.desktop) {
+	 *    this._cnt = !this._cnt;
+	 *    this.setStyle('background:'+(this._cnt ? 'red':'green'));
+	 *  }
+	 *}</code></pre>
+	 *
+	 * <p>Notice that, since it is not extending, so this.$super references
+	 * the superclass's method, rather than the <i>old</i> method.
+	 *
+	 * @param mtdnm the method name, such as setValue
+	 * @param script the method definition, such as <code>function (arg) {...}</code>.
+	 * If not null, this method will be added to the peer widget,
+	 * and the old method, if any, will be overriden.
+	 * If null, the previous method will be stored
+	 * @return the previous script if any
+	 * @since 5.0.0
+	 */
+	public String setWidgetMethod(String mtdnm, String script);
+	/** Returns the script of the method definition to override
+	 * widget's method, or null if not found.
+	 * @since 5.0.0
+	 */
+	public String getWidgetMethod(String mtdnm);
+	/** Returns a readonly collection of method names (String) that
+	 * shall be overriden, or an empty collection if none is registered.
+	 * @since 5.0.0
+	 */
+	public Set getWidgetMethodNames();
 
 	/** Clones the component.
 	 * All of its children is cloned.

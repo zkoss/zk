@@ -77,6 +77,8 @@ implements Cloneable, Condition, java.io.Externalizable {
 	private EventHandlerMap _evthds;
 	/** A list of event listeners for the peer widget. */
 	private List _wgtlsns;
+	/** A list of method overrides for the peer widget. */
+	private List _wgtmtds;
 	/** the annotation map. Note: it doesn't include what are defined in _compdef. */
 	private AnnotationMap _annots;
 	/** The tag name for the dyanmic tag. Used only if this implements {@link DynamicTag}*/
@@ -174,6 +176,8 @@ implements Cloneable, Condition, java.io.Externalizable {
 			_evthds = (EventHandlerMap)compInfo._evthds.clone();
 		if (compInfo._wgtlsns != null)
 			_wgtlsns = new LinkedList(compInfo._wgtlsns);
+		if (compInfo._wgtmtds != null)
+			_wgtmtds = new LinkedList(compInfo._wgtmtds);
 	}
 
 	/** Returns the language definition that {@link #getComponentDefinition}
@@ -550,11 +554,21 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 * @since 5.0.0
 	 */
 	public void addWidgetListener(String name, String script, ConditionImpl cond) {
-		final WidgetListener evthd =
+		final WidgetListener listener =
 			new WidgetListener(_evalr, name, script, cond);
 		if (_wgtlsns == null)
 			_wgtlsns = new LinkedList();
-		_wgtlsns.add(evthd);
+		_wgtlsns.add(listener);
+	}
+	/** Adds a method to the peer widget.
+	 * The previous method with the same name, if any, will be overridden.
+	 */
+	public void addWidgetMethod(String name, String script, ConditionImpl cond) {
+		final WidgetMethod mtd =
+			new WidgetMethod(_evalr, name, script, cond);
+		if (_wgtmtds == null)
+			_wgtmtds = new LinkedList();
+		_wgtmtds.add(mtd);
 	}
 	/** Sets the effectiveness condition.
 	 */
@@ -750,6 +764,10 @@ implements Cloneable, Condition, java.io.Externalizable {
 		if (_wgtlsns != null)
 			for (Iterator it = _wgtlsns.iterator(); it.hasNext();)
 				((WidgetListener)it.next()).assign(comp);
+
+		if (_wgtmtds != null)
+			for (Iterator it = _wgtmtds.iterator(); it.hasNext();)
+				((WidgetMethod)it.next()).assign(comp);
 
 		if (_props != null)
 			for (Iterator it = _props.iterator(); it.hasNext();)
@@ -947,6 +965,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 		out.writeObject(_props);
 		out.writeObject(_evthds);
 		out.writeObject(_wgtlsns);
+		out.writeObject(_wgtmtds);
 		out.writeObject(_annots);
 		out.writeObject(_tag);
 		out.writeObject(_cond);
@@ -977,6 +996,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 		_props = (List)in.readObject();
 		_evthds = (EventHandlerMap)in.readObject();
 		_wgtlsns = (List)in.readObject();
+		_wgtmtds = (List)in.readObject();
 		_annots = (AnnotationMap)in.readObject();
 		_tag = (String)in.readObject();
 		_cond = (ConditionImpl)in.readObject();

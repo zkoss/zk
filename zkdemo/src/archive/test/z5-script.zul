@@ -16,7 +16,17 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <window title="Test of JavaScript"
 xmlns:w="http://www.zkoss.org/2005/zk/client">
 	<label id="inf"/>
-	<label id="inf2"/>
+	<label id="inf2">
+		<attribute w:name="$setValue">
+		function (value, fromServer) {
+			this.$setValue(value, fromServer);
+			if (this.desktop) {
+				this._cnt = !this._cnt;
+				this.setStyle('background:'+(this._cnt ? 'red':'green'));
+			}
+		}
+		</attribute>
+	</label>
 	<separator bar="true"/>
 	<script>
 	var inf = this.getFellow('inf'); //this is the script widget

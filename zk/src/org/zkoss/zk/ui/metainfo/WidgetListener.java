@@ -21,22 +21,25 @@ import org.zkoss.zk.ui.util.ConditionImpl;
 import org.zkoss.zk.xel.impl.EvaluatorRef;
 
 /**
- * An event listener for the peer widget.
+ * Represents a client-side event listener for the peer widget.
+ * Notice that, unlike {@link WidgetMethod}, {@link #getScript} has only
+ * the function's body (without <code>function (event)</code>).
  *
  * @author tomyeh
  * @since 5.0.0
  * @see EventHandler
+ * @see WidgetMethod
  */
 public class WidgetListener extends EvalRefStub
 implements Condition, java.io.Serializable {
     private static final long serialVersionUID = 20081213L;
 
-	private final String _name;
-	private final String _script;
-	private final ConditionImpl _cond;
+	protected final String _name;
+	protected final String _script;
+	protected final ConditionImpl _cond;
 
 	/**
-	 * @param name the event name, such as onClick.
+	 * @param name the event name, such as onClick
 	 * @param evalr the evaluator reference. It is required if cond is not null.
 	 * @exception IllegalArgumentException if script is null
 	 * or (cond is not null but evalr is null)
@@ -50,7 +53,7 @@ implements Condition, java.io.Serializable {
 		_cond = cond;
 	}
 
-	/** Returns the event name, such as, click.
+	/** Returns the event name, such as, onClick.
 	 */
 	public String getName() {
 		return _name;

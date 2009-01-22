@@ -1,0 +1,35 @@
+#!/bin/bash
+# build
+#
+#	Purpose:
+#		Build ZK Light
+#	Description:
+#		
+#	History:
+#		Thu Jan 22 11:07:26     2009, Created by tomyeh
+#
+#Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+#
+#	This program is distributed under GPL Version 2.0 in the hope that
+#	it will be useful, but WITHOUT ANY WARRANTY.
+#
+
+if [ -d zklighter ] ; then
+	cd zklighter
+fi
+if [ ! -d lib ] ; then
+	echo Wrong directory: $(pwd)
+	exit -1
+fi
+if [ ! -f js.lst ] || [ ! -f css.lst ] ; then
+	echo js.lst and css.lst are both required
+	exit -1
+fi
+
+CP=
+if [ -f classpath ] ; then
+	#retrieve path
+	CP=$(cat classpath | tr '\n' ';')
+	CP=${CP%:}
+fi
+java -classpath "debug/zklighter.jar;$CP" org.zkoss.zklighter.Lighter js.lst css.lst lib

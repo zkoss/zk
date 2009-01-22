@@ -132,4 +132,9 @@ public class XmlContentRenderer implements ContentRenderer {
 			render((String)me.getKey(), me.getValue());
 		}
 	}
+	/** It is the same as <code>render(name, script)</code>.
+	 */
+	public void renderWidgetMethods(Map methods) {
+		renderWidgetMethods(methods);
+	}
 }
