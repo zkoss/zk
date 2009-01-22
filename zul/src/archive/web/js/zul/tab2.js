@@ -742,7 +742,7 @@ zkTabpanel2 = {
 	onVisi: function(cmp) {
 		var tbx = $e(getZKAttr(cmp, "box"));
 		this._fixPanelHgh(tbx,cmp);//Bug 2104974
-		 if (zk.ie6Only) zk.repaint(tbx);
+		if (zk.ie6Only || zk.ie7) zk.repaint(tbx); //Bug 2526699 - (add zk.ie7)
 	},
 	_fixPanelHgh: function(tabbox,tabpanel){
 		if (!zkTabbox2._isAccord(tabbox)) {
