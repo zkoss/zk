@@ -188,7 +188,7 @@ zk.TextUtil = {
 		var instance = {
 			styles: ["fontSize", "fontStyle", "fontWeight", "fontFamily", "lineHeight", "letterSpacing", "textTransform" ],
 			getSize: function () {
-				return {width: d.offsetWidth, height: d.offsetWidth};
+				return {width: d.offsetWidth, height: d.offsetHeight};
 			},
 			apply: function (el, text) {
 				for (var s = this.styles.length; --s >= 0;)

@@ -375,7 +375,7 @@ zkMenuit2 = { //menuitem
 			zk.listen(cmp, "click", zkMenuit2.onclick);
 			zk.listen(cmp, "mouseover", zkMenu2.onover);
 			zk.listen(cmp, "mouseout", zkMenu2.onout);
-			if (zkMenu2.isTop(cmp)) { //non-topmost
+			if (zkMenu2.isTop(cmp)) { //topmost
 				var anc = $e(cmp.id + "!a");
 				zk.listen(anc, "focus", zkau.onfocus);
 				zk.listen(anc, "blur", zkau.onblur);		
