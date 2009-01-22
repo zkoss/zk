@@ -42,13 +42,17 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 	},
 	insertChildHTML_: function (child, before, desktop) {
 		if (before)
-			zDom.insertHTMLBefore(before.getNode(),
+			zDom.insertHTMLBefore(before.getSubnode('chdextr'),
 				this.encloseChildHTML_({child: child, vertical: 'vertical' == this.getOrient()}));
 		else
 			zDom.insertHTMLBeforeEnd(this.getNode(),
 				this.encloseChildHTML_({child: child, vertical: 'vertical' == this.getOrient()}));
 		
 		child.bind_(desktop);
+	},
+	removeChildHTML_: function (child, prevsib) {
+		this.$supers('removeChildHTML_', arguments);
+		zDom.remove(child.uuid + '$chdextr');
 	},
 	encloseChildHTML_: function (opts) {
 		var out = opts.out || [],

@@ -226,7 +226,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (moveBefore && !(beforeNode = moveBefore.getNode()))
 			return false;
 
-		var node = this._node, kidnode = child._node;
+		var node = this.getNode(), kidnode = child.getNode();
 			dt = this.desktop, kiddt = child.desktop,
 			oldpt = child.parent;
 		child._node = this._node = child.desktop = this.desktop = null; //to avoid bind_ and unbind_
@@ -248,7 +248,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			this._node = node; child._node = kidnode;
 		}
 
-		oldpt.onChildRemoved(child);
+		oldpt.onChildRemoved_(child);
 		this.onChildAdded_(child);
 			//they are called if parent is the same
 		return true;

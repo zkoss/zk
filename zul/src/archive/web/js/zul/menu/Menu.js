@@ -96,8 +96,8 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		
 		this.$supers('unbind_', arguments);		
 	},
-	doClick_: function (evt, devt) {
-		if (this.isTopmost() && !zDom.isAncestor(this.getSubnode('a'), zEvt.target(devt))) return;		
+	doClick_: function (evt) {
+		if (this.isTopmost() && !zDom.isAncestor(this.getSubnode('a'), evt.nativeTarget)) return;		
 		zDom.addClass(this.getSubnode('a'), this.getZclass() + '-btn-seld');
 		if (this.menupopup) {
 			this.menupopup._shallClose = false;

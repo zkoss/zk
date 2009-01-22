@@ -27,10 +27,13 @@ zul.wgt.Label = zk.$extends(zul.Widget, {
 		if (this._value != value) {
 			this._value = value;
 			var n = this.getNode();
-			if (n) n.innerHTML = zUtl.encodeXML(value);
+			if (n) n.innerHTML = this.getEncodedText();
 		}
 	},
-
+	getEncodedText: function () {
+		var value = zUtl.encodeXML(this._value);
+		return value.replace(/ /g, '&nbsp;').replace(/\t/, '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
+	},
 	//super//
 	getZclass: function () {
 		var zcs = this._zclass;

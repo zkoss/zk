@@ -568,39 +568,41 @@ zDom = { //static methods
 		return [l, t];
 	},
 	getTextUtil: function () {
-		return {
-			styles: ["fontSize", "fontStyle", "fontWeight", "fontFamily", "lineHeight", "letterSpacing", "textTransform" ],
-			getNode: function () {
-				var d = this._node || zDom.$('zk_textUtil');
-				if (!d) {
-					d = document.createElement("div");
-					document.body.appendChild(d);
-					d.id = "zk_textUtil";
-					this._node = d;
+		if (!this._textUtil)
+			this._textUtil = {
+				styles: ["fontSize", "fontStyle", "fontWeight", "fontFamily", "lineHeight", "letterSpacing", "textTransform" ],
+				getNode: function () {
+					var d = this._node || zDom.$('zk_textUtil');
+					if (!d) {
+						d = document.createElement("div");
+						document.body.appendChild(d);
+						d.id = "zk_textUtil";
+						this._node = d;
+					}
+					d.style.position = "absolute";
+					d.style.top = d.style.left = "-1000px";
+					d.style.width = "auto";
+					d.style.visibility = "hidden";
+					return d; 
+				},
+				measure: function (el, text) {
+					if (!this._node)
+						this._node = this.getNode();
+					this.apply(el, text);
+					return {width: this._node.offsetWidth, height: this._node.offsetHeight};
+				},
+				apply: function (el, text) {
+					for (var s = this.styles.length; --s >= 0;)
+						this._node.style[this.styles[s]] = zDom.getStyle(el, this.styles[s]);
+					this._node.innerHTML = typeof text == "string" ? text : el.innerHTML;	
+				},
+				destroy: function () {
+					if (this._node)
+						zDom.remove(this._node);
+					this._node = null;
 				}
-				d.style.position = "absolute";
-				d.style.top = d.style.left = "-1000px";
-				d.style.width = "auto";
-				d.style.visibility = "hidden";
-				return d; 
-			},
-			measure: function (el, text) {
-				if (!this._node)
-					this._node = this.getNode();
-				this.apply(el, text);
-				return {width: this._node.offsetWidth, height: this._node.offsetHeight};
-			},
-			apply: function (el, text) {
-				for (var s = this.styles.length; --s >= 0;)
-					this._node.style[this.styles[s]] = zDom.getStyle(el, this.styles[s]);
-				this._node.innerHTML = typeof text == "string" ? text : el.innerHTML;	
-			},
-			destroy: function () {
-				if (this._node)
-					zDom.remove(this._node);
-				this._node = null;
-			}
-		};
+			};
+		return this._textUtil;
 	},
 	getDimension: function (el) {
 		var display = zDom.getStyle(el,  'display');

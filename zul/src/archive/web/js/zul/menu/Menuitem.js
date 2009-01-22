@@ -167,9 +167,9 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 			
 		this.$supers('unbind_', arguments);		
 	},
-	doClick_: function (evt, devt) {
+	doClick_: function (evt) {
 		if (this._disabled)
-			zEvt.stop(evt);
+			evt.stop();
 		else {
 			if (!this.$class._isActive(this)) return;
 			
@@ -205,12 +205,12 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 			zWatch.fire('onFloatUp', null, this); //notify all
 		}
 	},
-	_doMouseOut: function (evt, devt) {
+	_doMouseOut: function (evt) {
 		if (!this.isDisabled()) {
 			if (zk.ie) {
 					var n = this.getSubnode('a'),
 						xy = zDom.revisedOffset(n),
-						p = zEvt.pointer(devt),
+						p = zEvt.pointer(evt),
 						x = p[0],
 						y = p[1],
 						diff = this.isTopmost() ? 1 : 0;
