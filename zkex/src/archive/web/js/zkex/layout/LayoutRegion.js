@@ -507,12 +507,8 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	_isVertical : function () {
 		return this.getPosition() != zkex.layout.Borderlayout.WEST &&
 				this.getPosition() != zkex.layout.Borderlayout.EAST;
-	},
-	isImportantEvent_: function (evtnm) {
-		return this.$class._impEvts[evtnm];
 	}
 }, {
-	_impEvts: {onSize:1, onOpen:1},
 	// invokes border layout's renderer before the component slides out
 	beforeSlideOut: function (n) {
 		var s = this.getSubnode('colled').style;

@@ -59,8 +59,8 @@ public abstract class LayoutRegion extends XulElement implements org.zkoss.zkex.
 	private int[] _cmargins = new int[] { 5, 5, 5, 5 };
 
 	static {
-		addClientEvent(LayoutRegion.class, Events.ON_OPEN);
-		addClientEvent(LayoutRegion.class, Events.ON_SIZE);
+		addClientEvent(LayoutRegion.class, Events.ON_OPEN, CE_IMPORTANT);
+		addClientEvent(LayoutRegion.class, Events.ON_SIZE, CE_IMPORTANT|CE_DUPLICATE_IGNORE);
 	}
 	
 	public LayoutRegion() {

@@ -41,8 +41,8 @@ public class Button extends LabelImageElement implements org.zkoss.zul.api.Butto
 	private boolean _disabled;
 
 	static {
-		addClientEvent(Button.class, Events.ON_FOCUS);
-		addClientEvent(Button.class, Events.ON_BLUR);
+		addClientEvent(Button.class, Events.ON_FOCUS, CE_DUPLICATE_IGNORE);
+		addClientEvent(Button.class, Events.ON_BLUR, CE_DUPLICATE_IGNORE);
 	}
 
 	public Button() {

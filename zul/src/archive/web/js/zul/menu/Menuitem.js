@@ -220,12 +220,8 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 				}
 			this.$class._rmActive(this);
 		}
-	},
-	isImportantEvent_: function (evtnm) {
-		return this.$class._impEvts[evtnm];
 	}
 }, {
-	_impEvts: {onCheck:1},
 	_isActive: function (wgt) {
 		var top = wgt.isTopmost(),
 			n = top ? wgt.getSubnode('a') : wgt.getNode(),

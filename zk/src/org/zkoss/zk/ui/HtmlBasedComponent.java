@@ -68,9 +68,9 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	private String _prolog;
 
 	static {
-		addClientEvent(HtmlBasedComponent.class, Events.ON_CLICK);
-		addClientEvent(HtmlBasedComponent.class, Events.ON_DOUBLE_CLICK);
-		addClientEvent(HtmlBasedComponent.class, Events.ON_RIGHT_CLICK);
+		addClientEvent(HtmlBasedComponent.class, Events.ON_CLICK, 0);
+		addClientEvent(HtmlBasedComponent.class, Events.ON_DOUBLE_CLICK, 0);
+		addClientEvent(HtmlBasedComponent.class, Events.ON_RIGHT_CLICK, 0);
 	}
 
 	protected HtmlBasedComponent() {

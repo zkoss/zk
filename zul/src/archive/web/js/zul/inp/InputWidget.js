@@ -371,9 +371,6 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		this.einp = null;
 		this.$supers('unbind_', arguments);
 	},
-	isImportantEvent_: function (evtnm) {
-		return 'onChange' == evtnm || 'onError' == evtnm;
-	},
 	doKeyDown_: function (evt) {
 		var keyCode = evt.keyCode;
 		if ((keyCode == 13 && this.isListen('onOK'))

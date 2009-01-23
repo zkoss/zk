@@ -147,6 +147,39 @@ public interface ComponentCtrl {
 	 */
 	public Set getEventHandlerNames();
 
+	/** Returned by {@link #getClientEvents} to indicate the event is important
+	 * and the client must send it back even if no listener is registered.
+	 */
+	public static final int CE_IMPORTANT = 0x0001;
+	/** Returned by {@link #getClientEvents} to indicate the event
+	 * can be ignored by the server when the server is busy.
+	 */
+	public static final int CE_BUSY_IGNORE = 0x1000;
+	/** Returned by {@link #getClientEvents} to indicate the event
+	 * can be ignored by the server when the server receives the same AU
+	 * requests but not processed yet.
+	 * In other words, the server will remove the duplicate AU requests
+	 * if it was queued. 
+	 */
+	public static final int CE_DUPLICATE_IGNORE = 0x2000;
+	/** Returned by {@link #getClientEvents} to indicate the event
+	 * an be ignored by the server when the server receives consecutive
+	 * AU requests. In other words, the server will remove the first request
+	 * if it receives an event listed in this map consecutively.
+	 */
+	public static final int CE_REPEAT_IGNORE = 0x4000;
+	/** Returns a map of event information that the client might send to this component.
+	 * The key of the returned map is a String instance representing the event name,
+	 * and the value an integer representing the flags
+	 * (a combination of {@link #CE_IMPORTANT}, {@link #CE_BUSY_IGNORE},
+	 * {@link #CE_DUPLICATE_IGNORE} and {@link #CE_REPEAT_IGNORE}).
+	 * <p>Default: return the collection of events
+	 * added by {@link #getClientEvents}.
+	 *
+	 * @since 5.0.0
+	 */
+	public Map getClientEvents();
+
 	/** Returns the annotation associated with the component,
 	 * or null if not available.
 	 *

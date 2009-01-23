@@ -275,12 +275,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		var box = this.parent;
 		if (box) this.$class._fixKidSplts(box.getNode());
 		else this._fixsz();
-	},
-
-	isImportantEvent_: function (evtnm) {
-		return 'onOpen' == evtnm;
 	}
-
 },{
 	onclick: function (evt) {
 		var wgt = zk.Widget.$(evt);

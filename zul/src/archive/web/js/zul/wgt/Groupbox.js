@@ -167,8 +167,5 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 			html += this.getZclass() + '-collapsed';
 		}
 		return html;
-	},
-	isImportantEvent_: function (evtnm) {
-		return 'onOpen' == evtnm;
 	}
 });

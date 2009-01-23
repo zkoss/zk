@@ -48,7 +48,7 @@ public class Splitter extends XulElement implements org.zkoss.zul.api.Splitter {
 	private boolean _open = true;
 
 	static {
-		addClientEvent(Splitter.class, Events.ON_OPEN);
+		addClientEvent(Splitter.class, Events.ON_OPEN, CE_IMPORTANT);
 	}
 
 	public Splitter() {

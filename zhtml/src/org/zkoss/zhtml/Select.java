@@ -29,7 +29,7 @@ import org.zkoss.zk.ui.event.Events;
  */
 public class Select extends AbstractTag {
 	static {
-		addClientEvent(Select.class, Events.ON_CHANGE);
+		addClientEvent(Select.class, Events.ON_CHANGE, 0);
 	}
 
 	public Select() {

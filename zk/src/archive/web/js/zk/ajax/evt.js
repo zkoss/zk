@@ -205,31 +205,7 @@ zk.Event = zk.$extends(zk.Object, {
 	DN:		40,
 	INS:	45,
 	DEL:	46,
-	F1:		112,
-
-	duplicateIgnores: {
-		onBookmarkChange: true, onURIChange: true, onClientInfo: true,
-		onError: true, onBlur: true, onFocus: true, onSort: true,
-		onTimer: true, onMove: true, onSize: true, onZIndex: true,
-		onMaximize: true, onMinimize: true, onOpen: true,
-		onRender: true, onSelect: true
-	},
-	busyIgnores: {
-		dummy: true, getUploadInfo: true, onChanging: true, onScrolling: true
-	},
-	repeatIgnores: {
-		onChange: true, onScroll: true, onCheck: true
-	},
-	serverOption: function (evtnm, opts) {
-		var $Event = zk.Event, so = '';
-		if ((opts && opts.$duplicateIgnore) || $Event.duplicateIgnores[evtnm])
-			so = 'd';
-		if ((opts && opts.$repeatIgnore) || $Event.repeatIgnores[evtnm])
-			so += 'r';
-		if ((opts && opts.$busyIgnore) || $Event.busyIgnores[evtnm])
-			so += 'b'
-		return so;
-	}
+	F1:		112
 });
 
 zWatch = {

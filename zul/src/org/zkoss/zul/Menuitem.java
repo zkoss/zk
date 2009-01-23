@@ -44,7 +44,7 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zul.api.Men
 	private boolean _checkmark;
 
 	static {
-		addClientEvent(Menuitem.class, Events.ON_CHECK);
+		addClientEvent(Menuitem.class, Events.ON_CHECK, CE_IMPORTANT);
 	}
 	public Menuitem() {
 	}

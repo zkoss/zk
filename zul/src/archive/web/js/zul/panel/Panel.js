@@ -555,12 +555,8 @@ zul.panel.Panel = zk.$extends(zul.Widget, {
 		else if (child == this.fbar)
 			this.fbar = null;
 		this.rerender();
-	},
-	isImportantEvent_: function (evtnm) {
-		return this.$class._impEvts[evtnm];
 	}
 }, {
-	_impEvts: {onMove:1, onZIndex:1, onOpen:1, onMaximize:1, onMinimize:1},
 	//drag
 	_startmove: function (dg) {
 		dg.control._hideShadow();

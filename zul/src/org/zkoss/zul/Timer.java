@@ -40,7 +40,7 @@ public class Timer extends HtmlBasedComponent implements org.zkoss.zul.api.Timer
 	private boolean _repeats, _running = true;
 
 	static {
-		addClientEvent(Timer.class, Events.ON_TIMER);
+		addClientEvent(Timer.class, Events.ON_TIMER, CE_DUPLICATE_IGNORE);
 	}
 
 	public Timer() {

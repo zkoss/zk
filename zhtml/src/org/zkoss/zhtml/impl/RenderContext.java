@@ -15,9 +15,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 package org.zkoss.zhtml.impl;
 
 import java.util.Iterator;
-import java.util.Collection;
+import java.util.Map;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.event.Events;
 
 /**
@@ -35,7 +36,7 @@ public class RenderContext {
 	/** Whether to generate HTML tags directly.
 	 *
 	 * <p>If true, the HTML tag shall be generated directly to the writer
-	 * provided by {@link org.zkoss.zk.ui.sys.ComponentCtrl#redraw},
+	 * provided by {@link ComponentCtrl#redraw},
 	 * and generates JavaScript code snippet in {@link #renderBegin}.
 	 *
 	 * <p>If false, ZHTML components shall generate properties by use of
@@ -66,7 +67,7 @@ public class RenderContext {
 	 * Specifies true if the widget is created somewhere else.
 	 */
 	public void
-	renderBegin(Component comp, Collection clientEvents, boolean lookup) {
+	renderBegin(Component comp, Map clientEvents, boolean lookup) {
 		_jsout.append("\nzkb2('")
 			.append(comp.getUuid());
 
@@ -81,9 +82,13 @@ public class RenderContext {
 
 		if (!lookup && clientEvents != null) {
 			boolean first = true;
-			for (Iterator it = clientEvents.iterator(); it.hasNext();) {
-				final String evtnm = (String)it.next();
-				if (Events.isListened(comp, evtnm, false)) {
+			for (Iterator it = clientEvents.entrySet().iterator();
+			it.hasNext();) {
+				final Map.Entry me = (Map.Entry)it.next();
+				final String evtnm = (String)me.getKey();
+				final int flags = ((Integer)me.getValue()).intValue();
+				if ((flags & ComponentCtrl.CE_IMPORTANT) != 0
+				|| Events.isListened(comp, evtnm, false)) {
 					_jsout.append(',');
 					if (first) {
 						first = false;

@@ -433,9 +433,7 @@ zAu = {
 		for (var j = 0, el = es.length; el; ++j, --el) {
 			var aureq = es.shift(),
 				evtnm = aureq.name,
-				target = aureq.target,
-				so = $Event.serverOption(evtnm, aureq.opts);
-			if (so) content += '&so.'+j+'='+so;
+				target = aureq.target;
 			content += "&cmd."+j+"="+evtnm;
 			if (target) content += "&uuid."+j+"="+target.uuid;
 

@@ -444,20 +444,9 @@ public class DHtmlUpdateServlet extends HttpServlet {
 						if ("_z~nil".equals(data[k]))
 							data[k] = null;
 				}
-				final String sso = request.getParameter("so."+j);
-				int so = 0;
-				if (sso != null) {
-					for (int k = sso.length(); --k >= 0;) {
-						final char cc = sso.charAt(k);
-						if (cc == 'd') so |= AuRequest.DUPLICATE_IGNORE;
-						else if (cc == 'r') so |= AuRequest.REPEAT_IGNORE;
-						else if (cc == 'b') so |= AuRequest.BUSY_IGNORE;
-						else throw new ServletException("Unknown server options: "+sso);
-					}
-				}
 				aureqs.add(uuid == null || uuid.length() == 0 ? 
-					new AuRequest(desktop, cmdId, data, so):
-					new AuRequest(desktop, uuid, cmdId, data, so));
+					new AuRequest(desktop, cmdId, data):
+					new AuRequest(desktop, uuid, cmdId, data));
 			}
 		} catch (Throwable ex) {
 			log.warningBriefly(ex);

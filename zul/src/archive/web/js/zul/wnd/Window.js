@@ -599,13 +599,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			break;
 		}
 		this.$supers('doMouseOut_', arguments);
-	},
-	isImportantEvent_: function (evtnm) {
-		return this.$class._impEvts[evtnm];
 	}
 },{ //static
-	_impEvts: {onMove:1, onZIndex:1, onOpen:1, onMaximize:1, onMinimize:1},
-	
 	_onMoveMarshal: function () {
 		return [this.x, this.y, this.keys ? this.keys.marshal(): ''];
 	},

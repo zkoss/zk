@@ -102,7 +102,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private static final Log log = Log.lookup(AbstractComponent.class);
     private static final long serialVersionUID = 20070920L;
 
-	/** Map(Class, Set(String evtnm)). */
+	/** Map(Class, Map(String name, Integer flags)). */
 	private static final Map _clientEvents = new HashMap(128);
 
 	/*package*/ transient Page _page;
@@ -1467,9 +1467,13 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			render(renderer, "id", _id);
 		if (!_visible) renderer.render("visible", false);
 
-		for (Iterator it = getClientEvents().iterator(); it.hasNext();) {
-			final String evtnm = (String)it.next();
-			if (Events.isListened(this, evtnm, false))
+		for (Iterator it = getClientEvents().entrySet().iterator();
+		it.hasNext();) {
+			final Map.Entry me = (Map.Entry)it.next();
+			final String evtnm = (String)me.getKey();
+			final int flags = ((Integer)me.getValue()).intValue();
+			if ((flags & CE_IMPORTANT) != 0
+			|| Events.isListened(this, evtnm, false))
 				renderer.render('$' + evtnm, Events.isListened(this, evtnm, true));
 					//$onClick and so on
 		}
@@ -1515,8 +1519,11 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			renderer.render(name, true);
 	}
 
-	/** Returns a collection of event names that the client might send to
-	 * this component.
+	/** Returns a map of event information that the client might send to this component.
+	 * The key of the returned map is a String instance representing the event name,
+	 * and the value an integer representing the flags
+	 * (a combination of {@link #CE_IMPORTANT}, {@link #CE_BUSY_IGNORE},
+	 * {@link #CE_DUPLICATE_IGNORE} and {@link #CE_REPEAT_IGNORE}).
 	 * <p>Default: return the collection of events
 	 * added by {@link #getClientEvents}.
 	 *
@@ -1526,31 +1533,34 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * that the client might send. For example,
 	 * <pre><code>public MyComponent extend HtmlBasedComponent {
 	 *  static {
-	 *    addClientEvent(MyComponent.class, "onOpen");
+	 *    addClientEvent(MyComponent.class, "onOpen", 0);
 	 *  }</code></pre>
 	 *
 	 * @since 5.0.0
 	 */
-	protected Collection getClientEvents() {
+	public Map getClientEvents() {
 		for (Class cls = getClass(); cls != null; cls = cls.getSuperclass()) {
-			Set events;
+			Map events;
 			synchronized (_clientEvents) {
-				events = (Set)_clientEvents.get(cls);
+				events = (Map)_clientEvents.get(cls);
 			}
 			if (events != null) return events;
 		}
-		return Collections.EMPTY_LIST;
+		return Collections.EMPTY_MAP;
 	}
 	/** Adds an event that the client might send to the server.
 	 * It must be called when loading the class (i.e., in <code>static {}</code>).
 	 * It cannot be called after that.
 	 * @param cls the component's class (implementation class).
+	 * @param flags a combination of {@link #CE_IMPORTANT},
+	 * {@link #CE_BUSY_IGNORE}, {@link #CE_DUPLICATE_IGNORE}
+	 * and {@link #CE_REPEAT_IGNORE}.
 	 * @since 5.0.0
 	 */
-	protected static void addClientEvent(Class cls, String evtnm) {
-		Set events;
+	protected static void addClientEvent(Class cls, String evtnm, int flags) {
+		Map events;
 		synchronized (_clientEvents) {
-			events = (Set)_clientEvents.get(cls);
+			events = (Map)_clientEvents.get(cls);
 		}
 
 		//It is OK to race there
@@ -1558,20 +1568,20 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (first) {
 			//for better performance, we pack all event names of super
 			//classes, though it costs more memory
-			events = new HashSet(8);
+			events = new HashMap(8);
 			for (Class c = cls ; c != null; c = c.getSuperclass()) {
-				Set evts;
+				Map evts;
 				synchronized (_clientEvents) {
-					evts = (Set)_clientEvents.get(c);
+					evts = (Map)_clientEvents.get(c);
 				}
 				if (evts != null) {
-					events.addAll(evts);
+					events.putAll(evts);
 					break;
 				}
 			}
 		}
 
-		events.add(evtnm);
+		events.put(evtnm, new Integer(flags));
 		
 		if (first)
 			synchronized (_clientEvents) {
@@ -1608,7 +1618,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				response("clientInfo", new AuClientInfo(desktop));
 			} else if (Events.ON_PIGGYBACK.equals(evtnm)) {
 				((DesktopCtrl)desktop).onPiggybackListened(this, true);
-			} else if (getClientEvents().contains(evtnm)) {
+			} else if (getClientEvents().containsKey(evtnm)) {
 				final boolean asap = Events.isListened(this, evtnm, true);
 				if (l.size() == 1 || oldasap != asap)
 					smartUpdate(evtnm, asap);
@@ -1636,7 +1646,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 						if (desktop != null) {
 							onListenerChange(desktop, false);
 
-							if (getClientEvents().contains(evtnm)) {
+							if (getClientEvents().containsKey(evtnm)) {
 								if (l.isEmpty() && !Events.isListened(this, evtnm, false))
 									smartUpdate(evtnm, (Object)null); //no listener at all
 								else if (oldasap != Events.isListened(this, evtnm, true))

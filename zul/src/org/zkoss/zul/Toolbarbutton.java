@@ -45,8 +45,8 @@ public class Toolbarbutton extends LabelImageElement implements org.zkoss.zul.ap
 	private boolean _disabled = false;
 	
 	static {
-		addClientEvent(Toolbarbutton.class, Events.ON_FOCUS);
-		addClientEvent(Toolbarbutton.class, Events.ON_BLUR);
+		addClientEvent(Toolbarbutton.class, Events.ON_FOCUS, CE_DUPLICATE_IGNORE);
+		addClientEvent(Toolbarbutton.class, Events.ON_BLUR, CE_DUPLICATE_IGNORE);
 	}
 	
 	public Toolbarbutton() {

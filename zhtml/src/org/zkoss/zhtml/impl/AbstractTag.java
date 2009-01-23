@@ -58,7 +58,7 @@ import org.zkoss.zhtml.Zkhead;
 public class AbstractTag extends AbstractComponent
 implements DynamicPropertied, RawId {
 	static {
-		addClientEvent(AbstractTag.class, Events.ON_CLICK);
+		addClientEvent(AbstractTag.class, Events.ON_CLICK, 0);
 	}
 
 	/** The tag name. */

@@ -46,7 +46,7 @@ public class Groupbox extends XulElement implements org.zkoss.zul.api.Groupbox {
 	private boolean _open = true, _closable = true;
 
 	static {
-		addClientEvent(Groupbox.class, Events.ON_OPEN);
+		addClientEvent(Groupbox.class, Events.ON_OPEN, CE_IMPORTANT);
 	}
 
 	/** Returns the caption of this groupbox.

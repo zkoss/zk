@@ -48,20 +48,20 @@ public class AuRequest {
 	/** Indicates whether it can be ignored by the server when the server
 	 * receives the same requests consecutively.</dd>
 	 */
-	public static final int BUSY_IGNORE = 0x0001;
+	public static final int BUSY_IGNORE = ComponentCtrl.CE_BUSY_IGNORE;
 	/**
 	 * Indicates Whether it can be ignored by the server when the server
 	 * receives the same requests that was not processed yet.</dd>
 	 */
-	public static final int REPEAT_IGNORE = 0x0002;
+	public static final int REPEAT_IGNORE = ComponentCtrl.CE_REPEAT_IGNORE;
 	/** Indicates whether it can be ignored by the server when the server
 	 * receives the same requests consecutively.</dd>
 	 */
-	public static final int DUPLICATE_IGNORE = 0x0004;
+	public static final int DUPLICATE_IGNORE = ComponentCtrl.CE_DUPLICATE_IGNORE;
 
 	private final String _name;
 	private final Desktop _desktop;
-	private final int _opts;
+	private Integer _opts;
 	private Page _page;
 	private Component _comp;
 	private final String[] _data;
@@ -74,19 +74,16 @@ public class AuRequest {
 	 * @param uuid the component ID (never null)
 	 * @param name the name of the request (aka., command ID); never null.
 	 * @param data the data; might be null.
-	 * @param opts a combination of {@link #BUSY_IGNORE},
-	 * {@link #DUPLICATE_IGNORE} and {@link #REPEAT_IGNORE}.
 	 * @since 5.0.0
 	 */
 	public AuRequest(Desktop desktop, String uuid,
-	String name, String[] data, int opts) {
+	String name, String[] data) {
 		if (desktop == null || uuid == null || name == null)
 			throw new IllegalArgumentException();
 		_desktop = desktop;
 		_uuid = uuid;
 		_name = name;
 		_data = data;
-		_opts = opts;
 	}
 	/** Constructor for a general request sent from client.
 	 * This is usully used to ask server to log or report status.
@@ -95,19 +92,18 @@ public class AuRequest {
 	 * @param data the data; might be null.
 	 * @since 5.0.0
 	 */
-	public AuRequest(Desktop desktop, String name, String[] data, int opts) {
+	public AuRequest(Desktop desktop, String name, String[] data) {
 		if (desktop == null || name == null)
 			throw new IllegalArgumentException();
 		_desktop = desktop;
 		_name = name;
 		_data = data;
-		_opts = opts;
 	}
 
 	/** Activates this request.
 	 * <p>It can be accessed only in the activated execution.
-	 * Before calling this method, {@link #getPage} and {@link #getComponent}
-	 * cannot be called.
+	 * Before calling this method, {@link #getPage}, {@link #getComponent}
+	 * and {@link #getOptions} cannot be called.
 	 * @since 3.0.5
 	 */
 	public void activate()
@@ -126,7 +122,7 @@ public class AuRequest {
 		}
 	}
 
-	/** Returns the name (aka., the command ID).
+	/** Returns the name (aka., the command ID), such as onClick.
 	 * @since 5.0.0
 	 */
 	public String getName() {
@@ -138,7 +134,13 @@ public class AuRequest {
 	 * @since 5.0.0
 	 */
 	public int getOptions() {
-		return _opts;
+		if (_opts == null) {
+			if (_comp != null)
+				_opts = (Integer)((ComponentCtrl)_comp).getClientEvents().get(_name);
+			if (_opts == null)
+				_opts = new Integer(0);
+		}
+		return _opts.intValue();
 	}
 	/** Returns the desktop; never null.
 	 */
