@@ -215,6 +215,25 @@ zDom = { //static methods
 			if (p.offsetHeight && zDom.isVisible(p)) hgh -= p.offsetHeight; //may undefined
 		return hgh;
 	},
+	/**
+	 * Retrieves the index of the object in the cells collection of a row.
+	 * Note: The function fixed the problem of IE that the cell.cellIndex returns a wrong index 
+	 * if there is a hidden cell in the table. So, the behavior is difference among others.
+	 * @param {Element} cell
+	 */
+	cellIndex: function (cell) {
+		var i = 0; 
+		if (zk.ie) {
+			var cells = cell.parentNode.cells;
+			for(var j = 0, cl = cells.length; j < cl; j++) {
+				if (cells[j] == cell) {
+					i = j;
+					break;
+				}
+			}
+		} else i = cell.cellIndex;
+		return i; 
+	},
 	/** Converts from absolute coordination to style's coordination.
 	 */
 	toStyleOffset: function (el, x, y) {
@@ -755,6 +774,28 @@ zDom = { //static methods
 			}
 		}
 		return map;
+	},
+	/** Backup a style of the specified name.
+	 * The second call to backupStyle is ignored until zDom.restoreStyle is called.
+	 * Usually used with onmouseover.
+	 */
+	backupStyle: function (el, nm) {
+		var bknm = "zk_bk" + nm;
+		if (!el.getAttribute(bknm))
+			el.setAttribute(bknm, el.style[nm] || "_zk_none_");
+	},
+	/** Restore the style of the specified name.
+	 * Usually used with onover.
+	 */
+	restoreStyle: function (el, nm) {
+		if (el && el.getAttribute && el.style) { //el might be removed!
+			var bknm = "zk_bk" + nm;
+			var val = el.getAttribute(bknm);
+			if (val) {
+				el.removeAttribute(bknm);
+				el.style[nm] = val == "_zk_none_" ? "": val;
+			}
+		}
 	},
 	/** Returns the opacity style of the specified element, including CSS class. */
 	getOpacity: function (el) {

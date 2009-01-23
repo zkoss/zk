@@ -968,10 +968,10 @@ zk.Widget = zk.$extends(zk.Object, {
 				if (j >= 0) {
 					id = id.substring(0, j);
 					if (strict) {
-						var n2 = zDom.$(id);
-						if (n2) {
-							wgt = n2.z_wgt || binds[id];
-							if (wgt && zDom.isAncestor(n2, n)) return wgt;
+						wgt = binds[id];
+						if (wgt) {
+							var n2 = wgt.getNode();
+							if (n2 && zDom.isAncestor(n2, n)) return wgt;
 							continue;
 						}
 					}

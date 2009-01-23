@@ -523,7 +523,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 			else p.appendChild(el);
 		} else
 			el.style.position = pos;
-	}: function () {
+	}: function (el, pos) {
 		el.style.position = pos;
 	},
 

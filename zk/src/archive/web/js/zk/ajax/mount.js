@@ -401,7 +401,7 @@ zkm = {
 		evt = evt || window.event;
 		var wgt = zk.mouseCapture;
 		if (wgt) zk.mouseCapture = null;
-		else wgt = zk.Widget.$(evt);
+		else wgt = zk.Widget.$(evt, true);
 		if (wgt) {
 			var wevt = new zk.Event(wgt, 'onMouseUp', zkm._mouseData(evt, wgt), null, evt);
 			wgt.doMouseUp_(wevt);
@@ -414,7 +414,7 @@ zkm = {
 		zk.currentPointer[1] = zEvt.y(evt);
 
 		var wgt = zk.mouseCapture;
-		if (!wgt) wgt = zk.Widget.$(evt);
+		if (!wgt) wgt = zk.Widget.$(evt, true);
 		if (wgt)
 			wgt.doMouseMove_(new zk.Event(wgt, 'onMouseMove', zkm._mouseData(evt, wgt), null, evt));
 	},
@@ -423,19 +423,19 @@ zkm = {
 		zk.currentPointer[0] = zEvt.x(evt);
 		zk.currentPointer[1] = zEvt.y(evt);
 
-		var wgt = zk.Widget.$(evt);
+		var wgt = zk.Widget.$(evt, true);
 		if (wgt)
 			wgt.doMouseOver_(new zk.Event(wgt, 'onMouseOver', zkm._mouseData(evt, wgt), null, evt));
 	},
 	docMouseOut: function (evt) {
 		evt = evt || window.event;
-		var wgt = zk.Widget.$(evt);
+		var wgt = zk.Widget.$(evt, true);
 		if (wgt)
 			wgt.doMouseOut_(new zk.Event(wgt, 'onMouseOut', zkm._mouseData(evt, wgt), null, evt));
 	},
 	docKeyDown: function (evt) {
 		evt = evt || window.event;
-		var wgt = zk.Widget.$(evt);
+		var wgt = zk.Widget.$(evt, true);
 		if (wgt) {
 			var wevt = new zk.Event(wgt, 'onKeyDown', zEvt.keyData(evt), null, evt);
 			wgt.doKeyDown_(wevt);
@@ -446,7 +446,7 @@ zkm = {
 		evt = evt || window.event;
 		var wgt = zk.keyCapture;
 		if (wgt) zk.keyCapture = null;
-		else wgt = zk.Widget.$(evt);
+		else wgt = zk.Widget.$(evt, true);
 		if (wgt) {
 			var wevt = new zk.Event(wgt, 'onKeyUp', zEvt.keyData(evt), null, evt);
 			wgt.doKeyUp_(wevt);
@@ -456,7 +456,7 @@ zkm = {
 	docKeyPress: function (evt) {
 		evt = evt || window.event;
 		var wgt = zk.keyCapture;
-		if (!wgt) wgt = zk.Widget.$(evt);
+		if (!wgt) wgt = zk.Widget.$(evt, true);
 		if (wgt) {
 			var wevt = new zk.Event(wgt, 'onKeyPress', zEvt.keyData(evt), null, evt);
 			wgt.doKeyPress_(wevt);
@@ -468,7 +468,7 @@ zkm = {
 
 		evt = evt || window.event;
 		if (evt.which == 1 || (evt.button == 0 || evt.button == 1)) {
-			var wgt = zk.Widget.$(evt);
+			var wgt = zk.Widget.$(evt, true);
 			if (wgt) {
 				var wevt = new zk.Event(wgt, 'onClick', zkm._mouseData(evt, wgt), {ctl:true}, evt)
 				wgt.doClick_(wevt);
@@ -481,7 +481,7 @@ zkm = {
 		if (zk.processing) return;
 
 		evt = evt || window.event;
-		var wgt = zk.Widget.$(evt);
+		var wgt = zk.Widget.$(evt, true);
 		if (wgt) {
 			var wevt = new zk.Event(wgt, 'onDoubleClick', zkm._mouseData(evt, wgt), {ctl:true}, evt);
 			wgt.doDoubleClick_(wevt);
@@ -499,7 +499,7 @@ zkm = {
 		zk.lastPointer[0] = zEvt.x(evt);
 		zk.lastPointer[1] = zEvt.y(evt);
 
-		var wgt = zk.Widget.$(evt);
+		var wgt = zk.Widget.$(evt, true);
 		if (wgt) {
 			var wevt = new zk.Event(wgt, 'onRightClick', zkm._mouseData(evt, wgt), {ctl:true}, evt);
 			wgt.doRightClick_(wevt);
