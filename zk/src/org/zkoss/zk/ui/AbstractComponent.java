@@ -54,6 +54,7 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.Macro;
 import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.ui.ext.NonFellow;
+import org.zkoss.zk.ui.ext.render.Cropper;
 import org.zkoss.zk.ui.util.ComponentSerializationListener;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
@@ -1444,6 +1445,16 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * @see #redraw
 	 */
 	protected void redrawChildren(Writer out) throws IOException {
+		final Object xc = getExtraCtrl();
+		if (xc instanceof Cropper) {
+			final Set crop = ((Cropper)xc).getAvailableAtClient();
+			if (crop != null) {
+				for (Iterator it = crop.iterator(); it.hasNext();)
+					((ComponentCtrl)it.next()).redraw(out);
+				return;
+			}
+		}
+		
 		for (Component child = getFirstChild(); child != null;) {
 			Component next = child.getNextSibling();
 			((ComponentCtrl)child).redraw(out);
