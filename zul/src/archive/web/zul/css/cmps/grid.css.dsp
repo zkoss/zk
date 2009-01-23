@@ -153,3 +153,7 @@ a.z-column-btn:hover {
 .z-columns-menu-columns .z-menu-img {
 	background-image:  url(${c:encodeURL('~./zul/img/grid/Columns-16x16.png')});
 }
+<%-- ZK Column's sizing --%>
+.z-grid-header .z-column.z-column-sizing, .z-grid-header .z-column.z-column-sizing .z-column-cnt {
+	cursor: e-resize;
+}

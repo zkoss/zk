@@ -45,7 +45,7 @@ import org.zkoss.zul.impl.Utils;
 public class Row extends XulElement implements org.zkoss.zul.api.Row {
 	private Object _value;
 	private String _align, _valign;
-	private int[] _spans;
+	private String _spans;
 	private boolean _nowrap;
 	/** whether the content of this row is loaded; used if
 	 * the grid owning this row is using a list model.
@@ -157,7 +157,7 @@ public class Row extends XulElement implements org.zkoss.zul.api.Row {
 	 * <p>Default: empty.
 	 */
 	public String getSpans() {
-		return Utils.intsToString(_spans);
+		return _spans;
 	}
 	/** Sets the spans, which is a list of numbers separated by comma.
 	 *
@@ -166,10 +166,9 @@ public class Row extends XulElement implements org.zkoss.zul.api.Row {
 	 * one column.
 	 */
 	public void setSpans(String spans) throws WrongValueException {
-		final int[] ispans = Utils.stringToInts(spans, 1);
-		if (!Objects.equals(ispans, _spans)) {
-			_spans = ispans;
-			invalidate();
+		if (!Objects.equals(spans, _spans)) {
+			_spans = spans;
+			smartUpdate("spans", spans);
 		}
 	}
 
@@ -187,8 +186,7 @@ public class Row extends XulElement implements org.zkoss.zul.api.Row {
 					invalidate();
 					//reason: the client doesn't init (for better performance)
 					//i.e., z.skipsib is specified for unloaded items
-				else
-					smartUpdate("z.loaded", _loaded);
+				smartUpdate("_loaded", _loaded);
 		}
 	}
 	/** Returns whether the content of this row is loaded; used if
@@ -242,7 +240,19 @@ public class Row extends XulElement implements org.zkoss.zul.api.Row {
 		final Grid grid = getGrid();
 		return grid != null ? grid.getSclass(): sclass;
 	}
-
+	
+	// super
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+		
+		render(renderer, "align", _align);
+		render(renderer, "valign", _valign);
+		render(renderer, "nowrap", _nowrap);
+		render(renderer, "spans", _spans);
+		render(renderer, "_loaded", _loaded);
+	}
+	
 	//-- Component --//
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Rows))

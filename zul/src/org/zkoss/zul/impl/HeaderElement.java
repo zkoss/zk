@@ -58,4 +58,7 @@ abstract public class HeaderElement extends LabelImageElement implements org.zko
 			smartUpdate("valign", _valign);
 		}
 	}
+	void setWidthByClient(String width) {
+		_width = width;
+	}
 }

@@ -205,7 +205,12 @@ public class Utils {
 		addLocaleJS(sb, "NO_FUTURE", MZul.NO_FUTURE);
 		addLocaleJS(sb, "NO_PAST_TODAY", MZul.NO_PAST_TODAY);
 		addLocaleJS(sb, "NO_PAST", MZul.NO_PAST);
-		addLocaleJS(sb, "NO_TODAY", MZul.NO_TODAY);
+		addLocaleJS(sb, "NO_TODAY", MZul.NO_TODAY);	
+
+		addLocaleJS(sb, "FIRST", MZul.FIRST);
+		addLocaleJS(sb, "LAST", MZul.LAST);
+		addLocaleJS(sb, "PREV", MZul.PREV);
+		addLocaleJS(sb, "NEXT", MZul.NEXT);
 
 		int j = sb.length() - 1;
 		if (sb.charAt(j) == ',') sb.setLength(j);

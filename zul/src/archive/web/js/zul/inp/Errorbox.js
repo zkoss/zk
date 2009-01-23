@@ -65,7 +65,7 @@ zul.inp.Errorbox = zk.$extends('zul.wgt.Popup', {
 	doMouseMove_: function (evt) {
 		var el = evt.nativeTarget;
 		if (el == this.getSubnode('c')) {
-			var y = evt.data.y,
+			var y = evt.data.pageY,
 				size = zk.parseInt(zDom.getStyle(el, 'padding-right'))
 				offs = zDom.revisedOffset(el);
 			if (y >= offs[1] && y < offs[1] + size)	zDom.addClass(el, 'z-errbox-close-over');

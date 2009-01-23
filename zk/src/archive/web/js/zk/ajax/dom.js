@@ -20,6 +20,10 @@ zDom = { //static methods
 			id ? document.getElementById(id + (alias ? '$' + alias : '')): null: id;
 			//strange but getElementById("") fails in IE7
 	},
+	$$: function (id, alias) {
+		return typeof id == 'string' ?
+			id ? document.getElementsByName(id + (alias ? '$' + alias : '')): null: id;
+	},
 	tag: function (n) {
 		return n && n.tagName ? n.tagName.toUpperCase(): "";
 	},
@@ -233,6 +237,19 @@ zDom = { //static methods
 			}
 		} else i = cell.cellIndex;
 		return i; 
+	},
+	/** Returns the number of columns (considering colSpan)
+	 */
+	ncols: function (cells) {
+		var cnt = 0;
+		if (cells) {
+			for (var j = 0, cl = cells.length; j < cl; ++j) {
+				var span = cells[j].colSpan;
+				if (span >= 1) cnt += span;
+				else ++cnt;
+			}
+		}
+		return cnt;
 	},
 	/** Converts from absolute coordination to style's coordination.
 	 */
@@ -774,28 +791,6 @@ zDom = { //static methods
 			}
 		}
 		return map;
-	},
-	/** Backup a style of the specified name.
-	 * The second call to backupStyle is ignored until zDom.restoreStyle is called.
-	 * Usually used with onmouseover.
-	 */
-	backupStyle: function (el, nm) {
-		var bknm = "zk_bk" + nm;
-		if (!el.getAttribute(bknm))
-			el.setAttribute(bknm, el.style[nm] || "_zk_none_");
-	},
-	/** Restore the style of the specified name.
-	 * Usually used with onover.
-	 */
-	restoreStyle: function (el, nm) {
-		if (el && el.getAttribute && el.style) { //el might be removed!
-			var bknm = "zk_bk" + nm;
-			var val = el.getAttribute(bknm);
-			if (val) {
-				el.removeAttribute(bknm);
-				el.style[nm] = val == "_zk_none_" ? "": val;
-			}
-		}
 	},
 	/** Returns the opacity style of the specified element, including CSS class. */
 	getOpacity: function (el) {

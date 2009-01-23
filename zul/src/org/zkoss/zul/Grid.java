@@ -125,7 +125,13 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	private String _innerHeight = null;
 	private transient GridDrawerEngine _engine;
 	private boolean _fixedLayout, _vflex;
-
+	private transient EventListener _listener;
+	
+	static {
+		addClientEvent(Grid.class, Events.ON_RENDER, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
+		addClientEvent(Grid.class, "onInnerWidth", CE_DUPLICATE_IGNORE|CE_IMPORTANT);
+	}
+	
 	public Grid() {
 		init();
 	}
@@ -161,7 +167,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	public void setVflex(boolean vflex) {
 		if (_vflex != vflex) {
 			_vflex = vflex;
-			smartUpdate("z.flex", _vflex);
+			smartUpdate("vflex", _vflex);
 		}
 	}
 	/**
@@ -176,7 +182,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	public void setFixedLayout(boolean fixedLayout) {
 		if(_fixedLayout != fixedLayout) {
 			_fixedLayout = fixedLayout;
-			invalidate();
+			smartUpdate("fixedLayout", fixedLayout);
 		}
 	}
 	/**
@@ -485,7 +491,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		if (innerHeight == null) innerHeight = "100%";
 		if (!Objects.equals(_innerHeight, innerHeight)) {
 			_innerHeight = innerHeight;
-			smartUpdate("z.innerHeight", _innerHeight);
+			smartUpdate("innerHeight", _innerHeight);
 		}
 	}
 	
@@ -548,7 +554,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 						_rows.getChildren().clear();
 				} else {
 					if (_rows != null) _rows.getChildren().clear(); //Bug 1807414
-					smartUpdate("z.model", true);
+					smartUpdate("model", true);
 				}
 
 				_model = model;
@@ -566,9 +572,10 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 			//(to save a roundtrip)
 		} else if (_model != null) {
 			_model.removeListDataListener(_dataListener);
+			this.removeEventListener(Events.ON_RENDER, _listener);
 			_model = null;
 			if (_rows != null) _rows.getChildren().clear();
-			smartUpdate("z.model", false);
+			smartUpdate("model", false);
 		}
 	}
 	/** Sets the groups model associated with this grid.
@@ -595,6 +602,14 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 					onListDataChange(event);
 				}
 			};
+		if (_listener == null) {
+			_listener = new EventListener() {
+				public void onEvent(Event event) throws Exception {					
+				}			
+			};
+			this.addEventListener(Events.ON_RENDER, _listener);
+		}
+			
 		_model.addListDataListener(_dataListener);
 	}
 
@@ -692,7 +707,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		if (innerWidth == null) innerWidth = "100%";
 		if (!_innerWidth.equals(innerWidth)) {
 			_innerWidth = innerWidth;
-			smartUpdate("z.innerWidth", innerWidth);
+			smartUpdate("innerWidth", innerWidth);
 		}
 	}
 	/**
@@ -876,8 +891,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	private static Label newRenderLabel(String value) {
 		final Label label =
 			new Label(value != null && value.length() > 0 ? value: " ");
-		//TODO 5:
-		//label.setPre(true); //to make sure &nbsp; is generated, and then occupies some space
+		label.setPre(true); //to make sure &nbsp; is generated, and then occupies some space
 		return label;
 	}
 
@@ -923,7 +937,6 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		if (getAttribute(ATTR_ON_INIT_RENDER_POSTED) == null) {
 			setAttribute(ATTR_ON_INIT_RENDER_POSTED, Boolean.TRUE);
 			Events.postEvent("onInitRender", this, null);
-			smartUpdate("z.render", true);
 		}
 	}
 
@@ -1150,7 +1163,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		if (scls != null && scls.length() == 0) scls = null;
 		if (!Objects.equals(_scOddRow, scls)) {
 			_scOddRow = scls;
-			smartUpdate("z.scOddRow", scls);
+			smartUpdate("oddRowSclass", scls);
 		}
 	}
 
@@ -1282,6 +1295,36 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		if (_model != null) initDataListener();
 	}
 
+	// super
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+		
+		render(renderer, "align", _align);
+		render(renderer, "oddRowSclass", getOddRowSclass());
+		render(renderer, "fixedLayout", isFixedLayout());
+		render(renderer, "vflex", _vflex);
+		
+		if (_model != null) {
+			render(renderer, "model", true);
+			final List rows = getRows().getChildren();
+			int index = rows.size();
+			for(final ListIterator it = rows.listIterator(index);
+				it.hasPrevious(); --index)
+				if(((Row)it.previous()).isLoaded()) break;
+			
+			renderer.render("_lastLoadIdx", !inSpecialMold() || 
+					rows.size() <= _engine.getVisibleAmount() ? index : _engine.getVisibleAmount());
+		}
+		if (!"bottom".equals(_pagingPosition))
+			render(renderer, "pagingPosition", _pagingPosition);
+		if (!"100%".equals(_innerHeight))
+			render(renderer, "innerHeight", _innerHeight);
+		if (!"100%".equals(_innerWidth))
+			render(renderer, "innerWidth", _innerWidth);		
+		if (_preloadsz != 7)
+			renderer.render("preloadSize", _preloadsz);
+	}
 	//-- ComponentCtrl --//
 	/** Processes an AU request.
 	 *

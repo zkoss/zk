@@ -75,6 +75,7 @@ public class Paging extends XulElement implements org.zkoss.zul.api.Paging, Pagi
 
 		if (_pgsz != size) {
 			_pgsz = size;
+			smartUpdate("pageSize", _pgsz);
 			updatePageNum();
 			Events.postEvent(new PagingEvent("onPagingImpl", this, _actpg));
 				//onPagingImpl is used for implementation purpose only
@@ -89,7 +90,7 @@ public class Paging extends XulElement implements org.zkoss.zul.api.Paging, Pagi
 
 		if (_ttsz != size) {
 			_ttsz = size;
-			updatePageNum();
+			smartUpdate("totalSize", _ttsz);
 			if (_detailed) invalidate();
 		}
 	}
@@ -100,8 +101,6 @@ public class Paging extends XulElement implements org.zkoss.zul.api.Paging, Pagi
 			_npg = v;
 			if (_actpg >= _npg)
 				_actpg = _npg - 1;
-
-			invalidate();
 		}
 	}
 
@@ -130,7 +129,7 @@ public class Paging extends XulElement implements org.zkoss.zul.api.Paging, Pagi
 			throw new WrongValueException("Nonpositive is not allowed: "+pginc);
 		if (_pginc != pginc) {
 			_pginc = pginc;
-			invalidate();
+			smartUpdate("pageIncrement", pginc);
 		}
 	}
 
@@ -140,7 +139,7 @@ public class Paging extends XulElement implements org.zkoss.zul.api.Paging, Pagi
 	public void setDetailed(boolean detailed) {
 		if (_detailed != detailed) {
 			_detailed = detailed;
-			invalidate();
+			smartUpdate("detailed", detailed);
 		}
 	}
 
@@ -158,83 +157,23 @@ public class Paging extends XulElement implements org.zkoss.zul.api.Paging, Pagi
 	public void setAutohide(boolean autohide) {
 		if (_autohide != autohide) {
 			_autohide = autohide;
-			if (_npg == 1) invalidate();
+			smartUpdate("autohide", autohide);
 		}
-	}
-
-	/**
-	 * Returns the HTML tags of paging information.
-	 * <p>Default: <code>active-page-number / total-numbers-of-pages</code>
-	 * <p>Developers can override this method to show different information.
-	 * @since 3.5.0
-	 */
-	public String getInfoTags() {
-		if (_ttsz == 0)
-			return "";
-
-		final StringBuffer sb = new StringBuffer(512);
-		int lastItem = (_actpg+1) * _pgsz;
-		sb.append("<div class=\"").append(getZclass()).append("-info\">[ ")
-			.append(_actpg * _pgsz + 1).append(" - ").append(lastItem > _ttsz ? _ttsz : lastItem)
-			.append(" / ").append(_ttsz).append(" ]</div>");
-		return sb.toString();
-	}
-	
-	/** Returns the inner HTML tags of this component.
-	 * <p>Used only for component development. Not accessible by
-	 * application developers.
-	 * @since 3.5.2
-	 */
-	public String getInnerTags() {
-		final StringBuffer sb = new StringBuffer(512);
-
-		int half = _pginc / 2;
-		int begin, end = _actpg + half - 1;
-		if (end >= _npg) {
-			end = _npg - 1;
-			begin = end - _pginc + 1;
-			if (begin < 0) begin = 0;
-		} else {
-			begin = _actpg - half;
-			if (begin < 0) begin = 0;
-			end = begin + _pginc - 1;
-			if (end >= _npg) end = _npg - 1;
-		}
-		String zcs = getZclass();
-		if (_actpg > 0) {
-			if (begin > 0) //show first
-				appendAnchor(zcs, sb, Messages.get(MZul.FIRST), 0);
-			appendAnchor(zcs, sb, Messages.get(MZul.PREV), _actpg - 1);
-		}
-
-		boolean bNext = _actpg < _npg - 1;
-		for (; begin <= end; ++begin) {
-			if (begin == _actpg) {
-				appendAnchor(zcs, sb, Integer.toString(begin + 1), begin, true); //sb.append(begin + 1).append("&nbsp;");
-			} else {
-				appendAnchor(zcs, sb, Integer.toString(begin + 1), begin);
-			}
-		}
-
-		if (bNext) {
-			appendAnchor(zcs, sb, Messages.get(MZul.NEXT), _actpg + 1);
-			if (end < _npg - 1) //show last
-				appendAnchor(zcs, sb, Messages.get(MZul.LAST), _npg - 1);
-		}
-		if (_detailed)
-			sb.append("<span>[").append(_actpg * _pgsz + 1).append('/')
-				.append(_ttsz).append("]</span>");
-		return sb.toString();
-	}
-	private static final void appendAnchor(String zclass, StringBuffer sb, String label, int val) {
-		appendAnchor(zclass, sb, label, val, false);
-	}
-	private static final void appendAnchor(String zclass, StringBuffer sb, String label, int val, boolean seld) {
-		zclass += "-cnt" + (seld ? " " + zclass + "-seld" : "");
-		sb.append("<a class=\"").append(zclass).append("\" href=\"javascript:;\" onclick=\"zkPgOS.go(this,")
-			.append(val).append(")\">").append(label).append("</a>&nbsp;");
 	}
 	// super
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+		
+		if (_ttsz != 0) renderer.render("totalSize", _ttsz);
+		if (_pgsz != 20) renderer.render("pageSize", _pgsz);
+		if (_actpg != 0) renderer.render("activePage", _actpg);
+		if (_npg != 1) renderer.render("pageCount", _npg);
+		if (_pginc != 10) renderer.render("pageIncrement", _pginc);
+		render(renderer, "detailed", _detailed);
+		render(renderer, "autohide", _autohide);
+	}
+	
 	public String getZclass() {
 		String added = "os".equals(getMold()) ? "-os" : "";
 		return _zclass == null ? "z-paging" + added : _zclass;

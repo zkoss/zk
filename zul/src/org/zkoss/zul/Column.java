@@ -28,6 +28,7 @@ import java.util.List;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.Strings;
 import org.zkoss.mesg.Messages;
 import org.zkoss.xml.HTMLs;
 
@@ -36,6 +37,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Namespaces;
 
@@ -59,7 +61,13 @@ import org.zkoss.zul.mesg.MZul;
 public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 	private String _sortDir = "natural";
 	private Comparator _sortAsc, _sortDsc;
+	private String _sortAscNm = "none";
+	private String _sortDscNm = "none";
 
+	static {
+		addClientEvent(Column.class, Events.ON_SORT, CE_DUPLICATE_IGNORE);
+	}
+	
 	public Column() {
 	}
 	public Column(String label) {
@@ -101,7 +109,7 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 	public org.zkoss.zul.api.Grid getGridApi() {		
 		return getGrid();
 	}
-
+	
 	/** Returns the sort direction.
 	 * <p>Default: "natural".
 	 */
@@ -124,10 +132,71 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 			throw new WrongValueException("Unknown sort direction: "+sortDir);
 		if (!Objects.equals(_sortDir, sortDir)) {
 			_sortDir = sortDir;
-			smartUpdate("z.sort", _sortDir); //don't use null because sel.js assumes it
+			smartUpdate("sortDirection", _sortDir);
 		}
 	}
 
+	/** Sets the type of the sorter.
+	 * You might specify either "auto", "auto(FIELD_NAME1[,FIELD_NAME2] ...)"(since 3.5.3) or "none".
+	 *
+	 * <p>If "client" or "client(number)" is specified,
+	 * the sort functionality will be done by Javascript at client without notifying
+	 * to server, that is, the order of the component in the row is out of sync.
+	 * <ul>
+	 * <li> "client" : it is treated by a string</li>
+	 * <li> "client(number)" : it is treated by a number</li>
+	 * </ul>
+	 * <p>Note: client sorting cannot work in model case. (since 5.0.0)
+	 * 
+	 * <p>If "auto" is specified,
+	 * {@link #setSortAscending} and/or {@link #setSortDescending} 
+	 * are called with {@link ListitemComparator}, if
+	 * {@link #getSortDescending} and/or {@link #getSortAscending} are null.
+	 * If you assigned a comparator to them, it won't be affected.
+	 * The auto created comparator is case-insensitive.
+	 *
+	 * <p>If "auto(FIELD_NAME1, FIELD_NAME2, ...)" is specified,
+	 * {@link #setSortAscending} and/or {@link #setSortDescending} 
+	 * are called with {@link FieldComparator}, if
+	 * {@link #getSortDescending} and/or {@link #getSortAscending} are null.
+	 * If you assigned a comparator to them, it won't be affected.
+	 * The auto created comparator is case-insensitive.
+
+	 * <p>If "none" is specified, both {@link #setSortAscending} and
+	 * {@link #setSortDescending} are called with null.
+	 * Therefore, no more sorting is available to users for this column.
+	 * @throws IllegalAccessException 
+	 * @throws InstantiationException 
+	 * @throws ClassNotFoundException 
+	 * @since 3.5.3
+	 */
+	public void setSort(String type) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+		if (type == null) return;
+		if (type.startsWith("client")) {
+			setSortAscending(type);
+			setSortDescending(type);
+		} else 	if ("auto".equals(type)) {
+			if (getSortAscending() == null)
+				setSortAscending(new RowComparator(this, true, false, false));
+			if (getSortDescending() == null)
+				setSortDescending(new RowComparator(this, false, false, false));
+		} else if (type.startsWith("auto")) {
+			final int j = type.indexOf('(');
+			final int k = type.lastIndexOf(')');
+			if (j >= 0 && k >= 0) {
+				final String fieldnames = type.substring(j+1, k);
+				if (getSortAscending() == null)
+					setSortAscending(new FieldComparator(fieldnames, true));
+				if (getSortDescending() == null)
+					setSortDescending(new FieldComparator(fieldnames, false));
+			} else {
+				throw new UiException("Unknown sort type: "+type);
+			}
+		} else if ("none".equals(type)) {
+			setSortAscending((Comparator)null);
+			setSortDescending((Comparator)null);
+		}
+	}
 	/** Returns the ascending sorter, or null if not available.
 	 */
 	public Comparator getSortAscending() {
@@ -149,7 +218,11 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 	public void setSortAscending(Comparator sorter) {
 		if (!Objects.equals(_sortAsc, sorter)) {
 			_sortAsc = sorter;
-			invalidate();
+			String nm = _sortAsc == null ? "none" : "fromServer";
+			if (!_sortAscNm.equals(nm)) {
+				_sortAscNm = nm;
+				smartUpdate("sortAscending", _sortAscNm);
+			}
 		}
 	}
 	/** Sets the ascending sorter with the class name, or null for
@@ -158,7 +231,11 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 	public void setSortAscending(String clsnm)
 	throws ClassNotFoundException, InstantiationException,
 	IllegalAccessException {
-		setSortAscending(toComparator(clsnm));
+		if (!Strings.isBlank(clsnm) && clsnm.startsWith("client") && !_sortAscNm.equals(clsnm)) {
+			_sortAscNm = clsnm;
+			smartUpdate("sortAscending", clsnm);
+		} else
+			setSortAscending(toComparator(clsnm));
 	}
 
 	/** Returns the descending sorter, or null if not available.
@@ -182,7 +259,11 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 	public void setSortDescending(Comparator sorter) {
 		if (!Objects.equals(_sortDsc, sorter)) {
 			_sortDsc = sorter;
-			invalidate();
+			String nm = _sortDsc == null ? "none" : "fromServer";
+			if (!_sortDscNm.equals(nm)) {
+				_sortDscNm = nm;
+				smartUpdate("sortDescending", _sortDscNm);
+			}
 		}
 	}
 	/** Sets the descending sorter with the class name, or null for
@@ -191,7 +272,11 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 	public void setSortDescending(String clsnm)
 	throws ClassNotFoundException, InstantiationException,
 	IllegalAccessException {
-		setSortDescending(toComparator(clsnm));
+		if (!Strings.isBlank(clsnm) && clsnm.startsWith("client") && !_sortDscNm.equals(clsnm)) {
+			_sortDscNm = clsnm;
+			smartUpdate("sortDescending", clsnm);
+		} else
+			setSortDescending(toComparator(clsnm));
 	}
 
 	private Comparator toComparator(String clsnm)
@@ -418,20 +503,22 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 		fixDirection(grid, ascending);
 		return true;
 	}
-	
-	public void setLabel(String label) {
-		super.setLabel(label);
-		if (getParent() != null)
-			((Columns)getParent()).postOnInitLater();
-	}
-	
-	public boolean setVisible(boolean visible) {
-		boolean old = super.setVisible(visible);
-		if (getParent() != null)
-			((Columns)getParent()).postOnInitLater();
-		return old;
-	}
 
+	// super
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+		
+		if (!"none".equals(_sortDscNm))
+			render(renderer, "sortDescending", _sortDscNm);
+
+		if (!"none".equals(_sortAscNm))
+			render(renderer, "sortAscending", _sortAscNm);
+		
+		if (!"natural".equals(_sortDir))
+			render(renderer, "sortDirection", _sortDir);
+	}
+	
 	//-- event listener --//
 	/** It invokes {@link #sort(boolean)} to sort list items and maintain
 	 * {@link #getSortDirection}.

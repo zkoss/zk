@@ -348,17 +348,19 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>foot</component-name>
 		<component-class>org.zkoss.zul.Foot</component-class>
+		<widget-class>zul.grid.Foot</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/foot.dsp</mold-uri>
+			<mold-uri>mold/foot.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>footer</component-name>
 		<component-class>org.zkoss.zul.Footer</component-class>
+		<widget-class>zul.grid.Footer</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/footer.dsp</mold-uri>
+			<mold-uri>mold/footer.js</mold-uri>
 		</mold>
 		<preserve-blank/>
 	</component>
@@ -372,7 +374,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</mold>
 		<mold>
 			<mold-name>paging</mold-name>
-			<mold-uri>mold/grid-pg.js</mold-uri>
+			<mold-uri>mold/grid.js</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -598,13 +600,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>paging</component-name>
 		<component-class>org.zkoss.zul.Paging</component-class>
+		<widget-class>zul.grid.Paging</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/paging.dsp</mold-uri>
+			<mold-uri>mold/paging.js</mold-uri>
 		</mold>
 		<mold>
 			<mold-name>os</mold-name>
-			<mold-uri>~./zul/html/paging-os.dsp</mold-uri>
+			<mold-uri>mold/paging.js</mold-uri>
 		</mold>
 	</component>
 	<component>

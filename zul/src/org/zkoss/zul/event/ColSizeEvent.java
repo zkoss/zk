@@ -18,7 +18,13 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.event;
 
+import org.zkoss.lang.Objects;
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.AuRequests;
+import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.MouseEvent;
 
@@ -37,6 +43,7 @@ import org.zkoss.zk.ui.event.MouseEvent;
 public class ColSizeEvent extends Event {
 	private final Component _col;
 	private final int _icol, _keys;
+	private String _width;
 
 	/** Indicates whether the Alt key is pressed.
 	 * It might be returned as part of {@link #getKeys}.
@@ -51,17 +58,56 @@ public class ColSizeEvent extends Event {
 	 */
 	public static final int SHIFT_KEY = MouseEvent.SHIFT_KEY;
 
+	/** Converts an AU request to a size event.
+	 * @since 5.0.0
+	 */
+	public static final ColSizeEvent getColSizeEvent(AuRequest request) {
+		final Component comp = request.getComponent();
+		if (comp == null)
+			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, request);
+		final String[] data = request.getData();
+		if (data == null || data.length != 4)
+			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
+				new Object[] {Objects.toString(data), request});
+
+		final Desktop desktop = request.getDesktop();
+		final int icol = Integer.parseInt(data[0]);
+		final Component col1 = desktop.getComponentByUuid(data[1]);
+		
+		return new ColSizeEvent(request.getName(), comp, icol, col1, data[2],
+				AuRequests.parseKeys(data[3]));
+	}
+	
 	/** Constructs an instance of {@link ColSizeEvent}.
 	 *
-	 * @param icol the index of the first colum whose width is changed.
-	 * The second column is icol+1.
+	 * @see #ColSizeEvent(String, Component, int, Component, String, int)
 	 */
 	public ColSizeEvent(String evtnm, Component target, int icol,
 	Component col, int keys) {
+		this(evtnm, target, icol, col, null, keys);
+	}
+	
+	/**
+	 * Constructs an instance of {@link ColSizeEvent}.
+	 * @param icol the index of the first colum whose width is changed.
+	 * @param col the component of the column
+	 * @param width the width of the column
+	 * @since 5.0.0
+	 */
+	public ColSizeEvent(String evtnm, Component target, int icol,
+	Component col, String width, int keys) {
 		super(evtnm, target);
 		_icol = icol;
 		_col = col;
+		_width = width;
 		_keys = keys;
+	}
+	/**
+	 * Returns the column width
+	 * @since 5.0.0
+	 */
+	public String getWidth() {
+		return _width;
 	}
 	/** Return the column index of the first column whose width is changed.
 	 * The other column is the returned index plus one.
