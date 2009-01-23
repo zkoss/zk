@@ -14,16 +14,24 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 zUtl = { //static methods
 	//HTML/XML
-	encodeXML: function (txt, multiline) {
+	encodeXML: function (txt, opts) {
 		var out = "";
 		if (!txt) return out;
 
-		var k = 0, tl = txt.length;
+		var k = 0, tl = txt.length,
+			pre = opts && opts.pre,
+			multiline = pre || (opts && opts.multiline);
 		for (var j = 0; j < tl; ++j) {
 			var cc = txt.charAt(j);
 			if (cc == '\n') {
 				if (multiline) {
 					out += txt.substring(k, j) + "<br/>\n";
+					k = j + 1;
+				}
+			} else if (cc == ' ' || cc == '\t') {
+				if (pre) {
+					out += txt.substring(k, j) + '&nbsp;';
+					if (cc == '\t') out += '&nbsp;&nbsp;&nbsp;';
 					k = j + 1;
 				}
 			} else {

@@ -37,7 +37,7 @@ import org.zkoss.zul.impl.XulElement;
 public class Label extends XulElement implements org.zkoss.zul.api.Label {
 	private String _value = "";
 	private int _maxlength;
-	private boolean _multiline;
+	private boolean _multiline, _pre;
 
 	public Label() {
 	}
@@ -91,18 +91,28 @@ public class Label extends XulElement implements org.zkoss.zul.api.Label {
 			smartUpdate("multiline", _multiline);
 		}
 	}
-	/** @deprecated As of release 5.0.0, use CSS instead.
+	/** Returns whether to preserve the white spaces, such as space,
+	 * tab and new line.
+	 *
+	 * <p>It is the same as style="white-space:pre". However, IE has a bug when
+	 * handling such style if the content is updated dynamically.
+	 * Refer to Bug 1455584.
+	 *
+	 * <p>Note: the new line is preserved either {@link #isPre} or
+	 * {@link #isMultiline} returns true.
+	 * In other words, <code>pre</code> implies <code>multiline</code>
 	 */
 	public boolean isPre() {
-		return false;
+		return _pre;
 	}
-	/** @deprecated As of release 5.0.0, use CSS instead.
-	 *
-	 * <p>Use the CSS style called "white-spacing: pre" to have the
-	 * similar effect.
-	 *
+	/** Sets whether to preserve the white spaces, such as space,
+	 * tab and new line.
 	 */
 	public void setPre(boolean pre) {
+		if (_pre != pre) {
+			_pre = pre;
+			smartUpdate("pre", _pre);
+		}
 	}
 	/** @deprecated As of release 5.0.0, use CSS instead.
 	 */
@@ -135,6 +145,7 @@ public class Label extends XulElement implements org.zkoss.zul.api.Label {
 
 		if (_maxlength > 0) renderer.render("maxlength", _maxlength);
 		render(renderer, "multiline", _multiline);
+		render(renderer, "pre", _pre);
 
 		if (_value.length() > 0) {
 			boolean outed = false;

@@ -206,7 +206,7 @@ zk = {
 	+'<td align="right"><div id="'+id
 	+'$p"><a href="javascript:zk._sendRedraw()">redraw</a>&nbsp;'
 	+'<a href="javascript:zDom.remove(\''+id+'\')">close</a></div></td></tr>'
-	+'<tr valign="top"><td class="z-error-msg">'+zUtl.encodeXML(msg, true) //Bug 1463668: security
+	+'<tr valign="top"><td class="z-error-msg">'+zUtl.encodeXML(msg, {multiline:true}) //Bug 1463668: security
 	+'</td></tr></table></div>';
 		box = zDom.setOuterHTML(box, html);
 

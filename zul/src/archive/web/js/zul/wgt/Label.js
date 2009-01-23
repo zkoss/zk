@@ -30,9 +30,29 @@ zul.wgt.Label = zk.$extends(zul.Widget, {
 			if (n) n.innerHTML = this.getEncodedText();
 		}
 	},
+	isMultiline: function () {
+		return this._multiline;
+	},
+	setMultiline: function (multiline) {
+		if (multiline != this._multiline) {
+			this._multiline = multiline;
+			var n = this.getNode();
+			if (n) n.innerHTML = this.getEncodedText();
+		}
+	},
+	isPre: function () {
+		return this._pre;
+	},
+	setPre: function (pre) {
+		if (pre != this._pre) {
+			this._pre = pre;
+			var n = this.getNode();
+			if (n) n.innerHTML = this.getEncodedText();
+		}
+	},
+
 	getEncodedText: function () {
-		var value = zUtl.encodeXML(this._value);
-		return value.replace(/ /g, '&nbsp;').replace(/\t/, '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
+		return zUtl.encodeXML(this._value, {multiline:this._multiline,pre:this._pre});
 	},
 	//super//
 	getZclass: function () {
