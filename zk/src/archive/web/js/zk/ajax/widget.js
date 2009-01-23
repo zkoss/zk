@@ -780,7 +780,7 @@ zk.Widget = zk.$extends(zk.Object, {
 
 		if (this.inServer && this.desktop) {
 			var asap = this['$' + evtnm];
-			if (asap != null)
+			if (asap != null) //true or false
 				zAu.send(evt, asap ? timeout >= 0 ? timeout: 38: -1);
 		}
 		return evt;

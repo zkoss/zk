@@ -1538,10 +1538,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * <p>Default: return the collection of events
 	 * added by {@link #getClientEvents}.
 	 *
-	 * <p>Instead of overriding this method, it is suggested
+	 * <p>Rather than overriding this method, it is suggested
 	 * to invoke {@link #addClientEvent} in the <code>static</code> statement.
-	 * The deriving class might override it to specify what events
-	 * that the client might send. For example,
+	 * For example,
 	 * <pre><code>public MyComponent extend HtmlBasedComponent {
 	 *  static {
 	 *    addClientEvent(MyComponent.class, "onOpen", 0);
@@ -1657,8 +1656,11 @@ implements Component, ComponentCtrl, java.io.Serializable {
 						if (desktop != null) {
 							onListenerChange(desktop, false);
 
-							if (getClientEvents().containsKey(evtnm)) {
-								if (l.isEmpty() && !Events.isListened(this, evtnm, false))
+							final Object ce = getClientEvents().get(evtnm);
+							if (ce != null) {
+								final int cef = ((Integer)ce).intValue();
+								if ((cef & CE_IMPORTANT) == 0
+								&& l.isEmpty() && !Events.isListened(this, evtnm, false))
 									smartUpdate(evtnm, (Object)null); //no listener at all
 								else if (oldasap != Events.isListened(this, evtnm, true))
 									smartUpdate(evtnm, !oldasap);
