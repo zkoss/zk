@@ -723,7 +723,7 @@ zAu.cmd1 = {
 		}
 	},
 	setAttr: function (uuid, wgt, nm, val) {
-		zk.set(wgt, nm, val, true); //4th arg: fromServer
+		wgt.set(nm, val, true); //3rd arg: fromServer
 	},
 	outer: function (uuid, wgt, code) {
 		zAu.stub = function (newwgt) {

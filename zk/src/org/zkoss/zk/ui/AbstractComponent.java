@@ -1478,13 +1478,21 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			render(renderer, "id", _id);
 		if (!_visible) renderer.render("visible", false);
 
+		Boolean shallHandleImportant = null;
 		for (Iterator it = getClientEvents().entrySet().iterator();
 		it.hasNext();) {
 			final Map.Entry me = (Map.Entry)it.next();
 			final String evtnm = (String)me.getKey();
 			final int flags = ((Integer)me.getValue()).intValue();
-			if ((flags & CE_IMPORTANT) != 0
-			|| Events.isListened(this, evtnm, false))
+			if ((flags & CE_IMPORTANT) != 0) {
+				if (shallHandleImportant == null) {
+					Execution exec = Executions.getCurrent();
+					shallHandleImportant = Boolean.valueOf(exec != null && markImportantEvent(exec));
+				}
+				if (shallHandleImportant.booleanValue())
+					renderer.render("$$" + evtnm, true);
+			}
+			if (Events.isListened(this, evtnm, false))
 				renderer.render('$' + evtnm, Events.isListened(this, evtnm, true));
 					//$onClick and so on
 		}
@@ -1492,6 +1500,16 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		renderer.renderWidgetListeners(_wgtlsns);
 		renderer.renderWidgetMethods(_wgtmtds);
 	}
+	/** Adds this widget class to indicate that its important events
+	 * are generated
+	 */
+	private boolean markImportantEvent(Execution exec) {
+		Set wgtcls = (Set)exec.getAttribute(IMPORTANT_EVENTS);
+		if (wgtcls == null)
+			exec.setAttribute(IMPORTANT_EVENTS, wgtcls = new HashSet(8));
+		return wgtcls.add(getWidgetClass());
+	}
+	private static final String IMPORTANT_EVENTS = "org.zkoss.zk.ui.importantEvents";
 	/** An utility to be called by {@link #renderProperties} to
 	 * render a string-value property.
 	 * It ignores if value is null or empty.
@@ -1656,11 +1674,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 						if (desktop != null) {
 							onListenerChange(desktop, false);
 
-							final Object ce = getClientEvents().get(evtnm);
-							if (ce != null) {
-								final int cef = ((Integer)ce).intValue();
-								if ((cef & CE_IMPORTANT) == 0
-								&& l.isEmpty() && !Events.isListened(this, evtnm, false))
+							if (getClientEvents().containsKey(evtnm)) {
+								if (l.isEmpty() && !Events.isListened(this, evtnm, false))
 									smartUpdate(evtnm, (Object)null); //no listener at all
 								else if (oldasap != Events.isListened(this, evtnm, true))
 									smartUpdate(evtnm, !oldasap);

@@ -20,9 +20,10 @@ zk.Widget = zk.$extends(zk.Object, {
 	className: 'zk.Widget',
 
 	$init: function (props) {
-		this._lsns = {}; //listeners Map(evtnm,listener)
-		this._$lsns = {}; //listners registered by server Map(evtnm, fn)
-		this._subnodes = {}; // store the sub nodes for the widget Map(domId, domNode)
+		this._asaps = {}; //event listened at server
+		this._lsns = {}; //listeners(evtnm,listener)
+		this._$lsns = {}; //listners registered by server(evtnm, fn)
+		this._subnodes = {}; //store sub nodes for widget(domId, domNode)
 		
 		if (props) {
 			var mold = props.mold;
@@ -31,7 +32,7 @@ zk.Widget = zk.$extends(zk.Object, {
 				delete props.mold; //avoid setMold being called
 			}
 
-			zk.set(this, props);
+			this.set(props);
 		}
 
 		if (!this.uuid) this.uuid = zk.Widget.nextUuid();
@@ -77,6 +78,24 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 	},
 
+	set: function (name, value, extra) {
+		if (arguments.length == 1) {
+			for (var p in name)
+				this._set(p, name[p]);
+			return;
+		}
+		this._set(name, value, extra);
+	},
+	_set: function (name, value, extra) {
+		if (name.length > 4 && name.startsWith('$$on')) {
+			var cls = this.$class,
+				ime = cls._importantEvts;
+			(ime || (cls._importantEvts = {}))[name.substring(2)] = true;
+		} else if (name.length > 3 && name.startsWith('$on'))
+			this._asaps[name.substring(1)] = value;
+		else
+			zk.set(this, name, value, extra);
+	},
 	getChildAt: function (j) {
 		if (j >= 0)
 			for (var w = this.firstChild; w; w = w.nextSibling)
@@ -779,7 +798,12 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 
 		if (this.inServer && this.desktop) {
-			var asap = this['$' + evtnm];
+			var asap = this._asaps[evtnm];
+			if (asap == null) {
+				var ime = this.$class._importantEvts;
+				if (ime && ime[evtnm])
+					asap = false;
+			}
 			if (asap != null) //true or false
 				zAu.send(evt, asap ? timeout >= 0 ? timeout: 38: -1);
 		}
@@ -810,7 +834,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		return false;
 	},
 	isListen: function (evtnm) {
-		if (this['$' + evtnm]) return true;
+		if (this._asaps[evtnm]) return true;
 		var lsns = this._lsns[evtnm];
 		return lsns && lsns.length;
 	},

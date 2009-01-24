@@ -328,8 +328,7 @@ zkm = {
 			}
 		}
 
-		//assign properties
-		zk.set(wgt, props);
+		wgt.set(props);
 
 		for (var j = 0, childs = wginf.children, len = childs.length;
 		j < len; ++j)
