@@ -47,6 +47,7 @@ import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.event.ListDataListener;
 import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.event.PagingEvent;
+import org.zkoss.zul.event.RenderEvent;
 
 /**
  * A grid is an element that contains both rows and columns elements.
@@ -125,7 +126,6 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	private String _innerHeight = null;
 	private transient GridDrawerEngine _engine;
 	private boolean _fixedLayout, _vflex;
-	private transient EventListener _listener;
 	
 	static {
 		addClientEvent(Grid.class, Events.ON_RENDER, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
@@ -572,7 +572,6 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 			//(to save a roundtrip)
 		} else if (_model != null) {
 			_model.removeListDataListener(_dataListener);
-			this.removeEventListener(Events.ON_RENDER, _listener);
 			_model = null;
 			if (_rows != null) _rows.getChildren().clear();
 			smartUpdate("model", false);
@@ -602,13 +601,6 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 					onListDataChange(event);
 				}
 			};
-		if (_listener == null) {
-			_listener = new EventListener() {
-				public void onEvent(Event event) throws Exception {					
-				}			
-			};
-			this.addEventListener(Events.ON_RENDER, _listener);
-		}
 			
 		_model.addListDataListener(_dataListener);
 	}
@@ -1325,6 +1317,44 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		if (_preloadsz != 7)
 			renderer.render("preloadSize", _preloadsz);
 	}
+	public void onRender(RenderEvent event) {
+		final Set items = event.getItems();
+		int cnt = items.size();
+		if (cnt == 0) return; //nothing to do
+
+		cnt = 20 - cnt;
+		if (cnt > 0 && _preloadsz > 0) { //Feature 1740072: pre-load
+			if (cnt > _preloadsz) cnt = _preloadsz;
+
+			//1. locate the first item found in items
+			final List toload = new LinkedList();
+			Iterator it = getRows().getChildren().iterator();
+			while (it.hasNext()) {
+				final Row row = (Row)it.next();
+				if (items.contains(row)) //found
+					break;
+				if (!row.isLoaded())
+					toload.add(0, row); //reverse order
+			}
+
+			//2. add unload items before the found one
+			if (!toload.isEmpty()) {
+				int bfcnt = cnt/3;
+				for (Iterator e = toload.iterator();
+				bfcnt > 0 && e.hasNext(); --bfcnt, --cnt) {
+					items.add(e.next());
+				}
+			}
+
+			//3. add unloaded after the found one
+			while (cnt > 0 && it.hasNext()) {
+				final Row row = (Row)it.next();
+				if (!row.isLoaded() && items.add(row))
+					--cnt;
+			}
+		}
+		renderItems(items);
+	}
 	//-- ComponentCtrl --//
 	/** Processes an AU request.
 	 *
@@ -1338,44 +1368,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 			final String width = AuRequests.getInnerWidth(request);
 			_innerWidth = width == null ? "100%": width;
 		} else if (name.equals(Events.ON_RENDER)) {
-			final Set items = AuRequests.convertToItems(request);
-			int cnt = items.size();
-			if (cnt == 0)
-				return; //nothing to do
-
-			cnt = 20 - cnt;
-			if (cnt > 0 && _preloadsz > 0) { //Feature 1740072: pre-load
-				if (cnt > _preloadsz) cnt = _preloadsz;
-
-				//1. locate the first item found in items
-				final List toload = new LinkedList();
-				Iterator it = getRows().getChildren().iterator();
-				while (it.hasNext()) {
-					final Row row = (Row)it.next();
-					if (items.contains(row)) //found
-						break;
-					if (!row.isLoaded())
-						toload.add(0, row); //reverse order
-				}
-
-				//2. add unload items before the found one
-				if (!toload.isEmpty()) {
-					int bfcnt = cnt/3;
-					for (Iterator e = toload.iterator();
-					bfcnt > 0 && e.hasNext(); --bfcnt, --cnt) {
-						items.add(e.next());
-					}
-				}
-
-				//3. add unloaded after the found one
-				while (cnt > 0 && it.hasNext()) {
-					final Row row = (Row)it.next();
-					if (!row.isLoaded() && items.add(row))
-						--cnt;
-				}
-			}
-
-			Grid.this.renderItems(items);
+			Events.postEvent(RenderEvent.getRenderEvent(request));
 		} else
 			super.process(request, everError);
 	}
