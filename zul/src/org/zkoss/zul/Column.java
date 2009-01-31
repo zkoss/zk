@@ -134,7 +134,7 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 	 *
 	 * <p>If "auto" is specified,
 	 * {@link #setSortAscending} and/or {@link #setSortDescending} 
-	 * are called with {@link ListitemComparator}, if
+	 * are called with {@link RowComparator}, if
 	 * {@link #getSortDescending} and/or {@link #getSortAscending} are null.
 	 * If you assigned a comparator to them, it won't be affected.
 	 * The auto created comparator is case-insensitive.

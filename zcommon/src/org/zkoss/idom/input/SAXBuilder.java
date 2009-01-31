@@ -45,7 +45,7 @@ import org.zkoss.idom.Document;
  * @see SAXHandler
  */
 public class SAXBuilder {
-	private static final Log log = Log.lookup(SAXHandler.class);
+	private static final Log log = Log.lookup(SAXBuilder.class);
 
 	/** The parser. */
 	private final SAXParser _parser;
