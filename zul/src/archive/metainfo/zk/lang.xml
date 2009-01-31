@@ -27,12 +27,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 	<!-- Note: JavaScript that are listed here will be loaded no matter
 		what language is used.
-		Use zk.load("x.y") if x.y is required only for certain language
 	-->
 
 	<javascript src="~./js/zk/ajax/zk.wpd" charset="UTF-8"/>
 	<javascript src="~./js/zul/zk.wpd" charset="UTF-8"/>
-	<javascript src="~./js/zul/lang/zk.wpd" charset="UTF-8"/>
 
 	<stylesheet href="~./zul/css/norm*.css.dsp*" type="text/css"/>
 

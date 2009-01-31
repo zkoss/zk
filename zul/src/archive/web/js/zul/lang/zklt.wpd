@@ -2,9 +2,9 @@
 
 <!-- zk.wpd
 	Purpose:
-		
+		WPD used for ZK Light		
 	Description:
-		
+		ZK 5 doesn't require this file since they are loaded by zk/zk.wpd
 	History:
 		Tue Jan 13 10:10:07     2009, Created by tomyeh
 

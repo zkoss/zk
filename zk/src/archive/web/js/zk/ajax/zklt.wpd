@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- zk.wpd
+<!-- zklt.wpd
 	Purpose:
-		
+		WPD used for ZK Light
 	Description:
 		
 	History:
@@ -11,7 +11,7 @@
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 
-<package name="zk" cacheable="false">
+<package name="zk">
 	<script src="zk.js"/>
 	<script src="math.js"/>
 	<script src="utl.js"/>
@@ -27,8 +27,4 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<script src="au.js"/>
 	<script src="numfmt.js"/>
 	<script src="msgfmt.js"/>
-
-	<!-- load lang here to minimize # of JS files -->
-	<script src="lang/mesg*.js"/>
-	<function class="org.zkoss.zk.fn.DspFns" name="outLocaleJavaScript"/>
 </package>
