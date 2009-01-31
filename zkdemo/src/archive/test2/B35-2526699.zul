@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B35-2526699.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jan 22 09:47:02 TST 2009, Created by Flyworld
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<hbox id="mainBox" widths="20%,1024px,20%" height="768px"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.zkoss.org/2005/zul"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul
+http://www.zkoss.org/2005/zul/zul.xsd">
+
+	<box />
+
+	<box>
+	Click the accordion tab and resize the window, the accordion tab should shouldn't float to left. 
+		<window id="mainWindow" border="normal" width="1024px"
+			height="768px" apply="${mainWindowController}">
+			<!-- The height for the include is important or IE will interpret the
+				height as 100% of the screen -->
+			<hbox pack="center" align="center"
+				widths="100px,924px,100px">
+				<label />
+				<label />
+			</hbox>
+
+			<tabbox id="bidSessionSelectorTabBox" width="1016px"
+				height="685px">
+				<tabs>
+					<tab id="Tab2" label="Tab2" />
+				</tabs>
+				<tabpanels>
+					<tabpanel>
+						<box width="1004" height="650">
+							<hbox>
+								<window title="My Window"
+									border="normal" width="324px" height="437px">
+									<tabbox mold="accordion">
+										<tabs>
+											<tab label="Test1"></tab>
+											<tab label="Test2"></tab>
+											<tab label="Test3"></tab>
+										</tabs>
+										<tabpanels>
+											<tabpanel width="313px">
+												<grid height="50px">
+													<rows>
+														<row>
+															<label
+																value="TEST" />
+														</row>
+														<row>
+															<label
+																value="TEST2" />
+														</row>
+													</rows>
+												</grid>
+											</tabpanel>
+											<tabpanel width="313px">
+												<grid height="190px">
+													<rows>
+														<row>
+															<label
+																value="TEST" />
+														</row>
+														<row>
+															<label
+																value="TEST2" />
+														</row>
+													</rows>
+												</grid>
+											</tabpanel>
+											<tabpanel width="313px">
+												<grid height="190px">
+													<rows>
+														<row>
+															<label
+																value="TEST" />
+														</row>
+														<row>
+															<label
+																value="TEST2" />
+														</row>
+													</rows>
+												</grid>
+											</tabpanel>
+										</tabpanels>
+									</tabbox>
+
+								</window>
+							</hbox>
+						</box>
+					</tabpanel>
+				</tabpanels>
+			</tabbox>
+		</window>
+	</box>
+	<box />
+</hbox>

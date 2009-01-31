@@ -63,6 +63,39 @@ public interface Column extends org.zkoss.zul.impl.api.HeaderElement {
 	 */
 	public void setSortDirection(String sortDir) throws WrongValueException;
 
+	/** Sets the type of the sorter.
+	 * You might specify either "auto", "auto(FIELD_NAME1[,FIELD_NAME2] ...)" or "none".
+	 *
+	 * <p>If "client" or "client(number)" is specified,
+	 * the sort functionality will be done by Javascript at client without notifying
+	 * to server, that is, the order of the component in the row is out of sync.
+	 * <ul>
+	 * <li> "client" : it is treated by a string</li>
+	 * <li> "client(number)" : it is treated by a number</li>
+	 * </ul>
+	 * <p>Note: client sorting cannot work in model case. (since 5.0.0)
+	 *
+	 * <p>If "auto" is specified,
+	 * {@link #setSortAscending} and/or {@link #setSortDescending} 
+	 * are called with {@link org.zkoss.zul.RowComparator}, if
+	 * {@link #getSortDescending} and/or {@link #getSortAscending} are null.
+	 * If you assigned a comparator to them, it won't be affected.
+	 * The auto created comparator is case-insensitive.
+	 *
+	 * <p>If "auto(FIELD_NAME1, FIELD_NAME2, ...)" is specified,
+	 * {@link #setSortAscending} and/or {@link #setSortDescending} 
+	 * are called with {@link org.zkoss.zul.FieldComparator}, if
+	 * {@link #getSortDescending} and/or {@link #getSortAscending} are null.
+	 * If you assigned a comparator to them, it won't be affected.
+	 * The auto created comparator is case-insensitive.
+
+	 * <p>If "none" is specified, both {@link #setSortAscending} and
+	 * {@link #setSortDescending} are called with null.
+	 * Therefore, no more sorting is available to users for this column.
+	 * @since 3.5.3
+	 */
+	public void setSort(String type);
+
 	/**
 	 * Returns the ascending sorter, or null if not available.
 	 */
