@@ -21,9 +21,9 @@ package org.zkoss.zklighter;
  */
 public class Lighter {
 	public static void main(String[] args) {
-		if (args.length != 3) {
+		if (args.length != 1) {
 			System.err.println("ZK Lighter - ZK Light JavaScript/CSS Generator\n\n"
-			+"Usage:\n\tjava -classpath $CP org.zkoss.zklighter.Lighter js.lst css.lst lib\n");
+			+"Usage:\n\tjava -classpath $CP org.zkoss.zklighter.Lighter zklighter.xml\n");
 			System.exit(-1);
 		}
 	}

@@ -1,0 +1,35 @@
+<zklighter>
+	<javascript>
+		<destination>lib/zk.js</destination>
+		<source>../src/archive/web/js/zk/ajax/zklt.wpd</source>
+		<source>../src/archive/web/js/zul/zklt.wpd</source>
+	</javascript>
+	<javascript>
+		<destination>lib/lang.js</destination>
+		<source>../src/archive/web/js/zk/ajax/lang/zklt.wpd</source>
+		<source>../src/archive/web/js/zul/lang/zklt.wpd</source>
+		<locale></locale>
+		<locale>ar</locale>
+		<locale>bg</locale>
+		<locale>ca</locale>
+		<locale>cs</locale>
+		<locale>de</locale>
+		<locale>es</locale>
+		<locale>fr</locale>
+		<locale>hu</locale>
+		<locale>id</locale>
+		<locale>it</locale>
+		<locale>ja</locale>
+		<locale>nl</locale>
+		<locale>pt</locale>
+		<locale>ro</locale>
+		<locale>ru</locale>
+		<locale>si</locale>
+		<locale>sv</locale>
+		<locale>tr</locale>
+		<locale>uk</locale>
+		<locale>zh</locale>
+		<locale>zh_CN</locale>
+		<locale>zh_TW</locale>
+	</javascript>
+</zklighter>

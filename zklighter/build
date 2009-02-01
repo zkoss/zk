@@ -32,4 +32,4 @@ if [ -f classpath ] ; then
 	CP=$(cat classpath | tr '\n' ';')
 	CP=${CP%:}
 fi
-java -classpath "debug/zklighter.jar;$CP" org.zkoss.zklighter.Lighter js.lst css.lst lib
+java -classpath "debug/zklighter.jar;$CP" org.zkoss.zklighter.Lighter zklighter.xml
