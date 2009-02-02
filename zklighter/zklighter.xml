@@ -1,13 +1,13 @@
 <zklighter>
 	<javascript>
 		<destination>lib/zk.js</destination>
-		<source>../zk/src/archive/web/js/zk/ajax/zklt.wpd</source>
-		<source>../zul/src/archive/web/js/zul/zklt.wpd</source>
+		<source>../zk/codegen/archive/web/js/zk/ajax/zklt.wpd</source>
+		<source>../zul/codegen/archive/web/js/zul/zklt.wpd</source>
 	</javascript>
 	<javascript>
 		<destination>lib/lang.js</destination>
-		<source>../zk/src/archive/web/js/zk/ajax/lang/zklt.wpd</source>
-		<source>../zul/src/archive/web/js/zul/lang/zklt.wpd</source>
+		<source>../zk/codegen/archive/web/js/zk/ajax/lang/zklt.wpd</source>
+		<source>../zul/codegen/archive/web/js/zul/lang/zklt.wpd</source>
 		<locale></locale>
 		<locale>ar</locale>
 		<locale>bg</locale>

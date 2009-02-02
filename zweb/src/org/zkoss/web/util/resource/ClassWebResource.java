@@ -399,7 +399,7 @@ public class ClassWebResource {
 	 * Java (i.e., uncompressed) file instead of the compressed one.
 	 * For example, if {@link #service} is called to load abc.js,
 	 * and {@link #isDebugJS}, then {@link #service} will try
-	 * to load abc.org.js first. If not found, it load ab.js insted.
+	 * to load abc.src.js first. If not found, it load ab.js insted.
 	 *
 	 * <p>If {@link #isDebugJS} is false (default),
 	 * abc.js is always loaded.
@@ -479,7 +479,7 @@ public class ClassWebResource {
 
 		if (_debugJS && "js".equals(ext)) {
 			final String orgpi = Servlets.locate(_ctx, request,
-				pi.substring(0, pi.length() - 3) + ".org.js",
+				pi.substring(0, pi.length() - 3) + ".src.js",
 				_cwc.getLocator());
 			is = getResourceAsStream(orgpi);
 			if (is != null) pi = orgpi;
@@ -647,7 +647,7 @@ public class ClassWebResource {
 		}
 		public URL getResource(String uri) {
 			if (_debugJS && "js".equals(Servlets.getExtension(uri))) {
-				String orgpi = uri.substring(0, uri.length() - 3) + ".org.js";
+				String orgpi = uri.substring(0, uri.length() - 3) + ".src.js";
 				URL url = ClassWebResource.getResource(orgpi);
 				if (url != null) return url;
 			}
@@ -655,7 +655,7 @@ public class ClassWebResource {
 		}
 		public InputStream getResourceAsStream(String uri) {
 			if (_debugJS && "js".equals(Servlets.getExtension(uri))) {
-				String orgpi = uri.substring(0, uri.length() - 3) + ".org.js";
+				String orgpi = uri.substring(0, uri.length() - 3) + ".src.js";
 				InputStream is = ClassWebResource.getResourceAsStream(orgpi);
 				if (is != null) return is;
 			}

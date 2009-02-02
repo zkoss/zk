@@ -128,7 +128,9 @@ public class WpdExtendlet implements Extendlet {
 		return _debugJS.booleanValue();
 
 	}
-	/** Parses and return the specified input stream. */
+	/** Parses and return the specified file.
+	 * It is used by ZK Lighter to generate JavaScript files.
+	 */
 	public byte[] service(File fl) throws Exception {
 		_loc.set(new FileLocator(fl));
 		try {
@@ -389,6 +391,7 @@ public class WpdExtendlet implements Extendlet {
 		/*package*/
 		InputStream getResourceAsStream(String path, boolean locate)
 		throws IOException, ServletException {
+			//Note: _webctx will handle the renaming for debugJS (.src.js)
 			return _webctx.getResourceAsStream(
 				locate ?
 					Servlets.locate(_webctx.getServletContext(),
@@ -404,6 +407,11 @@ public class WpdExtendlet implements Extendlet {
 		}
 		InputStream getResourceAsStream(String path, boolean locate)
 		throws IOException {
+			if (isDebugJS()) {
+				final int j = path.lastIndexOf('.');
+				if (j >= 0)
+					path = 	path.substring(0, j) + ".src" + path.substring(j);
+			}
 			final File file = new File(_parent, path);
 			return locate ? new FileInputStream(Files.locate(file.getPath())):
 				new FileInputStream(file);
