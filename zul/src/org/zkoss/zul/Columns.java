@@ -20,6 +20,7 @@ package org.zkoss.zul;
 
 import java.io.IOException;
 
+import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.sys.ContentRenderer;
@@ -33,6 +34,7 @@ import org.zkoss.zul.impl.HeadersElement;
  * @author tomyeh
  */
 public class Columns extends HeadersElement implements org.zkoss.zul.api.Columns {
+	private String _mpop = "none";
 	private boolean _columnshide = true;
 	private boolean _columnsgroup = true;
 	
@@ -88,13 +90,63 @@ public class Columns extends HeadersElement implements org.zkoss.zul.api.Columns
 	public boolean isColumnsgroup() {
 		return _columnsgroup;
 	}
-	
+
+	/** Returns the ID of the Menupopup ({@link Menupopup}) that should appear
+	 * when the user clicks on the element.
+	 *
+	 * <p>Default: none (a default menupoppup).
+	 * @since 3.5.0
+	 */
+	public String getMenupopup() {
+		return _mpop;
+	}
+	/** Sets the ID of the menupopup ({@link Menupopup}) that should appear
+	 * when the user clicks on the element of each column.
+	 *
+	 * <p>An onOpen event is sent to the popup menu if it is going to
+	 * appear. Therefore, developers can manipulate it dynamically
+	 * (perhaps based on OpenEvent.getReference) by listening to the onOpen
+	 * event.
+	 *
+	 * <p>Note: To simplify the use, it ignores the ID space when locating
+	 * the component at the client. In other words, it searches for the
+	 * first component with the specified ID, no matter it is in 
+	 * the same ID space or not.
+	 *
+	 * <p>If there are two components with the same ID (of course, in
+	 * different ID spaces), you can specify the UUID with the following
+	 * format:<br/>
+	 * <code>uuid(comp_uuid)</code>
+	 * 
+	 * @param mpop an ID of the menupopup component, "none", or "auto".
+	 * 	"none" is assumed by default, "auto" means the menupopup component is 
+	 *  created automatically.
+	 * @since 3.5.0
+	 * @see #setMenupopup(String)
+	 */
+	public void setMenupopup(String mpop) {
+		if (!Objects.equals(_mpop, mpop)) {
+			_mpop = mpop;
+			smartUpdate("menupopup", mpop);
+		}
+	}
 	public void invalidate() {
 		final Grid grid = getGrid();
 		if (grid != null) grid.invalidate();
 		else super.invalidate();
 	}
 
+	/** @deprecated As of release 5.0.0, replaced with {@link #setPopup(Popup)}.
+	 */
+	public void setPopup(Menupopup mpop) {
+		super.setPopup(mpop);
+	}
+	/** @deprecated As of release 5.0.0, replaced with {@link #setPopup(Popup)}.
+	 */
+	public void setPopupApi(org.zkoss.zul.api.Menupopup mpopApi) {
+		super.setPopup((Popup)mpopApi);		
+	}
+	
 	// super
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
@@ -104,6 +156,8 @@ public class Columns extends HeadersElement implements org.zkoss.zul.api.Columns
 			renderer.render("columnsgroup", false);
 		if (!_columnshide) 
 			renderer.render("columnshide", false);
+		if (!"none".equals(_mpop))
+			renderer.render("menupopup", _mpop);
 	}
 	
 	//-- Component --//
