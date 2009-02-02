@@ -16,7 +16,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.event;
 
+import org.zkoss.lang.Objects;
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.AuRequests;
+import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 
 import org.zkoss.zul.ext.Pageable;
@@ -33,6 +38,30 @@ public class PagingEvent extends Event {
 	private final Pageable _pgi;
 	private final int _actpg;
 
+	/** Converts an AU request to a render event.
+	 * @since 5.0.0
+	 */
+	public static final PagingEvent getPagingEvent(AuRequest request) {
+		final Component comp = request.getComponent();
+		if (comp == null)
+			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, request);
+		final String[] data = request.getData();
+		if (data == null || data.length != 1)
+			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
+				new Object[] {Objects.toString(data), request});
+		final Pageable pageable = (Pageable)comp;
+		int pgi = Integer.parseInt(data[0]);
+		if (pgi < 0) pgi = 0;
+		else {
+			final int pgcnt = pageable.getPageCount();
+			if (pgi >= pgcnt) {
+				pgi = pgcnt - 1;
+				if (pgi < 0) pgi = 0;
+			}
+		}
+		return new PagingEvent(request.getName(), comp, pgi);
+	}
+	
 	/** Construct a paging event.
 	 *
 	 * @param target the target must be a paginal component, i.e.,

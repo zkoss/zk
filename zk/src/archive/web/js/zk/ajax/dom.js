@@ -1055,6 +1055,12 @@ zDom = { //static methods
 	parentNode: function (el) {
 		return el.z_vp || el.parentNode;
 	},
+	parentByTag: function (el, tagName) {
+		for (; el; el = zDom.parentNode(el))
+			if (zDom.tag(el) == tagName)
+				return el;
+		return null;
+	},
 	vparent: function (el) {
 		return el.z_vp;
 	},

@@ -23,7 +23,7 @@ zul.grid.Paging = zk.$extends(zul.Widget, {
 		if (this.isBothPaging())
 			this.parent.rerender();
 		else
-			this.$supers('replaceHTML', arguements);
+			this.$supers('replaceHTML', arguments);
 	},
 	isBothPaging: function () {
 		return this.parent && this.parent.getPagingPosition
@@ -36,7 +36,7 @@ zul.grid.Paging = zk.$extends(zul.Widget, {
 		if (this._pgsz != size) {
 			this._pgsz = size;
 			this._updatePageNum();
-			this.fire('onPagingImpl', _actpg);
+			// TODO this.fire('onPagingImpl', this._actpg);
 		}
 	},
 	getTotalSize: function () {
@@ -70,7 +70,7 @@ zul.grid.Paging = zk.$extends(zul.Widget, {
 	setActivePage: function (pg) {
 		if (this._actpg != pg) {
 			this._actpg = pg;
-			this.fire('onPagingImpl', _actpg);
+			// TODO this.fire('onPagingImpl', this._actpg);
 		}
 	},
 	getPageIncrement: function () {
@@ -165,67 +165,11 @@ zul.grid.Paging = zk.$extends(zul.Widget, {
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
+		if (this.getMold() == "os") return;
 		var uuid = this.uuid,
 			inputs = zDom.$$(uuid, 'real'),
-			$Paging = this.$class,
 			zcls = this.getZclass(),
-			first = zDom.$$(uuid, 'first'),
-			last = zDom.$$(uuid, 'last'),
-			prev = zDom.$$(uuid, 'prev'),
-			next = zDom.$$(uuid, 'next');
-		
-		//event for input
-		for (var i = inputs.length; --i>=0;) {
-			zEvt.listen(inputs[i], "keydown", $Paging._doKeyDown);
-			zEvt.listen(inputs[i], "blur", $Paging._doBlur);
-		}
-		
-		for (var i = first.length; --i>=0;) {
-			zEvt.listen(first[i], "click", $Paging._doFirstClick);
-			zEvt.listen(first[i], "mouseover", $Paging._doMouseOver);
-			zEvt.listen(first[i], "mouseout", $Paging._doMouseOut);
-			zEvt.listen(first[i], "mousedown", $Paging._doMouseDown);
-			
-			zEvt.listen(prev[i], "click", $Paging._doPrevClick);
-			zEvt.listen(prev[i], "mouseover", $Paging._doMouseOver);
-			zEvt.listen(prev[i], "mouseout", $Paging._doMouseOut);
-			zEvt.listen(prev[i], "mousedown", $Paging._doMouseDown);
-			
-			zEvt.listen(next[i], "click", $Paging._doNextClick);
-			zEvt.listen(next[i], "mouseover", $Paging._doMouseOver);
-			zEvt.listen(next[i], "mouseout", $Paging._doMouseOut);
-			zEvt.listen(next[i], "mousedown", $Paging._doMouseDown);
-			
-			zEvt.listen(last[i], "click", $Paging._doLastClick);
-			zEvt.listen(last[i], "mouseover", $Paging._doMouseOver);
-			zEvt.listen(last[i], "mouseout", $Paging._doMouseOut);
-			zEvt.listen(last[i], "mousedown", $Paging._doMouseDown);
-						
-			if (this._npg == 1) {
-				zDom.addClass(first[i], zcls + "-btn-disd");
-				zDom.addClass(prev[i], zcls + "-btn-disd");
-				zDom.addClass(next[i], zcls + "-btn-disd");
-				zDom.addClass(last[i], zcls + "-btn-disd");
-			} else {
-				if (cmp.actpg == 0) {
-					zk.addClass(first[i], zcls + "-btn-disd");
-					zk.addClass(prev[i], zcls + "-btn-disd");
-				} else if (cmp.actpg == cmp.npg - 1) {
-					zk.addClass(next[i], zcls + "-btn-disd");
-					zk.addClass(last[i], zcls + "-btn-disd");
-				}
-			}
-		}
-	},
-	unbind_: function () {
-		
-		var uuid = this.uuid,
-			inputs = zDom.$$(uuid, 'real'),
-			$Paging = this.$class,
-			first = zDom.$$(uuid, 'first'),
-			last = zDom.$$(uuid, 'last'),
-			prev = zDom.$$(uuid, 'prev'),
-			next = zDom.$$(uuid, 'next');
+			$Paging = this.$class;
 			
 		for (var i = inputs.length; --i>=0;) {
 			zEvt.listen(inputs[i], "keydown", $Paging._doKeyDown);
@@ -242,19 +186,38 @@ zul.grid.Paging = zk.$extends(zul.Widget, {
 				if (this._npg == 1)
 					zDom.addClass(btn[j], zcls + "-btn-disd");
 				else if (postfix[k] == 'first' || postfix[k] == 'prev') {
-					if (this._actpg == 0) zDom.addClass(btn[i], zcls + "-btn-disd");
+					if (this._actpg == 0) zDom.addClass(btn[j], zcls + "-btn-disd");
 				} else if (this._actpg == this._npg - 1) {
-					zk.addClass(btn[i], zcls + "-btn-disd");
+					zDom.addClass(btn[j], zcls + "-btn-disd");
 				}
 			}
 		}
-		
+	},
+	unbind_: function () {
+		if (this.getMold() != "os") {
+			var uuid = this.uuid, inputs = zDom.$$(uuid, 'real'), $Paging = this.$class;
+			
+			for (var i = inputs.length; --i >= 0;) {
+				zEvt.unlisten(inputs[i], "keydown", $Paging._doKeyDown);
+				zEvt.unlisten(inputs[i], "blur", $Paging._doBlur);
+			}
+			
+			for (var postfix = ['first', 'prev', 'last', 'next'], k = postfix.length; --k >= 0;) {
+				var btn = zDom.$$(uuid, postfix[k]);
+				for (var j = btn.length; --j >= 0;) {
+					zEvt.unlisten(btn[j], "mouseover", $Paging._doMouseOver);
+					zEvt.unlisten(btn[j], "mouseout", $Paging._doMouseOut);
+					zEvt.unlisten(btn[j], "mousedown", $Paging._doMouseDown);
+					zEvt.unlisten(btn[j], "click", $Paging['_do' + postfix[k] + 'Click']);
+				}
+			}
+		}
 		this.$supers('unbind_', arguments);
 	}
 }, {
 	go: function (anc, pgno) {
 		var wgt = zk.Widget.isInstance(anc) ? anc : zk.Widget.$(anc);
-		if (wgt)
+		if (wgt && wgt.getActivePage() != pgno)
 			wgt.fire('onPaging', pgno);
 	},
 	_doKeyDown: function (evt) {
@@ -317,8 +280,8 @@ zul.grid.Paging = zk.$extends(zul.Widget, {
 		if (inp.disabled || inp.readOnly)
 			return;
 		
-		this._increase(inp, wgt, 0);
-		this.go(wgt, inp.value-1);
+		wgt.$class._increase(inp, wgt, 0);
+		wgt.$class.go(wgt, inp.value-1);
 		zEvt.stop(evt);
 	},
 	_increase: function (inp, wgt, add){
@@ -327,5 +290,102 @@ zul.grid.Paging = zk.$extends(zul.Widget, {
 		if (value < 1) value = 1;
 		else if (value > wgt._npg) value = wgt._npg;
 		inp.value = value;
+	},
+	_dofirstClick: function (evt) {
+		if (!evt) evt = window.event;
+		var wgt = zk.Widget.$(evt),
+			zcls = wgt.getZclass();
+		
+		if (wgt.getActivePage() != 0) {
+			wgt.$class.go(wgt, 0);
+			var uuid = wgt.uuid;
+			for (var postfix = ['first', 'prev'], k = postfix.length; --k >= 0;)
+				for (var btn = zDom.$$(uuid, postfix[k]), i = btn.length; --i >= 0;)
+					zDom.addClass(btn[i], zcls + "-btn-disd");
+		}
+	},
+	_doprevClick: function (evt) {		
+		if (!evt) evt = window.event;
+		var wgt = zk.Widget.$(evt),
+			ap = wgt.getActivePage(),
+			zcls = wgt.getZclass();
+		
+		if (ap > 0) {
+			wgt.$class.go(wgt, ap - 1);
+			if (ap - 1 == 0) {
+				var uuid = wgt.uuid;
+				for (var postfix = ['first', 'prev'], k = postfix.length; --k >= 0;)
+					for (var btn = zDom.$$(uuid, postfix[k]), i = btn.length; --i >= 0;)
+						zDom.addClass(btn[i], zcls + "-btn-disd");
+			}
+		}
+	},
+	_donextClick: function (evt) {
+		if (!evt) evt = window.event;
+		var wgt = zk.Widget.$(evt),
+			ap = wgt.getActivePage(),
+			pc = wgt.getPageCount(),
+			zcls = wgt.getZclass();
+		
+		if (ap < pc - 1) {
+			wgt.$class.go(wgt, ap + 1);
+			if (ap + 1 == pc - 1) {
+				var uuid = wgt.uuid;
+				for (var postfix = ['last', 'next'], k = postfix.length; --k >= 0;)
+					for (var btn = zDom.$$(uuid, postfix[k]), i = btn.length; --i >= 0;)
+						zDom.addClass(btn[i], zcls + "-btn-disd");
+			}
+		}
+	},
+	_dolastClick: function (evt) {
+		if (!evt) evt = window.event;
+		var wgt = zk.Widget.$(evt),
+			pc = wgt.getPageCount(),
+			zcls = wgt.getZclass();
+		
+		if (wgt.getActivePage() < pc - 1) {
+			wgt.$class.go(wgt, pc - 1);
+			var uuid = wgt.uuid;
+			for (var postfix = ['last', 'next'], k = postfix.length; --k >= 0;)
+				for (var btn = zDom.$$(uuid, postfix[k]), i = btn.length; --i >= 0;)
+					zDom.addClass(btn[i], zcls + "-btn-disd");
+		}
+		
+	},
+	_doMouseOver: function (evt) {
+		if (!evt) evt = window.event;
+		var target = zEvt.target(evt),
+			table = zDom.parentByTag(target, "TABLE"),
+			zcls = zk.Widget.$(target).getZclass();
+		if (!zDom.hasClass(table, zcls + "-btn-disd")) 
+			zDom.addClass(table, zcls + "-btn-over");
+	},
+	_doMouseOut: function (evt) {
+		if (!evt) evt = window.event;
+		var target = zEvt.target(evt),
+			table = zDom.parentByTag(target, "TABLE"),
+			wgt = zk.Widget.$(target);
+		zDom.rmClass(table, wgt.getZclass() + "-btn-over");
+	},
+	_doMouseDown: function (evt) {		
+		if (!evt) evt = window.event;
+		var target = zEvt.target(evt),
+			table = zDom.parentByTag(target, "TABLE"),
+			wgt = zk.Widget.$(target),
+			zcls = wgt.getZclass();
+		if (zDom.hasClass(table, zcls + "-btn-disd")) return;
+		
+		zDom.addClass(table, zcls + "-btn-clk");
+		wgt.$class._downbtn = table;
+		zEvt.listen(document.body, "mouseup", wgt.$class._doMouseUp);
+	},
+	_doMouseUp: function (evt) {
+		if (!evt) evt = window.event;
+		if (zul.grid.Paging._downbtn) {
+			var zcls = zk.Widget.$(zul.grid.Paging._downbtn).getZclass();
+			zDom.rmClass(zul.grid.Paging._downbtn, zcls + "-btn-clk");
+		}
+		zul.grid.Paging._downbtn = null;
+		zEvt.unlisten(document.body, "mouseup", zul.grid.Paging._doMouseUp);
 	}
 });

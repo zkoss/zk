@@ -16,17 +16,15 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import org.zkoss.mesg.Messages;
-import org.zkoss.xml.HTMLs;
-import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 
 import org.zkoss.zul.event.PagingEvent;
+import org.zkoss.zul.event.RenderEvent;
+import org.zkoss.zul.event.ZulEvents;
 import org.zkoss.zul.impl.XulElement;
-import org.zkoss.zul.mesg.MZul;
 import org.zkoss.zul.ext.Paginal;
-import org.zkoss.zul.ext.Paginated;
 
 /**
  * Paging of long content.
@@ -51,6 +49,9 @@ public class Paging extends XulElement implements org.zkoss.zul.api.Paging, Pagi
 	/** Whether to show detailed info. */
 	private boolean _detailed;
 
+	static {
+		addClientEvent(Paging.class, ZulEvents.ON_PAGING, CE_IMPORTANT);
+	}
 	public Paging() {
 	}
 
@@ -91,6 +92,7 @@ public class Paging extends XulElement implements org.zkoss.zul.api.Paging, Pagi
 		if (_ttsz != size) {
 			_ttsz = size;
 			smartUpdate("totalSize", _ttsz);
+			updatePageNum();
 			if (_detailed) invalidate();
 		}
 	}
@@ -185,5 +187,21 @@ public class Paging extends XulElement implements org.zkoss.zul.api.Paging, Pagi
 	}
 	protected boolean isChildable() {
 		return false;
+	}
+	public void onPaging(PagingEvent evt) {
+		this.setActivePage(evt.getActivePage());
+	}
+	//-- ComponentCtrl --//
+	/** Processes an AU request.
+	 *
+	 * <p>Default: in addition to what are handled by {@link XulElement#process},
+	 * it also handles onSelect.
+	 * @since 5.0.0
+	 */
+	public void process(org.zkoss.zk.au.AuRequest request, boolean everError) {
+		final String name = request.getName();
+		if (name.equals(ZulEvents.ON_PAGING)) {
+			Events.postEvent(PagingEvent.getPagingEvent(request));
+		}
 	}
 }
