@@ -21,10 +21,6 @@ if [ ! -d lib ] ; then
 	echo Wrong directory: $(pwd)
 	exit -1
 fi
-if [ ! -f js.lst ] || [ ! -f css.lst ] ; then
-	echo js.lst and css.lst are both required
-	exit -1
-fi
 
 CP=
 if [ -f classpath ] ; then

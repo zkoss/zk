@@ -49,7 +49,6 @@ import org.zkoss.idom.CData;
 import org.zkoss.idom.Item;
 import org.zkoss.idom.Attribute;
 import org.zkoss.idom.ProcessingInstruction;
-import org.zkoss.idom.util.IDOMs;
 import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.xel.taglib.Taglib;
 import org.zkoss.xel.util.Evaluators;
@@ -537,7 +536,6 @@ public class Parser {
 	}
 	/** Checks whether the value is an empty string.
 	 * Note: Like {@link #noEL}, it is OK to be null!!
-	 * To check neither null nor empty, use IDOMs.getRequiredXxx.
 	 */
 	private static void noEmpty(String nm, String val, Item item)
 	throws UiException {

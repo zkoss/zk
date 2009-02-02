@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.HashMap;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.ByteArrayOutputStream;
@@ -40,6 +42,7 @@ import org.zkoss.util.resource.Loader;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.util.IDOMs;
+import org.zkoss.io.Files;
 
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.http.Https;
@@ -59,14 +62,15 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
  * @author tomyeh
  * @since 5.0.0
  */
-/*package*/ class WpdExtendlet implements Extendlet {
+public class WpdExtendlet implements Extendlet {
 	private static final Log log = Log.lookup(WpdExtendlet.class);
 
 	private ExtendletContext _webctx;
 	/** DSP Interpretation cache. */
 	private ResourceCache _cache;
 	private Boolean _debugJS;
-	private ThreadLocal _req = new ThreadLocal();
+	/** The locator. */
+	private ThreadLocal _loc = new ThreadLocal();
 
 	public void init(ExtendletConfig config) {
 		_webctx = config.getExtendletContext();
@@ -83,22 +87,22 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 	public void service(HttpServletRequest request,
 	HttpServletResponse response, String path, String extra)
 	throws ServletException, IOException {
-		final Object rawdata;
-		_req.set(request);
+		byte[] data;
+		_loc.set(new Locator(request));
 		try {
-			rawdata = _cache.get(path);
-		} finally {
-			_req.set(null);
-		}
-		if (rawdata == null) {
-			if (Servlets.isIncluded(request)) log.error("Failed to load the resource: "+path);
-				//It might be eaten, so log the error
-			response.sendError(response.SC_NOT_FOUND, path);
-			return;
-		}
+			final Object rawdata = _cache.get(path);
+			if (rawdata == null) {
+				if (Servlets.isIncluded(request)) log.error("Failed to load the resource: "+path);
+					//It might be eaten, so log the error
+				response.sendError(response.SC_NOT_FOUND, path);
+				return;
+			}
 
-		byte[] data = rawdata instanceof byte[] ? (byte[])rawdata:
-			((WpdContent)rawdata).toByteArray();
+			data = rawdata instanceof byte[] ? (byte[])rawdata:
+				((WpdContent)rawdata).toByteArray();
+		} finally {
+			_loc.set(null);
+		}
 
 		response.setContentType("text/javascript;charset=UTF-8");
 		if (data.length > 200) {
@@ -110,7 +114,12 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 		os.write(data);
 		response.flushBuffer();
 	}
-	private boolean isDebugJS() {
+	/** Sets whether to generate JS files that is easy to debug. */
+	public void setDebugJS(boolean debugJS) {
+		_debugJS = Boolean.valueOf(debugJS);
+	}
+	/** Returns whether to generate JS files that is easy to debug. */
+	public boolean isDebugJS() {
 		if (_debugJS == null) {
 			final WebManager wm = WebManager.getWebManager(_webctx.getServletContext());
 			if (wm == null) return true; //just in case
@@ -118,6 +127,17 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 		}
 		return _debugJS.booleanValue();
 
+	}
+	/** Parses and return the specified input stream. */
+	public byte[] service(File fl) throws Exception {
+		_loc.set(new FileLocator(fl));
+		try {
+			final Object rawdata = parse(new FileInputStream(fl), fl.getPath());
+			return rawdata instanceof byte[] ? (byte[])rawdata:
+				((WpdContent)rawdata).toByteArray();
+		} finally {
+			_loc.set(null);
+		}
 	}
 	private Object parse(InputStream is, String path) throws Exception {
 		final Element root = new SAXBuilder(true, false, true).build(is).getRootElement();
@@ -201,7 +221,7 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 			} else if ("script".equals(elnm)) {
 				String jspath = el.getAttributeValue("src");
 				if (jspath != null && jspath.length() > 0) {
-					if (wc != null) {
+					if (wc != null && jspath.indexOf('*') >= 0) {
 						move(wc, out);
 						wc.add(jspath);
 					} else if (!writeResource(out, jspath, dir, true)) {
@@ -263,12 +283,8 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 		else if (path.charAt(0) != '/')
 			path = Files.normalize(dir, path);
 
-		final InputStream is = _webctx.getResourceAsStream(
-			locate ?
-				Servlets.locate(_webctx.getServletContext(),
-					(HttpServletRequest)_req.get(), path, _webctx.getLocator()):
-				path);
-
+		final InputStream is =
+			((Locator)_loc.get()).getResourceAsStream(path, locate);
 		if (is == null) {
 			final boolean debugJS = isDebugJS();
 			if (debugJS) write(out, "zk.debug(");
@@ -363,6 +379,34 @@ import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 				}
 			}
 			return out.toByteArray();
+		}
+	}
+	/*package*/ class Locator { //don't use private since WpdContent needs it
+		private HttpServletRequest _request;
+		private Locator(HttpServletRequest request) {
+			_request = request;
+		}
+		/*package*/
+		InputStream getResourceAsStream(String path, boolean locate)
+		throws IOException, ServletException {
+			return _webctx.getResourceAsStream(
+				locate ?
+					Servlets.locate(_webctx.getServletContext(),
+						_request, path, _webctx.getLocator()):
+				path);
+		}
+	}
+	class FileLocator extends Locator {
+		private String _parent;
+		private FileLocator(File file) {
+			super(null);
+			_parent = file.getParent();
+		}
+		InputStream getResourceAsStream(String path, boolean locate)
+		throws IOException {
+			final File file = new File(_parent, path);
+			return locate ? new FileInputStream(Files.locate(file.getPath())):
+				new FileInputStream(file);
 		}
 	}
 }

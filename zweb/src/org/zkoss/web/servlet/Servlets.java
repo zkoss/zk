@@ -125,7 +125,7 @@ public class Servlets {
 	}
 
 	//-- resource locator --//
-	/** Locates a page based on the specified Locale. It never returns null.
+	/** Locates a page based on the current Locale. It never returns null.
 	 *
 	 * <p>If an URI contains "*", it will be replaced with a proper Locale.
 	 * For example, if the current Locale is zh_TW and the resource is
@@ -150,7 +150,7 @@ public class Servlets {
 	 * ".ext" is optional. Example, my_zh_tw.html.jsp.
 	 *
 	 * <p>Note: unlike {@link Encodes#encodeURL(ServletContext, ServletRequest, ServletResponse, String)},
-	 * it always locates the Locale, without handling "*".
+	 * it always locates the Locale by handling "*".
 	 *
 	 * @param ctx the servlet context to locate pages
 	 * @param pgpath the page path excluding servlet name. It is OK to have
@@ -159,6 +159,7 @@ public class Servlets {
 	 * is assumed.
 	 * @return pgpath if the original one matches; others if locale matches;
 	 * never null
+	 * @see Locales#getCurrent
 	 */
 	public static final String locate(ServletContext ctx,
 	ServletRequest request, String pgpath, Locator locator)

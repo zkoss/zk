@@ -2,4 +2,4 @@
 ../dist/lib/zweb.jar
 ../dist/lib/zk.jar
 ../dist/lib/zul.jar
-../dist/lib/ext/bsh.jar
+../dist/lib/ext/servlet-api.jar

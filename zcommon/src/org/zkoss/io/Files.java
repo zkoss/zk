@@ -30,10 +30,12 @@ import java.io.StringWriter;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.FileNotFoundException;
+import java.util.Locale;
 
 import org.zkoss.lang.D;
 import org.zkoss.lang.Library;
 import org.zkoss.util.ArraysX;
+import org.zkoss.util.Locales;
 
 /**
  * File related utilities.
@@ -420,5 +422,53 @@ public class Files {
 		//Don't convert sb to String to save the memory use
 		for (int j = 0, len = sb.length(); j < len; ++j)
 			out.write(sb.charAt(j));
+	}
+
+	/** Locates a file based o the current Locale. It never returns null.
+	 *
+	 * <p>If the filename contains "*", it will be replaced with a proper Locale.
+	 * For example, if the current Locale is zh_TW and the resource is
+	 * named "ab*.cd", then it searches "ab_zh_TW.cd", "ab_zh.cd" and
+	 * then "ab.cd", until any of them is found.
+	 *
+	 * <blockquote>Note: "*" must be right before ".", or the last character.
+	 * For example, "ab*.cd" and "ab*" are both correct, while
+	 * "ab*cd" and "ab*\/cd" are ignored.</blockquote>
+	 *
+	 * <p>Unlike {@link org.zkoss.util.resource.Locators#locate}, the filename
+	 * must contain '*', while {@link org.zkoss.util.resource.Locators#locate}
+	 * always tries to locate the file by
+	 * inserting the locale before '.'. In other words,
+	 * Files.locate("/a/b*.c") is similar to
+	 * Locators.locate(("/a/b.c", null, a_file_locator);
+	 *
+	 * @param flnm the filename to locate. If it doesn't contain any '*',
+	 * it is returned directly. If the file is not found, flnm is returned, too.
+	 * @see Locales#getCurrent
+	 * @since 5.0.0
+	 */
+	public static final String locate(String flnm) {
+		int j = flnm.indexOf('*');
+		if (j < 0) return flnm;
+
+		final String postfix = flnm.substring(j + 1);
+		final Locale locale = Locales.getCurrent();
+		final String[] secs = new String[] {
+			locale.getLanguage(), locale.getCountry(), locale.getVariant()
+		};
+
+		final StringBuffer sb = new StringBuffer(flnm.substring(0, j));
+		final int prefixlen = sb.length();
+		for (j = secs.length;;) {
+			if (--j >= 0 && secs[j].length() == 0)
+				continue;
+
+			sb.setLength(prefixlen);
+			for (int k = 0; k <= j; ++k)
+				sb.append('_').append(secs[k]);
+			sb.append(postfix);
+			flnm = sb.toString();
+			if (j < 0 || new File(flnm).exists()) return flnm;
+		}
 	}
 }

@@ -67,6 +67,12 @@ public class Locators {
 	 * so there might be problem if a filename contains '_' used other
 	 * than locale.
 	 *
+	 * <p>Unlike {@link org.zkoss.io.Files#locate}, where the filename
+	 * must contain '*', this method always tries to locate the file by
+	 * inserting the locale before '.'. In other words,
+	 * Files.locate("/a/b*.c") is similar to
+	 * Locators.locate(("/a/b.c", null, a_file_locator);
+	 *
 	 * @param locale the locale; null means the current locale
 	 * @return the URL containing proper locale characters; null if not found.
 	 * Note: it could compare it with the file argument with ==, because
