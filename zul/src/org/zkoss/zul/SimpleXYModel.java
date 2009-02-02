@@ -96,7 +96,8 @@ public class SimpleXYModel extends AbstractChartModel implements XYModel {
 	public void removeSeries(Comparable series) {
 		_seriesMap.remove(series);
 		_seriesList.remove(series);
-		fireEvent(ChartDataEvent.REMOVED, (String)series, null);
+		//bug 2555730: unnecessary String cast on 'series'
+		fireEvent(ChartDataEvent.REMOVED, series, null);
 	}
 	
 	public void removeValue(Comparable series, int index) {

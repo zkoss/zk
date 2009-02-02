@@ -108,7 +108,8 @@ public class SimpleCategoryModel extends AbstractChartModel implements CategoryM
 		}
 		
 		_valueMap.put(key, value);
-		fireEvent(ChartDataEvent.CHANGED, (String) series, category);
+		//bug 2555730: unnecessary String cast on 'series'
+		fireEvent(ChartDataEvent.CHANGED, series, category);
 	}
 	
 	public void removeValue(Comparable series, Comparable category) {
@@ -136,8 +137,8 @@ public class SimpleCategoryModel extends AbstractChartModel implements CategoryM
 			_seriesMap.remove(series);
 			_seriesList.remove(series);
 		}
-		
-		fireEvent(ChartDataEvent.REMOVED, (String)series, category);
+		//bug 2555730: unnecessary String cast on 'series'
+		fireEvent(ChartDataEvent.REMOVED, series, category);
 	}
 	
 	public void clear() {
