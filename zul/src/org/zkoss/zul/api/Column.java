@@ -94,7 +94,8 @@ public interface Column extends org.zkoss.zul.impl.api.HeaderElement {
 	 * Therefore, no more sorting is available to users for this column.
 	 * @since 3.5.3
 	 */
-	public void setSort(String type);
+	public void setSort(String type)
+	throws ClassNotFoundException, InstantiationException, IllegalAccessException;
 
 	/**
 	 * Returns the ascending sorter, or null if not available.
