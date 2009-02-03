@@ -26,7 +26,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
 import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.au.Marshaller;
+import org.zkoss.zk.device.marshal.Marshaller;
 import org.zkoss.zk.au.AuWriter;
 import org.zkoss.zk.au.AuWriters;
 import org.zkoss.zk.au.AuResponse;

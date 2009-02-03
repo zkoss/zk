@@ -21,6 +21,7 @@ package org.zkoss.zkmax.event;
 import org.zkoss.lang.Objects;
 
 import org.zkoss.zk.mesg.MZk;
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.au.AuRequest;

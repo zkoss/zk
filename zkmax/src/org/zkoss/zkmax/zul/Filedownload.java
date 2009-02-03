@@ -118,7 +118,7 @@ public class Filedownload extends org.zkoss.zul.Filedownload {
 			_contentType = contentType;
 			_data = data;
 		}
-		public String getValue() {
+		public Object getValue() {
 			return
 			_target instanceof File ?
 				AuDownloader.getDownloadURI((File)_target, _contentType, _data):

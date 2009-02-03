@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zkmax.event.*;
 import org.zkoss.zul.Panel;
 import org.zkoss.zul.impl.XulElement;
@@ -120,7 +121,7 @@ public class Portallayout extends XulElement implements org.zkoss.zkmax.zul.api.
 				evt.getFrom().disableSmartUpdate(true);
 				final Portalchildren to = evt.getTo();
 				to.disableSmartUpdate(true);
-				final Pannel dragged = evt.getDragged();
+				final Panel dragged = evt.getDragged();
 				dragged.disableSmartUpdate(true, to);
 				final int droppedIndex = evt.getDroppedIndex();
 				to.insertBefore(dragged,
@@ -134,5 +135,11 @@ public class Portallayout extends XulElement implements org.zkoss.zkmax.zul.api.
 			Events.postEvent(evt);
 		} else
 			super.process(request, everError);
+	}
+
+	/** Called by Portalchildren to call smart update.
+	 */
+	/*package*/ void smartUpdateDirectly(String name, boolean value) {
+		super.smartUpdate(name, value);
 	}
 }

@@ -98,7 +98,7 @@ import org.zkoss.zk.device.marshal.*;
  *
  * @author tomyeh
  */
-abstract public class AbstractComponent
+public class AbstractComponent
 implements Component, ComponentCtrl, java.io.Serializable {
 	private static final Log log = Log.lookup(AbstractComponent.class);
     private static final long serialVersionUID = 20070920L;

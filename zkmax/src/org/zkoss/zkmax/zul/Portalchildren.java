@@ -20,7 +20,6 @@ package org.zkoss.zkmax.zul;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.ext.client.Updatable;
 import org.zkoss.zul.Panel;
 import org.zkoss.zul.impl.XulElement;
 
@@ -60,7 +59,7 @@ public class Portalchildren extends XulElement implements org.zkoss.zkmax.zul.ap
 		super.onChildAdded(child);
 		final Portallayout layout = (Portallayout)getParent();
 		if (!_noSmartUpdate && layout != null) {
-			layout.smartUpdate("z.reset", true);
+			layout.smartUpdateDirectly("z.reset", true);
 		}
 	}
 	
@@ -68,7 +67,7 @@ public class Portalchildren extends XulElement implements org.zkoss.zkmax.zul.ap
 		super.onChildRemoved(child);
 		final Portallayout layout = (Portallayout)getParent();
 		if (!_noSmartUpdate && layout != null) {
-			layout.smartUpdate("z.reset", true);
+			layout.smartUpdateDirectly("z.reset", true);
 		}
 	}
 
