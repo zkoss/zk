@@ -19,7 +19,7 @@ mesg.FAILED_TO_LOAD="Eşuare la încărcare ";
 mesg.FAILED_TO_LOAD_DETAIL="Poate fi cauzat de traficul anevoios. Puteţi reîncărca această pagină şi încerca din nou.";
 mesg.CAUSE="Cauza: ";
 
-;zk.GROUPING=".";
+zk.GROUPING=".";
 zk.DECIMAL=",";
 zk.PERCENT="%";
 zk.MINUS="-";
@@ -41,7 +41,7 @@ msgzul.DATE_REQUIRED = "Trebuie să specificaţi o dată. Formatul: ";
 msgzul.OUT_OF_RANGE = "Se află în afara limitelor admise";
 msgzul.NO_AUDIO_SUPPORT = "Browser-ul dumneavoastră nu suportă audio dinamic";
 
-;zk.$default(msgzul, {
+zk.$default(msgzul, {
 VALUE_NOT_MATCHED:'Only values in the drop-down list are allowed',
 EMPTY_NOT_ALLOWED:'Valoarea vidă nu este permisă.\nDeasemenea, nu puteţi specifica numai spaţii',
 INTEGER_REQUIRED:'Trebuie să specificaţi un număr întreg, în loc de {0}.',

@@ -1,6 +1,6 @@
 _z='zk.lang';if(!zk.$import(_z)){try{_zkpk=zk.$package(_z);
 mesg={};mesg.NOT_FOUND="No s'ha trobat: ";mesg.UNSUPPORTED="Encara no és compatible: ";mesg.FAILED_TO_SEND="Ha fallat l'enviament de la petició al servidor.";mesg.FAILED_TO_RESPONSE="El servidor ha fallat en processar la petició.";mesg.TRY_AGAIN="Voleu provar una altra vegada?";mesg.UNSUPPORTED_BROWSER="El navegador no és compatible: ";mesg.ILLEGAL_RESPONSE="Resposta desconeguda enviada des del servidor. Si us plau, recarregueu i proveu una altra vegada.\n";mesg.FAILED_TO_PROCESS="Ha fallat el procés ";mesg.GOTO_ERROR_FIELD="Aneu al camp erroni";mesg.PLEASE_WAIT="S'està processant...";mesg.FILE_SIZE="Mida de l'arxiu: ";mesg.KBYTES="KB";mesg.FAILED_TO_LOAD="Ha fallat la càrrega ";mesg.FAILED_TO_LOAD_DETAIL="Pot haver estat provocat pel mal trànsit de les comunicacions. Podríeu recarregar aquesta pàgina i provar una altra vegada.";mesg.CAUSE="Motiu: ";
-;zk.GROUPING=".";
+zk.GROUPING=".";
 zk.DECIMAL=",";
 zk.PERCENT="%";
 zk.MINUS="-";
@@ -16,7 +16,7 @@ zk.APM=['AM','PM'];
 
 }finally{zPkg.end(_z);}}_z='zul.lang';if(!zk.$import(_z)){try{_zkpk=zk.$package(_z);
 msgzul={};msgzul.UNKNOWN_TYPE="El tipus de component és desconegut: ";msgzul.DATE_REQUIRED="Heu d'especificar una data. Format: ";msgzul.OUT_OF_RANGE="Fora dels valors a l'abast";msgzul.NO_AUDIO_SUPPORT="El navegador no admet l'àudio dinàmic";
-;zk.$default(msgzul, {
+zk.$default(msgzul, {
 VALUE_NOT_MATCHED:'Heu d\'especificar un dels valors de la llista desplegable.',
 EMPTY_NOT_ALLOWED:'Cal emplenar el camp.\nNo es pot deixar buit ni a blancs.',
 INTEGER_REQUIRED:'S\'ha d\'especificar un nombre enter, en lloc de {0}.',

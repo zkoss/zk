@@ -19,7 +19,7 @@ FAILED_TO_LOAD: "Failed to load ",
 FAILED_TO_LOAD_DETAIL: "It may be caused by bad traffic. You could reload this page and try again.",
 CAUSE: "Cause: "
 };
-;zk.GROUPING=".";
+zk.GROUPING=".";
 zk.DECIMAL=",";
 zk.PERCENT="%";
 zk.MINUS="-";
@@ -42,7 +42,7 @@ OUT_OF_RANGE: "Out of range",
 NO_AUDIO_SUPPORT: "Your browser doesn't support dynamic audio"
 };
 
-;zk.$default(msgzul, {
+zk.$default(msgzul, {
 VALUE_NOT_MATCHED:'Only values in the drop-down list are allowed',
 EMPTY_NOT_ALLOWED:'Empty is not allowed.\nYou cannot specify nothing but spaces, either.',
 INTEGER_REQUIRED:'You must specify an integer, rather than {0}.',

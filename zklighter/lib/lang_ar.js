@@ -1,6 +1,6 @@
 _z='zk.lang';if(!zk.$import(_z)){try{_zkpk=zk.$package(_z);
 mesg={};mesg.NOT_FOUND="لا يوجد";mesg.UNSUPPORTED="لا يدعم ";mesg.FAILED_TO_SEND="غير قادر على الأرسال";mesg.FAILED_TO_RESPONSE="غير قادر على الأستجابة.";mesg.TRY_AGAIN="هل تحب ان تحاول مرة أخرى";mesg.UNSUPPORTED_BROWSER="المتصفح غير مدعوم";mesg.ILLEGAL_RESPONSE="أستجابة خاطئة.\n";mesg.FAILED_TO_PROCESS="فشل فى القيام بالعملية";mesg.EMPTY_NOT_ALLOWED="غير مسموح بفراغ";mesg.GOTO_ERROR_FIELD="اذهب الى مكان الخطأ";mesg.PLEASE_WAIT="من فضلك الأنتظار ...";mesg.FILE_SIZE="حجم الملف : ";mesg.KBYTES="كيلو بايت ";mesg.FAILED_TO_LOAD="فشل فى التحميل  ";mesg.FAILED_TO_LOAD_DETAIL="فشل فى تحميل تفاصيل البيانات.";mesg.CAUSE="السبب: ";
-;zk.GROUPING=",";
+zk.GROUPING=",";
 zk.DECIMAL=".";
 zk.PERCENT="%";
 zk.MINUS="-";
@@ -16,7 +16,7 @@ zk.APM=['ص','م'];
 
 }finally{zPkg.end(_z);}}_z='zul.lang';if(!zk.$import(_z)){try{_zkpk=zk.$package(_z);
 msgzul={};msgzul.UNKNOWN_TYPE="نوع غير معروف";msgzul.DATE_REQUIRED="يتطلب وجود تاريخ";msgzul.NO_AUDIO_SUPPORT="لا يوجد دعم للصوت";
-;zk.$default(msgzul, {
+zk.$default(msgzul, {
 VALUE_NOT_MATCHED:'يجب أن تحدد قيمة من القائمة',
 EMPTY_NOT_ALLOWED:'اغير مسموح بفراغ',
 INTEGER_REQUIRED:'{0}. مطلوب رقم عددى صحيح',

@@ -1,6 +1,6 @@
 _z='zk.lang';if(!zk.$import(_z)){try{_zkpk=zk.$package(_z);
 mesg={};mesg.NOT_FOUND="Nem található: ";mesg.UNSUPPORTED="Még nem támogatott: ";mesg.FAILED_TO_SEND="A szerver kérelem nem sikerült.";mesg.FAILED_TO_RESPONSE="A webkiszolgáló ideiglenesen nem szolgál.";mesg.TRY_AGAIN="Try again?";mesg.UNSUPPORTED_BROWSER="Nem támogatott böngésző: ";mesg.ILLEGAL_RESPONSE="Ismeretlen szerver válasz. Legyen szíves az oldalt újra letölteni.\n";mesg.FAILED_TO_PROCESS="Nem sikerült feldolgozni ";mesg.GOTO_ERROR_FIELD="Menyen a hibás bejegyzéshez";mesg.PLEASE_WAIT="Feldolgozás...";mesg.FILE_SIZE="Fajl mérete: ";mesg.KBYTES="KB";mesg.FAILED_TO_LOAD="Betöltés nem sikerült ";mesg.FAILED_TO_LOAD_DETAIL="Rosz kapcsolat okozhatta. Próbáljan újra letölteni az oldalt.";mesg.CAUSE="Hibát okozta: ";
-;zk.GROUPING=" ";
+zk.GROUPING=" ";
 zk.DECIMAL=",";
 zk.PERCENT="%";
 zk.MINUS="-";
@@ -16,7 +16,7 @@ zk.APM=['DE','DU'];
 
 }finally{zPkg.end(_z);}}_z='zul.lang';if(!zk.$import(_z)){try{_zkpk=zk.$package(_z);
 msgzul={};msgzul.UNKNOWN_TYPE="Ismeretlen összetevő típus: ";msgzul.DATE_REQUIRED="Legyen szíves beadni egy időpontot. Alak: ";msgzul.OUT_OF_RANGE="nem létezik";msgzul.NO_AUDIO_SUPPORT="A böngészője nem tud lejátszani dinamikus hangokat";
-;zk.$default(msgzul, {
+zk.$default(msgzul, {
 VALUE_NOT_MATCHED:'Only values in the drop-down list are allowed',
 EMPTY_NOT_ALLOWED:'Egy üres beadás nem létezik',
 INTEGER_REQUIRED:'Legyen szíves beírni egy egész számot, és nem {0}.',

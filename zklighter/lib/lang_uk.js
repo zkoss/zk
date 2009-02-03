@@ -1,6 +1,6 @@
 _z='zk.lang';if(!zk.$import(_z)){try{_zkpk=zk.$package(_z);
 mesg={};mesg.NOT_FOUND="Не знайдений: ";mesg.UNSUPPORTED="Не підтримується: ";mesg.FAILED_TO_SEND="Не вдалося відіслати запит на сервер.";mesg.FAILED_TO_RESPONSE="Сервер тимчасово недоступний.";mesg.TRY_AGAIN="Try again?";mesg.UNSUPPORTED_BROWSER="Браузер не підтримується: ";mesg.ILLEGAL_RESPONSE="Невідома відповідь з серверу. Будьласка, перевантажте сторінку і спробуйте знову.\n";mesg.FAILED_TO_PROCESS="Не вдалося обробити ";mesg.GOTO_ERROR_FIELD="Перехід до невірного поля";mesg.PLEASE_WAIT="Обробка запиту...";mesg.FILE_SIZE="Розмір файлу: ";mesg.KBYTES="KB";mesg.FAILED_TO_LOAD="Не вдалося завантажити ";mesg.FAILED_TO_LOAD_DETAIL="Може бути спричинено проблемами з підключенням до мережі. Перевантажте сторінку і спробуйте знову.";mesg.CAUSE="Причина: ";
-;zk.GROUPING=".";
+zk.GROUPING=".";
 zk.DECIMAL=",";
 zk.PERCENT="%";
 zk.MINUS="-";
@@ -16,7 +16,7 @@ zk.APM=['AM','PM'];
 
 }finally{zPkg.end(_z);}}_z='zul.lang';if(!zk.$import(_z)){try{_zkpk=zk.$package(_z);
 msgzul={};msgzul.UNKNOWN_TYPE="Невідомий тип компоненту: ";msgzul.DATE_REQUIRED="Необхідно вказати дату. Формат: ";msgzul.OUT_OF_RANGE="Значення поза діапазоном";msgzul.NO_AUDIO_SUPPORT="Браузер не підтримує динамічне аудіо";
-;zk.$default(msgzul, {
+zk.$default(msgzul, {
 VALUE_NOT_MATCHED:'Ви маєте вказати одне зі значень в випадаючому списку.',
 EMPTY_NOT_ALLOWED:'Пусте значення не дозволено',
 INTEGER_REQUIRED:'Ви маєте ввести ціле число замість {0}.',

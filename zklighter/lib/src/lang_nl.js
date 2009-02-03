@@ -19,7 +19,7 @@ mesg.FAILED_TO_LOAD="Het laden is mislukt ";
 mesg.FAILED_TO_LOAD_DETAIL="Het kan veroorzaakt zijn door foutief verkeer. U kunt de pagina opnieuw landen en opnieuw proberen.";
 mesg.CAUSE="Oorzaak: ";
 
-;zk.GROUPING=".";
+zk.GROUPING=".";
 zk.DECIMAL=",";
 zk.PERCENT="%";
 zk.MINUS="-";
@@ -41,7 +41,7 @@ msgzul.DATE_REQUIRED = "U moet een datum ingeven. Formaat: ";
 msgzul.OUT_OF_RANGE = "Niet in het geldige bereik";
 msgzul.NO_AUDIO_SUPPORT = "Uw browser ondersteunt geen geluidsweergave";
 
-;zk.$default(msgzul, {
+zk.$default(msgzul, {
 VALUE_NOT_MATCHED:'U moet een waarde kiezen uit de lijst.',
 EMPTY_NOT_ALLOWED:'Geen invoer is niet toegestaan.\nAleen spaties zijn ook niet toegestaan',
 INTEGER_REQUIRED:'U moet in plaats van {0} een geheel getal invoeren.',

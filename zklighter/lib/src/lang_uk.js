@@ -17,7 +17,7 @@ mesg.FAILED_TO_LOAD="Не вдалося завантажити ";
 mesg.FAILED_TO_LOAD_DETAIL="Може бути спричинено проблемами з підключенням до мережі. Перевантажте сторінку і спробуйте знову.";
 mesg.CAUSE="Причина: ";
 
-;zk.GROUPING=".";
+zk.GROUPING=".";
 zk.DECIMAL=",";
 zk.PERCENT="%";
 zk.MINUS="-";
@@ -39,7 +39,7 @@ msgzul.DATE_REQUIRED="Необхідно вказати дату. Формат: 
 msgzul.OUT_OF_RANGE = "Значення поза діапазоном";
 msgzul.NO_AUDIO_SUPPORT="Браузер не підтримує динамічне аудіо"
 
-;zk.$default(msgzul, {
+zk.$default(msgzul, {
 VALUE_NOT_MATCHED:'Ви маєте вказати одне зі значень в випадаючому списку.',
 EMPTY_NOT_ALLOWED:'Пусте значення не дозволено',
 INTEGER_REQUIRED:'Ви маєте ввести ціле число замість {0}.',

@@ -19,7 +19,7 @@ mesg.FAILED_TO_LOAD = "Uppladdning misslyckades ";
 mesg.FAILED_TO_LOAD_DETAIL = "Kan ha orsakats av trafikstörning. Ladda om denna sida och försök igen.";
 mesg.CAUSE = "Orsak: ";
 
-;zk.GROUPING=" ";
+zk.GROUPING=" ";
 zk.DECIMAL=",";
 zk.PERCENT="%";
 zk.MINUS="-";
@@ -41,7 +41,7 @@ msgzul.DATE_REQUIRED = "Du måste ange ett datum. Format: ";
 msgzul.OUT_OF_RANGE = "Utom intervall";
 msgzul.NO_AUDIO_SUPPORT = "Din webbläsare stödjer inte dynamic audio";
 
-;zk.$default(msgzul, {
+zk.$default(msgzul, {
 VALUE_NOT_MATCHED:'Only values in the drop-down list are allowed',
 EMPTY_NOT_ALLOWED:'Blank inte tillåtet.\nDu kan inte ange annat än blanksteg',
 INTEGER_REQUIRED:'Du måste ange ett heltal, istället för {0}.',

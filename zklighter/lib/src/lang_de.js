@@ -19,7 +19,7 @@ FAILED_TO_LOAD: "Failed to load ",
 FAILED_TO_LOAD_DETAIL: "It may be caused by bad traffic. You could reload this page and try again.",
 CAUSE: "Cause: "
 };
-;zk.GROUPING=".";
+zk.GROUPING=".";
 zk.DECIMAL=",";
 zk.PERCENT="%";
 zk.MINUS="-";
@@ -41,7 +41,7 @@ DATE_REQUIRED: "Sie müssen ein Datum angeben. Format: ",
 OUT_OF_RANGE: "Nicht im zulässigen Bereich",
 NO_AUDIO_SUPPORT: "Ihr Browser unterstützt keine Tonwiedergabe"
 };
-;zk.$default(msgzul, {
+zk.$default(msgzul, {
 VALUE_NOT_MATCHED:'Only values in the drop-down list are allowed',
 EMPTY_NOT_ALLOWED:'Keine Eingabe ist nicht erlaubt.\nAuch nur Leerzeichen sind nicht möglich',
 INTEGER_REQUIRED:'Sie müssen statt {0} eine ganze Zahl angeben.',

@@ -19,7 +19,7 @@ mesg.FAILED_TO_LOAD = "Yükleme başarısız: ";
 mesg.FAILED_TO_LOAD_DETAIL = "Yoğunluktan kaynaklı problem oluşştu.Lütfen yeniden deneyiniz.";
 mesg.CAUSE = "Neden: ";
 
-;zk.GROUPING=".";
+zk.GROUPING=".";
 zk.DECIMAL=",";
 zk.PERCENT="%";
 zk.MINUS="-";
@@ -41,7 +41,7 @@ msgzul.DATE_REQUIRED = "Tarih belirtilmeli. Format: ";
 msgzul.OUT_OF_RANGE = "Aralık aşılıyor";
 msgzul.NO_AUDIO_SUPPORT = "Tarayıcınız dinamik ses bileşenini desteklememektedir.";
 
-;zk.$default(msgzul, {
+zk.$default(msgzul, {
 VALUE_NOT_MATCHED:'Only values in the drop-down list are allowed',
 EMPTY_NOT_ALLOWED:'Boş değer girilemez.\nBoşluk(space) girebilirsiniz',
 INTEGER_REQUIRED:'{0}\'\'dan başka integer değer giremelisiniz.',

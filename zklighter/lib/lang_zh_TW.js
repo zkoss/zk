@@ -1,6 +1,6 @@
 _z='zk.lang';if(!zk.$import(_z)){try{_zkpk=zk.$package(_z);
 mesg={NOT_FOUND:"找不到：",UNSUPPORTED:"尚未支援：",FAILED_TO_SEND:"無法傳送資料到伺服器。",FAILED_TO_RESPONSE:"伺服器暫時無法處理你的請求。",TRY_AGAIN:"再試一次?",UNSUPPORTED_BROWSER:"尚未支援你使用的瀏覽器：",ILLEGAL_RESPONSE:"無法辨識伺服器傳回的資料。請按重新載入，再試試。\n",FAILED_TO_PROCESS:"無法處理：",GOTO_ERROR_FIELD:"回錯誤欄",PLEASE_WAIT:"處理中…",FILE_SIZE:"檔案大小：",KBYTES:"KB",FAILED_TO_LOAD:"無法載入：",FAILED_TO_LOAD_DETAIL:"可能是連線問題，請按重載再試一次。",CAUSE:"原因："};
-;zk.GROUPING=",";
+zk.GROUPING=",";
 zk.DECIMAL=".";
 zk.PERCENT="%";
 zk.MINUS="-";
@@ -16,7 +16,7 @@ zk.APM=['AM','PM'];
 
 }finally{zPkg.end(_z);}}_z='zul.lang';if(!zk.$import(_z)){try{_zkpk=zk.$package(_z);
 msgzul={UNKNOWN_TYPE:"未知元件類型：",DATE_REQUIRED:"只能輸入日期。格式：",OUT_OF_RANGE:"超出範圍",NO_AUDIO_SUPPORT:"你的瀏覽器不支援動態音效"};
-;zk.$default(msgzul, {
+zk.$default(msgzul, {
 VALUE_NOT_MATCHED:'Only values in the drop-down list are allowed',
 EMPTY_NOT_ALLOWED:'Empty is not allowed.\nYou cannot specify nothing but spaces, either.',
 INTEGER_REQUIRED:'You must specify an integer, rather than {0}.',

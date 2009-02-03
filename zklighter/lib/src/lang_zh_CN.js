@@ -19,7 +19,7 @@ FAILED_TO_LOAD: "无法载入：",
 FAILED_TO_LOAD_DETAIL: "可能是连线问题，请按重载再试一次。",
 CAUSE: "原因："
 };
-;zk.GROUPING=",";
+zk.GROUPING=",";
 zk.DECIMAL=".";
 zk.PERCENT="%";
 zk.MINUS="-";
@@ -41,7 +41,7 @@ DATE_REQUIRED: "只能输入日期。格式：",
 OUT_OF_RANGE: "超出范围",
 NO_AUDIO_SUPPORT: "你的浏览器不支持动态音效"
 };
-;zk.$default(msgzul, {
+zk.$default(msgzul, {
 VALUE_NOT_MATCHED:'Only values in the drop-down list are allowed',
 EMPTY_NOT_ALLOWED:'Empty is not allowed.\nYou cannot specify nothing but spaces, either.',
 INTEGER_REQUIRED:'You must specify an integer, rather than {0}.',

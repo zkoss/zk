@@ -1,6 +1,6 @@
 _z='zk.lang';if(!zk.$import(_z)){try{_zkpk=zk.$package(_z);
 mesg={NOT_FOUND:"見つかりません: ",UNSUPPORTED:"今後サポートする予定です: ",FAILED_TO_SEND:"リクエストの送信に失敗しました。",FAILED_TO_RESPONSE:"サーバーが応答しませんでした。",TRY_AGAIN:"もう一度試してみますか？",UNSUPPORTED_BROWSER:"ご使用中のブラウザは対応しておりません: ",ILLEGAL_RESPONSE:"予期しない応答がありました。リロードしてから再度操作してください。\n",FAILED_TO_PROCESS:"処理できませんでした ",GOTO_ERROR_FIELD:"エラーフィールドに移動します",PLEASE_WAIT:"ただいま処理しています",FILE_SIZE:"ファイルサイズ: ",KBYTES:"KB",FAILED_TO_LOAD:"読み込みに失敗しました: ",FAILED_TO_LOAD_DETAIL:"接続に問題がある可能性があります。リロードしてから再度操作してください。",CAUSE:"原因： "};
-;zk.GROUPING=",";
+zk.GROUPING=",";
 zk.DECIMAL=".";
 zk.PERCENT="%";
 zk.MINUS="-";
@@ -16,7 +16,7 @@ zk.APM=['午前','午後'];
 
 }finally{zPkg.end(_z);}}_z='zul.lang';if(!zk.$import(_z)){try{_zkpk=zk.$package(_z);
 msgzul={UNKNOWN_TYPE:"コンポーネントタイプが不明です： ",DATE_REQUIRED:"日付を次の形式で指定してください: ",OUT_OF_RANGE:"範囲外です",NO_AUDIO_SUPPORT:"ご使用中のブラウザはダイナミックオーディオをサポートしていません"};
-;zk.$default(msgzul, {
+zk.$default(msgzul, {
 VALUE_NOT_MATCHED:'プルダウンメニューにある項目を指定してください。',
 EMPTY_NOT_ALLOWED:'空欄及び空白文字のみは許可されていません',
 INTEGER_REQUIRED:'{0}　以外の整数を指定してください',

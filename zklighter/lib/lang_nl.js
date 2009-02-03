@@ -1,6 +1,6 @@
 _z='zk.lang';if(!zk.$import(_z)){try{_zkpk=zk.$package(_z);
 mesg={};mesg.NOT_FOUND="Niet gevonden: ";mesg.UNSUPPORTED="Nog niet ondersteund: ";mesg.FAILED_TO_SEND="Verzoek kan niet aan de server gestuurd worden.";mesg.FAILED_TO_RESPONSE="Server kan verzoek niet verwerken.";mesg.TRY_AGAIN="Try again?";mesg.UNSUPPORTED_BROWSER="Niet ondersteunde Browser: ";mesg.ILLEGAL_RESPONSE="Unbekend Antwoord van de Server, Aktualiseer aub de pagina en probeer opnieuw.\n";mesg.FAILED_TO_PROCESS="Verwerking is fout gegaan ";mesg.GOTO_ERROR_FIELD="Ga naar foutief veld";mesg.PLEASE_WAIT="Verwerken...";mesg.FILE_SIZE="Bestandsgrootte: ";mesg.KBYTES="Kb";mesg.FAILED_TO_LOAD="Het laden is mislukt ";mesg.FAILED_TO_LOAD_DETAIL="Het kan veroorzaakt zijn door foutief verkeer. U kunt de pagina opnieuw landen en opnieuw proberen.";mesg.CAUSE="Oorzaak: ";
-;zk.GROUPING=".";
+zk.GROUPING=".";
 zk.DECIMAL=",";
 zk.PERCENT="%";
 zk.MINUS="-";
@@ -16,7 +16,7 @@ zk.APM=['AM','PM'];
 
 }finally{zPkg.end(_z);}}_z='zul.lang';if(!zk.$import(_z)){try{_zkpk=zk.$package(_z);
 msgzul={};msgzul.UNKNOWN_TYPE="Onbekende component: ";msgzul.DATE_REQUIRED="U moet een datum ingeven. Formaat: ";msgzul.OUT_OF_RANGE="Niet in het geldige bereik";msgzul.NO_AUDIO_SUPPORT="Uw browser ondersteunt geen geluidsweergave";
-;zk.$default(msgzul, {
+zk.$default(msgzul, {
 VALUE_NOT_MATCHED:'U moet een waarde kiezen uit de lijst.',
 EMPTY_NOT_ALLOWED:'Geen invoer is niet toegestaan.\nAleen spaties zijn ook niet toegestaan',
 INTEGER_REQUIRED:'U moet in plaats van {0} een geheel getal invoeren.',

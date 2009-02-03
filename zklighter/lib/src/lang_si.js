@@ -19,7 +19,7 @@ mesg.FAILED_TO_LOAD="Failed to load ";
 mesg.FAILED_TO_LOAD_DETAIL="It may be caused by bad traffic. You could reload this page and try again.";
 mesg.CAUSE="Cause: ";
 
-;zk.GROUPING=",";
+zk.GROUPING=",";
 zk.DECIMAL=".";
 zk.PERCENT="%";
 zk.MINUS="-";
@@ -41,7 +41,7 @@ msgzul.DATE_REQUIRED = "Vnesti je potrebno datum. Oblika: ";
 msgzul.OUT_OF_RANGE = "Out of range";
 msgzul.NO_AUDIO_SUPPORT = "Vaš brskalnik ne podpira dinamiène glasbe";
 
-;zk.$default(msgzul, {
+zk.$default(msgzul, {
 VALUE_NOT_MATCHED:'Only values in the drop-down list are allowed',
 EMPTY_NOT_ALLOWED:'Prazno polje ni dovoljeno.\nTudi sami presledki niso dovoljeni',
 INTEGER_REQUIRED:'Potrebna je številka, in ne {0}.',

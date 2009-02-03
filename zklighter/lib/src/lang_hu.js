@@ -19,7 +19,7 @@ mesg.FAILED_TO_LOAD="Betöltés nem sikerült ";
 mesg.FAILED_TO_LOAD_DETAIL="Rosz kapcsolat okozhatta. Próbáljan újra letölteni az oldalt.";
 mesg.CAUSE="Hibát okozta: ";
 
-;zk.GROUPING=" ";
+zk.GROUPING=" ";
 zk.DECIMAL=",";
 zk.PERCENT="%";
 zk.MINUS="-";
@@ -41,7 +41,7 @@ msgzul.DATE_REQUIRED = "Legyen szíves beadni egy időpontot. Alak: ";
 msgzul.OUT_OF_RANGE = "nem létezik";
 msgzul.NO_AUDIO_SUPPORT = "A böngészője nem tud lejátszani dinamikus hangokat";
 
-;zk.$default(msgzul, {
+zk.$default(msgzul, {
 VALUE_NOT_MATCHED:'Only values in the drop-down list are allowed',
 EMPTY_NOT_ALLOWED:'Egy üres beadás nem létezik',
 INTEGER_REQUIRED:'Legyen szíves beírni egy egész számot, és nem {0}.',

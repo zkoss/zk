@@ -19,7 +19,7 @@ mesg.FAILED_TO_LOAD = "Ha fallat la càrrega ";
 mesg.FAILED_TO_LOAD_DETAIL = "Pot haver estat provocat pel mal trànsit de les comunicacions. Podríeu recarregar aquesta pàgina i provar una altra vegada.";
 mesg.CAUSE = "Motiu: ";
 
-;zk.GROUPING=".";
+zk.GROUPING=".";
 zk.DECIMAL=",";
 zk.PERCENT="%";
 zk.MINUS="-";
@@ -41,7 +41,7 @@ msgzul.DATE_REQUIRED = "Heu d'especificar una data. Format: ";
 msgzul.OUT_OF_RANGE = "Fora dels valors a l'abast";
 msgzul.NO_AUDIO_SUPPORT = "El navegador no admet l'àudio dinàmic";
 
-;zk.$default(msgzul, {
+zk.$default(msgzul, {
 VALUE_NOT_MATCHED:'Heu d\'especificar un dels valors de la llista desplegable.',
 EMPTY_NOT_ALLOWED:'Cal emplenar el camp.\nNo es pot deixar buit ni a blancs.',
 INTEGER_REQUIRED:'S\'ha d\'especificar un nombre enter, en lloc de {0}.',

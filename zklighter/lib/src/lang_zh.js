@@ -19,7 +19,7 @@ FAILED_TO_LOAD: "無法載入：",
 FAILED_TO_LOAD_DETAIL: "可能是連線問題，請按重載再試一次。",
 CAUSE: "原因："
 };
-;zk.GROUPING=",";
+zk.GROUPING=",";
 zk.DECIMAL=".";
 zk.PERCENT="%";
 zk.MINUS="-";
@@ -41,7 +41,7 @@ DATE_REQUIRED: "只能輸入日期。格式：",
 OUT_OF_RANGE: "超出範圍",
 NO_AUDIO_SUPPORT: "你的瀏覽器不支援動態音效"
 };
-;zk.$default(msgzul, {
+zk.$default(msgzul, {
 VALUE_NOT_MATCHED:'你必需指定一個在下拉選單裡的值',
 EMPTY_NOT_ALLOWED:'不能空白，也不能只含空白字元',
 INTEGER_REQUIRED:'只能輸入整數，而不是 {0}',

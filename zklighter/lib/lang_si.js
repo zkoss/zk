@@ -1,6 +1,6 @@
 _z='zk.lang';if(!zk.$import(_z)){try{_zkpk=zk.$package(_z);
 mesg={};mesg.NOT_FOUND="Ni mogoče najti: ";mesg.UNSUPPORTED="Še ni podporto: ";mesg.FAILED_TO_SEND="Napaka pri pošiljanju zahteve strežniku.";mesg.FAILED_TO_RESPONSE="Strežnik je sporočil napako pri obdelavi vaše zahteve.";mesg.TRY_AGAIN="Try again?";mesg.UNSUPPORTED_BROWSER="Brskalnik ni prepoznan: ";mesg.ILLEGAL_RESPONSE="Strežnik je poslal neznan odgovor. Prosim osvežite stran .\n";mesg.FAILED_TO_PROCESS="Napaka pri obdelavi";mesg.GOTO_ERROR_FIELD="Pojdite na napačno polje";mesg.PLEASE_WAIT="Procesiram...";mesg.FILE_SIZE="Velikost datoteke: ";mesg.KBYTES="KB";mesg.FAILED_TO_LOAD="Failed to load ";mesg.FAILED_TO_LOAD_DETAIL="It may be caused by bad traffic. You could reload this page and try again.";mesg.CAUSE="Cause: ";
-;zk.GROUPING=",";
+zk.GROUPING=",";
 zk.DECIMAL=".";
 zk.PERCENT="%";
 zk.MINUS="-";
@@ -16,7 +16,7 @@ zk.APM=['AM','PM'];
 
 }finally{zPkg.end(_z);}}_z='zul.lang';if(!zk.$import(_z)){try{_zkpk=zk.$package(_z);
 msgzul={};msgzul.UNKNOWN_TYPE="Neznan tip komponente: ";msgzul.DATE_REQUIRED="Vnesti je potrebno datum. Oblika: ";msgzul.OUT_OF_RANGE="Out of range";msgzul.NO_AUDIO_SUPPORT="Vaš brskalnik ne podpira dinamiène glasbe";
-;zk.$default(msgzul, {
+zk.$default(msgzul, {
 VALUE_NOT_MATCHED:'Only values in the drop-down list are allowed',
 EMPTY_NOT_ALLOWED:'Prazno polje ni dovoljeno.\nTudi sami presledki niso dovoljeni',
 INTEGER_REQUIRED:'Potrebna je številka, in ne {0}.',

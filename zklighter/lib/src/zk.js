@@ -1,14 +1,10 @@
 
-//zk//
 zk = {
 	procDelay: 900,
 	tipDelay: 800,
 	resendDelay: -1,
 	lastPointer: [0, 0],
 	currentPointer: [0, 0],
-
-	/** Whether ZK is creating a new page. */
-	//creating: 0,
 
 	$package: function (name) {
 		for (var j = 0, ref = window;;) {
@@ -36,7 +32,6 @@ zk = {
 		if (!superclass)
 			throw 'unknown superclass';
 
-	//Note: we cannot use extends due to IE and Safari
 		var jclass = function() {
 			this.$init.apply(this, arguments);
 		};
@@ -72,7 +67,7 @@ zk = {
 		zk.copy(thisprototype, superprototype); //inherit non-static
 		zk.copy(thisprototype, members);
 
-		for (var p in superclass) //inherit static members
+		for (var p in superclass) //inherit static
 			if (p != 'prototype')
 				jclass[p] = superclass[p];
 
@@ -173,8 +168,6 @@ zk = {
 		}
 	},
 
-	//status
-
 	//DEBUG//
 	error: function (msg) {
 		if (!zk.sysInited) {
@@ -243,7 +236,6 @@ zk = {
 	}
 };
 
-//String//
 zk.copy(String.prototype, {
 	startsWith: function (prefix) {
 		return this.substring(0,prefix.length) == prefix;
@@ -278,7 +270,6 @@ zk.copy(String.prototype, {
 	}
 });
 
-//Array//
 zk.copy(Array.prototype, {
 	$array: true, //indicate it is an array
 	$contains: function (o) {
@@ -347,7 +338,6 @@ if (zk.gecko) {
 }
 zk.air = zk.agent.indexOf("adobeair") >= 0;
 
-//Object//
 zk.Object = function () {};
 zk.Object.prototype = {
 	$init: zk.$void,
@@ -373,7 +363,7 @@ zk.Object.prototype = {
 		var supers = this._$supers;
 		if (!supers) supers = this._$supers = {};
 
-		//locate the method
+		//locate method
 		var old = supers[mtdnm], m, p, oldmtd;
 		if (old) {
 			oldmtd = old[mtdnm];
@@ -414,7 +404,6 @@ zk.Object.prototype = {
 	}
 };
 
-//Class//
 zk.Class = function () {}
 zk.Class.superclass = zk.Object;
 _zkf = {
@@ -433,7 +422,7 @@ _zkf = {
 zk.copy(zk.Class, _zkf);
 zk.copy(zk.Object, _zkf);
 
-;
+
 /*zk.BigInteger = zk.$extends(zk.Object, {
 	$init: function (value) {
 		this._value = value ? '' + value: '0';
@@ -452,7 +441,7 @@ zk.BigDecimal = zk.$extends(zk.Object, {
 	}
 });
 
-;
+
 zUtl = { //static methods
 	//HTML/XML
 	encodeXML: function (txt, opts) {
@@ -690,7 +679,7 @@ zUtl = { //static methods
 };
 zUtl._init();
 
-;
+
 zDom = { //static methods
 	$: function(id, alias) {
 		return typeof id == 'string' ?
@@ -2133,7 +2122,7 @@ zk.Color = zk.$extends(zk.Object, {
 	}
 });
 
-;
+
 zEvt = {
 	target: function(evt) {
 		evt = evt || window.event;
@@ -2463,7 +2452,7 @@ zWatch = {
 };
 zWatch.listen('onBindLevelMove', zWatch);
 
-;
+
 zk.Draggable = zk.$extends(zk.Object, {
 	$init: function(control, node, opts) {
 		var zdg = zk.Draggable;
@@ -3006,7 +2995,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 	}
 });
 
-;
+
 /** The low level animation effect.
  * You don't use this class. Rather, use {@link zAnima} instead.
  */
@@ -4043,7 +4032,7 @@ zk.eff.Tooltip = zk.$extends(zk.Object, {
 });
 zTooltip = new zk.eff.Tooltip();
 
-;
+
 // anima //
 /* Animation effects. It requires the component to have the <div><div>
  * structure.
@@ -4322,7 +4311,7 @@ zAnima = {
 	}
 };
 
-;
+
 zk.Widget = zk.$extends(zk.Object, {
 	_visible: true,
 	nChildren: 0,
@@ -5561,7 +5550,7 @@ zk.RefWidget = zk.$extends(zk.Widget, {
 	}
 });
 
-;
+
 zPkg = {
 	loading: 0,
 
@@ -5700,7 +5689,7 @@ zk.afterLoad = function (a, b) { //part of zk
 	a();
 };
 
-;
+
 var _zkmt = zUtl.now(); //JS loaded
 
 function zkboot(dtid, updateURI, force) {
@@ -6304,7 +6293,7 @@ zk.beforeUnload = function (fn, opts) { //part of zk
 	else zkm._bfs.push(fn);
 };
 
-;
+
 zHistory = {
 	/** Sets a bookmark that user can use forward and back buttons */
 	bookmark: function (nm) {
@@ -6362,7 +6351,7 @@ zk.afterMount(function () { // Bug 1847708
 	//because user might specify URL directly
 });
 
-;
+
 zAu = {
 	comURI: function (uri, dt, ignoreSessId) {
 		var au = zk.Desktop.$(dt).updateURI;
@@ -7169,7 +7158,7 @@ zAu.cmd1 = {
 	}
 };
 
-;
+
 zNumFormat = {
 	format: function (fmt, val) {
 		if (!val) return '';
@@ -7215,7 +7204,7 @@ zNumFormat = {
 		return {raw: sb || val, divscale: divscale};
 	}
 };
-;
+
 zMsgFormat = {
 	format: function (msg) {
 		var i = 0, sb = '';
@@ -7245,7 +7234,7 @@ zMsgFormat = {
 	}
 };
 
-;_z='zul';if(!zk.$import(_z)){try{_zkpk=zk.$package(_z);
+_z='zul';if(!zk.$import(_z)){try{_zkpk=zk.$package(_z);
 
 /** The base class for XUL widget (org.zkoss.zul.impl.XulElement).
  */
@@ -7393,7 +7382,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 	}
 });
 
-;(_zkwg=_zkpk.Widget).prototype.className='zul.Widget';
+(_zkwg=_zkpk.Widget).prototype.className='zul.Widget';
 zul.LabelImageWidget = zk.$extends(zul.Widget, {
 	getLabel: function () {
 		var v = this._label;
@@ -7458,5 +7447,5 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 	}
 });
 
-;(_zkwg=_zkpk.LabelImageWidget).prototype.className='zul.LabelImageWidget';
+(_zkwg=_zkpk.LabelImageWidget).prototype.className='zul.LabelImageWidget';
 }finally{zPkg.end(_z);}}

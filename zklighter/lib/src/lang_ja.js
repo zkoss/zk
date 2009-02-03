@@ -19,7 +19,7 @@ FAILED_TO_LOAD: "読み込みに失敗しました: ",
 FAILED_TO_LOAD_DETAIL: "接続に問題がある可能性があります。リロードしてから再度操作してください。",
 CAUSE: "原因： "
 };
-;zk.GROUPING=",";
+zk.GROUPING=",";
 zk.DECIMAL=".";
 zk.PERCENT="%";
 zk.MINUS="-";
@@ -41,7 +41,7 @@ DATE_REQUIRED: "日付を次の形式で指定してください: ",
 OUT_OF_RANGE: "範囲外です",
 NO_AUDIO_SUPPORT: "ご使用中のブラウザはダイナミックオーディオをサポートしていません"
 };
-;zk.$default(msgzul, {
+zk.$default(msgzul, {
 VALUE_NOT_MATCHED:'プルダウンメニューにある項目を指定してください。',
 EMPTY_NOT_ALLOWED:'空欄及び空白文字のみは許可されていません',
 INTEGER_REQUIRED:'{0}　以外の整数を指定してください',

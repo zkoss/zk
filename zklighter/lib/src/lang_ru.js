@@ -19,7 +19,7 @@ mesg.FAILED_TO_LOAD="Не удалось загрузить ";
 mesg.FAILED_TO_LOAD_DETAIL="Возможно, проблема с подключением к сети. Перезагрузите страницу и попробуйте снова.";
 mesg.CAUSE="Причина: ";
 
-;zk.GROUPING=" ";
+zk.GROUPING=" ";
 zk.DECIMAL=",";
 zk.PERCENT="%";
 zk.MINUS="-";
@@ -41,7 +41,7 @@ msgzul.DATE_REQUIRED="Необходимо указать дату. Формат
 msgzul.OUT_OF_RANGE = "Не вписывается в диапазон";
 msgzul.NO_AUDIO_SUPPORT="Ваш браузер не поддерживает динамическое аудио"
 
-;zk.$default(msgzul, {
+zk.$default(msgzul, {
 VALUE_NOT_MATCHED:'Вы должны выбрать одно из значений в выпадающем списке.',
 EMPTY_NOT_ALLOWED:'Пустой ввод не разрешен',
 INTEGER_REQUIRED:'Вы должны ввести целое число, а не {0}.',

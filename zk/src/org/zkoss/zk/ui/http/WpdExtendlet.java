@@ -234,7 +234,7 @@ public class WpdExtendlet implements Extendlet {
 				String s = el.getText(true);
 				if (s != null && s.length() > 0) {
 					write(out, s);
-					write(out, "\n;"); //might terminate with //, or not with ;
+					write(out, '\n'); //might terminate with //
 				}
 			} else if ("function".equals(elnm)) {
 				final String clsnm = IDOMs.getRequiredAttributeValue(el, "class");
@@ -299,7 +299,7 @@ public class WpdExtendlet implements Extendlet {
 		}
 
 		Files.copy(out, is);
-		write(out, "\n;"); //might terminate with //, or not with ;
+		write(out, '\n'); //might terminate with //
 		return true;
 	}
 	private void write(OutputStream out, String s) throws IOException {

@@ -19,7 +19,7 @@ mesg.FAILED_TO_LOAD="Falhou ao carregar ";
 mesg.FAILED_TO_LOAD_DETAIL="Isto pode ser causado por um mau tráfego. Você pode recarregar esta página e tentar novamente.";
 mesg.CAUSE="Causa: ";
 
-;zk.GROUPING=".";
+zk.GROUPING=".";
 zk.DECIMAL=",";
 zk.PERCENT="%";
 zk.MINUS="-";
@@ -41,7 +41,7 @@ msgzul.DATE_REQUIRED = "Você deve especificar uma data. Formato: ";
 msgzul.OUT_OF_RANGE = "Fora de faixa";
 msgzul.NO_AUDIO_SUPPORT = "Seu navegador não suporta áudio dinâmico";
 
-;zk.$default(msgzul, {
+zk.$default(msgzul, {
 VALUE_NOT_MATCHED:'Você deve especificar um ou mais valores na lista de selecção',
 EMPTY_NOT_ALLOWED:'Em branco não permitido.\nMesmo somente espaços não são permitidos',
 INTEGER_REQUIRED:'Você deve especificar um inteiro, em vez de {0}.',

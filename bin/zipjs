@@ -100,11 +100,11 @@ function zips
 							cvt=false
 						else
 							if [ "$TERM" = "cygwin" ] ; then
-								orgfile=$(cygpath -wa $dst/${f%.js}.org.js)
+								srcfile=$(cygpath -wa $dst/${f%.js}.src.js)
   							else
-								orgfile=$dst/${f%.js}.org.js
+								srcfile=$dst/${f%.js}.src.js
 							fi
-							java -classpath $bshjar bsh.Interpreter $bshcmd "./$f" "$orgfile"
+							java -classpath $bshjar bsh.Interpreter $bshcmd "./$f" "$srcfile"
 								#always make a copy so we can use them if we want to debug them
 						fi
 					fi

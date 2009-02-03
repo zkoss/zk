@@ -1,6 +1,6 @@
 _z='zk.lang';if(!zk.$import(_z)){try{_zkpk=zk.$package(_z);
 mesg={};mesg.NOT_FOUND="No encontrado: ";mesg.UNSUPPORTED="No es soportado por esta version: ";mesg.FAILED_TO_SEND="Fallo al enviar peticiones (request) al servidor.";mesg.FAILED_TO_RESPONSE="El servidor fallo al procesar la peticion.";mesg.TRY_AGAIN="Inténtalo de nuevo?";mesg.UNSUPPORTED_BROWSER="Explorador (Browser) no compatible: ";mesg.ILLEGAL_RESPONSE="Respuesta no valida por parte del servidor. Por favor actualice la pagina (reload) e intente de nuevo.\n";mesg.FAILED_TO_PROCESS="Fallo al procesar ";mesg.GOTO_ERROR_FIELD="Ir al campo que contiene el error ";mesg.PLEASE_WAIT="Procesando...";mesg.FILE_SIZE="Tamaño del archivo: ";mesg.KBYTES="KB";mesg.FAILED_TO_LOAD="Fallo al cargar ";mesg.FAILED_TO_LOAD_DETAIL="Puede ser a causa de un tráfico erroneo. Podria refrescar de nuevo la página.";mesg.CAUSE="Causa: ";
-;zk.GROUPING=".";
+zk.GROUPING=".";
 zk.DECIMAL=",";
 zk.PERCENT="%";
 zk.MINUS="-";
@@ -16,7 +16,7 @@ zk.APM=['AM','PM'];
 
 }finally{zPkg.end(_z);}}_z='zul.lang';if(!zk.$import(_z)){try{_zkpk=zk.$package(_z);
 msgzul={};msgzul.UNKNOWN_TYPE="Tipo de componente desconocido: ";msgzul.DATE_REQUIRED="Debe especificar una fecha. Formato: ";msgzul.OUT_OF_RANGE="Valor fuera de rango";msgzul.NO_AUDIO_SUPPORT="Tu explorador (browser) no soporta audio dinamico ";
-;zk.$default(msgzul, {
+zk.$default(msgzul, {
 VALUE_NOT_MATCHED:'Only values in the drop-down list are allowed',
 EMPTY_NOT_ALLOWED:'No se permite vacio o espacios en blanco.\nDebe especificar un valor diferente',
 INTEGER_REQUIRED:'Debe especificar un numero entero, en lugar de {0}.',

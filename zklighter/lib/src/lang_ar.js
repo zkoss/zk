@@ -23,7 +23,7 @@ mesg.FAILED_TO_LOAD="فشل فى التحميل  ";
 mesg.FAILED_TO_LOAD_DETAIL="فشل فى تحميل تفاصيل البيانات.";
 mesg.CAUSE="السبب: ";
 
-;zk.GROUPING=",";
+zk.GROUPING=",";
 zk.DECIMAL=".";
 zk.PERCENT="%";
 zk.MINUS="-";
@@ -59,7 +59,7 @@ msgzul.NO_AUDIO_SUPPORT = "لا يوجد دعم للصوت";
 
 
 
-;zk.$default(msgzul, {
+zk.$default(msgzul, {
 VALUE_NOT_MATCHED:'يجب أن تحدد قيمة من القائمة',
 EMPTY_NOT_ALLOWED:'اغير مسموح بفراغ',
 INTEGER_REQUIRED:'{0}. مطلوب رقم عددى صحيح',

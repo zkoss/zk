@@ -1,6 +1,6 @@
 _z='zk.lang';if(!zk.$import(_z)){try{_zkpk=zk.$package(_z);
 mesg={};mesg.NOT_FOUND="Ej hittat: ";mesg.UNSUPPORTED="Stödjes inte än: ";mesg.FAILED_TO_SEND="Kunde inte sända begäran till servern.";mesg.FAILED_TO_RESPONSE="Servern kunde inte hantera din begäran.";mesg.TRY_AGAIN="Try again?";mesg.UNSUPPORTED_BROWSER="Icke-supportad webbläsare: ";mesg.ILLEGAL_RESPONSE="Okänt svar från server. Var god uppdatera sidan och försök igen..\n";mesg.FAILED_TO_PROCESS="Kunde inte hantera ";mesg.GOTO_ERROR_FIELD="Gå till felaktigt fält";mesg.PLEASE_WAIT="Arbetar...";mesg.FILE_SIZE="Filstorlek: ";mesg.KBYTES="KB";mesg.FAILED_TO_LOAD="Uppladdning misslyckades ";mesg.FAILED_TO_LOAD_DETAIL="Kan ha orsakats av trafikstörning. Ladda om denna sida och försök igen.";mesg.CAUSE="Orsak: ";
-;zk.GROUPING=" ";
+zk.GROUPING=" ";
 zk.DECIMAL=",";
 zk.PERCENT="%";
 zk.MINUS="-";
@@ -16,7 +16,7 @@ zk.APM=['AM','PM'];
 
 }finally{zPkg.end(_z);}}_z='zul.lang';if(!zk.$import(_z)){try{_zkpk=zk.$package(_z);
 msgzul={};msgzul.UNKNOWN_TYPE="Okänd komponenttyp: ";msgzul.DATE_REQUIRED="Du måste ange ett datum. Format: ";msgzul.OUT_OF_RANGE="Utom intervall";msgzul.NO_AUDIO_SUPPORT="Din webbläsare stödjer inte dynamic audio";
-;zk.$default(msgzul, {
+zk.$default(msgzul, {
 VALUE_NOT_MATCHED:'Only values in the drop-down list are allowed',
 EMPTY_NOT_ALLOWED:'Blank inte tillåtet.\nDu kan inte ange annat än blanksteg',
 INTEGER_REQUIRED:'Du måste ange ett heltal, istället för {0}.',

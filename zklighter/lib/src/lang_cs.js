@@ -19,7 +19,7 @@ mesg.FAILED_TO_LOAD = "Chyba při nahrávání ";
 mesg.FAILED_TO_LOAD_DETAIL = "Chyba může být způsobena špatným připojením, zkuste obnovit stránku";
 mesg.CAUSE = "Příčina: ";
 
-;zk.GROUPING=" ";
+zk.GROUPING=" ";
 zk.DECIMAL=",";
 zk.PERCENT="%";
 zk.MINUS="-";
@@ -41,7 +41,7 @@ msgzul.DATE_REQUIRED="Je nutné zadat datum. Formát: ";
 msgzul.OUT_OF_RANGE = "Hodnota je mimo daný rozsah";
 msgzul.NO_AUDIO_SUPPORT="Váš prohlížeč nepodporuje streamované audio"
 
-;zk.$default(msgzul, {
+zk.$default(msgzul, {
 VALUE_NOT_MATCHED:'Vyberte prosím jednu z nabízených hodnot',
 EMPTY_NOT_ALLOWED:'Zadejte hodnotu',
 INTEGER_REQUIRED:'Povoleny pouze celočíselné hodnoty, místo {0}',
