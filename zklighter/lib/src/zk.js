@@ -4892,7 +4892,10 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 
 	replaceHTML: function (n, desktop, skipper) {
-		if (!desktop) desktop = this.desktop;
+		if (!desktop) {
+			desktop = this.desktop;
+			if (!zk.Desktop._ndt) zkboot('z_auto');
+		}
 
 		var cf = zk.currentFocus;
 		if (cf && zUtl.isAncestor(this, cf, true)) {
@@ -5756,6 +5759,7 @@ function zkopt(opts) {
 		case "dj": zk.debugJS = val; break;
 		case "kd": zk.keepDesktop = val; break;
 		case "pf": zk.pfmeter = val; break;
+		case "cd": zk.clickFilterDelay = val; break;
 		}
 	}
 }
@@ -6697,8 +6701,8 @@ zAu = {
 	},
 
 	_send: function (dt, aureq, timeout) {
-		var opts = aureq.opts;
-		if (opts && opts.ctl) {
+		var opts = aureq.opts, clkfd = zk.clickFilterDelay;
+		if (clkfd > 0 && opts && opts.ctl) {
 			//Don't send the same request if it is in processing
 			if (zAu._areqInf && zAu._areqInf.ctli == aureq.uuid
 			&& zAu._areqInf.ctlc == aureq.cmd)
@@ -6706,7 +6710,7 @@ zAu = {
 
 			var t = zUtl.now();
 			if (zAu._ctli == aureq.uuid && zAu._ctlc == aureq.cmd //Bug 1797140
-			&& t - zAu._ctlt < 390)
+			&& t - zAu._ctlt < clkfd)
 				return; //to prevent key stroke are pressed twice (quickly)
 
 			//Note: it is still possible to queue two ctl with same uuid and cmd,

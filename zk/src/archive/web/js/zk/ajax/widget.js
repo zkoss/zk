@@ -592,7 +592,10 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 
 	replaceHTML: function (n, desktop, skipper) {
-		if (!desktop) desktop = this.desktop;
+		if (!desktop) {
+			desktop = this.desktop;
+			if (!zk.Desktop._ndt) zkboot('z_auto');
+		}
 
 		var cf = zk.currentFocus;
 		if (cf && zUtl.isAncestor(this, cf, true)) {

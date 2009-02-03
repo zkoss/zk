@@ -73,13 +73,13 @@
 		<destination>lib/zk-all.js</destination>
 		<source>../zk/codegen/archive/web/js/zk/ajax/zklt.wpd</source>
 		<source>../zul/codegen/archive/web/js/zul/zklt.wpd</source>
+		<source>../zul/codegen/archive/web/js/zul/wgt/zk.wpd</source>
 		<source>../zul/codegen/archive/web/js/zul/box/zk.wpd</source>
 		<source>../zul/codegen/archive/web/js/zul/grid/zk.wpd</source>
 		<source>../zul/codegen/archive/web/js/zul/inp/zk.wpd</source>
 		<source>../zul/codegen/archive/web/js/zul/menu/zk.wpd</source>
 		<source>../zul/codegen/archive/web/js/zul/panel/zk.wpd</source>
 		<source>../zul/codegen/archive/web/js/zul/utl/zk.wpd</source>
-		<source>../zul/codegen/archive/web/js/zul/wgt/zk.wpd</source>
 		<source>../zul/codegen/archive/web/js/zul/wnd/zk.wpd</source>
 		<source>../zkex/codegen/archive/web/js/zkex/layout/zk.wpd</source>
 	</javascript>
