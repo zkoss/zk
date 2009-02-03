@@ -234,6 +234,8 @@ public class HtmlPageRenders {
 		if (v != 800) sb.append(",td:").append(v);
 		v = config.getResendDelay();
 		if (v >= 0) sb.append(",rd:").append(v);
+		v = config.getClickFilterDelay();
+		if (v >= 0) sb.append(",cd:").append(v);
 		if (config.isDebugJS()) sb.append(",dj:1");
 		if (config.isKeepDesktopAcrossVisits()
 		|| exec.getAttribute(Attributes.NO_CACHE) == null)

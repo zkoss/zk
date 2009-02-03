@@ -78,6 +78,7 @@ function zkopt(opts) {
 		case "dj": zk.debugJS = val; break;
 		case "kd": zk.keepDesktop = val; break;
 		case "pf": zk.pfmeter = val; break;
+		case "cd": zk.clickFilterDelay = val; break;
 		}
 	}
 }
