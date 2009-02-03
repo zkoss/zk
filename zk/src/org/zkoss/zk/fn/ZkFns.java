@@ -192,6 +192,8 @@ public class ZkFns extends DspFns {
 				.append(config.getTooltipDelay())
 			.append(";\nzk_resndto=")
 				.append(config.getResendDelay())
+			.append(";\nzk_clkflto=")
+				.append(config.getClickFilterDelay())
 			.append(";\n");
 
 		if (config.isDebugJS())

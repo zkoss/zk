@@ -122,7 +122,8 @@ public class Configuration {
 	private int _dtTimeout = 3600, _sessDktMax = 15, _sessReqMax = 5,
 		_sessTimeout = 0, _sparThdMax = 100, _suspThdMax = -1,
 		_maxUploadSize = 5120, _maxProcTime = 3000,
-		_promptDelay = 900, _tooltipDelay = 800, _resendDelay;
+		_promptDelay = 900, _tooltipDelay = 800, _resendDelay,
+		_clkFilterDelay = 0;
 	private String _charsetResp = "UTF-8", _charsetUpload = "UTF-8";
 	private CharsetFinder _charsetFinderUpload;
 	/** The event interceptors. */
@@ -1264,6 +1265,31 @@ public class Configuration {
 	 */
 	public int getProcessingPromptDelay() {
 		return _promptDelay;
+	}
+	/** Specifies the time, in milliseconds, to filter out consecutive
+	 * click events.
+	 * If two click events (also onOK and onCancel) come too close, the
+	 * second one will be removed to avoid the denial-of-service attack.
+	 *
+	 * <p>If you prefer not to filter out any of them, specify a non-positive
+	 * value.
+	 *
+	 * <p>Default: 0
+	 *
+	 * @param minisecs the delay to filtering the second click event
+	 * if it happens shorter than the second value.
+	 * If a non-positive value is specified, no click event is ignored.
+	 * @since 3.5.3
+	 */
+	public void setClickFilterDelay(int minisecs) {
+		_clkFilterDelay = minisecs;
+	}
+	/** Returns the time, in milliseconds, to filter out consecutive
+	 * click events.
+	 * @since 3.5.3
+	 */
+	public int getClickFilterDelay() {
+		return _clkFilterDelay;
 	}
 	/** Specifies the time, in milliseconds, before ZK Client Engine shows
 	 * the tooltip when a user moves the mouse over particular UI components.
