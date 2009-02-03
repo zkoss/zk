@@ -12,16 +12,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-//zk//
 zk = {
 	procDelay: 900,
 	tipDelay: 800,
 	resendDelay: -1,
 	lastPointer: [0, 0],
 	currentPointer: [0, 0],
-
-	/** Whether ZK is creating a new page. */
-	//creating: 0,
 
 	$package: function (name) {
 		for (var j = 0, ref = window;;) {
@@ -49,7 +45,6 @@ zk = {
 		if (!superclass)
 			throw 'unknown superclass';
 
-	//Note: we cannot use extends due to IE and Safari
 		var jclass = function() {
 			this.$init.apply(this, arguments);
 		};
@@ -85,7 +80,7 @@ zk = {
 		zk.copy(thisprototype, superprototype); //inherit non-static
 		zk.copy(thisprototype, members);
 
-		for (var p in superclass) //inherit static members
+		for (var p in superclass) //inherit static
 			if (p != 'prototype')
 				jclass[p] = superclass[p];
 
@@ -186,8 +181,6 @@ zk = {
 		}
 	},
 
-	//status
-
 	//DEBUG//
 	error: function (msg) {
 		if (!zk.sysInited) {
@@ -256,7 +249,6 @@ zk = {
 	}
 };
 
-//String//
 zk.copy(String.prototype, {
 	startsWith: function (prefix) {
 		return this.substring(0,prefix.length) == prefix;
@@ -291,7 +283,6 @@ zk.copy(String.prototype, {
 	}
 });
 
-//Array//
 zk.copy(Array.prototype, {
 	$array: true, //indicate it is an array
 	$contains: function (o) {
@@ -360,7 +351,6 @@ if (zk.gecko) {
 }
 zk.air = zk.agent.indexOf("adobeair") >= 0;
 
-//Object//
 zk.Object = function () {};
 zk.Object.prototype = {
 	$init: zk.$void,
@@ -386,7 +376,7 @@ zk.Object.prototype = {
 		var supers = this._$supers;
 		if (!supers) supers = this._$supers = {};
 
-		//locate the method
+		//locate method
 		var old = supers[mtdnm], m, p, oldmtd;
 		if (old) {
 			oldmtd = old[mtdnm];
@@ -427,7 +417,6 @@ zk.Object.prototype = {
 	}
 };
 
-//Class//
 zk.Class = function () {}
 zk.Class.superclass = zk.Object;
 _zkf = {
