@@ -135,6 +135,7 @@ public class ConfigParser {
 
 			} else if ("client-config".equals(elnm)) { //since 3.0.0
 			//client-config
+			//	click-filter-delay
 			//  disable-behind-modal
 			//  keep-across-visits
 			//  processing-prompt-delay
@@ -367,6 +368,9 @@ public class ConfigParser {
 
 		v = parseInteger(conf, "resend-delay", false);
 		if (v != null) config.setResendDelay(v.intValue());
+
+		v = parseInteger(conf, "click-filter-delay", false);
+		if (v != null) config.setClickFilterDelay(v.intValue());
 
 		String s = conf.getElementValue("keep-across-visits", true);
 		if (s != null)

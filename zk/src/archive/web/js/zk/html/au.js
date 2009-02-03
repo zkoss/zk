@@ -487,7 +487,7 @@ zkau.sendasap = function (evt, timeout) {
 	zkau.send(evt, zkau.asapTimeout(evt.uuid, evt.cmd, timeout));
 };
 zkau._send = function (dtid, evt, timeout) {
-	if (evt.ctl) {
+	if (evt.ctl && zk_clkflto > 0) {
 		//Don't send the same request if it is in processing
 		if (zkau._areqInf && zkau._areqInf.ctli == evt.uuid
 		&& zkau._areqInf.ctlc == evt.cmd)
@@ -495,7 +495,7 @@ zkau._send = function (dtid, evt, timeout) {
 
 		var t = $now();
 		if (zkau._ctli == evt.uuid && zkau._ctlc == evt.cmd //Bug 1797140
-		&& t - zkau._ctlt < 390)
+		&& t - zkau._ctlt < zk_clkflto)
 			return; //to prevent key stroke are pressed twice (quickly)
 
 		//Note: it is still possible to queue two ctl with same uuid and cmd,
