@@ -32,4 +32,55 @@
 		<locale>zh_CN</locale>
 		<locale>zh_TW</locale>
 	</javascript>
+	<javascript>
+		<destination>lib/box.js</destination>
+		<source>../zul/codegen/archive/web/js/zul/box/zk.wpd</source>
+	</javascript>
+	<javascript>
+		<destination>lib/grid.js</destination>
+		<source>../zul/codegen/archive/web/js/zul/grid/zk.wpd</source>
+	</javascript>
+	<javascript>
+		<destination>lib/inp.js</destination>
+		<source>../zul/codegen/archive/web/js/zul/inp/zk.wpd</source>
+	</javascript>
+	<javascript>
+		<destination>lib/menu.js</destination>
+		<source>../zul/codegen/archive/web/js/zul/menu/zk.wpd</source>
+	</javascript>
+	<javascript>
+		<destination>lib/panel.js</destination>
+		<source>../zul/codegen/archive/web/js/zul/panel/zk.wpd</source>
+	</javascript>
+	<javascript>
+		<destination>lib/utl.js</destination>
+		<source>../zul/codegen/archive/web/js/zul/utl/zk.wpd</source>
+	</javascript>
+	<javascript>
+		<destination>lib/wgt.js</destination>
+		<source>../zul/codegen/archive/web/js/zul/wgt/zk.wpd</source>
+	</javascript>
+	<javascript>
+		<destination>lib/wnd.js</destination>
+		<source>../zul/codegen/archive/web/js/zul/wnd/zk.wpd</source>
+	</javascript>
+	<javascript>
+		<destination>lib/layout.js</destination>
+		<source>../zkex/codegen/archive/web/js/zkex/layout/zk.wpd</source>
+	</javascript>
+
+	<javascript>
+		<destination>lib/zk-all.js</destination>
+		<source>../zk/codegen/archive/web/js/zk/ajax/zklt.wpd</source>
+		<source>../zul/codegen/archive/web/js/zul/zklt.wpd</source>
+		<source>../zul/codegen/archive/web/js/zul/box/zk.wpd</source>
+		<source>../zul/codegen/archive/web/js/zul/grid/zk.wpd</source>
+		<source>../zul/codegen/archive/web/js/zul/inp/zk.wpd</source>
+		<source>../zul/codegen/archive/web/js/zul/menu/zk.wpd</source>
+		<source>../zul/codegen/archive/web/js/zul/panel/zk.wpd</source>
+		<source>../zul/codegen/archive/web/js/zul/utl/zk.wpd</source>
+		<source>../zul/codegen/archive/web/js/zul/wgt/zk.wpd</source>
+		<source>../zul/codegen/archive/web/js/zul/wnd/zk.wpd</source>
+		<source>../zkex/codegen/archive/web/js/zkex/layout/zk.wpd</source>
+	</javascript>
 </zklighter>
