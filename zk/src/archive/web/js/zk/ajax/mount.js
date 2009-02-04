@@ -528,7 +528,7 @@ zkm = {
 	//so we have to filter (most of) them out
 
 		var now = zUtl.now(), resz = zkm._resz;
-		if (resz.lastTime && now < resz.lastTime)
+		if ((resz.lastTime && now < resz.lastTime) || resz._inResize)
 			return; //ignore resize for a while (since onSize might trigger onsize)
 
 		var delay = zk.ie ? 250: 50;
@@ -551,9 +551,14 @@ zkm = {
 
 		zAu._onClientInfo();
 
-		zWatch.fire('beforeSize'); //notify all
-		zWatch.fire('onSize'); //notify all
-		resz.lastTime = zUtl.now() + 8;
+		resz._inResize = true;
+		try {
+			zWatch.fire('beforeSize'); //notify all
+			zWatch.fire('onSize'); //notify all
+			resz.lastTime = zUtl.now() + 8;
+		} finally {
+			resz._inResize = false;
+		}
 	},
 	_resz: {},
 
