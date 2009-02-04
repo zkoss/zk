@@ -1502,7 +1502,7 @@ zkau._onResize = function () {
 	//so we have to filter (most of) them out
 
 	var now = $now();
-	if (zkau._tmLastResz && now < zkau._tmLastResz)
+	if ((zkau._tmLastResz && now < zkau._tmLastResz) || zkau._inResize)
 		return; //ignore resize for a while (since zk.onSizeAt might trigger onsize)
 
 	var delay = zk.ie ? 250: 50;
@@ -1524,13 +1524,18 @@ zkau._onDidResize = function () {
 
 	if (zkau._cInfoReg)
 		setTimeout(zkau._doClientInfo, 20);
+	zkau._inResize = true;
+	try {
 			//we cannot pass zkau.cmd0.clientInfo directly
 			//otherwise, FF will pass 1 as the firt argument,
 			//i.e., it is equivalent to zkau.cmd0.clientInfo(1)
-
-	zk.beforeSizeAt();
-	zk.onSizeAt();
-	zkau._tmLastResz = $now() + 8;
+		zk.beforeSizeAt();
+		zk.onSizeAt();
+		//the onsize might be fire during delay 
+		zkau._tmLastResz = $now() + (zk.ie ? 250: 50);
+	} finally {
+		zkau._inResize = false;
+	}
 };
 zkau._doClientInfo = function () {
 	zkau.cmd0.clientInfo();
