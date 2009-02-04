@@ -37,6 +37,7 @@ ZK 3.5.3
   2523090: Some binding load twice when binder.loadAll()
   2525344: Exception when changing page's ID in Initiator
   2555730: Unnecessary String cast on 'series' in SimpleCategoryModel
+  2562880: Popup should be closed when click on the arrow of the sort
 
 	--------
 ZK 3.5.2
