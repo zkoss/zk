@@ -4,12 +4,12 @@
 B30-1921830.zul
 
 {{IS_NOTE
- Purpose:
-  
- Description:
-  
- History:
-  Fri Mar 21 10:04:16     2008, Created by tomyeh
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Mar 21 10:04:16     2008, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
@@ -18,20 +18,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <hbox width="100%" height="100%">
- <vbox height="100%">
+	<vbox height="100%">
 Click the following button, and the style shall change each time you clicked
-<button label="Change style">
-<attribute name="onClick">
-String cls = "z-splitter" + ("vertical".equals(hs.getOrient()) ? "-ver" : "-hor");
-if (cls.equals(hs.getMoldSclass())) {
- hs.setMoldSclass("z-splitter-os" + ("vertical".equals(hs.getOrient()) ? "-ver" : "-hor"));
-} else {
- hs.setMoldSclass("z-splitter" + ("vertical".equals(hs.getOrient()) ? "-ver" : "-hor"));
-}
-</attribute>
-</button>
+<button label="Change style" onClick='hs.sclass = "splitter".equals(hs.sclass) ? "splitter-os":"splitter"'/>
 <button label="Collapse dir" onClick='hs.collapse = "before".equals(hs.collapse) ? "after": "before"'/>
- </vbox>
- <splitter id="hs" collapse="after" />
- cdaccdacdacda
+	</vbox>
+	<splitter id="hs" collapse="after" />
+	cdaccdacdacda
 </hbox>
