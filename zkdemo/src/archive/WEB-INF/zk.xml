@@ -31,6 +31,14 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</language-config>
 	-->
 
+	<!-- Turn on if you want to ignore the consecutive click events,
+	if it happens too close to the previous one, or the server is still
+	serving the previous click.
+	<client-config>
+		<click-filter-delay>390</click-filter-delay>
+	</client-config>
+	-->
+
 	<!-- Optional -->
 	<!-- Map extensions to the xml language.
 		 By default, xml is mapped to xml -->
