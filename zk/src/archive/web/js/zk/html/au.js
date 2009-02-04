@@ -1402,7 +1402,7 @@ zkau._onResize = function () {
 	setTimeout(zkau._onDidResize, delay);
 };
 zkau._onDidResize = function () {
-	if (!zkau._tmResz || zkau._inResize) return; //already handled
+	if (!zkau._tmResz) return; //already handled
 
 	var now = $now();
 	if (zk.loading || anima.count || now < zkau._tmResz) {
