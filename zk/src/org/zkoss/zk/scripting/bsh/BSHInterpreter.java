@@ -317,7 +317,7 @@ implements SerializableAware, HierachicalAware {
 			//
 			//setVariable will callback this method,
 			//so use _inGet to prevent dead loop
-			Variable var = super.getVariableImpl(name, recurse);
+			Variable var = super.getVariableImpl(name, false);
 			if (!_inGet && var == null) {
 				Object v = getFromNamespace(name);
 				if (v != UNDEFINED) {
@@ -333,7 +333,25 @@ implements SerializableAware, HierachicalAware {
 						_inGet = false;
 					}
 				}
+
+				if (var == null && recurse) {
+					NameSpace parent = getParent();
+					if (parent instanceof AbstractNS) {
+						var = ((AbstractNS)parent).getVariableImpl(name, true);
+					} else if (parent != null) { //show not reach here; just in case
+						try {
+							java.lang.reflect.Method m =
+								NameSpace.class.getDeclaredMethod("getVariableImpl",
+									new Class[] {String.class, Boolean.TYPE});
+							m.setAccessible(true);
+							var = (Variable)m.invoke(parent, new Object[] {name, Boolean.TRUE});
+						} catch (Exception ex) {
+							throw UiException.Aide.wrap(ex);
+						}
+					}
+				}
 			}
+
 			return var;
 		}
 	    public void loadDefaultImports() {
