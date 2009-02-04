@@ -348,6 +348,7 @@ if (this.options.ignoredrag && this.options.ignoredrag(this.element, pointer, ev
 	  if (zkau.currentFocus && Event.element(event) != zkau.currentFocus 
 	  	&& typeof zkau.currentFocus.blur == "function") zkau.currentFocus.blur();
       Event.stop(event);
+	  zkau.closeFloatsOnFocus(src); // Bug 2562880
 //Tom M. Yeh, Potix: mousedown is eaten above
 zkau.autoZIndex(src, false, true);
     }

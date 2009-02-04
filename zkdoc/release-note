@@ -33,6 +33,7 @@ ZK 3.0.9
   2522437: Error display after invalidate desktop
   2523090: Some binding load twice when binder.loadAll()
   2555730: Unnecessary String cast on 'series' in SimpleCategoryModel
+  2562880: Popup should be closed when click on the arrow of the sort
   
 	--------
 ZK 3.0.8
