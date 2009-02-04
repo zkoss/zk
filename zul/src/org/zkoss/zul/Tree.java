@@ -1445,7 +1445,7 @@ public class Tree extends XulElement implements Paginated {
 			ti.setParent(parent);
 			Object childNode = _model.getChild(node, i);
 			renderer.render(ti, childNode);
-			if(!_model.isLeaf(childNode)){	
+			if(!_model.isLeaf(childNode) && ti.getTreechildren() == null){	
 				Treechildren tc = new Treechildren();
 				tc.setParent(ti);
 			}
