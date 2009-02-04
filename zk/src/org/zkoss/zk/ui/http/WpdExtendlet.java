@@ -289,7 +289,7 @@ public class WpdExtendlet implements Extendlet {
 			((Locator)_loc.get()).getResourceAsStream(path, locate);
 		if (is == null) {
 			final boolean debugJS = isDebugJS();
-			if (debugJS) write(out, "zk.debug(");
+			if (debugJS) write(out, "zk.log(");
 			write(out, "'Failed to load ");
 			write(out, path);
 			write(out, '\'');
