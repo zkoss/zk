@@ -14,13 +14,11 @@
 	width: auto; -moz-outline: 0 none; outline: 0 none; min-height: 13px;
 }
 <c:if test="${c:isExplorer()}">
-<%-- IE only --%>
 .z-menu-btn button, .z-menu-item-btn button {
 	padding-top: 2px;
 }
 </c:if>
 <c:if test="${c:isGecko()}">
-<%-- Firefox only --%>
 .z-menu-btn button, .z-menu-item-btn button {
 	padding-left: 0; padding-right: 0;
 }
