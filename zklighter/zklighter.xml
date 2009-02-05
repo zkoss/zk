@@ -84,6 +84,13 @@
 		<source>../zkex/codegen/archive/web/js/zkex/layout/zk.wpd</source>
 	</javascript>
 
+	<copy>
+		<destination>lib/zkres</destination>
+		<source>../zk/src/archive/web/zk/img</source>
+		<source>../zul/src/archive/web/zul/img</source>
+		<source>../zk/src/archive/web/zk/wordwrap.xml</source>
+	</copy>
+
 	<css>
 		<destination>lib/css/norm.css</destination>
 		<source>../zul/src/archive/web/zul/css/norm.css.dsp</source>
@@ -95,8 +102,9 @@
 		<browser>opr</browser>
 
 		<encodeURL prefix="">
-			<translate from="/zk/img" to="/img/zk"/>
-			<translate from="/zul/img" to="/img/zk"/>
+			<translate from="/zk/img" to="/zkres"/>
+			<translate from="/zul/img" to="/zkres"/>
+			<translate from="/zk/wordwrap.xml" to="/zkres/wordwrap.xml"/>
 		</encodeURL>
 
 		<variable name="fontSizeM">12px</variable>
@@ -106,9 +114,4 @@
 		<variable name="fontFamilyT">Verdana, Tahoma, Arial, Helvetica, sans-serif</variable>
 		<variable name="fontFamilyC">Verdana, Tahoma, Arial, Helvetica, sans-serif</variable>
 	</css>
-	<copy>
-		<destination>lib/img/zk</destination>
-		<source>../zk/src/archive/web/zk/img</source>
-		<source>../zul/src/archive/web/zul/img</source>
-	</copy>
 </zklighter>

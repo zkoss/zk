@@ -17,6 +17,7 @@ package org.zkoss.zklighter;
 import java.util.*;
 import java.io.*;
 
+import org.zkoss.lang.SystemException;
 import org.zkoss.util.Locales;
 import org.zkoss.io.Files;
 import org.zkoss.io.FileWriter;
@@ -47,10 +48,12 @@ public class Lighter {
 			if ("javascript".equals(nm)) genJS(wpd, el);
 			else if ("css".equals(nm)) genCSS(el);
 			else if ("copy".equals(nm)) copy(el);
-			else throw new Exception("Unknown "+nm+", "+el.getLocator());
+			else throw new IOException("Unknown "+nm+", "+el.getLocator());
 		}
 	}
-	private static void copy(Element el) throws Exception {
+
+	//copy//
+	private static void copy(Element el) throws IOException {
 		final File dst = new File(IDOMs.getRequiredElementValue(el, "destination"));
 		for (Iterator it = el.getElements("source").iterator(); it.hasNext();) {
 			final File src = new File(((Element)it.next()).getText(true));
@@ -60,7 +63,9 @@ public class Lighter {
 			Files.copy(dst, src, Files.CP_UPDATE|Files.CP_SKIP_SVN);
 		}
 	}
-	private static void genJS(WpdExtendlet wpd, Element el) throws Exception {
+
+	//JS//
+	private static void genJS(WpdExtendlet wpd, Element el) throws IOException {
 		final File dst = new File(IDOMs.getRequiredElementValue(el, "destination"));
 		final List srcs = new LinkedList();
 		for (Iterator it = el.getElements("source").iterator(); it.hasNext();) {
@@ -87,7 +92,7 @@ public class Lighter {
 		}
 	}
 	private static void outJS(WpdExtendlet wpd, File dst, List srcs,
-	String locale, boolean debugJS) throws Exception {
+	String locale, boolean debugJS) throws IOException {
 		wpd.setDebugJS(debugJS);
 		if (debugJS || locale != null) {
 			final String dstnm = dst.getName();
@@ -109,11 +114,15 @@ public class Lighter {
 		try {
 			for (Iterator it = srcs.iterator(); it.hasNext();)
 				out.write(wpd.service((File)it.next()));
-		} catch (Exception ex) {
+		} catch (Throwable ex) {
 			out.close();
+			if (ex instanceof IOException) throw (IOException)ex;
+			throw SystemException.Aide.wrap(ex);
 		}
 	}
-	private static void genCSS(Element el) throws Exception {
+
+	//CSS//
+	private static void genCSS(Element el) throws IOException {
 		final File dst = new File(IDOMs.getRequiredElementValue(el, "destination"));
 		final List srcs = new LinkedList();
 		for (Iterator it = el.getElements("source").iterator(); it.hasNext();) {
@@ -137,36 +146,195 @@ public class Lighter {
 
 		//merge all browser CSS into one
 		System.out.println("Generate "+dst);
+		ci.pure = true;
+		outCombinedCSS(dst, srcs, browsers, ci);
+		ci.pure = false;
+		outCombinedCSS(dst, srcs, browsers, ci);
 	}
-	private static void outCSS(File dst, List srcs, String browser, CSSInfo ci)
-	throws Exception {
-		final String nm = dst.getName();
-		final int j = nm.lastIndexOf('.');
-		dst = new File(dst.getParent(),
-			j >= 0 ? nm.substring(0, j) + browser + nm.substring(j):
-				nm + browser);
+	private static
+	void outCombinedCSS(File dst, List srcs, List browsers, CSSInfo ci)
+	throws IOException {
+		if (!ci.pure)
+			dst = new File(dst.getParent() + "/src", dst.getName());
 		System.out.println("Generate "+dst);
 		Writer out = new FileWriter(dst, "UTF-8");
 		try {
-			for (Iterator it = srcs.iterator(); it.hasNext();)
-				outCSS(out, (File)it.next(), ci, false);
+			boolean ignoreInclude = false;
+			for (Iterator ito = browsers.iterator(); ito.hasNext();) {
+				final String browser = (String)ito.next();
+				for (Iterator it = srcs.iterator(); it.hasNext();) {
+					File src = (File)it.next();
+					outCSS(out, renByBrowser(src, browser), ci, ignoreInclude);
+				}
+				ignoreInclude = true;
+			}
 		} finally {
 			out.close();
 		}
 	}
+	private static void outCSS(File dst, List srcs, String browser, CSSInfo ci)
+	throws IOException {
+		dst = renByBrowser(dst, browser);
+		if (!ci.pure)
+			dst = new File(dst.getParent() + "/src", dst.getName());
+		System.out.println("Generate "+dst);
+		Writer out = new FileWriter(dst, "UTF-8");
+		try {
+			for (Iterator it = srcs.iterator(); it.hasNext();) {
+				File src = (File)it.next();
+				outCSS(out, renByBrowser(src, browser), ci, false);
+			}
+		} finally {
+			out.close();
+		}
+	}
+	private static File renByBrowser(File fl, String browser) {
+		final String nm = fl.getName();
+		final int j = nm.indexOf('.', nm.lastIndexOf('/') +1); 
+		return new File(fl.getParent(),
+			j >= 0 ? nm.substring(0, j) + browser + nm.substring(j):
+				nm + browser);
+	}
 	private static
 	void outCSS(Writer out, File src, CSSInfo ci, boolean ignoreInclude)
-	throws Exception {
+	throws IOException {
+		ci.source = src;
+		ci.lineno = 1;
 		final String in = Files.readAll(new FileReader(src, "UTF-8")).toString();
 		for (int j = 0, len = in.length(); j < len; ++j) {
+			char cc = in.charAt(j);
+			if (cc == '$' && j + 1 < len && in.charAt(j + 1) == '{') {
+				int k = in.indexOf('}', j += 2);
+				if (k < 0)
+					throw new IOException(ci.message("Non-terminated EL"));
+				outEL(out, in.substring(j, k), ci);
+				j = k;
+			} else if (cc == '<' && j + 2 < len) {
+				cc = in.charAt(++j);
+				int k = in.indexOf('>', ++j);
+				if (k < 0)
+					throw new IOException(ci.message("Non-terminated <"));
+
+				if (cc == 'c' && in.charAt(j++) == ':') { //restrict but safer
+					outDirective(out, in.substring(j, k), ci, ignoreInclude);
+				} else if (cc != '/' && cc != '%')
+					throw new IOException(ci.message("Unknown <"+cc));
+				j = k;
+			} else {
+				if (cc == '\n') ++ci.lineno;
+				out.write(cc);
+			}
 		}
+	}
+	private static void outEL(Writer out, String cnt, CSSInfo ci)
+	throws IOException {
+		int j = cnt.indexOf("encodeURL");
+		if (j < 0) {
+			if (ci.pure) {
+				String s = (String)ci.vars.get(cnt);
+				if (s != null)
+					out.write(s);
+				else if (isFormula(cnt)) //formula
+					out.write('?'); //mark error
+				else
+					throw new IOException(ci.message("Unknown EL, ${"+ cnt+"}"));
+			} else {
+				if (isFormula(cnt)) //formula
+					out.write('?'); //mark error
+				else {
+					out.write("${");
+					out.write(cnt);
+					out.write('}');
+				}
+			}
+			return;
+		}
+
+		//encodeURL
+		j = cnt.indexOf('\'', j);
+		int k = cnt.indexOf('\'', ++j);
+		if (j <= 0 || k < 0)
+			throw new IOException(ci.message("Unknown EL, ${"+ cnt+"}: '...' not found"));
+		cnt = cnt.substring(j, k);
+		out.write(ci.pure ? ci.prefix: "${urlPrefix}");
+		if (cnt.startsWith("~./")) cnt = cnt.substring(2);
+		for (Iterator it = ci.translates.entrySet().iterator(); it.hasNext();) {
+			final Map.Entry me = (Map.Entry)it.next();
+			final String nm = (String)me.getKey();
+			j = cnt.indexOf(nm);
+			if (j >= 0) {
+				cnt = cnt.substring(0, j) + me.getValue() + cnt.substring(j + nm.length());
+				break; //done
+			}
+		}
+		out.write(cnt);
+	}
+	private static boolean isFormula(String s) {
+		for (int j = s.length(); --j >= 0;) {
+			char cc = s.charAt(j);
+			if ((cc > 'z' || cc < 'a') && (cc > 'Z' || cc < 'A')
+			&& (cc > '9' || cc < '0') && cc != '_' && cc != '$')
+				return true;
+		}
+		return false;
+	}
+	private static void outDirective(Writer out, String cnt, CSSInfo ci,
+	boolean ignoreInclude)
+	throws IOException {
+		int j = cnt.indexOf(' ');
+		if (j < 0) j = cnt.length();
+
+		String nm = cnt.substring(0, j);
+		if ("include".equals(nm)) {
+			if (ignoreInclude) return; //nothing to do
+
+			j = cnt.indexOf("page=\"", j);
+			if (j < 0)
+				throw new IOException(ci.message("The page attribute not found"));
+			nm = cnt.substring(j += 6, cnt.indexOf('"', j));
+			if (!nm.startsWith("~./"))
+				throw new IOException(ci.message("Unknown URI: "+nm));
+			nm = nm.substring(2);
+			j = nm.length();
+
+			for (String path = ci.source.getPath().replace('\\', '/');;) {
+				int k = nm.lastIndexOf('/', j);
+				if (k < 0)
+					throw new IOException(ci.message("Unmatched URI: "+nm));
+				final String s = nm.substring(0, k + 1);
+				j = path.indexOf(s);
+				if (j >= 0) { //found
+					nm = path.substring(0, j + s.length()) + nm.substring(k + 1);
+					break;
+				}
+				j = k - 1;
+			}
+
+			int oldln = ci.lineno;
+			File oldsrc = ci.source;
+			try {
+				outCSS(out, new File(nm), ci, false);
+			} finally {
+				ci.lineno = oldln;
+				ci.source = oldsrc;
+			}
+		} else if ("choose".equals(nm) || "when".equals(nm) || "otherwise".equals(nm)
+		|| "if".equals(nm) || "set".equals(nm)) {
+			out.write("//?");
+			out.write(nm);
+		} else
+			throw new IOException(ci.message("Unknown <c:"+nm));
 	}
 	private static class CSSInfo {
 		private final Map vars = new HashMap();
-		private final Map translates = new HashMap();
+		private final Map translates = new LinkedHashMap();
 		private final String prefix;
 		/** Whether to generate pure CSS, i.e., containing no ${xxx}. */
 		private boolean pure;
+		/** The current line number in {@link #source}. */
+		private int lineno;
+		/** The source file to parse. */
+		private File source;
 
 		private CSSInfo(Element el) {
 			for (Iterator it = el.getElements("variable").iterator(); it.hasNext();) {
@@ -186,6 +354,9 @@ public class Lighter {
 				this.translates.put(IDOMs.getRequiredAttributeValue(e, "from"),
 					IDOMs.getRequiredAttributeValue(e, "to"));
 			}
+		}
+		private String message(String msg) {
+			return msg + " at line "+lineno+", "+source;
 		}
 	}
 }
