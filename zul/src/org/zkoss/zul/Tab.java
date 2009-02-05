@@ -41,8 +41,10 @@ public class Tab extends LabelImageElement implements org.zkoss.zul.api.Tab {
 	private boolean _closable;
 
 	private boolean _disabled;
-
-	public Tab() {}		
+	static {
+		addClientEvent(Tab.class, Events.ON_CLOSE, 0);
+	}
+	public Tab() {}
 
 	public Tab(String label) {
 		this();
@@ -262,5 +264,15 @@ public class Tab extends LabelImageElement implements org.zkoss.zul.api.Tab {
 			Events.postEvent(evt);
 		} else
 			super.process(request, everError);
+	}
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+			throws java.io.IOException {
+		super.renderProperties(renderer);
+		if (_disabled)
+			render(renderer, "disabled", _disabled);
+		if (_selected)
+			render(renderer, "selected", _selected);
+		if (_closable)
+			render(renderer, "closable", _closable);
 	}
 }

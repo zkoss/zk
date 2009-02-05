@@ -755,60 +755,55 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>tabbox</component-name>
 		<component-class>org.zkoss.zul.Tabbox</component-class>
+		<widget-class>zul.tab.Tabbox</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<!--
-			<mold-uri>${self.orient == 'vertical' ? '~./zul/html/vtabbox2.dsp': '~./zul/html/tabbox2.dsp'}</mold-uri>
-			-->
+			<mold-uri>mold/tabbox.js</mold-uri>	
 		</mold>
 		<mold>
 			<mold-name>accordion</mold-name>
-			<mold-uri>~./zul/html/tabbox-accd2.dsp</mold-uri>
+			<mold-uri>mold/tabbox-accd.js</mold-uri>
 		</mold>
 		<mold>
 			<mold-name>accordion-lite</mold-name>
-			<mold-uri>~./zul/html/tabbox-accd2-lite.dsp</mold-uri>
+			<mold-uri>mold/tabbox-accd-lite.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>tabs</component-name>
 		<component-class>org.zkoss.zul.Tabs</component-class>
+		<widget-class>zul.tab.Tabs</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<!--
-			<mold-uri>${self.parent.orient == 'vertical' ? '~./zul/html/vtabs2.dsp': '~./zul/html/tabs2.dsp'}</mold-uri>
-			-->
+			<mold-uri>mold/tabs.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>tab</component-name>
 		<component-class>org.zkoss.zul.Tab</component-class>
+		<widget-class>zul.tab.Tab</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<!--
-			<mold-uri>${self.tabbox.orient == 'vertical' ? '~./zul/html/vtab2.dsp': '~./zul/html/tab2.dsp'}</mold-uri>
-			-->
+			<mold-uri>mold/tab.js</mold-uri>
 		</mold>
 		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>tabpanels</component-name>
 		<component-class>org.zkoss.zul.Tabpanels</component-class>
+		<widget-class>zul.tab.Tabpanels</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<!--
-			<mold-uri>${self.parent.orient == 'vertical' ? '~./zul/html/vtabpanels2.dsp' : '~./zul/html/tabpanels2.dsp'}</mold-uri>
-			-->
+			<mold-uri>mold/tabpanels.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>tabpanel</component-name>
 		<component-class>org.zkoss.zul.Tabpanel</component-class>
+		<widget-class>zul.tab.Tabpanel</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<!--
-			<mold-uri>${self.tabbox.mold == 'accordion' ? '~./zul/html/tabpanel-accd2.dsp' : self.tabbox.mold == 'accordion-lite' ? '~./zul/html/tabpanel-accd2-lite.dsp' : self.tabbox.orient == 'vertical' ? '~./zul/html/vtabpanel2.dsp': '~./zul/html/tabpanel2.dsp'}</mold-uri>
-			-->
+			<mold-uri>mold/tabpanel.js</mold-uri>
 		</mold>
 		<preserve-blank/>
 	</component>
