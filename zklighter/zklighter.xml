@@ -1,11 +1,11 @@
 <zklighter>
 	<javascript>
-		<destination>lib/zk.js</destination>
+		<destination>lib/js/zk.js</destination>
 		<source>../zk/codegen/archive/web/js/zk/ajax/zklt.wpd</source>
 		<source>../zul/codegen/archive/web/js/zul/zklt.wpd</source>
 	</javascript>
 	<javascript>
-		<destination>lib/lang.js</destination>
+		<destination>lib/js/lang.js</destination>
 		<source>../zk/codegen/archive/web/js/zk/ajax/lang/zklt.wpd</source>
 		<source>../zul/codegen/archive/web/js/zul/lang/zklt.wpd</source>
 		<locale></locale>
@@ -33,44 +33,44 @@
 		<locale>zh_TW</locale>
 	</javascript>
 	<javascript>
-		<destination>lib/box.js</destination>
+		<destination>lib/js/box.js</destination>
 		<source>../zul/codegen/archive/web/js/zul/box/zk.wpd</source>
 	</javascript>
 	<javascript>
-		<destination>lib/grid.js</destination>
+		<destination>lib/js/grid.js</destination>
 		<source>../zul/codegen/archive/web/js/zul/grid/zk.wpd</source>
 	</javascript>
 	<javascript>
-		<destination>lib/inp.js</destination>
+		<destination>lib/js/inp.js</destination>
 		<source>../zul/codegen/archive/web/js/zul/inp/zk.wpd</source>
 	</javascript>
 	<javascript>
-		<destination>lib/menu.js</destination>
+		<destination>lib/js/menu.js</destination>
 		<source>../zul/codegen/archive/web/js/zul/menu/zk.wpd</source>
 	</javascript>
 	<javascript>
-		<destination>lib/panel.js</destination>
+		<destination>lib/js/panel.js</destination>
 		<source>../zul/codegen/archive/web/js/zul/panel/zk.wpd</source>
 	</javascript>
 	<javascript>
-		<destination>lib/utl.js</destination>
+		<destination>lib/js/utl.js</destination>
 		<source>../zul/codegen/archive/web/js/zul/utl/zk.wpd</source>
 	</javascript>
 	<javascript>
-		<destination>lib/wgt.js</destination>
+		<destination>lib/js/wgt.js</destination>
 		<source>../zul/codegen/archive/web/js/zul/wgt/zk.wpd</source>
 	</javascript>
 	<javascript>
-		<destination>lib/wnd.js</destination>
+		<destination>lib/js/wnd.js</destination>
 		<source>../zul/codegen/archive/web/js/zul/wnd/zk.wpd</source>
 	</javascript>
 	<javascript>
-		<destination>lib/layout.js</destination>
+		<destination>lib/js/layout.js</destination>
 		<source>../zkex/codegen/archive/web/js/zkex/layout/zk.wpd</source>
 	</javascript>
 
 	<javascript>
-		<destination>lib/zk-all.js</destination>
+		<destination>lib/js/zk-all.js</destination>
 		<source>../zk/codegen/archive/web/js/zk/ajax/zklt.wpd</source>
 		<source>../zul/codegen/archive/web/js/zul/zklt.wpd</source>
 		<source>../zul/codegen/archive/web/js/zul/wgt/zk.wpd</source>
@@ -83,4 +83,32 @@
 		<source>../zul/codegen/archive/web/js/zul/wnd/zk.wpd</source>
 		<source>../zkex/codegen/archive/web/js/zkex/layout/zk.wpd</source>
 	</javascript>
+
+	<css>
+		<destination>lib/css/norm.css</destination>
+		<source>../zul/src/archive/web/zul/css/norm.css.dsp</source>
+		<source>../zkex/src/archive/web/zkex/css/zkex.css.dsp</source>
+
+		<browser>ie</browser>
+		<browser>moz</browser>
+		<browser>saf</browser>
+		<browser>opr</browser>
+
+		<encodeURL prefix="">
+			<translate from="/zk/img" to="/img/zk"/>
+			<translate from="/zul/img" to="/img/zk"/>
+		</encodeURL>
+
+		<variable name="fontSizeM">12px</variable>
+		<variable name="fontSizeMS">11px</variable>
+		<variable name="fontSizeS">11px</variable>
+		<variable name="fontSizeXS">10px</variable>
+		<variable name="fontFamilyT">Verdana, Tahoma, Arial, Helvetica, sans-serif</variable>
+		<variable name="fontFamilyC">Verdana, Tahoma, Arial, Helvetica, sans-serif</variable>
+	</css>
+	<copy>
+		<destination>lib/img/zk</destination>
+		<source>../zk/src/archive/web/zk/img</source>
+		<source>../zul/src/archive/web/zul/img</source>
+	</copy>
 </zklighter>

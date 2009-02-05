@@ -208,6 +208,10 @@ public class Files {
 	 * @see #copy(File, File, int)
 	 */
 	public static int CP_OVERWRITE = 0x0004;
+	/** Skips the SVN related files.
+	 * @since 5.0.0
+	 */
+	public static int CP_SKIP_SVN = 0x1000;
 
 	/** Copies a file or a directory into another.
 	 *
@@ -267,6 +271,9 @@ public class Files {
 	/** Assumes both dst and src is a directory. */
 	private static final void copyDir(File dst, File src, int flags)
 	throws IOException {
+		if ((flags & CP_SKIP_SVN) != 0 && ".svn".equals(src.getName()))
+			return; //skip
+
 		assert D.OFF || src.isDirectory();
 		final File[] srcs = src.listFiles();
 		for (int j = 0; j < srcs.length; ++j) {
