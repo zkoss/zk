@@ -134,21 +134,16 @@ public class Lighter {
 		}
 
 		final CSSInfo ci = new CSSInfo(el);
+		ci.pure = false;
 		final List browsers = new LinkedList();
 		for (Iterator it = el.getElements("browser").iterator(); it.hasNext();) {
 			final String browser = ((Element)it.next()).getText(true);
 			browsers.add(browser);
-			ci.pure = true;
-			outCSS(dst, srcs, browser, ci);
-			ci.pure = false;
 			outCSS(dst, srcs, browser, ci);
 		}
 
 		//merge all browser CSS into one
-		System.out.println("Generate "+dst);
 		ci.pure = true;
-		outCombinedCSS(dst, srcs, browsers, ci);
-		ci.pure = false;
 		outCombinedCSS(dst, srcs, browsers, ci);
 	}
 	private static
