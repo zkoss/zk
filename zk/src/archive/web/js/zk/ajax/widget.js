@@ -653,7 +653,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 		if (!before)
 			for (var w = this;;) {
-				ben = w.getNode();
+				ben = w.getSubnode('cave') || w.getNode();
 				if (ben) break;
 
 				var w2 = w.nextSibling;
