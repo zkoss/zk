@@ -966,7 +966,7 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 				+ '<div class="z-apply-mask" style="display:block;top:' + xy[1]
 				+ 'px;left:' + xy[0] + 'px;width:' + w + 'px;height:' + h + 'px;"></div>'
 				+ '<div id="'+maskId+'$z_loading" class="z-apply-loading"><div class="z-apply-loading-indicator">'
-				+ '<img class="z-apply-loading-icon" alt="..." src="'+zAu.comURI('/web/img/spacer.gif')+'"/> '
+				+ '<span class="z-apply-loading-icon"></span> '
 				+ msg+ '</div></div></div>';
 		zDom.setOuterHTML(n, html);
 		var loading = zDom.$(maskId+"$z_loading"),
