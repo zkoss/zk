@@ -587,11 +587,10 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	},
 	_ghostsizing: function (draggable, ofs, evt) {
 		var node = draggable.node;
-		var html = '<div id="zk_ddghost" style="background:#AAA;position:absolute;top:'
+		var html = '<div id="zk_ddghost" style="font-size:0;line-height:0;background:#AAA;position:absolute;top:'
 			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
 			+zDom.offsetWidth(node)+'px;height:'+zDom.offsetHeight(node)
-			+'px;"><img src="'+zAu.comURI('/web/img/spacer.gif')
-					+'"/></div>';
+			+'px;"></div>';
 		document.body.insertAdjacentHTML("afterBegin", html);
 		return zDom.$("zk_ddghost");
 	},

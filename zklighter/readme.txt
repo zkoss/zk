@@ -3,7 +3,7 @@ zklighter - creates JavaScript and CSS files for ZK Light
 
 Steps to Crate JavaScript and CSS files for ZK Light
 
-1. ./build clean zk zul;./build zk zul
+1. ./build clean zk zul zklighter;./build zk zul zklighter
 
 2. zklighter/build
 

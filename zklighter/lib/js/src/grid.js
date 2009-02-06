@@ -134,8 +134,7 @@ zul.grid.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		document.body.insertAdjacentHTML("afterBegin",
 			'<div id="zk_hdghost" style="position:absolute;top:'
 			+ofs[1]+'px;left:'+ofs[0]+'px;width:3px;height:'+zDom.offsetHeight(el.parentNode.parentNode)
-			+'px;background:darkgray"><img src="'+zAu.comURI('/web/img/spacer.gif')
-					+'"/></div>');
+			+'px;background:darkgray"></div>');
 		return zDom.$("zk_hdghost");		
 	},
 	_endghostsizing: function (dg, origin) {

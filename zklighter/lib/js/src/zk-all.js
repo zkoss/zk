@@ -3947,7 +3947,7 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 				+ '<div class="z-apply-mask" style="display:block;top:' + xy[1]
 				+ 'px;left:' + xy[0] + 'px;width:' + w + 'px;height:' + h + 'px;"></div>'
 				+ '<div id="'+maskId+'$z_loading" class="z-apply-loading"><div class="z-apply-loading-indicator">'
-				+ '<img class="z-apply-loading-icon" alt="..." src="'+zAu.comURI('/web/img/spacer.gif')+'"/> '
+				+ '<span class="z-apply-loading-icon"></span> '
 				+ msg+ '</div></div></div>';
 		zDom.setOuterHTML(n, html);
 		var loading = zDom.$(maskId+"$z_loading"),
@@ -9525,11 +9525,10 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	},
 	_ghostsizing: function (draggable, ofs, evt) {
 		var node = draggable.node;
-		var html = '<div id="zk_ddghost" style="background:#AAA;position:absolute;top:'
+		var html = '<div id="zk_ddghost" style="font-size:0;line-height:0;background:#AAA;position:absolute;top:'
 			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
 			+zDom.offsetWidth(node)+'px;height:'+zDom.offsetHeight(node)
-			+'px;"><img src="'+zAu.comURI('/web/img/spacer.gif')
-					+'"/></div>';
+			+'px;"></div>';
 		document.body.insertAdjacentHTML("afterBegin", html);
 		return zDom.$("zk_ddghost");
 	},
@@ -9793,8 +9792,7 @@ zul.grid.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		document.body.insertAdjacentHTML("afterBegin",
 			'<div id="zk_hdghost" style="position:absolute;top:'
 			+ofs[1]+'px;left:'+ofs[0]+'px;width:3px;height:'+zDom.offsetHeight(el.parentNode.parentNode)
-			+'px;background:darkgray"><img src="'+zAu.comURI('/web/img/spacer.gif')
-					+'"/></div>');
+			+'px;background:darkgray"></div>');
 		return zDom.$("zk_hdghost");		
 	},
 	_endghostsizing: function (dg, origin) {
@@ -16247,11 +16245,10 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	},
 	_ghosting: function (dg, ofs, evt) {
 		var el = dg.node,
-			html = '<div id="zk_layoutghost" style="background:#AAA;position:absolute;top:'
+			html = '<div id="zk_layoutghost" style="font-size:0;line-height:0;background:#AAA;position:absolute;top:'
 			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
 			+zDom.offsetWidth(el)+'px;height:'+zDom.offsetHeight(el)
-			+'px;cursor:'+el.style.cursor+';"><img src="'+zAu.comURI('/web/img/spacer.gif')
-					+'"/></div>';
+			+'px;cursor:'+el.style.cursor+';"></div>';
 		document.body.insertAdjacentHTML("afterBegin", html);
 		return zDom.$("zk_layoutghost");
 	}
