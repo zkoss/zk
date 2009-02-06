@@ -161,7 +161,7 @@ div.z-log button {
 }
 .z-dd-overlay {
 	width: 100%; height: 100%; display: block; position: absolute; left: 0; top: 0;
-	background-image: url(/img/spacer.gif); z-index: 10000;
+	background-image: url(zkrc/spacer.gif); z-index: 10000;
 }
 .z-hidden-offset {
 	visibility: hidden !important; position: absolute !important;
@@ -639,15 +639,15 @@ span.z-progressmeter-img {
 	border: 1px solid #B2CCD9; padding: 5px;
 }
 .z-groupbox-bm {
-	background:transparent url(/img/shdmd.gif) repeat-x 0 0;
+	background:transparent url(zkrc/shdmd.gif) repeat-x 0 0;
 	height: 6px; font-size: 0; line-height: 0; zoom: 1;
 }
 .z-groupbox-bl {
-	background:transparent url(/img/shdlf.gif) no-repeat 0 bottom;
+	background:transparent url(zkrc/shdlf.gif) no-repeat 0 bottom;
 	padding-left: 6px; zoom: 1;
 }
 .z-groupbox-br {
-	background:transparent url(/img/shdrg.gif) no-repeat right bottom;
+	background:transparent url(zkrc/shdrg.gif) no-repeat right bottom;
 	padding-right: 6px; zoom: 1;
 }
 .z-groupbox-header {
@@ -689,11 +689,11 @@ span.z-progressmeter-img {
 	width: 10px; overflow: hidden;
 }
 .z-separator-hor-bar {
-	background-image: url(/img/dot.gif);
+	background-image: url(zkrc/dot.gif);
 	background-position: center left; background-repeat: repeat-x;
 }
 .z-separator-ver-bar {
-	background-image: url(/img/dot.gif);
+	background-image: url(zkrc/dot.gif);
 	background-position: top center; background-repeat: repeat-y;
 }
 //?if

@@ -86,6 +86,7 @@
 
 	<copy>
 		<destination>lib/css/zkrc</destination>
+		<source>../zweb/src/archive/web/img</source>
 		<source>../zk/src/archive/web/zk/img</source>
 		<source>../zul/src/archive/web/zul/img</source>
 		<source>../zk/src/archive/web/zk/wordwrap.xml</source>
@@ -102,9 +103,10 @@
 		<browser>opr</browser>
 
 		<encodeURL prefix="">
-			<translate from="/zk/img" to="zkrc"/>
-			<translate from="/zul/img" to="zkrc"/>
-			<translate from="/zk/wordwrap.xml" to="zkrc/wordwrap.xml"/>
+			<translate from="~./zk/img" to="zkrc"/>
+			<translate from="~./zul/img" to="zkrc"/>
+			<translate from="~./zk/wordwrap.xml" to="zkrc/wordwrap.xml"/>
+			<translate from="~./img" to="zkrc"/>
 		</encodeURL>
 
 		<variable name="fontSizeM">12px</variable>

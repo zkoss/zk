@@ -247,8 +247,6 @@ public class Lighter {
 		if (j <= 0 || k < 0)
 			throw new IOException(ci.message("Unknown EL, ${"+ cnt+"}: '...' not found"));
 		cnt = cnt.substring(j, k);
-		out.write(ci.pure ? ci.prefix: "${urlPrefix}");
-		if (cnt.startsWith("~./")) cnt = cnt.substring(2);
 		for (Iterator it = ci.translates.entrySet().iterator(); it.hasNext();) {
 			final Map.Entry me = (Map.Entry)it.next();
 			final String nm = (String)me.getKey();
@@ -319,7 +317,6 @@ public class Lighter {
 	private static class CSSInfo {
 		private final Map vars = new HashMap();
 		private final Map translates = new LinkedHashMap();
-		private final String prefix;
 		/** Whether to generate pure CSS, i.e., containing no ${xxx}. */
 		private boolean pure;
 		/** The current line number in {@link #source}. */
@@ -334,11 +331,8 @@ public class Lighter {
 			}
 
 			el = el.getElement("encodeURL");
-			if (el == null) {
-				this.prefix = "";
+			if (el == null)
 				return;
-			}
-			this.prefix = el.getAttribute("prefix");
 
 			for (Iterator it = el.getElements("translate").iterator(); it.hasNext();) {
 				final Element e = (Element)it.next();
