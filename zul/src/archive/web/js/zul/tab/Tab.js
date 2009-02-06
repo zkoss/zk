@@ -18,28 +18,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	_selected : false,
 	_closable : false,
 	_disabled : false,
-	bind_: function () {
-		this.$supers('bind_', arguments);
-		var uuid = this.uuid,
-			closebtn = zDom.$(uuid, 'close');
-        if (closebtn) {
-			zEvt.listen(closebtn, "click", this.proxy(this._doClosebtnClick, '_tabClose'));
-			if (!closebtn.style.cursor)
-				closebtn.style.cursor = "default";
-		//				if (zk.ie6Only) {
-		//					zEvt.listen(closebtn, "mouseover", this.proxy(this._doMouseOver, '_tabMouseOver'));
-		//					zEvt.listen(closebtn, "mouseout", this.proxy(this._doMouseOut, '_tabMouseOut'));
-		//            	}
-//
-//	 var meta = $parent(cmp);
-//	 if (!meta._toscroll)
-//	 meta._toscroll = function () {
-//	 zkTabs2.scrollingchk($uuid(meta));
-//	 };
-//	 zk.addInit(meta._toscroll, false, $uuid(meta) );
-
-		}
-	},
+	
 	isClosable: function() {
 		return this._closable;
 	},
@@ -201,7 +180,33 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		img = '<img src="' + img + '" align="absmiddle" class="' + this.getZclass() + '-img"/>';
 		return label ? img + ' ' + label: img;
 	},
+	bind_: function () {
+		this.$supers('bind_', arguments);
+		var uuid = this.uuid,
+			closebtn = zDom.$(uuid, 'close');
+        if (closebtn) {
+			zEvt.listen(closebtn, "click", this.proxy(this._doClosebtnClick, '_tabClose'));
+			if (!closebtn.style.cursor)
+				closebtn.style.cursor = "default";
+		//				if (zk.ie6Only) {
+		//					zEvt.listen(closebtn, "mouseover", this.proxy(this._doMouseOver, '_tabMouseOver'));
+		//					zEvt.listen(closebtn, "mouseout", this.proxy(this._doMouseOut, '_tabMouseOut'));
+		//            	}
+//
+//	 var meta = $parent(cmp);
+//	 if (!meta._toscroll)
+//	 meta._toscroll = function () {
+//	 zkTabs2.scrollingchk($uuid(meta));
+//	 };
+//	 zk.addInit(meta._toscroll, false, $uuid(meta) );
+
+		}
+	},
 	unbind_: function () {
 		this.$supers('unbind_', arguments);
+		var closebtn = zDom.$(this.uuid, 'close');
+		if (closebtn) {
+			zWatch.unlisten(closebtn, "click", this.proxy(this._doClosebtnClick, '_tabClose'));		
+		}
 	}
 });

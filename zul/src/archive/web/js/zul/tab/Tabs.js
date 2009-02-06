@@ -15,16 +15,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 zul.tab.Tabs = zk.$extends(zul.Widget, {
-	bind_: function () {
-		this.$supers('bind_', arguments);
-		zWatch.listen("onSize", this);
-		zWatch.listen("onVisible", this);
-	},
 	getTabbox: function() {
-		for (var p = this.parent; p; p = p.parent)
-			if (p.$instanceof(zul.tab.Tabbox))
-				return p;
-		return null;
+		return this.parent ? this.parent : null;
 	},
 	getZclass: function() {
 		var tabbox = this.getTabbox();
@@ -32,20 +24,25 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		( tabbox._mold == "default" ? ( tabbox.isVertical() ? "-ver": "" ) : ""):
 		this._zclass;
 	},
-	onSize: function() {
+	onSize: _zkf = function () {
 		var tabbox = this.getTabbox();
 		if (tabbox.getNode())
 			zDom.cleanVisibility(tabbox.getNode());
 	},
+	onVisible: _zkf, 
 	insertChildHTML_: function (child, before, desktop) {
-		var cave = this.getSubnode("cave"),
-			last = child.previousSibling;
-		if (before) {
+		var last = child.previousSibling;
+		if (before || !last) {
 			zDom.insertHTMLBefore(before.getNode(), child._redrawHTML());
 		} else {
 			zDom.insertHTMLAfter(last.getNode(), child._redrawHTML());
 		}
 		child.bind_(desktop);
+	},
+	bind_: function () {
+		this.$supers('bind_', arguments);
+		zWatch.listen("onSize", this);
+		zWatch.listen("onVisible", this);
 	},
 	unbind_: function () {
 		zWatch.unlisten("onSize", this);

@@ -85,7 +85,7 @@ public class Tab extends LabelImageElement implements org.zkoss.zul.api.Tab {
 	public void setClosable(boolean closable) {
 		if (_closable != closable) {
 			_closable = closable;
-			invalidate(); // re-init is required
+			smartUpdate("closable", _closable);
 		}
 	}
 
@@ -169,8 +169,8 @@ public class Tab extends LabelImageElement implements org.zkoss.zul.api.Tab {
 				// Note: we don't update it here but let its parent does the job
 				tabbox.setSelectedTab(this);
 			} else {
-				_selected = selected;
-				invalidate();
+				_selected = selected;				
+				smartUpdate("selected", _selected);
 			}
 		}
 	}
@@ -196,7 +196,7 @@ public class Tab extends LabelImageElement implements org.zkoss.zul.api.Tab {
 	public void setDisabled(boolean disabled) {
 		if (_disabled != disabled) {
 			_disabled = disabled;
-			smartUpdate("z.disabled", _disabled);
+			smartUpdate("disabled", _disabled);
 		}
 	}
 

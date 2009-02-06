@@ -2,9 +2,9 @@
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Jul 12 10:42:31     2005, Created by tomyeh
 }}IS_NOTE
@@ -35,13 +35,13 @@ import org.zkoss.zul.impl.XulElement;
 
 /**
  * A tabbox.
- * 
+ *
  * <p>
  * Event:
  * <ol>
  * <li>org.zkoss.zk.ui.event.SelectEvent is sent when user changes the tab.</li>
  * </ol>
- * 
+ *
  * <p>
  * Mold:
  * <dl>
@@ -50,9 +50,9 @@ import org.zkoss.zul.impl.XulElement;
  * <dt>accordion</dt>
  * <dd>The accordion tabbox.</dd>
  * </dl>
- * 
+ *
  * <p>Default {@link #getZclass}: z-tabbox. (since 3.5.0)
- * 
+ *
  * @author tomyeh
  */
 public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
@@ -68,7 +68,7 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 	public Tabbox() {
 		init();
 	}
-	
+
 	private void init() {
 		_listener = new Listener();
 	}
@@ -107,7 +107,7 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 		return getTabpanels();
 	}
 	/**
-	 * Returns whether the tab scrolling is enabled. 
+	 * Returns whether the tab scrolling is enabled.
 	 * Default: true.
 	 * @since 3.5.0
 	 */
@@ -122,7 +122,7 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 	public void setTabscroll(boolean tabscroll) {
 		if (_tabscroll != tabscroll) {
 			_tabscroll = tabscroll;
-			invalidate();
+			smartUpdate("tabscroll", _tabscroll);
 		}
 	}
 
@@ -146,7 +146,7 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 
 		if (!Objects.equals(_panelSpacing, panelSpacing)) {
 			_panelSpacing = panelSpacing;
-			invalidate();
+			smartUpdate("panelSpacing", _panelSpacing);
 		}
 	}
 
@@ -192,7 +192,7 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 	}
 	/**
 	 * Sets the selected tab panel.
-	 * @param panelApi assume as a {@link org.zkoss.zul.Tabpanel}   
+	 * @param panelApi assume as a {@link org.zkoss.zul.Tabpanel}
 	 * @since 3.5.2
 	 */
 	public void setSelectedPanelApi(org.zkoss.zul.api.Tabpanel panelApi) {
@@ -219,10 +219,10 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 	public void setSelectedTab(Tab tab) {
 		selectTabDirectly(tab, false);
 	}
-	
+
 	/**
-	 * Sets the selected tab.	 
-	 * @param tabApi assume as a {@link org.zkoss.zul.Tab}   
+	 * Sets the selected tab.
+	 * @param tabApi assume as a {@link org.zkoss.zul.Tab}
 	 * @since 3.5.2
 	 */
 	public void setSelectedTabApi(org.zkoss.zul.api.Tab tabApi) {
@@ -249,10 +249,10 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 
 	/**
 	 * Returns the orient.
-	 * 
+	 *
 	 * <p>
 	 * Default: "horizontal".
-	 * 
+	 *
 	 * <p>
 	 * Note: only the default mold supports it (not supported if accordion).
 	 */
@@ -261,24 +261,24 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 	}
 	/**
 	 * Sets the mold.
-	 * 
-	 * @param mold default , accordion and accordion-lite 
-	 *            
+	 *
+	 * @param mold default , accordion and accordion-lite
+	 *
 	 */
 	public void setMold(String mold){
 		if (isVertical()){
 			if (mold.startsWith("accordion")){
 				throw new WrongValueException("Unsupported vertical orient in mold : "+mold);
 			}else{
-				super.setMold(mold);				
+				super.setMold(mold);
 			}
 		}else{
-			super.setMold(mold);			
+			super.setMold(mold);
 		}
 	}
 	/**
 	 * Sets the orient.
-	 * 
+	 *
 	 * @param orient
 	 *            either "horizontal" or "vertical".
 	 */
@@ -289,13 +289,13 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 			throw new WrongValueException("Unsupported vertical orient in mold : "+getMold());
 		if (!Objects.equals(_orient, orient)) {
 			_orient = orient;
-			invalidate();
+			smartUpdate("orient", _orient);
 		}
 	}
 
 	/**
 	 * Returns whether it is a horizontal tabbox.
-	 * 
+	 *
 	 * @since 3.0.3
 	 */
 	public boolean isHorizontal() {
@@ -304,7 +304,7 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 
 	/**
 	 * Returns whether it is a vertical tabbox.
-	 * 
+	 *
 	 * @since 3.0.3
 	 */
 	public boolean isVertical() {
@@ -315,19 +315,19 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 		return  _zclass == null ? "z-tabbox" + (inAccordionMold() ? "-" + getMold() : isVertical() ? "-ver" : "") :
 			_zclass;
 	}
-	
+
 	/**
 	 * @deprecated As of release 3.5.2
 	 */
-	public String getTabLook() {		
-		String scls = getZclass();		
+	public String getTabLook() {
+		String scls = getZclass();
 		if ("vertical".equals(_orient)){
 			String postfix = "-v";
 			return scls != null ? scls + postfix: postfix;
 		}else{
 			return scls;
 		}
-		
+
 	}
 
 	// -- Component --//

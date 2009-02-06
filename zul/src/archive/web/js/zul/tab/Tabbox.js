@@ -17,24 +17,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 zul.tab.Tabbox = zk.$extends(zul.Widget, {
 	_orient: "horizontal",
 	_tabscroll: true,
-	bind_: function () {
-		this.$supers('bind_', arguments);
-		this.tabs = this.getTabs();
-		this.tabpanels = this.getTabpanels();
-//		if (this.inAccordionMold()) {
-//			zDom.cleanVisibility(this.getNode());
-//		}
-		zk.afterMount(
-			this.proxy(function () {
-				if (this.inAccordionMold()) {
-					;
-				} else {
-					var x = this._selTab, wgt = zDom.$(x), tab = zk.Widget.$(wgt);
-					tab.setSelected(true);
-				}
-			})
-		);
-	},
 	getTabs: function () {
 		//The tabs must in index 0
 		return this.getChildAt(0);
@@ -123,5 +105,23 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 			this._panelSpacing = panelSpacing;
 			this.rerender();
 		}
+	},
+	bind_: function () {
+		this.$supers('bind_', arguments);
+		this.tabs = this.getTabs();
+		this.tabpanels = this.getTabpanels();
+//		if (this.inAccordionMold()) {
+//			zDom.cleanVisibility(this.getNode());
+//		}
+		zk.afterMount(
+			this.proxy(function () {
+				if (this.inAccordionMold()) {
+					;
+				} else {
+					var x = this._selTab, wgt = zDom.$(x), tab = zk.Widget.$(wgt);
+					tab.setSelected(true);
+				}
+			})
+		);
 	}
 });

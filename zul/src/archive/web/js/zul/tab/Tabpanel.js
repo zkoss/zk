@@ -16,10 +16,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 	getTabbox: function() {
-		for (var p = this.parent; p; p = p.parent)
-			if (p.$instanceof(zul.tab.Tabbox))
-				return p;
-		return null;
+		return this.parent ? this.parent.parent : null;
 	},
 	isVisible: function() {
 		return this.$supers('isVisible', arguments) && this.isSelected();
