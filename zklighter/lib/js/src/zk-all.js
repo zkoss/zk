@@ -4953,7 +4953,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 		if (!before)
 			for (var w = this;;) {
-				ben = w.getNode();
+				ben = w.getSubnode('cave') || w.getNode();
 				if (ben) break;
 
 				var w2 = w.nextSibling;
@@ -6218,7 +6218,7 @@ zkm = {
 	},
 	docDidResize: function () {
 		var resz = zkm._resz;
-		if (!resz.time || resz._inResize) return; //already handled
+		if (!resz.time) return; //already handled
 
 		var now = zUtl.now();
 		if (zk.mounting || zPkg.loading || zAnima.count || now < resz.time) {

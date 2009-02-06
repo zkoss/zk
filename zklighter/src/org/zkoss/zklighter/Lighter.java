@@ -149,8 +149,6 @@ public class Lighter {
 	private static
 	void outCombinedCSS(File dst, List srcs, List browsers, CSSInfo ci)
 	throws IOException {
-		if (!ci.pure)
-			dst = new File(dst.getParent() + "/src", dst.getName());
 		System.out.println("Generate "+dst);
 		Writer out = new FileWriter(dst, "UTF-8");
 		try {
@@ -170,8 +168,6 @@ public class Lighter {
 	private static void outCSS(File dst, List srcs, String browser, CSSInfo ci)
 	throws IOException {
 		dst = renByBrowser(dst, browser);
-		if (!ci.pure)
-			dst = new File(dst.getParent() + "/src", dst.getName());
 		System.out.println("Generate "+dst);
 		Writer out = new FileWriter(dst, "UTF-8");
 		try {

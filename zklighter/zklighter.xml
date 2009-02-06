@@ -85,7 +85,7 @@
 	</javascript>
 
 	<copy>
-		<destination>lib/zkres</destination>
+		<destination>lib/css/zkrc</destination>
 		<source>../zk/src/archive/web/zk/img</source>
 		<source>../zul/src/archive/web/zul/img</source>
 		<source>../zk/src/archive/web/zk/wordwrap.xml</source>
@@ -102,9 +102,9 @@
 		<browser>opr</browser>
 
 		<encodeURL prefix="">
-			<translate from="/zk/img" to="/zkres"/>
-			<translate from="/zul/img" to="/zkres"/>
-			<translate from="/zk/wordwrap.xml" to="/zkres/wordwrap.xml"/>
+			<translate from="/zk/img" to="zkrc"/>
+			<translate from="/zul/img" to="zkrc"/>
+			<translate from="/zk/wordwrap.xml" to="zkrc/wordwrap.xml"/>
 		</encodeURL>
 
 		<variable name="fontSizeM">12px</variable>
