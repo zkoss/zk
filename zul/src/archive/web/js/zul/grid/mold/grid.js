@@ -18,7 +18,7 @@ function (out) {
 		innerWidth = this.getInnerWidth(),
 		width = innerWidth == '100%' ? ' width="100%"' : '',
 		width1 =  innerWidth != '100%' ? 'width:' + innerWidth : '',
-		inPaging = this.getMold() == 'paging';
+		inPaging = this._inPagingMold();
 	out.push('<div', this.domAttrs_(), (this.getAlign() ? ' align="' + this.getAlign() + '"' : ''), '>');
 	
 	if (inPaging && this.paging
