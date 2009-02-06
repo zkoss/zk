@@ -45,7 +45,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	_doOverlapped: function () {
 		var pos = this.getPosition(),
 			n = this.getNode();
-		if (!pos && !n.style.top && !n.style.left) {		
+		if (!pos && !n.style.top && !n.style.left) {
 			var xy = zDom.revisedOffset(n);
 			n.style.left = xy[0] + "px";
 			n.style.top = xy[1] + "px";
@@ -53,7 +53,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			this._posByParent();
 
 		zDom.makeVParent(n);
-		this._syncShadow(); //create shadow
+		this._syncShadow();
 		this._updateDomPos();
 
 		if (this.isRealVisible()) {
@@ -659,8 +659,11 @@ zul.wnd.Skipper = zk.$extends(zk.Skipper, {
 	},
 	restore: function () {
 		this.$supers('restore', arguments);
-		if (this._w._mode != 'embedded')
-			this._w._updateDomPos(); //skipper's size is wrong in bind_
+		var w = this._w;
+		if (w._mode != 'embedded') {
+			w._updateDomPos(); //skipper's size is wrong in bind_
+			w._syncShadow();
+		}
 	}
 });
 
