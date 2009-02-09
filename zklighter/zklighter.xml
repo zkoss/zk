@@ -65,6 +65,10 @@
 		<source>../zul/codegen/archive/web/js/zul/wnd/zk.wpd</source>
 	</javascript>
 	<javascript>
+		<destination>lib/js/tab.js</destination>
+		<source>../zul/codegen/archive/web/js/zul/tab/zk.wpd</source>
+	</javascript>
+	<javascript>
 		<destination>lib/js/layout.js</destination>
 		<source>../zkex/codegen/archive/web/js/zkex/layout/zk.wpd</source>
 	</javascript>
@@ -81,6 +85,7 @@
 		<source>../zul/codegen/archive/web/js/zul/panel/zk.wpd</source>
 		<source>../zul/codegen/archive/web/js/zul/utl/zk.wpd</source>
 		<source>../zul/codegen/archive/web/js/zul/wnd/zk.wpd</source>
+		<source>../zul/codegen/archive/web/js/zul/tab/zk.wpd</source>
 		<source>../zkex/codegen/archive/web/js/zkex/layout/zk.wpd</source>
 	</javascript>
 

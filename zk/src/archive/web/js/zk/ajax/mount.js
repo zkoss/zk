@@ -135,6 +135,15 @@ zkm = {
 		zk.sysInited = true;
 		zkm.sysInit = null; //free
 
+		var ebc = zk.xbodyClass;
+		if (ebc) {
+			zk.xbodyClass = null;
+			var n = document.body
+				cn = n.className;
+			if (cn.length) cn += ' ';
+			n.className = cn + ebc;
+		}
+
 		zEvt.listen(document, "keydown", zkm.docKeyDown);
 		zEvt.listen(document, "keyup", zkm.docKeyUp);
 		zEvt.listen(document, "keypress", zkm.docKeyPress);

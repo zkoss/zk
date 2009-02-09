@@ -314,4 +314,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 			org.zkoss.zkdemo.userguide.DemoWebAppInit
 		</listener-class>
 	</listener>
+
+	<!-- Turn on if you want to debug by copying JavaScript files directly
+		to classpath
+	<desktop-config>
+		<extendlet-check-period>5</extendlet-check-period>
+	</desktop-config>
+	-->
 </zk>

@@ -949,10 +949,11 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	},
 	_ghosting: function (dg, ofs, evt) {
 		var el = dg.node,
-			html = '<div id="zk_layoutghost" style="font-size:0;line-height:0;background:#AAA;position:absolute;top:'
+			html = '<div id="zk_layoutghost" style="background:#AAA;position:absolute;top:'
 			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
 			+zDom.offsetWidth(el)+'px;height:'+zDom.offsetHeight(el)
-			+'px;cursor:'+el.style.cursor+';"></div>';
+			+'px;cursor:'+el.style.cursor+';"><img src="'+zAu.comURI('/web/img/spacer.gif')
+					+'"/></div>';
 		document.body.insertAdjacentHTML("afterBegin", html);
 		return zDom.$("zk_layoutghost");
 	}

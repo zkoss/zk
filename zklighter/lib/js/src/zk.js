@@ -326,7 +326,11 @@ if (zk.gecko) {
 	j = zk.parseInt(zk.agent.substring(j + 8));
 	zk.gecko3 = j >= 3;
 	zk.gecko2Only = !zk.gecko3;
-} else if (!zk.opera) {
+
+	zk.xbodyClass = 'gecko gecko' + j;
+} else if (zk.opera) {
+	zk.xbodyClass = 'opera';
+} else {
 	var j = zk.agent.indexOf("msie ");
 	zk.ie = j >= 0;
 	if (zk.ie) {
@@ -334,9 +338,13 @@ if (zk.gecko) {
 		zk.ie7 = j >= 7; //ie7 or later
 		zk.ie8 = j >= 8; //ie8 or later
 		zk.ie6Only = !zk.ie7;
-	}
+
+		zk.xbodyClass = 'ie ie' + j;
+	} else if (zk.safari)
+		zk.xbodyClass = 'safari';
 }
-zk.air = zk.agent.indexOf("adobeair") >= 0;
+if (zk.air = zk.agent.indexOf("adobeair") >= 0)
+	zk.xbodyClass = 'air';
 
 zk.Object = function () {};
 zk.Object.prototype = {
@@ -5815,6 +5823,15 @@ zkm = {
 	sysInit: function() {
 		zk.sysInited = true;
 		zkm.sysInit = null; //free
+
+		var ebc = zk.xbodyClass;
+		if (ebc) {
+			zk.xbodyClass = null;
+			var n = document.body
+				cn = n.className;
+			if (cn.length) cn += ' ';
+			n.className = cn + ebc;
+		}
 
 		zEvt.listen(document, "keydown", zkm.docKeyDown);
 		zEvt.listen(document, "keyup", zkm.docKeyUp);
