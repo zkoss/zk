@@ -27,6 +27,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.URL;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -391,12 +392,23 @@ public class WpdExtendlet implements Extendlet {
 		/*package*/
 		InputStream getResourceAsStream(String path, boolean locate)
 		throws IOException, ServletException {
+			if (locate)
+				path = Servlets.locate(_webctx.getServletContext(),
+					_request, path, _webctx.getLocator());
+
+			if (_cache.getCheckPeriod() >= 0) {
+				//Due to Web server might cache the result, we use URL if possible
+				try {
+					URL url = _webctx.getResource(path);
+					if (url != null)
+						return url.openStream();
+				} catch (Throwable ex) {
+					log.warningBriefly("Unable to read from URL: "+path, ex);
+				}
+			}
+
 			//Note: _webctx will handle the renaming for debugJS (.src.js)
-			return _webctx.getResourceAsStream(
-				locate ?
-					Servlets.locate(_webctx.getServletContext(),
-						_request, path, _webctx.getLocator()):
-				path);
+			return _webctx.getResourceAsStream(path);
 		}
 	}
 	class FileLocator extends Locator {
