@@ -106,6 +106,7 @@ public class WebManager {
 
 		_ctx = ctx;
 		_updateURI = updateURI;
+		_ctx.setAttribute(ATTR_WEB_MANAGER, this);
 
 		//load config as soon as possible since it might set some system props
 		final Configuration config = new Configuration();
@@ -121,7 +122,6 @@ public class WebManager {
 		//after zk.xml is loaded since it depends on the configuration
 		_cwr = ClassWebResource.getInstance(_ctx, _updateURI);
 		_cwr.setCompress(new String[] {"js", "css", "html", "xml"});
-		_ctx.setAttribute(ATTR_WEB_MANAGER, this);
 
 		Labels.register(new ServletLabelLocator(_ctx));
 		Labels.setVariableResolver(new ServletLabelResovler());
