@@ -38,6 +38,7 @@ ZK 3.5.3
   2525344: Exception when changing page's ID in Initiator
   2555730: Unnecessary String cast on 'series' in SimpleCategoryModel
   2562880: Popup should be closed when click on the arrow of the sort
+  2580627: extendlet-check-period has no effect to DspExtendlet
 
 * Upgrade Notes
   + The default setting disables the feature of ignoring the consecutive
