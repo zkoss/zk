@@ -19,12 +19,8 @@
 package org.zkoss.zkex.zul;
 
 /**
- * This class represents a region in a layout manager.
- * <p>
- * Events:<br/> onOpen, onSize.<br/>
- * 
  * @author jumperchen
- * @since 3.0.0
+ * @deprecated As of release 5.0.0, replaced with {@link org.zkoss.zul.LayoutRegion}.
  */
 public abstract class LayoutRegion extends org.zkoss.zul.LayoutRegion implements org.zkoss.zkex.zul.api.LayoutRegion {
 }

@@ -19,12 +19,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zkex.zul.api;
 
 /**
- * This component is a south region.
- * <p>
- * Default {@link org.zkoss.zkex.zul.South#getZclass}: z-south.(since 3.5.0)
- * 
  * @author jumperchen
- * @since 3.0.0
+ * @deprecated As of release 5.0.0, replaced with {@link org.zkoss.zul.api.South}.
  */
 public interface South extends org.zkoss.zul.api.South {
 

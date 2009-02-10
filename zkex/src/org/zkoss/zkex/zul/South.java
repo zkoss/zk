@@ -19,11 +19,8 @@
 package org.zkoss.zkex.zul;
 
 /**
- * This component is a south region.
- * <p>Default {@link #getZclass}: z-south.(since 3.5.0)
- * 
  * @author jumperchen
- * @since 3.0.0
+ * @deprecated As of release 5.0.0, replaced with {@link org.zkoss.zul.South}.
  */
 public class South extends org.zkoss.zul.South implements org.zkoss.zkex.zul.api.South {
 	

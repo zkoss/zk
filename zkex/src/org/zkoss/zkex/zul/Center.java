@@ -19,17 +19,7 @@
 package org.zkoss.zkex.zul;
 
 /**
- * This component is a center region.
- * <p>
- * <strong>Note:</strong> This component doesn't support the following method,
- * including {@link #setSplittable(boolean)}, {@link #setOpen(boolean)},
- * {@link #setCollapsible(boolean)}, {@link #setMaxsize(int)},
- * {@link #setMinsize(int)}, {@link #setHeight(String)},
- * {@link #setWidth(String)}, {@link #getSize()}, {@link #setSize(String)},
- * and {@link #setVisible(boolean)}.
- * 
- * <p>Default {@link #getZclass}: z-center.(since 3.5.0)
  * @author jumperchen
- * @since 3.0.0
+ * @deprecated As of release 5.0.0, replaced with {@link org.zkoss.zul.Center}.
  */
 public class Center extends org.zkoss.zul.Center implements org.zkoss.zkex.zul.api.Center {}

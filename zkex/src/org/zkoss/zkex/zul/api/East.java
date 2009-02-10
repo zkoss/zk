@@ -19,16 +19,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zkex.zul.api;
 
 /**
- * This component is a east region.
- * <p>
- * Default {@link org.zkoss.zkex.zul.East#getZclass}: z-east.(since 3.5.0)
- * 
- * <p>
- * Default: {@link org.zkoss.zkex.zul.East#getCmargins()} is "0,5,5,0" (since 3.5.0)
- * </p>
- * 
  * @author jumperchen
- * @since 3.0.0
+ * @deprecated As of release 5.0.0, replaced with {@link org.zkoss.zul.api.East}.
  */
 public interface East extends org.zkoss.zul.api.East {
 }

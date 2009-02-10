@@ -19,11 +19,8 @@
 package org.zkoss.zkex.zul;
 
 /**
- * This component is a north region.
- * <p>Default {@link #getZclass}: z-north.(since 3.5.0)
- * 
  * @author jumperchen
- * @since 3.0.0
+ * @deprecated As of release 5.0.0, replaced with {@link org.zkoss.zul.North}.
  */
 public class North extends org.zkoss.zul.North implements org.zkoss.zkex.zul.api.North {
 }

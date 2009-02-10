@@ -19,16 +19,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zkex.zul.api;
 
 /**
- * This component is a west region.
- * <p>
- * Default {@link org.zkoss.zkex.zul.West#getZclass}: z-west.(since 3.5.0)
- * 
- * <p>
- * Default: {@link org.zkoss.zkex.zul.West#getCmargins()} is "0,5,5,0" (since 3.5.0)
- * </p>
- * 
  * @author jumperchen
- * @since 3.0.0
+ * @deprecated As of release 5.0.0, replaced with {@link org.zkoss.zul.api.West}.
  */
 public interface West extends org.zkoss.zul.api.West {
 

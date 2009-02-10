@@ -19,12 +19,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zkex.zul.api;
 
 /**
- * This component is a north region.
- * <p>
- * Default {@link org.zkoss.zkex.zul.North#getZclass}: z-north.(since 3.5.0)
- * 
  * @author jumperchen
- * @since 3.0.0
+ * @deprecated As of release 5.0.0, replaced with {@link org.zkoss.zul.api.North}.
  */
 public interface North extends org.zkoss.zul.api.North {
 
