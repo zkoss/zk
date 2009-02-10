@@ -20,6 +20,7 @@ package org.zkoss.zk.ui.impl;
 
 import java.util.List;
 import java.util.LinkedList;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Collection;
 import java.util.Collections;
@@ -78,6 +79,11 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	protected AbstractExecution(Desktop desktop, Page creating) {
 		_desktop = desktop; //it is null if it is created by WebManager.newDesktop
 		_creating = creating;
+
+		if (desktop != null) {
+			final Iterator it = desktop.getPages().iterator();
+			if (it.hasNext()) _curpage = (Page)it.next();
+		}
 	}
 
 	//-- Execution --//
@@ -113,7 +119,10 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 
 	//-- ExecutionCtrl --//
 	public final Page getCurrentPage() {
-		return _curpage;
+		if (_curpage != null)
+			return _curpage;
+		final Iterator it = _desktop.getPages().iterator();
+		return it.hasNext() ? (Page)it.next(): null;
 	}
 	public final void setCurrentPage(Page curpage) {
 		if (_curpage != null && curpage != null && _curpage != curpage) {
@@ -186,7 +195,7 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	public Component createComponents(String uri, Component parent,
 	Map arg) {
 		final Component[] cs = getUiEngine().createComponents(
-			this, getPageDefinition(uri), _curpage, parent, arg);
+			this, getPageDefinition(uri), getCurrentPage(), parent, arg);
 		return cs.length > 0 ? cs[0]: null;
 	}
 	public Component createComponents(PageDefinition pagedef,
@@ -194,28 +203,28 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 		if (pagedef == null)
 			throw new IllegalArgumentException("pagedef cannot be null");
 		final Component[] cs = getUiEngine().createComponents(
-			this, pagedef, _curpage, parent, arg);
+			this, pagedef, getCurrentPage(), parent, arg);
 		return cs.length > 0 ? cs[0]: null;
 	}
 	public Component createComponentsDirectly(String content, String ext,
 	Component parent, Map arg) {
 		final Component[] cs = getUiEngine().createComponents(
 			this, getPageDefinitionDirectly(content, ext),
-			_curpage, parent, arg);
+			getCurrentPage(), parent, arg);
 		return cs.length > 0 ? cs[0]: null;
 	}
 	public Component createComponentsDirectly(Document content, String ext,
 	Component parent, Map arg) {
 		final Component[] cs = getUiEngine().createComponents(
 			this, getPageDefinitionDirectly(content, ext),
-			_curpage, parent, arg);
+			getCurrentPage(), parent, arg);
 		return cs.length > 0 ? cs[0]: null;
 	}
 	public Component createComponentsDirectly(Reader reader, String ext,
 	Component parent, Map arg) throws IOException {
 		final Component[] cs = getUiEngine().createComponents(
 			this, getPageDefinitionDirectly(reader, ext),
-			_curpage, parent, arg);
+			getCurrentPage(), parent, arg);
 		return cs.length > 0 ? cs[0]: null;
 	}
 

@@ -745,14 +745,15 @@ public class UiEngineImpl implements UiEngine {
 	PageDefinition pagedef, Page page, Component parent, Map arg) {
 		if (pagedef == null)
 			throw new IllegalArgumentException("pagedef");
+
+		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 		if (parent != null) {
 			if (parent.getPage() != null)
 				page = parent.getPage();
 			if (page == null)
-				page = getCurrentPage(exec);
+				page = execCtrl.getCurrentPage();
 		}
 
-		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 		if (!execCtrl.isActivated())
 			throw new IllegalStateException("Not activated yet");
 
@@ -1164,7 +1165,7 @@ public class UiEngineImpl implements UiEngine {
 				//Challenge: how to call UiFactory.isRichlet
 				final Richlet richlet = config.getRichletByPath(location);
 				if (richlet != null)
-					richlet.service(getCurrentPage(exec));
+					richlet.service(((ExecutionCtrl)exec).getCurrentPage());
 				else
 					exec.createComponents(location, null, null);
 
@@ -1188,11 +1189,6 @@ public class UiEngineImpl implements UiEngine {
 		}
 
 		uv.addResponse(null, new AuAlert(msg)); //default handling
-	}
-	private static final Page getCurrentPage(Execution exec) {
-		final Page page = ((ExecutionCtrl)exec).getCurrentPage();
-		return page != null ? page:
-			(Page)exec.getDesktop().getPages().iterator().next();
 	}
 
 	/** Processing the request and stores result into UiVisualizer.
