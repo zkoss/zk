@@ -128,6 +128,26 @@ public class Borderlayout extends HtmlBasedComponent implements org.zkoss.zkex.z
 	public Center getCenter() {
 		return _center;
 	}
+	
+	public org.zkoss.zkex.zul.api.North getNorthApi() {
+		return _north;
+	}
+
+	public org.zkoss.zkex.zul.api.South getSouthApi() {
+		return _south;
+	}
+
+	public org.zkoss.zkex.zul.api.West getWestApi() {
+		return _west;
+	}
+
+	public org.zkoss.zkex.zul.api.East getEastApi() {
+		return _east;
+	}
+
+	public org.zkoss.zkex.zul.api.Center getCenterApi() {
+		return _center;
+	}
 
 	/**
 	 * Re-size this layout component.
