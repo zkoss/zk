@@ -298,7 +298,7 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	doScroll_: function () {
 		zWatch.fireDown('onScroll', null, this);
 	},
-	doMouseOver_: function (wevt) {
+	doMouseOver_: function (evt) {
 		if (this.getSubnode('btn')) {
 			switch (evt.nativeTarget) {
 			case this.getSubnode('btn'):
@@ -314,7 +314,7 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		}
 		this.$supers('doMouseOver_', arguments);
 	},
-	doMouseOut_: function (wevt) {
+	doMouseOut_: function (evt) {
 		if (this.getSubnode('btn')) {
 			switch (evt.nativeTarget) {
 			case this.getSubnode('btn'):
@@ -330,7 +330,7 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		}
 		this.$supers('doMouseOut_', arguments);		
 	},
-	doClick_: function (wevt) {
+	doClick_: function (evt) {
 		if (this.getSubnode('btn')) {
 			var target = evt.nativeTarget;
 			switch (target) {
