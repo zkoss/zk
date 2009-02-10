@@ -195,7 +195,7 @@ zul.grid.Grid = zk.$extends(zul.Widget, {
 	},
 	//-- super --//
 	onChildAdded_: function (child) {
-		this.$supers('onChildAdded_', arguments)
+		this.$supers('onChildAdded_', arguments);
 		if (child.$instanceof(zul.grid.Rows))
 			this.rows = child;
 		else if (child.$instanceof(zul.grid.Columns))

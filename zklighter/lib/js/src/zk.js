@@ -5403,7 +5403,8 @@ zk.Page = zk.$extends(zk.Widget, {//unlik server, we derive from Widget!
 	className: 'zk.Page',
 
 	$init: function (pguid, contained) {
-		this.$super('$init', {uuid: pguid});
+		pguid = typeof pguid == 'string' ? {uuid: pguid} : pguid;
+		this.$super('$init', pguid);
 
 		this._fellows = {};
 		if (contained) zk.Page.contained.push(this);

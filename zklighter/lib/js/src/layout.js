@@ -273,7 +273,16 @@ zkex.layout.Borderlayout = zk.$extends(zul.Widget, {
 	CENTER: "center"
 });
 
-(_zkwg=_zkpk.Borderlayout).prototype.className='zkex.layout.Borderlayout';
+(_zkwg=_zkpk.Borderlayout).prototype.className='zkex.layout.Borderlayout';_zkmd={};
+_zkmd['default']=
+function (out) {
+	out.push('<div', this.domAttrs_(), '>');
+	for (var w = this.firstChild; w; w = w.nextSibling)
+		w.redraw(out);
+	out.push('</div>');
+}
+
+zkmld(_zkwg,_zkmd);
 zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	_open: true,
 	_border: "normal",
@@ -949,11 +958,10 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	},
 	_ghosting: function (dg, ofs, evt) {
 		var el = dg.node,
-			html = '<div id="zk_layoutghost" style="background:#AAA;position:absolute;top:'
+			html = '<div id="zk_layoutghost" style="font-size:0;line-height:0;background:#AAA;position:absolute;top:'
 			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
 			+zDom.offsetWidth(el)+'px;height:'+zDom.offsetHeight(el)
-			+'px;cursor:'+el.style.cursor+';"><img src="'+zAu.comURI('/web/img/spacer.gif')
-					+'"/></div>';
+			+'px;cursor:'+el.style.cursor+';"></div>';
 		document.body.insertAdjacentHTML("afterBegin", html);
 		return zDom.$("zk_layoutghost");
 	}
@@ -974,7 +982,49 @@ zkex.layout.North = zk.$extends(zkex.layout.LayoutRegion, {
 		this.setHeight(size);
 	}
 });
-(_zkwg=_zkpk.North).prototype.className='zkex.layout.North';
+(_zkwg=_zkpk.North).prototype.className='zkex.layout.North';_zkmd={};
+_zkmd['default']=
+function (out) {
+	var uuid = this.uuid,
+		zcls = this.getZclass(),
+		noCenter = this.getPosition() != zkex.layout.Borderlayout.CENTER,
+		pzcls = this.parent.getZclass();
+	out.push('<div id="', uuid,  '">', '<div id="', uuid, '$real"',
+			this.domAttrs_({id: 1}), '>');
+			
+	if (this.getTitle()) {
+		out.push('<div id="', uuid, '$cap" class="', zcls, '-header">');
+		if (noCenter) {
+			out.push('<div id="', uuid, '$btn" class="', pzcls,
+					'-tool ', zcls, '-collapse"');
+			if (!this.isCollapsible())
+				out.push(' style="display:none;"');
+			out.push('></div>');
+		}
+		out.push(zUtl.encodeXML(this.getTitle()), '</div>');
+	}
+	out.push('<div id="', uuid, '$cave" class="', zcls, '-body">');
+	
+	for (var w = this.firstChild; w; w = w.nextSibling)
+		w.redraw(out);
+	
+	out.push('</div></div>');
+	
+	if (noCenter) {
+		out.push('<div id="', uuid, '$split" class="', zcls, '-split"></div>');
+		if (this.getTitle()) {
+			out.push('<div id="', uuid, '$colled" class="', zcls,
+					'-collapsed" style="display:none"><div id="',
+					uuid, '$btned" class="', pzcls, '-tool ', zcls, '-expand"');
+			if (!this.isCollapsible())
+				out.push(' style="display:none;"');
+				
+			out.push('></div></div>');
+		}
+	}
+	out.push('</div>');
+}
+zkmld(_zkwg,_zkmd);
 zkex.layout.South = zk.$extends(zkex.layout.LayoutRegion, {
 	setWidth: zk.$void, // readonly
 	sanchor: 'b',
@@ -988,7 +1038,8 @@ zkex.layout.South = zk.$extends(zkex.layout.LayoutRegion, {
 		this.setHeight(size);
 	}
 });
-(_zkwg=_zkpk.South).prototype.className='zkex.layout.South';
+(_zkwg=_zkpk.South).prototype.className='zkex.layout.South';_zkmd={};
+_zkmd['default']=[_zkpk.North,'default'];zkmld(_zkwg,_zkmd);
 zkex.layout.Center = zk.$extends(zkex.layout.LayoutRegion, {
 	setCmargins: zk.$void,    // readonly
 	setSplittable: zk.$void,  // readonly
@@ -1009,7 +1060,8 @@ zkex.layout.Center = zk.$extends(zkex.layout.LayoutRegion, {
 		return zkex.layout.Borderlayout.CENTER;
 	}
 });
-(_zkwg=_zkpk.Center).prototype.className='zkex.layout.Center';
+(_zkwg=_zkpk.Center).prototype.className='zkex.layout.Center';_zkmd={};
+_zkmd['default']=[_zkpk.North,'default'];zkmld(_zkwg,_zkmd);
 zkex.layout.East = zk.$extends(zkex.layout.LayoutRegion, {
 	setHeight: zk.$void, // readonly
 	sanchor: 'r',
@@ -1028,7 +1080,8 @@ zkex.layout.East = zk.$extends(zkex.layout.LayoutRegion, {
 		this.setWidth(size);
 	}
 });
-(_zkwg=_zkpk.East).prototype.className='zkex.layout.East';
+(_zkwg=_zkpk.East).prototype.className='zkex.layout.East';_zkmd={};
+_zkmd['default']=[_zkpk.North,'default'];zkmld(_zkwg,_zkmd);
 zkex.layout.West = zk.$extends(zkex.layout.LayoutRegion, {
 	setHeight: zk.$void, // readonly
 	sanchor: 'l',
@@ -1047,5 +1100,6 @@ zkex.layout.West = zk.$extends(zkex.layout.LayoutRegion, {
 	}
 });
 
-(_zkwg=_zkpk.West).prototype.className='zkex.layout.West';
+(_zkwg=_zkpk.West).prototype.className='zkex.layout.West';_zkmd={};
+_zkmd['default']=[_zkpk.North,'default'];zkmld(_zkwg,_zkmd);
 }finally{zPkg.end(_z);}}

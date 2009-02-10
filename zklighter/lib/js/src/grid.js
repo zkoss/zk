@@ -254,6 +254,15 @@ zul.grid.Column = zk.$extends(zul.grid.HeaderWidget, {
 	getGrid: function () {
 		return this.getOwner();
 	},
+	setSort: function (type) {
+		if (type && type.startsWith('client')) {
+			this.setSortAscending(type);
+			this.setSortDescending(type);
+		} else {
+			this.setSortAscending('none');
+			this.setSortDescending('none');
+		}
+	},
 	getSortDirection: function () {
 		return this._sortDir;
 	},
@@ -681,7 +690,7 @@ zul.grid.Grid = zk.$extends(zul.Widget, {
 	},
 	//-- super --//
 	onChildAdded_: function (child) {
-		this.$supers('onChildAdded_', arguments)
+		this.$supers('onChildAdded_', arguments);
 		if (child.$instanceof(zul.grid.Rows))
 			this.rows = child;
 		else if (child.$instanceof(zul.grid.Columns))
@@ -1393,6 +1402,7 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 	},
 	_syncStripe: function () {
 		this._shallStripe = true;
+		if (!this.inServer && this.desktop)	this.stripe();
 	},
 	stripe: function () {
 		var scOdd = this.getGrid().getOddRowSclass();
@@ -1406,6 +1416,14 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 			}
 		}
 		this._shallStripe = false;
+	},
+	onChildAdded_: function (child) {
+		this.$supers('onChildAdded_', arguments);
+		this._syncStripe();
+	},
+	onChildRemoved_: function (child) {
+		this.$supers('onChildRemoved_', arguments);
+		this._syncStripe();
 	},
 	//Paging//
 	getVisibleItemCount: function () {

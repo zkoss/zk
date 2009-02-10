@@ -48,6 +48,7 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 	},
 	_syncStripe: function () {
 		this._shallStripe = true;
+		if (!this.inServer && this.desktop)	this.stripe();
 	},
 	stripe: function () {
 		var scOdd = this.getGrid().getOddRowSclass();
@@ -61,6 +62,14 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 			}
 		}
 		this._shallStripe = false;
+	},
+	onChildAdded_: function (child) {
+		this.$supers('onChildAdded_', arguments);
+		this._syncStripe();
+	},
+	onChildRemoved_: function (child) {
+		this.$supers('onChildRemoved_', arguments);
+		this._syncStripe();
 	},
 	//Paging//
 	getVisibleItemCount: function () {

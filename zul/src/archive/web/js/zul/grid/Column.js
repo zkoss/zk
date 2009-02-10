@@ -24,6 +24,15 @@ zul.grid.Column = zk.$extends(zul.grid.HeaderWidget, {
 	getGrid: function () {
 		return this.getOwner();
 	},
+	setSort: function (type) {
+		if (type && type.startsWith('client')) {
+			this.setSortAscending(type);
+			this.setSortDescending(type);
+		} else {
+			this.setSortAscending('none');
+			this.setSortDescending('none');
+		}
+	},
 	getSortDirection: function () {
 		return this._sortDir;
 	},
