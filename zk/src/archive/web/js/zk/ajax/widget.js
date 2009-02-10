@@ -632,17 +632,19 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (this.desktop) {
 			var n = this.getNode();
 			if (n) {
-				var skipInfo;
-				if (skipper) skipInfo = skipper.skip(this);
+				if (skipper) {
+					var skipInfo = skipper.skip(this);
+					if (skipInfo) {
+						this.replaceHTML(n, null, skipper);
 
-				this.replaceHTML(n, null, skipper);
+						skipper.restore(this, skipInfo);
 
-				if (skipInfo) {
-					skipper.restore(this, skipInfo);
-
-					zWatch.fireDown('beforeSize', null, this);
-					zWatch.fireDown('onSize', null, this);
+						zWatch.fireDown('beforeSize', null, this);
+						zWatch.fireDown('onSize', null, this);
+						return; //done
+					}
 				}
+				this.replaceHTML(n);
 			}
 		}
 	},
