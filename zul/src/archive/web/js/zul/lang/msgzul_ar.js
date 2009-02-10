@@ -1,4 +1,4 @@
-﻿/* mesg.js "charset=utf-8"
+/* mesg.js "charset=utf-8"
 
 	Purpose:
 		
@@ -16,5 +16,3 @@ msgzul = {};
 msgzul.UNKNOWN_TYPE = "نوع غير معروف";
 msgzul.DATE_REQUIRED = "يتطلب وجود تاريخ";
 msgzul.NO_AUDIO_SUPPORT = "لا يوجد دعم للصوت";
-
-
