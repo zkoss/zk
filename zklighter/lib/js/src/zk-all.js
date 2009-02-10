@@ -4922,8 +4922,10 @@ zk.Widget = zk.$extends(zk.Object, {
 		//TODO: if (zAu.valid) zAu.valid.fixerrboxes();
 		if (cf && !zk.currentFocus) cf.focus();
 
-		zWatch.fireDown('beforeSize', null, this);
-		zWatch.fireDown('onSize', null, this);
+		if (!skipper) {
+			zWatch.fireDown('beforeSize', null, this);
+			zWatch.fireDown('onSize', null, this);
+		}
 	},
 	insertHTML: function (n, where, desktop) {
 		n.insertAdjacentHTML(where, this._redrawHTML());
@@ -4938,12 +4940,19 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (this.desktop) {
 			var n = this.getNode();
 			if (n) {
-				var skipInfo;
-				if (skipper) skipInfo = skipper.skip(this);
+				if (skipper) {
+					var skipInfo = skipper.skip(this);
+					if (skipInfo) {
+						this.replaceHTML(n, null, skipper);
 
-				this.replaceHTML(n, null, skipper);
+						skipper.restore(this, skipInfo);
 
-				if (skipInfo) skipper.restore(this, skipInfo);
+						zWatch.fireDown('beforeSize', null, this);
+						zWatch.fireDown('onSize', null, this);
+						return; //done
+					}
+				}
+				this.replaceHTML(n);
 			}
 		}
 	},
@@ -5402,11 +5411,11 @@ zk.Page = zk.$extends(zk.Widget, {//unlik server, we derive from Widget!
 	_style: "width:100%;height:100%",
 	className: 'zk.Page',
 
-	$init: function (pguid, contained) {
-		pguid = typeof pguid == 'string' ? {uuid: pguid} : pguid;
-		this.$super('$init', pguid);
-
+	$init: function (props, contained) {
 		this._fellows = {};
+
+		this.$super('$init', props);
+
 		if (contained) zk.Page.contained.push(this);
 	},
 	redraw: function (out, skipper) {
@@ -5991,7 +6000,7 @@ zkm = {
 	create: function (parent, wginf) {
 		var wgt, props = wginf.props || {};
 		if (wginf.type == "#p") {
-			wgt = new zk.Page(wginf.uuid, wginf.contained);
+			wgt = new zk.Page({uuid: wginf.uuid}, wginf.contained);
 			wgt.inServer = true;
 			if (parent) parent.appendChild(wgt);
 		} else {
@@ -14592,14 +14601,16 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	_border: 'none',
 	_minheight: 100,
 	_minwidth: 200,
+	_zIndex: 0,
 
 	$init: function () {
+		this._fellows = {};
+
 		this.$supers('$init', arguments);
-		this._fellows = [];
+
 		this.listen('onClose', this, null, -1000);
 		this.listen('onMove', this, null, -1000);
 		this.listen('onZIndex', this, null, -1000);
-		this._zIndex = 0;
 		this._skipper = new zul.wnd.Skipper(this);
 	},
 
@@ -15849,24 +15860,24 @@ function (out) {
 	}
 }
 zkmld(_zkwg,_zkmd);
-}finally{zPkg.end(_z);}}_z='zkex.layout';if(!zk.$import(_z)){try{_zkpk=zk.$package(_z);
+}finally{zPkg.end(_z);}}_z='zul.layout';if(!zk.$import(_z)){try{_zkpk=zk.$package(_z);
 
-zkex.layout.Borderlayout = zk.$extends(zul.Widget, {
+zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 	setResize: function () {
 		this.resize();
 	},
 	//-- super --//
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
-		if (child.$instanceof(zkex.layout.North))
+		if (child.$instanceof(zul.layout.North))
 			this.north = child;
-		else if (child.$instanceof(zkex.layout.South))
+		else if (child.$instanceof(zul.layout.South))
 			this.south = child;
-		else if (child.$instanceof(zkex.layout.Center))
+		else if (child.$instanceof(zul.layout.Center))
 			this.center = child;
-		else if (child.$instanceof(zkex.layout.West))
+		else if (child.$instanceof(zul.layout.West))
 			this.west = child;
-		else if (child.$instanceof(zkex.layout.East))
+		else if (child.$instanceof(zul.layout.East))
 			this.east = child;
 		this.resize();
 	},
@@ -16124,7 +16135,7 @@ zkex.layout.Borderlayout = zk.$extends(zul.Widget, {
 	CENTER: "center"
 });
 
-(_zkwg=_zkpk.Borderlayout).prototype.className='zkex.layout.Borderlayout';_zkmd={};
+(_zkwg=_zkpk.Borderlayout).prototype.className='zul.layout.Borderlayout';_zkmd={};
 _zkmd['default']=
 function (out) {
 	out.push('<div', this.domAttrs_(), '>');
@@ -16134,7 +16145,7 @@ function (out) {
 }
 
 zkmld(_zkwg,_zkmd);
-zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
+zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	_open: true,
 	_border: "normal",
 	_maxsize: 2000,
@@ -16347,7 +16358,7 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
-		if (child.$instanceof(zkex.layout.Borderlayout)) {
+		if (child.$instanceof(zul.layout.Borderlayout)) {
 			this.setFlex(true);
 			zDom.addClass(this.getNode(), this.getZclass() + "-nested");
 		}
@@ -16356,7 +16367,7 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
-		if (child.$instanceof(zkex.layout.Borderlayout)) {
+		if (child.$instanceof(zul.layout.Borderlayout)) {
 			this.setFlex(false);
 			zDom.rmClass(this.getNode(), this.getZclass() + "-nested");
 		}
@@ -16370,7 +16381,7 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
-		if (this.getPosition() != zkex.layout.Borderlayout.CENTER) {
+		if (this.getPosition() != zul.layout.Borderlayout.CENTER) {
 			var split = this.getSubnode('split');			
 			if (split) {
 				this._fixSplit();
@@ -16420,7 +16431,7 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	doScroll_: function () {
 		zWatch.fireDown('onScroll', null, this);
 	},
-	doMouseOver_: function (wevt) {
+	doMouseOver_: function (evt) {
 		if (this.getSubnode('btn')) {
 			switch (evt.nativeTarget) {
 			case this.getSubnode('btn'):
@@ -16436,7 +16447,7 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		}
 		this.$supers('doMouseOver_', arguments);
 	},
-	doMouseOut_: function (wevt) {
+	doMouseOut_: function (evt) {
 		if (this.getSubnode('btn')) {
 			switch (evt.nativeTarget) {
 			case this.getSubnode('btn'):
@@ -16452,7 +16463,7 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		}
 		this.$supers('doMouseOut_', arguments);		
 	},
-	doClick_: function (wevt) {
+	doClick_: function (evt) {
 		if (this.getSubnode('btn')) {
 			var target = evt.nativeTarget;
 			switch (target) {
@@ -16608,27 +16619,27 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		var from = this.getSubnode('colled'),
 			to = this.getSubnode('real');
 		switch (this.getPosition()) {
-		case zkex.layout.Borderlayout.NORTH:
+		case zul.layout.Borderlayout.NORTH:
 			to.style.top = from.offsetTop + from.offsetHeight + "px";
 			to.style.left = from.offsetLeft + "px";
 			break;
-		case zkex.layout.Borderlayout.SOUTH:
+		case zul.layout.Borderlayout.SOUTH:
 			to.style.top = from.offsetTop - to.offsetHeight + "px";
 			to.style.left = from.offsetLeft + "px";
 			break;
-		case zkex.layout.Borderlayout.WEST:
+		case zul.layout.Borderlayout.WEST:
 			to.style.left = from.offsetLeft + from.offsetWidth + "px";
 			to.style.top = from.offsetTop + "px";
 			break;
-		case zkex.layout.Borderlayout.EAST:
+		case zul.layout.Borderlayout.EAST:
 			to.style.left = from.offsetLeft - to.offsetWidth + "px";
 			to.style.top = from.offsetTop + "px";
 			break;
 		}
 	},
 	_isVertical : function () {
-		return this.getPosition() != zkex.layout.Borderlayout.WEST &&
-				this.getPosition() != zkex.layout.Borderlayout.EAST;
+		return this.getPosition() != zul.layout.Borderlayout.WEST &&
+				this.getPosition() != zul.layout.Borderlayout.EAST;
 	}
 }, {
 	// invokes border layout's renderer before the component slides out
@@ -16682,7 +16693,7 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				wgt = dg.control;
 			if (!target || target != wgt.getSubnode('split')) return true;
 			if (wgt.isSplittable() && wgt.isOpen()) {			
-				var $Layout = zkex.layout.Borderlayout,
+				var $Layout = zul.layout.Borderlayout,
 					pos = wgt.getPosition(),
 					maxs = wgt.getMaxsize(),
 					mins = wgt.getMinsize(),
@@ -16767,7 +16778,7 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		var wgt = dg.control,
 			x = pointer[0],
 			y = pointer[1],
-			$Layout = zkex.layout.Borderlayout,
+			$Layout = zul.layout.Borderlayout,
 			split = wgt.getSubnode('split'),
 			b = dg._rootoffs, w, h;
 		switch (wgt.getPosition()) {
@@ -16818,13 +16829,13 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	}
 });
 
-(_zkwg=_zkpk.LayoutRegion).prototype.className='zkex.layout.LayoutRegion';
-zkex.layout.North = zk.$extends(zkex.layout.LayoutRegion, {
+(_zkwg=_zkpk.LayoutRegion).prototype.className='zul.layout.LayoutRegion';
+zul.layout.North = zk.$extends(zul.layout.LayoutRegion, {
 	setWidth: zk.$void, // readonly
 	sanchor: 't',
 	
 	getPosition: function () {
-		return zkex.layout.Borderlayout.NORTH;
+		return zul.layout.Borderlayout.NORTH;
 	},
 	getSize: function () {
 		return this.getHeight();
@@ -16833,12 +16844,12 @@ zkex.layout.North = zk.$extends(zkex.layout.LayoutRegion, {
 		this.setHeight(size);
 	}
 });
-(_zkwg=_zkpk.North).prototype.className='zkex.layout.North';_zkmd={};
+(_zkwg=_zkpk.North).prototype.className='zul.layout.North';_zkmd={};
 _zkmd['default']=
 function (out) {
 	var uuid = this.uuid,
 		zcls = this.getZclass(),
-		noCenter = this.getPosition() != zkex.layout.Borderlayout.CENTER,
+		noCenter = this.getPosition() != zul.layout.Borderlayout.CENTER,
 		pzcls = this.parent.getZclass();
 	out.push('<div id="', uuid,  '">', '<div id="', uuid, '$real"',
 			this.domAttrs_({id: 1}), '>');
@@ -16876,11 +16887,11 @@ function (out) {
 	out.push('</div>');
 }
 zkmld(_zkwg,_zkmd);
-zkex.layout.South = zk.$extends(zkex.layout.LayoutRegion, {
+zul.layout.South = zk.$extends(zul.layout.LayoutRegion, {
 	setWidth: zk.$void, // readonly
 	sanchor: 'b',
 	getPosition: function () {
-		return zkex.layout.Borderlayout.SOUTH;
+		return zul.layout.Borderlayout.SOUTH;
 	},
 	getSize: function () {
 		return this.getHeight();
@@ -16889,9 +16900,9 @@ zkex.layout.South = zk.$extends(zkex.layout.LayoutRegion, {
 		this.setHeight(size);
 	}
 });
-(_zkwg=_zkpk.South).prototype.className='zkex.layout.South';_zkmd={};
+(_zkwg=_zkpk.South).prototype.className='zul.layout.South';_zkmd={};
 _zkmd['default']=[_zkpk.North,'default'];zkmld(_zkwg,_zkmd);
-zkex.layout.Center = zk.$extends(zkex.layout.LayoutRegion, {
+zul.layout.Center = zk.$extends(zul.layout.LayoutRegion, {
 	setCmargins: zk.$void,    // readonly
 	setSplittable: zk.$void,  // readonly
 	setOpen: zk.$void,        // readonly
@@ -16908,12 +16919,12 @@ zkex.layout.Center = zk.$extends(zkex.layout.LayoutRegion, {
 	doClick_: zk.$void,       // do nothing.
 	
 	getPosition: function () {
-		return zkex.layout.Borderlayout.CENTER;
+		return zul.layout.Borderlayout.CENTER;
 	}
 });
-(_zkwg=_zkpk.Center).prototype.className='zkex.layout.Center';_zkmd={};
+(_zkwg=_zkpk.Center).prototype.className='zul.layout.Center';_zkmd={};
 _zkmd['default']=[_zkpk.North,'default'];zkmld(_zkwg,_zkmd);
-zkex.layout.East = zk.$extends(zkex.layout.LayoutRegion, {
+zul.layout.East = zk.$extends(zul.layout.LayoutRegion, {
 	setHeight: zk.$void, // readonly
 	sanchor: 'r',
 	
@@ -16922,7 +16933,7 @@ zkex.layout.East = zk.$extends(zkex.layout.LayoutRegion, {
 		this.setCmargins("0,5,5,0");
 	},
 	getPosition: function () {
-		return zkex.layout.Borderlayout.EAST;
+		return zul.layout.Borderlayout.EAST;
 	},
 	getSize: function () {
 		return this.getWidth();
@@ -16931,9 +16942,9 @@ zkex.layout.East = zk.$extends(zkex.layout.LayoutRegion, {
 		this.setWidth(size);
 	}
 });
-(_zkwg=_zkpk.East).prototype.className='zkex.layout.East';_zkmd={};
+(_zkwg=_zkpk.East).prototype.className='zul.layout.East';_zkmd={};
 _zkmd['default']=[_zkpk.North,'default'];zkmld(_zkwg,_zkmd);
-zkex.layout.West = zk.$extends(zkex.layout.LayoutRegion, {
+zul.layout.West = zk.$extends(zul.layout.LayoutRegion, {
 	setHeight: zk.$void, // readonly
 	sanchor: 'l',
 	$init: function () {
@@ -16941,7 +16952,7 @@ zkex.layout.West = zk.$extends(zkex.layout.LayoutRegion, {
 		this.setCmargins("0,5,5,0");
 	},
 	getPosition: function () {
-		return zkex.layout.Borderlayout.WEST;
+		return zul.layout.Borderlayout.WEST;
 	},
 	getSize: function () {
 		return this.getWidth();
@@ -16951,6 +16962,6 @@ zkex.layout.West = zk.$extends(zkex.layout.LayoutRegion, {
 	}
 });
 
-(_zkwg=_zkpk.West).prototype.className='zkex.layout.West';_zkmd={};
+(_zkwg=_zkpk.West).prototype.className='zul.layout.West';_zkmd={};
 _zkmd['default']=[_zkpk.North,'default'];zkmld(_zkwg,_zkmd);
 }finally{zPkg.end(_z);}}

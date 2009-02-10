@@ -4922,8 +4922,10 @@ zk.Widget = zk.$extends(zk.Object, {
 		//TODO: if (zAu.valid) zAu.valid.fixerrboxes();
 		if (cf && !zk.currentFocus) cf.focus();
 
-		zWatch.fireDown('beforeSize', null, this);
-		zWatch.fireDown('onSize', null, this);
+		if (!skipper) {
+			zWatch.fireDown('beforeSize', null, this);
+			zWatch.fireDown('onSize', null, this);
+		}
 	},
 	insertHTML: function (n, where, desktop) {
 		n.insertAdjacentHTML(where, this._redrawHTML());
@@ -4938,12 +4940,19 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (this.desktop) {
 			var n = this.getNode();
 			if (n) {
-				var skipInfo;
-				if (skipper) skipInfo = skipper.skip(this);
+				if (skipper) {
+					var skipInfo = skipper.skip(this);
+					if (skipInfo) {
+						this.replaceHTML(n, null, skipper);
 
-				this.replaceHTML(n, null, skipper);
+						skipper.restore(this, skipInfo);
 
-				if (skipInfo) skipper.restore(this, skipInfo);
+						zWatch.fireDown('beforeSize', null, this);
+						zWatch.fireDown('onSize', null, this);
+						return; //done
+					}
+				}
+				this.replaceHTML(n);
 			}
 		}
 	},
@@ -5402,11 +5411,11 @@ zk.Page = zk.$extends(zk.Widget, {//unlik server, we derive from Widget!
 	_style: "width:100%;height:100%",
 	className: 'zk.Page',
 
-	$init: function (pguid, contained) {
-		pguid = typeof pguid == 'string' ? {uuid: pguid} : pguid;
-		this.$super('$init', pguid);
-
+	$init: function (props, contained) {
 		this._fellows = {};
+
+		this.$super('$init', props);
+
 		if (contained) zk.Page.contained.push(this);
 	},
 	redraw: function (out, skipper) {
@@ -5991,7 +6000,7 @@ zkm = {
 	create: function (parent, wginf) {
 		var wgt, props = wginf.props || {};
 		if (wginf.type == "#p") {
-			wgt = new zk.Page(wginf.uuid, wginf.contained);
+			wgt = new zk.Page({uuid: wginf.uuid}, wginf.contained);
 			wgt.inServer = true;
 			if (parent) parent.appendChild(wgt);
 		} else {

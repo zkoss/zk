@@ -70,7 +70,7 @@
 	</javascript>
 	<javascript>
 		<destination>lib/js/layout.js</destination>
-		<source>../zkex/codegen/archive/web/js/zkex/layout/zk.wpd</source>
+		<source>../zul/codegen/archive/web/js/zul/layout/zk.wpd</source>
 	</javascript>
 
 	<javascript>
@@ -86,7 +86,7 @@
 		<source>../zul/codegen/archive/web/js/zul/utl/zk.wpd</source>
 		<source>../zul/codegen/archive/web/js/zul/wnd/zk.wpd</source>
 		<source>../zul/codegen/archive/web/js/zul/tab/zk.wpd</source>
-		<source>../zkex/codegen/archive/web/js/zkex/layout/zk.wpd</source>
+		<source>../zul/codegen/archive/web/js/zul/layout/zk.wpd</source>
 	</javascript>
 
 	<copy>
@@ -100,7 +100,6 @@
 	<css>
 		<destination>lib/css/norm.css</destination>
 		<source>../zul/src/archive/web/zul/css/norm.css.dsp</source>
-		<source>../zkex/src/archive/web/zkex/css/zkex.css.dsp</source>
 
 		<browser>ie</browser>
 		<browser>moz</browser>

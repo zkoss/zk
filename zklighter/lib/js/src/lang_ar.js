@@ -38,26 +38,11 @@ zk.FMON=['يناير','فبراير','مارس','أبريل','مايو','يون�
 zk.APM=['ص','م'];
 
 }finally{zPkg.end(_z);}}_z='zul.lang';if(!zk.$import(_z)){try{_zkpk=zk.$package(_z);
-﻿/* mesg.js "charset=utf-8"
 
-	Purpose:
-		
-	Description:
-		
-	History:
-　　Tranlated by Ayman Elgharabawy (aaaeg@hotmail.com) 6 April 2008
-
-Copyright (C) 2005-2007 Potix Corporation. All Rights Reserved.
-
-	This program is distributed under GPL Version 2.0 in the hope that
-	it will be useful, but WITHOUT ANY WARRANTY.
-*/
 msgzul = {};
 msgzul.UNKNOWN_TYPE = "نوع غير معروف";
 msgzul.DATE_REQUIRED = "يتطلب وجود تاريخ";
 msgzul.NO_AUDIO_SUPPORT = "لا يوجد دعم للصوت";
-
-
 
 zk.$default(msgzul, {
 VALUE_NOT_MATCHED:'يجب أن تحدد قيمة من القائمة',
