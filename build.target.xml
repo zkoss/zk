@@ -39,12 +39,6 @@ Copyright (C) 2002-2006 Potix Corporation. All Rights Reserved.
 <!-- ====== -->
 <!-- DEPLOY -->
 <!-- ====== -->
-<target name="deploy.export" depends="config.build" if="src.export.dir.exist">
-	<copy todir="${dist.export.dir}" preservelastmodified="yes">
-		<fileset dir="${src.export.dir}"/>
-	</copy>
-</target>
-
 <target name="deploy.lib" depends="config.build" if="deploy.lib.required">
 	<copy todir="${dist.lib.dir}" preservelastmodified="yes">
 		<fileset dir="${out.dir}" includes="${xar.name}, ${jad.name}"/>
@@ -133,14 +127,13 @@ if="deploy.jboss.required">
 	</copy>
 </target>
 
-<target name="deploy"
-depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
+<target name="deploy" depends="deploy.lib, deploy.tomcat, deploy.jboss">
 </target>
 
 <!-- ===== -->
 <!-- BUILD -->
 <!-- ===== -->
-<target name="build.jar" depends="gentime, compile, copy.web.jar" if="build.jar.required">
+<target name="build.jar" depends="gentime, compile" if="build.jar.required">
 	<mkdir dir="${src.archive.dir}"/>
 	<mkdir dir="${codegen.archive.dir}"/>
 
@@ -168,7 +161,7 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 		 excludes="META-INF/MANIFEST.MF"/>
 	</jar>
 </target>
-<target name="build.jad" depends="compile, copy.web.jar" if="build.jad.required">
+<target name="build.jad" depends="compile" if="build.jad.required">
 	<mkdir dir="${src.archive.dir}"/>
 	<mkdir dir="${codegen.archive.dir}"/>
 
@@ -193,16 +186,6 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 		<arg value="${out.dir}/${jad.name}"/>
 	</exec>
 </target>
-<!-- copy WEB-relevant resource  to jar (into codegen.archive.web.dir) -->
-<target name="copy.web.jar" depends="deploy.export" if="copy.web.jar.required">
-	<mkdir dir="${codegen.archive.web.dir}"/>
-	<copy todir="${codegen.archive.web.dir}" preservelastmodified="yes"
-	failonerror="false">
-		<fileset dir="${dist.export.dir}" includes="${import.libs}"/>
-		<fileset dir="${dist.lib.ext.dir}" includes="${import.libs}"/>
-		<fileset dir="${src.export.dir}" includes="${import.libs}"/>
-	</copy>
-</target>
 <target name="gentime" depends="config" if="gentime.required">
 	<exec executable="bash" dir="." failonerror="true">
 		<arg value="${bin.dir}/gentime"/>
@@ -219,8 +202,6 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 	manifest="${war.dir}/META-INF/MANIFEST.MF">
 		<fileset dir="${war.dir}" includes="**"
 		 excludes="WEB-INF/web.xml, META-INF/MANIFEST.MF"/>
-		<fileset dir="${dist.export.dir}" includes="${import.libs}"/>
-		<fileset dir="${dist.lib.ext.dir}" includes="${import.libs}"/>
 
 		<lib dir="${dist.lib.ext.dir}" includes="${war.libs}"/>
 		<lib dir="${dist.lib.dir}" includes="${war.libs}"/>
@@ -247,20 +228,11 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 <!-- ===== -->
 <!-- CLEAN -->
 <!-- ===== -->
-<target name="clean.all" depends="config" if="clean.all.required">
-	<delete quiet="true" includeEmptyDirs="true">
-		<fileset dir="${dist.export.dir}" includes="**"/>
-	</delete>
-	<!--delete quiet="true">
-		<fileset dir="${dist.lib.dir}" includes="*.?ar, *.jad"/>
-	</delete-->
-</target>
-
 <target name="clean.bin" depends="config" if="clean.bin.required">
 	<delete quiet="true" dir="${bin.dir}"/>
 </target>
 
-<target name="clean" depends="clean.all, clean.bin">
+<target name="clean" depends="clean.bin">
 	<delete quiet="true" dir="${out.dir}"/>
 	<delete quiet="true" dir="${tmp.dir}"/>
 	<delete quiet="true" dir="${outv.dir}"/>
@@ -277,12 +249,7 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 <!-- ========= -->
 <!-- UNIT TEST -->
 <!-- ========= -->
-<target name="deploy.test" depends="config" if="dist.test.dir.exist">
-	<copy todir="${jboss.app.test.dir}" preservelastmodified="yes">
-		<fileset dir="${dist.test.dir}" includes="**"/>
-	</copy>
-</target>
-<target name="utest" depends="build, deploy.test">
+<target name="utest" depends="build">
 	<property name="class.test" value="**/*Test.java"/><!-- test all if not defined -->
 
 	<echo message="Test ${class.test}..."/>

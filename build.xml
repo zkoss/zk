@@ -45,9 +45,6 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 		<!--tstamp/-->
 
 		<available file="${src.mesg.dir}" property="src.mesg.dir.exist"/>
-		<available file="${src.export.dir}" property="src.export.dir.exist"/>
-
-		<available file="${dist.test.dir}" property="dist.test.dir.exist"/>
 
 		<available file="${bin.dir}/CVS" property="bin.CVS.dir.exist"/>
 		<available file="${bin.dir}/.svn" property="bin.svn.dir.exist"/>
@@ -62,12 +59,6 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 		<condition property="war.dir" value="WebContent">
 			<not>
 				<available file="${src.archive.dir}" type="dir"/>
-			</not>
-		</condition>
-
-		<condition property="copy.web.jar.required">
-			<not>
-				<equals arg1="${import.libs}" arg2="nonexist"/>
 			</not>
 		</condition>
 
@@ -187,7 +178,6 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 	</target>
 	<target name="config.build" depends="config">
 		<mkdir dir="${codegen.dir}"/>
-		<mkdir dir="${dist.export.dir}"/>
 	</target>
 
 <!-- ======= -->

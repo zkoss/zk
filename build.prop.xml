@@ -31,7 +31,6 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 
 <property name="src.dir" value="src"/>
 <property name="src.archive.dir" value="${src.dir}/archive"/>
-<property name="src.export.dir" value="${src.dir}/export"/>
 <property name="src.mesg.dir" value="${src.archive.dir}/metainfo/mesg"/>
 <property name="manifest.mf" value="${src.archive.dir}/META-INF/MANIFEST.MF"/>
 <property name="application.xml" value="${src.archive.dir}/META-INF/application.xml"/>
@@ -55,10 +54,6 @@ Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 <property name="dist.lib.dir" value="${dist.dir}/lib"/>
 <property name="dist.lib.ext.dir" value="${dist.lib.dir}/ext"/>
 <property name="dist.conf.dir" value="${dist.dir}/conf"/>
-<property name="dist.install.dir" value="${dist.conf.dir}/install"/>
-<property name="dist.upgrade.dir" value="${dist.conf.dir}/upgrade"/>
-<property name="dist.test.dir" value="${dist.conf.dir}/test"/>
-<property name="dist.export.dir" value="${dist.dir}/export"/>
 <property name="working.javadoc.dir" value="${working.dir}/javadoc/${project.name}"/>
 <property name="dist.javadoc.dir" value="${share.javadoc.dir}/${project.name}"/>
 <property name="out.metainf.dir" value="${out.dir}/META-INF"/>

@@ -54,9 +54,6 @@ build.setting or build.setting.local
 		Optinal. Default: true if and only if D.ON is false
 		Controls whether to optimize code generation.
 
-MANIFEST.MF (Must)
-	Used if the project doesn't contain MANIFEST.MF
-
 ----------
 Files located under the project directory:
 ----------
@@ -110,14 +107,6 @@ ear.libs (Optional)
 	Specifies A list of libraries (one per line) under dist/lib
 	or dist/lib/ext that shall be packed to the result ear (format must be ear).
 	Used only if format: ear.
-
-import.libs (Optional)
-	Specifies a list of files (one per line) under dist/export that
-	shall be packed to the result war (format must be war).
-	Note: dist/export is generated if a project contains src/export.
-
-cactus.properties (Must if Web-based Unit Test)
-	Specifies the information required by web-based unit test codes.
 
 class.test.local (Optional)
  	Specifies a list of classes (one per line) that the unit test must

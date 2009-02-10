@@ -165,7 +165,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	cp -rp zkplus/codegen/* zkplus/src/* ../src/zkplus
 	cd ..
 	rm -rf $srcnm
-	rm -rf src/*/archive src/*/export
+	rm -rf src/*/archive
 	echo Output '*-sources.jar'
 	cd src
 	find -name 'package.html' | xargs rm -rf
@@ -225,9 +225,6 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	chmod 644 /tmp/zk/$binnm/dist/lib/*.jar
 	chmod 644 /tmp/zk/$binnm/dist/lib/*/*.jar
 
-	if [ -d dist/export/WEB-INF ] ; then
-		cp -rp dist/export/WEB-INF/* /tmp/zk/$binnm/dist/WEB-INF
-	fi
 	cp -rp zweb/src/archive/web/WEB-INF/tld/web /tmp/zk/$binnm/dist/WEB-INF/tld
 	cp -rp zk/src/archive/web/WEB-INF/tld/zk /tmp/zk/$binnm/dist/WEB-INF/tld
 	cp -rp zul/src/archive/web/WEB-INF/tld/zul /tmp/zk/$binnm/dist/WEB-INF/tld

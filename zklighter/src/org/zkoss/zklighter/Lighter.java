@@ -137,9 +137,7 @@ public class Lighter {
 		ci.pure = false;
 		final List browsers = new LinkedList();
 		for (Iterator it = el.getElements("browser").iterator(); it.hasNext();) {
-			final String browser = ((Element)it.next()).getText(true);
-			browsers.add(browser);
-			outCSS(dst, srcs, browser, ci);
+			browsers.add(((Element)it.next()).getText(true));
 		}
 
 		//merge all browser CSS into one

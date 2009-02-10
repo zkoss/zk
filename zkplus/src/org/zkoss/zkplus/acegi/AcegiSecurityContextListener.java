@@ -30,7 +30,6 @@ import org.zkoss.zk.ui.event.EventThreadInit;
 import org.zkoss.zk.ui.event.EventThreadCleanup;
 import org.zkoss.zk.ui.event.EventThreadResume;
 import org.zkoss.zk.ui.util.Configuration;
-import org.zkoss.zk.au.Command;
 
 import org.zkoss.util.logging.Log;
 import org.zkoss.web.servlet.BufferedResponse;

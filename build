@@ -343,15 +343,6 @@ function invoke_ant
 		ear_libs=nonexist
 	fi
 
-	local import_libs=
-	if [ -f import.libs ] ; then
-		import_libs=$(cat import.libs | tr '\n' ',')
-		import_libs=${import_libs%,}
-	fi
-	if [ "$import_libs" = "" ] ; then
-		import_libs=nonexist
-	fi
-
 	local deploy=
 	local unziplist=
 	if [ -f deploy ] ; then
@@ -444,7 +435,7 @@ function invoke_ant
 		-Djs.trim=$jstrim -Dzipjs=$zipjslist\
 		-Dzipcss=$zipcsslist\
 		-Dwar.libs="$war_libs" -Dbasedir=. \
-		-Dear.libs="$ear_libs" -Dimport.libs="$import_libs" \
+		-Dear.libs="$ear_libs" \
 		-Dproject.name="$2" -Dproject.version="$prjver" \
 		-Dsource.version="$srcver" -Dtarget.version="$tgtver" \
 		-Dhaltonerror=$haltonerror -Dout.dir=$outdir \
