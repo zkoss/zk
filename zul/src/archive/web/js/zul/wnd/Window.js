@@ -18,14 +18,16 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	_border: 'none',
 	_minheight: 100,
 	_minwidth: 200,
+	_zIndex: 0,
 
 	$init: function () {
+		this._fellows = {};
+
 		this.$supers('$init', arguments);
-		this._fellows = [];
+
 		this.listen('onClose', this, null, -1000);
 		this.listen('onMove', this, null, -1000);
 		this.listen('onZIndex', this, null, -1000);
-		this._zIndex = 0;
 		this._skipper = new zul.wnd.Skipper(this);
 	},
 

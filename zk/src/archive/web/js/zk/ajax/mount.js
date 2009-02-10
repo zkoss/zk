@@ -301,7 +301,7 @@ zkm = {
 	create: function (parent, wginf) {
 		var wgt, props = wginf.props || {};
 		if (wginf.type == "#p") {
-			wgt = new zk.Page(wginf.uuid, wginf.contained);
+			wgt = new zk.Page({uuid: wginf.uuid}, wginf.contained);
 			wgt.inServer = true;
 			if (parent) parent.appendChild(wgt);
 		} else {

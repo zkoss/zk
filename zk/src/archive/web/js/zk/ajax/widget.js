@@ -1094,11 +1094,11 @@ zk.Page = zk.$extends(zk.Widget, {//unlik server, we derive from Widget!
 	_style: "width:100%;height:100%",
 	className: 'zk.Page',
 
-	$init: function (pguid, contained) {
-		pguid = typeof pguid == 'string' ? {uuid: pguid} : pguid;
-		this.$super('$init', pguid);
-
+	$init: function (props, contained) {
 		this._fellows = {};
+
+		this.$super('$init', props);
+
 		if (contained) zk.Page.contained.push(this);
 	},
 	redraw: function (out, skipper) {
