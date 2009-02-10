@@ -23,6 +23,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Collections;
 import java.util.ListIterator;
+import java.util.Iterator;
 import java.io.Reader;
 import java.io.IOException;
 
@@ -75,6 +76,11 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	protected AbstractExecution(Desktop desktop, Page creating) {
 		_desktop = desktop; //it is null if it is created by WebManager.newDesktop
 		_creating = creating;
+
+		if (desktop != null) {
+			final Iterator it = desktop.getPages().iterator();
+			if (it.hasNext()) _curpage = (Page)it.next();
+		}
 	}
 
 	//-- Execution --//
@@ -111,10 +117,19 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 		return _curpage;
 	}
 	public final void setCurrentPage(Page curpage) {
-		if (_curpage != null && curpage != null && _curpage != curpage
-		&& _curpage.getDesktop() != curpage.getDesktop())
-			throw new IllegalStateException("Change current page to another desktop? "+curpage);
+		if (_curpage != null && curpage != null && _curpage != curpage) {
+			Desktop _curdt = _curpage.getDesktop(),
+				curdt = curpage.getDesktop();
+			if (_curdt != null && curdt != null && _curdt != curdt)
+				throw new IllegalStateException("Change current page to another desktop? "+curpage);
+		}
 		_curpage = curpage;
+	}
+	private final Page getCurrentPage0() {
+		if (_curpage != null)
+			return _curpage;
+		final Iterator it = _desktop.getPages().iterator();
+		return it.hasNext() ? (Page)it.next(): null;
 	}
 	public PageDefinition getCurrentPageDefinition() {
 		return _curpgdef;
@@ -178,7 +193,7 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	public Component createComponents(String uri, Component parent,
 	Map arg) {
 		final Component[] cs = getUiEngine().createComponents(
-			this, getPageDefinition(uri), _curpage, parent, arg);
+			this, getPageDefinition(uri), getCurrentPage0(), parent, arg);
 		return cs.length > 0 ? cs[0]: null;
 	}
 	public Component createComponents(PageDefinition pagedef,
@@ -186,28 +201,28 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 		if (pagedef == null)
 			throw new IllegalArgumentException("pagedef cannot be null");
 		final Component[] cs = getUiEngine().createComponents(
-			this, pagedef, _curpage, parent, arg);
+			this, pagedef, getCurrentPage0(), parent, arg);
 		return cs.length > 0 ? cs[0]: null;
 	}
 	public Component createComponentsDirectly(String content, String ext,
 	Component parent, Map arg) {
 		final Component[] cs = getUiEngine().createComponents(
 			this, getPageDefinitionDirectly(content, ext),
-			_curpage, parent, arg);
+			getCurrentPage0(), parent, arg);
 		return cs.length > 0 ? cs[0]: null;
 	}
 	public Component createComponentsDirectly(Document content, String ext,
 	Component parent, Map arg) {
 		final Component[] cs = getUiEngine().createComponents(
 			this, getPageDefinitionDirectly(content, ext),
-			_curpage, parent, arg);
+			getCurrentPage0(), parent, arg);
 		return cs.length > 0 ? cs[0]: null;
 	}
 	public Component createComponentsDirectly(Reader reader, String ext,
 	Component parent, Map arg) throws IOException {
 		final Component[] cs = getUiEngine().createComponents(
 			this, getPageDefinitionDirectly(reader, ext),
-			_curpage, parent, arg);
+			getCurrentPage0(), parent, arg);
 		return cs.length > 0 ? cs[0]: null;
 	}
 
