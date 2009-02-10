@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
+zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	_open: true,
 	_border: "normal",
 	_maxsize: 2000,
@@ -225,7 +225,7 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
-		if (child.$instanceof(zkex.layout.Borderlayout)) {
+		if (child.$instanceof(zul.layout.Borderlayout)) {
 			this.setFlex(true);
 			zDom.addClass(this.getNode(), this.getZclass() + "-nested");
 		}
@@ -234,7 +234,7 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
-		if (child.$instanceof(zkex.layout.Borderlayout)) {
+		if (child.$instanceof(zul.layout.Borderlayout)) {
 			this.setFlex(false);
 			zDom.rmClass(this.getNode(), this.getZclass() + "-nested");
 		}
@@ -248,7 +248,7 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
-		if (this.getPosition() != zkex.layout.Borderlayout.CENTER) {
+		if (this.getPosition() != zul.layout.Borderlayout.CENTER) {
 			var split = this.getSubnode('split');			
 			if (split) {
 				this._fixSplit();
@@ -486,27 +486,27 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		var from = this.getSubnode('colled'),
 			to = this.getSubnode('real');
 		switch (this.getPosition()) {
-		case zkex.layout.Borderlayout.NORTH:
+		case zul.layout.Borderlayout.NORTH:
 			to.style.top = from.offsetTop + from.offsetHeight + "px";
 			to.style.left = from.offsetLeft + "px";
 			break;
-		case zkex.layout.Borderlayout.SOUTH:
+		case zul.layout.Borderlayout.SOUTH:
 			to.style.top = from.offsetTop - to.offsetHeight + "px";
 			to.style.left = from.offsetLeft + "px";
 			break;
-		case zkex.layout.Borderlayout.WEST:
+		case zul.layout.Borderlayout.WEST:
 			to.style.left = from.offsetLeft + from.offsetWidth + "px";
 			to.style.top = from.offsetTop + "px";
 			break;
-		case zkex.layout.Borderlayout.EAST:
+		case zul.layout.Borderlayout.EAST:
 			to.style.left = from.offsetLeft - to.offsetWidth + "px";
 			to.style.top = from.offsetTop + "px";
 			break;
 		}
 	},
 	_isVertical : function () {
-		return this.getPosition() != zkex.layout.Borderlayout.WEST &&
-				this.getPosition() != zkex.layout.Borderlayout.EAST;
+		return this.getPosition() != zul.layout.Borderlayout.WEST &&
+				this.getPosition() != zul.layout.Borderlayout.EAST;
 	}
 }, {
 	// invokes border layout's renderer before the component slides out
@@ -560,7 +560,7 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				wgt = dg.control;
 			if (!target || target != wgt.getSubnode('split')) return true;
 			if (wgt.isSplittable() && wgt.isOpen()) {			
-				var $Layout = zkex.layout.Borderlayout,
+				var $Layout = zul.layout.Borderlayout,
 					pos = wgt.getPosition(),
 					maxs = wgt.getMaxsize(),
 					mins = wgt.getMinsize(),
@@ -645,7 +645,7 @@ zkex.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		var wgt = dg.control,
 			x = pointer[0],
 			y = pointer[1],
-			$Layout = zkex.layout.Borderlayout,
+			$Layout = zul.layout.Borderlayout,
 			split = wgt.getSubnode('split'),
 			b = dg._rootoffs, w, h;
 		switch (wgt.getPosition()) {

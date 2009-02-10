@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zkex.layout.Center = zk.$extends(zkex.layout.LayoutRegion, {
+zul.layout.Center = zk.$extends(zul.layout.LayoutRegion, {
 	setCmargins: zk.$void,    // readonly
 	setSplittable: zk.$void,  // readonly
 	setOpen: zk.$void,        // readonly
@@ -29,6 +29,6 @@ zkex.layout.Center = zk.$extends(zkex.layout.LayoutRegion, {
 	doClick_: zk.$void,       // do nothing.
 	
 	getPosition: function () {
-		return zkex.layout.Borderlayout.CENTER;
+		return zul.layout.Borderlayout.CENTER;
 	}
 });

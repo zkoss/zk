@@ -15,7 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 function (out) {
 	var uuid = this.uuid,
 		zcls = this.getZclass(),
-		noCenter = this.getPosition() != zkex.layout.Borderlayout.CENTER,
+		noCenter = this.getPosition() != zul.layout.Borderlayout.CENTER,
 		pzcls = this.parent.getZclass();
 	out.push('<div id="', uuid,  '">', '<div id="', uuid, '$real"',
 			this.domAttrs_({id: 1}), '>');

@@ -26,6 +26,6 @@ package org.zkoss.zkex.zul.api;
  * @author jumperchen
  * @since 3.0.0
  */
-public interface South extends LayoutRegion {
+public interface South extends org.zkoss.zul.api.South {
 
 }

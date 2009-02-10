@@ -1,12 +1,12 @@
 /* Borderlayout.java
 
- {{IS_NOTE
+{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
-		Tue Oct 23 09:22:13     2008, Created by Flyworld
+		Feb 10, 2009 4:17:16 PM , Created by jumperchen
 }}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
@@ -15,8 +15,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	This program is distributed under GPL Version 2.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
- */
-package org.zkoss.zkex.zul.api;
+*/
+package org.zkoss.zul.api;
 
 /**
  * A border layout lays out a container, arranging and resizing its components
@@ -58,10 +58,26 @@ package org.zkoss.zkex.zul.api;
  * </pre>
  * 
  * <p>
- * Default {@link org.zkoss.zkex.zul.Borderlayout#getZclass}: z-border-layout. (since 3.5.0)
+ * Default {@link org.zkoss.zul.Borderlayout#getZclass}: z-border-layout. (since 3.5.0)
  * 
  * @author jumperchen
- * @since 3.0.0
+ * @since 5.0.0
  */
-public interface Borderlayout extends org.zkoss.zul.api.Borderlayout {
+public interface Borderlayout extends org.zkoss.zk.ui.api.HtmlBasedComponent {
+
+	public North getNorthApi();
+
+	public South getSouthApi();
+
+	public West getWestApi();
+
+	public East getEastApi();
+
+	public Center getCenterApi();
+
+	/**
+	 * Re-size this layout component.
+	 */
+	public void resize();
+
 }

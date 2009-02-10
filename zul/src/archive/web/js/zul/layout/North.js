@@ -12,12 +12,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zkex.layout.North = zk.$extends(zkex.layout.LayoutRegion, {
+zul.layout.North = zk.$extends(zul.layout.LayoutRegion, {
 	setWidth: zk.$void, // readonly
 	sanchor: 't',
 	
 	getPosition: function () {
-		return zkex.layout.Borderlayout.NORTH;
+		return zul.layout.Borderlayout.NORTH;
 	},
 	getSize: function () {
 		return this.getHeight();

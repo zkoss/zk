@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Oct 23 09:22:13     2008, Created by Flyworld
+		Feb 10, 2009 4:18:57 PM , Created by jumperchen
 }}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
@@ -15,21 +15,21 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	This program is distributed under GPL Version 2.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
- */
-package org.zkoss.zkex.zul.api;
+*/
+package org.zkoss.zul.api;
 
 /**
  * This component is a west region.
  * <p>
- * Default {@link org.zkoss.zkex.zul.West#getZclass}: z-west.(since 3.5.0)
+ * Default {@link org.zkoss.zul.West#getZclass}: z-west.(since 3.5.0)
  * 
  * <p>
- * Default: {@link org.zkoss.zkex.zul.West#getCmargins()} is "0,5,5,0" (since 3.5.0)
+ * Default: {@link org.zkoss.zul.West#getCmargins()} is "0,5,5,0" (since 3.5.0)
  * </p>
  * 
  * @author jumperchen
- * @since 3.0.0
+ * @since 5.0.0
  */
-public interface West extends org.zkoss.zul.api.West {
+public interface West extends LayoutRegion {
 
 }

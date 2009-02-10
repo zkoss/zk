@@ -25,38 +25,5 @@ package org.zkoss.zkex.zul;
  * @author jumperchen
  * @since 3.0.0
  */
-public class North extends LayoutRegion implements org.zkoss.zkex.zul.api.North {
-	public North() {
-	}
-
-	/**
-	 * Returns {@link Borderlayout#NORTH}.
-	 */
-	public String getPosition() {
-		return Borderlayout.NORTH;
-	}
-
-	/**
-	 * The width can't be specified in this component because its width is
-	 * determined by other region components ({@link West} or {@link East}).
-	 */
-	public void setWidth(String width) {
-		throw new UnsupportedOperationException("readonly");
-	}
-
-	/**
-	 * Returns the size of this region. This method is shortcut for
-	 * {@link #getHeight()}.
-	 */
-	public String getSize() {
-		return getHeight();
-	}
-
-	/**
-	 * Sets the size of this region. This method is shortcut for
-	 * {@link #setHeight(String)}.
-	 */
-	public void setSize(String size) {
-		setHeight(size);
-	}
+public class North extends org.zkoss.zul.North implements org.zkoss.zkex.zul.api.North {
 }

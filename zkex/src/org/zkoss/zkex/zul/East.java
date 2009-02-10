@@ -26,39 +26,6 @@ package org.zkoss.zkex.zul;
  * @author jumperchen
  * @since 3.0.0
  */
-public class East extends LayoutRegion implements org.zkoss.zkex.zul.api.East {
-	public East() {
-		setCmargins("0,5,5,0");
-	}
-
-	/**
-	 * Returns {@link Borderlayout#EAST}.
-	 */
-	public String getPosition() {
-		return Borderlayout.EAST;
-	}
-
-	/**
-	 * The height can't be specified in this component because its height is
-	 * determined by other region components ({@link North} or {@link South}).
-	 */
-	public void setHeight(String height) {
-		throw new UnsupportedOperationException("readonly");
-	}
-
-	/**
-	 * Returns the size of this region. This method is shortcut for
-	 * {@link #getWidth()}.
-	 */
-	public String getSize() {
-		return getWidth();
-	}
-
-	/**
-	 * Sets the size of this region. This method is shortcut for
-	 * {@link #setWidth(String)}.
-	 */
-	public void setSize(String size) {
-		setWidth(size);
-	}
+public class East extends org.zkoss.zul.East implements org.zkoss.zkex.zul.api.East {
+	
 }

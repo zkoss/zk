@@ -414,3 +414,5 @@ span.z-progressmeter-img {
 <c:include page="~./zul/css/cmps/tree.css.dsp"/>
 <%-- Tabbox --%>
 <c:include page="~./zul/css/cmps/tabbox.css.dsp"/>
+<%-- Borderlayout --%>
+<c:include page="~./zul/css/cmps/layout.css.dsp"/>

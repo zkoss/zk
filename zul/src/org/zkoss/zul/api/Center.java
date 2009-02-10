@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		Tue Oct 23 09:22:13     2008, Created by Flyworld
+		Feb 10, 2009 4:19:37 PM , Created by jumperchen
 }}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
@@ -15,8 +15,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	This program is distributed under GPL Version 2.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
- */
-package org.zkoss.zkex.zul.api;
+*/
+package org.zkoss.zul.api;
 
 /**
  * This component is a center region.
@@ -24,16 +24,16 @@ package org.zkoss.zkex.zul.api;
  * <strong>Note:</strong> This component doesn't support the following method,
  * including {@link #setSplittable(boolean)}, {@link #setOpen(boolean)},
  * {@link #setCollapsible(boolean)}, {@link #setMaxsize(int)},
- * {@link #setMinsize(int)}, {@link org.zkoss.zkex.zul.Center#setHeight(String)},
- * {@link org.zkoss.zkex.zul.Center#setWidth(String)}, {@link #getSize()}, {@link #setSize(String)}, and
- * {@link org.zkoss.zkex.zul.Center#setVisible(boolean)}.
+ * {@link #setMinsize(int)}, {@link org.zkoss.zul.Center#setHeight(String)},
+ * {@link org.zkoss.zul.Center#setWidth(String)}, {@link #getSize()}, {@link #setSize(String)}, and
+ * {@link org.zkoss.zul.Center#setVisible(boolean)}.
  * 
  * <p>
- * Default {@link org.zkoss.zkex.zul.Center#getZclass}: z-center.(since 3.5.0)
+ * Default {@link org.zkoss.zul.Center#getZclass}: z-center.(since 3.5.0)
  * 
  * @author jumperchen
- * @since 3.0.0
+ * @since 5.0.0
  */
-public interface Center extends org.zkoss.zul.api.Center {
+public interface Center extends LayoutRegion {
 
 }

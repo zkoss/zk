@@ -12,22 +12,22 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zkex.layout.Borderlayout = zk.$extends(zul.Widget, {
+zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 	setResize: function () {
 		this.resize();
 	},
 	//-- super --//
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
-		if (child.$instanceof(zkex.layout.North))
+		if (child.$instanceof(zul.layout.North))
 			this.north = child;
-		else if (child.$instanceof(zkex.layout.South))
+		else if (child.$instanceof(zul.layout.South))
 			this.south = child;
-		else if (child.$instanceof(zkex.layout.Center))
+		else if (child.$instanceof(zul.layout.Center))
 			this.center = child;
-		else if (child.$instanceof(zkex.layout.West))
+		else if (child.$instanceof(zul.layout.West))
 			this.west = child;
-		else if (child.$instanceof(zkex.layout.East))
+		else if (child.$instanceof(zul.layout.East))
 			this.east = child;
 		this.resize();
 	},

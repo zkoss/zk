@@ -187,6 +187,15 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<preserve-blank/>
 	</component>
 	<component>
+		<component-name>borderlayout</component-name>
+		<component-class>org.zkoss.zul.Borderlayout</component-class>
+		<widget-class>zul.layout.Borderlayout</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/borderlayout.js</mold-uri>
+		</mold>
+	</component>	
+	<component>
 		<component-name>button</component-name>
 		<component-class>org.zkoss.zul.Button</component-class>
 		<widget-class>zul.wgt.Button</widget-class>
@@ -235,6 +244,16 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<mold>
 			<mold-name>default</mold-name>
  			<mold-uri>mold/caption.js</mold-uri>
+		</mold>
+		<preserve-blank/>
+	</component>
+	<component>
+		<component-name>center</component-name>
+		<component-class>org.zkoss.zul.Center</component-class>
+		<widget-class>zul.layout.Center</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/layoutregion.js</mold-uri>
 		</mold>
 		<preserve-blank/>
 	</component>
@@ -326,6 +345,16 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-name>default</mold-name>
 			<mold-uri>mold/input.js</mold-uri>
 		</mold>
+	</component>
+	<component>
+		<component-name>east</component-name>
+		<component-class>org.zkoss.zul.East</component-class>
+		<widget-class>zul.layout.East</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/layoutregion.js</mold-uri>
+		</mold>
+		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>fileupload</component-name>
@@ -545,6 +574,16 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-uri>~./zul/html/longbox.dsp</mold-uri>
 		</mold>
 	</component>
+	<component>
+		<component-name>north</component-name>
+		<component-class>org.zkoss.zul.North</component-class>
+		<widget-class>zul.layout.North</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/layoutregion.js</mold-uri>
+		</mold>
+		<preserve-blank/>
+	</component>	
 	<component><!-- Feature 2493161 -->
 		<component-name>macro</component-name>
 		<component-class>org.zkoss.zk.ui.HtmlMacroComponent</component-class>
@@ -710,6 +749,16 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-name>sphere</mold-name>
 			<mold-uri>~./zul/html/slider2.dsp</mold-uri>
 		</mold>
+	</component>
+	<component>
+		<component-name>south</component-name>
+		<component-class>org.zkoss.zul.South</component-class>
+		<widget-class>zul.layout.South</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/layoutregion.js</mold-uri>
+		</mold>
+		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>space</component-name>
@@ -943,6 +992,16 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-name>vertical</mold-name>
 			<mold-uri>mold/vbox.js</mold-uri>
 		</mold>
+	</component>
+	<component>
+		<component-name>west</component-name>
+		<component-class>org.zkoss.zul.West</component-class>
+		<widget-class>zul.layout.West</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/layoutregion.js</mold-uri>
+		</mold>
+		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>window</component-name>
