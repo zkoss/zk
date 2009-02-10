@@ -614,8 +614,10 @@ zk.Widget = zk.$extends(zk.Object, {
 		//TODO: if (zAu.valid) zAu.valid.fixerrboxes();
 		if (cf && !zk.currentFocus) cf.focus();
 
-		zWatch.fireDown('beforeSize', null, this);
-		zWatch.fireDown('onSize', null, this);
+		if (!skipper) {
+			zWatch.fireDown('beforeSize', null, this);
+			zWatch.fireDown('onSize', null, this);
+		}
 	},
 	insertHTML: function (n, where, desktop) {
 		n.insertAdjacentHTML(where, this._redrawHTML());
@@ -635,7 +637,12 @@ zk.Widget = zk.$extends(zk.Object, {
 
 				this.replaceHTML(n, null, skipper);
 
-				if (skipInfo) skipper.restore(this, skipInfo);
+				if (skipInfo) {
+					skipper.restore(this, skipInfo);
+
+					zWatch.fireDown('beforeSize', null, this);
+					zWatch.fireDown('onSize', null, this);
+				}
 			}
 		}
 	},
