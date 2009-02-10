@@ -143,6 +143,6 @@ public class Timer extends HtmlBasedComponent implements org.zkoss.zul.api.Timer
 
 		render(renderer, "repeats", _repeats);
 		if (_delay != 0) renderer.render("delay", _delay);
-		if (!_running) render(renderer, "running", false);
+		if (!_running) renderer.render("running", false);
 	}
 }
