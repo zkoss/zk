@@ -68,7 +68,7 @@ public class PollingServerPush implements ServerPush {
 
 		final String dtid = _desktop.getId();
 		final StringBuffer sb = new StringBuffer(128)
-			.append("zk.invoke('zkex.ui.cpsp',function(){zkCpsp.start('")
+			.append("zPkg.load('zkex.cpsp');zk.afterLoad(function(){zkex.cpsp.start('")
 			.append(dtid).append('\'');
 
 		final int v1 = getIntPref("PollingServerPush.delay.min"),
@@ -97,7 +97,7 @@ public class PollingServerPush implements ServerPush {
 		final String stop = _desktop.getWebApp().getConfiguration()
 			.getPreference("PollingServerPush.stop", null);
 		return stop != null ? stop:
-			"zkCpsp.stop('" + _desktop.getId() + "');";
+			"zkex.cpsp.stop('" + _desktop.getId() + "');";
 	}
 
 	//ServerPush//

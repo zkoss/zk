@@ -780,8 +780,6 @@ zAu.cmd1 = {
 		child.insertHTML(document.body, "beforeEnd");
 	},
 	rm: function (uuid, wgt) {
-		//NOTE: it is possible the server asking removing a non-exist cmp
-		//so keep silent if not found
 		if (wgt) {
 			var p = wgt.parent;
 			if (p) p.removeChild(wgt);

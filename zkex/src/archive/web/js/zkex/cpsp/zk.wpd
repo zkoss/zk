@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- zk.wpd
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Feb 10 18:52:11     2009, Created by tomyeh
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+-->
+
+<package name="zkex.cpsp">
+	<script src="serverpush.js"/>
+</package>
