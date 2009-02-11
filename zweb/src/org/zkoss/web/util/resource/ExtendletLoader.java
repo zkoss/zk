@@ -84,13 +84,8 @@ abstract public class ExtendletLoader implements Loader {
 
 		try {
 			return parse(is, path);
-		} catch (Exception ex) {
-			if (log.debugable())
-				log.realCauseBriefly("Failed to parse "+path, ex);
-			else
-				log.error("Failed to parse "+path
-				+"\nCause: "+ex.getClass().getName()+" "+Exceptions.getMessage(ex)
-				+"\n"+Exceptions.getBriefStackTrace(ex));
+		} catch (Throwable ex) {
+			log.realCauseBriefly("Failed to parse "+path, ex);
 			return null; //as non-existent
 		} finally {
 			try {
