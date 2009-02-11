@@ -450,6 +450,8 @@ zkm = {
 			wgt.doKeyDown_(wevt);
 			if (wevt.stopped) zEvt.stop(evt);
 		}
+		if (zEvt.keyCode(evt) == 27 && zAu.ignoreESC()) //Bug 1927788: prevent FF from closing connection
+			zEvt.stop(evt); //eat
 	},
 	docKeyUp: function (evt) {
 		evt = evt || window.event;

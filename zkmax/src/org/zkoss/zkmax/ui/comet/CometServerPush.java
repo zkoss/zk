@@ -71,7 +71,7 @@ public class CometServerPush implements ServerPush {
 			return start;
 
 		final String dtid = _desktop.getId();
-		return "zk.invoke('zkmax.ui.cmsp',function(){zkCmsp.start('"
+		return "zPkg.load('zkmax.cmsp');zk.afterLoad(function(){zkmax.cmsp.start('"
 			+ dtid + "');},'" + dtid + "');";
 	}
 			
@@ -81,7 +81,7 @@ public class CometServerPush implements ServerPush {
 		final String stop = _desktop.getWebApp().getConfiguration()
 			.getPreference("CometServerPush.stop", null);
 		return stop != null ? stop:
-			"zkCmsp.stop('" + _desktop.getId() + "');";
+			"zkmax.cmsp.stop('" + _desktop.getId() + "');";
 	}
 
 	/** Returns the desktop that this server push belongs to (never null).

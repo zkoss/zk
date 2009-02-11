@@ -220,6 +220,9 @@ zAu = {
 
 		zAu.showError("ILLEGAL_RESPONSE", "Unknown command: ", cmd);
 	},
+	ignoreESC: function () {
+		return zAu._areq;
+	},
 
 	//ajax internal//
 	_cmdsQue: [], //response commands in XML
@@ -386,21 +389,21 @@ zAu = {
 	_send2: function (dt, timeout) {
 		if (!timeout) timeout = 0;
 		if (dt && timeout >= 0)
-			setTimeout(function(){zAu._sendNow(dt);}, timeout);
+			setTimeout(function(){zAu.sendNow(dt);}, timeout);
 	},
-	_sendNow: function (dt) {
+	sendNow: function (dt) {
 		var es = dt._aureqs;
 		if (es.length == 0)
-			return; //nothing to do
+			return false;
 
 		if (zk.mounting) {
-			zk.afterMount(function(){zAu._sendNow(dt);});
-			return; //wait
+			zk.afterMount(function(){zAu.sendNow(dt);});
+			return true; //wait
 		}
 
 		if (zAu._areq || zAu._preqInf) { //send ajax request one by one
 			zAu._sendPending = true;
-			return;
+			return true;
 		}
 
 		//notify watches (fckez uses it to ensure its value is sent back correctly
@@ -457,6 +460,7 @@ zAu = {
 				ctli: ctli, ctlc: ctlc, implicit: implicit,
 				ignorable: ignorable, tmout: 0
 			});
+		return true;
 	},
 	_sendNow2: function(reqInf) {
 		var req = zUtl.newAjax(),
