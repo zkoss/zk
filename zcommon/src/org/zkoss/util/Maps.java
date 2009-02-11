@@ -252,7 +252,7 @@ public class Maps {
 		return parse(map, src, separator, quote, asValue, false, false);
 	}
 	/**
-	 * Parse a string 
+	 * Parse a string into a map.
 	 * <p>If = is omitted, whether it is considered as a key with the null
 	 * value or a value with the null key depends on
 	 * the asValue argument. If true, it is considered as a value with
@@ -275,7 +275,8 @@ public class Maps {
 	 * @param separator the separator, e.g., ' ' or ','.
 
 	 * @param quote the quote character to surround the value.
-	 * Ingored if quote is (char)0
+	 * Ingored if quote is (char)0.<br/>
+	 * Since 3.0.9: if quote is (char)1, then both ' and " are accepted.</br>
 	 * For example, a1='b c' will generate a map entry, ("a1", "b c") if
 	 * quote is '\''.<br/>
 	 * Note: the quote is taken off before storing to the map.<br/>
@@ -322,15 +323,22 @@ public class Maps {
 
 		//prepare delimiters for keys and values.
 		final String delimValue, delimKey;
+		final boolean sngldblquote = quote == (char)1;
 		{	final StringBuffer delimsb =
 				new StringBuffer().append(separator);
-			if (quote != (char)0)
+
+			if (sngldblquote) {
+				delimsb.append("\"'");
+				quote = '"';
+			} else if (quote != (char)0) {
 				delimsb.append(quote);
+			}
+
 			delimValue = delimsb.toString();
 			delimKey = delimsb.append('=').toString();
 		}
 
-		//parase
+		//parse
 		for (int j = 0, len = src.length();;) {
 			//handle name
 			Token tk = next(src, delimKey, j, true, parenthesis);
@@ -350,7 +358,8 @@ public class Maps {
 					else put(map, name, null, multiple);
 				return map;//done
 			default:
-				if (quote != (char)0 && tk.cc == quote) {
+				if (quote != (char)0
+				&& (tk.cc == quote || (sngldblquote && tk.cc == '\''))) {
 					name = null;
 					break; //value only
 				}
@@ -371,7 +380,8 @@ public class Maps {
 //			if (D.ON && log.finerable()) log.finer("value: "+tk.token+" "+tk.cc);
 			j = tk.next;
 			final String value = tk.token;
-			if (quote != (char)0 && tk.cc == quote) {
+			if (quote != (char)0
+			&& (tk.cc == quote || (sngldblquote && tk.cc == '\''))) {
 				if (value.length() > 0)
 					throw newIllegalSyntaxException(MCommon.UNEXPECTED_CHARACTER, tk.cc, src);
 
