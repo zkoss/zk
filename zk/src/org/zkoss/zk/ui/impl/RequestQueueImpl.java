@@ -128,7 +128,7 @@ public class RequestQueueImpl implements RequestQueue {
 		final String name = request.getName();
 		final int opts = request.getOptions();
 
-		//Since 3.0.2, redudant CTRL_GROUP is removed at the client
+		//Since 3.0.2, redundant CTRL_GROUP is removed at the client
 
 		//case 2, DUPLICATE_IGNORE: drop existent request if they are the same
 		//as the arrival.

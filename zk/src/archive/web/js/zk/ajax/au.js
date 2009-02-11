@@ -91,7 +91,7 @@ zAu = {
 
 		var t = aureq.target;
 		if (t) {
-			zAu._send(t.type == '#d' ? t: t.desktop, aureq, timeout);
+			zAu._send(t.className == 'zk.Desktop' ? t: t.desktop, aureq, timeout);
 		} else {
 			var dts = zk.Desktop.all;
 			for (var dtid in dts)
@@ -101,7 +101,7 @@ zAu = {
 	sendAhead: function (aureq, timeout) {
 		var t = aureq.target;
 		if (t) {
-			var dt = t.type == '#d' ? t: t.desktop;
+			var dt = t.className == 'zk.Desktop' ? t: t.desktop;
 			dt._aureqs.unshift(aureq);
 			zAu._send2(dt, timeout);
 		} else {
@@ -435,7 +435,8 @@ zAu = {
 				evtnm = aureq.name,
 				target = aureq.target;
 			content += "&cmd."+j+"="+evtnm;
-			if (target) content += "&uuid."+j+"="+target.uuid;
+			if (target && target.className != 'zk.Desktop')
+				content += "&uuid."+j+"="+target.uuid;
 
 			var data = aureq.data;
 			if (data && data.marshal) data = data.marshal();
