@@ -12,7 +12,7 @@
  Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
  {{IS_RIGHT
- This program is distributed under GPL Version 2.0 in the hope that
+ This program is distributed under GPL Version 3.0 in the hope that
  it will be useful, but WITHOUT ANY WARRANTY.
  }}IS_RIGHT
  */
@@ -361,7 +361,7 @@ public abstract class LayoutRegion extends XulElement implements org.zkoss.zkex.
 		return cls != null ? cls + " " + added : added; 
 	}
 	public String getZclass() {
-		return _zclass == null ? "z-" + getPosition() : super.getZclass();
+		return _zclass == null ? "z-" + getPosition() : _zclass;
 	}
 	public void onChildRemoved(Component child) {
 		super.onChildRemoved(child);

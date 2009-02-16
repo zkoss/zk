@@ -12,7 +12,7 @@
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -85,7 +85,7 @@ public class Fisheye extends XulElement implements org.zkoss.zkex.zul.api.Fishey
 	}
 	//-- super --//
 	public String getZclass() {
-		return _zclass == null ? "z-fisheye" : super.getZclass();
+		return _zclass == null ? "z-fisheye" : _zclass;
 	}
 	protected int getRealStyleFlags() {
 		return super.getRealStyleFlags() | RS_NO_WIDTH|RS_NO_HEIGHT;

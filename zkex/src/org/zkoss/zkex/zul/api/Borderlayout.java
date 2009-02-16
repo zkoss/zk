@@ -12,17 +12,11 @@
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
  */
 package org.zkoss.zkex.zul.api;
-
-import org.zkoss.zkex.zul.North;
-import org.zkoss.zkex.zul.South;
-import org.zkoss.zkex.zul.West;
-import org.zkoss.zkex.zul.East;
-import org.zkoss.zkex.zul.Center;
 
 /**
  * A border layout lays out a container, arranging and resizing its components
@@ -71,15 +65,15 @@ import org.zkoss.zkex.zul.Center;
  */
 public interface Borderlayout extends org.zkoss.zk.ui.api.HtmlBasedComponent {
 
-	public North getNorth();
+	public North getNorthApi();
 
-	public South getSouth();
+	public South getSouthApi();
 
-	public West getWest();
+	public West getWestApi();
 
-	public East getEast();
+	public East getEastApi();
 
-	public Center getCenter();
+	public Center getCenterApi();
 
 	/**
 	 * Re-size this layout component.
