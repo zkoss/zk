@@ -12,7 +12,7 @@
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -70,6 +70,14 @@ implements SerializableAware, HierachicalAware {
 	private static final String VAR_NS = "z_bshnS";
 	private bsh.Interpreter _ip;
 	private GlobalNS _bshns;
+
+	/*static {
+		bsh.Interpreter.LOCALSCOPING = false;
+			//must be false (default); otherwise, the following fails
+			//class X {
+			//  String x;
+			//  X(String v) {x = v;}
+	}*/
 
 	public BSHInterpreter() {
 	}
@@ -267,8 +275,7 @@ implements SerializableAware, HierachicalAware {
 		Namespace p = ns.getParent();
 		NameSpace bshns = //Bug 1831534: we have to pass class manager
 			new NS(p != null ? prepareNS(p): _bshns, _ip.getClassManager(), ns);
-				//Bug 1899353: we have to use _bshns instead of null
-				//Reason: unknown
+				//Bug 1899353: we have to use _bshns instead of null (Reason: unknown)
 		ns.setVariable(VAR_NS, new NSX(bshns), true);
 		return bshns;
 	}
@@ -310,7 +317,7 @@ implements SerializableAware, HierachicalAware {
 			//
 			//setVariable will callback this method,
 			//so use _inGet to prevent dead loop
-			Variable var = super.getVariableImpl(name, recurse);
+			Variable var = super.getVariableImpl(name, false);
 			if (!_inGet && var == null) {
 				Object v = getFromNamespace(name);
 				if (v != UNDEFINED) {
@@ -326,7 +333,25 @@ implements SerializableAware, HierachicalAware {
 						_inGet = false;
 					}
 				}
+
+				if (var == null && recurse) {
+					NameSpace parent = getParent();
+					if (parent instanceof AbstractNS) {
+						var = ((AbstractNS)parent).getVariableImpl(name, true);
+					} else if (parent != null) { //show not reach here; just in case
+						try {
+							java.lang.reflect.Method m =
+								NameSpace.class.getDeclaredMethod("getVariableImpl",
+									new Class[] {String.class, Boolean.TYPE});
+							m.setAccessible(true);
+							var = (Variable)m.invoke(parent, new Object[] {name, Boolean.TRUE});
+						} catch (Exception ex) {
+							throw UiException.Aide.wrap(ex);
+						}
+					}
+				}
 			}
+
 			return var;
 		}
 	    public void loadDefaultImports() {
@@ -340,7 +365,10 @@ implements SerializableAware, HierachicalAware {
 	    	super(null, classManager, name);
 	    }
 		protected Object getFromNamespace(String name) {
-			return BSHInterpreter.this.getFromNamespace(name);
+			final Namespace ns = getOwner().getNamespace();
+			Object v = ns.getVariable(name, true);
+			return v != null || ns.containsVariable(name, true) ? v: UNDEFINED; 
+				//local-only since getVariableImpl will look up its parent
 		}
 	    public void loadDefaultImports() {
 	    	BSHInterpreter.this.loadDefaultImports(this);
@@ -359,9 +387,9 @@ implements SerializableAware, HierachicalAware {
 		//super//
 		/** Search _ns instead. */
 		protected Object getFromNamespace(String name) {
-			final BSHInterpreter ip = getInterpreter();
-			return ip != null ? ip.getFromNamespace(_ns, name):
-				_ns.getVariable(name, false);
+			Object v = _ns.getVariable(name, true);
+			return v != null || _ns.containsVariable(name, true) ? v: UNDEFINED; 
+				//local-only since getVariableImpl will look up its parent
 		}
 		private BSHInterpreter getInterpreter() {
 			Page owner = _ns.getOwnerPage();
@@ -401,7 +429,7 @@ implements SerializableAware, HierachicalAware {
 	 * being serialized
 	 */
 	private static class NSX {
-		NameSpace ns;
+		final NameSpace ns;
 		private NSX(NameSpace ns) {
 			this.ns = ns;
 		}

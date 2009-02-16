@@ -12,7 +12,7 @@
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -192,6 +192,8 @@ public class ZkFns extends DspFns {
 				.append(config.getTooltipDelay())
 			.append(";\nzk_resndto=")
 				.append(config.getResendDelay())
+			.append(";\nzk_clkflto=")
+				.append(config.getClickFilterDelay())
 			.append(";\n");
 
 		if (config.isDebugJS())

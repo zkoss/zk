@@ -12,7 +12,7 @@
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -66,7 +66,9 @@ abstract public class GenericInterpreter implements Interpreter {
 	/** Used by {@link #getFromNamespace} to denote a variable is not defined.
 	 * @since 2.4.0
 	 */
-	public static final Object UNDEFINED = new Object();
+	public static final Object UNDEFINED = new Object() {
+		public String toString() {return "undefined";}
+	};
 
 	/** A list of {@link Namespace}.
 	 * Top of it is the current one (if null, it means Namespaces.getCurrent)
@@ -251,14 +253,23 @@ abstract public class GenericInterpreter implements Interpreter {
 	 * @param ns the namespace to search from (never null).
 	 * Note: if {@link #getCurrent} returns null, this method simply returns
 	 * null (i.e., ignoring ns).
+	 * @param localOnly whether to look for the current namespace only.
+	 * If false, it looks up the parent namespace, if any.
+	 * @since 3.5.3
 	 */
-	protected Object getFromNamespace(Namespace ns, String name) {
+	protected Object getFromNamespace(Namespace ns, String name, boolean localOnly) {
 		if (getCurrent() != null) {
-			Object val = ns.getVariable(name, false);
-			if (val != null || ns.containsVariable(name, false))
+			Object val = ns.getVariable(name, localOnly);
+			if (val != null || ns.containsVariable(name, localOnly))
 				return val;
 		}
 		return getImplicit(name);
+	}
+	/** It is a shortcut of getFromNamespace(ns, name, false).
+	 * @see #getFromNamespace(Namespace, String, boolean)
+	 */
+	protected Object getFromNamespace(Namespace ns, String name) {
+		return getFromNamespace(ns, name, false);
 	}
 
 	//Interpreter//
