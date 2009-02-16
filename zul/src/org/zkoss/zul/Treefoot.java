@@ -12,7 +12,7 @@
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -46,7 +46,7 @@ public class Treefoot extends XulElement implements org.zkoss.zul.api.Treefoot {
 	}
 	//-- Component --//
 	public String getZclass() {
-		return _zclass == null ? "z-tree-foot" : super.getZclass();
+		return _zclass == null ? "z-tree-foot" : _zclass;
 	}
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Tree))

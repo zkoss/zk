@@ -12,7 +12,7 @@
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -96,7 +96,8 @@ public class SimpleXYModel extends AbstractChartModel implements XYModel {
 	public void removeSeries(Comparable series) {
 		_seriesMap.remove(series);
 		_seriesList.remove(series);
-		fireEvent(ChartDataEvent.REMOVED, (String)series, null);
+		//bug 2555730: Unnecessary String cast on 'series' in SimpleCategoryModel
+		fireEvent(ChartDataEvent.REMOVED, series, null);
 	}
 	
 	public void removeValue(Comparable series, int index) {

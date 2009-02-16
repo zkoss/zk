@@ -12,7 +12,7 @@
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -62,7 +62,7 @@ public class Tabpanels extends XulElement implements org.zkoss.zul.api.Tabpanels
 	 * <p>Note: the default style class is always "z-tabpanels".
 	 */
 	public String getZclass() {
-		if (_zclass != null) return super.getZclass();
+		if (_zclass != null) return _zclass;
 		final Tabbox tabbox = getTabbox();
 		final String added = tabbox != null ? tabbox.inAccordionMold() ? "-" + tabbox.getMold() :
 			tabbox.isVertical() ? "-ver" : "" : "";

@@ -12,7 +12,7 @@
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -92,7 +92,7 @@ public class Auxheader extends HeaderElement implements org.zkoss.zul.api.Auxhea
 
 	//super//
 	public String getZclass() {
-		return _zclass == null ? "z-auxheader" : super.getZclass();
+		return _zclass == null ? "z-auxheader" : _zclass;
 	}
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();

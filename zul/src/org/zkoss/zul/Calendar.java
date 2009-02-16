@@ -146,7 +146,7 @@ public class Calendar extends XulElement implements org.zkoss.zul.api.Calendar {
 
 	//-- super --//
 	public String getZclass() {
-		return _zclass == null ? "z-calendar" : super.getZclass();
+		return _zclass == null ? "z-calendar" : _zclass;
 	}
 	public String getOuterAttrs() {
 		final StringBuffer sb =

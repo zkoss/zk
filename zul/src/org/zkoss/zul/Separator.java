@@ -12,7 +12,7 @@
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -172,7 +172,7 @@ public class Separator extends XulElement implements org.zkoss.zul.api.Separator
 	// super
 	public String getZclass() {
 		return _zclass == null ? "z-separator" + (isVertical() ? "-ver" + (isBar() ? "-bar" : "") :
-			"-hor" + (isBar() ? "-bar" : "")) : super.getZclass();
+			"-hor" + (isBar() ? "-bar" : "")) : _zclass;
 	}
 
 	/** Returns whether to use margins for spacing.

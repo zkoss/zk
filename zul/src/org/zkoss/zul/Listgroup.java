@@ -12,7 +12,7 @@
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -156,7 +156,7 @@ public class Listgroup extends Listitem implements org.zkoss.zul.api.Listgroup {
 		}
 	}
 	public String getZclass() {
-		return _zclass == null ? "z-list-group" : super.getZclass();
+		return _zclass == null ? "z-list-group" : _zclass;
 	}
 	public String getOuterAttrs() {
 		final StringBuffer sb = new StringBuffer(64).append( super.getOuterAttrs());

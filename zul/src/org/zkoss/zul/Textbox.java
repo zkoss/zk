@@ -12,7 +12,7 @@
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -134,7 +134,7 @@ public class Textbox extends InputElement implements org.zkoss.zul.api.Textbox{
 
 	//-- super --//
 	public String getZclass() {
-		return _zclass == null ? "z-textbox" : super.getZclass();
+		return _zclass == null ? "z-textbox" : _zclass;
 	}
 	public String getInnerAttrs() {
 		final String attrs = super.getInnerAttrs();

@@ -12,7 +12,7 @@
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -999,7 +999,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 
 	//-- Component --//
 	public String getZclass() {
-		return _zclass == null ? "z-tree" : super.getZclass();
+		return _zclass == null ? "z-tree" : _zclass;
 	}
 	public void smartUpdate(String attr, String value) {
 		if (!_noSmartUpdate) super.smartUpdate(attr, value);

@@ -12,7 +12,7 @@
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -31,7 +31,7 @@ public class Menuseparator extends XulElement implements org.zkoss.zul.api.Menus
 
 	//-- Component --//
 	public String getZclass() {
-		return _zclass == null ? "z-menu-separator" : super.getZclass();
+		return _zclass == null ? "z-menu-separator" : _zclass;
 	}
 	/** Not childable. */
 	public boolean isChildable() {

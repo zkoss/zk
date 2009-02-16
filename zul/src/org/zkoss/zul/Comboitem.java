@@ -12,7 +12,7 @@
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -67,7 +67,7 @@ public class Comboitem extends LabelImageElement implements org.zkoss.zul.api.Co
 	}
 
 	public String getZclass() {
-		return _zclass == null ? "z-combo-item" : super.getZclass();
+		return _zclass == null ? "z-combo-item" : _zclass;
 	}
 	
 	public void setLabel(String label) {

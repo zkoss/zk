@@ -12,7 +12,7 @@
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
  */
@@ -368,13 +368,6 @@ public interface Listbox extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 * It is the same as {@link #selectItemApi}.
 	 */
 	public void setSelectedItemApi(org.zkoss.zul.api.Listitem item);
-
-	/**
-	 * Selects the given listitems.
-	 * 
-	 * @since 3.6.0
-	 */
-	public void setSelectedItems(Set listItems);
 
 	/**
 	 * Returns all selected items.

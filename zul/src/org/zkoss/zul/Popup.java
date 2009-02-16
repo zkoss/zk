@@ -12,7 +12,7 @@
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -112,7 +112,7 @@ public class Popup extends XulElement implements org.zkoss.zul.api.Popup {
 		throw new UnsupportedOperationException("Use open/close instead");
 	}
 	public String getZclass() {
-		return _zclass == null ? "z-popup" : super.getZclass();
+		return _zclass == null ? "z-popup" : _zclass;
 	}
 	public String getOuterAttrs() {
 	//Note: don't generate z.type here because Menupopup's z.type diff

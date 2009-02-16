@@ -12,7 +12,7 @@
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -23,6 +23,8 @@ import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.Events;
 
 /**
  * A radio button.
@@ -166,8 +168,18 @@ public class Radio extends Checkbox implements org.zkoss.zul.api.Radio {
 	 * 
 	 */
 	public String getZclass() {
-		return _zclass == null ? "z-radio" : super.getZclass();
+		return _zclass == null ? "z-radio" : _zclass;
 	}
+	
+	/** Process the onCheck event sent when the radio is checked.
+	 * @since 3.5.3
+	 */
+	public void onCheck(Event event) {
+		final Radiogroup rg = getRadiogroup();
+		if (rg != null)
+			Events.sendEvent(rg, event);
+	}
+	
 	//-- Component --//
 	public void setParent(Component parent) {
 		final Radiogroup oldgp = getRadiogroup();

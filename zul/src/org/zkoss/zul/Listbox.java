@@ -12,7 +12,7 @@
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -879,6 +879,16 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 	 * <p>It is the same as {@link #selectItem}.
 	 */
 	public void setSelectedItem(Listitem item) {
+		selectItem(item);
+	}
+	/**  Deselects all of the currently selected items and selects
+	 * the given item.
+	 * <p>It is the same as {@link #selectItem}.
+	 * @param itemApi assume as a {@link org.zkoss.zul.Listitem}   
+	 * @since 3.5.2
+	 */
+	public void setSelectedItemApi(org.zkoss.zul.api.Listitem itemApi) {
+		Listitem item = (Listitem) itemApi;	
 		selectItem(item);
 	}
 
@@ -2431,7 +2441,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 	}
 
 	public String getZclass() {
-		return _zclass == null ? "z-listbox" : super.getZclass();
+		return _zclass == null ? "z-listbox" : _zclass;
 	}
 	public String getOuterAttrs() {
 		final StringBuffer sb =
@@ -2777,4 +2787,5 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 			throw new UnsupportedOperationException();
 		}
 	}
+
 }

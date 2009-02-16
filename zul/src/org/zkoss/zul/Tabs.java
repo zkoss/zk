@@ -12,7 +12,7 @@
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -96,7 +96,7 @@ public class Tabs extends XulElement implements org.zkoss.zul.api.Tabs {
 		return scls != null && scls.length() > 0 ? scls + " " + added : added;
 	}
 	public String getZclass() {
-		if (_zclass != null) return super.getZclass();
+		if (_zclass != null) return _zclass;
 		final Tabbox tabbox = getTabbox();
 		final String added = tabbox != null && tabbox.isVertical() ? "-ver" : ""; 
 		return "z-tabs" + added;
