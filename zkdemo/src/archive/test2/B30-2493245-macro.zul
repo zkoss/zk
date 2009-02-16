@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-2493245-macro.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jan  8 14:32:22     2009, Created by tomyeh
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+-->
+<window mode="modal" title="Zoom" border="normal">
+<zscript><![CDATA[
+Boolean.valueOf("true");
+]]>
+</zscript>
+<button label="new macro"/>
+</window>

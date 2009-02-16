@@ -18,6 +18,12 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<debug-js>true</debug-js>
 	</client-config>
 	-->
+	<!-- Turn on if you want to use the same UUID sequence for the desktops
+		after reboot. It is mainly for debugging purpose.
+	<desktop-config>
+		<repeat-uuid>true</repeat-uuid>
+	</desktop-config>
+	-->
 	<!--
 	<log>
 		<description>[Optional] Monitor i3-log.conf and register a handler for the specified log-base</description>
@@ -29,6 +35,14 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<language-config>
 		<addon-uri>/WEB-INF/lang-addon.xml</addon-uri>
 	</language-config>
+	-->
+
+	<!-- Turn on if you want to ignore the consecutive click events,
+	if it happens too close to the previous one, or the server is still
+	serving the previous click.
+	<client-config>
+		<click-filter-delay>390</click-filter-delay>
+	</client-config>
 	-->
 
 	<!-- Optional -->

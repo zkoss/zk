@@ -12,7 +12,7 @@
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -47,6 +47,11 @@ import org.zkoss.zk.ui.impl.PageImpl;
  */
 public class DumbFailoverManager implements FailoverManager {
 	private Desktop _killed;
+
+	public void start(WebApp wapp) {
+	}
+	public void stop(WebApp wapp) {
+	}
 
 	/** Drops the current desktop.
 	 *
@@ -124,5 +129,15 @@ public class DumbFailoverManager implements FailoverManager {
 			final Component comp = (Component)it.next();
 			((Component)comp.clone()).setPage(page);
 		}
+	}
+
+	public void start(WebApp wapp) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void stop(WebApp wapp) {
+		// TODO Auto-generated method stub
+		
 	}
 }

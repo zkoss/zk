@@ -12,7 +12,7 @@
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
  */
@@ -117,7 +117,7 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 		}
 		String href = getCategory(_selected.getId()).getHref();
 		if (href != null) {
-			Executions.getCurrent().sendRedirect(href, "zkdemo");
+			Executions.getCurrent().sendRedirect(href);
 		} else {
 			itemList.setModel(getSelectedModel());
 			if (Executions.getCurrent().isBrowser("ie6-"))

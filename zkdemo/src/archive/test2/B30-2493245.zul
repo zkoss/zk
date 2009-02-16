@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-2493245.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jan  8 14:30:15     2009, Created by tomyeh
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+-->
+<window id="main">
+You shall see a modal window on top of this
+	<zscript><![CDATA[
+zoom = new HtmlMacroComponent();
+zoom.setDynamicProperty("idColumn", 123);
+zoom.setMacroURI("B30-2493245-macro.zul");
+zoom.setParent(main);
+zoom.afterCompose();
+	]]></zscript>
+</window>

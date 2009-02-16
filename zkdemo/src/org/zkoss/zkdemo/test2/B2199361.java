@@ -12,7 +12,7 @@
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -29,6 +29,7 @@ import org.zkoss.zul.Label;
  */
 public class B2199361 implements Initiator {
 	public void doInit(Page page, Object[] args) throws Exception {
+		page.setId("abc"); //Bug 2525344
 		new Label("Hello, Initiator").setPage(page);
 	}
 	public void doAfterCompose(Page page) throws Exception {

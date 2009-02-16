@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-2446672.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Dec 19 12:46:24     2008, Created by jumperchen
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+Please click on the image, you should not see any dialog.
+<toolbarbutton disabled="true" image="/img/defender.gif"
+				onClick='alert("Defender")' />
+</zk>

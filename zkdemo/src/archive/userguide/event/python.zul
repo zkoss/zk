@@ -48,6 +48,7 @@ def sayHello():
 	return "Hello Python"
 	
 fck = FCKeditor()
+fck.customConfigurationsPath = "/userguide/macros/fckconfig.js"
 fck.value = sayHello()
 fck.parent = win
 </zscript>
