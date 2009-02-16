@@ -275,12 +275,6 @@ zkTabpanel.setAttr = function (cmp, name, value) {
 	}
 	return false;
 };
-zkTabpanel.onVisi = zkTabpanel.onSize = function (cmp){//Bug 2111320
-	var tabbox = $parentByType(cmp, "Tabbox");
-	if ( !zk.isAccord(tabbox) && zk.ie6Only  ) {
-		zk.repaint(cmp);
-	}
-};
 /** Returns whether the tabbox is accordion.
  * @since 3.0.3
  */

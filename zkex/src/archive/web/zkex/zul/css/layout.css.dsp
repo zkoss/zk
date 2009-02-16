@@ -1,25 +1,17 @@
 <%@ page contentType="text/css;charset=UTF-8" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 div.layout-container {
-    width:100%;
-    height:100%;
-    overflow:hidden;
-	background-color:#C4DCFB;
-	border:0 none;
-	position: relative;
-	visibility: hidden;
+    width: 100%; height: 100%; background-color:#C4DCFB;
+	border: 0; position: relative; overflow: hidden; visibility: hidden;
 }
 div.layout-region {
-    position:absolute;
-    border:0 none; 
-    overflow:hidden;
-    background-color:white;
+    position: absolute; background-color: white; border: 0; overflow: hidden;
 }
 div.layout-region-normal {
-	border:1px solid #9CBDFF; 
+	border: 1px solid #9CBDFF; 
 }
 div.layout-nested {
-	border:0 none;
+	border: 0;
 }
 div.layout-region-east, div.layout-region-west {
     z-index:10;

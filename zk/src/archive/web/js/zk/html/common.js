@@ -126,21 +126,6 @@ zk.override = function (obj, fn, supobj, func) {
 };
 
 /**
- * Forces the browser to repaint the specified element via changing its css name.
- * <p>
- * Note: this function uses setTimeout to clean up the appended css name.
- * @param {Object} el an element
- * @param {Number} timeout a millisecond.  
- * @since 3.0.8
- */
-zk.repaint = function (el, timeout) {
-	zk.addClass(el, "z-repaint");
-	setTimeout(function() {
-		zk.rmClass(el, "z-repaint");
-	}, timeout > 0 ? timeout : 1);
-};
-
-/**
  * Fixs the layout position of the element when the style of element is "overflow:hidden" or
  * "position:relative" in IE. Because, sometimes the layout position of the element
  * will be gone or go away its original place. 
@@ -199,13 +184,24 @@ zk.confirm = function (msg) {
 		try {zk.alerting = false;} catch (e) {} //doc might be unloaded
 	}
 };
-
+// This zk.reClassNameCache and zk.getClassRegEx function are based on the Yahoo! Inc.,
+// which can be found here - http://developer.yahoo.net/yui
+zk.reClassNameCache = {}; // cache regexes for className
+zk.getClassRegEx = function(clsnm) {
+	var re = zk.reClassNameCache[clsnm];
+	if (!re) {
+		re = new RegExp('(?:^|\\s+)' + clsnm + '(?:\\s+|$)', 'g');
+		zk.reClassNameCache[clsnm] = re;
+	}
+	return re;
+};
 /** Returns whether it is part of the class name
  * of the specified element.
  */
 zk.hasClass = function (el, clsnm) {
-	var cn = el.className;
-	return cn && (' '+cn+' ').indexOf(' '+clsnm+' ') != -1;
+	var re = zk.getClassRegEx(clsnm),
+		cn = el.className;
+	return re.test(cn);
 };
 
 /** Adds the specified class name to the class name of the specified element.
@@ -234,7 +230,7 @@ zk.rmClass = function (el, clsnm, bRemove) {
 	}
 
 	if (zk.hasClass(el, clsnm)) {
-    	var re = new RegExp('(?:^|\\s+)' + clsnm + '(?:\\s+|$)', "g");
+    	var re = zk.getClassRegEx(clsnm);
         el.className = el.className.replace(re, " ");            
 	}
 };
@@ -287,38 +283,80 @@ zk.offsetLeft = function (el) {
 		el = el.cells[0];
 	return el.offsetLeft;
 };
-zk.borders = {l: "border-left-width", r: "border-right-width", t: "border-top-width", b: "border-bottom-width"};
-zk.paddings = {l: "padding-left", r: "padding-right", t: "padding-top", b: "padding-bottom"};
+zk.borders = ["borderTopWidth", "borderRightWidth", "borderBottomWidth", "borderLeftWidth"];
+zk.paddings = ["paddingTop", "paddingRight", "paddingBottom", "paddingLeft"];
+zk.boxIndices = {width: [1,3], height: [0,2], box: [0,1,2,3]};
+/**
+ * Returns the number of the border width.
+ * @since 3.0.9
+ */
+zk.getBorderWidth = function (el) {
+	return zk.sumStyles(el, "width", zk.borders);
+};
+/**
+ * Returns the number of the border height.
+ * @since 3.0.9
+ */
+zk.getBorderHeight = function (el) {
+	return zk.sumStyles(el, "height", zk.borders);
+};
+/**
+ * Returns the number of the padding height.
+ * @since 3.0.9
+ */
+zk.getPaddingWidth = function (el) {
+	return zk.sumStyles(el, "width", zk.paddings);
+};
+/**
+ * Returns the number of the padding height.
+ * @since 3.0.9
+ */
+zk.getPaddingHeight = function (el) {
+	return zk.sumStyles(el, "height", zk.paddings);
+};
+/**
+ * Returns the number of the padding width and the border width from the specified element.
+ * @since 3.0.9
+ */
+zk.getFrameWidth = function (el) {
+	return zk.getPaddingWidth(el) + zk.getBorderWidth(el);
+};
+/**
+ * Returns the number of the padding height and the border height from the specified element.
+ * @since 3.0.9
+ */
+zk.getFrameHeight = function (el) {
+	return zk.getPaddingHeight(el) + zk.getBorderHeight(el);
+};
 /** Returns the summation of the specified styles.
  *  For example,
- *  zk.sumStyles(el, "lr", zk.paddings) sums the style values of
- * zk.paddings['l'] and zk.paddings['r'].
+ *  zk.sumStyles(el, "width", zk.paddings) sums the style values of
+ * paddingLeft and paddingRight from the specified element.
  *
- * @param {String} areas the areas is abbreviation for left "l", right "r", top "t", and bottom "b".
- * So you can specify to be "lr" or "tb" or more.
+ * @param {String} type 'width', 'height', and 'box', which means the number of the width and the height.
  * @param styles {zk.paddings} or {zk.borders}. 
  * @return {Number}
  * @since 3.0.0
  */
-zk.sumStyles = function (el, areas, styles) {
-	var val = 0;
-    for (var i = 0, l = areas.length; i < l; i++){
-		 var w = $int(Element.getStyle(el, styles[areas.charAt(i)]));
-         if (!isNaN(w)) val += w;
-    }
+zk.sumStyles = function (el, type, styles) {
+	var indices = zk.boxIndices[type],
+		val = 0; 
+	for (var sz, i = 0, j = indices.length; i < j; i++) {
+		sz = $int(Element.getStyle(el, styles[indices[i]]));
+		if (!isNaN(sz)) val += sz;
+	}
     return val;
 };
 /**
- * Returns the revised size, which subtracted the size of its CSS border or padding, for the specified element.
+ * Returns the number of the subtracted size by its frame(border and padding),
+ * for the specified element.
  * @param {Number} size original size of the specified element. 
  * @param {Boolean} isHgh if true it will be "tb" top and bottom.
  * @return {Number}
  * @since 3.0.0
  */
 zk.revisedSize = function (el, size, isHgh) {
-	var areas = "lr";
-	if (isHgh) areas = "tb";
-    size -= (zk.sumStyles(el, areas, zk.borders) + zk.sumStyles(el, areas, zk.paddings));
+    size -= isHgh ? zk.getFrameHeight(el) : zk.getFrameWidth(el);
     if (size < 0) size = 0;
 	return size;
 };
