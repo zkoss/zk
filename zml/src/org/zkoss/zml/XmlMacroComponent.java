@@ -12,7 +12,7 @@
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -93,8 +93,12 @@ public class XmlMacroComponent extends AbstractComponent implements Macro {
 			if (uri != null && uri.length() == 0)
 				throw new IllegalArgumentException("empty uri");
 			_uri = uri;
-			recreate();
+			if (getParent() != null)
+				recreate();
 		}
+	}
+	public String getMacroURI() {
+		return _uri != null ? _uri: getDefinition().getMacroURI();
 	}
 	public void recreate() {
 		if (_inlines != null) {
