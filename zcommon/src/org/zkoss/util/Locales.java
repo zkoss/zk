@@ -11,7 +11,7 @@
 Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -35,6 +35,7 @@ import org.zkoss.lang.Objects;
 public class Locales {
 	private final static
 		InheritableThreadLocal _thdLocale = new InheritableThreadLocal();
+
 	/** Returns the current locale; never null.
 	 * This is the locale that every other objects shall use,
 	 * unless they have special consideration.
@@ -184,7 +185,7 @@ public class Locales {
 	 * Example, if locale is zh_TW, it will try zh_TW and then zh.
 	 */
 	public static Locale getByFallback(Collection values, Locale locale) {
-		if (match(values, locale))
+		if (values.contains(locale))
 			return locale;
 
 		final String lang = locale.getLanguage();
@@ -192,12 +193,12 @@ public class Locales {
 		final String var = locale.getVariant();
 		if (var != null && var.length() > 0) {
 			locale = new Locale(lang, cnty);
-			if (match(values, locale))
+			if (values.contains(locale))
 				return locale;
 		}
 		if (cnty != null && cnty.length() > 0) {
 			locale = new Locale(lang, "");
-			if (match(values, locale))
+			if (values.contains(locale))
 				return locale;
 		}
 
@@ -217,13 +218,6 @@ public class Locales {
 			}
 		}
 		return rtn;
-	}
-	/** Tests whether a locale exists in the values collection. */
-	private static boolean match(Collection values, Locale locale) {
-		for (final Iterator it = values.iterator(); it.hasNext();)
-			if (locale.equals(it.next()))
-				return true;
-		return false;
 	}
 
 	/** Returns the index of '_' preceding the country part, starting from j.

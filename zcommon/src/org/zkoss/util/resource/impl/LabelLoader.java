@@ -139,7 +139,7 @@ public class LabelLoader {
 			if (label != null)
 				return label;
 		}
-		return "en".equals(lang) ? null: (String)getLabels(Locale.ENGLISH).get(key);
+		return (String)getLabels(null).get(key);
 	}
 
 	//-- private utilities --//
@@ -168,12 +168,13 @@ public class LabelLoader {
 		try {
 			//get the class name
 			log.info("Loading labels for "+locale);
-			final Map labels = new HashMap(617);
+			final Map labels = new HashMap(512);
 
 			//1. load from modules
 			final ClassLocator locator = new ClassLocator();
-			//if (log.finerable()) log.finer("Resources found: "+xmls);
-			for (Enumeration en = locator.getResources(getI3LabelPath(locale));
+			for (Enumeration en = locator.getResources(
+				locale == null ? "metainfo/i3-label.properties":
+				"metainfo/i3-label_" + locale + ".properties");
 			en.hasMoreElements();) {
 				final URL url = (URL)en.nextElement();
 				load(labels, url);
@@ -200,12 +201,6 @@ public class LabelLoader {
 		} finally {
 			lock.unlock(); //unlock (always unlock to avoid deadlock)
 		}
-	}
-	/** Returns the path of metainfo/i3-label.properties. */
-	private static final String getI3LabelPath(Locale locale) {
-		return locale.equals(Locale.ENGLISH) ?
-			"metainfo/i3-label.properties":
-			"metainfo/i3-label_" + locale + ".properties";
 	}
 	/** Loads all labels from the specified URL. */
 	private static final void load(Map labels, URL url) throws IOException {

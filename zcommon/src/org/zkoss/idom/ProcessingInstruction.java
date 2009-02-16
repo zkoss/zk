@@ -11,7 +11,7 @@
 Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -133,7 +133,7 @@ implements org.w3c.dom.ProcessingInstruction {
 		if (rawData == null || rawData.trim().length() == 0)
 			return map != null ? map: Collections.EMPTY_MAP;
 
-		map = Maps.parse(map, rawData, ' ', '"');
+		map = Maps.parse(map, rawData, ' ', (char)1); //both ' and "
 
 		//&quot; and other are not processed by SAXHandler,
 		//so we have to handle them here

@@ -11,7 +11,7 @@
 Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -108,6 +108,9 @@ public class Locators {
 			this.stream = stream;
 			this.locale = locale;
 		}
+		public String toString() {
+			return "[l="+locale+']';
+		}
 	}
 	/** Locates the file. */
 	private static final Object
@@ -160,7 +163,7 @@ public class Locators {
 					}
 				 	l = Locales.getLocale(sb.toString(), '_');
 				} else {
-					l = Locale.ENGLISH;
+					l = null;
 				}
 
 				//return the info

@@ -11,7 +11,7 @@
 Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -25,6 +25,7 @@ import java.lang.reflect.Method;
 
 import org.zkoss.lang.D;
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.Objects;
 import org.zkoss.util.CacheMap;
 import org.zkoss.util.Cache;
 import org.zkoss.util.Maps;
@@ -87,14 +88,15 @@ public class PropertyBundle {
 
 		//-- Object --//
 		public int hashCode() {
-			return baseName.hashCode() ^ locale.hashCode() ^ locator.hashCode();
+			return baseName.hashCode()
+				^ (locale != null ? locale.hashCode(): 0) ^ locator.hashCode();
 		}
 		public boolean equals(Object o) {
 			if (!(o instanceof Key))
 				return false;
 			Key k = (Key)o;
 			return k.baseName.equals(baseName)
-			&& k.locale.equals(locale) && k.locator.equals(locator)
+			&& Objects.equals(k.locale, locale) && k.locator.equals(locator)
 			&& k.caseInsensitive == caseInsensitive;
 		}
 	}
@@ -102,13 +104,16 @@ public class PropertyBundle {
 	 * Gets a resource bundle using the specified
 	 * base name, locale, and locator.
 	 *
-	 * @param locator the locator. {@link Locators#getDefault}.
+	 * @param locator the locator (never null). See {@link Locators#getDefault}.
 	 * @param caseInsensitive whether the key used to access the map
 	 * is case-insensitive. If true, all keys are converted to lower cases.
 	 * @return the bundle; null if not found
 	 */
 	public static final PropertyBundle getBundle(
 	String baseName, Locale locale, Locator locator, boolean caseInsensitive) {
+		if (baseName == null || locator == null)
+			throw new IllegalArgumentException();
+
 		//We don't lock the whole method, so it is possible that
 		//more than one thread are loading the same property file.
 		//However, it is OK since any result is correct.
@@ -174,7 +179,7 @@ public class PropertyBundle {
 			final Locators.StreamLocation loc =
 			Locators.locateAsStream(baseName + ".properties", locale, locator);
 			if (loc != null) {
-				_map = new HashMap(37);
+				_map = new HashMap(32);
 				Maps.load(_map, loc.stream, caseInsensitive);
 				_locale = loc.locale;
 			} else {
@@ -201,7 +206,7 @@ public class PropertyBundle {
 	public final Map getProperties() {
 		return _map;
 	}
-	/** Returns the locale of the bundle.
+	/** Returns the locale of the bundle, or null if it is the default.
 	 * Note: it is value might not be the same as the locale being passed
 	 * to the constructor, because the contructor will do some fallback.
 	 */

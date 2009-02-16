@@ -11,7 +11,7 @@
 Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -45,7 +45,7 @@ import org.zkoss.idom.Document;
  * @see SAXHandler
  */
 public class SAXBuilder {
-	private static final Log log = Log.lookup(SAXHandler.class);
+	private static final Log log = Log.lookup(SAXBuilder.class);
 
 	/** The parser. */
 	private final SAXParser _parser;
