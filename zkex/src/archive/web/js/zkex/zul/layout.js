@@ -44,18 +44,15 @@ zk.Layout.prototype = {
 			h = cmp.style.height || '',
 			widx = w.indexOf('%'),
 			hidx = h.indexOf('%'),
-			mars = this.stringToBox(getZKAttr(cmp, "mars") || '0,0,0,0'),
-			ambit = {
+			mars = this.stringToBox(getZKAttr(cmp, "mars") || '0,0,0,0');
+			
+			if (widx > 0) cmp._width = $int(w.substring(0, widx));
+			if (hidx > 0) cmp._height = $int(h.substring(0, hidx));
+			var ambit = {
 				x: mars.left,
 				y: mars.top,
-				w: widx > 0 ?
-					Math.max(
-						Math.floor(this.el.offsetWidth * $int(w.substring(0, widx)) / 100),
-						0) : cmp.offsetWidth, 
-				h: hidx > 0 ?
-					Math.max(
-						Math.floor(this.el.offsetHeight * $int(h.substring(0, hidx)) / 100),
-						0) : cmp.offsetHeight
+				w: cmp._width ?  Math.max(Math.floor(this.el.offsetWidth * cmp._width / 100), 0) : cmp.offsetWidth, 
+				h: cmp._height ?  Math.max(Math.floor(this.el.offsetHeight * cmp._height / 100), 0) : cmp.offsetHeight
 			};
 		}
 		
