@@ -12,7 +12,7 @@
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -64,9 +64,23 @@ abstract public class ExtendletLoader implements Loader {
 	public Object load(Object src) throws Exception {
 //		if (D.ON && log.debugable()) log.debug("Parse "+src);
 		final String path = (String)src;
-		final InputStream is = getExtendletContext().getResourceAsStream(path);
-		if (is == null)
-			return null;
+		InputStream is = null;
+		if (getCheckPeriod() >= 0) {
+			//Due to Web server might cache the result, we use URL if possible
+			try {
+				URL real = getExtendletContext().getResource(path);
+				if (real != null)
+					is = real.openStream();
+			} catch (Throwable ex) {
+				log.warningBriefly("Unable to read from URL: "+path, ex);
+			}
+		}
+
+		if (is == null) {
+			is = getExtendletContext().getResourceAsStream(path);
+			if (is == null)
+				return null;
+		}
 
 		try {
 			return parse(is, path);

@@ -12,7 +12,7 @@
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -137,5 +137,10 @@ public class PortletServletContext implements ServletContext {
 	}
 	public void setAttribute(String name, Object object) {
 		_ctx.setAttribute(name, object);
+	}
+
+	public String getContextPath() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

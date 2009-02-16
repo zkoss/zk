@@ -12,7 +12,7 @@
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -40,12 +40,9 @@ public class ServletLabelLocator implements LabelLocator {
 
 	//-- LabelLocator --//
 	public URL locate(Locale locale) throws IOException {
-		return _ctx.getResource("/WEB-INF/"+getI3LabelName(locale));
-	}
-	/** Returns the filename of i3-label.properties. */
-	private static final String getI3LabelName(Locale locale) {
-		return locale.equals(Locale.ENGLISH) ?
-			"i3-label.properties": "i3-label_" + locale + ".properties";
+		return _ctx.getResource(
+			locale == null ? "/WEB-INF/i3-label.properties":
+				"/WEB-INF/i3-label_" + locale + ".properties");
 	}
 
 	//-- Object --//
