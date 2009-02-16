@@ -48,7 +48,7 @@ zk.Layout.prototype = {
 			
 			if (widx > 0) cmp._width = $int(w.substring(0, widx));
 			if (hidx > 0) cmp._height = $int(h.substring(0, hidx));
-			var ambit = {
+			ambit = {
 				x: mars.left,
 				y: mars.top,
 				w: cmp._width ?  Math.max(Math.floor(this.el.offsetWidth * cmp._width / 100), 0) : cmp.offsetWidth, 
