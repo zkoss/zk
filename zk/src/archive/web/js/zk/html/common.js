@@ -12,7 +12,7 @@
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -188,7 +188,7 @@ zk.TextUtil = {
 		var instance = {
 			styles: ["fontSize", "fontStyle", "fontWeight", "fontFamily", "lineHeight", "letterSpacing", "textTransform" ],
 			getSize: function () {
-				return {width: d.offsetWidth, height: d.offsetWidth};
+				return {width: d.offsetWidth, height: d.offsetHeight};
 			},
 			apply: function (el, text) {
 				for (var s = this.styles.length; --s >= 0;)
@@ -268,7 +268,7 @@ zk.Shadow.prototype = {
 				break;
 		};
 		this.delta = d;
-		this.rel.parentNode.insertAdjacentHTML("afterbegin", this.template);
+		this.rel.parentNode.insertAdjacentHTML("afterBegin", this.template);
 		this.el = $e(this.id);
 		if (this.autoShow === true) this.show();
 	},

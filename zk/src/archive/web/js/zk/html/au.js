@@ -12,7 +12,7 @@
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -494,7 +494,7 @@ zkau.sendasap = function (evt, timeout) {
 	zkau.send(evt, zkau.asapTimeout(evt.uuid, evt.cmd, timeout));
 };
 zkau._send = function (dtid, evt, timeout) {
-	if (evt.ctl) {
+	if (evt.ctl && zk_clkflto > 0) {
 		//Don't send the same request if it is in processing
 		if (zkau._areqInf && zkau._areqInf.ctli == evt.uuid
 		&& zkau._areqInf.ctlc == evt.cmd)
@@ -502,7 +502,7 @@ zkau._send = function (dtid, evt, timeout) {
 
 		var t = $now();
 		if (zkau._ctli == evt.uuid && zkau._ctlc == evt.cmd //Bug 1797140
-		&& t - zkau._ctlt < 390)
+		&& t - zkau._ctlt < zk_clkflto)
 			return; //to prevent key stroke are pressed twice (quickly)
 
 		//Note: it is still possible to queue two ctl with same uuid and cmd,
@@ -1502,7 +1502,7 @@ zkau._onResize = function () {
 	//so we have to filter (most of) them out
 
 	var now = $now();
-	if (zkau._tmLastResz && now < zkau._tmLastResz)
+	if ((zkau._tmLastResz && now < zkau._tmLastResz) || zkau._inResize)
 		return; //ignore resize for a while (since zk.onSizeAt might trigger onsize)
 
 	var delay = zk.ie ? 250: 50;
@@ -1524,13 +1524,18 @@ zkau._onDidResize = function () {
 
 	if (zkau._cInfoReg)
 		setTimeout(zkau._doClientInfo, 20);
+	zkau._inResize = true;
+	try {
 			//we cannot pass zkau.cmd0.clientInfo directly
 			//otherwise, FF will pass 1 as the firt argument,
 			//i.e., it is equivalent to zkau.cmd0.clientInfo(1)
-
-	zk.beforeSizeAt();
-	zk.onSizeAt();
-	zkau._tmLastResz = $now() + 8;
+		zk.beforeSizeAt();
+		zk.onSizeAt();
+		//the onsize might be fire during delay 
+		zkau._tmLastResz = $now() + (zk.ie ? 250: 50);
+	} finally {
+		zkau._inResize = false;
+	}
 };
 zkau._doClientInfo = function () {
 	zkau.cmd0.clientInfo();
@@ -2149,7 +2154,7 @@ zkau._ghostdrag = function (dg, ghosting, evt) {
 			if (!msg) msg = "";
 			if (msg.length > 10) msg = msg.substring(0,10) + "...";
 			var el = dg.element;
-			document.body.insertAdjacentHTML("beforeend",
+			document.body.insertAdjacentHTML("beforeEnd",
 				'<div id="zk_ddghost" class="z-drop-ghost" style="position:absolute;top:'
 				+ofs[1]+'px;left:'+ofs[0]+'px;"><div class="z-drop-cnt"><span id="zk_ddghost!img" class="z-drop-disallow"></span>&nbsp;'+msg+'</div></div>');
 		}else {
@@ -2270,7 +2275,7 @@ zkau.updateUploadInfo = function (p, cb) {
 				+'<div style="width:202px;border:1px inset"><img id="zk_upload!img" src="'+zk.getUpdateURI('/web/zk/img/prgmeter.gif')
 				+'"/></div><br/>'+mesg.FILE_SIZE+Math.round(cb/1024)+mesg.KBYTES
 				+'<br/><input type="button" value="'+mesg.CANCEL+'" onclick="zkau._cancelUpload()"</div>';
-			document.body.insertAdjacentHTML("afterbegin", html);
+			document.body.insertAdjacentHTML("afterBegin", html);
 			zk.center($e("zk_upload"));
 			img = $e("zk_upload!img");
 		}
@@ -2628,7 +2633,7 @@ zkau.cmd1 = {
 				if (mode == "1") { //ref
 					ref = $e(x);
 					if (ref) {
-						var ofs = zPos.cumulativeOffset($e(x));
+						var ofs = zk.revisedOffset($e(x));
 						x = ofs[0];
 						y = ofs[1] + zk.offsetHeight(ref);
 					}
