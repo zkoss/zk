@@ -12,7 +12,7 @@
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -851,9 +851,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		addMoved(op, _page, newpg); //Not depends on UUID
 		setPage0(newpg); //UUID might be changed here
 
-		if (_spaceInfo != null) //ID space owner
-			_spaceInfo.ns.setParent(
-				_parent != null ? _parent.getNamespace(): null);
+		fixSpaceParentDown(this, _parent != null ? _parent.getNamespace(): null);
 		if (idSpaceChanged) addToIdSpacesDown(this); //called after setPage
 
 		//call back UiLifeCycle
@@ -865,6 +863,13 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				desktop.getWebApp().getConfiguration().afterComponentMoved(parent, this, op);
 			}
 		}
+	}
+	private static void fixSpaceParentDown(AbstractComponent comp, Namespace ns) {
+		if (comp._spaceInfo != null) //ID space owner
+			comp._spaceInfo.ns.setParent(ns);
+		else //Bug 2468048: we have to check all children
+			for (comp = comp._first; comp != null; comp = comp._next)
+				fixSpaceParentDown(comp, ns);
 	}
 	private void afterComponentPageChanged(Page newpg, Page oldpg) {
 		if (newpg == oldpg) return;
@@ -1336,7 +1341,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			if (Events.ON_PIGGYBACK.equals(evtnm))
 				((DesktopCtrl)desktop).onPiggybackListened(this, true);
 
-			if (!asap && isAsapRequired(evtnm))
+			// Bug 2448099
+			if (evtnm.indexOf("$") == -1 && !asap && isAsapRequired(evtnm))
 				smartUpdate(getAttrOfEvent(evtnm), "true");
 		}
 		return true;
@@ -2102,8 +2108,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (this instanceof IdSpace) {
 			_spaceInfo = new SpaceInfo(this);
 
-			//fix child's _spaceInfo's parent
-			fixSpaceParentOneLevelDown(this, _spaceInfo.ns);
+			//fix children's _spaceInfo's parent
+			for (AbstractComponent child = _first; child != null; child = child._next)
+				fixSpaceParentDown(child,  _spaceInfo.ns);
 
 			//read _spaceInfo.attrs
 			Serializables.smartRead(s, _spaceInfo.attrs);
@@ -2153,19 +2160,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private static boolean isVariableSerializable(String name, Object value) {
 		return !"spaceScope".equals(name) && !"spaceOwner".equals(name)
 			&& !(value instanceof Component);
-	}
-	/** Fixed Namespace's parent of children only one level.
-	 */
-	private static final
-	void fixSpaceParentOneLevelDown(Component comp, Namespace nsparent) {
-		for (Iterator it = comp.getChildren().iterator(); it.hasNext();) {
-			final AbstractComponent child = (AbstractComponent)it.next();
-			//Others are handled by readObject
-			if (child._spaceInfo != null)
-				child._spaceInfo.ns.setParent(nsparent);
-			else
-				fixSpaceParentOneLevelDown(child, nsparent); //recursive
-		}
 	}
 
 	/** Used to forward events (for the forward conditions).

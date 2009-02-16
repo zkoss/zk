@@ -12,7 +12,7 @@
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -253,8 +253,8 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		return _uuid;
 	}
 	public void setId(String id) {
-		if (_desktop != null)
-			throw new UiException("Unable to change the identifier after the page is initialized");
+		if (_desktop != null && _desktop.getPages().contains(this))
+			throw new UiException("Unable to change ID after initialized");
 		if (id != null && id.length() > 0) _id = id;
 		//No need to update client since it is allowed only before init(...)
 	}
@@ -534,7 +534,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	//-- PageCtrl --//
 	public void preInit() {
 		if (_desktop != null)
-			throw new IllegalStateException("Don't init twice");
+			throw new IllegalStateException("init twice");
 
 		final Execution exec = Executions.getCurrent();
 		_desktop = exec.getDesktop();
@@ -700,7 +700,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 		final boolean asyncUpdate = execCtrl.getVisualizer().isEverAsyncUpdate();
 		final boolean proxy = isProxy(exec);
-		final boolean bIncluded = asyncUpdate || exec.isIncluded()
+		boolean bIncluded = exec.isIncluded()
 			|| exec.getAttribute(ATTR_REDRAW_BY_INCLUDE) != null
 			|| proxy;
 		final String uri = (String)
@@ -708,9 +708,14 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 				.getValue(_langdef.getEvaluator(), this);
 				//desktop and page URI is defined in language
 
+		if (!bIncluded && asyncUpdate) //Bug 2522437
+			bIncluded = getOwner() != null
+				|| _desktop.getPages().iterator().next() != this;
 		if (bIncluded)
 			exec.setAttribute("org.zkoss.zk.ui.page.included", Boolean.TRUE);
 			//maintain original state since desktop.dsp will include page.dsp
+		else
+			bIncluded |= asyncUpdate;
 
 		final Map attrs = new HashMap(8);
 		attrs.put("page", this);

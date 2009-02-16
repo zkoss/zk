@@ -12,7 +12,7 @@
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -546,6 +546,12 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 */
 	public void setCondition(ConditionImpl cond) {
 		_cond = cond;
+	}
+	/** Tests if the condition is set
+	 * @since 3.5.3
+	 */
+	public boolean withCondition() {
+		return _cond != null;
 	}
 
 	/** Returns the forEach object if the forEach attribute is defined

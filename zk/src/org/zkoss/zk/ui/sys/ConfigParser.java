@@ -12,7 +12,7 @@
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -274,11 +274,13 @@ public class ConfigParser {
 			//	extendlet-check-period
 			//	theme-provider-class
 			//	theme-uri
+			//	repeat-uuid
 				parseDesktopConfig(config, el);
 				parseClientConfig(config, el); //backward compatible with 2.4
 
 			} else if ("client-config".equals(elnm)) { //since 3.0.0
 			//client-config
+			//	click-filter-delay
 			//  disable-behind-modal
 			//  keep-across-visits
 			//  processing-prompt-delay
@@ -500,6 +502,9 @@ public class ConfigParser {
 		if (v != null)
 			Library.setProperty("org.zkoss.util.resource.extendlet.checkPeriod", v.toString());
 			//library-wide property
+
+		String s = conf.getElementValue("repeat-uuid", true);
+		if (s != null) config.setRepeatUuid(!"false".equals(s));
 	}
 	/** Parses client-config. */
 	private static void parseClientConfig(Configuration config, Element conf) {
@@ -511,6 +516,9 @@ public class ConfigParser {
 
 		v = parseInteger(conf, "resend-delay", false);
 		if (v != null) config.setResendDelay(v.intValue());
+
+		v = parseInteger(conf, "click-filter-delay", false);
+		if (v != null) config.setClickFilterDelay(v.intValue());
 
 		String s = conf.getElementValue("keep-across-visits", true);
 		if (s != null)

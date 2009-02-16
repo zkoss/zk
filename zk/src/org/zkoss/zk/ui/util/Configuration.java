@@ -12,7 +12,7 @@
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -122,7 +122,8 @@ public class Configuration {
 	private int _dtTimeout = 3600, _sessDktMax = 15, _sessReqMax = 5,
 		_sessTimeout = 0, _sparThdMax = 100, _suspThdMax = -1,
 		_maxUploadSize = 5120, _maxProcTime = 3000,
-		_promptDelay = 900, _tooltipDelay = 800, _resendDelay;
+		_promptDelay = 900, _tooltipDelay = 800, _resendDelay,
+		_clkFilterDelay = 0;
 	private String _charsetResp = "UTF-8", _charsetUpload = "UTF-8";
 	private CharsetFinder _charsetFinderUpload;
 	/** The event interceptors. */
@@ -138,6 +139,8 @@ public class Configuration {
 	private boolean _timerKeepAlive;
 	/** Whether to debug JavaScript. */
 	private boolean _debugJS;
+	/** Whether to use the same UUID sequence. */
+	private boolean _repeatUuid;
 
 	/** Constructor.
 	 */
@@ -1260,6 +1263,31 @@ public class Configuration {
 	public int getProcessingPromptDelay() {
 		return _promptDelay;
 	}
+	/** Specifies the time, in milliseconds, to filter out consecutive
+	 * click events.
+	 * If two click events (also onOK and onCancel) come too close, the
+	 * second one will be removed to avoid the denial-of-service attack.
+	 *
+	 * <p>If you prefer not to filter out any of them, specify a non-positive
+	 * value.
+	 *
+	 * <p>Default: 0
+	 *
+	 * @param minisecs the delay to filtering the second click event
+	 * if it happens shorter than the second value.
+	 * If a non-positive value is specified, no click event is ignored.
+	 * @since 3.5.3
+	 */
+	public void setClickFilterDelay(int minisecs) {
+		_clkFilterDelay = minisecs;
+	}
+	/** Returns the time, in milliseconds, to filter out consecutive
+	 * click events.
+	 * @since 3.5.3
+	 */
+	public int getClickFilterDelay() {
+		return _clkFilterDelay;
+	}
 	/** Specifies the time, in milliseconds, before ZK Client Engine shows
 	 * the tooltip when a user moves the mouse over particular UI components.
 	 *
@@ -1888,6 +1916,24 @@ public class Configuration {
 	 */
 	public void setDebugJS(boolean debug) {
 		_debugJS = debug;
+	}
+
+	/** Returns whether to use the same UUID sequence for desktops after
+	 * rebooting.
+	 * <p>Default: false.
+	 * <p>Note: if the custom ID generator (org.zkoss.zk.ui.util.IdGenerator)
+	 * is used, this option is meaningless.
+	 * @since 5.0.0
+	 */
+	public boolean isRepeatUuid() {
+		return _repeatUuid;
+	}
+	/** Sets whether to use the same UUID sequence for desktops after
+	 * rebooting.
+	 * @since 5.0.0
+	 */
+	public void setRepeatUuid(boolean repeat) {
+		_repeatUuid = repeat;
 	}
 
 	/** Sets the implementation of the expression factory that shall

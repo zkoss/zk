@@ -12,7 +12,7 @@
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -120,7 +120,7 @@ public interface Desktop {
 	public Collection getPages();
 	/** Returns whether a page exists.
 	 */
-	public boolean hasPage(String id);
+	public boolean hasPage(String pageId);
 
 	/** Returns all custom attributes associated with this desktop.
 	 */

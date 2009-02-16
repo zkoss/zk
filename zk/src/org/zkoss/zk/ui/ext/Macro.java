@@ -12,7 +12,7 @@
 Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -36,6 +36,12 @@ public interface Macro extends AfterCompose, IdSpace, DynamicPropertied {
 	 * @param uri the URI of this macro. If null, the default is used.
 	 */
 	public void setMacroURI(String uri);
+	/** Returns the macro URI.
+	 * <p>If {@link #setMacroURI} wasn't called, it returns the URI
+	 * defined in the macro definition.
+	 * @since 3.5.3
+	 */
+	public String getMacroURI();
 	/** Detaches all child components and then recreate them by use of 
 	 * {@link #afterCompose}.
 	 *

@@ -12,7 +12,7 @@
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -41,6 +41,9 @@ public interface ExecutionCtrl {
 	 *
 	 * <p>Design decision: we put it here because user need not to know
 	 * about the conccept of the current page.
+	 *
+	 * <p>Since 3.5.3, this method returns the first page if
+	 * {@link #setCurrentPage} was not called (such as Server Push).
 	 *
 	 * @see Desktop#getPage
 	 */

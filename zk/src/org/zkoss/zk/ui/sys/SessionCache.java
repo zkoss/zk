@@ -12,7 +12,7 @@
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -38,6 +38,10 @@ public interface SessionCache {
 	 * It is called right after being instantiated.
 	 */
 	public void init(WebApp wapp);
+	/** Destroys the session cache
+	 * @since 3.5.3
+	 */
+	public void destroy(WebApp wapp);
 	/** Puts a ZK session to the cache.
 	 * You can retrieve the native session by {@link Session#getNativeSession}.
 	 * @param sess the ZK session.

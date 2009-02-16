@@ -12,7 +12,7 @@
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -94,18 +94,21 @@ public class WebManager {
 	private final String _updateURI;
 	private final ClassWebResource _cwr;
 
-	/** Creates a new Web
+	/** Creates the Web manager. It is singleton in a Web application
+	 * and it is created automatically by {@link DHtmlLayoutServlet},
+	 * so you rarely need to create it manually.
+	 * @since 3.5.3
 	 */
-	/*package*/ WebManager(ServletContext ctx, String updateURI) {
+	public WebManager(ServletContext ctx, String updateURI) {
 		if (log.debugable()) log.debug("Starting WebManager at "+ctx);
 
 		if (ctx == null || updateURI == null)
 			throw new IllegalArgumentException("null");
+		if (getWebManagerIfAny(ctx) != null)
+			throw new UiException("Only one Web manager is allowed in one context: "+ctx);
 
 		_ctx = ctx;
 		_updateURI = updateURI;
-		_cwr = ClassWebResource.getInstance(_ctx, _updateURI);
-		_cwr.setCompress(new String[] {"js", "css", "html", "xml"});
 		_ctx.setAttribute(ATTR_WEB_MANAGER, this);
 
 		//load config as soon as possible since it might set some system props
@@ -122,6 +125,10 @@ public class WebManager {
 		} catch (Throwable ex) {
 			log.error("Unable to load /WEB-INF/zk.xml", ex);
 		}
+
+		//after zk.xml is loaded since it depends on the configuration
+		_cwr = ClassWebResource.getInstance(_ctx, _updateURI);
+		_cwr.setCompress(new String[] {"js", "css", "html", "xml"});
 
 		Labels.register(new ServletLabelLocator(_ctx));
 		Labels.setVariableResolver(new ServletLabelResovler());
@@ -357,8 +364,9 @@ public class WebManager {
 	 *
 	 * <p>Note: Use this method to create a page, rather than invoking
 	 * {@link UiFactory#newPage} directly.
+	 * @since 3.5.3
 	 */
-	/*package*/ static
+	public static
 	Page newPage(UiFactory uf, RequestInfo ri, PageDefinition pagedef,
 	ServletResponse response, String path) {
 		final DesktopCtrl desktopCtrl = (DesktopCtrl)ri.getDesktop();
@@ -383,8 +391,9 @@ public class WebManager {
 	 *
 	 * <p>Note: Use this method to create a page, rather than invoking
 	 * {@link UiFactory#newPage} directly.
+	 * @since 3.5.3
 	 */
-	/*package*/ static
+	public static
 	Page newPage(UiFactory uf, RequestInfo ri, Richlet richlet,
 	ServletResponse response, String path) {
 		final DesktopCtrl desktopCtrl = (DesktopCtrl)ri.getDesktop();
