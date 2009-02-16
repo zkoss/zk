@@ -140,7 +140,7 @@ zkTbtn = {
 	},
 	onclick: function (evt) {
 		if (!evt) evt = window.event;
-		var cmp = Event.element(evt);
+		var cmp = $outer(Event.element(evt)); // Bug 2446672
 		if (getZKAttr(cmp, "disd")) {
 			Event.stop(evt);
 			return;

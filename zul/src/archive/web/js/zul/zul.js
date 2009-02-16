@@ -12,7 +12,7 @@
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -150,7 +150,7 @@ zul.adjustHeadWidth = function (hdfaker, bdfaker, ftfaker, rows) {
 	hdtable.style.width = total + "px";	
 	
 	if (bdtable) bdtable.style.width = hdtable.style.width;
-	if (fttable) bdtable.style.width = hdtable.style.width;
+	if (fttable) fttable.style.width = hdtable.style.width;
 	
 	for (var i = bdfaker.cells.length; --i >= 0;) {
 		if (!zk.isVisible(hdfaker.cells[i])) continue;
@@ -176,7 +176,7 @@ zul.adjustHeadWidth = function (hdfaker, bdfaker, ftfaker, rows) {
 			
 		hdtable.style.width = total + "px";	
 		if (bdtable) bdtable.style.width = hdtable.style.width;
-		if (fttable) bdtable.style.width = hdtable.style.width;
+		if (fttable) fttable.style.width = hdtable.style.width;
 	}
 };
 zul.getRealHeader = function (rows) {

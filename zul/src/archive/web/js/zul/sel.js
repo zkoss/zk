@@ -12,7 +12,7 @@
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -201,7 +201,10 @@ zk.Selectable.prototype = {
 	},
 	onBlur: function (evt) {
 		var meta = zkau.getMeta($uuid(Event.element(evt)));
-		if (meta) zkSel.cmonblurTo(meta._focusItem);
+		if (meta) {
+			zkSel.cmonblurTo(meta._focusItem);
+			meta._focusItem = null; // reset Bug 2465826
+		}
 	},
 	onKeydown: function (evt) {
 		var meta = zkau.getMeta($uuid(Event.element(evt)));
@@ -436,11 +439,12 @@ zk.Selectable.prototype = {
 			var r = this.bodyrows[j];
 			if (this._isFocus(r)) {
 				this._focusToAnc(r);
-				return;
+				break;
 			}
 		}
 		var focusEl = $e(this.id, "a");
-		if (focusEl) zk.asyncFocus(focusEl.id);
+		if (focusEl && zkau.canFocus(focusEl))
+			zk.asyncFocus(focusEl.id);
 		
 	},
 	/** Process the setAttr command sent from the server. */
@@ -1183,8 +1187,12 @@ zkLibox.bodyonkeydown = function (evt) {
 /** Called when a listitem got a key stroke. */
 zkLibox.onkeydown = function (evt) {
 	if (!evt) evt = window.event;
-	var target = Event.element(evt);
-	zk.disableSelection($parentByType(target, "Libox"));
+	var target = Event.element(evt),
+		tag = $tag(target);
+		
+	// Bug 2487562
+	if (!zk.gecko3 || (tag != "INPUT" && tag != "TEXTAREA"))
+		zk.disableSelection($parentByType(target, "Libox"));
 	var meta = zkau.getMetaByType(target, "Libox");
 	return !meta || meta.dokeydown(evt, target);
 };
@@ -1258,8 +1266,10 @@ zkLit.focus = function (cmp) {
 	if (meta) {
 		meta._focusItem = cmp;
 		meta._refocus();
+		return true;
 	}
 };
+
 zkLit.setAttr = function (cmp, nm, val) {
 	if (nm == "visibility") {// Bug #1836257
 		var meta = zkau.getMeta(getZKAttr(cmp, "rid"));
@@ -1532,7 +1542,7 @@ zkLitgp = {
 		if (nm == "z.open") {
 			zkLitgp._openItem(cmp, "true" == val, true);
 			if ("true" == val) {
-				var meta = zkau.getMeta(getZKAttr(row, "rid"));
+				var meta = zkau.getMeta(getZKAttr(cmp, "rid"));
 				if (meta) meta.stripe();
 			}
 			return true;

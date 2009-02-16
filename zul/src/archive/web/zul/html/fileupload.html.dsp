@@ -16,7 +16,7 @@ fileupload.html.dsp
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
@@ -54,7 +54,7 @@ function init() {
 
 	var el = document.getElementById("form");
 	el.action = parent.zk.getUpdateURI(
-		"/upload?dtid=${c:eatQuot(param.dtid)}&uuid=" + _zuuid + "&maxsize=${c:eatQuot(param.maxsize)}");
+		"/upload?dtid=${c:eatQuot(param.dtid)}&uuid=" + _zuuid);
 	if (parent.zk.ie) {
 		var cave = parent.$e(_zuuid + "!cave");
 		if (cave)
@@ -92,6 +92,7 @@ function deleteUpload(img) {
 function adjustHgh(table) {
 	table.parentNode.style.height = table.rows.length > 3 ? "100px" : "";
 	if (parent.zk.opera) table.parentNode.style.overflow = "auto";
+	table.parentNode.scrollTop = table.parentNode.scrollHeight;
 	table.parentNode.scrollTop = table.parentNode.scrollHeight;
 }
 // -->

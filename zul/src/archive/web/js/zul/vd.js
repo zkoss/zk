@@ -12,7 +12,7 @@
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -30,13 +30,8 @@ zk.load("zul.zul"); //zul
  */
 if (!window.Validate_errorbox) { //not customized
 	window.Validate_errorbox = function (id, boxid, msg) {
-		var URI = null;
-		if (zk.ie6Only){
-			URI = '/web/zul/img/vd/arrowU.gif';
-		}else{
-			URI = '/web/zul/img/vd/arrowU.png';
-		}
-		var html =
+		var URI = '/web/zul/img/vd/arrowU.' + (zk.ie6Only ? 'gif':'png'),
+			html =
 	'<div onmousedown="zkVld._ebmdown()" onmouseup="zkVld._ebmup()" id="'
 	+boxid+'" style="display:none;position:absolute" class="z-errbox"><div>'
 	+'<table width="250" border="0" cellpadding="0" cellspacing="0"><tr valign="top">'
@@ -47,7 +42,7 @@ if (!window.Validate_errorbox) { //not customized
 	+'</td><td width="16"><img src="'+zk.getUpdateURI('/web/zul/img/vd/close-off.gif')
 	+'" onclick="zkVld._ebclose(this)" onmouseover="zkau.onimgover(this)" onmouseout="zkau.onimgout(this)"/>'
 	+'</td></tr></table></div></div>';
-		document.body.insertAdjacentHTML("afterbegin", html);
+		document.body.insertAdjacentHTML("afterBegin", html);
 		return $e(boxid);
 	};
 }
@@ -285,15 +280,17 @@ zkVld._errbox = function () {
 		box._ifr = zk.createLining(box, id);
 	}, 0);
 	zul.initMovable(box, {
-		zindex: box.style.zIndex, effecting: zkVld._fiximg, starteffect: zk.voidf,
+		zindex: box.style.zIndex, starteffect: zk.voidf,
 		endeffect: zkVld._fiximg, change: zkVld._change});
 };
-zkVld._change = zk.ie6Only ? function (dg, pointer, evt) {
-	if (dg.element._ifr) {
-		dg.element._ifr.style.top = dg.element.style.top;
-		dg.element._ifr.style.left = dg.element.style.left;
+zkVld._change = function (dg, pointer, evt) {
+	var el = dg.element;
+	if (el._ifr) {
+		el._ifr.style.top = el.style.top;
+		el._ifr.style.left = el.style.left;
 	}
-}: zk.voidf;
+	zkVld._fiximg(el);
+};
 /** box is the box element or the component's ID. 
  * 
  * @param {Object} coerce it is used to close the error box coercively. (@since 3.0.3)
@@ -380,12 +377,7 @@ zkVld._fiximg = function (box) {
 		} else {
 			dir = dy < 0 ? "D": "U";
 		}
-		if (zk.ie6Only){
-			img.src = zk.getUpdateURI('/web/zul/img/vd/arrow'+dir+'.gif');	
-		}else{
-			img.src = zk.getUpdateURI('/web/zul/img/vd/arrow'+dir+'.png');	
-		}
-		
+		img.src = zk.getUpdateURI('/web/zul/img/vd/arrow'+dir+(zk.ie6Only?'.gif':'.png'));
 	}
 };
 /** Makes el visible by moving away any error box covering el.

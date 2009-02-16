@@ -12,7 +12,7 @@
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -82,7 +82,7 @@ zkGrbox = {
 		}
 	}
 };
-zkGrbox.onSize = zkGrbox._fixHgh = function (cmp) {
+zkGrbox.onSize = zkGrbox.onVisi = zkGrbox._fixHgh = function (cmp) {
 	var n = $e(cmp.id + "!cave");
 	if (n) {
 		var hgh = cmp.style.height;
@@ -402,9 +402,9 @@ if (zk.ie) {
 					cmp.src = cmp.src;
 			}
 	};
-} else if (zk.gecko) { //Bug 1692495
+} else if (zk.gecko) { //Bug 1692495 and 2443726
 	zkIfr.onVisi = function (cmp) {
-		if (cmp.src.indexOf(".xml") >= 0)
+		if (cmp.src.indexOf(".xml") >= 0 || cmp.src.indexOf(".pdf") >= 0)
 			cmp.src = cmp.src; //strange workaround: reload xml
 	};
 }

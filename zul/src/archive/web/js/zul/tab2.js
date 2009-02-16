@@ -13,7 +13,7 @@
 
 {{IS_RIGHT
 
- 	This program is distributed under GPL Version 2.0 in the hope that
+ 	This program is distributed under GPL Version 3.0 in the hope that
  	it will be useful, but WITHOUT ANY WARRANTY.
 
 }}IS_RIGHT
@@ -287,20 +287,28 @@ zkTabs2 = {
 		zkTabs2._fixWidth(cmp.id);
 		//horizontal
 		var btn = $e(cmp.id + "!right");
-		if (btn) zk.listen(btn, "click", zkTabs2.onClickArrow);
+		zkTabs2._arrowlistener(btn);
 		btn = $e(cmp.id + "!left");
-		if (btn) zk.listen(btn, "click", zkTabs2.onClickArrow);
+		zkTabs2._arrowlistener(btn);
 		//vertical
 		btn = $e(cmp.id + "!down");
-		if (btn) zk.listen(btn, "click", zkTabs2.onClickArrow);
+		zkTabs2._arrowlistener(btn);
 		btn = $e(cmp.id + "!up");
-		if (btn) zk.listen(btn, "click", zkTabs2.onClickArrow);
+		zkTabs2._arrowlistener(btn);
+		
 		var meta = $parent(cmp);
 		if (!meta.initscroll)
 			meta.initscroll = function () {
 				zkTabs2.scrollingchk(cmp.id,"init");
 			};
 		zk.addInit(meta.initscroll, false, meta.id);
+	},
+	_arrowlistener : function(cmp) {
+		//For Bug- 2436434
+		if (cmp) {
+			zk.unlisten(cmp, "click", zkTabs2.onClickArrow);
+			zk.listen(cmp, "click", zkTabs2.onClickArrow);
+		}
 	},
 	_showbutton : function(cmp) {
 		var tbx = $parentByType(cmp, "Tabbox2"),
@@ -495,7 +503,6 @@ zkTabs2 = {
 		uuid = $outer(ele).id,
 		move = 0,
 		head = $e(uuid + "!header");
-
 		//Scroll to next right tab
 		if (ele.id == uuid + "!right") {
 			var hosw = head.offsetWidth,
@@ -735,7 +742,7 @@ zkTabpanel2 = {
 	onVisi: function(cmp) {
 		var tbx = $e(getZKAttr(cmp, "box"));
 		this._fixPanelHgh(tbx,cmp);//Bug 2104974
-		 if (zk.ie6Only) zk.repaint(tbx);
+		if (zk.ie6Only || zk.ie7) zk.repaint(tbx); //Bug 2526699 - (add zk.ie7)
 	},
 	_fixPanelHgh: function(tabbox,tabpanel){
 		if (!zkTabbox2._isAccord(tabbox)) {
