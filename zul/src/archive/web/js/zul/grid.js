@@ -415,7 +415,7 @@ zk.addBeforeInit(function () {
 	};
 	
 	/** since 3.5.0 */
-	zk.apply(zkCol, {
+	zk.copy(zkCol, {
 		_zkColinit: zkCol.init,
 		init: function (cmp) {
 			zkCol._zkColinit(cmp);	

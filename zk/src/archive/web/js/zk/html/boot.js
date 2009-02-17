@@ -412,6 +412,7 @@ zk.copy = function (dst, src) {
 		dst[p] = src[p];
 	return dst;
 };
+zk.apply = zk.copy; //backward compatible
 
 //////////////////////////////////////
 zk.mods = {}; //ZkFns depends on it
