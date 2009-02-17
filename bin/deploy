@@ -13,7 +13,7 @@
 #Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 #
 #{{IS_RIGHT
-#	This program is distributed under GPL Version 2.0 in the hope that
+#	This program is distributed under GPL Version 3.0 in the hope that
 #	it will be useful, but WITHOUT ANY WARRANTY.
 #}}IS_RIGHT
 #
@@ -79,6 +79,7 @@ if [ "$jar_found" = "true" ] ; then
 		f=${f%/}
 		if [ ! -f dist/lib/$f.jad ] && [ -f dist/lib/$f.jar ] ; then
 			#echo "cp dist/lib/$f.jar /usr/tomcat/shared/lib"
+			chmod 644 dist/lib/$f.jar
 			cp -p -u -v -f dist/lib/$f.jar /usr/tomcat/shared/lib
 		fi
 	done
