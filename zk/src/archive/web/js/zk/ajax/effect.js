@@ -710,10 +710,10 @@ zk.eff.Shadow = zk.$extends(zk.Object, {
 			left: 4, right: -4, top: 3, bottom: -3
 		}));
 		if (zk.ie) {
-			opts.left -= 2;
-			opts.right -= 5;
+			opts.left -= 1;
+			opts.right -= 8;
 			opts.top -= 2;
-			opts.bottom -= 4;
+			opts.bottom -= 6;
 		}
 
 		this.node = element;

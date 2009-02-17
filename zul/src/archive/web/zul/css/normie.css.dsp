@@ -87,7 +87,7 @@ span.z-vfiletree-last-open, span.z-vfiletree-last-close, span.z-vfiletree-tee, s
 <%-- Shadow --%>
 .z-shadow-ie {
 	left: 0; top: 0; position: absolute; overflow: hidden;
-	background: #7a7a7a; zoom: 1; display: none;
+	background: #888; zoom: 1; display: none;
 	filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=4, MakeShadow=true, ShadowOpacity=0.30)
 }
 <c:if test="${c:isExplorer7()}">
