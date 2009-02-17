@@ -801,15 +801,22 @@ zDom = { //static methods
 		zDom.setStyle(el, {opacity:value});
 	},
 
-	/** Forces an element to re-render. */
-	rerender: function(el) {
+	/** Forces the browser to redo the CSS by adding and removing a CSS class. */
+	redoCSS: function (el, timeout) {
 		el = zDom.$(el);
-		try {
-			var n = document.createTextNode(' ');
-			el.appendChild(n);
-			el.removeChild(n);
-		} catch(e) {
+		if (el) {
+			try {
+				el.className += ' ';
+				el.className.trim();
+			} catch (e) {
+			}
 		}
+	},
+	/** Redraws the element by use of setOuterHTML. */
+	reOuter: function (el) {
+		el = zDom.$(el);
+		if (el)
+			zDom.setOuterHTML(el, zDom.getOuterHTML(el));
 	},
 
 	cleanWhitespace: function (el) {
@@ -861,6 +868,13 @@ zDom = { //static methods
 		}
 	},
 
+	getOuterHTML: function (el) {
+		if (el.outerHTML) return el.outerHTML;
+		var div = document.createElement("DIV");
+		var clone = el.cloneNode(true);
+		div.appendChild(clone);
+		return div.innerHTML;
+	},
 	/** Replaces the outer of the specified element with the HTML content.
 	 * @return the new node (actually the first new node, if multiple)
 	 */

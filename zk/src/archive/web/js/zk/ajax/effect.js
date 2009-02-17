@@ -692,9 +692,9 @@ zEffect._defOpts = {
 
 zk.eff.Shadow = zk.$extends(zk.Object, {
 	/**
-	 * Initial the Shadow object for the specified component.
+	 * Constructor of the Shadow object.
 	 * 
-	 * @param element a ZK client component.
+	 * @param element the element to associate the shadow.
 	 * @param opts The options
 	 * <p>Alowed options:
 	 * <ul>
@@ -706,9 +706,9 @@ zk.eff.Shadow = zk.$extends(zk.Object, {
 	 * </ul>
 	 */
 	$init: function (element, opts) {
-		opts = this.opts = zk.copy(this.opts, zk.$default(opts, {
+		opts = this.opts = zk.$default(opts, {
 			left: 4, right: -4, top: 3, bottom: -3
-		}));
+		});
 		if (zk.ie) {
 			opts.left -= 1;
 			opts.right -= 8;
@@ -740,29 +740,34 @@ zk.eff.Shadow = zk.$extends(zk.Object, {
 	 * visible.
 	 */
 	sync: function () {
-		var node = this.node;
+		var node = this.node, shadow = this.shadow;
 		if (!node || !zDom.isVisible(node, true)) {
 			this.hide();
 			return false;
 		}
 
-		if (zDom.nextSibling(this.shadow, zDom.tag(node))!= node)
-			node.parentNode.insertBefore(this.shadow, node);
-		this.shadow.style.zIndex = zk.parseInt(zDom.getStyle(node, "zIndex"));
+		for (var c = shadow;;) {
+			if (!(c = c.nextSibling) || c.tagName) {
+				if (c != node)
+					node.parentNode.insertBefore(shadow, node);
+				break;
+			}
+		}
+		shadow.style.zIndex = zk.parseInt(zDom.getStyle(node, "zIndex"));
 
 		var opts = this.opts,
 			l = node.offsetLeft, t = node.offsetTop,
-			w = node.offsetWidth, h = node.offsetHeight
-			shdw = this.shadow, st = shdw.style,
+			w = node.offsetWidth, h = node.offsetHeight,
 			wd = w - opts.left + opts.right,
-			hgh = h - opts.top + opts.bottom;
+			hgh = h - opts.top + opts.bottom,
+			st = shadow.style;
 		st.left = (l + opts.left) + "px";
 		st.top = (t + opts.top) + "px";
 		if(st.width != wd || st.height != hgh) {
 			st.width = wd + "px";
 			st.height = hgh + "px";
 			if(!zk.ie) {
-				var c = shdw.childNodes;
+				var c = shadow.childNodes;
 				// the 12 number means the both height the top side shadow and the bottom side shadow.
 				c[1].style.height = Math.max(0, (hgh - 12))+ "px";
 				
@@ -770,12 +775,13 @@ zk.eff.Shadow = zk.$extends(zk.Object, {
 				c[0].childNodes[1].style.width = c[1].childNodes[1].style.width = c[2].childNodes[1].style.width = Math.max(0, (wd - 12)) + "px";;
 			}
 		}
+		st.display = "block";
 
+		var stackup = this.stackup;
 		if(opts.stackup && node) {
-			var stackup = this.stackup;
 			if(!stackup)
 				stackup = this.stackup =
-					zDom.makeStackup(node, node.id + '$sdwstk', this.shadow);
+					zDom.makeStackup(node, node.id + '$sdwstk', shadow);
 
 			st = stackup.style;
 			st.left = l +"px";
@@ -783,19 +789,9 @@ zk.eff.Shadow = zk.$extends(zk.Object, {
 			st.width = w +"px";
 			st.height = h +"px";
 			st.zIndex = zk.parseInt(zDom.getStyle(node, "zIndex"));
+			st.display = "block";
 		}
-
-		this.shadow.style.display = "block";
-		if (this.stackup) this.stackup.style.display = "block";
 		return true;
-	},
-	/**
-	 * Returns the delta of the shadow.
-	 * The delta is a map of {l: left, t: top, w: width, h: height}
-	 * to specify the delta values for left, top, width and height.
-	 */
-	getDelta: function () {
-		return this.delta;
 	},
 	/** Returns the lowest level of element.
 	 */

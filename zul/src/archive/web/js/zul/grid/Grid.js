@@ -339,8 +339,7 @@ zul.grid.Grid = zk.$extends(zul.Widget, {
 		if (this.isRealVisible()) {
 			this._calcSize();// Bug #1813722
 			this.fireScrollRender(155);
-			if (zk.ie7) zDom.rerender(this.getNode());
-				//zk.repaint(this.getNode()); // Bug 2096807
+			if (zk.ie7) zDom.redoCSS(this.getNode()); // Bug 2096807
 		}
 	},
 	onVisible: _zkf,
