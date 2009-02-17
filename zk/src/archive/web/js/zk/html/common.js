@@ -395,7 +395,7 @@ zk.override = function (obj, fn, supobj, func) {
  * @since 3.5.0
  */
 zk.redoCSS = function (el, timeout) {
-	el = zDom.$(el);
+	el = $e(el);
 	if (el) {
 		try {
 			el.className += ' ';
