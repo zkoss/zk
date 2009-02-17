@@ -37,33 +37,27 @@ zkColumnLayout = {
 		if (!zk.isRealVisible(cmp)) 
 			return;
 		
-		var w = cmp.offsetWidth - zk.getFrameWidth(cmp),
-			h = cmp.offsetHeight - zk.getFrameHeight(cmp),
-			pw = w,
-			inner = $real(cmp),
-			cns = zk.childNodes(inner, this._isLegalChild);
+		var w = zk.revisedSize(cmp, cmp.offsetWidth),
+			h = zk.revisedSize(cmp, cmp.offsetHeight, true),
+			total = w,
+			real = $real(cmp),
+			cns = zk.childNodes(real, this._isLegalChild);
 			
-		inner.style.width = w + "px";
-				
-		for (var i = 0, j = cns.length; i < j; i++) {
-			var widx = cns[i]._width.indexOf("px");
-			if (widx > 0) {
-				var px_width = $int(cns[i]._width.substring(0, widx));
-				pw -= (px_width + zk.getFrameWidth(cns[i]));
-			}
-		}
+		real.style.width = total + "px";
 		
-		pw = pw < 0 ? 0 : pw;
+		cns.forEach(function (n) {
+			if (n._width.endsWith("px") > 0)
+				total -= ($int(n._width) + zk.getFrameWidth(n));
+		});
 		
-		for (var i = 0, j = cns.length; i < j; i++) {
-			var widx = cns[i]._width.indexOf("%");
-			if (widx > 0) {
-				var percentage_width = $int(cns[i]._width.substring(0, widx));
-				var result = (Math.floor(percentage_width / 100 * pw) - zk.getFrameWidth(cns[i]));
-				cns[i].style.width = (result > 0 ? result : 0) + "px";
-				if (broadcast) zk.onSizeAt(cns[i]);
+		total = Math.max(0, total);
+		
+		cns.forEach(function (n) {
+			if (n._width.indexOf("%") > 0) {
+				n.style.width = (total ? Math.max(0, Math.floor($int(n._width) / 100 * total) - zk.getFrameWidth(n)) : 0) + "px";
+				if (broadcast) zk.onSizeAt(n);
 			}
-		}
+		});
 		zk.cleanVisibility(cmp);
 	}
 };

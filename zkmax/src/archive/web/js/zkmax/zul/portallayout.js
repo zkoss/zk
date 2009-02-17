@@ -43,53 +43,46 @@ zkPortalLayout = {
 		header.style.cursor = "move";
 		zk.disableSelection(header);
 	},
-	_getColumnBoxes: function (cns) {
-		var cols = [];
-		for (var i = 0, j = cns.length; i < j; i++) {
-			cols.push({
-				x: zk.revisedOffset(cns[i])[0],
-				w: $real(cns[i]).offsetWidth
-			});
-		}
-		return cols;
+	_getColWidths: function (cns) {
+		var widths = [];
+		cns.forEach(function (n) {
+			widths.push(zk.revisedOffset(n)[0]);
+		});
+		return widths;
+	},
+	_getColHeights: function (cns) {
+		var heights = [];
+		cns.forEach(function (n) {
+			var h = $real(n).offsetHeight;
+			if (h)
+				heights.push(zk.revisedOffset(n)[1] + h/2);
+		});
+		return heights;
 	},
 	_changeMove: function(dg, pointer, event){
 		var xy = Event.pointer(event),
-			cns = dg._cns;
+			cns = dg._cns,
+			widths = dg._widths,
+			cIndex = widths.length;
 			
-		if (!dg._columns)
-			dg._columns = zkPortalLayout._getColumnBoxes(cns);
+		for (; --cIndex >= 0;)
+			if (widths[cIndex] <= xy[0]) break; 
 		
-		var col = 0,
-			cols = dg._columns,
-			match;
-		for (var i = cols.length; col < i; col++) {
-			if ((cols[col].x + cols[col].w) > xy[0]) {
-				match = true;
+		if (cIndex < 0) cIndex = 0;
+		
+		var panels = zk.childNodes($e(cns[cIndex], "cave"), zkPortalLayout._isLegalChild),
+			heights = zkPortalLayout._getColHeights(panels),
+			rIndex = 0,
+			lenth = heights.length;
+		
+		while(rIndex < lenth) {
+			if (heights[rIndex] > xy[1])
 				break;
-			}
+			rIndex++;
 		}
-		
-		if (!match)
-			col--;
-		
-		var p;
-		match = false;		
-		for (var panels = zk.childNodes($e(cns[col], "cave"), zkPortalLayout._isLegalChild), i = 0, j = panels.length;
-			i < j; i++) {
-			p = panels[i];
-			var h = p.offsetHeight;
-			if (h && (zk.revisedOffset(p)[1] + (h / 2)) > xy[1]) {
-				match = true;
-				break;
-			}
-		}
-				
-		if (p) {
-			p.parentNode.insertBefore($e(zkau.getGhostOrgin(dg), "proxy"), match ? p : null);
-		} else {
-			$e(cns[col], "cave").insertBefore($e(zkau.getGhostOrgin(dg), "proxy"), null);
-		}
+		if (panels[rIndex])
+			zk[rIndex < lenth ? 'insertBefore' : 'insertAfter']($e(zkau.getGhostOrgin(dg), "proxy"), panels[rIndex]);
+		else $e(cns[cIndex], "cave").appendChild($e(zkau.getGhostOrgin(dg), "proxy"));
 	},
 	_ignoreMove: function (cmp, pointer, event) {
 		return getZKAttr(cmp, "maximized") == "true" || zkPanel._ignoreMove(cmp, pointer, event);
@@ -127,6 +120,7 @@ zkPortalLayout = {
 			document.body.insertAdjacentHTML("afterbegin", html);
 			dg._zoffs = ofs;
 			dg._cns = zk.childNodes($real($parentByType(dg.element.parentNode, "PortalLayout")), zkPortalLayout._isLegalChild);
+			dg._widths = zkPortalLayout._getColWidths(dg._cns);
 			zkPortalLayout._initProxy(dg.element);
 			var h = dg.element.offsetHeight - title.offsetHeight;
 			dg.element = $e("zk_ddghost");
@@ -196,33 +190,28 @@ zkPortalLayout = {
 		if (!zk.isRealVisible(cmp)) 
 			return;
 		
-		var w = cmp.offsetWidth - zk.getFrameWidth(cmp),
-			h = cmp.offsetHeight - zk.getFrameHeight(cmp),
-			pw = w,
-			inner = $real(cmp),
-			cns = zk.childNodes(inner, this._isLegalChild);
+		var w = zk.revisedSize(cmp, cmp.offsetWidth),
+			h = zk.revisedSize(cmp, cmp.offsetHeight, true),
+			total = w,
+			real = $real(cmp),
+			cns = zk.childNodes(real, this._isLegalChild);
 			
-		inner.style.width = w + "px";
+		real.style.width = total + "px";
 		
-		for (var i = 0, j = cns.length; i < j; i++) {			
-			var widx = cns[i]._width.indexOf("px");
-			if (widx > 0) {
-				var px_width = $int(cns[i]._width.substring(0, widx));
-				pw -= (px_width + zk.getFrameWidth(cns[i]));
+		cns.forEach(function (n) {
+			if (n._width.endsWith("px") > 0)
+				total -= ($int(n._width) + zk.getFrameWidth(n));
+		});
+		
+		total = Math.max(0, total);
+		
+		cns.forEach(function (n) {
+			if (n._width.indexOf("%") > 0) {
+				n.style.width = (total ? Math.max(0, Math.floor($int(n._width) / 100 * total) - zk.getFrameWidth(n)) : 0) + "px";
+				if (broadcast) zk.onSizeAt(n);
 			}
-		}
+		});
 		
-		pw = pw < 0 ? 0 : pw;
-		
-		for (var i = 0, j = cns.length; i < j; i++) {		
-			var widx = cns[i]._width.indexOf("%");
-			if (widx > 0) {
-				var percentage_width = $int(cns[i]._width.substring(0, widx));
-				var result = (Math.floor(percentage_width / 100 * pw) - zk.getFrameWidth(cns[i]));
-				cns[i].style.width = (result > 0 ? result : 0) + "px";
-				if (broadcast) zk.onSizeAt(cns[i]);
-			}
-		}
 		zk.cleanVisibility(cmp);
 	}
 };
