@@ -699,15 +699,15 @@ zk.eff.Shadow = zk.$extends(zk.Object, {
 	 * <p>Alowed options:
 	 * <ul>
 	 * <li>left: The margin at left. Default: 4.</li>
-	 * <li>right: The margin at right. Default: -4.</li>
+	 * <li>right: The margin at right. Default: 4.</li>
 	 * <li>top: the margin at top. Default: 3.</li>
-	 * <li>bottom: the margin at bottom. Default: -3.</li>
+	 * <li>bottom: the margin at bottom. Default: 3.</li>
 	 * <li>stackup: whether to create a stackup (see {@link zDom#makeStackup})</li>
 	 * </ul>
 	 */
 	$init: function (element, opts) {
 		opts = this.opts = zk.$default(opts, {
-			left: 4, right: -4, top: 3, bottom: -3
+			left: 4, right: 4, top: 3, bottom: 3
 		});
 		if (zk.ie) {
 			opts.left -= 1;
