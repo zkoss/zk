@@ -32,7 +32,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<label value="davidwu@hotmail.com" onClick="callMe();"/> 
 	</listcell>
 	<listcell> 
-	<image src="/img/coffee.gif" onClick="callMe();" /> 
+	<image src="/test2/img/coffee.gif" onClick="callMe();" /> 
 	</listcell> 
 </listitem> 
 </listbox> 

@@ -19,7 +19,7 @@ void callMe() {
 			<label  value="davidwu@hotmail.com" onClick="callMe();"/> 
 			</listcell>
 			<listcell style="border-right:4px solid green;border-top: 4px solid green"> 
-			<image src="/img/coffee.gif" onClick="callMe();" /> 
+			<image src="/test2/img/coffee.gif" onClick="callMe();" /> 
 			</listcell> 
 		</listitem> 
 		<listitem> 
@@ -29,7 +29,7 @@ void callMe() {
 			<label value="davidwu@hotmail.com" onClick="callMe();"/> 
 			</listcell>
 			<listcell> 
-			<image src="/img/coffee.gif" onClick="callMe();" /> 
+			<image src="/test2/img/coffee.gif" onClick="callMe();" /> 
 			</listcell> 
 		</listitem>
 		<listitem> 
@@ -39,7 +39,7 @@ void callMe() {
 			<label value="davidwu@hotmail.com" onClick="callMe();"/> 
 			</listcell>
 			<listcell> 
-			<image src="/img/coffee.gif" onClick="callMe();" /> 
+			<image src="/test2/img/coffee.gif" onClick="callMe();" /> 
 			</listcell> 
 		</listitem>
 		<listitem> 
@@ -49,7 +49,7 @@ void callMe() {
 			<label value="davidwu@hotmail.com" onClick="callMe();"/> 
 			</listcell>
 			<listcell> 
-			<image src="/img/coffee.gif" onClick="callMe();" /> 
+			<image src="/test2/img/coffee.gif" onClick="callMe();" /> 
 			</listcell> 
 		</listitem>
 	</listbox> 
@@ -68,7 +68,7 @@ void callMe() {
 			<label  value="davidwu@hotmail.com" onClick="callMe();"/> 
 			</listcell>
 			<listcell > 
-			<image src="/img/coffee.gif" onClick="callMe();" /> 
+			<image src="/test2/img/coffee.gif" onClick="callMe();" /> 
 			</listcell> 
 		</listitem> 
 		<listitem> 
@@ -78,7 +78,7 @@ void callMe() {
 			<label value="davidwu@hotmail.com" onClick="callMe();"/> 
 			</listcell>
 			<listcell> 
-			<image src="/img/coffee.gif" onClick="callMe();" /> 
+			<image src="/test2/img/coffee.gif" onClick="callMe();" /> 
 			</listcell> 
 		</listitem>
 		<listitem> 
@@ -88,7 +88,7 @@ void callMe() {
 			<label value="davidwu@hotmail.com" onClick="callMe();"/> 
 			</listcell>
 			<listcell> 
-			<image src="/img/coffee.gif" onClick="callMe();" /> 
+			<image src="/test2/img/coffee.gif" onClick="callMe();" /> 
 			</listcell> 
 		</listitem>
 		<listitem> 
@@ -98,7 +98,7 @@ void callMe() {
 			<label value="davidwu@hotmail.com" onClick="callMe();"/> 
 			</listcell>
 			<listcell> 
-			<image src="/img/coffee.gif" onClick="callMe();" /> 
+			<image src="/test2/img/coffee.gif" onClick="callMe();" /> 
 			</listcell> 
 		</listitem>
 	</listbox> 

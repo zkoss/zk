@@ -22,7 +22,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<slider id="slider1" onScrolling="zooming()" onScroll="zoom()"/>
 	<slider id="slider2" onScroll="zoom()" width="200px" mold="sphere"/>
 	<separator bar="true"/>
-	<image id="image" src="/img/sun.jpg" width="10px"/>
+	<image id="image" src="/test2/img/sun.jpg" width="10px"/>
 	<zscript>
 	void zoom() {
 		int v = slider1.getCurpos() + slider2.getCurpos();

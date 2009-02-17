@@ -95,7 +95,7 @@ f1.detach();
 			<listcell label="[Size]" />
 		</listgroup>
 		<listitem forEach="${datas}" forEachBegin="0" forEachEnd="9">
-			<listcell label="${each[0]}" image="/img/mail_read.png"
+			<listcell label="${each[0]}" image="/test2/img/mail_read.png"
 				sclass="mailitem" />
 			<listcell label="${each[1]}" />
 			<listcell label="${each[2]}" />
@@ -110,7 +110,7 @@ f1.detach();
 		<listgroup label="Date:Yesterday" id="g2" />
 		<listitem forEach="${datas}" forEachBegin="10"
 			forEachEnd="14">
-			<listcell label="${each[0]}" image="/img/mail_read.png"
+			<listcell label="${each[0]}" image="/test2/img/mail_read.png"
 				sclass="mailitem" />
 			<listcell label="${each[1]}" />
 			<listcell label="${each[2]}" />
@@ -125,7 +125,7 @@ f1.detach();
 		<listgroup label="Date:Sunday" />
 		<listitem forEach="${datas}" forEachBegin="15"
 			forEachEnd="20">
-			<listcell label="${each[0]}" image="/img/mail_read.png"
+			<listcell label="${each[0]}" image="/test2/img/mail_read.png"
 				sclass="mailitem" />
 			<listcell label="${each[1]}" />
 			<listcell label="${each[2]}" />

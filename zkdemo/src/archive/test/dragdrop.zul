@@ -113,8 +113,8 @@ for (ListIterator it = src.children.listIterator(src.children.size()); it.hasPre
 	</button>
 	</vbox>
 </hbox>
-	<image src="/img/coffee.gif" draggable="1"/>
-	<image src="/img/cubfirs.gif" draggable="2"/>
+	<image src="/test2/img/coffee.gif" draggable="1"/>
+	<image src="/test2/img/cubfirs.gif" draggable="2"/>
 	<label style="border: 1px solid blue" value="Type 1" droppable="1"/>
 	<label style="border: 1px solid blue" value="Type 2" droppable="2"/>
 </window>

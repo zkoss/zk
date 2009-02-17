@@ -66,7 +66,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 				evt.getTarget().setOpen(true);
 			}});
 			 
-		Gscreen screen = new Gscreen("/img/sun.jpg", "200", "200", "0", "0", "100", "100");
+		Gscreen screen = new Gscreen("/test2/img/sun.jpg", "200", "200", "0", "0", "100", "100");
 //		xitems.add(info); 
 //		xitems.add(mark); 
  		
@@ -131,7 +131,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 			editPopup.open(event.clientX, event.clientY);
 		</attribute>
 <!-- 
-		<gscreen id="scr2" src="/img/home.gif" screenX="50%" screenY="50%" width="50" height="50" offsetX="25" offsetY="25" />
+		<gscreen id="scr2" src="/test2/img/home.gif" screenX="50%" screenY="50%" width="50" height="50" offsetX="25" offsetY="25" />
 		<ginfo id="myinfo" open="true">
 			<attribute name="content"><![CDATA[
 				Hello, <a href="http://www.zkoss.org">ZK</a>.

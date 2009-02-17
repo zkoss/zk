@@ -36,7 +36,7 @@ import org.zkoss.lang.Objects;
 
 	Username: ${c:l('username')} ${c:l('password')}
 
-	<image src="/img/coffee.gif" tooltiptext="Coffee"/>
+	<image src="/test2/img/coffee.gif" tooltiptext="Coffee"/>
 	<image src="../img/sun.jpg" width="100px"/>
 
 	<button label="Change page title" onClick="self.page.setTitle(self.page.getTitle()+&quot;Good&quot;)"/>

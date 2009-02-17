@@ -21,10 +21,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<vbox>
 	No area:
 	<button label="change" onClick="changeImage(img1)"/>
-	<imagemap id="img1" src="/img/sun.jpg" onClick="what(event)"/>
+	<imagemap id="img1" src="/test2/img/sun.jpg" onClick="what(event)"/>
 	Three area:
 	<button label="change" onClick="changeImage(img2)"/>
-	<imagemap id="img2" src="/img/sun.jpg" onClick="what(event)">
+	<imagemap id="img2" src="/test2/img/sun.jpg" onClick="what(event)">
 		<area id="First" coords="0,0,50,50" tooltiptext="First"/>
 		<area id="Second" coords="50,0,100,50"/>
 		<area id="Third" coords="100,0,150,50"/>
@@ -38,7 +38,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 			alert("Click ("+evt.x+", "+evt.y+")");
 	}
 	void changeImage(Imagemap img) {
-		img.src = img.src.endsWith(".png") ? "/img/sun.jpg": "/img/circle.png";
+		img.src = img.src.endsWith(".png") ? "/test2/img/sun.jpg": "/test2/img/circle.png";
 	}
 	</zscript>
 </window>

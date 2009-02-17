@@ -19,10 +19,10 @@
 			<auxheader label="D"/>
 		</auxhead>
 		<listhead  sizable="true">
-			<listheader label="Name" sort="auto" width="25%" image="/img/coffee.gif"/>
-			<listheader label="Gender" sort="auto" width="25%" image="/img/folder.gif"/>
-			<listheader label="Age" sort="auto" width="25%" align="center" image="/img/cubfirs.gif"/>
-			<listheader label="Description" width="25%" sort="auto" image="/img/home.gif"/>
+			<listheader label="Name" sort="auto" width="25%" image="/test2/img/coffee.gif"/>
+			<listheader label="Gender" sort="auto" width="25%" image="/test2/img/folder.gif"/>
+			<listheader label="Age" sort="auto" width="25%" align="center" image="/test2/img/cubfirs.gif"/>
+			<listheader label="Description" width="25%" sort="auto" image="/test2/img/home.gif"/>
 		</listhead>
 		<listitem>
 			<listcell label="Mary"/>
@@ -61,7 +61,7 @@
 			<listcell label="Senior Engineer."/>
 		</listitem>
 		<listfoot >
-			<listfooter><image width="80px" height="100px" src="/img/sun.jpg"/></listfooter>
+			<listfooter><image width="80px" height="100px" src="/test2/img/sun.jpg"/></listfooter>
 			<listfooter>
 					<listbox rows="3" mold="select"  multiple="true">
 						<listitem label="option1"/>

@@ -23,7 +23,7 @@ After this page display, if there is not Javascript error, that is correct.(IE o
 	<window id="win" closable="true" minimizable="true" maximizable="true"
 	border="normal" width="300px"
 	onClose="self.visible=false; event.stopPropagation();">
-		<caption image="/img/inet.png" label="Hi there!"/>
+		<caption image=/test2/img/inet.png label="Hi there!"/>
 		Auto-position (applicable if not embedded)
 		<separator/>
 		<button label="left,center" onClick="win.position = &quot;left,center&quot;;"/>

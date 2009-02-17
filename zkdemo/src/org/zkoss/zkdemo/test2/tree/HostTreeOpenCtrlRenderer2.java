@@ -51,18 +51,18 @@ public class HostTreeOpenCtrlRenderer2 implements TreeitemRenderer {
 				treeitem.setAttribute("hasOpenCtrl","");
 			}
 			
-			//cell.setImage("/img/add.gif");
+			//cell.setImage("/test2/img/add.gif");
 			cell.setId(host.getId());
 			treeitem.getTreerow().appendChild(cell);
 		}else if(data instanceof HostTreeModel.FakeProcess){
 			HostTreeModel.FakeProcess process = ((HostTreeModel.FakeProcess)data);
 			Treecell cell = new Treecell(process.getName());
 			/*if(process.getType().equals("A")){
-				cell.setImage("/img/caldrbtn.gif");
+				cell.setImage("/test2/img/caldrbtn.gif");
 			}else if(process.getType().equals("B")){
-				cell.setImage("/img/bandbtn.gif");
+				cell.setImage("/test2/img/bandbtn.gif");
 			}else if(process.getType().equals("C")){
-				cell.setImage("/img/upload.gif");
+				cell.setImage("/test2/img/upload.gif");
 			}*/
 			cell.setId(process.getId());
 			treeitem.getTreerow().appendChild(cell);

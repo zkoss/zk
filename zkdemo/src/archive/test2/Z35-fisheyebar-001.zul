@@ -1,16 +1,16 @@
 <window height="600px">
 	<fisheyebar id="fish" style="position: absolute; top: 50px; left:100px;margin:20px;" attachEdge="top">
-		<fisheye image="/img/icon_browser.png" label="Web Browser"
+		<fisheye image="/test2/img/icon_browser.png" label="Web Browser"
 			onClick="alert(self.label)" />
-		<fisheye image="/img/icon_calendar.png" label="Calendar"
+		<fisheye image="/test2/img/icon_calendar.png" label="Calendar"
 			onClick="alert(self.label)" />
-		<fisheye image="/img/icon_email.png" label="Email"
+		<fisheye image="/test2/img/icon_email.png" label="Email"
 			onClick="alert(self.label)" />
-		<fisheye image="/img/icon_texteditor.png" label="Text Editor"
+		<fisheye image="/test2/img/icon_texteditor.png" label="Text Editor"
 			onClick="alert(self.label)" />
-		<fisheye image="/img/icon_update.png" label="Software Update"
+		<fisheye image="/test2/img/icon_update.png" label="Software Update"
 			onClick="alert(self.label)" />
-		<fisheye image="/img/icon_users.png" label="Users"
+		<fisheye image="/test2/img/icon_users.png" label="Users"
 			onClick="alert(self.label)" />
 	</fisheyebar>
 	Click "Change orient" button and move cursor over the fisheyebar before it changes. It should work well. If it is out of expected, it is bug.

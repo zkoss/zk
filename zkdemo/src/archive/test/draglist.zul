@@ -86,7 +86,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 			<listfooter label="100.00%"/>
 		</listfoot>
 	</listbox>
-	<image src="/img/circle.png" draggable="true" mold="alphafix"/>
+	<image src="/test2/img/circle.png" draggable="true" mold="alphafix"/>
 	<zscript>
 	void move(Component dragged) {
 		if (dragged instanceof Listitem)

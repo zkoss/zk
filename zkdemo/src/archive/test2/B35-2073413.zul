@@ -54,7 +54,7 @@ new String[]{"15","[zk1 - Help] RE: SelectedItemConverter Question","2008/4/28 1
 					</hbox>
 				</detail>
 				<div>
-					<image style="padding: 0px 10px" src="/img/mail_read.png" />
+					<image style="padding: 0px 10px" src="/test2/img/mail_read.png" />
 					<label value="${each[0]}" />
 				</div>
 				<label value="${each[1]}" />
@@ -79,7 +79,7 @@ new String[]{"15","[zk1 - Help] RE: SelectedItemConverter Question","2008/4/28 1
 					</groupbox>
 				</detail>
 				<div>
-					<image style="padding: 0px 10px" src="/img/mail_read.png" />
+					<image style="padding: 0px 10px" src="/test2/img/mail_read.png" />
 					<label value="${each[0]}" />
 				</div>
 				<label value="${each[1]}" />

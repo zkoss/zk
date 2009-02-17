@@ -71,7 +71,7 @@
             <label value="[Size]"/>
           </group>
           <row forEach="${datas}" forEachBegin="0" forEachEnd="7">
-            <div><image style="padding: 0px 10px" src="/img/mail_read.png"/><label value="${each[0]}"/></div>
+            <div><image style="padding: 0px 10px" src="/test2/img/mail_read.png"/><label value="${each[0]}"/></div>
             <label value="${each[1]}"/>
             <label value="${each[2]}"/>
             <label value="${each[3]}"/>
@@ -80,7 +80,7 @@
           <row><label id="firstItem" value="11"/></row>
           <group label="Date:Yesterday" />
           <row forEach="${datas}" forEachBegin="11" forEachEnd="14">
-            <div><image style="padding: 0px 10px" src="/img/mail_read.png"/><label value="${each[0]}"/></div>
+            <div><image style="padding: 0px 10px" src="/test2/img/mail_read.png"/><label value="${each[0]}"/></div>
             <label value="${each[1]}"/>
             <label value="${each[2]}"/>
             <label value="${each[3]}"/>

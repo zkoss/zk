@@ -19,23 +19,23 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 	<fisheyebar id="fish" style="position: absolute; top: 50px; left:100px;margin:20px;" attachEdge="top">
-		<fisheye image="/img/icon_browser.png" label="Web Browser"
+		<fisheye image="/test2/img/icon_browser.png" label="Web Browser"
 			onClick="alert(self.label)" />
-		<fisheye image="/img/icon_calendar.png" label="Calendar"
+		<fisheye image="/test2/img/icon_calendar.png" label="Calendar"
 			onClick="alert(self.label)" />
-		<fisheye image="/img/icon_email.png" label="Email"
+		<fisheye image="/test2/img/icon_email.png" label="Email"
 			onClick="alert(self.label)" />
-		<fisheye image="/img/icon_texteditor.png" label="Text Editor"
+		<fisheye image="/test2/img/icon_texteditor.png" label="Text Editor"
 			onClick="alert(self.label)" />
-		<fisheye image="/img/icon_update.png" label="Software Update"
+		<fisheye image="/test2/img/icon_update.png" label="Software Update"
 			onClick="alert(self.label)" />
-		<fisheye image="/img/icon_users.png" label="Users"
+		<fisheye image="/test2/img/icon_users.png" label="Users"
 			onClick="alert(self.label)" />
 	</fisheyebar>
 	<separator height="250px"/>
 	<button label="add Fisheye">
 		<attribute name="onClick">
-			new Fisheye("Added Item", "/img/icon_browser.png").setParent(fish);
+			new Fisheye("Added Item", "/test2/img/icon_browser.png").setParent(fish);
 		</attribute>
 	</button>
 	<button label="delete Fisheye">

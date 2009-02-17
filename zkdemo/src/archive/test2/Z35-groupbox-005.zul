@@ -9,7 +9,7 @@
     <attribute name="onChildRemoved">
     Messagebox
     </attribute>
-      <caption image="/img/inet.png" label="Testing Group Box"/>
+      <caption image=/test2/img/inet.png label="Testing Group Box"/>
       <vbox>
         <combobox>
           <comboitem label="Simple and Rich"/>
@@ -22,9 +22,9 @@
           <comboitem label="Ajax and RIA" description="Rich Internet Application by Ajax"/>
         </combobox>
         <combobox>
-          <comboitem label="Simple and Rich" image="/img/coffee.gif" description="The simplest way to make Web applications rich"/>
-          <comboitem label="Cool!" image="/img/corner.gif" description="The coolest technology"/>
-          <comboitem label="Ajax and RIA" image="/img/cubfirs.gif" description="Rich Internet Application by Ajax"/>
+          <comboitem label="Simple and Rich" image="/test2/img/coffee.gif" description="The simplest way to make Web applications rich"/>
+          <comboitem label="Cool!" image="/test2/img/corner.gif" description="The coolest technology"/>
+          <comboitem label="Ajax and RIA" image="/test2/img/cubfirs.gif" description="Rich Internet Application by Ajax"/>
         </combobox>
         <separator bar="true"/>
 	Auto-complete:

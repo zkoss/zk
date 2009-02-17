@@ -32,7 +32,7 @@ new String[]{"15","[zk1 - Help] RE: SelectedItemConverter Question","2008/4/28 1
 
 void updateGroup(Group g1){
 g1.getChildren().clear();
-new Image("/img/inet.png").setParent(g1);
+new Image(/test2/img/inet.png).setParent(g1);
 new Label("group 1").setParent(g1);
 Menubar mb = new Menubar();
 mb.setParent(g1);
@@ -44,7 +44,7 @@ g1.setSpans("1,1,2");
 
 void updateFoot(Groupfoot f1){
 f1.getChildren().clear();
-new Image("/img/inet.png").setParent(f1);
+new Image(/test2/img/inet.png).setParent(f1);
 new Label("group 1").setParent(f1);
 Menubar mb = new Menubar();
 mb.setParent(f1);
@@ -82,7 +82,7 @@ f1.detach();
 </group>
 <row forEach="${datas}" forEachBegin="0" forEachEnd="9">
 <div><image style="padding: 0px 10px"
-src="/img/mail_read.png"/><label value="${each[0]}"/></div>
+src="/test2/img/mail_read.png"/><label value="${each[0]}"/></div>
 <label value="${each[1]}"/>
 <label value="${each[2]}"/>
 <label value="${each[3]}"/>
@@ -96,7 +96,7 @@ src="/img/mail_read.png"/><label value="${each[0]}"/></div>
 <group label="Date:Yesterday" id="g2"/>
 <row forEach="${datas}" forEachBegin="10" forEachEnd="14">
 <div><image style="padding: 0px 10px"
-src="/img/mail_read.png"/><label value="${each[0]}"/></div>
+src="/test2/img/mail_read.png"/><label value="${each[0]}"/></div>
 <label value="${each[1]}"/>
 <label value="${each[2]}"/>
 <label value="${each[3]}"/>

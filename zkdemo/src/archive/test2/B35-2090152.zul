@@ -29,7 +29,7 @@ button text label, that is correct. (IE6~7 only).
 			<row>
 				<label value="File:" />
 				<button label="ClickMe"
-					onClick='self.setLabel("Clicked OK.")' image="/img/coffee.gif" />
+					onClick='self.setLabel("Clicked OK.")' image="/test2/img/coffee.gif" />
 				<textbox width="99%" />
 			</row>
 			<row>
@@ -46,12 +46,12 @@ button text label, that is correct. (IE6~7 only).
 						<listitem label="And A button here">
 							<listcell>
 								<button label="ClickMe"
-									onClick='self.setLabel("ClickedOK."); self.setImage("/img/coffee.gif")' />
+									onClick='self.setLabel("ClickedOK."); self.setImage("/test2/img/coffee.gif")' />
 							</listcell>
 						</listitem>
 					</listbox>
 					<button label="ClickMe"
-						onClick='self.setLabel("Clicked OK.");self.setImage("/img/coffee.gif")' />
+						onClick='self.setLabel("Clicked OK.");self.setImage("/test2/img/coffee.gif")' />
 				</hbox>
 			</row>
 			<row>

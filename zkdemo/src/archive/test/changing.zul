@@ -21,7 +21,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <window>
 	<textbox onChanging="zoom()"/>
 	<separator bar="true"/>
-	<image id="image" src="/img/sun.jpg" width="10px"/>
+	<image id="image" src="/test2/img/sun.jpg" width="10px"/>
 	<zscript>
 	void zoom() {
 		image.setWidth((event.getValue().length()*10 + 10) + "px");

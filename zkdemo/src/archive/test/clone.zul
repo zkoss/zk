@@ -19,7 +19,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 	<window id="win" border="normal" width="200px" sizable="true">
-		<caption image="/img/inet.png" label="Clone Test"/>
+		<caption image="/test2/img/inet.png" label="Clone Test"/>
 		<checkbox id="ck" label="Hello, Wolrd!" onCheck="alert(self.id+&quot;: &quot;+self.label)"/>
 	</window>
 

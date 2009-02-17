@@ -106,7 +106,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		            <label value="${each[3]}"/>
           		</hbox>
           	</detail>
-            <div><image style="padding: 0px 10px" src="/img/mail_read.png"/><label value="${each[0]}"/></div>
+            <div><image style="padding: 0px 10px" src="/test2/img/mail_read.png"/><label value="${each[0]}"/></div>
             <label value="${each[1]}"/>
             <label value="${each[2]}"/>
             <label value="${each[3]}"/>
@@ -128,7 +128,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		            <label value="${each[3]}"/>
           		</groupbox>
             </detail>
-            <div><image style="padding: 0px 10px" src="/img/mail_read.png"/><label value="${each[0]}"/></div>
+            <div><image style="padding: 0px 10px" src="/test2/img/mail_read.png"/><label value="${each[0]}"/></div>
             <label value="${each[1]}"/>
             <label value="${each[2]}"/>
             <label value="${each[3]}"/>

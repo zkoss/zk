@@ -7,12 +7,12 @@
   <window title="Test Tabbox accordion-lite" border="normal" width="100%">
     <tabbox width="400px" mold="accordion-lite">
       <tabs>
-        <tab label="Tab 1" image="/img/folder.gif" closable="true" draggable="true" droppable="true" focus="true" tooltiptext="Test ToolTip" width="100%"/>
-        <tab label="Tab 2" image="/img/folder.gif" closable="true" draggable="true" droppable="true" focus="true" tooltiptext="Test ToolTip" width="100%"/>
-        <tab label="Tab 3" image="/img/folder.gif" closable="true" draggable="true" droppable="true" focus="true" tooltiptext="Test ToolTip" width="100%"/>
-        <tab label="Tab 4" image="/img/folder.gif" closable="true" draggable="true" droppable="true" focus="true" tooltiptext="Test ToolTip" width="100%"/>
-        <tab label="Tab 5" image="/img/folder.gif" closable="true" draggable="true" droppable="true" focus="true" tooltiptext="Test ToolTip" width="100%"/>
-        <tab label="Tab 6" image="/img/folder.gif" closable="true" draggable="true" droppable="true" focus="true" tooltiptext="Test ToolTip" width="100%"/>
+        <tab label="Tab 1" image="/test2/img/folder.gif" closable="true" draggable="true" droppable="true" focus="true" tooltiptext="Test ToolTip" width="100%"/>
+        <tab label="Tab 2" image="/test2/img/folder.gif" closable="true" draggable="true" droppable="true" focus="true" tooltiptext="Test ToolTip" width="100%"/>
+        <tab label="Tab 3" image="/test2/img/folder.gif" closable="true" draggable="true" droppable="true" focus="true" tooltiptext="Test ToolTip" width="100%"/>
+        <tab label="Tab 4" image="/test2/img/folder.gif" closable="true" draggable="true" droppable="true" focus="true" tooltiptext="Test ToolTip" width="100%"/>
+        <tab label="Tab 5" image="/test2/img/folder.gif" closable="true" draggable="true" droppable="true" focus="true" tooltiptext="Test ToolTip" width="100%"/>
+        <tab label="Tab 6" image="/test2/img/folder.gif" closable="true" draggable="true" droppable="true" focus="true" tooltiptext="Test ToolTip" width="100%"/>
       </tabs>
       <tabpanels>
         <tabpanel>
@@ -77,7 +77,7 @@ The second panel
           <vbox>
 		Which kind of fruit do you want?
 		<groupbox id="gb" mold="3d" width="300px">
-              <caption image="/img/inet.png" label="fruits"/>
+              <caption image=/test2/img/inet.png label="fruits"/>
               <radiogroup onCheck="fruit.value = self.selectedItem.label">
                 <radio label="Apple"/>
                 <radio label="Orange"/>

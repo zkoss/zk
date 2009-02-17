@@ -19,7 +19,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 	<window id="win" border="normal">
-		<caption image="/img/inet.png" label="Hi there!"/>
+		<caption image="/test2/img/inet.png" label="Hi there!"/>
 		<checkbox id="ck" label="Hello, Wolrd!"/>
 		<button label="change label" onClick="javascript:ck.label += 'a'"/>
 		<button label="add m in Java" onClick="{Label q = new Label(&quot;new&quot;);q.setId(&quot;m&quot;);q.setParent(win);}"/>

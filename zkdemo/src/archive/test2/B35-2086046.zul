@@ -16,12 +16,12 @@ bug.</label>
 </vbox>
 <window title="Groupbox test" width="100%">
 <groupbox id="gb3" width="100%">
-<caption image="/img/inet.png" label="Testing Group Box"/>
+<caption image=/test2/img/inet.png label="Testing Group Box"/>
 <vbox>
 <hbox>
 Testing Complicated Groupbox
 <groupbox id="gb" mold="3d" width="100%">
-<caption image="/img/inet.png" label="fruits"/>
+<caption image=/test2/img/inet.png label="fruits"/>
 <radiogroup onCheck="fruit.value = self.selectedItem.label">
 <radio label="Apple"/>
 <radio label="Orange"/>

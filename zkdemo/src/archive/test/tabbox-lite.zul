@@ -31,7 +31,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		</tabpanels>
 	</tabbox>
 		<groupbox mold="3d" width="300px" sclass="lite">
-			<caption image="/img/inet.png" label="fruits"/>
+			<caption image="/test2/img/inet.png" label="fruits"/>
 			<radiogroup onCheck="fruit.value = self.selectedItem.label">
 				<radio label="Apple"/>
 				<radio label="Orange"/>
