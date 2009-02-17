@@ -107,7 +107,6 @@ zk.Layout.prototype = {
 						ambit.y = height - ambit.y;
 					center.h -= ambit.ts;
 					break;
-				case 'east':
 				default:
 					ambit.y += center.y;
 					ambit.h = center.h - ambit.h;
