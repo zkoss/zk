@@ -1111,7 +1111,7 @@ zDom = { //static methods
 	},
 
 	/**
-	 * Creates and returns a 'stackup' (actually, an iframe) that makes
+	 * Creates a 'stackup' (actually, an iframe) that makes
 	 * an element (with position:absolute) shown above others.
 	 * The stackup is used to resolve the layer issues:
 	 * <ul>
@@ -1130,10 +1130,10 @@ zDom = { //static methods
 	makeStackup: function (el, id, anchor) {
 		var ifr = document.createElement('iframe');
 		ifr.id = id || (el ? el.id + "$ifrstk": 'z_ifrstk');
+		ifr.style.cssText = "position:absolute;overflow:hidden;filter:alpha(opacity=0)";
 		ifr.frameBorder = "no";
-		ifr.src="";
 		ifr.tabIndex = -1;
-		ifr.style.cssText = 'position:absolute;visibility:visible;overflow:hidden;filter:alpha(opacity=0);border:0;display:block';
+		ifr.src = "";
 		if (el) {
 			ifr.style.width = el.offsetWidth + "px";
 			ifr.style.height = el.offsetHeight + "px";

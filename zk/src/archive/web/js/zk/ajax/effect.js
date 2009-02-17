@@ -734,10 +734,7 @@ zk.eff.Shadow = zk.$extends(zk.Object, {
 		if (this.stackup) this.stackup.style.display = 'none';
 	},
 	/**
-	 * Synchronizes the state of the element with the shadow,
-	 * such as visiblity and position.
-	 * In other words, if the element is visible, the shadow becomes
-	 * visible.
+	 * Synchronizes the states of the element with shadow.
 	 */
 	sync: function () {
 		var node = this.node, shadow = this.shadow;
