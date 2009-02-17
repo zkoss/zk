@@ -291,8 +291,7 @@ zk.Shadow.prototype = {
 			this.rel.parentNode.insertBefore(this.el, this.rel);
 		this.el.style.zIndex = $int(Element.getStyle(this.rel, "zIndex"))-1;
 		if (zk.ie) 
-			this.el.style.filter = "progid:DXImageTransform.Microsoft.alpha(opacity=50) "
-				+ "progid:DXImageTransform.Microsoft.Blur(pixelradius="+(this.diam)+")";
+			this.el.style.filter = "progid:DXImageTransform.Microsoft.Blur(PixelRadius='4', MakeShadow='true', ShadowOpacity='0.50')";
 		this.recalc(this.rel.offsetLeft, this.rel.offsetTop, this.rel.offsetWidth,
 			this.rel.offsetHeight);
 		this.el.style.display = "block";
