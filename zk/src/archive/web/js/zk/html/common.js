@@ -541,12 +541,25 @@ zk.realClass = function (el, keywords) {
 	}
 	return "";
 };
+
+// This zk.reClassNameCache and zk.getClassRegEx function are based on the Yahoo! Inc.,
+// which can be found here - http://developer.yahoo.net/yui
+zk.reClassNameCache = {}; // cache regexes for className
+zk.getClassRegEx = function(clsnm) {
+	var re = zk.reClassNameCache[clsnm];
+	if (!re) {
+		re = new RegExp('(?:^|\\s+)' + clsnm + '(?:\\s+|$)', 'g');
+		zk.reClassNameCache[clsnm] = re;
+	}
+	return re;
+};
 /** Returns whether it is part of the class name
  * of the specified element.
  */
 zk.hasClass = function (el, clsnm) {
-	var cn = el ? el.className: "";
-	return cn && (' '+cn+' ').indexOf(' '+clsnm+' ') != -1;
+	var re = zk.getClassRegEx(clsnm),
+		cn = el.className;
+	return re.test(cn);
 };
 
 /** Adds the specified class name to the class name of the specified element.
@@ -575,7 +588,7 @@ zk.rmClass = function (el, clsnm, bRemove) {
 	}
 
 	if (zk.hasClass(el, clsnm)) {
-		var re = new RegExp('(?:^|\\s+)' + clsnm + '(?:\\s+|$)', "g");
+		var re = zk.getClassRegEx(clsnm);
 		el.className = el.className.replace(re, " ").trim();
 	}
 };
@@ -587,19 +600,66 @@ zk.setOffsetHeight = function (el, hgh) {
 		- $int(Element.getStyle(el, "margin-bottom"));
 	el.style.height = (hgh > 0 ? hgh: 0) + "px";
 };
+
+zk.borders = ["borderTopWidth", "borderRightWidth", "borderBottomWidth", "borderLeftWidth"];
+zk.paddings = ["paddingTop", "paddingRight", "paddingBottom", "paddingLeft"];
+zk.margins = ["marginTop", "marginRight", "marginBottom", "marginLeft"];
+zk.boxIndices = {width: [1,3], height: [0,2], box: [0,1,2,3]};
+/**
+ * Returns the number of the margin width.
+ * @since 3.5.0
+ */
+zk.getMarginWidth = function (el) {
+	return zk.sumStyles(el, "width", zk.margins);
+};
+/**
+ * Returns the number of the margin height.
+ * @since 3.5.0
+ */
+zk.getMarginHeight = function (el) {
+	return zk.sumStyles(el, "height", zk.margins);
+};
+/**
+ * Returns the number of the border width.
+ * @since 3.5.0
+ */
+zk.getBorderWidth = function (el) {
+	return zk.sumStyles(el, "width", zk.borders);
+};
+/**
+ * Returns the number of the border height.
+ * @since 3.5.0
+ */
+zk.getBorderHeight = function (el) {
+	return zk.sumStyles(el, "height", zk.borders);
+};
+/**
+ * Returns the number of the padding height.
+ * @since 3.5.0
+ */
+zk.getPaddingWidth = function (el) {
+	return zk.sumStyles(el, "width", zk.paddings);
+};
+/**
+ * Returns the number of the padding height.
+ * @since 3.5.0
+ */
+zk.getPaddingHeight = function (el) {
+	return zk.sumStyles(el, "height", zk.paddings);
+};
 /**
  * Returns the number of the padding width and the border width from the specified element.  
  * @since 3.5.0
  */
 zk.getFrameWidth = function (el) {
-	return zk.sumStyles(el, "lr", zk.borders) + zk.sumStyles(el, "lr", zk.paddings);
+	return zk.getPaddingWidth(el) + zk.getBorderWidth(el);
 };
 /**
  * Returns the number of the padding height and the border height from the specified element.  
  * @since 3.5.0
  */
 zk.getFrameHeight = function (el) {
-	return zk.sumStyles(el, "tb", zk.borders) + zk.sumStyles(el, "tb", zk.paddings);
+	return zk.getPaddingHeight(el) + zk.getBorderHeight(el);
 };
 /** Return el.offsetWidth, which solving Safari's bug. */
 zk.offsetWidth = function (el) {
@@ -637,27 +697,24 @@ zk.offsetLeft = function (el) {
 		el = el.cells[0];
 	return el.offsetLeft;
 };
-zk.margins = {l: "margin-left", r: "margin-right", t: "margin-top", b: "margin-bottom"};
-zk.borders = {l: "border-left-width", r: "border-right-width", t: "border-top-width", b: "border-bottom-width"};
-zk.paddings = {l: "padding-left", r: "padding-right", t: "padding-top", b: "padding-bottom"};
 /** Returns the summation of the specified styles.
  *  For example,
- *  zk.sumStyles(el, "lr", zk.paddings) sums the style values of
- * zk.paddings['l'] and zk.paddings['r'].
+ *  zk.sumStyles(el, "width", zk.paddings) sums the style values of
+ * paddingLeft and paddingRight from the specified element.
  *
- * @param {String} areas the areas is abbreviation for left "l", right "r", top "t", and bottom "b".
- * So you can specify to be "lr" or "tb" or more.
+ * @param {String} type 'width', 'height', and 'box', which means the number of the width and the height.
  * @param styles {zk.paddings} or {zk.borders}. 
  * @return {Number}
  * @since 3.0.0
  */
-zk.sumStyles = function (el, areas, styles) {
-	var val = 0;
-	for (var i = 0, l = areas.length; i < l; i++){
-		 var w = $int(Element.getStyle(el, styles[areas.charAt(i)]));
-		 if (!isNaN(w)) val += w;
+zk.sumStyles = function (el, type, styles) {
+	var indices = zk.boxIndices[type],
+		val = 0;
+	for (var sz, i = 0, j = indices.length; i < j; i++) {
+		sz = $int(Element.getStyle(el, styles[indices[i]]));
+		if (!isNaN(sz)) val += sz;
 	}
-	return val;
+    return val;
 };
 /**
  * Returns the revised size, which subtracted the size of its CSS border or padding, for the specified element.
@@ -667,7 +724,7 @@ zk.sumStyles = function (el, areas, styles) {
  * @since 3.0.0
  */
 zk.revisedSize = function (el, size, isHgh) {
-	size -= (isHgh === true ? zk.getFrameHeight(el): zk.getFrameWidth(el));
+    size -= isHgh ? zk.getFrameHeight(el) : zk.getFrameWidth(el);
 	if (size < 0) size = 0;
 	return size;
 };

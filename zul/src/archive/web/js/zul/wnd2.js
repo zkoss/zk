@@ -156,12 +156,12 @@ zkWnd2.maximize = function (cmp, maximized, silent) {
 			s.left = "-10000px";
 			
 			// Sometimes, the clientWidth/Height in IE6 is wrong. 
-			var sw = zk.ie6Only && op.clientWidth == 0 ? (op.offsetWidth - zk.sumStyles(op, "rl", zk.borders)) : op.clientWidth;
-			var sh = zk.ie6Only && op.clientHeight == 0 ? (op.offsetHeight - zk.sumStyles(op, "tb", zk.borders)) : op.clientHeight;
+			var sw = zk.ie6Only && op.clientWidth == 0 ? (op.offsetWidth - zk.getBorderWidth(op)) : op.clientWidth;
+			var sh = zk.ie6Only && op.clientHeight == 0 ? (op.offsetHeight - zk.getBorderHeight(op)) : op.clientHeight;
 			if (!floated) {
-				sw -= zk.sumStyles(op, "rl", zk.paddings);
+				sw -= zk.getPaddingWidth(op);
 				sw = zk.revisedSize(cmp, sw);
-				sh -= zk.sumStyles(op, "tb", zk.paddings);
+				sh -= zk.getPaddingHeight(op);
 				sh = zk.revisedSize(cmp, sh, true);
 			}
 			if (sw < 0) sw = 0;
@@ -259,12 +259,12 @@ zkWnd2.syncMaximized = function (cmp) {
 		s = cmp.style;
 		
 	// Sometimes, the clientWidth/Height in IE6 is wrong.
-	var sw = zk.ie6Only && op.clientWidth == 0 ? (op.offsetWidth - zk.sumStyles(op, "rl", zk.borders)) : op.clientWidth;
-	var sh = zk.ie6Only && op.clientHeight == 0 ? (op.offsetHeight - zk.sumStyles(op, "tb", zk.borders)) : op.clientHeight;
+	var sw = zk.ie6Only && op.clientWidth == 0 ? (op.offsetWidth - zk.getBorderWidth(op)) : op.clientWidth;
+	var sh = zk.ie6Only && op.clientHeight == 0 ? (op.offsetHeight - zk.getBorderHeight(op)) : op.clientHeight;
 	if (!floated) {
-		sw -= zk.sumStyles(op, "rl", zk.paddings);
+		sw -= zk.getPaddingWidth(op);
 		sw = zk.revisedSize(cmp, sw);
-		sh -= zk.sumStyles(op, "tb", zk.paddings);
+		sh -= zk.getPaddingHeight(op);
 		sh = zk.revisedSize(cmp, sh, true);
 	}
 	if (sw < 0) sw = 0;

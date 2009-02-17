@@ -420,8 +420,8 @@ zkFisheye = {
 		var label = $e(cmp, "label");
 		
 		// store the two attributes for better performance.
-		cmp.mh = zk.sumStyles(label, "tb", zk.margins);
-		cmp.mw = zk.sumStyles(label, "lr", zk.margins);
+		cmp.mh = zk.getMarginHeight(label);
+		cmp.mw = zk.getMarginWidth(label);
 		
 		zk.listen(img, "mouseover", this.onMouseOver);
 		zk.listen(img, "mouseout", this.onMouseOut);

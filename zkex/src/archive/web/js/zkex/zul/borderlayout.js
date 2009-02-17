@@ -51,43 +51,59 @@ zk.Layout2.prototype = {
 	// private
 	// returns the ambit of the specified cmp for region calculation. 
 	_getAmbit: function (cmp, region, ignoreSplit) {
+		var ambit, mars = this._getMargins(cmp);
 		if (region && !this.isOpen(cmp)) {
 			var colled = $e($uuid(cmp), "collapsed");
-			return {
+			ambit = {
+				x: mars.left,
+				y: mars.top,
 				w: colled ? colled.offsetWidth : 0,
 				h: colled ? colled.offsetHeight : 0
 			};
-		}
-		var w = cmp.style.width,
-			h = cmp.style.height,
-			widx = w.indexOf("%"),
-			hidx = h.indexOf("%");
-		if (widx > 0) cmp._width = $int(w.substring(0, widx));
-		if (hidx > 0) cmp._height = $int(h.substring(0, hidx));
-		var ambit = {
+			ignoreSplit = true;
+		} else {
+			var w = cmp.style.width || '',
+			h = cmp.style.height || '',
+			widx = w.indexOf('%'),
+			hidx = h.indexOf('%');
+			if (widx > 0) cmp._width = $int(w.substring(0, widx));
+			if (hidx > 0) cmp._height = $int(h.substring(0, hidx));
+			ambit = {
+				x: mars.left,
+				y: mars.top,
 				w: cmp._width ?  Math.max(Math.floor(this.el.offsetWidth * cmp._width / 100), 0) : cmp.offsetWidth, 
 				h: cmp._height ?  Math.max(Math.floor(this.el.offsetHeight * cmp._height / 100), 0) : cmp.offsetHeight
 			};
-		if (region && !ignoreSplit) {
-			var split = cmp.split || {offsetHeight:0, offsetWidth:0};
-			zkLayoutRegionSplit2._fixsplit(split);
-			switch (region) {
-				case "north":
-				case "south":
-					ambit.h += split.offsetHeight;
-					break;
-				case "west":
-				case "east":
-					ambit.w += split.offsetWidth;
-					break;
-			}
+		}
+		
+		var split = ignoreSplit ? {offsetHeight:0, offsetWidth:0} : cmp.split || {offsetHeight:0, offsetWidth:0};
+		zkLayoutRegionSplit2._fixsplit(split);
+		switch (region) {
+		case "north":
+		case "south":
+			ambit.h += split.offsetHeight;
+			ambit.ts = ambit.y + ambit.h + mars.bottom; // total size;
+			ambit.w = mars.left + mars.right;
+			if (region == 'south')
+				ambit.y = ambit.h + mars.bottom;
+			break;
+		case "west":
+		case "east":
+			ambit.h = mars.top + mars.bottom;
+			ambit.w += split.offsetWidth;
+			ambit.ts = ambit.x + ambit.w + mars.right; // total size;
+			if (region == 'east')
+				ambit.x = ambit.w + mars.right; 
+			break;
 		}
 		return ambit;
 	},
 	_getMargins: function (cmp) {
-		return this.isOpen(cmp) ?
-			this._paserMargin(getZKAttr(cmp, "mars") || "0,0,0,0") :
-			this._paserCmargin(getZKAttr(cmp, "cmars") || "5,5,5,5");
+		return this.stringToBox(this.isOpen(cmp) ? getZKAttr(cmp, "mars") || "0,0,0,0" : getZKAttr(cmp, "cmars") || "5,5,5,5");
+	},
+	stringToBox: function (val) {
+		val = val.split(',');
+		return {top: $int(val[0]), left: $int(val[1]), right: $int(val[2]), bottom: $int(val[3])};
 	},
 	isOpen: function (cmp) {
 		return getZKAttr(cmp, "open") == "true";
@@ -97,77 +113,51 @@ zk.Layout2.prototype = {
 		if (!zk.isRealVisible(this.el)) return;
 		var width = this.el.offsetWidth,
 			height = this.el.offsetHeight,
-			cW = width,
-			cH = height,
-			cY = 0,
-			cX = 0,
-			n = this.getRegion("north"),
-			s = this.getRegion("south"), 
-			w = this.getRegion("west"),
-			e = this.getRegion("east"), 
-			c = this.getRegion("center");
-			
-		if (n && zk.isRealVisible(n.parentNode)) {
-			var ambit = this._getAmbit(n, "north"),
-				mars = this._getMargins(n);
-			ambit.w = width - (mars.left + mars.right);
-			ambit.x = mars.left;
-			ambit.y = mars.top;
-			cY = ambit.h + ambit.y + mars.bottom;
-			cH -= cY;
-			this._resize(n, ambit, this.isOpen(n));
+			center = {
+				x: 0,
+				y: 0,
+				w: width,
+				h: height
+			};
+		
+		for (var region, ambit, margin,	rs = ['north', 'south', 'west', 'east'],
+				j = 0, k = rs.length; j < k; ++j) {
+			region = this.getRegion(rs[j]);
+			if (region && zk.isRealVisible(region.parentNode)) {
+				ambit = this._getAmbit(region, rs[j]);
+				switch (rs[j]) {
+				case 'north':
+				case 'south':
+					ambit.w = width - ambit.w;
+					if (rs[j] == 'north') 
+						center.y = ambit.ts;
+					else
+						ambit.y = height - ambit.y;
+					center.h -= ambit.ts;
+					break;
+				default:
+					ambit.y += center.y;
+					ambit.h = center.h - ambit.h;
+					if (rs[j] == 'east')
+						ambit.x = width - ambit.x;
+					else center.x += ambit.ts;
+					center.w -= ambit.ts;
+					break;
+				}
+				this._resize(region, ambit, this.isOpen(region));
+			}
 		}
-		if (s && zk.isRealVisible(s.parentNode)) {
-			var ambit = this._getAmbit(s, "south"),
-				mars = this._getMargins(s),
-				total = (ambit.h + mars.top + mars.bottom);
-			ambit.w = width - (mars.left + mars.right);
-			ambit.x = mars.left;
-			ambit.y = height - total + mars.top;
-			cH -= total;
-			this._resize(s, ambit, this.isOpen(s));
-		}
-		if (w && zk.isRealVisible(w.parentNode)) {
-			var ambit = this._getAmbit(w, "west"),
-				mars = this._getMargins(w),
-				total = (ambit.w + mars.left + mars.right);
-			ambit.h = cH - (mars.top + mars.bottom);
-			ambit.x = mars.left;
-			ambit.y = cY + mars.top;
-			cX += total;
-			cW -= total;
-			this._resize(w, ambit, this.isOpen(w));
-		}
-		if (e && zk.isRealVisible(e.parentNode)) {
-			var ambit = this._getAmbit(e, "east"),
-				mars = this._getMargins(e),
-				total = (ambit.w + mars.left + mars.right);
-			ambit.h = cH - (mars.top + mars.bottom);
-			ambit.x = width - total + mars.left;
-			ambit.y = cY + mars.top;
-			cW -= total;
-			this._resize(e, ambit, this.isOpen(e));
-		}
-		if (c) {
-			var mars = this._getMargins(c),
-				ambit = {
-					x: cX + mars.left,
-					y: cY + mars.top,
-					w: cW - (mars.left + mars.right),
-					h: cH - (mars.top + mars.bottom)
-				};
-			this._resize(c, ambit, true);
+		var cnt = this.getRegion('center');
+		if (cnt) {
+			var mars = this.stringToBox(getZKAttr(cnt, "mars") || "0,0,0,0");
+			center.x += mars.left;
+			center.y += mars.top;
+			center.w -= mars.left + mars.right;
+			center.h -= mars.top + mars.bottom;
+			this._resize(cnt, center, true);
 		}
 		zk.cleanVisibility(this.el);
 		this.isOnSize = false; // reset
-	},
-	_paserMargin: function (val) {
-		var ms = val.split(",");
-		return {top: $int(ms[0]), left: $int(ms[1]), right: $int(ms[2]), bottom: $int(ms[3])};
-	},
-	_paserCmargin: function (val) {
-		var cms = val.split(",");
-		return {top: $int(cms[0]), left: $int(cms[1]), right: $int(cms[2]), bottom: $int(cms[3])};
 	},
 	_resize: function (cmp, ambit, isOpen, ignoreSplit) {
 		if (isOpen) {
@@ -191,7 +181,10 @@ zk.Layout2.prototype = {
 	},
 	_resizeSplit: function (cmp, ambit, region) {	
 		if (!zk.isVisible(cmp.split)) return ambit;
-		var sAmbit = this._getAmbit(cmp.split);
+		var sAmbit = {
+				w: cmp.split.offsetWidth, 
+				h: cmp.split.offsetHeight
+			};
 		switch(region){
 			case "north":
 				ambit.h -= sAmbit.h;
@@ -282,30 +275,6 @@ zk.Layout2.getOwnerLayout = function (cmp, cleanup) {
 	var meta = zkau.getMeta(bl);
 	if (meta || cleanup) return meta;
 	else return new zk.Layout2(bl);
-};
-zk.Layout2.getRootLayout = function (el) {
-	for (; el; el = $parentByType($real(el), "BorderLayout2")) {
-		var lr = $e($uuid(el.parentNode));
-		if ($type(lr) == "LayoutRegion2") {
-			 el = lr;
-		} else return el;
-	}	
-};
-zk.Layout2.cumulativeOffset = function (element, rootelemnt) {
-	var valueT = 0, valueL = 0;
-	do {
-		if (rootelemnt && element == rootelemnt)break;
-		if (Element.getStyle(element, "position") == 'fixed') {
-			valueT += zk.innerY() + element.offsetTop;
-			valueL += zk.innerX() + element.offsetLeft;
-			break;
-		} else {
-			valueT += element.offsetTop  || 0;
-			valueL += element.offsetLeft || 0;			
-			element = zk.gecko && element != document.body ? zPos.offsetParent(element): element.offsetParent;
-		}
-	} while (element);
-	return [valueL, valueT];
 };
 /**
  * New trendy mold of border layout
@@ -463,92 +432,63 @@ zkLayoutRegion2 = {
 		anima.slideDown(real, zkLayoutRegionSplit2.sanchors[real.split.pos]);
 	},
 	syncSize: function (colled, cmp, inclusive) {
+		setZKAttr(cmp, "open", "true");
 		var layout = zk.Layout2.getOwnerLayout(cmp),
 			width = layout.el.offsetWidth,
 			height = layout.el.offsetHeight,
-			cH = height,
-			cY = 0,
-			cX = 0,
-			n = layout.getRegion("north"),
-			s = layout.getRegion("south"), 
-			w = layout.getRegion("west"),
-			e = layout.getRegion("east");
-		setZKAttr(cmp, "open", "true");
-		if (n && (zk.isVisible(n) || zk.isVisible($e($uuid(n), "collapsed")))) {
-			var ignoreSplit = n == cmp,
-				ambit = layout._getAmbit(n, "north", ignoreSplit),
-				mars = layout._getMargins(n);
-			ambit.w = width - (mars.left + mars.right);
-			ambit.x = mars.left;
-			ambit.y = mars.top;
-			cY = ambit.h + ambit.y + mars.bottom;
-			cH -= cY;
-			if (ignoreSplit) {
-				ambit.w = colled.offsetWidth;
-				if (inclusive) {
-					var cmars = layout._paserCmargin(getZKAttr(n, "cmars") || "5,5,5,5");
-					ambit.w += cmars.left + cmars.right;
+			center = {
+				x: 0,
+				y: 0,
+				w: width,
+				h: height
+			};
+			
+		for (var region, ambit, margin, rs = ['north', 'south', 'west', 'east'],
+			j = 0, k = rs.length; j < k; ++j) {
+			region = layout.getRegion(rs[j]);
+			if (region && (zk.isVisible(region) || zk.isVisible($e($uuid(region), "collapsed")))) {
+				var ignoreSplit = region == cmp;
+				ambit = layout._getAmbit(region, rs[j], ignoreSplit);
+				switch (rs[j]) {
+				case 'north':
+				case 'south':
+					ambit.w = width - ambit.w;
+					if (rs[j] == 'north') 
+						center.y = ambit.ts;
+					else
+						ambit.y = height - ambit.y;
+					center.h -= ambit.ts;
+					if (ignoreSplit) {
+						ambit.w = colled.offsetWidth;
+						if (inclusive) {
+							var cmars = layout.stringToBox(getZKAttr(region, "cmars") || "5,5,5,5");
+							ambit.w += cmars.left + cmars.right;
+						}
+						layout._resize(region, ambit, true, ignoreSplit);
+						setZKAttr(cmp, "open", "false");
+						return;
+					}
+					break;
+				default:
+					ambit.y += center.y;
+					ambit.h = center.h - ambit.h;
+					if (rs[j] == 'east')
+						ambit.x = width - ambit.x;
+					else center.x += ambit.ts;
+					center.w -= ambit.ts;
+					if (ignoreSplit) {
+						ambit.h = colled.offsetHeight;
+						if (inclusive) {
+							var cmars = layout.stringToBox(getZKAttr(region, "cmars") || "5,5,5,5");
+							ambit.h += cmars.top + cmars.bottom;
+						}
+						layout._resize(region, ambit, true, ignoreSplit);
+						setZKAttr(cmp, "open", "false");
+						return;
+					}
+					break;
 				}
-				layout._resize(n, ambit, true, ignoreSplit);
-				setZKAttr(cmp, "open", "false");
-				return;
-			}
-		}
-		if (s && (zk.isVisible(s) || zk.isVisible($e($uuid(s), "collapsed")))) {
-			var ignoreSplit = s == cmp,
-				ambit = layout._getAmbit(s, "south", ignoreSplit),
-				mars = layout._getMargins(s),
-				total = (ambit.h + mars.top + mars.bottom);
-			ambit.w = width - (mars.left + mars.right);
-			ambit.x = mars.left;
-			ambit.y = height - total + mars.top;
-			cH -= total;
-			if (ignoreSplit) {
-				ambit.w = colled.offsetWidth;
-				if (inclusive) {
-					var cmars = layout._paserCmargin(getZKAttr(s, "cmars") || "5,5,5,5");
-					ambit.w += cmars.left + cmars.right;
-				}
-				layout._resize(s, ambit, true, ignoreSplit);
-				setZKAttr(cmp, "open", "false");
-				return;
-			}
-		}
-		if (w && (zk.isVisible(w) || zk.isVisible($e($uuid(w), "collapsed")))) {
-			var ignoreSplit = w == cmp,
-				ambit = layout._getAmbit(w, "west", ignoreSplit),
-				mars = layout._getMargins(w);
-			ambit.h = cH - (mars.top + mars.bottom);
-			ambit.x = mars.left;
-			ambit.y = cY + mars.top;
-			if (ignoreSplit) {
-				ambit.h = colled.offsetHeight
-				if (inclusive) {
-					var cmars = layout._paserCmargin(getZKAttr(w, "cmars") || "5,5,5,5");
-					ambit.h += cmars.top + cmars.bottom;
-				}
-				layout._resize(w, ambit, true, ignoreSplit);
-				setZKAttr(cmp, "open", "false");
-				return;
-			}
-		}
-		if (e && (zk.isVisible(e) || zk.isVisible($e($uuid(e), "collapsed")))) {
-			var ignoreSplit = e == cmp,
-				ambit = layout._getAmbit(e, "east", ignoreSplit),
-				mars = layout._getMargins(e),
-				total = (ambit.w + mars.left + mars.right); 
-			ambit.h = cH - (mars.top + mars.bottom);
-			ambit.x = width - total + mars.left;
-			ambit.y = cY + mars.top;
-			if (ignoreSplit) {
-				ambit.h = colled.offsetHeight
-				if (inclusive) {
-					var cmars = layout._paserCmargin(getZKAttr(e, "cmars") || "5,5,5,5");
-					ambit.h += cmars.top + cmars.bottom;
-				}
-				layout._resize(e, ambit, true, ignoreSplit);
-				setZKAttr(cmp, "open", "false");
-				return;
+				
 			}
 		}
 	},
@@ -737,7 +677,7 @@ zkLayoutRegionSplit2 = {
 				var maxs = $int(getZKAttr(real, "maxs")) || 2000,
 					mins = $int(getZKAttr(real, "mins")) || 0,
 					ol = zk.Layout2.getOwnerLayout(real),
-					mars = ol._paserMargin(getZKAttr(real, "mars") || "0,0,0,0"),
+					mars = ol.stringToBox(getZKAttr(real, "mars") || "0,0,0,0"),
 					lr = zk.getFrameWidth(real) + (split.pos == "west" ? mars.left : mars.right),
 					tb = zk.getFrameHeight(real) + (split.pos == "north" ? mars.top : mars.bottom),
 					min = 0,

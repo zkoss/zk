@@ -279,12 +279,12 @@ zkPanel = {
 				s.left = "-10000px";
 				
 				// Sometimes, the clientWidth/Height in IE6 is wrong. 
-				var sw = zk.ie6Only && op.clientWidth == 0 ? (op.offsetWidth - zk.sumStyles(op, "rl", zk.borders)) : op.clientWidth;
-				var sh = zk.ie6Only && op.clientHeight == 0 ? (op.offsetHeight - zk.sumStyles(op, "tb", zk.borders)) : op.clientHeight;
+				var sw = zk.ie6Only && op.clientWidth == 0 ? (op.offsetWidth - zk.getBorderWidth(op)) : op.clientWidth;
+				var sh = zk.ie6Only && op.clientHeight == 0 ? (op.offsetHeight - zk.getBorderHeight(op)) : op.clientHeight;
 				if (!floated) {
-					sw -= zk.sumStyles(op, "rl", zk.paddings);
+					sw -= zk.getPaddingWidth(op);
 					sw = zk.revisedSize(cmp, sw);
-					sh -= zk.sumStyles(op, "tb", zk.paddings);
+					sh -= zk.getPaddingHeight(op);
 					sh = zk.revisedSize(cmp, sh, true);
 				}
 				if (sw < 0) sw = 0;
@@ -379,17 +379,17 @@ zkPanel = {
 			s = cmp.style;
 			
 		// Sometimes, the clientWidth/Height in IE6 is wrong. 
-		var sw = zk.ie6Only && op.clientWidth == 0 ? (op.offsetWidth - zk.sumStyles(op, "rl", zk.borders)) : op.clientWidth;
+		var sw = zk.ie6Only && op.clientWidth == 0 ? (op.offsetWidth - zk.getBorderWidth(op)) : op.clientWidth;
 		if (!floated) {
-			sw -= zk.sumStyles(op, "rl", zk.paddings);
+			sw -= zk.getPaddingWidth(op);
 			sw = zk.revisedSize(cmp, sw);
 		}
 		if (sw < 0) sw = 0;
 		s.width = sw + "px";
 		if (getZKAttr(cmp, "open") == "true") {
-			var sh = zk.ie6Only && op.clientHeight == 0 ? (op.offsetHeight - zk.sumStyles(op, "tb", zk.borders)) : op.clientHeight;
+			var sh = zk.ie6Only && op.clientHeight == 0 ? (op.offsetHeight - zk.getBorderHeight(op)) : op.clientHeight;
 			if (!floated) {
-				sh -= zk.sumStyles(op, "tb", zk.paddings);
+				sh -= zk.getPaddingHeight(op);
 				sh = zk.revisedSize(cmp, sh, true);
 			}
 			if (sh < 0) sh = 0;
