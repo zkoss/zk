@@ -8,6 +8,7 @@ menuitem2.dsp
 		New trendy mold for Menuitem component
 	History:
 		Fri May 23 14:35:44 TST 2008, Created by jumperchen
+		modify by dennis 20090217
 }}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
@@ -22,14 +23,14 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <c:when test="${self.topmost}">
 <td id="${self.uuid}" align="left" z.type="Menuit2"${self.outerAttrs}${self.innerAttrs}>
 <a href="${empty self.href?'javascript:;':c:encodeURL(self.href)}"${c:attr('target',self.target)} class="${zcls}-cnt">
-<table id="${self.uuid}!a" cellspacing="0" cellpadding="0" border="0" class="${zcls}-btn <c:if test="${self.imageAssigned}">${zcls}-btn<c:if test="${!empty self.label}">-text</c:if>-img</c:if>" style="width: auto;">
-<tbody><tr><td class="${zcls}-btn-l"><i>&nbsp;</i></td>
+<table id="${self.uuid}!a" cellspacing="0" cellpadding="0" border="0" class="${zcls}-bdy <c:if test="${self.imageAssigned}">${zcls}-bdy<c:if test="${!empty self.label}">-text</c:if>-img</c:if>" style="width: auto;">
+<tbody><tr><td class="${zcls}-inner-l"></td>
 <c:set var="imagesrc" value="${self.encodedImageURL}"/>
 <c:set var="imagesrc" value='style="background-image:url(${imagesrc})"' unless="${empty imagesrc}"/>
-<td class="${zcls}-btn-m"><em unselectable="on"><button id="${self.uuid}!b" type="button" class="${zcls}-btn-text"${imagesrc}><c:out value="${self.label}"/></button>
-</em>
+<td class="${zcls}-inner"><div><button id="${self.uuid}!b" type="button" class="${zcls}-btn"${imagesrc}><c:out value="${self.label}"/>&nbsp</button>
+</div>
 </td>
-<td class="${zcls}-btn-r"><i>&nbsp;</i></td>
+<td class="${zcls}-inner-r"></td>
 </tr>
 </tbody>
 </table></a></td>
