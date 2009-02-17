@@ -37,6 +37,7 @@ import org.zkoss.util.ModificationException;
 import org.zkoss.zk.scripting.HierachicalAware;
 import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.scripting.Namespace;
+import org.zkoss.zk.scripting.Namespaces;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Path;
@@ -432,19 +433,26 @@ public class DataBinder implements java.io.Serializable {
 	 * @param comp the UI component to be loaded value.
 	 */
 	public void loadComponent(Component comp) {
-		if (isTemplate(comp) || comp.getPage() == null) {
-			return; //skip detached component
-		}
 		init();
-		Collection bindings = getBindings(comp);
-		if (bindings != null) {
-			loadAttrs(comp, bindings);
+		if (loadComponent0(comp)) { //component detached, skip
+			return;
 		}
 			
 		//load kids of this component
 		for(final Iterator it = comp.getChildren().iterator(); it.hasNext();) {
 			loadComponent((Component) it.next()); //recursive
 		}
+	}
+	
+	private boolean loadComponent0(Component comp) {
+		if (isTemplate(comp) || comp.getPage() == null) {
+			return true; //skip detached component
+		}
+		final Collection bindings = getBindings(comp);
+		if (bindings != null) {
+			loadAttrs(comp, bindings);
+		}
+		return false;
 	}
 	
 	/** Save values from all attributes of a specified UI component to data bean properties.
@@ -471,7 +479,7 @@ public class DataBinder implements java.io.Serializable {
 		init();
 		for (final Iterator it = _compBindingMap.keySet().iterator(); it.hasNext(); ) {
 			final Component comp = (Component) it.next();
-			loadComponent(comp);
+			loadComponent0(comp);
 		}
 	}
 	
@@ -1148,11 +1156,26 @@ public class DataBinder implements java.io.Serializable {
 		} else if (beanid.startsWith(".")) { //a relative component Path: ./ or ../
 			bean = Path.getComponent(comp.getSpaceOwner(), beanid);
 		} else {
+			//VariableResolver would need such "self" information when doing
+			//variable resolving
 			final Page page = comp.getPage();
 			if (page != null)
 				bean = page.getZScriptVariable(comp.getNamespace(), beanid);
-			if (bean == null)
-				bean = comp.getVariable(beanid, false);
+			if (bean == null) {
+				final Object self = 
+					page.getNamespace().getVariableNames().contains("self") ? 
+					page.getNamespace().getVariable("self", true) : null; 
+				try {
+					page.setVariable("self", comp);
+					bean = comp.getVariable(beanid, false);
+				} finally {
+					if (self == null) {
+						page.unsetVariable("self");
+					} else {
+						page.setVariable("self", self);
+					}
+				}
+			}
 		}
 		return bean;
 	}

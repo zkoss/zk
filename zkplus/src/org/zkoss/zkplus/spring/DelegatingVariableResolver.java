@@ -28,7 +28,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
- * DelegatingVariableResolver, a spring bean variable resolver.
+ * <p>DelegatingVariableResolver, a spring bean variable resolver.</p>
  *
  * <p>It defines a variable called <code>springContext</code> to represent
  * the instance of <code>org.springframework.context.ApplicationContext</code>.
@@ -41,7 +41,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  */
 public class DelegatingVariableResolver implements VariableResolver {
 	protected ApplicationContext _ctx;
-	protected final Map _vars = new HashMap();
+//	protected final Map _vars = new HashMap();
 	
 	/**
 	 * Get the spring application context.
@@ -51,7 +51,7 @@ public class DelegatingVariableResolver implements VariableResolver {
 			return _ctx;
 			
 		_ctx = SpringUtil.getApplicationContext();
-		_vars.put("springContext", _ctx);
+//		_vars.put("springContext", _ctx);
 		return _ctx;
 	}
 	
@@ -59,16 +59,19 @@ public class DelegatingVariableResolver implements VariableResolver {
 	 * Get the spring bean by the specified name.
 	 */		
 	public Object resolveVariable(String name) {
-		Object o = _vars.get(name);
-		if (o == null) {
-			try {
-				o = getApplicationContext().getBean(name);
-			} catch (NoSuchBeanDefinitionException ex) {
-				o = null;
-			}
-			if (o != null)
-				_vars.put(name, o);
+		if ("springContext".equals(name)) {
+			return getApplicationContext();
 		}
-		return o;
+//		Object o = _vars.get(name);
+//		if (o == null) {
+			try {
+				return getApplicationContext().getBean(name);
+			} catch (NoSuchBeanDefinitionException ex) {
+				return null;
+			}
+//			if (o != null)
+//				_vars.put(name, o);
+//		}
+//		return o;
 	}
 }
