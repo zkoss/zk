@@ -137,7 +137,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			}
 		} else {
 			if (!this._shadow)
-				this._shadow = new zk.eff.Shadow(this.getNode(), {stackup:true});
+				this._shadow = new zk.eff.Shadow(this.getNode(),
+					{left: -4, right: 4, top: -2, bottom: 3, stackup:true});
 			this._shadow.sync();
 		}
 	},

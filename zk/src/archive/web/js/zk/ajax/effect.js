@@ -698,54 +698,27 @@ zk.eff.Shadow = zk.$extends(zk.Object, {
 	 * @param opts The options
 	 * <p>Alowed options:
 	 * <ul>
-	 * <li>mode: The shadow display mode.  Supports the following options:
-	 *  <ul><li>shade: Shadow displays on both sides and bottom only (by default)</li>
-	 *   <li>frame: Shadow displays equally on all four sides</li>
-	 *   <li>drop: Traditional bottom-right drop shadow</li></ul></li>
-	 * <li>diameter: The diameter of the offset of the shadow from the element (defaults to 4)</li>
+	 * <li>left: The margin at left. Default: 4.</li>
+	 * <li>right: The margin at right. Default: -4.</li>
+	 * <li>top: the margin at top. Default: 3.</li>
+	 * <li>bottom: the margin at bottom. Default: -3.</li>
 	 * <li>stackup: whether to create a stackup (see {@link zDom#makeStackup})</li>
 	 * </ul>
 	 */
 	$init: function (element, opts) {
 		opts = this.opts = zk.copy(this.opts, zk.$default(opts, {
-			diameter: 4, mode: "shade"
+			left: 4, right: -4, top: 3, bottom: -3
 		}));
-		var sdwid = element.id + "$sdw",
-			html = zk.ie ? '<div id="'+sdwid+'" class="z-ie-shadow"></div>' :
-				'<div id="'+sdwid+'" class="z-shadow"><div class="z-shadow-t"><div class="z-shadow-tl"></div><div class="z-shadow-tm"></div><div class="z-shadow-tr"></div></div><div class="z-shadow-c"><div class="z-shadow-cl"></div><div class="z-shadow-cm"></div><div class="z-shadow-cr"></div></div><div class="z-shadow-b"><div class="z-shadow-bl"></div><div class="z-shadow-bm"></div><div class="z-shadow-br"></div></div></div>',
-			o = opts.diameter,
-			d = {l: -o, t: o-1, h: 0, w:0},
-			rad = Math.floor(opts.diameter/2);
-		switch (opts.mode.toLowerCase()) {
-		case "shade":
-			d.w = o*2;
-			if(zk.ie) {
-				d.l -= rad - 1;
-				d.t -= opts.diameter + rad;
-				d.w -= opts.diameter + (rad + 1);
-				d.h -= 1;
-			}
-			break;
-		case "drop":
-			d.l = -d.l;
-			if (zk.ie)
-				d.l = d.t = d.w = d.h = -rad;
-			break;
-		case "frame":
-			d.w = d.h = (o*2);
-			d.t = d.l;
-			d.t += 1;
-			d.h -= 2;
-			if (zk.ie) {
-				d.t = d.l = d.t - rad;
-				d.h = d.w = d.w - (opts.diameter + rad + 1);
-			}
-			break;
-		};
-		this.delta = d;
+		if (zk.ie) {
+			opts.left -= 2;
+			opts.right -= 5;
+			opts.top -= 2;
+			opts.bottom -= 4;
+		}
+
 		this.node = element;
-		
-		zDom.insertHTMLBefore(element, html);
+		var sdwid = element.id + "$sdw";
+		zDom.insertHTMLBefore(element, '<div id="'+sdwid+this.POST_HTML);
 		this.shadow = zDom.$(sdwid);
 	},
 	/** Removes the shadow. */
@@ -772,38 +745,33 @@ zk.eff.Shadow = zk.$extends(zk.Object, {
 			this.hide();
 			return false;
 		}
-		if (zDom.nextSibling(this.shadow, "DIV")!= node)
+
+		if (zDom.nextSibling(this.shadow, zDom.tag(node))!= node)
 			node.parentNode.insertBefore(this.shadow, node);
 		this.shadow.style.zIndex = zk.parseInt(zDom.getStyle(node, "zIndex"));
-		if (zk.ie) 
-			this.shadow.style.filter = "progid:DXImageTransform.Microsoft.alpha(opacity=50) "
-				+ "progid:DXImageTransform.Microsoft.Blur(pixelradius="+(this.opts.diameter)+")";
-		this._recalc(node.offsetLeft, node.offsetTop, node.offsetWidth,
-			node.offsetHeight);
-		this.shadow.style.display = "block";
-		if (this.stackup) this.stackup.style.display = "block";
-		return true;
-	},
-	_recalc : function(l, t, w, h){
-		var d = this.delta, r = this.shadow, st = r.style, width = (w + d.w), height = (h + d.h),
-			widths = width +"px", heights = height + "px";
-		st.left = (l + d.l) + "px";
-		st.top = (t + d.t) + "px";
-		if(st.width != widths || st.height != heights) {
-			st.width = widths;
-			st.height = heights;
+
+		var opts = this.opts,
+			l = node.offsetLeft, t = node.offsetTop,
+			w = node.offsetWidth, h = node.offsetHeight
+			shdw = this.shadow, st = shdw.style,
+			wd = w - opts.left + opts.right,
+			hgh = h - opts.top + opts.bottom;
+		st.left = (l + opts.left) + "px";
+		st.top = (t + opts.top) + "px";
+		if(st.width != wd || st.height != hgh) {
+			st.width = wd + "px";
+			st.height = hgh + "px";
 			if(!zk.ie) {
-				var c = r.childNodes;
+				var c = shdw.childNodes;
 				// the 12 number means the both height the top side shadow and the bottom side shadow.
-				c[1].style.height = Math.max(0, (height - 12))+ "px";
+				c[1].style.height = Math.max(0, (hgh - 12))+ "px";
 				
 				// the 12 number means the both width the left side shadow and the right side shadow.
-				c[0].childNodes[1].style.width = c[1].childNodes[1].style.width = c[2].childNodes[1].style.width = Math.max(0, (width - 12)) + "px";;
+				c[0].childNodes[1].style.width = c[1].childNodes[1].style.width = c[2].childNodes[1].style.width = Math.max(0, (wd - 12)) + "px";;
 			}
 		}
 
-		var node = this.node;
-		if(this.opts.stackup && node) {
+		if(opts.stackup && node) {
 			var stackup = this.stackup;
 			if(!stackup)
 				stackup = this.stackup =
@@ -816,6 +784,10 @@ zk.eff.Shadow = zk.$extends(zk.Object, {
 			st.height = h +"px";
 			st.zIndex = zk.parseInt(zDom.getStyle(node, "zIndex"));
 		}
+
+		this.shadow.style.display = "block";
+		if (this.stackup) this.stackup.style.display = "block";
+		return true;
 	},
 	/**
 	 * Returns the delta of the shadow.
@@ -831,6 +803,19 @@ zk.eff.Shadow = zk.$extends(zk.Object, {
 		return this.stackup || this.shadow;
 	}
 });
+
+if (zk.ie) {
+	zk.eff.Shadow.prototype.POST_HTML = '" class="z-shadow-ie"></div>';
+} else {
+	var html = '" class="z-shadow">';
+	for (var ys = ['b', 'c', 't'], j = ys.length; --j >= 0;) {
+		html += '<div class="z-shadow-' + ys[j] + '">';
+		for (var xs = ['r', 'm', 'l'], k = xs.length; --k >= 0;)
+			html += '<div class="z-shadow-' + ys[j] + xs[k] + '"></div>';
+		html += '</div>';
+	}
+	zk.eff.Shadow.prototype.POST_HTML = html + '</div>';
+}
 
 /** A mask covers the browser window fully. */
 zk.eff.FullMask = zk.$extends(zk.Object, {

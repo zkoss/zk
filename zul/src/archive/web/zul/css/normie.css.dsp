@@ -85,8 +85,10 @@ span.z-vfiletree-last-open, span.z-vfiletree-last-close, span.z-vfiletree-tee, s
 
 <%-- Append New --%>
 <%-- Shadow --%>
-.z-ie-shadow { <%-- IE can use the "progid:DXImageTransform.Microsoft.Blur" function --%>
-	display: none; position: absolute; overflow: hidden; left: 0; top: 0; background: #777; zoom: 1;
+.z-shadow-ie {
+	left: 0; top: 0; position: absolute; overflow: hidden;
+	background: #7a7a7a; zoom: 1; display: none;
+	filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=4, MakeShadow=true, ShadowOpacity=0.30)
 }
 <c:if test="${c:isExplorer7()}">
 .z-panel-tm {
