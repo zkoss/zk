@@ -112,7 +112,7 @@ zkMenu2 = { // menu
 		if (zkMenu2.isTop(cmp)) {
 			var btn = $e(cmp.id + "!b");
 			if (!btn || !btn.innerHTML.trim()) return;
-			btn.style.width = zk.TextUtil.measure(btn).width + zk.getFrameWidth(btn) + "px";
+			btn.style.width = zk.getTextInfo(btn, btn.innerHTML)[0] + zk.getFrameWidth(btn) + "px";
 				// fix the gap between button and em tag for IE.
 		}
 	} : zk.voidf,

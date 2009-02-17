@@ -162,49 +162,31 @@ if (zk.ie) {
 
 //////
 // More zk utilities (defined also in boot.js) //
-/**
- * Provides precise pixel measurements for blocks of text so that you can determine
- * exactly how high and wide, in pixels, a given block of text will be.<br/>
- * For example,
- * 		var size = zk.TextUtil.measure(element, text);
- * 		btn.style.width = size.width + "px";
- * 		btn.style.height = size.height + "px";
- * @param {Object} element an element
- * @param {String} text the measured text, if any. Otherwise, element's innerHTML is assumed.
- * @since 3.5.0
+/** Returns an array to indicate the size of the text if it is placed
+ * inside the element.
+ * @since 3.6.0
  */
-zk.TextUtil = {
-	getInstance: function () {
-		var d = $e("zk-TextUtil");
-		if (!d) {
-			d = document.createElement("div");
-			document.body.appendChild(d);
-			d.id = "zk-TextUtil";
-		}
-		d.style.position = "absolute";
-		d.style.top = d.style.left = "-1000px";
-		d.style.width = "auto";
-		d.style.visibility = "hidden";
-		var instance = {
-			styles: ["fontSize", "fontStyle", "fontWeight", "fontFamily", "lineHeight", "letterSpacing", "textTransform" ],
-			getSize: function () {
-				return {width: d.offsetWidth, height: d.offsetHeight};
-			},
-			apply: function (el, text) {
-				for (var s = this.styles.length; --s >= 0;)
-					d.style[this.styles[s]] = Element.getStyle(el, this.styles[s]);
-				d.innerHTML = typeof text == "string" ? text : el.innerHTML;	
-			}
-		};
-		return instance;
-	},
-	measure: function (el, text) {
-		if (!this.instance)
-			this.instance = this.getInstance();
-		this.instance.apply(el, text);
-		return this.instance.getSize();
+zk.getTextInfo = function (el, txt) {
+	var ti = zk._txtInfo;
+	if (!ti) {
+		ti = zk._txtInfo = document.createElement("DIV");
+		ti.style.cssText = "left:-1000px;position:absolute;visibility:hidden;border:none";
+		document.body.appendChild(ti);
 	}
+
+	for (var ss = zk.TEXT_STYLES, j = ss.length; --j >= 0;)
+		ti.style[ss[j]] = Element.getStyle(el, ss[j]);
+
+	ti.innerHTML = txt;
+	return [ti.offsetWidth, ti.offsetHeight];
 };
+//refer to http://www.w3schools.com/css/css_text.asp
+zk.TEXT_STYLES = [
+	'fontFamily', 'fontSize', 'fontWeight', 'fontStyle',
+	'letterSpacing', 'lineHeight', 'textAlign', 'textDecoration',
+	'textIndent', 'textShadow', 'textTransform', 'textOverflow',
+	'direction', 'wordSpacing', 'whiteSpace'];
+
 zk.Shadow = zClass.create();
 zk.Shadow.prototype = {
 	/**
