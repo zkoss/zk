@@ -341,7 +341,7 @@ zkWnd2.getShadow = function (cmp) {
  * @since 3.5.0
  */
 zkWnd2.initShadow = function (cmp) {
-	cmp._shadow = new zk.Shadow(cmp);
+	cmp._shadow = new zk.Shadow(cmp, {left: -4, right: 4, top: -2, bottom: 3});
 };
 /**
  * Clean the shadow object for the specified component.

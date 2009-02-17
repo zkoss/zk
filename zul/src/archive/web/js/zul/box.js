@@ -22,7 +22,7 @@ zkBox.setAttr = function (cmp, nm, val) {
 		var n = $e(cmp.id + "!cave");
 		if (n) {
 			n.vAlign = val;
-			if (zk.opera) zk.redraw(n);
+			if (zk.opera) zk.reOuter(n);
 			return true;
 		}
 	}

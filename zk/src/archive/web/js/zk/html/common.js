@@ -207,192 +207,134 @@ zk.TextUtil = {
 };
 zk.Shadow = zClass.create();
 zk.Shadow.prototype = {
-	diam: 4,
-	mode: "shade", // default mode
-	autoShow: false,
 	/**
-	 * Initial the Shadow object for the specified component.
-	 * The both config {String} mode and {Number} diam are used to configure how the
-	 * layout of the shadow will be shown.<br />
+	 * Constructor of the Shadow object.
 	 * 
-	 * mode: The shadow display mode.  Supports the following options:<br />
-	 * shade: Shadow displays on both sides and bottom only (by default)<br />
-	 * frame: Shadow displays equally on all four sides<br />
-	 * drop: Traditional bottom-right drop shadow<br />
-	 *
-	 * diam: The diameter of the offset of the shadow from the element (defaults to 4)
-	 * 
-	 * autoShow: true to show the shadow in the initial phase. (default: false)
-	 * @param {Object} cmp a ZK client component.
-	 * @param {Object} config The config object used to apply the default value of the Shadow object.
-	 * @since 3.5.0
+	 * @param node the element to associate the shadow.
+	 * @param opts The options
+	 * <p>Alowed options:
+	 * <ul>
+	 * <li>left: The margin at left. Default: 4.</li>
+	 * <li>right: The margin at right. Default: 4.</li>
+	 * <li>top: the margin at top. Default: 3.</li>
+	 * <li>bottom: the margin at bottom. Default: 3.</li>
+	 * <li>autoShow: true to show the shadow in the initial phase. Default: false</li>
+	 * <li>stackup: whether to create a stackup</li>
+	 * </ul>
 	 */
-	initialize: function (cmp, config) {
-		zk.apply(this, config);
-		this.id = cmp.id + "!shadow";
-		this.rel = cmp;
-		this.template = zk.ie ? '<div id="'+this.id+'" class="z-ie-shadow"></div>' :
-		'<div id="'+this.id+'" class="z-shadow"><div class="z-shadow-t">' +
-		'<div class="z-shadow-tl"></div><div class="z-shadow-tm"></div>' +
-		'<div class="z-shadow-tr"></div></div><div class="z-shadow-c">' +
-		'<div class="z-shadow-cl"></div><div class="z-shadow-cm"></div>' +
-		'<div class="z-shadow-cr"></div></div><div class="z-shadow-b">' +
-		'<div class="z-shadow-bl"></div><div class="z-shadow-bm"></div>' +
-		'<div class="z-shadow-br"></div></div></div>';
-		var o = this.diam, d = {l: -o, t: o-1, h: 0, w:0};
-		var rad = Math.floor(this.diam/2);
-		switch (this.mode.toLowerCase()) {
-			case "shade":
-				d.w = (o*2);
-				if(zk.ie) {
-					d.l -= rad - 1;
-					d.t -= (this.diam + rad);
-					d.w -= this.diam + (rad + 1);
-					d.h -= 1;
-				}
-				break;
-			case "drop":
-				d.l = -d.l;
-				if (zk.ie)
-					d.l = d.t = d.w = d.h = -rad;
-				break;
-			case "frame":
-				d.w = d.h = (o*2);
-				d.t = d.l;
-				d.t += 1;
-				d.h -= 2;
-				if (zk.ie) {
-					d.t = d.l = d.t - rad;
-					d.h = d.w = d.w - (this.diam + rad + 1);
-				}
-				break;
-		};
-		this.delta = d;
-		this.rel.parentNode.insertAdjacentHTML("afterBegin", this.template);
-		this.el = $e(this.id);
-		if (this.autoShow === true) this.show();
+	initialize: function (node, opts) {
+		opts = this.opts = zk.$default(opts, {
+			left: 4, right: 4, top: 3, bottom: 3
+		});
+		if (zk.ie) {
+			opts.left -= 1;
+			opts.right -= 8;
+			opts.top -= 2;
+			opts.bottom -= 6;
+		}
+
+		var sdwid = node.id + "!shadow";
+		node.parentNode.insertAdjacentHTML("afterBegin", '<div id="'+sdwid+this.POST_HTML);
+		this.node = node;
+		this.shadow = $e(sdwid);
+		if (opts.autoShow) this.sync();
 	},
-	/**
-	 * Hides the shadow.
-	 */
 	hide: function(){
-		this.el.style.display = "none";
-		if (this.lining) this.lining.style.display = "none";
+		this.shadow.style.display = "none";
+		if (this.stackup) this.stackup.style.display = "none";
 	},
-	/**
-	 * Shows the shadow.
-	 */
-	show: function () {
-		if (!this.rel || !zk.isVisible(this.rel)) {
+	sync: function () {
+		var node = this.node, shadow = this.shadow;
+		if (!node || !zk.isVisible(node)) {
 			this.hide();
 			return;
 		}
-		if (zk.nextSibling(this.el, "DIV")!= this.rel)
-			this.rel.parentNode.insertBefore(this.el, this.rel);
-		this.el.style.zIndex = $int(Element.getStyle(this.rel, "zIndex"))-1;
-		if (zk.ie) 
-			this.el.style.filter = "progid:DXImageTransform.Microsoft.Blur(PixelRadius='4', MakeShadow='true', ShadowOpacity='0.50')";
-		this.recalc(this.rel.offsetLeft, this.rel.offsetTop, this.rel.offsetWidth,
-			this.rel.offsetHeight);
-		this.el.style.display = "block";
-		if (this.lining) this.lining.style.display = "block";
-	},
-	/**
-	 * Recalculates the position of the shadow.
-	 * @param {Object} l the number of the offset left of the real component.
-	 * @param {Object} t the number of the offset top of the real component.
-	 * @param {Object} w the number of the offset width of the real component.
-	 * @param {Object} h the number of the offset height of the real component.
-	 */
-	recalc : function(l, t, w, h){
-		var d = this.delta, r = this.el, s = r.style, width = (w + d.w), height = (h + d.h),
-			widths = width +"px", heights = height + "px";
-		s.left = (l + d.l) + "px";
-		s.top = (t + d.t) + "px";
-		if(s.width != widths || s.height != heights) {
-			s.width = widths;
-			s.height = zk.ie ? Math.abs(h + d.h) + "px" : heights; // Bug 2355376 (IE only)
-			if(!zk.ie) {
-				var c = r.childNodes;
-				// the 12 number means the both height the top side shadow and the bottom side shadow.
-				c[1].style.height = Math.max(0, (height - 12))+ "px";
-				
-				// the 12 number means the both width the left side shadow and the right side shadow.
-				c[0].childNodes[1].style.width = c[1].childNodes[1].style.width = c[2].childNodes[1].style.width = Math.max(0, (width - 12)) + "px";;
+
+		for (var c = shadow;;) {
+			if (!(c = c.nextSibling) || c.tagName) {
+				if (c != node)
+					node.parentNode.insertBefore(shadow, node);
+				break;
 			}
 		}
-		
-		var lining = this.getLining();
-		if (lining) {
-			var s = lining.style;
-			s.left = l +"px";
-			s.top = t +"px";
-			s.width = w +"px";
-			s.height = h +"px";
-			s.zIndex = $int(Element.getStyle(this.rel, "zIndex"))-2; // re-index
+		shadow.style.zIndex = $int(Element.getStyle(node, "zIndex"));
+
+		var opts = this.opts,
+			l = node.offsetLeft, t = node.offsetTop,
+			w = node.offsetWidth, h = node.offsetHeight,
+			wd = w - opts.left + opts.right,
+			hgh = h - opts.top + opts.bottom,
+			st = shadow.style;
+		st.left = (l + opts.left) + "px";
+		st.top = (t + opts.top) + "px";
+		if(st.width != wd || st.height != hgh) {
+			st.width = wd + "px";
+			st.height = hgh + "px";
+			if(!zk.ie) {
+				var c = shadow.childNodes;
+				// the 12 number means the both height the top side shadow and the bottom side shadow.
+				c[1].style.height = Math.max(0, (hgh - 12))+ "px";
+				
+				// the 12 number means the both width the left side shadow and the right side shadow.
+				c[0].childNodes[1].style.width = c[1].childNodes[1].style.width = c[2].childNodes[1].style.width = Math.max(0, (wd - 12)) + "px";;
+			}
+		}
+		st.display = "block";
+
+		var stackup = this.stackup;
+		if(opts.stackup && node) {
+			if(!stackup)
+				stackup = this.stackup =
+					zk.makeStackup(node, node.id + '!sdwstk', shadow);
+
+			st = stackup.style;
+			st.left = l +"px";
+			st.top = t +"px";
+			st.width = w +"px";
+			st.height = h +"px";
+			st.zIndex = $int(Element.getStyle(node, "zIndex"));
+			st.display = "block";
 		}
 	},
-	/**
-	 * Returns the delta of the shadow.
-	 */
-	getDelta: function () {
-		return this.delta;
-	},
-	/**
-	 * Synchronizes the state of the real component to the shadow.
-	 */
-	sync: function () {
-		this.show();
-	},
-	/**
-	 * Returns the lining of the shadow, if any.
-	 */
-	getLining: function() {
-		if(!zk.ie6Only || !this.rel)
-			return null;
-		if(this.lining)
-			return this.lining;
-		this.lining = zk.createLining(this.rel);
-		this.lining.style.zIndex = $int(this.rel.style.zIndex)-2;
-		return this.lining;
-	},
 	cleanup: function () {
-		zk.remove(this.el);
-		zk.remove(this.lining);
-		this.rel = this.lining = null;
+		zk.remove(this.shadow);
+		zk.remove(this.stackup);
+		this.cmp = this.shadow = this.stackup = null;
 	}
 };
+
+if (zk.ie) {
+	zk.Shadow.prototype.POST_HTML = '" class="z-shadow-ie"></div>';
+} else {
+	var html = '" class="z-shadow">';
+	for (var ys = ['b', 'c', 't'], j = ys.length; --j >= 0;) {
+		html += '<div class="z-shadow-' + ys[j] + '">';
+		for (var xs = ['r', 'm', 'l'], k = xs.length; --k >= 0;)
+			html += '<div class="z-shadow-' + ys[j] + xs[k] + '"></div>';
+		html += '</div>';
+	}
+	zk.Shadow.prototype.POST_HTML = html + '</div>';
+}
+
 /**
- * Copies all the properties of config to obj.
- * @param {Object} obj The receiver of the properties
- * @param {Object} config The source of the properties
- * @return {Object} returns obj
+ * Creates a 'stackup' (actually, an iframe) that makes
+ * an element (with position:absolute) shown above others.
  * @since 3.5.0
  */
-zk.apply = function(obj, config) {
-	if(obj && config && typeof config == "object")
-		for(var p in config)
-			obj[p] = config[p];
-	return obj;
-};
-/**
- * Create a lining, which resolves the layer of HTML for IE6, of the pop-up element 
- * for the specified component.
- * @param {String} id a ID used to concatenate the "!ifr" postfix as the lining's ID, if any,
- * Otherwise, the cmp.id is assumed.
- * @since 3.5.0
- */
-zk.createLining = function (cmp, id) {
+zk.makeStackup = function (cmp, id, anchor) {
 	var ifr = document.createElement('iframe');
-	ifr.id = (id || cmp.id) + "!ifr";
+	ifr.id = id || (cmp ? cmp.id + "!ifrstk": 'z_ifrstk');
+	ifr.style.cssText = "position:absolute;overflow:hidden;filter:alpha(opacity=0)";
 	ifr.frameBorder = "no";
-	ifr.src="javascript:false";
-	ifr.style.cssText = "position:absolute;visibility:visible;overflow:hidden;filter:alpha(opacity=0);display:block";
-	ifr.style.width = cmp.offsetWidth + "px";
-	ifr.style.height = cmp.offsetHeight + "px";
-	ifr.style.top = cmp.style.top;
-	ifr.style.left = cmp.style.left;
-	cmp.parentNode.appendChild(ifr);
+	ifr.tabIndex = -1;
+	ifr.src = "";
+	if (cmp) {
+		ifr.style.left = cmp.style.left;
+		ifr.style.top = cmp.style.top;
+		ifr.style.width = cmp.offsetWidth + "px";
+		ifr.style.height = cmp.offsetHeight + "px";
+		cmp.parentNode.insertBefore(ifr, anchor || cmp);
+	}
 	return ifr;
 };
 /**
@@ -449,24 +391,24 @@ zk.override = function (obj, fn, supobj, func) {
 };
 
 /**
- * Forces the browser to repaint the specified element via changing its css name.
- * <p>
- * Note: this function uses setTimeout to clean up the appended css name.
- * @param {Object} el an element
- * @param {Number} timeout a millisecond.  
+ * Forces the browser to redo the CSS by adding and removing a CSS class.
  * @since 3.5.0
  */
-zk.repaint = function (el, timeout) {
-	zk.addClass(el, "z-repaint");
-	setTimeout(function() {
-		zk.rmClass(el, "z-repaint");
-	}, timeout > 0 ? timeout : 1);
+zk.redoCSS = function (el, timeout) {
+	el = zDom.$(el);
+	if (el) {
+		try {
+			el.className += ' ';
+			el.className.trim();
+		} catch (e) {
+		}
+	}
 };
 /**
- * Redraws the all node tree.
+ * Redraws the element by use of setOuterHTML.
  * @since 3.0.4
  */
-zk.redraw = function (cmp) {
+zk.reOuter = function (cmp) {
 	if (cmp) {
 		cmp = $outer(cmp);
 		zkau.cmd1.outer(cmp.id, cmp, zk.getOuterHTML(cmp));
@@ -1535,7 +1477,7 @@ zk.rename = function (url, name) {
 //-- special routines --//
 if (!zk._actg1) {
 	zk._actg1 = ["IFRAME","EMBED","APPLET"];
-		// Due to using zk.createLining(), we don't handle the "SELECT" tag for IE6
+		// Due to using zk.makeStackup(), we don't handle the "SELECT" tag for IE6
 		// in zk.hideCovered() function.  
 	zk._actg2 = ["A","BUTTON","TEXTAREA","INPUT"];
 	zk._actg3 = ["IFRAME","EMBED"]; // zk.disableAll use only.
@@ -3051,7 +2993,7 @@ anima = {
 		if (n) {
 			--anima.count;
 			rmZKAttr(n, "animating");
-			if (zk.ie) zk.repaint(n); // fixed a bug of the finished animation for IE
+			if (zk.ie) zk.redoCSS(n); // fixed a bug of the finished animation for IE
 			zk.onVisiAt(n);
 			zk._doAnique(n.id);
 			zk.fire(n, "after" + ef.name, [n, ef]);

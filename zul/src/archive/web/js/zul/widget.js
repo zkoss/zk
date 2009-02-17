@@ -313,12 +313,12 @@ zkPop = {
 		zkPop._pop.addFloatId(ctx.id, true); //it behaves like Popup (rather than dropdown)
 		zkau.hideCovered();
 		if (zk.ie6Only) {
-			if (!ctx._lining)
-				ctx._lining = zk.createLining(ctx);
+			if (!ctx._stackup)
+				ctx._stackup = zk.makeStackup(ctx);
 			else {
-				ctx._lining.style.top = ctx.style.top;
-				ctx._lining.style.left = ctx.style.left;
-				ctx._lining.style.display = "block";
+				ctx._stackup.style.top = ctx.style.top;
+				ctx._stackup.style.left = ctx.style.left;
+				ctx._stackup.style.display = "block";
 			}
 		}
 		
@@ -336,8 +336,8 @@ zkPop = {
 	_close: function (ctx) {
 		ctx.style.display = "none";
 		
-		if (ctx._lining)
-			ctx._lining.style.display = "none";
+		if (ctx._stackup)
+			ctx._stackup.style.display = "none";
 			
 		zk.unsetVParent(ctx);
 		zkau.hideCovered();
@@ -346,9 +346,9 @@ zkPop = {
 			zkau.send({uuid: ctx.id, cmd: "onOpen", data: [false]});
 	},
 	cleanup: function (ctx) {
-		if (ctx._lining)
-			zk.remove(ctx._lining);
-		ctx._lining = null;
+		if (ctx._stackup)
+			zk.remove(ctx._stackup);
+		ctx._stackup = null;
 	},
 	onVisi: zk.ie7 ? function (cmp) {
 		var wdh = cmp.style.width;

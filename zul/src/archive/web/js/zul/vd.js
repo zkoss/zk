@@ -277,7 +277,7 @@ zkVld._errbox = function () {
 		//if we slide, opera will slide it at the top of screen and position it
 		//later. No sure it is a bug of script.aculo.us or Opera
 	if (zk.ie6Only) setTimeout(function () {
-		box._ifr = zk.createLining(box, id);
+		box._stackup = zk.makeStackup(box, id);
 	}, 0);
 	zul.initMovable(box, {
 		zindex: box.style.zIndex, starteffect: zk.voidf,
@@ -285,9 +285,9 @@ zkVld._errbox = function () {
 };
 zkVld._change = function (dg, pointer, evt) {
 	var el = dg.element;
-	if (el._ifr) {
-		el._ifr.style.top = el.style.top;
-		el._ifr.style.left = el.style.left;
+	if (el._stackup) {
+		el._stackup.style.top = el.style.top;
+		el._stackup.style.left = el.style.left;
 	}
 	zkVld._fiximg(el);
 };
@@ -319,8 +319,8 @@ zkVld.closeErrbox = function (box, remaingError, coerce) {
 	if (box) {
 		zul.cleanMovable(box.id);
 		if (zk.ie6Only) {
-			if (box._ifr) box._ifr.parentNode.removeChild(box._ifr);
-			box._ifr = null;
+			if (box._stackup) box._stackup.parentNode.removeChild(box._stackup);
+			box._stackup = null;
 		}
 		box.parentNode.removeChild(box);
 		zkVld._ebs.remove(box.id);

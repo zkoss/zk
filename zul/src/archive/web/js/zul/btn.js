@@ -90,7 +90,7 @@ zkButton = {
 			if (val) action.show($e(cmp.id + "!box"));
 			zk.setVisible(cmp, nm, val);
 			if (!val) action.hide($e(cmp.id + "!box"));
-			else if (zk.gecko2Only) zk.redraw(cmp); //sometimes, FF2 does re-calc
+			else if (zk.gecko2Only) zk.reOuter(cmp); //sometimes, FF2 does re-calc
 			return true;
 		case "style.height":
 		case "style.width":

@@ -802,7 +802,7 @@ zk.Selectable.prototype = {
 		if (zk.isRealVisible(this.element)) {
 			this._calcSize();// Bug #1813722
 			this._render(155);
-			if (zk.ie7) zk.repaint(this.element); // Bug 2096807
+			if (zk.ie7) zk.redoCSS(this.element); // Bug 2096807
 		}
 	},
 	/** Returns the visible row at the specified index. */

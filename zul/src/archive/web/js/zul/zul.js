@@ -368,7 +368,7 @@ zulHdr.setAttr = function (cmp, nm, val) {
 					ftfaker.style.width = val;
 					meta.foottbl.style.width = "";
 				}
-				if (zk.opera) zk.redraw(meta.element);
+				if (zk.opera) zk.reOuter(meta.element);
 				else meta._recalcSize();
 			}
 			return true;

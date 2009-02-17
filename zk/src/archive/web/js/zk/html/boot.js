@@ -393,6 +393,26 @@ zk.enableESC = function () {
 	}
 };
 
+/** Assigns a map of default propeties (copied only if not defined)
+ * @since 3.6.0
+ */
+zk.$default = function (opts, defaults) {
+	opts = opts || {};
+	for (var p in defaults)
+		if (opts[p] == null)
+			opts[p] = defaults[p];
+	return opts;
+};
+/** Copies a map of propeties
+ * @since 3.6.0
+ */
+zk.copy = function (dst, src) {
+	if (!dst) dst = {};
+	for (var p in src)
+		dst[p] = src[p];
+	return dst;
+};
+
 //////////////////////////////////////
 zk.mods = {}; //ZkFns depends on it
 

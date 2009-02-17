@@ -476,7 +476,7 @@ zkPanel = {
 	 * Initializes the shadow object for the specified component.
 	 */
 	initShadow: function (cmp) {
-		cmp._shadow = new zk.Shadow(cmp);
+		cmp._shadow = new zk.Shadow(cmp, {left: -4, right: 4, top: -2, bottom: 3});
 	},
 	/**
 	 * Clean the shadow object for the specified component.

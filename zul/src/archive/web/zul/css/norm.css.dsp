@@ -143,9 +143,6 @@ div.z-debugbox {
 	visibility: hidden !important; position: absolute !important;
 	left: -10000px !important; top: -10000px !important;
 }
-.z-repaint {
-	zoom: 1; background-color: transparent; -moz-outline: none;
-}
 <%-- Fix float issue for CSS --%>
 .z-clear {
 	clear: both; height: 0; overflow: hidden; line-height: 0; font-size: 0;
