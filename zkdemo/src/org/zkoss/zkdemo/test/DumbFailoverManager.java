@@ -130,14 +130,4 @@ public class DumbFailoverManager implements FailoverManager {
 			((Component)comp.clone()).setPage(page);
 		}
 	}
-
-	public void start(WebApp wapp) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void stop(WebApp wapp) {
-		// TODO Auto-generated method stub
-		
-	}
 }
