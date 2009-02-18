@@ -612,6 +612,7 @@
 	line-height:normal;
 	text-decoration:none;
 	padding-right:30px;
+	padding-bottom: 2px;
 }
 .z-tabbox-accordion .z-tabpanel-accordion {
 	border-bottom:1px solid #ABD6EE;
@@ -621,28 +622,49 @@
 	zoom: 1;
 }
 .z-tab-accordion-tl {
-	text-decoration:none;
-	padding-left:6px;
+	background:transparent no-repeat scroll -5px top;
+	background-image: url(${c:encodeURL('~./zul/img/tab2/tab-accd-corner.png')});
+	font-size:0;
+	height:5px;
 	line-height:0;
-	display:block;
+	margin-right:5px;
+	position:relative;
+	zoom:1;	
+}
+.z-tab-accordion-tr {
+	background:transparent no-repeat scroll 0 top;
+	background-image: url(${c:encodeURL('~./zul/img/tab2/tab-accd-corner.png')});
+	font-size:0;
+	height:5px;
+	line-height:0;
+	margin-right:-5px;
+	position:absolute;
+	right:0;
+	width:5px;
 	zoom:1;
-	text-decoration:none;
-	background:transparent url(${c:encodeURL('~./zul/img/tab2/accd-border.png')}) no-repeat scroll 0 0;
 }
-.z-tab-accordion-tr {	
+.z-tab-accordion-hl {
+	background:transparent no-repeat scroll 0 0;
+	background-image: url(${c:encodeURL('~./zul/img/tab2/tab-accd-hl.png')});
+	padding-left:6px;
+	zoom:1;
+}
+.z-tab-accordion-hr {
+	background:transparent no-repeat scroll right 0;
+	background-image: url(${c:encodeURL('~./zul/img/tab2/tab-accd-hr.png')});
 	padding-right:6px;
-	display:block;
-	background:transparent url(${c:encodeURL('~./zul/img/tab2/accd-border.png')}) no-repeat scroll right 0;
+	zoom:1;
 }
-.z-tab-accordion-tm {
-	display:block;
-	padding:7px 0 6px 0;
+.z-tab-accordion-hm {
+	background:transparent repeat-x scroll 0 0;
+	background-image: url(${c:encodeURL('~./zul/img/tab2/tab-accd-hm.png')});
 	overflow:hidden;
-	background:transparent url(${c:encodeURL('~./zul/img/tab2/accd-inner.png')}) repeat-x scroll 0 0;
-} 
+	padding:2px 0 5px;
+	zoom:1;
+}
 .z-tab-accordion-close {
-	background-image: url(${c:encodeURL('~./zul/img/tab2/tab-close-off.png')});
 	background-repeat:no-repeat;
+	background-image: url(${c:encodeURL('~./zul/img/tab2/tab-close-off.png')});
 	cursor:pointer;
 	width:17px;
 	height:16px;

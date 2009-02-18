@@ -27,16 +27,19 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	</c:if>
 	<div id="${tab.uuid}"${tab.outerAttrs}${tab.innerAttrs} z.type="zul.tab2.Tab2">
 		<div align="left" class="${tabzcs}header" >
-			<c:if test="${tab.closable}">
-				<a id="${tab.uuid}!close"  class="${tabzcs}close"></a>
-			</c:if>
-			<a href="javascript:;" id="${tab.uuid}!a" class="${tabzcs}tl">
-				<em class="${tabzcs}tr">
-					<span class="${tabzcs}tm">
+			<div class="${tabzcs}tl">
+				<div class="${tabzcs}tr"></div>
+			</div>
+			<div class="${tabzcs}hl">
+				<div class="${tabzcs}hr">
+					<div class="${tabzcs}hm">
+						<c:if test="${tab.closable}">
+							<a id="${tab.uuid}!close"  class="${tabzcs}close"></a>
+						</c:if>					
 						<span class="${tabzcs}text">${tab.imgTag}<c:out value="${tab.label}"/></span>
-					</span>
-				</em>
-			</a>
+					</div>
+				</div>
+			</div>			
 		</div>
 	</div>
 	<div id="${self.uuid}!real"${self.outerAttrs}${self.innerAttrs}>
