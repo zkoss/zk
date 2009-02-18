@@ -199,9 +199,7 @@ zk.getClassRegEx = function(clsnm) {
  * of the specified element.
  */
 zk.hasClass = function (el, clsnm) {
-	var re = zk.getClassRegEx(clsnm),
-		cn = el.className;
-	return re.test(cn);
+	return el.className.match(zk.getClassRegEx(clsnm));
 };
 
 /** Adds the specified class name to the class name of the specified element.
@@ -228,10 +226,9 @@ zk.rmClass = function (el, clsnm, bRemove) {
 		zk.addClass(el, clsnm);
 		return;
 	}
-
 	if (zk.hasClass(el, clsnm)) {
     	var re = zk.getClassRegEx(clsnm);
-        el.className = el.className.replace(re, " ");            
+        el.className = el.className.replace(re, " ").trim();          
 	}
 };
 
