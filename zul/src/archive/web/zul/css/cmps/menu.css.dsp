@@ -130,12 +130,12 @@
 }
 .z-menu-body-over .z-menu-inner-r,.z-menu-body-seld .z-menu-inner-r,.z-menu-item-body-over .z-menu-item-inner-r {
 	background-repeat : no-repeat; 
-	background-position : 0 -21px;
+	background-position : 0 -41px;
 	background-image : url(${c:encodeURL('~./zul/img/button/tb-btn-side.png')});
 }
 .z-menu-body-over .z-menu-inner-m,.z-menu-body-seld .z-menu-inner-m,.z-menu-item-body-over .z-menu-item-inner-m {
 	background-repeat : repeat-x; 
-	background-position : 0 -42px;
+	background-position : 0 -82px;
 	background-image : url(${c:encodeURL('~./zul/img/button/tb-btn-side.png')});
 }
 .z-menu-body-over .z-menu-inner-m .z-menu-btn,
