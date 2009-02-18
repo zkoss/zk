@@ -18,6 +18,7 @@ ZK 3.6.0
   2062056: Max Upload Size for FileUpload
   2025262: A way to close a group of ErrorBoxes
   2100105: Applet zul Component
+  2495414: Config to disable shadow for Window
 
 * Bugs
   2386650: NullPointerException when create tabs in onTimer()

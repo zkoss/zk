@@ -341,7 +341,9 @@ zkWnd2.getShadow = function (cmp) {
  * @since 3.5.0
  */
 zkWnd2.initShadow = function (cmp) {
-	cmp._shadow = new zk.Shadow(cmp, {left: -4, right: 4, top: -2, bottom: 3});
+	if (!cmp._shadow && getZKAttr(cmp, "shadow") != 'false')
+		cmp._shadow = new zk.Shadow(cmp, {left: -4, right: 4, top: -2, bottom: 3});
+	return cmp._shadow;
 };
 /**
  * Clean the shadow object for the specified component.
@@ -539,6 +541,16 @@ zkWnd2.setAttr = function (cmp, nm, val) {
 			zkWnd2.maximize(cmp, false);
 		}
 		zkWnd2.minimize(cmp, val == "true", true);
+		return true;
+	case "z.shadow":
+		zkau.setAttr(cmp, nm, val);
+
+		var mode = getZKAttr(cmp, "mode");
+		if (mode != 'embedded')
+			if (getZKAttr(cmp, "shadow") == "false")
+				zkWnd2.cleanupShadow(cmp);
+			else
+				zkWnd2.initShadow(cmp).sync();
 		return true;
 	}
 	return false;
@@ -743,7 +755,7 @@ zkWnd2._initMode = function (cmp) {
 	}
 	else if (zkWnd2._clean2[cmp.id])
 		zkWnd2._cleanMode2(cmp.id, true); //replace with a new mode
-	if (mode && mode != "embedded" && !zkWnd2.getShadow(cmp))
+	if (mode && mode != "embedded")
 		zkWnd2.initShadow(cmp);
 	switch (mode) {
 	case "modal":

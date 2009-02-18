@@ -100,6 +100,8 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 	private boolean _closable;
 	/** Whether the window is sizable. */
 	private boolean _sizable;
+	/** Whether to show the shadow. */
+	private boolean _shadow = true;
 	
 	private boolean _maximizable, _minimizable, _maximized, _minimized;
 	private int _minheight = 100, _minwidth = 200; 
@@ -669,6 +671,24 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 			smartUpdate("z.sizable", sizable);
 		}
 	}
+	/** Returns whether to show the shadow of an overlapped/popup/modal
+	 * window. It is meaningless if it is an embedded window.
+	 * @since 3.6.0
+	 */
+	public boolean isShadow() {
+		return _shadow;
+	}
+	/** Sets whether to show the shadow of an overlapped/popup/modal
+	 * window. It is meaningless if it is an embedded window.
+	 * <p>Default: true.
+	 * @since 3.6.0
+	 */
+	public void setShadow(boolean shadow) {
+		if (_shadow != shadow) {
+			_shadow = shadow;
+			smartUpdate("z.shadow", shadow);
+		}
+	}
 	/** Returns how to position the window at the client screen.
 	 * It is meaningless if the embedded mode is used.
 	 *
@@ -870,6 +890,8 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 			sb.append(" z.closable=\"true\"");
 		if (_sizable)
 			sb.append(" z.sizable=\"true\"");
+		if (!_shadow)
+			sb.append(" z.shadow=\"false\"");
 
 		if (_mode != EMBEDDED) {
 			if (_pos != null)
