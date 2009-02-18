@@ -249,7 +249,6 @@ zkWnd2.onVisi = zkWnd2.onSize = function (cmp) {
 			zkWnd2.syncMaximized(cmp);
 		cmp._maximized = false;
 	}
-	zkWnd2._fixWdh(cmp);
 	zkWnd2._fixHgh(cmp);
 	zkWnd2.syncShadow(cmp);
 };
@@ -273,26 +272,6 @@ zkWnd2.syncMaximized = function (cmp) {
 	s.width = sw + "px";
 	s.height = sh + "px";
 };
-zkWnd2._fixWdh = zk.ie7 ? function (cmp) {
-	if (zkWnd2._embedded(cmp) || zkWnd2._popup(cmp) || !zk.isRealVisible(cmp)) return;
-	var wdh = cmp.style.width;
-	var fir = zk.firstChild(cmp, "DIV"), last = zk.lastChild(zk.lastChild(cmp, "DIV"), "DIV"),
-		n = $e(cmp.id + "!cave").parentNode;
-	if (!wdh || wdh == "auto") {
-		var diff = zk.getFrameWidth(n.parentNode) + zk.getFrameWidth(n.parentNode.parentNode);
-		if (fir) {
-			fir.firstChild.firstChild.style.width = n.offsetWidth - (zk.getFrameWidth(fir)
-				+ zk.getFrameWidth(fir.firstChild) - diff) + "px";
-		}
-		if (last) {
-			last.firstChild.firstChild.style.width = n.offsetWidth - (zk.getFrameWidth(last)
-				+ zk.getFrameWidth(last.firstChild) - diff) + "px";
-		}
-	} else {
-		if (fir) fir.firstChild.firstChild.style.width = "";
-		if (last) last.firstChild.firstChild.style.width = "";
-	}
-} : zk.voidf;
 zkWnd2._fixHgh = function (cmp) {
 	if (!zk.isRealVisible(cmp)) return; //Bug #1944729
 	var hgh = cmp.style.height;
@@ -309,8 +288,8 @@ zkWnd2.getFrameHeight = function (cmp) {
 	var h = zk.getFrameHeight(cmp);
     h += zkWnd2.getTitleHeight(cmp);
     if(!zkWnd2._embedded(cmp) && !zkWnd2._popup(cmp)) {
-        var n = $e(cmp.id + "!cave"), ft = zk.lastChild($e(cmp.id + "!bwrap"), "DIV"), title = $e(cmp.id + "!caption");
-        h += ft.offsetHeight;
+        var n = $e(cmp.id + "!cave"), bl = zk.lastChild(cmp, "DIV"), title = $e(cmp.id + "!caption");
+        h += bl.offsetHeight;
 		if (n)
 			h += zk.getFrameHeight(n.parentNode);
 		if (title)
@@ -323,10 +302,12 @@ zkWnd2.getFrameHeight = function (cmp) {
  * @since 3.5.0
  */
 zkWnd2.getTitleHeight = function (cmp) {
-	var title = $e(cmp.id + "!caption"), top = 0;
-    if (!zkWnd2._embedded(cmp) && !zkWnd2._popup(cmp) && !title)
-		top = zk.firstChild(cmp, "DIV").firstChild.firstChild.offsetHeight;
-	return title ? title.offsetHeight : top;
+	var title = $e(cmp.id + "!caption"),
+		tl = zk.firstChild(cmp, "DIV"),
+		top = tl.offsetHeight;
+    if (!zkWnd2._embedded(cmp) && !zkWnd2._popup(cmp) && !title) 
+		top += zk.nextSibling(tl, "DIV").offsetHeight;
+	return title ? title.offsetHeight + top : top;
 };
 /**
  * Returns the shadow instance of the specified component.
@@ -668,7 +649,6 @@ zkWnd2._resize = function (cmp, t, l, h, w, keys) {
 	if (w != cmp.offsetWidth || h != cmp.offsetHeight) {
 		if (w != cmp.offsetWidth) {
 			cmp.style.width = w + "px";
-			zkWnd2._fixWdh(cmp);
 		}
 		if (h != cmp.offsetHeight) {
 			cmp.style.height = h + "px";
@@ -1094,19 +1074,23 @@ zkWnd2._float = function (cmp) {
 zkWnd2._ghostmove = function (dg, ghosting, pointer) {
 	if (ghosting) {
 		zkWnd2.hideShadow(dg.element);
-		var ofs = zkau.beginGhostToDIV(dg),  title = zk.firstChild(dg.element, "DIV"),
-			fakeT = title.cloneNode(true);
+		var ofs = zkau.beginGhostToDIV(dg),
+			top = zk.firstChild(dg.element, "DIV"),
+			header = zk.nextSibling(top, 'DIV'),
+			fakeT = top.cloneNode(true),
+			fakeH = header.cloneNode(true);
 		var html = '<div id="zk_ddghost" class="z-window-move-ghost" style="position:absolute;top:'
 			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
 			+zk.offsetWidth(dg.element)+'px;height:'+zk.offsetHeight(dg.element)
-			+'px;z-index:'+dg.element.style.zIndex+'"><ul></ul></div></div>';
+			+'px;z-index:'+dg.element.style.zIndex+'"><dl></dl></div>';
 		document.body.insertAdjacentHTML("afterbegin", html);
 		dg._zoffs = ofs;
 		dg.element.style.visibility = "hidden";
-		var h = dg.element.offsetHeight - title.offsetHeight;
+		var h = dg.element.offsetHeight - top.offsetHeight - header.offsetHeight;
 		dg.element = $e("zk_ddghost");
 		dg.element.firstChild.style.height = zk.revisedSize(dg.element.firstChild, h, true) + "px";
 		dg.element.insertBefore(fakeT, dg.element.firstChild);
+		dg.element.insertBefore(fakeH, dg.element.lastChild);
 	} else {
 		var org = zkau.getGhostOrgin(dg);
 		if (org) {
