@@ -273,12 +273,16 @@ tr.z-list-item td.z-list-item-focus {
 .z-tab-accordion-lite .z-tab-accordion-lite-close-over {
 	background-image: url(${c:encodeURL('~./zul/img/tab2/tab-close-on-l.gif')});
 }
+.z-tab-accordion-tl,
+.z-tab-accordion-tr {
+	background-image: url(${c:encodeURL('~./zul/img/tab2/tab-accd-corner.gif')});
+}
 <%-- tree.css.dsp --%>
 tr.z-tree-row td.z-tree-row-focus {
 	background-image: url(${c:encodeURL('~./zul/img/focusd.gif')});
 }
-span.z-vfiletree-ico,span.z-vfiletree-firstspacer {	
-	background-image: url(${c:encodeURL('~./zul/img/tree/folder-toggle2.gif')});	
+span.z-vfiletree-ico,span.z-vfiletree-firstspacer {
+	background-image: url(${c:encodeURL('~./zul/img/tree/folder-toggle2.gif')});
 }
 span.z-vfiletree-tee, span.z-vfiletree-last {
 	background-image: url(${c:encodeURL('~./zul/img/tree/entity.gif')});

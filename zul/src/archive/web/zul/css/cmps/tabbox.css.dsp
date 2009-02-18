@@ -622,26 +622,23 @@
 	zoom: 1;
 }
 .z-tab-accordion-tl {
-	background:transparent no-repeat scroll -5px top;
+	background:transparent no-repeat 0 top;
 	background-image: url(${c:encodeURL('~./zul/img/tab2/tab-accd-corner.png')});
-	font-size:0;
-	height:5px;
+	zoom: 1; 
+	height: 5px; 
+	margin-right: 5px; 
+	font-size: 0; 
 	line-height:0;
-	margin-right:5px;
-	position:relative;
-	zoom:1;	
 }
 .z-tab-accordion-tr {
-	background:transparent no-repeat scroll 0 top;
+	position: relative;
+	background:transparent no-repeat right -5px;
 	background-image: url(${c:encodeURL('~./zul/img/tab2/tab-accd-corner.png')});
-	font-size:0;
-	height:5px;
+	height: 5px; 
+	margin-right: -5px; 
+	font-size: 0; 
 	line-height:0;
-	margin-right:-5px;
-	position:absolute;
-	right:0;
-	width:5px;
-	zoom:1;
+	zoom: 1
 }
 .z-tab-accordion-hl {
 	background:transparent no-repeat scroll 0 0;
