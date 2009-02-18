@@ -272,7 +272,7 @@
 	font-size:1px;
 	line-height:1px;
 }
-.z-menu-popup-cnt .z-menu-separator-inner-m {
+.z-menu-popup-cnt .z-menu-separator-inner {
 	background-color:#E0E0E0;
 	border-bottom:1px solid #FFFFFF;
 	display:block;
