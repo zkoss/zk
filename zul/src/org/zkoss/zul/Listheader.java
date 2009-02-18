@@ -52,10 +52,11 @@ import org.zkoss.zul.impl.HeaderElement;
  * @author tomyeh
  */
 public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listheader {
-    private static final long serialVersionUID = 20060731L;
+    private static final long serialVersionUID = 20080218L;
 
 	private String _sortDir = "natural";
 	private transient Comparator _sortAsc, _sortDsc;
+	private Object _value;
 	private int _maxlength;
 
 	public Listheader() {
@@ -94,6 +95,25 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 	 */
 	public org.zkoss.zul.api.Listbox getListboxApi() {
 		return getListbox();
+	}
+
+	/** Returns the value.
+	 * <p>Default: null.
+	 * <p>Note: the value is application dependent, you can place
+	 * whatever value you want.
+	 * @since 3.6.0
+	 */
+	public Object getValue() {
+		return _value;
+	}
+	/** Sets the value.
+	 * @param value the value.
+	 * <p>Note: the value is application dependent, you can place
+	 * whatever value you want.
+	 * @since 3.6.0
+	 */
+	public void setValue(Object value) {
+		_value = value;
 	}
 
 	/** Returns the sort direction.

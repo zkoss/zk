@@ -46,6 +46,7 @@ import org.zkoss.zul.mesg.MZul;
 public class Columns extends HeadersElement implements org.zkoss.zul.api.Columns {
 	private String _mpop = "none";
 	private transient Menupopup _menupopup;
+	private Object _value;
 	private boolean _columnshide = true;
 	private boolean _columnsgroup = true;
 	
@@ -178,6 +179,25 @@ public class Columns extends HeadersElement implements org.zkoss.zul.api.Columns
 		if ("none".equals(mpop)) return "zk_n_a";
 		if ("auto".equals(mpop)) return _menupopup.getId();
 		return mpop;
+	}
+
+	/** Returns the value.
+	 * <p>Default: null.
+	 * <p>Note: the value is application dependent, you can place
+	 * whatever value you want.
+	 * @since 3.6.0
+	 */
+	public Object getValue() {
+		return _value;
+	}
+	/** Sets the value.
+	 * @param value the value.
+	 * <p>Note: the value is application dependent, you can place
+	 * whatever value you want.
+	 * @since 3.6.0
+	 */
+	public void setValue(Object value) {
+		_value = value;
 	}
 	//-- Component --//
 	public String getZclass() {

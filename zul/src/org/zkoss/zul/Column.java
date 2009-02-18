@@ -60,6 +60,7 @@ import org.zkoss.zul.mesg.MZul;
 public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 	private String _sortDir = "natural";
 	private Comparator _sortAsc, _sortDsc;
+	private Object _value;
 
 	public Column() {
 	}
@@ -476,6 +477,25 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 		if (getParent() != null)
 			((Columns)getParent()).postOnInitLater();
 		return old;
+	}
+
+	/** Returns the value.
+	 * <p>Default: null.
+	 * <p>Note: the value is application dependent, you can place
+	 * whatever value you want.
+	 * @since 3.6.0
+	 */
+	public Object getValue() {
+		return _value;
+	}
+	/** Sets the value.
+	 * @param value the value.
+	 * <p>Note: the value is application dependent, you can place
+	 * whatever value you want.
+	 * @since 3.6.0
+	 */
+	public void setValue(Object value) {
+		_value = value;
 	}
 
 	//-- event listener --//
