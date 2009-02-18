@@ -47,16 +47,16 @@ public class Menu2Default implements ComponentRenderer {
 			wh.write("<td id=\"").write(uuid).write("\" align=\"left\" z.type=\"zul.menu2.Menu2\"");
 			wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 			wh.write("<table id=\"").write(uuid).write("!a\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" class=\"")
-				.write(zcls).write("-btn");
+				.write(zcls).write("-body");
 			if (self.isImageAssigned()) {
-				wh.write(" ").write(zcls).write("-btn");
+				wh.write(" ").write(zcls).write("-body");
 				if (self.getLabel().length() > 0)
 					wh.write("-text");
 				wh.write("-img");
 			}
-			wh.write("\" style=\"width: auto;\"><tbody><tr><td class=\"").write(zcls).write("-btn-l\"><i>&nbsp;</i></td>");
-			wh.write("<td class=\"").write(zcls).write("-btn-m\"><em unselectable=\"on\"><button id=\"")
-				.write(uuid).write("!b\" type=\"button\" class=\"").write(zcls).write("-btn-text\"");
+			wh.write("\" style=\"width: auto;\"><tbody><tr><td class=\"").write(zcls).write("-inner-l\"></td>");
+			wh.write("<td class=\"").write(zcls).write("-inner-m\"><div><button id=\"")
+				.write(uuid).write("!b\" type=\"button\" class=\"").write(zcls).write("-btn\"");
 
 			final String imagesrc = self.getEncodedImageURL();
 			if (imagesrc != null)
@@ -64,8 +64,8 @@ public class Menu2Default implements ComponentRenderer {
 			wh.write('>');
 
 			new Out(self.getLabel()).render(out);
-			wh.write("</button>").write(self.getMenupopup()).write("</em></td><td class=\"")
-				.write(zcls).writeln("-btn-r\"><i>&nbsp;</i></td></tr></tbody></table></td>");
+			wh.write("&nbsp</button>").write(self.getMenupopup()).write("</div></td><td class=\"")
+				.write(zcls).writeln("-inner-r\"></td></tr></tbody></table></td>");
 		} else {
 			wh.write("<li id=\"").write(uuid).write("\" z.type=\"zul.menu2.Menu2\"");
 			wh.write(self.getOuterAttrs()).write(self.getInnerAttrs())
