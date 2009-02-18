@@ -24,13 +24,13 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <td id="${self.uuid}" align="left" z.type="Menuit2"${self.outerAttrs}${self.innerAttrs}>
 <a href="${empty self.href?'javascript:;':c:encodeURL(self.href)}"${c:attr('target',self.target)} class="${zcls}-cnt">
 <table id="${self.uuid}!a" cellspacing="0" cellpadding="0" border="0" class="${zcls}-body <c:if test="${self.imageAssigned}">${zcls}-body<c:if test="${!empty self.label}">-text</c:if>-img</c:if>" style="width: auto;">
-<tbody><tr><td class="${zcls}-inner-l"></td>
+<tbody><tr><td class="${zcls}-inner-l"><span/></td>
 <c:set var="imagesrc" value="${self.encodedImageURL}"/>
 <c:set var="imagesrc" value='style="background-image:url(${imagesrc})"' unless="${empty imagesrc}"/>
 <td class="${zcls}-inner-m"><div><button id="${self.uuid}!b" type="button" class="${zcls}-btn"${imagesrc}><c:out value="${self.label}"/>&nbsp</button>
 </div>
 </td>
-<td class="${zcls}-inner-r"></td>
+<td class="${zcls}-inner-r"><span/></td>
 </tr>
 </tbody>
 </table></a></td>

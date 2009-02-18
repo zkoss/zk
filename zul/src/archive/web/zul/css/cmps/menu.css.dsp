@@ -55,6 +55,12 @@
 	width:3px;
 }
 
+.z-menu-body .z-menu-inner-l span,.z-menubar-hor .z-menu-body .z-menu-inner-r span,
+.z-menu-item-body .z-menu-item-inner-l span,.z-menubar-hor .z-menu-item-body .z-menu-item-inner-r span{
+	display:block;
+	width:3px;
+}
+
 .z-menubar-hor .z-menu-body .z-menu-inner-m, .z-menubar-hor .z-menu-item-body .z-menu-item-inner-m,
 .z-menubar-ver .z-menu-body .z-menu-inner-m, .z-menubar-ver .z-menu-item-body .z-menu-item-inner-m{
 	height:21px;
