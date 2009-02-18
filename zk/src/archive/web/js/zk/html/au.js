@@ -2620,8 +2620,20 @@ zkau.cmd1 = {
 	submit: function (uuid, cmp) {
 		setTimeout(function (){if (cmp && cmp.submit) cmp.submit();}, 50);
 	},
-	invoke: function (uuid, cmp, func, arg0, arg1, arg2) {
-		zk.eval(cmp, func, null, arg0, arg1, arg2);
+	invoke: function (uuid, cmp, func) {
+		var args = arguments, len = args.length;
+		if (len == 8)
+			zk.eval(cmp, func, null, args[3], args[4], args[5], args[6], args[7]);
+		else if (len == 7)
+			zk.eval(cmp, func, null, args[3], args[4], args[5], args[6]);
+		else if (len == 6)
+			zk.eval(cmp, func, null, args[3], args[4], args[5]);
+		else if (len == 5)
+			zk.eval(cmp, func, null, args[3], args[4]);
+		else if (len == 4)
+			zk.eval(cmp, func, null, args[3]);
+		else
+			zk.eval(cmp, func, null);
 	},
 	popup: function (uuid, cmp, mode, x, y) {
 		var type = $type(cmp);

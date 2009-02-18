@@ -9,28 +9,37 @@
  }}IS_NOTE
  Copyright (C) 2008 Potix Corporation. All Rights Reserved.
  {{IS_RIGHT
- This program is distributed under GPL Version 2.0 in the hope that
+ This program is distributed under GPL Version 3.0 in the hope that
  it will be useful, but WITHOUT ANY WARRANTY.
  }}IS_RIGHT
  */
 zkApplet = {
-	invoke: function(id, argument){
+	invoke: function(id){
 		var cmp = $e(id);
-		if (cmp) {
+		if (cmp && arguments.length >= 2) {
+			var fn = arguments[1],
+				func = cmp[fn];
+			if (!func) {
+				zk.error("Method not found: "+fn);
+				return;
+			}
 			try {
-				eval("cmp." + argument);
+				var args = [];
+				for (var j = 2; j < arguments.length;)
+					args.push(arguments[j++]);
+				func.apply(cmp, args);
 			} catch (e) {
-				zk.alert("Invoke Failed! cmp." + argument);
+				zk.error("Failed to invoke applet's method: " + fn);
 			}
 		}
 	},
-	field: function(id, argument) {
+	field: function(id, name, value) {
 		var cmp = $e(id);
 		if (cmp) {
 			try {
-				eval("cmp." + argument);				
+				cmp[name] = value;
 			} catch(e) {
-				zk.alert("Set Feild Failed! cmp." + argument);
+				zk.error("Failed to set applet's field: " + name);
 			}
 		}
 	}

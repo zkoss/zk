@@ -41,18 +41,11 @@ public class AppletDefault implements ComponentRenderer {
 	public void render(Component comp, Writer out) throws IOException {
 		final SmartWriter wh = new SmartWriter(out);
 		final Applet self = (Applet) comp;
-		final String uuid = self.getUuid();
 		
-		wh.write("<applet id=\"").write(uuid).write("\" ");
+		wh.write("<applet id=\"").write(self.getUuid()).write('"');
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs());
-		wh.write(" z.type=\"zul.applet.Applet\">");
-		
-		List li = self.getParamsHtml();
-		for(Iterator iter = li.iterator(); iter.hasNext(); ) {
-			Object[] param = (Object[]) iter.next();
-			wh.write("<param name=\"").write(param[0].toString()).write("\" ");
-			wh.write("value=\"").write(param.toString()).write("\"/>");
-		}
-		wh.write("</applet>");		
+		wh.writeln(" z.type=\"zul.applet.Applet\">");
+		wh.write(self.getParamsHtml());
+		wh.writeln("</applet>");		
 	}
 }

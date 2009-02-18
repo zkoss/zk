@@ -20,13 +20,14 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import java.io.StringWriter;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.ui.WrongValueException;
@@ -40,49 +41,58 @@ import org.zkoss.zul.impl.XulElement;
  * Non XUL extension.
  * 
  * @author Davidchen
+ * @author Tomyeh
  * @since 3.6.0
  */
-public class Applet extends XulElement implements DynamicPropertied {
+public class Applet extends XulElement implements DynamicPropertied,
+org.zkoss.zul.api.Applet {
 	private String _code = "";
-	private String _name = "";
-	private Map _params = new HashMap();
+	private final Map _params = new LinkedHashMap();
 
+	/** Return the code of the applet, i.e., the URI of the Java class.
+	 */
 	public String getCode() {
 		return _code;
 	}
-
+	/** Sets the code of the applet, i.e., the URI of the Java class.
+	 */
 	public void setCode(String code) {
 		_code = code;
 		invalidate();
 	}
 
-	public String getName() {
-		return _name;
-	}
-
-	public void setName(String name) {
-		_name = name;
-		smartUpdate("z.name", name);
-	}
-
+	/** Sets a map of parameters (all existent parameters are removed first).
+	 */
 	public void setParams(Map params) {
-		_params = new HashMap(params);
+		_params.clear();
+		if (params != null)
+			_params.putAll(params);
 		invalidate();
 	}
-
+	/** Returns a map of parameters (never null).
+	 */
 	public Map getParams() {
 		return _params;
 	}
+	/** Sets a parameter.
+	 * If the value is null, the parameter is removed.
+	 */
+	public String setParam(String name, String value) {
+		return value != null ? (String)_params.remove(name):
+			(String)_params.put(name, value);
+	}
 
-	public List getParamsHtml() {
-		List list = new LinkedList();
-		Set keys = _params.entrySet();
-		for (Iterator iter = keys.iterator(); iter.hasNext();) {
-			Map.Entry pairs = (Map.Entry) iter.next();
-			Object[] value = { pairs.getKey(), pairs.getValue() };
-			list.add(value);
+	/** Used only internally for component development.
+	 */
+	public String getParamsHtml() {
+		final StringBuffer sb = new StringBuffer(256);
+		for (Iterator iter = _params.entrySet().iterator(); iter.hasNext();) {
+			Map.Entry me = (Map.Entry) iter.next();
+			sb.append("<param");
+			HTMLs.appendAttribute(sb, "name", Objects.toString(me.getKey()));
+			HTMLs.appendAttribute(sb, "value", Objects.toString(me.getValue()));
 		}
-		return list;
+		return sb.toString();
 	}
 
 	public Object getDynamicProperty(String name) {
@@ -94,39 +104,41 @@ public class Applet extends XulElement implements DynamicPropertied {
 	}
 
 	public void setDynamicProperty(String name, Object value)
-			throws WrongValueException {
-		_params.put(name, value);
+	throws WrongValueException {
+		setParam(name, Objects.toString(value));
 	}
 
+	/** Invokes the function of the applet running at the client.
+	 */
 	public void invoke(String function) {
-		invoke(function, null);
+		response(null, new AuInvoke(this, "invoke", function));
+	}
+	/** Invokes the function of the applet running at the client with
+	 * one argument.
+	 */
+	public void invoke(String function, String argument) {
+		response(null, new AuInvoke(this, "invoke", function, argument));
+	}
+	/** Invokes the function of the applet running at the client with
+	 * variable number argument.
+	 */
+	public void invoke(String function, String[] arguments) {
+		final int len = arguments != null ? arguments.length: 0;
+		final String[] args = new String[len + 1];
+		args[0] = function;
+		for (int j = 0; j < len; ++j)
+			args[j + 1] = arguments[j];
+		response(null, new AuInvoke(this, "invoke", args));
 	}
 
-	public void invoke(String function, String[] argument) {
-		StringWriter buffer = new StringWriter();
-		buffer.write(function + "(");
-		if (argument != null && argument.length > 0) {
-			buffer.write("\"" + argument[0] + "\"");
-			for (int i = 1; i < argument.length; i++) {
-				buffer.write(",\"" + argument[i] + "\"");
-			}
-		}
-		buffer.write(");");
-		response("ctrl", new AuInvoke(this, "invoke", buffer.toString()));
-	}
-
-	public void setField(String field, int value) {
-		response("ctrl", new AuInvoke(this, "field", field + "=" + value));
-	}
-
+	/** Sets the value of the specified filed.
+	 */
 	public void setField(String field, String value) {
-		response("ctrl", new AuInvoke(this, "field", field + "=\""
-				+ value.toString() + "\""));
+		response(null, new AuInvoke(this, "field", field, value));
 	}
 	public String getOuterAttrs() {
 		final StringBuffer sb = new StringBuffer(80).append(super.getOuterAttrs());
-		HTMLs.appendAttribute(sb, "name", getName());
-		HTMLs.appendAttribute(sb, "code", getCode());
+		HTMLs.appendAttribute(sb, "code", _code);
 		return sb.toString();
 	}
 	/** No child is allowed.

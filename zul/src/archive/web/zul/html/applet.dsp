@@ -20,7 +20,5 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <c:set var="self" value="${requestScope.arg.self}" />
 <applet id="${self.uuid}"${self.outerAttrs}${self.innerAttrs} z.type="zul.applet.Applet">
-<c:forEach var="param" items="${self.paramsHtml}">
-	<param name="${param[0]}" value="${param[1]}"/>
-</c:forEach>
+	${self.paramsHtml}
 </applet>
