@@ -174,7 +174,7 @@ zk.getTextSize = function (el, txt) {
 		document.body.appendChild(tsd);
 	}
 
-	for (var ss = zk.TEXT_STYLES, j = (ss.length - 1); --j >= 0;)
+	for (var ss = zk.TEXT_STYLES, j = ss.length; --j >= 0;)
 		tsd.style[ss[j]] = Element.getStyle(el, ss[j]);
 
 	tsd.innerHTML = txt;
