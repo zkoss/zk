@@ -60,10 +60,10 @@ zkPortalLayout = {
 		return heights;
 	},
 	_changeMove: function(dg, pointer, event){
-		var xy = Event.pointer(event),
-			cns = dg._cns,
+		var cns = dg._cns,
 			widths = dg._widths,
-			cIndex = widths.length;
+			cIndex = widths.length,
+			xy = Event.pointer(event);
 			
 		for (; --cIndex >= 0;)
 			if (widths[cIndex] <= xy[0]) break; 
