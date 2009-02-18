@@ -166,19 +166,19 @@ if (zk.ie) {
  * inside the element.
  * @since 3.6.0
  */
-zk.getTextInfo = function (el, txt) {
-	var ti = zk._txtInfo;
-	if (!ti) {
-		ti = zk._txtInfo = document.createElement("DIV");
-		ti.style.cssText = "left:-1000px;position:absolute;visibility:hidden;border:none";
-		document.body.appendChild(ti);
+zk.getTextSize = function (el, txt) {
+	var tsd = zk._txtSizDiv;
+	if (!tsd) {
+		tsd = zk._txtSizDiv = document.createElement("DIV");
+		tsd.style.cssText = "left:-1000px;position:absolute;visibility:hidden;border:none";
+		document.body.appendChild(tsd);
 	}
 
 	for (var ss = zk.TEXT_STYLES, j = ss.length; --j >= 0;)
-		ti.style[ss[j]] = Element.getStyle(el, ss[j]);
+		tsd.style[ss[j]] = Element.getStyle(el, ss[j]);
 
-	ti.innerHTML = txt;
-	return [ti.offsetWidth, ti.offsetHeight];
+	tsd.innerHTML = txt;
+	return [tsd.offsetWidth, tsd.offsetHeight];
 };
 //refer to http://www.w3schools.com/css/css_text.asp
 zk.TEXT_STYLES = [

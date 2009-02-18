@@ -105,15 +105,12 @@ zkMenu2 = { // menu
 	isTop: function (cmp) {
 		return cmp && getZKAttr(cmp, "top") == "true";
 	},
-	/**
-	 * Fixes the gap between button and em tag for IE. (IE only)
-	 */
+	/** Removes the extra space (IE only) */
 	fixBtn: zk.ie ? function (cmp) {
 		if (zkMenu2.isTop(cmp)) {
 			var btn = $e(cmp.id + "!b");
 			if (!btn || !btn.innerHTML.trim()) return;
-			btn.style.width = zk.getTextInfo(btn, btn.innerHTML)[0] + zk.getFrameWidth(btn) + "px";
-				// fix the gap between button and em tag for IE.
+			btn.style.width = zk.getTextSize(btn, btn.innerHTML)[0] + zk.getFrameWidth(btn) + "px";
 		}
 	} : zk.voidf,
 	cleanup: function (menu) {
