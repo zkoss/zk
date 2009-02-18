@@ -150,6 +150,3 @@ a.z-column-btn:hover {
 .z-columns-menu-desc .z-menu-item-img {
 	background-image:  url(${c:encodeURL('~./zul/img/grid/AZArrowDown-16x16.png')});
 }
-.z-columns-menu-columns .z-menu-img {
-	background-image:  url(${c:encodeURL('~./zul/img/grid/Columns-16x16.png')});
-}

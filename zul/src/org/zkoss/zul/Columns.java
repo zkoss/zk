@@ -307,13 +307,10 @@ public class Columns extends HeadersElement implements org.zkoss.zul.api.Columns
 			});
 			des.setParent(this);
 			if (cols._columnshide) {
-				final Menu columns = new Menu(Messages.get(MZul.GRID_COLUMNS));
-				columns.setSclass(cols.getZclass() + "-menu-columns");
-				final Menupopup menupop = new Menupopup();
-				menupop.setParent(columns);
-				columns.setParent(this);
+				Menuseparator sep = new Menuseparator();
+				sep.setParent(this);
 				for (Iterator it = cols.getChildren().iterator(); it.hasNext();) {
-					menupop.appendChild(createMenuitem((Column)it.next()));
+					this.appendChild(createMenuitem((Column)it.next()));
 				}
 			}
 		}
@@ -326,10 +323,13 @@ public class Columns extends HeadersElement implements org.zkoss.zul.api.Columns
 				public void onEvent(Event event) throws Exception {
 					Menupopup pop = (Menupopup)item.getParent();
 					int checked = 0;
-					for (Iterator it = pop.getChildren().iterator(); it.hasNext();)
-							if (((Menuitem)it.next()).isChecked())
-								checked++;
-					if (checked == 0) {
+					for (Iterator it = pop.getChildren().iterator(); it.hasNext();){
+						Object obj = it.next();
+						if (obj instanceof Menuitem && ((Menuitem)obj).isChecked()){
+							checked++;
+						}
+					}
+					if (checked == 0) {//at least show on column
 						item.setChecked(true);
 					}
 					col.setVisible(item.isChecked());

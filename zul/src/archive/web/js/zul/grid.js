@@ -470,6 +470,11 @@ zk.addBeforeInit(function () {
 					if (li) li.style.display = asc ? "" : "none";
 					li = zk.nextSibling(li, "LI");
 					if (li) li.style.display = dsc ? "" : "none";
+					
+					//separator
+					li = zk.nextSibling(li, "LI");
+					if (li) li.style.display = (asc||dsc) ? "" : "none";
+					
 				}
 			}
 			
