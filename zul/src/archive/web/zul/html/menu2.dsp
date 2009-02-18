@@ -22,11 +22,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <c:choose>
 <c:when test="${self.topmost}">
 <td id="${self.uuid}" align="left" z.type="zul.menu2.Menu2"${self.outerAttrs}${self.innerAttrs}>
-<table id="${self.uuid}!a" cellspacing="0" cellpadding="0" border="0" class="${zcls}-bdy <c:if test="${self.imageAssigned}">${zcls}-bdy<c:if test="${!empty self.label}">-text</c:if>-img</c:if>" style="width: auto;">
+<table id="${self.uuid}!a" cellspacing="0" cellpadding="0" border="0" class="${zcls}-body <c:if test="${self.imageAssigned}">${zcls}-body<c:if test="${!empty self.label}">-text</c:if>-img</c:if>" style="width: auto;">
 <tbody><tr><td class="${zcls}-inner-l"></td>
 <c:set var="imagesrc" value="${self.encodedImageURL}"/>
 <c:set var="imagesrc" value='style="background-image:url(${imagesrc})"' unless="${empty imagesrc}"/>
-<td class="${zcls}-inner"><div><button id="${self.uuid}!b" type="button" class="${zcls}-btn"${imagesrc}><c:out value="${self.label}"/>&nbsp</button>
+<td class="${zcls}-inner-m"><div><button id="${self.uuid}!b" type="button" class="${zcls}-btn"${imagesrc}><c:out value="${self.label}"/>&nbsp</button>
 ${z:redraw(self.menupopup, null)}
 </div>
 </td>

@@ -6,15 +6,15 @@
 .z-menubar-hor span,.z-menubar-hor a,.z-menubar-hor div,
 .z-menubar-ver .z-menu,.z-menubar-ver .z-menu-item,.z-menubar-ver .z-menu-btn,.z-menubar-ver .z-menu-item-btn, 
 .z-menubar-ver span,.z-menubar-ver a,.z-menubar-ver div {
-	font-family:Verdana,Tahoma,Arial,Helvetica,sans-serif;
-	font-size:11px;
-	font-size-adjust:none;
+	-adjust:none;
 	font-stretch:normal;
 	font-style:normal;
 	font-variant:normal;
 	font-weight:normal;
 	line-height:normal;
 	white-space:nowrap;
+	font-family: ${fontFamilyT}; 
+	font-size: ${fontSizeMS};
 }
 
 /* define common horizontal and vertical property */ 
@@ -33,32 +33,35 @@
 }
 
 .z-menu-cnt, .z-menu-item-cnt {
-	text-decoration: none; white-space: nowrap;  font-style: normal;
-	font-family: ${fontFamilyT}; font-size: ${fontSizeMS};
+	text-decoration: none; 
+	white-space: nowrap;  
+	font-style: normal;
+	font-family: ${fontFamilyT}; 
+	font-size: ${fontSizeMS};
 }
 
-.z-menubar-hor .z-menu-bdy, .z-menubar-hor .z-menu-item-bdy,
-.z-menubar-ver .z-menu-bdy, .z-menubar-ver .z-menu-item-bdy {
+.z-menubar-hor .z-menu-body, .z-menubar-hor .z-menu-item-body,
+.z-menubar-ver .z-menu-body, .z-menubar-ver .z-menu-item-body {
 	cursor: pointer;
 }
 
-.z-menubar-hor .z-menu-bdy .z-menu-inner-l,.z-menubar-hor .z-menu-bdy .z-menu-inner-r,
-.z-menubar-hor .z-menu-item-bdy .z-menu-item-inner-l,.z-menubar-hor .z-menu-item-bdy .z-menu-item-inner-r,
-.z-menubar-ver .z-menu-bdy .z-menu-inner-l,.z-menubar-ver .z-menu-bdy .z-menu-inner-r,
-.z-menubar-ver .z-menu-item-bdy .z-menu-item-inner-l,.z-menubar-ver .z-menu-item-bdy .z-menu-item-inner-r{
+.z-menubar-hor .z-menu-body .z-menu-inner-l,.z-menubar-hor .z-menu-body .z-menu-inner-r,
+.z-menubar-hor .z-menu-item-body .z-menu-item-inner-l,.z-menubar-hor .z-menu-item-body .z-menu-item-inner-r,
+.z-menubar-ver .z-menu-body .z-menu-inner-l,.z-menubar-ver .z-menu-body .z-menu-inner-r,
+.z-menubar-ver .z-menu-item-body .z-menu-item-inner-l,.z-menubar-ver .z-menu-item-body .z-menu-item-inner-r{
 	font-size:1px;
 	height:21px;
 	line-height:1px;
 	width:3px;
 }
 
-.z-menubar-hor .z-menu-bdy .z-menu-inner, .z-menubar-hor .z-menu-item-bdy .z-menu-item-inner,
-.z-menubar-ver .z-menu-bdy .z-menu-inner, .z-menubar-ver .z-menu-item-bdy .z-menu-item-inner{
+.z-menubar-hor .z-menu-body .z-menu-inner-m, .z-menubar-hor .z-menu-item-body .z-menu-item-inner-m,
+.z-menubar-ver .z-menu-body .z-menu-inner-m, .z-menubar-ver .z-menu-item-body .z-menu-item-inner-m{
 	height:21px;
 	text-align:center;
 }
 
-.z-menu-bdy .z-menu-inner div{
+.z-menu-body .z-menu-inner-m div{
 	background-color:transparent;
 	background-position:right 3px;
 	background-repeat:no-repeat;
@@ -69,7 +72,7 @@
 	background-image:url(${c:encodeURL('~./zul/img/button/tb-btn-arrow.png')});
 }
 
-.z-menu-item-bdy .z-menu-item-inner div{
+.z-menu-item-body .z-menu-item-inner-m div{
 	background-color:transparent;
 	display:block;
 	min-height:16px;
@@ -77,8 +80,8 @@
 	padding-left:0px;
 }
 
-.z-menu-inner .z-menu-btn,
-.z-menu-item-inner .z-menu-item-btn{
+.z-menu-inner-m .z-menu-btn,
+.z-menu-item-inner-m .z-menu-item-btn{
 	background:transparent none no-repeat scroll 0 2px;
 	border:0px none;
 	cursor:pointer;
@@ -96,13 +99,13 @@
 	text-decoration: none;
 }
 
-.z-menu-bdy-text-img .z-menu-inner .z-menu-btn,.z-menu-bdy-img .z-menu-inner .z-menu-btn,
-.z-menu-item-bdy-text-img .z-menu-item-inner .z-menu-item-btn{
+.z-menu-body-text-img .z-menu-inner-m .z-menu-btn,.z-menu-body-img .z-menu-inner-m .z-menu-btn,
+.z-menu-item-body-text-img .z-menu-item-inner-m .z-menu-item-btn{
 	padding-left:18px;
 }
 
-.z-menu-item-bdy-img .z-menu-item-inner .z-menu-item-btn,
-.z-menu-item-bdy-text .z-menu-item-inner .z-menu-item-btn{
+.z-menu-item-body-img .z-menu-item-inner-m .z-menu-item-btn,
+.z-menu-item-body-text .z-menu-item-inner-m .z-menu-item-btn{
 	padding-left:12px;
 	padding-right:0px;
 }
@@ -110,34 +113,34 @@
 
 <c:if test="${c:isExplorer()}">
 <%-- IE only --%>
-.z-menu-inner .z-menu-btn{
+.z-menu-inner-m .z-menu-btn{
 	padding-right:4px;
 }
-.z-menu-item-bdy-img .z-menu-item-inner .z-menu-item-btn,
-.z-menu-item-bdy-text .z-menu-item-inner .z-menu-item-btn{
+.z-menu-item-body-img .z-menu-item-inner-m .z-menu-item-btn,
+.z-menu-item-body-text .z-menu-item-inner-m .z-menu-item-btn{
 	padding-right:0px;
 }
 </c:if>
 
 /* define menu/menuitem mouse over and seld effect */
-.z-menu-bdy-over .z-menu-inner-l,.z-menu-bdy-seld .z-menu-inner-l,.z-menu-item-bdy-over .z-menu-item-inner-l {
+.z-menu-body-over .z-menu-inner-l,.z-menu-body-seld .z-menu-inner-l,.z-menu-item-body-over .z-menu-item-inner-l {
 	background-repeat : no-repeat;
 	background-position : 0 0;
 	background-image : url(${c:encodeURL('~./zul/img/button/tb-btn-side.png')});
 }
-.z-menu-bdy-over .z-menu-inner-r,.z-menu-bdy-seld .z-menu-inner-r,.z-menu-item-bdy-over .z-menu-item-inner-r {
+.z-menu-body-over .z-menu-inner-r,.z-menu-body-seld .z-menu-inner-r,.z-menu-item-body-over .z-menu-item-inner-r {
 	background-repeat : no-repeat; 
 	background-position : 0 -21px;
 	background-image : url(${c:encodeURL('~./zul/img/button/tb-btn-side.png')});
 }
-.z-menu-bdy-over .z-menu-inner,.z-menu-bdy-seld .z-menu-inner,.z-menu-item-bdy-over .z-menu-item-inner {
+.z-menu-body-over .z-menu-inner-m,.z-menu-body-seld .z-menu-inner-m,.z-menu-item-body-over .z-menu-item-inner-m {
 	background-repeat : repeat-x; 
 	background-position : 0 -42px;
 	background-image : url(${c:encodeURL('~./zul/img/button/tb-btn-side.png')});
 }
-.z-menu-bdy-over .z-menu-inner .z-menu-btn,
-.z-menu-bdy-seld .z-menu-inner .z-menu-btn,
-.z-menu-item-bdy-over .z-menu-item-inner .z-menu-btn{
+.z-menu-body-over .z-menu-inner-m .z-menu-btn,
+.z-menu-body-seld .z-menu-inner-m .z-menu-btn,
+.z-menu-item-body-over .z-menu-item-inner-m .z-menu-btn{
 	color:#233D6D;
 }
 
@@ -163,8 +166,6 @@
 /* define menupopup property*/
 .z-menu-popup {
 	-x-system-font:none;
-	font-family:Verdana,Tahoma,Arial,Helvetica,sans-serif;
-	font-size:11px;
 	font-size-adjust:none;
 	font-stretch:normal;
 	font-style:normal;
@@ -173,6 +174,8 @@
 	line-height:normal;
 	text-decoration:none;
 	white-space:nowrap;
+	font-family: ${fontFamilyT}; 
+	font-size: ${fontSizeMS};
 }
 
 .z-menu-popup a {
@@ -269,7 +272,7 @@
 	font-size:1px;
 	line-height:1px;
 }
-.z-menu-popup-cnt .z-menu-separator-inner {
+.z-menu-popup-cnt .z-menu-separator-inner-m {
 	background-color:#E0E0E0;
 	border-bottom:1px solid #FFFFFF;
 	display:block;
