@@ -47,6 +47,7 @@ ZK 3.6.0
   2580627: extendlet-check-period has no effect to DspExtendlet
   2583507: Executions.createComponents not work in server push
   2587158: <?page> failed to recognize single quote
+  2603453: Wrong dependency in zcommon-3.5.2.pom
 
 * Upgrade Notes
   + The default setting disables the feature of ignoring the consecutive
