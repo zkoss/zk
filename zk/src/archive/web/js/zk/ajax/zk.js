@@ -104,6 +104,13 @@ zk = {
 			dst[p] = src[p];
 		return dst;
 	},
+	forEach: function (objs, fn) {
+		var args = [];
+		for (var j = arguments.length; --j >= 2;)
+			args.unshift(arguments[j]);
+		for (var j = 0, len = objs.length; j < len;)
+			fn.apply(objs[j], args);
+	},
 
 	$void: function() {
 		return '';
