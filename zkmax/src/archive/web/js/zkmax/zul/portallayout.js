@@ -53,9 +53,7 @@ zkPortalLayout = {
 	_getColHeights: function (cns) {
 		var heights = [];
 		cns.forEach(function (n) {
-			var h = $real(n).offsetHeight;
-			if (h)
-				heights.push(zk.revisedOffset(n)[1] + h/2);
+			heights.push(zk.revisedOffset(n)[1] + $real(n).offsetHeight/2);
 		});
 		return heights;
 	},
@@ -70,7 +68,7 @@ zkPortalLayout = {
 		
 		if (cIndex < 0) cIndex = 0;
 		
-		var panels = zk.childNodes($e(cns[cIndex], "cave"), zkPortalLayout._isLegalChild),
+		var panels = zk.childNodes($e(cns[cIndex], "cave"), zkPortalLayout._isVisibleChild),
 			heights = zkPortalLayout._getColHeights(panels),
 			rIndex = 0,
 			lenth = heights.length;

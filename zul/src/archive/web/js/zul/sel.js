@@ -203,6 +203,7 @@ zk.Selectable.prototype = {
 		var meta = zkau.getMeta($uuid(Event.element(evt)));
 		if (meta) {
 			zkSel.cmonblurTo(meta._focusItem);
+			meta._lastSelected = meta._focusItem; // we need to store the last selected item for fixing Bug 2465826
 			meta._focusItem = null; // reset Bug 2465826
 		}
 	},
@@ -577,7 +578,7 @@ zk.Selectable.prototype = {
 					break;
 			} else {
 				rowfound = r == row;
-				focusfound = this._isFocus(r);
+				focusfound = this._isFocus(r) || r == this._lastSelected;
 				if (rowfound || focusfound) {
 					this._changeSelect(r, true);
 					if (rowfound && focusfound)
