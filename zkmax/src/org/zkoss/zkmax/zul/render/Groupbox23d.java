@@ -44,10 +44,13 @@ public class Groupbox23d implements ComponentRenderer {
 		wh.write("<div id=\"").write(uuid).write("\" z.type=\"zul.widget.Grbox\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
 			.write(">");
+		
 		String gcExtStyle;
 		if (caption != null) {
-			wh.write("<div class=\"").write(zcls).write("-tl\"><div class=\"")
-				.write(zcls).write("-tr\"><div class=\"").write(zcls).write("-tm\">")
+			wh.write("<div class=\"").write(zcls).write("-tl\"><div class=\"").write(zcls)
+			.write("-tr\"></div></div>");
+			wh.write("<div class=\"").write(zcls).write("-hl\"><div class=\"")
+				.write(zcls).write("-hr\"><div class=\"").write(zcls).write("-hm\">")
 				.write("<div class=\"").write(zcls).write("-header\">").write(caption)
 				.write("</div></div></div></div>");
 			gcExtStyle = "border-top:0;";
