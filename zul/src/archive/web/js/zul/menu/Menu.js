@@ -51,12 +51,11 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 				return p;
 		return null;
 	},
+	/** Removes the extra space (IE only) */
 	_fixBtn: function () {
 		var btn = this.getSubnode('b');
 		if (!btn || !btn.innerHTML.trim()) return;
-		if (!this._textUtil) this._textUtil = zDom.getTextUtil();
-		btn.style.width = this._textUtil.measure(btn).width + zDom.frameWidth(btn) + "px";
-			// fix the gap between button and em tag for IE.
+		btn.style.width = zDom.getTextSize(btn, btn.innerHTML)[0] + zDom.frameWidth(btn) + "px";
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
@@ -84,11 +83,6 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			zEvt.unlisten(n, "mouseover", this._fxMouseOver);
 			zEvt.unlisten(n, "mouseout", this._fxMouseOut);
 		} else {
-			if (this._textUtil) 
-				this._textUtil.destroy();
-		
-			this._textUtil = null;
-				
 			var n = this.getNode();
 			zEvt.unlisten(n, "mouseover", this._fxMouseOver);
 			zEvt.unlisten(n, "mouseout", this._fxMouseOut);

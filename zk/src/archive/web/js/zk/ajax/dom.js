@@ -603,43 +603,30 @@ zDom = { //static methods
 		} while (el = el.parentNode);
 		return [l, t];
 	},
-	getTextUtil: function () {
-		if (!this._textUtil)
-			this._textUtil = {
-				styles: ["fontSize", "fontStyle", "fontWeight", "fontFamily", "lineHeight", "letterSpacing", "textTransform" ],
-				getNode: function () {
-					var d = this._node || zDom.$('zk_textUtil');
-					if (!d) {
-						d = document.createElement("div");
-						document.body.appendChild(d);
-						d.id = "zk_textUtil";
-						this._node = d;
-					}
-					d.style.position = "absolute";
-					d.style.top = d.style.left = "-1000px";
-					d.style.width = "auto";
-					d.style.visibility = "hidden";
-					return d; 
-				},
-				measure: function (el, text) {
-					if (!this._node)
-						this._node = this.getNode();
-					this.apply(el, text);
-					return {width: this._node.offsetWidth, height: this._node.offsetHeight};
-				},
-				apply: function (el, text) {
-					for (var s = this.styles.length; --s >= 0;)
-						this._node.style[this.styles[s]] = zDom.getStyle(el, this.styles[s]);
-					this._node.innerHTML = typeof text == "string" ? text : el.innerHTML;	
-				},
-				destroy: function () {
-					if (this._node)
-						zDom.remove(this._node);
-					this._node = null;
-				}
-			};
-		return this._textUtil;
+	/** Returns an array to indicate the size of the text if it is placed
+	 * inside the element.
+	 */
+	getTextSize: function (el, txt) {
+		var tsd = zk._txtSizDiv;
+		if (!tsd) {
+			tsd = zk._txtSizDiv = document.createElement("DIV");
+			tsd.style.cssText = "left:-1000px;position:absolute;visibility:hidden;border:none";
+			document.body.appendChild(tsd);
+		}
+
+		for (var ss = zk.TEXT_STYLES, j = ss.length; --j >= 0;)
+			tsd.style[ss[j]] = Element.getStyle(el, ss[j]);
+
+		tsd.innerHTML = txt;
+		return [tsd.offsetWidth, tsd.offsetHeight];
 	},
+	//refer to http://www.w3schools.com/css/css_text.asp
+	TEXT_STYLES: [
+		'fontFamily', 'fontSize', 'fontWeight', 'fontStyle',
+		'letterSpacing', 'lineHeight', 'textAlign', 'textDecoration',
+		'textIndent', 'textShadow', 'textTransform', 'textOverflow',
+		'direction', 'wordSpacing', 'whiteSpace'],
+
 	getDimension: function (el) {
 		var display = zDom.getStyle(el,  'display');
 		if (display != 'none' && display != null) // Safari bug

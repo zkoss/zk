@@ -763,14 +763,6 @@ zk.eff.Shadow = zk.$extends(zk.Object, {
 		if(st.width != wd || st.height != hgh) {
 			st.width = wd + "px";
 			st.height = hgh + "px";
-			if(!zk.ie) {
-				var c = shadow.childNodes;
-				// the 12 number means the both height the top side shadow and the bottom side shadow.
-				c[1].style.height = Math.max(0, (hgh - 12))+ "px";
-				
-				// the 12 number means the both width the left side shadow and the right side shadow.
-				c[0].childNodes[1].style.width = c[1].childNodes[1].style.width = c[2].childNodes[1].style.width = Math.max(0, (wd - 12)) + "px";;
-			}
 		}
 		st.display = "block";
 
