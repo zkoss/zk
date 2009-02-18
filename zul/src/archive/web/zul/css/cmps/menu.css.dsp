@@ -191,7 +191,8 @@
 
 /* define menu & menuitem in menupopup */
 .z-menu-popup-cnt .z-menu,
-.z-menu-popup-cnt .z-menu-item {
+.z-menu-popup-cnt .z-menu-item,
+.z-menu-popup-cnt .z-menu-separator {
 	line-height:100%;
 	list-style-image:none !important;
 	list-style-position:outside !important;
