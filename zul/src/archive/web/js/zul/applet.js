@@ -14,7 +14,22 @@
  }}IS_RIGHT
  */
 zkApplet = {
-	invoke: function(id){
+	invoke: zk.ie ? function(id){
+		var cmp = $e(id);
+		if (cmp && arguments.length >= 2) {
+			var expr = "cmp." + arguments[1] + '(';
+			for (var j = 2; j < arguments.length;) {
+				if (j != 2) expr += ',';
+				var s = arguments[j++];
+				expr += '"' + (s ? s.replace('"', '\\"'): '') + '"';
+			}
+			try {
+				eval(expr + ');');
+			} catch (e) {
+				zk.error("Failed to invoke applet's method: " + expr);
+			}
+		}
+	}: function(id){
 		var cmp = $e(id);
 		if (cmp && arguments.length >= 2) {
 			var fn = arguments[1],
