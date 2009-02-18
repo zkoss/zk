@@ -40,8 +40,8 @@ import org.zkoss.zul.Tabpanel;
  */
 
 public class Tabpanel2Accordion implements ComponentRenderer {
-	public void render(Component comp, Writer out) throws IOException {	
-		final SmartWriter wh = new SmartWriter(out);		
+	public void render(Component comp, Writer out) throws IOException {
+		final SmartWriter wh = new SmartWriter(out);
 		final Tabpanel self = (Tabpanel) comp;
 		final Tab tab = self.getLinkedTab();
 		if (tab == null) return; //generate nothing (Bug 1848377)
@@ -60,17 +60,17 @@ public class Tabpanel2Accordion implements ComponentRenderer {
 			wh.write("<div id=\"").write(tabuuid).write("\"").write(tab.getOuterAttrs())
 				.write(tab.getInnerAttrs()).write(" z.type=\"zul.tab2.Tab2\">");
 			wh.write("<div align=\"left\" class=\"").write(tabzcs).write("header\">");
+			wh.write("<div class=\""+tabzcs+"tl\">")
+			.write("<div class=\""+tabzcs+"tr\"></div>").write("</div>")
+			.write("<div class=\""+tabzcs+"hl\">").write("<div class=\""+tabzcs+"hr\">")
+			.write("<div class=\""+tabzcs+"hm\">");
 			if (tab.isClosable()) {
 				wh.write("<a id=\"").write(tabuuid).write("!close\" class=\"").write(tabzcs).write("close\"></a>");
 			}
-			wh.writeln("<a href=\"javascript:;\" id=\"").write(tabuuid).write("!a\" class=\"").write(tabzcs).write("tl\">");
-			wh.writeln("<em class=\"").write(tabzcs).write("tr\">");
-			wh.writeln("<span class=\"").write(tabzcs).write("tm\">");
 			wh.writeln("<span class=\"").write(tabzcs).write("text\">");
 			wh.write(tab.getImgTag());
 			new Out(tab.getLabel()).render(out);
-			wh.writeln("</span>").writeln("</span>").writeln("</em>").writeln("</a>")
-				.writeln("</div>").writeln("</div>");
+			wh.write("</span></div></div></div></div></div>");
 			wh.write("<div id=\""+uuid+"!real\"")
 				.writeln(self.getOuterAttrs()).write(self.getInnerAttrs()+">");
 			wh.writeln("<div id=\""+uuid+"!cave\">");
