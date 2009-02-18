@@ -758,7 +758,7 @@ public class Parser {
 					if (use != null) {
 						use = use.trim();
 						if (use.length() != 0)
-							compInfo.setImplementationClass(use);
+							compInfo.setImplementation(use);
 							//Resolve later since might defined in zscript
 					}
 				}

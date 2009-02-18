@@ -69,8 +69,8 @@ implements Cloneable, Condition, java.io.Externalizable {
 	private transient EvaluatorRef _evalr;
 	private transient NodeInfo _parent; //it is restored by its parent
 	private transient ComponentDefinition _compdef;
-	/** The implemetation class (use). */
-	private ExValue _implcls;
+	/** The implemetation class/component (use). */
+	private ExValue _impl;
 	/** A list of {@link Property}, or null if no property at all. */
 	private List _props;
 	/** A Map of event handler to handle events. */
@@ -150,7 +150,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 		_children = compInfo._children;
 		_evalr = compInfo._evalr;
 		_compdef = compInfo._compdef;
-		_implcls = compInfo._implcls;
+		_impl = compInfo._impl;
 		_tag = compInfo._tag;
 		_cond = compInfo._cond;
 		_fulfill = compInfo._fulfill;
@@ -601,20 +601,38 @@ implements Cloneable, Condition, java.io.Externalizable {
 		return _forEach != null;
 	}
 
-	/** Returns the class name (String) that implements the component.
-	 * It is actually the value of the use attribute which might contains
-	 * EL expressions.
-	 * To resolve the real implementation class, use
-	 * {@link #resolveImplementationClass}.
+	/** @deprecated As of release 3.6.0, replaced with {@link #getImplementation}.
 	 */
 	public String getImplementationClass() {
-		return _implcls != null ? _implcls.getRawValue(): null;
+		return getImplementation();
 	}
-	/** Sets the class name to implements the component.
+	/** @deprecated As of release 3.6.0, replaced with {@link #setImplementation}.
 	 */
 	public void setImplementationClass(String clsnm) {
-		_implcls = clsnm != null && clsnm.length() > 0 ?
-			new ExValue(clsnm, Object.class): null;
+		setImplementation(clsnm);
+	}
+	/** Returns the class name or an expression returning a class instance,
+	 * a class name, or a component.
+	 * It is the same value that {@link #setImplementation} was called.
+	 * To resolve the real implementation class, use
+	 * {@link #resolveImplementationClass}.
+	 *
+	 * <p>Notice that, if a component is returned by the expression,
+	 * it shall not be assigned to any page.
+	 * @since 3.6.0
+	 */
+	public String getImplementation() {
+		return _impl != null ? _impl.getRawValue(): null;
+	}
+	/** Sets the string that implements the component.
+	 *
+	 * @param expr the class name, or an expression returning a class instance,
+	 * a class name,  or a component instance.
+	 * @since 3.6.0
+	 */
+	public void setImplementation(String expr) {
+		_impl = expr != null && expr.length() > 0 ?
+			new ExValue(expr, Object.class): null;
 	}
 
 	/** Creates an component based on this info (never null).
@@ -629,13 +647,14 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 * @since 3.0.2
 	 */
 	public Component newInstance(Page page, Component parent) {
-		Object implcls = evalImplClass(page, parent);
+		Object impl = evalImpl(page, parent);
 		ComponentsCtrl.setCurrentInfo(this);
 		final Component comp;
 		try {
-			comp = implcls instanceof Class ?
-				_compdef.newInstance((Class)implcls):
-				_compdef.newInstance(page, (String)implcls);
+			comp = impl instanceof Class ?
+				_compdef.newInstance((Class)impl):
+				impl instanceof Component ? (Component)impl:
+				_compdef.newInstance(page, (String)impl);
 		} catch (Exception ex) {
 			throw UiException.Aide.wrap(ex);
 		} finally {
@@ -648,11 +667,11 @@ implements Cloneable, Condition, java.io.Externalizable {
 	/** Evaluates the implementation claas, and rerturn either a class (Class),
 	 * a class name (String), or null.
 	 */
-	private Object evalImplClass(Page page, Component parent) {
-		return _implcls == null ? null:
+	private Object evalImpl(Page page, Component parent) {
+		return _impl == null ? null:
 			parent != null ?
-				_implcls.getValue(getEvaluator(), parent):
-				_implcls.getValue(getEvaluator(), page);
+				_impl.getValue(getEvaluator(), parent):
+				_impl.getValue(getEvaluator(), page);
 	}
 	/** Creates an component based on this info (never null).
 	 * It is the same as newInstance(page, null).
@@ -686,9 +705,10 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 */
 	public Class resolveImplementationClass(Page page, Component parent)
 	throws ClassNotFoundException {
-		Object implcls = evalImplClass(page, parent);
-		return implcls instanceof Class ? (Class)implcls:
-			_compdef.resolveImplementationClass(page, (String)implcls);
+		Object impl = evalImpl(page, parent);
+		return impl instanceof Class ? (Class)impl:
+			impl instanceof Component ? impl.getClass():
+			_compdef.resolveImplementationClass(page, (String)impl);
 	}
 	/** Resolves and returns the class for the component represented
 	 * by this info (never null).
@@ -928,7 +948,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 			out.writeObject(_compdef);
 		}
 
-		out.writeObject(_implcls);
+		out.writeObject(_impl);
 		out.writeObject(_props);
 		out.writeObject(_evthds);
 		out.writeObject(_annots);
@@ -957,7 +977,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 			_compdef = (ComponentDefinition)v;
 		}
 
-		_implcls = (ExValue)in.readObject();
+		_impl = (ExValue)in.readObject();
 		_props = (List)in.readObject();
 		_evthds = (EventHandlerMap)in.readObject();
 		_annots = (AnnotationMap)in.readObject();

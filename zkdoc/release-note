@@ -19,6 +19,7 @@ ZK 3.6.0
   2025262: A way to close a group of ErrorBoxes
   2100105: Applet zul Component
   2495414: Config to disable shadow for Window
+  2362560: Extend "use" to accept Object like "apply"
 
 * Bugs
   2386650: NullPointerException when create tabs in onTimer()
