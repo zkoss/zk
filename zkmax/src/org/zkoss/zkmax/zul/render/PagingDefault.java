@@ -48,16 +48,16 @@ public class PagingDefault implements ComponentRenderer {
 			.write("\" name=\"").write(uuid+"!tb_f")
 			.write("\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" class=\"")
 			.write(zcls).write("-btn\"><tbody><tr><td class=\"").write(zcls)
-			.write("-btn-l\"><i>&#160;</i></td><td class=\"").write(zcls)
-			.write("-btn-m\"><em unselectable=\"on\"><button type=\"button\" class=\"")
-			.write(zcls).write("-first\"> </button></em></td><td class=\"").write(zcls).write("-btn-r\"><i>&#160;</i></td></tr></tbody></table></td>");
+			.write("-btn-l\"></td><td class=\"").write(zcls)
+			.write("-btn-m\"><div><button type=\"button\" class=\"")
+			.write(zcls).write("-first\"> </button></div></td><td class=\"").write(zcls).write("-btn-r\"></td></tr></tbody></table></td>");
 		wh.write("<td><table id=\"").write(uuid+"!tb_p")
 			.write("\" name=\"").write(uuid+"!tb_p")
 			.write("\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" class=\"").write(zcls)
-			.write("-btn\"><tbody><tr><td class=\"").write(zcls).write("-btn-l\"><i>&#160;</i></td><td class=\"")
-			.write(zcls).write("-btn-m\"><em unselectable=\"on\"><button type=\"button\" class=\"")
-			.write(zcls).write("-prev\"> </button></em></td><td class=\"").write(zcls)
-			.write("-btn-r\"><i>&#160;</i></td></tr></tbody></table></td>");
+			.write("-btn\"><tbody><tr><td class=\"").write(zcls).write("-btn-l\"></td><td class=\"")
+			.write(zcls).write("-btn-m\"><div><button type=\"button\" class=\"")
+			.write(zcls).write("-prev\"> </button></div></td><td class=\"").write(zcls)
+			.write("-btn-r\"></td></tr></tbody></table></td>");
 		wh.write("<td><span class=\"").write(zcls).write("-sep\"/></td>");
 		wh.write("<td><span class=\"").write(zcls).write("-text\"></span></td>");
 		wh.write("<td><input type=\"text\" class=\"").write(zcls).write("-inp\" value=\"")
@@ -71,18 +71,18 @@ public class PagingDefault implements ComponentRenderer {
 			.write("\" name=\"").write(uuid+"!tb_n")
 			.write("\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" class=\"")
 			.write(zcls).write("-btn\"><tbody><tr><td class=\"").write(zcls)
-			.write("-btn-l\"><i>&#160;</i></td><td class=\"").write(zcls)
-			.write("-btn-m\"><em unselectable=\"on\"><button type=\"button\" class=\"")
-			.write(zcls).write("-next\"> </button></em></td><td class=\"").write(zcls)
-			.write("-btn-r\"><i>&#160;</i></td></tr></tbody></table></td>");
+			.write("-btn-l\"></td><td class=\"").write(zcls)
+			.write("-btn-m\"><div><button type=\"button\" class=\"")
+			.write(zcls).write("-next\"> </button></div></td><td class=\"").write(zcls)
+			.write("-btn-r\"></td></tr></tbody></table></td>");
 		wh.write("<td><table id=\"").write(uuid+"!tb_l")
 			.write("\" name=\"").write(uuid+"!tb_l")
 			.write("\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" class=\"")
 			.write(zcls).write("-btn\"><tbody><tr><td class=\"").write(zcls)
-			.write("-btn-l\"><i>&#160;</i></td><td class=\"").write(zcls)
-			.write("-btn-m\"><em unselectable=\"on\"><button type=\"button\" class=\"")
-			.write(zcls).write("-last\"> </button></em></td><td class=\"").write(zcls)
-			.write("-btn-r\"><i>&#160;</i></td></tr></tbody></table></td>");
+			.write("-btn-l\"></td><td class=\"").write(zcls)
+			.write("-btn-m\"><div><button type=\"button\" class=\"")
+			.write(zcls).write("-last\"> </button></div></td><td class=\"").write(zcls)
+			.write("-btn-r\"></td></tr></tbody></table></td>");
 		wh.write("</tr></tbody></table>");
 		
 		if (self.isDetailed())

@@ -25,9 +25,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 				<table id="${self.uuid}!tb_f" name="${self.uuid}!tb_f" cellspacing="0" cellpadding="0" border="0" class="${zcls}-btn">
 					<tbody>
 						<tr>
-							<td class="${zcls}-btn-l"><i>&#160;</i></td>
-							<td class="${zcls}-btn-m"><em unselectable="on"><button type="button" class="${zcls}-first"> </button></em></td>
-							<td class="${zcls}-btn-r"><i>&#160;</i></td>
+							<td class="${zcls}-btn-l"></td>
+							<td class="${zcls}-btn-m"><div><button type="button" class="${zcls}-first"> </button></div></td>
+							<td class="${zcls}-btn-r"></td>
 						</tr>
 					</tbody>
 				</table>
@@ -36,9 +36,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 				<table id="${self.uuid}!tb_p" name="${self.uuid}!tb_p" cellspacing="0" cellpadding="0" border="0" class="${zcls}-btn">
 					<tbody>
 						<tr>
-							<td class="${zcls}-btn-l"><i>&#160;</i></td>
-							<td class="${zcls}-btn-m"><em unselectable="on"><button type="button" class="${zcls}-prev"> </button></em></td>
-							<td class="${zcls}-btn-r"><i>&#160;</i></td>
+							<td class="${zcls}-btn-l"></td>
+							<td class="${zcls}-btn-m"><div><button type="button" class="${zcls}-prev"> </button></div></td>
+							<td class="${zcls}-btn-r"></td>
 						</tr>
 					</tbody>
 				</table>
@@ -52,9 +52,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 				<table id="${self.uuid}!tb_n" name="${self.uuid}!tb_n" cellspacing="0" cellpadding="0" border="0" class="${zcls}-btn">
 					<tbody>
 						<tr>
-							<td class="${zcls}-btn-l"><i>&#160;</i></td>
-							<td class="${zcls}-btn-m"><em unselectable="on"><button type="button" class="${zcls}-next"> </button></em></td>
-							<td class="${zcls}-btn-r"><i>&#160;</i></td>
+							<td class="${zcls}-btn-l"></td>
+							<td class="${zcls}-btn-m"><div><button type="button" class="${zcls}-next"> </button></div></td>
+							<td class="${zcls}-btn-r"></td>
 						</tr>
 					</tbody>
 				</table>
@@ -63,9 +63,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 				<table id="${self.uuid}!tb_l" name="${self.uuid}!tb_l" cellspacing="0" cellpadding="0" border="0" class="${zcls}-btn">
 					<tbody>
 						<tr>
-							<td class="${zcls}-btn-l"><i>&#160;</i></td>
-							<td class="${zcls}-btn-m"><em unselectable="on"><button type="button" class="${zcls}-last"> </button></em></td>
-							<td class="${zcls}-btn-r"><i>&#160;</i></td>
+							<td class="${zcls}-btn-l"></td>
+							<td class="${zcls}-btn-m"><div><button type="button" class="${zcls}-last"> </button></div></td>
+							<td class="${zcls}-btn-r"></td>
 						</tr>
 					</tbody>
 				</table>
