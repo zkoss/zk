@@ -350,7 +350,7 @@ zkPop = {
 			zk.remove(ctx._stackup);
 		ctx._stackup = null;
 	},
-	onVisi: zk.ie7 ? function (cmp) {
+	onVisi:/* zk.ie7 ? function (cmp) {
 		var wdh = cmp.style.width;
 		var fir = zk.firstChild(cmp, "DIV"), last = zk.lastChild(zk.lastChild(cmp, "DIV"), "DIV"),
 			n = $e(cmp.id + "!cave").parentNode;
@@ -368,7 +368,7 @@ zkPop = {
 			if (fir) fir.firstChild.firstChild.style.width = "";
 			if (last) last.firstChild.firstChild.style.width = "";
 		}
-	}: zk.voidf,
+	}: */zk.voidf,
 	setAttr: function (cmp, nm, val) {
 		if ("style.width" == nm) {
 			zkau.setAttr(cmp, nm, val);

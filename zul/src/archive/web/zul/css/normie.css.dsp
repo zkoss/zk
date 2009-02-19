@@ -183,16 +183,16 @@ tr.z-list-item td.z-list-item-focus {
 }
 <%-- popup.css.dsp --%>
 .z-popup .z-popup-tl, .z-popup .z-popup-tr, .z-popup .z-popup-bl, .z-popup .z-popup-br {
-	background-image: url(${c:encodeURL('~./zul/img/popup/pp-corners.gif')});
+	background-image: 
 }
 .z-popup .z-popup-tm, .z-popup .z-popup-cm, .z-popup .z-popup-bm {
-	background-image: url(${c:encodeURL('~./zul/img/popup/pp-tb.gif')});
+	background-image:
 }
 .z-popup .z-popup-cl {
-	background-image: url(${c:encodeURL('~./zul/img/popup/pp-l.gif')});
+	background-image: 
 }
 .z-popup .z-popup-cr {
-	background-image: url(${c:encodeURL('~./zul/img/popup/pp-r.gif')});
+	background-image: 
 }
 <%-- slider.css.dsp --%>
 .z-slider-hor {    
@@ -294,10 +294,10 @@ span.z-vfiletree-tee, span.z-vfiletree-last {
 .z-window-embedded-tr{
 	background-image: url(${c:encodeURL('~./zul/img/wnd2/wtp-r.gif')})
 }
-.z-window-modal-tl, .z-window-highlighted-tl, .z-window-overlapped-tl, .z-window-popup-tl {
+.z-window-modal-tl, .z-window-highlighted-tl, .z-window-overlapped-tl {
 	background-image: url(${c:encodeURL('~./zul/img/wnd2/wtp-l-ol.gif')})
 }
-.z-window-modal-tr, .z-window-highlighted-tr, .z-window-overlapped-tr, .z-window-popup-tr {
+.z-window-modal-tr, .z-window-highlighted-tr, .z-window-overlapped-tr {
 	background-image: url(${c:encodeURL('~./zul/img/wnd2/wtp-r-ol.gif')})
 }
 <%-- grid.css.dsp --%>

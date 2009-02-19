@@ -40,14 +40,17 @@ public class PopupDefault implements ComponentRenderer {
 		final String zcls = self.getZclass();
 		wh.write("<div id=\"").write(self.getUuid()).write("\" z.type=\"zul.widget.Pop\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">")
+			
 			.write("<div class=\"").write(zcls).write("-tl\"><div class=\"").write(zcls)
-			.write("-tr\"><div class=\"").write(zcls).write("-tm\"></div></div></div>")
+			.write("-tr\"></div></div>")
+			
 			.write("<div id=\"").write(uuid).write("!bwrap\" class=\"").write(zcls)
-			.write("-body\"><div class=\"").write(zcls).write("-cl\">")
+			.write("-cl\">")
 			.write("<div class=\"").write(zcls).write("-cr\"><div class=\"").write(zcls).write("-cm\"><div id=\"")
 			.write(uuid).write("!cave\" class=\"").write(zcls).write("-cnt\">")
 			.writeChildren(self)
-			.write("</div></div></div></div><div class=\"").write(zcls).write("-bl\"><div class=\"").write(zcls).write("-br\">")
-			.write("<div class=\"").write(zcls).write("-bm\"></div></div></div></div></div>");
+			.write("</div></div></div></div>")
+			.write("<div class=\"").write(zcls).write("-bl\"><div class=\"").write(zcls).write("-br\">")
+			.write("<div class=\"").write(zcls).write("-bm\"></div></div></div></div>");
 	}
 }
