@@ -13,7 +13,7 @@ script.aculo.us dragdrop.js v1.7.0,
 Copyright (c) 2005, 2006 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.us)
 	(c) 2005, 2006 Sammi Williams (http://www.oriontransfer.co.nz, sammi@oriontransfer.co.nz)
 
-This program is distributed under GPL Version 2.0 in the hope that
+This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 zk.Draggable = zk.$extends(zk.Object, {

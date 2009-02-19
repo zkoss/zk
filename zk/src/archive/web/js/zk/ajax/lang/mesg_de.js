@@ -9,7 +9,7 @@
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
-  This program is distributed under GPL Version 2.0 in the hope that
+  This program is distributed under GPL Version 3.0 in the hope that
   it will be useful, but WITHOUT ANY WARRANTY.
 */
 mesg = {
@@ -24,12 +24,12 @@ FAILED_TO_PROCESS: "Verarbeitung fehlgeschlagen ",
 GOTO_ERROR_FIELD: "Gehe zum falschen Feld",
 PLEASE_WAIT: "Verarbeitung...",
 
-FILE_SIZE: "File size: ",
+FILE_SIZE: "Dateigröße: ",
 KBYTES: "KB",
 
-FAILED_TO_LOAD: "Failed to load ",
-FAILED_TO_LOAD_DETAIL: "It may be caused by bad traffic. You could reload this page and try again.",
-CAUSE: "Cause: ",
+FAILED_TO_LOAD: "Fehler beim Laden ",
+FAILED_TO_LOAD_DETAIL: "Ursache: Netzwerkprobleme. Seite neu laden und erneut versuchen.",
+CAUSE: "Ursache: ",
 
-LOADING: "Verarbeitung..."
+LOADING: "Lade..."
 };
