@@ -78,7 +78,7 @@ public class Labels {
 	 * @param defValue the value being returned if the key is not found
 	 * @since 3.6.0
 	 */
-	public static final String getLabel(String key, Object[] args, String defValue) {
+	public static final String getLabel(String key, String defValue, Object[] args) {
 		final String s = getLabel(key, defValue);
 		return s != null ? MessageFormats.format(s, args, null): null;
 	}
