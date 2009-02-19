@@ -386,7 +386,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 				renderer.doFinally();
 			}
 		}
-		if (getPagingPosition().equals("both")) invalidate(); // just in case.
+		if (getModel() != null || getPagingPosition().equals("both")) invalidate(); // just in case.
 		else if (_rows != null) _rows.invalidate();
 	}
 			};

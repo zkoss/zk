@@ -58,6 +58,7 @@ ZK 3.6.0
   2587158: <?page> failed to recognize single quote
   2603453: Wrong dependency in zcommon-3.5.2.pom
   2614854: Strange Menu Icon when font set to Large
+  2585234: Add 'mold=paging" to Grid Grouping causes display problems
 
 * Upgrade Notes
   + The default setting disables the feature of ignoring the consecutive

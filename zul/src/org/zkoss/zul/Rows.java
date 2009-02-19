@@ -113,7 +113,9 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 			if (grid != null && grid.inPagingMold()) {
 				final Paginal pgi = grid.getPaginal();
 				pgi.setTotalSize(_visibleItemCount);
-				invalidate(); // the set of visible items might change
+				if (grid.getModel() != null)
+					grid.invalidate();
+				else invalidate(); // the set of visible items might change
 			}
 		}
 	}
