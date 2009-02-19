@@ -32,6 +32,7 @@ import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.http.Encodes;
 
 import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.xel.Evaluator;
@@ -55,7 +56,7 @@ import org.zkoss.zk.au.AuResponse;
  * @author tomyeh
  * @see Page
  */
-public interface Execution  {
+public interface Execution extends Scope {
 	/** Returns the desktop for this execution.
 	 * Each execution is against exactly one desktop.
 	 */

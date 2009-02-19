@@ -30,6 +30,7 @@ import org.zkoss.xel.Function;
 import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.InterpreterNotFoundException;
+import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
@@ -90,7 +91,7 @@ import org.zkoss.zk.ui.metainfo.ComponentDefinitionMap;
  *
  * @author tomyeh
  */
-public interface Page extends IdSpace {
+public interface Page extends IdSpace, Scope {
 	/** Returns ID which is unique in the request (never null).
 	 *
 	 * <p>Note: it returns null when

@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.io.Writer;
 import java.io.IOException;
 
+import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.scripting.Namespace;
@@ -58,7 +59,7 @@ import org.zkoss.zk.scripting.Namespace;
  *
  * @author tomyeh
  */
-public interface Component extends java.io.Serializable, Cloneable {
+public interface Component extends Scope, java.io.Serializable, Cloneable {
 	/** Returns the component definition of this component (never null).
 	 */
 	public ComponentDefinition getDefinition();

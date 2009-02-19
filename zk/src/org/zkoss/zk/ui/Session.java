@@ -20,6 +20,8 @@ package org.zkoss.zk.ui;
 
 import java.util.Map;
 
+import org.zkoss.zk.ui.ext.Scope;
+
 /**
  * A user session.
  *
@@ -33,7 +35,7 @@ import java.util.Map;
  *
  * @author tomyeh
  */
-public interface Session {
+public interface Session extends Scope {
 	/** Returns the device type that this session belongs to.
 	 *
 	 * <p>A device type identifies the type of a client. For example, "ajax"

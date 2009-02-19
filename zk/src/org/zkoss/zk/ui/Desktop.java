@@ -23,6 +23,7 @@ import java.util.Collection;
 
 import org.zkoss.util.media.Media;
 
+import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.util.EventInterceptor;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.device.Device;
@@ -40,7 +41,7 @@ import org.zkoss.zk.device.Device;
  * 
  * @author tomyeh
  */
-public interface Desktop {
+public interface Desktop extends Scope {
 	/** Returns the device type that this desktop belongs to.
 	 *
 	 * <p>A device type identifies the type of a client. For example, "ajax"
