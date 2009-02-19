@@ -91,8 +91,7 @@
 	background-repeat: no-repeat;
 	cursor: pointer;
 	display: block;
-	height: 11px;
-	
+	height: 11px;	
 	position: absolute;
 	right: 3px;
 	top: 3px;
@@ -242,7 +241,7 @@
 }
 <c:if test="${c:isExplorer()}">
 .z-tab-seld .z-tab-hr {
-	position:relative;
+	position: relative;
 }
 </c:if>
 <%-- Bug-2432784
@@ -272,7 +271,8 @@
 	opacity:0.6;
 	filter:alpha(opacity=60);
 }
-.z-tab-disd .z-tab-hl,.z-tab-disd-seld .z-tab-hl {
+.z-tab-disd .z-tab-hl,
+.z-tab-disd-seld .z-tab-hl {
 	background-position:0pt -51px;
 }
 .z-tab-disd .z-tab-hr,
@@ -393,7 +393,8 @@
 	z-index:2;
 	zoom: 1;
 }
-.z-tab-ver-close:hover, .z-tab-ver-close-over {
+.z-tab-ver-close:hover,
+.z-tab-ver-close-over {
 	opacity:1 !important;
 	filter:alpha(opacity=100) !important;
 }
@@ -695,7 +696,8 @@
 	filter:alpha(opacity=80);
 }
 <%-- Disabled --%>
-.z-tab-accordion-disd a,.z-tab-accordion-disd-seld a {
+.z-tab-accordion-disd a,
+.z-tab-accordion-disd-seld a {
 	color:gray;
 	cursor:default;
 	opacity:0.6;
@@ -706,7 +708,8 @@
 	background-image: url(${c:encodeURL('~./zul/img/tab2/tab-close-off.png')});
 	opacity:0.6; filter:alpha(opacity=60);
 }
-.z-tab-accordion-disd .z-tab-accordion-text,.z-tab-accordion-disd-seld .z-tab-accordion-text {
+.z-tab-accordion-disd .z-tab-accordion-text,
+.z-tab-accordion-disd-seld .z-tab-accordion-text {
 	cursor:default;
 	color:gray;
 }
@@ -800,7 +803,8 @@
 	background-image: url(${c:encodeURL('~./zul/img/tab2/tab-close-off.png')});
 	opacity:0.6; filter:alpha(opacity=60);
 }
-.z-tab-accordion-lite-disd a,.z-tab-accordion-lite-disd-seld a {
+.z-tab-accordion-lite-disd a,
+.z-tab-accordion-lite-disd-seld a {
 	color:gray;
 	cursor:default;
 	opacity:0.6;

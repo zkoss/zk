@@ -21,17 +21,12 @@ package org.zkoss.zkmax.zul.render;
 import java.io.IOException;
 import java.io.Writer;
 
-import org.zkoss.lang.Strings;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.render.ComponentRenderer;
-import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zk.ui.render.Out;
-
+import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Tabbox;
-import org.zkoss.zul.Tabpanel;
 
 /**
  * {@link Tab}'s default mold.
@@ -61,16 +56,15 @@ public class Tab2Default implements ComponentRenderer {
 			.write(self.getInnerAttrs()).write('>');
 		if (self.isClosable()) {
 			wh.write("<a class=\"").write(zcs).write("close\" id=\"").write(uuid)
-				.write("!close\" onclick=\"return false;\"/>");
+				.write("!close\" onclick=\"return false;\" ></a>");
 		}
-		wh.write("<a class=\"").write(zcs).write("body\" id=\"").write(uuid)
-			.writeln("!a\"  onclick=\"return false;\" href=\"#\">")
-			.writeln("<em id=\"").write(uuid).write("!em\">");
+		wh.write("<div class=\"").write(zcs).write("hl\" id=\"").write(uuid).writeln("!hl\">")
+			.writeln("<div id=\"").write(uuid).write("!hr\" class=\"").write(zcs).write("hr\">");
 		if (self.isClosable()) {
-			wh.write("<span id=\"").write(uuid).write("!inner\" class=\"")
-				.write(zcs).write("inner ").write(zcs).write("close-inner\">");
+			wh.write("<div id=\"").write(uuid).write("!hm\" class=\"")
+				.write(zcs).write("hm ").write(zcs).write("hm-close\">");
 		} else {
-			wh.write("<span id=\"").write(uuid).write("!inner\" class=\"").write(zcs).write("inner\">");
+			wh.write("<div id=\"").write(uuid).write("!hm\" class=\"").write(zcs).write("hm\">");
 		}
 		wh.writeln("<span class=\"").write(zcs).write("text\">");
 		final String imgTag = self.getImgTag(), label = self.getLabel();
@@ -80,6 +74,6 @@ public class Tab2Default implements ComponentRenderer {
 			wh.write(imgTag);
 			new Out(label).render(out);
 		}
-		wh.writeln("</span></span></em></a></li>");
+		wh.writeln("</span></div></div></div></li>");
 	}
 }

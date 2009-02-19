@@ -26,7 +26,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<div class="${c:cat(zcs,'tl')}">
 		<div class="${c:cat(zcs,'tr')}" ></div>
 	</div>
-	<div class="${c:cat(zcs,'hl')}" id="${self.uuid}!hl"  onclick="return false;" href="#">
+	<div class="${c:cat(zcs,'hl')}" id="${self.uuid}!hl" >
 	<div id="${self.uuid}!hr" class="${c:cat(zcs,'hr')}" >
 	<c:choose><c:when test="${self.closable}">
 		<div id="${self.uuid}!hm" class="${c:cat(zcs,'hm')} ${c:cat(zcs,'hm-close')}">

@@ -49,21 +49,21 @@ public class Tab2DefaultV implements ComponentRenderer {
 		} else {
 			wh.writeln("<a class=\"" + zcs + "noclose\" ></a>");
 		}
-		wh.write("<a class=\"" + zcs + "body\" id=\"" + self.getUuid()
+		wh.write("<div class=\"" + zcs + "hl\" id=\"" + self.getUuid()
 				+ "!real\"");
 		wh.writeln(self.getInnerAttrs() + " >");
-		wh.writeln("<em id=\"" + self.getUuid() + "!em\" class=\"" + zcs
-				+ "em\">");
+		wh.writeln("<div id=\"" + self.getUuid() + "!hr\" class=\"" + zcs
+				+ "hr\">");
 		if (self.isClosable()) {
-			wh.writeln("<span id=\"" + self.getUuid() + "!inner\" class=\""
-					+ zcs + "inner " + zcs + "close-inner\" >");
+			wh.writeln("<div id=\"" + self.getUuid() + "!hm\" class=\""
+					+ zcs + "hm " + zcs + "hm-close\" >");
 		} else {
-			wh.writeln("<span id=\"" + self.getUuid() + "!inner\" class=\""
-					+ zcs + "inner \">");
+			wh.writeln("<div id=\"" + self.getUuid() + "!hm\" class=\""
+					+ zcs + "hm \">");
 		}
 		wh.writeln("<span class=\"" + zcs + "text\">");
 		wh.write(self.getImgTag());
 		new Out(self.getLabel()).render(out);
-		wh.writeln("</span></span></em></a></li>");
+		wh.writeln("</span></div></div></div></li>");
 	}
 }
