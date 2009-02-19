@@ -9,7 +9,7 @@
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
-This program is distributed under GPL Version 2.0 in the hope that
+This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 zul.wgt.Space = zk.$extends(zul.wgt.Separator, {
