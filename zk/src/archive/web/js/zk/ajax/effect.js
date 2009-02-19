@@ -925,7 +925,7 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 		
 		if (progbox) return this;
 		
-		var msg = opts.msg || "Loading...",
+		var msg = opts.msg || (window.mesg?mesg.LOADING:"Loading..."),
 			n = document.createElement("DIV");
 		
 		document.body.appendChild(n);

@@ -30,3 +30,5 @@ mesg.KBYTES = "KB";
 mesg.FAILED_TO_LOAD = "Chyba při nahrávání ";
 mesg.FAILED_TO_LOAD_DETAIL = "Chyba může být způsobena špatným připojením, zkuste obnovit stránku";
 mesg.CAUSE = "Příčina: ";
+
+mesg.LOADING = "Pracuji...";

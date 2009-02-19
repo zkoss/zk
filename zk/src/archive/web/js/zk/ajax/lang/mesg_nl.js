@@ -30,3 +30,5 @@ mesg.KBYTES = "Kb";
 mesg.FAILED_TO_LOAD="Het laden is mislukt ";
 mesg.FAILED_TO_LOAD_DETAIL="Het kan veroorzaakt zijn door foutief verkeer. U kunt de pagina opnieuw landen en opnieuw proberen.";
 mesg.CAUSE="Oorzaak: ";
+
+mesg.LOADING = "Verwerken...";

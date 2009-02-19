@@ -21,3 +21,4 @@ mesg.KBYTES="كيلو بايت ";
 mesg.FAILED_TO_LOAD="فشل فى التحميل  ";
 mesg.FAILED_TO_LOAD_DETAIL="فشل فى تحميل تفاصيل البيانات.";
 mesg.CAUSE="السبب: ";
+mesg.LOADING = "من فضلك الأنتظار ...";
