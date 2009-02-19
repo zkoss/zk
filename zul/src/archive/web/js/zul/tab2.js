@@ -486,7 +486,7 @@ zkTabs2 = {
 					tabbox._scrolling = true;
 					zkTabs2._showbutton(tbsdiv);
 					var caveul = $e(getZKAttr(tabbox, "tabs"),"cave");
-					caveul.style.width = "5000px";
+					caveul.style.width = "5432px";
 					header.style.width = tabbox.offsetWidth - 38 + "px";
 					if (way == "sel") {
 						var d = cldwidth - header.offsetWidth - header.scrollLeft + 2;
