@@ -33,15 +33,15 @@ mesg.INTEGER_REQUIRED = "Sie müssen eine ganze Zahl angeben, und nicht ";
 mesg.EMPTY_NOT_ALLOWED = "Keine Eingabe ist nicht erlaubt.\nAuch nur Leerzeichen sind nicht möglich";
 mesg.GOTO_ERROR_FIELD = "Gehe zum falschen Feld";
 mesg.PLEASE_WAIT = "Verarbeitung...";
-mesg.VALUE_NOT_MATCHED = "You must specify one of values in the drop-down list.";
+mesg.VALUE_NOT_MATCHED = "Kein Wert in Drop Down Liste ausgewählt.";
 
-mesg.FILE_SIZE = "File size: ";
+mesg.FILE_SIZE = "Dateigröße: ";
 mesg.KBYTES = "KB";
 
 mesg.CANCEL="Abbruch";
 
-mesg.FAILED_TO_LOAD="Failed to load ";
-mesg.FAILED_TO_LOAD_DETAIL="It may be caused by bad traffic. You could reload this page and try again.";
+mesg.FAILED_TO_LOAD="Fehler beim Laden ";
+mesg.FAILED_TO_LOAD_DETAIL="Mögliche Ursache: Netzwerkprobleme. Seite neu laden und erneut versuchen.";
 mesg.CAUSE="Ursache: ";
 
-mesg.LOADING = "Verarbeitung...";
+mesg.LOADING = "Lade...";
