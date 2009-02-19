@@ -322,7 +322,7 @@ zk.makeStackup = function (cmp, id, anchor) {
 /**
  * Applies the indicator mask over the specified element. 
  * @param {Object/String} rel a related object
- * @param {String} message a message for the loading indicator. Default: 'Loading...'
+ * @param {String} message a message for the loading indicator. Default: mesg.LOADING
  * @since 3.5.0
  */
 zk.applyMask = function (rel, message) {
@@ -330,7 +330,7 @@ zk.applyMask = function (rel, message) {
 	if (!rel || !zk.isRealVisible(rel, true)) return; //nothing do to.
 	var progbox = $e(rel.id + "!progbox");
 	if (progbox) return progbox;
-	if (!message) message =  "Loading...";
+	if (!message) message = window.mesg ? mesg.LOADING: 'Loading...';
 	var n = document.createElement("DIV");
 	document.body.appendChild(n);
 	var xy = zk.revisedOffset(rel), 

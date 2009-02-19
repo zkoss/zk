@@ -34,7 +34,7 @@ mesg.INTEGER_REQUIRED = "Vous devez spécifier un entier, plutôt que";
 mesg.EMPTY_NOT_ALLOWED = "Champ vide non autorisé.\nVous devez spécifier une valeur";
 mesg.GOTO_ERROR_FIELD = "Allez sur le mauvais champ";
 mesg.PLEASE_WAIT = "Chargement...";
-mesg.VALUE_NOT_MATCHED = "You must specify one of values in the drop-down list.";
+mesg.VALUE_NOT_MATCHED = "Vous deviez spécifier l'une des valeurs dans la liste déroulante.";
 
 mesg.FILE_SIZE = "Taille du fichier: ";
 mesg.KBYTES = "KB";
@@ -44,3 +44,5 @@ mesg.CANCEL="Annuler";
 mesg.FAILED_TO_LOAD="Erreur de chargement ";
 mesg.FAILED_TO_LOAD_DETAIL="Cela peut être dû à un problème de réseau. Rechagez cette page et essayez de nouveau.";
 mesg.CAUSE="Cause: ";
+
+mesg.LOADING = "Chargement...";

@@ -43,3 +43,5 @@ mesg.CANCEL="Avbryt";
 mesg.FAILED_TO_LOAD = "Uppladdning misslyckades ";
 mesg.FAILED_TO_LOAD_DETAIL = "Kan ha orsakats av trafikstörning. Ladda om denna sida och försök igen.";
 mesg.CAUSE = "Orsak: ";
+
+mesg.LOADING = "Arbetar...";
