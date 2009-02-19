@@ -119,7 +119,7 @@
 	</tabbox>
 
 	<groupbox mold="3d" width="300px"  if="${!empty execution.parameterMap.groupbox1}">
-			<caption image="/img/inet.png" label="fruits"/>
+			<caption image=/test2/img/inet.png label="fruits"/>
 			<radiogroup onCheck="fruit.value = self.selectedItem.label">
 				<radio label="Apple"/>
 				<radio label="Orange"/>
@@ -133,7 +133,7 @@
 		collapsible="true" closable="true"  if="${!empty execution.parameterMap.panel1}">
 		<panelchildren>
 		<window border="normal" width="250px" sizable="true">
-			<caption image="/img/inet.png" label="Hi there!"/>
+			<caption image=/test2/img/inet.png label="Hi there!"/>
 			<checkbox label="Hello, World!"/>
 			<separator bar="true"/>
 			Auto-position (applicable if not embedded)
@@ -223,7 +223,7 @@ text line2...
 	</bandbox>
 	
 	<vbox  if="${!empty execution.parameterMap.images1}">
-		<image id="image" src="/img/sun.jpg" width="100px"/>
+		<image id="image" src="/test2/img/sun.jpg" width="100px"/>
 		Do you like the photo?
 		<label id="label"/>
 
@@ -247,11 +247,11 @@ text line2...
 		description="Rich Internet Application by Ajax"/>
 	</combobox>
 	<combobox>
-		<comboitem label="Simple and Rich" image="/img/coffee.gif"
+		<comboitem label="Simple and Rich" image="/test2/img/coffee.gif"
 		description="The simplest way to make Web applications rich"/>
-		<comboitem label="Cool!" image="/img/corner.gif"
+		<comboitem label="Cool!" image="/test2/img/corner.gif"
 		description="The coolest technology"/>
-		<comboitem label="Ajax and RIA" image="/img/cubfirs.gif"
+		<comboitem label="Ajax and RIA" image="/test2/img/cubfirs.gif"
 		description="Rich Internet Application by Ajax"/>
 	</combobox>
 	<separator bar="true"/>
@@ -265,11 +265,11 @@ text line2...
 	
 	
 	<menubar if="${!empty execution.parameterMap.menu1}">
-		<menu label="File" src="/img/m1.gif" >
+		<menu label="File" src="/test2/img/m1.gif" >
 			<menupopup>
-				<menuitem src="/img/m1.gif" label="New" onClick="alert(self.label)"/>
-				<menuitem src="/img/m2.gif" label="Open" onClick="alert(self.label)"/>
-				<menuitem src="/img/m3.gif" label="Save" onClick="alert(self.label)"/>
+				<menuitem src="/test2/img/m1.gif" label="New" onClick="alert(self.label)"/>
+				<menuitem src="/test2/img/m2.gif" label="Open" onClick="alert(self.label)"/>
+				<menuitem src="/test2/img/m3.gif" label="Save" onClick="alert(self.label)"/>
 				<menuseparator/>
 				<menuitem label="Exit" onClick="alert(self.label)"/>
 			</menupopup>
@@ -285,7 +285,7 @@ text line2...
 				</menu>
 			</menupopup>
 		</menu>
-		<menu src="/img/m2.gif"/>
+		<menu src="/test2/img/m2.gif"/>
 	</menubar>
 	
 	<window title="Customizable Tooltips" border="normal" width="360px" if="${!empty execution.parameterMap.popup1}">>
@@ -355,17 +355,17 @@ text line2...
 	
 	<fisheyebar style="position:absolute;margin:20px;"
 		attachEdge="top"  if="${!empty execution.parameterMap.fisheye1}">
-		<fisheye image="/img/icon_browser.png" label="Web Browser"
+		<fisheye image="/test2/img/icon_browser.png" label="Web Browser"
 			onClick="alert(self.label)" />
-		<fisheye image="/img/icon_calendar.png" label="Calendar"
+		<fisheye image="/test2/img/icon_calendar.png" label="Calendar"
 			onClick="alert(self.label)" />
-		<fisheye image="/img/icon_email.png" label="Email"
+		<fisheye image="/test2/img/icon_email.png" label="Email"
 			onClick="alert(self.label)" />
-		<fisheye image="/img/icon_texteditor.png" label="Text Editor"
+		<fisheye image="/test2/img/icon_texteditor.png" label="Text Editor"
 			onClick="alert(self.label)" />
-		<fisheye image="/img/icon_update.png" label="Software Update"
+		<fisheye image="/test2/img/icon_update.png" label="Software Update"
 			onClick="alert(self.label)" />
-		<fisheye image="/img/icon_users.png" label="Users"
+		<fisheye image="/test2/img/icon_users.png" label="Users"
 			onClick="alert(self.label)" />
 	</fisheyebar>
 			

@@ -12,7 +12,7 @@
 </vbox>
   <window title="Groupbox test" width="100%">
     <groupbox id="gb2" width="500px" open="false">
-      <caption image="/img/inet.png" label="Testing Group Box"/>
+      <caption image=/test2/img/inet.png label="Testing Group Box"/>
       <borderlayout height="500px">
         <north maxsize="300" size="50%" border="0" splittable="true" collapsible="true">
           <borderlayout>

@@ -24,7 +24,7 @@ onDoubleClick="alert(&quot;double&quot;)" onRightClick="alert(self.title)">
 	<separator bar="true"/>
 
 	<label value="Right Click Me!" onClick="alert(&quot;Left&quot;)" onRightClick="alert(self.value)"/>
-	<image src="/img/sun.jpg" onClick="alert(&quot;Left&quot;)" onRightClick="alert(&quot;Sun!&quot;)"/>
+	<image src="/test2/img/sun.jpg" onClick="alert(&quot;Left&quot;)" onRightClick="alert(&quot;Sun!&quot;)"/>
 	<div onRightClick="alert(&quot;div&quot;)">
 	Another div
 	</div>

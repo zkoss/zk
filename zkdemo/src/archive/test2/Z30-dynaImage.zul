@@ -28,7 +28,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 				import javax.servlet.ServletContext;
 				import org.zkoss.web.fn.*;
 				ServletContext context = ServletFns.getCurrentServletContext();
-				java.io.FileInputStream fis = new java.io.FileInputStream(context.getRealPath("/img") + "/sun.jpg");
+				java.io.FileInputStream fis = new java.io.FileInputStream(context.getRealPath("/test2/img") + "/sun.jpg");
 				org.zkoss.image.Image media = new org.zkoss.image.AImage("sun.jpg",fis);
 				img.setContent(media);
 			</zscript>

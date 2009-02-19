@@ -15,7 +15,7 @@ The complex listbox should show properly.
 		<label value="davidwu@hotmail.com" onClick="callMe();"/> 
 		</listcell>
 		<listcell > 
-		<image src="/img/coffee.gif" onClick="callMe();" /> 
+		<image src="/test2/img/coffee.gif" onClick="callMe();" /> 
 		</listcell> 
 	</listitem> 
 	<listitem> 
@@ -25,7 +25,7 @@ The complex listbox should show properly.
 		<label value="davidwu@hotmail.com" onClick="callMe();"/> 
 		</listcell>
 		<listcell> 
-		<image src="/img/coffee.gif" onClick="callMe();" /> 
+		<image src="/test2/img/coffee.gif" onClick="callMe();" /> 
 		</listcell> 
 	</listitem>
 </listbox> 
@@ -70,10 +70,10 @@ The complex listbox should show properly.
 
 	<listbox id="box" width="700px" multiple="true" rows="4" checkmark="true">
 		<listhead>
-			<listheader label="Name" image="/img/coffee.gif"/>
-			<listheader label="Gender" image="/img/folder.gif"/>
-			<listheader label="AgeOf"  image="/img/cubfirs.gif"/>
-			<listheader label="Description" image="/img/home.gif"/>
+			<listheader label="Name" image="/test2/img/coffee.gif"/>
+			<listheader label="Gender" image="/test2/img/folder.gif"/>
+			<listheader label="AgeOf"  image="/test2/img/cubfirs.gif"/>
+			<listheader label="Description" image="/test2/img/home.gif"/>
 		</listhead>
 		<listitem>
 			<listcell label="Mary"/>
@@ -112,7 +112,7 @@ The complex listbox should show properly.
 			<listcell label="Senior Engineer."/>
 		</listitem>
 		<listfoot >
-			<listfooter><image width="80px" height="100px" src="/img/sun.jpg"/></listfooter>
+			<listfooter><image width="80px" height="100px" src="/test2/img/sun.jpg"/></listfooter>
 			<listfooter>
 					<listbox rows="3" mold="select"  multiple="true">
 						<listitem label="option1"/>

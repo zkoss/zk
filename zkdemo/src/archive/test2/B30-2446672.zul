@@ -15,6 +15,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 Please click on the image, you should not see any dialog.
-<toolbarbutton disabled="true" image="/img/defender.gif"
+<toolbarbutton disabled="true" image="/test2/img/defender.gif"
 				onClick='alert("Defender")' />
 </zk>

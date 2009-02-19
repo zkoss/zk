@@ -20,11 +20,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native">
 	<n:h4>Select one comboitem from combobox, and then click the "alert" button if the result is not null!</n:h4>
 	<combobox id="cb">
-		<comboitem label="Simple and Rich" value="1" image="/img/coffee.gif"
+		<comboitem label="Simple and Rich" value="1" image="/test2/img/coffee.gif"
 		description="The simplest way to make Web applications rich"/>
-		<comboitem label="Cool!" value="2" image="/img/corner.gif"
+		<comboitem label="Cool!" value="2" image="/test2/img/corner.gif"
 		description="The coolest technology"/>
-		<comboitem label="Ajax and RIA" value="3" image="/img/cubfirs.gif"
+		<comboitem label="Ajax and RIA" value="3" image="/test2/img/cubfirs.gif"
 		description="Rich Internet Application by Ajax"/>
 	</combobox>
 	<button label="alert" onClick='alert(cb.getSelectedItem().getValue() + "");'/>

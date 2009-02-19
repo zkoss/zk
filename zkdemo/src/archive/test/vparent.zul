@@ -2,7 +2,7 @@
 	<west maxsize="600" size="40%" border="0" splittable="true"
 		collapsible="true">
 		<window id="win" border="normal" width="350px" sizable="true">
-			<caption image="/img/inet.png" label="Hi there!" />
+			<caption image="/test2/img/inet.png" label="Hi there!" />
 			<div style="border:1px solid black;">
 				<window top="50px" left="250px" id="inner" title="Inner"
 					border="normal" width="300px" sizable="true">

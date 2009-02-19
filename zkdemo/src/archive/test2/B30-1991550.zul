@@ -18,9 +18,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <groupbox id="gb" mold="3d" width="300px">
-<caption image="/img/inet.png" label="fruits">
+<caption image="/test2/img/inet.png" label="fruits">
 <toolbarbutton label="action"
-image="/img/inet.png">
+image="/test2/img/inet.png">
 </toolbarbutton>
 </caption>
 When you click the right image, this groupbox cannot be collapsed, but the left image can.

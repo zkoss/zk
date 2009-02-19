@@ -23,9 +23,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	If changed, it is correct.
 	<button label="c" >
 		<attribute name="onClick">
-	image.setContent(new org.zkoss.image.AImage("t", desktop.webApp.getResourceAsStream("/img/inet.png")));
+	image.setContent(new org.zkoss.image.AImage("t", desktop.webApp.getResourceAsStream(/test2/img/inet.png)));
 		</attribute>
 	</button>
-		<image id="image" src="/img/sun.jpg"/>
+		<image id="image" src="/test2/img/sun.jpg"/>
 	</vbox>
 </window>

@@ -21,11 +21,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<vbox height="100%">
 	Column 1-1: a lot of text here, try to split over multiple lines.
 	Then we can see the effect.
-		<hbox style="border:1px solid #336" widths="30px, 50px">
-			30px
-			<splitter/>
-			50px
-		</hbox>
 		<splitter collapse="after"/>
 		<hbox width="100%">
 	Column 1-2-1: more an more from one to another.
@@ -36,11 +31,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</vbox>
 	<splitter collapse="before"/>
 	<div>
-	Column 2: this is column 2.
+	Column 2: it has a textbox: <textbox/>
 	And more text to it multiple lines.
 	</div>
 	<div>
-	Column 3: it has a button <button label="nothing"/>
+	Column 3: also with a textbox: <textbox/>
 	</div>
 </hbox>
 

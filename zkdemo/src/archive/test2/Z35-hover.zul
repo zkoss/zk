@@ -19,20 +19,20 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 <window title="Button Hover Test" border="normal">
 	<vbox>
-<button id="b" label="Left" image="/img/m1.gif" hoverImage="/img/m2.gif" width="125px"/>
-<button label="Right" image="/img/m2.gif" hoverImage="/img/m3.gif" dir="reverse" width="125px"/>
-<button label="Above" image="/img/folder.gif" orient="vertical" width="125px"/>
-<button label="Below" image="/img/folder.gif" orient="vertical" dir="reverse" width="125px"/>
-<image src="/img/m1.gif" hover="/img/m2.gif"/>
+<button id="b" label="Left" image="/test2/img/m1.gif" hoverImage="/test2/img/m2.gif" width="125px"/>
+<button label="Right" image="/test2/img/m2.gif" hoverImage="/test2/img/m3.gif" dir="reverse" width="125px"/>
+<button label="Above" image="/test2/img/folder.gif" orient="vertical" width="125px"/>
+<button label="Below" image="/test2/img/folder.gif" orient="vertical" dir="reverse" width="125px"/>
+<image src="/test2/img/m1.gif" hover="/test2/img/m2.gif"/>
 	</vbox>
 	<separator/>
 	<zscript>
 	import org.zkoss.image.*;
 	</zscript>
 	<button label="change 1st button's face"
-		onClick='b.setImageContent(new AImage("t", desktop.webApp.getResourceAsStream("/img/folder.gif")))'/>
+		onClick='b.setImageContent(new AImage("t", desktop.webApp.getResourceAsStream("/test2/img/folder.gif")))'/>
 	<button label="change 1st button's hover"
-		onClick='b.setHoverImageContent(new AImage("t", desktop.webApp.getResourceAsStream("/img/m3.gif")))'/>
+		onClick='b.setHoverImageContent(new AImage("t", desktop.webApp.getResourceAsStream("/test2/img/m3.gif")))'/>
 	<button label="reset 1st button" 
-		onClick='b.setImage("/img/m1.gif"); b.setHoverImage("/img/m2.gif");'/>
+		onClick='b.setImage("/test2/img/m1.gif"); b.setHoverImage("/test2/img/m2.gif");'/>
 </window>

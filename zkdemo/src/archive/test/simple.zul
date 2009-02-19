@@ -24,5 +24,5 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<datebox id="db"/> <label id="info" onClick="self.value = &quot;[clear]&quot;"/>
 	<button onClick="info.value = db.value.toString()" label="to string"/>
 	<button onClick="alert(&quot;Hello&quot;)" label="Hi!"/>
-	<toolbarbutton image="/img/inet.png" onClick="alert(&quot;hi&quot;)"/>
+	<toolbarbutton image="/test2/img/inet.png" onClick="alert(&quot;hi&quot;)"/>
 </zk>

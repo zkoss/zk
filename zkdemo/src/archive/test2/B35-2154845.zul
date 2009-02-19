@@ -36,7 +36,7 @@
 			Tabbox loTabbox = (Tabbox) wnd1.getFellow("tbx");
 			
 			Tab loTab2 = (Tab) wnd1.getFellow("tab1");
-			loTab2.setImage("/img/corner.gif");
+			loTab2.setImage("/test2/img/corner.gif");
 			Tab loTab1 = (Tab) wnd1.getFellow("tab0");
 			loTabbox.setSelectedTab(loTab2);
 			loTabbox.setSelectedPanel(loTab2.getLinkedPanel());

@@ -56,7 +56,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			<listcell label="[Size]"/>                                                                                             
 		</listgroup>                                                                                                             
 		<listitem forEach="&#36;{datas}" forEachBegin="0" forEachEnd="4" sclass="cells">                                                            
-			<listcell label="&#36;{each[0]}" image="/img/mail_read.png" style="padding-left: 10px" />                                             
+			<listcell label="&#36;{each[0]}" image="/test2/img/mail_read.png" style="padding-left: 10px" />                                             
 			<listcell label="&#36;{each[1]}" />                                                                                        
 			<listcell label="&#36;{each[2]}" />                                                                                        
 			<listcell label="&#36;{each[3]}" />                                                                                        
@@ -69,7 +69,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		</listgroupfoot>                                                                                                       
 		<listgroup label="Date:Yesterday" />				                                                                             
 		<listitem forEach="&#36;{datas}" forEachBegin="5" forEachEnd="7" sclass="cells">                                                          
-			<listcell label="&#36;{each[0]}" image="/img/mail_read.png" style="padding-left: 10px" />                                             
+			<listcell label="&#36;{each[0]}" image="/test2/img/mail_read.png" style="padding-left: 10px" />                                             
 			<listcell label="&#36;{each[1]}" />                                                                                        
 			<listcell label="&#36;{each[2]}" />                                                                                        
 			<listcell label="&#36;{each[3]}" />                                                                                        
@@ -82,7 +82,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		</listgroupfoot>				                                                                                               
 		<listgroup label="Date:Sunday" />				                                                                                 
 		<listitem forEach="&#36;{datas}" forEachBegin="8" forEachEnd="10" sclass="cells">                                                          
-			<listcell label="&#36;{each[0]}" image="/img/mail_read.png" style="padding-left: 10px" />                                             
+			<listcell label="&#36;{each[0]}" image="/test2/img/mail_read.png" style="padding-left: 10px" />                                             
 			<listcell label="&#36;{each[1]}" />                                                                                        
 			<listcell label="&#36;{each[2]}" />                                                                                        
 			<listcell label="&#36;{each[3]}" />                                                                                        

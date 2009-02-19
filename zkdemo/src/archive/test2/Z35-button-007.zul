@@ -13,7 +13,7 @@ NOTE: FF2 has a known issue with scrollbar in listbox, it doesn't update screen 
       <rows>
         <row>
           <label value="File:"/>
-          <button label="ClickMe" onClick='self.setLabel("Clicked OK.")' image="/img/coffee.gif"/>
+          <button label="ClickMe" onClick='self.setLabel("Clicked OK.")' image="/test2/img/coffee.gif"/>
         </row>
         <row>
           <label value="Type:"/>
@@ -26,11 +26,11 @@ NOTE: FF2 has a known issue with scrollbar in listbox, it doesn't update screen 
               </listitem>
               <listitem label="And A button here">
                 <listcell>
-                  <button label="ClickMe" onClick='self.setLabel("Clicked OK."); self.setImage("/img/coffee.gif")'/>
+                  <button label="ClickMe" onClick='self.setLabel("Clicked OK."); self.setImage("/test2/img/coffee.gif")'/>
                 </listcell>
               </listitem>
             </listbox>
-            <button label="ClickMe" onClick='self.setLabel("Clicked OK."); self.setImage("/img/coffee.gif")'/>
+            <button label="ClickMe" onClick='self.setLabel("Clicked OK."); self.setImage("/test2/img/coffee.gif")'/>
           </hbox>
         </row>
         <row>
@@ -47,7 +47,7 @@ NOTE: FF2 has a known issue with scrollbar in listbox, it doesn't update screen 
       <rows>
         <row>
           <label value="File:"/>
-          <button label="ClickMe" onClick='self.setLabel("Clicked OK.")' image="/img/coffee.gif"/>
+          <button label="ClickMe" onClick='self.setLabel("Clicked OK.")' image="/test2/img/coffee.gif"/>
         </row>
         <row>
           <label value="Type:"/>
@@ -60,11 +60,11 @@ NOTE: FF2 has a known issue with scrollbar in listbox, it doesn't update screen 
               </listitem>
               <listitem label="All Files,(*.*)">
                 <listcell>
-                  <button label="ClickMe" onClick='self.setLabel("Clicked OK."); self.setImage("/img/coffee.gif")'/>
+                  <button label="ClickMe" onClick='self.setLabel("Clicked OK."); self.setImage("/test2/img/coffee.gif")'/>
                 </listcell>
               </listitem>
             </listbox>
-            <button label="ClickMe" onClick='self.setLabel("Clicked OK."); self.setImage("/img/coffee.gif")'/>
+            <button label="ClickMe" onClick='self.setLabel("Clicked OK."); self.setImage("/test2/img/coffee.gif")'/>
           </hbox>
         </row>
         <row>

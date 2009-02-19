@@ -12,7 +12,7 @@
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
@@ -67,7 +67,6 @@ public class DemoWebAppInit implements WebAppInit {
 		try {
 			BufferedReader bufReader = new BufferedReader(
 					new InputStreamReader(context.getResourceAsStream(PATH + CONFIG)));
-
 			String prop = null;
 			while ((prop = bufReader.readLine()) != null) {
 				int begin = prop.indexOf("=");

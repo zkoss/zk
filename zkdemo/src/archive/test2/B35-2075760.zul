@@ -134,7 +134,7 @@
 				<panelchildren>
 					<label>1.scroll to max.</label>
 					<slider id="slider1" curpos="50" onScroll="zoom(slider1, img1)" />
-					<image id="img1" src="/img/sun.jpg" width="${slider1.curpos*3+10}px" />
+					<image id="img1" src="/test2/img/sun.jpg" width="${slider1.curpos*3+10}px" />
 					<zscript><![CDATA[
 					//@DECLARARTION        	                  
 					void zoom(Slider slider, Image img) {
