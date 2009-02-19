@@ -54,7 +54,7 @@ public class Menu2Default implements ComponentRenderer {
 					wh.write("-text");
 				wh.write("-img");
 			}
-			wh.write("\" style=\"width: auto;\"><tbody><tr><td class=\"").write(zcls).write("-inner-l\"><span/></td>");
+			wh.write("\" style=\"width: auto;\"><tbody><tr><td class=\"").write(zcls).write("-inner-l\"><span class=\"").write(zcls).write("-space\"/></td>");
 			wh.write("<td class=\"").write(zcls).write("-inner-m\"><div><button id=\"")
 				.write(uuid).write("!b\" type=\"button\" class=\"").write(zcls).write("-btn\"");
 
@@ -64,8 +64,8 @@ public class Menu2Default implements ComponentRenderer {
 			wh.write('>');
 
 			new Out(self.getLabel()).render(out);
-			wh.write("&nbsp</button>").write(self.getMenupopup()).write("</div></td><td class=\"")
-				.write(zcls).writeln("-inner-r\"><span/></td></tr></tbody></table></td>");
+			wh.write("&nbsp;</button>").write(self.getMenupopup()).write("</div></td><td class=\"")
+				.write(zcls).writeln("-inner-r\"><span class=\"").write(zcls).write("-space\"/></td></tr></tbody></table></td>");
 		} else {
 			wh.write("<li id=\"").write(uuid).write("\" z.type=\"zul.menu2.Menu2\"");
 			wh.write(self.getOuterAttrs()).write(self.getInnerAttrs())

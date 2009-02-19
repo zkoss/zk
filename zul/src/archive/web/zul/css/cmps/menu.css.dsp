@@ -55,8 +55,8 @@
 	width:3px;
 }
 
-.z-menu-body .z-menu-inner-l span,.z-menubar-hor .z-menu-body .z-menu-inner-r span,
-.z-menu-item-body .z-menu-item-inner-l span,.z-menubar-hor .z-menu-item-body .z-menu-item-inner-r span{
+.z-menu-inner-l .z-menu-space,.z-menu-inner-r .z-menu-space,
+.z-menu-item-inner-l .z-menu-item-space,.z-menu-item-inner-r .z-menu-item-space{
 	display:block;
 	width:3px;
 }
