@@ -286,7 +286,7 @@ zk.Selectable.prototype = {
 			break;
 		case 32: //SPACE
 			if (this._isMultiple()) this.toggleSelect(row, !this._isSelected(row));
-			else this.select(row);
+			else this.select(row, zkau.getKeys(evt));
 			break;
 		case 36: //Home
 		case 35: //End
@@ -320,7 +320,7 @@ zk.Selectable.prototype = {
 		}
 		if (lastrow) {
 			if (ctrl) this.focus(lastrow);
-			else this.select(lastrow);
+			else this.select(lastrow, zkau.getKeys(evt));
 			this._syncFocus(lastrow);			
 			zk.scrollIntoView(this.body, lastrow); // Bug #1823947 and #1823278
 		}
@@ -374,7 +374,7 @@ zk.Selectable.prototype = {
 			if (this._isMultiple()) {
 				this.toggleSelect(row, target.checked);
 			} else {
-				this.select(row);
+				this.select(row, zkau.getKeys(evt));
 			}
 		} else {
 		//Bug 1650540: double click as select again
@@ -393,9 +393,9 @@ zk.Selectable.prototype = {
 				else if (evt && evt.ctrlKey)
 					this.toggleSelect(row, !this._isSelected(row));
 				else // Bug: 1973470
-					this.select(row);
+					this.select(row, zkau.getKeys(evt));
 			} else
-				this.select(row);
+				this.select(row, zkau.getKeys(evt));
 
 			//since row might was selected, we always enfoce focus here
 			this._focusToAnc(row);
@@ -530,11 +530,11 @@ zk.Selectable.prototype = {
 		return row.id;
 	},
 	/** Selects an item, notify server and change focus if necessary. */
-	select: function (row) {
+	select: function (row, keys) {
 		if (this._selectOne(row, true)) {
 			//notify server
 			zkau.sendasap({uuid: this.id, cmd: "onSelect",
-				data: [this.getItemUuid(row), this.getItemUuid(row)]});
+				data: [this.getItemUuid(row), this.getItemUuid(row), keys||'']});
 		}
 	},
 	/** Toggle the selection and notifies server. */

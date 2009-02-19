@@ -51,14 +51,15 @@ public class SelectCommand extends Command {
 			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, this);
 		final Set items = Commands.convertToItems(request);
 		final String[] data = request.getData();
-		if (data == null || (data.length != 1 && data.length != 2))
+		if (data == null || (data.length != 1 && data.length != 2 && data.length != 3))
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {Objects.toString(data), this});
-		final Component ref = data.length == 2 && data[1] != null ?
+		final Component ref = data.length >= 2 && data[1] != null ?
 			request.getDesktop().getComponentByUuidIfAny(data[1]): null;
 		final Object ec = ((ComponentCtrl)comp).getExtraCtrl();
 		if (ec instanceof Selectable)
 			((Selectable)ec).selectItemsByClient(items);
-		Events.postEvent(new SelectEvent(getId(), comp, items, ref));
+		Events.postEvent(new SelectEvent(getId(), comp, items, ref,
+			data.length < 3 ? 0: Commands.parseKeys(data[2])));
 	}
 }

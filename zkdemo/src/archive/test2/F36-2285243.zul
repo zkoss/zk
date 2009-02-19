@@ -1,0 +1,21 @@
+<window title="test of getKeys">
+<listbox onSelect='i.value = "keys: "+event.getKeys()'>
+	<listhead>
+		<listheader label="Population"/>
+		<listheader label="%"/>
+	</listhead>
+	<listitem value="A">
+		<listcell><textbox value="A. Graduate"/></listcell>
+		<listcell label="20%"/>
+	</listitem>
+	<listitem value="B">
+		<listcell><checkbox label="B. College"/></listcell>
+		<listcell><button label="23%"/></listcell>
+	</listitem>
+	<listitem value="C">
+		<listcell label="C. High School"/>
+		<listcell><textbox cols="8" value="40%"/></listcell>
+	</listitem>
+</listbox>
+<label id="i"/>
+</window>

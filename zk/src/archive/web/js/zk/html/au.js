@@ -205,15 +205,20 @@ zkau.ondblclick = function (evt) {
 
 /** Returns the data for onClick. */
 zkau._getMouseData = function (evt, target) {
+	var ofs = zPos.cumulativeOffset(target);
+	var x = Event.pointerX(evt) - ofs[0];
+	var y = Event.pointerY(evt) - ofs[1];
+	return [x, y, zkau.getKeys(evt)];
+};
+/** Returns the key info ("acs").
+ * @since 3.6.0
+ */
+zkau.getKeys = function (evt) {
 	var extra = "";
 	if (evt.altKey) extra += "a";
 	if (evt.ctrlKey) extra += "c";
 	if (evt.shiftKey) extra += "s";
-
-	var ofs = zPos.cumulativeOffset(target);
-	var x = Event.pointerX(evt) - ofs[0];
-	var y = Event.pointerY(evt) - ofs[1];
-	return [x, y, extra];
+	return extra;
 };
 
 /** Asks the server to update a component (for file uploading). */

@@ -60,7 +60,7 @@ zkCmbox.onblur = function (evt) {
 
 			if ((jfnd >= 0 || !strict) && getZKAttr(cmp, "selid") != item.id) {
 				setZKAttr(cmp, "selid", item.id);
-				zkau.sendasap({uuid: uuid, cmd: "onSelect", data: [item.id, item.id]});
+				zkau.sendasap({uuid: uuid, cmd: "onSelect", data: [item.id, item.id, zkau.getKeys(evt)]});
 			}
 		}	
 	}
