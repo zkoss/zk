@@ -636,10 +636,26 @@ zkTxbox.onkey = function (evt) {
 	}
 };
 zkTxbox.onkeydown = function (evt) {
+	if (!evt) evt = window.event;
 	var inp = Event.element(evt),
 		uuid = $uuid(inp),
 		cmp = $e(uuid),
 		keyCode = Event.keyCode(evt);
+
+	if (keyCode == 9 && !evt.altKey && !evt.ctrlKey && !evt.shiftKey
+	&& getZKAttr(cmp, "tabbable")) {
+		var sr = zk.getSelectionRange(inp),
+			val = inp.value;
+		val = val.substring(0, sr[0]) + '\t' + val.substring(sr[1]);
+		inp.value = val;
+
+		val = sr[0] + 1;
+		zk.setSelectionRange(inp, val, val);
+
+		Event.stop(evt);
+		return;
+	}
+
 	if ((keyCode == 13 && zkau.asap(cmp, "onOK"))
 	|| (keyCode == 27 && zkau.asap(cmp, "onCancel"))) {
 		zkTxbox._scanStop(inp);
@@ -695,26 +711,7 @@ zkTxbox.setAttr = function (cmp, nm, val) {
 		}
 
 		var ary = val.split(",");
-		var start = $int(ary[0]), end = $int(ary[1]),
-			len = inp.value.length;
-		if (start < 0) start = 0;
-		if (start > len) start = len;
-		if (end < 0) end = 0;
-		if (end > len) end = len;
-		
-		if (inp.setSelectionRange) {
-			inp.setSelectionRange(start, end);
-			inp.focus();
-		} else if (inp.createTextRange) {
-			var range = inp.createTextRange();
-			if(start != end){
-				range.moveEnd('character', end - range.text.length);
-				range.moveStart('character', start);
-			}else{
-				range.move('character', start);
-			}
-			range.select();
-		}
+		zk.setSelectionRange(inp, $int(ary[0]), end = $int(ary[1]));
 		return true;
 	}
 	return false;

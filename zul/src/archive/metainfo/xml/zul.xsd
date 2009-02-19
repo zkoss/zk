@@ -1897,6 +1897,7 @@
 		<xs:attribute name="type" type="textboxTypeAttrType" use="optional" />
 		<xs:attribute name="rows" type="intType" use="optional" />
 		<xs:attribute name="multiline" type="booleanType" use="optional" />
+		<xs:attribute name="tabbable" type="booleanType" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
     <!-- timer -->

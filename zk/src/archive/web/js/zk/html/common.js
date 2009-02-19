@@ -1020,7 +1020,28 @@ zk.getSelectionRange = function(inp) {
 	} catch (e) {
 		return [0, 0];
 	}
-}
+};
+zk.setSelectionRange = function (inp, start, end) {
+	var len = inp.value.length;
+	if (start < 0) start = 0;
+	if (start > len) start = len;
+	if (end < 0) end = 0;
+	if (end > len) end = len;
+	
+	if (inp.setSelectionRange) {
+		inp.setSelectionRange(start, end);
+		inp.focus();
+	} else if (inp.createTextRange) {
+		var range = inp.createTextRange();
+		if(start != end){
+			range.moveEnd('character', end - range.text.length);
+			range.moveStart('character', start);
+		}else{
+			range.move('character', start);
+		}
+		range.select();
+	}
+};
 
 /** Inserts a node after another.
  */

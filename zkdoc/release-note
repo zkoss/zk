@@ -1,6 +1,7 @@
 	--------
 ZK 3.6.0
 * Features
+  2276253: Allow Tab key in textbox
   2433264: Able to access the URI of the error page
   2437121: Make DHtmlLayoutServlet as optional
   2448278: Chart could provide default model

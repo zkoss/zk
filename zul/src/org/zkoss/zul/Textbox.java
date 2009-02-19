@@ -35,6 +35,7 @@ public class Textbox extends InputElement implements org.zkoss.zul.api.Textbox{
 	private String _type = "text";
 	private int _rows = 1;
 	private boolean _multiline;
+	private boolean _tabbable;
 
 	public Textbox() {
 		setValueDirectly("");
@@ -132,6 +133,28 @@ public class Textbox extends InputElement implements org.zkoss.zul.api.Textbox{
 		}
 	}
 
+	/** Returns whether TAB is allowed.
+	 * If true, the user can enter TAB in the textbox, rather than change
+	 * focus.
+	 * <p>Default: false.
+	 * @since 3.6.0
+	 */
+	public boolean isTabbable() {
+		return _tabbable;
+	}
+	/** Sets whether TAB is allowed.
+	 * If true, the user can enter TAB in the textbox, rather than change
+	 * focus.
+	 * <p>Default: false.
+	 * @since 3.6.0
+	 */
+	public void setTabbable(boolean tabbable) {
+		if (_tabbable != tabbable) {
+			_tabbable = tabbable;
+			smartUpdate("z.tabbable", tabbable);
+		}
+	}
+
 	//-- super --//
 	public String getZclass() {
 		return _zclass == null ? "z-textbox" : _zclass;
@@ -146,6 +169,10 @@ public class Textbox extends InputElement implements org.zkoss.zul.api.Textbox{
 	}
 	public String getOuterAttrs() {
 		final String attrs = super.getOuterAttrs();
-		return _multiline ? attrs + " z.skipOK=\"true\"": attrs;
+		if (!_multiline && !_tabbable) return attrs;
+		final StringBuffer sb = new StringBuffer(128).append(attrs);
+		if (_multiline) sb.append(" z.skipOK=\"true\"");
+		if (_tabbable) sb.append(" z.tabbable=\"true\"");
+		return sb.toString();
 	}
 }
