@@ -1207,7 +1207,7 @@ zDom = { //static methods
 	/** Returns the selection range of the specified input control.
 	 * Note: if the function occurs some error, it always return [0, 0];
 	 */
-	selectionRange: function(inp) {
+	getSelectionRange: function(inp) {
 		try {
 			if (document.selection != null && inp.selectionStart == null) { //IE
 				var range = document.selection.createRange(); 
@@ -1227,6 +1227,27 @@ zDom = { //static methods
 			}
 		} catch (e) {
 			return [0, 0];
+		}
+	},
+	setSelectionRange: function (inp, start, end) {
+		var len = inp.value.length;
+		if (start < 0) start = 0;
+		if (start > len) start = len;
+		if (end < 0) end = 0;
+		if (end > len) end = len;
+	
+		if (inp.setSelectionRange) {
+			inp.setSelectionRange(start, end);
+			inp.focus();
+		} else if (inp.createTextRange) {
+			var range = inp.createTextRange();
+			if(start != end){
+				range.moveEnd('character', end - range.text.length);
+				range.moveStart('character', start);
+			}else{
+				range.move('character', start);
+			}
+			range.select();
 		}
 	},
 

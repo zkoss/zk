@@ -25,6 +25,12 @@ zul.inp.Textbox = zk.$extends(zul.inp.InputWidget, {
 			this.rerender();
 		}
 	},
+	isTabbable: function () {
+		return this._tabbable;
+	},
+	setTabbable: function (tabbable) {
+		this._tabbable = tabbable;
+	},
 	getRows: function () {
 		return this._rows;
 	},

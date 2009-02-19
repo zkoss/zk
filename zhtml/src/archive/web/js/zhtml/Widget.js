@@ -54,7 +54,7 @@ zhtml.Widget = zk.$extends(zk.Native, {
 	},
 	_onChangeData: function (val, selbak) {
 		return {value: val,
-			start: zDom.selectionRange(this.getNode())[0],
+			start: zDom.getSelectionRange(this.getNode())[0],
 			marshal: this._onChangeMarshal}
 	},
 	_onChangeMarshal: function () {
