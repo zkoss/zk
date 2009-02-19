@@ -1,115 +1,201 @@
 <%@ page contentType="text/css;charset=UTF-8" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
-
-.z-panel-move-ghost {
-	overflow: hidden; position: absolute; filter: alpha(opacity=65) !important; <%-- IE --%>
-	background: #CBDDF3; opacity: .65 !important; cursor: move !important;
-}
-.z-panel-move-ghost ul {
-	margin: 0; padding: 0; overflow: hidden; font-size: 0; line-height: 0;
-	border: 1px solid #B1CBD5; display: block; background: #cbddf3;
-}
-.z-panel-move-ghost ul {
-	border-top-width: 0;
-}
-.z-panel-move-block {
-	border: 2px dashed #B1CBD5;
-}
-
 .z-panel {
-	border-style: solid; border-color: #B1CBD5; border-width: 0; overflow: hidden;
-}
-.z-panel-header {
-	overflow: hidden; zoom: 1; color: #15428b; font: normal ${fontSizeM} ${fontFamilyT};
-	padding: 5px 3px 4px 5px; border: 1px solid #B1CBD5; line-height: 15px; 
-	background:transparent url(${c:encodeURL('~./zul/img/panel/panel-tb.png')}) repeat-x 0 -1px;
-	font-weight:bold;
-}
-.z-panel-children {
-	border: 1px solid #B1CBD5; border-top: 0 none; overflow: hidden; background: white;
-	position: relative;
-}
-.z-panel-bbar .z-toolbar, .z-panel-tbar .z-toolbar {
-	border: 1px solid #B1CBD5; border-top: 0 none; overflow: hidden; padding: 2px;
-}
-.z-panel-tbar .z-toolbar {
-	border-top: 1px solid #B1CBD5; border-bottom: 0 none;
-}
-.z-panel-children-noheader, .z-panel-cm .z-panel-children {
-	border-top: 1px solid #B1CBD5;
-}
-.z-panel-header {
-	overflow: hidden; zoom: 1;
-}
-.z-panel-tl .z-panel-header {
-	color: #15428b; font: normal ${fontSizeM} ${fontFamilyT}; padding: 5px 0 4px 0;
-	border: 0 none; background: transparent;font-weight:bold;
-}
-.z-panel-tm {
-	background: transparent url(${c:encodeURL('~./zul/img/panel/panel-tb.png')}) repeat-x 0 0;
+	background: white;
 	overflow: hidden;
 }
-.z-panel-tl {
-	background: transparent url(${c:encodeURL('~./zul/img/panel/panel-corners.png')}) no-repeat 0 0;
-	padding-left: 6px; zoom: 1; border-bottom: 1px solid #B1CBD5;
+.z-panel-children {
+ 	background: white;
+	border: 1px solid #0B5CA0;
+	border-top: 0;
+	overflow: hidden;
+	position: relative;
 }
+.z-panel-bbar .z-toolbar {
+	border: 1px solid #0B5CA0;
+	padding: 2px;
+	border-top: 0 none;
+	overflow: hidden;
+}
+.z-panel-tbar .z-toolbar {
+	border: 1px solid #0B5CA0;
+	padding: 2px;
+	border-top: 0 none;
+	overflow: hidden;
+}
+.z-panel-tbar.z-panel-noheader .z-toolbar {
+	border-top: 1px solid #0B5CA0;
+	border-bottom: 0;
+	overflow: hidden;
+}
+.z-panel-cm .z-panel-tbar .z-toolbar {
+	border-top: 1px solid #0B5CA0;
+	border-bottom: 0 none;
+}
+.z-panel-children-noheader,
+.z-panel-cm .z-panel-children {
+	border-top: 1px solid #0B5CA0;
+}
+<%-- Top Left --%>
+.z-panel-tl {
+	background: transparent no-repeat 0 top;
+	background-image: url(${c:encodeURL('~./zul/img/panel/panel-corner.png')});
+	margin-right: 5px;
+	height: 5px;
+	font-size: 0;
+	line-height: 0;
+	zoom: 1;
+}
+<%-- Top Right --%>
 .z-panel-tr {
-	background: transparent url(${c:encodeURL('~./zul/img/panel/panel-corners.png')}) no-repeat right 0;
-	zoom: 1; padding-right: 6px;
+	background: transparent no-repeat right -10px;
+	background-image: url(${c:encodeURL('~./zul/img/panel/panel-corner.png')});
+	position: relative;
+	height: 5px;
+	margin-right: -5px;
+	font-size: 0;
+	line-height:0;
+	zoom: 1;
 }
 .z-panel-noheader {
 	border-bottom: 0px;
 }
-.z-panel-noheader .z-panel-tm {
-	height: 6px; font-size: 0; line-height: 0;
-}
-.z-panel-bm {
-	background: transparent url(${c:encodeURL('~./zul/img/panel/panel-tb.png')}) repeat-x 0 bottom;
+<%-- Header --%>
+.z-panel-header {
+	overflow: hidden;
+	color: #15428b;
+	font: normal ${fontSizeM} ${fontFamilyT};
+	padding: 5px 3px 4px 5px;
+	border: 1px solid #0B5CA0;
+	line-height: 15px; 
+	background:transparent repeat-x 0 -1px;
+	background-image: url(${c:encodeURL('~./zul/img/panel/panel-hm.png')});
+	font-weight:bold;
 	zoom: 1;
 }
-.z-panel-bl {
-	background: transparent url(${c:encodeURL('~./zul/img/panel/panel-corners.png')}) no-repeat 0 bottom;
-	padding-left: 6px; zoom: 1;
+.z-panel-body,
+.z-panel-children,
+.z-panel-header {
+	overflow: hidden;
+	zoom: 1;
 }
-.z-panel-br {
-	background: transparent url(${c:encodeURL('~./zul/img/panel/panel-corners.png')}) no-repeat right bottom;
-	padding-right: 6px; zoom: 1;
+.z-panel-hm .z-panel-header {
+	color: #15428b;
+	padding: 0;
+	padding-bottom: 4px;
+	background: transparent;
+	border: 0 none;
+	font: normal ${fontSizeM} ${fontFamilyT};
+	font-weight:bold;
 }
+<%-- Header Left --%>
+.z-panel-hl {
+	background: transparent no-repeat 0 0;
+	background-image: url(${c:encodeURL('~./zul/img/panel/panel-hl.png')});
+	padding-left: 6px;
+	border-bottom: 1px solid #0B5CA0;
+	zoom: 1;
+}
+<%-- Header Right --%>
+.z-panel-hr {
+	background: transparent no-repeat right 0;
+	background-image: url(${c:encodeURL('~./zul/img/panel/panel-hr.png')});
+	padding-right: 6px;
+	zoom: 1;
+}
+<%-- Header Middle --%>
+.z-panel-hm {
+	background: transparent repeat-x 0 0;
+	background-image: url(${c:encodeURL('~./zul/img/panel/panel-hm.png')});
+	overflow: hidden;
+	zoom: 1;
+}
+<%-- Center Left --%>
 .z-panel-cm {
-	border: 0 none; padding: 0; margin: 0; font: normal ${fontSizeM} ${fontFamilyT};
-	padding-top: 6px; background: #D8ECF7;
+	border: 0;
+	margin: 0;
+	background: #7EBBE1;
+	padding-top: 6px;
+}
+.z-panel-cm.z-panel-noheader {
+	padding: 0;
 }
 .z-panel-cm .z-panel-children {
-	border:1px solid #B1CBD5; background: transparent;
+	background: transparent;
+	border: 1px solid #0B5CA0;
 }
+<%-- Center Left --%>
 .z-panel-cl {
-	background: #fff url(${c:encodeURL('~./zul/img/panel/panel-lr.gif')}) repeat-y 0 0;
-	padding-left: 6px; zoom: 1;
+	background: transparent repeat-y 0 0;
+	background-image: url(${c:encodeURL('~./zul/img/panel/panel-clr.png')});
+	padding-left: 6px;
+	zoom: 1;
 }
+<%-- Center Right --%>
 .z-panel-cr {
-	background: transparent url(${c:encodeURL('~./zul/img/panel/panel-lr.gif')}) repeat-y right 0;
-	padding-right: 6px; zoom: 1;
+	background: transparent repeat-y right 0;
+	background-image: url(${c:encodeURL('~./zul/img/panel/panel-clr.png')});
+	padding-right: 6px;
+	zoom: 1;
 }
-.z-panel-bm .z-panel-fbar {
-	padding-bottom: 6px;
+
+<%-- Footer Left --%>
+.z-panel-fl {
+	background: transparent repeat-y 0 0;
+	background-image: url(${c:encodeURL('~./zul/img/panel/panel-hl.png')});
+	padding-left: 6px;
+	zoom: 1;
 }
-.z-panel-nofbar .z-panel-bm {
-	height: 6px; font-size: 0; line-height: 0;
+<%-- Footer Right --%>
+.z-panel-fr {
+	background: transparent repeat-y right 0;
+	background-image: url(${c:encodeURL('~./zul/img/panel/panel-hr.png')});
+	padding-right: 6px;
+	zoom: 1;
 }
-.z-panel-children, .z-panel-body {
-	overflow: hidden; zoom: 1;
+<%-- Footer Middle --%>
+.z-panel-fm {
+	background: transparent repeat-x 0 0;
+	background-image: url(${c:encodeURL('~./zul/img/panel/panel-hm.png')});
+	overflow: hidden;
+	zoom: 1;
+}
+<%-- Bottom Left --%>
+.z-panel-bl {
+	background: transparent no-repeat 0 -5px;
+	background-image: url(${c:encodeURL('~./zul/img/panel/panel-corner.png')});
+	height: 5px;
+	margin-right: 5px;
+	zoom: 1;
+}
+<%-- Bottom Right --%>
+.z-panel-br {
+	background: transparent no-repeat right bottom;
+	background-image: url(${c:encodeURL('~./zul/img/panel/panel-corner.png')});
+	position: relative;
+	height: 5px;
+	margin-right: -5px;
+	font-size: 0;
+	line-height:0;
+	zoom: 1;
+}
+.z-panel-nofbar {
+	display: none;
 }
 .z-panel-noborder .z-panel-children-noborder {
 	border-width: 0;
 }
 .z-panel-noborder .z-panel-header-noborder {
-	border-width: 0; border-bottom: 1px solid #B1CBD5;
+	border-width: 0;
+	border-bottom: 1px solid #0B5CA0;
 }
 .z-panel-noborder .z-panel-tbar-noborder .z-toolbar {
-	border-width: 0; border-bottom: 1px solid #B1CBD5;
+	border-width: 0;
+	border-bottom: 1px solid #0B5CA0;
 }
 .z-panel-noborder .z-panel-bbar-noborder .z-toolbar {
-	border-width: 0; border-top: 1px solid #B1CBD5;
+	border-width: 0;
+	border-top: 1px solid #0B5CA0;
 }
 <%-- Panel Tool --%>
 .z-panel-tool {

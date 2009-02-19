@@ -46,17 +46,18 @@ public class PanelDefault implements ComponentRenderer {
 		final boolean hasBorder = "normal".equals(border);
 		final boolean noTitle = Strings.isBlank(title);
 		final Caption caption = self.getCaption();
+		final boolean noHeader = noTitle && caption == null;
 		
 		wh.write("<div id=\"").write(self.getUuid()).write("\" z.type=\"zul.panel.Panel\" z.autoz=\"true\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
-		if (self.isFramable()) {
-			wh.write("<div class=\"").write(zcls).write("-tl");
-			if (caption == null && noTitle)
-				wh.write(' ').write(zcls).write("-noheader");
-			wh.write("\"><div class=\"").write(zcls).write("-tr\"><div class=\"").write(zcls)
-				.write("-tm\">");
-		}
+		
 		if (caption != null || !noTitle) {
+			if (self.isFramable()) {
+				wh.write("<div class=\"").write(zcls).write("-tl").write("\"><div class=\"")
+					.write(zcls).write("-tr\"></div></div><div class=\"").write(zcls)
+					.write("-hl").write("\"><div class=\"").write(zcls).write("-hr\"><div class=\"")
+					.write(zcls).write("-hm\">");
+			}
 			wh.write("<div id=\"").write(uuid).write("!caption\" class=\"").write(zcls)
 				.write("-header");
 			if (!self.isFramable() && !hasBorder)
@@ -81,20 +82,30 @@ public class PanelDefault implements ComponentRenderer {
 						.write(zcls).write("-tool ").write(zcls).write("-toggle\"></div>");
 				new Out(title).render(out);				
 			} else wh.write(caption);
+			
 			wh.write("</div>");
+			if (self.isFramable()) {
+				wh.write("</div></div></div>");
+			}
+		} else if (self.isFramable()) {
+			wh.write("<div class=\"").write(zcls).write("-tl").write("\"><div class=\"")
+			.write(zcls).write("-tr\"></div></div>");
 		}
-		if (self.isFramable()) wh.write("</div></div></div>");
 		
-		wh.write("<div id=\"").write(uuid).write("!bwrap\" class=\"").write(zcls).write("-body\"");
+		wh.write("<div id=\"").write(uuid).write("!body\" class=\"").write(zcls).write("-body\"");
 		if (!self.isOpen()) wh.write("style=\"display:none;\"");
 		wh.write('>');
 		
-		if (self.isFramable())
+		if (self.isFramable()) {
 			wh.write("<div class=\"").write(zcls).write("-cl\"><div class=\"").write(zcls)
-				.write("-cr\"><div class=\"").write(zcls).write("-cm\">");
+				.write("-cr\"><div class=\"").write(zcls).write("-cm");
+			if (noHeader)
+				wh.write(' ').write(zcls).write("-noheader");
+			wh.write("\">");
+		}
 		
 		if (self.getTopToolbar() != null) {
-			wh.write("<div id=\"").write(uuid).write("!tbar\" class=\"").write(zcls).write("-tbar");
+			wh.write("<div id=\"").write(uuid).write("!tb\" class=\"").write(zcls).write("-tbar");
 			if (!hasBorder)
 				wh.write(' ').write(zcls).write("-tbar-noborder");
 			if (self.isFramable() && caption == null && noTitle)
@@ -104,24 +115,27 @@ public class PanelDefault implements ComponentRenderer {
 		wh.write(self.getPanelchildren());
 
 		if (self.getBottomToolbar() != null) {
-			wh.write("<div id=\"").write(uuid).write("!bbar\" class=\"").write(zcls).write("-bbar");
+			wh.write("<div id=\"").write(uuid).write("!bb\" class=\"").write(zcls).write("-bbar");
 			if (!hasBorder)
 				wh.write(' ').write(zcls).write("-bbar-noborder");
 			if (self.isFramable() && caption == null && noTitle)
 				wh.write(' ').write(zcls).write("-noheader");
 			wh.write("\">").write(self.getBottomToolbar()).write("</div>");
 		}
+		
 		if (self.isFramable()) {
-			wh.write("</div></div></div><div class=\"").write(zcls).write("-bl");
+			wh.write("</div></div></div><div class=\"").write(zcls).write("-fl");
 			if (self.getFootToolbar() == null)
 				wh.write(' ').write(zcls).write("-nofbar");
-			wh.write("\"><div class=\"").write(zcls).write("-br\"><div class=\"").write(zcls).write("-bm\">");
+			wh.write("\"><div class=\"").write(zcls).write("-fr\"><div class=\"").write(zcls).write("-fm\">");
 		}
 		if (self.getFootToolbar() != null) {
-			wh.write("<div id=\"").write(uuid).write("!fbar\" class=\"").write(zcls)
+			wh.write("<div id=\"").write(uuid).write("!fb\" class=\"").write(zcls)
 				.write("-fbar\">").write(self.getFootToolbar()).write("</div>");
 		}
-		if (self.isFramable()) wh.write("</div></div></div>");
+		if (self.isFramable())
+			wh.write("</div></div></div><div class=\"").write(zcls).write("-bl\"><div class=\"")
+				.write(zcls).write("-br\"></div></div>");
 		wh.write("</div></div>");
 	}
 }

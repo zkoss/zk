@@ -202,21 +202,21 @@ zkPanel = {
 			if (getZKAttr(cmp, "collapsible") != "true")
 				return;
 	
-			var bwrap = $e(cmp.id + "!bwrap");
-			if (bwrap)
-				zkPanel.open(cmp, !$visible(bwrap), false, true);
+			var body = $e(cmp.id + "!body");
+			if (body)
+				zkPanel.open(cmp, !$visible(body), false, true);
 		}
 	},
 	open: function (cmp, open, silent, ignorable) {
 		var cmp = $e(cmp);
 		if (cmp) {
-			var bwrap = $e(cmp.id + "!bwrap");
-			if (bwrap && open != $visible(bwrap)
-			&& (!ignorable || !getZKAttr(bwrap, "animating"))) {
+			var body = $e(cmp.id + "!body");
+			if (body && open != $visible(body)
+			&& (!ignorable || !getZKAttr(body, "animating"))) {
 				var cls = getZKAttr(cmp, "zcls");
 				if (open) {
 					zk.rmClass(cmp, cls + "-collapsed");
-					anima.slideDown(bwrap);
+					anima.slideDown(body);
 				} else {
 					zk.addClass(cmp, cls + "-collapsed");
 					zkPanel.hideShadow(cmp);
@@ -225,7 +225,7 @@ zkPanel = {
 					if (zk.ie6Only && !cmp.style.width)
 						cmp.runtimeStyle.width = "100%";
 						
-					anima.slideUp(bwrap);
+					anima.slideUp(body);
 				}
 	
 				if (!silent)
@@ -264,8 +264,8 @@ zkPanel = {
 				
 				if (zkPanel.isCollapsible(cmp) && getZKAttr(cmp, "open") != "true") {
 					zk.rmClass(cmp, cls + "-collapsed");
-					var bwrap = $e(cmp.id + "!bwrap");
-					if (bwrap) bwrap.style.display = "";
+					var body = $e(cmp.id + "!body");
+					if (body) body.style.display = "";
 				}
 				
 				var floated = zkPanel.isFloatable(cmp), op = floated ? zPos.offsetParent(cmp) : cmp.parentNode;
@@ -314,8 +314,8 @@ zkPanel = {
 				h = s.height;
 				if (zkPanel.isCollapsible(cmp) && getZKAttr(cmp, "open") != "true") {
 					zk.addClass(cmp, cls + "-collapsed");
-					var bwrap = $e(cmp.id + "!bwrap");
-					if (bwrap) bwrap.style.display = "none";
+					var body = $e(cmp.id + "!body");
+					if (body) body.style.display = "none";
 				}
 				var body = $e(getZKAttr(cmp, "children"));
 				if (body)
@@ -370,7 +370,6 @@ zkPanel = {
 			cmp._maximized = false;
 		}
 		zkPanel._fixHgh(cmp);
-		zkPanel._fixWdh(cmp);
 		zkPanel.syncShadow(cmp);
 	}, 
 	syncMaximized: function (cmp) {
@@ -396,27 +395,6 @@ zkPanel = {
 			s.height = sh + "px";
 		}
 	},
-	_fixWdh: zk.ie7 ? function (cmp) {
-		if (getZKAttr(cmp, "framable") != "true" || !zk.isRealVisible(cmp)) return;
-		var body = $e(getZKAttr(cmp, "children"));
-		if (!body) return;
-		var wdh = cmp.style.width, fir = zk.firstChild(cmp, "DIV"), last = zk.lastChild(zk.lastChild(cmp, "DIV"), "DIV"),
-			n = body.parentNode;
-		if (!wdh || wdh == "auto") {
-			var diff = zk.getFrameWidth(n.parentNode) + zk.getFrameWidth(n.parentNode.parentNode);
-			if (fir) {
-				fir.firstChild.firstChild.style.width = n.offsetWidth - (zk.getFrameWidth(fir)
-					+ zk.getFrameWidth(fir.firstChild) - diff) + "px";
-			}
-			if (last) {
-				last.firstChild.firstChild.style.width = n.offsetWidth - (zk.getFrameWidth(last)
-					+ zk.getFrameWidth(last.firstChild) - diff) + "px";
-			}
-		} else {
-			if (fir) fir.firstChild.firstChild.style.width = "";
-			if (last) last.firstChild.firstChild.style.width = "";
-		}
-	} : zk.voidf,
 	_fixHgh: function (cmp) {
 		if (!zk.isRealVisible(cmp)) return;
 		var body = $e(getZKAttr(cmp, "children"));
@@ -429,28 +407,29 @@ zkPanel = {
 	getFrameHeight: function (cmp) {
 		var h = zk.getFrameHeight(cmp);
 	    h += zkPanel.getTitleHeight(cmp);
-		var tbar = $e(cmp.id + "!tbar"), bbar = $e(cmp.id + "!bbar");
+		var tb = $e(cmp.id + "!tb"),
+			bb = $e(cmp.id + "!bb"),
+			fb = $e(cmp.id + "!fb");
 	    if (getZKAttr(cmp, "framable") == "true") {
 			var body = $e(getZKAttr(cmp, "children")), 
-				ft = zk.lastChild($e(cmp.id + "!bwrap"), "DIV"), title = $e(cmp.id + "!caption");
-	        h += ft.offsetHeight;
+				fl = zk.lastChild($e(cmp.id + "!body"), "DIV"),
+				title = $e(cmp.id + "!caption");
+	        h += fl.offsetHeight;
 			if (body)
 				h += zk.getFrameHeight(body.parentNode);
 			if (title)
 		        h += zk.getFrameHeight(title.parentNode);
-	    } else {
-			var fbar = $e(cmp.id + "!fbar");
-			if (fbar)h += fbar.offsetHeight;
-		}
-		if (tbar) h += tbar.offsetHeight;
-		if (bbar) h += bbar.offsetHeight;
+	    }
+		if (tb) h += tb.offsetHeight;
+		if (bb) h += bb.offsetHeight;
+		if (fb) h += fb.offsetHeight;
 	    return h;
 	},
 	getTitleHeight: function (cmp) {
 		var title = $e(cmp.id + "!caption"), top = 0;
-		if (getZKAttr(cmp, "framable") == "true" && !title)
-			top = zk.firstChild(cmp, "DIV").firstChild.firstChild.offsetHeight;
-		return title ? title.offsetHeight : top;
+		if (getZKAttr(cmp, "framable") == "true")
+			top = zk.firstChild(cmp, "DIV").offsetHeight;
+		return title ? title.offsetHeight + top : top;
 	},
 	_show: function (cmp) {
 		if (getZKAttr(cmp, "visible") == "true")
@@ -496,8 +475,8 @@ zkPanel = {
 			zkPanel.hideShadow(cmp);
 			return;
 		}
-		var bwrap = $e(cmp.id + "!bwrap");
-		if (bwrap && $visible(bwrap)) // if only title, nothing to do.
+		var body = $e(cmp.id + "!body");
+		if (body && $visible(body)) // if only title, nothing to do.
 			zkPanel.getShadow(cmp).sync();
 	},
 	setAttr: function (cmp, nm, val) {

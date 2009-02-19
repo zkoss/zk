@@ -26,7 +26,8 @@
 	overflow: hidden;  
 	display: block;
 	background: #cbddf3;
-	font-size: 0; line-height: 0;
+	line-height: 0;
+	font-size: 0;
 }
 .z-window-embedded, .z-window-modal, .z-window-overlapped, .z-window-popup, .z-window-highlighted {
 	margin: 0; padding: 0; overflow: hidden; zoom: 1;
@@ -78,7 +79,7 @@
 .z-window-highlighted-hl,
 .z-window-overlapped-hl,
 .z-window-popup-hl {
-	background: transparent repeat-y 0 0;
+	background: transparent no-repeat 0 0;
 	background-image: url(${c:encodeURL('~./zul/img/wnd2/wnd-ol-hl.png')});
 	padding-left: 6px;
 	zoom: 1;
@@ -95,7 +96,7 @@
 .z-window-highlighted-hr,
 .z-window-overlapped-hr,
  .z-window-popup-hr {
-	background: transparent repeat-y right 0;
+	background: transparent no-repeat right 0;
 	background-image: url(${c:encodeURL('~./zul/img/wnd2/wnd-ol-hr.png')});
 	padding-right: 6px;
 	zoom: 1;

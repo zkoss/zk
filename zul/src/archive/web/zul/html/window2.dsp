@@ -20,7 +20,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <c:set var="zcls" value="${self.zclass}"/>
 <c:set var="noborder" value="${'normal' != self.border ? '-noborder' : ''}"/>
 <div id="${self.uuid}" z.type="zul.wnd2.Wnd2" z.autoz="true"${self.outerAttrs}${self.innerAttrs}>
-<c:if test="${!empty self.caption or !empty self.title}">
+<c:choose>
+<c:when test="${!empty self.caption or !empty self.title}">
 <div class="${zcls}-tl"><div class="${zcls}-tr"></div></div>
 <div class="${zcls}-hl"><div class="${zcls}-hr"><div class="${zcls}-hm">
 <div id="${self.uuid}!caption" class="${zcls}-header">
@@ -40,7 +41,11 @@ ${z:redraw(self.caption, null)}
 </c:otherwise>
 </c:choose>
 </div></div></div></div>
-</c:if>
+</c:when>
+<c:when test="${(self.mode != 'embedded' and self.mode != 'popup')}">
+<div class="${zcls}-tl"><div class="${zcls}-tr"></div></div>
+</c:when>
+</c:choose>
 
 <c:if test="${self.mode != 'embedded' and self.mode != 'popup'}">
 <div class="${zcls}-cl${noborder}"><div class="${zcls}-cr${noborder}"><div class="${zcls}-cm${noborder}">

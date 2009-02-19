@@ -69,6 +69,9 @@ public class Window2Default implements ComponentRenderer {
 				wh.write(caption);
 			}
 			wh.write("</div></div></div></div>");			
+		} else if (isFrame) {
+			wh.write("<div class=\"").write(zcls).write("-tl\"><div class=\"")
+			.write(zcls).write("-tr\"></div></div>");
 		}
 		if (isFrame) {
 			wh.write("<div class=\"").write(zcls).write("-cl").write(noBorder)
