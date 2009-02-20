@@ -166,7 +166,7 @@ zul.grid.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			ofs = zDom.revisedOffset(n); // Bug #1812154
 			
 		if (wgt._insizer(pointer[0] - ofs[0])) {
-			dg._zmin = 10 + zDom.frameWidth(n);		
+			dg._zmin = 10 + zDom.padBorderWidth(n);		
 				return false;
 		}
 		return true;

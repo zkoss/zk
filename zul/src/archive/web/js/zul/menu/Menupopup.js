@@ -137,7 +137,7 @@ zul.menu.Menupopup = zk.$extends('zul.wgt.Popup', {
 			var pp = this.getNode();
 			if (!pp.style.width) {// Bug 2105158 and Bug 1911129
 				var ul = this.getSubnode('cave');
-				pp.style.width = ul.offsetWidth + zDom.frameWidth(pp) + "px";
+				pp.style.width = ul.offsetWidth + zDom.padBorderWidth(pp) + "px";
 			}
 		}
 		this._syncShadow();

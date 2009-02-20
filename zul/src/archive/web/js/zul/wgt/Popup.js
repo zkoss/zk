@@ -139,14 +139,14 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			n = wgt.getSubnode('cave').parentNode;
 		
 		if (!wdh || wdh == "auto") {
-			var diff = zDom.frameWidth(n.parentNode) + zDom.frameWidth(n.parentNode.parentNode);
+			var diff = zDom.padBorderWidth(n.parentNode) + zDom.padBorderWidth(n.parentNode.parentNode);
 			if (fir) {
-				fir.firstChild.firstChild.style.width = Math.max(0, n.offsetWidth - (zDom.frameWidth(fir)
-					+ zDom.frameWidth(fir.firstChild) - diff)) + "px";
+				fir.firstChild.firstChild.style.width = Math.max(0, n.offsetWidth - (zDom.padBorderWidth(fir)
+					+ zDom.padBorderWidth(fir.firstChild) - diff)) + "px";
 			}
 			if (last) {
-				last.firstChild.firstChild.style.width = Math.max(0, n.offsetWidth - (zDom.frameWidth(last)
-					+ zDom.frameWidth(last.firstChild) - diff)) + "px";
+				last.firstChild.firstChild.style.width = Math.max(0, n.offsetWidth - (zDom.padBorderWidth(last)
+					+ zDom.padBorderWidth(last.firstChild) - diff)) + "px";
 			}
 		} else {
 			if (fir) fir.firstChild.firstChild.style.width = "";

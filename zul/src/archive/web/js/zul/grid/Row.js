@@ -183,17 +183,6 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 	isStripeable_: function () {
 		return true;
 	},
-	bind_: function () {
-		this.$supers('bind_', arguments);
-		if (this.isStripeable_()) this._syncStripe();
-	},
-	unbind_: function () {
-		if (this.isStripeable_()) this._syncStripe();
-		this.$supers('unbind_', arguments);
-	},
-	_syncStripe: function () {
-		if (this.parent) this.parent._syncStripe();
-	},
 	//-- super --//
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);

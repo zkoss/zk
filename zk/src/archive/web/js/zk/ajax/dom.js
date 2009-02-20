@@ -164,7 +164,7 @@ zDom = { //static methods
 	 * size is in term of the parent
 	 */
 	revisedWidth: function (el, size, excludeMargin) {
-		size -= zDom.frameWidth(el);
+		size -= zDom.padBorderWidth(el);
 		if (size > 0 && excludeMargin)
 			size -= zDom.sumStyles(el, "lr", zDom.margins);
 		return size < 0 ? 0: size;
@@ -176,7 +176,7 @@ zDom = { //static methods
 	 * size is in term of the parent
 	 */
 	revisedHeight: function (el, size, excludeMargin) {
-		size -= zDom.frameHeight(el);
+		size -= zDom.padBorderHeight(el);
 		if (size > 0 && excludeMargin)
 			size -= zDom.sumStyles(el, "tb", zDom.margins);
 		return size < 0 ? 0: size;
@@ -184,13 +184,13 @@ zDom = { //static methods
 	/**
 	 * Returns the number of the padding width and the border width from the specified element.
 	 */
-	frameWidth: function (el) {
+	padBorderWidth: function (el) {
 		return zDom.sumStyles(el, "lr", zDom.borders) + zDom.sumStyles(el, "lr", zDom.paddings);
 	},
 	/**
 	 * Returns the number of the padding height and the border height from the specified element.  
 	 */
-	frameHeight: function (el) {
+	padBorderHeight: function (el) {
 		return zDom.sumStyles(el, "tb", zDom.borders) + zDom.sumStyles(el, "tb", zDom.paddings);
 	},
 	/**

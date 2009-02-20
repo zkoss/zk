@@ -337,6 +337,10 @@ zul.grid.Grid = zk.$extends(zul.Widget, {
 	},
 	onSize: _zkf = function () {
 		if (this.isRealVisible()) {
+			var n = this.getNode();
+			if (n._lastsz && n._lastsz.height == n.offsetHeight && n._lastsz.width == n.offsetWidth)
+				return; // unchanged
+				
 			this._calcSize();// Bug #1813722
 			this.fireScrollRender(155);
 			if (zk.ie7) zDom.redoCSS(this.getNode()); // Bug 2096807
@@ -432,6 +436,7 @@ zul.grid.Grid = zk.$extends(zul.Widget, {
 			if (this.efoottbl.rows.length && this.rows)
 				this.$class.cpCellWidth(this);
 		}
+		n._lastsz = {height: n.offsetHeight, width: n.offsetWidth}; // cache for the dirty resizing.
 	},
 	domFaker_: function (out, fakeId, zcls) {
 		out.push('<tbody style="visibility:hidden;height:0px"><tr id="',

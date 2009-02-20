@@ -382,14 +382,14 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			bl = zDom.lastChild(zDom.lastChild(n, "DIV"), "DIV");
 			
 		if (!wdh || wdh == "auto") {
-			var diff = zDom.frameWidth(cm.parentNode) + zDom.frameWidth(cm.parentNode.parentNode);
+			var diff = zDom.padBorderWidth(cm.parentNode) + zDom.padBorderWidth(cm.parentNode.parentNode);
 			if (tl) {
 				tl.firstChild.firstChild.style.width = 
-					Math.max(0, cm.offsetWidth - (zDom.frameWidth(tl) + zDom.frameWidth(tl.firstChild) - diff)) + "px";
+					Math.max(0, cm.offsetWidth - (zDom.padBorderWidth(tl) + zDom.padBorderWidth(tl.firstChild) - diff)) + "px";
 			}
 			if (bl) {
 				bl.firstChild.firstChild.style.width =
-					Math.max(0, cm.offsetWidth - (zDom.frameWidth(bl) + zDom.frameWidth(bl.firstChild) - diff)) + "px";
+					Math.max(0, cm.offsetWidth - (zDom.padBorderWidth(bl) + zDom.padBorderWidth(bl.firstChild) - diff)) + "px";
 			}
 		} else {
 			if (tl) tl.firstChild.firstChild.style.width = "";
@@ -403,19 +403,19 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			hgh = n.style.height;
 		if (zk.ie6Only && ((hgh && hgh != "auto" )|| cave.style.height)) cave.style.height = "0px";
 		if (hgh && hgh != "auto")
-			cave.style.height = zDom.revisedHeight(cave, n.offsetHeight - this._frameHeight(n) - 1, true) + 'px';
+			cave.style.height = zDom.revisedHeight(cave, n.offsetHeight - this._padBorderHeight(n) - 1, true) + 'px';
 	},
-	_frameHeight: function (n) {
-		var h = zDom.frameHeight(n) + this._titleHeight(n);
+	_padBorderHeight: function (n) {
+		var h = zDom.padBorderHeight(n) + this._titleHeight(n);
 	    if (this._mode != 'embedded' && this._mode != 'popup') {
 			var ft = zDom.lastChild(this.getSubnode('body'), "DIV"),
 				title = this.getSubnode('cap'),
 				cave = this.getSubnode('cave');
 	        h += ft.offsetHeight;
 			if (cave)
-				h += zDom.frameHeight(cave.parentNode);
+				h += zDom.padBorderHeight(cave.parentNode);
 			if (title)
-		        h += zDom.frameHeight(title.parentNode);
+		        h += zDom.padBorderHeight(title.parentNode);
 	    }
 	    return h;
 	},

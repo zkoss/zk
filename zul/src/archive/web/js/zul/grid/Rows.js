@@ -44,11 +44,15 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 		this.$supers('unbind_', arguments);
 	},
 	onResponse: function () {
-		if (this._shallStripe) this.stripe();
+		if (this._shallStripe) {
+			this.stripe();
+			this.getGrid().onSize();
+		}
 	},
 	_syncStripe: function () {
 		this._shallStripe = true;
-		if (!this.inServer && this.desktop)	this.stripe();
+		if (!this.inServer && this.desktop)
+			this.onResponse();
 	},
 	stripe: function () {
 		var scOdd = this.getGrid().getOddRowSclass();

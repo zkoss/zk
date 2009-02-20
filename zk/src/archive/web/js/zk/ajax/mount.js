@@ -100,7 +100,7 @@ function zkam(fn) {
 		zkm._afMts.push(fn);
 		return true;
 	}
-	fn();
+	setTimeout(fn, 0);
 };
 zk.afterMount = zkam; //part of zk
 
