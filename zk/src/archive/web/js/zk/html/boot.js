@@ -112,7 +112,11 @@ if (zk.gecko) {
 	j = $int(zk.agent.substring(j + 8));
 	zk.gecko3 = j >= 3;
 	zk.gecko2Only = !zk.gecko3;
-} else if (!zk.opera) {
+
+	zk.xbodyClass = 'gecko gecko' + j;
+} else if (zk.opera) {
+	zk.xbodyClass = 'opera';
+} else {
 	var j = zk.agent.indexOf("msie ");
 	zk.ie = j >= 0;
 	if (zk.ie) {
@@ -120,11 +124,16 @@ if (zk.gecko) {
 		zk.ie7 = j >= 7; //ie7 or later
 		zk.ie8 = j >= 8; //ie8 or later
 		zk.ie6Only = !zk.ie7;
-	}
+
+		zk.xbodyClass = 'ie ie' + j;
+	} else if (zk.safari)
+		zk.xbodyClass = 'safari';
 }
+if (zk.air = zk.agent.indexOf("adobeair") >= 0)
+	zk.xbodyClass = 'air';
 //zk.windows = zk.agent.indexOf("windows") >= 0;
 //zk.firefox = zk.gecko && zk.agent.indexOf("firefox/") < 0;
-zk.air = zk.agent.indexOf("adobeair") >= 0;
+
 //zk.mac = zk.agent.indexOf("macintosh") >= 0;
 zk._js4ld = {}; //{name, [script]}
 zk._ctpgs = []; //contained page IDs
@@ -1736,6 +1745,15 @@ zk._scrlcmps = []; //an array of component's ID that requires zkType.onScroll; t
 zk._tszcmps = [], zk._tbfszcmps = [], zk._tscrlcmps = [],
 zk._tvisicmps = [], zk._thidecmps = []; //temporary array
 function myload() {
+	var ebc = zk.xbodyClass;
+	if (ebc) {
+		zk.xbodyClass = null;
+		var n = document.body
+			cn = n.className;
+		if (cn.length) cn += ' ';
+		n.className = cn + ebc;
+	}
+
 	var f = zk._onload;
 	if (f) {
 		zk._onload = null; //called only once
