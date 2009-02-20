@@ -46,6 +46,11 @@ import org.zkoss.xel.util.SimpleXelContext;
  *
  * Used to implement {@link org.zkoss.util.resource.Labels}.
  *
+ * <p>Notice that the encoding of i3-label.properties is assumed to be
+ * UTF-8. If it is not the case, please refer to 
+ * <a href="http://docs.zkoss.org/wiki/Developer_reference_Appendix_B._WEB-INF/zk.xml_Library_Properties">Libraries Properties</a>
+ * for configuration (avaible since 3.6.0).
+ *
  * @author tomyeh
  */
 public class LabelLoader {
