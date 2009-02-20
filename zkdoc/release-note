@@ -28,6 +28,7 @@ ZK 3.6.0
   2313219: Support GenericForwardComposer in groovy
   2354140: Labels support for default value if key not found
   2016068: provide ability to load zk.xml from classpath
+  2619208: A way to specify the charset to load i3-label*.properties
 
 * Bugs
   2386650: NullPointerException when create tabs in onTimer()
