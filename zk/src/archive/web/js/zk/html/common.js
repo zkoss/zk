@@ -189,6 +189,11 @@ zk.TEXT_STYLES = [
 
 zk.Shadow = zClass.create();
 zk.Shadow.prototype = {
+	POST_HTML:
+		'" class="z-shadow"><div class="z-shadow-tl"><div class="z-shadow-tr"></div></div>'
+		+'<div class="z-shadow-cl"><div class="z-shadow-cr"><div class="z-shadow-cm"></div></div></div>'
+		+'<div class="z-shadow-bl"><div class="z-shadow-br"></div></div></div>',
+
 	/**
 	 * Constructor of the Shadow object.
 	 * 
@@ -208,19 +213,12 @@ zk.Shadow.prototype = {
 		opts = this.opts = zk.$default(opts, {
 			left: 4, right: 4, top: 3, bottom: 3
 		});
-		if (zk.ie) {
-			opts.left -= 1;
-			opts.right -= 8;
-			opts.top -= 2;
-			opts.bottom -= 6;
-		}
 
 		var sdwid = node.id + "!shadow";
 		node.parentNode.insertAdjacentHTML("afterBegin", '<div id="'+sdwid+this.POST_HTML);
 		this.node = node;
 		this.shadow = $e(sdwid);
-		
-		
+
 		if (opts.autoShow) this.sync();
 	},
 	hide: function(){
@@ -251,17 +249,8 @@ zk.Shadow.prototype = {
 			st = shadow.style;
 		st.left = (l + opts.left) + "px";
 		st.top = (t + opts.top) + "px";
-		if(zk.ie){
-			st.width = wd + "px";
-			st.height = hgh + "px";
-		}else {
-			//the inner div(shadowcm)
-			this.inner = this.shadow.firstChild.nextSibling.firstChild.firstChild;
-			
-			//shadow boundary = 6 *2  
-			this.inner.style.height=Math.max(0, (hgh - 12))+ "px";
-			this.inner.style.width=Math.max(0, (wd - 12))+ "px";
-		}
+		st.width = wd + "px";
+		st.height = hgh + "px";
 		
 		st.display = "block";
 
@@ -287,15 +276,6 @@ zk.Shadow.prototype = {
 	}
 };
 
-if (zk.ie) {
-	zk.Shadow.prototype.POST_HTML = '" class="z-shadow-ie"></div>';
-} else {
-	var html = '" class="z-shadow">';
-	html +='<div class="z-shadow-tl"><div class="z-shadow-tr"></div></div>';
-	html +='<div class="z-shadow-cl"><div class="z-shadow-cr"><div class="z-shadow-cm"></div></div></div>';
-	html +='<div class="z-shadow-bl"><div class="z-shadow-br"></div></div>';
-	zk.Shadow.prototype.POST_HTML = html + '</div>';
-}
 
 /**
  * Creates a 'stackup' (actually, an iframe) that makes
