@@ -182,17 +182,18 @@ tr.z-list-item td.z-list-item-focus {
 	background-image:url(${c:encodeURL('~./zul/img/panel/panel-corners.gif')});
 }
 <%-- popup.css.dsp --%>
-.z-popup .z-popup-tl, .z-popup .z-popup-tr, .z-popup .z-popup-bl, .z-popup .z-popup-br {
-	background-image: 
+.z-popup .z-popup-tl,
+.z-popup .z-popup-tr,
+.z-popup .z-popup-bl,
+.z-popup .z-popup-br {
+	background-image:url(${c:encodeURL('~./zul/img/popup/pp-corner.gif')});
 }
-.z-popup .z-popup-tm, .z-popup .z-popup-cm, .z-popup .z-popup-bm {
-	background-image:
-}
-.z-popup .z-popup-cl {
-	background-image: 
-}
+.z-popup .z-popup-cl,
 .z-popup .z-popup-cr {
-	background-image: 
+	background-image: url(${c:encodeURL('~./zul/img/popup/pp-clr.gif')});
+}
+.z-popup .z-popup-cm {
+	background-image: url(${c:encodeURL('~./zul/img/popup/pp-cm.gif')});
 }
 <%-- slider.css.dsp --%>
 <%@ page contentType="text/css;charset=UTF-8" %>
