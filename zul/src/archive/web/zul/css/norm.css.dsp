@@ -281,14 +281,14 @@ div.z-errbox {
 
 <%-- Progressmeter --%>
 div.z-progressmeter {
-	background:#E0E8F3 url(${c:encodeURL('~./zk/img/prgmeter_bg.gif')}) repeat-x scroll 0 0 ;
+	background:#E0E8F3 url(${c:encodeURL('~./zk/img/prgmeter_bg.png')}) repeat-x scroll 0 0 ;
 	border:1px solid #7FA9E4;
 	text-align: left;
 	height: 17px;
 }
 span.z-progressmeter-img {
 	display:-moz-inline-box; display:inline-block;
-	background:#9CBFEE url(${c:encodeURL('~./zk/img/prgmeter.gif')}) repeat-x scroll left center;
+	background:#9CBFEE url(${c:encodeURL('~./zk/img/prgmeter.png')}) repeat-x scroll left center;
 	height: 17px; font-size:0;
 }
 .z-messagebox {
