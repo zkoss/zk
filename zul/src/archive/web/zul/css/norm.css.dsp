@@ -208,12 +208,12 @@ div.z-debugbox {
 }
 .z-shadow .z-shadow-tl,
 .z-shadow .z-shadow-tr{
-	background-image:url(${c:encodeURL('~./zul/img/shadow-t.png')});
+	background-image:url(${c:encodeURL('~./zul/img/shadow-tlr.png')});
 }
 
 .z-shadow .z-shadow-bl,
 .z-shadow .z-shadow-br{
-	background-image:url(${c:encodeURL('~./zul/img/shadow-b.png')});
+	background-image:url(${c:encodeURL('~./zul/img/shadow-blr.png')});
 }
 
 <%-- Drag-Drop --%>
