@@ -160,7 +160,6 @@ div.z-debugbox {
 	zoom: 1;
 }
 .z-shadow .z-shadow-cr{
-	height:100%;
 	background: transparent  repeat-y right;
 	background-image: url(${c:encodeURL('~./zul/img/shadow-cr.png')});
 	padding-right: 6px;
@@ -168,9 +167,7 @@ div.z-debugbox {
 	zoom: 1;
 }
 .z-shadow .z-shadow-cm {
-	height: 100%; 
 	background: transparent url(${c:encodeURL('~./zul/img/shadow-m.png')}) repeat 0 0;
-	padding:4px 10px;
 	overflow: hidden;
 	zoom: 1;
 }

@@ -117,6 +117,24 @@ span.z-vfiletree-last-open, span.z-vfiletree-last-close, span.z-vfiletree-tee, s
 	zoom: 1;
 }
 </c:if>
+.z-groupbox-tl {
+	background-image:url(${c:encodeURL('~./zul/img/groupbox/groupbox-corner.gif')});
+}
+.z-groupbox-tr{
+	background-image:url(${c:encodeURL('~./zul/img/groupbox/groupbox-corner.gif')});
+}
+
+.z-groupbox-hl {
+	background-image:url(${c:encodeURL('~./zul/img/groupbox/groupbox-hl.gif')});
+}
+.z-groupbox-hr {
+	background-image:url(${c:encodeURL('~./zul/img/groupbox/groupbox-hr.gif')});
+}
+.z-groupbox-hm {
+	background-image:url(${c:encodeURL('~./zul/img/groupbox/groupbox-hm.gif')});
+}
+
+
 <%-- IE 6 GIF  --%>
 <c:if test="${c:browser('ie6-')}">
 <%-- ZK Massagebox norm.css.dsp--%>
