@@ -406,17 +406,17 @@ zkPanel = {
 	},
 	getOffsetHeight: function (cmp) {
 		var h = cmp.offsetHeight - 1;
-	    h -= zkPanel.getTitleHeight(cmp);
-	    if (getZKAttr(cmp, "framable") == "true") {
+		h -= zkPanel.getTitleHeight(cmp);
+		if (getZKAttr(cmp, "framable") == "true") {
 			var body = $e(getZKAttr(cmp, "children")), 
 				bl = zk.lastChild($e(cmp.id + "!body"), "DIV"),
 				title = $e(cmp.id + "!caption");
-	        h -= bl.offsetHeight;
+			h -= bl.offsetHeight;
 			if (body)
 				h -= zk.getPadBorderHeight(body.parentNode);
 			if (title)
-		        h -= zk.getPadBorderHeight(title.parentNode);
-	    }
+				h -= zk.getPadBorderHeight(title.parentNode);
+		}
 		h -= zk.getPadBorderHeight(cmp);
 		var tb = $e(cmp.id + "!tb"),
 			bb = $e(cmp.id + "!bb"),
@@ -424,8 +424,8 @@ zkPanel = {
 		if (tb) h -= tb.offsetHeight;
 		if (bb) h -= bb.offsetHeight;
 		if (fb) h -= fb.offsetHeight;
-		
-	    return h;
+
+		return h;
 	},
 	getTitleHeight: function (cmp) {
 		var title = $e(cmp.id + "!caption"), top = 0;

@@ -286,17 +286,16 @@ zkWnd2._fixHgh = function (cmp) {
  */
 zkWnd2.getOffsetHeight = function (cmp) {
 	var h = cmp.offsetHeight - 1;
-    h -= zkWnd2.getTitleHeight(cmp);
-    if(!zkWnd2._embedded(cmp) && !zkWnd2._popup(cmp)) {
-        var n = $e(cmp.id + "!cave"), bl = zk.lastChild(cmp, "DIV"), title = $e(cmp.id + "!caption");
-        h -= bl.offsetHeight;
+	h -= zkWnd2.getTitleHeight(cmp);
+	if(!zkWnd2._embedded(cmp) && !zkWnd2._popup(cmp)) {
+		var n = $e(cmp.id + "!cave"), bl = zk.lastChild(cmp, "DIV"), title = $e(cmp.id + "!caption");
+		h -= bl.offsetHeight;
 		if (n)
 			h -= zk.getPadBorderHeight(n.parentNode);
 		if (title)
-	        h -= zk.getPadBorderHeight(title.parentNode);
-    }
-	h -= zk.getPadBorderHeight(cmp);
-    return h;
+			h -= zk.getPadBorderHeight(title.parentNode);
+	}
+	return h - zk.getPadBorderHeight(cmp);
 };
 /**
  * Returns the title height of the specified element.
@@ -306,7 +305,7 @@ zkWnd2.getTitleHeight = function (cmp) {
 	var title = $e(cmp.id + "!caption"),
 		tl = zk.firstChild(cmp, "DIV"),
 		top = tl.offsetHeight;
-    if (!zkWnd2._embedded(cmp) && !zkWnd2._popup(cmp) && !title) 
+	if (!zkWnd2._embedded(cmp) && !zkWnd2._popup(cmp) && !title) 
 		top += zk.nextSibling(tl, "DIV").offsetHeight;
 	return title ? title.offsetHeight + top : top;
 };
