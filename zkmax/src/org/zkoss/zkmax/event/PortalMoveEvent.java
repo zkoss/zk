@@ -32,16 +32,17 @@ import org.zkoss.zul.Panel;
 public class PortalMoveEvent extends Event {
 	private final Portalchildren _from, _to;
 	private final Panel _dragged;
-
+	private final int _droppedIndex;
 	/**
 	 * Constructs a ColumnMoved event.
 	 */
 	public PortalMoveEvent(String evtnm, Component target, Portalchildren from, Portalchildren to,
-	Panel dragged) {
+	Panel dragged, int droppedIndex) {
 		super(evtnm, target);
 		_from = from;
 		_to = to;
 		_dragged = dragged;
+		_droppedIndex = droppedIndex;
 	}
 	/**
 	 * Returns the portalchildren from the dragged panel.
@@ -60,5 +61,12 @@ public class PortalMoveEvent extends Event {
 	 */
 	public final Panel getDragged() {
 		return _dragged;
+	}
+	/**
+	 * Returns the dropped index.
+	 * @since 3.6.0
+	 */
+	public int getDroppedIndex() {
+		return _droppedIndex;
 	}
 }

@@ -58,18 +58,27 @@ public class PortalMoveCommand extends Command {
 		final Portalchildren from = (Portalchildren) desktop.getComponentByUuid(data[0]);
 		final Portalchildren to = (Portalchildren) desktop.getComponentByUuid(data[1]);
 		final Panel dragged = (Panel) desktop.getComponentByUuid(data[2]);
-		final int droppedIndex = Integer.parseInt(data[3]);
+		final int newIndex = Integer.parseInt(data[3]);
 		try {
 			((Updatable) (from).getExtraCtrl()).setResult(Boolean.TRUE);
 			((Updatable) (to).getExtraCtrl()).setResult(Boolean.TRUE);
 			((Updatable) (dragged).getExtraCtrl()).setResult(new Object[]{Boolean.TRUE, to});
-			to.insertBefore(dragged, droppedIndex < to.getChildren().size() ?
-					(Component)to.getChildren().get(droppedIndex) : null);
+			if (dragged.getParent() == to) {
+				int oldIndex = to.getChildren().indexOf(dragged);
+				if (newIndex == to.getChildren().size() - 1) {
+					to.appendChild(dragged);
+				} else {
+					to.insertBefore(dragged, (Component) to.getChildren().get(
+							oldIndex < newIndex ? newIndex + 1 : newIndex));
+				}
+			} else 
+			to.insertBefore(dragged, newIndex < to.getChildren().size() ?
+					(Component)to.getChildren().get(newIndex) : null);
 		} finally {
 			((Updatable) (dragged).getExtraCtrl()).setResult(new Object[]{Boolean.FALSE, null});
 			((Updatable) (from).getExtraCtrl()).setResult(Boolean.FALSE);
 			((Updatable) (to).getExtraCtrl()).setResult(Boolean.FALSE);
 		}
-		Events.postEvent(new PortalMoveEvent(getId(), comp, from, to, dragged));
+		Events.postEvent(new PortalMoveEvent(getId(), comp, from, to, dragged, newIndex));
 	}
 }
