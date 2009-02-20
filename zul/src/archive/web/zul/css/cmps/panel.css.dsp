@@ -1,5 +1,25 @@
 <%@ page contentType="text/css;charset=UTF-8" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
+.z-panel-move-ghost {
+	position: absolute;
+	background: #CBDDF3;
+	overflow: hidden;
+	filter: alpha(opacity=65) !important; <%-- IE --%>
+	opacity: .65 !important;
+	cursor: move !important;
+}
+.z-panel-move-ghost dl {
+	border: 1px solid #B1CBD5;
+	margin: 0; padding: 0;
+	overflow: hidden;  
+	display: block;
+	background: #cbddf3;
+	line-height: 0;
+	font-size: 0;
+}
+.z-panel-move-block {
+	border: 2px dashed #B1CBD5;
+}
 .z-panel {
 	background: white;
 	overflow: hidden;

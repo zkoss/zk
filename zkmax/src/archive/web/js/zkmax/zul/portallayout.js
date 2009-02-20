@@ -109,21 +109,25 @@ zkPortalLayout = {
 	},
 	_ghostMove: function (dg, ghosting, pointer) {
 		if (ghosting) {
-			var ofs = zkau.beginGhostToDIV(dg), title = zk.firstChild(dg.element, "DIV"),
-				fakeT = title.cloneNode(true);
+			var ofs = zkau.beginGhostToDIV(dg),
+			top = zk.firstChild(dg.element, "DIV"),
+			header = zk.nextSibling(top, 'DIV'),
+			fakeT = top.cloneNode(true),
+			fakeH = header.cloneNode(true);
 			var html = '<div id="zk_ddghost" class="z-panel-move-ghost" style="position:absolute;top:'
 				+ofs[1]+'px;left:'+ofs[0]+'px;width:'
 				+zk.offsetWidth(dg.element)+'px;height:'+zk.offsetHeight(dg.element)
-				+'px;z-index:'+dg.element.style.zIndex+'"><ul></ul></div></div>';
+				+'px;z-index:'+dg.element.style.zIndex+'"><dl></dl></div></div>';
 			document.body.insertAdjacentHTML("afterbegin", html);
 			dg._zoffs = ofs;
 			dg._cns = zk.childNodes($real($parentByType(dg.element.parentNode, "PortalLayout")), zkPortalLayout._isLegalChild);
 			dg._widths = zkPortalLayout._getColWidths(dg._cns);
 			zkPortalLayout._initProxy(dg.element);
-			var h = dg.element.offsetHeight - title.offsetHeight;
+			var h = dg.element.offsetHeight - top.offsetHeight - header.offsetHeight;
 			dg.element = $e("zk_ddghost");
 			dg.element.firstChild.style.height = zk.revisedSize(dg.element.firstChild, h, true) + "px";
 			dg.element.insertBefore(fakeT, dg.element.firstChild);
+			dg.element.insertBefore(fakeH, dg.element.lastChild);
 		} else {
 			zkau.endGhostToDIV(dg);
 		}
