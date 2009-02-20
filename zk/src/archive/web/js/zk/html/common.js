@@ -258,7 +258,7 @@ zk.Shadow.prototype = {
 				c[1].style.height = Math.max(0, (hgh - 12))+ "px";
 				
 				// the 12 number means the both width the left side shadow and the right side shadow.
-				c[0].childNodes[1].style.width = c[1].childNodes[1].style.width = c[2].childNodes[1].style.width = Math.max(0, (wd - 12)) + "px";;
+				//c[0].childNodes[1].style.width = c[1].childNodes[1].style.width = c[2].childNodes[1].style.width = Math.max(0, (wd - 12)) + "px";;
 			}
 		}
 		st.display = "block";
@@ -289,12 +289,9 @@ if (zk.ie) {
 	zk.Shadow.prototype.POST_HTML = '" class="z-shadow-ie"></div>';
 } else {
 	var html = '" class="z-shadow">';
-	for (var ys = ['b', 'c', 't'], j = ys.length; --j >= 0;) {
-		html += '<div class="z-shadow-' + ys[j] + '">';
-		for (var xs = ['r', 'm', 'l'], k = xs.length; --k >= 0;)
-			html += '<div class="z-shadow-' + ys[j] + xs[k] + '"></div>';
-		html += '</div>';
-	}
+	html +='<div class="z-shadow-tl"><div class="z-shadow-tr"></div></div>';
+	html +='<div class="z-shadow-cl"><div class="z-shadow-cr"><div class="z-shadow-cm"></div></div></div>';
+	html +='<div class="z-shadow-bl"><div class="z-shadow-br"></div></div>';
 	zk.Shadow.prototype.POST_HTML = html + '</div>';
 }
 

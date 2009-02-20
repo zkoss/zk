@@ -151,51 +151,72 @@ div.z-debugbox {
 .z-shadow {
 	display: none; position: absolute; overflow: hidden; left: 0; top: 0;
 }
-.z-shadow * {
+
+.z-shadow .z-shadow-cl{
+	background: transparent  repeat-y 0 0;
+	background-image: url(${c:encodeURL('~./zul/img/shadow-cl.png')});
+	padding-left: 6px;
 	overflow: hidden;
-	padding: 0; border: 0; margin:0 ; clear: none; zoom: 1;
+	zoom: 1;
 }
-.z-shadow .z-shadow-tm,.z-shadow .z-shadow-bm {
-	height: 6px; float: left;
-}
-.z-shadow .z-shadow-tl, .z-shadow .z-shadow-tr, .z-shadow .z-shadow-bl, .z-shadow .z-shadow-br {
-	width: 6px; height: 6px; float: left;
-}
-.z-shadow .z-shadow-c {
-	width:100%;
-}
-.z-shadow .z-shadow-cl, .z-shadow .z-shadow-cr {
-	width: 6px; float: left; height: 100%;
+.z-shadow .z-shadow-cr{
+	height:100%;
+	background: transparent  repeat-y right;
+	background-image: url(${c:encodeURL('~./zul/img/shadow-cr.png')});
+	padding-right: 6px;
+	overflow: hidden;
+	zoom: 1;
 }
 .z-shadow .z-shadow-cm {
-	float: left; height: 100%; background: transparent url(${c:encodeURL('~./zul/img/shadow-m.png')});
+	height: 100%; 
+	background: transparent url(${c:encodeURL('~./zul/img/shadow-m.png')}) repeat 0 0;
+	padding:4px 10px;
+	overflow: hidden;
+	zoom: 1;
 }
-.z-shadow .z-shadow-t, .z-shadow .z-shadow-b {
-	height: 6px; overflow: hidden; width: 100%;
-}
-.z-shadow .z-shadow-cl {
-	background:transparent url(${c:encodeURL('~./zul/img/shadow-lr.png')}) repeat-y 0 0;
-}
-.z-shadow .z-shadow-cr {
-	background:transparent url(${c:encodeURL('~./zul/img/shadow-lr.png')}) repeat-y -6px 0;
-}
+
 .z-shadow .z-shadow-tl {
-	background:transparent url(${c:encodeURL('~./zul/img/shadow.png')}) no-repeat 0 0;
-}
-.z-shadow .z-shadow-tm {
-	background:transparent url(${c:encodeURL('~./zul/img/shadow.png')}) repeat-x 0 -30px;
+	background:transparent no-repeat scroll 0 top;	
+	font-size:0;
+	height:6px;
+	line-height:0;
+	margin-right:6px;
+	zoom:1;
 }
 .z-shadow .z-shadow-tr {
-	background:transparent url(${c:encodeURL('~./zul/img/shadow.png')}) repeat-x 0 -18px;
+	background:transparent no-repeat scroll right -6px;
+	font-size:0;
+	height:6px;
+	line-height:0;
+	margin-right:-6px;
+	position:relative;
+	zoom:1;
 }
 .z-shadow .z-shadow-bl {
-	background:transparent url(${c:encodeURL('~./zul/img/shadow.png')}) no-repeat 0 -12px;
-}
-.z-shadow .z-shadow-bm {
-	background:transparent url(${c:encodeURL('~./zul/img/shadow.png')}) repeat-x 0 -36px;
+	background:transparent no-repeat scroll 0 top;	
+	font-size:0;
+	height:6px;
+	line-height:0;
+	margin-right:6px;
+	zoom:1;
 }
 .z-shadow .z-shadow-br {
-	background:transparent url(${c:encodeURL('~./zul/img/shadow.png')}) repeat-x 0 -6px;
+	background:transparent no-repeat scroll right -6px;
+	font-size:0;
+	height:6px;
+	line-height:0;
+	margin-right:-6px;
+	position:relative;
+	zoom:1;
+}
+.z-shadow .z-shadow-tl,
+.z-shadow .z-shadow-tr{
+	background-image:url(${c:encodeURL('~./zul/img/shadow-t.png')});
+}
+
+.z-shadow .z-shadow-bl,
+.z-shadow .z-shadow-br{
+	background-image:url(${c:encodeURL('~./zul/img/shadow-b.png')});
 }
 
 <%-- Drag-Drop --%>

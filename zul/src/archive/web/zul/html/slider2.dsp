@@ -19,12 +19,18 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 --%><%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <c:set var="zcls" value="${self.zclass}"/>
-<c:if test='${self.mold == "scale"}'><div id="${self.uuid}" class="${zcls}-tick"></c:if>
-<div id="${self.uuid}${self.mold == 'scale' ? '!real' : ''}"${self.outerAttrs}${self.innerAttrs} z.type="zul.sld.Sld">
-	<div class="${zcls}-end">
-		<div id="${self.uuid}!inner" class="${zcls}-center">
-			<div id="${self.uuid}!btn" class="${zcls}-btn"></div>
+
+<c:if test='${self.mold == "scale"}'>
+	<div id="${self.uuid}" class="${zcls}-tick">
+</c:if>
+		<div id="${self.uuid}${self.mold == 'scale' ? '!real' : ''}"${self.outerAttrs}${self.innerAttrs} z.type="zul.sld.Sld">
+		
+				<div id="${self.uuid}!inner" class="${zcls}-center">
+					<div id="${self.uuid}!btn" class="${zcls}-btn">
+					</div>
+				</div>
+		
 		</div>
-	</div>
+<c:if test='${self.mold == "scale"}'>
 </div>
-<c:if test='${self.mold == "scale"}'></div></c:if>
+</c:if>

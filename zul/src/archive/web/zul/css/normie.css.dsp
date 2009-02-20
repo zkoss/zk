@@ -195,66 +195,111 @@ tr.z-list-item td.z-list-item-focus {
 	background-image: 
 }
 <%-- slider.css.dsp --%>
-.z-slider-hor {    
-    background-image: url(${c: encodeURL('~./zul/img/slider2/slider-bg.gif')});        
+<%@ page contentType="text/css;charset=UTF-8" %>
+<%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
+
+<%-- Horizontal style --%>
+.z-slider-sphere-hor,
+.z-slider-scale,
+.z-slider-hor {
+	background:transparent no-repeat scroll 0 top;
+	background-image:url(${c:encodeURL('~./zul/img/slider2/slider-bg.png')});
+	font-size:0;
+	height:22px;
+	line-height:0;
+	margin-right:7px;
+	zoom:1;
 }
-.z-slider-hor-center { 
-	background-image: url(${c: encodeURL('~./zul/img/slider2/slider-bg.gif')});      
+.z-slider-sphere-hor-center,
+.z-slider-scale-center,
+.z-slider-hor-center {
+    background:transparent no-repeat scroll right -22px;
+	background-image:url(${c:encodeURL('~./zul/img/slider2/slider-bg.png')});
+	font-size:0;
+	height:22px;
+	line-height:0;
+	margin-right:-7px;
+	position:relative;
+	zoom:1;
 }
-.z-slider-hor-end {
-    background-image:url(${c: encodeURL('~./zul/img/slider2/slider-bg.gif')});    
-}
+.z-slider-sphere-hor-btn,
+.z-slider-scale-btn,
 .z-slider-hor-btn {
-    background-image: url(${c: encodeURL('~./zul/img/slider2/slider-thumb.gif')});    
-}
-.z-slider-ver {
-	background-image:url(${c: encodeURL('~./zul/img/slider2/slider-v-bg.gif')});
-}
-.z-slider-ver-center {
-	background-image:url(${c: encodeURL('~./zul/img/slider2/slider-v-bg.gif')});
-}
-.z-slider-ver-end {
-	background-image:url(${c: encodeURL('~./zul/img/slider2/slider-v-bg.gif')});
-}
-.z-slider-ver-btn {
-	background-image:url(${c: encodeURL('~./zul/img/slider2/slider-v-thumb.gif')});
-}
-.z-slider-scale {
-    background-image:url(${c: encodeURL('~./zul/img/slider2/slider-bg.gif')});
-}
-.z-slider-scale-center {
-    background-image:url(${c: encodeURL('~./zul/img/slider2/slider-bg.gif')});
-}
-.z-slider-scale-end {
-    background-image:url(${c: encodeURL('~./zul/img/slider2/slider-bg.gif')});
+    width: 14px; height: 15px; position: absolute; left: 0; top: 3px;
+    background-color : transparent;
+	background-image : url(${c: encodeURL('~./zul/img/slider2/slider-thumb.png')});
+	background-repeat : no-repeat;
+	background-position : 0 0;
 }
 .z-slider-scale-btn {
-    background-image:url(${c: encodeURL('~./zul/img/slider2/slider-scale-thumb.gif')});
+	background-image : url(${c: encodeURL('~./zul/img/slider2/slider-scale-thumb.gif')});
 }
-.z-slider-sphere-hor {
-	background-image:url(${c: encodeURL('~./zul/img/slider2/slider-bg.gif')});
+
+<%-- Scale style --%>
+.z-slider-scale-tick {
+    background-image:url(${c: encodeURL('~./zul/img/slider2/ticks.gif')});
+	padding-top:6px;
+	width:214px;
 }
-.z-slider-sphere-hor-center {
-	background-image:url(${c: encodeURL('~./zul/img/slider2/slider-bg.gif')});
+
+<%-- all button style --%>
+.z-slider-hor-btn-over,
+.z-slider-sphere-hor-btn-over,
+.z-slider-sphere-ver-btn-over,
+.z-slider-ver-btn-over,
+.z-slider-scale-btn-over {
+    background-position: -15px 0px;
 }
-.z-slider-sphere-hor-end {
-	background-image:url(${c: encodeURL('~./zul/img/slider2/slider-bg.gif')});
+.z-slider-hor-btn-drag,
+.z-slider-sphere-hor-btn-drag,
+.z-slider-sphere-ver-btn-drag,
+.z-slider-ver-btn-drag,
+.z-slider-scale-btn-drag {
+    background-position: -30px 0px;
+}
+
+<%-- Vertical style --%>
+.z-slider-sphere-ver,
+.z-slider-ver {
+	background:transparent no-repeat scroll left 0;
+	background-image:url(${c:encodeURL('~./zul/img/slider2/slider-bg-ver.gif')});
+	font-size:0;
+	width:22px;
+	line-height:0;
+	margin-bottom:7px;
+	zoom:1;
+}
+
+.z-slider-sphere-ver-center,
+.z-slider-ver-center {
+    background:transparent no-repeat scroll -22px bottom;
+	background-image:url(${c:encodeURL('~./zul/img/slider2/slider-bg-ver.gif')});
+	font-size:0;
+	width:22px;
+	line-height:0;
+	margin-bottom:-7px;
+	position:relative;
+	zoom:1;
+}
+
+.z-slider-sphere-ver-btn,
+.z-slider-ver-btn {
+    width: 15px; height: 14px; position: absolute; left: 3px; bottom: 0;
+    background-color : transparent;
+	background-image : url(${c: encodeURL('~./zul/img/slider2/slider-v-thumb.gif')});
+	background-repeat : no-repeat;
+	background-position : 0 0;
 }
 .z-slider-sphere-hor-btn {
-	background-image:url(${c: encodeURL('~./zul/img/slider2/slider-thumb_circle.gif')});
+	background-image : url(${c: encodeURL('~./zul/img/slider2/slider-thumb_circle.gif')});
 }
-.z-slider-sphere-ver {
-    background-image:url(${c: encodeURL('~./zul/img/slider2/slider-v-bg.gif')});
-}
-.z-slider-sphere-ver-center {
-    background-image:url(${c: encodeURL('~./zul/img/slider2/slider-v-bg.gif')});
-}
-.z-slider-sphere-ver-end {
-    background-image:url(${c: encodeURL('~./zul/img/slider2/slider-v-bg.gif')});
-}
+
 .z-slider-sphere-ver-btn {
-    background-image:url(${c: encodeURL('~./zul/img/slider2/slider-v-thumb_circle.gif')});
+	background-image : url(${c: encodeURL('~./zul/img/slider2/slider-v-thumb_circle.gif')});
 }
+
+
+
 <%-- tabbox.css.dsp --%>
 .z-tab-close, .z-tab-ver-close {
 	background-image: url(${c:encodeURL('~./zul/img/tab2/tab-close.gif')});

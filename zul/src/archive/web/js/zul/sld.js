@@ -163,12 +163,14 @@ zk.Slider.prototype = {
 	},
 	/** Returns the slider's real width. */
 	_width: function () {		
-		return this.element.clientWidth - this.button.offsetWidth;
+		//7 = corner img with
+		return this.element.clientWidth - this.button.offsetWidth+7;
 			//button shall not exceed the right edge
 	},
 	/** Returns the slider's real height. */
 	_height: function () {
-		return this.element.clientHeight - this.button.offsetHeight;
+		//7 = corner img height
+		return this.element.clientHeight - this.button.offsetHeight+7;
 			//button shall not exceed the bottom edge
 	},
 	onsubmit: function () {
@@ -197,7 +199,8 @@ zkSld = {
 			btn = $e(uuid + "!btn"),
 			inner = $e(uuid + "!inner");
 		if (vert) {
-			var het = cmp.clientHeight - 14;
+			//7 = corner width
+			var het = cmp.clientHeight+7;
 			inner.style.height = het + "px";
 		} 
 		zk.listen(btn, "mouseover", zkSld.onover);
