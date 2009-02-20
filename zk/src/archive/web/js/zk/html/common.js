@@ -219,6 +219,8 @@ zk.Shadow.prototype = {
 		node.parentNode.insertAdjacentHTML("afterBegin", '<div id="'+sdwid+this.POST_HTML);
 		this.node = node;
 		this.shadow = $e(sdwid);
+		
+		
 		if (opts.autoShow) this.sync();
 	},
 	hide: function(){
@@ -249,18 +251,18 @@ zk.Shadow.prototype = {
 			st = shadow.style;
 		st.left = (l + opts.left) + "px";
 		st.top = (t + opts.top) + "px";
-		if(st.width != wd || st.height != hgh) {
+		if(zk.ie){
 			st.width = wd + "px";
 			st.height = hgh + "px";
-			if(!zk.ie) {
-				var c = shadow.childNodes;
-				// the 12 number means the both height the top side shadow and the bottom side shadow.
-				c[1].style.height = Math.max(0, (hgh - 12))+ "px";
-				
-				// the 12 number means the both width the left side shadow and the right side shadow.
-				//c[0].childNodes[1].style.width = c[1].childNodes[1].style.width = c[2].childNodes[1].style.width = Math.max(0, (wd - 12)) + "px";;
-			}
+		}else {
+			//the inner div(shadowcm)
+			this.inner = this.shadow.firstChild.nextSibling.firstChild.firstChild;
+			
+			//shadow boundary = 6 *2  
+			this.inner.style.height=Math.max(0, (hgh - 12))+ "px";
+			this.inner.style.width=Math.max(0, (wd - 12))+ "px";
 		}
+		
 		st.display = "block";
 
 		var stackup = this.stackup;
@@ -337,7 +339,7 @@ zk.applyMask = function (rel, message) {
 			+ '<div class="z-apply-mask" style="display:block;top:' + xy[1]
 			+ 'px;left:' + xy[0] + 'px;width:' + w + 'px;height:' + h + 'px;"></div>'
 			+ '<div id="'+rel.id+'!z-loading" class="z-apply-loading"><div class="z-apply-loading-indicator">'
-			+ '<img class="z-apply-loading-icon" alt="..." src="'+zk.getUpdateURI('/web/img/spacer.gif')+'"/> '
+			+ '<span class="z-apply-loading-icon z-inline-block" alt="..."></span> '
 			+ message+ '</div></div></div>';
 	zk.setOuterHTML(n, html);
 	var loading = $e(rel.id+"!z-loading"), progbox = $e(rel.id + "!progbox");

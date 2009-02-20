@@ -53,7 +53,7 @@ if (!window.Boot_progressbox) { //not customized
 
 		html += ' id="zk_loading" class="z-loading" style="left:'+x+';top:'+y+';visibility: hidden;"'
 		+' z.x="' + ix + '" z.y="' + iy + '"><div class="z-loading-indicator">'
-		+'<img class="z-loading-icon" alt="..." src="'+zk.getUpdateURI('/web/img/spacer.gif')+'"/> '
+		+'<span class="z-loading-icon z-inline-block"  alt="..."></span> '
 		+msg+'</div></div></div>';
 		
 		var n = document.createElement("DIV");
@@ -76,6 +76,7 @@ if (!window.Boot_progressbox) { //not customized
 			}
 		}
 		zk.cleanVisibility(el);
+
 		return $e(id);
 	};
 }

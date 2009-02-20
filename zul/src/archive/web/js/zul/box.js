@@ -142,8 +142,7 @@ zkSplt._ghostsizing = function (dg, ghosting, pointer) {
 		var html = '<div id="zk_ddghost" style="background:#AAA;position:absolute;top:'
 			+pointer[1]+'px;left:'+pointer[0]+'px;width:'
 			+zk.offsetWidth(dg.element)+'px;height:'+zk.offsetHeight(dg.element)
-			+'px;"><img src="'+zk.getUpdateURI('/web/img/spacer.gif')
-					+'"/></div>';
+			+'px;"></div>';
 		document.body.insertAdjacentHTML("afterbegin", html);
 		dg.element = $e("zk_ddghost");
 	} else {		

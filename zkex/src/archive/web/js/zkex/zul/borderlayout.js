@@ -832,8 +832,7 @@ zkLayoutRegionSplit2 = {
 			var html = '<div id="zk_ddghost" style="background:#AAA;position:absolute;top:'
 				+pointer[1]+'px;left:'+pointer[0]+'px;width:'
 				+zk.offsetWidth(dg.element)+'px;height:'+zk.offsetHeight(dg.element)
-				+'px;cursor:'+dg.element.style.cursor+';"><img src="'+zk.getUpdateURI('/web/img/spacer.gif')
-						+'"/></div>';
+				+'px;cursor:'+dg.element.style.cursor+';"></div>';
 			document.body.insertAdjacentHTML("afterbegin", html);
 			dg.element = $e("zk_ddghost");
 		} else {		

@@ -477,8 +477,7 @@ zulHdr._ghostsizing = function (dg, ghosting, pointer) {
 		document.body.insertAdjacentHTML("afterbegin",
 			'<div id="zk_ddghost" style="position:absolute;top:'
 			+ofs[1]+'px;left:'+ofs[0]+'px;width:3px;height:'+zk.offsetHeight(el.parentNode.parentNode)
-			+'px;background:darkgray"><img src="'+zk.getUpdateURI('/web/img/spacer.gif')
-					+'"/></div>');
+			+'px;background:darkgray"></div>');
 		dg.element = $e("zk_ddghost");
 	} else {
 		var org = zkau.getGhostOrgin(dg);
