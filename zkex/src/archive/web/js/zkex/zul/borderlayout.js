@@ -680,8 +680,8 @@ zkLayoutRegionSplit2 = {
 					mins = $int(getZKAttr(real, "mins")) || 0,
 					ol = zk.Layout2.getOwnerLayout(real),
 					mars = ol.stringToBox(getZKAttr(real, "mars") || "0,0,0,0"),
-					lr = zk.getFrameWidth(real) + (split.pos == "west" ? mars.left : mars.right),
-					tb = zk.getFrameHeight(real) + (split.pos == "north" ? mars.top : mars.bottom),
+					lr = zk.getPadBorderWidth(real) + (split.pos == "west" ? mars.left : mars.right),
+					tb = zk.getPadBorderHeight(real) + (split.pos == "north" ? mars.top : mars.bottom),
 					min = 0,
 					uuid = $e($uuid(real));
 				switch (split.pos) {

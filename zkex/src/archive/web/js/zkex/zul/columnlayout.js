@@ -47,14 +47,14 @@ zkColumnLayout = {
 		
 		cns.forEach(function (n) {
 			if (n._width.endsWith("px") > 0)
-				total -= ($int(n._width) + zk.getFrameWidth(n));
+				total -= ($int(n._width) + zk.getPadBorderWidth(n));
 		});
 		
 		total = Math.max(0, total);
 		
 		cns.forEach(function (n) {
 			if (n._width.indexOf("%") > 0) {
-				n.style.width = (total ? Math.max(0, Math.floor($int(n._width) / 100 * total) - zk.getFrameWidth(n)) : 0) + "px";
+				n.style.width = (total ? Math.max(0, Math.floor($int(n._width) / 100 * total) - zk.getPadBorderWidth(n)) : 0) + "px";
 				if (broadcast) zk.onSizeAt(n);
 			}
 		});

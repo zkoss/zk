@@ -110,7 +110,7 @@ zkMenu2 = { // menu
 		if (zkMenu2.isTop(cmp)) {
 			var btn = $e(cmp.id + "!b");
 			if (!btn || !btn.innerHTML.trim()) return;
-			btn.style.width = zk.getTextSize(btn, btn.innerHTML)[0] + zk.getFrameWidth(btn) + "px";
+			btn.style.width = zk.getTextSize(btn, btn.innerHTML)[0] + zk.getPadBorderWidth(btn) + "px";
 		}
 	} : zk.voidf,
 	cleanup: function (menu) {
@@ -313,7 +313,7 @@ zkMenu2 = { // menu
 		
 		if (zk.ie7 && !pp.style.width) { // Bug 2105158 and Bug 1911129
 			var ul = $e(pp.id + "!cave");
-			pp.style.width = ul.offsetWidth + zk.getFrameWidth(pp) + "px";
+			pp.style.width = ul.offsetWidth + zk.getPadBorderWidth(pp) + "px";
 		}
 		
 		if (!pp._shadow)

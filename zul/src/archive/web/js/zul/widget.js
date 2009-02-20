@@ -350,25 +350,6 @@ zkPop = {
 			zk.remove(ctx._stackup);
 		ctx._stackup = null;
 	},
-	onVisi:/* zk.ie7 ? function (cmp) {
-		var wdh = cmp.style.width;
-		var fir = zk.firstChild(cmp, "DIV"), last = zk.lastChild(zk.lastChild(cmp, "DIV"), "DIV"),
-			n = $e(cmp.id + "!cave").parentNode;
-		if (!wdh || wdh == "auto") {
-			var diff = zk.getFrameWidth(n.parentNode) + zk.getFrameWidth(n.parentNode.parentNode);
-			if (fir) {
-				fir.firstChild.firstChild.style.width = n.offsetWidth - (zk.getFrameWidth(fir)
-					+ zk.getFrameWidth(fir.firstChild) - diff) + "px";
-			}
-			if (last) {
-				last.firstChild.firstChild.style.width = n.offsetWidth - (zk.getFrameWidth(last)
-					+ zk.getFrameWidth(last.firstChild) - diff) + "px";
-			}
-		} else {
-			if (fir) fir.firstChild.firstChild.style.width = "";
-			if (last) last.firstChild.firstChild.style.width = "";
-		}
-	}: */zk.voidf,
 	setAttr: function (cmp, nm, val) {
 		if ("style.width" == nm) {
 			zkau.setAttr(cmp, nm, val);

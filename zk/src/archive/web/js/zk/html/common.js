@@ -513,7 +513,7 @@ zk.rmClass = function (el, clsnm, bRemove) {
 
 /** Sets the offset height. */
 zk.setOffsetHeight = function (el, hgh) {
-	hgh = hgh - zk.getFrameHeight(el)
+	hgh = hgh - zk.getPadBorderHeight(el)
 		- $int(Element.getStyle(el, "margin-top"))
 		- $int(Element.getStyle(el, "margin-bottom"));
 	el.style.height = (hgh > 0 ? hgh: 0) + "px";
@@ -569,14 +569,14 @@ zk.getPaddingHeight = function (el) {
  * Returns the number of the padding width and the border width from the specified element.  
  * @since 3.5.0
  */
-zk.getFrameWidth = function (el) {
+zk.getPadBorderWidth = function (el) {
 	return zk.getPaddingWidth(el) + zk.getBorderWidth(el);
 };
 /**
  * Returns the number of the padding height and the border height from the specified element.  
  * @since 3.5.0
  */
-zk.getFrameHeight = function (el) {
+zk.getPadBorderHeight = function (el) {
 	return zk.getPaddingHeight(el) + zk.getBorderHeight(el);
 };
 /** Return el.offsetWidth, which solving Safari's bug. */
@@ -642,7 +642,7 @@ zk.sumStyles = function (el, type, styles) {
  * @since 3.0.0
  */
 zk.revisedSize = function (el, size, isHgh) {
-    size -= isHgh ? zk.getFrameHeight(el) : zk.getFrameWidth(el);
+    size -= isHgh ? zk.getPadBorderHeight(el) : zk.getPadBorderWidth(el);
 	if (size < 0) size = 0;
 	return size;
 };

@@ -278,22 +278,22 @@ zkWnd2._fixHgh = function (cmp) {
 	var n = $e(cmp.id + "!cave");
 	if (zk.ie6Only && ((hgh && hgh != "auto" )|| n.style.height)) n.style.height = "0px";
 	if (hgh && hgh != "auto")
-		zk.setOffsetHeight(n, cmp.offsetHeight - zkWnd2.getFrameHeight(cmp) - 1);
+		zk.setOffsetHeight(n, cmp.offsetHeight - zkWnd2.getPadBorderHeight(cmp) - 1);
 };
 /**
  * Returns the height of the framing elements.
  * @since 3.5.0
  */
-zkWnd2.getFrameHeight = function (cmp) {
-	var h = zk.getFrameHeight(cmp);
+zkWnd2.getPadBorderHeight = function (cmp) {
+	var h = zk.getPadBorderHeight(cmp);
     h += zkWnd2.getTitleHeight(cmp);
     if(!zkWnd2._embedded(cmp) && !zkWnd2._popup(cmp)) {
         var n = $e(cmp.id + "!cave"), bl = zk.lastChild(cmp, "DIV"), title = $e(cmp.id + "!caption");
         h += bl.offsetHeight;
 		if (n)
-			h += zk.getFrameHeight(n.parentNode);
+			h += zk.getPadBorderHeight(n.parentNode);
 		if (title)
-	        h += zk.getFrameHeight(title.parentNode);
+	        h += zk.getPadBorderHeight(title.parentNode);
     }
     return h;
 };

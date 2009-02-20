@@ -402,10 +402,10 @@ zkPanel = {
 		var hgh = cmp.style.height;
 		if (zk.ie6Only && ((hgh && hgh != "auto" )|| body.style.height)) body.style.height = "0px";
 		if (hgh && hgh != "auto")
-			zk.setOffsetHeight(body, cmp.offsetHeight - zkPanel.getFrameHeight(cmp) - 1);
+			zk.setOffsetHeight(body, cmp.offsetHeight - zkPanel.getPadBorderHeight(cmp) - 1);
 	},
-	getFrameHeight: function (cmp) {
-		var h = zk.getFrameHeight(cmp);
+	getPadBorderHeight: function (cmp) {
+		var h = zk.getPadBorderHeight(cmp);
 	    h += zkPanel.getTitleHeight(cmp);
 		var tb = $e(cmp.id + "!tb"),
 			bb = $e(cmp.id + "!bb"),
@@ -416,9 +416,9 @@ zkPanel = {
 				title = $e(cmp.id + "!caption");
 	        h += fl.offsetHeight;
 			if (body)
-				h += zk.getFrameHeight(body.parentNode);
+				h += zk.getPadBorderHeight(body.parentNode);
 			if (title)
-		        h += zk.getFrameHeight(title.parentNode);
+		        h += zk.getPadBorderHeight(title.parentNode);
 	    }
 		if (tb) h += tb.offsetHeight;
 		if (bb) h += bb.offsetHeight;

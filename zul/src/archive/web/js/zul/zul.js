@@ -413,7 +413,7 @@ zulHdr._ignoresizing = function (cmp, pointer) {
 		var ofs = zk.revisedOffset(cmp); // Bug #1812154
 		var v = zulHdr._insizer(cmp, pointer[0] - ofs[0]);
 		if (v) {
-			dg.z_min = 10 + zk.getFrameWidth(cmp);		
+			dg.z_min = 10 + zk.getPadBorderWidth(cmp);		
 			return false;
 		}
 	}
