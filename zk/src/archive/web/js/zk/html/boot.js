@@ -1070,6 +1070,8 @@ zk._loadAndInit = function (inf) {
 						if (n.type == "checkbox" || n.type == "radio") {
 							if (n.checked != n.defaultChecked)
 								n.checked = n.defaultChecked;
+							// commented by Bug: 2539896, but Bug 2383106 still remain :(
+							// if (zk.opera) zk.setOuterHTML(n, zk.getOuterHTML(n));
 							break;
 						}
 						if (n.type != "text" && n.type != "password") break;
