@@ -402,27 +402,29 @@ zkPanel = {
 		var hgh = cmp.style.height;
 		if (zk.ie6Only && ((hgh && hgh != "auto" )|| body.style.height)) body.style.height = "0px";
 		if (hgh && hgh != "auto")
-			zk.setOffsetHeight(body, cmp.offsetHeight - zkPanel.getPadBorderHeight(cmp) - 1);
+			zk.setOffsetHeight(body, zkPanel.getOffsetHeight(cmp));
 	},
-	getPadBorderHeight: function (cmp) {
-		var h = zk.getPadBorderHeight(cmp);
-	    h += zkPanel.getTitleHeight(cmp);
+	getOffsetHeight: function (cmp) {
+		var h = cmp.offsetHeight - 1;
+	    h -= zkPanel.getTitleHeight(cmp);
+	    if (getZKAttr(cmp, "framable") == "true") {
+			var body = $e(getZKAttr(cmp, "children")), 
+				bl = zk.lastChild($e(cmp.id + "!body"), "DIV"),
+				title = $e(cmp.id + "!caption");
+	        h -= bl.offsetHeight;
+			if (body)
+				h -= zk.getPadBorderHeight(body.parentNode);
+			if (title)
+		        h -= zk.getPadBorderHeight(title.parentNode);
+	    }
+		h -= zk.getPadBorderHeight(cmp);
 		var tb = $e(cmp.id + "!tb"),
 			bb = $e(cmp.id + "!bb"),
 			fb = $e(cmp.id + "!fb");
-	    if (getZKAttr(cmp, "framable") == "true") {
-			var body = $e(getZKAttr(cmp, "children")), 
-				fl = zk.lastChild($e(cmp.id + "!body"), "DIV"),
-				title = $e(cmp.id + "!caption");
-	        h += fl.offsetHeight;
-			if (body)
-				h += zk.getPadBorderHeight(body.parentNode);
-			if (title)
-		        h += zk.getPadBorderHeight(title.parentNode);
-	    }
-		if (tb) h += tb.offsetHeight;
-		if (bb) h += bb.offsetHeight;
-		if (fb) h += fb.offsetHeight;
+		if (tb) h -= tb.offsetHeight;
+		if (bb) h -= bb.offsetHeight;
+		if (fb) h -= fb.offsetHeight;
+		
 	    return h;
 	},
 	getTitleHeight: function (cmp) {

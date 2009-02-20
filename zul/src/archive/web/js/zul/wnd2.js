@@ -278,23 +278,24 @@ zkWnd2._fixHgh = function (cmp) {
 	var n = $e(cmp.id + "!cave");
 	if (zk.ie6Only && ((hgh && hgh != "auto" )|| n.style.height)) n.style.height = "0px";
 	if (hgh && hgh != "auto")
-		zk.setOffsetHeight(n, cmp.offsetHeight - zkWnd2.getPadBorderHeight(cmp) - 1);
+		zk.setOffsetHeight(n, zkWnd2.getOffsetHeight(cmp));
 };
 /**
- * Returns the height of the framing elements.
- * @since 3.5.0
+ * Returns the offsetHeight of window
+ * @since 3.6.0
  */
-zkWnd2.getPadBorderHeight = function (cmp) {
-	var h = zk.getPadBorderHeight(cmp);
-    h += zkWnd2.getTitleHeight(cmp);
+zkWnd2.getOffsetHeight = function (cmp) {
+	var h = cmp.offsetHeight - 1;
+    h -= zkWnd2.getTitleHeight(cmp);
     if(!zkWnd2._embedded(cmp) && !zkWnd2._popup(cmp)) {
         var n = $e(cmp.id + "!cave"), bl = zk.lastChild(cmp, "DIV"), title = $e(cmp.id + "!caption");
-        h += bl.offsetHeight;
+        h -= bl.offsetHeight;
 		if (n)
-			h += zk.getPadBorderHeight(n.parentNode);
+			h -= zk.getPadBorderHeight(n.parentNode);
 		if (title)
-	        h += zk.getPadBorderHeight(title.parentNode);
+	        h -= zk.getPadBorderHeight(title.parentNode);
     }
+	h -= zk.getPadBorderHeight(cmp);
     return h;
 };
 /**
