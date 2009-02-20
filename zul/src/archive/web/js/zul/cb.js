@@ -144,7 +144,7 @@ zkCmit.onclick = function (evt) {
 		var selId = getZKAttr(cmp, "selid");
 		if (selId != item.id) {
 			setZKAttr(cmp, "selid", item.id);
-			zkau.sendasap({uuid: uuid, cmd: "onSelect", data: [item.id, item.id]});
+			zkau.sendasap({uuid: uuid, cmd: "onSelect", data: [item.id, item.id, zkau.getKeys(evt)]});
 		}
 		if (inp) zkTxbox.updateChange(inp, false); //fire onChange
 		Event.stop(evt); //Bug 1597852 (cb might be a child of listitem)
@@ -308,7 +308,7 @@ zkCmbox.onkey = function (evt) {
 		var cmp = $e(uuid), selId = getZKAttr(cmp, "selid");
 		if (item && selId != item.id) {
 			setZKAttr(cmp, "selid", item.id);
-			zkau.sendasap({uuid: uuid, cmd: "onSelect", data: [item.id, item.id]});
+			zkau.sendasap({uuid: uuid, cmd: "onSelect", data: [item.id, item.id, zkau.getKeys(evt)]});
 		}
 		zkTxbox.updateChange(inp, false); //fire onChange
 		return true;
@@ -600,7 +600,7 @@ zkCmbox._hilite = function (uuid, selback, bUp, reminder, keycode) {
 			var selId = getZKAttr(cmp, "selid");
 			if (selId != found.id) {
 				setZKAttr(cmp, "selid", found.id);
-				zkau.sendasap({uuid: uuid, cmd: "onSelect", data: [found.id, found.id]});
+				zkau.sendasap({uuid: uuid, cmd: "onSelect", data: [found.id, found.id, zkau.getKeys(evt)]});
 			}
 		}
 	} else if (jfnd >= 0) {

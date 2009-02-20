@@ -301,5 +301,6 @@ public class Tab extends LabelImageElement implements org.zkoss.zul.api.Tab {
 						.selectTabDirectly((Tab) selItems.iterator().next(),
 								true);
 		}
+		public void clearSelectionByClient(){}
 	}
 }

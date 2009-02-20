@@ -285,7 +285,7 @@ zk.Selectable.prototype = {
 			step = Event.keyCode(evt) == 40 ? 1: -1;
 			break;
 		case 32: //SPACE
-			if (this._isMultiple()) this.toggleSelect(row, !this._isSelected(row));
+			if (this._isMultiple()) this.toggleSelect(row, !this._isSelected(row), evt);
 			else this.select(row, zkau.getKeys(evt));
 			break;
 		case 36: //Home
@@ -302,10 +302,10 @@ zk.Selectable.prototype = {
 		}
 
 		if (step) {
-			if (shift) this.toggleSelect(row, true);
+			if (shift) this.toggleSelect(row, true, evt);
 			for (; (row = step > 0 ? row.nextSibling: row.previousSibling) != null;) {
 				if ($tag(row) == "TR"  && this._isValid(row) && !getZKAttr(row, "disd")) {
-					if (shift) this.toggleSelect(row, true);
+					if (shift) this.toggleSelect(row, true, evt);
 
 					if ($visible(row)) {
 						if (!shift) lastrow = row;
@@ -372,7 +372,7 @@ zk.Selectable.prototype = {
 			return;
 		if (checkmark) {
 			if (this._isMultiple()) {
-				this.toggleSelect(row, target.checked);
+				this.toggleSelect(row, target.checked, evt);
 			} else {
 				this.select(row, zkau.getKeys(evt));
 			}
@@ -389,9 +389,9 @@ zk.Selectable.prototype = {
 			this._syncFocus(row);
 			if (this._isMultiple()) {
 				if (evt && evt.shiftKey)
-					this.selectUpto(row);
+					this.selectUpto(row, evt);
 				else if (evt && evt.ctrlKey)
-					this.toggleSelect(row, !this._isSelected(row));
+					this.toggleSelect(row, !this._isSelected(row), evt);
 				else // Bug: 1973470
 					this.select(row, zkau.getKeys(evt));
 			} else
@@ -538,7 +538,7 @@ zk.Selectable.prototype = {
 		}
 	},
 	/** Toggle the selection and notifies server. */
-	toggleSelect: function (row, toSel) {
+	toggleSelect: function (row, toSel, evt) {
 		this._changeSelect(row, toSel);
 		this.focus(row);
 
@@ -553,12 +553,12 @@ zk.Selectable.prototype = {
 		}
 
 		//notify server
-		this._sendSelect(row);
+		this._sendSelect(row, evt);
 	},
 	/** Selects a range from the last focus up to the specified one.
 	 * Callable only if multiple
 	 */
-	selectUpto: function (row) {
+	selectUpto: function (row, evt) {
 		if (this._isSelected(row)) {
 			this.focus(row);
 			return; //nothing changed
@@ -589,7 +589,7 @@ zk.Selectable.prototype = {
 
 		this.focus(row);
 		this._fixSelelectedId();
-		this._sendSelect(row);
+		this._sendSelect(row, evt);
 	},
 
 	/** Changes the specified row as focused. */
@@ -968,17 +968,17 @@ zk.Selectable.prototype = {
 	},
 
 	/** Sels all items (don't notify server and change focus, because it is from server). */
-	_selectAll: function (notify) {
+	_selectAll: function (notify, evt) {
 		var rows = this.bodyrows;
 		for (var j = 0, rl = rows.length; j < rl; ++j)
 			if (!getZKAttr(rows[j], "disd"))
 				this._changeSelect(rows[j], true);
 		this._setSelectedId(rows.length ? rows[0].id: null);
-		if (notify) this._sendSelect(rows[0]);
+		if (notify) this._sendSelect(rows[0], evt);
 	},
 
 	/** Notifies the server the selection is changed (callable only if multiple). */
-	_sendSelect: function (row) {
+	_sendSelect: function (row, evt) {
 		//To reduce # of bytes to send, we use a string instead of array.
 		var data = "";
 		for (var j = 0, bl = this.bodyrows.length; j < bl; ++j) {
@@ -988,7 +988,7 @@ zk.Selectable.prototype = {
 		}
 		if (data) data = data.substring(1);
 		zkau.sendasap({uuid: this.id, cmd: "onSelect",
-			data: [data, row ? this.getItemUuid(row) : ""]});
+			data: [data, row ? this.getItemUuid(row) : "", zkau.getKeys(evt), evt ? Event.element(evt).id.endsWith("!cm") : null]});
 	},
 
 	/** Returns z.selId (aka., the id of the selected item), or null if
@@ -1376,7 +1376,7 @@ zkLhfc.onclick = function (evt) {
 	var cmp = zkau.evtel(evt);	
 	var meta = zkau.getMeta(getZKAttr($parentByTag(cmp.parentNode, "TR"), "rid"));
 	if (meta)
-		cmp.checked ? meta._selectAll(true) : meta.select("");
+		cmp.checked ? meta._selectAll(true, evt) : meta.select("", zkau.getKeys(evt));
 };
 zk.addBeforeInit(function () {
 	//Listheader

@@ -687,5 +687,6 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 			_selItem = selItems != null && !selItems.isEmpty()?
 				(Comboitem)selItems.iterator().next(): null;
 		}
+		public void clearSelectionByClient(){}
 	}
 }

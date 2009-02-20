@@ -214,6 +214,7 @@ zkau._getMouseData = function (evt, target) {
  * @since 3.6.0
  */
 zkau.getKeys = function (evt) {
+	if (!evt) return "";
 	var extra = "";
 	if (evt.altKey) extra += "a";
 	if (evt.ctrlKey) extra += "c";

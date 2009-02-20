@@ -41,4 +41,11 @@ public interface Selectable {
 	 * might mismatch.
 	 */
 	public void selectItemsByClient(Set selectedItems);
+	/** Clears the selection.
+	 * <p>This method is designed to be used by engine.
+	 * Don't invoke it directly. Otherwise, the client and server
+	 * might mismatch.
+	 * @since 3.6.0
+	 */
+	public void clearSelectionByClient();
 }
