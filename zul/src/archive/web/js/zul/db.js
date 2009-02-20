@@ -596,15 +596,20 @@ zkDtbox.dropdn = function (cmp, dropdown) {
 	}
 };
 
+//SECTION TODO ADD CLASS
 zkDtbox.open = function (pp) {
 	pp = $e(pp);
 	zkau.closeFloats(pp); //including popups
 	zkau._dtbox.setFloatId(pp.id);
-
+	
 	var uuid = $uuid(pp.id);
 	var db = $e(uuid);
 	if (!db) return;
-
+		
+	var zcls = getZKAttr(db,"zcls");	
+	pp.className=db.className+" "+pp.className;
+	zk.rmClass(pp, zcls);
+	
 	var meta = zkau.getMeta(db);
 	if (meta) meta.init();
 	else zkau.setMeta(db, new zk.Cal(db, pp));
@@ -655,13 +660,19 @@ zkDtbox._repos = function (uuid) {
 	zkau.hideCovered();
 	zk.asyncFocus(inpId);
 };
-
+//TODO Remove Class
 zkDtbox.close = function (pp, focus) {
 	var uuid = $uuid(pp.id);
 
 	pp.style.display = "none";
 	zk.unsetVParent(pp);
 
+
+	var db = $e(uuid);
+	if (!db) return;
+	var zcls = getZKAttr(db,"zcls");	
+	pp.className=zcls+"-pp";
+	
 	pp = $e(pp);
 	zkau._dtbox.setFloatId(null);
 	//No special child, so no need to: zk.onHideAt(pp);
