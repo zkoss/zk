@@ -302,7 +302,7 @@ div.z-drop-ghost {
 div.z-drop-cnt {
 	width: 120px;
 	height: 18px;
-	background-image: url(${c:encodeURL('~./zul/img/grid/drop-bg.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/drop-bg.gif')});
 	padding: 2px;
 	font-size: ${fontSizeM};
 	font-weight: normal;
