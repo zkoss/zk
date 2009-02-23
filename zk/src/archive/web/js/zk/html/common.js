@@ -250,8 +250,9 @@ zk.Shadow.prototype = {
 		st.left = (l + opts.left) + "px";
 		st.top = (t + opts.top) + "px";
 		st.width = wd + "px";
-		shadow.childNodes[1].style.height = (h - 12 - opts.top + opts.bottom) + "px";
 		st.display = "block";
+		var cns = shadow.childNodes;
+		cns[1].style.height = (hgh - cns[0].offsetHeight - cns[2].offsetHeight) + "px";
 
 		var stackup = this.stackup;
 		if(opts.stackup && node) {
