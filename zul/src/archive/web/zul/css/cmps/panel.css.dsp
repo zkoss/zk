@@ -113,7 +113,7 @@
 	background: transparent no-repeat 0 0;
 	background-image: url(${c:encodeURL('~./zul/img/panel/panel-hl.png')});
 	padding-left: 6px;
-	border-bottom: 1px solid #0B5CA0;
+	border-bottom: 1px solid #A7DCF9;
 	zoom: 1;
 }
 <%-- Header Right --%>
@@ -134,7 +134,7 @@
 .z-panel-cm {
 	border: 0;
 	margin: 0;
-	background: #7EBBE1;
+	background: #e4f0fa;
 	padding-top: 6px;
 }
 .z-panel-cm.z-panel-noheader {

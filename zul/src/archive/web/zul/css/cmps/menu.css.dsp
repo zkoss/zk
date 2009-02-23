@@ -22,7 +22,7 @@
 	position : relative;
 	display: block;	
 	padding : 2px 0px;	
-	border-bottom : 1px solid #85A7C4;
+	border-bottom : 1px solid #B1CBD5;
 	background: #CEE7F5 repeat-x; 
 	background-image: url(${c:encodeURL('~./zul/img/button/tb-bg.png')}); 
 }

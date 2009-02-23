@@ -2,7 +2,7 @@
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 
 .z-toolbar {
-	border-color: #85A7C4; border-style: solid; border-width: 0 0 1px 0; display: block;
+	border-color: #B1CBD5; border-style: solid; border-width: 0 0 1px 0; display: block;
 	padding: 2px;
 	background: #CEE7F5 repeat-x top left; 
 	background-image: url(${c:encodeURL('~./zul/img/button/tb-bg.png')});
