@@ -67,6 +67,7 @@ ZK 3.6.0
   2539896: Checkmark in header of listbox has no effect (Opera only)
   2515562: the DOM tree parent of calendar in datebox is not datebox
   2492748: onClientInfo still firing after session invalidates
+  2519885: Paginated tree with multiple selection checkmark
 
 * Upgrade Notes
   + The default setting disables the feature of ignoring the consecutive
