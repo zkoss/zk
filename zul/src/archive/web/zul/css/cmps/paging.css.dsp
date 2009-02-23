@@ -8,7 +8,7 @@
 .z-paging-os .z-paging-os-cnt {
 	padding: 2px 3px;
 	background-color:#C7E5F1;
-	background-image:url(${c:encodeURL('~./zul/img/grid/s_hd.gif')});
+	background-image:url(${c:encodeURL('~./zul/img/grid/column-bg.png')});
 	background-repeat:repeat-x;
 	border: 1px solid #DAE7F6;
 	font-size: ${fontSizeS}; color: #1725A0; font-weight: normal;

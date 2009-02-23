@@ -9,7 +9,7 @@ div.z-tree-header, div.z-tree-header tr, div.z-tree-footer {
 	border: 0; overflow: hidden; width: 100%;
 }
 div.z-tree-header tr.z-tree-cols, div.z-tree-header tr.z-auxhead {
-	background-image: url(${c:encodeURL('~./zul/img/grid/s_hd.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/grid/column-bg.png')});
 }
 div.z-tree-header th.z-tree-col, div.z-tree-header th.z-auxheader {
 	overflow: hidden; border: 1px solid;
@@ -118,7 +118,7 @@ div.z-dottree-header, div.z-dottree-header tr, div.z-dottree-footer {
 	border: 0; overflow: hidden; width: 100%;
 }
 div.z-dottree-header tr.z-tree-cols, div.z-tree-header tr.z-auxhead  {
-	background-image: url(${c:encodeURL('~./zul/img/grid/s_hd.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/grid/column-bg.png')});
 }
 div.z-dottree-header th {
 	overflow: hidden; border: 1px solid;
@@ -190,7 +190,7 @@ div.z-filetree-header, div.z-filetree-header tr, div.z-filetree-footer {
 	border: 0; overflow: hidden; width: 100%;
 }
 div.z-filetree-header tr.z-tree-cols, div.z-tree-header tr.z-auxhead  {
-	background-image: url(${c:encodeURL('~./zul/img/grid/s_hd.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/grid/column-bg.png')});
 }
 div.z-filetree-header th {
 	overflow: hidden; border: 1px solid;
@@ -246,7 +246,7 @@ div.z-vfiletree-header, div.z-vfiletree-header tr, div.z-vfiletree-footer {
 	border: 0; overflow: hidden; width: 100%;
 }
 div.z-vfiletree-header tr.z-tree-cols, div.z-tree-header tr.z-auxhead  {
-	background-image: url(${c:encodeURL('~./zul/img/grid/s_hd.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/grid/column-bg.png')});
 }
 div.z-vfiletree-header th {
 	overflow: hidden; border: 1px solid;

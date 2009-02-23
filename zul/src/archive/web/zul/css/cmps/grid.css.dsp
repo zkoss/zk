@@ -14,7 +14,7 @@ div.z-grid-header, div.z-grid-header tr, div.z-grid-footer {
 div.z-grid-header tr.z-columns, div.z-grid-header tr.z-auxhead {
 	background-color: #C7E5F1;
 	background-repeat: repeat-x;
-	background-image: url(${c:encodeURL('~./zul/img/grid/s_hd.png')});
+	background-image: url(${c:encodeURL('~./zul/img/grid/column-bg.png')});
 }
 div.z-grid-header th.z-column, div.z-grid-header th.z-auxheader {
 	overflow: hidden; 
