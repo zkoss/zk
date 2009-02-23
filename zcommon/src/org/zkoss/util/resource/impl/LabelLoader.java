@@ -28,6 +28,7 @@ import java.io.InputStream;
 import java.io.IOException;
 
 import org.zkoss.mesg.MCommon;
+import org.zkoss.lang.Library;
 import org.zkoss.lang.SystemException;
 import org.zkoss.util.Maps;
 import org.zkoss.util.Locales;
@@ -45,6 +46,11 @@ import org.zkoss.xel.util.SimpleXelContext;
  *
  * Used to implement {@link org.zkoss.util.resource.Labels}.
  *
+ * <p>Notice that the encoding of i3-label.properties is assumed to be
+ * UTF-8. If it is not the case, please refer to 
+ * <a href="http://docs.zkoss.org/wiki/Developer_reference_Appendix_B._WEB-INF/zk.xml_Library_Properties">Libraries Properties</a>
+ * for configuration (avaible since 3.6.0).
+ *
  * @author tomyeh
  */
 public class LabelLoader {
@@ -56,6 +62,7 @@ public class LabelLoader {
 	private final List _locators = new LinkedList();
 	/** The XEL context. */
 	private XelContext _xelc;
+	private String _jarcharset, _warcharset;
 
 	/** Returns the label of the specified key, or null if not found.
 	 */
@@ -165,6 +172,11 @@ public class LabelLoader {
 					+"\nTry to load again automatically...");
 		} //for(;;)
 
+		if (_jarcharset == null)
+			_jarcharset = Library.getProperty("org.zkoss.util.label.classpath.charset", "UTF-8");
+		if (_warcharset == null)
+			_warcharset = Library.getProperty("org.zkoss.util.label.WEB-INF.charset", "UTF-8");
+
 		try {
 			//get the class name
 			log.info("Loading labels for "+locale);
@@ -177,14 +189,14 @@ public class LabelLoader {
 				"metainfo/i3-label_" + locale + ".properties");
 			en.hasMoreElements();) {
 				final URL url = (URL)en.nextElement();
-				load(labels, url);
+				load(labels, url, _jarcharset);
 			}
 
 			//2. load from extra resource
 			for (Iterator it = _locators.iterator(); it.hasNext();) {
 				final URL url = ((LabelLocator)it.next()).locate(locale);
 				if (url != null)
-					load(labels, url);
+					load(labels, url, _warcharset);
 			}
 
 			//add to map
@@ -203,12 +215,13 @@ public class LabelLoader {
 		}
 	}
 	/** Loads all labels from the specified URL. */
-	private static final void load(Map labels, URL url) throws IOException {
+	private static final void load(Map labels, URL url, String charset)
+	throws IOException {
 		log.info(MCommon.FILE_OPENING, url);
 		final Map news = new HashMap();
 		final InputStream is = url.openStream();
 		try {
-			Maps.load(news, is);
+			Maps.load(news, is, charset);
 		} finally {
 			try {is.close();} catch (Throwable ex) {}
 		}

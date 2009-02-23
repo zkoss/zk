@@ -55,6 +55,34 @@ public class Labels {
 		final String s = getLabel(key);
 		return s != null ? MessageFormats.format(s, args, null): null;
 	}
+
+	/** Returns the label of the specified key based
+	 * on the current Locale, or the default value if no found.
+	 *
+	 * <p>The current locale is given by {@link org.zkoss.util.Locales#getCurrent}.
+	 *
+	 * @param defValue the value being returned if the key is not found
+	 * @since 3.6.0
+	 */
+	public static final String getLabel(String key, String defValue) {
+		final String s = _loader.getLabel(key);
+		return s != null ? s: defValue;
+	}
+	/** Returns the label of the specified key and formats it
+	 * with the specified argument, or the default value if not found.
+	 *
+	 * <p>It first uses {@link #getLabel(String, String)} to load the label.
+	 * Then, it, if not null, invokes {@link MessageFormats#format} to format it.
+	 *
+	 * <p>The current locale is given by {@link org.zkoss.util.Locales#getCurrent}.
+	 * @param defValue the value being returned if the key is not found
+	 * @since 3.6.0
+	 */
+	public static final String getLabel(String key, String defValue, Object[] args) {
+		final String s = getLabel(key, defValue);
+		return s != null ? MessageFormats.format(s, args, null): null;
+	}
+
 	/** Returns the label of the specified key based on the current locale.
 	 * Unlike {@link #getLabel(String)}, it throws an exception if not found.
 	 *
