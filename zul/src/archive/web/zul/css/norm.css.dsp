@@ -73,7 +73,7 @@ div.z-debugbox {
 
 <%-- General --%>
 .noscript {<%-- the content of noscript --%>
-	position: absolute; z-index: 22000;
+	position: absolute; z-index: 32000;
 	top: 0; left: 0; width: 100%; height: 100%;
 	filter: alpha(opacity=60); opacity: .6; hasLayout: -1;
 	background: #E0E1E3; text-align: center;
@@ -90,15 +90,15 @@ div.z-debugbox {
 	font-size: ${fontSizeM}; font-weight: normal;
 }
 .z-modal-mask {
-	position: absolute; z-index: 20000;
+	position: absolute; z-index: 30000;
 	top: 0; left: 0; width: 100%; height: 100%;
 	filter: alpha(opacity=60); <%-- IE --%>
 	opacity: .6;
-	hasLayout: -1;<%-- not a layout element in IE --%>
-	background: #E0E1E3; <%-- #dae4f5/#e1eaf7/e3ecf7 --%>
+	zoom: 1;
+	background: #E0E1E3;
 }
 .z-loading {
-	position: absolute; z-index: 21000; background-color: #6eadff; cursor: wait;
+	position: absolute; z-index: 31000; background-color: #6eadff; cursor: wait;
 	white-space: nowrap; border: 1px solid #83B5F7; padding:3px;
 }
 .z-loading-indicator {
@@ -113,7 +113,7 @@ div.z-debugbox {
 .z-apply-mask {
 	position: absolute; z-index: 89000; top: 0; left: 0; width: 100%; height: 100%;
 	filter: alpha(opacity=60); opacity: .6;
-	hasLayout: -1; background: #E0E1E3; <%-- #dae4f5/#e1eaf7/e3ecf7 --%>
+	zoom: 1; background: #E0E1E3;
 }
 .z-apply-loading-indicator {
 	color: #102B6D; border:1px solid #A6C5DC; background-color: #FFF; 
@@ -230,7 +230,7 @@ span.z-drop-disallow {
 	background-image: url(${c:encodeURL('~./zul/img/grid/drop-no.gif')});
 }
 div.z-drop-ghost {
-	border:1px solid #6593CF;
+	border:1px solid #6699CE;
 }
 div.z-drop-cnt {
 	background-image: url(${c:encodeURL('~./zul/img/grid/drop-bg.gif')});
@@ -279,13 +279,13 @@ div.z-errbox {
 <%-- Progressmeter --%>
 div.z-progressmeter {
 	background:#E0E8F3 url(${c:encodeURL('~./zk/img/prgmeter_bg.png')}) repeat-x scroll 0 0 ;
-	border:1px solid #7FA9E4;
+	border:1px solid #6F9CDB;
 	text-align: left;
 	height: 17px;
 }
 span.z-progressmeter-img {
 	display:-moz-inline-box; display:inline-block;
-	background:#9CBFEE url(${c:encodeURL('~./zk/img/prgmeter.png')}) repeat-x scroll left center;
+	background:#A4C6F2 url(${c:encodeURL('~./zk/img/prgmeter.png')}) repeat-x scroll left center;
 	height: 17px; font-size:0;
 }
 .z-messagebox {

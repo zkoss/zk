@@ -2,7 +2,7 @@
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 .z-panel-move-ghost {
 	position: absolute;
-	background: #CBDDF3;
+	background: #D7E6F7;
 	overflow: hidden;
 	filter: alpha(opacity=65) !important; <%-- IE --%>
 	opacity: .65 !important;
@@ -13,7 +13,7 @@
 	margin: 0; padding: 0;
 	overflow: hidden;  
 	display: block;
-	background: #cbddf3;
+	background: #D7E6F7;
 	line-height: 0;
 	font-size: 0;
 }
@@ -83,7 +83,7 @@
 <%-- Header --%>
 .z-panel-header {
 	overflow: hidden;
-	color: #15428b;
+	color: #0F3B82;
 	font: normal ${fontSizeM} ${fontFamilyT};
 	padding: 5px 3px 4px 5px;
 	border: 1px solid #0B5CA0;
@@ -100,7 +100,7 @@
 	zoom: 1;
 }
 .z-panel-hm .z-panel-header {
-	color: #15428b;
+	color: #0F3B82;
 	padding: 0;
 	padding-bottom: 4px;
 	background: transparent;

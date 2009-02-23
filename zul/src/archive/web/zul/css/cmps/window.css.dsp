@@ -8,13 +8,13 @@
 	z-index: 50000;
 	left: 0;
 	top: 0;
-	background-color: #CBDDF3;
+	background-color: #D7E6F7;
 	filter: alpha(opacity=50); <%-- IE --%>
 	opacity: .5;
 }
 .z-window-move-ghost {
 	position: absolute;
-	background: #CBDDF3;
+	background: #D7E6F7;
 	overflow: hidden;
 	filter: alpha(opacity=65) !important; <%-- IE --%>
 	opacity: .65 !important;
@@ -25,7 +25,7 @@
 	margin: 0; padding: 0;
 	overflow: hidden;  
 	display: block;
-	background: #cbddf3;
+	background: #D7E6F7;
 	line-height: 0;
 	font-size: 0;
 }

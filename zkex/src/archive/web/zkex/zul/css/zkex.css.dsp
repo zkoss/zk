@@ -102,7 +102,7 @@
 .z-east-header,
 .z-north-header,
 .z-south-header {
-	color: #15428b;
+	color: #0F3B82;
 	font: normal 11px tahoma, arial, verdana, sans-serif;
 	font-weight:bold;
 	padding: 5px 3px 4px 5px;

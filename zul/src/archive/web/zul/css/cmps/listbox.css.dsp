@@ -116,7 +116,7 @@ td.z-list-group-inner {
 	border-bottom: 1px solid #bcd2ef;	
 }
 td.z-list-group-inner div.z-list-cell-cnt {
-	color:#3764a0; font: normal ${fontSizeM} ${fontFamilyT};
+	color:#2C559C; font: normal ${fontSizeM} ${fontFamilyT};
 	padding: 4px 2px; width: auto;font-weight:bold;
 }
 .z-list-group-img{

@@ -95,10 +95,10 @@ td.z-group-inner {
 	padding: 2px; overflow: hidden;
 	border-top: 2px solid #81BAF5;
 	border-bottom: 1px solid #bcd2ef;
-	color: #3764a0; font: normal ${fontSizeM} ${fontFamilyT};font-weight:bold;	
+	color: #2C559C; font: normal ${fontSizeM} ${fontFamilyT};font-weight:bold;	
 }
 .z-group-inner .z-group-cnt span, .z-group-inner .z-group-cnt {
-	color:#3764a0; font: normal ${fontSizeM} ${fontFamilyT};
+	color:#2C559C; font: normal ${fontSizeM} ${fontFamilyT};
 	padding: 4px 2px; width: auto;font-weight:bold;
 }
 .z-group-img {

@@ -49,7 +49,7 @@
 }
 
 .z-paging {
-	border-color:#A9BFD3;
+	border-color:#85A7C4;
 	border-style:solid;
 	border-width:0 0 1px;
 	display:block;
