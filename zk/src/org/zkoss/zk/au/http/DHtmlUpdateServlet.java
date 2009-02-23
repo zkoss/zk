@@ -492,7 +492,12 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			AuWriters.newInstance().open(request, response, 0);
 
 		if (!"rmDesktop".equals(cmdId) && !Events.ON_RENDER.equals(cmdId)
-		&& !Events.ON_TIMER.equals(cmdId) && !"dummy".equals(cmdId)) {//possible in FF due to cache
+		&& !Events.ON_TIMER.equals(cmdId)
+		&& !Events.ON_CLIENT_INFO.equals(cmdId)
+		&& !Events.ON_MOVE.equals(cmdId)
+		&& !Events.ON_SIZE.equals(cmdId)
+		&& !Events.ON_Z_INDEX.equals(cmdId)
+		&& !"dummy".equals(cmdId)) {//possible in FF due to cache
 			String uri = Devices.getTimeoutURI(getDeviceType(request));
 			final AuResponse resp;
 			if (uri != null) {
