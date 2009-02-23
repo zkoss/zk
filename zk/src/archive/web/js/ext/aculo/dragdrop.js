@@ -263,8 +263,7 @@ else
       scrollSensitivity: 20,
       scrollSpeed: 15,
       snap: false,  // false, or xy or [x,y] or function(x,y){ return [x,y] }
-      delay: 0,
-      overlay: false
+      delay: 0
     };
     
     if(!arguments[1] || typeof arguments[1].endeffect == 'undefined')
@@ -357,15 +356,6 @@ zkau.autoZIndex(src, false, true);
   startDrag: function(event) {
 //Tom M. Yeh, Potix: disable selection
 zk.disableSelection(document.body); // Bug #1820433
-  	if (this.options.overlay) { // Bug #1911280
-		this.domOverlay = document.createElement("DIV");
-		document.body.appendChild(this.domOverlay);
-		zk.setOuterHTML(this.domOverlay, '<div class="dd-overlay" id="zk_dd_overlay"></div>');
-		this.domOverlay = $e("zk_dd_overlay");
-		if (zk.gecko) this.domOverlay.style.MozUserSelect = "none";
-		this.domOverlay.style.width = zk.pageWidth() + "px";
-		this.domOverlay.style.height = zk.pageHeight() + "px";
-	}
     this.dragging = true;
     
     if(this.options.ghosting) {
@@ -440,8 +430,6 @@ if (this.z_orgpos != 'absolute')
   
   finishDrag: function(event, success) {
     this.dragging = false;
-	if (this.domOverlay) zk.remove(this.domOverlay);
-	delete this.domOverlay;
 //Tom M. Yeh, Potix: enable selection back and clear selection if any
 zk.enableSelection(document.body);
 setTimeout("zk.clearSelection()", 0);

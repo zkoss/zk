@@ -1959,36 +1959,32 @@ Object.extend(Event, {
       (document.documentElement.scrollTop || document.body.scrollTop));
   },
 /* Jumper Chen, Potix: add the code of event more controllable.*/
-  safariKeys: {
-    63234 : 37, // left
-    63232 : 38, // up
-    63235 : 39, // right
-    63233 : 40, // down
-    63276 : 33, // page up
-    63277 : 34, // page down
-    63272 : 46, // delete
-    63273 : 36, // home
-    63275 : 35  // end
+  safariKeymap: {
+  	25: 9, 	   // SHIFT-TAB
+    63276: 33, // page up
+    63277: 34, // page down
+    63275: 35, // end
+    63273: 36, // home
+    63234: 37, // left
+    63232: 38, // up
+    63235: 39, // right
+    63233: 40, // down
+    63272: 46 // delete
   },
+  specialKeyChar: ' 0 9 13 16 17 18 19 20 27 33 34 35 36 37 38 39 40 44 45 ',
   charCode: function(evt) {
   	return evt.charCode || evt.keyCode;
   },
 
   keyCode: function(evt) {
-    var k = evt.keyCode || evt.charCode;
-    return zk.safari ? (this.safariKeys[k] || k) : k;
+    var key = evt.keyCode || evt.charCode;
+    return zk.safari ? (this.safariKeymap[key] || key) : key;
   },
   isSpecialKey: function(evt) {
-    var k = evt.shiftKey ? evt.keyCode : this.keyCode(evt);
-    return (evt.type == 'keypress' && evt.ctrlKey) || k == 0 || k == 9 || 
-	k == 13 || k == 40 || k == 27 ||
-    (k == 16) || (k == 17) ||
-    (k >= 18 && k <= 20) ||
-    (k >= 33 && k <= 35) ||
-    (k >= 36 && k <= 39) ||
-    (k == 44 && k == 45);
+    return (evt.ctrlKey && evt.type == 'keypress') ||
+		this.specialKeyChar.indexOf(' ' + (evt.shiftKey ? evt.keyCode : this.keyCode(evt)) + ' ') != -1;
   },
-/* Jumper Chen, Potix*/  
+/* Jumper Chen, Potix*/
   
   stop: function(event) {
     if (event.preventDefault) {
