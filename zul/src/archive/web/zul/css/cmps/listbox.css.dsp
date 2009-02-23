@@ -27,12 +27,12 @@ div.z-listbox-header th.z-list-header-sort div.z-list-header-cnt {
 div.z-listbox-header th.z-list-header-sort-asc div.z-list-header-cnt {
 	cursor: pointer; padding-right: 9px;
 	background: transparent no-repeat scroll 99% center;
-	background-image: transparent url(${c:encodeURL('~./zul/img/sort/v_asc.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/sort/v_asc.gif')});
 }
 div.z-listbox-header th.z-list-header-sort-dsc div.z-list-header-cnt {
 	cursor: pointer; padding-right: 9px;
 	background: transparent no-repeat scroll 99% center;
-	background-image: transparent url(${c:encodeURL('~./zul/img/sort/v_dsc.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/sort/v_dsc.gif')});
 }
 div.z-listbox-body {
 	background: white; border: 0; overflow: auto; width: 100%; position: relative;

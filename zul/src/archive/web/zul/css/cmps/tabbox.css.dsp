@@ -58,6 +58,9 @@
 	overflow: hidden;
 	zoom: 1;
 }
+.z-tabs-header .z-clear {
+	height: 0px;
+}
 .z-tabs-scroll .z-tabs-cnt {
 	background: #C7E3F3 repeat-x scroll center top;
 	background-image: url(${c:encodeURL('~./zul/img/tab2/tab-strip-bg.png')});
