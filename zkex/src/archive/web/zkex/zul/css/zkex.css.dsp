@@ -242,18 +242,18 @@
 	cursor:pointer;
 	width: 100%;
 	height: 18px;
-	background: transparent no-repeat 4px 2px;
-	background-image: url(${c:encodeURL('~./zul/img/grid/row-expand.gif')}); 
+	background: transparent no-repeat 4px 3px;
+	background-image: url(${c:encodeURL('~./zul/img/grid/row-expand.png')}); 
 }
-.z-detail.z-detail-expd .z-detail-img {
-	background-position: -21px 2px;
+.z-detail.z-detail-expanded .z-detail-img {
+	background-position: -12px 3px;
 }
 tr.z-row .z-detail-outer {
-	background: #bae2f0 repeat-y left;
+	background: #C6E8FC repeat-y left;
 	border-top: none;
 	border-left: 1px solid white;
 	border-right: 1px solid #C0C0C0;
 	border-bottom: 1px solid #D0D0D0;
 	vertical-align: top;
-	background-image: url(${c:encodeURL('~./zul/img/grid/detail-bg.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/grid/detail-bg.png')});
 }

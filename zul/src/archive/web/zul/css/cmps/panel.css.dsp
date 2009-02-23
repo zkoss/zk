@@ -26,35 +26,35 @@
 }
 .z-panel-children {
  	background: white;
-	border: 1px solid #0B5CA0;
+	border: 1px solid #b1cbd5;
 	border-top: 0;
 	overflow: hidden;
 	position: relative;
 }
 .z-panel-bbar .z-toolbar {
-	border: 1px solid #0B5CA0;
+	border: 1px solid #b1cbd5;
 	padding: 2px;
 	border-top: 0 none;
 	overflow: hidden;
 }
 .z-panel-tbar .z-toolbar {
-	border: 1px solid #0B5CA0;
+	border: 1px solid #b1cbd5;
 	padding: 2px;
 	border-top: 0 none;
 	overflow: hidden;
 }
 .z-panel-tbar.z-panel-noheader .z-toolbar {
-	border-top: 1px solid #0B5CA0;
+	border-top: 1px solid #b1cbd5;
 	border-bottom: 0;
 	overflow: hidden;
 }
 .z-panel-cm .z-panel-tbar .z-toolbar {
-	border-top: 1px solid #0B5CA0;
+	border-top: 1px solid #b1cbd5;
 	border-bottom: 0 none;
 }
 .z-panel-children-noheader,
 .z-panel-cm .z-panel-children {
-	border-top: 1px solid #0B5CA0;
+	border-top: 1px solid #b1cbd5;
 }
 <%-- Top Left --%>
 .z-panel-tl {
@@ -86,7 +86,7 @@
 	color: #0F3B82;
 	font: normal ${fontSizeM} ${fontFamilyT};
 	padding: 5px 3px 4px 5px;
-	border: 1px solid #0B5CA0;
+	border: 1px solid #b1cbd5;
 	line-height: 15px; 
 	background:transparent repeat-x 0 -1px;
 	background-image: url(${c:encodeURL('~./zul/img/panel/panel-hm.png')});
@@ -142,7 +142,7 @@
 }
 .z-panel-cm .z-panel-children {
 	background: transparent;
-	border: 1px solid #0B5CA0;
+	border: 1px solid #b1cbd5;
 }
 <%-- Center Left --%>
 .z-panel-cl {
@@ -207,15 +207,15 @@
 }
 .z-panel-noborder .z-panel-header-noborder {
 	border-width: 0;
-	border-bottom: 1px solid #0B5CA0;
+	border-bottom: 1px solid #b1cbd5;
 }
 .z-panel-noborder .z-panel-tbar-noborder .z-toolbar {
 	border-width: 0;
-	border-bottom: 1px solid #0B5CA0;
+	border-bottom: 1px solid #b1cbd5;
 }
 .z-panel-noborder .z-panel-bbar-noborder .z-toolbar {
 	border-width: 0;
-	border-top: 1px solid #0B5CA0;
+	border-top: 1px solid #b1cbd5;
 }
 <%-- Panel Tool --%>
 .z-panel-icon {
