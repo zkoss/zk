@@ -31,32 +31,54 @@
 .z-caption .z-toolbar a:hover {
 	text-decoration: underline;
 }
+
+<%-- toolbar horizontal alignment --%>
+.z-toolbar-start {
+	float: left; clear: none;
+}
+.z-toolbar-center {
+	text-align: center;
+	margin: 0 auto;
+}
+.z-toolbar-end {
+	float: right; clear: none;
+}
+
+
 <%-- Toolbar Panel Mold--%>
 .z-toolbar-panel {
 	padding: 5px;
 }
+
 .z-toolbar-panel .z-toolbar-panel-body .z-toolbar-panel-hor,
 .z-toolbar-panel .z-toolbar-panel-body .z-toolbar-panel-ver {
-	border: 0; padding: 0;
+	border: 0; 
+	padding: 0;
 }
-.z-toolbar-panel .z-toolbar-panel-end .z-toolbar-panel-cnt, .z-toolbar-end {
-	float: right; clear: none;
-}
-.z-toolbar-panel .z-toolbar-panel-start .z-toolbar-panel-cnt, .z-toolbar-start {
-	float: left; clear: none;
-}
-.z-toolbar-panel .z-toolbar-panel-center, .z-toolbar-center {
-	text-align: center;
-}
-.z-toolbar-panel .z-toolbar-panel-center .z-toolbar-panel-cnt, .z-toolbar-center {
-	margin: 0 auto;
-}
-.z-toolbar-panel .z-toolbar-panel-cnt .z-toolbar-panel-hor {
+.z-toolbar-panel .z-toolbar-panel-cnt .z-toolbar-panel-hor{
 	padding: 3px;
 }
-.z-toolbar-panel .z-toolbar-panel-cnt .z-toolbar-panel-ver {
+.z-toolbar-panel .z-toolbar-panel-cnt .z-toolbar-panel-ver{
 	padding: 1px;
 }
+
+.z-toolbar-panel .z-toolbar-panel-start .z-toolbar-panel-cnt{
+	clear: none;
+	float: left; 
+}
+
+.z-toolbar-panel .z-toolbar-panel-center{
+	text-align: center;
+}
+.z-toolbar-panel .z-toolbar-panel-center .z-toolbar-panel-cnt{
+	margin: 0 auto;
+}
+
+.z-toolbar-panel .z-toolbar-panel-end .z-toolbar-panel-cnt{
+	clear: none;
+	float: right; 
+}
+
 <%-- Toolbar Button--%>
 .z-toolbar-button-disd {
 	color: #C5CACB !important; cursor: default!important;
