@@ -56,7 +56,7 @@
 	padding:2px;
 	position:relative;
 	background:#D0DEF0 repeat-x scroll left top;
-	background-image: url(${c:encodeURL('~./zul/img/button/tb-bg.png')});
+	background-image: url(${c:encodeURL('~./zul/img/button/bar-bg.png')});
 }
 
 .z-paging td {
