@@ -27,12 +27,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <div id="${self.uuid}!caption" class="${zcls}-header">
 <c:choose>
 <c:when test="${empty self.caption}">
-<c:if test="${self.closable}"><div id="${self.uuid}!close" class="${zcls}-tool ${zcls}-close"></div></c:if>
+<c:if test="${self.closable}"><div id="${self.uuid}!close" class="${zcls}-icon ${zcls}-close"></div></c:if>
 <c:if test="${self.maximizable}">
-<div id="${self.uuid}!maximize" class="${zcls}-tool ${zcls}-maximize <c:if test="${self.maximized}">${zcls}-maximized</c:if>"></div>
+<div id="${self.uuid}!maximize" class="${zcls}-icon ${zcls}-maximize <c:if test="${self.maximized}">${zcls}-maximized</c:if>"></div>
 </c:if>
 <c:if test="${self.minimizable}">
-<div id="${self.uuid}!minimize" class="${zcls}-tool ${zcls}-minimize"></div>
+<div id="${self.uuid}!minimize" class="${zcls}-icon ${zcls}-minimize"></div>
 </c:if>
 <c:out value="${self.title}"/>
 </c:when>

@@ -218,7 +218,7 @@
 	border-top: 1px solid #0B5CA0;
 }
 <%-- Panel Tool --%>
-.z-panel-tool {
+.z-panel-icon {
 	overflow: hidden; width: 15px; height: 15px; float: right; cursor: pointer;
 	background-color : transparent;
 	background-image : url(${c:encodeURL('~./zul/img/panel/tool-btn.gif')});

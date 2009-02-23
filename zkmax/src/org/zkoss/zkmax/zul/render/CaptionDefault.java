@@ -70,14 +70,14 @@ public class CaptionDefault implements ComponentRenderer {
 				wh.write("<td width=\"16\"><div id=\"")
 					.write(puuid)
 					.write("!minimize\" class=\"")
-					.write(pzcls).write("-tool ").write(pzcls)
+					.write(pzcls).write("-icon ").write(pzcls)
 					.write("-minimize\"></div></td>");
 			}
 			if (self.isMaximizableVisible()) {
 				wh.write("<td width=\"16\"><div id=\"")
 					.write(puuid)
 					.write("!maximize\" class=\"")
-					.write(pzcls).write("-tool ").write(pzcls)
+					.write(pzcls).write("-icon ").write(pzcls)
 					.write("-maximize");
 				if (((Window)self.getParent()).isMaximized())
 					wh.write(" ").write(pzcls).write("-maximized");
@@ -87,7 +87,7 @@ public class CaptionDefault implements ComponentRenderer {
 				wh.write("<td width=\"16\"><div id=\"")
 					.write(puuid)
 					.write("!close\" class=\"")
-					.write(pzcls).write("-tool ").write(pzcls)
+					.write(pzcls).write("-icon ").write(pzcls)
 					.write("-close\"></div></td>");
 			}
 			wh.write("</tr></table>");

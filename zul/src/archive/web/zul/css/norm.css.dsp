@@ -152,12 +152,16 @@ div.z-debugbox {
 .z-shadow {
 	display: none; position: absolute; overflow: hidden; left: 0; top: 0;
 }
-
+.z-shadow-wrapper{
+	padding-bottom:6px;
+	height:100%;
+}
 .z-shadow .z-shadow-cl{
 	background: transparent  repeat-y 0 0;
 	background-image: url(${c:encodeURL('~./zul/img/shadow-cl.png')});
 	padding-left: 6px;
 	overflow: hidden;
+	height:100%;
 	zoom: 1;
 }
 .z-shadow .z-shadow-cr{
@@ -165,12 +169,14 @@ div.z-debugbox {
 	background-image: url(${c:encodeURL('~./zul/img/shadow-cr.png')});
 	padding-right: 6px;
 	overflow: hidden;
+	height:100%;
 	zoom: 1;
 }
 .z-shadow .z-shadow-cm {
 	background: transparent repeat 0 0;
 	background-image: url(${c:encodeURL('~./zul/img/shadow-m.png')});
 	overflow: hidden;
+	height:100%;
 	zoom: 1;
 }
 

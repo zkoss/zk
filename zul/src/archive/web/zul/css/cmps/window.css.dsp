@@ -268,11 +268,11 @@
 	zoom: 1;
 }
 <%-- Tools --%>
-.z-window-embedded-tool,
-.z-window-popup-tool,
-.z-window-modal-tool,
-.z-window-overlapped-tool,
-.z-window-highlighted-tool {
+.z-window-embedded-icon,
+.z-window-popup-icon,
+.z-window-modal-icon,
+.z-window-overlapped-icon,
+.z-window-highlighted-icon {
 	background: transparent no-repeat 0 0;
 	background-image : url(${c:encodeURL('~./zul/img/panel/tool-btn-ol.gif')});
 	height: 15px;
@@ -282,10 +282,10 @@
 	cursor: pointer;
 	margin-left: 2px;
 }
-.z-window-popup-tool {
+.z-window-popup-icon {
 	background-image : url(${c:encodeURL('~./zul/img/panel/tool-btn-pp.gif')});
 }
-.z-window-embedded-tool {
+.z-window-embedded-icon {
 	background-image : url(${c:encodeURL('~./zul/img/panel/tool-btn.gif')});
 }
 .z-window-embedded-close, .z-window-modal-close, .z-window-overlapped-close,

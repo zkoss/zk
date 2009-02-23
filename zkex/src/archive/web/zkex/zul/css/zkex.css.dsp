@@ -10,7 +10,7 @@
 	position: relative;
 	visibility: hidden;
 }
-.z-border-layout-tool {
+.z-border-layout-icon {
 	overflow: hidden;
 	width: 15px;
 	height: 15px;

@@ -55,15 +55,15 @@ public class Window2Default implements ComponentRenderer {
 				.write(uuid).write("!caption\" class=\"").write(zcls).write("-header\">");
 			if (caption == null) {
 				if (self.isClosable())
-					wh.write("<div id=\"").write(uuid).write("!close\" class=\"").write(zcls).write("-tool ").write(zcls).write("-close\"></div>");
+					wh.write("<div id=\"").write(uuid).write("!close\" class=\"").write(zcls).write("-icon ").write(zcls).write("-close\"></div>");
 				if (self.isMaximizable()) {
-					wh.write("<div id=\"").write(uuid).write("!maximize\" class=\"").write(zcls).write("-tool ").write(zcls).write("-maximize");
+					wh.write("<div id=\"").write(uuid).write("!maximize\" class=\"").write(zcls).write("-icon ").write(zcls).write("-maximize");
 					if (self.isMaximized())
 							wh.write(" ").write(zcls).write("-maximized");
 					wh.write("\"></div>");
 				}
 				if (self.isMinimizable())
-					wh.write("<div id=\"").write(uuid).write("!minimize\" class=\"").write(zcls).write("-tool ").write(zcls).write("-minimize\"></div>");
+					wh.write("<div id=\"").write(uuid).write("!minimize\" class=\"").write(zcls).write("-icon ").write(zcls).write("-minimize\"></div>");
 				new Out(title).render(out);
 			} else {
 				wh.write(caption);

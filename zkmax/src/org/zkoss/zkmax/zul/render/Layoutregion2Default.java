@@ -53,7 +53,7 @@ public class Layoutregion2Default implements ComponentRenderer {
 			wh.write("<div id=\"").write(uuid).write("!caption\" class=\"").write(zcls).write("-header\">");
 			if (!pos.equals("center")) {
 				wh.write("<div id=\"").write(uuid).write("!btn\" class=\"").write(pzcls)
-					.write("-tool ").write(zcls).write("-collapse\"");
+					.write("-icon ").write(zcls).write("-collapse\"");
 				if (!self.isCollapsible()) {
 					wh.write(" style=\"display:none;\"");
 				}
@@ -70,7 +70,7 @@ public class Layoutregion2Default implements ComponentRenderer {
 			if (hasTitle) {
 				wh.write("<div id=\"").write(uuid).write("!collapsed\" class=\"").write(zcls).write("-collapsed\" style=\"display:none\"><div id=\"")
 					.write(uuid).write("!btned\" class=\"").write(pzcls)
-					.write("-tool ").write(zcls).write("-expand\"");
+					.write("-icon ").write(zcls).write("-expand\"");
 				if (!self.isCollapsible()) {
 					wh.write(" style=\"display:none;\"");
 				}
