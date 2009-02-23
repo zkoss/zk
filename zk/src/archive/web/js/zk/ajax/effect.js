@@ -691,6 +691,11 @@ zEffect._defOpts = {
 };
 
 zk.eff.Shadow = zk.$extends(zk.Object, {
+	POST_HTML:
+		'" class="z-shadow"><div class="z-shadow-tl"><div class="z-shadow-tr"></div></div>'
+		+'<div class="z-shadow-cl"><div class="z-shadow-cr"><div class="z-shadow-cm">&#160;</div></div></div>'
+		+'<div class="z-shadow-bl"><div class="z-shadow-br"></div></div></div>',
+
 	/**
 	 * Constructor of the Shadow object.
 	 * 
@@ -709,12 +714,6 @@ zk.eff.Shadow = zk.$extends(zk.Object, {
 		opts = this.opts = zk.$default(opts, {
 			left: 4, right: 4, top: 3, bottom: 3
 		});
-		if (zk.ie) {
-			opts.left -= 1;
-			opts.right -= 8;
-			opts.top -= 2;
-			opts.bottom -= 6;
-		}
 
 		this.node = element;
 		var sdwid = element.id + "$sdw";
@@ -760,11 +759,10 @@ zk.eff.Shadow = zk.$extends(zk.Object, {
 			st = shadow.style;
 		st.left = (l + opts.left) + "px";
 		st.top = (t + opts.top) + "px";
-		if(st.width != wd || st.height != hgh) {
-			st.width = wd + "px";
-			st.height = hgh + "px";
-		}
+		st.width = wd + "px";
 		st.display = "block";
+		var cns = shadow.childNodes;
+		cns[1].style.height = (hgh - cns[0].offsetHeight - cns[2].offsetHeight) + "px";
 
 		var stackup = this.stackup;
 		if(opts.stackup && node) {

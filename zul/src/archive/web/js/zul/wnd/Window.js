@@ -174,15 +174,15 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		zDom.center(n, pos);
 		var sdw = this._shadow;
 		if (pos && sdw) {
-			var d = sdw.getDelta(), l = n.offsetLeft, t = n.offsetTop, w = n.offsetWidth,
-				h = n.offsetHeight; 
-			if (pos.indexOf("left") >= 0 && d.l < 0) st.left = l - d.l + "px";
-			else if (pos.indexOf("right") >= 0)
-				st.left = l - (zk.ie ? Math.round((Math.abs(d.l) + d.w)/2) : Math.round((d.l + d.w)/2)) - 1 + "px";
-
-			if (pos.indexOf("top") >= 0 && d.t < 0) st.top = t - d.t + "px";
-			else if (pos.indexOf("bottom") >= 0)
-				st.top = t - (zk.ie ? Math.round((Math.abs(d.t) + d.h)/2) + 1 : Math.round((d.t + d.h)/2)) - 1 + "px";
+			var opts = sdw.opts, l = n.offsetLeft, t = n.offsetTop; 
+			if (pos.indexOf("left") >= 0 && opts.left < 0)
+				st.left = (l - opts.left) + "px";
+			else if (pos.indexOf("right") >= 0 && opts.right > 0)
+				st.left = (l - opts.right) + "px";
+			if (pos.indexOf("top") >= 0 && opts.top < 0)
+				st.top = (t - opts.top) + "px";
+			else if (pos.indexOf("bottom") >= 0 && opts.bottom > 0)
+				st.top = (t - opts.bottom) + "px";
 		}
 		this._syncShadow();
 		if (ol != st.left || ot != st.top)
