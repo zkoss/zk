@@ -370,6 +370,7 @@ zkPanel = {
 			cmp._maximized = false;
 		}
 		zkPanel._fixHgh(cmp);
+		zkPanel._fixWdh(cmp);
 		zkPanel.syncShadow(cmp);
 	}, 
 	syncMaximized: function (cmp) {
@@ -395,6 +396,42 @@ zkPanel = {
 			s.height = sh + "px";
 		}
 	},
+	_fixWdh: zk.ie7 ? function (cmp) {
+		if (getZKAttr(cmp, "framable") != "true" || !zk.isRealVisible(cmp)) return;
+		var body = $e(getZKAttr(cmp, "children"));
+		if (!body) return;
+		var wdh = cmp.style.width,
+			tl = zk.firstChild(cmp, "DIV"),
+			hl = $e(cmp, "caption") ? zk.nextSibling(tl, "DIV") : null,
+			bl = zk.lastChild(zk.lastChild(cmp, "DIV"), "DIV"),
+			bb = $e(cmp, "bb"),
+			fl = $e(cmp, "fb") ? zk.previousSibling(bl, "DIV"): null,
+			n = body.parentNode;
+		if (!wdh || wdh == "auto") {
+			var diff = zk.getPadBorderWidth(n.parentNode) + zk.getPadBorderWidth(n.parentNode.parentNode);
+			if (tl) {
+				tl.firstChild.style.width = n.offsetWidth + diff + "px";
+			}
+			if (hl) {
+				hl.firstChild.firstChild.style.width = n.offsetWidth - (zk.getPadBorderWidth(hl)
+					+ zk.getPadBorderWidth(hl.firstChild) - diff) + "px";
+			}
+			if (bb) bb.style.width = zk.revisedSize(bb, body.offsetWidth);
+			if (fl) {
+				fl.firstChild.firstChild.style.width = n.offsetWidth - (zk.getPadBorderWidth(fl)
+					+ zk.getPadBorderWidth(fl.firstChild) - diff) + "px";
+			}
+			if (bl) {
+				bl.firstChild.style.width = n.offsetWidth + diff + "px";
+			}
+		} else {
+			if (tl) tl.firstChild.style.width = "";
+			if (hl) hl.firstChild.style.width = "";
+			if (bb) bb.style.width = "";
+			if (fl) fl.firstChild.style.width = "";
+			if (bl) bl.firstChild.style.width = "";
+		}
+	} : zk.voidf,
 	_fixHgh: function (cmp) {
 		if (!zk.isRealVisible(cmp)) return;
 		var body = $e(getZKAttr(cmp, "children"));

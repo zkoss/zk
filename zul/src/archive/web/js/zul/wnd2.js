@@ -249,6 +249,7 @@ zkWnd2.onVisi = zkWnd2.onSize = function (cmp) {
 			zkWnd2.syncMaximized(cmp);
 		cmp._maximized = false;
 	}
+	zkWnd2._fixWdh(cmp);
 	zkWnd2._fixHgh(cmp);
 	zkWnd2.syncShadow(cmp);
 };
@@ -272,6 +273,31 @@ zkWnd2.syncMaximized = function (cmp) {
 	s.width = sw + "px";
 	s.height = sh + "px";
 };
+zkWnd2._fixWdh = zk.ie7 ? function (cmp) {
+	if (zkWnd2._embedded(cmp) || zkWnd2._popup(cmp) || !zk.isRealVisible(cmp)) return;
+	var wdh = cmp.style.width,
+		tl = zk.firstChild(cmp, "DIV"),
+		hl = $e(cmp, "caption") ? zk.nextSibling(tl, "DIV") : null,
+		bl = zk.lastChild(cmp, "DIV"),
+		n = $e(cmp.id + "!cave").parentNode;
+	if (!wdh || wdh == "auto") {
+		var diff = zk.getPadBorderWidth(n.parentNode) + zk.getPadBorderWidth(n.parentNode.parentNode);
+		if (tl) {
+			tl.firstChild.style.width = n.offsetWidth + diff + "px";
+		}
+		if (hl) {
+			hl.firstChild.firstChild.style.width = n.offsetWidth - (zk.getPadBorderWidth(hl)
+				+ zk.getPadBorderWidth(hl.firstChild) - diff) + "px";
+		}
+		if (bl) {
+			bl.firstChild.style.width = n.offsetWidth + diff + "px";
+		}
+	} else {
+		if (tl) tl.firstChild.style.width = "";
+		if (hl) hl.firstChild.style.width = "";
+		if (bl) bl.firstChild.style.width = "";
+	}
+} : zk.voidf;
 zkWnd2._fixHgh = function (cmp) {
 	if (!zk.isRealVisible(cmp)) return; //Bug #1944729
 	var hgh = cmp.style.height;
@@ -304,7 +330,7 @@ zkWnd2.getOffsetHeight = function (cmp) {
 zkWnd2.getTitleHeight = function (cmp) {
 	var title = $e(cmp.id + "!caption"),
 		tl = zk.firstChild(cmp, "DIV"),
-		top = tl.offsetHeight;
+		top = title ? tl.offsetHeight : 0;
 	if (!zkWnd2._embedded(cmp) && !zkWnd2._popup(cmp) && !title) 
 		top += zk.nextSibling(tl, "DIV").offsetHeight;
 	return title ? title.offsetHeight + top : top;
@@ -649,6 +675,7 @@ zkWnd2._resize = function (cmp, t, l, h, w, keys) {
 	if (w != cmp.offsetWidth || h != cmp.offsetHeight) {
 		if (w != cmp.offsetWidth) {
 			cmp.style.width = w + "px";
+			zkWnd2._fixWdh(cmp);
 		}
 		if (h != cmp.offsetHeight) {
 			cmp.style.height = h + "px";
