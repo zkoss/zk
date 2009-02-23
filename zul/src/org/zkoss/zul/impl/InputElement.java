@@ -424,7 +424,10 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 
 	//-- Constrainted --//
 	public void setConstraint(String constr) {
-		setConstraint(SimpleConstraint.getInstance(constr));
+		if (constr != null)
+			setConstraint(SimpleConstraint.getInstance(constr));
+		else
+			setConstraint((Constraint)null); //Bug 2564298
 	}
 	public void setConstraint(Constraint constr) {
 		if (!Objects.equals(_constr, constr)) {
