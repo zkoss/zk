@@ -28,12 +28,12 @@
 .z-tabs .z-tabs-cnt {
 	background: transparent none repeat scroll 0 0;
 	padding-left: 0px;
+	border-bottom: 1px solid #8DB2E3;
 	list-style-image: none;
 	list-style-position: outside;
 	list-style-type: none;
 	display: block;
 	margin: 0;
-	border-bottom: 1px solid #8DB2E3;
 	width: 100%;
 	zoom: 1;
 }
@@ -61,6 +61,7 @@
 .z-tabs-scroll .z-tabs-cnt {
 	background: #C7E3F3 repeat-x scroll center top;
 	background-image: url(${c:encodeURL('~./zul/img/tab2/tab-strip-bg.png')});
+	border-bottom: 1px solid #8DB2E3;
 	padding-left: 0px;
 	padding-top: 1px;
 	list-style-image: none;
@@ -69,7 +70,6 @@
 	display: block;
 	margin: 0;
 	zoom: 1;
-	border-bottom: 1px solid #8DB2E3;
 	-moz-user-select: none;
 }
 .z-tabs-cnt li {
@@ -79,7 +79,7 @@
 	cursor: default;
 	display: block;
 	float: left;
-	padding: 0px;
+	padding: 0;
 	margin: 0 0 0 2px;
 	-moz-user-select: none;
 }
@@ -93,7 +93,7 @@
 	right: 3px;
 	top: 3px;
 	width: 11px;
-	z-index: 2;
+	z-index: 15;
 	opacity: .6;
 	filter: alpha(opacity=60);
 	zoom: 1;
@@ -130,7 +130,7 @@
 	padding-right: 10px;
 }
 .z-tabs-edge {
-	float:left;
+	float: left;
 	line-height: 1px !important;
 	width: 1px;
 	margin: 0 !important;
@@ -180,7 +180,7 @@
 	border-bottom: 1px solid #8DB2E3;
 	cursor: pointer;
 	position: absolute;
-	z-index: 10;
+	z-index: 25;
 }
 .z-tabs-scroll .z-tabs-right-scroll:hover {
 	background-position: -18px 0;
@@ -195,7 +195,7 @@
 	border-bottom: 1px solid #8DB2E3;
 	cursor: pointer;
 	position: absolute;
-	z-index: 10;
+	z-index: 25;
 }
 .z-tabs-scroll .z-tabs-left-scroll:hover {
 	background-position: 0px 0;
@@ -350,7 +350,7 @@
 	display: block;
 	margin: 0;
 	zoom: 1;
-	height: 3456px;
+	height: 4096px;
 	border-right: 1px solid #8DB2E3;
 	-moz-user-select: none;
 }
@@ -375,8 +375,8 @@
 	opacity: .6;
 	filter: alpha(opacity=60);
 	cursor: pointer;
-	display: block;	
-	z-index: 2;
+	display: block;
+	z-index: 15;
 	zoom: 1;
 }
 .z-tab-ver-close:hover,
@@ -394,7 +394,7 @@
 	width: 11px;
 	right: 1px;
 	top: 15px;
-	z-index: 2;
+	z-index: 15;
 }
 .z-tab-ver-hl,
 .z-tab-ver-hr,
@@ -467,7 +467,7 @@
 	position: absolute;
 	right: 0;
 	top: 0;
-	z-index: 10;
+	z-index: 25;
 	width: 100%;
 	display: block;
 }
@@ -480,7 +480,7 @@
 	position: absolute;
 	right: 0;
 	bottom: 0;
-	z-index: 10;
+	z-index: 25;
 	width: 100%;
 	display: block;
 }
@@ -650,7 +650,7 @@
 	position: absolute;
 	right: 10px;
 	top: 5px;
-	z-index: 2;
+	z-index: 15;
 }
 .z-tab-accordion-close {
 	opacity: .6;
@@ -757,7 +757,7 @@
 	right: 10px;
 	top: 3px;
 	width: 17px;
-	z-index: 5;
+	z-index: 15;
 }
 .z-tab-accordion-lite-close {
 	opacity: .6;

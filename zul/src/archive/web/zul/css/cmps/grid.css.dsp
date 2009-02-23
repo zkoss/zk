@@ -141,7 +141,7 @@ td.z-group-inner {
 	background-color : #DDEEFB;
 	background-repeat : no-repeat;
 	background-position : left center;
-	display: none; position: absolute; width: 14px; right: 0; top: 0; z-index: 2;
+	display: none; position: absolute; width: 14px; right: 0; top: 0; z-index: 15;
 	cursor: pointer;
 	background-image : url(${c:encodeURL('~./zul/img/grid/hd-btn.gif')});
 }
