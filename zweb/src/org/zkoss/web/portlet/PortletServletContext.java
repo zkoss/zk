@@ -138,4 +138,9 @@ public class PortletServletContext implements ServletContext {
 	public void setAttribute(String name, Object object) {
 		_ctx.setAttribute(name, object);
 	}
+
+	public String getContextPath() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
