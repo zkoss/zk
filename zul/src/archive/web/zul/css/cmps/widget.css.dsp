@@ -8,7 +8,8 @@
 	color: gray !important; cursor: default !important;
 }
 .z-textbox, .z-decimalbox, .z-intbox, .z-longbox, .z-doublebox {
-	background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg.gif')}) repeat-x 0 0;
+	background: #FFF repeat-x 0 0;
+	background-image: url(${c:encodeURL('~./zul/img/grid/text-bg.gif')});
 	border: 1px solid #7F9DB9;
 	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
 }
@@ -21,7 +22,8 @@
 }
 .z-textbox-text-invalid, .z-decimalbox-text-invalid, .z-intbox-text-invalid, .z-longbox-text-invalid,
 	.z-doublebox-text-invalid {
-	background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg-invalid.gif')}) repeat-x 0 0;
+	background: #FFF repeat-x 0 0;
+	background-image: url(${c:encodeURL('~./zul/img/grid/text-bg-invalid.gif')});
 	border: 1px solid #DD7870;
 }
 .z-textbox-readonly, .z-textbox-text-disd,

@@ -10,9 +10,8 @@ div.z-listbox-header, div.z-listbox-header tr, div.z-listbox-footer {
 }
 
 div.z-listbox-header tr.z-list-head, div.z-listbox-header tr.z-auxhead {
+	background: #C7E5F1 repeat-x scroll 0 0;
 	background-image: url(${c:encodeURL('~./zul/img/grid/s_hd.gif')});
-	background-color: #C7E5F1;
-	background-repeat: repeat-x;
 }
 div.z-listbox-header th.z-list-header, div.z-listbox-header th.z-auxheader {
 	overflow: hidden; border: 1px solid;
@@ -22,21 +21,18 @@ div.z-listbox-header th.z-list-header, div.z-listbox-header th.z-auxheader {
 }
 div.z-listbox-header th.z-list-header-sort div.z-list-header-cnt {
 	cursor: pointer; padding-right: 9px;
-	background:transparent url(${c:encodeURL('~./zul/img/sort/v_hint.gif')});
-	background-position: 99% center;
-	background-repeat: no-repeat;
+	background: transparent no-repeat scroll 99% center;
+	background-image: url(${c:encodeURL('~./zul/img/sort/v_hint.gif')});
 }
 div.z-listbox-header th.z-list-header-sort-asc div.z-list-header-cnt {
 	cursor: pointer; padding-right: 9px;
-	background:transparent url(${c:encodeURL('~./zul/img/sort/v_asc.gif')});
-	background-position: 99% center;
-	background-repeat: no-repeat;
+	background: transparent no-repeat scroll 99% center;
+	background-image: transparent url(${c:encodeURL('~./zul/img/sort/v_asc.gif')});
 }
 div.z-listbox-header th.z-list-header-sort-dsc div.z-list-header-cnt {
 	cursor: pointer; padding-right: 9px;
-	background:transparent url(${c:encodeURL('~./zul/img/sort/v_dsc.gif')});
-	background-position: 99% center;
-	background-repeat: no-repeat;
+	background: transparent no-repeat scroll 99% center;
+	background-image: transparent url(${c:encodeURL('~./zul/img/sort/v_dsc.gif')});
 }
 div.z-listbox-body {
 	background: white; border: 0; overflow: auto; width: 100%; position: relative;
@@ -108,7 +104,8 @@ tr.z-list-item td.z-list-item-focus {
 }
 <%-- Listgroup --%>
 tr.z-list-group{
-	background: #E9F2FB url(${c:encodeURL('~./zul/img/grid/group_bg.gif')}) repeat-x 0 0;
+	background: #E9F2FB repeat-x 0 0;
+	background-image: url(${c:encodeURL('~./zul/img/grid/group_bg.gif')});
 }
 td.z-list-group-inner {
 	padding-top: 2px;
@@ -121,9 +118,8 @@ td.z-list-group-inner div.z-list-cell-cnt {
 }
 .z-list-group-img{
 	width: 18px; min-height: 18px; height: 100%;
+	background: transparent no-repeat scroll 0 0;
 	background-image: url(${c:encodeURL('~./zul/img/toggle.gif')});
-	background-repeat: no-repeat;
-	background-position: 0px 0px;
 	vertical-align: top; cursor: pointer; border: 0;
 }
 .z-list-group-img-open {
@@ -134,7 +130,8 @@ td.z-list-group-inner div.z-list-cell-cnt {
 }
 <%-- Listgroupfoot --%>
 .z-list-group-foot{
-	background: #E9F2FB url(${c:encodeURL('~./zul/img/grid/groupfoot_bg.gif')}) repeat-x 0 0;
+	background: #E9F2FB repeat-x 0 0;
+	background-image: url(${c:encodeURL('~./zul/img/grid/groupfoot_bg.gif')});
 }
 td.z-list-group-foot-inner div.z-list-cell-cnt {
 	color: #2C559C; font: normal ${fontSizeM} ${fontFamilyT};font-weight:bold;

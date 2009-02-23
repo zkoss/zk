@@ -94,7 +94,7 @@
 	top: 3px;
 	width: 11px;
 	z-index: 2;
-	opacity: 0.6;
+	opacity: .6;
 	filter: alpha(opacity=60);
 	zoom: 1;
 }
@@ -209,12 +209,12 @@
 .z-tab-seld .z-tab-hm {
 	cursor: default;
 	background-position: 0 -151px;
-	hasLayout: -1;
+	zoom: 1;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
 .z-tab-seld .z-tab-close {
-	opacity: 0.8;
+	opacity: .8;
 	filter: alpha(opacity=80);
 }
 .z-tab-seld .z-tab-hr {
@@ -259,7 +259,7 @@
 .z-tab-disd-seld .z-tab-hl {
 	color: gray;
 	cursor: default;
-	opacity: 0.6;
+	opacity: .6;
 	filter: alpha(opacity=60);
 }
 .z-tab-disd .z-tab-hl,
@@ -272,7 +272,7 @@
 }
 .z-tab-disd .z-tab-close:hover ,
 .z-tab-disd-seld .z-tab-close:hover {
-	opacity: 0.6!important;
+	opacity: .6!important;
 	filter: alpha(opacity=60) !important;
 }
 .z-tab-disd .z-tab-text,
@@ -372,7 +372,7 @@
 	position: absolute;
 	background-image: url(${c:encodeURL('~./zul/img/tab2/tab-close.png')});
 	background-repeat: no-repeat;
-	opacity: 0.6;
+	opacity: .6;
 	filter: alpha(opacity=60);
 	cursor: pointer;
 	display: block;	
@@ -386,7 +386,7 @@
 }
 .z-tab-ver-noclose {
 	position: absolute;
-	opacity: 0.6;
+	opacity: .6;
 	filter: alpha(opacity=60);
 	cursor: pointer;
 	display: block;
@@ -492,7 +492,7 @@
 }
 <%-- Selected --%>
 .z-tab-ver-seld .z-tab-ver-close {
-	opacity: 0.8;
+	opacity: .8;
 	filter: alpha(opacity=80);
 }
 .z-tab-ver-seld .z-tab-ver-hl {
@@ -518,12 +518,12 @@
 .z-tab-ver-disd-seld .z-tab-ver-hl {
 	color: gray;
 	cursor: default;
-	opacity: 0.6;
+	opacity: .6;
 	filter: alpha(opacity=60);
 }
 .z-tab-ver-disd .z-tab-ver-close,
 .z-tab-ver-disd-seld .z-tab-ver-close:hover {
-	opacity: 0.6 !important;
+	opacity: .6 !important;
 	filter: alpha(opacity=60) !important;
 }
 .z-tab-ver-disd .z-tab-ver-hl, .z-tab-ver-disd-seld .z-tab-ver-hl,
@@ -653,7 +653,7 @@
 	z-index: 2;
 }
 .z-tab-accordion-close {
-	opacity: 0.6;
+	opacity: .6;
 	filter: alpha(opacity=60);
 }
 .z-tab-accordion .z-tab-accordion-close:hover {
@@ -663,7 +663,7 @@
 }
 <%-- Selected --%>
 .z-tab-accordion-seld .z-tab-accordion-close {
-	opacity: 0.8;
+	opacity: .8;
 	filter: alpha(opacity=80);
 }
 <%-- Disabled --%>
@@ -671,13 +671,13 @@
 .z-tab-accordion-disd-seld a {
 	color: gray;
 	cursor: default;
-	opacity: 0.6;
+	opacity: .6;
 	filter: alpha(opacity=60);
 }
 .z-tab-accordion-disd .z-tab-accordion-close:hover,
 .z-tab-accordion-disd-seld .z-tab-accordion-close:hover {
 	background-image: url(${c:encodeURL('~./zul/img/tab2/tab-close-off.png')});
-	opacity: 0.6; 
+	opacity: .6; 
 	filter: alpha(opacity=60);
 }
 .z-tab-accordion-disd .z-tab-accordion-text,
@@ -732,18 +732,21 @@
 	display: block;
 	text-decoration: none;
 	text-decoration: none;
-	background: transparent url(${c:encodeURL('~./zul/img/tab2/accdlite-all.png')}) repeat-x scroll 0 -9px;
+	background: transparent repeat-x scroll 0 -9px;
+	background-image: url(${c:encodeURL('~./zul/img/tab2/accdlite-all.png')});
 }
 .z-tab-accordion-lite-tr {
 	padding-right: 6px;
 	display: block;
-	background: transparent url(${c:encodeURL('~./zul/img/tab2/accdlite-all.png')}) repeat-x scroll 0 -9px;
+	background: transparent repeat-x scroll 0 -9px;
+	background-image: url(${c:encodeURL('~./zul/img/tab2/accdlite-all.png')});
 }
 .z-tab-accordion-lite-tm {
 	display: block;
 	padding:4px 0 3px 0;
 	overflow: hidden;
-	background: transparent url(${c:encodeURL('~./zul/img/tab2/accdlite-all.png')}) repeat-x scroll 0 -9px;
+	background: transparent repeat-x scroll 0 -9px;
+	background-image: url(${c:encodeURL('~./zul/img/tab2/accdlite-all.png')});
 }
 .z-tab-accordion-lite-close {
 	background-repeat: no-repeat;
@@ -757,29 +760,31 @@
 	z-index: 5;
 }
 .z-tab-accordion-lite-close {
-	opacity: 0.6;
+	opacity: .6;
 	filter: alpha(opacity=60);
 }
 .z-tab-accordion-lite .z-tab-accordion-lite-close:hover {
 	background-image: url(${c:encodeURL('~./zul/img/tab2/tab-close-on-l.gif')});
-	opacity: 1; filter: alpha(opacity=100);
+	opacity: 1; 
+	filter: alpha(opacity=100);
 }
 <%-- Selected --%>
 .z-tab-accordion-lite-seld .z-tab-accordion-lite-close {
-	opacity: 0.8;
+	opacity: .8;
 	filter: alpha(opacity=80);
 }
 <%-- Disabled --%>
 .z-tab-accordion-lite-disd .z-tab-accordion-lite-close:hover,
 .z-tab-accordion-lite-disd-seld .z-tab-accordion-lite-close:hover {
 	background-image: url(${c:encodeURL('~./zul/img/tab2/tab-close-off.png')});
-	opacity: 0.6; filter: alpha(opacity=60);
+	opacity: .6; 
+	filter: alpha(opacity=60);
 }
 .z-tab-accordion-lite-disd a,
 .z-tab-accordion-lite-disd-seld a {
 	color: gray;
 	cursor: default;
-	opacity: 0.6;
+	opacity: .6;
 	filter: alpha(opacity=60);
 }
 .z-tab-accordion-lite-disd .z-tab-accordion-lite-text,

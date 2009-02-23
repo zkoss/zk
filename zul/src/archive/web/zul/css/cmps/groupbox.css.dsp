@@ -81,17 +81,20 @@
 }
 
 .z-groupbox-bl {
-	background:transparent url(${c:encodeURL('~./img/shdlf.gif')}) no-repeat 0 bottom;
+	background: transparent no-repeat 0 bottom;
+	background-image: url(${c:encodeURL('~./img/shdlf.gif')});
 	padding-left: 6px; 
 	zoom: 1;
 }
 .z-groupbox-br {
-	background:transparent url(${c:encodeURL('~./img/shdrg.gif')}) no-repeat right bottom;
+	background: transparent no-repeat right bottom;
+	background-image: url(${c:encodeURL('~./img/shdrg.gif')});
 	padding-right: 6px; 
 	zoom: 1;
 }
 .z-groupbox-bm {
-	background:transparent url(${c:encodeURL('~./img/shdmd.gif')}) repeat-x 0 0;
+	background: transparent repeat-x 0 0;
+	background-image: url(${c:encodeURL('~./img/shdmd.gif')});
 	height: 6px; 
 	font-size: 0; 
 	line-height: 0; 

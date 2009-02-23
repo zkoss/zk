@@ -75,7 +75,7 @@ div.z-debugbox {
 .noscript {<%-- the content of noscript --%>
 	position: absolute; z-index: 32000;
 	top: 0; left: 0; width: 100%; height: 100%;
-	filter: alpha(opacity=60); opacity: .6; hasLayout: -1;
+	filter: alpha(opacity=60); opacity: .6; zoom: 1;
 	background: #E0E1E3; text-align: center;
 }
 .noscript p {
@@ -106,7 +106,8 @@ div.z-debugbox {
 	white-space: nowrap; padding:6px;
 }
 .z-apply-loading-icon, .z-loading-icon {
-	background: transparent url(${c:encodeURL('~./zk/img/progress2.gif')}) no-repeat center;
+	background: transparent no-repeat center;
+	background-image: url(${c:encodeURL('~./zk/img/progress2.gif')});
 	width: 16px; height: 16px;
 }
 
@@ -167,7 +168,8 @@ div.z-debugbox {
 	zoom: 1;
 }
 .z-shadow .z-shadow-cm {
-	background: transparent url(${c:encodeURL('~./zul/img/shadow-m.png')}) repeat 0 0;
+	background: transparent repeat 0 0;
+	background-image: url(${c:encodeURL('~./zul/img/shadow-m.png')});
 	overflow: hidden;
 	zoom: 1;
 }
@@ -278,15 +280,19 @@ div.z-errbox {
 
 <%-- Progressmeter --%>
 div.z-progressmeter {
-	background:#E0E8F3 url(${c:encodeURL('~./zk/img/prgmeter_bg.png')}) repeat-x scroll 0 0 ;
-	border:1px solid #6F9CDB;
+	background: #E0E8F3 repeat-x scroll 0 0 ;
+	background-image: url(${c:encodeURL('~./zk/img/prgmeter_bg.png')});
+	border: 1px solid #6F9CDB;
 	text-align: left;
 	height: 17px;
 }
 span.z-progressmeter-img {
-	display:-moz-inline-box; display:inline-block;
-	background:#A4C6F2 url(${c:encodeURL('~./zk/img/prgmeter.png')}) repeat-x scroll left center;
-	height: 17px; font-size:0;
+	background: #A4C6F2 repeat-x scroll left center;
+	background-image: url(${c:encodeURL('~./zk/img/prgmeter.png')});
+	height: 17px;
+	font-size: 0;
+	display: -moz-inline-box; 
+	display: inline-block;
 }
 .z-messagebox {
 	word-break: break-all; overflow:auto;
