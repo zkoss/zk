@@ -117,7 +117,7 @@ zkPortalLayout = {
 			var html = '<div id="zk_ddghost" class="z-panel-move-ghost" style="position:absolute;top:'
 				+ofs[1]+'px;left:'+ofs[0]+'px;width:'
 				+zk.offsetWidth(dg.element)+'px;height:'+zk.offsetHeight(dg.element)
-				+'px;z-index:'+dg.element.style.zIndex+'"><dl></dl></div></div>';
+				+'px;z-index:'+dg.element.style.zIndex+'"><dl></dl></div>';
 			document.body.insertAdjacentHTML("afterbegin", html);
 			dg._zoffs = ofs;
 			dg._cns = zk.childNodes($real($parentByType(dg.element.parentNode, "PortalLayout")), zkPortalLayout._isLegalChild);
