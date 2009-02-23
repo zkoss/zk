@@ -55,7 +55,7 @@ zk.Layout2.prototype = {
 	_getAmbit: function (cmp, region, ignoreSplit) {
 		var ambit, mars = this._getMargins(cmp);
 		if (region && !this.isOpen(cmp)) {
-			var colled = $e($uuid(cmp), "collapsed");
+			var colled = $e($uuid(cmp), "colpsd");
 			ambit = {
 				x: mars.left,
 				y: mars.top,
@@ -172,7 +172,7 @@ zk.Layout2.prototype = {
 			this._resizeBody(cmp, ambit);
 		} else {
 			cmp.split.style.display = "none";
-			var colled = $e($uuid(cmp), "collapsed");
+			var colled = $e($uuid(cmp), "colpsd");
 			if (colled) {
 				colled.style.left = ambit.x + "px";
 				colled.style.top = ambit.y + "px";
@@ -313,7 +313,7 @@ zkLayoutRegion2 = {
 		if (btn) {
 			var uuid = $uuid(btn),
 				btned = $e(uuid, "btned"),
-				colled = $e(uuid, "collapsed");
+				colled = $e(uuid, "colpsd");
 			
 			// the effect of doing animation
 			zk.on(colled, "afterSlideOut", this.onAfterSlideOut);
@@ -361,7 +361,7 @@ zkLayoutRegion2 = {
 	},
 	// invokes border layout's renderer before the component slides out
 	onBeforeSlideOut: function (cmp) {
-		var colled = $e($uuid(cmp), "collapsed"),
+		var colled = $e($uuid(cmp), "colpsd"),
 			s = colled.style;
 		s.display = "";
 		s.visibility = "hidden";
@@ -374,7 +374,7 @@ zkLayoutRegion2 = {
 		if (getZKAttr(real, "open") == "true") 
 			anima.slideIn(real, zkLayoutRegionSplit2.sanchors[real.split.pos]);
 		else {
-			var colled = $e($uuid(cmp), "collapsed");
+			var colled = $e($uuid(cmp), "colpsd");
 			colled.style.zIndex = ""; // reset z-index refered to the onBeforeSlideOut()
 			colled.style.visibility = "";
 			anima.slideIn(colled, zkLayoutRegionSplit2.sanchors[real.split.pos], 200);
@@ -415,7 +415,7 @@ zkLayoutRegion2 = {
 	},
 	onColledClick: function (evt) {
 		var colled = zkau.evtel(evt), real = $real(colled);
-		if (!colled.id.endsWith("!collapsed") || real._isSlide) return;
+		if (!colled.id.endsWith("!colpsd") || real._isSlide) return;
 		real._isSlide = true;
 		var pos = getZKAttr(real, "pos");
 		real.style.visibilty = "hidden";
@@ -448,7 +448,7 @@ zkLayoutRegion2 = {
 		for (var region, ambit, margin, rs = ['north', 'south', 'west', 'east'],
 			j = 0, k = rs.length; j < k; ++j) {
 			region = layout.getRegion(rs[j]);
-			if (region && (zk.isVisible(region) || zk.isVisible($e($uuid(region), "collapsed")))) {
+			if (region && (zk.isVisible(region) || zk.isVisible($e($uuid(region), "colpsd")))) {
 				var ignoreSplit = region == cmp;
 				ambit = layout._getAmbit(region, rs[j], ignoreSplit);
 				switch (rs[j]) {
@@ -521,7 +521,7 @@ zkLayoutRegion2 = {
 		if (btn.id.endsWith("!btned")) {
 			real.style.visibilty = "hidden";
 			real.style.display = "";
-			zkLayoutRegion2.syncSize($e($uuid(real), "collapsed"), real, true);
+			zkLayoutRegion2.syncSize($e($uuid(real), "colpsd"), real, true);
 			real.style.visibilty = "";
 			real.style.display = "none";
 		}
@@ -544,7 +544,7 @@ zkLayoutRegion2 = {
 		}
 	},
 	cleanup: function (cmp) {
-		var colled = $e(cmp, "collapsed");
+		var colled = $e(cmp, "colpsd");
 		cmp = $real(cmp);		
 		var layout = zk.Layout2.getOwnerLayout(cmp, true);	// Bug #1814702
 		if (cmp.split) {
@@ -802,7 +802,7 @@ zkLayoutRegionSplit2 = {
 	
 		setZKAttr(real, "open", open ? "true": "false");
 		var vert = split.pos == "west" || split.pos == "east" ? false : true,
-			colled = $e($uuid(real), "collapsed");
+			colled = $e($uuid(real), "colpsd");
 		if (open) {
 			if (colled) {
 				if (!nonAnima) 
