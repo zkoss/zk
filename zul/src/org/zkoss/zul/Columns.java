@@ -319,7 +319,7 @@ public class Columns extends HeadersElement implements org.zkoss.zul.api.Columns
 			});
 			asc.setParent(this);
 			final Menuitem des = new Menuitem(Messages.get(MZul.GRID_DESC));
-			des.setSclass(cols.getZclass() + "-menu-desc");
+			des.setSclass(cols.getZclass() + "-menu-dsc");
 			des.addEventListener(Events.ON_CLICK, new EventListener(){
 				public void onEvent(Event event) throws Exception {
 					if (_ref instanceof Column) ((Column) _ref).sort(false);

@@ -364,7 +364,7 @@ span.z-vfiletree-tee, span.z-vfiletree-last {
 .z-columns-menu-asc .z-menu-item-img {
 	background-image:  url(${c:encodeURL('~./zul/img/grid/AZArrowUp-16x16.gif')});
 }
-.z-columns-menu-desc .z-menu-item-img {
+.z-columns-menu-dsc .z-menu-item-img {
 	background-image:  url(${c:encodeURL('~./zul/img/grid/AZArrowDown-16x16.gif')});
 }
 </c:if>
