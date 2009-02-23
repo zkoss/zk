@@ -657,7 +657,7 @@ zkLayoutRegionSplit2 = {
 			constraint: vert ? "vertical": "horizontal",
 			ghosting: zkLayoutRegionSplit2._ghostsizing,
 			snap: function (x, y) {return zkLayoutRegionSplit2._snap(split, x, y);},
-			zindex: 12000, overlay: true, ignoredrag: zkLayoutRegionSplit2._ignoresizing,
+			zindex: 12000, stackup: true, ignoredrag: zkLayoutRegionSplit2._ignoresizing,
 			endeffect: zkLayoutRegionSplit2._endDrag
 		});
 		var real = $real(split);

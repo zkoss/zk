@@ -87,7 +87,7 @@ zkPanel = {
 			handle.style.cursor = "move";
 			cmp.style.position = "absolute"; //just in case
 			zul.initMovable(cmp, {
-				handle: handle, starteffect: zkPanel._startMove, overlay: true,
+				handle: handle, starteffect: zkPanel._startMove, stackup: true,
 				change: zkau.hideCovered, ignoredrag: zkPanel._ignoreMove,
 				endeffect: zkPanel._endMove});
 		}

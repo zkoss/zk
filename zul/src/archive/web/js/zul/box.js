@@ -114,7 +114,7 @@ zkSplt.init = function (cmp) {
 		vert: vert,
 		drag: new zDraggable(cmp, {
 			constraint: vert ? "vertical": "horizontal", ignoredrag: zkSplt._ignoresizing,
-			ghosting: zkSplt._ghostsizing, overlay: true,
+			ghosting: zkSplt._ghostsizing, stackup: true,
 			snap: snap, endeffect: zkSplt._endDrag})
 	};
 

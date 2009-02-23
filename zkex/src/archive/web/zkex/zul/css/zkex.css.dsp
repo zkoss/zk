@@ -12,11 +12,11 @@
 }
 .z-border-layout-icon {
 	overflow: hidden;
-	width: 15px;
-	height: 15px;
+	width: 16px;
+	height: 16px;
 	float: right;
 	background: transparent no-repeat 0 0;
-	background-image : url(${c:encodeURL('~./zkex/zul/img/layout/tool-btn.gif')});
+	background-image : url(${c:encodeURL('~./zkex/zul/img/layout/borderlayout-btn.png')});
 	margin-left: 2px;
 	cursor: pointer;
 }
@@ -26,7 +26,7 @@
 .z-west,
 .z-center,
 .z-east {
-	border: 1px solid #B1CBD5;
+	border: 1px solid #a7dcf9;
 	position: absolute;
 	overflow: hidden;
 	background-color: white;
@@ -106,7 +106,7 @@
 	font: normal 11px tahoma, arial, verdana, sans-serif;
 	font-weight:bold;
 	padding: 5px 3px 4px 5px;
-	border-bottom: 1px solid #B1CBD5;
+	border-bottom: 1px solid #a7dcf9;
 	background:transparent repeat-x 0 -1px;
 	background-image: url(${c:encodeURL('~./zkex/zul/img/layout/borderlayout-hm.png')});
 	white-space: nowrap;
@@ -114,53 +114,37 @@
 	line-height: 15px;
 	zoom: 1;
 }
-.z-south-collapse {
-	background-position: 0 -195px;
-}
-.z-south-collapse-over {
-	background-position: -15px -195px;
-}
-.z-north-collapse {
-	background-position: 0 -210px;
-}
-.z-north-collapse-over{
-	background-position: -15px -210px;
-}
-.z-west-collapse {
-	background-position: 0 -180px;
-}
-.z-west-collapse-over {
-	background-position: -15px -180px;
-}
-.z-east-collapse {
-	background-position: 0 -165px;
-}
-.z-east-collapse-over {
-	background-position: -15px -165px;
-}
-.z-north-expand {
-	background-position: 0 -195px;
-}
-.z-north-expand-over {
-	background-position: -15px -195px;
-}
+.z-north-collapse,
 .z-south-expand {
-	background-position: 0 -210px;
+	background-position: 0 0;
 }
+.z-north-collapse-over,
 .z-south-expand-over {
-	background-position: -15px -210px;
+	background-position: -16px 0;
 }
-.z-east-expand {
-	background-position: 0 -180px;
-}
-.z-east-expand-over {
-	background-position: -15px -180px;
-}
+.z-east-collapse,
 .z-west-expand {
-	background-position: 0 -165px;
+	background-position: 0 -16px;
 }
+.z-east-collapse-over,
 .z-west-expand-over {
-	background-position: -15px -165px;
+	background-position: -16px -16px;
+}
+.z-south-collapse,
+.z-north-expand {
+	background-position: 0 -32px;
+}
+.z-south-collapse-over,
+.z-north-expand-over {
+	background-position: -16px -32px;
+}
+.z-west-collapse,
+.z-east-expand {
+	background-position: 0 -48px;
+}
+.z-west-collapse-over,
+.z-east-expand-over {
+	background-position: -16px -48px;
 }
 .z-north-expand, .z-south-expand {
 	margin: 3px;

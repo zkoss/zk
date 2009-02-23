@@ -33,7 +33,7 @@ zkPortalLayout = {
 		this.drags[n.id] = new zDraggable(n, {
 			handle: header,
 			zindex: 12000,
-			overlay: true,
+			stackup: true,
 			starteffect: zkPanel._startMove,
 			ghosting: this._ghostMove, 
 			ignoredrag: this._ignoreMove,
