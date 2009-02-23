@@ -330,7 +330,7 @@ public interface ComponentDefinition extends Cloneable {
 	 * names or EL expressions returning classes, class names or composer
 	 * instances, or null if no apply attribute.
 	 *
-	 * @see #getParsedApply();
+	 * @see #getParsedApply
 	 * @since 3.6.0
 	 */
 	public String getApply();
