@@ -242,7 +242,7 @@ zk.Shadow.prototype = {
 		shadow.style.zIndex = $int(Element.getStyle(node, "zIndex"));
 
 		var opts = this.opts,
-			l = node.offsetLeft, t = node.offsetTop + 4,
+			l = node.offsetLeft, t = node.offsetTop,
 			w = node.offsetWidth, h = node.offsetHeight,
 			wd = w - opts.left + opts.right,
 			hgh = h - opts.top + opts.bottom,
@@ -250,7 +250,7 @@ zk.Shadow.prototype = {
 		st.left = (l + opts.left) + "px";
 		st.top = (t + opts.top) + "px";
 		st.width = wd + "px";
-		
+		shadow.childNodes[1].style.height = (h-12) + "px";
 		st.display = "block";
 
 		var stackup = this.stackup;
@@ -258,7 +258,7 @@ zk.Shadow.prototype = {
 			if(!stackup)
 				stackup = this.stackup =
 					zk.makeStackup(node, node.id + '!sdwstk', shadow);
-			
+
 			st = stackup.style;
 			st.left = l +"px";
 			st.top = t +"px";
@@ -267,9 +267,6 @@ zk.Shadow.prototype = {
 			st.zIndex = $int(Element.getStyle(node, "zIndex"));
 			st.display = "block";
 		}
-		
-		var inner = shadow.childNodes[1];
-		inner.style.height = (h-12) + "px";
 	},
 	cleanup: function () {
 		zk.remove(this.shadow);
