@@ -427,6 +427,8 @@ public class DefinitionLoaders {
 			if (s != null && !"false".equals(s))
 				compdef.setBlankPreserved(true);
 
+			compdef.setApply(el.getElementValue("apply", true));
+
 			for (Iterator i = el.getElements("mold").iterator(); i.hasNext();) {
 				final Element e = (Element)i.next();
 				final String nm = IDOMs.getRequiredElementValue(e, "mold-name");

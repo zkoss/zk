@@ -50,6 +50,7 @@ import org.zkoss.zk.ui.metainfo.AnnotationMap;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.xel.ExValue;
 
 /**
  * Utilities for implementing components.
@@ -450,6 +451,15 @@ public class ComponentsCtrl {
 		}
 		public AnnotationMap getAnnotationMap() {
 			return null;
+		}
+		public String getApply() {
+			return null;
+		}
+		public ExValue[] getParsedApply() {
+			return null;
+		}
+		public void setApply(String apply) {
+			throw new UnsupportedOperationException();
 		}
 		public URL getDeclarationURL() {
 			return null;

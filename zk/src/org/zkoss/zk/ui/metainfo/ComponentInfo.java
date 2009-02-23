@@ -323,22 +323,21 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 * @param comp the component used as the self variable to resolve
 	 * EL expressions, if any.
 	 * Notice that UI engine uses the parent component for this argument.
-	 * If comp is null, it is the same as {@link #getComposer(Page)}.
+	 * If comp is null, the page is used as the parent component.
 	 * If comp is not null, it is used as the self variable.
 	 * @see #getApply
 	 * @since 3.5.0
 	 */
 	public Composer resolveComposer(Page page, Component comp) {
-		if (_apply == null)
+		ExValue[] defapply = _compdef.getParsedApply();
+		if (_apply == null && defapply == null)
 			return null;
 
 		try {
 			List composers = new LinkedList();
-			for (int j = 0; j < _apply.length; ++j)
-				toComposer(composers, page,
-					comp != null ?
-						_apply[j].getValue(getEvaluator(), comp):
-						_apply[j].getValue(getEvaluator(), page));
+			Evaluator eval = getEvaluator();
+			toComposers(composers, defapply, eval, page, comp);
+			toComposers(composers, _apply, eval, page, comp);
 
 			return MultiComposer.getComposer(page,
 				(Composer[])composers.toArray(new Composer[composers.size()]));
@@ -355,6 +354,16 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 */
 	public Composer getComposer(Page page, Component comp) {
 		return resolveComposer(page, comp);
+	}
+	private static void toComposers(List composers, ExValue[] apply,
+	Evaluator eval, Page page, Component comp)
+	throws Exception {
+		if (apply != null)
+			for (int j = 0; j < apply.length; ++j)
+				toComposer(composers, page,
+					comp != null ?
+						apply[j].getValue(eval, comp):
+						apply[j].getValue(eval, page));
 	}
 	private static void toComposer(List composers, Page page, Object o)
 	throws Exception {
@@ -399,7 +408,8 @@ implements Cloneable, Condition, java.io.Externalizable {
 		return (Composer)o;
 	}
 	/** Returns the apply attribute that is a list of {@link Composer} class
-	 * names or EL expressions, or null if no apply attribute.
+	 * names or EL expressions returning classes, class names or composer
+	 * instances, or null if no apply attribute.
 	 *
 	 * @since 3.0.0
 	 * @see #getComposer
@@ -416,7 +426,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 		return sb.toString();
 	}
 	/** Sets the apply attribute that is is a list of {@link Composer} class
-	 * or EL expressions.
+	 * or EL expressions returning classes, class names or composer instances.
 	 *
 	 * @param apply the attribute this is a list of {@link Composer} class
 	 * or EL expressions

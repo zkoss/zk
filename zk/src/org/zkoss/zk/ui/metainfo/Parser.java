@@ -464,6 +464,8 @@ public class Parser {
 				(String)params.remove("z2cURI"));
 		}
 
+		compdef.setApply((String)params.remove("apply"));
+
 		for (Iterator e = params.entrySet().iterator(); e.hasNext();) {
 			final Map.Entry me = (Map.Entry)e.next();
 			compdef.addProperty((String)me.getKey(), (String)me.getValue());
