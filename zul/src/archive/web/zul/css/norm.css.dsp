@@ -289,10 +289,12 @@ span.z-drop-allow, span.z-drop-disallow {
 	height: 16px;
 }
 span.z-drop-allow {
-	background-image: url(${c:encodeURL('~./zul/img/grid/drop-yes.gif')});
+	background: transparent no-repeat 0 0;
+	background-image: url(${c:encodeURL('~./zul/img/dd.png')});
 }
 span.z-drop-disallow {
-	background-image: url(${c:encodeURL('~./zul/img/grid/drop-no.gif')});
+	background: transparent no-repeat 0 -16px;
+	background-image: url(${c:encodeURL('~./zul/img/dd.png')});
 }
 div.z-drop-ghost {
 	border:1px solid #6699CE;
