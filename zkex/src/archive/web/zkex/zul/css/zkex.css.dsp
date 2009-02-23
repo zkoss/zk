@@ -208,9 +208,9 @@
 	zoom: 1;
 }
 .z-column-children {
-    float: left;
     margin: 0;
     padding: 0;
+    float: left;
     overflow: hidden;
     zoom: 1;
 }

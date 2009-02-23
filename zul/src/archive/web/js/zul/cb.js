@@ -399,7 +399,11 @@ zkCmbox._open = function (cb, uuid, pp, hilite) {
 	pp.style.position = "absolute"; //just in case
 	pp.style.display = "block";
 	pp.style.zIndex = "88000";
-	zk.addClass(pp, "z-hidden-offset");
+	
+	// throw out
+	pp.style.visibility = "hidden";
+	pp.style.left = "-10000px";
+	
 	zk.onVisiAt(pp);
 
 	//FF: Bug 1486840
@@ -408,7 +412,11 @@ zkCmbox._open = function (cb, uuid, pp, hilite) {
 	//must be inserted into the popup (by use of uuid!child) rather
 	//than invalidate!!
 	zk.setVParent(pp);
-	zk.rmClass(pp, "z-hidden-offset");
+	
+	// throw in
+	pp.style.visibility = "";
+	pp.style.left = "";
+	
 	zkCmbox._fixsz(cb, pp, pp2, ppofs);//fix size
 
 	zk.position(pp, $real(cb), "after-start");

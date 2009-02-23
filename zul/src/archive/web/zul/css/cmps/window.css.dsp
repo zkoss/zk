@@ -1,11 +1,11 @@
 <%@ page contentType="text/css;charset=UTF-8" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 
-.z-window-resize-proxy {
+.z-window-resize-faker {
 	position: absolute; 
 	border: 1px dashed #1854C2;
 	overflow: hidden;
-	z-index: 50000;
+	z-index: 60000;
 	left: 0;
 	top: 0;
 	background-color: #D7E6F7;

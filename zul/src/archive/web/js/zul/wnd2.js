@@ -700,7 +700,7 @@ zkWnd2._ghostsizing = function (dg, ghosting, pointer) {
 	if (ghosting) {
 		zkWnd2.hideShadow(dg.element);
 		var ofs = zkau.beginGhostToDIV(dg);
-		var html = '<div id="zk_ddghost" class="z-window-resize-proxy" style="position:absolute;top:'
+		var html = '<div id="zk_ddghost" class="z-window-resize-faker" style="position:absolute;top:'
 			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
 			+zk.offsetWidth(dg.element)+'px;height:'+zk.offsetHeight(dg.element)
 			+'px;"></div>';
