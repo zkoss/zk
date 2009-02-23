@@ -121,7 +121,7 @@ zkGrfs = {
 		zkGrfs.open(cmp);
 	},
 	open: function (cmp, silent) {
-		var zcls = getZKAttr(cmp, "zcls") + "-collapsed",
+		var zcls = getZKAttr(cmp, "zcls") + "-colpsd",
 			open = zk.hasClass(cmp, zcls);
 		zk[open ? "rmClass" : "addClass"](cmp, zcls);
 		if (!silent)

@@ -20,7 +20,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <div id="${self.uuid}" z.type="zkex.zul.borderlayout.LayoutRegion2">
 	<div id="${self.uuid}!real"${self.outerAttrs}${self.innerAttrs}>
 		<c:if test="${!empty self.title}">
-			<div id="${self.uuid}!caption" class="${self.zclass}-header"><c:if test="${self.position != 'center'}"><div id="${self.uuid}!btn" class="${self.parent.zclass}-icon ${self.zclass}-collapse" <c:if test="${!self.collapsible}">style="display:none;"</c:if>></div></c:if><c:out value="${self.title}" /></div>
+			<div id="${self.uuid}!caption" class="${self.zclass}-header"><c:if test="${self.position != 'center'}"><div id="${self.uuid}!btn" class="${self.parent.zclass}-icon ${self.zclass}-colps" <c:if test="${!self.collapsible}">style="display:none;"</c:if>></div></c:if><c:out value="${self.title}" /></div>
 		</c:if>
 		<div id="${self.uuid}!cave" class="${self.zclass}-body">
 		<c:forEach var="child" items="${self.children}">
@@ -29,9 +29,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		</div>
 	</div>
 	<c:if test="${self.position != 'center'}">
-	<div id="${self.uuid}!split" class="${self.zclass}-split"></div>
+	<div id="${self.uuid}!split" class="${self.zclass}-splt"></div>
 	<c:if test="${!empty self.title}">
-	<div id="${self.uuid}!collapsed" class="${self.zclass}-collapsed" style="display:none"><div id="${self.uuid}!btned" class="${self.parent.zclass}-icon ${self.zclass}-expand" <c:if test="${!self.collapsible}">style="display:none;"</c:if>></div></div>
+	<div id="${self.uuid}!colpsd" class="${self.zclass}-colpsd" style="display:none"><div id="${self.uuid}!btned" class="${self.parent.zclass}-icon ${self.zclass}-exp" <c:if test="${!self.collapsible}">style="display:none;"</c:if>></div></div>
 	</c:if>
 	</c:if>
 </div>

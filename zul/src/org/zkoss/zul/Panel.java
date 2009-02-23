@@ -466,7 +466,7 @@ public class Panel extends XulElement implements org.zkoss.zul.api.Panel {
 		final String scls = super.getRealSclass();
 		final String zcls = getZclass();
 		return scls + ("normal".equals(_border) ? "" : ' ' + zcls + "-noborder")
-			+ (_open ? "" : " " + zcls + "-collapsed");
+			+ (_open ? "" : " " + zcls + "-colpsd");
 	}
 	public String getZclass() {
 		return _zclass == null ?  "z-panel" : _zclass;

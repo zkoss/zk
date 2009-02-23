@@ -69,14 +69,14 @@ public class PanelDefault implements ComponentRenderer {
 						.write(zcls).write("-icon ").write(zcls).write("-close\"></div>");
 				if (self.isMaximizable()) {
 					wh.write("<div id=\"").write(uuid).write("!maximize\" class=\"")
-						.write(zcls).write("-icon ").write(zcls).write("-maximize");
+						.write(zcls).write("-icon ").write(zcls).write("-max");
 					if (self.isMaximized())
-							wh.write(" ").write(zcls).write("-maximized");
+							wh.write(" ").write(zcls).write("-maxd");
 					wh.write("\"></div>");
 				}
 				if (self.isMinimizable())
 					wh.write("<div id=\"").write(uuid).write("!minimize\" class=\"")
-						.write(zcls).write("-icon ").write(zcls).write("-minimize\"></div>");
+						.write(zcls).write("-icon ").write(zcls).write("-min\"></div>");
 				if (self.isCollapsible())
 					wh.write("<div id=\"").write(uuid).write("!toggle\" class=\"")
 						.write(zcls).write("-icon ").write(zcls).write("-toggle\"></div>");

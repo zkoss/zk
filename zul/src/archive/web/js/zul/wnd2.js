@@ -49,13 +49,13 @@ zkWnd2 = {
 		if (!evt) evt = window.event;
 		var btn = Event.element(evt),
 			cmp = $parentByType(btn, "Wnd2");
-		zk.addClass(btn, getZKAttr(cmp, "zcls") + "-minimize-over");
+		zk.addClass(btn, getZKAttr(cmp, "zcls") + "-min-over");
 	},
 	onMinimizeMouseout: function (evt) {
 		if (!evt) evt = window.event;
 		var btn = Event.element(evt),
 			cmp = $parentByType(btn, "Wnd2");
-		zk.rmClass(btn, getZKAttr(cmp, "zcls") + "-minimize-over");
+		zk.rmClass(btn, getZKAttr(cmp, "zcls") + "-min-over");
 	},
 	onMaximizeMouseover: function (evt) {
 		if (!evt) evt = window.event;
@@ -63,8 +63,8 @@ zkWnd2 = {
 			cmp = $parentByType(btn, "Wnd2"), 
 			cls = getZKAttr(cmp, "zcls");
 		if (getZKAttr(cmp, "maximized") == "true")
-			zk.addClass(btn, cls + "-maximized-over");
-		zk.addClass(btn, cls + "-maximize-over");
+			zk.addClass(btn, cls + "-maxd-over");
+		zk.addClass(btn, cls + "-max-over");
 	},
 	onMaximizeMouseout: function (evt) {
 		if (!evt) evt = window.event;
@@ -72,8 +72,8 @@ zkWnd2 = {
 			cmp = $parentByType(btn, "Wnd2"), 
 			cls = getZKAttr(cmp, "zcls");
 		if (getZKAttr(cmp, "maximized") == "true")
-			zk.rmClass(btn, cls + "-maximized-over");
-		zk.rmClass(btn, cls + "-maximize-over");
+			zk.rmClass(btn, cls + "-maxd-over");
+		zk.rmClass(btn, cls + "-max-over");
 	}
 };
 zkWnd2.init = function (cmp) {
@@ -143,7 +143,7 @@ zkWnd2.maximize = function (cmp, maximized, silent) {
 		
 		var l, t, w, h, s = cmp.style, cls = getZKAttr(cmp, "zcls");
 		if (maximized) {
-			zk.addClass($e(cmp, "maximize"), cls + "-maximized");
+			zk.addClass($e(cmp, "maximize"), cls + "-maxd");
 			zkWnd2.hideShadow(cmp);
 			var floated = !zkWnd2._embedded(cmp), op = floated ? zPos.offsetParent(cmp) : cmp.parentNode;
 			l = s.left;
@@ -176,8 +176,8 @@ zkWnd2.maximize = function (cmp, maximized, silent) {
 			s.left = "0px";
 		} else {
 			var max = $e(cmp, "maximize");
-			zk.rmClass(max, cls + "-maximized");
-			zk.rmClass(max, cls + "-maximized-over");
+			zk.rmClass(max, cls + "-maxd");
+			zk.rmClass(max, cls + "-maxd-over");
 			if (cmp._lastSize) {
 				s.left = cmp._lastSize.l;
 				s.top = cmp._lastSize.t;

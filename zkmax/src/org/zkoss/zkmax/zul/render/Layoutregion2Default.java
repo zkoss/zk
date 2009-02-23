@@ -53,7 +53,7 @@ public class Layoutregion2Default implements ComponentRenderer {
 			wh.write("<div id=\"").write(uuid).write("!caption\" class=\"").write(zcls).write("-header\">");
 			if (!pos.equals("center")) {
 				wh.write("<div id=\"").write(uuid).write("!btn\" class=\"").write(pzcls)
-					.write("-icon ").write(zcls).write("-collapse\"");
+					.write("-icon ").write(zcls).write("-colps\"");
 				if (!self.isCollapsible()) {
 					wh.write(" style=\"display:none;\"");
 				}
@@ -66,11 +66,11 @@ public class Layoutregion2Default implements ComponentRenderer {
 			.writeChildren(self).write("</div></div>");
 		
 		if (!pos.equals("center")) {
-			wh.write("<div id=\"").write(uuid).write("!split\" class=\"").write(zcls).write("-split\"\"></div>");
+			wh.write("<div id=\"").write(uuid).write("!split\" class=\"").write(zcls).write("-splt\"\"></div>");
 			if (hasTitle) {
-				wh.write("<div id=\"").write(uuid).write("!collapsed\" class=\"").write(zcls).write("-collapsed\" style=\"display:none\"><div id=\"")
+				wh.write("<div id=\"").write(uuid).write("!colpsd\" class=\"").write(zcls).write("-colpsd\" style=\"display:none\"><div id=\"")
 					.write(uuid).write("!btned\" class=\"").write(pzcls)
-					.write("-icon ").write(zcls).write("-expand\"");
+					.write("-icon ").write(zcls).write("-exp\"");
 				if (!self.isCollapsible()) {
 					wh.write(" style=\"display:none;\"");
 				}

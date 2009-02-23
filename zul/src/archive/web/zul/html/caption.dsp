@@ -27,10 +27,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<td align="left" class="${zcls}-l">${self.imgTag}<c:out value="${self.compoundLabel}" nbsp="true"/></td><%-- bug 1688261: nbsp is required --%>
 	<td align="right" class="${zcls}-r" id="${self.uuid}!cave"><c:forEach var="child" items="${self.children}">${z:redraw(child, null)}</c:forEach></td>
 <c:if test="${self.minimizableVisible}">
-	<td width="16"><div id="${puuid}!minimize" class="${pzcls}-icon ${pzcls}-minimize"></div></td>
+	<td width="16"><div id="${puuid}!minimize" class="${pzcls}-icon ${pzcls}-min"></div></td>
 </c:if>
 <c:if test="${self.maximizableVisible}">
-	<td width="16"><div id="${puuid}!maximize" class="${pzcls}-icon ${pzcls}-maximize <c:if test="${self.parent.maximized}">${pzcls}-maximized</c:if>"></div></td>
+	<td width="16"><div id="${puuid}!maximize" class="${pzcls}-icon ${pzcls}-max <c:if test="${self.parent.maximized}">${pzcls}-maxd</c:if>"></div></td>
 </c:if>
 <c:if test="${self.closableVisible}">
 	<td width="16"><div id="${puuid}!close" class="${pzcls}-icon ${pzcls}-close"></div></td>

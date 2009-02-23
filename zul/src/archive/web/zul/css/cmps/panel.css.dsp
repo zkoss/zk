@@ -232,13 +232,13 @@
 .z-panel-toggle-over {
 	background-position: -15px -60px;
 }
-.z-panel-collapsed .z-panel-toggle {
+.z-panel-colpsd .z-panel-toggle {
 	background-position: 0 -75px;
 }
-.z-panel-collapsed {
+.z-panel-colpsd {
 	height:auto !important;
 }
-.z-panel-collapsed .z-panel-toggle-over {
+.z-panel-colpsd .z-panel-toggle-over {
 	background-position: -15px -75px;
 }
 .z-panel-close {
@@ -247,21 +247,21 @@
 .z-panel-close-over {
 	background-position: -15px 0;
 }
-.z-panel-minimize {
+.z-panel-min {
 	background-position: 0 -15px;
 }
-.z-panel-minimize-over {
+.z-panel-min-over {
 	background-position: -15px -15px;
 }
-.z-panel-maximize {
+.z-panel-max {
 	background-position: 0 -30px;
 }
-.z-panel-maximize-over {
+.z-panel-max-over {
 	background-position: -15px -30px;
 }
-.z-panel-maximized {
+.z-panel-maxd {
 	background-position: 0 -45px;
 }
-.z-panel-maximized-over {
+.z-panel-maxd-over {
 	background-position: -15px -45px;
 }

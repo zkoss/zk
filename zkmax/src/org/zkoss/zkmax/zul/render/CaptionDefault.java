@@ -71,16 +71,16 @@ public class CaptionDefault implements ComponentRenderer {
 					.write(puuid)
 					.write("!minimize\" class=\"")
 					.write(pzcls).write("-icon ").write(pzcls)
-					.write("-minimize\"></div></td>");
+					.write("-min\"></div></td>");
 			}
 			if (self.isMaximizableVisible()) {
 				wh.write("<td width=\"16\"><div id=\"")
 					.write(puuid)
 					.write("!maximize\" class=\"")
 					.write(pzcls).write("-icon ").write(pzcls)
-					.write("-maximize");
+					.write("-max");
 				if (((Window)self.getParent()).isMaximized())
-					wh.write(" ").write(pzcls).write("-maximized");
+					wh.write(" ").write(pzcls).write("-maxd");
 				wh.write("\"></div></td>");
 			}
 			if (self.isClosableVisible()) {

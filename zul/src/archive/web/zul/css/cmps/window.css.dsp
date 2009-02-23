@@ -296,27 +296,27 @@
 	.z-window-popup-close-over, .z-window-highlighted-close-over {
 	background-position: -15px 0;
 }
-.z-window-embedded-minimize, .z-window-modal-minimize, .z-window-overlapped-minimize,
-	.z-window-popup-minimize, .z-window-highlighted-minimize {
+.z-window-embedded-min, .z-window-modal-min, .z-window-overlapped-min,
+	.z-window-popup-min, .z-window-highlighted-min {
 	background-position: 0 -15px;
 }
-.z-window-embedded-minimize-over, .z-window-modal-minimize-over, .z-window-overlapped-minimize-over,
-	.z-window-popup-minimize-over, .z-window-highlighted-minimize-over {
+.z-window-embedded-min-over, .z-window-modal-min-over, .z-window-overlapped-min-over,
+	.z-window-popup-min-over, .z-window-highlighted-min-over {
 	background-position: -15px -15px;
 }
-.z-window-embedded-maximize, .z-window-modal-maximize, .z-window-overlapped-maximize,
-	.z-window-popup-maximize, .z-window-highlighted-maximize {
+.z-window-embedded-max, .z-window-modal-max, .z-window-overlapped-max,
+	.z-window-popup-max, .z-window-highlighted-max {
 	background-position: 0 -30px;
 }
-.z-window-embedded-maximize-over, .z-window-modal-maximize-over, .z-window-overlapped-maximize-over,
-	.z-window-popup-maximize-over, .z-window-highlighted-maximize-over {
+.z-window-embedded-max-over, .z-window-modal-max-over, .z-window-overlapped-max-over,
+	.z-window-popup-max-over, .z-window-highlighted-max-over {
 	background-position: -15px -30px;
 }
-.z-window-embedded-maximized, .z-window-modal-maximized, .z-window-overlapped-maximized,
-	.z-window-popup-maximized, .z-window-highlighted-maximized {
+.z-window-embedded-maxd, .z-window-modal-maxd, .z-window-overlapped-maxd,
+	.z-window-popup-maxd, .z-window-highlighted-maxd {
 	background-position: 0 -45px;
 }
-.z-window-embedded-maximized-over, .z-window-modal-maximized-over, .z-window-overlapped-maximized-over,
-	.z-window-popup-maximized-over, .z-window-highlighted-maximized-over {
+.z-window-embedded-maxd-over, .z-window-modal-maxd-over, .z-window-overlapped-maxd-over,
+	.z-window-popup-maxd-over, .z-window-highlighted-maxd-over {
 	background-position: -15px -45px;
 }

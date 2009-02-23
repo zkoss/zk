@@ -96,7 +96,7 @@ public class Groupbox extends XulElement implements org.zkoss.zul.api.Groupbox {
 	}
 	protected String getRealSclass() {
 		final String cls = super.getRealSclass();
-		final String added = isClosable() && !isOpen() ? getZclass() + "-collapsed" : "";
+		final String added = isClosable() && !isOpen() ? getZclass() + "-colpsd" : "";
 		return cls == null ? added : cls + " " + added;
 	}
 	

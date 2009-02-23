@@ -57,13 +57,13 @@ public class Window2Default implements ComponentRenderer {
 				if (self.isClosable())
 					wh.write("<div id=\"").write(uuid).write("!close\" class=\"").write(zcls).write("-icon ").write(zcls).write("-close\"></div>");
 				if (self.isMaximizable()) {
-					wh.write("<div id=\"").write(uuid).write("!maximize\" class=\"").write(zcls).write("-icon ").write(zcls).write("-maximize");
+					wh.write("<div id=\"").write(uuid).write("!maximize\" class=\"").write(zcls).write("-icon ").write(zcls).write("-max");
 					if (self.isMaximized())
-							wh.write(" ").write(zcls).write("-maximized");
+							wh.write(" ").write(zcls).write("-maxd");
 					wh.write("\"></div>");
 				}
 				if (self.isMinimizable())
-					wh.write("<div id=\"").write(uuid).write("!minimize\" class=\"").write(zcls).write("-icon ").write(zcls).write("-minimize\"></div>");
+					wh.write("<div id=\"").write(uuid).write("!minimize\" class=\"").write(zcls).write("-icon ").write(zcls).write("-min\"></div>");
 				new Out(title).render(out);
 			} else {
 				wh.write(caption);

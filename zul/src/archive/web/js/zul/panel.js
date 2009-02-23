@@ -168,13 +168,13 @@ zkPanel = {
 		if (!evt) evt = window.event;
 		var btn = Event.element(evt),
 			cmp = $parentByType(btn, "Panel");
-		zk.addClass(btn, getZKAttr(cmp, "zcls") + "-minimize-over");
+		zk.addClass(btn, getZKAttr(cmp, "zcls") + "-min-over");
 	},
 	onMinimizeMouseout: function (evt) {
 		if (!evt) evt = window.event;
 		var btn = Event.element(evt),
 			cmp = $parentByType(btn, "Panel");
-		zk.rmClass(btn, getZKAttr(cmp, "zcls") + "-minimize-over");
+		zk.rmClass(btn, getZKAttr(cmp, "zcls") + "-min-over");
 	},
 	onMaximizeMouseover: function (evt) {
 		if (!evt) evt = window.event;
@@ -182,8 +182,8 @@ zkPanel = {
 			cmp = $parentByType(btn, "Panel"), 
 			cls = getZKAttr(cmp, "zcls");
 		if (getZKAttr(cmp, "maximized") == "true")
-			zk.addClass(btn, cls + "-maximized-over");
-		zk.addClass(btn, cls + "-maximize-over");
+			zk.addClass(btn, cls + "-maxd-over");
+		zk.addClass(btn, cls + "-max-over");
 	},
 	onMaximizeMouseout: function (evt) {
 		if (!evt) evt = window.event;
@@ -191,8 +191,8 @@ zkPanel = {
 			cmp = $parentByType(btn, "Panel"), 
 			cls = getZKAttr(cmp, "zcls");
 		if (getZKAttr(cmp, "maximized") == "true")
-			zk.rmClass(btn, cls + "-maximized-over");
-		zk.rmClass(btn, cls + "-maximize-over");
+			zk.rmClass(btn, cls + "-maxd-over");
+		zk.rmClass(btn, cls + "-max-over");
 	},
 	onOpen: function (evt) {
 		if (!evt) evt = window.event;
@@ -215,10 +215,10 @@ zkPanel = {
 			&& (!ignorable || !getZKAttr(body, "animating"))) {
 				var cls = getZKAttr(cmp, "zcls");
 				if (open) {
-					zk.rmClass(cmp, cls + "-collapsed");
+					zk.rmClass(cmp, cls + "-colpsd");
 					anima.slideDown(body);
 				} else {
-					zk.addClass(cmp, cls + "-collapsed");
+					zk.addClass(cmp, cls + "-colpsd");
 					zkPanel.hideShadow(cmp);
 					
 					// windows 2003 with IE6 will cause an error when user toggles the panel in portallayout.
@@ -259,11 +259,11 @@ zkPanel = {
 			
 			var l, t, w, h, s = cmp.style, cls = getZKAttr(cmp, "zcls");
 			if (maximized) {
-				zk.addClass($e(cmp.id + "!maximize"), cls + "-maximized");
+				zk.addClass($e(cmp.id + "!maximize"), cls + "-maxd");
 				zkPanel.hideShadow(cmp);
 				
 				if (zkPanel.isCollapsible(cmp) && getZKAttr(cmp, "open") != "true") {
-					zk.rmClass(cmp, cls + "-collapsed");
+					zk.rmClass(cmp, cls + "-colpsd");
 					var body = $e(cmp.id + "!body");
 					if (body) body.style.display = "";
 				}
@@ -299,8 +299,8 @@ zkPanel = {
 				s.left = "0px";
 			} else {
 				var max = $e(cmp.id + "!maximize");
-				zk.rmClass(max, cls + "-maximized");
-				zk.rmClass(max, cls + "-maximized-over");
+				zk.rmClass(max, cls + "-maxd");
+				zk.rmClass(max, cls + "-maxd-over");
 				if (cmp._lastSize) {
 					s.left = cmp._lastSize.l;
 					s.top = cmp._lastSize.t;
@@ -313,7 +313,7 @@ zkPanel = {
 				w = s.width;
 				h = s.height;
 				if (zkPanel.isCollapsible(cmp) && getZKAttr(cmp, "open") != "true") {
-					zk.addClass(cmp, cls + "-collapsed");
+					zk.addClass(cmp, cls + "-colpsd");
 					var body = $e(cmp.id + "!body");
 					if (body) body.style.display = "none";
 				}

@@ -7,10 +7,10 @@
 .z-fieldset-cnt {
 	overflow: hidden;
 }
-.z-fieldset-collapsed {
+.z-fieldset-colpsd {
 	padding-bottom: 0 !important; border-width: 2px 0 0 0 !important;
 }
-.z-fieldset-collapsed .z-fieldset-cnt {
+.z-fieldset-colpsd .z-fieldset-cnt {
 	visibility: hidden; position: absolute; left: -1000px; top: -1000px;
 }
 
