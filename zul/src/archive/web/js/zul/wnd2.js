@@ -1059,15 +1059,17 @@ zkWnd2._center = function (cmp, zi, pos) {
 	zk.center(cmp, pos);
 	var sw = zkWnd2.getShadow(cmp);
 	if (pos && sw) {
-		var d = sw.getDelta(), l = cmp.offsetLeft, t = cmp.offsetTop, w = cmp.offsetWidth,
-			h = cmp.offsetHeight, s = cmp.style; 
-		if (pos.indexOf("left") >= 0 && d.l < 0) s.left = l - d.l + "px";
-		else if (pos.indexOf("right") >= 0)
-			s.left = l - (zk.ie ? Math.round((Math.abs(d.l) + d.w)/2) : Math.round((d.l + d.w)/2)) - 1 + "px";
+		var opts = sw.opts, l = cmp.offsetLeft, t = cmp.offsetTop,
+			s = cmp.style; 
+		if (pos.indexOf("left") >= 0 && opts.left < 0)
+			s.left = (l - opts.left) + "px";
+		else if (pos.indexOf("right") >= 0 && opts.right > 0)
+			s.left = (l - opts.right) + "px";
 
-		if (pos.indexOf("top") >= 0 && d.t < 0) s.top = t - d.t + "px";
-		else if (pos.indexOf("bottom") >= 0)
-			s.top = t - (zk.ie ? Math.round((Math.abs(d.t) + d.h)/2) + 1 : Math.round((d.t + d.h)/2)) - 1 + "px";
+		if (pos.indexOf("top") >= 0 && opts.top < 0)
+			s.top = (t - opts.top) + "px";
+		else if (pos.indexOf("bottom") >= 0 && opts.bottom > 0)
+			s.top = (t - opts.bottom) + "px";
 	}
 	zkau.sendOnMove(cmp);
 
