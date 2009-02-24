@@ -290,11 +290,11 @@ span.z-drop-allow, span.z-drop-disallow {
 }
 span.z-drop-allow {
 	background: transparent no-repeat 0 0;
-	background-image: url(${c:encodeURL('~./zul/img/dd.png')});
+	background-image: url(${c:encodeURL('~./zul/img/misc/dd.png')});
 }
 span.z-drop-disallow {
 	background: transparent no-repeat 0 -16px;
-	background-image: url(${c:encodeURL('~./zul/img/dd.png')});
+	background-image: url(${c:encodeURL('~./zul/img/misc/dd.png')});
 }
 div.z-drop-ghost {
 	border:1px solid #6699CE;
@@ -302,7 +302,7 @@ div.z-drop-ghost {
 div.z-drop-cnt {
 	width: 120px;
 	height: 18px;
-	background-image: url(${c:encodeURL('~./zul/img/drop-bg.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/misc/drop-bg.gif')});
 	padding: 2px;
 	font-size: ${fontSizeM};
 	font-weight: normal;
@@ -310,12 +310,12 @@ div.z-drop-cnt {
 }
 <%-- ZK Fileupload --%>
 .z-fileupload-add {
-	background-image: url(${c:encodeURL('~./zul/img/fileupload/add.png')});
+	background-image: url(${c:encodeURL('~./zul/img/misc/add.png')});
 	width: 16px;
 	height: 16px;	
 }
 .z-fileupload-delete {
-	background-image: url(${c:encodeURL('~./zul/img/fileupload/delete.png')});
+	background-image: url(${c:encodeURL('~./zul/img/misc/delete.png')});
 	width: 16px;
 	height: 16px;	
 }

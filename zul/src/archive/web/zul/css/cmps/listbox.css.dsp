@@ -119,7 +119,7 @@ td.z-list-group-inner div.z-list-cell-cnt {
 .z-list-group-img{
 	width: 18px; min-height: 18px; height: 100%;
 	background: transparent no-repeat scroll 0 0;
-	background-image: url(${c:encodeURL('~./zul/img/toggle.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/tree/toggle.gif')});
 	vertical-align: top; cursor: pointer; border: 0;
 }
 .z-list-group-img-open {

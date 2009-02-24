@@ -167,7 +167,7 @@
 	border:1px solid #7F9DB9;
 	padding:2px;
 	z-index:88000;
-	background-image : url(${c:encodeURL('~./zul/img/menu2/pp-bg.gif')});
+	background-image : url(${c:encodeURL('~./zul/img/menu/pp-bg.gif')});
 }
 /* define menupopup property*/
 .z-menu-popup {
@@ -234,18 +234,18 @@
 
 .z-menu-popup-cnt .z-menu .z-menu-cnt-img {
 	background:transparent no-repeat scroll right center;
-	background-image:url(${c:encodeURL('~./zul/img/menu2/arrow.png')});
+	background-image:url(${c:encodeURL('~./zul/img/menu/arrow.png')});
 }
 
 /*define checked menuitem effect in menupopup */
 .z-menu-popup-cnt .z-menu-item-cnt-ck .z-menu-item-img {
 	background:transparent no-repeat scroll center center;
-	background-image:url(${c:encodeURL('~./zul/img/menu2/checked.gif')});
+	background-image:url(${c:encodeURL('~./zul/img/menu/checked.gif')});
 }
 
 .z-menu-popup-cnt .z-menu-item-cnt-unck .z-menu-item-img {
 	background:transparent no-repeat scroll center center;
-	background-image:url(${c:encodeURL('~./zul/img/menu2/unchecked.gif')});
+	background-image:url(${c:encodeURL('~./zul/img/menu/unchecked.gif')});
 }
 
 /*define disabled menuitem effect in menupopup*/
@@ -267,7 +267,7 @@
 	border:1px solid #A8D8EB;
 	padding:0;
 	background:#DDEEFB repeat-x scroll 0 0;
-	background-image:url(${c:encodeURL('~./zul/img/menu2/item-over.gif')});
+	background-image:url(${c:encodeURL('~./zul/img/menu/item-over.gif')});
 }
 .z-menu-popup-cnt .z-menu-over a.z-menu-cnt,
 .z-menu-popup-cnt .z-menu-item-over a.z-menu-item-cnt{

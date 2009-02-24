@@ -144,10 +144,10 @@ span.z-vfiletree-last-open, span.z-vfiletree-last-close, span.z-vfiletree-tee, s
 	background-image: url(${c:encodeURL('~./zul/img/msgbox/StopSign-32x32.gif')});
 }
 .z-fileupload-add {
-	background-image: url(${c:encodeURL('~./zul/img/fileupload/add.gif')});	
+	background-image: url(${c:encodeURL('~./zul/img/misc/add.gif')});
 }
 .z-fileupload-delete {
-	background-image: url(${c:encodeURL('~./zul/img/fileupload/delete.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/misc/delete.gif')});
 }
 <%-- box.css.dsp --%>
 .z-splitter-ver-btn-l, .z-splitter-hor-btn-l {
@@ -168,7 +168,7 @@ tr.z-list-item td.z-list-item-focus {
 }
 <%-- menu.css.dsp --%>
 .z-menu-cnt-img {
-	background-image:url(${c:encodeURL('~./zul/img/menu2/arrow.gif')});
+	background-image:url(${c:encodeURL('~./zul/img/menu/arrow.gif')});
 }
 .z-menu-btn .z-menu-btn-m em, .z-menu-btn-text-img .z-menu-btn-m em {
 	background-image: url(${c:encodeURL('~./zul/img/button/tb-btn-arrow.gif')});
@@ -177,7 +177,7 @@ tr.z-list-item td.z-list-item-focus {
 	background-image: url(${c:encodeURL('~./zul/img/button/tb-btn-arrow-ver.gif')});
 }
 .z-menu-item-cnt-unck .z-menu-item-img {
-	background-image:  url(${c:encodeURL('~./zul/img/menu2/unchecked.gif')});
+	background-image:  url(${c:encodeURL('~./zul/img/menu/unchecked.gif')});
 }
 <%-- panel.css.dsp --%>
 .z-panel-tl{
@@ -212,49 +212,49 @@ tr.z-list-item td.z-list-item-focus {
 .z-slider-sphere-hor,
 .z-slider-scale,
 .z-slider-hor {
-	background-image:url(${c:encodeURL('~./zul/img/slider2/slider-bg.png')});
+	background-image:url(${c:encodeURL('~./zul/img/slider/slider-bg.png')});
 }
 .z-slider-sphere-hor-center,
 .z-slider-scale-center,
 .z-slider-hor-center {
-	background-image:url(${c:encodeURL('~./zul/img/slider2/slider-bg.png')});
+	background-image:url(${c:encodeURL('~./zul/img/slider/slider-bg.png')});
 }
 .z-slider-sphere-hor-btn,
 .z-slider-scale-btn,
 .z-slider-hor-btn {
-    background-image : url(${c: encodeURL('~./zul/img/slider2/slider-thumb.png')});
+    background-image : url(${c: encodeURL('~./zul/img/slider/slider-thumb.png')});
 }
 .z-slider-scale-btn {
-	background-image : url(${c: encodeURL('~./zul/img/slider2/slider-scale-thumb.gif')});
+	background-image : url(${c: encodeURL('~./zul/img/slider/slider-scale-thumb.gif')});
 }
 
 <%-- Scale style --%>
 .z-slider-scale-tick {
-    background-image:url(${c: encodeURL('~./zul/img/slider2/ticks.gif')});
+    background-image:url(${c: encodeURL('~./zul/img/slider/ticks.gif')});
 }
 
 
 <%-- Vertical style --%>
 .z-slider-sphere-ver,
 .z-slider-ver {
-	background-image:url(${c:encodeURL('~./zul/img/slider2/slider-bg-ver.gif')});
+	background-image:url(${c:encodeURL('~./zul/img/slider/slider-bg-ver.gif')});
 }
 
 .z-slider-sphere-ver-center,
 .z-slider-ver-center {
-	background-image:url(${c:encodeURL('~./zul/img/slider2/slider-bg-ver.gif')});
+	background-image:url(${c:encodeURL('~./zul/img/slider/slider-bg-ver.gif')});
 }
 
 .z-slider-sphere-ver-btn,
 .z-slider-ver-btn {
-	background-image : url(${c: encodeURL('~./zul/img/slider2/slider-v-thumb.gif')});
+	background-image : url(${c: encodeURL('~./zul/img/slider/slider-v-thumb.gif')});
 }
 .z-slider-sphere-hor-btn {
-	background-image : url(${c: encodeURL('~./zul/img/slider2/slider-thumb_circle.gif')});
+	background-image : url(${c: encodeURL('~./zul/img/slider/slider-thumb_circle.gif')});
 }
 
 .z-slider-sphere-ver-btn {
-	background-image : url(${c: encodeURL('~./zul/img/slider2/slider-v-thumb_circle.gif')});
+	background-image : url(${c: encodeURL('~./zul/img/slider/slider-v-thumb_circle.gif')});
 }
 
 

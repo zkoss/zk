@@ -9,14 +9,14 @@
 
 .z-combobox-inp {
 	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
-	background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg.gif')}) repeat-x 0 0;
+	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg.gif')}) repeat-x 0 0;
 	border: 1px solid #7F9DB9;
 }
 .z-combobox-focus .z-combobox-inp {
 	border: 1px solid #90BCE6;
 }
 .z-combobox-text-invalid {
-	background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg-invalid.gif')}) repeat-x 0 0;
+	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg-invalid.gif')}) repeat-x 0 0;
 	border: 1px solid #DD7870;
 }
 
@@ -79,14 +79,14 @@
 }
 
 .z-bandbox-inp {
-	background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg.gif')}) repeat-x 0 0;
+	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg.gif')}) repeat-x 0 0;
 	border: 1px solid #7F9DB9;
 }
 .z-bandbox-focus .z-bandbox-inp {
 	border: 1px solid #90BCE6;
 }
 .z-bandbox-text-invalid {
-	background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg-invalid.gif')}) repeat-x 0 0;
+	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg-invalid.gif')}) repeat-x 0 0;
 	border: 1px solid #DD7870;
 }
 
@@ -127,14 +127,14 @@
 }
 
 .z-datebox-inp {
-	background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg.gif')}) repeat-x 0 0;
+	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg.gif')}) repeat-x 0 0;
 	border: 1px solid #7F9DB9;
 }
 .z-datebox-focus .z-datebox-inp {
 	border: 1px solid #90BCE6;
 }
 .z-datebox-text-invalid {
-	background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg-invalid.gif')}) repeat-x 0 0;
+	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg-invalid.gif')}) repeat-x 0 0;
 	border: 1px solid #DD7870;
 }
 
@@ -170,7 +170,7 @@
 
 <%-- Timebox --%>
 .z-timebox-inp {
-	background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg.gif')}) repeat-x 0 0;
+	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg.gif')}) repeat-x 0 0;
 	border: 1px solid #7F9DB9;
 	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
 }
@@ -178,7 +178,7 @@
 	border: 1px solid #90BCE6;
 }
 .z-timebox-text-invalid {
-	background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg-invalid.gif')}) repeat-x 0 0;
+	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg-invalid.gif')}) repeat-x 0 0;
 	border: 1px solid #DD7870;
 }
 
@@ -205,7 +205,7 @@
 }
 <%-- Spinner --%>
 .z-spinner-inp {
-	background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg.gif')}) repeat-x 0 0;
+	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg.gif')}) repeat-x 0 0;
 	border: 1px solid #7F9DB9;
 	font-family: ${fontFamilyC};
 	font-size: ${fontSizeM}; font-weight: normal;
@@ -214,7 +214,7 @@
 	border: 1px solid #90BCE6;
 }
 .z-spinner-text-invalid {
-	background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg-invalid.gif')}) repeat-x 0 0;
+	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg-invalid.gif')}) repeat-x 0 0;
 	border: 1px solid #DD7870;
 }
 .z-spinner .z-spinner-img {
