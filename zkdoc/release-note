@@ -71,6 +71,7 @@ ZK 3.6.0
   2519885: Paginated tree with multiple selection checkmark
   2564298: Clear a Datebox with constraint
   2630168: DataBinder.fetchValue throws unnecessary exception for map
+  2614901: Menu with key down/up fail in IE
 
 * Upgrade Notes
   + The default setting disables the feature of ignoring the consecutive

@@ -323,7 +323,12 @@ zkMenu2 = { // menu
 		zkMenu2._pop.addFloatId(pp.id);
 		zkau.hideCovered();
 		var anc = $e(pp.id + "!a");
-		if (anc) anc.focus();
+		if (anc) {
+			if (zk.ie)
+				setTimeout(function (){anc.focus();},10); // Bug 2614901
+			else
+				anc.focus();
+		}
 	},
 	/** Closes the menu. */
 	close: function (pp) {
