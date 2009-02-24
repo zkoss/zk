@@ -45,22 +45,6 @@
 	width:214px;
 }
 
-<%-- all button style --%>
-.z-slider-hor-btn-over,
-.z-slider-sphere-hor-btn-over,
-.z-slider-sphere-ver-btn-over,
-.z-slider-ver-btn-over,
-.z-slider-scale-btn-over {
-    background-position: -15px 0px;
-}
-.z-slider-hor-btn-drag,
-.z-slider-sphere-hor-btn-drag,
-.z-slider-sphere-ver-btn-drag,
-.z-slider-ver-btn-drag,
-.z-slider-scale-btn-drag {
-    background-position: -30px 0px;
-}
-
 <%-- Vertical style --%>
 .z-slider-sphere-ver,
 .z-slider-ver {
@@ -100,5 +84,19 @@
 .z-slider-sphere-ver-btn {
 	background-image : url(${c: encodeURL('~./zul/img/slider/slider-v-circle.png')});
 }
-
+<%-- all button style --%>
+.z-slider-hor-btn-over,
+.z-slider-sphere-hor-btn-over,
+.z-slider-sphere-ver-btn-over,
+.z-slider-ver-btn-over,
+.z-slider-scale-btn-over {
+    background-position: -30px 0px;
+}
+.z-slider-hor-btn-drag,
+.z-slider-sphere-hor-btn-drag,
+.z-slider-sphere-ver-btn-drag,
+.z-slider-ver-btn-drag,
+.z-slider-scale-btn-drag {
+    background-position: -15px 0px;
+}
 
