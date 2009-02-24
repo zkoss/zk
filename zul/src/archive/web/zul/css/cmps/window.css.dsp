@@ -274,7 +274,7 @@
 .z-window-overlapped-icon,
 .z-window-highlighted-icon {
 	background: transparent no-repeat 0 0;
-	background-image : url(${c:encodeURL('~./zul/img/panel/tool-btn-ol.gif')});
+	background-image : url(${c:encodeURL('~./zul/img/wnd/tool-btn-ol.gif')});
 	height: 15px;
 	width: 15px;
 	overflow: hidden;
@@ -283,10 +283,10 @@
 	margin-left: 2px;
 }
 .z-window-popup-icon {
-	background-image : url(${c:encodeURL('~./zul/img/panel/tool-btn-pp.gif')});
+	background-image : url(${c:encodeURL('~./zul/img/wnd/tool-btn-pp.gif')});
 }
 .z-window-embedded-icon {
-	background-image : url(${c:encodeURL('~./zul/img/panel/tool-btn.gif')});
+	background-image : url(${c:encodeURL('~./zul/img/wnd/tool-btn.gif')});
 }
 .z-window-embedded-close, .z-window-modal-close, .z-window-overlapped-close,
 	.z-window-popup-close, .z-window-highlighted-close {

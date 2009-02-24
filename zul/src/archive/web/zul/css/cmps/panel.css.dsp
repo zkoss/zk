@@ -59,7 +59,7 @@
 <%-- Top Left --%>
 .z-panel-tl {
 	background: transparent no-repeat 0 top;
-	background-image: url(${c:encodeURL('~./zul/img/panel/panel-corner.png')});
+	background-image: url(${c:encodeURL('~./zul/img/wnd/panel-corner.png')});
 	margin-right: 5px;
 	height: 5px;
 	font-size: 0;
@@ -69,7 +69,7 @@
 <%-- Top Right --%>
 .z-panel-tr {
 	background: transparent no-repeat right -10px;
-	background-image: url(${c:encodeURL('~./zul/img/panel/panel-corner.png')});
+	background-image: url(${c:encodeURL('~./zul/img/wnd/panel-corner.png')});
 	position: relative;
 	height: 5px;
 	margin-right: -5px;
@@ -89,7 +89,7 @@
 	border: 1px solid #b1cbd5;
 	line-height: 15px;
 	background:transparent repeat-x 0 -1px;
-	background-image: url(${c:encodeURL('~./zul/img/panel/panel-hm.png')});
+	background-image: url(${c:encodeURL('~./zul/img/wnd/panel-hm.png')});
 	font-weight:bold;
 	zoom: 1;
 }
@@ -111,7 +111,7 @@
 <%-- Header Left --%>
 .z-panel-hl {
 	background: transparent no-repeat 0 0;
-	background-image: url(${c:encodeURL('~./zul/img/panel/panel-hl.png')});
+	background-image: url(${c:encodeURL('~./zul/img/wnd/panel-hl.png')});
 	padding-left: 6px;
 	border-bottom: 1px solid #A7DCF9;
 	zoom: 1;
@@ -119,14 +119,14 @@
 <%-- Header Right --%>
 .z-panel-hr {
 	background: transparent no-repeat right 0;
-	background-image: url(${c:encodeURL('~./zul/img/panel/panel-hr.png')});
+	background-image: url(${c:encodeURL('~./zul/img/wnd/panel-hr.png')});
 	padding-right: 6px;
 	zoom: 1;
 }
 <%-- Header Middle --%>
 .z-panel-hm {
 	background: transparent repeat-x 0 0;
-	background-image: url(${c:encodeURL('~./zul/img/panel/panel-hm.png')});
+	background-image: url(${c:encodeURL('~./zul/img/wnd/panel-hm.png')});
 	overflow: hidden;
 	zoom: 1;
 }
@@ -148,7 +148,7 @@
 .z-panel-cl,
 .z-panel-fl {
 	background: transparent repeat-y 0 0;
-	background-image: url(${c:encodeURL('~./zul/img/panel/panel-clr.png')});
+	background-image: url(${c:encodeURL('~./zul/img/wnd/panel-clr.png')});
 	padding-left: 6px;
 	zoom: 1;
 }
@@ -156,7 +156,7 @@
 .z-panel-cr,
 .z-panel-fr {
 	background: transparent repeat-y right 0;
-	background-image: url(${c:encodeURL('~./zul/img/panel/panel-clr.png')});
+	background-image: url(${c:encodeURL('~./zul/img/wnd/panel-clr.png')});
 	padding-right: 6px;
 	zoom: 1;
 }
@@ -168,7 +168,7 @@
 <%-- Bottom Left --%>
 .z-panel-bl {
 	background: transparent no-repeat 0 -5px;
-	background-image: url(${c:encodeURL('~./zul/img/panel/panel-corner.png')});
+	background-image: url(${c:encodeURL('~./zul/img/wnd/panel-corner.png')});
 	height: 5px;
 	margin-right: 5px;
 	zoom: 1;
@@ -176,7 +176,7 @@
 <%-- Bottom Right --%>
 .z-panel-br {
 	background: transparent no-repeat right bottom;
-	background-image: url(${c:encodeURL('~./zul/img/panel/panel-corner.png')});
+	background-image: url(${c:encodeURL('~./zul/img/wnd/panel-corner.png')});
 	position: relative;
 	height: 5px;
 	margin-right: -5px;
@@ -206,7 +206,7 @@
 .z-panel-icon {
 	overflow: hidden; width: 15px; height: 15px; float: right; cursor: pointer;
 	background-color : transparent;
-	background-image : url(${c:encodeURL('~./zul/img/panel/tool-btn.gif')});
+	background-image : url(${c:encodeURL('~./zul/img/wnd/tool-btn.gif')});
 	background-position : 0 0;
 	background-repeat : no-repeat;
 	margin-left: 2px;

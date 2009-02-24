@@ -181,16 +181,16 @@ tr.z-list-item td.z-list-item-focus {
 }
 <%-- panel.css.dsp --%>
 .z-panel-tl{
-	background-image:url(${c:encodeURL('~./zul/img/panel/panel-corners.gif')});
+	background-image:url(${c:encodeURL('~./zul/img/wnd/panel-corners.gif')});
 }
 .z-panel-tr {
-	background-image:url(${c:encodeURL('~./zul/img/panel/panel-corners.gif')});
+	background-image:url(${c:encodeURL('~./zul/img/wnd/panel-corners.gif')});
 }
 .z-panel-bl {
-	background-image:url(${c:encodeURL('~./zul/img/panel/panel-corners.gif')});
+	background-image:url(${c:encodeURL('~./zul/img/wnd/panel-corners.gif')});
 }
 .z-panel-br {
-	background-image:url(${c:encodeURL('~./zul/img/panel/panel-corners.gif')});
+	background-image:url(${c:encodeURL('~./zul/img/wnd/panel-corners.gif')});
 }
 <%-- popup.css.dsp --%>
 .z-popup .z-popup-tl,
