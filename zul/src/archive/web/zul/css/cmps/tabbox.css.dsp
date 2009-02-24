@@ -14,11 +14,11 @@
 }
 .z-tabs .z-tabs-space {
 	height: 2px;
-	border: 1px solid #8DB2E3;
+	border: 1px solid #ABCDD6;
 	border-top: 0 none;
 	font-size: 1px;
 	line-height: 1px;
-	background: #DEECFD none repeat scroll 0 0;
+	background: #F7F7FF none repeat scroll 0 0;
 }
 .z-tabs-scroll .z-tabs-space {
 	background: none;
@@ -28,7 +28,7 @@
 .z-tabs .z-tabs-cnt {
 	background: transparent none repeat scroll 0 0;
 	padding-left: 0px;
-	border-bottom: 1px solid #8DB2E3;
+	border-bottom: 1px solid #ABCDD6;
 	list-style-image: none;
 	list-style-position: outside;
 	list-style-type: none;
@@ -91,11 +91,11 @@
 	background-repeat: no-repeat;
 	cursor: pointer;
 	display: block;
-	height: 11px;
+	width: 11px;
+	height: 12px;	
 	position: absolute;
 	right: 3px;
-	top: 3px;
-	width: 11px;
+	top: 3px;	
 	z-index: 15;
 	opacity: .6;
 	filter: alpha(opacity=60);
@@ -109,15 +109,15 @@
 .z-tab-hl {
 	position: relative;
 	padding-left: 10px;
-	background-image: url(${c:encodeURL('~./zul/img/tab/tabs-sprite.png')});
-	background-repeat: no-repeat;
+	background: transparent no-repeat 0 -128px;
+	background-image: url(${c:encodeURL('~./zul/img/tab/tab-corner.png')});	
 	-moz-outline: none;
 	outline: none;
 	cursor: pointer;
 }
 .z-tab-hr {
-	background: transparent no-repeat scroll right -351px;
-	background-image: url(${c:encodeURL('~./zul/img/tab/tabs-sprite.png')});
+	background: transparent no-repeat scroll right -128px;
+	background-image: url(${c:encodeURL('~./zul/img/tab/tab-corner.png')});
 	padding-right: 10px;
 	display: block;
 }
@@ -126,8 +126,8 @@
 	padding-right: 1px;
 	overflow: hidden;
 	cursor: pointer;
-	background: transparent repeat-x scroll 0 -201px;
-	background-image: url(${c:encodeURL('~./zul/img/tab/tabs-sprite.png')});
+	background: transparent repeat-x scroll 0 -128px;
+	background-image: url(${c:encodeURL('~./zul/img/tab/tab-hm.png')});
 }
 .z-tab-hm-close {
 	padding-right: 10px;
@@ -144,17 +144,14 @@
 	overflow: hidden;
 	zoom: 1;
 }
-.z-tab .z-tab-hl {
-	background-position: 0 -51px;
-}
 .z-tab .z-tab-hl:hover {
-	background-position: 0 -101px;
+	background-position: 0 -64px;
 }
 .z-tab .z-tab-hl:hover .z-tab-hr {
-	background-position: right -401px;
+	background-position: right -64px;
 }
 .z-tab .z-tab-hl:hover .z-tab-hm {
-	background-position: right -251px;
+	background-position: right -64px;
 }
 .z-tab .z-tab-hl:hover .z-tab-text {
 	color: #0F3B82;
@@ -177,9 +174,9 @@
 	right: 0;
 	top: 0;
 	width: 18px;
-	height: 26px;
-	background: transparent no-repeat scroll 0 0;
-	background-image: url(${c:encodeURL('~./zul/img/tab/scroll-right.png')});
+	height: 100%;
+	background: transparent no-repeat scroll 0 -1px;
+	background-image: url(${c:encodeURL('~./zul/img/tab/scroll-r.png')});
 	border-bottom: 1px solid #8DB2E3;
 	cursor: pointer;
 	position: absolute;
@@ -192,9 +189,9 @@
 	left: 0;
 	top: 0;
 	width: 18px;
-	height: 26px;
-	background: transparent no-repeat scroll -18px 0;
-	background-image: url(${c:encodeURL('~./zul/img/tab/scroll-left.png')});
+	height: 100%;
+	background: transparent no-repeat scroll -18px -1px;
+	background-image: url(${c:encodeURL('~./zul/img/tab/scroll-l.png')});
 	border-bottom: 1px solid #8DB2E3;
 	cursor: pointer;
 	position: absolute;
@@ -206,12 +203,12 @@
 <%-- Selected --%>
 .z-tab-seld .z-tab-hl {
 	cursor: default;
-	background-position: 0 0px;
+	background-position: 0 0;
 	margin: auto auto -1px;
 }
 .z-tab-seld .z-tab-hm {
 	cursor: default;
-	background-position: 0 -151px;
+	background-position: 0 0;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
@@ -220,7 +217,7 @@
 	filter: alpha(opacity=80);
 }
 .z-tab-seld .z-tab-hr {
-	background-position: right -301px;
+	background-position: right 0;
 }
 .z-tab-seld .z-tab-text {
 	color: #0F3B82;
@@ -367,8 +364,9 @@
 .z-tab-ver-close {
 	right: 1px;
 	top: 15px;
-	height: 11px;
 	width: 11px;
+	height: 12px;	
+	cursor: pointer;
 	position: absolute;
 	background-image: url(${c:encodeURL('~./zul/img/tab/tab-close.png')});
 	background-repeat: no-repeat;
@@ -390,8 +388,8 @@
 	filter: alpha(opacity=60);
 	cursor: pointer;
 	display: block;
-	height: 11px;
 	width: 11px;
+	height: 12px;	
 	right: 1px;
 	top: 15px;
 	z-index: 15;
@@ -459,8 +457,8 @@
 	margin-bottom: 18px;
 }
 .z-tabs-ver-up-scroll {
-	background: transparent no-repeat scroll 1px -18px;
-	background-image: url(${c:encodeURL('~./zul/img/tab/scroll-up.png')});
+	background: transparent no-repeat scroll 0 -18px;
+	background-image: url(${c:encodeURL('~./zul/img/tab/scroll-u.png')});
 	border-right: 1px solid #8DB2E3;
 	cursor: pointer;
 	height: 18px;
@@ -472,8 +470,8 @@
 	display: block;
 }
 .z-tabs-ver-down-scroll {
-	background: transparent no-repeat scroll 1px 0;
-	background-image: url(${c:encodeURL('~./zul/img/tab/scroll-down.png')});
+	background: transparent no-repeat scroll 0 0;
+	background-image: url(${c:encodeURL('~./zul/img/tab/scroll-d.png')});
 	border-right: 1px solid #8DB2E3;
 	cursor: pointer;
 	height: 18px;
@@ -551,9 +549,9 @@
 }
 <%-- Tabpanels Tabpanel --%>
 .z-tabpanel {<%-- horz, accd: tabpanel --%>
-	border-left: 1px solid #8DB2E3;
-	border-right: 1px solid #8DB2E3;
-	border-bottom: 1px solid #8DB2E3; padding: 5px;
+	border-left: 1px solid #ABCDD6;
+	border-right: 1px solid #ABCDD6;
+	border-bottom: 1px solid #ABCDD6; padding: 5px;
 	zoom: 1;
 }
 .z-tabpanel-cnt { <%-- Bug 2104974 --%>
