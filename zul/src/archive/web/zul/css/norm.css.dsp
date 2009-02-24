@@ -289,12 +289,12 @@ span.z-drop-allow, span.z-drop-disallow {
 	height: 16px;
 }
 span.z-drop-allow {
-	background: transparent no-repeat 0 0;
-	background-image: url(${c:encodeURL('~./zul/img/misc/dd.png')});
+	background: transparent no-repeat 0 -16px;
+	background-image: url(${c:encodeURL('~./zul/img/misc/drag.png')});
 }
 span.z-drop-disallow {
-	background: transparent no-repeat 0 -16px;
-	background-image: url(${c:encodeURL('~./zul/img/misc/dd.png')});
+	background: transparent no-repeat 0 -32px;
+	background-image: url(${c:encodeURL('~./zul/img/misc/drag.png')});
 }
 div.z-drop-ghost {
 	border:1px solid #6699CE;
@@ -309,13 +309,18 @@ div.z-drop-cnt {
 	font-family: ${fontFamilyC};
 }
 <%-- ZK Fileupload --%>
+.z-fileupload-img {
+	width: 16px;
+	padding-top: 4px;
+}
 .z-fileupload-add {
-	background-image: url(${c:encodeURL('~./zul/img/misc/add.png')});
+	background-image: url(${c:encodeURL('~./zul/img/misc/drag.png')});
 	width: 16px;
 	height: 16px;
 }
 .z-fileupload-delete {
-	background-image: url(${c:encodeURL('~./zul/img/misc/delete.png')});
+	background: transparent no-repeat 0 -32px;
+	background-image: url(${c:encodeURL('~./zul/img/misc/drag.png')});
 	width: 16px;
 	height: 16px;
 }

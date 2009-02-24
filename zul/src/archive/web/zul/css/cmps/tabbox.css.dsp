@@ -212,7 +212,6 @@
 .z-tab-seld .z-tab-hm {
 	cursor: default;
 	background-position: 0 -151px;
-	zoom: 1;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
@@ -233,11 +232,9 @@
 	white-space: nowrap;
 	padding:4px 0 5px;
 }
-<c:if test="${c:isExplorer()}">
-.z-tab-seld .z-tab-hr {
+.ie .z-tab-seld .z-tab-hr {
 	position: relative;
 }
-</c:if>
 <%-- Bug-2432784
 <c:if test="${c:isExplorer7()}">
 .z-tab-disd .z-tab-hl, .z-tab-disd-seld .z-tab-hl {	room: 1 }</c:if>

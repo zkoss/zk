@@ -23,9 +23,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<c:if test="${self.closable}">
 		<a class="${c:cat(zcs,'close')}" id="${self.uuid}!close" onclick="return false;" ></a>
 	</c:if>
-	<div class="${c:cat(zcs,'tl')}">
-		<div class="${c:cat(zcs,'tr')}" ></div>
-	</div>
 	<div class="${c:cat(zcs,'hl')}" id="${self.uuid}!hl" >
 	<div id="${self.uuid}!hr" class="${c:cat(zcs,'hr')}" >
 	<c:choose><c:when test="${self.closable}">
