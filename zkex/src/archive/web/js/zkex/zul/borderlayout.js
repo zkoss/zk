@@ -384,7 +384,7 @@ zkLayoutRegion2 = {
 	onAfterSlideIn: function (cmp) {
 		zk.Layout2.getOwnerLayout(cmp).render();
 	},
-	// a callback function after the collapsed region slides down
+	// a callback function after the colpsd region slides down
 	onColledAfterSlideDown: function (cmp) {
 		if (!cmp._slideIn)
 			cmp._slideIn = function (evt) {

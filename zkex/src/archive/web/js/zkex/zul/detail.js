@@ -43,10 +43,10 @@ zk.override(zkau.cmd1, "addBfr",  _zkexdetail, function (uuid, cmp, html) {
 zkDetail = {
 	/**
      * The keywords of  CSS class are applied to this component.
-     * <p>Default: ["expanded", "faker"]
+     * <p>Default: ["expd", "faker"]
      * @type Array
      */
-	cssKeywords: ["expanded", "faker"],
+	cssKeywords: ["expd", "faker"],
 	/**
 	 * Returns the detail component belongs to the specified row, if any.
 	 * @param {Object} tr a TR tag
@@ -74,7 +74,7 @@ zkDetail = {
 	open: function (cmp, open, silent) {
 		if (cmp) {
 			var cls = zk.realClass(cmp, zkDetail.cssKeywords);
-			zk[open ? "addClass" : "rmClass"](cmp, cls + "-expanded");
+			zk[open ? "addClass" : "rmClass"](cmp, cls + "-expd");
 			if (open) {
 				var td = $childExterior(cmp),
 					cave = $e(cmp, "cave"),
