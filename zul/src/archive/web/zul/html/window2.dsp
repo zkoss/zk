@@ -43,7 +43,7 @@ ${z:redraw(self.caption, null)}
 </div></div></div></div>
 </c:when>
 <c:when test="${(self.mode != 'embedded' and self.mode != 'popup')}">
-<div class="${zcls}-tl"><div class="${zcls}-tr"></div></div>
+<div class="${zcls}-tl-${noborder}"><div class="${zcls}-tr${noborder}"></div></div>
 </c:when>
 </c:choose>
 

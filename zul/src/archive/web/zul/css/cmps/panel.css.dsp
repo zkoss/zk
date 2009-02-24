@@ -21,7 +21,6 @@
 	border: 2px dashed #B1CBD5;
 }
 .z-panel {
-	background: white;
 	overflow: hidden;
 }
 .z-panel-children {

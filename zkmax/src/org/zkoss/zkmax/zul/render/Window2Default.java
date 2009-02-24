@@ -70,8 +70,9 @@ public class Window2Default implements ComponentRenderer {
 			}
 			wh.write("</div></div></div></div>");			
 		} else if (isFrame) {
-			wh.write("<div class=\"").write(zcls).write("-tl\"><div class=\"")
-			.write(zcls).write("-tr\"></div></div>");
+			wh.write("<div class=\"").write(zcls).write("-tl").write(noBorder)
+				.write("\"><div class=\"")
+			.write(zcls).write("-tr").write(noBorder).write("\"></div></div>");
 		}
 		if (isFrame) {
 			wh.write("<div class=\"").write(zcls).write("-cl").write(noBorder)
