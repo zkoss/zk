@@ -106,7 +106,7 @@ zEvt = {
 	keyCode: function(evt) {
 		evt = evt || window.event;
 		var k = evt.keyCode || evt.charCode;
-		return zk.safari ? (this.safariKeys[k] || k) : k;
+		return zk.safari ? (zEvt.safariKeys[k] || k) : k;
 	},
 
 	listen: function (el, evtnm, fn) {
@@ -175,6 +175,20 @@ zEvt = {
 	}
 };
 
+if (zk.safari)
+	zEvt.safariKeys = {
+		25: 9, 	   // SHIFT-TAB
+		63232: 38, // up
+		63233: 40, // down
+		63234: 37, // left
+		63235: 39, // right
+		63272: 46, // delete
+		63273: 36, // home
+		63275: 35, // end
+		63276: 33, // pgup
+		63277: 34  // pgdn
+	};
+
 zk.Event = zk.$extends(zk.Object, {
 	$init: function (target, name, data, opts, nativeEvent) {
 		this.currentTarget = this.target = target;
@@ -205,7 +219,7 @@ zk.Event = zk.$extends(zk.Object, {
 	DN:		40,
 	INS:	45,
 	DEL:	46,
-	F1:		112
+	F1:		112,
 });
 
 zWatch = {
