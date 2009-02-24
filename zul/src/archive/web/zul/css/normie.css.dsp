@@ -288,7 +288,7 @@ span.z-vfiletree-ico,span.z-vfiletree-firstspacer {
 	background-image: url(${c:encodeURL('~./zul/img/tree/vfolder-toggle.gif')});
 }
 span.z-vfiletree-tee, span.z-vfiletree-last {
-	background-image: url(${c:encodeURL('~./zul/img/tree/entity.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/tree/ventity.gif')});
 }
 <%-- window.css.dsp --%>
 .z-window-embedded-tl{

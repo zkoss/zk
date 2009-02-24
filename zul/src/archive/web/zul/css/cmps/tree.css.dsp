@@ -164,19 +164,19 @@ span.z-dottree-tee-close {
 	background-image: url(${c:encodeURL('~./zul/img/tree/tee-close.gif')});
 }
 span.z-dottree-last-open {
-	background-image: url(${c:encodeURL('~./zul/img/tree/last-open.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/tree/tee-last-open.gif')});
 }
 span.z-dottree-last-close {
-	background-image: url(${c:encodeURL('~./zul/img/tree/last-close.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/tree/tee-last-close.gif')});
 }
 span.z-dottree-tee {
 	background-image: url(${c:encodeURL('~./zul/img/tree/tee.gif')});
 }
 span.z-dottree-vbar {
-	background-image: url(${c:encodeURL('~./zul/img/tree/vbar.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/tree/tee-vbar.gif')});
 }
 span.z-dottree-last {
-	background-image: url(${c:encodeURL('~./zul/img/tree/last.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/tree/tee-last.gif')});
 }
 span.z-dottree-spacer, span.z-dottree-firstspacer {
 	background:none;
@@ -288,7 +288,7 @@ span.z-vfiletree-last-close, span.z-vfiletree-firstspacer {
 	background-position: 0px -18px;
 }
 span.z-vfiletree-tee, span.z-vfiletree-last {
-	background-image: url(${c:encodeURL('~./zul/img/tree/entity.png')});
+	background-image: url(${c:encodeURL('~./zul/img/tree/ventity.png')});
 }
 span.z-vfiletree-vbar, span.z-vfiletree-spacer {
 	background:none;
