@@ -92,7 +92,7 @@
 
 .z-bandbox .z-bandbox-img {
 	background-color : transparent;
-	background-image : url(${c:encodeURL('~./zul/img/button/BandboxButton.gif')});
+	background-image : url(${c:encodeURL('~./zul/img/button/bandbtn.gif')});
 	background-position : 0 0;
 	background-repeat : no-repeat;
 	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0;
@@ -140,7 +140,7 @@
 
 .z-datebox .z-datebox-img {
 	background-color : transparent;
-	background-image : url(${c:encodeURL('~./zul/img/button/DateButton.gif')});
+	background-image : url(${c:encodeURL('~./zul/img/button/datebtn.gif')});
 	background-position : 0 0;
 	background-repeat : no-repeat;
 	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0;

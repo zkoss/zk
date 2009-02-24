@@ -41,16 +41,16 @@ span.z-button {
 }
 <%-- default --%>
 .z-button .z-button-tl, .z-button .z-button-tr, .z-button .z-button-bl, .z-button .z-button-br{
-	background-image:url(${c:encodeURL('~./zul/img/button/z-btn-trendy-corner.gif')});
+	background-image:url(${c:encodeURL('~./zul/img/button/trendy-corner.gif')});
 }
 .z-button .z-button-tm, .z-button .z-button-bm  {
-	background-image:url(${c:encodeURL('~./zul/img/button/z-btn-trendy-x.gif')});
+	background-image:url(${c:encodeURL('~./zul/img/button/trendy-x.gif')});
 }
 .z-button .z-button-cl, .z-button .z-button-cr {
-	background-image:url(${c:encodeURL('~./zul/img/button/z-btn-trendy-y.gif')});
+	background-image:url(${c:encodeURL('~./zul/img/button/trendy-y.gif')});
 }
 .z-button .z-button-cm {
-	background-image:url(${c:encodeURL('~./zul/img/button/z-btn-trendy-ctr.gif')});
+	background-image:url(${c:encodeURL('~./zul/img/button/trendy-ctr.gif')});
 }
 
 .z-button .z-button-tl {

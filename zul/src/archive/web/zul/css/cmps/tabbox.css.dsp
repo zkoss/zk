@@ -63,7 +63,7 @@
 }
 .z-tabs-scroll .z-tabs-cnt {
 	background: #C7E3F3 repeat-x scroll center top;
-	background-image: url(${c:encodeURL('~./zul/img/tab/tab-strip-bg.png')});
+	background-image: url(${c:encodeURL('~./zul/img/tab/tabs-bg.png')});
 	border-bottom: 1px solid #8DB2E3;
 	padding-left: 0px;
 	padding-top: 1px;
@@ -328,7 +328,7 @@
 }
 .z-tabs-ver-scroll .z-tabs-ver-header {
 	background: #CEDFF5 repeat-y scroll center bottom;
-	background-image: url(${c:encodeURL('~./zul/img/tab/tab-vstrip-bg.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/tab/tabs-v-bg.gif')});
 	zoom: 1;
 	overflow: hidden;
 	position: relative;
@@ -608,7 +608,7 @@
 }
 .z-tab-accordion-tl {
 	background: transparent no-repeat 0 top;
-	background-image: url(${c:encodeURL('~./zul/img/tab/tab-accd-corner.png')});
+	background-image: url(${c:encodeURL('~./zul/img/tab/accd-corner.png')});
 	zoom: 1;
 	height: 5px;
 	margin-right: 5px;
@@ -618,7 +618,7 @@
 .z-tab-accordion-tr {
 	position: relative;
 	background: transparent no-repeat right -5px;
-	background-image: url(${c:encodeURL('~./zul/img/tab/tab-accd-corner.png')});
+	background-image: url(${c:encodeURL('~./zul/img/tab/accd-corner.png')});
 	height: 5px;
 	margin-right: -5px;
 	font-size: 0;
@@ -627,26 +627,26 @@
 }
 .z-tab-accordion-hl {
 	background: transparent no-repeat scroll 0 0;
-	background-image: url(${c:encodeURL('~./zul/img/tab/tab-accd-hl.png')});
+	background-image: url(${c:encodeURL('~./zul/img/tab/accd-hl.png')});
 	padding-left: 6px;
 	zoom: 1;
 }
 .z-tab-accordion-hr {
 	background: transparent no-repeat scroll right 0;
-	background-image: url(${c:encodeURL('~./zul/img/tab/tab-accd-hr.png')});
+	background-image: url(${c:encodeURL('~./zul/img/tab/accd-hr.png')});
 	padding-right: 6px;
 	zoom: 1;
 }
 .z-tab-accordion-hm {
 	background: transparent repeat-x scroll 0 0;
-	background-image: url(${c:encodeURL('~./zul/img/tab/tab-accd-hm.png')});
+	background-image: url(${c:encodeURL('~./zul/img/tab/accd-hm.png')});
 	overflow: hidden;
 	padding: 2px 0 5px;
 	zoom: 1;
 }
 .z-tab-accordion-close {
 	background-repeat: no-repeat;
-	background-image: url(${c:encodeURL('~./zul/img/tab/tab-close-off.png')});
+	background-image: url(${c:encodeURL('~./zul/img/common/close-off.gif')});
 	cursor: pointer;
 	width: 17px;
 	height: 16px;
@@ -679,7 +679,7 @@
 }
 .z-tab-accordion-disd .z-tab-accordion-close:hover,
 .z-tab-accordion-disd-seld .z-tab-accordion-close:hover {
-	background-image: url(${c:encodeURL('~./zul/img/tab/tab-close-off.png')});
+	background-image: url(${c:encodeURL('~./zul/img/common/close-off.gif')});
 	opacity: .6;
 	filter: alpha(opacity=60);
 }
@@ -736,24 +736,24 @@
 	text-decoration: none;
 	text-decoration: none;
 	background: transparent repeat-x scroll 0 -9px;
-	background-image: url(${c:encodeURL('~./zul/img/tab/accdlite-all.png')});
+	background-image: url(${c:encodeURL('~./zul/img/tab/lite-all.png')});
 }
 .z-tab-accordion-lite-tr {
 	padding-right: 6px;
 	display: block;
 	background: transparent repeat-x scroll 0 -9px;
-	background-image: url(${c:encodeURL('~./zul/img/tab/accdlite-all.png')});
+	background-image: url(${c:encodeURL('~./zul/img/tab/lite-all.png')});
 }
 .z-tab-accordion-lite-tm {
 	display: block;
 	padding:4px 0 3px 0;
 	overflow: hidden;
 	background: transparent repeat-x scroll 0 -9px;
-	background-image: url(${c:encodeURL('~./zul/img/tab/accdlite-all.png')});
+	background-image: url(${c:encodeURL('~./zul/img/tab/lite-all.png')});
 }
 .z-tab-accordion-lite-close {
 	background-repeat: no-repeat;
-	background-image: url(${c:encodeURL('~./zul/img/tab/tab-close-off.png')});
+	background-image: url(${c:encodeURL('~./zul/img/common/close-off.gif')});
 	cursor: pointer;
 	height: 16px;
 	position: absolute;
@@ -767,7 +767,7 @@
 	filter: alpha(opacity=60);
 }
 .z-tab-accordion-lite .z-tab-accordion-lite-close:hover {
-	background-image: url(${c:encodeURL('~./zul/img/tab/tab-close-on-l.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/tab/lite-close-on.gif')});
 	opacity: 1;
 	filter: alpha(opacity=100);
 }
@@ -779,7 +779,7 @@
 <%-- Disabled --%>
 .z-tab-accordion-lite-disd .z-tab-accordion-lite-close:hover,
 .z-tab-accordion-lite-disd-seld .z-tab-accordion-lite-close:hover {
-	background-image: url(${c:encodeURL('~./zul/img/tab/tab-close-off.png')});
+	background-image: url(${c:encodeURL('~./zul/img/common/close-off.gif')});
 	opacity: .6;
 	filter: alpha(opacity=60);
 }

@@ -39,7 +39,7 @@ if (!window.Validate_errorbox) { //not customized
 	+zk.getUpdateURI(URI)+'" id="'+id
 	+'!img" onclick="zkVld._eblocate(this)" title="'+mesg.GOTO_ERROR_FIELD
 	+'"/></td><td>'+zk.encodeXML(msg, true) //Bug 1463668: security
-	+'</td><td width="16"><img src="'+zk.getUpdateURI('/web/zul/img/vd/close-off.gif')
+	+'</td><td width="16"><img src="'+zk.getUpdateURI('/web/zul/img/common/close-off.gif')
 	+'" onclick="zkVld._ebclose(this)" onmouseover="zkau.onimgover(this)" onmouseout="zkau.onimgout(this)"/>'
 	+'</td></tr></table></div></div>';
 		document.body.insertAdjacentHTML("afterBegin", html);

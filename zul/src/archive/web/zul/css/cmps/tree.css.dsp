@@ -277,7 +277,7 @@ span.z-vfiletree-line, span.z-vfiletree-ico, span.z-vfiletree-firstspacer {
 	display:inline-block;
 }
 span.z-vfiletree-ico,span.z-vfiletree-firstspacer {
-	background-image: url(${c:encodeURL('~./zul/img/tree/folder-toggle2.png')});
+	background-image: url(${c:encodeURL('~./zul/img/tree/vfolder-toggle.png')});
 }
 span.z-vfiletree-root-open, span.z-vfiletree-root-close,
 span.z-vfiletree-root-open, span.z-vfiletree-tee-open, span.z-vfiletree-last-open {

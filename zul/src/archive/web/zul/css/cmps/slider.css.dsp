@@ -30,12 +30,12 @@
 .z-slider-hor-btn {
     width: 14px; height: 15px; position: absolute; left: 0; top: 3px;
     background-color : transparent;
-	background-image : url(${c: encodeURL('~./zul/img/slider/slider-thumb.png')});
+	background-image : url(${c: encodeURL('~./zul/img/slider/slider-square.png')});
 	background-repeat : no-repeat;
 	background-position : 0 0;
 }
 .z-slider-scale-btn {
-	background-image : url(${c: encodeURL('~./zul/img/slider/slider-scale-thumb.gif')});
+	background-image : url(${c: encodeURL('~./zul/img/slider/slider-scale.gif')});
 }
 
 <%-- Scale style --%>
@@ -89,16 +89,16 @@
 .z-slider-ver-btn {
     width: 15px; height: 14px; position: absolute; left: 3px; bottom: 0;
     background-color : transparent;
-	background-image : url(${c: encodeURL('~./zul/img/slider/slider-v-thumb.png')});
+	background-image : url(${c: encodeURL('~./zul/img/slider/slider-v-square.png')});
 	background-repeat : no-repeat;
 	background-position : 0 0;
 }
 .z-slider-sphere-hor-btn {
-	background-image : url(${c: encodeURL('~./zul/img/slider/slider-thumb_circle.png')});
+	background-image : url(${c: encodeURL('~./zul/img/slider/slider-circle.png')});
 }
 
 .z-slider-sphere-ver-btn {
-	background-image : url(${c: encodeURL('~./zul/img/slider/slider-v-thumb_circle.png')});
+	background-image : url(${c: encodeURL('~./zul/img/slider/slider-v-circle.png')});
 }
 
 

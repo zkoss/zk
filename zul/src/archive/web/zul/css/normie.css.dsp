@@ -222,10 +222,10 @@ tr.z-list-item td.z-list-item-focus {
 .z-slider-sphere-hor-btn,
 .z-slider-scale-btn,
 .z-slider-hor-btn {
-    background-image : url(${c: encodeURL('~./zul/img/slider/slider-thumb.png')});
+    background-image : url(${c: encodeURL('~./zul/img/slider/slider-square.png')});
 }
 .z-slider-scale-btn {
-	background-image : url(${c: encodeURL('~./zul/img/slider/slider-scale-thumb.gif')});
+	background-image : url(${c: encodeURL('~./zul/img/slider/slider-scale.gif')});
 }
 
 <%-- Scale style --%>
@@ -247,14 +247,14 @@ tr.z-list-item td.z-list-item-focus {
 
 .z-slider-sphere-ver-btn,
 .z-slider-ver-btn {
-	background-image : url(${c: encodeURL('~./zul/img/slider/slider-v-thumb.gif')});
+	background-image : url(${c: encodeURL('~./zul/img/slider/slider-v-square.gif')});
 }
 .z-slider-sphere-hor-btn {
-	background-image : url(${c: encodeURL('~./zul/img/slider/slider-thumb_circle.gif')});
+	background-image : url(${c: encodeURL('~./zul/img/slider/slider-circle.gif')});
 }
 
 .z-slider-sphere-ver-btn {
-	background-image : url(${c: encodeURL('~./zul/img/slider/slider-v-thumb_circle.gif')});
+	background-image : url(${c: encodeURL('~./zul/img/slider/slider-v-circle.gif')});
 }
 
 
@@ -268,24 +268,24 @@ tr.z-list-item td.z-list-item-focus {
 .z-tab-accordion-disd-seld .z-tab-accordion-close-over,
 .z-tab-accordion-lite-disd .z-tab-accordion-lite-close-over,
 .z-tab-accordion-lite-disd-seld .z-tab-accordion-lite-close-over {
-	background-image: url(${c:encodeURL('~./zul/img/tab/tab-close-off.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/common/close-off.gif')});
 }
 .z-tab-accordion .z-tab-accordion-close-over {
 	background-image: url(${c:encodeURL('~./zul/img/tab/tab-close-on.gif')});
 }
 .z-tab-accordion-lite .z-tab-accordion-lite-close-over {
-	background-image: url(${c:encodeURL('~./zul/img/tab/tab-close-on-l.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/tab/lite-close-on.gif')});
 }
 .z-tab-accordion-tl,
 .z-tab-accordion-tr {
-	background-image: url(${c:encodeURL('~./zul/img/tab/tab-accd-corner.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/tab/accd-corner.gif')});
 }
 <%-- tree.css.dsp --%>
 tr.z-tree-row td.z-tree-row-focus {
 	background-image: url(${c:encodeURL('~./zul/img/common/focusd.gif')});
 }
 span.z-vfiletree-ico,span.z-vfiletree-firstspacer {
-	background-image: url(${c:encodeURL('~./zul/img/tree/folder-toggle2.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/tree/vfolder-toggle.gif')});
 }
 span.z-vfiletree-tee, span.z-vfiletree-last {
 	background-image: url(${c:encodeURL('~./zul/img/tree/entity.gif')});
@@ -305,12 +305,12 @@ span.z-vfiletree-tee, span.z-vfiletree-last {
 }
 <%-- grid.css.dsp --%>
 .z-columns-menu-grouping .z-menu-item-img {
-	background-image:  url(${c:encodeURL('~./zul/img/grid/Group-16x16.gif')});
+	background-image:  url(${c:encodeURL('~./zul/img/grid/menu-group.gif')});
 }
 .z-columns-menu-asc .z-menu-item-img {
-	background-image:  url(${c:encodeURL('~./zul/img/grid/AZArrowUp-16x16.gif')});
+	background-image:  url(${c:encodeURL('~./zul/img/grid/menu-arrowup.gif')});
 }
 .z-columns-menu-dsc .z-menu-item-img {
-	background-image:  url(${c:encodeURL('~./zul/img/grid/AZArrowDown-16x16.gif')});
+	background-image:  url(${c:encodeURL('~./zul/img/grid/menu-arrowdown.gif')});
 }
 </c:if>

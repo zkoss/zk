@@ -156,11 +156,11 @@ a.z-column-btn:hover {
 	background-image: url(${c:encodeURL('~./zul/img/grid/column-over.png')});
 }
 .z-columns-menu-grouping .z-menu-item-img {
-	background-image: url(${c:encodeURL('~./zul/img/grid/Group-16x16.png')});
+	background-image: url(${c:encodeURL('~./zul/img/grid/menu-group.png')});
 }
 .z-columns-menu-asc .z-menu-item-img {
-	background-image: url(${c:encodeURL('~./zul/img/grid/AZArrowUp-16x16.png')});
+	background-image: url(${c:encodeURL('~./zul/img/grid/menu-arrowup.png')});
 }
 .z-columns-menu-dsc .z-menu-item-img {
-	background-image: url(${c:encodeURL('~./zul/img/grid/AZArrowDown-16x16.png')});
+	background-image: url(${c:encodeURL('~./zul/img/grid/menu-arrowdown.png')});
 }
