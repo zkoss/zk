@@ -4,7 +4,7 @@
 	Purpose:
 		combobox, bandbox
 	Description:
-		
+
 	History:
 		Fri Dec 16 18:28:03     2005, Created by tomyeh
 }}IS_NOTE
@@ -47,7 +47,7 @@ zkCmbox.onblur = function (evt) {
 				rows = pp2.rows, jfnd = -1,
 				strict = (getZKAttr(cmp, "valid") || "")
 					.toLowerCase().indexOf("strict") >= 0;
-			for (var j = 0, rl = rows.length; j < rl; ++j) {			
+			for (var j = 0, rl = rows.length; j < rl; ++j) {
 			var item = rows[j];
 				var txt = zkCmbox.getLabel(item).toLowerCase();
 				if (zk.isVisible(item) && (!strict || !getZKAttr(item, "disd")) && txt == inpval) {
@@ -62,7 +62,7 @@ zkCmbox.onblur = function (evt) {
 				setZKAttr(cmp, "selid", item.id);
 				zkau.sendasap({uuid: uuid, cmd: "onSelect", data: [item.id, item.id, zkau.getKeys(evt)]});
 			}
-		}	
+		}
 	}
 	zkTxbox.onblur(evt);
 };
@@ -70,7 +70,7 @@ zkCmbox.onblur = function (evt) {
 zkCmbox.init = function (cmp) {
 	zkCmbox.onVisi = zkCmbox.onSize = zul.onFixDropBtn;
 	zkCmbox.onHide = zkTxbox.onHide; //widget.js is ready now
-	
+
 	var inp = $real(cmp);
 	zkTxbox.init(inp, null, zkCmbox.onblur);
 	zk.listen(inp, "keydown", zkCmbox.onkey);
@@ -80,7 +80,7 @@ zkCmbox.init = function (cmp) {
 	var pp = $e(cmp.id + "!pp");
 	if (pp) // Bug #1879511
 		zk.listen(pp, "click", zkCmbox.closepp);
-	
+
 	var btn = $e(cmp.id + "!btn");
 	if (btn) {
 		zk.listen(btn, "click", function (evt) {
@@ -136,9 +136,9 @@ zkCmit.onclick = function (evt) {
 		zkau.closeFloats($outer($parent(item)));
 			//including combobox, but excluding dropdown
 		zkCmit.onoutTo(item); //onmouseout might be sent (especiall we change parent)
-		
+
 		//Request 1537962: better responsive
-		var inp = zkCmbox.getInputByItem(item);		
+		var inp = zkCmbox.getInputByItem(item);
 		var uuid = $uuid(inp);
 		var cmp = $e(uuid);
 		var selId = getZKAttr(cmp, "selid");
@@ -280,7 +280,7 @@ zkCmbox.onkey = function (evt) {
 	inp.removeAttribute("zk_typeAhead"); // reset
 	var uuid = $uuid(inp.id), cb = $e(uuid), pp = $e(uuid + "!pp");
 	if (!pp) return true;
-	
+
 	var keycode = Event.keyCode(evt);
 	var opened = $visible(pp);
 	if (keycode == 9 || (zk.safari && keycode == 0)) { //TAB or SHIFT-TAB (safari)
@@ -331,7 +331,7 @@ zkCmbox.onkey = function (evt) {
 
 	if (selback/* || getZKAttr(cb, "aco") == "true"*/) {
 		//Note: zkCmbox.open won't repos immediately, so we have to delay it
-		setTimeout("zkCmbox._hilite('"+uuid+"',true,"+(keycode == 38)+ ", " + 
+		setTimeout("zkCmbox._hilite('"+uuid+"',true,"+(keycode == 38)+ ", " +
 			((!evt.shiftKey || keycode != 16)  && !evt.ctrlKey && keycode != 8 && keycode != 46) + ", " + keycode + ")", 3);
 		Event.stop(evt);
 		return false;
@@ -340,7 +340,7 @@ zkCmbox.onkey = function (evt) {
 };
 zkCmbox._hiliteLater = function (uuid, evt) {
 	var keycode = Event.keyCode(evt);
-	setTimeout("zkCmbox._hilite('"+uuid+"', false, false," + 
+	setTimeout("zkCmbox._hilite('"+uuid+"', false, false," +
 		((!evt.shiftKey || keycode != 16) && !evt.ctrlKey && keycode != 8 && keycode != 46) + ", " + keycode +  ")", 1); //IE: keydown
 };
 
@@ -370,8 +370,8 @@ zkCmbox._setsel = function (item, sel) {
 
 /** Returns the text contained in the specified item. */
 zkCmbox.getLabel = function (item) {
-	return item && item.cells && item.cells.length > 1 && item.cells[1].firstChild 
-		&& item.cells[1].firstChild.data ? item.cells[1].firstChild.data : ""; 
+	return item && item.cells && item.cells.length > 1 && item.cells[1].firstChild
+		&& item.cells[1].firstChild.data ? item.cells[1].firstChild.data : "";
 };
 
 zkCmbox.open = function (pp, hilite) {
@@ -384,7 +384,7 @@ zkCmbox.open = function (pp, hilite) {
 	zkCmbox._pop.addFloatId(pp.id, $type(cb) != "Cmbox");
 
 	zkCmbox._open(cb, uuid, pp, hilite);
-		
+
 	if (zkau.asap(cb, "onOpen"))
 		zkau.send({uuid: uuid, cmd: "onOpen",
 			data: [true, null, $e(uuid + "!real").value]});
@@ -399,11 +399,11 @@ zkCmbox._open = function (cb, uuid, pp, hilite) {
 	pp.style.position = "absolute"; //just in case
 	pp.style.display = "block";
 	pp.style.zIndex = "88000";
-	
+
 	// throw out
 	pp.style.visibility = "hidden";
 	pp.style.left = "-10000px";
-	
+
 	zk.onVisiAt(pp);
 
 	//FF: Bug 1486840
@@ -412,11 +412,11 @@ zkCmbox._open = function (cb, uuid, pp, hilite) {
 	//must be inserted into the popup (by use of uuid!child) rather
 	//than invalidate!!
 	zk.setVParent(pp);
-	
+
 	// throw in
 	pp.style.visibility = "";
 	pp.style.left = "";
-	
+
 	zkCmbox._fixsz(cb, pp, pp2, ppofs);//fix size
 
 	zk.position(pp, $real(cb), "after-start");
@@ -430,7 +430,7 @@ zkCmbox._ppofs = function (pp) {
 	for (var n = pp.firstChild; n; n = n.nextSibling)
 		if (n.id) {
 			if (!n.id.endsWith("!cave")) { //bandbox's popup
-				var w = n.style.width, h = n.style.height; 
+				var w = n.style.width, h = n.style.height;
 				return [w ? w: "auto", h ? h: "auto"];
 			}
 			break;
@@ -490,13 +490,13 @@ zkCmbox._repos = function (uuid, hilite) {
 	if (!pp._shadow)
 		pp._shadow = new zk.Shadow(pp, {left: -4, right: 4, top: 2, bottom: 3, autoShow: true});
 	else pp._shadow.sync();
-		
+
 	if (hilite) zkCmbox._hilite(uuid);
 };
 
 /** Selects back the specified item. */
 zkCmbox._selback = function (item) {
-	var txt = zkCmbox.getLabel(item); 
+	var txt = zkCmbox.getLabel(item);
 
 	var inp = zkCmbox.getInputByItem(item);
 	if (inp) {
@@ -516,7 +516,7 @@ zkCmbox._autoselback = function (uuid) {
 
 	for (var j = rows.length; --j >= 0;) {
 		var item = rows[j];
-		if (item.getAttribute("zk_hilite") == "true") {			
+		if (item.getAttribute("zk_hilite") == "true") {
 			zkCmbox._selback(item);
 			return item;
 		}
@@ -553,7 +553,7 @@ zkCmbox._hilite = function (uuid, selback, bUp, reminder, keycode) {
 	var inpval = inp.value.toLowerCase(), ckval = pp.getAttribute("zk_ckval");
 	if (!selback && ckval == inpval && ckval == inp.getAttribute("zk_changing_last"))
 		return; //not changed
-		
+
 	//Identify the best matched item
 	var jfnd = -1, exact = !inpval, old;
 	for (var j = 0, rl = rows.length; j < rl; ++j) {
@@ -649,7 +649,7 @@ zkCmbox._hilite = function (uuid, selback, bUp, reminder, keycode) {
 		}
 	} else if (keycode && (keycode == 8 || keycode == 46))
 		inp.setAttribute("zk_typeAhead", inp.value);
-		
+
 	zk.scrollIntoView(pp, found); //make sure found is visible
 	pp.setAttribute("zk_ckval", inpval);
 };
@@ -677,7 +677,7 @@ zkCmbox.cbclose = function (cb) {
 };
 zkCmbox.close = function (pp, focus) {
 	pp = $e(pp);
-	var uuid = $uuid(pp.id);	
+	var uuid = $uuid(pp.id);
 	pp.style.display = "none";
 	zk.unsetVParent(pp);
 

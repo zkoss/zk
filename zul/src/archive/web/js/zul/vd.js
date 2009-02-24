@@ -2,9 +2,9 @@
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Oct 20 11:30:21	 2005, Created by tomyeh
 }}IS_NOTE
@@ -186,7 +186,7 @@ zkVld.onlyNum = function (id, noDot) {
 	}
 	if (!numed && (doted || dashed || perted || grouped))
 		return mesg.NUMBER_REQUIRED+val;
-		 
+
 	return null;
 };
 zkVld.noEmpty = function (id) {
@@ -194,7 +194,7 @@ zkVld.noEmpty = function (id) {
 	return inp && !inp.value.trim() ? mesg.EMPTY_NOT_ALLOWED: null;
 };
 /**
- * Validates the function of noEmpty and strict. 
+ * Validates the function of noEmpty and strict.
  * @param {Object} id
  * @since 3.0.2
  */
@@ -234,7 +234,7 @@ zkVld._errbox = function () {
 	zkVld.closeErrbox(boxid);
 
 	if (zkVld._cbs.contains(boxid)) return; //don't show the error box if it will close.
-	
+
 	cmp = $e(id);
 	if (cmp) {
 		zk.addClass($real(cmp), getZKAttr(cmp, "zcls") + "-text-invalid");
@@ -244,7 +244,7 @@ zkVld._errbox = function () {
 
 	if (getZKAttr(cmp, "srvald") == "custom")
 		return; //don't show the default error box if custom
-	
+
 	var box = Validate_errorbox(id, boxid, html);
 	if (!box) {
 		zk.alert(html);
@@ -261,7 +261,7 @@ zkVld._errbox = function () {
 				var box = $e(boxid);
 				if (box) {
 					setTimeout(function() {zkVld.syncErrBox(box)});
-				}		
+				}
 			};
 		}
 		zk.listen(cmp, "focus", cmp._focusFn);
@@ -291,8 +291,8 @@ zkVld._change = function (dg, pointer, evt) {
 	}
 	zkVld._fiximg(el);
 };
-/** box is the box element or the component's ID. 
- * 
+/** box is the box element or the component's ID.
+ *
  * @param {Object} coerce it is used to close the error box coercively. (@since 3.0.3)
  */
 zkVld.closeErrbox = function (box, remaingError, coerce) {
@@ -363,9 +363,9 @@ zkVld._ebmdown = function () {zkVld.validating = true;};
 zkVld._ebmup = function () {zkVld.validating = false;};
 
 zkVld._fiximg = function (box) {
-	var id = $uuid(box.id);
-	var cmp = $e(id);
-	var img = $e(id + "!img");
+	var id = $uuid(box.id),
+		cmp = $e(id),
+		img = $e(id + "!img");
 	if (cmp && img) {
 		var cmpofs = zk.revisedOffset(cmp);
 		var boxofs = zk.revisedOffset(box);
@@ -385,8 +385,8 @@ zkVld._fiximg = function (box) {
 zkVld.uncover = function (el) {
 	var ctags = zk.coveredTagnames;
 	for (var i = zkVld._ebs.length; --i >= 0;) {
-		var boxid = zkVld._ebs[i];
-		var box = $e(boxid);
+		var boxid = zkVld._ebs[i],
+			box = $e(boxid);
 		if (!box) {
 			zkVld._ebs.splice(i, 1);
 			continue;
@@ -404,8 +404,8 @@ zkVld.uncover = function (el) {
 	}
 };
 zkVld._uncover = function (box, el, ctag) {
-	var elofs = zPos.cumulativeOffset(el);
-	var boxofs = zPos.cumulativeOffset(box);
+	var elofs = zPos.cumulativeOffset(el),
+		boxofs = zPos.cumulativeOffset(box);
 
 	if (zk.isOffsetOverlapped(
 	elofs, [el.offsetWidth, el.offsetHeight],
@@ -498,7 +498,7 @@ zkTxbox.init = function (cmp, onfocus, onblur) {
 	zk.listen(cmp, "select", zkTxbox.onselect);
 	if ($tag(cmp) == "TEXTAREA")
 		zk.listen(cmp, "keyup", zkTxbox.onkey);
-		
+
 	zk.listen(cmp, "keydown", zkTxbox.onkeydown);
 
 	//Bug 1486556: we have to enforce zkTxbox to send value back for validating
@@ -547,7 +547,7 @@ zkTxbox.onblur = function (evt) {
 		zcls = getZKAttr(cmp, "zcls");
 	zk.rmClass(cmp, zcls + "-focus");
 };
-zkTxbox._scanStop = function (inp) {	
+zkTxbox._scanStop = function (inp) {
 	//stop the scanning of onChaning first
 	var interval = zkTxbox._intervals[inp.id];
 	if (interval) {
@@ -614,8 +614,8 @@ zkTxbox.onupdate = function (inp) {
 	var newval = inp.value;
 	if (newval != inp.defaultValue) { //changed
 		inp.defaultValue = newval;
-		var uuid = $uuid(inp);			
-		var sr = zk.getSelectionRange(inp);	
+		var uuid = $uuid(inp),
+			sr = zk.getSelectionRange(inp);
 		zkau.sendasap({uuid: uuid, cmd: "onChange", data: [newval, false, sr[0]]},
 			zk.delayTime_onChange ? zk.delayTime_onChange : 150);
 	} else if (inp.getAttribute("zk_err")) {
@@ -626,8 +626,8 @@ zkTxbox.onupdate = function (inp) {
 };
 zkTxbox.onkey = function (evt) {
 	//Request 1565288 and 1738246: support maxlength for Textarea
-	var inp = Event.element(evt);
-	var maxlen = getZKAttr(inp, "maxlen");
+	var inp = Event.element(evt),
+		maxlen = getZKAttr(inp, "maxlen");
 	if (maxlen) {
 		maxlen = $int(maxlen);
 		if (maxlen > 0 && inp.value != inp.defaultValue
@@ -679,8 +679,8 @@ zkTxbox.onfocus = function (evt) {
 };
 /** Scans whether any changes. */
 zkTxbox._scanChanging = function (id) {
-	var inp = $e(id);
-	var value = inp.getAttribute("zk_typeAhead") || inp.value;
+	var inp = $e(id),
+		value = inp.getAttribute("zk_typeAhead") || inp.value;
 	if (inp && zkau.asap($outer(inp), "onChanging")
 	&& inp.getAttribute("zk_changing_last") != value) {
 		zkTxbox.sendOnChanging(inp, value);
@@ -696,7 +696,7 @@ zkTxbox.sendOnChanging = function (inp, value) {
 	value = value || inp.value;
 	inp.setAttribute("zk_changing_last", value);
 	var selbk = inp.getAttribute("zk_changing_selbk");
-	inp.removeAttribute("zk_changing_selbk");		
+	inp.removeAttribute("zk_changing_selbk");
 	var sr = zk.getSelectionRange(inp);
 	zkau.send({uuid: $uuid(inp),
 		cmd: "onChanging", data: [value, selbk == value, sr[0]],
@@ -727,20 +727,21 @@ zkInpEl = {};
 zkInpEl.baseChars = "+0123456789" + zk.MINUS + zk.PERCENT + zk.GROUPING;
 zkInpEl.ignoreKeys = function (evt, keys) {
 	var k = Event.keyCode(evt);
-	if(!zk.ie && (Event.isSpecialKey(evt) || k == 8 || k == 46)) return;
+	zk.debug(k);
+	if(!zk.ie && k < 47) return;
 	var c = Event.charCode(evt);
 	if(keys.indexOf(String.fromCharCode(c)) === -1){
 		Event.stop(evt);
 	}
 };
-zkInbox.init = zkLnbox.init = function (cmp) {	
+zkInbox.init = zkLnbox.init = function (cmp) {
 	zk.listen(cmp, "keypress", zkInbox.onkeypress);
 	zkTxbox.init(cmp);
 };
 zkInbox.onkeypress = function (evt) {
 	zkInpEl.ignoreKeys(evt, zkInpEl.baseChars);
 };
-zkDcbox.init = zkDbbox.init = function (cmp) {	
+zkDcbox.init = zkDbbox.init = function (cmp) {
 	zk.listen(cmp, "keypress", zkDcbox.onkeypress);
 	zkTxbox.init(cmp);
 };

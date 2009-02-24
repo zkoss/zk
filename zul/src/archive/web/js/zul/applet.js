@@ -1,9 +1,9 @@
 /* applet.js
  {{IS_NOTE
  Purpose:
- 
+
  Description:
- 
+
  History:
  Fri Sep 19 17:31:03 TST 2008, Created by davidchen
  }}IS_NOTE

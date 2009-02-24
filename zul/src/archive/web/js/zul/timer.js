@@ -4,7 +4,7 @@
 	Purpose:
 		Timer
 	Description:
-		
+
 	History:
 		Mon Sep 26 14:04:22     2005, Created by tomyeh
 }}IS_NOTE
@@ -44,9 +44,9 @@ zk.Timer.prototype = {
 
 		this.cleanup(); //stop pending timer/interval
 
-		var repeats = getZKAttr(el, "repeats") == "true";
-		var delay = getZKAttr(el, "delay");
-		var func = "zkTimer._fire('"+this.id+"')";
+		var repeats = getZKAttr(el, "repeats") == "true",
+			delay = getZKAttr(el, "delay"),
+			func = "zkTimer._fire('"+this.id+"')";
 		if (repeats)
 			zkTimer._intvs.push(this.interval = setInterval(func, delay));
 		else

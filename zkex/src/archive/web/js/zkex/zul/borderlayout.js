@@ -833,7 +833,7 @@ zkLayoutRegionSplit2 = {
 				+pointer[1]+'px;left:'+pointer[0]+'px;width:'
 				+zk.offsetWidth(dg.element)+'px;height:'+zk.offsetHeight(dg.element)
 				+'px;cursor:'+dg.element.style.cursor+';"></div>';
-			document.body.insertAdjacentHTML("afterbegin", html);
+			document.body.insertAdjacentHTML("afterBegin", html);
 			dg.element = $e("zk_ddghost");
 		} else {		
 			zkau.endGhostToDIV(dg);

@@ -2,9 +2,9 @@
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Jul 9, 2007 10:03:38 AM , Created by Dennis Chen
 }}IS_NOTE
@@ -24,32 +24,31 @@ zkTmbox = {
 
 zkTmbox.init = function (cmp) {
 	zkTmbox.onVisi = zkTmbox.onSize = zul.onFixDropBtn;
-	zkTmbox.onHide = zkTxbox.onHide; 
+	zkTmbox.onHide = zkTxbox.onHide;
 
 	zkTxbox.init($real(cmp));
-	
+
 	cmp.lastTime = new Date();
 	cmp.lastTime.setHours(0);
 	cmp.lastTime.setMinutes(0);
 	cmp.lastTimeStr = "";
 	cmp.changed = false;
-	
+
 	cmp.currentStep = 1;
 	cmp.defaultStep = 1;
 	cmp.lastPos = 0;
 	cmp.runCount = 0;
 	cmp.timerId = null;
-			
-	var inp = $real(cmp);
-	
-	var btn = $e(cmp.id+"!btn");
-	
+
+	var inp = $real(cmp),
+		btn = $e(cmp.id+"!btn");
+
 	//event for inpu
 	zk.listen(inp, "focus",zkTmbox._inpfocus);
 	zk.listen(inp, "blur",zkTmbox._inpblur);
 	zk.listen(inp, "click",zkTmbox._inpclick);
 	zk.listen(inp, "keydown",zkTmbox._inpkeydown);
-	
+
 	//event for btn
 	if(btn){
 		zk.listen(btn, "mousedown", zkTmbox._btnDown);
@@ -58,7 +57,7 @@ zkTmbox.init = function (cmp) {
 		zk.listen(btn, "mouseout", zkTmbox._btnOut);
 		zk.listen(btn, "mouseover", zul.ondropbtnover);
 	}
-	
+
 	if(inp.value){
 		zkTmbox._setTime(cmp,inp.value);
 	}else{
@@ -74,23 +73,25 @@ zkTmbox.cleanup = function (cmp) {
 };
 zkTmbox.setAttr = function (cmp, nm, val) {
 	if ("value" == nm) {
-		if(val){
-			zkTmbox._setTime(cmp,val);
-		}else{
+		if (val) {
+			zkTmbox._setTime(cmp, val);
+		} else {
 			zkTmbox._clearTime(cmp);
 		}
 		var real = $real(cmp); // Bug 1948963 (related to 1998417).
 		if (real.defaultValue != real.value)
 			real.defaultValue = real.value;
 		return true;
-	}else if ("z.btnVisi" == nm) {
+	} else if ("z.btnVisi" == nm) {
 		var btn = $e(cmp.id + "!btn");
-		if (btn) btn.style.display = val == "true" ? "": "none";
+		if (btn)
+			btn.style.display = val == "true" ? "" : "none";
 		zul.onFixDropBtn(cmp);
 		return true;
 	} else if ("style" == nm) {
 		var inp = $real(cmp);
-		if (inp) zkau.setAttr(inp, nm, zk.getTextStyle(val, true, true));
+		if (inp)
+			zkau.setAttr(inp, nm, zk.getTextStyle(val, true, true));
 	} else if ("style.width" == nm) {
 		var inp = $real(cmp);
 		if (inp) {
@@ -126,23 +127,23 @@ zkTmbox.rmAttr = function (cmp, nm) {
 //event implements
 zkTmbox._inpfocus= function(evt){
 	if (!evt) evt = window.event;
-	var cmp = $outer(Event.element(evt));
-	var sels = zkTmbox._selrange(cmp);	
+	var cmp = $outer(Event.element(evt)),
+		sels = zkTmbox._selrange(cmp);
 	cmp.lastPos = sels[0];
 };
 zkTmbox._inpblur= function(evt){
 	if (!evt) evt = window.event;
-	var cmp = $outer(Event.element(evt));
-	var inp = $real(cmp);
+	var cmp = $outer(Event.element(evt)),
+		inp = $real(cmp);
 	if(!zkTmbox._check(inp.value)){
 		zkTmbox.setTime(cmp,cmp.lastTimeStr);
 	}
 };
 zkTmbox._inpclick= function(evt){
 	if (!evt) evt = window.event;
-	var cmp = $outer(Event.element(evt));
-	var sels = zkTmbox._selrange(cmp);	
-	cmp.lastPos = sels[0];	
+	var cmp = $outer(Event.element(evt)),
+		sels = zkTmbox._selrange(cmp);
+	cmp.lastPos = sels[0];
 };
 zkTmbox._inpkeydown= function(evt){
 	if (!evt) evt = window.event;
@@ -158,7 +159,7 @@ zkTmbox._inpkeydown= function(evt){
 	case 48:case 96://0
 	case 49:case 97://1
 	case 50:case 98://2
-	case 51:case 99://3	
+	case 51:case 99://3
 	case 52:case 100://4
 	case 53:case 101://5
 	case 54:case 102://6
@@ -168,20 +169,20 @@ zkTmbox._inpkeydown= function(evt){
 		code = code - (code>=96?96:48);
 		zkTmbox._setTimeDigit(cmp,code);
 		Event.stop(evt);
-		break;		
+		break;
 	case 37://left
-		break;		
+		break;
 	case 38://up
 		zkTmbox.onUp(cmp);
 		Event.stop(evt);
 		break;
 	case 39://right
-		break;		
+		break;
 	case 40://down
 		zkTmbox.onDown(cmp);
 		Event.stop(evt);
 		break;
-	case 46://del 
+	case 46://del
 		zkTmbox.clearTime(cmp);
 		Event.stop(evt);
 		break;
@@ -200,7 +201,7 @@ zkTmbox._btnDown= function(evt){
 		inp = $real(cmp);
 	if(inp.disabled || zk.dragging) return;
 
-	var btn = zk.opera || zk.safari ? $e(cmp.id + "!btn") : zk.firstChild($e(cmp.id + "!btn"), "IMG"),		
+	var btn = zk.opera || zk.safari ? $e(cmp.id + "!btn") : zk.firstChild($e(cmp.id + "!btn"), "IMG"),
 		ofs = zk.revisedOffset(btn);
 	if ((Event.pointerY(evt) - ofs[1]) < btn.offsetHeight / 2) { //up
 		zkTmbox.onUp(cmp);
@@ -213,8 +214,8 @@ zkTmbox._btnDown= function(evt){
 };
 zkTmbox._btnUp= function(evt){
 	if (!evt) evt = window.event;
-	var cmp = $outer(Event.element(evt));
-	var inp = $real(cmp);
+	var cmp = $outer(Event.element(evt)),
+		inp = $real(cmp);
 	if(inp.disabled || zk.dragging) return;
 	zkTxbox.sendOnChanging(inp);
 	zkTmbox._stopAutoIncProc(cmp);
@@ -224,8 +225,8 @@ zkTmbox._btnUp= function(evt){
 zkTmbox._btnOut= function(evt){
 	if (!evt) evt = window.event;
 	zul.ondropbtnout(evt);
-	var cmp = $outer(Event.element(evt));
-	var inp = $real(cmp);
+	var cmp = $outer(Event.element(evt)),
+		inp = $real(cmp);
 	if(inp.disabled || zk.dragging) return;
 
 	zkTmbox._stopAutoIncProc(cmp);
@@ -234,7 +235,7 @@ zkTmbox._btnOut= function(evt){
 //inner method
 //get selection range by order.
 zkTmbox._selrange = function (cmp){
-	var sel = zk.getSelectionRange($real(cmp));	
+	var sel = zk.getSelectionRange($real(cmp));
 	if(sel[0]>sel[1]){
 		var t = sel[1];
 		sel[1] = sel[0];
@@ -257,45 +258,45 @@ zkTmbox._calInc = function (cmp){
 	}
 };
 
-zkTmbox.onUp=function(cmp){
-	zkTmbox._increaseTime(cmp,zkTmbox._calInc(cmp))
+zkTmbox.onUp = function(cmp) {
+	zkTmbox._increaseTime(cmp, zkTmbox._calInc(cmp))
 	zkTmbox._markPositionSel(cmp);
 };
-zkTmbox.onDown=function(cmp){
-	zkTmbox._increaseTime(cmp,-zkTmbox._calInc(cmp))
+zkTmbox.onDown = function(cmp) {
+	zkTmbox._increaseTime(cmp, -zkTmbox._calInc(cmp))
 	zkTmbox._markPositionSel(cmp);
 };
 
 //check selection position on minute or hour.
-zkTmbox._checkPosition=function(cmp){
+zkTmbox._checkPosition = function(cmp) {
 	return cmp.lastPos <= 2 ? zkTmbox.POS_HOUR : zkTmbox.POS_MIN;
 };
 
-zkTmbox._markPositionSel=function (cmp){
+zkTmbox._markPositionSel = function(cmp) {
 	var pos = zkTmbox._checkPosition(cmp);
-	switch(pos){
-	case zkTmbox.POS_HOUR:
-		zkTmbox._markselection(cmp,0,2);
-		break;
-	case zkTmbox.POS_MIN:	
-		zkTmbox._markselection(cmp,3,5);
-		break;	
+	switch (pos) {
+		case zkTmbox.POS_HOUR:
+			zkTmbox._markselection(cmp, 0, 2);
+			break;
+		case zkTmbox.POS_MIN:
+			zkTmbox._markselection(cmp, 3, 5);
+			break;
 	}
 };
 
-zkTmbox._check=function (timestr){
-	if(!timestr){
+zkTmbox._check = function(timestr) {
+	if (!timestr) {
 		return false;
 	}
 	var ta = timestr.split(':');
-	if(ta.length==2){
-		var hour = $int(ta[0]);
-		var min = $int(ta[1]);
-		var hiterr = false;
-		if(isNaN(hour)||hour>23||hour<0){
+	if (ta.length == 2) {
+		var hour = $int(ta[0]),
+			min = $int(ta[1]),
+			hiterr = false;
+		if (isNaN(hour) || hour > 23 || hour < 0) {
 			return false;
 		}
-		if(isNaN(min)||min>59||min<0){
+		if (isNaN(min) || min > 59 || min < 0) {
 			return false;
 		}
 		return true;
@@ -303,95 +304,94 @@ zkTmbox._check=function (timestr){
 	return false;
 };
 
-zkTmbox._increaseTime=function (cmp,inc_sec){
+zkTmbox._increaseTime = function(cmp, inc_sec) {
 	var t = cmp.lastTime.getTime();
-	t = t+1000*inc_sec*cmp.currentStep;
+	t = t + 1000 * inc_sec * cmp.currentStep;
 	var date = new Date();
 	date.setTime(t);
-	var hour = date.getHours();
-	var min = date.getMinutes()
-	var newtimestr = zk.formatFixed(hour,2)+":"+zk.formatFixed(min,2);
-	
-	zkTmbox.setTime(cmp,newtimestr);
+	var hour = date.getHours(),
+		min = date.getMinutes(),
+		newtimestr = zk.formatFixed(hour, 2) + ":" + zk.formatFixed(min, 2);
+
+	zkTmbox.setTime(cmp, newtimestr);
 };
 
-zkTmbox._setTimeDigit=function (cmp,n){
-	var sel = zkTmbox._selrange(cmp);
-	var hour = cmp.lastTime.getHours();
-	var min = cmp.lastTime.getMinutes()
-	
-	var newpos = 0;
-	switch(sel[0]){
+zkTmbox._setTimeDigit = function(cmp, n) {
+	var sel = zkTmbox._selrange(cmp),
+		hour = cmp.lastTime.getHours(),
+		min = cmp.lastTime.getMinutes(),
+		newpos = 0;
+	switch (sel[0]) {
 		case 0:
-			if(n>2){
+			if (n > 2) {
 				hour = n;
-				newpos =3;
-			}else{
-				hour = hour%10 + n*10
-				newpos =1;
+				newpos = 3;
+			} else {
+				hour = hour % 10 + n * 10;
+				newpos = 1;
 			}
-			if(hour>23) return;
-			
+			if (hour > 23)
+				return;
+
 			break;
 		case 1:
-			hour = hour - hour%10 + n;
-			if(hour>23) return;
-			newpos =3;
+			hour = hour - hour % 10 + n;
+			if (hour > 23)
+				return;
+			newpos = 3;
 			break;
 		case 3:
-			if(n>5) {
+			if (n > 5) {
 				min = n;
-			}else{
-				min = min%10 + n*10
+			} else {
+				min = min % 10 + n * 10;
 			}
-			if(min>59) return;
-			newpos =4;
+			if (min > 59)
+				return;
+			newpos = 4;
 			break;
 		case 4:
-			min = min - min%10 + n;
-			if(min>59) return;
-			newpos =4;
+			min = min - min % 10 + n;
+			if (min > 59)
+				return;
+			newpos = 4;
 			break;
 		default:
 			return;
 	}
-	var newtimestr = zk.formatFixed(hour,2)+":"+zk.formatFixed(min,2);
-	zkTmbox.setTime(cmp,newtimestr);
-	zkTmbox._markselection(cmp,newpos,newpos);
+	var newtimestr = zk.formatFixed(hour, 2) + ":" + zk.formatFixed(min, 2);
+	zkTmbox.setTime(cmp, newtimestr);
+	zkTmbox._markselection(cmp, newpos, newpos);
 };
 
-zkTmbox._setTime = function(cmp,timestr){
-	if(cmp.lastTimeStr==timestr){
+zkTmbox._setTime = function(cmp, timestr) {
+	if (cmp.lastTimeStr == timestr || !zkTmbox._check(timestr)) {
 		return false;
 	}
-	if(!zkTmbox._check(timestr)){
-		return false;
-	}
-	var inp = $real(cmp);
-	var ta = timestr.split(':');
-	var hour = $int(ta[0]);
-	var min = $int(ta[1]);
-	
-	var newtimestr = zk.formatFixed(hour,2)+":"+zk.formatFixed(min,2);
-		
+	var inp = $real(cmp),
+		ta = timestr.split(':'),
+		hour = $int(ta[0]),
+		min = $int(ta[1]),
+		newtimestr = zk.formatFixed(hour, 2) + ":" + zk.formatFixed(min, 2);
+
 	cmp.lastTime.setHours(hour);
 	cmp.lastTime.setMinutes(min)
-	
+
 	inp.value = newtimestr;
 	cmp.lastTimeStr = newtimestr;
-	
+
 	return true;
 };
-zkTmbox.setTime = function(cmp,timestr){
-	if(zkTmbox._setTime(cmp,timestr)){
+zkTmbox.setTime = function(cmp, timestr) {
+	if (zkTmbox._setTime(cmp, timestr)) {
 		//mark changed, and fire changing event to server
 		cmp.changed = true;
 		//InputElement already handle onChange,onChanging if you inherit for InputElement and name your
 		//input to uuid!real.
 	}
 };
-zkTmbox._clearTime = function(cmp){
-	if(!cmp.lastTimeStr){
+zkTmbox._clearTime = function(cmp) {
+	if (!cmp.lastTimeStr) {
 		return false;
 	}
 	cmp.lastTimeStr = "";
@@ -400,53 +400,56 @@ zkTmbox._clearTime = function(cmp){
 	$real(cmp).value = "";
 	return true;
 };
-zkTmbox.clearTime = function(cmp){
-	if(zkTmbox._clearTime(cmp)){
+zkTmbox.clearTime = function(cmp) {
+	if (zkTmbox._clearTime(cmp)) {
 		cmp.changed = true;
 		//fire changing event to server
 	}
 };
-zkTmbox._autoIncTimeout=function (cmp,inc_sec){
-	zkTmbox._increaseTime(cmp,inc_sec);
-	if(cmp.timerId){
+zkTmbox._autoIncTimeout = function(cmp, inc_sec) {
+	zkTmbox._increaseTime(cmp, inc_sec);
+	if (cmp.timerId) {
 		//increase Step value
-		if(cmp.runCount!=0 && (cmp.runCount%10)==0){	
+		if (cmp.runCount != 0 && (cmp.runCount % 10) == 0) {
 			cmp.currentStep = cmp.currentStep + 1;
 		}
 		cmp.runCount = cmp.runCount + 1;
 		zkTxbox.sendOnChanging($real(cmp));
 	}
 };
-zkTmbox._startAutoIncProc=function (cmp,isup){
-	if(cmp.timerId){
+zkTmbox._startAutoIncProc = function(cmp, isup) {
+	if (cmp.timerId) {
 		clearInterval(cmp.timerId);
 	}
-	
+
 	var inc_sec = zkTmbox._calInc(cmp);
-	if(!isup) inc_sec = -inc_sec
-	cmp.timerId = setInterval(function(){zkTmbox._autoIncTimeout(cmp,inc_sec)}, 500);
-};		
-zkTmbox._stopAutoIncProc=function (cmp){
-	if(cmp.timerId){
+	if (!isup)
+		inc_sec = -inc_sec
+	cmp.timerId = setInterval(function() {
+		zkTmbox._autoIncTimeout(cmp, inc_sec)
+	}, 500);
+};
+zkTmbox._stopAutoIncProc = function(cmp) {
+	if (cmp.timerId) {
 		clearTimeout(cmp.timerId);
 	}
 	cmp.currentStep = cmp.defaultStep;
 	cmp.runCount = 0;
 	cmp.timerId = null;
-};	
-	
+};
+
 //copy from zkTxbox.setAttr 'sel' attribute
-zkTmbox._markselection = function (cmp,start,end){
+zkTmbox._markselection = function(cmp, start, end) {
 	var inp = $real(cmp);
 	if (inp.setSelectionRange) {
 		inp.setSelectionRange(start, end);
 		inp.focus();
 	} else if (inp.createTextRange) {
 		var range = inp.createTextRange();
-		if(start != end){
+		if (start != end) {
 			range.moveEnd('character', end - range.text.length);
 			range.moveStart('character', start);
-		}else{
+		} else {
 			range.move('character', start);
 		}
 		range.select();

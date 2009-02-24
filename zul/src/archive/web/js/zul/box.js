@@ -4,7 +4,7 @@
 	Purpose:
 		box and splitter
 	Description:
-		
+
 	History:
 		Sat Jun 10 12:42:15     2006, Created by tomyeh
 }}IS_NOTE
@@ -124,7 +124,7 @@ zkSplt.init = function (cmp) {
 		zk.listen(btn, "mouseover", function () {zk.addClass(btn, zcls + "-btn-visi")});
 	 	zk.listen(btn, "mouseout", function () {zk.rmClass(btn, zcls + "-btn-visi")});
 	}
-	zk.listen(btn, "click", function () {		
+	zk.listen(btn, "click", function () {
 		zk.rmClass(btn, zcls + "-btn-visi");
 		zkSplt.open(cmp, getZKAttr(cmp, "open") == "false");
 	});
@@ -138,14 +138,14 @@ zkSplt.init = function (cmp) {
 };
 zkSplt._ghostsizing = function (dg, ghosting, pointer) {
 	if (ghosting) {
-		var pointer = zkau.beginGhostToDIV(dg);	
+		var pointer = zkau.beginGhostToDIV(dg);
 		var html = '<div id="zk_ddghost" style="background:#AAA;position:absolute;top:'
 			+pointer[1]+'px;left:'+pointer[0]+'px;width:'
 			+zk.offsetWidth(dg.element)+'px;height:'+zk.offsetHeight(dg.element)
 			+'px;"></div>';
-		document.body.insertAdjacentHTML("afterbegin", html);
+		document.body.insertAdjacentHTML("afterBegin", html);
 		dg.element = $e("zk_ddghost");
-	} else {		
+	} else {
 		zkau.endGhostToDIV(dg);
 	}
 };
@@ -185,13 +185,13 @@ zkSplt._fixbtn = function (cmp) {
 	} else {
 		var zcls = getZKAttr(cmp, "zcls"),
 			vert = getZKAttr(cmp, "vert"),
-			before = colps == "before";		
+			before = colps == "before";
 		if (getZKAttr(cmp, "open") == "false") before = !before;
 
 		if (vert) {
 			zk.rmClass(btn, zcls + "-btn-" + (before ? "b" : "t"));
 			zk.addClass(btn, zcls + "-btn-" + (before ? "t" : "b"));
-		} else {			
+		} else {
 			zk.rmClass(btn, zcls + "-btn-" + (before ? "r" : "l"));
 			zk.addClass(btn, zcls + "-btn-" + (before ? "l" : "r"));
 		}
@@ -236,7 +236,7 @@ zkSplt._endDrag = function (cmp) {
 
 		if (run.next) zk.beforeSizeAt(run.next);
 		if (run.prev) zk.beforeSizeAt(run.prev);
-		
+
 		if (run.next) {
 			var s = $int(run.next.style[fd]);
 			s -= diff;
@@ -430,7 +430,7 @@ zkSplt.open = function (cmp, open, silent, enforce) {
 	if (!silent)
 		zkau.sendasap({uuid: cmp.id, cmd: "onOpen", data: [open]});
 };
-/** Returns the next 
+/** Returns the next
  * @param tn the tag name
  */
 zkSplt._next = function (n, tn) {

@@ -2,9 +2,9 @@
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Sep  9 16:34:55     2008, Created by tomyeh
 }}IS_NOTE
@@ -101,7 +101,7 @@ zkButton = {
 		case "tabindex":
 			if (zk.gecko || zk.safari)
 				zkau.setAttr($real(cmp.id), nm, val);
-			else 
+			else
 				zkau.setAttr($e(cmp.id + "!box"), nm, val);
 			return true;
 		}
@@ -132,7 +132,7 @@ zkButtonOS = {
 zkTbtn = {
 	init: function (cmp) {
 		zk.listen(cmp, "click", zkTbtn.onclick);
-		
+
 		if (!getZKAttr(cmp, "disd")) {
 			zk.listen(cmp, "focus", zkau.onfocus);
 			zk.listen(cmp, "blur", zkau.onblur);

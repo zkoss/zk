@@ -2,7 +2,7 @@
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
 		New trendy mold for Window component
 	History:
@@ -60,7 +60,7 @@ zkWnd2 = {
 	onMaximizeMouseover: function (evt) {
 		if (!evt) evt = window.event;
 		var btn = Event.element(evt),
-			cmp = $parentByType(btn, "Wnd2"), 
+			cmp = $parentByType(btn, "Wnd2"),
 			cls = getZKAttr(cmp, "zcls");
 		if (getZKAttr(cmp, "maximized") == "true")
 			zk.addClass(btn, cls + "-maxd-over");
@@ -69,7 +69,7 @@ zkWnd2 = {
 	onMaximizeMouseout: function (evt) {
 		if (!evt) evt = window.event;
 		var btn = Event.element(evt),
-			cmp = $parentByType(btn, "Wnd2"), 
+			cmp = $parentByType(btn, "Wnd2"),
 			cls = getZKAttr(cmp, "zcls");
 		if (getZKAttr(cmp, "maximized") == "true")
 			zk.rmClass(btn, cls + "-maxd-over");
@@ -83,18 +83,18 @@ zkWnd2.init = function (cmp) {
 		//FF: at the moment of browsing to other URL, listen is still attached but
 		//our js are unloaded. It causes JavaScript error though harmlessly
 		//This is a dirty fix (since onclick and others still fail but hardly happen)
-	zkWnd2.setSizable(cmp, zkWnd2.sizable(cmp));	
-	
+	zkWnd2.setSizable(cmp, zkWnd2.sizable(cmp));
+
 	//Bug #1840866
 	zkWnd2._initMode(cmp);
-		// But, for a Sun's bug, we need to invoke initMode directly to prevent 
+		// But, for a Sun's bug, we need to invoke initMode directly to prevent
 		// that the outline of page is gone.
 		// Note: we fixed bug #1830668 bug by using addInitLater to invoke
 		// _initMode later, but, with ZK 3.0.4, the problem is already resolved
 		// without using addInitLater
 
 	if (getZKAttr(cmp, "maximizable") == "true" && getZKAttr(cmp, "maximized") == "true")
-		zk.addInitLater(function () {zkWnd2.maximize(cmp, true, true);});		
+		zk.addInitLater(function () {zkWnd2.maximize(cmp, true, true);});
 };
 zkWnd2._initBtn = function (cmp) {
 	if (getZKAttr(cmp, "closable") == "true") {
@@ -140,7 +140,7 @@ zkWnd2.maximize = function (cmp, maximized, silent) {
 	if (cmp) {
 		var isRealVisible = zk.isRealVisible(cmp);
 		if (!isRealVisible && maximized) return;
-		
+
 		var l, t, w, h, s = cmp.style, cls = getZKAttr(cmp, "zcls");
 		if (maximized) {
 			zk.addClass($e(cmp, "maximize"), cls + "-maxd");
@@ -150,14 +150,14 @@ zkWnd2.maximize = function (cmp, maximized, silent) {
 			t = s.top;
 			w = s.width;
 			h = s.height;
-			
+
 			// prevent the scroll bar.
 			s.top = "-10000px";
 			s.left = "-10000px";
-			
-			// Sometimes, the clientWidth/Height in IE6 is wrong. 
-			var sw = zk.ie6Only && op.clientWidth == 0 ? (op.offsetWidth - zk.getBorderWidth(op)) : op.clientWidth;
-			var sh = zk.ie6Only && op.clientHeight == 0 ? (op.offsetHeight - zk.getBorderHeight(op)) : op.clientHeight;
+
+			// Sometimes, the clientWidth/Height in IE6 is wrong.
+			var sw = zk.ie6Only && op.clientWidth == 0 ? (op.offsetWidth - zk.getBorderWidth(op)) : op.clientWidth,
+				sh = zk.ie6Only && op.clientHeight == 0 ? (op.offsetHeight - zk.getBorderHeight(op)) : op.clientHeight;
 			if (!floated) {
 				sw -= zk.getPaddingWidth(op);
 				sw = zk.revisedSize(cmp, sw);
@@ -166,11 +166,11 @@ zkWnd2.maximize = function (cmp, maximized, silent) {
 			}
 			if (sw < 0) sw = 0;
 			if (sh < 0) sh = 0;
-			
+
 			s.width = sw + "px";
 			s.height = sh + "px";
 			cmp._lastSize = {l:l, t:t, w:w, h:h};
-			
+
 			// restore.
 			s.top = "0px";
 			s.left = "0px";
@@ -197,7 +197,7 @@ zkWnd2.maximize = function (cmp, maximized, silent) {
 		setZKAttr(cmp, "maximized", maximized ? "true" : "false");
 		if (!silent)
 			zkau.sendasap({uuid: cmp.id, cmd: "onMaximize", data: [l, t, w, h, maximized]});
-		
+
 		if (isRealVisible) {
 			cmp._maximized = true;
 			zk.beforeSizeAt(cmp);
@@ -257,10 +257,10 @@ zkWnd2.syncMaximized = function (cmp) {
 	if (!cmp._lastSize) return;
 	var floated = !zkWnd2._embedded(cmp), op = floated ? zPos.offsetParent(cmp) : cmp.parentNode,
 		s = cmp.style;
-		
+
 	// Sometimes, the clientWidth/Height in IE6 is wrong.
-	var sw = zk.ie6Only && op.clientWidth == 0 ? (op.offsetWidth - zk.getBorderWidth(op)) : op.clientWidth;
-	var sh = zk.ie6Only && op.clientHeight == 0 ? (op.offsetHeight - zk.getBorderHeight(op)) : op.clientHeight;
+	var sw = zk.ie6Only && op.clientWidth == 0 ? (op.offsetWidth - zk.getBorderWidth(op)) : op.clientWidth,
+		sh = zk.ie6Only && op.clientHeight == 0 ? (op.offsetHeight - zk.getBorderHeight(op)) : op.clientHeight;
 	if (!floated) {
 		sw -= zk.getPaddingWidth(op);
 		sw = zk.revisedSize(cmp, sw);
@@ -269,7 +269,7 @@ zkWnd2.syncMaximized = function (cmp) {
 	}
 	if (sw < 0) sw = 0;
 	if (sh < 0) sh = 0;
-	
+
 	s.width = sw + "px";
 	s.height = sh + "px";
 };
@@ -300,8 +300,8 @@ zkWnd2._fixWdh = zk.ie7 ? function (cmp) {
 } : zk.voidf;
 zkWnd2._fixHgh = function (cmp) {
 	if (!zk.isRealVisible(cmp)) return; //Bug #1944729
-	var hgh = cmp.style.height;
-	var n = $e(cmp.id + "!cave");
+	var hgh = cmp.style.height,
+		n = $e(cmp.id + "!cave");
 	if (zk.ie6Only && ((hgh && hgh != "auto" )|| n.style.height)) n.style.height = "0px";
 	if (hgh && hgh != "auto")
 		zk.setOffsetHeight(n, zkWnd2.getOffsetHeight(cmp));
@@ -331,7 +331,7 @@ zkWnd2.getTitleHeight = function (cmp) {
 	var title = $e(cmp.id + "!caption"),
 		tl = zk.firstChild(cmp, "DIV"),
 		top = title ? tl.offsetHeight : 0;
-	if (!zkWnd2._embedded(cmp) && !zkWnd2._popup(cmp) && !title) 
+	if (!zkWnd2._embedded(cmp) && !zkWnd2._popup(cmp) && !title)
 		top += zk.nextSibling(tl, "DIV").offsetHeight;
 	return title ? title.offsetHeight + top : top;
 };
@@ -405,7 +405,7 @@ zkWnd2.setAttr = function (cmp, nm, val) {
 		} else if (getZKAttr(cmp, "minimized") == "true") {
 			zkWnd2.minimize(cmp, false);
 		}
-		
+
 		zkWnd2.hideShadow(cmp);
 		//three cases:
 		//order=0: cmp and all its ancestor are embedded
@@ -449,10 +449,10 @@ zkWnd2.setAttr = function (cmp, nm, val) {
 			zk.setVisible(cmp, visible, {anima: true});
 		}
 		if (!embedded) zkau.hideCovered(); //Bug 1719826
-		
+
 		// sometimes the timing of the sync shadow with the cmp is unreliable
 		// when the cmp uses the onshow() or the onhide() to do something with anima.
-		if (visible) zkWnd2.syncShadow(cmp); 
+		if (visible) zkWnd2.syncShadow(cmp);
 		else zkWnd2.hideShadow(cmp);
 		return true;
 
@@ -581,11 +581,9 @@ zkWnd2.setSizable = function (cmp, sizable) {
 			});
 			cmp.style.position = orgpos;
 		}
-	} else {
-		if (zkWnd2._szs[id]) {
-			zkWnd2._szs[id].destroy();
-			delete zkWnd2._szs[id];
-		}
+	} else if (zkWnd2._szs[id]) {
+		zkWnd2._szs[id].destroy();
+		delete zkWnd2._szs[id];
 	}
 };
 /** 0: none, 1: top, 2: right-top, 3: right, 4: right-bottom, 5: bottom,
@@ -610,8 +608,8 @@ zkWnd2._insizer = function (cmp, x, y) {
 zkWnd2.onmouseover = function (evt, cmp) {
 	var target = Event.element(evt);
 	if (zkWnd2.sizable(cmp)) {
-		var c = zkWnd2._insizer(cmp, Event.pointerX(evt), Event.pointerY(evt));
-		var handle = zkWnd2._embedded(cmp) ? false : $e(cmp.id + "!caption");
+		var c = zkWnd2._insizer(cmp, Event.pointerX(evt), Event.pointerY(evt)),
+			handle = zkWnd2._embedded(cmp) ? false : $e(cmp.id + "!caption");
 		if (c) {
 			if (getZKAttr(cmp, "maximized") == "true") return; // unsupported this case.
 			zk.backupStyle(cmp, "cursor");
@@ -704,14 +702,14 @@ zkWnd2._ghostsizing = function (dg, ghosting, pointer) {
 			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
 			+zk.offsetWidth(dg.element)+'px;height:'+zk.offsetHeight(dg.element)
 			+'px;"></div>';
-			document.body.insertAdjacentHTML("afterbegin", html);
+			document.body.insertAdjacentHTML("afterBegin", html);
 		dg.element = $e("zk_ddghost");
 	} else {
 		var org = zkau.getGhostOrgin(dg);
 		if (org) {
 			dg.z_szofs = {
-				top: dg.element.offsetTop, left: dg.element.offsetLeft, 
-				height: zk.revisedSize(dg.element, dg.element.offsetHeight, true), 
+				top: dg.element.offsetTop, left: dg.element.offsetLeft,
+				height: zk.revisedSize(dg.element, dg.element.offsetHeight, true),
 				width: zk.revisedSize(dg.element, dg.element.offsetWidth)
 				};
 		} else {
@@ -757,7 +755,7 @@ zkWnd2._initMode = function (cmp) {
 	var replace = zkWnd2._clean2[cmp.id] == mode;
 	if (replace) {//replace with the same mode
 		delete zkWnd2._clean2[cmp.id]; //and _doXxx will handle it
-		if (getZKAttr(cmp, "visible") == "true")			
+		if (getZKAttr(cmp, "visible") == "true")
 			zk.cleanVisibility(cmp);
 	}
 	else if (zkWnd2._clean2[cmp.id])
@@ -814,7 +812,7 @@ zkWnd2._cleanMode2 = function (uuid, replace) {
 zkWnd2._show = function (cmp) {
 	if (getZKAttr(cmp, "conshow")) //enforce the anima effect, if any
 		cmp.style.display = "none";
-		
+
 	if (getZKAttr(cmp, "visible") == "true")
 		zk.cleanVisibility(cmp);
 			//turn it on since Window.getRealStyle turn it off to
@@ -844,7 +842,7 @@ zkWnd2._endOverlapped = function (uuid, replace) {
 zkWnd2._doOverpop = function (cmp, storage, replace) {
 	var pos = getZKAttr(cmp, "pos");
 	var isV = zkWnd2.shallVParent(cmp);
-	if (!pos && isV && !cmp.style.top && !cmp.style.left) {		
+	if (!pos && isV && !cmp.style.top && !cmp.style.left) {
 		var xy = zk.revisedOffset(cmp);
 		cmp.style.left = xy[0] + "px";
 		cmp.style.top = xy[1] + "px";
@@ -856,13 +854,13 @@ zkWnd2._doOverpop = function (cmp, storage, replace) {
 		cmp.style.top = xy[1] + $int(cmp.style.top) + "px";
 	}
 	if (isV) zk.setVParent(cmp);
-	
+
 	if (replace) {
 		zkau.fixZIndex(cmp);
 		zkWnd2._float(cmp);
 		return;
 	}
-	
+
 	if (pos) zkWnd2._center(cmp, null, pos); //unlike modal, change only if pos
 
 	zkau.closeFloats(cmp);
@@ -879,7 +877,7 @@ zkWnd2._doOverpop = function (cmp, storage, replace) {
 	//20080215 Tom: don't change focus if overlapped (more reasonable spec)
 };
 zkWnd2._endOverpop = function (uuid, storage, replace) {
-	storage.remove(uuid);		
+	storage.remove(uuid);
 	var cmp = $e(uuid);
 	if (cmp) {
 		zk.unsetVParent(cmp);
@@ -920,17 +918,17 @@ zkWnd2._doModal = function (cmp, replace) {
 		}
 		zk.setVParent(cmp);
 	}
-	
+
 	if (replace) {
 		zkWnd2._float(cmp);
 		if (!zkau._modals.contains(cmp.id))
 			zkau._modals.push(cmp.id); // restore the id, Bug 2465826
 		return;
 	}
-	
+
 	zkWnd2._center(cmp, zi, pos); //called even if pos not defined
 		//show dialog first to have better response.
-	
+
 	if (!pos) {
 		var top = $int(cmp.style.top), y = zk.innerY();
 		if (y) {
@@ -942,13 +940,13 @@ zkWnd2._doModal = function (cmp, replace) {
 			cmp.style.top = "100px";
 		}
 	}
-	
+
 	zkWnd2._show(cmp); //unlike other mode, it must be visible
 
 	zkau.closeFloats(cmp);
 
-	var maskId = cmp.id + ".mask";
-	var mask = $e(maskId);
+	var maskId = cmp.id + ".mask",
+		mask = $e(maskId);
 	if (!mask) {
 		//Note: a modal window might be a child of another
 		var bMask = true;
@@ -962,7 +960,7 @@ zkWnd2._doModal = function (cmp, replace) {
 		if (bMask) {
 			//bug 1510218: we have to make it as a sibling to cmp
 			cmp.insertAdjacentHTML(
-				"beforebegin", '<div id="'+maskId+'" class="z-modal-mask"></div>');
+				"beforeBegin", '<div id="'+maskId+'" class="z-modal-mask"></div>');
 			mask =  $e(maskId);
 			zk.listen(mask, "mousemove", Event.stop);
 		}
@@ -1003,16 +1001,16 @@ zkWnd2._doModal2 = function (uuid) {
 };
 /** Clean up the modal component. */
 zkWnd2._endModal = function (uuid, replace) {
-	var maskId = uuid + ".mask";
-	var mask = $e(maskId);
-	var prevfocusId;
+	var maskId = uuid + ".mask",
+		mask = $e(maskId),
+		prevfocusId;
 	if (mask) {
 		prevfocusId = mask.getAttribute("zk_prevfocus");
 		zk.remove(mask);
 	}
 
 	delete zkWnd2._modal2[uuid];
-	
+
 	var cmp = $e(uuid);
 	if (cmp) zk.unsetVParent(cmp);
 	if (zkau._modals.length == 0) {
@@ -1060,7 +1058,7 @@ zkWnd2._center = function (cmp, zi, pos) {
 	var sw = zkWnd2.getShadow(cmp);
 	if (pos && sw) {
 		var opts = sw.opts, l = cmp.offsetLeft, t = cmp.offsetTop,
-			s = cmp.style; 
+			s = cmp.style;
 		if (pos.indexOf("left") >= 0 && opts.left < 0)
 			s.left = (l - opts.left) + "px";
 		else if (pos.indexOf("right") >= 0 && opts.right > 0)
@@ -1091,7 +1089,7 @@ zkWnd2._float = function (cmp) {
 			cmp.style.position = "absolute"; //just in case
 			zul.initMovable(cmp, {
 				handle: handle, starteffect: zkWnd2._startMove, overlay: true,
-				change: zkau.hideCovered, ghosting: zkWnd2._ghostmove, 
+				change: zkau.hideCovered, ghosting: zkWnd2._ghostmove,
 				ignoredrag: zkWnd2._ignoremove,
 				endeffect: zkWnd2._onWndMove});
 			//we don't use options.change because it is called too frequently
@@ -1107,12 +1105,12 @@ zkWnd2._ghostmove = function (dg, ghosting, pointer) {
 			top = zk.firstChild(dg.element, "DIV"),
 			header = zk.nextSibling(top, 'DIV'),
 			fakeT = top.cloneNode(true),
-			fakeH = header.cloneNode(true);
-		var html = '<div id="zk_ddghost" class="z-window-move-ghost" style="position:absolute;top:'
+			fakeH = header.cloneNode(true),
+			html = '<div id="zk_ddghost" class="z-window-move-ghost" style="position:absolute;top:'
 			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
 			+zk.offsetWidth(dg.element)+'px;height:'+zk.offsetHeight(dg.element)
 			+'px;z-index:'+dg.element.style.zIndex+'"><dl></dl></div>';
-		document.body.insertAdjacentHTML("afterbegin", html);
+		document.body.insertAdjacentHTML("afterBegin", html);
 		dg._zoffs = ofs;
 		dg.element.style.visibility = "hidden";
 		var h = dg.element.offsetHeight - top.offsetHeight - header.offsetHeight;
@@ -1134,7 +1132,7 @@ zkWnd2._ignoremove = function (cmp, pointer, event) {
 	var target = Event.element(event);
 	if (!target || target.id.indexOf("!close") > -1 || target.id.indexOf("!minimize") > -1
 			|| target.id.indexOf("!maximize") > -1) return true;
-	if (!zkWnd2.sizable(cmp) || (cmp.offsetTop + 4 < pointer[1] && cmp.offsetLeft + 4 < pointer[0] 
+	if (!zkWnd2.sizable(cmp) || (cmp.offsetTop + 4 < pointer[1] && cmp.offsetLeft + 4 < pointer[0]
 		&& cmp.offsetLeft + cmp.offsetWidth - 4 > pointer[0])) return false;
 	return true;
 };

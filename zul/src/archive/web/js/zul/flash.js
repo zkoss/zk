@@ -4,7 +4,7 @@
 	Purpose:
 		flash
 	Description:
-		
+
 	History:
 		Tue Jul 24 12:01:12     2007, Created by jeffliu
 }}IS_NOTE
@@ -19,15 +19,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 zkFlash = {};
 
 zkFlash.setAttr = function (cmp, name, value) {
-		
+
 	switch(name) {
 	case "style.height":
-		//$e(cmp.id+"!obj").height = value;
 		$e(cmp.id).height = value;
 		$e(cmp.id+"!emb").height = value;
 		return true;
 	case "style.width":
-		//$e(cmp.id+"!obj").width = value;
 		$e(cmp.id).width = value;
 		$e(cmp.id+"!emb").width = value;
 		return true;

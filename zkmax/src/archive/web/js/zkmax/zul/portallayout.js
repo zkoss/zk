@@ -118,7 +118,7 @@ zkPortalLayout = {
 				+ofs[1]+'px;left:'+ofs[0]+'px;width:'
 				+zk.offsetWidth(dg.element)+'px;height:'+zk.offsetHeight(dg.element)
 				+'px;z-index:'+dg.element.style.zIndex+'"><dl></dl></div>';
-			document.body.insertAdjacentHTML("afterbegin", html);
+			document.body.insertAdjacentHTML("afterBegin", html);
 			dg._zoffs = ofs;
 			dg._cns = zk.childNodes($real($parentByType(dg.element.parentNode, "PortalLayout")), zkPortalLayout._isLegalChild);
 			dg._widths = zkPortalLayout._getColWidths(dg._cns);

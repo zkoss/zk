@@ -2,9 +2,9 @@
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Nov 17 15:45:10     2005, Created by tomyeh
 }}IS_NOTE

@@ -1980,7 +1980,6 @@ Object.extend(Event, {
 	63276: 33, // pgup
 	63277: 34  // pgdn
   },
-  specialKeyChar: ' 0 9 13 16 17 18 19 20 27 33 34 35 36 37 38 39 40 44 45 ',
   charCode: function(evt) {
   	return evt.charCode || evt.keyCode;
   },
@@ -1988,10 +1987,6 @@ Object.extend(Event, {
   keyCode: function(evt) {
     var key = evt.keyCode || evt.charCode;
     return zk.safari ? (this.safariKeymap[key] || key) : key;
-  },
-  isSpecialKey: function(evt) {
-    return (evt.ctrlKey && evt.type == 'keypress') ||
-		this.specialKeyChar.indexOf(' ' + (evt.shiftKey ? evt.keyCode : this.keyCode(evt)) + ' ') != -1;
   },
 /* Jumper Chen, Potix*/  
   

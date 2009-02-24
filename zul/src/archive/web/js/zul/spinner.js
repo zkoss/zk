@@ -2,9 +2,9 @@
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Mar  5 10:06:07 TST 2008, Created by gracelin
 }}IS_NOTE
@@ -19,25 +19,25 @@ zkSpinner = {};
 
 zkSpinner.init = function (cmp) {
 	zkSpinner.onVisi = zkSpinner.onSize = zul.fixDropBtn2;
-	zkSpinner.onHide = zkTxbox.onHide; 	
+	zkSpinner.onHide = zkTxbox.onHide;
 	zkSpinner.validate = zkInbox.validate;
 
 	zkTxbox.init($real(cmp));
-	
+
 	cmp.runCount = 0;
 	cmp.timerId = null;
-			
+
 	cmp.step = parseInt(getZKAttr(cmp, "step"));
 	cmp.min = parseInt(getZKAttr(cmp, "min"));
 	cmp.max = parseInt(getZKAttr(cmp, "max"));
 
-	var inp = $real(cmp);
-	var btn = $e(cmp.id+"!btn");
-	
+	var inp = $real(cmp),
+		btn = $e(cmp.id+"!btn");
+
 	//event for inpu
 	zk.listen(inp, "keypress", zkSpinner.onkeypress);
 	zk.listen(inp, "keydown",zkSpinner._inpkeydown);
-	
+
 	//event for btn
 	if(btn){
 		zk.listen(btn, "mousedown", zkSpinner._btnDown);
@@ -141,7 +141,7 @@ zkSpinner._inpkeydown= function(evt){
 
 zkSpinner.checkValue = function(cmp){
 	inp = $real(cmp);
-	
+
 	if(!inp.value) {
 		if(cmp.min && cmp.max)
 			inp.value = (cmp.min<=0 && 0<=cmp.max) ? 0: cmp.min;
@@ -160,11 +160,11 @@ zkSpinner._btnDown= function(evt){
 	var cmp = $outer(Event.element(evt)),
 		inp = $real(cmp);
 	if(inp.disabled) return;
-	
-	zkSpinner.checkValue(cmp);
-	
 
-	var btn = zk.opera || zk.safari ? $e(cmp.id + "!btn") : zk.firstChild($e(cmp.id + "!btn"), "IMG"),		
+	zkSpinner.checkValue(cmp);
+
+
+	var btn = zk.opera || zk.safari ? $e(cmp.id + "!btn") : zk.firstChild($e(cmp.id + "!btn"), "IMG"),
 		ofs = zk.revisedOffset(btn);
 	if ((Event.pointerY(evt) - ofs[1]) < btn.offsetHeight / 2) { //up
 		zkSpinner._increase(cmp,true);
@@ -177,20 +177,20 @@ zkSpinner._btnDown= function(evt){
 };
 zkSpinner._btnUp= function(evt){
 	if (!evt) evt = window.event;
-	var cmp = $outer(Event.element(evt));
-	var inp = $real(cmp);
+	var cmp = $outer(Event.element(evt)),
+		inp = $real(cmp);
 	if(inp.disabled) return;
-	
+
 	zkTxbox.sendOnChanging(inp);
-		
+
 	zkSpinner._stopAutoIncProc(cmp);
-	inp.focus();	
+	inp.focus();
 };
 zkSpinner._btnOut= function(evt){
 	if (!evt) evt = window.event;
 	zul.ondropbtnout(evt);
-	var cmp = $outer(Event.element(evt));
-	var inp = $real(cmp);
+	var cmp = $outer(Event.element(evt)),
+		inp = $real(cmp);
 	if(inp.disabled) return;
 
 	zkSpinner._stopAutoIncProc(cmp);
@@ -198,23 +198,22 @@ zkSpinner._btnOut= function(evt){
 
 //inner method
 zkSpinner._increase=function (cmp,is_add){
-	var inp = $real(cmp);
-	var value = parseInt(inp.value);
-	if(is_add){
+	var inp = $real(cmp),
+		value = parseInt(inp.value);
+	if (is_add)
 		result = value + cmp.step;
-	}else{
+	else
 		result = value - cmp.step;
-	}
 
-	// control overflow	
+	// control overflow
 	if ( result > Math.pow(2,31)-1 )	result = Math.pow(2,31)-1;
 	else if ( result < -Math.pow(2,31) ) result = -Math.pow(2,31);
-	
+
 	if (cmp.max!=null && result > cmp.max) result = cmp.max;
 	else if (cmp.min!=null && result < cmp.min) result = cmp.min;
-	
+
 	inp.value = result;
-	
+
 	zkTxbox.sendOnChanging(inp);
 };
 
@@ -225,15 +224,15 @@ zkSpinner._clearValue = function(cmp){
 };
 
 zkSpinner._startAutoIncProc=function (cmp,isup){
-	if(cmp.timerId){
+	if(cmp.timerId)
 		clearInterval(cmp.timerId);
-	}
+
 	cmp.timerId = setInterval(function(){zkSpinner._increase(cmp,isup)}, 500);
 };
 
 zkSpinner._stopAutoIncProc=function (cmp){
-	if(cmp.timerId){
+	if(cmp.timerId)
 		clearTimeout(cmp.timerId);
-	}
+
 	cmp.timerId = null;
 };

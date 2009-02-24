@@ -4,7 +4,7 @@
 	Purpose:
 		Slider's JavaScript
 	Description:
-		
+
 	History:
 		Fri Sep 30 12:15:24     2005, Created by tomyeh
 }}IS_NOTE
@@ -22,7 +22,7 @@ zk.load("zul.widget");
 //Slider
 zk.Slider = zClass.create();
 
-zk.Slider.prototype = {	
+zk.Slider.prototype = {
 	initialize: function (comp) {
 		this.id = $uuid(comp);
 		zkau.setMeta(comp, this);
@@ -40,7 +40,7 @@ zk.Slider.prototype = {
 	},
 	init: function(cmp) {
 		this.cleanup();
-		
+
 		this.element = cmp;
 		if (!this.element) return; //removed
 
@@ -49,13 +49,13 @@ zk.Slider.prototype = {
 
 		//calc the snap
 		var meta = this; //such that snap() could access it
-		
+
 		var snap = function (x, y) {return meta._snap(x,y)};
 		this.draggable = new zDraggable(this.button, {
 			constraint: this.vert ? "vertical": "horizontal", snap: snap,
 			starteffect: zkSld._startDrag, change: zkSld._dragging,
 			endeffect: zkSld._endDrag});
-		
+
 		this.form = zk.formOf(this.element);
 		if (this.form && !this.fnSubmit) {
 			this.fnSubmit = function () {
@@ -85,17 +85,16 @@ zk.Slider.prototype = {
 	},
 	_fixPos: function () {
 		if (this.vert) {
-			var ht = this._height();
-			var x = ht > 0 ? Math.round((this._curpos() * ht)/this._maxpos()): 0;
-			var ofs = zPos.cumulativeOffset(this.element);
+			var ht = this._height(),
+				x = ht > 0 ? Math.round((this._curpos() * ht)/this._maxpos()): 0,
+				ofs = zPos.cumulativeOffset(this.element);
 			ofs = zk.toStyleOffset(this.button, ofs[0], ofs[1]);
 			ofs = this._snap(0, ofs[1] + x);
 			this.button.style.top = ofs[1] + "px";
-		}
-		else {
-			var wd = this._width();
-			var x = wd > 0 ? Math.round((this._curpos() * wd)/this._maxpos()): 0;
-			var ofs = zPos.cumulativeOffset(this.element);
+		} else {
+			var wd = this._width(),
+				x = wd > 0 ? Math.round((this._curpos() * wd)/this._maxpos()): 0,
+				ofs = zPos.cumulativeOffset(this.element);
 			ofs = zk.toStyleOffset(this.button, ofs[0], ofs[1]);
 			ofs = this._snap(ofs[0] + x, 0);
 			this.button.style.left = ofs[0] + "px";
@@ -105,7 +104,7 @@ zk.Slider.prototype = {
 		this.button.title = ""; //to avoid annoying effect
 		this.slidepos = this._curpos();
 
-		document.body.insertAdjacentHTML("beforeend",
+		document.body.insertAdjacentHTML("beforeEnd",
 			'<div id="zul_slidetip" class="z-slider-pp" style="position:absolute;display:none;z-index:60000;background-color:white;border: 1px outset">'
 			+this.slidepos+'</div>');
 
@@ -122,7 +121,7 @@ zk.Slider.prototype = {
 			if (this.slidetip)
 				this.slidetip.innerHTML = getZKAttr(this.element, "slidingtext").replace(/\{0\}/g, pos);
 			if (zkau.asap(this.element, "onScrolling"))
-				zkau.send({uuid: this.id, 
+				zkau.send({uuid: this.id,
 					cmd: "onScrolling", data: [pos], ignorable: true},
 					100);
 		}
@@ -141,18 +140,17 @@ zk.Slider.prototype = {
 		this.slidetip = null;
 	},
 	_realpos: function () {
-		var btnofs = zPos.cumulativeOffset(this.button);
-		var refofs = zPos.cumulativeOffset(this.element);
-		var maxpos = this._maxpos();
-		var pos;
+		var btnofs = zPos.cumulativeOffset(this.button),
+			refofs = zPos.cumulativeOffset(this.element),
+			maxpos = this._maxpos(),
+			pos;
 		if (this.vert) {
 			var ht = this._height();
 			pos = ht ? Math.round(((btnofs[1] - refofs[1]) * maxpos) / ht): 0;
-		}
-		else {
+		} else {
 			var wd = this._width();
 			pos = wd ? Math.round(((btnofs[0] - refofs[0]) * maxpos) / wd): 0;
-		}		
+		}
 		return pos >= 0 ? pos: 0;
 	},
 	_curpos: function () {
@@ -162,7 +160,7 @@ zk.Slider.prototype = {
 		return $int(getZKAttr(this.element, "maxpos"))
 	},
 	/** Returns the slider's real width. */
-	_width: function () {		
+	_width: function () {
 		//7 = corner img with
 		return this.element.clientWidth - this.button.offsetWidth+7;
 			//button shall not exceed the right edge
@@ -191,10 +189,10 @@ zkSld = {
 	init: function (cmp) {
 		var meta = zkau.getMeta(cmp),
 			vert = getZKAttr(cmp, "vert");
-					
+
 		if (meta) meta.init();
 		else new zk.Slider(cmp);
-		
+
 		var uuid = $uuid(cmp),
 			btn = $e(uuid + "!btn"),
 			inner = $e(uuid + "!inner");
@@ -202,11 +200,11 @@ zkSld = {
 			//7 = corner width
 			var het = cmp.clientHeight+7;
 			inner.style.height = het + "px";
-		} 
+		}
 		zk.listen(btn, "mouseover", zkSld.onover);
 		zk.listen(btn, "mouseout", zkSld.onout);
 		zk.listen(btn, "mousedown", zkSld.ondown);
-		zk.listen(btn, "mouseup", zkSld.onup);	
+		zk.listen(btn, "mouseup", zkSld.onup);
 	},
 	onover: function (evt) {
 		if (!evt) evt = window.event;
@@ -237,7 +235,7 @@ zkSld = {
 		if (!evt) evt = window.event;
 		var cmp = $outer(Event.element(evt));
 		var btn = zkSld.down_btn;
-		if (btn) {			
+		if (btn) {
 			var zcls = getZKAttr($real(btn), "zcls");
 			zk.rmClass(btn, zcls + "-btn-drag");
 			zk.rmClass(btn, zcls + "-btn-over");

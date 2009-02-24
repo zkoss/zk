@@ -2,9 +2,9 @@
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Jun 17 10:44:03 TST 2008, Created by jumperchen
 }}IS_NOTE
@@ -68,7 +68,7 @@ zkPanel = {
 		}
 	},
 	_initFloat: function (cmp) {
-		if (!cmp.style.top && !cmp.style.left) {		
+		if (!cmp.style.top && !cmp.style.left) {
 			var xy = zk.revisedOffset(cmp);
 			cmp.style.left = xy[0] + "px";
 			cmp.style.top = xy[1] + "px";
@@ -179,7 +179,7 @@ zkPanel = {
 	onMaximizeMouseover: function (evt) {
 		if (!evt) evt = window.event;
 		var btn = Event.element(evt),
-			cmp = $parentByType(btn, "Panel"), 
+			cmp = $parentByType(btn, "Panel"),
 			cls = getZKAttr(cmp, "zcls");
 		if (getZKAttr(cmp, "maximized") == "true")
 			zk.addClass(btn, cls + "-maxd-over");
@@ -188,7 +188,7 @@ zkPanel = {
 	onMaximizeMouseout: function (evt) {
 		if (!evt) evt = window.event;
 		var btn = Event.element(evt),
-			cmp = $parentByType(btn, "Panel"), 
+			cmp = $parentByType(btn, "Panel"),
 			cls = getZKAttr(cmp, "zcls");
 		if (getZKAttr(cmp, "maximized") == "true")
 			zk.rmClass(btn, cls + "-maxd-over");
@@ -196,12 +196,12 @@ zkPanel = {
 	},
 	onOpen: function (evt) {
 		if (!evt) evt = window.event;
-		
+
 		var cmp = $parentByType(Event.element(evt), "Panel");
 		if (cmp) {
 			if (getZKAttr(cmp, "collapsible") != "true")
 				return;
-	
+
 			var body = $e(cmp.id + "!body");
 			if (body)
 				zkPanel.open(cmp, !$visible(body), false, true);
@@ -220,18 +220,18 @@ zkPanel = {
 				} else {
 					zk.addClass(cmp, cls + "-colpsd");
 					zkPanel.hideShadow(cmp);
-					
+
 					// windows 2003 with IE6 will cause an error when user toggles the panel in portallayout.
 					if (zk.ie6Only && !cmp.style.width)
 						cmp.runtimeStyle.width = "100%";
-						
+
 					anima.slideUp(body);
 				}
-	
+
 				if (!silent)
 					zkau.sendasap({uuid: cmp.id, cmd: "onOpen", data: [open]});
 					setZKAttr(cmp, "open", open ? "true" : "false");
-				if (open) 
+				if (open)
 					setTimeout(function(){
 						zkPanel.hideShadow(cmp);
 						zkPanel._fixHgh(cmp);
@@ -242,12 +242,12 @@ zkPanel = {
 	},
 	onMaximize: function (evt) {
 		if (!evt) evt = window.event;
-	
+
 		var cmp = $parentByType(Event.element(evt), "Panel");
 		if (cmp) {
 			if (getZKAttr(cmp, "maximizable") != "true")
 				return;
-	
+
 			zkPanel.maximize(cmp, getZKAttr(cmp, "maximized") != "true", false, true);
 		}
 	},
@@ -256,31 +256,31 @@ zkPanel = {
 		if (cmp) {
 			var isRealVisible = zk.isRealVisible(cmp);
 			if (!isRealVisible && maximized) return;
-			
+
 			var l, t, w, h, s = cmp.style, cls = getZKAttr(cmp, "zcls");
 			if (maximized) {
 				zk.addClass($e(cmp.id + "!maximize"), cls + "-maxd");
 				zkPanel.hideShadow(cmp);
-				
+
 				if (zkPanel.isCollapsible(cmp) && getZKAttr(cmp, "open") != "true") {
 					zk.rmClass(cmp, cls + "-colpsd");
 					var body = $e(cmp.id + "!body");
 					if (body) body.style.display = "";
 				}
-				
+
 				var floated = zkPanel.isFloatable(cmp), op = floated ? zPos.offsetParent(cmp) : cmp.parentNode;
 				l = s.left;
 				t = s.top;
 				w = s.width;
 				h = s.height;
-				
+
 				// prevent the scroll bar.
 				s.top = "-10000px";
 				s.left = "-10000px";
-				
-				// Sometimes, the clientWidth/Height in IE6 is wrong. 
-				var sw = zk.ie6Only && op.clientWidth == 0 ? (op.offsetWidth - zk.getBorderWidth(op)) : op.clientWidth;
-				var sh = zk.ie6Only && op.clientHeight == 0 ? (op.offsetHeight - zk.getBorderHeight(op)) : op.clientHeight;
+
+				// Sometimes, the clientWidth/Height in IE6 is wrong.
+				var sw = zk.ie6Only && op.clientWidth == 0 ? (op.offsetWidth - zk.getBorderWidth(op)) : op.clientWidth,
+					sh = zk.ie6Only && op.clientHeight == 0 ? (op.offsetHeight - zk.getBorderHeight(op)) : op.clientHeight;
 				if (!floated) {
 					sw -= zk.getPaddingWidth(op);
 					sw = zk.revisedSize(cmp, sw);
@@ -289,11 +289,11 @@ zkPanel = {
 				}
 				if (sw < 0) sw = 0;
 				if (sh < 0) sh = 0;
-				
+
 				s.width = sw + "px";
 				s.height = sh + "px";
 				cmp._lastSize = {l:l, t:t, w:w, h:h};
-				
+
 				// restore.
 				s.top = "0px";
 				s.left = "0px";
@@ -325,7 +325,7 @@ zkPanel = {
 			setZKAttr(cmp, "maximized", maximized ? "true" : "false");
 			if (!silent)
 				zkau.sendasap({uuid: cmp.id, cmd: "onMaximize", data: [l, t, w, h, maximized]});
-			
+
 			if (isRealVisible) {
 				cmp._maximized = true;
 				zk.beforeSizeAt(cmp);
@@ -336,12 +336,12 @@ zkPanel = {
 	},
 	onMinimize: function (evt) {
 		if (!evt) evt = window.event;
-	
+
 		var cmp = $parentByType(Event.element(evt), "Panel");
 		if (cmp) {
 			if (getZKAttr(cmp, "minimizable") != "true")
 				return;
-	
+
 			zkPanel.minimize(cmp, getZKAttr(cmp, "minimized") != "true", false, true);
 		}
 	},
@@ -372,13 +372,13 @@ zkPanel = {
 		zkPanel._fixHgh(cmp);
 		zkPanel._fixWdh(cmp);
 		zkPanel.syncShadow(cmp);
-	}, 
+	},
 	syncMaximized: function (cmp) {
 		if (!cmp._lastSize) return;
 		var floated = zkPanel.isFloatable(cmp), op = floated ? zPos.offsetParent(cmp) : cmp.parentNode,
 			s = cmp.style;
-			
-		// Sometimes, the clientWidth/Height in IE6 is wrong. 
+
+		// Sometimes, the clientWidth/Height in IE6 is wrong.
 		var sw = zk.ie6Only && op.clientWidth == 0 ? (op.offsetWidth - zk.getBorderWidth(op)) : op.clientWidth;
 		if (!floated) {
 			sw -= zk.getPaddingWidth(op);
@@ -445,7 +445,7 @@ zkPanel = {
 		var h = cmp.offsetHeight - 1;
 		h -= zkPanel.getTitleHeight(cmp);
 		if (getZKAttr(cmp, "framable") == "true") {
-			var body = $e(getZKAttr(cmp, "children")), 
+			var body = $e(getZKAttr(cmp, "children")),
 				bl = zk.lastChild($e(cmp.id + "!body"), "DIV"),
 				title = $e(cmp.id + "!caption");
 			h -= bl.offsetHeight;

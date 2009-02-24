@@ -4,7 +4,7 @@
 	Purpose:
 		Common utilities for zul.
 	Description:
-		
+
 	History:
 		Thu Jul 14 15:02:27     2005, Created by tomyeh
 }}IS_NOTE
@@ -29,7 +29,7 @@ zul._movs = {}; //(id, zDraggable): movables
  * @since 3.5.0
  */
 zul.fixDropBtn2 = function (cmp) {
-	//For new initial phase, we don't need to delay the function for IE. (Bug 1752477) 
+	//For new initial phase, we don't need to delay the function for IE. (Bug 1752477)
 	var cmp = $e(cmp);
 	if (cmp) zul._fixdbtn2(cmp);
 };
@@ -50,7 +50,7 @@ zul._fixdbtn2 = function (cmp) {
 		var v = inp.offsetHeight - img.offsetHeight;
 		if (v !== 0) {
 			var imghgh = $int(Element.getStyle(img, "height")) + v;
-			img.style.height = (imghgh < 0 ? 0 : imghgh) + "px"; 
+			img.style.height = (imghgh < 0 ? 0 : imghgh) + "px";
 		}
 
 		v = inp.offsetTop - img.offsetTop;
@@ -81,7 +81,7 @@ zul.ondropbtndown = function (evt) {
 		inp = $real(btn),
 		zcls = getZKAttr($outer(btn), "zcls");
 	if (inp && !inp.disabled && !zk.dragging) {
-		if (zul._currentbtn) 
+		if (zul._currentbtn)
 			zul.ondropbtnup(evt);
 		zk.addClass(btn, zcls + "-btn-clk");
 		zk.listen(document.body, "mouseup", zul.ondropbtnup);
@@ -118,63 +118,61 @@ zul.getMetaByHeader = function (cmp) {
 zul.adjustHeadWidth = function (hdfaker, bdfaker, ftfaker, rows) {
 	if (hdfaker == null || bdfaker == null || !hdfaker.cells.length
 	|| !bdfaker.cells.length || !zk.isRealVisible(hdfaker) || !rows || !rows.length) return;
-	
+
 	var hdtable = hdfaker.parentNode.parentNode, head = zul.getRealHeader(hdtable.tBodies[1].rows);
-	if (!head) return; 
+	if (!head) return;
 	if (zk.opera) {
 		if (!hdtable.style.width) {
 			var isFixed = true, tt = hdtable.parentNode.offsetWidth;
 			for(var i = hdfaker.cells.length; --i >=0;) {
 				if (!hdfaker.cells[i].style.width || hdfaker.cells[i].style.width.indexOf("%") >= 0) {
-					isFixed = false; 
+					isFixed = false;
 					break;
 				}
 				tt -= $int(hdfaker.cells[i].style.width);
 			}
 			if (!isFixed || tt >= 0) hdtable.style.tableLayout = "auto";
 		}
-	} 
-	var including = zk.revisedSize(head.cells[0], 100) !== zk.revisedSize(hdfaker.cells[0], 100);
-	
+	}
+
 	// Bug #1886788 the size of these table must be specified a fixed size.
 	var bdtable = $parentByTag(bdfaker, "TABLE"),
-		total = Math.max(hdtable.offsetWidth, bdtable.offsetWidth), 
-		fttable = $parentByTag(ftfaker, "TABLE"), 
+		total = Math.max(hdtable.offsetWidth, bdtable.offsetWidth),
+		fttable = $parentByTag(ftfaker, "TABLE"),
 		tblwd = Math.min(bdtable.parentNode.clientWidth, bdtable.offsetWidth);
-		
-	if (total == bdtable.parentNode.offsetWidth && 
+
+	if (total == bdtable.parentNode.offsetWidth &&
 		bdtable.parentNode.offsetWidth > tblwd && bdtable.parentNode.offsetWidth - tblwd < 20)
 		total = tblwd;
-		
+
 	var count = total;
-	hdtable.style.width = total + "px";	
-	
+	hdtable.style.width = total + "px";
+
 	if (bdtable) bdtable.style.width = hdtable.style.width;
 	if (fttable) fttable.style.width = hdtable.style.width;
-	
+
 	for (var i = bdfaker.cells.length; --i >= 0;) {
 		if (!zk.isVisible(hdfaker.cells[i])) continue;
 		var wd = i != 0 ? bdfaker.cells[i].offsetWidth : count;
 		bdfaker.cells[i].style.width = zk.revisedSize(bdfaker.cells[i], wd) + "px";
 		hdfaker.cells[i].style.width = bdfaker.cells[i].style.width;
 		if (ftfaker) ftfaker.cells[i].style.width = bdfaker.cells[i].style.width;
-		var cpwd = including ? zk.revisedSize(head.cells[i], $int(hdfaker.cells[i].style.width)) :
-			$int(hdfaker.cells[i].style.width);
+		var cpwd = zk.revisedSize(head.cells[i], $int(hdfaker.cells[i].style.width));
 		head.cells[i].style.width = cpwd + "px";
 		var cell = head.cells[i].firstChild;
 		cell.style.width = zk.revisedSize(cell, cpwd) + "px";
 		count -= wd;
 	}
-	
+
 	// in some case, the total width of this table may be changed.
 	if (total != hdtable.offsetWidth) {
 		total = hdtable.offsetWidth;
 		tblwd = Math.min(bdtable.parentNode.clientWidth, bdtable.offsetWidth);
-		if (total == bdtable.parentNode.offsetWidth && 
+		if (total == bdtable.parentNode.offsetWidth &&
 			bdtable.parentNode.offsetWidth > tblwd && bdtable.parentNode.offsetWidth - tblwd < 20)
 			total = tblwd;
-			
-		hdtable.style.width = total + "px";	
+
+		hdtable.style.width = total + "px";
 		if (bdtable) bdtable.style.width = hdtable.style.width;
 		if (fttable) fttable.style.width = hdtable.style.width;
 	}
@@ -210,8 +208,8 @@ zulHdrs.ondragover = function (evt) {
 	var tag = $tag(target);
 	if (tag != "INPUT" && tag != "TEXTAREA") {
 		var el = target;
-		for (; el; el = $parent(el)) {
-		var type = $type(el);
+		for (var type; el; el = $parent(el)) {
+		 type = $type(el);
 		if (type == "Lhr" || type == "Col" || type == "Tcol" || type == "Ftr")
 			break;
 		}
@@ -221,8 +219,8 @@ zulHdrs.ondragover = function (evt) {
 zulHdrs.ondragout = function (evt) {
 	var target = Event.element(evt);
 	var el = target;
-	for (; el; el = $parent(el)) {
-		var type = $type(el);
+	for (var type; el; el = $parent(el)) {
+		type = $type(el);
 		if (type == "Lhr" || type == "Col" || type == "Tcol" || type == "Ftr")
 			break;
 	}
@@ -231,13 +229,13 @@ zulHdrs.ondragout = function (evt) {
 zulHdrs.initdrag = function (cmp) {
 	if (zk.gecko) {
 		zk.listen(cmp, "mouseover", zulHdrs.ondragover);
-		zk.listen(cmp, "mouseout",  zulHdrs.ondragout);	
+		zk.listen(cmp, "mouseout",  zulHdrs.ondragout);
 	}
 };
 zulHdrs.cleandrag = function (cmp) {
 	if (zk.gecko) {
 		zk.unlisten(cmp, "mouseover", zulHdrs.ondragover);
-		zk.unlisten(cmp, "mouseout",  zulHdrs.ondragout);	
+		zk.unlisten(cmp, "mouseout",  zulHdrs.ondragout);
 	}
 };
 zulHdrs.cleanup = function (cmp) {
@@ -269,7 +267,7 @@ zulHdr._faker = ["hdfaker", "bdfaker", "ftfaker"];
 zulHdr.fixedFake = function (cmp) {
 	var meta = zul.getMetaByHeader(cmp);
 	if(!meta) return ; // uninitialized yet.
-	
+
 	var index = zk.cellIndex(cmp);
 	for (var i = zulHdr._faker.length; --i >= 0;)
 		if (meta[zulHdr._faker[i]] && !$e(cmp.id + "!" + zulHdr._faker[i]))
@@ -277,7 +275,7 @@ zulHdr.fixedFake = function (cmp) {
 				(zulHdr.createFake(cmp, zulHdr._faker[i]), meta[zulHdr._faker[i]].cells[index]);
 };
 zulHdr.createFake = function (cmp, postfix) {
-	var t = document.createElement("TH"), 
+	var t = document.createElement("TH"),
 		d = document.createElement("DIV");
 	t.id = cmp.id + "!" + postfix;
 	t.className = cmp.className;
@@ -312,7 +310,7 @@ zulHdr.setSizable = function (cmp, sizable) {
  * @param meta the metainfo of the parent, such as listbox and grid
  */
 zulHdr.resizeAll = function (meta, cmp, icol, col, wd, keys) {
-	if(getZKAttr(meta.element, "fixed") != "true") 
+	if(getZKAttr(meta.element, "fixed") != "true")
 		zul.adjustHeadWidth(meta.hdfaker, meta.bdfaker, meta.ftfaker, meta.bodyrows);
 	zkau.send({uuid: meta.id, cmd: "onInnerWidth",
 			data: [meta.headtbl.style.width]}, -1);
@@ -329,19 +327,19 @@ zulHdr.cleanup = function (cmp) {
 	if (ftfaker) zk.remove(ftfaker);
 };
 zulHdr.setAttr = function (cmp, nm, val) {
-	switch(nm) { // Bug #1822566 
-		case "style.width" :			
-		case "style.height" :		
-		case "style" :			
-			
-			var cell = cmp.firstChild;
-			var v = val, meta = zul.getMetaByHeader(cmp);	
+	switch(nm) { // Bug #1822566
+		case "style.width" :
+		case "style.height" :
+		case "style" :
+
+			var cell = cmp.firstChild,
+				v = val,
+				meta = zul.getMetaByHeader(cmp);
 			if (nm == "style") v = zk.getTextStyle(val, true, true);
 			if (v) {
 				if (nm == "style.width") {
 					if (v && v != "auto" && v.indexOf('%') < 0) {
-						var including = zk.revisedSize(meta.headrows[0].cells[0], 100) !== zk.revisedSize(meta.hdfaker.cells[0], 100);
-						v = (including ? zk.revisedSize(cmp, $int(v)) : v);
+						v = zk.revisedSize(cmp, $int(v));
 						v = zk.revisedSize(cell, $int(v)) + "px";
 						zkau.setAttr(cell, nm, v);
 					} else {
@@ -352,7 +350,7 @@ zulHdr.setAttr = function (cmp, nm, val) {
 				}
 			}
 			zkau.setAttr(cmp, nm, val);
-			
+
 			if (nm == "style.width") {
 				var hdfaker = $e(cmp.id + "!hdfaker"), bdfaker = $e(cmp.id + "!bdfaker"),
 					ftfaker = $e(cmp.id + "!ftfaker");
@@ -379,15 +377,14 @@ zulHdr.setAttr = function (cmp, nm, val) {
 };
 
 zulHdr.onclick = function (evt, cmp) {
-	if (!zk.dragging && $uuid(Event.element(evt)) == cmp.id && zulHdr._sortable(cmp) 
+	if (!zk.dragging && $uuid(Event.element(evt)) == cmp.id && zulHdr._sortable(cmp)
 		&& zkau.insamepos(evt) && $tag(Event.element(evt)) != "INPUT")
 		zkau.send({uuid: cmp.id, cmd: "onSort"}, 10);
 };
 zulHdr.onmove = function (evt, cmp) {
 	if (zk.dragging) return;
 	var ofs = zk.revisedOffset(cmp); // Bug #1812154
-	var v = zulHdr._insizer(cmp, Event.pointerX(evt) - ofs[0]);
-	if (v) {
+	if (zulHdr._insizer(cmp, Event.pointerX(evt) - ofs[0])) {
 		zk.backupStyle(cmp, "cursor");
 		cmp.style.cursor = v == 1 ? "e-resize": "w-resize";
 	} else {
@@ -402,7 +399,7 @@ zulHdr.ignoredrag = function (cmp, pointer) {
 /** Returns 1 if right, -1 if left, 0 if none. */
 zulHdr._insizer = function (cmp, x) {
 	if (zulHdr.sizable(cmp)) {
-		if (x >= cmp.offsetWidth - 10) return 1;		
+		if (x >= cmp.offsetWidth - 10) return 1;
 	}
 	return 0;
 };
@@ -411,9 +408,8 @@ zulHdr._ignoresizing = function (cmp, pointer) {
 	var dg = zulHdr._szs[cmp.id];
 	if (dg) {
 		var ofs = zk.revisedOffset(cmp); // Bug #1812154
-		var v = zulHdr._insizer(cmp, pointer[0] - ofs[0]);
-		if (v) {
-			dg.z_min = 10 + zk.getPadBorderWidth(cmp);		
+		if (zulHdr._insizer(cmp, pointer[0] - ofs[0])) {
+			dg.z_min = 10 + zk.getPadBorderWidth(cmp);
 			return false;
 		}
 	}
@@ -422,10 +418,12 @@ zulHdr._ignoresizing = function (cmp, pointer) {
 zulHdr._endsizing = function (cmp, evt) {
 	var dg = zulHdr._szs[cmp.id];
 	if (dg && dg.z_szofs) {
-		var meta = zul.getMetaByHeader(cmp);
-		var keys = "", wd = dg.z_szofs, table = $parentByTag(cmp, "TABLE"), head = table.tBodies[0].rows[0],
-			including = zk.revisedSize(head.cells[0], 100) !== zk.revisedSize(table.tBodies[1].rows[0].cells[0], 100), 
-			rwd = including ? zk.revisedSize(cmp, wd) : wd,
+		var meta = zul.getMetaByHeader(cmp),
+			keys = "",
+			wd = dg.z_szofs,
+			table = $parentByTag(cmp, "TABLE"),
+			head = table.tBodies[0].rows[0],
+			rwd = zk.revisedSize(cmp, wd),
 			cells = head.cells, cidx = zk.cellIndex(cmp), total = 0;
 		for (var k = cells.length; --k >= 0;)
 			if (k !== cidx) total += cells[k].offsetWidth;
@@ -443,18 +441,18 @@ zulHdr._endsizing = function (cmp, evt) {
 			}
 			meta.bdfaker.cells[cidx].style.width = wd + "px";
 		}
-		
+
 		head.cells[cidx].style.width = wd + "px";
 		cmp.style.width = rwd + "px";
 		var cell = cmp.firstChild;
 		cell.style.width = zk.revisedSize(cell, rwd) + "px";
-		
-		table.style.width = total + wd + "px";		
+
+		table.style.width = total + wd + "px";
 		if (meta.foottbl) {
-			meta.foottbl.style.width = table.style.width;	
+			meta.foottbl.style.width = table.style.width;
 		}
 		if (meta.bodytbl) {
-			meta.bodytbl.style.width = table.style.width;	
+			meta.bodytbl.style.width = table.style.width;
 		}
 		if (evt) {
 			if (evt.altKey) keys += 'a';
@@ -474,7 +472,7 @@ zulHdr._ghostsizing = function (dg, ghosting, pointer) {
 		var ofs = zkau.beginGhostToDIV(dg);
 		ofs[1] = of[1];
 		ofs[0] += zk.offsetWidth(dg.element);
-		document.body.insertAdjacentHTML("afterbegin",
+		document.body.insertAdjacentHTML("afterBegin",
 			'<div id="zk_ddghost" style="position:absolute;top:'
 			+ofs[1]+'px;left:'+ofs[0]+'px;width:3px;height:'+zk.offsetHeight(el.parentNode.parentNode)
 			+'px;background:darkgray"></div>');
@@ -495,7 +493,7 @@ zulHdr._snap = function (cmp, x, y) {
 	var dg = zulHdr._szs[cmp.id];
 	if (dg) {
 		var ofs = zk.revisedOffset(cmp);
-		x += zk.offsetWidth(cmp); 
+		x += zk.offsetWidth(cmp);
 		if (ofs[0] + dg.z_min >= x)
 			x = ofs[0] + dg.z_min;
 	}

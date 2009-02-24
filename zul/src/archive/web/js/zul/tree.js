@@ -2,9 +2,9 @@
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri Jul  8 12:57:05     2005, Created by tomyeh
 }}IS_NOTE
@@ -134,22 +134,22 @@ zkTree.beforeSize = function (cmp) {
 /** Called when the body got a key stroke. */
 zkTree.bodyonkeydown = function (evt) {
 	if (!evt) evt = window.event;
-	var target = Event.element(evt);
-	var meta = zkau.getMetaByType(target, "Tree");
+	var target = Event.element(evt),
+		meta = zkau.getMetaByType(target, "Tree");
 	return !meta || meta.dobodykeydown(evt, target);
 };
 /** Called when a listitem got a key stroke. */
 zkTree.onkeydown = function (evt) {
 	if (!evt) evt = window.event;
-	var target = Event.element(evt);
-	var meta = zkau.getMetaByType(target, "Tree");
+	var target = Event.element(evt),
+		meta = zkau.getMetaByType(target, "Tree");
 	return !meta || meta.dokeydown(evt, target);
 };
 /** Called when mouse click. */
 zkTree.onclick = function (evt) {
 	if (!evt) evt = window.event;
-	var target = Event.element(evt);
-	var meta = zkau.getMetaByType(target, "Tree");
+	var target = Event.element(evt),
+		meta = zkau.getMetaByType(target, "Tree");
 	if (meta) meta.doclick(evt, target);
 };
 
@@ -172,8 +172,8 @@ zkTree.setAttr = function (cmp, nm, val) {
 /** Called when the +/- button is clicked. */
 zkTree.ontoggle = function (evt) {
 	if (!evt) evt = window.event;
-	var target = Event.element(evt);
-	var meta = zkau.getMetaByType(target, "Tree");
+	var target = Event.element(evt),
+		meta = zkau.getMetaByType(target, "Tree");
 	if (meta) meta.toggleOpen(evt, target);
 };
 zkTree.isOpen = function (row) {
@@ -227,8 +227,8 @@ zkTrow.open = function (n, open) {
 		var p = $e(n);
 		n = p ? p: $e(_zktrx.sib[n]);
 	}
-	var tree = getZKAttr(cmp, "rid") || $parentByType(n, "Tree");
-	var meta = zkau.getMeta(tree);
+	var tree = getZKAttr(cmp, "rid") || $parentByType(n, "Tree"),
+		meta = zkau.getMeta(tree);
 	if (meta)
 		meta._openItem(n, null, open != false);
 };
@@ -242,8 +242,8 @@ zkTrow.onrtclk = function (cmp) {
  * It returns itself if there is no child at all.
  */
 zkTrow._lastKid = function (row) {
-	var uuid = getZKAttr(row, "pitem");
-	var n = row;
+	var uuid = getZKAttr(row, "pitem"),
+		n = row;
 	do {
 		var r = n.nextSibling;
 		if ($tag(r) == "TR") {
@@ -285,7 +285,7 @@ zk.addBeforeInit(function () {
 
 	//Treecols
 	zkTcols = zulHdrs;
-	
+
 	zkTrow.initdrag = zkLit.initdrag;
 	zkTrow.cleandrag = zkLit.cleandrag;
 });
@@ -308,8 +308,8 @@ _zktrx.init = function (trow, attr) {
 	}
 };
 _zktrx.cleanup = function (trow, attr) {
-	var pt = getZKAttr(trow, attr);
-	var dom = pt ? _zktrx.dom[pt]: null;
+	var pt = getZKAttr(trow, attr),
+		dom = pt ? _zktrx.dom[pt]: null;
 	if (dom) {
 		dom.remove(trow.id);
 		if (!dom.length) delete _zktrx.dom[pt];

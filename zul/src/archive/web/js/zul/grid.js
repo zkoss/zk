@@ -2,9 +2,9 @@
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Mon Jan  9 17:45:32     2006, Created by tomyeh
 }}IS_NOTE
@@ -23,15 +23,15 @@ zk.Grid = zClass.create();
 zk.Grid.prototype = {
 	initialize: function (comp) {
 		this.id = comp.id;
-		zkau.setMeta(comp, this);	
+		zkau.setMeta(comp, this);
 		this.init();
 	},
 	init: function () {
 		this.element = $e(this.id);
 		if (!this.element) return;
 		if (getZKAttr(this.element, "vflex") == "true") {
-			if (zk.ie) this.element.style.overflow = "hidden"; 
-			// added by Jumper for IE to get a correct offsetHeight so we need 
+			if (zk.ie) this.element.style.overflow = "hidden";
+			// added by Jumper for IE to get a correct offsetHeight so we need
 			// to add this command faster than the this._calcSize() function.
 			var hgh = this.element.style.height;
 			if (!hgh || hgh == "auto") this.element.style.height = "99%"; // avoid border 1px;
@@ -41,7 +41,7 @@ zk.Grid.prototype = {
 		this.paging = getZKAttr(this.element, "pg") != null;
 		if (this.body) {
 			this.bodytbl = zk.firstChild(this.body, "TABLE", true);
-			
+
 			this.head = $e(this.id + "!head");
 			this.foot = $e(this.id + "!foot");
 			if (this.foot) this.foottbl = zk.firstChild(this.foot, "TABLE", true);
@@ -52,7 +52,7 @@ zk.Grid.prototype = {
 				this.bdfaker = this.bodytbl.tBodies[0].rows[0]; // body's faker
 				if (this.foot) this.ftfaker = this.foottbl.tBodies[0].rows[0]; // foot's faker
 			}
-			
+
 			if (this.bodytbl.tBodies && this.bodytbl.tBodies[this.head ? 1 : 0])
 				this.bodyrows = this.bodytbl.tBodies[this.head ? 1 : 0].rows;
 				//Note: bodyrows is null in FF if no rows, so no err msg
@@ -79,7 +79,7 @@ zk.Grid.prototype = {
 			if (empty) this.head.style.display = "none"; // Bug #1819037, #1970048
 			//we have to hide if empty (otherwise, a small block is shown)
 			else this.head.style.display = "";// Bug #1832359
-				
+
 		}
 
 		this.body.onscroll = function () {
@@ -93,7 +93,7 @@ zk.Grid.prototype = {
 	/** Returns the size for vflex
 	 */
 	_vflexSize: function () {
-		if (zk.ie6Only) { 
+		if (zk.ie6Only) {
 			// ie6 must reset the height of the element,
 			// otherwise its offsetHeight might be wrong.
 			var hgh = this.element.style.height;
@@ -106,7 +106,7 @@ zk.Grid.prototype = {
 	/* set the height. */
 	setHgh: function (hgh) {
 		if (getZKAttr(this.element, "vflex") == "true" || (hgh && hgh != "auto" && hgh.indexOf('%') < 0)) {
-			var h =  this._vflexSize(); 
+			var h =  this._vflexSize();
 			if (this.paging) {
 				var pgit = $e(this.id + "!pgit"), pgib = $e(this.id + "!pgib");
 				if (pgit) h -= pgit.offsetHeight;
@@ -115,10 +115,10 @@ zk.Grid.prototype = {
 			if (h < 0) h = 0;
 
 			this.body.style.height = h + "px";
-			
-			//2007/12/20 We don't need to invoke the body.offsetHeight to avoid a performance issue for FF. 
+
+			//2007/12/20 We don't need to invoke the body.offsetHeight to avoid a performance issue for FF.
 			if (zk.ie && this.body.offsetHeight) {} // bug #1812001.
-			// note: we have to invoke the body.offestHeight to resolve the scrollbar disappearing in IE6 
+			// note: we have to invoke the body.offestHeight to resolve the scrollbar disappearing in IE6
 			// and IE7 at initializing phase.
 		} else {
 			//Bug 1556099: it is strange if we ever check the value of
@@ -185,12 +185,12 @@ zk.Grid.prototype = {
 		var tblwd = this.body.clientWidth;
 		if (zk.ie) //By experimental: see zk-blog.txt
 			if (this.headtbl && this.headtbl.offsetWidth != this.bodytbl.offsetWidth)
-				this.bodytbl.style.width = ""; //reset 
+				this.bodytbl.style.width = ""; //reset
 			if (tblwd && this.body.offsetWidth == this.bodytbl.offsetWidth && this.body.offsetWidth - tblwd > 11) { //scrollbar
 				if (--tblwd < 0) tblwd = 0;
 				this.bodytbl.style.width = tblwd + "px";
 			}
-				
+
 		if (this.headtbl) {
 			if (tblwd) this.head.style.width = tblwd + 'px';
 			if (getZKAttr(this.element, "fixed") != "true")
@@ -220,7 +220,7 @@ zk.Grid.prototype = {
 		case "style.height":
 			this.element.style.height = val;
 			if (zk.ie6Only && this.body) this.body.style.height = val;
-				// IE6 cannot shrink its height, we have to specify this.body's height to equal the element's height. 
+				// IE6 cannot shrink its height, we have to specify this.body's height to equal the element's height.
 			this.setHgh(val);
 			this._recalcSize();
 			return true;
@@ -249,15 +249,15 @@ zk.Grid.prototype = {
 				this.body.scrollLeft = val;
 				return true;
 			}
-		case "z.vflex":			
+		case "z.vflex":
 			if (val == "true") {
-				if (zk.ie) this.element.style.overflow = "hidden"; 
-				// added by Jumper for IE to get a correct offsetHeight so we need 
+				if (zk.ie) this.element.style.overflow = "hidden";
+				// added by Jumper for IE to get a correct offsetHeight so we need
 				// to add this command faster than the this._calcSize() function.
 				var hgh = this.element.style.height;
 				if (!hgh || hgh == "auto") this.element.style.height = "99%"; // avoid border 1px;
 			} else if (zk.ie) {
-				this.element.style.overflow = ""; // cleanup style 
+				this.element.style.overflow = ""; // cleanup style
 			}
 			zkau.setAttr(this.element, nm, val);
 			this._recalcSize();
@@ -353,13 +353,13 @@ zkGrw.init = function (cmp) {
 zkGrw.initdrag = function (cmp) {
 	if (zk.gecko) {
 		zk.listen(cmp, "mouseover", zkGrw.ondragover);
-		zk.listen(cmp, "mouseout",  zkGrw.ondragout);	
+		zk.listen(cmp, "mouseout",  zkGrw.ondragout);
 	}
 };
 zkGrw.cleandrag = function (cmp) {
 	if (zk.gecko) {
 		zk.unlisten(cmp, "mouseover", zkGrw.ondragover);
-		zk.unlisten(cmp, "mouseout",  zkGrw.ondragout);	
+		zk.unlisten(cmp, "mouseout",  zkGrw.ondragout);
 	}
 };
 zkGrw.ondragover = function (evt) {
@@ -373,7 +373,7 @@ zkGrw.ondragover = function (evt) {
 zkGrw.ondragout = function (evt) {
 	var target = Event.element(evt);
 	var p = $parentByType(target, "Gcl");
-	if (p) p.firstChild.style.MozUserSelect = "";	
+	if (p) p.firstChild.style.MozUserSelect = "";
 };
 zkGrw.cleanup = function (cmp) {
 	zkGrw.stripe(cmp, true);
@@ -388,7 +388,7 @@ zkGrw.setAttr = function (cmp, nm, val) {
 	}
 	return false;
 };
-zkGrw.stripe = function (cmp, isClean) {	
+zkGrw.stripe = function (cmp, isClean) {
 	var meta = zkau.getMeta(getZKAttr(cmp, "rid"));
 	if (meta) {
 		if (!meta.fixedStripe) meta.fixedStripe = function () {meta.stripe();};
@@ -413,12 +413,12 @@ zk.addBeforeInit(function () {
 					$parentByType(col1, "Cols"), icol, col1, wd1, keys);
 		}
 	};
-	
+
 	/** since 3.5.0 */
 	zk.copy(zkCol, {
 		_zkColinit: zkCol.init,
 		init: function (cmp) {
-			zkCol._zkColinit(cmp);	
+			zkCol._zkColinit(cmp);
 			var pp = getZKAttr(cmp.parentNode, "mpop");
 				zk.listen(cmp, "mouseover", zkCol.onHdOver);
 				zk.listen(cmp, "mouseout", zkCol.onHdOut);
@@ -426,7 +426,7 @@ zk.addBeforeInit(function () {
 				var btn = $e(cmp, "btn");
 				if (btn) {
 					zk.listen(btn, "click", zkCol.onMenuClick);
-					
+
 					// zid might not be ready yet.
 					zk.addInitLater(function () {
 						var mpop = $e(pp);
@@ -436,7 +436,7 @@ zk.addBeforeInit(function () {
 							if (getZKAttr(mpop, "autocreate") == "true" &&
 								getZKAttr(cmp.parentNode, "columnshide") != "true" &&
 								getZKAttr(cmp, "asc") != "true" &&
-								getZKAttr(cmp, "dsc") != "true") 
+								getZKAttr(cmp, "dsc") != "true")
 									zk.remove($e(cmp.id + "!btn"));
 							zk.on(mpop, "close", zkCol.onMenuClose);
 							zk.on(mpop, "onOuter", zkCol.onMenuOuter);
@@ -455,12 +455,12 @@ zk.addBeforeInit(function () {
 				btn = $e(cmp, "btn");
 			if (!pp) return;
 			zk.addClass(cmp, getZKAttr(cmp, "zcls") + "-visi");
-			
+
 			if (getZKAttr(pp, "autocreate") == "true") {
 				var group = getZKAttr(cmp.parentNode, "columnsgroup") == "true",
 					asc = getZKAttr(cmp, "asc") == "true",
-					dsc = getZKAttr(cmp, "dsc") == "true";
-				var ul = $e(pp, "cave");
+					dsc = getZKAttr(cmp, "dsc") == "true",
+					ul = $e(pp, "cave");
 				if (ul) {
 					var li = zk.firstChild(ul, "LI");
 					if (group) {
@@ -470,20 +470,20 @@ zk.addBeforeInit(function () {
 					if (li) li.style.display = asc ? "" : "none";
 					li = zk.nextSibling(li, "LI");
 					if (li) li.style.display = dsc ? "" : "none";
-					
+
 					//separator
 					li = zk.nextSibling(li, "LI");
 					if (li) li.style.display = (asc||dsc) ? "" : "none";
-					
+
 				}
 			}
-			
+
 			pp.style.position = "absolute";
 			zk.setVParent(pp);
 			zk.position(pp, btn, "after_start");
 			var xy = zk.revisedOffset(cmp), t = $int(pp.style.top);
-			if (xy[1] < t) pp.style.top = t - 4 + "px"; 
-			
+			if (xy[1] < t) pp.style.top = t - 4 + "px";
+
 			zkMpop2.context(pp, cmp);
 			setZKAttr(pp, "menuId", cmp.id);
 			Event.stop(evt); // avoid onSort event.
@@ -497,10 +497,10 @@ zk.addBeforeInit(function () {
 		},
 		onHdOver: function (evt) {
 			if (!evt) evt = window.event;
-			var cmp = $parentByType(Event.element(evt), "Col");			
+			var cmp = $parentByType(Event.element(evt), "Col"),
+				btn = $e(cmp, "btn");
 			zk.addClass(cmp, getZKAttr(cmp, "zcls") + "-over");
-			var btn = $e(cmp, "btn");
-			if (btn) btn.style.height = cmp.offsetHeight - 1 + "px";											
+			if (btn) btn.style.height = cmp.offsetHeight - 1 + "px";
 		},
 		onHdOut: function (evt) {
 			if (!evt) evt = window.event;
@@ -508,7 +508,7 @@ zk.addBeforeInit(function () {
 				zcls = getZKAttr(cmp, "zcls");
 			if (!zk.hasClass(cmp, zcls + "-visi") &&
 				(!zk.ie || !zk.isAncestor(cmp, evt.relatedTarget || evt.toElement)))
-				zk.rmClass(cmp, zcls + "-over");	
+				zk.rmClass(cmp, zcls + "-over");
 		}
 	});
 	//Columns
@@ -530,18 +530,18 @@ zkGrwgp = {
 				span -= cells[i].colSpan;
 			if (span > 0 && cmp.cells.length) cmp.cells[cmp.cells.length - 1].colSpan += span;
 		}
-	},	
+	},
 	ontoggle: function (evt) {
 		if (!evt) evt = window.event;
-		var target = Event.element(evt);
-		var row = zk.parentNode(target, "TR");
+		var target = Event.element(evt),
+			row = zk.parentNode(target, "TR");
 		if (!row) return; //incomplete structure
 
-		var meta = zkau.getMeta(getZKAttr(row, "rid"));
-		var toOpen = !zkGrwgp.isOpen(row); //toggle
+		var meta = zkau.getMeta(getZKAttr(row, "rid")),
+			toOpen = !zkGrwgp.isOpen(row); //toggle
 		zkGrwgp._openItem(row, toOpen);
 
-		if (toOpen && meta || getZKAttr(meta.element, "model") == "true") {	
+		if (toOpen && meta || getZKAttr(meta.element, "model") == "true") {
 			if (toOpen) meta.stripe();
 			if (!meta.paging) meta._recalcSize(); // group in paging will invalidate the whole rows.
 		}
@@ -562,7 +562,7 @@ zkGrwgp = {
 			}
 		}
 		zkGrwgp._openItemNow(row, toOpen);
-		if (!silent) 
+		if (!silent)
 			zkau.sendasap({uuid: row.id,
 				cmd: "onOpen", data: [toOpen]});
 				//always send since the client has to update Openable
@@ -599,7 +599,7 @@ zkGrwgp = {
 				if (meta) meta.stripe();
 			}
 			return true;
-		} 
+		}
 		return false;
 	},
 	initdrag: zkGrw.initdrag,

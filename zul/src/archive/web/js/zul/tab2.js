@@ -200,7 +200,7 @@ zkTab2 = {
 		//accordion: we must go to panel firs, and then browse its sibling
 		var panel = $e(getZKAttr(tab, "panel"));
 		if (!panel) return false;
-		
+
 		for (var node = panel; node = node.nextSibling;)
 			if (getZKAttr($real(node), "animating"))
 				return true;
@@ -295,7 +295,7 @@ zkTabs2 = {
 		zkTabs2._arrowlistener(btn);
 		btn = $e(cmp.id + "!up");
 		zkTabs2._arrowlistener(btn);
-		
+
 		var meta = $parent(cmp);
 		if (!meta.initscroll)
 			meta.initscroll = function () {
@@ -405,10 +405,9 @@ zkTabs2 = {
 								sct = header.scrollTop,
 								hosh = headheight;
 							if (ost < sct) {
-								zkTabs2._tabscroll(uuid, "up", sct - ost );
-							}
-							else if (ost + tosh > sct + hosh) {
-									zkTabs2._tabscroll(uuid, "down", ost + tosh - sct - hosh + 4);
+								zkTabs2._tabscroll(uuid, "up", sct - ost);
+							} else if (ost + tosh > sct + hosh) {
+								zkTabs2._tabscroll(uuid, "down", ost + tosh - sct - hosh + 4);
 							}
 							break;
 						case "end":
@@ -428,7 +427,7 @@ zkTabs2 = {
 							}
 							break;
 					}
-				}else { // not enough tab to scroll
+				} else { // not enough tab to scroll
 					if (cldheight > (headheight - 18)) {
 						tabbox._scrolling = true;
 						zkTabs2._showbutton(tbsdiv);
@@ -460,9 +459,8 @@ zkTabs2 = {
 						var osl = cmp.offsetLeft, tosw = cmp.offsetWidth, scl = header.scrollLeft, hosw = headwidth;
 						if (osl < scl) {
 							zkTabs2._tabscroll(uuid, "left", scl - osl + 2);
-						}
-						else if (osl + tosw > scl + hosw) {
-								zkTabs2._tabscroll(uuid, "right", osl + tosw - scl - hosw + 2);
+						} else if (osl + tosw > scl + hosw) {
+							zkTabs2._tabscroll(uuid, "right", osl + tosw - scl - hosw + 2);
 						}
 						break;
 					case "end":
@@ -474,9 +472,8 @@ zkTabs2 = {
 						//over left
 						if (osl < scl) {
 							zkTabs2._tabscroll(uuid, "left", scl - osl + 2);
-						}
-						else if (osl + tosw > scl + hosw) {
-								zkTabs2._tabscroll(uuid, "right", osl + tosw - scl - hosw + 2);
+						} else if (osl + tosw > scl + hosw) {
+							zkTabs2._tabscroll(uuid, "right", osl + tosw - scl - hosw + 2);
 						}
 						break;
 				}
@@ -513,14 +510,14 @@ zkTabs2 = {
 				if ($type(a[i]) == "Tab2") {
 					if (a[i].offsetLeft + a[i].offsetWidth > scl + hosw) {
 						move = a[i].offsetLeft + a[i].offsetWidth - scl - hosw + 2;
-						if (move == 0 || move == null || isNaN(move))
+						if (!move || isNaN(move))
 							return null;
 						zkTabs2._tabscroll(uuid, "right", move);
 						return;
 					};
 				}
 			};
-		}else if (ele.id == uuid + "!left") {//Scroll to next left tab
+		} else if (ele.id == uuid + "!left") {//Scroll to next left tab
 				var a =  zk.childNodes($e(uuid + "!cave"), zkTabs2._isLegalType),
 					scl = head.scrollLeft;
 				if (!a.length) return; // nothing to do
@@ -538,7 +535,7 @@ zkTabs2 = {
 				if (isNaN(move)) return;
 				zkTabs2._tabscroll(uuid, "left", move);
 				return;
-		}else if (ele.id == uuid + "!up") {
+		} else if (ele.id == uuid + "!up") {
 				var scltop =  head.scrollTop,
 					tab = zk.childNodes($e(uuid,"ul"), zkTabs2._isLegalType);
 				if (!tab.length) return; // nothing to do
@@ -556,7 +553,7 @@ zkTabs2 = {
 				move = scltop - preli.offsetTop ;
 				zkTabs2._tabscroll(uuid, "up", move);
 				return;
-		}else if (ele.id == uuid + "!down") {
+		} else if (ele.id == uuid + "!down") {
 			var scltop = head.scrollTop,
 				tab = zk.childNodes($e(uuid,"ul"), zkTabs2._isLegalType),
 				scltop =  head.scrollTop,
@@ -565,7 +562,7 @@ zkTabs2 = {
 			for (var i = 0, count = tab.length; i < count; i++) {
 				if (tab[i].offsetTop + tab[i].offsetHeight > scltop + hosh ) {
 					move = tab[i].offsetTop + tab[i].offsetHeight - scltop - hosh + 2;
-					if (move == 0 || move == null || isNaN(move)) return ;
+					if (!move || isNaN(move)) return ;
 					zkTabs2._tabscroll(uuid, "down", move);
 					return;
 				};
@@ -580,11 +577,10 @@ zkTabs2 = {
 		//the tab bigger , the scroll speed faster
 		step = move <= 60 ? 5 : eval(5 * ($int(move / 60) + 1));
 		var run = setInterval(function() {
-			if (move == 0) {
+			if (!move) {
 				clearInterval(run);
 				return;
-			}
-			else {
+			} else {
 				//high speed scroll, need break
 				move < step ? goscroll(header, to, move) : goscroll(header, to, step);
 				move = move - step;
@@ -593,18 +589,21 @@ zkTabs2 = {
 		}, 10);
 		//Use to scroll
 		goscroll = function(header, to, step) {
-			if (to == "right") {
+			switch(to){
+			case 'right':
 				header.scrollLeft = header.scrollLeft + step;
-			}else if (to == "left") {
+				break;
+			case 'left':
 				header.scrollLeft = header.scrollLeft - step;
-			}else if (to == "up") {
+				break;
+			case 'up':
 				header.scrollTop = header.scrollTop - step;
-			}else if (to == "down") {
+				break;
+			default:
 				header.scrollTop = header.scrollTop + step;
 			}
 			header.scrollLeft = (header.scrollLeft <= 0 ? 0 : header.scrollLeft);
 			header.scrollTop = (header.scrollTop <= 0 ? 0 : header.scrollTop);
-
 		}
 	},
 	/** Check Node Type. */
@@ -690,19 +689,11 @@ zkTabs2 = {
 		if ($int(value) < 0) return;
 		switch(attr) {
 		case "h":
-			if (zk.ie6Only) {
-				cmp.style.height = "0px";
-			} else {
-				cmp.style.height = "";
-			}
+			cmp.style.height = zk.ie6Only ? "0px" : ""; // recalculate for IE6
 			cmp.style.height = value;
 			break;
 		case "w":
-			if (zk.ie6Only) {
-				cmp.style.width = "0px";
-			} else {
-				cmp.style.width = "";
-			}
+			cmp.style.width = zk.ie6Only ? "0px" : ""; // recalculate for IE6
 			cmp.style.width = "";
 			cmp.style.width = value;
 			break;
@@ -746,8 +737,8 @@ zkTabpanel2 = {
 	},
 	_fixPanelHgh: function(tabbox,tabpanel){
 		if (!zkTabbox2._isAccord(tabbox)) {
-			var hgh = tabbox.style.height;
-			var panels = $parent(tabpanel);
+			var hgh = tabbox.style.height,
+				panels = $parent(tabpanel);
 			if (panels) {
 				for (var pos, n = panels.firstChild; n; n = n.nextSibling) {
 					if (n.id) {

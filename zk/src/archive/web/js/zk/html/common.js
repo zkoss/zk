@@ -1382,27 +1382,27 @@ if (!zk.ie && !HTMLElement.prototype.insertAdjacentHTML) {
 		var r = this.ownerDocument.createRange();
 
 		switch (String(sWhere).toLowerCase()) {  // convert to string and unify case
-		case "beforebegin":
+		case "beforeBegin":
 			r.setStartBefore(this);
 			df = r.createContextualFragment(sHTML);
 			this.parentNode.insertBefore(df, this);
 			break;
 
-		case "afterbegin":
+		case "afterBegin":
 			r.selectNodeContents(this);
 			r.collapse(true);
 			df = r.createContextualFragment(sHTML);
 			this.insertBefore(df, this.firstChild);
 			break;
 
-		case "beforeend":
+		case "beforeEnd":
 			r.selectNodeContents(this);
 			r.collapse(false);
 			df = r.createContextualFragment(sHTML);
 			this.appendChild(df);
 			break;
 
-		case "afterend":
+		case "afterEnd":
 			r.setStartAfter(this);
 			df = r.createContextualFragment(sHTML);
 			zk.insertAfter(df, this);

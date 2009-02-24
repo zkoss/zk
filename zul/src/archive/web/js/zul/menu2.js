@@ -2,7 +2,7 @@
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
 		New trendy mold for Menu component
 	History:
@@ -17,7 +17,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 ////
 zk.FloatMenu = zClass.create();
 Object.extend(Object.extend(zk.FloatMenu.prototype, zk.Floats.prototype), {
-	_close: function (el) {		
+	_close: function (el) {
 		// No longer need to invoke zkMenu._close later because it will cause another issue
      	// when you click the item to show the menu popup, it will close at second time.
 		zkMenu2._close(el);
@@ -39,7 +39,7 @@ zkMenu2 = { // menu
 			zk.listen(anc, "focus", zkau.onfocus);
 			zk.listen(anc, "blur", zkau.onblur);
 		}
-		
+
 		var pp = $e(getZKAttr(cmp, "mpop"));
 		if (pp)
 			zk.listen(pp, "keydown", zkMenu2.onkeydown);
@@ -82,7 +82,7 @@ zkMenu2 = { // menu
 		var seld = getZKAttr(pp, "seld");
 		if (seld || seld === 0)
 			zkMenu2.onPopupOut(zkMenu2.getItemAt(cmp.parentNode, $int(seld)).el);
-			
+
 		setZKAttr(pp, "seld", index === undefined ? zkMenu2.indexOf(cmp) : index);
 		zk.addClass(cmp, getZKAttr(cmp, "zcls") + "-over");
 	},
@@ -133,7 +133,7 @@ zkMenu2 = { // menu
 	 * Navigates the popup-list via keyboard.
 	 * @param {Object} ul a UL tag.
 	 * @param {Object} keycode a code of the key event.
-	 * @param {Object} index the index of the current item. 
+	 * @param {Object} index the index of the current item.
 	 */
 	navigate: function (ul, keycode, index) {
 		var item = index || index === 0 ? zkMenu2.getItemAt(ul, index) : {};
@@ -150,7 +150,7 @@ zkMenu2 = { // menu
 					for (var n = ul.lastChild; n; n = n.previousSibling)
 						if (zkMenu2.isItemActive(n)) {
 							item.el = n;
-							break;	
+							break;
 						}
 					item.index = -1;
 					for (var n = ul.firstChild; n; n = n.nextSibling)
@@ -170,7 +170,7 @@ zkMenu2 = { // menu
 					for (var n = ul.firstChild; n; n = n.nextSibling)
 						if (zkMenu2.isItemActive(n)) {
 							item.el = n;
-							break;	
+							break;
 						}
 					item.index = 0;
 				}
@@ -203,28 +203,28 @@ zkMenu2 = { // menu
 	onover: function (evt) {
 		if (!evt) evt = window.event;
 		var cmp = $outer(Event.element(evt));
-	
+
 		if ($type(cmp) != "Menusp2") {
 			if (zkMenu2.isTop(cmp))
 				zk.addClass($e(cmp.id + "!a"), getZKAttr(cmp, "zcls") + "-body-over");
-			else 
+			else
 				zkMenu2.onPopupOver(cmp);
 		}
-		var menubar = $parentByType(cmp, "Menubar2");
-		var autodrop = !menubar || getZKAttr(menubar, "autodrop") == "true";
+		var menubar = $parentByType(cmp, "Menubar2"),
+			autodrop = !menubar || getZKAttr(menubar, "autodrop") == "true";
 		if (autodrop) zkMenu2._shallClose = false;
 			//turn off pending auto-close
-	
+
 		var popupIds = zkMenu2._pop.getFloatIds();
 		if (!autodrop && popupIds.length == 0) return;
-	
+
 		//Close non-child menu
 		for (var j = popupIds.length; --j >= 0;) {
 			var pp = $e(popupIds[j]);
 			if (!zk.isAncestor(cmp, pp) && !zk.isAncestor(pp, cmp))
 				zkMenu2.close(pp);
 		}
-	
+
 		zkMenu2.open(cmp, false);
 	},
 	onout: function (evt) {
@@ -244,10 +244,10 @@ zkMenu2 = { // menu
 		if ($type(cmp) != "Menusp2") {
 			if (zkMenu2.isTop(cmp))
 				zk.rmClass($e(cmp.id + "!a"), getZKAttr(cmp, "zcls") + "-body-over");
-			else 
+			else
 				zkMenu2.onPopupOut(cmp);
 		}
-	
+
 		if (!noAutoClose && zkMenu2._pop.getFloatIds().length != 0) { //nothing to do
 			var menubar = $parentByType(cmp, "Menubar2");
 			if (menubar && getZKAttr(menubar, "autodrop") == "true") {
@@ -260,10 +260,10 @@ zkMenu2 = { // menu
 	onclick: function (evt) {
 		if (!evt) evt = window.event;
 		var cmp = $outer(Event.element(evt));
-		
+
 		if ($type(cmp) != "Menusp2")
 			zk.addClass($e(cmp.id + "!a"), getZKAttr(cmp, "zcls") + "-body-seld");
-		
+
 		if ("Menu2" == $type(cmp)) { //note: Menuit also go thru this method
 			zkMenu2.open(cmp, zkMenu2.isTop(cmp));
 		}
@@ -273,14 +273,14 @@ zkMenu2 = { // menu
 	 */
 	open: function (menu, toggle) {
 		if (toggle) zkau.closeFloats(menu);
-	
+
 		var popupId = getZKAttr(menu, "mpop");
 		if (!popupId) {
 			if ($type(menu) != "Menusp2")
 				zk.rmClass($e(menu.id + "!a"), getZKAttr(menu, "zcls") + "-body-seld");
 			return; //menuitem
 		}
-	
+
 		var pp = $e(popupId);
 		if (!pp) {
 			zk.error(mesg.INVALID_STRUCTURE+"z.mpop not exists");
@@ -290,11 +290,11 @@ zkMenu2 = { // menu
 		if (!$visible(pp)) {
 			var top = zkMenu2.isTop(menu), //top-level menu
 				pos = top && getZKAttr(menu, "vert") == null ? "after-start": "end_before";
-			
+
 			pp.style.position = "absolute"; //just in case
 			zk.setVParent(pp);
 			zkMenu2._open(pp, top, $e(menu, "a"), pos);
-	
+
 			if (zkau.asap(pp, "onOpen"))
 				zkau.send({uuid: pp.id, cmd: "onOpen", data: [true, menu.id]});
 		}
@@ -310,16 +310,16 @@ zkMenu2 = { // menu
 		//IE: Bug 1766244 (after specifying position:relative to grid/tree/listbox)
 		if (ref) zk.position(pp, ref, pos);
 		zk.show(pp); //animation effect, if any
-		
+
 		if (zk.ie7 && !pp.style.width) { // Bug 2105158 and Bug 1911129
 			var ul = $e(pp.id + "!cave");
 			pp.style.width = ul.offsetWidth + zk.getPadBorderWidth(pp) + "px";
 		}
-		
+
 		if (!pp._shadow)
 			pp._shadow = new zk.Shadow(pp, {autoShow: true});
 		else pp._shadow.sync();
-		
+
 		zkMenu2._pop.addFloatId(pp.id);
 		zkau.hideCovered();
 		var anc = $e(pp.id + "!a");
@@ -341,11 +341,11 @@ zkMenu2 = { // menu
 			var menu = $e(getZKAttr(pp, "menuId"));
 			if (zkMenu2.isTop(menu))
 				zk.rmClass($e(menu.id + "!a"), getZKAttr(menu, "zcls") + "-body-seld");
-				
+
 			if (zkau.asap(pp, "onOpen"))
 				zkau.send({uuid: pp.id, cmd: "onOpen", data: [false]});
 				//for better performance, sent only if non-deferable
-				
+
 			var seld = getZKAttr(pp, "seld");
 			if (seld || seld === 0) {
 				zkMenu2.onPopupOut(zkMenu2.getItemAt($e(pp.id + "!cave"), $int(seld)).el);
@@ -354,13 +354,6 @@ zkMenu2 = { // menu
 			zk.fire(pp, "close");
 		}
 	}
-	/**,
-	// No longer need to invoke zkMenu._close later because it will cause another issue
- 	// when you click the item to show the menu popup, it will close at second time.
-	_close2: function (pp) {
-		if (pp._shadow) pp._shadow.hide();
-		setTimeout("zkMenu2._close('"+pp.id+"')", 0);
-	}*/
 };
 if (!zkMenu2._pop)
 	zkau.floats.push(zkMenu2._pop = new zk.FloatMenu()); //hook to zkau.js
@@ -375,7 +368,7 @@ zkMenuit2 = { //menuitem
 			if (zkMenu2.isTop(cmp)) { //topmost
 				var anc = $e(cmp.id + "!a");
 				zk.listen(anc, "focus", zkau.onfocus);
-				zk.listen(anc, "blur", zkau.onblur);		
+				zk.listen(anc, "blur", zkau.onblur);
 			}
 		} else {
 			var menubar = $parentByType(cmp, "Menubar");
@@ -401,29 +394,29 @@ zkMenuit2 = { //menuitem
 		zkMenu2._onout(cmp, true); //Bug 1822720
 			//Bug 1852304: theorectically, popup shall not appear since 'owner'
 			//is hidden, but owner is menu -- so popup still show
-	
+
 		var anc = $e(cmp.id + "!a");
 		if (zkMenu2.isTop(cmp)) anc = anc.parentNode;
 		if ("javascript:;" == anc.href) {
-			var cmp = $outer(anc);
-			var uuid = cmp.id;
+			var cmp = $outer(anc),
+				uuid = cmp.id;
 			if (getZKAttr(cmp, "autock")) {
 				var newval = getZKAttr(cmp, "checked") != "true";
 				zkau.send({uuid: uuid, cmd: "onCheck", data: [newval]}, -1);
 			}
 			zkau.send({uuid: uuid, cmd: "onClick", ctl: true});
 		} else {
-			var t = anc.getAttribute("target");
-			var overwrite = false;
+			var t = anc.getAttribute("target"),
+				overwrite = false;
 			if (anc.href && !zk.isNewWindow(anc.href, t)) {
 				zk.progress();
 				overwrite = true;
 			}
 			if (zk.ie && zkMenu2.isTop(cmp) && cmp.id != anc.id) zk.go(anc.href, overwrite, t);
-				// Bug #1886352 and #2154611 
+				// Bug #1886352 and #2154611
 			//Note: we cannot eat onclick. or, <a> won't work
 		}
-		if (!getZKAttr(cmp, "pop")) // Bug 1852304 
+		if (!getZKAttr(cmp, "pop")) // Bug 1852304
 			zkau.closeFloats(cmp); //bug 1711822: fire onClick first
 	}
 };
@@ -440,7 +433,7 @@ zkMpop2 = { //menupopup
 	context: function (ctx, ref) {
 		if (!$visible(ctx)) {
 			zkMenu2._open(ctx, true);
-	
+
 			if (zkau.asap(ctx, "onOpen"))
 				zkau.send({uuid: ctx.id, cmd: "onOpen",
 					data: ref ? [true, ref.id]: [true]});

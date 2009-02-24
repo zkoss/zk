@@ -4,7 +4,7 @@
 	Purpose:
 		datebox
 	Description:
-		
+
 	History:
 		Mon Oct 17 15:24:01     2005, Created by tomyeh
 }}IS_NOTE
@@ -39,9 +39,10 @@ zk.Cal.prototype = {
 	_newCal: function() {
 		this.element = $e(this.id);
 		if (!this.element) return;
-		var zcls = getZKAttr(this.element, "zcls");
-		var compact = getZKAttr(this.element, "compact") == "true";
-		var html = this.popup ? '<table border="0" cellspacing="0" cellpadding="0" tabindex="-1">': '';
+		var zcls = getZKAttr(this.element, "zcls"),
+			compact = getZKAttr(this.element, "compact") == "true",
+			html = this.popup ? '<table border="0" cellspacing="0" cellpadding="0" tabindex="-1">': '';
+
 		html += '<tr><td><table class="'+zcls+'-calyear" width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="5"></td><td align="right"><img src="'
 			+zk.getUpdateURI('/web/zul/img/cal/arrowL.gif')
 			+'" style="cursor:pointer" onclick="zkCal.onyearofs(event,-1)" id="'
@@ -126,9 +127,12 @@ zk.Cal.prototype = {
 	},
 	_output: function () {
 		//year
-		var val = this.date, m = val.getMonth(), d = val.getDate();
-		var y = val.getFullYear();
-		var el = $e(this.id + "!title");
+		var val = this.date,
+			m = val.getMonth(),
+			d = val.getDate(),
+			y = val.getFullYear(),
+			el = $e(this.id + "!title");
+
 		zk.setInnerHTML(el, zk.SMON[m] + ', ' + y);
 		var zcls = getZKAttr(this.element, "zcls");
 		//month
@@ -138,15 +142,16 @@ zk.Cal.prototype = {
 				if (m == j) {
 					zk.addClass(el, zcls + "-seld");
 					zk.rmClass(el, zcls + "-over");
-				} else 
+				} else
 					zk.rmClass(el, zcls + "-seld") ;
 				el.setAttribute("zk_mon", j);
 			}
 		}
 
 		var last = new Date(y, m + 1, 0).getDate(), //last date of this month
-			prev = new Date(y, m, 0).getDate(); //last date of previous month
-		var v = new Date(y, m, 1).getDay()- zk.DOW_1ST;
+			prev = new Date(y, m, 0).getDate(), //last date of previous month
+			v = new Date(y, m, 1).getDay()- zk.DOW_1ST;
+
 		if (v < 0) v += 7;
 		for (var j = 0, cur = -v + 1; j < 6; ++j) {
 			el = $e(this.id + "!w" +j);
@@ -171,12 +176,12 @@ zk.Cal.prototype = {
 	_outcell: function (cell, sel, disd) {
 		if (sel) this.curcell = cell;
 		var zcls = getZKAttr(this.element, "zcls");
-				
+
 		zk.rmClass(cell, zcls+"-over");
 		zk.rmClass(cell, zcls+"-over-seld");
-		sel? zk.addClass(cell, zcls+"-seld"): zk.rmClass(cell, zcls+"-seld");
-		disd? zk.addClass(cell, zcls+"-disd"): zk.rmClass(cell, zcls+"-disd");
-		
+		zk[sel ? "addClass" : "rmClass"](cell, zcls+"-seld");
+		zk[disd ? "addClass" : "rmClass"](cell, zcls+"-disd");
+
 		var d = cell.getAttribute("zk_day");
 		zk.setInnerHTML(cell,
 			!sel || this.popup ? d:
@@ -184,11 +189,12 @@ zk.Cal.prototype = {
 			//IE: use keydown. otherwise, it causes the window to scroll
 	},
 	_ondayclk: function (cell) {
-		var y = this.date.getFullYear(), m = this.date.getMonth();
-		var d = zk.getIntAttr(cell, "zk_day");
+		var y = this.date.getFullYear(),
+			m = this.date.getMonth(),
+			d = zk.getIntAttr(cell, "zk_day");
 		if (!zkCal._seled(cell)) { //!selected
-			var monofs = zk.getIntAttr(cell, "zk_monofs");
-			var now = new Date(y, m + monofs, d);
+			var monofs = zk.getIntAttr(cell, "zk_monofs"),
+				now = new Date(y, m + monofs, d);
 			if (this._invalid(now)) {
 				if (this.popup) {
 					var pp = $e(this.id + "!pp");
@@ -210,21 +216,24 @@ zk.Cal.prototype = {
 	},
 	_onmonclk: function (cell) {
 		if (!zkCal._seled(cell)) { //!selected
-			var y = this.date.getFullYear(), d = this.date.getDate();
+			var y = this.date.getFullYear(),
+				d = this.date.getDate();
 			this._setDateMonChg(y, zk.getIntAttr(cell, "zk_mon"), d);
 			this._output();
 			this._onupdate(false);
 		}
 	},
 	_onyearofs: function (ofs) {
-		var y = this.date.getFullYear(), m = this.date.getMonth(),
+		var y = this.date.getFullYear(),
+			m = this.date.getMonth(),
 			d = this.date.getDate();
 		this.date = new Date(y + ofs, m, d);
 		this._output();
 		this._onupdate(false);
 	},
 	_onmonofs: function (ofs) {
-		var y = this.date.getFullYear(), m = this.date.getMonth(),
+		var y = this.date.getFullYear(),
+			m = this.date.getMonth(),
 			d = this.date.getDate();
 		this._setDateMonChg(y, m + ofs, d);
 		this._output();
@@ -250,7 +259,7 @@ zk.Cal.prototype = {
 			} else {
 				this.date = val;
 				this._outcell(this.curcell, false, this._invalid(val));
-	
+
 				var d = val.getDate();
 				for (var j = 0; j < 6; ++j) {
 					el = $e(this.id + "!w" +j);
@@ -287,7 +296,8 @@ zk.Cal.prototype = {
 			zkTxbox.updateChange(this.input, false);
 		} else {
 			var y = this.date.getFullYear(),
-				m = this.date.getMonth(), d = this.date.getDate();
+				m = this.date.getMonth(),
+				d = this.date.getDate();
 			setZKAttr(this.element, "value", this.getDateString());
 			zkau.sendasap({uuid: this.id, cmd: "onChange",
 				data: [y+'/'+(m+1)+'/'+d]});
@@ -344,8 +354,8 @@ zkCal.onmonofs = function (evt, ofs) {
 	if (meta) meta._onmonofs(ofs);
 };
 zkCal.onmonclk = function (evt) {
-	var el = Event.element(evt);
-	var meta = zkau.getMeta($uuid(el));
+	var el = Event.element(evt),
+		meta = zkau.getMeta($uuid(el));
 	if (meta) meta._onmonclk(el);
 };
 zkCal.ondayclk = function (evt) {
@@ -382,28 +392,26 @@ zkCal.onblur = function (evt) {
 };
 
 zkCal.onover = function (evt) {
-	var el = Event.element(evt);
-	var cmp = $outer(Event.element(evt));
-	var zcls = getZKAttr(cmp, "zcls");
-	
+	var el = Event.element(evt),
+		cmp = $outer(Event.element(evt)),
+		zcls = getZKAttr(cmp, "zcls");
+
 	if(! zk.hasClass(el, zcls+"-disd")) {
 		if(zk.hasClass(el, zcls+"-seld") || zk.hasClass(el, zcls+"-over-seld"))
 			zk.addClass(el, zcls+"-over-seld");
-		else 
-			zk.addClass(el, zcls+"-over");		
+		else
+			zk.addClass(el, zcls+"-over");
 	}
 };
-zkCal.onout = function (evt) {	
-	var el = Event.element(evt);
-	var cmp = $outer(Event.element(evt));
-	var zcls = getZKAttr(cmp, "zcls");
-	
-	if(zk.hasClass(el, zcls+"-seld") || zk.hasClass(el, zcls+"-over-seld")) {
+zkCal.onout = function (evt) {
+	var el = Event.element(evt),
+		cmp = $outer(Event.element(evt)),
+		zcls = getZKAttr(cmp, "zcls");
+
+	if(zk.hasClass(el, zcls+"-seld") || zk.hasClass(el, zcls+"-over-seld"))
 		zk.rmClass(el, zcls+"-over-seld");
-	}
-	else {
+	else
 		zk.rmClass(el, zcls+"-over");
-	}
 };
 /** Returns if a cell is selected. */
 zkCal._seled = function (cell) {
@@ -442,8 +450,9 @@ zkDtbox.validate = function (cmp) {
 	if (inp.value) {
 		var fmt = getZKAttr(cmp, "fmt"),
 			bd = getZKAttr(cmp, "bd"),
-			ed = getZKAttr(cmp, "ed");
-		var d = zk.parseDate(inp.value, fmt, getZKAttr(cmp, "lenient") == "false");
+			ed = getZKAttr(cmp, "ed"),
+			d = zk.parseDate(inp.value, fmt, getZKAttr(cmp, "lenient") == "false");
+
 		if (!d) return msgzul.DATE_REQUIRED+fmt;
 
 		if (bd || ed) {
@@ -601,15 +610,15 @@ zkDtbox.open = function (pp) {
 	pp = $e(pp);
 	zkau.closeFloats(pp); //including popups
 	zkau._dtbox.setFloatId(pp.id);
-	
+
 	var uuid = $uuid(pp.id);
 	var db = $e(uuid);
 	if (!db) return;
-		
-	var zcls = getZKAttr(db,"zcls");	
+
+	var zcls = getZKAttr(db,"zcls");
 	pp.className=db.className+" "+pp.className;
 	zk.rmClass(pp, zcls);
-	
+
 	var meta = zkau.getMeta(db);
 	if (meta) meta.init();
 	else zkau.setMeta(db, new zk.Cal(db, pp));
@@ -623,7 +632,7 @@ zkDtbox.open = function (pp) {
 
 	//FF: Bug 1486840
 	//IE: Bug 1766244 (after specifying position:relative to grid/tree/listbox)
-	zk.setVParent(pp);	
+	zk.setVParent(pp);
 
 	//fix size
 	if (pp.offsetHeight > 200) {
@@ -642,7 +651,7 @@ zkDtbox.open = function (pp) {
 
 	var input = $e(db.id + "!real");
 	zk.position(pp, input, "after-start");
-	
+
 	setTimeout("zkDtbox._repos('"+uuid+"')", 3);
 		//IE issue: we have to re-position again because some dimensions
 		//might not be correct here
@@ -670,9 +679,9 @@ zkDtbox.close = function (pp, focus) {
 
 	var db = $e(uuid);
 	if (!db) return;
-	var zcls = getZKAttr(db,"zcls");	
+	var zcls = getZKAttr(db,"zcls");
 	pp.className=zcls+"-pp";
-	
+
 	pp = $e(pp);
 	zkau._dtbox.setFloatId(null);
 	//No special child, so no need to: zk.onHideAt(pp);
@@ -680,7 +689,7 @@ zkDtbox.close = function (pp, focus) {
 
 	var btn = $e(uuid + "!btn");
 	if (btn) zk.rmClass(btn, getZKAttr($e(uuid), "zcls") + "-btn-over");
-	
+
 	if (focus)
 		zk.asyncFocus(uuid + "!real");
 };

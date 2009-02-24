@@ -2,9 +2,9 @@
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Sun Jan 29 15:25:10     2006, Created by tomyeh
 }}IS_NOTE
@@ -25,7 +25,7 @@ zkGrbox = {
 		case "z.open":
 			zkGrbox.open(cmp, val == "true", true);
 			return true; //no need to store z.open
-	
+
 		case "z.cntStyle":
 			var n = $e(cmp.id + "!cave");
 			if (n) {
@@ -43,22 +43,22 @@ zkGrbox = {
 	},
 	onclick: function (evt, uuid) {
 		if (!evt) evt = window.event;
-	
+
 		var target = Event.element(evt);
-	
+
 		// Bug: 1991550
 		for (var type; (type = $type(target)) != "Grbox"; target = $parent(target)) {
 			var tn = $tag(target);
 			if (type == "Button" || "BUTTON" == tn || "INPUT" == tn || "TEXTAREA" == tn || "SELECT" == tn ||
-				"A" == tn || ("TD" != tn && "TR" != tn && target.onclick)) 
+				"A" == tn || ("TD" != tn && "TR" != tn && target.onclick))
 				return;
 		}
-	
+
 		if (uuid) {
 			var cmp = $e(uuid);
 			if (getZKAttr(cmp, "closable") == "false")
 				return;
-	
+
 			cmp = $e(uuid + "!slide");
 			if (cmp)
 				zkGrbox.open(uuid, !$visible(cmp), false, true);
@@ -73,10 +73,10 @@ zkGrbox = {
 			&& (!ignorable || !getZKAttr(panel, "animating"))) {
 				if (open) anima.slideDown(panel);
 				else anima.slideUp(panel);
-	
+
 				if (!silent)
 					zkau.sendasap({uuid: gb.id, cmd: "onOpen", data: [open]});
-	
+
 				if (open) setTimeout(function() {zkGrbox._fixHgh(gb);}, 500); //after slide down
 			}
 		}
@@ -108,16 +108,16 @@ zkGrfs = {
 	},
 	onclick: function (evt) {
 		if (!evt) evt = window.event;
-		var target = Event.element(evt);
-		var tn = $tag(target);
+		var target = Event.element(evt),
+			tn = $tag(target);
 		if ("BUTTON" == tn || "INPUT" == tn || "TEXTAREA" == tn || "SELECT" == tn
 		|| "A" == tn || ("TD" != tn && "TR" != tn && target.onclick))
 			return;
-			
+
 		var cmp = $parentByTag(target, "FIELDSET");
 
 		if (getZKAttr(cmp, "closable") == "false") return; // Bug 2125673
-		
+
 		zkGrfs.open(cmp);
 	},
 	open: function (cmp, silent) {
@@ -133,12 +133,12 @@ zkGrfs = {
 			case "z.open":
 				zkGrfs.open(cmp, val == "true", true);
 				return true; //no need to store z.open
-		
+
 			case "z.cntStyle":
 				var n = $e(cmp.id + "!cave");
 				if (n)
 					zk.setStyle(n, val != null ? val: "");
-					
+
 				return true; //no need to store z.cntType
 		}
 	}
@@ -301,15 +301,15 @@ zkMap._toofast = function () {
 //popup//
 zkPop = {
 	/** Called by au.js's context menu. */
-	context: function (ctx, ref) {	
+	context: function (ctx, ref) {
 		zk.show(ctx); //onVisiAt is called in zk.show
-		var asap= zkau.asap(ctx, "onOpen");	
+		var asap= zkau.asap(ctx, "onOpen");
 		if (asap) {
 			//use a progress bar to hide the popup
 			var mask = zk.applyMask(ctx.id, "");
 			//register addOnReponse to remove the progress bar after receiving the response from server
-			if (mask) zkau.addOnResponse("zk.remove($e('"+mask.id+"'))");		
-		}		
+			if (mask) zkau.addOnResponse("zk.remove($e('"+mask.id+"'))");
+		}
 		zkPop._pop.addFloatId(ctx.id, true); //it behaves like Popup (rather than dropdown)
 		zkau.hideCovered();
 		if (zk.ie6Only) {
@@ -321,7 +321,7 @@ zkPop = {
 				ctx._stackup.style.display = "block";
 			}
 		}
-		
+
 		zk.cleanVisibility(ctx);
 		if (asap)
 			zkau.send({uuid: ctx.id, cmd: "onOpen",
@@ -330,18 +330,18 @@ zkPop = {
 	close: function (ctx) {
 		zkPop._pop.removeFloatId(ctx.id);
 		zkPop._close(ctx);
-			
+
 		rmZKAttr(ctx, "owner"); //it is set by au.js after calling zkPop.context
 	},
 	_close: function (ctx) {
 		ctx.style.display = "none";
-		
+
 		if (ctx._stackup)
 			ctx._stackup.style.display = "none";
-			
+
 		zk.unsetVParent(ctx);
 		zkau.hideCovered();
-	
+
 		if (zkau.asap(ctx, "onOpen"))
 			zkau.send({uuid: ctx.id, cmd: "onOpen", data: [false]});
 	},
