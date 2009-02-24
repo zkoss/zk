@@ -1969,16 +1969,16 @@ Object.extend(Event, {
   },
 /* Jumper Chen, Potix: add the code of event more controllable.*/
   safariKeymap: {
-  	25: 9, 	   // SHIFT-TAB
-    63276: 33, // page up
-    63277: 34, // page down
-    63275: 35, // end
-    63273: 36, // home
-    63234: 37, // left
-    63232: 38, // up
-    63235: 39, // right
-    63233: 40, // down
-    63272: 46 // delete
+	25: 9, 	   // SHIFT-TAB
+	63232: 38, // up
+	63233: 40, // down
+	63234: 37, // left
+	63235: 39, // right
+	63272: 46, // delete
+	63273: 36, // home
+	63275: 35, // end
+	63276: 33, // pgup
+	63277: 34  // pgdn
   },
   specialKeyChar: ' 0 9 13 16 17 18 19 20 27 33 34 35 36 37 38 39 40 44 45 ',
   charCode: function(evt) {
