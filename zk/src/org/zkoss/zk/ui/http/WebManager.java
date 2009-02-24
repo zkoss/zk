@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Iterator;
+import java.util.Enumeration;
 import java.net.URL;
 
 import javax.servlet.ServletContext;
@@ -36,6 +37,7 @@ import org.zkoss.lang.D;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.util.resource.Locator;
+import org.zkoss.util.resource.ClassLocator;
 
 import org.zkoss.web.util.resource.ServletContextLocator;
 import org.zkoss.web.util.resource.ServletLabelLocator;
@@ -113,12 +115,33 @@ public class WebManager {
 
 		//load config as soon as possible since it might set some system props
 		final Configuration config = new Configuration();
-		try {
-			//load metainfo/zk/config.xml
-			final ConfigParser parser = new ConfigParser();
-			parser.parseConfigXml(config);
+		final ConfigParser parser = new ConfigParser();
 
-			//load /WEB-INF/zk.xml
+		//load metainfo/zk/config.xml
+		try {
+			parser.parseConfigXml(config);
+		} catch (Throwable ex) {
+			log.error("Unable to load metainfo/zk/config.xml", ex);
+		}
+
+		//load metainfo/zk/zk.xml
+		try {
+			final ClassLocator loc = new ClassLocator();
+			for (Enumeration en = loc.getResources("metainfo/zk/zk.xml");
+			en.hasMoreElements();) {
+				final URL cfgUrl = (URL)en.nextElement();
+				try {
+					parser.parse(cfgUrl, config, loc);
+				} catch (Throwable ex) {
+					log.error("Unable to load "+cfgUrl, ex);
+				}
+			}
+		} catch (Throwable ex) {
+			log.error("Unable to load metainfo/zk/zk.xml", ex);
+		}
+
+		//load /WEB-INF/zk.xml
+		try {
 			final URL cfgUrl = _ctx.getResource("/WEB-INF/zk.xml");
 			if (cfgUrl != null)
 				parser.parse(cfgUrl, config, new ServletContextLocator(_ctx));

@@ -71,6 +71,18 @@ import org.zkoss.zk.ui.Components;
  * @see org.zkoss.zk.ui.Components#addForwards
  */
 abstract public class GenericForwardComposer extends GenericAutowireComposer {
+	protected GenericForwardComposer() {
+	}
+	/** Constructor with a custom separator.
+	 * The separator is used to separate the component ID and event name.
+	 * By default, it is '$'. For Grooy and other environment that '$'
+	 * is not applicable, you can specify '_'.
+	 * @since 3.6.0
+	 */
+	protected GenericForwardComposer(char separator) {
+		super(separator);
+	}
+
 	/**
 	 * Auto forward events and wire accessible variables of the specified 
 	 * component into a controller Java object; a subclass that 
@@ -82,6 +94,6 @@ abstract public class GenericForwardComposer extends GenericAutowireComposer {
 		
 		//add forward condtions to the components as defined in this composer
 		//onXxx$myid
-		Components.addForwards(comp, this);
+		Components.addForwards(comp, this, _separator);
 	}
 }

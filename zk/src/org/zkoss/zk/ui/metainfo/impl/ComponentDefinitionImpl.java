@@ -40,6 +40,7 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.impl.EvaluatorRef;
+import org.zkoss.zk.xel.impl.Utils;
 import org.zkoss.zk.scripting.Interpreter;
 
 /**
@@ -73,6 +74,8 @@ implements ComponentDefinition, java.io.Serializable {
 	private String _textAs;
 	private AnnotationMap _annots;
 	private URL _declURL;
+	/** The parsed expessions of the apply attribute. */
+	private ExValue[] _apply;
 	/** Whether to preserve the blank text. */
 	private boolean _blankpresv;
 
@@ -360,6 +363,24 @@ implements ComponentDefinition, java.io.Serializable {
 
 	public AnnotationMap getAnnotationMap() {
 		return _annots;
+	}
+
+	public String getApply() {
+		if (_apply == null)
+			return null;
+
+		final StringBuffer sb = new StringBuffer();
+		for (int j = 0; j < _apply.length; ++j) {
+			if (j > 0) sb.append(',');
+			sb.append(_apply[j].getRawValue());
+		}
+		return sb.toString();
+	}
+	public void setApply(String apply) {
+		_apply = Utils.parseList(apply, Object.class, true);
+	}
+	public ExValue[] getParsedApply() {
+		return _apply;
 	}
 
 	public URL getDeclarationURL() {

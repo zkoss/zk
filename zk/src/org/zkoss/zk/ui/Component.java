@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Iterator;
 
+import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.scripting.Namespace;
@@ -57,7 +58,7 @@ import org.zkoss.zk.scripting.Namespace;
  *
  * @author tomyeh
  */
-public interface Component extends java.io.Serializable, Cloneable {
+public interface Component extends Scope, java.io.Serializable, Cloneable {
 	/** Returns the widget class (aka., the widget type), or null
 	 * if not available.
 	 * The widget class is a JavaScript class, including the package name.

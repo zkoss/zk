@@ -157,7 +157,22 @@ abstract public class GenericAutowireComposer extends GenericComposer implements
 	 * @since 3.0.8
 	 */
 	protected Map arg;
-	
+	/** The separator. */
+	protected final char _separator;
+
+	protected GenericAutowireComposer() {
+		_separator = '$';
+	}
+	/** Constructor with a custom separator.
+	 * The separator is used to separate the component ID and event name.
+	 * By default, it is '$'. For Grooy and other environment that '$'
+	 * is not applicable, you can specify '_'.
+	 * @since 3.6.0
+	 */
+	protected GenericAutowireComposer(char separator) {
+		_separator = separator;
+	}
+
 	/**
 	 * Auto wire accessible variables of the specified component into a 
 	 * controller Java object; a subclass that 
@@ -168,7 +183,7 @@ abstract public class GenericAutowireComposer extends GenericComposer implements
 		super.doAfterCompose(comp);
 		
 		//wire variables to reference fields (include implicit objects)
-		Components.wireVariables(comp, this);
+		Components.wireVariables(comp, this, _separator);
 	}
 	
 	/** Shortcut to call Messagebox.show(String).

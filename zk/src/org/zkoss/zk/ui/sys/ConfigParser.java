@@ -51,7 +51,8 @@ import org.zkoss.zk.device.Devices;
 import org.zkoss.zk.au.AuWriters;
 
 /**
- * Used to parse WEB-INF/zk.xml into {@link Configuration}.
+ * Used to parse WEB-INF/zk.xml, metainfo/zk/zk.xml 
+ * and meta/zk/config.xml into {@link Configuration}.
  *
  * @author tomyeh
  */

@@ -26,6 +26,7 @@ import java.io.InputStream;
 
 import org.zkoss.util.resource.Locator;
 import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.ext.Scope;
 
 /**
  * Represents a Web application.
@@ -40,7 +41,7 @@ import org.zkoss.zk.ui.util.Configuration;
  *
  * @author tomyeh
  */
-public interface WebApp extends Locator {
+public interface WebApp extends Scope, Locator {
 	/** Returns the application name, never null.
 	 * Developer can set it to any name that describes his application.
 	 * <p>Default: ZK

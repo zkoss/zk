@@ -458,6 +458,8 @@ public class Parser {
 			throw new UnsupportedOperationException("moldURI not supported in 5.0. Use lang-addon.xml instead");
 		}
 
+		compdef.setApply((String)params.remove("apply"));
+
 		for (Iterator e = params.entrySet().iterator(); e.hasNext();) {
 			final Map.Entry me = (Map.Entry)e.next();
 			compdef.addProperty((String)me.getKey(), (String)me.getValue());
@@ -751,7 +753,7 @@ public class Parser {
 					if (use != null) {
 						use = use.trim();
 						if (use.length() != 0)
-							compInfo.setImplementationClass(use);
+							compInfo.setImplementation(use);
 							//Resolve later since might defined in zscript
 					}
 				}

@@ -160,6 +160,22 @@ public class AuInvoke extends AuResponse {
 	public AuInvoke(Component comp, String function, Object[] args) {
 		super("invoke", comp, toData(comp, function, args));
 	}
+	/** Construct AuInvoke to call a client function with variable number of
+	 * arguments.
+	 * Notice that the component itself will be inserted in front of
+	 * the specified argument array. In other words, the first argument
+	 * is the component itself, the second is the first item in the
+	 * argument array, and so on.<br/>
+	 * <code>zkType.function(comp, args[0], args[1], args[2]...)</code>
+	 *
+	 * @param comp the component that this script depends on.
+	 * It cannot be null.
+	 * @param function the function name
+	 * @since 3.6.0
+	 */
+	public AuInvoke(Component comp, String function, String[] args) {
+		super("invoke", comp, toData(comp, function, args));
+	}
 	private static final
 	Object[] toData(Component comp, String function, Object[] args) {
 		final Object[] data = new Object[2 + (args != null ? args.length: 0)];

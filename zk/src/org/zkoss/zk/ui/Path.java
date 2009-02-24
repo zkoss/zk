@@ -160,8 +160,8 @@ public class Path {
 			if (is == null)
 				return null;
 
-			final Component c = is.getFellow(nm);
-			if (k < 0) return c;
+			final Component c = is.getFellowIfAny(nm);
+			if (k < 0 || c == null) return c;
 
 			if (!(c instanceof IdSpace))
 				return null;

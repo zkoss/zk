@@ -338,7 +338,7 @@ public class Components {
 		}
 		return Path.getComponent(ref.getSpaceOwner(), path);
 	}
-	/** <p>Wire fellow components and space owner ancestors of the specified 
+	/** Wire fellow components and space owner ancestors of the specified 
 	 * Id space into a controller Java object. This implementation checks the 
 	 * setXxx() method names first then the
 	 * field names. If a setXxx() method name matches the id of a fellow or
@@ -347,7 +347,7 @@ public class Components {
 	 * argument. If no proper setXxx() method then search the field of the 
 	 * controller object for a matched field with name equals to the fellow 
 	 * component's id and proper type. Then the fellow component 
-	 * is assigned as the value of the matched field.</p> 
+	 * is assigned as the value of the matched field.
 	 * 
 	 * <p>Note that fellow components are looked up first, then the space owner
 	 * ancestors<p>
@@ -359,6 +359,10 @@ public class Components {
 	 * <p>This is useful in writing controller code in MVC design practice. You
 	 * can wire the components into the controller object per the
 	 * component's id and do whatever you like.</p>
+	 *
+	 * <p>Since 3.6.0, for Groovy or other environment that
+	 * '$' is not applicable, you can invoke {@link #wireFellows(IdSpace,Object,char)}
+	 * to use '_' as the separator.
 	 * 
 	 * @param idspace the id space to be bound
 	 * @param controller the controller Java object to be injected the fellow components.
@@ -366,6 +370,19 @@ public class Components {
 	 */
 	public static final void wireFellows(IdSpace idspace, Object controller) {
 		new Wire(controller).wireFellows(idspace);
+	}
+	/** Wire fellow components and space owner with a custom separator.
+	 * The separator is used to separate the component ID and additional
+	 * information, such as event name.
+	 * By default, it is '$'. However, for Groovy or other environment that
+	 * '$' is not applicable, you can invoke this method to use '_' as
+	 * the separator.
+	 * @see #wireFellows(IdSpace, Object)
+	 * @since 3.6.0
+	 */
+	public static final
+	void wireFellows(IdSpace idspace, Object controller, char separator) {
+		new Wire(controller, separator).wireFellows(idspace);
 	}
 		
 	/** <p>Wire accessible variable objects of the specified component into a 
@@ -390,6 +407,10 @@ public class Components {
 	 * the controller object per the components' id and variables' name and do 
 	 * whatever you like.
 	 * </p>
+	 
+	 * <p>Since 3.6.0, for Groovy or other environment that
+	 * '$' is not applicable, you can invoke {@link #wireVariables(Component,Object,char)}
+	 * to use '_' as the separator.
 	 * 
 	 * @param comp the reference component to wire variables
 	 * @param controller the controller Java object to be injected the 
@@ -399,6 +420,19 @@ public class Components {
 	 */
 	public static final void wireVariables(Component comp, Object controller) {
 		new Wire(controller).wireVariables(comp);
+	}
+	/** Wire accessible variable objects of the specified component with a custom separator.
+	 * The separator is used to separate the component ID and additional
+	 * information, such as event name.
+	 * By default, it is '$'. However, for Groovy or other environment that
+	 * '$' is not applicable, you can invoke this method to use '_' as
+	 * the separator.
+	 * @see #wireVariables(Component, Object)
+	 * @since 3.6.0
+	 */
+	public static final
+	void wireVariables(Component comp, Object controller, char separator) {
+		new Wire(controller, separator).wireVariables(comp);
 	}
 	
 	/** <p>Wire accessible variables of the specified page into a 
@@ -425,6 +459,10 @@ public class Components {
 	 * whatever you like.
 	 * </p>
 	 * 
+	 * <p>Since 3.6.0, for Groovy or other environment that
+	 * '$' is not applicable, you can invoke {@link #wireVariables(Page,Object,char)}
+	 * to use '_' as the separator.
+	 * 
 	 * @param page the reference page to wire variables
 	 * @param controller the controller Java object to be injected the fellow components.
 	 * @since 3.0.6
@@ -432,6 +470,20 @@ public class Components {
 	public static final void wireVariables(Page page, Object controller) {
 		new Wire(controller).wireVariables(page);
 	}
+	/** Wire accessible variable objects of the specified page with a custom separator.
+	 * The separator is used to separate the component ID and additional
+	 * information, such as event name.
+	 * By default, it is '$'. However, for Groovy or other environment that
+	 * '$' is not applicable, you can invoke this method to use '_' as
+	 * the separator.
+	 * @see #wireVariables(Page, Object)
+	 * @since 3.6.0
+	 */
+	public static final
+	void wireVariables(Page page, Object controller, char separator) {
+		new Wire(controller, separator).wireVariables(page);
+	}
+
 	/** <p>Adds forward conditions to myid source component so onXxx source 
 	 * event received by 
 	 * myid component can be forwarded to the specified target 
@@ -449,11 +501,28 @@ public class Components {
 	 * "btn.onClick=w1.onClick$btn" and add another forward on the window w1
 	 * "w1.onClick$btn=w2.onClick$btn$w1"</p>
 	 * 
+	 * <p>Since 3.6.0, for Groovy or other environment that
+	 * '$' is not applicable, you can invoke {@link #addForwards(Component,Object,char)}
+	 * to use '_' as the separator.
+	 * 
 	 * @param comp the targetComponent
 	 * @param controller the controller code with onXxx$myid event handler methods
 	 * @since 3.0.7
 	 */
 	public static void addForwards(Component comp, Object controller) {
+		addForwards(comp, controller, '$');
+	}
+	/** Adds forward conditions to the specified component with a custom separator.
+	 * The separator is used to separate the component ID and additional
+	 * information, such as event name.
+	 * By default, it is '$'. However, for Groovy or other environment that
+	 * '$' is not applicable, you can invoke this method to use '_' as
+	 * the separator.
+	 * @see #addForwards(Component, Object)
+	 * @since 3.6.0
+	 */
+	public static
+	void addForwards(Component comp, Object controller, char separator) {
 		final Class cls = controller.getClass();
 		final Method[] mtds = cls.getMethods();
 		for (int j = 0; j < mtds.length; ++j) {
@@ -463,7 +532,7 @@ public class Components {
 				Component xcomp = comp;
 				int k = 0;
 				do { //handle cascade $. e.g. onClick$btn$win1
-					k = mdname.lastIndexOf('$');
+					k = mdname.lastIndexOf(separator);
 					if (k >= 3) { //found '$'
 						final String srcevt = mdname.substring(0, k);
 						if ((k+1) < mdname.length()) {
@@ -480,7 +549,7 @@ public class Components {
 								mdname = srcevt;
 							}
 						} else {
-							throw new UiException("Illegal event method name(component id not specified or consecutive '$'): "+md.getName());
+							throw new UiException("Illegal event method name(component id not specified or consecutive '"+separator+"'): "+md.getName());
 						}
 					}
 				} while (k >= 3);
@@ -520,7 +589,7 @@ public class Components {
 	}
 	
 	/** Internal Use only. 
-	 * @since 3.5.3
+	 * @since 3.6.0
 	 */
 	public static Object getImplicit(Component comp, String fdname) {
 		//initialize implicit objects
@@ -563,7 +632,7 @@ public class Components {
 	}
 
 	/** Internal Use only. 
-	 * @since 3.5.3
+	 * @since 3.6.0
 	 */
 	public static Object getImplicit(Page page, String fdname) {
 		//initialize implicit objects
@@ -606,12 +675,17 @@ public class Components {
 	 * @since 3.0.8
 	 */
 	private static class Wire {
-		private Object _controller;
-		private Set _injected;
-		private Map _fldMaps;
+		private final Object _controller;
+		private final Set _injected;
+		private final Map _fldMaps;
+		private final char _separator;
 		
 		public Wire(Object controller) {
+			this(controller, '$');
+		}
+		public Wire(Object controller, char separator) {
 			_controller = controller;
+			_separator = separator;
 			_injected = new HashSet();
 			_fldMaps = new LinkedHashMap(64);
 			
@@ -819,7 +893,7 @@ public class Components {
 		private String varname(String id, Class cls) {
 			final String clsname = cls.getName();
 			int j = clsname.lastIndexOf('.');
-			return id + "$" + (j >= 0 ? clsname.substring(j+1) : clsname);
+			return id + _separator + (j >= 0 ? clsname.substring(j+1) : clsname);
 		}
 	}
 	/** Execution Proxy */

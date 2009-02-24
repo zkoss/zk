@@ -24,6 +24,9 @@ import java.net.URL;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.util.Composer;
+import org.zkoss.zk.ui.render.ComponentRenderer;
+import org.zkoss.zk.xel.ExValue;
 
 /**
  * A component definition.
@@ -304,6 +307,32 @@ public interface ComponentDefinition extends Cloneable {
 	 * if no annotation is ever defined.
 	 */
 	public AnnotationMap getAnnotationMap();
+
+	/** Returns the apply attribute that is a list of
+	 *{@link Composer} class
+	 * names or EL expressions returning classes, class names or composer
+	 * instances, or null if no apply attribute.
+	 *
+	 * @see #getParsedApply
+	 * @since 3.6.0
+	 */
+	public String getApply();
+	/** Return the parsed expressions of the apply attribute.
+	 * @see #getApply
+	 * @since 3.6.0
+	 */
+	public ExValue[] getParsedApply();
+	/** Sets the apply attribute that is is a list of {@link Composer} class
+	 * or EL expressions returning classes, class names or composer instances.
+	 *
+	 * @param apply the attribute this is a list of {@link Composer} class
+	 * or EL expressions
+	 * El expressions are allowed, but self means the parent, if available;
+	 * or page, if no parent at all. (Note: the component is not created yet
+	 * when the apply attribute is evaluated).
+	 * @since 3.6.0
+	 */
+	public void setApply(String apply);
 
 	/** Returns the URL where this component definition is declared, or
 	 * null if not available.
