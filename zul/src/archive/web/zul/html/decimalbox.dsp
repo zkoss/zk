@@ -3,9 +3,9 @@ decimalbox.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Jul  5 09:12:37     2005, Created by tomyeh
 }}IS_NOTE

@@ -3,9 +3,9 @@ toolbarbutton.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Jun 23 16:39:54     2005, Created by tomyeh
 }}IS_NOTE

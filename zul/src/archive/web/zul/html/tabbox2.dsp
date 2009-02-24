@@ -3,9 +3,9 @@ tabbox.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Jul 12 10:58:27     2005, Created by tomyeh
 }}IS_NOTE

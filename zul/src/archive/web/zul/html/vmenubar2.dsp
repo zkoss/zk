@@ -3,7 +3,7 @@ vmenubar2.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
 		New trendy mold for Menubar component
 	History:

@@ -3,9 +3,9 @@ checkbox.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Jun 16 23:48:26     2005, Created by tomyeh
 }}IS_NOTE

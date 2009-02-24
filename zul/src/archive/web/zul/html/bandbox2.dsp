@@ -3,9 +3,9 @@ bandbox2.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Jun  5 13:43:16 TST 2008, Created by jumperchen
 }}IS_NOTE

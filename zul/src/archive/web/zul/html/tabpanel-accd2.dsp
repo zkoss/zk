@@ -5,7 +5,7 @@ tabpanel-accd.dsp
 	Purpose:
 		A accordion-type tabpanel.
 	Description:
-		
+
 	History:
 		Tue Sep 27 15:02:30     2005, Created by tomyeh
 }}IS_NOTE
@@ -35,11 +35,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 					<div class="${tabzcs}hm">
 						<c:if test="${tab.closable}">
 							<a id="${tab.uuid}!close"  class="${tabzcs}close"></a>
-						</c:if>					
+						</c:if>
 						<span class="${tabzcs}text">${tab.imgTag}<c:out value="${tab.label}"/></span>
 					</div>
 				</div>
-			</div>			
+			</div>
 		</div>
 	</div>
 	<div id="${self.uuid}!real"${self.outerAttrs}${self.innerAttrs}>

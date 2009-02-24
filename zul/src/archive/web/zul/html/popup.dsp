@@ -3,9 +3,9 @@ popup.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Mon Jun  5 11:03:53     2006, Created by tomyeh
 }}IS_NOTE
@@ -23,7 +23,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<div class="${zcls}-tr">
 		</div>
 	</div>
-	
+
 	<div id="${self.uuid}!bwrap" class="${zcls}-cl">
 		<div class="${zcls}-cr">
 			<div class="${zcls}-cm">

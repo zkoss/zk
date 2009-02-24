@@ -3,9 +3,9 @@ column.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Mon Jan  9 14:50:13     2006, Created by tomyeh
 }}IS_NOTE

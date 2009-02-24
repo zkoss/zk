@@ -3,9 +3,9 @@ footer.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri Jan 19 14:51:33     2007, Created by tomyeh
 }}IS_NOTE

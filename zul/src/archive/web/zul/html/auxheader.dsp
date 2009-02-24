@@ -3,9 +3,9 @@ auxheader.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Oct 24 11:10:06     2007, Created by tomyeh
 }}IS_NOTE

@@ -3,9 +3,9 @@ macro.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Mon Apr 17 11:15:17     2006, Created by tomyeh
 }}IS_NOTE

@@ -3,9 +3,9 @@ image.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Mon Jul 18 21:00:00     2005, Created by tomyeh
 }}IS_NOTE

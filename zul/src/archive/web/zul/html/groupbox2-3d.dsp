@@ -3,9 +3,9 @@ groupbox2-3d.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Jul 17 12:38:05 TST 2008, Created by jumperchen
 }}IS_NOTE
@@ -20,14 +20,14 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <c:set var="zcls" value="${self.zclass}"/>
 
 <div id="${self.uuid}" z.type="zul.widget.Grbox"${self.outerAttrs}${self.innerAttrs}>
-	
+
 	<%-- caption --%>
 	<c:if test="${!empty self.caption}">
-		
+
 		<div class="${zcls}-tl">
 			<div class="${zcls}-tr"></div>
 		</div>
-		
+
 		<div class="${zcls}-hl">
 			<div class="${zcls}-hr">
 				<div class="${zcls}-hm">
@@ -50,11 +50,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 				</c:forEach>
 			</div>
 		</div>
-		
+
 	<%-- shadow --%>
 	<div id="${self.uuid}!sdw" class="${zcls}-bl">
 		<div class="${zcls}-br">
-			<div class="${zcls}-bm">		
+			<div class="${zcls}-bm">
 			</div>
 		</div>
 	</div>

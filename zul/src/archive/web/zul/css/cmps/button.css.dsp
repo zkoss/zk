@@ -45,8 +45,8 @@ span.z-button {
 }
 .z-button .z-button-tm, .z-button .z-button-bm  {
 	background-image:url(${c:encodeURL('~./zul/img/button/z-btn-trendy-x.gif')});
-} 
-.z-button .z-button-cl, .z-button .z-button-cr { 
+}
+.z-button .z-button-cl, .z-button .z-button-cr {
 	background-image:url(${c:encodeURL('~./zul/img/button/z-btn-trendy-y.gif')});
 }
 .z-button .z-button-cm {
@@ -79,7 +79,7 @@ span.z-button {
 	padding: 0 5px;
 	background-repeat: repeat-x;
 	background-position: 0 0;
-	white-space: nowrap; 
+	white-space: nowrap;
 }
 .z-button .z-button-cr {
 	background-repeat: no-repeat;
@@ -116,7 +116,7 @@ span.z-button {
 	background-position:-6px 0px;
 }
 .z-button-over .z-button-cm {
-  background-position:0 -500px;    
+  background-position:0 -500px;
 }
 .z-button-over .z-button-cr {
 	background-position:-9px 0px;

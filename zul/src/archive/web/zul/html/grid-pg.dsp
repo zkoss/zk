@@ -5,7 +5,7 @@ gridpg.dsp
 	Purpose:
 		Grid for mold = paging
 	Description:
-		
+
 	History:
 		Mon Aug 21 14:43:31     2006, Created by tomyeh
 }}IS_NOTE

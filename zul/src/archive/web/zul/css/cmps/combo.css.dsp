@@ -25,7 +25,7 @@
 	background-image : url(${c:encodeURL('~./zul/img/button/combobtn.gif')});
 	background-position : 0 0;
 	background-repeat : no-repeat;
-	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0; 
+	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0;
 	border-bottom: 1px solid #7F9DB9;
 }
 .z-combobox-btn-over .z-combobox-img {
@@ -95,7 +95,7 @@
 	background-image : url(${c:encodeURL('~./zul/img/button/BandboxButton.gif')});
 	background-position : 0 0;
 	background-repeat : no-repeat;
-	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0; 
+	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0;
 	border-bottom: 1px solid #86A4BE;
 }
 .z-bandbox-btn-over .z-bandbox-img {
@@ -143,7 +143,7 @@
 	background-image : url(${c:encodeURL('~./zul/img/button/DateButton.gif')});
 	background-position : 0 0;
 	background-repeat : no-repeat;
-	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0; 
+	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0;
 	border-bottom: 1px solid #86A4BE;
 }
 .z-datebox-btn-over .z-datebox-img {
@@ -187,7 +187,7 @@
 	background-image : url(${c:encodeURL('~./zul/img/button/timebtn.gif')});
 	background-position : 0 0;
 	background-repeat : no-repeat;
-	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0; 
+	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0;
 	border-bottom: 1px solid #86A4BE;
 }
 .z-timebox-btn-over .z-timebox-img {
@@ -222,7 +222,7 @@
 	background-image : url(${c:encodeURL('~./zul/img/button/timebtn.gif')});
 	background-position : 0 0;
 	background-repeat : no-repeat;
-	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0; 
+	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0;
 	border-bottom: 1px solid #86A4BE;
 }
 .z-spinner-btn-over .z-spinner-img {
@@ -246,8 +246,8 @@
 .z-bandbox-disd,
 .z-combo-item-disd,
 .z-combobox-disd {
-	opacity: .6; 
-	-moz-opacity: .6; 
+	opacity: .6;
+	-moz-opacity: .6;
 	filter: alpha(opacity=60);
 }
 
@@ -258,12 +258,12 @@
 .z-combo-item-disd, .z-combo-item-disd *,
 .z-combobox-disd, .z-combobox-disd * {
 	cursor: default !important;
-	color: #AAA !important; 
+	color: #AAA !important;
 }
 
 .z-timebox-disd {
 	font-family: ${fontFamilyC};
-	font-size: ${fontSizeM}; 
+	font-size: ${fontSizeM};
 	font-weight: normal;
 }
 .z-combo-item-readonly, .z-combo-item-text-disd,

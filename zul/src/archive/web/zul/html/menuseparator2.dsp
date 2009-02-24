@@ -3,7 +3,7 @@ menuseparator2.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
 		New trendy mold for Menuseparator component
 	History:

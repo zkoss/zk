@@ -3,7 +3,7 @@ button2.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
 		In Safari, the shape of <button> is not pleasure, so we use
 		<input> if no image is required

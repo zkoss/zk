@@ -3,11 +3,11 @@ vtabbox2.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
 		Vertical orientation of tabbox
 	History:
-		Aug 18 2008, Created by Ryanwu		
+		Aug 18 2008, Created by Ryanwu
 }}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.

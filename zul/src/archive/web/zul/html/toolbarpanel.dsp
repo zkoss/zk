@@ -3,9 +3,9 @@ toolbarpanel.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Jun 17 14:59:22 TST 2008, Created by jumperchen
 }}IS_NOTE

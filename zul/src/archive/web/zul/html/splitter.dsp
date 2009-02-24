@@ -3,9 +3,9 @@ splitter.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Jun  8 15:11:44     2006, Created by tomyeh
 }}IS_NOTE

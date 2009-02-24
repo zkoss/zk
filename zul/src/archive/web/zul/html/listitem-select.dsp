@@ -3,9 +3,9 @@ listitem-select.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Sep 28 14:01:29     2005, Created by tomyeh
 }}IS_NOTE

@@ -3,9 +3,9 @@ vtabs2.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Aug 18 2008, Created by Ryanwu
 }}IS_NOTE
@@ -21,7 +21,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <c:set var="self" value="${requestScope.arg.self}"/>
 <c:set var="zcs" value="${self.zclass}-"/>
 <div id="${self.uuid}" z.type="zul.tab2.Tabs2"${self.outerAttrs}${self.innerAttrs}>
-	<div id="${self.uuid}!header" class="${c:cat(zcs,'header')}"> 
+	<div id="${self.uuid}!header" class="${c:cat(zcs,'header')}">
 		<ul id="${self.uuid}!ul" class="${c:cat(zcs,'cnt')}" >
 			<c:forEach var="child" items="${self.children}">
 				${z:redraw(child, null)}

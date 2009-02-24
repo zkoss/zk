@@ -3,9 +3,9 @@ listfooter.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri Jan 13 13:01:30     2006, Created by tomyeh
 }}IS_NOTE

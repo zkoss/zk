@@ -47,7 +47,7 @@ tr.z-vbox-sep {
 .z-splitter-ver-btn-t, .z-splitter-ver-btn-b,
 .z-splitter-hor-btn-l, .z-splitter-hor-btn-r {
 	filter:alpha(opacity=50);  <%-- IE --%>
-	opacity:0.5;  <%-- Moz + FF --%>	
+	opacity:0.5;  <%-- Moz + FF --%>
 	background-repeat: no-repeat; vertical-align:top;
 	display:-moz-inline-box; display:inline-block; font-size:0;
 }
@@ -100,7 +100,7 @@ tr.z-vbox-sep {
 .z-splitter-os-ver-btn-t, .z-splitter-os-ver-btn-b,
 .z-splitter-os-hor-btn-l, .z-splitter-os-hor-btn-r {
 	filter:alpha(opacity=50);  <%-- IE --%>
-	opacity:0.5;  <%-- Moz + FF --%>	
+	opacity:0.5;  <%-- Moz + FF --%>
 	background-repeat: no-repeat; vertical-align:top;
 	display:-moz-inline-box; display:inline-block; font-size: 0;
 }

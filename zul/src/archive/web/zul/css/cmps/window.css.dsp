@@ -2,7 +2,7 @@
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 
 .z-window-resize-faker {
-	position: absolute; 
+	position: absolute;
 	border: 1px dashed #1854C2;
 	overflow: hidden;
 	z-index: 60000;
@@ -23,7 +23,7 @@
 .z-window-move-ghost dl {
 	border: 1px solid #538BA2;
 	margin: 0; padding: 0;
-	overflow: hidden;  
+	overflow: hidden;
 	display: block;
 	background: #D7E6F7;
 	line-height: 0;

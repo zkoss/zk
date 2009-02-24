@@ -3,9 +3,9 @@ panel.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Jun 11 11:44:46 TST 2008, Created by jumperchen
 }}IS_NOTE
@@ -51,7 +51,7 @@ ${z:redraw(self.caption, null)}
 			<c:if test="${self.framable}"></div></div></div></c:if>
 		</c:when>
 		<c:when test="${self.framable}">
-<div class="${zcls}-tl"><div class="${zcls}-tr"></div></div>		
+<div class="${zcls}-tl"><div class="${zcls}-tr"></div></div>
 		</c:when>
 	</c:choose>
 <div id="${self.uuid}!body" class="${zcls}-body" <c:if test="${!self.open}">style="display:none;"</c:if>>

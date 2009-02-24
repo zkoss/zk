@@ -3,9 +3,9 @@ caption-legend.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Oct 11 14:31:46     2005, Created by tomyeh
 }}IS_NOTE

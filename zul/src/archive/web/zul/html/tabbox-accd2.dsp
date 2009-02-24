@@ -5,7 +5,7 @@ tabbox-accd.dsp
 	Purpose:
 		A accordion-type tabbox.
 	Description:
-		
+
 	History:
 		Tue Sep 27 14:45:27     2005, Created by tomyeh
 }}IS_NOTE

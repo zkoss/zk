@@ -5,9 +5,9 @@ imagemap-done.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Mar 28 18:38:41     2006, Created by tomyeh
 }}IS_NOTE

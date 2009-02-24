@@ -3,9 +3,9 @@ hbox.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Jun 21 09:01:33     2005, Created by tomyeh
 }}IS_NOTE

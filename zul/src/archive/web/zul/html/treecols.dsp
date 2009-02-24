@@ -3,9 +3,9 @@ treecols.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Jul  7 15:32:06     2005, Created by tomyeh
 }}IS_NOTE

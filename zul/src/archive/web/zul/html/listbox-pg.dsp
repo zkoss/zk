@@ -5,7 +5,7 @@ listbox-pg.dsp
 	Purpose:
 		Listbox for mold = paging
 	Description:
-		
+
 	History:
 		Mon Aug 28 11:55:34     2006, Created by tomyeh
 }}IS_NOTE

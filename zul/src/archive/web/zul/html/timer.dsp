@@ -3,9 +3,9 @@ timer.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Mon Sep 26 12:48:39     2005, Created by tomyeh
 }}IS_NOTE

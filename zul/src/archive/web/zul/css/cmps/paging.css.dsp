@@ -31,9 +31,9 @@
 <%-- default mold --%>
 
 /* font properties */
-.z-paging td, 
-.z-paging span, 
-.z-paging input, 
+.z-paging td,
+.z-paging span,
+.z-paging input,
 .z-paging div,
 .z-paging button{
 	-x-system-font:none;
@@ -44,7 +44,7 @@
 	font-weight:normal;
 	line-height:normal;
 	white-space:nowrap;
-	font-family: ${fontFamilyT}; 
+	font-family: ${fontFamilyT};
 	font-size: ${fontSizeMS};
 }
 
@@ -68,7 +68,7 @@
 	font-weight:normal;
 	white-space:nowrap;
 	width:auto;
-	font-family: ${fontFamilyT}; 
+	font-family: ${fontFamilyT};
 	font-size: ${fontSizeMS};
 }
 
@@ -172,7 +172,7 @@
 	color:gray !important;
 	cursor:default !important;
 	opacity:0.4;
-	-moz-opacity:0.4; 
+	-moz-opacity:0.4;
 	filter: alpha(opacity=40);
 }
 .z-paging .z-paging-btn-disd *{

@@ -5,7 +5,7 @@ caption.dsp
 	Purpose:
 		Used with groupbox.
 	Description:
-		
+
 	History:
 		Tue Oct 11 15:54:37     2005, Created by tomyeh
 }}IS_NOTE

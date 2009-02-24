@@ -3,7 +3,7 @@ vtabpanel.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
 
 	History:

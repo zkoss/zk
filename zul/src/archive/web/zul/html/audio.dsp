@@ -3,9 +3,9 @@ audio.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Nov 16 17:04:52     2005, Created by tomyeh
 }}IS_NOTE

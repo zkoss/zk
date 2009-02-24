@@ -3,9 +3,9 @@ style.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Dec 26 14:14:35     2007, Created by tomyeh
 }}IS_NOTE

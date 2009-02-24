@@ -3,7 +3,7 @@ menuitem2.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
 		New trendy mold for Menuitem component
 	History:

@@ -3,9 +3,9 @@ longbox.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Nov. 26     2007, Created by tomyeh
 }}IS_NOTE

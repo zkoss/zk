@@ -3,9 +3,9 @@ separator.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Jul 19 12:32:59     2005, Created by tomyeh
 }}IS_NOTE

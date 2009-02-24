@@ -11,7 +11,7 @@
 .z-panel-move-ghost dl {
 	border: 1px solid #B1CBD5;
 	margin: 0; padding: 0;
-	overflow: hidden;  
+	overflow: hidden;
 	display: block;
 	background: #D7E6F7;
 	line-height: 0;
@@ -87,7 +87,7 @@
 	font: normal ${fontSizeM} ${fontFamilyT};
 	padding: 5px 3px 4px 5px;
 	border: 1px solid #b1cbd5;
-	line-height: 15px; 
+	line-height: 15px;
 	background:transparent repeat-x 0 -1px;
 	background-image: url(${c:encodeURL('~./zul/img/panel/panel-hm.png')});
 	font-weight:bold;

@@ -3,9 +3,9 @@ area.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Mar 28 14:54:59     2006, Created by tomyeh
 }}IS_NOTE

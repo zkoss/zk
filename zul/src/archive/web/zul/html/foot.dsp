@@ -3,9 +3,9 @@ foot.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Fri Jan 19 14:51:29     2007, Created by tomyeh
 }}IS_NOTE

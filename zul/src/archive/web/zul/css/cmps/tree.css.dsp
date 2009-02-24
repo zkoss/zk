@@ -38,7 +38,7 @@ div.z-tree-footer {
 tr.z-tree-faker, tr.z-tree-faker th, tr.z-tree-faker div,
 tr.z-dottree-faker, tr.z-dottree-faker th, tr.z-dottree-faker div,
 tr.z-filetree-faker, tr.z-filetree-faker th, tr.z-filetree-faker div,
-tr.z-vfiletree-faker, tr.z-vfiletree-faker th, tr.z-vfiletree-faker div {	
+tr.z-vfiletree-faker, tr.z-vfiletree-faker th, tr.z-vfiletree-faker div {
 	border-top: 0 !important; border-right : 0 !important;border-bottom: 0 !important;border-left: 0 !important;
 	padding-top: 0 !important;	padding-right: 0 !important; padding-bottom: 0 !important;padding-left: 0 !important;
 	margin-top: 0 !important; margin-right : 0 !important;margin-bottom: 0 !important;margin-left: 0 !important;
@@ -47,7 +47,7 @@ tr.z-vfiletree-faker, tr.z-vfiletree-faker th, tr.z-vfiletree-faker div {
 <%-- these above css cannot be overrided--%>
 <%-- tree icons --%>
 span.z-tree-ico, span.z-tree-line, span.checkmark-spacer {
-	width: 18px; min-height: 18px; height: 100%;	
+	width: 18px; min-height: 18px; height: 100%;
 	display:-moz-inline-box; vertical-align:top;
 	display:inline-block;
 }
@@ -220,14 +220,14 @@ span.z-filetree-line, span.z-filetree-ico, span.z-filetree-firstspacer {
 	display:-moz-inline-box; vertical-align:top;
 	display:inline-block;
 }
-span.z-filetree-ico,span.z-filetree-firstspacer {	
-	background-image: url(${c:encodeURL('~./zul/img/tree/folder-toggle.gif')});	
+span.z-filetree-ico,span.z-filetree-firstspacer {
+	background-image: url(${c:encodeURL('~./zul/img/tree/folder-toggle.gif')});
 }
-span.z-filetree-root-open, span.z-filetree-root-close, 
+span.z-filetree-root-open, span.z-filetree-root-close,
 span.z-filetree-root-open, span.z-filetree-tee-open, span.z-filetree-last-open {
 	background-position: 0px 0px;
 }
-span.z-filetree-root-close, span.z-filetree-tee-close, 
+span.z-filetree-root-close, span.z-filetree-tee-close,
 span.z-filetree-last-close, span.z-filetree-firstspacer {
 	background-position: 0px -18px;
 }
@@ -276,14 +276,14 @@ span.z-vfiletree-line, span.z-vfiletree-ico, span.z-vfiletree-firstspacer {
 	display:-moz-inline-box; vertical-align:top;
 	display:inline-block;
 }
-span.z-vfiletree-ico,span.z-vfiletree-firstspacer {	
-	background-image: url(${c:encodeURL('~./zul/img/tree/folder-toggle.png')});	
+span.z-vfiletree-ico,span.z-vfiletree-firstspacer {
+	background-image: url(${c:encodeURL('~./zul/img/tree/folder-toggle.png')});
 }
-span.z-vfiletree-root-open, span.z-vfiletree-root-close, 
+span.z-vfiletree-root-open, span.z-vfiletree-root-close,
 span.z-vfiletree-root-open, span.z-vfiletree-tee-open, span.z-vfiletree-last-open {
 	background-position: 0px 0px;
 }
-span.z-vfiletree-root-close, span.z-vfiletree-tee-close, 
+span.z-vfiletree-root-close, span.z-vfiletree-tee-close,
 span.z-vfiletree-last-close, span.z-vfiletree-firstspacer {
 	background-position: 0px -18px;
 }

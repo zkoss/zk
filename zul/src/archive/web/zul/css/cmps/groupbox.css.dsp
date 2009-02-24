@@ -62,7 +62,7 @@
 	zoom: 1;
 }
 .z-groupbox-header {
-	overflow: hidden; 
+	overflow: hidden;
 	zoom: 1;
 }
 .z-groupbox-hl .z-groupbox-header {
@@ -71,32 +71,32 @@
 	font-size: ${fontSizeM};
 	font-weight: normal;
 	padding: 0 0 4px 0;
-	border: 0 none; 
+	border: 0 none;
 	background: transparent;
 }
 
 .z-groupbox-cnt {<%-- content of 3d groupbox-new2 --%>
-	border: 1px solid #B2CCD9; 
+	border: 1px solid #B2CCD9;
 	padding: 5px;
 }
 
 .z-groupbox-bl {
 	background: transparent no-repeat 0 bottom;
 	background-image: url(${c:encodeURL('~./img/shdlf.gif')});
-	padding-left: 6px; 
+	padding-left: 6px;
 	zoom: 1;
 }
 .z-groupbox-br {
 	background: transparent no-repeat right bottom;
 	background-image: url(${c:encodeURL('~./img/shdrg.gif')});
-	padding-right: 6px; 
+	padding-right: 6px;
 	zoom: 1;
 }
 .z-groupbox-bm {
 	background: transparent repeat-x 0 0;
 	background-image: url(${c:encodeURL('~./img/shdmd.gif')});
-	height: 6px; 
-	font-size: 0; 
-	line-height: 0; 
+	height: 6px;
+	font-size: 0;
+	line-height: 0;
 	zoom: 1;
 }

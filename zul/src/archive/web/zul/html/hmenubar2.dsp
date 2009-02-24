@@ -3,9 +3,9 @@ hmenubar2.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		New trendy mold for Menubar component		
+		New trendy mold for Menubar component
 	History:
 		Thu May 22 17:14:08 TST 2008, Created by jumperchen
 }}IS_NOTE

@@ -3,9 +3,9 @@ calendar.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Mon Apr 24 17:13:31     2006, Created by tomyeh
 }}IS_NOTE

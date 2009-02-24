@@ -3,9 +3,9 @@ spinner.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Mar  5 09:26:51 TST 2008, Created by gracelin
 }}IS_NOTE

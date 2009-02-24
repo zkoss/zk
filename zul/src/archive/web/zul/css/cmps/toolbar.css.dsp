@@ -4,7 +4,7 @@
 .z-toolbar {
 	border-color: #B1CBD5; border-style: solid; border-width: 0 0 1px 0; display: block;
 	padding: 2px;
-	background: #CEE7F5 repeat-x top left; 
+	background: #CEE7F5 repeat-x top left;
 	background-image: url(${c:encodeURL('~./zul/img/button/bar-bg.png')});
 	position: relative; zoom: 1;
 }
@@ -25,7 +25,7 @@
 }
 .z-toolbar-button {
 	font-family: ${fontFamilyT};
-	font-size: ${fontSizeM}; 
+	font-size: ${fontSizeM};
 	font-weight: normal;
 }
 .z-caption .z-toolbar a:hover {
@@ -52,7 +52,7 @@
 
 .z-toolbar-panel .z-toolbar-panel-body .z-toolbar-panel-hor,
 .z-toolbar-panel .z-toolbar-panel-body .z-toolbar-panel-ver {
-	border: 0; 
+	border: 0;
 	padding: 0;
 }
 .z-toolbar-panel .z-toolbar-panel-cnt .z-toolbar-panel-hor{
@@ -64,7 +64,7 @@
 
 .z-toolbar-panel .z-toolbar-panel-start .z-toolbar-panel-cnt{
 	clear: none;
-	float: left; 
+	float: left;
 }
 
 .z-toolbar-panel .z-toolbar-panel-center{
@@ -76,14 +76,14 @@
 
 .z-toolbar-panel .z-toolbar-panel-end .z-toolbar-panel-cnt{
 	clear: none;
-	float: right; 
+	float: right;
 }
 
 <%-- Toolbar Button--%>
 .z-toolbar-button-disd {
 	color: #C5CACB !important; cursor: default!important;
 }
-.z-toolbar-button-disd:visited, .z-toolbar-button-disd:hover { 
+.z-toolbar-button-disd:visited, .z-toolbar-button-disd:hover {
 	text-decoration: none !important; cursor: default !important;;
 	border-color: #D0DEF0 !important;
 }

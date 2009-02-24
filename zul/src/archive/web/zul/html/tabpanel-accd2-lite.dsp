@@ -5,7 +5,7 @@ tabpanel-accd.dsp
 	Purpose:
 		A accordion-type tabpanel.
 	Description:
-		
+
 	History:
 		Tue Sep 27 15:02:30     2005, Created by tomyeh
 }}IS_NOTE

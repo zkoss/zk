@@ -5,7 +5,7 @@ desktop.dsp
 	Purpose:
 		The template used to render a full page
 	Description:
-		
+
 	History:
 		Fri Jun 10 09:16:14     2005, Created by tomyeh
 }}IS_NOTE

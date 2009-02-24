@@ -28,7 +28,7 @@
 	padding: 1px 3px;
 }
 .z-calendar-calday td a:hover, .z-datebox-calday td a:hover {
-	text-decoration: underline;	
+	text-decoration: underline;
 }
 .z-calendar-calmon td.z-calendar-seld, .z-calendar-calday td.z-calendar-seld,
 .z-datebox-calmon td.z-datebox-seld, .z-datebox-calday td.z-datebox-seld {

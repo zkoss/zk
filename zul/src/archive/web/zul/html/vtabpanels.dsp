@@ -3,9 +3,9 @@ vtabpanels.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		May 3 2006, Created by tomyeh
 }}IS_NOTE

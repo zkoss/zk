@@ -5,7 +5,7 @@ html.dsp
 	Purpose:
 		Display any HTML tags
 	Description:
-		
+
 	History:
 		Mon Jul 25 11:32:14     2005, Created by tomyeh
 }}IS_NOTE

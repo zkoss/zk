@@ -3,9 +3,9 @@ rows.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Oct 25 17:06:05     2005, Created by tomyeh
 }}IS_NOTE
@@ -21,7 +21,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <%@ taglib uri="http://www.zkoss.org/dsp/zul/core" prefix="u" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 ${u:resetStripeClass(self)}
-<tbody id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}>	
+<tbody id="${self.uuid}"${self.outerAttrs}${self.innerAttrs}>
 	<c:forEach var="child" items="${self.visibleChildrenIterator}">
 	${u:setStripeClass(child)}
 	${z:redraw(child, null)}

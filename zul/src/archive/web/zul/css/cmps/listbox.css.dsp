@@ -45,7 +45,7 @@ div.z-listbox-pgi-t {
 }
 div.z-listbox-body .z-list-cell, div.z-listbox-footer .z-list-footer {
 	cursor: pointer; padding: 0 2px;
-	font-size: ${fontSizeM}; font-weight: normal; overflow: hidden; 
+	font-size: ${fontSizeM}; font-weight: normal; overflow: hidden;
 }
 div.z-listbox-footer {
 	background: #DAE7F6; border-top: 1px solid #9EB6CE;
@@ -64,10 +64,10 @@ div.z-list-footer-cnt, div.z-list-header-cnt {
 }
 <%-- faker uses only --%>
 tr.z-listbox-faker, tr.z-listbox-faker th, tr.z-listbox-faker div {
-	height: 0px !important; 	
-	border-top: 0 !important; border-right : 0 !important;border-bottom: 0 !important;border-left: 0 !important;  
-	padding-top: 0 !important;	padding-right: 0 !important; padding-bottom: 0 !important;padding-left: 0 !important;			
-	margin-top: 0 !important; margin-right : 0 !important;margin-bottom: 0 !important;margin-left: 0 !important;  		
+	height: 0px !important;
+	border-top: 0 !important; border-right : 0 !important;border-bottom: 0 !important;border-left: 0 !important;
+	padding-top: 0 !important;	padding-right: 0 !important; padding-bottom: 0 !important;padding-left: 0 !important;
+	margin-top: 0 !important; margin-right : 0 !important;margin-bottom: 0 !important;margin-left: 0 !important;
 	<%-- these above css cannot be overrided--%>
 }
 tr.z-list-item, tr.z-list-item a, tr.z-list-item a:visited {
@@ -84,7 +84,7 @@ tr.z-list-item-disd *, td.z-list-cell-disd * {
 	color: #C5CACB !important; cursor: default!important;
 }
 tr.z-list-item-disd a:visited, tr.z-list-item-disd a:hover,
-td.z-list-cell-disd a:visited, td.z-list-cell-disd a:hover { 
+td.z-list-cell-disd a:visited, td.z-list-cell-disd a:hover {
 	text-decoration: none !important;
 	cursor: default !important;;
 	border-color: #D0DEF0 !important;
@@ -110,7 +110,7 @@ tr.z-list-group{
 td.z-list-group-inner {
 	padding-top: 2px;
 	border-top: 2px solid #81BAF5;
-	border-bottom: 1px solid #bcd2ef;	
+	border-bottom: 1px solid #bcd2ef;
 }
 td.z-list-group-inner div.z-list-cell-cnt {
 	color:#2C559C; font: normal ${fontSizeM} ${fontFamilyT};

@@ -46,7 +46,7 @@ body {
 }
 .zk th {
 	font-family: ${fontFamilyT};
-	font-weight: bold; 
+	font-weight: bold;
 }
 .zk thead tr {
 	font-family: ${fontFamilyT};
@@ -68,7 +68,7 @@ td.gamma {background: #F4F4F4;}
 <%-- ZK JavaScript debug box --%>
 div.z-debugbox {
 	position: absolute;
-	border: 1px solid #77c;	
+	border: 1px solid #77c;
 	width: 60%;
 	z-index: 99000;
 	background: white;
@@ -91,7 +91,7 @@ div.z-debugbox {
 .noscript p {
 	background: white;
 	font-weight: bold;
-	color: black;	
+	color: black;
 	margin: 10% 15%;
 	padding: 10px 0;
 	border: 1px solid black;
@@ -99,7 +99,7 @@ div.z-debugbox {
 	opacity: 1;
 }
 
-.z-label, .z-radio-cnt, .z-checkbox-cnt, .z-slider-pp, input.button, input.file, 
+.z-label, .z-radio-cnt, .z-checkbox-cnt, .z-slider-pp, input.button, input.file,
 .z-loading,.z-errbox {
 	font-family: ${fontFamilyC};
 	font-size: ${fontSizeM}; font-weight: normal;
@@ -107,8 +107,8 @@ div.z-debugbox {
 .z-modal-mask {
 	width: 100%;
 	height: 100%;
-	position: absolute;	
-	top: 0; left: 0; 
+	position: absolute;
+	top: 0; left: 0;
 	filter: alpha(opacity=60); <%-- IE --%>
 	opacity: .6;
 	z-index: 30000;
@@ -126,8 +126,8 @@ div.z-debugbox {
 }
 .z-loading-indicator {
 	background-color: #FFFFFF;
-	color: #102B6D; 
-	border:1px solid #83B5F7; 
+	color: #102B6D;
+	border:1px solid #83B5F7;
 	white-space: nowrap;
 	padding:6px;
 }
@@ -154,7 +154,7 @@ div.z-debugbox {
 .z-apply-loading-indicator {
 	border:1px solid #A6C5DC;
 	background-color: #FFF;
-	color: #102B6D; 
+	color: #102B6D;
 	white-space: nowrap;
 	padding: 2px;
 	font: normal ${fontSizeM} ${fontFamilyT};
@@ -193,7 +193,7 @@ div.z-debugbox {
 .z-clear {
 	clear: both;
 	height: 1px;
-	width: 1px; 
+	width: 1px;
 	line-height: 0;
 	font-size: 0;
 	overflow: hidden;
@@ -235,7 +235,7 @@ div.z-debugbox {
 }
 
 .z-shadow .z-shadow-tl {
-	background:transparent no-repeat scroll 0 top;	
+	background:transparent no-repeat scroll 0 top;
 	font-size:0;
 	height:6px;
 	line-height:0;
@@ -252,7 +252,7 @@ div.z-debugbox {
 	zoom:1;
 }
 .z-shadow .z-shadow-bl {
-	background:transparent no-repeat scroll 0 top;	
+	background:transparent no-repeat scroll 0 top;
 	font-size:0;
 	height:6px;
 	line-height:0;
@@ -312,12 +312,12 @@ div.z-drop-cnt {
 .z-fileupload-add {
 	background-image: url(${c:encodeURL('~./zul/img/misc/add.png')});
 	width: 16px;
-	height: 16px;	
+	height: 16px;
 }
 .z-fileupload-delete {
 	background-image: url(${c:encodeURL('~./zul/img/misc/delete.png')});
 	width: 16px;
-	height: 16px;	
+	height: 16px;
 }
 <%-- ZK Massagebox --%>
 .z-msgbox{

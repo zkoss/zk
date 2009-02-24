@@ -3,7 +3,7 @@ menu2.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
 		New trendy mold for Menu component
 	History:

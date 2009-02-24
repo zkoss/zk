@@ -3,9 +3,9 @@ doublebox.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Sat Oct  14 13:25:12     2006, Created by henrichen
 }}IS_NOTE

@@ -3,9 +3,9 @@ listbox.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Wed Jun 15 18:20:53     2005, Created by tomyeh
 }}IS_NOTE
@@ -59,7 +59,7 @@ ${z:redraw(head, null)}
 		</c:if>
 ${u:resetStripeClass(self)}
 	<c:forEach var="item" items="${self.items}">
-${u:setStripeClass(item)}	
+${u:setStripeClass(item)}
 ${z:redraw(item, null)}
 	</c:forEach>
 	</table><${c:browser('ie') || c:browser('gecko') ? 'a' : 'button'} z.keyevt="true" id="${self.uuid}!a" tabindex="-1" onclick="return false;" href="javascript:;" style="position: absolute;left: 0px; top: 0px;padding:0 !important; margin:0 !important; border:0 !important; background: transparent !important; font-size: 1px !important; width: 1px !important; height: 1px !important;-moz-outline: 0 none; outline: 0 none;	-moz-user-select: text; -khtml-user-select: text;"></${c:browser('ie') || c:browser('gecko') ? 'a' : 'button'}>

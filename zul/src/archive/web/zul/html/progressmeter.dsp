@@ -3,9 +3,9 @@ progressmeter.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Mon Aug 14 17:12:24     2006, Created by tomyeh
 }}IS_NOTE

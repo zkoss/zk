@@ -8,7 +8,7 @@ fileupload.html.dsp
 		The content of the inline frame of the fileupload modal dialog
 		(fileupload.html.zul)
 	Description:
-		
+
 	History:
 		Thu Jul 21 11:37:28     2005, Created by tomyeh
 }}IS_NOTE
@@ -71,9 +71,9 @@ function addUpload(img) {
 	parent.zk.rmClass(img, "z-fileupload-add");
 	parent.zk.addClass(img, "z-fileupload-delete");
 	img.onclick = function () {deleteUpload(img)};
-	
-	// due to the runtime error of IE, we cannot use the tr.innerHTML method.  
-	var table = parent.$parentByTag(img, "TABLE"), 
+
+	// due to the runtime error of IE, we cannot use the tr.innerHTML method.
+	var table = parent.$parentByTag(img, "TABLE"),
 		tr = table.insertRow(table.rows.length),
 		td = tr.insertCell(0);
 	td.innerHTML = table.rows.length;

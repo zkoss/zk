@@ -680,7 +680,7 @@
 .z-tab-accordion-disd .z-tab-accordion-close:hover,
 .z-tab-accordion-disd-seld .z-tab-accordion-close:hover {
 	background-image: url(${c:encodeURL('~./zul/img/tab/tab-close-off.png')});
-	opacity: .6; 
+	opacity: .6;
 	filter: alpha(opacity=60);
 }
 .z-tab-accordion-disd .z-tab-accordion-text,
@@ -768,7 +768,7 @@
 }
 .z-tab-accordion-lite .z-tab-accordion-lite-close:hover {
 	background-image: url(${c:encodeURL('~./zul/img/tab/tab-close-on-l.gif')});
-	opacity: 1; 
+	opacity: 1;
 	filter: alpha(opacity=100);
 }
 <%-- Selected --%>
@@ -780,7 +780,7 @@
 .z-tab-accordion-lite-disd .z-tab-accordion-lite-close:hover,
 .z-tab-accordion-lite-disd-seld .z-tab-accordion-lite-close:hover {
 	background-image: url(${c:encodeURL('~./zul/img/tab/tab-close-off.png')});
-	opacity: .6; 
+	opacity: .6;
 	filter: alpha(opacity=60);
 }
 .z-tab-accordion-lite-disd a,

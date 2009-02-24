@@ -3,9 +3,9 @@
 
 <%-- Grid --%>
 div.z-grid {
-	background: #DAE7F6; 
-	border: 1px solid #7F9DB9; 
-	overflow: hidden; 
+	background: #DAE7F6;
+	border: 1px solid #7F9DB9;
+	overflow: hidden;
 	zoom: 1;
 }
 div.z-grid-header, div.z-grid-header tr, div.z-grid-footer {
@@ -17,15 +17,15 @@ div.z-grid-header tr.z-columns, div.z-grid-header tr.z-auxhead {
 	background-image: url(${c:encodeURL('~./zul/img/grid/column-bg.png')});
 }
 div.z-grid-header th.z-column, div.z-grid-header th.z-auxheader {
-	overflow: hidden; 
+	overflow: hidden;
 	border: 1px solid;
 	border-color: #DAE7F6 #9EB6CE #9EB6CE #DAE7F6;
-	white-space: nowrap; 
+	white-space: nowrap;
 	padding: 2px;
 	font-size: ${fontSizeM}; font-weight: normal;
 }
 div.z-grid-header .z-column-sort div.z-column-cnt {
-	cursor: pointer; 
+	cursor: pointer;
 	padding-right: 9px;
 	background-color: transparent;
 	background-position: 99% center;
@@ -33,7 +33,7 @@ div.z-grid-header .z-column-sort div.z-column-cnt {
 	background-image: url(${c:encodeURL('~./zul/img/sort/v_hint.gif')});
 }
 div.z-grid-header .z-column-sort-asc div.z-column-cnt {
-	cursor: pointer; 
+	cursor: pointer;
 	padding-right: 9px;
 	background-color:transparent;
 	background-position: 99% center;
@@ -45,7 +45,7 @@ div.z-grid-header .z-column-sort-asc, div.z-grid-header .z-column-sort-dsc {
 	background-image:url(${c:encodeURL('~./zul/img/grid/column-over.png')});
 }
 div.z-grid-header .z-column-sort-dsc div.z-column-cnt {
-	cursor: pointer; 
+	cursor: pointer;
 	padding-right: 9px;
 	background:transparent ;
 	background-position: 99% center;
@@ -80,10 +80,10 @@ div.z-footer-cnt, div.z-column-cnt{
 }
 <%-- faker uses only --%>
 tr.z-grid-faker, tr.z-grid-faker th, tr.z-grid-faker div {
-	height: 0px !important; 	
-	border-top: 0 !important; border-right : 0 !important;border-bottom: 0 !important;border-left: 0 !important;  
-	padding-top: 0 !important;	padding-right: 0 !important; padding-bottom: 0 !important;padding-left: 0 !important;			
-	margin-top: 0 !important; margin-right : 0 !important;margin-bottom: 0 !important;margin-left: 0 !important;  	
+	height: 0px !important;
+	border-top: 0 !important; border-right : 0 !important;border-bottom: 0 !important;border-left: 0 !important;
+	padding-top: 0 !important;	padding-right: 0 !important; padding-bottom: 0 !important;padding-left: 0 !important;
+	margin-top: 0 !important; margin-right : 0 !important;margin-bottom: 0 !important;margin-left: 0 !important;
 } <%-- these above css cannot be overrided--%>
 td.z-row-inner, td.z-group-foot-inner {
 	padding: 2px; overflow: hidden;
@@ -107,7 +107,7 @@ td.z-group-inner {
 	padding: 2px; overflow: hidden;
 	border-top: 2px solid #81BAF5;
 	border-bottom: 1px solid #bcd2ef;
-	color: #2C559C; font: normal ${fontSizeM} ${fontFamilyT};font-weight:bold;	
+	color: #2C559C; font: normal ${fontSizeM} ${fontFamilyT};font-weight:bold;
 }
 .z-group-inner .z-group-cnt span, .z-group-inner .z-group-cnt {
 	color:#2C559C; font: normal ${fontSizeM} ${fontFamilyT};

@@ -3,9 +3,9 @@ bandpopup.dsp
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Mon Mar 20 12:43:49     2006, Created by tomyeh
 }}IS_NOTE
