@@ -67,18 +67,18 @@
 	text-align:center;
 }
 
-.z-menu-body .z-menu-inner-m div{
-	background-color:transparent;
-	background-position:right 3px;
-	background-repeat:no-repeat;
+.z-menu-body .z-menu-inner-m div {
 	display:block;
 	min-height:16px;
 	padding-right:2px;
 	padding-left:0px;
-	background-image:url(${c:encodeURL('~./zul/img/button/tb-btn-arrow.png')});
+	background: transparent no-repeat right -14px;
+	background-image:url(${c:encodeURL('~./zul/img/menu/btn-arrow.gif')});
 }
-
-.z-menu-item-body .z-menu-item-inner-m div{
+.z-menubar-ver .z-menu-body .z-menu-inner-m div {
+	background-position: right 0px;
+}
+.z-menu-item-body .z-menu-item-inner-m div {
 	background-color:transparent;
 	display:block;
 	min-height:16px;
@@ -129,20 +129,26 @@
 </c:if>
 
 /* define menu/menuitem mouse over and seld effect */
-.z-menu-body-over .z-menu-inner-l,.z-menu-body-seld .z-menu-inner-l,.z-menu-item-body-over .z-menu-item-inner-l {
+.z-menu-body-over .z-menu-inner-l,
+.z-menu-body-seld .z-menu-inner-l,
+.z-menu-item-body-over .z-menu-item-inner-l {
 	background-repeat : no-repeat;
 	background-position : 0 0;
-	background-image : url(${c:encodeURL('~./zul/img/button/tb-btn-side.png')});
+	background-image : url(${c:encodeURL('~./zul/img/menu/menu-btn.png')});
 }
-.z-menu-body-over .z-menu-inner-r,.z-menu-body-seld .z-menu-inner-r,.z-menu-item-body-over .z-menu-item-inner-r {
+.z-menu-body-over .z-menu-inner-r,
+.z-menu-body-seld .z-menu-inner-r,
+.z-menu-item-body-over .z-menu-item-inner-r {
 	background-repeat : no-repeat;
 	background-position : 0 -41px;
-	background-image : url(${c:encodeURL('~./zul/img/button/tb-btn-side.png')});
+	background-image : url(${c:encodeURL('~./zul/img/menu/menu-btn.png')});
 }
-.z-menu-body-over .z-menu-inner-m,.z-menu-body-seld .z-menu-inner-m,.z-menu-item-body-over .z-menu-item-inner-m {
+.z-menu-body-over .z-menu-inner-m,
+.z-menu-body-seld .z-menu-inner-m,
+.z-menu-item-body-over .z-menu-item-inner-m {
 	background-repeat : repeat-x;
 	background-position : 0 -82px;
-	background-image : url(${c:encodeURL('~./zul/img/button/tb-btn-side.png')});
+	background-image : url(${c:encodeURL('~./zul/img/menu/menu-btn.png')});
 }
 .z-menu-body-over .z-menu-inner-m .z-menu-btn,
 .z-menu-body-seld .z-menu-inner-m .z-menu-btn,
@@ -163,11 +169,11 @@
 
 /* define menupopup effect */
 .z-menu-popup {
-	background:#E7F3FA  repeat-y scroll 0 0;
+	background:#85BAD5 repeat-y scroll 0 0;
 	border:1px solid #7F9DB9;
 	padding:2px;
 	z-index:88000;
-	background-image : url(${c:encodeURL('~./zul/img/menu/pp-bg.gif')});
+	background-image : url(${c:encodeURL('~./zul/img/menu/pp-bg.png')});
 }
 /* define menupopup property*/
 .z-menu-popup {
@@ -234,7 +240,7 @@
 
 .z-menu-popup-cnt .z-menu .z-menu-cnt-img {
 	background:transparent no-repeat scroll right center;
-	background-image:url(${c:encodeURL('~./zul/img/menu/arrow.png')});
+	background-image:url(${c:encodeURL('~./zul/img/menu/arrow.gif')});
 }
 
 /*define checked menuitem effect in menupopup */
@@ -267,7 +273,7 @@
 	border:1px solid #A8D8EB;
 	padding:0;
 	background:#DDEEFB repeat-x scroll 0 0;
-	background-image:url(${c:encodeURL('~./zul/img/menu/item-over.gif')});
+	background-image:url(${c:encodeURL('~./zul/img/menu/item-over.png')});
 }
 .z-menu-popup-cnt .z-menu-over a.z-menu-cnt,
 .z-menu-popup-cnt .z-menu-item-over a.z-menu-item-cnt{

@@ -166,19 +166,6 @@ span.z-vfiletree-last-open, span.z-vfiletree-last-close, span.z-vfiletree-tee, s
 tr.z-list-item td.z-list-item-focus {
 	background-image: url(${c:encodeURL('~./zul/img/common/focusd.gif')});
 }
-<%-- menu.css.dsp --%>
-.z-menu-cnt-img {
-	background-image:url(${c:encodeURL('~./zul/img/menu/arrow.gif')});
-}
-.z-menu-btn .z-menu-btn-m em, .z-menu-btn-text-img .z-menu-btn-m em {
-	background-image: url(${c:encodeURL('~./zul/img/button/tb-btn-arrow.gif')});
-}
-.z-menubar-ver .z-menu-btn .z-menu-btn-m em, .z-menubar-ver .z-menu-btn-text-img .z-menu-btn-m em {
-	background-image: url(${c:encodeURL('~./zul/img/button/tb-btn-arrow-ver.gif')});
-}
-.z-menu-item-cnt-unck .z-menu-item-img {
-	background-image:  url(${c:encodeURL('~./zul/img/menu/unchecked.gif')});
-}
 <%-- panel.css.dsp --%>
 .z-panel-tl{
 	background-image:url(${c:encodeURL('~./zul/img/wnd/panel-corners.gif')});
