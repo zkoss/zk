@@ -1,0 +1,16 @@
+<window position="center" mode="overlapped"
+title="test" height="400px" width="400px" border="normal"
+>
+Click the invalidate button first, and then resize the browser widow.
+You shall NOT see the timeout message.
+<zscript if="true">
+EventListener mylistener=new EventListener () {
+public void onEvent(Event ev) {
+System.err.println("event at " + new java.util.Date());
+}
+};
+self.addEventListener( Events.ON_CLIENT_INFO,mylistener);
+self.removeEventListener(Events.ON_CLIENT_INFO,mylistener);
+</zscript>
+<button onClick="session.invalidate();" label="invalidate"/>
+</window>

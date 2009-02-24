@@ -1,4 +1,4 @@
-<window id="w" title="more" mode="overlapped" shadow="false">
+<window id="w" title="more" mode="overlapped" shadow="false" border="normal">
 	Change the following value, you can control whether to display a shadow:
 	<checkbox label="shadow" checked="${w.shadow}" onCheck="w.shadow = !w.shadow"/>
 </window>

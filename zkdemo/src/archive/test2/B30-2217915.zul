@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-2217915.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Nov 19 18:34:35     2008, Created by jumperchen
+}}IS_NOTE
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk>
+	Please press the button, you should see the download dialog. (Opera 9.x version only)
+	<button label="Download sun.jpg">
+		<attribute name="onClick">
+		Filedownload.save("/test2/img/sun.jpg", null);
+		</attribute>
+	</button>
+</zk>
