@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?page title="ZK ${desktop.webApp.version}"?>
+
 <!--
 service.zul
 
@@ -19,12 +20,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 	<zscript>
-	String zulData = Executions.getCurrent().getParameter("zulData");
-	try {
-		Component cmp = Executions.createComponentsDirectly(zulData, "zul", null, null);
-		if (cmp != null) cmp.setPage(page);
-	} catch (Exception e) { 
-		if (zulData == null || "".equals(zulData.trim()))
+	void CatchError(String value, String title, Exception e) {
+		if (value == null || "".equals(value.trim()))
 			return; // nothing to do.
 			
 		java.io.ByteArrayOutputStream arrayOutputStream = new java.io.ByteArrayOutputStream(); 
@@ -32,10 +29,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		byte[] bytes = arrayOutputStream.toByteArray();
 		
 		Window win = new Window();
-		win.setTitle("Some Error caused by the code!");
+		win.setTitle(title);
 		win.setBorder("normal");
 		win.setPage(page);
-		Label l = new Label(zulData);
+		win.setId("error_window");
+		Label l = new Label(value);
 		l.setPre(true);
 		l.setParent(win);
 		new Separator().setParent(win);
@@ -58,6 +56,14 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			}
 		});
 	}
+	String zulData = Executions.getCurrent().getParameter("zulData");
+	try {
+		Component cmp = Executions.createComponentsDirectly(zulData, "zul", null, null);
+		if (cmp != null) cmp.setPage(page);
+	} catch (Exception e) {
+		page.removeComponents();
+		CatchError(zulData, "Some Error caused by the code!", e);
+	}
 	</zscript>
 	<script if="${desktop.execution.serverName == &quot;www.zkoss.org&quot; or desktop.execution.serverName == &quot;www.potix.com&quot;}">
 	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
@@ -69,4 +75,20 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	pageTracker._initData();
 	pageTracker._trackPageview();
 	</script>
+	<textbox style="visibility:hidden;position:absolute;" onCreate='Clients.evalJavaScript("_zkJetId = \"" + self.uuid+"\"")'>
+		<attribute name="onChange"><![CDATA[
+		import org.zkoss.zk.ui.metainfo.*;
+		String data = self.value;
+		try {
+			Component cmp = page.getFellowIfAny("error_window");
+			if (cmp != null) cmp.detach();
+			ZScript zscript = ZScript.parseContent(data);
+			zscript.setLanguage("Java");
+			page.interpret(
+					zscript.getLanguage(), zscript.getContent(page, self), self.getNamespace());
+		} catch (Exception e) {
+			CatchError(data, "Some Error caused by the zscript!", e);
+		}
+		]]></attribute>
+	</textbox>
 </zk>
