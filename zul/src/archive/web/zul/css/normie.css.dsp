@@ -260,7 +260,7 @@ tr.z-list-item td.z-list-item-focus {
 
 <%-- tabbox.css.dsp --%>
 .z-tab-close, .z-tab-ver-close {
-	background-image: url(${c:encodeURL('~./zul/img/tab2/tab-close.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/tab/tab-close.gif')});
 }
 .z-tab-accordion-close,
 .z-tab-accordion-lite-close,
@@ -268,17 +268,17 @@ tr.z-list-item td.z-list-item-focus {
 .z-tab-accordion-disd-seld .z-tab-accordion-close-over,
 .z-tab-accordion-lite-disd .z-tab-accordion-lite-close-over,
 .z-tab-accordion-lite-disd-seld .z-tab-accordion-lite-close-over {
-	background-image: url(${c:encodeURL('~./zul/img/tab2/tab-close-off.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/tab/tab-close-off.gif')});
 }
 .z-tab-accordion .z-tab-accordion-close-over {
-	background-image: url(${c:encodeURL('~./zul/img/tab2/tab-close-on.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/tab/tab-close-on.gif')});
 }
 .z-tab-accordion-lite .z-tab-accordion-lite-close-over {
-	background-image: url(${c:encodeURL('~./zul/img/tab2/tab-close-on-l.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/tab/tab-close-on-l.gif')});
 }
 .z-tab-accordion-tl,
 .z-tab-accordion-tr {
-	background-image: url(${c:encodeURL('~./zul/img/tab2/tab-accd-corner.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/tab/tab-accd-corner.gif')});
 }
 <%-- tree.css.dsp --%>
 tr.z-tree-row td.z-tree-row-focus {
@@ -292,16 +292,16 @@ span.z-vfiletree-tee, span.z-vfiletree-last {
 }
 <%-- window.css.dsp --%>
 .z-window-embedded-tl{
-	background-image: url(${c:encodeURL('~./zul/img/wnd2/wtp-l.gif')})
+	background-image: url(${c:encodeURL('~./zul/img/wnd/wtp-l.gif')})
 }
 .z-window-embedded-tr{
-	background-image: url(${c:encodeURL('~./zul/img/wnd2/wtp-r.gif')})
+	background-image: url(${c:encodeURL('~./zul/img/wnd/wtp-r.gif')})
 }
 .z-window-modal-tl, .z-window-highlighted-tl, .z-window-overlapped-tl {
-	background-image: url(${c:encodeURL('~./zul/img/wnd2/wtp-l-ol.gif')})
+	background-image: url(${c:encodeURL('~./zul/img/wnd/wtp-l-ol.gif')})
 }
 .z-window-modal-tr, .z-window-highlighted-tr, .z-window-overlapped-tr {
-	background-image: url(${c:encodeURL('~./zul/img/wnd2/wtp-r-ol.gif')})
+	background-image: url(${c:encodeURL('~./zul/img/wnd/wtp-r-ol.gif')})
 }
 <%-- grid.css.dsp --%>
 .z-columns-menu-grouping .z-menu-item-img {
