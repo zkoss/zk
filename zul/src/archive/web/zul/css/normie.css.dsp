@@ -164,7 +164,7 @@ span.z-vfiletree-last-open, span.z-vfiletree-last-close, span.z-vfiletree-tee, s
 }
 <%-- listbox.css.dsp --%>
 tr.z-list-item td.z-list-item-focus {
-	background-image: url(${c:encodeURL('~./zul/img/focusd.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/common/focusd.gif')});
 }
 <%-- menu.css.dsp --%>
 .z-menu-cnt-img {
@@ -282,7 +282,7 @@ tr.z-list-item td.z-list-item-focus {
 }
 <%-- tree.css.dsp --%>
 tr.z-tree-row td.z-tree-row-focus {
-	background-image: url(${c:encodeURL('~./zul/img/focusd.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/common/focusd.gif')});
 }
 span.z-vfiletree-ico,span.z-vfiletree-firstspacer {
 	background-image: url(${c:encodeURL('~./zul/img/tree/folder-toggle2.gif')});

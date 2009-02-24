@@ -56,7 +56,7 @@ span.z-tree-ico {
 }
 span.z-tree-root-open, span.z-tree-tee-open, span.z-tree-last-open,
 span.z-tree-root-close, span.z-tree-tee-close, span.z-tree-last-close {
-	background-image: url(${c:encodeURL('~./zul/img/tree/tree_btn.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/common/toggle.gif')});
 }
 span.z-tree-root-open, span.z-tree-tee-open, span.z-tree-last-open {
 	background-position: 0px -18px;
@@ -106,7 +106,7 @@ tr.z-tree-row-over-seld {
 	background: #6eadff;
 }
 tr.z-tree-row td.z-tree-row-focus {
-	background-image: url(${c:encodeURL('~./zul/img/focusd.png')});
+	background-image: url(${c:encodeURL('~./zul/img/common/focusd.png')});
 	background-repeat: no-repeat;
 }
 
@@ -277,7 +277,7 @@ span.z-vfiletree-line, span.z-vfiletree-ico, span.z-vfiletree-firstspacer {
 	display:inline-block;
 }
 span.z-vfiletree-ico,span.z-vfiletree-firstspacer {
-	background-image: url(${c:encodeURL('~./zul/img/tree/folder-toggle.png')});
+	background-image: url(${c:encodeURL('~./zul/img/tree/folder-toggle2.png')});
 }
 span.z-vfiletree-root-open, span.z-vfiletree-root-close,
 span.z-vfiletree-root-open, span.z-vfiletree-tee-open, span.z-vfiletree-last-open {

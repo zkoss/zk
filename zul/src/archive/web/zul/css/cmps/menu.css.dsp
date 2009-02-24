@@ -24,7 +24,7 @@
 	padding : 2px 0px;
 	border-bottom : 1px solid #B1CBD5;
 	background: #CEE7F5 repeat-x;
-	background-image: url(${c:encodeURL('~./zul/img/button/bar-bg.png')});
+	background-image: url(${c:encodeURL('~./zul/img/common/bar-bg.png')});
 }
 
 .z-menubar-hor .z-menu, .z-menubar-hor .z-menu-item,

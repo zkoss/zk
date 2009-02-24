@@ -115,15 +115,15 @@ td.z-group-inner {
 }
 .z-group-img {
 	width: 18px; min-height: 18px; height: 100%;
-	background-image: url(${c:encodeURL('~./zul/img/tree/toggle.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/common/toggle.gif')});
 	background-repeat: no-repeat;
 	vertical-align: top; cursor: pointer; border: 0;
 }
 .z-group-img-open {
-	background-position: 0px 0px;
+	background-position: 0px -18px;
 }
 .z-group-img-close {
-	background-position: 0px -18px;
+	background-position: 0px 0px;
 }
 <%-- Groupfooter --%>
 .z-group-foot {

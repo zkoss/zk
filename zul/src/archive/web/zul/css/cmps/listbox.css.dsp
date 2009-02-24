@@ -99,7 +99,7 @@ tr.z-list-item-over-seld {
 	background: #6eadff;
 }
 tr.z-list-item td.z-list-item-focus {
-	background-image: url(${c:encodeURL('~./zul/img/focusd.png')});
+	background-image: url(${c:encodeURL('~./zul/img/common/focusd.png')});
 	background-repeat: no-repeat;
 }
 <%-- Listgroup --%>
@@ -119,14 +119,14 @@ td.z-list-group-inner div.z-list-cell-cnt {
 .z-list-group-img{
 	width: 18px; min-height: 18px; height: 100%;
 	background: transparent no-repeat scroll 0 0;
-	background-image: url(${c:encodeURL('~./zul/img/tree/toggle.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/common/toggle.gif')});
 	vertical-align: top; cursor: pointer; border: 0;
 }
 .z-list-group-img-open {
-	background-position: 0px 0px;
+	background-position: 0px -18px;
 }
 .z-list-group-img-close {
-	background-position: 0px -18px;
+	background-position: 0px 0px;
 }
 <%-- Listgroupfoot --%>
 .z-list-group-foot{
