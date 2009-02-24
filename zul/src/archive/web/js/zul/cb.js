@@ -488,7 +488,7 @@ zkCmbox._repos = function (uuid, hilite) {
 	zkau.hideCovered();
 	zk.asyncFocus(inpId);
 	if (!pp._shadow)
-		pp._shadow = new zk.Shadow(pp, {left: -4, right: 4, top: 2, bottom: 3, autoShow: true, stackup: zk.ie6Only});
+		pp._shadow = new zk.Shadow(pp, {left: -4, right: 4, top: 2, bottom: 3, autoShow: true, stackup: true});
 	else pp._shadow.sync();
 
 	if (hilite) zkCmbox._hilite(uuid);

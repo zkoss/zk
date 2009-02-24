@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B35-2219660.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Feb 24 19:12:58     2009, Created by jumperchen
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+Please test the popup of menu should cover the PDF file
+<menubar width="250px"><menu label="test">
+<menupopup>
+<menuitem label="test"/>
+<menuitem label="test"/>
+<menuitem label="test"/>
+<menuitem label="test"/>
+<menuitem label="test"/>
+</menupopup>
+</menu>
+</menubar>
+<iframe src="/test2/B1896797.pdf"/>
+</zk>
