@@ -144,41 +144,26 @@
 	background: transparent;
 	border: 1px solid #b1cbd5;
 }
-<%-- Center Left --%>
-.z-panel-cl {
-	background: transparent repeat-y 0 0;
-	background-image: url(${c:encodeURL('~./zul/img/panel/panel-clr.png')});
-	padding-left: 6px;
-	zoom: 1;
-}
-<%-- Center Right --%>
-.z-panel-cr {
-	background: transparent repeat-y right 0;
-	background-image: url(${c:encodeURL('~./zul/img/panel/panel-clr.png')});
-	padding-right: 6px;
-	zoom: 1;
-}
-
-<%-- Footer Left --%>
+<%-- Center Left, Footer Left --%>
+.z-panel-cl,
 .z-panel-fl {
 	background: transparent repeat-y 0 0;
-	background-image: url(${c:encodeURL('~./zul/img/panel/panel-hl.png')});
+	background-image: url(${c:encodeURL('~./zul/img/panel/panel-clr.png')});
 	padding-left: 6px;
 	zoom: 1;
 }
-<%-- Footer Right --%>
+<%-- Center Right, Footer Right --%>
+.z-panel-cr,
 .z-panel-fr {
 	background: transparent repeat-y right 0;
-	background-image: url(${c:encodeURL('~./zul/img/panel/panel-hr.png')});
+	background-image: url(${c:encodeURL('~./zul/img/panel/panel-clr.png')});
 	padding-right: 6px;
 	zoom: 1;
 }
 <%-- Footer Middle --%>
 .z-panel-fm {
-	background: transparent repeat-x 0 0;
-	background-image: url(${c:encodeURL('~./zul/img/panel/panel-hm.png')});
+	background: #e4f0fa;
 	overflow: hidden;
-	zoom: 1;
 }
 <%-- Bottom Left --%>
 .z-panel-bl {
