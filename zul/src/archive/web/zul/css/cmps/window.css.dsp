@@ -275,8 +275,8 @@
 .z-window-highlighted-icon {
 	background: transparent no-repeat 0 0;
 	background-image : url(${c:encodeURL('~./zul/img/wnd/tool-btn-ol.gif')});
-	height: 15px;
-	width: 15px;
+	height: 16px;
+	width: 16px;
 	overflow: hidden;
 	float: right;
 	cursor: pointer;
@@ -286,37 +286,37 @@
 	background-image : url(${c:encodeURL('~./zul/img/wnd/tool-btn-pp.gif')});
 }
 .z-window-embedded-icon {
-	background-image : url(${c:encodeURL('~./zul/img/wnd/tool-btn.gif')});
-}
-.z-window-embedded-close, .z-window-modal-close, .z-window-overlapped-close,
-	.z-window-popup-close, .z-window-highlighted-close {
-	background-position: 0 0;
-}
-.z-window-embedded-close-over, .z-window-modal-close-over, .z-window-overlapped-close-over,
-	.z-window-popup-close-over, .z-window-highlighted-close-over {
-	background-position: -15px 0;
+	background-image : url(${c:encodeURL('~./zul/img/wnd/btn.gif')});
 }
 .z-window-embedded-min, .z-window-modal-min, .z-window-overlapped-min,
 	.z-window-popup-min, .z-window-highlighted-min {
-	background-position: 0 -15px;
+	background-position: 0 0;
 }
 .z-window-embedded-min-over, .z-window-modal-min-over, .z-window-overlapped-min-over,
 	.z-window-popup-min-over, .z-window-highlighted-min-over {
-	background-position: -15px -15px;
+	background-position: -16px 0;
 }
 .z-window-embedded-max, .z-window-modal-max, .z-window-overlapped-max,
 	.z-window-popup-max, .z-window-highlighted-max {
-	background-position: 0 -30px;
+	background-position: 0 -16px;
 }
 .z-window-embedded-max-over, .z-window-modal-max-over, .z-window-overlapped-max-over,
 	.z-window-popup-max-over, .z-window-highlighted-max-over {
-	background-position: -15px -30px;
+	background-position: -16px -16px;
 }
 .z-window-embedded-maxd, .z-window-modal-maxd, .z-window-overlapped-maxd,
 	.z-window-popup-maxd, .z-window-highlighted-maxd {
-	background-position: 0 -45px;
+	background-position: 0 -32px;
 }
 .z-window-embedded-maxd-over, .z-window-modal-maxd-over, .z-window-overlapped-maxd-over,
 	.z-window-popup-maxd-over, .z-window-highlighted-maxd-over {
-	background-position: -15px -45px;
+	background-position: -16px -32px;
+}
+.z-window-embedded-close, .z-window-modal-close, .z-window-overlapped-close,
+	.z-window-popup-close, .z-window-highlighted-close {
+	background-position: 0 -48px;
+}
+.z-window-embedded-close-over, .z-window-modal-close-over, .z-window-overlapped-close-over,
+	.z-window-popup-close-over, .z-window-highlighted-close-over {
+	background-position: -16px -48px;
 }
