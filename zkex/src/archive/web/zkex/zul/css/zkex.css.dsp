@@ -107,7 +107,7 @@
 	font-weight:bold;
 	padding: 5px 3px 4px 5px;
 	border-bottom: 1px solid #a7dcf9;
-	background:transparent repeat-x 0 -1px;
+	background:transparent repeat-x 0 0;
 	background-image: url(${c:encodeURL('~./zkex/zul/img/layout/borderlayout-hm.png')});
 	white-space: nowrap;
 	overflow: hidden;
@@ -158,7 +158,7 @@
 .z-west-colpsd,
 .z-south-colpsd,
 .z-north-colpsd {
-	background-color: #E1F1FB;
+	background-color: #E5FDFF;
 	position: absolute;
 	width: 20px;
 	height: 20px;
@@ -171,7 +171,7 @@
 .z-south-colpsd-over,
 .z-north-colpsd-over {
 	cursor: pointer;
-	background-color: #E8FFFC;
+	background-color: #EEFCFF;
 }
 .z-west-colpsd {
     z-index: 12;
@@ -245,7 +245,7 @@
 	background: transparent no-repeat 4px 3px;
 	background-image: url(${c:encodeURL('~./zul/img/grid/row-expand.png')}); 
 }
-.z-detail.z-detail-expanded .z-detail-img {
+.z-detail.z-detail-expd .z-detail-img {
 	background-position: -12px 3px;
 }
 tr.z-row .z-detail-outer {
