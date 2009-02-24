@@ -39,7 +39,7 @@ import org.zkoss.zk.ui.UiException;
  * of e.g. "name, age, salary" and this comparator will compare in that sequence.</p>
  * 
  * @author henrichen
- * @since 3.5.3
+ * @since 3.6.0
  */
 public class FieldComparator implements Comparator, Serializable {
 	private static final long serialVersionUID = 20090120111922L;

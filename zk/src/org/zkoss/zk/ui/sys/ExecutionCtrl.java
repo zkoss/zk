@@ -42,7 +42,7 @@ public interface ExecutionCtrl {
 	 * <p>Design decision: we put it here because user need not to know
 	 * about the conccept of the current page.
 	 *
-	 * <p>Since 3.5.3, this method returns the first page if
+	 * <p>Since 3.6.0, this method returns the first page if
 	 * {@link #setCurrentPage} was not called (such as Server Push).
 	 *
 	 * @see Desktop#getPage

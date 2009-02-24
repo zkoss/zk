@@ -558,7 +558,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 		_cond = cond;
 	}
 	/** Tests if the condition is set
-	 * @since 3.5.3
+	 * @since 3.6.0
 	 */
 	public boolean withCondition() {
 		return _cond != null;

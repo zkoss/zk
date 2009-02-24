@@ -584,7 +584,7 @@ public class Components {
 	}
 	
 	/** Internal Use only. 
-	 * @since 3.5.3
+	 * @since 3.6.0
 	 */
 	public static Object getImplicit(Component comp, String fdname) {
 		//initialize implicit objects
@@ -627,7 +627,7 @@ public class Components {
 	}
 
 	/** Internal Use only. 
-	 * @since 3.5.3
+	 * @since 3.6.0
 	 */
 	public static Object getImplicit(Page page, String fdname) {
 		//initialize implicit objects

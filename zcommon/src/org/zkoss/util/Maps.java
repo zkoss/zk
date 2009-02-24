@@ -276,7 +276,7 @@ public class Maps {
 
 	 * @param quote the quote character to surround the value.
 	 * Ingored if quote is (char)0.<br/>
-	 * Since 3.5.3: if quote is (char)1, then both ' and " are accepted.</br>
+	 * Since 3.6.0: if quote is (char)1, then both ' and " are accepted.</br>
 	 * For example, a1='b c' will generate a map entry, ("a1", "b c") if
 	 * quote is '\''.<br/>
 	 * Note: the quote is taken off before storing to the map.<br/>

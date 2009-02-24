@@ -83,7 +83,7 @@ public interface Column extends org.zkoss.zul.impl.api.HeaderElement {
 	 * <p>If "none" is specified, both {@link #setSortAscending} and
 	 * {@link #setSortDescending} are called with null.
 	 * Therefore, no more sorting is available to users for this column.
-	 * @since 3.5.3
+	 * @since 3.6.0
 	 */
 	public void setSort(String type);
 

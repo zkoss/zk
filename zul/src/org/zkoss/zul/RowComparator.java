@@ -23,7 +23,7 @@ import java.util.Comparator;
  * or the data themselves, if live data.
  *
  * @author jumperchen
- * @since 3.5.3
+ * @since 3.6.0
  */
 public class RowComparator implements Comparator {
 

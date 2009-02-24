@@ -99,7 +99,7 @@ public class WebManager {
 	/** Creates the Web manager. It is singleton in a Web application
 	 * and it is created automatically by {@link DHtmlLayoutServlet},
 	 * so you rarely need to create it manually.
-	 * @since 3.5.3
+	 * @since 3.6.0
 	 */
 	public WebManager(ServletContext ctx, String updateURI) {
 		if (log.debugable()) log.debug("Starting WebManager at "+ctx);
@@ -387,7 +387,7 @@ public class WebManager {
 	 *
 	 * <p>Note: Use this method to create a page, rather than invoking
 	 * {@link UiFactory#newPage} directly.
-	 * @since 3.5.3
+	 * @since 3.6.0
 	 */
 	public static
 	Page newPage(UiFactory uf, RequestInfo ri, PageDefinition pagedef,
@@ -414,7 +414,7 @@ public class WebManager {
 	 *
 	 * <p>Note: Use this method to create a page, rather than invoking
 	 * {@link UiFactory#newPage} directly.
-	 * @since 3.5.3
+	 * @since 3.6.0
 	 */
 	public static
 	Page newPage(UiFactory uf, RequestInfo ri, Richlet richlet,

@@ -255,7 +255,7 @@ abstract public class GenericInterpreter implements Interpreter {
 	 * null (i.e., ignoring ns).
 	 * @param localOnly whether to look for the current namespace only.
 	 * If false, it looks up the parent namespace, if any.
-	 * @since 3.5.3
+	 * @since 3.6.0
 	 */
 	protected Object getFromNamespace(Namespace ns, String name, boolean localOnly) {
 		if (getCurrent() != null) {

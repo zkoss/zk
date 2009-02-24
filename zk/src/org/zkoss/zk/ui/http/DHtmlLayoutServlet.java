@@ -86,7 +86,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 	private WebManager _webman;
 	private boolean _compress = true;
 
-	/** @deprecated As of release 3.5.3, removed in favor of 
+	/** @deprecated As of release 3.6.0, removed in favor of 
 	 * {@link WebManager#getWebManager}.
 	 */
 	public static DHtmlLayoutServlet getLayoutServlet(WebApp wapp) {

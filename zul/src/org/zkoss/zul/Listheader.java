@@ -143,7 +143,7 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 	}
 
 	/** Sets the type of the sorter.
-	 * You might specify either "auto", "auto(FIELD_NAME1[,FIELD_NAME2] ...)"(since 3.5.3) or "none".
+	 * You might specify either "auto", "auto(FIELD_NAME1[,FIELD_NAME2] ...)"(since 3.6.0) or "none".
 	 *
 	 * <p>If "auto" is specified,
 	 * {@link #setSortAscending} and/or {@link #setSortDescending} 
