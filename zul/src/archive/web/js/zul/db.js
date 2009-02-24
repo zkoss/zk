@@ -445,6 +445,13 @@ zkDtbox.init = function (cmp) {
 	if (pp) // Bug #1912363
 		zk.listen(pp, "click", zkDtbox.closepp);
 };
+zkDtbox.cleanup = function (cmp) {
+	var pp = $e(cmp.id + "!pp");
+	if (pp && pp._shadow) {
+		pp._shadow.cleanup();
+		pp._shadow = null;
+	}
+};
 zkDtbox.validate = function (cmp) {
 	var inp = $e(cmp.id+"!real");
 	if (inp.value) {
@@ -666,13 +673,18 @@ zkDtbox._repos = function (uuid) {
 	var inp = $e(inpId);
 
 	zk.position(pp, inp, "after-start");
+	
+	if (!pp._shadow)
+		pp._shadow = new zk.Shadow(pp, {left: -4, right: 4, top: 2, bottom: 3, autoShow: true, stackup: zk.ie6Only});
+	else pp._shadow.sync();
+	
 	zkau.hideCovered();
 	zk.asyncFocus(inpId);
 };
 //TODO Remove Class
 zkDtbox.close = function (pp, focus) {
 	var uuid = $uuid(pp.id);
-
+	if (pp._shadow) pp._shadow.hide();
 	pp.style.display = "none";
 	zk.unsetVParent(pp);
 

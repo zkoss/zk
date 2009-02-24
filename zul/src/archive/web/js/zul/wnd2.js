@@ -349,7 +349,7 @@ zkWnd2.getShadow = function (cmp) {
  */
 zkWnd2.initShadow = function (cmp) {
 	if (!cmp._shadow && getZKAttr(cmp, "shadow") != 'false')
-		cmp._shadow = new zk.Shadow(cmp, {left: -4, right: 4, top: -2, bottom: 3});
+		cmp._shadow = new zk.Shadow(cmp, {stackup: zk.ie6Only, left: -4, right: 4, top: -2, bottom: 3});
 	return cmp._shadow;
 };
 /**
@@ -574,7 +574,7 @@ zkWnd2.setSizable = function (cmp, sizable) {
 		if (!zkWnd2._szs[id]) {
 			var orgpos = cmp.style.position; //Bug 1679593
 			zkWnd2._szs[id] = new zDraggable(cmp, {
-				starteffect: zkau.closeFloats, overlay: true,
+				starteffect: zkau.closeFloats, stackup: true,
 				endeffect: zkWnd2._endsizing, ghosting: zkWnd2._ghostsizing,
 				revert: true, reverteffect: zk.voidf,
 				ignoredrag: zkWnd2._ignoresizing, draw: zkWnd2._draw
@@ -1088,7 +1088,7 @@ zkWnd2._float = function (cmp) {
 			handle.style.cursor = "move";
 			cmp.style.position = "absolute"; //just in case
 			zul.initMovable(cmp, {
-				handle: handle, starteffect: zkWnd2._startMove, overlay: true,
+				handle: handle, starteffect: zkWnd2._startMove, stackup: true,
 				change: zkau.hideCovered, ghosting: zkWnd2._ghostmove,
 				ignoredrag: zkWnd2._ignoremove,
 				endeffect: zkWnd2._onWndMove});
