@@ -246,23 +246,6 @@ tr.z-list-item td.z-list-item-focus {
 
 
 <%-- tabbox.css.dsp --%>
-.z-tab-close, .z-tab-ver-close {
-	background-image: url(${c:encodeURL('~./zul/img/tab/tab-close.gif')});
-}
-.z-tab-accordion-close,
-.z-tab-accordion-lite-close,
-.z-tab-accordion-disd .z-tab-accordion-close-over,
-.z-tab-accordion-disd-seld .z-tab-accordion-close-over,
-.z-tab-accordion-lite-disd .z-tab-accordion-lite-close-over,
-.z-tab-accordion-lite-disd-seld .z-tab-accordion-lite-close-over {
-	background-image: url(${c:encodeURL('~./zul/img/common/close-off.gif')});
-}
-.z-tab-accordion .z-tab-accordion-close-over {
-	background-image: url(${c:encodeURL('~./zul/img/tab/tab-close-on.gif')});
-}
-.z-tab-accordion-lite .z-tab-accordion-lite-close-over {
-	background-image: url(${c:encodeURL('~./zul/img/tab/lite-close-on.gif')});
-}
 .z-tab-accordion-tl,
 .z-tab-accordion-tr {
 	background-image: url(${c:encodeURL('~./zul/img/tab/accd-corner.gif')});
