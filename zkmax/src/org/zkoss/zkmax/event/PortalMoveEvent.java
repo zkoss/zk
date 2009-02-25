@@ -91,10 +91,11 @@ public class PortalMoveEvent extends Event {
 	public final Panel getDragged() {
 		return _dragged;
 	}
-	/** Returns the dropped index.
-	 * @since 5.0.0
+	/**
+	 * Returns the dropped index.
+	 * @since 3.6.0
 	 */
-	public final int getDroppedIndex() {
+	public int getDroppedIndex() {
 		return _droppedIndex;
 	}
 }
