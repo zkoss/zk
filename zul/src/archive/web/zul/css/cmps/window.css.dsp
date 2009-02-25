@@ -282,11 +282,11 @@
 	cursor: pointer;
 	margin-left: 2px;
 }
-.z-window-popup-icon {
-	background-image : url(${c:encodeURL('~./zul/img/wnd/ebd-btn.gif')});
+.z-window-overlapped-icon {
+	background-image : url(${c:encodeURL('~./zul/img/wnd/ol-btn.gif')});
 }
-.z-window-embedded-icon {
-	background-image : url(${c:encodeURL('~./zul/img/wnd/ebd-btn.gif')});
+.z-window-popup-icon {
+	background-image : url(${c:encodeURL('~./zul/img/wnd/pop-btn.gif')});
 }
 .z-window-embedded-min, .z-window-modal-min, .z-window-overlapped-min,
 	.z-window-popup-min, .z-window-highlighted-min {
