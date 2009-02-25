@@ -40,35 +40,48 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 						<textbox id="codeView" class="code" rows="20" width="95%">
 			<attribute name="value"><![CDATA[
 <zk>
-	<style>
-		.vista.z-toolbar,.vista.z-toolbar a,.vista.z-toolbar
-			a:visited,.vista.z-toolbar a:hover {
-			background:none;
-			border:none;
-		}
-	</style>
-	<panel id="panel" title="ZK Desktop" height="350px" width="400px"
-		border="normal">
-		<panelchildren>
-			<image src="/img/castle.png" height="330px" width="398px"/>
-		</panelchildren>
-		<toolbar id="tb" sclass="vista" height="20px"
-			style="background:#000000 url(${c:encodeURL('/img/bar.png')}) repeat-x 0 0;padding-top:7px"
-			align="end">
-			<toolbarbutton image="/img/live.gif"
-				onClick='alert("Live")' />
-			<toolbarbutton image="/img/defender.gif"
-				onClick='alert("Defender")' />
-			<toolbarbutton image="/img/battery.gif"
-				onClick='alert("Battery")' />
-			<toolbarbutton image="/img/network.gif"
-				onClick='alert("Network")' />
-			<toolbarbutton image="/img/volumn.gif"
-				onClick='alert("Volumn")' />
-			<toolbarbutton style="color:white;" label="12:55 PM"
-				onClick='alert("time")' />
-		</toolbar>
-	</panel>
+<style>
+	.z-toolbar a, .z-toolbar a:visited, .z-toolbar a:hover{
+		background-color:transparent;
+    	border:0 none;
+	}
+	.vista.z-toolbar,.vista.z-toolbar a,.vista.z-toolbar
+		a:visited,.vista.z-toolbar a:hover {
+                    border:0 none;
+                    background:#000000 url(/zk1/img/bar.png) repeat-x 0 0;
+                    color:white;
+                    padding-top:7px;
+	}
+</style>
+      Toolbar style: 
+      <separator/>
+		<radiogroup onCheck='tb.sclass = self.selectedItem.label;'>
+
+				<radio label="default" />
+				<radio label="vista" checked="true" />
+		</radiogroup>
+
+    <separator/>
+<panel id="panel" title="ZK Desktop" height="350px" width="400px"
+	border="normal">
+	<panelchildren>
+		<image src="/img/castle.png" height="330px" width="398px"/>
+	</panelchildren>
+	<toolbar id="tb" sclass="vista" height="20px" align="end">
+		<toolbarbutton image="/img/live.gif"
+			onClick='alert("Live")' />
+		<toolbarbutton image="/img/defender.gif"
+			onClick='alert("Defender")' />
+		<toolbarbutton image="/img/battery.gif"
+			onClick='alert("Battery")' />
+		<toolbarbutton image="/img/network.gif"
+			onClick='alert("Network")' />
+		<toolbarbutton image="/img/volumn.gif"
+			onClick='alert("Volumn")' />
+		<toolbarbutton  label="12:55 PM"
+			onClick='alert("time")' />
+	</toolbar>
+</panel>
 </zk>
 			]]></attribute>
 						</textbox>
