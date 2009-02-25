@@ -15,9 +15,6 @@ Copyright (c) 2005, 2006 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-/** The low level animation effect.
- * You don't use this class. Rather, use {@link zAnima} instead.
- */
 zEffect = {
 	fade: function(element, opts) {
 		element = zDom.$(element);
@@ -691,50 +688,36 @@ zEffect._defOpts = {
 };
 
 zk.eff.Shadow = zk.$extends(zk.Object, {
-	POST_HTML:
+	_HTML: zk.ie6Only ? '" class="z-shadow"></div>':
 		'" class="z-shadow"><div class="z-shadow-tl"><div class="z-shadow-tr"></div></div>'
 		+'<div class="z-shadow-cl"><div class="z-shadow-cr"><div class="z-shadow-cm">&#160;</div></div></div>'
 		+'<div class="z-shadow-bl"><div class="z-shadow-br"></div></div></div>',
 
-	/**
-	 * Constructor of the Shadow object.
-	 * 
-	 * @param element the element to associate the shadow.
-	 * @param opts The options
-	 * <p>Alowed options:
-	 * <ul>
-	 * <li>left: The margin at left. Default: 4.</li>
-	 * <li>right: The margin at right. Default: 4.</li>
-	 * <li>top: the margin at top. Default: 3.</li>
-	 * <li>bottom: the margin at bottom. Default: 3.</li>
-	 * <li>stackup: whether to create a stackup (see {@link zDom#makeStackup})</li>
-	 * </ul>
-	 */
 	$init: function (element, opts) {
 		opts = this.opts = zk.$default(opts, {
 			left: 4, right: 4, top: 3, bottom: 3
 		});
+		if (zk.ie6Only) {
+			opts.left -= 1;
+			opts.right -= 8;
+			opts.top -= 2;
+			opts.bottom -= 6;
+		}
 
 		this.node = element;
 		var sdwid = element.id + "$sdw";
-		zDom.insertHTMLBefore(element, '<div id="'+sdwid+this.POST_HTML);
+		zDom.insertHTMLBefore(element, '<div id="'+sdwid+this._HTML);
 		this.shadow = zDom.$(sdwid);
 	},
-	/** Removes the shadow. */
 	destroy: function () {
 		zDom.remove(this.shadow);
 		zDom.remove(this.stackup);
 		this.node = this.shadow = this.stackup = null;
 	},
-	/** Hides the shadow, no matter the element is visible or not.
-	 */
 	hide: function(){
 		this.shadow.style.display = 'none';
 		if (this.stackup) this.stackup.style.display = 'none';
 	},
-	/**
-	 * Synchronizes the states of the element with shadow.
-	 */
 	sync: function () {
 		var node = this.node, shadow = this.shadow;
 		if (!node || !zDom.isVisible(node, true)) {
@@ -761,8 +744,11 @@ zk.eff.Shadow = zk.$extends(zk.Object, {
 		st.top = (t + opts.top) + "px";
 		st.width = wd + "px";
 		st.display = "block";
-		var cns = shadow.childNodes;
-		cns[1].style.height = (hgh - cns[0].offsetHeight - cns[2].offsetHeight) + "px";
+		if (zk.ie6Only) st.height = hgh + "px";
+		else {
+			var cns = shadow.childNodes;
+			cns[1].style.height = (hgh - cns[0].offsetHeight - cns[2].offsetHeight) + "px";
+		}
 
 		var stackup = this.stackup;
 		if(opts.stackup && node) {
@@ -780,39 +766,12 @@ zk.eff.Shadow = zk.$extends(zk.Object, {
 		}
 		return true;
 	},
-	/** Returns the lowest level of element.
-	 */
 	getBottomElement: function () {
 		return this.stackup || this.shadow;
 	}
 });
 
-if (zk.ie) {
-	zk.eff.Shadow.prototype.POST_HTML = '" class="z-shadow-ie"></div>';
-} else {
-	var html = '" class="z-shadow">';
-	for (var ys = ['b', 'c', 't'], j = ys.length; --j >= 0;) {
-		html += '<div class="z-shadow-' + ys[j] + '">';
-		for (var xs = ['r', 'm', 'l'], k = xs.length; --k >= 0;)
-			html += '<div class="z-shadow-' + ys[j] + xs[k] + '"></div>';
-		html += '</div>';
-	}
-	zk.eff.Shadow.prototype.POST_HTML = html + '</div>';
-}
-
-/** A mask covers the browser window fully. */
 zk.eff.FullMask = zk.$extends(zk.Object, {
-	/**
-	 * @param opts The options
-	 * <p>Alowed options:
-	 * <ul>
-	 * <li>mask: the mask element if the mask was created. Default: create a new one.</li>
-	 * <li>anchor: whether to insert the mask before</li>
-	 * <li>id: the mask ID. Default: z_mask</li>
-	 * <li>zIndex: z-index to assign. Default: defined in z-modal-mask</li>
-	 * <li>visible: whether it is visible.</li>
-	 * </ul>
-	 */
 	$init: function (opts) {
 		opts = opts || {};
 		var mask = this.mask = opts.mask;
@@ -859,13 +818,10 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 		zDom.remove(this.stackup);
 		this.mask = this.stackup = null;
 	},
-	/** Hides the mask. */
 	hide: function () {
 		this.mask.style.display = 'none';
 		if (this.stackup) this.stackup.style.display = 'none';
 	},
-	/** Synchronize with the specified element with the same visibility
-	 * and z-index. */
 	sync: function (el) {
 		if (!zDom.isVisible(el, true)) {
 			this.hide();
@@ -910,7 +866,6 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 	}
 });
 
-/** The indicator mask over the specified element. */
 zk.eff.Mask = zk.$extends(zk.Object, {
 	$init: function(opts) {
 		opts = opts || {};

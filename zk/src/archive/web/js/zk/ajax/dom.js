@@ -20,9 +20,9 @@ zDom = { //static methods
 			id ? document.getElementById(id + (alias ? '$' + alias : '')): null: id;
 			//strange but getElementById("") fails in IE7
 	},
-	$$: function (id, alias) {
+	$$: function (id, subId) {
 		return typeof id == 'string' ?
-			id ? document.getElementsByName(id + (alias ? '$' + alias : '')): null: id;
+			id ? document.getElementsByName(id + (subId ? '$' + subId : '')): null: id;
 	},
 	tag: function (n) {
 		return n && n.tagName ? n.tagName.toUpperCase(): "";
@@ -40,16 +40,9 @@ zDom = { //static methods
 	} : function (n) {
 		n.style.visibility = "inherit";
 	},
-	/** Returns whether a DOM element is visible.
-	 * Returns false if not exist.
-	 * Returns true if no style.
-	 * @param strict whether the visibility property must not be hidden, too
-	 */
 	isVisible: function (n, strict) {
 		return n && (!n.style || (n.style.display != "none" && (!strict || n.style.visibility != "hidden")));
 	},
-	/** Returns if a DOM element is real visible (i.e., all ancestors are visible).
-	 */
 	isRealVisible: function (n, strict) {
 		for (; n; n = zDom.parentNode(n))
 			if (!zDom.isVisible(n, strict))
@@ -64,25 +57,21 @@ zDom = { //static methods
 		return false;
 	},
 
-	/** Returns the x coordination of the visible part. */
 	innerX: function () {
 		return window.pageXOffset
 			|| document.documentElement.scrollLeft
 			|| document.body.scrollLeft || 0;
 	},
-	/** Returns the y coordination of the visible part. */
 	innerY: function () {
 		return window.pageYOffset
 			|| document.documentElement.scrollTop
 			|| document.body.scrollTop || 0;
 	},
-	/** Returns the width of the visible part. */
 	innerWidth: function () {
 		return typeof window.innerWidth == "number" ? window.innerWidth:
 			document.compatMode == "CSS1Compat" ?
 				document.documentElement.clientWidth: document.body.clientWidth;
 	},
-	/** Returns the height of the visible part. */
 	innerHeight: function () {
 		return typeof window.innerHeight == "number" ? window.innerHeight:
 			document.compatMode == "CSS1Compat" ?
@@ -1446,8 +1435,6 @@ zk.copy(zDom,
   });
 
 zk.Color = zk.$extends(zk.Object, {
-	/** A 3-element array, [r, g, b]. */
-	//rgb: null;
 	$init: function (color) {
 		var rgb = this.rgb = [0, 0, 0];
 		if(color.slice(0,4) == 'rgb(') {  
@@ -1466,7 +1453,6 @@ zk.Color = zk.$extends(zk.Object, {
 			}  
 		}
 	},
-	/** Converts the color to #xxxxxx. */
 	toString: function () {
 		var s = '#';
 		for (var j = 0; j < 3;) {
