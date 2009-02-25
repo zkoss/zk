@@ -70,7 +70,7 @@
 .z-menu-body .z-menu-inner-m div {
 	display:block;
 	min-height:16px;
-	padding-right:2px;
+	padding-right: 3px;
 	padding-left:0px;
 	background: transparent no-repeat right -14px;
 	background-image:url(${c:encodeURL('~./zul/img/menu/btn-arrow.gif')});
