@@ -187,6 +187,8 @@ zk.Slider.prototype = {
 zkSld = {
 	down_btn : null,
 	init: function (cmp) {
+		if(!cmp)
+			alert("cannot found cmp");
 		var meta = zkau.getMeta(cmp),
 			vert = getZKAttr(cmp, "vert");
 
@@ -199,7 +201,10 @@ zkSld = {
 		if (vert) {
 			//7 = corner width
 			var het = cmp.clientHeight+7;
-			inner.style.height = het + "px";
+			if(cmp.clientHeight>0)
+				inner.style.height = het + "px";
+			else
+				inner.style.height = "214px";
 		}
 		zk.listen(btn, "mouseover", zkSld.onover);
 		zk.listen(btn, "mouseout", zkSld.onout);

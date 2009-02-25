@@ -77,7 +77,7 @@
 	background-repeat : no-repeat;
 	background-position : 0 0;
 }
-.z-slider-sphere-ver-btn,
+.z-slider-sphere-ver-btn
  {
  	height: 14px; 
  	left: 3px;
