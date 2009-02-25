@@ -31,15 +31,10 @@
 	overflow: hidden;
 	background-color: white;
 }
-.z-west-nested,
 .z-west-noborder,
 .z-center-noborder,
-.z-center-nested,
 .z-east-noborder,
-.z-east-nested,
 .z-north-noborder,
-.z-north-nested,
-.z-south-nested,
 .z-south-noborder {
 	border:0;
 }
