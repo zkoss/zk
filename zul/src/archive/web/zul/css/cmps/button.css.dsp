@@ -11,7 +11,7 @@ button.z-button {
 	font-size: 1px !important; width: 3px !important;
 	height: ${c:isGecko() ? 0: 1}px !important;
 }
-i.z-button {
+.z-button .z-button-cr * {
 	display: block; width: 1px !important; overflow: hidden;
 	font-size: 1px !important; line-height: 1px !important;
 }
@@ -33,7 +33,7 @@ span.z-button {
 }
 </c:if>
 
-.z-button i.z-button {
+.z-button .z-button-cr * {
 	width: 3px !important;
 }
 .z-button-disd {

@@ -102,8 +102,7 @@ public class Button2Default implements ComponentRenderer {
 		}		
 
 		wh.write("</td>\n<td class=\"").write(zcls)
-			.write("-cr\"><i class=\"")
-			.write(zcls).write("\"></i></td></tr>\n<tr><td class=\"")
+			.write("-cr\"><div></div></td></tr>\n<tr><td class=\"")
 			.write(zcls).write("-bl\"></td><td class=\"").write(zcls)
 			.write("-bm\"></td><td class=\"")
 			.write(zcls).write("-br\"></td></tr>\n</table></span>");
