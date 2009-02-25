@@ -189,7 +189,7 @@ zk.TEXT_STYLES = [
 
 zk.Shadow = zClass.create();
 zk.Shadow.prototype = {
-	POST_HTML:
+	_HTML: zk.ie6Only ? '" class="z-shadow"></div>':
 		'" class="z-shadow"><div class="z-shadow-tl"><div class="z-shadow-tr"></div></div>'
 		+'<div class="z-shadow-cl"><div class="z-shadow-cr"><div class="z-shadow-cm">&#160;</div></div></div>'
 		+'<div class="z-shadow-bl"><div class="z-shadow-br"></div></div></div>',
@@ -213,9 +213,15 @@ zk.Shadow.prototype = {
 		opts = this.opts = zk.$default(opts, {
 			left: 4, right: 4, top: 3, bottom: 3
 		});
+		if (zk.ie6Only) {
+			opts.left -= 1;
+			opts.right -= 8;
+			opts.top -= 2;
+			opts.bottom -= 6;
+		}
 
 		var sdwid = node.id + "!shadow";
-		node.parentNode.insertAdjacentHTML("afterBegin", '<div id="'+sdwid+this.POST_HTML);
+		node.parentNode.insertAdjacentHTML("afterBegin", '<div id="'+sdwid+this._HTML);
 		this.node = node;
 		this.shadow = $e(sdwid);
 
@@ -251,8 +257,11 @@ zk.Shadow.prototype = {
 		st.top = (t + opts.top) + "px";
 		st.width = wd + "px";
 		st.display = "block";
-		var cns = shadow.childNodes;
-		cns[1].style.height = (hgh - cns[0].offsetHeight - cns[2].offsetHeight) + "px";
+		if (zk.ie6Only) st.height = hgh + "px";
+		else {
+			var cns = shadow.childNodes;
+			cns[1].style.height = (hgh - cns[0].offsetHeight - cns[2].offsetHeight) + "px";
+		}
 
 		var stackup = this.stackup;
 		if(opts.stackup && node) {

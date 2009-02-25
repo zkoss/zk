@@ -36,8 +36,13 @@ option {
 	filter: alpha(opacity=60);
 }
 
-<%-- tree.css.dsp, listbox.css.dsp, and grid.css.dsp --%>
+<%-- shadow, tree.css.dsp, listbox.css.dsp, and grid.css.dsp --%>
 <c:if test="${c:browser('ie6-')}">
+.z-shadow {
+	background: #888; zoom: 1; display: none;
+	filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=4, MakeShadow=true, ShadowOpacity=0.30)
+}
+
 div.z-listbox, div.z-tree, div.z-dottree, div.z-filetree, div.z-vfiletree, div.z-grid {
 	position:relative; <%-- Bug 1914215 and Bug 1914054 --%>
 }
