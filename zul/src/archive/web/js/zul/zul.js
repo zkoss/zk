@@ -386,7 +386,7 @@ zulHdr.onmove = function (evt, cmp) {
 	var ofs = zk.revisedOffset(cmp); // Bug #1812154
 	if (zulHdr._insizer(cmp, Event.pointerX(evt) - ofs[0])) {
 		zk.backupStyle(cmp, "cursor");
-		cmp.style.cursor = v == 1 ? "e-resize": "w-resize";
+		cmp.style.cursor = "e-resize";
 	} else {
 		zk.restoreStyle(cmp, "cursor");
 	}

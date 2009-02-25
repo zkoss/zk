@@ -324,7 +324,8 @@ zkMenu2 = { // menu
 		zkau.hideCovered();
 		var anc = $e(pp.id + "!a");
 		if (anc) {
-			if (zk.ie)
+			var menu = $e(getZKAttr(pp, "menuId"));
+			if (zk.ie && zkMenu2.isTop(menu))
 				setTimeout(function (){anc.focus();},10); // Bug 2614901
 			else
 				anc.focus();
