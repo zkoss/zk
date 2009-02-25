@@ -40,8 +40,7 @@ function (out) {
 	out.push('<tr><td class="', zcls, '-cl">');
 	if (zk.ie) out.push(btn);
 	out.push('</td><td class="', zcls, '-cm">', this.domContent_(),
-			'</td><td class="', zcls, '-cr"><i class="', zcls,
-			'"></i></td></tr>',
+			'</td><td class="', zcls, '-cr"><div></div></td></tr>',
 			'<tr><td class="', zcls, '-bl"></td>',
 			'<td class="', zcls, '-bm"></td>',
 			'<td class="', zcls, '-br"></td></tr></table></span>');
