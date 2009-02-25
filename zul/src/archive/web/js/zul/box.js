@@ -139,7 +139,7 @@ zkSplt.init = function (cmp) {
 zkSplt._ghostsizing = function (dg, ghosting, pointer) {
 	if (ghosting) {
 		var pointer = zkau.beginGhostToDIV(dg);
-		var html = '<div id="zk_ddghost" style="background:#AAA;position:absolute;top:'
+		var html = '<div id="zk_ddghost" style="background:#AAA;position:absolute;font-size:0;line-height:0;top:'
 			+pointer[1]+'px;left:'+pointer[0]+'px;width:'
 			+zk.offsetWidth(dg.element)+'px;height:'+zk.offsetHeight(dg.element)
 			+'px;"></div>';
