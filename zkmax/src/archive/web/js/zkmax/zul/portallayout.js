@@ -141,6 +141,10 @@ zkPortalLayout = {
 			change = zk.nextSibling(dg.element, "DIV") != proxy;
 		if (change) {
 			proxy.parentNode.insertBefore(dg.element, proxy);
+			var panels = zk.childNodes(proxy.parentNode, zkPortalLayout._isVisibleChild);
+			panels.forEach(function (n) {
+				if (getZKAttr(n, "maximized") == "true") zkPanel.maximize(n);
+			});
 			zkau.sendasap({
 				uuid: $uuid($parentByType(fromCol, "PortalLayout")),
 				cmd: "onPortalMove", data: [fromCol.id, toCol.id, dg.element.id, zkPortalLayout.indexOf(proxy)]});

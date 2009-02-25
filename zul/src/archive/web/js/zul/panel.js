@@ -248,7 +248,7 @@ zkPanel = {
 			if (getZKAttr(cmp, "maximizable") != "true")
 				return;
 
-			zkPanel.maximize(cmp, getZKAttr(cmp, "maximized") != "true", false, true);
+			zkPanel.maximize(cmp, getZKAttr(cmp, "maximized") != "true", false);
 		}
 	},
 	maximize: function (cmp, maximized, silent) {
