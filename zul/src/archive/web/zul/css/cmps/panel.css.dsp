@@ -205,7 +205,7 @@
 .z-panel-icon {
 	overflow: hidden; width: 15px; height: 15px; float: right; cursor: pointer;
 	background-color : transparent;
-	background-image : url(${c:encodeURL('~./zul/img/wnd/tool-btn.gif')});
+	background-image : url(${c:encodeURL('~./zul/img/wnd/btn.gif')});
 	background-position : 0 0;
 	background-repeat : no-repeat;
 	margin-left: 2px;
