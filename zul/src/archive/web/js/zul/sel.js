@@ -574,7 +574,7 @@ zk.Selectable.prototype = {
 					break;
 			} else if (rowfound) {
 				this._changeSelect(r, true);
-				if (this._isFocus(r))
+				if (this._isFocus(r) || r == this._lastSelected)
 					break;
 			} else {
 				rowfound = r == row;
@@ -1027,7 +1027,7 @@ zk.Selectable.prototype = {
 	},
 	/** Whether an item has focus. */
 	_isFocus: function (row) {
-		return this._focusItem == row || $e(row.id + "!cm");
+		return this._focusItem == row;
 	},
 	/** Whether the component is multiple.
 	 */
