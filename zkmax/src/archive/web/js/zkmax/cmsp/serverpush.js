@@ -101,7 +101,7 @@ zk.copy(zkmax.cmsp, {
 	}
 });
 
-zkmax.cmsp._auIgnoreESC = zAu.ignoreESC;
-zAu.ignoreESC = function () {
-	return zkmax.cmsp._auIgnoreESC() || zkmax.cmsp._nStart;
+zkmax.cmsp._auSIE = zAu.shallIgnoreESC;
+zAu.shallIgnoreESC = function () {
+	return zkmax.cmsp._auSIE() || zkmax.cmsp._nStart;
 };

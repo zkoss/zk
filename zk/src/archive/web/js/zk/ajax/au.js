@@ -220,7 +220,7 @@ zAu = {
 
 		zAu.showError("ILLEGAL_RESPONSE", "Unknown command: ", cmd);
 	},
-	ignoreESC: function () {
+	shallIgnoreESC: function () {
 		return zAu._areq;
 	},
 
