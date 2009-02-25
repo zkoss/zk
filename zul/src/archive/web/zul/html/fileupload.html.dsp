@@ -54,7 +54,7 @@ function init() {
 
 	var el = document.getElementById("form");
 	el.action = parent.zk.getUpdateURI(
-		"/upload?dtid=${c:eatQuot(param.dtid)}&uuid=" + _zuuid);
+		"/upload?dtid=${c:eatQuot(param.dtid)}&maxsize=${param.maxsize}&uuid=" + _zuuid);
 	if (parent.zk.ie) {
 		var cave = parent.$e(_zuuid + "!cave");
 		if (cave)

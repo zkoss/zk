@@ -2278,8 +2278,7 @@ zkau.updateUploadInfo = function (p, cb) {
 		var img = $e("zk_upload!img");
 		if (!img) {
 			var html = '<div id="zk_upload" style="position:absolute;border:1px solid #77a;padding:9px;background-color:#fec;z-index:79000">'
-				+'<div style="width:202px;border:1px inset"><img id="zk_upload!img" src="'+zk.getUpdateURI('/web/zk/img/prgmeter.gif')
-				+'"/></div><br/>'+mesg.FILE_SIZE+Math.round(cb/1024)+mesg.KBYTES
+				+'<div style="width:202px;border:1px inset"><div id="zk_upload!img" class="z-upload-icon"></div></div><br/>'+mesg.FILE_SIZE+Math.round(cb/1024)+mesg.KBYTES
 				+'<br/><input type="button" value="'+mesg.CANCEL+'" onclick="zkau._cancelUpload()"</div>';
 			document.body.insertAdjacentHTML("afterBegin", html);
 			zk.center($e("zk_upload"));

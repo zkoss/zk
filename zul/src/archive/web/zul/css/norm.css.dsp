@@ -104,6 +104,10 @@ div.z-debugbox {
 	font-family: ${fontFamilyC};
 	font-size: ${fontSizeM}; font-weight: normal;
 }
+.z-upload-icon {
+	overflow: hidden;
+	background-image: url(${c:encodeURL('~./zk/img/prgmeter.png')});
+}
 .z-modal-mask {
 	width: 100%;
 	height: 100%;

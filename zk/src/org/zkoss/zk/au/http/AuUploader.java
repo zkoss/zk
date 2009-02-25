@@ -281,9 +281,7 @@ public class AuUploader implements AuProcessor {
 		final Configuration conf = desktop.getWebApp().getConfiguration();
 		int maxsz = conf.getMaxUploadSize();
 		try {
-			final int maxsz1 = Integer.parseInt(request.getParameter("maxsize"));
-			if (maxsz1 > -1)
-				maxsz = maxsz1;
+			maxsz = Integer.parseInt(request.getParameter("maxsize"));
 		} catch (NumberFormatException e) {}
 		
 		sfu.setSizeMax(maxsz >= 0 ? 1024L*maxsz: -1);
