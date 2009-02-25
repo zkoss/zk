@@ -16,7 +16,7 @@
 	height: 16px;
 	float: right;
 	background: transparent no-repeat 0 0;
-	background-image : url(${c:encodeURL('~./zkex/zul/img/layout/borderlayout-btn.png')});
+	background-image : url(${c:encodeURL('~./zkex/zul/img/layout/borderlayout-btn.gif')});
 	margin-left: 2px;
 	cursor: pointer;
 }

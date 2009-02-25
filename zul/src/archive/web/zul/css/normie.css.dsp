@@ -169,6 +169,13 @@ span.z-vfiletree-last-open, span.z-vfiletree-last-close, span.z-vfiletree-tee, s
 tr.z-list-item td.z-list-item-focus {
 	background-image: url(${c:encodeURL('~./zul/img/common/focusd.gif')});
 }
+<%-- paging.css.dsp --%>
+.z-paging-btn .z-paging-next,
+.z-paging-btn .z-paging-prev,
+.z-paging-btn .z-paging-last,
+.z-paging-btn .z-paging-first {	
+	background-image:url(${c:encodeURL('~./zul/img/paging/pg-btn.gif')}) !important;
+}
 <%-- panel.css.dsp --%>
 .z-panel-tl{
 	background-image:url(${c:encodeURL('~./zul/img/wnd/panel-corners.gif')});
@@ -249,6 +256,14 @@ tr.z-list-item td.z-list-item-focus {
 
 
 <%-- tabbox.css.dsp --%>
+.z-tab-hl,
+.z-tab-hr {
+	background-image: url(${c:encodeURL('~./zul/img/tab/tab-corner.gif')});
+}
+.z-tab-ver-hl,
+.z-tab-ver-hl .z-tab-ver-hr {
+	background-image: url(${c:encodeURL('~./zul/img/tab/tab-v-corner.gif')});
+}
 .z-tab-accordion-tl,
 .z-tab-accordion-tr {
 	background-image: url(${c:encodeURL('~./zul/img/tab/accd-corner.gif')});

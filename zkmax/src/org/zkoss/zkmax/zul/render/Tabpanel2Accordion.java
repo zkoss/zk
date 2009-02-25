@@ -87,14 +87,13 @@ public class Tabpanel2Accordion implements ComponentRenderer {
 			if (tab.isClosable()) {
 				wh.write("<a id=\"").write(tabuuid).write("!close\" class=\"").write(tabzcs).write("close\"></a>");
 			}
-			wh.writeln("<a href=\"javascript:;\" id=\"").write(tabuuid).write("!a\" class=\"").write(tabzcs).write("tl\">");
-			wh.writeln("<em class=\"").write(tabzcs).write("tr\">");
+			wh.writeln("<div href=\"javascript:;\" id=\"").write(tabuuid).write("!tl\" class=\"").write(tabzcs).write("tl\">");
+			wh.writeln("<div class=\"").write(tabzcs).write("tr\">");
 			wh.writeln("<span class=\"").write(tabzcs).write("tm\">");
 			wh.writeln("<span class=\"").write(tabzcs).write("text\">");
 			wh.write(tab.getImgTag());
 			new Out(tab.getLabel()).render(out);
-			wh.writeln("</span>").writeln("</span>").writeln("</em>").writeln("</a>")
-			.writeln("</div>").writeln("</div>");
+			wh.writeln("</span></span></div></div></div></div>");
 			wh.write("<div id=\""+uuid+"!real\"")
 				.writeln(self.getOuterAttrs()).write(self.getInnerAttrs()+">");
 			wh.writeln("<div id=\""+uuid+"!cave\">");

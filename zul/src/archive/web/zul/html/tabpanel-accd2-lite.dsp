@@ -27,13 +27,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<c:if test="${tab.closable}">
 				<a id="${tab.uuid}!close"  class="${tabzcs}close"></a>
 			</c:if>
-			<a href="javascript:;" id="${tab.uuid}!a" class="${tabzcs}tl">
-				<em class="${tabzcs}tr">
+			<div href="javascript:;" id="${tab.uuid}!tl" class="${tabzcs}tl">
+				<div class="${tabzcs}tr">
 					<span class="${tabzcs}tm">
 						<span class="${tabzcs}text">${tab.imgTag}<c:out value="${tab.label}"/></span>
 					</span>
-				</em>
-			</a>
+				</div>
+			</div>
 		</div>
 	</div>
 	<div id="${self.uuid}!real"${self.outerAttrs}${self.innerAttrs}>
