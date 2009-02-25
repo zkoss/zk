@@ -26,6 +26,11 @@ option {
 	width: 47pt;
 	text-overflow: ellipsis;
 }
+<%-- norm.css.dsp --%>
+.span.z-drop-allow,
+.span.z-drop-disallow {
+	background-image: url(${c:encodeURL('~./zul/img/misc/drag.gif')});
+}
 <%-- Widget.css.dsp --%>
 .z-textbox-disd *, .z-decimalbox-disd *, .z-intbox-disd *, .z-longbox-disd *, .z-doublebox-disd * {
 	filter: alpha(opacity=60);
@@ -143,11 +148,9 @@ span.z-vfiletree-last-open, span.z-vfiletree-last-close, span.z-vfiletree-tee, s
 .z-msgbox-error {
 	background-image: url(${c:encodeURL('~./zul/img/msgbox/StopSign-32x32.gif')});
 }
-.z-fileupload-add {
-	background-image: url(${c:encodeURL('~./zul/img/misc/add.gif')});
-}
+.z-fileupload-add,
 .z-fileupload-delete {
-	background-image: url(${c:encodeURL('~./zul/img/misc/delete.gif')});
+	ackground-image: url(${c:encodeURL('~./zul/img/misc/drag.gif')});
 }
 <%-- box.css.dsp --%>
 .z-splitter-ver-btn-l, .z-splitter-hor-btn-l {

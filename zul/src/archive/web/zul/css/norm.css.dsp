@@ -314,11 +314,13 @@ div.z-drop-cnt {
 	padding-top: 4px;
 }
 .z-fileupload-add {
+	cursor: pointer;
 	background-image: url(${c:encodeURL('~./zul/img/misc/drag.png')});
 	width: 16px;
 	height: 16px;
 }
 .z-fileupload-delete {
+	cursor: pointer;
 	background: transparent no-repeat 0 -32px;
 	background-image: url(${c:encodeURL('~./zul/img/misc/drag.png')});
 	width: 16px;

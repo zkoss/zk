@@ -253,27 +253,27 @@
 }
 .z-tab-disd .z-tab-hl,
 .z-tab-disd-seld .z-tab-hl {
-	color: gray;
-	cursor: default;
-	opacity: .6;
-	filter: alpha(opacity=60);
-}
-.z-tab-disd .z-tab-hl,
-.z-tab-disd-seld .z-tab-hl {
-	background-position: 0 -64px;
+	background-position: 0 -128px;
 }
 .z-tab-disd .z-tab-hr,
 .z-tab-disd-seld .z-tab-hr {
-	background-position: right -64px;
+	background-position: right -128px;
 }
 .z-tab-disd .z-tab-hm ,
 .z-tab-disd-seld .z-tab-hm {
-	background-position: right -64px;
+	background-position: right -128px;
 	cursor: default;
 }
 .z-tab-disd .z-tab-close:hover ,
 .z-tab-disd-seld .z-tab-close:hover {
 	background-position: 0 0;
+}
+.z-tab-disd .z-tab-hl,
+.z-tab-disd-seld .z-tab-hl {
+	color: gray;
+	cursor: default;
+	opacity: .4;
+	filter: alpha(opacity=40);
 }
 .z-tab-disd .z-tab-text,
 .z-tab-disd-seld .z-tab-text {
@@ -654,8 +654,8 @@
 	filter: alpha(opacity=80);
 }
 <%-- Disabled --%>
-.z-tab-accordion-disd a,
-.z-tab-accordion-disd-seld a {
+.z-tab-accordion-disd .z-tab-accordion-header,
+.z-tab-accordion-disd-seld .z-tab-accordion-header {
 	color: gray;
 	cursor: default;
 	opacity: .6;
