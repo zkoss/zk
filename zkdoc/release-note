@@ -73,6 +73,7 @@ ZK 3.6.0
   2630168: DataBinder.fetchValue throws unnecessary exception for map
   2614901: Menu with key down/up fail in IE
   2219660: Menus don't work over HTML component if PDF inside
+  2635417: Slider scale mold no effect when mouse hover on the icon
 
 * Upgrade Notes
   + The default setting disables the feature of ignoring the consecutive
