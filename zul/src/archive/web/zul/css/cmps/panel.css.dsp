@@ -203,7 +203,7 @@
 }
 <%-- Panel Tool --%>
 .z-panel-icon {
-	overflow: hidden; width: 15px; height: 15px; float: right; cursor: pointer;
+	overflow: hidden; width: 16px; height: 16px; float: right; cursor: pointer;
 	background-color : transparent;
 	background-image : url(${c:encodeURL('~./zul/img/wnd/btn.gif')});
 	background-position : 0 0;
@@ -211,41 +211,41 @@
 	margin-left: 2px;
 }
 .z-panel-toggle {
-	background-position: 0 -60px;
+	background-position: 0 -64px;
 }
 .z-panel-toggle-over {
-	background-position: -15px -60px;
+	background-position: -16px -64px;
 }
 .z-panel-colpsd .z-panel-toggle {
-	background-position: 0 -75px;
+	background-position: 0 -96px;
 }
 .z-panel-colpsd {
 	height:auto !important;
 }
 .z-panel-colpsd .z-panel-toggle-over {
-	background-position: -15px -75px;
+	background-position: -16px -96px;
 }
 .z-panel-close {
-	background-position: 0 0;
+	background-position: 0 -48px;
 }
 .z-panel-close-over {
-	background-position: -15px 0;
+	background-position: -16px -48px;
 }
 .z-panel-min {
-	background-position: 0 -15px;
+	background-position: 0 0;
 }
 .z-panel-min-over {
-	background-position: -15px -15px;
+	background-position: -16px 0;
 }
 .z-panel-max {
-	background-position: 0 -30px;
+	background-position: 0 -16px;
 }
 .z-panel-max-over {
-	background-position: -15px -30px;
+	background-position: -16px -16px;
 }
 .z-panel-maxd {
-	background-position: 0 -45px;
+	background-position: 0 -32px;
 }
 .z-panel-maxd-over {
-	background-position: -15px -45px;
+	background-position: -16px -32px;
 }
