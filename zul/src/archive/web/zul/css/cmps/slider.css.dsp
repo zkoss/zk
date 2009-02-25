@@ -71,11 +71,16 @@
 
 .z-slider-sphere-ver-btn,
 .z-slider-ver-btn {
-    width: 15px; height: 14px; position: absolute; left: 3px; bottom: 0;
+    width: 15px; height: 15px; position: absolute; left: 4px; bottom: 0;
     background-color : transparent;
 	background-image : url(${c: encodeURL('~./zul/img/slider/slider-v-square.png')});
 	background-repeat : no-repeat;
 	background-position : 0 0;
+}
+.z-slider-sphere-ver-btn,
+ {
+ 	height: 14px; 
+ 	left: 3px;
 }
 .z-slider-sphere-hor-btn {
 	background-image : url(${c: encodeURL('~./zul/img/slider/slider-circle.png')});
