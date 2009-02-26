@@ -659,9 +659,9 @@ zkDtbox.open = function (pp) {
 	var input = $e(db.id + "!real");
 	zk.position(pp, input, "after-start");
 
-	setTimeout("zkDtbox._repos('"+uuid+"')", 3);
-		//IE issue: we have to re-position again because some dimensions
-		//might not be correct here
+	setTimeout("zkDtbox._repos('"+uuid+"')", 150);
+		//IE, Opera, and Safari issue: we have to re-position again because some dimensions
+		//in Chinese language might not be correct here.
 };
 /** Re-position the popup. */
 zkDtbox._repos = function (uuid) {
