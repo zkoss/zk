@@ -78,7 +78,7 @@ The second panel
           <vbox>
 		Which kind of fruit do you want?
 		<groupbox id="gb" mold="3d" width="300px">
-              <caption image=/test2/img/inet.png label="fruits"/>
+              <caption image="/test2/img/inet.png" label="fruits"/>
               <radiogroup onCheck="fruit.value = self.selectedItem.label">
                 <radio label="Apple"/>
                 <radio label="Orange"/>

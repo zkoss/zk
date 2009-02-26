@@ -7,9 +7,9 @@
   <window title="Groupbox test" width="100%">
     <groupbox id="gb3" width="100%" mold="3d">
     <attribute name="onChildRemoved">
-    Messagebox
+    Messagebox.show("Hey You!");
     </attribute>
-      <caption image=/test2/img/inet.png label="Testing Group Box"/>
+      <caption image="/test2/img/inet.png" label="Testing Group Box"/>
       <vbox>
         <combobox>
           <comboitem label="Simple and Rich"/>

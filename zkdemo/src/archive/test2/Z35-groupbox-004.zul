@@ -13,7 +13,7 @@ Testing Groupbox basic functionality.
 </vbox>
   <window title="Groupbox test" width="100%">
     <groupbox id="gb3">
-      <caption image=/test2/img/inet.png label="Testing Group Box"/>
+      <caption image="/test2/img/inet.png" label="Testing Group Box"/>
       <vbox>
         <listbox rows="1" mold="select">
           <listitem label="option1"/>
@@ -29,7 +29,7 @@ Testing Groupbox basic functionality.
           <listitem>
             <listcell>
               <groupbox id="gb4">
-                <caption image=/test2/img/inet.png label="Testing Group Box IN LISTBOX"/>
+                <caption image="/test2/img/inet.png" label="Testing Group Box IN LISTBOX"/>
                 <vbox>
                   <listbox rows="1" mold="select">
                     <listitem label="option1"/>

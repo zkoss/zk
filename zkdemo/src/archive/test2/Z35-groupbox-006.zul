@@ -9,7 +9,7 @@
       <attribute name="onChildRemoved">
     Messagebox.show("Hey You!");
     </attribute>
-      <caption image=/test2/img/inet.png label="Testing Group Box - Should remain"/>
+      <caption image="/test2/img/inet.png" label="Testing Group Box - Should remain"/>
       <vbox id="SomeOtherChildren">
       This text should remain.
       </vbox>

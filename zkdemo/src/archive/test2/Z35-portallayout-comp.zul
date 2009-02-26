@@ -119,7 +119,7 @@
 	</tabbox>
 
 	<groupbox mold="3d" width="300px"  if="${!empty execution.parameterMap.groupbox1}">
-			<caption image=/test2/img/inet.png label="fruits"/>
+			<caption image="/test2/img/inet.png" label="fruits"/>
 			<radiogroup onCheck="fruit.value = self.selectedItem.label">
 				<radio label="Apple"/>
 				<radio label="Orange"/>
@@ -133,7 +133,7 @@
 		collapsible="true" closable="true"  if="${!empty execution.parameterMap.panel1}">
 		<panelchildren>
 		<window border="normal" width="250px" sizable="true">
-			<caption image=/test2/img/inet.png label="Hi there!"/>
+			<caption image="/test2/img/inet.png" label="Hi there!"/>
 			<checkbox label="Hello, World!"/>
 			<separator bar="true"/>
 			Auto-position (applicable if not embedded)
