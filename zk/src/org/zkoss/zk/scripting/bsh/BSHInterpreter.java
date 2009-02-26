@@ -367,7 +367,7 @@ implements SerializableAware, HierachicalAware {
 		protected Object getFromNamespace(String name) {
 			final Namespace ns = getOwner().getNamespace();
 			Object v = ns.getVariable(name, true);
-			return v != null || ns.containsVariable(name, true) ? v: UNDEFINED; 
+			return v != null || ns.containsVariable(name, true) ? v: getImplicit(name); 
 				//local-only since getVariableImpl will look up its parent
 		}
 	    public void loadDefaultImports() {
@@ -388,7 +388,7 @@ implements SerializableAware, HierachicalAware {
 		/** Search _ns instead. */
 		protected Object getFromNamespace(String name) {
 			Object v = _ns.getVariable(name, true);
-			return v != null || _ns.containsVariable(name, true) ? v: UNDEFINED; 
+			return v != null || _ns.containsVariable(name, true) ? v: getImplicit(name); 
 				//local-only since getVariableImpl will look up its parent
 		}
 		private BSHInterpreter getInterpreter() {
