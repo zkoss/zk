@@ -440,6 +440,7 @@ zkPanel = {
 		if (zk.ie6Only && ((hgh && hgh != "auto" )|| body.style.height)) body.style.height = "0px";
 		if (hgh && hgh != "auto")
 			zk.setOffsetHeight(body, zkPanel.getOffsetHeight(cmp));
+		if (zk.ie6Only) zk.redoCSS(body);
 	},
 	getOffsetHeight: function (cmp) {
 		var h = cmp.offsetHeight - 1;

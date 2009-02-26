@@ -364,7 +364,22 @@ zk.override = function (obj, fn, supobj, func) {
  * Forces the browser to redo the CSS.
  * @since 3.5.0
  */
-zk.redoCSS = function (el, timeout) {
+zk.redoCSS = zk.ie ? function (el, timeout) {
+	el = $e(el);
+	if (el) {
+		try {
+			var z = el.style.zoom;
+			el.style.zoom = 1;
+			el.className += ' ';
+			if (el.offsetHeight);
+			el.className.trim();
+			setTimeout(function () {try {
+				el.style.zoom = z;
+			} catch (e){}}, timeout > 0 ? timeout: 1);
+		} catch (e) {
+		}
+	}
+} : function (el) {
 	el = $e(el);
 	if (el) {
 		try {
