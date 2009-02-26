@@ -122,55 +122,55 @@
 }
 
 .z-paging-btn .z-paging-next {
-	background-position:0 0 !important;
-	background-image:url(${c:encodeURL('~./zul/img/paging/pg-btn.png')}) !important;
+	background-position:0 0;
+	background-image:url(${c:encodeURL('~./zul/img/paging/pg-btn.png')});
 }
 .z-paging-btn .z-paging-prev {
-	background-position:0 -21px !important;
-	background-image:url(${c:encodeURL('~./zul/img/paging/pg-btn.png')}) !important;
+	background-position:0 -21px;
+	background-image:url(${c:encodeURL('~./zul/img/paging/pg-btn.png')});
 }
 .z-paging-btn .z-paging-last {
-	background-position:0 -42px !important;
-	background-image:url(${c:encodeURL('~./zul/img/paging/pg-btn.png')}) !important;
+	background-position:0 -42px;
+	background-image:url(${c:encodeURL('~./zul/img/paging/pg-btn.png')});
 }
 .z-paging-btn .z-paging-first {
-	background-position:0 -63px !important;
-	background-image:url(${c:encodeURL('~./zul/img/paging/pg-btn.png')}) !important;
+	background-position:0 -63px;
+	background-image:url(${c:encodeURL('~./zul/img/paging/pg-btn.png')});
 }
 
 
 
 /*mouse over a button */
 .z-paging-btn-over .z-paging-next {
-	background-position:-21px 0 !important;
+	background-position:-21px 0;
 }
 .z-paging-btn-over .z-paging-prev {
-	background-position:-21px -21px !important;
+	background-position:-21px -21px;
 }
 .z-paging-btn-over .z-paging-last {
-	background-position:-21px -42px !important;
+	background-position:-21px -42px;
 }
 .z-paging-btn-over .z-paging-first {
-	background-position:-21px -63px !important;
+	background-position:-21px -63px;
 }
 /* mouse click on a button */
 .z-paging-btn-clk .z-paging-next {
-	background-position:-42px 0 !important;
+	background-position:-42px 0;
 }
 .z-paging-btn-clk .z-paging-prev {
-	background-position:-42px -21px !important;
+	background-position:-42px -21px;
 }
 .z-paging-btn-clk .z-paging-last {
-	background-position:-42px -42px !important;
+	background-position:-42px -42px; 
 }
 .z-paging-btn-clk .z-paging-first {
-	background-position:-42px -63px !important;
+	background-position:-42px -63px;
 }
 
 /* disabled button */
-.z-paging .z-paging-btn-disd{
-	color:gray !important;
-	cursor:default !important;
+.z-paging .z-paging-btn-disd {
+	color:gray;
+	cursor:default;
 	opacity:0.4;
 	-moz-opacity:0.4;
 	filter: alpha(opacity=40);
