@@ -62,7 +62,7 @@
 	height: 0px;
 }
 .z-tabs-scroll .z-tabs-cnt {
-	background: #C7E3F3 repeat-x scroll center top;
+	background: #C7E3F3 repeat-x scroll 0 top;
 	background-image: url(${c:encodeURL('~./zul/img/tab/tabs-bg.png')});
 	border-bottom: 1px solid #8DB2E3;
 	padding-left: 0px;
@@ -320,8 +320,8 @@
 	background: none; zoom: 1; overflow: hidden; position: relative;
 }
 .z-tabs-ver-scroll .z-tabs-ver-header {
-	background: #CEDFF5 repeat-y scroll center bottom;
-	background-image: url(${c:encodeURL('~./zul/img/tab/tabs-v-bg.gif')});
+	background: #CEDFF5 repeat-y scroll 0 0;
+	background-image: url(${c:encodeURL('~./zul/img/tab/tabs-v-bg.png')});
 	zoom: 1;
 	overflow: hidden;
 	position: relative;

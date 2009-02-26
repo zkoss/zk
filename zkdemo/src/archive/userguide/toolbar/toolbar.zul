@@ -33,7 +33,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 				<window id="view">
 				</window>
 			</tabpanel>
-			
 			<tabpanel>
 				<panel>
 					<panelchildren>
@@ -45,27 +44,27 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		background-color:transparent;
 		border:0 none;
 	}
-	
 	.z-panel-bbar .vista,.vista a,.vista a:visited,.vista a:hover {
-		border:0 none;
 		background:#000000 url(${c:encodeURL('/img/bar.png')}) repeat-x 0 0;
 		color:white;
 		padding-top:7px;
+	}
+	.p-vista .z-panel-children {
+		background-color: #008BB6;
+		border-bottom: 0 none;
 	}
 </style>
       Toolbar style: 
       <separator/>
 		<radiogroup onCheck='tb.sclass = self.selectedItem.label;'>
-
 				<radio label="default" />
 				<radio label="vista" checked="true" />
 		</radiogroup>
-
     <separator/>
-<panel id="panel" title="ZK Desktop" height="350px" width="400px"
-	border="normal">
+<panel id="panel" title="ZK Desktop" height="350px" width="433px"
+	border="normal" sclass="p-vista">
 	<panelchildren>
-		<image src="/img/castle.png" height="330px" width="398px"/>
+		<image src="/img/castle.png" />
 	</panelchildren>
 	<toolbar id="tb" sclass="vista" height="20px" align="end">
 		<toolbarbutton image="/img/live.gif"

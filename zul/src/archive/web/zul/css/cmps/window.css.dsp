@@ -274,7 +274,6 @@
 .z-window-overlapped-icon,
 .z-window-highlighted-icon {
 	background: transparent no-repeat 0 0;
-	background-image : url(${c:encodeURL('~./zul/img/wnd/ebd-btn.gif')});
 	height: 16px;
 	width: 16px;
 	overflow: hidden;
@@ -282,6 +281,11 @@
 	cursor: pointer;
 	margin-left: 2px;
 }
+.z-window-embedded-icon {
+	background-image : url(${c:encodeURL('~./zul/img/wnd/ebd-btn.gif')});
+}
+.z-window-modal-icon,
+.z-window-highlighted-icon,
 .z-window-overlapped-icon {
 	background-image : url(${c:encodeURL('~./zul/img/wnd/ol-btn.gif')});
 }
