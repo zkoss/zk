@@ -133,7 +133,7 @@
 .z-panel-cm {
 	border: 0;
 	margin: 0;
-	background: #e4f0fa;
+	background: #D8F8FF;
 	padding-top: 6px;
 }
 .z-panel-cm.z-panel-noheader {
@@ -161,7 +161,7 @@
 }
 <%-- Footer Middle --%>
 .z-panel-fm {
-	background: #e4f0fa;
+	background: #D8F8FF;
 	overflow: hidden;
 }
 <%-- Bottom Left --%>

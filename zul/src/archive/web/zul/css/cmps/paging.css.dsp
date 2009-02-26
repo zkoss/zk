@@ -161,7 +161,7 @@
 	background-position:-42px -21px;
 }
 .z-paging-btn-clk .z-paging-last {
-	background-position:-42px -42px;
+	background-position:-42px -42px; 
 }
 .z-paging-btn-clk .z-paging-first {
 	background-position:-42px -63px;
