@@ -23,7 +23,7 @@
 	display: block;
 	padding : 2px 0px;
 	border-bottom : 1px solid #B1CBD5;
-	background: #CEE7F5 repeat-x;
+	background: #CEE7F5 repeat-x 0 center;
 	background-image: url(${c:encodeURL('~./zul/img/common/bar-bg.png')});
 }
 

@@ -101,7 +101,7 @@
 	font: normal 11px tahoma, arial, verdana, sans-serif;
 	font-weight:bold;
 	padding: 5px 3px 4px 5px;
-	border-bottom: 1px solid #a7dcf9;
+	border-bottom: 1px solid #9ecad8;
 	background:transparent repeat-x 0 0;
 	background-image: url(${c:encodeURL('~./zkex/zul/img/layout/borderlayout-hm.png')});
 	white-space: nowrap;
