@@ -26,7 +26,7 @@
 .z-west,
 .z-center,
 .z-east {
-	border: 1px solid #a7dcf9;
+	border: 1px solid #9ECAD8;
 	position: absolute;
 	overflow: hidden;
 	background-color: white;

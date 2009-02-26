@@ -228,6 +228,15 @@
 	white-space: nowrap;
 	padding:4px 0 5px;
 }
+.z-tab-seld .z-tab-hl:hover {
+	background-position: 0 0;
+}
+.z-tab-seld .z-tab-hl:hover .z-tab-hr {
+	background-position: right 0;
+}
+.z-tab-seld .z-tab-hl:hover .z-tab-hm {
+	background-position: 0 0;
+}
 .ie .z-tab-seld .z-tab-hr {
 	position: relative;
 }
@@ -501,6 +510,15 @@
 	cursor: default;
 	font-weight: bold;
 	white-space: nowrap;
+}
+.z-tab-ver-seld .z-tab-ver-hl:hover {
+	background-position: 0 0;
+}
+.z-tab-ver-seld .z-tab-ver-hl:hover .z-tab-ver-hr {
+	background-position: 0 bottom;
+}
+.z-tab-ver-seld .z-tab-ver-hl:hover .z-tab-ver-hm {
+	background-position: 0 0;
 }
 <%-- Disabled --%>
 .z-tab-ver-disd .z-tab-ver-hl,
