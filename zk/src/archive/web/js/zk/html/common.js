@@ -369,6 +369,7 @@ zk.redoCSS = function (el, timeout) {
 	if (el) {
 		try {
 			el.className += ' ';
+			if (el.offsetHeight);
 			el.className.trim();
 		} catch (e) {
 		}
