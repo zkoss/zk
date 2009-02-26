@@ -21,10 +21,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:set var="self" value="${requestScope.arg.self}"/>
 <c:choose>
 <c:when test="${!self.imageAssigned && c:isSafari()}">
-<input type="button" id="${self.uuid}" z.type="zul.btn.Buttonos" value="${self.label}"${self.outerAttrs}${self.innerAttrs}/>
+<input type="button" id="${self.uuid}" z.type="zul.btn.ButtonOS" value="${self.label}"${self.outerAttrs}${self.innerAttrs}/>
 </c:when>
 <c:otherwise>
-<button type="button" id="${self.uuid}" z.type="zul.btn.Buttonos"${self.outerAttrs}${self.innerAttrs}>
+<button type="button" id="${self.uuid}" z.type="zul.btn.ButtonOS"${self.outerAttrs}${self.innerAttrs}>
 <c:choose>
 <c:when test="${self.dir == 'reverse'}">
 	<c:out value="${self.label}"/><c:if test="${self.imageAssigned and self.orient == 'vertical'}"><br/></c:if>${self.imgTag}
