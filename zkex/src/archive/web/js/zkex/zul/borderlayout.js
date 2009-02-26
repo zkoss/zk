@@ -159,6 +159,7 @@ zk.Layout2.prototype = {
 			this._resize(cnt, center, true);
 		}
 		zk.cleanVisibility(this.el);
+		if (zk.ie) zk.redoCSS(this.el);
 		this.isOnSize = false; // reset
 	},
 	_resize: function (cmp, ambit, isOpen, ignoreSplit) {
