@@ -142,16 +142,16 @@ span.z-vfiletree-last-open, span.z-vfiletree-last-close, span.z-vfiletree-tee, s
 <c:if test="${c:browser('ie6-')}">
 <%-- ZK Massagebox norm.css.dsp--%>
 .z-msgbox-question {
-	background-image: url(${c:encodeURL('~./zul/img/msgbox/QuestionmarkButton-32x32.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/msgbox/question-btn.gif')});
 }
 .z-msgbox-exclamation {
-	background-image: url(${c:encodeURL('~./zul/img/msgbox/WarningTriangle-32x32.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/msgbox/warning-btn.gif')});
 }
 .z-msgbox-imformation {
-	background-image: url(${c:encodeURL('~./zul/img/msgbox/InfoButton-32x32.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/msgbox/info-btn.gif')});
 }
 .z-msgbox-error {
-	background-image: url(${c:encodeURL('~./zul/img/msgbox/StopSign-32x32.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/msgbox/stop-btn.gif')});
 }
 .z-fileupload-add,
 .z-fileupload-delete {
