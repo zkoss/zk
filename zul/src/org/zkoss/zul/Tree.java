@@ -1852,17 +1852,20 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 			Set selItems = evt.getSelectedItems();
 			_noSmartUpdate = true;
 			try {
-				if (!_multiple || selItems == null || selItems.size() <= 1) {
+				final boolean paging = inPagingMold();
+				if (!_multiple
+						|| (!paging && (selItems == null || selItems.size() <= 1))) {
 					final Treeitem item =
 						selItems != null && selItems.size() > 0 ?
 							(Treeitem)selItems.iterator().next(): null;
 					selectItem(item);
 				} else {
-					for (Iterator it = new ArrayList(_selItems).iterator(); it.hasNext();) {
-						final Treeitem item = (Treeitem)it.next();
-						if (!selItems.remove(item))
-							removeItemFromSelection(item);
-					}
+					if (!_multiple)
+						for (Iterator it = new ArrayList(_selItems).iterator(); it.hasNext();) {
+							final Treeitem item = (Treeitem)it.next();
+							if (!selItems.remove(item))
+								removeItemFromSelection(item);
+						}
 					for (Iterator it = selItems.iterator(); it.hasNext();)
 						addItemToSelection((Treeitem)it.next());
 				}
@@ -1876,6 +1879,15 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 			_innerWidth = width == null ? "100%": width;
 		} else
 			super.process(request, everError);
+
+		public void clearSelectionByClient() {
+			_noSmartUpdate = true;
+			try {
+				clearSelection();
+			} finally {
+				_noSmartUpdate = false;
+			}
+		}
 	}
 
 	/** An iterator used by _heads.

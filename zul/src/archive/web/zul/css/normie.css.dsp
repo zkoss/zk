@@ -14,13 +14,23 @@ option {
 	width: 47pt;
 	text-overflow: ellipsis;
 }
+<%-- norm.css.dsp --%>
+.span.z-drop-allow,
+.span.z-drop-disallow {
+	background-image: url(${c:encodeURL('~./zul/img/misc/drag.gif')});
+}
 <%-- Widget.css.dsp --%>
 .z-textbox-disd *, .z-decimalbox-disd *, .z-intbox-disd *, .z-longbox-disd *, .z-doublebox-disd * {
 	filter: alpha(opacity=60);
 }
 
-<%-- tree.css.dsp, listbox.css.dsp, and grid.css.dsp --%>
+<%-- shadow, tree.css.dsp, listbox.css.dsp, and grid.css.dsp --%>
 <c:if test="${c:browser('ie6-')}">
+.z-shadow {
+	background: #888; zoom: 1; display: none;
+	filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=4, MakeShadow=true, ShadowOpacity=0.30)
+}
+
 div.z-listbox, div.z-tree, div.z-dottree, div.z-filetree, div.z-vfiletree, div.z-grid {
 	position:relative; <%-- Bug 1914215 and Bug 1914054 --%>
 }
@@ -39,7 +49,7 @@ div.z-listbox-header th.z-list-header, div.z-listbox-header th.z-auxheader,
 div.z-grid-header th.z-column, div.z-grid-header th.z-auxheader {
 	text-overflow: ellipsis;
 }
-div.z-tree-col-cnt, div.z-dottree-col-cnt, div.z-filetree-col-cnt, div.z-vfiletree-col-cnt, 
+div.z-tree-col-cnt, div.z-dottree-col-cnt, div.z-filetree-col-cnt, div.z-vfiletree-col-cnt,
 div.z-list-header-cnt, div.z-column-cnt, .z-auxheader-cnt {
 	white-space: nowrap;
 	<%-- Bug #1839960  --%>
@@ -48,7 +58,7 @@ div.z-footer-cnt, div.z-row-cnt, div.z-group-cnt, div.z-group-foot-cnt, div.z-co
 div.z-tree-footer-cnt, div.z-tree-cell-cnt, div.z-tree-col-cnt,
 div.z-dottree-footer-cnt, div.z-dottree-cell-cnt, div.z-dottree-col-cnt,
 div.z-filetree-footer-cnt, div.z-filetree-cell-cnt, div.z-filetree-col-cnt,
-div.z-vfiletree-footer-cnt, div.z-vfiletree-cell-cnt, div.z-vfiletree-col-cnt, 
+div.z-vfiletree-footer-cnt, div.z-vfiletree-cell-cnt, div.z-vfiletree-col-cnt,
 .z-auxheader-cnt, div.z-list-footer-cnt, div.z-list-cell-cnt, div.z-list-header-cnt {
 	position: relative;
 	<%-- Bug #1825896  --%>
@@ -61,16 +71,16 @@ div.z-tree-body, div.z-dottree-body, div.z-filetree-body, div.z-vfiletree-body, 
 	position: relative;
 	<%-- Bug 1766244: we have to specify position:relative with overflow:auto --%>
 }
-tr.z-grid-faker, tr.z-listbox-faker, tr.z-tree-faker, tr.z-dottree-faker, tr.z-filetree-faker, tr.z-vfiletree-faker { 
-	position: absolute; top: -1000px; left: -1000px;<%-- fixed a white line for IE --%> 
+tr.z-grid-faker, tr.z-listbox-faker, tr.z-tree-faker, tr.z-dottree-faker, tr.z-filetree-faker, tr.z-vfiletree-faker {
+	position: absolute; top: -1000px; left: -1000px;<%-- fixed a white line for IE --%>
 }
-span.z-tree-root-open, span.z-tree-root-close, span.z-tree-tee-open, span.z-tree-tee-close, 
+span.z-tree-root-open, span.z-tree-root-close, span.z-tree-tee-open, span.z-tree-tee-close,
 span.z-tree-last-open, span.z-tree-last-close, span.z-tree-tee, span.z-tree-vbar, span.z-tree-last, span.z-tree-spacer,
-span.z-dottree-root-open, span.z-dottree-root-close, span.z-dottree-tee-open, span.z-dottree-tee-close, 
+span.z-dottree-root-open, span.z-dottree-root-close, span.z-dottree-tee-open, span.z-dottree-tee-close,
 span.z-dottree-last-open, span.z-dottree-last-close, span.z-dottree-tee, span.z-dottree-vbar, span.z-dottree-last, span.z-dottree-spacer,
-span.z-filetree-root-open, span.z-filetree-root-close, span.z-filetree-tee-open, span.z-filetree-tee-close, 
+span.z-filetree-root-open, span.z-filetree-root-close, span.z-filetree-tee-open, span.z-filetree-tee-close,
 span.z-filetree-last-open, span.z-filetree-last-close, span.z-filetree-tee, span.z-filetree-vbar, span.z-filetree-last, span.z-filetree-spacer,
-span.z-vfiletree-root-open, span.z-vfiletree-root-close, span.z-vfiletree-tee-open, span.z-vfiletree-tee-close, 
+span.z-vfiletree-root-open, span.z-vfiletree-root-close, span.z-vfiletree-tee-open, span.z-vfiletree-tee-close,
 span.z-vfiletree-last-open, span.z-vfiletree-last-close, span.z-vfiletree-tee, span.z-vfiletree-vbar, span.z-vfiletree-last, span.z-vfiletree-spacer {
 	height: 18px;
 }
@@ -84,13 +94,6 @@ span.z-vfiletree-last-open, span.z-vfiletree-last-close, span.z-vfiletree-tee, s
 }
 
 <%-- Append New --%>
-<%-- Shadow --%>
-.z-shadow-ie {
-	left: 0; top: 0;
-	position: absolute; overflow: hidden;
-	background: #888; zoom: 1; display: none;
-	filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=4, MakeShadow=true, ShadowOpacity=0.30)
-}
 <c:if test="${c:isExplorer7()}">
 .z-panel-tm {
 	overflow: visible;
@@ -105,219 +108,177 @@ span.z-vfiletree-last-open, span.z-vfiletree-last-close, span.z-vfiletree-tee, s
 	zoom: 1;
 }
 </c:if>
+.z-groupbox-tl {
+	background-image:url(${c:encodeURL('~./zul/img/groupbox/groupbox-corner.gif')});
+}
+.z-groupbox-tr{
+	background-image:url(${c:encodeURL('~./zul/img/groupbox/groupbox-corner.gif')});
+}
+
+.z-groupbox-hl {
+	background-image:url(${c:encodeURL('~./zul/img/groupbox/groupbox-hl.gif')});
+}
+.z-groupbox-hr {
+	background-image:url(${c:encodeURL('~./zul/img/groupbox/groupbox-hr.gif')});
+}
+.z-groupbox-hm {
+	background-image:url(${c:encodeURL('~./zul/img/groupbox/groupbox-hm.gif')});
+}
+
+
 <%-- IE 6 GIF  --%>
 <c:if test="${c:browser('ie6-')}">
 <%-- ZK Massagebox norm.css.dsp--%>
 .z-msgbox-question {
-	background-image: url(${c:encodeURL('~./zul/img/msgbox/question2.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/msgbox/QuestionmarkButton-32x32.gif')});
 }
 .z-msgbox-exclamation {
-	background-image: url(${c:encodeURL('~./zul/img/msgbox/warning2.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/msgbox/WarningTriangle-32x32.gif')});
 }
 .z-msgbox-imformation {
-	background-image: url(${c:encodeURL('~./zul/img/msgbox/information2.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/msgbox/InfoButton-32x32.gif')});
 }
 .z-msgbox-error {
-	background-image: url(${c:encodeURL('~./zul/img/msgbox/error2.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/msgbox/StopSign-32x32.gif')});
 }
-.z-fileupload-add {
-	background-image: url(${c:encodeURL('~./zul/img/fileupload/add.gif')});	
-}
+.z-fileupload-add,
 .z-fileupload-delete {
-	background-image: url(${c:encodeURL('~./zul/img/fileupload/delete.gif')});
-}
-
-.z-arrow-d {
-	background-image: url(${c:encodeURL('~./zul/img/arrowD.gif')});
-}
-.z-arrow-l {
-	background-image: url(${c:encodeURL('~./zul/img/arrowL.gif')});
-}
-.z-arrow-ld {
-	background-image: url(${c:encodeURL('~./zul/img/arrowLD.gif')});
-}
-.z-arrow-lu {
-	background-image: url(${c:encodeURL('~./zul/img/arrowLU.gif')});
-}
-.z-arrow-rd {
-	background-image: url(${c:encodeURL('~./zul/img/arrowRD.gif')});
-}
-.z-arrow-ru {
-	background-image: url(${c:encodeURL('~./zul/img/arrowRU.gif')});
-}
-.z-arrow-u {
-	background-image: url(${c:encodeURL('~./zul/img/arrowU.gif')});
-}
-.z-errbox.z-popup .z-popup-tl, .z-errbox.z-popup .z-popup-tr,
-	.z-errbox.z-popup .z-popup-bl, .z-errbox.z-popup .z-popup-br {
-	background-image: url(${c:encodeURL('~./zul/img/errbox/pp-corners.gif')});
-}
-.z-errbox.z-popup .z-popup-tm, .z-errbox.z-popup .z-popup-cm, .z-errbox.z-popup .z-popup-bm {
-	background-image: url(${c:encodeURL('~./zul/img/errbox/pp-tb.gif')});
-}
-.z-errbox.z-popup .z-popup-cl {
-	background-image: url(${c:encodeURL('~./zul/img/errbox/pp-l.gif')});
-}
-.z-errbox.z-popup .z-popup-cr {
-	background-image: url(${c:encodeURL('~./zul/img/errbox/pp-r.gif')});
+	ackground-image: url(${c:encodeURL('~./zul/img/misc/drag.gif')});
 }
 <%-- box.css.dsp --%>
 .z-splitter-ver-btn-l, .z-splitter-hor-btn-l {
 	background-image: url(${c:encodeURL('~./zul/img/splt/colps-l.gif')});
 }
-.z-splitter-ver-btn-r, .z-splitter-hor-btn-r {	
+.z-splitter-ver-btn-r, .z-splitter-hor-btn-r {
 	background-image: url(${c:encodeURL('~./zul/img/splt/colps-r.gif')});
 }
-.z-splitter-ver-btn-t, .z-splitter-hor-btn-t {	
+.z-splitter-ver-btn-t, .z-splitter-hor-btn-t {
 	background-image: url(${c:encodeURL('~./zul/img/splt/colps-t.gif')});
 }
-.z-splitter-ver-btn-b, .z-splitter-hor-btn-b {	
+.z-splitter-ver-btn-b, .z-splitter-hor-btn-b {
 	background-image: url(${c:encodeURL('~./zul/img/splt/colps-b.gif')});
+}
+<%-- grid.css.dsp --%>
+.z-columns-menu-grouping .z-menu-item-img {
+	background-image:  url(${c:encodeURL('~./zul/img/grid/menu-group.gif')});
+}
+.z-columns-menu-asc .z-menu-item-img {
+	background-image:  url(${c:encodeURL('~./zul/img/grid/menu-arrowup.gif')});
+}
+.z-columns-menu-dsc .z-menu-item-img {
+	background-image:  url(${c:encodeURL('~./zul/img/grid/menu-arrowdown.gif')});
 }
 <%-- listbox.css.dsp --%>
 tr.z-list-item td.z-list-item-focus {
-	background-image: url(${c:encodeURL('~./zul/img/focusd.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/common/focusd.gif')});
 }
-<%-- menu.css.dsp --%>
-.z-menu-cnt-img {
-	background-image:url(${c:encodeURL('~./zul/img/menu2/arrow.gif')});
-}
-.z-menu-btn .z-menu-btn-m em, .z-menu-btn-text-img .z-menu-btn-m em {
-	background-image: url(${c:encodeURL('~./zul/img/button/tb-btn-arrow.gif')});
-}
-.z-menubar-ver .z-menu-btn .z-menu-btn-m em, .z-menubar-ver .z-menu-btn-text-img .z-menu-btn-m em {
-	background-image: url(${c:encodeURL('~./zul/img/button/tb-btn-arrow-ver.gif')});
-}
-.z-menu-item-cnt-unck .z-menu-item-img {
-	background-image:  url(${c:encodeURL('~./zul/img/menu2/unchecked.gif')});
+<%-- paging.css.dsp --%>
+.z-paging-btn .z-paging-next,
+.z-paging-btn .z-paging-prev,
+.z-paging-btn .z-paging-last,
+.z-paging-btn .z-paging-first {	
+	background-image:url(${c:encodeURL('~./zul/img/paging/pg-btn.gif')}) !important;
 }
 <%-- panel.css.dsp --%>
-.z-panel-tl{
-	background-image:url(${c:encodeURL('~./zul/img/panel/panel-corners.gif')});
-}
-.z-panel-tr {
-	background-image:url(${c:encodeURL('~./zul/img/panel/panel-corners.gif')});
-}
-.z-panel-bl {
-	background-image:url(${c:encodeURL('~./zul/img/panel/panel-corners.gif')});
-}
+.z-panel-tl,
+.z-panel-tr,
+.z-panel-bl,
 .z-panel-br {
-	background-image:url(${c:encodeURL('~./zul/img/panel/panel-corners.gif')});
+	background-image:url(${c:encodeURL('~./zul/img/wnd/panel-corner.gif')});
 }
 <%-- popup.css.dsp --%>
-.z-popup .z-popup-tl, .z-popup .z-popup-tr, .z-popup .z-popup-bl, .z-popup .z-popup-br {
-	background-image: url(${c:encodeURL('~./zul/img/popup/pp-corners.gif')});
+.z-popup .z-popup-tl,
+.z-popup .z-popup-tr,
+.z-popup .z-popup-bl,
+.z-popup .z-popup-br {
+	background-image:url(${c:encodeURL('~./zul/img/popup/pp-corner.gif')});
 }
-.z-popup .z-popup-tm, .z-popup .z-popup-cm, .z-popup .z-popup-bm {
-	background-image: url(${c:encodeURL('~./zul/img/popup/pp-tb.gif')});
-}
-.z-popup .z-popup-cl {
-	background-image: url(${c:encodeURL('~./zul/img/popup/pp-l.gif')});
-}
+.z-popup .z-popup-cl,
 .z-popup .z-popup-cr {
-	background-image: url(${c:encodeURL('~./zul/img/popup/pp-r.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/popup/pp-clr.gif')});
+}
+.z-popup .z-popup-cm {
+	background-image: url(${c:encodeURL('~./zul/img/popup/pp-cm.gif')});
 }
 <%-- slider.css.dsp --%>
-.z-slider-hor {    
-    background-image: url(${c: encodeURL('~./zul/img/slider2/slider-bg.gif')});        
+.z-slider-sphere-hor,
+.z-slider-scale,
+.z-slider-hor,
+.z-slider-sphere-hor-center,
+.z-slider-scale-center,
+.z-slider-hor-center {
+	background-image:url(${c:encodeURL('~./zul/img/slider/slider-bg.gif')});
 }
-.z-slider-hor-center { 
-	background-image: url(${c: encodeURL('~./zul/img/slider2/slider-bg.gif')});      
-}
-.z-slider-hor-end {
-    background-image:url(${c: encodeURL('~./zul/img/slider2/slider-bg.gif')});    
-}
+.z-slider-sphere-hor-btn,
+.z-slider-scale-btn,
 .z-slider-hor-btn {
-    background-image: url(${c: encodeURL('~./zul/img/slider2/slider-thumb.gif')});    
-}
-.z-slider-ver {
-	background-image:url(${c: encodeURL('~./zul/img/slider2/slider-v-bg.gif')});
-}
-.z-slider-ver-center {
-	background-image:url(${c: encodeURL('~./zul/img/slider2/slider-v-bg.gif')});
-}
-.z-slider-ver-end {
-	background-image:url(${c: encodeURL('~./zul/img/slider2/slider-v-bg.gif')});
-}
-.z-slider-ver-btn {
-	background-image:url(${c: encodeURL('~./zul/img/slider2/slider-v-thumb.gif')});
-}
-.z-slider-scale {
-    background-image:url(${c: encodeURL('~./zul/img/slider2/slider-bg.gif')});
-}
-.z-slider-scale-center {
-    background-image:url(${c: encodeURL('~./zul/img/slider2/slider-bg.gif')});
-}
-.z-slider-scale-end {
-    background-image:url(${c: encodeURL('~./zul/img/slider2/slider-bg.gif')});
+    background-image : url(${c: encodeURL('~./zul/img/slider/slider-square.gif')});
 }
 .z-slider-scale-btn {
-    background-image:url(${c: encodeURL('~./zul/img/slider2/slider-scale-thumb.gif')});
+	background-image : url(${c: encodeURL('~./zul/img/slider/slider-scale.gif')});
 }
-.z-slider-sphere-hor {
-	background-image:url(${c: encodeURL('~./zul/img/slider2/slider-bg.gif')});
+.z-slider-sphere-ver,
+.z-slider-ver,
+.z-slider-sphere-ver-center,
+.z-slider-ver-center {
+	background-image:url(${c:encodeURL('~./zul/img/slider/slider-bg-ver.gif')});
 }
-.z-slider-sphere-hor-center {
-	background-image:url(${c: encodeURL('~./zul/img/slider2/slider-bg.gif')});
-}
-.z-slider-sphere-hor-end {
-	background-image:url(${c: encodeURL('~./zul/img/slider2/slider-bg.gif')});
+
+.z-slider-sphere-ver-btn,
+.z-slider-ver-btn {
+	background-image : url(${c: encodeURL('~./zul/img/slider/slider-v-square.gif')});
 }
 .z-slider-sphere-hor-btn {
-	background-image:url(${c: encodeURL('~./zul/img/slider2/slider-thumb_circle.gif')});
-}
-.z-slider-sphere-ver {
-    background-image:url(${c: encodeURL('~./zul/img/slider2/slider-v-bg.gif')});
-}
-.z-slider-sphere-ver-center {
-    background-image:url(${c: encodeURL('~./zul/img/slider2/slider-v-bg.gif')});
-}
-.z-slider-sphere-ver-end {
-    background-image:url(${c: encodeURL('~./zul/img/slider2/slider-v-bg.gif')});
+	background-image : url(${c: encodeURL('~./zul/img/slider/slider-circle.gif')});
 }
 .z-slider-sphere-ver-btn {
-    background-image:url(${c: encodeURL('~./zul/img/slider2/slider-v-thumb_circle.gif')});
+	background-image : url(${c: encodeURL('~./zul/img/slider/slider-v-circle.gif')});
 }
 <%-- tabbox.css.dsp --%>
-.z-tab-close, .z-tab-ver-close {
-	background-image: url(${c:encodeURL('~./zul/img/tab2/tab-close.gif')});
+.z-tab-hl,
+.z-tab-hr {
+	background-image: url(${c:encodeURL('~./zul/img/tab/tab-corner.gif')});
 }
-.z-tab-accordion-close,
-.z-tab-accordion-lite-close,
-.z-tab-accordion-disd .z-tab-accordion-close-over,
-.z-tab-accordion-disd-seld .z-tab-accordion-close-over,
-.z-tab-accordion-lite-disd .z-tab-accordion-lite-close-over,
-.z-tab-accordion-lite-disd-seld .z-tab-accordion-lite-close-over {
-	background-image: url(${c:encodeURL('~./zul/img/tab2/tab-close-off.gif')});
+.z-tab-ver-hl,
+.z-tab-ver-hl .z-tab-ver-hr {
+	background-image: url(${c:encodeURL('~./zul/img/tab/tab-v-corner.gif')});
 }
-.z-tab-accordion .z-tab-accordion-close-over {
-	background-image: url(${c:encodeURL('~./zul/img/tab2/tab-close-on.gif')});
-}
-.z-tab-accordion-lite .z-tab-accordion-lite-close-over {
-	background-image: url(${c:encodeURL('~./zul/img/tab2/tab-close-on-l.gif')});
+.z-tab-accordion-tl,
+.z-tab-accordion-tr {
+	background-image: url(${c:encodeURL('~./zul/img/tab/accd-corner.gif')});
 }
 <%-- tree.css.dsp --%>
 tr.z-tree-row td.z-tree-row-focus {
-	background-image: url(${c:encodeURL('~./zul/img/focusd.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/common/focusd.gif')});
 }
-span.z-vfiletree-ico,span.z-vfiletree-firstspacer {	
-	background-image: url(${c:encodeURL('~./zul/img/tree/folder-toggle2.gif')});	
+span.z-vfiletree-ico,span.z-vfiletree-firstspacer {
+	background-image: url(${c:encodeURL('~./zul/img/tree/vfolder-toggle.gif')});
 }
 span.z-vfiletree-tee, span.z-vfiletree-last {
-	background-image: url(${c:encodeURL('~./zul/img/tree/entity.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/tree/ventity.gif')});
 }
 <%-- window.css.dsp --%>
-.z-window-embedded-tl{
-	background-image: url(${c:encodeURL('~./zul/img/wnd2/wtp-l.gif')})
+.z-window-modal-tl,
+.z-window-modal-tr,
+.z-window-modal-bl,
+.z-window-modal-br,
+.z-window-overlapped-tl,
+.z-window-overlapped-tr,
+.z-window-overlapped-bl,
+.z-window-overlapped-br,
+.z-window-highlighted-tl,
+.z-window-highlighted-tr,
+.z-window-highlighted-bl,
+.z-window-highlighted-br {
+	background-image: url(${c:encodeURL('~./zul/img/wnd/wnd-ol-corner.gif')});
 }
-.z-window-embedded-tr{
-	background-image: url(${c:encodeURL('~./zul/img/wnd2/wtp-r.gif')})
+.z-window-embedded-tl,
+.z-window-embedded-tr {
+	background-image: url(${c:encodeURL('~./zul/img/wnd/wnd-corner.gif')});
 }
-.z-window-modal-tl, .z-window-highlighted-tl, .z-window-overlapped-tl, .z-window-popup-tl {
-	background-image: url(${c:encodeURL('~./zul/img/wnd2/wtp-l-ol.gif')})
-}
-.z-window-modal-tr, .z-window-highlighted-tr, .z-window-overlapped-tr, .z-window-popup-tr {
-	background-image: url(${c:encodeURL('~./zul/img/wnd2/wtp-r-ol.gif')})
+.z-window-popup-tl,
+.z-window-popup-tr {
+	background-image: url(${c:encodeURL('~./zul/img/wnd/wnd-pop-corner.gif')});
 }
 <%-- grid.css.dsp --%>
 .z-columns-menu-grouping .z-menu-item-img {

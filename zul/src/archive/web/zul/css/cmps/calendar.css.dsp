@@ -5,12 +5,7 @@
 	background: white; border: 1px solid #7F9DB9;
 	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
 }
-.z-calendar-disd {
-	color: gray !important; cursor: default !important; opacity: .6; -moz-opacity: .6; filter: alpha(opacity=60);
-}
-.z-calendar-disd * {
-	color: gray !important; cursor: default !important;
-}
+
 <%-- Calendar and Datebox --%>
 .z-calendar-calyear, .z-datebox-calyear {
 	background: #e9f1f3; border: 1px solid;
@@ -33,7 +28,7 @@
 	padding: 1px 3px;
 }
 .z-calendar-calday td a:hover, .z-datebox-calday td a:hover {
-	text-decoration: underline;	
+	text-decoration: underline;
 }
 .z-calendar-calmon td.z-calendar-seld, .z-calendar-calday td.z-calendar-seld,
 .z-datebox-calmon td.z-datebox-seld, .z-datebox-calday td.z-datebox-seld {

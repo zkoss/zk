@@ -871,11 +871,10 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 	public void setSelectedItem(Listitem item) {
 		selectItem(item);
 	}
-
 	/**  Deselects all of the currently selected items and selects
 	 * the given item.
 	 * <p>It is the same as {@link #selectItem}.
-	 * @param itemApi assume as a {@link org.zkoss.zul.Listitem}
+	 * @param itemApi assume as a {@link org.zkoss.zul.Listitem}   
 	 * @since 3.5.2
 	 */
 	public void setSelectedItemApi(org.zkoss.zul.api.Listitem itemApi) {
@@ -2676,6 +2675,14 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 			}
 			return avail;
 		}
+		public void clearSelectionByClient() {
+			_noSmartUpdate = true;
+			try {
+				clearSelection();
+			} finally {
+				_noSmartUpdate = false;
+			}
+		}
 	}
 	/** An iterator used by _heads.
 	 */
@@ -2714,4 +2721,5 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 			throw new UnsupportedOperationException();
 		}
 	}
+
 }

@@ -370,13 +370,6 @@ public interface Listbox extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	public void setSelectedItemApi(org.zkoss.zul.api.Listitem item);
 
 	/**
-	 * Selects the given listitems.
-	 * 
-	 * @since 3.6.0
-	 */
-	public void setSelectedItems(Set listItems);
-
-	/**
 	 * Returns all selected items.
 	 * 
 	 * <p>

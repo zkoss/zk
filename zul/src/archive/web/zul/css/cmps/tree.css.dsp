@@ -9,7 +9,7 @@ div.z-tree-header, div.z-tree-header tr, div.z-tree-footer {
 	border: 0; overflow: hidden; width: 100%;
 }
 div.z-tree-header tr.z-tree-cols, div.z-tree-header tr.z-auxhead {
-	background-image: url(${c:encodeURL('~./zul/img/grid/s_hd.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/grid/column-bg.png')});
 }
 div.z-tree-header th.z-tree-col, div.z-tree-header th.z-auxheader {
 	overflow: hidden; border: 1px solid;
@@ -38,7 +38,7 @@ div.z-tree-footer {
 tr.z-tree-faker, tr.z-tree-faker th, tr.z-tree-faker div,
 tr.z-dottree-faker, tr.z-dottree-faker th, tr.z-dottree-faker div,
 tr.z-filetree-faker, tr.z-filetree-faker th, tr.z-filetree-faker div,
-tr.z-vfiletree-faker, tr.z-vfiletree-faker th, tr.z-vfiletree-faker div {	
+tr.z-vfiletree-faker, tr.z-vfiletree-faker th, tr.z-vfiletree-faker div {
 	border-top: 0 !important; border-right : 0 !important;border-bottom: 0 !important;border-left: 0 !important;
 	padding-top: 0 !important;	padding-right: 0 !important; padding-bottom: 0 !important;padding-left: 0 !important;
 	margin-top: 0 !important; margin-right : 0 !important;margin-bottom: 0 !important;margin-left: 0 !important;
@@ -47,7 +47,7 @@ tr.z-vfiletree-faker, tr.z-vfiletree-faker th, tr.z-vfiletree-faker div {
 <%-- these above css cannot be overrided--%>
 <%-- tree icons --%>
 span.z-tree-ico, span.z-tree-line, span.checkmark-spacer {
-	width: 18px; min-height: 18px; height: 100%;	
+	width: 18px; min-height: 18px; height: 100%;
 	display:-moz-inline-box; vertical-align:top;
 	display:inline-block;
 }
@@ -56,7 +56,7 @@ span.z-tree-ico {
 }
 span.z-tree-root-open, span.z-tree-tee-open, span.z-tree-last-open,
 span.z-tree-root-close, span.z-tree-tee-close, span.z-tree-last-close {
-	background-image: url(${c:encodeURL('~./zul/img/tree/tree_btn.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/common/toggle.gif')});
 }
 span.z-tree-root-open, span.z-tree-tee-open, span.z-tree-last-open {
 	background-position: 0px -18px;
@@ -106,7 +106,7 @@ tr.z-tree-row-over-seld {
 	background: #6eadff;
 }
 tr.z-tree-row td.z-tree-row-focus {
-	background-image: url(${c:encodeURL('~./zul/img/focusd.png')});
+	background-image: url(${c:encodeURL('~./zul/img/common/focusd.png')});
 	background-repeat: no-repeat;
 }
 
@@ -118,7 +118,7 @@ div.z-dottree-header, div.z-dottree-header tr, div.z-dottree-footer {
 	border: 0; overflow: hidden; width: 100%;
 }
 div.z-dottree-header tr.z-tree-cols, div.z-tree-header tr.z-auxhead  {
-	background-image: url(${c:encodeURL('~./zul/img/grid/s_hd.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/grid/column-bg.png')});
 }
 div.z-dottree-header th {
 	overflow: hidden; border: 1px solid;
@@ -164,19 +164,19 @@ span.z-dottree-tee-close {
 	background-image: url(${c:encodeURL('~./zul/img/tree/tee-close.gif')});
 }
 span.z-dottree-last-open {
-	background-image: url(${c:encodeURL('~./zul/img/tree/last-open.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/tree/tee-last-open.gif')});
 }
 span.z-dottree-last-close {
-	background-image: url(${c:encodeURL('~./zul/img/tree/last-close.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/tree/tee-last-close.gif')});
 }
 span.z-dottree-tee {
 	background-image: url(${c:encodeURL('~./zul/img/tree/tee.gif')});
 }
 span.z-dottree-vbar {
-	background-image: url(${c:encodeURL('~./zul/img/tree/vbar.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/tree/tee-vbar.gif')});
 }
 span.z-dottree-last {
-	background-image: url(${c:encodeURL('~./zul/img/tree/last.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/tree/tee-last.gif')});
 }
 span.z-dottree-spacer, span.z-dottree-firstspacer {
 	background:none;
@@ -190,7 +190,7 @@ div.z-filetree-header, div.z-filetree-header tr, div.z-filetree-footer {
 	border: 0; overflow: hidden; width: 100%;
 }
 div.z-filetree-header tr.z-tree-cols, div.z-tree-header tr.z-auxhead  {
-	background-image: url(${c:encodeURL('~./zul/img/grid/s_hd.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/grid/column-bg.png')});
 }
 div.z-filetree-header th {
 	overflow: hidden; border: 1px solid;
@@ -220,14 +220,14 @@ span.z-filetree-line, span.z-filetree-ico, span.z-filetree-firstspacer {
 	display:-moz-inline-box; vertical-align:top;
 	display:inline-block;
 }
-span.z-filetree-ico,span.z-filetree-firstspacer {	
-	background-image: url(${c:encodeURL('~./zul/img/tree/folder-toggle.gif')});	
+span.z-filetree-ico,span.z-filetree-firstspacer {
+	background-image: url(${c:encodeURL('~./zul/img/tree/folder-toggle.gif')});
 }
-span.z-filetree-root-open, span.z-filetree-root-close, 
+span.z-filetree-root-open, span.z-filetree-root-close,
 span.z-filetree-root-open, span.z-filetree-tee-open, span.z-filetree-last-open {
 	background-position: 0px 0px;
 }
-span.z-filetree-root-close, span.z-filetree-tee-close, 
+span.z-filetree-root-close, span.z-filetree-tee-close,
 span.z-filetree-last-close, span.z-filetree-firstspacer {
 	background-position: 0px -18px;
 }
@@ -246,7 +246,7 @@ div.z-vfiletree-header, div.z-vfiletree-header tr, div.z-vfiletree-footer {
 	border: 0; overflow: hidden; width: 100%;
 }
 div.z-vfiletree-header tr.z-tree-cols, div.z-tree-header tr.z-auxhead  {
-	background-image: url(${c:encodeURL('~./zul/img/grid/s_hd.gif')});
+	background-image: url(${c:encodeURL('~./zul/img/grid/column-bg.png')});
 }
 div.z-vfiletree-header th {
 	overflow: hidden; border: 1px solid;
@@ -276,19 +276,19 @@ span.z-vfiletree-line, span.z-vfiletree-ico, span.z-vfiletree-firstspacer {
 	display:-moz-inline-box; vertical-align:top;
 	display:inline-block;
 }
-span.z-vfiletree-ico,span.z-vfiletree-firstspacer {	
-	background-image: url(${c:encodeURL('~./zul/img/tree/folder-toggle.png')});	
+span.z-vfiletree-ico,span.z-vfiletree-firstspacer {
+	background-image: url(${c:encodeURL('~./zul/img/tree/vfolder-toggle.png')});
 }
-span.z-vfiletree-root-open, span.z-vfiletree-root-close, 
+span.z-vfiletree-root-open, span.z-vfiletree-root-close,
 span.z-vfiletree-root-open, span.z-vfiletree-tee-open, span.z-vfiletree-last-open {
 	background-position: 0px 0px;
 }
-span.z-vfiletree-root-close, span.z-vfiletree-tee-close, 
+span.z-vfiletree-root-close, span.z-vfiletree-tee-close,
 span.z-vfiletree-last-close, span.z-vfiletree-firstspacer {
 	background-position: 0px -18px;
 }
 span.z-vfiletree-tee, span.z-vfiletree-last {
-	background-image: url(${c:encodeURL('~./zul/img/tree/entity.png')});
+	background-image: url(${c:encodeURL('~./zul/img/tree/ventity.png')});
 }
 span.z-vfiletree-vbar, span.z-vfiletree-spacer {
 	background:none;

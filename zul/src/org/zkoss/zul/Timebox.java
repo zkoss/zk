@@ -116,7 +116,7 @@ public class Timebox extends InputElement implements org.zkoss.zul.api.Timebox {
 	 */
 	public void setImage(String img) {
 	}
-		
+	
 	/** Returns the time zone that this time box belongs to, or null if
 	 * the default time zone is used.
 	 * <p>The default time zone is determined by {@link TimeZones#getCurrent}.

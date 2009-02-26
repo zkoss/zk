@@ -2,8 +2,10 @@
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 
 .z-toolbar {
-	border-color: #a9bfd3; border-style: solid; border-width: 0 0 1px 0; display: block;
-	padding: 2px; background: #CEE7F5 url(${c:encodeURL('~./zul/img/button/tb-bg.png')}) repeat-x top left;
+	border-color: #B1CBD5; border-style: solid; border-width: 0 0 1px 0; display: block;
+	padding: 2px;
+	background: #CEE7F5 repeat-x top left;
+	background-image: url(${c:encodeURL('~./zul/img/common/bar-bg.png')});
 	position: relative; zoom: 1;
 }
 .z-caption .z-toolbar, .z-caption .z-toolbarbutton {
@@ -23,43 +25,65 @@
 }
 .z-toolbar-button {
 	font-family: ${fontFamilyT};
-	font-size: ${fontSizeM}; 
+	font-size: ${fontSizeM};
 	font-weight: normal;
 }
 .z-caption .z-toolbar a:hover {
 	text-decoration: underline;
 }
+
+<%-- toolbar horizontal alignment --%>
+.z-toolbar-start {
+	float: left; clear: none;
+}
+.z-toolbar-center {
+	text-align: center;
+	margin: 0 auto;
+}
+.z-toolbar-end {
+	float: right; clear: none;
+}
+
+
 <%-- Toolbar Panel Mold--%>
 .z-toolbar-panel {
 	padding: 5px;
 }
+
 .z-toolbar-panel .z-toolbar-panel-body .z-toolbar-panel-hor,
 .z-toolbar-panel .z-toolbar-panel-body .z-toolbar-panel-ver {
-	border: 0; padding: 0;
+	border: 0;
+	padding: 0;
 }
-.z-toolbar-panel .z-toolbar-panel-end .z-toolbar-panel-cnt, .z-toolbar-end {
-	float: right; clear: none;
-}
-.z-toolbar-panel .z-toolbar-panel-start .z-toolbar-panel-cnt, .z-toolbar-start {
-	float: left; clear: none;
-}
-.z-toolbar-panel .z-toolbar-panel-center, .z-toolbar-center {
-	text-align: center;
-}
-.z-toolbar-panel .z-toolbar-panel-center .z-toolbar-panel-cnt, .z-toolbar-center {
-	margin: 0 auto;
-}
-.z-toolbar-panel .z-toolbar-panel-cnt .z-toolbar-panel-hor {
+.z-toolbar-panel .z-toolbar-panel-cnt .z-toolbar-panel-hor{
 	padding: 3px;
 }
-.z-toolbar-panel .z-toolbar-panel-cnt .z-toolbar-panel-ver {
+.z-toolbar-panel .z-toolbar-panel-cnt .z-toolbar-panel-ver{
 	padding: 1px;
 }
+
+.z-toolbar-panel .z-toolbar-panel-start .z-toolbar-panel-cnt{
+	clear: none;
+	float: left;
+}
+
+.z-toolbar-panel .z-toolbar-panel-center{
+	text-align: center;
+}
+.z-toolbar-panel .z-toolbar-panel-center .z-toolbar-panel-cnt{
+	margin: 0 auto;
+}
+
+.z-toolbar-panel .z-toolbar-panel-end .z-toolbar-panel-cnt{
+	clear: none;
+	float: right;
+}
+
 <%-- Toolbar Button--%>
 .z-toolbar-button-disd {
 	color: #C5CACB !important; cursor: default!important;
 }
-.z-toolbar-button-disd:visited, .z-toolbar-button-disd:hover { 
+.z-toolbar-button-disd:visited, .z-toolbar-button-disd:hover {
 	text-decoration: none !important; cursor: default !important;;
 	border-color: #D0DEF0 !important;
 }

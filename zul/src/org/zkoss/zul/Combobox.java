@@ -653,5 +653,6 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 			Events.postEvent(evt);
 		} else
 			super.process(request, everError);
+		public void clearSelectionByClient(){}
 	}
 }

@@ -778,6 +778,7 @@
 		<xs:attribute name="sortAscending" type="xs:string" use="optional" />
 		<xs:attribute name="sortDescending" type="xs:string" use="optional" />
 		<xs:attribute name="onSort" type="xs:string" use="optional" />
+		<xs:attribute name="value" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- columnchildren -->
 	<xs:element name="columnchildren" type="columnchildrenType" />
@@ -806,6 +807,7 @@
 		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="sizable" type="xs:string" use="optional" />
+		<xs:attribute name="value" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- combobox -->
 	<xs:element name="combobox" type="comboboxType" />
@@ -1449,6 +1451,7 @@
 		</xs:choice>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="sizable" type="booleanType" use="optional" />
+		<xs:attribute name="value" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- listheader -->
 	<xs:element name="listheader" type="listheaderType" />
@@ -1461,6 +1464,7 @@
 		<xs:attribute name="sortDescending" type="xs:string" use="optional" />
 		<xs:attribute name="maxlength" type="intType" use="optional" />
 		<xs:attribute name="onSort" type="xs:string" use="optional" />
+		<xs:attribute name="value" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- listitem -->
 	<xs:element name="listitem" type="listitemType" />
@@ -1893,6 +1897,7 @@
 		<xs:attribute name="type" type="textboxTypeAttrType" use="optional" />
 		<xs:attribute name="rows" type="intType" use="optional" />
 		<xs:attribute name="multiline" type="booleanType" use="optional" />
+		<xs:attribute name="tabbable" type="booleanType" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
     <!-- timer -->

@@ -162,7 +162,7 @@ public class Radio extends Checkbox implements org.zkoss.zul.api.Radio {
 	}
 	
 	/** Process the onCheck event sent when the radio is checked.
-	 * @since 3.5.3
+	 * @since 3.6.0
 	 */
 	public void onCheck(Event event) {
 		final Radiogroup rg = getRadiogroup();

@@ -6,33 +6,26 @@
 	border: 0; padding: 0; margin: 0; white-space: nowrap;
 	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
 }
-.z-combobox-disd {
-	color: gray !important; cursor: default !important; opacity: .6; -moz-opacity: .6; filter: alpha(opacity=60);
-}
-.z-combobox-disd * {
-	color: gray !important; cursor: default !important;
-}
+
 .z-combobox-inp {
 	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
-	background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg.gif')}) repeat-x 0 0;
+	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg.gif')}) repeat-x 0 0;
 	border: 1px solid #7F9DB9;
 }
 .z-combobox-focus .z-combobox-inp {
 	border: 1px solid #90BCE6;
 }
 .z-combobox-text-invalid {
-	background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg-invalid.gif')}) repeat-x 0 0;
+	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg-invalid.gif')}) repeat-x 0 0;
 	border: 1px solid #DD7870;
 }
-.z-combobox-readonly, .z-combobox-text-disd {
-	background: #ECEAE4;
-}
+
 .z-combobox .z-combobox-img {
 	background-color : transparent;
 	background-image : url(${c:encodeURL('~./zul/img/button/combobtn.gif')});
 	background-position : 0 0;
 	background-repeat : no-repeat;
-	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0; 
+	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0;
 	border-bottom: 1px solid #7F9DB9;
 }
 .z-combobox-btn-over .z-combobox-img {
@@ -78,43 +71,31 @@
 .z-combobox-pp .z-combo-item-over-seld {
 	background: #82D5F8;
 }
-.z-combo-item-disd {
-	color: gray !important; cursor: default !important; opacity: .6; -moz-opacity: .6; filter: alpha(opacity=60);
-}
-.z-combo-item-disd * {
-	color: gray !important; cursor: default !important;
-}
+
 <%-- Bandbox trendy mold --%>
 .z-bandbox {
 	border: 0; padding: 0; margin: 0; white-space: nowrap;
 	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
 }
-.z-bandbox-disd {
-	color: gray !important; cursor: default !important; opacity: .6; -moz-opacity: .6; filter: alpha(opacity=60);
-}
-.z-bandbox-disd * {
-	color: gray !important; cursor: default !important;
-}
+
 .z-bandbox-inp {
-	background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg.gif')}) repeat-x 0 0;
+	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg.gif')}) repeat-x 0 0;
 	border: 1px solid #7F9DB9;
 }
 .z-bandbox-focus .z-bandbox-inp {
 	border: 1px solid #90BCE6;
 }
 .z-bandbox-text-invalid {
-	background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg-invalid.gif')}) repeat-x 0 0;
+	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg-invalid.gif')}) repeat-x 0 0;
 	border: 1px solid #DD7870;
 }
-.z-bandbox-readonly, .z-bandbox-text-disd {
-	background: #ECEAE4;
-}
+
 .z-bandbox .z-bandbox-img {
 	background-color : transparent;
 	background-image : url(${c:encodeURL('~./zul/img/button/BandboxButton.gif')});
 	background-position : 0 0;
 	background-repeat : no-repeat;
-	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0; 
+	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0;
 	border-bottom: 1px solid #86A4BE;
 }
 .z-bandbox-btn-over .z-bandbox-img {
@@ -141,36 +122,28 @@
 	border: 0; padding: 0; margin: 0; white-space: nowrap;
 	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
 }
-.z-datebox-disd {
-	color: gray !important; cursor: default !important; opacity: .6; -moz-opacity: .6; filter: alpha(opacity=60);
-}
-.z-datebox-disd * {
-	color: gray !important; cursor: default !important;
-}
 .z-datebox-over{
 	background: #dae7f6;
 }
 
 .z-datebox-inp {
-	background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg.gif')}) repeat-x 0 0;
+	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg.gif')}) repeat-x 0 0;
 	border: 1px solid #7F9DB9;
 }
 .z-datebox-focus .z-datebox-inp {
 	border: 1px solid #90BCE6;
 }
 .z-datebox-text-invalid {
-	background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg-invalid.gif')}) repeat-x 0 0;
+	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg-invalid.gif')}) repeat-x 0 0;
 	border: 1px solid #DD7870;
 }
-.z-datebox-readonly, .z-datebox-text-disd {
-	background: #ECEAE4;
-}
+
 .z-datebox .z-datebox-img {
 	background-color : transparent;
 	background-image : url(${c:encodeURL('~./zul/img/button/DateButton.gif')});
 	background-position : 0 0;
 	background-repeat : no-repeat;
-	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0; 
+	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0;
 	border-bottom: 1px solid #86A4BE;
 }
 .z-datebox-btn-over .z-datebox-img {
@@ -196,15 +169,8 @@
 }
 
 <%-- Timebox --%>
-.z-timebox-disd {
-	color: gray !important; cursor: default !important; opacity: .6; -moz-opacity: .6; filter: alpha(opacity=60);
-	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
-}
-.z-timebox-disd * {
-	color: gray !important; cursor: default !important;
-}
 .z-timebox-inp {
-	background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg.gif')}) repeat-x 0 0;
+	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg.gif')}) repeat-x 0 0;
 	border: 1px solid #7F9DB9;
 	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
 }
@@ -212,18 +178,16 @@
 	border: 1px solid #90BCE6;
 }
 .z-timebox-text-invalid {
-	background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg-invalid.gif')}) repeat-x 0 0;
+	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg-invalid.gif')}) repeat-x 0 0;
 	border: 1px solid #DD7870;
 }
-.z-timebox-readonly, .z-timebox-text-disd {
-	background: #ECEAE4;
-}
+
 .z-timebox .z-timebox-img {
 	background-color : transparent;
 	background-image : url(${c:encodeURL('~./zul/img/button/timebtn.gif')});
 	background-position : 0 0;
 	background-repeat : no-repeat;
-	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0; 
+	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0;
 	border-bottom: 1px solid #86A4BE;
 }
 .z-timebox-btn-over .z-timebox-img {
@@ -240,14 +204,8 @@
 	background-position: -34px 0;
 }
 <%-- Spinner --%>
-.z-spinner-disd {
-	color: gray !important; cursor: default !important; opacity: .6; -moz-opacity: .6; filter: alpha(opacity=60);
-}
-.z-spinner-disd * {
-	color: gray !important; cursor: default !important;
-}
 .z-spinner-inp {
-	background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg.gif')}) repeat-x 0 0;
+	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg.gif')}) repeat-x 0 0;
 	border: 1px solid #7F9DB9;
 	font-family: ${fontFamilyC};
 	font-size: ${fontSizeM}; font-weight: normal;
@@ -256,18 +214,15 @@
 	border: 1px solid #90BCE6;
 }
 .z-spinner-text-invalid {
-	background: #FFF url(${c:encodeURL('~./zul/img/grid/text-bg-invalid.gif')}) repeat-x 0 0;
+	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg-invalid.gif')}) repeat-x 0 0;
 	border: 1px solid #DD7870;
-}
-.z-spinner-readonly, .z-spinner-text-disd {
-	background: #ECEAE4;
 }
 .z-spinner .z-spinner-img {
 	background-color : transparent;
 	background-image : url(${c:encodeURL('~./zul/img/button/timebtn.gif')});
 	background-position : 0 0;
 	background-repeat : no-repeat;
-	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0; 
+	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0;
 	border-bottom: 1px solid #86A4BE;
 }
 .z-spinner-btn-over .z-spinner-img {
@@ -282,4 +237,40 @@
 }
 .z-spinner-focus .z-spinner-btn-clk .z-spinner-img , .z-spinner-btn-clk .z-spinner-img {
 	background-position: -34px 0;
+}
+
+<%-- disable --%>
+.z-spinner-disd,
+.z-timebox-disd,
+.z-datebox-disd,
+.z-bandbox-disd,
+.z-combo-item-disd,
+.z-combobox-disd {
+	opacity: .6;
+	-moz-opacity: .6;
+	filter: alpha(opacity=60);
+}
+
+.z-spinner-disd, .z-spinner-disd *,
+.z-timebox-disd, .z-timebox-disd *,
+.z-datebox-disd, .z-datebox-disd *,
+.z-bandbox-disd, .z-bandbox-disd *,
+.z-combo-item-disd, .z-combo-item-disd *,
+.z-combobox-disd, .z-combobox-disd * {
+	cursor: default !important;
+	color: #AAA !important;
+}
+
+.z-timebox-disd {
+	font-family: ${fontFamilyC};
+	font-size: ${fontSizeM};
+	font-weight: normal;
+}
+.z-combo-item-readonly, .z-combo-item-text-disd,
+.z-spinner-readonly, .z-spinner-text-disd,
+.z-timebox-readonly, .z-timebox-text-disd,
+.z-datebox-readonly, .z-datebox-text-disd,
+.z-bandbox-readonly, .z-bandbox-text-disd,
+.z-combobox-readonly, .z-combobox-text-disd {
+	background: #ECEAE4;
 }

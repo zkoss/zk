@@ -14,22 +14,24 @@ tr.z-vbox-sep {
     font-size:0;
 }
 .z-splitter-hor-outer {
+    background: transparent repeat-y top right;
     background-image:url(${c:encodeURL('~./zul/img/splt/splt-h-ns.png')});
-    background-repeat: repeat-y; max-width: 8px; width: 8px;
-    background-position: top right;
+    max-width: 8px; width: 8px;
 }
 .z-splitter-ver-outer .z-splitter-ver-outer-td {
+ 	background: transparent repeat-x bottom left;
     background-image:url(${c:encodeURL('~./zul/img/splt/splt-v-ns.png')});
-    background-repeat: repeat-x; max-height: 8px; height: 8px;
-    background-position: bottom left;
+    max-height: 8px; height: 8px;
 }
 .z-splitter-hor {
+	background: transparent no-repeat center left;
     background-image:url(${c:encodeURL('~./zul/img/splt/splt-h.png')});
-    background-position: center left; font-size:0; max-width: 8px; width: 8px;
+    font-size:0; max-width: 8px; width: 8px;
 }
 .z-splitter-ver {
+	background: transparent no-repeat top center;
     background-image:url(${c:encodeURL('~./zul/img/splt/splt-v.png')});
-    background-position: top center; font-size:0; max-height: 8px; height: 8px;
+    font-size:0; max-height: 8px; height: 8px;
 }
 .z-splitter-hor-ns {
     background-image: none; background-position: none;
@@ -45,7 +47,7 @@ tr.z-vbox-sep {
 .z-splitter-ver-btn-t, .z-splitter-ver-btn-b,
 .z-splitter-hor-btn-l, .z-splitter-hor-btn-r {
 	filter:alpha(opacity=50);  <%-- IE --%>
-	opacity:0.5;  <%-- Moz + FF --%>	
+	opacity:0.5;  <%-- Moz + FF --%>
 	background-repeat: no-repeat; vertical-align:top;
 	display:-moz-inline-box; display:inline-block; font-size:0;
 }
@@ -76,14 +78,14 @@ tr.z-vbox-sep {
     font-size:0;
 }
 .z-splitter-os-hor-outer {
+	background: transparent repeat-y top right;
     background-image:url(${c:encodeURL('~./zul/img/splt/splt-h.gif')});
-    background-repeat: repeat-y; max-width: 8px; width: 8px;
-    background-position: top right;
+    max-width: 8px; width: 8px;
 }
 .z-splitter-os-ver-outer .z-splitter-os-ver-outer-td {
+	background: transparent repeat-x bottom left;
     background-image:url(${c:encodeURL('~./zul/img/splt/splt-v.gif')});
-    background-repeat: repeat-x; max-height: 8px; height: 8px;
-    background-position: bottom left;
+   	max-height: 8px; height: 8px;
 }
 .z-splitter-os-hor, .z-splitter-os-hor-ns {
     font-size:0; max-width: 8px; width: 8px;
@@ -98,7 +100,7 @@ tr.z-vbox-sep {
 .z-splitter-os-ver-btn-t, .z-splitter-os-ver-btn-b,
 .z-splitter-os-hor-btn-l, .z-splitter-os-hor-btn-r {
 	filter:alpha(opacity=50);  <%-- IE --%>
-	opacity:0.5;  <%-- Moz + FF --%>	
+	opacity:0.5;  <%-- Moz + FF --%>
 	background-repeat: no-repeat; vertical-align:top;
 	display:-moz-inline-box; display:inline-block; font-size: 0;
 }
