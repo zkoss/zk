@@ -39,7 +39,7 @@ public interface Macro extends AfterCompose, IdSpace, DynamicPropertied {
 	/** Returns the macro URI.
 	 * <p>If {@link #setMacroURI} wasn't called, it returns the URI
 	 * defined in the macro definition.
-	 * @since 3.5.3
+	 * @since 3.6.0
 	 */
 	public String getMacroURI();
 	/** Detaches all child components and then recreate them by use of 

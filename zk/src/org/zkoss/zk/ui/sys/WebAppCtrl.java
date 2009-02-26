@@ -49,7 +49,7 @@ public interface WebAppCtrl {
 	 * if there are active sessions.
 	 * @param engine the UI engine
 	 * @exception IllegalArgumentException if engine is null.
-	 * @since 3.5.3
+	 * @since 3.6.0
 	 */
 	public void setUiEngine(UiEngine engine);
 
@@ -64,7 +64,7 @@ public interface WebAppCtrl {
 	/** Sets the desktop provider for this Web application.
 	 * @param provider the desktop cache provider
 	 * @exception IllegalArgumentException if provider is null.
-	 * @since 3.5.3
+	 * @since 3.6.0
 	 */
 	public void setDesktopCacheProvider(DesktopCacheProvider provider);
 
@@ -74,7 +74,7 @@ public interface WebAppCtrl {
 	/** Sets the UI factory for this Web application.
 	 * @param factory the UI factory
 	 * @exception IllegalArgumentException if factory is null.
-	 * @since 3.5.3
+	 * @since 3.6.0
 	 */
 	public void setUiFactory(UiFactory factory);
 
@@ -84,7 +84,7 @@ public interface WebAppCtrl {
 	/** Sets the failover manager for this Web application.
 	 * @param manager the failover manager.
 	 * If null, it means no failover manager at all.
-	 * @since 3.5.3
+	 * @since 3.6.0
 	 */
 	public void setFailoverManager(FailoverManager manager);
 
@@ -96,7 +96,7 @@ public interface WebAppCtrl {
 	/** Sets the ID generator for this Web application.
 	 * @param generator the ID generator.
 	 * If null, it means no (custom) ID generator at all.
-	 * @since 3.5.3
+	 * @since 3.6.0
 	 */
 	public void setIdGenerator(IdGenerator generator);
 
@@ -108,7 +108,7 @@ public interface WebAppCtrl {
 	/** Sets the session cache for this Web application.
 	 * @param cache the session cache
 	 * @exception IllegalArgumentException if cache is null.
-	 * @since 3.5.3
+	 * @since 3.6.0
 	 */
 	public void setSessionCache(SessionCache cache);
 

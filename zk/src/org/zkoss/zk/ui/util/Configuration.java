@@ -1272,14 +1272,14 @@ public class Configuration {
 	 * @param minisecs the delay to filtering the second click event
 	 * if it happens shorter than the second value.
 	 * If a non-positive value is specified, no click event is ignored.
-	 * @since 3.5.3
+	 * @since 3.6.0
 	 */
 	public void setClickFilterDelay(int minisecs) {
 		_clkFilterDelay = minisecs;
 	}
 	/** Returns the time, in milliseconds, to filter out consecutive
 	 * click events.
-	 * @since 3.5.3
+	 * @since 3.6.0
 	 */
 	public int getClickFilterDelay() {
 		return _clkFilterDelay;

@@ -233,7 +233,14 @@ abstract public class GenericInterpreter implements Interpreter {
 		}
 		return getImplicit(name);
 	}
-	private Object getImplicit(String name) {
+	/** Returns the value of the implict variables.
+	 * It is called by {@link #getFromNamespace}, so you don't need to
+	 * invoke this method if you invoke {@link #getFromNameSpace}.
+	 * However, you have to invoke this method as the last step, if you
+	 * implement your own getFromNamespace from scratch.
+	 * @since 3.6.0
+	 */
+	protected static Object getImplicit(String name) {
 		if ("execution".equals(name)) {
 			final Execution exec = Executions.getCurrent();
 			if (exec != null) return exec;
@@ -255,7 +262,7 @@ abstract public class GenericInterpreter implements Interpreter {
 	 * null (i.e., ignoring ns).
 	 * @param localOnly whether to look for the current namespace only.
 	 * If false, it looks up the parent namespace, if any.
-	 * @since 3.5.3
+	 * @since 3.6.0
 	 */
 	protected Object getFromNamespace(Namespace ns, String name, boolean localOnly) {
 		if (getCurrent() != null) {

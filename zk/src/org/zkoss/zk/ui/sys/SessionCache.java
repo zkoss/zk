@@ -39,7 +39,7 @@ public interface SessionCache {
 	 */
 	public void init(WebApp wapp);
 	/** Destroys the session cache
-	 * @since 3.5.3
+	 * @since 3.6.0
 	 */
 	public void destroy(WebApp wapp);
 	/** Puts a ZK session to the cache.
