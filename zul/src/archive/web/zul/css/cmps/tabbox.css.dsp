@@ -27,7 +27,7 @@
 }
 .z-tabs .z-tabs-cnt {
 	background: transparent none repeat scroll 0 0;
-	padding-left: 0px;
+	padding-left: 5px;
 	border-bottom: 1px solid #ABCDD6;
 	list-style-image: none;
 	list-style-position: outside;
@@ -83,7 +83,7 @@
 	display: block;
 	float: left;
 	padding: 0;
-	margin: 0 0 0 2px;
+	margin: 0;
 	-moz-user-select: none;
 }
 .z-tab-close {
@@ -347,7 +347,7 @@
 	height: 1px;
 }
 .z-tabs-ver .z-tabs-ver-cnt {
-	padding-top: 0px;
+	padding-top: 5px;
 	padding-left: 1px;
 	list-style-image: none;
 	list-style-position:outside;
@@ -365,8 +365,8 @@
 	font-size: ${fontSizeM};
 	cursor: default;
 	display: block;
-	padding: 2px 0 0 0 ;
-	margin: 0 0 0 0;
+	padding-top: 1px;
+	margin: 0;
 	-moz-user-select: none;
 }
 .z-tab-ver-close {
