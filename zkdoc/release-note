@@ -32,6 +32,7 @@ ZK 3.6.0
   2619208: A way to specify the charset to load i3-label*.properties
 
 * Bugs
+  2090136: IE6 only - Horizontal tabbox borderline disjoined.
   2386650: NullPointerException when create tabs in onTimer()
   2432784: Tabbox error in IE7
   2436434: Tabbox scroll to much in IE 7
@@ -74,7 +75,7 @@ ZK 3.6.0
   2614901: Menu with key down/up fail in IE
   2219660: Menus don't work over HTML component if PDF inside
   2635417: Slider scale mold no effect when mouse hover on the icon
-
+  
 * Upgrade Notes
   + The default setting disables the feature of ignoring the consecutive
 	click events if it happens too close to the previous one

@@ -251,9 +251,15 @@ tr.z-list-item td.z-list-item-focus {
 .z-tab-hr {
 	background-image: url(${c:encodeURL('~./zul/img/tab/tab-corner.gif')});
 }
+.z-tab-hm {
+	background-image: url(${c:encodeURL('~./zul/img/tab/tab-hm.gif')});
+}
 .z-tab-ver-hl,
 .z-tab-ver-hl .z-tab-ver-hr {
 	background-image: url(${c:encodeURL('~./zul/img/tab/tab-v-corner.gif')});
+}
+.z-tab-ver .z-tab-ver-hm {
+	background-image: url(${c:encodeURL('~./zul/img/tab/tab-v-hm.png')});
 }
 .z-tab-accordion-tl,
 .z-tab-accordion-tr {
