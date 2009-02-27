@@ -12,6 +12,13 @@
 .z-tabs-cnt .z-tab-text {
 	display: block;
 }
+.z-tab-text,
+.z-tab-ver-text,
+.z-tab-accordion-text,
+.z-tab-accordion-lite-text {
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
 .z-tabs .z-tabs-space {
 	height: 2px;
 	border: 1px solid #ABCDD6;
@@ -65,7 +72,7 @@
 	background: #C7E3F3 repeat-x scroll 0 top;
 	background-image: url(${c:encodeURL('~./zul/img/tab/tabs-bg.png')});
 	border-bottom: 1px solid #8DB2E3;
-	padding-left: 0px;
+	padding-left: 3px;
 	padding-top: 1px;
 	list-style-image: none;
 	list-style-position: outside;
@@ -347,7 +354,7 @@
 	height: 1px;
 }
 .z-tabs-ver .z-tabs-ver-cnt {
-	padding-top: 5px;
+	padding-top: 2px;
 	padding-left: 1px;
 	list-style-image: none;
 	list-style-position:outside;
@@ -364,14 +371,13 @@
 	font-family: ${fontFamilyT};
 	font-size: ${fontSizeM};
 	cursor: default;
-	display: block;
-	padding-top: 1px;
+	display: block;	
 	margin: 0;
 	-moz-user-select: none;
 }
 .z-tab-ver-close {
 	right: 1px;
-	top: 15px;
+	top: 5px;
 	width: 11px;
 	height: 12px;
 	cursor: pointer;
@@ -417,7 +423,7 @@
 .z-tab-ver .z-tab-ver-hm {
 	overflow: hidden;
 	cursor: pointer;
-	padding: 2px 14px 0 4px;
+	padding-left: 5px;
 	background: transparent repeat-y scroll -128px 0;
 	background-image: url(${c:encodeURL('~./zul/img/tab/tab-v-hm.png')});
 	zoom: 1;

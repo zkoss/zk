@@ -92,7 +92,7 @@ zkTab2 = {
 		var meta = $parent(cmp);
 		if (!meta._toscroll)
 			meta._toscroll = function () {
-				zkTabs2.scrollingchk($uuid(meta));
+				zkTabs2.scrollcheck($uuid(meta));
 			};
 		zk.addInit(meta._toscroll, false, $uuid(meta) );
 	},
@@ -106,7 +106,7 @@ zkTab2 = {
 			case "style.height":
 				zkau.setAttr(cmp, name, value);
 				zk.beforeSizeAt(cmp);
-				zkTabs2.scrollingchk($uuid($parent(cmp)));
+				zkTabs2.scrollcheck($uuid($parent(cmp)));
 				zkTabs2._fixWidth($uuid($parent(cmp)));
 				zk.onSizeAt(cmp);
 				return true;
@@ -135,9 +135,9 @@ zkTab2 = {
 	selTab: function(tab, notify) {
 		var tabbox = $e(getZKAttr(tab, "box"));
 		if (zkTabbox2._isVert(tabbox))
-			zkTabs2.scrollingchk($uuid($parent(tab)),"vsel",tab);
+			zkTabs2.scrollcheck($uuid($parent(tab)),"vsel",tab);
 		else if (!zkTabbox2._isAccord(tabbox))
-			zkTabs2.scrollingchk($uuid($parent(tab)),"sel",tab);
+			zkTabs2.scrollcheck($uuid($parent(tab)),"sel",tab);
 		tab = $e(tab);
 		if (!tab)
 			return;
@@ -158,7 +158,7 @@ zkTab2 = {
 		var tbx = $e(getZKAttr(cmp, "box"));
 		if (!zkTabbox2._isAccord(tbx)) { //if delete tab , need scroll back !
 		zk.addCleanup(function () {
-			zkTabs2.scrollingchk(parent.id, "cln", cmp);
+			zkTabs2.scrollcheck(parent.id, "cln", cmp);
 				if (zkTabbox2._isVert(tbx)) {
 					zkTabs2._fixHgh(tbx, parent);
 				}
@@ -299,7 +299,7 @@ zkTabs2 = {
 		var meta = $parent(cmp);
 		if (!meta.initscroll)
 			meta.initscroll = function () {
-				zkTabs2.scrollingchk(cmp.id,"init");
+				zkTabs2.scrollcheck(cmp.id,"init");
 			};
 		zk.addInit(meta.initscroll, false, meta.id);
 	},
@@ -349,11 +349,11 @@ zkTabs2 = {
 			cmp.style.width = "";
 		}
 		zkTabs2._fixWidth(cmp.id);
-		zkTabs2.scrollingchk(cmp.id);
+		zkTabs2.scrollcheck(cmp.id);
 	},
 	onSize: function(cmp) {
 		zkTabs2._fixWidth(cmp.id);
-		zkTabs2.scrollingchk(cmp.id);
+		zkTabs2.scrollcheck(cmp.id);
 		zk.cleanVisibility($parentByType(cmp, "Tabbox2"));
 	},
 	beforeSize: function(cmp) {
@@ -373,20 +373,19 @@ zkTabs2 = {
 	 * @param {string} : use to direct scroll to somewhere.
 	 * @param {cmp}	   : use to scroll to specific tab
 	 */
-	scrollingchk: function(uuid, way, cmp) {
+	scrollcheck: function(uuid, way, cmp) {
 		var tbsdiv = $e(uuid),
 			tabbox = $parentByType($e(uuid), "Tabbox2");
 
 		if (!zkTabbox2._isScroll(tabbox)) return;
 		if (!tbsdiv) return;	// tabbox is delete , no need to check scroll
-		if (tbsdiv.offsetWidth < 36)  return; //tooooo small
 		if (zkTabbox2._isVert(tabbox)) {//vertical
 			if (tbsdiv.offsetHeight < 36)  return; //tooooo small
 			var header = $e(uuid , "header"),
 				ul_si = $e(uuid , "ul"),
 				headheight = header.offsetHeight,
 				cldheight = 0,
-				tab = zk.childNodes(ul_si, zkTabs2._isLegalType);
+				tab = zk.childNodes(ul_si, zkTabs2._isLegalTab);
 				for (var i=0,count=tab.length;i<count;i++) {
 					cldheight = cldheight + tab[i].offsetHeight;
 				}
@@ -407,7 +406,7 @@ zkTabs2 = {
 							if (ost < sct) {
 								zkTabs2._tabscroll(uuid, "up", sct - ost);
 							} else if (ost + tosh > sct + hosh) {
-								zkTabs2._tabscroll(uuid, "down", ost + tosh - sct - hosh + 4);
+								zkTabs2._tabscroll(uuid, "down", ost + tosh - sct - hosh);
 							}
 							break;
 						case "end":
@@ -423,7 +422,7 @@ zkTabs2 = {
 							if (ost < scltop) {
 								zkTabs2._tabscroll(uuid, "up", scltop - ost);
 							} else if (ost + tosh > scltop + host) {
-								zkTabs2._tabscroll(uuid, "down", ost + tosh - scltop - host + 2);
+								zkTabs2._tabscroll(uuid, "down", ost + tosh - scltop - host);
 							}
 							break;
 					}
@@ -439,14 +438,17 @@ zkTabs2 = {
 					}
 				}
 		} else if(!zkTabbox2._isAccord(tabbox)) {
-			var tabs = $e(uuid + "!cave"), header = $e(uuid + "!header"),
-			 a = zk.childNodes(tabs, zkTabs2._isLegalType);
-			var headwidth = header.offsetWidth, cldwidth = 0;
-			for (var i = 0, count = a.length; i < count; i++)
-				cldwidth = cldwidth + $int(a[i].offsetWidth) + 2;
+			if (tbsdiv.offsetWidth < 36)  return; //tooooo small
+			var cave = $e(uuid + "!cave"), 
+				header = $e(uuid + "!header"),
+			 	alltab = zk.childNodes(cave, zkTabs2._isLegalTab),
+				headwidth = header.offsetWidth,
+				childwidth = 0;
+			for (var i = 0, count = alltab.length; i < count; i++)
+				childwidth = childwidth + $int(alltab[i].offsetWidth);// + 2;
 
 			if (tabbox._scrolling) { //already in scrolling status
-				if (cldwidth <= (headwidth)) {
+				if (childwidth <= (headwidth)) {
 					tabbox._scrolling = false;
 					zkTabs2._hidebutton(tbsdiv);
 					header.style.width = tabbox.offsetWidth - 2 + "px";
@@ -455,38 +457,42 @@ zkTabs2 = {
 				// scroll to specific position
 				switch (way) {
 					case "init":
-						if (cmp == null)cmp = zkTab2._getSelTab(zk.firstChild(tabs,"LI"));
-						var osl = cmp.offsetLeft, tosw = cmp.offsetWidth, scl = header.scrollLeft, hosw = headwidth;
-						if (osl < scl) {
-							zkTabs2._tabscroll(uuid, "left", scl - osl + 2);
-						} else if (osl + tosw > scl + hosw) {
-							zkTabs2._tabscroll(uuid, "right", osl + tosw - scl - hosw + 2);
+						if (cmp == null)
+							cmp = zkTab2._getSelTab(zk.firstChild(cave,"LI"));
+						var cmpOffsetLeft = cmp.offsetLeft, 
+							cmpOffsetWidth = cmp.offsetWidth, 
+							scl = header.scrollLeft, 
+							hosw = headwidth;
+						if (cmpOffsetLeft < scl) {
+							zkTabs2._tabscroll(uuid, "left", scl - cmpOffsetLeft + 2);
+						} else if (cmpOffsetLeft + cmpOffsetWidth > scl + hosw) {
+							zkTabs2._tabscroll(uuid, "right", cmpOffsetLeft + cmpOffsetWidth - scl - hosw);
 						}
 						break;
 					case "end":
-						var d = cldwidth - header.offsetWidth - header.scrollLeft + 2;
+						var d = childwidth - header.offsetWidth - header.scrollLeft + 2;
 						d >= 0 ? zkTabs2._tabscroll(uuid, "right", d) : zkTabs2._tabscroll(uuid, "left", Math.abs(d));
 						break;
 					case "sel":
-						var osl = cmp.offsetLeft, tosw = cmp.offsetWidth, scl = header.scrollLeft, hosw = headwidth;
+						var cmpOffsetLeft = cmp.offsetLeft, cmpOffsetWidth = cmp.offsetWidth, scl = header.scrollLeft, hosw = headwidth;
 						//over left
-						if (osl < scl) {
-							zkTabs2._tabscroll(uuid, "left", scl - osl + 2);
-						} else if (osl + tosw > scl + hosw) {
-							zkTabs2._tabscroll(uuid, "right", osl + tosw - scl - hosw + 2);
+						if (cmpOffsetLeft < scl) {
+							zkTabs2._tabscroll(uuid, "left", scl - cmpOffsetLeft + 2);
+						} else if (cmpOffsetLeft + cmpOffsetWidth > scl + hosw) {
+							zkTabs2._tabscroll(uuid, "right", cmpOffsetLeft + cmpOffsetWidth - scl - hosw);
 						}
 						break;
 				}
 
 			} else { // not enough tab to scroll
-				if (cldwidth > (headwidth - 10)) {
+				if (childwidth > (headwidth - 10)) {
 					tabbox._scrolling = true;
 					zkTabs2._showbutton(tbsdiv);
 					var caveul = $e(getZKAttr(tabbox, "tabs"),"cave");
 					caveul.style.width = "5432px";
 					header.style.width = tabbox.offsetWidth - 38 + "px";
 					if (way == "sel") {
-						var d = cldwidth - header.offsetWidth - header.scrollLeft + 2;
+						var d = childwidth - header.offsetWidth - header.scrollLeft + 2;
 						d < 0 ? "" : zkTabs2._tabscroll(uuid, "right", d);
 					}
 				}
@@ -504,12 +510,12 @@ zkTabs2 = {
 		if (ele.id == uuid + "!right") {
 			var hosw = head.offsetWidth,
 				scl = head.scrollLeft,
-				a =  zk.childNodes($e(uuid + "!cave"), zkTabs2._isLegalType);
+				a =  zk.childNodes($e(uuid + "!cave"), zkTabs2._isLegalTab);
 			if (!a.length) return; // nothing to do
 			for (var i = 0, count = a.length; i < count; i++) {
 				if ($type(a[i]) == "Tab2") {
 					if (a[i].offsetLeft + a[i].offsetWidth > scl + hosw) {
-						move = a[i].offsetLeft + a[i].offsetWidth - scl - hosw + 2;
+						move = a[i].offsetLeft + a[i].offsetWidth - scl - hosw;
 						if (!move || isNaN(move))
 							return null;
 						zkTabs2._tabscroll(uuid, "right", move);
@@ -518,14 +524,15 @@ zkTabs2 = {
 				}
 			};
 		} else if (ele.id == uuid + "!left") {//Scroll to next left tab
-				var a =  zk.childNodes($e(uuid + "!cave"), zkTabs2._isLegalType),
+				var a =  zk.childNodes($e(uuid + "!cave"), zkTabs2._isLegalTab),
 					scl = head.scrollLeft;
 				if (!a.length) return; // nothing to do
 				for (var i = 0, count = a.length; i < count; i++) {
 					if (a[i].offsetLeft > scl) {
 						//if no Sibling tab no sroll
-						if (zk.previousSibling(a[i], "LI") == null)  return;
-						move = scl - zk.previousSibling(a[i], "LI").offsetLeft + 2;
+						tabli = zk.previousSibling(a[i], "LI");
+						if (tabli == null)  return;
+						move = scl - tabli.offsetLeft;
 						if (isNaN(move)) return;
 						zkTabs2._tabscroll(uuid, "left", move);
 						return;
@@ -537,7 +544,7 @@ zkTabs2 = {
 				return;
 		} else if (ele.id == uuid + "!up") {
 				var scltop =  head.scrollTop,
-					tab = zk.childNodes($e(uuid,"ul"), zkTabs2._isLegalType);
+					tab = zk.childNodes($e(uuid,"ul"), zkTabs2._isLegalTab);
 				if (!tab.length) return; // nothing to do
 				for (var i = 0, count = tab.length; i < count; i++) {
 					if (tab[i].offsetTop >= scltop) {
@@ -555,13 +562,13 @@ zkTabs2 = {
 				return;
 		} else if (ele.id == uuid + "!down") {
 			var scltop = head.scrollTop,
-				tab = zk.childNodes($e(uuid,"ul"), zkTabs2._isLegalType),
+				tab = zk.childNodes($e(uuid,"ul"), zkTabs2._isLegalTab),
 				scltop =  head.scrollTop,
 				hosh = head.offsetHeight;
 			if (!tab.length) return; //nothing to do
 			for (var i = 0, count = tab.length; i < count; i++) {
 				if (tab[i].offsetTop + tab[i].offsetHeight > scltop + hosh ) {
-					move = tab[i].offsetTop + tab[i].offsetHeight - scltop - hosh + 2;
+					move = tab[i].offsetTop + tab[i].offsetHeight - scltop - hosh;
 					if (!move || isNaN(move)) return ;
 					zkTabs2._tabscroll(uuid, "down", move);
 					return;
@@ -607,7 +614,7 @@ zkTabs2 = {
 		}
 	},
 	/** Check Node Type. */
-	_isLegalType: function (n) {return ($type(n) == "Tab2");},
+	_isLegalTab: function (n) {return ($type(n) == "Tab2");},
 	/** Check Node Tag. */
 	_isLegalLI: function (n) {return $tag(n) == "LI";},
 	/** Fix the width of header. */
