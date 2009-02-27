@@ -380,17 +380,20 @@ zkTabs2 = {
 		if (!zkTabbox2._isScroll(tabbox)) return;
 		if (!tbsdiv) return;	// tabbox is delete , no need to check scroll
 		if (zkTabbox2._isVert(tabbox)) {//vertical
-			if (tbsdiv.offsetHeight < 36)  return; //tooooo small
 			var header = $e(uuid , "header"),
 				ul_si = $e(uuid , "ul"),
 				headheight = header.offsetHeight,
 				cldheight = 0,
-				tab = zk.childNodes(ul_si, zkTabs2._isLegalTab);
+				tab = zk.childNodes(ul_si, zkTabs2._isLegalTab),
+				upbtn = $e(uuid + "!up"),
+				downbtn = $e(uuid + "!down");
 				for (var i=0,count=tab.length;i<count;i++) {
 					cldheight = cldheight + tab[i].offsetHeight;
 				}
 				if (tabbox._scrolling) { //already in scrolling status
-					if (cldheight <= (headheight+18)) {
+				
+					if (tbsdiv.offsetHeight < upbtn.offsetHeight + downbtn.offsetHeight)  return;
+					if (cldheight <= (headheight + upbtn.offsetHeight)) {
 						tabbox._scrolling = false;
 						zkTabs2._hidebutton(tbsdiv)
 						header.style.height= tabbox.offsetHeight-2 + "px";
@@ -427,7 +430,7 @@ zkTabs2 = {
 							break;
 					}
 				} else { // not enough tab to scroll
-					if (cldheight > (headheight - 18)) {
+					if (cldheight > (headheight - upbtn.offsetHeight)) {
 						tabbox._scrolling = true;
 						zkTabs2._showbutton(tbsdiv);
 						header.style.height = tabbox.offsetHeight - 36 + "px";
@@ -438,17 +441,19 @@ zkTabs2 = {
 					}
 				}
 		} else if(!zkTabbox2._isAccord(tabbox)) {
-			if (tbsdiv.offsetWidth < 36)  return; //tooooo small
 			var cave = $e(uuid + "!cave"), 
 				header = $e(uuid + "!header"),
 			 	alltab = zk.childNodes(cave, zkTabs2._isLegalTab),
 				headwidth = header.offsetWidth,
-				childwidth = 0;
+				childwidth = 0,
+				leftbtn = $e(uuid + "!left"),
+				rightbtn = $e(uuid + "!right");
 			for (var i = 0, count = alltab.length; i < count; i++)
 				childwidth = childwidth + $int(alltab[i].offsetWidth);// + 2;
 
 			if (tabbox._scrolling) { //already in scrolling status
-				if (childwidth <= (headwidth)) {
+				if (tbsdiv.offsetWidth < leftbtn.offsetWidth + rightbtn.offsetWidth)  return;
+				if (childwidth <= (headwidth + leftbtn.offsetWidth)) {
 					tabbox._scrolling = false;
 					zkTabs2._hidebutton(tbsdiv);
 					header.style.width = tabbox.offsetWidth - 2 + "px";
@@ -528,7 +533,7 @@ zkTabs2 = {
 					scl = head.scrollLeft;
 				if (!a.length) return; // nothing to do
 				for (var i = 0, count = a.length; i < count; i++) {
-					if (a[i].offsetLeft > scl) {
+					if (a[i].offsetLeft >= scl) {
 						//if no Sibling tab no sroll
 						tabli = zk.previousSibling(a[i], "LI");
 						if (tabli == null)  return;
@@ -538,7 +543,7 @@ zkTabs2 = {
 						return;
 					};
 				};
-				move = scl - a[a.length-1].offsetLeft + 2;
+				move = scl - a[a.length-1].offsetLeft;
 				if (isNaN(move)) return;
 				zkTabs2._tabscroll(uuid, "left", move);
 				return;
