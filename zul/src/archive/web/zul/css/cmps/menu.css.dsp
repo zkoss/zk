@@ -169,7 +169,7 @@
 
 /* define menupopup effect */
 .z-menu-popup {
-	background:#85BAD5 repeat-y scroll 0 0;
+	background:#CCE6FB repeat-y scroll 0 0;
 	border:1px solid #7F9DB9;
 	padding:2px;
 	z-index:88000;

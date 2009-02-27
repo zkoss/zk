@@ -371,7 +371,7 @@
 	font-family: ${fontFamilyT};
 	font-size: ${fontSizeM};
 	cursor: default;
-	display: block;	
+	display: block;
 	margin: 0;
 	-moz-user-select: none;
 }
@@ -459,7 +459,7 @@
 }
 
 .ie6 .z-tabs-ver-space {
-	margin-right: -4px;	
+	margin-right: -4px;
 }
 .z-tabbox-ver .z-tabs-ver-header-scroll {
 	margin-top: 18px;
@@ -577,9 +577,9 @@
 	zoom: 1;
 }
 .z-tabpanel {
-	border-top: none;	
+	border-top: none;
 }
-.ie6 .z-tabpanels-ver {	
+.ie6 .z-tabpanels-ver {
 	border-left: none;
 }
 .z-tabpanel-cnt { <%-- Bug 2104974 --%>
