@@ -293,11 +293,11 @@ span.z-drop-allow, span.z-drop-disallow {
 	height: 16px;
 }
 span.z-drop-allow {
-	background: transparent no-repeat 0 -16px;
+	background: transparent no-repeat 0 -64px;
 	background-image: url(${c:encodeURL('~./zul/img/misc/drag.png')});
 }
 span.z-drop-disallow {
-	background: transparent no-repeat 0 -32px;
+	background: transparent no-repeat 0 -80px;
 	background-image: url(${c:encodeURL('~./zul/img/misc/drag.png')});
 }
 div.z-drop-ghost {
@@ -319,13 +319,14 @@ div.z-drop-cnt {
 }
 .z-fileupload-add {
 	cursor: pointer;
+	background: transparent no-repeat 0 -48px;
 	background-image: url(${c:encodeURL('~./zul/img/misc/drag.png')});
 	width: 16px;
 	height: 16px;
 }
 .z-fileupload-delete {
 	cursor: pointer;
-	background: transparent no-repeat 0 -32px;
+	background: transparent no-repeat 0 -80px;
 	background-image: url(${c:encodeURL('~./zul/img/misc/drag.png')});
 	width: 16px;
 	height: 16px;
