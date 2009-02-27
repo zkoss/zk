@@ -590,9 +590,6 @@
 	overflow: hidden;
 	visibility: hidden;
 }
-.z-tabpanel-accordion-outer {
-	position: relative;
-}
 .z-tab-accordion-header {
 	cursor: pointer;
 	position: relative;
@@ -708,10 +705,6 @@
 	border-top: 1px solid #99BBE8;
 	border-right: 1px solid #99BBE8;
 	border-left: 1px solid #99BBE8;
-	position: relative;
-}
-.z-tabpanel-accordion-lite-outer {
-	position: relative;
 }
 .z-tab-accordion-lite-header {
 	overflow: hidden;

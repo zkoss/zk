@@ -377,7 +377,7 @@ zkTabs2 = {
 		var tbsdiv = $e(uuid),
 			tabbox = $parentByType($e(uuid), "Tabbox2");
 
-		if (!zkTabbox2._isScroll(tabbox)) return;
+		if (!zk.isRealVisible(tabbox) || !zkTabbox2._isScroll(tabbox)) return;
 		if (!tbsdiv) return;	// tabbox is delete , no need to check scroll
 		if (zkTabbox2._isVert(tabbox)) {//vertical
 			var header = $e(uuid , "header"),
