@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B35-2635417.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Feb 25 09:25:41     2009, Created by jumperchen
+
+Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	Please mouse hover on the icon, it should change its background
+	<groupbox mold="3d" width="250px">
+		<caption label="Scale" />
+		<slider id="slider3" mold="scale" />
+	</groupbox>
+</zk>

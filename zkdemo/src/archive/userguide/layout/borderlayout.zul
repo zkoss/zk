@@ -48,7 +48,7 @@ Rights Reserved.
 			<div style="float:right">
  				<textbox sclass="demo-search-inp"/><separator orient="vertical"/><button label="Search Site"/>
 			</div>
-			<image style="padding:0 10px;" src="/img/ZK-Logo2.gif"/>
+			<image style="padding:0 10px;" src="/img/ZK-Logo.gif"/>
 			<label style="position:relative; top:-30px;padding-left: 50px; font-size:24px;color:#008BB6;font-weight:bold;"
 					value="Project ZK"/>
 		</div>
