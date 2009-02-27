@@ -72,7 +72,7 @@
 	background: #C7E3F3 repeat-x scroll 0 top;
 	background-image: url(${c:encodeURL('~./zul/img/tab/tabs-bg.png')});
 	border-bottom: 1px solid #7EAAC6;
-	padding-left: 3px;
+	padding-left: 5px;
 	padding-top: 1px;
 	list-style-image: none;
 	list-style-position: outside;

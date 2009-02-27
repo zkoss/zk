@@ -391,9 +391,8 @@ zkTabs2 = {
 					cldheight = cldheight + tab[i].offsetHeight;
 				}
 				if (tabbox._scrolling) { //already in scrolling status
-				
-					if (tbsdiv.offsetHeight < upbtn.offsetHeight + downbtn.offsetHeight)  return;
-					if (cldheight <= (headheight + upbtn.offsetHeight)) {
+					if (tbsdiv.offsetHeight < (upbtn ? upbtn.offsetHeight : 0 ) + (downbtn ? downbtn.offsetHeight : 0 ))  return;
+					if (cldheight <= (headheight + (upbtn ? upbtn.offsetHeight : 0 ))) {
 						tabbox._scrolling = false;
 						zkTabs2._hidebutton(tbsdiv)
 						header.style.height= tabbox.offsetHeight-2 + "px";
@@ -430,7 +429,7 @@ zkTabs2 = {
 							break;
 					}
 				} else { // not enough tab to scroll
-					if (cldheight > (headheight - upbtn.offsetHeight)) {
+					if (cldheight > (headheight - (upbtn ? upbtn.offsetHeight : 0 ))) {
 						tabbox._scrolling = true;
 						zkTabs2._showbutton(tbsdiv);
 						header.style.height = tabbox.offsetHeight - 36 + "px";
@@ -452,8 +451,8 @@ zkTabs2 = {
 				childwidth = childwidth + $int(alltab[i].offsetWidth);// + 2;
 
 			if (tabbox._scrolling) { //already in scrolling status
-				if (tbsdiv.offsetWidth < leftbtn.offsetWidth + rightbtn.offsetWidth)  return;
-				if (childwidth <= (headwidth + leftbtn.offsetWidth)) {
+				if (tbsdiv.offsetWidth < (leftbtn ? leftbtn.offsetWidth : 0) + (rightbtn ? rightbtn.offsetWidth : 0))  return;
+				if (childwidth <= (headwidth + (leftbtn ? leftbtn.offsetWidth : 0))) {
 					tabbox._scrolling = false;
 					zkTabs2._hidebutton(tbsdiv);
 					header.style.width = tabbox.offsetWidth - 2 + "px";
