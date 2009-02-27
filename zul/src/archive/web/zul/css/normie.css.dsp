@@ -27,8 +27,8 @@ option {
 	text-overflow: ellipsis;
 }
 <%-- norm.css.dsp --%>
-.span.z-drop-allow,
-.span.z-drop-disallow {
+span.z-drop-allow,
+span.z-drop-disallow {
 	background-image: url(${c:encodeURL('~./zul/img/misc/drag.gif')});
 }
 <%-- Widget.css.dsp --%>
