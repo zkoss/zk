@@ -153,7 +153,7 @@
 .z-west-colpsd,
 .z-south-colpsd,
 .z-north-colpsd {
-	background-color: #E5FDFF;
+	background-color: #E1F0F2;
 	position: absolute;
 	width: 20px;
 	height: 20px;

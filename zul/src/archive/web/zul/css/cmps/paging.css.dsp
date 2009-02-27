@@ -55,7 +55,7 @@
 	display:block;
 	padding:2px;
 	position:relative;
-	background:#D0DEF0 repeat-x scroll 0 center;
+	background:#DAF3FF repeat-x scroll 0 center;
 	background-image: url(${c:encodeURL('~./zul/img/common/bar-bg.png')});
 }
 

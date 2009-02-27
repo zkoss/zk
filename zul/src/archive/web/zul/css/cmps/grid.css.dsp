@@ -12,7 +12,7 @@ div.z-grid-header, div.z-grid-header tr, div.z-grid-footer {
 	border: 0; overflow: hidden; width: 100%;
 }
 div.z-grid-header tr.z-columns, div.z-grid-header tr.z-auxhead {
-	background-color: #C7E5F1;
+	background-color: #C3E7FB;
 	background-repeat: repeat-x;
 	background-image: url(${c:encodeURL('~./zul/img/grid/column-bg.png')});
 }
@@ -148,7 +148,7 @@ a.z-column-btn:hover {
 	background-position: -14px center;
 }
 .z-column-over {
-	background: transparent repeat-x 0 0;
+	background: #ACDDF9 repeat-x 0 0;
 	background-image: url(${c:encodeURL('~./zul/img/grid/column-over.png')});
 }
 .z-columns-menu-grouping .z-menu-item-img {
