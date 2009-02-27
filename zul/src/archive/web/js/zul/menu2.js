@@ -326,7 +326,9 @@ zkMenu2 = { // menu
 		if (anc) {
 			var menu = $e(getZKAttr(pp, "menuId"));
 			if (zk.ie && zkMenu2.isTop(menu))
-				setTimeout(function (){anc.focus();},10); // Bug 2614901
+				setTimeout(function (){try {
+					anc.focus();
+				} catch (e){}},10); // Bug 2614901
 			else
 				anc.focus();
 		}

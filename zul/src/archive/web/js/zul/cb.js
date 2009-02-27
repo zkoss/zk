@@ -384,7 +384,7 @@ zkCmbox.open = function (pp, hilite) {
 	zkCmbox._pop.addFloatId(pp.id, $type(cb) != "Cmbox");
 
 	zkCmbox._open(cb, uuid, pp, hilite);
-
+	if (zk.ie6Only) zk.redoCSS(pp);
 	if (zkau.asap(cb, "onOpen"))
 		zkau.send({uuid: uuid, cmd: "onOpen",
 			data: [true, null, $e(uuid + "!real").value]});
