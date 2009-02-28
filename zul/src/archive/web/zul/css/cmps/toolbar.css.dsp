@@ -4,7 +4,7 @@
 .z-toolbar {
 	border-color: #B1CBD5; border-style: solid; border-width: 0 0 1px 0; display: block;
 	padding: 2px;
-	background: #CEE7F5 repeat-x top left;
+	background: #DAF3FF repeat-x 0 center;
 	background-image: url(${c:encodeURL('~./zul/img/common/bar-bg.png')});
 	position: relative; zoom: 1;
 }

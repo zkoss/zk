@@ -367,8 +367,8 @@ ul ul ul li	{list-style: url(${c:encodeURL('/img/z-bullet3.gif')}) square}
 	padding: 10px 10px 0 10px;
 	float:left;
 }
-.demo-items {
-	border: none; background: white;
+div.demo-items {
+	border: 0; background: white;
 }
 .demo-items .z-listbox-body {
 	overflow-x: hidden;

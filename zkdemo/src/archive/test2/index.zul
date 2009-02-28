@@ -29,9 +29,9 @@ function newWindow(url){
 										]]></attribute>
 									</checkbox>
 									<hbox>
-										<button label="clear" onClick='lb.setSelectedItem(null);main.getFellow("ifr").setSrc("");main.getFellow("center").title = "ZK TEST2"'/>
-										<button label="reload" onClick='main.getFellow("center").invalidate()'/>
-										<button label="tracker">
+										<button mold="os" label="clear" onClick='lb.setSelectedItem(null);main.getFellow("ifr").setSrc("");main.getFellow("center").title = "ZK TEST2"'/>
+										<button mold="os" label="reload" onClick='main.getFellow("center").invalidate()'/>
+										<button mold="os" label="tracker">
 		<attribute name="onClick"><![CDATA[
 			if (lb.getSelectedItem() != null) {
 				String label = lb.getSelectedItem().getLabel();
@@ -67,15 +67,15 @@ function newWindow(url){
 								<vbox>
 								Filter File Name By Tag:
 								<textbox id="fnt"/>
-								<button label="Show Uncategorized" onClick="main.showUncategorized();"/> 
+								<button mold="os" label="Show Uncategorized" onClick="main.showUncategorized();"/> 
 								For Example: [A,H,Grid,!BI]
 								</vbox>
 							</tabpanel>
 						</tabpanels>
 					</tabbox>
 					<hbox>
-						<button label="Export File Name" onClick="main.exportFileName();"/>
-						<button label="Import File Name" onClick="main.importFileName();"/>
+						<button mold="os" label="Export File Name" onClick="main.exportFileName();"/>
+						<button mold="os" label="Import File Name" onClick="main.importFileName();"/>
 					</hbox>
 					<zscript>
 					org.zkoss.zkdemo.test2.FileDateCompare asc = new org.zkoss.zkdemo.test2.FileDateCompare(true),
@@ -103,8 +103,8 @@ function newWindow(url){
 		<!-- ******************** Code Panel ******************** -->
 		<window id="codeViewPanel">
 			<caption>
-				<button label="Save" onClick=" main.saveBack()"/>
-				<button label="Reload" onClick="main.reloadCodeView();"/>
+				<button mold="os" label="Save" onClick=" main.saveBack()"/>
+				<button mold="os" label="Reload" onClick="main.reloadCodeView();"/>
 			</caption>
 			<textbox id="codeView" class="code" rows="15" width="99%">
 				<attribute name="onCreate"><![CDATA[main.codeView=self;]]></attribute>

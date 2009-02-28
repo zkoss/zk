@@ -79,7 +79,7 @@
 }
 .z-slider-sphere-ver-btn
  {
- 	height: 14px; 
+ 	height: 14px;
  	left: 3px;
 }
 .z-slider-sphere-hor-btn {

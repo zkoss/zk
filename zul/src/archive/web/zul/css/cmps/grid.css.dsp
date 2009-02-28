@@ -12,7 +12,7 @@ div.z-grid-header, div.z-grid-header tr, div.z-grid-footer {
 	border: 0; overflow: hidden; width: 100%;
 }
 div.z-grid-header tr.z-columns, div.z-grid-header tr.z-auxhead {
-	background-color: #C7E5F1;
+	background-color: #C3E7FB;
 	background-repeat: repeat-x;
 	background-image: url(${c:encodeURL('~./zul/img/grid/column-bg.png')});
 }
@@ -27,9 +27,7 @@ div.z-grid-header th.z-column, div.z-grid-header th.z-auxheader {
 div.z-grid-header .z-column-sort div.z-column-cnt {
 	cursor: pointer;
 	padding-right: 9px;
-	background-color: transparent;
-	background-position: 99% center;
-	background-repeat: no-repeat;
+	background: transparent no-repeat 99% center;
 	background-image: url(${c:encodeURL('~./zul/img/sort/v_hint.gif')});
 }
 div.z-grid-header .z-column-sort-asc div.z-column-cnt {
@@ -138,12 +136,10 @@ td.z-group-inner {
 	position: relative;
 }
 .z-column-btn {
-	background-color : #DDEEFB;
-	background-repeat : no-repeat;
-	background-position : left center;
+	background: transparent no-repeat left center;
 	display: none; position: absolute; width: 14px; right: 0; top: 0; z-index: 15;
 	cursor: pointer;
-	background-image : url(${c:encodeURL('~./zul/img/grid/hd-btn.png')});
+	background-image: url(${c:encodeURL('~./zul/img/grid/hd-btn.png')});
 }
 .z-column-over .z-column-btn, .z-column-visi .z-column-btn {
 	display: block;
@@ -152,7 +148,7 @@ a.z-column-btn:hover {
 	background-position: -14px center;
 }
 .z-column-over {
-	background: #B9EBFF repeat-x 0 0;
+	background: #ACDDF9 repeat-x 0 0;
 	background-image: url(${c:encodeURL('~./zul/img/grid/column-over.png')});
 }
 .z-columns-menu-grouping .z-menu-item-img {

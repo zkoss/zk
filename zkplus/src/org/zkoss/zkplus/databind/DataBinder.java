@@ -923,13 +923,14 @@ public class DataBinder implements java.io.Serializable {
 	
 	private Object fetchValue(Object bean, BindingNode node, String nodeid, boolean registerNode) {
 		if (bean != null) {
-			try {
-				bean = Fields.get(bean, nodeid);
-			} catch (NoSuchMethodException ex) {
-				//feature#1766905 Binding to Map
-				if (bean instanceof Map) {
-					bean = ((Map)bean).get(nodeid);
-				} else {
+			//feature#1766905 Binding to Map
+			//bug# 2630168, check Map case first and avoid throw unnecessary exception
+			if (bean instanceof Map) {
+				bean = ((Map)bean).get(nodeid);
+			} else {
+				try {
+					bean = Fields.get(bean, nodeid);
+				} catch (NoSuchMethodException ex) {
 					throw UiException.Aide.wrap(ex);
 				}
 			}

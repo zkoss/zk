@@ -55,7 +55,7 @@
 	display:block;
 	padding:2px;
 	position:relative;
-	background:#D0DEF0 repeat-x scroll left top;
+	background:#DAF3FF repeat-x scroll 0 center;
 	background-image: url(${c:encodeURL('~./zul/img/common/bar-bg.png')});
 }
 
@@ -161,7 +161,7 @@
 	background-position:-42px -21px;
 }
 .z-paging-btn-clk .z-paging-last {
-	background-position:-42px -42px; 
+	background-position:-42px -42px;
 }
 .z-paging-btn-clk .z-paging-first {
 	background-position:-42px -63px;

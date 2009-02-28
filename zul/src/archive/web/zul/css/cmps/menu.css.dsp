@@ -23,7 +23,7 @@
 	display: block;
 	padding : 2px 0px;
 	border-bottom : 1px solid #B1CBD5;
-	background: #CEE7F5 repeat-x;
+	background: #CEE7F5 repeat-x 0 center;
 	background-image: url(${c:encodeURL('~./zul/img/common/bar-bg.png')});
 }
 
@@ -169,7 +169,7 @@
 
 /* define menupopup effect */
 .z-menu-popup {
-	background:#85BAD5 repeat-y scroll 0 0;
+	background:#CCE6FB repeat-y scroll 0 0;
 	border:1px solid #7F9DB9;
 	padding:2px;
 	z-index:88000;

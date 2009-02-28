@@ -1,7 +1,17 @@
 <%@ page contentType="text/css;charset=UTF-8" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <c:include page="~./zul/css/norm.css.dsp"/>
-
+<c:choose>
+<c:when  test="${!empty c:property('org.zkoss.zul.theme.enableZKPrefix')}">
+.zk img	{
+	hspace: 0; vspace: 0
+}
+.zk option {
+	font-family: ${fontFamilyC};
+	font-size: ${fontSizeXS}; font-weight: normal;
+}
+</c:when>
+<c:otherwise>
 img	{
 	hspace: 0; vspace: 0
 }
@@ -9,14 +19,16 @@ option {
 	font-family: ${fontFamilyC};
 	font-size: ${fontSizeXS}; font-weight: normal;
 }
+</c:otherwise>
+</c:choose>
 
 .z-messagebox-btn {
 	width: 47pt;
 	text-overflow: ellipsis;
 }
 <%-- norm.css.dsp --%>
-.span.z-drop-allow,
-.span.z-drop-disallow {
+span.z-drop-allow,
+span.z-drop-disallow {
 	background-image: url(${c:encodeURL('~./zul/img/misc/drag.gif')});
 }
 <%-- Widget.css.dsp --%>
@@ -239,9 +251,15 @@ tr.z-list-item td.z-list-item-focus {
 .z-tab-hr {
 	background-image: url(${c:encodeURL('~./zul/img/tab/tab-corner.gif')});
 }
+.z-tab-hm {
+	background-image: url(${c:encodeURL('~./zul/img/tab/tab-hm.gif')});
+}
 .z-tab-ver-hl,
 .z-tab-ver-hl .z-tab-ver-hr {
 	background-image: url(${c:encodeURL('~./zul/img/tab/tab-v-corner.gif')});
+}
+.z-tab-ver .z-tab-ver-hm {
+	background-image: url(${c:encodeURL('~./zul/img/tab/tab-v-hm.png')});
 }
 .z-tab-accordion-tl,
 .z-tab-accordion-tr {
@@ -280,17 +298,51 @@ span.z-vfiletree-tee, span.z-vfiletree-last {
 .z-window-popup-tr {
 	background-image: url(${c:encodeURL('~./zul/img/wnd/wnd-pop-corner.gif')});
 }
-<%-- grid.css.dsp --%>
-.z-columns-menu-grouping .z-menu-item-img {
-	background-image:  url(${c:encodeURL('~./zul/img/grid/Group-16x16.gif')});
+.z-window-modal-hr,
+.z-window-highlighted-hr,
+.z-window-overlapped-hr,
+ .z-window-popup-hr {
+	background-image: url(${c:encodeURL('~./zul/img/wnd/wnd-ol-hr.gif')});
 }
-.z-columns-menu-asc .z-menu-item-img {
-	background-image:  url(${c:encodeURL('~./zul/img/grid/AZArrowUp-16x16.gif')});
+.z-window-embedded-hr,
+.z-window-embedded-hr-noborder {
+	background-image: url(${c:encodeURL('~./zul/img/wnd/wnd-hr.gif')});
 }
-.z-columns-menu-desc .z-menu-item-img {
-	background-image:  url(${c:encodeURL('~./zul/img/grid/AZArrowDown-16x16.gif')});
+.z-window-popup-hr {
+	background-image: url(${c:encodeURL('~./zul/img/wnd/wnd-pop-hr.gif')});
 }
-.z-columns-menu-columns .z-menu-img {
-	background-image:  url(${c:encodeURL('~./zul/img/grid/Columns-16x16.gif')});
+.z-window-modal-hl,
+.z-window-highlighted-hl,
+.z-window-overlapped-hl,
+.z-window-popup-hl {
+	background-image: url(${c:encodeURL('~./zul/img/wnd/wnd-ol-hl.gif')});
+}
+.z-window-embedded-hl,
+.z-window-embedded-hl-noborder {
+	background-image: url(${c:encodeURL('~./zul/img/wnd/wnd-hl.gif')});
+}
+.z-window-popup-hl {
+	background-image: url(${c:encodeURL('~./zul/img/wnd/wnd-pop-hl.gif')});
+}
+.z-window-modal-hm,
+.z-window-highlighted-hm,
+.z-window-overlapped-hm,
+.z-window-popup-hm {
+	background-image: url(${c:encodeURL('~./zul/img/wnd/wnd-ol-hm.gif')});
+}
+.z-window-embedded-hm,
+.z-window-embedded-hm-noborder {
+	background-image: url(${c:encodeURL('~./zul/img/wnd/wnd-hm.gif')});
+}
+.z-window-popup-hm {
+	background-image: url(${c:encodeURL('~./zul/img/wnd/wnd-pop-hm.gif')});
+}
+.z-window-modal-cl,
+.z-window-highlighted-cl,
+.z-window-overlapped-cl,
+.z-window-modal-cr,
+.z-window-highlighted-cr,
+.z-window-overlapped-cr {
+	background-image: url(${c:encodeURL('~./zul/img/wnd/wnd-ol-clr.gif')});
 }
 </c:if>
