@@ -494,7 +494,7 @@ ZK 3.0.5
   1882277: Overflow:auto lost when swiching accord tabbox (Safari only)
   1752907: groupbox mold=3d FF animation jumping
   1920793: The focused style of selected item differences Firefox/IE
-  1936366: focus don��t work after Messagebox
+  1936366: focus don't work after Messagebox
   1933050: onSelect fail in Listbox's select mold when use key(FF&Sa)
   1936804: combobox.onInitRender(Event data) triggers validation.
   1472534: error popup is shown behind select inputs(IE6 only)
