@@ -119,7 +119,7 @@ div.z-log button {
 }
 
 .z-label, .z-radio-cnt, .z-checkbox-cnt, .z-slider-pp, input.button, input.file,
-.z-loading {
+.z-loading, .z-errbox {
 	font-family: ${fontFamilyC};
 	font-size: ${fontSizeM}; font-weight: normal;
 }
@@ -157,11 +157,11 @@ div.z-log button {
 }
 .z-apply-loading-icon,
 .z-loading-icon {
-	background: transparent no-repeat center;
-	background-image: url(${c:encodeURL('~./zk/img/progress2.gif')});
 	height: 16px;
 	width: 16px;
 	display:-moz-inline-box; vertical-align:top; display:inline-block;
+	background: transparent no-repeat center;
+	background-image: url(${c:encodeURL('~./zk/img/progress2.gif')});
 }
 
 .z-apply-mask {

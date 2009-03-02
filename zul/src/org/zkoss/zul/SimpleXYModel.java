@@ -134,4 +134,3 @@ public class SimpleXYModel extends AbstractChartModel implements XYModel {
 		}
 	}
 }
-

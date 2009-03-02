@@ -459,6 +459,7 @@ public class Panel extends XulElement implements org.zkoss.zul.api.Panel {
 	public org.zkoss.zul.api.Panelchildren getPanelchildrenApi() {		
 		return getPanelchildren();
 	}
+
 	public String getZclass() {
 		return _zclass == null ?  "z-panel" : _zclass;
 	}	

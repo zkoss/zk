@@ -179,6 +179,7 @@ public class Columns extends HeadersElement implements org.zkoss.zul.api.Columns
 	public void setValue(Object value) {
 		_value = value;
 	}
+
 	//-- Component --//
 	public String getZclass() {
 		return _zclass == null ? "z-columns" : _zclass;

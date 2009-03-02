@@ -265,6 +265,7 @@ public class Tab extends LabelImageElement implements org.zkoss.zul.api.Tab {
 		} else
 			super.process(request, everError);
 		public void clearSelectionByClient(){}
+		public void clearSelectionByClient(){}
 	}
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 			throws java.io.IOException {

@@ -2683,6 +2683,14 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 				_noSmartUpdate = false;
 			}
 		}
+		public void clearSelectionByClient() {
+			_noSmartUpdate = true;
+			try {
+				clearSelection();
+			} finally {
+				_noSmartUpdate = false;
+			}
+		}
 	}
 	/** An iterator used by _heads.
 	 */

@@ -81,4 +81,3 @@ public class SimpleXYZModel extends SimpleXYModel implements XYZModel {
 		}
 	}
 }
-

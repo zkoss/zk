@@ -117,6 +117,20 @@ public class Timebox extends InputElement implements org.zkoss.zul.api.Timebox {
 	public void setImage(String img) {
 	}
 	
+	public String getInnerAttrs() {
+		final String attrs = super.getInnerAttrs();
+		final String style = getInnerStyle();
+		return style.length() > 0 ? attrs+" style=\""+style+'"': attrs;
+	}
+	
+	private String getInnerStyle() {
+		final StringBuffer sb = new StringBuffer(32)
+			.append(HTMLs.getTextRelevantStyle(getRealStyle()));
+		HTMLs.appendStyle(sb, "width", getWidth());
+		HTMLs.appendStyle(sb, "height", getHeight());
+		return sb.toString();
+	}
+	
 	/** Returns the time zone that this time box belongs to, or null if
 	 * the default time zone is used.
 	 * <p>The default time zone is determined by {@link TimeZones#getCurrent}.

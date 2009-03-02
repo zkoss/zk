@@ -144,7 +144,6 @@ public class Treecell extends LabelImageElement implements org.zkoss.zul.api.Tre
 		}
 	}
 
-	//-- Internal use only --//
 	/** Returns whether an item is the last child.
 	 */
 	public static boolean isLastChild(Treeitem item) {
