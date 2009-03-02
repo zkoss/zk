@@ -1,26 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
-<book lang="en-US">
+<book lang="">
 <title>The Quick Start Guide</title>
-<<<<<<< .working
-<subtitle>Version 3.6.0</subtitle>
-=======
-<subtitle>Version 3.5.3</subtitle>
->>>>>>> .merge-right.r10831
+<subtitle>Version 3.6</subtitle>
 <bookinfo>
 <copyright>
-<year>2007</year>
+<year>2009</year>
 <holder>Potix Corporation. All rights reserved.</holder>
 </copyright>
 </bookinfo>
 <para>
-<graphic fileref=""/>
+<graphic fileref="images/2000009A000011C5000007882B1A34C6.jpg"/>
 </para>
 <para>SIMPLY RICH</para>
 <para>ZKTM</para>
 <para/>
 <para/>
-<para>December 2008</para>
+<para>February 2009</para>
 <para>Potix Corporation</para>
 <para/>
 <para/>
@@ -48,23 +44,11 @@
 </thead><tbody>
 <row>
 <entry>
-<para>Download</para>
-</entry>
-<entry>
-<para>Installer for Windows:<ulink url="http://apache.ntu.edu.tw/tomcat/tomcat-5/v5.5.25/bin/apache-tomcat-5.5.25.exe">apache-tomcat-5.5.20.exe</ulink>
-</para>
-<para>A list of all available versions:<ulink url="http://tomcat.apache.org/download-55.cgi">http://tomcat.apache.org/download-55.cgi</ulink>
-</para>
-</entry>
-</row>
-<row>
-<entry>
 <para>Documentation</para>
 </entry>
 <entry>
 <para>
-<ulink url="http://tomcat.apache.org/tomcat-5.5-doc/index.html">http://tomcat.apache.org/tomcat-5.5-doc/index.html</ulink>
-</para>
+<ulink url="http://tomcat.apache.org/tomcat-5.5-doc/index.html">http://tomcat.apache.org/tomcat-6.0-doc/index.html</ulink> </para>
 </entry>
 </row></tbody></tgroup>
 </informaltable></sect1><sect1><title>New to Java Language</title>
@@ -87,8 +71,7 @@
 </entry>
 <entry>
 <para>
-<ulink url="http://java.sun.com/docs/books/tutorial/java/nutsandbolts/index.html">http://java.sun.com/docs/books/tutorial/java/nutsandbolts/index.html</ulink>
-</para>
+<ulink url="http://java.sun.com/docs/books/tutorial/java/nutsandbolts/index.html">http://java.sun.com/docs/books/tutorial/java/nutsandbolts/index.html</ulink> </para>
 </entry>
 </row>
 <row>
@@ -97,329 +80,270 @@
 </entry>
 <entry>
 <para>
-<ulink url="http://java.sun.com/docs/books/tutorial/java/concepts/index.html">http://java.sun.com/docs/books/tutorial/java/concepts/index.html</ulink>
-</para>
+<ulink url="http://java.sun.com/docs/books/tutorial/java/concepts/index.html">http://java.sun.com/docs/books/tutorial/java/concepts/index.html</ulink> </para>
 <para>
-<ulink url="http://java.sun.com/docs/books/tutorial/java/javaOO/index.html">http://java.sun.com/docs/books/tutorial/java/javaOO/index.html</ulink>
-</para>
+<ulink url="http://java.sun.com/docs/books/tutorial/java/javaOO/index.html">http://java.sun.com/docs/books/tutorial/java/javaOO/index.html</ulink> </para>
 <para>
-<ulink url="http://java.sun.com/docs/books/tutorial/java/IandI/index.html">http://java.sun.com/docs/books/tutorial/java/IandI/index.html</ulink>
-</para>
-</entry>
-</row></tbody></tgroup>
-</informaltable></sect1><sect1><title>New to Java Integrated Development Environment (IDE)</title>
-<para>Eclipse is one of the most popular Java IDEs. With IDE, it is easier to develop and debug your Web applications. Moreover, you can understand ZK better by debugging through ZK's source codes.</para>
-<para>The step-by-step setup guide can be found in one of our small talks:</para>
-<para>
-<ulink url="http://www.zkoss.org/smalltalks/eclipse/ek.html">http://www.zkoss.org/smalltalks/eclipse/ek.html</ulink>
-</para></sect1></chapter>
-<chapter>
-<title>1. What to Download</title>
-<para>Download ZK Library:</para>
-<para>
-<ulink url="http://www.zkoss.org/download/zk.dsp">http://www.zkoss.org/download/zk.dsp</ulink>
-</para>
-<informaltable frame="all">
-<tgroup cols="2">
-<thead>
-<row>
-<entry>
-<para>File</para>
-</entry>
-<entry>
-<para>Description</para>
-</entry>
-</row>
-</thead><tbody>
-<row>
-<entry>
-<<<<<<< .working
-<para>zk-bin-std-3.6.0.tar.gz</para>
-<para>zk-bin-std-3.6.0.zip</para>
-=======
-<para>zk-bin-std-3.5.3.tar.gz</para>
-<para>zk-bin-std-3.5.3.zip</para>
->>>>>>> .merge-right.r10831
-</entry>
-<entry>
-<para>The binary distribution of ZK with the minimal set of libraries that you need to enrich your Web applications with ZK.</para>
-<para>It is also called the standard edition.</para>
-</entry>
-</row>
-<row>
-<entry>
-<<<<<<< .working
-<para>zk-bin—prof-3.6.0.tar.gz</para>
-<para>zk-bin-prof-3.6.0.zip</para>
-=======
-<para>zk-bin—prof-3.5.3.tar.gz</para>
-<para>zk-bin-prof-3.5.3.zip</para>
->>>>>>> .merge-right.r10831
-</entry>
-<entry>
-<para>The binary distribution of ZK, including the standard edition, JFreeChart, Google Maps, Jasper Reports, and layout components.</para>
-<para>It is also called the professional edition.</para>
-</entry>
-</row>
-<row>
-<entry>
-<<<<<<< .working
-<para>zk-bin-3.6.0.tar.gz</para>
-<para>zk-bin-3.6.0.zip</para>
-=======
-<para>zk-bin-3.5.3.tar.gz</para>
-<para>zk-bin-3.5.3.zip</para>
->>>>>>> .merge-right.r10831
-</entry>
-<entry>
-<para>The binary distribution of ZK, including the professional edition, accessibility, the performance version of ZUL (zkmax.jar), and versatile plug-ins, such as Ruby, Groovy, JavaScript, MVEL and OGNL.</para>
-<para>It is also called the enterprise edition.</para>
-</entry>
-</row>
-<row>
-<entry>
-<<<<<<< .working
-<para>zk-demo-3.6.0.zip</para>
-=======
-<para>zk-demo-3.5.3.zip</para>
->>>>>>> .merge-right.r10831
-</entry>
-<entry>
-<para>Standalone zkdemo application in WAR and EAR format, and the source codes of zkdemo.</para>
-<para>It is the fastest way to test drive the features of ZK without configuring your Web server.</para>
-</entry>
-</row>
-<row>
-<entry>
-<<<<<<< .working
-<para>zk-javadoc-3.6.0.zip</para>
-=======
-<para>zk-javadoc-3.5.3.zip</para>
->>>>>>> .merge-right.r10831
-</entry>
-<entry>
-<para>The Java API document of ZK framework.</para>
-</entry>
-</row>
-<row>
-<entry>
-<<<<<<< .working
-<para>zk-src-3.6.0.tar.gz</para>
-=======
-<para>zk-src-3.5.3.tar.gz</para>
->>>>>>> .merge-right.r10831
-</entry>
-<entry>
-<para>The source codes of ZK framework.</para>
+<ulink url="http://java.sun.com/docs/books/tutorial/java/IandI/index.html">http://java.sun.com/docs/books/tutorial/java/IandI/index.html</ulink> </para>
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/>
-</chapter>
+<para/></sect1><sect1><title/></sect1></chapter>
 <chapter>
-<title>2. Run the Demo</title>
-<para>The simplest way to test drive the power of ZK is to visit <ulink url="http://www.zkoss.org/zkdemo/userguide">http://www.zkoss.org/zkdemo/userguide</ulink>.</para>
-<para>If you want to run the demo in your local server, you can follow the following steps.</para>
+<title>1. Creating an Application from Scratch</title><sect1><title>1. Environment Setup</title>
+<para>Prerequisite</para>
+<para>There are three softwares you need to download and install prior to use ZK Studio:</para>
+<para>Installing Java SE Development Kit (JDK)</para>
 <orderedlist>
 <listitem>
-<<<<<<< .working
+<para>Download at</para>
+</listitem>
+</orderedlist>
+<para>JDK 6:</para>
+<para>
+<ulink url="http://java.sun.com/javase/downloads/index.jsp">http://java.sun.com/javase/downloads/index.jsp</ulink> </para>
+<para>JDK 5:</para>
+<para>
+<ulink url="http://java.sun.com/javase/downloads/index_jdk5.jsp">http://java.sun.com/javase/downloads/index_jdk5.jsp</ulink> </para>
+<orderedlist>
+<listitem>
+<para>Select the "Java SE Development Kit (JDK)" to download, not JRE.</para>
+</listitem>
+</orderedlist>
+<para>Installation Instructions:</para>
+<para>
+<ulink url="http://java.sun.com/javase/6/webnotes/install/index.html">http://java.sun.com/javase/6/webnotes/install/index.html</ulink> </para>
+<para>
+<ulink url="http://java.sun.com/j2se/1.5.0/install.html">http://java.sun.com/j2se/1.5.0/install.html</ulink> </para>
+<para>Installing Application Server</para>
+<orderedlist>
+<listitem>
+<para>Download <ulink url="http://apache.stu.edu.tw/tomcat/tomcat-5/v5.5.27/bin/apache-tomcat-5.5.27.exe">Windows Service Installer</ulink> from the following url.</para>
+<para>
+<ulink url="http://tomcat.apache.org/download-60.cgi">http://tomcat.apache.org/download-60.cgi</ulink> </para>
+</listitem>
+<listitem>
+<para>Double clicks apache-tomcat-6.0.18.exe to install Apache Tomcat </para>
+</listitem>
+</orderedlist>
+<para>Notice: Suggest to setup the port number as 8080.</para>
+<para>Running Application Server</para>
+<para>Here are the steps to see if Tomcat has been successfully installed</para>
+<orderedlist>
+<listitem>
+<para>Start Tomcat by finding its start program in the Programs Menu (located in the Start menu). Look under Apache Tomcat 6.0 and select "Monitor Tomcat". Click the Start button to activates the server.</para>
+<para>
+<graphic fileref="images/tomcat.png"/>
+</para>
+</listitem>
+<listitem>
+<para>Open a Web browser and type in the following URL:</para>
+</listitem>
+</orderedlist>
+<para>
+<graphic fileref="images/tomcat2.png"/>
+</para>
+<para>At this point, you should see the Tomcat home page, which is provided by the Tomcat Web server running on your computer. </para>
+<para>To shut down your server and remove the Console window, select "Stop Tomcat" in the same menu of where you selected "Stop Tomcat".</para>
+<para>Download ZK Library</para>
+<para>You have to download the ZK binary distribution in order to run or develop the ZK Web Application, please download the last one in "ZK Recommended Releases" section in <ulink url="http://www.zkoss.org/download/zk.dsp">http://www.zkoss.org/download/zk.dsp</ulink> and save it to a proper location. </para>
+<para>
+<ulink url="http://www.zkoss.org/download/zk.dsp">http://www.zkoss.org/download/zk.dsp</ulink> </para></sect1><sect1><title>2. Step by Step Tutorial</title>
+<orderedlist>
+<listitem>
+<para>Create Web Project</para>
+</listitem>
+</orderedlist>
+<para>Create a development directory under $TOMCAT_HOME\webapps. Say myZK. The structure of development directory is shown below:(ex.<link linkend="%7Cregion">C:\Program</link> Files\Apache Software Foundation\Tomcat 6.0\webapps\myZK\) </para>
+<programlisting>+myZK &#13;    +WEB-INF     &#13;    web.xml     &#13;index.zul &#13;</programlisting>
+<orderedlist>
+<listitem>
+<para>Deploy ZK library</para>
+</listitem>
+</orderedlist>
+<para>Unzip <ulink url="http://prdownloads.sourceforge.net/zk1/zk-bin-3.5.2.zip?download">zk-bin-3.x.x.zip </ulink>file, and copy the following jar files to the $TOMCAT_HOME\webapps\$PROJECT_NAME\WEB-INF\lib (ex.<link linkend="%7Cregion">C:\Program</link> Files\Apache Software Foundation\Tomcat 6.0\webapps\myZK\WEB-INF\lib) </para>
+<orderedlist>
+<listitem>
+<para>Create web.xml</para>
+</listitem>
+</orderedlist>
+<para>Create web.xml under $TOMCAT_HOME\webapps\myZK, and Copy the following lines into web.xml </para>
+<programlisting>&lt;!-- ZK --&gt; &#13;&lt;listener&gt; &#13;&lt;description&gt;Used to clean up when a session is destroyed&lt;/description&gt; &#13;&lt;display-name&gt;ZK Session Cleaner&lt;/display-name&gt; &#13;&lt;listener-class&gt;org.zkoss.zk.ui.http.HttpSessionListener&lt;/listener-class&gt; &#13;&lt;/listener&gt; &#13;&#13;&lt;servlet&gt; &#13;&lt;description&gt;ZK loader for ZUML pages&lt;/description&gt; &#13;&lt;servlet-name&gt;zkLoader&lt;/servlet-name&gt; &#13;&lt;servlet-class&gt;org.zkoss.zk.ui.http.DHtmlLayoutServlet&lt;/servlet-class&gt; &#13;&lt;init-param&gt; &#13;&lt;param-name&gt;update-uri&lt;/param-name&gt; &#13;&lt;param-value&gt;/zkau&lt;/param-value&gt; &#13;&lt;/init-param&gt; &#13;&lt;load-on-startup&gt;1&lt;/load-on-startup&gt; &#13;&lt;/servlet&gt; &#13;&lt;servlet-mapping&gt; &#13;&lt;servlet-name&gt;zkLoader&lt;/servlet-name&gt; &#13;&lt;url-pattern&gt;*.zul&lt;/url-pattern&gt; &#13;&lt;/servlet-mapping&gt; &#13;&lt;servlet-mapping&gt; &#13;&lt;servlet-name&gt;zkLoader&lt;/servlet-name&gt; &#13;&lt;url-pattern&gt;*.zhtml&lt;/url-pattern&gt; &#13;&lt;/servlet-mapping&gt; &#13;&#13;&lt;servlet&gt; &#13;&lt;description&gt;The asynchronous update engine for ZK&lt;/description&gt; &#13;&lt;servlet-name&gt;auEngine&lt;/servlet-name&gt; &#13;&lt;servlet-class&gt;org.zkoss.zk.au.http.DHtmlUpdateServlet&lt;/servlet-class&gt; &#13;&lt;/servlet&gt; &#13;&lt;servlet-mapping&gt; &#13;&lt;servlet-name&gt;auEngine&lt;/servlet-name&gt; &#13;&lt;url-pattern&gt;/zkau/*&lt;/url-pattern&gt; &#13;&lt;/servlet-mapping&gt; &#13;</programlisting>
+<orderedlist>
+<listitem>
+<para>Create First Web Page</para>
+</listitem>
+</orderedlist>
+<para>Create index.zul under $TOMCAT_HOME\webapps\myZK\, and copy the following lines into it. </para>
+<programlisting>&lt;window title="My First window" border="normal" width="200px"&gt; &#13;Hello, World! &#13;&lt;/window&gt; &#13;</programlisting>
+<orderedlist>
+<listitem>
+<para>Activates Tomcat Server</para>
+</listitem>
+</orderedlist>
+<para>Use Tomcat Monitor to activates the Server.</para>
+<para>
+<graphic fileref="images/tomcat.png"/>
+</para>
+<orderedlist>
+<listitem>
+<para>Browse the Application</para>
+<para>Browse to http://localhost:8080/myZK/. </para>
+</listitem>
+</orderedlist>
+<para>
+<graphic fileref="images/hello.gif"/>
+</para></sect1></chapter>
+<chapter>
+<title>2. Creating an Application from Scratch (with IDE)</title><sect1><title>Installing Eclipse IDE</title>
+<para>Eclipse IDE for Java EE Developers</para>
+<orderedlist>
+<listitem>
+<para>Download the Eclipse IDE for Java EE Developers package. </para>
+</listitem>
+</orderedlist>
+<para>
+<ulink url="http://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/ganymedesr1">http://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/ganymedesr1</ulink> </para>
+<orderedlist>
+<listitem>
+<para>Install</para>
+</listitem>
+</orderedlist>
+<para>Extract the "eclipse" folder from downloaded zip file to a proper location. To make sure Eclipse IDE can be run in your system, execute the eclipse.exe (in windows environment) or eclipse (in *nix environment) in that eclipse folder to start up the Eclipse IDE.</para>
+<para>We recommend to set the default JRE of Eclipse to JDK, refer to the Setup/Preferences section in WTP Tutorials – Building and Running a Web Application <ulink url="http://www.eclipse.org/webtools/community/tutorials/BuildJ2EEWebApp/BuildJ2EEWebApp.html">http://www.eclipse.org/webtools/community/tutorials/BuildJ2EEWebApp/BuildJ2EEWebApp.html</ulink> </para>
+<para>We recommend to modify some parameters in the configuration file eclipse.ini to gain performance, please refer to <ulink url="http://www.eclipsezone.com/eclipse/forums/t61618.html">http://www.eclipsezone.com/eclipse/forums/t61618.html</ulink> and <ulink url="http://blog.xam.dk/archives/68-Eclipse-and-memory-settings.html">http://blog.xam.dk/archives/68-Eclipse-and-memory-settings.html</ulink> </para></sect1><sect1><title>Installing ZK Studio</title>
+<para>Since ZK Studio is an Eclipse plugin, we recommend to install ZK Studio via Eclipse Update Manager. It provides a better installation experience and online update mechanism for maintain our release. </para>
+<para>We have a detailed step-by-step install procedures in ZK Studio Installation Guide:</para>
+<para>
+<ulink url="http://www.potix.com/smalltalks/zkstudioins/">http://www.zkoss.org/smalltalks/zkstudioins/</ulink> </para>
+<para>Please follow the link according to the Eclipse version number of your Eclipse Installation to complete the installation.</para></sect1><sect1><title>Setup and Configure ZK Library</title>
+<para>Download ZK Library:</para>
+<para>You have to download the ZK binary distribution in order to run or develop the ZK Web Application, please download the last one in "ZK Recommended Releases" section in <ulink url="http://www.zkoss.org/download/zk.dsp">http://www.zkoss.org/download/zk.dsp</ulink> and save it to a proper location. You can also extract the content, but it is not necessary.</para>
+<para>Configure ZK Library:</para>
+<orderedlist>
+<listitem>
+<para>Start the Eclipse which already has ZK Studio installed.</para>
+</listitem>
+<listitem>
+<para>Click [Window]/[Preferences] in Eclipse main menu.</para>
+</listitem>
+<listitem>
+<para>On the Preferences Window, select ZK/ZK Packages.</para>
+</listitem>
+<listitem>
+<para>On the right panel of the ZK Packages preference page in Preferences Window, select Add Directory if you have extract the ZK Library zip file, point the location to the extracted file folder, then click OK; Otherwise select Add File if you didn't had extract the zip file, then select the ZK Package zip file.<graphic fileref="images/import_ZK-1.png"/>
+</para>
+</listitem>
+<listitem>
+<para>It will popup a confirm window, click OK.<graphic fileref="images/import_ZK-3.png"/>
+</para>
+</listitem>
+<listitem>
+<para>Type the alias name as you like for this imported package on next window, click OK.<graphic fileref="images/import_ZK-4.png"/>
+</para>
+</listitem>
+<listitem>
+<para>ZK Studio will import the selected ZK Library.</para>
+</listitem>
+</orderedlist>
+<para>In ZK Packages preferences page, you can check the check box of the imported ZK Packages on the ZK Package list as the default ZK library for any ZK Web application you will create later. If you don't select anyone as a default ZK library, ZK Studio will automatically choose the latest version of those imported ZK Packages.</para>
+<para>
+<graphic fileref="images/GlobalPreference_ZKPackages.png"/>You can remove unwanted ZK package in ZK Packages preferences page in Preferences Window by select the row in ZK Package then click Remove.</para></sect1><sect1><title>Create a New Dynamic Web Project</title>
+<orderedlist>
+<listitem>
+<para>Click [File]/[New]/[Dynamic Web Project] in Eclipse main menu</para>
+</listitem>
+<listitem>
+<para>Type the project name, click "Modify..." in the Configuration Column<graphic fileref="images/CreateZKProject_34-1.png"/>
+</para>
+</listitem>
+<listitem>
+<para>On the left side of pop-up Project Facets Window, select ZK Supports, then Click OK.<graphic fileref="images/CreateZKProject_34-2.png"/>
+</para>
+</listitem>
+<listitem>
+<para>Click Next</para>
+</listitem>
+<listitem>
+<para>If you don't want to modify the default directory of Context Root, Content Directory, Java Source Directory, just click Next.</para>
+</listitem>
+<listitem>
+<para>On the next page you can choose which ZK packages you want to use for this Dynamic Web Project. It will automatically choose the default ZK packages configured in the ZK Packages preferences page in Preferences Window of Eclipse.<graphic fileref="images/CreateZKProject_33-3.png"/>You can select other ZK packages installed in Eclipse by click the combo box.</para>
+</listitem>
+<listitem>
+<para>Click Finish, the New Project Wizard will setup a Dynamic Web Project ready for development.</para>
+</listitem>
+</orderedlist>
+<para>Tips:You can see a ZK mark on the project's right top icon to indicate that this project is support ZK:<graphic fileref="images/hasZKLibrary.png"/>
+</para>
+<para>Create New ZUL File</para>
+<para>Using New File Command</para>
+<para>You can create new ZUL file via [File]/[New]/[File] command in Eclipse main menu.<graphic fileref="images/NewZULFileMethod1-1.png"/>
+</para>
+<para>But you have to input the ".zul" extension for that file yourself, and the newly create zul file will be empty content without any template code inside.<graphic fileref="images/NewZULFileMethod1-2.png"/>
+</para>
+<para>Using New ZUL File Wizard</para>
+<orderedlist>
+<listitem>
+<para>There are two ways to open New ZUL File Wizard:</para>
+<orderedlist>
+<listitem>
+<para>Right click on the opened project which has been created as Dynamic Web Project in "Project Explorer" view or "Package Explorer" view, select [New]/[ZUL].<graphic fileref="images/NewZULFileRightClick.png"/>
+</para>
+</listitem>
+<listitem>
+<para>Click [File]/[New]/[ZUL] in Eclipse main menu when you select an opened project which has been created as Dynamic Web Project.<graphic fileref="images/NewZULFileMainMenu.png"/>
+</para>
+</listitem>
+</orderedlist>
+</listitem>
+<listitem>
+<para>Type the file name you want in File name textbox, select the options your want in the beneath check box.(you can refer to developer's guide for the meaning of these instructions:<ulink url="http://www.zkoss.org/doc/devguide-single/index.html#id457941">http://www.zkoss.org/doc/devguide-single/index.html#id457941</ulink> <ulink url="http://www.zkoss.org/doc/devref-single/index.html#id385772">http://www.zkoss.org/doc/devref-single/index.html#id385772</ulink> ), click Finish.<graphic fileref="images/NewZULFileWizard1.png"/>
+</para>
+</listitem>
+<listitem>
+<para>The newly created ZUL File will be opened in ZUL Editor.</para>
+</listitem>
+</orderedlist>
+<para>Running the ZUL File</para>
+<para>To run the ZUL File (that is, to run a ZK Web application in Eclipse), follow the instructions:</para>
+<orderedlist>
+<listitem>
+<para>Configure Apache Tomcat server configuration in Eclipse:You have to create a valid Apache Tomcat server configuration of the Apache Tomcat Server (The extracted tomcat zip file which is described in <link linkend="Application Servers">Application Severs</link> section) in Server/Runtime Environments preference page in Eclipse's Preference Window.<graphic fileref="images/ServerRuntimePreference1.png"/>Please refer to the "Choose a Server Runtime Environment" section in the "WTP Tutorials – Building and Running a Web Application" article on Eclipse: website <ulink url="http://www.eclipse.org/webtools/community/tutorials/BuildJ2EEWebApp/BuildJ2EEWebApp.html">http://www.eclipse.org/webtools/community/tutorials/BuildJ2EEWebApp/BuildJ2EEWebApp.html</ulink>Or you can refer "2.Define a Server Runtime" in this smalltalk:<ulink url="http://www.zkoss.org/smalltalks/eclipse/ek.html">http://www.zkoss.org/smalltalks/eclipse/ek.html</ulink>
+</para>
+</listitem>
+<listitem>
+<para>Create a Server instance in Eclipse's Servers View:Please follow the "Create a Server" section in the "WTP Tutorials – Building and Running a Web Application" article on Eclipse: website <ulink url="http://www.eclipse.org/webtools/community/tutorials/BuildJ2EEWebApp/BuildJ2EEWebApp.html">http://www.eclipse.org/webtools/community/tutorials/BuildJ2EEWebApp/BuildJ2EEWebApp.html</ulink> or refer "3.Define a Server Instance" in <ulink url="http://www.zkoss.org/smalltalks/eclipse/ek.html">http://www.zkoss.org/smalltalks/eclipse/ek.html</ulink> to create a runnable server in Eclipse.</para>
+</listitem>
+<listitem>
+<para>Start server, view result:Please refer to the "Start the Server", "Running the Application" and "Running the Application" sections section in the "WTP Tutorials – Building and Running a Web Application" article on Eclipse: website<ulink url="http://www.eclipse.org/webtools/community/tutorials/BuildJ2EEWebApp/BuildJ2EEWebApp.html">http://www.eclipse.org/webtools/community/tutorials/BuildJ2EEWebApp/BuildJ2EEWebApp.html</ulink>
+</para>
+</listitem>
+</orderedlist></sect1></chapter>
+<chapter>
+<title>3. Running A Sample Application</title><sect1><title>No Installation Required</title>
+<para>The simplest way to test drive the power of ZK is to visit <ulink url="http://www.zkoss.org/zkdemo/userguide">http://www.zkoss.org/zkdemo/userguide</ulink>.</para></sect1><sect1><title>Installing Sample Application on Your Computer</title>
+<para>If you want to run the demo on your local server, you can follow the following steps. </para>
+<para>Notice: Make sure you have installed Java JDK, and application server on your computer or you have to refer to the previous chapter.</para>
+<orderedlist>
+<listitem>
 <para>Download zk-demo-3.6.0.zip from <ulink url="http://sourceforge.net/project/showfiles.php?group_id=152762&amp;package_id=169309">here (sourceforge.net)</ulink>.</para>
-=======
-<para>Download zk-demo-3.5.3.zip from <ulink url="http://sourceforge.net/project/showfiles.php?group_id=152762&amp;package_id=169309">here (sourceforge.net)</ulink>.</para>
->>>>>>> .merge-right.r10831
+<para>http://downloads.sourceforge.net/zk1/zk-demo-3.6.0.zip</para>
 </listitem>
 <listitem>
-<para>After uncompressing the file, you can deploy zkdemo.war or zkdemo.ear to your Web or application server.Most Web or application servers have a management console that allows you to deploy an application painlessly. Consult the corresponding manuals, or you can visit <ulink url="http://en.wikibooks.org/wiki/ZK/How-Tos#Installation_and_Configuration">http://en.wikibooks.org/wiki/ZK/How-Tos#Installation_and_Configuration</ulink>, where the ZK community maintains the installation guides for many Web or application servers.For Tomcat server, you can copy it directly to the $TOMCAT_DIR/webapps directory, and then Tomcat will start the deployment automatically.</para>
+<para>Unzip zk-demo-3.6.0.zip, and Copy zkdemo.war to the $TOMCAT_HOME\webapps directory</para>
 </listitem>
 <listitem>
-<para>After zkdemo.war is deployed you can visit it at, say, <ulink url="http://localhost:8080/zkdemo-all/userguide">http://localhost:8080/zkdemo/userguide</ulink>. The port number depends on how you installed your Web or application servers. Some application servers deploy only the EAR file. That is, you have to deploy zkdemos.ear instead.</para>
+<para>Execute $TOMCAT_HOME\bin\tomcat5w.exe, and clicks Start button to activate your Web Server.</para>
 </listitem>
-</orderedlist>
-</chapter>
+<listitem>
+<para>Open your browser to visit <ulink url="http://localhost:8080/zkdemo-all/userguide">http://localhost:8080/zkdemo/userguide</ulink>. </para>
+<para>The port number depends on how you installed your Web or application servers. Some application servers deploy only the EAR file. That is, you have to deploy zkdemos.ear instead.</para>
+</listitem>
+</orderedlist></sect1></chapter>
 <chapter>
-<title>3. Begin Your First ZK Project</title>
-<para>ZK consists of several libraries (the JAR files). There are two alternatives to install them.</para>
-<para>First, you can bundle them with your Web application. In other words, copy them to the WEB-INF/lib directory of your Web application. The benefit is that you can deploy your Web application to any Web server without configuring the Web server.</para>
-<para>Second, you can install them to your Web or application server. In other words, copy them to your Web application directory (for Tomcat, it is $TOMCAT_HOME/webapps/$PROJECT_NAME/WEB-INF/lib). </para>
-<para/>
-<itemizedlist>
-<listitem>
-<para>
-<ulink url="http://www.zkoss.org/download/zk.dsp">Download ZK Library:</ulink>
-</para>
-<para>
-<ulink url="http://www.zkoss.org/download/zk.dsp">http://www.zkoss.org/download/zk.dsp</ulink>
-</para>
-</listitem>
-<listitem>
-<para>Create project </para>
-<para>Create a development directory under $TOMCAT_HOME/webapps. The structure of development directory is shown below:(ex.zkdemo) </para>
-<para/>
-<para>
-<code>+zkdemo</code>
-</para>
-<para>
-<code>+WEB-INF</code>
-</para>
-<para>
-<code>web.xml</code>
-</para>
-<para>
-<code>index.zul</code>
-</para>
-</listitem>
-<listitem>
-<para>Unzip ZK libraryUnzip zk-bin-prof-xxx.zip or zk-bin-prof-xxx.tar.gz (ex. zk-bin-prof-x.x.x.zip) </para>
-</listitem>
-<listitem>
-<para>Deploy ZK libraryCopy the following jar files to the $TOMCAT_HOME/webapps/$PROJECT_NAME/WEB-INF/lib (ex.zkdemo/WEB-INF/lib) </para>
-<orderedlist>
-<para>
-<code>dist/lib/*.jar </code>
-</para>
-<para>
-<code>dist/lib/zkforge/*.jar </code>
-</para>
-<para>
-<code>dist/lib/ext/*.jar </code>
-</para>
-</orderedlist>
-</listitem>
-<listitem>
-<para>Create web.xmlCreate web.xml under $TOMCAT_HOME/webapps/zkdemo, and Copy the following lines into web.xml </para>
-<para/>
-<para>
-<code>&lt;!-- ZK --&gt;</code>
-</para>
-<para>
-<code>&lt;listener&gt;</code>
-</para>
-<para>
-<code>&lt;description&gt;Used to clean up when a session is destroyed&lt;/description&gt;</code>
-</para>
-<para>
-<code>&lt;display-name&gt;ZK Session Cleaner&lt;/display-name&gt;</code>
-</para>
-<para>
-<code>&lt;listener-class&gt;org.zkoss.zk.ui.http.HttpSessionListener&lt;/listener-class&gt;</code>
-</para>
-<para>
-<code>&lt;/listener&gt;</code>
-</para>
-<para/>
-<para>
-<code>&lt;servlet&gt;</code>
-</para>
-<para>
-<code>&lt;description&gt;ZK loader for ZUML pages&lt;/description&gt;</code>
-</para>
-<para>
-<code>&lt;servlet-name&gt;zkLoader&lt;/servlet-name&gt;</code>
-</para>
-<para>
-<code>&lt;servlet-class&gt;org.zkoss.zk.ui.http.DHtmlLayoutServlet&lt;/servlet-class&gt;</code>
-</para>
-<para>
-<code>&lt;init-param&gt;</code>
-</para>
-<para>
-<code>&lt;param-name&gt;update-uri&lt;/param-name&gt;</code>
-</para>
-<para>
-<code>&lt;param-value&gt;/zkau&lt;/param-value&gt;</code>
-</para>
-<para>
-<code>&lt;/init-param&gt;</code>
-</para>
-<para>
-<code>&lt;load-on-startup&gt;1&lt;/load-on-startup&gt;</code>
-</para>
-<para>
-<code>&lt;/servlet&gt;</code>
-</para>
-<para>
-<code>&lt;servlet-mapping&gt;</code>
-</para>
-<para>
-<code>&lt;servlet-name&gt;zkLoader&lt;/servlet-name&gt;</code>
-</para>
-<para>
-<code>&lt;url-pattern&gt;*.zul&lt;/url-pattern&gt;</code>
-</para>
-<para>
-<code>&lt;/servlet-mapping&gt;</code>
-</para>
-<para>
-<code>&lt;servlet-mapping&gt;</code>
-</para>
-<para>
-<code>&lt;servlet-name&gt;zkLoader&lt;/servlet-name&gt;</code>
-</para>
-<para>
-<code>&lt;url-pattern&gt;*.zhtml&lt;/url-pattern&gt;</code>
-</para>
-<para>
-<code>&lt;/servlet-mapping&gt;</code>
-</para>
-<para/>
-<para>
-<code>&lt;servlet&gt;</code>
-</para>
-<para>
-<code>&lt;description&gt;The asynchronous update engine for ZK&lt;/description&gt;</code>
-</para>
-<para>
-<code>&lt;servlet-name&gt;auEngine&lt;/servlet-name&gt; </code>
-</para>
-<para>
-<code>&lt;servlet-class&gt;org.zkoss.zk.au.http.DHtmlUpdateServlet&lt;/servlet-class&gt;</code>
-</para>
-<para>
-<code>&lt;/servlet&gt;</code>
-</para>
-<para>
-<code>&lt;servlet-mapping&gt;</code>
-</para>
-<para>
-<code>&lt;servlet-name&gt;auEngine&lt;/servlet-name&gt;</code>
-</para>
-<para>
-<code>&lt;url-pattern&gt;/zkau/*&lt;/url-pattern&gt;</code>
-</para>
-<para>
-<code>&lt;/servlet-mapping&gt;</code>
-</para>
-</listitem>
-<listitem>
-<para>Create first ZUL FileCreate index.zul under $TOMCAT_HOME/webapps/zkdemo/, and copy the following lines into it. </para>
-<para/>
-<para>
-<code>&lt;window title="My First window" border="normal" width="200px"&gt;</code>
-</para>
-<para>
-<code>Hello, World!</code>
-</para>
-<para>
-<code>&lt;/window&gt;</code>
-</para>
-<para/>
-</listitem>
-<listitem>
-<para>Start TomcatExecute $TOMCAT_HOME/bin/start.bat to activate Tomcat.(ex. C:\Program Files\apache-tomcat-5.5.23\bin\start.bat) </para>
-</listitem>
-<listitem>
-<para>Browse zkdemoBrowse to http://localhost/zkdemo/ or http://localhost:8080/zkdemo/ depending on your configuration for Tomcat. </para>
-</listitem>
-</itemizedlist>
-<para/>
-</chapter>
-<chapter>
-<title>4. The Content of Binary Distribution</title>
-<<<<<<< .working
+<title>Appendix A. The Content of Binary Distribution</title>
 <para>This chapter describes the content of zk-bin-3.6.0.zip.</para><sect1><title>/doc</title>
-=======
-<para>This chapter describes the content of zk-bin-3.5.3.zip.</para><sect1><title>/doc</title>
->>>>>>> .merge-right.r10831
 <para>This directory holds the documents including copyrights and release notes.</para></sect1><sect1><title>/dist/lib</title>
 <para>This directory holds the binary libraries required to run ZK.</para></sect1><sect1><title>/dist/lib/zkforge</title>
 <para>This directory holds the components from ZK Forge, such as FCKeditor. It is optional depending on whether you need them.</para>
@@ -552,8 +476,7 @@
 </entry>
 <entry>
 <para>Required if you want scripting in Python (J<ulink url="http://www.jython.org/">ython</ulink>).</para>
-<para>Version: <ulink url="http://jruby.codehaus.org/">J</ulink>
-<ulink url="http://www.jython.org/">ython</ulink> 2.2.1</para>
+<para>Version: <ulink url="http://jruby.codehaus.org/">J</ulink> <ulink url="http://www.jython.org/">ython</ulink> 2.2.1</para>
 <para>[not available in the standard and professional edition]</para>
 </entry>
 </row>
@@ -588,33 +511,13 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable></sect1><sect1><title>/dist/src</title>
-<<<<<<< .working
 <para>This directory holds the source codes in JAR format. These JAR files are used for debugging in IDE, such as Eclipse. You cannot build the binary libraries from these. Rather, download and uncompress zk-src-3.6.0.tar.gz.</para></sect1><sect1><title>/dist/xsd</title>
-=======
-<para>This directory holds the source codes in JAR format. These JAR files are used for debugging in IDE, such as Eclipse. You cannot build the binary libraries from these. Rather, download and uncompress zk-src-3.5.3.tar.gz.</para></sect1><sect1><title>/dist/xsd</title>
->>>>>>> .merge-right.r10831
 <para>This directory holds the XSD files that might be useful to develop ZK applications.</para></sect1><sect1><title>/dist/WEB-INF</title>
 <para>This directory holds the TLD files. These TLD files are part of JAR files so they are loaded automatically. We put them here mainly for your reference only.</para></sect1></chapter>
 <chapter>
-<title>5. The Content of Demo Distribution</title>
-<<<<<<< .working
+<title>Appendix B. The Content of Demo Distribution</title>
 <para>This chapter describes the content of zk-demo-3.6.0.zip.</para><sect1><title>/</title>
-=======
-<para>This chapter describes the content of zk-demo-3.5.3.zip.</para><sect1><title>/</title>
->>>>>>> .merge-right.r10831
 <para>This directory holds the executable: zkdemo.war, zkdemo-min.war, zkdemos.ear and zkdemos-min.ear. Refer to the Installation chapter for details.</para></sect1><sect1><title>/zkdemo</title>
 <para>This directory holds the source codes of the live demo.</para></sect1><sect1><title>/MyApp</title>
 <para>This directory holds an empty Web application which you can start your new Web application from.</para></sect1></chapter>
-<chapter>
-<title>6. My First ZK Application</title>
-<para>Prepare WEB-INF/web.xml</para>
-<para>Copy or merge the following content to the web.xml in the WEB-INF directory in your application. This step must be done once each time you created a new Web applications. Then, what you need to do is to copy files with .zul or .zhtml extension to the proper directories in your Web applications.</para>
-<programlisting>&lt;web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"&#13;xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&#13;xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"&gt; &#13;&#13;    &lt;!-- //// --&gt;    &#13;    &lt;!-- ZK --&gt;    &#13;    &lt;listener&gt;    &#13;        &lt;description&gt;ZK listener for session cleanup&lt;/description&gt;        &#13;        &lt;listener-class&gt;org.zkoss.zk.ui.http.HttpSessionListener&lt;/listener-class&gt;        &#13;    &lt;/listener&gt;    &#13;    &lt;servlet&gt;    &#13;        &lt;description&gt;ZK loader for evaluating ZK pages&lt;/description&gt;        &#13;        &lt;servlet-name&gt;zkLoader&lt;/servlet-name&gt;        &#13;        &lt;servlet-class&gt;org.zkoss.zk.ui.http.DHtmlLayoutServlet&lt;/servlet-class&gt;        &#13;&#13;        &lt;!-- Must. Specifies URI of the update engine        &#13;        (DHtmlUpdateServlet). --&gt;        &#13;        &lt;init-param&gt;        &#13;            &lt;param-name&gt;update-uri&lt;/param-name&gt;            &#13;            &lt;param-value&gt;/zkau&lt;/param-value&gt;            &#13;        &lt;/init-param&gt;        &#13;        &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;&lt;!-- MUST --&gt;        &#13;    &lt;/servlet&gt;    &#13;    &lt;servlet-mapping&gt;    &#13;        &lt;servlet-name&gt;zkLoader&lt;/servlet-name&gt;        &#13;        &lt;url-pattern&gt;*.zul&lt;/url-pattern&gt;        &#13;    &lt;/servlet-mapping&gt;    &#13;    &lt;servlet-mapping&gt;    &#13;        &lt;servlet-name&gt;zkLoader&lt;/servlet-name&gt;        &#13;        &lt;url-pattern&gt;*.zhtml&lt;/url-pattern&gt;        &#13;    &lt;/servlet-mapping&gt;    &#13;    &lt;servlet&gt;    &#13;        &lt;description&gt;The asynchronous update engine for ZK&lt;/description&gt;        &#13;        &lt;servlet-name&gt;auEngine&lt;/servlet-name&gt;        &#13;        &lt;servlet-class&gt;org.zkoss.zk.au.http.DHtmlUpdateServlet&lt;/servlet-class&gt;        &#13;    &lt;/servlet&gt;    &#13;    &lt;servlet-mapping&gt;    &#13;        &lt;servlet-name&gt;auEngine&lt;/servlet-name&gt;        &#13;        &lt;url-pattern&gt;/zkau/*&lt;/url-pattern&gt;        &#13;    &lt;/servlet-mapping&gt;    &#13;    &lt;!-- //// --&gt;    &#13;&#13;    &lt;!-- MIME mapping --&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;gif&lt;/extension&gt;        &#13;        &lt;mime-type&gt;image/gif&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;html&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/html&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;htm&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/html&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;jad&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/vnd.sun.j2me.app-descriptor&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;jpeg&lt;/extension&gt;        &#13;        &lt;mime-type&gt;image/jpeg&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;jpg&lt;/extension&gt;        &#13;        &lt;mime-type&gt;image/jpeg&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;js&lt;/extension&gt;        &#13;        &lt;mime-type&gt;application/x-javascript&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;png&lt;/extension&gt;        &#13;        &lt;mime-type&gt;image/png&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;txt&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/plain&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;xml&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/xml&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;zhtml&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/html&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;    &lt;mime-mapping&gt;    &#13;        &lt;extension&gt;zul&lt;/extension&gt;        &#13;        &lt;mime-type&gt;text/html&lt;/mime-type&gt;        &#13;    &lt;/mime-mapping&gt;    &#13;&#13;    &lt;welcome-file-list&gt;    &#13;        &lt;welcome-file&gt;index.zul&lt;/welcome-file&gt;        &#13;        &lt;welcome-file&gt;index.zhtml&lt;/welcome-file&gt;        &#13;        &lt;welcome-file&gt;index.html&lt;/welcome-file&gt;        &#13;        &lt;welcome-file&gt;index.htm&lt;/welcome-file&gt;        &#13;    &lt;/welcome-file-list&gt;    &#13;&lt;/web-app&gt;&#13;</programlisting><sect1><title>My First Hello World</title>
-<para>Create a file called hello.zul with the following content. Then, you could use the browser to see the result, say http://localhost:8080/zkdemo/hello.zul.</para>
-<programlisting>&lt;window title="My First window" border="normal" width="200px"&gt;&#13;    Hello, World!    &#13;&lt;/window&gt;&#13;</programlisting>
-<para>Then, the result is depicted as follow.</para>
-<para>
-<graphic fileref="images/hello.gif"/>Notice that, though the content of hello.zul is very similar to XUL<footnote>
-<para>http://xul.sourceforge.net/mozilla.html</para>
-</footnote>, it is actually written in ZUML. ZK Loader parses it into a valid HTML page which can be interpreted correctly by a regular browser, such as Internet Explorer and Mozilla Firefox. Refer to the Developer's Guide for more details.</para></sect1></chapter>
 </book>
