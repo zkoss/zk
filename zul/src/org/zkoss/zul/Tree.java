@@ -1879,24 +1879,6 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 			_innerWidth = width == null ? "100%": width;
 		} else
 			super.process(request, everError);
-
-		public void clearSelectionByClient() {
-			_noSmartUpdate = true;
-			try {
-				clearSelection();
-			} finally {
-				_noSmartUpdate = false;
-			}
-		}
-
-		public void clearSelectionByClient() {
-			_noSmartUpdate = true;
-			try {
-				clearSelection();
-			} finally {
-				_noSmartUpdate = false;
-			}
-		}
 	}
 
 	/** An iterator used by _heads.
