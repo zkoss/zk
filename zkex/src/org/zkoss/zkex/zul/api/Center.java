@@ -23,5 +23,4 @@ package org.zkoss.zkex.zul.api;
  * @deprecated As of release 5.0.0, replaced with {@link org.zkoss.zul.api.Center}.
  */
 public interface Center extends org.zkoss.zul.api.Center {
-
 }

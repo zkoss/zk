@@ -22,5 +22,5 @@ package org.zkoss.zkex.zul.api;
  * @author jumperchen
  * @deprecated As of release 5.0.0, replaced with {@link org.zkoss.zul.api.LayoutRegion}.
  */
-public abstract interface LayoutRegion extends org.zkoss.zul.api.LayoutRegion {
+public interface LayoutRegion extends org.zkoss.zul.api.LayoutRegion {
 }
