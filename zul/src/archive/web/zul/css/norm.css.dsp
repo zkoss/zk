@@ -319,17 +319,17 @@ div.z-drop-cnt {
 }
 .z-fileupload-add {
 	cursor: pointer;
-	background: transparent no-repeat 0 -48px;
-	background-image: url(${c:encodeURL('~./zul/img/misc/drag.png')});
+	background: transparent no-repeat 0 -23px;
+	background-image: url(${c:encodeURL('~./zul/img/misc/fileupload.gif')});
 	width: 16px;
-	height: 16px;
+	height: 17px;
 }
 .z-fileupload-delete {
 	cursor: pointer;
-	background: transparent no-repeat 0 -80px;
-	background-image: url(${c:encodeURL('~./zul/img/misc/drag.png')});
+	background: transparent no-repeat 0 0;
+	background-image: url(${c:encodeURL('~./zul/img/misc/fileupload.gif')});
 	width: 16px;
-	height: 16px;
+	height: 17px;
 }
 <%-- ZK Massagebox --%>
 .z-msgbox{
