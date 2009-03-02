@@ -25,7 +25,6 @@ import java.net.URL;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.Composer;
-import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.xel.ExValue;
 
 /**

@@ -67,8 +67,8 @@ public class SelectEvent extends Event {
 				new Object[] {Objects.toString(data), request});
 		final Component ref = data.length >= 2 && data[1] != null ?
 			request.getDesktop().getComponentByUuidIfAny(data[1]): null;
-		Events.postEvent(new SelectEvent(getId(), comp, items, ref,
-			data.length < 3 ? 0: AuRequests.parseKeys(data[2])));
+		return new SelectEvent(request.getName(), comp, items, ref,
+			data.length < 3 ? 0: AuRequests.parseKeys(data[2]));
 	}
 
 	/** Constructs a selection event.
