@@ -40,7 +40,6 @@ ZK 3.6.0
   2512695: Able to change UiFactory, IdGenerator.. in WebAppInit
   2494920: Enhance <listheader> auto sorting to sort on fieldnames
   2512555: Converter convert date to String with annotated format
-  2526699: Tabpanel display issue in IE7
   2530133: Column support default comparator like listheader
   2559476: A way to turn off the filtering of clicks
   1733461: throw new WrongValuesException(WrongValueException[])
@@ -60,6 +59,7 @@ ZK 3.6.0
   2619208: A way to specify the charset to load i3-label*.properties
 
 * Bugs
+  2526699: Tabpanel display issue in IE7
   2090136: IE6 only - Horizontal tabbox borderline disjoined.
   2386650: NullPointerException when create tabs in onTimer()
   2432784: Tabbox error in IE7
