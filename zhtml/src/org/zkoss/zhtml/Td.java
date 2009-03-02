@@ -1,4 +1,4 @@
-m/* Td.java
+/* Td.java
 
 {{IS_NOTE
 	Purpose:
