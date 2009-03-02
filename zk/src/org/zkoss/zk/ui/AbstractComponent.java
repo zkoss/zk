@@ -1368,6 +1368,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		final String widgetClass = _def.getWidgetClass(getMold());
 		return widgetClass != null ? widgetClass: _def.getDefaultWidgetClass();
 	}
+
 	/** Returns the mold used to render this component.
 	 * Default: "default"
 	 */

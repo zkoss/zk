@@ -1382,7 +1382,8 @@ public class Configuration {
 	 *
 	 * <p>If not specified, it shows up an error message at client.
 	 *
-	 * <p>Default: none.
+	 * <p>Default: none (since 3.6.0;
+	 * older version: 302, 401 and 403 are associated with an empty URI).
 	 * @since 3.0.0
 	 */
 	public int[] getClientErrorReloadCodes() {
