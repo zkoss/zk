@@ -453,21 +453,21 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	setHeight: function (height) {
 		this.$supers('setHeight', arguments);
 		if (this.desktop) {
-			zWatch.fireDown('beforeSize', null, this);
-			zWatch.fireDown('onSize', null, this); // Note: IE6 is broken, because its offsetHeight doesn't update.
-
 			this._fixHgh();
 			this._syncShadow();
+
+			zWatch.fireDown('beforeSize', null, this);
+			zWatch.fireDown('onSize', null, this); // Note: IE6 is broken, because its offsetHeight doesn't update.
 		}
 	},
 	setWidth: function (width) {
 		this.$supers('setWidth', arguments);
 		if (this.desktop) {
-			zWatch.fireDown('beforeSize', null, this);
-			zWatch.fireDown('onSize', null, this);
-
 			this._fixWdh();
 			this._syncShadow();
+
+			zWatch.fireDown('beforeSize', null, this);
+			zWatch.fireDown('onSize', null, this);
 		}
 	},
 	setDomVisible_: function () {
