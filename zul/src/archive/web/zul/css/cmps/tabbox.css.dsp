@@ -336,7 +336,7 @@
 	background: none; zoom: 1; overflow: hidden; position: relative;
 }
 .z-tabs-ver-scroll .z-tabs-ver-header {
-	background: #CEDFF5 repeat-y scroll 0 0;
+	background: #C7E3F3 repeat-y scroll 0 0;
 	background-image: url(${c:encodeURL('~./zul/img/tab/tabs-v-bg.png')});
 	zoom: 1;
 	overflow: hidden;
@@ -410,32 +410,32 @@
 	-moz-outline: none;
 	outline: none;
 	zoom: 1;
-	background: transparent no-repeat scroll -128px 0;
+	background: transparent no-repeat scroll -512px 0;
 	background-image: url(${c:encodeURL('~./zul/img/tab/tab-v-corner.png')});
 	cursor: pointer;
 }
 
 .z-tab-ver-hl .z-tab-ver-hr {
 	padding-bottom: 10px;
-	background: transparent no-repeat scroll -128px bottom;
+	background: transparent no-repeat scroll -512px bottom;
 	background-image: url(${c:encodeURL('~./zul/img/tab/tab-v-corner.png')});
 }
 .z-tab-ver .z-tab-ver-hm {
 	overflow: hidden;
 	cursor: pointer;
 	padding-left: 5px;
-	background: transparent repeat-y scroll -128px 0;
+	background: transparent repeat-y scroll -512px 0;
 	background-image: url(${c:encodeURL('~./zul/img/tab/tab-v-hm.png')});
 	zoom: 1;
 }
 .z-tab-ver .z-tab-ver-hl:hover {
-	background-position: -64px 0;
+	background-position: -256px 0;
 }
 .z-tab-ver .z-tab-ver-hl:hover .z-tab-ver-hr {
-	background-position: -64px bottom;
+	background-position: -256px bottom;
 }
 .z-tab-ver .z-tab-ver-hl:hover .z-tab-ver-hm {
-	background-position: -64px 0;
+	background-position: -256px 0;
 }
 .z-tab-ver .z-tab-ver-text {
 	font-style: normal;
@@ -543,19 +543,19 @@
 }
 .z-tab-ver-disd .z-tab-ver-hl, .z-tab-ver-disd-seld .z-tab-ver-hl,
 .z-tab-ver-disd .z-tab-ver-hl:hover, .z-tab-ver-disd-seld .z-tab-ver-hl:hover {
-	background-position: -128px 0;
+	background-position: -512px 0;
 }
 .z-tab-ver-disd .z-tab-ver-hl .z-tab-ver-hr,
 .z-tab-ver-disd-seld .z-tab-ver-hl .z-tab-ver-hr,
 .z-tab-ver-disd .z-tab-ver-hl:hover .z-tab-ver-hr,
 .z-tab-ver-disd-seld .z-tab-ver-hl:hover .z-tab-ver-hr {
-	background-position: -128px bottom;
+	background-position: -512px bottom;
 }
 .z-tab-ver-disd .z-tab-ver-hl .z-tab-ver-hm,
 .z-tab-ver-disd-seld .z-tab-ver-hl .z-tab-ver-hm,
 .z-tab-ver-disd .z-tab-ver-hl:hover .z-tab-ver-hm,
 .z-tab-ver-disd-seld .z-tab-ver-hl:hover .z-tab-ver-hm {
-	background-position: -128px 0;
+	background-position: -512px 0;
 	color: gray;
 	cursor: default;
 }
