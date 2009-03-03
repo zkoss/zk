@@ -120,6 +120,16 @@ zDom = { //static methods
 		return val;
 	},
 
+	/** Sets the offset height by specifying the inner height.
+	 * @param hgh the height without margin and border
+	 */
+	setOffsetHeight: function (el, hgh) {
+		hgh -= zDom.padBorderHeight(el)
+			+ zk.parseInt(zDom.getStyle(el, "margin-top"))
+			+ zk.parseInt(zDom.getStyle(el, "margin-bottom"));
+		el.style.height = (hgh > 0 ? hgh: 0) + "px";
+	},
+
 	/**
 	 * Returns the revised position, which subtracted the offset of its scrollbar,
 	 * for the specified element.

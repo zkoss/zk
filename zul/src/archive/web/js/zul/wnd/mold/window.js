@@ -17,7 +17,7 @@ function (out, skipper) {
 		uuid = this.uuid,
 		title = this.getTitle(),
 		caption = this.caption,
-		contentStyle = this.getContentStyle(), wcExtStyle = '',
+		contentStyle = this.getContentStyle(),
 		contentSclass = this.getContentSclass(),
 		mode = this.getMode(),
 		withFrame = 'embedded' != mode && 'popup' != mode,
@@ -26,49 +26,40 @@ function (out, skipper) {
 	out.push('<div', this.domAttrs_(), '>');
 
 	if (caption || title) {
-		out.push('<div class="', zcls, '-tl', noborder,
-				'"><div class="', zcls, '-tr', noborder,
-				'"><div class="', zcls, '-tm', noborder,
-				'"><div id="', uuid, '$cap" class="', zcls,
-				'-header">');
+		out.push('<div class="', zcls, '-tl"><div class="',
+			zcls, '-tr"></div></div><div class="',
+			zcls, '-hl"><div class="', zcls,
+			'-hr"><div class="', zcls, '-hm"><div id="',
+			uuid, '$cap" class="', zcls, '-header">');
+
 		if (caption) caption.redraw(out);
 		else {
 			if (this.isClosable())
-				out.push('<div id="', uuid, '$close" class="',
-						zcls, '-tool ', zcls, '-close"></div>');
+				out.push('<div id="', uuid, '$close" class="', zcls, '-icon ', zcls, '-close"></div>');
 			if (this.isMaximizable()) {
-				out.push('<div id="', uuid, '$max" class="',
-						zcls, '-tool ', zcls, '-maximize');
+				out.push('<div id="', uuid, '$max" class="', zcls, '-icon ', zcls, '-max');
 				if (this.isMaximized())
-					out.push(' ', zcls, '-maximized');
+					out.push(' ', zcls, '-maxd');
 				out.push('"></div>');
 			}
 			if (this.isMinimizable())
-				out.push('<div id="' + uuid, '$min" class="',
-						zcls, '-tool ', zcls, '-minimize"></div>');
+				out.push('<div id="' + uuid, '$min" class="', zcls, '-icon ', zcls, '-min"></div>');
 			out.push(zUtl.encodeXML(title));
 		}
 		out.push('</div></div></div></div>');
-		wcExtStyle = 'border-top:0;';
 	} else if (withFrame)
 		out.push('<div class="', zcls, '-tl', noborder,
-				'"><div class="', zcls, '-tr', noborder,
-				'"><div class="', zcls, '-tm', noborder,
-				'-noheader"></div></div></div>');
-
-	out.push('<div id="', uuid, '$body" class="', zcls, '-body">');
+				'"><div class="', zcls, '-tr', noborder, '"></div></div>');
 
 	if (withFrame)
 		out.push('<div class="', zcls, '-cl', noborder,
-				'"><div class="', zcls, '-cr', noborder,
-				'"><div class="', zcls, '-cm', noborder, '">');
-
-	if (contentStyle) wcExtStyle += contentStyle;
+			'"><div class="', zcls, '-cr', noborder,
+			'"><div class="', zcls, '-cm', noborder, '">');
 
 	out.push('<div id="', uuid, '$cave" class="');
 	if (contentSclass) out.push(contentSclass, ' ');
 	out.push(zcls, '-cnt', noborder, '"');
-	if (wcExtStyle) out.push(' style="', wcExtStyle,'"');
+	if (contentStyle) out.push(' style="', contentStyle, '"');
 	out.push('>');
 
 	if (!skipper)
@@ -79,10 +70,8 @@ function (out, skipper) {
 	out.push('</div>');
 
 	if (withFrame)
-		out.push('</div></div></div><div class="', zcls, '-bl',
-				noborder, '"><div class="', zcls, '-br', noborder,
-				'"><div class="', zcls, '-bm', noborder,
-				'"></div></div></div>');
+		out.push('</div></div></div><div class="', zcls, '-bl', noborder,
+			'"><div class="', zcls, '-br', noborder, '"></div></div>');
 
-	out.push('</div></div>');
+	out.push('</div>');
 }

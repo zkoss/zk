@@ -219,7 +219,7 @@ zk.Event = zk.$extends(zk.Object, {
 	DN:		40,
 	INS:	45,
 	DEL:	46,
-	F1:		112,
+	F1:		112
 });
 
 zWatch = {
