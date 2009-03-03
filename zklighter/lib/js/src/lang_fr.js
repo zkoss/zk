@@ -17,8 +17,11 @@ KBYTES: "KB",
 
 FAILED_TO_LOAD: "Erreur de chargement ",
 FAILED_TO_LOAD_DETAIL: "Cela peut être dû à un problème de réseau. Rechagez cette page et essayez de nouveau.",
-CAUSE: "Cause: "
+CAUSE: "Cause: ",
+
+LOADING: "Chargement..."
 };
+
 zk.GROUPING=" ";
 zk.DECIMAL=",";
 zk.PERCENT="%";
@@ -43,7 +46,7 @@ NO_AUDIO_SUPPORT: "Votre navigateur ne supporte pas l'audio dynamique"
 };
 
 zk.$default(msgzul, {
-VALUE_NOT_MATCHED:'Vous deviez spécifier l\'une des valeurs dans la liste déroulante',
+VALUE_NOT_MATCHED:'Vous deviez spécifier l\'une des valeurs dans la liste déroulante.',
 EMPTY_NOT_ALLOWED:'Champ vide non autorisé.\nVous devez spécifier une valeur',
 INTEGER_REQUIRED:'Vous devez spécifier un entier, au lieu de {0}.',
 NUMBER_REQUIRED:'Vous devez spécifier un nombre au lieu de {0}.',

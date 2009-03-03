@@ -12,12 +12,14 @@ FAILED_TO_PROCESS: "Verarbeitung fehlgeschlagen ",
 GOTO_ERROR_FIELD: "Gehe zum falschen Feld",
 PLEASE_WAIT: "Verarbeitung...",
 
-FILE_SIZE: "File size: ",
+FILE_SIZE: "Dateigröße: ",
 KBYTES: "KB",
 
-FAILED_TO_LOAD: "Failed to load ",
-FAILED_TO_LOAD_DETAIL: "It may be caused by bad traffic. You could reload this page and try again.",
-CAUSE: "Cause: "
+FAILED_TO_LOAD: "Fehler beim Laden ",
+FAILED_TO_LOAD_DETAIL: "Ursache: Netzwerkprobleme. Seite neu laden und erneut versuchen.",
+CAUSE: "Ursache: ",
+
+LOADING: "Lade..."
 };
 zk.GROUPING=".";
 zk.DECIMAL=",";
@@ -42,7 +44,7 @@ OUT_OF_RANGE: "Nicht im zulässigen Bereich",
 NO_AUDIO_SUPPORT: "Ihr Browser unterstützt keine Tonwiedergabe"
 };
 zk.$default(msgzul, {
-VALUE_NOT_MATCHED:'Only values in the drop-down list are allowed',
+VALUE_NOT_MATCHED:'Kein Wert in Drop Down Liste ausgewählt',
 EMPTY_NOT_ALLOWED:'Keine Eingabe ist nicht erlaubt.\nAuch nur Leerzeichen sind nicht möglich',
 INTEGER_REQUIRED:'Sie müssen statt {0} eine ganze Zahl angeben.',
 NUMBER_REQUIRED:'Sie müssen statt {0} eine Zahl angeben.',

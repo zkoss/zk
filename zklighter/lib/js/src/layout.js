@@ -838,9 +838,9 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 					ol = wgt.parent,
 					real = wgt.getSubnode('real'),
 					mars = ol._arrayToObject(wgt._margins),
-					lr = zDom.frameWidth(real)
+					lr = zDom.padBorderWidth(real)
 						+ (pos == $Layout.WEST ? mars.left : mars.right),
-					tb = zDom.frameWidth(real)
+					tb = zDom.padBorderWidth(real)
 						+ (pos == $Layout.NORTH ? mars.top : mars.bottom),
 					min = 0,
 					uuid = wgt.uuid;

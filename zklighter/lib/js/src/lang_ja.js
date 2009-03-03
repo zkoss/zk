@@ -17,7 +17,9 @@ KBYTES: "KB",
 
 FAILED_TO_LOAD: "読み込みに失敗しました: ",
 FAILED_TO_LOAD_DETAIL: "接続に問題がある可能性があります。リロードしてから再度操作してください。",
-CAUSE: "原因： "
+CAUSE: "原因： ",
+
+LOADING: "読み込み中..."
 };
 zk.GROUPING=",";
 zk.DECIMAL=".";

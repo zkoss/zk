@@ -19,6 +19,8 @@ mesg.FAILED_TO_LOAD="Fallo al cargar ";
 mesg.FAILED_TO_LOAD_DETAIL="Puede ser a causa de un tráfico erroneo. Podria refrescar de nuevo la página.";
 mesg.CAUSE="Causa: ";
 
+mesg.LOADING = "Cargando...";
+
 zk.GROUPING=".";
 zk.DECIMAL=",";
 zk.PERCENT="%";
@@ -42,7 +44,7 @@ msgzul.OUT_OF_RANGE = "Valor fuera de rango";
 msgzul.NO_AUDIO_SUPPORT = "Tu explorador (browser) no soporta audio dinamico ";
 
 zk.$default(msgzul, {
-VALUE_NOT_MATCHED:'Only values in the drop-down list are allowed',
+VALUE_NOT_MATCHED:'Debe especificar uno de los valores de la lista desplegable.',
 EMPTY_NOT_ALLOWED:'No se permite vacio o espacios en blanco.\nDebe especificar un valor diferente',
 INTEGER_REQUIRED:'Debe especificar un numero entero, en lugar de {0}.',
 NUMBER_REQUIRED:'Debe especificar un numero, en lugar de {0}.',

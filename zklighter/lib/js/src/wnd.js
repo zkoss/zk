@@ -125,7 +125,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			}
 		} else {
 			if (!this._shadow)
-				this._shadow = new zk.eff.Shadow(this.getNode(), {stackup:true});
+				this._shadow = new zk.eff.Shadow(this.getNode(),
+					{left: -4, right: 4, top: -2, bottom: 3, stackup:true});
 			this._shadow.sync();
 		}
 	},
@@ -161,15 +162,15 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		zDom.center(n, pos);
 		var sdw = this._shadow;
 		if (pos && sdw) {
-			var d = sdw.getDelta(), l = n.offsetLeft, t = n.offsetTop, w = n.offsetWidth,
-				h = n.offsetHeight; 
-			if (pos.indexOf("left") >= 0 && d.l < 0) st.left = l - d.l + "px";
-			else if (pos.indexOf("right") >= 0)
-				st.left = l - (zk.ie ? Math.round((Math.abs(d.l) + d.w)/2) : Math.round((d.l + d.w)/2)) - 1 + "px";
-
-			if (pos.indexOf("top") >= 0 && d.t < 0) st.top = t - d.t + "px";
-			else if (pos.indexOf("bottom") >= 0)
-				st.top = t - (zk.ie ? Math.round((Math.abs(d.t) + d.h)/2) + 1 : Math.round((d.t + d.h)/2)) - 1 + "px";
+			var opts = sdw.opts, l = n.offsetLeft, t = n.offsetTop; 
+			if (pos.indexOf("left") >= 0 && opts.left < 0)
+				st.left = (l - opts.left) + "px";
+			else if (pos.indexOf("right") >= 0 && opts.right > 0)
+				st.left = (l - opts.right) + "px";
+			if (pos.indexOf("top") >= 0 && opts.top < 0)
+				st.top = (t - opts.top) + "px";
+			else if (pos.indexOf("bottom") >= 0 && opts.bottom > 0)
+				st.top = (t - opts.bottom) + "px";
 		}
 		this._syncShadow();
 		if (ol != st.left || ot != st.top)
@@ -326,9 +327,9 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this._hideShadow();
 		if (this.isMaximized()) {
 			/** TODO 
-			 * if (this.__maximized)
+			 * if (this._maximized)
 				this._syncMaximized();
-			this.__maximized = false; // avoid deadloop
+			this._maximized = false; // avoid deadloop
 			*/
 		}
 		this._fixHgh();
@@ -361,56 +362,59 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			}
 	},
 	_fixWdh: zk.ie7 ? function () {
-		if (this._mode == 'embedded' || this._mode == 'popup') return;
+		if (this._mode == 'embedded' || this._mode == 'popup' || !this.isRealVisible()) return;
 		var n = this.getNode(),
-			cm = this.getSubnode('cave').parentNode,
+			cave = this.getSubnode('cave').parentNode,
 			wdh = n.style.width,
 			tl = zDom.firstChild(n, "DIV"),
-			bl = zDom.lastChild(zDom.lastChild(n, "DIV"), "DIV");
+			hl = tl && this.getSubnode("cap") ? zDom.nextSibling(tl, "DIV") : null,
+			bl = zDom.lastChild(n, "DIV");
 			
 		if (!wdh || wdh == "auto") {
-			var diff = zDom.frameWidth(cm.parentNode) + zDom.frameWidth(cm.parentNode.parentNode);
-			if (tl) {
-				tl.firstChild.firstChild.style.width = 
-					Math.max(0, cm.offsetWidth - (zDom.frameWidth(tl) + zDom.frameWidth(tl.firstChild) - diff)) + "px";
-			}
-			if (bl) {
-				bl.firstChild.firstChild.style.width =
-					Math.max(0, cm.offsetWidth - (zDom.frameWidth(bl) + zDom.frameWidth(bl.firstChild) - diff)) + "px";
-			}
+			var diff = zDom.padBorderWidth(cave.parentNode) + zDom.padBorderWidth(cave.parentNode.parentNode);
+			if (tl) tl.firstChild.style.width = cave.offsetWidth + diff + "px";
+			if (hl) hl.firstChild.firstChild.style.width = cave.offsetWidth
+				- (zDom.padBorderWidth(hl) + zDom.padBorderWidth(hl.firstChild) - diff) + "px";
+			if (bl) bl.firstChild.style.width = cave.offsetWidth + diff + "px";
 		} else {
-			if (tl) tl.firstChild.firstChild.style.width = "";
-			if (bl) bl.firstChild.firstChild.style.width = "";
+			if (tl) tl.firstChild.style.width = "";
+			if (hl) hl.firstChild.style.width = "";
+			if (bl) bl.firstChild.style.width = "";
 		}
 	} : zk.$void,
 	_fixHgh: function () {
 		if (!this.isRealVisible()) return;
 		var n = this.getNode(),
+			hgh = n.style.height
 			cave = this.getSubnode('cave'),
-			hgh = n.style.height;
-		if (zk.ie6Only && ((hgh && hgh != "auto" )|| cave.style.height)) cave.style.height = "0px";
-		if (hgh && hgh != "auto")
-			cave.style.height = zDom.revisedHeight(cave, n.offsetHeight - this._frameHeight(n) - 1, true) + 'px';
+			cvh = cave.style.height;
+		if (hgh && hgh != "auto") {
+			if (zk.ie6Only) cave.style.height = "0px";
+			zDom.setOffsetHeight(cave, this._offsetHeight(n));
+		} else if (cvh && cvh != "auto") {
+			if (zk.ie6Only) cave.style.height = "0px";
+			cave.style.height = "";
+		}
 	},
-	_frameHeight: function (n) {
-		var h = zDom.frameHeight(n) + this._titleHeight(n);
-	    if (this._mode != 'embedded' && this._mode != 'popup') {
-			var ft = zDom.lastChild(this.getSubnode('body'), "DIV"),
-				title = this.getSubnode('cap'),
-				cave = this.getSubnode('cave');
-	        h += ft.offsetHeight;
+	_offsetHeight: function (n) {
+		var h = n.offsetHeight - 1 - this._titleHeight(n);
+		if(this._mode != 'embedded' && this._mode != 'popup') {
+			var cave = this.getSubnode('cave'), bl = zDom.lastChild(n, "DIV"),
+				cap = this.getSubnode("cap");
+			h -= bl.offsetHeight;
 			if (cave)
-				h += zDom.frameHeight(cave.parentNode);
-			if (title)
-		        h += zDom.frameHeight(title.parentNode);
-	    }
-	    return h;
+				h -= zDom.padBorderHeight(cave.parentNode);
+			if (cap)
+				h -= zDom.padBorderHeight(cap.parentNode);
+		}
+		return h - zDom.padBorderHeight(n);
 	},
 	_titleHeight: function (n) {
-		var cap = this.getSubnode('cap');
-		return cap ? cap.offsetHeight : 
-				this._mode != 'embedded' && this._mode != 'popup' ?
-					zDom.firstChild(n, "DIV").firstChild.firstChild.offsetHeight : 0;
+		var cap = this.getSubnode('cap'),
+			tl = zDom.firstChild(n, "DIV");
+		return cap ? cap.offsetHeight + tl.offsetHeight:
+			this._mode != 'embedded' && this._mode != 'popup' ?
+				zDom.nextSibling(tl, "DIV").offsetHeight: 0;
 	},
 
 	_fireOnMove: function (keys) {
@@ -434,6 +438,26 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 
 	//super//
+	setHeight: function (height) {
+		this.$supers('setHeight', arguments);
+		if (this.desktop) {
+			this._fixHgh();
+			this._syncShadow();
+
+			zWatch.fireDown('beforeSize', null, this);
+			zWatch.fireDown('onSize', null, this); // Note: IE6 is broken, because its offsetHeight doesn't update.
+		}
+	},
+	setWidth: function (width) {
+		this.$supers('setWidth', arguments);
+		if (this.desktop) {
+			this._fixWdh();
+			this._syncShadow();
+
+			zWatch.fireDown('beforeSize', null, this);
+			zWatch.fireDown('onSize', null, this);
+		}
+	},
 	setDomVisible_: function () {
 		this.$supers('setDomVisible_', arguments);
 		this._syncShadow();
@@ -563,11 +587,11 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			break;
 		case this.getSubnode('max'):
 			var zcls = this.getZclass(),
-				added = this.isMaximized() ? ' ' + zcls + '-maximized-over' : '';
-			zDom.addClass(this.getSubnode('max'), zcls + '-maximize-over' + added);
+				added = this.isMaximized() ? ' ' + zcls + '-maxd-over' : '';
+			zDom.addClass(this.getSubnode('max'), zcls + '-max-over' + added);
 			break;
 		case this.getSubnode('min'):
-			zDom.addClass(this.getSubnode('min'), this.getZclass() + '-minimize-over');
+			zDom.addClass(this.getSubnode('min'), this.getZclass() + '-min-over');
 			break;
 		}
 		this.$supers('doMouseOver_', arguments);
@@ -581,11 +605,11 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			var zcls = this.getZclass(),
 				max = this.getSubnode('max');
 			if (this.isMaximized())
-				zDom.rmClass(max, zcls + '-maximized-over');
-			zDom.rmClass(max, zcls + '-maximize-over');
+				zDom.rmClass(max, zcls + '-maxd-over');
+			zDom.rmClass(max, zcls + '-max-over');
 			break;
 		case this.getSubnode('min'):
-			zDom.rmClass(this.getSubnode('min'), this.getZclass() + '-minimize-over');
+			zDom.rmClass(this.getSubnode('min'), this.getZclass() + '-min-over');
 			break;
 		}
 		this.$supers('doMouseOut_', arguments);
@@ -603,26 +627,28 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			 el.style.top = el.offsetTop + "px";
 		if(el.style.left && el.style.left.indexOf("%") >= 0)
 			 el.style.left = el.offsetLeft + "px";
-		//TODO var real = $real(handle);
-		//zkau.closeFloats(real, handle);
+		//TODO zkau.closeFloats();
 	},
 	_ghostmove: function (dg, ofs, evt) {
 		var wnd = dg.control,
 			el = dg.node;
 		wnd._hideShadow();
-		var title = zDom.firstChild(el, "DIV"),
-			fakeTitle = title.cloneNode(true);
-		var html = '<div id="zk_wndghost" class="z-window-move-ghost" style="position:absolute;top:'
+		var top = zDom.firstChild(el, "DIV"),
+			header = zDom.nextSibling(top, 'DIV'),
+			fakeT = top.cloneNode(true),
+			fakeH = header.cloneNode(true),
+			html = '<div id="zk_wndghost" class="z-window-move-ghost" style="position:absolute;top:'
 			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
 			+zDom.offsetWidth(el)+'px;height:'+zDom.offsetHeight(el)
-			+'px;z-index:'+el.style.zIndex+'"><ul></ul></div></div>';
+			+'px;z-index:'+el.style.zIndex+'"><dl></dl></div>';
 		document.body.insertAdjacentHTML("afterBegin", html);
 		dg._wndoffs = ofs;
 		el.style.visibility = "hidden";
-		var h = el.offsetHeight - title.offsetHeight;
+		var h = el.offsetHeight - top.offsetHeight - header.offsetHeight;
 		el = zDom.$("zk_wndghost");
 		el.firstChild.style.height = zDom.revisedHeight(el.firstChild, h) + "px";
-		el.insertBefore(fakeTitle, el.firstChild);
+		el.insertBefore(fakeT, el.firstChild);
+		el.insertBefore(fakeH, el.lastChild);
 		return el;
 	},
 	_endghostmove: function (dg, origin) {
@@ -676,7 +702,7 @@ function (out, skipper) {
 		uuid = this.uuid,
 		title = this.getTitle(),
 		caption = this.caption,
-		contentStyle = this.getContentStyle(), wcExtStyle = '',
+		contentStyle = this.getContentStyle(),
 		contentSclass = this.getContentSclass(),
 		mode = this.getMode(),
 		withFrame = 'embedded' != mode && 'popup' != mode,
@@ -685,49 +711,40 @@ function (out, skipper) {
 	out.push('<div', this.domAttrs_(), '>');
 
 	if (caption || title) {
-		out.push('<div class="', zcls, '-tl', noborder,
-				'"><div class="', zcls, '-tr', noborder,
-				'"><div class="', zcls, '-tm', noborder,
-				'"><div id="', uuid, '$cap" class="', zcls,
-				'-header">');
+		out.push('<div class="', zcls, '-tl"><div class="',
+			zcls, '-tr"></div></div><div class="',
+			zcls, '-hl"><div class="', zcls,
+			'-hr"><div class="', zcls, '-hm"><div id="',
+			uuid, '$cap" class="', zcls, '-header">');
+
 		if (caption) caption.redraw(out);
 		else {
 			if (this.isClosable())
-				out.push('<div id="', uuid, '$close" class="',
-						zcls, '-tool ', zcls, '-close"></div>');
+				out.push('<div id="', uuid, '$close" class="', zcls, '-icon ', zcls, '-close"></div>');
 			if (this.isMaximizable()) {
-				out.push('<div id="', uuid, '$max" class="',
-						zcls, '-tool ', zcls, '-maximize');
+				out.push('<div id="', uuid, '$max" class="', zcls, '-icon ', zcls, '-max');
 				if (this.isMaximized())
-					out.push(' ', zcls, '-maximized');
+					out.push(' ', zcls, '-maxd');
 				out.push('"></div>');
 			}
 			if (this.isMinimizable())
-				out.push('<div id="' + uuid, '$min" class="',
-						zcls, '-tool ', zcls, '-minimize"></div>');
+				out.push('<div id="' + uuid, '$min" class="', zcls, '-icon ', zcls, '-min"></div>');
 			out.push(zUtl.encodeXML(title));
 		}
 		out.push('</div></div></div></div>');
-		wcExtStyle = 'border-top:0;';
 	} else if (withFrame)
 		out.push('<div class="', zcls, '-tl', noborder,
-				'"><div class="', zcls, '-tr', noborder,
-				'"><div class="', zcls, '-tm', noborder,
-				'-noheader"></div></div></div>');
-
-	out.push('<div id="', uuid, '$body" class="', zcls, '-body">');
+				'"><div class="', zcls, '-tr', noborder, '"></div></div>');
 
 	if (withFrame)
 		out.push('<div class="', zcls, '-cl', noborder,
-				'"><div class="', zcls, '-cr', noborder,
-				'"><div class="', zcls, '-cm', noborder, '">');
-
-	if (contentStyle) wcExtStyle += contentStyle;
+			'"><div class="', zcls, '-cr', noborder,
+			'"><div class="', zcls, '-cm', noborder, '">');
 
 	out.push('<div id="', uuid, '$cave" class="');
 	if (contentSclass) out.push(contentSclass, ' ');
 	out.push(zcls, '-cnt', noborder, '"');
-	if (wcExtStyle) out.push(' style="', wcExtStyle,'"');
+	if (contentStyle) out.push(' style="', contentStyle, '"');
 	out.push('>');
 
 	if (!skipper)
@@ -738,12 +755,10 @@ function (out, skipper) {
 	out.push('</div>');
 
 	if (withFrame)
-		out.push('</div></div></div><div class="', zcls, '-bl',
-				noborder, '"><div class="', zcls, '-br', noborder,
-				'"><div class="', zcls, '-bm', noborder,
-				'"></div></div></div>');
+		out.push('</div></div></div><div class="', zcls, '-bl', noborder,
+			'"><div class="', zcls, '-br', noborder, '"></div></div>');
 
-	out.push('</div></div>');
+	out.push('</div>');
 }
 zkmld(_zkwg,_zkmd);
 }finally{zPkg.end(_z);}}

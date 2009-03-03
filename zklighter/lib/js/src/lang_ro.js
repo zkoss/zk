@@ -19,6 +19,8 @@ mesg.FAILED_TO_LOAD="Eşuare la încărcare ";
 mesg.FAILED_TO_LOAD_DETAIL="Poate fi cauzat de traficul anevoios. Puteţi reîncărca această pagină şi încerca din nou.";
 mesg.CAUSE="Cauza: ";
 
+mesg.LOADING = "Se procesează...";
+
 zk.GROUPING=".";
 zk.DECIMAL=",";
 zk.PERCENT="%";

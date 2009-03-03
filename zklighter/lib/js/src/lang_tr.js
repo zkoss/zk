@@ -19,6 +19,8 @@ mesg.FAILED_TO_LOAD = "Yükleme başarısız: ";
 mesg.FAILED_TO_LOAD_DETAIL = "Yoğunluktan kaynaklı problem oluşştu.Lütfen yeniden deneyiniz.";
 mesg.CAUSE = "Neden: ";
 
+mesg.LOADING = "Bekleyiniz...";
+
 zk.GROUPING=".";
 zk.DECIMAL=",";
 zk.PERCENT="%";

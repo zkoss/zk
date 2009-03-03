@@ -267,14 +267,14 @@ zul.panel.Panel = zk.$extends(zul.Widget, {
 			bl = zDom.lastChild(zDom.lastChild(n, "DIV"), "DIV");
 			
 		if (!wdh || wdh == "auto") {
-			var diff = zDom.frameWidth(cm.parentNode) + zDom.frameWidth(cm.parentNode.parentNode);
+			var diff = zDom.padBorderWidth(cm.parentNode) + zDom.padBorderWidth(cm.parentNode.parentNode);
 			if (tl) {
 				tl.firstChild.firstChild.style.width = 
-					Math.max(0, cm.offsetWidth - (zDom.frameWidth(tl) + zDom.frameWidth(tl.firstChild) - diff)) + "px";
+					Math.max(0, cm.offsetWidth - (zDom.padBorderWidth(tl) + zDom.padBorderWidth(tl.firstChild) - diff)) + "px";
 			}
 			if (bl) {
 				bl.firstChild.firstChild.style.width =
-					Math.max(0, cm.offsetWidth - (zDom.frameWidth(bl) + zDom.frameWidth(bl.firstChild) - diff)) + "px";
+					Math.max(0, cm.offsetWidth - (zDom.padBorderWidth(bl) + zDom.padBorderWidth(bl.firstChild) - diff)) + "px";
 			}
 		} else {
 			if (tl) tl.firstChild.firstChild.style.width = "";
@@ -288,10 +288,10 @@ zul.panel.Panel = zk.$extends(zul.Widget, {
 			hgh = n.style.height;
 		if (zk.ie6Only && ((hgh && hgh != "auto" )|| body.style.height)) body.style.height = "0px";
 		if (hgh && hgh != "auto")
-			body.style.height = zDom.revisedHeight(body, n.offsetHeight - this._frameHeight(n) - 1, true) + 'px';
+			body.style.height = zDom.revisedHeight(body, n.offsetHeight - this._padBorderHeight(n) - 1, true) + 'px';
 	},
-	_frameHeight: function (n) {
-		var h = zDom.frameHeight(n) + this._titleHeight(n),
+	_padBorderHeight: function (n) {
+		var h = zDom.padBorderHeight(n) + this._titleHeight(n),
 			tbar = this.getSubnode('tbar'), bbar = this.getSubnode('bbar');
 	    if (this.isFramable()) {
 			var body = this.getSubnode('body'),
@@ -299,9 +299,9 @@ zul.panel.Panel = zk.$extends(zul.Widget, {
 				title = this.getSubnode('cap');
 	        h += ft.offsetHeight;
 			if (this.panelchildren)
-				h += zDom.frameHeight(this.panelchildren.getNode().parentNode);
+				h += zDom.padBorderHeight(this.panelchildren.getNode().parentNode);
 			if (title)
-		        h += zDom.frameHeight(title.parentNode);
+		        h += zDom.padBorderHeight(title.parentNode);
 	    } else {
 			var fbar = this.getSubnode('fbar');
 			if (fbar) h += fbar.offsetHeight;
@@ -401,7 +401,8 @@ zul.panel.Panel = zk.$extends(zul.Widget, {
 			}
 		} else {
 			if (!this._shadow)
-				this._shadow = new zk.eff.Shadow(this.getNode(), {stackup:true});
+				this._shadow = new zk.eff.Shadow(this.getNode(),
+					{left: -4, right: 4, top: -2, bottom: 3, stackup:true});
 			this._shadow.sync();
 		}
 	},

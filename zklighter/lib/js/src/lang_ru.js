@@ -19,6 +19,8 @@ mesg.FAILED_TO_LOAD="Не удалось загрузить ";
 mesg.FAILED_TO_LOAD_DETAIL="Возможно, проблема с подключением к сети. Перезагрузите страницу и попробуйте снова.";
 mesg.CAUSE="Причина: ";
 
+mesg.LOADING = "Обработка запроса...";
+
 zk.GROUPING=" ";
 zk.DECIMAL=",";
 zk.PERCENT="%";

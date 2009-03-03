@@ -17,8 +17,11 @@ KBYTES: "KB",
 
 FAILED_TO_LOAD: "無法載入：",
 FAILED_TO_LOAD_DETAIL: "可能是連線問題，請按重載再試一次。",
-CAUSE: "原因："
+CAUSE: "原因：",
+
+LOADING: "載入中..."
 };
+
 zk.GROUPING=",";
 zk.DECIMAL=".";
 zk.PERCENT="%";

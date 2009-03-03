@@ -154,7 +154,7 @@ zul.grid.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			ofs = zDom.revisedOffset(n); // Bug #1812154
 			
 		if (wgt._insizer(pointer[0] - ofs[0])) {
-			dg._zmin = 10 + zDom.frameWidth(n);		
+			dg._zmin = 10 + zDom.padBorderWidth(n);		
 				return false;
 		}
 		return true;
@@ -832,10 +832,13 @@ zul.grid.Grid = zk.$extends(zul.Widget, {
 	},
 	onSize: _zkf = function () {
 		if (this.isRealVisible()) {
+			var n = this.getNode();
+			if (n._lastsz && n._lastsz.height == n.offsetHeight && n._lastsz.width == n.offsetWidth)
+				return; // unchanged
+				
 			this._calcSize();// Bug #1813722
 			this.fireScrollRender(155);
-			if (zk.ie7) zDom.rerender(this.getNode());
-				//zk.repaint(this.getNode()); // Bug 2096807
+			if (zk.ie7) zDom.redoCSS(this.getNode()); // Bug 2096807
 		}
 	},
 	onVisible: _zkf,
@@ -928,6 +931,7 @@ zul.grid.Grid = zk.$extends(zul.Widget, {
 			if (this.efoottbl.rows.length && this.rows)
 				this.$class.cpCellWidth(this);
 		}
+		n._lastsz = {height: n.offsetHeight, width: n.offsetWidth}; // cache for the dirty resizing.
 	},
 	domFaker_: function (out, fakeId, zcls) {
 		out.push('<tbody style="visibility:hidden;height:0px"><tr id="',
@@ -1311,17 +1315,6 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 	isStripeable_: function () {
 		return true;
 	},
-	bind_: function () {
-		this.$supers('bind_', arguments);
-		if (this.isStripeable_()) this._syncStripe();
-	},
-	unbind_: function () {
-		if (this.isStripeable_()) this._syncStripe();
-		this.$supers('unbind_', arguments);
-	},
-	_syncStripe: function () {
-		if (this.parent) this.parent._syncStripe();
-	},
 	//-- super --//
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
@@ -1398,11 +1391,15 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 		this.$supers('unbind_', arguments);
 	},
 	onResponse: function () {
-		if (this._shallStripe) this.stripe();
+		if (this._shallStripe) {
+			this.stripe();
+			this.getGrid().onSize();
+		}
 	},
 	_syncStripe: function () {
 		this._shallStripe = true;
-		if (!this.inServer && this.desktop)	this.stripe();
+		if (!this.inServer && this.desktop)
+			this.onResponse();
 	},
 	stripe: function () {
 		var scOdd = this.getGrid().getOddRowSclass();

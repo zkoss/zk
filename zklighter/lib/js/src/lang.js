@@ -17,7 +17,9 @@ KBYTES: "KB",
 
 FAILED_TO_LOAD: "Failed to load ",
 FAILED_TO_LOAD_DETAIL: "It may be caused by bad traffic. You could reload this page and try again.",
-CAUSE: "Cause: "
+CAUSE: "Cause: ",
+
+LOADING: "Loading..."
 };
 zk.GROUPING=",";
 zk.DECIMAL=".";

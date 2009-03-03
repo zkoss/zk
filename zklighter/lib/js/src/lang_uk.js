@@ -16,6 +16,7 @@ mesg.KBYTES="KB";
 mesg.FAILED_TO_LOAD="Не вдалося завантажити ";
 mesg.FAILED_TO_LOAD_DETAIL="Може бути спричинено проблемами з підключенням до мережі. Перевантажте сторінку і спробуйте знову.";
 mesg.CAUSE="Причина: ";
+mesg.LOADING = "Обробка запиту...";
 
 zk.GROUPING=".";
 zk.DECIMAL=",";

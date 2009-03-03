@@ -19,6 +19,8 @@ mesg.FAILED_TO_LOAD = "Ha fallat la càrrega ";
 mesg.FAILED_TO_LOAD_DETAIL = "Pot haver estat provocat pel mal trànsit de les comunicacions. Podríeu recarregar aquesta pàgina i provar una altra vegada.";
 mesg.CAUSE = "Motiu: ";
 
+mesg.LOADING = "S'està processant...";
+
 zk.GROUPING=".";
 zk.DECIMAL=",";
 zk.PERCENT="%";

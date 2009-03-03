@@ -91,6 +91,13 @@ zk = {
 			dst[p] = src[p];
 		return dst;
 	},
+	forEach: function (objs, fn) {
+		var args = [];
+		for (var j = arguments.length; --j >= 2;)
+			args.unshift(arguments[j]);
+		for (var j = 0, len = objs.length; j < len;)
+			fn.apply(objs[j], args);
+	},
 
 	$void: function() {
 		return '';
@@ -694,9 +701,9 @@ zDom = { //static methods
 			id ? document.getElementById(id + (alias ? '$' + alias : '')): null: id;
 			//strange but getElementById("") fails in IE7
 	},
-	$$: function (id, alias) {
+	$$: function (id, subId) {
 		return typeof id == 'string' ?
-			id ? document.getElementsByName(id + (alias ? '$' + alias : '')): null: id;
+			id ? document.getElementsByName(id + (subId ? '$' + subId : '')): null: id;
 	},
 	tag: function (n) {
 		return n && n.tagName ? n.tagName.toUpperCase(): "";
@@ -714,16 +721,9 @@ zDom = { //static methods
 	} : function (n) {
 		n.style.visibility = "inherit";
 	},
-	/** Returns whether a DOM element is visible.
-	 * Returns false if not exist.
-	 * Returns true if no style.
-	 * @param strict whether the visibility property must not be hidden, too
-	 */
 	isVisible: function (n, strict) {
 		return n && (!n.style || (n.style.display != "none" && (!strict || n.style.visibility != "hidden")));
 	},
-	/** Returns if a DOM element is real visible (i.e., all ancestors are visible).
-	 */
 	isRealVisible: function (n, strict) {
 		for (; n; n = zDom.parentNode(n))
 			if (!zDom.isVisible(n, strict))
@@ -738,25 +738,21 @@ zDom = { //static methods
 		return false;
 	},
 
-	/** Returns the x coordination of the visible part. */
 	innerX: function () {
 		return window.pageXOffset
 			|| document.documentElement.scrollLeft
 			|| document.body.scrollLeft || 0;
 	},
-	/** Returns the y coordination of the visible part. */
 	innerY: function () {
 		return window.pageYOffset
 			|| document.documentElement.scrollTop
 			|| document.body.scrollTop || 0;
 	},
-	/** Returns the width of the visible part. */
 	innerWidth: function () {
 		return typeof window.innerWidth == "number" ? window.innerWidth:
 			document.compatMode == "CSS1Compat" ?
 				document.documentElement.clientWidth: document.body.clientWidth;
 	},
-	/** Returns the height of the visible part. */
 	innerHeight: function () {
 		return typeof window.innerHeight == "number" ? window.innerHeight:
 			document.compatMode == "CSS1Compat" ?
@@ -805,6 +801,16 @@ zDom = { //static methods
 		return val;
 	},
 
+	/** Sets the offset height by specifying the inner height.
+	 * @param hgh the height without margin and border
+	 */
+	setOffsetHeight: function (el, hgh) {
+		hgh -= zDom.padBorderHeight(el)
+			+ zk.parseInt(zDom.getStyle(el, "margin-top"))
+			+ zk.parseInt(zDom.getStyle(el, "margin-bottom"));
+		el.style.height = (hgh > 0 ? hgh: 0) + "px";
+	},
+
 	/**
 	 * Returns the revised position, which subtracted the offset of its scrollbar,
 	 * for the specified element.
@@ -838,7 +844,7 @@ zDom = { //static methods
 	 * size is in term of the parent
 	 */
 	revisedWidth: function (el, size, excludeMargin) {
-		size -= zDom.frameWidth(el);
+		size -= zDom.padBorderWidth(el);
 		if (size > 0 && excludeMargin)
 			size -= zDom.sumStyles(el, "lr", zDom.margins);
 		return size < 0 ? 0: size;
@@ -850,7 +856,7 @@ zDom = { //static methods
 	 * size is in term of the parent
 	 */
 	revisedHeight: function (el, size, excludeMargin) {
-		size -= zDom.frameHeight(el);
+		size -= zDom.padBorderHeight(el);
 		if (size > 0 && excludeMargin)
 			size -= zDom.sumStyles(el, "tb", zDom.margins);
 		return size < 0 ? 0: size;
@@ -858,13 +864,13 @@ zDom = { //static methods
 	/**
 	 * Returns the number of the padding width and the border width from the specified element.
 	 */
-	frameWidth: function (el) {
+	padBorderWidth: function (el) {
 		return zDom.sumStyles(el, "lr", zDom.borders) + zDom.sumStyles(el, "lr", zDom.paddings);
 	},
 	/**
 	 * Returns the number of the padding height and the border height from the specified element.  
 	 */
-	frameHeight: function (el) {
+	padBorderHeight: function (el) {
 		return zDom.sumStyles(el, "tb", zDom.borders) + zDom.sumStyles(el, "tb", zDom.paddings);
 	},
 	/**
@@ -1277,43 +1283,30 @@ zDom = { //static methods
 		} while (el = el.parentNode);
 		return [l, t];
 	},
-	getTextUtil: function () {
-		if (!this._textUtil)
-			this._textUtil = {
-				styles: ["fontSize", "fontStyle", "fontWeight", "fontFamily", "lineHeight", "letterSpacing", "textTransform" ],
-				getNode: function () {
-					var d = this._node || zDom.$('zk_textUtil');
-					if (!d) {
-						d = document.createElement("div");
-						document.body.appendChild(d);
-						d.id = "zk_textUtil";
-						this._node = d;
-					}
-					d.style.position = "absolute";
-					d.style.top = d.style.left = "-1000px";
-					d.style.width = "auto";
-					d.style.visibility = "hidden";
-					return d; 
-				},
-				measure: function (el, text) {
-					if (!this._node)
-						this._node = this.getNode();
-					this.apply(el, text);
-					return {width: this._node.offsetWidth, height: this._node.offsetHeight};
-				},
-				apply: function (el, text) {
-					for (var s = this.styles.length; --s >= 0;)
-						this._node.style[this.styles[s]] = zDom.getStyle(el, this.styles[s]);
-					this._node.innerHTML = typeof text == "string" ? text : el.innerHTML;	
-				},
-				destroy: function () {
-					if (this._node)
-						zDom.remove(this._node);
-					this._node = null;
-				}
-			};
-		return this._textUtil;
+	/** Returns an array to indicate the size of the text if it is placed
+	 * inside the element.
+	 */
+	getTextSize: function (el, txt) {
+		var tsd = zk._txtSizDiv;
+		if (!tsd) {
+			tsd = zk._txtSizDiv = document.createElement("DIV");
+			tsd.style.cssText = "left:-1000px;position:absolute;visibility:hidden;border:none";
+			document.body.appendChild(tsd);
+		}
+
+		for (var ss = zk.TEXT_STYLES, j = ss.length; --j >= 0;)
+			tsd.style[ss[j]] = Element.getStyle(el, ss[j]);
+
+		tsd.innerHTML = txt;
+		return [tsd.offsetWidth, tsd.offsetHeight];
 	},
+	//refer to http://www.w3schools.com/css/css_text.asp
+	TEXT_STYLES: [
+		'fontFamily', 'fontSize', 'fontWeight', 'fontStyle',
+		'letterSpacing', 'lineHeight', 'textAlign', 'textDecoration',
+		'textIndent', 'textShadow', 'textTransform', 'textOverflow',
+		'direction', 'wordSpacing', 'whiteSpace'],
+
 	getDimension: function (el) {
 		var display = zDom.getStyle(el,  'display');
 		if (display != 'none' && display != null) // Safari bug
@@ -1475,15 +1468,22 @@ zDom = { //static methods
 		zDom.setStyle(el, {opacity:value});
 	},
 
-	/** Forces an element to re-render. */
-	rerender: function(el) {
+	/** Forces the browser to redo the CSS by adding and removing a CSS class. */
+	redoCSS: function (el, timeout) {
 		el = zDom.$(el);
-		try {
-			var n = document.createTextNode(' ');
-			el.appendChild(n);
-			el.removeChild(n);
-		} catch(e) {
+		if (el) {
+			try {
+				el.className += ' ';
+				el.className.trim();
+			} catch (e) {
+			}
 		}
+	},
+	/** Redraws the element by use of setOuterHTML. */
+	reOuter: function (el) {
+		el = zDom.$(el);
+		if (el)
+			zDom.setOuterHTML(el, zDom.getOuterHTML(el));
 	},
 
 	cleanWhitespace: function (el) {
@@ -1535,6 +1535,13 @@ zDom = { //static methods
 		}
 	},
 
+	getOuterHTML: function (el) {
+		if (el.outerHTML) return el.outerHTML;
+		var div = document.createElement("DIV");
+		var clone = el.cloneNode(true);
+		div.appendChild(clone);
+		return div.innerHTML;
+	},
 	/** Replaces the outer of the specified element with the HTML content.
 	 * @return the new node (actually the first new node, if multiple)
 	 */
@@ -1771,7 +1778,7 @@ zDom = { //static methods
 	},
 
 	/**
-	 * Creates and returns a 'stackup' (actually, an iframe) that makes
+	 * Creates a 'stackup' (actually, an iframe) that makes
 	 * an element (with position:absolute) shown above others.
 	 * The stackup is used to resolve the layer issues:
 	 * <ul>
@@ -1790,10 +1797,10 @@ zDom = { //static methods
 	makeStackup: function (el, id, anchor) {
 		var ifr = document.createElement('iframe');
 		ifr.id = id || (el ? el.id + "$ifrstk": 'z_ifrstk');
+		ifr.style.cssText = "position:absolute;overflow:hidden;filter:alpha(opacity=0)";
 		ifr.frameBorder = "no";
-		ifr.src="";
 		ifr.tabIndex = -1;
-		ifr.style.cssText = 'position:absolute;visibility:visible;overflow:hidden;filter:alpha(opacity=0);border:0;display:block';
+		ifr.src = "";
 		if (el) {
 			ifr.style.width = el.offsetWidth + "px";
 			ifr.style.height = el.offsetHeight + "px";
@@ -1880,7 +1887,7 @@ zDom = { //static methods
 	/** Returns the selection range of the specified input control.
 	 * Note: if the function occurs some error, it always return [0, 0];
 	 */
-	selectionRange: function(inp) {
+	getSelectionRange: function(inp) {
 		try {
 			if (document.selection != null && inp.selectionStart == null) { //IE
 				var range = document.selection.createRange(); 
@@ -1900,6 +1907,27 @@ zDom = { //static methods
 			}
 		} catch (e) {
 			return [0, 0];
+		}
+	},
+	setSelectionRange: function (inp, start, end) {
+		var len = inp.value.length;
+		if (start < 0) start = 0;
+		if (start > len) start = len;
+		if (end < 0) end = 0;
+		if (end > len) end = len;
+	
+		if (inp.setSelectionRange) {
+			inp.setSelectionRange(start, end);
+			inp.focus();
+		} else if (inp.createTextRange) {
+			var range = inp.createTextRange();
+			if(start != end){
+				range.moveEnd('character', end - range.text.length);
+				range.moveStart('character', start);
+			}else{
+				range.move('character', start);
+			}
+			range.select();
 		}
 	},
 
@@ -2098,8 +2126,6 @@ zk.copy(zDom,
   });
 
 zk.Color = zk.$extends(zk.Object, {
-	/** A 3-element array, [r, g, b]. */
-	//rgb: null;
 	$init: function (color) {
 		var rgb = this.rgb = [0, 0, 0];
 		if(color.slice(0,4) == 'rgb(') {  
@@ -2118,7 +2144,6 @@ zk.Color = zk.$extends(zk.Object, {
 			}  
 		}
 	},
-	/** Converts the color to #xxxxxx. */
 	toString: function () {
 		var s = '#';
 		for (var j = 0; j < 3;) {
@@ -2225,7 +2250,7 @@ zEvt = {
 	keyCode: function(evt) {
 		evt = evt || window.event;
 		var k = evt.keyCode || evt.charCode;
-		return zk.safari ? (this.safariKeys[k] || k) : k;
+		return zk.safari ? (zEvt.safariKeys[k] || k) : k;
 	},
 
 	listen: function (el, evtnm, fn) {
@@ -2293,6 +2318,20 @@ zEvt = {
 		}
 	}
 };
+
+if (zk.safari)
+	zEvt.safariKeys = {
+		25: 9, 	   // SHIFT-TAB
+		63232: 38, // up
+		63233: 40, // down
+		63234: 37, // left
+		63235: 39, // right
+		63272: 46, // delete
+		63273: 36, // home
+		63275: 35, // end
+		63276: 33, // pgup
+		63277: 34  // pgdn
+	};
 
 zk.Event = zk.$extends(zk.Object, {
 	$init: function (target, name, data, opts, nativeEvent) {
@@ -3004,9 +3043,6 @@ zk.Draggable = zk.$extends(zk.Object, {
 });
 
 
-/** The low level animation effect.
- * You don't use this class. Rather, use {@link zAnima} instead.
- */
 zEffect = {
 	fade: function(element, opts) {
 		element = zDom.$(element);
@@ -3680,123 +3716,73 @@ zEffect._defOpts = {
 };
 
 zk.eff.Shadow = zk.$extends(zk.Object, {
-	/**
-	 * Initial the Shadow object for the specified component.
-	 * 
-	 * @param element a ZK client component.
-	 * @param opts The options
-	 * <p>Alowed options:
-	 * <ul>
-	 * <li>mode: The shadow display mode.  Supports the following options:
-	 *  <ul><li>shade: Shadow displays on both sides and bottom only (by default)</li>
-	 *   <li>frame: Shadow displays equally on all four sides</li>
-	 *   <li>drop: Traditional bottom-right drop shadow</li></ul></li>
-	 * <li>diameter: The diameter of the offset of the shadow from the element (defaults to 4)</li>
-	 * <li>stackup: whether to create a stackup (see {@link zDom#makeStackup})</li>
-	 * </ul>
-	 */
+	_HTML: zk.ie6Only ? '" class="z-shadow"></div>':
+		'" class="z-shadow"><div class="z-shadow-tl"><div class="z-shadow-tr"></div></div>'
+		+'<div class="z-shadow-cl"><div class="z-shadow-cr"><div class="z-shadow-cm">&#160;</div></div></div>'
+		+'<div class="z-shadow-bl"><div class="z-shadow-br"></div></div></div>',
+
 	$init: function (element, opts) {
-		opts = this.opts = zk.copy(this.opts, zk.$default(opts, {
-			diameter: 4, mode: "shade"
-		}));
-		var sdwid = element.id + "$sdw",
-			html = zk.ie ? '<div id="'+sdwid+'" class="z-ie-shadow"></div>' :
-				'<div id="'+sdwid+'" class="z-shadow"><div class="z-shadow-t"><div class="z-shadow-tl"></div><div class="z-shadow-tm"></div><div class="z-shadow-tr"></div></div><div class="z-shadow-c"><div class="z-shadow-cl"></div><div class="z-shadow-cm"></div><div class="z-shadow-cr"></div></div><div class="z-shadow-b"><div class="z-shadow-bl"></div><div class="z-shadow-bm"></div><div class="z-shadow-br"></div></div></div>',
-			o = opts.diameter,
-			d = {l: -o, t: o-1, h: 0, w:0},
-			rad = Math.floor(opts.diameter/2);
-		switch (opts.mode.toLowerCase()) {
-		case "shade":
-			d.w = o*2;
-			if(zk.ie) {
-				d.l -= rad - 1;
-				d.t -= opts.diameter + rad;
-				d.w -= opts.diameter + (rad + 1);
-				d.h -= 1;
-			}
-			break;
-		case "drop":
-			d.l = -d.l;
-			if (zk.ie)
-				d.l = d.t = d.w = d.h = -rad;
-			break;
-		case "frame":
-			d.w = d.h = (o*2);
-			d.t = d.l;
-			d.t += 1;
-			d.h -= 2;
-			if (zk.ie) {
-				d.t = d.l = d.t - rad;
-				d.h = d.w = d.w - (opts.diameter + rad + 1);
-			}
-			break;
-		};
-		this.delta = d;
+		opts = this.opts = zk.$default(opts, {
+			left: 4, right: 4, top: 3, bottom: 3
+		});
+		if (zk.ie6Only) {
+			opts.left -= 1;
+			opts.right -= 8;
+			opts.top -= 2;
+			opts.bottom -= 6;
+		}
+
 		this.node = element;
-		
-		zDom.insertHTMLBefore(element, html);
+		var sdwid = element.id + "$sdw";
+		zDom.insertHTMLBefore(element, '<div id="'+sdwid+this._HTML);
 		this.shadow = zDom.$(sdwid);
 	},
-	/** Removes the shadow. */
 	destroy: function () {
 		zDom.remove(this.shadow);
 		zDom.remove(this.stackup);
 		this.node = this.shadow = this.stackup = null;
 	},
-	/** Hides the shadow, no matter the element is visible or not.
-	 */
 	hide: function(){
 		this.shadow.style.display = 'none';
 		if (this.stackup) this.stackup.style.display = 'none';
 	},
-	/**
-	 * Synchronizes the state of the element with the shadow,
-	 * such as visiblity and position.
-	 * In other words, if the element is visible, the shadow becomes
-	 * visible.
-	 */
 	sync: function () {
-		var node = this.node;
+		var node = this.node, shadow = this.shadow;
 		if (!node || !zDom.isVisible(node, true)) {
 			this.hide();
 			return false;
 		}
-		if (zDom.nextSibling(this.shadow, "DIV")!= node)
-			node.parentNode.insertBefore(this.shadow, node);
-		this.shadow.style.zIndex = zk.parseInt(zDom.getStyle(node, "zIndex"));
-		if (zk.ie) 
-			this.shadow.style.filter = "progid:DXImageTransform.Microsoft.alpha(opacity=50) "
-				+ "progid:DXImageTransform.Microsoft.Blur(pixelradius="+(this.opts.diameter)+")";
-		this._recalc(node.offsetLeft, node.offsetTop, node.offsetWidth,
-			node.offsetHeight);
-		this.shadow.style.display = "block";
-		if (this.stackup) this.stackup.style.display = "block";
-		return true;
-	},
-	_recalc : function(l, t, w, h){
-		var d = this.delta, r = this.shadow, st = r.style, width = (w + d.w), height = (h + d.h),
-			widths = width +"px", heights = height + "px";
-		st.left = (l + d.l) + "px";
-		st.top = (t + d.t) + "px";
-		if(st.width != widths || st.height != heights) {
-			st.width = widths;
-			st.height = heights;
-			if(!zk.ie) {
-				var c = r.childNodes;
-				// the 12 number means the both height the top side shadow and the bottom side shadow.
-				c[1].style.height = Math.max(0, (height - 12))+ "px";
-				
-				// the 12 number means the both width the left side shadow and the right side shadow.
-				c[0].childNodes[1].style.width = c[1].childNodes[1].style.width = c[2].childNodes[1].style.width = Math.max(0, (width - 12)) + "px";;
+
+		for (var c = shadow;;) {
+			if (!(c = c.nextSibling) || c.tagName) {
+				if (c != node)
+					node.parentNode.insertBefore(shadow, node);
+				break;
 			}
 		}
+		shadow.style.zIndex = zk.parseInt(zDom.getStyle(node, "zIndex"));
 
-		var node = this.node;
-		if(this.opts.stackup && node) {
-			var stackup = this.stackup;
+		var opts = this.opts,
+			l = node.offsetLeft, t = node.offsetTop,
+			w = node.offsetWidth, h = node.offsetHeight,
+			wd = w - opts.left + opts.right,
+			hgh = h - opts.top + opts.bottom,
+			st = shadow.style;
+		st.left = (l + opts.left) + "px";
+		st.top = (t + opts.top) + "px";
+		st.width = wd + "px";
+		st.display = "block";
+		if (zk.ie6Only) st.height = hgh + "px";
+		else {
+			var cns = shadow.childNodes;
+			cns[1].style.height = (hgh - cns[0].offsetHeight - cns[2].offsetHeight) + "px";
+		}
+
+		var stackup = this.stackup;
+		if(opts.stackup && node) {
 			if(!stackup)
 				stackup = this.stackup =
-					zDom.makeStackup(node, node.id + '$sdwstk', this.shadow);
+					zDom.makeStackup(node, node.id + '$sdwstk', shadow);
 
 			st = stackup.style;
 			st.left = l +"px";
@@ -3804,36 +3790,16 @@ zk.eff.Shadow = zk.$extends(zk.Object, {
 			st.width = w +"px";
 			st.height = h +"px";
 			st.zIndex = zk.parseInt(zDom.getStyle(node, "zIndex"));
+			st.display = "block";
 		}
+		return true;
 	},
-	/**
-	 * Returns the delta of the shadow.
-	 * The delta is a map of {l: left, t: top, w: width, h: height}
-	 * to specify the delta values for left, top, width and height.
-	 */
-	getDelta: function () {
-		return this.delta;
-	},
-	/** Returns the lowest level of element.
-	 */
 	getBottomElement: function () {
 		return this.stackup || this.shadow;
 	}
 });
 
-/** A mask covers the browser window fully. */
 zk.eff.FullMask = zk.$extends(zk.Object, {
-	/**
-	 * @param opts The options
-	 * <p>Alowed options:
-	 * <ul>
-	 * <li>mask: the mask element if the mask was created. Default: create a new one.</li>
-	 * <li>anchor: whether to insert the mask before</li>
-	 * <li>id: the mask ID. Default: z_mask</li>
-	 * <li>zIndex: z-index to assign. Default: defined in z-modal-mask</li>
-	 * <li>visible: whether it is visible.</li>
-	 * </ul>
-	 */
 	$init: function (opts) {
 		opts = opts || {};
 		var mask = this.mask = opts.mask;
@@ -3880,13 +3846,10 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 		zDom.remove(this.stackup);
 		this.mask = this.stackup = null;
 	},
-	/** Hides the mask. */
 	hide: function () {
 		this.mask.style.display = 'none';
 		if (this.stackup) this.stackup.style.display = 'none';
 	},
-	/** Synchronize with the specified element with the same visibility
-	 * and z-index. */
 	sync: function (el) {
 		if (!zDom.isVisible(el, true)) {
 			this.hide();
@@ -3931,7 +3894,6 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 	}
 });
 
-/** The indicator mask over the specified element. */
 zk.eff.Mask = zk.$extends(zk.Object, {
 	$init: function(opts) {
 		opts = opts || {};
@@ -3944,7 +3906,7 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 		
 		if (progbox) return this;
 		
-		var msg = opts.msg || "Loading...",
+		var msg = opts.msg || (window.mesg?mesg.LOADING:"Loading..."),
 			n = document.createElement("DIV");
 		
 		document.body.appendChild(n);
@@ -4286,7 +4248,7 @@ zAnima = {
 			if (n) {
 				--zAnima.count;
 				n._$animating = null;
-				if (zk.ie && zDom.isVisible(n)) zDom.rerender(n); //fix an IE bug
+				if (zk.ie && zDom.isVisible(n)) zDom.redoDOM(n); //fix an IE bug
 
 				zAnima._doAniQue(n);
 
@@ -5799,7 +5761,7 @@ function zkam(fn) {
 		zkm._afMts.push(fn);
 		return true;
 	}
-	fn();
+	setTimeout(fn, 0);
 };
 zk.afterMount = zkam; //part of zk
 
@@ -6149,6 +6111,8 @@ zkm = {
 			wgt.doKeyDown_(wevt);
 			if (wevt.stopped) zEvt.stop(evt);
 		}
+		if (zEvt.keyCode(evt) == 27 && zAu.shallIgnoreESC()) //Bug 1927788: prevent FF from closing connection
+			zEvt.stop(evt); //eat
 	},
 	docKeyUp: function (evt) {
 		evt = evt || window.event;
@@ -6467,7 +6431,7 @@ zAu = {
 
 		var t = aureq.target;
 		if (t) {
-			zAu._send(t.type == '#d' ? t: t.desktop, aureq, timeout);
+			zAu._send(t.className == 'zk.Desktop' ? t: t.desktop, aureq, timeout);
 		} else {
 			var dts = zk.Desktop.all;
 			for (var dtid in dts)
@@ -6477,7 +6441,7 @@ zAu = {
 	sendAhead: function (aureq, timeout) {
 		var t = aureq.target;
 		if (t) {
-			var dt = t.type == '#d' ? t: t.desktop;
+			var dt = t.className == 'zk.Desktop' ? t: t.desktop;
 			dt._aureqs.unshift(aureq);
 			zAu._send2(dt, timeout);
 		} else {
@@ -6595,6 +6559,9 @@ zAu = {
 		}
 
 		zAu.showError("ILLEGAL_RESPONSE", "Unknown command: ", cmd);
+	},
+	shallIgnoreESC: function () {
+		return zAu._areq;
 	},
 
 	//ajax internal//
@@ -6762,21 +6729,21 @@ zAu = {
 	_send2: function (dt, timeout) {
 		if (!timeout) timeout = 0;
 		if (dt && timeout >= 0)
-			setTimeout(function(){zAu._sendNow(dt);}, timeout);
+			setTimeout(function(){zAu.sendNow(dt);}, timeout);
 	},
-	_sendNow: function (dt) {
+	sendNow: function (dt) {
 		var es = dt._aureqs;
 		if (es.length == 0)
-			return; //nothing to do
+			return false;
 
 		if (zk.mounting) {
-			zk.afterMount(function(){zAu._sendNow(dt);});
-			return; //wait
+			zk.afterMount(function(){zAu.sendNow(dt);});
+			return true; //wait
 		}
 
 		if (zAu._areq || zAu._preqInf) { //send ajax request one by one
 			zAu._sendPending = true;
-			return;
+			return true;
 		}
 
 		//notify watches (fckez uses it to ensure its value is sent back correctly
@@ -6811,7 +6778,8 @@ zAu = {
 				evtnm = aureq.name,
 				target = aureq.target;
 			content += "&cmd."+j+"="+evtnm;
-			if (target) content += "&uuid."+j+"="+target.uuid;
+			if (target && target.className != 'zk.Desktop')
+				content += "&uuid."+j+"="+target.uuid;
 
 			var data = aureq.data;
 			if (data && data.marshal) data = data.marshal();
@@ -6832,6 +6800,7 @@ zAu = {
 				ctli: ctli, ctlc: ctlc, implicit: implicit,
 				ignorable: ignorable, tmout: 0
 			});
+		return true;
 	},
 	_sendNow2: function(reqInf) {
 		var req = zUtl.newAjax(),
@@ -7156,8 +7125,6 @@ zAu.cmd1 = {
 		child.insertHTML(document.body, "beforeEnd");
 	},
 	rm: function (uuid, wgt) {
-		//NOTE: it is possible the server asking removing a non-exist cmp
-		//so keep silent if not found
 		if (wgt) {
 			var p = wgt.parent;
 			if (p) p.removeChild(wgt);
@@ -7814,8 +7781,7 @@ function (out) {
 	out.push('<tr><td class="', zcls, '-cl">');
 	if (zk.ie) out.push(btn);
 	out.push('</td><td class="', zcls, '-cm">', this.domContent_(),
-			'</td><td class="', zcls, '-cr"><i class="', zcls,
-			'"></i></td></tr>',
+			'</td><td class="', zcls, '-cr"><div></div></td></tr>',
 			'<tr><td class="', zcls, '-bl"></td>',
 			'<td class="', zcls, '-bm"></td>',
 			'<td class="', zcls, '-br"></td></tr></table></span>');
@@ -8298,8 +8264,10 @@ function (out, skipper) {
 	out.push('<div', this.domAttrs_(), '>');
 	
 	if (cap) {
-		out.push('<div class="', zcls, '-tl"><div class="', zcls,
-				'-tr"><div class="', zcls, '-tm"><div class="', zcls, '-header">');
+		out.push('<div class=\"', zcls, '-tl"><div class="', zcls,
+			'-tr"></div></div><div class="', zcls, '-hl"><div class="',
+			zcls, '-hr"><div class="', zcls, '-hm"><div class="',
+			zcls, '-header">');
 		cap.redraw(out);
 		out.push('</div></div></div></div>');
 	}
@@ -8481,14 +8449,14 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			n = wgt.getSubnode('cave').parentNode;
 		
 		if (!wdh || wdh == "auto") {
-			var diff = zDom.frameWidth(n.parentNode) + zDom.frameWidth(n.parentNode.parentNode);
+			var diff = zDom.padBorderWidth(n.parentNode) + zDom.padBorderWidth(n.parentNode.parentNode);
 			if (fir) {
-				fir.firstChild.firstChild.style.width = Math.max(0, n.offsetWidth - (zDom.frameWidth(fir)
-					+ zDom.frameWidth(fir.firstChild) - diff)) + "px";
+				fir.firstChild.firstChild.style.width = Math.max(0, n.offsetWidth - (zDom.padBorderWidth(fir)
+					+ zDom.padBorderWidth(fir.firstChild) - diff)) + "px";
 			}
 			if (last) {
-				last.firstChild.firstChild.style.width = Math.max(0, n.offsetWidth - (zDom.frameWidth(last)
-					+ zDom.frameWidth(last.firstChild) - diff)) + "px";
+				last.firstChild.firstChild.style.width = Math.max(0, n.offsetWidth - (zDom.padBorderWidth(last)
+					+ zDom.padBorderWidth(last.firstChild) - diff)) + "px";
 			}
 		} else {
 			if (fir) fir.firstChild.firstChild.style.width = "";
@@ -9839,7 +9807,7 @@ zul.grid.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			ofs = zDom.revisedOffset(n); // Bug #1812154
 			
 		if (wgt._insizer(pointer[0] - ofs[0])) {
-			dg._zmin = 10 + zDom.frameWidth(n);		
+			dg._zmin = 10 + zDom.padBorderWidth(n);		
 				return false;
 		}
 		return true;
@@ -10517,10 +10485,13 @@ zul.grid.Grid = zk.$extends(zul.Widget, {
 	},
 	onSize: _zkf = function () {
 		if (this.isRealVisible()) {
+			var n = this.getNode();
+			if (n._lastsz && n._lastsz.height == n.offsetHeight && n._lastsz.width == n.offsetWidth)
+				return; // unchanged
+				
 			this._calcSize();// Bug #1813722
 			this.fireScrollRender(155);
-			if (zk.ie7) zDom.rerender(this.getNode());
-				//zk.repaint(this.getNode()); // Bug 2096807
+			if (zk.ie7) zDom.redoCSS(this.getNode()); // Bug 2096807
 		}
 	},
 	onVisible: _zkf,
@@ -10613,6 +10584,7 @@ zul.grid.Grid = zk.$extends(zul.Widget, {
 			if (this.efoottbl.rows.length && this.rows)
 				this.$class.cpCellWidth(this);
 		}
+		n._lastsz = {height: n.offsetHeight, width: n.offsetWidth}; // cache for the dirty resizing.
 	},
 	domFaker_: function (out, fakeId, zcls) {
 		out.push('<tbody style="visibility:hidden;height:0px"><tr id="',
@@ -10996,17 +10968,6 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 	isStripeable_: function () {
 		return true;
 	},
-	bind_: function () {
-		this.$supers('bind_', arguments);
-		if (this.isStripeable_()) this._syncStripe();
-	},
-	unbind_: function () {
-		if (this.isStripeable_()) this._syncStripe();
-		this.$supers('unbind_', arguments);
-	},
-	_syncStripe: function () {
-		if (this.parent) this.parent._syncStripe();
-	},
 	//-- super --//
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
@@ -11083,11 +11044,15 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 		this.$supers('unbind_', arguments);
 	},
 	onResponse: function () {
-		if (this._shallStripe) this.stripe();
+		if (this._shallStripe) {
+			this.stripe();
+			this.getGrid().onSize();
+		}
 	},
 	_syncStripe: function () {
 		this._shallStripe = true;
-		if (!this.inServer && this.desktop)	this.stripe();
+		if (!this.inServer && this.desktop)
+			this.onResponse();
 	},
 	stripe: function () {
 		var scOdd = this.getGrid().getOddRowSclass();
@@ -12133,7 +12098,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	_doSelect: function (evt) {
 		if (this.isListen('onSelection')) {
 			var inp = this.einp,
-				sr = zDom.selectionRange(inp),
+				sr = zDom.getSelectionRange(inp),
 				b = sr[0], e = sr[1];
 			this.fire('onSelection', {start: b, end: e,
 				selected: inp.value.substring(b, e),
@@ -12268,7 +12233,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	_onChangeData: function (val, selbak) {
 		return {value: val,
 			bySelectBack: selbak,
-			start: zDom.selectionRange(this.einp)[0],
+			start: zDom.getSelectionRange(this.einp)[0],
 			marshal: this._onChangeMarshal}
 	},
 	_onChangeMarshal: function () {
@@ -12327,7 +12292,21 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		this.$supers('unbind_', arguments);
 	},
 	doKeyDown_: function (evt) {
-		var keyCode = evt.keyCode;
+		var keyCode = evt.keyCode, keys = evt.keys;
+		if (keyCode == 9 && !keys.altKey && !keys.ctrlKey && !keys.shiftKey
+		&& this._tabbable) {
+			var sr = zDom.getSelectionRange(inp),
+				val = inp.value;
+			val = val.substring(0, sr[0]) + '\t' + val.substring(sr[1]);
+			inp.value = val;
+
+			val = sr[0] + 1;
+			zDom.setSelectionRange(inp, val, val);
+
+			evt.stop();
+			return;
+		}
+
 		if ((keyCode == 13 && this.isListen('onOK'))
 		|| (keyCode == 27 && this.isListen('onCancel'))) {
 			this._stopOnChanging();
@@ -12695,6 +12674,12 @@ zul.inp.Textbox = zk.$extends(zul.inp.InputWidget, {
 			this.rerender();
 		}
 	},
+	isTabbable: function () {
+		return this._tabbable;
+	},
+	setTabbable: function (tabbable) {
+		this._tabbable = tabbable;
+	},
 	getRows: function () {
 		return this._rows;
 	},
@@ -12916,12 +12901,11 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 				return p;
 		return null;
 	},
+	/** Removes the extra space (IE only) */
 	_fixBtn: function () {
 		var btn = this.getSubnode('b');
 		if (!btn || !btn.innerHTML.trim()) return;
-		if (!this._textUtil) this._textUtil = zDom.getTextUtil();
-		btn.style.width = this._textUtil.measure(btn).width + zDom.frameWidth(btn) + "px";
-			// fix the gap between button and em tag for IE.
+		btn.style.width = zDom.getTextSize(btn, btn.innerHTML)[0] + zDom.frameWidth(btn) + "px";
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
@@ -12949,11 +12933,6 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			zEvt.unlisten(n, "mouseover", this._fxMouseOver);
 			zEvt.unlisten(n, "mouseout", this._fxMouseOut);
 		} else {
-			if (this._textUtil) 
-				this._textUtil.destroy();
-		
-			this._textUtil = null;
-				
 			var n = this.getNode();
 			zEvt.unlisten(n, "mouseover", this._fxMouseOver);
 			zEvt.unlisten(n, "mouseout", this._fxMouseOut);
@@ -13204,12 +13183,11 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 				return p;
 		return null;
 	},
+	/** Removes the extra space (IE only) */
 	_fixBtn: function () {
 		var btn = this.getSubnode('b');
 		if (!btn || !btn.innerHTML.trim()) return;
-		if (!this._textUtil) this._textUtil = zDom.getTextUtil();
-		btn.style.width = this._textUtil.measure(btn).width + zDom.frameWidth(btn) + "px";
-			// fix the gap between button and em tag for IE.
+		btn.style.width = zDom.getTextSize(btn, btn.innerHTML)[0] + zDom.frameWidth(btn) + "px";
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
@@ -13240,10 +13218,6 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 				zEvt.unlisten(anc, "blur", this._fxBlur);
 			}
 		}
-		
-		if (this._textUtil)
-			this._textUtil.destroy();
-		this._textUtil = null;
 			
 		this.$supers('unbind_', arguments);		
 	},
@@ -13518,7 +13492,7 @@ zul.menu.Menupopup = zk.$extends('zul.wgt.Popup', {
 			var pp = this.getNode();
 			if (!pp.style.width) {// Bug 2105158 and Bug 1911129
 				var ul = this.getSubnode('cave');
-				pp.style.width = ul.offsetWidth + zDom.frameWidth(pp) + "px";
+				pp.style.width = ul.offsetWidth + zDom.padBorderWidth(pp) + "px";
 			}
 		}
 		this._syncShadow();
@@ -13892,14 +13866,14 @@ zul.panel.Panel = zk.$extends(zul.Widget, {
 			bl = zDom.lastChild(zDom.lastChild(n, "DIV"), "DIV");
 			
 		if (!wdh || wdh == "auto") {
-			var diff = zDom.frameWidth(cm.parentNode) + zDom.frameWidth(cm.parentNode.parentNode);
+			var diff = zDom.padBorderWidth(cm.parentNode) + zDom.padBorderWidth(cm.parentNode.parentNode);
 			if (tl) {
 				tl.firstChild.firstChild.style.width = 
-					Math.max(0, cm.offsetWidth - (zDom.frameWidth(tl) + zDom.frameWidth(tl.firstChild) - diff)) + "px";
+					Math.max(0, cm.offsetWidth - (zDom.padBorderWidth(tl) + zDom.padBorderWidth(tl.firstChild) - diff)) + "px";
 			}
 			if (bl) {
 				bl.firstChild.firstChild.style.width =
-					Math.max(0, cm.offsetWidth - (zDom.frameWidth(bl) + zDom.frameWidth(bl.firstChild) - diff)) + "px";
+					Math.max(0, cm.offsetWidth - (zDom.padBorderWidth(bl) + zDom.padBorderWidth(bl.firstChild) - diff)) + "px";
 			}
 		} else {
 			if (tl) tl.firstChild.firstChild.style.width = "";
@@ -13913,10 +13887,10 @@ zul.panel.Panel = zk.$extends(zul.Widget, {
 			hgh = n.style.height;
 		if (zk.ie6Only && ((hgh && hgh != "auto" )|| body.style.height)) body.style.height = "0px";
 		if (hgh && hgh != "auto")
-			body.style.height = zDom.revisedHeight(body, n.offsetHeight - this._frameHeight(n) - 1, true) + 'px';
+			body.style.height = zDom.revisedHeight(body, n.offsetHeight - this._padBorderHeight(n) - 1, true) + 'px';
 	},
-	_frameHeight: function (n) {
-		var h = zDom.frameHeight(n) + this._titleHeight(n),
+	_padBorderHeight: function (n) {
+		var h = zDom.padBorderHeight(n) + this._titleHeight(n),
 			tbar = this.getSubnode('tbar'), bbar = this.getSubnode('bbar');
 	    if (this.isFramable()) {
 			var body = this.getSubnode('body'),
@@ -13924,9 +13898,9 @@ zul.panel.Panel = zk.$extends(zul.Widget, {
 				title = this.getSubnode('cap');
 	        h += ft.offsetHeight;
 			if (this.panelchildren)
-				h += zDom.frameHeight(this.panelchildren.getNode().parentNode);
+				h += zDom.padBorderHeight(this.panelchildren.getNode().parentNode);
 			if (title)
-		        h += zDom.frameHeight(title.parentNode);
+		        h += zDom.padBorderHeight(title.parentNode);
 	    } else {
 			var fbar = this.getSubnode('fbar');
 			if (fbar) h += fbar.offsetHeight;
@@ -14026,7 +14000,8 @@ zul.panel.Panel = zk.$extends(zul.Widget, {
 			}
 		} else {
 			if (!this._shadow)
-				this._shadow = new zk.eff.Shadow(this.getNode(), {stackup:true});
+				this._shadow = new zk.eff.Shadow(this.getNode(),
+					{left: -4, right: 4, top: -2, bottom: 3, stackup:true});
 			this._shadow.sync();
 		}
 	},
@@ -14720,7 +14695,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			}
 		} else {
 			if (!this._shadow)
-				this._shadow = new zk.eff.Shadow(this.getNode(), {stackup:true});
+				this._shadow = new zk.eff.Shadow(this.getNode(),
+					{left: -4, right: 4, top: -2, bottom: 3, stackup:true});
 			this._shadow.sync();
 		}
 	},
@@ -14756,15 +14732,15 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		zDom.center(n, pos);
 		var sdw = this._shadow;
 		if (pos && sdw) {
-			var d = sdw.getDelta(), l = n.offsetLeft, t = n.offsetTop, w = n.offsetWidth,
-				h = n.offsetHeight; 
-			if (pos.indexOf("left") >= 0 && d.l < 0) st.left = l - d.l + "px";
-			else if (pos.indexOf("right") >= 0)
-				st.left = l - (zk.ie ? Math.round((Math.abs(d.l) + d.w)/2) : Math.round((d.l + d.w)/2)) - 1 + "px";
-
-			if (pos.indexOf("top") >= 0 && d.t < 0) st.top = t - d.t + "px";
-			else if (pos.indexOf("bottom") >= 0)
-				st.top = t - (zk.ie ? Math.round((Math.abs(d.t) + d.h)/2) + 1 : Math.round((d.t + d.h)/2)) - 1 + "px";
+			var opts = sdw.opts, l = n.offsetLeft, t = n.offsetTop; 
+			if (pos.indexOf("left") >= 0 && opts.left < 0)
+				st.left = (l - opts.left) + "px";
+			else if (pos.indexOf("right") >= 0 && opts.right > 0)
+				st.left = (l - opts.right) + "px";
+			if (pos.indexOf("top") >= 0 && opts.top < 0)
+				st.top = (t - opts.top) + "px";
+			else if (pos.indexOf("bottom") >= 0 && opts.bottom > 0)
+				st.top = (t - opts.bottom) + "px";
 		}
 		this._syncShadow();
 		if (ol != st.left || ot != st.top)
@@ -14921,9 +14897,9 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this._hideShadow();
 		if (this.isMaximized()) {
 			/** TODO 
-			 * if (this.__maximized)
+			 * if (this._maximized)
 				this._syncMaximized();
-			this.__maximized = false; // avoid deadloop
+			this._maximized = false; // avoid deadloop
 			*/
 		}
 		this._fixHgh();
@@ -14956,56 +14932,59 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			}
 	},
 	_fixWdh: zk.ie7 ? function () {
-		if (this._mode == 'embedded' || this._mode == 'popup') return;
+		if (this._mode == 'embedded' || this._mode == 'popup' || !this.isRealVisible()) return;
 		var n = this.getNode(),
-			cm = this.getSubnode('cave').parentNode,
+			cave = this.getSubnode('cave').parentNode,
 			wdh = n.style.width,
 			tl = zDom.firstChild(n, "DIV"),
-			bl = zDom.lastChild(zDom.lastChild(n, "DIV"), "DIV");
+			hl = tl && this.getSubnode("cap") ? zDom.nextSibling(tl, "DIV") : null,
+			bl = zDom.lastChild(n, "DIV");
 			
 		if (!wdh || wdh == "auto") {
-			var diff = zDom.frameWidth(cm.parentNode) + zDom.frameWidth(cm.parentNode.parentNode);
-			if (tl) {
-				tl.firstChild.firstChild.style.width = 
-					Math.max(0, cm.offsetWidth - (zDom.frameWidth(tl) + zDom.frameWidth(tl.firstChild) - diff)) + "px";
-			}
-			if (bl) {
-				bl.firstChild.firstChild.style.width =
-					Math.max(0, cm.offsetWidth - (zDom.frameWidth(bl) + zDom.frameWidth(bl.firstChild) - diff)) + "px";
-			}
+			var diff = zDom.padBorderWidth(cave.parentNode) + zDom.padBorderWidth(cave.parentNode.parentNode);
+			if (tl) tl.firstChild.style.width = cave.offsetWidth + diff + "px";
+			if (hl) hl.firstChild.firstChild.style.width = cave.offsetWidth
+				- (zDom.padBorderWidth(hl) + zDom.padBorderWidth(hl.firstChild) - diff) + "px";
+			if (bl) bl.firstChild.style.width = cave.offsetWidth + diff + "px";
 		} else {
-			if (tl) tl.firstChild.firstChild.style.width = "";
-			if (bl) bl.firstChild.firstChild.style.width = "";
+			if (tl) tl.firstChild.style.width = "";
+			if (hl) hl.firstChild.style.width = "";
+			if (bl) bl.firstChild.style.width = "";
 		}
 	} : zk.$void,
 	_fixHgh: function () {
 		if (!this.isRealVisible()) return;
 		var n = this.getNode(),
+			hgh = n.style.height
 			cave = this.getSubnode('cave'),
-			hgh = n.style.height;
-		if (zk.ie6Only && ((hgh && hgh != "auto" )|| cave.style.height)) cave.style.height = "0px";
-		if (hgh && hgh != "auto")
-			cave.style.height = zDom.revisedHeight(cave, n.offsetHeight - this._frameHeight(n) - 1, true) + 'px';
+			cvh = cave.style.height;
+		if (hgh && hgh != "auto") {
+			if (zk.ie6Only) cave.style.height = "0px";
+			zDom.setOffsetHeight(cave, this._offsetHeight(n));
+		} else if (cvh && cvh != "auto") {
+			if (zk.ie6Only) cave.style.height = "0px";
+			cave.style.height = "";
+		}
 	},
-	_frameHeight: function (n) {
-		var h = zDom.frameHeight(n) + this._titleHeight(n);
-	    if (this._mode != 'embedded' && this._mode != 'popup') {
-			var ft = zDom.lastChild(this.getSubnode('body'), "DIV"),
-				title = this.getSubnode('cap'),
-				cave = this.getSubnode('cave');
-	        h += ft.offsetHeight;
+	_offsetHeight: function (n) {
+		var h = n.offsetHeight - 1 - this._titleHeight(n);
+		if(this._mode != 'embedded' && this._mode != 'popup') {
+			var cave = this.getSubnode('cave'), bl = zDom.lastChild(n, "DIV"),
+				cap = this.getSubnode("cap");
+			h -= bl.offsetHeight;
 			if (cave)
-				h += zDom.frameHeight(cave.parentNode);
-			if (title)
-		        h += zDom.frameHeight(title.parentNode);
-	    }
-	    return h;
+				h -= zDom.padBorderHeight(cave.parentNode);
+			if (cap)
+				h -= zDom.padBorderHeight(cap.parentNode);
+		}
+		return h - zDom.padBorderHeight(n);
 	},
 	_titleHeight: function (n) {
-		var cap = this.getSubnode('cap');
-		return cap ? cap.offsetHeight : 
-				this._mode != 'embedded' && this._mode != 'popup' ?
-					zDom.firstChild(n, "DIV").firstChild.firstChild.offsetHeight : 0;
+		var cap = this.getSubnode('cap'),
+			tl = zDom.firstChild(n, "DIV");
+		return cap ? cap.offsetHeight + tl.offsetHeight:
+			this._mode != 'embedded' && this._mode != 'popup' ?
+				zDom.nextSibling(tl, "DIV").offsetHeight: 0;
 	},
 
 	_fireOnMove: function (keys) {
@@ -15029,6 +15008,26 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 
 	//super//
+	setHeight: function (height) {
+		this.$supers('setHeight', arguments);
+		if (this.desktop) {
+			this._fixHgh();
+			this._syncShadow();
+
+			zWatch.fireDown('beforeSize', null, this);
+			zWatch.fireDown('onSize', null, this); // Note: IE6 is broken, because its offsetHeight doesn't update.
+		}
+	},
+	setWidth: function (width) {
+		this.$supers('setWidth', arguments);
+		if (this.desktop) {
+			this._fixWdh();
+			this._syncShadow();
+
+			zWatch.fireDown('beforeSize', null, this);
+			zWatch.fireDown('onSize', null, this);
+		}
+	},
 	setDomVisible_: function () {
 		this.$supers('setDomVisible_', arguments);
 		this._syncShadow();
@@ -15158,11 +15157,11 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			break;
 		case this.getSubnode('max'):
 			var zcls = this.getZclass(),
-				added = this.isMaximized() ? ' ' + zcls + '-maximized-over' : '';
-			zDom.addClass(this.getSubnode('max'), zcls + '-maximize-over' + added);
+				added = this.isMaximized() ? ' ' + zcls + '-maxd-over' : '';
+			zDom.addClass(this.getSubnode('max'), zcls + '-max-over' + added);
 			break;
 		case this.getSubnode('min'):
-			zDom.addClass(this.getSubnode('min'), this.getZclass() + '-minimize-over');
+			zDom.addClass(this.getSubnode('min'), this.getZclass() + '-min-over');
 			break;
 		}
 		this.$supers('doMouseOver_', arguments);
@@ -15176,11 +15175,11 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			var zcls = this.getZclass(),
 				max = this.getSubnode('max');
 			if (this.isMaximized())
-				zDom.rmClass(max, zcls + '-maximized-over');
-			zDom.rmClass(max, zcls + '-maximize-over');
+				zDom.rmClass(max, zcls + '-maxd-over');
+			zDom.rmClass(max, zcls + '-max-over');
 			break;
 		case this.getSubnode('min'):
-			zDom.rmClass(this.getSubnode('min'), this.getZclass() + '-minimize-over');
+			zDom.rmClass(this.getSubnode('min'), this.getZclass() + '-min-over');
 			break;
 		}
 		this.$supers('doMouseOut_', arguments);
@@ -15198,26 +15197,28 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			 el.style.top = el.offsetTop + "px";
 		if(el.style.left && el.style.left.indexOf("%") >= 0)
 			 el.style.left = el.offsetLeft + "px";
-		//TODO var real = $real(handle);
-		//zkau.closeFloats(real, handle);
+		//TODO zkau.closeFloats();
 	},
 	_ghostmove: function (dg, ofs, evt) {
 		var wnd = dg.control,
 			el = dg.node;
 		wnd._hideShadow();
-		var title = zDom.firstChild(el, "DIV"),
-			fakeTitle = title.cloneNode(true);
-		var html = '<div id="zk_wndghost" class="z-window-move-ghost" style="position:absolute;top:'
+		var top = zDom.firstChild(el, "DIV"),
+			header = zDom.nextSibling(top, 'DIV'),
+			fakeT = top.cloneNode(true),
+			fakeH = header.cloneNode(true),
+			html = '<div id="zk_wndghost" class="z-window-move-ghost" style="position:absolute;top:'
 			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
 			+zDom.offsetWidth(el)+'px;height:'+zDom.offsetHeight(el)
-			+'px;z-index:'+el.style.zIndex+'"><ul></ul></div></div>';
+			+'px;z-index:'+el.style.zIndex+'"><dl></dl></div>';
 		document.body.insertAdjacentHTML("afterBegin", html);
 		dg._wndoffs = ofs;
 		el.style.visibility = "hidden";
-		var h = el.offsetHeight - title.offsetHeight;
+		var h = el.offsetHeight - top.offsetHeight - header.offsetHeight;
 		el = zDom.$("zk_wndghost");
 		el.firstChild.style.height = zDom.revisedHeight(el.firstChild, h) + "px";
-		el.insertBefore(fakeTitle, el.firstChild);
+		el.insertBefore(fakeT, el.firstChild);
+		el.insertBefore(fakeH, el.lastChild);
 		return el;
 	},
 	_endghostmove: function (dg, origin) {
@@ -15271,7 +15272,7 @@ function (out, skipper) {
 		uuid = this.uuid,
 		title = this.getTitle(),
 		caption = this.caption,
-		contentStyle = this.getContentStyle(), wcExtStyle = '',
+		contentStyle = this.getContentStyle(),
 		contentSclass = this.getContentSclass(),
 		mode = this.getMode(),
 		withFrame = 'embedded' != mode && 'popup' != mode,
@@ -15280,49 +15281,40 @@ function (out, skipper) {
 	out.push('<div', this.domAttrs_(), '>');
 
 	if (caption || title) {
-		out.push('<div class="', zcls, '-tl', noborder,
-				'"><div class="', zcls, '-tr', noborder,
-				'"><div class="', zcls, '-tm', noborder,
-				'"><div id="', uuid, '$cap" class="', zcls,
-				'-header">');
+		out.push('<div class="', zcls, '-tl"><div class="',
+			zcls, '-tr"></div></div><div class="',
+			zcls, '-hl"><div class="', zcls,
+			'-hr"><div class="', zcls, '-hm"><div id="',
+			uuid, '$cap" class="', zcls, '-header">');
+
 		if (caption) caption.redraw(out);
 		else {
 			if (this.isClosable())
-				out.push('<div id="', uuid, '$close" class="',
-						zcls, '-tool ', zcls, '-close"></div>');
+				out.push('<div id="', uuid, '$close" class="', zcls, '-icon ', zcls, '-close"></div>');
 			if (this.isMaximizable()) {
-				out.push('<div id="', uuid, '$max" class="',
-						zcls, '-tool ', zcls, '-maximize');
+				out.push('<div id="', uuid, '$max" class="', zcls, '-icon ', zcls, '-max');
 				if (this.isMaximized())
-					out.push(' ', zcls, '-maximized');
+					out.push(' ', zcls, '-maxd');
 				out.push('"></div>');
 			}
 			if (this.isMinimizable())
-				out.push('<div id="' + uuid, '$min" class="',
-						zcls, '-tool ', zcls, '-minimize"></div>');
+				out.push('<div id="' + uuid, '$min" class="', zcls, '-icon ', zcls, '-min"></div>');
 			out.push(zUtl.encodeXML(title));
 		}
 		out.push('</div></div></div></div>');
-		wcExtStyle = 'border-top:0;';
 	} else if (withFrame)
 		out.push('<div class="', zcls, '-tl', noborder,
-				'"><div class="', zcls, '-tr', noborder,
-				'"><div class="', zcls, '-tm', noborder,
-				'-noheader"></div></div></div>');
-
-	out.push('<div id="', uuid, '$body" class="', zcls, '-body">');
+				'"><div class="', zcls, '-tr', noborder, '"></div></div>');
 
 	if (withFrame)
 		out.push('<div class="', zcls, '-cl', noborder,
-				'"><div class="', zcls, '-cr', noborder,
-				'"><div class="', zcls, '-cm', noborder, '">');
-
-	if (contentStyle) wcExtStyle += contentStyle;
+			'"><div class="', zcls, '-cr', noborder,
+			'"><div class="', zcls, '-cm', noborder, '">');
 
 	out.push('<div id="', uuid, '$cave" class="');
 	if (contentSclass) out.push(contentSclass, ' ');
 	out.push(zcls, '-cnt', noborder, '"');
-	if (wcExtStyle) out.push(' style="', wcExtStyle,'"');
+	if (contentStyle) out.push(' style="', contentStyle, '"');
 	out.push('>');
 
 	if (!skipper)
@@ -15333,12 +15325,10 @@ function (out, skipper) {
 	out.push('</div>');
 
 	if (withFrame)
-		out.push('</div></div></div><div class="', zcls, '-bl',
-				noborder, '"><div class="', zcls, '-br', noborder,
-				'"><div class="', zcls, '-bm', noborder,
-				'"></div></div></div>');
+		out.push('</div></div></div><div class="', zcls, '-bl', noborder,
+			'"><div class="', zcls, '-br', noborder, '"></div></div>');
 
-	out.push('</div></div>');
+	out.push('</div>');
 }
 zkmld(_zkwg,_zkmd);
 }finally{zPkg.end(_z);}}_z='zul.tab';if(!zk.$import(_z)){try{_zkpk=zk.$package(_z);
@@ -16700,9 +16690,9 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 					ol = wgt.parent,
 					real = wgt.getSubnode('real'),
 					mars = ol._arrayToObject(wgt._margins),
-					lr = zDom.frameWidth(real)
+					lr = zDom.padBorderWidth(real)
 						+ (pos == $Layout.WEST ? mars.left : mars.right),
-					tb = zDom.frameWidth(real)
+					tb = zDom.padBorderWidth(real)
 						+ (pos == $Layout.NORTH ? mars.top : mars.bottom),
 					min = 0,
 					uuid = wgt.uuid;

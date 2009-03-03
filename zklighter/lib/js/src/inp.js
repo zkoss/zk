@@ -166,7 +166,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	_doSelect: function (evt) {
 		if (this.isListen('onSelection')) {
 			var inp = this.einp,
-				sr = zDom.selectionRange(inp),
+				sr = zDom.getSelectionRange(inp),
 				b = sr[0], e = sr[1];
 			this.fire('onSelection', {start: b, end: e,
 				selected: inp.value.substring(b, e),
@@ -301,7 +301,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	_onChangeData: function (val, selbak) {
 		return {value: val,
 			bySelectBack: selbak,
-			start: zDom.selectionRange(this.einp)[0],
+			start: zDom.getSelectionRange(this.einp)[0],
 			marshal: this._onChangeMarshal}
 	},
 	_onChangeMarshal: function () {
@@ -360,7 +360,21 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		this.$supers('unbind_', arguments);
 	},
 	doKeyDown_: function (evt) {
-		var keyCode = evt.keyCode;
+		var keyCode = evt.keyCode, keys = evt.keys;
+		if (keyCode == 9 && !keys.altKey && !keys.ctrlKey && !keys.shiftKey
+		&& this._tabbable) {
+			var sr = zDom.getSelectionRange(inp),
+				val = inp.value;
+			val = val.substring(0, sr[0]) + '\t' + val.substring(sr[1]);
+			inp.value = val;
+
+			val = sr[0] + 1;
+			zDom.setSelectionRange(inp, val, val);
+
+			evt.stop();
+			return;
+		}
+
 		if ((keyCode == 13 && this.isListen('onOK'))
 		|| (keyCode == 27 && this.isListen('onCancel'))) {
 			this._stopOnChanging();
@@ -727,6 +741,12 @@ zul.inp.Textbox = zk.$extends(zul.inp.InputWidget, {
 			this._multiline = multiline;
 			this.rerender();
 		}
+	},
+	isTabbable: function () {
+		return this._tabbable;
+	},
+	setTabbable: function (tabbable) {
+		this._tabbable = tabbable;
 	},
 	getRows: function () {
 		return this._rows;
