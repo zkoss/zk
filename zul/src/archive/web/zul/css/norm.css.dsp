@@ -421,20 +421,20 @@ div.z-drop-cnt {
 .z-errbox-close-over {
 	background-image: url(${c:encodeURL('~./zul/img/errbox/close-over.gif')});
 }
-.z-errbox .z-popup .z-popup-tl,
-.z-errbox .z-popup .z-popup-tr,
-.z-errbox .z-popup .z-popup-bl,
-.z-errbox .z-popup .z-popup-br {
+.z-errbox.z-popup .z-popup-tl,
+.z-errbox.z-popup .z-popup-tr,
+.z-errbox.z-popup .z-popup-bl,
+.z-errbox.z-popup .z-popup-br {
 	background-image:url(${c:encodeURL('~./zul/img/errbox/pp-corner.png')});
 }
-.z-errbox .z-popup .z-popup-cm {
+.z-errbox.z-popup .z-popup-cm {
 	background-color : #FFCD9B;
 	background-image: url(${c:encodeURL('~./zul/img/errbox/pp-cm.png')});
 }
-.z-errbox .z-popup .z-popup-cl {
+.z-errbox.z-popup .z-popup-cl {
 	background-image: url(${c:encodeURL('~./zul/img/errbox/pp-clr.png')});
 }
-.z-errbox .z-popup .z-popup-cr {
+.z-errbox.z-popup .z-popup-cr {
 	background-image: url(${c:encodeURL('~./zul/img/errbox/pp-clr.png')});
 }
 <%-- Progressmeter --%>

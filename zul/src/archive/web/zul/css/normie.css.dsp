@@ -182,19 +182,19 @@ span.z-vfiletree-last-open, span.z-vfiletree-last-close, span.z-vfiletree-tee, s
 .z-arrow-u {
 	background-image: url(${c:encodeURL('~./zul/img/misc/arrowU.gif')});
 }
-.z-errbox .z-popup .z-popup-tl,
-.z-errbox .z-popup .z-popup-tr,
-.z-errbox .z-popup .z-popup-bl,
-.z-errbox .z-popup .z-popup-br {
+.z-errbox.z-popup .z-popup-tl,
+.z-errbox.z-popup .z-popup-tr,
+.z-errbox.z-popup .z-popup-bl,
+.z-errbox.z-popup .z-popup-br {
 	background-image:url(${c:encodeURL('~./zul/img/errbox/pp-corner.gif')});
 }
-.z-errbox .z-popup .z-popup-cm {
+.z-errbox.z-popup .z-popup-cm {
 	background-image: url(${c:encodeURL('~./zul/img/errbox/pp-cm.gif')});
 }
-.z-errbox .z-popup .z-popup-cl {
+.z-errbox.z-popup .z-popup-cl {
 	background-image: url(${c:encodeURL('~./zul/img/errbox/pp-clr.gif')});
 }
-.z-errbox .z-popup .z-popup-cr {
+.z-errbox.z-popup .z-popup-cr {
 	background-image: url(${c:encodeURL('~./zul/img/errbox/pp-clr.gif')});
 }
 <%-- box.css.dsp --%>
