@@ -157,6 +157,46 @@ span.z-vfiletree-last-open, span.z-vfiletree-last-close, span.z-vfiletree-tee, s
 .z-fileupload-delete {
 	ackground-image: url(${c:encodeURL('~./zul/img/misc/drag.gif')});
 }
+<%-- error box --%>
+.z-arrow-d {
+	background-image: url(${c:encodeURL('~./zul/img/misc/arrowD.gif')});
+}
+.z-arrow-l {
+	background-image: url(${c:encodeURL('~./zul/img/misc/arrowL.gif')});
+}
+.z-arrow-ld {
+	background-image: url(${c:encodeURL('~./zul/img/misc/arrowLD.gif')});
+}
+.z-arrow-lu {
+	background-image: url(${c:encodeURL('~./zul/img/misc/arrowLU.gif')});
+}
+.z-arrow-rd {
+	background-image: url(${c:encodeURL('~./zul/img/misc/arrowRD.gif')});
+}
+.z-arrow-ru {
+	background-image: url(${c:encodeURL('~./zul/img/misc/arrowRU.gif')});
+}
+.z-arrow-r {
+	background-image: url(${c:encodeURL('~./zul/img/misc/arrowR.gif')});
+}
+.z-arrow-u {
+	background-image: url(${c:encodeURL('~./zul/img/misc/arrowU.gif')});
+}
+.z-errbox .z-popup .z-popup-tl,
+.z-errbox .z-popup .z-popup-tr,
+.z-errbox .z-popup .z-popup-bl,
+.z-errbox .z-popup .z-popup-br {
+	background-image:url(${c:encodeURL('~./zul/img/errbox/pp-corner.gif')});
+}
+.z-errbox .z-popup .z-popup-cm {
+	background-image: url(${c:encodeURL('~./zul/img/errbox/pp-cm.gif')});
+}
+.z-errbox .z-popup .z-popup-cl {
+	background-image: url(${c:encodeURL('~./zul/img/errbox/pp-clr.gif')});
+}
+.z-errbox .z-popup .z-popup-cr {
+	background-image: url(${c:encodeURL('~./zul/img/errbox/pp-clr.gif')});
+}
 <%-- box.css.dsp --%>
 .z-splitter-ver-btn-l, .z-splitter-hor-btn-l {
 	background-image: url(${c:encodeURL('~./zul/img/splt/colps-l.gif')});

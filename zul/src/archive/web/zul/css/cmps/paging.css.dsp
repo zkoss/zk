@@ -30,7 +30,7 @@
 
 <%-- default mold --%>
 
-/* font properties */
+<%-- font properties --%>
 .z-paging td,
 .z-paging span,
 .z-paging input,
@@ -92,7 +92,7 @@
 	white-space:nowrap;
 }
 
-/*define icon of button*/
+<%-- define icon of button --%>
 .z-paging-btn button {
 	background:transparent none repeat scroll 0 0;
 	border:0 none;
@@ -140,7 +140,7 @@
 
 
 
-/*mouse over a button */
+<%-- mouse over a button --%>
 .z-paging-btn-over .z-paging-next {
 	background-position:-21px 0;
 }
@@ -153,7 +153,7 @@
 .z-paging-btn-over .z-paging-first {
 	background-position:-21px -63px;
 }
-/* mouse click on a button */
+<%-- mouse click on a button --%>
 .z-paging-btn-clk .z-paging-next {
 	background-position:-42px 0;
 }
@@ -167,7 +167,7 @@
 	background-position:-42px -63px;
 }
 
-/* disabled button */
+<%-- disabled button --%>
 .z-paging .z-paging-btn-disd {
 	color:gray;
 	cursor:default;
@@ -180,7 +180,7 @@
 	cursor:default !important;
 }
 
-/*paging info*/
+<%-- paging info --%>
 .z-paging-info {
 	color:#444444;
 	position:absolute;
