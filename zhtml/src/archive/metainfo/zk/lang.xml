@@ -22,7 +22,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 	<version>
 		<version-class>org.zkoss.zhtml.Version</version-class>
-		<version-uid>3.6.0</version-uid>
+		<version-uid>3.6.1</version-uid>
 	</version>
 
 	<case-insensitive/>
