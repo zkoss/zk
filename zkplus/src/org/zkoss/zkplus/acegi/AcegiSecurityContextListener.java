@@ -18,29 +18,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkplus.acegi;
 
-import org.zkoss.zkplus.spring.SpringUtil;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.WebApp;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventThreadInit;
-import org.zkoss.zk.ui.event.EventThreadCleanup;
-import org.zkoss.zk.ui.event.EventThreadResume;
-import org.zkoss.zk.ui.util.Configuration;
-
-import org.zkoss.util.logging.Log;
-import org.zkoss.web.servlet.BufferedResponse;
-import org.zkoss.io.NullWriter;
-import org.zkoss.lang.Exceptions;
-
-import org.acegisecurity.context.SecurityContext;
-import org.acegisecurity.context.SecurityContextHolder;
-import org.acegisecurity.AcegiSecurityException;
-import org.acegisecurity.AuthenticationException;
-
 import java.util.List;
 
 import javax.servlet.Filter;
@@ -48,6 +25,24 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+
+import org.acegisecurity.AcegiSecurityException;
+import org.acegisecurity.context.SecurityContext;
+import org.acegisecurity.context.SecurityContextHolder;
+import org.zkoss.io.NullWriter;
+import org.zkoss.lang.Exceptions;
+import org.zkoss.util.logging.Log;
+import org.zkoss.web.servlet.BufferedResponse;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventThreadCleanup;
+import org.zkoss.zk.ui.event.EventThreadInit;
+import org.zkoss.zk.ui.event.EventThreadResume;
+import org.zkoss.zkplus.spring.SpringUtil;
 
 /**
  * <p>Listener to copy servlet thread ThreadLocal, securityContext, over to 
