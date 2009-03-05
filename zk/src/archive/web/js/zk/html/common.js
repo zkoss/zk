@@ -255,12 +255,12 @@ zk.Shadow.prototype = {
 			st = shadow.style;
 		st.left = (l + opts.left) + "px";
 		st.top = (t + opts.top) + "px";
-		st.width = wd + "px";
+		st.width = Math.max(wd, 0) + "px";
 		st.display = "block";
-		if (zk.ie6Only) st.height = hgh + "px";
+		if (zk.ie6Only) st.height = Math.max(hgh, 0) + "px";
 		else {
 			var cns = shadow.childNodes;
-			cns[1].style.height = (hgh - cns[0].offsetHeight - cns[2].offsetHeight) + "px";
+			cns[1].style.height = Math.max(hgh - cns[0].offsetHeight - cns[2].offsetHeight, 0) + "px";
 		}
 
 		var stackup = this.stackup;
@@ -484,7 +484,7 @@ zk.getClassRegEx = function(clsnm) {
  * of the specified element.
  */
 zk.hasClass = function (el, clsnm) {
-	return el.className.match(zk.getClassRegEx(clsnm));
+	return el.className.match(zk.getClassRegEx(clsnm)) != null;
 };
 
 /** Adds the specified class name to the class name of the specified element.

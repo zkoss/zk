@@ -395,7 +395,7 @@ zkTabs2 = {
 					if (cldheight <= (headheight + (upbtn ? upbtn.offsetHeight : 0 ))) {
 						tabbox._scrolling = false;
 						zkTabs2._hidebutton(tbsdiv)
-						header.style.height= tabbox.offsetHeight-2 + "px";
+						header.style.height= Math.max(tabbox.offsetHeight-2, 0) + "px";
 						header.scrollTop = 0;
 					}
 					switch (way) {
@@ -432,7 +432,7 @@ zkTabs2 = {
 					if (cldheight > (headheight - (upbtn ? upbtn.offsetHeight : 0 ))) {
 						tabbox._scrolling = true;
 						zkTabs2._showbutton(tbsdiv);
-						header.style.height = tabbox.offsetHeight - 36 + "px";
+						header.style.height = Math.max(tabbox.offsetHeight - 36, 0) + "px";
 						if (way == "end") {
 							var d = cldheight - header.offsetHeight - header.scrollTop + 2;
 							d < 0 ? "" : zkTabs2._tabscroll(uuid, "down", d);
@@ -455,7 +455,7 @@ zkTabs2 = {
 				if (childwidth <= (headwidth + (leftbtn ? leftbtn.offsetWidth : 0))) {
 					tabbox._scrolling = false;
 					zkTabs2._hidebutton(tbsdiv);
-					header.style.width = tabbox.offsetWidth - 2 + "px";
+					header.style.width = Math.max(tabbox.offsetWidth - 2, 0) + "px";
 					header.scrollLeft = 0;
 				}
 				// scroll to specific position
@@ -494,7 +494,7 @@ zkTabs2 = {
 					zkTabs2._showbutton(tbsdiv);
 					var caveul = $e(getZKAttr(tabbox, "tabs"),"cave");
 					caveul.style.width = "5432px";
-					header.style.width = tabbox.offsetWidth - 38 + "px";
+					header.style.width = Math.max(tabbox.offsetWidth - 38, 0) + "px";
 					if (way == "sel") {
 						var d = childwidth - header.offsetWidth - header.scrollLeft + 2;
 						d < 0 ? "" : zkTabs2._tabscroll(uuid, "right", d);
