@@ -413,13 +413,13 @@ zkPanel = {
 				tl.firstChild.style.width = n.offsetWidth + diff + "px";
 			}
 			if (hl) {
-				hl.firstChild.firstChild.style.width = n.offsetWidth - (zk.getPadBorderWidth(hl)
-					+ zk.getPadBorderWidth(hl.firstChild) - diff) + "px";
+				hl.firstChild.firstChild.style.width = Math.max(n.offsetWidth - (zk.getPadBorderWidth(hl)
+					+ zk.getPadBorderWidth(hl.firstChild) - diff), 0) + "px";
 			}
 			if (bb) bb.style.width = zk.revisedSize(bb, body.offsetWidth);
 			if (fl) {
-				fl.firstChild.firstChild.style.width = n.offsetWidth - (zk.getPadBorderWidth(fl)
-					+ zk.getPadBorderWidth(fl.firstChild) - diff) + "px";
+				fl.firstChild.firstChild.style.width = Math.max(n.offsetWidth - (zk.getPadBorderWidth(fl)
+					+ zk.getPadBorderWidth(fl.firstChild) - diff), 0) + "px";
 			}
 			if (bl) {
 				bl.firstChild.style.width = n.offsetWidth + diff + "px";

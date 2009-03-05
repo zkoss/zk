@@ -30,17 +30,17 @@
 .z-slider-hor-btn {
     width: 14px; height: 15px; position: absolute; left: 0; top: 3px;
     background-color : transparent;
-	background-image : url(${c: encodeURL('~./zul/img/slider/slider-square.png')});
+	background-image : url(${c:encodeURL('~./zul/img/slider/slider-square.png')});
 	background-repeat : no-repeat;
 	background-position : 0 0;
 }
 .z-slider-scale-btn {
-	background-image : url(${c: encodeURL('~./zul/img/slider/slider-scale.gif')});
+	background-image : url(${c:encodeURL('~./zul/img/slider/slider-scale.gif')});
 }
 
 <%-- Scale style --%>
 .z-slider-scale-tick {
-    background-image:url(${c: encodeURL('~./zul/img/slider/ticks.gif')});
+    background-image:url(${c:encodeURL('~./zul/img/slider/ticks.gif')});
 	padding-top:6px;
 	width:214px;
 }
@@ -73,7 +73,7 @@
 .z-slider-ver-btn {
     width: 15px; height: 15px; position: absolute; left: 4px; bottom: 0;
     background-color : transparent;
-	background-image : url(${c: encodeURL('~./zul/img/slider/slider-v-square.png')});
+	background-image : url(${c:encodeURL('~./zul/img/slider/slider-v-square.png')});
 	background-repeat : no-repeat;
 	background-position : 0 0;
 }
@@ -83,11 +83,11 @@
  	left: 3px;
 }
 .z-slider-sphere-hor-btn {
-	background-image : url(${c: encodeURL('~./zul/img/slider/slider-circle.png')});
+	background-image : url(${c:encodeURL('~./zul/img/slider/slider-circle.png')});
 }
 
 .z-slider-sphere-ver-btn {
-	background-image : url(${c: encodeURL('~./zul/img/slider/slider-v-circle.png')});
+	background-image : url(${c:encodeURL('~./zul/img/slider/slider-v-circle.png')});
 }
 <%-- all button style --%>
 .z-slider-hor-btn-over,

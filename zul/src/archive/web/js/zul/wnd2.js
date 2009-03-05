@@ -286,8 +286,8 @@ zkWnd2._fixWdh = zk.ie7 ? function (cmp) {
 			tl.firstChild.style.width = n.offsetWidth + diff + "px";
 		}
 		if (hl) {
-			hl.firstChild.firstChild.style.width = n.offsetWidth - (zk.getPadBorderWidth(hl)
-				+ zk.getPadBorderWidth(hl.firstChild) - diff) + "px";
+			hl.firstChild.firstChild.style.width = Math.max(n.offsetWidth - (zk.getPadBorderWidth(hl)
+				+ zk.getPadBorderWidth(hl.firstChild) - diff), 0) + "px";
 		}
 		if (bl) {
 			bl.firstChild.style.width = n.offsetWidth + diff + "px";

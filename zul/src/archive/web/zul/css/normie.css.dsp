@@ -153,10 +153,6 @@ span.z-vfiletree-last-open, span.z-vfiletree-last-close, span.z-vfiletree-tee, s
 .z-msgbox-error {
 	background-image: url(${c:encodeURL('~./zul/img/msgbox/stop-btn.gif')});
 }
-.z-fileupload-add,
-.z-fileupload-delete {
-	ackground-image: url(${c:encodeURL('~./zul/img/misc/drag.gif')});
-}
 <%-- box.css.dsp --%>
 .z-splitter-ver-btn-l, .z-splitter-hor-btn-l {
 	background-image: url(${c:encodeURL('~./zul/img/splt/colps-l.gif')});
