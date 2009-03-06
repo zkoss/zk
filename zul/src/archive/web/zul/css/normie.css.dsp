@@ -187,9 +187,7 @@ span.z-vfiletree-last-open, span.z-vfiletree-last-close, span.z-vfiletree-tee, s
 .z-errbox.z-popup .z-popup-cm {
 	background-image: url(${c:encodeURL('~./zul/img/errbox/pp-cm.gif')});
 }
-.z-errbox.z-popup .z-popup-cl {
-	background-image: url(${c:encodeURL('~./zul/img/errbox/pp-clr.gif')});
-}
+.z-errbox.z-popup .z-popup-cl,
 .z-errbox.z-popup .z-popup-cr {
 	background-image: url(${c:encodeURL('~./zul/img/errbox/pp-clr.gif')});
 }
