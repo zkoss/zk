@@ -808,7 +808,7 @@ zDom = { //static methods
 		hgh -= zDom.padBorderHeight(el)
 			+ zk.parseInt(zDom.getStyle(el, "margin-top"))
 			+ zk.parseInt(zDom.getStyle(el, "margin-bottom"));
-		el.style.height = (hgh > 0 ? hgh: 0) + "px";
+		el.style.height = max(0, hgh) + "px";
 	},
 
 	/**
@@ -3765,8 +3765,8 @@ zk.eff.Shadow = zk.$extends(zk.Object, {
 		var opts = this.opts,
 			l = node.offsetLeft, t = node.offsetTop,
 			w = node.offsetWidth, h = node.offsetHeight,
-			wd = w - opts.left + opts.right,
-			hgh = h - opts.top + opts.bottom,
+			wd = max(0, w - opts.left + opts.right),
+			hgh = max(0, h - opts.top + opts.bottom),
 			st = shadow.style;
 		st.left = (l + opts.left) + "px";
 		st.top = (t + opts.top) + "px";
@@ -3775,7 +3775,7 @@ zk.eff.Shadow = zk.$extends(zk.Object, {
 		if (zk.ie6Only) st.height = hgh + "px";
 		else {
 			var cns = shadow.childNodes;
-			cns[1].style.height = (hgh - cns[0].offsetHeight - cns[2].offsetHeight) + "px";
+			cns[1].style.height = max(0, hgh - cns[0].offsetHeight - cns[2].offsetHeight) + "px";
 		}
 
 		var stackup = this.stackup;
@@ -8118,7 +8118,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 					if (open) zAnima.slideDown(this, panel, {afterAnima: this._afterSlideDown});
 					else zAnima.slideUp(this, panel, {beforeAnima: this._beforeSlideUp});
 				} else {
-					zDom[open ? 'rmClass': 'addClass'](node, this.getZclass() + "-collapsed");
+					zDom[open ? 'rmClass': 'addClass'](node, this.getZclass() + "-colpsd");
 					zWatch.fireDown(open ? 'onVisible': 'onHide', {visible:true}, this);
 				}
 				if (!fromServer) this.fire('onOpen', open);
@@ -8249,7 +8249,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		var html = this.$supers('domClass_', arguments);
 		if (!this._open) {
 			if (html) html += ' ';
-			html += this.getZclass() + '-collapsed';
+			html += this.getZclass() + '-colpsd';
 		}
 		return html;
 	}

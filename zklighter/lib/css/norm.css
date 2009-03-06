@@ -409,6 +409,9 @@ div.z-drop-cnt {
 .z-arrow-ru {
 	background-image: url(zkrc/misc/arrowRU.png);
 }
+.z-arrow-r {
+	background-image: url(zkrc/misc/arrowR.png);
+}
 .z-arrow-u {
 	background-image: url(zkrc/misc/arrowU.png);
 }
@@ -418,33 +421,21 @@ div.z-drop-cnt {
 .z-errbox-close-over {
 	background-image: url(zkrc/errbox/close-over.gif);
 }
-.z-errbox.z-popup .z-popup-tm {
-	background-image : url(zkrc/errbox/pp-tb.png);
-}
-.z-errbox.z-popup .z-popup-tl {
-	background-image : url(zkrc/errbox/pp-corners.png);
-}
-.z-errbox.z-popup .z-popup-tr {
-	background-image : url(zkrc/errbox/pp-corners.png);
+.z-errbox.z-popup .z-popup-tl,
+.z-errbox.z-popup .z-popup-tr,
+.z-errbox.z-popup .z-popup-bl,
+.z-errbox.z-popup .z-popup-br {
+	background-image:url(zkrc/errbox/pp-corner.png);
 }
 .z-errbox.z-popup .z-popup-cm {
-    background-color : #FFCD9B;
-	background-image : url(zkrc/errbox/pp-tb.png);
+	background-color : #FFCD9B;
+	background-image: url(zkrc/errbox/pp-cm.png);
 }
 .z-errbox.z-popup .z-popup-cl {
-	background-image : url(zkrc/errbox/pp-l.png);
+	background-image: url(zkrc/errbox/pp-clr.png);
 }
 .z-errbox.z-popup .z-popup-cr {
-	background-image : url(zkrc/errbox/pp-r.png);
-}
-.z-errbox.z-popup .z-popup-bm {
-	background-image : url(zkrc/errbox/pp-tb.png);
-}
-.z-errbox.z-popup .z-popup-bl {
-	background-image : url(zkrc/errbox/pp-corners.png);
-}
-.z-errbox.z-popup .z-popup-br {
-	background-image : url(zkrc/errbox/pp-corners.png);
+	background-image: url(zkrc/errbox/pp-clr.png);
 }
 
 div.z-progressmeter {
@@ -1404,7 +1395,7 @@ span.z-button {
 
 
 
-/* font properties */
+
 .z-paging td,
 .z-paging span,
 .z-paging input,
@@ -1466,7 +1457,7 @@ span.z-button {
 	white-space:nowrap;
 }
 
-/*define icon of button*/
+
 .z-paging-btn button {
 	background:transparent none repeat scroll 0 0;
 	border:0 none;
@@ -1514,7 +1505,7 @@ span.z-button {
 
 
 
-/*mouse over a button */
+
 .z-paging-btn-over .z-paging-next {
 	background-position:-21px 0;
 }
@@ -1527,7 +1518,7 @@ span.z-button {
 .z-paging-btn-over .z-paging-first {
 	background-position:-21px -63px;
 }
-/* mouse click on a button */
+
 .z-paging-btn-clk .z-paging-next {
 	background-position:-42px 0;
 }
@@ -1541,7 +1532,7 @@ span.z-button {
 	background-position:-42px -63px;
 }
 
-/* disabled button */
+
 .z-paging .z-paging-btn-disd {
 	color:gray;
 	cursor:default;
@@ -1554,7 +1545,7 @@ span.z-button {
 	cursor:default !important;
 }
 
-/*paging info*/
+
 .z-paging-info {
 	color:#444444;
 	position:absolute;
@@ -2399,7 +2390,7 @@ tr.z-vbox-sep {
 
 
 
-/* define common font property*/
+
 .z-menubar-hor .z-menu,.z-menubar-hor .z-menu-item,.z-menubar-hor .z-menu-btn,.z-menubar-hor .z-menu-item-btn,
 .z-menubar-hor span,.z-menubar-hor a,.z-menubar-hor div,
 .z-menubar-ver .z-menu,.z-menubar-ver .z-menu-item,.z-menubar-ver .z-menu-btn,.z-menubar-ver .z-menu-item-btn,
@@ -2415,7 +2406,7 @@ tr.z-vbox-sep {
 	font-size: 11px;
 }
 
-/* define common horizontal and vertical property */
+
 .z-menubar-hor,.z-menubar-ver {
 	position : relative;
 	display: block;
@@ -2496,7 +2487,7 @@ tr.z-vbox-sep {
 	outline-width:0px;
 	overflow:visible;
 	width:auto;
-	padding-left:2px; /*button has default padding, reset it*/
+	padding-left:2px; 
 	padding-top:3px;
 	padding-bottom:2px;
 	padding-right:1px;
@@ -2526,7 +2517,7 @@ tr.z-vbox-sep {
 }
 
 
-/* define menu/menuitem mouse over and seld effect */
+
 .z-menu-body-over .z-menu-inner-l,
 .z-menu-body-seld .z-menu-inner-l,
 .z-menu-item-body-over .z-menu-item-inner-l {
@@ -2554,7 +2545,7 @@ tr.z-vbox-sep {
 	color:#233D6D;
 }
 
-/*define disabled menuitem effect*/
+
 .z-menubar-hor .z-menu-item-disd *, .z-menubar-ver .z-menu-item-disd *{
 	color:gray !important;
 	cursor:default !important;
@@ -2565,7 +2556,7 @@ tr.z-vbox-sep {
 	filter: alpha(opacity=50);
 }
 
-/* define menupopup effect */
+
 .z-menu-popup {
 	background:#CCE6FB repeat-y scroll 0 0;
 	border:1px solid #7F9DB9;
@@ -2573,7 +2564,7 @@ tr.z-vbox-sep {
 	z-index:88000;
 	background-image : url(zkrc/menu/pp-bg.png);
 }
-/* define menupopup property*/
+
 .z-menu-popup {
 	-x-system-font:none;
 	font-size-adjust:none;
@@ -2599,7 +2590,7 @@ tr.z-vbox-sep {
 	margin:0px !important;
 }
 
-/* define menu & menuitem in menupopup */
+
 .z-menu-popup-cnt .z-menu,
 .z-menu-popup-cnt .z-menu-item,
 .z-menu-popup-cnt .z-menu-separator {
@@ -2641,7 +2632,7 @@ tr.z-vbox-sep {
 	background-image:url(zkrc/menu/arrow.gif);
 }
 
-/*define checked menuitem effect in menupopup */
+
 .z-menu-popup-cnt .z-menu-item-cnt-ck .z-menu-item-img {
 	background:transparent no-repeat scroll center center;
 	background-image:url(zkrc/menu/checked.gif);
@@ -2652,7 +2643,7 @@ tr.z-vbox-sep {
 	background-image:url(zkrc/menu/unchecked.gif);
 }
 
-/*define disabled menuitem effect in menupopup*/
+
 .z-menu-popup-cnt .z-menu-item-disd,
 .z-menu-popup-cnt .z-menu-item-disd *{
 	color:gray !important;
@@ -2665,7 +2656,7 @@ tr.z-vbox-sep {
 	filter: alpha(opacity=50);
 }
 
-/*define mouse over effect in menupopup*/
+
 .z-menu-popup-cnt .z-menu-over,
 .z-menu-popup-cnt .z-menu-item-over{
 	border:1px solid #A8D8EB;
@@ -2678,7 +2669,7 @@ tr.z-vbox-sep {
 	color:#233D6D;
 }
 
-/*define separator*/
+
 .z-menu-popup-cnt .z-menu-separator {
 	font-size:1px;
 	line-height:1px;
@@ -4392,9 +4383,45 @@ span.z-vfiletree-last-open, span.z-vfiletree-last-close, span.z-vfiletree-tee, s
 .z-msgbox-error {
 	background-image: url(zkrc/msgbox/stop-btn.gif);
 }
-.z-fileupload-add,
-.z-fileupload-delete {
-	ackground-image: url(zkrc/misc/drag.gif);
+
+.z-arrow-d {
+	background-image: url(zkrc/misc/arrowD.gif);
+}
+.z-arrow-l {
+	background-image: url(zkrc/misc/arrowL.gif);
+}
+.z-arrow-ld {
+	background-image: url(zkrc/misc/arrowLD.gif);
+}
+.z-arrow-lu {
+	background-image: url(zkrc/misc/arrowLU.gif);
+}
+.z-arrow-rd {
+	background-image: url(zkrc/misc/arrowRD.gif);
+}
+.z-arrow-ru {
+	background-image: url(zkrc/misc/arrowRU.gif);
+}
+.z-arrow-r {
+	background-image: url(zkrc/misc/arrowR.gif);
+}
+.z-arrow-u {
+	background-image: url(zkrc/misc/arrowU.gif);
+}
+.z-errbox.z-popup .z-popup-tl,
+.z-errbox.z-popup .z-popup-tr,
+.z-errbox.z-popup .z-popup-bl,
+.z-errbox.z-popup .z-popup-br {
+	background-image:url(zkrc/errbox/pp-corner.gif);
+}
+.z-errbox.z-popup .z-popup-cm {
+	background-image: url(zkrc/errbox/pp-cm.gif);
+}
+.z-errbox.z-popup .z-popup-cl {
+	background-image: url(zkrc/errbox/pp-clr.gif);
+}
+.z-errbox.z-popup .z-popup-cr {
+	background-image: url(zkrc/errbox/pp-clr.gif);
 }
 
 .z-splitter-ver-btn-l, .z-splitter-hor-btn-l {

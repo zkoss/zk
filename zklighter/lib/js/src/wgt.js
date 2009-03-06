@@ -665,7 +665,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 					if (open) zAnima.slideDown(this, panel, {afterAnima: this._afterSlideDown});
 					else zAnima.slideUp(this, panel, {beforeAnima: this._beforeSlideUp});
 				} else {
-					zDom[open ? 'rmClass': 'addClass'](node, this.getZclass() + "-collapsed");
+					zDom[open ? 'rmClass': 'addClass'](node, this.getZclass() + "-colpsd");
 					zWatch.fireDown(open ? 'onVisible': 'onHide', {visible:true}, this);
 				}
 				if (!fromServer) this.fire('onOpen', open);
@@ -796,7 +796,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		var html = this.$supers('domClass_', arguments);
 		if (!this._open) {
 			if (html) html += ' ';
-			html += this.getZclass() + '-collapsed';
+			html += this.getZclass() + '-colpsd';
 		}
 		return html;
 	}
