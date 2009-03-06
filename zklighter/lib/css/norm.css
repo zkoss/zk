@@ -4417,9 +4417,7 @@ span.z-vfiletree-last-open, span.z-vfiletree-last-close, span.z-vfiletree-tee, s
 .z-errbox.z-popup .z-popup-cm {
 	background-image: url(zkrc/errbox/pp-cm.gif);
 }
-.z-errbox.z-popup .z-popup-cl {
-	background-image: url(zkrc/errbox/pp-clr.gif);
-}
+.z-errbox.z-popup .z-popup-cl,
 .z-errbox.z-popup .z-popup-cr {
 	background-image: url(zkrc/errbox/pp-clr.gif);
 }

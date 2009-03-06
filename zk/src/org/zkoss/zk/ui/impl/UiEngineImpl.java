@@ -1515,7 +1515,17 @@ public class UiEngineImpl implements UiEngine {
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 		execCtrl.setVisualizer(uv);
 		ExecutionsCtrl.setCurrent(exec);
-		execCtrl.onActivate();
+		try {
+			execCtrl.onActivate();
+		} catch (Error ex) {
+			ExecutionsCtrl.setCurrent(null); //just in case
+			((DesktopCtrl)desktop).setExecution(null);
+			throw ex;
+		} catch (RuntimeException ex) {
+			ExecutionsCtrl.setCurrent(null); //just in case
+			((DesktopCtrl)desktop).setExecution(null);
+			throw ex;
+		}
 		return uv;
 	}
 	/** Returns whether the desktop is being recovered.
@@ -1526,14 +1536,13 @@ public class UiEngineImpl implements UiEngine {
 	}
 	/** Deactivates the execution. */
 	private static final void doDeactivate(Execution exec) {
-		final Desktop desktop = exec.getDesktop();
-		final Session sess = desktop.getSession();
 //		if (log.finerable()) log.finer("Deactivating "+desktop);
 
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
+		final Desktop desktop = exec.getDesktop();
 		try {
 			//Unlock desktop
-			final Map eis = getVisualizers(sess);
+			final Map eis = getVisualizers(desktop.getSession());
 			synchronized (eis) {
 				final Object o = eis.remove(desktop);
 				assert D.OFF || o != null;
@@ -1541,13 +1550,17 @@ public class UiEngineImpl implements UiEngine {
 				eis.notify(); //wakeup doActivate's wait
 			}
 		} finally {
-			execCtrl.onDeactivate();
+			try {
+				execCtrl.onDeactivate();
+			} catch (Throwable ex) {
+				log.warningBriefly("Failed to deactive", ex);
+			}
+			ExecutionsCtrl.setCurrent(null);
 			execCtrl.setCurrentPage(null);
 			execCtrl.setVisualizer(null);
-			ExecutionsCtrl.setCurrent(null);
 		}
 
-		final SessionCtrl sessCtrl = (SessionCtrl)sess;
+		final SessionCtrl sessCtrl = (SessionCtrl)desktop.getSession();
 		if (sessCtrl.isInvalidated()) sessCtrl.invalidateNow();
 	}
 	/** Re-activates for another execution. It is callable only for
@@ -1575,7 +1588,17 @@ public class UiEngineImpl implements UiEngine {
 		final ExecutionCtrl curCtrl = (ExecutionCtrl)curExec;
 		curCtrl.setVisualizer(uv);
 		ExecutionsCtrl.setCurrent(curExec);
-		curCtrl.onActivate();
+		try {
+			curCtrl.onActivate();
+		} catch (Error ex) { //just in case
+			ExecutionsCtrl.setCurrent(olduv.getExecution());
+			((DesktopCtrl)desktop).setExecution(olduv.getExecution());
+			throw ex;
+		} catch (RuntimeException ex) {//just in case
+			ExecutionsCtrl.setCurrent(olduv.getExecution());
+			((DesktopCtrl)desktop).setExecution(olduv.getExecution());
+			throw ex;
+		}
 		return uv;
 	}
 	/** De-reactivated exec. Work with {@link #doReactivate}.
@@ -1583,22 +1606,28 @@ public class UiEngineImpl implements UiEngine {
 	private static void doDereactivate(Execution curExec, UiVisualizer olduv) {
 		if (olduv == null) throw new IllegalArgumentException("null");
 
-		final Desktop desktop = curExec.getDesktop();
-		final Session sess = desktop.getSession();
-//		if (log.finerable()) log.finer("Deactivating "+desktop);
-
 		final ExecutionCtrl curCtrl = (ExecutionCtrl)curExec;
-		curCtrl.onDeactivate();
-		curCtrl.setCurrentPage(null);
-		curCtrl.setVisualizer(null); //free memory
-
 		final Execution oldexec = olduv.getExecution();
-		final Map eis = getVisualizers(sess);
-		synchronized (eis) {
-			eis.put(desktop, olduv);
-			((DesktopCtrl)desktop).setExecution(oldexec);
+		try {
+			final Desktop desktop = curExec.getDesktop();
+	//		if (log.finerable()) log.finer("Deactivating "+desktop);
+
+			try {
+				curCtrl.onDeactivate();
+			} catch (Throwable ex) {
+				log.warningBriefly("Failed to deactive", ex);
+			}
+
+			final Map eis = getVisualizers(desktop.getSession());
+			synchronized (eis) {
+				eis.put(desktop, olduv);
+				((DesktopCtrl)desktop).setExecution(oldexec);
+			}
+		} finally {
+			ExecutionsCtrl.setCurrent(oldexec);
+			curCtrl.setCurrentPage(null);
+			curCtrl.setVisualizer(null); //free memory
 		}
-		ExecutionsCtrl.setCurrent(oldexec);
 	}
 	/** Returns a map of (Page, UiVisualizer). */
 	private static Map getVisualizers(Session sess) {
