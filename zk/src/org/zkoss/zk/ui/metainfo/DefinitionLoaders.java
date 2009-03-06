@@ -427,7 +427,9 @@ public class DefinitionLoaders {
 			if (s != null && !"false".equals(s))
 				compdef.setBlankPreserved(true);
 
-			compdef.setApply(el.getElementValue("apply", true));
+			s = el.getElementValue("component-apply", true);
+			if (s == null) s = el.getElementValue("apply", true); //backward-compatible
+			compdef.setApply(s);
 
 			for (Iterator i = el.getElements("mold").iterator(); i.hasNext();) {
 				final Element e = (Element)i.next();
