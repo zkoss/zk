@@ -385,8 +385,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		if (!wdh || wdh == "auto") {
 			var diff = zDom.padBorderWidth(cave.parentNode) + zDom.padBorderWidth(cave.parentNode.parentNode);
 			if (tl) tl.firstChild.style.width = cave.offsetWidth + diff + "px";
-			if (hl) hl.firstChild.firstChild.style.width = cave.offsetWidth
-				- (zDom.padBorderWidth(hl) + zDom.padBorderWidth(hl.firstChild) - diff) + "px";
+			if (hl) hl.firstChild.firstChild.style.width = zDom.getPositive(cave.offsetWidth
+				- (zDom.padBorderWidth(hl) + zDom.padBorderWidth(hl.firstChild) - diff)) + "px";
 			if (bl) bl.firstChild.style.width = cave.offsetWidth + diff + "px";
 		} else {
 			if (tl) tl.firstChild.style.width = "";

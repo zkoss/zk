@@ -1,9 +1,9 @@
 /* dom.js
 
 	Purpose:
-	
+
 	Description:
-	
+
 	History:
 		Mon Sep 29 17:17:32	 2008, Created by tomyeh
 
@@ -109,7 +109,7 @@ zDom = { //static methods
 	 *
 	 * @param areas the areas is abbreviation for left "l", right "r", top "t", and bottom "b".
 	 * So you can specify to be "lr" or "tb" or more.
-	 * @param styles {@link #paddings} or {@link #borders}. 
+	 * @param styles {@link #paddings} or {@link #borders}.
 	 */
 	sumStyles: function (el, areas, styles) {
 		var val = 0;
@@ -153,12 +153,12 @@ zDom = { //static methods
 			ofs = zDom.cmOffset(el);
 		}
 		var scrolls = zDom.scrollOffset(el);
-		scrolls[0] -= zDom.innerX(); scrolls[1] -= zDom.innerY(); 
+		scrolls[0] -= zDom.innerX(); scrolls[1] -= zDom.innerY();
 		return [ofs[0] - scrolls[0], ofs[1] - scrolls[1]];
 	},
 	/**
 	 * Returns the revised width, which subtracted the size of its CSS border or padding, for the specified element.
-	 * @param size original size of the specified element. 
+	 * @param size original size of the specified element.
 	 * @param excludeMargin excludes the margins. You rarely need this unless
 	 * size is in term of the parent
 	 */
@@ -170,7 +170,7 @@ zDom = { //static methods
 	},
 	/**
 	 * Returns the revised width, which subtracted the size of its CSS border or padding, for the specified element.
-	 * @param size original size of the specified element. 
+	 * @param size original size of the specified element.
 	 * @param excludeMargin excludes the margins. You rarely need this unless
 	 * size is in term of the parent
 	 */
@@ -181,13 +181,19 @@ zDom = { //static methods
 		return size < 0 ? 0: size;
 	},
 	/**
+	 * Returns 0 if the num is not a positive number, otherwise, returns num itself.
+	 */
+	getPositive: function (num) {
+		return num < 0 ? 0 : num;
+	},
+	/**
 	 * Returns the number of the padding width and the border width from the specified element.
 	 */
 	padBorderWidth: function (el) {
 		return zDom.sumStyles(el, "lr", zDom.borders) + zDom.sumStyles(el, "lr", zDom.paddings);
 	},
 	/**
-	 * Returns the number of the padding height and the border height from the specified element.  
+	 * Returns the number of the padding height and the border height from the specified element.
 	 */
 	padBorderHeight: function (el) {
 		return zDom.sumStyles(el, "tb", zDom.borders) + zDom.sumStyles(el, "tb", zDom.paddings);
@@ -220,12 +226,12 @@ zDom = { //static methods
 	},
 	/**
 	 * Retrieves the index of the object in the cells collection of a row.
-	 * Note: The function fixed the problem of IE that the cell.cellIndex returns a wrong index 
+	 * Note: The function fixed the problem of IE that the cell.cellIndex returns a wrong index
 	 * if there is a hidden cell in the table. So, the behavior is difference among others.
 	 * @param {Element} cell
 	 */
 	cellIndex: function (cell) {
-		var i = 0; 
+		var i = 0;
 		if (zk.ie) {
 			var cells = cell.parentNode.cells;
 			for(var j = 0, cl = cells.length; j < cl; j++) {
@@ -235,7 +241,7 @@ zDom = { //static methods
 				}
 			}
 		} else i = cell.cellIndex;
-		return i; 
+		return i;
 	},
 	/** Returns the number of columns (considering colSpan)
 	 */
@@ -313,7 +319,7 @@ zDom = { //static methods
 		if (x < left) x = left;
 		if (y < top) y = top;
 
-		var ofs = zDom.toStyleOffset(el, x, y);	
+		var ofs = zDom.toStyleOffset(el, x, y);
 
 		if (!skipx) el.style.left = ofs[0] + "px";
 		if (!skipy) el.style.top =  ofs[1] + "px";
@@ -325,7 +331,7 @@ zDom = { //static methods
 			hgh = box.height,
 			x = dim.top,
 			y = dim.left;
-			
+
 		switch(where) {
 		case "before_start":
 			y -= hgh;
@@ -350,7 +356,7 @@ zDom = { //static methods
 			break;
 		case "end_before":
 			x += dim.width;
-			break; 
+			break;
 		case "end_after":
 			x += dim.width;
 			y += dim.height - hgh;
@@ -380,7 +386,7 @@ zDom = { //static methods
 			if (y + hgh > scMaxY) y = scMaxY - hgh;
 			if (y < scY) y = scY;
 		}
-	
+
 		box = zDom.toStyleOffset(el, x, y);
 		el.style.left = box[0] + "px";
 		el.style.top = box[1] + "px";
@@ -396,10 +402,10 @@ zDom = { //static methods
 		do {
 			//Fix opera bug (see the page function)
 			// If tag is "IMG" or "TR", the "DIV" element's scrollTop should be ignored.
-			// Because the offsetTop of element "IMG" or "TR" is excluded its scrollTop.  
+			// Because the offsetTop of element "IMG" or "TR" is excluded its scrollTop.
 			var t2 = zDom.tag(el);
 			if (!zk.opera || t2 == 'BODY'
-			|| (tag != "TR" && tag != "IMG"  && t2 == 'DIV')) { 
+			|| (tag != "TR" && tag != "IMG"  && t2 == 'DIV')) {
 				t += el.scrollTop  || 0;
 				l += el.scrollLeft || 0;
 			}
@@ -444,9 +450,9 @@ zDom = { //static methods
 				l += zk.innerX() + el.offsetLeft;
 				break;
 			} else {
-				//Fix opera bug. If the parent of "INPUT" or "SPAN" is "DIV" 
+				//Fix opera bug. If the parent of "INPUT" or "SPAN" is "DIV"
 				// and the scrollTop of "DIV" is more than 0, the offsetTop of "INPUT" or "SPAN" always is wrong.
-				if (zk.opera) { 
+				if (zk.opera) {
 					if (operaBug && el.nodeName == "DIV" && el.scrollTop != 0)
 						t += el.scrollTop || 0;
 					operaBug = el.nodeName == "SPAN" || el.nodeName == "INPUT";
@@ -591,7 +597,7 @@ zDom = { //static methods
 			// Safari fix
 			if (p.offsetParent==document.body)
 			if (zDom.getStyle(p, 'position')=='absolute') break;
-	
+
 		} while (p = p.offsetParent);
 
 		do {
@@ -651,14 +657,23 @@ zDom = { //static methods
 		return {width: originalWidth, height: originalHeight,
 			top: originalTop, left: originalLeft};
 	},
-
+	// This zk.reClassNameCache and zk.getClassRegEx function are based on the Yahoo! Inc.,
+	// which can be found here - http://developer.yahoo.net/yui
+	reClassNameCache: {},
+	getClassRegEx: function (clsnm) {
+		var re = zDom.reClassNameCache[clsnm];
+		if (!re) {
+			re = new RegExp('(?:^|\\s+)' + clsnm + '(?:\\s+|$)', 'g');
+			zDom.reClassNameCache[clsnm] = re;
+		}
+		return re;
+	},
 	//class and style//
 	/** Returns whether it is part of the class name
 	 * of the specified element.
 	 */
 	hasClass: function (el, clsnm) {
-		var cn = el ? el.className: '';
-		return cn && (' '+cn+' ').indexOf(' '+clsnm+' ') != -1;
+		return el.className.match(zk.getClassRegEx(clsnm)) != null;
 	},
 	/** Adds the specified class name to the class name of the specified element.
 	 */
@@ -674,13 +689,13 @@ zDom = { //static methods
 	 */
 	rmClass: function (el, clsnm) {
 		if (el && zDom.hasClass(el, clsnm)) {
-			var re = new RegExp('(?:^|\\s+)' + clsnm + '(?:\\s+|$)', "g");
+			var re = zDom.getClassRegEx(clsnm);
 			el.className = el.className.replace(re, " ").trim();
 		}
 	},
-	
+
 	_txtstyles: ["color", "background-color", "background",	"white-space"],
-	
+
 	/** Returns the text-relevant style (same as HTMLs.getTextRelevantStyle).
 	 * @param incwd whether to include width
 	 * @param inchgh whether to include height
@@ -692,7 +707,7 @@ zDom = { //static methods
 			var s = k >= 0 ? style.substring(j, k): style.substring(j);
 			var l = s.indexOf(':');
 			var nm = l < 0 ? s.trim(): s.substring(0, l).trim();
-	
+
 			if (nm.startsWith("font")  || nm.startsWith("text")
 			|| zDom._txtstyles.$contains(nm)
 			|| (incwd && nm == "width") || (inchgh && nm == "height"))
@@ -1040,7 +1055,7 @@ zDom = { //static methods
 		for (var n = el.lastChild; n; n = n.previousSibling)
 			if (zDom.tag(n) == tagName)
 				return n;
-	
+
 		if (descendant) {
 			for (var n = el.lastChild; n; n = n.previousSibling) {
 				var chd = zDom.lastChild(n, tagName, descendant);
@@ -1209,16 +1224,16 @@ zDom = { //static methods
 	getSelectionRange: function(inp) {
 		try {
 			if (document.selection != null && inp.selectionStart == null) { //IE
-				var range = document.selection.createRange(); 
-				var rangetwo = inp.createTextRange(); 
-				var stored_range = ""; 
+				var range = document.selection.createRange();
+				var rangetwo = inp.createTextRange();
+				var stored_range = "";
 				if(inp.type.toLowerCase() == "text"){
 					stored_range = rangetwo.duplicate();
 				}else{
-					 stored_range = range.duplicate(); 
-					 stored_range.moveToElementText(inp); 
+					 stored_range = range.duplicate();
+					 stored_range.moveToElementText(inp);
 				}
-				stored_range.setEndPoint('EndToEnd', range); 
+				stored_range.setEndPoint('EndToEnd', range);
 				var start = stored_range.text.length - range.text.length;
 				return [start, start + range.text.length];
 			} else { //Gecko
@@ -1234,7 +1249,7 @@ zDom = { //static methods
 		if (start > len) start = len;
 		if (end < 0) end = 0;
 		if (end > len) end = len;
-	
+
 		if (inp.setSelectionRange) {
 			inp.setSelectionRange(start, end);
 			inp.focus();
@@ -1253,7 +1268,7 @@ zDom = { //static methods
 	//selection//
 	clearSelection: function () {
 		try{
-			if (window["getSelection"]) { 
+			if (window["getSelection"]) {
 				if (zk.safari) window.getSelection().collapse();
 				else window.getSelection().removeAllRanges();
 			} else if (document.selection) {
@@ -1272,7 +1287,7 @@ zDom = { //static methods
 			if (zk.gecko)
 				el.style.MozUserSelect = "none";
 			else if (zk.safari)
-				el.style.KhtmlUserSelect = "none"; 
+				el.style.KhtmlUserSelect = "none";
 			else if (zk.ie)
 				el.onselectstart = function (evt) {
 					var n = zEvt.target(evt), tag = zDom.tag(n);
@@ -1284,7 +1299,7 @@ zDom = { //static methods
 		el = zDom.$(el);
 		if (el)
 			if (zk.gecko)
-				el.style.MozUserSelect = ""; 
+				el.style.MozUserSelect = "";
 			else if (zk.safari)
 				el.style.KhtmlUserSelect = "";
 			else if (zk.ie)
@@ -1447,11 +1462,11 @@ zk.copy(zDom,
 zk.Color = zk.$extends(zk.Object, {
 	$init: function (color) {
 		var rgb = this.rgb = [0, 0, 0];
-		if(color.slice(0,4) == 'rgb(') {  
-			var cols = color.slice(4,color.length-1).split(',');  
+		if(color.slice(0,4) == 'rgb(') {
+			var cols = color.slice(4,color.length-1).split(',');
 			for (var j = 0, len = cols.length; j < len; j++)
 				rgb[j] = parseInt(cols[j]); //dec
-		} else if(color.slice(0,1) == '#') {  
+		} else if(color.slice(0,1) == '#') {
 			if (color.length == 4) {
 				for(var j = 0; j < 3; j++) {
 					var cc = color.charAt(j + 1);
@@ -1460,7 +1475,7 @@ zk.Color = zk.$extends(zk.Object, {
 			} else if(color.length == 7) {
 				for(var j = 0, i = 1; j < 3; j++, i += 2)
 					rgb[j] = parseInt(color.substring(i, i+2), 16); //hex
-			}  
+			}
 		}
 	},
 	toString: function () {
