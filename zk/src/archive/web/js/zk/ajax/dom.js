@@ -127,7 +127,7 @@ zDom = { //static methods
 		hgh -= zDom.padBorderHeight(el)
 			+ zk.parseInt(zDom.getStyle(el, "margin-top"))
 			+ zk.parseInt(zDom.getStyle(el, "margin-bottom"));
-		el.style.height = (hgh > 0 ? hgh: 0) + "px";
+		el.style.height = max(0, hgh) + "px";
 	},
 
 	/**
