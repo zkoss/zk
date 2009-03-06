@@ -26,12 +26,7 @@ if (!window.zkau) { //avoid eval twice
  */
 if (!window.Droppable_effect) { //define it only if not customized
 	Droppable_effect = function (e, undo) {
-		if (undo)
-			zk.restoreStyle(e, "backgroundColor");
-		else {
-			zk.backupStyle(e, "backgroundColor");
-			e.style.backgroundColor = "#80ADE7";
-		}
+		zk[undo ? "rmClass" : "addClass"] (e, "z-drag-over");
 	};
 }
 /** Handles the error caused by processing the response.
