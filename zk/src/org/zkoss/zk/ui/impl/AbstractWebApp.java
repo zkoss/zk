@@ -52,7 +52,7 @@ import org.zkoss.zk.ui.impl.UiEngineImpl;
 abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	private static final Log log = Log.lookup(AbstractWebApp.class);
 
-	private String _appnm = "ZK", _build;
+	private String _appnm = "ZK";
 	private Configuration _config;
 	private UiEngine _engine;
 	private DesktopCacheProvider _provider;
@@ -60,6 +60,8 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	private FailoverManager _failover;
 	private IdGenerator _idgen;
 	private SessionCache _sesscache;
+
+	private static String _build;
 
 	/** Constructor.
 	 *
@@ -84,9 +86,7 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		return Version.RELEASE;
 	}
 	public final String getBuild() {
-		if (_build == null)
-			loadBuild();
-		return _build;
+		return _build == null ? loadBuild(): _build;
 	}
 	public int getSubversion(int portion) {
 		return Utils.getSubversion(getVersion(), portion);
@@ -300,18 +300,18 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		}
 	}
 
-	/** Loads the build identifier. */
-	synchronized private void loadBuild() {
+	/** Loads the build identifier.
+	 * This method is used only Internally
+	 */
+	synchronized public static String loadBuild() {
 		if (_build == null) {
 			final String FILE = "/metainfo/zk/build";
 			InputStream is = Thread.currentThread()
 				.getContextClassLoader().getResourceAsStream(FILE);
 			if (is == null) {
 				is = AbstractWebApp.class.getResourceAsStream(FILE);
-				if (is == null) {
-					_build = "";
-					return; //done;
-				}
+				if (is == null)
+					return _build = ""; //done;
 			}
 			try {
 				_build = new String(Files.readAll(is)).trim();
@@ -321,5 +321,6 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 				try {is.close();} catch (Throwable ex) {}
 			}
 		}
+		return _build;
 	}
 }
