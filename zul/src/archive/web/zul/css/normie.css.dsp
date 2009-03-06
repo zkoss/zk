@@ -153,10 +153,6 @@ span.z-vfiletree-last-open, span.z-vfiletree-last-close, span.z-vfiletree-tee, s
 .z-msgbox-error {
 	background-image: url(${c:encodeURL('~./zul/img/msgbox/stop-btn.gif')});
 }
-.z-fileupload-add,
-.z-fileupload-delete {
-	ackground-image: url(${c:encodeURL('~./zul/img/misc/drag.gif')});
-}
 <%-- error box --%>
 .z-arrow-d {
 	background-image: url(${c:encodeURL('~./zul/img/misc/arrowD.gif')});
@@ -264,10 +260,10 @@ tr.z-list-item td.z-list-item-focus {
 .z-slider-sphere-hor-btn,
 .z-slider-scale-btn,
 .z-slider-hor-btn {
-    background-image : url(${c: encodeURL('~./zul/img/slider/slider-square.gif')});
+    background-image : url(${c:encodeURL('~./zul/img/slider/slider-square.gif')});
 }
 .z-slider-scale-btn {
-	background-image : url(${c: encodeURL('~./zul/img/slider/slider-scale.gif')});
+	background-image : url(${c:encodeURL('~./zul/img/slider/slider-scale.gif')});
 }
 .z-slider-sphere-ver,
 .z-slider-ver,
@@ -278,13 +274,13 @@ tr.z-list-item td.z-list-item-focus {
 
 .z-slider-sphere-ver-btn,
 .z-slider-ver-btn {
-	background-image : url(${c: encodeURL('~./zul/img/slider/slider-v-square.gif')});
+	background-image : url(${c:encodeURL('~./zul/img/slider/slider-v-square.gif')});
 }
 .z-slider-sphere-hor-btn {
-	background-image : url(${c: encodeURL('~./zul/img/slider/slider-circle.gif')});
+	background-image : url(${c:encodeURL('~./zul/img/slider/slider-circle.gif')});
 }
 .z-slider-sphere-ver-btn {
-	background-image : url(${c: encodeURL('~./zul/img/slider/slider-v-circle.gif')});
+	background-image : url(${c:encodeURL('~./zul/img/slider/slider-v-circle.gif')});
 }
 <%-- tabbox.css.dsp --%>
 .z-tab-hl,

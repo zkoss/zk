@@ -27,6 +27,14 @@ ZK 5.0.0
     automatically
 
 	--------
+ZK 3.6.1
+* Features
+  2666743: Support component-apply in lang-addon
+  2666812: Log ZK version number at server bootup
+
+* Bugs
+
+	--------
 ZK 3.6.0
 * Features
   2276253: Allow Tab key in textbox

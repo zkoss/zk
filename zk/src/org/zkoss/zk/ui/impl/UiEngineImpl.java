@@ -1502,6 +1502,9 @@ public class UiEngineImpl implements UiEngine {
 				}
 			}
 
+			if (!desktop.isAlive())
+				throw new org.zkoss.zk.ui.DesktopUnavailableException("Unable to activate destroyed desktop, "+desktop);
+
 			//grant
 			eis.put(desktop, uv = new UiVisualizer(exec, asyncupd, recovering));
 			((DesktopCtrl)desktop).setExecution(exec);

@@ -109,6 +109,9 @@ public class WebManager {
 		if (getWebManagerIfAny(ctx) != null)
 			throw new UiException("Only one Web manager is allowed in one context: "+ctx);
 
+		log.info("Starting ZK "+org.zkoss.zk.Version.RELEASE+" (build: "+
+			org.zkoss.zk.ui.impl.AbstractWebApp.loadBuild() + ')');
+
 		_ctx = ctx;
 		_updateURI = updateURI;
 		_ctx.setAttribute(ATTR_WEB_MANAGER, this);
