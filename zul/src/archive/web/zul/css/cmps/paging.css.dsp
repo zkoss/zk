@@ -120,7 +120,9 @@
 	width:4px;
 	background-image:url(${c:encodeURL('~./zul/img/paging/pg-split.gif')});
 }
-
+.z-paging-inp {
+	border:1px solid #7F9DB9;
+}
 .z-paging-btn .z-paging-next {
 	background-position:0 0;
 	background-image:url(${c:encodeURL('~./zul/img/paging/pg-btn.png')});
