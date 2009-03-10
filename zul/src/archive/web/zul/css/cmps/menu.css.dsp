@@ -6,12 +6,9 @@
 .z-menubar-hor span,.z-menubar-hor a,.z-menubar-hor div,
 .z-menubar-ver .z-menu,.z-menubar-ver .z-menu-item,.z-menubar-ver .z-menu-btn,.z-menubar-ver .z-menu-item-btn,
 .z-menubar-ver span,.z-menubar-ver a,.z-menubar-ver div {
-	-adjust:none;
-	font-stretch:normal;
 	font-style:normal;
 	font-variant:normal;
 	font-weight:normal;
-	line-height:normal;
 	white-space:nowrap;
 	font-family: ${fontFamilyT};
 	font-size: ${fontSizeMS};
@@ -178,12 +175,9 @@
 /* define menupopup property*/
 .z-menu-popup {
 	-x-system-font:none;
-	font-size-adjust:none;
-	font-stretch:normal;
 	font-style:normal;
 	font-variant:normal;
 	font-weight:normal;
-	line-height:normal;
 	text-decoration:none;
 	white-space:nowrap;
 	font-family: ${fontFamilyT};

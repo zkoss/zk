@@ -37,12 +37,9 @@
 .z-paging div,
 .z-paging button{
 	-x-system-font:none;
-	font-size-adjust:none;
-	font-stretch:normal;
 	font-style:normal;
 	font-variant:normal;
 	font-weight:normal;
-	line-height:normal;
 	white-space:nowrap;
 	font-family: ${fontFamilyT};
 	font-size: ${fontSizeMS};
