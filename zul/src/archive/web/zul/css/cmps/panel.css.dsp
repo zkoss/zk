@@ -30,24 +30,24 @@
 	overflow: hidden;
 	position: relative;
 }
-.z-panel-bbar .z-toolbar {
+.z-panel-b .z-toolbar {
 	border: 1px solid #b1cbd5;
 	padding: 2px;
 	border-top: 0 none;
 	overflow: hidden;
 }
-.z-panel-tbar .z-toolbar {
+.z-panel-t .z-toolbar {
 	border: 1px solid #b1cbd5;
 	padding: 2px;
 	border-top: 0 none;
 	overflow: hidden;
 }
-.z-panel-tbar.z-panel-noheader .z-toolbar {
+.z-panel-t.z-panel-noheader .z-toolbar {
 	border-top: 1px solid #b1cbd5;
 	border-bottom: 0;
 	overflow: hidden;
 }
-.z-panel-cm .z-panel-tbar .z-toolbar {
+.z-panel-cm .z-panel-t .z-toolbar {
 	border-top: 1px solid #b1cbd5;
 	border-bottom: 0 none;
 }
@@ -183,7 +183,7 @@
 	line-height:0;
 	zoom: 1;
 }
-.z-panel-nofbar {
+.z-panel-nof {
 	display: none;
 }
 .z-panel-noborder .z-panel-children-noborder {
@@ -193,11 +193,11 @@
 	border-width: 0;
 	border-bottom: 1px solid #b1cbd5;
 }
-.z-panel-noborder .z-panel-tbar-noborder .z-toolbar {
+.z-panel-noborder .z-panel-noborder-t .z-toolbar {
 	border-width: 0;
 	border-bottom: 1px solid #b1cbd5;
 }
-.z-panel-noborder .z-panel-bbar-noborder .z-toolbar {
+.z-panel-noborder .z-panel-noborder-b .z-toolbar {
 	border-width: 0;
 	border-top: 1px solid #b1cbd5;
 }
