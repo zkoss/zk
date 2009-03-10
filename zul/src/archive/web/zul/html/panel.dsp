@@ -39,7 +39,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <div id="${self.uuid}!minimize" class="${zcls}-icon ${zcls}-min"></div>
 					</c:if>
 					<c:if test="${self.collapsible}">
-<div id="${self.uuid}!toggle" class="${zcls}-icon ${zcls}-toggle"></div>
+<div id="${self.uuid}!exp" class="${zcls}-icon ${zcls}-exp"></div>
 					</c:if>
 					<c:out value="${self.title}" />
 				</c:when>

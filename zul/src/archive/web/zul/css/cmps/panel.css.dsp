@@ -121,19 +121,21 @@
 	line-height: 0;
 	font-size: 0;
 }
-.z-panel {
+.z-panel,
+.z-panel-header {
 	overflow: hidden;
 }
 .z-panel-header {
-	overflow: hidden;
-	font: normal ${fontSizeM} ${fontFamilyT};
-	font-weight:bold;
-	background:transparent repeat-x 0 -1px;
+	background:transparent repeat-x 0 0;
 	background-image: url(${c:encodeURL('~./zul/img/wnd/panel-hm.png')});
 	border: 1px solid #B1CBD5;
 	color: #0F3B82;
-	padding: 5px 3px 4px 5px;
-	zoom: 1;
+	padding: 5px;
+	padding-bottom: 4px;
+	padding-right: 3px;	
+	font-size: ${fontSizeM};
+	font-family: ${fontFamilyT};
+	font-weight: bold;
 }
 .z-panel-hl .z-panel.header {
 	background-color: transparent;
@@ -245,18 +247,18 @@
 .z-panel-close-over {
 	background-position: -16px -48px;
 }
-.z-panel-toggle {
+.z-panel-exp {
 	background-position: 0 -64px;
 }
-.z-panel-toggle-over {
+.z-panel-exp-over {
 	background-position: -16px -64px;
 }
-.z-panel-colpsd .z-panel-toggle {
+.z-panel-colpsd .z-panel-exp {
 	background-position: 0 -96px;
 }
 .z-panel-colpsd {
 	height:auto !important;
 }
-.z-panel-colpsd .z-panel-toggle-over {
+.z-panel-colpsd .z-panel-exp-over {
 	background-position: -16px -96px;
 }

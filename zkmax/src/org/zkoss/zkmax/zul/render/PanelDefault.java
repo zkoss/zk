@@ -78,8 +78,8 @@ public class PanelDefault implements ComponentRenderer {
 					wh.write("<div id=\"").write(uuid).write("!minimize\" class=\"")
 						.write(zcls).write("-icon ").write(zcls).write("-min\"></div>");
 				if (self.isCollapsible())
-					wh.write("<div id=\"").write(uuid).write("!toggle\" class=\"")
-						.write(zcls).write("-icon ").write(zcls).write("-toggle\"></div>");
+					wh.write("<div id=\"").write(uuid).write("!exp\" class=\"")
+						.write(zcls).write("-icon ").write(zcls).write("-exp\"></div>");
 				new Out(title).render(out);				
 			} else wh.write(caption);
 			

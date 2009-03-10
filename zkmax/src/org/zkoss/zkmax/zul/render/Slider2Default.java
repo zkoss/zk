@@ -42,10 +42,9 @@ public class Slider2Default implements ComponentRenderer {
 		wh.write("<div id=\"").write(uuid).write("\"")
 			.write(self.getOuterAttrs()).write(self.getInnerAttrs())
 			.write(" z.type=\"zul.sld.Sld\">")
-			.write("<div class=\"").write(zcls).write("-end\">")
 			.write("<div id=\"").write(uuid).write("!inner\" class=\"").write(zcls).write("-center\">")
 			.write("<div id=\"").write(uuid).write("!btn\" class=\"").write(zcls).write("-btn\"></div>")
-			.write("</div></div></div>");
+			.write("</div></div>");
 	}
 
 }
