@@ -40,12 +40,12 @@ zkPanel = {
 			}
 		}
 		if (getZKAttr(cmp, "collapsible") == "true") {
-			var toggle = $e(cmp.id + "!toggle");
-			if (toggle) {
-				zk.listen(toggle, "click", zkPanel.onOpen);
-				zk.listen(toggle, "mouseover", this.onToggleMouseover);
-				zk.listen(toggle, "mouseout", this.onToggleMouseout);
-				if (!toggle.style.cursor) toggle.style.cursor = "default";
+			var exp = $e(cmp.id + "!exp");
+			if (exp) {
+				zk.listen(exp, "click", zkPanel.onOpen);
+				zk.listen(exp, "mouseover", this.onToggleMouseover);
+				zk.listen(exp, "mouseout", this.onToggleMouseout);
+				if (!exp.style.cursor) exp.style.cursor = "default";
 			}
 		}
 		if (getZKAttr(cmp, "maximizable") == "true") {
@@ -96,7 +96,7 @@ zkPanel = {
 	_ignoreMove: function (cmp, pointer, event) {
 		var target = Event.element(event);
 		if (!target || target.id.indexOf("!close") > -1
-			|| target.id.indexOf("!toggle") > -1 || target.id.indexOf("!minimize") > -1
+			|| target.id.indexOf("!exp") > -1 || target.id.indexOf("!minimize") > -1
 			|| target.id.indexOf("!maximize") > -1) return true;
 		return false;
 	},
@@ -156,13 +156,13 @@ zkPanel = {
 		if (!evt) evt = window.event;
 		var btn = Event.element(evt),
 			cmp = $parentByType(btn, "Panel");
-		zk.addClass(btn, getZKAttr(cmp, "zcls") + "-toggle-over");
+		zk.addClass(btn, getZKAttr(cmp, "zcls") + "-exp-over");
 	},
 	onToggleMouseout: function (evt) {
 		if (!evt) evt = window.event;
 		var btn = Event.element(evt),
 			cmp = $parentByType(btn, "Panel");
-		zk.rmClass(btn, getZKAttr(cmp, "zcls") + "-toggle-over");
+		zk.rmClass(btn, getZKAttr(cmp, "zcls") + "-exp-over");
 	},
 	onMinimizeMouseover: function (evt) {
 		if (!evt) evt = window.event;
