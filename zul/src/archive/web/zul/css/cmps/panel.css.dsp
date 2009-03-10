@@ -28,8 +28,9 @@
 	padding-bottom: 4px;
 	background: transparent;
 	border: 0 none;
-	font: normal ${fontSizeM} ${fontFamilyT};
 	font-weight:bold;
+	font-size: ${fontSizeM};
+	font-family: ${fontFamilyT};
 }
 <%-- Header Left --%>
 .z-panel-hl {
@@ -133,9 +134,9 @@
 	padding: 5px;
 	padding-bottom: 4px;
 	padding-right: 3px;	
+	font-weight: bold;
 	font-size: ${fontSizeM};
 	font-family: ${fontFamilyT};
-	font-weight: bold;
 }
 .z-panel-hl .z-panel.header {
 	background-color: transparent;
