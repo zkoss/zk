@@ -36,7 +36,6 @@
 .z-paging input,
 .z-paging div,
 .z-paging button{
-	-x-system-font:none;
 	font-style:normal;
 	font-variant:normal;
 	font-weight:normal;

@@ -174,7 +174,6 @@
 }
 /* define menupopup property*/
 .z-menu-popup {
-	-x-system-font:none;
 	font-style:normal;
 	font-variant:normal;
 	font-weight:normal;

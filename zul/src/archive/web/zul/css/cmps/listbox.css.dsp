@@ -113,8 +113,11 @@ td.z-list-group-inner {
 	border-bottom: 1px solid #bcd2ef;
 }
 td.z-list-group-inner div.z-list-cell-cnt {
-	color:#2C559C; font: normal ${fontSizeM} ${fontFamilyT};
-	padding: 4px 2px; width: auto;font-weight:bold;
+	color:#2C559C;
+	padding: 4px 2px; width: auto;
+	font-weight: bold;
+	font-size: ${fontSizeM};
+	font-family: ${fontFamilyT};
 }
 .z-list-group-img{
 	width: 18px; min-height: 18px; height: 100%;
@@ -134,5 +137,8 @@ td.z-list-group-inner div.z-list-cell-cnt {
 	background-image: url(${c:encodeURL('~./zul/img/grid/groupfoot_bg.gif')});
 }
 td.z-list-group-foot-inner div.z-list-cell-cnt {
-	color: #2C559C; font: normal ${fontSizeM} ${fontFamilyT};font-weight:bold;
+	color: #2C559C;
+	font-weight: bold;
+	font-size: ${fontSizeM};
+	font-family: ${fontFamilyT};
 }
