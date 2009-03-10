@@ -105,9 +105,9 @@ public class PanelDefault implements ComponentRenderer {
 		}
 		
 		if (self.getTopToolbar() != null) {
-			wh.write("<div id=\"").write(uuid).write("!tb\" class=\"").write(zcls).write("-tbar");
+			wh.write("<div id=\"").write(uuid).write("!tb\" class=\"").write(zcls).write("-top");
 			if (!hasBorder)
-				wh.write(' ').write(zcls).write("-tbar-noborder");
+				wh.write(' ').write(zcls).write("-top-noborder");
 			if (self.isFramable() && caption == null && noTitle)
 				wh.write(' ').write(zcls).write("-noheader");
 			wh.write("\">").write(self.getTopToolbar()).write("</div>");
@@ -115,9 +115,9 @@ public class PanelDefault implements ComponentRenderer {
 		wh.write(self.getPanelchildren());
 
 		if (self.getBottomToolbar() != null) {
-			wh.write("<div id=\"").write(uuid).write("!bb\" class=\"").write(zcls).write("-bbar");
+			wh.write("<div id=\"").write(uuid).write("!bb\" class=\"").write(zcls).write("-btm");
 			if (!hasBorder)
-				wh.write(' ').write(zcls).write("-bbar-noborder");
+				wh.write(' ').write(zcls).write("-btm-noborder");
 			if (self.isFramable() && caption == null && noTitle)
 				wh.write(' ').write(zcls).write("-noheader");
 			wh.write("\">").write(self.getBottomToolbar()).write("</div>");
@@ -126,12 +126,12 @@ public class PanelDefault implements ComponentRenderer {
 		if (self.isFramable()) {
 			wh.write("</div></div></div><div class=\"").write(zcls).write("-fl");
 			if (self.getFootToolbar() == null)
-				wh.write(' ').write(zcls).write("-nofbar");
+				wh.write(' ').write(zcls).write("-nobtm2");
 			wh.write("\"><div class=\"").write(zcls).write("-fr\"><div class=\"").write(zcls).write("-fm\">");
 		}
 		if (self.getFootToolbar() != null) {
 			wh.write("<div id=\"").write(uuid).write("!fb\" class=\"").write(zcls)
-				.write("-fbar\">").write(self.getFootToolbar()).write("</div>");
+				.write("-btm2\">").write(self.getFootToolbar()).write("</div>");
 		}
 		if (self.isFramable())
 			wh.write("</div></div></div><div class=\"").write(zcls).write("-bl\"><div class=\"")

@@ -44,7 +44,7 @@ public class PopupDefault implements ComponentRenderer {
 			.write("<div class=\"").write(zcls).write("-tl\"><div class=\"").write(zcls)
 			.write("-tr\"></div></div>")
 			
-			.write("<div id=\"").write(uuid).write("!bwrap\" class=\"").write(zcls)
+			.write("<div id=\"").write(uuid).write("!body\" class=\"").write(zcls)
 			.write("-cl\">")
 			.write("<div class=\"").write(zcls).write("-cr\"><div class=\"").write(zcls).write("-cm\"><div id=\"")
 			.write(uuid).write("!cave\" class=\"").write(zcls).write("-cnt\">")
