@@ -24,7 +24,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		</div>
 	</div>
 
-	<div id="${self.uuid}!bwrap" class="${zcls}-cl">
+	<div id="${self.uuid}!body" class="${zcls}-cl">
 		<div class="${zcls}-cr">
 			<div class="${zcls}-cm">
 				<div id="${self.uuid}!cave" class="${zcls}-cnt">
