@@ -57,7 +57,7 @@ ${z:redraw(self.caption, null)}
 <div id="${self.uuid}!body" class="${zcls}-body" <c:if test="${!self.open}">style="display:none;"</c:if>>
 	<c:if test="${self.framable}"><div class="${zcls}-cl"><div class="${zcls}-cr"><div class="${zcls}-cm <c:if test="${noheader}">${zcls}-noheader</c:if>"></c:if>
 		<c:if test="${!empty self.topToolbar}">
-<div id="${self.uuid}!tb" class="${zcls}-tbar <c:if test="${self.border != 'normal'}">${zcls}-tbar-noborder</c:if> <c:if test="${noheader}">${zcls}-noheader</c:if>">
+<div id="${self.uuid}!tb" class="${zcls}-top <c:if test="${self.border != 'normal'}">${zcls}-top-noborder</c:if> <c:if test="${noheader}">${zcls}-noheader</c:if>">
 ${z:redraw(self.topToolbar, null)}
 </div>
 		</c:if>
@@ -65,16 +65,16 @@ ${z:redraw(self.topToolbar, null)}
 ${z:redraw(self.panelchildren, null)}
 		</c:if>
 		<c:if test="${!empty self.bottomToolbar}">
-<div id="${self.uuid}!bb" class="${zcls}-bbar <c:if test="${self.border != 'normal'}">${zcls}-bbar-noborder</c:if> <c:if test="${noheader}">${zcls}-noheader</c:if>">
+<div id="${self.uuid}!bb" class="${zcls}-btm <c:if test="${self.border != 'normal'}">${zcls}-btm-noborder</c:if> <c:if test="${noheader}">${zcls}-noheader</c:if>">
 ${z:redraw(self.bottomToolbar, null)}
 </div>
 		</c:if>
 	<c:if test="${self.framable}">
 </div></div></div>
-<div class="${zcls}-fl <c:if test="${empty self.footToolbar}">${zcls}-nofbar</c:if>"><div class="${zcls}-fr"><div class="${zcls}-fm">
+<div class="${zcls}-fl <c:if test="${empty self.footToolbar}">${zcls}-nobtm2</c:if>"><div class="${zcls}-fr"><div class="${zcls}-fm">
 	</c:if>
 	<c:if test="${!empty self.footToolbar}">
-<div id="${self.uuid}!fb" class="${zcls}-fbar">
+<div id="${self.uuid}!fb" class="${zcls}-btm2">
 ${z:redraw(self.footToolbar, null)}
 </div>
 	</c:if>

@@ -1,60 +1,5 @@
 <%@ page contentType="text/css;charset=UTF-8" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
-.z-panel-move-ghost {
-	position: absolute;
-	background: #D7E6F7;
-	overflow: hidden;
-	filter: alpha(opacity=65) !important; <%-- IE --%>
-	opacity: .65 !important;
-	cursor: move !important;
-}
-.z-panel-move-ghost dl {
-	border: 1px solid #B1CBD5;
-	margin: 0; padding: 0;
-	overflow: hidden;
-	display: block;
-	background: #D7E6F7;
-	line-height: 0;
-	font-size: 0;
-}
-.z-panel-move-block {
-	border: 2px dashed #B1CBD5;
-}
-.z-panel {
-	overflow: hidden;
-}
-.z-panel-children {
- 	background: white;
-	border: 1px solid #b1cbd5;
-	border-top: 0;
-	overflow: hidden;
-	position: relative;
-}
-.z-panel-btm .z-toolbar {
-	border: 1px solid #b1cbd5;
-	padding: 2px;
-	border-top: 0 none;
-	overflow: hidden;
-}
-.z-panel-top .z-toolbar {
-	border: 1px solid #b1cbd5;
-	padding: 2px;
-	border-top: 0 none;
-	overflow: hidden;
-}
-.z-panel-top.z-panel-noheader .z-toolbar {
-	border-top: 1px solid #b1cbd5;
-	border-bottom: 0;
-	overflow: hidden;
-}
-.z-panel-cm .z-panel-top .z-toolbar {
-	border-top: 1px solid #b1cbd5;
-	border-bottom: 0 none;
-}
-.z-panel-children-noheader,
-.z-panel-cm .z-panel-children {
-	border-top: 1px solid #b1cbd5;
-}
 <%-- Top Left --%>
 .z-panel-tl {
 	background: transparent no-repeat 0 top;
@@ -76,28 +21,7 @@
 	line-height:0;
 	zoom: 1;
 }
-.z-panel-noheader {
-	border-bottom: 0px;
-}
 <%-- Header --%>
-.z-panel-header {
-	overflow: hidden;
-	color: #0F3B82;
-	font: normal ${fontSizeM} ${fontFamilyT};
-	padding: 5px 3px 4px 5px;
-	border: 1px solid #b1cbd5;
-	line-height: 15px;
-	background:transparent repeat-x 0 -1px;
-	background-image: url(${c:encodeURL('~./zul/img/wnd/panel-hm.png')});
-	font-weight:bold;
-	zoom: 1;
-}
-.z-panel-body,
-.z-panel-children,
-.z-panel-header {
-	overflow: hidden;
-	zoom: 1;
-}
 .z-panel-hm .z-panel-header {
 	color: #0F3B82;
 	padding: 0;
@@ -135,13 +59,6 @@
 	margin: 0;
 	background: #CDF0FF;
 	padding-top: 6px;
-}
-.z-panel-cm.z-panel-noheader {
-	padding: 0;
-}
-.z-panel-cm .z-panel-children {
-	background: transparent;
-	border: 1px solid #b1cbd5;
 }
 <%-- Center Left, Footer Left --%>
 .z-panel-cl,
@@ -183,53 +100,126 @@
 	line-height:0;
 	zoom: 1;
 }
-.z-panel-nobtm2 {
-	display: none;
+.z-panel-move-ghost {
+	position: absolute;
+	background: #D7E6F7;
+	overflow: hidden;
+	filter: alpha(opacity=60) !important; <%-- IE --%>
+	opacity: .6 !important;
+	cursor: move !important;
+}
+.z-panel-move-block {
+	border: 2px dashed #B1CBD5;
+}
+.z-panel-move-ghost dl {
+	border: 1px solid #B1CBD5;
+	margin: 0;
+	overflow: hidden;
+	padding: 0;
+	display: block;
+	background: #D7E6F7;
+	line-height: 0;
+	font-size: 0;
+}
+.z-panel {
+	overflow: hidden;
+}
+.z-panel-header {
+	overflow: hidden;
+	font: normal ${fontSizeM} ${fontFamilyT};
+	font-weight:bold;
+	background:transparent repeat-x 0 -1px;
+	background-image: url(${c:encodeURL('~./zul/img/wnd/panel-hm.png')});
+	border: 1px solid #B1CBD5;
+	color: #0F3B82;
+	padding: 5px 3px 4px 5px;
+	zoom: 1;
+}
+.z-panel-hl .z-panel.header {
+	background-color: transparent;
+	border: 0;
+	color: #0F3B82;
+	padding: 0 0 4px;
+}
+.z-panel-body {
+	overflow: hidden;
+	zoom: 1;
+}
+.z-panel-children {
+	overflow: hidden;
+	background-color: white;
+	border: 1px solid #B1CBD5;
+	border-top: 0;
+	position: relative;
+	zoom: 1;
+}
+.z-panel-body .z-panel-top .z-toolbar,
+.z-panel-body .z-panel-btm .z-toolbar {
+	border: 1px solid #B1CBD5;
+	border-top: 0;
+	overflow: hidden;
+	padding: 2px;
+}
+.z-panel-cl .z-panel-top .z-toolbar {
+	border-top: 1px solid #B1CBD5;
+	border-bottom: 0;
+}
+.z-panel-cl .z-panel-children {
+	background-color: transparent;
+	border: 1px solid #B1CBD5;
+}
+.z-panel-children-noheader,
+.z-panel-cl .z-panel-children {
+	border-top: 1px solid #B1CBD5;
 }
 .z-panel-noborder .z-panel-children-noborder {
 	border-width: 0;
 }
-.z-panel-noborder .z-panel-header-noborder {
+.z-panel-children-noheader {
+	border-top: 1px solid #B1CBD5;
+}
+.z-panel-fl.z-panel-nobtm2 {
+	display: none;
+}
+.z-panel-cm.z-panel-noheader {
+	padding: 0;
+}
+.z-panel-noheader {
+	border-bottom: 0;
+}
+.z-panel-top-noborder .z-toolbar {
+	border-bottom: 0;
+	border-top: 1px solid #B1CBD5;
+	overflow: hidden;
+}
+.z-panel-noborder .z-panel-top.z-panel-top-noborder .z-toolbar {
+	border-bottom: 1px solid #B1CBD5;
+	border-width: 0 0 1px;
+}
+.z-panel-noborder .z-panel-btm.z-panel-btm-noborder .z-toolbar {
+	border-top: 1px solid #B1CBD5;
+	border-width: 1px 0 0;
+}
+.z-panel-noborder .z-panel-header.z-panel-header-noborder {
 	border-width: 0;
 	border-bottom: 1px solid #b1cbd5;
 }
-.z-panel-noborder .z-panel-top-noborder .z-toolbar {
-	border-width: 0;
-	border-bottom: 1px solid #b1cbd5;
-}
-.z-panel-noborder .z-panel-btm-noborder .z-toolbar {
-	border-width: 0;
-	border-top: 1px solid #b1cbd5;
+.z-panel-top.z-panel-noheader .z-toolbar {
+	border-bottom: 0;
+	border-top: 1px solid #B1CBD5;
+	overflow: hidden;
 }
 <%-- Panel Tool --%>
 .z-panel-icon {
-	overflow: hidden; width: 16px; height: 16px; float: right; cursor: pointer;
+	overflow: hidden; 
+	float: right;
+	margin-left: 2px;
 	background-color : transparent;
 	background-image : url(${c:encodeURL('~./zul/img/wnd/btn.gif')});
 	background-position : 0 0;
 	background-repeat : no-repeat;
-	margin-left: 2px;
-}
-.z-panel-toggle {
-	background-position: 0 -64px;
-}
-.z-panel-toggle-over {
-	background-position: -16px -64px;
-}
-.z-panel-colpsd .z-panel-toggle {
-	background-position: 0 -96px;
-}
-.z-panel-colpsd {
-	height:auto !important;
-}
-.z-panel-colpsd .z-panel-toggle-over {
-	background-position: -16px -96px;
-}
-.z-panel-close {
-	background-position: 0 -48px;
-}
-.z-panel-close-over {
-	background-position: -16px -48px;
+	width: 16px;
+	height: 16px;
 }
 .z-panel-min {
 	background-position: 0 0;
@@ -248,4 +238,25 @@
 }
 .z-panel-maxd-over {
 	background-position: -16px -32px;
+}
+.z-panel-close {
+	background-position: 0 -48px;
+}
+.z-panel-close-over {
+	background-position: -16px -48px;
+}
+.z-panel-toggle {
+	background-position: 0 -64px;
+}
+.z-panel-toggle-over {
+	background-position: -16px -64px;
+}
+.z-panel-colpsd .z-panel-toggle {
+	background-position: 0 -96px;
+}
+.z-panel-colpsd {
+	height:auto !important;
+}
+.z-panel-colpsd .z-panel-toggle-over {
+	background-position: -16px -96px;
 }
