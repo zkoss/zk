@@ -79,8 +79,8 @@ public class RepeatableInputStream extends InputStream implements Repeatable {
 
 	private RepeatableInputStream(InputStream is) {
 		_org = is;
-		_bufmaxsz = getIntProp(BUFFER_LIMIT_SIZE, 20 * 1024 * 1024);
-		_memmaxsz = getIntProp(MEMORY_LIMIT_SIZE, 512 * 1024);
+		_bufmaxsz = Library.getIntProperty(BUFFER_LIMIT_SIZE, 20 * 1024 * 1024);
+		_memmaxsz = Library.getIntProperty(MEMORY_LIMIT_SIZE, 512 * 1024);
 	}
 
 	/**
@@ -165,17 +165,6 @@ public class RepeatableInputStream extends InputStream implements Repeatable {
 		if (url == null)
 			throw new IllegalArgumentException("null");
 		return new RepeatableURLInputStream(url);
-	}
-
-	/*package*/ static int getIntProp(String name, int defVal) {
-		String val = Library.getProperty(name);
-		try {
-			if (val != null)
-				return Integer.parseInt(val);
-		} catch (Throwable ex) { //ignore
-			log.warning("Ignored: unable to parse "+name+", value="+val);
-		}
-		return defVal;
 	}
 
 	private OutputStream getOutputStream() throws IOException {

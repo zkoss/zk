@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.zkoss.mesg.Messages;
 import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
+import org.zkoss.util.CacheMap;
 import org.zkoss.util.media.Media;
 import org.zkoss.util.media.AMedia;
 import org.zkoss.util.logging.Log;
@@ -48,6 +49,16 @@ import org.zkoss.zkmax.zul.FiledownloadListener;
 /**
  * The AU processor to handle the resumable download.
  *
+ * <p>There are two library properties that can control the number of allowed
+ * resumable downloads.
+ * <dl>
+ * <dt>org.zkoss.zk.download.resumable.lifetime</dt>
+ * <dd>Specifies when the download URL will be expired (unit: second).<br/>
+ * Default: 14400 (i.e., 4 hours).</dd>
+ * <dt>org.zkoss.zk.download.resumable.maxsize</dt>
+ * <dd>Specifies the maximal allowed number of resumable downloads.<br/>
+ * Default: 4096.</dd>
+ * </dl>
  * @author tomyeh
  * @since 3.5.0
  * @see org.zkoss.zkmax.zul.Filedownload
@@ -56,6 +67,11 @@ public class AuDownloader implements AuProcessor {
 	private static final Log log = Log.lookup(AuDownloader.class);
 	private static FiledownloadListener _listener;
 	private static final String URI_PREFIX = "/download";
+
+	/** A map of allowed download.
+	 * To avoid security hole, we have to limit access to recognized URL only
+	 */
+	private static final CacheMap _dls= new CacheMap();
 
 	/** Initializes the downloader.
 	 */
@@ -72,6 +88,11 @@ public class AuDownloader implements AuProcessor {
 
 			DHtmlUpdateServlet
 				.addAuProcessor(wapp, URI_PREFIX, new AuDownloader());
+
+			_dls.setMaxSize(Library.getIntProperty(
+				"org.zkoss.zk.download.resumable.maxsize", 1024 * 4));
+			_dls.setLifetime(Library.getIntProperty(
+				"org.zkoss.zk.download.resumable.lifetime", 4 * 60 * 60) * 1000);
 		}
 	}
 
@@ -97,7 +118,7 @@ public class AuDownloader implements AuProcessor {
 		return getDownloadURI('p', path, contentType, data);
 	}
 	private static String
-	getDownloadURI(char type, String path, String contentType, String data) {
+	getDownloadURI(final char type, final String path, String contentType, String data) {
 		final Desktop desktop = Executions.getCurrent().getDesktop();
 
 		final StringBuffer sb = new StringBuffer(256)
@@ -131,6 +152,10 @@ public class AuDownloader implements AuProcessor {
 			sb.append('/').append(path.substring(j + 1));
 		} else {
 			sb.append(path);
+		}
+
+		synchronized (_dls) {
+			_dls.put(path, new Character(type));
 		}
 		return desktop.getUpdateURI(sb.toString());
 	}
@@ -234,6 +259,17 @@ public class AuDownloader implements AuProcessor {
 		Media media = null;
 		Object source = null;
 		if (path != null && path.length() > 0) {
+			//make sure it is still valid
+			Object o;
+			synchronized (_dls) {
+				_dls.expunge();
+				o = _dls.get(path);
+			}
+			if (!(o instanceof Character) || ((Character)o).charValue() != type) {
+				response.sendError(response.SC_GONE, Messages.get(MZk.PAGE_NOT_FOUND, path != null ? path: pi));
+				return;
+			}
+
 			if (type == 'p') {
 				source = path;
 				URL url = ctx.getResource(path);

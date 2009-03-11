@@ -735,18 +735,7 @@ public class Log {
 	 */
 	public final void realCauseBriefly(String message, Throwable ex) {
 		realCause0(message, ex, true,
-			getIntProp("org.zkoss.util.logging.realCauseBriefly", 6));
-	}
-	private static int getIntProp(String prop, int defVal) {
-		final String s = Library.getProperty(prop);
-		if (s != null) {
-			try {
-				return Integer.parseInt(s);
-			} catch (Throwable t) {
-				Log.lookup(Log.class).warning("Failed to parse "+prop+", value="+s);
-			}
-		}
-		return defVal;
+			Library.getIntProperty("org.zkoss.util.logging.realCauseBriefly", 6));
 	}
 
 	/** Lo only the first few lines of the real cause as an error message.
@@ -787,7 +776,7 @@ public class Log {
 	 */
 	public final void warningBriefly(String message, Throwable ex) {
 		realCause0(message, ex, false,
-			getIntProp("org.zkoss.util.logging.warningBriefly", 3));
+			Library.getIntProperty("org.zkoss.util.logging.warningBriefly", 3));
 	}
 	/** Lo only the first few lines of the real cause.
 	 */
