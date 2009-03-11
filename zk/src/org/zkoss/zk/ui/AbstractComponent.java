@@ -2034,7 +2034,16 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * @since 5.0.0
 	 */
 	public void process(AuRequest request, boolean everError) {
-		Events.postEvent(Event.getEvent(request));
+		final String name = request.getName();
+		if ("echo".equals(name)) {
+			final String[] data = request.getData();
+			if (data == null || (data.length != 1 && data.length != 2))
+				throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
+					new Object[] {Objects.toString(data), this});
+			Events.postEvent(data.length == 1 ?
+				new Event(data[0], this): new Event(data[0], this, data[1]));
+		} else
+			Events.postEvent(Event.getEvent(request));
 	}
 
 	//-- Object --//

@@ -49,7 +49,7 @@ public class AuEcho  extends AuResponse {
 	 * @since 3.0.0
 	 */
 	public AuEcho(Desktop desktop) {
-		super("echo",  desktop != null ? desktop.getId(): null);
+		super("echo", desktop != null ? desktop.getId(): null);
 	}
 	/** Contructs an echo response for each desktop in the same browser
 	 * window
