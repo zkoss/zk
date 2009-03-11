@@ -689,24 +689,11 @@ zAu.cmd0 = { //no uuid at all
 		zk.confirmClose = msg;
 	},
 	showBusy: function (msg, open) {
-		//close first (since users might want close and show diff message)
-		var n = zDom.$("zk_showBusy");
-		if (n) {
-			n.parentNode.removeChild(n);
-			zk.restoreDisabled();
-		}
+		zDom.remove("zk_showBusy"); //since user might want to show diff msg
 
-		if (open == "true") {
-			n = zDom.$("zk_loadprog");
-			if (n) n.parentNode.removeChild(n);
-			n = zDom.$("zk_prog");
-			if (n) n.parentNode.removeChild(n);
-			n = zDom.$("zk_showBusy");
-			if (!n) {
-				msg = msg == "" ? mesg.PLEASE_WAIT : msg;
-				zUtl.progressbox("zk_showBusy", msg, true);
-				zk.disableAll();
-			}
+		if (open) {
+			zUtl.destroyProgressbox("zk_loadprog");
+			zUtl.progressbox("zk_showBusy", msg || mesg.PLEASE_WAIT, true);
 		}
 	}
 };
