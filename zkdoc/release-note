@@ -6,6 +6,7 @@ ZK 3.6.1
   2666812: Log ZK version number at server bootup
   2677873: A way to always get full stacktrace
   2681333: Resumable filedownload limit to allowed period and number
+  2681775: Resumable filedownload supports relative path
 
 * Bugs
   

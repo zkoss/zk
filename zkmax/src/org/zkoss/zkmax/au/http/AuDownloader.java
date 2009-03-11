@@ -112,9 +112,17 @@ public class AuDownloader implements AuProcessor {
 		return getDownloadURI('u', url.toExternalForm(), contentType, data);
 	}
 	/** Returns the download URI of the specified file.
+	 * @param path the path to access the resource of the Web application.
+	 * In other words, it is URI of ServletContext.
+	 * Since 3.6.1: if the path is relative, {@link Desktop#getCurrentDirectory} is assumed.
 	 */
 	public static
 	String getDownloadURI(String path, String contentType, String data) {
+		if (!path.startsWith("/")) {
+			final String dir = Executions.getCurrent().getDesktop().getCurrentDirectory();
+			if (dir != null)
+				path = dir + path;
+		}
 		return getDownloadURI('p', path, contentType, data);
 	}
 	private static String
