@@ -49,16 +49,6 @@ import org.zkoss.zkmax.zul.FiledownloadListener;
 /**
  * The AU processor to handle the resumable download.
  *
- * <p>There are two library properties that can control the number of allowed
- * resumable downloads.
- * <dl>
- * <dt>org.zkoss.zk.download.resumable.lifetime</dt>
- * <dd>Specifies when the download URL will be expired (unit: second).<br/>
- * Default: 14400 (i.e., 4 hours).</dd>
- * <dt>org.zkoss.zk.download.resumable.maxsize</dt>
- * <dd>Specifies the maximal allowed number of resumable downloads.<br/>
- * Default: 4096.</dd>
- * </dl>
  * @author tomyeh
  * @since 3.5.0
  * @see org.zkoss.zkmax.zul.Filedownload

@@ -36,15 +36,26 @@ import org.zkoss.zk.ui.util.DeferredValue;
  * <p>By resumable we mean the user can bookmark the URL and download
  * it later (and even resume the download in the middle).
  * On the other hand, the download URL of {@link org.zkoss.zul.Filedownload}
- * is obsolte as soon as the desktop (or session) is gone.
+ * becomes obsolete as soon as the desktop (or session) is gone.
  *
  * <p>Since the resumable download can be used in any session or
  * without any session, or with a different client (such flashget),
  * you might want to limit the download under certain condition.
- * If so, you can implement {@link FiledownloadListener} and specify
- * it as a library (or system) property called org.zkoss.zkmax.zul.FiledownloadListener.class
- * by use of {@link org.zkoss.lang.Library#setProperty}
- * or the library-property element in zk.xml.
+ *
+ * <p>First, there are two library properties that can control the number of allowed
+ * resumable downloads.
+ * <dl>
+ * <dt>org.zkoss.zk.download.resumable.lifetime</dt>
+ * <dd>Specifies when the download URL will be expired (unit: second).<br/>
+ * Default: 14400 (i.e., 4 hours).</dd>
+ * <dt>org.zkoss.zk.download.resumable.maxsize</dt>
+ * <dd>Specifies the maximal allowed number of resumable downloads.<br/>
+ * Default: 4096.</dd>
+ * </dl>
+ *
+ * <p>Second, you can have more control by implementing {@link FiledownloadListener} and specify
+ * it as a library property called org.zkoss.zkmax.zul.FiledownloadListener.class.
+ * For example, you can specify the following in zk.xml:
  *
  *<pre><code>&lt;library-property&gt;
   &lt;name&gt;org.zkoss.zkmax.zul.FiledownloadListener.class&lt;/name&gt;
@@ -52,10 +63,10 @@ import org.zkoss.zk.ui.util.DeferredValue;
 &lt;/library-property&gt;
 </code></pre>
  *
- *
  * @author tomyeh
  * @since 3.5.0
  * @see FiledownloadListener
+ * @see org.zkoss.lang.Library#setProperty
  */
 public class Filedownload extends org.zkoss.zul.Filedownload {
 	/** Open a download dialog to save the specified file at the client.
