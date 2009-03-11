@@ -737,17 +737,17 @@ zk.eff.Shadow = zk.$extends(zk.Object, {
 		var opts = this.opts,
 			l = node.offsetLeft, t = node.offsetTop,
 			w = node.offsetWidth, h = node.offsetHeight,
-			wd = w - opts.left + opts.right,
-			hgh = h - opts.top + opts.bottom,
+			wd = Math.max(0, w - opts.left + opts.right),
+			hgh = Math.max(0, h - opts.top + opts.bottom),
 			st = shadow.style;
 		st.left = (l + opts.left) + "px";
 		st.top = (t + opts.top) + "px";
-		st.width = zDom.getPositive(wd) + "px";
+		st.width = wd + "px";
 		st.display = "block";
-		if (zk.ie6Only) st.height = zDom.getPositive(hgh) + "px";
+		if (zk.ie6Only) st.height = hgh + "px";
 		else {
 			var cns = shadow.childNodes;
-			cns[1].style.height = zDom.getPositive(hgh - cns[0].offsetHeight - cns[2].offsetHeight) + "px";
+			cns[1].style.height = Math.max(0, hgh - cns[0].offsetHeight - cns[2].offsetHeight) + "px";
 		}
 
 		var stackup = this.stackup;

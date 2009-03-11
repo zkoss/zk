@@ -181,12 +181,6 @@ zDom = { //static methods
 		return size < 0 ? 0: size;
 	},
 	/**
-	 * Returns 0 if the num is not a positive number, otherwise, returns num itself.
-	 */
-	getPositive: function (num) {
-		return num < 0 ? 0 : num;
-	},
-	/**
 	 * Returns the number of the padding width and the border width from the specified element.
 	 */
 	padBorderWidth: function (el) {
