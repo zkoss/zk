@@ -83,11 +83,11 @@ zhtml.Widget = zk.$extends(zk.Native, {
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
-		if (this.$onChange) {
+		if (this.isListen('onChange', true)) {
 			this.doChange_(null, -1);
 			zEvt.listen(this.getNode(), 'change', this.proxy(this.doChange_, '_pxChange'));
 		}
-		if (this.$onCheck)
+		if (this.isListen('onCheck', true))
 			this._doCheck(-1);
 	},
 	unbind_: function () {

@@ -35,8 +35,8 @@ public class Input extends AbstractTag {
 	private transient boolean _byClient;
 
 	static {
-		addClientEvent(Input.class, Events.ON_CHANGE, CE_IMPORTANT);
-		addClientEvent(Input.class, Events.ON_CHECK, CE_IMPORTANT);
+		addClientEvent(Input.class, Events.ON_CHANGE, 0);
+		addClientEvent(Input.class, Events.ON_CHECK, 0);
 	}
 
 	public Input() {
