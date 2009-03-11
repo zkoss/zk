@@ -4,6 +4,7 @@ ZK 3.6.1
   2677655: A way to use ID as UUID for unit test purpse
   2666743: Support component-apply in lang-addon
   2666812: Log ZK version number at server bootup
+  2677873: A way to always get full stacktrace
 
 * Bugs
 

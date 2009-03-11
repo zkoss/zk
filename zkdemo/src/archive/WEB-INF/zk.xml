@@ -288,6 +288,23 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</library-property>
 	-->
 	
+	<!-- Uncommet to control the number of lines to log an error message.
+		Default: 6. If nonpostive is specified, the full stack traces are logged.
+		Notice that # of lines don't include packages starting with java, javax or sun.
+	<library-property>
+		<name>org.zkoss.util.logging.realCauseBriefly</name>
+		<value>0</value>
+	</library-property>
+	-->
+	<!-- Uncommet to control the number of lines to log a warning message.
+		Default: 3. If nonpostive is specified, the full stack traces are logged.
+		Notice that # of lines don't include packages starting with java, javax or sun.
+	<library-property>
+		<name>org.zkoss.util.logging.warningBriefly</name>
+		<value>0</value>
+	</library-property>
+	-->
+
 	<!-- Configure the Hibernate SessionFactory Lifecycle.
 	<listener>
 		<description>Hibernate SessionFactory Lifecycle</description>
