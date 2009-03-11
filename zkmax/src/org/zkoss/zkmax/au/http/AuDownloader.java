@@ -263,7 +263,7 @@ public class AuDownloader implements AuProcessor {
 			Object o;
 			synchronized (_dls) {
 				_dls.expunge();
-				o = _dls.get(path);
+				o = _dls.getWithoutExpunge(path);
 			}
 			if (!(o instanceof Character) || ((Character)o).charValue() != type) {
 				response.sendError(response.SC_GONE, Messages.get(MZk.PAGE_NOT_FOUND, path != null ? path: pi));
