@@ -304,6 +304,9 @@ div.z-log button {
 }
 
 <%-- Drag-Drop --%>
+.z-drag-over {
+	background: #ADD2FF;
+}
 span.z-drop-allow, span.z-drop-disallow {
 	background-repeat: no-repeat;
 	vertical-align: top;

@@ -111,7 +111,10 @@ span.z-vfiletree-last-open, span.z-vfiletree-last-close, span.z-vfiletree-tee, s
 	overflow: visible;
 }
 </c:if>
-.z-panel-bbar {
+.z-panel-header {
+	zoom: 1;
+}
+.z-panel-btm {
 	position: relative;
 }
 <%-- groupbox.css.dsp --%>

@@ -34,9 +34,8 @@ import org.zkoss.util.WaitLock;
  *
  * <p>Unlike {@link CacheMap}, it is thread-safe.
  *
- * <p>The default check period depends on the system propety called
- * org.zkoss.util.resource.checkPeriod (unit: second).
- * If not specified, 5 seconds are assumed
+ * <p>The default check period depends on the libary propety called
+ * org.zkoss.util.resource.checkPeriod (unit: second). If not specified, 5 seconds are assumed
  *
  * @author tomyeh
  */

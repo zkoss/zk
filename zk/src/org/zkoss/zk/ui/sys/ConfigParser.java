@@ -142,6 +142,7 @@ public class ConfigParser {
 							parseDeviceConfig(el);
 							parseSystemConfig(el);
 							parseClientConfig(el);
+							//parseDesktopConfig(el);
 						}
 
 						if (config != null) {
@@ -189,6 +190,11 @@ public class ConfigParser {
 				Library.setProperty(Attributes.RESEND_DELAY, v.toString());
 		}
 	}
+	/*private static void parseDesktopConfig(Element root) throws Exception {
+		final Element el = root.getElement("desktop-config");
+		if (el != null) {
+		}
+	}*/
 	private static void parseListeners(Configuration config, Element root)
 	throws Exception {
 		for (Iterator it = root.getElements("listener").iterator();
@@ -505,6 +511,11 @@ public class ConfigParser {
 
 		String s = conf.getElementValue("repeat-uuid", true);
 		if (s != null) config.setRepeatUuid(!"false".equals(s));
+
+		s = conf.getElementValue("id-to-uuid-prefix", true);
+		if (s != null)
+			Library.setProperty(Attributes.ID_TO_UUID_PREFIX, s);
+			//library-wide property
 	}
 	/** Parses client-config. */
 	private static void parseClientConfig(Configuration config, Element conf) {

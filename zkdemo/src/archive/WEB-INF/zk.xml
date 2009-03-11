@@ -18,8 +18,16 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<debug-js>true</debug-js>
 	</client-config>
 	-->
+	<!-- Turn on if you want to generate UUID by prefixing ID with the value specified
+		here. It is designed for testing purpose.
+		Notice ${page will be replaced with page's UUID. If you don't want it,
+		remove it.
+	<desktop-config>
+		<id-to-uuid-prefix>_zid_${page}_</id-to-uuid-prefix>
+	</desktop-config>
+	-->
 	<!-- Turn on if you want to use the same UUID sequence for the desktops
-		after reboot. It is mainly for debugging purpose.
+		after reboot. It is mainly for testing purpose.
 	<desktop-config>
 		<repeat-uuid>true</repeat-uuid>
 	</desktop-config>
@@ -278,6 +286,23 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</library-property>
 	-->
 	
+	<!-- Uncommet to control the number of lines to log an error message.
+		Default: 6. If nonpostive is specified, the full stack traces are logged.
+		Notice that # of lines don't include packages starting with java, javax or sun.
+	<library-property>
+		<name>org.zkoss.util.logging.realCauseBriefly</name>
+		<value>0</value>
+	</library-property>
+	-->
+	<!-- Uncommet to control the number of lines to log a warning message.
+		Default: 3. If nonpostive is specified, the full stack traces are logged.
+		Notice that # of lines don't include packages starting with java, javax or sun.
+	<library-property>
+		<name>org.zkoss.util.logging.warningBriefly</name>
+		<value>0</value>
+	</library-property>
+	-->
+
 	<!-- Configure the Hibernate SessionFactory Lifecycle.
 	<listener>
 		<description>Hibernate SessionFactory Lifecycle</description>

@@ -36,13 +36,9 @@
 .z-paging input,
 .z-paging div,
 .z-paging button{
-	-x-system-font:none;
-	font-size-adjust:none;
-	font-stretch:normal;
 	font-style:normal;
 	font-variant:normal;
 	font-weight:normal;
-	line-height:normal;
 	white-space:nowrap;
 	font-family: ${fontFamilyT};
 	font-size: ${fontSizeMS};
@@ -120,7 +116,9 @@
 	width:4px;
 	background-image:url(${c:encodeURL('~./zul/img/paging/pg-split.gif')});
 }
-
+.z-paging-inp {
+	border:1px solid #7F9DB9;
+}
 .z-paging-btn .z-paging-next {
 	background-position:0 0;
 	background-image:url(${c:encodeURL('~./zul/img/paging/pg-btn.png')});

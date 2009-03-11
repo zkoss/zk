@@ -24,13 +24,14 @@ import java.util.logging.Level;
 import java.util.logging.Handler;
 
 import org.zkoss.lang.D;
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.util.Locales;
 import org.zkoss.mesg.Messages;
 
 /**
- * The I3 logger. Usage:
+ * The logger. Usage:
  *
  * <p><code>private static final Log log = Log.lookup(MyClass.class);<br>
  * ...<br>
@@ -132,19 +133,19 @@ public class Log {
 	}
 
 	/**
-	 * Gets the I3 logger based on the class.
+	 * Gets the logger based on the class.
 	 * @param cls the class that identifies the logger.
 	 */
 	public static final Log lookup(Class cls) {
 		return new Log(cls.getName());
 	}
 	/**
-	 * Gets the I3 logger based on the giving name.
+	 * Gets the logger based on the giving name.
 	 */
 	public static final Log lookup(String name) {
 		return new Log(name);
 	}
-	/** Gets the I3 logger based on the package.
+	/** Gets the logger based on the package.
 	 */
 	public static final Log lookup(Package pkg) {
 		return new Log(pkg.getName());
@@ -726,10 +727,28 @@ public class Log {
 		realCause0(message, ex, true, 0);
 	}
 	/** Logs only the first few lines of the real cause as an error message.
+	 * <p>To control the number of lines to log, you can specify a library
+	 * property called org.zkoss.util.logging.realCauseBriefly.lines.
+	 * If not specified, 6 is assumed. If nonpostive is specified, the full stack
+	 * traces are logged.
+	 * <p>Notice that # of lines don't include packages starting with java, javax or sun.
 	 */
 	public final void realCauseBriefly(String message, Throwable ex) {
-		realCause0(message, ex, true, 6);
+		realCause0(message, ex, true,
+			getIntProp("org.zkoss.util.logging.realCauseBriefly", 6));
 	}
+	private static int getIntProp(String prop, int defVal) {
+		final String s = Library.getProperty(prop);
+		if (s != null) {
+			try {
+				return Integer.parseInt(s);
+			} catch (Throwable t) {
+				Log.lookup(Log.class).warning("Failed to parse "+prop+", value="+s);
+			}
+		}
+		return defVal;
+	}
+
 	/** Lo only the first few lines of the real cause as an error message.
 	 */
 	public final void realCauseBriefly(Throwable ex) {
@@ -760,9 +779,15 @@ public class Log {
 	}
 
 	/** Logs only the first few lines of the real cause as an warning message.
+	 * <p>To control the number of lines to log, you can specify a library
+	 * property called org.zkoss.util.logging.warningBriefly.lines.
+	 * If not specified, 3 is assumed. If nonpostive is specified, the full stack
+	 * traces are logged.
+	 * <p>Notice that # of lines don't include packages starting with java, javax or sun.
 	 */
 	public final void warningBriefly(String message, Throwable ex) {
-		realCause0(message, ex, false, 3);
+		realCause0(message, ex, false,
+			getIntProp("org.zkoss.util.logging.warningBriefly", 3));
 	}
 	/** Lo only the first few lines of the real cause.
 	 */
