@@ -235,7 +235,7 @@ abstract public class GenericInterpreter implements Interpreter {
 	}
 	/** Returns the value of the implict variables.
 	 * It is called by {@link #getFromNamespace}, so you don't need to
-	 * invoke this method if you invoke {@link #getFromNameSpace}.
+	 * invoke this method if you invoke {@link #getFromNamespace}.
 	 * However, you have to invoke this method as the last step, if you
 	 * implement your own getFromNamespace from scratch.
 	 * @since 3.6.0
