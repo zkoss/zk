@@ -660,7 +660,7 @@ zAu.cmd0 = { //no uuid at all
 			} else {
 				var html = '<iframe src="'+url
 				+'" id="zk_download" name="zk_download" style="visibility:hidden;width:0;height:0;border:0" frameborder="0"></iframe>';
-				zk.insertHTMLBeforeEnd(document.body, html);
+				zDom.insertHTMLBeforeEnd(document.body, html);
 			}
 		}
 	},

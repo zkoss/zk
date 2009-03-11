@@ -651,14 +651,13 @@ zDom = { //static methods
 		return {width: originalWidth, height: originalHeight,
 			top: originalTop, left: originalLeft};
 	},
-	// This zk.reClassNameCache and zk.getClassRegEx function are based on the Yahoo! Inc.,
-	// which can be found here - http://developer.yahoo.net/yui
-	reClassNameCache: {},
-	getClassRegEx: function (clsnm) {
-		var re = zDom.reClassNameCache[clsnm];
+
+	_clsregexs: {}, //Refer to http://developer.yahoo.net/yui
+	_clsRegEx: function (clsnm) {
+		var re = zDom._clsregexs[clsnm];
 		if (!re) {
 			re = new RegExp('(?:^|\\s+)' + clsnm + '(?:\\s+|$)', 'g');
-			zDom.reClassNameCache[clsnm] = re;
+			zDom._clsregexs[clsnm] = re;
 		}
 		return re;
 	},
@@ -667,7 +666,7 @@ zDom = { //static methods
 	 * of the specified element.
 	 */
 	hasClass: function (el, clsnm) {
-		return el.className.match(zk.getClassRegEx(clsnm)) != null;
+		return el.className.match(zDom._clsRegEx(clsnm)) != null;
 	},
 	/** Adds the specified class name to the class name of the specified element.
 	 */
@@ -683,7 +682,7 @@ zDom = { //static methods
 	 */
 	rmClass: function (el, clsnm) {
 		if (el && zDom.hasClass(el, clsnm)) {
-			var re = zDom.getClassRegEx(clsnm);
+			var re = zDom._clsRegEx(clsnm);
 			el.className = el.className.replace(re, " ").trim();
 		}
 	},

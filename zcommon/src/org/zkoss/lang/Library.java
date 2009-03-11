@@ -21,6 +21,8 @@ package org.zkoss.lang;
 import java.util.Map;
 import java.util.HashMap;
 
+import org.zkoss.util.logging.Log;
+
 /**
  * Represent the scope of ZK libraries.
  * Unlike {@link System}, the scope of {@link Library} depends how
@@ -37,6 +39,7 @@ import java.util.HashMap;
  * @since 3.0.7
  */
 public class Library {
+	private static final Log log = Log.lookup(Library.class);
 	private static final Map _props = new HashMap();
 
 	private Library() {}
@@ -108,5 +111,23 @@ public class Library {
 		synchronized (_props) {
 			return (String)_props.put(key, value);
 		}
+	}
+
+	/** Parses the property value to an integer.
+	 * If the specified value is not an integer, the default value is returned
+	 * (and a warning is logged).
+	 * @param defVal the default value
+	 * @since 3.6.1
+	 */
+	public static int getIntProperty(String key, int defVal) {
+		final String val = getProperty(key);
+		if (val != null) {
+			try {
+				return Integer.parseInt(val);
+			} catch (Throwable t) {
+				log.warning("Failed to parse "+key+": not an integer, "+val);
+			}
+		}
+		return defVal;
 	}
 }

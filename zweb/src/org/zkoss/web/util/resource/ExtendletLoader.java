@@ -124,16 +124,7 @@ abstract public class ExtendletLoader implements Loader {
 		return _checkPeriod;
 	}
 	private static int getInitCheckPeriod() {
-		final String ATTR = "org.zkoss.util.resource.extendlet.checkPeriod";
-		final String s = Library.getProperty(ATTR);
-		try {
-			if (s != null) {
-				final int i = Integer.parseInt(s);
-				if (i > 0) return i * 1000;
-			}
-		} catch (Throwable ex) {
-			log.warningBriefly("Failed to parse "+ATTR+", value="+s, ex);
-		}
-		return -1; //never change
+		final int v = Library.getIntProperty("org.zkoss.util.resource.extendlet.checkPeriod", -1);
+		return v > 0 ? v * 1000: v;
 	}
 }

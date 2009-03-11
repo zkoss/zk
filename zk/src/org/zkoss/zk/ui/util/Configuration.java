@@ -145,13 +145,7 @@ public class Configuration {
 	/** Constructor.
 	 */
 	public Configuration() {
-		String s = Library.getProperty(Attributes.RESEND_DELAY);
-		try {
-			if (s != null)
-				_resendDelay = Integer.parseInt(s);
-		} catch (Throwable t) {
-			log.warning("Failed to parse "+Attributes.RESEND_DELAY+"="+s);
-		}
+		_resendDelay = Library.getIntProperty(Attributes.RESEND_DELAY, -1);
 	}
 
 	/** Returns the Web application that this configuration belongs to,

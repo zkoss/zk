@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.net.URL;
 
+import org.zkoss.lang.Library;
 import org.zkoss.util.logging.Log;
 
 /**
@@ -73,9 +74,9 @@ public class RepeatableReader extends Reader implements Repeatable {
 
 	private RepeatableReader(Reader is) {
 		_org = is;
-		_bufmaxsz = RepeatableInputStream.getIntProp(
+		_bufmaxsz = Library.getIntProperty(
 			RepeatableInputStream.BUFFER_LIMIT_SIZE, 20 * 1024 * 1024);
-		_memmaxsz = RepeatableInputStream.getIntProp(
+		_memmaxsz = Library.getIntProperty(
 			RepeatableInputStream.MEMORY_LIMIT_SIZE, 512 * 1024);
 	}
 

@@ -203,33 +203,46 @@ public class CacheMap implements Map, Cache, java.io.Serializable, Cloneable {
 			|| (System.currentTimeMillis() - v.access) > getLifetime() ?
 			(EXPUNGE_YES|EXPUNGE_CONTINUE): (EXPUNGE_NO|EXPUNGE_STOP);
 	}
-	private void expunge() {
+	/** Expunges if {@link #shallExpunge} is true. */
+	private void tryExpunge() {
 		if (shallExpunge()) {
 			if (_inExpunge)
 				throw new IllegalStateException("expung in expung?");
-			_inExpunge = true;
 			try {
-				//dennis, bug 1815633, remove some control code here 
-				
-				for (final Iterator it = _map.values().iterator();it.hasNext();) {
-					final Value v = (Value)it.next();
-					final int result = canExpunge(v);
-					if ((result & EXPUNGE_YES) != 0) {
-						//if (D.ON && log.debugable())
-						//	log.debug("expunge: value="+v.value+" size="+_map.size()+"("+getMaxSize()+") time="+v.access+"("+getLifetime()+")");
+				expunge();
+			} finally {
+				newRef();
+			}
+		}
+	}
+	/** Enforces to expunge items that exceeds the maximal allowed number
+	 * or lifetime.
+	 * <p>By default, this method is called only GC takes places.
+	 * @since 3.6.1
+	 */
+	public void expunge() {
+		if (_inExpunge) return; //nothing to do
 
-						it.remove();
-						onExpunge(v);
-					}
+		_inExpunge = true;
+		try {
+			//dennis, bug 1815633, remove some control code here 
+			
+			for (final Iterator it = _map.values().iterator();it.hasNext();) {
+				final Value v = (Value)it.next();
+				final int result = canExpunge(v);
+				if ((result & EXPUNGE_YES) != 0) {
+					//if (D.ON && log.debugable())
+					//	log.debug("expunge: value="+v.value+" size="+_map.size()+"("+getMaxSize()+") time="+v.access+"("+getLifetime()+")");
 
-					if ((result & EXPUNGE_STOP) != 0)
-						break; //stop
+					it.remove();
+					onExpunge(v);
 				}
 
-				newRef();
-			} finally {
-				_inExpunge = false;
+				if ((result & EXPUNGE_STOP) != 0)
+					break; //stop
 			}
+		} finally {
+			_inExpunge = false;
 		}
 	}
 	/** Creates the reference queue.
@@ -335,7 +348,7 @@ public class CacheMap implements Map, Cache, java.io.Serializable, Cloneable {
 
 	//-- Map --//
 	public boolean isEmpty() {
-		expunge();
+		tryExpunge();
 		return _map.isEmpty();
 	}
 	/** Returns whether it is empty without trying to expunge first.
@@ -345,7 +358,7 @@ public class CacheMap implements Map, Cache, java.io.Serializable, Cloneable {
 		return _map.isEmpty();
 	}
 	public int size() {
-		expunge();
+		tryExpunge();
 		return _map.size();
 	}
 	/** Returns the size without trying to expunge first.
@@ -359,12 +372,12 @@ public class CacheMap implements Map, Cache, java.io.Serializable, Cloneable {
 	}
 
 	public Object remove(Object key) {
-		expunge();
+		tryExpunge();
 		final Value v = (Value)_map.remove(key);
 		return v != null ? v.value: null;
 	}
 	public Object get(Object key) {
-		expunge();
+		tryExpunge();
 		return getWithoutExpunge(key);
 	}
 	/** Returns the value without trying to expunge first.
@@ -380,11 +393,11 @@ public class CacheMap implements Map, Cache, java.io.Serializable, Cloneable {
 		return null;
 	}
 	public boolean containsKey(Object key) {
-		expunge();
+		tryExpunge();
 		return _map.containsKey(key);
 	}
 	public boolean containsValue(Object value) {
-		expunge();
+		tryExpunge();
 		for (final Iterator it = _map.values().iterator(); it.hasNext();) {
 			final Value v = (Value)it.next();
 			if (Objects.equals(v.value, value))
@@ -393,7 +406,7 @@ public class CacheMap implements Map, Cache, java.io.Serializable, Cloneable {
 		return false;
 	}
 	public Object put(Object key, Object value) {
-		expunge();
+		tryExpunge();
 		final Value v = (Value)_map.put(key, new Value(value));
 		return v != null ? v.value: null;
 	}
@@ -467,7 +480,7 @@ public class CacheMap implements Map, Cache, java.io.Serializable, Cloneable {
 		}
 		//-- Set --//
 		public Iterator iterator() {
-			expunge();
+			tryExpunge();
 			return new EntryIter(_map.entrySet().iterator());
 		}
 		public boolean contains(Object o) {
@@ -486,7 +499,7 @@ public class CacheMap implements Map, Cache, java.io.Serializable, Cloneable {
 		}
 	}
 	public Set entrySet() {
-		expunge();
+		tryExpunge();
 		return new EntrySet();
 	}
 
@@ -496,7 +509,7 @@ public class CacheMap implements Map, Cache, java.io.Serializable, Cloneable {
 		}
 		//-- Set --//
 		public Iterator iterator() {
-			expunge();
+			tryExpunge();
 			return new KeyIter(_map.keySet().iterator());
 		}
 		public boolean contains(Object o) {
@@ -513,7 +526,7 @@ public class CacheMap implements Map, Cache, java.io.Serializable, Cloneable {
 		}
 	}
 	public Set keySet() {
-		expunge();
+		tryExpunge();
 		return new KeySet();
 	}
 
@@ -542,23 +555,23 @@ public class CacheMap implements Map, Cache, java.io.Serializable, Cloneable {
 		}
 	}
 	public Collection values() {
-		expunge();
+		tryExpunge();
 		return new Values();
 	}
 
 	//-- Object --//
 	public int hashCode() {
-		expunge();
+		tryExpunge();
 		return _map.hashCode();
 	}
 	public boolean equals(Object o) {
-		expunge();
+		tryExpunge();
 		return o == this
 			|| ((o instanceof CacheMap) && _map.equals(((CacheMap)o)._map))
 			|| ((o instanceof Map) && _map.equals((Map)o));
 	}
 	public String toString() {
-		expunge();
+		tryExpunge();
 
 		final StringBuffer sb = new StringBuffer(128).append('{');
 		if (!_map.isEmpty()) {

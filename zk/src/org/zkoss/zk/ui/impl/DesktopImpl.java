@@ -104,7 +104,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private transient Session _sess;
 	private String _id;
 	/** The current directory of this desktop. */
-	private String _dir;
+	private String _dir = "";
 	/** The path of the request that causes this desktop to be created. */
 	private final String _path;
 	/** The URI to access the update engine. */
