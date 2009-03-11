@@ -695,6 +695,9 @@ zAu.cmd0 = { //no uuid at all
 			zUtl.destroyProgressbox("zk_loadprog");
 			zUtl.progressbox("zk_showBusy", msg || mesg.PLEASE_WAIT, true);
 		}
+	},
+	submit: function (id) {
+		setTimeout(function (){var n = zDom.$(id); if (n && n.submit) n.submit();}, 50);
 	}
 };
 zAu.cmd1 = {
@@ -792,9 +795,6 @@ zAu.cmd1 = {
 			for (var i = uuids.length; --i >= 0;)
 				zAu.valid.closeErrbox(uuids[i], false, true);
 		}
-	},
-	submit: function (uuid, cmp) {
-		setTimeout(function (){if (cmp && cmp.submit) cmp.submit();}, 50);
 	},
 	invoke: function (uuid, wgt, func, vararg) {
 		var args = [];

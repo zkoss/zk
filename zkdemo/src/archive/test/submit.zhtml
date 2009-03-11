@@ -1,0 +1,10 @@
+<html xmlns:zk="http://www.zkoss.org/2005/zk" xmlns="http://www.zkoss.org/2005/zk/native">
+<head>
+	<title>Submit</title>
+</head>
+<body>
+	<form>
+		<input/>
+	</form>
+</body>
+</html>
