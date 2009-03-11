@@ -18,8 +18,16 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<debug-js>true</debug-js>
 	</client-config>
 	-->
+	<!-- Turn on if you want to generate UUID by prefixing ID with the value specified
+		here. It is designed for testing purpose.
+		Notice ${page will be replaced with page's UUID. If you don't want it,
+		remove it.
+	<desktop-config>
+		<id-to-uuid-prefix>_zid_${page}_</id-to-uuid-prefix>
+	</desktop-config>
+	-->
 	<!-- Turn on if you want to use the same UUID sequence for the desktops
-		after reboot. It is mainly for debugging purpose.
+		after reboot. It is mainly for testing purpose.
 	<desktop-config>
 		<repeat-uuid>true</repeat-uuid>
 	</desktop-config>

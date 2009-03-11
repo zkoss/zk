@@ -81,6 +81,7 @@ import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
 import org.zkoss.zk.ui.metainfo.EventHandler;
 import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zk.ui.impl.ListenerIterator;
+import org.zkoss.zk.ui.impl.Attributes;
 import org.zkoss.zk.fn.ZkFns;
 import org.zkoss.zk.au.Command;
 import org.zkoss.zk.au.AuResponse;
@@ -605,15 +606,20 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			throw new UiException("ID cannot be empty");
 
 		if (!Objects.equals(_id, id)) {
-			final boolean rawId = this instanceof RawId;
+			boolean rawId = this instanceof RawId;
+			final String newUuid;
+			if (rawId) newUuid = id;
+			else if ((newUuid = id2Uuid(id)) != null)
+				rawId = true;
+
 			if (id != null) {
 				if (Names.isReserved(id)
 				|| (!(this instanceof NonFellow) && ComponentsCtrl.isAutoId(id)))
 					throw new UiException("Invalid ID: "+id+". Cause: reserved words not allowed: "+Names.getReservedNames());
 
 				if (rawId && _page != null
-				&& _page.getDesktop().getComponentByUuidIfAny(id) != null)
-					throw new UiException("Replicated ID is not allowed for "+getClass()+": "+id+"\nNote: HTML/WML tags, ID must be unique");
+				&& _page.getDesktop().getComponentByUuidIfAny(newUuid) != null)
+					throw new UiException("Replicated UUID is not allowed for "+getClass()+": "+newUuid);
 
 				checkIdSpaces(this, id);
 			}
@@ -626,7 +632,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 					((DesktopCtrl)_page.getDesktop()).removeComponent(this);
 				}
 
-				_uuid = _id = id;
+				_id = id;
+				_uuid = newUuid;
 
 				if (_page != null) {
 					((DesktopCtrl)_page.getDesktop()).addComponent(this);
@@ -2209,5 +2216,35 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		public Object clone(Component comp) {
 			return null; //handle by AbstractComponent.clone
 		}
+	}
+
+	private static final String NONE = "";
+	private static String _id2uuidPrefix = NONE, _id2uuidPrefix2;
+	private static int _id2uuidPageOfs;
+	private static String id2Uuid(String id) {
+		if (id != null) {
+			if (_id2uuidPrefix == NONE) {
+				_id2uuidPrefix = Library.getProperty(Attributes.ID_TO_UUID_PREFIX);
+				if (_id2uuidPrefix != null) {
+					_id2uuidPageOfs = _id2uuidPrefix.indexOf("${page}");
+					if (_id2uuidPageOfs >= 0) {
+						_id2uuidPrefix2 = _id2uuidPrefix.substring(_id2uuidPageOfs + 7);
+						_id2uuidPrefix = _id2uuidPrefix.substring(0, _id2uuidPageOfs);
+					}
+				}
+			}
+			if (_id2uuidPrefix != null) {
+				if (_id2uuidPageOfs >= 0) {
+					final ExecutionCtrl execCtrl = (ExecutionCtrl)Executions.getCurrent();
+					if (execCtrl != null) {
+						final Page page = execCtrl.getCurrentPage();
+						if (page != null)
+							return _id2uuidPrefix + page.getUuid() + _id2uuidPrefix2 + id;
+					}
+				}
+				return _id2uuidPrefix + id;
+			}
+		}
+		return null;
 	}
 }
