@@ -295,7 +295,7 @@ zkVld._change = function (dg, pointer, evt) {
  *
  * @param {Object} coerce it is used to close the error box coercively. (@since 3.0.3)
  */
-zkVld.closeErrbox = function (box, remaingError, coerce) {
+zkVld.closeErrbox = function (box, remainError, coerce) {
 	var boxid, id;
 	if (typeof box == "string") {
 		id = $uuid(box);
@@ -307,7 +307,7 @@ zkVld.closeErrbox = function (box, remaingError, coerce) {
 	}
 
 	var cmp = $e(id);
-	if (!remaingError) {
+	if (!remainError) {
 		if (cmp) {
 			zk.rmClass($real(cmp), getZKAttr(cmp, "zcls") + "-text-invalid");
 		}
