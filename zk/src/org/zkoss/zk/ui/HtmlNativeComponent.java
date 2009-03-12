@@ -32,6 +32,7 @@ import org.zkoss.xml.XMLs;
 import org.zkoss.idom.Namespace;
 
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
@@ -140,11 +141,12 @@ implements DynamicTag, Native {
 
 	public void redraw(java.io.Writer out) throws java.io.IOException {
 		//Note: _tag == null can NOT be handled specially
-		final boolean root = getParent() == null && getPage().isComplete();
 		final Execution exec = Executions.getCurrent();
+		final boolean root = getParent() == null && (getPage().isComplete()
+		|| (exec != null && "complete".equals(exec.getAttribute(PageCtrl.ATTR_REDRAW_CONTROL))));
 		if (exec == null || exec.isAsyncUpdate(null)
 		|| (!root && exec.getAttribute(ATTR_TOP_NATIVE) == null)) {
-			super.redraw(out);
+			super.redraw(out); //renderProperties (assume in zscript)
 			return;
 		}
 

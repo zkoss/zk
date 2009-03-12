@@ -81,8 +81,10 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 
 		if (pageOnly)
 			renderPage(exec, page, out, au);
-		else
+		else {
+			exec.setAttribute(PageCtrl.ATTR_REDRAW_CONTROL, "complete");
 			renderComplete(exec, page, out);
+		}
 	}
 	private static void write(Writer out, String s) throws IOException {
 		if (s != null) out.write(s);
