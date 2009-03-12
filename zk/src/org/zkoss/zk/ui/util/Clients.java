@@ -93,16 +93,18 @@ public class Clients {
 	}
 	
 	/** Closes all the error boxes at the browser belonging to
-	 * the specified components within a list, if any.
+	 * the specified list of components, if any.
 	 * @since 3.6.0
 	 */
 	public static final void closeErrorBox(List comps) {
-		StringBuffer sb = new StringBuffer();
-		for (Iterator it = comps.iterator(); it.hasNext();)
-			sb.append(((Component)it.next()).getUuid()).append(",");
-		if (sb.length() > 0)
-			sb.delete(sb.length() - 1, sb.length());
-		response(new AuCloseErrorBox(sb.toString()));
+		response(new AuCloseErrorBox(comps));
+	}
+	/** Closes all the error boxes at the browser belonging to
+	 * the specified array of components, if any.
+	 * @since 3.6.1
+	 */
+	public static final void closeErrorBox(Component[] comps) {
+		response(new AuCloseErrorBox(comps));
 	}
 	
 	/** Submits the form with the specified ID.

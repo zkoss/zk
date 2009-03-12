@@ -2381,6 +2381,11 @@ zkau.cmd0 = { //no uuid at all
 	cfmClose: function (msg) {
 		zkau.confirmClose = msg;
 	},
+	closeErrbox: function () {
+		if (zkau.valid)
+			for (var i = arguments.length; --i >= 0;)
+				zkau.valid.closeErrbox(arguments[i], false, true);
+	},
 	showBusy: function (msg, open) {
 		//close first (since users might want close and show diff message)
 		var n = $e("zk_showBusy");
@@ -2608,13 +2613,6 @@ zkau.cmd1 = {
 				cmp = $real(cmp); //focus goes to inner tag
 				zk.asyncFocus(cmp.id, 35);
 				}, 30); //wnd.js uses 20
-		}
-	},
-	closeErrbox: function (uuid, cmp) {
-		if (zkau.valid) {
-			var uuids = uuid.trim().split(',');
-			for (var i = uuids.length; --i >= 0;)
-				zkau.valid.closeErrbox(uuids[i], false, true);
 		}
 	},
 	submit: function (uuid, cmp) {
