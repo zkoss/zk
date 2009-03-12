@@ -1104,32 +1104,32 @@ public class UiEngineImpl implements UiEngine {
 			final Component comp = wve.getComponent();
 			if (comp != null) {
 				wve = ((ComponentCtrl)comp).onWrongValue(wve);
-				if (wve != null)
+				if (wve != null) {
+					Component c = wve.getComponent();
+					if (c == null) c = comp;
 					uv.addResponse("wrongValue",
-						new AuWrongValue(comp, Exceptions.getMessage(wve)));
+						new AuWrongValue(c, Exceptions.getMessage(wve)));
+				}
 				return;
 			}
 		} else if (ex instanceof WrongValuesException) {
-			final WrongValuesException wve = (WrongValuesException)ex;
-			final WrongValueException[] wves = wve.getWrongValueExceptions();
-			final StringBuffer uuids = new StringBuffer();
-			final LinkedList msgs = new LinkedList();
+			final WrongValueException[] wves =
+				((WrongValuesException)ex).getWrongValueExceptions();
+			final LinkedList infs = new LinkedList();
 			for (int i = 0; i < wves.length; i++) {
 				final Component comp = wves[i].getComponent();
 				if (comp != null) {
-					wves[i] = ((ComponentCtrl)comp).onWrongValue(wves[i]);
-					if (wves[i] != null) {
-						uuids.append(comp.getUuid()).append(",");
-						msgs.add(Exceptions.getMessage(wves[i]));
+					WrongValueException wve = ((ComponentCtrl)comp).onWrongValue(wves[i]);
+					if (wve != null) {
+						Component c = wve.getComponent();
+						if (c == null) c = comp;
+						infs.add(c.getUuid());
+						infs.add(Exceptions.getMessage(wve));
 					}
 				}
 			}
-			if (uuids.length() > 0) {
-				uuids.delete(uuids.length() - 1, uuids.length());
-			}
-			msgs.addFirst(uuids.toString());
 			uv.addResponse("wrongValue",
-				new AuWrongValue((String[])msgs.toArray(new String[]{})));
+				new AuWrongValue((String[])infs.toArray(new String[infs.size()])));
 			return;
 		}
 

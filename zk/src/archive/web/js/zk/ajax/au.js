@@ -703,27 +703,22 @@ zAu.cmd0 = { //no uuid at all
 				wgt.clearErrorMessage();
 		}
 	},
+	wrongValue: function () {
+		for (var i = 0, len = arguments.length - 1; i < len; i += 2) {
+			var uuid = arguments[i], msg = arguments[i + 1],
+				wgt = zk.Widget.$(uuid);
+			if (wgt) {
+				if (wgt.showErrorMessage) wgt.showErrorMessage(msg);
+				else zDom.alert(msg);
+			} else if (!uuid) //keep silent if component (of uuid) not exist (being detaced)
+				zDom.alert(msg);
+		}
+	},
 	submit: function (id) {
 		setTimeout(function (){var n = zDom.$(id); if (n && n.submit) n.submit();}, 50);
 	}
 };
 zAu.cmd1 = {
-	wrongValue: function (uuid, cmp, dt1) {
-		for (var uuids = uuid.split(","), i = 0, j = uuids.length; i < j; i++) {
-			cmp = zDom.$(uuids[i]);
-			if (cmp) {
-				cmp = $real(cmp); //refer to INPUT (e.g., datebox)
-				//we have to update default value so validation will be done again
-				var old = cmp.value;
-				cmp.defaultValue = old + "_err"; //enforce to validate
-				if (old != cmp.value) cmp.value = old; //Bug 1490079 (FF only)
-				if (zAu.errbox) zAu.errbox.open(cmp.id, arguments[i+2]);
-				else zDom.alert(arguments[i+2]);
-			} else if (!uuids[i]) { //keep silent if component (of uuid) not exist (being detaced)
-				zDom.alert(arguments[i+2]);
-			}
-		}
-	},
 	setAttr: function (uuid, wgt, nm, val) {
 		wgt.set(nm, val, true); //3rd arg: fromServer
 	},

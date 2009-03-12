@@ -45,7 +45,7 @@ public class Namespaces {
 final Map backup = new HashMap();
 final Namespace ns = Namespaces.beforeInterpret(backup, comp, false);
 try {
-  Namespaces.backupVariable(backup, ns, "some");
+  Namespaces.setImplicit(backup, ns, "some", value);
   page.interpret(zslang, zscript, ns); //it will push ns as the current namespace
 } finally {
   Namespaces.afterInterpret(backup, ns, false);
@@ -57,7 +57,7 @@ try {
 final Map backup = new HashMap();
 final Namespace ns = Namespaces.beforeInterpret(backup, comp, true);
 try {
-  Namespaces.backupVariable(backup, ns, "some");
+  Namespaces.setImplicit(backup, ns, "some", value);
   constr.validate(comp); //if constr might be an instance of a class implemented in zscript
 } finally {
   Namespaces.afterInterpret(backup, ns, true);
@@ -65,7 +65,7 @@ try {
 </code></pre>
 	 *
 	 * <p>If you need to backup some variables, you can invoke
-	 * {@link #backupVariable} between {@link #beforeInterpret}
+	 * {@link #setImplicit} between {@link #beforeInterpret}
 	 * and {@link #afterInterpret}.
 	 *
 	 * @param backup the map to hold the backup variables. Never null.
@@ -81,17 +81,11 @@ try {
 		Namespace ns = comp.getNamespace();
 		if (ns == null) ns = new SimpleNamespace();
 
-		backupVariable(backup, ns, "self");
-		backupVariable(backup, ns, "componentScope");
-		backupVariable(backup, ns, "arg");
-
-		ns.setVariable("self", comp, true);
-		ns.setVariable("componentScope",
-			comp.getAttributes(Component.COMPONENT_SCOPE), true);
+		setImplicit(backup, ns, "self", comp);
+		setImplicit(backup, ns, "componentScope", comp.getAttributes(Component.COMPONENT_SCOPE));
 
 		final Execution exec = Executions.getCurrent();
-		final Object arg = exec != null ? exec.getArg(): null;
-		ns.setVariable("arg", arg, true);
+		setImplicit(backup, ns, "arg", exec != null ? exec.getArg(): null);
 
 		if (pushNS) push(ns);
 		return ns;
@@ -101,7 +95,10 @@ try {
 	 * implemented with zscript.
 	 *
 	 * @see #beforeInterpret
-	 * @param backup the map to hold the backup variables. Never null.
+	 * @param backup the map to hold the backup variables.
+	 * If it is the first time to set the implicit, it cannot be null.
+	 * If it is the second time, it must be null (so the previous backup won't
+	 * be destroyed).
 	 * @param page the page, never null.
 	 * @param pushNS whether to make the namespace being returned
 	 * as the current namespace ({@link #getCurrent}).
@@ -113,11 +110,8 @@ try {
 	boolean pushNS) {
 		final Namespace ns = page.getNamespace();
 
-		backupVariable(backup, ns, "arg");
-
 		final Execution exec = Executions.getCurrent();
-		final Object arg = exec != null ? exec.getArg(): null;
-		ns.setVariable("arg", arg, true);
+		setImplicit(backup, ns, "arg", exec != null ? exec.getArg(): null);
 
 		if (pushNS) push(ns);
 		return ns;
@@ -133,34 +127,46 @@ try {
 	 */
 	public static final void afterInterpret(Map backup, Namespace ns,
 	boolean popNS) {
-		for (Iterator it = backup.entrySet().iterator(); it.hasNext();) {
-			final Map.Entry me = (Map.Entry)it.next();
-			final String name = (String)me.getKey();
-			final Object val = me.getValue();
-			//if (D.ON && log.finerable()) log.finer("Restore "+name+"="+val);
-			if (val != VOID) ns.setVariable(name, val, true);
-			else ns.unsetVariable(name, true);
+		if (backup != null && !backup.isEmpty()) {
+			Namespace nsbk = ns;
+			for (Namespace np; (np = nsbk.getParent()) != null; nsbk = np)
+				;
+
+			for (Iterator it = backup.entrySet().iterator(); it.hasNext();) {
+				final Map.Entry me = (Map.Entry)it.next();
+				final String name = (String)me.getKey();
+				final Object val = me.getValue();
+				//if (D.ON && log.finerable()) log.finer("Restore "+name+"="+val);
+				if (val != VOID) nsbk.setVariable(name, val, true);
+				else nsbk.unsetVariable(name, true);
+			}
 		}
 		if (popNS) pop(ns);
 	}
 
-	/** Backup the specfied variable, such that it can be restored with
-	 * {@link #afterInterpret}.
-	 *
-	 * <p>Note: you have to invoke {@link #beforeInterpret} before calling
-	 * this method. Then, backup-ed variables will be restored together
-	 * when {@link #afterInterpret} is called.
-	 *
-	 * @param backup the map to hold the backup variables. Never null.
-	 * It must be the same as the backup argument of {@link #beforeInterpret}.
-	 * @param name the variable to backup.
+	/** Sets an implicit object that will be stored later when {@link #afterInterpret}
+	 * is called.
+	 * @since 3.6.1
 	 */
-	public static final void backupVariable(Map backup, Namespace ns, String name) {
-		final Object val = ns.getVariable(name, true);
-		backup.put(name,
-			val != null || ns.getVariableNames().contains(name) ? val: VOID);
+	public static void setImplicit(Map backup, Namespace ns, String name, Object val) {
+		//Bug 2684510: use top-level namespace to backup (since it is implict)
+		for (Namespace np; (np = ns.getParent()) != null; ns = np)
+			;
+
+		if (backup != null) {
+			final Object oldval = ns.getVariable(name, true);
+			backup.put(name,
+				oldval != null || ns.getVariableNames().contains(name) ? oldval: VOID);
+		}
+		ns.setVariable(name, val, true);
 	}
 	private static final Object VOID = new Object();
+
+	/** @deprecated As of release 3.6.1, it is replaced with {@link #setImplicit}.
+	 */
+	public static final void backupVariable(Map backup, Namespace ns, String name) {
+		//due to incompatible restore, we cannot store backup
+	}
 
 	/** Returns the current namespace.
 	 * The current namespace is the event target's namespace if this thread

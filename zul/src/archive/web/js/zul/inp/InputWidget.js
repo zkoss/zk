@@ -172,7 +172,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		zDom.rmClass(this.einp, this.getZclass() + '-focus');
 		this.domBlur_();
 
-		setTimeout(this._pxLateBlur, 0);
+		if (!zk.alerting)
+			setTimeout(this._pxLateBlur, 0);
 			//curretFocus still unknow, so wait a while to execute
 	},
 	_doSelect: function (evt) {
@@ -197,6 +198,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	getErrorMesssage: function () {
 		return this._errmsg;
+	},
+	showErrorMessage: function (msg) {
 	},
 	clearErrorMessage: function (revalidate, remainError) {
 		var w = this._errbox;

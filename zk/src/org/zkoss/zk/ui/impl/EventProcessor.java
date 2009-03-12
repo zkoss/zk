@@ -134,12 +134,11 @@ public class EventProcessor {
 		final Namespace ns = Namespaces.beforeInterpret(backup, _comp, true);
 			//we have to push since process0 might invoke methods from zscript class
 		try {
-			Namespaces.backupVariable(backup, ns, "event");
-			ns.setVariable("event", _event, true);
+			Namespaces.setImplicit(backup, ns, "event", _event);
 
 			_event = ((DesktopCtrl)_desktop).beforeProcessEvent(_event);
 			if (_event != null) {
-				ns.setVariable("event", _event, true); //_event might change
+				Namespaces.setImplicit(null, ns, "event", _event); //_event might change
 				process0(ns);
 				((DesktopCtrl)_desktop).afterProcessEvent(_event);
 			}
