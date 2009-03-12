@@ -434,9 +434,7 @@ div.z-drop-cnt {
 	background-color : #FFCD9B;
 	background-image: url(${c:encodeURL('~./zul/img/errbox/pp-cm.png')});
 }
-.z-errbox.z-popup .z-popup-cl {
-	background-image: url(${c:encodeURL('~./zul/img/errbox/pp-clr.png')});
-}
+.z-errbox.z-popup .z-popup-cl,
 .z-errbox.z-popup .z-popup-cr {
 	background-image: url(${c:encodeURL('~./zul/img/errbox/pp-clr.png')});
 }
