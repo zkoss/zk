@@ -88,7 +88,7 @@
 	white-space:nowrap;
 }
 
-<%-- define icon of button --%>
+<%--define icon of button--%>
 .z-paging-btn button {
 	background:transparent none repeat scroll 0 0;
 	border:0 none;
@@ -138,7 +138,7 @@
 
 
 
-<%-- mouse over a button --%>
+<%--mouse over a button --%>
 .z-paging-btn-over .z-paging-next {
 	background-position:-21px 0;
 }
@@ -178,7 +178,7 @@
 	cursor:default !important;
 }
 
-<%-- paging info --%>
+<%--paging info--%>
 .z-paging-info {
 	color:#444444;
 	position:absolute;
