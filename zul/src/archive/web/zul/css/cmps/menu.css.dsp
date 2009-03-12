@@ -1,7 +1,7 @@
 <%@ page contentType="text/css;charset=UTF-8" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 
-/* define common font property*/
+<%-- define common font property --%>
 .z-menubar-hor .z-menu,.z-menubar-hor .z-menu-item,.z-menubar-hor .z-menu-btn,.z-menubar-hor .z-menu-item-btn,
 .z-menubar-hor span,.z-menubar-hor a,.z-menubar-hor div,
 .z-menubar-ver .z-menu,.z-menubar-ver .z-menu-item,.z-menubar-ver .z-menu-btn,.z-menubar-ver .z-menu-item-btn,
@@ -14,7 +14,7 @@
 	font-size: ${fontSizeMS};
 }
 
-/* define common horizontal and vertical property */
+<%-- define common horizontal and vertical property --%>
 .z-menubar-hor,.z-menubar-ver {
 	position : relative;
 	display: block;
@@ -95,7 +95,7 @@
 	outline-width:0px;
 	overflow:visible;
 	width:auto;
-	padding-left:2px; /*button has default padding, reset it*/
+	padding-left:2px; <%--button has default padding, reset it--%>
 	padding-top:3px;
 	padding-bottom:2px;
 	padding-right:1px;
@@ -125,7 +125,7 @@
 }
 </c:if>
 
-/* define menu/menuitem mouse over and seld effect */
+<%-- define menu/menuitem mouse over and seld effect --%>
 .z-menu-body-over .z-menu-inner-l,
 .z-menu-body-seld .z-menu-inner-l,
 .z-menu-item-body-over .z-menu-item-inner-l {
@@ -153,7 +153,7 @@
 	color:#233D6D;
 }
 
-/*define disabled menuitem effect*/
+<%--define disabled menuitem effect--%>
 .z-menubar-hor .z-menu-item-disd *, .z-menubar-ver .z-menu-item-disd *{
 	color:gray !important;
 	cursor:default !important;
@@ -164,7 +164,7 @@
 	filter: alpha(opacity=50);
 }
 
-/* define menupopup effect */
+<%-- define menupopup effect --%>
 .z-menu-popup {
 	background:#CCE6FB repeat-y scroll 0 0;
 	border:1px solid #7F9DB9;
@@ -172,7 +172,7 @@
 	z-index:88000;
 	background-image : url(${c:encodeURL('~./zul/img/menu/pp-bg.png')});
 }
-/* define menupopup property*/
+<%-- define menupopup property--%>
 .z-menu-popup {
 	font-style:normal;
 	font-variant:normal;
@@ -194,7 +194,7 @@
 	margin:0px !important;
 }
 
-/* define menu & menuitem in menupopup */
+<%-- define menu & menuitem in menupopup --%>
 .z-menu-popup-cnt .z-menu,
 .z-menu-popup-cnt .z-menu-item,
 .z-menu-popup-cnt .z-menu-separator {
@@ -236,7 +236,7 @@
 	background-image:url(${c:encodeURL('~./zul/img/menu/arrow.gif')});
 }
 
-/*define checked menuitem effect in menupopup */
+<%--define checked menuitem effect in menupopup --%>
 .z-menu-popup-cnt .z-menu-item-cnt-ck .z-menu-item-img {
 	background:transparent no-repeat scroll center center;
 	background-image:url(${c:encodeURL('~./zul/img/menu/checked.gif')});
@@ -247,7 +247,7 @@
 	background-image:url(${c:encodeURL('~./zul/img/menu/unchecked.gif')});
 }
 
-/*define disabled menuitem effect in menupopup*/
+<%--define disabled menuitem effect in menupopup--%>
 .z-menu-popup-cnt .z-menu-item-disd,
 .z-menu-popup-cnt .z-menu-item-disd *{
 	color:gray !important;
@@ -260,7 +260,7 @@
 	filter: alpha(opacity=50);
 }
 
-/*define mouse over effect in menupopup*/
+<%--define mouse over effect in menupopup--%>
 .z-menu-popup-cnt .z-menu-over,
 .z-menu-popup-cnt .z-menu-item-over{
 	border:1px solid #A8D8EB;
@@ -273,7 +273,7 @@
 	color:#233D6D;
 }
 
-/*define separator*/
+<%--define separator--%>
 .z-menu-popup-cnt .z-menu-separator {
 	font-size:1px;
 	line-height:1px;
