@@ -26,11 +26,6 @@ option {
 	width: 47pt;
 	text-overflow: ellipsis;
 }
-<%-- norm.css.dsp --%>
-span.z-drop-allow,
-span.z-drop-disallow {
-	background-image: url(${c:encodeURL('~./zul/img/misc/drag.gif')});
-}
 <%-- Widget.css.dsp --%>
 .z-textbox-disd *, .z-decimalbox-disd *, .z-intbox-disd *, .z-longbox-disd *, .z-doublebox-disd * {
 	filter: alpha(opacity=60);
@@ -123,27 +118,15 @@ span.z-vfiletree-last-open, span.z-vfiletree-last-close, span.z-vfiletree-tee, s
 	zoom: 1;
 }
 </c:if>
-.z-groupbox-tl {
-	background-image:url(${c:encodeURL('~./zul/img/groupbox/groupbox-corner.gif')});
-}
-.z-groupbox-tr{
-	background-image:url(${c:encodeURL('~./zul/img/groupbox/groupbox-corner.gif')});
-}
-
-.z-groupbox-hl {
-	background-image:url(${c:encodeURL('~./zul/img/groupbox/groupbox-hl.gif')});
-}
-.z-groupbox-hr {
-	background-image:url(${c:encodeURL('~./zul/img/groupbox/groupbox-hr.gif')});
-}
-.z-groupbox-hm {
-	background-image:url(${c:encodeURL('~./zul/img/groupbox/groupbox-hm.gif')});
-}
 
 
 <%-- IE 6 GIF  --%>
 <c:if test="${c:browser('ie6-')}">
-<%-- ZK Massagebox norm.css.dsp--%>
+<%-- norm.css.dsp --%>
+span.z-drop-allow,
+span.z-drop-disallow {
+	background-image: url(${c:encodeURL('~./zul/img/misc/drag.gif')});
+}
 .z-msgbox-question {
 	background-image: url(${c:encodeURL('~./zul/img/msgbox/question-btn.gif')});
 }
@@ -343,5 +326,22 @@ span.z-vfiletree-tee, span.z-vfiletree-last {
 .z-window-highlighted-cr,
 .z-window-overlapped-cr {
 	background-image: url(${c:encodeURL('~./zul/img/wnd/wnd-ol-clr.gif')});
+}
+
+.z-groupbox-tl {
+	background-image:url(${c:encodeURL('~./zul/img/groupbox/groupbox-corner.gif')});
+}
+.z-groupbox-tr{
+	background-image:url(${c:encodeURL('~./zul/img/groupbox/groupbox-corner.gif')});
+}
+
+.z-groupbox-hl {
+	background-image:url(${c:encodeURL('~./zul/img/groupbox/groupbox-hl.gif')});
+}
+.z-groupbox-hr {
+	background-image:url(${c:encodeURL('~./zul/img/groupbox/groupbox-hr.gif')});
+}
+.z-groupbox-hm {
+	background-image:url(${c:encodeURL('~./zul/img/groupbox/groupbox-hm.gif')});
 }
 </c:if>
