@@ -2386,6 +2386,22 @@ zkau.cmd0 = { //no uuid at all
 			for (var i = arguments.length; --i >= 0;)
 				zkau.valid.closeErrbox(arguments[i], false, true);
 	},
+	wrongValue: function () {
+		for (var i = 0, len = arguments.length - 1; i < len; i += 2) {
+			var uuid = arguments[i], msg = arguments[i + 1],
+				cmp = $e(uuid);
+			if (cmp) {
+				cmp = $real(cmp); //refer to INPUT (e.g., datebox)
+				//we have to update default value so validation will be done again
+				var old = cmp.value;
+				cmp.defaultValue = old + "_err"; //enforce to validate
+				if (old != cmp.value) cmp.value = old; //Bug 1490079 (FF only)
+				if (zkau.valid) zkau.valid.errbox(cmp.id, msg, true);
+				else zk.alert(msg);
+			} else if (!uuid) //keep silent if component (of uuid) not exist (being detaced)
+				zk.alert(msg);
+		}
+	},
 	showBusy: function (msg, open) {
 		//close first (since users might want close and show diff message)
 		var n = $e("zk_showBusy");
@@ -2410,22 +2426,6 @@ zkau.cmd0 = { //no uuid at all
 	}
 };
 zkau.cmd1 = {
-	wrongValue: function (uuid, cmp, dt1) {
-		for (var uuids = uuid.split(","), i = 0, j = uuids.length; i < j; i++) {
-			cmp = $e(uuids[i]);
-			if (cmp) {
-				cmp = $real(cmp); //refer to INPUT (e.g., datebox)
-				//we have to update default value so validation will be done again
-				var old = cmp.value;
-				cmp.defaultValue = old + "_err"; //enforce to validate
-				if (old != cmp.value) cmp.value = old; //Bug 1490079 (FF only)
-				if (zkau.valid) zkau.valid.errbox(cmp.id, arguments[i+2], true);
-				else zk.alert(arguments[i+2]);
-			} else if (!uuids[i]) { //keep silent if component (of uuid) not exist (being detaced)
-				zk.alert(arguments[i+2]);
-			}
-		}
-	},
 	setAttr: function (uuid, cmp, nm, val) {
 		if (nm == "z.init" || nm == "z.chchg") { //initialize
 			//Note: cmp might be null because it might be removed
