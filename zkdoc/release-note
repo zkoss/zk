@@ -9,7 +9,7 @@ ZK 3.6.1
   2681775: Resumable filedownload supports relative path
 
 * Bugs
-  
+  2684510: Unable to access implict objects if func defined in other namespace
 
 	--------
 ZK 3.6.0
