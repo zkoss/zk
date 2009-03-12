@@ -160,7 +160,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		zDom.rmClass(this.einp, this.getZclass() + '-focus');
 		this.domBlur_();
 
-		setTimeout(this._pxLateBlur, 0);
+		if (!zk.alerting)
+			setTimeout(this._pxLateBlur, 0);
 			//curretFocus still unknow, so wait a while to execute
 	},
 	_doSelect: function (evt) {
@@ -186,6 +187,10 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	getErrorMesssage: function () {
 		return this._errmsg;
 	},
+	showErrorMessage: function (msg) {
+		this.clearErrorMessage(true, true);
+		this._markError(msg, null, true);
+	},
 	clearErrorMessage: function (revalidate, remainError) {
 		var w = this._errbox;
 		if (w) {
@@ -205,7 +210,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	coerceToString_: function (value) {
 		return value || '';
 	},
-	_markError: function (val, msg) {
+	_markError: function (msg, val, noOnError) { //val used only if noOnError=false
 		this._errmsg = msg;
 
 		if (this.desktop) { //err not visible if not attached
@@ -219,8 +224,9 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 
 			if (!errbox) this._errbox = this.showError_(msg);
 
-			this.fire('onError',
-				{value: val, message: msg, marshal: this._onErrMarshal});
+			if (!noOnError)
+				this.fire('onError',
+					{value: val, message: msg, marshal: this._onErrMarshal});
 		}
 	},
 	validate_: function (val) {
@@ -238,10 +244,10 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			if (typeof val == 'string' || val == null) {
 				val = this.coerceFromString_(val);
 				if (val) {
-					var errmsg = val.error;
-					if (errmsg) {
+					var msg = val.error;
+					if (msg) {
 						this.clearErrorMessage(true);
-						this._markError(val, errmsg);
+						this._markError(msg, val);
 						return val;
 					}
 				}
@@ -253,7 +259,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				this.clearErrorMessage(true);
 				var msg = this.validate_(val);
 				if (msg) {
-					this._markError(val, msg);
+					this._markError(msg, val);
 					return {error: msg};
 				} else
 					this._lastRawValVld = value; //raw
@@ -560,6 +566,7 @@ zul.inp.Errorbox = zk.$extends('zul.wgt.Popup', {
 		errbox._fixarrow();
 	}
 });
+
 (_zkwg=_zkpk.Errorbox).prototype.className='zul.inp.Errorbox';
 zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 	$init: function (a, b, c) {
