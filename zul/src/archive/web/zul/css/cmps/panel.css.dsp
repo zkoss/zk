@@ -138,7 +138,7 @@
 	font-size: ${fontSizeM};
 	font-family: ${fontFamilyT};
 }
-.z-panel-hl .z-panel.header {
+.z-panel-hl .z-panel-header {
 	background-color: transparent;
 	border: 0;
 	color: #0F3B82;
