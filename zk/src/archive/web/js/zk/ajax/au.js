@@ -696,6 +696,13 @@ zAu.cmd0 = { //no uuid at all
 			zUtl.progressbox("zk_showBusy", msg || mesg.PLEASE_WAIT, true);
 		}
 	},
+	closeErrbox: function () {
+		for (var i = arguments.length; --i >= 0;) {
+			var wgt = zk.Widget.$(arguments[i]);
+			if (wgt && wgt.clearErrorMessage)
+				wgt.clearErrorMessage();
+		}
+	},
 	submit: function (id) {
 		setTimeout(function (){var n = zDom.$(id); if (n && n.submit) n.submit();}, 50);
 	}
@@ -710,7 +717,7 @@ zAu.cmd1 = {
 				var old = cmp.value;
 				cmp.defaultValue = old + "_err"; //enforce to validate
 				if (old != cmp.value) cmp.value = old; //Bug 1490079 (FF only)
-				if (zAu.valid) zAu.valid.errbox(cmp.id, arguments[i+2], true);
+				if (zAu.errbox) zAu.errbox.open(cmp.id, arguments[i+2]);
 				else zDom.alert(arguments[i+2]);
 			} else if (!uuids[i]) { //keep silent if component (of uuid) not exist (being detaced)
 				zDom.alert(arguments[i+2]);
@@ -784,17 +791,10 @@ zAu.cmd1 = {
 				zDom.remove(p);
 			}
 		}
-		//TODO if (zAu.valid) zAu.valid.fixerrboxes();
 	},
 	focus: function (uuid, wgt) {
-		wgt.focus();
-	},
-	closeErrbox: function (uuid, cmp) {
-		if (zAu.valid) {
-			var uuids = uuid.trim().split(',');
-			for (var i = uuids.length; --i >= 0;)
-				zAu.valid.closeErrbox(uuids[i], false, true);
-		}
+		setTimeout(function() {wgt.focus();}, 5);
+			//consecutive call wgt.focus causes error in FF
 	},
 	invoke: function (uuid, wgt, func, vararg) {
 		var args = [];
