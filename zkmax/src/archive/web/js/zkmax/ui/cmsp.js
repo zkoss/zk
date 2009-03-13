@@ -28,9 +28,7 @@ zk.override(zkau, "ignoreESC", zkCmsp,
 zkCmsp.start = function (dtid) {
 	++zkCmsp._nStart;
 	zkCmsp._start[dtid] = true;
-	setTimeout(function () {zkCmsp._send(dtid);},
-		zkau.sendNow(dtid) ? 900: 50);
-		//Delay it a bit so zkau.sendNow has time to send any pending status back
+	zkCmsp._asend(dtid, 50);
 };
 
 zkCmsp.stop = function (dtid) {
@@ -68,7 +66,9 @@ zkCmsp._send = function (dtid) {
 };
 zkCmsp._asend = function (dtid, timeout) {
 	if (zkCmsp._start[dtid])
-		setTimeout("zkCmsp._send('" + dtid + "')", timeout);
+		setTimeout(function () {zkCmsp._send(dtid);},
+			Math.max(zkau.sendNow(dtid) ? 900:0, timeout));
+			//At least 900 so sendNow has time to send any pending status back
 };
 
 zkCmsp._onRespReady = function () {
@@ -89,7 +89,7 @@ zkCmsp._onRespReady = function () {
 						var sid = req.getResponseHeader("ZK-SID");
 						if (!sid || sid == zkCmsp._sid) {
 							if (zkau.pushXmlResp(dtid, req)) {
-								timeout = 100;
+								timeout = 50;
 								if (sid && ++zkCmsp._sid > 999) zkCmsp._sid = 1;
 								//both pushXmlResp and doCmds might ex
 							}

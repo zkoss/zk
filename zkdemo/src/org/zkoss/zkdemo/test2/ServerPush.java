@@ -34,14 +34,14 @@ import org.zkoss.zul.*;
 public class ServerPush {
 	private static final Log log = Log.lookup(ServerPush.class);
 
-	public static void start(Component info) throws InterruptedException {
+	public static void start(Component info, Textbox tb) throws InterruptedException {
 		final Desktop desktop = Executions.getCurrent().getDesktop();
 		if (desktop.isServerPushEnabled()) {
 			Messagebox.show("Already started");
 		} else {
 			desktop.removeAttribute("sp.ceased");
 			desktop.enableServerPush(true);
-			new WorkingThread(info).start();
+			new WorkingThread(info, tb).start();
 		}
 	}
 	public static void stop() throws InterruptedException {
@@ -53,7 +53,7 @@ public class ServerPush {
 			Messagebox.show("Already stopped");
 		}
 	}
-	public static void updateInfo(Component info, String postfix) {
+	public static void updateInfo(Component info, Textbox tb, String postfix) {
 		Integer i = (Integer)info.getAttribute("count");
 		int v = i == null ? 0: i.intValue() + 1;
 		if (info.getChildren().size() >= 10) {
@@ -61,7 +61,7 @@ public class ServerPush {
 			((Component)info.getChildren().get(0)).detach();
 		}
 		info.setAttribute("count", new Integer(v));
-		info.appendChild(new Label(" " + v + " " + postfix));
+		info.appendChild(new Label(" " + v + ", " + tb.getValue() + " " + postfix));
 		info.appendChild(new Separator());
 			//create a new component that is easier to detect bugs
 	}
@@ -69,16 +69,18 @@ public class ServerPush {
 	private static class WorkingThread extends Thread {
 		private final Desktop _desktop;
 		private final Component _info;
-		private WorkingThread(Component info) {
+		private final Textbox _tb;
+		private WorkingThread(Component info, Textbox tb) {
 			_desktop = info.getDesktop();
 			_info = info;
+			_tb = tb;
 		}
 		public void run() {
 			try {
 				while (_desktop.getAttribute("sp.ceased") == null) {
 					Executions.activate(_desktop);
 					try {
-						updateInfo(_info, "comet");
+						updateInfo(_info, _tb, "comet");
 					} catch (RuntimeException ex) {
 						log.error(ex);
 						throw ex;
