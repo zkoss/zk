@@ -780,8 +780,8 @@ public interface Execution extends Scope {
 	/** Returns whether it is a browser of the specified type.
 	 *
 	 * @param type the type of the browser.
-	 * Allowed values include "robot", "ie", "ie6", "ie6-", "ie7", "ie8",
-	 * "ie7-", "gecko", "gecko2", "gecko3", "gecko2-",
+	 * Allowed values include "robot", "ie", "ie6", "ie6-", "ie7", "ie8", "ie8-"
+	 * "ie7-", "gecko", "gecko2", "gecko3", "gecko2-", "gecko3-"
 	 * "opara", "safari",
 	 * "mil", "hil", "mil-". Otherwise, it matches whether the type exist or not.<br/>
 	 * Note: "ie6-" means Internet Explorer 6 only; not Internet Explorer 7

@@ -255,8 +255,8 @@ public class Servlets {
 	/** Returns whether the client is a browser of the specified type.
 	 *
 	 * @param type the type of the browser.
-	 * Allowed values include "robot", "ie", "ie6", "ie6-", "ie7", "ie8",
-	 * "ie7-", "gecko", "gecko2", "gecko3", "gecko2-",
+	 * Allowed values include "robot", "ie", "ie6", "ie6-", "ie7", "ie8", "ie8-",
+	 * "ie7-", "gecko", "gecko2", "gecko3", "gecko2-", "gecko3-",
 	 * "opara", "safari",
 	 * "mil", "hil", "mil-".<br/>
 	 * Note: "ie6-" means Internet Explorer 6 only; not Internet Explorer 7
@@ -286,10 +286,12 @@ public class Servlets {
 		if ("ie7".equals(type)) return isExplorer7(userAgent);
 		if ("ie7-".equals(type)) return getIEVer(userAgent) == 7;
 		if ("ie8".equals(type)) return getIEVer(userAgent) >= 8;
+		if ("ie8-".equals(type)) return getIEVer(userAgent) == 8;
 
 		if ("gecko".equals(type) || "gecko2".equals(type)) return isGecko(userAgent);
 		if ("gecko2-".equals(type)) return getGeckoVer(userAgent) == 2;
 		if ("gecko3".equals(type)) return isGecko3(userAgent);
+		if ("gecko3-".equals(type)) return getGeckoVer(userAgent) == 3;
 
 		if ("safari".equals(type)) return isSafari(userAgent);
 		if ("opera".equals(type)) return isOpera(userAgent);
