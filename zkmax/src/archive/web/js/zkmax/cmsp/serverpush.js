@@ -18,8 +18,7 @@ zkmax.cmsp.SPush = zk.$extends(zk.Object, {
 	start: function (dt) {
 		++zkmax.cmsp._nStart;
 		this.desktop = dt;
-		setTimeout(this.proxy(this._send), zAu.sendNow(dt) ? 900: 50);
-		//Delay it a bit so zAu.sendNow has time to send any pending status back
+		this._asend(50);
 	},
 	stop: function () {
 		--zkmax.cmsp._nStart;
@@ -65,7 +64,7 @@ zkmax.cmsp.SPush = zk.$extends(zk.Object, {
 					var sid = req.getResponseHeader("ZK-SID");
 					if (!sid || sid == this._sid) {
 						if (zAu.pushXmlResp(this.desktop, req)) {
-							timeout = 100;
+							timeout = 50;
 							if (sid && ++this._sid > 999) this._sid = 1;
 							//both pushXmlResp and doCmds might ex
 						}
@@ -80,7 +79,9 @@ zkmax.cmsp.SPush = zk.$extends(zk.Object, {
 	},
 	_asend: function (timeout) {
 		if (!this._stopped)
-			setTimeout(this.proxy(this._send), timeout);
+			setTimeout(this.proxy(this._send, "_pxsend"),
+				Math.max(zAu.sendNow(this.desktop) ? 900: 0, timeout));
+				//At least 900 so zAu.sendNow has time to send any pending status back
 	}
 });
 
