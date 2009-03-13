@@ -14,6 +14,7 @@ ZK 3.6.1
 
 	--------
 ZK 3.6.0
+March 2, 2009
 * Features
   2276253: Allow Tab key in textbox
   2285243: SelectEvent getKeys()
@@ -105,6 +106,7 @@ ZK 3.6.0
 
 	--------
 ZK 3.5.2
+December 8, 2008
 * Features
   2173627: A way to specify where to gen ZK tags in JSP (incl zul)
   2173943: Enhance the generation of noscript (unavailable message)
@@ -157,6 +159,7 @@ ZK 3.5.2
   
 	--------
 ZK 3.5.1
+October 8, 2008
 * Features
   2106820: Change font size/family with system properties
   2058993: Fileupload supports bookmarkable and resumable download
@@ -202,6 +205,7 @@ ZK 3.5.1
 
 	--------
 ZK 3.5.0
+September 10, 2008
 * Features
   1973888: Listbox support Listgroupfoot in Group
   1972591: Grid support Groupfoot in Group
@@ -334,6 +338,7 @@ ZK 3.5.0
 
 	--------
 ZK 3.0.7
+August 1, 2008
 * Features
   2026318: Enhance Tree's paging to use Paging cmp as its paging mold
   2003033: Provides an utitlity to forward events to a component
@@ -376,6 +381,7 @@ ZK 3.0.7
 
 	--------
 ZK 3.0.6
+June 24, 2008
 * Features
   1968749: A way to pass object in forward attribute
   1978624: Keyevent support for every ZUL component
@@ -452,6 +458,7 @@ ZK 3.0.6
 
 	--------
 ZK 3.0.5
+April 30, 2008
 * Features
   1951358: A way to have component-specific Command
   1951286: JavaScript utils: comm.sendClick and comm.sendUser
@@ -510,6 +517,7 @@ ZK 3.0.5
 
 	--------
 ZK 3.0.4
+March 25, 2008
 * Features
   1904532: Grid/Listbox/Tree support the fixed layout concept
   1902777: A way to pass Object to included page with include comp
@@ -704,6 +712,7 @@ tr.listbox-fake th.sort-dsc div, tr.tree-fake th.sort-dsc div, tr.grid-fake th.s
 
 	--------
 ZK 3.0.3
+February 1, 2008
 * Features
   1883329: Translate messages to Ukrainian. Thank Denis Yarkovoy for his contribution.
   1883328: Translate messages to Russian. Thank Denis Yarkovoy for his contribution.
@@ -740,6 +749,7 @@ ZK 3.0.3
 
 	--------
 ZK 3.0.2
+January 22, 2008
 * Features:
   1862036: Combobox supports ListModel
   1764967: Combobox to support List binding
@@ -831,6 +841,7 @@ ZK 3.0.2
 
 	--------
 ZK 3.0.1
+December 17, 2007
 * Features:  
   1836202: A generic composer to realize MVC approach more easily
   1836198: A generic event listener which invokes corresponding method
@@ -951,6 +962,7 @@ ZK 3.0.1
 
 	--------
 ZK 3.0.0
+November 6, 2007
 * Features:
   1819982: Support the apply attribute to seperate view and controller
   1820406: Support the xel-method directive to load method dynamically
@@ -975,6 +987,84 @@ ZK 3.0.0
   1822158: Add getParentItem to replace deprecated getTreeitem
   1823959: Grid failed to re-sync model (Opera/IE/IE7)
   1824402: A way to close popup manually
+  1777430: Add getNextSibling/getPreviousSibling to Component Interface
+  1678806: Allow comboitems to carry a value payload
+  1800058: Provide align property for Box component
+  1802860: New improved translation to the the Catalan language
+  1803181: Change the modifier of org.zkoss.zul.Utils
+  1803253: Provide a simply layout component for ZK
+  1803964: Label's hyphen shall apply maxlength to each line
+  1806058: Listbox.selectedIndex should be setup default databinding
+  1811241: A way to access Execution in DesktopInit
+  1811274: A way to access Execution in IdGenerate.newDesktopId
+  1811281: A way to access Execution in IdGenerator.newPage
+  1811700: XUL box model: align and pack
+  1796284: MVEL easy way to access Resource Labels
+  1813503: A way to acess component being created in doAfterCompose
+  1803419: Providing schema definitions of 3rd-party components
+  1794409: Treerow need add onMouseover event  
+  1487212: A way to intercept events
+  1773607: Provide pluggable OGNL expression evaluator
+  1733589: get uploaded Media as InputStream regardless of its MIMEtype
+  1815594: A way to plugin a class to determine the encoding of upload
+  1815523: A way to show Popup manually
+  1779346: Messagebox : change default focus
+  1736341: A way to define the layout of Tab on the Tabbox
+  1787513: Translate messages to Hungarian. Thank Andreas Klein (andiklein@idatso.com) for his contribution.
+  1579332: Server Push
+  1776116: A way to forward event to another component w/o programming
+  1774559: Introduce the native namespace to speed up the handling HTML
+  1780018: A way to specify the namespace of native components
+  1780020: Support to generate XML output directly
+  1765987: Add timebox (by merge timebox from zkforge to zul)
+  1758837: Zk Flash Component
+  1537229: Treemodel with Tree
+  1786163: A way to make EL evaluator pluggable
+  1786165: Provide MVEL plugin
+  1788194: A way to specify a class mold for rendering a component
+  1787604: A way to import classes for EL eval, such as MVEL, OGNL
+  1760212: A simpler way to annotation a component
+  1760689: Data Binding using new simpler annotation to component
+  1760691: DataBinder support validation phase
+  1776269: Comboitem supports description in HTML raw content
+  1638395: Timer component and Session timeout
+  1771412: DSP TLD shall support tag uri
+  1780301: Performance measurement of ZK applications
+  1765119: Authentication & AU Http Status Code Handling
+  1753222: A way to assign text with element to a property than child
+  1758761: A way to attach a root component before another root
+  1751674: WebApp retrieves the major/minor version from getVersion
+  1752559: The script component shall support the content property
+  1752569: The style component shall support the content property
+  1752431: Change the modifier of addMoved in AbstractComponent
+  1753168: nextComponentUuid shall be called as late as possible
+  1759278: A way to get the request path of desktop
+  1766020: Icon of datebox shall be configurable (like combobox)
+  1760850: DHtmlLayoutServlet.process() as protected
+  1766667: DataBinder support multiple save-when events
+  1769025: Move isAsapRequired from HtmlBasedComponent to AbstractComponent
+  1769792: Component add onPageAttached and onPageDetached
+  1767347: DesktopCleanup shall called before UiEngine.desktopDestroyed
+  1770594: Tab: use class instead of hardcode background to style
+  1770613: Groupbox: use class instead of hardcode background to style
+  1770614: Slider: use class instead of hardcode background to style
+  1771384: a way to add xmlns on generated <html> tag
+  1772915: Desktop supports getPageIfAny
+  1775445: DSP Loader supports the compress option (like ZK Loader)
+  1760203: expiration time of events execution in UiEngineImpl
+  1776006: Slider supports value submitting in form
+  1776007: Calendar supports value submitting in form
+  1780078: A way to map an extension to a language
+  1780128: <?page?> shall support contentType
+  1780111: A way to specify DOCTYPE that will be generated to the client
+  1780804: A way to allow the client to cache the output
+  1782250: Performance improve: don't go thru Web container if incl ~./
+  1765212: Annoying sellection during drag-drop
+  1789258: A way to configure the cache of the event methods
+  1789830: A way to decouple Caption assumes LEGENG if default mold
+  1791353: Tabbox adds a simpler look
+  1441351: zebra colors for listbox
+  1792877: Tab and gbox's default height shall be configurable with CSS
 
 * Bugs:
   1814702: ZK Layout Fails to Resize
@@ -1040,49 +1130,6 @@ ZK 3.0.0
   1826517: A wrong calculation width when listhead is invisible
   1826101: Listbox size problem with paging mold
   1826606: A wrong calculation width when listheader is invisible
-  
-* Upgrade Notes:
-  + The pageContext variable in EL expressions becomes an instance of
-    org.zkoss.web.servlet.xel.PageContext
-  + Initiator's doCatch() now returns a boolean to indicate whether to ignore
-    the exception.
-    Note: it is backward compatible that you don't need to re-compile your codes
-  + In zk.xml, disable-default-theme is replaced with disable-theme-uri.
-  + EventThreadInit's init() now returns a boolean to indicate whether
-    to continue the processing of the event.
-  + Throws an exception in EventThreadResume's afterResume() will stop
-    the execution.
-  + The look of a tree is now customizable by use of CSS. Refer to Java API.
-    The icon-uri, icon-width and icon-height attributes are no longer used
-
-	--------
-ZK 3.0.0 RC2
-* Features:
-  1777430: Add getNextSibling/getPreviousSibling to Component Interface
-  1678806: Allow comboitems to carry a value payload
-  1800058: Provide align property for Box component
-  1802860: New improved translation to the the Catalan language
-  1803181: Change the modifier of org.zkoss.zul.Utils
-  1803253: Provide a simply layout component for ZK
-  1803964: Label's hyphen shall apply maxlength to each line
-  1806058: Listbox.selectedIndex should be setup default databinding
-  1811241: A way to access Execution in DesktopInit
-  1811274: A way to access Execution in IdGenerate.newDesktopId
-  1811281: A way to access Execution in IdGenerator.newPage
-  1811700: XUL box model: align and pack
-  1796284: MVEL easy way to access Resource Labels
-  1813503: A way to acess component being created in doAfterCompose
-  1803419: Providing schema definitions of 3rd-party components
-  1794409: Treerow need add onMouseover event  
-  1487212: A way to intercept events
-  1773607: Provide pluggable OGNL expression evaluator
-  1733589: get uploaded Media as InputStream regardless of its MIMEtype
-  1815594: A way to plugin a class to determine the encoding of upload
-  1815523: A way to show Popup manually
-  1779346: Messagebox : change default focus
-  1736341: A way to define the layout of Tab on the Tabbox
-
-* Bugs:
   1797527: malformed zul.xsd
   1801028: Failed to include ZUL located in classpath
   1798123: DHtmlLayoutPortlet.handleError throws exception in Pluto
@@ -1137,74 +1184,6 @@ ZK 3.0.0 RC2
   1816451: In ZK Popup window demo, popuped window cann't move outside
   1816436: The scroll bar is disappear in ZK demo, IE 6
   1816892: If popup the same menu twice, the second time's offset wrong
-  
-
-* Upgrade Notes:
-  + If the hyphen property of label is true, it means the maximal allowed
-    length of each line, rather than each word.
-  + The org.zkoss.zk.au.impl package is renamed to org.zkoss.zk.au.cmd
-    and Au* are moved from org.zkoss.zk.au to org.zkoss.zk.au.resp
-
-	--------
-ZK 3.0.0 RC
-* Features:
-  1787513: Translate messages to Hungarian. Thank Andreas Klein (andiklein@idatso.com) for his contribution.
-  1579332: Server Push
-  1776116: A way to forward event to another component w/o programming
-  1774559: Introduce the native namespace to speed up the handling HTML
-  1780018: A way to specify the namespace of native components
-  1780020: Support to generate XML output directly
-  1765987: Add timebox (by merge timebox from zkforge to zul)
-  1758837: Zk Flash Component
-  1537229: Treemodel with Tree
-  1786163: A way to make EL evaluator pluggable
-  1786165: Provide MVEL plugin
-  1788194: A way to specify a class mold for rendering a component
-  1787604: A way to import classes for EL eval, such as MVEL, OGNL
-  1760212: A simpler way to annotation a component
-  1760689: Data Binding using new simpler annotation to component
-  1760691: DataBinder support validation phase
-  1776269: Comboitem supports description in HTML raw content
-  1638395: Timer component and Session timeout
-  1771412: DSP TLD shall support tag uri
-  1780301: Performance measurement of ZK applications
-  1765119: Authentication & AU Http Status Code Handling
-  1753222: A way to assign text with element to a property than child
-  1758761: A way to attach a root component before another root
-  1751674: WebApp retrieves the major/minor version from getVersion
-  1752559: The script component shall support the content property
-  1752569: The style component shall support the content property
-  1752431: Change the modifier of addMoved in AbstractComponent
-  1753168: nextComponentUuid shall be called as late as possible
-  1759278: A way to get the request path of desktop
-  1766020: Icon of datebox shall be configurable (like combobox)
-  1760850: DHtmlLayoutServlet.process() as protected
-  1766667: DataBinder support multiple save-when events
-  1769025: Move isAsapRequired from HtmlBasedComponent to AbstractComponent
-  1769792: Component add onPageAttached and onPageDetached
-  1767347: DesktopCleanup shall called before UiEngine.desktopDestroyed
-  1770594: Tab: use class instead of hardcode background to style
-  1770613: Groupbox: use class instead of hardcode background to style
-  1770614: Slider: use class instead of hardcode background to style
-  1771384: a way to add xmlns on generated <html> tag
-  1772915: Desktop supports getPageIfAny
-  1775445: DSP Loader supports the compress option (like ZK Loader)
-  1760203: expiration time of events execution in UiEngineImpl
-  1776006: Slider supports value submitting in form
-  1776007: Calendar supports value submitting in form
-  1780078: A way to map an extension to a language
-  1780128: <?page?> shall support contentType
-  1780111: A way to specify DOCTYPE that will be generated to the client
-  1780804: A way to allow the client to cache the output
-  1782250: Performance improve: don't go thru Web container if incl ~./
-  1765212: Annoying sellection during drag-drop
-  1789258: A way to configure the cache of the event methods
-  1789830: A way to decouple Caption assumes LEGENG if default mold
-  1791353: Tabbox adds a simpler look
-  1441351: zebra colors for listbox
-  1792877: Tab and gbox's default height shall be configurable with CSS
-
-* Bugs:
   1751603: zk.renType in common.js not handling sessionid
   1752477: combobox in groupbox and vbox failed to pos button (IE only)
   1753712: Detaching component in DesktopCleanup causing IllegalStateException
@@ -1253,8 +1232,24 @@ ZK 3.0.0 RC
   1731646: error-popup not visible
   1694095: Combobox list vertical position
   1765047: tabbox not rendering well with percent width
-
+  
 * Upgrade Notes:
+  + The pageContext variable in EL expressions becomes an instance of
+    org.zkoss.web.servlet.xel.PageContext
+  + Initiator's doCatch() now returns a boolean to indicate whether to ignore
+    the exception.
+    Note: it is backward compatible that you don't need to re-compile your codes
+  + In zk.xml, disable-default-theme is replaced with disable-theme-uri.
+  + EventThreadInit's init() now returns a boolean to indicate whether
+    to continue the processing of the event.
+  + Throws an exception in EventThreadResume's afterResume() will stop
+    the execution.
+  + The look of a tree is now customizable by use of CSS. Refer to Java API.
+    The icon-uri, icon-width and icon-height attributes are no longer used
+  + If the hyphen property of label is true, it means the maximal allowed
+    length of each line, rather than each word.
+  + The org.zkoss.zk.au.impl package is renamed to org.zkoss.zk.au.cmd
+    and Au* are moved from org.zkoss.zk.au to org.zkoss.zk.au.resp
   + The way to customize the zebra color (striping) of grid is changed.
     ZK 3.0 uses dual class names, grid and odd, to provide the style
     instead of renaming the class name to grid-od. Note: odd is the
@@ -1263,10 +1258,8 @@ ZK 3.0.0 RC
 	tr.odd td.gc {
 		background: yellow;
 	}
-
   + The way to customize a grid not to stripe rows is changed:
     <grid oddRowSclass="none">
-
   + el-config (of zk.xml) is replaced with xel-config, and the class
     must implement org.zkoss.xel.ExpressionFactory instead of
     javax.servlet.jsp.el.ExpressionEvaluator.
@@ -1306,6 +1299,7 @@ ZK 3.0.0 RC
 
 	--------
 ZK 2.4.1
+July 6, 2007
 * Features:
   1735610: Translate messages to Catalan. Thank Xavier Covas O'Ryan (xcovas@conselldemallorca.net) for his contribution.
   1744123: Improve the way the performance of handling a huge tree
@@ -1353,6 +1347,7 @@ ZK 2.4.1
 
 	--------
 ZK 2.4.0
+June 8, 2007
 * Features:
   1727154: Support the fulfill attribute to defer creation of children
   1711860: An option to use native thread instead of event thread
@@ -1443,6 +1438,7 @@ ZK 2.4.0
 
 	--------
 ZK 2.3.1
+May 2, 2007
 * Features:
   1698249: A way to customize the error box withouot writing JavaScript
   1690498: A way to download a file from server with save as dialog
@@ -1543,6 +1539,7 @@ ZK 2.3.1
 
 	--------
 ZK 2.3.0
+March 20, 2007
 * Features:
   1666877: Support the variables element
   1655219: Radiogroup's layout independent of Radio button
@@ -1593,6 +1590,25 @@ ZK 2.3.0
   1631231: ZK and Acegi: refresh main page after login
   1683464: Upgrade to JRuby 0.9.8
   1683500: Upgrade to JFreeChart 1.0.4
+  1653099: JavaScript support (for zscript)
+  1613080: Groovy support (for zscript)
+  1656785: Ruby support (for zscript)
+  1636304: Add Grid footer (foot and footer)
+  1639117: Add Tree footer (treefoot and treefooter)
+  1467524: Component and Page supports getZScriptMethod
+  1627515: A way to turn off logs completely.
+  1628339: Make the tooltip open/close delay intravals configurable.
+  1628452: Make the delay to prompt the Processing dialog configurable.
+  1632869: Support messages in Bulgarian. Thank Boril Yonchev for his contribution.
+  1641269: Supports URIInterceptor.
+  1639628: Add afterSuspend method to EventThreadSuspend interface.
+  1647101: Upgrade to script.aculo.us 1.7.0
+  1636000: Remove indexOf() method from ListModel interface.
+  1647599: Allow the page directive being placed under other elements
+  1652091: A way to let developer create Listitem with live data
+  1649781: DataBind support nullify default configuration
+  1649795: DataBind support disable default configuration
+  1639707: A way to determine whether there's any suspended thread
  
 * Bugs:
   1659512: Datebox failed to init if no textbox was used
@@ -1632,56 +1648,6 @@ ZK 2.3.0
   1681128: Chart does not update when change width/height
   1683727: Progressmeter display progression
   1683841: Auto-gen Popup.getId() doesn't work with Label.tooltip
-
-* Upgrade Notes:
-  + The way to customize window's look and feel is changed.
-    Refer to the Developer's Guide for details.
-  + Removed InterPortletFilter from web.xml since it is no longer required.
-  + Implements the getRichlet and isRichlet method for your UiFactory class,
-    if you doesn't extend it from AbstractUiFactory.
-  + Use the following pattern to specify the style of a row of a grid.
-	tr.grid-od td.gc {
-		background: gray;
-	}
-  + Implements the getControls method of the LisitemRendererExt interface
-    instead of the shallDetachOnRender method.
-  + Use onOpen instead of onShow to be notified when a popup is closed.
-  + Client Side Action now use EL expressions (#{}) to reference a component
-    or any object.
-    <textbox action="onfocus: action.show(#{help1}); onblur: action.hide(#{help1})"/>
-  + script: Use child (label) to specify the embedded JavaScript codes
-    instead of the content property
-
-* Notes for upgrading from 2.3.0 RC
-  + getSuspsendedThreads is moved from Desktop to DesktopCtrl
-  + getZScriptVariable, getZScriptMethod and getZScriptClass are removed
-    from Component. Use the corresponding methods defined in Page.
-  + org.zkoss.zkplus.databind.BindingRenderer renamed to org.zkoss.zkplus.databind.BindingListitemRenderer
-
-	--------
-ZK 2.3.0 RC
-* Features:
-  1653099: JavaScript support (for zscript)
-  1613080: Groovy support (for zscript)
-  1656785: Ruby support (for zscript)
-  1636304: Add Grid footer (foot and footer)
-  1639117: Add Tree footer (treefoot and treefooter)
-  1467524: Component and Page supports getZScriptMethod
-  1627515: A way to turn off logs completely.
-  1628339: Make the tooltip open/close delay intravals configurable.
-  1628452: Make the delay to prompt the Processing dialog configurable.
-  1632869: Support messages in Bulgarian. Thank Boril Yonchev for his contribution.
-  1641269: Supports URIInterceptor.
-  1639628: Add afterSuspend method to EventThreadSuspend interface.
-  1647101: Upgrade to script.aculo.us 1.7.0
-  1636000: Remove indexOf() method from ListModel interface.
-  1647599: Allow the page directive being placed under other elements
-  1652091: A way to let developer create Listitem with live data
-  1649781: DataBind support nullify default configuration
-  1649795: DataBind support disable default configuration
-  1639707: A way to determine whether there's any suspended thread
-
-* Bugs:
   1630359: RequestResolver's application scope was implemented wrong
   1636562: Include a page that include another failed if relative path is used
   1635685: popup menu conflict with confirmClose (IE only)
@@ -1710,6 +1676,23 @@ ZK 2.3.0 RC
   1649718: Droppable attributes suppress each other
 
 * Upgrade Notes:
+  + The way to customize window's look and feel is changed.
+    Refer to the Developer's Guide for details.
+  + Removed InterPortletFilter from web.xml since it is no longer required.
+  + Implements the getRichlet and isRichlet method for your UiFactory class,
+    if you doesn't extend it from AbstractUiFactory.
+  + Use the following pattern to specify the style of a row of a grid.
+	tr.grid-od td.gc {
+		background: gray;
+	}
+  + Implements the getControls method of the LisitemRendererExt interface
+    instead of the shallDetachOnRender method.
+  + Use onOpen instead of onShow to be notified when a popup is closed.
+  + Client Side Action now use EL expressions (#{}) to reference a component
+    or any object.
+    <textbox action="onfocus: action.show(#{help1}); onblur: action.hide(#{help1})"/>
+  + script: Use child (label) to specify the embedded JavaScript codes
+    instead of the content property
   + The concept of variables and methods defined in zscript are changed.
     Each interpreter now supports only one logical scope. Variables and methods
     defined in zscript are visible for the same interpreter.
@@ -1731,15 +1714,23 @@ ZK 2.3.0 RC
     org.zkoss.zk.ui.util to org.zkoss.zk.scripting
   + Evaluator is moved from org.zkoss.zk.ui.util to org.zkoss.zk.el
 
+* Notes for upgrading from 2.3.0 RC
+  + getSuspsendedThreads is moved from Desktop to DesktopCtrl
+  + getZScriptVariable, getZScriptMethod and getZScriptClass are removed
+    from Component. Use the corresponding methods defined in Page.
+  + org.zkoss.zkplus.databind.BindingRenderer renamed to org.zkoss.zkplus.databind.BindingListitemRenderer
+
 	--------
 ZK 2.2.1
+January 2, 2007
 * Features:
   1619271, 1619272, 1619530, 1616213, 1615651, 1626042.
   + Support filtering of controller side events for Acegi security.
 
 * Bugs:
   1615959, 1616955, 1617664, 1617116, 1616783, 1619349, 1621425, 1619959,
-  1624086, 1624169, 1623918, 1625157, 1623918.
+  1624086, 1624169, 1623918, 1625157, 1623918,
+  1615919, 1615878, 1615371, 1616056.
 
 * Upgrade Note:
   + The signature of the cleanup method of ExecutionCleanup is changed.
@@ -1748,12 +1739,8 @@ ZK 2.2.1
     Developers have a chance to clean up exceptions.
 
 	--------
-ZK 2.2.0-1
-* Bugs:
-  1615919, 1615878, 1615371, 1616056.
-
-	--------
 ZK 2.2.0
+December 13, 2006
 * Features:
   1587247, 1587699, 1587701, 1588387, 1589060, 1589050, 1589119, 1567850,
   1502660, 1548218, 1441459, 1589979, 1490690, 1446618, 1557255, 1554667,
@@ -1794,6 +1781,7 @@ ZK 2.2.0
 
 	--------
 ZK 2.1.3
+October 24, 2006
 * Features:
   1567586, 1572187, 1575649, 1573501, 1577003, 1577051, 1577496, 1575726,
   1578371, 1580405, 1580579, 1581125.
@@ -1819,6 +1807,7 @@ ZK 2.1.3
 
 	--------
 ZK 2.1.2
+October 3, 2006
 * Features:
   1562214, 1563300, 1561398, 1450988, 1565483, 1565486, 1565288, 1569285.
   + French messages are supported. Thank Jerome Vergereau for his contribution.
@@ -1844,6 +1833,7 @@ ZK 2.1.2
 
 	--------
 ZK 2.1.1
+September 19, 2006
 * Features:
   1553828, 1553839, 1553829, 1553920, 1553918, 1553858, 1553952, 1553954,
   1554098, 1554495, 1554477, 1554567, 1556109, 1555491, 1520538, 1556783,
@@ -1871,6 +1861,7 @@ ZK 2.1.1
 
 	--------
 ZK 2.1.0
+August 28, 2006
 * Features:
   1513892, 1475475, 1517902, 1517384, 1518636, 1521070, 1521058, 1522329,
   1522677, 1507204, 1523732, 1518548, 1525722, 1526249, 1520170, 1526869,
@@ -1917,6 +1908,7 @@ ZK 2.1.0
 
 	--------
 ZK 2.0.1
+June 26, 2006
 * Features:
   1505319, 1505760, 1505410, 1505883, 1509204, 1509878, 1508629.
   + Components are cloneable.
@@ -1941,7 +1933,7 @@ ZK 2.0.1
  
 	--------
 ZK 2.0.0
-
+June 13, 2006
 * Features:
   1428252, 1470240, 1455332, 1454636, 1455415, 1456664, 1456733, 1456647,
   1459033, 1461806, 1462148, 1461209, 1464025, 1465967, 1459833, 1466246,
@@ -2044,7 +2036,7 @@ ZK 2.0.0
 
 --------
 ZK 1.1.0
-
+March 20, 2006
 * Request: 1442883, 1443536, 1443541, 1440869, 1447044, 1449724, 1449700,
   1450219, 1449680, 1448925, 1447272, 1453874, 1454168
 	+ The forEach attribute to generate components repeatedly
@@ -2073,7 +2065,7 @@ ZK 1.0.1
 
 --------
 ZK 1.0.0
-
+February 27, 2006
 * Request: 1432007, 1432863, 1431913, 1436785, 1437175, 1437434, 1438092
 	+ Drag and drop
 	+ Configurable when to check whether a ZUML file is modified
@@ -2095,30 +2087,21 @@ ZK 1.0.0 RC7
 	+ It simplifies the component development.
 	+ It improves the performance for long-latency or slow conenctions
 		-- about 7x faster for the first page to show up.
-
 * BeanShell 2.0 is used instead of 1.3
 
 ------------
 ZK 1.0.0 RC6
 
 * com.potix.zk.ui.Path is added to represent a component path.
-
 * Listbox supports listfoot and listfooter
-
 * Button supports the href attribute
-
 * DHtmlLayoutPortlet is added to work with Portal (JSR168).
-
 * com.potix.zul.Space is added to simplify the adding of vertical spacing.
-
 * Box, vbox, hbox, separator and space supports the spacing attribute
 	to let developer control the spacing.
-
 * getPages, getPage, getDesktopId are removed from Component, so you might
 	have to modify your codes to use getDesktop().getPage(...) insteaad.
-
 * Optimizes the performance by dropping redudant requests.
-
 * UiException derives from RuntimeException, so you don't need to declare
 	it as part of signature.
 
@@ -2126,26 +2109,18 @@ ZK 1.0.0 RC6
 ZK 1.0.0 RC5
 
 * Grid supports scrollable and headers. Refer to Developer's Guide.
-
 * Listbox and tree support the checkmark attribute. Refer to Developer's Guide.
-
 * Listcell and treecell are allowed to have textbox, button,
 	 and, in theory, any children. Refer to Developer's Guide.
-
 * The way to include style sheets is changed.
 	1. All style sheets is always included. Refer to Appendix A
 	in ZK Developer's GUide.
-
 	2. ${u:getThemeUri} is no longer supported, since they are always
 	included. Remove them.
-
 	3. Use "abc*.css" instead of "abc" for locale-dependence style sheet.
 	Refer to Locale-Dependent File in the Internationalization chapter.
-
 * OK to specify JavaScript codes directly in lang.xml and lang-addon.xml
-
 * OK to specify CSS files and style sheets in lang.xml and lang-addon.xml.
-
 * The directory structure of the distribution is changed a bit. Refer to
 	ZK-quickstart.pdf for details.
 
@@ -2153,10 +2128,8 @@ ZK 1.0.0 RC5
 ZK 1.0.0 RC4
 
 * iframe supports the setContent method for the dynamically generate contents
-
 * The setImageContent method is supported for all components that supports
 	images, such as button, checkbox, comboitem, listcell and many others.
-
 * Window supports the closable attribute
 
 ------------
@@ -2170,17 +2143,12 @@ ZK 1.0.0 RC2
 * To be complaint with XUL, we have rename some components
 	+ toolbutton is renamed to toolbarbutton
 	+ listcols and listcol are renamed to listhead and listheader
-
 * DHtmlLayoutServlet support more configuration options, session-timeout
   and desktop-timeout.
-
 * Desktop is moved to com.potix.zk.ui, since it is worth to let developers
   know it
-
 * com.potix.zk.ui.WebApp is added to represent a Web application.
   It wraps javax.servlet.ServletContext.
-
 * com.potix.zk.ui.InitAware is removed. Instead, com.potix.zk.ui.Initiator
   is added. The later is simpler yet powerful.
-
 * Over 80 XHTML components are added.
