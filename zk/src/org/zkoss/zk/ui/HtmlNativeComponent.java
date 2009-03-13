@@ -211,14 +211,22 @@ implements DynamicTag, Native {
 
 		//second half
 		helper.getSecondHalf(sb, _tag);
-		final String tn = _tag != null ? _tag.toLowerCase(): "";
-		if (!rc.zktagGened && ("html".equals(tn) || "body".equals(tn))) {
-			final int j = sb.lastIndexOf("</" + _tag);
-			if (j >= 0) {
-				final String zktags =
-					HtmlPageRenders.outZkTags(Executions.getCurrent(), getDesktop());
-				if (zktags != null)
-					sb.insert(j, zktags);
+		final Execution exec = Executions.getCurrent();
+		if (exec != null) {
+			final String tn = _tag != null ? _tag.toLowerCase(): "";
+			if ("html".equals(tn) || "body".equals(tn)) {
+				final int j = sb.lastIndexOf("</" + _tag);
+				if (j >= 0) {
+					if (!rc.zktagGened) {
+						final String zktags =
+							HtmlPageRenders.outZkTags(exec, getDesktop());
+						if (zktags != null)
+							sb.insert(j, zktags);
+					}
+
+					final String msg = HtmlPageRenders.outUnavailable(exec);
+					if (msg != null) sb.insert(j, msg);
+				}
 			}
 		}
 		return sb.toString();
