@@ -11,7 +11,9 @@ ZK 3.6.1
 * Bugs
   2684510: Unable to access implict objects if func defined in other namespace
   2685872: Comet not send back new value of textbox if no listener
-
+  2684322: Nullpoint when accese to a nonexist page
+  2681819: normal page throws exception after installed zkspring
+  
 	--------
 ZK 3.6.0
 March 2, 2009
