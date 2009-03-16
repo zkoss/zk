@@ -469,14 +469,12 @@ zk.realClass = function (el, keywords) {
 	return "";
 };
 
-// This zk.reClassNameCache and zk.getClassRegEx function are based on the Yahoo! Inc.,
-// which can be found here - http://developer.yahoo.net/yui
-zk.reClassNameCache = {}; // cache regexes for className
-zk.getClassRegEx = function(clsnm) {
-	var re = zk.reClassNameCache[clsnm];
+zk._clsregexs = {}; //Refer to http://developer.yahoo.net/yui
+zk._clsRegEx = function(clsnm) {
+	var re = zk._clsregexs[clsnm];
 	if (!re) {
 		re = new RegExp('(?:^|\\s+)' + clsnm + '(?:\\s+|$)', 'g');
-		zk.reClassNameCache[clsnm] = re;
+		zk._clsregexs[clsnm] = re;
 	}
 	return re;
 };
@@ -484,7 +482,7 @@ zk.getClassRegEx = function(clsnm) {
  * of the specified element.
  */
 zk.hasClass = function (el, clsnm) {
-	return el.className.match(zk.getClassRegEx(clsnm)) != null;
+	return el.className.match(zk._clsRegEx(clsnm)) != null;
 };
 
 /** Adds the specified class name to the class name of the specified element.
@@ -513,7 +511,7 @@ zk.rmClass = function (el, clsnm, bRemove) {
 	}
 
 	if (zk.hasClass(el, clsnm)) {
-		var re = zk.getClassRegEx(clsnm);
+		var re = zk._clsRegEx(clsnm);
 		el.className = el.className.replace(re, " ").trim();
 	}
 };
