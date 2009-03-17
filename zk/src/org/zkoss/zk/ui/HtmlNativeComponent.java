@@ -59,6 +59,7 @@ public class HtmlNativeComponent extends AbstractComponent
 implements DynamicTag, Native {
 	private static final Helper _helper = new HtmlHelper();
 	private static final String ATTR_TOP_NATIVE = "org.zkoss.zk.top-native";
+	private static final String ATTR_RENDER_CONTEXT = "org.zkoss.zk.render-context";
 
 	private String _tag;
 	private String _prolog = "", _epilog = "";
@@ -150,7 +151,7 @@ implements DynamicTag, Native {
 			return;
 		}
 
-		final RenderContext rc = new RenderContext();
+		final RenderContext rc = getRenderContext(exec);
 		out.write(getPrologHalf(rc));
 
 		//children
@@ -173,9 +174,17 @@ implements DynamicTag, Native {
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 
-		final RenderContext rc = new RenderContext();
+		final RenderContext rc = getRenderContext(Executions.getCurrent());
 		render(renderer, "prolog", getPrologHalf(rc));
 		render(renderer, "epilog", getEpilogHalf(rc));
+	}
+	private RenderContext getRenderContext(Execution exec) {
+		if (exec == null)
+			return new RenderContext();
+		RenderContext rc = (RenderContext)exec.getAttribute(ATTR_RENDER_CONTEXT);
+		if (rc == null)
+			exec.setAttribute(ATTR_RENDER_CONTEXT, rc = new RenderContext());
+		return rc;
 	}
 	private String getPrologHalf(RenderContext rc) {
 		final StringBuffer sb = new StringBuffer(128);
@@ -187,16 +196,22 @@ implements DynamicTag, Native {
 
 		//prolog
 		sb.append(_prolog); //no encoding
-		final String tn = _tag != null ? _tag.toLowerCase(): "";
-		if ("html".equals(tn) || "body".equals(tn)
-		|| "head".equals(tn)) {//<head> might be part of _prolog
-			final int j = indexOfHead(sb);
-			if (j >= 0) {
-				rc.zktagGened = true;
-				final String zktags =
-					HtmlPageRenders.outZkTags(Executions.getCurrent(), getDesktop());
-				if (zktags != null)
-					sb.insert(j, zktags);
+
+		final Execution exec = Executions.getCurrent();
+		if (exec != null) {
+			replaceZkhead(exec, sb, rc);
+
+			final String tn = _tag != null ? _tag.toLowerCase(): "";
+			if (!rc.zktagGened
+			&& ("html".equals(tn) || "body".equals(tn) || "head".equals(tn))) { //<head> might be part of _prolog
+				final int j = indexOfHead(sb);
+				if (j >= 0) {
+					rc.zktagGened = true;
+					final String zktags =
+						HtmlPageRenders.outZkTags(exec, getDesktop());
+					if (zktags != null)
+						sb.insert(j, zktags);
+				}
 			}
 		}
 
@@ -211,8 +226,11 @@ implements DynamicTag, Native {
 
 		//second half
 		helper.getSecondHalf(sb, _tag);
+
 		final Execution exec = Executions.getCurrent();
 		if (exec != null) {
+			replaceZkhead(exec, sb, rc);
+
 			final String tn = _tag != null ? _tag.toLowerCase(): "";
 			if ("html".equals(tn) || "body".equals(tn)) {
 				final int j = sb.lastIndexOf("</" + _tag);
@@ -231,7 +249,27 @@ implements DynamicTag, Native {
 		}
 		return sb.toString();
 	}
+	private void
+	replaceZkhead(Execution exec, StringBuffer sb, RenderContext rc) {
+		if (!rc.zkheadFound) {
+			final int j = sb.indexOf("<zkhead/>");
+			if (j >= 0) {
+				rc.zkheadFound = true;
+					//Note: we allow only one zkhead (for better performance)
 
+				if (!rc.zktagGened) {
+					rc.zktagGened = true;
+					final String zktags = HtmlPageRenders.outZkTags(exec, getDesktop());
+					if (zktags != null) {
+						sb.replace(j, j + 9, zktags);
+						return;
+					}
+				}
+				sb.delete(j, j + 9);
+			}
+		}
+		return;
+	}
 	/** Search <head> case-insensitive. */
 	private static int indexOfHead(StringBuffer sb) {
 		for (int j = 0, len = sb.length(); (j = sb.indexOf("<", j)) >= 0;) {
@@ -300,7 +338,7 @@ implements DynamicTag, Native {
 
 			if (tag != null) {
 				final String tn = tag.toLowerCase();
-				if (HTMLs.isOrphanTag(tn))
+				if ("zkhead".equals(tn) || HTMLs.isOrphanTag(tn))
 					sb.append('/');
 				sb.append('>');
 
@@ -311,7 +349,7 @@ implements DynamicTag, Native {
 		public void getSecondHalf(StringBuffer sb, String tag) {
 			if (tag != null) {
 				final String tn = tag.toLowerCase();
-				if (HTMLs.isOrphanTag(tn))
+				if ("zkhead".equals(tn) || HTMLs.isOrphanTag(tn))
 					return;
 
 				sb.append("</").append(tag).append('>');
@@ -321,7 +359,7 @@ implements DynamicTag, Native {
 			}
 		}
 		public void appendText(StringBuffer sb, String text) {
-			XMLs.encodeText(sb, text);
+			sb.append(text); //don't encode (bug 2689443)
 		}
 	}
 	/** A set of tags that we shall append linefeed to it.
@@ -355,5 +393,6 @@ implements DynamicTag, Native {
 	}
 	private static class RenderContext {
 		boolean zktagGened;
+		boolean zkheadFound;
 	};
 }

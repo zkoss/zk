@@ -47,7 +47,9 @@ import org.zkoss.xel.VariableResolver;
 
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.xel.Evaluator;
 import org.zkoss.zk.ui.event.Events;
 
@@ -577,6 +579,7 @@ public class Components {
 		IMPLICIT_NAMES.add("desktop");
 		IMPLICIT_NAMES.add("desktopScope");
 		IMPLICIT_NAMES.add("execution");
+		IMPLICIT_NAMES.add("event"); //since 3.6.1, #bug 2681819: normal page throws exception after installed zkspring
 		IMPLICIT_NAMES.add("self");
 		IMPLICIT_NAMES.add("session");
 		IMPLICIT_NAMES.add("sessionScope");
@@ -628,6 +631,7 @@ public class Components {
 			return ARG_PROXY;
 		if ("param".equals(fdname))
 			return PARAM_PROXY;
+		//20090314, Henri Chen: No way to suppport "event" with an event proxy becuase org.zkoss.zk.Event is not an interface
 		return null;
 	}
 
@@ -666,6 +670,9 @@ public class Components {
 			return EXECUTION_PROXY;
 		if ("arg".equals(fdname))
 			return EXECUTION_PROXY.getArg();
+		if ("param".equals(fdname))
+			return PARAM_PROXY;
+		//20090314, Henri Chen: No way to suppport "event" with an event proxy becuase org.zkoss.zk.Event is not an interface
 		return null;
 	}
 	

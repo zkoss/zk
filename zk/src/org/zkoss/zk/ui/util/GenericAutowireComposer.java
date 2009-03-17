@@ -157,6 +157,11 @@ abstract public class GenericAutowireComposer extends GenericComposer implements
 	 * @since 3.0.8
 	 */
 	protected Map arg;
+	/** Implicit Object; the param argument passed from the http request.
+	 * @since 3.6.1
+	 */
+	protected Map param;
+	
 	/** The separator. */
 	protected final char _separator;
 

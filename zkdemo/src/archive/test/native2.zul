@@ -18,6 +18,10 @@ xmlns:u="http://www.zkoss.org/2005/zul"
 xmlns:zk="http://www.zkoss.org/2005/zk">
  <head>
 	<title>Native Complete Page</title>
+	<zkhead/>
+	<script>
+	setTimeout(function(){zk.log("You shall see this");},0); //test if quote is escaped
+	</script>
  </head>
  <body>
 	<zk:zscript>
