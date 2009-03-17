@@ -579,7 +579,7 @@ public class ZkFns extends DspFns {
 	}
 
 	/** Generates and returns the ZK specific HTML tags for
-	 * a desktop.
+	 * a desktop (never null).
 	 *
 	 * <p>For each desktop, we have to generate a set of HTML tags
 	 * to load ZK Client engine, style sheets and so on.
@@ -588,7 +588,7 @@ public class ZkFns extends DspFns {
 	 * with special component such as org.zkoss.zhtml.Head, such that
 	 * the result HTML page is legal.
 	 *
-	 * @return the string holding the HTML tags, or null if already generated.
+	 * @return the string holding the HTML tags, or an empty string if already generated.
 	 * @since 3.5.0
 	 */
 	public static String outZkHtmlTags() {

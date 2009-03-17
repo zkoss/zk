@@ -57,6 +57,7 @@ import org.zkoss.zk.fn.ZkFns;
 public class HtmlNativeComponent extends AbstractComponent
 implements DynamicTag, Native {
 	private static Helper _helper = new HtmlHelper();
+	private static final String ATTR_ZKHEAD_FOUND = "org.zkoss.zk.ui.zkheadFound";
 
 	private String _tag;
 	private String _prolog = "", _epilog = "";
@@ -138,14 +139,13 @@ implements DynamicTag, Native {
 
 		//first half
 		helper.getFirstHalf(sb, _tag, _props, _dns);
-		write(out, sb);
 
 		//prolog
 		sb.append(_prolog); //no encoding
-		boolean zktagGened = false;
+		boolean zktagGened = replaceZkhead(sb, false);
 		final String tn = _tag != null ? _tag.toLowerCase(): "";
-		if ("html".equals(tn) || "body".equals(tn)
-		|| "head".equals(tn)) {//<head> might be part of _prolog
+		if (!zktagGened && ("html".equals(tn) || "body".equals(tn)
+		|| "head".equals(tn))) {//<head> might be part of _prolog
 			final int j = indexOfHead(sb);
 			if (j >= 0) {
 				zktagGened = true;
@@ -162,10 +162,10 @@ implements DynamicTag, Native {
 
 		//epilog
 		sb.append(_epilog);
-		write(out, sb);
 
 		//second half
 		helper.getSecondHalf(sb, _tag);
+		zktagGened = replaceZkhead(sb, zktagGened);
 		if (!zktagGened && ("html".equals(tn) || "body".equals(tn))) {
 			final int j = sb.lastIndexOf("</" + _tag);
 			if (j >= 0) {
@@ -175,6 +175,28 @@ implements DynamicTag, Native {
 			}
 		}
 		out.write(sb.toString());
+	}
+	private static boolean replaceZkhead(StringBuffer sb, boolean zktagGened) {
+		final Execution exec = Executions.getCurrent();
+		if (exec == null || exec.getAttribute(ATTR_ZKHEAD_FOUND) == null) {
+			final int j = sb.indexOf("<zkhead/>");
+			if (j >= 0) {
+				if (exec != null)
+					exec.setAttribute(ATTR_ZKHEAD_FOUND, Boolean.TRUE);
+					//Note: we allow only one zkhead (for better performance)
+
+				if (!zktagGened) {
+					final String zktags = ZkFns.outZkHtmlTags();
+					if (zktags != null) {
+						sb.replace(j, j + 9, zktags);
+						return true;
+					}
+					zktagGened = true;
+				}
+				sb.delete(j, j + 9);
+			}
+		}
+		return zktagGened;
 	}
 	/** Writes the content of stringbuffer to the writer.
 	 * After written, stringbuffer is reset.
@@ -252,7 +274,7 @@ implements DynamicTag, Native {
 
 			if (tag != null) {
 				final String tn = tag.toLowerCase();
-				if (HTMLs.isOrphanTag(tn))
+				if ("zkhead".equals(tn) || HTMLs.isOrphanTag(tn))
 					sb.append('/');
 				sb.append('>');
 
@@ -263,7 +285,7 @@ implements DynamicTag, Native {
 		public void getSecondHalf(StringBuffer sb, String tag) {
 			if (tag != null) {
 				final String tn = tag.toLowerCase();
-				if (HTMLs.isOrphanTag(tn))
+				if ("zkhead".equals(tn) || HTMLs.isOrphanTag(tn))
 					return;
 
 				sb.append("</").append(tag).append('>');
