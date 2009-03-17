@@ -305,6 +305,13 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</library-property>
 	-->
 
+	<!-- Uncomment it if you prefer to keep the desktops when an user browses to
+		another URL or reloads the page.
+	<client-config>
+		<keep-across-visits>true</keep-across-visits>
+	</client-config>
+	-->
+
 	<!-- Configure the Hibernate SessionFactory Lifecycle.
 	<listener>
 		<description>Hibernate SessionFactory Lifecycle</description>

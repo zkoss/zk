@@ -273,7 +273,7 @@ implements DynamicTag, Native {
 			}
 		}
 		public void appendText(StringBuffer sb, String text) {
-			XMLs.encodeText(sb, text);
+			sb.append(text); //don't encode (bug 2689443)
 		}
 	}
 	/** A set of tags that we shall append linefeed to it.
