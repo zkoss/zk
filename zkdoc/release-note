@@ -15,6 +15,7 @@ ZK 3.6.1
   2684322: Nullpoint when accese to a nonexist page
   2681819: normal page throws exception after installed zkspring
   2689443: script in native namespace shall not encode the content
+  2687399: Filedownload error if included by JSP or other servlet
   
 	--------
 ZK 3.6.0

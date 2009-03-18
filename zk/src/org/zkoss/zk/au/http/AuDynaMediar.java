@@ -101,7 +101,7 @@ public class AuDynaMediar implements AuProcessor {
 				config.invokeExecutionInits(exec, oldexec);
 				desktopCtrl.invokeExecutionInits(exec, oldexec);
 
-				media = desktopCtrl.getDownloadMedia(uuid, true);
+				media = desktopCtrl.getDownloadMedia(uuid, false);
 				if (media != null) {
 					download = true; //yes, it is for download
 				} else {

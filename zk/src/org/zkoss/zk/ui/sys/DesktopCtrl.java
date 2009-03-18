@@ -163,10 +163,10 @@ if (c.isEmpty()) {
 	 * <p>This method is used internally. Developers rarely need to
 	 * access this method.
 	 *
-	 * @param remove whether to remove it from cache once returned.
+	 * @param reserved reserved for future use.
 	 * @return the media or null if not found.
 	 */
-	public Media getDownloadMedia(String medId, boolean remove);
+	public Media getDownloadMedia(String medId, boolean reserved);
 
 	/** Called when a component added or removed a listener for
 	 * {@link Events#ON_PIGGYBACK}.

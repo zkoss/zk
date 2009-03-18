@@ -221,7 +221,7 @@ public class CacheMap implements Map, Cache, java.io.Serializable, Cloneable {
 	 * @since 3.6.1
 	 */
 	public void expunge() {
-		if (_inExpunge) return; //nothing to do
+		if (_inExpunge || _map.isEmpty()) return; //nothing to do
 
 		_inExpunge = true;
 		try {
