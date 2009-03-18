@@ -1525,14 +1525,13 @@ public class UiEngineImpl implements UiEngine {
 		ExecutionsCtrl.setCurrent(exec);
 		try {
 			execCtrl.onActivate();
-		} catch (Error ex) {
+		} catch (Throwable ex) {
 			ExecutionsCtrl.setCurrent(null); //just in case
-			((DesktopCtrl)desktop).setExecution(null);
-			throw ex;
-		} catch (RuntimeException ex) {
-			ExecutionsCtrl.setCurrent(null); //just in case
-			((DesktopCtrl)desktop).setExecution(null);
-			throw ex;
+			synchronized (eis) {
+				eis.put(desktop, null);
+				((DesktopCtrl)desktop).setExecution(null);
+			}
+			throw UiException.Aide.wrap(ex);
 		}
 		return uv;
 	}
@@ -1587,9 +1586,7 @@ public class UiEngineImpl implements UiEngine {
 		final UiVisualizer uv = new UiVisualizer(olduv, curExec);
 		final Map eis = getVisualizers(sess);
 		synchronized (eis) {
-			final Object o = eis.put(desktop, uv);
-			if (o != olduv)
-				throw new InternalError(); //wrong olduv
+			eis.put(desktop, uv);
 			((DesktopCtrl)desktop).setExecution(curExec);
 		}
 
@@ -1598,14 +1595,13 @@ public class UiEngineImpl implements UiEngine {
 		ExecutionsCtrl.setCurrent(curExec);
 		try {
 			curCtrl.onActivate();
-		} catch (Error ex) { //just in case
+		} catch (Throwable ex) { //just in case
 			ExecutionsCtrl.setCurrent(olduv.getExecution());
-			((DesktopCtrl)desktop).setExecution(olduv.getExecution());
-			throw ex;
-		} catch (RuntimeException ex) {//just in case
-			ExecutionsCtrl.setCurrent(olduv.getExecution());
-			((DesktopCtrl)desktop).setExecution(olduv.getExecution());
-			throw ex;
+			synchronized (eis) {
+				eis.put(desktop, olduv);
+				((DesktopCtrl)desktop).setExecution(olduv.getExecution());
+			}
+			throw UiException.Aide.wrap(ex);
 		}
 		return uv;
 	}
