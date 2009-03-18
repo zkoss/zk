@@ -562,7 +562,9 @@ public class Components {
 	 * @since 3.5.2
 	 */
 	public static boolean isImplicit(String id) {
-		return IMPLICIT_NAMES.contains(id);
+		//since 3.6.1, #bug 2681819: normal page throws exception after installed zkspring
+		//cannot add "event" directly into IMPLICIT_NAMES because we cannot inject an event
+		return "event".equals(id) || IMPLICIT_NAMES.contains(id);
 	}
 
 	private static final Set IMPLICIT_NAMES = new HashSet();
@@ -574,7 +576,6 @@ public class Components {
 		IMPLICIT_NAMES.add("desktop");
 		IMPLICIT_NAMES.add("desktopScope");
 		IMPLICIT_NAMES.add("execution");
-		IMPLICIT_NAMES.add("event"); //since 3.6.1, #bug 2681819: normal page throws exception after installed zkspring
 		IMPLICIT_NAMES.add("self");
 		IMPLICIT_NAMES.add("session");
 		IMPLICIT_NAMES.add("sessionScope");
@@ -805,20 +806,23 @@ public class Components {
 		}
 		
 		private void injectByName(Object arg, String fdname) {
-			final String mdname = Classes.toMethodName(fdname, "set");
-			final Class parmcls = arg.getClass();
-			final Class tgtcls = _controller.getClass();
-			try {
-				final Method md = 
-					Classes.getCloseMethod(tgtcls, mdname, new Class[] {parmcls});
-				if (!injectByMethod(md, parmcls, parmcls, arg, fdname)) {
+			//argument to be injected is null; then no need to inject
+			if (arg != null) {
+				final String mdname = Classes.toMethodName(fdname, "set");
+				final Class parmcls = arg.getClass();
+				final Class tgtcls = _controller.getClass();
+				try {
+					final Method md = 
+						Classes.getCloseMethod(tgtcls, mdname, new Class[] {parmcls});
+					if (!injectByMethod(md, parmcls, parmcls, arg, fdname)) {
+						injectFieldByName(arg, tgtcls, parmcls, fdname);
+					}
+				} catch (NoSuchMethodException ex) {
+					//no setXxx() method, try inject into Field
 					injectFieldByName(arg, tgtcls, parmcls, fdname);
+				} catch (Exception ex) {
+					throw UiException.Aide.wrap(ex);
 				}
-			} catch (NoSuchMethodException ex) {
-				//no setXxx() method, try inject into Field
-				injectFieldByName(arg, tgtcls, parmcls, fdname);
-			} catch (Exception ex) {
-				throw UiException.Aide.wrap(ex);
 			}
 		}
 		
