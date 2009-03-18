@@ -45,6 +45,8 @@ import org.zkoss.lang.SystemException;
 import org.zkoss.util.media.Media;
 import org.zkoss.util.logging.Log;
 import org.zkoss.io.Files;
+import org.zkoss.io.RepeatableInputStream;
+import org.zkoss.io.RepeatableReader;
 
 import org.zkoss.web.Attributes;
 import org.zkoss.web.servlet.Servlets;
@@ -401,14 +403,14 @@ public class Https extends Servlets {
 	 * @param media the content to be writeen
 	 * @param download whether to cause the download to show at the client.
 	 * If true, it sets the Content-Disposition header.
-	 * @param resumable whether to handle the partial content.
-	 * Note: the partial content is handled only if resumable is true
-	 * and the Range header is specified in the request.
+	 * @param repeatable whether to use {@link RepeatableInputStream}
+	 * or {@link RepeatableReader} to read the media.
+	 * It is better to specify true if the media might be read repeatedly.
 	 * @since 3.5.0
 	 */
 	public static
 	void write(HttpServletRequest request, HttpServletResponse response,
-	Media media, boolean download, boolean resumable)
+	Media media, boolean download, boolean repeatable)
 	throws IOException {
 		response.setHeader("Accept-Ranges", "bytes");
 
@@ -442,7 +444,8 @@ public class Https extends Servlets {
 			if (!media.inMemory()) {
 				final ServletOutputStream out = response.getOutputStream();
 				if (media.isBinary()) {
-					final InputStream in = media.getStreamData();
+					InputStream in = media.getStreamData();
+					if (repeatable) in = RepeatableInputStream.getInstance(in);
 					try {
 						if (headOnly) {
 							int cnt = 0;
@@ -478,7 +481,8 @@ public class Https extends Servlets {
 					}
 				} else {
 					final String charset = getCharset(ctype);
-					final Reader in = media.getReaderData();
+					Reader in = media.getReaderData();
+					if (repeatable) in = RepeatableReader.getInstance(in);
 					try {
 						if (headOnly) {
 							int cnt = 0;

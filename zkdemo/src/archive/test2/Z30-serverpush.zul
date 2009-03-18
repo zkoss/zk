@@ -24,7 +24,7 @@ Click "Start Push", and it shall count again (from 1).
 <separator/>
 Note: the server push is enabled and timer disabled at the beginning.
 	<vbox>
-	<button label="Start Push" onClick="org.zkoss.zkdemo.test2.ServerPush.start(info)"/>
+	<button label="Start Push" onClick="org.zkoss.zkdemo.test2.ServerPush.start(info, tb)"/>
 	<button label="Stop Push" onClick="org.zkoss.zkdemo.test2.ServerPush.stop()"/>
 	<button label="Start Timer" onClick="timer.start()"/>
 	<button Label="Stop Timer" onClick="timer.stop()"/>

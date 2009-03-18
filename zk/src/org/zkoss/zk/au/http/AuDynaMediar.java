@@ -101,7 +101,7 @@ public class AuDynaMediar implements AuProcessor {
 				config.invokeExecutionInits(exec, oldexec);
 				desktopCtrl.invokeExecutionInits(exec, oldexec);
 
-				media = desktopCtrl.getDownloadMedia(uuid, true);
+				media = desktopCtrl.getDownloadMedia(uuid, false);
 				if (media != null) {
 					download = true; //yes, it is for download
 				} else {
@@ -149,6 +149,7 @@ public class AuDynaMediar implements AuProcessor {
 		}
 
 		Https.write(request, response, media, download, false);
+			//see bug 2691017 for why not repeatable
 		//FUTURE: support last-modified
 	}
 }

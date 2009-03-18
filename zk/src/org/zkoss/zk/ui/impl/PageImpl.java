@@ -713,12 +713,15 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 				//execCtrl.addHeader("Cache-Control", "pre-check=0");
 				execCtrl.setHeader("Expires", "-1");
 
-				//a temporary solution before IE8 really mature
+				exec.setAttribute(Attributes.NO_CACHE, Boolean.TRUE);
+				//so HtmlPageRenderers.outLangJavaScripts generates JS's keepDesktop correctly
+			}
+
+			//a temporary solution before IE8 really mature
+			try {
 				if (exec.isBrowser("ie8"))
 					execCtrl.setHeader("X-UA-Compatible", "IE=EmulateIE7");
-
-				exec.setAttribute(Attributes.NO_CACHE, Boolean.TRUE);
-				//so HtmlPageRenderers.outLangJavaScripts generates zk.keepDesktop correctly
+			} catch (Throwable ex) { //ignore (it might not be allowed)
 			}
 		}
 

@@ -748,6 +748,10 @@ public class Components {
 		private void wireImplicit(Object x) {
 			for (final Iterator it= IMPLICIT_NAMES.iterator(); it.hasNext();) {
 				final String fdname = (String) it.next();
+				//we cannot inject event proxy because it is not an Interface
+				if ("event".equals(fdname)) { 
+					continue;
+				}
 				final Object arg = myGetImplicit(x, fdname);
 				injectByName(arg, fdname);
 			}
@@ -810,20 +814,23 @@ public class Components {
 		}
 		
 		private void injectByName(Object arg, String fdname) {
-			final String mdname = Classes.toMethodName(fdname, "set");
-			final Class parmcls = arg.getClass();
-			final Class tgtcls = _controller.getClass();
-			try {
-				final Method md = 
-					Classes.getCloseMethod(tgtcls, mdname, new Class[] {parmcls});
-				if (!injectByMethod(md, parmcls, parmcls, arg, fdname)) {
+			//argument to be injected is null; then no need to inject
+			if (arg != null) {
+				final String mdname = Classes.toMethodName(fdname, "set");
+				final Class parmcls = arg.getClass();
+				final Class tgtcls = _controller.getClass();
+				try {
+					final Method md = 
+						Classes.getCloseMethod(tgtcls, mdname, new Class[] {parmcls});
+					if (!injectByMethod(md, parmcls, parmcls, arg, fdname)) {
+						injectFieldByName(arg, tgtcls, parmcls, fdname);
+					}
+				} catch (NoSuchMethodException ex) {
+					//no setXxx() method, try inject into Field
 					injectFieldByName(arg, tgtcls, parmcls, fdname);
+				} catch (Exception ex) {
+					throw UiException.Aide.wrap(ex);
 				}
-			} catch (NoSuchMethodException ex) {
-				//no setXxx() method, try inject into Field
-				injectFieldByName(arg, tgtcls, parmcls, fdname);
-			} catch (Exception ex) {
-				throw UiException.Aide.wrap(ex);
 			}
 		}
 		

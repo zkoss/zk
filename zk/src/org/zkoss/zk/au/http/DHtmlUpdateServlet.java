@@ -418,7 +418,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			//reason: a new page might be created (such as include)
 
 		final String sid = request.getHeader("ZK-SID");
-		if (sid != null) //Mobile client doesn't have ZK-SID
+		if (sid != null) //Some client might not have ZK-SID
 			response.setHeader("ZK-SID", sid);
 
 		//parse commands

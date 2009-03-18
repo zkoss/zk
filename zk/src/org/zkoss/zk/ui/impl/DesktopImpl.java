@@ -136,7 +136,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	/** The device. */
 	private transient Device _dev; //it will re-init each time getDevice called
 	/** A map of media (String key, Media content). */
-	private Cache _meds;
+	private CacheMap _meds;
 	/** ID used to identify what is stored in _meds. */
 	private int _medId;
 	/** The server push controller, or null if not enabled. */
@@ -316,10 +316,13 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 		if (_meds == null) {
 			_meds = new CacheMap();
-			_meds.setMaxSize(1024 * 16);
-			_meds.setLifetime(6 * 60 * 1000);
-				//6 minutes (CONSIDER: configurable)
+			_meds.setMaxSize(1024);
+			_meds.setLifetime(15 * 60 * 1000);
+				//15 minutes (CONSIDER: configurable)
+		} else {
+			housekeep();
 		}
+
 		String medId = Strings.encode(
 			new StringBuffer(12).append(DOWNLOAD_PREFIX), _medId++).toString();
 		_meds.put(medId, media);
@@ -334,9 +337,12 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		}
 		return getUpdateURI(sb.toString());
 	}
-	public Media getDownloadMedia(String medId, boolean remove) {
-		return _meds != null ? remove ?
-			(Media)_meds.remove(medId): (Media)_meds.get(medId): null;
+	public Media getDownloadMedia(String medId, boolean reserved) {
+		return _meds != null ? (Media)_meds.get(medId): null;
+	}
+	/** Cleans up redudant data. */
+	private void housekeep() {
+		if (_meds != null) _meds.expunge();
 	}
 
 	public Page getPage(String pageId) {
@@ -438,6 +444,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 	//-- DesktopCtrl --//
 	public RequestQueue getRequestQueue() {
+		housekeep();
 		return _rque;
 	}
 	public void setExecution(Execution exec) {

@@ -226,7 +226,7 @@ zAu = {
 
 	//ajax internal//
 	_cmdsQue: [], //response commands in XML
-	_seqId: 1, //1-999
+	_seqId: (zUtl.now() % 9999) + 1; //1-9999 (random init: bug 2691017)
 
 	/** IE6 sometimes remains readyState==1 (reason unknown), so resend. */
 	_areqTmout: function () {
@@ -280,7 +280,7 @@ zAu = {
 
 					if (zAu.pushXmlResp(reqInf.dt, req)) { //valid response
 						//advance SID to avoid receive the same response twice
-						if (sid && ++zAu._seqId > 999) zAu._seqId = 1;
+						if (sid && ++zAu._seqId > 9999) zAu._seqId = 1;
 						zAu._areqTry = 0;
 						zAu._preqInf = null;
 					}
