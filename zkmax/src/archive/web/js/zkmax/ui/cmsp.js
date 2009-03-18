@@ -18,7 +18,7 @@ zkCmsp = {};
 zkCmsp._reqs = {};
 zkCmsp._start = {};
 zkCmsp._nStart = 0;
-zkCmsp._sid = 1; //1-999
+zkCmsp._sid = ($now() % 999) + 1; //1-999 (random init: bug 2691017)
 
 zk.override(zkau, "ignoreESC", zkCmsp,
 	function () {

@@ -71,7 +71,7 @@ zkau.topZIndex = zkau.initZIndex; //topmost z-index for overlap/popup/modal
 zkau.topZIndexStep = 3; // the step of topmost z-index for overlap/popup/modal
 zkau.floats = []; //popup of combobox, bandbox, datebox...
 zkau._onsends = []; //JS called before zkau.sendNow
-zkau._seqId = 1; //1-999
+zkau._seqId = ($now() % 9999) + 1; //1-9999 (random init: bug 2691017)
 zkau._dtids = []; //an array of desktop IDs
 zkau._uris = {}; //a map of update engine's URIs ({dtid, uri})
 zkau._spushInfo = {} //the server-push info: Map(dtid, {min, max, factor})
@@ -285,7 +285,7 @@ zkau._onRespReady = function () {
 
 				if (zkau.pushXmlResp(reqInf.dtid, req)) { //valid response
 					//advance SID to avoid receive the same response twice
-					if (sid && ++zkau._seqId > 999) zkau._seqId = 1;
+					if (sid && ++zkau._seqId > 9999) zkau._seqId = 1;
 					zkau._areqTry = 0;
 					zkau._preqInf = null;
 				}

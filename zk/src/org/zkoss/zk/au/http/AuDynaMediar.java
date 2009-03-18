@@ -148,9 +148,8 @@ public class AuDynaMediar implements AuProcessor {
 			return;
 		}
 
-		Https.write(request, response, media, download, true);
-			//it has to be resumable since browser might request twice
-			//(first block for user's confirmation, second for real download)
+		Https.write(request, response, media, download, false);
+			//see bug 2691017 for why not repeatable
 		//FUTURE: support last-modified
 	}
 }
