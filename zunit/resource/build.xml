@@ -1,5 +1,5 @@
 <project name="zktest3" default="junit" basedir=".">
-	<property name="source.dir" value="src/" />
+	<property name="source.dir" value="unittests/" />
 	<property name="build.dir" value="build/" />
 	<property name="lib.dir" value="lib/" />
 	<property name="classes.dir" value="${build.dir}/classes" />

@@ -39,7 +39,7 @@ mkdir %Name%
 xcopy "resource\*.*" "%Name%" /s /C /I /Q /Y  >NUL 2>NUL
 cd %Name%
 md report
-md src
+md unittests
 md build
 md build\classes
 goto end
