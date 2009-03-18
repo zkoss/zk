@@ -562,9 +562,7 @@ public class Components {
 	 * @since 3.5.2
 	 */
 	public static boolean isImplicit(String id) {
-		//since 3.6.1, #bug 2681819: normal page throws exception after installed zkspring
-		//cannot add "event" directly into IMPLICIT_NAMES because we cannot inject an event
-		return "event".equals(id) || IMPLICIT_NAMES.contains(id);
+		return IMPLICIT_NAMES.contains(id);
 	}
 
 	private static final Set IMPLICIT_NAMES = new HashSet();
@@ -576,6 +574,7 @@ public class Components {
 		IMPLICIT_NAMES.add("desktop");
 		IMPLICIT_NAMES.add("desktopScope");
 		IMPLICIT_NAMES.add("execution");
+		IMPLICIT_NAMES.add("event"); //since 3.6.1, #bug 2681819: normal page throws exception after installed zkspring
 		IMPLICIT_NAMES.add("self");
 		IMPLICIT_NAMES.add("session");
 		IMPLICIT_NAMES.add("sessionScope");
@@ -744,6 +743,10 @@ public class Components {
 		private void wireImplicit(Object x) {
 			for (final Iterator it= IMPLICIT_NAMES.iterator(); it.hasNext();) {
 				final String fdname = (String) it.next();
+				//we cannot inject event proxy because it is not an Interface
+				if ("event".equals(fdname)) { 
+					continue;
+				}
 				final Object arg = myGetImplicit(x, fdname);
 				injectByName(arg, fdname);
 			}
