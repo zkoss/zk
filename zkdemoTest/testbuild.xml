@@ -1,0 +1,60 @@
+<project name="zktest3" default="reports" basedir=".">
+	<property name="source.dir" value="src/" />
+	<property name="build.dir" value="build/" />
+	<property name="lib.dir" value="lib/" />
+	<property name="classes.dir" value="${build.dir}/classes" />
+	<property name="report.dir" value="report/" />
+	<!--Test Targets-->
+	<property name="classes.pattern" value="${pattern}"/>
+	
+	<target name="clean">
+		<delete dir="${classes.dir}" />
+		<mkdir dir="${classes.dir}" />
+		<delete dir="${report.dir}" />
+		<mkdir dir="${report.dir}" />
+	</target>
+	<target name="compile" depends="clean">
+		<!-- local project jars -->
+		<patternset id="lib.includes.compile">
+			<include name="*.jar" />
+		</patternset>
+		<fileset dir="${lib.dir}" id="lib.compile">
+			<patternset refid="lib.includes.compile" />
+		</fileset>
+		<pathconvert targetos="windows" property="libs.compile"
+			refid="lib.compile" />
+		<!-- compile -->
+		<javac srcdir="${source.dir}" destdir="${classes.dir}"
+			classpath="${libs.compile}" includes="**/*.java" debug="true">
+		</javac>
+	</target>
+	<target name="junit" depends="compile">
+		<junit printsummary="on" fork="true" haltonfailure="false"
+			failureproperty="tests.failed" showoutput="true">
+			<classpath>
+				<pathelement path="${classes.dir}" />
+				<fileset dir="${lib.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+			<formatter type="xml" />
+			<batchtest todir="${report.dir}">
+				<fileset dir="${classes.dir}" >
+					<containsregexp expression="${classes.pattern}"/>
+				</fileset>
+			</batchtest>
+		</junit>
+		<!--
+		<fail if="tests.failed">
+		</fail>
+		-->
+	</target>
+	<target name="reports" >
+		<junitreport todir="${report.dir}">
+			<fileset dir="${report.dir}">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report format="frames" styledir="." todir="${report.dir}" />
+		</junitreport>
+	</target>
+</project>
