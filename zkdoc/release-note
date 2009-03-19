@@ -18,7 +18,8 @@ ZK 3.6.1
   2687399: Filedownload error if included by JSP or other servlet
   2691017: Filedownload with InputStream results empty file if blocked
   2669197: filedownload.save(reader, content, filename) not working
-  2668190: NullPointerException on SessionsCtrl.getSession()
+  2668190: NullPointerException on SessionsCtrl.getSession() when undeploy
+  1896797: iframe and pdf in overlapped wnd (FF and IE7)
 
 	--------
 ZK 3.6.0

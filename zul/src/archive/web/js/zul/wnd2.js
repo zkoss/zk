@@ -349,7 +349,7 @@ zkWnd2.getShadow = function (cmp) {
  */
 zkWnd2.initShadow = function (cmp) {
 	if (!cmp._shadow && getZKAttr(cmp, "shadow") != 'false')
-		cmp._shadow = new zk.Shadow(cmp, {stackup: true, left: -4, right: 4, top: -2, bottom: 3});
+		cmp._shadow = new zk.Shadow(cmp, {stackup: !zk.gecko/*bug1896797*/, left: -4, right: 4, top: -2, bottom: 3});
 	return cmp._shadow;
 };
 /**
@@ -760,19 +760,20 @@ zkWnd2._initMode = function (cmp) {
 	}
 	else if (zkWnd2._clean2[cmp.id])
 		zkWnd2._cleanMode2(cmp.id, true); //replace with a new mode
-	if (mode && mode != "embedded")
+	if (mode && mode != "embedded") {
 		zkWnd2.initShadow(cmp);
-	switch (mode) {
-	case "modal":
-	case "highlighted":
-		zkWnd2._doModal(cmp, replace);
-		break;
-	case "overlapped":
-		zkWnd2._doOverlapped(cmp, replace);
-		break;
-	case "popup":
-		zkWnd2._doPopup(cmp, replace);
-	//default: embedded
+
+		switch (mode) {
+		case "modal":
+		case "highlighted":
+			zkWnd2._doModal(cmp, replace);
+			break;
+		case "overlapped":
+			zkWnd2._doOverlapped(cmp, replace);
+			break;
+		//default: popup
+			zkWnd2._doPopup(cmp, replace);
+		}
 	}
 };
 zkWnd2._cleanMode = function (cmp) {
