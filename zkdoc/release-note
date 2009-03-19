@@ -17,6 +17,7 @@ ZK 3.6.1
   2689443: script in native namespace shall not encode the content
   2687399: Filedownload error if included by JSP or other servlet
   2691017: Filedownload with InputStream results empty file if blocked
+  2669197: filedownload.save(reader, content, filename) not working
 
 	--------
 ZK 3.6.0
