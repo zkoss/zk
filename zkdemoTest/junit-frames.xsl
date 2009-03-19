@@ -342,13 +342,12 @@ h6 {
           win.focus();
         }
 		function link(a,package,file) {
-			var win = window.open(path+"/"+package.replace(".","/")+"/"+file);
+			var win = window.open(path + replaceAll(package,".","/")+"/"+file);
 			win.focus();
 		}
 		function tracker(name) {
 			if (name.match(/^F/i)) {
 				var number = name.split(/_|\./);
-				alert(number[1]);
 				var win = window.open("http://sourceforge.net/tracker/index.php?func=detail&aid="+number[1]+"&group_id=152762&atid=785194")
 				win.focus();
 			} else if (name.match(/^B/i)) {
@@ -359,6 +358,14 @@ h6 {
 				alert("No Tracker");
 			}
 		}
+		function replaceAll(strOrg,strFind,strReplace){
+			var index = 0;
+			while(strOrg.indexOf(strFind,index) != -1){
+				strOrg = strOrg.replace(strFind,strReplace);
+				index = strOrg.indexOf(strFind,index);
+			}
+			return strOrg
+		} 
       ]]>
       </script>
         </head>
@@ -800,7 +807,7 @@ h6 {
         <td><a title="Display all tests" href="{@id}_{@name}.html"><xsl:value-of select="@name"/></a></td>
 		<td class="Source">
 			<a alt="Link to local file" title="Link to local file" href="#" onClick="link(this,'{@package}','{@name}.java')">Local</a><br />
-			<a alt="Link to remote source file" title="Link to remote source file" target="_code" href="../../src/{@name}.java">Remote</a>
+			<!--<a alt="Link to remote source file" title="Link to remote source file" target="_code" href="/src/{@name}.java">Remote</a>-->
 		</td>
 		<td>
 			<a alt="Link to tracker in Sourceforge" title="Link to tracker in Sourceforge" href="#" onClick="tracker('{@name}')">Tracker</a>

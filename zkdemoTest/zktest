@@ -51,7 +51,7 @@ $#list = $#tmp = -1;
 while (@ARGV > 0 ) {
   switch (@ARGV[0]) {
     case /^-[Aa]$\|^--[Aa]ll$/ {
-      $pattern=".java";      
+      $pattern=".Test\.java";      
     }
     case /^-[Bb]$\|^--[Bb]rowser$/ {
       $openbw = 1;

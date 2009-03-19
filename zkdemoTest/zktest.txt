@@ -25,7 +25,7 @@
         Do test(s) specific case which have [4mid[m.
 
     [1;37m-q, --quiet[m
-        Do test(s) in quiet mode.
+        Do test(s) in quiet mode. This option only works when using -t(tag).
 
     [1;37m-t, --tag[m=[4mtags[m
         Do test(s) cases match tag(s) in [4mconfig.properties[m of zkdemoTest.
