@@ -8,7 +8,6 @@ ZK 3.6.1
   2681333: Resumable filedownload limit to allowed period and number
   2681775: Resumable filedownload supports relative path
   2689696: Native namespace supports zkhead
-
 * Bugs
   2684510: Unable to access implict objects if func defined in other namespace
   2685872: Comet not send back new value of textbox if no listener
@@ -20,7 +19,7 @@ ZK 3.6.1
   2669197: filedownload.save(reader, content, filename) not working
   2668190: NullPointerException on SessionsCtrl.getSession() when undeploy
   1896797: iframe and pdf in overlapped wnd (FF and IE7)
-
+  2673128: Impossible to select some date
 	--------
 ZK 3.6.0
 March 2, 2009

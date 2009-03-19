@@ -2052,12 +2052,12 @@ zk.parseDate = function (txt, fmt, strict) {
 					for (var l = 0;; ++l) {
 						if (l == 12) return null; //failed
 						if (len == 3) {
-							if (zk.SMON[l].split(/\W+/)[0] == token) {
+							if (zk.SMON[l] == token) {
 								m = l;
 								break;
 							}
 						} else {
-							if (zk.FMON[l].split(/\W+/)[0] == token) {
+							if (token && zk.FMON[l].startsWith(token)) {
 								m = l;
 								break;
 							}
