@@ -226,7 +226,7 @@ zAu = {
 
 	//ajax internal//
 	_cmdsQue: [], //response commands in XML
-	_seqId: (zUtl.now() % 9999) + 1; //1-9999 (random init: bug 2691017)
+	_seqId: (zUtl.now() % 9999) + 1, //1-9999 (random init: bug 2691017)
 
 	/** IE6 sometimes remains readyState==1 (reason unknown), so resend. */
 	_areqTmout: function () {

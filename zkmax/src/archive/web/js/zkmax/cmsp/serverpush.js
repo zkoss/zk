@@ -13,7 +13,7 @@ This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 zkmax.cmsp.SPush = zk.$extends(zk.Object, {
-	_sid: (zUtl.now() % 999) + 1; //1-999 (random init: bug 2691017)
+	_sid: (zUtl.now() % 999) + 1, //1-999 (random init: bug 2691017)
 
 	start: function (dt) {
 		++zkmax.cmsp._nStart;

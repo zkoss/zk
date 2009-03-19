@@ -698,9 +698,9 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			final boolean cacheable =
 				_cacheable != null ?  _cacheable.booleanValue():
 					_desktop.getDevice().isCacheable();
+			final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 			if (!cacheable) {
 				//Bug 1520444
-				final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 				execCtrl.setHeader("Pragma", "no-cache");
 				execCtrl.addHeader("Cache-Control", "no-cache");
 				execCtrl.addHeader("Cache-Control", "no-store");
