@@ -87,7 +87,11 @@ public class SessionsCtrl extends Sessions {
 	 * @since 3.0.5
 	 */
 	public static final Session getSession(WebApp wapp, Object navsess) {
-		final Session sess = ((WebAppCtrl)wapp).getSessionCache().get(navsess);
+		final SessionCache sc = ((WebAppCtrl)wapp).getSessionCache();
+		if (sc == null) return null;
+			//bug 2668190: happens when destroying app in WebSphere 7
+
+		final Session sess = sc.get(navsess);
 		if (sess != null && sess.getNativeSession() != navsess)
 			((SessionCtrl)sess).recover(navsess);
 		return sess;
