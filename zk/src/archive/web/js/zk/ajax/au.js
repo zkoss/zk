@@ -614,6 +614,44 @@ zAu = {
 			if (meta && meta.cleanupOnFatal)
 				meta.cleanupOnFatal(ignorable);
 		}
+	},
+
+	//Perfomance Meter//
+	_pfj: 0, //an index
+	_pfsend: function (dt, req, completeOnly) {
+		if (!completeOnly)
+			req.setRequestHeader("ZK-Client-Start",
+				dt.id + "-" + zAu._pfj++ + "=" + Math.round(zUtl.now()));
+
+		var ids;
+		if (ids = dt._pfRecvIds) {
+			req.setRequestHeader("ZK-Client-Receive", ids);
+			dt._pfRecvIds = null;
+		}
+		if (ids = dt._pfDoneIds) {
+			req.setRequestHeader("ZK-Client-Complete", ids);
+			dt._pfDoneIds = null;
+		}
+	},
+	/** Returns request IDs sent from the server separated by space. */
+	_pfGetIds: function (req) {
+		return req.getResponseHeader("ZK-Client-Complete");
+	},
+	/** Adds performance request IDs that have been processed completely. */
+	pfrecv: function (dt, pfIds) {
+		zAu._pfAddIds(dt, '_pfRecvIds', pfIds);
+	},
+	/** Adds performance request IDs that have been processed completely. */
+	pfdone: function (dt, pfIds) {
+		zAu._pfAddIds(dt, '_pfDoneIds', pfIds);
+	},
+	_pfAddIds: function (dt, prop, pfIds) {
+		if (pfIds && (pfIds = pfIds.trim())) {
+			var s = pfIds + "=" + Math.round(zUtl.now());
+			var ids = dt[prop];
+			if (ids) ids += ',' + s;
+			else dt[prop] = s;
+		}
 	}
 };
 

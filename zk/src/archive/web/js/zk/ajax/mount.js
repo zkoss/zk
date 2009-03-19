@@ -52,8 +52,10 @@ function zkb2(uuid, type, props) { //zhtml
 }
 function zkdtbg(dtid, updateURI) {
 	var dt = zk.Desktop.$(dtid);
-	if (dt == null) dt = new zk.Desktop(dtid, updateURI);
-	else if (updateURI) dt.updateURI = updateURI;
+	if (dt == null) {
+		dt = new zk.Desktop(dtid, updateURI);
+		if (zk.pfmeter) zAu.pfrecv(dt, dtid);
+	} else if (updateURI) dt.updateURI = updateURI;
 	zkm.curdt = dt;
 	return dt;
 }
@@ -259,6 +261,12 @@ zkm = {
 
 		zk.mounting = zk.bootstrapping = false;
 		zk.endProcessing();
+
+		if (zk.pfmeter) {
+			var dts = zk.Desktop.all;
+			for (var dtid in dts)
+				zAu.pfdone(dts[dtid], dtid);
+		}
 	},
 
 	/** mount for AU */
@@ -593,7 +601,7 @@ zkm = {
 						uri = zAu.comURI(null, dt);
 					req.open("POST", zk.ie ? uri+"?"+content: uri, true);
 					req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-					if (zk.pfmeter) zAu._pfsend(dtid, req, true);
+					if (zk.pfmeter) zAu._pfsend(dt, req, true);
 					if (zk.ie) req.send(null);
 					else req.send(content);
 				}
