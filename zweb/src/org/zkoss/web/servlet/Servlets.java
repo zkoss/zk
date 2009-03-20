@@ -306,7 +306,7 @@ public class Servlets {
 	 */
 	public static boolean isBrowser(String userAgent, String type) {
 		final BrowserIdentifier bwid = _bwid;
-		if (bwid != null && bwid.identify(userAgent, type))
+		if (bwid != null && bwid.isBrowser(userAgent, type))
 			return true;
 
 		if ("ie".equals(type) || "ie6".equals(type)) return isExplorer(userAgent);
@@ -1115,11 +1115,11 @@ public class Servlets {
 	 * @see #setBrowserIdentifier
 	 */
 	public static interface BrowserIdentifier {
-		/** Identify if a client is the givent type.
+		/** Tests if a client is the givent type.
 		 * @param userAgent represents a client.
 		 * @param type the type of the browser.
 		 * @return true if it matches, false if unable to identify
 		 */
-		public boolean identify(String userAgent, String type);
+		public boolean isBrowser(String userAgent, String type);
 	}
 }

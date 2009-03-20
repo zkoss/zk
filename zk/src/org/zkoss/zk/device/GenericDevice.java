@@ -20,8 +20,6 @@ package org.zkoss.zk.device;
 
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.sys.ServerPush;
-import org.zkoss.zk.device.marshal.Marshaller;
-import org.zkoss.zk.device.marshal.SimpleMarshaller;
 
 /**
  * A skeletal implementation of {@link Device}.
@@ -33,7 +31,6 @@ abstract public class GenericDevice implements Device {
 	private String _type, _uamsg, _tmoutURI;
 	private Class _spushcls;
 	private String _embed;
-	private Marshaller _marshaller;
 
 	//Device//
 	public boolean isSupported(int func) {
@@ -94,32 +91,14 @@ abstract public class GenericDevice implements Device {
 		return _embed;
 	}
 
-	/** Returns the marshaller to marshall the object between the
-	 * client and server.
-	 * <p>Default: returns the object created by {@link #newMarshaller}.
-	 * <p>Derived class don't override this method directly.
-	 * Rather, overrides {@link #newMarshaller}.
-	 * @since 5.0.0
-	 */
-	public Marshaller getMarshaller() {
-		return _marshaller;
-	}
-	/** Instantiates a marshaller for {@link #getMarshaller}.
-	 *
-	 * <p>Default: an instance of {@link SimpleMarshaller}.
-	 * @since 5.0.0
-	 */
-	public Marshaller newMarshaller() {
-		return new SimpleMarshaller();
-	}
-	/** Identify if a client is the givent type.
+	/** Tests if a client is the givent type.
 	 * <p>This implementation always return false.
 	 * @param userAgent represents a client.
 	 * @param type the type of the browser.
 	 * @return true if it matches, false if unable to identify
 	 * @since 5.0.0
 	 */
-	public boolean identifyClient(String userAgent, String type) {
+	public boolean isClient(String userAgent, String type) {
 		return false;
 	}
 
@@ -129,7 +108,6 @@ abstract public class GenericDevice implements Device {
 		_tmoutURI = config.getTimeoutURI();
 		_spushcls = config.getServerPushClass();
 		_embed = config.getEmbedded();
-		_marshaller = newMarshaller();
 	}
 	public void sessionWillPassivate(Desktop desktop) {
 	}

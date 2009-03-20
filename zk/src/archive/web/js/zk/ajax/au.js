@@ -144,58 +144,16 @@ zAu = {
 				continue;
 			}
 
-			cmds.push(cmd = {cmd: zUtl.getElementValue(cmd)});
-			cmd.data = [];
-			for (var cd = cmd.data, k = data ? data.length: 0; --k >= 0;)
-				cd.unshift(zAu._decodeData(zUtl.getElementValue(data[k])));
+			cmds.push(cmd = {cmd: zUtl.getElementValue(cmd),
+				data: data && data.length ?
+					eval(zUtl.getElementValue(data[0])): []});
 		}
 
 		zAu._cmdsQue.push(cmds);
 		return true;
 	},
-	_decodeData: function (d) {
-		var v = d.substring(1);
-		switch (d.charAt(0).toLowerCase()) {
-		case 'c': case 's': return v;
-		case 'n': return null;
-		case '1': case '3': return true;
-		case '0': case '2': return false;
-		case 'i': case 'l': case 'b': case 'h':
-			return parseInt(v);
-		case 'd': case 'f':
-			return parseFloat(v);
-		case 't': return new Date(parseInt(v));
-		case 'j': return new zk.BigInteger(v);
-		case 'k': return new zk.BigDecimal(v);
-		case '[':
-			d = v;
-			v = [];
-			var esc;
-			for (var len = d.length, j = 0, k = 0;; ++j) {
-				if (j >= len) {
-					if (len)
-						v.push(zAu._decodeData(esc || d.substring(k, j)));
-					return v;
-				}
-				var cc = d.charAt(j);
-				if (cc == '\\') {
-					if (!esc) esc = d.substring(k, j);
-					esc += d.charAt(++j);
-				} else if (cc == ',') {
-					v.push(zAu._decodeData(esc || d.substring(k, j)));
-					k = j + 1;
-					esc = null;
-				} else if (esc)
-					esc += cc;
-			}
-		}
-		return v;
-	},
-	process: function (cmd, varags) { //by server only (encoded)
-		var data = [];
-		for (var j = arguments.length; --j > 0;)
-			data.unshift(zAu._decodeData(arguments[j]));
-		zAu._process(cmd, data);
+	process: function (cmd, data) { //by server only (encoded)
+		zAu._process(cmd, data ? eval(data): []);
 	},
 	_process: function (cmd, data) { //decoded
 		//I. process commands that data[0] is not UUID

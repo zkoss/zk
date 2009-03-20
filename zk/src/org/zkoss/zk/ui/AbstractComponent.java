@@ -90,7 +90,6 @@ import org.zkoss.zk.au.out.AuClientInfo;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.scripting.util.SimpleNamespace;
-import org.zkoss.zk.device.marshal.*;
 
 /**
  * A skeletal implementation of {@link Component}. Though it is OK
@@ -1223,9 +1222,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * or disable the use of the event processing thread
 	 * (by use of <code>disable-event-thread</code> in zk.xml).
 	 * <p>In addition, the value can be any kind of objects that
-	 * the client accepts. For Ajax devices, it could be String,
-	 * Date, the wrapper of primitives (such as Boolean), primitives
-	 * (wrapped with {@link $boolean} and so on), and an array of above types.
+	 * the client accepts (marshaled by JSON).
 	 * @since 5.0.0 (become protected)
 	 */
 	protected void smartUpdate(String attr, Object value) {
@@ -1237,7 +1234,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * @since 5.0.0
 	 */
 	protected void smartUpdate(String attr, int value) {
-		smartUpdate(attr, new $int(value));
+		smartUpdate(attr, new Integer(value));
 	}
 	/** A special smart update to update a value in long.
 	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
@@ -1245,7 +1242,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * @since 5.0.0
 	 */
 	protected void smartUpdate(String attr, long value) {
-		smartUpdate(attr, new $long(value));
+		smartUpdate(attr, new Long(value));
 	}
 	/** A special smart update to update a value in byte.
 	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
@@ -1253,7 +1250,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * @since 5.0.0
 	 */
 	protected void smartUpdate(String attr, byte value) {
-		smartUpdate(attr, new $byte(value));
+		smartUpdate(attr, new Byte(value));
 	}
 	/** A special smart update to update a value in character.
 	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
@@ -1261,7 +1258,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * @since 5.0.0
 	 */
 	protected void smartUpdate(String attr, char value) {
-		smartUpdate(attr, new $char(value));
+		smartUpdate(attr, new Character(value));
 	}
 	/** A special smart update to update a value in boolean.
 	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
@@ -1269,7 +1266,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * @since 5.0.0
 	 */
 	protected void smartUpdate(String attr, boolean value) {
-		smartUpdate(attr, $boolean.valueOf(value));
+		smartUpdate(attr, Boolean.valueOf(value));
 	}
 	/** A special smart update to update a value in float.
 	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
@@ -1277,7 +1274,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * @since 5.0.0
 	 */
 	protected void smartUpdate(String attr, float value) {
-		smartUpdate(attr, new $float(value));
+		smartUpdate(attr, new Float(value));
 	}
 	/** A special smart update to update a value in double.
 	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
@@ -1285,7 +1282,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * @since 5.0.0
 	 */
 	protected void smartUpdate(String attr, double value) {
-		smartUpdate(attr, new $double(value));
+		smartUpdate(attr, new Double(value));
 	}
 	/** A special smart update to update a value in Date.
 	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update

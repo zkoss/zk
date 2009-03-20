@@ -867,7 +867,7 @@ public class UiEngineImpl implements UiEngine {
 			}
 
 			out.writeResponseId(((Integer)resInfo[0]).intValue());
-			out.write(desktop.getDevice().getMarshaller(), (Collection)resInfo[1]);
+			out.write((Collection)resInfo[1]);
 			return true; //replicate
 		}
 		return false;
@@ -900,7 +900,7 @@ public class UiEngineImpl implements UiEngine {
 				out.getChannel(), execCtrl.getRequestId(),
 				new Object[] {new Integer(resId), responses});
 			out.writeResponseId(resId);
-			out.write(desktop.getDevice().getMarshaller(), responses);
+			out.write(responses);
 
 			cleaned = true;
 			desktopCtrl.invokeExecutionCleanups(exec, null, null);
@@ -1031,7 +1031,7 @@ public class UiEngineImpl implements UiEngine {
 			desktopCtrl.responseSent(out.getChannel(), sid,
 				new Object[] {new Integer(resId), responses});
 			out.writeResponseId(resId);
-			out.write(desktop.getDevice().getMarshaller(), responses);
+			out.write(responses);
 
 //			if (log.debugable())
 //				if (responses.size() < 5 || log.finerable()) log.finer("Responses: "+responses);

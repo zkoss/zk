@@ -22,11 +22,11 @@ import java.util.Map;
 import java.util.HashMap;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.json.JSONArray;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.util.DeferredValue;
-import org.zkoss.zk.device.marshal.Marshaller;
 
 /**
  * A response sent from the server to the client via
@@ -127,18 +127,18 @@ public class AuResponse {
 	 * @see #getRawData
 	 * @since 5.0.0
 	 */
-	public String[] getEncodedData(Marshaller marshaller) {
+	public String getEncodedData() {
 		if (_data == null)
 			return null;
 
-		final String[] encdata = new String[_data.length];
+		final JSONArray encdata = new JSONArray();
 		for (int j = 0; j < _data.length; ++j) {
 			Object d = _data[j];
 			if (d instanceof DeferredValue)
 				d = ((DeferredValue)d).getValue();
-			encdata[j] = marshaller.marshal(d);
+			encdata.put(d);
 		}
-		return encdata;
+		return encdata.toString();
 	}
 	/** Returns the associated data of this response in the original
 	 * format (might be null).

@@ -424,8 +424,8 @@ public class WebManager {
 
 	private static class BrowserIdentifier
 	implements Servlets.BrowserIdentifier {
-		public boolean identify(String userAgent, String type) {
-			return org.zkoss.zk.device.Devices.identifyClient(userAgent, type);
+		public boolean isBrowser(String userAgent, String type) {
+			return org.zkoss.zk.device.Devices.isClient(userAgent, type);
 		}
 	}
 }

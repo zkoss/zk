@@ -25,7 +25,6 @@ import org.zkoss.idom.Verifier;
 
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.au.http.HttpAuWriter;
-import org.zkoss.zk.device.marshal.Marshaller;
 
 /**
  * Utilities to instantiate an implmentation of {@link AuWriter}.
@@ -88,21 +87,18 @@ public class AuWriters {
 		out.write("</rid>\n");
 	}
 	/** Writes a XML fragment representing the response to the output.
-	 * @since 5.0.0
+	 * @since 3.5.0
 	 */
-	public static
-	void write(Marshaller marshaller, Writer out, AuResponse response)
+	public static void write(Writer out, AuResponse response)
 	throws IOException {
 		out.write("\n<r><c>");
 		out.write(response.getCommand());
 		out.write("</c>");
-		final String[] data = response.getEncodedData(marshaller);
+		final String data = response.getEncodedData();
 		if (data != null) {
-			for (int j = 0; j < data.length; ++j) {
-				out.write("\n<d>");
-				encodeXML(out, data[j]);
-				out.write("</d>");
-			}
+			out.write("\n<d>");
+			encodeXML(out, data);
+			out.write("</d>");
 		}
 		out.write("\n</r>");
 	}

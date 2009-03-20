@@ -20,7 +20,6 @@ package org.zkoss.zk.au.out;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.au.AuResponse;
-import org.zkoss.zk.device.marshal.*;
 
 /**
  * A response to ask the client to execute the specified client function.
@@ -78,7 +77,7 @@ public class AuInvoke extends AuResponse {
 	 */
 	public AuInvoke(Component comp, String function, boolean arg) {
 		super("invoke", comp,
-			new Object[] {comp.getUuid(), function, $boolean.valueOf(arg)});
+			new Object[] {comp.getUuid(), function, Boolean.valueOf(arg)});
 	}
 	/** Construct AuInvoke to call the peer widget's member function with
 	 * one int argument.
@@ -91,7 +90,7 @@ public class AuInvoke extends AuResponse {
 	 */
 	public AuInvoke(Component comp, String function, int arg) {
 		super("invoke", comp,
-			new Object[] {comp.getUuid(), function, new $int(arg)});
+			new Object[] {comp.getUuid(), function, new Integer(arg)});
 	}
 	/** Construct AuInvoke to call the peer widget's member function with
 	 * one double argument.
@@ -104,7 +103,7 @@ public class AuInvoke extends AuResponse {
 	 */
 	public AuInvoke(Component comp, String function, double arg) {
 		super("invoke", comp,
-			new Object[] {comp.getUuid(), function, new $double(arg)});
+			new Object[] {comp.getUuid(), function, new Double(arg)});
 	}
 	/** Construct AuInvoke to call the peer widget's member function with
 	 * two arguments.

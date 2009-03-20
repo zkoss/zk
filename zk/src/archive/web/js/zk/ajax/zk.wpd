@@ -32,4 +32,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<!-- load lang here to minimize # of JS files -->
 	<script src="lang/mesg*.js"/>
 	<function class="org.zkoss.zk.fn.DspFns" name="outLocaleJavaScript"/>
+
+	<script src="ext/json2.js"/>
 </package>

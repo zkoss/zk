@@ -21,7 +21,6 @@ package org.zkoss.zk.device;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.sys.ServerPush;
-import org.zkoss.zk.device.marshal.Marshaller;
 
 /**
  * Represents a client device.
@@ -160,13 +159,6 @@ public interface Device {
 	 */
 	public String getEmbedded();
 
-	/** Returns the marshaller to marshall the object between the
-	 * client and server.
-	 * <p>Currently, it is used only by {@link org.zkoss.zk.au.AuResponse}.
-	 * @since 5.0.0
-	 */
-	public Marshaller getMarshaller();
-
 	/** Initializes the device.
 	 * A device is created for each desktop, and this method is called
 	 * when it is associated to the desktop.
@@ -187,7 +179,7 @@ public interface Device {
 	 */
 	public void sessionDidActivate(Desktop desktop);
 
-	/** Identify if a client is the givent type.
+	/** Tests if a client is the givent type.
 	 * @param userAgent represents a client.
 	 * @param type the type of the browser.
 	 * @return true if it matches, false if unable to identify.
@@ -196,5 +188,5 @@ public interface Device {
 	 * return false), though it is harmless to identify.
 	 * @since 5.0.0
 	 */
-	public boolean identifyClient(String userAgent, String type);
+	public boolean isClient(String userAgent, String type);
 }

@@ -21,8 +21,6 @@ package org.zkoss.zk.au;
 import java.util.Collection;
 import java.io.IOException;
 
-import org.zkoss.zk.device.marshal.Marshaller;
-
 /**
  * Represents a writer that is used to send the output back to the client,
  * when processing {@link AuRequest}.
@@ -68,10 +66,8 @@ public interface AuWriter {
 	public void writeResponseId(int resId) throws IOException;
 	/** Generates the specified the response to the output.
 	 */
-	public void write(Marshaller marshaller, AuResponse response)
-	throws IOException;
+	public void write(AuResponse response) throws IOException;
 	/** Generates a list of responses to the output.
 	 */
-	public void write(Marshaller marshaller, Collection responses)
-	throws IOException;
+	public void write(Collection responses) throws IOException;
 }

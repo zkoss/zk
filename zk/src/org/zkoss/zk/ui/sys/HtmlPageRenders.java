@@ -56,7 +56,6 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.impl.Attributes;
 import org.zkoss.zk.au.AuResponse;
-import org.zkoss.zk.device.marshal.Marshaller;
 import org.zkoss.zk.device.Devices;
 import org.zkoss.zk.device.Device;
 
@@ -156,20 +155,16 @@ public class HtmlPageRenders {
 
 		final StringBuffer sb = new StringBuffer(256)
 			.append("\n<script>zkam(function(){\n");
-		final Marshaller marshaller = exec.getDesktop().getDevice().getMarshaller();
 		for (Iterator it = responses.iterator(); it.hasNext();) {
 			final AuResponse response = (AuResponse)it.next();
 			sb.append("zAu.process('").append(response.getCommand())
 				.append("'");
 
-			final String[] data = response.getEncodedData(marshaller);
-			final int datanum = data != null ? data.length: 0;
-			for (int j = 0; j < datanum; ++j) {
-				sb.append(",'");
-				if (data[j] != null)
-					sb.append(Strings.escape(data[j], Strings.ESCAPE_JAVASCRIPT));
-				sb.append('\'');
-			}
+			final String encdata = response.getEncodedData();
+			if (encdata != null)
+				sb.append(",'")
+					.append(Strings.escape(encdata, Strings.ESCAPE_JAVASCRIPT))
+					.append('\'');
 			sb.append(");\n");
 		}
 		return sb.append("});\n</script>\n").toString();

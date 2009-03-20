@@ -450,14 +450,14 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			}
 		} catch (Throwable ex) {
 			log.warningBriefly(ex);
-			responseError(request, response, desktop, Exceptions.getMessage(ex));
+			responseError(request, response, Exceptions.getMessage(ex));
 			return;
 		}
 
 		if (aureqs.isEmpty()) {
 			final String errmsg = "Illegal request: cmd required";
 			log.debug(errmsg);
-			responseError(request, response, desktop, errmsg);
+			responseError(request, response, errmsg);
 			return;
 		}
 
@@ -505,7 +505,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				resp = new AuObsolete(
 					dtid, Messages.get(MZk.UPDATE_OBSOLETE_PAGE, dtid));
 			}
-			out.write(Devices.getDevice(deviceType).getMarshaller(), resp);
+			out.write(resp);
 		}
 
 		out.close(request, response);
@@ -554,11 +554,11 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	/** Generates a response for an error message.
 	 */
 	private static void responseError(HttpServletRequest request,
-	HttpServletResponse response, Desktop desktop, String errmsg)
+	HttpServletResponse response, String errmsg)
 	throws IOException {
 		//Don't use sendError because Browser cannot handle UTF-8
 		AuWriter out = AuWriters.newInstance().open(request, response, 0);
-		out.write(desktop.getDevice().getMarshaller(), new AuAlert(errmsg));
+		out.write(new AuAlert(errmsg));
 		out.close(request, response);
 	}
 }

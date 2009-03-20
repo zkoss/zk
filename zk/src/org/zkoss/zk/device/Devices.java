@@ -393,8 +393,8 @@ public class Devices {
 		}
 	}
 
-	/** Identify if a client is the givent type.
-	 * It invokes {@link Device#identifyClient} one-by-one until one
+	/** Tests if a client is the givent type.
+	 * It invokes {@link Device#isClient} one-by-one until one
 	 * of them returns true, or all false.
 	 *
 	 * @param userAgent represents a client.
@@ -402,9 +402,9 @@ public class Devices {
 	 * @return true if it matches, false if unable to identify
 	 * @since 5.0.0
 	 */
-	public static boolean identifyClient(String userAgent, String type) {
+	public static boolean isClient(String userAgent, String type) {
 		for (int j = 0; j < _devs.length; ++j)
-			if (_devs[j].identifyClient(userAgent, type))
+			if (_devs[j].isClient(userAgent, type))
 				return true;
 		return false;
 	}
