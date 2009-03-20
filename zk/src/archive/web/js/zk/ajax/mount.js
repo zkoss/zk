@@ -262,6 +262,7 @@ zkm = {
 		zk.mounting = zk.bootstrapping = false;
 		zk.endProcessing();
 
+		zHistory.onURLChange();
 		if (zk.pfmeter) {
 			var dts = zk.Desktop.all;
 			for (var dtid in dts)

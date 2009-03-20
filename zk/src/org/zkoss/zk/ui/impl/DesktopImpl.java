@@ -462,8 +462,6 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			Events.postEvent(evt);
 			Events.postEvent(new BookmarkEvent("onBookmarkChanged", evt.getBookmark()));
 				//backward compatible
-		} else if (Events.ON_URI_CHANGE.equals(name)) {
-			Events.postEvent(URIEvent.getURIEvent(request));
 		} else if (Events.ON_CLIENT_INFO.equals(name)) {
 			Events.postEvent(ClientInfoEvent.getClientInfoEvent(request));
 		} else if ("rmDesktop".equals(name)) {

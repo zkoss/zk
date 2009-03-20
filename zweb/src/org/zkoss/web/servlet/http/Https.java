@@ -495,10 +495,14 @@ public class Https extends Servlets {
 
 						if (from >= 0) { //partial
 							PartialByteStream pbs = new PartialByteStream(from, to);
-							Files.copy(new OutputStreamWriter(pbs, charset), in);
+							OutputStreamWriter wt = new OutputStreamWriter(pbs, charset);
+							Files.copy(wt, in);
+							wt.close(); //flush to pbs
 							pbs.responseTo(response);
 						} else {
-							Files.copy(new OutputStreamWriter(out, charset), in);
+							OutputStreamWriter wt = new OutputStreamWriter(out, charset); 
+							Files.copy(wt, in);
+							wt.close(); //flush to out
 						}
 					} catch (IOException ex) {
 						//browser might close the connection and reread

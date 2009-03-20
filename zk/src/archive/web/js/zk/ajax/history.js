@@ -55,9 +55,58 @@ zHistory = {
 		zHistory.checkBookmark();
 	}: zk.$void,
 
-	/** */
+	/** check if URL is changed */
 	onURLChange: function () {
-		//TODO
+		try {
+			var ifr = window.frameElement;
+			if (!parent || parent == window || !ifr) //not iframe
+				return;
+
+			var l0 = parent.location, l1 = location,
+				url = l0.protocol != l1.protocol || l0.host != l1.host
+				|| l0.port != l1.port ? l1.href: l1.pathname,
+				j = url.lastIndexOf(';'), k = url.lastIndexOf('?');
+			if (j >= 0 && (k < 0 || j < k)) {
+				var s = url.substring(0, j);
+				url = k < 0 ? s: s + url.substring(k);
+			}
+			if (l1.hash && "#" != l1.hash) url += l1.hash;
+
+			if (zDom.getAttr(ifr, "z_xsrc") != ifr.src) {//the first zul page being loaded
+				var ifrsrc = ifr.src, loc = location.pathname;
+				zDom.setAttr(ifr, "z_xsrc", ifrsrc);
+
+			//The first zul page might or might not be ifr.src
+			//We have to compare ifr.src with location
+			//Gecko/Opera/Safari: ifr.src is a complete URL (including http://)
+			//IE: ifr.src has no http://hostname/ (actually, same as server's value)
+			//Opera: location.pathname has bookmark and jsessionid
+			//Tomcat: /path;jsessionid=xxx#abc?xyz
+				ifrsrc = zHistory._simplifyURL(ifrsrc);
+				loc = zHistory._simplifyURL(loc);
+				if (ifrsrc.endsWith(loc)
+				|| loc.endsWith(ifrsrc)) { //the non-zul page is ifr.src
+					zDom.setAttr(ifr, "z_xurl", url);
+					return; //not notify if changed by server
+				}
+			}
+
+			if (parent.onIframeURLChange && zDom.getAttr(ifr, "z_xurl") != url) {
+				parent.onIframeURLChange(ifr.id, url);
+				zDom.setAttr(ifr, "z_xurl", url);
+			}
+		} catch (e) { //due to JS sandbox, we cannot access if not from same host
+			if (zk.debugJS) zk.log("Unable to access parent frame");
+		}
+	},
+	_simplifyURL: function (url) {
+		var j = url.lastIndexOf(';');
+		if (j >= 0) url = url.substring(0, j);
+		j = url.lastIndexOf('#');
+		if (j >= 0) url = url.substring(0, j);
+		j = url.lastIndexOf('?');
+		if (j >= 0) url = url.substring(0, j);
+		return url;
 	}
 };
 

@@ -26,6 +26,7 @@ import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.URIEvent;
 
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.impl.Utils;
@@ -50,6 +51,10 @@ public class Iframe extends XulElement implements org.zkoss.zul.api.Iframe {
 	/** Whether to hide when a popup or dropdown is placed on top of it. */
 	private boolean _autohide;
 
+	static {
+		addClientEvent(Iframe.class, Events.ON_URI_CHANGE, CE_DUPLICATE_IGNORE);
+	}
+
 	public Iframe() {
 	}
 	public Iframe(String src) {
@@ -66,7 +71,7 @@ public class Iframe extends XulElement implements org.zkoss.zul.api.Iframe {
 		if (scrolling == null) scrolling = "auto";
 		if (!scrolling.equals(_scrolling)) {
 			_scrolling = scrolling;
-			invalidate();
+			smartUpdate("scrolling", _scrolling);
 		}
 	}
 	
@@ -135,7 +140,7 @@ public class Iframe extends XulElement implements org.zkoss.zul.api.Iframe {
 	public void setAutohide(boolean autohide) {
 		if (_autohide != autohide) {
 			_autohide = autohide;
-			smartUpdate("z.autohide", _autohide);
+			smartUpdate("autohide", _autohide);
 		}
 	}
 
@@ -168,8 +173,8 @@ public class Iframe extends XulElement implements org.zkoss.zul.api.Iframe {
 	protected String getEncodedSrc() {
 		final Desktop dt = getDesktop();
 		return _media != null ? getMediaSrc(): //already encoded
-			dt != null ? dt.getExecution().encodeURL(
-				_src != null ? _src: "~./img/spacer.gif"):  "";
+			dt != null && _src != null ?
+				dt.getExecution().encodeURL(_src):  "";
 	}
 
 	/** Sets the content directly.
@@ -205,6 +210,33 @@ public class Iframe extends XulElement implements org.zkoss.zul.api.Iframe {
 	private String getMediaSrc() {
 		return Utils.getDynamicMediaURI(
 			this, _medver, _media.getName(), _media.getFormat());
+	}
+
+	//super//
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		render(renderer, "src", getEncodedSrc());
+		if (!"auto".equals(_scrolling))
+			render(renderer, "scrolling", _scrolling);
+		render(renderer, "align", _align);
+		render(renderer, "name", _name);
+		if (_autohide) renderer.render("autohide", _autohide);
+	}
+
+	/** Processes an AU request.
+	 *
+	 * <p>Default: in addition to what are handled by {@link XulElement#process},
+	 * it also handles onURIChange.
+	 * @since 5.0.0
+	 */
+	public void process(org.zkoss.zk.au.AuRequest request, boolean everError) {
+		final String name = request.getName();
+		if (Events.ON_URI_CHANGE.equals(name)) {
+			Events.postEvent(URIEvent.getURIEvent(request));
+		} else
+			super.process(request, everError);
 	}
 
 	//-- Component --//

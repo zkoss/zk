@@ -648,8 +648,7 @@ zAu = {
 	_pfAddIds: function (dt, prop, pfIds) {
 		if (pfIds && (pfIds = pfIds.trim())) {
 			var s = pfIds + "=" + Math.round(zUtl.now());
-			var ids = dt[prop];
-			if (ids) ids += ',' + s;
+			if (dt[prop]) dt[prop] += ',' + s;
 			else dt[prop] = s;
 		}
 	}
@@ -838,5 +837,18 @@ zAu.cmd1 = {
 	echo2: function (uuid, wgt, evtnm, data) {
 		zAu.send(new zk.Event(wgt, "echo",
 			data != null ? [evtnm, data]: [evtnm], {ignorable: true}));
+	}
+};
+
+/** Callback when iframe's URL/bookmark been changed.
+ * Notice the containing page might not be ZK. It could be any technology
+ * and it can got the notification by implementing this method.
+ * @param uuid the component UUID
+ * @param url the new URL
+ */
+function onIframeURLChange(uuid, url) {
+	if (!zk.unloading) {
+		var wgt = zk.Widget.$(uuid);
+		if (wgt) wgt.fire("onURIChange", url);
 	}
 };

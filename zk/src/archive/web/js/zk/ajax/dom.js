@@ -1297,6 +1297,25 @@ zDom = { //static methods
 				el.style.KhtmlUserSelect = "";
 			else if (zk.ie)
 				el.onselectstart = null;
+	},
+
+	/** Returns the attribute of the specified name.
+	 */
+	getAttr: function (el, nm) {
+		try {
+			return el && el.getAttribute ? el.getAttribute(nm): null;
+		} catch (e) {
+			return null; //IE6: failed if el is TABLE and attribute not there
+		}
+	},
+	/** Sets the attribute of the specified name with the specified value.
+	 */
+	setAttr: function (el, nm, val) {
+		if (el && el.setAttribute) el.setAttribute(nm, val);
+	},
+	rmAttr: function (el, nm) {
+		if (el && el.removeAttribute) el.removeAttribute(nm);
+		else zDom.setAttr(el, nm, "");
 	}
 };
 

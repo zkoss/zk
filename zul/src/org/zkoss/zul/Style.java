@@ -148,8 +148,7 @@ public class Style extends AbstractComponent implements org.zkoss.zul.api.Style 
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 
-		final String encURL = getEncodedURL();
-		render(renderer, "src", encURL);
+		render(renderer, "src", getEncodedURL());
 
 		if (_content != null) {
 			final HtmlPageRenders.RenderContext rc =
