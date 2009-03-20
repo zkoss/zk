@@ -1174,6 +1174,8 @@ public class Components {
 			return exec().isIncluded();
 		}
 
+		/** @deprecated As of release 5.0.0, MIL is no longer supported.
+		 */
 		public boolean isMilDevice() {
 			return exec().isMilDevice();
 		}

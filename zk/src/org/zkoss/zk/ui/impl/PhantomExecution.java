@@ -160,6 +160,8 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 	public boolean isSafari() {
 		return false;
 	}
+	/** @deprecated As of release 5.0.0, MIL is no longer supported.
+	 */
 	public boolean isMilDevice() {
 		return false;
 	}

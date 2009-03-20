@@ -107,9 +107,20 @@ abstract public class GenericDevice implements Device {
 	/** Instantiates a marshaller for {@link #getMarshaller}.
 	 *
 	 * <p>Default: an instance of {@link SimpleMarshaller}.
+	 * @since 5.0.0
 	 */
 	public Marshaller newMarshaller() {
 		return new SimpleMarshaller();
+	}
+	/** Identify if a client is the givent type.
+	 * <p>This implementation always return false.
+	 * @param userAgent represents a client.
+	 * @param type the type of the browser.
+	 * @return true if it matches, false if unable to identify
+	 * @since 5.0.0
+	 */
+	public boolean identifyClient(String userAgent, String type) {
+		return false;
 	}
 
 	public void init(String type, DeviceConfig config) {

@@ -39,6 +39,7 @@ import org.zkoss.util.resource.Labels;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.util.resource.ClassLocator;
 
+import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.util.resource.ServletContextLocator;
 import org.zkoss.web.util.resource.ServletLabelLocator;
 import org.zkoss.web.util.resource.ServletLabelResovler;
@@ -115,6 +116,9 @@ public class WebManager {
 		_ctx = ctx;
 		_updateURI = updateURI;
 		_ctx.setAttribute(ATTR_WEB_MANAGER, this);
+
+		Servlets.setBrowserIdentifier(new BrowserIdentifier());
+			//plugin device-dependent browser identifier
 
 		//load config as soon as possible since it might set some system props
 		final Configuration config = new Configuration();
@@ -415,6 +419,13 @@ public class WebManager {
 		} finally {
 			ExecutionsCtrl.setCurrent(exec);
 			desktopCtrl.setExecution(exec);
+		}
+	}
+
+	private static class BrowserIdentifier
+	implements Servlets.BrowserIdentifier {
+		public boolean identify(String userAgent, String type) {
+			return org.zkoss.zk.device.Devices.identifyClient(userAgent, type);
 		}
 	}
 }

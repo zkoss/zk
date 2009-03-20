@@ -19,6 +19,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.device;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.LinkedList;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -41,7 +43,11 @@ public class Devices {
 	private Devices() {}
 
 	/** Map(String type, DeviceInfo info or Device device). */
-	private static final Map _devs = new LinkedHashMap(8);
+	private static final Map _devmap = new LinkedHashMap(8);
+	/** A list of devices registered. It is a duplicated info (of _devmap)
+	 * but used to improve the performance.
+	 */
+	private static Device[] _devs = new Device[0];
 
 	/** Returns the device for the specified desktop type.
 	 *
@@ -52,8 +58,8 @@ public class Devices {
 	public static final Device getDevice(String deviceType)
 	throws DeviceNotFoundException {
 		final Object o; //null, Device or DeviceInfo
-		synchronized (_devs) {
-			o = _devs.get(deviceType);
+		synchronized (_devmap) {
+			o = _devmap.get(deviceType);
 		}
 
 		if (o instanceof Device)
@@ -62,11 +68,19 @@ public class Devices {
 			throw new DeviceNotFoundException(deviceType, MZk.NOT_FOUND, deviceType);
 
 		final Device device = ((DeviceInfo)o).newDevice(deviceType);
-		synchronized (_devs) {
-			final Object old = _devs.put(deviceType, device);
+		final List devs = new LinkedList();
+		synchronized (_devmap) {
+			final Object old = _devmap.put(deviceType, device);
 			if (old != o)
-				_devs.put(deviceType, old); //changed by someone else; so restore
+				_devmap.put(deviceType, old); //changed by someone else; so restore
+
+			for (Iterator it = _devmap.values().iterator(); it.hasNext();) {
+				final Object d = it.next();
+				if (d instanceof Device)
+					devs.add(d);
+			}
 		}
+		_devs = (Device[])devs.toArray(new Device[devs.size()]);
 		return device;
 	}
 	/** Returns the device for the specified client.
@@ -84,8 +98,8 @@ public class Devices {
 	public static final Device getDeviceByClient(String userAgent)
 	throws DeviceNotFoundException {
 		String[] devTypes;
-		synchronized (_devs) {
-			Collection c = _devs.keySet();
+		synchronized (_devmap) {
+			Collection c = _devmap.keySet();
 			devTypes = (String[])c.toArray(new String[c.size()]);
 		}
 
@@ -128,8 +142,8 @@ public class Devices {
 		if (deviceType == null) return false;
 
 		final Object o;
-		synchronized (_devs) {
-			o = _devs.get(deviceType);
+		synchronized (_devmap) {
+			o = _devmap.get(deviceType);
 		}
 		return o instanceof Device
 			|| (o != null && ((DeviceInfo)o).isValid());
@@ -161,19 +175,19 @@ public class Devices {
 		|| cls == null)
 			throw new IllegalArgumentException();
 
-		synchronized (_devs) {
-			final Object o = _devs.get(deviceType);
+		synchronized (_devmap) {
+			final Object o = _devmap.get(deviceType);
 			if (o instanceof DeviceInfo) {
 				return ((DeviceInfo)o).setDeviceClass(cls);
 			} else if (o instanceof Device) {
 				final Device device = (Device)o;
-				_devs.put(deviceType,
+				_devmap.put(deviceType,
 					new DeviceInfo(cls,
 						device.getUnavailableMessage(),
 						device.getTimeoutURI(), device.getServerPushClass()));
 				return device.getClass().getName();
 			} else {
-				_devs.put(deviceType, new DeviceInfo(cls));
+				_devmap.put(deviceType, new DeviceInfo(cls));
 				return null;
 			}
 		}
@@ -190,8 +204,8 @@ public class Devices {
 	 */
 	public static final String getUnavailableMessage(String deviceType) {
 		final Object o;
-		synchronized (_devs) {
-			o = _devs.get(deviceType);
+		synchronized (_devmap) {
+			o = _devmap.get(deviceType);
 		}
 		return o instanceof Device ? ((Device)o).getUnavailableMessage():
 			o instanceof DeviceInfo ? ((DeviceInfo)o).getUnavailableMessage(): null;
@@ -209,15 +223,15 @@ public class Devices {
 		if (msg != null && msg.length() == 0)
 			msg = null;
 
-		synchronized (_devs) {
-			final Object o = _devs.get(deviceType);
+		synchronized (_devmap) {
+			final Object o = _devmap.get(deviceType);
 			if (o instanceof Device) {
 				return ((Device)o).setUnavailableMessage(msg);
 			} else if (o instanceof DeviceInfo) {
 				return ((DeviceInfo)o).setUnavailableMessage(msg);
 			} else {
 				final DeviceInfo info = new DeviceInfo();
-				_devs.put(deviceType, info);
+				_devmap.put(deviceType, info);
 				info.setUnavailableMessage(msg);
 				return null;
 			}
@@ -236,8 +250,8 @@ public class Devices {
 	 */
 	public static final String getTimeoutURI(String deviceType) {
 		final Object o;
-		synchronized (_devs) {
-			o = _devs.get(deviceType);
+		synchronized (_devmap) {
+			o = _devmap.get(deviceType);
 		}
 		return o instanceof Device ? ((Device)o).getTimeoutURI():
 			o instanceof DeviceInfo ? ((DeviceInfo)o).getTimeoutURI(): null;
@@ -255,15 +269,15 @@ public class Devices {
 		if (deviceType == null || deviceType.length() == 0)
 			throw new IllegalArgumentException();
 
-		synchronized (_devs) {
-			final Object o = _devs.get(deviceType);
+		synchronized (_devmap) {
+			final Object o = _devmap.get(deviceType);
 			if (o instanceof Device) {
 				return ((Device)o).setTimeoutURI(timeoutURI);
 			} else if (o instanceof DeviceInfo) {
 				return ((DeviceInfo)o).setTimeoutURI(timeoutURI);
 			} else {
 				final DeviceInfo info = new DeviceInfo();
-				_devs.put(deviceType, info);
+				_devmap.put(deviceType, info);
 				info.setTimeoutURI(timeoutURI);
 				return null;
 			}
@@ -277,8 +291,8 @@ public class Devices {
 	 */
 	public String getEmbedded(String deviceType) {
 		final Object o;
-		synchronized (_devs) {
-			o = _devs.get(deviceType);
+		synchronized (_devmap) {
+			o = _devmap.get(deviceType);
 		}
 		return o instanceof Device ? ((Device)o).getEmbedded():
 			o instanceof DeviceInfo ? ((DeviceInfo)o).getEmbedded(): null;
@@ -299,15 +313,15 @@ public class Devices {
 		if (content == null || content.length() == 0)
 			return; //nothing to do
 
-		synchronized (_devs) {
-			final Object o = _devs.get(deviceType);
+		synchronized (_devmap) {
+			final Object o = _devmap.get(deviceType);
 			if (o instanceof Device) {
 				((Device)o).addEmbedded(content);
 			} else if (o instanceof DeviceInfo) {
 				((DeviceInfo)o).addEmbedded(content);
 			} else {
 				final DeviceInfo info = new DeviceInfo();
-				_devs.put(deviceType, info);
+				_devmap.put(deviceType, info);
 				info.addEmbedded(content);
 			}
 		}
@@ -324,8 +338,8 @@ public class Devices {
 	 */
 	public static final String getServerPushClass(String deviceType) {
 		final Object o;
-		synchronized (_devs) {
-			o = _devs.get(deviceType);
+		synchronized (_devmap) {
+			o = _devmap.get(deviceType);
 		}
 		if (o instanceof Device) {
 			final Class cls = ((Device)o).getServerPushClass();
@@ -358,8 +372,8 @@ public class Devices {
 			throw new IllegalArgumentException();
 
 		try {
-			synchronized (_devs) {
-				final Object o = _devs.get(deviceType);
+			synchronized (_devmap) {
+				final Object o = _devmap.get(deviceType);
 				if (o instanceof Device) {
 					final Class old = ((Device)o).setServerPushClass(
 						cls instanceof Class ? (Class)cls:
@@ -369,7 +383,7 @@ public class Devices {
 					return ((DeviceInfo)o).setServerPushClass(cls);
 				} else {
 					final DeviceInfo info = new DeviceInfo();
-					_devs.put(deviceType, info);
+					_devmap.put(deviceType, info);
 					info.setServerPushClass(cls);
 					return null;
 				}
@@ -377,6 +391,22 @@ public class Devices {
 		} catch (ClassNotFoundException ex) {
 			throw new UiException("Class not found: "+cls);
 		}
+	}
+
+	/** Identify if a client is the givent type.
+	 * It invokes {@link Device#identifyClient} one-by-one until one
+	 * of them returns true, or all false.
+	 *
+	 * @param userAgent represents a client.
+	 * @param type the type of the browser.
+	 * @return true if it matches, false if unable to identify
+	 * @since 5.0.0
+	 */
+	public static boolean identifyClient(String userAgent, String type) {
+		for (int j = 0; j < _devs.length; ++j)
+			if (_devs[j].identifyClient(userAgent, type))
+				return true;
+		return false;
 	}
 
 	/** Adds a device based on the XML declaration.
@@ -419,6 +449,7 @@ public class Devices {
 			addEmbedded(deviceType, ((Element)it.next()).getText(true));
 		}
 	}
+
 	/** Device info.
 	 */
 	private static class DeviceInfo implements DeviceConfig {

@@ -72,6 +72,8 @@ import org.zkoss.web.util.resource.ServletContextLocator;
 public class Servlets {
 //	private static final Log log = Log.lookup(Servlets.class);
 
+	private static BrowserIdentifier _bwid;
+
 	private static final boolean _svl24, _svl23;
 	static {
 		boolean b = false;
@@ -253,13 +255,34 @@ public class Servlets {
 		}
 	}
 
+	/** Sets the browser identifier that is used to assist {@link #isBrowser}
+	 * to identify a client.
+	 *
+	 * <p>Notice that the browser identifier must be thread-safe.
+	 *
+	 * @param bwid the browser identifier. If null, only the default types
+	 * are recognized.
+	 * @see BrowserIdentifier
+	 * @since 5.0.0
+	 */
+	public static void setBrowserIdentifier(BrowserIdentifier bwid) {
+		_bwid = bwid;
+	}
+	/** Returns the browser identifier, or null if no such plugin.
+	 * @see BrowserIdentifier
+	 * @since 5.0.0
+	 */
+	public static BrowserIdentifier getBrowserIdentifier() {
+		return _bwid;
+	}
+
 	/** Returns whether the client is a browser of the specified type.
 	 *
 	 * @param type the type of the browser.
 	 * Allowed values include "robot", "ie", "ie6", "ie6-", "ie7", "ie8", "ie8-",
 	 * "ie7-", "gecko", "gecko2", "gecko3", "gecko2-", "gecko3-",
 	 * "opara", "safari",
-	 * "mil", "hil", "mil-".<br/>
+	 * "hil",.<br/>
 	 * Note: "ie6-" means Internet Explorer 6 only; not Internet Explorer 7
 	 * or other.
 	 * @since 3.5.1
@@ -274,7 +297,7 @@ public class Servlets {
 	 * Allowed values include "robot", "ie", "ie6", "ie6-", "ie7", "ie8",
 	 * "ie7-", "gecko", "gecko2", "gecko3", "gecko2-",
 	 * "opara", "safari",
-	 * "mil", "hil", "mil-". Otherwise, it matches whether the type exist or not.<br/>
+	 * "hil". Otherwise, it matches whether the type exist or not.<br/>
 	 * Note: "ie6-" means Internet Explorer 6 only; not Internet Explorer 7
 	 * or other.
 	 * @param userAgent represents a client.
@@ -282,6 +305,10 @@ public class Servlets {
 	 * @since 3.5.1
 	 */
 	public static boolean isBrowser(String userAgent, String type) {
+		final BrowserIdentifier bwid = _bwid;
+		if (bwid != null && bwid.identify(userAgent, type))
+			return true;
+
 		if ("ie".equals(type) || "ie6".equals(type)) return isExplorer(userAgent);
 		if ("ie6-".equals(type)) return getIEVer(userAgent) == 6;
 		if ("ie7".equals(type)) return isExplorer7(userAgent);
@@ -297,8 +324,6 @@ public class Servlets {
 		if ("safari".equals(type)) return isSafari(userAgent);
 		if ("opera".equals(type)) return isOpera(userAgent);
 
-		if ("mil".equals(type)) return isMilDevice(userAgent);
-		if ("mil-".equals(type)) return isMilDevice(userAgent) && !isHilDevice(userAgent);
 		if ("hil".equals(type)) return isHilDevice(userAgent);
 
 		if ("robot".equals(type)) return isRobot(userAgent);
@@ -482,20 +507,13 @@ public class Servlets {
 		return userAgent.indexOf("opera") >= 0;
 	}
 
-	/** Returns whether the client is a mobile device supporting MIL
-	 * (Mobile Interactive Language).
-	 * @since 2.4.0
+	/** @deprecated As of release 5.0.0, MIL is no longer supported.
 	 */
 	public static final boolean isMilDevice(ServletRequest req) {
 		return (req instanceof HttpServletRequest)
 			&& isMilDevice(((HttpServletRequest)req).getHeader("user-agent"));
 	}
-	/** Returns whether the client is a mobile device supporting MIL
-	 * (Mobile Interactive Language).
-	 *
-	 * @param userAgent represents a client.
-	 * For HTTP clients, It is the user-agent header.
-	 * @since 3.5.1
+	/** @deprecated As of release 5.0.0, MIL is no longer supported.
 	 */
 	public static final boolean isMilDevice(String userAgent) {
 		if (userAgent == null)
@@ -507,10 +525,7 @@ public class Servlets {
 	}
 	/** Returns whether the client is a mobile device supporting HIL
 	 * (Handset Interactive Language).
-	 *
-	 * <p>Note: ZK Mobile for Android supports both MIL and HIL.
-	 * That is, both {@link #isHilDevice} and {@link #isMilDevice}
-	 * return true.
+	 * For example, ZK Mobile for Android.
 	 *
 	 * @since 3.0.2
 	 */
@@ -520,10 +535,7 @@ public class Servlets {
 	}
 	/** Returns whether the client is a mobile device supporting HIL
 	 * (Handset Interactive Language).
-	 *
-	 * <p>Note: ZK Mobile for Android supports both MIL and HIL.
-	 * That is, both {@link #isHilDevice} and {@link #isMilDevice}
-	 * return true.
+	 * For example, ZK Mobile for Android.
 	 *
 	 * @param userAgent represents a client.
 	 * For HTTP clients, It is the user-agent header.
@@ -1095,5 +1107,19 @@ public class Servlets {
 		sb.append(' ')
 			.append(header).append(": ").append(request.getHeader(header))
 			.append('\n');
+	}
+
+	/** A plugin used to assist {@link #isBrowser} to identify
+	 * if a client is the given type.
+	 * @since 5.0.0
+	 * @see #setBrowserIdentifier
+	 */
+	public static interface BrowserIdentifier {
+		/** Identify if a client is the givent type.
+		 * @param userAgent represents a client.
+		 * @param type the type of the browser.
+		 * @return true if it matches, false if unable to identify
+		 */
+		public boolean identify(String userAgent, String type);
 	}
 }

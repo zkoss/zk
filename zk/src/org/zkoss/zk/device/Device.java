@@ -186,4 +186,15 @@ public interface Device {
 	 * @since 2.4.0
 	 */
 	public void sessionDidActivate(Desktop desktop);
+
+	/** Identify if a client is the givent type.
+	 * @param userAgent represents a client.
+	 * @param type the type of the browser.
+	 * @return true if it matches, false if unable to identify.
+	 * Note: the default identifies ie*, gecko*, safari, opera and hil.
+	 * So, the implementation needs not to identify them (i.e., simply
+	 * return false), though it is harmless to identify.
+	 * @since 5.0.0
+	 */
+	public boolean identifyClient(String userAgent, String type);
 }

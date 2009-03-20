@@ -38,8 +38,6 @@ public class AjaxDevice extends GenericDevice {
 		return false;
 	}
 	public Boolean isCompatible(String userAgent) {
-		if (Servlets.isMilDevice(userAgent))
-			return Boolean.FALSE;
 		userAgent = userAgent.toLowerCase();
 		return userAgent.indexOf("mozilla") >= 0 
 			|| userAgent.indexOf("msie ") >= 0

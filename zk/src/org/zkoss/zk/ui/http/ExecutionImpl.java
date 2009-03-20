@@ -441,6 +441,8 @@ public class ExecutionImpl extends AbstractExecution {
 	public boolean isSafari() {
 		return Servlets.isSafari(_request);
 	}
+	/** @deprecated As of release 5.0.0, MIL is no longer supported.
+	 */
 	public boolean isMilDevice() {
 		return Servlets.isMilDevice(_request);
 	}
