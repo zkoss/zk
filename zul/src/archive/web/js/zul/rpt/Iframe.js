@@ -70,7 +70,7 @@ zul.rpt.Iframe = zk.$extends(zul.Widget, {
 
 	domAttrs_: function(no){
 		var attr = this.$supers('domAttrs_', arguments)
-				+ ' src="' + (this._src || '') + '"',
+				+ ' src="' + (this._src || '') + '" frameborder="0"',
 			v = this._scrolling;
 		if ("auto" != v)
 			attr += ' scrolling="' + ('true' == v ? 'yes': 'false' == v ? 'no': v) + '"';
