@@ -18,7 +18,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.event;
 
-import org.zkoss.lang.Objects;
+import org.zkoss.json.JSONObject;
+
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.mesg.MZk;
@@ -65,17 +66,20 @@ public class ColSizeEvent extends Event {
 		final Component comp = request.getComponent();
 		if (comp == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, request);
-		final String[] data = request.getData();
-		if (data == null || data.length != 4)
+		final JSONObject data = request.getData();
+		if (data == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
-				new Object[] {Objects.toString(data), request});
+				new Object[] {data, request});
 
-		final Desktop desktop = request.getDesktop();
-		final int icol = Integer.parseInt(data[0]);
-		final Component col1 = desktop.getComponentByUuid(data[1]);
-		
-		return new ColSizeEvent(request.getName(), comp, icol, col1, data[2],
-				AuRequests.parseKeys(data[3]));
+		try {
+			return new ColSizeEvent(request.getName(), comp,
+				data.getInt("index"),
+				request.getDesktop().getComponentByUuid(data.getString("column")),
+				data.getString("width"),
+				AuRequests.parseKeys(data.optJSONObject("keys")));
+		} catch (org.zkoss.json.JSONException ex) {
+			throw new UiException(ex);
+		}
 	}
 	
 	/** Constructs an instance of {@link ColSizeEvent}.

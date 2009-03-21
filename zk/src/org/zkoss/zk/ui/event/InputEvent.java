@@ -18,7 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
-import org.zkoss.lang.Objects;
+import org.zkoss.json.JSONObject;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
@@ -43,17 +43,17 @@ public class InputEvent extends Event {
 		final Component comp = request.getComponent();
 		if (comp == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, request);
-		final String[] data = request.getData();
-		if (data == null || (data.length != 1 && data.length != 3))
+		final JSONObject data = request.getData();
+		if (data == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
-				new Object[] {Objects.toString(data), request});
-
-		final String newval = data[0];
-		if (data.length == 1)
-			return new InputEvent(request.getName(), comp, newval, false, 0);
-		else 
-			return new InputEvent(request.getName(), comp, newval,
-				"true".equals(data[1]), Integer.parseInt(data[2]));
+				new Object[] {data, request});
+		try {
+			return new InputEvent(request.getName(), comp,
+				data.getString("value"), data.optBoolean("bySelectBack"),
+				data.optInt("start"));
+		} catch (org.zkoss.json.JSONException ex) {
+			throw new UiException(ex);
+		}
 	}
 
 	/** Constructs a input-relevant event.

@@ -53,8 +53,10 @@ public class AuResponse {
 	}
 	/** Constructs a component-independent response.
 	 *
-	 * @param data the data. It can be null, String, Date, primitive
-	 * types ({@link org.zkoss.zk.device.marshal.$boolean}, {@link org.zkoss.zk.device.marshal.$int}...), and an array of the above time.
+	 * @param data the data. It can be null, String, Date,
+	 * and any kind of objects that
+	 * the client accepts (marshaled by JSON).
+
 	 */
 	protected AuResponse(String cmd, Object data) {
 		this(cmd, (Component)null, data);

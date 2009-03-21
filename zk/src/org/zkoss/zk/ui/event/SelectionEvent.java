@@ -18,7 +18,12 @@
  */
 package org.zkoss.zk.ui.event;
 
+import org.zkoss.json.JSONObject;
+
+import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.au.AuRequest;
 
 /**
  * Represents an event cause by user's the active selection which is a
@@ -28,8 +33,24 @@ import org.zkoss.zk.ui.Component;
  */
 public class SelectionEvent extends Event {
 	private final int _start, _end;
-
 	private final String _txt;
+
+	/** Converts an AU request to a selection event.
+	 * @since 5.0.0
+	 */
+	public static final SelectionEvent getSelectionEvent(AuRequest request) {
+		final Component comp = request.getComponent();
+		if (comp == null)
+			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, request);
+		final JSONObject data = request.getData();
+		if (data == null)
+			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
+				new Object[] {data, request});
+
+		return new SelectionEvent(request.getName(), comp,
+			data.optInt("start"), data.optInt("end"),
+			data.optString("selected"));
+	}
 
 	/**
 	 * Constructs a selection event.

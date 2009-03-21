@@ -109,8 +109,7 @@ public interface UiEngine {
 	 * <p>The second invocation of this method
 	 * in the same execution with the same attr will override the previous one.
 	 *
-	 * @param value the value. To represent a primitive value, use
-	 * {@link org.zkoss.zk.device.marshal.$int}, {@link org.zkoss.zk.device.marshal.$short} and so on.
+	 * @param value the value.
 	 */
 	public void addSmartUpdate(Component comp, String attr, Object value);
 	/** Adds a response which will be sent to client at the end

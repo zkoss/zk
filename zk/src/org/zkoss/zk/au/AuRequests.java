@@ -17,7 +17,9 @@ package org.zkoss.zk.au;
 import java.util.Set;
 import java.util.LinkedHashSet;
 
-import org.zkoss.lang.Objects;
+import org.zkoss.json.JSONObject;
+import org.zkoss.json.JSONArray;
+import org.zkoss.json.JSONException;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
@@ -39,22 +41,16 @@ public class AuRequests {
 	 *
 	 * @return a set of components.
 	 */
-	public static Set convertToItems(AuRequest request) {
+	public static Set convertToItems(Desktop desktop, JSONArray uuids) {
 		final Set items = new LinkedHashSet();
-		final String[] data = request.getData();
-		String s = data != null && data.length > 0 ? data[0]: null;
-		if (s != null) {
-			s = s.trim();
-			if (s.length() > 0) {
-				final Desktop desktop = request.getDesktop();
-				for (int j = 0, k = 0; k >=0; j = k + 1) {
-					k = s.indexOf(',', j);
-					final String uuid =
-						k >= 0 ? s.substring(j, k): s.substring(j);
-					final Component item =
-						desktop.getComponentByUuid(uuid.trim());
-					items.add(item);
+		if (uuids != null) {
+			try {
+				for (int len = uuids.length(), j = 0; j < len; ++j) {
+					final String uuid = uuids.getString(j);
+					items.add(desktop.getComponentByUuid(uuid.trim()));
 				}
+			} catch (JSONException ex) {
+				throw new UiException(ex);
 			}
 		}
 		return items;
@@ -64,12 +60,12 @@ public class AuRequests {
 	 * @return a combination of {@link MouseEvent#ALT_KEY},
 	 * {@link MouseEvent#SHIFT_KEY} and {@link MouseEvent#CTRL_KEY},
 	 */
-	public static int parseKeys(String flags) {
+	public static int parseKeys(JSONObject flags) {
 		int keys = 0;
 		if (flags != null) {
-			if (flags.indexOf("a") >= 0) keys |= MouseEvent.ALT_KEY;
-			if (flags.indexOf("c") >= 0) keys |= MouseEvent.CTRL_KEY;
-			if (flags.indexOf("s") >= 0) keys |= MouseEvent.SHIFT_KEY;
+			if (flags.optBoolean("altKey")) keys |= MouseEvent.ALT_KEY;
+			if (flags.optBoolean("ctrlKey")) keys |= MouseEvent.CTRL_KEY;
+			if (flags.optBoolean("shiftKey")) keys |= MouseEvent.SHIFT_KEY;
 		}
 		return keys;
 	}
@@ -79,25 +75,30 @@ public class AuRequests {
 	 */
 	public static String getInnerWidth(AuRequest request)
 	throws UiException {
-		final String[] data = request.getData();
-		if (data == null || data.length != 1)
+		final JSONObject data = request.getData();
+		if (data == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
-				new Object[] {Objects.toString(data), request});
-		return data[0];
+				new Object[] {data, request});
+		return data.optString("");
 	}
 
 	/** Returns the result of an AU request representing the update result.
 	 */
 	public static Object getUpdateResult(AuRequest request)
 	throws UiException {
-		final String[] data = request.getData();
-		if (data == null || data.length != 1)
+		final JSONObject data = request.getData();
+		if (data == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
-				new Object[] {Objects.toString(data), request});
+				new Object[] {data, request});
 
-		final Object result = request.getDesktop().removeAttribute(data[0]);
-		if (result == null)
-			throw new UiException("Content not found: "+data[0]);
-		return result;
+		try {
+			final String key = data.getString("");
+			final Object result = request.getDesktop().removeAttribute(key);
+			if (result == null)
+				throw new UiException("Content not found: "+key);
+			return result;
+		} catch (JSONException ex) {
+			throw new UiException(ex);
+		}
 	}
 }

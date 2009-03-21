@@ -55,10 +55,9 @@ public class AuInvoke extends AuResponse {
 	 * It cannot be null.
 	 * @param function the function name
 	 * @param arg the additional argument. It could be null, String, Date,
-	 * {@link org.zkoss.zk.ui.util.DeferredValue}, primitives
-	 * (such as Boolean and {@link $boolean})
-	 * and an array of above types.
-	 * Different devices might support more types.
+	 * {@link org.zkoss.zk.ui.util.DeferredValue},
+	 * and any kind of objects that
+	 * the client accepts (marshaled by JSON).
 	 * @since 5.0.0
 	 */
 	public AuInvoke(Component comp, String function, Object arg) {
@@ -112,10 +111,9 @@ public class AuInvoke extends AuResponse {
 	 * It cannot be null.
 	 * @param function the function name
 	 * @param arg1 the additional argument. It could be null, String, Date,
-	 * {@link org.zkoss.zk.ui.util.DeferredValue}, primitives
-	 * (such as Boolean and {@link $boolean})
-	 * and an array of above types.
-	 * Different devices might support more types.
+	 * {@link org.zkoss.zk.ui.util.DeferredValue},
+	 * and any kind of objects that
+	 * the client accepts (marshaled by JSON).
 	 * @param arg2 the 2nd additional argument.
 	 * @since 5.0.0
 	 */
@@ -130,10 +128,9 @@ public class AuInvoke extends AuResponse {
 	 * It cannot be null.
 	 * @param function the function name
 	 * @param arg1 the additional argument. It could be null, String, Date,
-	 * {@link org.zkoss.zk.ui.util.DeferredValue}, primitives
-	 * (such as Boolean and {@link $boolean})
-	 * and an array of above types.
-	 * Different devices might support more types.
+	 * {@link org.zkoss.zk.ui.util.DeferredValue},
+	 * and any kind of objects that
+	 * the client accepts (marshaled by JSON).
 	 * @param arg2 the 2nd additional argument.
 	 * @param arg3 the 3rd additional argument.
 	 * @since 5.0.0
@@ -150,10 +147,9 @@ public class AuInvoke extends AuResponse {
 	 * It cannot be null.
 	 * @param function the function name
 	 * @param args the additional arguments. It could be null, String, Date,
-	 * {@link org.zkoss.zk.ui.util.DeferredValue}, primitives
-	 * (such as Boolean and {@link $boolean})
-	 * and an array of above types.
-	 * Different devices might support more types.
+	 * {@link org.zkoss.zk.ui.util.DeferredValue},
+	 * and any kind of objects that
+	 * the client accepts (marshaled by JSON).
 	 * @since 5.0.0
 	 */
 	public AuInvoke(Component comp, String function, Object[] args) {

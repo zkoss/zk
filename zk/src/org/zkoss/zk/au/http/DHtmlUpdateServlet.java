@@ -39,6 +39,7 @@ import org.zkoss.mesg.Messages;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.util.logging.Log;
+import org.zkoss.json.JSONObject;
 
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.Charsets;
@@ -438,15 +439,12 @@ public class DHtmlUpdateServlet extends HttpServlet {
 					//dummy is used for PollingServerPush for piggyback
 
 				final String uuid = request.getParameter("uuid."+j);
-				final String[] data = request.getParameterValues("data."+j);
-				if (data != null) {
-					for (int k = data.length; --k >= 0;)
-						if ("_z~nil".equals(data[k]))
-							data[k] = null;
-				}
+				final String data = request.getParameter("data."+j);
+				final JSONObject decdata =
+					data != null ? new JSONObject(data): null;
 				aureqs.add(uuid == null || uuid.length() == 0 ? 
-					new AuRequest(desktop, cmdId, data):
-					new AuRequest(desktop, uuid, cmdId, data));
+					new AuRequest(desktop, cmdId, decdata):
+					new AuRequest(desktop, uuid, cmdId, decdata));
 			}
 		} catch (Throwable ex) {
 			log.warningBriefly(ex);

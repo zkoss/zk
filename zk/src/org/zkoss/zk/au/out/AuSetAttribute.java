@@ -34,10 +34,10 @@ public class AuSetAttribute extends AuResponse {
 	/** Construct an instance for miscellanous values, such as Boolean,
 	 * Integer and so on.
 	 * @param val the value. It could be null, String, Date,
-	 * {@link org.zkoss.zk.ui.util.DeferredValue}, primitives
-	 * (such as Boolean and {@link org.zkoss.zk.device.marshal.$boolean})
-	 * and an array of above types.
-	 * Different devices might support more types.
+	 * {@link org.zkoss.zk.ui.util.DeferredValue},
+	 * and any kind of objects that
+	 * the client accepts (marshaled by JSON).
+
 	 * @since 5.0.0
 	 */
 	public AuSetAttribute(Component comp, String attr, Object val) {

@@ -20,7 +20,9 @@ package org.zkoss.zk.ui.event;
 
 import java.util.TimeZone;
 
-import org.zkoss.lang.Objects;
+import org.zkoss.json.JSONObject;
+import org.zkoss.json.JSONArray;
+import org.zkoss.json.JSONException;
 import org.zkoss.util.TimeZones;
 
 import org.zkoss.zk.mesg.MZk;
@@ -51,16 +53,19 @@ public class ClientInfoEvent extends Event {
 	 * @since 5.0.0
 	 */
 	public static final ClientInfoEvent getClientInfoEvent(AuRequest request) {
-		final String[] data = request.getData();
-		if (data == null || data.length != 8)
+		final JSONObject data = request.getData();
+		if (data == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
-				new Object[] {Objects.toString(data), request});
+				new Object[] {data, request});
 		//Note: ClientInfoEvent is a broadcast event
-		return new ClientInfoEvent(request.getName(),
-			Integer.parseInt(data[0]), Integer.parseInt(data[1]),
-			Integer.parseInt(data[2]), Integer.parseInt(data[3]),
-			Integer.parseInt(data[4]), Integer.parseInt(data[5]),
-			Integer.parseInt(data[6]), Integer.parseInt(data[7]));
+		try {
+			final JSONArray inf = data.getJSONArray("");
+			return new ClientInfoEvent(request.getName(),
+				inf.getInt(0), inf.getInt(1), inf.getInt(2), inf.getInt(3),
+				inf.getInt(4), inf.getInt(5), inf.getInt(6), inf.getInt(7));
+		} catch (JSONException ex) {
+			throw new UiException(ex);
+		}
 	}
 
 	/** Constructs an event to hold the client-info.

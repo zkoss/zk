@@ -18,13 +18,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
-import org.zkoss.lang.Objects;
+import org.zkoss.json.JSONObject;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.au.AuRequest;
-import org.zkoss.zk.au.AuRequests;
 
 /**
  * Represents an event cause by user's entering a wrong data
@@ -42,13 +41,17 @@ public class ErrorEvent extends InputEvent {
 		final Component comp = request.getComponent();
 		if (comp == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, request);
-		final String[] data = request.getData();
-		if (data == null || data.length != 2)
+		final JSONObject data = request.getData();
+		if (data == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
-				new Object[] {Objects.toString(data), request});
+				new Object[] {data, request});
 
-		final String newval = data[0], msg = data[1];
-		return new ErrorEvent(request.getName(), comp, newval, msg);
+		try {
+			return new ErrorEvent(request.getName(), comp,
+				data.getString("value"), data.getString("message"));
+		} catch (org.zkoss.json.JSONException ex) {
+			throw new UiException(ex);
+		}
 	}
 
 	/** Constructs an error-relevant event.

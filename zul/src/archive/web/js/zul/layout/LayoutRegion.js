@@ -634,12 +634,8 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		wgt.fire('onSize', {
 			width: wgt.getSubnode('real').style.width,
 			height: wgt.getSubnode('real').style.height,
-			keys: zEvt.keyMetaData(evt),
-			marshal: wgt.$class._onSizeMarshal
+			keys: zEvt.keyMetaData(evt)
 		});
-	},
-	_onSizeMarshal: function () {
-		return [this.width, this.height, this.keys ? this.keys.marshal(): ''];
 	},
 	_snap: function (dg, pointer) {
 		var wgt = dg.control,

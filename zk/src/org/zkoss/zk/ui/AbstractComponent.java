@@ -44,6 +44,9 @@ import org.zkoss.util.logging.Log;
 import org.zkoss.io.PrintWriterX;
 import org.zkoss.io.Serializables;
 import org.zkoss.xml.HTMLs;
+import org.zkoss.json.JSONObject;
+import org.zkoss.json.JSONArray;
+import org.zkoss.json.JSONException;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.event.EventListener;
@@ -2033,12 +2036,16 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	public void process(AuRequest request, boolean everError) {
 		final String name = request.getName();
 		if ("echo".equals(name)) {
-			final String[] data = request.getData();
-			if (data == null || (data.length != 1 && data.length != 2))
+			final JSONObject data = request.getData();
+			if (data == null)
 				throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
-					new Object[] {Objects.toString(data), this});
-			Events.postEvent(data.length == 1 ?
-				new Event(data[0], this): new Event(data[0], this, data[1]));
+					new Object[] {data, this});
+			try {
+				final JSONArray data2 = data.getJSONArray("");
+				Events.postEvent(new Event(data2.getString(0), this, data2.opt(1)));
+			} catch (JSONException ex) {
+				throw new UiException(ex);
+			}
 		} else
 			Events.postEvent(Event.getEvent(request));
 	}

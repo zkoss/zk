@@ -399,16 +399,12 @@ zAu = {
 			if (target && target.className != 'zk.Desktop')
 				content += "&uuid."+j+"="+target.uuid;
 
-			var data = aureq.data;
-			if (data && data.marshal) data = data.marshal();
-			if (data != null) {
-				if (!data.$array) data = [data];
-				for (var k = 0, dl = data.length; k < dl; ++k) {
-					var d = data[k];
-					content += "&data."+j+"="
-						+ (d != null ? encodeURIComponent(d): '_z~nil');
-				}
-			}
+			var data = aureq.data, dtype = typeof data;
+			if (dtype == 'string' || dtype == 'number' || dtype == 'boolean'
+			|| (data && data.$array))
+				data = {'':data};
+			if (data)
+				content += "&data."+j+"="+encodeURIComponent(zJSON.stringify(data));
 		}
 
 		if (content)

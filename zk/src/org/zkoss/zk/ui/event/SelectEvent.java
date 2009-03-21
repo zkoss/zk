@@ -21,9 +21,10 @@ package org.zkoss.zk.ui.event;
 import java.util.Set;
 import java.util.Collections;
 
-import org.zkoss.lang.Objects;
+import org.zkoss.json.JSONObject;
 
 import org.zkoss.zk.mesg.MZk;
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.au.AuRequest;
@@ -60,15 +61,16 @@ public class SelectEvent extends Event {
 		final Component comp = request.getComponent();
 		if (comp == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, request);
-		final Set items = AuRequests.convertToItems(request);
-		final String[] data = request.getData();
-		if (data == null || data.length > 3)
+		final JSONObject data = request.getData();
+		if (data == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
-				new Object[] {Objects.toString(data), request});
-		final Component ref = data.length >= 2 && data[1] != null ?
-			request.getDesktop().getComponentByUuidIfAny(data[1]): null;
-		return new SelectEvent(request.getName(), comp, items, ref,
-			data.length < 3 ? 0: AuRequests.parseKeys(data[2]));
+				new Object[] {data, request});
+
+		final Desktop desktop = request.getDesktop();
+		return new SelectEvent(request.getName(), comp,
+			AuRequests.convertToItems(desktop, data.optJSONArray("items")),
+			desktop.getComponentByUuidIfAny(data.optString("reference", null)),
+			AuRequests.parseKeys(data.optJSONObject("keys")));
 	}
 
 	/** Constructs a selection event.

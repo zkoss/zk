@@ -18,7 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
-import org.zkoss.lang.Objects;
+import org.zkoss.json.JSONObject;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
@@ -55,13 +55,18 @@ public class MoveEvent extends Event {
 		final Component comp = request.getComponent();
 		if (comp == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, request);
-		final String[] data = request.getData();
-		if (data == null || data.length != 3)
+		final JSONObject data = request.getData();
+		if (data == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
-				new Object[] {Objects.toString(data), request});
+				new Object[] {data, request});
 
-		return new MoveEvent(request.getName(), comp,
-			data[0], data[1], AuRequests.parseKeys(data[2]));
+		try {
+			return new MoveEvent(request.getName(), comp,
+				data.getString("left"), data.getString("top"),
+				AuRequests.parseKeys(data.optJSONObject("keys")));
+		} catch (org.zkoss.json.JSONException ex) {
+			throw new UiException(ex);
+		}
 	}
 
 	/** Constructs a mouse relevant event.

@@ -45,8 +45,7 @@ zEvt = {
 		return {
 			x: px - ofs[0], y: py - ofs[1],
 			pageX: px, pageY: py,
-			keys: zEvt.keyMetaData(evt),
-			marshal: zEvt._mouseDataMarshal
+			keys: zEvt.keyMetaData(evt)
 		};
 	},
 	keyData: function (evt) {
@@ -54,35 +53,18 @@ zEvt = {
 		return {
 			keyCode: zEvt.keyCode(evt),
 			charCode: zEvt.charCode(evt),
-			keys: zEvt.keyMetaData(evt),
-			marshal: zEvt._keyDataMarshal
+			keys: zEvt.keyMetaData(evt)
 		};
 	},
 	keyMetaData: function (evt) {
 		evt = evt || window.event;
-		return {
-			altKey: evt.altKey,
-			ctrlKey: evt.ctrlKey,
-			shiftKey: evt.shiftKey,
-			leftClick: zEvt.leftClick(evt),
-			rightClick: zEvt.rightClick(evt),
-			marshal: zEvt._keyMetaDataMarshal
-		};
-	},
-	_mouseDataMarshal: function () {
-		return [this.x, this.y, this.pageX, this.pageY, this.keys.marshal()];
-	},
-	_keyDataMarshal: function () {
-		return [this.keyCode, this.charCode, this.keys.marshal()];
-	},
-	_keyMetaDataMarshal: function () {
-		var s = "";
-		if (this.altKey) s += 'a';
-		if (this.ctrlKey) s += 'c';
-		if (this.shiftKey) s += 's';
-		if (this.leftClick) s += 'l';
-		if (this.rightClick) s += 'r';
-		return s;
+		var inf = {};
+		if (evt.altKey) inf.altKey = true;
+		if (evt.ctrlKey) inf.ctrlKey = true;
+		if (evt.shiftKey) inf.shiftKey = true;
+		if (zEvt.leftClick(evt)) inf.leftClick = true;
+		if (zEvt.rightClick(evt)) inf.rightClick = true;
+		return inf;
 	},
 
 	x: function (evt) {

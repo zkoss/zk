@@ -131,9 +131,6 @@ zul.grid.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 }, {
 	_faker: ["hdfaker", "bdfaker", "ftfaker"],
 	
-	_onSizingMarshal: function () {
-		return [this.index, this.uuid, this.width, this.keys ? this.keys.marshal(): ''];
-	},
 	//dragdrop//
 	_ghostsizing: function (dg, ofs, evt) {
 		var wgt = dg.control,
@@ -216,10 +213,9 @@ zul.grid.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		
 		wgt.parent.fire('onColSize', {
 			index: cidx,
-			uuid: wgt.uuid,
+			column: wgt,
 			width: wd + "px",
-			keys: zEvt.keyMetaData(evt),
-			marshal: wgt.$class._onSizingMarshal
+			keys: zEvt.keyMetaData(evt)
 		}, null, 0);
 	}
 });

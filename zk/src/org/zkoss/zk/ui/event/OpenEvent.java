@@ -18,7 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
-import org.zkoss.lang.Objects;
+import org.zkoss.json.JSONObject;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
@@ -55,16 +55,15 @@ public class OpenEvent extends Event {
 		final Component comp = request.getComponent();
 		if (comp == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, request);
-		final String[] data = request.getData();
-		if (data == null || data.length < 1 || data.length > 3)
+		final JSONObject data = request.getData();
+		if (data == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
-				new Object[] {Objects.toString(data), request});
+				new Object[] {data, request});
 
-		final boolean open = "true".equals(data[0]);
-		final Component ref = data.length >= 2 && data[1] != null ?
-			request.getDesktop().getComponentByUuidIfAny(data[1]): null;
-		return new OpenEvent(request.getName(), comp, open, ref,
-			data.length == 3 ? data[2]: null);
+		return new OpenEvent(request.getName(), comp,
+			data.optBoolean("open"),
+			request.getDesktop().getComponentByUuidIfAny(data.optString("reference", null)),
+			data.opt("value"));
 			//FUTURE: support non-String value (by coerce to comp.value.class)
 	}
 

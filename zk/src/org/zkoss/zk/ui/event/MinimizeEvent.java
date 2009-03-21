@@ -18,7 +18,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
-import org.zkoss.lang.Objects;
+import org.zkoss.json.JSONObject;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
@@ -43,14 +43,15 @@ public class MinimizeEvent extends Event {
 		final Component comp = request.getComponent();
 		if (comp == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, request);
-		final String[] data = request.getData();
-		if (data == null || data.length != 5)
+		final JSONObject data = request.getData();
+		if (data == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
-				new Object[] {Objects.toString(data), request});
+				new Object[] {data, request});
 
-		final boolean minimized = "true".equals(data[4]);
 		return new MinimizeEvent(request.getName(), comp,
-			data[0], data[1], data[2], data[3], minimized);
+			data.optString("left", null), data.optString("top", null),
+			data.optString("width", null), data.optString("height", null),
+			data.optBoolean("minimized"));
 	}
 
 	public MinimizeEvent(String name, Component target, String left, String top,

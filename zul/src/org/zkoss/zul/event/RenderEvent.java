@@ -16,6 +16,12 @@ package org.zkoss.zul.event;
 
 import java.util.Set;
 
+import org.zkoss.json.JSONObject;
+
+import org.zkoss.zk.mesg.MZk;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.ui.event.Event;
@@ -33,13 +39,25 @@ public class RenderEvent extends Event {
 	 * @since 5.0.0
 	 */
 	public static final RenderEvent getRenderEvent(AuRequest request) {
-		return new RenderEvent(request.getName(), AuRequests.convertToItems(request));
+		final JSONObject data = request.getData();
+		if (data == null)
+			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
+				new Object[] {data, request});
+		return new RenderEvent(request.getName(),
+			request.getComponent(),
+			AuRequests.convertToItems(request.getDesktop(), data.optJSONArray("items")));
 	}
 
-	public RenderEvent(String name, Set items) {
-		super(name, null);
+	/**
+	 * @since 5.0.0
+	 */
+	public RenderEvent(String name, Component comp, Set items) {
+		super(name, comp);
 		if (items == null) throw new IllegalArgumentException();
 		_items = items;
+	}
+	public RenderEvent(String name, Set items) {
+		this(name, null, items);
 	}
 
 	/** Returns the (readonly) collection of items to render (never null).

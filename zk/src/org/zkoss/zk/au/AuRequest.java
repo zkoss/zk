@@ -23,6 +23,8 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.HashSet;
 
+import org.zkoss.json.JSONObject;
+
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
@@ -64,7 +66,7 @@ public class AuRequest {
 	private Integer _opts;
 	private Page _page;
 	private Component _comp;
-	private final String[] _data;
+	private final JSONObject _data;
 	/** Component's UUID. Used only if _comp is not specified directly. */
 	private String _uuid;
 
@@ -77,7 +79,7 @@ public class AuRequest {
 	 * @since 5.0.0
 	 */
 	public AuRequest(Desktop desktop, String uuid,
-	String name, String[] data) {
+	String name, JSONObject data) {
 		if (desktop == null || uuid == null || name == null)
 			throw new IllegalArgumentException();
 		_desktop = desktop;
@@ -92,7 +94,7 @@ public class AuRequest {
 	 * @param data the data; might be null.
 	 * @since 5.0.0
 	 */
-	public AuRequest(Desktop desktop, String name, String[] data) {
+	public AuRequest(Desktop desktop, String name, JSONObject data) {
 		if (desktop == null || name == null)
 			throw new IllegalArgumentException();
 		_desktop = desktop;
@@ -168,8 +170,12 @@ public class AuRequest {
 		return _comp != null ? _comp.getUuid(): _uuid;
 	}
 	/** Returns the data of the command, might be null.
+	 * If the client sends a string, a number or an array as data,
+	 * the data can be retrived by the key, "". For example,
+	 * <code>getData().getInt("")</code>.
+	 * @since 5.0.0
 	 */
-	public String[] getData() {
+	public JSONObject getData() {
 		return _data;
 	}
 

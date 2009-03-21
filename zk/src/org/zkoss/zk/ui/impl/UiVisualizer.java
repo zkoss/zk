@@ -213,8 +213,7 @@ import org.zkoss.zk.au.out.*;
 	/** Smart updates a component's attribute.
 	 * Meaningful only if {@link #addInvalidate(Component)} is not called in this
 	 * execution
-	 * @param value the value. To represent a primitive value, use
-	 * {@link org.zkoss.lang.$int}, {@link org.zkoss.lang.$short} and so on.
+	 * @param value the value.
 	 */
 	public void addSmartUpdate(Component comp, String attr, Object value) {
 		final Map respmap = getAttrRespMap(comp, attr);

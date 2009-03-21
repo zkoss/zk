@@ -18,12 +18,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
-import org.zkoss.lang.Objects;
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuRequests;
+import org.zkoss.json.JSONObject;
 
 /**
  * Represents an event cause by mouse activitly.
@@ -65,22 +65,17 @@ public class MouseEvent extends Event {
 		final Component comp = request.getComponent();
 		if (comp == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, request);
-		final String[] data = request.getData();
-		if (data != null && data.length != 1 && data.length != 4
-		&& data.length != 5)
+		final JSONObject data = request.getData();
+		if (data == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
-				new Object[] {Objects.toString(data), request});
+				new Object[] {data, request});
 		final String name = request.getName();
-
-		return
-			data == null || data.length == 0 ?
-				new MouseEvent(name, comp):			//no area, no coord
-			data.length == 1 ?
-				new MouseEvent(name, comp, data[0]):	//by area
-				new MouseEvent(name, comp,			//by coord
-					Integer.parseInt(data[0]), Integer.parseInt(data[1]),
-					Integer.parseInt(data[2]), Integer.parseInt(data[3]),
-					data.length == 4 ? 0: AuRequests.parseKeys(data[4]));
+		final int keys = AuRequests.parseKeys(data.optJSONObject("keys"));
+		final String area = data.optString("area", null);
+		return area != null ? new MouseEvent(name, comp, area, keys): //area
+			new MouseEvent(name, comp, //coord
+				data.optInt("x"), data.optInt("y"),
+				data.optInt("pageX"), data.optInt("pageY"), keys);
 	}
 
 	/** Construct a mouse relevant event with coordinate or area.
@@ -113,6 +108,15 @@ public class MouseEvent extends Event {
 		_area = null;
 		_keys = keys;
 	}
+	/** Constructs a mouse relevant event with a logic name called area.
+	 * @since 5.0.0
+	 */
+	public MouseEvent(String name, Component target, String area, int keys) {
+		super(name, target);
+		_area = area;
+		_x = _y = _pgx = _pgy = 0;
+		_keys = keys;
+	}
 	/** @deprecated As of release 5.0.0, replaced with
 	 * {@link #MouseEvent(String,Component,int,int,int,int)}.
 	 */
@@ -125,12 +129,11 @@ public class MouseEvent extends Event {
 	public MouseEvent(String name, Component target, int x, int y, int keys) {
 		this(name, target, x, y, x, y, keys);
 	}
-	/** Constructs a mouse relevant event with a logic name called area.
+	/** @deprecated As of release 5.0.0, replaced with
+	 * {@link #MouseEvent(String,Component,String,int)}.
 	 */
 	public MouseEvent(String name, Component target, String area) {
-		super(name, target);
-		_area = area;
-		_x = _y = _pgx = _pgy = _keys = 0;
+		this(name, target, area, 0);
 	}
 
 	/** Returns the logical name of the area that the click occurs, or

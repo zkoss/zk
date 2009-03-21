@@ -18,13 +18,12 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
-import org.zkoss.lang.Objects;
+import org.zkoss.json.JSONObject;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.au.AuRequest;
-import org.zkoss.zk.au.AuRequests;
 
 /**
  * Represents a key pressed by the user.
@@ -64,16 +63,15 @@ public class KeyEvent extends Event {
 		final Component comp = request.getComponent();
 		if (comp == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, request);
-		final String[] data = request.getData();
-		if (data == null || (data.length != 4 && data.length != 5))
+		final JSONObject data = request.getData();
+		if (data == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
-				new Object[] {Objects.toString(data), request});
-		final Component ref = data.length == 5 && data[4] != null ?
-				request.getDesktop().getComponentByUuidIfAny(data[4]): null;
-				
+				new Object[] {data, request});
+
 		return new KeyEvent(request.getName(), comp,
-			Integer.parseInt(data[0]), "true".equals(data[1]),
-			"true".equals(data[2]), "true".equals(data[3]), ref);
+			data.optInt("keyCode"), data.optBoolean("ctrlKey"),
+			data.optBoolean("shiftKey"), data.optBoolean("altKey"),
+			request.getDesktop().getComponentByUuidIfAny(data.optString("reference", null)));
 	}
 
 	private final int _keyCode;

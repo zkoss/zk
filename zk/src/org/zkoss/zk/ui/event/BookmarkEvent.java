@@ -18,7 +18,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
-import org.zkoss.lang.Objects;
+import org.zkoss.json.JSONObject;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
@@ -45,11 +45,11 @@ public class BookmarkEvent extends Event {
 	 * @since 5.0.0
 	 */
 	public static final BookmarkEvent getBookmarkEvent(AuRequest request) {
-		final String[] data = request.getData();
-		if (data == null || data.length != 1)
+		final JSONObject data = request.getData();
+		if (data == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
-				new Object[] {Objects.toString(data), request});
-		final String nm = data[0];
+				new Object[] {data, request});
+		final String nm = data.optString("");
 		((DesktopCtrl)request.getDesktop()).setBookmarkByClient(nm);
 		return new BookmarkEvent(request.getName(), nm);
 	}

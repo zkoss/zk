@@ -18,6 +18,9 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
+import org.zkoss.json.JSONObject;
+import org.zkoss.json.JSONArray;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.au.AuRequest;
@@ -37,12 +40,21 @@ public class Event {
 	/** Creates an instance of {@link Event} based on the specified request.
 	 */
 	public static Event getEvent(AuRequest request) {
-		final String[] data = request.getData();
 		final String name = request.getName();
 		final Component comp = request.getComponent();
-		return data == null || data.length == 0 ? new Event(name, comp):
-			data.length == 1 ? new Event(name, comp, data[0]):
-				new Event(name, comp, data);
+		final JSONObject data = request.getData();
+		final Object data2 = data != null ? data.opt(""): null;
+		if (data2 == null)
+			return new Event(name, comp);
+		if (data2 instanceof JSONArray) {
+			final JSONArray ary = (JSONArray)data2;
+			int j = ary.length();
+			final Object[] data3 = new Object[j];
+			while (--j >= 0)
+				data3[j] = ary.opt(j);
+			return new Event(name, comp, data3);
+		}
+		return new Event(name, comp, data2);
 	}
 
 	/** Constructs a simple event.

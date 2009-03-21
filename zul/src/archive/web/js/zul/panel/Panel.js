@@ -173,8 +173,7 @@ zul.panel.Panel = zk.$extends(zul.Widget, {
 						top: s.top,
 						width: s.width,
 						height: s.height,
-						minimized: minimized,
-						marshal: wgt.$class._onMinimizeMarshal
+						minimized: minimized
 					});
 				}
 			}
@@ -249,8 +248,8 @@ zul.panel.Panel = zk.$extends(zul.Widget, {
 			this.parent.removeChild(this); //default: remove
 	},
 	onMove: function (evt) {
-		this._left = evt.data[0];
-		this._top = evt.data[1];
+		this._left = evt.data.left;
+		this._top = evt.data.top;
 	},
 	//watch//
 	onSize: _zkf = function () {
@@ -588,16 +587,9 @@ zul.panel.Panel = zk.$extends(zul.Widget, {
 			x = zk.parseInt(node.style.left),
 			y = zk.parseInt(node.style.top);
 		wgt.fire('onMove', {
-			x: x + 'px',
-			y: y + 'px',
-			keys: keys,
-			marshal: wgt.$class._onMoveMarshal
+			left: x + 'px',
+			top: y + 'px',
+			keys: keys
 		}, {ignorable: true});
-	},
-	_onMoveMarshal: function () {
-		return [this.x, this.y, this.keys ? this.keys.marshal(): ''];
-	},
-	_onMinimizeMarshal: function(){
-		return [this.left, this.top, this.width, this.height, this.minimized];
 	}
 });

@@ -982,6 +982,9 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (zk.currentFocus == this) zk.currentFocus = null;
 		if (this.isListen('onBlur'))
 			this.fire('onBlur');
+	},
+	toJSON: function () {
+		return this.uuid;
 	}
 
 }, {

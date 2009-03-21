@@ -327,8 +327,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			this.parent.removeChild(this); //default: remove
 	},
 	onMove: function (evt) {
-		this._left = evt.data[0];
-		this._top = evt.data[1];
+		this._left = evt.data.left;
+		this._top = evt.data.top;
 	},
 	onZIndex: function (evt) {
 		this._syncShadow();
@@ -442,10 +442,9 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			}
 		}
 		this.fire('onMove', {
-			x: x + 'px',
-			y: y + 'px',
-			keys: keys,
-			marshal: zul.wnd.Window._onMoveMarshal
+			left: x + 'px',
+			top: y + 'px',
+			keys: keys
 		}, {ignorable: true});
 	},
 
@@ -627,10 +626,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this.$supers('doMouseOut_', arguments);
 	}
 },{ //static
-	_onMoveMarshal: function () {
-		return [this.x, this.y, this.keys ? this.keys.marshal(): ''];
-	},
-
 	//drag
 	_startmove: function (dg) {
 		//Bug #1568393: we have to change the percetage to the pixel.

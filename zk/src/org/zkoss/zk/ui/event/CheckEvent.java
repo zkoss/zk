@@ -18,7 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
-import org.zkoss.lang.Objects;
+import org.zkoss.json.JSONObject;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
@@ -41,13 +41,16 @@ public class CheckEvent extends Event {
 		final Component comp = request.getComponent();
 		if (comp == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, request);
-		final String[] data = request.getData();
-		if (data == null || data.length != 1)
+		final JSONObject data = request.getData();
+		if (data == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
-				new Object[] {Objects.toString(data), request});
+				new Object[] {data, request});
 
-		final boolean checked = "true".equals(data[0]);
-		return new CheckEvent(request.getName(), comp, checked);
+		try {
+			return new CheckEvent(request.getName(), comp, data.getBoolean(""));
+		} catch (org.zkoss.json.JSONException ex) {
+			throw new UiException(ex);
+		}
 	}
 
 	/** Constructs a check-relevant event.
