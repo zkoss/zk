@@ -218,10 +218,11 @@ public class CacheMap implements Map, Cache, java.io.Serializable, Cloneable {
 	/** Enforces to expunge items that exceeds the maximal allowed number
 	 * or lifetime.
 	 * <p>By default, this method is called only GC takes places.
+	 * @return number of items left ({@link #size}) after expunged
 	 * @since 3.6.1
 	 */
-	public void expunge() {
-		if (_inExpunge || _map.isEmpty()) return; //nothing to do
+	public int expunge() {
+		if (_inExpunge || _map.isEmpty()) return _map.size(); //nothing to do
 
 		_inExpunge = true;
 		try {
@@ -241,6 +242,7 @@ public class CacheMap implements Map, Cache, java.io.Serializable, Cloneable {
 				if ((result & EXPUNGE_STOP) != 0)
 					break; //stop
 			}
+			return _map.size();
 		} finally {
 			_inExpunge = false;
 		}
