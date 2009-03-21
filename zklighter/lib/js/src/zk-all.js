@@ -1978,6 +1978,25 @@ zDom = { //static methods
 				el.style.KhtmlUserSelect = "";
 			else if (zk.ie)
 				el.onselectstart = null;
+	},
+
+	/** Returns the attribute of the specified name.
+	 */
+	getAttr: function (el, nm) {
+		try {
+			return el && el.getAttribute ? el.getAttribute(nm): null;
+		} catch (e) {
+			return null; //IE6: failed if el is TABLE and attribute not there
+		}
+	},
+	/** Sets the attribute of the specified name with the specified value.
+	 */
+	setAttr: function (el, nm, val) {
+		if (el && el.setAttribute) el.setAttribute(nm, val);
+	},
+	rmAttr: function (el, nm) {
+		if (el && el.removeAttribute) el.removeAttribute(nm);
+		else zDom.setAttr(el, nm, "");
 	}
 };
 
@@ -2197,8 +2216,7 @@ zEvt = {
 		return {
 			x: px - ofs[0], y: py - ofs[1],
 			pageX: px, pageY: py,
-			keys: zEvt.keyMetaData(evt),
-			marshal: zEvt._mouseDataMarshal
+			keys: zEvt.keyMetaData(evt)
 		};
 	},
 	keyData: function (evt) {
@@ -2206,35 +2224,18 @@ zEvt = {
 		return {
 			keyCode: zEvt.keyCode(evt),
 			charCode: zEvt.charCode(evt),
-			keys: zEvt.keyMetaData(evt),
-			marshal: zEvt._keyDataMarshal
+			keys: zEvt.keyMetaData(evt)
 		};
 	},
 	keyMetaData: function (evt) {
 		evt = evt || window.event;
-		return {
-			altKey: evt.altKey,
-			ctrlKey: evt.ctrlKey,
-			shiftKey: evt.shiftKey,
-			leftClick: zEvt.leftClick(evt),
-			rightClick: zEvt.rightClick(evt),
-			marshal: zEvt._keyMetaDataMarshal
-		};
-	},
-	_mouseDataMarshal: function () {
-		return [this.x, this.y, this.pageX, this.pageY, this.keys.marshal()];
-	},
-	_keyDataMarshal: function () {
-		return [this.keyCode, this.charCode, this.keys.marshal()];
-	},
-	_keyMetaDataMarshal: function () {
-		var s = "";
-		if (this.altKey) s += 'a';
-		if (this.ctrlKey) s += 'c';
-		if (this.shiftKey) s += 's';
-		if (this.leftClick) s += 'l';
-		if (this.rightClick) s += 'r';
-		return s;
+		var inf = {};
+		if (evt.altKey) inf.altKey = true;
+		if (evt.ctrlKey) inf.ctrlKey = true;
+		if (evt.shiftKey) inf.shiftKey = true;
+		if (zEvt.leftClick(evt)) inf.leftClick = true;
+		if (zEvt.rightClick(evt)) inf.rightClick = true;
+		return inf;
 	},
 
 	x: function (evt) {
@@ -5260,6 +5261,9 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (zk.currentFocus == this) zk.currentFocus = null;
 		if (this.isListen('onBlur'))
 			this.fire('onBlur');
+	},
+	toJSON: function () {
+		return this.uuid;
 	}
 
 }, {
@@ -5728,8 +5732,10 @@ function zkb2(uuid, type, props) { //zhtml
 }
 function zkdtbg(dtid, updateURI) {
 	var dt = zk.Desktop.$(dtid);
-	if (dt == null) dt = new zk.Desktop(dtid, updateURI);
-	else if (updateURI) dt.updateURI = updateURI;
+	if (dt == null) {
+		dt = new zk.Desktop(dtid, updateURI);
+		if (zk.pfmeter) zAu.pfrecv(dt, dtid);
+	} else if (updateURI) dt.updateURI = updateURI;
 	zkm.curdt = dt;
 	return dt;
 }
@@ -5935,6 +5941,13 @@ zkm = {
 
 		zk.mounting = zk.bootstrapping = false;
 		zk.endProcessing();
+
+		zHistory.onURLChange();
+		if (zk.pfmeter) {
+			var dts = zk.Desktop.all;
+			for (var dtid in dts)
+				zAu.pfdone(dts[dtid], dtid);
+		}
 	},
 
 	/** mount for AU */
@@ -6269,7 +6282,7 @@ zkm = {
 						uri = zAu.comURI(null, dt);
 					req.open("POST", zk.ie ? uri+"?"+content: uri, true);
 					req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-					if (zk.pfmeter) zAu._pfsend(dtid, req, true);
+					if (zk.pfmeter) zAu._pfsend(dt, req, true);
 					if (zk.ie) req.send(null);
 					else req.send(content);
 				}
@@ -6352,9 +6365,58 @@ zHistory = {
 		zHistory.checkBookmark();
 	}: zk.$void,
 
-	/** */
+	/** check if URL is changed */
 	onURLChange: function () {
-		//TODO
+		try {
+			var ifr = window.frameElement;
+			if (!parent || parent == window || !ifr) //not iframe
+				return;
+
+			var l0 = parent.location, l1 = location,
+				url = l0.protocol != l1.protocol || l0.host != l1.host
+				|| l0.port != l1.port ? l1.href: l1.pathname,
+				j = url.lastIndexOf(';'), k = url.lastIndexOf('?');
+			if (j >= 0 && (k < 0 || j < k)) {
+				var s = url.substring(0, j);
+				url = k < 0 ? s: s + url.substring(k);
+			}
+			if (l1.hash && "#" != l1.hash) url += l1.hash;
+
+			if (zDom.getAttr(ifr, "z_xsrc") != ifr.src) {//the first zul page being loaded
+				var ifrsrc = ifr.src, loc = location.pathname;
+				zDom.setAttr(ifr, "z_xsrc", ifrsrc);
+
+			//The first zul page might or might not be ifr.src
+			//We have to compare ifr.src with location
+			//Gecko/Opera/Safari: ifr.src is a complete URL (including http://)
+			//IE: ifr.src has no http://hostname/ (actually, same as server's value)
+			//Opera: location.pathname has bookmark and jsessionid
+			//Tomcat: /path;jsessionid=xxx#abc?xyz
+				ifrsrc = zHistory._simplifyURL(ifrsrc);
+				loc = zHistory._simplifyURL(loc);
+				if (ifrsrc.endsWith(loc)
+				|| loc.endsWith(ifrsrc)) { //the non-zul page is ifr.src
+					zDom.setAttr(ifr, "z_xurl", url);
+					return; //not notify if changed by server
+				}
+			}
+
+			if (parent.onIframeURLChange && zDom.getAttr(ifr, "z_xurl") != url) {
+				parent.onIframeURLChange(ifr.id, url);
+				zDom.setAttr(ifr, "z_xurl", url);
+			}
+		} catch (e) { //due to JS sandbox, we cannot access if not from same host
+			if (zk.debugJS) zk.log("Unable to access parent frame");
+		}
+	},
+	_simplifyURL: function (url) {
+		var j = url.lastIndexOf(';');
+		if (j >= 0) url = url.substring(0, j);
+		j = url.lastIndexOf('#');
+		if (j >= 0) url = url.substring(0, j);
+		j = url.lastIndexOf('?');
+		if (j >= 0) url = url.substring(0, j);
+		return url;
 	}
 };
 
@@ -6499,58 +6561,16 @@ zAu = {
 				continue;
 			}
 
-			cmds.push(cmd = {cmd: zUtl.getElementValue(cmd)});
-			cmd.data = [];
-			for (var cd = cmd.data, k = data ? data.length: 0; --k >= 0;)
-				cd.unshift(zAu._decodeData(zUtl.getElementValue(data[k])));
+			cmds.push(cmd = {cmd: zUtl.getElementValue(cmd),
+				data: data && data.length ?
+					eval(zUtl.getElementValue(data[0])): []});
 		}
 
 		zAu._cmdsQue.push(cmds);
 		return true;
 	},
-	_decodeData: function (d) {
-		var v = d.substring(1);
-		switch (d.charAt(0).toLowerCase()) {
-		case 'c': case 's': return v;
-		case 'n': return null;
-		case '1': case '3': return true;
-		case '0': case '2': return false;
-		case 'i': case 'l': case 'b': case 'h':
-			return parseInt(v);
-		case 'd': case 'f':
-			return parseFloat(v);
-		case 't': return new Date(parseInt(v));
-		case 'j': return new zk.BigInteger(v);
-		case 'k': return new zk.BigDecimal(v);
-		case '[':
-			d = v;
-			v = [];
-			var esc;
-			for (var len = d.length, j = 0, k = 0;; ++j) {
-				if (j >= len) {
-					if (len)
-						v.push(zAu._decodeData(esc || d.substring(k, j)));
-					return v;
-				}
-				var cc = d.charAt(j);
-				if (cc == '\\') {
-					if (!esc) esc = d.substring(k, j);
-					esc += d.charAt(++j);
-				} else if (cc == ',') {
-					v.push(zAu._decodeData(esc || d.substring(k, j)));
-					k = j + 1;
-					esc = null;
-				} else if (esc)
-					esc += cc;
-			}
-		}
-		return v;
-	},
-	process: function (cmd, varags) { //by server only (encoded)
-		var data = [];
-		for (var j = arguments.length; --j > 0;)
-			data.unshift(zAu._decodeData(arguments[j]));
-		zAu._process(cmd, data);
+	process: function (cmd, data) { //by server only (encoded)
+		zAu._process(cmd, data ? eval(data): []);
 	},
 	_process: function (cmd, data) { //decoded
 		//I. process commands that data[0] is not UUID
@@ -6581,7 +6601,7 @@ zAu = {
 
 	//ajax internal//
 	_cmdsQue: [], //response commands in XML
-	_seqId: 1, //1-999
+	_seqId: (zUtl.now() % 9999) + 1, //1-9999 (random init: bug 2691017)
 
 	/** IE6 sometimes remains readyState==1 (reason unknown), so resend. */
 	_areqTmout: function () {
@@ -6635,7 +6655,7 @@ zAu = {
 
 					if (zAu.pushXmlResp(reqInf.dt, req)) { //valid response
 						//advance SID to avoid receive the same response twice
-						if (sid && ++zAu._seqId > 999) zAu._seqId = 1;
+						if (sid && ++zAu._seqId > 9999) zAu._seqId = 1;
 						zAu._areqTry = 0;
 						zAu._preqInf = null;
 					}
@@ -6796,16 +6816,12 @@ zAu = {
 			if (target && target.className != 'zk.Desktop')
 				content += "&uuid."+j+"="+target.uuid;
 
-			var data = aureq.data;
-			if (data && data.marshal) data = data.marshal();
-			if (data != null) {
-				if (!data.$array) data = [data];
-				for (var k = 0, dl = data.length; k < dl; ++k) {
-					var d = data[k];
-					content += "&data."+j+"="
-						+ (d != null ? encodeURIComponent(d): '_z~nil');
-				}
-			}
+			var data = aureq.data, dtype = typeof data;
+			if (dtype == 'string' || dtype == 'number' || dtype == 'boolean'
+			|| (data && data.$array))
+				data = {'':data};
+			if (data)
+				content += "&data."+j+"="+encodeURIComponent(zJSON.stringify(data));
 		}
 
 		if (content)
@@ -6968,6 +6984,43 @@ zAu = {
 			var meta = zAu._metas[uuid];
 			if (meta && meta.cleanupOnFatal)
 				meta.cleanupOnFatal(ignorable);
+		}
+	},
+
+	//Perfomance Meter//
+	_pfj: 0, //an index
+	_pfsend: function (dt, req, completeOnly) {
+		if (!completeOnly)
+			req.setRequestHeader("ZK-Client-Start",
+				dt.id + "-" + zAu._pfj++ + "=" + Math.round(zUtl.now()));
+
+		var ids;
+		if (ids = dt._pfRecvIds) {
+			req.setRequestHeader("ZK-Client-Receive", ids);
+			dt._pfRecvIds = null;
+		}
+		if (ids = dt._pfDoneIds) {
+			req.setRequestHeader("ZK-Client-Complete", ids);
+			dt._pfDoneIds = null;
+		}
+	},
+	/** Returns request IDs sent from the server separated by space. */
+	_pfGetIds: function (req) {
+		return req.getResponseHeader("ZK-Client-Complete");
+	},
+	/** Adds performance request IDs that have been processed completely. */
+	pfrecv: function (dt, pfIds) {
+		zAu._pfAddIds(dt, '_pfRecvIds', pfIds);
+	},
+	/** Adds performance request IDs that have been processed completely. */
+	pfdone: function (dt, pfIds) {
+		zAu._pfAddIds(dt, '_pfDoneIds', pfIds);
+	},
+	_pfAddIds: function (dt, prop, pfIds) {
+		if (pfIds && (pfIds = pfIds.trim())) {
+			var s = pfIds + "=" + Math.round(zUtl.now());
+			if (dt[prop]) dt[prop] += ',' + s;
+			else dt[prop] = s;
 		}
 	}
 };
@@ -7155,6 +7208,19 @@ zAu.cmd1 = {
 	echo2: function (uuid, wgt, evtnm, data) {
 		zAu.send(new zk.Event(wgt, "echo",
 			data != null ? [evtnm, data]: [evtnm], {ignorable: true}));
+	}
+};
+
+/** Callback when iframe's URL/bookmark been changed.
+ * Notice the containing page might not be ZK. It could be any technology
+ * and it can got the notification by implementing this method.
+ * @param uuid the component UUID
+ * @param url the new URL
+ */
+function onIframeURLChange(uuid, url) {
+	if (!zk.unloading) {
+		var wgt = zk.Widget.$(uuid);
+		if (wgt) wgt.fire("onURIChange", url);
 	}
 };
 
@@ -8898,13 +8964,14 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		return scls;
 	},
 	domAttrs_: function(no){
-		var attr = this.$supers('domAttrs_', arguments);
-		if (this.getTarget()) 
-			attr += ' target="' + this.getTarget() + '"';
-		if (this.getTabindex()) 
-			attr += ' tabIndex="' + this.getTabindex() + '"';
-		if (this.getHref()) 
-			attr += ' href="' + this.getHref() + '"';
+		var attr = this.$supers('domAttrs_', arguments),
+			v;
+		if (v = this.getTarget())
+			attr += ' target="' + v + '"';
+		if (v = this.getTabindex()) 
+			attr += ' tabIndex="' + v + '"';
+		if (v = this.getHref()) 
+			attr += ' href="' + v + '"';
 		else 
 			attr += ' href="javascript:;"';
 		return attr;
@@ -9004,12 +9071,12 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		if (before) {
 			zDom.insertHTMLBefore(before.getSubnode('chdex'), this.encloseChildHTML_(child));
 		} else {
-			var n = this.getNode();
-			if (this.isVertical())
-				n = n.tBodies[0];
-			else
-				n = n.tBodies[0].rows[0];
-			zDom.insertHTMLBeforeEnd(n, this.encloseChildHTML_(child, true));
+			var n = this.getNode(), tbs = n.tBodies;
+			if (!tbs || !tbs.length)
+				n.appendChild(document.createElement("TBODY"));
+			zDom.insertHTMLBeforeEnd(
+				this.isVertical() ? tbs[0]: tbs[0].rows[0],
+				this.encloseChildHTML_(child, true));
 		}
 		child.bind_(desktop);
 	},
@@ -9769,9 +9836,6 @@ zul.grid.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 }, {
 	_faker: ["hdfaker", "bdfaker", "ftfaker"],
 	
-	_onSizingMarshal: function () {
-		return [this.index, this.uuid, this.width, this.keys ? this.keys.marshal(): ''];
-	},
 	//dragdrop//
 	_ghostsizing: function (dg, ofs, evt) {
 		var wgt = dg.control,
@@ -9854,10 +9918,9 @@ zul.grid.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		
 		wgt.parent.fire('onColSize', {
 			index: cidx,
-			uuid: wgt.uuid,
+			column: wgt,
 			width: wd + "px",
-			keys: zEvt.keyMetaData(evt),
-			marshal: wgt.$class._onSizingMarshal
+			keys: zEvt.keyMetaData(evt)
 		}, null, 0);
 	}
 });
@@ -12099,12 +12162,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				sr = zDom.getSelectionRange(inp),
 				b = sr[0], e = sr[1];
 			this.fire('onSelection', {start: b, end: e,
-				selected: inp.value.substring(b, e),
-				marshal: this._onSelMarshal});
+				selected: inp.value.substring(b, e)});
 		}
-	},
-	_onSelMarshal: function () {
-		return [this.start, this.end, this.selected];
 	},
 	_lateBlur: function () {
 		if (this.shallUpdate_(zk.currentFocus))
@@ -12154,8 +12213,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			if (!errbox) this._errbox = this.showError_(msg);
 
 			if (!noOnError)
-				this.fire('onError',
-					{value: val, message: msg, marshal: this._onErrMarshal});
+				this.fire('onError', {value: val, message: msg});
 		}
 	},
 	validate_: function (val) {
@@ -12233,17 +12291,10 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				{ignorable:1}, 100);
 		}
 	},
-	_onChangeData: function (val, selbak) {
-		return {value: val,
-			bySelectBack: selbak,
-			start: zDom.getSelectionRange(this.einp)[0],
-			marshal: this._onChangeMarshal}
-	},
-	_onChangeMarshal: function () {
-		return [this.value, this.bySelectBack, this.start];
-	},
-	_onErrMarshal: function () {
-		return [this.vale, this.message];
+	_onChangeData: function (val, selbk) {
+		var inf = {value: val, start: zDom.getSelectionRange(this.einp)[0]}
+		if (selbk) inf.bySelectBack =  true;
+		return inf;
 	},
 	_stopOnChanging: function () {
 		if (this._tidChg) {
@@ -13764,8 +13815,7 @@ zul.panel.Panel = zk.$extends(zul.Widget, {
 						top: s.top,
 						width: s.width,
 						height: s.height,
-						minimized: minimized,
-						marshal: wgt.$class._onMinimizeMarshal
+						minimized: minimized
 					});
 				}
 			}
@@ -13840,8 +13890,8 @@ zul.panel.Panel = zk.$extends(zul.Widget, {
 			this.parent.removeChild(this); //default: remove
 	},
 	onMove: function (evt) {
-		this._left = evt.data[0];
-		this._top = evt.data[1];
+		this._left = evt.data.left;
+		this._top = evt.data.top;
 	},
 	//watch//
 	onSize: _zkf = function () {
@@ -14179,17 +14229,10 @@ zul.panel.Panel = zk.$extends(zul.Widget, {
 			x = zk.parseInt(node.style.left),
 			y = zk.parseInt(node.style.top);
 		wgt.fire('onMove', {
-			x: x + 'px',
-			y: y + 'px',
-			keys: keys,
-			marshal: wgt.$class._onMoveMarshal
+			left: x + 'px',
+			top: y + 'px',
+			keys: keys
 		}, {ignorable: true});
-	},
-	_onMoveMarshal: function () {
-		return [this.x, this.y, this.keys ? this.keys.marshal(): ''];
-	},
-	_onMinimizeMarshal: function(){
-		return [this.left, this.top, this.width, this.height, this.minimized];
 	}
 });
 
@@ -14572,6 +14615,84 @@ zul.utl.Style = zk.$extends(zk.Widget, {
 	}
 });
 (_zkwg=_zkpk.Style).prototype.className='zul.utl.Style';
+zul.utl.Iframe = zk.$extends(zul.Widget, {
+	_scrolling: "auto",
+
+	getSrc: function () {
+		return this._src;
+	},
+	setSrc: function (src) {
+		if (this._src != src) {
+			this._src = src;
+			var n = this.getNode();
+			if (n) n.src = src || '';
+		}
+	},
+	getScrolling: function () {
+		return this._scrolling;
+	},
+	setScrolling: function (scrolling) {
+		if (!scrolling) scrolling = "auto";
+		if (this._scrolling != scrolling) {
+			this._scrolling = scrolling;
+			var n = this.getNode();
+			if (n) n.scrolling = scrolling;
+		}
+	},
+	getAlign: function () {
+		return this._align;
+	},
+	setAlign: function (align) {
+		if (this._align != align) {
+			this._align = align;
+			var n = this.getNode();
+			if (n) n.align = align || '';
+		}
+	},
+	getName: function () {
+		return this._name;
+	},
+	setName: function (name) {
+		if (this._name != name) {
+			this._name = name;
+			var n = this.getNode();
+			if (n) n.name = name || '';
+		}
+	},
+
+	getAutohide: function () {
+		return this._autohide;
+	},
+	setAutohide: function (autohide) {
+		if (this._autohide != autohide) {
+			this._autohide = autohide;
+			var n = this.getNode();
+			if (n) zDom.setAttr(n, 'z_autohide', autohide);
+		}
+	},
+
+	domAttrs_: function(no){
+		var attr = this.$supers('domAttrs_', arguments)
+				+ ' src="' + (this._src || '') + '" frameborder="0"',
+			v = this._scrolling;
+		if ("auto" != v)
+			attr += ' scrolling="' + ('true' == v ? 'yes': 'false' == v ? 'no': v) + '"';
+		if (v = this._align) 
+			attr += ' align="' + v + '"';
+		if (v = this._name) 
+			attr += ' name="' + v + '"';
+		if (v = this._autohide) 
+			attr += ' z_autohide="' + v + '"';
+		return attr;
+	}
+});
+
+(_zkwg=_zkpk.Iframe).prototype.className='zul.utl.Iframe';_zkmd={};
+_zkmd['default']=
+function (out) {
+	out.push('<iframe', this.domAttrs_(), '>', '</iframe>');
+}
+zkmld(_zkwg,_zkmd);
 }finally{zPkg.end(_z);}}_z='zul.wnd';if(!zk.$import(_z)){try{_zkpk=zk.$package(_z);
 
 zPkg.load('zul.wgt');
@@ -14700,7 +14821,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		} else {
 			if (!this._shadow)
 				this._shadow = new zk.eff.Shadow(this.getNode(),
-					{left: -4, right: 4, top: -2, bottom: 3, stackup:true});
+					{left: -4, right: 4, top: -2, bottom: 3, stackup: !zk.gecko/*bug1896797*/});
 			this._shadow.sync();
 		}
 	},
@@ -14889,8 +15010,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			this.parent.removeChild(this); //default: remove
 	},
 	onMove: function (evt) {
-		this._left = evt.data[0];
-		this._top = evt.data[1];
+		this._left = evt.data.left;
+		this._top = evt.data.top;
 	},
 	onZIndex: function (evt) {
 		this._syncShadow();
@@ -15004,10 +15125,9 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			}
 		}
 		this.fire('onMove', {
-			x: x + 'px',
-			y: y + 'px',
-			keys: keys,
-			marshal: zul.wnd.Window._onMoveMarshal
+			left: x + 'px',
+			top: y + 'px',
+			keys: keys
 		}, {ignorable: true});
 	},
 
@@ -15189,10 +15309,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this.$supers('doMouseOut_', arguments);
 	}
 },{ //static
-	_onMoveMarshal: function () {
-		return [this.x, this.y, this.keys ? this.keys.marshal(): ''];
-	},
-
 	//drag
 	_startmove: function (dg) {
 		//Bug #1568393: we have to change the percetage to the pixel.
@@ -16761,12 +16877,8 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		wgt.fire('onSize', {
 			width: wgt.getSubnode('real').style.width,
 			height: wgt.getSubnode('real').style.height,
-			keys: zEvt.keyMetaData(evt),
-			marshal: wgt.$class._onSizeMarshal
+			keys: zEvt.keyMetaData(evt)
 		});
-	},
-	_onSizeMarshal: function () {
-		return [this.width, this.height, this.keys ? this.keys.marshal(): ''];
 	},
 	_snap: function (dg, pointer) {
 		var wgt = dg.control,

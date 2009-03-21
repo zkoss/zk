@@ -74,12 +74,12 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		if (before) {
 			zDom.insertHTMLBefore(before.getSubnode('chdex'), this.encloseChildHTML_(child));
 		} else {
-			var n = this.getNode();
-			if (this.isVertical())
-				n = n.tBodies[0];
-			else
-				n = n.tBodies[0].rows[0];
-			zDom.insertHTMLBeforeEnd(n, this.encloseChildHTML_(child, true));
+			var n = this.getNode(), tbs = n.tBodies;
+			if (!tbs || !tbs.length)
+				n.appendChild(document.createElement("TBODY"));
+			zDom.insertHTMLBeforeEnd(
+				this.isVertical() ? tbs[0]: tbs[0].rows[0],
+				this.encloseChildHTML_(child, true));
 		}
 		child.bind_(desktop);
 	},

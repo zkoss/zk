@@ -126,7 +126,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		} else {
 			if (!this._shadow)
 				this._shadow = new zk.eff.Shadow(this.getNode(),
-					{left: -4, right: 4, top: -2, bottom: 3, stackup:true});
+					{left: -4, right: 4, top: -2, bottom: 3, stackup: !zk.gecko/*bug1896797*/});
 			this._shadow.sync();
 		}
 	},
@@ -315,8 +315,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			this.parent.removeChild(this); //default: remove
 	},
 	onMove: function (evt) {
-		this._left = evt.data[0];
-		this._top = evt.data[1];
+		this._left = evt.data.left;
+		this._top = evt.data.top;
 	},
 	onZIndex: function (evt) {
 		this._syncShadow();
@@ -430,10 +430,9 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			}
 		}
 		this.fire('onMove', {
-			x: x + 'px',
-			y: y + 'px',
-			keys: keys,
-			marshal: zul.wnd.Window._onMoveMarshal
+			left: x + 'px',
+			top: y + 'px',
+			keys: keys
 		}, {ignorable: true});
 	},
 
@@ -615,10 +614,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this.$supers('doMouseOut_', arguments);
 	}
 },{ //static
-	_onMoveMarshal: function () {
-		return [this.x, this.y, this.keys ? this.keys.marshal(): ''];
-	},
-
 	//drag
 	_startmove: function (dg) {
 		//Bug #1568393: we have to change the percetage to the pixel.

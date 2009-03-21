@@ -1978,6 +1978,25 @@ zDom = { //static methods
 				el.style.KhtmlUserSelect = "";
 			else if (zk.ie)
 				el.onselectstart = null;
+	},
+
+	/** Returns the attribute of the specified name.
+	 */
+	getAttr: function (el, nm) {
+		try {
+			return el && el.getAttribute ? el.getAttribute(nm): null;
+		} catch (e) {
+			return null; //IE6: failed if el is TABLE and attribute not there
+		}
+	},
+	/** Sets the attribute of the specified name with the specified value.
+	 */
+	setAttr: function (el, nm, val) {
+		if (el && el.setAttribute) el.setAttribute(nm, val);
+	},
+	rmAttr: function (el, nm) {
+		if (el && el.removeAttribute) el.removeAttribute(nm);
+		else zDom.setAttr(el, nm, "");
 	}
 };
 
@@ -2197,8 +2216,7 @@ zEvt = {
 		return {
 			x: px - ofs[0], y: py - ofs[1],
 			pageX: px, pageY: py,
-			keys: zEvt.keyMetaData(evt),
-			marshal: zEvt._mouseDataMarshal
+			keys: zEvt.keyMetaData(evt)
 		};
 	},
 	keyData: function (evt) {
@@ -2206,35 +2224,18 @@ zEvt = {
 		return {
 			keyCode: zEvt.keyCode(evt),
 			charCode: zEvt.charCode(evt),
-			keys: zEvt.keyMetaData(evt),
-			marshal: zEvt._keyDataMarshal
+			keys: zEvt.keyMetaData(evt)
 		};
 	},
 	keyMetaData: function (evt) {
 		evt = evt || window.event;
-		return {
-			altKey: evt.altKey,
-			ctrlKey: evt.ctrlKey,
-			shiftKey: evt.shiftKey,
-			leftClick: zEvt.leftClick(evt),
-			rightClick: zEvt.rightClick(evt),
-			marshal: zEvt._keyMetaDataMarshal
-		};
-	},
-	_mouseDataMarshal: function () {
-		return [this.x, this.y, this.pageX, this.pageY, this.keys.marshal()];
-	},
-	_keyDataMarshal: function () {
-		return [this.keyCode, this.charCode, this.keys.marshal()];
-	},
-	_keyMetaDataMarshal: function () {
-		var s = "";
-		if (this.altKey) s += 'a';
-		if (this.ctrlKey) s += 'c';
-		if (this.shiftKey) s += 's';
-		if (this.leftClick) s += 'l';
-		if (this.rightClick) s += 'r';
-		return s;
+		var inf = {};
+		if (evt.altKey) inf.altKey = true;
+		if (evt.ctrlKey) inf.ctrlKey = true;
+		if (evt.shiftKey) inf.shiftKey = true;
+		if (zEvt.leftClick(evt)) inf.leftClick = true;
+		if (zEvt.rightClick(evt)) inf.rightClick = true;
+		return inf;
 	},
 
 	x: function (evt) {
@@ -5260,6 +5261,9 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (zk.currentFocus == this) zk.currentFocus = null;
 		if (this.isListen('onBlur'))
 			this.fire('onBlur');
+	},
+	toJSON: function () {
+		return this.uuid;
 	}
 
 }, {
@@ -5728,8 +5732,10 @@ function zkb2(uuid, type, props) { //zhtml
 }
 function zkdtbg(dtid, updateURI) {
 	var dt = zk.Desktop.$(dtid);
-	if (dt == null) dt = new zk.Desktop(dtid, updateURI);
-	else if (updateURI) dt.updateURI = updateURI;
+	if (dt == null) {
+		dt = new zk.Desktop(dtid, updateURI);
+		if (zk.pfmeter) zAu.pfrecv(dt, dtid);
+	} else if (updateURI) dt.updateURI = updateURI;
 	zkm.curdt = dt;
 	return dt;
 }
@@ -5935,6 +5941,13 @@ zkm = {
 
 		zk.mounting = zk.bootstrapping = false;
 		zk.endProcessing();
+
+		zHistory.onURLChange();
+		if (zk.pfmeter) {
+			var dts = zk.Desktop.all;
+			for (var dtid in dts)
+				zAu.pfdone(dts[dtid], dtid);
+		}
 	},
 
 	/** mount for AU */
@@ -6269,7 +6282,7 @@ zkm = {
 						uri = zAu.comURI(null, dt);
 					req.open("POST", zk.ie ? uri+"?"+content: uri, true);
 					req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-					if (zk.pfmeter) zAu._pfsend(dtid, req, true);
+					if (zk.pfmeter) zAu._pfsend(dt, req, true);
 					if (zk.ie) req.send(null);
 					else req.send(content);
 				}
@@ -6352,9 +6365,58 @@ zHistory = {
 		zHistory.checkBookmark();
 	}: zk.$void,
 
-	/** */
+	/** check if URL is changed */
 	onURLChange: function () {
-		//TODO
+		try {
+			var ifr = window.frameElement;
+			if (!parent || parent == window || !ifr) //not iframe
+				return;
+
+			var l0 = parent.location, l1 = location,
+				url = l0.protocol != l1.protocol || l0.host != l1.host
+				|| l0.port != l1.port ? l1.href: l1.pathname,
+				j = url.lastIndexOf(';'), k = url.lastIndexOf('?');
+			if (j >= 0 && (k < 0 || j < k)) {
+				var s = url.substring(0, j);
+				url = k < 0 ? s: s + url.substring(k);
+			}
+			if (l1.hash && "#" != l1.hash) url += l1.hash;
+
+			if (zDom.getAttr(ifr, "z_xsrc") != ifr.src) {//the first zul page being loaded
+				var ifrsrc = ifr.src, loc = location.pathname;
+				zDom.setAttr(ifr, "z_xsrc", ifrsrc);
+
+			//The first zul page might or might not be ifr.src
+			//We have to compare ifr.src with location
+			//Gecko/Opera/Safari: ifr.src is a complete URL (including http://)
+			//IE: ifr.src has no http://hostname/ (actually, same as server's value)
+			//Opera: location.pathname has bookmark and jsessionid
+			//Tomcat: /path;jsessionid=xxx#abc?xyz
+				ifrsrc = zHistory._simplifyURL(ifrsrc);
+				loc = zHistory._simplifyURL(loc);
+				if (ifrsrc.endsWith(loc)
+				|| loc.endsWith(ifrsrc)) { //the non-zul page is ifr.src
+					zDom.setAttr(ifr, "z_xurl", url);
+					return; //not notify if changed by server
+				}
+			}
+
+			if (parent.onIframeURLChange && zDom.getAttr(ifr, "z_xurl") != url) {
+				parent.onIframeURLChange(ifr.id, url);
+				zDom.setAttr(ifr, "z_xurl", url);
+			}
+		} catch (e) { //due to JS sandbox, we cannot access if not from same host
+			if (zk.debugJS) zk.log("Unable to access parent frame");
+		}
+	},
+	_simplifyURL: function (url) {
+		var j = url.lastIndexOf(';');
+		if (j >= 0) url = url.substring(0, j);
+		j = url.lastIndexOf('#');
+		if (j >= 0) url = url.substring(0, j);
+		j = url.lastIndexOf('?');
+		if (j >= 0) url = url.substring(0, j);
+		return url;
 	}
 };
 
@@ -6499,58 +6561,16 @@ zAu = {
 				continue;
 			}
 
-			cmds.push(cmd = {cmd: zUtl.getElementValue(cmd)});
-			cmd.data = [];
-			for (var cd = cmd.data, k = data ? data.length: 0; --k >= 0;)
-				cd.unshift(zAu._decodeData(zUtl.getElementValue(data[k])));
+			cmds.push(cmd = {cmd: zUtl.getElementValue(cmd),
+				data: data && data.length ?
+					eval(zUtl.getElementValue(data[0])): []});
 		}
 
 		zAu._cmdsQue.push(cmds);
 		return true;
 	},
-	_decodeData: function (d) {
-		var v = d.substring(1);
-		switch (d.charAt(0).toLowerCase()) {
-		case 'c': case 's': return v;
-		case 'n': return null;
-		case '1': case '3': return true;
-		case '0': case '2': return false;
-		case 'i': case 'l': case 'b': case 'h':
-			return parseInt(v);
-		case 'd': case 'f':
-			return parseFloat(v);
-		case 't': return new Date(parseInt(v));
-		case 'j': return new zk.BigInteger(v);
-		case 'k': return new zk.BigDecimal(v);
-		case '[':
-			d = v;
-			v = [];
-			var esc;
-			for (var len = d.length, j = 0, k = 0;; ++j) {
-				if (j >= len) {
-					if (len)
-						v.push(zAu._decodeData(esc || d.substring(k, j)));
-					return v;
-				}
-				var cc = d.charAt(j);
-				if (cc == '\\') {
-					if (!esc) esc = d.substring(k, j);
-					esc += d.charAt(++j);
-				} else if (cc == ',') {
-					v.push(zAu._decodeData(esc || d.substring(k, j)));
-					k = j + 1;
-					esc = null;
-				} else if (esc)
-					esc += cc;
-			}
-		}
-		return v;
-	},
-	process: function (cmd, varags) { //by server only (encoded)
-		var data = [];
-		for (var j = arguments.length; --j > 0;)
-			data.unshift(zAu._decodeData(arguments[j]));
-		zAu._process(cmd, data);
+	process: function (cmd, data) { //by server only (encoded)
+		zAu._process(cmd, data ? eval(data): []);
 	},
 	_process: function (cmd, data) { //decoded
 		//I. process commands that data[0] is not UUID
@@ -6581,7 +6601,7 @@ zAu = {
 
 	//ajax internal//
 	_cmdsQue: [], //response commands in XML
-	_seqId: 1, //1-999
+	_seqId: (zUtl.now() % 9999) + 1, //1-9999 (random init: bug 2691017)
 
 	/** IE6 sometimes remains readyState==1 (reason unknown), so resend. */
 	_areqTmout: function () {
@@ -6635,7 +6655,7 @@ zAu = {
 
 					if (zAu.pushXmlResp(reqInf.dt, req)) { //valid response
 						//advance SID to avoid receive the same response twice
-						if (sid && ++zAu._seqId > 999) zAu._seqId = 1;
+						if (sid && ++zAu._seqId > 9999) zAu._seqId = 1;
 						zAu._areqTry = 0;
 						zAu._preqInf = null;
 					}
@@ -6796,16 +6816,12 @@ zAu = {
 			if (target && target.className != 'zk.Desktop')
 				content += "&uuid."+j+"="+target.uuid;
 
-			var data = aureq.data;
-			if (data && data.marshal) data = data.marshal();
-			if (data != null) {
-				if (!data.$array) data = [data];
-				for (var k = 0, dl = data.length; k < dl; ++k) {
-					var d = data[k];
-					content += "&data."+j+"="
-						+ (d != null ? encodeURIComponent(d): '_z~nil');
-				}
-			}
+			var data = aureq.data, dtype = typeof data;
+			if (dtype == 'string' || dtype == 'number' || dtype == 'boolean'
+			|| (data && data.$array))
+				data = {'':data};
+			if (data)
+				content += "&data."+j+"="+encodeURIComponent(zJSON.stringify(data));
 		}
 
 		if (content)
@@ -6968,6 +6984,43 @@ zAu = {
 			var meta = zAu._metas[uuid];
 			if (meta && meta.cleanupOnFatal)
 				meta.cleanupOnFatal(ignorable);
+		}
+	},
+
+	//Perfomance Meter//
+	_pfj: 0, //an index
+	_pfsend: function (dt, req, completeOnly) {
+		if (!completeOnly)
+			req.setRequestHeader("ZK-Client-Start",
+				dt.id + "-" + zAu._pfj++ + "=" + Math.round(zUtl.now()));
+
+		var ids;
+		if (ids = dt._pfRecvIds) {
+			req.setRequestHeader("ZK-Client-Receive", ids);
+			dt._pfRecvIds = null;
+		}
+		if (ids = dt._pfDoneIds) {
+			req.setRequestHeader("ZK-Client-Complete", ids);
+			dt._pfDoneIds = null;
+		}
+	},
+	/** Returns request IDs sent from the server separated by space. */
+	_pfGetIds: function (req) {
+		return req.getResponseHeader("ZK-Client-Complete");
+	},
+	/** Adds performance request IDs that have been processed completely. */
+	pfrecv: function (dt, pfIds) {
+		zAu._pfAddIds(dt, '_pfRecvIds', pfIds);
+	},
+	/** Adds performance request IDs that have been processed completely. */
+	pfdone: function (dt, pfIds) {
+		zAu._pfAddIds(dt, '_pfDoneIds', pfIds);
+	},
+	_pfAddIds: function (dt, prop, pfIds) {
+		if (pfIds && (pfIds = pfIds.trim())) {
+			var s = pfIds + "=" + Math.round(zUtl.now());
+			if (dt[prop]) dt[prop] += ',' + s;
+			else dt[prop] = s;
 		}
 	}
 };
@@ -7155,6 +7208,19 @@ zAu.cmd1 = {
 	echo2: function (uuid, wgt, evtnm, data) {
 		zAu.send(new zk.Event(wgt, "echo",
 			data != null ? [evtnm, data]: [evtnm], {ignorable: true}));
+	}
+};
+
+/** Callback when iframe's URL/bookmark been changed.
+ * Notice the containing page might not be ZK. It could be any technology
+ * and it can got the notification by implementing this method.
+ * @param uuid the component UUID
+ * @param url the new URL
+ */
+function onIframeURLChange(uuid, url) {
+	if (!zk.unloading) {
+		var wgt = zk.Widget.$(uuid);
+		if (wgt) wgt.fire("onURIChange", url);
 	}
 };
 

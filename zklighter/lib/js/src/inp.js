@@ -170,12 +170,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				sr = zDom.getSelectionRange(inp),
 				b = sr[0], e = sr[1];
 			this.fire('onSelection', {start: b, end: e,
-				selected: inp.value.substring(b, e),
-				marshal: this._onSelMarshal});
+				selected: inp.value.substring(b, e)});
 		}
-	},
-	_onSelMarshal: function () {
-		return [this.start, this.end, this.selected];
 	},
 	_lateBlur: function () {
 		if (this.shallUpdate_(zk.currentFocus))
@@ -225,8 +221,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			if (!errbox) this._errbox = this.showError_(msg);
 
 			if (!noOnError)
-				this.fire('onError',
-					{value: val, message: msg, marshal: this._onErrMarshal});
+				this.fire('onError', {value: val, message: msg});
 		}
 	},
 	validate_: function (val) {
@@ -304,17 +299,10 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				{ignorable:1}, 100);
 		}
 	},
-	_onChangeData: function (val, selbak) {
-		return {value: val,
-			bySelectBack: selbak,
-			start: zDom.getSelectionRange(this.einp)[0],
-			marshal: this._onChangeMarshal}
-	},
-	_onChangeMarshal: function () {
-		return [this.value, this.bySelectBack, this.start];
-	},
-	_onErrMarshal: function () {
-		return [this.vale, this.message];
+	_onChangeData: function (val, selbk) {
+		var inf = {value: val, start: zDom.getSelectionRange(this.einp)[0]}
+		if (selbk) inf.bySelectBack =  true;
+		return inf;
 	},
 	_stopOnChanging: function () {
 		if (this._tidChg) {

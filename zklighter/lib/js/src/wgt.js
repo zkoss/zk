@@ -1448,13 +1448,14 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		return scls;
 	},
 	domAttrs_: function(no){
-		var attr = this.$supers('domAttrs_', arguments);
-		if (this.getTarget()) 
-			attr += ' target="' + this.getTarget() + '"';
-		if (this.getTabindex()) 
-			attr += ' tabIndex="' + this.getTabindex() + '"';
-		if (this.getHref()) 
-			attr += ' href="' + this.getHref() + '"';
+		var attr = this.$supers('domAttrs_', arguments),
+			v;
+		if (v = this.getTarget())
+			attr += ' target="' + v + '"';
+		if (v = this.getTabindex()) 
+			attr += ' tabIndex="' + v + '"';
+		if (v = this.getHref()) 
+			attr += ' href="' + v + '"';
 		else 
 			attr += ' href="javascript:;"';
 		return attr;
