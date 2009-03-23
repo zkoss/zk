@@ -20,6 +20,7 @@ ZK 3.6.1
   2668190: NullPointerException on SessionsCtrl.getSession() when undeploy
   1896797: iframe and pdf in overlapped wnd (FF and IE7)
   2673128: Impossible to select some date
+  2705040: Navigating Combobox causes JS error
 	--------
 ZK 3.6.0
 March 2, 2009

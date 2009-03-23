@@ -608,7 +608,7 @@ zkCmbox._hilite = function (uuid, selback, bUp, reminder, keycode) {
 			var selId = getZKAttr(cmp, "selid");
 			if (selId != found.id) {
 				setZKAttr(cmp, "selid", found.id);
-				zkau.sendasap({uuid: uuid, cmd: "onSelect", data: [found.id, found.id, zkau.getKeys(evt)]});
+				zkau.sendasap({uuid: uuid, cmd: "onSelect", data: [found.id, found.id]});
 			}
 		}
 	} else if (jfnd >= 0) {
