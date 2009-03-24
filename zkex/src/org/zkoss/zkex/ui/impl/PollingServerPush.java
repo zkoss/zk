@@ -58,7 +58,34 @@ public class PollingServerPush implements ServerPush {
 	 */
 	private final Object _mutex = new Object();
 
+	/** Sends an AU response to the client to start the server push.
+	 * It is called by {@link #start}.
+	 * <p>The derived class usually overrides this method to support
+	 * different devices, such as ZK Mobile.
+	 * <p>The default implementation is to send {@link AuScript} containing
+	 * the script returned by {@link #getStartScript}.
+	 * Devices that don't support scripts could override this method
+	 * to send a custom AU response ({@link org.zkoss.zk.au.AuResponse}).
+	 * @since 3.6.1
+	 */
+	protected void startClientPush() {
+		Clients.response(new AuScript(null, getStartScript()));
+	}
+	/** Sends an AU response the client to stop the server push.
+	 * <p>The derived class usually overrides this method to support
+	 * different devices, such as ZK Mobile.
+	 * <p>The default implementation is to send {@link AuScript} containing
+	 * the script returned by {@link #getStopScript}.
+	 * Devices that don't support scripts could override this method
+	 * to send a custom AU response ({@link org.zkoss.zk.au.AuResponse}).
+	 * @since 3.6.1
+	 */
+	protected void stopClientPush() {
+		Clients.response(new AuScript(null, getStopScript()));
+	}
 	/** Returns the JavaScript codes to enable (aka., start) the server push.
+	 * It is called by {@link #startClientPush} to prepare the script
+	 * of {@link AuScript} that will be sent to the client.
 	 */
 	protected String getStartScript() {
 		final String start = _desktop.getWebApp().getConfiguration()
@@ -92,6 +119,8 @@ public class PollingServerPush implements ServerPush {
 	}
 			
 	/** Returns the JavaScript codes to disable (aka., stop) the server push.
+	 * It is called by {@link #stopClientPush} to prepare the script
+	 * of {@link AuScript} that will be sent to the client.
 	 */
 	protected String getStopScript() {
 		final String stop = _desktop.getWebApp().getConfiguration()
@@ -111,7 +140,7 @@ public class PollingServerPush implements ServerPush {
 		}
 
 		_desktop = desktop;
-		Clients.response(new AuScript(null, getStartScript()));
+		startClientPush();
 	}
 	public void stop() {
 		if (_desktop == null) {
@@ -134,9 +163,6 @@ public class PollingServerPush implements ServerPush {
 				_mutex.notify(); //wake up onPiggyback
 			}
 		}
-	}
-	private void stopClientPush() {
-		Clients.response(new AuScript(null, getStopScript()));
 	}
 	private void wakePending() {
 		synchronized (_pending) {
