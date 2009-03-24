@@ -37,7 +37,7 @@ import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.au.out.AuScript;
 
 /**
- * A server-push implementation that is based on client-polling.
+ * A server-push implementation that is based on comet.
  * 
  * @author tomyeh
  * @since 3.5.0
@@ -62,7 +62,34 @@ public class CometServerPush implements ServerPush {
 	/** Used to denote deactivate() was called. */
 	private boolean _busy;
 
+	/** Sends an AU response to the client to start the server push.
+	 * It is called by {@link #start}.
+	 * <p>The derived class usually overrides this method to support
+	 * different devices, such as ZK Mobile.
+	 * <p>The default implementation is to send {@link AuScript} containing
+	 * the script returned by {@link #getStartScript}.
+	 * Devices that don't support scripts could override this method
+	 * to send a custom AU response ({@link org.zkoss.zk.au.AuResponse}).
+	 * @since 3.6.1
+	 */
+	protected void startClientPush() {
+		Clients.response(new AuScript(null, getStartScript()));
+	}
+	/** Sends an AU response the client to stop the server push.
+	 * <p>The derived class usually overrides this method to support
+	 * different devices, such as ZK Mobile.
+	 * <p>The default implementation is to send {@link AuScript} containing
+	 * the script returned by {@link #getStopScript}.
+	 * Devices that don't support scripts could override this method
+	 * to send a custom AU response ({@link org.zkoss.zk.au.AuResponse}).
+	 * @since 3.6.1
+	 */
+	protected void stopClientPush() {
+		Clients.response(new AuScript(null, getStopScript()));
+	}
 	/** Returns the JavaScript codes to enable (aka., start) the server push.
+	 * It is called by {@link #startClientPush} to prepare the script
+	 * of {@link AuScript} that will be sent to the client.
 	 */
 	protected String getStartScript() {
 		final String start = _desktop.getWebApp().getConfiguration()
@@ -74,8 +101,9 @@ public class CometServerPush implements ServerPush {
 		return "zPkg.load('zkmax.cmsp');zk.afterLoad(function(){zkmax.cmsp.start('"
 			+ dtid + "');},'" + dtid + "');";
 	}
-			
 	/** Returns the JavaScript codes to disable (aka., stop) the server push.
+	 * It is called by {@link #stopClientPush} to prepare the script
+	 * of {@link AuScript} that will be sent to the client.
 	 */
 	protected String getStopScript() {
 		final String stop = _desktop.getWebApp().getConfiguration()
@@ -94,6 +122,10 @@ public class CometServerPush implements ServerPush {
 	public boolean isActive() {
 		return _active != null;
 	}
+	/** Starts the server push.
+	 * <p>The derived class rarely need to override this method.
+	 * Rather, override {@link #startClientPush}.
+	 */
 	public void start(Desktop desktop) {
 		if (_desktop != null) {
 			log.warning("Ignored: Sever-push already started");
@@ -102,8 +134,12 @@ public class CometServerPush implements ServerPush {
 
 		_desktop = desktop;
 		CometProcessor.init(_desktop.getWebApp());
-		Clients.response(new AuScript(null, getStartScript()));
+		startClientPush();
 	}
+	/** Stops the server push.
+	 * <p>The derived class rarely need to override this method.
+	 * Rather, override {@link #stopClientPush}.
+	 */
 	public void stop() {
 		if (_desktop == null) {
 			log.warning("Ignored: Sever-push not started");
@@ -125,9 +161,6 @@ public class CometServerPush implements ServerPush {
 				_mutex.notify();
 			}
 		}
-	}
-	private void stopClientPush() {
-		Clients.response(new AuScript(null, getStopScript()));
 	}
 	private void wakePending() {
 		synchronized (_pending) {
