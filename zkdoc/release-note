@@ -23,6 +23,7 @@ ZK 3.6.1
   2668190: NullPointerException on SessionsCtrl.getSession() when undeploy
   2673128: Impossible to select some date
   2705040: Navigating Combobox causes JS error
+  2711600: Applet generates the wrong param tags
 
 	--------
 ZK 3.6.0

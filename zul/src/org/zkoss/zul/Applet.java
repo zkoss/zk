@@ -78,8 +78,8 @@ org.zkoss.zul.api.Applet {
 	 * If the value is null, the parameter is removed.
 	 */
 	public String setParam(String name, String value) {
-		return value != null ? (String)_params.remove(name):
-			(String)_params.put(name, value);
+		return value != null ? (String)_params.put(name, value):
+			(String)_params.remove(name);
 	}
 
 	/** Used only internally for component development.
@@ -91,6 +91,7 @@ org.zkoss.zul.api.Applet {
 			sb.append("<param");
 			HTMLs.appendAttribute(sb, "name", Objects.toString(me.getKey()));
 			HTMLs.appendAttribute(sb, "value", Objects.toString(me.getValue()));
+			sb.append("/>");
 		}
 		return sb.toString();
 	}
