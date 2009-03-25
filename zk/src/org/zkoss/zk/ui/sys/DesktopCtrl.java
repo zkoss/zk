@@ -392,5 +392,5 @@ if (c.isEmpty()) {
 	 * request causes any exception.
 	 * @since 5.0.0
 	 */
-	public void process(AuRequest request, boolean everError);
+	public void service(AuRequest request, boolean everError);
 }

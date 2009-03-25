@@ -250,7 +250,7 @@ public class Tab extends LabelImageElement implements org.zkoss.zul.api.Tab {
 	 * it also handles onSelect.
 	 * @since 5.0.0
 	 */
-	public void process(org.zkoss.zk.au.AuRequest request, boolean everError) {
+	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String name = request.getName();
 		if (name.equals(Events.ON_SELECT)) {
 			SelectEvent evt = SelectEvent.getSelectEvent(request);
@@ -263,7 +263,7 @@ public class Tab extends LabelImageElement implements org.zkoss.zul.api.Tab {
 
 			Events.postEvent(evt);
 		} else
-			super.process(request, everError);
+			super.service(request, everError);
 	}
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 			throws java.io.IOException {

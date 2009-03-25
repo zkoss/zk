@@ -89,6 +89,7 @@ import org.zkoss.zk.ui.impl.Attributes;
 import org.zkoss.zk.fn.ZkFns;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.au.AuService;
 import org.zkoss.zk.au.out.AuClientInfo;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Interpreter;
@@ -169,6 +170,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private transient boolean _annotsShared;
 	/** Whether _evthds is shared with other components. */
 	private transient boolean _evthdsShared;
+	/** the Au service. */
+	private transient AuService _ausvc;
 	/** Whether this component is visible.
 	 * @since 3.5.0 (becomes protected)
 	 */
@@ -2026,14 +2029,22 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return ex;
 	}
 
-	/** Processes an AU request.
+	public AuService getAuService() {
+		return _ausvc;
+	}
+	public void setAuService(AuService ausvc) {
+		_ausvc = ausvc;
+	}
+
+	/** Handles an AU request.
 	 *
 	 * <p>Default: it convests the request to an event (by
 	 * {@link Event#getEvent}) and then posts the event
 	 * (by {@link Events#postEvent}).
 	 * @since 5.0.0
+	 * @see setDigester
 	 */
-	public void process(AuRequest request, boolean everError) {
+	public void service(AuRequest request, boolean everError) {
 		final String name = request.getName();
 		if ("echo".equals(name)) {
 			final JSONObject data = request.getData();
@@ -2259,6 +2270,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				}
 			}
 		}
+
+		Object val = clone._ausvc;
+		if (val instanceof ComponentCloneListener)
+			clone._ausvc = (AuService)((ComponentCloneListener)val).clone(clone);
 		return clone;
 	}
 	private static final
@@ -2383,6 +2398,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			}
 		}
 		s.writeObject(null);
+
+		willSerialize(_ausvc);
+		s.writeObject(_ausvc == null || (_ausvc instanceof java.io.Serializable)
+		|| (_ausvc instanceof java.io.Externalizable) ? _ausvc: null);
 	}
 	private void willSerialize(Collection c) {
 		if (c != null)
@@ -2481,6 +2500,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 					//since the parent doesn't deserialized completely
 					//Rather, we handle it until the event is received
 		}
+
+		didDeserialize(_ausvc = (AuService)s.readObject());
 	}
 	private void didDeserialize(Collection c) {
 		if (c != null)

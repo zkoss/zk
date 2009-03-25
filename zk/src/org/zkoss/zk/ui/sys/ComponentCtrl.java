@@ -301,18 +301,18 @@ public interface ComponentCtrl {
 	 */
 	public void redraw(Writer out) throws IOException;
 
-	/** Processes an AU request.
+	/** Handles an AU request.
 	 *
 	 * <p>To send reponses to the client, use
 	 * {@link org.zkoss.zk.ui.AbstractComponent#smartUpdate},
 	 * {@link org.zkoss.zk.ui.AbstractComponent#response}
 	 * or {@link Component#invalidate()}.
-	 * To process the AU requests sent from the client, override this
+	 * To handle the AU requests sent from the client, override this
 	 * method.
 	 *
 	 * @param everError whether any error ever occured before
 	 * processing this request.
 	 * @since 5.0.0
 	 */
-	public void process(AuRequest request, boolean everError);
+	public void service(AuRequest request, boolean everError);
 }

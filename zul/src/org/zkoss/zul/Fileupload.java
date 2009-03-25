@@ -163,7 +163,7 @@ public class Fileupload extends HtmlBasedComponent implements org.zkoss.zul.api.
 	 * it also handles updateResult.
 	 * @since 5.0.0
 	 */
-	public void process(org.zkoss.zk.au.AuRequest request, boolean everError) {
+	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String name = request.getName();
 		if (name.equals("updateResult")) {
 			Events.postEvent(
@@ -171,7 +171,7 @@ public class Fileupload extends HtmlBasedComponent implements org.zkoss.zul.api.
 				FileuploadDlg.parseResult(
 					(List)AuRequests.getUpdateResult(request))));
 		} else
-			super.process(request, everError);
+			super.service(request, everError);
 	}
 
 	/////Open as a Modal Dialog/////

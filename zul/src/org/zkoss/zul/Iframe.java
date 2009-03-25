@@ -231,12 +231,12 @@ public class Iframe extends XulElement implements org.zkoss.zul.api.Iframe {
 	 * it also handles onURIChange.
 	 * @since 5.0.0
 	 */
-	public void process(org.zkoss.zk.au.AuRequest request, boolean everError) {
+	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String name = request.getName();
 		if (Events.ON_URI_CHANGE.equals(name)) {
 			Events.postEvent(URIEvent.getURIEvent(request));
 		} else
-			super.process(request, everError);
+			super.service(request, everError);
 	}
 
 	//-- Component --//

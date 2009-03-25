@@ -67,13 +67,13 @@ abstract public class HeadersElement extends XulElement implements org.zkoss.zul
 	 * it also handles onColSize.
 	 * @since 5.0.0
 	 */
-	public void process(org.zkoss.zk.au.AuRequest request, boolean everError) {
+	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String name = request.getName();
 		if (name.equals(ZulEvents.ON_COL_SIZE)) {
 			ColSizeEvent evt = ColSizeEvent.getColSizeEvent(request);
 			((HeaderElement)evt.getColumn()).setWidthByClient(evt.getWidth());
 			Events.postEvent(evt);
 		} else
-			super.process(request, everError);
+			super.service(request, everError);
 	}
 }

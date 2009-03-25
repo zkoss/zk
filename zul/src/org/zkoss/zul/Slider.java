@@ -264,7 +264,7 @@ public class Slider extends XulElement implements org.zkoss.zul.api.Slider {
 	 * it also handles onOpen.
 	 * @since 5.0.0
 	 */
-	public void process(org.zkoss.zk.au.AuRequest request, boolean everError) {
+	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String name = request.getName();
 		if (name.equals(Events.ON_SCROLL)) {
 			ScrollEvent evt = ScrollEvent.getScrollEvent(request);
@@ -275,6 +275,6 @@ public class Slider extends XulElement implements org.zkoss.zul.api.Slider {
 			ScrollEvent evt = ScrollEvent.getScrollEvent(request);
 			Events.postEvent(evt);
 		} else
-			super.process(request, everError);
+			super.service(request, everError);
 	}
 }

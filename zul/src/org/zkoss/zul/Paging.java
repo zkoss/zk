@@ -198,10 +198,11 @@ public class Paging extends XulElement implements org.zkoss.zul.api.Paging, Pagi
 	 * it also handles onSelect.
 	 * @since 5.0.0
 	 */
-	public void process(org.zkoss.zk.au.AuRequest request, boolean everError) {
+	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String name = request.getName();
 		if (name.equals(ZulEvents.ON_PAGING)) {
 			Events.postEvent(PagingEvent.getPagingEvent(request));
-		}
+		} else
+			super.service(request, everError);
 	}
 }

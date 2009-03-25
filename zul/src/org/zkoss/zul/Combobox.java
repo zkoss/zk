@@ -641,7 +641,7 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 	 * it also handles onOpen and onSelect.
 	 * @since 5.0.0
 	 */
-	public void process(org.zkoss.zk.au.AuRequest request, boolean everError) {
+	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String name = request.getName();
 		if (name.equals(Events.ON_OPEN)) {
 			Events.postEvent(OpenEvent.getOpenEvent(request));
@@ -652,6 +652,6 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 				(Comboitem)selItems.iterator().next(): null;
 			Events.postEvent(evt);
 		} else
-			super.process(request, everError);
+			super.service(request, everError);
 	}
 }

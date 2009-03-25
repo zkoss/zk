@@ -223,7 +223,7 @@ public class Group extends Row implements org.zkoss.zul.api.Group {
 	 * it also handles onOpen.
 	 * @since 5.0.0
 	 */
-	public void process(org.zkoss.zk.au.AuRequest request, boolean everError) {
+	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String name = request.getName();
 		if (name.equals(Events.ON_OPEN)) {
 			OpenEvent evt = OpenEvent.getOpenEvent(request);
@@ -233,7 +233,7 @@ public class Group extends Row implements org.zkoss.zul.api.Group {
 				rows.addVisibleItemCount(_open ? getVisibleItemCount() : -getVisibleItemCount());
 			Events.postEvent(evt);
 		} else
-			super.process(request, everError);
+			super.service(request, everError);
 	}
 	/**
 	 * An iterator used by _items.

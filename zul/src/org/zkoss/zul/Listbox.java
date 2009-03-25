@@ -2534,7 +2534,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 	 * it also handles onSelect.
 	 * @since 5.0.0
 	 */
-	public void process(org.zkoss.zk.au.AuRequest request, boolean everError) {
+	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String name = request.getName();
 		if (name.equals(Events.ON_SELECT)) {
 			SelectEvent evt = SelectEvent.getSelectEvent(request);
@@ -2622,7 +2622,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 
 			Listbox.this.renderItems(items);
 		} else
-			super.process(request, everError);
+			super.service(request, everError);
 	}
 	protected Object newExtraCtrl() {
 		return new ExtraCtrl();

@@ -80,7 +80,7 @@ public class Input extends AbstractTag {
 	 *
 	 * @since 5.0.0
 	 */
-	public void process(org.zkoss.zk.au.AuRequest request, boolean everError) {
+	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String name = request.getName();
 		if (name.equals(Events.ON_CHANGE)) {
 			InputEvent evt = InputEvent.getInputEvent(request);
@@ -106,6 +106,6 @@ public class Input extends AbstractTag {
 
 			Events.postEvent(evt);
 		} else
-			super.process(request, everError);
+			super.service(request, everError);
 	}
 }

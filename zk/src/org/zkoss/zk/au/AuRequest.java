@@ -40,10 +40,6 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
 /**
  * A request sent from the client to the server.
  *
- * <p>Notice that {@link #activate} must be called in the activated execution.
- * Before calling this method, {@link #getPage} and {@link #getComponent}
- * cannot be called.
- *
  * @author tomyeh
  */
 public class AuRequest {
@@ -103,9 +99,9 @@ public class AuRequest {
 	}
 
 	/** Activates this request.
-	 * <p>It can be accessed only in the activated execution.
-	 * Before calling this method, {@link #getPage}, {@link #getComponent}
-	 * and {@link #getOptions} cannot be called.
+	 * <p>Used internally to identify the component and page after
+	 * an execution is activated. Applications rarely need to access this
+	 * method.
 	 * @since 3.0.5
 	 */
 	public void activate()
@@ -163,16 +159,12 @@ public class AuRequest {
 	public Component getComponent() {
 		return _comp;
 	}
-	/** @deprecated As of release 3.0.5, use {@link #getComponent}
-	 * instead.
-	 */
-	public String getComponentUuid() {
-		return _comp != null ? _comp.getUuid(): _uuid;
-	}
 	/** Returns the data of the command, might be null.
 	 * If the client sends a string, a number or an array as data,
 	 * the data can be retrived by the key, "". For example,
 	 * <code>getData().getInt("")</code>.
+	 *
+	 * <p>See also <a href="http://docs.zkoss.org/wiki/Zk.Event#How_to_process_data_with_JSON">how to process data with JSON</a>.
 	 * @since 5.0.0
 	 */
 	public JSONObject getData() {

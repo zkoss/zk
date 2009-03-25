@@ -389,7 +389,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	 * onMove, onSize, onZIndex.
 	 * @since 5.0.0
 	 */
-	public void process(AuRequest request, boolean everError) {
+	public void service(AuRequest request, boolean everError) {
 		final String name = request.getName();
 		if (name.equals(Events.ON_CLICK)
 		|| name.equals(Events.ON_DOUBLE_CLICK)
@@ -410,7 +410,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 			_zIndex = evt.getZIndex();
 			Events.postEvent(evt);
 		} else
-			super.process(request, everError);
+			super.service(request, everError);
 	}
 	/** Used by {@link #getExtraCtrl} to create a client control.
 	 * It is used only by component developers.

@@ -113,7 +113,7 @@ public class Portallayout extends XulElement implements org.zkoss.zkmax.zul.api.
 	 * it also handles onPortalMove.
 	 * @since 5.0.0
 	 */
-	public void process(org.zkoss.zk.au.AuRequest request, boolean everError) {
+	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String name = request.getName();
 		if (name.equals(ZkMaxEvents.ON_PORTAL_MOVE)) {
 			PortalMoveEvent evt = PortalMoveEvent.getPortalMoveEvent(request);
@@ -134,7 +134,7 @@ public class Portallayout extends XulElement implements org.zkoss.zkmax.zul.api.
 			}
 			Events.postEvent(evt);
 		} else
-			super.process(request, everError);
+			super.service(request, everError);
 	}
 
 	/** Called by Portalchildren to call smart update.

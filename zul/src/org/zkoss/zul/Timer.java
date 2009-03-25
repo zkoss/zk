@@ -128,12 +128,12 @@ public class Timer extends HtmlBasedComponent implements org.zkoss.zul.api.Timer
 	 * it also handles onOpen.
 	 * @since 5.0.0
 	 */
-	public void process(org.zkoss.zk.au.AuRequest request, boolean everError) {
+	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String name = request.getName();
 		if (name.equals(Events.ON_TIMER)) {
 			if (!_repeats) _running = false; //Bug 1829397
 		}
-		super.process(request, everError);
+		super.service(request, everError);
 	}
 
 	//super//

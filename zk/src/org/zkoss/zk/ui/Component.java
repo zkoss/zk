@@ -28,6 +28,7 @@ import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.scripting.Namespace;
+import org.zkoss.zk.au.AuService;
 
 /**
  * An UI component.
@@ -842,6 +843,24 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 * @since 5.0.0
 	 */
 	public Set getWidgetMethodNames();
+
+	/** Sets an AU service to process the AU request before the component's
+	 * default handling.
+	 * This method is used if you want to send some custom request
+	 * from client (by your application).
+	 * <p>Default: null.
+	 * <p>If you want to provide an AU service for the AU requests
+	 * targeting the desktop. Use {@link Desktop#addListener}.
+	 * <p>See also <a href="http://docs.zkoss.org/wiki/Zk.Event#How_to_process_data_with_JSON">how to process data with JSON</a>.
+	 * @since 5.0.0
+	 */
+	public void setAuService(AuService service);
+	/** Returns an AU service to process the AU request before the component's
+	 * default handling.
+	 * <p>Default: null
+	 * @since 5.0.0
+	 */
+	public AuService getAuService();
 
 	/** Clones the component.
 	 * All of its children is cloned.

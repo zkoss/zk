@@ -56,7 +56,6 @@ import org.zkoss.zk.ui.util.UiLifeCycle;
 import org.zkoss.zk.ui.util.Monitor;
 import org.zkoss.zk.ui.util.DesktopSerializationListener;
 import org.zkoss.zk.ui.util.EventInterceptor;
-import org.zkoss.zk.ui.util.AuRequestProcessor;
 import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
 import org.zkoss.zk.ui.sys.PageCtrl;
@@ -73,6 +72,7 @@ import org.zkoss.zk.ui.sys.IdGenerator;
 import org.zkoss.zk.ui.sys.ServerPush;
 import org.zkoss.zk.ui.impl.EventInterceptors;
 import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.AuService;
 import org.zkoss.zk.au.out.AuBookmark;
 import org.zkoss.zk.device.Device;
 import org.zkoss.zk.device.Devices;
@@ -144,7 +144,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	/** The event interceptors. */
 	private final EventInterceptors _eis = new EventInterceptors();
 	private transient List _dtCleans, _execInits, _execCleans,
-		_uiCycles, _auProcs;
+		_uiCycles, _ausvcs;
 	private transient Map _lastRes;
 	private static final int MAX_RESPONSE_ID = 999;
 	/** The response sequence ID. */
@@ -450,10 +450,10 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	public void setExecution(Execution exec) {
 		_exec = exec;
 	}
-	public void process(AuRequest request, boolean everError) {
-		if (_auProcs != null)
-			for (Iterator it = _auProcs.iterator(); it.hasNext();)
-				if (((AuRequestProcessor)it.next()).process(request, everError))
+	public void service(AuRequest request, boolean everError) {
+		if (_ausvcs != null)
+			for (Iterator it = _ausvcs.iterator(); it.hasNext();)
+				if (((AuService)it.next()).service(request, everError))
 					return; //done
 
 		final String name = request.getName();
@@ -617,8 +617,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		Serializables.smartWrite(s, _execCleans);
 		willSerialize(_uiCycles);
 		Serializables.smartWrite(s, _uiCycles);
-		willSerialize(_auProcs);
-		Serializables.smartWrite(s, _auProcs);
+		willSerialize(_ausvcs);
+		Serializables.smartWrite(s, _ausvcs);
 
 		s.writeBoolean(_spush != null);
 	}
@@ -653,8 +653,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		didDeserialize(_execCleans);
 		_uiCycles = (List)Serializables.smartRead(s, _uiCycles);
 		didDeserialize(_uiCycles);
-		_auProcs = (List)Serializables.smartRead(s, _auProcs);
-		didDeserialize(_auProcs);
+		_ausvcs = (List)Serializables.smartRead(s, _ausvcs);
+		didDeserialize(_ausvcs);
 
 		if (s.readBoolean())
 			enableServerPush(true);
@@ -700,8 +700,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			added = true;
 		}
 
-		if (listener instanceof AuRequestProcessor) {
-			_auProcs = addListener0(_auProcs, listener);
+		if (listener instanceof AuService) {
+			_ausvcs = addListener0(_ausvcs, listener);
 			added = true;
 		}
 
@@ -736,8 +736,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		&& removeListener0(_uiCycles, listener))
 			found = true;
 
-		if (listener instanceof AuRequestProcessor
-		&& removeListener0(_auProcs, listener))
+		if (listener instanceof AuService
+		&& removeListener0(_ausvcs, listener))
 			found = true;
 		return found;
 	}
