@@ -310,9 +310,13 @@ public interface ComponentCtrl {
 	 * To handle the AU requests sent from the client, override this
 	 * method.
 	 *
+	 * <p>Application developer can plug the custom service to handle
+	 * the AU request by {@link Component#setAuService}.
+	 *
 	 * @param everError whether any error ever occured before
 	 * processing this request.
 	 * @since 5.0.0
+	 * @see Component#setAuService
 	 */
 	public void service(AuRequest request, boolean everError);
 }

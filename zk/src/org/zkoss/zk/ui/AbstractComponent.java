@@ -2041,8 +2041,11 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * <p>Default: it convests the request to an event (by
 	 * {@link Event#getEvent}) and then posts the event
 	 * (by {@link Events#postEvent}).
+	 *
+	 * <p>Application developer can plug the custom service to handle
+	 * the AU request by {@link #setAuService}.
 	 * @since 5.0.0
-	 * @see setDigester
+	 * @see #setAuService
 	 */
 	public void service(AuRequest request, boolean everError) {
 		final String name = request.getName();
