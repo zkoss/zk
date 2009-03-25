@@ -78,21 +78,8 @@ org.zkoss.zul.api.Applet {
 	 * If the value is null, the parameter is removed.
 	 */
 	public String setParam(String name, String value) {
-		return value != null ? (String)_params.remove(name):
-			(String)_params.put(name, value);
-	}
-
-	/** Used only internally for component development.
-	 */
-	public String getParamsHtml() {
-		final StringBuffer sb = new StringBuffer(256);
-		for (Iterator iter = _params.entrySet().iterator(); iter.hasNext();) {
-			Map.Entry me = (Map.Entry) iter.next();
-			sb.append("<param");
-			HTMLs.appendAttribute(sb, "name", Objects.toString(me.getKey()));
-			HTMLs.appendAttribute(sb, "value", Objects.toString(me.getValue()));
-		}
-		return sb.toString();
+		return value != null ? (String)_params.put(name, value):
+			(String)_params.remove(name);
 	}
 
 	public Object getDynamicProperty(String name) {
@@ -140,5 +127,19 @@ org.zkoss.zul.api.Applet {
 	 */
 	public boolean isChildable() {
 		return false;
+	}
+
+	//super//
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		render(renderer, "code", getCode());
+
+		for (Iterator it = _params.entrySet().iterator(); it.hasNext();) {
+			final Map.Entry me = (Map.Entry)it.next();
+			render(renderer, "param",
+				new String[] {(String)me.getKey(), (String)me.getValue()});
+		}
 	}
 }

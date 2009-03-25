@@ -32,7 +32,8 @@ zk.Widget = zk.$extends(zk.Object, {
 				delete props.mold; //avoid setMold being called
 			}
 
-			this.set(props);
+			for (var nm in props)
+				this.set(nm, props[nm]);
 		}
 
 		if (!this.uuid) this.uuid = zk.Widget.nextUuid();
@@ -79,14 +80,6 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 
 	set: function (name, value, extra) {
-		if (arguments.length == 1) {
-			for (var p in name)
-				this._set(p, name[p]);
-			return;
-		}
-		this._set(name, value, extra);
-	},
-	_set: function (name, value, extra) {
 		if (name.length > 4 && name.startsWith('$$on')) {
 			var cls = this.$class,
 				ime = cls._importantEvts;

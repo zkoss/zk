@@ -318,6 +318,7 @@ zkm = {
 				uuid = wginf.uuid,
 				initOpts = {uuid: uuid},
 				v = wginf.mold;
+			if (!cls) throw 'Unknown widget: ' + wginf.type;
 			if (v) initOpts.mold = v;
 			var wgt = new cls(initOpts);
 			wgt.inServer = true;
@@ -347,7 +348,8 @@ zkm = {
 			}
 		}
 
-		wgt.set(props);
+		for (var nm in props)
+			wgt.set(nm, props[nm]);
 
 		for (var j = 0, childs = wginf.children, len = childs.length;
 		j < len; ++j)

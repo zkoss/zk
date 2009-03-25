@@ -139,9 +139,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>applet</component-name>
 		<component-class>org.zkoss.zul.Applet</component-class>
+		<widget-class>zul.med.Applet</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~/zul/html/applet.dsp</mold-uri>
+			<mold-uri>mold/applet.js</mold-uri>
 		</mold>
 	</component>
 	<component>
