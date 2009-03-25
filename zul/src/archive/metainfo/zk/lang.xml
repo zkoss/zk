@@ -86,38 +86,30 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<native-class>org.zkoss.zk.ui.HtmlNativeComponent</native-class>
 	</native-template>
 
+	<!-- Specifies a component
 	<component>
-		<component-name>applet</component-name>
-		<component-class>org.zkoss.zul.Applet</component-class>
+		<component-name>foo</component-name> //the component name
+		<component-class>Foo</component-class> //the component class
+
+		//Any number of molds are allowed and
+		//where mold-uri could be an expression or contain '~ctx/'
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/applet.dsp</mold-uri>
+			<mold-uri>~./foo/fool.js</mold-uri>
 		</mold>
-	</component>
-	<component>
-		<component-name>area</component-name>
-		<component-class>org.zkoss.zul.Area</component-class>
-		<!-- any number of molds are allowed and
-			mold-uri could be an expression or contain '~ctx/'
-		-->
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/area.dsp</mold-uri>
-		</mold>
-		<!-- Specifies which property to assign the text within the element
-		to.
-		If not specified (default), the text becomes a child Label component.
-		If specified, the text is assigned to the specified property.
+
+		//Specifies which property to assign the text within the element to.
+		//If not specified (default), the text becomes a child Label component.
+		//If specified, the text is assigned to the specified property.
 		<text-as>content</text-as>
-		-->
-		<!-- Any number of component's property to set
+
+		//Any number of component's property to set
 		<property>
 			<property-name></property-name>
 			<property-value></property-value>
 		</property>
-		-->
 
-		<!-- Any number of annotations
+		//Any number of annotations
 		Annotation of this component definition
 		<annotation>
 			<annotation-name></annotation-name>
@@ -143,15 +135,31 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 				<attribute-value></attribute-value>
 			</attribute>
 		</annotation>
-		-->
 
-		<!-- any number of custom attributes
-			attribute-value could be an EL expression
+		//Any number of custom attributes
+		//where attribute-value could be an EL expression
 		<custom-attribute>
 			<attribute-name></attribute-name>
 			<attribute-value></attribute-value>
 		</custom-attribute>
-		-->
+	</component>
+	-->
+
+	<component>
+		<component-name>applet</component-name>
+		<component-class>org.zkoss.zul.Applet</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./zul/html/applet.dsp</mold-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>area</component-name>
+		<component-class>org.zkoss.zul.Area</component-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>~./zul/html/area.dsp</mold-uri>
+		</mold>
 	</component>
 	<component>
 		<component-name>audio</component-name>
