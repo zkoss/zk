@@ -2239,7 +2239,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 					if (execCtrl != null) {
 						final Page page = execCtrl.getCurrentPage();
 						if (page != null)
-							return _id2uuidPrefix + page.getUuid() + _id2uuidPrefix2 + id;
+							return _id2uuidPrefix + page.getId() + _id2uuidPrefix2 + id;
 					}
 				}
 				return _id2uuidPrefix + id;
