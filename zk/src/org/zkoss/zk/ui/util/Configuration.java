@@ -120,6 +120,7 @@ public class Configuration {
 	private Class _wappcls, _uiengcls, _dcpcls, _uiftycls,
 		_failmancls, _idgencls, _sesscachecls;
 	private int _dtTimeout = 3600, _sessDktMax = 15, _sessReqMax = 5,
+		_sessPushMax = -1,
 		_sessTimeout = 0, _sparThdMax = 100, _suspThdMax = -1,
 		_maxUploadSize = 5120, _maxProcTime = 3000,
 		_promptDelay = 900, _tooltipDelay = 800, _resendDelay,
@@ -1447,6 +1448,25 @@ public class Configuration {
 	 */
 	public int getSessionMaxRequests() {
 		return _sessReqMax;
+	}
+
+	/** Specifies the maximal allowed number of concurrent server-pushes
+	 * per session.
+	 *
+	 * <p>Default: -1 (no limitation).
+	 *
+	 * @param max the maximal allowed number.
+	 * A negative value indicates there is no limit.
+	 * @since 5.0.0
+	 */
+	public void setSessionMaxPushes(int max) {
+		_sessPushMax = max;
+	}
+	/** Returns the maximal allowed number of concurrent server-pushes
+	 * per session.
+	 */
+	public int getSessionMaxPushes() {
+		return _sessPushMax;
 	}
 
 	/** Specifies the maximal allowed number of the spare pool for
