@@ -52,7 +52,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 	<separator/>
 	Live with header and paging:
-	<grid width="200px" model="${model2}" mold="paging" pageSize="10">
+	<grid id="gp" width="200px" model="${model2}" mold="paging" pageSize="10">
 		<columns>
 			<column label="options"/>
 		</columns>
@@ -60,6 +60,9 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<footer label="summary"/>
 		</foot>
 	</grid>
+	<zscript>
+		gp.paging.detailed = false;
+	</zscript>
 
 	<separator/>
 

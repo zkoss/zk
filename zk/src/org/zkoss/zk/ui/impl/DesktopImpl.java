@@ -99,6 +99,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	 * It must be distinguishable from component's ID.
 	 */
 	private static final String DOWNLOAD_PREFIX = "dwnmed-";
+	/** A session attribute holding the number of server pushes.
+	 */
+	private static final String ATTR_PUSH_COUNT = "org.zkoss.zk.ui.pushes.count";
 
 	private transient WebApp _wapp;
 	private transient Session _sess;
@@ -891,7 +894,14 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	public boolean enableServerPush(boolean enable) {
 		final boolean old = _spush != null;
 		if (old != enable) {
+			final Integer icnt = (Integer)_sess.getAttribute(ATTR_PUSH_COUNT);
+			int cnt = icnt != null ? icnt.intValue(): 0;
 			if (enable) {
+				final int maxcnt = _wapp.getConfiguration().getSessionMaxPushes();
+				if (maxcnt >= 0 && cnt >= maxcnt)
+					throw new UiException(cnt > 0 ? "Too many concurrent push connections per session: "+cnt:
+						"Server push is disabled");
+
 				final Class cls = getDevice().getServerPushClass();
 				if (cls == null)
 					throw new UiException("No server push defined. Make sure you are using the professional or enterprise edition, or you configured your own implementation");
@@ -902,13 +912,16 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 					throw UiException.Aide.wrap(ex, "Unable to instantiate "+cls);
 				}
 				_spush.start(this);
+				++cnt;
 			} else if (_spush.isActive()) {
 				_spushShallStop = true;
+				--cnt;
 			} else {
 				_spush.stop();
 				_spush = null;
+				--cnt;
 			}
-				
+			_sess.setAttribute(ATTR_PUSH_COUNT, new Integer(cnt));
 		}
 		return old;
 	}

@@ -37,6 +37,7 @@ ZK 3.6.1
   2681775: Resumable filedownload supports relative path
   2689696: Native namespace supports zkhead
   2708855: A way to customize CometServerPush for diff device
+  2675648: Server Push and number of browser windows issue
 
 * Bugs
   2684510: Unable to access implict objects if func defined in other namespace
@@ -48,7 +49,6 @@ ZK 3.6.1
   2691017: Filedownload with InputStream results empty file if blocked
   2669197: filedownload.save(reader, content, filename) not working
   2668190: NullPointerException on SessionsCtrl.getSession() when undeploy
-  1896797: iframe and pdf in overlapped wnd (FF and IE7)
   2673128: Impossible to select some date
   2705040: Navigating Combobox causes JS error
 
