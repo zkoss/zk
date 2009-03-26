@@ -1,9 +1,9 @@
 /* Menuseparator.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Jan 15 09:02:35     2009, Created by jumperchen
 

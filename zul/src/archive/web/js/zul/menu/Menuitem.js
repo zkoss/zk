@@ -1,9 +1,9 @@
 /* Menuitem.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Jan 15 09:02:33     2009, Created by jumperchen
 
@@ -14,7 +14,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 	_value: "",
-	
+
 	isCheckmark: function () {
 		return this._checkmark;
 	},
@@ -92,7 +92,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		return this._topmost;
 	},
 	beforeParentChanged_: function (newParent) {
-		this._topmost = newParent && !(newParent.$instanceof(zul.menu.Menupopup));		
+		this._topmost = newParent && !(newParent.$instanceof(zul.menu.Menupopup));
 	},
 	domClass_: function (no) {
 		var scls = this.$supers('domClass_', arguments);
@@ -128,18 +128,18 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 	_fixBtn: function () {
 		var btn = this.getSubnode('b');
 		if (!btn || !btn.innerHTML.trim()) return;
-		btn.style.width = zDom.getTextSize(btn, btn.innerHTML)[0] + zDom.frameWidth(btn) + "px";
+		btn.style.width = zDom.getTextSize(btn, btn.innerHTML)[0] + zDom.padBorderWidth(btn) + "px";
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
-		
-		if (!this.isDisabled()) {			
+
+		if (!this.isDisabled()) {
 			var anc = this.getSubnode('a'),
 				n = this.getNode();
-			
+
 			zEvt.listen(n, "mouseover", this.proxy(this._doMouseOver, '_fxMouseOver'));
 			zEvt.listen(n, "mouseout", this.proxy(this._doMouseOut, '_fxMouseOut'));
-			
+
 			if (this.isTopmost()) {
 				zEvt.listen(anc, "focus", this.proxy(this.domFocus_, '_fxFocus'));
 				zEvt.listen(anc, "blur", this.proxy(this.domBlur_, '_fxBlur'));
@@ -150,29 +150,29 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 	unbind_: function () {
 		if (!this.isDisabled()) {
 			var anc = this.getSubnode('a'),
-				n = this.getNode();				
+				n = this.getNode();
 			zEvt.unlisten(n, "mouseover", this._fxMouseOver);
 			zEvt.unlisten(n, "mouseout", this._fxMouseOut);
-			
+
 			if (this.isTopmost()) {
 				zEvt.unlisten(anc, "focus", this._fxFocus);
 				zEvt.unlisten(anc, "blur", this._fxBlur);
 			}
 		}
-			
-		this.$supers('unbind_', arguments);		
+
+		this.$supers('unbind_', arguments);
 	},
 	doClick_: function (evt) {
 		if (this._disabled)
 			evt.stop();
 		else {
 			if (!this.$class._isActive(this)) return;
-			
+
 			var topmost = this.isTopmost(),
 				anc = this.getSubnode('a');
-			
+
 			if (topmost) {
-				zDom.rmClass(anc, this.getZclass() + '-btn-over');
+				zDom.rmClass(anc, this.getZclass() + '-body-over');
 				anc = anc.parentNode;
 			}
 			if ('javascript:;' == anc.href) {
@@ -182,9 +182,9 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 				}
 				this.fireX(evt);
 			} else {
-				if (zk.ie && topmost && this.getNode().id != anc.id) 
+				if (zk.ie && topmost && this.getNode().id != anc.id)
 					zUtl.go(anc.href, false, anc.target);
-					// Bug #1886352 and #2154611 
+					// Bug #1886352 and #2154611
 					//Note: we cannot eat onclick. or, <a> won't work
 			}
 			zWatch.fire('onFloatUp', null, this); //notify all
@@ -195,7 +195,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		if (!this.isDisabled()) {
 			if (this.isTopmost() && zk.ie && !zDom.isAncestor(this.getSubnode('a'), zEvt.target(evt)))
 				return;
-			
+
 			this.$class._addActive(this);
 			zWatch.fire('onFloatUp', null, this); //notify all
 		}
@@ -220,13 +220,13 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 	_isActive: function (wgt) {
 		var top = wgt.isTopmost(),
 			n = top ? wgt.getSubnode('a') : wgt.getNode(),
-			cls = wgt.getZclass() + (top ? '-btn-over' : '-over');
+			cls = wgt.getZclass() + (top ? '-body-over' : '-over');
 		return zDom.hasClass(n, cls);
 	},
 	_addActive: function (wgt) {
 		var top = wgt.isTopmost(),
 			n = top ? wgt.getSubnode('a') : wgt.getNode(),
-			cls = wgt.getZclass() + (top ? '-btn-over' : '-over');
+			cls = wgt.getZclass() + (top ? '-body-over' : '-over');
 		zDom.addClass(n, cls);
 		if (!top && wgt.parent.parent.$instanceof(zul.menu.Menu))
 			this._addActive(wgt.parent.parent);
@@ -234,7 +234,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 	_rmActive: function (wgt) {
 		var top = wgt.isTopmost(),
 			n = top ? wgt.getSubnode('a') : wgt.getNode(),
-			cls = wgt.getZclass() + (top ? '-btn-over' : '-over');
+			cls = wgt.getZclass() + (top ? '-body-over' : '-over');
 		zDom.rmClass(n, cls);
 	}
 });

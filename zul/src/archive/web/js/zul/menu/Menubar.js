@@ -1,9 +1,9 @@
 /* Menubar.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Jan 15 09:02:32     2009, Created by jumperchen
 
@@ -15,7 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zPkg.load('zul.wgt');
 zul.menu.Menubar = zk.$extends(zul.Widget, {
 	_orient: "horizontal",
-	
+
 	getOrient: function () {
 		return this._orient;
 	},
@@ -47,7 +47,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 		else
 			zDom.insertHTMLBeforeEnd(this.getNode(),
 				this.encloseChildHTML_({child: child, vertical: 'vertical' == this.getOrient()}));
-		
+
 		child.bind_(desktop);
 	},
 	removeChildHTML_: function (child, prevsib) {

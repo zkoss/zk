@@ -1,9 +1,9 @@
 /* Menupopup.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Jan 15 09:02:34     2009, Created by jumperchen
 
@@ -14,7 +14,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 zul.menu.Menupopup = zk.$extends('zul.wgt.Popup', {
 	_curIndex: -1,
-	
+
 	_getCurrentIndex: function () {
 		return this._curIndex;
 	},
@@ -24,12 +24,12 @@ zul.menu.Menupopup = zk.$extends('zul.wgt.Popup', {
 	getSelectedItem: function () {
 		return this.getSelectedItemAt(this.getSelectedIndex());
 	},
-	_isActiveItem: function (wgt) { 
+	_isActiveItem: function (wgt) {
 		return wgt.isVisible() && (wgt.$instanceof(zul.menu.Menu) || (wgt.$instanceof(zul.menu.Menuitem) && !wgt.isDisabled()));
 	},
 	_currentChild: function (index) {
 		var index = index != null ? index : this._curIndex;
-		for (var w = this.firstChild, k = -1; w; w = w.nextSibling) 
+		for (var w = this.firstChild, k = -1; w; w = w.nextSibling)
 			if (this._isActiveItem(w) && ++k === index)
 				return w;
 		return null;
@@ -37,7 +37,7 @@ zul.menu.Menupopup = zk.$extends('zul.wgt.Popup', {
 	_previousChild: function (wgt) {
 		wgt = wgt ? wgt.previousSibling : this.lastChild;
 		var lastChild = this.lastChild == wgt;
-		for (; wgt; wgt = wgt.previousSibling) 
+		for (; wgt; wgt = wgt.previousSibling)
 			if (this._isActiveItem(wgt)) {
 				this._curIndex--;
 				return wgt;
@@ -51,14 +51,14 @@ zul.menu.Menupopup = zk.$extends('zul.wgt.Popup', {
 	_nextChild: function (wgt) {
 		wgt = wgt ? wgt.nextSibling : this.firstChild;
 		var firstChild = this.firstChild == wgt;
-		for (; wgt; wgt = wgt.nextSibling) 
+		for (; wgt; wgt = wgt.nextSibling)
 			if (this._isActiveItem(wgt)) {
 				this._curIndex++;
 				return wgt;
 			}
 		if (firstChild) return null; // avoid deadloop;
-		this._curIndex = -1;	
-		return this._nextChild();		
+		this._curIndex = -1;
+		return this._nextChild();
 	},
 	_syncShadow: function () {
 		if (!this._shadow)
@@ -73,8 +73,8 @@ zul.menu.Menupopup = zk.$extends('zul.wgt.Popup', {
 		this._hideShadow();
 		var menu = this.parent;
 		if (menu.$instanceof(zul.menu.Menu) && menu.isTopmost())
-			zDom.rmClass(menu.getSubnode('a'), menu.getZclass() + "-btn-seld");
-		
+			zDom.rmClass(menu.getSubnode('a'), menu.getZclass() + "-body-seld");
+
 		var item = this._currentChild();
 		if (item) item.$class._rmActive(item);
 		this._curIndex = -1;
@@ -95,14 +95,14 @@ zul.menu.Menupopup = zk.$extends('zul.wgt.Popup', {
 		this.$super('open', ref, offset, position, opts);
 	},
 	onFloatUp: function(wgt) {
-		if (!this.isVisible()) 
+		if (!this.isVisible())
 			return;
 		var org = wgt;
 		if (this.parent.menupopup == this && !this.parent.isTopmost() && !this.parent.$class._isActive(this.parent)) {
 			this.close({sendOnOpen:true});
 			return;
 		}
-		
+
 		// check if the wgt belongs to the popup
 		for (var floatFound; wgt; wgt = wgt.parent) {
 			if (wgt == this || (wgt.menupopup == this && !this._shallClose)) {
@@ -112,18 +112,18 @@ zul.menu.Menupopup = zk.$extends('zul.wgt.Popup', {
 			}
 			floatFound = floatFound || wgt.isFloating_();
 		}
-		
+
 		// check if the popup is one of the wgt's children
 		for (var floatFound, wgt = this.parent; wgt; wgt = wgt.parent) {
 			if (wgt == org) {
 				if (this._shallClose) break;
-				if (!floatFound) 
+				if (!floatFound)
 					this.setTopmost();
 				return;
 			}
 			floatFound = floatFound || wgt.isFloating_();
 		}
-		
+
 		// check if the popup is an active menu
 		if (!this._shallClose && this.parent.$instanceof(zul.menu.Menu)) {
 			var menubar = this.parent.getMenubar();
@@ -143,11 +143,11 @@ zul.menu.Menupopup = zk.$extends('zul.wgt.Popup', {
 		this._syncShadow();
 		var anc = this.getSubnode('a');
 		if (anc) {
-			
+
 			// just in case
 			if (zk.ie)
 				zDom.cleanVisibility(this.getNode());
-				
+
 			anc.focus();
 		}
 	},
@@ -177,7 +177,7 @@ zul.menu.Menupopup = zk.$extends('zul.wgt.Popup', {
 			break;
 		case 37: //LEFT
 			this.close();
-			
+
 			if (this.parent.$instanceof(zul.menu.Menu) && !this.parent.isTopmost()) {
 				var pp = this.parent.parent;
 				if (pp) {
@@ -210,7 +210,7 @@ zul.menu.Menupopup = zk.$extends('zul.wgt.Popup', {
 	doMouseOut_: function (evt) {
 		this._shallClose = true;
 		this.$supers('doMouseOut_', arguments);
-	}	
+	}
 }, {
 	_rmActive: function (wgt) {
 		if (wgt.parent.$instanceof(zul.menu.Menu)) {

@@ -1,9 +1,9 @@
 /* Menu.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Thu Jan 15 09:02:33     2009, Created by jumperchen
 
@@ -25,7 +25,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		return this._topmost;
 	},
 	beforeParentChanged_: function (newParent) {
-		this._topmost = newParent && !(newParent.$instanceof(zul.menu.Menupopup));		
+		this._topmost = newParent && !(newParent.$instanceof(zul.menu.Menupopup));
 	},
 	getZclass: function () {
 		return this._zclass == null ? "z-menu" : this._zclass;
@@ -37,12 +37,12 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
-		if (child.$instanceof(zul.menu.Menupopup)) 
+		if (child.$instanceof(zul.menu.Menupopup))
 			this.menupopup = child;
 	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
-		if (child == this.menupopup) 
+		if (child == this.menupopup)
 			this.menupopup = null;
 	},
 	getMenubar: function () {
@@ -55,11 +55,11 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	_fixBtn: function () {
 		var btn = this.getSubnode('b');
 		if (!btn || !btn.innerHTML.trim()) return;
-		btn.style.width = zDom.getTextSize(btn, btn.innerHTML)[0] + zDom.frameWidth(btn) + "px";
+		btn.style.width = zDom.getTextSize(btn, btn.innerHTML)[0] + zDom.padBorderWidth(btn) + "px";
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
-		
+
 		if (!this.isTopmost()) {
 			var anc = this.getSubnode('a'), n = this.getNode();
 			zEvt.listen(anc, "focus", this.proxy(this.domFocus_, '_fxFocus'));
@@ -68,13 +68,13 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			zEvt.listen(n, "mouseout", this.proxy(this._doMouseOut, '_fxMouseOut'));
 		} else {
 			if (zk.ie) this._fixBtn();
-			
+
 			var anc = this.getSubnode('a');
 			zEvt.listen(anc, "mouseover", this.proxy(this._doMouseOver, '_fxMouseOver'));
 			zEvt.listen(anc, "mouseout", this.proxy(this._doMouseOut, '_fxMouseOut'));
 		}
 	},
-	unbind_: function () {		
+	unbind_: function () {
 		if (!this.isTopmost()) {
 			var anc = this.getSubnode('a'),
 				n = this.getNode();
@@ -87,12 +87,12 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			zEvt.unlisten(n, "mouseover", this._fxMouseOver);
 			zEvt.unlisten(n, "mouseout", this._fxMouseOut);
 		}
-		
-		this.$supers('unbind_', arguments);		
+
+		this.$supers('unbind_', arguments);
 	},
 	doClick_: function (evt) {
-		if (this.isTopmost() && !zDom.isAncestor(this.getSubnode('a'), evt.nativeTarget)) return;		
-		zDom.addClass(this.getSubnode('a'), this.getZclass() + '-btn-seld');
+		if (this.isTopmost() && !zDom.isAncestor(this.getSubnode('a'), evt.nativeTarget)) return;
+		zDom.addClass(this.getSubnode('a'), this.getZclass() + '-body-seld');
 		if (this.menupopup) {
 			this.menupopup._shallClose = false;
 			if (this.isTopmost())
@@ -103,11 +103,11 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	},
 	_doMouseOver: function (evt) {
 		if (this.$class._isActive(this)) return;
-		
+
 		var	topmost = this.isTopmost();
 		if (topmost && zk.ie && !zDom.isAncestor(this.getSubnode('a'), zEvt.target(evt)))
-				return; // don't activate 
-		
+				return; // don't activate
+
 		this.$class._addActive(this);
 		if (!topmost) {
 			if (this.menupopup) this.menupopup._shallClose = false;
@@ -161,13 +161,13 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	_isActive: function (wgt) {
 		var top = wgt.isTopmost(),
 			n = top ? wgt.getSubnode('a') : wgt.getNode(),
-			cls = wgt.getZclass() + (top ? '-btn-over' : '-over');
+			cls = wgt.getZclass() + (top ? '-body-over' : '-over');
 		return zDom.hasClass(n, cls);
 	},
 	_addActive: function (wgt) {
 		var top = wgt.isTopmost(),
 			n = top ? wgt.getSubnode('a') : wgt.getNode(),
-			cls = wgt.getZclass() + (top ? '-btn-over' : '-over');
+			cls = wgt.getZclass() + (top ? '-body-over' : '-over');
 		zDom.addClass(n, cls);
 		if (!top && wgt.parent.parent.$instanceof(zul.menu.Menu))
 			this._addActive(wgt.parent.parent);
@@ -175,7 +175,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	_rmActive: function (wgt) {
 		var top = wgt.isTopmost(),
 			n = top ? wgt.getSubnode('a') : wgt.getNode(),
-			cls = wgt.getZclass() + (top ? '-btn-over' : '-over');
+			cls = wgt.getZclass() + (top ? '-body-over' : '-over');
 		zDom.rmClass(n, cls);
 	}
 });
