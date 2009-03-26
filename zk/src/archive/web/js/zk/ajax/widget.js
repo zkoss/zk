@@ -86,8 +86,10 @@ zk.Widget = zk.$extends(zk.Object, {
 			(ime || (cls._importantEvts = {}))[name.substring(2)] = true;
 		} else if (name.length > 3 && name.startsWith('$on'))
 			this._asaps[name.substring(1)] = value;
-		else
+		else if (arguments.length >= 3)
 			zk.set(this, name, value, extra);
+		else
+			zk.set(this, name, value);
 	},
 	getChildAt: function (j) {
 		if (j >= 0)
@@ -599,7 +601,8 @@ zk.Widget = zk.$extends(zk.Object, {
 		var p = this.parent;
 		if (p) p.replaceChildHTML_(this, n, desktop, skipper);
 		else {
-			if (n.z_wgt) n.z_wgt.unbind_(skipper); //unbind first (w/o removal)
+			var oldwgt = zk.Widget.$(n);
+			if (oldwgt) oldwgt.unbind_(skipper); //unbind first (w/o removal)
 			zDom.setOuterHTML(n, this._redrawHTML(skipper));
 			this.bind_(desktop, skipper);
 		}
@@ -643,7 +646,8 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 
 	replaceChildHTML_: function (child, n, desktop, skipper) {
-		if (n.z_wgt) n.z_wgt.unbind_(skipper); //unbind first (w/o removal)
+		var oldwgt = zk.Widget.$(n);
+		if (oldwgt) oldwgt.unbind_(skipper); //unbind first (w/o removal)
 		zDom.setOuterHTML(n, child._redrawHTML(skipper));
 		child.bind_(desktop, skipper);
 	},
@@ -717,11 +721,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	getNode: function () {
 		var n = this._node;
 		if (!n && this.desktop && !this._nodeSolved) {
-			n = zDom.$(this.uuid);
-			if (n) {
-				n.z_wgt = this;
-				this._node = n;
-			}
+			this._node = n = zDom.$(this.uuid);
 			this._nodeSolved = true;
 		}
 		return n;
@@ -743,11 +743,8 @@ zk.Widget = zk.$extends(zk.Object, {
 	unbind_: function (skipper) {
 		delete zk.Widget._binds[this.uuid];
 
-		var n = this._node;
-		if (n) {
-			n.z_wgt = null;
-			this._node = null;
-		}
+		this._node = null;
+
 		for (var el in this._subnodes)
 			this._subnodes[el] = null;
 		
@@ -990,13 +987,11 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 
 		if (!n || zk.Widget.isInstance(n)) return n;
-		else n = n.z_target || n.target || n.srcElement || n; //check DOM event first
+		else if (!n.nodeType) //skip Element
+			n = n.z_target || n.target || n.srcElement || n; //check DOM event first
 				//z_target: used if we have to override the default
 
 		for (; n; n = zDom.parentNode(n)) {
-			var wgt = n.z_wgt;
-			if (wgt) return wgt;
-
 			var id = n.id;
 			if (id) {
 				var j = id.indexOf('$');

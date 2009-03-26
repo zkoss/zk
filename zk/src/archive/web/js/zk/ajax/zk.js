@@ -129,8 +129,11 @@ zk = {
 
 	set: function (o, name, value, extra) {
 		var m = o['set' + name.charAt(0).toUpperCase() + name.substring(1)];
-		if (m) m.call(o, value, extra);
-		else o[name] = value;
+		if (!m) o[name] = value;
+		else if (arguments.length >= 4)
+			m.call(o, value, extra);
+		else
+			m.call(o, value);
 	},
 	get: function (o, name) {
 		var nm = name.charAt(0).toUpperCase() + name.substring(1);

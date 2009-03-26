@@ -121,7 +121,7 @@ org.zkoss.zul.api.Applet {
 	/** Sets the value of the specified filed.
 	 */
 	public void setField(String field, String value) {
-		response(null, new AuInvoke(this, "field", field, value));
+		response(null, new AuInvoke(this, "setField", field, value));
 	}
 	/** No child is allowed.
 	 */
