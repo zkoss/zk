@@ -30,7 +30,7 @@ zkAudio.play = function (id) {
 			try {
 				cmp.Play(); //Firefox
 			} catch (e) {
-				zk.alert(msgzul.NO_AUDIO_SUPPORT);
+				zk.alert(msgzul.NO_AUDIO_SUPPORT+'\n'+e.message);
 			}
 		}
 	}
@@ -45,7 +45,7 @@ zkAudio.stop = function (id) {
 			try {
 				cmp.Stop();
 			} catch (e) {
-				zk.alert(msgzul.NO_AUDIO_SUPPORT);
+				zk.alert(msgzul.NO_AUDIO_SUPPORT+'\n'+e.message);
 			}
 		}
 	}
@@ -57,7 +57,11 @@ zkAudio.pause = function (id) {
 		try { //Note: we cannot do "if (cmp.pause)" in IE
 			cmp.pause();
 		} catch (e) {
-			zk.alert(msgzul.NO_AUDIO_SUPPORT);
+			try {
+				cmp.Pause();
+			} catch (e) {
+				zk.alert(msgzul.NO_AUDIO_SUPPORT+'\n'+e.message);
+			}
 		}
 	}
 };
@@ -66,5 +70,9 @@ zkAudio.cleanup = function (cmp) {
 	try { //Note: we cannot do "if (cmp.stop)" in IE
 		cmp.stop();
 	} catch (e) { //silent
+		try {
+			cmp.Stop();
+		} catch (e) {
+		}
 	}
 };
