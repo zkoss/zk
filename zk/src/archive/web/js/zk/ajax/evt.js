@@ -107,6 +107,14 @@ zEvt = {
 			}
 		}
 	},
+	fire: function (el, evtnm) {
+		if (document.createEvent) {
+			var evt = document.createEvent('HTMLEvents');
+			evt.initEvent(evtnm, false, false);
+			el.dispatchEvent(evt);
+		} else
+			el.fireEvent('on' + evtnm);
+	},
 
 	enableESC: function () {
 		if (zDom._noESC) {

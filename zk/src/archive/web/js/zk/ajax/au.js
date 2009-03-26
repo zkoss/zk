@@ -706,7 +706,18 @@ zAu.cmd0 = { //no uuid at all
 		}
 	},
 	submit: function (id) {
-		setTimeout(function (){var n = zDom.$(id); if (n && n.submit) n.submit();}, 50);
+		setTimeout(function (){
+			var n = zk.Widget.$(id);
+			if (n && n.submit)
+				n.submit();
+			else {
+				n = zDom.$(id);
+				if (n && n.submit) {
+					zEvt.fire(n, 'submit');
+					n.submit();
+				}
+			}
+		}, 50);
 	}
 };
 zAu.cmd1 = {
