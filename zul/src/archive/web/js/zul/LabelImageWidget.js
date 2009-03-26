@@ -30,7 +30,8 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 	setImage: function(image) {
 		if (this._image != image) {
 			this._image = image;
-			this.updateDomContent_();
+			var n = this.getImageNode_();
+			if (n) n.src = image || '';
 		}
 	},
 	getHoverImage: function () {
@@ -53,21 +54,23 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 	doMouseOver_: function () {
 		var himg = this._himg;
 		if (himg) {
-			var img = this.getImageNode_();
-			if (img) img.src = himg;
+			var n = this.getImageNode_();
+			if (n) n.src = himg;
 		}
 		this.$supers('doMouseOver_', arguments);
 	},
 	doMouseOut_: function () {
 		if (this._himg) {
-			var img = this.getImageNode_();
-			if (img) img.src = this._image;
+			var n = this.getImageNode_();
+			if (n) n.src = this._image;
 		}
 		this.$supers('doMouseOut_', arguments);
 	},
 	getImageNode_: function () {
-		if (!this._eimg && this._image)
-			this._eimg = zDom.firstChild(this.getNode(), "IMG", true);
+		if (!this._eimg && this._image) {
+			var n = this.getNode();
+			if (n) this._eimg = zDom.firstChild(n, "IMG", true);
+		}
 		return this._eimg;
 	},
 	unbind_: function () {

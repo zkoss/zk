@@ -95,14 +95,6 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		return false;
 	},
 
-	/** Updates the label and image. */
-	updateDomContent_: function () {
-		if (this.desktop) {
-			var n = this.getSubnode('box');
-			if (n) n.tBodies[0].rows[1].cells[1].innerHTML = this.domContent_();
-			else this.getNode().innertHTML = this.domContent_();
-		}
-	},
 	domContent_: function () {
 		var label = zUtl.encodeXML(this.getLabel()),
 			img = this.getImage();

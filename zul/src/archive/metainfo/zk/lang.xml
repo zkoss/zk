@@ -454,7 +454,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>iframe</component-name>
 		<component-class>org.zkoss.zul.Iframe</component-class>
-				<widget-class>zul.utl.Iframe</widget-class>
+		<widget-class>zul.utl.Iframe</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/iframe.js</mold-uri>
@@ -463,13 +463,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>image</component-name>
 		<component-class>org.zkoss.zul.Image</component-class>
+		<widget-class>zul.wgt.Image</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/image.dsp</mold-uri>
+			<mold-uri>mold/image.js</mold-uri>
 		</mold>
 		<mold>
 			<mold-name>alphafix</mold-name>
-			<mold-uri>~./zul/html/image.dsp</mold-uri>
+			<mold-uri>mold/image.js</mold-uri>
 		</mold>
 	</component>
 	<component>

@@ -219,7 +219,7 @@ public class Image extends XulElement implements org.zkoss.zul.api.Image{
 	}
 	/** Returns the encoded URL of the hover image, or null if no hover image.
 	 */
-	private String getgetEncodedHoverURL() {
+	private String getEncodedHoverURL() {
 		if (_hoverimg != null)
 			return Utils.getDynamicMediaURI(
 				this, _hoverimgver,
@@ -252,7 +252,7 @@ public class Image extends XulElement implements org.zkoss.zul.api.Image{
 		if (_hoverimg != null || !Objects.equals(_hoversrc, src)) {
 			_hoversrc = src;
 			_hoverimg = null;
-			smartUpdate("z.hvig", new getEncodedHoverURL());
+			smartUpdate("hover", new EncodedHoverURL());
 		}
 	}
 	/** Sets the content of the hover image directly.
@@ -271,7 +271,7 @@ public class Image extends XulElement implements org.zkoss.zul.api.Image{
 			_hoverimg = image;
 			_hoversrc = null;
 			if (_hoverimg != null) _hoverimgver++; //enforce browser to reload image
-			smartUpdate("z.hvig", new getEncodedHoverURL());
+			smartUpdate("hover", new EncodedHoverURL());
 		}
 	}
 	/** Sets the content of the hover image directly with the rendered image.
@@ -292,6 +292,21 @@ public class Image extends XulElement implements org.zkoss.zul.api.Image{
 			throw new UiException(ex);
 		}
 	}
+
+	//super//
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		render(renderer, "src", getEncodedURL());
+		if (_hoversrc != null || _hoverimg != null)
+			render(renderer, "hover", getEncodedHoverURL());
+		render(renderer, "align", _align);
+		render(renderer, "border", _border);
+		render(renderer, "hspace", _hspace);
+		render(renderer, "vspace", _vspace);
+	}
+
 
 	//-- Component --//
 	/** Default: not childable.
@@ -328,9 +343,9 @@ public class Image extends XulElement implements org.zkoss.zul.api.Image{
 			return getEncodedURL();
 		}
 	}
-	private class getEncodedHoverURL implements org.zkoss.zk.ui.util.DeferredValue {
+	private class EncodedHoverURL implements org.zkoss.zk.ui.util.DeferredValue {
 		public Object getValue() {
-			return getgetEncodedHoverURL();
+			return getEncodedHoverURL();
 		}
 	}
 }
