@@ -156,9 +156,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>audio</component-name>
 		<component-class>org.zkoss.zul.Audio</component-class>
+		<widget-class>zul.med.Audio</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/audio.dsp</mold-uri>
+			<mold-uri>mold/audio.js</mold-uri>
 		</mold>
 	</component>
 	<component>

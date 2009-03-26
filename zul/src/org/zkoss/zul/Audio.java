@@ -126,14 +126,16 @@ public class Audio extends XulElement implements org.zkoss.zul.api.Audio {
 		if (_audio != null || !Objects.equals(_src, src)) {
 			_src = src;
 			_audio = null;
-			updateSrc();
+			smartUpdate("src", new EncodedSrc());
 		}
 	}
 	private String getEncodedSrc() {
 		final Desktop dt = getDesktop();
 		return _audio != null ? getAudioSrc(): //already encoded
 			dt != null ? dt.getExecution().encodeURL(
-				_src != null ? _src: "~./aud/mute.mid"): "";
+					_src != null ? _src: "~./aud/mute.mid"):
+					//mute.mid is required. otherwise, quicktime failed to identify audio
+				"";
 	}
 
 	/** Returns whether to auto start playing the audio.
@@ -166,12 +168,8 @@ public class Audio extends XulElement implements org.zkoss.zul.api.Audio {
 			_audio = audio;
 			_src = null;
 			if (_audio != null) ++_audver; //enforce browser to reload
-			updateSrc();
+			smartUpdate("src", new EncodedSrc());
 		}
-	}
-	private void updateSrc() {
-		invalidate();
-			//IE won't work if we only change the src attribute
 	}
 	/** Returns the content set by {@link #setContent}.
 	 * <p>Note: it won't fetch what is set thru by {@link #setSrc}.
@@ -187,6 +185,18 @@ public class Audio extends XulElement implements org.zkoss.zul.api.Audio {
 	private String getAudioSrc() {
 		return Utils.getDynamicMediaURI(
 			this, _audver, _audio.getName(), _audio.getFormat());
+	}
+
+	//super//
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		render(renderer, "src", getEncodedSrc());
+		render(renderer, "align", _align);
+		render(renderer, "border", _border);
+		if (_autostart) renderer.render("autostart", _autostart);
+		if (_loop) renderer.render("loop", _loop);
 	}
 
 	//-- Component --//
@@ -208,6 +218,12 @@ public class Audio extends XulElement implements org.zkoss.zul.api.Audio {
 		//-- DynamicMedia --//
 		public Media getMedia(String pathInfo) {
 			return _audio;
+		}
+	}
+
+	private class EncodedSrc implements org.zkoss.zk.ui.util.DeferredValue {
+		public Object getValue() {
+			return getEncodedSrc();
 		}
 	}
 }

@@ -23,15 +23,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 
 	<audio id="audio" height="20"/>
 	<separator/>
-	<button label="Upload">
-		<attribute name="onClick">{
-	Object media = Fileupload.get();
-	if (media instanceof org.zkoss.sound.Audio)
-		audio.setContent(media);
-	else if (media != null)
-		Messagebox.show("Not an audio: "+media, "Error", Messagebox.OK, Messagebox.ERROR);
-		}</attribute>
-	</button>
+	<button label="audio 321" onClick='audio.src = "am_md321.mid"'/>
+	<button label="audio 322" onClick='audio.src = "am_md322.mid"'/>
+	<separator/>
 	<button label="Play" onClick="audio.play()"/>
 	<button label="Stop" onClick="audio.stop()"/>
 </window>
