@@ -613,14 +613,14 @@ zDom = { //static methods
 			document.body.appendChild(tsd);
 		}
 
-		for (var ss = zk.TEXT_STYLES, j = ss.length; --j >= 0;)
+		for (var ss = zDom._TEXT_STYLES, j = ss.length; --j >= 0;)
 			tsd.style[ss[j]] = Element.getStyle(el, ss[j]);
 
 		tsd.innerHTML = txt;
 		return [tsd.offsetWidth, tsd.offsetHeight];
 	},
 	//refer to http://www.w3schools.com/css/css_text.asp
-	TEXT_STYLES: [
+	_TEXT_STYLES: [
 		'fontFamily', 'fontSize', 'fontWeight', 'fontStyle',
 		'letterSpacing', 'lineHeight', 'textAlign', 'textDecoration',
 		'textIndent', 'textShadow', 'textTransform', 'textOverflow',
