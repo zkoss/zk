@@ -84,7 +84,7 @@ while (@ARGV > 0 ) {
     }
     case /^-[Cc]$\|^--[Cc]ategory$/ {
       shift @ARGV;
-      $pattern="^@ARGV[0]";      
+      $pattern=".@ARGV[0].";      
     }
     case /^-[iI]$\|^--[iI]d$/ {
       shift @ARGV;
