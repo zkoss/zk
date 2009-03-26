@@ -614,7 +614,7 @@ zDom = { //static methods
 		}
 
 		for (var ss = zDom._TEXT_STYLES, j = ss.length; --j >= 0;)
-			tsd.style[ss[j]] = Element.getStyle(el, ss[j]);
+			tsd.style[ss[j]] = zDom.getStyle(el, ss[j]);
 
 		tsd.innerHTML = txt;
 		return [tsd.offsetWidth, tsd.offsetHeight];
