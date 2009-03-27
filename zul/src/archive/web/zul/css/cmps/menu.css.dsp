@@ -171,6 +171,8 @@
 	padding:2px;
 	z-index:88000;
 	background-image : url(${c:encodeURL('~./zul/img/menu/pp-bg.png')});
+	left: 0;
+	top: 0;
 }
 <%-- define menupopup property--%>
 .z-menu-popup {

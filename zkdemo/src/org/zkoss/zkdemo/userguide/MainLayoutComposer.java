@@ -39,7 +39,7 @@ import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.util.ComposerExt;
 import org.zkoss.zk.ui.util.GenericForwardComposer;
-import org.zkoss.zkex.zul.Borderlayout;
+import org.zkoss.zul.Borderlayout;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Include;
 import org.zkoss.zul.ListModel;
