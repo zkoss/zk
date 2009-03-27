@@ -899,7 +899,7 @@ zDom = { //static methods
 			n.innerHTML = zDom._removeOuter(html);
 		} else { //non-IE
 			var range = n.ownerDocument.createRange();
-			range.selectNodeContents(n);
+			range.setStartBefore(n);
 			parent.replaceChild(range.createContextualFragment(html), n);
 		}
 
