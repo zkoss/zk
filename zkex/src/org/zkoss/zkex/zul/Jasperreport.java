@@ -87,7 +87,7 @@ public class Jasperreport extends Iframe implements org.zkoss.zkex.zul.api.Jaspe
 	private static final String TASK_ODT = "odt";
 	private static final String IMAGE_DIR = "img/";
 
-	private String _src;
+	private String _source;
 	private Map _parameters;
 	private JRDataSource _datasource;
 	private int _medver;
@@ -98,9 +98,9 @@ public class Jasperreport extends Iframe implements org.zkoss.zkex.zul.api.Jaspe
 	 */
 	private transient Map _imageMap;
 	/** The result is cached since the browser might send the request
-	 * multiple times (such as parent's invalidated or setVParent at client).
+	 * multiple times.
 	 */
-	private transient Media _media;
+	private transient Media _report;
 
 	public Jasperreport() {
 		setHeight("100%");
@@ -108,50 +108,54 @@ public class Jasperreport extends Iframe implements org.zkoss.zkex.zul.api.Jaspe
 	}
 
 	public Jasperreport(String src) {
-		setSrc(src);
+		setSource(src);
+	}
+
+	/** @deprecated As of release 5.0.0, replaced with {@link #getSource}.
+	 * (confused with {@link Iframe#getSrc}.
+	 */
+	public String getSrc() {
+		return getSource();
+	}
+	/** @deprecated As of release 5.0.0, replaced with {@link #setSource}.
+	 * (confused with {@link Iframe#setSrc}.
+	 */
+	public void setSrc(String src) {
+		setSource(src);
 	}
 
 	/**
 	 * Returns the source (jasper file).
 	 * 
 	 * @return src The compiled file (jasper file).
+	 * @since 5.0.0
 	 */
-	public String getSrc() {
-		return _src;
+	public String getSource() {
+		return _source;
 	}
-
 	/**
 	 * Sets the source (jasper file).
 	 * <p>
-	 * If src is changed, the whole component is invalidate.
+	 * If src is changed, the whole component is redrawn.
 	 * 
 	 * @param src
 	 *            The compiled file (jasper file). If null or empty, nothing is
 	 *            included.
+	 * @since 5.0.0
 	 */
-	public void setSrc(String src) {
+	public void setSource(String src) {
 		if (src != null && src.length() == 0)
 			src = null;
-		if (!Objects.equals(_src, src)) {
-			_src = src;
-			invalidate();
+		if (!Objects.equals(_source, src)) {
+			_source = src;
+			updateContent();
 		}
 	}
 	
 	public void setContent(Media media) {
 		throw new UnsupportedOperationException("readonly");
 	}
-	
-	protected String getEncodedSrc() {
-		if (_src == null) {
-			final Desktop dt = getDesktop();
-			return 	dt != null ? dt.getExecution().encodeURL("~./img/spacer.gif"):  "";
-		} else {
-			StringTokenizer st = new StringTokenizer(_src, ".");
-			return Utils.getDynamicMediaURI(this, _medver++, st.nextToken(),
-						_type.equals("jxl") ? "xls": _type);
-		}
-	}
+
 	/**
 	 * Returns the JasperReports Parameters.
 	 * <p>Default: null.
@@ -169,7 +173,7 @@ public class Jasperreport extends Iframe implements org.zkoss.zkex.zul.api.Jaspe
 	public void setParameters(Map parameters) {
 		if (!Objects.equals(_parameters, parameters)) {
 			_parameters = parameters;
-			invalidate();
+			updateContent();
 		}
 	}
 
@@ -190,7 +194,7 @@ public class Jasperreport extends Iframe implements org.zkoss.zkex.zul.api.Jaspe
 	public void setDatasource(JRDataSource dataSource) {
 		if (!Objects.equals(_datasource, dataSource)) {
 			_datasource = dataSource;
-			invalidate();
+			updateContent();
 		}
 	}
 
@@ -228,7 +232,7 @@ public class Jasperreport extends Iframe implements org.zkoss.zkex.zul.api.Jaspe
 		if (type == null) type = "pdf";
 		if (!Objects.equals(_type, type)) {
 			_type = type;
-			invalidate();
+			updateContent();
 		}
 	}
 
@@ -272,14 +276,25 @@ public class Jasperreport extends Iframe implements org.zkoss.zkex.zul.api.Jaspe
 	public void setLocale(Locale locale) {
 		if (!Objects.equals(_locale, locale)) {
 			_locale = locale;
-			invalidate();
+			updateContent();
 		}
 	}
 
-	//Component//
-	public void invalidate() {
-		_media = null; //re-gen
-		super.invalidate();
+	private void updateContent() {
+		_report = null; //so doReport will redo
+		smartUpdate("src", new EncodedSrc()); //Bug 1850895
+	}
+
+	//super
+	protected String getEncodedSrc() {
+		if (_source == null) {
+			final Desktop dt = getDesktop();
+			return 	dt != null ? dt.getExecution().encodeURL("~./img/spacer.gif"):  "";
+		} else {
+			StringTokenizer st = new StringTokenizer(_source, ".");
+			return Utils.getDynamicMediaURI(this, _medver++, st.nextToken(),
+						_type.equals("jxl") ? "xls": _type);
+		}
 	}
 
 	// -- ComponentCtrl --//
@@ -319,23 +334,22 @@ public class Jasperreport extends Iframe implements org.zkoss.zkex.zul.api.Jaspe
 	 * @return A AMedia contains report's byte stream.
 	 */
 	private Media doReport() {
-		if (_media != null)
-			return _media;
+		if (_report != null)
+			return _report;
 
 		InputStream is = null;
 		try {
 			// get template file
 			final Execution exec = Executions.getCurrent();
 			is = exec.getDesktop().getWebApp()
-					.getResourceAsStream(exec.toAbsoluteURI(_src, false));
+					.getResourceAsStream(exec.toAbsoluteURI(_source, false));
 			if (is == null) {// try to load by class loader
 				is = Thread.currentThread().getContextClassLoader()
-						.getResourceAsStream(_src);
+						.getResourceAsStream(_source);
 				if (is == null) {// try to load by file
-					File fl = new File(_src);
+					File fl = new File(_source);
 					if (!fl.exists())
-						throw new RuntimeException("resource for " + _src
-								+ " not found.");
+						throw new RuntimeException("resource for " + _source + " not found.");
 
 					is = new FileInputStream(fl);
 				}
@@ -378,7 +392,7 @@ public class Jasperreport extends Iframe implements org.zkoss.zkex.zul.api.Jaspe
 				arrayOutputStream.close();
 
 				_imageMap = (Map)exporter.getParameter(JRHtmlExporterParameter.IMAGES_MAP);
-				return _media = new AMedia("report.pdf", "pdf", "application/pdf",
+				return _report = new AMedia("report.pdf", "pdf", "application/pdf",
 						arrayOutputStream.toByteArray());
 				
 			} else if (TASK_XML.equals(_type)) {
@@ -395,7 +409,7 @@ public class Jasperreport extends Iframe implements org.zkoss.zkex.zul.api.Jaspe
 				arrayOutputStream.close();
 
 				_imageMap = (Map)exporter.getParameter(JRHtmlExporterParameter.IMAGES_MAP);
-				return _media = new AMedia("report.xml", "xml", "text/xml", arrayOutputStream.toByteArray());
+				return _report = new AMedia("report.xml", "xml", "text/xml", arrayOutputStream.toByteArray());
 				
 			} else if (TASK_HTML.equals(_type)) {
 				
@@ -415,7 +429,7 @@ public class Jasperreport extends Iframe implements org.zkoss.zkex.zul.api.Jaspe
 				arrayOutputStream.close();
 
 				_imageMap = (Map)exporter.getParameter(JRHtmlExporterParameter.IMAGES_MAP);
-				return _media = new AMedia("report.html", "html", "text/html",
+				return _report = new AMedia("report.html", "html", "text/html",
 						arrayOutputStream.toByteArray());
 
 			} else if (TASK_RTF.equals(_type)) {
@@ -432,7 +446,7 @@ public class Jasperreport extends Iframe implements org.zkoss.zkex.zul.api.Jaspe
 				arrayOutputStream.close();
 
 				_imageMap = (Map)exporter.getParameter(JRHtmlExporterParameter.IMAGES_MAP);
-				return _media = new AMedia("report.rtf", "rtf", "application/rtf",
+				return _report = new AMedia("report.rtf", "rtf", "application/rtf",
 						arrayOutputStream.toByteArray());
 
 			} else if (TASK_XLS.equals(_type)) {
@@ -450,7 +464,7 @@ public class Jasperreport extends Iframe implements org.zkoss.zkex.zul.api.Jaspe
 				arrayOutputStream.close();
 
 				_imageMap = (Map)exporter.getParameter(JRHtmlExporterParameter.IMAGES_MAP);
-				return _media = new AMedia("report.xls", "xls",
+				return _report = new AMedia("report.xls", "xls",
 						"application/vnd.ms-excel", arrayOutputStream.toByteArray());
 
 			} else if (TASK_JXL.equals(_type)) {
@@ -468,7 +482,7 @@ public class Jasperreport extends Iframe implements org.zkoss.zkex.zul.api.Jaspe
 				arrayOutputStream.close();
 
 				_imageMap = (Map)exporter.getParameter(JRHtmlExporterParameter.IMAGES_MAP);
-				return _media = new AMedia("report.xls", "xls",
+				return _report = new AMedia("report.xls", "xls",
 						"application/vnd.ms-excel", arrayOutputStream.toByteArray());
 				
 			} else if (TASK_CSV.equals(_type)) {
@@ -485,7 +499,7 @@ public class Jasperreport extends Iframe implements org.zkoss.zkex.zul.api.Jaspe
 				arrayOutputStream.close();
 
 				_imageMap = (Map)exporter.getParameter(JRHtmlExporterParameter.IMAGES_MAP);
-				return _media = new AMedia("report.csv", "csv", "text/csv", arrayOutputStream.toByteArray());
+				return _report = new AMedia("report.csv", "csv", "text/csv", arrayOutputStream.toByteArray());
 				
 			} else if (TASK_ODT.equals(_type)) {
 
@@ -501,7 +515,7 @@ public class Jasperreport extends Iframe implements org.zkoss.zkex.zul.api.Jaspe
 				arrayOutputStream.close();
 
 				_imageMap = (Map)exporter.getParameter(JRHtmlExporterParameter.IMAGES_MAP);
-				return _media = new AMedia("report.odt", "odt",
+				return _report = new AMedia("report.odt", "odt",
 						"application/vnd.oasis.opendocument.text", arrayOutputStream.toByteArray());
 
 			} else {
@@ -536,5 +550,11 @@ public class Jasperreport extends Iframe implements org.zkoss.zkex.zul.api.Jaspe
 
 		byte[] imageBytes = (byte[])_imageMap.get(imageName);
 		return new AMedia(imageName, "", "image/gif", imageBytes);
+	}
+
+	private class EncodedSrc implements org.zkoss.zk.ui.util.DeferredValue {
+		public Object getValue() {
+			return getEncodedSrc();
+		}
 	}
 }

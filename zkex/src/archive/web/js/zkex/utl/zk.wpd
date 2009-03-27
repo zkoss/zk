@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- zk.wpd
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Mar 27 15:41:31     2009, Created by tomyeh
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+-->
+
+<package name="zkex.utl" language="xul/html">
+	<widget name="Jasperreport" depends="zul.utl"/>
+</package>

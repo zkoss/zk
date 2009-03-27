@@ -78,6 +78,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>fisheye</component-name>
 		<component-class>org.zkoss.zkex.zul.Fisheye</component-class>
+		<widget-class>zkex.utl.Fisheye</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>~./zkex/zul/html/fisheye.dsp</mold-uri>
@@ -86,6 +87,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>fisheyebar</component-name>
 		<component-class>org.zkoss.zkex.zul.Fisheyebar</component-class>
+		<widget-class>zkex.utl.Fisheyebar</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>~./zkex/zul/html/fisheyebar.dsp</mold-uri>
@@ -110,9 +112,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>jasperreport</component-name>
 		<component-class>org.zkoss.zkex.zul.Jasperreport</component-class>
+		<widget-class>zkex.utl.Jasperreport</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zkex/zul/html/jasperreport.dsp</mold-uri>
+			<mold-uri>mold/jasperreport.js</mold-uri>
 		</mold>
 	</component>
 	<component>
