@@ -21,10 +21,10 @@ zPkg = {
 			zPkg._lded[pkg] = true;
 			//specified in lang.xml (or in HTML directly)
 
-		var al2 = zPkg._afld2[pkg];
-		if (al2) {
-			delete zPkg._afld2[pkg];
-			for (var fn, aflds = zPkg._aflds; fn = al2.pop();)
+		var afpg = zPkg._afpglds[pkg];
+		if (afpg) {
+			delete zPkg._afpglds[pkg];
+			for (var fn, aflds = zPkg._aflds; fn = afpg.pop();)
 				aflds.unshift(fn);
 		}
 
@@ -35,17 +35,21 @@ zPkg = {
 			} catch (ex) {
 			}
 
-			for (var fn, aflds = zPkg._aflds; fn = aflds.shift();)
+			for (var fn, aflds = zPkg._aflds; fn = aflds.shift();) {
 				fn();
+				if (zPkg._updCnt()) break; //some loading
+			}
 		}
 	},
 	isLoaded: function (pkg) {
 		return zPkg._lded[pkg];
 	},
-	load: function (pkg, dt) {
+	load: function (pkg, dt, func) {
 		var pkglds = zPkg._lded;
 		if (!pkg || pkglds[pkg]) return !zPkg.loading;
 			//since pkg might be loading (-> return false)
+
+		if (func) zk.afterLoad(pkg, func);
 
 		pkglds[pkg] = true;
 
@@ -84,7 +88,7 @@ zPkg = {
 	_lded: {'zk': true}, //loaded
 	_lding: [], //loading
 	_aflds: [],
-	_afld2: {},
+	_afpglds: {},
 	_deps: {},
 
 	_ldmsg: function () {
@@ -136,9 +140,9 @@ zk.afterLoad = function (a, b) { //part of zk
 		if (!b) return;
 		if (zPkg._lded[a]) a = b;
 		else {
-			var al2 = zPkg._afld2;
-			if (al2[a]) al2[a].push(b);
-			else al2[a] = [b];
+			var afpg = zPkg._afpglds;
+			if (afpg[a]) afpg[a].push(b);
+			else afpg[a] = [b];
 			return;
 		}
 	}

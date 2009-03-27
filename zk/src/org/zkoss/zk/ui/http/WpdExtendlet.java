@@ -166,6 +166,16 @@ public class WpdExtendlet implements Extendlet {
 			final Element el = (Element)it.next();
 			final String elnm = el.getName();
 			if ("widget".equals(elnm)) {
+				final String depends = el.getAttributeValue("depends");
+				final boolean bDepends = depends != null && depends.length() > 0;
+				if (bDepends) {
+					write(out, "zPkg.load('");
+					write(out, depends);
+					write(out, "',null,function(){\n_z='");
+					write(out, name);
+					write(out, "';_zkpk=zk.$package(_z);");
+				}
+
 				final String wgtnm = IDOMs.getRequiredAttributeValue(el, "name");
 				final String jspath = wgtnm + ".js"; //eg: /js/zul/wgt/Div.js
 				if (!writeResource(out, jspath, dir, false)) {
@@ -215,12 +225,16 @@ public class WpdExtendlet implements Extendlet {
 								write(out, " not found')");
 								log.error("Failed to load mold "+mold+" for widget "+wgtflnm+". Cause: "+uri+" not found");
 							}
+							write(out, ';');
 						}
 					}
 					if (!first) write(out, "zkmld(_zkwg,_zkmd);");
 				} catch (Throwable ex) {
 					log.error("Failed to load molds for widget "+wgtflnm+".\nCause: "+Exceptions.getMessage(ex));
 				}
+
+				if (bDepends)
+					write(out, "\n});");
 			} else if ("script".equals(elnm)) {
 				String jspath = el.getAttributeValue("src");
 				if (jspath != null && jspath.length() > 0) {

@@ -318,7 +318,8 @@ zkm = {
 				uuid = wginf.uuid,
 				initOpts = {uuid: uuid},
 				v = wginf.mold;
-			if (!cls) throw 'Unknown widget: ' + wginf.type;
+			if (!cls)
+				throw 'Unknown widget: ' + wginf.type;
 			if (v) initOpts.mold = v;
 			var wgt = new cls(initOpts);
 			wgt.inServer = true;
