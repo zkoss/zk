@@ -295,8 +295,8 @@ zkMap._toofast = function () {
 			return true;
 		zkMap._stamp = now;
 	}
-	return false
-}
+	return false;
+};
 
 //popup//
 zkPop = {

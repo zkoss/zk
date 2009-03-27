@@ -20,9 +20,9 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 <c:set var="self" value="${requestScope.arg.self}"/>
 <div id="${self.uuid}" ${self.outerAttrs} z.type="zul.flash.Flash">
 <object id="${self.uuid}!obj" width="${self.width}" height="${self.height}">
-<param name="movie" value="${self.src}"></param>
+<param name="movie" value="${c:encodeURL(self.src)}"></param>
 <param name="wmode" value="transparent"></param>
-<embed id="${self.uuid}!emb" src="${self.src}" type="application/x-shockwave-flash" wmode="transparent" width="${self.width}" height="${self.height}">
+<embed id="${self.uuid}!emb" src="${c:encodeURL(self.src)}" type="application/x-shockwave-flash" wmode="transparent" width="${self.width}" height="${self.height}">
 </embed>
 </object>
 </div>

@@ -43,7 +43,7 @@ public class ImagemapDefault implements ComponentRenderer {
 		
 		wh.write("<span id=\"").write(uuid).write("\" z.type=\"zul.widget.Map\" z.cave=\"")
 			.write(uuid).write("_map\"").write(self.getOuterAttrs()).write(">");
-		wh.write("<a href=\"").write(exec.encodeURL("~./zul/html/imagemap-done.dsp"));
+		wh.write("<a href=\"").write(exec.encodeURL("~./zul/html/imagemap-done.html"));
 		wh.write("?").write(uuid).write("\" target=\"zk_hfr_\">");
 		wh.write("<img id=\"").write(self.getUuid()).write("!real\"")
 			.write(self.getInnerAttrs()).write("/></a>");

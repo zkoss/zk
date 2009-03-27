@@ -20,7 +20,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <c:set var="self" value="${requestScope.arg.self}"/>
 <span id="${self.uuid}" z.type="zul.widget.Map" z.cave="${self.uuid}_map"${self.outerAttrs}>
-<a href="${c:encodeURL('~./zul/html/imagemap-done.dsp')}?${self.uuid}" target="zk_hfr_"><img id="${self.uuid}!real"${self.innerAttrs}/></a>
+<a href="${c:encodeURL('~./zul/html/imagemap-done.html')}?${self.uuid}" target="zk_hfr_"><img id="${self.uuid}!real"${self.innerAttrs}/></a>
 <map name="${self.uuid}_map" id="${self.uuid}_map">
 	<c:forEach var="child" items="${self.children}">
 	${z:redraw(child, null)}
