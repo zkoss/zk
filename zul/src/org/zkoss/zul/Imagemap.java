@@ -36,11 +36,6 @@ import org.zkoss.zk.ui.UiException;
  * which area is clicked.</li>
  * </ol>
  *
- * <p>Note: IE 5.5/6 (not 7) has a bug that failed to render PNG with
- * alpha transparency. See http://homepage.ntlworld.com/bobosola/index.htm for details.
- * Thus, if you want to display such image, you have to use the alphafix mold.
- * <code>&lt;imagemap mold="alphafix"/&gt;</code>
- *
  * @author tomyeh
  */
 public class Imagemap extends Image implements org.zkoss.zul.api.Imagemap{
@@ -54,15 +49,5 @@ public class Imagemap extends Image implements org.zkoss.zul.api.Imagemap{
 		if (!(newChild instanceof Area))
 			throw new UiException("Unsupported child for imagemap: "+newChild);
 		return super.insertBefore(newChild, refChild);
-	}
-	public void onChildAdded(Component child) {
-		super.onChildAdded(child);
-		if (getChildren().size() == 1)
-			smartUpdate("ckchd", true); //change ismap to usemap
-	}
-	public void onChildRemoved(Component child) {
-		super.onChildRemoved(child);
-		if (getChildren().isEmpty())
-			smartUpdate("ckchd", true); //change usmap to ismap
 	}
 }

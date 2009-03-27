@@ -107,24 +107,22 @@ public class Area extends AbstractComponent implements org.zkoss.zul.api.Area {
 			tooltiptext = null;
 		if (!Objects.equals(_tooltiptext, tooltiptext)) {
 			_tooltiptext = tooltiptext;
-			smartUpdate("title", getTooltiptext());
+			smartUpdate("tooltiptext", getTooltiptext());
 		}
 	}
 
 	//-- super --//
-	public void setId(String id) {
-		final String old = getId();
-		super.setId(id);
-
-		id = getId();
-		if (!old.equals(id)) smartUpdate("z.aid", id);
-	}
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Imagemap))
 			throw new UiException("Area's parent must be imagemap, not "+parent);
 		super.setParent(parent);
 	}
-	public void redraw(java.io.Writer out) throws java.io.IOException {
-		//TODO
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		render(renderer, "coords", _coords);
+		render(renderer, "shape", _shape);
+		render(renderer, "tooltiptext", _tooltiptext);
 	}
 }

@@ -148,9 +148,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>area</component-name>
 		<component-class>org.zkoss.zul.Area</component-class>
+		<widget-class>zul.wgt.Area</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/area.dsp</mold-uri>
+			<mold-uri>mold/area.js</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -270,9 +271,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>chart</component-name>
 		<component-class>org.zkoss.zul.Chart</component-class>
+		<widget-class>zul.wgt.Chart</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/imagemap.dsp</mold-uri>
+			<mold-uri>mold/imagemap.js</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -476,13 +478,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>imagemap</component-name>
 		<component-class>org.zkoss.zul.Imagemap</component-class>
+		<widget-class>zul.wgt.Imagemap</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/imagemap.dsp</mold-uri>
+			<mold-uri>mold/imagemap.js</mold-uri>
 		</mold>
 		<mold>
 			<mold-name>alphafix</mold-name>
-			<mold-uri>~./zul/html/imagemap.dsp</mold-uri>
+			<mold-uri>mold/imagemap.js</mold-uri>
 		</mold>
 	</component>
 	<component>

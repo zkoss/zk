@@ -1316,6 +1316,18 @@ zDom = { //static methods
 	rmAttr: function (el, nm) {
 		if (el && el.removeAttribute) el.removeAttribute(nm);
 		else zDom.setAttr(el, nm, "");
+	},
+
+	/** Creates one if not found. */
+	newFrame: function (id, src, style) {
+		if (!src) src = zAu.comURI('/web/img/spacer.gif');
+			//IE with HTTPS: we must specify the src
+
+		var html = '<iframe id="'+id+'" name="'+id+'" src="'+src+'"';
+		if (style) html += ' style="'+style+'"';
+		html += '></iframe>';
+		zDom.insertHTMLBeforeEnd(document.body, html);
+		return zDom.$(id);
 	}
 };
 

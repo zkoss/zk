@@ -24,6 +24,19 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<imagemap id="img1" src="/test2/img/sun.jpg" onClick="what(event)"/>
 	Three area:
 	<button label="change" onClick="changeImage(img2)"/>
+	<button label="add two area">
+		<attribute name="onClick">
+		Area area = new Area();
+		area.setId("Fourth");
+		area.setCoords("0,50,50,100");
+		area.setTooltiptext("Fourth");
+		img2.appendChild(area);
+		area = new Area();
+		area.setId("Fifth");
+		area.setCoords("50,50,100,100");
+		img2.appendChild(area);
+		</attribute>
+	</button>
 	<imagemap id="img2" src="/test2/img/sun.jpg" onClick="what(event)">
 		<area id="First" coords="0,0,50,50" tooltiptext="First"/>
 		<area id="Second" coords="50,0,100,50"/>

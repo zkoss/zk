@@ -89,10 +89,17 @@ zul.wgt.Image = zk.$extends(zul.Widget, {
 		}
 		this.$supers('doMouseOut_', arguments);
 	},
-	domAttrs_: function(no){
-		var attr = this.$supers('domAttrs_', arguments)
-				+ ' src="' + (this._src || '') + '" z_autohide="true"',
-			v;
+	domAttrs_: function (no) {
+		var attr = this.$supers('domAttrs_', arguments);
+		if (!no || !no.content)
+			attr += this.contentAttrs_();
+		return attr;
+	},
+	/** This method is required only if IMG is placed in the inner.
+	 * And, it also has to specify {content:true} when calling [[#domAttrs_]]
+	 */
+	contentAttrs_: function () {
+		var attr = ' src="' + (this._src || '') + '"', v;
 		if (v = this._align) 
 			attr += ' align="' + v + '"';
 		if (v = this._border) 

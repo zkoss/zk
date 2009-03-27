@@ -659,7 +659,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 		if (!before)
 			for (var w = this;;) {
-				ben = w.getSubnode('cave') || w.getNode();
+				ben = w.getCaveNode_();
 				if (ben) break;
 
 				var w2 = w.nextSibling;
@@ -679,6 +679,9 @@ zk.Widget = zk.$extends(zk.Object, {
 		else
 			zDom.insertHTMLBeforeEnd(ben, child._redrawHTML());
 		child.bind_(desktop);
+	},
+	getCaveNode_: function () {
+		return this.getSubnode('cave') || this.getNode();
 	},
 	_getBeforeNode: function () {
 		for (var w = this; w; w = w.nextSibling) {

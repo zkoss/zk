@@ -41,8 +41,8 @@ zHistory = {
 	_bkIframe: zk.ie ? function (nm) {
 		//Bug 2019171: we have to create iframe frist
 		var url = zAu.comURI("/web/js/zk/html/history.html", null, true),
-			ifr = $e('zk_histy');
-		if (!ifr) ifr = zk.newFrame('zk_histy', url, "display:none");
+			ifr = zDom.$('zk_histy');
+		if (!ifr) ifr = zDom.newFrame('zk_histy', url, "display:none");
 
 		if (nm) url += '?' +encodeURIComponent(nm);
 		ifr.src = url;
