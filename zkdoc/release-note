@@ -40,6 +40,7 @@ ZK 3.6.1
   2689696: Native namespace supports zkhead
   2708855: A way to customize CometServerPush for diff device
   2675648: Server Push and number of browser windows issue
+  2713463: Audio supports the loop attribute
 
 * Bugs
   2684510: Unable to access implict objects if func defined in other namespace

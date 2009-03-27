@@ -70,14 +70,14 @@ public class ZKTestCase extends SeleneseTestCase {
 	}
 
 	public void setUp() {
-		getServer().start();
+		getBrowser().start();
 	}
 
 	public void tearDown() {
-		getServer().stop();
+		getBrowser().stop();
 	}
 
-	protected Selenium getServer() {
+	protected Selenium getBrowser() {
 		return _server;
 	}
 

@@ -154,6 +154,24 @@ public class Audio extends XulElement implements org.zkoss.zul.api.Audio {
 		}
 	}
 
+	/** Returns whether to play the audio repeatedly.
+	 *
+	 * <p>Default: false;
+	 * @since 3.6.1
+	 */
+	public final boolean isLoop() {
+		return _loop;
+	}
+	/** Sets whether to play the audio repeatedly.
+	 * @since 3.6.1
+	 */
+	public final void setLoop(boolean loop) {
+		if (_loop != loop) {
+			_loop = loop;
+			smartUpdate("loop", _loop);
+		}
+	}
+
 	/** Sets the content directly.
 	 * <p>Default: null.
 	 *
