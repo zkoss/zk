@@ -378,7 +378,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	/** Returns the topmost z-index for this widget.*/
 	_topZIndex: function () {
-		var zi = 0;
+		var zi = 1; //we have to start from 1 (since IE7 considers 0 as ignore)
 		for (var fs = zk.Widget._floating, j = fs.length; --j >= 0;) {
 			var w = fs[j].widget;
 			if (w._zIndex >= zi && !zUtl.isAncestor(this, w) && w.isVisible())

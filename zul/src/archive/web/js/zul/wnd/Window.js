@@ -18,7 +18,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	_border: 'none',
 	_minheight: 100,
 	_minwidth: 200,
-	_zIndex: 0,
 
 	$init: function () {
 		this._fellows = {};
@@ -101,7 +100,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			zDom.cleanVisibility(n);
 			this.setTopmost();
 		}
-		this._syncMask();
 
 		this._mask = new zk.eff.FullMask({
 			id: this.uuid + "$mask",
