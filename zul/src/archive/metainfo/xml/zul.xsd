@@ -571,6 +571,14 @@
     <!--
     ELEMENT
     -->
+    <!-- applet -->
+	<xs:element name="applet" type="appletType" />
+	<xs:complexType name="appletType">
+		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="code" type="xs:string" use="optional" />
+		<xs:attribute name="params" type="xs:string" use="optional" />
+	</xs:complexType>
     <!-- area -->
 	<xs:element name="area" type="areaType" />
 	<xs:complexType name="areaType">
@@ -970,6 +978,7 @@
 		<xs:attribute name="src" type="xs:string" use="optional" />
 		<xs:attribute name="content" type="xs:string" use="optional" />
 	</xs:complexType>
+
     <!-- foot -->
 	<xs:element name="foot" type="footType" />
 	<xs:complexType name="footType">

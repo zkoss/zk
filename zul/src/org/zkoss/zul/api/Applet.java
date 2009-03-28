@@ -22,7 +22,7 @@ import java.util.Map;
  * @author tomyeh
  * @since 3.6.0
  */
-public interface Applet {
+public interface Applet extends org.zkoss.zul.impl.api.XulElement {
 	/** Return the code of the applet, i.e., the URI of the Java class.
 	 */
 	public String getCode();

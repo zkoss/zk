@@ -19,6 +19,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 package org.zkoss.zul.api;
 
+import org.zkoss.util.media.Media;
+
 /**
  * A generic flash component.
  * 
@@ -31,17 +33,12 @@ package org.zkoss.zul.api;
 public interface Flash extends org.zkoss.zk.ui.api.HtmlBasedComponent {
 
 	/**
-	 * Gets the background color of Flash movie
-	 * 
-	 * @return the background color of Flash movie,[ hexadecimal RGB value]
+	 * @deprecated since 3.6.1
 	 */
 	public String getBgcolor();
 
 	/**
-	 * Sets the background color of Flash movie
-	 * 
-	 * @param bgcolor
-	 *            [ hexadecimal RGB value]
+	 * @deprecated since 3.6.1
 	 */
 	public void setBgcolor(String bgcolor);
 
@@ -103,4 +100,21 @@ public interface Flash extends org.zkoss.zk.ui.api.HtmlBasedComponent {
 	 */
 	public void setSrc(String src);
 
+	/** Sets the content of the flash directly.
+	 * Default: null.
+	 *
+	 * <p>Calling this method implies setSrc(null).
+	 * In other words, the last invocation of {@link #setContent} overrides
+	 * the previous {@link #setSrc}, if any.
+	 * @param media the media representing the flash, i.e., SWF.
+	 * @see #setSrc
+	 * @since 3.6.1
+	 */
+	public void setContent(Media media);
+	/** Returns the content set by {@link #setContent}.
+	 * <p>Note: it won't fetch what is set thru by {@link #setSrc}.
+	 * It simply returns what is passed to {@link #setContent}.
+	 * @since 3.6.1
+	 */
+	public Media getContent();
 }
