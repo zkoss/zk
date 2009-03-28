@@ -572,7 +572,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	domAttrs_: function (no) {
 		var html = !no || !no.id ? ' id="' + this.uuid + '"': '';
 		if (!no || !no.domStyle) {
-			var s = this.domStyle_();
+			var s = this.domStyle_(no);
 			if (s) html += ' style="' + s + '"';
 		}
 		if (!no || !no.domclass) {
@@ -718,7 +718,8 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	getSubnode: function (name) {
 		var n = this._subnodes[name];
-		if (!n && this.desktop)	n = this._subnodes[name] = zDom.$(this.uuid, name);
+		if (!n && this.desktop)
+			n = this._subnodes[name] = zDom.$(this.uuid, name);
 		return n;
 	},
 	getNode: function () {
