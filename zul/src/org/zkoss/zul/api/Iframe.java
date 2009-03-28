@@ -32,7 +32,7 @@ import org.zkoss.util.media.Media;
  * @see Include
  * @since 3.5.2
  */
-public interface Iframe extends org.zkoss.zul.impl.api.XulElement {
+public interface Iframe extends org.zkoss.zk.ui.api.HtmlBasedComponent {
 	/**
 	 * Define scroll bars
 	 * 

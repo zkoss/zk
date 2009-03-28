@@ -27,6 +27,8 @@ ZK 5.0.0
     A dummy macro definition is used instead.
   + org.zkoss.zul.Style's dynamic is deprecated since it is decided
     automatically
+  + org.zkoss.zul.Applet and Iframe extends from HtmlBasedComponent
+    rather than XulElement
 
 	--------
 ZK 3.6.1
@@ -41,6 +43,7 @@ ZK 3.6.1
   2708855: A way to customize CometServerPush for diff device
   2675648: Server Push and number of browser windows issue
   2713463: Audio supports the loop attribute
+  2718665: Flash supports  the dynamic content (setContent)
 
 * Bugs
   2684510: Unable to access implict objects if func defined in other namespace
@@ -55,6 +58,7 @@ ZK 3.6.1
   2673128: Impossible to select some date
   2705040: Navigating Combobox causes JS error
   2711600: Applet generates the wrong param tags
+  2716731: flash component doesn't support absolute URI
 
 	--------
 ZK 3.6.0

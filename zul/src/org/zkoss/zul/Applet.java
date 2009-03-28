@@ -29,10 +29,12 @@ import java.util.Set;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
-import org.zkoss.zk.au.out.AuInvoke;
+
+import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.ext.DynamicPropertied;
 import org.zkoss.zul.impl.XulElement;
+import org.zkoss.zk.au.out.AuInvoke;
 
 /**
  * A generic applet component.
@@ -44,7 +46,7 @@ import org.zkoss.zul.impl.XulElement;
  * @author Tomyeh
  * @since 3.6.0
  */
-public class Applet extends XulElement implements DynamicPropertied,
+public class Applet extends HtmlBasedComponent implements DynamicPropertied,
 org.zkoss.zul.api.Applet {
 	private String _code = "";
 	private final Map _params = new LinkedHashMap();

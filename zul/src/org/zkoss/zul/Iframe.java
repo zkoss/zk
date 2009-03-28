@@ -24,6 +24,7 @@ import org.zkoss.util.media.Media;
 import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.URIEvent;
@@ -41,7 +42,7 @@ import org.zkoss.zul.impl.Utils;
  * @author tomyeh
  * @see Include
  */
-public class Iframe extends XulElement implements org.zkoss.zul.api.Iframe {
+public class Iframe extends HtmlBasedComponent implements org.zkoss.zul.api.Iframe {
 	private String _align, _name;
 	private String _src, _scrolling = "auto";
 	/** The media. _src and _media cannot be nonnull at the same time. */
@@ -94,9 +95,6 @@ public class Iframe extends XulElement implements org.zkoss.zul.api.Iframe {
 	 * center.
 	 */
 	public void setAlign(String align) {
-		if (align != null && align.length() == 0)
-			align = null;
-
 		if (!Objects.equals(_align, align)) {
 			_align = align;
 			smartUpdate("align", _align);
@@ -111,9 +109,6 @@ public class Iframe extends XulElement implements org.zkoss.zul.api.Iframe {
 	/** Sets the frame name.
 	 */
 	public void setName(String name) {
-		if (name != null && name.length() == 0)
-			name = null;
-
 		if (!Objects.equals(_name, name)) {
 			_name = name;
 			smartUpdate("name", _name);

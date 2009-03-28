@@ -31,21 +31,6 @@ package org.zkoss.zul.api;
 public interface Flash extends org.zkoss.zk.ui.api.HtmlBasedComponent {
 
 	/**
-	 * Gets the background color of Flash movie
-	 * 
-	 * @return the background color of Flash movie,[ hexadecimal RGB value]
-	 */
-	public String getBgcolor();
-
-	/**
-	 * Sets the background color of Flash movie
-	 * 
-	 * @param bgcolor
-	 *            [ hexadecimal RGB value]
-	 */
-	public void setBgcolor(String bgcolor);
-
-	/**
 	 * Returns true if the Flash movie plays repeatly
 	 * 
 	 * @return true if the Flash movie plays repeatly
@@ -87,7 +72,7 @@ public interface Flash extends org.zkoss.zk.ui.api.HtmlBasedComponent {
 	 * @param wmode
 	 *            Possible values: window, opaque, transparent.
 	 */
-	public void setWode(String wmode);
+	public void setWmode(String wmode);
 
 	/**
 	 * Gets the source path of Flash movie
