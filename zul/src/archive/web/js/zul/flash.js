@@ -29,16 +29,16 @@ zkFlash.setAttr = function (cmp, name, value) {
 		$e(cmp.id).width = value;
 		$e(cmp.id+"!emb").width = value;
 		return true;
-	case "z:play":
+	case "play":
 		$e(cmp.id+"!emb").play = value;
 		return true;
-	case "z:loop":
+	case "loop":
 		$e(cmp.id+"!emb").loop = value;
 		return true;
-	case "z:wmode":
+	case "wmode":
 		$e(cmp.id+"!emb").wmode = value;
 		return true;
-	case "z:bgcolor":
+	case "bgcolor":
 		$e(cmp.id+"!emb").bgcolor = value;
 		return true;
 	}

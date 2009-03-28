@@ -89,9 +89,6 @@ public class Iframe extends XulElement implements org.zkoss.zul.api.Iframe {
 	 * center.
 	 */
 	public void setAlign(String align) {
-		if (align != null && align.length() == 0)
-			align = null;
-
 		if (!Objects.equals(_align, align)) {
 			_align = align;
 			smartUpdate("align", _align);
@@ -106,9 +103,6 @@ public class Iframe extends XulElement implements org.zkoss.zul.api.Iframe {
 	/** Sets the frame name.
 	 */
 	public void setName(String name) {
-		if (name != null && name.length() == 0)
-			name = null;
-
 		if (!Objects.equals(_name, name)) {
 			_name = name;
 			smartUpdate("name", _name);
