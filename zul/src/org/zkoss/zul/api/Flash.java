@@ -87,7 +87,7 @@ public interface Flash extends org.zkoss.zk.ui.api.HtmlBasedComponent {
 	 * @param wmode
 	 *            Possible values: window, opaque, transparent.
 	 */
-	public void setWode(String wmode);
+	public void setWmode(String wmode);
 
 	/**
 	 * Gets the source path of Flash movie
