@@ -618,7 +618,7 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	}
 	/** Processes an AU request.
 	 *
-	 * <p>Default: in addition to what are handled by {@link XulElement#process},
+	 * <p>Default: in addition to what are handled by {@link XulElement#service},
 	 * it also handles onChange, onChanging and onError.
 	 * @since 5.0.0
 	 */

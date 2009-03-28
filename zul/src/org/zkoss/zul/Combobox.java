@@ -637,7 +637,7 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 	//-- ComponentCtrl --//
 	/** Processes an AU request.
 	 *
-	 * <p>Default: in addition to what are handled by {@link Textbox#process},
+	 * <p>Default: in addition to what are handled by {@link Textbox#service},
 	 * it also handles onOpen and onSelect.
 	 * @since 5.0.0
 	 */

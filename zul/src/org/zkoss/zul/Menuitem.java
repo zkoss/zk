@@ -227,7 +227,7 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zul.api.Men
 	//-- ComponentCtrl --//
 	/** Processes an AU request.
 	 *
-	 * <p>Default: in addition to what are handled by {@link LabelImageElement#process},
+	 * <p>Default: in addition to what are handled by {@link LabelImageElement#service},
 	 * it also handles onCheck.
 	 * @since 5.0.0
 	 */

@@ -63,7 +63,7 @@ abstract public class HeadersElement extends XulElement implements org.zkoss.zul
 	//-- ComponentCtrl --//
 	/** Processes an AU request.
 	 *
-	 * <p>Default: in addition to what are handled by {@link XulElement#process},
+	 * <p>Default: in addition to what are handled by {@link XulElement#service},
 	 * it also handles onColSize.
 	 * @since 5.0.0
 	 */

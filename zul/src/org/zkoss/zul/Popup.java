@@ -151,7 +151,7 @@ public class Popup extends XulElement implements org.zkoss.zul.api.Popup {
 	//-- ComponentCtrl --//
 	/** Processes an AU request.
 	 *
-	 * <p>Default: in addition to what are handled by {@link XulElement#process},
+	 * <p>Default: in addition to what are handled by {@link XulElement#service},
 	 * it also handles onOpen.
 	 * @since 5.0.0
 	 */

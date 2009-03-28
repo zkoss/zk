@@ -2530,7 +2530,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 	//-- ComponentCtrl --//
 	/** Processes an AU request.
 	 *
-	 * <p>Default: in addition to what are handled by {@link XulElement#process},
+	 * <p>Default: in addition to what are handled by {@link XulElement#service},
 	 * it also handles onSelect.
 	 * @since 5.0.0
 	 */

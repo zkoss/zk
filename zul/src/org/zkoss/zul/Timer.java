@@ -124,7 +124,7 @@ public class Timer extends HtmlBasedComponent implements org.zkoss.zul.api.Timer
 	//-- ComponentCtrl --//
 	/** Processes an AU request.
 	 *
-	 * <p>Default: in addition to what are handled by {@link HtmlBasedComponent#process},
+	 * <p>Default: in addition to what are handled by {@link HtmlBasedComponent#service},
 	 * it also handles onOpen.
 	 * @since 5.0.0
 	 */

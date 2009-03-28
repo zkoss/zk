@@ -246,7 +246,7 @@ public class Tab extends LabelImageElement implements org.zkoss.zul.api.Tab {
 	// -- ComponentCtrl --//
 	/** Processes an AU request.
 	 *
-	 * <p>Default: in addition to what are handled by {@link LabelImageElement#process},
+	 * <p>Default: in addition to what are handled by {@link LabelImageElement#service},
 	 * it also handles onSelect.
 	 * @since 5.0.0
 	 */

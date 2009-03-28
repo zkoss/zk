@@ -159,7 +159,7 @@ public class Fileupload extends HtmlBasedComponent implements org.zkoss.zul.api.
 	//-- ComponentCtrl --//
 	/** Processes an AU request.
 	 *
-	 * <p>Default: in addition to what are handled by {@link HtmlBasedComponent#process},
+	 * <p>Default: in addition to what are handled by {@link HtmlBasedComponent#service},
 	 * it also handles updateResult.
 	 * @since 5.0.0
 	 */
