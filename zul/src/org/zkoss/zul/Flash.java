@@ -113,7 +113,7 @@ public class Flash extends HtmlBasedComponent implements org.zkoss.zul.api.Flash
 	 * for transparency, layering, and positioning in the browser.
 	 * @param wmode Possible values: window, opaque, transparent.
 	 */
-	public void setWode(String wmode) {
+	public void setWmode(String wmode) {
 		if(!Objects.equals(_wmode, wmode)){
 			_wmode = wmode;
 			smartUpdate("wmode", wmode);
