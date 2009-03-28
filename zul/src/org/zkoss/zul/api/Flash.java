@@ -33,18 +33,22 @@ import org.zkoss.util.media.Media;
 public interface Flash extends org.zkoss.zk.ui.api.HtmlBasedComponent {
 
 	/**
-	 * @deprecated since 3.6.1
+	 * Gets the background color of Flash movie
+	 * <p>Default: null.
+	 * @return the background color of Flash movie,[ hexadecimal RGB value]
 	 */
 	public String getBgcolor();
-
 	/**
-	 * @deprecated since 3.6.1
+	 * Sets the background color of Flash movie
+	 * 
+	 * @param bgcolor
+	 *            [ hexadecimal RGB value]
 	 */
 	public void setBgcolor(String bgcolor);
 
 	/**
 	 * Returns true if the Flash movie plays repeatly
-	 * 
+	 * <p>Default: false.
 	 * @return true if the Flash movie plays repeatly
 	 */
 	public boolean isLoop();
@@ -56,23 +60,30 @@ public interface Flash extends org.zkoss.zk.ui.api.HtmlBasedComponent {
 	 */
 	public void setLoop(boolean loop);
 
-	/**
-	 * Return true if the Flash movie starts playing automatically
-	 * 
-	 * @return true if the Flash movie starts playing automatically
+	/** @deprecated As of release 3.6.1, use {@link #isAutoplay} instead.
 	 */
 	public boolean isAutoPlay();
-
-	/**
-	 * Sets wether the song Flash movie playing automatically
-	 * 
-	 * @param play
+	/** @deprecated As of release 3.6.1, use {@link #setAutoplay} instead.
 	 */
-	public void setAutoPlay(boolean play);
+	public void setAutoPlay(boolean autoplay);
+	/**
+	 * Return true if the Flash movie starts playing automatically
+	 * <p>Default: true.s
+	 * @return true if the Flash movie starts playing automatically
+	 * @since 3.6.1
+	 */
+	public boolean isAutoplay();
+	/**
+	 * Sets wether to play the Flash movie automatically.
+	 * 
+	 * @param autoplay whether to play the Flash movie automatically.
+	 * @since 3.6.1
+	 */
+	public void setAutoplay(boolean autoplay);
 
 	/**
 	 * Returns the Window mode property of the Flash movie
-	 * 
+	 * <p>Default: "transparent".
 	 * @return the Window mode property of the Flash movie
 	 */
 	public String getWmode();

@@ -972,8 +972,9 @@
 	<xs:complexType name="flashType">
 		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
+		<xs:attribute name="bgcolor" type="xs:string" use="optional" />
 		<xs:attribute name="loop" type="booleanType" use="optional" />
-		<xs:attribute name="autoPlay" type="booleanType" use="optional" />
+		<xs:attribute name="autoplay" type="booleanType" use="optional" />
 		<xs:attribute name="wmode" type="flashWmodeAttrType" use="optional" />
 		<xs:attribute name="src" type="xs:string" use="optional" />
 		<xs:attribute name="content" type="xs:string" use="optional" />

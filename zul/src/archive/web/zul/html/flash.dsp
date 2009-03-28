@@ -23,7 +23,12 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 <object id="${self.uuid}!obj" width="${self.width}" height="${self.height}">
 <param name="movie" value="${encsrc}"></param>
 <param name="wmode" value="${self.wmode}"></param>
-<embed id="${self.uuid}!emb" src="${encsrc}" type="application/x-shockwave-flash" wmode="${self.wmode}" width="${self.width}" height="${self.height}">
+<param name="autoplay" value="${self.autoPlay}"></param>
+<param name="loop" value="${self.loop}"></param>
+<c:if test="${!empty self.bgcolor}">
+<param name="bgcolor" value="${self.bgcolor}"></param>
+</c:if>
+<embed id="${self.uuid}!emb" src="${encsrc}" type="application/x-shockwave-flash" wmode="${self.wmode}" autoplay="${self.autoplay}" loop="${self.loop}" width="${self.width}" height="${self.height}">
 </embed>
 </object>
 </div>

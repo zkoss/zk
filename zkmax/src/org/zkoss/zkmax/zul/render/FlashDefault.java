@@ -39,16 +39,28 @@ public class FlashDefault implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Flash self = (Flash) comp;
 		final String uuid = self.getUuid();
-		final String encsrc = self.getEncodedSrc();
+		final String encsrc = self.getEncodedSrc(), bgcolor = self.getBgcolor();
 		wh.write("<div id=\"").write(uuid).write("\" ");
 		wh.write(self.getOuterAttrs()).write(" z.type=\"zul.flash.Flash\">");
 		wh.write("<object id=\"").write(uuid).write("!obj\"  width=\"");
 		wh.write(self.getWidth()).write("\" height=\"").write(self.getHeight()).write("\">");
 		wh.write("<param name=\"movie\" value=\"").write(encsrc).write("\"></param>");
 		wh.write("<param name=\"wmode\" value=\"").write(self.getWmode()).write("\"></param>");
+		wh.write("<param name=\"autoplay\" value=\"").write(self.isAutoplay()).write("\"></param>");
+		wh.write("<param name=\"loop\" value=\"").write(self.isLoop()).write("\"></param>");
+
+		if (bgcolor != null && bgcolor.length() > 0)
+			wh.write("<param name=\"bgcolor\" value=\"").write(bgcolor).write("\"></param>");
+
 		wh.write("<embed id=\"").write(uuid).write("!emb\" src=\"");
-		wh.write(encsrc).write("\" type=\"application/x-shockwave-flash\" wmode=\"").write(self.getWmode()).write("\" width=\"");
-		wh.write(self.getWidth()).write("\" height=\"").write(self.getHeight()).write("\">");
+		wh.write(encsrc).write("\" type=\"application/x-shockwave-flash\" wmode=\"").write(self.getWmode())
+			.write("\" autoplay=\"").write(self.isAutoplay())
+			.write("\" loop=\"").write(self.isLoop()).write('"');
+
+		if (bgcolor != null && bgcolor.length() > 0)
+			wh.write(" bgcolor=\"").write(bgcolor).write('"');
+		
+		wh.write(" width=\"").write(self.getWidth()).write("\" height=\"").write(self.getHeight()).write("\">");
 		wh.write("</embed></object></div>");
 	}
 }

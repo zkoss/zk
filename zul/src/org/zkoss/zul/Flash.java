@@ -40,8 +40,9 @@ public class Flash extends HtmlBasedComponent implements org.zkoss.zul.api.Flash
 	private String _src;
 	private Media _media;
 	private String _wmode = "transparent";	
+	private String _bgcolor;
 	private byte _medver;
-	private boolean _autoPlay = true;
+	private boolean _autoplay = true;
 	private boolean _loop;
 
 	public Flash() {
@@ -51,19 +52,26 @@ public class Flash extends HtmlBasedComponent implements org.zkoss.zul.api.Flash
 	}
 
 	/**
-	 * @deprecated since 3.6.1
+	 * Gets the background color of Flash movie.
+	 * <p>Default: null (the system default)
+	 * @return the background color of Flash movie,[ hexadecimal RGB value] 
 	 */
 	public String getBgcolor() {
-		return "";
-	}
+		return _bgcolor;
+	}	
 	/**
-	 * @deprecated since 3.6.1
+	 * Sets the background color of Flash movie.
+	 * @param bgcolor [ hexadecimal RGB value] 
 	 */
 	public void setBgcolor(String bgcolor) {
+		if(!Objects.equals(_bgcolor, bgcolor)){
+			_bgcolor = bgcolor;
+			smartUpdate("bgcolor",bgcolor);
+		}
 	}
 	
 	/**
-	 * Returns true if the Flash movie plays repeatly
+	 * Returns true if the Flash movie plays repeatly.
 	 * <p>Default: false
 	 * @return true if the Flash movie plays repeatly 
 	 */
@@ -80,23 +88,34 @@ public class Flash extends HtmlBasedComponent implements org.zkoss.zul.api.Flash
 			smartUpdate("loop",loop);
 		}
 	}
-	
+	/** @deprecated As of release 3.6.1, use {@link #isAutoplay} instead.
+	 */
+	public boolean isAutoPlay() {
+		return isAutoplay();
+	}
+	/** @deprecated As of release 3.6.1, use {@link #setAutoplay} instead.
+	 */
+	public void setAutoPlay(boolean autoplay) {
+		setAutoplay(autoplay);
+	}
 	/**
 	 * Return true if the Flash movie starts playing automatically
 	 * <p>Default: true
 	 * @return true if the Flash movie starts playing automatically
+	 * @since 3.6.1
 	 */
-	public boolean isAutoPlay() {
-		return _autoPlay;
+	public boolean isAutoplay() {
+		return _autoplay;
 	}
 	/**
-	 * Sets wether the song Flash movie playing automatically
-	 * @param play
+	 * Sets wether to play the Flash movie automatically.
+	 * @param autoplay whether to play the Flash movie automatically
+	 * @since 3.6.1
 	 */
-	public void setAutoPlay(boolean play){
-		if(_autoPlay != play){
-			_autoPlay = play;
-			smartUpdate("play",play);
+	public void setAutoplay(boolean autoplay){
+		if(_autoplay != autoplay){
+			_autoplay = autoplay;
+			smartUpdate("play", autoplay);
 		}
 	}
 	
