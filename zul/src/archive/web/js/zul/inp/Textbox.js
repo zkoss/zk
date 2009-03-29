@@ -50,8 +50,8 @@ zul.inp.Textbox = zk.$extends(zul.inp.InputWidget, {
 	},
 
 	//super//
-	innerAttrs_: function () {
-		var html = this.$supers('innerAttrs_', arguments);
+	textAttrs_: function () {
+		var html = this.$supers('textAttrs_', arguments);
 		if (this._multiline)
 			html += ' rows="' + this._rows + '"';
 		return html;

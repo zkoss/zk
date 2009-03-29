@@ -309,18 +309,20 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>combobox</component-name>
 		<component-class>org.zkoss.zul.Combobox</component-class>
+		<widget-class>zul.inp.Combobox</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/combobox2.dsp</mold-uri>
+			<mold-uri>mold/combobox.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>comboitem</component-name>
 		<component-class>org.zkoss.zul.Comboitem</component-class>
+		<widget-class>zul.inp.Comboitem</widget-class>
 		<text-as>content</text-as><!-- treat text within the element as the content property -->
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/comboitem.dsp</mold-uri>
+			<mold-uri>mold/comboitem.js</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -586,9 +588,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>longbox</component-name>
 		<component-class>org.zkoss.zul.Longbox</component-class>
+		<widget-class>zul.inp.Longbox</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/longbox.dsp</mold-uri>
+			<mold-uri>mold/input.js</mold-uri>
 		</mold>
 	</component>
 	<component>

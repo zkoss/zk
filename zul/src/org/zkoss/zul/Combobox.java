@@ -341,7 +341,7 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 	public void setAutodrop(boolean autodrop) {
 		if (_autodrop != autodrop) {
 			_autodrop = autodrop;
-			smartUpdate("z.adr", autodrop);
+			smartUpdate("autodrop", autodrop);
 		}
 	}
 	/** Returns whether to automatically complete this text box
@@ -368,7 +368,7 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 	public void setAutocomplete(boolean autocomplete) {
 		if (_autocomplete != autocomplete) {
 			_autocomplete = autocomplete;
-			smartUpdate("z.aco", autocomplete);
+			smartUpdate("autocomplete", autocomplete);
 		}
 	}
 
@@ -411,7 +411,7 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 	public void setButtonVisible(boolean visible) {
 		if (_btnVisible != visible) {
 			_btnVisible = visible;
-			smartUpdate("z.btnVisi", visible);
+			smartUpdate("buttonVisible", visible);
 		}
 	}
 

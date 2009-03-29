@@ -20,25 +20,26 @@
 	border: 1px solid #DD7870;
 }
 
-.z-combobox .z-combobox-img {
+.z-combobox-btn {
 	background-color : transparent;
 	background-image : url(${c:encodeURL('~./zul/img/button/combobtn.gif')});
 	background-position : 0 0;
 	background-repeat : no-repeat;
 	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0;
 	border-bottom: 1px solid #7F9DB9;
+	display:-moz-inline-box; display:inline-block;
 }
-.z-combobox-btn-over .z-combobox-img {
+.z-combobox-btn-over.z-combobox-btn {
 	background-position: -17px 0;
 }
-.z-combobox-focus .z-combobox-img {
+.z-combobox-focus .z-combobox-btn {
 	background-position: -51px 0;
 	border-bottom: 1px solid #80B9E9;
 }
-.z-combobox-focus .z-combobox-btn-over .z-combobox-img {
+.z-combobox-focus .z-combobox-btn-over.z-combobox-btn {
 	background-position: -68px 0;
 }
-.z-combobox-focus .z-combobox-btn-clk .z-combobox-img, .z-combobox-btn-clk .z-combobox-img {
+.z-combobox-focus .z-combobox-btn-clk.z-combobox-btn, .z-combobox-btn-clk.z-combobox-btn {
 	background-position: -34px 0;
 }
 .z-combobox-pp {

@@ -117,7 +117,17 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		}
 	},
 
-	innerAttrs_: function () {
+	domAttrs_: function (no) {
+		var attr = this.$supers('domAttrs_', arguments);
+		if (!no || !no.text)
+			attr += this.textAttrs_();
+		return attr;
+	},
+	/** Attributes for the text control.
+	 * Called automatically by [[#domAttrs_]] unless {text:true}
+	 * is specified
+	 */
+	textAttrs_: function () {
 		var html = '', v;
 		if (this.isMultiline()) {
 			v = this._cols;

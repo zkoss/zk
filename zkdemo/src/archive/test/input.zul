@@ -36,6 +36,14 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	  <div id="div">
 	  no empty: <textbox id="t" constraint="no empty"/>
 	  </div>
+	  <div>
+	  combobox
+	<combobox id="combo" onChange="comboOut.value = self.value">
+		<comboitem label="Simple and Rich"/>
+		<comboitem label="Cool!"/>
+		<comboitem label="Thumbs Up!"/>
+	</combobox>
+	  </div>
 	  <separator/>
 	  <button label="toggle visibility" onClick="t.visible = !t.visible"/>
 	  <button label="close errorbox" onClick="Clients.closeErrorBox(t)"/>

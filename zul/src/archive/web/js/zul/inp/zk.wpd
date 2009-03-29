@@ -19,4 +19,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<widget name="FormatWidget"/>
 	<widget name="Intbox"/>
 	<widget name="Doublebox"/>
+	<widget name="Longbox"/>
+	<widget name="Combobox"/>
+	<widget name="Comboitem"/>
 </package>

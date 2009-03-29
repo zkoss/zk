@@ -14,8 +14,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
 	if(this.isMultiline()) 
-		out.push('<textarea', this.domAttrs_(), this.innerAttrs_(), '>',
-				this._areaText(), '</textarea>');
+		out.push('<textarea', this.domAttrs_(), '>', this._areaText(), '</textarea>');
 	else
-		out.push('<input', this.domAttrs_(), this.innerAttrs_(), '/>');
+		out.push('<input', this.domAttrs_(), '/>');
 }
