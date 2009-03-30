@@ -43,13 +43,18 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 	updateDomContent_: function () {
 		this.rerender();
 	},
+	domImage_: function () {
+		var img = this._image;
+		return img ? '<img src="' + img + '" align="absmiddle" />': '';
+	},
+	domLabel_: function () {
+		return zUtl.encodeXML(this.getLabel());
+	},
+	/** A combination of image ([[#domImage_]]) and label ([[#domLabel_]]). */
 	domContent_: function () {
-		var label = zUtl.encodeXML(this.getLabel()),
-			img = this._image;
-		if (!img) return label;
-
-		img = '<img src="' + img + '" align="absmiddle" />';
-		return label ? img + ' ' + label: img;
+		var label = this.domLabel_(),
+			img = this.domImage_();
+		return img ? label ? img + ' ' + label: img: label;
 	},
 	doMouseOver_: function () {
 		var himg = this._himg;

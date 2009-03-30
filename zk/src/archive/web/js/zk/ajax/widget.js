@@ -908,74 +908,89 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (!this.fireX(evt).stopped) {
 			var p = this.parent;
 			if (p) p.doRightClick_(evt);
-		}	
+		}
 	},
 	doMouseOver_: function (evt) {
 		if (!this.fireX(evt).stopped) {
 			var p = this.parent;
 			if (p) p.doMouseOver_(evt);
-		}	
+		}
 	},
 	doMouseOut_: function (evt) {
 		if (!this.fireX(evt).stopped) {
 			var p = this.parent;
 			if (p) p.doMouseOut_(evt);
-		}	
+		}
 	},
 	doMouseDown_: function (evt) {
 		if (!this.fireX(evt).stopped) {
 			var p = this.parent;
 			if (p) p.doMouseDown_(evt);
-		}	
+		}
 	},
 	doMouseUp_: function (evt) {
 		if (!this.fireX(evt).stopped) {
 			var p = this.parent;
 			if (p) p.doMouseUp_(evt);
-		}	
+		}
 	},
 	doMouseMove_: function (evt) {
 		if (!this.fireX(evt).stopped) {
 			var p = this.parent;
 			if (p) p.doMouseMove_(evt);
-		}	
+		}
 	},
 	doKeyDown_: function (evt) {
 		if (!this.fireX(evt).stopped) {
 			var p = this.parent;
 			if (p) p.doKeyDown_(evt);
-		}	
+		}
 	},
 	doKeyUp_: function (evt) {
 		if (!this.fireX(evt).stopped) {
 			var p = this.parent;
 			if (p) p.doKeyUp_(evt);
-		}	
+		}
 	},
 	doKeyPress_: function (evt) {
 		if (!this.fireX(evt).stopped) {
 			var p = this.parent;
 			if (p) p.doKeyPress_(evt);
-		}	
+		}
+	},
+
+	doFocus_: function (evt) {
+		if (!this.fireX(evt).stopped) {
+			var p = this.parent;
+			if (p) p.doFocus_(evt);
+		}
+	},
+	doBlur_: function (evt) {
+		if (!this.fireX(evt).stopped) {
+			var p = this.parent;
+			if (p) p.doBlur_(evt);
+		}
 	},
 
 	//DOM event handling//
-	domFocus_: function () {
-		if (!this.canActivate()) return false;
+	domFocus_: function (devt) {
+		if (this.canActivate()) {
+			zk.currentFocus = this;
+			zWatch.fire('onFloatUp', null, this); //notify all
 
-		zk.currentFocus = this;
-		zWatch.fire('onFloatUp', null, this); //notify all
-
-		if (this.isListen('onFocus'))
-			this.fire('onFocus');
-		return true;
+			var evt = new zk.Event(this, 'onFocus', null, null, devt);
+			this.doFocus_(evt);
+			if (evt.stopped) zEvt.stop(devt);
+		}
 	},
-	domBlur_: function () {
+	domBlur_: function (devt) {
 		//due to domMouseDown called, zk.currentFocus already point to the
 		//widget gaining focus
 		if (zk.currentFocus == this) zk.currentFocus = null;
-		if (this.isListen('onBlur'))
-			this.fire('onBlur');
+
+		var evt = new zk.Event(this, 'onFocus', null, null, devt);
+		this.doBlur_(evt);
+		if (evt.stopped) zEvt.stop(devt);
 	},
 	toJSON: function () {
 		return this.uuid;

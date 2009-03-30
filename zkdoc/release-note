@@ -29,7 +29,7 @@ ZK 5.0.0
     automatically
   + org.zkoss.zul.Applet and Iframe extends from HtmlBasedComponent
     rather than XulElement
-  + combobox, datebox, bandbox's CSS has been simplified
+  + The CSS of comboitem is renamed from combo-item to comboitem
 
 	--------
 ZK 3.6.1

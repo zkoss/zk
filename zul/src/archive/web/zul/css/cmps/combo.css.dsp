@@ -20,7 +20,7 @@
 	border: 1px solid #DD7870;
 }
 
-.z-combobox-btn {
+.z-combobox .z-combobox-img {
 	background-color : transparent;
 	background-image : url(${c:encodeURL('~./zul/img/button/combobtn.gif')});
 	background-position : 0 0;
@@ -29,17 +29,17 @@
 	border-bottom: 1px solid #7F9DB9;
 	display:-moz-inline-box; display:inline-block;
 }
-.z-combobox-btn-over.z-combobox-btn {
+.z-combobox-btn-over .z-combobox-img {
 	background-position: -17px 0;
 }
-.z-combobox-focus .z-combobox-btn {
+.z-combobox-focus .z-combobox-img {
 	background-position: -51px 0;
 	border-bottom: 1px solid #80B9E9;
 }
-.z-combobox-focus .z-combobox-btn-over.z-combobox-btn {
+.z-combobox-focus .z-combobox-btn-over .z-combobox-img {
 	background-position: -68px 0;
 }
-.z-combobox-focus .z-combobox-btn-clk.z-combobox-btn, .z-combobox-btn-clk.z-combobox-btn {
+.z-combobox-focus .z-combobox-btn-clk .z-combobox-img, .z-combobox-btn-clk .z-combobox-img {
 	background-position: -34px 0;
 }
 .z-combobox-pp {
@@ -50,26 +50,26 @@
 	font-weight: normal;
 }
 <%-- Comboitem --%>
-.z-combobox-pp .z-combo-item-text, .z-combobox-pp .z-combo-item-img {
+.z-combobox-pp .z-comboitem-text, .z-combobox-pp .z-comboitem-img {
 	white-space: nowrap; font-size: ${fontSizeS}; cursor: pointer;
 }
-.z-combobox-pp .z-combo-item-inner, .z-combobox-pp .z-combo-item-cnt {<%--description--%>
+.z-combobox-pp .z-comboitem-inner, .z-combobox-pp .z-comboitem-cnt {<%--description--%>
 	color: #888; font-size: ${fontSizeXS}; padding-left: 6px;
 }
-.z-combobox-pp .z-combo-item, .z-combobox-pp .z-combo-item a, .z-combobox-pp .z-combo-item a:visited {
+.z-combobox-pp .z-comboitem, .z-combobox-pp .z-comboitem a, .z-combobox-pp .z-comboitem a:visited {
 	font-size: ${fontSizeM}; font-weight: normal; color: black;
 	text-decoration: none;
 }
-.z-combobox-pp .z-combo-item a:hover {
+.z-combobox-pp .z-comboitem a:hover {
 	text-decoration: underline;
 }
-.z-combobox-pp .z-combo-item-seld {
+.z-combobox-pp .z-comboitem-seld {
 	background: #b3c8e8; border: 1px solid #6f97d2;
 }
-.z-combobox-pp .z-combo-item-over {
+.z-combobox-pp .z-comboitem-over {
 	background: #D3EFFA;
 }
-.z-combobox-pp .z-combo-item-over-seld {
+.z-combobox-pp .z-comboitem-over-seld {
 	background: #82D5F8;
 }
 
@@ -245,7 +245,7 @@
 .z-timebox-disd,
 .z-datebox-disd,
 .z-bandbox-disd,
-.z-combo-item-disd,
+.z-comboitem-disd,
 .z-combobox-disd {
 	opacity: .6;
 	-moz-opacity: .6;
@@ -256,7 +256,7 @@
 .z-timebox-disd, .z-timebox-disd *,
 .z-datebox-disd, .z-datebox-disd *,
 .z-bandbox-disd, .z-bandbox-disd *,
-.z-combo-item-disd, .z-combo-item-disd *,
+.z-comboitem-disd, .z-comboitem-disd *,
 .z-combobox-disd, .z-combobox-disd * {
 	cursor: default !important;
 	color: #AAA !important;
@@ -267,7 +267,7 @@
 	font-size: ${fontSizeM};
 	font-weight: normal;
 }
-.z-combo-item-readonly, .z-combo-item-text-disd,
+.z-comboitem-readonly, .z-comboitem-text-disd,
 .z-spinner-readonly, .z-spinner-text-disd,
 .z-timebox-readonly, .z-timebox-text-disd,
 .z-datebox-readonly, .z-datebox-text-disd,

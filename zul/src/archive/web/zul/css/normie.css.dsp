@@ -93,7 +93,7 @@ span.z-vfiletree-last-open, span.z-vfiletree-last-close, span.z-vfiletree-tee, s
 }
 
 <%-- combo.css.dsp --%>
-.z-combobox-pp .z-combo-item-inner {<%--description--%>
+.z-combobox-pp .z-comboitem-inner {<%--description--%>
 	padding-left: 5px;
 }
 .z-calendar-calyear td, .z-datebox-calyear td {

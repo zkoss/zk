@@ -34,7 +34,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  *
  * <p>Non-XUL extension. Refer to {@link Combobox}.
  * 
- * <p>Default {@link #getZclass}: z-combo-item. (since 3.5.0)
+ * <p>Default {@link #getZclass}: z-comboitem. (since 5.0.0)
  *
  * @author tomyeh
  * @see Combobox
@@ -43,7 +43,7 @@ public class Comboitem extends LabelImageElement implements org.zkoss.zul.api.Co
 	private String _desc = "";
 	private Object _value;
 	private String _content = "";
-	private boolean _disabled = false;
+	private boolean _disabled;
 
 	public Comboitem() {
 	}
@@ -56,32 +56,6 @@ public class Comboitem extends LabelImageElement implements org.zkoss.zul.api.Co
 		setLabel(label);
 		setImage(image);
 	}
-
-
-	// super
-	public String getZclass() {
-		return _zclass == null ? "z-combo-item" : _zclass;
-	}
-	
-	public void setLabel(String label) {
-		final String old = getLabel();
-		if (!Objects.equals(old, label)) {
-			final Combobox cb = (Combobox)getParent();
-			final boolean reIndex = cb != null && cb.getSelectedItem() == this;
-
-			super.setLabel(label);
-			
-			if (reIndex) {
-				final Constraint constr = cb.getConstraint();
-				if (constr != null && constr instanceof SimpleConstraint 
-						&& (((SimpleConstraint)constr).getFlags() & SimpleConstraint.STRICT) != 0) {
-					cb.setValue(label);
-				} else {
-					cb.reIndex();
-				}
-			}
-		}
-	}
 	
 	/**
 	 * Sets whether it is disabled.
@@ -90,7 +64,7 @@ public class Comboitem extends LabelImageElement implements org.zkoss.zul.api.Co
 	public void setDisabled(boolean disabled) {
 		if (_disabled != disabled) {
 			_disabled = disabled;
-			invalidate();
+			smartUpdate("disabled", disabled);
 		}
 	}
 	
@@ -116,7 +90,7 @@ public class Comboitem extends LabelImageElement implements org.zkoss.zul.api.Co
 		if (desc == null) desc = "";
 		if (!_desc.equals(desc)) {
 			_desc = desc;
-			invalidate();
+			smartUpdate("description", desc);
 		}
 	}
 
@@ -145,7 +119,7 @@ public class Comboitem extends LabelImageElement implements org.zkoss.zul.api.Co
 		if (content == null) content = "";
 		if (!Objects.equals(_content, content)) {
 			_content = content;
-			invalidate();
+			smartUpdate("content", content);
 		}
 	}
 
@@ -175,6 +149,37 @@ public class Comboitem extends LabelImageElement implements org.zkoss.zul.api.Co
 	}
 
 	//-- super --//
+	public String getZclass() {
+		return _zclass == null ? "z-comboitem" : _zclass;
+	}	
+	public void setLabel(String label) {
+		final String old = getLabel();
+		if (!Objects.equals(old, label)) {
+			final Combobox cb = (Combobox)getParent();
+			final boolean reIndex = cb != null && cb.getSelectedItem() == this;
+
+			super.setLabel(label);
+			
+			if (reIndex) {
+				final Constraint constr = cb.getConstraint();
+				if (constr != null && constr instanceof SimpleConstraint 
+						&& (((SimpleConstraint)constr).getFlags() & SimpleConstraint.STRICT) != 0) {
+					cb.setValue(label);
+				} else {
+					cb.reIndex();
+				}
+			}
+		}
+	}
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		render(renderer, "disabled", _disabled);
+		render(renderer, "description", _desc);
+		render(renderer, "content", _content);
+	}
+
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Combobox))
 			throw new UiException("Comboitem's parent must be Combobox");		

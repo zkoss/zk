@@ -23,10 +23,13 @@ function (out) {
 	if (!this._btnVisible)
 		out.push(' style="display:none"');
 
-	out.push('></span><div id="',
+	out.push('><span class="', zcls, '-img"></span></span><div id="',
 		uuid, '$pp" class="', zcls,
 		'-pp" style="display:none" tabindex="-1"><table id="',
 		uuid, '$cave"', zUtl.cellps0, '>');
+
+	for (var w = this.firstChild; w; w = w.nextSibling)
+		w.redraw(out);
 
 	out.push('</table></div></span>');
 }

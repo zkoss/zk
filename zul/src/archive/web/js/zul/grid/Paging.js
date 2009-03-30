@@ -172,17 +172,17 @@ zul.grid.Paging = zk.$extends(zul.Widget, {
 			$Paging = this.$class;
 			
 		for (var i = inputs.length; --i>=0;) {
-			zEvt.listen(inputs[i], "keydown", $Paging._doKeyDown);
-			zEvt.listen(inputs[i], "blur", $Paging._doBlur);
+			zEvt.listen(inputs[i], "keydown", $Paging._domKeyDown);
+			zEvt.listen(inputs[i], "blur", $Paging._domBlur);
 		}
 		
 		for (var postfix = ['first', 'prev', 'last', 'next'], k = postfix.length; --k >=0; ) {
 			var btn = zDom.$$(uuid, postfix[k]);
 			for (var j = btn.length; --j>=0;) {
-				zEvt.listen(btn[j], "mouseover", $Paging._doMouseOver);
-				zEvt.listen(btn[j], "mouseout", $Paging._doMouseOut);
-				zEvt.listen(btn[j], "mousedown", $Paging._doMouseDown);
-				zEvt.listen(btn[j], "click", $Paging['_do' + postfix[k] + 'Click']);
+				zEvt.listen(btn[j], "mouseover", $Paging._domMouseOver);
+				zEvt.listen(btn[j], "mouseout", $Paging._domMouseOut);
+				zEvt.listen(btn[j], "mousedown", $Paging._domMouseDown);
+				zEvt.listen(btn[j], "click", $Paging['_dom' + postfix[k] + 'Click']);
 				if (this._npg == 1)
 					zDom.addClass(btn[j], zcls + "-btn-disd");
 				else if (postfix[k] == 'first' || postfix[k] == 'prev') {
@@ -198,17 +198,17 @@ zul.grid.Paging = zk.$extends(zul.Widget, {
 			var uuid = this.uuid, inputs = zDom.$$(uuid, 'real'), $Paging = this.$class;
 			
 			for (var i = inputs.length; --i >= 0;) {
-				zEvt.unlisten(inputs[i], "keydown", $Paging._doKeyDown);
-				zEvt.unlisten(inputs[i], "blur", $Paging._doBlur);
+				zEvt.unlisten(inputs[i], "keydown", $Paging._domKeyDown);
+				zEvt.unlisten(inputs[i], "blur", $Paging._domBlur);
 			}
 			
 			for (var postfix = ['first', 'prev', 'last', 'next'], k = postfix.length; --k >= 0;) {
 				var btn = zDom.$$(uuid, postfix[k]);
 				for (var j = btn.length; --j >= 0;) {
-					zEvt.unlisten(btn[j], "mouseover", $Paging._doMouseOver);
-					zEvt.unlisten(btn[j], "mouseout", $Paging._doMouseOut);
-					zEvt.unlisten(btn[j], "mousedown", $Paging._doMouseDown);
-					zEvt.unlisten(btn[j], "click", $Paging['_do' + postfix[k] + 'Click']);
+					zEvt.unlisten(btn[j], "mouseover", $Paging._domMouseOver);
+					zEvt.unlisten(btn[j], "mouseout", $Paging._domMouseOut);
+					zEvt.unlisten(btn[j], "mousedown", $Paging._domMouseDown);
+					zEvt.unlisten(btn[j], "click", $Paging['_dom' + postfix[k] + 'Click']);
 				}
 			}
 		}
@@ -220,7 +220,7 @@ zul.grid.Paging = zk.$extends(zul.Widget, {
 		if (wgt && wgt.getActivePage() != pgno)
 			wgt.fire('onPaging', pgno);
 	},
-	_doKeyDown: function (evt) {
+	_domKeyDown: function (evt) {
 		if (!evt) evt = window.event;
 		var inp = zEvt.target(evt),
 			wgt = zk.Widget.$(inp);
@@ -273,7 +273,7 @@ zul.grid.Paging = zk.$extends(zul.Widget, {
 				zEvt.stop(evt);
 		}
 	},
-	_doBlur: function (evt) {
+	_domBlur: function (evt) {
 		if (!evt) evt = window.event;
 		var inp = zEvt.target(evt),
 			wgt = zk.Widget.$(inp);
@@ -291,7 +291,7 @@ zul.grid.Paging = zk.$extends(zul.Widget, {
 		else if (value > wgt._npg) value = wgt._npg;
 		inp.value = value;
 	},
-	_dofirstClick: function (evt) {
+	_domfirstClick: function (evt) {
 		if (!evt) evt = window.event;
 		var wgt = zk.Widget.$(evt),
 			zcls = wgt.getZclass();
@@ -304,7 +304,7 @@ zul.grid.Paging = zk.$extends(zul.Widget, {
 					zDom.addClass(btn[i], zcls + "-btn-disd");
 		}
 	},
-	_doprevClick: function (evt) {		
+	_domprevClick: function (evt) {		
 		if (!evt) evt = window.event;
 		var wgt = zk.Widget.$(evt),
 			ap = wgt.getActivePage(),
@@ -320,7 +320,7 @@ zul.grid.Paging = zk.$extends(zul.Widget, {
 			}
 		}
 	},
-	_donextClick: function (evt) {
+	_domnextClick: function (evt) {
 		if (!evt) evt = window.event;
 		var wgt = zk.Widget.$(evt),
 			ap = wgt.getActivePage(),
@@ -337,7 +337,7 @@ zul.grid.Paging = zk.$extends(zul.Widget, {
 			}
 		}
 	},
-	_dolastClick: function (evt) {
+	_domlastClick: function (evt) {
 		if (!evt) evt = window.event;
 		var wgt = zk.Widget.$(evt),
 			pc = wgt.getPageCount(),
@@ -352,7 +352,7 @@ zul.grid.Paging = zk.$extends(zul.Widget, {
 		}
 		
 	},
-	_doMouseOver: function (evt) {
+	_domMouseOver: function (evt) {
 		if (!evt) evt = window.event;
 		var target = zEvt.target(evt),
 			table = zDom.parentByTag(target, "TABLE"),
@@ -360,14 +360,14 @@ zul.grid.Paging = zk.$extends(zul.Widget, {
 		if (!zDom.hasClass(table, zcls + "-btn-disd")) 
 			zDom.addClass(table, zcls + "-btn-over");
 	},
-	_doMouseOut: function (evt) {
+	_domMouseOut: function (evt) {
 		if (!evt) evt = window.event;
 		var target = zEvt.target(evt),
 			table = zDom.parentByTag(target, "TABLE"),
 			wgt = zk.Widget.$(target);
 		zDom.rmClass(table, wgt.getZclass() + "-btn-over");
 	},
-	_doMouseDown: function (evt) {		
+	_domMouseDown: function (evt) {		
 		if (!evt) evt = window.event;
 		var target = zEvt.target(evt),
 			table = zDom.parentByTag(target, "TABLE"),
@@ -377,15 +377,15 @@ zul.grid.Paging = zk.$extends(zul.Widget, {
 		
 		zDom.addClass(table, zcls + "-btn-clk");
 		wgt.$class._downbtn = table;
-		zEvt.listen(document.body, "mouseup", wgt.$class._doMouseUp);
+		zEvt.listen(document.body, "mouseup", wgt.$class._domMouseUp);
 	},
-	_doMouseUp: function (evt) {
+	_domMouseUp: function (evt) {
 		if (!evt) evt = window.event;
 		if (zul.grid.Paging._downbtn) {
 			var zcls = zk.Widget.$(zul.grid.Paging._downbtn).getZclass();
 			zDom.rmClass(zul.grid.Paging._downbtn, zcls + "-btn-clk");
 		}
 		zul.grid.Paging._downbtn = null;
-		zEvt.unlisten(document.body, "mouseup", zul.grid.Paging._doMouseUp);
+		zEvt.unlisten(document.body, "mouseup", zul.grid.Paging._domMouseUp);
 	}
 });

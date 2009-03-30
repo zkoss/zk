@@ -25,7 +25,7 @@ package org.zkoss.zul.api;
  * Non-XUL extension. Refer to {@link Combobox}.
  * 
  * <p>
- * Default {@link #getZclass}: z-combo-item. (since 3.5.0)
+ * Default {@link #getZclass}: z-comboitem. (since 5.0.0)
  * 
  * @author tomyeh
  * @see Combobox

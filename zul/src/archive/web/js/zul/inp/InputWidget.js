@@ -164,29 +164,32 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	getConstraint: function () {
 		return this._cst;
 	},
-	//dom event//
-	doFocus_: function (evt) {
-		if (!zDom.tag(zEvt.target(evt)) //Bug 2111900
-		|| !this.domFocus_())
-			return;
 
-		if (this.isListen('onChanging')) {
-			this._lastChg = this.einp.value;
-			this._tidChg = setInterval(this.proxy(this._onChanging), 500);
+	doFocus_: function (evt) {
+		if (zDom.tag(evt.nativeTarget)) { //Bug 2111900
+			if (this.isListen('onChanging')) {
+				this._lastChg = this.einp.value;
+				this._tidChg = setInterval(this.proxy(this._onChanging), 500);
+			}
+			zDom.addClass(this.einp, this.getZclass() + '-focus');
 		}
-		zDom.addClass(this.einp, this.getZclass() + '-focus');
+
+		this.$supers('doFocus_', arguments);
 	},
 	doBlur_: function (evt) {
 		this._stopOnChanging();
 
 		zDom.rmClass(this.einp, this.getZclass() + '-focus');
-		this.domBlur_();
 
 		if (!zk.alerting)
 			setTimeout(this._pxLateBlur, 0);
 			//curretFocus still unknow, so wait a while to execute
+
+		this.$supers('doBlur_', arguments);
 	},
-	_doSelect: function (evt) {
+
+	//dom event//
+	_domSelect: function (devt) {
 		if (this.isListen('onSelection')) {
 			var inp = this.einp,
 				sr = zDom.getSelectionRange(inp),
@@ -360,9 +363,9 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	bind_: function () {
 		this.$supers('bind_', arguments);
 		var inp = this.einp = this.getSubnode('inp') || this.getNode();
-		zEvt.listen(inp, "focus", this.proxy(this.doFocus_, '_pxFocus'));
-		zEvt.listen(inp, "blur", this.proxy(this.doBlur_, '_pxBlur'));
-		zEvt.listen(inp, "select", this.proxy(this._doSelect, '_pxSelect'));
+		zEvt.listen(inp, "focus", this.proxy(this.domFocus_, '_pxFocus'));
+		zEvt.listen(inp, "blur", this.proxy(this.domBlur_, '_pxBlur'));
+		zEvt.listen(inp, "select", this.proxy(this._domSelect, '_pxSelect'));
 	},
 	unbind_: function () {
 		this.clearErrorMessage(true);

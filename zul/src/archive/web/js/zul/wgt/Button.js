@@ -121,7 +121,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	bind_: function () {
 		this.$supers('bind_', arguments);
 
-		var $Button = zul.wgt.Button, n;
+		var n;
 		if (this._mold == 'os') {
 			n = this.getNode();
 		} else {
@@ -132,18 +132,28 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			n = this.getSubnode('btn');
 		}
 
-		zEvt.listen(n, "focus", $Button._doFocus);
-		zEvt.listen(n, "blur", $Button._doBlur);
+		zEvt.listen(n, "focus", this.proxy(this.domFocus_, '_pxFocus'));
+		zEvt.listen(n, "blur", this.proxy(this.domBlur_, '_pxBlur'));
 	},
 	unbind_: function () {
-		var $Button = zul.wgt.Button,
-			n = this._mold == 'os' ? this.getNode(): this.getSubnode('btn');
+		var n = this._mold == 'os' ? this.getNode(): this.getSubnode('btn');
 		if (n) {
-			zEvt.unlisten(n, "focus", $Button._doFocus);
-			zEvt.unlisten(n, "blur", $Button._doBlur);
+			zEvt.unlisten(n, "focus", this._pxFocus);
+			zEvt.unlisten(n, "blur", this._pxBlur);
 		}
 
 		this.$supers('unbind_', arguments);
+	},
+
+	doFocus_: function (evt) {
+		if (this._mold != 'os')
+			zDom.addClass(this.getSubnode('box'), this.getZclass() + "-focus");
+		this.$supers('doFocus_', arguments);
+	},
+	doBlur_: function (evt) {
+		if (this._mold != 'os')
+			zDom.rmClass(this.getSubnode('box'), this.getZclass() + "-focus");
+		this.$supers('doBlur_', arguments);
 	},
 	doClick_: function (wevt) {
 		if (!this._disabled) {
@@ -182,18 +192,5 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		zDom.rmClass(box, zcls + "-clk");
 		zDom.rmClass(box, zcls + "-over");
 		this.$supers('doMouseUp_', arguments);
-	}
-},{
-	_doFocus: function (evt) {
-		var wgt = zk.Widget.$(evt);
-		if (wgt && wgt.domFocus_() //FF2 will cause a focus error when resize browser.
-		&& wgt._mold != 'os')
-			zDom.addClass(wgt.getSubnode('box'), wgt.getZclass() + "-focus");
-	},
-	_doBlur: function (evt) {
-		var wgt = zk.Widget.$(evt);
-		if (wgt._mold != 'os')
-			zDom.rmClass(wgt.getSubnode('box'), wgt.getZclass() + "-focus");
-		wgt.domBlur_();
 	}
 });

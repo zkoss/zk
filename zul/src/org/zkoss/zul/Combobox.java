@@ -566,6 +566,15 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 	public String getZclass() {
 		return _zclass == null ? "z-combobox" : _zclass;
 	}
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		render(renderer, "autodrop", _autodrop);
+		render(renderer, "autocomplete", _autocomplete);
+		if (!_btnVisible)
+			renderer.render("buttonVisible", false);
+	}
 
 	//-- Component --//
 	public boolean insertBefore(Component newChild, Component refChild) {
