@@ -332,7 +332,7 @@ zkWnd2.getTitleHeight = function (cmp) {
 		tl = zk.firstChild(cmp, "DIV"),
 		top = title ? tl.offsetHeight : 0;
 	if (!zkWnd2._embedded(cmp) && !zkWnd2._popup(cmp) && !title)
-		top += zk.nextSibling(tl, "DIV").offsetHeight;
+		top += tl.offsetHeight;//B36-2721780: Nested window resize problem
 	return title ? title.offsetHeight + top : top;
 };
 /**
