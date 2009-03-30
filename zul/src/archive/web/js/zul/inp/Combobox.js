@@ -47,8 +47,9 @@ zul.inp.Combobox = zk.$extends(zul.inp.InputWidget, {
 	//super
 	bind_: function () {
 		this.$supers('bind_', arguments);
-		this._dropb = new zul.Dropbutton(
-			this.getSubnode('btn'), this.getSubnode('real'));
+		var btn = this.getSubnode('btn'),
+			inp = this.getSubnode('real'),
+			dropb = this._dropb = new zul.Dropbutton(this, btn, inp);
 
 		zWatch.listen("onSize", this);
 		zWatch.listen("onVisible", this);
@@ -56,7 +57,10 @@ zul.inp.Combobox = zk.$extends(zul.inp.InputWidget, {
 	unbind_: function () {
 		zWatch.unlisten("onSize", this);
 		zWatch.unlisten("onVisible", this);
+
+		this._dropb.cleanup();
 		delete this._dropb;
+
 		this.$supers('unbind_', arguments);
 	},
 	doBlur_: function (evt) { //dom evt

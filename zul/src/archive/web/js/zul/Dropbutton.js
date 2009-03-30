@@ -13,10 +13,28 @@ This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 zul.Dropbutton = zk.$extends(zk.Object, {
-	$init: function (btn, ref) {
+	$init: function (wgt, btn, ref) {
+		this._wgt = wgt;
 		this._btn = btn;
 		this._ref = ref;
 		this._img = zDom.firstChild(btn, 'SPAN');
+
+		zDom.disableSelection(btn);
+		zDom.disableSelection(this._img);
+
+		zEvt.listen(btn, 'mouseover', this.proxy(this._domOver, '_pxOver'));
+		zEvt.listen(btn, 'mouseout', this.proxy(this._domOut, '_pxOut'));
+		zEvt.listen(btn, 'mousedown', this.proxy(this._domDown, '_pxDown'));
+	},
+	cleanup: function () {
+		var btn = this._btn;
+
+		zDom.enableSelection(btn);
+		zDom.enableSelection(this._img);
+
+		zEvt.unlisten(btn, 'mouseover', this._pxOver);
+		zEvt.unlisten(btn, 'mouseout', this._pxOut);
+		zEvt.unlisten(btn, 'mousedown', this._pxDown);
 	},
 	fixpos: function () {
 		var btn = this._btn;
@@ -39,6 +57,38 @@ zul.Dropbutton = zk.$extends(zk.Object, {
 			btn.style.position = "relative";
 			btn.style.top = v + "px";
 			if (zk.safari) btn.style.left = "-2px";
+		}
+	},
+	_domOver: function () {
+		var wgt = this._wgt;
+		if (!wgt.isDisabled() && !zk.dragging)
+			zDom.addClass(this._btn, wgt.getZclass() + "-btn-over");
+	},
+	_domOut: function () {
+		var wgt = this._wgt;
+		if (!wgt.isDisabled() && !zk.dragging)
+			zDom.rmClass(this._btn, wgt.getZclass() + "-btn-over");
+	},
+	_domDown: function () {
+		var wgt = this._wgt;
+		if (!wgt.isDisabled() && !zk.dragging) {
+			var $Dropbutton = zul.Dropbutton,
+				curdb = $Dropbutton._curdb;
+			if (curdb) curdb._domUp();
+
+			zDom.addClass(this._btn, wgt.getZclass() + "-btn-clk");
+			zEvt.listen(document.body, "mouseup", this.proxy(this._domUp, '_pxUp'));
+
+			$Dropbutton._curdb = this;
+		}
+	},
+	_domUp: function () {
+		var $Dropbutton = zul.Dropbutton,
+			curdb = $Dropbutton._curdb;
+		if (curdb) {
+			$Dropbutton._curdb = null;
+			zDom.rmClass(curdb._btn, curdb._wgt.getZclass() + "-btn-clk");
+			zEvt.unlisten(document.body, "mouseup", curdb._pxUp);
 		}
 	}
 });
