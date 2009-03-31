@@ -1062,12 +1062,7 @@ zk._loadAndInit = function (inf) {
 	//The algorithm here is to mimic deep-first tree traversal
 	//We cannot use recursive algorithm because it might take too much time
 	//to execute and browser will alert users for aborting!
-	for (var j = 0; inf.stk.length;) {
-		if (++j > 1000) {
-			setTimeout(function() {zk._loadAndInit(inf);}, 10);
-			return; //let browser breath
-		}
-
+	while (inf.stk.length) {
 		var n = inf.stk.pop();
 		if (n.nodeType == 1) {
 			try { 
@@ -1167,7 +1162,7 @@ zk._evalInit = function () {
 			(zk._bfinits.shift())();
 
 		//Note: if loading, zk._doLoad will execute zk._evalInit after finish
-		for (var j = 0; zk._initcmps.length && !zk.loading;) {
+		while (zk._initcmps.length && !zk.loading) {
 			var n = zk._initcmps.pop(); //reverse-order (child first)
 
 			var m = zk.eval(n, "init");
@@ -1192,11 +1187,8 @@ zk._evalInit = function () {
 				}
 			}
 
-			if (zk.loading || ++j > 1000) {
-				if (!zk.loading)
-					setTimeout(zk._evalInit, 10); //let browser breath
+			if (zk.loading)
 				return;
-			}
 		}
 
 		if (!zk.loading) {

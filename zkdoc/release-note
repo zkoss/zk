@@ -28,6 +28,7 @@ ZK 3.6.1
   2711600: Applet generates the wrong param tags
   2716731: flash component doesn't support absolute URI
   2721780: Nested window resize problem
+  2722982: Tree render proble with a combobox and a lot of comboitems
 
 	--------
 ZK 3.6.0
