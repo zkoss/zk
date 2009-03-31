@@ -360,21 +360,25 @@ zk.Widget = zk.$extends(zk.Object, {
 	onChildVisible_: function (child, visible) {
 	},
 	setTopmost: function () {
-		var n = this.getNode();
-		if (n && this._floating) {
-			var zi = this._topZIndex();
-			this._setZIndex(zi, true);
+		if (!this.desktop) return -1;
 
-			for (var fs = zk.Widget._floating, j = 0, fl = fs.length;
-			j < fl; ++j) { //parent first
-				var w = fs[j].widget;
-				if (this != w && zUtl.isAncestor(this, w) && w.isVisible()) {
-					var n = fs[j].node
-					if (n != w.getNode()) w.setFloatZIndex_(n, ++zi); //only a portion
-					else w._setZIndex(++zi, true);
+		for (wgt = this; wgt; wgt = wgt.parent)
+			if (wgt._floating) {
+				var zi = wgt._topZIndex();
+				wgt._setZIndex(zi, true);
+
+				for (var fs = zk.Widget._floating, j = 0, fl = fs.length;
+				j < fl; ++j) { //parent first
+					var w = fs[j].widget;
+					if (wgt != w && zUtl.isAncestor(wgt, w) && w.isVisible()) {
+						var n = fs[j].node
+						if (n != w.getNode()) w.setFloatZIndex_(n, ++zi); //only a portion
+						else w._setZIndex(++zi, true);
+					}
 				}
+				return zi;
 			}
-		}
+		return -1;
 	},
 	/** Returns the topmost z-index for this widget.*/
 	_topZIndex: function () {
