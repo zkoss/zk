@@ -747,12 +747,8 @@ zk.Widget = zk.$extends(zk.Object, {
 	unbind_: function (skipper) {
 		delete zk.Widget._binds[this.uuid];
 
-		this._node = null;
-
-		for (var el in this._subnodes)
-			this._subnodes[el] = null;
-		
-		this.desktop = null;
+		this._node = this.desktop = null;
+		this._subnodes = {};
 		this._nodeSolved = false;
 		this.bindLevel = -1;
 
@@ -980,7 +976,7 @@ zk.Widget = zk.$extends(zk.Object, {
 
 			var evt = new zk.Event(this, 'onFocus', null, null, devt);
 			this.doFocus_(evt);
-			if (evt.stopped) zEvt.stop(devt);
+			if (evt.domStopped) zEvt.stop(devt);
 		}
 	},
 	domBlur_: function (devt) {
@@ -990,7 +986,7 @@ zk.Widget = zk.$extends(zk.Object, {
 
 		var evt = new zk.Event(this, 'onFocus', null, null, devt);
 		this.doBlur_(evt);
-		if (evt.stopped) zEvt.stop(devt);
+		if (evt.domStopped) zEvt.stop(devt);
 	},
 	toJSON: function () {
 		return this.uuid;

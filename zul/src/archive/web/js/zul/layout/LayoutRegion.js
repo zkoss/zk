@@ -300,7 +300,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	},
 	doMouseOver_: function (evt) {
 		if (this.getSubnode('btn')) {
-			switch (evt.nativeTarget) {
+			switch (evt.domTarget) {
 			case this.getSubnode('btn'):
 				zDom.addClass(this.getSubnode('btn'), this.getZclass() + '-collapse-over');
 				break;
@@ -316,7 +316,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	},
 	doMouseOut_: function (evt) {
 		if (this.getSubnode('btn')) {
-			switch (evt.nativeTarget) {
+			switch (evt.domTarget) {
 			case this.getSubnode('btn'):
 				zDom.rmClass(this.getSubnode('btn'), this.getZclass() + '-collapse-over');
 				break;
@@ -332,7 +332,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	},
 	doClick_: function (evt) {
 		if (this.getSubnode('btn')) {
-			var target = evt.nativeTarget;
+			var target = evt.domTarget;
 			switch (target) {
 			case this.getSubnode('btn'):
 			case this.getSubnode('btned'):

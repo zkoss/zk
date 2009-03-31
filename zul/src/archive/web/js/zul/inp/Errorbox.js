@@ -63,7 +63,7 @@ zul.inp.Errorbox = zk.$extends('zul.wgt.Popup', {
 		if (stackup) stackup.style.display = visible ? '': 'none';
 	},
 	doMouseMove_: function (evt) {
-		var el = evt.nativeTarget;
+		var el = evt.domTarget;
 		if (el == this.getSubnode('c')) {
 			var y = evt.data.pageY,
 				size = zk.parseInt(zDom.getStyle(el, 'padding-right'))
@@ -73,14 +73,14 @@ zul.inp.Errorbox = zk.$extends('zul.wgt.Popup', {
 		} else this.$supers('doMouseMove_', arguments);
 	},
 	doMouseOut_: function (evt) {
-		var el = evt.nativeTarget;
+		var el = evt.domTarget;
 		if (el == this.getSubnode('c'))
 			zDom.rmClass(el, 'z-errbox-close-over');
 		else
 			this.$supers('doMouseOut_', arguments);
 	},
 	doClick_: function (evt) {
-		var el = evt.nativeTarget;
+		var el = evt.domTarget;
 		if (el == this.getSubnode('c') && zDom.hasClass(el, 'z-errbox-close-over'))
 			this.parent.clearErrorMessage(true, true);
 		else {

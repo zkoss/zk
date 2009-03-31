@@ -29,7 +29,7 @@ zul.Dropbutton = zk.$extends(zk.Object, {
 	cleanup: function () {
 		var btn = this._btn;
 
-		zDom.enableSelection(btn);
+		zDom.enableSelection(btn); //unlisten in IE
 		zDom.enableSelection(this._img);
 
 		zEvt.unlisten(btn, 'mouseover', this._pxOver);

@@ -409,7 +409,7 @@ zkm = {
 		if (wgt) {
 			var wevt = new zk.Event(wgt, 'onMouseDown', zkm._mouseData(evt, wgt), null, evt);
 			wgt.doMouseDown_(wevt);
-			if (wevt.stopped) zEvt.stop(evt);
+			if (wevt.domStopped) zEvt.stop(evt);
 		}
 	},
 	_mouseData: function (evt, wgt) {
@@ -426,7 +426,7 @@ zkm = {
 		if (wgt) {
 			var wevt = new zk.Event(wgt, 'onMouseUp', zkm._mouseData(evt, wgt), null, evt);
 			wgt.doMouseUp_(wevt);
-			if (wevt.stopped) zEvt.stop(evt);
+			if (wevt.domStopped) zEvt.stop(evt);
 		}
 	},
 	docMouseMove: function (evt) {
@@ -460,7 +460,7 @@ zkm = {
 		if (wgt) {
 			var wevt = new zk.Event(wgt, 'onKeyDown', zEvt.keyData(evt), null, evt);
 			wgt.doKeyDown_(wevt);
-			if (wevt.stopped) zEvt.stop(evt);
+			if (wevt.domStopped) zEvt.stop(evt);
 		}
 		if (zEvt.keyCode(evt) == 27 && zAu.shallIgnoreESC()) //Bug 1927788: prevent FF from closing connection
 			zEvt.stop(evt); //eat
@@ -473,7 +473,7 @@ zkm = {
 		if (wgt) {
 			var wevt = new zk.Event(wgt, 'onKeyUp', zEvt.keyData(evt), null, evt);
 			wgt.doKeyUp_(wevt);
-			if (wevt.stopped) zEvt.stop(evt);
+			if (wevt.domStopped) zEvt.stop(evt);
 		}
 	},
 	docKeyPress: function (evt) {
@@ -483,7 +483,7 @@ zkm = {
 		if (wgt) {
 			var wevt = new zk.Event(wgt, 'onKeyPress', zEvt.keyData(evt), null, evt);
 			wgt.doKeyPress_(wevt);
-			if (wevt.stopped) zEvt.stop(evt);
+			if (wevt.domStopped) zEvt.stop(evt);
 		}
 	},
 	docClick: function (evt) {
@@ -495,7 +495,7 @@ zkm = {
 			if (wgt) {
 				var wevt = new zk.Event(wgt, 'onClick', zkm._mouseData(evt, wgt), {ctl:true}, evt)
 				wgt.doClick_(wevt);
-				if (wevt.stopped) zEvt.stop(evt);
+				if (wevt.domStopped) zEvt.stop(evt);
 			}
 			//don't return anything. Otherwise, it replaces event.returnValue in IE (Bug 1541132)
 		}		
@@ -509,7 +509,7 @@ zkm = {
 			var wevt = new zk.Event(wgt, 'onDoubleClick', zkm._mouseData(evt, wgt), {ctl:true}, evt);
 			wgt.doDoubleClick_(wevt);
 
-			if (wevt.stopped) {
+			if (wevt.domStopped) {
 				zEvt.stop(evt); //prevent browser default
 				return false;
 			}
@@ -527,7 +527,7 @@ zkm = {
 			var wevt = new zk.Event(wgt, 'onRightClick', zkm._mouseData(evt, wgt), {ctl:true}, evt);
 			wgt.doRightClick_(wevt);
 
-			if (wevt.stopped) {
+			if (wevt.domStopped) {
 				zEvt.stop(evt); //prevent browser default
 				return false;
 			}

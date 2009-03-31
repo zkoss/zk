@@ -166,7 +166,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 
 	doFocus_: function (evt) {
-		if (zDom.tag(evt.nativeTarget)) { //Bug 2111900
+		if (zDom.tag(evt.domTarget)) { //Bug 2111900
 			if (this.isListen('onChanging')) {
 				this._lastChg = this.einp.value;
 				this._tidChg = setInterval(this.proxy(this._onChanging), 500);
@@ -200,7 +200,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	_lateBlur: function () {
 		if (this.shallUpdate_(zk.currentFocus))
-			this._updateChange();
+			this.updateChange_();
 	},
 	shallUpdate_: function (focus) {
 		return !focus || !zUtl.isAncestor(this, focus);
@@ -294,7 +294,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		eb.show(this, msg);
 		return eb;
 	},
-	_updateChange: function () {
+	/** Updates the change to server by firing onChange if necessary. */
+	updateChange_: function () {
 		if (zul.inp.validating) return; //avoid deadloop (when both focus and blur fields invalid)
 
 		var inp = this.einp,
@@ -362,7 +363,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
-		var inp = this.einp = this.getSubnode('inp') || this.getNode();
+		var inp = this.einp = this.getSubnode('real') || this.getNode();
 		zEvt.listen(inp, "focus", this.proxy(this.domFocus_, '_pxFocus'));
 		zEvt.listen(inp, "blur", this.proxy(this.domBlur_, '_pxBlur'));
 		zEvt.listen(inp, "select", this.proxy(this._domSelect, '_pxSelect'));
@@ -397,7 +398,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		if ((keyCode == 13 && this.isListen('onOK'))
 		|| (keyCode == 27 && this.isListen('onCancel'))) {
 			this._stopOnChanging();
-			this._updateChange();
+			this.updateChange_();
 		}
 	},
 	doKeyUp_: function () {

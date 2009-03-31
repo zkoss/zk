@@ -456,7 +456,7 @@ zul.panel.Panel = zk.$extends(zul.Widget, {
 		this.$supers('unbind_', arguments);
 	},
 	doClick_: function (evt) {
-		switch (evt.nativeTarget) {
+		switch (evt.domTarget) {
 		case this.getSubnode('close'):
 			this.fire('onClose');
 			evt.stop();
@@ -476,7 +476,7 @@ zul.panel.Panel = zk.$extends(zul.Widget, {
 		this.$supers('doClick_', arguments);
 	},
 	doMouseOver_: function (evt) {
-		switch (evt.nativeTarget) {
+		switch (evt.domTarget) {
 		case this.getSubnode('close'):
 			zDom.addClass(this.getSubnode('close'), this.getZclass() + '-close-over');
 			break;
@@ -495,7 +495,7 @@ zul.panel.Panel = zk.$extends(zul.Widget, {
 		this.$supers('doMouseOver_', arguments);
 	},
 	doMouseOut_: function (evt) {
-		switch (evt.nativeTarget) {
+		switch (evt.domTarget) {
 		case this.getSubnode('close'):
 			zDom.rmClass(this.getSubnode('close'), this.getZclass() + '-close-over');
 			break;

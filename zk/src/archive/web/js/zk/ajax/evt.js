@@ -180,16 +180,18 @@ if (zk.safari)
 	};
 
 zk.Event = zk.$extends(zk.Object, {
-	$init: function (target, name, data, opts, nativeEvent) {
+	$init: function (target, name, data, opts, domEvent) {
 		this.currentTarget = this.target = target;
 		this.name = name;
 		this.data = data;
 		this.opts = opts;
-		var devt = this.nativeEvent = nativeEvent || window.event;
-		if (devt) this.nativeTarget = zEvt.target(devt);
+		this.domEvent = domEvent = domEvent || window.event;
+		if (domEvent) this.domTarget = zEvt.target(domEvent);
 	},
-	stop: function (b) {
-		this.stopped = !b;
+	stop: function (opts) {
+		var b = !opts || !opts.revoke;
+		if (!opts || opts.propagation || !opts.dom) this.stopped = b;
+		if (!opts || opts.dom || !opts.propagation) this.domStopped = b;
 	}
 },{
 	BS:		8,

@@ -103,8 +103,8 @@ zul.grid.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		return t;
 	},
 	doClick_: function (evt) {
-		if (!zk.dragging && zk.Widget.$(evt.nativeTarget) == this && this.isSortable_() 
-			&& zDom.tag(evt.nativeTarget) != "INPUT") {
+		if (!zk.dragging && zk.Widget.$(evt.domTarget) == this && this.isSortable_() 
+			&& zDom.tag(evt.domTarget) != "INPUT") {
 			this.fire('onSort');
 			evt.stop();
 		}
