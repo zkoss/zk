@@ -312,7 +312,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			this.setDomVisible_(node, true);
 
 			//from parent to child
-			for (var fs = zk.Widget._floating, j = 0, fl = fs.length; j < fl; ++j) {
+			for (var fs = zk.Widget._floatings, j = 0, fl = fs.length; j < fl; ++j) {
 				var w = fs[j].widget;
 				if (this != w && this._floatVisibleDependent(w)) {
 					zi = zi >= 0 ? ++zi: w._topZIndex();
@@ -328,7 +328,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		} else {
 			zWatch.fireDown('onHide', {visible:true}, this);
 
-			for (var fs = zk.Widget._floating, j = fs.length,
+			for (var fs = zk.Widget._floatings, j = fs.length,
 			bindLevel = this.bindLevel; --j >= 0;) {
 				var w = fs[j].widget;
 				if (bindLevel >= w.bindLevel)
@@ -367,7 +367,7 @@ zk.Widget = zk.$extends(zk.Object, {
 				var zi = wgt._topZIndex();
 				wgt._setZIndex(zi, true);
 
-				for (var fs = zk.Widget._floating, j = 0, fl = fs.length;
+				for (var fs = zk.Widget._floatings, j = 0, fl = fs.length;
 				j < fl; ++j) { //parent first
 					var w = fs[j].widget;
 					if (wgt != w && zUtl.isAncestor(wgt, w) && w.isVisible()) {
@@ -383,7 +383,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	/** Returns the topmost z-index for this widget.*/
 	_topZIndex: function () {
 		var zi = 1; //we have to start from 1 (since IE7 considers 0 as ignore)
-		for (var fs = zk.Widget._floating, j = fs.length; --j >= 0;) {
+		for (var fs = zk.Widget._floatings, j = fs.length; --j >= 0;) {
 			var w = fs[j].widget;
 			if (w._zIndex >= zi && !zUtl.isAncestor(this, w) && w.isVisible())
 				zi = w._zIndex + 1;
@@ -395,7 +395,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	setFloating_: function (floating, opts) {
 		if (this._floating != floating) {
-			var fs = zk.Widget._floating;
+			var fs = zk.Widget._floatings;
 			if (floating) {
 				//parent first
 				var inf = {widget: this, node: opts && opts.node? opts.node: this.getNode()},
@@ -997,7 +997,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	}
 
 }, {
-	_floating: [], //[{widget,node}]
+	_floatings: [], //[{widget,node}]
 	$: function (n, strict) {
 		var binds = zk.Widget._binds;
 		if (typeof n == 'string') {

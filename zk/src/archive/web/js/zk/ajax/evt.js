@@ -260,16 +260,24 @@ zWatch = {
 					setTimeout(
 					function () {
 						var o;
-						while (o = wts.shift())
-							o[name].apply(o, args);
+						while (o = wts.shift()) {
+							var fn = o[name];
+							if (!fn)
+								throw name + ' not defined in '+(o.className || o);
+							fn.apply(o, args);
+						}
 					}, opts.timeout);
 					return;
 				}
 			}
 
 			var o;
-			while (o = wts.shift())
-				o[name].apply(o, args);
+			while (o = wts.shift()) {
+				var fn = o[name];
+				if (!fn)
+					throw name + ' not defined in '+(o.className || o);
+				fn.apply(o, args);
+			}
 		}
 	},
 	fireDown: function (name, opts, origin, vararg) {
@@ -304,15 +312,23 @@ zWatch = {
 				setTimeout(
 				function () {
 					var o;
-					while (o = found.shift())
-						o[name].apply(o, args);
+					while (o = found.shift()) {
+						var fn = o[name];
+						if (!fn)
+							throw name + ' not defined in '+(o.className || o);
+						fn.apply(o, args);
+					}
 				}, opts.timeout);
 				return;
 			}
 
 			var o;
-			while (o = found.shift())
-				o[name].apply(o, args);
+			while (o = found.shift()) {
+				var fn = o[name];
+				if (!fn)
+					throw name + ' not defined in '+(o.className || o);
+				fn.apply(o, args);
+			}
 		}
 	},
 	_visibleChild: function (p, c) {
