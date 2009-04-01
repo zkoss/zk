@@ -644,14 +644,11 @@ zDom = { //static methods
 		return ts;
 	},
 
-	/** Returns the style. In addition to n.style, it also
-	 * checked CSS styles that are applicated to the specified element.
-	 */
 	getStyle: function(el, style) {
 		var st = el.style;
+		style = style.$camel();
 		if (['float','cssFloat'].$contains(style))
 			style = (typeof st.styleFloat != 'undefined' ? 'styleFloat' : 'cssFloat');
-		style = style.$camel();
 		var value = st[style];
 		if (!value) {
 			if (document.defaultView && document.defaultView.getComputedStyle) {
@@ -677,13 +674,10 @@ zDom = { //static methods
 		}
 		return value == 'auto' ? null : value;
 	},
-	/** Sets the style.
-	 * @param style a map of styles to update (String name, String value).
-	 */
-	setStyle: function(el, style) {
+	setStyles: function(el, styles) {
 		var st = el.style;
-		for (var name in style) {
-			var value = style[name];
+		for (var name in styles) {
+			var value = styles[name];
 			if(name == 'opacity') {
 				if (value == 1) {
 					value = (/gecko/.test(zk.userAgent) &&
@@ -705,9 +699,6 @@ zDom = { //static methods
 			st[name.$camel()] = value;
 		}
 	},
-	/** Parses a string-type style into a map of styles
-	 * that can be used with {@link #setStyle}.
-	 */
 	parseStyle: function (style) {
 		var map = {};
 		if (style) {
@@ -727,7 +718,7 @@ zDom = { //static methods
 	},
 	/** Sets the opacity style of the specified element. */
 	setOpacity: function(el, value){
-		zDom.setStyle(el, {opacity:value});
+		zDom.setStyles(el, {opacity:value});
 	},
 
 	/** Forces the browser to redo the CSS by adding and removing a CSS class. */

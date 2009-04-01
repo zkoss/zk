@@ -525,7 +525,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	updateDomStyle_: function () {
 		if (this.desktop)
-			zDom.setStyle(this.getNode(), zDom.parseStyle(this.domStyle_()));
+			zDom.setStyles(this.getNode(), zDom.parseStyle(this.domStyle_()));
 	},
 
 	domStyle_: function (no) {

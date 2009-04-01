@@ -111,9 +111,9 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 	},
 	updateDomStyle_: function () {
 		var node = this.getNode()
-		zDom.setStyle(node, zDom.parseStyle(this.domStyle_()));
+		zDom.setStyles(node, zDom.parseStyle(this.domStyle_()));
 		var label = zDom.firstChild(node, "LABEL", true);
-		if (label) zDom.setStyle(label, zDom.parseStyle(zDom.filterTextStyle(this.domStyle_())));
+		if (label) zDom.setStyles(label, zDom.parseStyle(zDom.filterTextStyle(this.domStyle_())));
 	}
 });
 if (zk.gecko2Only)

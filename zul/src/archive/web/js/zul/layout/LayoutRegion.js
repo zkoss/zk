@@ -217,7 +217,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		if (this.desktop) {
 			var real = this.getSubnode('real');
 			if (real) {
-				zDom.setStyle(real, zDom.parseStyle(this.domStyle_()));
+				zDom.setStyles(real, zDom.parseStyle(this.domStyle_()));
 				if (this.parent) 
 					this.parent.resize();
 			}

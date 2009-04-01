@@ -21,7 +21,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		var posInfo = this._posInfo(ref, offset, position);
 
 		var node = this.getNode();
-		zDom.setStyle(node, {position: "absolute"});
+		zDom.setStyles(node, {position: "absolute"});
 		zDom.makeVParent(node);
 		if (posInfo)
 			zDom.position(node, posInfo.dim, posInfo.pos, opts);

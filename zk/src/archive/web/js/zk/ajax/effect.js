@@ -26,7 +26,7 @@ zEffect = {
 				if(effect.opts.to==0) {
 					var e = effect.node;
 					zDom.hide(e);
-					zDom.setStyle(e, {opacity: oldOpacity}); 
+					zDom.setStyles(e, {opacity: oldOpacity}); 
 				}
 			};
 		return new zk.eff.Opacity(element,opts);
@@ -70,7 +70,7 @@ zEffect = {
 			opts.afterFinishInternal = function(effect) {
 				var e = effect._effects[0].node;
 				zDom.hide(e);
-				zDom.setStyle(e, oldStyle);
+				zDom.setStyles(e, oldStyle);
 			};
 		return new zk.eff.Parallel(
 			[ new zk.eff.Scale(element, 200, 
@@ -105,7 +105,7 @@ zEffect = {
 			opts.afterSetup = function(effect) {
 				var e = effect.node;
 				zDom.makeClipping(e);
-				zDom.setStyle(e, {height: '0px'});
+				zDom.setStyles(e, {height: '0px'});
 				zDom.show(e); 
 			};
 		if (!opts.afterFinishInternal)
@@ -136,7 +136,7 @@ zEffect = {
 						zDom.hide(e);
 						zDom.undoClipping(e);
 						zDom.undoPositioned(e);
-						zDom.setStyle(e, {opacity: oldOpacity});
+						zDom.setStyles(e, {opacity: oldOpacity});
 					}
 				});
 			}
@@ -159,7 +159,7 @@ zEffect = {
 				var e = effect._effects[0].node;
 				zDom.hide(e);
 				zDom.undoPositioned(e);
-				zDom.setStyle(e, oldStyle);
+				zDom.setStyles(e, oldStyle);
 			};
 		return new zk.eff.Parallel(
 			[new zk.eff.Move(element, {x: 0, y: 100, sync: true}), 
@@ -203,7 +203,7 @@ zEffect = {
 			opts.afterFinishInternal = function(effect) {
 				var e = effect._effects[0].node;
 				zDom.undoPositioned(e)
-				zDom.setStyle(e, oldStyle);
+				zDom.setStyles(e, oldStyle);
 			}; 
 		return new zk.eff.Parallel(
 			[new zk.eff.Move(element, movement)], opts);
@@ -251,7 +251,7 @@ zEffect = {
 			opts.afterFinishInternal = function(effect) {
 				var e = effect._effects[0].node;
 				zDom.undoPositioned(e);
-				zDom.setStyle(e, oldStyle);
+				zDom.setStyles(e, oldStyle);
 			};
 		return new zk.eff.Parallel(
 			[new zk.eff.Move(element, movement)], opts);
@@ -281,24 +281,24 @@ zEffect = {
 				switch (anchor) {
 				case 't':
 					zDom.makeClipping(e);
-					zDom.setStyle(e, {height: '0px'});
+					zDom.setStyles(e, {height: '0px'});
 					zDom.show(e);
 					break;
 				case 'b':
 					orig.ot = dims.top + dims.height;
 					zDom.makeClipping(e);
-					zDom.setStyle(e, {height: '0px', top: orig.ot + 'px'});
+					zDom.setStyles(e, {height: '0px', top: orig.ot + 'px'});
 					zDom.show(e);
 					break;
 				case 'l':
 					zDom.makeClipping(e);
-					zDom.setStyle(e, {width: '0px'});
+					zDom.setStyles(e, {width: '0px'});
 					zDom.show(e);
 					break;
 				case 'r':
 					orig.ol = dims.left + dims.width;
 					zDom.makeClipping(e);
-					zDom.setStyle(e, {width: '0px', left: orig.ol + 'px'});
+					zDom.setStyles(e, {width: '0px', left: orig.ol + 'px'});
 					zDom.show(e);
 					break;
 				}
@@ -307,16 +307,16 @@ zEffect = {
 			opts.afterUpdateInternal = function(effect){
 				var e = effect.node;
 				if (anchor == 'b')
-					zDom.setStyle(e, {top: (orig.ot - zk.parseInt(effect.node.style.height)) + 'px'});
+					zDom.setStyles(e, {top: (orig.ot - zk.parseInt(effect.node.style.height)) + 'px'});
 				else if (anchor == 'r')
-					zDom.setStyle(e, {left: (orig.ol - zk.parseInt(effect.node.style.width)) + 'px'});
+					zDom.setStyles(e, {left: (orig.ol - zk.parseInt(effect.node.style.width)) + 'px'});
 			};
 		if (!opts.afterFinishInternal)
 			opts.afterFinishInternal = function(effect) {
 				var e = effect.node;
 				zDom.undoClipping(e);
 				zDom.undoPositioned(e);
-				zDom.setStyle(e, {top: orig.t, left: orig.l});
+				zDom.setStyles(e, {top: orig.t, left: orig.l});
 			};
 		return new zk.eff.Scale(element, 100, opts);
 	},
@@ -348,9 +348,9 @@ zEffect = {
 			opts.afterUpdateInternal = function (effect) {
 				var e = effect.node;
 				if (anchor == 'b')
-					zDom.setStyle(e, {top: (orig.ot + orig.oh - zk.parseInt(effect.node.style.height)) + 'px'});
+					zDom.setStyles(e, {top: (orig.ot + orig.oh - zk.parseInt(effect.node.style.height)) + 'px'});
 				else if (anchor == 'r')
-					zDom.setStyle(e, {left: (orig.ol + orig.ow - zk.parseInt(effect.node.style.width)) + 'px'});
+					zDom.setStyles(e, {left: (orig.ol + orig.ow - zk.parseInt(effect.node.style.width)) + 'px'});
 			};
 		if (!opts.beforeFinishInternal)
 			opts.beforeFinishInternal = function (effect) {
@@ -361,7 +361,7 @@ zEffect = {
 				var e = effect.node;
 				zDom.undoClipping(e);
 				zDom.undoPositioned(e);
-				zDom.setStyle(e, {top: orig.t, left: orig.l});
+				zDom.setStyles(e, {top: orig.t, left: orig.l});
 			};
 		return new zk.eff.Scale(element, zk.opera ? 0 : 1, opts);
 	}
@@ -454,7 +454,7 @@ zk.eff.Opacity = zk.$extends(zk.eff.Base_, {
 		var e = this.node = zDom.$(element);
 		// make this work on IE on elements without 'layout'
 		if(zk.ie && (!e.currentStyle.hasLayout))
-			zDom.setStyle(e, {zoom: 1});
+			zDom.setStyles(e, {zoom: 1});
 		opts = zk.$default(opts, {to: 1.0});
 		if (!opts.from) opts.from = zDom.getOpacity(e) || 0.0,
 		this.start(opts);
@@ -486,7 +486,7 @@ zk.eff.Move = zk.$extends(zk.eff.Base_, {
 		}
 	},
 	update: function(position) {
-		zDom.setStyle(this.node, {
+		zDom.setStyles(this.node, {
 			left: Math.round(this.opts.x  * position + this.originalLeft) + 'px',
 			top:  Math.round(this.opts.y  * position + this.originalTop)  + 'px'
 		});
@@ -546,12 +546,12 @@ zk.eff.Scale = zk.$extends(zk.eff.Base_, {
 	update: function(position) {
 		var currentScale = (this.opts.scaleFrom/100.0) + (this.factor * position);
 		if(this.opts.scaleContent && this.fontSize)
-			zDom.setStyle(this.node, {fontSize: this.fontSize * currentScale + this.fontSizeType});
+			zDom.setStyles(this.node, {fontSize: this.fontSize * currentScale + this.fontSizeType});
 		this.setDimensions(this.dims[0] * currentScale, this.dims[1] * currentScale);
 	},
 	finish: function(position) {
 		if(this.restoreAfterFinish)
-			zDom.setStyle(this.node, this.originalStyle);
+			zDom.setStyles(this.node, this.originalStyle);
 	},
 	setDimensions: function(height, width) {
 		var d = {};
@@ -568,7 +568,7 @@ zk.eff.Scale = zk.$extends(zk.eff.Base_, {
 				if(this.opts.scaleX) d.left = -leftd + 'px';
 			}
 		}
-		zDom.setStyle(this.node, d);
+		zDom.setStyles(this.node, d);
 	}
 });
 
