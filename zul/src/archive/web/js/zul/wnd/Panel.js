@@ -13,7 +13,7 @@ This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 zPkg.load('zul.wgt');
-zul.panel.Panel = zk.$extends(zul.Widget, {
+zul.wnd.Panel = zk.$extends(zul.Widget, {
 	_border: "none",
 	_title: "",
 	_open: true,
@@ -530,14 +530,14 @@ zul.panel.Panel = zk.$extends(zul.Widget, {
 		this.$supers('onChildAdded_', arguments);
 		if (child.$instanceof(zul.wgt.Caption))
 			this.caption = child;
-		else if (child.$instanceof(zul.panel.Panelchildren))
+		else if (child.$instanceof(zul.wnd.Panelchildren))
 			this.panelchildren = child;
 		else if (child.$instanceof(zul.wgt.Toolbar)) {
 			if (this.firstChild == child)
 				this.tbar = child;
 			else if (this.lastChild == child && child.previousSibling.$instanceof(zul.wgt.Toolbar))
 				this.fbar = child;
-			else if (child.previousSibling.$instanceof(zul.panel.Panelchildren))
+			else if (child.previousSibling.$instanceof(zul.wnd.Panelchildren))
 				this.bbar = child;
 		}
 		this.rerender();
