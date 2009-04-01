@@ -76,7 +76,7 @@ public class ColSizeEvent extends Event {
 				data.getInt("index"),
 				request.getDesktop().getComponentByUuid(data.getString("column")),
 				data.getString("width"),
-				AuRequests.parseKeys(data.optJSONObject("keys")));
+				AuRequests.parseKeys(data));
 		} catch (org.zkoss.json.JSONException ex) {
 			throw new UiException(ex);
 		}

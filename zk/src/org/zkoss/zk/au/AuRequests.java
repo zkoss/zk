@@ -60,12 +60,12 @@ public class AuRequests {
 	 * @return a combination of {@link MouseEvent#ALT_KEY},
 	 * {@link MouseEvent#SHIFT_KEY} and {@link MouseEvent#CTRL_KEY},
 	 */
-	public static int parseKeys(JSONObject flags) {
+	public static int parseKeys(JSONObject data) {
 		int keys = 0;
-		if (flags != null) {
-			if (flags.optBoolean("altKey")) keys |= MouseEvent.ALT_KEY;
-			if (flags.optBoolean("ctrlKey")) keys |= MouseEvent.CTRL_KEY;
-			if (flags.optBoolean("shiftKey")) keys |= MouseEvent.SHIFT_KEY;
+		if (data != null) {
+			if (data.optBoolean("altKey")) keys |= MouseEvent.ALT_KEY;
+			if (data.optBoolean("ctrlKey")) keys |= MouseEvent.CTRL_KEY;
+			if (data.optBoolean("shiftKey")) keys |= MouseEvent.SHIFT_KEY;
 		}
 		return keys;
 	}

@@ -36,7 +36,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 					zDom[open ? 'rmClass': 'addClass'](node, this.getZclass() + "-colpsd");
 					zWatch.fireDown(open ? 'onVisible': 'onHide', {visible:true}, this);
 				}
-				if (!fromServer) this.fire('onOpen', open);
+				if (!fromServer) this.fire('onOpen', {open:open});
 			}
 		}
 	},

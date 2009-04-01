@@ -70,7 +70,7 @@ public class SelectEvent extends Event {
 		return new SelectEvent(request.getName(), comp,
 			AuRequests.convertToItems(desktop, data.optJSONArray("items")),
 			desktop.getComponentByUuidIfAny(data.optString("reference", null)),
-			AuRequests.parseKeys(data.optJSONObject("keys")));
+			AuRequests.parseKeys(data));
 	}
 
 	/** Constructs a selection event.

@@ -62,7 +62,7 @@ public class SizeEvent extends Event {
 
 		return new SizeEvent(request.getName(), comp,
 			data.optString("width", null), data.optString("height", null),
-			AuRequests.parseKeys(data.optJSONObject("keys")));
+			AuRequests.parseKeys(data));
 	}
 
 	/** Constructs a mouse relevant event.

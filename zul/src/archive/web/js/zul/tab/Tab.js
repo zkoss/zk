@@ -70,7 +70,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		if (!evt) evt = window.event;
 		if (this._disabled)
 			return;
-		this.fire('onClose', true);
+		this.fire('onClose');
 		zEvt.stop(evt);
 	},
 	_sliding: function(tab) {

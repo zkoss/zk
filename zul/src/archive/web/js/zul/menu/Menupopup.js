@@ -167,12 +167,12 @@ zul.menu.Menupopup = zk.$extends('zul.wgt.Popup', {
 	},
 	doKeyDown_: function (evt) {
 		var w = this._currentChild(),
-			keycode = evt.data.keyCode;
-		switch (keycode) {
+			keyCode = evt.keyCode;
+		switch (keyCode) {
 		case 38: //UP
 		case 40: //DOWN
 			if (w) w.$class._rmActive(w);
-			w = keycode == 38 ? this._previousChild(w) : this._nextChild(w);
+			w = keyCode == 38 ? this._previousChild(w) : this._nextChild(w);
 			if (w) w.$class._addActive(w);
 			break;
 		case 37: //LEFT

@@ -113,7 +113,7 @@ zul.grid.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		if (zk.dragging || !this.parent.isSizable()) return;
 		var n = this.getNode(),
 			ofs = zDom.revisedOffset(n); // Bug #1812154
-		if (this._insizer(evt.data.pageX - ofs[0])) {
+		if (this._insizer(evt.pageX - ofs[0])) {
 			zDom.addClass(n, this.getZclass() + "-sizing");
 		} else {
 			zDom.rmClass(n, this.getZclass() + "-sizing");
@@ -211,11 +211,10 @@ zul.grid.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			
 		if (zk.opera && fixed) owner.ebodytbl.style.tableLayout = fixed;
 		
-		wgt.parent.fire('onColSize', {
+		wgt.parent.fire('onColSize', zk.copy({
 			index: cidx,
 			column: wgt,
-			width: wd + "px",
-			keys: zEvt.keyMetaData(evt)
-		}, null, 0);
+			width: wd + "px"
+		}, zEvt.metaData(evt)), null, 0);
 	}
 });

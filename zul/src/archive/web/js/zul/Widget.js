@@ -120,7 +120,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 			var popup = this._smartFellow(this._popup);
 			if (popup) {
 				evt._popuped = true;
-				popup.open(this, [evt.data.pageX, evt.data.pageY], null, {sendOnOpen:true});
+				popup.open(this, [evt.pageX, evt.pageY], null, {sendOnOpen:true});
 				evt.stop();
 			}
 		}
@@ -131,7 +131,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 			var ctx = this._smartFellow(this._context);
 			if (ctx) {
 				evt._ctxed = true;
-				ctx.open(this, [evt.data.pageX, evt.data.pageY], null, {sendOnOpen:true});
+				ctx.open(this, [evt.pageX, evt.pageY], null, {sendOnOpen:true});
 				evt.stop(); //prevent default context menu to appear
 			}
 		}

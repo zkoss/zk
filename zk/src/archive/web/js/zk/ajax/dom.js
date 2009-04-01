@@ -666,7 +666,7 @@ zDom = { //static methods
 	 * of the specified element.
 	 */
 	hasClass: function (el, clsnm) {
-		return el.className.match(zDom._clsRegEx(clsnm)) != null;
+		return el && el.className.match(zDom._clsRegEx(clsnm)) != null;
 	},
 	/** Adds the specified class name to the class name of the specified element.
 	 */

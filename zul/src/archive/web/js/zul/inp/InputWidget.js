@@ -380,8 +380,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		this.$supers('unbind_', arguments);
 	},
 	doKeyDown_: function (evt) {
-		var keyCode = evt.keyCode, keys = evt.keys;
-		if (keyCode == 9 && !keys.altKey && !keys.ctrlKey && !keys.shiftKey
+		var keyCode = evt.keyCode;
+		if (keyCode == 9 && !evt.altKey && !evt.ctrlKey && !evt.shiftKey
 		&& this._tabbable) {
 			var sr = zDom.getSelectionRange(inp),
 				val = inp.value;

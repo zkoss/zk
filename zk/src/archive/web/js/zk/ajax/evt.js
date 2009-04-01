@@ -42,21 +42,19 @@ zEvt = {
 		evt = evt || window.event;
 		var ofs = zDom.cmOffset(target ? target: zEvt.target(evt)),
 			px = zEvt.x(evt), py = zEvt.y(evt);
-		return {
+		return zk.copy({
 			x: px - ofs[0], y: py - ofs[1],
-			pageX: px, pageY: py,
-			keys: zEvt.keyMetaData(evt)
-		};
+			pageX: px, pageY: py
+			}, zEvt.metaData(evt));
 	},
 	keyData: function (evt) {
 		evt = evt || window.event;
-		return {
+		return zk.copy({
 			keyCode: zEvt.keyCode(evt),
-			charCode: zEvt.charCode(evt),
-			keys: zEvt.keyMetaData(evt)
-		};
+			charCode: zEvt.charCode(evt)
+			}, zEvt.metaData(evt));
 	},
-	keyMetaData: function (evt) {
+	metaData: function (evt) {
 		evt = evt || window.event;
 		var inf = {};
 		if (evt.altKey) inf.altKey = true;
@@ -64,6 +62,15 @@ zEvt = {
 		if (evt.shiftKey) inf.shiftKey = true;
 		if (zEvt.leftClick(evt)) inf.leftClick = true;
 		if (zEvt.rightClick(evt)) inf.rightClick = true;
+		return inf;
+	},
+	filterMetaData: function (data) {
+		var inf = {}
+		if (data.altKey) inf.altKey = true;
+		if (data.ctrlKey) inf.ctrlKey = true;
+		if (data.shiftKey) inf.shiftKey = true;
+		if (data.leftClick) inf.leftClick = true;
+		if (data.rightClick) inf.rightClick = true;
 		return inf;
 	},
 
@@ -184,6 +191,9 @@ zk.Event = zk.$extends(zk.Object, {
 		this.currentTarget = this.target = target;
 		this.name = name;
 		this.data = data;
+		if (data && typeof data == 'object' && !data.$array)
+			zk.copy(this, data);
+
 		this.opts = opts;
 		this.domEvent = domEvent = domEvent || window.event;
 		if (domEvent) this.domTarget = zEvt.target(domEvent);

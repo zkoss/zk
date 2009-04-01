@@ -325,8 +325,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			this.parent.removeChild(this); //default: remove
 	},
 	onMove: function (evt) {
-		this._left = evt.data.left;
-		this._top = evt.data.top;
+		this._left = evt.left;
+		this._top = evt.top;
 	},
 	onZIndex: function (evt) {
 		this._syncShadow();
@@ -360,7 +360,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				floatFound = floatFound || wgt.isFloating_();
 			}
 			this.setVisible(false);
-			this.fire('onOpen', false);
+			this.fire('onOpen', {open:false});
 		} else
 			for (; wgt; wgt = wgt.parent) {
 				if (wgt == this) {
@@ -439,11 +439,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				y -= ofs[1];
 			}
 		}
-		this.fire('onMove', {
+		this.fire('onMove', zk.copy({
 			left: x + 'px',
-			top: y + 'px',
-			keys: keys
-		}, {ignorable: true});
+			top: y + 'px'
+		}, keys), {ignorable: true});
 	},
 
 	//super//
@@ -682,7 +681,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		dg.node.style.visibility = "";
 		var wgt = dg.control;
 		wgt._syncShadow();
-		wgt._fireOnMove(zEvt.keyMetaData(evt));
+		wgt._fireOnMove(zEvt.metaData(evt));
 	}
 });
 

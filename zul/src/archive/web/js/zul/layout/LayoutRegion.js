@@ -168,7 +168,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				}
 			}
 			if (nonAnima) this.parent.resize();
-			if (!fromServer) this.fire('onOpen', open);	
+			if (!fromServer) this.fire('onOpen', {open:open});
 		}
 	},
 	domClass_: function (no) {
@@ -631,11 +631,10 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		dg._rootoffs = dg._point = null;
 		
 		wgt.parent.resize();
-		wgt.fire('onSize', {
+		wgt.fire('onSize', zk.copy({
 			width: wgt.getSubnode('real').style.width,
-			height: wgt.getSubnode('real').style.height,
-			keys: zEvt.keyMetaData(evt)
-		});
+			height: wgt.getSubnode('real').style.height
+		}, zEvt.metaData(evt)));
 	},
 	_snap: function (dg, pointer) {
 		var wgt = dg.control,

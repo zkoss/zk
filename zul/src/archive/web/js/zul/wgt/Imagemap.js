@@ -80,8 +80,10 @@ zul.wgt.Imagemap = zk.$extends(zul.wgt.Image, {
 		j = href.indexOf(',', ++k);
 		if (j < 0) return;
 
-		wgt.fire('onClick', {x: zk.parseInt(href.substring(k, j)),
-			y: zk.parseInt(href.substring(j + 1))}, {ctl:true});
+		wgt.fire('onClick', {
+			x: zk.parseInt(href.substring(k, j)),
+			y: zk.parseInt(href.substring(j + 1))
+		}, {ctl:true});
 	},
 	_toofast: function () {
 		if (zk.gecko) { //bug 1510374

@@ -37,6 +37,9 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		this._dropb.fixpos();
 	},
 	onVisible: _zkf,
+	onFloatUp: function (wgt) {
+		//TODO
+	},
 
 	isOpen: function () {
 		return this._open;
@@ -44,12 +47,51 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	open: function () {
 		var pp = this.getSubnode('pp');
 		if (!pp) return;
+
+		zWatch.fire('onFloatUp', null, this); //notify all
+		this.setTopmost();
+
+		var ppofs = this.getPopupSize_(pp);
+		pp.style.width = ppofs[0];
+		pp.style.height = "auto";
+		pp.style.zIndex = 88000; //on-top of everything
+
+		var pp2 = this.getSubnode("cave");
+		if (pp2) pp2.style.width = pp2.style.height = "auto";
+
+		pp.style.position = "absolute"; //just in case
+		pp.style.display = "block";
+
+		// throw out
+		pp.style.visibility = "hidden";
+		pp.style.left = "-10000px";
+
+//	zk.onVisiAt(pp);
+
+		//FF: Bug 1486840
+		//IE: Bug 1766244 (after specifying position:relative to grid/tree/listbox)
+		//NOTE: since the parent/child relation is changed, new listitem
+		//must be inserted into the popup (by use of uuid!child) rather
+		//than invalidate!!
+		zDom.makeVParent(pp);
+
+		// throw in
+		pp.style.visibility = "";
+		pp.style.left = "";
+
+//	zkCmbox._fixsz(cb, pp, pp2, ppofs);//fix size
 	},
 	close: function () {
 	},
 
 	downPressed_: zk.$void, //function (evt) {}
 	upPressed_: zk.$void, //function (evt) {}
+	/** Returns [width, height] for the popup if specified by user.
+	 * Default: ['auto', 'auto']
+	 */
+	getPopupSize_: function (pp) {
+		return ['auto', 'auto'];
+	},
 
 	//super
 	bind_: function () {
@@ -59,12 +101,14 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			inp = this.getSubnode('real'),
 			dropb = this._dropb = new zul.Dropbutton(this, btn, inp);
 
-		zWatch.listen("onSize", this);
-		zWatch.listen("onVisible", this);
+		zWatch.listen('onSize', this);
+		zWatch.listen('onVisible', this);
+		zWatch.listen('onFloatUp', this);
 	},
 	unbind_: function () {
-		zWatch.unlisten("onSize", this);
-		zWatch.unlisten("onVisible", this);
+		zWatch.unlisten('onSize', this);
+		zWatch.unlisten('onVisible', this);
+		zWatch.unlisten('onFloatUp', this);
 
 		this._dropb.cleanup();
 		delete this._dropb;
@@ -79,15 +123,14 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		this.$supers('doKeyDown_', arguments);
 	},
 	_doKeyDown: function (evt) {
-		var ei = evt.data,
-			keyCode = ei.keyCode,
+		var keyCode = evt.keyCode,
 			opened = this._opened;
 		if (keyCode == 9 || (zk.safari && keyCode == 0)) { //TAB or SHIFT-TAB (safari)
 			if (opened) this.close();
 			return;
 		}
 
-		if (ei.altKey && (keyCode == 38 || keyCode == 40)) {//UP/DN
+		if (evt.altKey && (keyCode == 38 || keyCode == 40)) {//UP/DN
 			if (keyCode == 38) { //UP
 				if (opened) this.close();
 			} else {
@@ -106,7 +149,9 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			var item = this._autoselback(); //Better usability(Bug 1633335): auto selback
 			if (item && this._selId != item.uuid) {
 				this._selId = item.uuid;
-				this.fire('onSelect', {items: [item], reference: item, keys: ei.keys});
+				this.fire('onSelect', zk.copy({
+					items: [item], reference: item
+				}, zEvt.filterMetaData(evt)));
 			}
 			this.updateChange_(); //fire onChange
 			return;

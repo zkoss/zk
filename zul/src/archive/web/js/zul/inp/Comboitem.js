@@ -50,7 +50,7 @@ zul.inp.Comboitem = zk.$extends(zul.LabelImageWidget, {
 		if (!this._disabled) {
 			var n = this.getNode(),
 				zcls = this.getZclass();
-			zDom.addClass(zDom.hasClass(n, zcls + '-seld') ?
+			zDom.addClass(n, zDom.hasClass(n, zcls + '-seld') ?
 				zcls + "-over-seld": zcls + "-over");
 		}
 		this.$supers('doMouseOver_', arguments);

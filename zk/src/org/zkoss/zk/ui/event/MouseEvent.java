@@ -70,7 +70,7 @@ public class MouseEvent extends Event {
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {data, request});
 		final String name = request.getName();
-		final int keys = AuRequests.parseKeys(data.optJSONObject("keys"));
+		final int keys = AuRequests.parseKeys(data);
 		final String area = data.optString("area", null);
 		return area != null ? new MouseEvent(name, comp, area, keys): //area
 			new MouseEvent(name, comp, //coord

@@ -100,8 +100,9 @@ zk = {
 	},
 	copy: function (dst, src) {
 		if (!dst) dst = {};
-		for (var p in src)
-			dst[p] = src[p];
+		if (src)
+			for (var p in src)
+				dst[p] = src[p];
 		return dst;
 	},
 	forEach: function (objs, fn) {

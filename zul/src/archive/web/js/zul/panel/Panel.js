@@ -95,7 +95,7 @@ zul.panel.Panel = zk.$extends(zul.Widget, {
 						});
 					}
 				}
-				if (fromServer) this.fire('onOpen', open);
+				if (fromServer) this.fire('onOpen', {open:open});
 			}
 		}
 	},
@@ -248,8 +248,8 @@ zul.panel.Panel = zk.$extends(zul.Widget, {
 			this.parent.removeChild(this); //default: remove
 	},
 	onMove: function (evt) {
-		this._left = evt.data.left;
-		this._top = evt.data.top;
+		this._left = evt.left;
+		this._top = evt.top;
 	},
 	//watch//
 	onSize: _zkf = function () {
@@ -582,14 +582,12 @@ zul.panel.Panel = zk.$extends(zul.Widget, {
 	_aftermove: function (dg, evt) {
 		var wgt = dg.control;
 		wgt._syncShadow();
-		var keys = zEvt.keyMetaData(evt),
-			node = wgt.getNode(),
+		var node = wgt.getNode(),
 			x = zk.parseInt(node.style.left),
 			y = zk.parseInt(node.style.top);
-		wgt.fire('onMove', {
+		wgt.fire('onMove', zk.copy({
 			left: x + 'px',
-			top: y + 'px',
-			keys: keys
-		}, {ignorable: true});
+			top: y + 'px'
+		}, zEvt.metaData(evt)), {ignorable: true});
 	}
 });

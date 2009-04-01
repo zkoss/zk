@@ -80,7 +80,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			this._fixbtn();
 			this._fixszAll();
 
-			if (!fromServer) this.fire('onOpen', open);
+			if (!fromServer) this.fire('onOpen', {open:open});
 		}
 	},
 	/** Returns the collapse of this button.
