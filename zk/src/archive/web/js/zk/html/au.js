@@ -2423,6 +2423,11 @@ zkau.cmd0 = { //no uuid at all
 				zk.disableAll();
 			}
 		}
+	},
+	scrollIntoView: function (id) {
+		var n = $e(id);
+		for (var p = n; p = p.parentNode;)
+			zk.scrollIntoView(p, n);
 	}
 };
 zkau.cmd1 = {
