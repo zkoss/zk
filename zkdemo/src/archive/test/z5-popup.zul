@@ -1,60 +1,96 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-z5-popup.zul
-
+	z5-popup.zul
+	
 	Purpose:
-		
+	
 	Description:
-		
+	
 	History:
-		Mon Jan 19 15:43:06     2009, Created by jumperchen
-
-Copyright (C) 2008 Potix Corporation. All Rights Reserved.
-
+	Mon Jan 19 15:43:06     2009, Created by jumperchen
+	
+	Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+	
 -->
 <zk>
-<div height="50px" width="150px" popup="pp" style="border: 1px solid blue;">Left Click Me</div>
-<div height="50px" width="150px" tooltip="pp" style="border: 1px solid red;">Mouse-over Me</div>
-<div height="50px" width="150px" context="context" style="border: 1px solid blue;">Right Click Me</div>
-<window title="overlap 1" mode="overlapped" width="200px" border="normal">
-<div height="50px" width="150px" popup="pp" style="border: 1px solid blue;">Left Click Me</div>
-<div height="50px" width="150px" tooltip="pp" style="border: 1px solid red;">Mouse-over Me</div>
-<div height="50px" width="150px" context="context" style="border: 1px solid blue;">Right Click Me</div>
-</window>
-<window title="overlap 2" mode="overlapped" width="200px" border="normal">
-<div height="50px" width="150px" popup="pp" style="border: 1px solid blue;">Left Click Me</div>
-<div height="50px" width="150px" tooltip="pp" style="border: 1px solid red;">Mouse-over Me</div>
-<div height="50px" width="150px" context="context" style="border: 1px solid blue;">Right Click Me</div>
-</window>
+	<div height="50px" width="150px" popup="pp"
+		style="border: 1px solid blue;">
+		Left Click Me
+	</div>
+	<div height="50px" width="150px" tooltip="pp"
+		style="border: 1px solid red;">
+		Mouse-over Me
+	</div>
+	<div height="50px" width="150px" context="context"
+		style="border: 1px solid blue;">
+		Right Click Me
+	</div>
+	<window title="overlap 1" mode="overlapped" width="200px"
+		border="normal">
+		<div height="50px" width="150px" popup="pp"
+			style="border: 1px solid blue;">
+			Left Click Me
+		</div>
+		<div height="50px" width="150px" tooltip="pp"
+			style="border: 1px solid red;">
+			Mouse-over Me
+		</div>
+		<div height="50px" width="150px" context="context"
+			style="border: 1px solid blue;">
+			Right Click Me
+		</div>
+	</window>
+	<window title="overlap 2" mode="overlapped" width="200px"
+		border="normal">
+		<div height="50px" width="150px" popup="pp"
+			style="border: 1px solid blue;">
+			Left Click Me
+		</div>
+		<div height="50px" width="150px" tooltip="pp"
+			style="border: 1px solid red;">
+			Mouse-over Me
+		</div>
+		<div height="50px" width="150px" context="context"
+			style="border: 1px solid blue;">
+			Right Click Me
+		</div>
+	</window>
 
-<popup id="pp" width="200px" onOpen='l.value = "" + new Date() + event.open;'>
-Here is popup
-</popup>
-<popup id="context" width="200px">
-Here is context menu
-</popup>
-<button label="open with button" onClick='pp.open(self);'/>
-<button label="open with x and y" onClick='pp.open("30px", "30px");'/>
-<button label="close" onClick='pp.close();'/>
-<separator/>
-<label id='l'/>
-<div height="50px"></div>
-<hbox>
-<div width="50px"></div>
-<button label="before_start" onClick='pp.open(self, "before_start");'/>
-<button label="before_end" onClick='pp.open(self, "before_end");'/>
-<button label="after_start" onClick='pp.open(self, "after_start");'/>
-<button label="after_end" onClick='pp.open(self, "after_end");'/>
-</hbox>
-<hbox>
-<div width="50px"></div>
-<button label="start_before" onClick='pp.open(self, "start_before");'/>
-<button label="start_after" onClick='pp.open(self, "start_after");'/>
-<button label="end_before" onClick='pp.open(self, "end_before");'/>
-<button label="end_after" onClick='pp.open(self, "end_after");'/>
-<button label="overlap" onClick='pp.open(self, "overlap");'/>
-<button label="after_pointer" onClick='pp.open(self, "after_pointer");'/>
-<button label="at_pointer" onClick='pp.open(self, "at_pointer");'/>
-</hbox>
+	<popup id="pp" onOpen='l.value = "" + new Date() + event.open;'>
+		Here is popup
+	</popup>
+	<popup id="context" width="200px">Here is context menu</popup>
+	<button label="open with button" onClick='pp.open(self);' />
+	<button label="open with x and y"
+		onClick='pp.open("30px", "30px");' />
+	<button label="close" onClick='pp.close();' />
+	<separator />
+	<label id='l' />
+	<div height="50px"></div>
+	<hbox>
+		<div width="50px"></div>
+		<button label="before_start"
+			onClick='pp.open(self, "before_start");' />
+		<button label="before_end"
+			onClick='pp.open(self, "before_end");' />
+		<button label="after_start"
+			onClick='pp.open(self, "after_start");' />
+		<button label="after_end" onClick='pp.open(self, "after_end");' />
+	</hbox>
+	<hbox>
+		<div width="50px"></div>
+		<button label="start_before"
+			onClick='pp.open(self, "start_before");' />
+		<button label="start_after"
+			onClick='pp.open(self, "start_after");' />
+		<button label="end_before"
+			onClick='pp.open(self, "end_before");' />
+		<button label="end_after" onClick='pp.open(self, "end_after");' />
+		<button label="overlap" onClick='pp.open(self, "overlap");' />
+		<button label="after_pointer"
+			onClick='pp.open(self, "after_pointer");' />
+		<button label="at_pointer"
+			onClick='pp.open(self, "at_pointer");' />
+	</hbox>
 </zk>

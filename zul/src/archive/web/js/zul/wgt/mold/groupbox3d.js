@@ -20,7 +20,7 @@ function (out, skipper) {
 	out.push('<div', this.domAttrs_(), '>');
 	
 	if (cap) {
-		out.push('<div class=\"', zcls, '-tl"><div class="', zcls,
+		out.push('<div class="', zcls, '-tl"><div class="', zcls,
 			'-tr"></div></div><div class="', zcls, '-hl"><div class="',
 			zcls, '-hr"><div class="', zcls, '-hm"><div class="',
 			zcls, '-header">');

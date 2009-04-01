@@ -135,22 +135,22 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		var node = wgt.getNode(),
 			wdh = node.style.width,
 			fir = zDom.firstChild(node, "DIV"),
-			last = zDom.lastChild(zDom.lastChild(node, "DIV"), "DIV"),
+			last = zDom.lastChild(node, "DIV"),
 			n = wgt.getSubnode('cave').parentNode;
 		
-		if (!wdh || wdh == "auto") {
+		if (!wdh || wdh == "auto") { //Popup will disappear when width is null in IE 
 			var diff = zDom.padBorderWidth(n.parentNode) + zDom.padBorderWidth(n.parentNode.parentNode);
 			if (fir) {
-				fir.firstChild.firstChild.style.width = Math.max(0, n.offsetWidth - (zDom.padBorderWidth(fir)
+				fir.firstChild.style.width = Math.max(0, n.offsetWidth - (zDom.padBorderWidth(fir)
 					+ zDom.padBorderWidth(fir.firstChild) - diff)) + "px";
 			}
 			if (last) {
-				last.firstChild.firstChild.style.width = Math.max(0, n.offsetWidth - (zDom.padBorderWidth(last)
+				last.firstChild.style.width = Math.max(0, n.offsetWidth - (zDom.padBorderWidth(last)
 					+ zDom.padBorderWidth(last.firstChild) - diff)) + "px";
 			}
 		} else {
-			if (fir) fir.firstChild.firstChild.style.width = "";
-			if (last) last.firstChild.firstChild.style.width = "";
+			if (fir) fir.firstChild.style.width = "";
+			if (last) last.firstChild.style.width = "";
 		}
 	}: zk.$void,
 	setWidth: function (width) {
