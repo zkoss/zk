@@ -581,7 +581,7 @@ zDom = { //static methods
 		st.display = 'block';
 		try {
 			return zDom._addOfsToDim(el,
-				{width: zDom.offsetWidth(el), height = zDom.offsetHeight(el)}, revised);
+				{width: zDom.offsetWidth(el), height: zDom.offsetHeight(el)}, revised);
 		} finally {
 			st.display = originalDisplay;
 			st.position = originalPosition;
@@ -629,11 +629,7 @@ zDom = { //static methods
 
 	_txtstyles: ["color", "background-color", "background",	"white-space"],
 
-	/** Returns the text-relevant style (same as HTMLs.getTextRelevantStyle).
-	 * @param incwd whether to include width
-	 * @param inchgh whether to include height
-	 */
-	getTextStyle: function (style, incwd, inchgh) {
+	filterTextStyle: function (style, plus) {
 		var ts = "";
 		for (var j = 0, k = 0; k >= 0; j = k + 1) {
 			k = style.indexOf(';', j);
@@ -642,8 +638,7 @@ zDom = { //static methods
 			var nm = l < 0 ? s.trim(): s.substring(0, l).trim();
 
 			if (nm.startsWith("font")  || nm.startsWith("text")
-			|| zDom._txtstyles.$contains(nm)
-			|| (incwd && nm == "width") || (inchgh && nm == "height"))
+			|| zDom._txtstyles.$contains(nm) || (plus && plus.$contains(nm)))
 				ts += s + ';';
 		}
 		return ts;

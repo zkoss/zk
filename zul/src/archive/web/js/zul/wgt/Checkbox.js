@@ -73,7 +73,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		return html;
 	},
 	labelAttrs_: function () {
-		var style = zDom.getTextStyle(this.domStyle_());
+		var style = zDom.filterTextStyle(this.domStyle_());
 		return style ? ' style="' + style + '"' : "";
 	},
 	bind_: function (desktop) {
@@ -113,7 +113,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		var node = this.getNode()
 		zDom.setStyle(node, zDom.parseStyle(this.domStyle_()));
 		var label = zDom.firstChild(node, "LABEL", true);
-		if (label) zDom.setStyle(label, zDom.parseStyle(zDom.getTextStyle(this.domStyle_())));
+		if (label) zDom.setStyle(label, zDom.parseStyle(zDom.filterTextStyle(this.domStyle_())));
 	}
 });
 if (zk.gecko2Only)
