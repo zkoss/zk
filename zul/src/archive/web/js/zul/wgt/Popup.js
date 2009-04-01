@@ -67,18 +67,14 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 				ref = zk.Widget.$(ref);
 				
 			if (ref) {
-				var refn = zul.Widget.isInstance(ref) ? ref.getNode() : ref,
-					ofs = zDom.revisedOffset(refn);
+				var refn = zul.Widget.isInstance(ref) ? ref.getNode() : ref;
 				pos = position;
-				dim = {
-					top: ofs[0], left: ofs[1],
-					width: zDom.offsetWidth(refn), height: zDom.offsetHeight(refn)  
-				}
+				dim = zDom.dimension(refn, true);
 			}
 		} else if (offset && offset.$array) {
 			dim = {
-				top: zk.parseInt(offset[0]),
-				left:  zk.parseInt(offset[1])
+				left: zk.parseInt(offset[0]), top: zk.parseInt(offset[1]),
+				width: 0, height: 0
 			}
 		}
 		if (dim) return {pos: pos, dim: dim};

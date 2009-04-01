@@ -77,23 +77,19 @@ zDom = { //static methods
 			document.compatMode == "CSS1Compat" ?
 				document.documentElement.clientHeight: document.body.clientHeight;
 	},
-	/** Returns the page total width. */
 	pageWidth: function () {
 		var a = document.body.scrollWidth, b = document.body.offsetWidth;
 		return a > b ? a: b;
 	},
-	/** Returns the page total height. */
 	pageHeight: function () {
 		var a = document.body.scrollHeight, b = document.body.offsetHeight;
 		return a > b ? a: b;
 	},
 
-	/** Scrolls the browser window to the specified element. */
 	scrollTo: function (n) {
 		n = zDom.$(n);
 		var pos = zDom.cmOffset(n);
 		scrollTo(pos[0], pos[1]);
-		return n;
 	},
 
 	/** A map of the margin styles. */
@@ -102,15 +98,6 @@ zDom = { //static methods
 	borders: {l: "border-left-width", r: "border-right-width", t: "border-top-width", b: "border-bottom-width"},
 	/** A map of the padding styles. */
 	paddings: {l: "padding-left", r: "padding-right", t: "padding-top", b: "padding-bottom"},
-	/** Returns the summation of the specified styles.
-	 *  For example,
-	 * zDom.sumStyles(el, "lr", zDom.paddings) sums the style values of
-	 * zDom.paddings['l'] and zDom.paddings['r'].
-	 *
-	 * @param areas the areas is abbreviation for left "l", right "r", top "t", and bottom "b".
-	 * So you can specify to be "lr" or "tb" or more.
-	 * @param styles {@link #paddings} or {@link #borders}.
-	 */
 	sumStyles: function (el, areas, styles) {
 		var val = 0;
 		for (var i = 0, len = areas.length; i < len; i++){
@@ -120,9 +107,6 @@ zDom = { //static methods
 		return val;
 	},
 
-	/** Sets the offset height by specifying the inner height.
-	 * @param hgh the height without margin and border
-	 */
 	setOffsetHeight: function (el, hgh) {
 		hgh -= zDom.padBorderHeight(el)
 			+ zk.parseInt(zDom.getStyle(el, "margin-top"))
@@ -130,13 +114,6 @@ zDom = { //static methods
 		el.style.height = Math.max(0, hgh) + "px";
 	},
 
-	/**
-	 * Returns the revised position, which subtracted the offset of its scrollbar,
-	 * for the specified element.
-	 * @param {Object} el
-	 * @param {Array} ofs [left, top];
-	 * @return {Array} [left, top];
-	 */
 	revisedOffset: function (el, ofs) {
 		if(!ofs) {
 			if (el.getBoundingClientRect){ // IE and FF3
@@ -156,51 +133,27 @@ zDom = { //static methods
 		scrolls[0] -= zDom.innerX(); scrolls[1] -= zDom.innerY();
 		return [ofs[0] - scrolls[0], ofs[1] - scrolls[1]];
 	},
-	/**
-	 * Returns the revised width, which subtracted the size of its CSS border or padding, for the specified element.
-	 * @param size original size of the specified element.
-	 * @param excludeMargin excludes the margins. You rarely need this unless
-	 * size is in term of the parent
-	 */
 	revisedWidth: function (el, size, excludeMargin) {
 		size -= zDom.padBorderWidth(el);
 		if (size > 0 && excludeMargin)
 			size -= zDom.sumStyles(el, "lr", zDom.margins);
 		return size < 0 ? 0: size;
 	},
-	/**
-	 * Returns the revised width, which subtracted the size of its CSS border or padding, for the specified element.
-	 * @param size original size of the specified element.
-	 * @param excludeMargin excludes the margins. You rarely need this unless
-	 * size is in term of the parent
-	 */
 	revisedHeight: function (el, size, excludeMargin) {
 		size -= zDom.padBorderHeight(el);
 		if (size > 0 && excludeMargin)
 			size -= zDom.sumStyles(el, "tb", zDom.margins);
 		return size < 0 ? 0: size;
 	},
-	/**
-	 * Returns the number of the padding width and the border width from the specified element.
-	 */
 	padBorderWidth: function (el) {
 		return zDom.sumStyles(el, "lr", zDom.borders) + zDom.sumStyles(el, "lr", zDom.paddings);
 	},
-	/**
-	 * Returns the number of the padding height and the border height from the specified element.
-	 */
 	padBorderHeight: function (el) {
 		return zDom.sumStyles(el, "tb", zDom.borders) + zDom.sumStyles(el, "tb", zDom.paddings);
 	},
-	/**
-	 * Returns the number of the scrollbar.
-	 */
 	scrollbarWidth: function (el) {
 		return (el.offsetWidth - el.clientWidth) + zDom.sumStyles(el, "lr", zDom.borders);
 	},
-	/** Returns the maximal allowed height of the specified element.
-	 * In other words, it is the client height of the parent minus all sibling's.
-	 */
 	vflexHeight: function (el) {
 		var hgh = el.parentNode.clientHeight;
 		if (zk.ie6Only) { //IE6's clientHeight is wrong
@@ -250,8 +203,6 @@ zDom = { //static methods
 		}
 		return cnt;
 	},
-	/** Converts from absolute coordination to style's coordination.
-	 */
 	toStyleOffset: function (el, x, y) {
 		var oldx = el.style.left, oldy = el.style.top,
 			resetFirst = zk.opera || zk.air;
@@ -273,10 +224,6 @@ zDom = { //static methods
 		el.style.left = oldx; el.style.top = oldy; //restore
 		return ofs1;
 	},
-	/** Center the specified element.
-	 * @param flags a combination of center, left, right, top and bottom.
-	 * If omitted, center is assigned.
-	 */
 	center: function (el, flags) {
 		var wdgap = zDom.offsetWidth(el),
 			hghgap = zDom.offsetHeight(el);
@@ -320,11 +267,11 @@ zDom = { //static methods
 	},
 	position: function (el, dim, where, opts) {
 		where = where || "overlap";
-		var box = zDom.getDimension(el),
-			wd = box.width,
-			hgh = box.height,
-			x = dim.top,
-			y = dim.left;
+		if (dim.nodeType) //DOM element
+			dim = zDom.dimension(dim, true);
+		var x = dim.left, y = dim.top,
+			wd = zDom.dimension(el), hgh = wd.height; //only width and height
+		wd = wd.width;
 
 		switch(where) {
 		case "before_start":
@@ -381,16 +328,11 @@ zDom = { //static methods
 			if (y < scY) y = scY;
 		}
 
-		box = zDom.toStyleOffset(el, x, y);
-		el.style.left = box[0] + "px";
-		el.style.top = box[1] + "px";
+		var ofs = zDom.toStyleOffset(el, x, y);
+		el.style.left = ofs[0] + "px";
+		el.style.top = ofs[1] + "px";
 	},
 
-	/** Calculates the cumulative scroll offset of an element in nested scrolling containers.
-	 * Adds the cumulative scrollLeft and scrollTop of an element and all its parents.
-	 * Used for calculating the scroll offset of an element that is in more than one scroll container (e.g., a draggable in a scrolling container which is itself part of a scrolling document).
-	 * Note that all values are returned as numbers only although they are expressed in pixels.
-	 */
 	scrollOffset: function(el) {
 		var t = 0, l = 0, tag = zDom.tag(el);
 		do {
@@ -581,7 +523,6 @@ zDom = { //static methods
 		return el.offsetLeft;
 	},
 
-	/* Returns the X/Y coordinates of element relative to the viewport. */
 	viewportOffset: function(el) {
 		var t = 0, l = 0, p = el;
 		do {
@@ -602,10 +543,7 @@ zDom = { //static methods
 		} while (el = el.parentNode);
 		return [l, t];
 	},
-	/** Returns an array to indicate the size of the text if it is placed
-	 * inside the element.
-	 */
-	getTextSize: function (el, txt) {
+	textSize: function (el, txt) {
 		var tsd = zk._txtSizDiv;
 		if (!tsd) {
 			tsd = zk._txtSizDiv = document.createElement("DIV");
@@ -626,11 +564,11 @@ zDom = { //static methods
 		'textIndent', 'textShadow', 'textTransform', 'textOverflow',
 		'direction', 'wordSpacing', 'whiteSpace'],
 
-	getDimension: function (el) {
+	dimension: function (el, revised) {
 		var display = zDom.getStyle(el,  'display');
 		if (display != 'none' && display != null) // Safari bug
-			return {width: zDom.offsetWidth(el), height: zDom.offsetHeight(el),
-				top: zDom.offsetTop(el), left: zDom.offsetLeft(el)};
+			return zDom._addOfsToDim(el,
+				{width: zDom.offsetWidth(el), height: zDom.offsetHeight(el)}, revised);
 
 	// All *Width and *Height properties give 0 on elements with display none,
 	// so enable the el temporarily
@@ -641,15 +579,25 @@ zDom = { //static methods
 		st.visibility = 'hidden';
 		st.position = 'absolute';
 		st.display = 'block';
-		var originalWidth = el.clientWidth,
-			originalHeight = el.clientHeight,
-			originalTop = el.offsetTop,
-			originalLeft = el.offsetLeft;
-		st.display = originalDisplay;
-		st.position = originalPosition;
-		st.visibility = originalVisibility;
-		return {width: originalWidth, height: originalHeight,
-			top: originalTop, left: originalLeft};
+		try {
+			return zDom._addOfsToDim(el,
+				{width: zDom.offsetWidth(el), height = zDom.offsetHeight(el)}, revised);
+		} finally {
+			st.display = originalDisplay;
+			st.position = originalPosition;
+			st.visibility = originalVisibility;
+		}
+	},
+	_addOfsToDim: function (el, dim, revised) {
+		if (revised) {
+			var ofs = zDom.revisedOffset(el);
+			dim.left = ofs[0];
+			dim.top = ofs[1];
+		} else {
+			dim.left = zDom.offsetLeft(el);
+			dim.top = zDom.offsetTop(el);
+		}
+		return dim;
 	},
 
 	_clsregexs: {}, //Refer to http://developer.yahoo.net/yui
@@ -662,14 +610,9 @@ zDom = { //static methods
 		return re;
 	},
 	//class and style//
-	/** Returns whether it is part of the class name
-	 * of the specified element.
-	 */
 	hasClass: function (el, clsnm) {
 		return el && el.className.match(zDom._clsRegEx(clsnm)) != null;
 	},
-	/** Adds the specified class name to the class name of the specified element.
-	 */
 	addClass: function (el, clsnm) {
 		if (el && !zDom.hasClass(el, clsnm)) {
 			var cn = el.className;
@@ -677,9 +620,6 @@ zDom = { //static methods
 			el.className = cn + clsnm;
 		}
 	},
-	/** Removes the specified class name from the the class name of the specified
-	 * element.
-	 */
 	rmClass: function (el, clsnm) {
 		if (el && zDom.hasClass(el, clsnm)) {
 			var re = zDom._clsRegEx(clsnm);

@@ -19,8 +19,9 @@ zul.inp.FormatWidget = zk.$extends(zul.inp.InputWidget, {
 	setFormat: function (format) {
 		if (this._format != format) {
 			this._format = format;
-			if (this.einp)
-				this.einp.value = this.coerceToString_(this._value);
+			var inp = this.getInputNode();
+			if (inp)
+				inp.value = this.coerceToString_(this._value);
 		}
 	}
 });

@@ -37,15 +37,17 @@ zul.inp.Textbox = zk.$extends(zul.inp.InputWidget, {
 	setRows: function (rows) {
 		if (this._rows != rows) {
 			this._rows = rows;
-			if (this.einp && this.isMultiline())
-				this.einp.rows = rows;
+			var inp = this.getInputNode();
+			if (inp && this.isMultiline())
+				inp.rows = rows;
 		}
 	},
 	setType: function (type) {
 		if (this._type != type) {
 			this._type = type;
-			if (this.einp)
-				this.einp.type = type;
+			var inp = this.getInputNode();
+			if (inp)
+				inp.type = type;
 		}
 	},
 

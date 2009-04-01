@@ -13,4 +13,10 @@ This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 zul.inp.Bandbox = zk.$extends(zul.inp.ComboWidget, {
+	//super
+	open: function (opts) {
+		this.$supers('open', arguments);
+
+		zWatch.fire('onVisible', this._popup);
+	}
 });

@@ -44,7 +44,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	isOpen: function () {
 		return this._open;
 	},
-	open: function () {
+	open: function (opts) {
 		var pp = this.getSubnode('pp');
 		if (!pp) return;
 
@@ -66,8 +66,6 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		pp.style.visibility = "hidden";
 		pp.style.left = "-10000px";
 
-//	zk.onVisiAt(pp);
-
 		//FF: Bug 1486840
 		//IE: Bug 1766244 (after specifying position:relative to grid/tree/listbox)
 		//NOTE: since the parent/child relation is changed, new listitem
@@ -79,9 +77,35 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		pp.style.visibility = "";
 		pp.style.left = "";
 
-//	zkCmbox._fixsz(cb, pp, pp2, ppofs);//fix size
+		this._fixsz(ppofs);//fix size
+		zDom.position(pp, this.getInputNode(), "after_start");
 	},
 	close: function () {
+	},
+	_fixsz: function (ppofs) {
+		var pp = this.getSubnode('pp');
+		if (!pp) return;
+
+		var pp2 = this.getSubnode('cave');
+		if (ppofs[1] == "auto" && pp.offsetHeight > 250) {
+			pp.style.height = "250px";
+		} else if (pp.offsetHeight < 10) {
+			pp.style.height = "10px"; //minimal
+		}
+
+		if (ppofs[0] == "auto") {
+			var cb = this.getNode();
+			if (pp.offsetWidth < cb.offsetWidth) {
+				pp.style.width = cb.offsetWidth + "px";
+				if (pp2) pp2.style.width = "100%";
+					//Note: we have to set width to auto and then 100%
+					//Otherwise, the width is too wide in IE
+			} else {
+				var wd = zk.innerWidth() - 20;
+				if (wd < cb.offsetWidth) wd = cb.offsetWidth;
+				if (pp.offsetWidth > wd) pp.style.width = wd;
+			}
+		}
 	},
 
 	downPressed_: zk.$void, //function (evt) {}
@@ -94,11 +118,14 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	},
 
 	//super
+	getInputNode: function () {
+		return this.getSubnode('real');
+	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
 
 		var btn = this.getSubnode('btn'),
-			inp = this.getSubnode('real'),
+			inp = this.getInputNode(),
 			dropb = this._dropb = new zul.Dropbutton(this, btn, inp);
 
 		zWatch.listen('onSize', this);
@@ -116,11 +143,9 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		this.$supers('unbind_', arguments);
 	},
 	doKeyDown_: function (evt) {
-		if (evt.domTarget == this.getSubnode('real')) {
-			this._doKeyDown(evt);
-			if (evt.stopped) return;
-		}
-		this.$supers('doKeyDown_', arguments);
+		this._doKeyDown(evt);
+		if (!evt.stopped)
+			this.$supers('doKeyDown_', arguments);
 	},
 	_doKeyDown: function (evt) {
 		var keyCode = evt.keyCode,

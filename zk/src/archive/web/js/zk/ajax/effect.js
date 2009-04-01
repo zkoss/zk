@@ -94,7 +94,7 @@ zEffect = {
 	},
 	blindDown: function(element, opts) {
 		element = zDom.$(element);
-		var elementDimensions = zDom.getDimension(element);
+		var elementDimensions = zDom.dimension(element);
 		opts = zk.$default(opts,{
 			scaleContent: false,
 			scaleX: false,
@@ -265,7 +265,7 @@ zEffect = {
 		// SlideDown need to have the content of the element wrapped in a container element with fixed height!
 		var orig = {t: zDom.getStyle(element, 'top'), l: zDom.getStyle(element, 'left')},
 			isVert = anchor == 't' || anchor == 'b',
-			dims = zDom.getDimension(element);
+			dims = zDom.dimension(element);
 
 		opts = zk.$default(opts, {
 			scaleContent: false,

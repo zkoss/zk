@@ -55,7 +55,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	_fixBtn: function () {
 		var btn = this.getSubnode('b');
 		if (!btn || !btn.innerHTML.trim()) return;
-		btn.style.width = zDom.getTextSize(btn, btn.innerHTML)[0] + zDom.padBorderWidth(btn) + "px";
+		btn.style.width = zDom.textSize(btn, btn.innerHTML)[0] + zDom.padBorderWidth(btn) + "px";
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
