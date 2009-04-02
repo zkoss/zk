@@ -114,11 +114,8 @@ zDom = { //static methods
 		}
 	},
 
-	/** A map of the margin styles. */
 	margins: {l: "margin-left", r: "margin-right", t: "margin-top", b: "margin-bottom"},
-	/** A map of the border styles. */
 	borders: {l: "border-left-width", r: "border-right-width", t: "border-top-width", b: "border-bottom-width"},
-	/** A map of the padding styles. */
 	paddings: {l: "padding-left", r: "padding-right", t: "padding-top", b: "padding-bottom"},
 	sumStyles: function (el, areas, styles) {
 		var val = 0;
@@ -193,12 +190,6 @@ zDom = { //static methods
 			if (p.offsetHeight && zDom.isVisible(p)) hgh -= p.offsetHeight; //may undefined
 		return hgh;
 	},
-	/**
-	 * Retrieves the index of the object in the cells collection of a row.
-	 * Note: The function fixed the problem of IE that the cell.cellIndex returns a wrong index
-	 * if there is a hidden cell in the table. So, the behavior is difference among others.
-	 * @param {Element} cell
-	 */
 	cellIndex: function (cell) {
 		var i = 0;
 		if (zk.ie) {
@@ -212,16 +203,15 @@ zDom = { //static methods
 		} else i = cell.cellIndex;
 		return i;
 	},
-	/** Returns the number of columns (considering colSpan)
-	 */
-	ncols: function (cells) {
-		var cnt = 0;
-		if (cells) {
-			for (var j = 0, cl = cells.length; j < cl; ++j) {
-				var span = cells[j].colSpan;
-				if (span >= 1) cnt += span;
-				else ++cnt;
-			}
+	ncols: function (row, visibleOnly) {
+		var cnt = 0, cells;
+		if (row && (cells = rows.cells)) {
+			for (var j = 0, cl = cells.length; j < cl; ++j)
+				if (!visibleOnly || zDom.isVisible(cl)) {
+					var span = cells[j].colSpan;
+					if (span >= 1) cnt += span;
+					else ++cnt;
+				}
 		}
 		return cnt;
 	},
@@ -433,7 +423,6 @@ zDom = { //static methods
 		return o2x1 <= o1x2 && o2x2 >= o1x1 && o2y1 <= o1y2 && o2y2 >= o1y1;
 	},
 
-	/** Make the position of the element as absolute. */
 	absolutize: function(el) {
 		if (el.style.position == 'absolute') return;
 
@@ -478,7 +467,6 @@ zDom = { //static methods
 		} while (el);
 		return [l, t];
 	},
-	/** Make the position of the element as relative. */
 	relativize: function(el) {
 		if (el.style.position == 'relative') return;
 
@@ -495,7 +483,6 @@ zDom = { //static methods
 		*/
 	},
 
-	/** Returns the offset parent. */
 	offsetParent: function (el) {
 		if (el.offsetParent) return el.offsetParent;
 		if (el == document.body) return el;
@@ -506,9 +493,6 @@ zDom = { //static methods
 
 		return document.body;
 	},
-	/** Return element's offsetWidth, which solving Safari's bug.
-	 * Meaningful only if element is TR).
-	 */
 	offsetWidth: function (el) {
 		if (!el) return 0;
 		if (!zk.safari || zDom.tag(el) != "TR") return el.offsetWidth;
@@ -518,7 +502,6 @@ zDom = { //static methods
 			wd += cells[j].offsetWidth;
 		return wd;
 	},
-	/** Return element.offsetHeight, which solving Safari's bug. */
 	offsetHeight: function (el) {
 		if (!el) return 0;
 		if (!zk.safari || zDom.tag(el) != "TR") return el.offsetHeight;
@@ -530,14 +513,12 @@ zDom = { //static methods
 		}
 		return hgh;
 	},
-	/** Returns el.offsetTop, which solving Safari's bug. */
 	offsetTop: function (el) {
 		if (!el) return 0;
 		if (zk.safari && zDom.tag(el) === "TR" && el.cells.length)
 			el = el.cells[0];
 		return el.offsetTop;
 	},
-	/** Returns el.offsetLeft, which solving Safari's bug. */
 	offsetLeft: function (el) {
 		if (!el) return 0;
 		if (zk.safari && zDom.tag(el) === "TR" && el.cells.length)
@@ -734,17 +715,8 @@ zDom = { //static methods
 		}
 		return map;
 	},
-	/** Returns the opacity style of the specified element, including CSS class. */
-	getOpacity: function (el) {
-		return zDom.getStyle(el, 'opacity');
-	},
-	/** Sets the opacity style of the specified element. */
-	setOpacity: function(el, value){
-		zDom.setStyles(el, {opacity:value});
-	},
 
-	/** Forces the browser to redo the CSS by adding and removing a CSS class. */
-	redoCSS: function (el, timeout) {
+	redoCSS: function (el) {
 		el = zDom.$(el);
 		if (el) {
 			try {
@@ -754,7 +726,6 @@ zDom = { //static methods
 			}
 		}
 	},
-	/** Redraws the element by use of setOuterHTML. */
 	reOuter: function (el) {
 		el = zDom.$(el);
 		if (el)
@@ -937,9 +908,6 @@ zDom = { //static methods
 		if (n && n.parentNode) n.parentNode.removeChild(n);
 	},
 
-	/** Appends a JavaScript node.
-	 * @param charset the charset. UTF-8 is assumed if omitted.
-	 */
 	appendScript: function (src, charset) {
 		var e = document.createElement("SCRIPT");
 		e.type = "text/javascript";
@@ -1002,17 +970,11 @@ zDom = { //static methods
 	vparent: function (el) {
 		return el.z_vp;
 	},
-	/**Position an element able to apear above others.
-	 * It doesn't change style.position (which is caller's job).
-	 * Rather, it changes its parent to document.body.
-	 * Remember to call {@link #undoVParent} (at least, in {@link #unbind_})
-	 * if you called this method.
-	 */
 	makeVParent: function (el) {
-		if (el.z_vp) return; //called twice
+		var p = el.parentNode;
+		if (el.z_vp || p == document.body) return; //called twice or not necessary
 
 		var sib = el.nextSibling,
-			p = el.parentNode,
 			agtx = el.z_vpagtx = document.createElement("SPAN");
 		agtx.style.display = "none";
 		if (sib) p.insertBefore(agtx, sib);
@@ -1034,24 +996,7 @@ zDom = { //static methods
 		}
 	},
 
-	/**
-	 * Creates a 'stackup' (actually, an iframe) that makes
-	 * an element (with position:absolute) shown above others.
-	 * The stackup is used to resolve the layer issues:
-	 * <ul>
-	 * <li>IE6: SELECT's dropdown above any other DOM element</li>
-	 * <li>All browser: PDF iframe above any other DOM element.
-	 * However, this approach works only in FF and IE.</li<
-	 * </ul>
-	 * @param el the element to retrieve the dimensions.
-	 * If omitted, the stackup is not appended to the DOM tree.
-	 * @param id ID of the iframe. If omitted and el is specified,
-	 * it is el.id + '$ifrstk'. If both el and id are omitted, 'z_ifrstk'
-	 * is assumed.
-	 * @param anchor whether to insert the DOM element before.
-	 * If omitted, el is assumed.
-	 */
-	makeStackup: function (el, id, anchor) {
+	newStackup: function (el, id, anchor) {
 		var ifr = document.createElement('iframe');
 		ifr.id = id || (el ? el.id + "$ifrstk": 'z_ifrstk');
 		ifr.style.cssText = "position:absolute;overflow:hidden;filter:alpha(opacity=0)";
@@ -1069,8 +1014,6 @@ zDom = { //static methods
 	},
 
 	//dialog//
-	/** To confirm the user for an activity.
-	 */
 	confirm: function (msg) {
 		zk.alerting = true;
 		try {
@@ -1079,9 +1022,6 @@ zDom = { //static methods
 			try {zk.alerting = false;} catch (e) {} //doc might be unloaded
 		}
 	},
-	/** To prevent onblur if alert is shown.
-	 * Note: browser will change the focus back, so it is safe to ingore.
-	 */
 	alert: function (msg) {
 		zk.alerting = true;
 		try {
@@ -1229,8 +1169,6 @@ zDom = { //static methods
 				el.onselectstart = null;
 	},
 
-	/** Returns the attribute of the specified name.
-	 */
 	getAttr: function (el, nm) {
 		try {
 			return el && el.getAttribute ? el.getAttribute(nm): null;
@@ -1238,8 +1176,6 @@ zDom = { //static methods
 			return null; //IE6: failed if el is TABLE and attribute not there
 		}
 	},
-	/** Sets the attribute of the specified name with the specified value.
-	 */
 	setAttr: function (el, nm, val) {
 		if (el && el.setAttribute) el.setAttribute(nm, val);
 	},

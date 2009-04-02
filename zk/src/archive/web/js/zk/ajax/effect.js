@@ -20,7 +20,7 @@ zEffect = {
 		element = zDom.$(element);
 		var oldOpacity = element.style.opacity || '';
 		opts = zk.$default(opts, {to: 0.0});
-		if (!opts.from) opts.from = zDom.getOpacity(element) || 1.0;
+		if (!opts.from) opts.from = zDom.getStyle(element, 'opacity') || 1.0;
 		if (!opts.afterFinishInternal)
 			opts.afterFinishInternal = function(effect) { 
 				if(effect.opts.to==0) {
@@ -35,7 +35,8 @@ zEffect = {
 		element = zDom.$(element);
 		opts = zk.$default(opts, {to: 1.0});
 		if (!opts.from)
-			opts.from = zDom.getStyle(element, 'display') == 'none' ? 0.0 : zDom.getOpacity(element) || 0.0;
+			opts.from = zDom.getStyle(element, 'display') == 'none' ?
+				0.0 : zDom.getStyle(element, 'opacity') || 0.0;
 		
 		if (!opts.afterFinishInternal)
 			opts.afterFinishInternal = function(effect) { 
@@ -45,7 +46,7 @@ zEffect = {
 		if (!opts.beforeSetup)
 			opts.beforeSetup = function(effect) {
 				var e = effect.node;
-				zDom.setOpacity(e, effect.opts.from);
+				zDom.setStyles(e, {opacity:effect.opts.from});
 				zDom.show(e);
 			};
 		return new zk.eff.Opacity(element,opts);
@@ -456,11 +457,11 @@ zk.eff.Opacity = zk.$extends(zk.eff.Base_, {
 		if(zk.ie && (!e.currentStyle.hasLayout))
 			zDom.setStyles(e, {zoom: 1});
 		opts = zk.$default(opts, {to: 1.0});
-		if (!opts.from) opts.from = zDom.getOpacity(e) || 0.0,
+		if (!opts.from) opts.from = zDom.getStyle(e, 'opacity') || 0.0,
 		this.start(opts);
 	},
 	update: function(position) {
-		zDom.setOpacity(this.node, position);
+		zDom.setStyles(this.node, {opacity:position});
 	}
 });
 
@@ -754,7 +755,7 @@ zk.eff.Shadow = zk.$extends(zk.Object, {
 		if(opts.stackup && node) {
 			if(!stackup)
 				stackup = this.stackup =
-					zDom.makeStackup(node, node.id + '$sdwstk', shadow);
+					zDom.newStackup(node, node.id + '$sdwstk', shadow);
 
 			st = stackup.style;
 			st.left = l +"px";
@@ -799,7 +800,7 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 			mask = this.mask = zDom.$(maskId);
 		}
 		if (opts.stackup)
-			this.stackup = zDom.makeStackup(mask, mask.id + '$mkstk');
+			this.stackup = zDom.newStackup(mask, mask.id + '$mkstk');
 
 		this._syncPos();
 

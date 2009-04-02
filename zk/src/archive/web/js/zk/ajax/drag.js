@@ -21,7 +21,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 		var zdg = zk.Draggable;
 		if (!zdg._stackup) {
 		//IE: if we don't insert stackup at beginning, dragging is slow
-			var n = zdg._stackup = zDom.makeStackup(null, 'z_ddstkup');
+			var n = zdg._stackup = zDom.newStackup(null, 'z_ddstkup');
 			zDom.hide(n);
 			document.body.appendChild(n);
 		}
@@ -114,7 +114,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 		if (this.opts.stackup) {
 			var defStackup = zdg._stackup;
 			if (zDom.isVisible(defStackup)) //in use
-				this._stackup = zDom.makeStackup(node, node.id + '$ddstk');
+				this._stackup = zDom.newStackup(node, node.id + '$ddstk');
 			else {
 				this._stackup = defStackup;
 				this._syncStackup();
@@ -530,7 +530,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 	//default effect//
 	_defStartEffect: function (draggable) {
 		var node = draggable.node;
-		node._$opacity = zDom.getOpacity(node);
+		node._$opacity = zDom.getStyle(node, 'opacity');
 		zk.Draggable._dragging[node] = true;
 		new zk.eff.Opacity(node, {duration:0.2, from:node._$opacity, to:0.7}); 
 	},

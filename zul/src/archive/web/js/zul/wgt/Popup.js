@@ -43,7 +43,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		}
 		if (zk.ie6Only) {
 			if (!this._stackup)
-				this._stackup = zDom.makeStackup(node);
+				this._stackup = zDom.newStackup(node);
 			else {
 				this._stackup.style.top = node.style.top;
 				this._stackup.style.left = node.style.left;

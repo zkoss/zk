@@ -518,12 +518,12 @@ zul.grid.Grid = zk.$extends(zul.Widget, {
 			srcrows = wgt.rows.getNode().rows;
 		if (!dst || !srcrows.length || !dst.cells.length)
 			return;
-		var ncols = dst.cells.length, //TODO: handle colspan for dst: ncols = zk.ncols(dst.cells);
+		var ncols = dst.cells.length,
 			src, maxnc = 0, loadIdx = wgt._lastLoadIdx;
 		for (var j = 0, len = loadIdx || srcrows.length; j < len; ++j) {
 			var row = srcrows[j];
 			if (!zDom.isVisible(row) || !zk.Widget.$(row)._loaded) continue;
-			var cells = row.cells, nc = zDom.ncols(cells),
+			var cells = row.cells, nc = zDom.ncols(row),
 				valid = cells.length == nc && zDom.isVisible(row);
 				//skip with colspan and invisible
 			if (valid && nc >= ncols) {
