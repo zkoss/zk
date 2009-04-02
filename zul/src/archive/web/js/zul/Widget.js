@@ -43,13 +43,14 @@ zul.Widget = zk.$extends(zk.Widget, {
 		return this._ctrlKeys;
 	},
 	setCtrlKeys: function (keys) {
-		if (this._ctrlKeys != keys) {
-			if (!keys) {
-				this._ctrlKeys = this._parsedCtlKeys = null;
-				return;
-			}
+		if (this._ctrlKeys == keys) return;
+		if (!keys) {
+			this._ctrlKeys = this._parsedCtlKeys = null;
+			return;
+		}
 
-		var parsed = ['', '', '', '', ''], which = 0; //ext(#), ctl, alt, shft
+		var parsed = [{}, {}, {}, {}, {}], //ext(#), ctl, alt, shft
+			which = 0, $Event = zk.Event;
 		for (var j = 0, len = keys.length; j < len; ++j) {
 			var cc = keys.charAt(j); //ext
 			switch (cc) {
@@ -72,25 +73,25 @@ zul.Widget = zk.$extends(zk.Widget, {
 					throw "Unexpected character "+cc+" in "+keys;
 
 				var s = keys.substring(j+1, k).toLowerCase();
-				if ("pgup" == s) cc = 'A';
-				else if ("pgdn" == s) cc = 'B';
-				else if ("end" == s) cc = 'C';
-				else if ("home" == s) cc = 'D';
-				else if ("left" == s) cc = 'E';
-				else if ("up" == s) cc = 'F';
-				else if ("right" == s) cc = 'G';
-				else if ("down" == s) cc = 'H';
-				else if ("ins" == s) cc = 'I';
-				else if ("del" == s) cc = 'J';
+				if ("pgup" == s) cc = $Event.PGUP;
+				else if ("pgdn" == s) cc = $Event.PGDN;
+				else if ("end" == s) cc = $Event.END;
+				else if ("home" == s) cc = $Event.HOME;
+				else if ("left" == s) cc = $Event.LFT;
+				else if ("up" == s) cc = $Event.UP;
+				else if ("right" == s) cc = $Event.RGH;
+				else if ("down" == s) cc = $Event.DN;
+				else if ("ins" == s) cc = $Event.INS;
+				else if ("del" == s) cc = $Event.DEL;
 				else if (s.length > 1 && s.charAt(0) == 'f') {
 					var v = zk.parseInt(s.substring(1));
 					if (v == 0 || v > 12)
 						throw "Unsupported function key: #f" + v;
-					cc = 'O'.$inc(v); //'P': F1, 'Q': F2... 'Z': F12
+					cc = $Event.F1 + v - 1;
 				} else
 					throw "Unknown #"+s+" in "+keys;
 
-				parsed[which] += cc;
+				parsed[which][cc] = true;
 				which = 0;
 				j = k - 1;
 				break;
@@ -101,17 +102,16 @@ zul.Widget = zk.$extends(zk.Widget, {
 				if (which == 3)
 					throw "$a - $z not supported (found in "+keys+"). Allowed: $#f1, $#home and so on.";
 
-				if (cc <= 'Z' && cc >= 'A')
-					cc = cc.$inc('a'.$sub('A')); //to lower case
-				parsed[which] += cc;
+				if (cc <= 'z' && cc >= 'a')
+					cc = cc.toUpperCase();
+				parsed[which][cc.charCodeAt(0)] = true;
 				which = 0;
 				break;
 			}
 		}
 
-			this._parsedCtlKeys = parsed;
-			this._ctrlKeys = keys;
-		}
+		this._parsedCtlKeys = parsed;
+		this._ctrlKeys = keys;
 	},
 
 	//super//
@@ -155,5 +155,67 @@ zul.Widget = zk.$extends(zk.Widget, {
 		return id ? id.startsWith('uuid(') && id.endsWith(')') ?
 			zk.Widget.$(id.substring(5, id.length - 1)):
 			this.getFellow(id, true): null;
+	},
+
+	afterKeyDown_: function (evt) {
+		var keyCode = evt.keyCode, evtnm = "onCtrlKey", okcancel;
+		switch (keyCode) {
+		case 13: //ENTER
+			var target = evt.domTarget, tn = zDom.tag(target);
+			if (tn == "TEXTAREA" || (tn == "BUTTON" && getZKAttr(target, "keyevt") != "true")
+			|| (tn == "INPUT" && target.type.toLowerCase() == "button"))
+				return true; //don't change button's behavior (Bug 1556836)
+			okcancel = evtnm = "onOK";
+			break;
+		case 27: //ESC
+			okcancel = evtnm = "onCancel";
+			break;
+		case 16: //Shift
+		case 17: //Ctrl
+		case 18: //Alt
+			return;
+		case 45: //Ins
+		case 46: //Del
+			break;
+		default:
+			if ((keyCode >= 33 && keyCode <= 40) //PgUp, PgDn, End, Home, L, U, R, D
+			|| (keyCode >= 112 && keyCode <= 123) //F1: 112, F12: 123
+			|| evt.ctrlKey || evt.altKey)
+				break;
+			return;
+		}
+
+		var target = evt.target, wgt = target;
+		for (;; wgt = wgt.parent) {
+			if (!wgt) return;
+			if (!wgt.isListen(evtnm, true)) continue;
+
+			if (okcancel)
+				break
+
+			var parsed = wgt._parsedCtlKeys;
+			if (parsed
+			&& parsed[evt.ctrlKey ? 1: evt.altKey ? 2: evt.shiftKey ? 3: 0][keyCode])
+				break; //found
+		}
+
+		for (var w = target;; w = w.parent) {
+			if (w.beforeCtrlKeys_ && w.beforeCtrlKeys_(evt))
+				return;
+			if (w == wgt) break;
+		}
+		wgt.fire(evtnm, zk.copy({keyCode: keyCode, reference: target},
+			zEvt.filterMetaData(evt)), {ctl: true});
+		evt.stop();
+		//TODO: Bug 1756559
+
+		//Bug 2041347
+		if (zk.ie && keyCode == 112) {
+			zk._oldOnHelp = window.onhelp;
+			window.onhelp = function () {return false;}
+			setTimeout(function () {window.onhelp = zk._oldOnHelp; zk._oldOnHelp = null;}, 200);
+		}
+	},
+	beforeCtrlKeys_: function (evt) {
 	}
 });

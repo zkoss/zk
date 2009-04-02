@@ -406,11 +406,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			return;
 		}
 
-		if ((keyCode == 13 && this.isListen('onOK'))
-		|| (keyCode == 27 && this.isListen('onCancel'))) {
-			this._stopOnChanging();
-			this.updateChange_();
-		}
+		this.$supers('doKeyDown_', arguments);
 	},
 	doKeyUp_: function () {
 		//Support maxlength for Textarea
@@ -423,5 +419,12 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			}
 		}
 		this.$supers('doKeyUp_', arguments);
+	},
+	afterKeyDown_: function (evt) {
+		if (evt.keyCode != 13 || !this.isMultiline())
+			this.$supers('afterKeyDown_', arguments);
+	},
+	beforeCtrlKeys_: function (evt) {
+		this.updateChange_();
 	}
 });

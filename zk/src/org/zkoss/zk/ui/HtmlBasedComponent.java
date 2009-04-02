@@ -71,6 +71,9 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 		addClientEvent(HtmlBasedComponent.class, Events.ON_CLICK, 0);
 		addClientEvent(HtmlBasedComponent.class, Events.ON_DOUBLE_CLICK, 0);
 		addClientEvent(HtmlBasedComponent.class, Events.ON_RIGHT_CLICK, 0);
+		addClientEvent(HtmlBasedComponent.class, Events.ON_OK, 0);
+		addClientEvent(HtmlBasedComponent.class, Events.ON_CANCEL, 0);
+		addClientEvent(HtmlBasedComponent.class, Events.ON_CTRL_KEY, 0);
 	}
 
 	protected HtmlBasedComponent() {
@@ -409,6 +412,9 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 			ZIndexEvent evt = ZIndexEvent.getZIndexEvent(request);
 			_zIndex = evt.getZIndex();
 			Events.postEvent(evt);
+		} else if (name.equals(Events.ON_OK) || name.equals(Events.ON_CANCEL)
+		|| name.equals(Events.ON_CTRL_KEY)) {
+			Events.postEvent(KeyEvent.getKeyEvent(request));
 		} else
 			super.service(request, everError);
 	}

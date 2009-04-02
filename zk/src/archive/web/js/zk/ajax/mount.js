@@ -461,6 +461,7 @@ zkm = {
 			var wevt = new zk.Event(wgt, 'onKeyDown', zEvt.keyData(evt), null, evt);
 			wgt.doKeyDown_(wevt);
 			if (wevt.domStopped) zEvt.stop(evt);
+			if (!wevt.stopped && wgt.afterKeyDown_) wgt.afterKeyDown_(wevt);
 		}
 		if (zEvt.keyCode(evt) == 27 && zAu.shallIgnoreESC()) //Bug 1927788: prevent FF from closing connection
 			zEvt.stop(evt); //eat
