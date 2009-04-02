@@ -718,6 +718,11 @@ zAu.cmd0 = { //no uuid at all
 				}
 			}
 		}, 50);
+	},
+	scrollIntoView: function (id) {
+		var w = zk.Widget.$(id);
+		if (w) w.scrollIntoView();
+		else zDom.scrollIntoView(id);
 	}
 };
 zAu.cmd1 = {

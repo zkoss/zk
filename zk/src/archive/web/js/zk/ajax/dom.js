@@ -91,6 +91,28 @@ zDom = { //static methods
 		var pos = zDom.cmOffset(n);
 		scrollTo(pos[0], pos[1]);
 	},
+	scrollIntoView: function (el, ancestor) {
+		if (arguments.length == 1) {
+			el = zDom.$(el);
+			if (el)
+				for (var p = el; p = p.parentNode;)
+					zDom._scrvw(p, el);
+		} else
+			zDom._scrvw(zDom.$(ancestor), zDom.$(el));
+	},
+	_scrvw: function (outer, inner) {
+		if (outer && inner) {
+			var padding = zk.parseInt(zDom.getStyle(inner, "padding-top"));
+			var limit = inner.offsetTop - padding;
+			if (limit < outer.scrollTop) {
+				outer.scrollTop = limit;
+			} else {
+				limit = 3 + inner.offsetTop + inner.offsetHeight
+					- outer.scrollTop - outer.clientHeight;
+				if (limit > 0) outer.scrollTop += limit;
+			}
+		}
+	},
 
 	/** A map of the margin styles. */
 	margins: {l: "margin-left", r: "margin-right", t: "margin-top", b: "margin-bottom"},
@@ -795,9 +817,6 @@ zDom = { //static methods
 		div.appendChild(clone);
 		return div.innerHTML;
 	},
-	/** Replaces the outer of the specified element with the HTML content.
-	 * @return the new node (actually the first new node, if multiple)
-	 */
 	setOuterHTML: function(n, html) {
 		n = zDom.$(n);
 		var parent = n.parentNode, sib = n.previousSibling;
@@ -822,7 +841,7 @@ zDom = { //static methods
 			n.outerHTML = html;
 		else if (zk.gecko2Only && zDom.tag(n) == 'LEGEND') {
 			//A dirty fix (not work if html is not LEGEND
-			n.innerHTML = zDom._removeOuter(html);
+			n.innerHTML = zDom._rmOuter(html);
 		} else { //non-IE
 			var range = n.ownerDocument.createRange();
 			range.setStartBefore(n);
@@ -844,13 +863,10 @@ zDom = { //static methods
 		}*/
 		return n;
 	},
-	_removeOuter: function (html) {
+	_rmOuter: function (html) {
 		var j = html.indexOf('>') + 1, k = html.lastIndexOf('<');
 		return k >= j ? html.substring(j, k): html;
 	},
-	/** Inserts an unparsed HTML immediately before the specified element.
-	 * @param el the sibling before which to insert
-	 */
 	insertHTMLBefore: function (el, html) {
 		if (zk.ie) {
 			switch (zDom.tag(el)) { //exclude TABLE
@@ -865,8 +881,6 @@ zDom = { //static methods
 		}
 		el.insertAdjacentHTML('beforeBegin', html);
 	},
-	/** Inserts an unparsed HTML immediately before the ending element.
-	 */
 	insertHTMLBeforeEnd: function (el, html) {
 		if (zk.ie) {
 			var tn = zDom.tag(el);
@@ -892,9 +906,6 @@ zDom = { //static methods
 		}
 		el.insertAdjacentHTML("beforeEnd", html);
 	},
-	/** Inserts an unparsed HTML immediately after the specified element.
-	 * @param el the sibling after which to insert
-	 */
 	insertHTMLAfter: function (el, html) {
 		if (zk.ie) {
 			switch (zDom.tag(el)) { //exclude TABLE
@@ -913,21 +924,14 @@ zDom = { //static methods
 		el.insertAdjacentHTML('afterEnd', html);
 	},
 
-	/** Inserts a node after another.
-	 */
 	insertAfter: function (el, ref) {
 		var sib = ref.nextSibling;
 		if (sib) ref.parentNode.insertBefore(el, sib);
 		else ref.parentNode.appendChild(el);
 	},
-	/** Inserts a node before another.
-	 */
 	insertBefore: function (el, ref) {
 		ref.parentNode.insertBefore(el, ref);
 	},
-	/** Detaches an element.
-	 * @param n the element, or the element's ID.
-	 */
 	remove: function (n) {
 		n = zDom.$(n);
 		if (n && n.parentNode) n.parentNode.removeChild(n);

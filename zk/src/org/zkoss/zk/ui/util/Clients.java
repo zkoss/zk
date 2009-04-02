@@ -124,6 +124,12 @@ public class Clients {
 		response(new AuPrint());
 	}
 
+	/** Scrolls the ancestor elements to make the specified element visible.
+	 * @since 3.6.1
+	 */
+	public static final void scrollIntoView(Component cmp) {
+		response(new AuScrollIntoView(cmp));
+	}
 	/** Scrolls the current desktop (aka., browser window) by the specified number of pixels.
 	 * If the number passed is positive, the desktop is scrolled down.
 	 * If negative, it is scrolled up.

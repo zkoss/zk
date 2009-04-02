@@ -507,6 +507,26 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 	},
 
+	getScrollTop: function () {
+		var n = this.getNode();
+		return n ? n.scrollTop: 0;
+	},
+	getScrollLeft: function () {
+		var n = this.getNode();
+		return n ? n.scrollLeft: 0;
+	},
+	setScrollTop: function (val) {
+		var n = this.getNode();
+		if (n) n.scrollTop = val;
+	},
+	setScrollLeft: function (val) {
+		var n = this.getNode();
+		if (n) n.scrollLeft = val;
+	},
+	scrollIntoView: function () {
+		zDom.scrollIntoView(this.getNode());
+	},
+
 	redraw: function (out) {
 		var s = this.prolog;
 		if (s) out.push(s);

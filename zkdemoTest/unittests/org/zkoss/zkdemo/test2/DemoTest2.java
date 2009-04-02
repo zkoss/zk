@@ -5,10 +5,12 @@ import com.thoughtworks.selenium.Selenium;
 public class DemoTest2 extends ZKTestCase {
 
 	private Selenium browser;
+	private String url;
 
-	public void setUp() {
-		browser = Server;
-		browser.start();
+	public DemoTest2() {
+		super();
+		browser = getBrowser();
+		url = getUrl();
 	}
 
 	public void testTodo() {
@@ -40,7 +42,6 @@ public class DemoTest2 extends ZKTestCase {
 			Thread.sleep(1000);
 			browser.focus("zk-comp-18!real");
 			browser.click("zk-comp-18!real");
-
 			Thread.sleep(1500);
 
 			assertEquals("Somthing impotant", browser
@@ -64,7 +65,4 @@ public class DemoTest2 extends ZKTestCase {
 		}
 	}
 
-	public void tearDown() {
-		browser.stop();
-	}
 }

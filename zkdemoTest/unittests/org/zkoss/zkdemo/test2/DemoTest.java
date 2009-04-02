@@ -7,9 +7,15 @@ import com.thoughtworks.selenium.Selenium;
 public class DemoTest extends ZKTestCase {
 
 	private Selenium browser;
+	private String url;
+
+	public DemoTest() {
+		super();
+		browser = getBrowser();
+		url = getUrl();
+	}
 
 	public void setUp() {
-		browser = Server;
 		browser.start();
 	}
 
