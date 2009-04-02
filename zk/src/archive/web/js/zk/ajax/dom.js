@@ -916,15 +916,11 @@ zDom = { //static methods
 		document.getElementsByTagName("HEAD")[0].appendChild(e);
 	},
 
-	/** Returns the next sibling with the specified tag name, or null if not found.
-	 */
 	nextSibling: function (el, tagName) {
 		while (el && (el = el.nextSibling) != null && zDom.tag(el) != tagName)
 			;
 		return el;
 	},
-	/** Returns the next sibling with the specified tag name, or null if not found.
-	 */
 	previousSibling: function (el, tagName) {
 		while (el && (el = el.previousSibling) != null && zDom.tag(el) != tagName)
 			;
@@ -957,11 +953,10 @@ zDom = { //static methods
 		return null;
 	},
 
-	/** Returns the parent node including the virtual parent. */
 	parentNode: function (el) {
 		return el.z_vp || el.parentNode;
 	},
-	parentByTag: function (el, tagName) {
+	ancestor: function (el, tagName) {
 		for (; el; el = zDom.parentNode(el))
 			if (zDom.tag(el) == tagName)
 				return el;
@@ -1032,10 +1027,6 @@ zDom = { //static methods
 	},
 
 	//focus/select//
-	/** Focus to the specified component w/o throwing exception.
-	 * @return whether focus is allowed. Currently, it accepts only
-	 * BUTTON, INPUT, SELECT and IFRAME.
-	 */
 	focus: function (n, timeout) {
 		n = zDom.$(n);
 		if (!n || !n.focus) return false;
@@ -1063,7 +1054,6 @@ zDom = { //static methods
 		} //IE throws exception if failed to focus in some cases
 	},
 
-	/** Select to the specified component w/o throwing exception. */
 	select: function (n, timeout) {
 		n = zDom.$(n);
 		if (!n || typeof n.select != 'function') return false;
@@ -1081,9 +1071,6 @@ zDom = { //static methods
 			}, 0);
 		} //IE throws exception when select() in some cases
 	},
-	/** Returns the selection range of the specified input control.
-	 * Note: if the function occurs some error, it always return [0, 0];
-	 */
 	getSelectionRange: function(inp) {
 		try {
 			if (document.selection != null && inp.selectionStart == null) { //IE
@@ -1143,7 +1130,6 @@ zDom = { //static methods
 			return false;
 		}
 	},
-	/** Disable whether the specified element is selectable. */
 	disableSelection: function (el) {
 		el = zDom.$(el);
 		if (el)
@@ -1157,7 +1143,6 @@ zDom = { //static methods
 					return tag == "TEXTAREA" || tag == "INPUT" && (n.type == "text" || n.type == "password");
 				};
 	},
-	/** Enables whether the specified element is selectable. */
 	enableSelection: function (el) {
 		el = zDom.$(el);
 		if (el)
@@ -1184,7 +1169,6 @@ zDom = { //static methods
 		else zDom.setAttr(el, nm, "");
 	},
 
-	/** Creates one if not found. */
 	newFrame: function (id, src, style) {
 		if (!src) src = zAu.comURI('/web/img/spacer.gif');
 			//IE with HTTPS: we must specify the src

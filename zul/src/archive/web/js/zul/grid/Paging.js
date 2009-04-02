@@ -355,7 +355,7 @@ zul.grid.Paging = zk.$extends(zul.Widget, {
 	_domMouseOver: function (evt) {
 		if (!evt) evt = window.event;
 		var target = zEvt.target(evt),
-			table = zDom.parentByTag(target, "TABLE"),
+			table = zDom.ancestor(target, "TABLE"),
 			zcls = zk.Widget.$(target).getZclass();
 		if (!zDom.hasClass(table, zcls + "-btn-disd")) 
 			zDom.addClass(table, zcls + "-btn-over");
