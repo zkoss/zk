@@ -27,11 +27,11 @@ zul.inp.Comboitem = zk.$extends(zul.LabelImageWidget, {
 		}
 	},
 	getDescription: function () {
-		return this._desc;
+		return this._description;
 	},
 	setDescription: function (desc) {
-		if (this._desc != desc) {
-			this._desc = desc;
+		if (this._description != desc) {
+			this._description = desc;
 			if (this.desktop) this.rerender();
 		}
 	},

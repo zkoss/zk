@@ -38,9 +38,14 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	},
 	onShow: _zkf,
 	onFloatUp: function (wgt) {
-		//TODO
+		if (!zUtl.isAncestor(this, wgt))
+			this.close({sendOnOpen:true});
 	},
 
+	setOpen: function (open, opts) {
+		if (open) this.open(opts);
+		else this.close(opts)
+	},
 	isOpen: function () {
 		return this._open;
 	},
@@ -50,7 +55,8 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		if (opts && opts.focus)
 			this.focus();
 
-		var pp = this.getSubnode('pp');
+		var pp = this.getSubnode('pp'),
+			inp = this.getInputNode();
 		if (!pp) return;
 
 		zWatch.fire('onFloatUp', null, this); //notify all
@@ -81,20 +87,39 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		// throw in
 		pp.style.left = "";
 		this._fixsz(ppofs);//fix size
-		zDom.position(pp, this.getInputNode(), "after_start");
+		zDom.position(pp, inp, "after_start");
 		pp.style.display = "none";
 		pp.style.visibility = "";
 
 		zAnima.slideDown(this, pp, {afterAnima: this._afterSlideDown});
 
-		if (!opts || !opts.silent) {
-			var n = this.getSubnode('real');
-			if (n) n = n.value;
-			this.fire('onOpen', {open:true, value: n||''});
+		//FF issue:
+		//If both horz and vert scrollbar are visible:
+		//a row might be hidden by the horz bar.
+		if (zk.gecko) {
+			var rows = pp2 ? pp2.rows: null;
+			if (rows) {
+				var gap = pp.offsetHeight - pp.clientHeight;
+				if (gap > 10 && pp.offsetHeight < 150) { //scrollbar
+					var hgh = 0;
+					for (var j = rows.length; --j >= 0;)
+						hgh += rows[j].offsetHeight;
+					pp.style.height = (hgh + 20) + "px";
+						//add the height of scrollbar (18 is an experimental number)
+				}
+			}
 		}
+
+		if (!this._shadow)
+			this._shadow = new zk.eff.Shadow(pp,
+				{left: -4, right: 4, top: -2, bottom: 3, stackup: true});
+
+		if (opts && opts.sendOnOpen)
+			this.fire('onOpen', {open:true, value: inp.value});
 	},
 	_afterSlideDown: function (n) {
 		zWatch.fireDown("onShow", {visible:true}, this);
+		if (this._shadow) this._shadow.sync();
 	},
 	close: function (opts) {
 		if (!this._open) return;
@@ -114,11 +139,8 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		var n = this.getSubnode('btn');
 		if (n) zDom.rmClass(n, this.getZclass() + '-btn-over');
 
-		if (!opts || !opts.silent) {
-			n = this.getSubnode('real');
-			if (n) n = n.value;
-			this.fire('onOpen', {open:false, value: n||''});
-		}
+		if (opts && opts.sendOnOpen)
+			this.fire('onOpen', {open:false, value: this.getInputNode().value});
 
 		zWatch.fireDown("onHide", {visible:true}, this);
 	},
@@ -141,7 +163,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 					//Note: we have to set width to auto and then 100%
 					//Otherwise, the width is too wide in IE
 			} else {
-				var wd = zk.innerWidth() - 20;
+				var wd = zDom.innerWidth() - 20;
 				if (wd < cb.offsetWidth) wd = cb.offsetWidth;
 				if (pp.offsetWidth > wd) pp.style.width = wd;
 			}
@@ -175,6 +197,8 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		zWatch.listen('onFloatUp', this);
 	},
 	unbind_: function () {
+		this.close();
+
 		var btn = this.getSubnode('btn');
 		if (btn) {
 			this._auxb.cleanup();
@@ -190,8 +214,8 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		this.$supers('unbind_', arguments);
 	},
 	_domBtn: function (devt) {
-		if (this._open) this.close({focus:true});
-		else this.open({focus:true});
+		if (this._open) this.close({focus:true,sendOnOpen:true});
+		else this.open({focus:true,sendOnOpen:true});
 		zEvt.stop(devt);
 	},
 	doKeyDown_: function (evt) {
@@ -203,13 +227,13 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		var keyCode = evt.keyCode,
 			bOpen = this._open;
 		if (keyCode == 9 || (zk.safari && keyCode == 0)) { //TAB or SHIFT-TAB (safari)
-			if (bOpen) this.close();
+			if (bOpen) this.close({sendOnOpen:true});
 			return;
 		}
 
 		if (evt.altKey && (keyCode == 38 || keyCode == 40)) {//UP/DN
-			if (bOpen) this.close();
-			else this.open();
+			if (bOpen) this.close({sendOnOpen:true});
+			else this.open({sendOnOpen:true});
 
 			//FF: if we eat UP/DN, Alt+UP degenerate to Alt (select menubar)
 			var opts = {propagation:true};
@@ -237,5 +261,10 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 
 		if (keyCode == 38) this.upPressed_();
 		else if (keyCode == 40) this.downPressed_();
-	}
+	},
+	onChildAdded_: _zkf = function (child) {
+		if (this._shadow) this._shadow.sync();
+	},
+	onChildRemoved_: _zkf,
+	onChildVisible_: _zkf
 });

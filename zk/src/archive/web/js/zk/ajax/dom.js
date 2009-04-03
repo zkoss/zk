@@ -148,7 +148,7 @@ zDom = { //static methods
 			}
 			ofs = zDom.cmOffset(el);
 		}
-		var scrolls = zDom.scrollOffset(el);
+		var scrolls = zDom.scrollOffset(el.parentNode);
 		scrolls[0] -= zDom.innerX(); scrolls[1] -= zDom.innerY();
 		return [ofs[0] - scrolls[0], ofs[1] - scrolls[1]];
 	},

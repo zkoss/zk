@@ -82,6 +82,10 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 	private transient ListDataListener _dataListener;
 	private transient EventListener _eventListener;
 	
+	static {
+		addClientEvent(Combobox.class, Events.ON_OPEN, CE_DUPLICATE_IGNORE);
+	}
+
 	public Combobox() {
 	}
 	public Combobox(String value) throws WrongValueException {
@@ -388,7 +392,7 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 	 * @since 3.0.1
 	 */
 	public void open() {
-		response("dropdn", new AuInvoke(this, "dropdn", true));
+		response("open", new AuInvoke(this, "setOpen", true)); //don't use smartUpdate
 	}
 	/** Closes the list of combo items ({@link Comboitem} if it was
 	 * dropped down.
@@ -397,7 +401,7 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 	 * @since 3.0.1
 	 */
 	public void close() {
-		response("dropdn", new AuInvoke(this, "dropdn", false));
+		response("open", new AuInvoke(this, "setOpen", false));//don't use smartUpdate
 	}
 
 	/** Returns whether the button (on the right of the textbox) is visible.
@@ -413,23 +417,6 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 			_btnVisible = visible;
 			smartUpdate("buttonVisible", visible);
 		}
-	}
-
-	/** Returns the URI of the button image.
-	 * <p>Default: null. (since 3.5.0)
-	 * @since 2.4.1
-	 * @deprecated As of release 3.5.0
-	 */
-	public String getImage() {
-		return null;
-	}
-	/** Sets the URI of the button image.
-	 *
-	 * @param img the URI of the button image.
-	 * @since 2.4.1
-	 * @deprecated As of release 3.5.0
-	 */
-	public void setImage(String img) {
 	}
 
 	/** Returns a 'live' list of all {@link Comboitem}.
@@ -575,6 +562,25 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 		if (!_btnVisible)
 			renderer.render("buttonVisible", false);
 	}
+	/** Processes an AU request.
+	 *
+	 * <p>Default: in addition to what are handled by {@link Textbox#service},
+	 * it also handles onOpen and onSelect.
+	 * @since 5.0.0
+	 */
+	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
+		final String name = request.getName();
+		if (name.equals(Events.ON_OPEN)) {
+			Events.postEvent(OpenEvent.getOpenEvent(request));
+		}else if (name.equals(Events.ON_SELECT)) {
+			SelectEvent evt = SelectEvent.getSelectEvent(request);
+			Set selItems = evt.getSelectedItems();
+			_selItem = selItems != null && !selItems.isEmpty()?
+				(Comboitem)selItems.iterator().next(): null;
+			Events.postEvent(evt);
+		} else
+			super.service(request, everError);
+	}
 
 	//-- Component --//
 	public boolean insertBefore(Component newChild, Component refChild) {
@@ -641,26 +647,5 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 			_selItem = getItemAtIndex(idx);
 		
 		if (_model != null) initDataListener();
-	}
-	
-	//-- ComponentCtrl --//
-	/** Processes an AU request.
-	 *
-	 * <p>Default: in addition to what are handled by {@link Textbox#service},
-	 * it also handles onOpen and onSelect.
-	 * @since 5.0.0
-	 */
-	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
-		final String name = request.getName();
-		if (name.equals(Events.ON_OPEN)) {
-			Events.postEvent(OpenEvent.getOpenEvent(request));
-		}else if (name.equals(Events.ON_SELECT)) {
-			SelectEvent evt = SelectEvent.getSelectEvent(request);
-			Set selItems = evt.getSelectedItems();
-			_selItem = selItems != null && !selItems.isEmpty()?
-				(Comboitem)selItems.iterator().next(): null;
-			Events.postEvent(evt);
-		} else
-			super.service(request, everError);
 	}
 }

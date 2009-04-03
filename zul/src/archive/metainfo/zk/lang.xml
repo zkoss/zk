@@ -183,17 +183,19 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>bandbox</component-name>
 		<component-class>org.zkoss.zul.Bandbox</component-class>
+		<widget-class>zul.inp.Bandbox</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/bandbox2.dsp</mold-uri>
+			<mold-uri>mold/bandbox.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>bandpopup</component-name>
 		<component-class>org.zkoss.zul.Bandpopup</component-class>
+		<widget-class>zul.inp.Bandpopup</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/bandpopup.dsp</mold-uri>
+			<mold-uri>mold/bandpopup.js</mold-uri>
 		</mold>
 		<preserve-blank/>
 	</component>

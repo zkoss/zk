@@ -20,9 +20,6 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		this._autocomplete = autocomplete;
 	},
 
-	_autoselback: function () {
-	},
-
 	//super
 	doBlur_: function (evt) {
 		//TODO

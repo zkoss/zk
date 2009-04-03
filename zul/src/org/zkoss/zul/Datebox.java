@@ -104,7 +104,7 @@ public class Datebox extends FormatInputElement implements org.zkoss.zul.api.Dat
 	public void setLenient(boolean lenient) {
 		if (_lenient != lenient) {
 			_lenient = lenient;
-			smartUpdate("z.lenient", _lenient);
+			smartUpdate("lenient", _lenient);
 		}
 	}
 	/** Returns whether to use a compact layout.
@@ -118,7 +118,7 @@ public class Datebox extends FormatInputElement implements org.zkoss.zul.api.Dat
 	public void setCompact(boolean compact) {
 		if (_compact != compact) {
 			_compact = compact;
-			invalidate();
+			smartUpdate("compact", compact);
 		}
 	}
 
@@ -135,24 +135,8 @@ public class Datebox extends FormatInputElement implements org.zkoss.zul.api.Dat
 	public void setButtonVisible(boolean visible) {
 		if (_btnVisible != visible) {
 			_btnVisible = visible;
-			smartUpdate("z.btnVisi", visible);
+			smartUpdate("buttonVisible", visible);
 		}
-	}
-	/** Returns the URI of the button image.
-	 * <p>Default: null. (since 3.5.0)
-	 * @since 3.0.0
-	 * @deprecated As of release 3.5.0
-	 */
-	public String getImage() {
-		return null;
-	}
-	/** Sets the URI of the button image.
-	 *
-	 * @param img the URI of the button image.
-	 * @since 3.0.0
-	 * @deprecated As of release 3.5.0
-	 */
-	public void setImage(String img) {
 	}
 
 	/** Returns the value (in Date), might be null unless

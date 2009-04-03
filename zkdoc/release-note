@@ -30,6 +30,7 @@ ZK 5.0.0
   + org.zkoss.zul.Applet and Iframe extends from HtmlBasedComponent
     rather than XulElement
   + The CSS of comboitem is renamed from combo-item to comboitem
+  + The CSS of bandpopup is renamed from band-popup to bandpopup
 
 	--------
 ZK 3.6.1
@@ -63,6 +64,7 @@ ZK 3.6.1
   2716731: flash component doesn't support absolute URI
   2721780: Nested window resize problem
   2722982: Tree render proble with a combobox and a lot of comboitems
+  2726542: The result of zk.revisedOffset is inconsistent between IE&FF2
 
 	--------
 ZK 3.6.0

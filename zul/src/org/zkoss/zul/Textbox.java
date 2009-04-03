@@ -19,6 +19,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.event.*;
 
 import org.zkoss.zul.impl.InputElement;
 
@@ -34,6 +35,11 @@ public class Textbox extends InputElement implements org.zkoss.zul.api.Textbox{
 	private int _rows = 1;
 	private boolean _multiline;
 	private boolean _tabbable;
+
+	static {
+		addClientEvent(Textbox.class, Events.ON_FOCUS, CE_DUPLICATE_IGNORE);
+		addClientEvent(Textbox.class, Events.ON_BLUR, CE_DUPLICATE_IGNORE);
+	}
 
 	public Textbox() {
 		setValueDirectly("");

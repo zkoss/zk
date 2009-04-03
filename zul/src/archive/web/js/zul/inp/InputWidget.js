@@ -172,6 +172,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 
 	doFocus_: function (evt) {
+		this.$supers('doFocus_', arguments);
+
 		if (zDom.tag(evt.domTarget)) { //Bug 2111900
 			var inp = this.getInputNode();
 			if (this.isListen('onChanging')) {
@@ -180,10 +182,10 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			}
 			zDom.addClass(inp, this.getZclass() + '-focus');
 		}
-
-		this.$supers('doFocus_', arguments);
 	},
 	doBlur_: function (evt) {
+		this.$supers('doBlur_', arguments);
+
 		this._stopOnChanging();
 
 		var inp = this.getInputNode();
@@ -191,7 +193,6 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		if (!zk.alerting && this.shallUpdate_(zk.currentFocus))
 			this.updateChange_();
 
-		this.$supers('doBlur_', arguments);
 	},
 
 	//dom event//
