@@ -34,7 +34,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	},
 
 	onSize: _zkf = function () {
-		this._dropb.fixpos();
+		this._auxb.fixpos();
 	},
 	onShow: _zkf,
 	onFloatUp: function (wgt) {
@@ -47,6 +47,9 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	open: function (opts) {
 		if (this._open) return;
 		this._open = true;
+		if (opts && opts.focus)
+			this.focus();
+
 		var pp = this.getSubnode('pp');
 		if (!pp) return;
 
@@ -96,6 +99,9 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	close: function (opts) {
 		if (!this._open) return;
 		this._open = false;
+		if (opts && opts.focus)
+			this.focus();
+
 		var pp = this.getSubnode('pp');
 		if (!pp) return;
 
@@ -108,8 +114,6 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		var n = this.getSubnode('btn');
 		if (n) zDom.rmClass(n, this.getZclass() + '-btn-over');
 
-		if (opts && opts.focus)
-			this.focus();
 		if (!opts || !opts.silent) {
 			n = this.getSubnode('real');
 			if (n) n = n.value;
@@ -161,22 +165,34 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		this.$supers('bind_', arguments);
 
 		var btn = this.getSubnode('btn'),
-			inp = this.getInputNode(),
-			dropb = this._dropb = new zul.Dropbutton(this, btn, inp);
-
+			inp = this.getInputNode();
+		if (btn) {
+			this._auxb = new zul.Auxbutton(this, btn, inp);
+			zEvt.listen(btn, 'click', this.proxy(this._domBtn, '_pxBtn'));
+		}
 		zWatch.listen('onSize', this);
 		zWatch.listen('onShow', this);
 		zWatch.listen('onFloatUp', this);
 	},
 	unbind_: function () {
+		var btn = this.getSubnode('btn');
+		if (btn) {
+			this._auxb.cleanup();
+			this._auxb = null;
+			zEvt.unlisten(btn, 'click', this._pxBtn);
+		}
+
 		zWatch.unlisten('onSize', this);
 		zWatch.unlisten('onShow', this);
 		zWatch.unlisten('onFloatUp', this);
 
-		this._dropb.cleanup();
-		delete this._dropb;
 
 		this.$supers('unbind_', arguments);
+	},
+	_domBtn: function (devt) {
+		if (this._open) this.close({focus:true});
+		else this.open({focus:true});
+		zEvt.stop(devt);
 	},
 	doKeyDown_: function (evt) {
 		this._doKeyDown(evt);

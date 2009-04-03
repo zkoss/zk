@@ -18,10 +18,6 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	_tabindex: -1,
 	_type: 'text',
 
-	$init: function () {
-		this._pxLateBlur = this.proxy(this._lateBlur);
-		this.$supers('$init', arguments);
-	},
 	getType: function () {
 		return this._type;
 	},
@@ -192,10 +188,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 
 		var inp = this.getInputNode();
 		zDom.rmClass(inp, this.getZclass() + '-focus');
-
-		if (!zk.alerting)
-			setTimeout(this._pxLateBlur, 0);
-			//curretFocus still unknow, so wait a while to execute
+		if (!zk.alerting && this.shallUpdate_(zk.currentFocus))
+			this.updateChange_();
 
 		this.$supers('doBlur_', arguments);
 	},
@@ -209,10 +203,6 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			this.fire('onSelection', {start: b, end: e,
 				selected: inp.value.substring(b, e)});
 		}
-	},
-	_lateBlur: function () {
-		if (this.shallUpdate_(zk.currentFocus))
-			this.updateChange_();
 	},
 	shallUpdate_: function (focus) {
 		return !focus || !zUtl.isAncestor(this, focus);

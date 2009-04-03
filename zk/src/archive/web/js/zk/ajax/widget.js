@@ -1004,9 +1004,9 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 	},
 	domBlur_: function (devt) {
-		//due to domMouseDown called, zk.currentFocus already point to the
-		//widget gaining focus
-		if (zk.currentFocus == this) zk.currentFocus = null;
+		//due to domMouseDown called, zk.currentFocus already corrected,
+		//so we clear it only if caused by other case
+		if (!zk._cfByMD) zk.currentFocus = null;
 
 		var evt = new zk.Event(this, 'onFocus', null, null, devt);
 		this.doBlur_(evt);
@@ -1064,8 +1064,14 @@ zk.Widget = zk.$extends(zk.Object, {
 			else modal.focus(0);
 		} else if (!wgt || wgt.canActivate()) {
 			zk.currentFocus = wgt;
+			zk._cfByMD = true;
+			setTimeout(zk.Widget._clearCFByMD, 0);
+				//turn it off later since onBlur_ needs it
 			if (wgt) zWatch.fire('onFloatUp', null, wgt); //notify all
 		}
+	},
+	_clearCFByMD: function () {
+		zk._cfByMD = false;
 	},
 
 	//uuid//

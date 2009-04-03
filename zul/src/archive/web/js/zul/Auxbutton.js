@@ -1,4 +1,4 @@
-/* Dropbutton.js
+/* Auxbutton.js
 
 	Purpose:
 		
@@ -12,7 +12,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.Dropbutton = zk.$extends(zk.Object, {
+zul.Auxbutton = zk.$extends(zk.Object, {
 	$init: function (wgt, btn, ref) {
 		this._wgt = wgt;
 		this._btn = btn;
@@ -72,23 +72,23 @@ zul.Dropbutton = zk.$extends(zk.Object, {
 	_domDown: function () {
 		var wgt = this._wgt;
 		if (!wgt.isDisabled() && !zk.dragging) {
-			var $Dropbutton = zul.Dropbutton,
-				curdb = $Dropbutton._curdb;
-			if (curdb) curdb._domUp();
+			var $Auxbutton = zul.Auxbutton,
+				curab = $Auxbutton._curab;
+			if (curab) curab._domUp();
 
 			zDom.addClass(this._btn, wgt.getZclass() + "-btn-clk");
 			zEvt.listen(document.body, "mouseup", this.proxy(this._domUp, '_pxUp'));
 
-			$Dropbutton._curdb = this;
+			$Auxbutton._curab = this;
 		}
 	},
 	_domUp: function () {
-		var $Dropbutton = zul.Dropbutton,
-			curdb = $Dropbutton._curdb;
-		if (curdb) {
-			$Dropbutton._curdb = null;
-			zDom.rmClass(curdb._btn, curdb._wgt.getZclass() + "-btn-clk");
-			zEvt.unlisten(document.body, "mouseup", curdb._pxUp);
+		var $Auxbutton = zul.Auxbutton,
+			curab = $Auxbutton._curab;
+		if (curab) {
+			$Auxbutton._curab = null;
+			zDom.rmClass(curab._btn, curab._wgt.getZclass() + "-btn-clk");
+			zEvt.unlisten(document.body, "mouseup", curab._pxUp);
 		}
 	}
 });
