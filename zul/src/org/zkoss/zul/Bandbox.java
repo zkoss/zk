@@ -68,10 +68,10 @@ public class Bandbox extends Textbox implements org.zkoss.zul.api.Bandbox {
 	public org.zkoss.zul.api.Bandpopup getDropdownApi() {
 		return getDropdown();
 	}
-	/** Closes the popup ({@link #getDropdown}).
+	/** @deprecated As of release 3.6.1, use {@link #close} instead.
 	 */
 	public void closeDropdown() {
-		response("close", new AuInvoke(this, "cbclose"));
+		close();
 	}
 
 	/** Returns whether to automatically drop the list if users is changing
