@@ -3,7 +3,7 @@
 
 <%-- Listbox --%>
 div.z-listbox {
-	background: #DAE7F6; border: 1px solid #7F9DB9; overflow: hidden; zoom: 1;
+	background: #DAE7F6; border: 1px solid #86A4BE; overflow: hidden; zoom: 1;
 }
 div.z-listbox-header, div.z-listbox-header tr, div.z-listbox-footer {
 	border: 0; overflow: hidden; width: 100%;

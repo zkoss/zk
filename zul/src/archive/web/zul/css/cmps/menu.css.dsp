@@ -167,7 +167,7 @@
 <%-- define menupopup effect --%>
 .z-menu-popup {
 	background:#CCE6FB repeat-y scroll 0 0;
-	border:1px solid #7F9DB9;
+	border:1px solid #86A4BE;
 	padding:2px;
 	z-index:88000;
 	background-image : url(${c:encodeURL('~./zul/img/menu/pp-bg.png')});

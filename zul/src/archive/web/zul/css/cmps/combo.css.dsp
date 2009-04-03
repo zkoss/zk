@@ -10,7 +10,7 @@
 .z-combobox-inp {
 	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
 	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg.gif')}) repeat-x 0 0;
-	border: 1px solid #7F9DB9;
+	border: 1px solid #86A4BE;
 }
 .z-combobox-focus .z-combobox-inp {
 	border: 1px solid #90BCE6;
@@ -26,7 +26,7 @@
 	background-position : 0 0;
 	background-repeat : no-repeat;
 	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0;
-	border-bottom: 1px solid #7F9DB9;
+	border-bottom: 1px solid #86A4BE;
 }
 .z-combobox-btn-over .z-combobox-img {
 	background-position: -17px 0;
@@ -43,7 +43,7 @@
 }
 .z-combobox-pp {
 	display: block; position: absolute; z-index: 88000;
-	background: white; border: 1px solid #7F9DB9; padding: 2px;
+	background: white; border: 1px solid #86A4BE; padding: 2px;
 	font-size: ${fontSizeS}; overflow: auto;
 	font-family: ${fontFamilyC};
 	font-weight: normal;
@@ -80,7 +80,7 @@
 
 .z-bandbox-inp {
 	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg.gif')}) repeat-x 0 0;
-	border: 1px solid #7F9DB9;
+	border: 1px solid #86A4BE;
 }
 .z-bandbox-focus .z-bandbox-inp {
 	border: 1px solid #90BCE6;
@@ -113,7 +113,7 @@
 }
 .z-bandbox-pp {
 	display: block; position: absolute; z-index: 88000;
-	background: white; border: 1px solid #7F9DB9; padding: 2px;
+	background: white; border: 1px solid #86A4BE; padding: 2px;
 	font-size: ${fontSizeS};
 }
 
@@ -128,7 +128,7 @@
 
 .z-datebox-inp {
 	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg.gif')}) repeat-x 0 0;
-	border: 1px solid #7F9DB9;
+	border: 1px solid #86A4BE;
 }
 .z-datebox-focus .z-datebox-inp {
 	border: 1px solid #90BCE6;
@@ -171,7 +171,7 @@
 <%-- Timebox --%>
 .z-timebox-inp {
 	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg.gif')}) repeat-x 0 0;
-	border: 1px solid #7F9DB9;
+	border: 1px solid #86A4BE;
 	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
 }
 .z-timebox-focus .z-timebox-inp {
@@ -206,7 +206,7 @@
 <%-- Spinner --%>
 .z-spinner-inp {
 	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg.gif')}) repeat-x 0 0;
-	border: 1px solid #7F9DB9;
+	border: 1px solid #86A4BE;
 	font-family: ${fontFamilyC};
 	font-size: ${fontSizeM}; font-weight: normal;
 }
