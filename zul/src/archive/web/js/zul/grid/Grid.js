@@ -243,7 +243,7 @@ zul.grid.Grid = zk.$extends(zul.Widget, {
 			this.ebody.style.overflow = ''; // clear
 		}
 		zWatch.listen("onSize", this);
-		zWatch.listen("onVisible", this);
+		zWatch.listen("onShow", this);
 		zWatch.listen("beforeSize", this);
 	},
 	unbind_: function () {
@@ -254,7 +254,7 @@ zul.grid.Grid = zk.$extends(zul.Widget, {
 			= this.eheadtbl = this.efoottbl = null;
 		
 		zWatch.unlisten("onSize", this);
-		zWatch.unlisten("onVisible", this);
+		zWatch.unlisten("onShow", this);
 		zWatch.unlisten("beforeSize", this);
 		
 		this.$supers('unbind_', arguments);
@@ -346,7 +346,7 @@ zul.grid.Grid = zk.$extends(zul.Widget, {
 			if (zk.ie7) zDom.redoCSS(this.getNode()); // Bug 2096807
 		}
 	},
-	onVisible: _zkf,
+	onShow: _zkf,
 	onRender: function (evt) {
 		var d = evt.data.marshal();
 		this._curpos = d[0];

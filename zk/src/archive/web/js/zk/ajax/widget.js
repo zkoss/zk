@@ -324,7 +324,7 @@ zk.Widget = zk.$extends(zk.Object, {
 				}
 			}
 
-			zWatch.fireDown('onVisible', {visible:true}, this);
+			zWatch.fireDown('onShow', {visible:true}, this);
 		} else {
 			zWatch.fireDown('onHide', {visible:true}, this);
 

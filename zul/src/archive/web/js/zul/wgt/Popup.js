@@ -113,7 +113,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	bind_: function () {
 		this.$supers('bind_', arguments);
 		zWatch.listen('onFloatUp', this);
-		zWatch.listen('onVisible', this);
+		zWatch.listen('onShow', this);
 		this.setFloating_(true);
 	},
 	unbind_: function () {
@@ -123,11 +123,11 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		}
 		
 		zWatch.unlisten('onFloatUp', this);
-		zWatch.unlisten('onVisible', this);
+		zWatch.unlisten('onShow', this);
 		this.setFloating_(false);
 		this.$supers('unbind_', arguments);
 	},
-	onVisible: zk.ie7 ? function (wgt) {
+	onShow: zk.ie7 ? function (wgt) {
 		var node = wgt.getNode(),
 			wdh = node.style.width,
 			fir = zDom.firstChild(node, "DIV"),
@@ -151,7 +151,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	}: zk.$void,
 	setWidth: function (width) {
 		this.$supers('setWidth', arguments);
-		zWatch.fireDown('onVisible', {visible:true}, this);
+		zWatch.fireDown('onShow', {visible:true}, this);
 	},
 	prologHTML_: function (out) {
 	},

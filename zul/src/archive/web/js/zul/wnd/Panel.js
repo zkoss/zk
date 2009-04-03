@@ -164,7 +164,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 					zDom.hide(node);
 				} else {
 					zDom.show(node);
-					zWatch.fireDown('onVisible', {visible:true}, this);
+					zWatch.fireDown('onShow', {visible:true}, this);
 				}
 				if (!fromServer) {
 					var wgt = this;
@@ -265,7 +265,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		this._fixWdh();
 		this._syncShadow();
 	},
-	onVisible: _zkf,
+	onShow: _zkf,
 	onHide: function () {
 		this._hideShadow();
 	},
@@ -368,7 +368,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		return this._zclass == null ?  "z-panel" : this._zclass;
 	},
 	_afterSlideDown: function (n) {
-		zWatch.fireDown("onVisible", {visible:true}, this);
+		zWatch.fireDown("onShow", {visible:true}, this);
 	},
 	_beforeSlideUp: function (n) {
 		zWatch.fireDown("onHide", {visible:true}, this);
@@ -426,7 +426,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		this.$supers('bind_', arguments);
 
 		zWatch.listen("onSize", this);
-		zWatch.listen("onVisible", this);
+		zWatch.listen("onShow", this);
 		zWatch.listen("onHide", this);
 
 		var uuid = this.uuid,
@@ -440,7 +440,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	},
 	unbind_: function () {
 		zWatch.unlisten("onSize", this);
-		zWatch.unlisten("onVisible", this);
+		zWatch.unlisten("onShow", this);
 		zWatch.unlisten('onFloatUp', this);
 		zWatch.unlisten("onHide", this);
 		this.setFloating_(false);

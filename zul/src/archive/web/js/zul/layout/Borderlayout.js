@@ -51,11 +51,11 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 	bind_: function () {
 		this.$supers('bind_', arguments);
 		zWatch.listen("onSize", this);
-		zWatch.listen("onVisible", this);
+		zWatch.listen("onShow", this);
 	},
 	unbind_: function () {
 		zWatch.unlisten("onSize", this);
-		zWatch.unlisten("onVisible", this);
+		zWatch.unlisten("onShow", this);
 		this.$supers('unbind_', arguments);
 	},
 	// private
@@ -276,7 +276,7 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 	onSize: _zkf = function () {
 		this._resize(true);
 	},
-	onVisible: _zkf
+	onShow: _zkf
 }, {
 	NORTH: "north",
 	SOUTH: "south",

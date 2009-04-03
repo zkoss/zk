@@ -257,7 +257,7 @@ zAnima = {
 			if (n) {
 				--zAnima.count;
 				n._$animating = null;
-				if (zk.ie && zDom.isVisible(n)) zDom.redoDOM(n); //fix an IE bug
+				if (zk.ie) zDom.redoCSS(n); //fix an IE bug
 
 				zAnima._doAniQue(n);
 

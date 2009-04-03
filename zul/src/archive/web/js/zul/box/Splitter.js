@@ -52,7 +52,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 				sibwgt = zk.Widget.$(sib),
 				fd = vert ? "height": "width", diff;
 			if (sib) {
-				sibwgt.setDomVisible_(sib, open); //fire onVisible/onHide
+				sibwgt.setDomVisible_(sib, open); //fire onShow/onHide
 				sibwgt.parent._fixChildDomVisible(sibwgt, open);
 
 				diff = zk.parseInt(sib.style[fd]);
@@ -60,7 +60,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 				if (!before && sibwgt && !sibwgt.nextSibling) {
 					var sp = this.getSubnode('chdex2');
 					if (sp) {
-						sp.style.display = open ? '': 'none'; //no onVisible/onHide
+						sp.style.display = open ? '': 'none'; //no onShow/onHide
 						diff += zk.parseInt(sp.style[fd]);
 					}
 				}
@@ -120,7 +120,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 
 		zWatch.listen("onSize", this);
 		zWatch.listen("beforeSize", this);
-		zWatch.listen("onVisible", this);
+		zWatch.listen("onShow", this);
 
 		this._fixDomClass();
 			//Bug 1921830: if spiltter is invalidated...
@@ -162,7 +162,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	unbind_: function () {
 		zWatch.unlisten("onSize", this);
 		zWatch.unlisten("beforeSize", this);
-		zWatch.unlisten("onVisible", this);
+		zWatch.unlisten("onShow", this);
 
 		var $Splitter = this.$class,
 			btn = this.button;
@@ -264,7 +264,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			}
 		}
 	},
-	onVisible: _zkf,
+	onShow: _zkf,
 	onSize: _zkf,
 	beforeSize: function () {
 		this.getNode().style[this.isVertical() ? "width": "height"] = "";

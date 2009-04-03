@@ -151,7 +151,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 					else {
 						zDom[open ? 'show' : 'hide'](real);
 						zDom[!open ? 'show' : 'hide'](colled);
-						zWatch.fireDown(open ? 'onVisible' : 'onHide', {visible:true}, this);
+						zWatch.fireDown(open ? 'onShow' : 'onHide', {visible:true}, this);
 					}
 				}
 			} else {

@@ -202,7 +202,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		if (!this._watchBound) {
 			this._watchBound = true;
 			zWatch.listen("onSize", this);
-			zWatch.listen("onVisible", this);
+			zWatch.listen("onShow", this);
 			zWatch.listen("onHide", this);
 		}
 	},
@@ -210,7 +210,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		if (this._watchBound) {
 			this._watchBound = false;
 			zWatch.unlisten("onSize", this);
-			zWatch.unlisten("onVisible", this);
+			zWatch.unlisten("onShow", this);
 			zWatch.unlisten("onHide", this);
 		}
 
@@ -272,7 +272,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				}
 		}
 	},
-	onVisible: _zkf,
+	onShow: _zkf,
 	onHide: _zkf
 },{
 	_toValign: function (v) {

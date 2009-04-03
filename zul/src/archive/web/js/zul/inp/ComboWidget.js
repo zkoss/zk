@@ -36,7 +36,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	onSize: _zkf = function () {
 		this._dropb.fixpos();
 	},
-	onVisible: _zkf,
+	onShow: _zkf,
 	onFloatUp: function (wgt) {
 		//TODO
 	},
@@ -45,6 +45,8 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		return this._open;
 	},
 	open: function (opts) {
+		if (this._open) return;
+		this._open = true;
 		var pp = this.getSubnode('pp');
 		if (!pp) return;
 
@@ -74,13 +76,47 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		zDom.makeVParent(pp);
 
 		// throw in
-		pp.style.visibility = "";
 		pp.style.left = "";
-
 		this._fixsz(ppofs);//fix size
 		zDom.position(pp, this.getInputNode(), "after_start");
+		pp.style.display = "none";
+		pp.style.visibility = "";
+
+		zAnima.slideDown(this, pp, {afterAnima: this._afterSlideDown});
+
+		if (!opts || !opts.silent) {
+			var n = this.getSubnode('real');
+			if (n) n = n.value;
+			this.fire('onOpen', {open:true, value: n||''});
+		}
 	},
-	close: function () {
+	_afterSlideDown: function (n) {
+		zWatch.fireDown("onShow", {visible:true}, this);
+	},
+	close: function (opts) {
+		if (!this._open) return;
+		this._open = false;
+		var pp = this.getSubnode('pp');
+		if (!pp) return;
+
+		pp.style.display = "none";
+		zDom.undoVParent(pp);
+		if (this._shadow) {
+			this._shadow.destroy();
+			this._shadow = null;
+		}
+		var n = this.getSubnode('btn');
+		if (n) zDom.rmClass(n, this.getZclass() + '-btn-over');
+
+		if (opts && opts.focus)
+			this.focus();
+		if (!opts || !opts.silent) {
+			n = this.getSubnode('real');
+			if (n) n = n.value;
+			this.fire('onOpen', {open:false, value: n||''});
+		}
+
+		zWatch.fireDown("onHide", {visible:true}, this);
 	},
 	_fixsz: function (ppofs) {
 		var pp = this.getSubnode('pp');
@@ -129,12 +165,12 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			dropb = this._dropb = new zul.Dropbutton(this, btn, inp);
 
 		zWatch.listen('onSize', this);
-		zWatch.listen('onVisible', this);
+		zWatch.listen('onShow', this);
 		zWatch.listen('onFloatUp', this);
 	},
 	unbind_: function () {
 		zWatch.unlisten('onSize', this);
-		zWatch.unlisten('onVisible', this);
+		zWatch.unlisten('onShow', this);
 		zWatch.unlisten('onFloatUp', this);
 
 		this._dropb.cleanup();
@@ -149,18 +185,15 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	},
 	_doKeyDown: function (evt) {
 		var keyCode = evt.keyCode,
-			opened = this._opened;
+			bOpen = this._open;
 		if (keyCode == 9 || (zk.safari && keyCode == 0)) { //TAB or SHIFT-TAB (safari)
-			if (opened) this.close();
+			if (bOpen) this.close();
 			return;
 		}
 
 		if (evt.altKey && (keyCode == 38 || keyCode == 40)) {//UP/DN
-			if (keyCode == 38) { //UP
-				if (opened) this.close();
-			} else {
-				if (!opened) this.open();
-			}
+			if (bOpen) this.close();
+			else this.open();
 
 			//FF: if we eat UP/DN, Alt+UP degenerate to Alt (select menubar)
 			var opts = {propagation:true};
@@ -170,7 +203,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		}
 
 		//Request 1537962: better responsive
-		if (opened && keyCode == 13) { //ENTER
+		if (bOpen && keyCode == 13) { //ENTER
 			var item = this._autoselback(); //Better usability(Bug 1633335): auto selback
 			if (item && this._selId != item.uuid) {
 				this._selId = item.uuid;

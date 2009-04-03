@@ -34,7 +34,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 					else zAnima.slideUp(this, panel, {beforeAnima: this._beforeSlideUp});
 				} else {
 					zDom[open ? 'rmClass': 'addClass'](node, this.getZclass() + "-colpsd");
-					zWatch.fireDown(open ? 'onVisible': 'onHide', {visible:true}, this);
+					zWatch.fireDown(open ? 'onShow': 'onHide', {visible:true}, this);
 				}
 				if (!fromServer) this.fire('onOpen', {open:open});
 			}
@@ -100,9 +100,9 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 			//shadow raraly needs to fix so OK to delay for better performance
 			//(getSubnode('sdw') a bit slow due to zDom.$)
 	},
-	onVisible: _zkf,
+	onShow: _zkf,
 	_afterSlideDown: function (n) {
-		zWatch.fireDown("onVisible", {visible:true}, this);
+		zWatch.fireDown("onShow", {visible:true}, this);
 	},
 	_beforeSlideUp: function (n) {
 		zWatch.fireDown("onHide", {visible:true}, this);
@@ -139,13 +139,13 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 
 		if (!this.isLegend()) {
 			zWatch.listen("onSize", this);
-			zWatch.listen("onVisible", this);
+			zWatch.listen("onShow", this);
 		}
 	},
 	unbind_: function () {
 		if (!this.isLegend()) {
 			zWatch.unlisten("onSize", this);
-			zWatch.unlisten("onVisible", this);
+			zWatch.unlisten("onShow", this);
 		}
 		this.$supers('unbind_', arguments);
 	},

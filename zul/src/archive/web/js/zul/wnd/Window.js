@@ -346,7 +346,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this._fixWdh();
 		this._syncShadow();
 	},
-	onVisible: _zkf,
+	onShow: _zkf,
 	onFloatUp: function (wgt) {
 		if (!this.isVisible() || this._mode == 'embedded')
 			return; //just in case
@@ -518,7 +518,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 
 		var mode = this._mode;
 		zWatch.listen('onSize', this);
-		zWatch.listen('onVisible', this);
+		zWatch.listen('onShow', this);
 		if (mode != 'embedded') {
 			zWatch.listen('onFloatUp', this);
 			this.setFloating_(true);
@@ -548,7 +548,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		zDom.undoVParent(node);
 		zWatch.unlisten('onFloatUp', this);
 		zWatch.unlisten('onSize', this);
-		zWatch.unlisten('onVisible', this);
+		zWatch.unlisten('onShow', this);
 		this.setFloating_(false);
 
 		if (zk.currentModal == this) {

@@ -132,7 +132,7 @@ zul.menu.Menupopup = zk.$extends('zul.wgt.Popup', {
 		}
 		this.close({sendOnOpen:true});
 	},
-	onVisible: function (wgt) {
+	onShow: function (wgt) {
 		if (zk.ie7) {
 			var pp = this.getNode();
 			if (!pp.style.width) {// Bug 2105158 and Bug 1911129
