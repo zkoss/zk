@@ -97,8 +97,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<disable-event-thread/>
 	</system-config>
 	-->
-	<!-- Turn on the following if you want to keep session after Web server restarts
+	<!-- Turn on the following if you want to use ZK with a clustering server
 	<system-config>
+		<disable-event-thread/>
 		<ui-factory-class>org.zkoss.zk.ui.http.SerializableUiFactory</ui-factory-class>
 	</system-config>
 	-->
