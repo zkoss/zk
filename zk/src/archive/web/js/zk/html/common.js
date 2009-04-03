@@ -674,7 +674,7 @@ zk.revisedOffset = function (el, ofs) {
 		}
 		ofs = zPos.cumulativeOffset(el);
 	}
-	var scrolls = zPos.realOffset(el);
+	var scrolls = zPos.realOffset(el.parentNode);
 	scrolls[0] -= zk.innerX(); scrolls[1] -= zk.innerY(); 
 	return [ofs[0] - scrolls[0], ofs[1] - scrolls[1]];
 };

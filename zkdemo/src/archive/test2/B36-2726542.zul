@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2726542.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Apr  3 10:31:49     2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<div id="outer" style="overflow-y: scroll; height: 200px;"> <button label="test" action='onclick:#{outer}.scrollTop=200;zk.debug("top", zk.revisedOffset(#{outer})[1])'/> <div style="height: 800px;background:red;"/> </div>
+After click the test button, you should see the message "[top] [0]".
+</zk>
