@@ -644,7 +644,6 @@
 		<xs:attribute name="autodrop" type="booleanType" use="optional" />
 		<xs:attribute name="buttonVisible" type="booleanType" use="optional" />
 		<xs:attribute name="constraint" type="constraintAttrType" use="optional" />
-		<xs:attribute name="image" type="xs:string" use="optional" />
 		<xs:attribute name="value" type="xs:string" use="optional" />
 		<xs:attribute name="type" type="textboxTypeAttrType" use="optional" />
 		<xs:attribute name="open" type="booleanType" use="optional" />
@@ -828,7 +827,6 @@
 		<xs:attribute name="autodrop" type="booleanType" use="optional" />
 		<xs:attribute name="buttonVisible" type="booleanType" use="optional" />
 		<xs:attribute name="constraint" type="constraintAttrType" use="optional" />
-		<xs:attribute name="image" type="xs:string" use="optional" />
 		<xs:attribute name="value" type="xs:string" use="optional" />
 		<xs:attribute name="model" type="xs:string" use="optional" />
 		<xs:attribute name="itemRenderer" type="xs:string" use="optional" />
@@ -866,7 +864,6 @@
 		<xs:attribute name="compact" type="booleanType" use="optional" />
 		<xs:attribute name="timeZone" type="xs:string" use="optional" />
 		<xs:attribute name="buttonVisible" type="booleanType" use="optional" />
-		<xs:attribute name="image" type="xs:string" use="optional" />
 		<xs:attribute name="open" type="booleanType" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
