@@ -38,7 +38,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			var inp = this.getInputNode();
 			if (inp) {
 				inp.value = value = this.coerceToString_(value);
-				if (fromServer) inp.defaultValue = value;
+				if (fromServer) inp.defaultValue = value; //not clear error if by client app
 			}
 		}
 	},
@@ -310,6 +310,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			val = this._validate(value);
 		if (!val || !val.error) {
 			inp.value = value = this.coerceToString_(val);
+			//reason to use defaultValue rather than this._value is
+			//to save the trouble of coerceToString issue
 			if (wasErr || value != inp.defaultValue) {
 				this._value = val;
 				inp.defaultValue = value;

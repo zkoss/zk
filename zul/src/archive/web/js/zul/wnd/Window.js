@@ -584,9 +584,11 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			// if (this.isMinimizable())
 			//	this.setMinimized(!this.isMinimized());
 			break;
+		default:
+			this.$supers('doClick_', arguments);
+			return;
 		}
 		evt.stop();
-		this.$supers('doClick_', arguments);
 	},
 	doMouseOver_: function (evt) {
 		switch (evt.domTarget) {

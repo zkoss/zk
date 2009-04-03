@@ -14,6 +14,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 	_tabindex: -1,
+	_checked: false,
 	
 	isDisabled: function () {
 		return this._disabled;
@@ -21,8 +22,8 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 	setDisabled: function (disabled) {
 		if (this._disabled != disabled) {
 			this._disabled = disabled;
-			if (this.getSubnode('real'))
-				this.getSubnode('real').disabled = disabled;
+			var n = this.getSubnode('real');
+			if (n) n.disabled = disabled;
 		}
 	},
 	isChecked: function () {
@@ -31,18 +32,18 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 	setChecked: function (checked) {
 		if (this._checked != checked) {
 			this._checked = checked;
-			if (this.getSubnode('real')) this.getSubnode('real').checked = checked;
+			var n = this.getSubnode('real');
+			if (n) n.checked = checked || false;
 		}
 	},
 	getName: function () {
 		return this._name;
 	},
 	setName: function (name) {
-		if (!name) name = null;
 		if (this._name != name) {
 			this._name = name;
-			if (this.getSubnode('real'))
-				this.getSubnode('real').name = name;
+			var n = this.getSubnode('real');
+			if (n) n.name = name;
 		}
 	},
 	getTabindex: function () {
@@ -51,8 +52,8 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 	setTabindex: function (tabindex) {
 		if (this._tabindex != tabindex) {
 			this._tabindex = tabindex;
-			if (this.getSubnode('real'))
-				this.getSubnode('real').tabIndex = tabindex;
+			var n = this.getSubnode('real');
+			if (n) n.tabIndex = tabindex;
 		}
 	},
 	getZclass: function () {
@@ -99,12 +100,11 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 
 		this.$supers('unbind_', arguments);
 	},
-	doClick_: function () {
+	doClick_: function (evt) {
 		var real = this.getSubnode('real'),
-			val = real.checked;
-		if (val != real.defaultChecked) { //changed
-			this.setChecked(val);
-			real.defaultChecked = val;
+			checked = real.checked;
+		if (checked != this._checked) { //changed
+			this.setChecked(checked); //so Radio has a chance to override it
 			this.fire('onCheck', val);
 		}
 		return this.$supers('doClick_', arguments);

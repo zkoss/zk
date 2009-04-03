@@ -13,49 +13,48 @@ This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
-	_value: '',
-	
 	getRadiogroup: function (parent) {
 		var wgt = parent || this.parent;
 		for (; wgt; wgt = wgt.parent)
 			if (wgt.$instanceof(zul.wgt.Radiogroup)) return wgt;
 		return null;
 	},
-	isSelected: function () {
-		return this.isChecked();
-	},
-	setSelected: function (selected, fromServer) {
-		this.setChecked(selected, fromServer);
-	},
-	setChecked: function (checked, fromServer) {
-		if (checked != this.isChecked()) {
-			this.$supers('setChecked', arguments);
-			if (this.getSubnode('real')) {
+	setChecked: _zkf = function (checked) {
+		if (checked != this._checked) {
+			this._checked = checked;
+			var n = this.getSubnode('real');
+			if (n) {
+				n.checked = checked || false;
+
 				var group = this.getRadiogroup();
-				
-				// bug #1893575 : we have to clean all of the radio at the same group.
-				// in addition we can filter unnecessary onCheck with defaultChecked
-				if (checked) {
-					for (var items = group.getItems(), i = items.length; --i >= 0;) {
-						if (items[i] != this) {
-							items[i].getSubnode('real').defaultChecked = false;
-							items[i]._checked = false;
+				if (group) {
+					// bug #1893575 : we have to clean all of the radio at the same group.
+					if (checked) {
+						for (var items = group.getItems(), i = items.length; --i >= 0;) {
+							if (items[i] != this) {
+								items[i].getSubnode('real').checked = false;
+								items[i]._checked = false;
+							}
 						}
 					}
-				}
-				if (group) 
 					group._fixSelectedIndex();
+				}
 			}
 		}
+	},
+	setSelected: _zkf,
+	isSelected: function () {
+		return this.isChecked();
 	},
 	getValue: function () {
 		return this._value;
 	},
 	setValue: function (value) {
-		if (value == null)
-			value = "";
-		if (this._value != value)
+		if (this._value != value) {
 			this._value = value;
+			var n = this.getSubnode('real');
+			if (n) n.value = value || '';
+		}
 	},
 	getName: function () {
 		var group = this.getRadiogroup();

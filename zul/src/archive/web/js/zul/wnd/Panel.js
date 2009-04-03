@@ -459,7 +459,6 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		switch (evt.domTarget) {
 		case this.getSubnode('close'):
 			this.fire('onClose');
-			evt.stop();
 			break;
 		case this.getSubnode('max'):
 			// TODO
@@ -472,8 +471,11 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			if (this.isCollapsible())
 				this.setOpen(!this.isOpen());
 			break;
+		default:
+			this.$supers('doClick_', arguments);
+			return;
 		}
-		this.$supers('doClick_', arguments);
+		evt.stop();
 	},
 	doMouseOver_: function (evt) {
 		switch (evt.domTarget) {
