@@ -70,6 +70,9 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 			this.parseConstraint_(s.trim().toLowerCase());
 		}
 	},
+	getFlags: function () {
+		return tis._flags;
+	},
 	parseConstraint_: function (cst) {
 		var f = this._flags;
 		if (cst == "no positive")
@@ -114,8 +117,9 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 			var regex = this._regex;
 			if (regex && !regex.test(val))
 				return msg || msgzul.ILLEGAL_VALUE;
-			if (f.STRICT && val) {
-				//TODO VALUE_NOT_MATCHED;
+			if (f.STRICT && val && wgt.validateStrict) {
+				msg = wgt.validateStrict(val);
+				if (msg) return msg;
 			}
 			return;
 		case 'number':

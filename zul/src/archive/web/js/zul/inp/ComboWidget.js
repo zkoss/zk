@@ -172,6 +172,8 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 
 	downPressed_: zk.$void, //function (evt) {}
 	upPressed_: zk.$void, //function (evt) {}
+	enterPressed_: zk.$void, //function(evt){}
+
 	/** Returns [width, height] for the popup if specified by user.
 	 * Default: ['auto', 'auto']
 	 */
@@ -244,14 +246,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 
 		//Request 1537962: better responsive
 		if (bOpen && keyCode == 13) { //ENTER
-			var item = this._autoselback(); //Better usability(Bug 1633335): auto selback
-			if (item && this._selId != item.uuid) {
-				this._selId = item.uuid;
-				this.fire('onSelect', zk.copy({
-					items: [item], reference: item
-				}, zEvt.filterMetaData(evt)));
-			}
-			this.updateChange_(); //fire onChange
+			this.enterPressed_(evt);
 			return;
 		}
 
@@ -259,8 +254,8 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		|| (keyCode >= 112 && keyCode <= 123)) //ALT, ESC, Enter, Fn
 			return; //ignore it (doc will handle it)
 
-		if (keyCode == 38) this.upPressed_();
-		else if (keyCode == 40) this.downPressed_();
+		if (keyCode == 38) this.upPressed_(evt);
+		else if (keyCode == 40) this.downPressed_(evt);
 	},
 	onChildAdded_: _zkf = function (child) {
 		if (this._shadow) this._shadow.sync();
