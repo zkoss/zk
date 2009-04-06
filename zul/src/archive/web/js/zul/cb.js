@@ -55,7 +55,7 @@ zkCmbox.onblur = function (evt) {
 					break;
 				}
 			}
-			if (jfnd >= 0) item = rows[j];
+			if (jfnd >= 0) item = rows[jfnd];
 			else item = {id: ""};
 
 			if ((jfnd >= 0 || !strict) && getZKAttr(cmp, "selid") != item.id) {
