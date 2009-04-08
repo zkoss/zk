@@ -1725,6 +1725,10 @@ zk.restoreStyle = function (el, nm) {
 	}
 };
 
+zk.scrollIntoView = function (outer, inner) {
+	if (inner && inner.scrollIntoView) inner.scrollIntoView();
+};
+
 /** Go to the specified uri.
  * @param overwrite whether to overwrite the history
  * @param target the target frame (ignored if overwrite is true
