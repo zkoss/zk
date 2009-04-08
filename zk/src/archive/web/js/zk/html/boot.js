@@ -1676,7 +1676,7 @@ zk._msgclose = function (n) {
 		}
 };
 //FUTURE: developer could control whether to turn on/off
-zk.debug = zk.message;
+zk.log = zk.debug = zk.message;
 
 /** Error message must be a popup. */
 zk.error = function (msg) {
