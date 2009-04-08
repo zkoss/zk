@@ -4,7 +4,7 @@
 <%-- Grid --%>
 div.z-grid {
 	background: #DAE7F6;
-	border: 1px solid #7F9DB9;
+	border: 1px solid #86A4BE;
 	overflow: hidden;
 	zoom: 1;
 }

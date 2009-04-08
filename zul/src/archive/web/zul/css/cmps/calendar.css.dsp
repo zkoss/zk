@@ -2,7 +2,7 @@
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 
 .z-calendar {
-	background: white; border: 1px solid #7F9DB9;
+	background: white; border: 1px solid #86A4BE;
 	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
 }
 

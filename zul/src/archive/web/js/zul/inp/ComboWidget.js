@@ -172,7 +172,14 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 
 	downPressed_: zk.$void, //function (evt) {}
 	upPressed_: zk.$void, //function (evt) {}
-	enterPressed_: zk.$void, //function(evt){}
+	enterPressed_: function (evt) {
+		this.close({sendOnOpen:true});
+		evt.stop();
+	},
+	escPressed_: function (evt) {
+		this.close({sendOnOpen:true});
+		evt.stop();
+	},
 
 	/** Returns [width, height] for the popup if specified by user.
 	 * Default: ['auto', 'auto']
@@ -245,8 +252,9 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		}
 
 		//Request 1537962: better responsive
-		if (bOpen && keyCode == 13) { //ENTER
-			this.enterPressed_(evt);
+		if (bOpen && (keyCode == 13 || keyCode == 27)) { //ENTER or ESC
+			if (keyCode == 13) this.enterPressed_(evt);
+			else this.escPressed_(evt);
 			return;
 		}
 

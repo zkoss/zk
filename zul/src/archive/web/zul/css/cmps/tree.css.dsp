@@ -3,7 +3,7 @@
 
 <%-- Tree --%>
 div.z-tree {
-	background: #DAE7F6; border: 1px solid #7F9DB9; overflow: hidden; zoom: 1;
+	background: #DAE7F6; border: 1px solid #86A4BE; overflow: hidden; zoom: 1;
 }
 div.z-tree-header, div.z-tree-header tr, div.z-tree-footer {
 	border: 0; overflow: hidden; width: 100%;
@@ -112,7 +112,7 @@ tr.z-tree-row td.z-tree-row-focus {
 
 <%-- z-dottree --%>
 div.z-dottree {
-	background: #DAE7F6; border: 1px solid #7F9DB9; overflow: hidden; zoom: 1;
+	background: #DAE7F6; border: 1px solid #86A4BE; overflow: hidden; zoom: 1;
 }
 div.z-dottree-header, div.z-dottree-header tr, div.z-dottree-footer {
 	border: 0; overflow: hidden; width: 100%;
@@ -184,7 +184,7 @@ span.z-dottree-spacer, span.z-dottree-firstspacer {
 
 <%-- z-filetree --%>
 div.z-filetree {
-	background: #DAE7F6; border: 1px solid #7F9DB9; overflow: hidden; zoom: 1;
+	background: #DAE7F6; border: 1px solid #86A4BE; overflow: hidden; zoom: 1;
 }
 div.z-filetree-header, div.z-filetree-header tr, div.z-filetree-footer {
 	border: 0; overflow: hidden; width: 100%;
@@ -240,7 +240,7 @@ span.z-filetree-vbar, span.z-filetree-spacer {
 
 <%-- z-vfiletree--%>
 div.z-vfiletree {
-	background: #DAE7F6; border: 1px solid #7F9DB9; overflow: hidden; zoom: 1;
+	background: #DAE7F6; border: 1px solid #86A4BE; overflow: hidden; zoom: 1;
 }
 div.z-vfiletree-header, div.z-vfiletree-header tr, div.z-vfiletree-footer {
 	border: 0; overflow: hidden; width: 100%;

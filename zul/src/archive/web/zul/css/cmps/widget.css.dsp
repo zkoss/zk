@@ -19,7 +19,7 @@
 .z-textbox, .z-decimalbox, .z-intbox, .z-longbox, .z-doublebox {
 	background: #FFF repeat-x 0 0;
 	background-image: url(${c:encodeURL('~./zul/img/misc/text-bg.gif')});
-	border: 1px solid #7F9DB9;
+	border: 1px solid #86A4BE;
 	font-family: ${fontFamilyC};
 	font-size: ${fontSizeM};
 	font-weight: normal;

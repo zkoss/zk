@@ -722,7 +722,10 @@ zAu.cmd0 = { //no uuid at all
 	scrollIntoView: function (id) {
 		var w = zk.Widget.$(id);
 		if (w) w.scrollIntoView();
-		else zDom.scrollIntoView(id);
+		else {
+			w = zDom.$(id);
+			if (w && w.scrollIntoView) w.scrollIntoView();
+		}
 	}
 };
 zAu.cmd1 = {

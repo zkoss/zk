@@ -91,28 +91,6 @@ zDom = { //static methods
 		var pos = zDom.cmOffset(n);
 		scrollTo(pos[0], pos[1]);
 	},
-	scrollIntoView: function (el, ancestor) {
-		if (arguments.length == 1) {
-			el = zDom.$(el);
-			if (el)
-				for (var p = el; p = p.parentNode;)
-					zDom._scrvw(p, el);
-		} else
-			zDom._scrvw(zDom.$(ancestor), zDom.$(el));
-	},
-	_scrvw: function (outer, inner) {
-		if (outer && inner) {
-			var padding = zk.parseInt(zDom.getStyle(inner, "padding-top"));
-			var limit = inner.offsetTop - padding;
-			if (limit < outer.scrollTop) {
-				outer.scrollTop = limit;
-			} else {
-				limit = 3 + inner.offsetTop + inner.offsetHeight
-					- outer.scrollTop - outer.clientHeight;
-				if (limit > 0) outer.scrollTop += limit;
-			}
-		}
-	},
 
 	margins: {l: "margin-left", r: "margin-right", t: "margin-top", b: "margin-bottom"},
 	borders: {l: "border-left-width", r: "border-right-width", t: "border-top-width", b: "border-bottom-width"},
