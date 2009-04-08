@@ -2426,7 +2426,7 @@ zkau.cmd0 = { //no uuid at all
 	},
 	scrollIntoView: function (id) {
 		var n = $e(id);
-		if (n) n.scrollIntoView();
+		if (n && n.scrollIntoView) n.scrollIntoView();
 	}
 };
 zkau.cmd1 = {
