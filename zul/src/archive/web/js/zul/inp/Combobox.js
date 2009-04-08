@@ -32,33 +32,49 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			&& val == item.getLabel().toLowerCase())
 				return item;
 	},
-	_markSel: function (item, fire) {
-		var sel = this._sel;
+	_hilite: function (opts) {
+		if (!opts) opts = {};
+
+		var sel = this._sel, item;
 		if (sel && sel.parent == this) { //we don't clear _sel precisely, so...
 			var n = sel.getNode();
 			if (n) zDom.rmClass(n, sel.getZclass() + '-seld');
 		}
 
-		if (this._sel = item)
-			zDom.addClass(item.getNode(), item.getZclass() + '-seld');
+		this._sel = null;
+		if (this._open || opts.sendOnSelect) {
+			var inp = this.getInputNode(),
+				val = inp.value;
+			if (val.length) {
+				var strict = this.getConstraint();
+				strict = strict && strict._flags && strict._flags.STRICT;
+				item = this._findItem(val.toLowerCase(), strict);
+			}
 
-		if (fire)
-			this.fire('onSelect', zk.copy(
-				{items: item?[item]:[], reference: item},
-				zEvt.getMetaKeys(evt)));
+			if ((this._sel = item) && this._open)
+				zDom.addClass(item.getNode(), item.getZclass() + '-seld');
+		}
+
+		if (opts.sendOnSelect)
+			this.fire('onSelect', {items: item?[item]:[], reference: item});
 	},
 
 	//super
-	doBlur_: function (evt) {
-		var inp = this.getInputNode(),
-			val = inp.value;
-		if (val.length) {
-			var strict = this.getConstraint();
-			strict = strict && strict._flags && strict._flags.STRICT;
-			var item = this._findItem(val.toLowerCase(), strict);
-			this._markSel(item, item || !strict);
+	open: function (opts) {
+		this.$supers('open', arguments);
+		this._hilite(); //after _open is set
+	},
+	downPressed_: function (evt) {
+	},
+	upPressed_: function (evt) {
+	},
+	otherPressed_: function (evt) {
+	},
+	updateChange_: function () {
+		if (this.$supers('updateChange_', arguments)) {
+			this._hilite({sendOnSelect:true});
+			return true;
 		}
-		this.$supers('doBlur_', arguments);
 	},
 	getZclass: function () {
 		var zcs = this._zclass;

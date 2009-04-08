@@ -192,7 +192,6 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		zDom.rmClass(inp, this.getZclass() + '-focus');
 		if (!zk.alerting && this.shallUpdate_(zk.currentFocus))
 			this.updateChange_();
-
 	},
 
 	//dom event//
@@ -299,12 +298,12 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	/** Updates the change to server by firing onChange if necessary. */
 	updateChange_: function () {
-		if (zul.inp.validating) return; //avoid deadloop (when both focus and blur fields invalid)
+		if (zul.inp.validating) return false; //avoid deadloop (when both focus and blur fields invalid)
 
 		var inp = this.getInputNode(),
 			value = inp.value;
 		if (value == this._lastRawValVld)
-			return; //not changed
+			return false; //not changed
 
 		var wasErr = this._errmsg,
 			val = this._validate(value);
@@ -318,6 +317,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				this.fire('onChange', this._onChangeData(value), null, 150);
 			}
 		}
+		return true;
 	},
 	_onChanging: function () {
 		var inp = this.getInputNode(),

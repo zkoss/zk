@@ -22,13 +22,14 @@ onOK='alert("ENTER press")' onCancel='alert("ESC pressed")'>
 		<comboitem label="Thumbs Up!"/>
 	</combobox>
 	<checkbox onCheck="combo.autodrop = self.checked" label="autodrop"/>
+	<separator/>
 	<combobox id="combo2" cols="10" onChange="comboOut.value = self.value">
 		<comboitem label="Another Commbo that is longer than input box"/>
 		<comboitem label="For testing auto-close"/>
 	</combobox>
 	<separator/>
 	combobox3:
-	<combobox id="combo3" cols="10" onChange="comboOut.value = self.value">
+	<combobox id="combo3" cols="10" onChange="comboOut.value = self.value" autodrop="true">
 		<comboitem label="Item 1"/>
 		<comboitem label="Item 2"/>
 		<comboitem label="Item 3"/>
@@ -58,7 +59,7 @@ onOK='alert("ENTER press")' onCancel='alert("ESC pressed")'>
 		<comboitem label="Item 27"/>
 		<comboitem label="Last"/>
 	</combobox>
-	<checkbox onCheck="combo3.autodrop = self.checked" label="autodrop"/>
+	<checkbox onCheck="combo3.autodrop = self.checked" label="autodrop" checked="true"/>
 	<separator bar="true"/>
 	Output of combo: <label id="comboOut"/>
 	<separator bar="true"/>

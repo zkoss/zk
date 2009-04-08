@@ -162,9 +162,9 @@ zul.Widget = zk.$extends(zk.Widget, {
 		switch (keyCode) {
 		case 13: //ENTER
 			var target = evt.domTarget, tn = zDom.tag(target);
-			if (tn == "TEXTAREA" || (tn == "BUTTON" && getZKAttr(target, "keyevt") != "true")
+			if (tn == "TEXTAREA" || tn == "BUTTON"
 			|| (tn == "INPUT" && target.type.toLowerCase() == "button"))
-				return true; //don't change button's behavior (Bug 1556836)
+				return; //don't change button's behavior (Bug 1556836)
 			okcancel = evtnm = "onOK";
 			break;
 		case 27: //ESC
@@ -202,8 +202,10 @@ zul.Widget = zk.$extends(zk.Widget, {
 		for (var w = target;; w = w.parent) {
 			if (w.beforeCtrlKeys_ && w.beforeCtrlKeys_(evt))
 				return;
+
 			if (w == wgt) break;
 		}
+
 		wgt.fire(evtnm, zk.copy({keyCode: keyCode, reference: target},
 			zEvt.filterMetaData(evt)), {ctl: true});
 		evt.stop();
