@@ -1725,21 +1725,6 @@ zk.restoreStyle = function (el, nm) {
 	}
 };
 
-/** Scroll inner into visible, assuming outer has a scrollbar. */
-zk.scrollIntoView = function (outer, inner) {
-	if (outer && inner) {
-		var padding = $int(Element.getStyle(inner, "padding-top"));
-		var limit = inner.offsetTop - padding;
-		if (limit < outer.scrollTop) {
-			outer.scrollTop = limit;
-		} else {
-			limit = 3 + inner.offsetTop + inner.offsetHeight
-				- outer.scrollTop - outer.clientHeight;
-			if (limit > 0) outer.scrollTop += limit;
-		}
-	}
-};
-
 /** Go to the specified uri.
  * @param overwrite whether to overwrite the history
  * @param target the target frame (ignored if overwrite is true

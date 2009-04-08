@@ -253,26 +253,6 @@ zkCmbox._cc2 = function (uuid) {
 		zkCmbox._fixsz(cb, pp, $e(cb.id + "!cave"), zkCmbox._ppofs(pp));
 };
 
-/** Eats UP/DN keys. */
-zkCmbox.ondown = function (evt) {
-	//IE: if NOT eat UP/DN here, it de-select the text
-	//IE: if we eat UP/DN here, onpress won't be sent
-	//IE: we have to handle UP/DN in onup (so the repeat feature is lost)
-	var keycode = Event.keyCode(evt);
-	if (keycode == 38 || keycode == 40) { //UP and DN
-		Event.stop(evt);
-		return false;
-	}
-	if (keycode == 9) { //TAB; IE: close now so to show covered SELECT
-		var inp = Event.element(evt);
-		if (inp) {
-			var uuid = $uuid(inp.id);
-			var pp = $e(uuid + "!pp");
-			if ($visible(pp)) zkCmbox.close(pp);
-		}
-	}
-	return true;
-};
 zkCmbox.onkey = function (evt) {
 	var inp = Event.element(evt);
 	if (!inp) return true;
