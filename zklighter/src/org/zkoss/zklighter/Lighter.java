@@ -58,8 +58,9 @@ public class Lighter {
 		for (Iterator it = el.getElements("source").iterator(); it.hasNext();) {
 			final File src = new File(((Element)it.next()).getText(true));
 			System.out.println("Copy "+src+" to "+dst);
-			if (!dst.isDirectory())
+			if (dst.isFile())
 				throw new IOException("Directory required: "+dst);
+			dst.mkdirs();
 			Files.copy(dst, src, Files.CP_UPDATE|Files.CP_SKIP_SVN);
 		}
 	}
@@ -110,6 +111,7 @@ public class Lighter {
 		}
 
 		System.out.println("Generate "+dst);
+		dst.getParentFile().mkdirs();
 		FileOutputStream out = new FileOutputStream(dst);
 		try {
 			for (Iterator it = srcs.iterator(); it.hasNext();)
