@@ -641,7 +641,6 @@ zk.Widget = zk.$extends(zk.Object, {
 			this.bind_(desktop, skipper);
 		}
 
-		//TODO: if (zAu.valid) zAu.valid.fixerrboxes();
 		if (cf && !zk.currentFocus) cf.focus();
 
 		if (!skipper) {
@@ -833,7 +832,8 @@ zk.Widget = zk.$extends(zk.Object, {
 			}
 		}
 
-		if (this.inServer && this.desktop) {
+		if ((this.inServer && this.desktop)
+		|| (evt.opts && evt.opts.toServer)){
 			var asap = this._asaps[evtnm];
 			if (asap == null) {
 				var ime = this.$class._importantEvts;
