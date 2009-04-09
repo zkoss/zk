@@ -161,6 +161,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			&& item.getLabel().toLowerCase().startsWith(val)) {
 				inp.value = item.getLabel();
 				zDom.setSelectionRange(inp, val.length, inp.value.length);
+				this._hilite2(item);
 				return;
 			}
 
