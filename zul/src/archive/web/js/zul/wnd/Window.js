@@ -20,7 +20,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	_minwidth: 200,
 
 	$init: function () {
-		this._fellows = {};
+		if (!zk.light) this._fellows = {};
 
 		this.$supers('$init', arguments);
 

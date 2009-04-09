@@ -36,7 +36,10 @@ zk.Widget = zk.$extends(zk.Object, {
 				this.set(nm, props[nm]);
 		}
 
-		if (!this.uuid) this.uuid = zk.Widget.nextUuid();
+		if (zk.light) { //id == uuid
+			if (this.id) this.uuid = this.id; //setId was called
+			else this.uuid = this.id = zk.Widget.nextUuid();
+		} else if (!this.uuid) this.uuid = zk.Widget.nextUuid();
 	},
 
 	getMold: function () {
@@ -59,23 +62,29 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (!ow) return null;
 
 		var f = ow._fellows[id];
-		return f || !global ? f: zk.Widget._global[id];
+		return f || !global || zk.light ? f: zk.Widget._global[id];
 	},
 	getId: function () {
 		return this.id;
 	},
 	setId: function (id) {
-		var $Widget = zk.Widget, old = this.id;
-		if (old) {
-			delete zk.Widget._global[id];
-			$Widget._rmIdSpace(this);
-		}
+		if (id != this.id) {
+			if (zk.light && this.desktop)
+				throw 'id cannot be changed after bound'; //since there might be subnodes
 
-		this.id = id;
+			var $Widget = zk.Widget, old = this.id;
+			if (old) {
+				if (!zk.light) delete $Widget._global[id];
+				$Widget._rmIdSpace(this);
+			}
 
-		if (id) {
-			zk.Widget._global[id] = this;
-			$Widget._addIdSpace(this);
+			this.id = id;
+			if (zk.light) this.uuid = id;
+
+			if (id) {
+				if (!zk.light) $Widget._global[id] = this;
+				$Widget._addIdSpace(this);
+			}
 		}
 	},
 
@@ -1176,7 +1185,7 @@ zk.Desktop = zk.$extends(zk.Widget, {
 
 		var zkdt = zk.Desktop, dts = zkdt.all, dt = dts[dtid];
 		if (!dt) {
-			this.id = dtid;
+			this.uuid = this.id = dtid;
 			this.updateURI = updateURI;
 			dts[dtid] = this;
 			++zkdt._ndt;
