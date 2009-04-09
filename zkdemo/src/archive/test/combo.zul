@@ -22,6 +22,7 @@ onOK='alert("ENTER press")' onCancel='alert("ESC pressed")'>
 		<comboitem label="Thumbs Up!"/>
 	</combobox>
 	<checkbox onCheck="combo.autodrop = self.checked" label="autodrop"/>
+	<checkbox onCheck="combo.autocomplete = self.checked" label="autocomplete" checked="true"/>
 	<separator/>
 	<combobox id="combo2" cols="10" onChange="comboOut.value = self.value">
 		<comboitem label="Another Commbo that is longer than input box"/>

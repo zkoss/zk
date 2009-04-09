@@ -38,7 +38,7 @@ import org.zkoss.zul.event.ListDataListener;
 import org.zkoss.zul.impl.Utils;
 
 /**
- * A combo box.
+ * A combobox.
  *
  * <p>Non-XUL extension. It is used to replace XUL menulist. This class
  * is more flexible than menulist, such as {@link #setAutocomplete}
@@ -75,7 +75,7 @@ import org.zkoss.zul.impl.Utils;
  */
 public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 	private static final Log log = Log.lookup(Combobox.class);
-	private boolean _autodrop, _autocomplete, _btnVisible = true;
+	private boolean _autodrop, _autocomplete = true, _btnVisible = true;
 	private transient Comboitem _selItem;
 	private ListModel _model;
 	private ComboitemRenderer _renderer;
@@ -350,16 +350,16 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 	}
 	/** Returns whether to automatically complete this text box
 	 * by matching the nearest item ({@link Comboitem}.
+	 * It is also known as auto-type-ahead.
 	 *
-	 * <p>Default: false.
+	 * <p>Default: true (since 5.0.0).
 	 *
 	 * <p>If true, the nearest item will be searched and the text box is
 	 * updated automatically.
 	 * If false, user has to click the item or use the DOWN or UP keys to
 	 * select it back.
 	 *
-	 * <p>Note: this feature is reserved and not yet implemented.
-	 * Don't confuse it with the auto-completion feature mentioned by
+	 * <p>Don't confuse it with the auto-completion feature mentioned by
 	 * other framework. Such kind of auto-completion is supported well
 	 * by listening to the onChanging event.
 	 */
@@ -558,7 +558,8 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 		super.renderProperties(renderer);
 
 		render(renderer, "autodrop", _autodrop);
-		render(renderer, "autocomplete", _autocomplete);
+		if (!_autocomplete)
+			render(renderer, "autocomplete", false);
 		if (!_btnVisible)
 			renderer.render("buttonVisible", false);
 	}
