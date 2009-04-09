@@ -58,7 +58,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			if (n) zDom.rmClass(n, oldsel.getZclass() + '-seld');
 		}
 
-		if (sel)
+		if (sel && !sel.isDisabled())
 			zDom.addClass(sel.getNode(), sel.getZclass() + '-seld');
 
 		if (opts.sendOnSelect && this._lastsel != sel) {
