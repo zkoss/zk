@@ -362,7 +362,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	setTopmost: function () {
 		if (!this.desktop) return -1;
 
-		for (wgt = this; wgt; wgt = wgt.parent)
+		for (var wgt = this; wgt; wgt = wgt.parent)
 			if (wgt._floating) {
 				var zi = wgt._topZIndex();
 				wgt._setZIndex(zi, true);
@@ -1038,7 +1038,7 @@ zk.Widget = zk.$extends(zk.Object, {
 				if (j >= 0) {
 					id = id.substring(0, j);
 					if (strict) {
-						wgt = binds[id];
+						var wgt = binds[id];
 						if (wgt) {
 							var n2 = wgt.getNode();
 							if (n2 && zDom.isAncestor(n2, n)) return wgt;
