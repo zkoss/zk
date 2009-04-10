@@ -221,6 +221,7 @@ zk.Cal.prototype = {
 			this._setDateMonChg(y, zk.getIntAttr(cell, "zk_mon"), d);
 			this._output();
 			this._onupdate(false);
+			zkDtbox._repos($uuid(this));
 		}
 	},
 	_onyearofs: function (ofs) {
@@ -230,6 +231,7 @@ zk.Cal.prototype = {
 		this.date = new Date(y + ofs, m, d);
 		this._output();
 		this._onupdate(false);
+		zkDtbox._repos($uuid(this));
 	},
 	_onmonofs: function (ofs) {
 		var y = this.date.getFullYear(),
@@ -238,6 +240,8 @@ zk.Cal.prototype = {
 		this._setDateMonChg(y, m + ofs, d);
 		this._output();
 		this._onupdate(false);
+		zkDtbox._repos($uuid(this));
+		
 	},
 	/** Sets date caused by the change of month (it fixed 6/31 issue).
 	 */
