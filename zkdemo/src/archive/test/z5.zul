@@ -38,7 +38,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		<attribute w:name="onClick">
 		var verify = function (wgt, level) {
 				if (wgt.bindLevel != level) {
-					zk.debug("Error", wgt.uuid, bindLevel, level);
+					zk.log("Error", wgt.uuid, bindLevel, level);
 					return false;
 				}
 				++level;
@@ -49,11 +49,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			};
 		var dts = zk.Desktop.all;
 		for (var dtid in dts) {
-			zk.debug('Verifying desktop: '+dtid);
+			zk.log('Verifying desktop: '+dtid);
 			if (verify(dts[dtid], 0)) {
-				zk.debug("SUCCEESS");
+				zk.log("SUCCEESS");
 			} else {
-				zk.debug("FAILED");
+				zk.log("FAILED");
 				break;
 			}
 		}
