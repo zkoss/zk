@@ -14,6 +14,34 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 zUtl = { //static methods
 	//HTML/XML
+	loadXML: function (url, callback) {
+		var doc = document.implementation;
+		if (doc && doc.createDocument) {
+			doc = doc.createDocument('', '', null); //FF, Safari, Opera
+			if (callback)
+				doc.onload = function () {callback(doc);};
+		} else {
+			doc = new ActiveXObject("Microsoft.XMLDOM");
+			if (callback)
+				doc.onreadystatechange = function() {
+					if (doc.readyState == 4) callback(doc);
+				};
+		}
+		if (!callback) doc.async = false;
+		doc.load(url);
+		return doc;
+	},
+	parseXML: function (text) {
+		if (typeof DOMParser != "undefined")
+			return (new DOMParser()).parseFromString(text, "text/xml");
+			//FF, Safar, Opera
+	
+		doc = new ActiveXObject("Microsoft.XMLDOM"); //IE
+		doc.async = false;
+		doc.loadXML(text);
+		return doc;
+	},
+
 	encodeXML: function (txt, opts) {
 		var out = "";
 		if (!txt) return out;
