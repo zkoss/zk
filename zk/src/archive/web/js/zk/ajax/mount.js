@@ -14,6 +14,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 var _zkmt = zUtl.now(); //JS loaded
 
+zkreg = zk.Widget.register; //a shortcut for WPD loader
+
 function zkboot(dtid, updateURI, force) {
 	if (!zk.sysInited) zkm.sysInit();
 

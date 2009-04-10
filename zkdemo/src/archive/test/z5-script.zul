@@ -15,6 +15,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 <window title="Test of JavaScript"
 xmlns:w="http://www.zkoss.org/2005/zk/client">
+	<script src="z5-script.js" packages="zk.zuml, zul.inp"/>
+
 	<label id="inf"/>
 	<label id="inf2">
 		<attribute w:name="$setValue">
@@ -38,7 +40,7 @@ xmlns:w="http://www.zkoss.org/2005/zk/client">
 	});
 	this.parent.appendChild(btn);
 	</script>
-	<script src="z5-script.js"/>
+
 	<script>
 	var btn = new zul.wgt.Button(),
 		wnd = this.getSpaceOwner();
@@ -58,5 +60,8 @@ xmlns:w="http://www.zkoss.org/2005/zk/client">
 		inf.setValue(inf.getValue() + '*');
 		</attribute>
 	</button>
+	<separator bar="true"/>
+	<button label="Create with iZUML"
+		w:onClick="createWidgets(this.parent)"/>
 	<separator bar="true"/>
 </window>

@@ -184,12 +184,12 @@ public class WpdExtendlet implements Extendlet {
 				}
 
 				final String wgtflnm = name + "." + wgtnm;
-				write(out, "(_zkwg=");
+				write(out, "zkreg(_zkwg=");
 				write(out, zk ? "zk.": "_zkpk.");
 				write(out, wgtnm);
-				write(out, ").prototype.className='");
+				write(out, ",'");
 				write(out, wgtflnm);
-				write(out, "';");
+				write(out, "');");
 				if (langdef == null || !langdef.hasWidgetDefinition(wgtflnm))
 					continue;
 

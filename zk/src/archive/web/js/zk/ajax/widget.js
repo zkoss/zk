@@ -1149,7 +1149,20 @@ zk.Widget = zk.$extends(zk.Object, {
 			fn(wgt, owner, fn);
 	},
 
-	_global: {} //a global ID space
+	_global: {}, //a global ID space
+
+	_wgtcs: {},
+	register: function (cls, clsnm) {
+		cls.prototype.className = clsnm;
+		var j = clsnm.lastIndexOf('.');
+		if (j >= 0) clsnm = clsnm.substring(j + 1);
+		zk.Widget._wgtcs[clsnm.substring(0,1).toLowerCase()+clsnm.substring(1)] = cls;
+	},
+	newInstance: function (wgtnm) {
+		var cls = zk.Widget._wgtcs[wgtnm.toLowerCase()];
+		if (!cls) throw 'widget not found: '+wgtnm;
+		return new cls();
+	}
 });
 
 zk.Page = zk.$extends(zk.Widget, {//unlik server, we derive from Widget!

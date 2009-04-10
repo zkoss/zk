@@ -18,3 +18,8 @@ function appendTo(wgt) {
 	l.setValue(' ' + ++cnt);
 	wgt.appendChild(l);
 }
+
+function createWidgets(parent) {
+	zk.zuml.Parser.createWidgets(parent,
+		'<div forEach="${[1, 2]}">${each}: <textbox value="${each}"/></div>');
+}
