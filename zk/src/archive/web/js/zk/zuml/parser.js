@@ -13,12 +13,23 @@ This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 zk.zuml.Parser = {
-	createWidgets: function (parent, doc) {
+	createWidgets: function (parent, doc, vars) {
 		if (typeof doc == 'string')
 			doc = zUtl.parseXML(doc);
-		var cwgts = [];
-		zk.zuml.Parser._cw(parent, doc.documentElement, cwgts);
-		return cwgts.length ? cwgts: null;
+
+		var cwgts = [], oldvars;
+		if (vars) {
+			oldvars = window._;
+			window._ = vars;
+		}
+		try {
+			zk.zuml.Parser._cw(parent, doc.documentElement, cwgts);
+		} finally {
+			if (vars) window._ = oldvars;
+		}
+
+		var l = cwgts.length;
+		return l ? l == 1 ? cwgts[0]: cwgts: null;
 	},
 	_cw: function (parent, e, cwgts) {
 		if (!e) return null;
@@ -46,8 +57,17 @@ zk.zuml.Parser = {
 			if (parent) parent.appendChild(wgt);
 
 			for (var l = atts.length, j = 0; j < l; ++j) {
-				var att = atts[j];
-				wgt.set(att.name, $Parser._eval(att.value));
+				var att = atts[j],
+					nm = att.name,
+					val = $Parser._eval(att.value);
+				if (nm.startsWith('on') && nm.length > 2) {
+					att = nm.charAt(2);
+					if (att >= 'A' && att <= 'Z') {
+						wgt.setListener([nm, val]);
+						continue;
+					}
+				}
+				wgt.set(nm, val);
 			}
 
 			for (e = e.firstChild; e; e = e.nextSibling) {
@@ -62,9 +82,8 @@ zk.zuml.Parser = {
 		}
 	},
 	_eval: function (s) {
-		if (s) {
-			var s2;
-			for (var j = 0, k, l, t, last = s.length - 1;;) {
+		if (s)
+			for (var j = 0, k, l, t, last = s.length - 1, s2;;) {
 				k = s.indexOf('${', j);
 				if (k < 0) {
 					if (s2) s = s2 + s.substring(j);
@@ -80,18 +99,19 @@ zk.zuml.Parser = {
 
 				s2 = s2 ? s2 + t: t;
 				t = s.substring(k + 2, l); //EL
+
 				try {
 					eval('t=' + t);
 				} catch (e) {
 					throw 'Failed to evaluate '+t;
 				}
-				if (!j && l == last) return t; //don't convert to string
+
+				if (!s2 && l == last) return t; //don't convert to string
 
 				if (t) s2 += t;
 
 				j = l + 1;
 			}
-		}
 		return s;
 	}
 };
