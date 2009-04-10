@@ -43,8 +43,6 @@ import org.zkoss.zk.au.http.HttpAuWriter;
 public class SmartAuWriter extends HttpAuWriter {
 	private static final Log log = Log.lookup(SmartAuWriter.class);
 
-	/** The first few bytes of the output header (byte[]). */
-	private static final byte[] CONTENT_HEAD_BYTES = AuWriters.CONTENT_HEAD.getBytes();
 	private static ScalableTimer _timer;
 
 	private Task _tmoutTask;
@@ -76,7 +74,7 @@ public class SmartAuWriter extends HttpAuWriter {
 				_tmoutTask = new Task((HttpServletResponse)response), timeout);
 		return super.open(request, response, timeout);
 	}
-	protected void flush(HttpServletRequest request, HttpServletResponse response)
+	public void close(Object request, Object response)
 	throws IOException {
 		final Task task = _tmoutTask;
 		if (task != null)
@@ -90,14 +88,13 @@ public class SmartAuWriter extends HttpAuWriter {
 		}
 
 		if (timeout) {
-			//write the rest of _out (except CONTENT_HEAD)
-			//and no compress
-			response.getOutputStream()
-				.write(_out.getBuffer().substring(AuWriters.CONTENT_HEAD.length()).getBytes("UTF-8"));
-			response.flushBuffer();
+			//some data is written, no compress
+			final HttpServletResponse hres = (HttpServletResponse)response;
+			hres.getOutputStream().write(getResult().getBytes("UTF-8"));
+			hres.flushBuffer();
 		} else {
-			//default: compress and generate _out
-			super.flush(request, response);
+			//default: compress and generate output
+			super.close(request, response);
 		}
 	}
 
@@ -115,7 +112,7 @@ public class SmartAuWriter extends HttpAuWriter {
 					//advance XMLHttpRequest.readyState (to 3).
 					//Otherwise, the client may consider it as timeout and resend
 					try {
-						_res.getOutputStream().write(CONTENT_HEAD_BYTES);
+						_res.getOutputStream().write(new byte[] {(byte)' '});
 						_timeout = true; //let flush() know CONTENT_HEAD is sent
 						_res.flushBuffer();
 					} catch (Throwable ex) {

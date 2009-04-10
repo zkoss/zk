@@ -115,38 +115,38 @@ zAu = {
 	},
 
 	////Ajax receive////
-	pushXmlResp: function (dt, req) {
-		var xml = req.responseXML;
-		if (!xml) {
+	pushCmds: function (dt, req) {
+		var res = req.responseText;
+		if (!res) {
 			if (zk.pfmeter) zAu.pfdone(dt, zAu._pfGetIds(req));
 			return false; //invalid
 		}
 
-		var cmds = [],
-			rs = xml.getElementsByTagName("r"),
-			rid = xml.getElementsByTagName("rid");
 		if (zk.pfmeter) {
 			cmds.dt = dt;
 			cmds.pfIds = zAu._pfGetIds(req);
 		}
 
-		if (rid && rid.length) {
-			rid = zk.parseInt(zUtl.getElementValue(rid[0])); //response ID
+		eval('res='+res);
+		var cmds = [],
+			rs = res.rs,
+			rid = res.rid;
+		if (rid) {
+			rid = parseInt(rid); //response ID
 			if (!isNaN(rid)) cmds.rid = rid;
 		}
 
 		for (var j = 0, rl = rs ? rs.length: 0; j < rl; ++j) {
-			var cmd = rs[j].getElementsByTagName("c")[0],
-				data = rs[j].getElementsByTagName("d");
+			var r = rs[j],
+				cmd = r[0],
+				data = r[1];
 
 			if (!cmd) {
 				zk.error(mesg.ILLEGAL_RESPONSE+"Command required");
 				continue;
 			}
 
-			cmds.push(cmd = {cmd: zUtl.getElementValue(cmd),
-				data: data && data.length ?
-					eval(zUtl.getElementValue(data[0])): []});
+			cmds.push({cmd: cmd, data: data ? eval(data): []});
 		}
 
 		zAu._cmdsQue.push(cmds);
@@ -236,7 +236,7 @@ zAu = {
 						return;
 					} //if sid null, always process (usually for error msg)
 
-					if (zAu.pushXmlResp(reqInf.dt, req)) { //valid response
+					if (zAu.pushCmds(reqInf.dt, req)) { //valid response
 						//advance SID to avoid receive the same response twice
 						if (sid && ++zAu._seqId > 9999) zAu._seqId = 1;
 						zAu._areqTry = 0;

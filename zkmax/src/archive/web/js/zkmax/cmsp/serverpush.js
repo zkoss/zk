@@ -63,10 +63,10 @@ zkmax.cmsp.SPush = zk.$extends(zk.Object, {
 				if (req.status == 200) {
 					var sid = req.getResponseHeader("ZK-SID");
 					if (!sid || sid == this._sid) {
-						if (zAu.pushXmlResp(this.desktop, req)) {
+						if (zAu.pushCmds(this.desktop, req)) {
 							timeout = 50;
 							if (sid && ++this._sid > 999) this._sid = 1;
-							//both pushXmlResp and doCmds might ex
+							//both pushCmds and doCmds might ex
 						}
 						zAu.doCmds();
 					}

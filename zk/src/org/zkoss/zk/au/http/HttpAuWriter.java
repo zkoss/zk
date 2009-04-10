@@ -20,14 +20,15 @@ package org.zkoss.zk.au.http;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.io.StringWriter;
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.zkoss.json.*;
 import org.zkoss.web.servlet.http.Https;
 
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuWriter;
 import org.zkoss.zk.au.AuWriters;
@@ -41,7 +42,8 @@ import org.zkoss.zk.au.AuWriters;
 public class HttpAuWriter implements AuWriter{
 	/** The writer used to generate the output to.
 	 */
-	protected StringWriter _out;
+	private JSONObject _out;
+	private JSONArray _rs;
 
 	public HttpAuWriter() {
 	}
@@ -55,8 +57,8 @@ public class HttpAuWriter implements AuWriter{
 	}
 	/** Opens the connection.
 	 *
-	 * <p>Default: it creates a StringWriter instance for {@link #_out}
-	 * and then generate the XML header.
+	 * <p>Default: it creates an instance of {@link JSONObject}
+	 * to store the responses.
 	 *
 	 * <p>This implementation doesn't support the timeout argument.
 	 */
@@ -66,43 +68,59 @@ public class HttpAuWriter implements AuWriter{
 			//Bug 1907640: with Glassfish v1, we cannot change content type
 			//in another thread, so we have to do it here
 
-		_out = new StringWriter();
-		_out.write(AuWriters.CONTENT_HEAD);
-		_out.write("<rs>\n");
+		_out = new JSONObject();
+		try {
+			_out.put("rs", _rs = new JSONArray());
+		} catch (JSONException ex) {
+			throw new UiException(ex);
+		}
 		return this;
 	}
 	/** Closes the connection.
-	 *
 	 */
 	public void close(Object request, Object response)
 	throws IOException {
-		_out.write("\n</rs>");
-		flush((HttpServletRequest)request, (HttpServletResponse)response);
-	}
-	/** Flushes the bufferred output ({@link #_out}) to the client.
-	 * It is called by {@link #close}.
-	 */
-	protected void flush(HttpServletRequest request, HttpServletResponse response)
-	throws IOException {
+		final HttpServletRequest hreq = (HttpServletRequest)request;
+		final HttpServletResponse hres = (HttpServletResponse)response;
+
 		//Use OutputStream due to Bug 1528592 (Jetty 6)
-		byte[] data = _out.toString().getBytes("UTF-8");
+		byte[] data = getResult().getBytes("UTF-8");
 		if (data.length > 200) {
-			byte[] bs = Https.gzip(request, response, null, data);
+			byte[] bs = Https.gzip(hreq, hres, null, data);
 			if (bs != null) data = bs; //yes, browser support compress
 		}
 
-		response.setContentType(AuWriters.CONTENT_TYPE);
+		hres.setContentType(AuWriters.CONTENT_TYPE);
 			//we have to set content-type again. otherwise, tomcat might
 			//fail to preserve what is set in open()
-		response.setContentLength(data.length);
-		response.getOutputStream().write(data);
-		response.flushBuffer();
+		hres.setContentLength(data.length);
+		hres.getOutputStream().write(data);
+		hres.flushBuffer();
+	}
+	/** Returns the result of responses that will be sent to client
+	 * (never null).
+	 * It is called by {@link #close} to retrieve the output.
+	 * After invocation, the writer is reset.
+	 * @since 5.0.0
+	 */
+	protected String getResult() {
+		final String data = _out.toString();
+		_out = null;
+		_rs = null;
+		return data;
 	}
 	public void writeResponseId(int resId) throws IOException {
-		AuWriters.writeResponseId(_out, resId);
+		try {
+			_out.put("rid", resId);
+		} catch (JSONException ex) {
+			throw new UiException(ex);
+		}
 	}
 	public void write(AuResponse response) throws IOException {
-		AuWriters.write(_out, response);
+		final JSONArray r = new JSONArray();
+		r.put(response.getCommand());
+		r.put(response.getEncodedData());
+		_rs.put(r);
 	}
 	public void write(Collection responses) throws IOException {
 		for (Iterator it = responses.iterator(); it.hasNext();)

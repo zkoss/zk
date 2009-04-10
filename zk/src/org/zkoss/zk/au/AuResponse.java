@@ -125,11 +125,14 @@ public class AuResponse {
 	 * will be evaluated. Thus, don't call it until the rendering phase.
 	 * If you want to access it other than the render phase,
 	 * use {@link #getRawData} instead.
-	 * <p>Note: it is a readonly array. Don't change its value.
+	 *
+	 * <p>Note: it is a copy, so any modification to it won't affect
+	 * the data of this response.
+	 *
 	 * @see #getRawData
 	 * @since 5.0.0
 	 */
-	public String getEncodedData() {
+	public JSONArray getEncodedData() {
 		if (_data == null)
 			return null;
 
@@ -140,7 +143,7 @@ public class AuResponse {
 				d = ((DeferredValue)d).getValue();
 			encdata.put(d);
 		}
-		return encdata.toString();
+		return encdata;
 	}
 	/** Returns the associated data of this response in the original
 	 * format (might be null).
