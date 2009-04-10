@@ -733,6 +733,7 @@
 		<xs:attribute name="autoscroll" type="booleanType" use="optional" />
 		<xs:attribute name="border" type="layoutBorderAttrType" use="optional" />
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
+		<xs:attribute name="title" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- chart -->
 	<xs:element name="chart" type="chartType" />
@@ -925,6 +926,7 @@
 		<xs:attribute name="maxsize" type="intType" use="optional" />
 		<xs:attribute name="minsize" type="intType" use="optional" />
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
+		<xs:attribute name="title" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- fileupload -->
 	<xs:element name="fileupload" type="fileuploadType" />
@@ -1562,6 +1564,7 @@
 		<xs:attribute name="maxsize" type="intType" use="optional" />
 		<xs:attribute name="minsize" type="intType" use="optional" />
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
+		<xs:attribute name="title" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- panel -->
 	<xs:element name="panel" type="panelType" />
@@ -1779,6 +1782,7 @@
 		<xs:attribute name="maxsize" type="intType" use="optional" />
 		<xs:attribute name="minsize" type="intType" use="optional" />
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
+		<xs:attribute name="title" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- space -->
 	<xs:element name="space" type="spaceType" />
@@ -2223,6 +2227,7 @@
 		<xs:attribute name="maxsize" type="intType" use="optional" />
 		<xs:attribute name="minsize" type="intType" use="optional" />
 		<xs:attribute name="onOpen" type="xs:string" use="optional" />
+		<xs:attribute name="title" type="xs:string" use="optional" />
 	</xs:complexType>
     <!-- window -->
 	<xs:element name="window" type="windowType" />
