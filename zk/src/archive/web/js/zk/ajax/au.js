@@ -116,8 +116,8 @@ zAu = {
 
 	////Ajax receive////
 	pushCmds: function (dt, req) {
-		var res = req.responseText;
-		if (!res) {
+		var rt = req.responseText;
+		if (!rt) {
 			if (zk.pfmeter) zAu.pfdone(dt, zAu._pfGetIds(req));
 			return false; //invalid
 		}
@@ -127,10 +127,10 @@ zAu = {
 			cmds.pfIds = zAu._pfGetIds(req);
 		}
 
-		eval('res='+res);
+		eval('rt='+rt);
 		var cmds = [],
-			rs = res.rs,
-			rid = res.rid;
+			rs = rt.rs,
+			rid = rt.rid;
 		if (rid) {
 			rid = parseInt(rid); //response ID
 			if (!isNaN(rid)) cmds.rid = rid;
