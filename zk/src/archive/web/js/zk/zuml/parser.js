@@ -50,7 +50,7 @@ zk.zuml.Parser = {
 		var l = cwgts.length;
 		if (!l) return null;
 
-		if (!opts || opts.noReplaceHTML) {
+		if (!opts || opts.replaceHTML !== false) {
 			var ns = [node];
 			if (l > 1) {
 				var p = node.parentNode, sib = node.nextSibling;
