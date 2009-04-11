@@ -89,12 +89,16 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 
 	set: function (name, value, extra) {
+		var cc;
 		if (name.length > 4 && name.startsWith('$$on')) {
 			var cls = this.$class,
 				ime = cls._importantEvts;
 			(ime || (cls._importantEvts = {}))[name.substring(2)] = true;
 		} else if (name.length > 3 && name.startsWith('$on'))
 			this._asaps[name.substring(1)] = value;
+		else if (name.length > 2 && name.startsWith('on')
+		&& (cc = name.charAt(2)) >= 'A' && cc <= 'Z')
+			this.setListener([name, value]);
 		else if (arguments.length >= 3)
 			zk.set(this, name, value, extra);
 		else

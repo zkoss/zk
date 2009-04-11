@@ -57,17 +57,8 @@ zk.zuml.Parser = {
 			if (parent) parent.appendChild(wgt);
 
 			for (var l = atts.length, j = 0; j < l; ++j) {
-				var att = atts[j],
-					nm = att.name,
-					val = $Parser._eval(att.value);
-				if (nm.startsWith('on') && nm.length > 2) {
-					att = nm.charAt(2);
-					if (att >= 'A' && att <= 'Z') {
-						wgt.setListener([nm, val]);
-						continue;
-					}
-				}
-				wgt.set(nm, val);
+				var att = atts[j];
+				wgt.set(att.name, $Parser._eval(att.value));
 			}
 
 			for (e = e.firstChild; e; e = e.nextSibling) {
