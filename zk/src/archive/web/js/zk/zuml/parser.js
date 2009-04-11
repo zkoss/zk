@@ -31,6 +31,41 @@ zk.zuml.Parser = {
 		var l = cwgts.length;
 		return l ? l == 1 ? cwgts[0]: cwgts: null;
 	},
+	createFromNode: function (node, opts, vars) {
+		var node = zDom.$(node),
+			txt = node.innerHTML,
+			j = txt.indexOf('<!--');
+		if (j >= 0)
+			txt = txt.substring(j + 4, txt.lastIndexOf('-->'));
+		var wgt = this.createWidgets(null, '<div>' + txt.trim() + '</div>', vars),
+			cwgts = [];
+
+		for (var w = wgt.firstChild, sib; w;) {
+			sib = w.nextSibling;
+			wgt.removeChild(w);
+			cwgts.push(w);
+			w = sib;
+		}
+
+		var l = cwgts.length;
+		if (!l) return null;
+
+		if (!opts || opts.noReplaceHTML) {
+			var ns = [node];
+			if (l > 1) {
+				var p = node.parentNode, sib = node.nextSibling;
+				for (j = l; --j > 0;) {
+					var n = document.createElement('DIV');
+					ns.push(n);
+					p.insertBefore(n, sib);
+				}
+			}
+			for (j = 0; j < l; ++j)
+				cwgts[j].replaceHTML(ns[j]);
+		}
+
+		return l == 1 ? cwgts[0]: cwgts;
+	},
 	_cw: function (parent, e, cwgts) {
 		if (!e) return null;
 
