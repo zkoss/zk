@@ -14,4 +14,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <package name="zul" language="xul/html">
 	<widget name="Widget"/>
 	<widget name="LabelImageWidget"/>
+
+	<script src="Auxbutton.js"/>
 </package>

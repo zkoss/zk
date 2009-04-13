@@ -19,6 +19,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	_minheight: 100,
 	_minwidth: 200,
 
+	preserveBlank: true, //iZuml
+
 	$init: function () {
 		if (!zk.light) this._fellows = {};
 

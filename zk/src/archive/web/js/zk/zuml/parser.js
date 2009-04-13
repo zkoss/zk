@@ -100,9 +100,12 @@ zk.zuml.Parser = {
 				var nt = e.nodeType;
 				if (nt == 1) $Parser._cw(wgt, e);
 				else if (nt == 3) {
-					var w = new zk.Native();
-					w.prolog = $Parser._eval(e.nodeValue);
-					wgt.appendChild(w);
+					var txt = e.nodeValue;
+					if (txt.trim().length || wgt.preserveBlank) {
+						var w = new zk.Native();
+						w.prolog = $Parser._eval(txt);
+						wgt.appendChild(w);
+					}
 				}
 			}
 		}

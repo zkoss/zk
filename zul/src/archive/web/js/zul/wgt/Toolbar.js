@@ -15,6 +15,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.wgt.Toolbar = zk.$extends(zul.Widget, {
 	_orient: "horizontal",
 	_align: "start",
+
+	preserveBlank: true, //iZuml
+
 	getAlign: function(){
 		return this._align;
 	},

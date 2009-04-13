@@ -159,9 +159,9 @@ public class AuRequest {
 	public Component getComponent() {
 		return _comp;
 	}
-	/** Returns the data of the command, might be null.
+	/** Returns the data of this request, or null if not available.
 	 * If the client sends a string, a number or an array as data,
-	 * the data can be retrived by the key, "". For example,
+	 * the data can be retrieved by the key, "". For example,
 	 * <code>getData().getInt("")</code>.
 	 *
 	 * <p>See also <a href="http://docs.zkoss.org/wiki/Zk.Event#How_to_process_data_with_JSON">how to process data with JSON</a>.

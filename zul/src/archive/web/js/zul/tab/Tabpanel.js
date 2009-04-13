@@ -15,6 +15,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 zul.tab.Tabpanel = zk.$extends(zul.Widget, {
+	preserveBlank: true, //iZuml
+
 	getTabbox: function() {
 		return this.parent ? this.parent.parent : null;
 	},

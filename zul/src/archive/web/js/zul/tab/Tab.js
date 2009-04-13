@@ -19,6 +19,8 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	_closable : false,
 	_disabled : false,
 	
+	preserveBlank: true, //iZuml
+
 	isClosable: function() {
 		return this._closable;
 	},

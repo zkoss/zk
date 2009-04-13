@@ -14,6 +14,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 zul.wgt.Popup = zk.$extends(zul.Widget, {
 	_visible: false,
+
+	preserveBlank: true, //iZuml
+
 	isOpen: function () {
 		return this.isVisible();
 	},

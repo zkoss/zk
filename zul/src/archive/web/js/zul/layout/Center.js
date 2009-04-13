@@ -28,6 +28,8 @@ zul.layout.Center = zk.$extends(zul.layout.LayoutRegion, {
 	doMouseOut_: zk.$void,    // do nothing.
 	doClick_: zk.$void,       // do nothing.
 	
+	preserveBlank: true, //iZuml
+
 	getPosition: function () {
 		return zul.layout.Borderlayout.CENTER;
 	}

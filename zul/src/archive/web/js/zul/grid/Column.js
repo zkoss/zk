@@ -16,6 +16,8 @@ zul.grid.Column = zk.$extends(zul.grid.HeaderWidget, {
 	_sortDir: "natural",
 	_sortAsc: "none",
 	_sortDsc: "none",
+
+	preserveBlank: true, //iZuml
 	
 	$init: function () {
 		this.$supers('$init', arguments);

@@ -1164,7 +1164,8 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	newInstance: function (wgtnm) {
 		var cls = zk.Widget._wgtcs[wgtnm.toLowerCase()];
-		if (!cls) throw 'widget not found: '+wgtnm;
+		if (!cls)
+			throw 'widget not found: '+wgtnm;
 		return new cls();
 	}
 });

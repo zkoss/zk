@@ -15,6 +15,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.layout.South = zk.$extends(zul.layout.LayoutRegion, {
 	setWidth: zk.$void, // readonly
 	sanchor: 'b',
+	preserveBlank: true, //iZuml
+
 	getPosition: function () {
 		return zul.layout.Borderlayout.SOUTH;
 	},

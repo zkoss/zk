@@ -16,6 +16,8 @@ zul.wnd.Panelchildren = zk.$extends(zul.Widget, {
 	setHeight: zk.$void,      // readonly
 	setWidth: zk.$void,       // readonly
 
+	preserveBlank: true, //iZuml
+
 	// super
 	getZclass: function () {
 		return this._zclass == null ?  "z-panel-children" : this._zclass;
