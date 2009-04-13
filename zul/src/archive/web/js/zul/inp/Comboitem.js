@@ -70,8 +70,8 @@ zul.inp.Comboitem = zk.$extends(zul.LabelImageWidget, {
 		if (!this._disabled) {
 			this._doMouseOut();
 
-			//TODO
-
+			this.parent._select(this, {sendOnSelect:true});
+			this.parent.close({sendOnOpen:true});
 			evt.stop();
 		}
 	},

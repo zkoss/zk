@@ -170,7 +170,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		}
 	},
 
-	downPressed_: zk.$void, //function (evt) {}
+	dnPressed_: zk.$void, //function (evt) {}
 	upPressed_: zk.$void, //function (evt) {}
 	otherPressed_: zk.$void, //function (evt) {}
 	enterPressed_: function (evt) {
@@ -268,7 +268,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			this.open({sendOnOpen:true});
 
 		if (keyCode == 38) this.upPressed_(evt);
-		else if (keyCode == 40) this.downPressed_(evt);
+		else if (keyCode == 40) this.dnPressed_(evt);
 		else this.otherPressed_(evt);
 	},
 	onChildAdded_: _zkf = function (child) {

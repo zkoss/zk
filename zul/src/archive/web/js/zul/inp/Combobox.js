@@ -76,13 +76,13 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		this.$supers('open', arguments);
 		this._hilite(); //after _open is set
 	},
-	downPressed_: function (evt) {
-		this._updnSel();
+	dnPressed_: function (evt) {
+		this._updnSel(evt);
 	},
 	upPressed_: function (evt) {
-		this._updnSel(true);
+		this._updnSel(evt, true);
 	},
-	_updnSel: function (bUp) {
+	_updnSel: function (evt, bUp) {
 		var inp = this.getInputNode(),
 			val = inp.value, sel;
 		if (val) {
@@ -119,15 +119,20 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		} else
 			sel = this._next(null, bUp);
 
-		val = inp.value = sel ? sel.getLabel(): '';
-		if (val) zDom.setSelectionRange(inp, 0, val.length)
-
-		this._hilite2(sel, {sendOnSelect:true});
+		this._select(sel, {sendOnSelect:true});
+		evt.stop();
 	},
 	_next: function (item, bUp) {
 		if (item)
 			item = bUp ? item.previousSibling: item.nextSibling;
 		return item ? item: bUp ? this.lastChild: this.firstChild;
+	},
+	_select: function (sel, opts) {
+		var inp = this.getInputNode(),
+			val = inp.value = sel ? sel.getLabel(): '';
+		if (val)
+			zDom.setSelectionRange(inp, 0, val.length)
+		this._hilite2(sel, opts);
 	},
 	otherPressed_: function (evt) {
 		var wgt = this,
