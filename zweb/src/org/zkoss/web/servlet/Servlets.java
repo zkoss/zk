@@ -368,7 +368,19 @@ public class Servlets {
 	}
 	private static final int getIEVer(String userAgent) {
 		if (userAgent == null) return -1;
-
+/*
+ * IE8 on Windows Vista (Compatibility View)
+ * 	Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Trident/4.0)
+ * IE8 on Windows Vista
+ * 	Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0)
+ * IE8 on Windows 7
+ * 	Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0)
+ * 64-bit IE on 64-bit Windows:
+ * 	Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Win64; x64; Trident/4.0)
+ * 32-bit IE on 64-bit Windows:
+ * 	Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; WOW64; Trident/4.0)
+ * 
+ */
 		userAgent = userAgent.toLowerCase();
 		int j = userAgent.indexOf("msie ");
 		if (j < 0 || userAgent.indexOf("opera") >= 0) return -1;
@@ -422,9 +434,18 @@ public class Servlets {
 	}
 	private static final int getGeckoVer(String userAgent) {
 		if (userAgent == null) return -1;
-
+		/* 
+		Firefox 3.0.8
+		  Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.8) Gecko/2009032609 Firefox/3.0.8 (.NET CLR 3.5.30729) FirePHP/0.2.4
+		Firefox 2.0.0.20
+		  Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.20) Gecko/20081217 Firefox/2.0.0.20 (.NET CLR 3.5.30729)
+		Safari 4 beta
+		  Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US) AppleWebKit/528.16 (KHTML, like Gecko) Version/4.0 Safari/528.16
+		Opera 9.64
+		  Opera/9.64 (Windows NT 5.1; U; en) Presto/2.1.1
+		*/
 		userAgent = userAgent.toLowerCase();
-		if (userAgent.indexOf("gecko/") >= 0 && userAgent.indexOf("safari") < 0)
+		if (userAgent.indexOf("gecko/") >= 0 && userAgent.indexOf("safari") > 0)
 			return -1;
 
 		int j = userAgent.indexOf("firefox/");
