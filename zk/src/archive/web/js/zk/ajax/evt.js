@@ -198,6 +198,9 @@ zk.Event = zk.$extends(zk.Object, {
 		this.domEvent = domEvent = domEvent || window.event;
 		if (domEvent) this.domTarget = zEvt.target(domEvent);
 	},
+	addOptions: function (opts) {
+		this.opts = zk.copy(this.opts, opts);
+	},
 	stop: function (opts) {
 		var b = !opts || !opts.revoke;
 		if (!opts || opts.propagation || !opts.dom) this.stopped = b;

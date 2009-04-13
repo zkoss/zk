@@ -22,7 +22,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	$init: function (props) {
 		this._asaps = {}; //event listened at server
 		this._lsns = {}; //listeners(evtnm,listener)
-		this._$lsns = {}; //listners registered by server(evtnm, fn)
+		this._$lsns = {}; //listners registered by setListener(evtnm, fn)
 		this._subnodes = {}; //store sub nodes for widget(domId, domNode)
 		
 		if (props) {
@@ -214,6 +214,16 @@ zk.Widget = zk.$extends(zk.Object, {
 			this.removeChildHTML_(child, p);
 		this.onChildRemoved_(child);
 		return true;
+	},
+	detach: function () {
+		if (this.parent) this.parent.removeChild(this);
+		else {
+			var n = this.getNode();
+			if (n) {
+				this.unbind_();
+				zDom.remove(n);
+			}
+		}
 	},
 	_replaceWgt: function (newwgt) { //called by au's outer
 		var node = this.getNode(),
@@ -830,15 +840,21 @@ zk.Widget = zk.$extends(zk.Object, {
 			len = lsns ? lsns.length: 0;
 		if (len) {
 			for (var j = 0; j < len;) {
-				var inf = lsns[j++], o = inf[1];
-				(inf[2] || o[evtnm]).call(o, evt);
+				var inf = lsns[j++], o = inf[1],
+					oldevt = o.$event;
+				o.$event = evt;
+				try {
+					(inf[2] || o[evtnm]).call(o, evt);
+				} finally {
+					o.$event = oldevt;
+				}
 				if (evt.stopped) return evt; //no more processing
 			}
 		}
 
-		if ((this.inServer && this.desktop)
-		|| (evt.opts && evt.opts.toServer)){
-			var asap = this._asaps[evtnm];
+		var toServer = evt.opts && evt.opts.toServer;
+		if (toServer || (this.inServer && this.desktop)){
+			var asap = toServer || this._asaps[evtnm];
 			if (asap == null) {
 				var ime = this.$class._importantEvts;
 				if (ime && ime[evtnm])
