@@ -70,7 +70,7 @@ zk.zuml.Parser = {
 		if (!e) return null;
 
 		var $Parser = zk.zuml.Parser,
-			forEach = $Parser._eval(e.getAttribute('forEach'));
+			forEach = $Parser._eval(parent, e.getAttribute('forEach'));
 		if (forEach != null) {
 			var oldEach = window.each;
 			for (var l = forEach.length, j = 0; j < l; j++) {
@@ -83,14 +83,14 @@ zk.zuml.Parser = {
 	},
 	_cw2: function (parent, e, cwgts) {
 		var $Parser = zk.zuml.Parser;
-		var ifc = $Parser._eval(e.getAttribute('if')),
-			unless = $Parser._eval(e.getAttribute('unless'));
+		var ifc = $Parser._eval(parent, e.getAttribute('if')),
+			unless = $Parser._eval(parent, e.getAttribute('unless'));
 		if ((ifc == null || ifc) && (unless == null || !unless)) {
 			var tn = e.tagName, wgt;
 			if ("zk" == tn) {
 				wgt = parent;
 			} else if ("attribute" == tn) {
-				var attnm = $Parser._eval(e.getAttribute('name'));
+				var attnm = $Parser._eval(parent, e.getAttribute('name'));
 				if (!attnm)
 					throw "The name attribute required, "+e;
 				parent.set(attnm, zUtl.getElementValue(e));
@@ -104,7 +104,7 @@ zk.zuml.Parser = {
 
 				for (var l = atts.length, j = 0; j < l; ++j) {
 					var att = atts[j];
-					wgt.set(att.name, $Parser._eval(att.value));
+					wgt.set(att.name, $Parser._eval(wgt, att.value));
 				}
 			}
 
@@ -115,14 +115,14 @@ zk.zuml.Parser = {
 					var txt = e.nodeValue;
 					if (txt.trim().length || wgt.preserveBlank) {
 						var w = new zk.Native();
-						w.prolog = $Parser._eval(txt);
+						w.prolog = $Parser._eval(wgt, txt);
 						wgt.appendChild(w);
 					}
 				}
 			}
 		}
 	},
-	_eval: function (s) {
+	_eval: function (wgt, s) {
 		if (s)
 			for (var j = 0, k, l, t, last = s.length - 1, s2;;) {
 				k = s.indexOf('${', j);
@@ -142,7 +142,7 @@ zk.zuml.Parser = {
 				t = s.substring(k + 2, l); //EL
 
 				try {
-					eval('t=' + t);
+					t = new Function('return ' + t).call(wgt);
 				} catch (e) {
 					throw 'Failed to evaluate '+t;
 				}
