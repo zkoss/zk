@@ -86,14 +86,26 @@ zk.zuml.Parser = {
 		var ifc = $Parser._eval(e.getAttribute('if')),
 			unless = $Parser._eval(e.getAttribute('unless'));
 		if ((ifc == null || ifc) && (unless == null || !unless)) {
-			var wgt = zk.Widget.newInstance(e.tagName),
-				atts = e.attributes;
-			if (cwgts) cwgts.push(wgt);
-			if (parent) parent.appendChild(wgt);
+			var tn = e.tagName, wgt;
+			if ("zk" == tn) {
+				wgt = parent;
+			} else if ("attribute" == tn) {
+				var attnm = $Parser._eval(e.getAttribute('name'));
+				if (!attnm)
+					throw "The name attribute required, "+e;
+				parent.set(attnm, zUtl.getElementValue(e));
+				return;
+			} else {
+				var atts = e.attributes;
 
-			for (var l = atts.length, j = 0; j < l; ++j) {
-				var att = atts[j];
-				wgt.set(att.name, $Parser._eval(att.value));
+				wgt = zk.Widget.newInstance(tn)
+				if (cwgts) cwgts.push(wgt);
+				if (parent) parent.appendChild(wgt);
+
+				for (var l = atts.length, j = 0; j < l; ++j) {
+					var att = atts[j];
+					wgt.set(att.name, $Parser._eval(att.value));
+				}
 			}
 
 			for (e = e.firstChild; e; e = e.nextSibling) {
