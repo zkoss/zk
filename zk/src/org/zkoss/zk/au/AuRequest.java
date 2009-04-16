@@ -164,7 +164,7 @@ public class AuRequest {
 	 * the data can be retrieved by the key, "". For example,
 	 * <code>getData().getInt("")</code>.
 	 *
-	 * <p>See also <a href="http://docs.zkoss.org/wiki/Zk.Event#How_to_process_data_with_JSON">how to process data with JSON</a>.
+	 * <p>See also <a href="http://docs.zkoss.org/wiki/How_to_Process_Request_with_JSON">how to process data with JSON</a>.
 	 * @since 5.0.0
 	 */
 	public JSONObject getData() {
