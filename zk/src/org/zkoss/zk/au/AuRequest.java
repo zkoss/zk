@@ -57,7 +57,7 @@ public class AuRequest {
 	 */
 	public static final int DUPLICATE_IGNORE = ComponentCtrl.CE_DUPLICATE_IGNORE;
 
-	private final String _name;
+	private final String _cmd;
 	private final Desktop _desktop;
 	private Integer _opts;
 	private Page _page;
@@ -70,31 +70,31 @@ public class AuRequest {
 	 *
 	 * @param desktop the desktop containing the component; never null.
 	 * @param uuid the component ID (never null)
-	 * @param name the name of the request (aka., command ID); never null.
+	 * @param cmd the command of the request (never null)
 	 * @param data the data; might be null.
 	 * @since 5.0.0
 	 */
 	public AuRequest(Desktop desktop, String uuid,
-	String name, JSONObject data) {
-		if (desktop == null || uuid == null || name == null)
+	String cmd, JSONObject data) {
+		if (desktop == null || uuid == null || cmd == null)
 			throw new IllegalArgumentException();
 		_desktop = desktop;
 		_uuid = uuid;
-		_name = name;
+		_cmd = cmd;
 		_data = data;
 	}
 	/** Constructor for a general request sent from client.
 	 * This is usully used to ask server to log or report status.
 	 *
-	 * @param name the name of the request (aka., command ID); never null.
+	 * @param cmd the command of the request (never null)
 	 * @param data the data; might be null.
 	 * @since 5.0.0
 	 */
-	public AuRequest(Desktop desktop, String name, JSONObject data) {
-		if (desktop == null || name == null)
+	public AuRequest(Desktop desktop, String cmd, JSONObject data) {
+		if (desktop == null || cmd == null)
 			throw new IllegalArgumentException();
 		_desktop = desktop;
-		_name = name;
+		_cmd = cmd;
 		_data = data;
 	}
 
@@ -120,11 +120,11 @@ public class AuRequest {
 		}
 	}
 
-	/** Returns the name (aka., the command ID), such as onClick.
+	/** Returns the command of this request, such as onClick.
 	 * @since 5.0.0
 	 */
-	public String getName() {
-		return _name;
+	public String getCommand() {
+		return _cmd;
 	}
 	/** Returns the options,
 	 * a combination of {@link #BUSY_IGNORE},
@@ -134,7 +134,7 @@ public class AuRequest {
 	public int getOptions() {
 		if (_opts == null) {
 			if (_comp != null)
-				_opts = (Integer)((ComponentCtrl)_comp).getClientEvents().get(_name);
+				_opts = (Integer)((ComponentCtrl)_comp).getClientEvents().get(_cmd);
 			if (_opts == null)
 				_opts = new Integer(0);
 		}
@@ -177,10 +177,10 @@ public class AuRequest {
 	}
 	public String toString() {
 		if (_comp != null)
-			return "[comp="+_comp+", cmd="+_name+']';
+			return "[comp="+_comp+", cmd="+_cmd+']';
 		else if (_page != null)
-			return "[page="+_page+", cmd="+_name+']';
+			return "[page="+_page+", cmd="+_cmd+']';
 		else
-			return "[uuid="+_uuid+", cmd="+_name+']';
+			return "[uuid="+_uuid+", cmd="+_cmd+']';
 	}
 }

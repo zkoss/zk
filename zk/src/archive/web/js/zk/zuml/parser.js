@@ -142,7 +142,8 @@ zk.zuml.Parser = {
 				t = s.substring(k + 2, l); //EL
 
 				try {
-					t = new Function('return ' + t).call(wgt);
+					var fn = new Function('return ' + t);
+					t = wgt ? fn.call(wgt): fn();
 				} catch (e) {
 					throw 'Failed to evaluate '+t;
 				}
