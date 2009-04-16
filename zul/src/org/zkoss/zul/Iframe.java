@@ -227,8 +227,8 @@ public class Iframe extends HtmlBasedComponent implements org.zkoss.zul.api.Ifra
 	 * @since 5.0.0
 	 */
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
-		final String name = request.getName();
-		if (Events.ON_URI_CHANGE.equals(name)) {
+		final String cmd = request.getCommand();
+		if (Events.ON_URI_CHANGE.equals(cmd)) {
 			Events.postEvent(URIEvent.getURIEvent(request));
 		} else
 			super.service(request, everError);

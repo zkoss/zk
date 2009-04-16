@@ -179,8 +179,8 @@ public class Listgroup extends Listitem implements org.zkoss.zul.api.Listgroup {
 	 * @since 5.0.0
 	 */
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
-		final String name = request.getName();
-		if (name.equals(Events.ON_OPEN)) {
+		final String cmd = request.getCommand();
+		if (cmd.equals(Events.ON_OPEN)) {
 			OpenEvent evt = OpenEvent.getOpenEvent(request);
 			_open = evt.isOpen();
 			final Listbox listbox = getListbox();

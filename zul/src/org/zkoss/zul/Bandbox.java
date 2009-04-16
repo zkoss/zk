@@ -172,8 +172,8 @@ public class Bandbox extends Textbox implements org.zkoss.zul.api.Bandbox {
 	 * @since 5.0.0
 	 */
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
-		final String name = request.getName();
-		if (name.equals(Events.ON_OPEN)) {
+		final String cmd = request.getCommand();
+		if (cmd.equals(Events.ON_OPEN)) {
 			Events.postEvent(OpenEvent.getOpenEvent(request));
 		} else
 			super.service(request, everError);

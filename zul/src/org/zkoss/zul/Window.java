@@ -918,12 +918,12 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 	 * @since 5.0.0
 	 */
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
-		final String name = request.getName();
-		if (name.equals(Events.ON_OPEN)) {
+		final String cmd = request.getCommand();
+		if (cmd.equals(Events.ON_OPEN)) {
 			OpenEvent evt = OpenEvent.getOpenEvent(request);
 			setVisible(evt.isOpen());
 			Events.postEvent(evt);
-		} else if (name.equals(Events.ON_MAXIMIZE)) {
+		} else if (cmd.equals(Events.ON_MAXIMIZE)) {
 			MaximizeEvent evt = MaximizeEvent.getMaximizeEvent(request);
 			_left = evt.getLeft();
 			_top = evt.getTop();
@@ -932,7 +932,7 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 			_maximized = evt.isMaximized();
 			if (_maximized) _visible = true;
 			Events.postEvent(evt);
-		} else if (name.equals(Events.ON_MINIMIZE)) {
+		} else if (cmd.equals(Events.ON_MINIMIZE)) {
 			MinimizeEvent evt = MinimizeEvent.getMinimizeEvent(request);
 			_left = evt.getLeft();
 			_top = evt.getTop();

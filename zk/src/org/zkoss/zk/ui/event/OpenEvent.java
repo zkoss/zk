@@ -60,7 +60,7 @@ public class OpenEvent extends Event {
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {data, request});
 
-		return new OpenEvent(request.getName(), comp,
+		return new OpenEvent(request.getCommand(), comp,
 			data.optBoolean("open"),
 			request.getDesktop().getComponentByUuidIfAny(data.optString("reference", null)),
 			data.opt("value"));

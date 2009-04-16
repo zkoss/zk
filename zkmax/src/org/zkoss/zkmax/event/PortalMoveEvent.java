@@ -57,7 +57,7 @@ public class PortalMoveEvent extends Event {
 
 		try {
 			final Desktop desktop = request.getDesktop();
-			return new PortalMoveEvent(request.getName(), comp,
+			return new PortalMoveEvent(request.getCommand(), comp,
 				(Portalchildren)desktop.getComponentByUuid(data.getString("from")),
 				(Portalchildren)desktop.getComponentByUuid(data.getString("to")),
 				(Panel)desktop.getComponentByUuid(data.getString("dragged")),

@@ -164,8 +164,8 @@ public class Fileupload extends HtmlBasedComponent implements org.zkoss.zul.api.
 	 * @since 5.0.0
 	 */
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
-		final String name = request.getName();
-		if (name.equals("updateResult")) {
+		final String cmd = request.getCommand();
+		if (cmd.equals("updateResult")) {
 			Events.postEvent(
 				new UploadEvent(Events.ON_UPLOAD, Fileupload.this,
 				FileuploadDlg.parseResult(

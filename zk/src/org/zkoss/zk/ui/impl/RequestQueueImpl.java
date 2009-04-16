@@ -125,7 +125,7 @@ public class RequestQueueImpl implements RequestQueue {
 			}
 		}
 
-		final String name = request.getName();
+		final String name = request.getCommand();
 		final int opts = request.getOptions();
 
 		//Since 3.0.2, redundant CTRL_GROUP is removed at the client
@@ -136,7 +136,7 @@ public class RequestQueueImpl implements RequestQueue {
 			final String uuid = getUuid(request);
 			for (Iterator it = _requests.iterator(); it.hasNext();) {
 				final AuRequest req2 = (AuRequest)it.next();
-				if (req2.getName().equals(name)
+				if (req2.getCommand().equals(name)
 				&& Objects.equals(getUuid(req2), uuid)) {
 					it.remove(); //drop req2
 					break; //no need to iterate because impossible to have more
@@ -148,7 +148,7 @@ public class RequestQueueImpl implements RequestQueue {
 		} else if ((opts & AuRequest.REPEAT_IGNORE) != 0) {
 			final int last = _requests.size() - 1;
 			final AuRequest req2 = (AuRequest)_requests.get(last);
-			if (req2.getName().equals(name)
+			if (req2.getCommand().equals(name)
 			&& Objects.equals(getUuid(req2), getUuid(request))) {
 				_requests.remove(last);
 			}

@@ -47,7 +47,7 @@ public class CheckEvent extends Event {
 				new Object[] {data, request});
 
 		try {
-			return new CheckEvent(request.getName(), comp, data.getBoolean(""));
+			return new CheckEvent(request.getCommand(), comp, data.getBoolean(""));
 		} catch (org.zkoss.json.JSONException ex) {
 			throw new UiException(ex);
 		}

@@ -61,7 +61,7 @@ public class MoveEvent extends Event {
 				new Object[] {data, request});
 
 		try {
-			return new MoveEvent(request.getName(), comp,
+			return new MoveEvent(request.getCommand(), comp,
 				data.getString("left"), data.getString("top"),
 				AuRequests.parseKeys(data));
 		} catch (org.zkoss.json.JSONException ex) {

@@ -48,7 +48,7 @@ public class MinimizeEvent extends Event {
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {data, request});
 
-		return new MinimizeEvent(request.getName(), comp,
+		return new MinimizeEvent(request.getCommand(), comp,
 			data.optString("left", null), data.optString("top", null),
 			data.optString("width", null), data.optString("height", null),
 			data.optBoolean("minimized"));

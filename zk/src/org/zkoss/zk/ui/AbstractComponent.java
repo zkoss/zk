@@ -2048,8 +2048,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * @see #setAuService
 	 */
 	public void service(AuRequest request, boolean everError) {
-		final String name = request.getName();
-		if ("echo".equals(name)) {
+		final String cmd = request.getCommand();
+		if ("echo".equals(cmd)) {
 			final JSONObject data = request.getData();
 			if (data == null)
 				throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,

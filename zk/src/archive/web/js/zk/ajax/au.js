@@ -395,16 +395,16 @@ zAu = {
 			var aureq = es.shift(),
 				evtnm = aureq.name,
 				target = aureq.target;
-			content += "&cmd."+j+"="+evtnm;
+			content += "&cmd_"+j+"="+evtnm;
 			if (target && target.className != 'zk.Desktop')
-				content += "&uuid."+j+"="+target.uuid;
+				content += "&uuid_"+j+"="+target.uuid;
 
 			var data = aureq.data, dtype = typeof data;
 			if (dtype == 'string' || dtype == 'number' || dtype == 'boolean'
 			|| (data && data.$array))
 				data = {'':data};
 			if (data)
-				content += "&data."+j+"="+encodeURIComponent(zJSON.stringify(data));
+				content += "&data_"+j+"="+encodeURIComponent(zJSON.stringify(data));
 		}
 
 		if (content)

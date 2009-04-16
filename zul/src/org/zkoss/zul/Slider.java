@@ -265,13 +265,13 @@ public class Slider extends XulElement implements org.zkoss.zul.api.Slider {
 	 * @since 5.0.0
 	 */
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
-		final String name = request.getName();
-		if (name.equals(Events.ON_SCROLL)) {
+		final String cmd = request.getCommand();
+		if (cmd.equals(Events.ON_SCROLL)) {
 			ScrollEvent evt = ScrollEvent.getScrollEvent(request);
 			int curpos = evt.getPos();
 			_curpos = curpos >= 0 ? curpos: 0;
 			Events.postEvent(evt);
-		} else if (name.equals(Events.ON_SCROLLING)) {
+		} else if (cmd.equals(Events.ON_SCROLLING)) {
 			ScrollEvent evt = ScrollEvent.getScrollEvent(request);
 			Events.postEvent(evt);
 		} else

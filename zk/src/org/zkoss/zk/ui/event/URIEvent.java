@@ -81,7 +81,7 @@ public class URIEvent extends Event {
 			}
 		}
 
-		return new URIEvent(request.getName(), comp, uri);
+		return new URIEvent(request.getCommand(), comp, uri);
 	}
 
 	/** Constructs an URI update event.

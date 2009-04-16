@@ -40,7 +40,7 @@ public class Event {
 	/** Creates an instance of {@link Event} based on the specified request.
 	 */
 	public static Event getEvent(AuRequest request) {
-		final String name = request.getName();
+		final String name = request.getCommand();
 		final Component comp = request.getComponent();
 		final JSONObject data = request.getData();
 		final Object data2 = data != null ? data.opt(""): null;

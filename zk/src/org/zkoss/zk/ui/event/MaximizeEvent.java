@@ -48,7 +48,7 @@ public class MaximizeEvent extends Event {
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {data, request});
 
-		return new MaximizeEvent(request.getName(), comp,
+		return new MaximizeEvent(request.getCommand(), comp,
 			data.optString("left", null), data.optString("top", null),
 			data.optString("width", null), data.optString("height", null),
 			data.optBoolean("maximized"));

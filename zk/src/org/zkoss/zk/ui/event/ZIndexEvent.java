@@ -48,7 +48,7 @@ public class ZIndexEvent  extends Event {
 				new Object[] {data, request});
 
 		try {
-			return new ZIndexEvent(request.getName(), comp, data.getInt(""));
+			return new ZIndexEvent(request.getCommand(), comp, data.getInt(""));
 		} catch (org.zkoss.json.JSONException ex) {
 			throw new UiException(ex);
 		}

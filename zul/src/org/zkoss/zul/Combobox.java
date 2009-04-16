@@ -570,10 +570,10 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 	 * @since 5.0.0
 	 */
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
-		final String name = request.getName();
-		if (name.equals(Events.ON_OPEN)) {
+		final String cmd = request.getCommand();
+		if (cmd.equals(Events.ON_OPEN)) {
 			Events.postEvent(OpenEvent.getOpenEvent(request));
-		}else if (name.equals(Events.ON_SELECT)) {
+		}else if (cmd.equals(Events.ON_SELECT)) {
 			SelectEvent evt = SelectEvent.getSelectEvent(request);
 			Set selItems = evt.getSelectedItems();
 			_selItem = selItems != null && !selItems.isEmpty()?

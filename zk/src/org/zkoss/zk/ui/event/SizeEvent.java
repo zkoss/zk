@@ -60,7 +60,7 @@ public class SizeEvent extends Event {
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {data, request});
 
-		return new SizeEvent(request.getName(), comp,
+		return new SizeEvent(request.getCommand(), comp,
 			data.optString("width", null), data.optString("height", null),
 			AuRequests.parseKeys(data));
 	}

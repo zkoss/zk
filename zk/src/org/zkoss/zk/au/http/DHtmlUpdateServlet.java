@@ -429,7 +429,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		boolean keepAlive = false;
 		try {
 			for (int j = 0;; ++j) {
-				final String cmdId = request.getParameter("cmd."+j);
+				final String cmdId = request.getParameter("cmd_"+j);
 				if (cmdId == null)
 					break;
 
@@ -438,8 +438,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
 						&& !"dummy".equals(cmdId));
 					//dummy is used for PollingServerPush for piggyback
 
-				final String uuid = request.getParameter("uuid."+j);
-				final String data = request.getParameter("data."+j);
+				final String uuid = request.getParameter("uuid_"+j);
+				final String data = request.getParameter("data_"+j);
 				final JSONObject decdata =
 					data != null ? new JSONObject(data): null;
 				aureqs.add(uuid == null || uuid.length() == 0 ? 

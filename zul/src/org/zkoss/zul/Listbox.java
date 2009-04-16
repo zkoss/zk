@@ -2535,8 +2535,8 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 	 * @since 5.0.0
 	 */
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
-		final String name = request.getName();
-		if (name.equals(Events.ON_SELECT)) {
+		final String cmd = request.getCommand();
+		if (cmd.equals(Events.ON_SELECT)) {
 			SelectEvent evt = SelectEvent.getSelectEvent(request);
 			Set selItems = evt.getSelectedItems();
 			_noSmartUpdate = true;
@@ -2578,10 +2578,10 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 			}
 
 			Events.postEvent(evt);
-		} else if (name.equals("onInnerWidth")) {
+		} else if (cmd.equals("onInnerWidth")) {
 			final String width = AuRequests.getInnerWidth(request);
 			_innerWidth = width == null ? "100%": width;
-		} else if (name.equals(Events.ON_RENDER)) {
+		} else if (cmd.equals(Events.ON_RENDER)) {
 			final Set items = AuRequests.convertToItems(request.getDesktop(),
 				request.getData().optJSONArray("items"));
 			int cnt = items.size();

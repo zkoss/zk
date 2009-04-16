@@ -459,21 +459,21 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				if (((AuService)it.next()).service(request, everError))
 					return; //done
 
-		final String name = request.getName();
-		if (Events.ON_BOOKMARK_CHANGE.equals(name)) {
+		final String cmd = request.getCommand();
+		if (Events.ON_BOOKMARK_CHANGE.equals(cmd)) {
 			BookmarkEvent evt = BookmarkEvent.getBookmarkEvent(request);
 			Events.postEvent(evt);
 			Events.postEvent(new BookmarkEvent("onBookmarkChanged", evt.getBookmark()));
 				//backward compatible
-		} else if (Events.ON_CLIENT_INFO.equals(name)) {
+		} else if (Events.ON_CLIENT_INFO.equals(cmd)) {
 			Events.postEvent(ClientInfoEvent.getClientInfoEvent(request));
-		} else if ("rmDesktop".equals(name)) {
+		} else if ("rmDesktop".equals(cmd)) {
 			((WebAppCtrl)request.getDesktop().getWebApp())
 				.getUiEngine().setAbortingReason(
 					new org.zkoss.zk.ui.impl.AbortByRemoveDesktop());
 				//to avoid surprise, we don't remove it now
 				//rather, it is done by AbortByRemoveDesktop.getResponse
-		} else if ("redraw".equals(name)) {
+		} else if ("redraw".equals(cmd)) {
 			invalidate();
 		} else
 			Events.postEvent(Event.getEvent(request));

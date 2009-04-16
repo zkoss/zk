@@ -393,27 +393,27 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	 * @since 5.0.0
 	 */
 	public void service(AuRequest request, boolean everError) {
-		final String name = request.getName();
-		if (name.equals(Events.ON_CLICK)
-		|| name.equals(Events.ON_DOUBLE_CLICK)
-		|| name.equals(Events.ON_RIGHT_CLICK)) {
+		final String cmd = request.getCommand();
+		if (cmd.equals(Events.ON_CLICK)
+		|| cmd.equals(Events.ON_DOUBLE_CLICK)
+		|| cmd.equals(Events.ON_RIGHT_CLICK)) {
 			Events.postEvent(MouseEvent.getMouseEvent(request));
-		} else if (name.equals(Events.ON_MOVE)) {
+		} else if (cmd.equals(Events.ON_MOVE)) {
 			MoveEvent evt = MoveEvent.getMoveEvent(request);
 			_left = evt.getLeft();
 			_top = evt.getTop();
 			Events.postEvent(evt);
-		} else if (name.equals(Events.ON_SIZE)) {
+		} else if (cmd.equals(Events.ON_SIZE)) {
 			SizeEvent evt = SizeEvent.getSizeEvent(request);
 			_width = evt.getWidth();
 			_height = evt.getHeight();
 			Events.postEvent(evt);
-		} else if (name.equals(Events.ON_Z_INDEX)) {
+		} else if (cmd.equals(Events.ON_Z_INDEX)) {
 			ZIndexEvent evt = ZIndexEvent.getZIndexEvent(request);
 			_zIndex = evt.getZIndex();
 			Events.postEvent(evt);
-		} else if (name.equals(Events.ON_OK) || name.equals(Events.ON_CANCEL)
-		|| name.equals(Events.ON_CTRL_KEY)) {
+		} else if (cmd.equals(Events.ON_OK) || cmd.equals(Events.ON_CANCEL)
+		|| cmd.equals(Events.ON_CTRL_KEY)) {
 			Events.postEvent(KeyEvent.getKeyEvent(request));
 		} else
 			super.service(request, everError);

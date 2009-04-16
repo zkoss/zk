@@ -68,7 +68,7 @@ public class KeyEvent extends Event {
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {data, request});
 
-		return new KeyEvent(request.getName(), comp,
+		return new KeyEvent(request.getCommand(), comp,
 			data.optInt("keyCode"), data.optBoolean("ctrlKey"),
 			data.optBoolean("shiftKey"), data.optBoolean("altKey"),
 			request.getDesktop().getComponentByUuidIfAny(data.optString("reference", null)));

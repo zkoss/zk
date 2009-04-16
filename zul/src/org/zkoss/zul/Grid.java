@@ -1363,11 +1363,11 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	 * @since 5.0.0
 	 */
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
-		final String name = request.getName();
-		if (name.equals("onInnerWidth")) {
+		final String cmd = request.getCommand();
+		if (cmd.equals("onInnerWidth")) {
 			final String width = AuRequests.getInnerWidth(request);
 			_innerWidth = width == null ? "100%": width;
-		} else if (name.equals(Events.ON_RENDER)) {
+		} else if (cmd.equals(Events.ON_RENDER)) {
 			Events.postEvent(RenderEvent.getRenderEvent(request));
 		} else
 			super.service(request, everError);

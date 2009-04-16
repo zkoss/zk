@@ -47,7 +47,7 @@ public class SelectionEvent extends Event {
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {data, request});
 
-		return new SelectionEvent(request.getName(), comp,
+		return new SelectionEvent(request.getCommand(), comp,
 			data.optInt("start"), data.optInt("end"),
 			data.optString("selected"));
 	}

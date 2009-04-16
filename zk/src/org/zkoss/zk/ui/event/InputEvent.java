@@ -48,7 +48,7 @@ public class InputEvent extends Event {
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {data, request});
 		try {
-			return new InputEvent(request.getName(), comp,
+			return new InputEvent(request.getCommand(), comp,
 				data.getString("value"), data.optBoolean("bySelectBack"),
 				data.optInt("start"));
 		} catch (org.zkoss.json.JSONException ex) {

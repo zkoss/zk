@@ -72,7 +72,7 @@ public class ColSizeEvent extends Event {
 				new Object[] {data, request});
 
 		try {
-			return new ColSizeEvent(request.getName(), comp,
+			return new ColSizeEvent(request.getCommand(), comp,
 				data.getInt("index"),
 				request.getDesktop().getComponentByUuid(data.getString("column")),
 				data.getString("width"),

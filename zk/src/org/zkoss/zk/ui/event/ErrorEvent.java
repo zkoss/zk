@@ -47,7 +47,7 @@ public class ErrorEvent extends InputEvent {
 				new Object[] {data, request});
 
 		try {
-			return new ErrorEvent(request.getName(), comp,
+			return new ErrorEvent(request.getCommand(), comp,
 				data.getString("value"), data.getString("message"));
 		} catch (org.zkoss.json.JSONException ex) {
 			throw new UiException(ex);

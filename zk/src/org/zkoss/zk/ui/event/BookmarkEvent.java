@@ -51,7 +51,7 @@ public class BookmarkEvent extends Event {
 				new Object[] {data, request});
 		final String nm = data.optString("");
 		((DesktopCtrl)request.getDesktop()).setBookmarkByClient(nm);
-		return new BookmarkEvent(request.getName(), nm);
+		return new BookmarkEvent(request.getCommand(), nm);
 	}
 
 	public BookmarkEvent(String name, String bookmark) {

@@ -1846,8 +1846,8 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	 * @since 5.0.0
 	 */
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
-		final String name = request.getName();
-		if (name.equals(Events.ON_SELECT)) {
+		final String cmd = request.getCommand();
+		if (cmd.equals(Events.ON_SELECT)) {
 			SelectEvent evt = SelectEvent.getSelectEvent(request);
 			Set selItems = evt.getSelectedItems();
 			_noSmartUpdate = true;
@@ -1874,7 +1874,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 			}
 
 			Events.postEvent(evt);
-		} else if (name.equals("onInnerWidth")) {
+		} else if (cmd.equals("onInnerWidth")) {
 			final String width = AuRequests.getInnerWidth(request);
 			_innerWidth = width == null ? "100%": width;
 		} else

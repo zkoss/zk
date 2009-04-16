@@ -47,7 +47,7 @@ public class ScrollEvent extends Event {
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {data, request});
 
-		return new ScrollEvent(request.getName(), comp, data.optInt(""));
+		return new ScrollEvent(request.getCommand(), comp, data.optInt(""));
 	}
 
 	/** Constructs an scroll-relevant event.

@@ -66,7 +66,7 @@ public class PagingEvent extends Event {
 				if (pgi < 0) pgi = 0;
 			}
 		}
-		return new PagingEvent(request.getName(), comp, pgi);
+		return new PagingEvent(request.getCommand(), comp, pgi);
 	}
 	
 	/** Construct a paging event.

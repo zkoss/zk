@@ -129,8 +129,8 @@ public class Timer extends HtmlBasedComponent implements org.zkoss.zul.api.Timer
 	 * @since 5.0.0
 	 */
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
-		final String name = request.getName();
-		if (name.equals(Events.ON_TIMER)) {
+		final String cmd = request.getCommand();
+		if (cmd.equals(Events.ON_TIMER)) {
 			if (!_repeats) _running = false; //Bug 1829397
 		}
 		super.service(request, everError);

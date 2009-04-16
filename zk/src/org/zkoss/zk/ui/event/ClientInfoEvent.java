@@ -60,7 +60,7 @@ public class ClientInfoEvent extends Event {
 		//Note: ClientInfoEvent is a broadcast event
 		try {
 			final JSONArray inf = data.getJSONArray("");
-			return new ClientInfoEvent(request.getName(),
+			return new ClientInfoEvent(request.getCommand(),
 				inf.getInt(0), inf.getInt(1), inf.getInt(2), inf.getInt(3),
 				inf.getInt(4), inf.getInt(5), inf.getInt(6), inf.getInt(7));
 		} catch (JSONException ex) {

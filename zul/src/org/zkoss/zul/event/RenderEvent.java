@@ -43,7 +43,7 @@ public class RenderEvent extends Event {
 		if (data == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {data, request});
-		return new RenderEvent(request.getName(),
+		return new RenderEvent(request.getCommand(),
 			request.getComponent(),
 			AuRequests.convertToItems(request.getDesktop(), data.optJSONArray("items")));
 	}

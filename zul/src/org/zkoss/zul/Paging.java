@@ -199,7 +199,7 @@ public class Paging extends XulElement implements org.zkoss.zul.api.Paging, Pagi
 	 * @since 5.0.0
 	 */
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
-		final String name = request.getName();
+		final String name = request.getCommand();
 		if (name.equals(ZulEvents.ON_PAGING)) {
 			Events.postEvent(PagingEvent.getPagingEvent(request));
 		} else

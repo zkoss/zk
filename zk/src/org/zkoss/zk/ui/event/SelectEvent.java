@@ -67,7 +67,7 @@ public class SelectEvent extends Event {
 				new Object[] {data, request});
 
 		final Desktop desktop = request.getDesktop();
-		return new SelectEvent(request.getName(), comp,
+		return new SelectEvent(request.getCommand(), comp,
 			AuRequests.convertToItems(desktop, data.optJSONArray("items")),
 			desktop.getComponentByUuidIfAny(data.optString("reference", null)),
 			AuRequests.parseKeys(data));

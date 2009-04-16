@@ -251,8 +251,8 @@ public class Tab extends LabelImageElement implements org.zkoss.zul.api.Tab {
 	 * @since 5.0.0
 	 */
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
-		final String name = request.getName();
-		if (name.equals(Events.ON_SELECT)) {
+		final String cmd = request.getCommand();
+		if (cmd.equals(Events.ON_SELECT)) {
 			SelectEvent evt = SelectEvent.getSelectEvent(request);
 			Set selItems = evt.getSelectedItems();
 			if (selItems == null || selItems.size() != 1)

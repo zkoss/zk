@@ -232,8 +232,8 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zul.api.Men
 	 * @since 5.0.0
 	 */
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
-		final String name = request.getName();
-		if (name.equals(Events.ON_CHECK)) {
+		final String cmd = request.getCommand();
+		if (cmd.equals(Events.ON_CHECK)) {
 			CheckEvent evt = CheckEvent.getCheckEvent(request);
 			_checked = evt.isChecked();
 			if (_checked) _checkmark = true;
