@@ -21,7 +21,7 @@ public class JSONArray extends LinkedList implements List, JSONAware {
 	 * Convert a list to JSON text. The result is a JSON array. 
 	 * If this list is also a JSONAware, JSONAware specific behaviours will be omitted at this top level.
 	 * 
-	 * @see org.zkoss.json.JSONValue#toJSONString(Object)
+	 * @see JSONValue#toJSONString(Object)
 	 * 
 	 * @param list
 	 * @return JSON text, or "null" if list is null.

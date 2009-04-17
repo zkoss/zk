@@ -25,8 +25,8 @@ public class JSONValue {
 	 * 
 	 * @param in the input to parse
 	 * @return Instance of the following:
-	 *	{@link org.zkoss.json.JSONObject} (also java.util.Map),
-	 * 	{@link org.zkoss.json.JSONArray} (also java.util.List),
+	 *	{@link JSONObject} (also java.util.Map),
+	 * 	{@link JSONArray} (also java.util.List),
 	 * 	java.lang.String,
 	 * 	java.lang.Number,
 	 * 	java.lang.Boolean,

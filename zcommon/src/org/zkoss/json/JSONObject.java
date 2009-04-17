@@ -21,7 +21,7 @@ public class JSONObject extends LinkedHashMap implements Map, JSONAware {
 	 * Convert (aka., encode) a map to JSON text. The result is a JSON object. 
 	 * If this map is also a JSONAware, JSONAware specific behaviours will be omitted at this top level.
 	 * 
-	 * @see org.zkoss.json.JSONValue#toJSONString(Object)
+	 * @see JSONValue#toJSONString(Object)
 	 * 
 	 * @param map
 	 * @return JSON text, or "null" if map is null.
