@@ -13,7 +13,8 @@ ZK 3.6.1
   2713463: Audio supports the loop attribute
   2718665: Flash supports  the dynamic content (setContent)
   2724923: Support scrollIntoView to scroll an element to become visible
-
+  2770471: GenericAutowireComposer shall support wiring ZScript varible
+  
 * Bugs
   2684510: Unable to access implict objects if func defined in other namespace
   2685872: Comet not send back new value of textbox if no listener
