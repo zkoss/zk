@@ -2156,7 +2156,7 @@ zk.formatDate = function (val, fmt) {
 				else txt += zk.FMON[val.getMonth()];
 				break;
 			case 'd':
-				txt += zk.formatFixed(val.getDate(), len);
+				txt += zk.formatFixed(zk.dayInMonth(val), len);
 				break;
 			case 'E':
 				if (len <= 3) txt += zk.SDOW[val.getDay()];
@@ -2164,9 +2164,6 @@ zk.formatDate = function (val, fmt) {
 				break;
 			case 'D':
 				txt += zk.dayInYear(val);
-				break;
-			case 'd':
-				txt += zk.dayInMonth(val);
 				break;
 			case 'w':
 				txt += zk.weekInYear(val);
@@ -2224,7 +2221,7 @@ zk.dayInYear = function (d, ref) {
 };
 /** Day in month (starting at 1). */
 zk.dayInMonth = function (d) {
-	return zk.dayInYear(d, new Date(d.getFullYear(), d.getMonth(), 1));
+	return d.getDate();
 };
 /** Week in year (starting at 1). */
 zk.weekInYear = function (d, ref) {
