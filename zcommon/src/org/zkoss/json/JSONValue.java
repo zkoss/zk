@@ -23,25 +23,30 @@ public class JSONValue {
 	/**
 	 * Parse (aka., decode) JSON text into java object from the input source. 
 	 * 
-	 * @param in the input to parse
+	 * @param in the input to parse.
 	 * @return Instance of the following:
 	 *	{@link JSONObject} (also java.util.Map),
 	 * 	{@link JSONArray} (also java.util.List),
 	 * 	java.lang.String,
 	 * 	java.lang.Number,
 	 * 	java.lang.Boolean,
-	 * 	null
+	 * 	null.
+	 * If in is null, null is returned.
 	 * 
 	 */
 	public static Object parse(Reader in) throws java.io.IOException {
+		if (in == null) return null;
 		JSONParser parser=new JSONParser();
 		return parser.parse(in);
 	}
 	
 	/**
 	 * Parse (aka., decode) JSON text into java object from the string.
+	 * @return the decoded object.
+	 * If s is null, null is returned.
 	 */
 	public static Object parse(String s){
+		if (s == null) return null;
 		try {
 			StringReader in=new StringReader(s);
 			return parse(in);
