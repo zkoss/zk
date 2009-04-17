@@ -170,7 +170,7 @@ zk.getTextSize = function (el, txt) {
 	var tsd = zk._txtSizDiv;
 	if (!tsd) {
 		tsd = zk._txtSizDiv = document.createElement("DIV");
-		tsd.style.cssText = "left:-1000px;position:absolute;visibility:hidden;border:none";
+		tsd.style.cssText = "top:-1000px;left:-1000px;position:absolute;visibility:hidden;border:none";
 		document.body.appendChild(tsd);
 	}
 
