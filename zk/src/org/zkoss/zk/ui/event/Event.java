@@ -18,8 +18,9 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
-import org.zkoss.json.JSONObject;
-import org.zkoss.json.JSONArray;
+import java.util.List;
+import java.util.Map;
+import java.util.Iterator;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
@@ -42,16 +43,16 @@ public class Event {
 	public static Event getEvent(AuRequest request) {
 		final String name = request.getCommand();
 		final Component comp = request.getComponent();
-		final JSONObject data = request.getData();
-		final Object data2 = data != null ? data.opt(""): null;
+		final Map data = request.getData();
+		final Object data2 = data != null ? data.get(""): null;
 		if (data2 == null)
 			return new Event(name, comp);
-		if (data2 instanceof JSONArray) {
-			final JSONArray ary = (JSONArray)data2;
-			int j = ary.length();
-			final Object[] data3 = new Object[j];
-			while (--j >= 0)
-				data3[j] = ary.opt(j);
+		if (data2 instanceof List) {
+			final List ary = (List)data2;
+			final Object[] data3 = new Object[ary.size()];
+			int j = 0;
+			for (Iterator it = ary.iterator(); it.hasNext();)
+				data3[j++] = it.next();
 			return new Event(name, comp, data3);
 		}
 		return new Event(name, comp, data2);

@@ -18,12 +18,13 @@
  */
 package org.zkoss.zk.ui.event;
 
-import org.zkoss.json.JSONObject;
+import java.util.Map;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.AuRequests;
 
 /**
  * Represents an event cause by user's the active selection which is a
@@ -42,14 +43,15 @@ public class SelectionEvent extends Event {
 		final Component comp = request.getComponent();
 		if (comp == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, request);
-		final JSONObject data = request.getData();
+		final Map data = request.getData();
 		if (data == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {data, request});
 
 		return new SelectionEvent(request.getCommand(), comp,
-			data.optInt("start"), data.optInt("end"),
-			data.optString("selected"));
+			AuRequests.getInt(data, "start", 0),
+			AuRequests.getInt(data, "end", 0),
+			(String)data.get("selected"));
 	}
 
 	/**

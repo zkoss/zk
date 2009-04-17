@@ -16,7 +16,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.event;
 
-import org.zkoss.json.JSONObject;
+import java.util.Map;
 
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuRequests;
@@ -46,17 +46,12 @@ public class PagingEvent extends Event {
 		final Component comp = request.getComponent();
 		if (comp == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, request);
-		final JSONObject data = request.getData();
+		final Map data = request.getData();
 		if (data == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {data, request});
-		int pgi;
-		try {
-			pgi = data.getInt("");
-		} catch (org.zkoss.json.JSONException ex) {
-			throw new UiException(ex);
-		}
 
+		int pgi = AuRequests.getInt(data, "", 0);
 		final Pageable pageable = (Pageable)comp;
 		if (pgi < 0) pgi = 0;
 		else {

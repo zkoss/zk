@@ -18,7 +18,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
-import org.zkoss.json.JSONObject;
+import java.util.Map;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
@@ -53,18 +53,12 @@ public class URIEvent extends Event {
 		final Component comp = request.getComponent();
 		if (comp == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, request);
-		final JSONObject data = request.getData();
+		final Map data = request.getData();
 		if (data == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {data, request});
 
-		String uri;
-		try {
-			uri = data.getString("");
-		} catch (org.zkoss.json.JSONException ex) {
-			throw new UiException(ex);
-		}
-
+		String uri = (String)data.get("");
 		int urilen = uri.length();
 		if (urilen > 0 && uri.charAt(0) == '/') {
 			//Convert URL to URI if starting with the context path

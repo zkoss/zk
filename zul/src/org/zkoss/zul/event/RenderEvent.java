@@ -15,8 +15,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 package org.zkoss.zul.event;
 
 import java.util.Set;
-
-import org.zkoss.json.JSONObject;
+import java.util.Map;
+import java.util.List;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Desktop;
@@ -39,13 +39,13 @@ public class RenderEvent extends Event {
 	 * @since 5.0.0
 	 */
 	public static final RenderEvent getRenderEvent(AuRequest request) {
-		final JSONObject data = request.getData();
+		final Map data = request.getData();
 		if (data == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {data, request});
 		return new RenderEvent(request.getCommand(),
 			request.getComponent(),
-			AuRequests.convertToItems(request.getDesktop(), data.optJSONArray("items")));
+			AuRequests.convertToItems(request.getDesktop(), (List)data.get("items")));
 	}
 
 	/**

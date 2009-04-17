@@ -2583,7 +2583,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 			_innerWidth = width == null ? "100%": width;
 		} else if (cmd.equals(Events.ON_RENDER)) {
 			final Set items = AuRequests.convertToItems(request.getDesktop(),
-				request.getData().optJSONArray("items"));
+				(List)request.getData().get("items"));
 			int cnt = items.size();
 			if (cnt == 0)
 				return; //nothing to do

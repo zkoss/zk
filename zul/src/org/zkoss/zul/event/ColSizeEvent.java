@@ -18,7 +18,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.event;
 
-import org.zkoss.json.JSONObject;
+import java.util.Map;
 
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuRequests;
@@ -66,20 +66,15 @@ public class ColSizeEvent extends Event {
 		final Component comp = request.getComponent();
 		if (comp == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, request);
-		final JSONObject data = request.getData();
+		final Map data = request.getData();
 		if (data == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {data, request});
 
-		try {
-			return new ColSizeEvent(request.getCommand(), comp,
-				data.getInt("index"),
-				request.getDesktop().getComponentByUuid(data.getString("column")),
-				data.getString("width"),
-				AuRequests.parseKeys(data));
-		} catch (org.zkoss.json.JSONException ex) {
-			throw new UiException(ex);
-		}
+		return new ColSizeEvent(request.getCommand(), comp,
+			AuRequests.getInt(data, "index", 0),
+			request.getDesktop().getComponentByUuid((String)data.get("column")),
+			(String)data.get("width"), AuRequests.parseKeys(data));
 	}
 	
 	/** Constructs an instance of {@link ColSizeEvent}.

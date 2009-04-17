@@ -39,7 +39,7 @@ import org.zkoss.mesg.Messages;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.util.logging.Log;
-import org.zkoss.json.JSONObject;
+import org.zkoss.json.JSONValue;
 
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.Charsets;
@@ -440,8 +440,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 				final String uuid = request.getParameter("uuid_"+j);
 				final String data = request.getParameter("data_"+j);
-				final JSONObject decdata =
-					data != null ? new JSONObject(data): null;
+				final Map decdata =
+					data != null ? (Map)JSONValue.parse(data): null;
 				aureqs.add(uuid == null || uuid.length() == 0 ? 
 					new AuRequest(desktop, cmdId, decdata):
 					new AuRequest(desktop, uuid, cmdId, decdata));

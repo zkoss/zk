@@ -57,8 +57,7 @@ public class HttpAuWriter implements AuWriter{
 	}
 	/** Opens the connection.
 	 *
-	 * <p>Default: it creates an instance of {@link JSONObject}
-	 * to store the responses.
+	 * <p>Default: it creates an object to store the responses.
 	 *
 	 * <p>This implementation doesn't support the timeout argument.
 	 */
@@ -69,11 +68,7 @@ public class HttpAuWriter implements AuWriter{
 			//in another thread, so we have to do it here
 
 		_out = new JSONObject();
-		try {
-			_out.put("rs", _rs = new JSONArray());
-		} catch (JSONException ex) {
-			throw new UiException(ex);
-		}
+		_out.put("rs", _rs = new JSONArray());
 		return this;
 	}
 	/** Closes the connection.
@@ -110,17 +105,13 @@ public class HttpAuWriter implements AuWriter{
 		return data;
 	}
 	public void writeResponseId(int resId) throws IOException {
-		try {
-			_out.put("rid", resId);
-		} catch (JSONException ex) {
-			throw new UiException(ex);
-		}
+		_out.put("rid", new Integer(resId));
 	}
 	public void write(AuResponse response) throws IOException {
 		final JSONArray r = new JSONArray();
-		r.put(response.getCommand());
-		r.put(response.getEncodedData());
-		_rs.put(r);
+		r.add(response.getCommand());
+		r.add(response.getEncodedData());
+		_rs.add(r);
 	}
 	public void write(Collection responses) throws IOException {
 		for (Iterator it = responses.iterator(); it.hasNext();)

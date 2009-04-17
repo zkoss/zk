@@ -160,10 +160,12 @@ public class HtmlPageRenders {
 			sb.append("zAu.process('").append(response.getCommand())
 				.append("'");
 
-			final org.zkoss.json.JSONArray encdata = response.getEncodedData();
+			final List encdata = response.getEncodedData();
 			if (encdata != null)
 				sb.append(",'")
-					.append(Strings.escape(encdata.toString(), Strings.ESCAPE_JAVASCRIPT))
+					.append(Strings.escape(
+						org.zkoss.json.JSONArray.toJSONString(encdata),
+						Strings.ESCAPE_JAVASCRIPT))
 					.append('\'');
 			sb.append(");\n");
 		}

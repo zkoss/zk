@@ -23,8 +23,6 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.HashSet;
 
-import org.zkoss.json.JSONObject;
-
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
@@ -62,7 +60,7 @@ public class AuRequest {
 	private Integer _opts;
 	private Page _page;
 	private Component _comp;
-	private final JSONObject _data;
+	private final Map _data;
 	/** Component's UUID. Used only if _comp is not specified directly. */
 	private String _uuid;
 
@@ -75,7 +73,7 @@ public class AuRequest {
 	 * @since 5.0.0
 	 */
 	public AuRequest(Desktop desktop, String uuid,
-	String cmd, JSONObject data) {
+	String cmd, Map data) {
 		if (desktop == null || uuid == null || cmd == null)
 			throw new IllegalArgumentException();
 		_desktop = desktop;
@@ -90,7 +88,7 @@ public class AuRequest {
 	 * @param data the data; might be null.
 	 * @since 5.0.0
 	 */
-	public AuRequest(Desktop desktop, String cmd, JSONObject data) {
+	public AuRequest(Desktop desktop, String cmd, Map data) {
 		if (desktop == null || cmd == null)
 			throw new IllegalArgumentException();
 		_desktop = desktop;
@@ -167,7 +165,7 @@ public class AuRequest {
 	 * <p>See also <a href="http://docs.zkoss.org/wiki/How_to_Process_Request_with_JSON">how to process data with JSON</a>.
 	 * @since 5.0.0
 	 */
-	public JSONObject getData() {
+	public Map getData() {
 		return _data;
 	}
 

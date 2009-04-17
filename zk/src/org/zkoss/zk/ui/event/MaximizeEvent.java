@@ -18,7 +18,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
-import org.zkoss.json.JSONObject;
+import java.util.Map;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
@@ -43,15 +43,15 @@ public class MaximizeEvent extends Event {
 		final Component comp = request.getComponent();
 		if (comp == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, request);
-		final JSONObject data = request.getData();
+		final Map data = request.getData();
 		if (data == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {data, request});
 
 		return new MaximizeEvent(request.getCommand(), comp,
-			data.optString("left", null), data.optString("top", null),
-			data.optString("width", null), data.optString("height", null),
-			data.optBoolean("maximized"));
+			(String)data.get("left"), (String)data.get("top"),
+			(String)data.get("width"), (String)data.get("height"),
+			AuRequests.getBoolean(data, "maximized"));
 	}
 
 	public MaximizeEvent(String name, Component target, String left, String top,

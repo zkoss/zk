@@ -20,8 +20,8 @@ package org.zkoss.zk.ui.event;
 
 import java.util.Set;
 import java.util.Collections;
-
-import org.zkoss.json.JSONObject;
+import java.util.Map;
+import java.util.List;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Desktop;
@@ -61,15 +61,15 @@ public class SelectEvent extends Event {
 		final Component comp = request.getComponent();
 		if (comp == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, request);
-		final JSONObject data = request.getData();
+		final Map data = request.getData();
 		if (data == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {data, request});
 
 		final Desktop desktop = request.getDesktop();
 		return new SelectEvent(request.getCommand(), comp,
-			AuRequests.convertToItems(desktop, data.optJSONArray("items")),
-			desktop.getComponentByUuidIfAny(data.optString("reference", null)),
+			AuRequests.convertToItems(desktop, (List)data.get("items")),
+			desktop.getComponentByUuidIfAny((String)data.get("reference")),
 			AuRequests.parseKeys(data));
 	}
 

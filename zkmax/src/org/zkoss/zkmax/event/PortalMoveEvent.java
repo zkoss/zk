@@ -18,8 +18,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkmax.event;
 
-import org.zkoss.json.JSONObject;
-import org.zkoss.json.JSONException;
+import java.util.Map;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Desktop;
@@ -51,20 +50,16 @@ public class PortalMoveEvent extends Event {
 		if (comp == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, request);
 
-		final JSONObject data = request.getData();
+		final Map data = request.getData();
 		if (data == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA, new Object[] {data, request});
 
-		try {
-			final Desktop desktop = request.getDesktop();
-			return new PortalMoveEvent(request.getCommand(), comp,
-				(Portalchildren)desktop.getComponentByUuid(data.getString("from")),
-				(Portalchildren)desktop.getComponentByUuid(data.getString("to")),
-				(Panel)desktop.getComponentByUuid(data.getString("dragged")),
-				data.getInt("index"));
-		} catch (JSONException ex) {
-			throw new UiException(ex);
-		}
+		final Desktop desktop = request.getDesktop();
+		return new PortalMoveEvent(request.getCommand(), comp,
+			(Portalchildren)desktop.getComponentByUuid((String)data.get("from")),
+			(Portalchildren)desktop.getComponentByUuid((String)data.get("to")),
+			(Panel)desktop.getComponentByUuid((String)data.get("dragged")),
+			AuRequests.getInt(data, "index", 0));
 	}
 	/**
 	 * Constructs a ColumnMoved event.

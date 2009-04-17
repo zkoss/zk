@@ -16,10 +16,9 @@ package org.zkoss.zk.au;
 
 import java.util.Set;
 import java.util.LinkedHashSet;
-
-import org.zkoss.json.JSONObject;
-import org.zkoss.json.JSONArray;
-import org.zkoss.json.JSONException;
+import java.util.Map;
+import java.util.List;
+import java.util.Iterator;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
@@ -41,18 +40,13 @@ public class AuRequests {
 	 *
 	 * @return a set of components.
 	 */
-	public static Set convertToItems(Desktop desktop, JSONArray uuids) {
+	public static Set convertToItems(Desktop desktop, List uuids) {
 		final Set items = new LinkedHashSet();
-		if (uuids != null) {
-			try {
-				for (int len = uuids.length(), j = 0; j < len; ++j) {
-					final String uuid = uuids.getString(j);
-					items.add(desktop.getComponentByUuid(uuid.trim()));
-				}
-			} catch (JSONException ex) {
-				throw new UiException(ex);
+		if (uuids != null)
+			for (Iterator it = uuids.iterator(); it.hasNext();) {
+				final String uuid = (String)it.next();
+				items.add(desktop.getComponentByUuid(uuid.trim()));
 			}
-		}
 		return items;
 	}
 
@@ -60,12 +54,12 @@ public class AuRequests {
 	 * @return a combination of {@link MouseEvent#ALT_KEY},
 	 * {@link MouseEvent#SHIFT_KEY} and {@link MouseEvent#CTRL_KEY},
 	 */
-	public static int parseKeys(JSONObject data) {
+	public static int parseKeys(Map data) {
 		int keys = 0;
 		if (data != null) {
-			if (data.optBoolean("altKey")) keys |= MouseEvent.ALT_KEY;
-			if (data.optBoolean("ctrlKey")) keys |= MouseEvent.CTRL_KEY;
-			if (data.optBoolean("shiftKey")) keys |= MouseEvent.SHIFT_KEY;
+			if (getBoolean(data, "altKey")) keys |= MouseEvent.ALT_KEY;
+			if (getBoolean(data, "ctrlKey")) keys |= MouseEvent.CTRL_KEY;
+			if (getBoolean(data, "shiftKey")) keys |= MouseEvent.SHIFT_KEY;
 		}
 		return keys;
 	}
@@ -75,30 +69,48 @@ public class AuRequests {
 	 */
 	public static String getInnerWidth(AuRequest request)
 	throws UiException {
-		final JSONObject data = request.getData();
+		final Map data = request.getData();
 		if (data == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {data, request});
-		return data.optString("");
+		return (String)data.get("");
 	}
 
 	/** Returns the result of an AU request representing the update result.
 	 */
 	public static Object getUpdateResult(AuRequest request)
 	throws UiException {
-		final JSONObject data = request.getData();
+		final Map data = request.getData();
 		if (data == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {data, request});
 
-		try {
-			final String key = data.getString("");
-			final Object result = request.getDesktop().removeAttribute(key);
-			if (result == null)
-				throw new UiException("Content not found: "+key);
-			return result;
-		} catch (JSONException ex) {
-			throw new UiException(ex);
-		}
+		final String key = (String)data.get("");
+		final Object result = request.getDesktop().removeAttribute(key);
+		if (result == null)
+			throw new UiException("Content not found: "+key);
+		return result;
+	}
+
+	/** Returns the integer value of the specified key in the data.
+	 * @param defVal the default value; used if not found.
+	 */
+	public static int getInt(Map data, String key, int defVal) {
+		final Object o = data.get(key);
+		return o != null ? ((Number)o).intValue(): defVal;
+	}
+	/** Returns the integer value of the specified key in the data.
+	 * @param defVal the default value; used if not found.
+	 */
+	public static long getLong(Map data, String key, long defVal) {
+		final Object o = data.get(key);
+		return o != null ? ((Number)o).longValue(): defVal;
+	}
+	/** Returns whether the specified key is defined.
+	 */
+	public static boolean getBoolean(Map data, String key) {
+		final Object o = data.get(key);
+		return o != null
+			&& (!(o instanceof Boolean) || ((Boolean)o).booleanValue());
 	}
 }

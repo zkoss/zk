@@ -18,6 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.au;
 
+import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -56,7 +57,6 @@ public class AuResponse {
 	 * @param data the data. It can be null, String, Date,
 	 * and any kind of objects that
 	 * the client accepts (marshaled by JSON).
-
 	 */
 	protected AuResponse(String cmd, Object data) {
 		this(cmd, (Component)null, data);
@@ -132,7 +132,7 @@ public class AuResponse {
 	 * @see #getRawData
 	 * @since 5.0.0
 	 */
-	public JSONArray getEncodedData() {
+	public List getEncodedData() {
 		if (_data == null)
 			return null;
 
@@ -141,7 +141,7 @@ public class AuResponse {
 			Object d = _data[j];
 			if (d instanceof DeferredValue)
 				d = ((DeferredValue)d).getValue();
-			encdata.put(d);
+			encdata.add(d);
 		}
 		return encdata;
 	}

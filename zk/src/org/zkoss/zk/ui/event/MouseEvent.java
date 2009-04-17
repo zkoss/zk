@@ -18,12 +18,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
+import java.util.Map;
+
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuRequests;
-import org.zkoss.json.JSONObject;
 
 /**
  * Represents an event cause by mouse activitly.
@@ -65,17 +66,18 @@ public class MouseEvent extends Event {
 		final Component comp = request.getComponent();
 		if (comp == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, request);
-		final JSONObject data = request.getData();
+		final Map data = request.getData();
 		if (data == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {data, request});
 		final String name = request.getCommand();
 		final int keys = AuRequests.parseKeys(data);
-		final String area = data.optString("area", null);
+		final String area = (String)data.get("area");
 		return area != null ? new MouseEvent(name, comp, area, keys): //area
 			new MouseEvent(name, comp, //coord
-				data.optInt("x"), data.optInt("y"),
-				data.optInt("pageX"), data.optInt("pageY"), keys);
+				AuRequests.getInt(data, "x", 0), AuRequests.getInt(data, "y", 0),
+				AuRequests.getInt(data, "pageX", 0), AuRequests.getInt(data, "pageY", 0),
+				keys);
 	}
 
 	/** Construct a mouse relevant event with coordinate or area.

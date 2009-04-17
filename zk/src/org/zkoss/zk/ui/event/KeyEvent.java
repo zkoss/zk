@@ -18,12 +18,13 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
-import org.zkoss.json.JSONObject;
+import java.util.Map;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.AuRequests;
 
 /**
  * Represents a key pressed by the user.
@@ -63,15 +64,15 @@ public class KeyEvent extends Event {
 		final Component comp = request.getComponent();
 		if (comp == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, request);
-		final JSONObject data = request.getData();
+		final Map data = request.getData();
 		if (data == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {data, request});
 
 		return new KeyEvent(request.getCommand(), comp,
-			data.optInt("keyCode"), data.optBoolean("ctrlKey"),
-			data.optBoolean("shiftKey"), data.optBoolean("altKey"),
-			request.getDesktop().getComponentByUuidIfAny(data.optString("reference", null)));
+			AuRequests.getInt(data, "keyCode", 0), AuRequests.getBoolean(data, "ctrlKey"),
+			AuRequests.getBoolean(data, "shiftKey"), AuRequests.getBoolean(data, "altKey"),
+			request.getDesktop().getComponentByUuidIfAny((String)data.get("reference")));
 	}
 
 	private final int _keyCode;

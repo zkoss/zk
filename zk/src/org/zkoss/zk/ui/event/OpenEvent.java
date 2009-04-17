@@ -18,7 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
-import org.zkoss.json.JSONObject;
+import java.util.Map;
 
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
@@ -55,16 +55,15 @@ public class OpenEvent extends Event {
 		final Component comp = request.getComponent();
 		if (comp == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, request);
-		final JSONObject data = request.getData();
+		final Map data = request.getData();
 		if (data == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {data, request});
 
 		return new OpenEvent(request.getCommand(), comp,
-			data.optBoolean("open"),
-			request.getDesktop().getComponentByUuidIfAny(data.optString("reference", null)),
-			data.opt("value"));
-			//FUTURE: support non-String value (by coerce to comp.value.class)
+			AuRequests.getBoolean(data, "open"),
+			request.getDesktop().getComponentByUuidIfAny((String)data.get("reference")),
+			data.get("value"));
 	}
 
 	/** Constructs an onOpen event.

@@ -19,10 +19,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.event;
 
 import java.util.TimeZone;
+import java.util.List;
+import java.util.Map;
 
-import org.zkoss.json.JSONObject;
-import org.zkoss.json.JSONArray;
-import org.zkoss.json.JSONException;
 import org.zkoss.util.TimeZones;
 
 import org.zkoss.zk.mesg.MZk;
@@ -53,19 +52,18 @@ public class ClientInfoEvent extends Event {
 	 * @since 5.0.0
 	 */
 	public static final ClientInfoEvent getClientInfoEvent(AuRequest request) {
-		final JSONObject data = request.getData();
+		final Map data = request.getData();
 		if (data == null)
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {data, request});
 		//Note: ClientInfoEvent is a broadcast event
-		try {
-			final JSONArray inf = data.getJSONArray("");
-			return new ClientInfoEvent(request.getCommand(),
-				inf.getInt(0), inf.getInt(1), inf.getInt(2), inf.getInt(3),
-				inf.getInt(4), inf.getInt(5), inf.getInt(6), inf.getInt(7));
-		} catch (JSONException ex) {
-			throw new UiException(ex);
-		}
+		final List inf = (List)data.get("");
+		return new ClientInfoEvent(request.getCommand(),
+			getInt(inf, 0), getInt(inf, 1), getInt(inf, 2), getInt(inf, 3),
+			getInt(inf, 4), getInt(inf, 5), getInt(inf, 6), getInt(inf, 7));
+	}
+	private static final int getInt(List inf, int j) {
+		return ((Integer)inf.get(j)).intValue();
 	}
 
 	/** Constructs an event to hold the client-info.
