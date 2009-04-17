@@ -486,7 +486,7 @@ public class Components {
 	 * component with the target event name onXxx$myid.</p> 
 	 * <p>The controller is a POJO file with onXxx$myid methods (the event handler 
 	 * codes). This utility method search such onXxx$myid methods and adds 
-	 * forward condition to the source myid component looked up by  
+	 * forward condition to the source myid component looked up by   
 	 * {@link Component#getVariable} of the specified component, so you 
 	 * don't have to specify in zul file the "forward" attribute one by one. 
 	 * If the source component cannot be looked up or the object looked up is 
@@ -790,13 +790,35 @@ public class Components {
 		}
 
 		private boolean containsVariable(Object x, String fdname) {
-			return x instanceof Page ? 
-				((Page)x).containsVariable(fdname) : ((Component)x).containsVariable(fdname, false);
+			//#feature 2770471 GenericAutowireComposer shall support wiring ZScript varible
+			if (x instanceof Page) {
+				final Page pg = (Page) x;
+				return pg.getZScriptVariable(fdname) != null
+					|| pg.containsVariable(fdname);
+			} else {
+				final Component cmp = (Component) x;
+				return cmp.getPage().getZScriptVariable(cmp, fdname) != null
+					|| cmp.containsVariable(fdname, false);
+			}
 		}
 		
 		private Object getVariable(Object x, String fdname) {
-			return x instanceof Page ?
-				((Page)x).getVariable(fdname) : ((Component)x).getVariable(fdname, false);
+			//#feature 2770471 GenericAutowireComposer shall support wiring ZScript varible
+			if (x instanceof Page) {
+				final Page pg = (Page) x;
+				Object arg = pg.getZScriptVariable(fdname);
+				if (arg == null) {
+					arg = pg.getVariable(fdname);
+				}
+				return arg;
+			} else {
+				final Component cmp = (Component) x;
+				Object arg = cmp.getPage().getZScriptVariable(cmp, fdname);
+				if (arg == null) {
+					arg = cmp.getVariable(fdname, false);
+				}
+				return arg;
+			}
 		}
 		
 		private void injectFellow(Object arg) {
