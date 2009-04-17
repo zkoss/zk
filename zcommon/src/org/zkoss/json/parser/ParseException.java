@@ -1,4 +1,4 @@
-package org.json.simple.parser;
+package org.zkoss.json.parser;
 
 /**
  * ParseException explains why and where the error occurs in source JSON text.
@@ -6,7 +6,7 @@ package org.json.simple.parser;
  * @author FangYidong<fangyidong@yahoo.com.cn>
  *
  */
-public class ParseException extends Exception {
+public class ParseException extends RuntimeException {
 	private static final long serialVersionUID = -7880698968187728548L;
 	
 	public static final int ERROR_UNEXPECTED_CHAR = 0;
@@ -40,7 +40,7 @@ public class ParseException extends Exception {
 	}
 	
 	/**
-	 * @see org.json.simple.parser.JSONParser#getPosition()
+	 * @see org.zkoss.json.parser.JSONParser#getPosition()
 	 * 
 	 * @return The character position (starting with 0) of the input where the error occurs.
 	 */
@@ -53,11 +53,11 @@ public class ParseException extends Exception {
 	}
 	
 	/**
-	 * @see org.json.simple.parser.Yytoken
+	 * @see org.zkoss.json.parser.Yytoken
 	 * 
 	 * @return One of the following base on the value of errorType:
 	 * 		   	ERROR_UNEXPECTED_CHAR		java.lang.Character
-	 * 			ERROR_UNEXPECTED_TOKEN		org.json.simple.parser.Yytoken
+	 * 			ERROR_UNEXPECTED_TOKEN		org.zkoss.json.parser.Yytoken
 	 * 			ERROR_UNEXPECTED_EXCEPTION	java.lang.Exception
 	 */
 	public Object getUnexpectedObject() {
