@@ -39,35 +39,39 @@ zk.Cal.prototype = {
 	_newCal: function() {
 		this.element = $e(this.id);
 		if (!this.element) return;
-		var zcls = getZKAttr(this.element, "zcls"),
+		var uuid = $uuid(this);
+			zcls = getZKAttr(this.element, "zcls"),
+			zhr = getZKAttr(this.element, "hr") == "true",
+			zmin = getZKAttr(this.element, "min") == "true",
+			za = getZKAttr(this.element, "ampm") == "true",
 			compact = getZKAttr(this.element, "compact") == "true",
 			html = this.popup ? '<table border="0" cellspacing="0" cellpadding="0" tabindex="-1">': '';
 
 		html += '<tr><td><table class="'+zcls+'-calyear" width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td width="5"></td><td align="right"><img src="'
 			+zk.getUpdateURI('/web/zul/img/cal/arrowL.gif')
 			+'" style="cursor:pointer" onclick="zkCal.onyearofs(event,-1)" id="'
-			+this.id+'!ly"/></td>';
+			+uuid+'!ly"/></td>';
 
 		if (compact)
 			html += '<td align="right"><img src="'+zk.getUpdateURI('/web/zul/img/cal/arrow2L.gif')
 				+'" style="cursor:pointer" onclick="zkCal.onmonofs(event,-1)" id="'
-				+this.id+'!lm"/></td>';
+				+uuid+'!lm"/></td>';
 
-		html += '<td width="5"></td><td id="'+this.id+'!title"></td><td width="5"></td>';
+		html += '<td width="5"></td><td id="'+uuid+'!title"></td><td width="5"></td>';
 
 		if (compact)
 			html += '<td align="left"><img src="'+zk.getUpdateURI('/web/zul/img/cal/arrow2R.gif')
 				+'" style="cursor:pointer" onclick="zkCal.onmonofs(event,1)" id="'
-				+this.id+'!rm"/></td>';
+				+uuid+'!rm"/></td>';
 
 		html += '<td align="left"><img src="'+zk.getUpdateURI('/web/zul/img/cal/arrowR.gif')
 			+'" style="cursor:pointer" onclick="zkCal.onyearofs(event,1)" id="'
-			+this.id+'!ry"/></td><td width="5"></td></tr></table></td></tr>';
+			+uuid+'!ry"/></td><td width="5"></td></tr></table></td></tr>';
 
 		if (!compact) {
 			html += '<tr><td><table class="'+zcls+'-calmon" width="100%" border="0" cellspacing="0" cellpadding="0"><tr>';
 			for (var j = 0 ; j < 12; ++j) {
-				html += '<td id="'+this.id+'!m'+j
+				html += '<td id="'+uuid+'!m'+j
 					+'" onclick="zkCal.onmonclk(event)" onmouseover="zkCal.onover(event)" onmouseout="zkCal.onout(event)">'
 					+ zk.S2MON[j] + '</td>';
 				if (j == 5) html += '</tr><tr>';
@@ -85,16 +89,49 @@ zk.Cal.prototype = {
 		}
 		html += '</tr>';
 		for (var j = 0; j < 6; ++j) { //at most 7 rows
-			html += '<tr class="'+zcls+'-calday" id="'+this.id+'!w'+j
+			html += '<tr class="'+zcls+'-calday" id="'+uuid+'!w'+j
 				+'" onclick="zkCal.ondayclk(event)" onmouseover="zkCal.onover(event)" onmouseout="zkCal.onout(event)">';
 			for (var k = 0; k < 7; ++k)
 				html += '<td></td>';
 			html += '</tr>'
 		}
 		html += '</table></td></tr>';
-		if (this.popup) html += '</table>';
-		zk.setInnerHTML(this.popup || this.element, html);
+		if (this.popup) {
+			html += '<tr id="'+ uuid+'!ztime"><td align="center"><table><tr>'+
+				'<td id="'+ uuid+'!za"><button id="'+ uuid+'!abtn" class="'+ zcls +'-time-ampm" type="button" onclick="zkCal.onmarkchg(event)">AM</button></td>'+
+				'<td id="'+ uuid+'!zhr"><input id="'+ uuid+ '!hrinp" class="'+ zcls +'-time ' + zcls + '-inp" type="text" maxlength="2" size="2" autocomplete="off"/></td>' +
+				'<td><div id="'+ uuid+ '!hup" class="'+ zcls + '-time-up" onclick="zkCal.onhrofs(event,1)"></div>'+
+				'<div id="'+ uuid+ '!hdown" class="'+ zcls + '-time-down" onclick="zkCal.onhrofs(event,-1)" ></div></td>'+
+				'<td id="'+ uuid+'!timesep">:</td>'+
+				'<td id="'+ uuid+'!zmin"><input id="'+ uuid+ '!mininp" class="'+ zcls +'-time '+ zcls + '-inp" type="text" maxlength="2" size="2" autocomplete="off"/></td>' +
+				'<td><div id="'+ uuid+ '!mup" class="'+ zcls + '-time-up" onclick="zkCal.onminofs(event,1)"></div>'+
+				'<div id="'+ uuid+ '!mdown" class="'+ zcls + '-time-down" onclick="zkCal.onminofs(event,-1)"></div></td>'+
+				'</tr></table></td></tr></table>';
+		}
 
+		zk.setInnerHTML(this.popup || this.element, html);
+		if (this.popup) {
+            var hrinp = $e(uuid + "!hrinp"),
+				mininp = $e(uuid + "!mininp"),
+				hup = $e(uuid + "!hup"),
+				hdown = $e(uuid + "!hdown"),
+				mup = $e(uuid + "!mup"),
+				mdown = $e(uuid + "!mdown"),
+				za = $e(uuid + "!abtn");
+			zk.listen(hrinp, "click", zkCal.ontimeclk);
+			zk.listen(hrinp, "blur", zkCal.ontimechg);
+			zk.listen(mininp, "click", zkCal.ontimeclk);
+			zk.listen(mininp, "blur", zkCal.ontimechg);
+            zk.listen(hup, "mouseover", zkDtbox.onmouseevent);
+            zk.listen(hup, "mouseout", zkDtbox.onmouseevent);
+            zk.listen(hdown, "mouseover", zkDtbox.onmouseevent);
+            zk.listen(hdown, "mouseout", zkDtbox.onmouseevent);
+            zk.listen(mup, "mouseover", zkDtbox.onmouseevent);
+            zk.listen(mup, "mouseout", zkDtbox.onmouseevent);
+            zk.listen(mdown, "mouseover", zkDtbox.onmouseevent);
+            zk.listen(mdown, "mouseout", zkDtbox.onmouseevent);
+            this._updateCal(this.element);
+		}
 		this.form = zk.formOf(this.element);
 		if (this.form && !this.fnSubmit) {
 			var meta = this;
@@ -115,6 +152,7 @@ zk.Cal.prototype = {
 		this.date = val ? val: this.today();
 		if (bd) this.begin = new Date($int(bd) * 1000);
 		if (ed) this.end = new Date($int(ed) * 1000);
+		this._updateCal(this.element);
 		this._output();
 	},
 	getFormat: function () {
@@ -123,7 +161,30 @@ zk.Cal.prototype = {
 	},
 	today: function () {
 		var d = new Date();
-		return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+		return new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes());
+	},
+	_updateCal: function(cmp) {
+		var zhr = getZKAttr(cmp, "hr") == "true",
+			zmin = getZKAttr(cmp, "min") == "true",
+			za = getZKAttr(cmp, "ampm") == "true",
+			ztime = $e(cmp.id+"!ztime"),
+			hr = $e(cmp.id+"!zhr"),
+			min = $e(cmp.id+"!zmin"),
+			sep = $e(cmp.id+"!timesep")
+			a = $e(cmp.id+"!za");
+		if (zhr || zmin || za) {
+			var harr = zk.nextSibling(hr, "TD"),
+				marr = zk.nextSibling(min, "TD");
+			hr ? action[zhr ? "show" : "hide"](hr) : "";
+			min ? action[zmin ? "show" : "hide"](min) : "";
+			a ? action[za ? "show" : "hide"](a) : "";
+			action[zhr ? "show" : "hide"](harr);
+			action[zmin ? "show" : "hide"](marr);
+			action[(zmin && zhr) ? "show" : "hide"](sep);
+			ztime ? action.show(ztime) : "";
+		} else {
+			ztime ? action.hide(ztime) : "";
+		}
 	},
 	_output: function () {
 		//year
@@ -131,10 +192,15 @@ zk.Cal.prototype = {
 			m = val.getMonth(),
 			d = val.getDate(),
 			y = val.getFullYear(),
-			el = $e(this.id + "!title");
-
+			hr = val.getHours(),
+			min = val.getMinutes(),
+			el = $e(this.id + "!title"),
+			abtn = $e(this.id + "!abtn"),
+			hrbox = $e(this.id,'hrinp'),
+			minbox = $e(this.id,'mininp'),
+			zcls = getZKAttr(this.element, "zcls"),
+			fmt = getZKAttr(this.element, "fmt");
 		zk.setInnerHTML(el, zk.SMON[m] + ', ' + y);
-		var zcls = getZKAttr(this.element, "zcls");
 		//month
 		for (var j = 0; j < 12; ++j) {
 			el = $e(this.id + "!m" + j);
@@ -169,6 +235,20 @@ zk.Cal.prototype = {
 				}
 			}
 		}
+		//time
+		abtn.innerHTML = hr > 11 ? "PM" : "AM";
+		var tmp;
+		if (fmt.indexOf('h') > 0) {
+			tmp = hr > 11 ? hr - 12 : hr == 0 ? 12 : hr ;
+		} else if (fmt.indexOf('K') > 0 && hr > 11) {
+			tmp = hr - 12;
+		} else if (fmt.indexOf('k') > 0) { //Hour in day (1-24)
+			tmp = hr == 0 ? 24 : hr;
+		} else {
+			tmp = hr;
+		}
+		hrbox.value =zk.formatFixed(tmp, 2);
+		minbox.value = zk.formatFixed(min, 2);
 	},
 	_invalid: function (d) {
 		return zkDtbox._invalid(d, this.begin, this.end);
@@ -191,10 +271,12 @@ zk.Cal.prototype = {
 	_ondayclk: function (cell) {
 		var y = this.date.getFullYear(),
 			m = this.date.getMonth(),
-			d = zk.getIntAttr(cell, "zk_day");
+			d = zk.getIntAttr(cell, "zk_day"),
+			hr = this.date.getHours(),
+			min = this.date.getMinutes();
 		if (!zkCal._seled(cell)) { //!selected
 			var monofs = zk.getIntAttr(cell, "zk_monofs"),
-				now = new Date(y, m + monofs, d);
+				now = new Date(y, m + monofs, d, hr, min);
 			if (this._invalid(now)) {
 				if (this.popup) {
 					var pp = $e(this.id + "!pp");
@@ -212,45 +294,83 @@ zk.Cal.prototype = {
 				}
 			}
 		}
-		this._onupdate(true);
+		this._onupdate({close: true});
 	},
 	_onmonclk: function (cell) {
 		if (!zkCal._seled(cell)) { //!selected
 			var y = this.date.getFullYear(),
-				d = this.date.getDate();
-			this._setDateMonChg(y, zk.getIntAttr(cell, "zk_mon"), d);
+				d = this.date.getDate(),
+				hr = this.date.getHours(),
+				min = this.date.getMinutes();
+			this._setDateMonChg(y, zk.getIntAttr(cell, "zk_mon"), d, hr, min);
 			this._output();
-			this._onupdate(false);
+			this._onupdate({close: false});
 			zkDtbox._repos($uuid(this));
 		}
 	},
 	_onyearofs: function (ofs) {
 		var y = this.date.getFullYear(),
 			m = this.date.getMonth(),
-			d = this.date.getDate();
-		this.date = new Date(y + ofs, m, d);
+			d = this.date.getDate(),
+			hr = this.date.getHours(),
+			min = this.date.getMinutes();
+		this.date = new Date(y + ofs, m, d, hr, min);
 		this._output();
-		this._onupdate(false);
+		tthis._onupdate({close: false});
 		zkDtbox._repos($uuid(this));
 	},
 	_onmonofs: function (ofs) {
 		var y = this.date.getFullYear(),
 			m = this.date.getMonth(),
-			d = this.date.getDate();
-		this._setDateMonChg(y, m + ofs, d);
+			d = this.date.getDate(),
+			hr = this.date.getHours(),
+			min = this.date.getMinutes();
+		this.date = new Date(y, m + ofs, d, hr, min);
 		this._output();
-		this._onupdate(false);
+		this._onupdate({close: false});
 		zkDtbox._repos($uuid(this));
-		
+
+	},
+	_onhrofs: function(ofs,inp) {
+		var y = this.date.getFullYear(),
+			m = this.date.getMonth(),
+			d = this.date.getDate(),
+			hr = this.date.getHours(),
+			min = this.date.getMinutes();
+		this.date = new Date(y, m, d, inp ? inp : hr + ofs, min);
+		this._output();
+		this._onupdate({close: false, sendOnChange: false});
+	},
+	_onminofs: function(ofs, inp) {
+		var y = this.date.getFullYear(),
+			m = this.date.getMonth(),
+			d = this.date.getDate(),
+			hr = this.date.getHours(),
+			min = this.date.getMinutes();
+		this.date = new Date(y, m, d, hr, inp ? inp : min + ofs);
+		this._output();
+		this._onupdate({close: false, sendOnChange: false});
+
+	},
+	_onmarkchg: function(target){
+		var y = this.date.getFullYear(),
+			m = this.date.getMonth(),
+			d = this.date.getDate(),
+			hr = this.date.getHours(),
+			min = this.date.getMinutes();
+		target.innerHTML = target.innerHTML == "AM" ? "PM" : "AM";
+		this.date = new Date(y, m, d, hr > 11 ? hr - 12 : hr + 12, min);
+		this._output();
+		this._onupdate({close: false, sendOnChange: false});
 	},
 	/** Sets date caused by the change of month (it fixed 6/31 issue).
 	 */
-	_setDateMonChg: function (y, m, d) {
-		this.date = new Date(y, m, d);
+	_setDateMonChg: function (y, m, d, hr, min) {
+		this.date = new Date(y, m, d, hr, min);
 		if (m >= 0) { //just in case
 			m %= 12;
 			while (this.date.getMonth() != m) //6/31 -> 7/1
-				this.date = new Date(y, m, --d);
+				this.date = new Date(y, m, --d, hr, min);
 		}
 	},
 	setDate: function (val) {
@@ -264,7 +384,9 @@ zk.Cal.prototype = {
 				this.date = val;
 				this._outcell(this.curcell, false, this._invalid(val));
 
-				var d = val.getDate();
+				var d = val.getDate(),
+					hr = this.date.getHours(),
+					min = this.date.getMinutes();
 				for (var j = 0; j < 6; ++j) {
 					el = $e(this.id + "!w" +j);
 					for (var k = 0; k < 7; ++k) {
@@ -272,7 +394,7 @@ zk.Cal.prototype = {
 						if (zk.getIntAttr(cell, "zk_monofs") == 0
 						&& zk.getIntAttr(cell, "zk_day") == d) {
 							this._outcell(cell, true,
-								this._invalid(new Date(year, mon, d)));
+								this._invalid(new Date(year, mon, d, hr, min)));
 							break;
 						}
 					}
@@ -281,13 +403,13 @@ zk.Cal.prototype = {
 		}
 	},
 	/** Calls selback or onchange depending on this.popup. */
-	_onupdate: function (close) {
+	_onupdate: function (opts) {
 		this._output();
 		if (this.popup) {
-			this.selback(close);
+			this.selback(opts.close);
 			if (this.input) {
 				//Request 1551019: better responsive
-				this.onchange();
+				if (!opts || opts.sendOnChange !== false) this.onchange();
 				zk.asyncFocus(this.input.id);
 			}
 		} else {
@@ -301,10 +423,12 @@ zk.Cal.prototype = {
 		} else {
 			var y = this.date.getFullYear(),
 				m = this.date.getMonth(),
-				d = this.date.getDate();
+				d = this.date.getDate(),
+				hr = this.date.getHours(),
+				min = this.date.getMinutes();
 			setZKAttr(this.element, "value", this.getDateString());
 			zkau.sendasap({uuid: this.id, cmd: "onChange",
-				data: [y+'/'+(m+1)+'/'+d]});
+				data: [y+'/'+(m+1)+'/'+d+'/'+hr+'/'+min]});
 			this._changed = false;
 		}
 	},
@@ -322,7 +446,7 @@ zk.Cal.prototype = {
 	shift: function (days) {
 		var val = this.date;
 		this.setDate(new Date(
-			val.getFullYear(), val.getMonth(), val.getDate() + days));
+			val.getFullYear(), val.getMonth(), val.getDate() + days, val.getHours(), val.getMinutes()));
 	},
 	onsubmit: function () {
 		var nm = getZKAttr(this.element, "name");
@@ -367,6 +491,31 @@ zkCal.ondayclk = function (evt) {
 	if ($tag(el) == "A") el = el.parentNode;
 	var meta = zkau.getMeta($uuid(el));
 	if (meta) meta._ondayclk(el);
+};
+zkCal.onhrofs = function(evt, ofs) {
+	var meta = zkau.getMeta($uuid(Event.element(evt)));
+	if (meta) meta._onhrofs(ofs);
+};
+zkCal.onminofs = function(evt, ofs) {
+	var meta = zkau.getMeta($uuid(Event.element(evt)));
+	if (meta) meta._onminofs(ofs);
+};
+zkCal.ontimechg = function(evt) {
+	if (!evt) evt = window.event;
+	var el = Event.element(evt),
+		cmp = $outer(el),
+		meta = zkau.getMeta($uuid(el));
+	if (meta) meta[(el.id == cmp.id +"!hrinp") ? "_onhrofs" : "_onminofs"](0, el.value);
+};
+zkCal.ontimeclk = function(evt){
+	if (!evt) evt = window.event;
+	var el = Event.element(evt);
+	zk.setSelectionRange(el, 0, el.value.length);
+};
+zkCal.onmarkchg = function(evt) {
+	var target = Event.element(evt),
+		meta = zkau.getMeta($uuid(target));
+	if (meta) meta._onmarkchg(target);
 };
 zkCal.onup = function (evt) {
 	var meta = zkau.getMeta($uuid(Event.element(evt)));
@@ -434,7 +583,7 @@ zkDtbox.init = function (cmp) {
 	zkTxbox.init(inp);
 	zk.listen(inp, "keydown", zkDtbox.onkey);
 		//IE: use keydown. otherwise, it causes the window to scroll
-
+	zkDtbox.setTimeAttr(cmp, getZKAttr(cmp,'fmt'));
 	var btn = $e(cmp.id + "!btn");
 	if (btn) {
 		zk.listen(btn, "click", function (evt) {
@@ -446,6 +595,7 @@ zkDtbox.init = function (cmp) {
 		zk.listen(btn, "mousedown", zul.ondropbtndown);
 	}
 	var pp = $e(cmp.id + "!pp");
+
 	if (pp) // Bug #1912363
 		zk.listen(pp, "click", zkDtbox.closepp);
 };
@@ -487,13 +637,20 @@ zkDtbox._invalid = function (d, begin, end) {
 	return (begin && (d - begin)/86400000/*1000*60*60*24*/ < 0)
 		|| (end && (end - d)/86400000 < 0);
 };
+/**Check format whether have hHkKma*/
+zkDtbox.setTimeAttr = function(cmp, fmt) {
+	var chk = fmt.toLowerCase();
+	setZKAttr(cmp, "hr", (chk.indexOf("k") > 0 || chk.indexOf("h") > 0) ? 'true' : 'false');
+	setZKAttr(cmp, "min", (fmt.indexOf("m") > 0 ? 'true' : 'false'));//the minutes only in lowercase
+	setZKAttr(cmp, "ampm", (chk.indexOf("a") > 0  ? 'true' : 'false'));
 
+}
 /** Handles setAttr. */
 zkDtbox.setAttr = function (cmp, nm, val) {
 	if ("z.fmt" == nm) {
 		zkau.setAttr(cmp, nm, val);
-
 		var inp = $real(cmp);
+		zkDtbox.setTimeAttr(cmp, val);
 		if (inp) {
 			var d = zk.parseDate(inp.value, val);
 			if (d) inp.value = zk.formatDate(d, val);
@@ -514,7 +671,7 @@ zkDtbox.setAttr = function (cmp, nm, val) {
 			inp.style.height = val;
 			return true;
 		}
-	} else if ("z.sel" == nm ) {
+	} else if ("z.sel" == nm) {
 		return zkTxbox.setAttr(cmp, nm, val);
 	} else if ("z.btnVisi" == nm) {
 		var btn = $e(cmp.id + "!btn");
@@ -608,6 +765,14 @@ zkDtbox.onbutton = function (cmp, evt) {
 		Event.stop(evt);
 	}
 };
+zkDtbox.onmouseevent = function (evt) {
+	if (!evt) evt = window.event;
+	var target = Event.element(evt);
+	if (!$tag(Event.element(evt))) return;
+	var cmp = $outer(target),
+		zcls = getZKAttr(cmp, "zcls");
+	zk[zk.hasClass(target, zcls + "-time-over") ? "rmClass" : "addClass"](target, zcls + "-time-over");
+};
 zkDtbox.dropdn = function (cmp, dropdown) {
 	var pp = $e(cmp.id + "!pp");
 	if (pp) {
@@ -677,15 +842,15 @@ zkDtbox._repos = function (uuid) {
 	var inp = $e(inpId);
 
 	zk.position(pp, inp, "after-start");
-	
+
 	if (!pp._shadow)
 		pp._shadow = new zk.Shadow(pp, {left: -4, right: 4, top: 2, bottom: 3, autoShow: true, stackup: true});
 	else pp._shadow.sync();
-	
+
 	zkau.hideCovered();
 	zk.asyncFocus(inpId);
 };
-//TODO Remove Class
+//Remove Class
 zkDtbox.close = function (pp, focus) {
 	var uuid = $uuid(pp.id);
 	if (pp._shadow) pp._shadow.hide();
@@ -713,12 +878,12 @@ zkDtbox.closepp = function (evt) {
 	if (!evt) evt = window.event;
 	var pp = Event.element(evt);
 	for (; pp; pp = pp.parentNode) {
-		if (pp.id) {
+		//the up/down arrow, marker, and input
+		if (pp.onclick || $tag(pp) == "INPUT" || $tag(pp) == "BUTTON") return;
+		if (pp.id)
 			if (pp.id.endsWith("!pp"))
 				zkDtbox.close(pp, true);
-			return; //done
-		}
-		if (pp.onclick) return;
+
 	}
 };
 zk.FloatDatebox = zClass.create();

@@ -4,7 +4,7 @@
 	Purpose:
 		Common utiltiies.
 	Description:
-		
+
 	History:
 		Fri Jun 10 18:16:11     2005, Created by tomyeh
 }}IS_NOTE
@@ -84,12 +84,12 @@ if (!Array.prototype.forEach) {
 	 * @since 3.5.0
 	 */
 	Array.prototype.forEach = function(fun /*, thisp*/){
-		if (typeof fun != "function") 
+		if (typeof fun != "function")
 			throw new TypeError();
-		
+
 		var thisp = arguments[1];
 		for (var i = 0, len = this.length; i < len; i++) {
-			if (i in this) 
+			if (i in this)
 				fun.call(thisp, this[i], i, this);
 		}
 	};
@@ -116,11 +116,11 @@ if (!Array.prototype.indexOf) {
 		var from = Number(arguments[1]) || 0,
 			len = this.length;
 		from = (from < 0) ? Math.ceil(from) : Math.floor(from);
-		if (from < 0) 
+		if (from < 0)
 			from += len;
-		
+
 		for (; from < len; from++) {
-			if (from in this &&	this[from] === elt) 
+			if (from in this &&	this[from] === elt)
 				return from;
 		}
 		return -1;
@@ -196,7 +196,7 @@ zk.Shadow.prototype = {
 
 	/**
 	 * Constructor of the Shadow object.
-	 * 
+	 *
 	 * @param node the element to associate the shadow.
 	 * @param opts The options
 	 * <p>Alowed options:
@@ -308,7 +308,7 @@ zk.makeStackup = function (cmp, id, anchor) {
 	return ifr;
 };
 /**
- * Applies the indicator mask over the specified element. 
+ * Applies the indicator mask over the specified element.
  * @param {Object/String} rel a related object
  * @param {String} message a message for the loading indicator. Default: mesg.LOADING
  * @since 3.5.0
@@ -321,10 +321,10 @@ zk.applyMask = function (rel, message) {
 	if (!message) message = window.mesg ? mesg.LOADING: 'Loading...';
 	var n = document.createElement("DIV");
 	document.body.appendChild(n);
-	var xy = zk.revisedOffset(rel), 
+	var xy = zk.revisedOffset(rel),
 		w = zk.offsetWidth(rel),
 		h = zk.offsetHeight(rel),
-		html = '<div id="'+rel.id+'!progbox" style="visibility:hidden">' 
+		html = '<div id="'+rel.id+'!progbox" style="visibility:hidden">'
 			+ '<div class="z-apply-mask" style="display:block;top:' + xy[1]
 			+ 'px;left:' + xy[0] + 'px;width:' + w + 'px;height:' + h + 'px;"></div>'
 			+ '<div id="'+rel.id+'!z-loading" class="z-apply-loading"><div class="z-apply-loading-indicator">'
@@ -333,7 +333,7 @@ zk.applyMask = function (rel, message) {
 	zk.setOuterHTML(n, html);
 	var loading = $e(rel.id+"!z-loading"), progbox = $e(rel.id + "!progbox");
 	if (loading) {
-		if (loading.offsetHeight > rel.offsetHeight) 
+		if (loading.offsetHeight > rel.offsetHeight)
 			loading.style.height = zk.revisedSize(loading, rel.offsetHeight, true) + "px";
 		if (loading.offsetWidth > rel.offsetWidth)
 			loading.style.width = zk.revisedSize(loading, rel.offsetWidth) + "px";
@@ -571,14 +571,14 @@ zk.getPaddingHeight = function (el) {
 	return zk.sumStyles(el, "height", zk.paddings);
 };
 /**
- * Returns the number of the padding width and the border width from the specified element.  
+ * Returns the number of the padding width and the border width from the specified element.
  * @since 3.5.0
  */
 zk.getPadBorderWidth = function (el) {
 	return zk.getPaddingWidth(el) + zk.getBorderWidth(el);
 };
 /**
- * Returns the number of the padding height and the border height from the specified element.  
+ * Returns the number of the padding height and the border height from the specified element.
  * @since 3.5.0
  */
 zk.getPadBorderHeight = function (el) {
@@ -626,7 +626,7 @@ zk.offsetLeft = function (el) {
  * paddingLeft and paddingRight from the specified element.
  *
  * @param {String} type 'width', 'height', and 'box', which means the number of the width and the height.
- * @param styles {zk.paddings} or {zk.borders}. 
+ * @param styles {zk.paddings} or {zk.borders}.
  * @return {Number}
  * @since 3.0.0
  */
@@ -641,7 +641,7 @@ zk.sumStyles = function (el, type, styles) {
 };
 /**
  * Returns the revised size, which subtracted the size of its CSS border or padding, for the specified element.
- * @param {Number} size original size of the specified element. 
+ * @param {Number} size original size of the specified element.
  * @param {Boolean} isHgh if true it will be "tb" top and bottom.
  * @return {Number}
  * @since 3.0.0
@@ -675,7 +675,7 @@ zk.revisedOffset = function (el, ofs) {
 		ofs = zPos.cumulativeOffset(el);
 	}
 	var scrolls = zPos.realOffset(el.parentNode);
-	scrolls[0] -= zk.innerX(); scrolls[1] -= zk.innerY(); 
+	scrolls[0] -= zk.innerX(); scrolls[1] -= zk.innerY();
 	return [ofs[0] - scrolls[0], ofs[1] - scrolls[1]];
 };
 if (zk.safari) {
@@ -746,9 +746,9 @@ zk.center = function (el, flags) {
 
 	if (x < left) x = left;
 	if (y < top) y = top;
-	
-	var ofs = zk.toStyleOffset(el, x, y);	
-	
+
+	var ofs = zk.toStyleOffset(el, x, y);
+
 	if (!skipx) el.style.left = ofs[0] + "px";
 	if (!skipy) el.style.top =  ofs[1] + "px";
 };
@@ -780,8 +780,8 @@ zk.getDimension = function (el) {
 zk.position = function (el, ref, type) {
 	var refofs = zk.getDimension(el);
 	var wd = refofs[0], hgh = refofs[1];
-	refofs = zk.revisedOffset(ref); 
-	
+	refofs = zk.revisedOffset(ref);
+
 	var x, y;
 	var scx = zk.innerX(), scy = zk.innerY(),
 		scmaxx = scx + zk.innerWidth(), scmaxy = scy + zk.innerHeight();
@@ -1001,20 +1001,20 @@ zk.select = function (cmp) {
 /** Returns the selection range of the specified control.
  * Note: if the function occurs some error, it always return [0, 0];
  */
-zk.getSelectionRange = function(inp) {	
+zk.getSelectionRange = function(inp) {
 	try {
-		if (document.selection != null && inp.selectionStart == null) { //IE		
-			var range = document.selection.createRange(); 
-			var rangetwo = inp.createTextRange(); 
-			var stored_range = ""; 
+		if (document.selection != null && inp.selectionStart == null) { //IE
+			var range = document.selection.createRange();
+			var rangetwo = inp.createTextRange();
+			var stored_range = "";
 			if(inp.type.toLowerCase() == "text"){
 				stored_range = rangetwo.duplicate();
 			}else{
-				 stored_range = range.duplicate(); 
-				 stored_range.moveToElementText(inp); 
+				 stored_range = range.duplicate();
+				 stored_range.moveToElementText(inp);
 			}
-			stored_range.setEndPoint('EndToEnd', range); 
-			var start = stored_range.text.length - range.text.length;			
+			stored_range.setEndPoint('EndToEnd', range);
+			var start = stored_range.text.length - range.text.length;
 			return [start, start + range.text.length];
 		} else { //Gecko
 			return [inp.selectionStart, inp.selectionEnd];
@@ -1029,7 +1029,7 @@ zk.setSelectionRange = function (inp, start, end) {
 	if (start > len) start = len;
 	if (end < 0) end = 0;
 	if (end > len) end = len;
-	
+
 	if (inp.setSelectionRange) {
 		inp.setSelectionRange(start, end);
 		inp.focus();
@@ -1236,7 +1236,7 @@ zk.firstChild = function (el, tagName, descendant) {
 	}
 	return null;
 };
-/** Returns the last child of the specified node. 
+/** Returns the last child of the specified node.
  * @since 3.5.0
  */
 zk.lastChild = function (el, tagName, descendant) {
@@ -1371,7 +1371,7 @@ if (zk.ie || zk.opera) {
 		el.innerHTML = html;
 		while (--level >= 0)
 			el = el.firstChild;
-		
+
 		//detach from parent and return
 		var ns = [];
 		for (var n; n = el.firstChild;) {
@@ -1481,7 +1481,7 @@ zk.rename = function (url, name) {
 if (!zk._actg1) {
 	zk._actg1 = ["IFRAME","EMBED","APPLET"];
 		// Due to using zk.makeStackup(), we don't handle the "SELECT" tag for IE6
-		// in zk.hideCovered() function.  
+		// in zk.hideCovered() function.
 	zk._actg2 = ["A","BUTTON","TEXTAREA","INPUT"];
 	zk._actg3 = ["IFRAME","EMBED"]; // zk.disableAll use only.
 	if (zk.ie6Only) { //ie7 solves the z-order issue of SELECT
@@ -1563,12 +1563,12 @@ zk.restoreDisabled = function (n) {
 				var j = what.indexOf(':', 2);
 				if (what.substring(2, j) == zkau.getStamp(el, "href"))
 					el.tabIndex = what.substring(j + 1);
-			} else 
+			} else
 				el.style.visibility = what;
 
 			//Workaround IE: Bug 1498895
-			/**if (bug1498895) { disable by the bug #1884111, 
-			 // because we had the new concept that restores the previous focus, 
+			/**if (bug1498895) { disable by the bug #1884111,
+			 // because we had the new concept that restores the previous focus,
 			 // we don't need to find which input element needs to be focused.
 				var tn = $tag(el);
 				if ((tn == "INPUT" && (el.type == "text" || el.type == "password"))
@@ -1842,13 +1842,13 @@ zk.ncols = function (cells) {
 };
 /**
  * Retrieves the index of the object in the cells collection of a row.
- * Note: The function fixed the problem of IE that the cell.cellIndex returns a wrong index 
+ * Note: The function fixed the problem of IE that the cell.cellIndex returns a wrong index
  * if there is a hidden cell in the table. So, the behavior is difference among others.
  * @param {Object} cell
  * @since 3.0.1
  */
 zk.cellIndex = function (cell) {
-	var i = 0; 
+	var i = 0;
 	if (zk.ie) {
 		var cells = cell.parentNode.cells;
 		for(var j = 0, cl = cells.length; j < cl; j++) {
@@ -1858,7 +1858,7 @@ zk.cellIndex = function (cell) {
 			}
 		}
 	} else i = cell.cellIndex;
-	return i; 
+	return i;
 };
 
 
@@ -1966,8 +1966,12 @@ zk.formatFixed = function (val, digits) {
 zk.parseDate = function (txt, fmt, strict) {
 	if (!fmt) fmt = "yyyy/MM/dd";
 	var val = new Date();
-	var y = val.getFullYear(), m = val.getMonth(), d = val.getDate();
-	
+	var y = val.getFullYear(),
+		m = val.getMonth(),
+		d = val.getDate(),
+		hr = val.getHours(),
+		min = val.getMinutes();
+
 	var	ts = [], mindex = fmt.indexOf("MMM"), ary = [];
 	for (var i = 0, j = txt.length; i < j; i++) {
 		var c = txt.charAt(i);
@@ -1982,8 +1986,8 @@ zk.parseDate = function (txt, fmt, strict) {
 						ts.push(ary.join(""));
 						ary = [];
 					}
-				} else 
-					ary.push(c);					
+				} else
+					ary.push(c);
 			}
 		} else if (ary.length) {
 			ts.push(ary.join(""));
@@ -2065,15 +2069,41 @@ zk.parseDate = function (txt, fmt, strict) {
 				d = $int(token);
 				if (isNaN(d)) return null; //failed
 				break;
+			case 'H':
+			case 'h':
+			case 'K':
+			case 'k':
+				if (nosep) {
+					if (len < 2) len = 2;
+					if (token.length > len) {
+						ts[--i] = token.substring(len);
+						token = token.substring(0, len);
+					}
+				}
+				hr = $int(token);
+				if (isNaN(hr)) return null; //failed
+				break;
+			case 'm':
+				if (nosep) {
+					if (len < 2) len = 2;
+					if (token.length > len) {
+						ts[--i] = token.substring(len);
+						token = token.substring(0, len);
+					}
+				}
+				min = $int(token);
+				if (isNaN(min)) return null; //failed
+				break;
 			//default: ignored
 			}
 			j = k - 1;
 		}
 	}
 
-	var dt = new Date(y, m, d);
+	var dt = new Date(y, m, d, hr, min);
 	if (strict) {
-		if (dt.getFullYear() != y || dt.getMonth() != m || dt.getDate() != d)
+		if (dt.getFullYear() != y || dt.getMonth() != m || dt.getDate() != d ||
+			dt.getHours() != hr || dt.getMinutes() != min)
 			return null; //failed
 
 		txt = txt.trim();
@@ -2150,10 +2180,31 @@ zk.formatDate = function (val, fmt) {
 			case 'F':
 				txt += zk.dayOfWeekInMonth(val);
 				break;
+			case 'H':
+				if (len <= 2) txt += zk.formatFixed(val.getHours(), len);
+				break;
+			case 'k':
+				if (len <= 2) txt += zk.formatFixed(val.getHours() == 0 ? "24" : val.getHours(), len);
+				break;
+			case 'K':
+				if (len <= 2) txt += zk.formatFixed(val.getHours() > 11 ? val.getHours() - 12 : val.getHours(), len);
+				break;
+			case 'h':
+				if (len <= 2) txt += zk.formatFixed(val.getHours() > 11 ? val.getHours() - 12 : val.getHours() == 0 ? "12" : val.getHours(), len);
+				break;
+			case 'm':
+				if (len <= 2) txt += zk.formatFixed(val.getMinutes(), len);
+				break;
+			case 'Z':
+				txt += -(val.getTimezoneOffset()/60);
+				break;
+			case 'a':
+				txt += val.getHours() > 11 ? "PM" : "AM";
+				break;
 			default:
 				txt += '1';
-					//fake; SimpleDateFormat.parse might ignore it
-					//However, it must be an error if we don't generate a digit
+				//fake; SimpleDateFormat.parse might ignore it
+				//However, it must be an error if we don't generate a digit
 			}
 			j = k - 1;
 		} else {
@@ -2218,7 +2269,7 @@ zk.disableSelection = function (el) {
 		if (zk.gecko)
 			el.style.MozUserSelect = "none";
 		else if (zk.safari)
-			el.style.KhtmlUserSelect = "none"; 
+			el.style.KhtmlUserSelect = "none";
 		else if (zk.ie)
 			el.onselectstart = function (evt) {
 				if (!evt) evt = window.event;
@@ -2231,7 +2282,7 @@ zk.enableSelection = function (el) {
 	el = $e(el);
 	if (el)
 		if (zk.gecko)
-			el.style.MozUserSelect = ""; 
+			el.style.MozUserSelect = "";
 		else if (zk.safari)
 			el.style.KhtmlUserSelect = "";
 		else if (zk.ie)
@@ -2397,7 +2448,7 @@ zk.History.prototype = {
 			zkau.history.checkBookmark(); // We don't need to wait for the first time.
 			setInterval("zkau.history.checkBookmark()", 250);
 		});
-			//Though IE use history.html, timer is still required 
+			//Though IE use history.html, timer is still required
 			//because user might specify URL directly
 	},
 	/** Sets a bookmark that user can use forward and back buttons */
@@ -2473,13 +2524,13 @@ if (zk.opera)
 	/**
 	 * Cleans up the visibility of the specified component.
 	 * Note: In Opera, "inherit" will cause a big bug of text input element, which is inside
-	 * the specified component. 
+	 * the specified component.
 	 * @since 3.0.8
 	 */
 	zk.cleanVisibility = function (cmp) {
 		cmp.style.visibility = "visible"; // visible will cause an other bug, but we need do it for Input element.
 	};
-else 
+else
 	/**
 	 * Cleans up the visibility of the specified component.
 	 * @since 3.0.8
@@ -2668,7 +2719,7 @@ anima = {
 	/** @since 3.0.1 */
 	count: 0,
 	/** Make a component visible by increasing the opacity.
-	 * 
+	 *
 	 * <p>Event: <code>beforeAppear</code> and <code>afterAppear</code>.
 	 * The <code>beforeAppear</code> callback function is called before the
 	 * effect begins. The <code>afterAppear</code> callback function
@@ -2720,15 +2771,15 @@ anima = {
 		anima.moveBy(id);
 	},
 	/** Make a component visible by moving.
-	 * 
+	 *
 	 * <p>Event: <code>beforeMoveBy</code> and <code>afterMoveBy</code>.
 	 * The <code>beforeMoveBy</code> callback function is called before the
 	 * effect begins. The <code>afterMoveBy</code> callback function
 	 * is called after the effect is finished. (since 3.5.0)
 	 * </p>
-	 * 
+	 *
 	 * @param id component or its ID
-	 * @param pos the move position. "top" means from 0 to the original top, 
+	 * @param pos the move position. "top" means from 0 to the original top,
 	 *  "left" means from 0 to the original left.
 	 * @since 3.0.2
 	 */
@@ -2736,7 +2787,7 @@ anima = {
 		var n = $e(id);
 		if (n) {
 			if (getZKAttr(n, "animating")) {
-				zk._addAnique(n.id, "anima." + (pos == "top" ? "moveDown" : pos == "left" ? 
+				zk._addAnique(n.id, "anima." + (pos == "top" ? "moveDown" : pos == "left" ?
 					"moveRight" : "moveBy"));
 			} else {
 				++anima.count;
@@ -2816,7 +2867,7 @@ anima = {
 		}
 	},
 	/** Make a component visible by sliding down.
-	 * 
+	 *
 	 * <p>Event: <code>beforeSlideDown</code> and <code>afterSlideDown</code>.
 	 * The <code>beforeSlideDown</code> callback function is called before the
 	 * effect begins. The <code>afterSlideDown</code> callback function
@@ -2833,7 +2884,7 @@ anima = {
 				zk._addAnique(n.id, "anima.slideDown");
 			} else {
 				if (anchor && typeof anchor != "string") {
-					dur = anchor.duration; // backward compatible	
+					dur = anchor.duration; // backward compatible
 					anchor = 't';
 				}
 				++anima.count;
@@ -2848,7 +2899,7 @@ anima = {
 		}
 	},
 	/** Make a component invisible by sliding up.
-	 * 
+	 *
 	 * <p>Event: <code>beforeSlideUp</code> and <code>afterSlideUp</code>.
 	 * The <code>beforeSlideUp</code> callback function is called before the
 	 * effect begins. The <code>afterSlideUp</code> callback function
@@ -2865,7 +2916,7 @@ anima = {
 				zk._addAnique(n.id, "anima.slideUp");
 			} else {
 				if (anchor && typeof anchor != "string") {
-					dur = anchor.duration; // backward compatible	
+					dur = anchor.duration; // backward compatible
 					anchor = 't';
 				}
 				++anima.count;
@@ -2880,7 +2931,7 @@ anima = {
 		}
 	},
 	/** Make a component invisible by fading it out.
-	 * 
+	 *
 	 * <p>Event: <code>beforeFade</code> and <code>afterFade</code>.
 	 * The <code>beforeFade</code> callback function is called before the
 	 * effect begins. The <code>afterFade</code> callback function
@@ -2905,7 +2956,7 @@ anima = {
 		}
 	},
 	/** Make a component invisible by puffing away.
-	 * 
+	 *
 	 * <p>Event: <code>beforePuff</code> and <code>afterPuff</code>.
 	 * The <code>beforePuff</code> callback function is called before the
 	 * effect begins. The <code>afterPuff</code> callback function
@@ -2930,7 +2981,7 @@ anima = {
 		}
 	},
 	/** Make a component invisible by fading and dropping out.
-	 * 
+	 *
 	 * <p>Event: <code>beforeDropOut</code> and <code>afterDropOut</code>.
 	 * The <code>beforeDropOut</code> callback function is called before the
 	 * effect begins. The <code>afterDropOut</code> callback function
@@ -3013,7 +3064,7 @@ zk._doAnique = function (id) {
 			eval(js+"('"+id+"')");
 			al--;
 		}
-			
+
 		if (!al)
 			delete zk._anique[id];
 	}

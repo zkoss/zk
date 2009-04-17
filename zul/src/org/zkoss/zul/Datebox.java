@@ -2,9 +2,9 @@
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Jun 28 13:41:01     2005, Created by tomyeh
 }}IS_NOTE
@@ -53,8 +53,7 @@ import org.zkoss.zul.impl.Utils;
  */
 public class Datebox extends FormatInputElement implements org.zkoss.zul.api.Datebox {
 	private TimeZone _tzone;
-	private boolean _lenient = true;
-	private boolean _compact, _btnVisible = true;
+	private boolean _compact, _btnVisible = true, _lenient = true;
 
 	public Datebox() {
 		setFormat(getDefaultFormat());
@@ -324,14 +323,14 @@ public class Datebox extends FormatInputElement implements org.zkoss.zul.api.Dat
 	public String getZclass() {
 		return _zclass == null ? "z-datebox" : _zclass;
 	}
-	
+
 	public String getOuterAttrs() {
 		final StringBuffer sb = new StringBuffer(80).append(super.getOuterAttrs());
 		if (getConstraint() instanceof SimpleDateConstraint) {
 			final SimpleDateConstraint st = (SimpleDateConstraint)getConstraint();
 			Date d = st.getBeginDate();
 			if (d != null)
-				HTMLs.appendAttribute(sb, "z.bd", d.getTime() / 1000); 
+				HTMLs.appendAttribute(sb, "z.bd", d.getTime() / 1000);
 			d = st.getEndDate();
 			if (d != null)
 				HTMLs.appendAttribute(sb, "z.ed", d.getTime() / 1000);

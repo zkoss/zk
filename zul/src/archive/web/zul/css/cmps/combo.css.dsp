@@ -167,6 +167,48 @@
 .z-datebox-pp .z-datebox-calyear {
 	background: #d8e8f0;
 }
+.z-datebox-time {
+	width: 20px;
+	padding: 0;
+	margin: 0;
+}
+.z-datebox-time {
+	text-align: center;	
+}
+.z-datebox-time-up,
+.z-datebox-time-down { 	
+	width: 0; 
+	height: 0;
+	margin: 0;
+	padding: 0;
+	cursor: pointer;
+}
+.z-datebox-time-up {
+	border-color: white white #004A7F;
+	border-style: none solid solid solid ;
+	border-width: 5px;
+	<c:if test="${c:browser('ie') || c:isOpera() || c:browser('gecko2-')}">
+		border-width: 6px;
+	</c:if>
+	overflow: hidden;
+}
+
+.z-datebox-time-down {
+	border-color: #004A7F white white;
+	border-style: solid solid none solid;
+	border-width: 5px;
+	margin-top: 3px;
+	<c:if test="${c:isOpera() || c:browser('gecko2-')}">
+		margin: 3px 0 0 1px;
+	</c:if>
+	overflow: hidden;
+}
+.z-datebox-time-up.z-datebox-time-over {
+	border-color: white white #BFBFBF;
+}
+.z-datebox-time-down.z-datebox-time-over {
+	border-color: #BFBFBF white white;
+}
 
 <%-- Timebox --%>
 .z-timebox-inp {
