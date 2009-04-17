@@ -6,7 +6,7 @@
 	Description:
 
 	History:
-		Mon Oct 17 15:24:01     2005, Created by tomyeh
+		Mon Oct 17 15:24:01	 2005, Created by tomyeh
 }}IS_NOTE
 
 Copyright (C) 2005 Potix Corporation. All Rights Reserved.
@@ -34,12 +34,33 @@ zk.Cal.prototype = {
 	cleanup: function ()  {
 		if (this.fnSubmit)
 			zk.unlisten(this.form, "submit", this.fnSubmit);
+		if (this.popup) {
+			var hrinp = $e(uuid + "!hrinp"),
+				mininp = $e(uuid + "!mininp"),
+				hup = $e(uuid + "!hup"),
+				hdown = $e(uuid + "!hdown"),
+				mup = $e(uuid + "!mup"),
+				mdown = $e(uuid + "!mdown"),
+				za = $e(uuid + "!abtn");
+			zk.unlisten(hrinp, "click", zkCal.ontimeclk);
+			zk.unlisten(hrinp, "blur", zkCal.ontimechg);
+			zk.unlisten(mininp, "click", zkCal.ontimeclk);
+			zk.unlisten(mininp, "blur", zkCal.ontimechg);
+			zk.unlisten(hup, "mouseover", zkDtbox.onmouseevent);
+			zk.unlisten(hup, "mouseout", zkDtbox.onmouseevent);
+			zk.unlisten(hdown, "mouseover", zkDtbox.onmouseevent);
+			zk.unlisten(hdown, "mouseout", zkDtbox.onmouseevent);
+			zk.unlisten(mup, "mouseover", zkDtbox.onmouseevent);
+			zk.unlisten(mup, "mouseout", zkDtbox.onmouseevent);
+			zk.unlisten(mdown, "mouseover", zkDtbox.onmouseevent);
+			zk.unlisten(mdown, "mouseout", zkDtbox.onmouseevent);
+		}
 		this.element = this.fnSubmit = null;
 	},
 	_newCal: function() {
 		this.element = $e(this.id);
 		if (!this.element) return;
-		var uuid = $uuid(this);
+		var uuid = this.id;
 			zcls = getZKAttr(this.element, "zcls"),
 			zhr = getZKAttr(this.element, "hr") == "true",
 			zmin = getZKAttr(this.element, "min") == "true",
@@ -100,18 +121,18 @@ zk.Cal.prototype = {
 			html += '<tr id="'+ uuid+'!ztime"><td align="center"><table><tr>'+
 				'<td id="'+ uuid+'!za"><button id="'+ uuid+'!abtn" class="'+ zcls +'-time-ampm" type="button" onclick="zkCal.onmarkchg(event)">AM</button></td>'+
 				'<td id="'+ uuid+'!zhr"><input id="'+ uuid+ '!hrinp" class="'+ zcls +'-time ' + zcls + '-inp" type="text" maxlength="2" size="2" autocomplete="off"/></td>' +
-				'<td><div id="'+ uuid+ '!hup" class="'+ zcls + '-time-up" onclick="zkCal.onhrofs(event,1)"></div>'+
-				'<div id="'+ uuid+ '!hdown" class="'+ zcls + '-time-down" onclick="zkCal.onhrofs(event,-1)" ></div></td>'+
+				'<td><div id="'+ uuid+ '!hup" class="'+ zcls + '-time-up" onclick="zkCal.ontimeofs(event,1)"></div>'+
+				'<div id="'+ uuid+ '!hdown" class="'+ zcls + '-time-down" onclick="zkCal.ontimeofs(event,-1)" ></div></td>'+
 				'<td id="'+ uuid+'!timesep">:</td>'+
 				'<td id="'+ uuid+'!zmin"><input id="'+ uuid+ '!mininp" class="'+ zcls +'-time '+ zcls + '-inp" type="text" maxlength="2" size="2" autocomplete="off"/></td>' +
-				'<td><div id="'+ uuid+ '!mup" class="'+ zcls + '-time-up" onclick="zkCal.onminofs(event,1)"></div>'+
-				'<div id="'+ uuid+ '!mdown" class="'+ zcls + '-time-down" onclick="zkCal.onminofs(event,-1)"></div></td>'+
+				'<td><div id="'+ uuid+ '!mup" class="'+ zcls + '-time-up" onclick="zkCal.ontimeofs(event,1)"></div>'+
+				'<div id="'+ uuid+ '!mdown" class="'+ zcls + '-time-down" onclick="zkCal.ontimeofs(event,-1)"></div></td>'+
 				'</tr></table></td></tr></table>';
 		}
 
 		zk.setInnerHTML(this.popup || this.element, html);
 		if (this.popup) {
-            var hrinp = $e(uuid + "!hrinp"),
+			var hrinp = $e(uuid + "!hrinp"),
 				mininp = $e(uuid + "!mininp"),
 				hup = $e(uuid + "!hup"),
 				hdown = $e(uuid + "!hdown"),
@@ -119,18 +140,20 @@ zk.Cal.prototype = {
 				mdown = $e(uuid + "!mdown"),
 				za = $e(uuid + "!abtn");
 			zk.listen(hrinp, "click", zkCal.ontimeclk);
+			zk.listen(hrinp, "keydown", zkCal.ontimepress);
 			zk.listen(hrinp, "blur", zkCal.ontimechg);
 			zk.listen(mininp, "click", zkCal.ontimeclk);
+			zk.listen(mininp, "keydown", zkCal.ontimepress);
 			zk.listen(mininp, "blur", zkCal.ontimechg);
-            zk.listen(hup, "mouseover", zkDtbox.onmouseevent);
-            zk.listen(hup, "mouseout", zkDtbox.onmouseevent);
-            zk.listen(hdown, "mouseover", zkDtbox.onmouseevent);
-            zk.listen(hdown, "mouseout", zkDtbox.onmouseevent);
-            zk.listen(mup, "mouseover", zkDtbox.onmouseevent);
-            zk.listen(mup, "mouseout", zkDtbox.onmouseevent);
-            zk.listen(mdown, "mouseover", zkDtbox.onmouseevent);
-            zk.listen(mdown, "mouseout", zkDtbox.onmouseevent);
-            this._updateCal(this.element);
+			zk.listen(hup, "mouseover", zkDtbox.onmouseevent);
+			zk.listen(hup, "mouseout", zkDtbox.onmouseevent);
+			zk.listen(hdown, "mouseover", zkDtbox.onmouseevent);
+			zk.listen(hdown, "mouseout", zkDtbox.onmouseevent);
+			zk.listen(mup, "mouseover", zkDtbox.onmouseevent);
+			zk.listen(mup, "mouseout", zkDtbox.onmouseevent);
+			zk.listen(mdown, "mouseover", zkDtbox.onmouseevent);
+			zk.listen(mdown, "mouseout", zkDtbox.onmouseevent);
+			this._updateCal(this.element);
 		}
 		this.form = zk.formOf(this.element);
 		if (this.form && !this.fnSubmit) {
@@ -238,15 +261,14 @@ zk.Cal.prototype = {
 		//time
 		abtn.innerHTML = hr > 11 ? "PM" : "AM";
 		var tmp;
-		if (fmt.indexOf('h') > 0) {
+		if (fmt.indexOf('h') > 0)
 			tmp = hr > 11 ? hr - 12 : hr == 0 ? 12 : hr ;
-		} else if (fmt.indexOf('K') > 0 && hr > 11) {
+		else if (fmt.indexOf('K') > 0 && hr > 11)
 			tmp = hr - 12;
-		} else if (fmt.indexOf('k') > 0) { //Hour in day (1-24)
+		else if (fmt.indexOf('k') > 0) //Hour in day (1-24)
 			tmp = hr == 0 ? 24 : hr;
-		} else {
+		else
 			tmp = hr;
-		}
 		hrbox.value =zk.formatFixed(tmp, 2);
 		minbox.value = zk.formatFixed(min, 2);
 	},
@@ -406,11 +428,13 @@ zk.Cal.prototype = {
 	_onupdate: function (opts) {
 		this._output();
 		if (this.popup) {
-			this.selback(opts.close);
+			this.selback(opts && opts.close);
 			if (this.input) {
 				//Request 1551019: better responsive
-				if (!opts || opts.sendOnChange !== false) this.onchange();
-				zk.asyncFocus(this.input.id);
+				if (!opts || opts.sendOnChange !== false) {
+					this.onchange();
+					zk.asyncFocus(this.input.id);
+				}
 			}
 		} else {
 			this.onchange();
@@ -435,10 +459,14 @@ zk.Cal.prototype = {
 	selback: function (close) {
 		if (this.input) {
 			this.input.value = this.getDateString();
-			zk.asyncFocus(this.input.id);
-			zk.asyncSelect(this.input.id);
+			if (close) {
+				zk.asyncFocus(this.input.id);
+				zk.asyncSelect(this.input.id);
+			}
 		}
-		if (close) zkau.closeFloats(this.element);
+		if (close) {
+			zkau.closeFloats(this.element);
+		}
 	},
 	getDateString: function () {
 		return zk.formatDate(this.date, this.getFormat());
@@ -472,7 +500,23 @@ zkCal.setAttr = function (cmp, nm, val) {
 	zkau.setAttr(cmp, nm, val);
 	return true;
 };
-
+zkCal.baseChars = "0123456789";
+zkCal.ontimepress = function(evt){
+	var el = Event.element(evt),
+		cmp = $outer(el),
+		kc = Event.keyCode(evt),
+		meta = zkau.getMeta($uuid(el));
+	if ((meta) && (kc == 38 || kc == 40)) {//UP/DN if + shift it add or minus 5
+		meta[(el.id == cmp.id +"!hrinp") ? "_onhrofs" : "_onminofs"](evt.shiftKey ? kc == 38 ? 5 : -5 : kc == 38 ? 1 : -1);
+		if (zk.ie) {
+			Event.stop(evt);
+			return false;
+		}
+		return true;
+	} else {
+		zkInpEl.ignoreKeys(evt, zkCal.baseChars);
+	}
+};
 zkCal.onyearofs = function (evt, ofs) {
 	var meta = zkau.getMeta($uuid(Event.element(evt)));
 	if (meta) meta._onyearofs(ofs);
@@ -492,20 +536,18 @@ zkCal.ondayclk = function (evt) {
 	var meta = zkau.getMeta($uuid(el));
 	if (meta) meta._ondayclk(el);
 };
-zkCal.onhrofs = function(evt, ofs) {
-	var meta = zkau.getMeta($uuid(Event.element(evt)));
-	if (meta) meta._onhrofs(ofs);
-};
-zkCal.onminofs = function(evt, ofs) {
-	var meta = zkau.getMeta($uuid(Event.element(evt)));
-	if (meta) meta._onminofs(ofs);
+zkCal.ontimeofs = function(evt, ofs) {
+	if (!evt) evt = window.event;
+	var el = Event.element(evt),
+		meta = zkau.getMeta($uuid(el));
+	if (meta) meta[el.id.endsWith("hup")||el.id.endsWith("hdown") ? "_onhrofs" : "_onminofs"](ofs);
 };
 zkCal.ontimechg = function(evt) {
 	if (!evt) evt = window.event;
 	var el = Event.element(evt),
 		cmp = $outer(el),
 		meta = zkau.getMeta($uuid(el));
-	if (meta) meta[(el.id == cmp.id +"!hrinp") ? "_onhrofs" : "_onminofs"](0, el.value);
+	if (meta) meta[(el.id == cmp.id +"!hrinp") ? "_onhrofs" : "_onminofs"](0, isNaN(el.value) ? 1 : el.value);
 };
 zkCal.ontimeclk = function(evt){
 	if (!evt) evt = window.event;
@@ -857,7 +899,6 @@ zkDtbox.close = function (pp, focus) {
 	pp.style.display = "none";
 	zk.unsetVParent(pp);
 
-
 	var db = $e(uuid);
 	if (!db) return;
 	var zcls = getZKAttr(db,"zcls");
@@ -880,10 +921,10 @@ zkDtbox.closepp = function (evt) {
 	for (; pp; pp = pp.parentNode) {
 		//the up/down arrow, marker, and input
 		if (pp.onclick || $tag(pp) == "INPUT" || $tag(pp) == "BUTTON") return;
-		if (pp.id)
-			if (pp.id.endsWith("!pp"))
-				zkDtbox.close(pp, true);
-
+		if (pp.id && pp.id.endsWith("!pp")) {
+			zkDtbox.close(pp, true);
+			return;//Done
+		}
 	}
 };
 zk.FloatDatebox = zClass.create();

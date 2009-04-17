@@ -83,7 +83,25 @@ public class ZKTestCase extends SeleneseTestCase {
 
 	protected String getUrl() {
 		return _url;
+	}
 
+	public void clickzButton(String id) {
+		clickzButton(null, id);
+	}
+
+	public void clickzButton(Selenium s, String id) {
+		s = s == null ? _server : s;
+		s.focus(id + "!real");
+		s.click(id + "!real");
+	}
+
+	public void typezTextbox(String id, String input) {
+		typezTextbox(null, id, input);
+	}
+	public void typezTextbox(Selenium s, String id, String input) {
+		s = s == null ? _server : s;
+		s.focus(id);
+		s.type(id, "Hi");
 	}
 
 }
