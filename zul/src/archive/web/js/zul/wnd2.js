@@ -771,7 +771,7 @@ zkWnd2._initMode = function (cmp) {
 		case "overlapped":
 			zkWnd2._doOverlapped(cmp, replace);
 			break;
-		//default: popup
+		default: //popup
 			zkWnd2._doPopup(cmp, replace);
 		}
 	}
