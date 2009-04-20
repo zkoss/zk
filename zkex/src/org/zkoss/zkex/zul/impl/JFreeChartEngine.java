@@ -293,10 +293,12 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 		ChartRenderingInfo jfinfo = new ChartRenderingInfo();
 		BufferedImage bi = jfchart.createBufferedImage(chart.getIntWidth(), chart.getIntHeight(), Transparency.TRANSLUCENT, jfinfo);
 		
-		if (Events.isListened(chart, Events.ON_CLICK, true)) {
-			//remove old areas 	
-			chart.getChildren().clear();
-			
+		//remove old areas 	
+		if (chart.getChildren().size() > 20)
+			chart.invalidate(); //improve performance if too many chart
+		chart.getChildren().clear();
+
+		if (Events.isListened(chart, Events.ON_CLICK, false)) {
 			int j = 0;
 			String preUrl = null;
 			for(Iterator it=jfinfo.getEntityCollection().iterator();it.hasNext();) {

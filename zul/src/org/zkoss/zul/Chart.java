@@ -805,6 +805,13 @@ public class Chart extends Imagemap implements org.zkoss.zul.api.Chart {
 		return Integer.parseInt(str);
 	}
 
+	public boolean addEventListener(String evtnm, EventListener listener) {
+		final boolean ret = super.addEventListener(evtnm, listener);
+		if (Events.ON_CLICK.equals(evtnm) && ret)
+			this.invalidate(); //since Area has to generate
+		return ret;
+	}
+
 	//Cloneable//
 	public Object clone() {
 		final Chart clone = (Chart)super.clone();

@@ -83,6 +83,10 @@ import org.zkoss.zk.au.out.*;
 	private final Set _attached = new LinkedHashSet(32);
 	/** A set of moved components (parent changed or page changed). */
 	private final Set _moved = new LinkedHashSet(32);
+	/** A map of detached components (detached only -- not moved thereafter).
+	 * (comp, comp's parent).
+	 */
+	private final Map _detached = new LinkedHashMap(32);
 	/** A map of components whose UUID is changed (Component, UUID). */
 	private Map _idChgd;
 	/** A map of responses being added(Component/Page, Map(key, List/TimedValue(AuResponse))). */
@@ -173,7 +177,8 @@ import org.zkoss.zk.au.out.*;
 		return !_exec.isAsyncUpdate(comp.getPage())
 			|| _invalidated.contains(comp)
 			|| _attached.contains(comp)
-			|| _moved.contains(comp);
+			|| _moved.contains(comp)
+			|| _detached.containsKey(comp);
 			//No need to check page, recovering... since it won't be
 			//part of _invalidated if so.
 	}
@@ -271,13 +276,18 @@ import org.zkoss.zk.au.out.*;
 			return; //to avoid redundant AuRemove
 		if (_ending) throw new IllegalStateException("ended");
 
-		if (oldpg == null && !_moved.contains(comp)) { //new attached
+		if (oldpg == null && !_moved.contains(comp)
+		&& !_detached.containsKey(comp)) { //new attached
 			_attached.add(comp);
 				//note: we cannot examine _exec.isAsyncUpdate here because
 				//comp.getPage might be ready when this method is called
+		} else if (newpg == null && !_moved.contains(comp)
+		&& !_attached.contains(comp)) { //new detached
+			_detached.put(comp, oldparent);
 		} else {
 			_moved.add(comp);
 			_attached.remove(comp);
+			_detached.remove(comp);
 		}
 	}
 	/** Called before changing the component's UUID.
@@ -502,7 +512,11 @@ import org.zkoss.zk.au.out.*;
 		//1. process dead comonents, cropping and the removed page
 		final Map croppingInfos;
 		{
-			//1a. handle _moved
+			//1a. handle _detached to remove unncessary detach
+			doDetached();
+				//after call, _detached is merged to _moved
+
+			//1b. handle _moved
 			//The reason to remove first: some insertion might fail if the old
 			//componetns are not removed yet
 			//Also, we have to remove both parent and child because, at
@@ -510,12 +524,12 @@ import org.zkoss.zk.au.out.*;
 			Set removed = doMoved(responses);
 				//after called, _moved is cleared (add to _attached if necessary)
 
-			//1b. remove reduntant
+			//1c. remove reduntant
 			removeRedundant(_invalidated);
 			removeRedundant(_attached);
 			removeCrossRedundant();
 
-			//1c. process Cropper
+			//1d. process Cropper
 			croppingInfos = doCrop();
 
 			//1d. prepare removed pages and optimize for invalidate or removed pages
@@ -645,6 +659,23 @@ import org.zkoss.zk.au.out.*;
 		return responses;
 	}
 
+	/** Porcess detached components.
+	 * After called, _detached is merged backed to _moved if it is required
+	 */
+	private void doDetached() {
+		l_out:
+		for (Iterator it = _detached.entrySet().iterator(); it.hasNext();) {
+			final Map.Entry me = (Map.Entry)it.next();
+			Component p = (Component)me.getValue();
+			for (;p != null; p = p.getParent())
+				if (_moved.contains(p) || _detached.containsKey(p)
+				|| _invalidated.contains(p) || _attached.contains(p))
+					continue l_out; //don't merge (ingore it)
+
+			_moved.add(me.getKey()); //merge
+		}
+		_detached.clear(); //no longer required
+	}
 	/** process moved components.
 	 *
 	 * <p>After called, _moved becomes empty.
