@@ -440,8 +440,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 				final String uuid = request.getParameter("uuid_"+j);
 				final String data = request.getParameter("data_"+j);
-				final Map decdata =
-					data != null ? (Map)JSONValue.parse(data): null;
+				final Map decdata = (Map)JSONValue.parse(data);
 				aureqs.add(uuid == null || uuid.length() == 0 ? 
 					new AuRequest(desktop, cmdId, decdata):
 					new AuRequest(desktop, uuid, cmdId, decdata));

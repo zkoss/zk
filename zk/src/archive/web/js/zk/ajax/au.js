@@ -374,15 +374,20 @@ zAu = {
 		//bug 1721809: we cannot filter out ctl even if zAu.processing
 
 		//decide implicit and ignorable
-		var implicit = true, ignorable = true, ctli, ctlc;
-		for (var j = es.length; --j >= 0;) {
+		var implicit = true, ignorable = true, ctli, ctlc, uri;
+		for (var j = 0, el = es.length; j < el; ++j) {
 			var aureq = es[j], opts = aureq.opts;
-			if (implicit && (!opts || !opts.ignorable)) { //ignorable implies implicit
+			if (!opts) aureq.opts = opts = {};
+			if (opts.uri != uri) {
+				if (j) break;
+				uri = opts.uri;
+			}
+			if (implicit && !opts.ignorable) { //ignorable implies implicit
 				ignorable = false;
-				if (!opts || !opts.implicit)
+				if (!opts.implicit)
 					implicit = false;
 			}
-			if (opts && opts.ctl && !ctli) {
+			if (opts.ctl && !ctli) {
 				ctli = aureq.target.uuid;
 				ctlc = aureq.name;
 			}
@@ -395,6 +400,10 @@ zAu = {
 			var aureq = es.shift(),
 				evtnm = aureq.name,
 				target = aureq.target;
+			if (aureq.opts.uri != uri) {
+				es.unshift(aureq);
+				break;
+			}
 			content += "&cmd_"+j+"="+evtnm;
 			if (target && target.className != 'zk.Desktop')
 				content += "&uuid_"+j+"="+target.uuid;
@@ -409,7 +418,7 @@ zAu = {
 
 		if (content)
 			zAu._sendNow2({
-				sid: zAu._seqId, uri: zAu.comURI(null, dt),
+				sid: zAu._seqId, uri: uri || zAu.comURI(null, dt),
 				dt: dt, content: "dtid=" + dt.id + content,
 				ctli: ctli, ctlc: ctlc, implicit: implicit,
 				ignorable: ignorable, tmout: 0
