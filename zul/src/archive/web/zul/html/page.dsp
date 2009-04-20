@@ -21,13 +21,15 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <%@ taglib uri="http://www.zkoss.org/dsp/zk/core" prefix="z" %>
 <c:set var="arg" value="${requestScope.arg}"/>
 <c:set var="page" value="${arg.page}"/>
+<c:if test="${!empty zk_htmlHeadRequired}">
+${z:outHeaders(page)}
+</c:if>
 <c:if test="${!arg.embed}">
 ${z:outLangStyleSheets()}
 ${z:outLangJavaScripts(null)}
 </c:if>
 <c:if test="${!empty zk_htmlHeadRequired}">
 <c:set var="zk_htmlHeadRequired" value="" scope="request"/>
-${z:outHeaders(page)}
 </head>
 <body>
 </c:if>
