@@ -43,10 +43,15 @@ public class AuInsertAfter extends AuResponse {
 			new String[] {anchor.getUuid(), content, getRefId(anchor)});
 	}
 	private static String getRefId(Component anchor) {
-		//Bug 1939059/2686585: This is a dirty fix. We only handle roots
+		//Bug 1939059: This is a dirty fix. We only handle roots
 		//and assume it must be the last one
-		if ((anchor instanceof Native) && anchor.getParent() != null)
-			throw new UiException("Adding a component after a native one not allowed: "+anchor);
+		if (anchor.getParent() != null) {
+			if (anchor instanceof Native)
+				throw new UiException("Adding a component after a native one not allowed: "+anchor);
+
+			//Bug 2686585: if ZK JSP used, we have no info so no exception
+			return "";
+		}
 
 		final Page page = anchor.getPage();
 		return page != null ? /*just in case*/page.getUuid(): "";
