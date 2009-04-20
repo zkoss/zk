@@ -35,7 +35,8 @@ zk.Cal.prototype = {
 		if (this.fnSubmit)
 			zk.unlisten(this.form, "submit", this.fnSubmit);
 		if (this.popup) {
-			var hrinp = $e(uuid + "!hrinp"),
+			var uuid = this.id,
+				hrinp = $e(uuid + "!hrinp"),
 				mininp = $e(uuid + "!mininp"),
 				hup = $e(uuid + "!hup"),
 				hdown = $e(uuid + "!hdown"),
@@ -259,18 +260,20 @@ zk.Cal.prototype = {
 			}
 		}
 		//time
-		abtn.innerHTML = hr > 11 ? "PM" : "AM";
-		var tmp;
-		if (fmt.indexOf('h') > 0)
-			tmp = hr > 11 ? hr - 12 : hr == 0 ? 12 : hr ;
-		else if (fmt.indexOf('K') > 0 && hr > 11)
-			tmp = hr - 12;
-		else if (fmt.indexOf('k') > 0) //Hour in day (1-24)
-			tmp = hr == 0 ? 24 : hr;
-		else
-			tmp = hr;
-		hrbox.value =zk.formatFixed(tmp, 2);
-		minbox.value = zk.formatFixed(min, 2);
+		if (this.popup) {
+			abtn.innerHTML = hr > 11 ? "PM" : "AM";
+			var tmp;
+			if (fmt.indexOf('h') > -1)
+				tmp = hr > 11 ? hr - 12 : hr == 0 ? 12 : hr;
+			else if (fmt.indexOf('K') > -1 && hr > 11)
+				tmp = hr - 12;
+			else if (fmt.indexOf('k') > -1) //Hour in day (1-24)
+				tmp = hr == 0 ? 24 : hr;
+			else
+				tmp = hr;
+			hrbox.value = zk.formatFixed(tmp, 2);
+			minbox.value = zk.formatFixed(min, 2);
+		}
 	},
 	_invalid: function (d) {
 		return zkDtbox._invalid(d, this.begin, this.end);
@@ -338,7 +341,7 @@ zk.Cal.prototype = {
 			min = this.date.getMinutes();
 		this.date = new Date(y + ofs, m, d, hr, min);
 		this._output();
-		tthis._onupdate({close: false});
+		this._onupdate({close: false});
 		zkDtbox._repos($uuid(this));
 	},
 	_onmonofs: function (ofs) {
@@ -682,9 +685,9 @@ zkDtbox._invalid = function (d, begin, end) {
 /**Check format whether have hHkKma*/
 zkDtbox.setTimeAttr = function(cmp, fmt) {
 	var chk = fmt.toLowerCase();
-	setZKAttr(cmp, "hr", (chk.indexOf("k") > 0 || chk.indexOf("h") > 0) ? 'true' : 'false');
-	setZKAttr(cmp, "min", (fmt.indexOf("m") > 0 ? 'true' : 'false'));//the minutes only in lowercase
-	setZKAttr(cmp, "ampm", (chk.indexOf("a") > 0  ? 'true' : 'false'));
+	setZKAttr(cmp, "hr", (chk.indexOf("k") > -1 || chk.indexOf("h") > -1 ) ? 'true' : 'false');
+	setZKAttr(cmp, "min", (fmt.indexOf("m") > -1 ? 'true' : 'false'));//the minutes only in lowercase
+	setZKAttr(cmp, "ampm", (chk.indexOf("a") > -1  ? 'true' : 'false'));
 
 }
 /** Handles setAttr. */
@@ -883,14 +886,16 @@ zkDtbox._repos = function (uuid) {
 	var inpId = db.id + "!real";
 	var inp = $e(inpId);
 
-	zk.position(pp, inp, "after-start");
+	if(pp) {
+		zk.position(pp, inp, "after-start");
 
-	if (!pp._shadow)
-		pp._shadow = new zk.Shadow(pp, {left: -4, right: 4, top: 2, bottom: 3, autoShow: true, stackup: true});
-	else pp._shadow.sync();
-
-	zkau.hideCovered();
-	zk.asyncFocus(inpId);
+		if (!pp._shadow)
+			pp._shadow = new zk.Shadow(pp, {left: -4, right: 4, top: 2, bottom: 3, autoShow: true, stackup: true});
+		else
+			pp._shadow.sync();
+		zkau.hideCovered();
+		zk.asyncFocus(inpId);
+	}
 };
 //Remove Class
 zkDtbox.close = function (pp, focus) {

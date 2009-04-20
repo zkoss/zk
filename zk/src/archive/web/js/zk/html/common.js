@@ -2009,12 +2009,12 @@ zk.parseDate = function (txt, fmt, strict) {
 				nosep = c2 == 'y' || c2 == 'M' || c2 == 'd' || c2 == 'E';
 			}
 
-			var token = ts[i++];
+			var token = ts[i++] != null ? ts[i++] : "";//Bug 2560497 : if no seperator, token must be assigned.
 			switch (cc) {
 			case 'y':
 				if (nosep) {
 					if (len <= 3) len = 2;
-					if (token.length > len) {
+					if (token && token.length > len) {
 						ts[--i] = token.substring(len);
 						token = token.substring(0, len);
 					}
@@ -2061,7 +2061,7 @@ zk.parseDate = function (txt, fmt, strict) {
 			case 'd':
 				if (nosep) {
 					if (len < 2) len = 2;
-					if (token.length > len) {
+					if (token && token.length > len) {
 						ts[--i] = token.substring(len);
 						token = token.substring(0, len);
 					}
