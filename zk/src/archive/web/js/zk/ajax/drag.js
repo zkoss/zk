@@ -511,21 +511,6 @@ zk.Draggable = zk.$extends(zk.Object, {
 		if(zdg.activeDraggable)
 			zdg.activeDraggable._keyPress(evt);
 	},
-	_restorePos: zk.ie ? function (el, pos) {
-		//In IE, we have to detach and attach. We cannot simply restore position!!
-		//Otherwise, a strange bar appear
-		if (pos != 'absolute' && pos != 'relative') {
-			var p = el.parentNode;
-			var n = el.nextSibling;
-			zDom.remove(el);
-			el.style.position = pos;
-			if (n) p.insertBefore(el, n);
-			else p.appendChild(el);
-		} else
-			el.style.position = pos;
-	}: function (el, pos) {
-		el.style.position = pos;
-	},
 
 	//default effect//
 	_defStartEffect: function (draggable) {
@@ -545,15 +530,13 @@ zk.Draggable = zk.$extends(zk.Object, {
 		});
 	},
 	_defRevertEffect: function(draggable, top_offset, left_offset) {
-		var node = draggable.node,
-			orgpos = node.style.position, //Bug 1538506
-			dur = Math.sqrt(Math.abs(top_offset^2)+Math.abs(left_offset^2))*0.02;
-		new zk.eff.Move(node, { x: -left_offset, y: -top_offset,
-			duration: dur, queue: {scope:'_draggable', position:'end'}});
-
-		//Bug 1538506: a strange bar appear in IE
-		setTimeout(function () {
-			zk.Draggable._restorePos(node, orgpos);
-		}, dur * 1000 + 10);
+		if (top_offset || left_offset) {
+			var node = draggable.node,
+				orgpos = node.style.position,
+				dur = Math.sqrt(Math.abs(top_offset^2)+Math.abs(left_offset^2))*0.02;
+			new zk.eff.Move(node, { x: -left_offset, y: -top_offset,
+				duration: dur, queue: {scope:'_draggable', position:'end'},
+				afterFinish: function () {node.style.position = orgpos;}});
+		}
 	}
 });
