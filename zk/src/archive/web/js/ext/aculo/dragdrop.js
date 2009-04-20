@@ -235,18 +235,14 @@ zDraggable.prototype = {
     var defaults = {
       handle: false,
       reverteffect: function(element, top_offset, left_offset) {
+if (top_offset || left_offset) {
 var orgpos = element.style.position; //Tom M. Yeh, Potix: Bug 1538506
         var dur = Math.sqrt(Math.abs(top_offset^2)+Math.abs(left_offset^2))*0.02;
         new zEffect.Move(element, { x: -left_offset, y: -top_offset, duration: dur,
-          queue: {scope:'_draggable', position:'end'}
+          queue: {scope:'_draggable', position:'end'},
+          afterFinish: function () {element.style.position = orgpos;}
         });
-//Tom M. Yeh, Potix: Bug 1538506: a strange bar appear in IE
-setTimeout(function () {
-if (zdd && orgpos != 'absolute' && orgpos != 'relative')
-	zkau._fixie4drop(element, orgpos);
-else
-	element.style.position = orgpos;
-}, dur * 1000 + 10);
+}
       },
       endeffect: function(element) {
         var toOpacity = typeof element._opacity == 'number' ? element._opacity : 1.0;

@@ -716,7 +716,7 @@ zk.center = function (el, flags) {
 		hghgap = zk.offsetHeight(el);
 
 	if ((!wdgap || !hghgap) && !$visible(el)) {
-		el.style.top = "-10000px"; //avoid annoying effect
+		el.style.left = el.style.top = "-10000px"; //avoid annoying effect
 		el.style.display = "block"; //we need to calculate the size
 		wdgap = zk.offsetWidth(el);
 		hghgap = zk.offsetHeight(el),

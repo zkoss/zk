@@ -2040,11 +2040,7 @@ zkau._revertdrag = function (cmp, pointer, evt) {
 	//Note: we hve to revert when zkau._onRespReady called, since app might
 	//change cmp's position
 	var dg = zkau._drags[cmp.id];
-	var orgpos = cmp.style.position;
 	zkau._revertpending = function () {
-		//Bug 1599737: a strange bar appears
-		if (zk.ie && orgpos != 'absolute' && orgpos != 'relative')
-			zkau._fixie4drop(cmp, orgpos);
 		if (dg.z_x != null) {
 			cmp.style.left = dg.z_x;
 			cmp.style.top = dg.z_y;
@@ -2055,18 +2051,6 @@ zkau._revertdrag = function (cmp, pointer, evt) {
 	};
 	return false;
 };
-if (zk.ie) {
-//In IE, we have to detach and attach. We cannot simply restore position!!
-//Otherwise, a strange bar appear
-	zkau._fixie4drop = function (el, orgpos) {
-		var p = el.parentNode;
-		var n = el.nextSibling;
-		zk.remove(el);
-		el.style.position = orgpos;
-		if (n) p.insertBefore(el, n);
-		else p.appendChild(el);
-	};
-}
 
 zkau._enddrag = function (cmp, evt) {
 	zkau._cleanLastDrop(zkau._drags[cmp.id]);
