@@ -1367,6 +1367,7 @@
 		<xs:attribute name="rows" type="intType" use="optional" />
 		<xs:attribute name="maxlength" type="intType" use="optional" />
 		<xs:attribute name="name" type="xs:string" use="optional" />
+		<xs:attribute name="oddRowSclass" type="xs:string" use="optional" />
 		<xs:attribute name="selectedItem" type="xs:string" use="optional" />
 		<xs:attribute name="selectedIndex" type="xs:string" use="optional" />
 		<xs:attribute name="tabindex" type="intType" use="optional" />

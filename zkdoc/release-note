@@ -35,6 +35,7 @@ ZK 3.6.1
   2746948: Datebox shadow not sync
   2747825: Add the attribute "title" in XSD for BorderLayout children
   2769863: Unnecessary scrollbar appear in IE with Menu
+  2771231: Add attribute "oddRowSclass" for listbox
 	--------
 ZK 3.6.0
 March 2, 2009
