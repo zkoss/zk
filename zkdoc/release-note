@@ -38,6 +38,7 @@ ZK 3.6.1
   2771231: Add attribute "oddRowSclass" for listbox
   2769836: Favicon in Safari is not work
   2715894: The header of Grid, listbox, and tree display error in IE8
+
 	--------
 ZK 3.6.0
 March 2, 2009
