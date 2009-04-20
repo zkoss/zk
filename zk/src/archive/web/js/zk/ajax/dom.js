@@ -219,7 +219,7 @@ zDom = { //static methods
 			hghgap = zDom.offsetHeight(el);
 
 		if ((!wdgap || !hghgap) && !zDom.isVisible(el)) {
-			el.style.top = "-10000px"; //avoid annoying effect
+			el.style.left = el.style.top = "-10000px"; //avoid annoying effect
 			el.style.display = "block"; //we need to calculate the size
 			wdgap = zDom.offsetWidth(el);
 			hghgap = zDom.offsetHeight(el),
@@ -528,7 +528,7 @@ zDom = { //static methods
 		var tsd = zk._txtSizDiv;
 		if (!tsd) {
 			tsd = zk._txtSizDiv = document.createElement("DIV");
-			tsd.style.cssText = "left:-1000px;position:absolute;visibility:hidden;border:none";
+			tsd.style.cssText = "left:-1000px;top:-1000px;position:absolute;visibility:hidden;border:none";
 			document.body.appendChild(tsd);
 		}
 
