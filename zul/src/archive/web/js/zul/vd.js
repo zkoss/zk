@@ -50,7 +50,6 @@ if (!window.Validate_errorbox) { //not customized
 ////
 zkVld = {};
 zkVld._ebs = []; //a list of id of errbox to show
-zkVld._cbs = []; //a list of id of errbox that shall not shown
 zkau.valid = zkVld; //zkau depends on it
 
 /**
@@ -95,6 +94,7 @@ zkVld.syncErrBox = function (box, unfocused) {
 	if (atTop) ofs[1] -= box.offsetHeight + 1;
 	ofs = zk.toStyleOffset(box, ofs[0], ofs[1]);
 	box.style.left = ofs[0] + "px"; box.style.top = ofs[1] + "px";
+	zkVld._fiximg(box);
 };
 /** Validates the specified component and returns the error msg. */
 zkVld.validate = function (id) {
@@ -219,22 +219,18 @@ zkVld.errbox = function (id, html, multiple) {
 	var cmp = $e(id);
 	if (cmp && zk.isRealVisible(cmp, true)) {
 		zkVld._errInfo = {id: id, html: html};
-		if (multiple) zkVld._errbox();
-		else setTimeout(zkVld._errbox, 5);
+		zkVld._errbox();
 	}
 	zkVld.validating = false;
 };
 zkVld._errbox = function () {
 	if (!zkVld._errInfo) return; //nothing to do
-
 	var id = zkVld._errInfo.id, html = zkVld._errInfo.html;
 	zkVld._errInfo = null;
 
 	var boxid = id + "!errb";
 	zkVld.closeErrbox(boxid);
-
-	if (zkVld._cbs.contains(boxid)) return; //don't show the error box if it will close.
-
+	
 	cmp = $e(id);
 	if (cmp) {
 		zk.addClass($real(cmp), getZKAttr(cmp, "zcls") + "-text-invalid");
@@ -326,8 +322,7 @@ zkVld.closeErrbox = function (box, remainError, coerce) {
 		zkVld._ebs.remove(box.id);
 	} else if (boxid)
 		if (coerce) {
-			zkVld._cbs.push(boxid);
-			setTimeout(function () {zkVld._cbs.remove(boxid);zkVld._ebs.remove(boxid);}, 5);
+			zkVld._ebs.remove(boxid);
 		} else
 			zkVld._ebs.remove(boxid);
 };
