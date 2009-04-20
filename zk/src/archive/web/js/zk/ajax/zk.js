@@ -352,6 +352,7 @@ if (zk.gecko) {
 	if (zk.ie) {
 		j = zk.parseInt(zk.agent.substring(j + 5));
 		zk.ie7 = j >= 7; //ie7 or later
+		zk.ie8All = j >= 8; //ie8 or later (including compatible)
 		zk.ie8 = j >= 8 && document.documentMode >= 8; //ie8 or later
 		zk.ie6Only = !zk.ie7;
 
