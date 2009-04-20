@@ -748,25 +748,18 @@ zAu.cmd1 = {
 		zk.mounting = true;
 		eval(code);
 	},
-	addAft: function (uuid, wgt, code) {
+	addAft: function (uuid, wgt, code, pgid) {
 		//Bug 1939059: This is a dirty fix. Refer to AuInsertBefore
 		//Format: comp-uuid:pg-uuid (if native root)
-		if (!wgt) {
-			var j = uuid.indexOf(':');
-			if (j >= 0) { //native root
-				wgt = zk.Widget.$(uuid.substring(0, j)); //try comp (though not possible)
-				if (!wgt) {
-					uuid = uuid.substring(j + 1); //try page
-					wgt = zk.Widget.$(uuid);
-					if (wgt) zAu.cmd1.addChd(uuid, wgt, code);
-					else {
-						zAu.stub = zAu.cmd1._asBodyChild;
-						zk.mounting = true;
-						eval(code);
-					}
-					return;
-				}
+		if (!wgt && pgid) {
+			wgt = zk.Widget.$(pgid);
+			if (wgt) zAu.cmd1.addChd(pgid, wgt, code);
+			else {
+				zAu.stub = zAu.cmd1._asBodyChild;
+				zk.mounting = true;
+				eval(code);
 			}
+			return;
 		}
 
 		zAu.stub = function (child) {

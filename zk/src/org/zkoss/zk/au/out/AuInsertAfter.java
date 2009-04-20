@@ -29,6 +29,7 @@ import org.zkoss.zk.au.AuResponse;
  * at the client.
  * <p>data[0]: the uuid of the component after which the HTML will insert<br>
  * data[1]: the unparsed HTML (aka., content)
+ * data[2]: the page UUID
  * 
  * @author tomyeh
  * @since 3.0.0
@@ -38,19 +39,16 @@ public class AuInsertAfter extends AuResponse {
 	 * @param anchor the reference where the component will be added after.
 	 */
 	public AuInsertAfter(Component anchor, String content) {
-		super("addAft", anchor, new String[] {getRefId(anchor), content});
+		super("addAft", anchor,
+			new String[] {anchor.getUuid(), content, getRefId(anchor)});
 	}
 	private static String getRefId(Component anchor) {
-		//Bug 1939059: This is a dirty fix. We only handle roots
+		//Bug 1939059/2686585: This is a dirty fix. We only handle roots
 		//and assume it must be the last one
-		if (anchor instanceof Native) {
-			if (anchor.getParent() != null)
-				throw new UiException("Adding a component after a native one not allowed: "+anchor);
+		if ((anchor instanceof Native) && anchor.getParent() != null)
+			throw new UiException("Adding a component after a native one not allowed: "+anchor);
 
-			final Page page = anchor.getPage();
-			if (page != null) //just in case
-				return anchor.getUuid() + ":" + page.getUuid();
-		}
-		return anchor.getUuid();	
+		final Page page = anchor.getPage();
+		return page != null ? /*just in case*/page.getUuid(): "";
 	}
 }

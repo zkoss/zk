@@ -351,7 +351,7 @@ public class SimpleSession implements Session, SessionCtrl {
 	}
 	public void recover(Object nativeSession) {
 		if (_invalidated)
-			log.warning("Recover an invalidated session, "+this);
+			log.info("Recover an invalidated session, "+this);
 
 		_invalidated = _invalid = false;
 		if (_navsess == null)

@@ -2,9 +2,9 @@
 
 {{IS_NOTE
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Tue Jun 28 13:41:01     2005, Created by tomyeh
 }}IS_NOTE
@@ -53,8 +53,7 @@ import org.zkoss.zul.impl.Utils;
  */
 public class Datebox extends FormatInputElement implements org.zkoss.zul.api.Datebox {
 	private TimeZone _tzone;
-	private boolean _lenient = true;
-	private boolean _compact, _btnVisible = true;
+	private boolean _compact, _btnVisible = true, _lenient = true;
 
 	public Datebox() {
 		setFormat(getDefaultFormat());

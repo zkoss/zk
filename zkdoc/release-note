@@ -47,7 +47,8 @@ ZK 3.6.1
   2713463: Audio supports the loop attribute
   2718665: Flash supports  the dynamic content (setContent)
   2724923: Support scrollIntoView to scroll an element to become visible
-
+  2770471: GenericAutowireComposer shall support wiring ZScript varible
+  
 * Bugs
   2684510: Unable to access implict objects if func defined in other namespace
   2685872: Comet not send back new value of textbox if no listener
@@ -65,7 +66,15 @@ ZK 3.6.1
   2721780: Nested window resize problem
   2722982: Tree render proble with a combobox and a lot of comboitems
   2726542: The result of zk.revisedOffset is inconsistent between IE&FF2
+  2746948: Datebox shadow not sync
   2747825: Add the attribute "title" in XSD for BorderLayout children
+  2769863: Unnecessary scrollbar appear in IE with Menu
+  2771231: Add attribute "oddRowSclass" for listbox
+  2769836: Favicon in Safari is not work
+  2715894: The header of Grid, listbox, and tree display error in IE8
+  2686585: fileupload.get javascript error on jsp pages
+  2721977: WrongValuesException and focus
+
 	--------
 ZK 3.6.0
 March 2, 2009

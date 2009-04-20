@@ -169,7 +169,7 @@ public class Radiogroup extends XulElement implements org.zkoss.zul.api.Radiogro
 	 */
 	public void setSelectedItemApi(org.zkoss.zul.api.Radio itemApi) {
 		Radio item = (Radio) itemApi;
-		setSelectedItemApi(item);		
+		setSelectedItem(item);
 	}
 
 	/** Appends a radio button.
