@@ -627,6 +627,9 @@ zDom = { //static methods
 
 	getStyle: function(el, style) {
 		var st = el.style;
+	  	if (!st)
+	  		return null; //possible when dragging in IE
+
 		style = style.$camel();
 		if (['float','cssFloat'].$contains(style))
 			style = (typeof st.styleFloat != 'undefined' ? 'styleFloat' : 'cssFloat');

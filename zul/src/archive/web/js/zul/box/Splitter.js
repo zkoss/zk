@@ -34,7 +34,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	},
 	/** Sets whther it is open.
 	 */
-	setOpen: function(open, fromServer) {
+	setOpen: function(open, opts) {
 		if (this._open != open) {
 			this._open = open;
 
@@ -80,7 +80,9 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			this._fixbtn();
 			this._fixszAll();
 
-			if (!fromServer) this.fire('onOpen', {open:open});
+			if (!opts || opts.sendOnOpen)
+				this.fire('onOpen', {open:open});
+				//if fromServer, opts is true
 		}
 	},
 	/** Returns the collapse of this button.
@@ -92,11 +94,18 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	 */
 	setCollapse: function(collapse) {
 		if (this._collapse != collapse) {
+			var bOpen = this._open;
+			if (!bOpen)
+				this.setOpen(true, {sendOnOpen:false}); //bug 1939263
+
 			this._collapse = collapse;
 			if (this.desktop) {
 				this._fixbtn();
 				this._fixsz();
 			}
+
+			if (!bOpen)
+				this.setOpen(false, {sendOnOpen:false});
 		}
 	},
 
