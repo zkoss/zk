@@ -43,7 +43,7 @@ ZK 3.6.1
   2721977: WrongValuesException and focus
   2560497: Dateboxes: "ddMMyy" is not working
   2716537: Large data set in chart cause browser no response
-
+  2761151: fail to import zkdemo-3.6.0.war to Eclipse
 	--------
 ZK 3.6.0
 March 2, 2009

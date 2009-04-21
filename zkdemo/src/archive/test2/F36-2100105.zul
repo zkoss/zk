@@ -19,6 +19,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 <window>
 	<hbox>
+		<html><![CDATA[
+		<h3>Due to eclipse import issue, if you want to try this feature,
+		please rename the ticker.klass to ticker.class.</h3>
+		]]>
+		</html>
 		<applet code="ticker.class" msg="ZK is Simple and Rich!" id="ticker"
 			width="400px" style="border: 1px" />
 		<listbox width="200px">
