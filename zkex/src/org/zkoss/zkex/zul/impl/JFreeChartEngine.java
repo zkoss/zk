@@ -23,6 +23,7 @@ import org.zkoss.zul.GanttModel.GanttTask;
 import org.zkoss.zul.WaferMapModel.IntPair;
 import org.zkoss.zul.impl.ChartEngine;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.util.TimeZones;
 import org.zkoss.lang.Objects;
 
@@ -293,42 +294,45 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 		BufferedImage bi = jfchart.createBufferedImage(chart.getIntWidth(), chart.getIntHeight(), Transparency.TRANSLUCENT, jfinfo);
 		
 		//remove old areas 	
+		if (chart.getChildren().size() > 20)
+			chart.invalidate(); //improve performance if too many chart
 		chart.getChildren().clear();
-		
-		int j = 0;
-		String preUrl = null;
-		for(Iterator it=jfinfo.getEntityCollection().iterator();it.hasNext();) {
-			ChartEntity ce = ( ChartEntity ) it.next();
-			final String url = ce.getURLText();
 
-			//workaround JFreeChart's bug (skip replicate areas)
-			if (url != null) { 
-				if (preUrl == null) {
-					preUrl = url;
-				} else if (url.equals(preUrl)) { //start replicate, skip
-					break;
+		if (Events.isListened(chart, Events.ON_CLICK, false)) {
+			int j = 0;
+			String preUrl = null;
+			for(Iterator it=jfinfo.getEntityCollection().iterator();it.hasNext();) {
+				ChartEntity ce = ( ChartEntity ) it.next();
+				final String url = ce.getURLText();
+	
+				//workaround JFreeChart's bug (skip replicate areas)
+				if (url != null) { 
+					if (preUrl == null) {
+						preUrl = url;
+					} else if (url.equals(preUrl)) { //start replicate, skip
+						break;
+					}
 				}
-			}
-			
-			Area area = new Area();
-			area.setParent(chart);
-		 	area.setCoords(ce.getShapeCoords());
-		 	area.setShape(ce.getShapeType());
-		    area.setId("area_"+chart.getId()+'_'+(j++));
-		    if (chart.isShowTooltiptext() && ce.getToolTipText() != null) {
-		    	area.setTooltiptext(ce.getToolTipText());
-		    }
-		    area.setAttribute("url", ce.getURLText());
-		    impl.render(chart, area, ce);
-			if (chart.getAreaListener() != null) {
-				try {
-					chart.getAreaListener().onRender(area, ce);
-				} catch (Exception ex) {
-					throw UiException.Aide.wrap(ex);
+				
+				Area area = new Area();
+				area.setParent(chart);
+			 	area.setCoords(ce.getShapeCoords());
+			 	area.setShape(ce.getShapeType());
+			    area.setId("area_"+chart.getId()+'_'+(j++));
+			    if (chart.isShowTooltiptext() && ce.getToolTipText() != null) {
+			    	area.setTooltiptext(ce.getToolTipText());
+			    }
+			    area.setAttribute("url", ce.getURLText());
+			    impl.render(chart, area, ce);
+				if (chart.getAreaListener() != null) {
+					try {
+						chart.getAreaListener().onRender(area, ce);
+					} catch (Exception ex) {
+						throw UiException.Aide.wrap(ex);
+					}
 				}
 			}
 		}
-		
 		//clean up the "LEGEND_SEQ"
 		//used for workaround LegendItemEntity.getSeries() always return 0
 		//used for workaround TickLabelEntity no information

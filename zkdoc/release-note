@@ -74,6 +74,8 @@ ZK 3.6.1
   2715894: The header of Grid, listbox, and tree display error in IE8
   2686585: fileupload.get javascript error on jsp pages
   2721977: WrongValuesException and focus
+  2560497: Dateboxes: "ddMMyy" is not working
+  2716537: Large data set in chart cause browser no response
 
 	--------
 ZK 3.6.0
