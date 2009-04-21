@@ -1088,6 +1088,9 @@ Element.Methods = {
 
   getStyle: function(element, style) {
     element = z$(element);
+  	if (!element.style)
+  		return null; //possible when dragging in IE
+
     if (['float','cssFloat'].include(style))
       style = (typeof element.style.styleFloat != 'undefined' ? 'styleFloat' : 'cssFloat');
     style = style.camelize();
