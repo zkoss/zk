@@ -161,9 +161,16 @@ zkSplt.setAttr = function (cmp, nm, val) {
 		zkSplt.open(cmp, val == "true", true);
 		return true; //no need to store the z.open attribute
 	} else if ("z.colps" == nm) {
-		setZKAttr(cmp, "colps", val);
-		zkSplt._fixbtn(cmp);
-		zkSplt._fixsz(cmp);
+		if (getZKAttr(cmp, "colps") != val) {
+			var bClose = getZKAttr(cmp, "open") == "false";
+			if (bClose) zkSplt.open(cmp, true, true);
+
+			setZKAttr(cmp, "colps", val);
+			zkSplt._fixbtn(cmp);
+			zkSplt._fixsz(cmp);
+
+			if (bClose) zkSplt.open(cmp, false, true);
+		}
 		return true;
 	} else if (zk.opera && "visibility" == nm) {
 		zkau.setAttr(cmp, nm, val);
