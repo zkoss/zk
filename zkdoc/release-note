@@ -45,6 +45,7 @@ ZK 3.6.1
   2716537: Large data set in chart cause browser no response
   2761151: fail to import zkdemo-3.6.0.war to Eclipse
   1939263: Splitter - Dark blue bar won't overlap the light blue bar
+  2564298: Clear a Datebox with constraint
 
 	--------
 ZK 3.6.0
