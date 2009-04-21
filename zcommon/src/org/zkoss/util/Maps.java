@@ -127,9 +127,13 @@ public class Maps {
 			if (len == 0)
 				continue;
 
+			final int from = Strings.skipWhitespaces(line, 0);
+			if (from < len && line.charAt(from) == '#')
+				continue; //comment, ignore rest of line
+
 			final Strings.Result res =
-				Strings.nextToken(line, 0, new char[] {'=', '{', '}'}, true, false);
-			if (res == null || res.token.startsWith("#"))
+				Strings.nextToken(line, from, new char[] {'=', '{', '}'}, true, false);
+			if (res == null)
 				continue; //nothing found
 			if (res.separator == (char)0) {
 				if (res.token.length() > 0)
