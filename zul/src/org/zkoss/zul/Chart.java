@@ -808,7 +808,7 @@ public class Chart extends Imagemap implements org.zkoss.zul.api.Chart {
 	public boolean addEventListener(String evtnm, EventListener listener) {
 		final boolean ret = super.addEventListener(evtnm, listener);
 		if (Events.ON_CLICK.equals(evtnm) && ret)
-			this.invalidate(); //since Area has to generate
+			smartDrawChart(); //since Area has to generate
 		return ret;
 	}
 

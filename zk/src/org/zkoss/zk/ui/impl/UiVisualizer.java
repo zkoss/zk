@@ -281,9 +281,10 @@ import org.zkoss.zk.au.out.*;
 			_attached.add(comp);
 				//note: we cannot examine _exec.isAsyncUpdate here because
 				//comp.getPage might be ready when this method is called
-		} else if (newpg == null && !_moved.contains(comp)
-		&& !_attached.contains(comp)) { //new detached
-			_detached.put(comp, oldparent);
+		} else if (newpg == null && !_moved.contains(comp)) {
+			if (!_attached.remove(comp))
+				_detached.put(comp, oldparent); //new detached
+			//ignore if attach and then detach
 		} else {
 			_moved.add(comp);
 			_attached.remove(comp);
