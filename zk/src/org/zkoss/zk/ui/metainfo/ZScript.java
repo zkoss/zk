@@ -71,6 +71,28 @@ implements Condition, java.io.Serializable {
 	 * @since 3.0.0
 	 */
 	public static final ZScript parseContent(String content) {
+		return parseContent(content, 0);
+	}
+	/** Parses the content into a {@link ZScript} instance.
+	 *
+	 * <p>It is similar to {@link #parseContent(String)} except it
+	 * allows the caller to specify the line number of the first line of the
+	 * content.
+	 *
+	 * @param content the content of zscript codes
+	 * @param lineno the linenumber of the first line. Ignored if
+	 * zero (or negative).
+	 * @since 3.6.1
+	 */
+	public static final ZScript parseContent(String content, int lineno) {
+		String prefix = null;
+		if (content != null && lineno > 1) {
+			final StringBuffer sb = new StringBuffer(lineno);
+			while (--lineno > 0)
+				sb.append('\n');
+			prefix = sb.toString();
+		}
+
 		final int len = content != null ? content.length(): 0;
 		for (int j = 0; j < len; ++j) {
 			final char cc = content.charAt(j);
@@ -89,7 +111,7 @@ implements Condition, java.io.Serializable {
 				break; //done
 			}
 		}
-		return new ZScript(null, null, content, null);
+		return new ZScript(null, null, prefix != null ? prefix+content: content, null);
 	}
 
 	/** Creates a zscript object with the content directly.

@@ -14,6 +14,7 @@ ZK 3.6.1
   2718665: Flash supports  the dynamic content (setContent)
   2724923: Support scrollIntoView to scroll an element to become visible
   2770471: GenericAutowireComposer shall support wiring ZScript varible
+  2209199: BeanShell error message shall show the correct line number
   
 * Bugs
   2684510: Unable to access implict objects if func defined in other namespace
