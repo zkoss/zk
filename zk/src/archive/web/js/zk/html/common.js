@@ -297,8 +297,8 @@ zk.makeStackup = function (cmp, id, anchor) {
 	ifr.style.cssText = "position:absolute;overflow:hidden;filter:alpha(opacity=0)";
 	ifr.frameBorder = "no";
 	ifr.tabIndex = -1;
-	ifr.src = zk.ie6Only ? zk.getUpdateURI('/web/img/spacer.gif'): "";
-		//IE with HTTPS: we must specify the src
+	ifr.src = "javascript:false;";
+		//IE: prevent secure/nonsecure warning with HTTPS
 	if (cmp) {
 		ifr.style.left = cmp.style.left;
 		ifr.style.top = cmp.style.top;
@@ -308,6 +308,7 @@ zk.makeStackup = function (cmp, id, anchor) {
 	}
 	return ifr;
 };
+
 /**
  * Applies the indicator mask over the specified element.
  * @param {Object/String} rel a related object
@@ -1796,9 +1797,8 @@ zk.newFrame = function (name, src, style) {
 	var frm = $e(name);
 	if (frm) return frm;
 
-	if (!src)
-		src = zk.ie6Only ? zk.getUpdateURI('/web/img/spacer.gif'): "";
-		//IE with HTTPS: we must specify the src
+	if (!src) src = "javascript:false;";
+		//IE: prevent secure/nonsecure warning with HTTPS
 
 	var html = '<iframe id="'+name+'" name="'+name+'" src="'+src+'"';
 	if (style) html += ' style="'+style+'"';
