@@ -82,11 +82,13 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 			<listheader label="Load on Demend"/>
 		</listhead>
 	</listbox>
-	<listbox width="200px" mold="paging" pageSize="5" model="${model2}">
+	<listbox id="lb2" width="200px" mold="paging" pageSize="5" model="${model2}">
 		<listhead>
 			<listheader label="Load on Demend"/>
 		</listhead>
 	</listbox>
 	<button label="remove 2nd" onClick="model2.remove(1)"/>
 	<button label="remove 2nd and 3rd" onClick="model2.remove(1);model2.remove(1);"/>
+	<button label="remove model" onClick="lb2.setModel(null)"/>
+	<button label="set model" onClick="lb2.setModel(model2)"/>
 </window>
