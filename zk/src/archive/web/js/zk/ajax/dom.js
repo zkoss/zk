@@ -978,7 +978,8 @@ zDom = { //static methods
 		ifr.style.cssText = "position:absolute;overflow:hidden;filter:alpha(opacity=0)";
 		ifr.frameBorder = "no";
 		ifr.tabIndex = -1;
-		ifr.src = "";
+		ifr.src = "javascript:false;";
+			//IE: prevent secure/nonsecure warning with HTTPS
 		if (el) {
 			ifr.style.width = el.offsetWidth + "px";
 			ifr.style.height = el.offsetHeight + "px";
@@ -1151,8 +1152,8 @@ zDom = { //static methods
 	},
 
 	newFrame: function (id, src, style) {
-		if (!src) src = zAu.comURI('/web/img/spacer.gif');
-			//IE with HTTPS: we must specify the src
+		if (!src) src = "javascript:false;";
+			//IE: prevent secure/nonsecure warning with HTTPS
 
 		var html = '<iframe id="'+id+'" name="'+id+'" src="'+src+'"';
 		if (style) html += ' style="'+style+'"';
