@@ -392,7 +392,8 @@ zkPop = {
 				ctx._stackup.style.display = "block";
 			}
 		}
-
+		zkPop._fixWdh(ctx);
+		zkPop._fixHgh(ctx);
 		zk.cleanVisibility(ctx);
 		if (asap)
 			zkau.send({uuid: ctx.id, cmd: "onOpen",
@@ -421,10 +422,25 @@ zkPop = {
 			zk.remove(ctx._stackup);
 		ctx._stackup = null;
 	},
+	getOffsetHeight: function (cmp) {
+		var h = cmp.offsetHeight - 1, 
+			tl = zk.firstChild(cmp, "DIV"),	
+			bl = zk.lastChild(cmp, "DIV"),
+			n = $e(cmp.id + "!cave").parentNode,
+			bd = $e(cmp.id + "!body");
+		
+			h -= tl.offsetHeight;
+			h -= bl.offsetHeight;
+			h -= zk.getPadBorderHeight(n);
+			h -= zk.getPadBorderHeight(bd);
+		return h;
+	},
 	setAttr: function (cmp, nm, val) {
-		if ("style.width" == nm) {
+		if ("style.width" == nm || "style.height" == nm) {
 			zkau.setAttr(cmp, nm, val);
-			zkPop.onVisi(cmp);
+			zk.onVisiAt(cmp);
+			zkPop._fixWdh(cmp);
+			zkPop._fixHgh(cmp);
 			return true;
 		}
 		return false;
@@ -436,6 +452,36 @@ Object.extend(Object.extend(zk.Popup.prototype, zk.Floats.prototype), {
 		zkPop._close(el);
 	}
 });
+zkPop._fixWdh = zk.ie7 ? function(cmp) {
+	var wdh = cmp.style.width,
+		tl = zk.firstChild(cmp, "DIV"),	
+		bl = zk.lastChild(cmp, "DIV"),
+		n = $e(cmp.id + "!cave").parentNode;
+	if (!wdh || wdh == "auto") {
+		var diff = zk.getPadBorderWidth(n.parentNode) + zk.getPadBorderWidth(n.parentNode.parentNode);
+		if (tl) {
+			var tr = zk.firstChild(tl,"DIV");
+			tr.style.width = n.offsetWidth + diff + "px";
+		}		
+		if (bl) {
+			var br = zk.firstChild(bl,"DIV");
+			br.style.width = n.offsetWidth + diff + "px";
+		}
+	} else {
+		if (tl) tl.firstChild.style.width = "";
+		if (bl) bl.firstChild.style.width = "";
+	}
+} : zk.voidf;
+zkPop._fixHgh = function (cmp) {
+	var hgh = cmp.style.height,
+	n = $e(cmp.id + "!cave");
+	if (zk.ie6Only && ((hgh && hgh != "auto" )|| n.style.height)) n.style.height = "0px";
+	if (hgh && hgh != "auto")
+		zk.setOffsetHeight(n, zkPop.getOffsetHeight(cmp));
+	else 
+		n.style.height = "auto";
+	
+};
 if (!zkPop._pop)
 	zkau.floats.push(zkPop._pop = new zk.Popup()); //hook to zkau.js
 

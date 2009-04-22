@@ -53,7 +53,7 @@ ZK 3.6.1
   2778334: The doModal window in IE6 with SSL shows security issue
   2710830: Position doesn't work if closable is set for window
   2777216: Problem paging detail at Grid Component
-
+  2688197: Popup border disappearance on IE 7
 	--------
 ZK 3.6.0
 March 2, 2009
