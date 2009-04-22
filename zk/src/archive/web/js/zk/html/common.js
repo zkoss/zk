@@ -297,7 +297,8 @@ zk.makeStackup = function (cmp, id, anchor) {
 	ifr.style.cssText = "position:absolute;overflow:hidden;filter:alpha(opacity=0)";
 	ifr.frameBorder = "no";
 	ifr.tabIndex = -1;
-	ifr.src = "";
+	ifr.src = zk.ie6Only ? zk.getUpdateURI('/web/img/spacer.gif'): "";
+		//IE with HTTPS: we must specify the src
 	if (cmp) {
 		ifr.style.left = cmp.style.left;
 		ifr.style.top = cmp.style.top;
@@ -1795,7 +1796,8 @@ zk.newFrame = function (name, src, style) {
 	var frm = $e(name);
 	if (frm) return frm;
 
-	if (!src) src = zk.getUpdateURI('/web/img/spacer.gif');
+	if (!src)
+		src = zk.ie6Only ? zk.getUpdateURI('/web/img/spacer.gif'): "";
 		//IE with HTTPS: we must specify the src
 
 	var html = '<iframe id="'+name+'" name="'+name+'" src="'+src+'"';
