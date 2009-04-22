@@ -111,6 +111,20 @@ public class AuInvoke extends AuResponse {
 		super("invoke", comp, new String[] {comp.getUuid(), function,
 			arg1, arg2, arg3});
 	}
+	/** Construct AuInvoke to call the peer widget's member function with
+	 * an array of arguments.
+	 *
+	 * @param comp the component that the widget is associated with.
+	 * It cannot be null.
+	 * @param function the function name
+	 * @param args the additional arguments. It could be null, String, Date,
+	 * {@link org.zkoss.zk.ui.util.DeferredValue},
+	 * and any kind of objects.
+	 * @since 3.6.1
+	 */
+	public AuInvoke(Component comp, String function, Object[] args) {
+		super("invoke", comp, toData(comp, function, args));
+	}
 	/** Construct AuInvoke to call a client function with variable number of
 	 * arguments.
 	 * Notice that the component itself will be inserted in front of
@@ -128,11 +142,11 @@ public class AuInvoke extends AuResponse {
 		super("invoke", comp, toData(comp, function, args));
 	}
 	private static
-	String[] toData(Component comp, String function, String[] args) {
+	Object[] toData(Component comp, String function, Object[] args) {
 		if (args == null)
 			return new String[] {comp.getUuid(), function};
 
-		final String[] data = new String[args.length + 2];
+		final Object[] data = new Object[args.length + 2];
 		data[0] = comp.getUuid();
 		data[1] = function;
 		for (int j = 0; j < args.length; ++j)

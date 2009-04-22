@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F36-2314215.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Apr 22 16:35:11     2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<popup id="pp">
+		Here is popup
+	</popup>
+	The following buttons should work as the same as the image.
+	<div height="50px"></div>
+	<hbox>
+		<div width="150px"></div>
+		<button label="before_start"
+			onClick='pp.open(self, "before_start");' />
+		<button label="before_end"
+			onClick='pp.open(self, "before_end");' />
+		<button label="after_start"
+			onClick='pp.open(self, "after_start");' />
+		<button label="after_end" onClick='pp.open(self, "after_end");' />
+	</hbox>
+	<hbox>
+		<div width="150px"></div>
+		<button label="start_before"
+			onClick='pp.open(self, "start_before");' />
+		<button label="start_after"
+			onClick='pp.open(self, "start_after");' />
+		<button label="end_before"
+			onClick='pp.open(self, "end_before");' />
+		<button label="end_after" onClick='pp.open(self, "end_after");' />
+		<button label="overlap" onClick='pp.open(self, "overlap");' />
+		<button label="after_pointer"
+			onClick='pp.open(self, "after_pointer");' />
+		<button label="at_pointer"
+			onClick='pp.open(self, "at_pointer");' />
+	</hbox>
+	<div height="50px"></div>
+	<image src="/test/popup1.JPG"/>
+</zk>
