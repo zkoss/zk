@@ -52,6 +52,7 @@ ZK 3.6.1
   2777293: Tree keeps old data with new Model
   2778334: The doModal window in IE6 with SSL shows security issue
   2710830: Position doesn't work if closable is set for window
+  2777216: Problem paging detail at Grid Component
 
 	--------
 ZK 3.6.0

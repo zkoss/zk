@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2777216.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Apr 22 17:17:57     2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<window id="wnditemlist" title="List Item" mode="overlapped">
+	Please add 5 items, then the paging bar in  IE7 shouldn't appear weird
+	<grid id="itemlist" mold="paging" pageSize="4">
+		<columns>
+			<column label="Kode" />
+
+		</columns>
+		<rows id="rows"/>
+	</grid>
+	<button label="addItem">
+		<attribute name="onClick"><![CDATA[
+			Row row = new Row();
+			new Label("TEST TEST TEST").setParent(row);
+			row.setParent(rows);
+		]]></attribute>
+	</button>
+</window>
+
+
