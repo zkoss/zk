@@ -50,6 +50,7 @@ ZK 3.6.1
   2697462: Tree selection is remembered even when unselected
   2777293: Tree keeps old data with new Model
   2778334: The doModal window in IE6 with SSL shows security issue
+  2710830: Position doesn't work if closable is set for window
 
 	--------
 ZK 3.6.0
