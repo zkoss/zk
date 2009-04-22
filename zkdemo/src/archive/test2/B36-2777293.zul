@@ -34,6 +34,7 @@ org.zkoss.zkdemo.userguide.BigList(1000)));
 <attribute name="onCreate">
 tree.renderItemByPath(new int[]{1,1,1,1,1,1,1,1,1,1,1,1});
 tree.renderItemByPath(new int[]{0,0,0,0,0,0,0,0,0,0,0,0});
+self.getPagingChild().setAutohide(false);
 </attribute>
 </tree>
 </zk>
