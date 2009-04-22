@@ -1902,14 +1902,29 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 							(Treeitem)selItems.iterator().next(): null;
 					selectItem(item);
 				} else {
-					if (!_multiple)
-						for (Iterator it = new ArrayList(_selItems).iterator(); it.hasNext();) {
-							final Treeitem item = (Treeitem)it.next();
-							if (!selItems.remove(item))
+					int from, to;
+					if (paging) {
+						final Paginal pgi = getPaginal();
+						int pgsz = pgi.getPageSize();
+						from = pgi.getActivePage() * pgsz;
+						to = from + pgsz; //excluded
+					} else {
+						from = to = 0;
+					}
+
+					int j = 0;
+					for (Iterator it = getItems().iterator(); it.hasNext(); ++j) {
+						final Treeitem item = (Treeitem)it.next();
+						if (selItems.remove(item)) {
+							addItemToSelection(item);
+						} else if (!paging) {
+							removeItemFromSelection(item);
+						} else {
+							final int index = getVisibleIndexOfItem(item);
+							if (index >= from && index < to)
 								removeItemFromSelection(item);
 						}
-					for (Iterator it = selItems.iterator(); it.hasNext();)
-						addItemToSelection((Treeitem)it.next());
+					}
 				}
 			} finally {
 				_noSmartUpdate = false;

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2697462.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Apr 22 09:51:34     2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+Select an item and un-select it. Now navigate to another page in the tree and come back.
+The un-selected item cannot now be selected, this is correct.
+<zscript>
+import org.zkoss.zkdemo.test2.tree.BinaryTreeModel;
+
+BinaryTreeModel btm = new BinaryTreeModel(new ArrayList(new
+org.zkoss.zkdemo.userguide.BigList(1000)));
+</zscript>
+<tree id="tree" mold="paging" pageSize="15" model="&#36;{btm}"
+checkmark="true" multiple="true">
+<attribute name="onCreate">
+tree.renderItemByPath(new int[]{1,1,1,1,1,1,1,1,1,1,1,1});
+tree.renderItemByPath(new int[]{0,0,0,0,0,0,0,0,0,0,0,0});
+</attribute>
+</tree>
+</zk>
