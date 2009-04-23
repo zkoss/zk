@@ -254,7 +254,7 @@ zkWnd2.onVisi = zkWnd2.onSize = function (cmp) {
 	if (!zkWnd2._embedded(cmp)) {
 		var pos = getZKAttr(cmp, "pos");
 		// sync the position, if any.
-		if (pos) zkWnd2._center(cmp, false, pos);
+		if (pos) zkWnd2._center(cmp, null, pos);
 		zkWnd2.syncShadow(cmp);
 	}
 };
@@ -1077,7 +1077,7 @@ zkWnd2._center = function (cmp, zi, pos) {
 	}
 	zkau.sendOnMove(cmp);
 
-	if (zi || zi == 0) {
+	if (zi || zi === 0) {
 		cmp.style.zIndex = zi;
 		zkau.sendOnZIndex(cmp);
 		//let the server know the position. otherwise, invalidate will
