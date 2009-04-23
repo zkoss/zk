@@ -71,7 +71,8 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  * can even hybrid them together though it is not generally a good practice.</p>
  *
  * <p>The tag:expression or tag='expression' is a generic form to bind more metainfo to the attrY of the componentX. 
- * The currently supported tags includes "load-when", "save-when", "access", and "converter".</p>
+ * The currently supported tags includes "load-when", "save-when", "access", "converter", "load-after"(since 3.6.1), 
+ * and "save-after"(since 3.6.1).</p>
  * 
  * <ul>
  * <li>load-when. You can specify the events concerned when to load the attribute of the component from the bean.
@@ -220,6 +221,18 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  * used types. However, if you specify the TypeConverter class name, this DataBinder will new an instance and use 
  * it to cast the class.
  * </li>
+ * 
+ * <li>(Since 3.6.1) load-after. Similar to load-when. You can specify the events concerned when to load the 
+ * attribute of the component from the bean. The only difference is that the loading is done <b>AFTER</b> other
+ * event listeners listening to the same event are processed; while in load-when the loading is done <b>BEFORE</b> other
+ * event listeners listening to the same event are processed. 
+ * </li>
+ * 
+ * <li>(Since 3.6.1) save-after. Similar to save-when. You can specify the events concerned when to save the
+ * attribute of the component to the bean. The only difference is that the saving is done <b>AFTER</b> other
+ * event listeners listening to the same event are processed; while in save-when the saving is done <b>BEFORE</b> other
+ * event listeners listening to the same event are processed.
+ *</li>
  * </ul>
  * 
  * @since 2.4.0 Supporting @{...} annotations.
@@ -332,10 +345,10 @@ public class AnnotateDataBinder extends DataBinder {
 		final List props = compCtrl.getAnnotatedPropertiesBy(annotName);
 		for (final Iterator it = props.iterator(); it.hasNext(); ) {
 			final String propName = (String) it.next();
-			//[0] value, [1] loadWhenEvents, [2] saveWhenEvents, [3] access, [4] converter, [5] args
+			//[0] value, [1] loadWhenEvents, [2] saveWhenEvents, [3] access, [4] converter, [5] args, [6] loadAfterEvents, [7] saveAfterEvents
 			final Object[] objs = loadPropertyAnnotation(comp, propName, annotName);
 			addBinding(comp, propName, (String) objs[0], 
-					(List) objs[1], (List) objs[2], (String) objs[3], (String) objs[4], (Map) objs[5]);
+					(List) objs[1], (List) objs[2], (String) objs[3], (String) objs[4], (Map) objs[5], (List) objs[6], (List) objs[7]);
 		}
 	}
 	
@@ -365,6 +378,8 @@ public class AnnotateDataBinder extends DataBinder {
 				
 				List loadWhenEvents = null;
 				List saveWhenEvents = null;
+				List loadAfterEvents = null;
+				List saveAfterEvents = null;
 				String access = null;
 				String converter = null;
 				Map args = null;
@@ -375,22 +390,34 @@ public class AnnotateDataBinder extends DataBinder {
 					if (tags == null) {
 						continue; //skip
 					}
-					if ("load-when".equals(tags.get(0))) {
-						if (tags.size() > 1 && tags.get(1) != null) {
-							loadWhenEvents = parseExpression((String)tags.get(1), ",");
-						} else {
-							loadWhenEvents.add(NULLIFY);
-						}
+					if ("converter".equals(tags.get(0))) {
+						converter = tags.size() > 1 ? (String) tags.get(1) : NULLIFY;
 					} else if ("save-when".equals(tags.get(0))) {
 						if (tags.size() > 1 && tags.get(1) != null) {
 							saveWhenEvents = parseExpression((String)tags.get(1), ",");
 						} else {
 							saveWhenEvents.add(NULLIFY);
 						}
+					} else if ("load-after".equals(tags.get(0))) {
+						if (tags.size() > 1 && tags.get(1) != null) {
+							loadAfterEvents = parseExpression((String)tags.get(1), ",");
+						} else {
+							loadAfterEvents.add(NULLIFY);
+						}
+					} else if ("load-when".equals(tags.get(0))) {
+						if (tags.size() > 1 && tags.get(1) != null) {
+							loadWhenEvents = parseExpression((String)tags.get(1), ",");
+						} else {
+							loadWhenEvents.add(NULLIFY);
+						}
 					} else if ("access".equals(tags.get(0))) {
 						access = tags.size() > 1 ? (String) tags.get(1) : NULLIFY;
-					} else if ("converter".equals(tags.get(0))) {
-						converter = tags.size() > 1 ? (String) tags.get(1) : NULLIFY;
+					} else if ("save-after".equals(tags.get(0))) {
+						if (tags.size() > 1 && tags.get(1) != null) {
+							saveAfterEvents = parseExpression((String)tags.get(1), ",");
+						} else {
+							saveAfterEvents.add(NULLIFY);
+						}
 					} else {
 						if (args == null) {
 							args = new HashMap(1);
@@ -405,8 +432,14 @@ public class AnnotateDataBinder extends DataBinder {
 				if (saveWhenEvents != null && saveWhenEvents.isEmpty()) {
 					saveWhenEvents = null;
 				}
+				if (loadAfterEvents != null && loadAfterEvents.isEmpty()) {
+					loadAfterEvents = null;
+				}
+				if (saveAfterEvents != null && saveAfterEvents.isEmpty()) {
+					saveAfterEvents = null;
+				}
 				
-				addBinding(comp, attr, (String) expr.get(0), loadWhenEvents, saveWhenEvents, access, converter, args);
+				addBinding(comp, attr, (String) expr.get(0), loadWhenEvents, saveWhenEvents, access, converter, args, loadAfterEvents, saveAfterEvents);
 			}
 		}
 	}

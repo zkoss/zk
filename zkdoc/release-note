@@ -19,6 +19,8 @@ ZK 3.6.1
   2770471: GenericAutowireComposer shall support wiring ZScript varible
   2209199: BeanShell error message shall show the correct line number
   2314215: A way to specify the position of the popup component
+  2778507: Add load-after descriptive to DataBinder
+  2779281: Add save-after descriptive to DataBinder
   
 * Bugs
   2684510: Unable to access implict objects if func defined in other namespace

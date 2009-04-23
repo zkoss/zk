@@ -189,7 +189,7 @@ public class DataBinder implements java.io.Serializable {
 	 */
 	public void addBinding(Component comp, String attr, String expr,
 		List loadWhenEvents, List saveWhenEvents, String access, String converter) {
-		addBinding(comp, attr, expr, loadWhenEvents, saveWhenEvents, access, converter, null);
+		addBinding(comp, attr, expr, loadWhenEvents, saveWhenEvents, access, converter, null, null, null);
 	}
 	
 	/** Binding bean to UI component. 
@@ -207,8 +207,30 @@ public class DataBinder implements java.io.Serializable {
 	 * @param args generic argument map for each binding.
 	 * @since 3.5.0
 	 */
+/*	public void addBinding(Component comp, String attr, String expr,
+			List loadWhenEvents, List saveWhenEvents, String access, String converter, Map args) {
+		addBinding(comp, attr, expr, loadWhenEvents, saveWhenEvents, access, converter, args, null, null);
+	}
+*/
+	/** Binding bean to UI component. 
+	 * @param comp The component to be associated.
+	 * @param attr The attribute of the component to be associated.
+	 * @param expr The expression to associate the data bean.
+	 * @param loadWhenEvents The event list when to load data.
+	 * @param saveWhenEvents The event list when to save data.
+	 * @param access In the view of UI component: "load" load only, 
+	 * "both" load/save, "save" save only when doing
+	 * data binding. null means using the default access natural of the component. 
+	 * e.g. Label.value is "load", but Textbox.value is "both".
+	 * @param converter The converter class used to convert classes between component 
+	 *  and the associated bean. null means using the default class conversion method.
+	 * @param args generic argument map for each binding.
+	 * @param loadAfterEvents the event list when to load data after.
+	 * @param saveAfterEvents the event list when to save data after.
+	 * @since 3.6.1
+	 */
 	public void addBinding(Component comp, String attr, String expr,
-		List loadWhenEvents, List saveWhenEvents, String access, String converter, Map args) {
+		List loadWhenEvents, List saveWhenEvents, String access, String converter, Map args, List loadAfterEvents, List saveAfterEvents) {
 		//since 3.1, 20080416, Henri Chen: add a generic arguments map (string, string)
 		
 		//Since 3.0, 20070726, Henri Chen: we accept "each" to replace "_var" in collection data binding
@@ -244,6 +266,15 @@ public class DataBinder implements java.io.Serializable {
 			if (converter == null && objs[4] != null) {
 				converter = (String) objs[4];
 			}
+			if (args == null && objs[5] != null) {
+				args = (Map) objs[5];
+			}
+			if (loadAfterEvents == null && objs[6] != null) {
+				loadAfterEvents = (List) objs[6];
+			}
+			if (saveAfterEvents == null && objs[7] != null) {
+				saveAfterEvents = (List) objs[7];
+			}
 		}
 	
 		//nullify check
@@ -263,9 +294,25 @@ public class DataBinder implements java.io.Serializable {
 			}
 		}
 
-		Set saveEvents = null;
+		LinkedHashSet lafterEvents = null;
+		if (loadAfterEvents != null && loadAfterEvents.size() > 0) {
+			lafterEvents = new LinkedHashSet(loadAfterEvents.size());
+			for(final Iterator it = loadAfterEvents.iterator(); it.hasNext();) {
+				final String event = (String) it.next();
+				if (NULLIFY.equals(event)) {
+					lafterEvents.clear();
+				} else {
+					lafterEvents.add(event);
+				}
+			}
+			if (lafterEvents.isEmpty()) { 
+				lafterEvents = null;
+			}
+		}
+		
+		LinkedHashSet saveEvents = null;
 		if (saveWhenEvents != null && saveWhenEvents.size() > 0) {
-			saveEvents = new HashSet(saveWhenEvents.size());
+			saveEvents = new LinkedHashSet(saveWhenEvents.size());
 			for(final Iterator it = saveWhenEvents.iterator(); it.hasNext();) {
 				final String event = (String) it.next();
 				if (NULLIFY.equals(event)) {
@@ -276,6 +323,22 @@ public class DataBinder implements java.io.Serializable {
 			}
 			if (saveEvents.isEmpty()) { 
 				saveEvents = null;
+			}
+		}
+		
+		LinkedHashSet safterEvents = null;
+		if (saveAfterEvents != null && saveAfterEvents.size() > 0) {
+			safterEvents = new LinkedHashSet(saveAfterEvents.size());
+			for(final Iterator it = saveAfterEvents.iterator(); it.hasNext();) {
+				final String event = (String) it.next();
+				if (NULLIFY.equals(event)) {
+					safterEvents.clear();
+				} else {
+					safterEvents.add(event);
+				}
+			}
+			if (safterEvents.isEmpty()) { 
+				safterEvents = null;
 			}
 		}
 
@@ -298,11 +361,13 @@ public class DataBinder implements java.io.Serializable {
 			final Binding binding = (Binding) attrMap.get(attr);
 			binding.setExpression(expr);
 			binding.setLoadWhenEvents(loadEvents);
+			binding.setLoadAfterEvents(lafterEvents);
 			binding.setSaveWhenEvents(saveEvents);
+			binding.setSaveAfterEvents(safterEvents);
 			binding.setAccess(access);
 			binding.setConverter(converter);
 		} else {
-			attrMap.put(attr, new Binding(this, comp, attr, expr, loadEvents, saveEvents, access, converter, args));
+			attrMap.put(attr, new Binding(this, comp, attr, expr, loadEvents, saveEvents, access, converter, args, lafterEvents, safterEvents));
 		}
 	}
 	
@@ -506,7 +571,7 @@ public class DataBinder implements java.io.Serializable {
 		}
 	}
 
-	//[0] expr, [1] loadWhenEvents, [2] saveWhenEvents, [3] access, [4] converter, [5] args
+	//[0] expr, [1] loadWhenEvents, [2] saveWhenEvents, [3] access, [4] converter, [5] args, [6] loadAfterEvents, [7] saveAfterEvents
 	protected Object[] loadPropertyAnnotation(Component comp, String propName, String bindName) {
 		ComponentCtrl compCtrl = (ComponentCtrl) comp;
 		Annotation ann = compCtrl.getAnnotation(propName, bindName);
@@ -514,6 +579,8 @@ public class DataBinder implements java.io.Serializable {
 			final Map attrs = ann.getAttributes(); //(tag, tagExpr)
 			List loadWhenEvents = null;
 			List saveWhenEvents = null;
+			List loadAfterEvents = null;
+			List saveAfterEvents = null;
 			String access = null;
 			String converter = null;
 			String expr = null;
@@ -524,12 +591,16 @@ public class DataBinder implements java.io.Serializable {
 				String tagExpr = (String) entry.getValue();
 				if ("save-when".equals(tag)) {
 					saveWhenEvents = parseExpression(tagExpr, ",");
+				} else if ("load-after".equals(tag)) {
+					loadAfterEvents = parseExpression(tagExpr, ",");
 				} else if ("access".equals(tag)) {
 					access = tagExpr;
 				} else if ("converter".equals(tag)) {
 					converter = tagExpr;
 				} else if ("load-when".equals(tag)) {
 					loadWhenEvents = parseExpression(tagExpr, ",");
+				} else if ("save-after".equals(tag)) {
+					saveAfterEvents = parseExpression(tagExpr, ",");
 				} else if ("value".equals(tag)) {
 					expr = tagExpr;
 				} else {
@@ -539,9 +610,9 @@ public class DataBinder implements java.io.Serializable {
 					args.put(tag, tagExpr);
 				}
 			}
-			return new Object[] {expr, loadWhenEvents, saveWhenEvents, access, converter, args};
+			return new Object[] {expr, loadWhenEvents, saveWhenEvents, access, converter, args, loadAfterEvents, saveAfterEvents};
 		}
-		return new Object[6];
+		return new Object[8];
 	}
 	
 	//late init
