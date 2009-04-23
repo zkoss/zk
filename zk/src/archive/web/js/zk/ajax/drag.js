@@ -77,6 +77,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 	_startDrag: function(evt) {
 		//disable selection
 		zDom.disableSelection(document.body); // Bug #1820433
+		zDom.clearSelection(); // Bug #2721980
 		if (this.opts.overlay) { // Bug #1911280
 			this._overlay = document.createElement("DIV");
 			document.body.appendChild(this._overlay);
