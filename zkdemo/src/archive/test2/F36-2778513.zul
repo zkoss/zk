@@ -1,0 +1,3 @@
+<window id="xwin" apply="org.zkoss.zkdemo.test2.VariableComposer">
+If you see two "A1" then it is correct: ${xwin$composer.a1}, ${xwin$VariableComposer.a1}.
+</window>

@@ -54,10 +54,10 @@ div.z-grid-body {
 	background: white; border: 0; overflow: auto; width: 100%;
 }
 div.z-grid-pgi-b {
-	border-top: 1px solid #AAB; overflow: hidden;
+	border-top: 1px solid #AAB; overflow: hidden; width: 100%;
 }
 div.z-grid-pgi-t {
-	border-bottom: 1px solid #AAB; overflow: hidden;
+	border-bottom: 1px solid #AAB; overflow: hidden; width: 100%;
 }
 div.z-grid-footer {
 	background: #DAE7F6; border-top: 1px solid #9EB6CE;

@@ -32,6 +32,7 @@ import org.zkoss.zk.ui.metainfo.ComponentInfo;
  * @author tomyeh
  * @since 3.0.0
  * @since Composer
+ * @see FullComposer
  */
 public interface ComposerExt {
 	/** Invokes before composing a component.
@@ -48,7 +49,7 @@ public interface ComposerExt {
 	 * In other words, it is ignored.
 	 */
 	public ComponentInfo doBeforeCompose(Page page, Component parent,
-	ComponentInfo compInfo);
+	ComponentInfo compInfo) throws Exception;
 	/** Invokes after the component is instantiated and initialized, but
 	 * before composing any child.
 	 * @param comp the component being composed

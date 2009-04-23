@@ -486,6 +486,30 @@ public class Components {
 		new Wire(controller, separator).wireVariables(page);
 	}
 
+	/** Wire controller as a variable objects of the specified component with a custom separator.
+	 * The separator is used to separate the component ID and the controller.
+	 * By default, it is '$'. However, for Groovy or other environment that
+	 * '$' is not applicable, you can invoke {@link #wireController(Component, Object, char)}
+	 * to use '_' as the separator.
+	 * @since 3.6.1
+	 */
+	public static final
+	void wireController(Component comp, Object controller) {
+		new Wire(controller).wireController(comp, comp.getId());
+	}
+	
+	/** Wire controller as a variable objects of the specified component with a custom separator.
+	 * The separator is used to separate the component ID and the controller.
+	 * By default, it is '$'. However, for Groovy or other environment that
+	 * '$' is not applicable, you can invoke this method to use '_' as
+	 * the separator.
+	 * @since 3.6.1
+	 */
+	public static final
+	void wireController(Component comp, Object controller, char separator) {
+		new Wire(controller, separator).wireController(comp, comp.getId());
+	}
+	
 	/** <p>Adds forward conditions to myid source component so onXxx source 
 	 * event received by 
 	 * myid component can be forwarded to the specified target 
@@ -708,6 +732,35 @@ public class Components {
 				cls = cls.getSuperclass();
 			} while (cls != null && !Object.class.equals(cls));
 		}
+		/**
+		 * Inject controller as variable of the specified component. You can
+		 * then access the controller with the name pattern of 
+		 * id + separator + "composer" 
+		 * or id + separator + controller's class name.
+		 * e.g. if the given id is "xwin" and the controller class name is "org.zkoss.MyController"
+		 * then you can access the controller with the name of "xwin$MyController" or "xwin$composer".
+		 *   
+		 * @param comp component to be assigned the variable
+		 * @param id the id used in controller name pattern
+		 * @since 3.6.1
+		 */
+		public void wireController(Component comp, String id) {
+			//feature #2778513, support {id}$composer name
+			final String composerid =  id + _separator + "composer";
+			if (!comp.containsVariable(composerid, true)) {
+				comp.setVariable(composerid, _controller, true);
+			}
+			comp.setVariable(varname(id, _controller.getClass()), _controller, true);
+		}
+		
+		public void wireController(Page page, String id) {
+			final String composerid =  id + _separator + "composer";
+			if (!page.containsVariable(composerid)) {
+				page.setVariable(composerid, _controller);
+			}
+			page.setVariable(varname(id, _controller.getClass()), _controller);
+		}
+		
 		public void wireFellows(IdSpace idspace) {
 			//inject fellows
 			final Collection fellows = idspace.getFellows();
@@ -718,7 +771,7 @@ public class Components {
 			//inject space owner ancestors
 			IdSpace xidspace = idspace;
 			if (xidspace instanceof Component) {
-				((Component)xidspace).setVariable(varname(((Component)idspace).getId(), _controller.getClass()), _controller, true);
+				wireController((Component)xidspace, ((Component)idspace).getId());
 				while (true) {
 					final Component parent = ((Component)xidspace).getParent();
 					if (parent == null) {//hit page
@@ -729,16 +782,16 @@ public class Components {
 					injectFellow(xidspace);
 				}
 			} else {
-				((Page)xidspace).setVariable(varname(((Component)idspace).getId(), _controller.getClass()), _controller);
+				wireController((Page)xidspace, ((Component)idspace).getId());
 				injectFellow((Page) idspace);
 			}
 		}
 		public void wireVariables(Page page) {
-			page.setVariable(varname(page.getId(), _controller.getClass()), _controller);
+			wireController(page, page.getId());
 			myWireVariables(page);
 		}
 		public void wireVariables(Component comp) {
-			comp.setVariable(varname(comp.getId(), _controller.getClass()), _controller, true);
+			wireController(comp, comp.getId());
 			myWireVariables(comp);
 		}
 		private void myWireVariables(Object x) {

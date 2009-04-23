@@ -149,8 +149,8 @@ public class AuInvoke extends AuResponse {
 	 * @param args the additional arguments. It could be null, String, Date,
 	 * {@link org.zkoss.zk.ui.util.DeferredValue},
 	 * and any kind of objects that
-	 * the client accepts (marshaled by JSON).
-	 * @since 5.0.0
+	 * the client accepts (marshaled by JSON since 5.0.0).
+	 * @since 3.6.1
 	 */
 	public AuInvoke(Component comp, String function, Object[] args) {
 		super("invoke", comp, toData(comp, function, args));

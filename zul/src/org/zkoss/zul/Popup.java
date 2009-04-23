@@ -121,7 +121,7 @@ public class Popup extends XulElement implements org.zkoss.zul.api.Popup {
 	 * after is the bottom, start is the left and end is the right. For right to left locales,
 	 * start is the right and end is the left. 
 	 * 
-	 * @since 5.0.0
+	 * @since 3.6.1
 	 */
 	public void open(Component ref, String position) {
 		response("popup", new AuInvoke(this, "open", new Object[] {ref.getUuid(), null, position}));

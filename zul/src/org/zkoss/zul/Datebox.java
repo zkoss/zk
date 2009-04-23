@@ -267,7 +267,7 @@ public class Datebox extends FormatInputElement implements org.zkoss.zul.api.Dat
 
 	//-- super --//
 	public void setConstraint(String constr) {
-		setConstraint(new SimpleDateConstraint(constr));
+		setConstraint(constr != null ? new SimpleDateConstraint(constr): null); //Bug 2564298
 	}
 	protected Object coerceFromString(String value) throws WrongValueException {
 		if (value == null || value.length() == 0)

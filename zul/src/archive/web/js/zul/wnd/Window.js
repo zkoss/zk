@@ -346,7 +346,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		}
 		this._fixHgh();
 		this._fixWdh();
-		this._syncShadow();
+		if (this._mode != 'embedded') {
+			this._updateDomPos();
+			this._syncShadow();
+		}
 	},
 	onShow: _zkf,
 	onFloatUp: function (wgt) {

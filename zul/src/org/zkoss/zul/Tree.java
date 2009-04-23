@@ -1107,6 +1107,8 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 
 	public void onChildAdded(Component child) {
 		super.onChildAdded(child);
+		if (child instanceof Treechildren)
+			addVisibleItemCount(((Treechildren) child).getVisibleItemCount());
 		invalidate();
 	}
 	public void onChildRemoved(Component child) {
@@ -1118,6 +1120,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 			_treechildren = null;
 			_selItems.clear();
 			_sel = null;
+			addVisibleItemCount(-((Treechildren) child).getVisibleItemCount());
 		} else if (_paging == child) {
 			_paging = null;
 			if (_pgi == child) _pgi = null;
@@ -1408,7 +1411,8 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 				if (_model != null) {
 					_model.removeTreeDataListener(_dataListener);
 				} else {
-					getItems().clear();
+					if (_treechildren != null) _treechildren.detach();
+						//don't call getItems().clear(), since it readonly
 				}
 
 				_model = model;
@@ -1418,7 +1422,8 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		} else if (_model != null) {
 			_model.removeTreeDataListener(_dataListener);
 			_model = null;
-			getItems().clear();
+			if (_treechildren != null) _treechildren.detach();
+				//don't call getItems().clear(), since it readonly
 		}
 	}
 	
@@ -1521,6 +1526,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		public void render(Treeitem ti, Object node){
 			Treecell tc = new Treecell(Objects.toString(node));
 			Treerow tr = null;
+			ti.setValue(node);
 			if(ti.getTreerow()==null){
 				tr = new Treerow();
 				tr.setParent(ti);
@@ -1860,14 +1866,29 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 							(Treeitem)selItems.iterator().next(): null;
 					selectItem(item);
 				} else {
-					if (!_multiple)
-						for (Iterator it = new ArrayList(_selItems).iterator(); it.hasNext();) {
-							final Treeitem item = (Treeitem)it.next();
-							if (!selItems.remove(item))
+					int from, to;
+					if (paging) {
+						final Paginal pgi = getPaginal();
+						int pgsz = pgi.getPageSize();
+						from = pgi.getActivePage() * pgsz;
+						to = from + pgsz; //excluded
+					} else {
+						from = to = 0;
+					}
+
+					int j = 0;
+					for (Iterator it = getItems().iterator(); it.hasNext(); ++j) {
+						final Treeitem item = (Treeitem)it.next();
+						if (selItems.remove(item)) {
+							addItemToSelection(item);
+						} else if (!paging) {
+							removeItemFromSelection(item);
+						} else {
+							final int index = getVisibleIndexOfItem(item);
+							if (index >= from && index < to)
 								removeItemFromSelection(item);
 						}
-					for (Iterator it = selItems.iterator(); it.hasNext();)
-						addItemToSelection((Treeitem)it.next());
+					}
 				}
 			} finally {
 				_noSmartUpdate = false;

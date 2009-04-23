@@ -52,7 +52,9 @@ public class Binding implements java.io.Serializable {
 	private String _attr;
 	private String _expression; //the bean expression
 	private LinkedHashSet _loadWhenEvents;
-	private Set _saveWhenEvents;
+	private LinkedHashSet _loadAfterEvents;
+	private LinkedHashSet _saveWhenEvents;
+	private LinkedHashSet _saveAfterEvents; 
 	private boolean _loadable = true;
 	private boolean _savable;
 	private TypeConverter _converter;
@@ -73,8 +75,8 @@ public class Binding implements java.io.Serializable {
 	 * and the associated bean expression. null means using the default class conversion method.
 	 */
 	/*package*/ Binding(DataBinder binder, Component comp, String attr, String expr, 
-		LinkedHashSet loadWhenEvents, Set saveWhenEvents, String access, String converter) {
-		this(binder, comp, attr, expr, loadWhenEvents, saveWhenEvents, access, converter, null);
+		LinkedHashSet loadWhenEvents, LinkedHashSet saveWhenEvents, String access, String converter) {
+		this(binder, comp, attr, expr, loadWhenEvents, saveWhenEvents, access, converter, null, null, null);
 	}
 	
 	/** Constrcutor to form a binding between UI component and backend data bean.
@@ -93,13 +95,38 @@ public class Binding implements java.io.Serializable {
 	 * @since 3.1
 	 */
 	/*package*/ Binding(DataBinder binder, Component comp, String attr, String expr, 
-		LinkedHashSet loadWhenEvents, Set saveWhenEvents, String access, String converter, Map args) {
+		LinkedHashSet loadWhenEvents, LinkedHashSet saveWhenEvents, String access, String converter, Map args) {
+		this(binder, comp, attr, expr, loadWhenEvents, saveWhenEvents, access, converter, args, null, null);
+	}
+	
+	/** Constrcutor to form a binding between UI component and backend data bean.
+	 * @param binder the associated Data Binder.
+	 * @param comp The concerned component
+	 * @param attr The component attribute
+	 * @param expr The bean expression.
+	 * @param loadWhenEvents The event set when to load data.
+	 * @param saveWhenEvents The event set when to save data.
+	 * @param access In the view of UI component: "load" load only, "both" load/save, 
+	 *	"save" save only when doing data binding. null means using the default access 
+	 *	natural of the component. e.g. Label.expr is "load", but Textbox.expr is "both".
+	 * @param converter The converter class used to convert classes between component attribute 
+	 * and the associated bean expression. null means using the default class conversion method.
+	 * @param args generic arguments
+	 * @param loadAfterEvents the event set when to load data after
+	 * @param saveAfterEvents the event set when to save data after
+	 * @since 3.6.1
+	 */
+	/*package*/ Binding(DataBinder binder, Component comp, String attr, String expr, 
+		LinkedHashSet loadWhenEvents, LinkedHashSet saveWhenEvents, String access, String converter, Map args,
+		LinkedHashSet loadAfterEvents, LinkedHashSet saveAfterEvents) {
 		_binder = binder;
 		_comp = comp;
 		setAttr(attr);
 		setExpression(expr);
 		setLoadWhenEvents(loadWhenEvents);
+		setLoadAfterEvents(loadAfterEvents);
 		setSaveWhenEvents(saveWhenEvents);
+		setSaveAfterEvents(saveAfterEvents);
 		setAccess(access);
 		setConverter(converter);
 		setArgs(args);
@@ -172,7 +199,7 @@ public class Binding implements java.io.Serializable {
 	/** Set save-when event expression.
 	 * @param saveWhenEvents the save-when expression.
 	 */
-	/*package*/ void setSaveWhenEvents(Set saveWhenEvents) {
+	/*package*/ void setSaveWhenEvents(LinkedHashSet saveWhenEvents) {
 		_saveWhenEvents = saveWhenEvents;
 	}
 	
@@ -181,6 +208,20 @@ public class Binding implements java.io.Serializable {
 	public Set getSaveWhenEvents() {
 		return _saveWhenEvents;
 	}
+
+	/** Set save-after event expression.
+	 * @param saveAfterEvents the save-after expression.
+	 */
+	/*package*/ void setSaveAfterEvents(LinkedHashSet saveAfterEvents) {
+		_saveAfterEvents = saveAfterEvents;
+	}
+	
+	/** Get save-after event expression.
+	 */
+	public Set getAfterWhenEvents() {
+		return _saveAfterEvents;
+	}
+	
 	
 	/** Add load-when event expression.
 	 * @param loadWhenEvent the load-when expression.
@@ -193,6 +234,20 @@ public class Binding implements java.io.Serializable {
 	 */
 	public LinkedHashSet getLoadWhenEvents() {
 		return _loadWhenEvents;
+	}
+	
+	/** Add load-after event expression.
+	 * 
+	 * @param loadAfterEvents the load-after expression.
+	 */
+	/*package*/ void setLoadAfterEvents(LinkedHashSet loadAfterEvents) {
+		_loadAfterEvents = loadAfterEvents;
+	}
+	
+	/** Get load-after event expression set.
+	 */
+	public LinkedHashSet getLoadAfterEvents() {
+		return _loadAfterEvents;
 	}
 
 	/** Set accessibility.
@@ -399,45 +454,89 @@ public class Binding implements java.io.Serializable {
 	}		
 	
 	/*package*/ void registerSaveEvents(Component comp) {
-		if (_saveWhenEvents != null && isSavable()) { //bug 1804356
-			for(final Iterator it = _saveWhenEvents.iterator(); it.hasNext(); ) {
-				final String expr = (String) it.next();
-				final Object[] objs =
-					ComponentsCtrl.parseEventExpression(comp, expr, comp, false);
-				//objs[0] component, objs[1] event name
-				final Component target = (Component) objs[0];
-				final String evtname = (String) objs[1];
-
-				SaveEventListener listener = (SaveEventListener)
-					target.getAttribute("zk.SaveEventListener."+evtname);
-				if (listener == null) {
-					listener = new SaveEventListener();
-					target.setAttribute("zk.SaveEventListener."+evtname, listener);
-					target.addEventListener(evtname, listener);
+		if (isSavable()) { //bug 1804356
+			if (_saveWhenEvents != null) { 
+				for(final Iterator it = _saveWhenEvents.iterator(); it.hasNext(); ) {
+					final String expr = (String) it.next();
+					final Object[] objs =
+						ComponentsCtrl.parseEventExpression(comp, expr, comp, false);
+					//objs[0] component, objs[1] event name
+					final Component target = (Component) objs[0];
+					final String evtname = (String) objs[1];
+	
+					SaveEventListener listener = (SaveEventListener)
+						target.getAttribute("zk.SaveEventListener."+evtname);
+					if (listener == null) {
+						listener = new SaveEventListener();
+						target.setAttribute("zk.SaveEventListener."+evtname, listener);
+						target.addEventListener(evtname, listener);
+					}
+					listener.addDataTarget(this, comp);
 				}
-				listener.addDataTarget(this, comp);
+			}
+			if (_saveAfterEvents != null) {
+				for(final Iterator it = _saveAfterEvents.iterator(); it.hasNext(); ) {
+					final String expr = (String) it.next();
+					final Object[] objs =
+						ComponentsCtrl.parseEventExpression(comp, expr, comp, false);
+					//objs[0] component, objs[1] event name
+					final Component target = (Component) objs[0];
+					final String evtname = (String) objs[1];
+	
+					SaveAfterEventListener listener = (SaveAfterEventListener)
+						target.getAttribute("zk.SaveAfterEventListener."+evtname);
+					if (listener == null) {
+						listener = new SaveAfterEventListener();
+						target.setAttribute("zk.SaveAfterEventListener."+evtname, listener);
+						target.addEventListener(evtname, listener);
+						target.addEventListener(evtname+"SaveAfter", listener);
+					}
+					listener.addDataTarget(this, comp);
+				}
 			}
 		}
 	}
 	
 	/*package*/ void registerLoadEvents(Component comp) {
-		if (_loadWhenEvents != null && isLoadable()) { //bug 1804356
-			for(final Iterator it = _loadWhenEvents.iterator(); it.hasNext(); ) {
-				final String expr = (String) it.next();
-				final Object[] objs =
-					ComponentsCtrl.parseEventExpression(comp, expr, comp, false);
-				//objs[0] component, objs[1] event name
-				final Component target = (Component) objs[0];
-				final String evtname = (String) objs[1];
-				
-				LoadEventListener listener = (LoadEventListener)
-					target.getAttribute("zk.LoadEventListener."+evtname);
-				if (listener == null) {
-					listener = new LoadEventListener();
-					target.setAttribute("zk.LoadEventListener."+evtname, listener);
-					target.addEventListener(evtname, listener);
+		if (isLoadable()) { //bug 1804356
+			if (_loadWhenEvents != null) {
+				for(final Iterator it = _loadWhenEvents.iterator(); it.hasNext(); ) {
+					final String expr = (String) it.next();
+					final Object[] objs =
+						ComponentsCtrl.parseEventExpression(comp, expr, comp, false);
+					//objs[0] component, objs[1] event name
+					final Component target = (Component) objs[0];
+					final String evtname = (String) objs[1];
+					
+					LoadEventListener listener = (LoadEventListener)
+						target.getAttribute("zk.LoadEventListener."+evtname);
+					if (listener == null) {
+						listener = new LoadEventListener();
+						target.setAttribute("zk.LoadEventListener."+evtname, listener);
+						target.addEventListener(evtname, listener);
+					}
+					listener.addDataTarget(this, comp);
 				}
-				listener.addDataTarget(this, comp);
+			} 
+			if (_loadAfterEvents != null) {
+				for(final Iterator it = _loadAfterEvents.iterator(); it.hasNext(); ) {
+					final String expr = (String) it.next();
+					final Object[] objs =
+						ComponentsCtrl.parseEventExpression(comp, expr, comp, false);
+					//objs[0] component, objs[1] event name
+					final Component target = (Component) objs[0];
+					final String evtname = (String) objs[1];
+					
+					LoadAfterEventListener listener = (LoadAfterEventListener)
+						target.getAttribute("zk.LoadAfterEventListener."+evtname);
+					if (listener == null) {
+						listener = new LoadAfterEventListener();
+						target.setAttribute("zk.LoadAfterEventListener."+evtname, listener);
+						target.addEventListener(evtname, listener);
+						target.addEventListener(evtname+"LoadAfter", listener);
+					}
+					listener.addDataTarget(this, comp);
+				}
 			}
 		}
 	}
@@ -446,6 +545,7 @@ public class Binding implements java.io.Serializable {
 	public String toString() {
 		return "[binder:"+_binder+", comp:"+_comp+", attr:"+_attr+", expr:"+_expression
 			+", load-when:"+_loadWhenEvents+", save-when:"+_saveWhenEvents
+			+", load-after:"+_loadAfterEvents+", save-after:"+_saveAfterEvents
 			+", load:"+_loadable+", save:"+_savable+", converter:"+_converter+"]";
 	}
 	
@@ -474,10 +574,10 @@ public class Binding implements java.io.Serializable {
 		}
 	}
 	
-	private static abstract class BaseEventListener implements EventListener, Express, java.io.Serializable {
+	private static abstract class ExpressBaseEventListener implements EventListener, Express, java.io.Serializable {
 		protected List _dataTargets;
 		
-		public BaseEventListener() {
+		public ExpressBaseEventListener() {
 			_dataTargets = new ArrayList(8);
 		}
 		
@@ -485,13 +585,12 @@ public class Binding implements java.io.Serializable {
 			_dataTargets.add(new BindingInfo(binding, comp, null));
 		}
 	}
-			
-	private static class LoadEventListener extends BaseEventListener {
-		private static final long serialVersionUID = 200808191313L;
-		public LoadEventListener() {
+	
+	private abstract static class BaseLoadEventListener extends ExpressBaseEventListener {
+		public BaseLoadEventListener() {
 			super();
 		}
-		public void onEvent(Event event) {
+		protected void handleEvent(Event event) {
 			for(final Iterator it = _dataTargets.iterator();it.hasNext();) {
 				final BindingInfo bi = (BindingInfo) it.next();
 				final Component dt = bi.getComponent();
@@ -504,13 +603,70 @@ public class Binding implements java.io.Serializable {
 			}
 		}
 	}
+	
+	private static class LoadEventListener extends BaseLoadEventListener {
+		private static final long serialVersionUID = 200808191313L;
+		public LoadEventListener() {
+			super();
+		}
+		public void onEvent(Event event) {
+			handleEvent(event);
+		}
+	}
+	
 
-	private static class SaveEventListener extends BaseEventListener {
+	//since 3.6.1
+	private static class LoadAfterEventListener extends BaseLoadEventListener {
+		private static final long serialVersionUID = 20090423120513L;
+		public LoadAfterEventListener() {
+			super();
+		}
+		public void onEvent(Event event) {
+			if (event instanceof AfterEvent) {
+				handleEvent((Event) event.getData());
+			} else { //post AfterEvent to make sure it is called after
+				Events.postEvent(new AfterEvent(event.getName()+"LoadAfter", event));
+			}
+		}
+	}
+	
+	//since 3.6.1
+	private static class AfterEvent extends Event {
+		public AfterEvent(String evtnm, Event event) {
+			super(evtnm, event.getTarget(), event);
+		}
+	}
+	
+	//since 3.6.1
+	private static class SaveAfterEventListener extends BaseSaveEventListener {
+		private static final long serialVersionUID = 20090423143051L;
+		public SaveAfterEventListener() {
+			super();
+		}
+		public void onEvent(Event event) {
+			if (event instanceof AfterEvent) {
+				handleEvent((Event) event.getData());
+			} else { //post AfterEvent to make sure it is called after
+				Events.postEvent(new AfterEvent(event.getName()+"SaveAfter", event));
+			}
+		}
+	}
+	
+	private static class SaveEventListener extends BaseSaveEventListener {
 		private static final long serialVersionUID = 200808191313L;
 		public SaveEventListener() {
 			super();
 		}
 		public void onEvent(Event event) {
+			handleEvent(event);
+		}
+	}
+	
+	private static abstract class BaseSaveEventListener extends ExpressBaseEventListener {
+		public BaseSaveEventListener() {
+			super();
+		}
+		protected void handleEvent(Event event) {
 			final Component target = event.getTarget();
 			final List tmplist = new ArrayList(_dataTargets.size());
 			
@@ -577,7 +733,7 @@ public class Binding implements java.io.Serializable {
 			}
 			
 		}
-		
+
 		//scan up the component hierarchy until the real owner is found and collect all cloned components.
 		private List scanClones(DataBinder binder, Component comp) {
 			if (DataBinder.isTemplate(comp)) {

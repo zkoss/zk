@@ -116,7 +116,7 @@ public class Spinner extends NumberInputElement implements org.zkoss.zul.api.Spi
 	
 	// -- super --//
 	public void setConstraint(String constr) {
-		setConstraint(new SimpleSpinnerConstraint(constr));
+		setConstraint(constr != null ? new SimpleSpinnerConstraint(constr): null); //Bug 2564298
 	}
 	
 	protected Object coerceFromString(String value) throws WrongValueException {

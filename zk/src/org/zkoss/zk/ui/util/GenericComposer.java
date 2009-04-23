@@ -21,15 +21,19 @@ package org.zkoss.zk.ui.util;
 import java.lang.reflect.Method;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Components;
+import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.event.GenericEventListener;
+import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.util.Composer;
+import org.zkoss.zk.ui.util.ComposerExt;
 
 /**
  * <p>An abstract composer that you can extend and write intuitive onXxx event handler methods;
  * this class will registers onXxx events to the supervised component automatically.</p>
  * <p>The following is an example. The onOK and onCancel event listener is registered into 
  * the target main window automatically.</p>
- *
+ * 
  * <pre><code>
  * &lt;zscript>&lt;!-- both OK in zscript or a compiled Java class -->
  * public class MyComposer extends GenericComposer {
@@ -48,11 +52,20 @@ import org.zkoss.zk.ui.util.Composer;
  *     ...
  * &lt;/window>
  * </code></pre>
+ * <p>since 3.6.1, this composer would be assigned as a variable of the given component 
+ * per the naming convention composed of the component id and composer Class name. e.g.
+ * If the applied component id is "xwin" and this composer class is 
+ * org.zkoss.MyComposer, then the variable name would be "xwin$MyComposer". You can
+ * reference this composer with {@link Component#getVariable} or via EL as ${xwin$MyComposer}
+ * of via annotate data binder as @{xwin$MyComposer}, etc. If this composer is the 
+ * first composer applied to the component, a shorter variable name
+ * composed of the component id and a String "composer" would be also available for use. 
+ * Per the above example, you can also reference this composer with the name "xwin$composer"</p>
  * 
  * @author robbiecheng
  * @since 3.0.1
  */
-abstract public class GenericComposer extends GenericEventListener implements Composer{
+abstract public class GenericComposer extends GenericEventListener implements Composer, ComposerExt{
     
 	/**
 	 * Registers onXxx events to the supervised component; a subclass that override
@@ -62,5 +75,30 @@ abstract public class GenericComposer extends GenericEventListener implements Co
 	public void doAfterCompose(Component comp) throws Exception {
 		//bind this GenericEventListener to the supervised component
 		bindComponent(comp);
+	}
+
+	//since 3.6.1
+	public ComponentInfo doBeforeCompose(Page page, Component parent,
+			ComponentInfo compInfo) {
+		//do nothing
+		return compInfo;
+	}
+
+	//since 3.6.1
+	public void doBeforeComposeChildren(Component comp) throws Exception {
+		//assign this composer as a variable
+		//feature #2778508
+		Components.wireController(comp, this);
+	}
+
+	//since 3.6.1
+	public boolean doCatch(Throwable ex) throws Exception {
+		//do nothing
+		return false;
+	}
+
+	//since 3.6.1
+	public void doFinally() throws Exception {
+		//do nothing
 	}
 }

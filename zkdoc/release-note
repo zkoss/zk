@@ -36,6 +36,10 @@ ZK 5.0.0
 ZK 3.6.1
 * Features
   2677655: A way to use ID as UUID for unit test purpse
+  2724923: Support scrollIntoView to scroll an element to become visible
+  2779199: A way to let composer monitor the composing of all children
+  2778508: GenericXxxComposer shall be accessible immediatly
+  2778513: Add "xxx$composer" as a variabl of applied GenericXxxComposer
   2666743: Support component-apply in lang-addon
   2666812: Log ZK version number at server bootup
   2677873: A way to always get full stacktrace
@@ -46,8 +50,11 @@ ZK 3.6.1
   2675648: Server Push and number of browser windows issue
   2713463: Audio supports the loop attribute
   2718665: Flash supports  the dynamic content (setContent)
-  2724923: Support scrollIntoView to scroll an element to become visible
   2770471: GenericAutowireComposer shall support wiring ZScript varible
+  2209199: BeanShell error message shall show the correct line number
+  2314215: A way to specify the position of the popup component
+  2778507: Add load-after descriptive to DataBinder
+  2779281: Add save-after descriptive to DataBinder
   
 * Bugs
   2684510: Unable to access implict objects if func defined in other namespace
@@ -76,6 +83,21 @@ ZK 3.6.1
   2721977: WrongValuesException and focus
   2560497: Dateboxes: "ddMMyy" is not working
   2716537: Large data set in chart cause browser no response
+  2761151: fail to import zkdemo-3.6.0.war to Eclipse
+  1939263: Splitter - Dark blue bar won't overlap the light blue bar
+  2564298: Clear a Datebox with constraint
+  2777241: Exception StringIndexOutOfBoundsException in Maps loading
+  2697462: Tree selection is remembered even when unselected
+  2777293: Tree keeps old data with new Model
+  2778334: The doModal window in IE6 with SSL shows security issue
+  2710830: Position doesn't work if closable is set for window
+  2777216: Problem paging detail at Grid Component
+  2688197: Popup border disappearance on IE 7
+  2778524: Datebox always shows constraint-error
+  2688620: setSelectionRange() fails in Timebox and Spinner
+  2678340: timebox bug when tabbing to change foucs
+  2721980: Drag+Drop Problem on IE 6/7
+  2713338: Node object is not set in treeitem
 
 	--------
 ZK 3.6.0

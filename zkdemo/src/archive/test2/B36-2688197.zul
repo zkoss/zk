@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+	B36-2688197.zul
+	
+	{{IS_NOTE
+	Purpose:
+	
+	Description:
+	
+	History:
+	Wed Apr 22 17:39:01 TST 2009, Created by Flyworld
+	}}IS_NOTE
+	
+	Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+	
+	{{IS_RIGHT
+	}}IS_RIGHT
+-->
+<zk>
+	<html><![CDATA[  
+	Test 3 Cases:
+	<ol>
+		<li>In IE 7, the popup have width but no height.</li>
+		<li>In all browser, the popup have height but no width.</li>
+		<li>In all browser, the popup have no height and no width</li>
+	</ol>
+	]]></html>
+	<vbox>
+		<hbox>
+			<button label="set width">
+				<attribute name="onClick"><![CDATA[  
+			 title.setWidth("300px");
+		]]></attribute>
+			</button>
+			<button label="no width">
+				<attribute name="onClick"><![CDATA[  
+			title.setWidth("");
+		]]></attribute>
+			</button>
+			<button label="set height">
+				<attribute name="onClick"><![CDATA[  
+			title.setHeight("100px");
+		]]></attribute>
+			</button>
+			<button label="no height">
+				<attribute name="onClick"><![CDATA[  
+			title.setHeight("");
+		]]></attribute>
+			</button>
+		</hbox>
+		<label value="Click me to Show Popup!" popup="title" />
+	</vbox>
+	<popup id="title">
+		<html>Input the subject of this letter. Problem report :</html>
+		<toolbarbutton label="ZK Forum" target="zkdemo"
+			href="http://www.zkoss.org/forum" />
+	</popup>
+
+</zk>

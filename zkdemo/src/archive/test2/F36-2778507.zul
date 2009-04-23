@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<window>
+<html>
+<![CDATA[
+<ol>
+<li>You shall see load-when load-when and a button "load-when"</li>
+<li>Press the "load-when" button, you shall see load-when load-after and button "load-after"</li>
+<li>Press the "load-after" button, you shall see load-after load-after and button "load-after"</li>
+<li>Done</li>
+</ol>
+]]>
+</html>
+	<label value="@{btn.label, load-when=btn.onClick}"/>
+	<label value="@{btn.label, load-after=btn.onClick}"/>
+	<button id="btn" label="load-when" onClick='self.setLabel("load-after")'/>
+</window>

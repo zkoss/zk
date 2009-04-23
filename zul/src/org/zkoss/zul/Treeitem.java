@@ -411,6 +411,16 @@ public class Treeitem extends XulElement implements org.zkoss.zul.api.Treeitem {
 		}
 		return result;
 	}
+	
+	/**
+	 * Returns the number of visible descendant {@link Treechildren}.
+	 * Descendants include direct children, grand children and so on.
+	 *
+	 * @since 3.6.1
+	 */
+	public int getVisibleItemCount() {
+		return isVisible() ? 1 + (_treechildren != null ? _treechildren.getVisibleItemCount() : 0 ): 0;
+	}
 	/**
 	 * adds the number of the visible item to the count of its parent.
 	 * @param count
@@ -481,10 +491,16 @@ public class Treeitem extends XulElement implements org.zkoss.zul.api.Treeitem {
 		}
 		return super.insertBefore(child, insertBefore);
 	}
+	public void onChildAdded(Component child) {
+		super.onChildAdded(child);
+		if (_treechildren == child)
+			addVisibleItemCount(_treechildren.getVisibleItemCount(), false);
+	}
 	public void onChildRemoved(Component child) {
 		if (child instanceof Treerow) {
 			_treerow = null;
 		} else if (child instanceof Treechildren) {
+			addVisibleItemCount(-_treechildren.getVisibleItemCount(), false);
 			_treechildren = null;
 			invalidate();
 		}

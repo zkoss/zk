@@ -829,7 +829,8 @@ public class Parser {
 							attrAnnHelper.applyAnnotations(compInfo,
 								"self".equals(attnm) ? null: attnm, true);
 						} else {
-							addAttribute(compInfo, attrns, attnm, attval, null);
+							addAttribute(compInfo, attrns, attnm, attval, null,
+								attr.getLocator());
 							if (attrAnnHelper != null)
 								attrAnnHelper.applyAnnotations(compInfo, attnm, true);
 						}
@@ -896,8 +897,16 @@ public class Parser {
 			parent.appendChild(zs);
 		}
 
-		final String script = el.getText(true);
-		if (!isEmpty(script)) {
+		String script = el.getText(false);
+		if (!isEmpty(script.trim())) {
+			final org.zkoss.xml.Locator l = el.getLocator();
+			int lno = l != null ? l.getLineNumber(): 0;
+			if (lno > 1) {
+				final StringBuffer sb = new StringBuffer(lno);
+				while (--lno > 0)
+					sb.append('\n');
+				script = sb.toString() + script;
+			}
 			final ZScript zs =
 				new ZScript(parent.getEvaluatorRef(), zslang, script, cond);
 			if (deferred) zs.setDeferred(true);
@@ -939,7 +948,8 @@ public class Parser {
 			final String trim = el.getAttributeValue("trim");
 			noEL("trim", trim, el);
 			final String attval = el.getText(trim != null && "true".equals(trim));
-			addAttribute(parent, attr.getNamespace(), attnm, attval, cond);
+			addAttribute(parent, attr.getNamespace(), attnm, attval, cond,
+				el.getLocator());
 		}
 
 		annHelper.applyAnnotations(parent, attnm, true);
@@ -1081,7 +1091,8 @@ public class Parser {
 	/** Parse an attribute and adds it to the definition.
 	 */
 	private static void addAttribute(ComponentInfo compInfo, Namespace attrns,
-	String name, String value, ConditionImpl cond) throws Exception {
+	String name, String value, ConditionImpl cond, org.zkoss.xml.Locator xl)
+	throws Exception {
 		if (Events.isValid(name)) {
 			boolean bZkAttr = attrns == null;
 			if (!bZkAttr) {
@@ -1101,7 +1112,8 @@ public class Parser {
 					bZkAttr = LanguageDefinition.ZK_NAMESPACE.equals(uri);
 			}
 			if (bZkAttr) {
-				final ZScript zscript = ZScript.parseContent(value);
+				final int lno = xl != null ? xl.getLineNumber(): 0;
+				final ZScript zscript = ZScript.parseContent(value, lno);
 				if (zscript.getLanguage() == null)
 					zscript.setLanguage(
 						compInfo.getPageDefinition().getZScriptLanguage());

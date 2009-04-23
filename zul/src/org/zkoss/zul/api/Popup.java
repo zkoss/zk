@@ -117,11 +117,10 @@ public interface Popup extends org.zkoss.zul.impl.api.XulElement {
 	 * after is the bottom, start is the left and end is the right. For right to left locales,
 	 * start is the right and end is the left. 
 	 * 
-	 * @since 5.0.0
+	 * @since 3.6.1
 	 */
 	public void open(Component ref, String position);
 	
-
 	/**
 	 * Closes this popup at the client.
 	 * 
@@ -131,5 +130,4 @@ public interface Popup extends org.zkoss.zul.impl.api.XulElement {
 	 * 
 	 */
 	public void close();
-
 }

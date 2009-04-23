@@ -592,7 +592,7 @@ zDom = { //static methods
 	},
 	//class and style//
 	hasClass: function (el, clsnm) {
-		return el && el.className.match(zDom._clsRegEx(clsnm)) != null;
+		return el && el.className && el.className.match(zDom._clsRegEx(clsnm)) != null;
 	},
 	addClass: function (el, clsnm) {
 		if (el && !zDom.hasClass(el, clsnm)) {
