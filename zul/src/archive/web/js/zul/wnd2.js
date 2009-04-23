@@ -251,10 +251,12 @@ zkWnd2.onVisi = zkWnd2.onSize = function (cmp) {
 	}
 	zkWnd2._fixWdh(cmp);
 	zkWnd2._fixHgh(cmp);
-	var pos = getZKAttr(cmp, "pos");
-	// sync the position, if any.
-	if (pos) zkWnd2._center(cmp, false, pos);
-	zkWnd2.syncShadow(cmp);
+	if (!zkWnd2._embedded(cmp)) {
+		var pos = getZKAttr(cmp, "pos");
+		// sync the position, if any.
+		if (pos) zkWnd2._center(cmp, false, pos);
+		zkWnd2.syncShadow(cmp);
+	}
 };
 zkWnd2.syncMaximized = function (cmp) {
 	if (!cmp._lastSize) return;

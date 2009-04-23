@@ -297,7 +297,7 @@ zk.makeStackup = function (cmp, id, anchor) {
 	ifr.style.cssText = "position:absolute;overflow:hidden;filter:alpha(opacity=0)";
 	ifr.frameBorder = "no";
 	ifr.tabIndex = -1;
-	ifr.src = "javascript:false;";
+	ifr.src = "javascript:false";
 		//IE: prevent secure/nonsecure warning with HTTPS
 	if (cmp) {
 		ifr.style.left = cmp.style.left;
@@ -484,7 +484,7 @@ zk._clsRegEx = function(clsnm) {
  * of the specified element.
  */
 zk.hasClass = function (el, clsnm) {
-	return el.className.match(zk._clsRegEx(clsnm)) != null;
+	return el && el.className && el.className.match(zk._clsRegEx(clsnm)) != null;
 };
 
 /** Adds the specified class name to the class name of the specified element.

@@ -183,7 +183,8 @@ public class AuResponse {
 			for (int j = 0; j < _data.length; ++j) {
 				final Object d = _data[j];
 				_evdata[j] = d instanceof DeferredValue ?
-					((DeferredValue)d).getValue(): (String)d;
+					((DeferredValue)d).getValue():
+					Objects.toString(d);
 			}
 		}
 		return _evdata;
