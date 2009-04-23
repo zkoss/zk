@@ -56,7 +56,7 @@ import org.zkoss.zk.ui.util.ComposerExt;
  * per the naming convention composed of the component id and composer Class name. e.g.
  * If the applied component id is "xwin" and this composer class is 
  * org.zkoss.MyComposer, then the variable name would be "xwin$MyComposer". You can
- * reference this composer with {@link Component#getVaraible} or via EL as ${xwin$MyComposer}
+ * reference this composer with {@link Component#getVariable} or via EL as ${xwin$MyComposer}
  * of via annotate data binder as @{xwin$MyComposer}, etc. If this composer is the 
  * first composer applied to the component, a shorter variable name
  * composed of the component id and a String "composer" would be also available for use. 

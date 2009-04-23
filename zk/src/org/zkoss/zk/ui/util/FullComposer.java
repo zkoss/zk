@@ -31,11 +31,11 @@ package org.zkoss.zk.ui.util;
  * </code></pre>
  *
  * <p>If FooComposer implements both {@link Composer} and {@link FullComposer},
- * then its {@link Composer#afterCompose} is called after textbox, div
+ * then its {@link Composer#doAfterCompose} is called after textbox, div
  * and window are composed.
  *
  * <p>If FooComposer implements only {@link Composer},
- * its {@link Composer#afterCompose is called only after window is composed.
+ * its {@link Composer#doAfterCompose} is called only after window is composed.
  *
  * @author tomyeh
  * @since 3.6.1

@@ -60,6 +60,7 @@ import org.zkoss.zk.ui.Component;
  * @since 3.0.0
  * @see org.zkoss.zk.ui.ext.AfterCompose
  * @see ComposerExt
+ * @see FullComposer
  * @see Initiator
  */
 public interface Composer {

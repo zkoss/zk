@@ -32,6 +32,7 @@ import org.zkoss.zk.ui.metainfo.ComponentInfo;
  * @author tomyeh
  * @since 3.0.0
  * @since Composer
+ * @see FullComposer
  */
 public interface ComposerExt {
 	/** Invokes before composing a component.
