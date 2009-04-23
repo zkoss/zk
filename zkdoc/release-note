@@ -63,6 +63,7 @@ ZK 3.6.1
   2688620: setSelectionRange() fails in Timebox and Spinner
   2678340: timebox bug when tabbing to change foucs
   2721980: Drag+Drop Problem on IE 6/7
+  2713338: Node object is not set in treeitem
 
 	--------
 ZK 3.6.0

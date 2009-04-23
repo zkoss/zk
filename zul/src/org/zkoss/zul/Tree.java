@@ -1560,6 +1560,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		public void render(Treeitem ti, Object node){
 			Treecell tc = new Treecell(Objects.toString(node));
 			Treerow tr = null;
+			ti.setValue(node);
 			if(ti.getTreerow()==null){
 				tr = new Treerow();
 				tr.setParent(ti);
