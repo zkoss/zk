@@ -58,6 +58,7 @@ ZK 3.6.1
   2688197: Popup border disappearance on IE 7
   2778524: Datebox always shows constraint-error
   2688620: setSelectionRange() fails in Timebox and Spinner
+  2678340: timebox bug when tabbing to change foucs
 	--------
 ZK 3.6.0
 March 2, 2009
