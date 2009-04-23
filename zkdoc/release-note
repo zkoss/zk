@@ -55,6 +55,7 @@ ZK 3.6.1
   2777216: Problem paging detail at Grid Component
   2688197: Popup border disappearance on IE 7
   2778524: Datebox always shows constraint-error
+  2688620: setSelectionRange() fails in Timebox and Spinner
 	--------
 ZK 3.6.0
 March 2, 2009

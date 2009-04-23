@@ -105,8 +105,7 @@ zkTmbox.setAttr = function (cmp, nm, val) {
 			return true;
 		}
 	}
-	zkau.setAttr(cmp, nm, val);
-	return true;
+	return zkTxbox.setAttr(cmp, nm, val);
 };
 
 zkTmbox.rmAttr = function (cmp, nm) {
