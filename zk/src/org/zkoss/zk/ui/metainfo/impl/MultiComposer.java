@@ -97,7 +97,7 @@ public class MultiComposer implements Composer {
 			_cs[j].doAfterCompose(comp);
 	}
 	public ComponentInfo doBeforeCompose(Page page, Component parent,
-	ComponentInfo compInfo) {
+	ComponentInfo compInfo) throws Exception {
 		for (int j = 0; j < _cs.length; ++j)
 			if (_cs[j] instanceof ComposerExt) {
 				compInfo = ((ComposerExt)_cs[j])

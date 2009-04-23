@@ -586,9 +586,18 @@ public class UiEngineImpl implements UiEngine {
 	}
 	private static Component execCreateChild0(CreateInfo ci,
 	Component parent, ComponentInfo childInfo, String replaceableText) {
-		final Composer composer = childInfo.resolveComposer(ci.page, parent);
-		final ComposerExt composerExt =
-			composer instanceof ComposerExt ? (ComposerExt)composer: null;
+		Composer composer = childInfo.resolveComposer(ci.page, parent);
+		ComposerExt composerExt = null;
+		boolean bPopComposer = false;
+		if (composer != null)
+			if (composer instanceof FullComposer) {
+				ci.pushFullComposer(composer);
+				bPopComposer = true;
+				composer = null; //ci will handle it
+			} else if (composer instanceof ComposerExt) {
+				composerExt = (ComposerExt)composer;
+			}
+
 		Component child = null;
 		try {
 			if (composerExt != null) {
@@ -596,6 +605,9 @@ public class UiEngineImpl implements UiEngine {
 				if (childInfo == null)
 					return null;
 			}
+			childInfo = ci.doBeforeCompose(ci.page, parent, childInfo);
+			if (childInfo == null)
+				return null;
 
 			child = ci.uf.newComponent(ci.page, parent, childInfo);
 
@@ -610,6 +622,7 @@ public class UiEngineImpl implements UiEngine {
 
 			if (composerExt != null)
 				composerExt.doBeforeComposeChildren(child);
+			ci.doBeforeComposeChildren(child);
 
 			execCreate(ci, childInfo, child); //recursive
 
@@ -618,8 +631,10 @@ public class UiEngineImpl implements UiEngine {
 
 			if (child instanceof AfterCompose)
 				((AfterCompose)child).afterCompose();
+
 			if (composer != null)
 				composer.doAfterCompose(child);
+			ci.doAfterCompose(child);
 
 			ComponentsCtrl.applyForward(child, childInfo.getForward());
 				//applies the forward condition
@@ -642,18 +657,23 @@ public class UiEngineImpl implements UiEngine {
 					log.error("Failed to invoke doCatch for "+childInfo, t);
 				}
 			}
-			if (!ignore)
-				throw UiException.Aide.wrap(ex);
+			if (!ignore) {
+				ignore = ci.doCatch(ex);
+				if (!ignore)
+					throw UiException.Aide.wrap(ex);
+			}
 
 			return child != null && child.getPage() != null ? child: null;
 				//return child only if attached successfully
 		} finally {
-			if (composerExt != null) {
-				try {
+			try {
+				if (composerExt != null)
 					composerExt.doFinally();
-				} catch (Throwable ex) {
-					throw UiException.Aide.wrap(ex);
-				}
+				ci.doFinally();
+			} catch (Throwable ex) {
+				throw UiException.Aide.wrap(ex);
+			} finally {
+				if (bPopComposer) ci.popFullComposer();
 			}
 		}
 	}
@@ -1911,10 +1931,71 @@ public class UiEngineImpl implements UiEngine {
 		private final Execution exec;
 		private final Page page;
 		private final UiFactory uf;
+		private List _composers, _composerExts;
 		private CreateInfo(UiFactory uf, Execution exec, Page page) {
 			this.exec = exec;
 			this.page = page;
 			this.uf = uf;
+		}
+
+		private void pushFullComposer(Composer composer) {
+			if (_composers == null)
+				_composers = new LinkedList();
+			_composers.add(0, composer);
+			if (composer instanceof ComposerExt) {
+				if (_composerExts == null)
+					_composerExts = new LinkedList();
+				_composerExts.add(0, composer);
+			}
+		}
+		private void popFullComposer() {
+			Object o = _composers.remove(0);
+			if (_composers.isEmpty()) _composers = null;
+			if (o instanceof ComposerExt) {
+				_composerExts.remove(0);
+				if (_composerExts.isEmpty()) _composerExts = null;
+			}
+		}
+		private void doAfterCompose(Component comp) throws Exception {
+			if (_composers != null)
+				for (Iterator it = _composers.iterator(); it.hasNext();) {
+					((Composer)it.next()).doAfterCompose(comp);
+				}
+		}
+		private ComponentInfo doBeforeCompose(Page page, Component parent,
+		ComponentInfo compInfo) throws Exception {
+			if (_composerExts != null)
+				for (Iterator it = _composerExts.iterator(); it.hasNext();) {
+					compInfo = ((ComposerExt)it.next()).doBeforeCompose(page, parent, compInfo);
+					if (compInfo == null)
+						return null;
+				}
+			return compInfo;
+		}
+		private void doBeforeComposeChildren(Component comp) throws Exception {
+			if (_composerExts != null)
+				for (Iterator it = _composerExts.iterator(); it.hasNext();) {
+					((ComposerExt)it.next()).doBeforeComposeChildren(comp);
+				}
+		}
+		private boolean doCatch(Throwable ex) {
+			if (_composerExts != null)
+				for (Iterator it = _composerExts.iterator(); it.hasNext();) {
+					final ComposerExt composerExt = (ComposerExt)it.next();
+					try {
+						if (composerExt.doCatch(ex))
+							return true; //ignore
+					} catch (Throwable t) {
+						log.error("Failed to invoke doCatch for "+composerExt, t);
+					}
+				}
+			return false;
+		}
+		private void doFinally() throws Exception {
+			if (_composerExts != null)
+				for (Iterator it = _composerExts.iterator(); it.hasNext();) {
+					((ComposerExt)it.next()).doFinally();
+				}
 		}
 	}
 	private static class ReplaceableText {

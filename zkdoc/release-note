@@ -2,6 +2,10 @@
 ZK 3.6.1
 * Features
   2677655: A way to use ID as UUID for unit test purpse
+  2724923: Support scrollIntoView to scroll an element to become visible
+  2779199: A way to let composer monitor the composing of all children
+  2778508: GenericXxxComposer shall be accessible immediatly
+  2778513: Add "xxx$composer" as a variabl of applied GenericXxxComposer
   2666743: Support component-apply in lang-addon
   2666812: Log ZK version number at server bootup
   2677873: A way to always get full stacktrace
@@ -12,12 +16,9 @@ ZK 3.6.1
   2675648: Server Push and number of browser windows issue
   2713463: Audio supports the loop attribute
   2718665: Flash supports  the dynamic content (setContent)
-  2724923: Support scrollIntoView to scroll an element to become visible
   2770471: GenericAutowireComposer shall support wiring ZScript varible
   2209199: BeanShell error message shall show the correct line number
   2314215: A way to specify the position of the popup component
-  2778508: GenericXxxComposer shall be accessible immediatly
-  2778513: Add "xxx$composer" as a variabl of applied GenericXxxComposer
   
 * Bugs
   2684510: Unable to access implict objects if func defined in other namespace
@@ -59,6 +60,7 @@ ZK 3.6.1
   2778524: Datebox always shows constraint-error
   2688620: setSelectionRange() fails in Timebox and Spinner
   2678340: timebox bug when tabbing to change foucs
+
 	--------
 ZK 3.6.0
 March 2, 2009

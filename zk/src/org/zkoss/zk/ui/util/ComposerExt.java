@@ -48,7 +48,7 @@ public interface ComposerExt {
 	 * In other words, it is ignored.
 	 */
 	public ComponentInfo doBeforeCompose(Page page, Component parent,
-	ComponentInfo compInfo);
+	ComponentInfo compInfo) throws Exception;
 	/** Invokes after the component is instantiated and initialized, but
 	 * before composing any child.
 	 * @param comp the component being composed
