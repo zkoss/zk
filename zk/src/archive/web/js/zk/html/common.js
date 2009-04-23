@@ -2010,8 +2010,7 @@ zk.parseDate = function (txt, fmt, strict) {
 				var c2 = fmt.charAt(k);
 				nosep = c2 == 'y' || c2 == 'M' || c2 == 'd' || c2 == 'E';
 			}
-
-			var token = ts[i++] != null ? ts[i++] : "";//Bug 2560497 : if no seperator, token must be assigned.
+			var token = ts[i++] ;
 			switch (cc) {
 			case 'y':
 				if (nosep) {
@@ -2037,7 +2036,7 @@ zk.parseDate = function (txt, fmt, strict) {
 				if (len == 3 && token) {
 					break; // nothing to do.
 				}else if (len <= 2) {
-					if (nosep && token.length > 2) {
+					if (nosep && token && token.length > 2) {//Bug 2560497 : if no seperator, token must be assigned.
 						ts[--i] = token.substring(2);
 						token = token.substring(0, 2);
 					}
