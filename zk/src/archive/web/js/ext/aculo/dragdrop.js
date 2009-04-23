@@ -353,6 +353,7 @@ zkau.autoZIndex(src, false, true);
   startDrag: function(event) {
 //Tom M. Yeh, Potix: disable selection
 zk.disableSelection(document.body); // Bug #1820433
+	  zk.clearSelection(); // Bug #2721980
   	if (this.options.stackup) { // Bug #1911280
 		this.domstackup = document.createElement("DIV");
 		document.body.appendChild(this.domstackup);

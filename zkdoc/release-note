@@ -60,6 +60,7 @@ ZK 3.6.1
   2778524: Datebox always shows constraint-error
   2688620: setSelectionRange() fails in Timebox and Spinner
   2678340: timebox bug when tabbing to change foucs
+  2721980: Drag+Drop Problem on IE 6/7
 
 	--------
 ZK 3.6.0
