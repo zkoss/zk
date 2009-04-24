@@ -150,13 +150,13 @@ public class Chart extends Imagemap implements org.zkoss.zul.api.Chart {
 	private String _orient = "vertical"; //orient
 	private ChartAreaListener _areaListener; //callback function when chart area changed
     private String _paneColor; // pane's color
-    private int[] _paneRGB; //pane red, green, blue (0 ~ 255, 0 ~ 255, 0 ~ 255)
+    private int[] _paneRGB = new int[] {0xEE,0xEE,0xEE}; //pane red, green, blue (0 ~ 255, 0 ~ 255, 0 ~ 255)
     private int _paneAlpha = 255; //pane alpha transparency (0 ~ 255, default to 255)
 	
 	//plot related attributes
 	private int _fgAlpha = 255; //foreground alpha transparency (0 ~ 255, default to 255)
 	private String _bgColor;
-	private int[] _bgRGB; //background red, green, blue (0 ~ 255, 0 ~ 255, 0 ~ 255)
+	private int[] _bgRGB = new int[] {0xFF,0xFF,0xFF}; //background red, green, blue (0 ~ 255, 0 ~ 255, 0 ~ 255)
 	private int _bgAlpha = 255; //background alpha transparency (0 ~ 255, default to 255)
 	
 	//Time Series Chart related attributes

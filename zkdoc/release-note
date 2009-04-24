@@ -66,7 +66,8 @@ ZK 3.6.1
   2713338: Node object is not set in treeitem
   2779453: Checkmarks lost when used in a detail component
   2780038: zhtml.Messagebox.INFORMATION returns wrong value
-
+  2779247: No tooltip in chart after using  jfreechart 1.0.13
+  
 	--------
 ZK 3.6.0
 March 2, 2009
