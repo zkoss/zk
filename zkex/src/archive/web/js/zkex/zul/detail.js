@@ -97,6 +97,17 @@ zkDetail = {
 					tr = td.parentNode,
 					fake = $e(cmp, "fake");
 				cave.style.display = "none";
+				
+				// fix IE6 bug #2779453
+				if (zk.ie6Only) {
+					try {
+						var inps = $e(cmp, "cave").getElementsByTagName("INPUT");
+						for (var i in inps) {
+							if (inps[i].type == "checkbox")
+								inps[i].defaultChecked = inps[i].checked;
+						}
+					} catch (e) {}
+				}
 				cmp.appendChild(cave);
 				td.rowSpan = 1;
 				zk.remove(fake);
