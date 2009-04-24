@@ -5,7 +5,7 @@ reproducible step.<br/>
 1.select Henry and Dennis<br/>
 2.click toogle multiple ,<br/>
 3.click toogle multiple again.<br/>
-4.disselect (Jane,) Henry.<br/>
+4.disselect (Mary,) Henry.<br/>
 5.click invalidate.<br/>
 <br/>
 If Henry is still selected, it is bug.<br/>
