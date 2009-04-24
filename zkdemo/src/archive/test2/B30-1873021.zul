@@ -1,6 +1,6 @@
 <zk>
 <html><![CDATA[
-If you did not see any Exception, then it is OK.<br/>
+If you did not see any Exception like below, then it is OK.<br/>
 <br/>
 java.lang.IndexOutOfBoundsException: Index: 16, Size: 4<br/>
 	at org.zkoss.zk.ui.AbstractComponent$ChildIter.<init>(AbstractComponent.java:1606)<br/>

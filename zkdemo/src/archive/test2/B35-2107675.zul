@@ -1,5 +1,5 @@
 <zk>
-You shall see "Correct 3 Correct 4" below
+You shall see "Correct 4 Correct 3" below
 <separator bar="true"/>
 <zk switch="${each}" forEach="zk, gwt">
 	<zk case="gwt">
