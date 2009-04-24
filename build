@@ -187,6 +187,9 @@ if [ $# != 0 ] ; then
 		fi
 	done
 else
+	if [ $cmd == "javadoc" ] ; then
+		javadocAll="true"
+	fi
 	if [ ! -f build.projects ] ; then
 		echo build.projects not found
 		exit 1
@@ -274,9 +277,15 @@ function safe_cygpath
 #$2: target
 function invoke_ant
 {
-	echo "$1.$outdir $2..."
+	echo "$1.$outdir $2... $3"
 	cd $2
-
+	
+	if [ $3 ] ; then
+		pronm=$3
+	else
+		pronm=$2
+	fi
+	
 	#handle class.test.local
 	local class_test=
 	if [ "${cmd#utest}" != "$cmd" ] ; then #utest
@@ -445,7 +454,7 @@ function invoke_ant
 		-Dzipcss=$zipcsslist\
 		-Dwar.libs="$war_libs" -Dbasedir=. \
 		-Dear.libs="$ear_libs" -Dimport.libs="$import_libs" \
-		-Dproject.name="$2" -Dproject.version="$prjver" \
+		-Dproject.name="$pronm" -Dproject.version="$prjver" \
 		-Dsource.version="$srcver" -Dtarget.version="$tgtver" \
 		-Dhaltonerror=$haltonerror -Dout.dir=$outdir \
 		-Ddebug=$this_dflag -Doptimize=$this_oflag ${nojc} \
@@ -464,14 +473,39 @@ function invoke_ant
 }
 
 start=`date +%s`
-echo "targets: ${targetList}"
-for target in $targetList ; do
-	if [ -d $target ] ; then
-		invoke_ant $cmd $target
-	else
-		echo "Ignore: $target doesn't exist"
-	fi
-done
+if [ "$javadocAll" = "true" ] ; then
+	echo "prepare javadoc all"
+	rm -rf javadoctmp
+	mkdir -p javadoctmp/src
+	touch javadoctmp/tmp
+	for target in $targetList ; do
+		echo "copy $target"
+		if [ -d $target/src/org ] ; then
+			cp -rp $target/src/org* javadoctmp/src
+		fi
+		if [ -d $target/codegen/org ] ; then
+			cp -rp $target/codegen/org* javadoctmp/src
+		fi
+		if [ -f $target/classpath ] ; then
+			cat $target/classpath >> javadoctmp/tmp
+		fi
+	done
+	sort javadoctmp/tmp | uniq >> javadoctmp/classpath
+	rm javadoctmp/tmp
+	cp zk/version zk/format javadoctmp
+	invoke_ant javadoc javadoctmp ZK
+	rm -rf javadoctmp
+	exit 1
+else
+	echo "targets: ${targetList}"
+	for target in $targetList ; do
+		if [ -d $target ] ; then
+			invoke_ant $cmd $target
+		else
+			echo "Ignore: $target doesn't exist"
+		fi
+	done
+fi
 end=`date +%s`
 if [ "${end%s}" = "${end}" ] ; then
 	buildTime=$(( $end - $start ))

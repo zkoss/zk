@@ -307,7 +307,7 @@ depends="deploy.export, deploy.lib, deploy.tomcat, deploy.jboss">
 	 windowtitle="${project.name} ${project.version} API"
 	 doctitle="${project.name} ${project.version} API"
 	 additionalparam="-breakiterator -source ${source.version}"
-	 bottom="Copyright &amp;copy; 2005-2008 Potix Corporation. All Rights Reserved.">
+	 bottom="Copyright &amp;copy; 2005-2009 Potix Corporation. All Rights Reserved.">
 		<classpath>
 			<pathelement path="${javadoc.class.path}"/>
 		</classpath>
