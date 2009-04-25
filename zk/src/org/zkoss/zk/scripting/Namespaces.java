@@ -43,13 +43,13 @@ public class Namespaces {
 	/** A stack of current namespace. */
 	private static final ThreadLocal _curnss = new ThreadLocal();
 
-	/** Prepares builtin variable before calling {@link Page#interpret}.
+	/** Prepares implicit variable before calling {@link Page#interpret}.
 	 *
 	 * <p>Typical use:
 	 * <pre><code>
 final Namespace ns = Namespaces.beforeInterpret(comp);
 try {
-  Namespaces.("some", value);
+  Namespaces.setImplicit("some", value);
   page.interpret(zslang, zscript, ns); //it will push ns as the current namespace
 } finally {
   Namespaces.afterInterpret();
@@ -60,7 +60,6 @@ try {
 	 * <pre><code>
 Namespaces.beforeInterpret(comp);
 try {
-  Namespaces.setImplicit("some", value);
   constr.validate(comp); //if constr might be an instance of a class implemented in zscript
 } finally {
   Namespaces.afterInterpret();
@@ -115,10 +114,9 @@ try {
 
 		return impl;
 	}
-	/** Used with {@link #beforeInterpret} to clean up builtin
+	/** Used with {@link #beforeInterpret} to clean up implicit
 	 * variables.
 	 *
-	 * @param ns the namespace returned by {@link #beforeInterpret}
 	 * @since 3.6.1
 	 */
 	public static final void afterInterpret() {
@@ -126,8 +124,10 @@ try {
 		pop();
 	}
 
-	/** Sets an implicit object that will be stored later when {@link #afterInterpret}
-	 * is called.
+	/** Sets an implicit object.
+	 * It can be called only between {@link #beforeInterpret} and
+	 * {@link #afterInterpret}.
+	 *
 	 * @since 3.6.1
 	 */
 	public static void setImplicit(String name, Object value) {
@@ -142,23 +142,25 @@ try {
 	 * @since 3.6.1
 	 */
 	public static Object getImplicit(String name, Object defValue) {
-		return ((Implicit)((List)_implicits.get()).get(0))
-			.getImplicit(name, defValue);
+		final List implicits = (List)_implicits.get();
+		if (implicits != null && !implicits.isEmpty()) //in case: beforeInterpret not called
+			return ((Implicit)implicits.get(0)).getImplicit(name, defValue);
+		return defValue;
 	}
 
-	/** @deprecated As of release 3.6.1, it is replaced with {@link #beforeInterpret(Component, boolean)}.
+	/** @deprecated As of release 3.6.1, it is replaced with {@link #beforeInterpret(Component)}.
 	 */
 	public static final Namespace beforeInterpret(Map backup, Component comp,
 	boolean pushNS) {
 		return beforeInterpret(comp);
 	}
-	/** @deprecated As of release 3.6.1, it is replaced with {@link #beforeInterpret(Page, boolean)}.
+	/** @deprecated As of release 3.6.1, it is replaced with {@link #beforeInterpret(Page)}.
 	 */
 	public static final Namespace beforeInterpret(Map backup, Page page,
 	boolean pushNS) {
 		return beforeInterpret(page);
 	}
-	/** @deprecated As of release 3.6.1, it is replaced with {@link #afterInterpret(Namespace ns, boolean)}.
+	/** @deprecated As of release 3.6.1, it is replaced with {@link #afterInterpret}.
 	 */
 	public static final void afterInterpret(Map backup, Namespace ns,
 	boolean popNS) {
