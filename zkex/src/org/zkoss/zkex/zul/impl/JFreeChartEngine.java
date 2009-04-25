@@ -32,6 +32,7 @@ import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.encoders.*;
 import org.jfree.chart.plot.*;
 import org.jfree.chart.renderer.*;
+import org.jfree.chart.title.LegendTitle;
 import org.jfree.chart.entity.*;
 import org.jfree.data.gantt.GanttCategoryDataset;
 import org.jfree.data.gantt.Task;
@@ -287,6 +288,20 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 	        if (paneRGB != null) {
 	            jfchart.setBackgroundPaint(new Color(paneRGB[0], paneRGB[1], paneRGB[2], chart.getPaneAlpha()));
 	        }
+	        
+	        //since 3.6.1, use JFreeChart 1.0.13. Make it appear like previous version(background, grid lines)
+	        if (plot instanceof CategoryPlot) {
+	        	final CategoryPlot cplot = (CategoryPlot) plot;
+	        	cplot.setRangeGridlinePaint(new Color(0xc0, 0xc0, 0xc0));
+	        } else if (plot instanceof XYPlot) {
+	        	final XYPlot xyplot = (XYPlot) plot;
+	        	xyplot.setRangeGridlinePaint(Color.LIGHT_GRAY);
+	        	xyplot.setDomainGridlinePaint(Color.LIGHT_GRAY);
+	        } else if (plot instanceof PolarPlot) {
+	        	final PolarPlot pplot = (PolarPlot) plot;
+	        	pplot.setAngleGridlinePaint(Color.LIGHT_GRAY);
+	        	pplot.setRadiusGridlinePaint(Color.LIGHT_GRAY);
+	        }
 		}
 		
 		//callbacks for each area
@@ -298,7 +313,7 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 			chart.invalidate(); //improve performance if too many chart
 		chart.getChildren().clear();
 
-		if (Events.isListened(chart, Events.ON_CLICK, false)) {
+		if (Events.isListened(chart, Events.ON_CLICK, false) || chart.isShowTooltiptext()) {
 			int j = 0;
 			String preUrl = null;
 			for(Iterator it=jfinfo.getEntityCollection().iterator();it.hasNext();) {
@@ -314,21 +329,28 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 					}
 				}
 				
-				Area area = new Area();
-				area.setParent(chart);
-			 	area.setCoords(ce.getShapeCoords());
-			 	area.setShape(ce.getShapeType());
-			    area.setId("area_"+chart.getId()+'_'+(j++));
-			    if (chart.isShowTooltiptext() && ce.getToolTipText() != null) {
-			    	area.setTooltiptext(ce.getToolTipText());
-			    }
-			    area.setAttribute("url", ce.getURLText());
-			    impl.render(chart, area, ce);
-				if (chart.getAreaListener() != null) {
-					try {
-						chart.getAreaListener().onRender(area, ce);
-					} catch (Exception ex) {
-						throw UiException.Aide.wrap(ex);
+				//1. JFreeChartEntity area cover the whole chart, will "mask" other areas
+				//2. LegendTitle area cover the whole legend, will "mask" each legend 
+				//3. PlotEntity cover the whole chart plotting araa, will "mask" each bar/line/area
+				if (!(ce instanceof JFreeChartEntity) 
+				&& !(ce instanceof TitleEntity && ((TitleEntity)ce).getTitle() instanceof LegendTitle)
+				&& !(ce instanceof PlotEntity)) {
+					Area area = new Area();
+					area.setParent(chart);
+				 	area.setCoords(ce.getShapeCoords());
+				 	area.setShape(ce.getShapeType());
+				    area.setId("area_"+chart.getId()+'_'+(j++));
+				    if (chart.isShowTooltiptext() && ce.getToolTipText() != null) {
+				    	area.setTooltiptext(ce.getToolTipText());
+				    }
+				    area.setAttribute("url", ce.getURLText());
+				    impl.render(chart, area, ce);
+					if (chart.getAreaListener() != null) {
+						try {
+							chart.getAreaListener().onRender(area, ce);
+						} catch (Exception ex) {
+							throw UiException.Aide.wrap(ex);
+						}
 					}
 				}
 			}

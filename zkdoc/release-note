@@ -58,6 +58,7 @@ ZK 3.6.1
   
 * Bugs
   2684510: Unable to access implict objects if func defined in other namespace
+  2781051: The self implicit variable lost after doModal
   2685872: Comet not send back new value of textbox if no listener
   2684322: Nullpoint when accese to a nonexist page
   2681819: normal page throws exception after installed zkspring
@@ -98,7 +99,10 @@ ZK 3.6.1
   2678340: timebox bug when tabbing to change foucs
   2721980: Drag+Drop Problem on IE 6/7
   2713338: Node object is not set in treeitem
-
+  2779453: Checkmarks lost when used in a detail component
+  2780038: zhtml.Messagebox.INFORMATION returns wrong value
+  2779247: No tooltip in chart after using  jfreechart 1.0.13
+  
 	--------
 ZK 3.6.0
 March 2, 2009

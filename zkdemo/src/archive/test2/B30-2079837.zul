@@ -4,7 +4,7 @@
 <label value="2.click arrow-down button"/>
 <label value="3.the value should be decreased instead of increased"/>
 </vbox>
-<div height="300px" style="overflow: scroll" width="200px">
+<div height="300px" style="overflow: scroll;position:relative" width="200px">
 <div height="400px">
 <div height="100px"/>
 <timebox/>

@@ -15,7 +15,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <zk>
-Column can not resize by drag when start with no row.
+Column should can resize by drag when start with no row.
 It still doesn't work even add row after creation.
 	<zscript>
 	void addRow1(){

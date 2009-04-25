@@ -1,5 +1,5 @@
 <vbox>
-Click "hello world"
+Click "hello world", if you see the message change, it is ok.
 <zscript>
 public void doCreate(Event evt)
 {

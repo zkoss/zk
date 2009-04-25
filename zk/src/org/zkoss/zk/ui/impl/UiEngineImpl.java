@@ -731,15 +731,14 @@ public class UiEngineImpl implements UiEngine {
 				((PageCtrl)page).addDeferredZScript(comp, zscript);
 					//isEffective is handled later
 			} else if (isEffective(zscript, page, comp)) {
-				final Map backup = new HashMap();
 				final Namespace ns = comp != null ?
-					Namespaces.beforeInterpret(backup, comp, false):
-					Namespaces.beforeInterpret(backup, page, false);
+					Namespaces.beforeInterpret(comp):
+					Namespaces.beforeInterpret(page);
 				try {
 					page.interpret(zscript.getLanguage(),
 						zscript.getContent(page, comp), ns);
 				} finally {
-					Namespaces.afterInterpret(backup, ns, false);
+					Namespaces.afterInterpret();
 				}
 			}
 		} else if (meta instanceof AttributesInfo) {

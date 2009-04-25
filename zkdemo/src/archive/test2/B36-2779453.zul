@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2779453.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Apr 24 10:55:22     2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+Please open the item, and check some checkboxes, then close and open the item, all of the checkboxes you checked should be checked. (IE 6 Only)
+<window title="Detail demo" border="normal" width="450px">
+<grid>
+<columns>
+<column label=""></column>
+<column label=""></column>
+</columns>
+<rows>
+<row>
+<label value="Non detail"></label>
+<detail>
+<listbox checkmark="true" multiple="true">
+<listhead>
+<listheader label="Select All"></listheader>
+</listhead>
+<listitem>
+<listcell label="aaaaaaa"></listcell>
+</listitem>
+<listitem>
+<listcell label="ffffffff"></listcell>
+</listitem>
+</listbox>
+</detail>
+</row>
+</rows>
+</grid>
+</window>
+</zk>

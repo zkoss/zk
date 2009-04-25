@@ -326,7 +326,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	cd $javadocdir
 
 	echo Output ${javadocnm}.zip
-	zip -qr9 ${javadocnm}.zip zcommon zweb zk zul zhtml zml zkex zkmax zkplus
+	zip -qr9 ${javadocnm}.zip ZK
 	mv ${javadocnm}.zip /tmp/zk
 
 	mkdir -p /tmp/zk/$demonm/zkdemo/WebContent
