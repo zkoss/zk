@@ -245,7 +245,7 @@ abstract public class GenericInterpreter implements Interpreter {
 			final Execution exec = Executions.getCurrent();
 			if (exec != null) return exec;
 		}
-		return UNDEFINED;
+		return Namespaces.getImplicit(name, UNDEFINED);
 	}
 	/** Returns the variable through the specified namespaces and
 	 * variable resolvers, or {@link #UNDEFINED} if the variable is not

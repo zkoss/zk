@@ -277,7 +277,7 @@ function safe_cygpath
 #$2: target
 function invoke_ant
 {
-	echo "$1.$outdir $2... $3"
+	echo "$1.$outdir $2 $3..."
 	cd $2
 	
 	if [ $3 ] ; then

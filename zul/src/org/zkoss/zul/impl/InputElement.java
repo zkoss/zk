@@ -295,8 +295,7 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 		final Constraint constr = getConstraint();
 		if (constr != null) {
 			//Bug 1698190: contructor might be zscript
-			final HashMap backup = new HashMap();
-			final Namespace ns = Namespaces.beforeInterpret(backup, this, true);
+			Namespaces.beforeInterpret(this);
 			try {
 				constr.validate(this, value);
 				if (!_checkOnly && (constr instanceof CustomConstraint)) {
@@ -312,7 +311,7 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 					((CustomConstraint)constr).showCustomError(this, ex);
 				throw ex;
 			} finally {
-				Namespaces.afterInterpret(backup, ns, true);
+				Namespaces.afterInterpret();
 			}
 		}
 	}
@@ -329,14 +328,13 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	 */
 	protected WrongValueException showCustomError(WrongValueException ex) {
 		if (_constr instanceof CustomConstraint) {
-			final HashMap backup = new HashMap();
-			final Namespace ns = Namespaces.beforeInterpret(backup, this, true);
+			Namespaces.beforeInterpret(this);
 			try {
 				((CustomConstraint)_constr).showCustomError(this, ex);
 			} catch (Throwable t) {
 				log.realCause(t); //and ignore it
 			} finally {
-				Namespaces.afterInterpret(backup, ns, true);
+				Namespaces.afterInterpret();
 			}
 		}
 		return ex;

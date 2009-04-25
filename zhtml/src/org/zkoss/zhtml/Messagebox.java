@@ -38,7 +38,7 @@ public class Messagebox {
 	 * a yellow background.
 	 */
 	public static final String EXCLAMATION  = org.zkoss.zul.Messagebox.EXCLAMATION;
-	/** The same as {@link #EXCLAMATION}.
+	/** A symbol of a lowercase letter i in a circle.
 	 */
 	public static final String INFORMATION = org.zkoss.zul.Messagebox.INFORMATION;
 	/** A symbol consisting of a white X in a circle with a red background. */

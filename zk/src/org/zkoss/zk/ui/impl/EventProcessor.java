@@ -130,20 +130,19 @@ public class EventProcessor {
 	public void process() throws Exception {
 		//Bug 1506712: event listeners might be zscript, so we have to
 		//keep built-in variables as long as possible
-		final HashMap backup = new HashMap();
-		final Namespace ns = Namespaces.beforeInterpret(backup, _comp, true);
+		final Namespace ns = Namespaces.beforeInterpret(_comp);
 			//we have to push since process0 might invoke methods from zscript class
 		try {
-			Namespaces.setImplicit(backup, ns, "event", _event);
+			Namespaces.setImplicit("event", _event);
 
 			_event = ((DesktopCtrl)_desktop).beforeProcessEvent(_event);
 			if (_event != null) {
-				Namespaces.setImplicit(null, ns, "event", _event); //_event might change
+				Namespaces.setImplicit("event", _event); //_event might change
 				process0(ns);
 				((DesktopCtrl)_desktop).afterProcessEvent(_event);
 			}
 		} finally {
-			Namespaces.afterInterpret(backup, ns, true);
+			Namespaces.afterInterpret();
 		}
 	}
 	private void process0(Namespace ns) throws Exception {

@@ -38,130 +38,132 @@ import org.zkoss.zk.scripting.util.SimpleNamespace;
 public class Namespaces {
 	private static final Log log = Log.lookup(Namespaces.class);
 
+	/** A stack of implict objects ({@link Implicts}. */
+	private static final ThreadLocal _implicits = new ThreadLocal();
+	/** A stack of current namespace. */
+	private static final ThreadLocal _curnss = new ThreadLocal();
+
 	/** Prepares builtin variable before calling {@link Page#interpret}.
 	 *
 	 * <p>Typical use:
 	 * <pre><code>
-final Map backup = new HashMap();
-final Namespace ns = Namespaces.beforeInterpret(backup, comp, false);
+final Namespace ns = Namespaces.beforeInterpret(comp);
 try {
-  Namespaces.setImplicit(backup, ns, "some", value);
+  Namespaces.("some", value);
   page.interpret(zslang, zscript, ns); //it will push ns as the current namespace
 } finally {
-  Namespaces.afterInterpret(backup, ns, false);
+  Namespaces.afterInterpret();
 }
 </code></pre>
 	 *
 	 * <p>Another example:
 	 * <pre><code>
-final Map backup = new HashMap();
-final Namespace ns = Namespaces.beforeInterpret(backup, comp, true);
+Namespaces.beforeInterpret(comp);
 try {
-  Namespaces.setImplicit(backup, ns, "some", value);
+  Namespaces.setImplicit("some", value);
   constr.validate(comp); //if constr might be an instance of a class implemented in zscript
 } finally {
-  Namespaces.afterInterpret(backup, ns, true);
+  Namespaces.afterInterpret();
 }
 </code></pre>
 	 *
-	 * <p>If you need to backup some variables, you can invoke
+	 * <p>If you need to set some implicit variables, you can invoke
 	 * {@link #setImplicit} between {@link #beforeInterpret}
 	 * and {@link #afterInterpret}.
 	 *
-	 * @param backup the map to hold the backup variables. Never null.
 	 * @param comp the component, never null.
-	 * @param pushNS whether to make the namespace being returned
-	 * as the current namespace ({@link #getCurrent}).
-	 * Note: its value must be the same as the popNS argument of
-	 * {@link #afterInterpret}.
 	 * @return the namespace that owns the specified component
+	 * @since 3.6.1
 	 */
-	public static final Namespace beforeInterpret(Map backup, Component comp,
-	boolean pushNS) {
+	public static final
+	Namespace beforeInterpret(Component comp) {
 		Namespace ns = comp.getNamespace();
 		if (ns == null) ns = new SimpleNamespace();
 
-		setImplicit(backup, ns, "self", comp);
-		setImplicit(backup, ns, "componentScope", comp.getAttributes(Component.COMPONENT_SCOPE));
+		final Implicit impl = beforeInterpret0(ns);
+		impl.setImplicit("self", comp);
+		impl.setImplicit("componentScope", comp.getAttributes(Component.COMPONENT_SCOPE));
 
-		final Execution exec = Executions.getCurrent();
-		setImplicit(backup, ns, "arg", exec != null ? exec.getArg(): null);
-
-		if (pushNS) push(ns);
 		return ns;
 	}
 	/** Prepares builtin variable before calling
 	 * {@link org.zkoss.zk.ui.Page#interpret} or a method that might be
 	 * implemented with zscript.
 	 *
-	 * @see #beforeInterpret
-	 * @param backup the map to hold the backup variables.
-	 * If it is the first time to set the implicit, it cannot be null.
-	 * If it is the second time, it must be null (so the previous backup won't
-	 * be destroyed).
+	 * @see #beforeInterpret(Component)
 	 * @param page the page, never null.
-	 * @param pushNS whether to make the namespace being returned
-	 * as the current namespace ({@link #getCurrent}).
-	 * Note: its value must be the same as the popNS argument of
-	 * {@link #afterInterpret}.
 	 * @return the namespace that owns the specified page
+	 * @since 3.6.1
 	 */
-	public static final Namespace beforeInterpret(Map backup, Page page,
-	boolean pushNS) {
+	public static final Namespace beforeInterpret(Page page) {
 		final Namespace ns = page.getNamespace();
+		final Implicit impl = beforeInterpret0(ns);
+		impl.setImplicit("self", page);
+		return ns;
+	}
+	private static Implicit beforeInterpret0(Namespace ns) {
+		List impls = (List)_implicits.get();
+		if (impls == null)
+			_implicits.set(impls = new LinkedList());
+		final Implicit impl = new Implicit();
+		impls.add(0, impl);
 
 		final Execution exec = Executions.getCurrent();
-		setImplicit(backup, ns, "arg", exec != null ? exec.getArg(): null);
+		impl.setImplicit("arg", exec != null ? exec.getArg(): null);
 
-		if (pushNS) push(ns);
-		return ns;
+		push(ns);
+
+		return impl;
 	}
 	/** Used with {@link #beforeInterpret} to clean up builtin
 	 * variables.
 	 *
-	 * @param backup the map to hold the backup variables. Never null.
-	 * It must be the same as the backup argument of {@link #beforeInterpret}.
 	 * @param ns the namespace returned by {@link #beforeInterpret}
-	 * @param popNS whether to pop out the current namespace.
-	 * Its value must be the same as the pushNS argument of {@link #beforeInterpret}.
+	 * @since 3.6.1
 	 */
-	public static final void afterInterpret(Map backup, Namespace ns,
-	boolean popNS) {
-		if (backup != null && !backup.isEmpty()) {
-			Namespace nsbk = ns;
-			for (Namespace np; (np = nsbk.getParent()) != null; nsbk = np)
-				;
-
-			for (Iterator it = backup.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				final String name = (String)me.getKey();
-				final Object val = me.getValue();
-				//if (D.ON && log.finerable()) log.finer("Restore "+name+"="+val);
-				if (val != VOID) nsbk.setVariable(name, val, true);
-				else nsbk.unsetVariable(name, true);
-			}
-		}
-		if (popNS) pop(ns);
+	public static final void afterInterpret() {
+		((List)_implicits.get()).remove(0);
+		pop();
 	}
 
 	/** Sets an implicit object that will be stored later when {@link #afterInterpret}
 	 * is called.
 	 * @since 3.6.1
 	 */
-	public static void setImplicit(Map backup, Namespace ns, String name, Object val) {
-		//Bug 2684510: use top-level namespace to backup (since it is implict)
-		for (Namespace np; (np = ns.getParent()) != null; ns = np)
-			;
-
-		if (backup != null) {
-			final Object oldval = ns.getVariable(name, true);
-			backup.put(name,
-				oldval != null || ns.getVariableNames().contains(name) ? oldval: VOID);
-		}
-		ns.setVariable(name, val, true);
+	public static void setImplicit(String name, Object value) {
+		((Implicit)((List)_implicits.get()).get(0))
+			.setImplicit(name, value);
 	}
-	private static final Object VOID = new Object();
+	/** Returns the implict object.
+	 *
+	 * @param name the variable to retrieve
+	 * @param defValue the default vale that is used if the implicit
+	 * object is not defined.
+	 * @since 3.6.1
+	 */
+	public static Object getImplicit(String name, Object defValue) {
+		return ((Implicit)((List)_implicits.get()).get(0))
+			.getImplicit(name, defValue);
+	}
 
+	/** @deprecated As of release 3.6.1, it is replaced with {@link #beforeInterpret(Component, boolean)}.
+	 */
+	public static final Namespace beforeInterpret(Map backup, Component comp,
+	boolean pushNS) {
+		return beforeInterpret(comp);
+	}
+	/** @deprecated As of release 3.6.1, it is replaced with {@link #beforeInterpret(Page, boolean)}.
+	 */
+	public static final Namespace beforeInterpret(Map backup, Page page,
+	boolean pushNS) {
+		return beforeInterpret(page);
+	}
+	/** @deprecated As of release 3.6.1, it is replaced with {@link #afterInterpret(Namespace ns, boolean)}.
+	 */
+	public static final void afterInterpret(Map backup, Namespace ns,
+	boolean popNS) {
+		afterInterpret();
+	}
 	/** @deprecated As of release 3.6.1, it is replaced with {@link #setImplicit}.
 	 */
 	public static final void backupVariable(Map backup, Namespace ns, String name) {
@@ -194,12 +196,22 @@ try {
 	}
 	/** Pops the current namespce (pushed by {@link #push}).
 	 */
-	private static final void pop(Namespace ns) {
-		final List nss = (List)_curnss.get();
-		if (nss.remove(0) != ns)
-			log.realCauseBriefly(new IllegalStateException("Unmatched pop the current namespace"));
+	private static final void pop() {
+		((List)_curnss.get()).remove(0);
 	}
 
-	/** A stack of current namespace. */
-	private static final ThreadLocal _curnss = new ThreadLocal();
+	private static class Implicit {
+		/** Implicit variables. */
+		private final Map _vars = new HashMap();
+
+		private Implicit() {
+		}
+		private void setImplicit(String name, Object value) {
+			_vars.put(name, value);
+		}
+		private Object getImplicit(String name, Object defValue) {
+			final Object o = _vars.get(name);
+			return o != null || _vars.containsKey(name) ? o: defValue;
+		}
+	}
 }

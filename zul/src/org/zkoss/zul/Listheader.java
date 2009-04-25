@@ -354,8 +354,7 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 		if (box == null) return false;
 
 		//comparator might be zscript
-		final HashMap backup = new HashMap();
-		final Namespace ns = Namespaces.beforeInterpret(backup, this, true);
+		Namespaces.beforeInterpret(this);
 		try {
 			final ListModel model = box.getModel();
 			boolean isPagingMold = box.inPagingMold();
@@ -377,7 +376,7 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 				// the wrong active page when dynamically add/remove the item (i.e. sorting).
 				// Therefore, we have to reset the correct active page.
 		} finally {
-			Namespaces.afterInterpret(backup, ns, true);
+			Namespaces.afterInterpret();
 		}
 
 		//maintain
