@@ -257,6 +257,7 @@ zkWnd2.onVisi = zkWnd2.onSize = function (cmp) {
 		if (pos) zkWnd2._center(cmp, null, pos);
 		zkWnd2.syncShadow(cmp);
 	}
+	if (zk.ie) zk.redoCSS(cmp); //Bug 2685842
 };
 zkWnd2.syncMaximized = function (cmp) {
 	if (!cmp._lastSize) return;

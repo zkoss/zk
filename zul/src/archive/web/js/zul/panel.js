@@ -372,6 +372,7 @@ zkPanel = {
 		zkPanel._fixHgh(cmp);
 		zkPanel._fixWdh(cmp);
 		zkPanel.syncShadow(cmp);
+		if (zk.ie) zk.redoCSS(cmp); //Bug 2685842
 	},
 	syncMaximized: function (cmp) {
 		if (!cmp._lastSize) return;
