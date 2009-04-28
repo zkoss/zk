@@ -483,6 +483,7 @@
 			<xs:element ref="menubar" />
 			<xs:element ref="menupopup" />
 			<xs:element ref="paging" />
+			<xs:element ref="panel" />
 			<xs:element ref="popup" />
 			<xs:element ref="portallayout" />
 			<xs:element ref="progressmeter" />

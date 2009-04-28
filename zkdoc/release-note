@@ -70,6 +70,7 @@ ZK 3.6.1
   2779247: No tooltip in chart after using  jfreechart 1.0.13
   2685842: Panel and Window corner's position error in Tabpanel(IE)
   2780144: rendering of tree with z-dottree and hidden treeitems
+  2782400: Correct XSD definition for panel usage
   
 	--------
 ZK 3.6.0
