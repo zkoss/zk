@@ -101,6 +101,7 @@ public class DumbFailoverManager implements FailoverManager {
 				public String getUuid() {return killed.getUuid();} //required; never null
 				public String getTitle() {return killed.getTitle();} //if unknown, just pass null
 				public String getStyle() {return killed.getStyle();} //if unknown, just pass null
+				public String getHeaders(boolean before) {return killedCtrl.getHeaders(before);} //if unknown, just pass null
 				public String getHeaders() {return killedCtrl.getHeaders();} //if unknown, just pass null
 			});
 

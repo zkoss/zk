@@ -441,12 +441,25 @@ public class ZkFns extends DspFns {
 	//might have old version core.dsp.tld
 	}
 
-	/** Returns the content that will be placed inside the header element
+	/** Returns the content of the specified condition
+	 *  that will be placed inside the header element
 	 * of the specified page.
 	 * For HTML, the header element is the HEAD element.
+	 * @param before whether to return the headers that shall be shown
+	 * before ZK's CSS/JS headers.
+	 * If true, only the headers that shall be shown before (such as meta)
+	 * are returned.
+	 * If true, only the headers that shall be shown after (such as link)
+	 * are returned.
+	 * @since 3.6.1
+	 */
+	public static final String outHeaders(Page page, boolean before) {
+		return ((PageCtrl)page).getHeaders(before);
+	}
+	/** @deprecated As of release 3.6.1, replaced with {@link #outHeaders(Page,boolean)}.
 	 */
 	public static final String outHeaders(Page page) {
-		return ((PageCtrl)page).getHeaders();
+		return outHeaders(page, true) + outHeaders(page, false);
 	}
 	/** Returns the content that will be generated
 	 * as the attributes of the root element of the specified page.

@@ -22,13 +22,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:set var="arg" value="${requestScope.arg}"/>
 <c:set var="page" value="${arg.page}"/>
 <c:if test="${!empty zk_htmlHeadRequired}">
-${z:outHeaders(page)}
+${z:outHeaders(page, true)}
 </c:if>
 <c:if test="${!arg.embed}">
 ${z:outLangStyleSheets()}
 ${z:outLangJavaScripts(null)}
 </c:if>
 <c:if test="${!empty zk_htmlHeadRequired}">
+${z:outHeaders(page, false)}
 <c:set var="zk_htmlHeadRequired" value="" scope="request"/>
 </head>
 <body>

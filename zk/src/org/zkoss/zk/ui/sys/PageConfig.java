@@ -54,10 +54,31 @@ public interface PageConfig {
 	 * a non-empty value before, this method is ignored.
 	 */
 	public String getStyle();
-	/** Returns the content that will be generated inside the header element
+	/** Returns the content of the specified condition
+	 * that shall be generated inside the header element
+	 * (HTML HEAD), or null if no special header is required.
+	 *
+	 * <p>For HTML, the header element is the HEAD element.
+	 *
+	 * @param before whether to return the headers that shall be shown
+	 * before ZK's CSS/JS headers.
+	 * If true, only the headers that shall be shown before (such as meta)
+	 * are returned.
+	 * If true, only the headers that shall be shown after (such as link)
+	 * are returned.
+	 * @see #getHeaders()
+	 * @since 3.6.1
+	 */
+	public String getHeaders(boolean before);
+	/** Returns all content that will be generated inside the header element
 	 * (HTML HEAD), or null if no special header is required.
 	 * <p>For HTML, the header element is the HEAD element.
+	 * <p>It returns all header no matter it shall be shown before or
+	 * after ZK's CSS/JS headers. To have more control, use
+	 * {@link #getHeaders(boolean)} instead.
+	 *
 	 * @see PageCtrl#getHeaders
+	 * @see #getHeaders(boolean)
 	 */
 	public String getHeaders();
 }
