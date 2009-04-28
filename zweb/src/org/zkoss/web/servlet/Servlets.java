@@ -471,7 +471,8 @@ public class Servlets {
 		  Opera/9.64 (Windows NT 5.1; U; en) Presto/2.1.1
 		*/
 		userAgent = userAgent.toLowerCase();
-		if (userAgent.indexOf("gecko/") >= 0 && userAgent.indexOf("safari") > 0)
+		if (userAgent.indexOf("gecko/") < 0 || userAgent.indexOf("safari") >= 0
+		|| userAgent.indexOf("opera") >= 0)
 			return -1;
 
 		int j = userAgent.indexOf("firefox/");

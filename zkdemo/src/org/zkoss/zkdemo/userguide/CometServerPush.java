@@ -28,6 +28,7 @@ import java.awt.image.BufferedImage;
 import org.zkoss.lang.Threads;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zk.ui.DesktopUnavailableException;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zul.Image;
 import org.zkoss.zul.Listbox;
@@ -104,7 +105,9 @@ public class CometServerPush {
 					}
 					Threads.sleep(1000);
 				}
-			} catch (InterruptedException ex) {
+			} catch (DesktopUnavailableException ex) {
+				System.out.println("The server push thread interrupted");
+			} catch (InterruptedException e) {
 				System.out.println("The server push thread interrupted");
 			}
 		}

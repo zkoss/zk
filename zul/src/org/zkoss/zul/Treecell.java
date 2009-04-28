@@ -144,11 +144,14 @@ public class Treecell extends LabelImageElement implements org.zkoss.zul.api.Tre
 		}
 	}
 
-	/** Returns whether an item is the last child.
+	/** Returns whether an item is the last visible child.
 	 */
 	public static boolean isLastChild(Treeitem item) {
 		final Component parent = item.getParent();
-		return parent == null || parent.getLastChild() == item;
+		if (parent == null) return true;
+		for (Component n = parent.getLastChild(); n != null; n = n.getPreviousSibling())
+			if (n.isVisible()) return  n == item;
+		return false;		
 	}
 	/** Returns an array of Treeitem from the root.
 	 */

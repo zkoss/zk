@@ -89,8 +89,10 @@ public class PageDefinition extends NodeInfo {
 	private List _resolvdefs;
 	/** List(FunctionMapper mapper). */
 	private List _mapperdefs;
-	/** List(HeaderInfo). */
-	private List _headerdefs;
+	/** List(HeaderInfo). They are generated before ZK default headers, such as meta. */
+	private List _hdBfrDefs;
+	/** List(HeaderInfo). They are generated after ZK default headers. */
+	private List _hdAftDefs;
 	/** List(ForwardInfo). */
 	private List _forwdefs;
 	/** Map(String name, ExValue value). */
@@ -282,10 +284,15 @@ public class PageDefinition extends NodeInfo {
 			}
 		}
 
-		if (pgdef._headerdefs != null
+		if (pgdef._hdBfrDefs != null
 		&& directives != null && contains(directives, "meta")) {
-			for (Iterator it = pgdef._headerdefs.iterator(); it.hasNext();)
-				addHeaderInfo((HeaderInfo)it.next());
+			for (Iterator it = pgdef._hdBfrDefs.iterator(); it.hasNext();)
+				addHeaderInfo((HeaderInfo)it.next(), true);
+		}
+		if (pgdef._hdAftDefs != null
+		&& directives != null && contains(directives, "meta")) {
+			for (Iterator it = pgdef._hdAftDefs.iterator(); it.hasNext();)
+				addHeaderInfo((HeaderInfo)it.next(), false);
 		}
 	}
 	private static boolean contains(String[] dirs, String dir) {
@@ -410,26 +417,60 @@ public class PageDefinition extends NodeInfo {
 	}
 
 	/** Adds a header definition ({@link HeaderInfo}).
+	 * @param before whether to place the header <b>before</b> ZK's
+	 * CSS/JS headers. If false, it is placed after ZK's CSS/JS headers.
+	 * @since 3.6.1
 	 */
-	public void addHeaderInfo(HeaderInfo header) {
+	public void addHeaderInfo(HeaderInfo header, boolean before) {
 		if (header == null)
 			throw new IllegalArgumentException("null");
 
-		if (_headerdefs == null)
-			_headerdefs = new LinkedList();
-		_headerdefs.add(header);
+		if (before) {
+			if (_hdBfrDefs == null)
+				_hdBfrDefs = new LinkedList();
+			_hdBfrDefs.add(header);
+		} else {
+			if (_hdAftDefs == null)
+				_hdAftDefs = new LinkedList();
+			_hdAftDefs.add(header);
+		}
+	}
+	/** Adds a header definition ({@link HeaderInfo}).
+	 * It places the meta headers before ZK's CSS/JS headers,
+	 * and others after ZK's CSS/JS headers.
+	 */
+	public void addHeaderInfo(HeaderInfo header) {
+		addHeaderInfo(header, "meta".equals(header.getName()));
 	}
 	/** Converts the header definitions (added by {@link #addHeaderInfo}) to
 	 * HTML tags.
+	 *
+	 * @param before whether to return the headers that shall be shown
+	 * before ZK's CSS/JS headers.
+	 * If true, only the headers that shall be shown before (such as meta)
+	 * are returned.
+	 * If true, only the headers that shall be shown after (such as link)
+	 * are returned.
+	 * @see #getHeaders(Page)
+	 * @since 3.6.1
 	 */
-	public String getHeaders(Page page) {
-		if (_headerdefs == null)
+	public String getHeaders(Page page, boolean before) {
+		final List defs = before ? _hdBfrDefs: _hdAftDefs;
+		if (defs == null)
 			return "";
 
 		final StringBuffer sb = new StringBuffer(256);
-		for (Iterator it = _headerdefs.iterator(); it.hasNext();)
+		for (Iterator it = defs.iterator(); it.hasNext();)
 			sb.append(((HeaderInfo)it.next()).toHTML(this, page)).append('\n');
 		return sb.toString();
+	}
+	/** Converts all header definitions (added by {@link #addHeaderInfo}) to
+	 * HTML tags, no matter that shall be shown before or after ZK's
+	 * CSS/JS headers.
+	 * To have better control, use {@link #getHeaders(Page,boolean)} instead.
+	 */
+	public String getHeaders(Page page) {
+		return getHeaders(page, true) + getHeaders(page, false);
 	}
 	/** Adds a forward definition ({@link ForwardInfo}).
 	 */
@@ -781,6 +822,10 @@ public class PageDefinition extends NodeInfo {
 				public String getUuid() {return null;}
 				public String getTitle() {return _title;}
 				public String getStyle() {return _style;}
+				public String getHeaders(boolean before) {
+					return evalHeaders ?
+						PageDefinition.this.getHeaders(page, before): "";
+				}
 				public String getHeaders() {
 					return evalHeaders ?
 						PageDefinition.this.getHeaders(page): "";

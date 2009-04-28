@@ -468,6 +468,8 @@ if [ "$javadocAll" = "true" ] ; then
 	echo "prepare javadoc all"
 	rm -rf javadoctmp
 	mkdir -p javadoctmp/src
+	maindir="$(pwd)"
+	chmod -R 755 $maindir
 	touch javadoctmp/tmp
 	for target in $targetList ; do
 		echo "copy $target"

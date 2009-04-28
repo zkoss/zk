@@ -22,7 +22,7 @@ Filters.jar
 jasperreports.jar
 commons-collections.jar
 commons-logging.jar
-iText.jar
+itext.jar
 jxl.jar
 poi.jar
 bsh.jar

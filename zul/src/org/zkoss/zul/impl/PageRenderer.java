@@ -75,9 +75,10 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 			+"<title>");
 		write(out, page.getTitle());
 		out.write("</title>\n");
-		out.write(pageCtrl.getHeaders());
+		out.write(pageCtrl.getHeaders(true));
 		out.write(HtmlPageRenders.outLangStyleSheets(exec, null, null));
 		out.write(HtmlPageRenders.outLangJavaScripts(exec, null, null));
+		out.write(pageCtrl.getHeaders(false));
 		out.write("</head>\n");
 
 		out.write("<body>\n");

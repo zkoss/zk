@@ -92,6 +92,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
                     }
                     Threads.sleep(1000);
                 }
+            } <span style='color:#7f0055; font-weight:bold; '>catch</span> (<span style='color:#7f0055; font-weight:bold; '>DesktopUnavailableException</span> ex) {
+                <span style='color:#7f0055; font-weight:bold; '>System</span>.out.println(<span style='color:#2a00ff; '>"The server push thread interrupted"</span>);
             } <span style='color:#7f0055; font-weight:bold; '>catch</span> (<span style='color:#7f0055; font-weight:bold; '>InterruptedException</span> ex) {
                 <span style='color:#7f0055; font-weight:bold; '>System</span>.out.println(<span style='color:#2a00ff; '>"The server push thread interrupted"</span>);
             }

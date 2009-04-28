@@ -380,6 +380,7 @@ public class UiEngineImpl implements UiEngine {
 					public String getUuid() {return null;}
 					public String getTitle() {return null;}
 					public String getStyle() {return null;}
+					public String getHeaders(boolean before) {return null;}
 					public String getHeaders() {return null;}
 				});
 				richlet.service(page);

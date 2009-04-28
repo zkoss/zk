@@ -137,7 +137,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	/** The reason to store it is PageDefinition is not serializable. */
 	private transient LanguageDefinition _langdef;
 	/** The header tags. */
-	private String _headers = "";
+	private String _hdbfr = "", _hdaft = "";
 	/** The root attributes. */
 	private String _rootAttrs = "";
 	private String _contentType, _docType, _firstLine;
@@ -567,8 +567,10 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			}
 		}
 
-		String s = config.getHeaders();
-		if (s != null) _headers = s;
+		String s = config.getHeaders(true);
+		if (s != null) _hdbfr = s;
+		s = config.getHeaders(false);
+		if (s != null) _hdaft = s;
 
 		if (_title.length() == 0) {
 			s = config.getTitle();
@@ -649,8 +651,11 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		}
 	};
 
+	public String getHeaders(boolean before) {
+		return before ? _hdbfr: _hdaft;
+	}
 	public String getHeaders() {
-		return _headers;
+		return _hdbfr + _hdaft;
 	}
 	public String getRootAttributes() {
 		return _rootAttrs;

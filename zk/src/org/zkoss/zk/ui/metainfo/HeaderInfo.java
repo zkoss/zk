@@ -29,8 +29,8 @@ import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.Evaluator;
 
 /**
- * Represents a header element, such as &lt;link&gt; and &lt;meta&gt;
- * on the ZUML page.
+ * Represents a header element, such as &lt;?link&gt; and &lt;?meta&gt;
+ * directives on the ZUML page.
  * They are usually represented as directives in ZUML.
  * For example, the link and meta directives represent &lt;link&gt;
  * and &lt;meta&gt; HTML tags, respectively.

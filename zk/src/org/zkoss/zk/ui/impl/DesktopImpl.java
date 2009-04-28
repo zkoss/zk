@@ -548,6 +548,15 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 
 	public void destroy() {
+		if (_spush != null) {
+			try {
+				_spush.stop();
+			} catch (Throwable ex) {
+				log.error("Failed to stop server-push, "+_spush, ex);
+			}
+			_spush = null;
+		}
+
 		for (Iterator it = _pages.values().iterator(); it.hasNext();) {
 			final PageCtrl pgc = (PageCtrl)it.next();
 			try {
@@ -555,11 +564,6 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			} catch (Throwable ex) {
 				log.error("Failed to destroy "+pgc, ex);
 			}
-		}
-
-		if (_spush != null) {
-			_spush.stop();
-			_spush = null;
 		}
 
 		//theorectically, the following is not necessary, but, to be safe...
