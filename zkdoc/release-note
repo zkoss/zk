@@ -21,6 +21,7 @@ ZK 3.6.1
   2314215: A way to specify the position of the popup component
   2778507: Add load-after descriptive to DataBinder
   2779281: Add save-after descriptive to DataBinder
+  2783319: Datebox format enhance
   
 * Bugs
   2684510: Unable to access implict objects if func defined in other namespace
