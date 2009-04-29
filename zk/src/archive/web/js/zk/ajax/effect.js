@@ -806,15 +806,16 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 
 		zEvt.listen(mask, "mousemove", zEvt.stop);
 		zEvt.listen(mask, "click", zEvt.stop);
-		zEvt.listen(window, "resize", this.proxy(this._syncPos, '_pxSyncPos'));
-		zEvt.listen(window, "scroll", this._pxSyncPos);
+		var f;
+		zEvt.listen(window, "resize", f = this.proxy(this._syncPos));
+		zEvt.listen(window, "scroll", f);
 	},
 	destroy: function () {
-		var mask = this.mask;
+		var mask = this.mask, f;
 		zEvt.unlisten(mask, "mousemove", zEvt.stop);
 		zEvt.unlisten(mask, "click", zEvt.stop);
-		zEvt.unlisten(window, "resize", this._pxSyncPos);
-		zEvt.unlisten(window, "scroll", this._pxSyncPos);
+		zEvt.unlisten(window, "resize", f = this.proxy(this._syncPos));
+		zEvt.unlisten(window, "scroll", f);
 		zDom.remove(mask);
 		zDom.remove(this.stackup);
 		this.mask = this.stackup = null;
@@ -926,7 +927,7 @@ zk.eff.Tooltip = zk.$extends(zk.Object, {
 
 			this._inf = {
 				tip: tip, ref: ref,
-				timer: setTimeout(this.proxy(this.open_, '_pxopen'), zk.tipDelay)
+				timer: setTimeout(this.proxy(this.open_), zk.tipDelay)
 			};
 		} else
 			this._clearClosing();
@@ -934,7 +935,7 @@ zk.eff.Tooltip = zk.$extends(zk.Object, {
 	end: function (ref) {
 		if (this._ref == ref || this._tip == ref)
 			this._tmClosing =
-				setTimeout(this.proxy(this.close_, '_pxclose'), 100);
+				setTimeout(this.proxy(this.close_), 100);
 			//don't cloes immediate since user might move from ref to toolip
 		else
 			this._clearOpening();

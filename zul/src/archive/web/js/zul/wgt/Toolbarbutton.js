@@ -92,14 +92,14 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		this.$supers('bind_', arguments);
 		var n = this.getNode();
 		if (!this._disabled) {
-			zEvt.listen(n, "focus", this.proxy(this.domFocus_, '_fxFocus'));
-			zEvt.listen(n, "blur", this.proxy(this.domBlur_, '_fxBlur'));
+			zEvt.listen(n, "focus", this.proxy(this.domFocus_));
+			zEvt.listen(n, "blur", this.proxy(this.domBlur_));
 		}
 	},
 	unbind_: function(){
 		var n = this.getNode();
-		zEvt.unlisten(n, "focus", this._fxFocus);
-		zEvt.unlisten(n, "blur", this._fxBlur);
+		zEvt.unlisten(n, "focus", this.proxy(this.domFocus_));
+		zEvt.unlisten(n, "blur", this.proxy(this.domBlur_));
 		this.$supers('unbind_', arguments);
 	},
 	domContent_: function(){

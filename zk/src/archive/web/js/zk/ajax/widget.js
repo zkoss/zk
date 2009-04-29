@@ -764,6 +764,8 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 	},
 	getSubnode: function (name) {
+		if (!name)
+			return this.getNode();
 		var n = this._subnodes[name];
 		if (!n && this.desktop)
 			n = this._subnodes[name] = zDom.$(this.uuid, name);

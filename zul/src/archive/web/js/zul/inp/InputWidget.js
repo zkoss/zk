@@ -369,17 +369,17 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	bind_: function () {
 		this.$supers('bind_', arguments);
 		var inp = this.getInputNode();
-		zEvt.listen(inp, "focus", this.proxy(this.domFocus_, '_pxFocus'));
-		zEvt.listen(inp, "blur", this.proxy(this.domBlur_, '_pxBlur'));
-		zEvt.listen(inp, "select", this.proxy(this._domSelect, '_pxSelect'));
+		zEvt.listen(inp, "focus", this.proxy(this.domFocus_));
+		zEvt.listen(inp, "blur", this.proxy(this.domBlur_));
+		zEvt.listen(inp, "select", this.proxy(this._domSelect));
 	},
 	unbind_: function () {
 		this.clearErrorMessage(true);
 
 		var n = this.getInputNode();
-		zEvt.unlisten(n, "focus", this._pxFocus);
-		zEvt.unlisten(n, "blur", this._pxBlur);
-		zEvt.unlisten(n, "select", this._pxSelect);
+		zEvt.unlisten(n, "focus", this.proxy(this.domFocus_));
+		zEvt.unlisten(n, "blur", this.proxy(this.domBlur_));
+		zEvt.unlisten(n, "select", this.proxy(this._domSelect));
 
 		this.$supers('unbind_', arguments);
 	},

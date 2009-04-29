@@ -239,7 +239,7 @@ zul.grid.Grid = zk.$extends(zul.Widget, {
 		this._bindDomNode();
 		this._fixHeaders();
 		if (this.ebody) {
-			zEvt.listen(this.ebody, 'scroll', this.proxy(this.doScroll_, '_pxDoScroll'));
+			zEvt.listen(this.ebody, 'scroll', this.proxy(this.doScroll_));
 			this.ebody.style.overflow = ''; // clear
 		}
 		zWatch.listen("onSize", this);
@@ -248,7 +248,7 @@ zul.grid.Grid = zk.$extends(zul.Widget, {
 	},
 	unbind_: function () {
 		if (this.ebody)
-			zEvt.unlisten(this.ebody, 'scroll', this._pxDoScroll);
+			zEvt.unlisten(this.ebody, 'scroll', this.proxy(this.doScroll_));
 			
 		this.ebody = this.ehead = this.efoot = this.ebodytbl
 			= this.eheadtbl = this.efoottbl = null;

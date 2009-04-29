@@ -37,7 +37,7 @@ zkmax.cmsp.SPush = zk.$extends(zk.Object, {
 			dt = this.desktop;
 		zAu.sentTime = zUtl.now();
 		try {
-			req.onreadystatechange = this.proxy(this._onRespReady, '_xonRespReady');
+			req.onreadystatechange = this.proxy(this._onRespReady);
 			req.open("POST", zAu.comURI("/comet?dtid="+dt.id, dt, false), true);
 			req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 			req.setRequestHeader("ZK-SID", this._sid);
@@ -79,7 +79,7 @@ zkmax.cmsp.SPush = zk.$extends(zk.Object, {
 	},
 	_asend: function (timeout) {
 		if (!this._stopped)
-			setTimeout(this.proxy(this._send, "_pxsend"),
+			setTimeout(this.proxy(this._send),
 				Math.max(zAu.sendNow(this.desktop) ? 900: 0, timeout));
 				//At least 900 so zAu.sendNow has time to send any pending status back
 	}

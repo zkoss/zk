@@ -120,11 +120,11 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				if (autoscroll) {
 					bodyEl.style.overflow = "auto";
 					bodyEl.style.position = "relative";
-					zEvt.listen(bodyEl, "scroll", this.proxy(this.doScroll_, '_pxDoscroll'));
+					zEvt.listen(bodyEl, "scroll", this.proxy(this.doScroll_));
 				} else {
 					bodyEl.style.overflow = "hidden";
 					bodyEl.style.position = "";
-					zEvt.unlisten(bodyEl, "scroll", this._pxDoscroll);
+					zEvt.unlisten(bodyEl, "scroll", this.proxy(this.doScroll_));
 				}
 			}
 		}
@@ -278,14 +278,14 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		if (this.isAutoscroll()) {
 			var bodyEl = this.isFlex() && this.firstChild ?
 					this.firstChild.getNode() : this.getSubnode('cave');
-			zEvt.listen(bodyEl, "scroll", this.proxy(this.doScroll_, '_pxDoscroll'));
+			zEvt.listen(bodyEl, "scroll", this.proxy(this.doScroll_));
 		}
 	},
 	unbind_: function () {
 		if (this.isAutoscroll()) {
 			var bodyEl = this.isFlex() && this.firstChild ?
 					this.firstChild.getNode() : this.getSubnode('cave');
-			zEvt.unlisten(bodyEl, "scroll", this._pxDoscroll);
+			zEvt.unlisten(bodyEl, "scroll", this.proxy(this.doScroll_));
 		}
 		if (this.getSubnode('split')) {			
 			if (this._drag) {
@@ -541,7 +541,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	},
 	// a callback function after the collapsed region slides down
 	afterSlideDown: function (n) {
-		zEvt.listen(document, "click", this.proxy(this._doDocClick, '_pxdoDocClick'));
+		zEvt.listen(document, "click", this.proxy(this._doDocClick));
 	},
 	// a callback function after the collapsed region slides up
 	afterSlideUp: function (n) {
@@ -551,7 +551,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		n._lastSize = null;// reset size for Borderlayout
 		s.zIndex = "";
 		this.getSubnode('btn').style.display = "";
-		zEvt.unlisten(document, "click", this._pxdoDocClick);
+		zEvt.unlisten(document, "click", this.proxy(this._doDocClick));
 		this._isSlideUp = this._isSlide = false;
 	},
 	// Drag and drop

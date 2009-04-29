@@ -22,9 +22,9 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 		zDom.disableSelection(btn);
 		zDom.disableSelection(this._img);
 
-		zEvt.listen(btn, 'mouseover', this.proxy(this._domOver, '_pxOver'));
-		zEvt.listen(btn, 'mouseout', this.proxy(this._domOut, '_pxOut'));
-		zEvt.listen(btn, 'mousedown', this.proxy(this._domDown, '_pxDown'));
+		zEvt.listen(btn, 'mouseover', this.proxy(this._domOver));
+		zEvt.listen(btn, 'mouseout', this.proxy(this._domOut));
+		zEvt.listen(btn, 'mousedown', this.proxy(this._domDown));
 	},
 	cleanup: function () {
 		var btn = this._btn;
@@ -32,9 +32,9 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 		zDom.enableSelection(btn); //unlisten in IE
 		zDom.enableSelection(this._img);
 
-		zEvt.unlisten(btn, 'mouseover', this._pxOver);
-		zEvt.unlisten(btn, 'mouseout', this._pxOut);
-		zEvt.unlisten(btn, 'mousedown', this._pxDown);
+		zEvt.unlisten(btn, 'mouseover', this.proxy(this._domOver));
+		zEvt.unlisten(btn, 'mouseout', this.proxy(this._domOut));
+		zEvt.unlisten(btn, 'mousedown', this.proxy(this._domDown));
 	},
 	fixpos: function () {
 		var btn = this._btn;
@@ -43,7 +43,7 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 				refh = ref.offsetHeight,
 				imgh = img.offsetHeight;
 			if (!refh || !imgh) {
-				setTimeout(this.proxy(this.fixpos, '_pxfixpos'), 66);
+				setTimeout(this.proxy(this.fixpos), 66);
 				return;
 			}
 
@@ -77,7 +77,7 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 			if (curab) curab._domUp();
 
 			zDom.addClass(this._btn, wgt.getZclass() + "-btn-clk");
-			zEvt.listen(document.body, "mouseup", this.proxy(this._domUp, '_pxUp'));
+			zEvt.listen(document.body, "mouseup", this.proxy(this._domUp));
 
 			$Auxbutton._curab = this;
 		}
@@ -88,7 +88,7 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 		if (curab) {
 			$Auxbutton._curab = null;
 			zDom.rmClass(curab._btn, curab._wgt.getZclass() + "-btn-clk");
-			zEvt.unlisten(document.body, "mouseup", curab._pxUp);
+			zEvt.unlisten(document.body, "mouseup", curab.proxy(this._domUp));
 		}
 	}
 });

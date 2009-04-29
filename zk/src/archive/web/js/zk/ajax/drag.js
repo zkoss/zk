@@ -57,13 +57,12 @@ zk.Draggable = zk.$extends(zk.Object, {
 		this.opts = opts;
 		this.dragging = false;   
 
-		zEvt.listen(this.handle, "mousedown",
-			this.proxy(this._mouseDown, '_pxMouseDown'));
+		zEvt.listen(this.handle, "mousedown", this.proxy(this._mouseDown));
 
 		zdg._register(this);
 	},
 	destroy: function() {
-		zEvt.unlisten(this.handle, "mousedown", this._pxMouseDown);
+		zEvt.unlisten(this.handle, "mousedown", this.proxy(this._mouseDown));
 		zk.Draggable._unregister(this);
 		this.node = this.control = this.handle = null;
 	},

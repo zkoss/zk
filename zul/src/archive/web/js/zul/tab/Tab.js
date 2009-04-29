@@ -187,12 +187,12 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		var uuid = this.uuid,
 			closebtn = zDom.$(uuid, 'close');
         if (closebtn) {
-			zEvt.listen(closebtn, "click", this.proxy(this._doClosebtnClick, '_tabClose'));
+			zEvt.listen(closebtn, "click", this.proxy(this._doClosebtnClick));
 			if (!closebtn.style.cursor)
 				closebtn.style.cursor = "default";
 		//				if (zk.ie6Only) {
-		//					zEvt.listen(closebtn, "mouseover", this.proxy(this._doMouseOver, '_tabMouseOver'));
-		//					zEvt.listen(closebtn, "mouseout", this.proxy(this._doMouseOut, '_tabMouseOut'));
+		//					zEvt.listen(closebtn, "mouseover", this.proxy(this._doMouseOver));
+		//					zEvt.listen(closebtn, "mouseout", this.proxy(this._doMouseOut));
 		//            	}
 //
 //	 var meta = $parent(cmp);
@@ -208,7 +208,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		this.$supers('unbind_', arguments);
 		var closebtn = zDom.$(this.uuid, 'close');
 		if (closebtn) {
-			zWatch.unlisten(closebtn, "click", this.proxy(this._doClosebtnClick, '_tabClose'));		
+			zWatch.unlisten(closebtn, "click", this.proxy(this._doClosebtnClick));		
 		}
 	}
 });
