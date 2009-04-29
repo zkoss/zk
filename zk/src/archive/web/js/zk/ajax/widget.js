@@ -1025,6 +1025,31 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 
 	//DOM event handling//
+	domListen_: function (n, evtnm, fnm) {
+		if (!fnm) fnm = zk.Widget._dome2fn(evtnm);
+		if (fnm = this._domfInDesign(fnm))
+			zEvt.listen(n, evtnm, fnm);
+	},
+	domUnlisten_: function (n, evtnm, fnm) {
+		if (!fnm) fnm = zk.Widget._dome2fn(evtnm);
+		if (fnm = this._domfInDesign(fnm))
+			zEvt.unlisten(n, evtnm, fnm);
+	},
+	_domfInDesign: function (fn) { //fn in design mode
+		if (this.inDesign) {
+			if (fn.startsWith('_dom'))
+				fn = '_domDesign' + fn.substring(4);
+			else
+				fn = 'domDesign' + (fn.startsWith('dom') ? fn.substring(3): fn);
+			fn = this[fn];
+			return fn ? this.proxy(fn): null;
+		}
+
+		var f = this[fn];
+		if (!f)
+			throw fn + ' not defined in ' + this.className;
+		return this.proxy(f);
+	},
 	domFocus_: function (devt) {
 		if (this.canActivate()) {
 			zk.currentFocus = this;
@@ -1086,6 +1111,9 @@ zk.Widget = zk.$extends(zk.Object, {
 	_binds: {}, //Map(uuid, wgt): bind but no node
 
 	//Event Handling//
+	_dome2fn: function (evtnm) {//evtnm => fnm
+		return 'dom' + evtnm.charAt(0).toUpperCase() + evtnm.substring(1) + '_';
+	},
 	domMouseDown: function (wgt) {
 		var modal = zk.currentModal;
 		if (modal && !wgt) {

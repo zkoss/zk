@@ -62,30 +62,30 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 
 		if (!this.isTopmost()) {
 			var anc = this.getSubnode('a'), n = this.getNode();
-			zEvt.listen(anc, "focus", this.proxy(this.domFocus_));
-			zEvt.listen(anc, "blur", this.proxy(this.domBlur_));
-			zEvt.listen(n, "mouseover", this.proxy(this._doMouseOver));
-			zEvt.listen(n, "mouseout", this.proxy(this._doMouseOut));
+			this.domListen_(anc, "focus");
+			this.domListen_(anc, "blur");
+			this.domListen_(n, "mouseover");
+			this.domListen_(n, "mouseout");
 		} else {
 			if (zk.ie) this._fixBtn();
 
 			var anc = this.getSubnode('a');
-			zEvt.listen(anc, "mouseover", this.proxy(this._doMouseOver));
-			zEvt.listen(anc, "mouseout", this.proxy(this._doMouseOut));
+			this.domListen_(anc, "mouseover");
+			this.domListen_(anc, "mouseout");
 		}
 	},
 	unbind_: function () {
 		if (!this.isTopmost()) {
 			var anc = this.getSubnode('a'),
 				n = this.getNode();
-			zEvt.unlisten(anc, "focus", this.proxy(this.domFocus_));
-			zEvt.unlisten(anc, "blur", this.proxy(this.domBlur_));
-			zEvt.unlisten(n, "mouseover", this.proxy(this._doMouseOver));
-			zEvt.unlisten(n, "mouseout", this.proxy(this._doMouseOut));
+			this.domUnlisten_(anc, "focus");
+			this.domUnlisten_(anc, "blur");
+			this.domUnlisten_(n, "mouseover");
+			this.domUnlisten_(n, "mouseout");
 		} else {
 			var n = this.getNode();
-			zEvt.unlisten(n, "mouseover", this.proxy(this._doMouseOver));
-			zEvt.unlisten(n, "mouseout", this.proxy(this._doMouseOut));
+			this.domUnlisten_(n, "mouseover");
+			this.domUnlisten_(n, "mouseout");
 		}
 
 		this.$supers('unbind_', arguments);
@@ -101,7 +101,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		}
 		this.fireX(evt);
 	},
-	_doMouseOver: function (evt) {
+	domMouseover_: function (evt) {
 		if (this.$class._isActive(this)) return;
 
 		var	topmost = this.isTopmost();
@@ -132,7 +132,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			}
 		}
 	},
-	_doMouseOut: function (evt) {
+	domMouseout_: function (evt) {
 		if (zk.ie) {
 			var n = this.getSubnode('a'),
 				xy = zDom.revisedOffset(n),

@@ -170,19 +170,23 @@ zul.grid.Paging = zk.$extends(zul.Widget, {
 			inputs = zDom.$$(uuid, 'real'),
 			zcls = this.getZclass(),
 			$Paging = this.$class;
-			
-		for (var i = inputs.length; --i>=0;) {
-			zEvt.listen(inputs[i], "keydown", $Paging._domKeyDown);
-			zEvt.listen(inputs[i], "blur", $Paging._domBlur);
-		}
+
+		if (!this.inDesign)
+			for (var i = inputs.length; --i>=0;) {
+				zEvt.listen(inputs[i], "keydown", $Paging._domKeyDown);
+				zEvt.listen(inputs[i], "blur", $Paging._domBlur);
+			}
 		
 		for (var postfix = ['first', 'prev', 'last', 'next'], k = postfix.length; --k >=0; ) {
 			var btn = zDom.$$(uuid, postfix[k]);
 			for (var j = btn.length; --j>=0;) {
-				zEvt.listen(btn[j], "mouseover", $Paging._domMouseOver);
-				zEvt.listen(btn[j], "mouseout", $Paging._domMouseOut);
-				zEvt.listen(btn[j], "mousedown", $Paging._domMouseDown);
-				zEvt.listen(btn[j], "click", $Paging['_dom' + postfix[k] + 'Click']);
+				if (!this.inDesign) {
+					zEvt.listen(btn[j], "mouseover", $Paging._domMouseOver);
+					zEvt.listen(btn[j], "mouseout", $Paging._domMouseOut);
+					zEvt.listen(btn[j], "mousedown", $Paging._domMouseDown);
+					zEvt.listen(btn[j], "click", $Paging['_dom' + postfix[k] + 'Click']);
+				}
+
 				if (this._npg == 1)
 					zDom.addClass(btn[j], zcls + "-btn-disd");
 				else if (postfix[k] == 'first' || postfix[k] == 'prev') {

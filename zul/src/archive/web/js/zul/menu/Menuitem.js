@@ -137,12 +137,12 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 			var anc = this.getSubnode('a'),
 				n = this.getNode();
 
-			zEvt.listen(n, "mouseover", this.proxy(this._doMouseOver));
-			zEvt.listen(n, "mouseout", this.proxy(this._doMouseOut));
+			this.domListen_(n, "mouseover");
+			this.domListen_(n, "mouseout");
 
 			if (this.isTopmost()) {
-				zEvt.listen(anc, "focus", this.proxy(this.domFocus_));
-				zEvt.listen(anc, "blur", this.proxy(this.domBlur_));
+				this.domListen_(anc, "focus");
+				this.domListen_(anc, "blur");
 			}
 		}
 		if (zk.ie && this.isTopmost()) this._fixBtn();
@@ -151,12 +151,12 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		if (!this.isDisabled()) {
 			var anc = this.getSubnode('a'),
 				n = this.getNode();
-			zEvt.unlisten(n, "mouseover", this.proxy(this._doMouseOver));
-			zEvt.unlisten(n, "mouseout", this.proxy(this._doMouseOut));
+			this.domUnlisten_(n, "mouseover");
+			this.domUnlisten_(n, "mouseout");
 
 			if (this.isTopmost()) {
-				zEvt.unlisten(anc, "focus", this.proxy(this.domFocus_));
-				zEvt.unlisten(anc, "blur", this.proxy(this.domBlur_));
+				this.domUnlisten_(anc, "focus");
+				this.domUnisten_(anc, "blur");
 			}
 		}
 
@@ -190,7 +190,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 			zWatch.fire('onFloatUp', null, this); //notify all
 		}
 	},
-	_doMouseOver: function (evt) {
+	domMouseover_: function (evt) {
 		if (this.$class._isActive(this)) return;
 		if (!this.isDisabled()) {
 			if (this.isTopmost() && zk.ie && !zDom.isAncestor(this.getSubnode('a'), zEvt.target(evt)))
@@ -200,7 +200,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 			zWatch.fire('onFloatUp', null, this); //notify all
 		}
 	},
-	_doMouseOut: function (evt) {
+	domMouseout_: function (evt) {
 		if (!this.isDisabled()) {
 			if (zk.ie) {
 					var n = this.getSubnode('a'),

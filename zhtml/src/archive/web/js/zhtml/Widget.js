@@ -41,7 +41,7 @@ zhtml.Widget = zk.$extends(zk.Native, {
 				n[nm] = val;
 			}
 	},
-	doChange_: function (devt, timeout) {
+	domChange_: function (devt, timeout) {
 		var n = this.getNode();
 		if (n) {
 			var val = n.value;
@@ -84,14 +84,14 @@ zhtml.Widget = zk.$extends(zk.Native, {
 	bind_: function () {
 		this.$supers('bind_', arguments);
 		if (this.isListen('onChange', true)) {
-			this.doChange_(null, -1);
-			zEvt.listen(this.getNode(), 'change', this.proxy(this.doChange_));
+			this.domChange_(null, -1);
+			this.domListen_(this.getNode(), 'change');
 		}
 		if (this.isListen('onCheck', true))
 			this._doCheck(-1);
 	},
 	unbind_: function () {
-		zEvt.unlisten(this.getNode(), 'change', this.proxy(this.doChange_));
+		this.domUnlisten_(this.getNode(), 'change');
 		this.$supers('unbind_', arguments);
 	}
 });

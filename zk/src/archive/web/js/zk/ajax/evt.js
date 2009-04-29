@@ -98,29 +98,25 @@ zEvt = {
 		return zk.safari ? (zEvt.safariKeys[k] || k) : k;
 	},
 
-	listen: function (el, evtnm, fn) {
-		if (el.addEventListener)
-			el.addEventListener(evtnm, fn, false);
-		else /*if (el.attachEvent)*/
-			el.attachEvent('on' + evtnm, fn);
+	listen: zk.ie ? function (el, evtnm, fn) {
+		el.attachEvent('on' + evtnm, fn);
+	}: function (el, evtnm, fn) {
+		el.addEventListener(evtnm, fn, false);
 	},
-	unlisten: function (el, evtnm, fn) {
-		if (el.removeEventListener)
-			el.removeEventListener(evtnm, fn, false);
-		else if (el.detachEvent) {
-			try {
-				el.detachEvent('on' + evtnm, fn);
-			} catch (e) {
-			}
+	unlisten: zk.ie ? function (el, evtnm, fn) {
+		try {
+			el.detachEvent('on' + evtnm, fn);
+		} catch (e) {
 		}
+	}: function (el, evtnm, fn) {
+		el.removeEventListener(evtnm, fn, false);
 	},
-	fire: function (el, evtnm) {
-		if (document.createEvent) {
-			var evt = document.createEvent('HTMLEvents');
-			evt.initEvent(evtnm, false, false);
-			el.dispatchEvent(evt);
-		} else
-			el.fireEvent('on' + evtnm);
+	fire: document.createEvent ? function (el, evtnm) {
+		var evt = document.createEvent('HTMLEvents');
+		evt.initEvent(evtnm, false, false);
+		el.dispatchEvent(evt);
+	}: function (el, evtnm) {
+		el.fireEvent('on' + evtnm);
 	},
 
 	enableESC: function () {

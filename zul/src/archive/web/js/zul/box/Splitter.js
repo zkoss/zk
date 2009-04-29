@@ -142,11 +142,13 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			vert ? "s-resize": "e-resize": "default";
 		btn.style.cursor = "pointer";
 
-		if (zk.ie) {
-			zEvt.listen(btn, "mouseover", $Splitter.onover);
-			zEvt.listen(btn, "mouseout", $Splitter.onout);
+		if (!this.inDesign) {
+			if (zk.ie) {
+				zEvt.listen(btn, "mouseover", $Splitter.onover);
+				zEvt.listen(btn, "mouseout", $Splitter.onout);
+			}
+			zEvt.listen(btn, "click", $Splitter.onclick);
 		}
-		zEvt.listen(btn, "click", $Splitter.onclick);
 
 		this._fixbtn();
 

@@ -120,11 +120,11 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				if (autoscroll) {
 					bodyEl.style.overflow = "auto";
 					bodyEl.style.position = "relative";
-					zEvt.listen(bodyEl, "scroll", this.proxy(this.doScroll_));
+					this.domListen_(bodyEl, "scroll");
 				} else {
 					bodyEl.style.overflow = "hidden";
 					bodyEl.style.position = "";
-					zEvt.unlisten(bodyEl, "scroll", this.proxy(this.doScroll_));
+					this.domUnlisten_(bodyEl, "scroll");
 				}
 			}
 		}
@@ -278,14 +278,14 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		if (this.isAutoscroll()) {
 			var bodyEl = this.isFlex() && this.firstChild ?
 					this.firstChild.getNode() : this.getSubnode('cave');
-			zEvt.listen(bodyEl, "scroll", this.proxy(this.doScroll_));
+			this.domListen_(bodyEl, "scroll");
 		}
 	},
 	unbind_: function () {
 		if (this.isAutoscroll()) {
 			var bodyEl = this.isFlex() && this.firstChild ?
 					this.firstChild.getNode() : this.getSubnode('cave');
-			zEvt.unlisten(bodyEl, "scroll", this.proxy(this.doScroll_));
+			this.domUnlisten_(bodyEl, "scroll");
 		}
 		if (this.getSubnode('split')) {			
 			if (this._drag) {
@@ -295,7 +295,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		}
 		this.$supers('unbind_', arguments);
 	},
-	doScroll_: function () {
+	domScroll_: function () {
 		zWatch.fireDown('onScroll', null, this);
 	},
 	doMouseOver_: function (evt) {
@@ -371,7 +371,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		}
 		this.$supers('doClick_', arguments);		
 	},
-	_doDocClick: function (evt) {
+	_docClick: function (evt) {
 		var target = zEvt.target(evt);
 		if (this._isSlide && !zDom.isAncestor(this.getSubnode('real'), target)) {
 			if (this.getSubnode('btned') == target) {
@@ -541,7 +541,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	},
 	// a callback function after the collapsed region slides down
 	afterSlideDown: function (n) {
-		zEvt.listen(document, "click", this.proxy(this._doDocClick));
+		zEvt.listen(document, "click", this.proxy(this._docClick));
 	},
 	// a callback function after the collapsed region slides up
 	afterSlideUp: function (n) {
@@ -551,7 +551,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		n._lastSize = null;// reset size for Borderlayout
 		s.zIndex = "";
 		this.getSubnode('btn').style.display = "";
-		zEvt.unlisten(document, "click", this.proxy(this._doDocClick));
+		zEvt.unlisten(document, "click", this.proxy(this._docClick));
 		this._isSlideUp = this._isSlide = false;
 	},
 	// Drag and drop

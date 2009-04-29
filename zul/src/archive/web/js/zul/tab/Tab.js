@@ -68,12 +68,12 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 			index = this.getIndex();
 		return tabpanels.getChildAt(index);
 	},
-	_doClosebtnClick : function(evt) {
+	_domClosebtnClick : function(evt) {
 		if (!evt) evt = window.event;
-		if (this._disabled)
-			return;
-		this.fire('onClose');
-		zEvt.stop(evt);
+		if (!this._disabled) {
+			this.fire('onClose');
+			zEvt.stop(evt);
+		}
 	},
 	_sliding: function(tab) {
 		var tabbox = this.getTabbox(),
@@ -184,31 +184,17 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
-		var uuid = this.uuid,
-			closebtn = zDom.$(uuid, 'close');
-        if (closebtn) {
-			zEvt.listen(closebtn, "click", this.proxy(this._doClosebtnClick));
+		var closebtn = this.getSubnode('close');
+		if (closebtn) {
+			this.domListen_(closebtn, "click", '_domClosebtnClick');
 			if (!closebtn.style.cursor)
 				closebtn.style.cursor = "default";
-		//				if (zk.ie6Only) {
-		//					zEvt.listen(closebtn, "mouseover", this.proxy(this._doMouseOver));
-		//					zEvt.listen(closebtn, "mouseout", this.proxy(this._doMouseOut));
-		//            	}
-//
-//	 var meta = $parent(cmp);
-//	 if (!meta._toscroll)
-//	 meta._toscroll = function () {
-//	 zkTabs2.scrollingchk($uuid(meta));
-//	 };
-//	 zk.addInit(meta._toscroll, false, $uuid(meta) );
-
 		}
 	},
 	unbind_: function () {
 		this.$supers('unbind_', arguments);
-		var closebtn = zDom.$(this.uuid, 'close');
-		if (closebtn) {
-			zWatch.unlisten(closebtn, "click", this.proxy(this._doClosebtnClick));		
-		}
+		var closebtn = this.getSubnode('close');
+		if (closebtn)
+			this.domUnlisten_(closebtn, "click", '_domClosebtnClick');		
 	}
 });

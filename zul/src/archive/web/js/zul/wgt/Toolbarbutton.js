@@ -24,7 +24,7 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 	setDisabled: function(disabled){
 		if (this._disabled != disabled) {
 			this._disabled = disabled;
-			this.updateDomClass_();//update class and attr
+			this.rerender(); //bind and unbind
 		}
 	},
 	
@@ -90,16 +90,17 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 
 	bind_: function(){
 		this.$supers('bind_', arguments);
-		var n = this.getNode();
 		if (!this._disabled) {
-			zEvt.listen(n, "focus", this.proxy(this.domFocus_));
-			zEvt.listen(n, "blur", this.proxy(this.domBlur_));
+			var n = this.getNode();
+			this.domListen_(n, "focus");
+			this.domListen_(n, "blur");
 		}
 	},
 	unbind_: function(){
 		var n = this.getNode();
-		zEvt.unlisten(n, "focus", this.proxy(this.domFocus_));
-		zEvt.unlisten(n, "blur", this.proxy(this.domBlur_));
+		this.domUnlisten_(n, "focus");
+		this.domUnlisten_(n, "blur");
+
 		this.$supers('unbind_', arguments);
 	},
 	domContent_: function(){
