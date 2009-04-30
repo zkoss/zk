@@ -588,7 +588,7 @@ public class ConfigParser {
 //				if (log.debuggable()) log.debug("Using "+clsnm+" for "+cls);
 				return klass;
 			} catch (Throwable ex) {
-				throw new UiException("Unable to load "+clsnm+", at "+el.getLocator());
+				throw new UiException("Unable to load "+clsnm+", at "+el.getLocator(), ex);
 			}
 		}
 		return null;

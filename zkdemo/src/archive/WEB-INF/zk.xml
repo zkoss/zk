@@ -354,4 +354,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<extendlet-check-period>5</extendlet-check-period>
 	</desktop-config>
 	-->
+
+	<!-- Turn on if you want to JSP 2.1 EL as the default interpreter
+	<xel-config>
+		<evaluator-class>org.zkoss.zkmax.xel.el21.ApacheELFactory</evaluator-class>
+	</xel-config>
+	-->
 </zk>
