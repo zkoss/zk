@@ -297,7 +297,7 @@ zk.makeStackup = function (cmp, id, anchor) {
 	ifr.style.cssText = "position:absolute;overflow:hidden;filter:alpha(opacity=0)";
 	ifr.frameBorder = "no";
 	ifr.tabIndex = -1;
-	ifr.src = "javascript:false";
+	ifr.src = zk.ie ? "javascript:false": "";
 		//IE: prevent secure/nonsecure warning with HTTPS
 	if (cmp) {
 		ifr.style.left = cmp.style.left;
@@ -1797,7 +1797,7 @@ zk.newFrame = function (name, src, style) {
 	var frm = $e(name);
 	if (frm) return frm;
 
-	if (!src) src = "javascript:false;";
+	if (!src) src = zk.ie ? "javascript:false;": "";
 		//IE: prevent secure/nonsecure warning with HTTPS
 
 	var html = '<iframe id="'+name+'" name="'+name+'" src="'+src+'"';
