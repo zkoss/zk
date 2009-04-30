@@ -73,6 +73,7 @@ ZK 3.6.1
   2780144: rendering of tree with z-dottree and hidden treeitems
   2782400: Correct XSD definition for panel usage
   2784107: Datebox onchange problem
+  2782751: listbox fails to restore activepage if re-set the model
 	--------
 ZK 3.6.0
 March 2, 2009
