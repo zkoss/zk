@@ -98,8 +98,8 @@ implements SerializableAware, HierachicalAware {
 	 *
 	 * @since 3.0.2
 	 */
-    protected void loadDefaultImports(NameSpace bshns) {
-    }
+	protected void loadDefaultImports(NameSpace bshns) {
+	}
 
 	//GenericInterpreter//
 	protected void exec(String script) {
@@ -297,10 +297,10 @@ implements SerializableAware, HierachicalAware {
 	private static abstract class AbstractNS extends NameSpace {
 		private boolean _inGet;
 
-	    protected AbstractNS(NameSpace parent, BshClassManager classManager,
-	    String name) {
-	    	super(parent, classManager, name);
-	    }
+		protected AbstractNS(NameSpace parent, BshClassManager classManager,
+		String name) {
+			super(parent, classManager, name);
+		}
 
 		/** Deriver has to override this method. */
 		abstract protected Object getFromNamespace(String name);
@@ -354,25 +354,28 @@ implements SerializableAware, HierachicalAware {
 
 			return var;
 		}
-	    public void loadDefaultImports() {
-	    	 //to speed up the formance
-	    }
+		public void loadDefaultImports() {
+			 //to speed up the formance
+		}
 	}
 	/** The global NameSpace. */
 	private class GlobalNS extends AbstractNS {
-	    private GlobalNS(BshClassManager classManager,
-	    String name) {
-	    	super(null, classManager, name);
-	    }
+		private GlobalNS(BshClassManager classManager,
+		String name) {
+			super(null, classManager, name);
+		}
 		protected Object getFromNamespace(String name) {
+			if (getCurrent() == null)
+				return getImplicit(name); //ignore ns
+
 			final Namespace ns = getOwner().getNamespace();
 			Object v = ns.getVariable(name, true);
 			return v != null || ns.containsVariable(name, true) ? v: getImplicit(name); 
 				//local-only since getVariableImpl will look up its parent
 		}
-	    public void loadDefaultImports() {
-	    	BSHInterpreter.this.loadDefaultImports(this);
-	    }
+		public void loadDefaultImports() {
+			BSHInterpreter.this.loadDefaultImports(this);
+		}
 	}
 	/** The per-Namespace NameSpace. */
 	private static class NS extends AbstractNS {
@@ -387,6 +390,10 @@ implements SerializableAware, HierachicalAware {
 		//super//
 		/** Search _ns instead. */
 		protected Object getFromNamespace(String name) {
+			final BSHInterpreter ip = getInterpreter();
+			if (ip != null && ip.getCurrent() == null)
+				return getImplicit(name); //ignore ns
+
 			Object v = _ns.getVariable(name, true);
 			return v != null || _ns.containsVariable(name, true) ? v: getImplicit(name); 
 				//local-only since getVariableImpl will look up its parent
