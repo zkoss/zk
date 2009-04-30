@@ -54,6 +54,7 @@ ZK 3.6.1
   2314215: A way to specify the position of the popup component
   2778507: Add load-after descriptive to DataBinder
   2779281: Add save-after descriptive to DataBinder
+  2783319: Datebox support hour format
   
 * Bugs
   2684510: Unable to access implict objects if func defined in other namespace
@@ -105,6 +106,9 @@ ZK 3.6.1
   2685842: Panel and Window corner's position error in Tabpanel(IE)
   2780144: rendering of tree with z-dottree and hidden treeitems
   2782400: Correct XSD definition for panel usage
+  2784107: Datebox onchange problem
+  2782751: listbox fails to restore activepage if re-set the model
+  2783767: BSHInterperter does not respect HierachicalAware spec.
   
 	--------
 ZK 3.6.0

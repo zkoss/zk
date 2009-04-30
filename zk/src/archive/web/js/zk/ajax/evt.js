@@ -199,8 +199,9 @@ zk.Event = zk.$extends(zk.Object, {
 	},
 	stop: function (opts) {
 		var b = !opts || !opts.revoke;
-		if (!opts || opts.propagation || !opts.dom) this.stopped = b;
-		if (!opts || opts.dom || !opts.propagation) this.domStopped = b;
+		if (!opts || opts.propagation) this.stopped = b;
+		if (!opts || opts.dom) this.domStopped = b;
+		if (opts && opts.au) this.auStopped = b;
 	}
 },{
 	BS:		8,

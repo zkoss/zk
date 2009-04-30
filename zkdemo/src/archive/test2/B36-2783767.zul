@@ -1,0 +1,23 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window id="win" title="new page title" border="normal">
+If you see "false", it is correct; otherwise, it is not correct:
+<label id="lbl" value="false"/>
+
+<zscript>
+	win.setVariable("abc", "Hello", false); //abc inside the win's namespace
+	final org.zkoss.zk.scripting.Namespace ns = win.getNamespace();
+	for(final Iterator it = win.getPage().getLoadedInterpreters().iterator(); it.hasNext();) {
+		final org.zkoss.zk.scripting.Interpreter ip = (org.zkoss.zk.scripting.Interpreter) it.next();
+		if (ip instanceof org.zkoss.zk.scripting.HierachicalAware) {
+			final org.zkoss.zk.scripting.HierachicalAware ha = (org.zkoss.zk.scripting.HierachicalAware)ip;
+			if (ha.containsVariable(ns, "abc")) {
+				lbl.setValue("true");
+				break;
+			}
+		}
+	}
+</zscript>
+
+</window>
+</zk>

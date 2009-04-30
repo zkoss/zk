@@ -978,7 +978,7 @@ zDom = { //static methods
 		ifr.style.cssText = "position:absolute;overflow:hidden;filter:alpha(opacity=0)";
 		ifr.frameBorder = "no";
 		ifr.tabIndex = -1;
-		ifr.src = "javascript:false;";
+		ifr.src = zk.ie ? "javascript:false;": "";
 			//IE: prevent secure/nonsecure warning with HTTPS
 		if (el) {
 			ifr.style.width = el.offsetWidth + "px";
@@ -1152,7 +1152,7 @@ zDom = { //static methods
 	},
 
 	newFrame: function (id, src, style) {
-		if (!src) src = "javascript:false;";
+		if (!src) src = zk.ie ? "javascript:false;": "";
 			//IE: prevent secure/nonsecure warning with HTTPS
 
 		var html = '<iframe id="'+id+'" name="'+id+'" src="'+src+'"';

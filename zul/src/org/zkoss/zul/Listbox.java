@@ -1997,7 +1997,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 		final int oldsz = getItemCount();
 
 		int newcnt = newsz - oldsz;
-
+		int atg = _pgi != null ? getActivePage(): 0;
 		ListitemRenderer renderer = null;
 		Component next = null;		
 		if (oldsz > 0) {
@@ -2054,6 +2054,11 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 			if (renderer == null)
 				renderer = getRealRenderer();
 			insertBefore(newUnloadedItem(renderer, min), next);
+		}
+		if (_pgi != null) {
+			if (atg > _pgi.getPageCount())
+				atg = _pgi.getPageCount();
+			_pgi.setActivePage(atg);
 		}
 	}
 	/** Unloads items.

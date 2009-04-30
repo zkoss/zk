@@ -723,7 +723,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		final int oldsz = _rows != null ? _rows.getChildren().size(): 0;
 
 		int newcnt = newsz - oldsz;
-
+		int atg = _pgi != null ? getActivePage(): 0;
 		RowRenderer renderer = null;
 		Component next = null;		
 		if (oldsz > 0) {
@@ -784,6 +784,12 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 			if (renderer == null)
 				renderer = getRealRenderer();
 			_rows.insertBefore(newUnloadedRow(renderer, min), next);
+		}
+
+		if (_pgi != null) {
+			if (atg > _pgi.getPageCount())
+				atg = _pgi.getPageCount();
+			_pgi.setActivePage(atg);
 		}
 	}
 	/** Unloads rows.

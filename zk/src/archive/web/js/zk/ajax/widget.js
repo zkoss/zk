@@ -854,16 +854,18 @@ zk.Widget = zk.$extends(zk.Object, {
 			}
 		}
 
-		var toServer = evt.opts && evt.opts.toServer;
-		if (toServer || (this.inServer && this.desktop)){
-			var asap = toServer || this._asaps[evtnm];
-			if (asap == null) {
-				var ime = this.$class._importantEvts;
-				if (ime && ime[evtnm])
-					asap = false;
+		if (!evt.auStopped) {
+			var toServer = evt.opts && evt.opts.toServer;
+			if (toServer || (this.inServer && this.desktop)){
+				var asap = toServer || this._asaps[evtnm];
+				if (asap == null) {
+					var ime = this.$class._importantEvts;
+					if (ime && ime[evtnm])
+						asap = false;
+				}
+				if (asap != null) //true or false
+					zAu.send(evt, asap ? timeout >= 0 ? timeout: 38: -1);
 			}
-			if (asap != null) //true or false
-				zAu.send(evt, asap ? timeout >= 0 ? timeout: 38: -1);
 		}
 		return evt;
 	},
