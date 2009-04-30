@@ -74,7 +74,8 @@ ZK 3.6.1
   2782400: Correct XSD definition for panel usage
   2784107: Datebox onchange problem
   2782751: listbox fails to restore activepage if re-set the model
-
+  2783767: BSHInterperter does not respect HierachicalAware spec.
+  
 	--------
 ZK 3.6.0
 March 2, 2009
