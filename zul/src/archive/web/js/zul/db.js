@@ -622,8 +622,7 @@ zkDtbox = {};
 zkDtbox.init = function (cmp) {
 	zkDtbox.onVisi = zkDtbox.onSize = zul.onFixDropBtn;
 	zkDtbox.onHide = zkTxbox.onHide; //widget.js is ready now
-	zkDtbox.cleanup = zkTxbox.cleanup;
-
+	
 	var inp = $real(cmp);
 	zkTxbox.init(inp);
 	zk.listen(inp, "keydown", zkDtbox.onkey);
@@ -650,6 +649,7 @@ zkDtbox.cleanup = function (cmp) {
 		pp._shadow.cleanup();
 		pp._shadow = null;
 	}
+	zkTxbox.cleanup(cmp);
 };
 zkDtbox.validate = function (cmp) {
 	var inp = $e(cmp.id+"!real");

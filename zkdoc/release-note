@@ -72,7 +72,7 @@ ZK 3.6.1
   2685842: Panel and Window corner's position error in Tabpanel(IE)
   2780144: rendering of tree with z-dottree and hidden treeitems
   2782400: Correct XSD definition for panel usage
-  
+  2784107: Datebox onchange problem
 	--------
 ZK 3.6.0
 March 2, 2009
