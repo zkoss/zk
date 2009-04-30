@@ -66,9 +66,21 @@ public class ConfigParser {
 	private static boolean _syscfgLoaded;
 
 	/** Checks and returns whether the loaded document's version is correct.
+	 * It is the same as checkVersion(url, doc, false).
 	 * @since 3.5.0
 	 */
 	public static boolean checkVersion(URL url, Document doc)
+	throws Exception {
+		return checkVersion(url, doc, false);
+	}
+	/** Checks and returns whether the loaded document's version is correct.
+	 * @param zk5required whether ZK 5 or later is required.
+	 * If true and zk-version is earlier than 5, doc will be ignored
+	 * (and false is returned).
+	 * @since 5.0.0
+	 */
+	public static
+	boolean checkVersion(URL url, Document doc, boolean zk5required)
 	throws Exception {
 		final Element el = doc.getRootElement().getElement("version");
 		if (el == null)
@@ -77,11 +89,17 @@ public class ConfigParser {
 		if (_zkver == null)
 			_zkver = Utils.parseVersion(Version.UID);
 
-		final String reqzkver = el.getElementValue("zk-version", true);
-		if (reqzkver != null
-		&& Utils.compareVersion(_zkver,	Utils.parseVersion(reqzkver)) < 0) {
-			log.info("Ignore "+url+"\nCause: ZK version must be "+reqzkver+" or later, not "+Version.UID);
-			return false;
+		String s = el.getElementValue("zk-version", true);
+		if (s != null) {
+			final int[] reqzkver = Utils.parseVersion(s);
+			if (Utils.compareVersion(_zkver, reqzkver) < 0) {
+				log.info("Ignore "+url+"\nCause: ZK version must be "+s+" or later, not "+Version.UID);
+				return false;
+			}
+			if (zk5required && reqzkver.length > 0 && reqzkver[0] < 5) {
+				log.info("Ingore "+url+"\nCause: version "+s+" not supported");
+				return false;
+			}
 		}
 
 		final String clsnm = el.getElementValue("version-class", true);

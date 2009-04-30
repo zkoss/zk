@@ -144,7 +144,7 @@ public class DefinitionLoaders {
 			if (log.debugable()) log.debug("Loading "+url);
 			try {
 				final Document doc = new SAXBuilder(true, false, true).build(url);
-				if (ConfigParser.checkVersion(url, doc))
+				if (ConfigParser.checkVersion(url, doc, true))
 					parseLang(doc, locator, url, false);
 			} catch (Exception ex) {
 				log.error("Failed to load "+url, ex);
@@ -159,7 +159,7 @@ public class DefinitionLoaders {
 		for (Iterator it = xmls.iterator(); it.hasNext();) {
 			final ClassLocator.Resource res = (ClassLocator.Resource)it.next();
 			try {
-				if (ConfigParser.checkVersion(res.url, res.document))
+				if (ConfigParser.checkVersion(res.url, res.document, true))
 					parseLang(res.document, locator, res.url, true);
 			} catch (Exception ex) {
 				log.realCauseBriefly("Failed to load "+res.url, ex);
