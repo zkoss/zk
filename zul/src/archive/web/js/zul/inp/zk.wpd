@@ -12,15 +12,15 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 
 <package name="zul.inp" language="xul/html">
-	<widget name="InputWidget"/>
+	<script src="InputWidget.js"/>
 	<widget name="Errorbox"/>
 	<script src="SimpleConstraint.js"/>
 	<widget name="Textbox"/>
-	<widget name="FormatWidget"/>
+	<script src="FormatWidget.js"/>
 	<widget name="Intbox"/>
 	<widget name="Doublebox"/>
 	<widget name="Longbox"/>
-	<widget name="ComboWidget"/>
+	<script src="ComboWidget.js"/>
 	<widget name="Combobox"/>
 	<widget name="Comboitem"/>
 	<widget name="Bandbox"/>

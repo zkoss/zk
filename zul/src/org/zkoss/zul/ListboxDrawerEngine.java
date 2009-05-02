@@ -55,9 +55,9 @@ import org.zkoss.zul.Listbox.Renderer;
 						_extent = Integer.parseInt(data[1]);
 						if (_listbox.getListhead() != null)
 							_listbox.setInnerWidth(data[2]);
-						_listbox.setInnerHeight(data[3]);
-						_listbox.setInnerTop(data[4]);
-						_listbox.setInnerBottom(data[5]);
+						//_listbox.setInnerHeight(data[3]);
+						//_listbox.setInnerTop(data[4]);
+						//_listbox.setInnerBottom(data[5]);
 						int pgsz = getRenderAmount();
 
 						final Renderer renderer = _listbox.new Renderer();

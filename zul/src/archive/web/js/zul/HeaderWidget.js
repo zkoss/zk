@@ -12,14 +12,14 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.grid.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
+zul.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	getAlign: function () {
 		return this._align;
 	},
 	setAlign: function (align) {
 		if (this._align != align) {
 			this._align = align;
-			this.invalidateWhole_();
+			this.updateMesh_('align', align);
 		}
 	},
 	getValign: function () {
@@ -28,14 +28,16 @@ zul.grid.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	setValign: function (valign) {
 		if (this._valign != valign) {
 			this._valign = valign;
-			this.invalidateWhole_();
+			this.updateMesh_('valign', valign);
 		}
 	},
-	invalidateWhole_: function () {
-		var wgt = this.getOwner();
-		if (wqt) wgt.rerender();
+	updateMesh_: function (nm, val) { //TODO: don't rerender
+		if (this.desktop) {
+			var wgt = this.getMeshWidget_();
+			if (wgt) wgt.rerender();
+		}
 	},
-	getOwner: function () {
+	getMeshWidget_: function () {
 		return this.parent ? this.parent.parent : null;
 	},
 	isSortable_: function () {
@@ -48,7 +50,7 @@ zul.grid.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	setVisible: function (visible) {
 		if (this.isVisible() != visible) {
 			this.$supers('setVisible', arguments);
-			this.invalidateWhole();
+			this.updateMesh_('visible', visible);
 		}
 	},
 	domAttrs_: function (no) {
@@ -84,7 +86,7 @@ zul.grid.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	_fixedFaker: function () {
 		var n = this.getNode(),
 			index = zDom.cellIndex(n),
-			owner = this.getOwner();
+			owner = this.getMeshWidget_();
 		for (var faker, fs = this.$class._faker, i = fs.length; --i >= 0;) {
 			faker = owner['e' + fs[i]]; // internal element
 			if (faker && !this.getSubnode(fs[i])) 
@@ -134,7 +136,7 @@ zul.grid.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	//dragdrop//
 	_ghostsizing: function (dg, ofs, evt) {
 		var wgt = dg.control,
-			el = wgt.getOwner().eheadtbl;
+			el = wgt.getMeshWidget_().eheadtbl;
 			of = zDom.revisedOffset(el),
 			n = wgt.getNode();
 		
@@ -171,7 +173,7 @@ zul.grid.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	_aftersizing: function (dg, evt) {
 		var wgt = dg.control,
 			n = wgt.getNode(),
-			owner = wgt.getOwner(),
+			owner = wgt.getMeshWidget_(),
 			wd = dg._zszofs,
 			table = owner.eheadtbl,
 			head = table.tBodies[0].rows[0], 

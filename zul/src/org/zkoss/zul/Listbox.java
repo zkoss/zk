@@ -124,10 +124,8 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 	private transient Collection _heads;
 	private int _hdcnt;
 	private String _innerWidth = "100%";
-	/** ROD mold use only*/
-	private String _innerHeight = null,
-	_innerTop = "height:0px;display:none", _innerBottom = "height:0px;display:none";
 	private transient ListboxDrawerEngine _engine;
+	private String _align;
 	
 	private String _pagingPosition = "bottom";
 	/** The name. */
@@ -309,58 +307,6 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 		return "select".equals(getMold());
 	}
 	
-	/**
-	 *Internal use only.
-	 *@since 3.0.4
-	 */
-	public void setInnerHeight(String innerHeight) {
-		if (innerHeight == null) innerHeight = "100%";
-		if (!Objects.equals(_innerHeight, innerHeight)) {
-			_innerHeight = innerHeight;
-		}
-	}
-	
-	/**
-	 *Internal use only.
-	 *@since 3.0.4
-	 */
-	public String getInnerHeight() {
-		return _innerHeight;
-	}	
-	/**
-	 *Internal use only.
-	 *@since 3.0.4
-	 */
-	public void setInnerTop(String innerTop) {
-		if (innerTop == null) innerTop = "height:0px;display:none";
-		if (!Objects.equals(_innerTop, innerTop)) {
-			_innerTop = innerTop;
-		}
-	}
-	/**
-	 *Internal use only.
-	 *@since 3.0.4
-	 */
-	public String getInnerTop() {
-		return _innerTop;
-	}
-	/**
-	 *Internal use only.
-	 *@since 3.0.4
-	 */
-	public void setInnerBottom(String innerBottom) {
-		if (innerBottom == null) innerBottom = "height:0px;display:none";
-		if (!Objects.equals(_innerBottom, innerBottom)) {
-			_innerBottom = innerBottom;
-		}
-	}
-	/**
-	 *Internal use only.
-	 *@since 3.0.4
-	 */
-	public String getInnerBottom() {
-		return _innerBottom;
-	}
 	/** Returns whether the check mark shall be displayed in front
 	 * of each item.
 	 * <p>Default: false.
@@ -952,6 +898,24 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 	 */
 	public org.zkoss.zul.api.Listitem removeItemAtApi(int index) {		
 		return removeItemAt(index);
+	}
+
+	/** Returns the horizontal alignment of the whole grid.
+	 * <p>Default: null (system default: left unless CSS specified).
+	 * @since 5.0.0
+	 */
+	public String getAlign() {
+		return _align;
+	}
+	/** Sets the horizontal alignment of the whole grid.
+	 * <p>Allowed: "left", "center", "right", "justify"
+	 * @since 5.0.0
+	 */
+	public void setAlign(String align) {
+		if (!Objects.equals(_align, align)) {
+			_align = align;
+			smartUpdate("align", _align);
+		}
 	}
 
 	//--Paging--//

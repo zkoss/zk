@@ -122,8 +122,6 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	/** the # of rows to preload. */
 	private int _preloadsz = 7;
 	private String _innerWidth = "100%";
-	/** ROD mold use only*/
-	private String _innerHeight = null;
 	private transient GridDrawerEngine _engine;
 	private boolean _fixedLayout, _vflex;
 	
@@ -260,7 +258,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		return _align;
 	}
 	/** Sets the horizontal alignment of the whole grid.
-	 * <p>Allowed: "left", "center", "right"
+	 * <p>Allowed: "left", "center", "right", "justify"
 	 */
 	public void setAlign(String align) {
 		if (!Objects.equals(_align, align)) {
@@ -283,7 +281,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 			throw new WrongValueException("Unsupported position : "+pagingPosition);
 		if(!Objects.equals(_pagingPosition, pagingPosition)){
 			_pagingPosition = pagingPosition;
-			invalidate();
+			smartUpdate("pagingPosition", pagingPosition);
 		}
 	}
 	/**
@@ -483,25 +481,6 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		return _engine;
 	}
 	
-	/**
-	 *Internal use only.
-	 *@since 3.0.4
-	 */
-	public void setInnerHeight(String innerHeight) {
-		if (innerHeight == null) innerHeight = "100%";
-		if (!Objects.equals(_innerHeight, innerHeight)) {
-			_innerHeight = innerHeight;
-			smartUpdate("innerHeight", _innerHeight);
-		}
-	}
-	
-	/**
-	 *Internal use only.
-	 *@since 3.0.4
-	 */
-	public String getInnerHeight() {
-		return _innerHeight;
-	}
 	//-- ListModel dependent codes --//
 	/** Returns the model associated with this grid, or null
 	 * if this grid is not associated with any list data model.
@@ -1218,13 +1197,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 			throw new UiException("Unsupported child for grid: "+newChild);
 		}
  
-		if (super.insertBefore(newChild, refChild)) {
-			//not need to invalidate since auxhead visible only with _cols
-			if (!(newChild instanceof Auxhead))
-				invalidate();
-			return true;
-		}
-		return false;
+		return super.insertBefore(newChild, refChild);
 	}
 	public boolean removeChild(Component child) {
 		if (_paging == child && _pgi == child && inPagingMold())
@@ -1241,7 +1214,6 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 			_paging = null;
 			if (_pgi == child) _pgi = null;
 		}
-		invalidate();
 		return true;
 	}
 
@@ -1316,8 +1288,6 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		}
 		if (!"bottom".equals(_pagingPosition))
 			render(renderer, "pagingPosition", _pagingPosition);
-		if (!"100%".equals(_innerHeight))
-			render(renderer, "innerHeight", _innerHeight);
 		if (!"100%".equals(_innerWidth))
 			render(renderer, "innerWidth", _innerWidth);		
 		if (_preloadsz != 7)

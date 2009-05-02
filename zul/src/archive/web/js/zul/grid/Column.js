@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.grid.Column = zk.$extends(zul.grid.HeaderWidget, {
+zul.grid.Column = zk.$extends(zul.HeaderWidget, {
 	_sortDir: "natural",
 	_sortAsc: "none",
 	_sortDsc: "none",
@@ -23,9 +23,7 @@ zul.grid.Column = zk.$extends(zul.grid.HeaderWidget, {
 		this.$supers('$init', arguments);
 		this.listen('onSort', this, null, -1000);
 	},
-	getGrid: function () {
-		return this.getOwner();
-	},
+	getGrid: zul.HeaderWidget.prototype.getMeshWidget_,
 	setSort: function (type) {
 		if (type && type.startsWith('client')) {
 			this.setSortAscending(type);

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- zk.wpd
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Apr 30 22:15:03     2009, Created by tomyeh
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+-->
+
+<package name="zul.sel" language="xul/html">
+	<script src="SelectWidget.js"/>
+	<widget name="Listbox"/>
+	<widget name="Listitem"/>
+	<widget name="Listcell"/>
+	<widget name="Listhead"/>
+	<widget name="Listheader"/>
+</package>

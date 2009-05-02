@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.grid.Paging = zk.$extends(zul.Widget, {
+zul.wgt.Paging = zk.$extends(zul.Widget, {
 	_pgsz: 20,
 	_ttsz: 0,
 	_npg: 1,

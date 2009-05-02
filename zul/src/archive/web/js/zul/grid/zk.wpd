@@ -12,8 +12,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 
 <package name="zul.grid" language="xul/html">
-	<widget name="HeaderWidget"/>
-	<widget name="HeadersWidget"/>
 	<widget name="Column"/>
 	<widget name="Columns"/>
 	<widget name="Grid"/>
@@ -21,5 +19,4 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<widget name="Rows"/>
 	<widget name="Foot"/>
 	<widget name="Footer"/>	
-	<widget name="Paging"/>	
 </package>

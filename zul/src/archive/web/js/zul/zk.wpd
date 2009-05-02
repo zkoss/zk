@@ -12,8 +12,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 
 <package name="zul" language="xul/html" cacheable="false">
-	<widget name="Widget"/>
-	<widget name="LabelImageWidget"/>
+	<script src="Widget.js"/>
+	<script src="LabelImageWidget.js"/>
+
+	<script src="HeadersWidget.js"/>
+	<script src="HeaderWidget.js"/>
+	<script src="MeshWidget.js"/>
 
 	<script src="Auxbutton.js"/>
 
