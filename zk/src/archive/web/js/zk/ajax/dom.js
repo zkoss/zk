@@ -937,7 +937,7 @@ zDom = { //static methods
 	parentNode: function (el) {
 		return el.z_vp || el.parentNode;
 	},
-	ancestor: function (el, tagName) {
+	ancestor: function (el, tagName) { //parentByTag
 		for (; el; el = zDom.parentNode(el))
 			if (zDom.tag(el) == tagName)
 				return el;

@@ -93,7 +93,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (name.length > 4 && name.startsWith('$$on')) {
 			var cls = this.$class,
 				ime = cls._importantEvts;
-			(ime || (cls._importantEvts = {}))[name.substring(2)] = true;
+			(ime || (cls._importantEvts = {}))[name.substring(2)] = value;
 		} else if (name.length > 3 && name.startsWith('$on'))
 			this._asaps[name.substring(1)] = value;
 		else if (name.length > 2 && name.startsWith('on')
@@ -860,8 +860,11 @@ zk.Widget = zk.$extends(zk.Object, {
 				var asap = toServer || this._asaps[evtnm];
 				if (asap == null) {
 					var ime = this.$class._importantEvts;
-					if (ime && ime[evtnm])
-						asap = false;
+					if (ime) {
+						var ime = ime[evtnm];
+						if (ime != null)
+							asap = ime;
+					}
 				}
 				if (asap != null) //true or false
 					zAu.send(evt, asap ? timeout >= 0 ? timeout: 38: -1);

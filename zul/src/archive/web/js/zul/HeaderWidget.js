@@ -33,11 +33,11 @@ zul.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	},
 	updateMesh_: function (nm, val) { //TODO: don't rerender
 		if (this.desktop) {
-			var wgt = this.getMeshWidget_();
+			var wgt = this.getMeshWidget();
 			if (wgt) wgt.rerender();
 		}
 	},
-	getMeshWidget_: function () {
+	getMeshWidget: function () {
 		return this.parent ? this.parent.parent : null;
 	},
 	isSortable_: function () {
@@ -86,7 +86,7 @@ zul.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	_fixedFaker: function () {
 		var n = this.getNode(),
 			index = zDom.cellIndex(n),
-			owner = this.getMeshWidget_();
+			owner = this.getMeshWidget();
 		for (var faker, fs = this.$class._faker, i = fs.length; --i >= 0;) {
 			faker = owner['e' + fs[i]]; // internal element
 			if (faker && !this.getSubnode(fs[i])) 
@@ -136,7 +136,7 @@ zul.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	//dragdrop//
 	_ghostsizing: function (dg, ofs, evt) {
 		var wgt = dg.control,
-			el = wgt.getMeshWidget_().eheadtbl;
+			el = wgt.getMeshWidget().eheadtbl;
 			of = zDom.revisedOffset(el),
 			n = wgt.getNode();
 		
@@ -173,7 +173,7 @@ zul.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	_aftersizing: function (dg, evt) {
 		var wgt = dg.control,
 			n = wgt.getNode(),
-			owner = wgt.getMeshWidget_(),
+			owner = wgt.getMeshWidget(),
 			wd = dg._zszofs,
 			table = owner.eheadtbl,
 			head = table.tBodies[0].rows[0], 

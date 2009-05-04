@@ -14,8 +14,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 zPkg.load('zul.wgt');
 zul.grid.Grid = zk.$extends(zul.MeshWidget, {
-	_preloadsz: 7,
-
 	getHeads: function () {
 		var heads = [];
 		for (var w = this.firstChild; w; w = w.nextSibling) {
@@ -30,13 +28,6 @@ zul.grid.Grid = zk.$extends(zul.MeshWidget, {
 
 		var row = rows.getChildAt(row);
 		return row.nChildren <= col ? null: row.getChildAt(col);
-	},
-	getPreloadSize: function () {
-		return this._preloadsz;
-	},
-	setPreloadSize: function (sz) {
-		if (sz >= 0)
-			this._preloadsz = sz;
 	},
 	getOddRowSclass: function () {
 		return this._scOddRow == null ? this.getZclass() + "-odd" : this._scOddRow;
@@ -90,7 +81,26 @@ zul.grid.Grid = zk.$extends(zul.MeshWidget, {
 		this.rerender();
 	},
 
-	getHeadersWidget_: function () {
+	getHeadersWidget: function () {
 		return this.columns;
+	},
+	getBodyWidgetIterator: function () {
+		return new zul.grid.BodyWidgetIterator(this);
 	}
 });
+
+zul.grid.BodyWidgetIterator = zk.$extends(zk.Object, {
+	$init: function (grid) {
+		var rows = grid.rows;
+		this.p = rows ? rows.firstChild: null;
+	},
+	hasNext: function () {
+		return this.p;
+	},
+	next: function () {
+		var p = this.p;
+		if (p) this.p = p.nextSibling;
+		return p;
+	}
+});
+

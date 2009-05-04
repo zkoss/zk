@@ -23,7 +23,7 @@ zul.grid.Column = zk.$extends(zul.HeaderWidget, {
 		this.$supers('$init', arguments);
 		this.listen('onSort', this, null, -1000);
 	},
-	getGrid: zul.HeaderWidget.prototype.getMeshWidget_,
+	getGrid: zul.HeaderWidget.prototype.getMeshWidget,
 	setSort: function (type) {
 		if (type && type.startsWith('client')) {
 			this.setSortAscending(type);

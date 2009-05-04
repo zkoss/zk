@@ -151,6 +151,11 @@ public interface ComponentCtrl {
 	 * and the client must send it back even if no listener is registered.
 	 */
 	public static final int CE_IMPORTANT = 0x0001;
+	/** Returned by {@link #getClientEvents} to indicate the event is 
+	 * no deferrable, i.e., the event has to be sent back immediately.
+	 * It is meaningful only used with {@link #CE_IMPORTANT}
+	 */
+	public static final int CE_NON_DEFERRABLE = 0x0002;
 	/** Returned by {@link #getClientEvents} to indicate the event
 	 * can be ignored by the server when the server is busy.
 	 */

@@ -1498,7 +1498,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 					shallHandleImportant = Boolean.valueOf(exec != null && markImportantEvent(exec));
 				}
 				if (shallHandleImportant.booleanValue())
-					renderer.render("$$" + evtnm, true);
+					renderer.render("$$" + evtnm, (flags & CE_NON_DEFERRABLE) != 0);
 			}
 			if (Events.isListened(this, evtnm, false))
 				renderer.render('$' + evtnm, Events.isListened(this, evtnm, true));
@@ -1559,7 +1559,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/** Returns a map of event information that the client might send to this component.
 	 * The key of the returned map is a String instance representing the event name,
 	 * and the value an integer representing the flags
-	 * (a combination of {@link #CE_IMPORTANT}, {@link #CE_BUSY_IGNORE},
+	 * (a combination of {@link #CE_IMPORTANT}, {@link #CE_NON_DEFERRABLE}, {@link #CE_BUSY_IGNORE},
 	 * {@link #CE_DUPLICATE_IGNORE} and {@link #CE_REPEAT_IGNORE}).
 	 * <p>Default: return the collection of events
 	 * added by {@link #getClientEvents}.
@@ -1588,7 +1588,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * It must be called when loading the class (i.e., in <code>static {}</code>).
 	 * It cannot be called after that.
 	 * @param cls the component's class (implementation class).
-	 * @param flags a combination of {@link #CE_IMPORTANT},
+	 * @param flags a combination of {@link #CE_IMPORTANT}, {@link #CE_NON_DEFERRABLE}
 	 * {@link #CE_BUSY_IGNORE}, {@link #CE_DUPLICATE_IGNORE}
 	 * and {@link #CE_REPEAT_IGNORE}.
 	 * @since 5.0.0

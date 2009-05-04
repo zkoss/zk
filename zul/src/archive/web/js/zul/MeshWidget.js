@@ -164,7 +164,7 @@ zul.MeshWidget = zk.$extends(zul.Widget, {
 		this.$supers('unbind_', arguments);
 	},
 	_fixHeaders: function () {
-		var headers = this.getHeadersWidget_();
+		var headers = this.getHeadersWidget();
 		if (headers && this.ehead) {
 			var empty = true;
 			for (var w = headers.firstChild; w; w = w.nextSibling) 
@@ -204,41 +204,46 @@ zul.MeshWidget = zk.$extends(zul.Widget, {
 				this.eftfaker = this.efoottbl.tBodies[0].rows[0];
 		}
 	},
-	fireScrollRender: function (timeout) {
-		setTimeout(this.proxy(this.onScrollRender), timeout ? timeout : 100);
+	fireOnRender: function (timeout) {
+		if (!this._pendOnRender) {
+			this._pendOnRender = true;
+			setTimeout(this.proxy(this._onRender), timeout ? timeout : 100);
+		}
 	},
 	domScroll_: function () {
 		if (this.ehead)
 			this.ehead.scrollLeft = this.ebody.scrollLeft;
 		if (this.efoot)
 			this.efoot.scrollLeft = this.ebody.scrollLeft;
-		if (!this.paging) this.fireScrollRender(zk.gecko ? 200 : 60);
+		if (!this.paging) this.fireOnRender(zk.gecko ? 200 : 60);
 	},
-	onScrollRender: function () {
-		if (!this.isModel() || !this.ebodyrows || !this.ebodyrows.length) return;
+	_onRender: function () {
+		this._pendOnRender = false;
+
+		var rows = this.ebodyrows;
+		if (!this._model || !rows || !rows.length) return;
 
 		//Note: we have to calculate from top to bottom because each row's
 		//height might diff (due to different content)
-		var data = "",
+		var items = [],
 			min = this.ebody.scrollTop, max = min + this.ebody.offsetHeight;
-		for (var rows = this.ebodyrows, j = 0, rl = rows.length; j < rl; ++j) {
-			var r = rows[j];
-			if (zDom.isVisible(r)) {
-				var top = zDom.offsetTop(r);
-				if (top + zDom.offsetHeight(r) < min) continue;
+		for (var j = 0, it = this.getBodyWidgetIterator(), w; (w = it.next()); j++) {
+			if (w.isVisible()) {
+				var row = rows[j],
+					top = zDom.offsetTop(row);
+				if (top + zDom.offsetHeight(row) < min) continue;
 				if (top > max) break; //Bug 1822517
-				if (!zk.Widget.$(r)._loaded)
-					data += "," + r.id;
+				if (!w._loaded)
+					items.push(w);
 			}
 		}
-		if (data) {
-			data = data.substring(1);
-			this.fire('onRender', data);
-		}
+		if (items.length)
+			this.fire('onRender', {items: items});
 	},
 
 	//derive must override
-	//getHeadersWidget_
+	//getHeadersWidget
+	//getBodyWidgetIterator
 
 	//watch//
 	beforeSize: function () {
@@ -257,22 +262,11 @@ zul.MeshWidget = zk.$extends(zul.Widget, {
 				return; // unchanged
 				
 			this._calcSize();// Bug #1813722
-			this.fireScrollRender(155);
+			this.fireOnRender(155);
 			if (zk.ie7) zDom.redoCSS(this.getNode()); // Bug 2096807
 		}
 	},
 	onShow: _zkf,
-	onRender: function (evt) {
-		var d = evt.data.marshal();
-		this._curpos = d[0];
-		this._visicnt = d[1];
-		if (this.getHeadersWidget_())
-			this.setInnerWidth(d[2]);
-			
-		this.setInnerHeight(d[3]);
-		this._onRender();
-		evt.stop();
-	},
 	_vflexSize: function (hgh) {
 		var n = this.getNode();
 		if (zk.ie6Only) { 
@@ -354,7 +348,7 @@ zul.MeshWidget = zk.$extends(zul.Widget, {
 		n._lastsz = {height: n.offsetHeight, width: n.offsetWidth}; // cache for the dirty resizing.
 	},
 	domFaker_: function (out, fakeId, zcls) { //used by mold
-		var headers = this.getHeadersWidget_();
+		var headers = this.getHeadersWidget();
 		out.push('<tbody style="visibility:hidden;height:0px"><tr id="',
 				headers.uuid, fakeId, '" class="', zcls, '-faker">');
 		for (var w = headers.firstChild; w; w = w.nextSibling)
@@ -399,10 +393,10 @@ zul.MeshWidget = zk.$extends(zul.Widget, {
 		// function (hdfaker, bdfaker, ftfaker, rows) {
 		var hdfaker = wgt.ehdfaker,
 			bdfaker = wgt.ebdfaker,
-			ftfaker = wgt.eftfaker,
-			rows = wgt.rows.getNode().rows;
+			ftfaker = wgt.eftfaker;
 		if (!hdfaker || !bdfaker || !hdfaker.cells.length
-		|| !bdfaker.cells.length || !zDom.isRealVisible(hdfaker) || !rows.length) return;
+		|| !bdfaker.cells.length || !zDom.isRealVisible(hdfaker)
+		|| !wgt.getBodyWidgetIterator().hasNext()) return;
 		
 		var hdtable = wgt.ehead.firstChild, head = wgt.columns.getNode();
 		if (!head) return; 
@@ -463,15 +457,16 @@ zul.MeshWidget = zk.$extends(zul.Widget, {
 	},
 	cpCellWidth: function (wgt) {
 		var dst = wgt.efoot.firstChild.rows[0],
-			srcrows = wgt.rows.getNode().rows;
-		if (!dst || !srcrows.length || !dst.cells.length)
+			srcrows = wgt.ebodyrows;
+		if (!dst || !srcrows || !srcrows.length || !dst.cells.length)
 			return;
 		var ncols = dst.cells.length,
-			src, maxnc = 0, loadIdx = wgt._lastLoadIdx;
-		for (var j = 0, len = loadIdx || srcrows.length; j < len; ++j) {
-			var row = srcrows[j];
-			if (!zDom.isVisible(row) || !zk.Widget.$(row)._loaded) continue;
-			var cells = row.cells, nc = zDom.ncols(row),
+			src, maxnc = 0;
+		for (var j = 0, it = wgt.getBodyWidgetIterator(), w; (w = it.next());) {
+			if (!w.isVisible() || !w._loaded) continue;
+
+			var row = srcrows[j++],
+				cells = row.cells, nc = zDom.ncols(row),
 				valid = cells.length == nc && zDom.isVisible(row);
 				//skip with colspan and invisible
 			if (valid && nc >= ncols) {

@@ -19,7 +19,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 -->
 <window title="Live Grid" border="normal">
 	<zscript>
-		String[] d1 = new String[30];
+		String[] d1 = new String[50];
 		List d2 = new LinkedList();
 		for(int j=0; j &lt; d1.length + 10; ++j) {
 			if (j &lt; d1.length)

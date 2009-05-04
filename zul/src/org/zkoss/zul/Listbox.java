@@ -152,6 +152,12 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 	/** maintain the number of the visible item in Paging mold. */
 	private int _visibleItemCount;
 	
+	static {
+		addClientEvent(Listbox.class, Events.ON_RENDER, CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE);
+		addClientEvent(Listbox.class, "onInnerWidth", CE_DUPLICATE_IGNORE|CE_IMPORTANT);
+		addClientEvent(Listbox.class, Events.ON_SELECT, CE_IMPORTANT);
+	}
+
 	public Listbox() {
 		init();
 	}
@@ -247,7 +253,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 	public void setFixedLayout(boolean fixedLayout) {
 		if(_fixedLayout != fixedLayout) {
 			_fixedLayout = fixedLayout;
-			invalidate();
+			smartUpdate("fixedLayout", fixedLayout);
 		}
 	}
 	/**
@@ -322,7 +328,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 	public void setCheckmark(boolean checkmark) {
 		if (_checkmark != checkmark) {
 			_checkmark = checkmark;
-			if (!inSelectMold()) invalidate();
+			smartUpdate("checkmark", checkmark);
 		}
 	}
 
@@ -347,7 +353,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 		if (innerWidth == null) innerWidth = "100%";
 		if (!_innerWidth.equals(innerWidth)) {
 			_innerWidth = innerWidth;
-			smartUpdate("z.innerWidth", innerWidth);
+			smartUpdate("innerWidth", innerWidth);
 		}
 	}
 	/**
@@ -379,7 +385,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 	public void setVflex(boolean vflex) {
 		if (_vflex != vflex) {
 			_vflex = vflex;
-			if (!inSelectMold()) smartUpdate("z.flex", _vflex);
+			smartUpdate("flex", _vflex);
 		}
 	}
 
@@ -394,11 +400,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 	public void setDisabled(boolean disabled) {
 		if (_disabled != disabled) {
 			_disabled = disabled;
-			if (inSelectMold()) {
-				smartUpdate("disabled", _disabled);
-			} else {
-				smartUpdate("z.disabled", _disabled);
-			}
+			smartUpdate("disabled", _disabled);
 		}
 	}
 
@@ -415,8 +417,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 	public void setTabindex(int tabindex) throws WrongValueException {
 		if (_tabindex != tabindex) {
 			_tabindex = tabindex;
-			if (tabindex < 0) smartUpdate("tabindex", (Object)null);
-			else smartUpdate("tabindex", _tabindex);
+			smartUpdate("tabindex", _tabindex);
 		}
 	}
 
@@ -473,21 +474,18 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 						it.remove();
 					}
 				}
-				//No need to update z.selId because z.multiple will do the job
+				//No need to update selId because multiple will do the job at client
 			}
 
-			if (inSelectMold()) smartUpdate("multiple", _multiple);
-			else if (isCheckmark()) invalidate(); //change check mark
-			else smartUpdate("z.multiple", _multiple);
-				//No need to use response because such info is carried on tags
+			smartUpdate("multiple", _multiple);
 		}
 	}
-	/** Returns the ID of the selected item (it is stored as the z.selId
+	/** Returns the UUID of the selected item (it is stored as the selId
 	 * attribute of the listbox).
 	 */
-	private String getSelectedId() {
+	private String getSelUuid() {
 		final Listitem sel = getSelectedItem();
-		return sel != null ? sel.getUuid(): "zk_n_a";
+		return sel != null ? sel.getUuid(): null;
 	}
 
 	/** Returns the maximal length of each item's label.
@@ -496,14 +494,13 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 		return _maxlength;
 	}
 	/** Sets the maximal length of each item's label.
+	 * <p>It is meaningful only for the select mold.
 	 */
 	public void setMaxlength(int maxlength) {
 		if (maxlength < 0) maxlength = 0;
 		if (_maxlength != maxlength) {
 			_maxlength = maxlength;
-			if (inSelectMold()) //affects only the HTML-select listbox
-				invalidate();
-				//Both IE and Mozilla are buggy if we insert options by innerHTML
+			smartUpdate("maxlength", maxlength);
 		}
 	}
 
@@ -533,9 +530,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 		if (name != null && name.length() == 0) name = null;
 		if (!Objects.equals(_name, name)) {
 			_name = name;
-			if (inSelectMold()) smartUpdate("name", _name);
-			else if (_name != null) smartUpdate("z.name", _name);
-			else invalidate(); //1) generate _value; 2) add submit listener
+			smartUpdate("name", name);
 		}
 	}
 
@@ -613,10 +608,8 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 			final Listitem item = getItemAtIndex(_jsel);
 			item.setSelectedDirectly(true);
 			_selItems.add(item);
-			if (inSelectMold())
-				smartUpdate("selectedIndex", _jsel);
-			else
-				smartUpdate("select", item.getUuid());
+			if (inSelectMold()) smartUpdate("selectedIndex", _jsel);
+			else smartUpdate("select", item.getUuid());
 				//Bug 1734950: don't count on index (since it may change)
 				//On the other hand, it is OK with select-mold since
 				//it invalidates if items are added or removed
@@ -672,7 +665,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 			} else {
 				if (item.getIndex() < _jsel || _jsel < 0) {
 					_jsel = item.getIndex();
-					if (!inSelectMold()) smartUpdate("z.selId", getSelectedId());
+					if (!inSelectMold()) smartUpdate("select", getSelUuid());
 				}
 				item.setSelectedDirectly(true);
 				_selItems.add(item);
@@ -712,7 +705,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 				} else {
 					smartUpdateSelection();
 					if (oldSel != _jsel)
-						smartUpdate("z.selId", getSelectedId());
+						smartUpdate("select", getSelUuid());
 				}
 			}
 		}
@@ -767,7 +760,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 			if (inSelectMold())
 				smartUpdate("selectedIndex", -1);
 			else
-				smartUpdate("select", "");
+				smartUpdate("select", null);
 				//Bug 1734950: don't count on index (since it may change)
 		}
 	}
@@ -932,7 +925,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 			throw new WrongValueException("Unsupported position : "+pagingPosition);
 		if(!Objects.equals(_pagingPosition, pagingPosition)){
 			_pagingPosition = pagingPosition;
-			invalidate();
+			smartUpdate("pagingPosition", pagingPosition);
 		}
 	}
 	/**
@@ -1161,13 +1154,13 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 		}
 	}
 	/** 
-	 * @deprecated As of release As of release 3.5.1 
+	 * @deprecated As of release 3.5.1 
 	 */
 	public int getVisibleBegin() {
 		return 0;
 	}
 	/** 
-	 * @deprecated As of release As of release 3.5.1 
+	 * @deprecated As of release 3.5.1 
 	 */
 	public int getVisibleEnd() {
 		return Integer.MAX_VALUE;
@@ -1190,7 +1183,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 		if (scls != null && scls.length() == 0) scls = null;
 		if (!Objects.equals(_scOddRow, scls)) {
 			_scOddRow = scls;
-			smartUpdate("z.scOddRow", scls);
+			smartUpdate("oddRowSclass", scls);
 		}
 	}
 	/**
@@ -1218,18 +1211,6 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 	//-- Component --//
 	protected void smartUpdate(String attr, Object value) {
 		if (!_noSmartUpdate) super.smartUpdate(attr, value);
-	}
-	public void onChildAdded(Component child) {
-		super.onChildAdded(child);
-		if (inSelectMold()) invalidate();
-			//Both IE and Mozilla are buggy if we insert options by innerHTML
-	}
-	public void onChildRemoved(Component child) {
-		super.onChildRemoved(child);
-		if (inSelectMold()) invalidate();
-			//Both IE and Mozilla are buggy if we remove options by outerHTML
-			//CONSIDER: use special command to remove items
-			//Cons: if user remove a lot of items it is slower
 	}
 	
 	/*package*/ void fixGroupIndex(int j, int to, boolean infront) {
@@ -1378,12 +1359,12 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 				if (newItem.isSelected()) {
 					if (_jsel < 0) {
 						_jsel = newIndex;
-						if (!inSelectMold()) smartUpdate("z.selId", getSelectedId());
+						if (!inSelectMold()) smartUpdate("select", getSelUuid());
 						_selItems.add(newItem);
 					} else if (_multiple) {
 						if (_jsel > newIndex) {
 							_jsel = newIndex;
-							if (!inSelectMold()) smartUpdate("z.selId", getSelectedId());
+							if (!inSelectMold()) smartUpdate("select", getSelUuid());
 						}
 						_selItems.add(newItem);
 					} else { //deselect
@@ -1402,7 +1383,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 					}
 
 					if (oldjsel != _jsel && !inSelectMold())
-						smartUpdate("z.selId", getSelectedId());
+						smartUpdate("select", getSelUuid());
 				}
 				
 				if (newChild instanceof Listgroup) {
@@ -1453,7 +1434,6 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 			if (super.insertBefore(newChild, refChild)) {
 				if (added)
 					++_hdcnt; //it may be moved, not inserted
-				invalidate(); //required since it might be the first child
 				return true;
 			}
 			return false;
@@ -1463,8 +1443,6 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 			if (super.insertBefore(newChild, refChild)) {
 				if (added)
 					++_hdcnt; //it may be moved, not inserted
-					//not need to invalidate since auxhead visible only
-					//with _listhead
 				return true;
 			}
 			return false;
@@ -1474,8 +1452,6 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 
 			if (inSelectMold())
 				log.warning("Mold select ignores listfoot");
-			invalidate();
-				//we place listfoot and treeitem at different div, so...
 			_listfoot = (Listfoot)newChild;
 			refChild = _paging; //the last two: listfoot and paging
 			return super.insertBefore(newChild, refChild);
@@ -1487,7 +1463,6 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 			if (!inPagingMold())
 				throw new UiException("The child paging is allowed only in the paging mold");
 
-			invalidate();
 			_pgi = _paging = (Paging)newChild;
 			refChild = null; //the last: paging
 			return super.insertBefore(newChild, refChild);
@@ -1548,12 +1523,12 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 				_selItems.remove(item);
 				if (_jsel == index) {
 					fixSelectedIndex(index);
-					if (!inSelectMold()) smartUpdate("z.selId", getSelectedId());
+					if (!inSelectMold()) smartUpdate("select", getSelUuid());
 				}
 			} else {
 				if (_jsel >= index) {
 					--_jsel;
-					if (!inSelectMold()) smartUpdate("z.selId", getSelectedId());
+					if (!inSelectMold()) smartUpdate("select", getSelUuid());
 				}
 			}
 			if (child instanceof Listgroup) {
@@ -1597,7 +1572,6 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 		} else if (child instanceof Auxhead) {
 			--_hdcnt;
 		}
-		invalidate();
 		return true;
 	}
 	/** Callback if a list item has been inserted.
@@ -1837,7 +1811,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 				} else {
 					getItems().clear(); //Bug 1807414
 					if (!inSelectMold())
-						smartUpdate("z.model", true);
+						smartUpdate("model", true);
 				}
 
 				_model = model;
@@ -1858,7 +1832,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 			_model = null;
 			getItems().clear();
 			if (!inSelectMold())
-				smartUpdate("z.model", (Object)null);
+				smartUpdate("model", false);
 		}
 	}
 	/** Sets the groups model associated with this list box.
@@ -1950,6 +1924,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 		if (sz < 0)
 			throw new UiException("nonnegative is required: "+sz);
 		_preloadsz = sz;
+			//no need to update client since paging done at server
 	}
 
 	/** Synchronizes the listbox to be consistent with the specified model.
@@ -2158,7 +2133,6 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 		if (getAttribute(ATTR_ON_INIT_RENDER_POSTED) == null) {
 			setAttribute(ATTR_ON_INIT_RENDER_POSTED, Boolean.TRUE);
 			Events.postEvent("onInitRender", this, null);
-			smartUpdate("z.render", true);
 		}
 	}
 
@@ -2497,6 +2471,23 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 	}
 
 	//-- ComponentCtrl --//
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+		
+		render(renderer, "align", _align);
+		render(renderer, "oddRowSclass", getOddRowSclass());
+		render(renderer, "fixedLayout", isFixedLayout());
+		render(renderer, "vflex", _vflex);
+		
+		if (_model != null)
+			render(renderer, "model", true);
+
+		if (!"bottom".equals(_pagingPosition))
+			render(renderer, "pagingPosition", _pagingPosition);
+		if (!"100%".equals(_innerWidth))
+			render(renderer, "innerWidth", _innerWidth);		
+	}
 	/** Processes an AU request.
 	 *
 	 * <p>Default: in addition to what are handled by {@link XulElement#service},

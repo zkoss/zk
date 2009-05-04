@@ -126,7 +126,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	private boolean _fixedLayout, _vflex;
 	
 	static {
-		addClientEvent(Grid.class, Events.ON_RENDER, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
+		addClientEvent(Grid.class, Events.ON_RENDER, CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE);
 		addClientEvent(Grid.class, "onInnerWidth", CE_DUPLICATE_IGNORE|CE_IMPORTANT);
 	}
 	
@@ -655,6 +655,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		if (sz < 0)
 			throw new UiException("nonnegative is required: "+sz);
 		_preloadsz = sz;
+			//no need to update client since paging done at server
 	}
 
 	/**
@@ -1275,61 +1276,13 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		render(renderer, "fixedLayout", isFixedLayout());
 		render(renderer, "vflex", _vflex);
 		
-		if (_model != null) {
+		if (_model != null)
 			render(renderer, "model", true);
-			final List rows = getRows().getChildren();
-			int index = rows.size();
-			for(final ListIterator it = rows.listIterator(index);
-				it.hasPrevious(); --index)
-				if(((Row)it.previous()).isLoaded()) break;
-			
-			renderer.render("_lastLoadIdx", !inSpecialMold() || 
-					rows.size() <= _engine.getVisibleAmount() ? index : _engine.getVisibleAmount());
-		}
+
 		if (!"bottom".equals(_pagingPosition))
 			render(renderer, "pagingPosition", _pagingPosition);
 		if (!"100%".equals(_innerWidth))
 			render(renderer, "innerWidth", _innerWidth);		
-		if (_preloadsz != 7)
-			renderer.render("preloadSize", _preloadsz);
-	}
-	public void onRender(RenderEvent event) {
-		final Set items = event.getItems();
-		int cnt = items.size();
-		if (cnt == 0) return; //nothing to do
-
-		cnt = 20 - cnt;
-		if (cnt > 0 && _preloadsz > 0) { //Feature 1740072: pre-load
-			if (cnt > _preloadsz) cnt = _preloadsz;
-
-			//1. locate the first item found in items
-			final List toload = new LinkedList();
-			Iterator it = getRows().getChildren().iterator();
-			while (it.hasNext()) {
-				final Row row = (Row)it.next();
-				if (items.contains(row)) //found
-					break;
-				if (!row.isLoaded())
-					toload.add(0, row); //reverse order
-			}
-
-			//2. add unload items before the found one
-			if (!toload.isEmpty()) {
-				int bfcnt = cnt/3;
-				for (Iterator e = toload.iterator();
-				bfcnt > 0 && e.hasNext(); --bfcnt, --cnt) {
-					items.add(e.next());
-				}
-			}
-
-			//3. add unloaded after the found one
-			while (cnt > 0 && it.hasNext()) {
-				final Row row = (Row)it.next();
-				if (!row.isLoaded() && items.add(row))
-					--cnt;
-			}
-		}
-		renderItems(items);
 	}
 	//-- ComponentCtrl --//
 	/** Processes an AU request.
@@ -1344,7 +1297,44 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 			final String width = AuRequests.getInnerWidth(request);
 			_innerWidth = width == null ? "100%": width;
 		} else if (cmd.equals(Events.ON_RENDER)) {
-			Events.postEvent(RenderEvent.getRenderEvent(request));
+			final RenderEvent event = RenderEvent.getRenderEvent(request);
+			final Set items = event.getItems();
+
+			int cnt = items.size();
+			if (cnt == 0) return; //nothing to do
+
+			cnt = 20 - cnt;
+			if (cnt > 0 && _preloadsz > 0) { //Feature 1740072: pre-load
+				if (cnt > _preloadsz) cnt = _preloadsz;
+
+				//1. locate the first item found in items
+				final List toload = new LinkedList();
+				Iterator it = getRows().getChildren().iterator();
+				while (it.hasNext()) {
+					final Row row = (Row)it.next();
+					if (items.contains(row)) //found
+						break;
+					if (!row.isLoaded())
+						toload.add(0, row); //reverse order
+				}
+
+				//2. add unload items before the found one
+				if (!toload.isEmpty()) {
+					int bfcnt = cnt/3;
+					for (Iterator e = toload.iterator();
+					bfcnt > 0 && e.hasNext(); --bfcnt, --cnt) {
+						items.add(e.next());
+					}
+				}
+
+				//3. add unloaded after the found one
+				while (cnt > 0 && it.hasNext()) {
+					final Row row = (Row)it.next();
+					if (!row.isLoaded() && items.add(row))
+						--cnt;
+				}
+			}
+			renderItems(items);
 		} else
 			super.service(request, everError);
 	}

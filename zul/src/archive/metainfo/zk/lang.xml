@@ -521,70 +521,75 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>listbox</component-name>
 		<component-class>org.zkoss.zul.Listbox</component-class>
+		<widget-class>zul.sel.Listbox</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/listbox.dsp</mold-uri>
+			<mold-uri>mold/listbox.js</mold-uri>
 		</mold>
 		<mold>
 			<mold-name>select</mold-name>
-			<mold-uri>~./zul/html/listbox-select.dsp</mold-uri>
+			<mold-uri>mold/listbox-select.js</mold-uri>
 		</mold>
 		<mold>
 			<mold-name>paging</mold-name>
-			<mold-uri>~./zul/html/listbox-pg.dsp</mold-uri>
+			<mold-uri>mold/listbox.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>listcell</component-name>
 		<component-class>org.zkoss.zul.Listcell</component-class>
+		<widget-class>zul.sel.Listcell</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/listcell.dsp</mold-uri>
+			<mold-uri>mold/listcell.js</mold-uri>
 		</mold>
 		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>listfoot</component-name>
 		<component-class>org.zkoss.zul.Listfoot</component-class>
+		<widget-class>zul.sel.Listfoot</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/listfoot.dsp</mold-uri>
+			<mold-uri>mold/listfoot.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>listfooter</component-name>
 		<component-class>org.zkoss.zul.Listfooter</component-class>
+		<widget-class>zul.sel.Listfooter</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/listfooter.dsp</mold-uri>
+			<mold-uri>mold/listfooter.js</mold-uri>
 		</mold>
 		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>listhead</component-name>
 		<component-class>org.zkoss.zul.Listhead</component-class>
+		<widget-class>zul.sel.Listhead</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/listhead.dsp</mold-uri>
+			<mold-uri>mold/listhead.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>listheader</component-name>
 		<component-class>org.zkoss.zul.Listheader</component-class>
+		<widget-class>zul.sel.Listheader</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/listheader.dsp</mold-uri>
+			<mold-uri>mold/listheader.js</mold-uri>
 		</mold>
 		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>listitem</component-name>
 		<component-class>org.zkoss.zul.Listitem</component-class>
+		<widget-class>zul.sel.Listitem</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<!--
-			<mold-uri>${self.listbox.mold == 'select' ? '~./zul/html/listitem-select.dsp': '~./zul/html/listitem.dsp'}</mold-uri>
-			-->
+			<mold-uri>mold/listitem.js</mold-uri>
 		</mold>
 	</component>
 	<component>

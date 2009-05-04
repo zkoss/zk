@@ -152,7 +152,7 @@ zul.wgt.Paging = zk.$extends(zul.Widget, {
 	},
 	appendAnchor: function (zclass, out, label, val, seld) {
 		zclass += "-cnt" + (seld ? " " + zclass + "-seld" : "");
-		out.push('<a class="', zclass, '" href="javascript:;" onclick="zul.grid.Paging.go(this,',
+		out.push('<a class="', zclass, '" href="javascript:;" onclick="zul.wgt.Paging.go(this,',
 				val, ')">', label, '</a>&nbsp;');
 	},
 	getZclass: function () {
@@ -367,14 +367,14 @@ zul.wgt.Paging = zk.$extends(zul.Widget, {
 	_domMouseOut: function (evt) {
 		if (!evt) evt = window.event;
 		var target = zEvt.target(evt),
-			table = zDom.parentByTag(target, "TABLE"),
+			table = zDom.ancestor(target, "TABLE"),
 			wgt = zk.Widget.$(target);
 		zDom.rmClass(table, wgt.getZclass() + "-btn-over");
 	},
 	_domMouseDown: function (evt) {		
 		if (!evt) evt = window.event;
 		var target = zEvt.target(evt),
-			table = zDom.parentByTag(target, "TABLE"),
+			table = zDom.ancestor(target, "TABLE"),
 			wgt = zk.Widget.$(target),
 			zcls = wgt.getZclass();
 		if (zDom.hasClass(table, zcls + "-btn-disd")) return;
@@ -385,11 +385,11 @@ zul.wgt.Paging = zk.$extends(zul.Widget, {
 	},
 	_domMouseUp: function (evt) {
 		if (!evt) evt = window.event;
-		if (zul.grid.Paging._downbtn) {
-			var zcls = zk.Widget.$(zul.grid.Paging._downbtn).getZclass();
-			zDom.rmClass(zul.grid.Paging._downbtn, zcls + "-btn-clk");
+		if (zul.wgt.Paging._downbtn) {
+			var zcls = zk.Widget.$(zul.wgt.Paging._downbtn).getZclass();
+			zDom.rmClass(zul.wgt.Paging._downbtn, zcls + "-btn-clk");
 		}
-		zul.grid.Paging._downbtn = null;
-		zEvt.unlisten(document.body, "mouseup", zul.grid.Paging._domMouseUp);
+		zul.wgt.Paging._downbtn = null;
+		zEvt.unlisten(document.body, "mouseup", zul.wgt.Paging._domMouseUp);
 	}
 });
