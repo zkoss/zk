@@ -12,8 +12,13 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.MeshWidget = zk.$extends(zul.Widget, {
+zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	_pgpos: "bottom",
+
+	$init: function () {
+		this.$supers('$init', arguments);
+		this.heads = [];
+	},
 
 	//ROD Mold
 	_innerWidth: "100%",
@@ -164,10 +169,9 @@ zul.MeshWidget = zk.$extends(zul.Widget, {
 		this.$supers('unbind_', arguments);
 	},
 	_fixHeaders: function () {
-		var headers = this.getHeadersWidget();
-		if (headers && this.ehead) {
+		if (this.head && this.ehead) {
 			var empty = true;
-			for (var w = headers.firstChild; w; w = w.nextSibling) 
+			for (var w = this.head.firstChild; w; w = w.nextSibling) 
 				if (w.getLabel() || w.getImage()) {
 					empty = false;
 					break;
@@ -242,7 +246,7 @@ zul.MeshWidget = zk.$extends(zul.Widget, {
 	},
 
 	//derive must override
-	//getHeadersWidget
+	//getHeadWidgetClass
 	//getBodyWidgetIterator
 
 	//watch//
@@ -348,10 +352,10 @@ zul.MeshWidget = zk.$extends(zul.Widget, {
 		n._lastsz = {height: n.offsetHeight, width: n.offsetWidth}; // cache for the dirty resizing.
 	},
 	domFaker_: function (out, fakeId, zcls) { //used by mold
-		var headers = this.getHeadersWidget();
+		var head = this.head;
 		out.push('<tbody style="visibility:hidden;height:0px"><tr id="',
-				headers.uuid, fakeId, '" class="', zcls, '-faker">');
-		for (var w = headers.firstChild; w; w = w.nextSibling)
+				head.uuid, fakeId, '" class="', zcls, '-faker">');
+		for (var w = head.firstChild; w; w = w.nextSibling)
 			out.push('<th id="', w.uuid, fakeId, '"', w.domAttrs_(),
 				 	'><div style="overflow:hidden"></div></th>');
 		out.push('</tr></tbody>');
@@ -387,6 +391,34 @@ zul.MeshWidget = zk.$extends(zul.Widget, {
 	},
 	getInnerBottom: function () {
 		return this._innerBottom;
+	},
+
+	//super//
+	onChildAdded_: function (child) {
+		this.$supers('onChildAdded_', arguments);
+
+		if (child.$instanceof(this.getHeadWidgetClass()))
+			this.head = child;
+		else if (!child.$instanceof(zul.mesh.Auxhead))
+			return;
+
+		var nsib = child.nextSibling;
+		if (nsib)
+			for (var hds = this.heads, j = 0, len = hds.length; j < len; ++j)
+				if (hds[j] == nsib) {
+					this.heads.$addAt(j, child);
+					return; //done
+				}
+		this.heads.push(child);
+	},
+	onChildRemoved_: function (child) {
+		this.$supers('onChildRemoved_', arguments);
+
+		if (child == this.head) {
+			this.head = null;
+			this.heads.$remove(child);
+		} else if (child.$instanceof(zul.mesh.Auxhead))
+			this.heads.$remove(child);
 	}
 }, {
 	_adjHeadWd: function (wgt) {

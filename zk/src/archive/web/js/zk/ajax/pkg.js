@@ -34,7 +34,6 @@ zPkg = {
 				zUtl.destroyProgressbox("zk_loadprog");
 			} catch (ex) {
 			}
-
 			for (var fn, aflds = zPkg._aflds; fn = aflds.shift();) {
 				fn();
 				if (zPkg._updCnt()) break; //some loading
@@ -46,10 +45,13 @@ zPkg = {
 	},
 	load: function (pkg, dt, func) {
 		var pkglds = zPkg._lded;
-		if (!pkg || pkglds[pkg]) return !zPkg.loading;
+		if (!pkg || pkglds[pkg]) {
+			if (func) zk.afterLoad(pkg, func, true);
+			return !zPkg.loading;
 			//since pkg might be loading (-> return false)
+		}
 
-		if (func) zk.afterLoad(pkg, func);
+		if (func) zk.afterLoad(pkg, func, true);
 
 		pkglds[pkg] = true;
 
@@ -135,7 +137,7 @@ zPkg = {
 	},
 	_pkgVers: {}
 };
-zk.afterLoad = function (a, b) { //part of zk
+zk.afterLoad = function (a, b, front) { //part of zk
 	if (typeof a == 'string') {
 		if (!b) return;
 		if (zPkg._lded[a]) a = b;
@@ -148,7 +150,8 @@ zk.afterLoad = function (a, b) { //part of zk
 	}
 
 	if (zPkg.loading) {
-		zPkg._aflds.push(a);
+		if (front) zPkg._aflds.unshift(a);
+		else zPkg._aflds.push(a);
 		return true;
 	}
 	a();

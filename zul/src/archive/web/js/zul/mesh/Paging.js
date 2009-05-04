@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.wgt.Paging = zk.$extends(zul.Widget, {
+zul.mesh.Paging = zk.$extends(zul.Widget, {
 	_pgsz: 20,
 	_ttsz: 0,
 	_npg: 1,
@@ -152,7 +152,7 @@ zul.wgt.Paging = zk.$extends(zul.Widget, {
 	},
 	appendAnchor: function (zclass, out, label, val, seld) {
 		zclass += "-cnt" + (seld ? " " + zclass + "-seld" : "");
-		out.push('<a class="', zclass, '" href="javascript:;" onclick="zul.wgt.Paging.go(this,',
+		out.push('<a class="', zclass, '" href="javascript:;" onclick="zul.mesh.Paging.go(this,',
 				val, ')">', label, '</a>&nbsp;');
 	},
 	getZclass: function () {
@@ -385,11 +385,11 @@ zul.wgt.Paging = zk.$extends(zul.Widget, {
 	},
 	_domMouseUp: function (evt) {
 		if (!evt) evt = window.event;
-		if (zul.wgt.Paging._downbtn) {
-			var zcls = zk.Widget.$(zul.wgt.Paging._downbtn).getZclass();
-			zDom.rmClass(zul.wgt.Paging._downbtn, zcls + "-btn-clk");
+		if (zul.mesh.Paging._downbtn) {
+			var zcls = zk.Widget.$(zul.mesh.Paging._downbtn).getZclass();
+			zDom.rmClass(zul.mesh.Paging._downbtn, zcls + "-btn-clk");
 		}
-		zul.wgt.Paging._downbtn = null;
-		zEvt.unlisten(document.body, "mouseup", zul.wgt.Paging._domMouseUp);
+		zul.mesh.Paging._downbtn = null;
+		zEvt.unlisten(document.body, "mouseup", zul.mesh.Paging._domMouseUp);
 	}
 });

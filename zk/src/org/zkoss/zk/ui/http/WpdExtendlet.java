@@ -155,10 +155,23 @@ public class WpdExtendlet implements Extendlet {
 				new WpdContent(dir): null;
 
 		final ByteArrayOutputStream out = new ByteArrayOutputStream(1024*8);
+		String depends = null;
 		if (!zk) {
 			write(out, "_z='");
 			write(out, name);
-			write(out, "';if(!zk.$import(_z)){try{_zkpk=zk.$package(_z);\n");
+			write(out, "';try{_zkpk=zk.$package(_z);\n");
+
+			depends = root.getAttributeValue("depends");
+			if (depends != null)
+				if (depends.length() == 0) {
+					depends = null;
+				} else if (depends != null) {
+					write(out, "zPkg.load('");
+					write(out, depends);
+					write(out, "',null,function(){\n_zkpk=");
+					write(out, name);
+					write(out, ";\n");
+				}
 		}
 
 		final Map moldInfos = new HashMap();
@@ -166,16 +179,6 @@ public class WpdExtendlet implements Extendlet {
 			final Element el = (Element)it.next();
 			final String elnm = el.getName();
 			if ("widget".equals(elnm)) {
-				final String depends = el.getAttributeValue("depends");
-				final boolean bDepends = depends != null && depends.length() > 0;
-				if (bDepends) {
-					write(out, "zPkg.load('");
-					write(out, depends);
-					write(out, "',null,function(){\n_z='");
-					write(out, name);
-					write(out, "';_zkpk=zk.$package(_z);");
-				}
-
 				final String wgtnm = IDOMs.getRequiredAttributeValue(el, "name");
 				final String jspath = wgtnm + ".js"; //eg: /js/zul/wgt/Div.js
 				if (!writeResource(out, jspath, dir, false)) {
@@ -232,9 +235,6 @@ public class WpdExtendlet implements Extendlet {
 				} catch (Throwable ex) {
 					log.error("Failed to load molds for widget "+wgtflnm+".\nCause: "+Exceptions.getMessage(ex));
 				}
-
-				if (bDepends)
-					write(out, "\n});");
 			} else if ("script".equals(elnm)) {
 				String jspath = el.getAttributeValue("src");
 				if (jspath != null && jspath.length() > 0) {
@@ -284,8 +284,11 @@ public class WpdExtendlet implements Extendlet {
 				log.warning("Unknown element "+elnm+", "+el.getLocator());
 			}
 		}
-		if (!zk)
-			write(out, "\n}finally{zPkg.end(_z);}}");
+		if (!zk) {
+			if (depends != null)
+				write(out, "\n});");
+			write(out, "\n}finally{zPkg.end(_z);}");
+		}
 
 		if (wc != null) {
 			move(wc, out);

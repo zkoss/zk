@@ -12,16 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zPkg.load('zul.wgt');
-zul.grid.Grid = zk.$extends(zul.MeshWidget, {
-	getHeads: function () {
-		var heads = [];
-		for (var w = this.firstChild; w; w = w.nextSibling) {
-			if (w.$instanceof(zul.grid.Auxhead) || w.$instanceof(zul.grid.Columns))
-				heads.push(w);
-		}
-		return heads;
-	},
+zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	getCell: function (row, col) {
 		if (!this.rows) return null;
 		if (rows.nChildren <= row) return null;
@@ -41,11 +32,11 @@ zul.grid.Grid = zk.$extends(zul.MeshWidget, {
 				this.rows.stripe();
 		}
 	},
+
+	//-- super --//
 	getZclass: function () {
 		return this._zclass == null ? "z-grid" : this._zclass;
 	},
-
-	//-- super --//
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 		if (child.$instanceof(zul.grid.Rows))
@@ -54,7 +45,7 @@ zul.grid.Grid = zk.$extends(zul.MeshWidget, {
 			this.columns = child;
 		else if (child.$instanceof(zul.grid.Foot))
 			this.foot = child;			
-		else if (child.$instanceof(zul.wgt.Paging))
+		else if (child.$instanceof(zul.mesh.Paging))
 			this.paging = child;
 	},
 	onChildRemoved_: function (child) {
@@ -81,8 +72,8 @@ zul.grid.Grid = zk.$extends(zul.MeshWidget, {
 		this.rerender();
 	},
 
-	getHeadersWidget: function () {
-		return this.columns;
+	getHeadWidgetClass: function () {
+		return zul.grid.Columns;
 	},
 	getBodyWidgetIterator: function () {
 		return new zul.grid.BodyWidgetIterator(this);

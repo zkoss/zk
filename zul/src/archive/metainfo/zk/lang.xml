@@ -166,17 +166,19 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>auxhead</component-name>
 		<component-class>org.zkoss.zul.Auxhead</component-class>
+		<widget-class>zul.mesh.Auxhead</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/auxhead.dsp</mold-uri>
+			<mold-uri>mold/auxhead.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>auxheader</component-name>
 		<component-class>org.zkoss.zul.Auxheader</component-class>
+		<widget-class>zul.mesh.Auxheader</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/auxheader.dsp</mold-uri>
+			<mold-uri>mold/auxheader.js</mold-uri>
 		</mold>
 		<preserve-blank/><!-- blank text is converted as a label child -->
 	</component>
@@ -528,7 +530,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</mold>
 		<mold>
 			<mold-name>select</mold-name>
-			<mold-uri>mold/listbox-select.js</mold-uri>
+			<mold-uri>mold/select.js</mold-uri>
+			<widget-class>zul.sel.Select</widget-class>
 		</mold>
 		<mold>
 			<mold-name>paging</mold-name>
@@ -664,7 +667,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>paging</component-name>
 		<component-class>org.zkoss.zul.Paging</component-class>
-		<widget-class>zul.wgt.Paging</widget-class>
+		<widget-class>zul.mesh.Paging</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/paging.js</mold-uri>

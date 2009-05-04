@@ -21,8 +21,6 @@ package org.zkoss.zul;
 import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 
@@ -62,10 +60,7 @@ public class Auxheader extends HeaderElement implements org.zkoss.zul.api.Auxhea
 			throw new WrongValueException("Positive only");
 		if (_colspan != colspan) {
 			_colspan = colspan;
-			final Execution exec = Executions.getCurrent();
-			if (exec != null && exec.isExplorer())
-				invalidate();
-			else smartUpdate("colspan", _colspan);
+			smartUpdate("colspan", _colspan);
 		}
 	}
 
@@ -83,16 +78,22 @@ public class Auxheader extends HeaderElement implements org.zkoss.zul.api.Auxhea
 			throw new WrongValueException("Positive only");
 		if (_rowspan != rowspan) {
 			_rowspan = rowspan;
-			final Execution exec = Executions.getCurrent();
-			if (exec != null && exec.isExplorer())
-				invalidate();
-			else smartUpdate("rowspan", _rowspan);
+			smartUpdate("rowspan", _rowspan);
 		}
 	}
 
 	//super//
 	public String getZclass() {
 		return _zclass == null ? "z-auxheader" : _zclass;
+	}
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		if (_colspan != 1)
+			renderer.render("colspan", _colspan);
+		if (_rowspan != 1)
+			renderer.render("rowspan", _rowspan);
 	}
 
 	//Component//
