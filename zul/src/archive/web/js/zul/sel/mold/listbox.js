@@ -1,13 +1,13 @@
-/* grid.js
+/* listbox.js
 
 	Purpose:
 		
 	Description:
 		
 	History:
-		Tue Dec 23 15:24:01     2008, Created by jumperchen
+		Mon May  4 15:34:02     2009, Created by tomyeh
 
-Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
@@ -18,7 +18,8 @@ function (out) {
 		innerWidth = this.getInnerWidth(),
 		wdAttr = innerWidth == '100%' ? ' width="100%"' : '',
 		wdStyle =  innerWidth != '100%' ? 'width:' + innerWidth : '',
-		inPaging = this.inPagingMold(), pgpos;
+		inPaging = this.inPagingMold(), pgpos,
+		tag = zk.ie || zk.gecko ? "a" : "button";
 
 	out.push('<div', this.domAttrs_(), '>');
 
@@ -31,7 +32,7 @@ function (out) {
 		}
 	}
 
-	if (this.columns) {
+	if(this.listhead){
 		out.push('<div id="', uuid, '$head" class="', zcls, '-header">',
 			'<table', wdAttr, zUtl.cellps0,
 			' style="table-layout:fixed;', wdStyle,'">');
@@ -45,27 +46,33 @@ function (out) {
 	out.push('<div id="', uuid, '$body" class="', zcls, '-body"');
 
 	var hgh = this.getHeight();
-	if (hgh) out.push(' style="height:', hgh, '"');
+	if (hgh) out.push(' style="overflow:hidden;height:', hgh, '"');
+	else if (this.getRows() > 1) out.push(' style="overflow:hidden;height:"', this.getRows() * 15, 'px"');
 	
-	out.push('><table', wdAttr, zUtl.cellps0);
+	out.push('><table', wdAttr, zUtl.cellps0, ' id="', uuid, '$cave"');
 	if (this.isFixedLayout())
 		out.push(' style="table-layout:fixed;', wdStyle,'"');		
 	out.push('>');
 	
-	if (this.columns)
+	if(this.listhead)
 		this.domFaker_(out, '$bdfaker', zcls);
 
-	if (this.rows) this.rows.redraw(out);
 
-	out.push('</table></div>');
-	
-	if (this.foot) {
+	for (var items = this.items, j = 0, len = items.length; j < len;)
+		items[j++].redraw(out);
+
+	out.push('</table><', tag, ' id="', uuid,
+		'$a" tabindex="-1" onclick="return false;" href="javascript:;" style="position:absolute;left:0px;top:0px;padding:0 !important;margin:0 !important;border:0 !important;background:transparent !important;font-size:1px !important;width:1px !important;height:1px !important;-moz-outline:0 none;outline:0 none;-moz-user-select:text;-khtml-user-select:text;"></',
+		tag, '>');
+	out.push("</div>");
+
+	if (this.listfoot) {
 		out.push('<div id="', uuid, '$foot" class="', zcls, '-footer">',
 			'<table', wdAttr, zUtl.cellps0, ' style="table-layout:fixed;', wdStyle,'">');
-		if (this.columns) 
+		if (this.listhead) 
 			this.domFaker_(out, '$ftfaker', zcls);
 			
-		this.foot.redraw(out);
+		this.listfoot.redraw(out);
 		out.push('</table></div>');
 	}
 

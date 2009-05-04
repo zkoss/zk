@@ -502,15 +502,4 @@ public interface Tree extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 * @return the treeitem from tree by given path
 	 */
 	public org.zkoss.zul.api.Treeitem renderItemByPathApi(int[] path);
-
-	/** Returns the horizontal alignment of the whole grid.
-	 * <p>Default: null (system default: left unless CSS specified).
-	 * @since 5.0.0
-	 */
-	public String getAlign();
-	/** Sets the horizontal alignment of the whole grid.
-	 * <p>Allowed: "left", "center", "right", "justify"
-	 * @since 5.0.0
-	 */
-	public void setAlign(String align);
 }

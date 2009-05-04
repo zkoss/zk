@@ -1122,7 +1122,6 @@
 			</xs:choice>
 		</xs:sequence>
 		<xs:attributeGroup ref="xulElementAttrGroup" />
-		<xs:attribute name="align" type="gridAlignAttrType" use="optional" />
 		<xs:attribute name="pageSize" type="intType" use="optional" />
 		<xs:attribute name="paginal" type="xs:string" use="optional" />
 		<xs:attribute name="model" type="xs:string" use="optional" />

@@ -104,7 +104,6 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	private transient Columns _cols;
 	private transient Foot _foot;
 	private transient Collection _heads;
-	private String _align;
 	private String _pagingPosition = "bottom";
 	private ListModel _model;
 	private RowRenderer _renderer;
@@ -251,20 +250,14 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		return children.size() <= col ? null: (Component)children.get(col);
 	}
 
-	/** Returns the horizontal alignment of the whole grid.
-	 * <p>Default: null (system default: left unless CSS specified).
+	/** @deprecated As of release 5.0, use CSS instead.
 	 */
 	public String getAlign() {
-		return _align;
+		return null;
 	}
-	/** Sets the horizontal alignment of the whole grid.
-	 * <p>Allowed: "left", "center", "right", "justify"
+	/** @deprecated As of release 5.0, use CSS instead.
 	 */
 	public void setAlign(String align) {
-		if (!Objects.equals(_align, align)) {
-			_align = align;
-			smartUpdate("align", _align);
-		}
 	}
 
 	//--Paging--//
@@ -1271,7 +1264,6 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 		
-		render(renderer, "align", _align);
 		render(renderer, "oddRowSclass", getOddRowSclass());
 		render(renderer, "fixedLayout", isFixedLayout());
 		render(renderer, "vflex", _vflex);

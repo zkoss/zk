@@ -54,17 +54,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		return "paging" == this.getMold();
 	},
 
-	getAlign: function () {
-		return this._align;
-	},
-	setAlign: function (align) {
-		if (this._align != align) {
-			this._align = align;
-			var n = this.getNode();
-			if (n) n.align = align;
-		}
-	},
-
 	isVflex: function () {
 		return this._vflex;
 	},

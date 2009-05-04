@@ -125,7 +125,6 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 	private int _hdcnt;
 	private String _innerWidth = "100%";
 	private transient ListboxDrawerEngine _engine;
-	private String _align;
 	
 	private String _pagingPosition = "bottom";
 	/** The name. */
@@ -437,7 +436,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 
 		if (_rows != rows) {
 			_rows = rows;
-			smartUpdate("size", _rows);
+			smartUpdate("rows", _rows);
 		}
 	}
 
@@ -891,24 +890,6 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 	 */
 	public org.zkoss.zul.api.Listitem removeItemAtApi(int index) {		
 		return removeItemAt(index);
-	}
-
-	/** Returns the horizontal alignment of the whole grid.
-	 * <p>Default: null (system default: left unless CSS specified).
-	 * @since 5.0.0
-	 */
-	public String getAlign() {
-		return _align;
-	}
-	/** Sets the horizontal alignment of the whole grid.
-	 * <p>Allowed: "left", "center", "right", "justify"
-	 * @since 5.0.0
-	 */
-	public void setAlign(String align) {
-		if (!Objects.equals(_align, align)) {
-			_align = align;
-			smartUpdate("align", _align);
-		}
 	}
 
 	//--Paging--//
@@ -2475,7 +2456,6 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 		
-		render(renderer, "align", _align);
 		render(renderer, "oddRowSclass", getOddRowSclass());
 		render(renderer, "fixedLayout", isFixedLayout());
 		render(renderer, "vflex", _vflex);

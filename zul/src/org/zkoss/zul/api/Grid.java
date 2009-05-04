@@ -143,17 +143,10 @@ public interface Grid extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 */
 	public Component getCell(int row, int col);
 
-	/**
-	 * Returns the horizontal alignment of the whole grid.
-	 * <p>
-	 * Default: null (system default: left unless CSS specified).
+	/** @deprecated As of release 5.0, use CSS instead.
 	 */
 	public String getAlign();
-
-	/**
-	 * Sets the horizontal alignment of the whole grid.
-	 * <p>
-	 * Allowed: "left", "center", "right"
+	/** @deprecated As of release 5.0, use CSS instead.
 	 */
 	public void setAlign(String align);
 

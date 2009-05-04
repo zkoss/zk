@@ -44,7 +44,7 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 		else if (child.$instanceof(zul.grid.Columns))
 			this.columns = child;
 		else if (child.$instanceof(zul.grid.Foot))
-			this.foot = child;			
+			this.foot = child;
 		else if (child.$instanceof(zul.mesh.Paging))
 			this.paging = child;
 	},
@@ -55,7 +55,7 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 		else if (child == this.columns)
 			this.columns = null;
 		else if (child == this.foot)
-			this.foot = null;			
+			this.foot = null;
 		else if (child == this.paging)
 			this.paging = null;
 	},
@@ -68,7 +68,7 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 				return;
 			}
 		} 
-		
+
 		this.rerender();
 	},
 
@@ -94,4 +94,3 @@ zul.grid.BodyWidgetIterator = zk.$extends(zk.Object, {
 		return p;
 	}
 });
-

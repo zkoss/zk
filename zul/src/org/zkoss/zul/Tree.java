@@ -98,7 +98,6 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	private transient Paging _paging;
 	private transient EventListener _pgListener, _pgImpListener;
 	private String _pagingPosition = "bottom";
-	private String _align;
 
 	public Tree() {
 		init();
@@ -177,24 +176,6 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 			}
 		}
 		return true;
-	}
-
-	/** Returns the horizontal alignment of the whole grid.
-	 * <p>Default: null (system default: left unless CSS specified).
-	 * @since 5.0.0
-	 */
-	public String getAlign() {
-		return _align;
-	}
-	/** Sets the horizontal alignment of the whole grid.
-	 * <p>Allowed: "left", "center", "right", "justify"
-	 * @since 5.0.0
-	 */
-	public void setAlign(String align) {
-		if (!Objects.equals(_align, align)) {
-			_align = align;
-			smartUpdate("align", _align);
-		}
 	}
 
 	//-- super --//
