@@ -376,11 +376,11 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (opts && opts.visibility)
 			n.style.visibility = visible ? 'visible': 'hidden';
 	},
-	onChildAdded_: function (child) {
+	onChildAdded_: function (/*child*/) {
 	},
-	onChildRemoved_: function (child) {
+	onChildRemoved_: function (/*child*/) {
 	},
-	onChildVisible_: function (child, visible) {
+	onChildVisible_: function (/*child, visible*/) {
 	},
 	setTopmost: function () {
 		if (!this.desktop) return -1;
