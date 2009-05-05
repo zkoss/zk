@@ -192,12 +192,15 @@ public class WpdExtendlet implements Extendlet {
 				write(out, wgtnm);
 				write(out, ",'");
 				write(out, wgtflnm);
-				write(out, "');");
-				if (langdef == null || !langdef.hasWidgetDefinition(wgtflnm))
+				write(out, '\'');
+				WidgetDefinition wgtdef = langdef != null ? langdef.getWidgetDefinitionIfAny(wgtflnm): null;
+				if (wgtdef != null && wgtdef.isBlankPreserved())
+					write(out, ",true");
+				write(out, ");");
+				if (wgtdef == null)
 					continue;
 
 				try {
-					WidgetDefinition wgtdef = langdef.getWidgetDefinition(wgtflnm);
 					boolean first = true;
 					for (Iterator e = wgtdef.getMoldNames().iterator(); e.hasNext();) {
 						final String mold = (String)e.next();

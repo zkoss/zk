@@ -113,7 +113,7 @@ zk.zuml.Parser = {
 				if (nt == 1) $Parser._cw(wgt, e);
 				else if (nt == 3) {
 					var txt = e.nodeValue;
-					if (txt.trim().length || wgt.preserveBlank) {
+					if (txt.trim().length || wgt.blankPreserved) {
 						var w = new zk.Native();
 						w.prolog = $Parser._eval(wgt, txt);
 						wgt.appendChild(w);

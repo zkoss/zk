@@ -73,14 +73,6 @@ public class Listhead extends HeadersElement implements org.zkoss.zul.api.Listhe
 	}
 
 	//super//
-	public boolean setVisible(boolean visible) {
-		final boolean vis = super.setVisible(visible);
-		final Listbox listbox = getListbox();
-		if (listbox != null)
-			listbox.invalidate();
-		return vis;
-	}
-
 	public String getZclass() {
 		return _zclass == null ? "z-list-head" : _zclass;
 	}

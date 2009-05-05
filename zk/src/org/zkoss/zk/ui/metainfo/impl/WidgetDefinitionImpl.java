@@ -38,14 +38,20 @@ public class WidgetDefinitionImpl implements WidgetDefinition {
 	private final String _class;
 	/** A map of molds (String mold, String moldURI). */
 	private Map _molds;
+	/** Whether to preserve the blank text. */
+	private final boolean _blankpresv;
 
-	public WidgetDefinitionImpl(String klass) {
+	public WidgetDefinitionImpl(String klass, boolean blankPreserved) {
 		_class = klass;
+		_blankpresv = blankPreserved;
 	}
 
 	//WidgetDefinition//
 	public String getWidgetClass() {
 		return _class;
+	}
+	public boolean isBlankPreserved() {
+		return _blankpresv;
 	}
 	public void addMold(String name, String moldURI) {
 		if (moldURI == null || moldURI.length() == 0 || name == null

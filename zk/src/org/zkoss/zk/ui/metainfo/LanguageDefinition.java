@@ -475,11 +475,21 @@ public class LanguageDefinition {
 	 * @since 5.0.0
 	 */
 	public WidgetDefinition getWidgetDefinition(String widgetClass) {
-		final WidgetDefinition wgtdef =
-			(WidgetDefinition)_wgtdefs.get(widgetClass);
+		final WidgetDefinition wgtdef = getWidgetDefinitionIfAny(widgetClass);
 		if (wgtdef == null)
 			throw new DefinitionNotFoundException("Widget definition not found: "+widgetClass);
 		return wgtdef;
+	}
+	/** Returns the widget of the specified class name, or null if not found.
+	 * It is the same as {@link #getWidgetDefinition}, except this method
+	 * won't throw any exception.
+	 *
+	 * @param widgetClass the name of the widget class (JavaScript class),
+	 * including the package name.
+	 * @since 5.0.0
+	 */
+	public WidgetDefinition getWidgetDefinitionIfAny(String widgetClass) {
+		return (WidgetDefinition)_wgtdefs.get(widgetClass);
 	}
 	/** Adds a widget definition.
 	 * @since 5.0.0

@@ -16,8 +16,6 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	_open: true,
 	_closable: true,
 
-	preserveBlank: true, //iZuml
-
 	isLegend: function () {
 		return this._mold == 'default';
 	},

@@ -14,7 +14,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 zul.grid.Footer = zk.$extends(zul.LabelImageWidget, {
 	_span: 1,
-	preserveBlank: true, //iZuml
 	
 	getGrid: function () {
 		return this.parent ? this.parent.parent : null;

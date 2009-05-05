@@ -16,8 +16,6 @@ zul.layout.North = zk.$extends(zul.layout.LayoutRegion, {
 	setWidth: zk.$void, // readonly
 	sanchor: 't',
 
-	preserveBlank: true, //iZuml
-	
 	getPosition: function () {
 		return zul.layout.Borderlayout.NORTH;
 	},

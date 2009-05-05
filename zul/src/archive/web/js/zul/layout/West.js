@@ -15,7 +15,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.layout.West = zk.$extends(zul.layout.LayoutRegion, {
 	setHeight: zk.$void, // readonly
 	sanchor: 'l',
-	preserveBlank: true, //iZuml
 
 	$init: function () {
 		this.$supers('$init', arguments);

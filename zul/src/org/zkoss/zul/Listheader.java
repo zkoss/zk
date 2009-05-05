@@ -138,7 +138,7 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 			throw new WrongValueException("Unknown sort direction: "+sortDir);
 		if (!Objects.equals(_sortDir, sortDir)) {
 			_sortDir = sortDir;
-			smartUpdate("z.sort", _sortDir); //don't use null because sel.js assumes it
+			smartUpdate("sortDirection", _sortDir); //don't use null because sel.js assumes it
 		}
 	}
 
@@ -207,8 +207,8 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 	 */
 	public void setSortAscending(Comparator sorter) {
 		if (!Objects.equals(_sortAsc, sorter)) {
-			if (sorter == null) smartUpdate("z.asc", (Object)null);
-			else if (_sortAsc == null) smartUpdate("z.asc", true);
+			if (sorter == null) smartUpdate("sortAscending", false);
+			else if (_sortAsc == null) smartUpdate("sortAscending", true);
 			_sortAsc = sorter;
 		}
 	}
@@ -241,8 +241,8 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 	 */
 	public void setSortDescending(Comparator sorter) {
 		if (!Objects.equals(_sortDsc, sorter)) {
-			if (sorter == null) smartUpdate("z.dsc", (Object)null);
-			else if (_sortDsc == null) smartUpdate("z.dsc", true);
+			if (sorter == null) smartUpdate("sortDescending", false);
+			else if (_sortDsc == null) smartUpdate("sortDescending", true);
 			_sortDsc = sorter;
 		}
 	}
@@ -282,7 +282,7 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 		if (maxlength < 0) maxlength = 0;
 		if (_maxlength != maxlength) {
 			_maxlength = maxlength;
-			invalidateCells();
+			smartUpdate("maxlength", maxlength);
 		}
 	}
 
@@ -295,21 +295,6 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 			if (it.next() == this)
 				break;
 		return j;
-	}
-
-	/** Invalidates the relevant cells. */
-	private void invalidateCells() {
-		final Listbox listbox = getListbox();
-		if (listbox == null || listbox.inSelectMold())
-			return;
-
-		final int jcol = getColumnIndex();
-		for (Iterator it = listbox.getItems().iterator(); it.hasNext();) {
-			final Listitem li = (Listitem)it.next();
-			final List chs = li.getChildren();
-			if (jcol < chs.size())
-				((Component)chs.get(jcol)).invalidate();
-		}
 	}
 
 	/** Sorts the list items based on {@link #getSortAscending}
@@ -430,24 +415,6 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 		return _zclass == null ? "z-list-header" : _zclass;
 	}
 
-	//-- Internal use only --//
-	/** Returns the prefix of the first column (in HTML tags), null if this
-	 * is not first column. Called only by listheader.dsp.
-	 * @since 3.0.1
-	 */
-	public String getColumnHtmlPrefix() {
-		final Listbox listbox = getListbox();
-		if (listbox != null && getParent().getFirstChild() == this 
-				&& listbox.isCheckmark() && listbox.isMultiple()) {
-			final StringBuffer sb = new StringBuffer(64);
-				sb.append("<input type=\"checkbox\"");
-				sb.append(" id=\"").append(getUuid())
-					.append("!cm\" z.type=\"Lhfc\"/>");
-			return sb.toString();
-		}
-		return null;
-	}
-	
 	//-- Component --//
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Listhead))

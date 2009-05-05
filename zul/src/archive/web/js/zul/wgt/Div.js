@@ -13,5 +13,4 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
 zul.wgt.Div = zk.$extends(zul.Widget, {
-	preserveBlank: true //iZuml
 });

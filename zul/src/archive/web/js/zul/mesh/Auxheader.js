@@ -16,8 +16,6 @@ zul.mesh.Auxheader = zk.$extends(zul.mesh.HeaderWidget, {
 	_colspan: 1,
 	_rowspan: 1,
 
-	preserveBlank: true, //iZuml
-
 	getColspan: function () {
 		return this._colspan;
 	},

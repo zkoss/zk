@@ -420,7 +420,7 @@ public class DefinitionLoaders {
 			String wgtnm = el.getElementValue("widget-class", true);
 			WidgetDefinition wgtdef = null;
 			if (wgtnm != null) {
-				wgtdef = getWidgetDefinition(langdef, wgtnm);
+				wgtdef = getWidgetDefinition(langdef, compdef, wgtnm);
 				compdef.setDefaultWidgetClass(wgtnm);
 			}
 
@@ -439,7 +439,7 @@ public class DefinitionLoaders {
 				compdef.addMold(nm, wn != null ? wn: wgtnm, z2c);
 
 				WidgetDefinition wd =
-					wn !=  null ? getWidgetDefinition(langdef, wn): wgtdef;
+					wn !=  null ? getWidgetDefinition(langdef, compdef, wn): wgtdef;
 				if (uri != null) {
 					if (wd != null)
 						wd.addMold(nm, uri);
@@ -462,11 +462,11 @@ public class DefinitionLoaders {
 		}
 	}
 	private static WidgetDefinition getWidgetDefinition(
-	LanguageDefinition langdef, String wgtnm) {
+	LanguageDefinition langdef, ComponentDefinition compdef, String wgtnm) {
 		if (langdef.hasWidgetDefinition(wgtnm))
 			return langdef.getWidgetDefinition(wgtnm);
 
-		WidgetDefinition wgtdef = new WidgetDefinitionImpl(wgtnm);
+		WidgetDefinition wgtdef = new WidgetDefinitionImpl(wgtnm, compdef.isBlankPreserved());
 		langdef.addWidgetDefinition(wgtdef);
 		return wgtdef;
 	}

@@ -17,8 +17,6 @@ zul.grid.Column = zk.$extends(zul.mesh.HeaderWidget, {
 	_sortAsc: "none",
 	_sortDsc: "none",
 
-	preserveBlank: true, //iZuml
-	
 	$init: function () {
 		this.$supers('$init', arguments);
 		this.listen('onSort', this, null, -1000);

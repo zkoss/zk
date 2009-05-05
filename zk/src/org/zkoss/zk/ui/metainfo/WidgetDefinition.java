@@ -55,4 +55,13 @@ public interface WidgetDefinition {
 	 * @see org.zkoss.zk.ui.AbstractComponent#redraw
 	 */
 	public String getMoldURI(String name);
+
+	/** Returns whether to preserve the blank text.
+	 * If false, the blank text (a non-empty string consisting of whitespaces)
+	 * are ignored.
+	 * If true, they are converted to a label child.
+	 *
+	 * <p>It is used only with <a href="http://docs.zkoss.org/wiki/IZUML">iZUML</a>.
+	 */
+	public boolean isBlankPreserved();
 }
