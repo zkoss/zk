@@ -373,11 +373,11 @@ div.demo-items {
 .demo-items .z-listbox-body {
 	overflow-x: hidden;
 }
-.demo-items .z-list-cell-cnt img {
+.demo-items .z-listcell-cnt img {
 	width:24px;
 	height:24px;
 }
-.demo-items .z-list-cell-cnt {
+.demo-items .z-listcell-cnt {
 	padding-left: 5px;
 }
 .demo-main-cnt {
