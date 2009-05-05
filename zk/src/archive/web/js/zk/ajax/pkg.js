@@ -17,14 +17,20 @@ zPkg = {
 
 	/** Called after the whole package is declared. */
 	end: function (pkg) {
-		if (!zPkg._lding.$remove(pkg))
-			zPkg._lded[pkg] = true;
-			//specified in lang.xml (or in HTML directly)
+		zPkg._ldings.$remove(pkg);
+		zPkg._lded[pkg] = zPkg._lding[pkg] = true;
 
-		var afpg = zPkg._afpglds[pkg];
-		if (afpg) {
-			delete zPkg._afpglds[pkg];
-			for (var fn, aflds = zPkg._aflds; fn = afpg.pop();)
+		var deps = zPkg._deps[pkg];
+		if (deps) {
+			delete zPkg._deps[pkg];
+			for (var pn; pn = deps.unshift();)
+				zPkg.load(pn);
+		}
+
+		var afpk = zPkg._afpklds[pkg];
+		if (afpk) {
+			delete zPkg._afpklds[pkg];
+			for (var fn, aflds = zPkg._aflds; fn = afpk.pop();)
 				aflds.unshift(fn);
 		}
 
@@ -44,28 +50,18 @@ zPkg = {
 		return zPkg._lded[pkg];
 	},
 	load: function (pkg, dt, func) {
-		var pkglds = zPkg._lded;
-		if (!pkg || pkglds[pkg]) {
-			if (func) zk.afterLoad(pkg, func, true);
-			return !zPkg.loading;
-			//since pkg might be loading (-> return false)
-		}
-
 		if (func) zk.afterLoad(pkg, func, true);
 
-		pkglds[pkg] = true;
+		if (!pkg || zPkg._lding[pkg])
+			return !zPkg.loading;
+			//since pkg might be loading (-> return false)
 
-		var deps = zPkg._deps[pkg];
-		if (deps) {
-			delete zPkg._deps[pkg];
-			for (var pn; pn = deps.unshift();)
-				zPkg.load(pn);
-		}
+		zPkg._lding[pkg] = true;
 
 		//We don't use e.onload since Safari doesn't support t
 		//See also Bug 1815074
 
-		zPkg._lding.unshift(pkg);
+		zPkg._ldings.unshift(pkg);
 		if (zPkg._updCnt() == 1) {
 			zEvt.disableESC();
 			setTimeout(zPkg._pgbox, 380);
@@ -88,21 +84,22 @@ zPkg = {
 		document.getElementsByTagName("HEAD")[0].appendChild(e);
 	},
 	_lded: {'zk': true}, //loaded
-	_lding: [], //loading
+	_lding: {'zk': true}, //loading (include loaded)
+	_ldings: [], //loading (exclude loaded)
 	_aflds: [],
-	_afpglds: {},
+	_afpklds: {}, //after pkg loaded
 	_deps: {},
 
 	_ldmsg: function () {
 		var msg = '';
-		for (var lding = zPkg._lding, j = lding.length; --j >=0;) {
+		for (var lding = zPkg._ldings, j = lding.length; --j >=0;) {
 			if (msg) msg += ', ';
 			msg += lding[j];
 		}
 		return msg;
 	},
 	_updCnt: function () {
-		zPkg.loading = zPkg._lding.length;
+		zPkg.loading = zPkg._ldings.length;
 		try {
 			var n = zDom.$("zk_loadcnt");
 			if (n) n.innerHTML = zPkg._ldmsg();
@@ -142,9 +139,9 @@ zk.afterLoad = function (a, b, front) { //part of zk
 		if (!b) return;
 		if (zPkg._lded[a]) a = b;
 		else {
-			var afpg = zPkg._afpglds;
-			if (afpg[a]) afpg[a].push(b);
-			else afpg[a] = [b];
+			var afpk = zPkg._afpklds;
+			if (afpk[a]) afpk[a].push(b);
+			else afpk[a] = [b];
 			return;
 		}
 	}
