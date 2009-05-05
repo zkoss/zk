@@ -28,7 +28,7 @@ import org.zkoss.zul.impl.HeaderElement;
 
 /**
  * A treecol.
- * <p>Default {@link #getZclass}: z-tree-col.(since 3.5.0)
+ * <p>Default {@link #getZclass}: z-treecol (since 5.0.0)
  * @author tomyeh
  */
 public class Treecol extends HeaderElement implements org.zkoss.zul.api.Treecol {
@@ -123,7 +123,7 @@ public class Treecol extends HeaderElement implements org.zkoss.zul.api.Treecol 
 
 	//-- super --//
 	public String getZclass() {
-		return _zclass == null ? "z-tree-col" : _zclass;
+		return _zclass == null ? "z-treecol" : _zclass;
 	}
 
 	//-- Component --//

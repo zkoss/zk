@@ -27,7 +27,7 @@ package org.zkoss.zul.api;
  * and label.
  * 
  * <p>
- * Default {@link #getZclass}: z-tree-cell.(since 3.5.0)
+ * Default {@link #getZclass}: z-treecell (since 5.0.0)
  * 
  * @author tomyeh
  * @since 3.5.2

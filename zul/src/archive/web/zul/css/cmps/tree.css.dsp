@@ -8,10 +8,10 @@ div.z-tree {
 div.z-tree-header, div.z-tree-header tr, div.z-tree-footer {
 	border: 0; overflow: hidden; width: 100%;
 }
-div.z-tree-header tr.z-tree-cols, div.z-tree-header tr.z-auxhead {
+div.z-tree-header tr.z-treecols, div.z-tree-header tr.z-auxhead {
 	background-image: url(${c:encodeURL('~./zul/img/grid/column-bg.png')});
 }
-div.z-tree-header th.z-tree-col, div.z-tree-header th.z-auxheader {
+div.z-tree-header th.z-treecol, div.z-tree-header th.z-auxheader {
 	overflow: hidden; border: 1px solid;
 	border-color: #DAE7F6 #9EB6CE #9EB6CE #DAE7F6;
 	white-space: nowrap; padding: 2px;
@@ -26,7 +26,7 @@ div.z-tree-pgi-b {
 div.z-tree-pgi-t {
 	border-bottom: 1px solid #AAB; overflow: hidden;
 }
-div.z-tree-body td.z-tree-cell, div.z-tree-footer td.z-tree-footer {
+div.z-tree-body td.z-treecell, div.z-tree-footer td.z-treefooter {
 	cursor: pointer; padding: 0 2px;
 	font-size: ${fontSizeM}; font-weight: normal; overflow: hidden;
 }
@@ -66,46 +66,46 @@ span.z-tree-root-close, span.z-tree-tee-close, span.z-tree-last-close {
 }
 
 <%-- Treecol, Treefooter, and Treecell--%>
-div.z-tree-footer-cnt, div.z-tree-cell-cnt, div.z-tree-col-cnt {
+div.z-treefooter-cnt, div.z-treecell-cnt, div.z-treecol-cnt {
 	border: 0; margin: 0; padding: 0;
 	font-family: ${fontFamilyC};
 	font-size: ${fontSizeM}; font-weight: normal;
 }
-div.z-tree-footer-cnt, div.z-tree-col-cnt{
+div.z-treefooter-cnt, div.z-treecol-cnt{
 	overflow: hidden;
 }
-.z-word-wrap div.z-tree-cell-cnt, .z-word-wrap div.z-tree-footer-cnt,
-	.z-word-wrap div.z-tree-col-cnt {
+.z-word-wrap div.z-treecell-cnt, .z-word-wrap div.z-treefooter-cnt,
+	.z-word-wrap div.z-treecol-cnt {
 	word-wrap: break-word;
 }
 
 <%-- Treerow --%>
-tr.z-tree-row, tr.z-tree-row a, tr.z-tree-row a:visited {
+tr.z-treerow, tr.z-treerow a, tr.z-treerow a:visited {
 	font-size: ${fontSizeM}; font-weight: normal; color: black;
 	text-decoration: none;
 }
-tr.z-tree-row a:hover {
+tr.z-treerow a:hover {
 	text-decoration: underline;
 }
-tr.z-tree-row-disd *, td.z-tree-cell-disd * {
+tr.z-treerow-disd *, td.z-treecell-disd * {
 	color: #C5CACB !important; cursor: default!important;
 }
-tr.z-tree-row-disd a:visited, tr.z-tree-row-disd a:hover,
-td.z-tree-cell-disd a:visited, td.z-tree-cell-disd a:hover {
+tr.z-treerow-disd a:visited, tr.z-treerow-disd a:hover,
+td.z-treecell-disd a:visited, td.z-treecell-disd a:hover {
 	text-decoration: none !important;
 	cursor: default !important;;
 	border-color: #D0DEF0 !important;
 }
-tr.z-tree-row-seld {
+tr.z-treerow-seld {
 	background: #bcd2ef; border: 1px solid #6f97d2;
 }
-tr.z-tree-row-over {
+tr.z-treerow-over {
 	background: #dae7f6;
 }
-tr.z-tree-row-over-seld {
+tr.z-treerow-over-seld {
 	background: #6eadff;
 }
-tr.z-tree-row td.z-tree-row-focus {
+tr.z-treerow td.z-treerow-focus {
 	background-image: url(${c:encodeURL('~./zul/img/common/focusd.png')});
 	background-repeat: no-repeat;
 }
@@ -117,7 +117,7 @@ div.z-dottree {
 div.z-dottree-header, div.z-dottree-header tr, div.z-dottree-footer {
 	border: 0; overflow: hidden; width: 100%;
 }
-div.z-dottree-header tr.z-tree-cols, div.z-tree-header tr.z-auxhead  {
+div.z-dottree-header tr.z-treecols, div.z-tree-header tr.z-auxhead  {
 	background-image: url(${c:encodeURL('~./zul/img/grid/column-bg.png')});
 }
 div.z-dottree-header th {
@@ -135,7 +135,7 @@ div.z-dottree-pgi-b {
 div.z-dottree-pgi-t {
 	border-bottom: 1px solid #AAB; overflow: hidden;
 }
-div.z-dottree-body td.z-tree-cell, div.z-dottree-footer td.z-tree-footer {
+div.z-dottree-body td.z-treecell, div.z-dottree-footer td.z-treefooter {
 	cursor: pointer; padding: 0 2px;
 	font-size: ${fontSizeM}; font-weight: normal; overflow: hidden;
 }
@@ -189,10 +189,10 @@ div.z-filetree {
 div.z-filetree-header, div.z-filetree-header tr, div.z-filetree-footer {
 	border: 0; overflow: hidden; width: 100%;
 }
-div.z-filetree-header tr.z-tree-cols, div.z-tree-header tr.z-auxhead  {
+div.z-filetree-header tr.z-treecols, div.z-tree-header tr.z-auxhead  {
 	background-image: url(${c:encodeURL('~./zul/img/grid/column-bg.png')});
 }
-div.z-filetree-header th {
+div.z-filetree-header th.z-treecol, div.z-filetree-header th.z-auxheader {
 	overflow: hidden; border: 1px solid;
 	border-color: #DAE7F6 #9EB6CE #9EB6CE #DAE7F6;
 	white-space: nowrap; padding: 2px;
@@ -207,7 +207,7 @@ div.z-filetree-pgi-b {
 div.z-filetree-pgi-t {
 	border-bottom: 1px solid #AAB; overflow: hidden;
 }
-div.z-filetree-body td.z-tree-cell, div.z-filetree-footer td.z-tree-footer {
+div.z-filetree-body td.z-treecell, div.z-filetree-footer td.z-treefooter {
 	cursor: pointer; padding: 0 2px;
 	font-size: ${fontSizeM}; font-weight: normal; overflow: hidden;
 }
@@ -245,10 +245,10 @@ div.z-vfiletree {
 div.z-vfiletree-header, div.z-vfiletree-header tr, div.z-vfiletree-footer {
 	border: 0; overflow: hidden; width: 100%;
 }
-div.z-vfiletree-header tr.z-tree-cols, div.z-tree-header tr.z-auxhead  {
+div.z-vfiletree-header tr.z-treecols, div.z-tree-header tr.z-auxhead  {
 	background-image: url(${c:encodeURL('~./zul/img/grid/column-bg.png')});
 }
-div.z-vfiletree-header th {
+div.z-vfiletree-header th.z-treecol, div.z-vfiletree-header th.z-auxheader {
 	overflow: hidden; border: 1px solid;
 	border-color: #DAE7F6 #9EB6CE #9EB6CE #DAE7F6;
 	white-space: nowrap; padding: 2px;
@@ -263,7 +263,7 @@ div.z-vfiletree-pgi-b {
 div.z-vfiletree-pgi-t {
 	border-bottom: 1px solid #AAB; overflow: hidden;
 }
-div.z-vfiletree-body td.z-tree-cell, div.z-vfiletree-footer td.z-tree-footer {
+div.z-vfiletree-body td.z-treecell, div.z-vfiletree-footer td.z-treefooter {
 	cursor: pointer; padding: 0 2px;
 	font-size: ${fontSizeM}; font-weight: normal; overflow: hidden;
 }

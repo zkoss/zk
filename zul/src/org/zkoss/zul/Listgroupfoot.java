@@ -24,7 +24,7 @@ import org.zkoss.zk.ui.Component;
 /**
  * GroupFooter serves as a summary listitem of listgroup.
  * 
- * <p>Default {@link #getZclass}: z-list-group-foot.
+ * <p>Default {@link #getZclass}: z-listgroupfoot (since 5.0.0).
  *
  *<p>Note: All the {@link Label} child of this component are automatically applied
  * the group-cell CSS, if you don't want this CSS, you can invoke the {@link Label#setSclass(String)}
@@ -62,7 +62,7 @@ public class Listgroupfoot extends Listitem implements org.zkoss.zul.api.Listgro
 	}
 
 	public String getZclass() {
-		return _zclass == null ? "z-list-group-foot" : _zclass;
+		return _zclass == null ? "z-listgroupfoot" : _zclass;
 	}
 
 	private Listcell autoFirstCell() {

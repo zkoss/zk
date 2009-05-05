@@ -26,7 +26,7 @@ package org.zkoss.zul.api;
  * <p>
  * Like {@link Listhead}, each listbox has at most one {@link Listfoot}.
  * <p>
- * Default {@link #getZclass}: z-list-foot.(since 3.5.0)
+ * Default {@link #getZclass}: z-listfoot (since 5.0.0)
  * 
  * @author tomyeh
  * @since 3.5.2

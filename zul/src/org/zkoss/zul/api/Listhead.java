@@ -28,7 +28,7 @@ package org.zkoss.zul.api;
  * Reason: easier to write Listbox.</li>
  * </ol>
  * <p>
- * Default {@link #getZclass}: z-list-head.(since 3.5.0)
+ * Default {@link #getZclass}: z-listhead (since 5.0.0)
  * 
  * @author tomyeh
  * @since 3.5.2

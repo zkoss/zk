@@ -36,7 +36,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  * Thus, you could place any kind of children in it. They will be placed
  * right after the image and label.
  *
- * <p>Default {@link #getZclass}: z-tree-cell.(since 3.5.0)
+ * <p>Default {@link #getZclass}: z-treecell (since 5.0.0)
  * @author tomyeh
  */
 public class Treecell extends LabelImageElement implements org.zkoss.zul.api.Treecell {
@@ -175,7 +175,7 @@ public class Treecell extends LabelImageElement implements org.zkoss.zul.api.Tre
 	}
 
 	public String getZclass() {
-		return _zclass == null ? "z-tree-cell" : _zclass;
+		return _zclass == null ? "z-treecell" : _zclass;
 	}
 
 	//-- super --//

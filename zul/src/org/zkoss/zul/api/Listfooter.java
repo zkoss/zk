@@ -27,7 +27,7 @@ package org.zkoss.zul.api;
  * <p>
  * Note: {@link Listcell} also accepts children.
  * <p>
- * Default {@link #getZclass}: z-list-footer.(since 3.5.0)
+ * Default {@link #getZclass}: z-listfooter (since 5.0.0)
  * 
  * @author tomyeh
  * @since 3.5.2

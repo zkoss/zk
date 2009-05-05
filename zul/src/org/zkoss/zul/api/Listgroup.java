@@ -30,7 +30,7 @@ import java.util.List;
  * </ol>
  * 
  * <p>
- * Default {@link #getZclass}: z-list-group.
+ * Default {@link #getZclass}: z-listgroup (since 5.0.0)
  * 
  * @author jumperchen
  * @since 3.5.2

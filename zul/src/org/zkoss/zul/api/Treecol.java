@@ -21,7 +21,7 @@ package org.zkoss.zul.api;
 /**
  * A treecol.
  * <p>
- * Default {@link #getZclass}: z-tree-col.(since 3.5.0)
+ * Default {@link #getZclass}: z-treecol (since 5.0.0)
  * 
  * @author tomyeh
  * @since 3.5.2

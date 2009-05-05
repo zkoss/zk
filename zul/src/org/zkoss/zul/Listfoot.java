@@ -27,7 +27,7 @@ import org.zkoss.zul.impl.XulElement;
  * A row of {@link Listfooter}.
  *
  * <p>Like {@link Listhead}, each listbox has at most one {@link Listfoot}.
- * <p>Default {@link #getZclass}: z-list-foot.(since 3.5.0)
+ * <p>Default {@link #getZclass}: z-listfoot (since 5.0.0)
  *
  * @author tomyeh
  */
@@ -58,6 +58,6 @@ public class Listfoot extends XulElement implements org.zkoss.zul.api.Listfoot {
 		return super.insertBefore(child, insertBefore);
 	}
 	public String getZclass() {
-		return _zclass == null ? "z-list-foot" : _zclass;
+		return _zclass == null ? "z-listfoot" : _zclass;
 	}
 }

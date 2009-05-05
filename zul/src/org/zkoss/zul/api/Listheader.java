@@ -33,7 +33,7 @@ import org.zkoss.zk.ui.WrongValueException;
  * Reason: easier to write Listbox.</li>
  * </ol>
  * <p>
- * Default {@link #getZclass}: z-list-header.(since 3.5.0)
+ * Default {@link #getZclass}: z-listheader (since 5.0.0)
  * 
  * @author tomyeh
  * @since 3.5.2

@@ -27,7 +27,7 @@ package org.zkoss.zul.api;
  * <p>
  * Note: {@link Treecell} also accepts children.
  * <p>
- * Default {@link #getZclass}: z-tree-footer.(since 3.5.0)
+ * Default {@link #getZclass}: z-treefooter (since 5.0.0)
  * 
  * @author tomyeh
  * @since 3.5.2

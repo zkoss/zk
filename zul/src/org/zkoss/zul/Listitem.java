@@ -30,7 +30,7 @@ import org.zkoss.zul.impl.XulElement;
 /**
  * A list item.
  *
- * <p>Default {@link #getZclass}: z-list-item.(since 3.5.0)
+ * <p>Default {@link #getZclass}: z-listitem (since 5.0.0)
  *
  * @author tomyeh
  */
@@ -96,7 +96,7 @@ public class Listitem extends XulElement implements org.zkoss.zul.api.Listitem {
 	}
 
 	public String getZclass() {
-		return _zclass == null ? "z-list-item" : _zclass;
+		return _zclass == null ? "z-listitem" : _zclass;
 	}
 	/** Returns whether it is checkable.
 	 * <p>Default: true.

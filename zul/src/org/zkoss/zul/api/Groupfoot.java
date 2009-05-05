@@ -22,7 +22,7 @@ package org.zkoss.zul.api;
  * GroupFoot serves as a summary row of group.
  * 
  * <p>
- * Default {@link #getZclass}: z-group-foot.
+ * Default {@link #getZclass}: z-groupfoot (since 5.0.0)
  * 
  *<p>
  * Note: All the child of this component are automatically applied the

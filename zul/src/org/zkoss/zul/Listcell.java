@@ -32,7 +32,7 @@ import org.zkoss.zul.impl.LabelImageElement;
 /**
  * A list cell.
  * 
- * <p>Default {@link #getZclass}: z-list-cell. (since 3.5.0)
+ * <p>Default {@link #getZclass}: z-listcell (since 5.0.0)
  *
  * @author tomyeh
  */
@@ -65,7 +65,7 @@ public class Listcell extends LabelImageElement implements org.zkoss.zul.api.Lis
 	}
 
 	public String getZclass() {
-		return _zclass == null ? "z-list-cell" : _zclass;
+		return _zclass == null ? "z-listcell" : _zclass;
 	}
 	/** Returns the list header that is in the same column as
 	 * this cell, or null if not available.

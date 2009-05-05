@@ -22,7 +22,7 @@ package org.zkoss.zul.api;
  * A list item.
  * 
  * <p>
- * Default {@link #getZclass}: z-list-item.(since 3.5.0)
+ * Default {@link #getZclass}: z-listitem (since 5.0.0)
  * 
  * @author tomyeh
  * @since 3.5.2

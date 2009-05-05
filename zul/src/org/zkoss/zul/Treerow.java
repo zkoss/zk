@@ -29,7 +29,7 @@ import org.zkoss.zul.impl.XulElement;
 
 /**
  * A treerow.
- * <p>Default {@link #getZclass}: z-tree-row.(since 3.5.0)
+ * <p>Default {@link #getZclass}: z-treerow (since 5.0.0)
  * @author tomyeh
  */
 public class Treerow extends XulElement implements org.zkoss.zul.api.Treerow {
@@ -79,7 +79,7 @@ public class Treerow extends XulElement implements org.zkoss.zul.api.Treerow {
 
 	//-- Component --//
 	public String getZclass() {
-		return _zclass == null ? "z-tree-row" : _zclass;
+		return _zclass == null ? "z-treerow" : _zclass;
 	}
 
 	/** Alwasys throws UnsupportedOperationException since developers shall

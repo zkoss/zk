@@ -13,4 +13,22 @@ This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 zul.sel.Listheader = zk.$extends(zul.mesh.HeaderWidget, {
+	getListbox: function () {
+		var p = this.parent;
+		return p ? p.parent: null;
+	},
+
+	//super//
+	//super//
+	getZclass: function () {
+		return this._zclass == null ? "z-listheader" : this._zclass;
+	},
+	domContent_: function () {
+		var s = this.$supers('domContent_', arguments),
+			box = this.getListbox();
+		if (box != null && this.parent.firstChild == this 
+		&& box.isCheckmark() && box.isMultiple())
+			s += '<input type="checkbox" id="' + this.uuid + '$cm"/>';
+		return s;
+	}
 });

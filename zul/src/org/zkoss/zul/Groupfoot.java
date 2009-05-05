@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.UiException;
 /**
  * GroupFoot serves as a summary row of group.
  * 
- * <p>Default {@link #getZclass}: z-group-foot.
+ * <p>Default {@link #getZclass}: z-groupfoot (since 5.0.0)
  *
  *<p>Note: All the child of this component are automatically applied
  * the group-cell CSS, if you don't want this CSS, you can invoke the {@link Label#setSclass(String)}
@@ -63,7 +63,7 @@ public class Groupfoot extends Row implements org.zkoss.zul.api.Groupfoot {
 	}
 
 	public String getZclass() {
-		return _zclass == null ? "z-group-foot" : _zclass;
+		return _zclass == null ? "z-groupfoot" : _zclass;
 	}
 	private Label autoFirstCell() {
 		Component cell = getFirstChild();

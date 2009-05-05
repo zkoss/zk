@@ -26,7 +26,7 @@ import org.zkoss.zul.impl.HeadersElement;
 
 /**
  * A treecols.
- * <p>Default {@link #getZclass}: z-tree-cols.(since 3.5.0)
+ * <p>Default {@link #getZclass}: z-treecols (since 5.0.0)
  * @author tomyeh
  */
 public class Treecols extends HeadersElement implements org.zkoss.zul.api.Treecols {
@@ -54,7 +54,7 @@ public class Treecols extends HeadersElement implements org.zkoss.zul.api.Treeco
 	}
 
 	public String getZclass() {
-		return _zclass == null ? "z-tree-cols" : _zclass;
+		return _zclass == null ? "z-treecols" : _zclass;
 	}
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Tree))

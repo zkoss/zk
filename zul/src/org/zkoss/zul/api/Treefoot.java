@@ -24,7 +24,7 @@ package org.zkoss.zul.api;
  * <p>
  * Like {@link Treecols}, each tree has at most one {@link Treefoot}.
  * <p>
- * Default {@link #getZclass}: z-tree-foot.(since 3.5.0)
+ * Default {@link #getZclass}: z-treefoot (since 5.0.0)
  * 
  * @author tomyeh
  * @since 3.5.2

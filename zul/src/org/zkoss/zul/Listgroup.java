@@ -35,7 +35,7 @@ import org.zkoss.zul.impl.XulElement;
  * 	<li>onOpen is sent when this listgroup is opened or closed by user.</li>
  * </ol>
  * 
- * <p>Default {@link #getZclass}: z-list-group.
+ * <p>Default {@link #getZclass}: z-listgroup (since 5.0.0)
  * @author jumperchen
  * @since 3.5.0
  */
@@ -155,7 +155,7 @@ public class Listgroup extends Listitem implements org.zkoss.zul.api.Listgroup {
 		}
 	}
 	public String getZclass() {
-		return _zclass == null ? "z-list-group" : _zclass;
+		return _zclass == null ? "z-listgroup" : _zclass;
 	}
 
 	//Cloneable//

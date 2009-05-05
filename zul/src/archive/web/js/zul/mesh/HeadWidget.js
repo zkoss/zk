@@ -38,4 +38,11 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		if (this.ftfaker) zDom.remove(this.ftfaker);
 		this.$supers('unbind_', arguments);
 	}
+},{
+	redraw: function (out) {
+		out.push('<tr', this.domAttrs_(), ' align="left">');
+		for (var w = this.firstChild; w; w = w.nextSibling)
+			w.redraw(out);
+		out.push('</tr>');
+	}
 });

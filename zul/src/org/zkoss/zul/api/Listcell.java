@@ -22,7 +22,7 @@ package org.zkoss.zul.api;
  * A list cell.
  * 
  * <p>
- * Default {@link #getZclass}: z-list-cell. (since 3.5.0)
+ * Default {@link #getZclass}: z-listcell (since 5.0.0)
  * 
  * @author tomyeh
  */

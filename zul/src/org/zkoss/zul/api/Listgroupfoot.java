@@ -22,7 +22,7 @@ package org.zkoss.zul.api;
  * GroupFooter serves as a summary listitem of listgroup.
  * 
  * <p>
- * Default {@link #getZclass}: z-list-group-foot.
+ * Default {@link #getZclass}: z-listgroupfoot (since 5.0.0)
  * 
  *<p>
  * Note: All the {@link Label} child of this component are automatically applied

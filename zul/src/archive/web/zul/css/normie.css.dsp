@@ -48,30 +48,30 @@ div.z-listbox-header, div.z-grid-header, div.z-tree-footer, div.z-listbox-footer
 	position:relative;
 	<%-- Bug 1712708 and 1926094:  we have to specify position:relative --%>
 }
-div.z-tree-header th.z-tree-col, div.z-tree-header th.z-auxheader,
-div.z-dottree-header th.z-tree-col, div.z-dottree-header th.z-auxheader,
-div.z-filetree-header th.z-tree-col, div.z-filetree-header th.z-auxheader,
-div.z-vfiletree-header th.z-tree-col, div.z-vfiletree-header th.z-auxheader,
-div.z-listbox-header th.z-list-header, div.z-listbox-header th.z-auxheader,
+div.z-tree-header th.z-treecol, div.z-tree-header th.z-auxheader,
+div.z-dottree-header th.z-treecol, div.z-dottree-header th.z-auxheader,
+div.z-filetree-header th.z-treecol, div.z-filetree-header th.z-auxheader,
+div.z-vfiletree-header th.z-treecol, div.z-vfiletree-header th.z-auxheader,
+div.z-listbox-header th.z-listheader, div.z-listbox-header th.z-auxheader,
 div.z-grid-header th.z-column, div.z-grid-header th.z-auxheader {
 	text-overflow: ellipsis;
 }
-div.z-tree-col-cnt, div.z-dottree-col-cnt, div.z-filetree-col-cnt, div.z-vfiletree-col-cnt,
-div.z-list-header-cnt, div.z-column-cnt, .z-auxheader-cnt {
+div.z-treecol-cnt, div.z-dottreecol-cnt, div.z-filetreecol-cnt, div.z-vfiletreecol-cnt,
+div.z-listheader-cnt, div.z-column-cnt, .z-auxheader-cnt {
 	white-space: nowrap;
 	<%-- Bug #1839960  --%>
 }
-div.z-footer-cnt, div.z-row-cnt, div.z-group-cnt, div.z-group-foot-cnt, div.z-column-cnt,
-div.z-tree-footer-cnt, div.z-tree-cell-cnt, div.z-tree-col-cnt,
-div.z-dottree-footer-cnt, div.z-dottree-cell-cnt, div.z-dottree-col-cnt,
-div.z-filetree-footer-cnt, div.z-filetree-cell-cnt, div.z-filetree-col-cnt,
-div.z-vfiletree-footer-cnt, div.z-vfiletree-cell-cnt, div.z-vfiletree-col-cnt,
-.z-auxheader-cnt, div.z-list-footer-cnt, div.z-list-cell-cnt, div.z-list-header-cnt {
+div.z-footer-cnt, div.z-row-cnt, div.z-group-cnt, div.z-groupfoot-cnt, div.z-column-cnt,
+div.z-treefooter-cnt, div.z-treecell-cnt, div.z-treecol-cnt,
+div.z-dottreefooter-cnt, div.z-dottreecell-cnt, div.z-dottreecol-cnt,
+div.z-filetreefooter-cnt, div.z-filetreecell-cnt, div.z-filetreecol-cnt,
+div.z-vfiletreefooter-cnt, div.z-vfiletreecell-cnt, div.z-vfiletreecol-cnt,
+.z-auxheader-cnt, div.z-listfooter-cnt, div.z-listcell-cnt, div.z-listheader-cnt {
 	position: relative;
 	<%-- Bug #1825896  --%>
 }
-div.z-row-cnt, div.z-group-cnt, div.z-group-foot-cnt,div.z-list-cell-cnt,
-div.z-tree-cell-cnt, div.z-dottree-cell-cnt, div.z-filetree-cell-cnt, div.z-vfiletree-cell-cnt {
+div.z-row-cnt, div.z-group-cnt, div.z-groupfoot-cnt,div.z-listcell-cnt,
+div.z-treecell-cnt, div.z-dottreecell-cnt, div.z-filetreecell-cnt, div.z-vfiletreecell-cnt {
 	width: 100%;
 }
 div.z-tree-body, div.z-dottree-body, div.z-filetree-body, div.z-vfiletree-body, div.z-listbox-body, div.z-grid-body {<%-- always used. --%>
@@ -201,7 +201,7 @@ span.z-drop-disallow {
 	background-image:  url(${c:encodeURL('~./zul/img/grid/menu-arrowdown.gif')});
 }
 <%-- listbox.css.dsp --%>
-tr.z-list-item td.z-list-item-focus {
+tr.z-listitem td.z-listitem-focus {
 	background-image: url(${c:encodeURL('~./zul/img/common/focusd.gif')});
 }
 <%-- paging.css.dsp --%>
@@ -286,7 +286,7 @@ tr.z-list-item td.z-list-item-focus {
 	background-image: url(${c:encodeURL('~./zul/img/tab/accd-corner.gif')});
 }
 <%-- tree.css.dsp --%>
-tr.z-tree-row td.z-tree-row-focus {
+tr.z-treerow td.z-treerow-focus {
 	background-image: url(${c:encodeURL('~./zul/img/common/focusd.gif')});
 }
 span.z-vfiletree-ico,span.z-vfiletree-firstspacer {

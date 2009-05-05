@@ -27,7 +27,7 @@ import org.zkoss.zul.impl.XulElement;
  * A row of {@link Treefooter}.
  *
  * <p>Like {@link Treecols}, each tree has at most one {@link Treefoot}.
- * <p>Default {@link #getZclass}: z-tree-foot.(since 3.5.0)
+ * <p>Default {@link #getZclass}: z-treefoot (since 5.0.0)
  * @author tomyeh
  */
 public class Treefoot extends XulElement implements org.zkoss.zul.api.Treefoot {
@@ -46,7 +46,7 @@ public class Treefoot extends XulElement implements org.zkoss.zul.api.Treefoot {
 	}
 	//-- Component --//
 	public String getZclass() {
-		return _zclass == null ? "z-tree-foot" : _zclass;
+		return _zclass == null ? "z-treefoot" : _zclass;
 	}
 	public void setParent(Component parent) {
 		if (parent != null && !(parent instanceof Tree))

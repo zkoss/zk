@@ -32,13 +32,21 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 
 	//-- super --//
 	getZclass: function () {
-		return this._zclass == null ? "z-grid" : this._zclass;
+		return this._zclass == null ? "z-listbox" : this._zclass;
 	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
+		if (child.$instanceof(zul.sel.Listhead))
+			this.listhead = child;
+		else if (child.$instanceof(zul.mesh.Paging))
+			this.paging = child;
 	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
+		if (child == this.listhead)
+			this.listhead = null;
+		else if (child == this.paging)
+			this.paging = null;
 	},
 	getHeadWidgetClass: function () {
 		return zul.sel.Listhead;

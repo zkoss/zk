@@ -32,7 +32,7 @@ import org.zkoss.zul.impl.HeadersElement;
  * <li>There is no listcols in ZUL because it is merged into {@link Listhead}.
  * Reason: easier to write Listbox.</li>
  * </ol>
- *  <p>Default {@link #getZclass}: z-list-head.(since 3.5.0)
+ *  <p>Default {@link #getZclass}: z-listhead.(since 5.0.0)
  *
  * @author tomyeh
  */
@@ -74,7 +74,7 @@ public class Listhead extends HeadersElement implements org.zkoss.zul.api.Listhe
 
 	//super//
 	public String getZclass() {
-		return _zclass == null ? "z-list-head" : _zclass;
+		return _zclass == null ? "z-listhead" : _zclass;
 	}
 
 	public void setParent(Component parent) {
