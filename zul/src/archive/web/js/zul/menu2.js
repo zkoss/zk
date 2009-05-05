@@ -437,14 +437,90 @@ zkMenusp2 = { //menuseparator
 };
 
 zkMpop2 = { //menupopup
+	position: function (el, dim, where) {
+		where = where || "overlap";
+		var x = dim.left, y = dim.top,
+			wd = zk.getDimension(el), hgh = wd[1]; //only width and height
+		wd = wd[0];
+		switch(where) {
+		case "before_start":
+			y -= hgh;
+			break;
+		case "before_end":
+			y -= hgh;
+			x += dim.width - wd;
+			break;
+		case "after_start":
+			y += dim.height;
+			break;
+		case "after_end":
+			y += dim.height;
+			x += dim.width - wd;
+			break;
+		case "start_before":
+			x -= wd;
+			break;
+		case "start_after":
+			x -= wd;
+			y += dim.height - hgh;
+			break;
+		case "end_before":
+			x += dim.width;
+			break;
+		case "end_after":
+			x += dim.width;
+			y += dim.height - hgh;
+			break;
+		case "at_pointer":
+			var offset = zkau._mspos;
+			x = offset[0];
+			y = offset[1];
+			break;
+		case "after_pointer":
+			var offset = zkau._mspos;
+			x = offset[0];
+			y = offset[1] + 20;
+			break;
+		default: // overlap is assumed
+			// nothing to do.
+		}
+
+		var scX = zk.innerX(),
+			scY = zk.innerY(),
+			scMaxX = scX + zk.innerWidth(),
+			scMaxY = scY + zk.innerHeight();
+
+		if (x + wd > scMaxX) x = scMaxX - wd;
+		if (x < scX) x = scX;
+		if (y + hgh > scMaxY) y = scMaxY - hgh;
+		if (y < scY) y = scY;
+		
+		var ofs = zk.toStyleOffset(el, x, y);
+		el.style.left = ofs[0] + "px";
+		el.style.top = ofs[1] + "px";
+	},
 	/** Called by au.js's context menu. */
-	context: function (ctx, ref) {
+	context: function (ctx, ref, position) {
 		if (!$visible(ctx)) {
+			if (position) {
+				ref = $e(ref);
+				if (!ref) return;
+				ctx.style.position = "absolute";
+				zk.setVParent(ctx);
+				var offs = zk.revisedOffset(ref);
+				zkMpop2.position(ctx, {top: offs[1], left: offs[0], width: zk.offsetWidth(ref),
+					height: zk.offsetHeight(ref)}, position);
+			}
 			zkMenu2._open(ctx, true);
 
 			if (zkau.asap(ctx, "onOpen"))
 				zkau.send({uuid: ctx.id, cmd: "onOpen",
 					data: ref ? [true, ref.id]: [true]});
 		} else if (ctx._shadow) ctx._shadow.sync();
+	},
+	cleanup: function (ctx) {
+		if (ctx._stackup)
+			zk.remove(ctx._stackup);
+		ctx._stackup = null;
 	}
 };
