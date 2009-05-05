@@ -2,20 +2,22 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <book lang="en-US">
 <title>The Developer's Guide</title>
-<subtitle>Version 3.6.1</subtitle>
+<subtitle>Version 3.6.2</subtitle>
 <bookinfo>
 <copyright>
-<year>2009</year>
+<year>2007</year>
 <holder>Potix Corporation. All rights reserved.</holder>
 </copyright>
 </bookinfo>
 <para>
-<graphic fileref="images/2000009A000011C5000007882B1A34C6.jpg"/>
+<graphic fileref="images/2000009A000011C5000007882B1A34C6.jpg">2
+			
+		</graphic>
 </para>
 <para/>
 <para>SIMPLY RICH</para>
 <para>ZKTM</para>
-<para>April 2009</para>
+<para>February 2009</para>
 <para>Potix Corporation</para>
 <para>Revision 225</para>
 <para/>
@@ -33,14 +35,18 @@
 <para>This chapter describes the historical background of Web programming, AJAX technologies and the ZK project. You may skip this chapter if you prefer to familiarize yourself with the ZK features right away.</para><sect1><title>Traditional Web Applications</title>
 <para>Aimed at simply and effectively exchanging documents Web technologies such as, HTTP and HTML are originated from the page-based stateless-communication model. In this model a page is self-contained and is a minimal unit that communicates between clients and servers.</para>
 <para>
-<graphic fileref="images/20000081000027E400002C36A98C01AF.jpg"/>Since the Web has emerged as the default platform for application development this model faces a substantial challenge: the inability to visually represent the complexities in today's applications. For example, to give a customer a quotation, you might have to open another page to search his trading records, another page for the recent prices, and another page for current stocking. Users are forced to leave the page they are working in, and navigate among several pages. It is easy to get lost and confused resulting in unhappy customers, lost sales and low productivities.</para>
+<graphic fileref="images/20000081000027E400002C36A98C01AF.jpg">2
+			
+		</graphic>Since the Web has emerged as the default platform for application development this model faces a substantial challenge: the inability to visually represent the complexities in today's applications. For example, to give a customer a quotation, you might have to open another page to search his trading records, another page for the recent prices, and another page for current stocking. Users are forced to leave the page they are working in, and navigate among several pages. It is easy to get lost and confused resulting in unhappy customers, lost sales and low productivities.</para>
 <para>The challenge to develop a modern application upon this page-based model is also substantial. In this model, applications running at the server have to take care of everything: from parsing the request, rendering the response, routing processes that link users from one page to another, and handling versatile errors made by users. Many different frameworks such as: Struts, Tapestry and JSF have emerged to simplify this development process. Due to the huge gap between the page-based model and modern applications learning and using these frameworks is never a pleasant process, not to mention intuitive or simplistic.</para></sect1><sect1><title>Ad-hoc AJAX Applications</title>
 <para>Over a decade of evolution, Web applications have evolved from static HTML pages to Dynamic HTML pages, from applets to Flash, and finally to AJAX<footnote>
 <para>AJAX is coined by Jesse James Garrett in Ajax: A New Approach to Web Applications.</para>
 </footnote> technologies (Asynchronous JavaScript and XML). Illustrated by Google Maps and Suggest, AJAX breaths new life into Web applications by delivering the same level of interactivity and responsiveness as desktop applications do. Unlike applets or Flash, AJAX is based on the standard browser and JavaScript with no proprietary plugins required.</para>
 <para/>
 <para>
-<graphic fileref="images/200000C9000027E4000032FC924A1F58.jpg"/>AJAX is a kind of new generation DHTML. Like DHTML, it heavily relies on JavaScript to listen to events triggered by user's activity, and then manipulate visual presentation of a page (aka. DOM) in the browser dynamically. Moreover, it takes a step further by enabling communication with the server asynchronously without leaving or rendering the whole page again. It breaks the page-based model by introducing light-weight communication between clients and servers. With proper design AJAX could bring rich components, common to desktop applications, to life in Web applications allowing dynamic updates and more control over the application.</para>
+<graphic fileref="images/200000C9000027E4000032FC924A1F58.jpg">2
+			
+		</graphic>AJAX is a kind of new generation DHTML. Like DHTML, it heavily relies on JavaScript to listen to events triggered by user's activity, and then manipulate visual presentation of a page (aka. DOM) in the browser dynamically. Moreover, it takes a step further by enabling communication with the server asynchronously without leaving or rendering the whole page again. It breaks the page-based model by introducing light-weight communication between clients and servers. With proper design AJAX could bring rich components, common to desktop applications, to life in Web applications allowing dynamic updates and more control over the application.</para>
 <para>When providing the interactivity that users demand, AJAX adds more complexities and skill prerequisites to the already costly development of Web applications. Developers have to manipulate DOM in the browser and communicate with the server via incompatible and even buggy JavaScript APIs. For better interactivity developers have to replicate application data and business logic in the browser, increasing maintenance costs and the challenge of synchronizing data between the server and the client.</para>
 <para>The bottom line is that ad hoc AJAX applications are no different from traditional Web applications in regards to the way processes are requested. Developers still have to fill the gap caused by the page-based and stateless model.</para></sect1><sect1><title>ZK: What It Is </title>
 <para>ZK is an event-driven, component-based framework to enable rich user interfaces for Web applications. ZK includes an AJAX-based event-driven engine, a rich set of XUL and XHTML components and a markup language called ZUML (ZK User Interface Markup Language).</para>
@@ -80,7 +86,9 @@
 <programlisting>&lt;window title="Hello" border="normal"&gt;&#13;    Hello World!    &#13;&lt;/window&gt;&#13;</programlisting>
 <para>Then, browse to the right URL, say <ulink url="http://localhost/myapp/hello.zul">http://localhost/myapp/hello.zul</ulink>, and you got it.</para>
 <para>
-<graphic fileref="images/100000000000016B0000003225F823E1.png"/>In a ZUML page, a XML element describes what component to create. In this example, it is a window (org.zkoss.zul.Window). The XML attributes are used to assign values to properties of the window component. In this example, it creates a window with a title and border, which is done by setting the title and border properties to "Hello" and "normal", respectively.</para>
+<graphic fileref="images/100000000000016B0000003225F823E1.png">2
+			
+		</graphic>In a ZUML page, a XML element describes what component to create. In this example, it is a window (org.zkoss.zul.Window). The XML attributes are used to assign values to properties of the window component. In this example, it creates a window with a title and border, which is done by setting the title and border properties to "Hello" and "normal", respectively.</para>
 <para>The text enclosed in the XML elements is also interpreted as a special component called label (org.zkoss.zul.Label). Thus, the above example is equivalent to the following.</para>
 <programlisting>&lt;window title="Hello" border="normal"&gt;&#13;    &lt;label value="Hello World!"/&gt;    &#13;&lt;/window&gt;&#13;</programlisting>
 <para>Also, it is equivalent to</para>
@@ -89,8 +97,12 @@
 <programlisting>&lt;window title="Hello" border="normal"&gt;&#13;    &lt;button label="Say Hello" onClick="alert(&amp;quot;Hello World!&amp;quot;)"/&gt;    &#13;&lt;/window&gt;&#13;</programlisting>
 <para>Then, when you click the button, you see as follows.</para>
 <para>
-<graphic fileref="images/10000000000002960000005450FF7802.png"/>
-<graphic fileref="images/10000000000001EB00000087D3A63E71.png"/>The onClick attribute is a special attribute used to add an event listener to the component. The attribute value could be any legal Java codes. Notice that we use &amp;quot; to denote the double quot (") to make it a legal XML document. If you are not familiar with XML, you might take a look at the XML section in the ZK User Interface Markup Language chapter.</para>
+<graphic fileref="images/10000000000002960000005450FF7802.png">2
+			
+		</graphic>
+<graphic fileref="images/10000000000001EB00000087D3A63E71.png">2
+			
+		</graphic>The onClick attribute is a special attribute used to add an event listener to the component. The attribute value could be any legal Java codes. Notice that we use &amp;quot; to denote the double quot (") to make it a legal XML document. If you are not familiar with XML, you might take a look at the XML section in the ZK User Interface Markup Language chapter.</para>
 <para>The alert function is a global function to display a message dialog box. It is a shortcut to one of the show methods of the org.zkoss.zul.Messagebox class.</para>
 <programlisting>&lt;button label="Say Hello" onClick="Messagebox.show(&amp;quot;Hello World!&amp;quot;)"/&gt;&#13;</programlisting>
 <para>Notes:</para>
@@ -142,7 +154,9 @@
 <programlisting>&lt;window title="Vote" border="normal"&gt;&#13;    Do you like ZK? &lt;label id="label"/&gt;    &#13;    &lt;separator/&gt;    &#13;    &lt;button label="Yes" onClick="label.value = self.label"/&gt;    &#13;    &lt;button label="No" onClick="label.value = self.label"/&gt;    &#13;&lt;/window&gt;&#13;</programlisting>
 <para>After pressing the Yes button, you will see the following.</para>
 <para>
-<graphic fileref="images/100000000000029A0000006E7B745AB5.png"/>The following is any example for referencing a component in an EL expression.</para>
+<graphic fileref="images/100000000000029A0000006E7B745AB5.png">2
+			
+		</graphic>The following is any example for referencing a component in an EL expression.</para>
 <programlisting>&lt;textbox id="source" value="ABC"/&gt;&#13;&lt;label value="${source.value}"/&gt;&#13;</programlisting></sect1><sect1><title>The if and unless Attributes</title>
 <para>The if and unless attributes are used to control whether to create a component. In the following examples, both labels are created only if the request has a parameter called vote.</para>
 <programlisting>&lt;label value="Vote 1" if="${param.vote}"/&gt;&#13;&lt;label value="Vote 2" unless="${!param.vote}"/&gt;&#13;</programlisting>
@@ -227,7 +241,9 @@
 <para>Also known as ZK Update Engine.</para>
 </footnote> and ZK Client Engine.</para>
 <para>
-<graphic fileref="images/2000011400003FE500002350FCFBD1DA.jpg"/>Based on the user's request, the ZK Loader loads a ZK page, interprets it, and renders the result into HTML pages in response to URL requests. A ZK page is written in a markup language called ZUML. ZUML, like HTML, is used to describe what components to create and how to represent them visually. These components, once created, remain available until the session is timeout.</para>
+<graphic fileref="images/2000011400003FE500002350FCFBD1DA.jpg">2
+			
+		</graphic>Based on the user's request, the ZK Loader loads a ZK page, interprets it, and renders the result into HTML pages in response to URL requests. A ZK page is written in a markup language called ZUML. ZUML, like HTML, is used to describe what components to create and how to represent them visually. These components, once created, remain available until the session is timeout.</para>
 <para>The ZK AU<footnote>
 <para>AU stands for Asynchronous Update.</para>
 </footnote> Engine and the ZK Client Engine then work together as pitcher and catcher. They deliver events happening in the browser to the application running at the server, and update the DOM tree at the browser based on how components are manipulated by the application. This is so-called event-driven programming model.</para><sect2><title>The Execution Flow</title>
@@ -266,7 +282,9 @@
 <para>Each page could have a title that will be displayed as part of the browser's window caption. Refer to the Processing Instructions section in the ZK User Interface Markup Language chapter for details.</para>
 <programlisting>&lt;?page title="My Page Title"?&gt;&#13;</programlisting></sect3></sect2><sect2><title>Desktops</title>
 <para>
-<graphic fileref="images/2000002800002299000010A1C2250C8A.jpg"/>A ZUML page might include another ZUML pages directly or indirectly. Since these pages are created for serving the same URL request, they are collectively called a desktop (org.zkoss.zk.ui.Desktop). In other word, a desktop is a collection of pages for serving the same URL request.</para>
+<graphic fileref="images/2000002800002299000010A1C2250C8A.jpg">2
+			
+		</graphic>A ZUML page might include another ZUML pages directly or indirectly. Since these pages are created for serving the same URL request, they are collectively called a desktop (org.zkoss.zk.ui.Desktop). In other word, a desktop is a collection of pages for serving the same URL request.</para>
 <para>As a ZK application interacts with user, more pages might be added to a desktop and some might be removed from a desktop. Similarly, a component might be added to or removed from a page.</para><sect3><title>The createComponents Method</title>
 <para>Notice that both pages and desktops are created and remove implicitly. There are no API to create or remove them. A page is create each time ZUML loads a page. A page is removed when ZK finds it is no longer referenced. A desktop is created when the first ZUML page is loaded. A desktop is removed if too many desktops are created for the specific session.</para>
 <para>The createComponents method in the org.zkoss.zk.ui.Executions class creates only components, not page, even though it loads a ZUML file (aka., page).</para></sect3></sect2><sect2><title>Forest of Trees of Components</title>
@@ -291,7 +309,9 @@
 <para>More generally, any component could form an ID space as long as it implements the org.zkoss.zk.ui.IdSpace interface. Page also implements the IdSpace interface, so it is also a space owner.</para>
 <para>The topmost component of an ID space is called the owner of the ID space, which could be retrieved by the getSpaceOwner method in the Component interface.</para>
 <para>
-<graphic fileref="images/2000005000001B39000015E7270F9884.jpg"/>If an ID space, say X, is a descendant of another ID space, say Y, then space X's owner is part of space Y but descendants of X is not part of space Y.</para>
+<graphic fileref="images/2000005000001B39000015E7270F9884.jpg">2
+			
+		</graphic>If an ID space, say X, is a descendant of another ID space, say Y, then space X's owner is part of space Y but descendants of X is not part of space Y.</para>
 <para>As depicted in the figure, there are three spaces: P, A and C. Space P includes P, A, F and G. Space A includes A, B, C and D. Space C includes C and E.</para>
 <para>Components in the same ID spaces are called fellows. For example, A, B, C and D are fellows of the same ID space.</para>
 <para>To retrieve another fellow, you could use the getFellow method in the IdSpace interface or the Component interface.</para>
@@ -301,7 +321,9 @@
 <para>new Path("A/C", "E").getComponent();</para><sect2><title>Namespace and ID Space</title>
 <para>To let the interpreter able to access the components directly, the namespace concept (org.zkoss.scripting.Namespace) is introduced. First, each ID space has exactly one namespace. Second, variables defined in a namespace are visible to the scripting codes and EL expressions that belong to the same namespace.</para>
 <para>
-<graphic fileref="images/100000000000013A0000001CEEC7BB2A.png"/>
+<graphic fileref="images/100000000000013A0000001CEEC7BB2A.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;window border="normal"&gt;&#13;    &lt;label id="l" value="hi"/&gt;    &#13;    &lt;zscript&gt;    &#13;        l.value = "Hi, namespace";        &#13;    &lt;/zscript&gt;    &#13;    ${l.value}    &#13;&lt;/window&gt;&#13;</programlisting>
 <para>In the following example, there are two namspaces. One belongs to window w1 and the other to window w2<footnote>
@@ -838,7 +860,9 @@
 <para>In the following example, we use nested iterative elements to generate two listboxes.</para>
 <programlisting>&lt;hbox&gt;&#13;&lt;zscript&gt;&#13;classes = new String[] {"College", "Graduate"};&#13;grades = new Object[] {&#13;new String[] {"Best", "Better"}, new String[] {"A++", "A+", "A"}&#13;};&#13;&lt;/zscript&gt;&#13;&lt;listbox width="200px" forEach="${classes}"&gt;&#13;&lt;listhead&gt;&#13;&lt;listheader label="${each}"/&gt;&#13;&lt;/listhead&gt;&#13;&lt;listitem label="${forEachStatus.previous.each}: ${each}"&#13;forEach="${grades[forEachStatus.previous.index]}"/&gt;&#13;&lt;/listbox&gt;&#13;&lt;/hbox&gt;&#13;</programlisting>
 <para>
-<graphic fileref="images/10000000000001A20000004E0C4C66ED.png"/>Notice that the forEachStatus variable is accessible both in EL expression and in zscript.</para></sect2><sect2><title>How to Use each and forEachStatus Variables in Event Listeners</title>
+<graphic fileref="images/10000000000001A20000004E0C4C66ED.png">2
+			
+		</graphic>Notice that the forEachStatus variable is accessible both in EL expression and in zscript.</para></sect2><sect2><title>How to Use each and forEachStatus Variables in Event Listeners</title>
 <para>It is a bit tricky to use the forEach and forEachStatus variables in event listeners, because they are available only in the Component Creation Phase<footnote>
 <para>Refer to the Component Lifecycle chapter for more details.</para>
 </footnote>. Thus, the following sample is incorrect: when the onClick listener is called, the each variable is no longer available.</para>
@@ -1681,7 +1705,9 @@
 <para>For example, if a user clicks 208 pixels over and 205 pixels down from the upper-left corner of the image displayed from the following statement.</para>
 <programlisting>&lt;imagemap src="/img/sun.jpg" onClick="alert(event.x + &amp;quot;, &amp;quot; +event.y)"/&gt;&#13;</programlisting>
 <para>
-<graphic fileref="images/10000000000001AC00000155E1243DA6.png"/>Then, the user gets the result as depicted below.</para>
+<graphic fileref="images/10000000000001AC00000155E1243DA6.png">2
+			
+		</graphic>Then, the user gets the result as depicted below.</para>
 <para/>
 <para>The application usually uses the coordinates to determine where a user has clicked, and then response accordingly.</para><sect3><title>Area</title>
 <para>Instead of processing the coordinates by the application itself, developers could add the area components as the children of a imagemap component.</para>
@@ -1689,7 +1715,9 @@
 <para>Then, the imagemap component will translate the coordinates of the mouse position to a logical name: the identifier of the area that users has clicked.</para>
 <para>For example, if users clicks at (150, 150), then the user gets the result as depicted blow.</para>
 <para>
-<graphic fileref="images/10000000000001D200000103800B52A3.png"/>
+<graphic fileref="images/10000000000001D200000103800B52A3.png">2
+			
+		</graphic>
 </para></sect3><sect3><title>The shape Property</title>
 <para>An area component supports three kinds of shapes: circle, polygon and rectangle. The coordinates of the mouse position are screen pixels counted from the upper-left corner of the image beginning with (0, 0).</para>
 <informaltable frame="all">
@@ -1737,7 +1765,9 @@
 <para>Depending on the browser and the audio plugin, developers might be able to control the play of an audio by the play, stop and pause methods. Currently, Internet Explorer with Media Player is capable of such controls.</para></sect2><sect2><title>Input Controls</title>
 <para>A set of input controls are supported in the XUL component set: textbox, intbox, decimalbox, doublebox, datebox, combobox, and bandbox. They are used to let users input different types of data.</para>
 <para>
-<graphic fileref="images/1000000000000160000000A52BD72F03.png"/>
+<graphic fileref="images/1000000000000160000000A52BD72F03.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;zk&gt;&#13;    &lt;textbox/&gt;    &#13;    &lt;datebox/&gt;    &#13;&lt;/zk&gt;&#13;</programlisting>
 <para>Tip: combobox and bandbox are special input boxes. They shares the common properties described here. Their unique features will be discussed later in the Comboboxes and Bandboxes section.</para><sect3><title>The type Property</title>
@@ -1831,12 +1861,16 @@
 <para>It is too early if you want to reject illegal value in the onChanging's event listener, because user may not complete the change yet. Rather, it is recommended to use a constraint as described in the Custom Constraints section.</para></sect3></sect2><sect2><title>Calendar</title>
 <para>A calendar displays a 'flat' calendar and allows user to select a day from it.</para>
 <para>
-<graphic fileref="images/10000000000001310000009425D8FF0B.png"/>
+<graphic fileref="images/10000000000001310000009425D8FF0B.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;hbox&gt;&#13;    &lt;calendar id="cal" onChange="in.value = cal.value"/&gt;    &#13;    &lt;datebox id="in" onChange="cal.value = in.value"/&gt;    &#13;&lt;/hbox&gt;&#13;</programlisting><sect3><title>The value Property and the onChange Event</title>
 <para>Like input controls, calendar supports the value property to let developers set and retrieve the selected day. In addition, developers could listen to the onChange event to process it immediately, if necessary.</para></sect3><sect3><title>The compact Property</title>
 <para>
-<graphic fileref="images/10000000000000BC0000007A5A0A2B82.png"/>A calendar supports two different layouts and you can control it by use of the compact property.</para>
+<graphic fileref="images/10000000000000BC0000007A5A0A2B82.png">2
+			
+		</graphic>A calendar supports two different layouts and you can control it by use of the compact property.</para>
 <programlisting>&lt;calendar compact="true"/&gt;&#13;</programlisting>
 <para>The default value depends on the current Locale.</para></sect3></sect2><sect2><title>Progressmeter</title>
 <para>A progress meter is a bar that indicates how much of a task has been completed. The value property must be in the range between 0 and 100.</para>
@@ -1883,7 +1917,9 @@
 <para>By default, the sclass property is the same as the window mode, so windows in different modes appear differently. To change the appearance, simply assign a value to the sclass property as illustrated in the following example.</para>
 <programlisting>&lt;hbox&gt;&#13;    &lt;window title="Embedded Style" border="normal" width="200px"&gt;    &#13;        Hello, Embedded!        &#13;    &lt;/window&gt;    &#13;    &lt;window title="Cyan Style" sclass="wndcyan" border="normal" width="200px"&gt;    &#13;        Hello, Cyan!        &#13;    &lt;/window&gt;    &#13;    &lt;window title="Popup Style" sclass="popup" border="normal" width="200px"&gt;    &#13;        Hello, Popup!        &#13;    &lt;/window&gt;    &#13;    &lt;window title="Modal Style" sclass="modal" border="normal" width="200px"&gt;    &#13;        Hello, Modal!        &#13;    &lt;/window&gt;    &#13;&lt;/hbox&gt;&#13;</programlisting>
 <para>
-<graphic fileref="images/100000000000033B0000003395A4C925.png"/>
+<graphic fileref="images/100000000000033B0000003395A4C925.png">2
+			
+		</graphic>
 </para></sect2><sect2><title>The contentStyle Property</title>
 <para>You can customize the look and feel of the content block of the window by specifying the contentStyle property.</para>
 <programlisting>&lt;window title="My Window" border="normal" width="200px" contentStyle="background:yellow"&gt;<inlinegraphic fileref="images/10000000000000CB0000003292CB8174.png" align="right"/>&#13;    Hello, World!    &#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Scrollable Window</title>
@@ -1918,7 +1954,9 @@
 </footnote>.</para>
 <programlisting>//t1.zul&#13;&lt;window title="My Modal" width="300px" closable="true" mode="modal"&gt;&#13;&lt;/window&gt;&#13;</programlisting>
 <para>
-<graphic fileref="images/10000000000005110000034A677D3288.png"/>It will cause the following result<footnote>
+<graphic fileref="images/10000000000005110000034A677D3288.png">2
+			
+		</graphic>It will cause the following result<footnote>
 <para>Assume Tomcat is used.</para>
 </footnote> if you browse it directly.</para>
 <para>The following codes will cause the same result.</para>
@@ -2004,7 +2042,9 @@
 <para>The fileupload component is not a modal dialog. Rather, it is a component, so it is placed inline with other components.</para>
 <para>Note: In addition to providing the static get methods for opening the file upload dialogs, org.zkoss.zul.Fileupload itself is a component. It is the so-called fileuplod component.</para>
 <para>
-<graphic fileref="images/10000000000001130000004F6BCA5979.png"/>For example,</para>
+<graphic fileref="images/10000000000001130000004F6BCA5979.png">2
+			
+		</graphic>For example,</para>
 <programlisting>&lt;image id="img"/&gt;&#13;Upload your hot shot:&#13;&lt;fileupload onUpload="img.setContent(event.media)"/&gt;&#13;</programlisting><sect4><title>The onUpload Event</title>
 <para>When the Upload button is pressed, the onUpload event is sent with an instance of the org.zkoss.zk.ui.event.UploadEvent event. You can then retreive the content of the upload files by use of the getMedia or getMedias methods.</para>
 <para>Notice that getMedia and getMedias return null to indicate that no file is specified but the Upload button is pressed.</para></sect4><sect4><title>The onClose Event</title>
@@ -2062,7 +2102,9 @@
 <para>If you would like to make your layout components splittable, you could assign the <code>splittable</code> property to be <code>true</code>.</para>
 <para>In addition, you could make a layout component collapsible by specifying the <code>collapsible</code> property to be <code>true</code>.</para>
 <para>
-<graphic fileref="images/1000000000000177000001FCE0049437.jpg"/>
+<graphic fileref="images/1000000000000177000001FCE0049437.jpg">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;borderlayout height="500px"&gt;&#13;    &lt;north size="20%" splittable="true" collapsible="true"/&gt;    &#13;&lt;east size="20%" splittable="true" collapsible="true"/&gt;&#13;    &lt;center border="normal"/&gt;    &#13;&lt;west size="20%" splittable="true" collapsible="true"/&gt;&#13;&lt;south size="30%" border="normal" splittable="true" collapsible="true"/&gt;&#13;&lt;/borderlayout&gt;&#13;</programlisting><sect3><title>The <code>maxsize</code> and <code>minisize</code> Properties</title>
 <para>When you make a layout component splittable, <code>maxsize</code> and <code>minisize</code> are two properties to determine the re-resizing range of it. </para>
@@ -2092,7 +2134,9 @@
 <para>There may be times when you want to have two sections of a window where the user can resize the sections. This feature is accomplished by using a component called a <ulink url="http://xulplanet.com/references/elemref/ref_splitter.html">splitter</ulink>. It creates a skinny bar between two sections which allows either side to be resized. </para>
 <para>A splitter must be put inside a box. When a splitter is placed inside a horizontal box (hbox), it will allow resizing horizontally. When a splitter is placed inside a vertical box (vbox), it will allow resizing vertically. For example,</para>
 <para>
-<graphic fileref="images/splitter.jpg"/>
+<graphic fileref="images/splitter.jpg">2
+			
+		</graphic>
 </para>
 <para>Note: If you would like to use the original “os” CSS, you could specify the class name of</para>
 <para>splitter with “splitter-os”.</para>
@@ -2196,7 +2240,9 @@
 <para>Similarly, the columns are declared with the columns component, which should be placed as a child element of the grid. Unlike row is used to hold the content of each row, column declares the common attributes of each column, such as the width and alignment, and and optional headers, i.e., label and/or image.</para>
 <programlisting>&lt;grid&gt;<inlinegraphic fileref="images/100000000000017D0000004DD592B1C3.png" align="right"/>&#13;    &lt;columns&gt;    &#13;        &lt;column label="Type"/&gt;        &#13;        &lt;column label="Content"/&gt;        &#13;    &lt;/columns&gt;    &#13;    &lt;rows&gt;    &#13;        &lt;row&gt;        &#13;            &lt;label value="File:"/&gt;            &#13;            &lt;textbox width="99%"/&gt;            &#13;        &lt;/row&gt;        &#13;        &lt;row&gt;        &#13;            &lt;label value="Type:"/&gt;            &#13;            &lt;hbox&gt;            &#13;                &lt;listbox rows="1" mold="select"&gt;                &#13;                    &lt;listitem label="Java Files,(*.java)"/&gt;                    &#13;                    &lt;listitem label="All Files,(*.*)"/&gt;                    &#13;                &lt;/listbox&gt;                &#13;                &lt;button label="Browse..."/&gt;                &#13;            &lt;/hbox&gt;            &#13;        &lt;/row&gt;        &#13;    &lt;/rows&gt;    &#13;&lt;/grid&gt;&#13;</programlisting><sect2><title>Scrollable Grid</title>
 <para>
-<graphic fileref="images/10000000000001FC0000009FFC9DC218.png"/>A grid could be scrollable if you specify the height property and there is not enough space to show all data.</para>
+<graphic fileref="images/10000000000001FC0000009FFC9DC218.png">2
+			
+		</graphic>A grid could be scrollable if you specify the height property and there is not enough space to show all data.</para>
 <programlisting>&lt;grid width="500px" height="130px"&gt;&#13;    &lt;columns&gt;    &#13;        &lt;column label="Head 1"/&gt;        &#13;        &lt;column label="Head 2" align="center"/&gt;        &#13;        &lt;column label="Head 3" align="right"/&gt;        &#13;    &lt;/columns&gt;    &#13;    &lt;rows&gt;    &#13;        &lt;row&gt;        &#13;            &lt;listbox mold="select"&gt;            &#13;                &lt;listitem label="Faster"/&gt;                &#13;                &lt;listitem label="Fast"/&gt;                &#13;                &lt;listitem label="Average"/&gt;                &#13;            &lt;/listbox&gt;            &#13;            &lt;datebox/&gt;            &#13;            &lt;textbox rows="2"/&gt;            &#13;        &lt;/row&gt;        &#13;        &lt;row&gt;        &#13;            &lt;checkbox checked="true" label="Option 1"/&gt;            &#13;            &lt;checkbox label="Option 2"/&gt;            &#13;            &lt;radiogroup&gt;            &#13;                &lt;radio label="Apple"/&gt;                &#13;                &lt;radio label="Orange" checked="true"/&gt;                &#13;                &lt;radio label="Lemon"/&gt;                &#13;            &lt;/radiogroup&gt;            &#13;        &lt;/row&gt;        &#13;        &lt;row&gt;        &#13;            &lt;checkbox checked="true" label="Option 1"/&gt;            &#13;            &lt;checkbox label="Option 2"/&gt;            &#13;            &lt;radiogroup orient="vertical"&gt;            &#13;                &lt;radio label="Apple"/&gt;                &#13;                &lt;radio label="Orange" checked="true"/&gt;                &#13;                &lt;radio label="Lemon"/&gt;                &#13;            &lt;/radiogroup&gt;            &#13;        &lt;/row&gt;        &#13;    &lt;/rows&gt;    &#13;&lt;/grid&gt;&#13;</programlisting></sect2><sect2><title>Sizable Columns</title>
 <para>If you allow users to resize the widths of columns, you can specify true to the sizable property of columns as follows. Once allowed, users can resize the widths of columns by dragging the border between adjacent column components.</para>
 <programlisting>&lt;window&gt;&#13;    &lt;grid&gt;    &#13;        &lt;columns id="cs" sizable="true"&gt;        &#13;            &lt;column label="AA"/&gt;            &#13;            &lt;column label="BB"/&gt;            &#13;            &lt;column label="CC"/&gt;            &#13;        &lt;/columns&gt;        &#13;        &lt;rows&gt;        &#13;            &lt;row&gt;            &#13;                &lt;label value="AA01"/&gt;                &#13;                &lt;label value="BB01"/&gt;                &#13;                &lt;label value="CC01"/&gt;                &#13;            &lt;/row&gt;            &#13;            &lt;row&gt;            &#13;                &lt;label value="AA01"/&gt;                &#13;                &lt;label value="BB01"/&gt;                &#13;                &lt;label value="CC01"/&gt;                &#13;            &lt;/row&gt;            &#13;            &lt;row&gt;            &#13;                &lt;label value="AA01"/&gt;                &#13;                &lt;label value="BB01"/&gt;                &#13;                &lt;label value="CC01"/&gt;                &#13;            &lt;/row&gt;            &#13;        &lt;/rows&gt;        &#13;    &lt;/grid&gt;    &#13;    &lt;checkbox label="sizeable" checked="true" onCheck="cs.sizeable = self.checked"/&gt;    &#13;&lt;/window&gt;&#13;</programlisting><sect3><title>The onColSize Event</title>
@@ -2271,13 +2317,17 @@
 <para>In addition to columns, you can specify auxiliary headers with the auxhead and auxheader components as follows.</para>
 <programlisting>&lt;grid&gt;&#13;    &lt;auxhead&gt;    &#13;        &lt;auxheader label="H1'07" colspan="6"/&gt;        &#13;        &lt;auxheader label="H2'07" colspan="6"/&gt;        &#13;    &lt;/auxhead&gt;    &#13;    &lt;auxhead&gt;    &#13;        &lt;auxheader label="Q1" colspan="3"/&gt;        &#13;        &lt;auxheader label="Q2" colspan="3"/&gt;        &#13;        &lt;auxheader label="Q3" colspan="3"/&gt;        &#13;        &lt;auxheader label="Q4" colspan="3"/&gt;        &#13;    &lt;/auxhead&gt;    &#13;    &lt;columns&gt;    &#13;        &lt;column label="Jan"/&gt;&lt;column label="Feb"/&gt;&lt;column label="Mar"/&gt;        &#13;        &lt;column label="Apr"/&gt;&lt;column label="May"/&gt;&lt;column label="Jun"/&gt;        &#13;        &lt;column label="Jul"/&gt;&lt;column label="Aug"/&gt;&lt;column label="Sep"/&gt;        &#13;        &lt;column label="Oct"/&gt;&lt;column label="Nov"/&gt;&lt;column label="Dec"/&gt;        &#13;    &lt;/columns&gt;    &#13;    &lt;rows&gt;    &#13;        &lt;row&gt;        &#13;        &lt;label value="1,000"/&gt;&lt;label value="1,100"/&gt;&lt;label value="1,200"/&gt;        &#13;        &lt;label value="1,300"/&gt;&lt;label value="1,400"/&gt;&lt;label value="1,500"/&gt;        &#13;        &lt;label value="1,600"/&gt;&lt;label value="1,700"/&gt;&lt;label value="1,800"/&gt;        &#13;        &lt;label value="1,900"/&gt;&lt;label value="2,000"/&gt;&lt;label value="2,100"/&gt;        &#13;        &lt;/row&gt;        &#13;    &lt;/rows&gt;    &#13;&lt;/grid&gt;&#13;</programlisting>
 <para>
-<graphic fileref="images/1000000000000235000000602BB4CFD2.png"/>The auxiliary headers support the colspan and rowsspan properties that the column header don't. However, as its name suggested, the auxiliary headers must be used with column.</para>
+<graphic fileref="images/1000000000000235000000602BB4CFD2.png">2
+			
+		</graphic>The auxiliary headers support the colspan and rowsspan properties that the column header don't. However, as its name suggested, the auxiliary headers must be used with column.</para>
 <para>Unlike column/columns, which can used only with grid, auhead/auxheader can be used with grid, listbox and tree.</para></sect2><sect2><title>Special Properties</title><sect3><title>The spans Property</title>
 <para>It is a list of integers, separated by coma, to control whether to span a cell over several columns. The first number in the list denotes the number of columns the first cell shall span. The second number denotes that of the second cell and so on. If the number is omitted, 1 is assumed.</para>
 <para>For example,</para>
 <programlisting>&lt;grid&gt;&#13;    &lt;columns&gt;    &#13;        &lt;column label="Left" align="left"/&gt;&lt;column label="Center" align="center"/&gt;        &#13;        &lt;column label="Right" align="right"/&gt;&lt;column label="Column 4"/&gt;        &#13;        &lt;column label="Column 5"/&gt;&lt;column label="Column 6"/&gt;        &#13;    &lt;/columns&gt;    &#13;    &lt;rows&gt;    &#13;        &lt;row&gt;        &#13;            &lt;label value="Item A.1"/&gt;&lt;label value="Item A.2"/&gt;            &#13;            &lt;label value="Item A.3"/&gt;&lt;label value="Item A.4"/&gt;            &#13;            &lt;label value="Item A.5"/&gt;&lt;label value="Item A.6"/&gt;            &#13;        &lt;/row&gt;        &#13;        &lt;row spans="1,2,2"&gt;        &#13;            &lt;label value="Item B.1"/&gt;&lt;label value="Item B.2"/&gt;            &#13;            &lt;label value="Item B.4"/&gt;&lt;label value="Item B.6"/&gt;            &#13;        &lt;/row&gt;        &#13;        &lt;row spans="3"&gt;        &#13;            &lt;label value="Item C.1"/&gt;&lt;label value="Item C.4"/&gt;            &#13;            &lt;label value="Item C.5"/&gt;&lt;label value="Item C.6"/&gt;            &#13;        &lt;/row&gt;        &#13;        &lt;row spans=",,2,2"&gt;        &#13;            &lt;label value="Item D.1"/&gt;&lt;label value="Item D.2"/&gt;            &#13;            &lt;label value="Item D.3"/&gt;&lt;label value="Item D.5"/&gt;            &#13;        &lt;/row&gt;        &#13;    &lt;/rows&gt;    &#13;&lt;/grid&gt;&#13;</programlisting>
 <para>
-<graphic fileref="images/100000000000031500000070C388AAA9.png"/>
+<graphic fileref="images/100000000000031500000070C388AAA9.png">2
+			
+		</graphic>
 </para></sect3></sect2></sect1><sect1><title>More Layout Components</title><sect2><title>Separators and Spaces</title>
 <para>Components: separator and space.</para>
 <para>A separator is used to insert a space between two components. There are several ways to customize the separator.</para>
@@ -2290,7 +2340,9 @@
 </listitem>
 <listitem>
 <para>
-<graphic fileref="images/10000000000001170000007AB8B71E54.png"/>By use of the spacing property, you could control the size of spacing.</para>
+<graphic fileref="images/10000000000001170000007AB8B71E54.png">2
+			
+		</graphic>By use of the spacing property, you could control the size of spacing.</para>
 </listitem>
 </orderedlist>
 <programlisting>&lt;window&gt;&#13;    line 1 by separator    &#13;    &lt;separator/&gt;    &#13;    line 2 by separator    &#13;    &lt;separator/&gt;    &#13;    line 3 by separator&lt;space bar="true"/&gt;another piece    &#13;    &lt;separator spacing="20px"/&gt;    &#13;    line 4 by separator&lt;space bar="true" spacing="20px"/&gt;another piece    &#13;&lt;/window&gt;&#13;</programlisting></sect2><sect2><title>Group boxes</title>
@@ -2464,10 +2516,14 @@
 <para>Tip: Sorting huge number of live data might degrade the performance significantly. It is better to intercept the onSort event or the sort method to handle it effectively. Refer to the Sort Live Data section below.</para></sect3></sect2><sect2><title>Special Properties</title><sect3><title>The checkmark Property</title>
 <para>The checkmark property controls whether to display a checkbox or a radio button in front of each list item.</para>
 <para>
-<graphic fileref="images/10000000000001C20000005540C9B7A9.png"/>In the following example, you will see how a checkbox is added automatically, when you move a list item from the left list box to the right one. The checkbox is removed when you move a list item from right to left.</para>
+<graphic fileref="images/10000000000001C20000005540C9B7A9.png">2
+			
+		</graphic>In the following example, you will see how a checkbox is added automatically, when you move a list item from the left list box to the right one. The checkbox is removed when you move a list item from right to left.</para>
 <programlisting>&lt;hbox&gt;&#13;    &lt;listbox id="src" rows="0" multiple="true" width="200px"&gt;    &#13;        &lt;listhead&gt;        &#13;            &lt;listheader label="Population"/&gt;            &#13;            &lt;listheader label="Percentage"/&gt;            &#13;        &lt;/listhead&gt;        &#13;        &lt;listitem id="a" value="A"&gt;        &#13;            &lt;listcell label="A. Graduate"/&gt;            &#13;            &lt;listcell label="20%"/&gt;            &#13;        &lt;/listitem&gt;        &#13;        &lt;listitem id="b" value="B"&gt;        &#13;            &lt;listcell label="B. College"/&gt;            &#13;            &lt;listcell label="23%"/&gt;            &#13;        &lt;/listitem&gt;        &#13;        &lt;listitem id="c" value="C"&gt;        &#13;            &lt;listcell label="C. High School"/&gt;            &#13;            &lt;listcell label="40%"/&gt;            &#13;        &lt;/listitem&gt;        &#13;        &lt;listitem id="d" value="D"&gt;        &#13;            &lt;listcell label="D. Others"/&gt;            &#13;            &lt;listcell label="17%"/&gt;            &#13;        &lt;/listitem&gt;        &#13;    &lt;/listbox&gt;    &#13;    &lt;vbox&gt;    &#13;        &lt;button label="=&amp;gt;" onClick="move(src, dst)"/&gt;        &#13;        &lt;button label="&amp;lt;=" onClick="move(dst, src)"/&gt;        &#13;    &lt;/vbox&gt;    &#13;    &lt;listbox id="dst" checkmark="true" rows="0" multiple="true" width="200px"&gt;    &#13;        &lt;listhead&gt;        &#13;            &lt;listheader label="Population"/&gt;            &#13;            &lt;listheader label="Percentage"/&gt;            &#13;        &lt;/listhead&gt;        &#13;        &lt;listitem id="e" value="E"&gt;        &#13;            &lt;listcell label="E. Supermen"/&gt;            &#13;            &lt;listcell label="21%"/&gt;            &#13;        &lt;/listitem&gt;        &#13;    &lt;/listbox&gt;    &#13;    &lt;zscript&gt;    &#13;void move(Listbox src, Listbox dst) {&#13;    Listitem s = src.getSelectedItem();    &#13;    if (s == null)    &#13;        Messagebox.show("Select an item first");        &#13;    else    &#13;        s.setParent(dst);        &#13;}&#13;    &lt;/zscript&gt;    &#13;&lt;/hbox&gt;&#13;</programlisting>
 <para>
-<graphic fileref="images/10000000000000CD0000006D96B78742.png"/>Notice that if the multiple property is false, the radio buttons are displayed instead, as depicted at the right.</para></sect3><sect3><title>The vflex Property</title>
+<graphic fileref="images/10000000000000CD0000006D96B78742.png">2
+			
+		</graphic>Notice that if the multiple property is false, the radio buttons are displayed instead, as depicted at the right.</para></sect3><sect3><title>The vflex Property</title>
 <para>The vflex property controls whether to grow and shrink vertical to fit their given space. It is so-called vertical flexibility. For example, if the list is too big to fit in the browser window, it will shrink its height to make the whole list control visible in the browser window.</para>
 <para>This property is ignored if the rows property is specified.</para></sect3><sect3><title>The maxlength Property</title>
 <para>The maxlength property defines the maximal allowed characters being visible at the browser. By setting this property, you could make a narrower list box.</para></sect3></sect2><sect2><title>Live Data</title>
@@ -2509,7 +2565,9 @@
 </listitem>
 </orderedlist>
 <para>
-<graphic fileref="images/1000000000000132000000E3AE1693E7.png"/>In the following example, we prepared a list model called strset, assigned it to a list box through the model property. Then, the list box will do the rest.</para>
+<graphic fileref="images/1000000000000132000000E3AE1693E7.png">2
+			
+		</graphic>In the following example, we prepared a list model called strset, assigned it to a list box through the model property. Then, the list box will do the rest.</para>
 <programlisting>&lt;window title="Livedata Demo" border="normal"&gt;&lt;zscript&gt;String[] data = new String[30];for(int j=0; j &amp;lt; data.length; ++j) {data[j] = "option "+j;}ListModel strset = new SimpleListModel(data);&lt;/zscript&gt;&lt;listbox width="200px" rows="10" model="${strset}"&gt;&lt;listhead&gt;&lt;listheader label="Load on demend"/&gt;&lt;/listhead&gt;&lt;/listbox&gt;&lt;/window&gt;                                                                                        &#13;</programlisting><sect3><title>Sorting with Live Data</title>
 <para>If you allow users to sort a list box provided with live data, you have to implement an interface, org.zkoss.zul.ListModelExt, in addition to org.zkoss.zul.ListModel.</para>
 <programlisting>class MyListModel implements ListModel, ListModelExt {&#13;    public void sort(Comparator cmpr, boolean ascending) {    &#13;        //do the real sorting        &#13;        //notify the listbox (or grid) that data is changed by use of ListDataEvent        &#13;    }    &#13;}&#13;</programlisting>
@@ -2603,14 +2661,18 @@
 <para>For sophisticated applications, you can defer the creation of the content of the tree item or manipulate its content dynamically, until the onOpen event is received. Refer to the Load on Demand section in th ZK User Interface Markup Language chapter for details.</para></sect2><sect2><title>Multiple Selection</title>
 <para>When user clicks on a tree item, the whole item is selected and the onSelect event is sent back to the server to notify the application. You could control whether a tree control allows multiple selections by setting the multiple property to true. The default value is false.</para></sect2><sect2><title>Paging</title>
 <para>
-<graphic fileref="images/100000000000008A000001112B40E516.png"/>The pageSize property controls the number of tree items to display at once. By default, it is 10. That is, at most 10 tree items are displayed at the client for each level as depicted in the right figure.</para>
+<graphic fileref="images/100000000000008A000001112B40E516.png">2
+			
+		</graphic>The pageSize property controls the number of tree items to display at once. By default, it is 10. That is, at most 10 tree items are displayed at the client for each level as depicted in the right figure.</para>
 <para>A user can click to see more tree items (i.e., enlarge pageSize), or click or to scroll up and down.</para>
 <para>If you want to display all tree items, simply set pageSize to -1. However, it is not recommended if the tree control is huge, since the browser is too slow to handle a tree with huge number of items.</para>
 <para>In addition to the pageSize property of a tree control, you can change the page size of each treechildren instance by modifying the pageSize property of the corresponding treechildren instance.</para><sect3><title>The onPaging and onPageSize Event</title>
 <para>When a user clicks or to scroll up and down the page, the onPaging event is sent with an org.zkoss.zul.event.PagingEvent instance. Similarly, the onPageSize event is sent with an org.zkoss.zul.event.PageSize instance when a user clicks .</para></sect3></sect2><sect2><title>Special Properties</title><sect3><title>The rows Property</title>
 <para>The rows property is used to control how many rows are visible. By setting it to zero, the tree control will resize itself to hold as many as items if possible.</para></sect3><sect3><title>The checkmark Property</title>
 <para>
-<graphic fileref="images/10000000000001980000007BBA791396.png"/>The checkmark property controls whether to display a checkbox or a radio button in front of each tree item.</para></sect3><sect3><title>The vflex Property</title>
+<graphic fileref="images/10000000000001980000007BBA791396.png">2
+			
+		</graphic>The checkmark property controls whether to display a checkbox or a radio button in front of each tree item.</para></sect3><sect3><title>The vflex Property</title>
 <para>The vflex property controls whether to grow and shrink vertical to fit their given space. It is so-called vertical flexibility. For example, if the tree is too big to fit in the browser window, it will shrink the height to make the whole tree visible in the browser window.</para>
 <para>This property is ignored if the rows property is specified.</para></sect3><sect3><title>The maxlength Property</title>
 <para>The maxlength property defines the maximal allowed characters being visible at the browser. By setting this property, you could make a narrower tree control.</para></sect3><sect3><title>Sizable Columns</title>
@@ -2632,12 +2694,16 @@
 <para>UP and DOWN to change the selection of the items from the list.</para>
 </listitem>
 </itemizedlist><sect2><title>The autodrop Property</title>
-<para>By default, the drop-down list won't be opened until user clicks the <graphic fileref="images/100000000000000F00000015A76D2BBC.png"/> button, or press Alt+DOWN. However, you could set the autodrop property to true, such that the drop-down list is opened as soon as user types any character. This is helpful for novice users, but it might be annoying for experienced users.</para>
+<para>By default, the drop-down list won't be opened until user clicks the <graphic fileref="images/100000000000000F00000015A76D2BBC.png">2
+			
+		</graphic> button, or press Alt+DOWN. However, you could set the autodrop property to true, such that the drop-down list is opened as soon as user types any character. This is helpful for novice users, but it might be annoying for experienced users.</para>
 <programlisting>&lt;combobox autodrop="true"/&gt;&#13;</programlisting></sect2><sect2><title>The description Property</title>
 <para>You could add a description to each combo item to make it more descriptive. In addition, you could assign an image to each combo item.</para>
 <programlisting>&lt;combobox&gt;&#13;    &lt;comboitem label="Simple and Rich" image="/img/coffee.gif"    &#13;    description="The simplest way to make Web applications rich"/&gt;    &#13;    &lt;comboitem label="Cool!" image="/img/corner.gif"    &#13;    description="The coolest technology"/&gt;    &#13;    &lt;comboitem label="Ajax and RIA" image="/img/cubfirs.gif"    &#13;    description="Rich Internet Application by Ajax"/&gt;    &#13;&lt;/combobox&gt;&#13;</programlisting>
 <para>
-<graphic fileref="images/10000000000001210000007CA44D783C.png"/>Like other components that support images, you could use the setImageContent method to assign the content of a dynamically generated image to the comboitem component. Refer to the Image section for details.</para></sect2><sect2><title>The onOpen Event</title>
+<graphic fileref="images/10000000000001210000007CA44D783C.png">2
+			
+		</graphic>Like other components that support images, you could use the setImageContent method to assign the content of a dynamically generated image to the comboitem component. Refer to the Image section for details.</para></sect2><sect2><title>The onOpen Event</title>
 <para>The onOpen event is sent to the application, when user opens the drop-down list. To defer the creation of combo items, you can use the fulfill attribute as shown below.</para>
 <programlisting>&lt;combobox fulfill="onOpen"&gt;<inlinegraphic fileref="images/10000000000000B50000004419304D81.png" align="right"/>&#13;    &lt;comboitem label="Simple and Rich"/&gt;    &#13;    &lt;comboitem label="Cool!"/&gt;    &#13;    &lt;comboitem label="Ajax and RIA"/&gt;    &#13;&lt;/combobox&gt;&#13;</programlisting>
 <para>Alternatively, you can listen to the onOpen event, and then prepare the drop-down list or change it dynamically in the listener as shown below. </para>
@@ -2650,7 +2716,9 @@
 <programlisting>&lt;combobox id="combo" autodrop="true" onChanging="suggest()"/&gt;&#13;&lt;zscript&gt;&#13;    void suggest() {    &#13;        combo.getItems().clear();        &#13;        if (event.value.startsWith("A")) {        &#13;            combo.appendItem("Ace");            &#13;            combo.appendItem("Ajax");            &#13;            combo.appendItem("Apple");            &#13;        } else if (event.value.startsWith("B")) {        &#13;            combo.appendItem("Best");            &#13;            combo.appendItem("Blog");            &#13;        }        &#13;    }    &#13;&lt;/zscript&gt;&#13;</programlisting>
 <para>Notice that, when the onChanging event is received, the content of the combobox is not changed yet. Thus, you cannot use the value property of the combobox. Rather, you shall use the value property of the event (org.zkoss.zk.ui.event.InputEvent).</para></sect2></sect1><sect1><title>Bandboxes</title>
 <para>Components: bandbox and bandpopup.</para>
-<para>A bandbox is a special text box that embeds a customizable popup window (aka., a dropdown window). Like comboboxes, a bandbox consists of an input box and a popup window. The popup window is opened automatically, when users presses Alt+DOWN or clicks the <graphic fileref="images/10000000000000150000001699487861.png"/> button.</para>
+<para>A bandbox is a special text box that embeds a customizable popup window (aka., a dropdown window). Like comboboxes, a bandbox consists of an input box and a popup window. The popup window is opened automatically, when users presses Alt+DOWN or clicks the <graphic fileref="images/10000000000000150000001699487861.png">2
+			
+		</graphic> button.</para>
 <para>Unlike comboboxes, the popup window of a bandbox could be anything. It is designed to give developers the maximal flexibility. A typical use is to represent the popup window as a search dialog.</para>
 <programlisting>        &lt;bandboxid="bd"&gt;        <inlinegraphic fileref="images/10000000000000E80000008E1E66A663.png" align="right"/>&#13;        &lt;bandpopup&gt;        &#13;                &lt;vbox&gt;                &#13;            &lt;hbox&gt;Search&lt;textbox/&gt;&lt;/hbox&gt;            &#13;            &lt;listboxwidth="200px"            &#13;            onSelect="bd.value=self.selectedItem.label;bd.closeDropdown();"&gt;            &#13;            &lt;listhead&gt;            &#13;                    &lt;listheaderlabel="Name"/&gt;                    &#13;                    &lt;listheaderlabel="Description"/&gt;                    &#13;            &lt;/listhead&gt;            &#13;            &lt;listitem&gt;            &#13;                    &lt;listcelllabel="John"/&gt;                    &#13;                    &lt;listcelllabel="CEO"/&gt;                    &#13;            &lt;/listitem&gt;            &#13;            &lt;listitem&gt;            &#13;                    &lt;listcelllabel="Joe"/&gt;                    &#13;                    &lt;listcelllabel="Engineer"/&gt;                    &#13;            &lt;/listitem&gt;            &#13;            &lt;listitem&gt;            &#13;                    &lt;listcelllabel="Mary"/&gt;                    &#13;                    &lt;listcelllabel="Supervisor"/&gt;                    &#13;            &lt;/listitem&gt;            &#13;        &lt;/listbox&gt;        &#13;        &lt;/vbox&gt;        &#13;        &lt;/bandpopup&gt;        &#13;    &lt;/bandbox&gt;    &#13;</programlisting>
 <para>Mouseless Entrybandbox</para>
@@ -2668,7 +2736,9 @@
 <para>A popup window could contain any kind of components, so it is developer's job to copy the value from and close the popup if one of item is selected.</para>
 <para>In the above example, we copy the selected item's label to the bandbox, and then close the popup by the following statement.</para>
 <programlisting>&lt;listbox width="200px" onSelect="bd.value=self.selectedItem.label; bd.closeDropdown();"&gt;&#13;</programlisting></sect2><sect2><title>The autodrop Property</title>
-<para>By default, the popup window won't be opened until user clicks the <graphic fileref="images/10000000000000150000001699487861.png"/> button, or press Alt+DOWN. However, you could set the autodrop property to true, such that the popup is opened as soon as user types any character. This is helpful for novice users, but it might be annoying for experienced users.</para>
+<para>By default, the popup window won't be opened until user clicks the <graphic fileref="images/10000000000000150000001699487861.png">2
+			
+		</graphic> button, or press Alt+DOWN. However, you could set the autodrop property to true, such that the popup is opened as soon as user types any character. This is helpful for novice users, but it might be annoying for experienced users.</para>
 <programlisting>&lt;bandbox autodrop="true"/&gt;&#13;</programlisting></sect2><sect2><title>The onOpen Event</title>
 <para>The onOpen event is sent to the application if the user opens the popup window. By use of the fulfill attribute with the onOpen value as shown below, you can defer the creation of the popup window.</para>
 <programlisting>&lt;bandbox fulfill="onOpen"&gt;&#13;    &lt;bandpopup&gt;    &#13;    ...    &#13;    &lt;/bandpopup&gt;    &#13;&lt;/bandbox&gt;&#13;</programlisting>
@@ -2830,7 +2900,9 @@
 <para>Notice that the target of the onDrop event is the droppable component, not the component being dragged.</para>
 <para>The following is a simple example that allows users to reorder list items by drag-and-drop.</para>
 <para>
-<graphic fileref="images/1000000000000213000000B4ADEE091E.png"/>
+<graphic fileref="images/1000000000000213000000B4ADEE091E.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;window title="Reorder by Drag-and-Drop" border="normal"&gt;&#13;    Unique Visitors of ZK:    &#13;    &lt;listbox id="src" multiple="true" width="300px"&gt;    &#13;        &lt;listhead&gt;        &#13;            &lt;listheader label="Country/Area"/&gt;            &#13;            &lt;listheader align="right" label="Visits"/&gt;            &#13;            &lt;listheader align="right" label="%"/&gt;            &#13;        &lt;/listhead&gt;        &#13;        &lt;listitem draggable="true" droppable="true" onDrop="move(event.dragged)"&gt;        &#13;            &lt;listcell label="United States"/&gt;            &#13;            &lt;listcell label="5,093"/&gt;            &#13;            &lt;listcell label="19.39%"/&gt;            &#13;        &lt;/listitem&gt;        &#13;        &lt;listitem draggable="true" droppable="true" onDrop="move(event.dragged)"&gt;        &#13;            &lt;listcell label="China"/&gt;            &#13;            &lt;listcell label="4,274"/&gt;            &#13;            &lt;listcell label="16.27%"/&gt;            &#13;        &lt;/listitem&gt;        &#13;        &lt;listitem draggable="true" droppable="true" onDrop="move(event.dragged)"&gt;        &#13;            &lt;listcell label="France"/&gt;            &#13;            &lt;listcell label="1,892"/&gt;            &#13;            &lt;listcell label="7.20%"/&gt;            &#13;        &lt;/listitem&gt;        &#13;        &lt;listitem draggable="true" droppable="true" onDrop="move(event.dragged)"&gt;        &#13;            &lt;listcell label="Germany"/&gt;            &#13;            &lt;listcell label="1,846"/&gt;            &#13;            &lt;listcell label="7.03%"/&gt;            &#13;        &lt;/listitem&gt;        &#13;        &lt;listitem draggable="true" droppable="true" onDrop="move(event.dragged)"&gt;        &#13;            &lt;listcell label="(other)"/&gt;            &#13;            &lt;listcell label="13,162"/&gt;            &#13;            &lt;listcell label="50.01%"/&gt;            &#13;        &lt;/listitem&gt;        &#13;        &lt;listfoot&gt;        &#13;            &lt;listfooter label="Total 132"/&gt;            &#13;            &lt;listfooter label="26,267"/&gt;            &#13;            &lt;listfooter label="100.00%"/&gt;            &#13;        &lt;/listfoot&gt;        &#13;    &lt;/listbox&gt;    &#13;    &lt;zscript&gt;    &#13;    void move(Component dragged) {    &#13;        self.parent.insertBefore(dragged, self);        &#13;    }    &#13;    &lt;/zscript&gt;    &#13;&lt;/window&gt;&#13;</programlisting></sect2><sect2><title>Dragging with Multiple Selections</title>
 <para>When a user drag-and-drops a list item or a tree item, the selection status of these items won't be changed. Visually only the dragged item is moved, but you can handle all selected items at once by looking up the set of all selected items as depicted below.</para>
@@ -2949,7 +3021,9 @@
 <row>
 <entry>
 <para>
-<graphic fileref="images/1000000000000275000001275F0B1F07.png"/>
+<graphic fileref="images/1000000000000275000001275F0B1F07.png">2
+			
+		</graphic>
 </para>
 </entry>
 <entry>
@@ -4062,8 +4136,7 @@
 <para>For better control of data-binding manager, you can set the access mode of the attribute-name of the component-name to be <code>both</code>(load/save), <code>load</code>(load Only), <code>save</code>(save Only), or <code>none</code>(neither) .</para>
 <para>
 <code/>
-<code>&lt;component-name attribute-name="@{bean-name.attribute-</code>
-<code>name,</code>
+<code>&lt;component-name attribute-name="@{bean-name.attribute-name,</code>
 <code>access='type-name'</code>
 <code>}"/&gt;</code>
 </para>
@@ -4405,7 +4478,9 @@
 <programlisting>if (mail.isDirty()) {&#13;    Clients.confirmClose("Your message has not been sent.\nDiscard your message?");    &#13;} else {&#13;    Clients.confirmClose(null);    &#13;}&#13;</programlisting>
 <para>Once the confirmClose method is called with a non-empty string, a confirmation dialog is shown up when the user tries to close the browser window, reload, or browse to another URL:</para>
 <para>
-<graphic fileref="images/100000000000036D000000FE561CE3BC.png"/> </para></sect2></sect1><sect1><title>Browser's History Management</title>
+<graphic fileref="images/100000000000036D000000FE561CE3BC.png">2
+			
+		</graphic> </para></sect2></sect1><sect1><title>Browser's History Management</title>
 <para>In traditional multi-page Web applications, user usually use the BACK and FORWARD button to surf around multiple pages, and bookmark them for later use. With ZK, you still can use multiple pages to represent different set of features and information, as you did in traditional Web applications.</para>
 <para>However, it is common for ZK applications to represent a lot of features in one desktop, which usually take multiple Web pages in a traditional Web application. To make user's surfing easier, ZK supports the browser's history management that enables ZK applications to manage browser's history simply in the server.</para>
 <para>The concept is simple. You add items for appropriate states of a desktop to the browser's history, and then users can use the BACK and FORWARD button to surf around different states of the same ZK desktop. When users surf around these states, an event called onBookmarkChange is sent to notify the application.</para>
@@ -4425,9 +4500,13 @@
 <programlisting>&lt;button label="Next" onClick="desktop.setBookmark(&amp;quot;Step-2&amp;quot;)"/&gt;&#13;</programlisting>
 <para>If you look carefully at the URL, you will find ZK appends #Step-2 to the URL.</para>
 <para>
-<graphic fileref="images/1000000000000284000000226A7DEE65.png"/>If you press the BACK button, you will see as follows.</para>
+<graphic fileref="images/1000000000000284000000226A7DEE65.png">2
+			
+		</graphic>If you press the BACK button, you will see as follows.</para>
 <para>
-<graphic fileref="images/100000000000027B0000001CA1C78D7E.png"/>
+<graphic fileref="images/100000000000027B0000001CA1C78D7E.png">2
+			
+		</graphic>
 </para></sect2><sect2><title>Listen to the onBookmarkChange Event and Manipulate the Desktop Accordingly</title>
 <para>After adding a state to the browser's history, users can then surf among these states such as pressing the BACK button to return the previous state. When the state is changed, ZK will notify the application by broadcasting the onBookmarkChange event (an instance of the org.zkoss.zk.ui.event.BookmarkEvent class) to all root components in the desktop.</para>
 <para>Unlike traditional multi-page Web applications, you have to manipulate the ZK desktop manually when the state is changed. It is application developer's job to manipulate the desktop to reflect the state that a bookmark represented.</para>
@@ -4560,7 +4639,9 @@
 <para>If an un-caught exception is thrown when loading a ZUML page, it is handled directly by the Web server. In other words, its handling is no different from other pages, such as JSP.</para>
 <para>By default, the Web server displays an error page showing the error message and stack trace.</para>
 <para>
-<graphic fileref="images/100000000000038700000181C7DBF256.png"/>You can customize the error handling by specifying the error page in WEB-INF/web.xml as follows. Refer to Java Servlet Specification for more details.</para>
+<graphic fileref="images/100000000000038700000181C7DBF256.png">2
+			
+		</graphic>You can customize the error handling by specifying the error page in WEB-INF/web.xml as follows. Refer to Java Servlet Specification for more details.</para>
 <programlisting>&lt;!-- web.xml --&gt;&#13;&lt;error-page&gt;&#13;    &lt;exception-type&gt;java.lang.Throwable&lt;/exception-type&gt;    &#13;    &lt;location&gt;/WEB-INF/sys/error.zul&lt;/location&gt;    &#13;&lt;/error-page&gt;&#13;</programlisting>
 <para>Then, when an error occurs in loading a page, the Web server forwards the error page you specified, /error/error.zul. Upon forwarding, the Web server passes a set of request attributes to the error page to describe what happens. These attributes are as follows.</para>
 <informaltable frame="all">
@@ -4632,7 +4713,9 @@
 <programlisting>//error.zul&#13;&lt;zk&gt;&#13;    &lt;zscript&gt;    &#13;    if (Executions.getCurrent().isMilDevice())    &#13;        Executions.forward("error.mil");        &#13;    &lt;/zscript&gt;    &#13;    &lt;window&gt;    &#13;    ....error message in ZUL    &#13;    &lt;/window&gt;    &#13;&lt;/zk&gt;&#13;</programlisting></sect3></sect2><sect2><title>Error Handing When Updating Pages</title>
 <para>If an uncaught exception is thrown when updating a ZUML page (aka., when an event listener is executing), it is handled by the ZK Update Engine. By default, it simply asks the browser to show up an alert dialog to tell the user.</para>
 <para>
-<graphic fileref="images/10000000000002C10000011E30DFBEA1.png"/>You can customize the error handling by specifying the error page in WEB-INF/zk.xml as follows. Refer to Appendix B in the Developer's Reference.</para>
+<graphic fileref="images/10000000000002C10000011E30DFBEA1.png">2
+			
+		</graphic>You can customize the error handling by specifying the error page in WEB-INF/zk.xml as follows. Refer to Appendix B in the Developer's Reference.</para>
 <programlisting>&lt;!-- zk.xml --&gt;&#13;&lt;error-page&gt;&#13;    &lt;exception-type&gt;java.lang.Throwable&lt;/exception-type&gt;    &#13;    &lt;location&gt;/WEB-INF/sys/error.zul&lt;/location&gt;    &#13;&lt;/error-page&gt;&#13;</programlisting>
 <para>Then, when an error occurs in an event listener, the ZK Update Engine creates a dialog by use of the error page you specified, /error/error.zul.</para>
 <para>Like error handling in loading a ZUML page, you can specify multiple &lt;error-page&gt; elements. Each of them is associated with a different exception type (the value of &lt;exception-type&gt; element). When an error occurs, ZK will search the error pages one-by-one until the exception type matches.</para>
@@ -4822,7 +4905,9 @@
 </title>
 <ulink url="http://www.zkoss.org/2007/mil">http://www.zkoss.org/2007/mil</ulink>
 <para>
-<graphic fileref="images/10000000000000FC0000015034C5AED2.png"/>You can write your ZK Mobile applications the same way as you have done with ZUL and ZHTML components. Only that this time you have to use the MIL components instead. Following is the classic Hello World example (hello.mil).</para>
+<graphic fileref="images/10000000000000FC0000015034C5AED2.png">2
+			
+		</graphic>You can write your ZK Mobile applications the same way as you have done with ZUL and ZHTML components. Only that this time you have to use the MIL components instead. Following is the classic Hello World example (hello.mil).</para>
 <programlisting>&lt;frame title="My First Window" visible="true"&gt;&#13;Hello World!&#13;&lt;/frame&gt;&#13;</programlisting>
 <para>This is almost the same as the ZUL "Hello World" example. The &lt;frame&gt; tag indicates the frame of the mobile display and the "Hello World!" is the text inside the frame. </para>
 <para>You can apply all your programming experiences with ZUL components on MIL components without problem. The only difference is that the former (ZUL components) is designed for showing on web Ajax browser while the latter (MIL components) is for showing on the ZK Mobile client. You can still use the ZK template attributes such as if, unless, forEach, each, etc. You can use multiple script languages in &lt;zscript&gt; tag. You can use EL expression and the annotated data binding. You can also choose coding with ZUML page or pure Java Richlet way. </para>
@@ -5587,7 +5672,9 @@
 <para>How to pass a request parameter or attribute to a portlet depends on the portal. You have to consult the user's guide of your favorite portal for details. The following is an example that uses Potix Portal.</para>
 <programlisting>&lt;layout contentType="text/html"&gt;&#13;    &lt;title&gt;ZK Porlet Demo&lt;/title&gt;    &#13;    &lt;header name="Cache-Control" value="no-cache"/&gt;    &#13;    &lt;header name="Pragma" value="no-cache"/&gt;    &#13;&#13;    &lt;vbox&gt;    &#13;        &lt;hbox&gt;        &#13;            &lt;servlet page="sample1.zul"/&gt;            &#13;            &lt;portlet name="zkdemo.zkLoader"&gt;            &#13;                &lt;attribute name="zk_page" value="/test/sample2.zul"/&gt;                &#13;            &lt;/portlet&gt;            &#13;        &lt;/hbox&gt;        &#13;    &lt;/vbox&gt;    &#13;&#13;    &lt;molds uri="~./pxp/html/molds.xml"/&gt;    &#13;&lt;/layout&gt;&#13;</programlisting>
 <para>
-<graphic fileref="images/1000000000000290000000735EEBE1FC.png"/>
+<graphic fileref="images/1000000000000290000000735EEBE1FC.png">2
+			
+		</graphic>
 </para></sect2></sect1></chapter>
 <chapter>
 <title>19. Beyond ZK</title>

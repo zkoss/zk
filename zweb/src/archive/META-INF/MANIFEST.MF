@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Specification-Title: Potix Web Library
-Specification-Version: 3.6.1
+Specification-Version: 3.6.2
 Specification-Vendor: Potix Corporation
 Implementation-Title: org.zkoss.web
 Implementation-URL: http://www.zkoss.org/
-Implementation-Version: 3.6.1
+Implementation-Version: 3.6.2
 Implementation-Vendor: Potix Corporation

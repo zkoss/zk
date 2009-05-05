@@ -2,15 +2,17 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <book lang="en-US">
 <title>The Developer's Reference</title>
-<subtitle>Version 3.6.1</subtitle>
+<subtitle>Version 3.6.2</subtitle>
 <bookinfo>
 <copyright>
-<year>2009</year>
+<year>2007</year>
 <holder>Potix Corporation. All rights reserved.</holder>
 </copyright>
 </bookinfo>
 <para>
-<graphic fileref="images/potix.jpg"/>
+<graphic fileref="images/potix.jpg">2
+			
+		</graphic>
 </para>
 <para>SIMPLY RICH</para>
 <para>ZKTM</para>
@@ -509,7 +511,9 @@
 <para>For each iteration, two variables, each and forEachStatus, are assigned automatically to let developers control how to evaluate the associated element.</para>
 <programlisting>&lt;hbox&gt;&#13;&lt;zscript&gt;&#13;classes = new String[] {"College", "Graduate"};&#13;grades = new Object[] {&#13;new String[] {"Best", "Better"}, new String[] {"A++", "A+", "A"}&#13;};&#13;&lt;/zscript&gt;&#13;&lt;listbox width="200px" forEach="${classes}"&gt;&#13;&lt;listhead&gt;&#13;&lt;listheader label="${each}"/&gt;&#13;&lt;/listhead&gt;&#13;&lt;listitem label="${forEachStatus.previous.each}: ${each}"&#13;forEach="${grades[forEachStatus.index]}"/&gt;&#13;&lt;/listbox&gt;&#13;&lt;/hbox&gt;&#13;</programlisting>
 <para>
-<graphic fileref="images/foreach-example.PNG"/>
+<graphic fileref="images/foreach-example.PNG">2
+			
+		</graphic>
 </para></sect2><sect2><title>The forEachBegin Attribute</title>
 <para>forEachBegin="${an-EL-expr}"</para>
 <para>It is used with the forEach attribute to specify the index (starting from 0) that the iteration shall begin at. If not specified, the iteration begins at the first element, i.e., 0 is assumed.</para>
@@ -3697,7 +3701,9 @@
 <para>An <code>audio</code> component is used to play the audio at the browser. Like <code>image</code>, you could use the <code>src</code> property to specify an URL of an audio resource, or the <code>setContent</code> method to specify a dynamically generated audio.</para>
 <para>Depending on the browser and the <code>audio</code> plugin, developers might be able to control the play of an audio by the <code>play</code>, <code>stop</code> and <code>pause</code> methods. Currently, Internet Explorer with Media Player is capable of such controls.</para>
 <para>
-<graphic fileref="images/audio.png"/>
+<graphic fileref="images/audio.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;audio id="audio" height="20"/&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -3934,7 +3940,9 @@
 <para/></sect3></sect2><sect2 id="Auxhead"><title>Auxhead</title>
 <para>Used to define a collection of auxiliary headers (<code>Auxheader</code>).</para>
 <para>
-<graphic fileref="images/auxheader.png"/>
+<graphic fileref="images/auxheader.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;grid&gt;&#13;    &lt;auxhead&gt;    &#13;        &lt;auxheader label="H1'07" colspan="6"/&gt;        &#13;        &lt;auxheader label="H2'07" colspan="6"/&gt;        &#13;    &lt;/auxhead&gt;    &#13;    &lt;auxhead&gt;    &#13;        &lt;auxheader label="Q1" colspan="3"/&gt;        &#13;        &lt;auxheader label="Q2" colspan="3"/&gt;        &#13;        &lt;auxheader label="Q3" colspan="3"/&gt;        &#13;        &lt;auxheader label="Q4" colspan="3"/&gt;        &#13;    &lt;/auxhead&gt;    &#13;    &lt;columns&gt;    &#13;        &lt;column label="Jan"/&gt;&lt;column label="Feb"/&gt;&lt;column label="Mar"/&gt;        &#13;        &lt;column label="Apr"/&gt;&lt;column label="May"/&gt;&lt;column label="Jun"/&gt;        &#13;        &lt;column label="Jul"/&gt;&lt;column label="Aug"/&gt;&lt;column label="Sep"/&gt;        &#13;        &lt;column label="Oct"/&gt;&lt;column label="Nov"/&gt;&lt;column label="Dec"/&gt;        &#13;    &lt;/columns&gt;    &#13;    &lt;rows&gt;    &#13;        &lt;row&gt;        &#13;        &lt;label value="1,000"/&gt;&lt;label value="1,100"/&gt;&lt;label value="1,200"/&gt;        &#13;        &lt;label value="1,300"/&gt;&lt;label value="1,400"/&gt;&lt;label value="1,500"/&gt;        &#13;        &lt;label value="1,600"/&gt;&lt;label value="1,700"/&gt;&lt;label value="1,800"/&gt;        &#13;        &lt;label value="1,900"/&gt;&lt;label value="2,000"/&gt;&lt;label value="2,100"/&gt;        &#13;        &lt;/row&gt;        &#13;    &lt;/rows&gt;    &#13;</programlisting>
 <para>&lt;/grid&gt;</para><sect3><title>Class Name</title>
@@ -4022,7 +4030,9 @@
 <para/></sect3></sect2><sect2 id="Auxheader"><title>Auxheader</title>
 <para>An auxiliary header.</para>
 <para>
-<graphic fileref="images/auxheader.png"/>
+<graphic fileref="images/auxheader.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;grid&gt;&#13;    &lt;auxhead&gt;    &#13;        &lt;auxheader label="H1'07" colspan="6"/&gt;        &#13;        &lt;auxheader label="H2'07" colspan="6"/&gt;        &#13;    &lt;/auxhead&gt;    &#13;    &lt;auxhead&gt;    &#13;        &lt;auxheader label="Q1" colspan="3"/&gt;        &#13;        &lt;auxheader label="Q2" colspan="3"/&gt;        &#13;        &lt;auxheader label="Q3" colspan="3"/&gt;        &#13;        &lt;auxheader label="Q4" colspan="3"/&gt;        &#13;    &lt;/auxhead&gt;    &#13;    &lt;columns&gt;    &#13;        &lt;column label="Jan"/&gt;&lt;column label="Feb"/&gt;&lt;column label="Mar"/&gt;        &#13;        &lt;column label="Apr"/&gt;&lt;column label="May"/&gt;&lt;column label="Jun"/&gt;        &#13;        &lt;column label="Jul"/&gt;&lt;column label="Aug"/&gt;&lt;column label="Sep"/&gt;        &#13;        &lt;column label="Oct"/&gt;&lt;column label="Nov"/&gt;&lt;column label="Dec"/&gt;        &#13;    &lt;/columns&gt;    &#13;    &lt;rows&gt;    &#13;        &lt;row&gt;        &#13;        &lt;label value="1,000"/&gt;&lt;label value="1,100"/&gt;&lt;label value="1,200"/&gt;        &#13;        &lt;label value="1,300"/&gt;&lt;label value="1,400"/&gt;&lt;label value="1,500"/&gt;        &#13;        &lt;label value="1,600"/&gt;&lt;label value="1,700"/&gt;&lt;label value="1,800"/&gt;        &#13;        &lt;label value="1,900"/&gt;&lt;label value="2,000"/&gt;&lt;label value="2,100"/&gt;        &#13;        &lt;/row&gt;        &#13;    &lt;/rows&gt;    &#13;</programlisting>
 <para>&lt;/grid&gt;</para><sect3><title>Class Name</title>
@@ -4189,7 +4199,9 @@
 <para/>
 <para/></sect3></sect2><sect2 id="Bandbox"><title>Bandbox</title>
 <para>A <code>band</code>
-<code>box</code> is a special text box that embeds a customizable popup window (aka., a dropdown window). Like comboboxes, a <code>bandbox</code> consists of an input box and a popup window. The popup window is opened automatically, when users presses Alt+DOWN or clicks the <graphic fileref="images/bandbox-1.png"/> button.</para>
+<code>box</code> is a special text box that embeds a customizable popup window (aka., a dropdown window). Like comboboxes, a <code>bandbox</code> consists of an input box and a popup window. The popup window is opened automatically, when users presses Alt+DOWN or clicks the <graphic fileref="images/bandbox-1.png">2
+			
+		</graphic> button.</para>
 <para>Unlike <code>comboboxes</code>, the popup window of a bandbox could be anything. It is designed to give developers the maximal flexibility. A typical use is to represent the popup window as a search dialog.</para>
 <programlisting>        &lt;bandboxid="bd"&gt;        <inlinegraphic fileref="images/bandbox-2.png" align="right"/>&#13;        &lt;bandpopup&gt;        &#13;                &lt;vbox&gt;                &#13;            &lt;hbox&gt;Search&lt;textbox/&gt;&lt;/hbox&gt;            &#13;            &lt;listboxwidth="200px"            &#13;            onSelect="bd.value=self.selectedItem.label;bd.closeDropdown();"&gt;            &#13;            &lt;listhead&gt;            &#13;                    &lt;listheaderlabel="Name"/&gt;                    &#13;                    &lt;listheaderlabel="Description"/&gt;                    &#13;            &lt;/listhead&gt;            &#13;            &lt;listitem&gt;            &#13;                    &lt;listcelllabel="John"/&gt;                    &#13;                    &lt;listcelllabel="CEO"/&gt;                    &#13;            &lt;/listitem&gt;            &#13;            &lt;listitem&gt;            &#13;                    &lt;listcelllabel="Joe"/&gt;                    &#13;                    &lt;listcelllabel="Engineer"/&gt;                    &#13;            &lt;/listitem&gt;            &#13;            &lt;listitem&gt;            &#13;                    &lt;listcelllabel="Mary"/&gt;                    &#13;                    &lt;listcelllabel="Supervisor"/&gt;                    &#13;            &lt;/listitem&gt;            &#13;        &lt;/listbox&gt;        &#13;        &lt;/vbox&gt;        &#13;        &lt;/bandpopup&gt;        &#13;    &lt;/bandbox&gt;    &#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -4608,7 +4620,9 @@
 <para/></sect3></sect2><sect2 id="Calendar"><title>Calendar</title>
 <para>A calendar displays a 'flat' calendar and allows user to select a day from it.</para>
 <para>
-<graphic fileref="images/calendar.png"/>
+<graphic fileref="images/calendar.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;hbox&gt;&#13;    &lt;calendar id="cal" onChange="in.value = cal.value"/&gt;    &#13;    &lt;datebox id="in" onChange="cal.value = in.value"/&gt;    &#13;&lt;/hbox&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -4808,7 +4822,9 @@
 <para/></sect2><sect2 id="Borderlayout"><title>Borderlayout</title>
 <para>The layout component is a nested component. The parent component is <code>borderlayout</code>, and its children components include north, south, center, west, and east. The combination of children components of <code>borderlayout</code> is free.</para>
 <para>
-<graphic fileref="images/layout.jpg"/>
+<graphic fileref="images/layout.jpg">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;borderlayout height="500px"&gt;&#13;    &lt;north size="50%" border="0"&gt;    &#13;        &lt;borderlayout&gt;        &#13;            &lt;west size="25%" border="none" flex="true"&gt;            &#13;                &lt;div style="background:#B8D335"&gt;                &#13;                    &lt;label value="25%"                    &#13;                        style="color:white;font-size:50px" /&gt;                        &#13;                &lt;/div&gt;                &#13;            &lt;/west&gt;            &#13;            &lt;center border="none" flex="true"&gt;            &#13;                &lt;div style="background:#E6D92C"&gt;                &#13;                    &lt;label value="25%"                    &#13;                        style="color:white;font-size:50px" /&gt;                        &#13;                &lt;/div&gt;                &#13;            &lt;/center&gt;            &#13;            &lt;east size="50%" border="none" flex="true"&gt;            &#13;                &lt;label value="Here is a non-border"                &#13;                    style="color:gray;font-size:30px" /&gt;                    &#13;            &lt;/east&gt;            &#13;        &lt;/borderlayout&gt;        &#13;    &lt;/north&gt;    &#13;    &lt;center border="0"&gt;    &#13;        &lt;borderlayout&gt;        &#13;            &lt;west size="30%" flex="true" border="0"&gt;            &#13;                &lt;div style="background:#E6D92C"&gt;                &#13;                    &lt;label value="30%"                    &#13;                        style="color:white;font-size:50px" /&gt;                        &#13;                &lt;/div&gt;                &#13;            &lt;/west&gt;            &#13;            &lt;center&gt;            &#13;                &lt;label value="Here is a border"                &#13;                    style="color:gray;font-size:30px" /&gt;                    &#13;            &lt;/center&gt;            &#13;            &lt;east size="30%" flex="true" border="0"&gt;            &#13;                &lt;div style="background:#B8D335"&gt;                &#13;                    &lt;label value="30%"                    &#13;                        style="color:white;font-size:50px" /&gt;                        &#13;                &lt;/div&gt;                &#13;            &lt;/east&gt;            &#13;        &lt;/borderlayout&gt;        &#13;    &lt;/center&gt;    &#13;&lt;/borderlayout&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -4971,7 +4987,9 @@
 <para>A box can lay out its children in one of two orientations, either horizontally or vertically. A horizontal box lines up its components horizontally and a vertical box orients its components vertically. You can think of a box as one row or one column from an HTML table.</para>
 <para/>
 <para>
-<graphic fileref="images/box.png"/>
+<graphic fileref="images/box.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;zk&gt;&#13;    &lt;box orient="vertical"&gt;    &#13;        &lt;button label="Button 1"/&gt;        &#13;        &lt;button label="Button 2"/&gt;        &#13;    &lt;/box&gt;    &#13;    &lt;box orient="horizontal"&gt;    &#13;        &lt;button label="Button 3"/&gt;        &#13;        &lt;button label="Button 4"/&gt;        &#13;    &lt;/box&gt;    &#13;&lt;/zk&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -5200,7 +5218,9 @@
 <para/></sect3></sect2><sect2 id="Button"><title>Button</title>
 <para>You could assign a <code>label</code> and an <code>image</code> to a button by the <code>label</code> and <code>image</code> properties. If both are specified, the <code>dir</code> property control which is displayed up front, and the <code>orient</code> property controls whether the layout is horizontal or vertical. </para>
 <para>
-<graphic fileref="images/button.jpg"/>
+<graphic fileref="images/button.jpg">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;button label="Left" image="/img/folder.gif" width="125px"/&gt;&#13;&lt;button label="Right" image="/img/folder.gif" dir="reverse" width="125px"/&gt;&#13;&lt;button label="Above" image="/img/folder.gif" orient="vertical" width="125px"/&gt;&#13;&lt;button label="Below" image="/img/folder.gif" orient="vertical" dir="reverse" width="125px"/&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -5552,7 +5572,9 @@
 <para/></sect3></sect2><sect2 id="Captcha"><title>Captcha</title>
 <para>A <code>captcha</code> component can generate a special distortion image, also called a CAPTCHA (Completely Automated Public Turing test to tell Computers and Humans Apart) image. Developers could set <code>height </code>and <code>width </code>for dimension of captcha. By default, captcha render the image with a randomly generated text, and developers can set <code>value </code>to assign a purposive text.</para>
 <para>
-<graphic fileref="images/captcha.png"/>
+<graphic fileref="images/captcha.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;vbox&gt;&#13;&lt;captcha id="cpa" length="5" width="200px" height="50px"/&gt;&#13;&lt;/vbox&gt;&#13;</programlisting>
 <para/><sect3><title>Class Name</title>
@@ -6029,7 +6051,9 @@
 <para>A header for a <code>Groupbox</code>. It may contain either a text label, using <code>LabelElement.setLabel(java.lang.String)</code>, or child elements for a more complex caption.</para>
 <para/>
 <para>
-<graphic fileref="images/caption.png"/>
+<graphic fileref="images/caption.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;zk&gt;&#13;&lt;window border="normal" width="350px"&gt;&#13;&lt;caption label="This is a caption"/&gt;&#13;        &lt;groupbox width="300px"&gt;        &#13;                 &lt;caption label="fruits"/&gt;                &#13;        &lt;radiogroup onCheck="fruit.value = self.selectedItem.label"&gt;        &#13;        &lt;radio label="Apple"/&gt;        &#13;    &lt;radio label="Orange"/&gt;    &#13;    &lt;radio label="Banana"/&gt;     &#13;        &lt;/radiogroup&gt;        &#13;        &lt;/groupbox&gt;        &#13;&lt;/window&gt;&#13;            &lt;/zk&gt;            &#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -6292,7 +6316,9 @@
 <para>This component is a center region. The default class of CSS is specified "layout-region-center".</para>
 <para/>
 <para>
-<graphic fileref="images/layout.jpg"/>
+<graphic fileref="images/layout.jpg">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;borderlayout height="500px"&gt;&#13;    &lt;north size="50%" border="0"&gt;    &#13;        &lt;borderlayout&gt;        &#13;            &lt;west size="25%" border="none" flex="true"&gt;            &#13;                &lt;div style="background:#B8D335"&gt;                &#13;                    &lt;label value="25%"                    &#13;                        style="color:white;font-size:50px" /&gt;                        &#13;                &lt;/div&gt;                &#13;            &lt;/west&gt;            &#13;            &lt;center border="none" flex="true"&gt;            &#13;                &lt;div style="background:#E6D92C"&gt;                &#13;                    &lt;label value="25%"                    &#13;                        style="color:white;font-size:50px" /&gt;                        &#13;                &lt;/div&gt;                &#13;            &lt;/center&gt;            &#13;            &lt;east size="50%" border="none" flex="true"&gt;            &#13;                &lt;label value="Here is a non-border"                &#13;                    style="color:gray;font-size:30px" /&gt;                    &#13;            &lt;/east&gt;            &#13;        &lt;/borderlayout&gt;        &#13;    &lt;/north&gt;    &#13;    &lt;center border="0"&gt;    &#13;        &lt;borderlayout&gt;        &#13;            &lt;west size="30%" flex="true" border="0"&gt;            &#13;                &lt;div style="background:#E6D92C"&gt;                &#13;                    &lt;label value="30%"                    &#13;                        style="color:white;font-size:50px" /&gt;                        &#13;                &lt;/div&gt;                &#13;            &lt;/west&gt;            &#13;            &lt;center&gt;            &#13;                &lt;label value="Here is a border"                &#13;                    style="color:gray;font-size:30px" /&gt;                    &#13;            &lt;/center&gt;            &#13;            &lt;east size="30%" flex="true" border="0"&gt;            &#13;                &lt;div style="background:#B8D335"&gt;                &#13;                    &lt;label value="30%"                    &#13;                        style="color:white;font-size:50px" /&gt;                        &#13;                &lt;/div&gt;                &#13;            &lt;/east&gt;            &#13;        &lt;/borderlayout&gt;        &#13;    &lt;/center&gt;    &#13;&lt;/borderlayout&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -6741,7 +6767,9 @@
 <code/>
 </para>
 <para>
-<graphic fileref="images/chart.png"/>
+<graphic fileref="images/chart.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;vbox&gt;&#13;&lt;chart id="mychart" title="Pie Chart Demo" width="500" height="250" type="pie" threeD="true" fgAlpha="128"/&gt;&#13;&lt;zscript&gt;&#13;PieModel model = new MyPieModel();&#13;mychart.setModel(model);&#13;&lt;/zscript&gt;&#13;&lt;/vbox&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -7412,7 +7440,9 @@
 <para/></sect3></sect2><sect2 id="Checkbox"><title>Checkbox</title>
 <para>A checkbox.</para>
 <para>
-<graphic fileref="images/checkbox.png"/>
+<graphic fileref="images/checkbox.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;window title="Checkbox demo" border="normal" width="350px"&gt;&#13;        &lt;checkbox id="apple" label="Apple" onCheck="doChecked()" /&gt;        &#13;        &lt;checkbox id="orange" label="Orange" onCheck="doChecked()" /&gt;        &#13;        &lt;checkbox id="banana" label="Banana" onCheck="doChecked()" /&gt;        &#13;        &lt;hbox&gt;You have selected :&lt;label id="fruit2"/&gt;&lt;/hbox&gt;        &#13;        &lt;zscript&gt;        &#13;            void doChecked() {            &#13;                fruit2.value = (apple.isChecked() ? apple.label+' ' : &amp;quot;&amp;quot;)                 &#13;                    + (orange.isChecked() ? orange.label+' ' : &amp;quot;&amp;quot;)                     &#13;                    + (banana.isChecked() ? banana.label+' ' : &amp;quot;&amp;quot;);                    &#13;            }            &#13;        &lt;/zscript&gt;        &#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -7746,7 +7776,9 @@
 <para/></sect3></sect2><sect2 id="Column"><title>Column</title>
 <para>A single <code>column</code> in a <code>Columns</code> element. Each child of the <code>Column</code> element is placed in each successive cell of the <code>grid</code>. The <code>column</code> with the most child elements determines the number of rows in each <code>column</code>. The use of column is mainly to define attributes for each cell in the <code>grid</code>. </para>
 <para>
-<graphic fileref="images/grid.png"/>
+<graphic fileref="images/grid.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;window title="Grid Demo" border="normal" width="360px"&gt;&#13;    &lt;zscript&gt;    &#13;    class Comp implements Comparator {    &#13;        private boolean _asc;        &#13;        public Comp(boolean asc) {        &#13;            _asc = asc;            &#13;        }        &#13;        public int compare(Object o1, Object o2) {        &#13;            String s1 = o1.getChildren().get(0).getValue(),            &#13;                s2 = o2.getChildren().get(0).getValue();                &#13;            int v = s1.compareTo(s2);            &#13;            return _asc ? v: -v;            &#13;        }        &#13;    }    &#13;    Comp asc = new Comp(true), dsc = new Comp(false);    &#13;    &lt;/zscript&gt;    &#13;    &lt;grid&gt;    &#13;        &lt;columns sizable="true"&gt;        &#13;            &lt;column label="Type" sortAscending="&amp;#36;{asc}" sortDescending="&amp;#36;{dsc}"/&gt;            &#13;            &lt;column label="Content"/&gt;            &#13;        &lt;/columns&gt;        &#13;        &lt;rows&gt;        &#13;            &lt;row&gt;            &#13;                &lt;label value="File:"/&gt;                &#13;                &lt;textbox width="99%"/&gt;                &#13;            &lt;/row&gt;            &#13;            &lt;row&gt;            &#13;                &lt;label value="Type:"/&gt;                &#13;                &lt;hbox&gt;                &#13;                    &lt;listbox rows="1" mold="select"&gt;                    &#13;                        &lt;listitem label="Java Files,(*.java)"/&gt;                        &#13;                        &lt;listitem label="All Files,(*.*)"/&gt;                        &#13;                    &lt;/listbox&gt;                    &#13;                    &lt;button label="Browse..."/&gt;                    &#13;                &lt;/hbox&gt;                &#13;            &lt;/row&gt;            &#13;            &lt;row&gt;            &#13;                &lt;label value="Options:"/&gt;                &#13;                &lt;textbox rows="3" width="99%"/&gt;                &#13;            &lt;/row&gt;            &#13;        &lt;/rows&gt;        &#13;    &lt;/grid&gt;    &#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -8116,7 +8148,9 @@
 <para/></sect3></sect2><sect2 id="Columnchildren"><title>Columnchildren</title>
 <para>Child of Columnchildren only can be Panel. </para>
 <para>
-<graphic fileref="images/ColumnLayout.PNG"/>
+<graphic fileref="images/ColumnLayout.PNG">2
+			
+		</graphic>
 </para>
 <para/>
 <programlisting>&lt;columnlayout&gt;&#13;    &lt;columnchildren width="30%" style="padding: 5px"&gt;    &#13;        &lt;panel height="100px" style="margin-bottom:10px"        &#13;            title="column1-1" border="normal" maximizable="true" collapsible="true"&gt;            &#13;            &lt;panelchildren&gt;Panel&lt;/panelchildren&gt;            &#13;        &lt;/panel&gt;        &#13;        &lt;panel height="100px" framable="true" title="column1-2"        &#13;            border="normal" maximizable="true" style="margin-bottom:10px"&gt;            &#13;            &lt;panelchildren&gt;Panel&lt;/panelchildren&gt;            &#13;        &lt;/panel&gt;        &#13;        &lt;panel height="100px" title="column1-3" border="normal" closable="true"&gt;        &#13;            &lt;panelchildren&gt;Panel&lt;/panelchildren&gt;            &#13;        &lt;/panel&gt;        &#13;    &lt;/columnchildren&gt;    &#13;    &lt;columnchildren width="40%" style="padding: 10px"&gt;    &#13;        &lt;panel title="Data" maximizable="true" border="normal" style="margin-bottom:10px"&gt;        &#13;            &lt;panelchildren&gt;            &#13;                &lt;grid fixedLayout="true" style="border:0px" height="100%"&gt;                &#13;                    &lt;columns&gt;                    &#13;                        &lt;column label="category" /&gt;                        &#13;                        &lt;column label="value" /&gt;                        &#13;                    &lt;/columns&gt;                    &#13;                    &lt;rows&gt;                    &#13;                        &lt;row&gt;                        &#13;                            &lt;label id="c0" value="C/C++" /&gt;                            &#13;                            &lt;decimalbox id="v0" value="21.2"                            &#13;                                constraint="no empty" onChange="update(0)" /&gt;                                &#13;                        &lt;/row&gt;                        &#13;                        &lt;row&gt;                        &#13;                            &lt;label id="c1" value="VB" /&gt;                            &#13;                            &lt;decimalbox id="v1" value="10.2"                            &#13;                                constraint="no empty" onChange="update(1)" /&gt;                                &#13;                        &lt;/row&gt;                        &#13;                        &lt;row&gt;                        &#13;                            &lt;label id="c2" value="Java" /&gt;                            &#13;                            &lt;decimalbox id="v2" value="40.4"                            &#13;                                constraint="no empty" onChange="update(2)" /&gt;                                &#13;                        &lt;/row&gt;                        &#13;                        &lt;row&gt;                        &#13;                            &lt;label id="c3" value="PHP" /&gt;                            &#13;                            &lt;decimalbox id="v3" value="28.2"                            &#13;                                constraint="no empty" onChange="update(3)" /&gt;                                &#13;                        &lt;/row&gt;                        &#13;                    &lt;/rows&gt;                    &#13;                &lt;/grid&gt;                &#13;            &lt;/panelchildren&gt;            &#13;        &lt;/panel&gt;        &#13;        &lt;panel border="normal"&gt;        &#13;            &lt;panelchildren&gt;            &#13;                &lt;checkbox label="3D Chart" checked="true"                &#13;                    onCheck="mychart.setThreeD(self.isChecked())" /&gt;                    &#13;                &lt;chart id="mychart" title="Pie Chart Demo" width="320px"                &#13;                    type="pie" threeD="true" fgAlpha="128"&gt;                    &#13;                    &lt;attribute name="onClick"&gt;                    &#13;                            String areaid = event.getArea();                             &#13;                            if (areaid!= null) {                             &#13;                            Area area = self.getFellow(areaid);                            &#13;                            alert(""+area.getAttribute("entity")+":"+area.getTooltiptext());                            &#13;                            }                            &#13;                        &lt;/attribute&gt;                        &#13;                    &lt;zscript&gt;                    &#13;                            void update(int rowIndex) {                             &#13;                            Label lb = (Label) self.getFellow("c"+rowIndex);                            &#13;                            Decimalbox db = (Decimalbox)self.getFellow("v"+rowIndex);                            &#13;                            model.setValue(lb.value, newDouble(db.getValue().doubleValue())); }                            &#13;                            PieModel model = new SimplePieModel();                            &#13;                            for(int j=0; j &amp;lt; 4; ++j) { update(j); }                            &#13;                            mychart.setModel(model);                            &#13;                        &lt;/zscript&gt;                        &#13;                &lt;/chart&gt;                &#13;            &lt;/panelchildren&gt;            &#13;        &lt;/panel&gt;        &#13;    &lt;/columnchildren&gt;    &#13;&lt;/columnlayout&gt;&#13;</programlisting><sect3><title>Class Name</title>
@@ -8219,7 +8253,9 @@
 <para/></sect3></sect2><sect2><title/></sect2><sect2><title>Columnlayout</title>
 <para>A columnlayout lays out a container which can have multiple columns, and each column may contain one or more panel.Use Columnlayout need assign width (either present or pixel) on every Columnchildren, or we cannot make sure about layout look. </para>
 <para>
-<graphic fileref="images/ColumnLayout.PNG"/>
+<graphic fileref="images/ColumnLayout.PNG">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;columnlayout&gt;&#13;    &lt;columnchildren width="30%" style="padding: 5px"&gt;    &#13;        &lt;panel height="100px" style="margin-bottom:10px"        &#13;            title="column1-1" border="normal" maximizable="true" collapsible="true"&gt;            &#13;            &lt;panelchildren&gt;Panel&lt;/panelchildren&gt;            &#13;        &lt;/panel&gt;        &#13;        &lt;panel height="100px" framable="true" title="column1-2"        &#13;            border="normal" maximizable="true" style="margin-bottom:10px"&gt;            &#13;            &lt;panelchildren&gt;Panel&lt;/panelchildren&gt;            &#13;        &lt;/panel&gt;        &#13;        &lt;panel height="100px" title="column1-3" border="normal" closable="true"&gt;        &#13;            &lt;panelchildren&gt;Panel&lt;/panelchildren&gt;            &#13;        &lt;/panel&gt;        &#13;    &lt;/columnchildren&gt;    &#13;    &lt;columnchildren width="40%" style="padding: 10px"&gt;    &#13;        &lt;panel title="Data" maximizable="true" border="normal" style="margin-bottom:10px"&gt;        &#13;            &lt;panelchildren&gt;            &#13;                &lt;grid fixedLayout="true" style="border:0px" height="100%"&gt;                &#13;                    &lt;columns&gt;                    &#13;                        &lt;column label="category" /&gt;                        &#13;                        &lt;column label="value" /&gt;                        &#13;                    &lt;/columns&gt;                    &#13;                    &lt;rows&gt;                    &#13;                        &lt;row&gt;                        &#13;                            &lt;label id="c0" value="C/C++" /&gt;                            &#13;                            &lt;decimalbox id="v0" value="21.2"                            &#13;                                constraint="no empty" onChange="update(0)" /&gt;                                &#13;                        &lt;/row&gt;                        &#13;                        &lt;row&gt;                        &#13;                            &lt;label id="c1" value="VB" /&gt;                            &#13;                            &lt;decimalbox id="v1" value="10.2"                            &#13;                                constraint="no empty" onChange="update(1)" /&gt;                                &#13;                        &lt;/row&gt;                        &#13;                        &lt;row&gt;                        &#13;                            &lt;label id="c2" value="Java" /&gt;                            &#13;                            &lt;decimalbox id="v2" value="40.4"                            &#13;                                constraint="no empty" onChange="update(2)" /&gt;                                &#13;                        &lt;/row&gt;                        &#13;                        &lt;row&gt;                        &#13;                            &lt;label id="c3" value="PHP" /&gt;                            &#13;                            &lt;decimalbox id="v3" value="28.2"                            &#13;                                constraint="no empty" onChange="update(3)" /&gt;                                &#13;                        &lt;/row&gt;                        &#13;                    &lt;/rows&gt;                    &#13;                &lt;/grid&gt;                &#13;            &lt;/panelchildren&gt;            &#13;        &lt;/panel&gt;        &#13;        &lt;panel border="normal"&gt;        &#13;            &lt;panelchildren&gt;            &#13;                &lt;checkbox label="3D Chart" checked="true"                &#13;                    onCheck="mychart.setThreeD(self.isChecked())" /&gt;                    &#13;                &lt;chart id="mychart" title="Pie Chart Demo" width="320px"                &#13;                    type="pie" threeD="true" fgAlpha="128"&gt;                    &#13;                    &lt;attribute name="onClick"&gt;                    &#13;                            String areaid = event.getArea();                             &#13;                            if (areaid!= null) {                             &#13;                            Area area = self.getFellow(areaid);                            &#13;                            alert(""+area.getAttribute("entity")+":"+area.getTooltiptext());                            &#13;                            }                            &#13;                        &lt;/attribute&gt;                        &#13;                    &lt;zscript&gt;                    &#13;                            void update(int rowIndex) {                             &#13;                            Label lb = (Label) self.getFellow("c"+rowIndex);                            &#13;                            Decimalbox db = (Decimalbox)self.getFellow("v"+rowIndex);                            &#13;                            model.setValue(lb.value, newDouble(db.getValue().doubleValue())); }                            &#13;                            PieModel model = new SimplePieModel();                            &#13;                            for(int j=0; j &amp;lt; 4; ++j) { update(j); }                            &#13;                            mychart.setModel(model);                            &#13;                        &lt;/zscript&gt;                        &#13;                &lt;/chart&gt;                &#13;            &lt;/panelchildren&gt;            &#13;        &lt;/panel&gt;        &#13;    &lt;/columnchildren&gt;    &#13;&lt;/columnlayout&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -8323,7 +8359,9 @@
 <para>Defines the <code>columns</code> of a <code>grid</code>. </para>
 <para>Each child of a <code>columns</code> element should be a <code>org.zkoss.zul.Column</code> element.</para>
 <para>
-<graphic fileref="images/grid.png"/>
+<graphic fileref="images/grid.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;window title="Grid Demo" border="normal" width="360px"&gt;&#13;    &lt;zscript&gt;    &#13;    class Comp implements Comparator {    &#13;        private boolean _asc;        &#13;        public Comp(boolean asc) {        &#13;            _asc = asc;            &#13;        }        &#13;        public int compare(Object o1, Object o2) {        &#13;            String s1 = o1.getChildren().get(0).getValue(),            &#13;                s2 = o2.getChildren().get(0).getValue();                &#13;            int v = s1.compareTo(s2);            &#13;            return _asc ? v: -v;            &#13;        }        &#13;    }    &#13;    Comp asc = new Comp(true), dsc = new Comp(false);    &#13;    &lt;/zscript&gt;    &#13;    &lt;grid&gt;    &#13;        &lt;columns sizable="true"&gt;        &#13;            &lt;column label="Type" sortAscending="&amp;#36;{asc}" sortDescending="&amp;#36;{dsc}"/&gt;            &#13;            &lt;column label="Content"/&gt;            &#13;        &lt;/columns&gt;        &#13;        &lt;rows&gt;        &#13;            &lt;row&gt;            &#13;                &lt;label value="File:"/&gt;                &#13;                &lt;textbox width="99%"/&gt;                &#13;            &lt;/row&gt;            &#13;            &lt;row&gt;            &#13;                &lt;label value="Type:"/&gt;                &#13;                &lt;hbox&gt;                &#13;                    &lt;listbox rows="1" mold="select"&gt;                    &#13;                        &lt;listitem label="Java Files,(*.java)"/&gt;                        &#13;                        &lt;listitem label="All Files,(*.*)"/&gt;                        &#13;                    &lt;/listbox&gt;                    &#13;                    &lt;button label="Browse..."/&gt;                    &#13;                &lt;/hbox&gt;                &#13;            &lt;/row&gt;            &#13;            &lt;row&gt;            &#13;                &lt;label value="Options:"/&gt;                &#13;                &lt;textbox rows="3" width="99%"/&gt;                &#13;            &lt;/row&gt;            &#13;        &lt;/rows&gt;        &#13;    &lt;/grid&gt;    &#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -8470,7 +8508,9 @@
 <para>Components: <code>combobox</code> and <code>comboitem</code>.</para>
 <para>A <code>combobox</code> is a special text box that embeds a drop-down list. With <code>comboboxes</code>, users are allowed to select from a drop-down list, in addition to entering the text manually. </para>
 <para>
-<graphic fileref="images/combobox.png"/>
+<graphic fileref="images/combobox.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;combobox&gt;&#13;    &lt;comboitem label="Simple and Rich"/&gt;    &#13;    &lt;comboitem label="Cool!"/&gt;    &#13;    &lt;comboitem label="Ajax and RIA"/&gt;    &#13;&lt;/combobox&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -9048,7 +9088,9 @@
 <para/></sect3></sect2><sect2 id="Comboitem"><title>Comboitem</title>
 <para>An item of a combo box.</para>
 <para>
-<graphic fileref="images/combobox.png"/>
+<graphic fileref="images/combobox.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;combobox&gt;&#13;    &lt;comboitem label="Simple and Rich"/&gt;    &#13;    &lt;comboitem label="Cool!"/&gt;    &#13;    &lt;comboitem label="Ajax and RIA"/&gt;    &#13;&lt;/combobox&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -9223,7 +9265,9 @@
 <para>• ENTER to activate the selection by copying the selected day to the <code>datebox</code> control.</para>
 <para>• Alt+UP or ESC to give up the selection and close the <code>calendar</code>.</para>
 <para>
-<graphic fileref="images/datebox.png"/>
+<graphic fileref="images/datebox.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;datebox lenient="true" image="newButton.jpg" buttonVisible="false" /&gt;&#13;&lt;datebox lenient="false" compact="false" buttonVisible="true" /&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -9680,7 +9724,9 @@
 <para>multiple detail rows are on the same row. </para>
 <para/>
 <para>
-<graphic fileref="images/detail.png"/>
+<graphic fileref="images/detail.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&#13;&lt;zk&gt;&#13;    Please open/close the +/- button, and the layout of this page shows properly.    &#13;    &lt;grid fixedLayout="true" width="600px"&gt;    &#13;        &lt;columns&gt;        &#13;            &lt;column width="25px" /&gt;            &#13;            &lt;column&gt;Product Name&lt;/column&gt;            &#13;            &lt;column&gt;Price&lt;/column&gt;            &#13;            &lt;column&gt;Item location&lt;/column&gt;            &#13;        &lt;/columns&gt;        &#13;        &lt;rows&gt;        &#13;            &lt;row&gt;            &#13;                &lt;detail&gt;                &#13;                                            &lt;hbox&gt;                                            &#13;                        &lt;image width="200px" height="200px" src="/img/icon_update.png"/&gt;                        &#13;                        &lt;vbox&gt;                        &#13;                            &lt;label value="Item Specifics - Item Condition"                            &#13;                                style="font-weight:bold;font-style: italic;" /&gt;                                &#13;                        &lt;hbox&gt;                        &#13;                            &lt;label value="Condition:" /&gt;                            &#13;                            &lt;label value="Used"                            &#13;                                style="font-weight:bold;" /&gt;                                &#13;                        &lt;/hbox&gt;                        &#13;                        &lt;hbox&gt;                        &#13;                            &lt;label value="Brand:" /&gt;                            &#13;                            &lt;label value="Apple"                            &#13;                                style="font-weight:bold;" /&gt;                                &#13;                        &lt;/hbox&gt;                        &#13;                        &lt;hbox&gt;                        &#13;                            &lt;label value="Technology:" /&gt;                            &#13;                            &lt;label value="DVI"                            &#13;                                style="font-weight:bold;" /&gt;                                &#13;                        &lt;/hbox&gt;                        &#13;                        &lt;hbox&gt;                        &#13;                            &lt;label value="Monitor Type:" /&gt;                            &#13;                            &lt;label value="LCD/Flat Panel"                            &#13;                                style="font-weight:bold;" /&gt;                                &#13;                        &lt;/hbox&gt;                        &#13;                        &lt;/vbox&gt;                        &#13;                    &lt;/hbox&gt;                    &#13;                &lt;/detail&gt;                &#13;                &lt;label value="Apple 20-inch Aluminum Cinema Display M9177/A" /&gt;                &#13;                &lt;label style="color:green;float:right;" value="US $202.50" /&gt;                &#13;                &lt;label value="tulsa, ok, United States" /&gt;                &#13;            &lt;/row&gt;            &#13;        &lt;/rows&gt;        &#13;    &lt;/grid&gt;    &#13;&lt;/zk&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -9830,7 +9876,9 @@
 <para/></sect3></sect2><sect2 id="Doublebox"><title>Doublebox</title>
 <para>An edit box for holding an float point value (double).</para>
 <para>
-<graphic fileref="images/doublebox.png"/>
+<graphic fileref="images/doublebox.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;doublebox value="2.3"/&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -10168,7 +10216,9 @@
 <para>The same as <code>HTML DIV </code>tag.</para>
 <para>An extension. It has the same effect as<code> &lt;h:div xmlns:h="http://www.w3.org/1999/xhtml"&gt;</code>. Note: a Window without title and caption has the same visual effect as <code>Div</code>, but <code>Div</code> doesn't implement <code>IdSpace</code>. In other words, <code>Div</code> won't affect the uniqueness of identifiers. </para>
 <para>
-<graphic fileref="images/Div.png"/>
+<graphic fileref="images/Div.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;div align="left" width="300px"&gt;&#13;    &lt;doublebox /&gt;    &#13;&lt;/div&gt;&#13;&lt;div align="right" width="300px"&gt;&#13;    &lt;doublebox /&gt;    &#13;&lt;/div&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -10295,7 +10345,9 @@
 <para>This component is a east region. The default class of CSS is specified "layout-region-east".</para>
 <para/>
 <para>
-<graphic fileref="images/layout.jpg"/>
+<graphic fileref="images/layout.jpg">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;borderlayout height="500px"&gt;&#13;    &lt;north size="50%" border="0"&gt;    &#13;        &lt;borderlayout&gt;        &#13;            &lt;west size="25%" border="none" flex="true"&gt;            &#13;                &lt;div style="background:#B8D335"&gt;                &#13;                    &lt;label value="25%"                    &#13;                        style="color:white;font-size:50px" /&gt;                        &#13;                &lt;/div&gt;                &#13;            &lt;/west&gt;            &#13;            &lt;center border="none" flex="true"&gt;            &#13;                &lt;div style="background:#E6D92C"&gt;                &#13;                    &lt;label value="25%"                    &#13;                        style="color:white;font-size:50px" /&gt;                        &#13;                &lt;/div&gt;                &#13;            &lt;/center&gt;            &#13;            &lt;east size="50%" border="none" flex="true"&gt;            &#13;                &lt;label value="Here is a non-border"                &#13;                    style="color:gray;font-size:30px" /&gt;                    &#13;            &lt;/east&gt;            &#13;        &lt;/borderlayout&gt;        &#13;    &lt;/north&gt;    &#13;    &lt;center border="0"&gt;    &#13;        &lt;borderlayout&gt;        &#13;            &lt;west size="30%" flex="true" border="0"&gt;            &#13;                &lt;div style="background:#E6D92C"&gt;                &#13;                    &lt;label value="30%"                    &#13;                        style="color:white;font-size:50px" /&gt;                        &#13;                &lt;/div&gt;                &#13;            &lt;/west&gt;            &#13;            &lt;center&gt;            &#13;                &lt;label value="Here is a border"                &#13;                    style="color:gray;font-size:30px" /&gt;                    &#13;            &lt;/center&gt;            &#13;            &lt;east size="30%" flex="true" border="0"&gt;            &#13;                &lt;div style="background:#B8D335"&gt;                &#13;                    &lt;label value="30%"                    &#13;                        style="color:white;font-size:50px" /&gt;                        &#13;                &lt;/div&gt;                &#13;            &lt;/east&gt;            &#13;        &lt;/borderlayout&gt;        &#13;    &lt;/center&gt;    &#13;&lt;/borderlayout&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -10453,7 +10505,9 @@
 <para>A fisheye bar is a bar of fisheye that is a menu similar to the fish eye menu on the Mac OS.</para>
 <para/>
 <para>
-<graphic fileref="images/fisheyebar.PNG"/>
+<graphic fileref="images/fisheyebar.PNG">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;window&gt;&#13;        Click "Change orient" button and move cursor over the fisheyebar before it changes.        &#13;    &lt;separator/&gt;    &#13;    Fisheyebar will be out of expected.(That is wrong)    &#13;    &lt;fisheyebar id="fish" style="position: absolute; top: 50px;    &#13;        left:100px;margin:20px;" attachEdge="top"&gt;        &#13;        &lt;fisheye image="/img/icon_browser.png" label="Web Browser"        &#13;            onClick="alert(self.label)" /&gt;            &#13;        &lt;fisheye image="/img/icon_calendar.png" label="Calendar"        &#13;            onClick="alert(self.label)" /&gt;            &#13;        &lt;fisheye image="/img/icon_email.png" label="Email"        &#13;            onClick="alert(self.label)" /&gt;            &#13;        &lt;fisheye image="/img/icon_texteditor.png" label="Text Editor"        &#13;            onClick="alert(self.label)" /&gt;            &#13;        &lt;fisheye image="/img/icon_update.png" label="Software Update"        &#13;            onClick="alert(self.label)" /&gt;            &#13;        &lt;fisheye image="/img/icon_users.png" label="Users"        &#13;            onClick="alert(self.label)" /&gt;            &#13;    &lt;/fisheyebar&gt;    &#13;    &lt;button label="Change orient"&gt;    &#13;        &lt;attribute name="onClick"&gt;        &#13;            if (fish.orient.equals("horizontal")) {            &#13;                fish.orient = "vertical";                &#13;            } else {            &#13;                fish.orient = "horizontal";                &#13;            }            &#13;        &lt;/attribute&gt;        &#13;    &lt;/button&gt;    &#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -10616,7 +10670,9 @@
 <para>A fisheye item.</para>
 <para/>
 <para>
-<graphic fileref="images/fisheyebar.PNG"/>
+<graphic fileref="images/fisheyebar.PNG">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;window&gt;&#13;        Click "Change orient" button and move cursor over the fisheyebar before it changes.        &#13;    &lt;separator/&gt;    &#13;    Fisheyebar will be out of expected.(That is wrong)    &#13;    &lt;fisheyebar id="fish" style="position: absolute; top: 50px;    &#13;        left:100px;margin:20px;" attachEdge="top"&gt;        &#13;        &lt;fisheye image="/img/icon_browser.png" label="Web Browser"        &#13;            onClick="alert(self.label)" /&gt;            &#13;        &lt;fisheye image="/img/icon_calendar.png" label="Calendar"        &#13;            onClick="alert(self.label)" /&gt;            &#13;        &lt;fisheye image="/img/icon_email.png" label="Email"        &#13;            onClick="alert(self.label)" /&gt;            &#13;        &lt;fisheye image="/img/icon_texteditor.png" label="Text Editor"        &#13;            onClick="alert(self.label)" /&gt;            &#13;        &lt;fisheye image="/img/icon_update.png" label="Software Update"        &#13;            onClick="alert(self.label)" /&gt;            &#13;        &lt;fisheye image="/img/icon_users.png" label="Users"        &#13;            onClick="alert(self.label)" /&gt;            &#13;    &lt;/fisheyebar&gt;    &#13;    &lt;button label="Change orient"&gt;    &#13;        &lt;attribute name="onClick"&gt;        &#13;            if (fish.orient.equals("horizontal")) {            &#13;                fish.orient = "vertical";                &#13;            } else {            &#13;                fish.orient = "horizontal";                &#13;            }            &#13;        &lt;/attribute&gt;        &#13;    &lt;/button&gt;    &#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -10752,7 +10808,9 @@
 <para/></sect3></sect2><sect2 id="Flash"><title>Flash</title>
 <para>A generic flash component.</para>
 <para>
-<graphic fileref="images/flash.png"/>
+<graphic fileref="images/flash.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;flash src="SWF/cc.milestones.121503.swf" height="320" width="620"&gt;&lt;/flash&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -10928,7 +10986,9 @@
 <para>A column of the footer of a grid (<code>Grid</code>). Its parent must be <code>Foot</code>.</para>
 <para>Unlike <code>Column</code>, you could place any child in a grid footer. </para>
 <para>
-<graphic fileref="images/grid-2.png"/>
+<graphic fileref="images/grid-2.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;grid&gt;&#13;    &lt;columns&gt;    &#13;        &lt;column label="Type"/&gt;        &#13;        &lt;column label="Content"/&gt;        &#13;    &lt;/columns&gt;    &#13;    &lt;rows&gt;    &#13;        &lt;row&gt;        &#13;            &lt;label value="File:"/&gt;            &#13;            &lt;textbox width="99%"/&gt;            &#13;        &lt;/row&gt;        &#13;        &lt;row&gt;        &#13;            &lt;label value="Type:"/&gt;            &#13;            &lt;hbox&gt;            &#13;                &lt;listbox rows="1" mold="select"&gt;                &#13;                    &lt;listitem label="Java Files,(*.java)"/&gt;                    &#13;                    &lt;listitem label="All Files,(*.*)"/&gt;                    &#13;                &lt;/listbox&gt;                &#13;                &lt;button label="Browse..."/&gt;                &#13;            &lt;/hbox&gt;            &#13;        &lt;/row&gt;        &#13;    &lt;/rows&gt;    &#13;    &lt;foot&gt;    &#13;        &lt;footer&gt;footer1&lt;/footer&gt;        &#13;        &lt;footer&gt;footer2&lt;/footer&gt;        &#13;    &lt;foot&gt;    &#13;&lt;/grid&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -11114,7 +11174,9 @@
 <para/></sect3></sect2><sect2 id="Foot"><title>Foot</title>
 <para>Defines a set of footers (Footer) for a grid (Grid).</para>
 <para>
-<graphic fileref="images/grid-2.png"/>
+<graphic fileref="images/grid-2.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;grid&gt;&#13;    &lt;columns&gt;    &#13;        &lt;column label="Type"/&gt;        &#13;        &lt;column label="Content"/&gt;        &#13;    &lt;/columns&gt;    &#13;    &lt;rows&gt;    &#13;        &lt;row&gt;        &#13;            &lt;label value="File:"/&gt;            &#13;            &lt;textbox width="99%"/&gt;            &#13;        &lt;/row&gt;        &#13;        &lt;row&gt;        &#13;            &lt;label value="Type:"/&gt;            &#13;            &lt;hbox&gt;            &#13;                &lt;listbox rows="1" mold="select"&gt;                &#13;                    &lt;listitem label="Java Files,(*.java)"/&gt;                    &#13;                    &lt;listitem label="All Files,(*.*)"/&gt;                    &#13;                &lt;/listbox&gt;                &#13;                &lt;button label="Browse..."/&gt;                &#13;            &lt;/hbox&gt;            &#13;        &lt;/row&gt;        &#13;    &lt;/rows&gt;    &#13;    &lt;foot&gt;    &#13;        &lt;footer&gt;footer1&lt;/footer&gt;        &#13;        &lt;footer&gt;footer2&lt;/footer&gt;        &#13;    &lt;foot&gt;    &#13;&lt;/grid&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -11259,7 +11321,9 @@
 </para>
 <para>A <code>grid</code> contains components that are aligned in rows like tables. Inside a <code>grid</code>, you declare two things, the <code>columns</code>, that define the header and <code>column</code> attributes, and the <code>rows</code>, that provide the content. To declare a set of rows, use the <code>rows</code> component, which should be a child element of <code>grid</code>. Inside that you should add <code>row</code> components, which are used for each <code>row</code>. Inside the <code>row</code> element, you should place the content that you want inside that <code>row</code>. Each child is a <code>column</code> of the specific <code>row</code>. Similarly, the <code>columns</code> are declared with the <code>columns</code> component, which should be placed as a child element of the <code>grid</code>. Unlike <code>row</code> is used to hold the content of each <code>row</code>, <code>column</code> declares the common attributes of each <code>column</code>, such as the width and alignment, and and optional headers, i.e., label and/or image. </para>
 <para>
-<graphic fileref="images/grid.png"/>
+<graphic fileref="images/grid.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;window title="Grid Demo" border="normal" width="360px"&gt;&#13;    &lt;zscript&gt;    &#13;    class Comp implements Comparator {    &#13;        private boolean _asc;        &#13;        public Comp(boolean asc) {        &#13;            _asc = asc;            &#13;        }        &#13;        public int compare(Object o1, Object o2) {        &#13;            String s1 = o1.getChildren().get(0).getValue(),            &#13;                s2 = o2.getChildren().get(0).getValue();                &#13;            int v = s1.compareTo(s2);            &#13;            return _asc ? v: -v;            &#13;        }        &#13;    }    &#13;    Comp asc = new Comp(true), dsc = new Comp(false);    &#13;    &lt;/zscript&gt;    &#13;    &lt;grid&gt;    &#13;        &lt;columns sizable="true"&gt;        &#13;            &lt;column label="Type" sortAscending="&amp;#36;{asc}" sortDescending="&amp;#36;{dsc}"/&gt;            &#13;            &lt;column label="Content"/&gt;            &#13;        &lt;/columns&gt;        &#13;        &lt;rows&gt;        &#13;            &lt;row&gt;            &#13;                &lt;label value="File:"/&gt;                &#13;                &lt;textbox width="99%"/&gt;                &#13;            &lt;/row&gt;            &#13;            &lt;row&gt;            &#13;                &lt;label value="Type:"/&gt;                &#13;                &lt;hbox&gt;                &#13;                    &lt;listbox rows="1" mold="select"&gt;                    &#13;                        &lt;listitem label="Java Files,(*.java)"/&gt;                        &#13;                        &lt;listitem label="All Files,(*.*)"/&gt;                        &#13;                    &lt;/listbox&gt;                    &#13;                    &lt;button label="Browse..."/&gt;                    &#13;                &lt;/hbox&gt;                &#13;            &lt;/row&gt;            &#13;            &lt;row&gt;            &#13;                &lt;label value="Options:"/&gt;                &#13;                &lt;textbox rows="3" width="99%"/&gt;                &#13;            &lt;/row&gt;            &#13;        &lt;/rows&gt;        &#13;    &lt;/grid&gt;    &#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -11771,7 +11835,9 @@
 <para>Adds the ability for single level grouping to the Grid.</para>
 <para>Default getSclass(): the same as grid's sclass. </para>
 <para>
-<graphic fileref="images/Groupfoot.PNG"/>
+<graphic fileref="images/Groupfoot.PNG">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&#13;&lt;zk&gt;&#13;    Grid support Groupfoot in Group    &#13;&#13;    &lt;grid id="grid"&gt;    &#13;        &lt;columns id="h" sizable="true"&gt;        &#13;            &lt;column id="col1" label="Type"/&gt;            &#13;            &lt;column id="col2" label="Content"/&gt;            &#13;        &lt;/columns&gt;        &#13;        &lt;rows id="rows"&gt;        &#13;            &lt;group id="gp1"&gt;            &#13;            &lt;label value="Group1: (gp1)"/&gt;            &#13;            &lt;label value="Group1:"/&gt;            &#13;            &lt;/group&gt;            &#13;            &lt;row&gt;            &#13;                &lt;label value="File:"/&gt;                &#13;                &lt;label value="File:"/&gt;                &#13;            &lt;/row&gt;            &#13;            &lt;row id="row1"&gt;            &#13;                &lt;label value="Type:"/&gt;                &#13;                &lt;hbox&gt;                &#13;                    &lt;listbox rows="1" mold="select"&gt;                    &#13;                        &lt;listitem label="Java Files,(*.java)"/&gt;                        &#13;                        &lt;listitem label="All Files,(*.*)"/&gt;                        &#13;                    &lt;/listbox&gt;                    &#13;                    &lt;button label="Browse..."/&gt;                    &#13;                &lt;/hbox&gt;                &#13;            &lt;/row&gt;            &#13;            &lt;groupfoot&gt;            &#13;                &lt;label value="2 Java Files"/&gt;                &#13;                &lt;label value="10 Files"/&gt;                &#13;            &lt;/groupfoot&gt;            &#13;            &lt;group id="gp2" label="Group 2 (gp2)" onOpen='alert("Group is open: "+self.open);'/&gt;            &#13;            &lt;row&gt;            &#13;                &lt;label value="Options:"/&gt;                &#13;                &lt;label value="Options:"/&gt;                &#13;            &lt;/row&gt;            &#13;                &lt;groupfoot&gt;                &#13;                &lt;label value="2 Options"/&gt;                &#13;                &lt;label value="10 Options"/&gt;                &#13;            &lt;/groupfoot&gt;            &#13;        &lt;/rows&gt;        &#13;    &lt;/grid&gt;    &#13;&lt;/zk&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -12091,7 +12157,9 @@
 <para>Components: <code>groupbox</code>.</para>
 <para>A group box is used to group components together. A border is typically drawn around the components to show that they are related. The label across the top of the group box can be created by using the <code>caption</code> component. It works much like the HTML legend element. Unlike windows, a group box is not an owner of the ID space. It cannot be overlapped or popup.</para>
 <para>
-<graphic fileref="images/groupbox.png"/>
+<graphic fileref="images/groupbox.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;groupbox width="250px"&gt;&#13;    &lt;caption label="Fruits"/&gt;    &#13;    &lt;radiogroup&gt;    &#13;        &lt;radio label="Apple"/&gt;        &#13;        &lt;radio label="Orange"/&gt;        &#13;        &lt;radio label="Banana"/&gt;        &#13;    &lt;/radiogroup&gt;    &#13;&lt;/groupbox&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -12424,7 +12492,9 @@
 <para>Adds the ability for single level grouping to the Grid.</para>
 <para>Default getSclass(): the same as grid's sclass. </para>
 <para>
-<graphic fileref="images/Groupfoot.PNG"/>
+<graphic fileref="images/Groupfoot.PNG">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&#13;&lt;zk&gt;&#13;    Grid support Groupfoot in Group    &#13;&#13;    &lt;grid id="grid"&gt;    &#13;        &lt;columns id="h" sizable="true"&gt;        &#13;            &lt;column id="col1" label="Type"/&gt;            &#13;            &lt;column id="col2" label="Content"/&gt;            &#13;        &lt;/columns&gt;        &#13;        &lt;rows id="rows"&gt;        &#13;            &lt;group id="gp1"&gt;            &#13;            &lt;label value="Group1: (gp1)"/&gt;            &#13;            &lt;label value="Group1:"/&gt;            &#13;            &lt;/group&gt;            &#13;            &lt;row&gt;            &#13;                &lt;label value="File:"/&gt;                &#13;                &lt;label value="File:"/&gt;                &#13;            &lt;/row&gt;            &#13;            &lt;row id="row1"&gt;            &#13;                &lt;label value="Type:"/&gt;                &#13;                &lt;hbox&gt;                &#13;                    &lt;listbox rows="1" mold="select"&gt;                    &#13;                        &lt;listitem label="Java Files,(*.java)"/&gt;                        &#13;                        &lt;listitem label="All Files,(*.*)"/&gt;                        &#13;                    &lt;/listbox&gt;                    &#13;                    &lt;button label="Browse..."/&gt;                    &#13;                &lt;/hbox&gt;                &#13;            &lt;/row&gt;            &#13;            &lt;groupfoot&gt;            &#13;                &lt;label value="2 Java Files"/&gt;                &#13;                &lt;label value="10 Files"/&gt;                &#13;            &lt;/groupfoot&gt;            &#13;            &lt;group id="gp2" label="Group 2 (gp2)" onOpen='alert("Group is open: "+self.open);'/&gt;            &#13;            &lt;row&gt;            &#13;                &lt;label value="Options:"/&gt;                &#13;                &lt;label value="Options:"/&gt;                &#13;            &lt;/row&gt;            &#13;                &lt;groupfoot&gt;                &#13;                &lt;label value="2 Options"/&gt;                &#13;                &lt;label value="10 Options"/&gt;                &#13;            &lt;/groupfoot&gt;            &#13;        &lt;/rows&gt;        &#13;    &lt;/grid&gt;    &#13;&lt;/zk&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -12744,7 +12814,9 @@
 <para>The <code>hbox</code> component is used to create a horizontally oriented box. Each component placed in the hbox will be placed horizontally in a row.</para>
 <para/>
 <para>
-<graphic fileref="images/box.png"/>
+<graphic fileref="images/box.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;zk&gt;&#13;    &lt;vbox&gt;    &#13;        &lt;button label="Button 1"/&gt;        &#13;        &lt;button label="Button 2"/&gt;        &#13;    &lt;/vbox&gt;    &#13;    &lt;hbox&gt;    &#13;        &lt;button label="Button 3"/&gt;        &#13;        &lt;button label="Button 4"/&gt;        &#13;    &lt;/hbox&gt;    &#13;&lt;/zk&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -12794,7 +12866,9 @@
 <para/></sect3></sect2><sect2 id="Html"><title>Html</title>
 <para>The simplest way is to use a XUL component called <code>html</code> to embed whatever HTML tags you want to send directly to the browser. To avoid ZK from interpreting the HTML tags, you usually enclose them with <code>&lt;![CDATA[</code> and <code>]]&gt;</code>. In other words, they are not the child component. Rather, they are stored in the <code>content</code> property. Notice you can use EL expressions in it.</para>
 <para>
-<graphic fileref="images/Html.png"/>
+<graphic fileref="images/Html.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;window id="win" title="Html Demo"&gt;&#13;&lt;html&gt;&lt;![CDATA[&#13;&lt;h4&gt;Hi, ${win.title}&lt;/h4&gt;&#13;&lt;p&gt;It is the content of the html component.&lt;/p&gt;&#13;]]&gt;&lt;/html&gt;&#13;&lt;/window&gt;&#13;</programlisting>
 <para>where <code>&lt;h4&gt;...&lt;/p&gt;</code> will become the content of the <code>html</code> element (see also the <code>getContent</code> method of the <code>org.zkoss.zul.Html</code> class).</para>
@@ -12937,7 +13011,9 @@
 <para>it is loaded as a separate page, the format of the content could be different from HTML. For</para>
 <para>example, you could embed an PDF file.</para>
 <para>
-<graphic fileref="images/iframe.png"/>
+<graphic fileref="images/iframe.png">2
+			
+		</graphic>
 </para>
 <para/>
 <programlisting>&lt;window id="win" title="This is an Iframe Demo!"&gt;&#13;&lt;iframe style="width:99%; height:400px;border:3px inset;" &#13;src="/zk-devguide.pdf" /&gt;&#13;&lt;/window&gt;&#13;</programlisting>
@@ -13236,7 +13312,9 @@
 <para>of the image displayed from the following statement.</para>
 <programlisting>&lt;imagemap src="/img/sun.jpg" onClick="alert(event.x + &amp;quot;, &amp;quot; +event.y)"/&gt;&#13;</programlisting>
 <para>
-<graphic fileref="images/imagemap.png"/>Then, the user gets the result as depicted below.</para><sect3><title>Class Name</title>
+<graphic fileref="images/imagemap.png">2
+			
+		</graphic>Then, the user gets the result as depicted below.</para><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zul.Imagemap</code>
 </para></sect3><sect3><title>Supported Child Components</title>
@@ -13565,9 +13643,13 @@
 <para/></sect3></sect2><sect2 id="Intbox"><title>Intbox</title>
 <para>A <code>intbox</code> is used to let users input integer data.</para>
 <para>
-<graphic fileref="images/intbox.png"/>While input invalid data:</para>
+<graphic fileref="images/intbox.png">2
+			
+		</graphic>While input invalid data:</para>
 <para>
-<graphic fileref="images/intbox2.png"/>
+<graphic fileref="images/intbox2.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;window title="Intbox Demo" border="normal" width="200px"&gt;&#13;    int box:&lt;intbox/&gt;    &#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -13799,7 +13881,9 @@
 <para/></sect3></sect2><sect2 id="Label"><title>Label</title>
 <para>A label component represents a piece of text.</para>
 <para>
-<graphic fileref="images/label.png"/>
+<graphic fileref="images/label.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;window title="Label Demo" &gt;&#13;&lt;grid&gt;&#13;&lt;rows&gt;&#13;&lt;row&gt;Label(normal): &lt;label id="lb1"/&gt;&lt;/row&gt;&#13;&lt;row&gt;Label(color): &lt;label id="lb2" style="color:red"/&gt;&lt;/row&gt;&#13;&lt;row&gt;Label(font): &lt;label id="lb3" style="font-weight:bold"/&gt;&lt;/row&gt;&#13;&lt;row&gt;Label(size): &lt;label id="lb4" style="font-size:14pt"/&gt;&lt;/row&gt;&#13;&lt;row&gt;Label(maxlength): &lt;label id="lb5" maxlength="5"/&gt;&lt;/row&gt;&#13;&lt;row&gt;Label(pre): &lt;label id="lb6" pre="true"/&gt;&lt;/row&gt;&#13;&lt;row&gt;input:&#13;&lt;textbox id="txt" rows="2"&gt;&lt;attribute name="onChange"&gt;&#13;lb1.value=self.value;&#13;lb2.value=self.value;&#13;lb3.value=self.value;&#13;lb4.value=self.value;&#13;lb5.value=self.value;&#13;lb6.value=self.value;&#13;&lt;/attribute&gt;&lt;/textbox&gt;&#13;&lt;/row&gt;&#13;&lt;/rows&gt;&#13;&lt;/grid&gt;&#13;&lt;/window&gt;&#13;</programlisting>
 <para/>
@@ -13940,7 +14024,9 @@
 <para>Components: <code>listbox, listitem, listcell, listhead</code> and <code>listheader</code>.</para>
 <para>A list box is used to display a number of items in a list. The user may select an item from the list.</para>
 <para>
-<graphic fileref="images/listbox.png"/>
+<graphic fileref="images/listbox.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;window title="listbox demo" border="normal"&gt;&#13;        &lt;listbox id="box" width="250px"&gt;        &#13;            &lt;listhead sizable="true"&gt;            &#13;                &lt;listheader label="name" sort="auto"/&gt;                &#13;                &lt;listheader label="gender" sort="auto"/&gt;                &#13;            &lt;/listhead&gt;            &#13;            &lt;listitem&gt;            &#13;                &lt;listcell label="Mary"/&gt;                &#13;                &lt;listcell label="FEMALE"/&gt;                &#13;            &lt;/listitem&gt;            &#13;            &lt;listitem&gt;            &#13;                &lt;listcell label="John"/&gt;                &#13;                &lt;listcell label="MALE"/&gt;                &#13;            &lt;/listitem&gt;            &#13;            &lt;listitem&gt;            &#13;                &lt;listcell label="Jane"/&gt;                &#13;                &lt;listcell label="FEMALE"/&gt;                &#13;            &lt;/listitem&gt;            &#13;            &lt;listitem&gt;            &#13;                &lt;listcell label="Henry"/&gt;                &#13;                &lt;listcell label="MALE"/&gt;                &#13;            &lt;/listitem&gt;            &#13;            &lt;listfoot &gt;            &#13;                &lt;listfooter&gt;&lt;label value="This is footer1"/&gt;&lt;/listfooter&gt;                &#13;                &lt;listfooter&gt;&lt;label value="This is footer2"/&gt;&lt;/listfooter&gt;                &#13;            &lt;/listfoot&gt;            &#13;                &lt;/listbox&gt;                &#13;&lt;/window&gt;&#13;</programlisting>
 <para>Listbox has two molds: <code>default</code> and <code>select</code>. If the select mold is used, the HTML's SELECT tag is generated instead.</para><sect3><title/></sect3><sect3><title>Class Name</title>
@@ -14559,7 +14645,9 @@
 <para/></sect3></sect2><sect2 id="Listcell"><title>Listcell</title>
 <para>A list cell. </para>
 <para>
-<graphic fileref="images/listbox.png"/>
+<graphic fileref="images/listbox.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;window title="listbox demo" border="normal"&gt;&#13;        &lt;listbox id="box" width="250px"&gt;        &#13;            &lt;listhead sizable="true"&gt;            &#13;                &lt;listheader label="name" sort="auto"/&gt;                &#13;                &lt;listheader label="gender" sort="auto"/&gt;                &#13;            &lt;/listhead&gt;            &#13;            &lt;listitem&gt;            &#13;                &lt;listcell label="Mary"/&gt;                &#13;                &lt;listcell label="FEMALE"/&gt;                &#13;            &lt;/listitem&gt;            &#13;            &lt;listitem&gt;            &#13;                &lt;listcell label="John"/&gt;                &#13;                &lt;listcell label="MALE"/&gt;                &#13;            &lt;/listitem&gt;            &#13;            &lt;listitem&gt;            &#13;                &lt;listcell label="Jane"/&gt;                &#13;                &lt;listcell label="FEMALE"/&gt;                &#13;            &lt;/listitem&gt;            &#13;            &lt;listitem&gt;            &#13;                &lt;listcell label="Henry"/&gt;                &#13;                &lt;listcell label="MALE"/&gt;                &#13;            &lt;/listitem&gt;            &#13;            &lt;listfoot &gt;            &#13;                &lt;listfooter&gt;&lt;label value="This is footer1"/&gt;&lt;/listfooter&gt;                &#13;                &lt;listfooter&gt;&lt;label value="This is footer2"/&gt;&lt;/listfooter&gt;                &#13;            &lt;/listfoot&gt;            &#13;                &lt;/listbox&gt;                &#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -14821,7 +14909,9 @@
 <para/></sect3></sect2><sect2 id="Listfoot"><title>Listfoot</title>
 <para>Like <code>Listhead</code>, each listbox has at most one <code>Listfoot</code>.</para>
 <para>
-<graphic fileref="images/listbox.png"/>
+<graphic fileref="images/listbox.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;window title="listbox demo" border="normal"&gt;&#13;        &lt;listbox id="box" width="250px"&gt;        &#13;            &lt;listhead sizable="true"&gt;            &#13;                &lt;listheader label="name" sort="auto"/&gt;                &#13;                &lt;listheader label="gender" sort="auto"/&gt;                &#13;            &lt;/listhead&gt;            &#13;            &lt;listitem&gt;            &#13;                &lt;listcell label="Mary"/&gt;                &#13;                &lt;listcell label="FEMALE"/&gt;                &#13;            &lt;/listitem&gt;            &#13;            &lt;listitem&gt;            &#13;                &lt;listcell label="John"/&gt;                &#13;                &lt;listcell label="MALE"/&gt;                &#13;            &lt;/listitem&gt;            &#13;            &lt;listitem&gt;            &#13;                &lt;listcell label="Jane"/&gt;                &#13;                &lt;listcell label="FEMALE"/&gt;                &#13;            &lt;/listitem&gt;            &#13;            &lt;listitem&gt;            &#13;                &lt;listcell label="Henry"/&gt;                &#13;                &lt;listcell label="MALE"/&gt;                &#13;            &lt;/listitem&gt;            &#13;            &lt;listfoot &gt;            &#13;                &lt;listfooter&gt;&lt;label value="This is footer1"/&gt;&lt;/listfooter&gt;                &#13;                &lt;listfooter&gt;&lt;label value="This is footer2"/&gt;&lt;/listfooter&gt;                &#13;            &lt;/listfoot&gt;            &#13;                &lt;/listbox&gt;                &#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -14900,7 +14990,9 @@
 <para>A column of the footer of a list box (<code>Listbox</code>). Its parent must be <code>Listfoot</code>. Unlike <code>Listheader</code>, you could place any child in a list footer. </para>
 <para>Note: <code>Listcell</code> also accepts children. </para>
 <para>
-<graphic fileref="images/listbox.png"/>
+<graphic fileref="images/listbox.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;window title="listbox demo" border="normal"&gt;&#13;        &lt;listbox id="box" width="250px"&gt;        &#13;            &lt;listhead sizable="true"&gt;            &#13;                &lt;listheader label="name" sort="auto"/&gt;                &#13;                &lt;listheader label="gender" sort="auto"/&gt;                &#13;            &lt;/listhead&gt;            &#13;            &lt;listitem&gt;            &#13;                &lt;listcell label="Mary"/&gt;                &#13;                &lt;listcell label="FEMALE"/&gt;                &#13;            &lt;/listitem&gt;            &#13;            &lt;listitem&gt;            &#13;                &lt;listcell label="John"/&gt;                &#13;                &lt;listcell label="MALE"/&gt;                &#13;            &lt;/listitem&gt;            &#13;            &lt;listitem&gt;            &#13;                &lt;listcell label="Jane"/&gt;                &#13;                &lt;listcell label="FEMALE"/&gt;                &#13;            &lt;/listitem&gt;            &#13;            &lt;listitem&gt;            &#13;                &lt;listcell label="Henry"/&gt;                &#13;                &lt;listcell label="MALE"/&gt;                &#13;            &lt;/listitem&gt;            &#13;            &lt;listfoot &gt;            &#13;                &lt;listfooter&gt;&lt;label value="This is footer1"/&gt;&lt;/listfooter&gt;                &#13;                &lt;listfooter&gt;&lt;label value="This is footer2"/&gt;&lt;/listfooter&gt;                &#13;            &lt;/listfoot&gt;            &#13;                &lt;/listbox&gt;                &#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -15104,7 +15196,9 @@
 <para>Adds the ability for single level grouping to the Listbox. </para>
 <para/>
 <para>
-<graphic fileref="images/Listgroup.PNG"/>
+<graphic fileref="images/Listgroup.PNG">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&#13;&lt;zk&gt;&#13;    Listbox support Grouping    &#13;    &lt;listbox id="listbox" width="250px"&gt;    &#13;        &lt;listhead sizable="true" id="h"&gt;        &#13;            &lt;listheader id="h1" label="name" sort="auto" /&gt;            &#13;            &lt;listheader id="h2" label="gender" sort="auto" /&gt;            &#13;        &lt;/listhead&gt;        &#13;        &lt;listgroup id="gp1" open="false"&gt;        &#13;            &lt;listcell label="Group1"/&gt;            &#13;            &lt;listcell label="Group2"/&gt;            &#13;        &lt;/listgroup&gt;        &#13;        &lt;listitem&gt;        &#13;            &lt;listcell label="a Mary" /&gt;            &#13;            &lt;listcell label="a FEMALE" /&gt;            &#13;        &lt;/listitem&gt;        &#13;        &lt;listitem&gt;        &#13;            &lt;listcell label="b Mary" /&gt;            &#13;            &lt;listcell label="b FEMALE" /&gt;            &#13;        &lt;/listitem&gt;        &#13;        &lt;listitem id="li1"&gt;        &#13;            &lt;listcell label="c Mary1" /&gt;            &#13;            &lt;listcell label="c FEMALE1" /&gt;            &#13;        &lt;/listitem&gt;        &#13;        &lt;listitem&gt;        &#13;            &lt;listcell label="d Mary" /&gt;            &#13;            &lt;listcell label="d FEMALE" /&gt;            &#13;        &lt;/listitem&gt;        &#13;        &lt;listitem&gt;        &#13;            &lt;listcell label="e John" /&gt;            &#13;            &lt;listcell label="e MALE" /&gt;            &#13;        &lt;/listitem&gt;        &#13;        &lt;listgroup id="g2" label="Grouping 2" /&gt;        &#13;        &lt;listitem&gt;        &#13;            &lt;listcell label="Jane" /&gt;            &#13;            &lt;listcell label="FEMALE" /&gt;            &#13;        &lt;/listitem&gt;        &#13;        &lt;listitem&gt;        &#13;            &lt;listcell label="Henry" /&gt;            &#13;            &lt;listcell label="MALE" /&gt;            &#13;        &lt;/listitem&gt;        &#13;&#13;    &lt;/listbox&gt;    &#13;&lt;/zk&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -15413,7 +15507,9 @@
 <para>GroupFooter serves as a summary listitem of listgroup.</para>
 <para/>
 <para>
-<graphic fileref="images/Listgroupfoot.PNG"/>
+<graphic fileref="images/Listgroupfoot.PNG">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&#13;&lt;zk&gt;&#13;    Listbox support Grouping    &#13;    &lt;listbox id="listbox" width="250px"&gt;    &#13;        &lt;listhead sizable="true" id="h"&gt;        &#13;            &lt;listheader id="h1" label="name" sort="auto" /&gt;            &#13;            &lt;listheader id="h2" label="gender" sort="auto" /&gt;            &#13;        &lt;/listhead&gt;        &#13;        &lt;listgroup id="gp1" open="false"&gt;        &#13;            &lt;listcell label="Group1"/&gt;            &#13;            &lt;listcell label="Group2"/&gt;            &#13;        &lt;/listgroup&gt;        &#13;        &lt;listitem&gt;        &#13;            &lt;listcell label="a Mary" /&gt;            &#13;            &lt;listcell label="a FEMALE" /&gt;            &#13;        &lt;/listitem&gt;        &#13;        &lt;listitem&gt;        &#13;            &lt;listcell label="b Mary" /&gt;            &#13;            &lt;listcell label="b FEMALE" /&gt;            &#13;        &lt;/listitem&gt;        &#13;        &lt;listitem id="li1"&gt;        &#13;            &lt;listcell label="c Mary1" /&gt;            &#13;            &lt;listcell label="c FEMALE1" /&gt;            &#13;        &lt;/listitem&gt;        &#13;        &lt;listitem&gt;        &#13;            &lt;listcell label="d Mary" /&gt;            &#13;            &lt;listcell label="d FEMALE" /&gt;            &#13;        &lt;/listitem&gt;        &#13;        &lt;listitem&gt;        &#13;            &lt;listcell label="e John" /&gt;            &#13;            &lt;listcell label="e MALE" /&gt;            &#13;        &lt;/listitem&gt;        &#13;        &lt;listgroupfoot id="f1"&gt;        &#13;            &lt;listcell label="10 emails" /&gt;            &#13;            &lt;listcell label="zk1" /&gt;            &#13;        &lt;/listgroupfoot&gt;        &#13;        &lt;listgroup id="g2" label="Grouping 2" /&gt;        &#13;        &lt;listitem&gt;        &#13;            &lt;listcell label="Jane" /&gt;            &#13;            &lt;listcell label="FEMALE" /&gt;            &#13;        &lt;/listitem&gt;        &#13;        &lt;listitem&gt;        &#13;            &lt;listcell label="Henry" /&gt;            &#13;            &lt;listcell label="MALE" /&gt;            &#13;        &lt;/listitem&gt;        &#13;&#13;    &lt;/listbox&gt;    &#13;&lt;/zk&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -15722,7 +15818,9 @@
 <para/></sect3></sect2><sect2 id="Listhead"><title>Listhead</title>
 <para>A list headers used to define multi-columns and/or headers. Can only surpport <code>Listheader</code> as its child.</para>
 <para>
-<graphic fileref="images/listbox.png"/>
+<graphic fileref="images/listbox.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;window title="listbox demo" border="normal"&gt;&#13;        &lt;listbox id="box" width="250px"&gt;        &#13;            &lt;listhead sizable="true"&gt;            &#13;                &lt;listheader label="name" sort="auto"/&gt;                &#13;                &lt;listheader label="gender" sort="auto"/&gt;                &#13;            &lt;/listhead&gt;            &#13;            &lt;listitem&gt;            &#13;                &lt;listcell label="Mary"/&gt;                &#13;                &lt;listcell label="FEMALE"/&gt;                &#13;            &lt;/listitem&gt;            &#13;            &lt;listitem&gt;            &#13;                &lt;listcell label="John"/&gt;                &#13;                &lt;listcell label="MALE"/&gt;                &#13;            &lt;/listitem&gt;            &#13;            &lt;listitem&gt;            &#13;                &lt;listcell label="Jane"/&gt;                &#13;                &lt;listcell label="FEMALE"/&gt;                &#13;            &lt;/listitem&gt;            &#13;            &lt;listitem&gt;            &#13;                &lt;listcell label="Henry"/&gt;                &#13;                &lt;listcell label="MALE"/&gt;                &#13;            &lt;/listitem&gt;            &#13;            &lt;listfoot &gt;            &#13;                &lt;listfooter&gt;&lt;label value="This is footer1"/&gt;&lt;/listfooter&gt;                &#13;                &lt;listfooter&gt;&lt;label value="This is footer2"/&gt;&lt;/listfooter&gt;                &#13;            &lt;/listfoot&gt;            &#13;                &lt;/listbox&gt;                &#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -15807,7 +15905,9 @@
 <para/></sect3></sect2><sect2 id="Listheader"><title>Listheader</title>
 <para>The list header which defines the attributes and header of a columen of a list box. Its parent must be <code>Listhead</code>.</para>
 <para>
-<graphic fileref="images/listbox.png"/>
+<graphic fileref="images/listbox.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;window title="listbox demo" border="normal"&gt;&#13;        &lt;listbox id="box" width="250px"&gt;        &#13;            &lt;listhead sizable="true"&gt;            &#13;                &lt;listheader label="name" sort="auto"/&gt;                &#13;                &lt;listheader label="gender" sort="auto"/&gt;                &#13;            &lt;/listhead&gt;            &#13;            &lt;listitem&gt;            &#13;                &lt;listcell label="Mary"/&gt;                &#13;                &lt;listcell label="FEMALE"/&gt;                &#13;            &lt;/listitem&gt;            &#13;            &lt;listitem&gt;            &#13;                &lt;listcell label="John"/&gt;                &#13;                &lt;listcell label="MALE"/&gt;                &#13;            &lt;/listitem&gt;            &#13;            &lt;listitem&gt;            &#13;                &lt;listcell label="Jane"/&gt;                &#13;                &lt;listcell label="FEMALE"/&gt;                &#13;            &lt;/listitem&gt;            &#13;            &lt;listitem&gt;            &#13;                &lt;listcell label="Henry"/&gt;                &#13;                &lt;listcell label="MALE"/&gt;                &#13;            &lt;/listitem&gt;            &#13;            &lt;listfoot &gt;            &#13;                &lt;listfooter&gt;&lt;label value="This is footer1"/&gt;&lt;/listfooter&gt;                &#13;                &lt;listfooter&gt;&lt;label value="This is footer2"/&gt;&lt;/listfooter&gt;                &#13;            &lt;/listfoot&gt;            &#13;                &lt;/listbox&gt;                &#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -16192,7 +16292,9 @@
 <para/></sect3></sect2><sect2 id="Listitem"><title>Listitem</title>
 <para>A list item. </para>
 <para>
-<graphic fileref="images/listbox.png"/>
+<graphic fileref="images/listbox.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;window title="listbox demo" border="normal"&gt;&#13;        &lt;listbox id="box" width="250px"&gt;        &#13;            &lt;listhead sizable="true"&gt;            &#13;                &lt;listheader label="name" sort="auto"/&gt;                &#13;                &lt;listheader label="gender" sort="auto"/&gt;                &#13;            &lt;/listhead&gt;            &#13;            &lt;listitem&gt;            &#13;                &lt;listcell label="Mary"/&gt;                &#13;                &lt;listcell label="FEMALE"/&gt;                &#13;            &lt;/listitem&gt;            &#13;            &lt;listitem&gt;            &#13;                &lt;listcell label="John"/&gt;                &#13;                &lt;listcell label="MALE"/&gt;                &#13;            &lt;/listitem&gt;            &#13;            &lt;listitem&gt;            &#13;                &lt;listcell label="Jane"/&gt;                &#13;                &lt;listcell label="FEMALE"/&gt;                &#13;            &lt;/listitem&gt;            &#13;            &lt;listitem&gt;            &#13;                &lt;listcell label="Henry"/&gt;                &#13;                &lt;listcell label="MALE"/&gt;                &#13;            &lt;/listitem&gt;            &#13;            &lt;listfoot &gt;            &#13;                &lt;listfooter&gt;&lt;label value="This is footer1"/&gt;&lt;/listfooter&gt;                &#13;                &lt;listfooter&gt;&lt;label value="This is footer2"/&gt;&lt;/listfooter&gt;                &#13;            &lt;/listfoot&gt;            &#13;                &lt;/listbox&gt;                &#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -16515,7 +16617,9 @@
 <para/></sect3></sect2><sect2 id="Longbox"><title>Longbox</title>
 <para>A long<code>box</code> is used to let users input long data.</para>
 <para>
-<graphic fileref="images/longbox.jpg"/>
+<graphic fileref="images/longbox.jpg">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;window title="Longbox Demo" border="normal" width="200px"&gt;&#13;    long box:&lt;longbox/&gt;    &#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -16817,7 +16921,9 @@
 <code> </code>
 </para>
 <para>
-<graphic fileref="images/Menu.png"/>
+<graphic fileref="images/Menu.png">2
+			
+		</graphic>
 <code/>
 </para>
 <programlisting>&lt;menu label="File"&gt;&#13;    &lt;menupopup&gt;    &#13;        &lt;menuitem label="New" onClick="alert(self.label)"/&gt;        &#13;        &lt;menuitem label="Open" onClick="alert(self.label)"/&gt;        &#13;        &lt;menuitem label="Save" onClick="alert(self.label)"/&gt;        &#13;        &lt;menuseparator/&gt;        &#13;        &lt;menuitem label="Exit" onClick="alert(self.label)"/&gt;        &#13;    &lt;/menupopup&gt;    &#13;&lt;/menu&gt;&#13;</programlisting><sect3><title>Class Name</title>
@@ -16987,7 +17093,9 @@
 <code> </code>
 </para>
 <para>
-<graphic fileref="images/Menu.png"/>
+<graphic fileref="images/Menu.png">2
+			
+		</graphic>
 <code/>
 </para>
 <programlisting>&lt;menubar id="menubar"&gt;&#13;        &lt;menu label="File"&gt;        &#13;            &lt;menupopup onOpen="alert(self.id)"&gt;            &#13;                &lt;menuitem label="New" onClick="alert(self.label)"/&gt;                &#13;                &lt;menuitem label="Open" onClick="alert(self.label)"/&gt;                &#13;                &lt;menuitem label="Save" onClick="alert(self.label)"/&gt;                &#13;                &lt;menuseparator/&gt;                &#13;                &lt;menuitem label="Exit" onClick="alert(self.label)"/&gt;                &#13;            &lt;/menupopup&gt;            &#13;        &lt;/menu&gt;        &#13;        &lt;menu label="Help"&gt;        &#13;            &lt;menupopup&gt;            &#13;                &lt;menuitem label="Index" onClick="alert(self.label)"/&gt;                &#13;                &lt;menu label="About"&gt;                &#13;                    &lt;menupopup&gt;                    &#13;                        &lt;menuitem label="About ZK" onClick="alert(self.label)"/&gt;                        &#13;                        &lt;menuitem label="About Potix" onClick="alert(self.label)"/&gt;                        &#13;                    &lt;/menupopup&gt;                    &#13;                &lt;/menu&gt;                &#13;            &lt;/menupopup&gt;            &#13;        &lt;/menu&gt;        &#13;    &lt;/menubar&gt;    &#13;</programlisting><sect3><title>Class Name</title>
@@ -17166,7 +17274,9 @@
 <code/>
 </para>
 <para>
-<graphic fileref="images/Menu.png"/>
+<graphic fileref="images/Menu.png">2
+			
+		</graphic>
 <code/>
 </para>
 <programlisting>&lt;menu label="File"&gt;&#13;    &lt;menupopup&gt;    &#13;        &lt;menuitem label="New" onClick="alert(self.label)"/&gt;        &#13;        &lt;menuitem label="Open" onClick="alert(self.label)"/&gt;        &#13;        &lt;menuitem label="Save" onClick="alert(self.label)"/&gt;        &#13;        &lt;menuseparator/&gt;        &#13;        &lt;menuitem label="Exit" onClick="alert(self.label)"/&gt;        &#13;    &lt;/menupopup&gt;    &#13;&lt;/menu&gt;&#13;</programlisting><sect3><title>Class Name</title>
@@ -17461,7 +17571,9 @@
 <code/>
 </para>
 <para>
-<graphic fileref="images/Menu.png"/>
+<graphic fileref="images/Menu.png">2
+			
+		</graphic>
 <code/>
 </para>
 <programlisting>&lt;menubar id="menubar"&gt;&#13;        &lt;menu label="File"&gt;        &#13;            &lt;menupopup onOpen="alert(self.id)"&gt;            &#13;                &lt;menuitem label="New" onClick="alert(self.label)"/&gt;                &#13;                &lt;menuitem label="Open" onClick="alert(self.label)"/&gt;                &#13;                &lt;menuitem label="Save" onClick="alert(self.label)"/&gt;                &#13;                &lt;menuseparator/&gt;                &#13;                &lt;menuitem label="Exit" onClick="alert(self.label)"/&gt;                &#13;            &lt;/menupopup&gt;            &#13;        &lt;/menu&gt;        &#13;        &lt;menu label="Help"&gt;        &#13;            &lt;menupopup&gt;            &#13;                &lt;menuitem label="Index" onClick="alert(self.label)"/&gt;                &#13;                &lt;menu label="About"&gt;                &#13;                    &lt;menupopup&gt;                    &#13;                        &lt;menuitem label="About ZK" onClick="alert(self.label)"/&gt;                        &#13;                        &lt;menuitem label="About Potix" onClick="alert(self.label)"/&gt;                        &#13;                    &lt;/menupopup&gt;                    &#13;                &lt;/menu&gt;                &#13;            &lt;/menupopup&gt;            &#13;        &lt;/menu&gt;        &#13;    &lt;/menubar&gt;    &#13;</programlisting><sect3><title>Class Name</title>
@@ -17617,7 +17729,9 @@
 <code> </code>
 </para>
 <para>
-<graphic fileref="images/Menu.png"/>
+<graphic fileref="images/Menu.png">2
+			
+		</graphic>
 <code/>
 </para>
 <programlisting>&lt;menu label="File"&gt;&#13;    &lt;menupopup&gt;    &#13;        &lt;menuitem label="New" onClick="alert(self.label)"/&gt;        &#13;        &lt;menuitem label="Open" onClick="alert(self.label)"/&gt;        &#13;        &lt;menuitem label="Save" onClick="alert(self.label)"/&gt;        &#13;        &lt;menuseparator/&gt;        &#13;        &lt;menuitem label="Exit" onClick="alert(self.label)"/&gt;        &#13;    &lt;/menupopup&gt;    &#13;&lt;/menu&gt;&#13;</programlisting><sect3><title>Class Name</title>
@@ -17702,7 +17816,9 @@
 <para>This component is a north region. The default class of CSS is specified "layout-region-north".</para>
 <para/>
 <para>
-<graphic fileref="images/layout.jpg"/>
+<graphic fileref="images/layout.jpg">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;borderlayout height="500px"&gt;&#13;    &lt;north size="50%" border="0"&gt;    &#13;        &lt;borderlayout&gt;        &#13;            &lt;west size="25%" border="none" flex="true"&gt;            &#13;                &lt;div style="background:#B8D335"&gt;                &#13;                    &lt;label value="25%"                    &#13;                        style="color:white;font-size:50px" /&gt;                        &#13;                &lt;/div&gt;                &#13;            &lt;/west&gt;            &#13;            &lt;center border="none" flex="true"&gt;            &#13;                &lt;div style="background:#E6D92C"&gt;                &#13;                    &lt;label value="25%"                    &#13;                        style="color:white;font-size:50px" /&gt;                        &#13;                &lt;/div&gt;                &#13;            &lt;/center&gt;            &#13;            &lt;east size="50%" border="none" flex="true"&gt;            &#13;                &lt;label value="Here is a non-border"                &#13;                    style="color:gray;font-size:30px" /&gt;                    &#13;            &lt;/east&gt;            &#13;        &lt;/borderlayout&gt;        &#13;    &lt;/north&gt;    &#13;    &lt;center border="0"&gt;    &#13;        &lt;borderlayout&gt;        &#13;            &lt;west size="30%" flex="true" border="0"&gt;            &#13;                &lt;div style="background:#E6D92C"&gt;                &#13;                    &lt;label value="30%"                    &#13;                        style="color:white;font-size:50px" /&gt;                        &#13;                &lt;/div&gt;                &#13;            &lt;/west&gt;            &#13;            &lt;center&gt;            &#13;                &lt;label value="Here is a border"                &#13;                    style="color:gray;font-size:30px" /&gt;                    &#13;            &lt;/center&gt;            &#13;            &lt;east size="30%" flex="true" border="0"&gt;            &#13;                &lt;div style="background:#B8D335"&gt;                &#13;                    &lt;label value="30%"                    &#13;                        style="color:white;font-size:50px" /&gt;                        &#13;                &lt;/div&gt;                &#13;            &lt;/east&gt;            &#13;        &lt;/borderlayout&gt;        &#13;    &lt;/center&gt;    &#13;&lt;/borderlayout&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -17860,7 +17976,9 @@
 <para>A <code>paging</code> component is used to separate long content into multiple pages. For example, assume that you have 100 items and prefer to show 20 items at a time, then you can use the paging components as follows.</para>
 <para>Then, when a user clicks on the hyperlinks, the <code>onPaging </code>event is sent with an instance of <code>org.zkoss.zul.event.PagingEvent</code> to the paging component. To decide which portion of your 100 items are visible, you shall add a listener to the paging component.</para>
 <para>
-<graphic fileref="images/paging.png"/>
+<graphic fileref="images/paging.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;vbox&gt;&#13;&lt;paging totalSize="100" pageSize="20"/&gt;&#13;&lt;/vbox&gt;&#13;</programlisting>
 <para/>
@@ -18125,7 +18243,9 @@
 <para/></sect3></sect2><sect2 id="Panel"><title>Panel</title>
 <para>Panel is a container that has specific functionality and structural components that make it the perfect building block for application-oriented user interfaces. The Panel contains bottom, top, and foot toolbars, along with separate header, footer and body sections. It also provides built-in collapsible, closable, maximizable, and minimizable behavior, along with a variety of pre-built tool buttons that can be wired up to provide other customized behavior. Panels can be easily embedded into any kind of ZUL component that is allowed to have children or layout component. Panels also provide specific features like float and move. Unlike Window, Panels can only be floated and moved inside its parent node, which is not using zk.setVParent() function at client side. In other words, if Panel's parent node is an relative position, the floated panel is only inside its parent, not the whole page. The second difference of Window is that Panel is not an independent ID space (by implementing IdSpace), so the ID of each child can be used throughout the panel.</para>
 <para>
-<graphic fileref="images/Panel.PNG"/>
+<graphic fileref="images/Panel.PNG">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;panel height="100px" width="200px" style="margin-bottom:10px"&#13;    title="Panel1" border="normal" maximizable="true"    &#13;    collapsible="true"&gt;    &#13;    &lt;panelchildren&gt;PanelContent1&lt;/panelchildren&gt;    &#13;&lt;/panel&gt;&#13;&lt;panel height="100px" width="200px" framable="true" title="Panel2"&#13;    border="normal" maximizable="true" style="margin-bottom:10px"&gt;    &#13;    &lt;panelchildren&gt;PanelContent2&lt;/panelchildren&gt;    &#13;&lt;/panel&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -18466,7 +18586,8 @@
 <row>
 <entry>
 <para>
-<code>addMoved(org.zkoss.zk.ui.Component oldparent, org.zkoss.zk.ui.Page oldpg, org.zkoss.zk.ui.Page newpg) </code>
+<code>addMoved(org.zkoss.zk.ui.Component oldparent, org.zkoss.zk.ui.Page oldpg, </code>
+<code>org.zkoss.zk.ui.Page newpg) </code>
 </para>
 </entry>
 <entry>
@@ -18722,7 +18843,9 @@
 <para/></sect3></sect2><sect2 id="Panelchildren"><title>Panelchildren</title>
 <para>Panelchildren is used for Panel component to manage each child who will be shown in the body of Panel. Note that the size of Panelchildren is automatically calculated by Panel so both setWidth(String) and setHeight(String) are read-only.</para>
 <para>
-<graphic fileref="images/Panel.PNG"/>
+<graphic fileref="images/Panel.PNG">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;panel height="100px" width="200px" style="margin-bottom:10px"&#13;    title="Panel1" border="normal" maximizable="true"    &#13;    collapsible="true"&gt;    &#13;    &lt;panelchildren&gt;PanelContent1&lt;/panelchildren&gt;    &#13;&lt;/panel&gt;&#13;&lt;panel height="100px" width="200px" framable="true" title="Panel2"&#13;    border="normal" maximizable="true" style="margin-bottom:10px"&gt;    &#13;    &lt;panelchildren&gt;PanelContent2&lt;/panelchildren&gt;    &#13;&lt;/panel&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -18853,7 +18976,9 @@
 <code> XulElement.setPopup(java.lang.String), XulElement.setContext(java.lang.String) or XulElement.setTooltip(java.lang.String) attribute of the element. </code>
 </para>
 <para>
-<graphic fileref="images/Popup.png"/>
+<graphic fileref="images/Popup.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;label value="Move Mouse Over Me!" tooltip="editPopup"/&gt;&#13;    &lt;separator bar="true"/&gt;    &#13;    &lt;label value="Tooptip for Another Popup" tooltip="any"/&gt;    &#13;    &lt;separator bar="true"/&gt;    &#13;    ...    &#13;    &lt;popup id="any" width="300px"&gt;    &#13;        &lt;vbox&gt;        &#13;            ZK simply rich.            &#13;            &lt;toolbarbutton label="ZK your killer Web application now!" href="http://www.zkoss.org"/&gt;            &#13;        &lt;/vbox&gt;        &#13;    &lt;/popup&gt;    &#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -18946,7 +19071,9 @@
 <para>A portallayout lays out a container which can have multiple columns, and each column may contain one or more panel. Portallayout provides a way to drag-and-drop panel into other portalchildren from the same portallayout.</para>
 <para>Use Portallayout need assign width (either present or pixel) on every Portalchildren, or we cannot make sure about layout look.</para>
 <para>
-<graphic fileref="images/Portallayout.PNG"/>
+<graphic fileref="images/Portallayout.PNG">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;portallayout&gt;&#13;    &lt;portalchildren width="30%"&gt;    &#13;        &lt;panel height="150px" title="Google Tools"&gt;        &#13;            &lt;panelchildren&gt;...&lt;/panelchildren&gt;            &#13;        &lt;/panel&gt;        &#13;        &lt;panel height="300px" title="LabPixies Clock"&gt;        &#13;            &lt;panelchildren&gt;...&lt;/panelchildren&gt;            &#13;        &lt;/panel&gt;        &#13;    &lt;/portalchildren&gt;    &#13;    &lt;portalchildren width="30%"&gt;    &#13;        &lt;panel height="150px" title="Google Tools"&gt;        &#13;            &lt;panelchildren&gt;...&lt;/panelchildren&gt;            &#13;        &lt;/panel&gt;        &#13;    &lt;/portalchildren&gt;    &#13;&lt;/portallayout&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -19127,7 +19254,9 @@
 <para>The column of Portallayout. </para>
 <para>Child of Portalchildren can only be Panel.</para>
 <para>
-<graphic fileref="images/Portallayout.PNG"/>
+<graphic fileref="images/Portallayout.PNG">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;portallayout&gt;&#13;    &lt;portalchildren width="30%"&gt;    &#13;        &lt;panel height="150px" title="Google Tools"&gt;        &#13;            &lt;panelchildren&gt;...&lt;/panelchildren&gt;            &#13;        &lt;/panel&gt;        &#13;        &lt;panel height="300px" title="LabPixies Clock"&gt;        &#13;            &lt;panelchildren&gt;...&lt;/panelchildren&gt;            &#13;        &lt;/panel&gt;        &#13;    &lt;/portalchildren&gt;    &#13;    &lt;portalchildren width="30%"&gt;    &#13;        &lt;panel height="150px" title="Google Tools"&gt;        &#13;            &lt;panelchildren&gt;...&lt;/panelchildren&gt;            &#13;        &lt;/panel&gt;        &#13;    &lt;/portalchildren&gt;    &#13;&lt;/portallayout&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -19261,7 +19390,9 @@
 <para/></sect3></sect2><sect2 id="Progressmeter"><title>Progressmeter</title>
 <para>A progress meter is a bar that indicates how much of a task has been completed. The value property must be in the range between 0 and 100.</para>
 <para>
-<graphic fileref="images/progressmeter.png"/>
+<graphic fileref="images/progressmeter.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;progressmeter value="10"/&gt;    &#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -19388,7 +19519,9 @@
 <para/></sect3></sect2><sect2 id="Radio"><title>Radio</title>
 <para>A <code>radio</code> button is a component that can be turned on and off. Radio buttons are grouped together in a group, called <code>radiogroup</code>. Only one radio button with the same group may be selected at a time.</para>
 <para>
-<graphic fileref="images/radio.png"/>
+<graphic fileref="images/radio.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;window title="Radiobox &amp;amp; Radio Demo" &gt;&#13;&lt;vbox&gt;&#13;&lt;radiogroup onCheck="fruit.value = self.selectedItem.label"&gt;&#13;&lt;radio label="Apple"/&gt;&#13;&lt;radio label="Orange"/&gt;&#13;&lt;radio label="Banana"/&gt;&#13;&lt;/radiogroup&gt;&#13;You have selected :&lt;label id="fruit" style="color:red"/&gt;&#13;&lt;/vbox&gt;&#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -19645,7 +19778,9 @@
 <para/></sect3></sect2><sect2 id="Radiogroup"><title>Radiogroup</title>
 <para>Used to group multiple <code>radio</code> buttons. In one <code>radiogroup</code>. Only one radio button may be selected at a time.</para>
 <para>
-<graphic fileref="images/radio.png"/>
+<graphic fileref="images/radio.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;window title="Radiobox &amp;amp; Radio Demo" &gt;&#13;&lt;vbox&gt;&#13;&lt;radiogroup onCheck="fruit.value = self.selectedItem.label"&gt;&#13;&lt;radio label="Apple"/&gt;&#13;&lt;radio label="Orange"/&gt;&#13;&lt;radio label="Banana"/&gt;&#13;&lt;/radiogroup&gt;&#13;You have selected :&lt;label id="fruit" style="color:red"/&gt;&#13;&lt;/vbox&gt;&#13;&lt;/window&gt;&#13;</programlisting>
 <para>Note: To support the versatile layout, a radio group accepts any kind of children , including Radio. On the other hand, the parent of a radio, if any, must be a radio group.</para><sect3><title>Class Name</title>
@@ -19826,7 +19961,9 @@
 <para>A single row in a <code>Rows</code> element. Each child of the <code>Row</code> element is placed in each successive cell of the grid. The row with the most child elements determines the number of <code>columns</code> in each <code>row</code>.</para>
 <para>Default getSclass(): the same as grid's sclass. </para>
 <para>
-<graphic fileref="images/grid.png"/>
+<graphic fileref="images/grid.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;window title="Grid Demo" border="normal" width="360px"&gt;&#13;    &lt;zscript&gt;    &#13;    class Comp implements Comparator {    &#13;        private boolean _asc;        &#13;        public Comp(boolean asc) {        &#13;            _asc = asc;            &#13;        }        &#13;        public int compare(Object o1, Object o2) {        &#13;            String s1 = o1.getChildren().get(0).getValue(),            &#13;                s2 = o2.getChildren().get(0).getValue();                &#13;            int v = s1.compareTo(s2);            &#13;            return _asc ? v: -v;            &#13;        }        &#13;    }    &#13;    Comp asc = new Comp(true), dsc = new Comp(false);    &#13;    &lt;/zscript&gt;    &#13;    &lt;grid&gt;    &#13;        &lt;columns sizable="true"&gt;        &#13;            &lt;column label="Type" sortAscending="&amp;#36;{asc}" sortDescending="&amp;#36;{dsc}"/&gt;            &#13;            &lt;column label="Content"/&gt;            &#13;        &lt;/columns&gt;        &#13;        &lt;rows&gt;        &#13;            &lt;row&gt;            &#13;                &lt;label value="File:"/&gt;                &#13;                &lt;textbox width="99%"/&gt;                &#13;            &lt;/row&gt;            &#13;            &lt;row&gt;            &#13;                &lt;label value="Type:"/&gt;                &#13;                &lt;hbox&gt;                &#13;                    &lt;listbox rows="1" mold="select"&gt;                    &#13;                        &lt;listitem label="Java Files,(*.java)"/&gt;                        &#13;                        &lt;listitem label="All Files,(*.*)"/&gt;                        &#13;                    &lt;/listbox&gt;                    &#13;                    &lt;button label="Browse..."/&gt;                    &#13;                &lt;/hbox&gt;                &#13;            &lt;/row&gt;            &#13;            &lt;row&gt;            &#13;                &lt;label value="Options:"/&gt;                &#13;                &lt;textbox rows="3" width="99%"/&gt;                &#13;            &lt;/row&gt;            &#13;        &lt;/rows&gt;        &#13;    &lt;/grid&gt;    &#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -20126,7 +20263,9 @@
 <para/></sect3></sect2><sect2 id="Rows"><title>Rows</title>
 <para>Defines the <code>rows</code> of a grid. Each child of a <code>rows</code> element should be a <code>org.zkoss.zul.Row</code> element.</para>
 <para>
-<graphic fileref="images/grid.png"/>
+<graphic fileref="images/grid.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;window title="Grid Demo" border="normal" width="360px"&gt;&#13;    &lt;zscript&gt;    &#13;    class Comp implements Comparator {    &#13;        private boolean _asc;        &#13;        public Comp(boolean asc) {        &#13;            _asc = asc;            &#13;        }        &#13;        public int compare(Object o1, Object o2) {        &#13;            String s1 = o1.getChildren().get(0).getValue(),            &#13;                s2 = o2.getChildren().get(0).getValue();                &#13;            int v = s1.compareTo(s2);            &#13;            return _asc ? v: -v;            &#13;        }        &#13;    }    &#13;    Comp asc = new Comp(true), dsc = new Comp(false);    &#13;    &lt;/zscript&gt;    &#13;    &lt;grid&gt;    &#13;        &lt;columns sizable="true"&gt;        &#13;            &lt;column label="Type" sortAscending="&amp;#36;{asc}" sortDescending="&amp;#36;{dsc}"/&gt;            &#13;            &lt;column label="Content"/&gt;            &#13;        &lt;/columns&gt;        &#13;        &lt;rows&gt;        &#13;            &lt;row&gt;            &#13;                &lt;label value="File:"/&gt;                &#13;                &lt;textbox width="99%"/&gt;                &#13;            &lt;/row&gt;            &#13;            &lt;row&gt;            &#13;                &lt;label value="Type:"/&gt;                &#13;                &lt;hbox&gt;                &#13;                    &lt;listbox rows="1" mold="select"&gt;                    &#13;                        &lt;listitem label="Java Files,(*.java)"/&gt;                        &#13;                        &lt;listitem label="All Files,(*.*)"/&gt;                        &#13;                    &lt;/listbox&gt;                    &#13;                    &lt;button label="Browse..."/&gt;                    &#13;                &lt;/hbox&gt;                &#13;            &lt;/row&gt;            &#13;            &lt;row&gt;            &#13;                &lt;label value="Options:"/&gt;                &#13;                &lt;textbox rows="3" width="99%"/&gt;                &#13;            &lt;/row&gt;            &#13;        &lt;/rows&gt;        &#13;    &lt;/grid&gt;    &#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -20291,7 +20430,9 @@
 <para/></sect3></sect2><sect2 id="Script"><title>Script</title>
 <para>The script component is used to specify the script codes running at the browser. Notice that, unlike zscript, the script codes are running at the browser. They are usually written in JavaScript which is supported by the most of browsers. The simplest format is as follows.</para>
 <para>
-<graphic fileref="images/script.png"/>
+<graphic fileref="images/script.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;zk&gt;&#13;&lt;window id="win" &gt;&#13;    &lt;button label="change color" onClick='Clients.evalJavaScript("myfunc()")'/&gt;    &#13;&lt;/window&gt;&#13;&lt;script type="text/javascript"&gt;&#13;function myfunc() {&#13;    $e("${win.uuid}").style.backgroundColor = "blue";    &#13;}&#13;&lt;/script&gt;&#13;&lt;/zk&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -20453,7 +20594,9 @@
 <para>A slider accepts a range of value starting from 0 to 100. You could change the maximal</para>
 <para>allowed value by the <code>maxpos</code> property.</para>
 <para>
-<graphic fileref="images/Slider.png"/>
+<graphic fileref="images/Slider.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;slider id="slider" /&gt;&#13;&lt;slider curpos=”1” maxpos=”20” /&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -20670,7 +20813,9 @@
 <para>Space is a <code>Separator</code> with the orient default to "horizontal".</para>
 <para>In other words, &lt;space&gt; is equivalent to <code>&lt;separator orient="horizontal"&gt;</code> </para>
 <para>
-<graphic fileref="images/space.png"/>
+<graphic fileref="images/space.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;zk&gt;&#13;    &lt;space bar="true"/&gt;    &#13;    &lt;space bar="true"/&gt;    &#13;    &lt;space bar="true"/&gt;    &#13;    &lt;space bar="true"/&gt;    &#13;&lt;/zk&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -20733,7 +20878,9 @@
 <title/><sect2><sect2><title>Spinner</title>
 <para>An edit box for holding a constrained integer. </para>
 <para>
-<graphic fileref="images/Spinner.PNG"/>
+<graphic fileref="images/Spinner.PNG">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;window title="Spinner" border="normal" width="150px"&gt;&#13;    &lt;spinner /&gt;    &#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -20833,11 +20980,13 @@
 <row>
 <entry>
 <para>
-<code>coerceToString(java.lang.Object value)</code>
+<code>coerceToString(java</code>
+<code>.lang.Object value)</code>
 </para>
 </entry>
 <entry>
-<para>Coerces the value passed to <code>InputElement.setText(java.lang.String)</code>. </para>
+<para>Coerces the value passed to <code>InputElement.setText(java.lang.Stri</code>
+<code>ng)</code>. </para>
 </entry>
 <entry>
 <para>
@@ -20939,7 +21088,9 @@
 <para>This component is a south region. The default class of CSS is specified "layout-region-south".</para>
 <para/>
 <para>
-<graphic fileref="images/layout.jpg"/>
+<graphic fileref="images/layout.jpg">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;borderlayout height="500px"&gt;&#13;    &lt;north size="50%" border="0"&gt;    &#13;        &lt;borderlayout&gt;        &#13;            &lt;west size="25%" border="none" flex="true"&gt;            &#13;                &lt;div style="background:#B8D335"&gt;                &#13;                    &lt;label value="25%"                    &#13;                        style="color:white;font-size:50px" /&gt;                        &#13;                &lt;/div&gt;                &#13;            &lt;/west&gt;            &#13;            &lt;center border="none" flex="true"&gt;            &#13;                &lt;div style="background:#E6D92C"&gt;                &#13;                    &lt;label value="25%"                    &#13;                        style="color:white;font-size:50px" /&gt;                        &#13;                &lt;/div&gt;                &#13;            &lt;/center&gt;            &#13;            &lt;east size="50%" border="none" flex="true"&gt;            &#13;                &lt;label value="Here is a non-border"                &#13;                    style="color:gray;font-size:30px" /&gt;                    &#13;            &lt;/east&gt;            &#13;        &lt;/borderlayout&gt;        &#13;    &lt;/north&gt;    &#13;    &lt;center border="0"&gt;    &#13;        &lt;borderlayout&gt;        &#13;            &lt;west size="30%" flex="true" border="0"&gt;            &#13;                &lt;div style="background:#E6D92C"&gt;                &#13;                    &lt;label value="30%"                    &#13;                        style="color:white;font-size:50px" /&gt;                        &#13;                &lt;/div&gt;                &#13;            &lt;/west&gt;            &#13;            &lt;center&gt;            &#13;                &lt;label value="Here is a border"                &#13;                    style="color:gray;font-size:30px" /&gt;                    &#13;            &lt;/center&gt;            &#13;            &lt;east size="30%" flex="true" border="0"&gt;            &#13;                &lt;div style="background:#B8D335"&gt;                &#13;                    &lt;label value="30%"                    &#13;                        style="color:white;font-size:50px" /&gt;                        &#13;                &lt;/div&gt;                &#13;            &lt;/east&gt;            &#13;        &lt;/borderlayout&gt;        &#13;    &lt;/center&gt;    &#13;&lt;/borderlayout&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -21110,7 +21261,9 @@
 <code>&lt;separator orient="horizontal"&gt; </code>
 </para>
 <para>
-<graphic fileref="images/Separator.png"/>
+<graphic fileref="images/Separator.png">2
+			
+		</graphic>
 </para>
 <programlisting>line 1 by separator&#13;&lt;separator /&gt;&#13;line 2 by separator&#13;&lt;separator /&gt;&#13;line 3 by separator&#13;&lt;space bar="true" /&gt;&#13;another piece&#13;&lt;separator spacing="20px" /&gt;&#13;line 4 by separator&#13;&lt;space bar="true" spacing="20px" /&gt;&#13;another piece&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -21263,7 +21416,9 @@
 <code> is true, a grippy in placed inside the splitter, and one sibling element of the splitter is collapsed when the grippy is clicked. </code>
 </para>
 <para>
-<graphic fileref="images/Splitter.png"/>
+<graphic fileref="images/Splitter.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;hbox spacing="0" width="100%"&gt;&#13;    &lt;vbox height="200px"&gt;    &#13;        Column 1-1: The left-top box. To know whether a splitter        &#13;        is collapsed, you can listen to the onOpen event.        &#13;        &lt;splitter collapse="after"/&gt;        &#13;        Column 1-2: You can enforce to open or collapse programming        &#13;        by calling setOpen method.        &#13;    &lt;/vbox&gt;    &#13;    &lt;splitter collapse="before"/&gt;    &#13;    Column 2: Whether a splitter allows users to open or collapse    &#13;    depending on the collapse attribue.    &#13;&lt;/hbox&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -21430,7 +21585,9 @@
 <para>The style component used to specify <code>CSS</code> styles for the owner desktop.</para>
 <para>Note: a <code>style </code>component can appear anywhere in a <code>ZUML</code> page, but it affects all components in the same <code>desktop</code>. </para>
 <para>
-<graphic fileref="images/Style.png"/>
+<graphic fileref="images/Style.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;style&gt;&#13;    a{    &#13;        color:red;        &#13;    }    &#13;&lt;/style&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -21526,7 +21683,8 @@
 <row>
 <entry>
 <para>
-<code>insertBefore(org.zkoss.zk.ui.Component child, org.zkoss.zk.ui.Component insertBefore)</code>
+<code>insertBefore(org.zkoss.zk.ui.Co</code>
+<code>mponent child, org.zkoss.zk.ui.Component insertBefore)</code>
 </para>
 </entry>
 <entry>
@@ -21567,7 +21725,9 @@
 </link>
 </para>
 <para>
-<graphic fileref="images/tab.png"/>
+<graphic fileref="images/tab.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;tabbox width="400px"&gt;&#13;    &lt;tabs&gt;    &#13;        &lt;tab label="Tab 1" image="/img/folder.gif" /&gt;        &#13;        &lt;tab label="Tab 2" image="/img/folder.gif" closable="true"/&gt;        &#13;    &lt;/tabs&gt;    &#13;    &lt;tabpanels&gt;    &#13;        &lt;tabpanel&gt;This is panel 1&lt;/tabpanel&gt;        &#13;        &lt;tabpanel&gt;This is panel 2&lt;/tabpanel&gt;        &#13;    &lt;/tabpanels&gt;    &#13;&lt;/tabbox&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -21881,7 +22041,9 @@
 </informaltable></sect3></sect2></sect2><sect2><sect2><title/></sect2></sect2><sect2><sect2><title/></sect2></sect2><sect2><sect2 id="TableChildren"><title>TableChildren</title>
 <para>The cell of Tablelayout. The child component of Tablechildren only can be Panel.</para>
 <para>
-<graphic fileref="images/Tablelayout.PNG"/>
+<graphic fileref="images/Tablelayout.PNG">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&#13;&#13;&lt;?component name="panel" extends="panel" width="200px" height="200px" ?&gt;&#13;&#13;&lt;zk&gt;&#13;&lt;label value="3 columns, 1 colspan, 1 rowspan"/&gt;&#13;&#13;&lt;tablelayout id="tbl" columns="3"&gt;&#13;        &lt;tablechildren id="tc1" colspan="2"&gt;        &#13;            &lt;panel title="table1" border="normal"             &#13;                 maximizable="true" collapsible="true" &gt;                &#13;                     &lt;panelchildren&gt;Panel&lt;/panelchildren&gt;                    &#13;             &lt;/panel&gt;            &#13;        &lt;/tablechildren&gt;        &#13;        &lt;tablechildren&gt;        &#13;            &lt;panel title="table2" border="normal"            &#13;                 maximizable="true" collapsible="true"&gt;                &#13;                 &lt;panelchildren&gt;Panel&lt;/panelchildren&gt;                &#13;             &lt;/panel&gt;            &#13;        &lt;/tablechildren&gt;        &#13;&lt;/tablelayout&gt;&#13;&lt;/zk&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -21933,7 +22095,9 @@
 <para/></sect3></sect2></sect2><sect2><sect2><title/></sect2></sect2><sect2><sect2><title>TableLayout</title>
 <para>Tablelayout lay outs a container as an HTML table whose columns can be specified, and rowspan and colspan of its child can also be specified to create complex layouts within the table.</para>
 <para>
-<graphic fileref="images/Tablelayout.PNG"/>
+<graphic fileref="images/Tablelayout.PNG">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&#13;&#13;&lt;?component name="panel" extends="panel" width="200px" height="200px" ?&gt;&#13;&#13;&lt;zk&gt;&#13;&lt;label value="3 columns, 1 colspan, 1 rowspan"/&gt;&#13;&#13;&lt;tablelayout id="tbl" columns="3"&gt;&#13;        &lt;tablechildren id="tc1" colspan="2"&gt;        &#13;            &lt;panel title="table1" border="normal"             &#13;                 maximizable="true" collapsible="true" &gt;                &#13;                     &lt;panelchildren&gt;Panel&lt;/panelchildren&gt;                    &#13;             &lt;/panel&gt;            &#13;        &lt;/tablechildren&gt;        &#13;        &lt;tablechildren&gt;        &#13;            &lt;panel title="table2" border="normal"            &#13;                 maximizable="true" collapsible="true"&gt;                &#13;                 &lt;panelchildren&gt;Panel&lt;/panelchildren&gt;                &#13;             &lt;/panel&gt;            &#13;        &lt;/tablechildren&gt;        &#13;&lt;/tablelayout&gt;&#13;&lt;/zk&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -22022,7 +22186,9 @@
 </link>
 </para>
 <para>
-<graphic fileref="images/tabbox.png"/>
+<graphic fileref="images/tabbox.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;zk&gt;&#13;&lt;tabbox width="400px"&gt;&#13;    &lt;tabs&gt;    &#13;        &lt;tab label="Tab 1"/&gt;        &#13;        &lt;tab label="Tab 2"/&gt;        &#13;    &lt;/tabs&gt;    &#13;    &lt;tabpanels&gt;    &#13;        &lt;tabpanel&gt;This is panel 1&lt;/tabpanel&gt;        &#13;        &lt;tabpanel&gt;This is panel 2&lt;/tabpanel&gt;        &#13;    &lt;/tabpanels&gt;    &#13;&lt;/tabbox&gt;&#13;&lt;space/&gt;&#13;&lt;tabbox width="400px" mold="accordion"&gt;&#13;    &lt;tabs&gt;    &#13;        &lt;tab label="Tab 3"/&gt;        &#13;        &lt;tab label="Tab 4"/&gt;        &#13;    &lt;/tabs&gt;    &#13;    &lt;tabpanels&gt;    &#13;        &lt;tabpanel&gt;This is panel 3&lt;/tabpanel&gt;        &#13;        &lt;tabpanel&gt;This is panel 4&lt;/tabpanel&gt;        &#13;    &lt;/tabpanels&gt;    &#13;&lt;/tabbox&gt;&#13;&lt;/zk&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -22332,7 +22498,9 @@
 </link>
 </para>
 <para>
-<graphic fileref="images/tabbox.png"/>
+<graphic fileref="images/tabbox.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;zk&gt;&#13;&lt;tabbox width="400px"&gt;&#13;    &lt;tabs&gt;    &#13;        &lt;tab label="Tab 1"/&gt;        &#13;        &lt;tab label="Tab 2"/&gt;        &#13;    &lt;/tabs&gt;    &#13;    &lt;tabpanels&gt;    &#13;        &lt;tabpanel&gt;This is panel 1&lt;/tabpanel&gt;        &#13;        &lt;tabpanel&gt;This is panel 2&lt;/tabpanel&gt;        &#13;    &lt;/tabpanels&gt;    &#13;&lt;/tabbox&gt;&#13;&lt;space/&gt;&#13;&lt;tabbox width="400px" mold="accordion"&gt;&#13;    &lt;tabs&gt;    &#13;        &lt;tab label="Tab 3"/&gt;        &#13;        &lt;tab label="Tab 4"/&gt;        &#13;    &lt;/tabs&gt;    &#13;    &lt;tabpanels&gt;    &#13;        &lt;tabpanel&gt;This is panel 3&lt;/tabpanel&gt;        &#13;        &lt;tabpanel&gt;This is panel 4&lt;/tabpanel&gt;        &#13;    &lt;/tabpanels&gt;    &#13;&lt;/tabbox&gt;&#13;&lt;/zk&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -22538,7 +22706,9 @@
 </link>
 </para>
 <para>
-<graphic fileref="images/tabbox.png"/>
+<graphic fileref="images/tabbox.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;zk&gt;&#13;&lt;tabbox width="400px"&gt;&#13;    &lt;tabs&gt;    &#13;        &lt;tab label="Tab 1"/&gt;        &#13;        &lt;tab label="Tab 2"/&gt;        &#13;    &lt;/tabs&gt;    &#13;    &lt;tabpanels&gt;    &#13;        &lt;tabpanel&gt;This is panel 1&lt;/tabpanel&gt;        &#13;        &lt;tabpanel&gt;This is panel 2&lt;/tabpanel&gt;        &#13;    &lt;/tabpanels&gt;    &#13;&lt;/tabbox&gt;&#13;&lt;space/&gt;&#13;&lt;tabbox width="400px" mold="accordion"&gt;&#13;    &lt;tabs&gt;    &#13;        &lt;tab label="Tab 3"/&gt;        &#13;        &lt;tab label="Tab 4"/&gt;        &#13;    &lt;/tabs&gt;    &#13;    &lt;tabpanels&gt;    &#13;        &lt;tabpanel&gt;This is panel 3&lt;/tabpanel&gt;        &#13;        &lt;tabpanel&gt;This is panel 4&lt;/tabpanel&gt;        &#13;    &lt;/tabpanels&gt;    &#13;&lt;/tabbox&gt;&#13;&lt;/zk&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -22635,7 +22805,9 @@
 </link>
 </para>
 <para>
-<graphic fileref="images/tabbox.png"/>
+<graphic fileref="images/tabbox.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;zk&gt;&#13;&lt;tabbox width="400px"&gt;&#13;    &lt;tabs&gt;    &#13;        &lt;tab label="Tab 1"/&gt;        &#13;        &lt;tab label="Tab 2"/&gt;        &#13;    &lt;/tabs&gt;    &#13;    &lt;tabpanels&gt;    &#13;        &lt;tabpanel&gt;This is panel 1&lt;/tabpanel&gt;        &#13;        &lt;tabpanel&gt;This is panel 2&lt;/tabpanel&gt;        &#13;    &lt;/tabpanels&gt;    &#13;&lt;/tabbox&gt;&#13;&lt;space/&gt;&#13;&lt;tabbox width="400px" mold="accordion"&gt;&#13;    &lt;tabs&gt;    &#13;        &lt;tab label="Tab 3"/&gt;        &#13;        &lt;tab label="Tab 4"/&gt;        &#13;    &lt;/tabs&gt;    &#13;    &lt;tabpanels&gt;    &#13;        &lt;tabpanel&gt;This is panel 3&lt;/tabpanel&gt;        &#13;        &lt;tabpanel&gt;This is panel 4&lt;/tabpanel&gt;        &#13;    &lt;/tabpanels&gt;    &#13;&lt;/tabbox&gt;&#13;&lt;/zk&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -22729,7 +22901,9 @@
 <para>You colud assign <code>value, type, constraint, rows, cols </code>to a textbox by the corresponding properties. When you assigns the property <code>type </code>to a string value “password” when <code>multiline </code>is false( <code>multiline</code> will be <code>true </code>if You set rows large then 1 or sets <code>multiline </code>to true directly) then any character in this component will replace by '*'.</para>
 <para>You colud also assign a constraint value with a regular expression string or a default constraint expression(available value is “no empty”). When user change the value of textbox, will cause a validating preocess to valdate the value. If valdation fail, then a notification will poped up. </para>
 <para>
-<graphic fileref="images/textbox.png"/>
+<graphic fileref="images/textbox.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;textbox value="text..."/&gt;&#13;&lt;textbox value="secret" type="password"/&gt;&#13;&lt;textbox constraint="/.+@.+\.[a-z]+/: Please enter an e-mail address" /&gt;&#13;&lt;textbox rows="5" cols="40"&gt;&#13;    &lt;attribute name="value"&gt;    &#13;text line1...&#13;text line2...&#13;    &lt;/attribute&gt;    &#13;&lt;/textbox&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -23009,7 +23183,9 @@
 <para/></sect3></sect2></sect2><sect2><sect2><title>Timebox</title>
 <para>An edit box for holding a time (a java.util.Date Object , but only Hour &amp; Minute are used.</para>
 <para>
-<graphic fileref="images/timebox.png"/>
+<graphic fileref="images/timebox.png">2
+			
+		</graphic>
 </para>
 <para>&lt;window title="Simple" width="300px" border="normal"&gt;</para>
 <para>&lt;timebox id="tb0"/&gt;</para>
@@ -23389,7 +23565,9 @@
 </link>
 </para>
 <para>
-<graphic fileref="images/toolbar.png"/>
+<graphic fileref="images/toolbar.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;window title="Toolbar window" border="normal" width="300px"&gt;&#13;    &lt;toolbar&gt;    &#13;        &lt;toolbarbutton label="Left" /&gt;&lt;space/&gt;        &#13;        &lt;toolbarbutton label="Right" image="/img/folder.gif" dir="reverse"/&gt;        &#13;    &lt;/toolbar&gt;    &#13;    &lt;toolbar orient="vertical"&gt;    &#13;        &lt;button label="Left" image="/img/folder.gif" width="125px"/&gt;        &#13;        &lt;toolbarbutton label="Right" image="/img/folder.gif" dir="reverse"/&gt;        &#13;    &lt;/toolbar&gt;    &#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -23546,7 +23724,9 @@
 </link>
 </para>
 <para>
-<graphic fileref="images/toolbarbutton.png"/>
+<graphic fileref="images/toolbarbutton.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;window title="toolbar demo" border="normal" width="300px"&gt;&#13;    &lt;caption&gt;    &#13;        &lt;toolbarbutton label="button3" image="/img/folder.gif"/&gt;&lt;space/&gt;        &#13;        &lt;toolbarbutton label="button4" image="/img/folder.gif" dir="reverse" /&gt;        &#13;    &lt;/caption&gt;    &#13;    &lt;toolbar&gt;    &#13;        &lt;toolbarbutton label="button1" image="/img/folder.gif" /&gt;&lt;space/&gt;        &#13;        &lt;toolbarbutton label="button2" image="/img/folder.gif" /&gt;        &#13;    &lt;/toolbar&gt;    &#13;    &lt;hbox&gt;    &#13;    &lt;toolbarbutton label="button5" image="/img/folder.gif" orient="vertical"/&gt;&lt;space/&gt;    &#13;    &lt;toolbarbutton label="button6" image="/img/folder.gif" orient="vertical" dir="reverse"/&gt;    &#13;    &lt;/hbox&gt;    &#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -23810,7 +23990,9 @@
 </link>
 </para>
 <para>
-<graphic fileref="images/tree.png"/>
+<graphic fileref="images/tree.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;window title="tree demo" border="normal"&gt;&#13;    &lt;tree id="tree" width="400px" rows="5"&gt;    &#13;        &lt;treecols sizable="true"&gt;        &#13;            &lt;treecol label="Name"/&gt;            &#13;            &lt;treecol label="Description"/&gt;            &#13;        &lt;/treecols&gt;        &#13;        &lt;treechildren&gt;        &#13;            &lt;treeitem&gt;            &#13;                &lt;treerow&gt;                &#13;                    &lt;treecell label="Item 1"/&gt;                    &#13;                    &lt;treecell label="Item 1 description"/&gt;                    &#13;                &lt;/treerow&gt;                &#13;            &lt;/treeitem&gt;            &#13;            &lt;treeitem&gt;            &#13;                &lt;treerow&gt;                &#13;                    &lt;treecell label="Item 2"/&gt;                    &#13;                    &lt;treecell label="Item 2 description"/&gt;                    &#13;                &lt;/treerow&gt;                &#13;                &lt;treechildren&gt;                &#13;                    &lt;treeitem&gt;                    &#13;                        &lt;treerow&gt;                        &#13;                            &lt;treecell label="Item 2.1"/&gt;                            &#13;                        &lt;/treerow&gt;                        &#13;                    &lt;/treeitem&gt;                    &#13;                    &lt;treeitem&gt;                    &#13;                        &lt;treerow&gt;                        &#13;                            &lt;treecell label="Item 2.2"/&gt;                            &#13;                            &lt;treecell label="Item 2.2 is something who cares"/&gt;                            &#13;                        &lt;/treerow&gt;                        &#13;                    &lt;/treeitem&gt;                    &#13;                &lt;/treechildren&gt;                &#13;            &lt;/treeitem&gt;            &#13;            &lt;treeitem label="Item 3"/&gt;            &#13;        &lt;/treechildren&gt;        &#13;        &lt;treefoot&gt;        &#13;            &lt;treefooter label="Count"/&gt;            &#13;            &lt;treefooter label="Summary"/&gt;            &#13;        &lt;/treefoot&gt;        &#13;    &lt;/tree&gt;    &#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -24415,7 +24597,9 @@
 </link>
 </para>
 <para>
-<graphic fileref="images/treeitem.png"/>
+<graphic fileref="images/treeitem.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;window title="tree demo" border="normal" width="400px"&gt;&#13;    &lt;tree id="tree" width="90%" &gt;    &#13;        &lt;treecols sizable="true"&gt;        &#13;            &lt;treecol label="Name"/&gt;            &#13;            &lt;treecol label="Description"/&gt;            &#13;        &lt;/treecols&gt;        &#13;        &lt;treechildren&gt;        &#13;            &lt;treeitem&gt;            &#13;                &lt;treerow&gt;                &#13;                    &lt;treecell&gt;                    &#13;                        &lt;image src="/img/folder.gif"/&gt;Item 1                        &#13;                    &lt;/treecell&gt;                    &#13;                    &lt;treecell&gt;                    &#13;                        &lt;textbox value="Item 1 description"/&gt;                        &#13;                    &lt;/treecell&gt;                    &#13;                &lt;/treerow&gt;                &#13;            &lt;/treeitem&gt;            &#13;            &lt;treeitem&gt;            &#13;                &lt;treerow&gt;                &#13;                    &lt;treecell label="Item 2"/&gt;                    &#13;                    &lt;treecell label="Item 2 description"/&gt;                    &#13;                &lt;/treerow&gt;                &#13;                &lt;treechildren&gt;                &#13;                    &lt;treeitem open="false"&gt;                    &#13;                        &lt;treerow&gt;                        &#13;                            &lt;treecell label="Item 2.1"&gt;                            &#13;                                &lt;image src="/img/folder.gif"/&gt;                                &#13;                            &lt;/treecell&gt;                            &#13;                        &lt;/treerow&gt;                        &#13;                        &lt;treechildren&gt;                        &#13;                            &lt;treeitem&gt;                            &#13;                                &lt;treerow&gt;                                &#13;                                    &lt;treecell label="Item 2.1.1"/&gt;                                    &#13;                                &lt;/treerow&gt;                                &#13;                            &lt;/treeitem&gt;                            &#13;                        &lt;/treechildren&gt;                        &#13;                    &lt;/treeitem&gt;                    &#13;                &lt;/treechildren&gt;                &#13;            &lt;/treeitem&gt;            &#13;            &lt;treeitem label="Item 3"/&gt;            &#13;        &lt;/treechildren&gt;        &#13;    &lt;/tree&gt;    &#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -24719,7 +24903,9 @@
 </link>
 </para>
 <para>
-<graphic fileref="images/treechildren.png"/>
+<graphic fileref="images/treechildren.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;window title="tree demo" border="normal" width="450px"&gt;&#13;    &lt;tree id="tree" width="90%" &gt;    &#13;        &lt;treecols sizable="true"&gt;        &#13;            &lt;treecol label="Name"/&gt;            &#13;            &lt;treecol label="Description"/&gt;            &#13;        &lt;/treecols&gt;        &#13;        &lt;treechildren&gt;        &#13;            &lt;treeitem&gt;            &#13;                &lt;treerow&gt;                &#13;                    &lt;treecell label="Item 1"/&gt;                    &#13;                    &lt;treecell label="Item 1 description"/&gt;                    &#13;                &lt;/treerow&gt;                &#13;            &lt;/treeitem&gt;            &#13;            &lt;treeitem&gt;            &#13;                &lt;treerow&gt;                &#13;                    &lt;treecell label="Item 2"/&gt;                    &#13;                    &lt;treecell label="Item 2 description"/&gt;                    &#13;                &lt;/treerow&gt;                &#13;                &lt;treechildren&gt;                &#13;                    &lt;treeitem&gt;                    &#13;                        &lt;treerow&gt;                        &#13;                            &lt;treecell label="Item 2.1"/&gt;                            &#13;                        &lt;/treerow&gt;                        &#13;                        &lt;treechildren pageSize="3"&gt;                        &#13;                            &lt;treeitem&gt;                            &#13;                                &lt;treerow&gt;                                &#13;                                    &lt;treecell label="Item 2.1.1"/&gt;                                    &#13;                                &lt;/treerow&gt;                                &#13;                            &lt;/treeitem&gt;                            &#13;                            &lt;treeitem&gt;                            &#13;                                &lt;treerow&gt;                                &#13;                                    &lt;treecell label="Item 2.1.2"/&gt;                                    &#13;                                &lt;/treerow&gt;                                &#13;                            &lt;/treeitem&gt;                            &#13;                            &lt;treeitem&gt;                            &#13;                                &lt;treerow&gt;                                &#13;                                    &lt;treecell label="Item 2.1.3"/&gt;                                    &#13;                                &lt;/treerow&gt;                                &#13;                            &lt;/treeitem&gt;                            &#13;                            &lt;treeitem&gt;                            &#13;                                &lt;treerow&gt;                                &#13;                                    &lt;treecell label="Item 2.1.4"/&gt;                                    &#13;                                &lt;/treerow&gt;                                &#13;                            &lt;/treeitem&gt;                            &#13;                        &lt;/treechildren&gt;                        &#13;                    &lt;/treeitem&gt;                    &#13;                    &lt;treeitem&gt;                    &#13;                        &lt;treerow&gt;                        &#13;                            &lt;treecell label="Item 2.2"/&gt;                            &#13;                            &lt;treecell label="Item 2.2 is something who cares"/&gt;                            &#13;                        &lt;/treerow&gt;                        &#13;                    &lt;/treeitem&gt;                    &#13;                &lt;/treechildren&gt;                &#13;            &lt;/treeitem&gt;            &#13;            &lt;treeitem label="Item 3"/&gt;            &#13;        &lt;/treechildren&gt;        &#13;    &lt;/tree&gt;    &#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -25038,7 +25224,9 @@
 <para>A <code>treecol </code>is a top column of tree, Its parent must be <code>Treecols.</code>
 </para>
 <para>
-<graphic fileref="images/treecol.png"/>
+<graphic fileref="images/treecol.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;window title="tree demo" border="normal" width="400px"&gt;&#13;    &lt;tree id="tree" width="90%" rows="2"&gt;    &#13;        &lt;treecols sizable="true"&gt;        &#13;            &lt;treecol label="Name"/&gt;            &#13;            &lt;treecol label="Description"/&gt;            &#13;            &lt;treecol label="Remark"/&gt;            &#13;        &lt;/treecols&gt;        &#13;        &lt;treechildren&gt;        &#13;            &lt;treeitem&gt;            &#13;                &lt;treerow&gt;                &#13;                    &lt;treecell label="Item 1"/&gt;                    &#13;                    &lt;treecell label="Item 1 description"/&gt;                    &#13;                    &lt;treecell label="Item 1 remark"/&gt;                    &#13;                &lt;/treerow&gt;                &#13;            &lt;treechildren&gt;            &#13;                &lt;treeitem&gt;                &#13;                    &lt;treerow&gt;                    &#13;                        &lt;treecell label="Item 1.2"/&gt;                        &#13;                        &lt;treecell label="Item 1.2 description"/&gt;                        &#13;                    &lt;/treerow&gt;                    &#13;                &lt;/treeitem&gt;                &#13;            &lt;/treechildren&gt;            &#13;            &lt;/treeitem&gt;            &#13;        &lt;/treechildren&gt;        &#13;    &lt;/tree&gt;    &#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -25213,7 +25401,9 @@
 </link>
 </para>
 <para>
-<graphic fileref="images/treecol.png"/>
+<graphic fileref="images/treecol.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;window title="tree demo" border="normal" width="400px"&gt;&#13;    &lt;tree id="tree" width="90%" rows="2"&gt;    &#13;        &lt;treecols sizable="true"&gt;        &#13;            &lt;treecol label="Name"/&gt;            &#13;            &lt;treecol label="Description"/&gt;            &#13;            &lt;treecol label="Remark"/&gt;            &#13;        &lt;/treecols&gt;        &#13;        &lt;treechildren&gt;        &#13;            &lt;treeitem&gt;            &#13;                &lt;treerow&gt;                &#13;                    &lt;treecell label="Item 1"/&gt;                    &#13;                    &lt;treecell label="Item 1 description"/&gt;                    &#13;                    &lt;treecell label="Item 1 remark"/&gt;                    &#13;                &lt;/treerow&gt;                &#13;            &lt;treechildren&gt;            &#13;                &lt;treeitem&gt;                &#13;                    &lt;treerow&gt;                    &#13;                        &lt;treecell label="Item 1.2"/&gt;                        &#13;                        &lt;treecell label="Item 1.2 description"/&gt;                        &#13;                    &lt;/treerow&gt;                    &#13;                &lt;/treeitem&gt;                &#13;            &lt;/treechildren&gt;            &#13;            &lt;/treeitem&gt;            &#13;        &lt;/treechildren&gt;        &#13;    &lt;/tree&gt;    &#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -25353,7 +25543,9 @@
 </link>
 </para>
 <para>
-<graphic fileref="images/tree.png"/>
+<graphic fileref="images/tree.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;window title="tree demo" border="normal"&gt;&#13;    &lt;tree id="tree" width="400px" rows="5"&gt;    &#13;        &lt;treecols sizable="true"&gt;        &#13;            &lt;treecol label="Name"/&gt;            &#13;            &lt;treecol label="Description"/&gt;            &#13;        &lt;/treecols&gt;        &#13;        &lt;treechildren&gt;        &#13;            &lt;treeitem&gt;            &#13;                &lt;treerow&gt;                &#13;                    &lt;treecell label="Item 1"/&gt;                    &#13;                    &lt;treecell label="Item 1 description"/&gt;                    &#13;                &lt;/treerow&gt;                &#13;            &lt;/treeitem&gt;            &#13;            &lt;treeitem&gt;            &#13;                &lt;treerow&gt;                &#13;                    &lt;treecell label="Item 2"/&gt;                    &#13;                    &lt;treecell label="Item 2 description"/&gt;                    &#13;                &lt;/treerow&gt;                &#13;                &lt;treechildren&gt;                &#13;                    &lt;treeitem&gt;                    &#13;                        &lt;treerow&gt;                        &#13;                            &lt;treecell label="Item 2.1"/&gt;                            &#13;                        &lt;/treerow&gt;                        &#13;                    &lt;/treeitem&gt;                    &#13;                    &lt;treeitem&gt;                    &#13;                        &lt;treerow&gt;                        &#13;                            &lt;treecell label="Item 2.2"/&gt;                            &#13;                            &lt;treecell label="Item 2.2 is something who cares"/&gt;                            &#13;                        &lt;/treerow&gt;                        &#13;                    &lt;/treeitem&gt;                    &#13;                &lt;/treechildren&gt;                &#13;            &lt;/treeitem&gt;            &#13;            &lt;treeitem label="Item 3"/&gt;            &#13;        &lt;/treechildren&gt;        &#13;        &lt;treefoot&gt;        &#13;            &lt;treefooter label="Count"/&gt;            &#13;            &lt;treefooter label="Summary"/&gt;            &#13;        &lt;/treefoot&gt;        &#13;    &lt;/tree&gt;    &#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -25448,7 +25640,9 @@
 </link>
 </para>
 <para>
-<graphic fileref="images/treefooter.png"/>
+<graphic fileref="images/treefooter.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;window title="tree demo" border="normal" width="400px"&gt;&#13;    &lt;tree id="tree" width="90%" rows="2"&gt;    &#13;        &lt;treecols sizable="true"&gt;        &#13;            &lt;treecol label="Name"/&gt;            &#13;            &lt;treecol label="Description"/&gt;            &#13;        &lt;/treecols&gt;        &#13;        &lt;treechildren&gt;        &#13;            &lt;treeitem&gt;            &#13;                &lt;treerow&gt;                &#13;                    &lt;treecell label="Item 1"/&gt;                    &#13;                    &lt;treecell label="Item 1 description"/&gt;                    &#13;                &lt;/treerow&gt;                &#13;            &lt;treechildren&gt;            &#13;                &lt;treeitem&gt;                &#13;                    &lt;treerow&gt;                    &#13;                        &lt;treecell label="Item 1.2"/&gt;                        &#13;                        &lt;treecell label="Item 1.2 description"/&gt;                        &#13;                    &lt;/treerow&gt;                    &#13;                &lt;/treeitem&gt;                &#13;            &lt;/treechildren&gt;            &#13;            &lt;/treeitem&gt;            &#13;        &lt;/treechildren&gt;        &#13;        &lt;treefoot &gt;        &#13;            &lt;treefooter&gt;&lt;image src="/img/folder.gif"/&gt;Count&lt;/treefooter&gt;            &#13;            &lt;treefooter&gt;&lt;image src="/img/folder.gif"/&gt;Summary&lt;/treefooter&gt;            &#13;        &lt;/treefoot&gt;        &#13;    &lt;/tree&gt;    &#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -25636,7 +25830,9 @@
 </link>
 </para>
 <para>
-<graphic fileref="images/treeitem.png"/>
+<graphic fileref="images/treeitem.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;window title="tree demo" border="normal" width="400px"&gt;&#13;    &lt;tree id="tree" width="90%" &gt;    &#13;        &lt;treecols sizable="true"&gt;        &#13;            &lt;treecol label="Name"/&gt;            &#13;            &lt;treecol label="Description"/&gt;            &#13;        &lt;/treecols&gt;        &#13;        &lt;treechildren&gt;        &#13;            &lt;treeitem&gt;            &#13;                &lt;treerow&gt;                &#13;                    &lt;treecell&gt;                    &#13;                        &lt;image src="/img/folder.gif"/&gt;Item 1                        &#13;                    &lt;/treecell&gt;                    &#13;                    &lt;treecell&gt;                    &#13;                        &lt;textbox value="Item 1 description"/&gt;                        &#13;                    &lt;/treecell&gt;                    &#13;                &lt;/treerow&gt;                &#13;            &lt;/treeitem&gt;            &#13;            &lt;treeitem&gt;            &#13;                &lt;treerow&gt;                &#13;                    &lt;treecell label="Item 2"/&gt;                    &#13;                    &lt;treecell label="Item 2 description"/&gt;                    &#13;                &lt;/treerow&gt;                &#13;                &lt;treechildren&gt;                &#13;                    &lt;treeitem open="false"&gt;                    &#13;                        &lt;treerow&gt;                        &#13;                            &lt;treecell label="Item 2.1"&gt;                            &#13;                                &lt;image src="/img/folder.gif"/&gt;                                &#13;                            &lt;/treecell&gt;                            &#13;                        &lt;/treerow&gt;                        &#13;                        &lt;treechildren&gt;                        &#13;                            &lt;treeitem&gt;                            &#13;                                &lt;treerow&gt;                                &#13;                                    &lt;treecell label="Item 2.1.1"/&gt;                                    &#13;                                &lt;/treerow&gt;                                &#13;                            &lt;/treeitem&gt;                            &#13;                        &lt;/treechildren&gt;                        &#13;                    &lt;/treeitem&gt;                    &#13;                &lt;/treechildren&gt;                &#13;            &lt;/treeitem&gt;            &#13;            &lt;treeitem label="Item 3"/&gt;            &#13;        &lt;/treechildren&gt;        &#13;    &lt;/tree&gt;    &#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -26031,7 +26227,9 @@
 </link>
 </para>
 <para>
-<graphic fileref="images/treeitem.png"/>
+<graphic fileref="images/treeitem.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;window title="tree demo" border="normal" width="400px"&gt;&#13;    &lt;tree id="tree" width="90%" &gt;    &#13;        &lt;treecols sizable="true"&gt;        &#13;            &lt;treecol label="Name"/&gt;            &#13;            &lt;treecol label="Description"/&gt;            &#13;        &lt;/treecols&gt;        &#13;        &lt;treechildren&gt;        &#13;            &lt;treeitem&gt;            &#13;                &lt;treerow&gt;                &#13;                    &lt;treecell&gt;                    &#13;                        &lt;image src="/img/folder.gif"/&gt;Item 1                        &#13;                    &lt;/treecell&gt;                    &#13;                    &lt;treecell&gt;                    &#13;                        &lt;textbox value="Item 1 description"/&gt;                        &#13;                    &lt;/treecell&gt;                    &#13;                &lt;/treerow&gt;                &#13;            &lt;/treeitem&gt;            &#13;            &lt;treeitem&gt;            &#13;                &lt;treerow&gt;                &#13;                    &lt;treecell label="Item 2"/&gt;                    &#13;                    &lt;treecell label="Item 2 description"/&gt;                    &#13;                &lt;/treerow&gt;                &#13;                &lt;treechildren&gt;                &#13;                    &lt;treeitem open="false"&gt;                    &#13;                        &lt;treerow&gt;                        &#13;                            &lt;treecell label="Item 2.1"&gt;                            &#13;                                &lt;image src="/img/folder.gif"/&gt;                                &#13;                            &lt;/treecell&gt;                            &#13;                        &lt;/treerow&gt;                        &#13;                        &lt;treechildren&gt;                        &#13;                            &lt;treeitem&gt;                            &#13;                                &lt;treerow&gt;                                &#13;                                    &lt;treecell label="Item 2.1.1"/&gt;                                    &#13;                                &lt;/treerow&gt;                                &#13;                            &lt;/treeitem&gt;                            &#13;                        &lt;/treechildren&gt;                        &#13;                    &lt;/treeitem&gt;                    &#13;                &lt;/treechildren&gt;                &#13;            &lt;/treeitem&gt;            &#13;            &lt;treeitem label="Item 3"/&gt;            &#13;        &lt;/treechildren&gt;        &#13;    &lt;/tree&gt;    &#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -26255,7 +26453,9 @@
 <para>The vbox component is used to create a vertically oriented box. Added components will be placed underneath each other in a column.</para>
 <para/>
 <para>
-<graphic fileref="images/box.png"/>
+<graphic fileref="images/box.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;zk&gt;&#13;    &lt;vbox&gt;    &#13;        &lt;button label="Button 1"/&gt;        &#13;        &lt;button label="Button 2"/&gt;        &#13;    &lt;/vbox&gt;    &#13;    &lt;hbox&gt;    &#13;        &lt;button label="Button 3"/&gt;        &#13;        &lt;button label="Button 4"/&gt;        &#13;    &lt;/hbox&gt;    &#13;&lt;/zk&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -26306,7 +26506,9 @@
 <para>This component is a west region. The default class of CSS is specified "layout-region-west".</para>
 <para/>
 <para>
-<graphic fileref="images/layout.jpg"/>
+<graphic fileref="images/layout.jpg">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;borderlayout height="500px"&gt;&#13;    &lt;north size="50%" border="0"&gt;    &#13;        &lt;borderlayout&gt;        &#13;            &lt;west size="25%" border="none" flex="true"&gt;            &#13;                &lt;div style="background:#B8D335"&gt;                &#13;                    &lt;label value="25%"                    &#13;                        style="color:white;font-size:50px" /&gt;                        &#13;                &lt;/div&gt;                &#13;            &lt;/west&gt;            &#13;            &lt;center border="none" flex="true"&gt;            &#13;                &lt;div style="background:#E6D92C"&gt;                &#13;                    &lt;label value="25%"                    &#13;                        style="color:white;font-size:50px" /&gt;                        &#13;                &lt;/div&gt;                &#13;            &lt;/center&gt;            &#13;            &lt;east size="50%" border="none" flex="true"&gt;            &#13;                &lt;label value="Here is a non-border"                &#13;                    style="color:gray;font-size:30px" /&gt;                    &#13;            &lt;/east&gt;            &#13;        &lt;/borderlayout&gt;        &#13;    &lt;/north&gt;    &#13;    &lt;center border="0"&gt;    &#13;        &lt;borderlayout&gt;        &#13;            &lt;west size="30%" flex="true" border="0"&gt;            &#13;                &lt;div style="background:#E6D92C"&gt;                &#13;                    &lt;label value="30%"                    &#13;                        style="color:white;font-size:50px" /&gt;                        &#13;                &lt;/div&gt;                &#13;            &lt;/west&gt;            &#13;            &lt;center&gt;            &#13;                &lt;label value="Here is a border"                &#13;                    style="color:gray;font-size:30px" /&gt;                    &#13;            &lt;/center&gt;            &#13;            &lt;east size="30%" flex="true" border="0"&gt;            &#13;                &lt;div style="background:#B8D335"&gt;                &#13;                    &lt;label value="30%"                    &#13;                        style="color:white;font-size:50px" /&gt;                        &#13;                &lt;/div&gt;                &#13;            &lt;/east&gt;            &#13;        &lt;/borderlayout&gt;        &#13;    &lt;/center&gt;    &#13;&lt;/borderlayout&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -26476,7 +26678,9 @@
 </listitem>
 </itemizedlist>
 <para>
-<graphic fileref="images/window.PNG"/>
+<graphic fileref="images/window.PNG">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;hbox&gt;&#13;    &lt;window title="Embedded Style" border="normal" width="200px"&gt;    &#13;        Hello, Embedded!        &#13;    &lt;/window&gt;    &#13;    &lt;window title="Cyan Style" sclass="wndcyan" border="normal" width="200px"&gt;    &#13;        Hello, Cyan!        &#13;    &lt;/window&gt;    &#13;    &lt;window title="Popup Style" sclass="popup" border="normal" width="200px"&gt;    &#13;        Hello, Popup!        &#13;    &lt;/window&gt;    &#13;    &lt;window title="Modal Style" sclass="modal" border="normal" width="200px"&gt;    &#13;        Hello, Modal!        &#13;    &lt;/window&gt;    &#13;&lt;/hbox&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
@@ -28913,7 +29117,9 @@
 <para/></sect3></sect2><sect2 id="Fileupload"><title>Fileupload</title>
 <para>A fileupload dialog used to let user upload a file.The <code>fileupload</code> component is not a modal dialog. Rather, it is a component, so it is placed inline with other components.</para>
 <para>
-<graphic fileref="images/fileupload.png"/>
+<graphic fileref="images/fileupload.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;image id="img"/&gt;&#13;Upload your hot shot:&#13;</programlisting>
 <para>&lt;fileupload onUpload="img.setContent(event.media)"/&gt;</para><sect3><title>Class Name</title>
@@ -29254,7 +29460,9 @@
 <para>It provides a set of utilities to show message boxes.</para>
 <para>It is typically used to alert users when an error occurs, or to prompt user for an decision.</para>
 <para>
-<graphic fileref="images/messagebox.png"/>
+<graphic fileref="images/messagebox.png">2
+			
+		</graphic>
 </para>
 <programlisting>&lt;window title="Messagebox demo" border="normal"&gt;&#13;    &lt;button label="Question" width="100px"&gt;    &#13;        &lt;attribute name="onClick"&gt;{        &#13;            Messagebox.show("Question is pressed. Are you sure?", "Question",            &#13;            Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION);            &#13;        }&lt;/attribute&gt;        &#13;    &lt;/button&gt;    &#13;&lt;/window&gt;&#13;</programlisting><sect3><title>Class Name</title>
 <para>
