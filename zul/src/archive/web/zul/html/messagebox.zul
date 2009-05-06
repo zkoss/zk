@@ -24,7 +24,7 @@ use="org.zkoss.zul.impl.MessageboxDlg">
 	<hbox>
 		<div class="${arg.icon}"/>
 		<div sclass="z-messagebox" width="210pt">
-			${arg.message}
+			<label value="${arg.message}" multiline="true"/>
 		</div>
 	</hbox>
 	<separator bar="true"/>

@@ -1,6 +1,7 @@
 	--------
 ZK 3.6.2
 * Features
+  2787715: Messagebox shall recognize linebreak
 
 * Bugs
   2787077: Listbox-Paging was broken with fix for #2782751
