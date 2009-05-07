@@ -20,7 +20,7 @@ function (out) {
 	if (box != null && box.isFixedLayout())
 		out.push(' z-overflow-hidden');
 
-	out.push('">', this.domContent_());
+	out.push('"', this.domTextStyleAttr_(), '>', this.domContent_());
 
 	for (var w = this.firstChild; w; w = w.nextSibling)
 		w.redraw(out);

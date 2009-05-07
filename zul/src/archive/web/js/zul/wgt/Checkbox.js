@@ -33,10 +33,6 @@ _zkc = zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 			html += ' tabindex="' + v + '"';
 		return html;
 	},
-	labelAttrs_: function () {
-		var style = zDom.filterTextStyle(this.domStyle_());
-		return style ? ' style="' + style + '"' : "";
-	},
 	bind_: function (desktop) {
 		this.$supers('bind_', arguments);
 
@@ -68,10 +64,13 @@ _zkc = zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		return this.$supers('doClick_', arguments);
 	},
 	updateDomStyle_: function () {
-		var node = this.getNode()
-		zDom.setStyles(node, zDom.parseStyle(this.domStyle_()));
-		var label = zDom.firstChild(node, "LABEL", true);
-		if (label) zDom.setStyles(label, zDom.parseStyle(zDom.filterTextStyle(this.domStyle_())));
+		this.$supers('updateDomStyle_', arguments);
+
+		var n = this.getNode();
+		if (n) {
+			var label = zDom.firstChild(n, "LABEL");
+			if (label) zDom.setStyles(label, zDom.parseStyle(zDom.filterTextStyle(this.domStyle_())));
+		}
 	}
 });
 if (zk.gecko2Only)

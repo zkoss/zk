@@ -17,6 +17,6 @@ function (out) {
 		zcls = this.getZclass();
 	out.push('<span', this.domAttrs_(), '>', '<input type="checkbox" id="', uuid,
 			'$real"', this.contentAttrs_(), '/><label for="', uuid, '$real"',
-			this.labelAttrs_(), ' class="', zcls, '-cnt">', this.domContent_(),
+			this.domTextStyleAttr_(), ' class="', zcls, '-cnt">', this.domContent_(),
 			'</label></span>');	
 }

@@ -555,6 +555,14 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 		return html;
 	},
+	domTextStyleAttr_: function () {
+		var s = this.getStyle();
+		if (s) {
+			s = zDom.filterTextStyle(s);
+			if (s) s = ' style="' + s + '"';
+		}
+		return s;
+	},
 
 	replaceHTML: function (n, desktop, skipper) {
 		if (!desktop) {

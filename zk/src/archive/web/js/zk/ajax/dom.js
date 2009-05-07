@@ -908,27 +908,31 @@ zDom = { //static methods
 		return el;
 	},
 	firstChild: function (el, tagName, descendant) {
-		for (var n = el.firstChild; n; n = n.nextSibling)
-			if (zDom.tag(n) == tagName)
-				return n;
+		if (el) {
+			for (var n = el.firstChild; n; n = n.nextSibling)
+				if (zDom.tag(n) == tagName)
+					return n;
 
-		if (descendant)
-			for (var n = el.firstChild; n; n = n.nextSibling) {
-				var chd = zDom.firstChild(n, tagName, descendant);
-				if (chd) return chd;
-			}
+			if (descendant)
+				for (var n = el.firstChild; n; n = n.nextSibling) {
+					var chd = zDom.firstChild(n, tagName, descendant);
+					if (chd) return chd;
+				}
+		}
 		return null;
 	},
 	lastChild: function (el, tagName, descendant) {
-		for (var n = el.lastChild; n; n = n.previousSibling)
-			if (zDom.tag(n) == tagName)
-				return n;
+		if (el) {
+			for (var n = el.lastChild; n; n = n.previousSibling)
+				if (zDom.tag(n) == tagName)
+					return n;
 
-		if (descendant) {
-			for (var n = el.lastChild; n; n = n.previousSibling) {
-				var chd = zDom.lastChild(n, tagName, descendant);
-				if (chd)
-					return chd;
+			if (descendant) {
+				for (var n = el.lastChild; n; n = n.previousSibling) {
+					var chd = zDom.lastChild(n, tagName, descendant);
+					if (chd)
+						return chd;
+				}
 			}
 		}
 		return null;
