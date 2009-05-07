@@ -12,71 +12,23 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.wgt.Groupbox = zk.$extends(zul.Widget, {
+_zkc = zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	_open: true,
 	_closable: true,
 
 	isLegend: function () {
 		return this._mold == 'default';
 	},
-	isOpen: function () {
-		return this._open;
-	},
-	setOpen: function (open, fromServer) {
-		if (this._open != open) {
-			this._open = open;
-
-			var node = this.getNode();
-			if (node) {
-				var panel = this.getSubnode('panel');
-				if (panel) { //!legend
-					if (open) zAnima.slideDown(this, panel, {afterAnima: this._afterSlideDown});
-					else zAnima.slideUp(this, panel, {beforeAnima: this._beforeSlideUp});
-				} else {
-					zDom[open ? 'rmClass': 'addClass'](node, this.getZclass() + "-colpsd");
-					zWatch.fireDown(open ? 'onShow': 'onHide', {visible:true}, this);
-				}
-				if (!fromServer) this.fire('onOpen', {open:open});
-			}
-		}
-	},
-	isClosable: function () {
-		return this._closable;
-	},
-	setClosable: function (closable) {
-		if (this._closable != closable) {
-			this._closable = closable;
-			this._updateDomOuter();
-		}
-	},
-	getContentStyle: function () {
-		return this._cntStyle;
-	},
-	setContentStyle: function (style) {
-		if (this._cntStyle != style) {
-			this._cntStyle = style;
-			this._updateDomOuter();
-		}
-	},
-	getContentSclass: function () {
-		return this._cntSclass;
-	},
-	setContentSclass: function (sclass) {
-		if (this._cntSclass != sclass) {
-			this._cntSclass = sclass;
-			this._updateDomOuter();
-		}
-	},
 
 	_updateDomOuter: function () {
 		this.rerender(zk.Skipper.nonCaptionSkipper);
 	},
 	_contentAttrs: function () {
-		var html = ' class="', s = this._cntSclass;
+		var html = ' class="', s = this._contentSclass;
 		if (s) html += s + ' ';
 		html += this.getZclass() + '-cnt"';
 
-		s = this._cntStyle;
+		s = this._contentStyle;
 		if (!this.isLegend() && this.caption) s = 'border-top:0;' + (s ? s: '');
 		if (s) html += ' style="' + s + '"';
 		return html;
@@ -168,4 +120,26 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		}
 		return html;
 	}
+});
+
+zk.def(_zkc, {
+	open: function (open, fromServer) {
+		var node = this.getNode();
+		if (node) {
+			var panel = this.getSubnode('panel');
+			if (panel) { //!legend
+				if (open) zAnima.slideDown(this, panel, {afterAnima: this._afterSlideDown});
+				else zAnima.slideUp(this, panel, {beforeAnima: this._beforeSlideUp});
+			} else {
+				zDom[open ? 'rmClass': 'addClass'](node, this.getZclass() + "-colpsd");
+				zWatch.fireDown(open ? 'onShow': 'onHide', {visible:true}, this);
+			}
+			if (!fromServer) this.fire('onOpen', {open:open});
+		}
+	},
+	closable: _zkf = function () {
+		this._updateDomOuter();
+	},
+	contentStyle: _zkf,
+	contentSclass: _zkf
 });

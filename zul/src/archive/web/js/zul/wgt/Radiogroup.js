@@ -12,19 +12,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.wgt.Radiogroup = zk.$extends(zul.Widget, {
+_zkc = zul.wgt.Radiogroup = zk.$extends(zul.Widget, {
 	_orient: 'horizontal',
 	_jsel: -1,
 	
-	getOrient: function () {
-		return this._orient;
-	},
-	setOrient: function (orient) {
-		if (this._orient != orient) {
-			this._orient = orient;
-			this.rerender();
-		}
-	},
 	getItemAtIndex: function (index) {
 		if (index < 0)
 			return null;
@@ -70,17 +61,7 @@ zul.wgt.Radiogroup = zk.$extends(zul.Widget, {
 		this.removeChild(item);
 		return item;
 	},
-	getName: function () {
-		return this._name;
-	},
-	setName: function (name) {
-		if (!name) name = null;
-		if (this._name != name) {
-			this._name = name;
-			for (var items = this.getItems(), i = items.length; --i >= 0;)
-				items[i].setName(name);
-		}
-	},
+
 	/** private method */
 	_fixSelectedIndex: function () {
 		this._jsel = this._fixSelIndex(this, {value: 0});
@@ -134,5 +115,15 @@ zul.wgt.Radiogroup = zk.$extends(zul.Widget, {
 			}
 		}
 		return -1;
+	}
+});
+
+zk.def(_zkc, {
+	orient: function () {
+		this.rerender();
+	},
+	name: function (v) {
+		for (var items = this.getItems(), i = items.length; --i >= 0;)
+			items[i].setName(name);
 	}
 });

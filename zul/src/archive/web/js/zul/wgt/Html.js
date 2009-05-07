@@ -12,17 +12,13 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.wgt.Html = zk.$extends(zul.Widget, {
-	_content: '',
-	getContent: function () {
-		return this._content;
-	},
-	setContent: function (content) {
-		if (!content) content = '';
-		if (this._content != content) {
-			this._content = content;
-			var n = this.getNode();
-			if (n) n.innerHTML = content;
-		}
+_zkc = zul.wgt.Html = zk.$extends(zul.Widget, {
+	_content: ''	
+});
+
+zk.def(_zkc, {
+	content: function (v) {
+		var n = this.getNode();
+		if (n) n.innerHTML = content || '';
 	}
 });

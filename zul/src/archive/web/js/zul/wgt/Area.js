@@ -12,28 +12,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.wgt.Area = zk.$extends(zk.Widget, {
-	getShape: function () {
-		return this._shape;
-	},
-	setShape: function (shape) {
-		if (this._shape != shape) {
-			this._shape = shape;
-			var n = this.getNode();
-			if (n) n.shape = shape || '';
-		}
-	},
-	getCoords: function () {
-		return this._coords;
-	},
-	setCoords: function (coords) {
-		if (this._coords != coords) {
-			this._coords = coords;
-			var n = this.getNode();
-			if (n) n.coords = coords || '';
-		}
-	},
-
+_zkc = zul.wgt.Area = zk.$extends(zk.Widget, {
 	//super//
 	doClick_: function (evt) {
 		if (zul.wgt.Imagemap._toofast()) return;
@@ -51,5 +30,16 @@ zul.wgt.Area = zk.$extends(zk.Widget, {
 		if (v = this._shape) 
 			attr += ' shape="' + v + '"';
 		return attr;
+	}
+});
+
+zk.def(_zkc, {
+	shape: function (v) {
+		var n = this.getNode();
+		if (n) n.shape = v || '';
+	},
+	coords: function (coords) {
+		var n = this.getNode();
+		if (n) n.coords = v || '';
 	}
 });

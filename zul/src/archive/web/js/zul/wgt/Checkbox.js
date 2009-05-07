@@ -12,50 +12,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
+_zkc = zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 	_tabindex: -1,
 	_checked: false,
 	
-	isDisabled: function () {
-		return this._disabled;
-	},
-	setDisabled: function (disabled) {
-		if (this._disabled != disabled) {
-			this._disabled = disabled;
-			var n = this.getSubnode('real');
-			if (n) n.disabled = disabled;
-		}
-	},
-	isChecked: function () {
-		return this._checked;
-	},
-	setChecked: function (checked) {
-		if (this._checked != checked) {
-			this._checked = checked;
-			var n = this.getSubnode('real');
-			if (n) n.checked = checked || false;
-		}
-	},
-	getName: function () {
-		return this._name;
-	},
-	setName: function (name) {
-		if (this._name != name) {
-			this._name = name;
-			var n = this.getSubnode('real');
-			if (n) n.name = name;
-		}
-	},
-	getTabindex: function () {
-		return this._tabindex;
-	},
-	setTabindex: function (tabindex) {
-		if (this._tabindex != tabindex) {
-			this._tabindex = tabindex;
-			var n = this.getSubnode('real');
-			if (n) n.tabIndex = tabindex;
-		}
-	},
 	getZclass: function () {
 		var zcls = this._zclass;
 		return zcls != null ? zcls: "z-checkbox";
@@ -80,8 +40,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 	bind_: function (desktop) {
 		this.$supers('bind_', arguments);
 
-		var $Checkbox = zul.wgt.Checkbox,
-			n = this.getSubnode('real');
+		var n = this.getSubnode('real');
 
 		if (zk.gecko2Only)
 			zEvt.listen(n, "click", zul.wgt.Checkbox._domClick);
@@ -90,8 +49,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		this.domListen_(n, "blur");
 	},
 	unbind_: function () {
-		var $Checkbox = zul.wgt.Checkbox,
-			n = this.getSubnode('real');
+		var n = this.getSubnode('real');
 		
 		if (zk.gecko2Only)
 			zEvt.unlisten(n, "click", zul.wgt.Checkbox._domClick);
@@ -117,7 +75,26 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 	}
 });
 if (zk.gecko2Only)
-	zul.wgt.Checkbox._domClick = function (evt) {
+	_zkc._domClick = function (evt) {
 		evt.z_target = evt.currentTarget;
 			//bug #2233787 : this is a bug of firefox 2, it need get currentTarget
 	};
+
+zk.def(_zkc,{
+	disabled: function (v) {
+		var n = this.getSubnode('real');
+		if (n) n.disabled = v;
+	},
+	checked: function (v) {
+		var n = this.getSubnode('real');
+		if (n) n.checked = v;
+	},
+	name: function (v) {
+		var n = this.getSubnode('real');
+		if (n) n.name = v || '';
+	},
+	tabindex: function (v) {
+		var n = this.getSubnode('real');
+		if (n) n.tabIndex = v >= 0 ? v: '';
+	}
+});

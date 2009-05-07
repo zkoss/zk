@@ -12,34 +12,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.LabelImageWidget = zk.$extends(zul.Widget, {
-	getLabel: function () {
-		var v = this._label;
-		return v ? v: '';
-	},
-	setLabel: function(label) {
-		if (label == null) label = '';
-		if (this._label != label) {
-			this._label = label;
-			this.updateDomContent_();
-		}
-	},
-	getImage: function () {
-		return this._image;
-	},
-	setImage: function(image) {
-		if (this._image != image) {
-			this._image = image;
-			var n = this.getImageNode_();
-			if (n) n.src = image || '';
-		}
-	},
-	getHoverImage: function () {
-		return this._himg;
-	},
-	setHoverImage: function (himg) {
-		this._himg = himg;
-	},
+_zkc = zul.LabelImageWidget = zk.$extends(zul.Widget, {
+	_label: '',
+
 	updateDomContent_: function () {
 		this.rerender();
 	},
@@ -57,7 +32,7 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 		return img ? label ? img + ' ' + label: img: label;
 	},
 	doMouseOver_: function () {
-		var himg = this._himg;
+		var himg = this._hoverImage;
 		if (himg) {
 			var n = this.getImageNode_();
 			if (n) n.src = himg;
@@ -65,7 +40,7 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 		this.$supers('doMouseOver_', arguments);
 	},
 	doMouseOut_: function () {
-		if (this._himg) {
+		if (this._hoverImage) {
 			var n = this.getImageNode_();
 			if (n) n.src = this._image;
 		}
@@ -82,4 +57,15 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 		this._eimg = null;
 		this.$supers('unbind_', arguments);
 	}
+});
+
+zk.def(_zkc, {
+	label: function () {
+		this.updateDomContent_();
+	},
+	image: function (v) {
+		var n = this.getImageNode_();
+		if (n) n.src = v || '';
+	},
+	hoverImage: null
 });

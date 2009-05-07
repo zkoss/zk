@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
+_zkc = zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	_orient: "horizontal",
 	_dir: "normal",
 	_tabindex: -1,
@@ -131,7 +131,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	}
 });
 
-zk.def(zul.wgt.Button, {
+zk.def(_zkc, {
 	once: null,
 	href: null,
 	target: null,
@@ -139,13 +139,13 @@ zk.def(zul.wgt.Button, {
 		this.updateDomContent_();
 	},
 	orient: _zkf,
-	disabled: function () {
+	disabled: function (v) {
 		if (this.desktop)
-			if (this._mold == 'os') this.getNode().disabled = true;
+			if (this._mold == 'os') this.getNode().disabled = v;
 			else this.rerender(); //bind and unbind required
 	},
-	tabindex: function () {
+	tabindex: function (v) {
 		var n = this.getNode();
-		if (n) (this.getSubnode('btn') || n).tabIndex = tabindex;
+		if (n) (this.getSubnode('btn') || n).tabIndex = v >= 0 ? v: '';
 	}
 });
