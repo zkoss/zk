@@ -56,13 +56,10 @@ import org.zkoss.zk.ui.AbstractComponent;
  * load the JavaScript file.
  *
  * <p>If you want to run the codes immediately without waiting the widgets
- * to be created, you can use the native namespace, or
+ * to be created, you can use the script directive, or
  * specify it in language addon.
  *
- * <pre><code>&lt:n:script xmlns:n="http://www.zkoss.org/2005/zk/native"
- * src="${c:encodeURL('/js/mine.js')}" /&gt;
- * //Note: encodeURL is required since it is native (i.e., generated directly)
- *</code></pre>
+ * <pre><code>&lt:?script src="/js/mine.js"?/&gt;</code></pre>
  *
  * @author tomyeh
  */

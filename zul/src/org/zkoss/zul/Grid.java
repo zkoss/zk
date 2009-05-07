@@ -760,8 +760,8 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		}
 
 		if (_pgi != null) {
-			if (atg > _pgi.getPageCount())
-				atg = _pgi.getPageCount();
+			if (atg >= _pgi.getPageCount())
+				atg = _pgi.getPageCount() - 1;
 			_pgi.setActivePage(atg);
 		}
 	}

@@ -284,7 +284,8 @@ public class Parser {
 			parseEvaluatorDirective(pgdef, pi, params);
 		} else if ("xel-method".equals(target)) {
 			parseXelMethod(pgdef, pi, params);
-		} else if ("link".equals(target) || "meta".equals(target)) { //declare a header element
+		} else if ("link".equals(target) || "meta".equals(target)
+		|| "script".equals(target)) { //declare a header element
 			pgdef.addHeaderInfo(new HeaderInfo(target, params));
 		} else if ("root-attributes".equals(target)) {
 			for (Iterator it = pi.parseData().entrySet().iterator(); it.hasNext();) {
@@ -454,9 +455,8 @@ public class Parser {
 
 		String moldURI = (String)params.remove("moldURI");
 		if (moldURI == null) moldURI = (String)params.remove("mold-uri"); //backward comaptible (2.4.x)
-		if (!isEmpty(moldURI)) {
-			throw new UnsupportedOperationException("moldURI not supported in 5.0. Use lang-addon.xml instead");
-		}
+		if (!isEmpty(moldURI))
+			throw new UnsupportedOperationException("moldURI not supported in 5.0. Use <?script?> or lang-addon.xml instead, "+pi.getLocator());
 
 		compdef.setApply((String)params.remove("apply"));
 
