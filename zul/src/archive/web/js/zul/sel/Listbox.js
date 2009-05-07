@@ -24,12 +24,14 @@ zk.def(zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			while ((p = p.nextSibling)
 			&& !p.$instanceof(zul.sel.Listitem))
 				;
+		return p;
 	},
 	previousItem: function (p) {
 		if (p)
 			while ((p = p.previousSibling)
 			&& !p.$instanceof(zul.sel.Listitem))
 				;
+		return p;
 	},
 
 	//-- super --//

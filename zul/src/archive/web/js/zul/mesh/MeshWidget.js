@@ -328,7 +328,7 @@ zk.def(zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		|| !bdfaker.cells.length || !zDom.isRealVisible(hdfaker)
 		|| !wgt.getBodyWidgetIterator().hasNext()) return;
 		
-		var hdtable = wgt.ehead.firstChild, head = wgt.columns.getNode();
+		var hdtable = wgt.ehead.firstChild, head = wgt.head.getNode();
 		if (!head) return; 
 		if (zk.opera) {
 			if (!hdtable.style.width) {
