@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.box.Box = zk.$extends(zul.Widget, {
+zk.def(zul.box.Box = zk.$extends(zul.Widget, {
 	_mold: 'vertical',
 	_align: 'start',
 	_pack: 'start',
@@ -24,33 +24,6 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	/** Returns the orient. */
 	getOrient: function () {
 		return this._mold;
-	},
-
-	/** Returns the align of this button.
-	 */
-	getAlign: function () {
-		return this._align;
-	},
-	/** Sets the align of this button.
-	 */
-	setAlign: function(align) {
-		if (this._align != align) {
-			this._align = align;
-			//TODO
-		}
-	},
-	/** Returns the pack of this button.
-	 */
-	getPack: function () {
-		return this._pack;
-	},
-	/** Sets the pack of this button.
-	 */
-	setPack: function(pack) {
-		if (this._pack != pack) {
-			this._pack = pack;
-			//TODO
-		}
 	},
 
 	//super//
@@ -274,12 +247,19 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	},
 	onShow: _zkf,
 	onHide: _zkf
-},{
+},{ //static
 	_toValign: function (v) {
 		return v ? "start" == v ? "top": "center" == v ? "middle":
 			"end" == v ? "bottom": v: null;
 	},
 	_toHalign: function (v) {
 		return v ? "start" == v ? "left": "end" == v ? "right": v: null;
+	}
+}), { //zk.def
+	align: function () {
+		this.rerender(); //TODO: a better algoithm
+	},
+	pack: function () {
+		this.rerender(); //TODO: a better algoithm
 	}
 });

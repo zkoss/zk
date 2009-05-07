@@ -12,25 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
-	getAlign: function () {
-		return this._align;
-	},
-	setAlign: function (align) {
-		if (this._align != align) {
-			this._align = align;
-			this.updateMesh_('align', align);
-		}
-	},
-	getValign: function () {
-		return this._valign;
-	},
-	setValign: function (valign) {
-		if (this._valign != valign) {
-			this._valign = valign;
-			this.updateMesh_('valign', valign);
-		}
-	},
+zk.def(zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	updateMesh_: function (nm, val) { //TODO: don't rerender
 		if (this.desktop) {
 			var wgt = this.getMeshWidget();
@@ -130,7 +112,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	_insizer: function (x) {
 		return x >= this.getNode().offsetWidth - 10;
 	}
-}, {
+}, { //static
 	_faker: ["hdfaker", "bdfaker", "ftfaker"],
 	
 	//dragdrop//
@@ -232,5 +214,12 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
 		out.push('</div></th>');	
+	}
+}), { //zk.def
+	align: function (v) {
+		this.updateMesh_('align', v);
+	},
+	valign: function (v) {
+		this.updateMesh_('valign', v);
 	}
 });

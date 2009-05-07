@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-_zkc = zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
+zk.def(zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	_orient: "horizontal",
 	_dir: "normal",
 	_tabindex: -1,
@@ -129,9 +129,7 @@ _zkc = zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		}
 		this.$supers('doMouseUp_', arguments);
 	}
-});
-
-zk.def(_zkc, {
+}), { //zk.def
 	once: null,
 	href: null,
 	target: null,

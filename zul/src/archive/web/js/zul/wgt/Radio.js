@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-_zkc = zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
+zk.def(zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 	getRadiogroup: function (parent) {
 		var wgt = parent || this.parent;
 		for (; wgt; wgt = wgt.parent)
@@ -67,9 +67,7 @@ _zkc = zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 				newParent._fixOnAdd(this); 
 		}
 	}
-});
-
-zk.def(_zkc, {
+}), {
 	value: function (v) {
 		var n = this.getSubnode('real');
 		if (n) n.value = v || '';

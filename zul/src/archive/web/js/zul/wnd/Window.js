@@ -13,7 +13,7 @@ This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 zPkg.load('zul.wgt');
-zul.wnd.Window = zk.$extends(zul.Widget, {
+zk.def(zul.wnd.Window = zk.$extends(zul.Widget, {
 	_mode: 'embedded',
 	_border: 'none',
 	_minheight: 100,
@@ -30,15 +30,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this._skipper = new zul.wnd.Skipper(this);
 	},
 
-	getMode: function () {
-		return this._mode;
-	},
-	setMode: function (mode) {
-		if (this._mode != mode) {
-			this._mode = mode;
-			this._updateDomOuter();
-		}
-	},
 	doOverlapped: function () {
 		this.setMode('overlapped');
 	},
@@ -162,7 +153,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		}
 	},
 	_updateDomPos: function (force) {
-		var n = this.getNode(), pos = this._pos;
+		var n = this.getNode(), pos = this._position;
 		if (pos == "parent"/*handled by the caller*/ || (!pos && !force))
 			return;
 
@@ -185,134 +176,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this._syncShadow();
 		if (ol != st.left || ot != st.top)
 			this._fireOnMove();
-	},
-
-	getTitle: function () {
-		return this._title;
-	},
-	setTitle: function (title) {
-		if (this._title != title) {
-			this._title = title;
-			this._updateDomOuter();
-		}
-	},
-	getBorder: function () {
-		return this._border;
-	},
-	setBorder: function (border) {
-		if (!border || '0' == border)
-			border = "none";
-		if (this._border != border) {
-			this._border = border;
-			this._updateDomOuter();
-		}
-	},
-	getPosition: function () {
-		return this._pos;
-	},
-	setPosition: function (pos) {
-		if (this._pos != pos) {
-			this._pos = pos;
-
-			if (this.desktop && this._mode != 'embedded') {
-				this._updateDomPos(); //TODO: handle pos = 'parent'
-			}
-		}
-	},
-
-	getMinheight: function () {
-		return this._minheight;
-	},
-	setMinheight: function (minheight) {
-		if (this._minheight != minheight) {
-			this._minheight = minheight;
-
-			//TODO
-		}
-	},
-	getMinwidth: function () {
-		return this._minwidth;
-	},
-	setMinwidth: function (minwidth) {
-		if (this._minwidth != minwidth) {
-			this._minwidth = minwidth;
-
-			//TODO
-		}
-	},
-
-	isClosable: function () {
-		return this._closable;
-	},
-	setClosable: function (closable) {
-		if (this._closable != closable) {
-			this._closable = closable;
-			this._updateDomOuter();
-		}
-	},
-	isSizable: function () {
-		return this._sizable;
-	},
-	setSizable: function (sizable) {
-		if (this._sizable != sizable) {
-			this._sizable = sizable;
-			this._updateDomOuter();
-		}
-	},
-	isMaximized: function () {
-		return this._maximized;
-	},
-	setMaximized: function (maximized) {
-		if (this._maximized != maximized) {
-			this._maximized = maximized;
-			this._updateDomOuter();
-		}
-	},
-	isMaximizable: function () {
-		return this._maximizable;
-	},
-	setMaximizable: function (maximizable) {
-		if (this._maximizable != maximizable) {
-			this._maximizable = maximizable;
-			this._updateDomOuter();
-		}
-	},
-	isMinimized: function () {
-		return this._minimized;
-	},
-	setMinimized: function (minimized) {
-		if (this._minimized != minimized) {
-			this._minimized = minimized;
-			this._updateDomOuter();
-		}
-	},
-	isMinimizable: function () {
-		return this._minimizable;
-	},
-	setMinimizable: function (minimizable) {
-		if (this._minimizable != minimizable) {
-			this._minimizable = minimizable;
-			this._updateDomOuter();
-		}
-	},
-
-	getContentStyle: function () {
-		return this._cntStyle;
-	},
-	setContentStyle: function (style) {
-		if (this._cntStyle != style) {
-			this._cntStyle = style;
-			this._updateDomOuter();
-		}
-	},
-	getContentSclass: function () {
-		return this._cntSclass;
-	},
-	setContentSclass: function (sclass) {
-		if (this._cntSclass != sclass) {
-			this._cntSclass = sclass;
-			this._updateDomOuter();
-		}
 	},
 
 	_updateDomOuter: function () {
@@ -432,7 +295,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 
 	_fireOnMove: function (keys) {
-		var pos = this._pos, node = this.getNode(),
+		var pos = this._position, node = this.getNode(),
 			x = zk.parseInt(node.style.left),
 			y = zk.parseInt(node.style.top);
 		if (pos == 'parent') {
@@ -475,11 +338,12 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this._syncShadow();
 		this._syncMask();
 	},
-	setZIndex: function () {
+	setZIndex: _zkf = function () {
 		this.$supers('setZIndex', arguments);
 		this._syncShadow();
 		this._syncMask();
 	},
+	setZindex: _zkf,
 	focus: function (timeout) {
 		if (this.desktop) {
 			var cap = this.caption;
@@ -689,6 +553,28 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		wgt._syncShadow();
 		wgt._fireOnMove(zEvt.metaData(evt));
 	}
+}), { //zk.def
+	mode: _zkf = function () {
+		this._updateDomOuter();
+	},
+	title: _zkf,
+	border: _zkf,
+	closable: _zkf,
+	sizable: _zkf,
+	maximized: _zkf,
+	maximizable: _zkf,
+	minimized: _zkf,
+	minimizable: _zkf,
+	contentStyle: _zkf,
+	contentSclass: _zkf,
+
+	position: function (pos) {
+		if (this.desktop && this._mode != 'embedded')
+			this._updateDomPos(); //TODO: handle pos = 'parent'
+	},
+
+	minheight: null, //TODO
+	minwidth: null //TODO
 });
 
 zul.wnd.Skipper = zk.$extends(zk.Skipper, {

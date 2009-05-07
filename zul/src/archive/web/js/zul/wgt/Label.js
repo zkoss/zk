@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
-_zkc = zul.wgt.Label = zk.$extends(zul.Widget, {
+zk.def(zul.wgt.Label = zk.$extends(zul.Widget, {
 	_value: '',
 
 	getEncodedText: function () {
@@ -23,9 +23,7 @@ _zkc = zul.wgt.Label = zk.$extends(zul.Widget, {
 		var zcs = this._zclass;
 		return zcs != null ? zcs: "z-label";
 	}
-});
-
-zk.def(_zkc, {
+}), { //zk.def
 	value: _zkf = function () {
 		var n = this.getNode();
 		if (n) n.innerHTML = this.getEncodedText();

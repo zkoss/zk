@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-_zkc = zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
+zk.def(zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 	_orient: "horizontal",
 	_dir: "normal",
 	_tabindex: -1,
@@ -76,9 +76,7 @@ _zkc = zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 			this.fireX(evt);
 			//Unlike DOM, we don't proprogate to parent (so not call $supers)
 	}
-});
-
-zk.def(_zkc, {
+}), { //zk.def
 	disabled: function () {
 		this.rerender(); //bind and unbind
 	},

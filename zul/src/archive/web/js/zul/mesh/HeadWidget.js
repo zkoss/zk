@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
+zk.def(zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 	$init: function () {
 		this.$supers('$init', arguments);
 		this.listen('onColSize', this, null, -1000);
@@ -23,26 +23,21 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		owner.fire('onInnerWidth', owner.eheadtbl.style.width);
 		owner.fireScrollRender(zk.gecko ? 200 : 60);
 	},
-	isSizable: function () {
-		return this._sizable;
-	},
-	setSizable: function (sizable) {
-		if (this._sizable != sizable) {
-			this._sizable = sizable;
-			this.rerender();
-		}
-	},
 	unbind_: function () {
 		if (this.hdfaker) zDom.remove(this.hdfaker);
 		if (this.bdfaker) zDom.remove(this.bdfaker);
 		if (this.ftfaker) zDom.remove(this.ftfaker);
 		this.$supers('unbind_', arguments);
 	}
-},{
+},{ //static
 	redraw: function (out) {
 		out.push('<tr', this.domAttrs_(), ' align="left">');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
 		out.push('</tr>');
+	}
+}), { //zk.set
+	sizable: function () {
+		this.rerender();
 	}
 });

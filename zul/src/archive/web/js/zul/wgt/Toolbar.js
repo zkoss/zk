@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-_zkc = zul.wgt.Toolbar = zk.$extends(zul.Widget, {
+zk.def(zul.wgt.Toolbar = zk.$extends(zul.Widget, {
 	_orient: "horizontal",
 	_align: "start",
 
@@ -37,9 +37,7 @@ _zkc = zul.wgt.Toolbar = zk.$extends(zul.Widget, {
 			this.rerender();
 	}
 	
-});
-
-zk.def(_zkc, {
+}), { //zk.def
 	align: _zkf = function () {
 		this.rerender();
 	},

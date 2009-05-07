@@ -12,8 +12,8 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
-	_pgpos: "bottom",
+zk.def(zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
+	_pagingPosition: "bottom",
 
 	$init: function () {
 		this.$supers('$init', arguments);
@@ -26,15 +26,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	_innerTop: "height:0px;display:none",
 	_innerBottom: "height:0px;display:none",
 
-	setPagingPosition: function (pagingPosition) {
-		if(this._pgpos != pagingPosition) {
-			this._pgpos = pagingPosition;
-			this.rerender();
-		}
-	},
-	getPagingPosition: function () {
-		return this._pgpos;
-	},
 	getPageSize: function () {
 		return this.paging.getPageSize();
 	},
@@ -54,56 +45,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		return "paging" == this.getMold();
 	},
 
-	isVflex: function () {
-		return this._vflex;
-	},
-	setVflex: function (vflex) {
-		if (this._vflex != vflex) {
-			this._vflex = vflex;
-			var n = this.getNode();
-			if (n) {
-				if (vflex) {
-					// added by Jumper for IE to get a correct offsetHeight so we need 
-					// to add this command faster than the this._calcSize() function.
-					var hgh = n.style.height;
-					if (!hgh || hgh == "auto") n.style.height = "99%"; // avoid border 1px;
-				}
-				this.onSize();
-			}
-		}
-	},
-
-	setFixedLayout: function (fixedLayout) {
-		if(this._fixedLayout != fixedLayout) {
-			this._fixedLayout = fixedLayout;
-			this.rerender();
-		}
-	},
-	isFixedLayout: function () {
-		return this._fixedLayout;
-	},
-
-	isModel: function () {
-		return this._model;
-	},
-	setModel: function (model) {
-		if (this._model != model) {
-			this._model = model;
-		}
-	},
-
-	setInnerWidth: function (innerWidth) {
-		if (innerWidth == null) innerWidth = "100%";
-		if (this._innerWidth != innerWidth) {
-			this._innerWidth = innerWidth;
-			if (this.eheadtbl) this.eheadtbl.style.width = innerWidth;
-			if (this.ebodytbl) this.ebodytbl.style.width = innerWidth;
-			if (this.efoottbl) this.efoottbl.style.width = innerWidth;
-		}
-	},
-	getInnerWidth: function () {
-		return this._innerWidth;
-	},
 	setHeight: function (height) {
 		this.$supers('setHeight', arguments);
 		if (this.desktop) {
@@ -350,38 +291,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		out.push('</tr></tbody>');
 	},
 
-	//ROD
-	setInnerHeight: function (innerHeight) {
-		if (innerHeight == null) innerHeight = "100%";
-		if (this._innerHeight != innerHeight) {
-			this._innerHeight = innerHeight;
-			// TODO for ROD Mold
-		}
-	},
-	getInnerHeight: function () {
-		return this._innerHeight;
-	},
-	setInnerTop: function (innerTop) {
-		if (innerTop == null) innerTop = "height:0px;display:none";
-		if (this._innerTop != innerTop) {
-			this._innerTop = innerTop;
-			// TODO for ROD Mold
-		}
-	},
-	getInnerTop: function () {
-		return this._innerTop;
-	},
-	setInnerBottom: function (innerBottom) {
-		if (innerBottom == null) innerBottom = "height:0px;display:none";
-		if (this._innerBottom != innerBottom) {
-			this._innerBottom = innerBottom;
-			// TODO for ROD Mold
-		}
-	},
-	getInnerBottom: function () {
-		return this._innerBottom;
-	},
-
 	//super//
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
@@ -409,7 +318,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		} else if (child.$instanceof(zul.mesh.Auxhead))
 			this.heads.$remove(child);
 	}
-}, {
+}, { //static
 	_adjHeadWd: function (wgt) {
 		// function (hdfaker, bdfaker, ftfaker, rows) {
 		var hdfaker = wgt.ehdfaker,
@@ -543,5 +452,46 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	
 		if (fakeRow)
 			src.parentNode.removeChild(src);
+	}
+}), { //zk.def
+	pagingPosition: _zkf = function () {
+		this.rerender();
+	},
+	fixedLayout: _zkf,
+
+	vflex: function (vflex) {
+		var n = this.getNode();
+		if (n) {
+			if (vflex) {
+				// added by Jumper for IE to get a correct offsetHeight so we need 
+				// to add this command faster than the this._calcSize() function.
+				var hgh = n.style.height;
+				if (!hgh || hgh == "auto") n.style.height = "99%"; // avoid border 1px;
+			}
+			this.onSize();
+		}
+	},
+
+	model: null,
+
+	innerWidth: function (v) {
+		if (v == null) this._innerWidth = v = "100%";
+		if (this.eheadtbl) this.eheadtbl.style.width = v;
+		if (this.ebodytbl) this.ebodytbl.style.width = v;
+		if (this.efoottbl) this.efoottbl.style.width = v;
+	},
+
+	//ROD
+	innerHeight: function (v) {
+		if (v == null) this._innerHeight = v = "100%";
+		// TODO for ROD Mold
+	},
+	innerTop: function (v) {
+		if (v == null) this._innerTop = v = "height:0px;display:none";
+		// TODO for ROD Mold
+	},
+	innerBottom: function (v) {
+		if (v == null) this._innerBottom = v = "height:0px;display:none";
+		// TODO for ROD Mold
 	}
 });

@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-_zkc = zul.wgt.Radiogroup = zk.$extends(zul.Widget, {
+zk.def(zul.wgt.Radiogroup = zk.$extends(zul.Widget, {
 	_orient: 'horizontal',
 	_jsel: -1,
 	
@@ -116,9 +116,7 @@ _zkc = zul.wgt.Radiogroup = zk.$extends(zul.Widget, {
 		}
 		return -1;
 	}
-});
-
-zk.def(_zkc, {
+}), { //zk.def
 	orient: function () {
 		this.rerender();
 	},

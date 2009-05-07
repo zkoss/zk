@@ -13,7 +13,7 @@ This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 zPkg.load('zul.wgt');
-zul.wnd.Panel = zk.$extends(zul.Widget, {
+zk.def(zul.wnd.Panel = zk.$extends(zul.Widget, {
 	_border: "none",
 	_title: "",
 	_open: true,
@@ -64,167 +64,6 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		if (this.desktop) {
 			zWatch.fireDown('beforeSize', null, this);
 			zWatch.fireDown('onSize', null, this);
-		}
-	},
-	isOpen: function () {
-		return this._open;
-	},
-	setOpen: function (open, fromServer) {
-		if (this._open != open) {
-			this._open = open;
-			var node = this.getNode();
-			if (node) {
-				var zcls = this.getZclass(),
-					body = this.getSubnode('body');
-				if (body) {
-					if (open) {
-						zDom.rmClass(node, zcls + '-colpsd');
-						zAnima.slideDown(this, body, {
-							afterAnima: this._afterSlideDown
-						});
-					} else {
-						zDom.addClass(node, zcls + '-colpsd');
-						this._hideShadow();
-
-						// windows 2003 with IE6 will cause an error when user toggles the panel in portallayout.
-						if (zk.ie6Only && !node.style.width)
-							node.runtimeStyle.width = "100%";
-
-						zAnima.slideUp(this, body, {
-							beforeAnima: this._beforeSlideUp
-						});
-					}
-				}
-				if (fromServer) this.fire('onOpen', {open:open});
-			}
-		}
-	},
-	isFramable: function () {
-		return this._framable;
-	},
-	setFramable: function (framable) {
-		if (this._framable != framable) {
-			this._framable = framable;
-			this.rerender();
-		}
-	},
-	setMovable: function (movable) {
-		if (this._movable != movable) {
-			this._movable = movable;
-			this.rerender();
-		}
-	},
-	isMovable: function () {
-		return this._movable;
-	},
-	isFloatable: function () {
-		return this._floatable;
-	},
-	setFloatable: function (floatable) {
-		if (this._floatable != floatable) {
-			this._floatable = floatable;
-			this.rerender();
-		}
-	},
-	isMaximized: function () {
-		return this._maximized;
-	},
-	setMaximized: function (maximized) {
-		if (this._maximized != maximized) {
-			this._maximized = maximized;
-			// TODO
-		}
-	},
-	isMaximizable: function () {
-		return this._maximizable;
-	},
-	setMaximizable: function (maximizable) {
-		if (this._maximizable != maximizable) {
-			this._maximizable = maximizable;
-			this.rerender();
-		}
-	},
-	isMinimized: function () {
-		return this._minimized;
-	},
-	setMinimized: function (minimized, fromServer) {
-		if (this._minimized != minimized) {
-			this._minimized = minimized;
-			/** TODO
-			 * if (_minimized) {
-				_maximized = false;
-				setVisible0(false); //avoid dead loop
-			} else setVisible0(true);
-			*/
-			var node = this.getNode();
-			if (node) {
-				var s = node.style, l = s.left, t = s.top, w = s.width, h = s.height;
-				if (minimized) {
-					zWatch.fireDown('onHide', {visible:true}, this);
-					zDom.hide(node);
-				} else {
-					zDom.show(node);
-					zWatch.fireDown('onShow', {visible:true}, this);
-				}
-				if (!fromServer) {
-					var wgt = this;
-					this.fire('onMinimize', {
-						left: s.left,
-						top: s.top,
-						width: s.width,
-						height: s.height,
-						minimized: minimized
-					});
-				}
-			}
-		}
-	},
-	isMinimizable: function () {
-		return this._minimizable;
-	},
-	setMinimizable: function (minimizable) {
-		if (this._minimizable != minimizable) {
-			this._minimizable = minimizable;
-			this.rerender();
-		}
-	},
-	isCollapsible: function () {
-		return this._collapsible;
-	},
-	setCollapsible: function (collapsible) {
-		if (this._collapsible != collapsible) {
-			this._collapsible = collapsible;
-			this.rerender();
-		}
-	},
-	isClosable: function () {
-		return this._closable;
-	},
-	setClosable: function (closable) {
-		if (this._closable != closable) {
-			this._closable = closable;
-			this.rerender();
-		}
-	},
-	getBorder: function () {
-		return this._border;
-	},
-	setBorder: function (border) {
-		if (!border || '0' == border)
-			border = "none";
-		if (this._border != border) {
-			this._border = border;
-			this.rerender();
-		}
-	},
-	getTitle: function () {
-		return this._title;
-	},
-	setTitle: function (title) {
-		if (!title) title = "";
-		if (this._title != title) {
-			this._title = title;
-			this.rerender();
 		}
 	},
 	addToolbar: function (name, toolbar) {
@@ -559,7 +398,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			this.fbar = null;
 		this.rerender();
 	}
-}, {
+}, { //static
 	//drag
 	_startmove: function (dg) {
 		dg.control._hideShadow();
@@ -592,5 +431,76 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			left: x + 'px',
 			top: y + 'px'
 		}, zEvt.metaData(evt)), {ignorable: true});
+	}
+}), { //zk.def
+	framable: _zkf = function () {
+		this.rerender(); //TODO: like Window, use _updateDomOuter
+	},
+	movable: _zkf,
+	floatable: _zkf,
+	maximizable: _zkf,
+	minimizable: _zkf,
+	collapsible: _zkf,
+	closable: _zkf,
+	border: _zkf,
+	title: _zkf,
+
+	open: function (open, fromServer) {
+		var node = this.getNode();
+		if (node) {
+			var zcls = this.getZclass(),
+				body = this.getSubnode('body');
+			if (body) {
+				if (open) {
+					zDom.rmClass(node, zcls + '-colpsd');
+					zAnima.slideDown(this, body, {
+						afterAnima: this._afterSlideDown
+					});
+				} else {
+					zDom.addClass(node, zcls + '-colpsd');
+					this._hideShadow();
+
+					// windows 2003 with IE6 will cause an error when user toggles the panel in portallayout.
+					if (zk.ie6Only && !node.style.width)
+						node.runtimeStyle.width = "100%";
+
+					zAnima.slideUp(this, body, {
+						beforeAnima: this._beforeSlideUp
+					});
+				}
+			}
+			if (fromServer) this.fire('onOpen', {open:open});
+		}
+	},
+
+	maximized: null, //TODO
+	minimized: function (minimized, fromServer) {
+		/** TODO
+		 * if (_minimized) {
+			_maximized = false;
+			setVisible0(false); //avoid dead loop
+		} else setVisible0(true);
+		*/
+		var node = this.getNode();
+		if (node) {
+			var s = node.style, l = s.left, t = s.top, w = s.width, h = s.height;
+			if (minimized) {
+				zWatch.fireDown('onHide', {visible:true}, this);
+				zDom.hide(node);
+			} else {
+				zDom.show(node);
+				zWatch.fireDown('onShow', {visible:true}, this);
+			}
+			if (!fromServer) {
+				var wgt = this;
+				this.fire('onMinimize', {
+					left: s.left,
+					top: s.top,
+					width: s.width,
+					height: s.height,
+					minimized: minimized
+				});
+			}
+		}
 	}
 });

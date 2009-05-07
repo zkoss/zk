@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-_zkc = zul.wgt.Separator = zk.$extends(zul.Widget, {
+zk.def(zul.wgt.Separator = zk.$extends(zul.Widget, {
 	_orient: 'horizontal',
 
 	isVertical: function () {
@@ -52,9 +52,7 @@ _zkc = zul.wgt.Separator = zk.$extends(zul.Widget, {
 	_isPercentGecko: function () {
 		return zk.gecko && this._spacing != null && this._spacing.endsWith("%");
 	}
-});
-
-zk.def(_zkc, {
+}), { //zk.def
 	orient: _zkf = function () {
 		this.updateDomClass_();
 	},

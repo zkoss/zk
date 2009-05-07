@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-_zkc = zul.wgt.Groupbox = zk.$extends(zul.Widget, {
+zk.def(zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	_open: true,
 	_closable: true,
 
@@ -120,9 +120,7 @@ _zkc = zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		}
 		return html;
 	}
-});
-
-zk.def(_zkc, {
+}), { //zk.def
 	open: function (open, fromServer) {
 		var node = this.getNode();
 		if (node) {

@@ -87,7 +87,7 @@ public class Button extends LabelImageElement implements org.zkoss.zul.api.Butto
 	public void setOnce(boolean once) {
 		if (_once != once) {
 			_once = once;
-			smartUpdate("z.once", once);
+			smartUpdate("once", once);
 		}
 	}
 

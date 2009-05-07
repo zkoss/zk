@@ -12,12 +12,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.mesh.Paging = zk.$extends(zul.Widget, {
-	_pgsz: 20,
-	_ttsz: 0,
-	_npg: 1,
-	_actpg: 0,
-	_pginc: 10,
+zk.def(zul.mesh.Paging = zk.$extends(zul.Widget, {
+	_pageSize: 20,
+	_totalSize: 0,
+	_pageCount: 1,
+	_activePage: 0,
+	_pageIncrement: 10,
 	_autohide: 10,
 	replaceHTML: function () {
 		if (this.isBothPaging())
@@ -29,112 +29,50 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		return this.parent && this.parent.getPagingPosition
 					&& "both" == this.parent.getPagingPosition();
 	},
-	getPageSize: function () {
-		return this._pgsz;
-	},
-	setPageSize: function (size) {
-		if (this._pgsz != size) {
-			this._pgsz = size;
-			this._updatePageNum();
-			// TODO this.fire('onPagingImpl', this._actpg);
-		}
-	},
-	getTotalSize: function () {
-		return this._ttsz;
-	},
-	setTotalSize: function (size) {
-		if (this._ttsz != size) {
-			this._ttsz = size;
-			this._updatePageNum();
-			if (this._detailed) rerender();
-		}
-	},
 	_updatePageNum: function () {
-		var v = Math.floor((this._ttsz - 1) / this._pgsz + 1);
+		var v = Math.floor((this._totalSize - 1) / this._pageSize + 1);
 		if (v == 0) v = 1;
-		if (v != this._npg) {
-			this._npg = v;
-			if (this._actpg >= this._npg)
-				this._actpg = this._npg - 1;
-		}
-	},
-	getPageCount: function () {
-		return this._npg;
-	},
-	setPageCount: function (npg) {
-		this._npg = npg;
-	},
-	getActivePage: function () {
-		return this._actpg;
-	},
-	setActivePage: function (pg) {
-		if (this._actpg != pg) {
-			this._actpg = pg;
-			// TODO this.fire('onPagingImpl', this._actpg);
-		}
-	},
-	getPageIncrement: function () {
-		return this._pginc;
-	},
-	setPageIncrement: function (pginc) {
-		if (_pginc != pginc) {
-			_pginc = pginc;
-			this.rerender();
-		}
-	},
-	isDetailed: function () {
-		return this._detailed;
-	},
-	setDetailed: function (detailed) {
-		if (this._detailed != detailed) {
-			this._detailed = detailed;
-			this.rerender();
-		}
-	},
-	isAutohide: function () {
-		return this._autohide;
-	},
-	setAutohide: function (autohide) {
-		if (this._autohide != autohide) {
-			this._autohide = autohide;
-			if (this._npg == 1) this.rerender();
+		if (v != this._pageCount) {
+			this._pageCount = v;
+			if (this._activePage >= this._pageCount)
+				this._activePage = this._pageCount - 1;
 		}
 	},
 	_infoTags: function () {
-		if (this._ttsz == 0)
+		if (this._totalSize == 0)
 			return "";
-		var lastItem = (this._actpg+1) * this._pgsz,
+		var lastItem = (this._activePage+1) * this._pageSize,
 			out = [];
 		out.push('<div class="', this.getZclass(), '-info">[ ', lastItem + 1,
-				' - ', lastItem > this._ttsz ? this._ttsz : lastItem, ' / ',
-				this._ttsz, ' ]</div>');
+				' - ', lastItem > this._totalSize ? this._totalSize : lastItem, ' / ',
+				this._totalSize, ' ]</div>');
 		return out.join('');
 	},
 	_innerTags: function () {
 		var out = [];
 
-		var half = this._pginc / 2,
-			begin, end = this._actpg + half - 1;
-		if (end >= this._npg) {
-			end = this._npg - 1;
-			begin = end - this._pginc + 1;
+		var half = this._pageIncrement / 2,
+			begin, end = this._activePage + half - 1;
+		if (end >= this._pageCount) {
+			end = this._pageCount - 1;
+			begin = end - this._pageIncrement + 1;
 			if (begin < 0) begin = 0;
 		} else {
-			begin = this._actpg - half;
+			begin = this._activePage - half;
 			if (begin < 0) begin = 0;
-			end = begin + this._pginc - 1;
-			if (end >= this._npg) end = this._npg - 1;
+			end = begin + this._pageIncrement - 1;
+			if (end >= this._pageCount) end = this._pageCount - 1;
 		}
 		var zcs = this.getZclass();
-		if (this._actpg > 0) {
+		if (this._activePage > 0) {
 			if (begin > 0) //show first
 				this.appendAnchor(zcs, out, msgzul.FIRST, 0);
-			this.appendAnchor(zcs, out, msgzul.PREV, this._actpg - 1);
+			this.appendAnchor(zcs, out, msgzul.PREV, this._activePage - 1);
 		}
 
-		var bNext = this._actpg < this._npg - 1;
+		var bNext = this._activePage < this._pageCount - 1;
 		for (; begin <= end; ++begin) {
-			if (begin == this._actpg) {
+			if (begin == this._activePage) {
 				this.appendAnchor(zcs, out, begin + 1, begin, true);
 			} else {
 				this.appendAnchor(zcs, out, begin + 1, begin);
@@ -142,12 +80,12 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		}
 
 		if (bNext) {
-			this.appendAnchor(zcs, out, msgzul.NEXT, this._actpg + 1);
-			if (end < this._npg - 1) //show last
-				this.appendAnchor(zcs, out, msgzul.LAST, this._npg - 1);
+			this.appendAnchor(zcs, out, msgzul.NEXT, this._activePage + 1);
+			if (end < this._pageCount - 1) //show last
+				this.appendAnchor(zcs, out, msgzul.LAST, this._pageCount - 1);
 		}
 		if (this._detailed)
-			out.push('<span>[', this._actpg * this._pgsz + 1, '/', this._ttsz, "]</span>");
+			out.push('<span>[', this._activePage * this._pageSize + 1, '/', this._totalSize, "]</span>");
 		return out.join('');
 	},
 	appendAnchor: function (zclass, out, label, val, seld) {
@@ -161,7 +99,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 	},
 	isVisible: function () {
 		var visible = this.$supers('isVisible', arguments);
-		return visible && (this._npg > 1 || !this._autohide);
+		return visible && (this._pageCount > 1 || !this._autohide);
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
@@ -187,11 +125,11 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 					zEvt.listen(btn[j], "click", $Paging['_dom' + postfix[k] + 'Click']);
 				}
 
-				if (this._npg == 1)
+				if (this._pageCount == 1)
 					zDom.addClass(btn[j], zcls + "-btn-disd");
 				else if (postfix[k] == 'first' || postfix[k] == 'prev') {
-					if (this._actpg == 0) zDom.addClass(btn[j], zcls + "-btn-disd");
-				} else if (this._actpg == this._npg - 1) {
+					if (this._activePage == 0) zDom.addClass(btn[j], zcls + "-btn-disd");
+				} else if (this._activePage == this._pageCount - 1) {
 					zDom.addClass(btn[j], zcls + "-btn-disd");
 				}
 			}
@@ -218,7 +156,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		}
 		this.$supers('unbind_', arguments);
 	}
-}, {
+}, { //static
 	go: function (anc, pgno) {
 		var wgt = zk.Widget.isInstance(anc) ? anc : zk.Widget.$(anc);
 		if (wgt && wgt.getActivePage() != pgno)
@@ -261,7 +199,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 			zEvt.stop(evt);
 			break;
 		case 35://end
-			wgt.$class.go(wgt, wgt._npg - 1);
+			wgt.$class.go(wgt, wgt._pageCount - 1);
 			zEvt.stop(evt);
 			break;
 		case 9: case 8: case 46: //tab, backspace, delete 
@@ -292,7 +230,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		var value = zk.parseInt(inp.value);
 		value += add;
 		if (value < 1) value = 1;
-		else if (value > wgt._npg) value = wgt._npg;
+		else if (value > wgt._pageCount) value = wgt._pageCount;
 		inp.value = value;
 	},
 	_domfirstClick: function (evt) {
@@ -391,5 +329,23 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		}
 		zul.mesh.Paging._downbtn = null;
 		zEvt.unlisten(document.body, "mouseup", zul.mesh.Paging._domMouseUp);
+	}
+}), { //zk.def
+	totalSize: function () {
+		this._updatePageNum();
+		if (this._detailed) rerender();
+	},
+	pageIncrement: _zkf = function () {
+		this.rerender();
+	},
+	detailed: _zkf,
+	pageCount: _zkf, //TODO: smarter algorithm
+	activePage: null, //TODO this.fire('onPagingImpl', this._activePage);
+	pageSize: function () {
+		this._updatePageNum();
+		// TODO this.fire('onPagingImpl', this._activePage);
+	},
+	autohide: function () {
+		if (this._pageCount == 1) this.rerender();
 	}
 });

@@ -12,7 +12,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-_zkc = zul.wgt.Image = zk.$extends(zul.Widget, {
+zk.def(zul.wgt.Image = zk.$extends(zul.Widget, {
 	getImageNode_: function () {
 		return this.getNode();
 	},
@@ -54,9 +54,7 @@ _zkc = zul.wgt.Image = zk.$extends(zul.Widget, {
 			attr += ' vspace="' + v + '"';
 		return attr;
 	}
-});
-
-zk.def(_zkc, {
+}), { //zk.def
 	src: function (v) {
 		var n = this.getImageNode_();
 		if (n) n.src = v || '';
