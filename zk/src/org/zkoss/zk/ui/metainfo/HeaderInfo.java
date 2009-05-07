@@ -89,20 +89,33 @@ public class HeaderInfo {
 		final StringBuffer sb = new StringBuffer(128)
 			.append('<').append(_name);
 
+		final boolean bScript = "script".equals(_name);
+		String scriptContent = null;
 		final Evaluator eval = pgdef.getEvaluator();
 		for (Iterator it = _attrs.iterator(); it.hasNext();) {
 			final Object[] p = (Object[])it.next();
-			String nm = (String)p[0];
+			final String nm = (String)p[0];
 			String val = (String)((ExValue)p[1]).getValue(eval, page);
+			if (bScript && "content".equals(nm)) {
+				scriptContent = val;
+				continue;
+			}
 
 			if (val == null || val.length() == 0) {
 				sb.append(' ').append(nm).append("=\"\"");
 			} else {
-				if ("href".equals(nm)) val = Executions.encodeURL(val);
+				if ("href".equals(nm) || (bScript && "src".equals(nm)))
+					val = Executions.encodeURL(val);
 				HTMLs.appendAttribute(sb, nm, val);
 			}
 		}
 
+		if (bScript) {
+			sb.append(">\n");
+			if (scriptContent != null)
+				sb.append(scriptContent).append('\n');
+			return sb.append("</script>").toString();
+		}
 		return sb.append("/>").toString();
 	}
 }

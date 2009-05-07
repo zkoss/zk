@@ -285,7 +285,8 @@ public class Parser {
 			parseEvaluatorDirective(pgdef, pi, params);
 		} else if ("xel-method".equals(target)) {
 			parseXelMethod(pgdef, pi, params);
-		} else if ("link".equals(target) || "meta".equals(target)) { //declare a header element
+		} else if ("link".equals(target) || "meta".equals(target)
+		|| "script".equals(target)) { //declare a header element
 			pgdef.addHeaderInfo(new HeaderInfo(target, params));
 		} else if ("root-attributes".equals(target)) {
 			for (Iterator it = pi.parseData().entrySet().iterator(); it.hasNext();) {
