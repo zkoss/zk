@@ -12,10 +12,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.grid.Column = zk.$extends(zul.mesh.HeaderWidget, {
-	_sortDir: "natural",
-	_sortAsc: "none",
-	_sortDsc: "none",
+zk.def(zul.grid.Column = zk.$extends(zul.mesh.HeaderWidget, {
+	_sortDirection: "natural",
+	_sortAscending: "none",
+	_sortDescending: "none",
 
 	$init: function () {
 		this.$supers('$init', arguments);
@@ -31,72 +31,8 @@ zul.grid.Column = zk.$extends(zul.mesh.HeaderWidget, {
 			this.setSortDescending('none');
 		}
 	},
-	getSortDirection: function () {
-		return this._sortDir;
-	},
-	setSortDirection: function (sortDir) {
-		if (this._sortDir != sortDir) {
-			this._sortDir = sortDir;
-			var n = this.getNode();
-			
-			if (n) {
-				var zcls = this.getZclass();
-				zDom.rmClass(n, zcls + "-sort-dsc");
-				zDom.rmClass(n, zcls + "-sort-asc");
-				switch (sortDir) {
-				case "ascending":
-					zDom.addClass(n, zcls + "-sort-asc");
-					break;
-				case "descending":
-					zDom.addClass(n, zcls + "-sort-dsc");
-					break;
-				default: // "natural"
-					zDom.addClass(n, zcls + "-sort");
-					break;
-				}
-			}
-		}
-	},
 	isSortable_: function () {
-		return this._sortAsc != "none" || this._sortDsc != "none";
-	},
-	getSortAscending: function () {
-		return this._sortAsc;
-	},
-	setSortAscending: function (sorter) {
-		if (!sorter) sorter = "none";
-		if (this._sortAsc != sorter) {
-			this._sortAsc = sorter;
-			var n = this.getNode(),
-				zcls = this.getZclass();
-			if (n) {
-				if (sorter == "none") {
-					zDom.rmClass(n, zcls + "-sort-asc");
-					if (this._sortDsc == "none")
-						zDom.rmClass(n, zcls + "-sort");					
-				} else
-					zDom.addClass(n, zcls + "-sort");
-			}
-		}
-	},
-	getSortDescending: function () {
-		return this._sortDsc;
-	},
-	setSortDescending: function (sorter) {
-		if (!sorter) sorter = "none";
-		if (this._sortDsc != sorter) {
-			this._sortDsc = sorter;
-			var n = this.getNode(),
-				zcls = this.getZclass();
-			if (n) {
-				if (sorter == "none") {
-					zDom.rmClass(n, zcls + "-sort-dsc");
-					if (this._sortAsc == "none")
-						zDom.rmClass(n, zcls + "-sort");					
-				} else
-					zDom.addClass(n, zcls + "-sort");
-			}
-		}
+		return this._sortAscending != "none" || this._sortDescending != "none";
 	},
 	sort: function (ascending, evt) {
 		var dir = this.getSortDirection();
@@ -106,7 +42,7 @@ zul.grid.Column = zk.$extends(zul.mesh.HeaderWidget, {
 			if ("descending" == dir) return false;
 		}
 
-		var sorter = ascending ? this._sortAsc: this._sortDsc;
+		var sorter = ascending ? this._sortAscending: this._sortDescending;
 		if (sorter == "fromServer")
 			return false;
 		else if (sorter == "none") {
@@ -183,9 +119,55 @@ zul.grid.Column = zk.$extends(zul.mesh.HeaderWidget, {
 	domClass_: function (no) {
 		var scls = this.$supers('domClass_', arguments);
 		if (!no || !no.zclass) {
-			var added = this._sortAsc != "none" || this._sortDsc != "none" ?  this.getZclass() + '-sort': '';
+			var added = this._sortAscending != "none" || this._sortDescending != "none" ?  this.getZclass() + '-sort': '';
 			return scls != null ? scls + ' ' + added : added;
 		}
 		return scls;
+	}
+}), { //zk.def
+	sortDirection: function (v) {
+		var n = this.getNode();
+		if (n) {
+			var zcls = this.getZclass();
+			zDom.rmClass(n, zcls + "-sort-dsc");
+			zDom.rmClass(n, zcls + "-sort-asc");
+			switch (v) {
+			case "ascending":
+				zDom.addClass(n, zcls + "-sort-asc");
+				break;
+			case "descending":
+				zDom.addClass(n, zcls + "-sort-dsc");
+				break;
+			default: // "natural"
+				zDom.addClass(n, zcls + "-sort");
+				break;
+			}
+		}
+	},
+	sortAscending: function (v) {
+		if (!v) this._sortAscending = v = "none";
+		var n = this.getNode(),
+			zcls = this.getZclass();
+		if (n) {
+			if (v == "none") {
+				zDom.rmClass(n, zcls + "-sort-asc");
+				if (this._sortDescending == "none")
+					zDom.rmClass(n, zcls + "-sort");					
+			} else
+				zDom.addClass(n, zcls + "-sort");
+		}
+	},
+	sortDescending: function (v) {
+		if (!v) this._sortDescending = v = "none";
+		var n = this.getNode(),
+			zcls = this.getZclass();
+		if (n) {
+			if (v == "none") {
+				zDom.rmClass(n, zcls + "-sort-dsc");
+				if (this._sortAscending == "none")
+					zDom.rmClass(n, zcls + "-sort");					
+			} else
+				zDom.addClass(n, zcls + "-sort");
+		}
 	}
 });

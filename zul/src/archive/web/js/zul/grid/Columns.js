@@ -12,43 +12,13 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.grid.Columns = zk.$extends(zul.mesh.HeadWidget, {
-	_mpop: "none",
+zk.def(zul.grid.Columns = zk.$extends(zul.mesh.HeadWidget, {
+	_menupopup: "none",
 	_columnshide: true,
 	_columnsgroup: true,
 	
 	getGrid: function () {
 		return this.parent;
-	},
-	setColumnshide: function (columnshide) {
-		if (this._columnshide != columnshide) {
-			this._columnshide = columnshide;
-			//postOnInitLater();
-			//smartUpdate("z.columnshide", _columnshide);
-		}
-	},
-	isColumnshide: function () {
-		return this._columnshide;
-	},
-	setColumnsgroup: function (columnsgroup) {
-		if (this._columnsgroup != columnsgroup) {
-			this._columnsgroup = columnsgroup;
-			//postOnInitLater();
-			//smartUpdate("z.columnsgroup", _columnsgroup);
-		}
-	},
-	isColumnsgroup: function () {
-		return this._columnsgroup;
-	},
-	getMenupopup: function () {
-		return this._mpop;
-	},
-	setMenupopup: function (mpop) {
-		/**if (!Objects.equals(_mpop, mpop)) {
-			_mpop = mpop;
-			invalidate();
-			postOnInitLater();
-		}*/
 	},
 	rerender: function () {
 		if (this.desktop) {
@@ -60,7 +30,7 @@ zul.grid.Columns = zk.$extends(zul.mesh.HeadWidget, {
 	},
 	setPopup: function (mpop) {
 		if (zk.Widget.isInstance(mpop))
-			this._mpop = mpop;
+			this._menupopup = mpop;
 	},
 	_getMpopId: function () {
 		/**final String mpop = getMenupopup();
@@ -71,4 +41,9 @@ zul.grid.Columns = zk.$extends(zul.mesh.HeadWidget, {
 	getZclass: function () {
 		return this._zclass == null ? "z-columns" : this._zclass;
 	}
+}), { //zk.def
+	columnshide: null, //TODO: postOnInitLater()?
+	columnsgroup: null, //TODO: postOnInitLater()?
+	columnsgroup: null,
+	menupopup: null //TODO: rerender, postOnInitLater?
 });

@@ -12,37 +12,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.utl.Timer = zk.$extends(zk.Widget, {
+zk.def(zul.utl.Timer = zk.$extends(zk.Widget, {
 	_running: true,
 	_delay: 0,
 
-	isRepeats: function () {
-		return this._repeats;
-	},
-	setRepeats: function (repeats) {
-		if (this._repeats != repeats) {
-			this._repeats = repeats;
-			if (this.desktop) this._sync();
-		}
-	},
-	getDelay: function () {
-		return this._delay;
-	},
-	setDelay: function (delay) {
-		if (this._delay != delay) {
-			this._delay = delay;
-			if (this.desktop) this._sync();
-		}
-	},
-	isRunning: function () {
-		return this._running;
-	},
-	setRunning: function (running) {
-		if (this._running != running) {
-			this._running = running;
-			if (this.desktop) this._sync();
-		}
-	},
 	play: function () {
 		this.setRunning(true);
 	},
@@ -91,4 +64,10 @@ zul.utl.Timer = zk.$extends(zk.Widget, {
 		this._stop();
 		this.$supers('unbind_', arguments);
 	}
+}), { //zk.def
+	repeats: _zkf = function () {
+		if (this.desktop) this._sync();
+	},
+	delay: _zkf,
+	running: _zkf
 });

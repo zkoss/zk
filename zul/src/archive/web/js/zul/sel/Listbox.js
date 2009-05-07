@@ -12,21 +12,11 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
+zk.def(zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	_rows: 0,
 
 	$init: function () {
 		this.$supers('$init', arguments);
-	},
-
-	getRows: function () {
-		return this._rows;
-	},
-	setRows: function (rows) {
-		if (this._rows != rows) {
-			this._rows = rows;
-			if (this.desktop) ;//TODO: recalc size
-		}
 	},
 
 	nextItem: function (p) {
@@ -86,6 +76,10 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		return new zul.sel.ItemIter(this);
 	},
 	getBodyWidgetIterator: _zkf
+}), { //zk.def
+	rows: function (rows) {
+		if (this.desktop) ;//TODO: recalc size
+	}
 });
 
 zul.sel.ItemIter = zk.$extends(zk.Object, {

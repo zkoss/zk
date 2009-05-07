@@ -12,39 +12,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.inp.Comboitem = zk.$extends(zul.LabelImageWidget, {
-	isDisabled: function () {
-		return this._disabled;
-	},
-	setDisabled: function (disabled) {
-		if (this._disabled != disabled) {
-			this._disabled = disabled;
-			var n = this.getNode();
-			if (n) {
-				var zcls = this.getZclass() + '-disd';
-				disabled ? zDom.addClass(n, zcls): zDom.rmClass(n, zcls);
-			}
-		}
-	},
-	getDescription: function () {
-		return this._description;
-	},
-	setDescription: function (desc) {
-		if (this._description != desc) {
-			this._description = desc;
-			if (this.desktop) this.rerender();
-		}
-	},
-	getContent: function () {
-		return this._content;
-	},
-	setContent: function (content) {
-		if (this._content != content) {
-			this._content = content;
-			if (this.desktop) this.rerender();
-		}
-	},
-
+zk.def(zul.inp.Comboitem = zk.$extends(zul.LabelImageWidget, {
 	//super
 	doMouseOver_: function () {
 		if (!this._disabled) {
@@ -88,4 +56,16 @@ zul.inp.Comboitem = zk.$extends(zul.LabelImageWidget, {
 		var zcs = this._zclass;
 		return zcs != null ? zcs: "z-comboitem";
 	}
+}), { //zk.def
+	disabled: function (v) {
+		var n = this.getNode();
+		if (n) {
+			var zcls = this.getZclass() + '-disd';
+			v ? zDom.addClass(n, zcls): zDom.rmClass(n, zcls);
+		}
+	},
+	description: _zkf = function () {
+		this.rerender();
+	},
+	content: _zkf
 });

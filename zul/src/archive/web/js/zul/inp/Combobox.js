@@ -12,15 +12,8 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
+zk.def(zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	_autocomplete: true,
-
-	isAutocomplete: function () {
-		return this._autocomplete;
-	},
-	setAutocomplete: function (autocomplete) {
-		this._autocomplete = autocomplete;
-	},
 
 	//called by SimpleConstraint
 	validateStrict: function (val) {
@@ -192,4 +185,6 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		var zcs = this._zclass;
 		return zcs != null ? zcs: "z-combobox";
 	}
+}), { //zk.def
+	autocomplete: null
 });

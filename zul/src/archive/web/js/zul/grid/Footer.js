@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.grid.Footer = zk.$extends(zul.LabelImageWidget, {
+zk.def(zul.grid.Footer = zk.$extends(zul.LabelImageWidget, {
 	_span: 1,
 	
 	getGrid: function () {
@@ -27,17 +27,12 @@ zul.grid.Footer = zk.$extends(zul.LabelImageWidget, {
 		}
 		return null;
 	},
-	getSpan: function () {
-		return this._span;
-	},
-	setSpan: function (span) {
-		if (this._span != span) {
-			this._span = span;
-			var n = this.getNode();
-			if (n) n.colspan = span;
-		}
-	},
 	getZclass: function () {
 		return this._zclass == null ? "z-footer" : this._zclass;
+	}
+}), { //zk.def
+	span: function (v) {
+		var n = this.getNode();
+		if (n) n.colSpan = v;
 	}
 });

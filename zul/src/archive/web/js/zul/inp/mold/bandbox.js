@@ -20,7 +20,7 @@ function (out) {
 		this.textAttrs_(), '/><span id="', this.uuid, '$btn" class="',
 		zcls, '-btn"');
 
-	if (!this._btnVisible)
+	if (!this._buttonVisible)
 		out.push(' style="display:none"');
 
 	out.push('><span class="', zcls, '-img"></span></span><div id="',

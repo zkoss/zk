@@ -12,58 +12,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.med.Audio = zk.$extends(zul.Widget, {
-	getSrc: function () {
-		return this._src;
-	},
-	setSrc: function (src) {
-		if (this._src != src) {
-			this._src = src;
-			var n = this.getNode();
-			if (n) this.rerender(); //At least IE failed if change n.src only
-		}
-	},
-	getAlign: function () {
-		return this._align;
-	},
-	setAlign: function (align) {
-		if (this._align != align) {
-			this._align = align;
-			var n = this.getNode();
-			if (n) n.align = align || '';
-		}
-	},
-	getBorder: function () {
-		return this._border;
-	},
-	setBorder: function (border) {
-		if (this._border != border) {
-			this._border = border;
-			var n = this.getNode();
-			if (n) n.border = border || '';
-		}
-	},
-	getAutostart: function () {
-		return this._autostart;
-	},
-	setAutostart: function (autostart) {
-		if (this._autostart != autostart) {
-			this._autostart = autostart;
-			var n = this.getNode();
-			if (n) n.autostart = autostart;
-		}
-	},
-	getLoop: function () {
-		return this._loop;
-	},
-	setLoop: function (loop) {
-		if (this._loop != loop) {
-			this._loop = loop;
-			var n = this.getNode();
-			if (n) n.loop = loop;
-		}
-	},
-
+zk.def(zul.med.Audio = zk.$extends(zul.Widget, {
 	play: function () {
 		var n = this.getNode();
 		if (n) {
@@ -128,5 +77,25 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 		if (v = this._loop) 
 			attr += ' loop="' + v + '"';
 		return attr;
+	}
+}), { //zk.def
+	src: function () {
+		this.rerender(); //At least IE failed if change n.src only
+	},
+	align: function (v) {
+		var n = this.getNode();
+		if (n) n.align = v || '';
+	},
+	border: function (v) {
+		var n = this.getNode();
+		if (n) n.border = v || '';
+	},
+	autostart: function (v) {
+		var n = this.getNode();
+		if (n) n.autostart = v;
+	},
+	loop: function (v) {
+		var n = this.getNode();
+		if (n) n.loop = v;
 	}
 });

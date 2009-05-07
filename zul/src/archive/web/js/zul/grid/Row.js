@@ -12,42 +12,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.grid.Row = zk.$extends(zul.Widget, {
+zk.def(zul.grid.Row = zk.$extends(zul.Widget, {
 	getGrid: function () {
 		return this.parent ? this.parent.parent : null;
-	},
-	getAlign: function () {
-		return this._align;
-	},
-	setAlign: function (align) {
-		if (this._align != align) {
-			this._align = align;
-			var n = this.getNode();
-			if (n)
-				n.align = align;
-		}
-	},
-	isNowrap: function () {
-		return this._nowrap;
-	},
-	setNowrap: function (nowrap) {
-		if (this._nowrap != nowrap) {
-			this._nowrap = nowrap;
-			var n = this.getNode();
-			if (n)
-				n.noWrap = nowrap;
-		}
-	},
-	getValign: function () {
-		return this._valign;
-	},
-	setValign: function (valign) {
-		if (this._valign != valign) {
-			this._valign = valign;
-			var n = this.getNode();
-			if (n)
-				n.vAlign = valign;
-		}
 	},
 	setVisible: function (visible) {
 		if (this.isVisible() != visible) {
@@ -194,7 +161,27 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 		if (child == this.detail)
 			this.detail = null;
 	}
+}), { //zk.def
+	getAlign: function () {
+		return this._align;
+	},
+	align: function (v) {
+		var n = this.getNode();
+		if (n)
+			n.align = v;
+	},
+	nowrap: function (v) {
+		var n = this.getNode();
+		if (n)
+			n.noWrap = v;
+	},
+	valign: function (v) {
+		var n = this.getNode();
+		if (n)
+			n.vAlign = v;
+	}
 });
+
 /** // TODO for drag and drop
  * if (zk.gecko) {
 	zul.grid.Row.prototype.doMouseOver_ = function (evt) {
