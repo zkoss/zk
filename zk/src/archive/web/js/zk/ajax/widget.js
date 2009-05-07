@@ -42,16 +42,6 @@ zk.Widget = zk.$extends(zk.Object, {
 		} else if (!this.uuid) this.uuid = zk.Widget.nextUuid();
 	},
 
-	getMold: function () {
-		return this._mold;
-	},
-	setMold: function (mold) {
-		if (mold != this._mold) {
-			this._mold = mold;
-			this.rerender();
-		}
-	},
-
 	getSpaceOwner: function () {
 		for (var w = this; w; w = w.parent)
 			if (w._fellows) return w;
@@ -443,22 +433,6 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 	},
 
-	getWidth: function () {
-		return this._width;
-	},
-	setWidth: function (width) {
-		this._width = width;
-		var n = this.getNode();
-		if (n) n.style.width = width ? width: '';
-	},
-	getHeight: function () {
-		return this._height;
-	},
-	setHeight: function (height) {
-		this._height = height;
-		var n = this.getNode();
-		if (n) n.style.height = height ? height: '';
-	},
 	getZIndex: _zkf = function () {
 		return this._zIndex;
 	},
@@ -472,61 +446,9 @@ zk.Widget = zk.$extends(zk.Object, {
 			this._zIndex = zIndex;
 			var n = this.getNode();
 			if (n) {
-				n.style.zIndex = zIndex >= 0 ? zIndex: '';
+				n.style.zIndex = zIndex = zIndex >= 0 ? zIndex: '';
 				if (fire) this.fire('onZIndex', zIndex, {ignorable: true});
 			}
-		}
-	},
-	getLeft: function () {
-		return this._left;
-	},
-	setLeft: function (left) {
-		this._left = left;
-		var n = this.getNode();
-		if (n) n.style.left = left ? left: '';
-	},
-	getTop: function () {
-		return this._top;
-	},
-	setTop: function (top) {
-		this._top = top;
-		var n = this.getNode();
-		if (n) n.style.top = top ? top: '';
-	},
-	getTooltiptext: function () {
-		return this._tooltiptext;
-	},
-	setTooltiptext: function (tooltiptext) {
-		this._tooltiptext = tooltiptext;
-		var n = this.getNode();
-		if (n) n.title = tooltiptext ? tooltiptext: '';
-	},
-
-	getStyle: function () {
-		return this._style;
-	},
-	setStyle: function (style) {
-		if (this._style != style) {
-			this._style = style;
-			this.updateDomStyle_();
-		}
-	},
-	getSclass: function () {
-		return this._sclass;
-	},
-	setSclass: function (sclass) {
-		if (this._sclass != sclass) {
-			this._sclass = sclass;
-			this.updateDomClass_();
-		}
-	},
-	getZclass: function () {
-		return this._zclass;
-	},
-	setZclass: function (zclass) {
-		if (this._zclass != zclass) {
-			this._zclass = zclass;
-			this.updateDomClass_();
 		}
 	},
 
@@ -1219,6 +1141,39 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (!cls)
 			throw 'widget not found: '+wgtnm;
 		return new cls();
+	}
+});
+
+zk.def(zk.Widget, {
+	mold: function () {
+		this.rerender();
+	},
+	style: function () {
+		this.updateDomStyle_();
+	},
+	sclass: _zkf = function () {
+		this.updateDomClass_();
+	},
+	zclass: _zkf,
+	width: function (v) {
+		var n = this.getNode();
+		if (n) n.style.width = v || '';
+	},
+	height: function (h) {
+		var n = this.getNode();
+		if (n) n.style.height = h || '';
+	},
+	left: function (v) {
+		var n = this.getNode();
+		if (n) n.style.left = v || '';
+	},
+	top: function (v) {
+		var n = this.getNode();
+		if (n) n.style.top = v || '';
+	},
+	tooltiptext: function (v) {
+		var n = this.getNode();
+		if (n) n.title = v || '';
 	}
 });
 

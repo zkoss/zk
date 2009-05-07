@@ -86,11 +86,11 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			zDom.rmClass(this.getSubnode('box'), this.getZclass() + "-focus");
 		this.$supers('doBlur_', arguments);
 	},
-	doClick_: function (wevt) {
+	doClick_: function (evt) {
 		if (!this._disabled) {
-			this.fireX(wevt);
+			this.fireX(evt);
 
-			if (!wevt.stopped) {
+			if (!evt.stopped) {
 				var href = this._href;
 				if (href)
 					zUtl.go(href, false, this.getTarget(), "target");

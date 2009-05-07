@@ -134,14 +134,11 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 			attr += ' href="javascript:;"';
 		return attr;
 	},
-	doClick_: function(wevt, evt){
+	doClick_: function(evt){
 		if (this._disabled)
-			zEvt.stop(evt); //prevent default behavior
-		else {
-			this.fireX(wevt);
-			if (wevt.stopped)
-				zEvt.stop(evt); //prevent default behavior
-		}
-		//Unlike DOM, we don't proprogate to parent (so no calling $supers)
+			evt.stop(); //prevent browser default
+		else
+			this.fireX(evt);
+			//Unlike DOM, we don't proprogate to parent (so not call $supers)
 	}
 });

@@ -197,14 +197,14 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 });
 /** // TODO for drag and drop
  * if (zk.gecko) {
-	zul.grid.Row.prototype.doMouseOver_ = function (wevt, evt) {
-		var target = this._getDirectChildByElement(zEvt.target(evt), this.getNode());
+	zul.grid.Row.prototype.doMouseOver_ = function (evt) {
+		var target = this._getDirectChildByElement(evt.domTarget, this.getNode());
 		if (target)
 			target.firstChild.style.MozUserSelect = "none";
 		this.$supers('doMouseOver_', arguments);
 	};
-	zul.grid.Row.prototype.doMouseOut_ = function (wevt, evt) {
-		var target = this._getDirectChildByElement(zEvt.target(evt), this.getNode());
+	zul.grid.Row.prototype.doMouseOut_ = function (evt) {
+		var target = this._getDirectChildByElement(evt.domTarget, this.getNode());
 		if (target)
 			target.firstChild.style.MozUserSelect = "";
 		this.$supers('doMouseOut_', arguments);
