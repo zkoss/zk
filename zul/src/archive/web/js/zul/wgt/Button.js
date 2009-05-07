@@ -17,75 +17,6 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	_dir: "normal",
 	_tabindex: -1,
 
-	/** Returns the orient of this button.
-	 */
-	getOrient: function () {
-		return this._orient;
-	},
-	/** Sets the orient of this button.
-	 */
-	setOrient: function(orient) {
-		if (this._orient != orient) {
-			this._orient = orient;
-			this.updateDomContent_();
-		}
-	},
-	/** Returns the dir of this button.
-	 */
-	getDir: function () {
-		return this._dir;
-	},
-	/** Sets the dir of this button.
-	 */
-	setDir: function(dir) {
-		if (this._dir != dir) {
-			this._dir = dir;
-			this.updateDomContent_();
-		}
-	},
-	/** Returns whether this button is disabled
-	 */
-	isDisabled: function () {
-		return this._disabled;
-	},
-	/** Sets whether this button is disabled
-	 */
-	setDisabled: function(disabled) {
-		if (this._disabled != disabled) {
-			this._disabled = disabled;
-			if (this.desktop)
-				if (this._mold == 'os') this.getNode().disabled = true;
-				else this.rerender(); //bind and unbind required
-		}
-	},
-	/** Returns the tab index
-	 */
-	getTabindex: function () {
-		return this._tabindex;
-	},
-	/** Sets the tab index
-	 */
-	setTabindex: function(tabindex) {
-		if (this._tabindex != tabindex) {
-			this._tabindex = tabindex;
-			var n = this.getNode();
-			if (n) (this.getSubnode('btn') || n).tabIndex = tabindex;
-		}
-	},
-
-	getHref: function () {
-		return this._href;
-	},
-	setHref: function (href) {
-		this._href = href;
-	},
-	getTarget: function () {
-		return this._target;
-	},
-	setTarget: function (target) {
-		this._target = target;
-	},
-
 	//super//
 	focus: function (timeout) {
 		if (this.isVisible() && this.canActivate({checkOnly:true})) {
@@ -168,29 +99,53 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		//Unlike DOM, we don't proprogate to parent (so no calling $supers)
 	},
 	doMouseOver_: function () {
-		zDom.addClass(this.getSubnode('box'), this.getZclass() + "-over");
+		if (!this._disabled)
+			zDom.addClass(this.getSubnode('box'), this.getZclass() + "-over");
 		this.$supers('doMouseOver_', arguments);
 	},
 	doMouseOut_: function () {
-		if (this != zul.wgt.Button._curdn)
+		if (!this._disabled && this != zul.wgt.Button._curdn)
 			zDom.rmClass(this.getSubnode('box'), this.getZclass() + "-over");
 		this.$supers('doMouseOut_', arguments);
 	},
 	doMouseDown_: function () {
-		var box = this.getSubnode('box'),
-			zcls = this.getZclass();
-		zDom.addClass(box, zcls + "-clk");
-		zDom.addClass(box, zcls + "-over");
-		zDom.focus(this.getSubnode('btn'), 30);
+		if (!this._disabled) {
+			var box = this.getSubnode('box'),
+				zcls = this.getZclass();
+			zDom.addClass(box, zcls + "-clk");
+			zDom.addClass(box, zcls + "-over");
+			zDom.focus(this.getSubnode('btn'), 30);
+		}
 
 		zk.mouseCapture = this; //capture mouse up
 		this.$supers('doMouseDown_', arguments);
 	},
 	doMouseUp_: function () {
-		var box = this.getSubnode('box'),
-			zcls = this.getZclass();
-		zDom.rmClass(box, zcls + "-clk");
-		zDom.rmClass(box, zcls + "-over");
+		if (!this._disabled) {
+			var box = this.getSubnode('box'),
+				zcls = this.getZclass();
+			zDom.rmClass(box, zcls + "-clk");
+			zDom.rmClass(box, zcls + "-over");
+		}
 		this.$supers('doMouseUp_', arguments);
+	}
+});
+
+zk.def(zul.wgt.Button, {
+	once: null,
+	href: null,
+	target: null,
+	dir: _zkf = function () {
+		this.updateDomContent_();
+	},
+	orient: _zkf,
+	disabled: function () {
+		if (this.desktop)
+			if (this._mold == 'os') this.getNode().disabled = true;
+			else this.rerender(); //bind and unbind required
+	},
+	tabindex: function () {
+		var n = this.getNode();
+		if (n) (this.getSubnode('btn') || n).tabIndex = tabindex;
 	}
 });

@@ -58,8 +58,8 @@ function (out) {
 		this.domFaker_(out, '$bdfaker', zcls);
 
 
-	for (var items = this.items, j = 0, len = items.length; j < len;)
-		items[j++].redraw(out);
+	for (var item = this.firstItem; item; item = this.nextItem(item))
+		item.redraw(out);
 
 	out.push('</table><', tag, ' id="', uuid,
 		'$a" tabindex="-1" onclick="return false;" href="javascript:;" style="position:absolute;left:0px;top:0px;padding:0 !important;margin:0 !important;border:0 !important;background:transparent !important;font-size:1px !important;width:1px !important;height:1px !important;-moz-outline:0 none;outline:0 none;-moz-user-select:text;-khtml-user-select:text;"></',

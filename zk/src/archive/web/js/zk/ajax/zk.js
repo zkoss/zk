@@ -113,6 +113,25 @@ zk = {
 			fn.apply(objs[j], args);
 	},
 
+	def: function (klass, props) {
+		for (var nm in props) {
+			var nm1 = '_' + nm;
+				nm2 = nm.charAt(0).toUpperCase() + nm.substring(1),
+				pt = klass.prototype;
+			pt['set' + nm2] = zk._def(nm1, props[nm]);
+			pt['get' + nm2] = pt['is' + nm2] =
+				new Function('return this.' + nm1 + ';');
+		}
+	},
+	_def: function (nm, func) {
+		return function (v) {
+			if (this[nm] != v) {
+				this[nm] = v;
+				if (func) func.apply(this, arguments);
+			}
+		};
+	},
+
 	$void: function() {
 		return '';
 	},

@@ -39,6 +39,7 @@ public class Button extends LabelImageElement implements org.zkoss.zul.api.Butto
 	private String _href, _target;
 	private int _tabindex = -1;
 	private boolean _disabled;
+	private boolean _once;
 
 	static {
 		addClientEvent(Button.class, Events.ON_FOCUS, CE_DUPLICATE_IGNORE);
@@ -71,7 +72,25 @@ public class Button extends LabelImageElement implements org.zkoss.zul.api.Butto
 		}
 	}
 
-	
+	/** Returns whether to disable the button after the user clicks it.
+	 * In other words, the user can only click it once. It is useful
+	 * to avoid unncessary redudant requests if it takes long to execute.
+	 * <p>Default: false.
+	 * @since 5.0.0
+	 */
+	public boolean isOnce() {
+		return _once;
+	}
+	/** Sets whether to disable the button after the user clicks it.
+	 * @since 5.0.0
+	 */
+	public void setOnce(boolean once) {
+		if (_once != once) {
+			_once = once;
+			smartUpdate("z.once", once);
+		}
+	}
+
 	/** Returns the direction.
 	 * <p>Default: "normal".
 	 */
@@ -183,6 +202,7 @@ public class Button extends LabelImageElement implements org.zkoss.zul.api.Butto
 		if (!"horizontal".equals(_orient)) render(renderer, "orient", _orient);
 
 		render(renderer, "disabled", _disabled);
+		if (_once) renderer.render("once", true);
 		render(renderer, "href", getEncodedHref());
 		render(renderer, "target", _target);
 	}

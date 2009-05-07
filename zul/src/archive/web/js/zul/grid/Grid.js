@@ -76,11 +76,11 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 		return zul.grid.Columns;
 	},
 	getBodyWidgetIterator: function () {
-		return new zul.grid.BodyWidgetIterator(this);
+		return new zul.grid.RowIter(this);
 	}
 });
 
-zul.grid.BodyWidgetIterator = zk.$extends(zk.Object, {
+zul.grid.RowIter = zk.$extends(zk.Object, {
 	$init: function (grid) {
 		var rows = grid.rows;
 		this.p = rows ? rows.firstChild: null;

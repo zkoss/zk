@@ -17,7 +17,6 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 
 	$init: function () {
 		this.$supers('$init', arguments);
-		this.items = [];
 	},
 
 	getRows: function () {
@@ -30,13 +29,31 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		}
 	},
 
+	nextItem: function (p) {
+		if (p)
+			while ((p = p.nextSibling)
+			&& !p.$instanceof(zul.sel.Listitem))
+				;
+	},
+	previousItem: function (p) {
+		if (p)
+			while ((p = p.previousSibling)
+			&& !p.$instanceof(zul.sel.Listitem))
+				;
+	},
+
 	//-- super --//
 	getZclass: function () {
 		return this._zclass == null ? "z-listbox" : this._zclass;
 	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
-		if (child.$instanceof(zul.sel.Listhead))
+		if (child.$instanceof(zul.sel.Listitem)) {
+			if (!this.firstItem || !this.previousItem(child))
+				this.firstItem = child;
+			if (!this.lastItem || !this.nextItem(child))
+				this.lastItem = child;
+		} else if (child.$instanceof(zul.sel.Listhead))
 			this.listhead = child;
 		else if (child.$instanceof(zul.mesh.Paging))
 			this.paging = child;
@@ -47,24 +64,40 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			this.listhead = null;
 		else if (child == this.paging)
 			this.paging = null;
+		else {
+			if (child == this.firstItem) {
+				for (var p = this.firstChild, Listitem = zul.sel.ListItem;
+				p && !p.$instanceof(Listitem); p = p.nextSibling)
+					;
+				this.firstItem = p;
+			}
+			if (child == this.lastItem) {
+				for (var p = this.lastChild, Listitem = zul.sel.ListItem;
+				p && !p.$instanceof(Listitem); p = p.previousSibling)
+					;
+				this.lastItem = p;
+			}
+		}
 	},
 	getHeadWidgetClass: function () {
 		return zul.sel.Listhead;
 	},
-	getBodyWidgetIterator: function () {
-		return new zul.sel.BodyWidgetIterator(this);
-	}
+	itemIterator: _zkf = function () {
+		return new zul.sel.ItemIter(this);
+	},
+	getBodyWidgetIterator: _zkf
 });
 
-zul.sel.BodyWidgetIterator = zk.$extends(zk.Object, {
+zul.sel.ItemIter = zk.$extends(zk.Object, {
 	$init: function (box) {
-		this.items = box.items;
-		this.j = 0;
+		this.p = box.firstItem;
 	},
 	hasNext: function () {
-		return this.j < this.items.length;
+		return this.p;
 	},
 	next: function () {
-		return this.j < this.items.length ? this.items[this.j++]: null;
+		var p = this.p;
+		this.p = box.nextItem(p);
+		return p;
 	}
 });
