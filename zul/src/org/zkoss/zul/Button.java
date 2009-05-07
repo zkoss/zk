@@ -66,7 +66,6 @@ public class Button extends LabelImageElement implements org.zkoss.zul.api.Butto
 		}
 	}
 
-	
 	/** Returns the direction.
 	 * <p>Default: "normal".
 	 */
