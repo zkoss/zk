@@ -35,10 +35,10 @@ import org.zkoss.zul.impl.XulElement;
  */
 public class Panelchildren extends XulElement implements org.zkoss.zul.api.Panelchildren {
 	
-	public void setParent(Component parent) {
+	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Panel))
 			throw new UiException("Wrong parent: "+parent);
-		super.setParent(parent);
+		super.beforeParentChanged(parent);
 	}
 	
 	/**

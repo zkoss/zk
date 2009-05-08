@@ -1262,19 +1262,16 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	}
 
 	//-- Component --//
-	public boolean insertBefore(Component newChild, Component refChild) {
+	public void beforeChildAdded(Component newChild, Component refChild) {
 		if (newChild instanceof Rows) {
 			if (_rows != null && _rows != newChild)
 				throw new UiException("Only one rows child is allowed: "+this+"\nNote: rows is created automatically if live data");
-			_rows = (Rows)newChild;
 		} else if (newChild instanceof Columns) {
 			if (_cols != null && _cols != newChild)
 				throw new UiException("Only one columns child is allowed: "+this);
-			_cols = (Columns)newChild;
 		} else if (newChild instanceof Foot) {
 			if (_foot != null && _foot != newChild)
 				throw new UiException("Only one foot child is allowed: "+this);
-			_foot = (Foot)newChild;
 		} else if (newChild instanceof Paging) {
 			if (_pgi != null)
 				throw new UiException("External paging cannot coexist with child paging");
@@ -1282,16 +1279,38 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 				throw new UiException("Only one paging is allowed: "+this);
 			if (!inPagingMold())
 				throw new UiException("The child paging is allowed only in the paging mold");
-			_pgi = _paging = (Paging)newChild;
 		} else if (!(newChild instanceof Auxhead)) {
 			throw new UiException("Unsupported child for grid: "+newChild);
 		}
- 
-		if (super.insertBefore(newChild, refChild)) {
-			//not need to invalidate since auxhead visible only with _cols
-			if (!(newChild instanceof Auxhead))
+		super.beforeChildAdded(newChild, refChild);
+	}
+	public boolean insertBefore(Component newChild, Component refChild) {
+		if (newChild instanceof Rows) {
+			if (super.insertBefore(newChild, refChild)) {
+				_rows = (Rows)newChild;
 				invalidate();
-			return true;
+				return true;
+			}
+		} else if (newChild instanceof Columns) {
+			if (super.insertBefore(newChild, refChild)) {
+				_cols = (Columns)newChild;
+				invalidate();
+				return true;
+			}
+		} else if (newChild instanceof Foot) {
+			if (super.insertBefore(newChild, refChild)) {
+				_foot = (Foot)newChild;
+				invalidate();
+				return true;
+			}
+		} else if (newChild instanceof Paging) {
+			if (super.insertBefore(newChild, refChild)) {
+				_pgi = _paging = (Paging)newChild;
+				invalidate();
+				return true;
+			}
+		} else {
+			return super.insertBefore(newChild, refChild);
 		}
 		return false;
 	}

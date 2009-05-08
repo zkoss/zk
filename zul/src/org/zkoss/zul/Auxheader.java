@@ -117,9 +117,9 @@ public class Auxheader extends HeaderElement implements org.zkoss.zul.api.Auxhea
 	}
 
 	//Component//
-	public void setParent(Component parent) {
+	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Auxhead))
 			throw new UiException("Wrong parent: "+parent);
-		super.setParent(parent);
+		super.beforeParentChanged(parent);
 	}
 }

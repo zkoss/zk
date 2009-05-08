@@ -199,11 +199,14 @@ public class Bandbox extends Textbox implements org.zkoss.zul.api.Bandbox {
 	}
 
 	//-- Component --//
-	public boolean insertBefore(Component newChild, Component refChild) {
+	public void beforeChildAdded(Component newChild, Component refChild) {
 		if (!(newChild instanceof Bandpopup))
 			throw new UiException("Unsupported child for Bandbox: "+newChild);
 		if (_drop != null)
 			throw new UiException("At most one bandpopup is allowed, "+this);
+		super.beforeChildAdded(newChild, refChild);
+	}
+	public boolean insertBefore(Component newChild, Component refChild) {
 		if (super.insertBefore(newChild, refChild)) {
 			invalidate();
 			_drop = (Bandpopup)newChild;

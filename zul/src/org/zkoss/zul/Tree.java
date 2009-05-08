@@ -1004,21 +1004,16 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	public void smartUpdate(String attr, String value) {
 		if (!_noSmartUpdate) super.smartUpdate(attr, value);
 	}
-	public boolean insertBefore(Component newChild, Component refChild) {
+	public void beforeChildAdded(Component newChild, Component refChild) {
 		if (newChild instanceof Treecols) {
 			if (_treecols != null && _treecols != newChild)
 				throw new UiException("Only one treecols is allowed: "+this);
-			_treecols = (Treecols)newChild;
 		} else if (newChild instanceof Treefoot) {
 			if (_treefoot != null && _treefoot != newChild)
 				throw new UiException("Only one treefoot is allowed: "+this);
-			_treefoot = (Treefoot)newChild;
-			refChild = _paging; //the last two: listfoot and paging
 		} else if (newChild instanceof Treechildren) {
 			if (_treechildren != null && _treechildren != newChild)
 				throw new UiException("Only one treechildren is allowed: "+this);
-			_treechildren = (Treechildren)newChild;
-			fixSelectedSet();
 		} else if (newChild instanceof Paging) {
 			if (_paging != null && _paging != newChild)
 				throw new UiException("Only one paging is allowed: "+this);
@@ -1026,19 +1021,41 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 				throw new UiException("External paging cannot coexist with child paging");
 			if (!inPagingMold())
 				throw new UiException("The child paging is allowed only in the paging mold");
-
-			invalidate();
-			_pgi = _paging = (Paging)newChild;
-			refChild = null; //the last: paging
 		} else if (!(newChild instanceof Auxhead)) {
 			throw new UiException("Unsupported newChild: "+newChild);
 		}
-
-		if (super.insertBefore(newChild, refChild)) {
-			//not need to invalidate since auxhead visible only with _treecols
-			if (!(newChild instanceof Auxhead))
+		super.beforeChildAdded(newChild, refChild);
+	}
+	public boolean insertBefore(Component newChild, Component refChild) {
+		if (newChild instanceof Treecols) {
+			if (super.insertBefore(newChild, refChild)) {
+				_treecols = (Treecols)newChild;
 				invalidate();
-			return true;
+				return true;
+			}
+		} else if (newChild instanceof Treefoot) {
+			refChild = _paging; //the last two: listfoot and paging
+			if (super.insertBefore(newChild, refChild)) {
+				_treefoot = (Treefoot)newChild;
+				invalidate();
+				return true;
+			}
+		} else if (newChild instanceof Treechildren) {
+			if (super.insertBefore(newChild, refChild)) {
+				_treechildren = (Treechildren)newChild;
+				fixSelectedSet();
+				invalidate();
+				return true;
+			}
+		} else if (newChild instanceof Paging) {
+			refChild = null; //the last: paging
+			if (super.insertBefore(newChild, refChild)) {
+				_pgi = _paging = (Paging)newChild;
+				invalidate();
+				return true;
+			}
+		} else { //Auxhead
+			return super.insertBefore(newChild, refChild);
 		}
 		return false;
 	}

@@ -92,11 +92,11 @@ public class Portallayout extends XulElement implements org.zkoss.zkmax.zul.api.
 	public String getZclass() {
 		return _zclass == null ? "z-portal-layout" : _zclass;
 	}
-	public boolean insertBefore(Component child, Component insertBefore) {
+	public void beforeChildAdded(Component child, Component refChild) {
 		if (!(child instanceof Portalchildren))
 			throw new UiException("Unsupported child for Portallayout: "
 					+ child);
-		return super.insertBefore(child, insertBefore);
+		super.beforeChildAdded(child, refChild);
 	}
 	public void onChildAdded(Component child) {
 		super.onChildAdded(child);

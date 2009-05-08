@@ -234,14 +234,16 @@ public class Treechildren extends XulElement implements org.zkoss.zul.api.Treech
 	}
 
 	//-- Component --//
+	public void beforeParentChanged(Component parent) {
+		if (parent != null && !(parent instanceof Tree)
+		&& !(parent instanceof Treeitem))
+			throw new UiException("Wrong parent: "+parent);
+		super.beforeParentChanged(parent);
+	}
 	public void setParent(Component parent) {
 		final Component oldp = getParent();
 		if (oldp == parent)
 			return; //nothing changed
-
-		if (parent != null && !(parent instanceof Tree)
-		&& !(parent instanceof Treeitem))
-			throw new UiException("Wrong parent: "+parent);
 
 		final Tree oldtree = oldp != null ? getTree(): null;
 
@@ -255,10 +257,10 @@ public class Treechildren extends XulElement implements org.zkoss.zul.api.Treech
 			if (tree != null) tree.onTreechildrenAdded(this);
 		}
 	}
-	public boolean insertBefore(Component child, Component insertBefore) {
+	public void beforeChildAdded(Component child, Component refChild) {
 		if (!(child instanceof Treeitem))
 			throw new UiException("Unsupported child for treechildren: "+child);
-		return super.insertBefore(child, insertBefore);
+		super.beforeChildAdded(child, refChild);
 	}
 	public void invalidate() {
 		final Component parent = getParent();

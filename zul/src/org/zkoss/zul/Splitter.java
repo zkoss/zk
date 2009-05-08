@@ -143,10 +143,10 @@ public class Splitter extends XulElement implements org.zkoss.zul.api.Splitter {
 		if (!_open) sb.append(" z.open=\"false\"");
 		return sb.toString();
 	}
-	public void setParent(Component parent) {
+	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Box))
 			throw new UiException("Wrong parent: "+parent);
-		super.setParent(parent);
+		super.beforeParentChanged(parent);
 	}
 	/** Not allow any children.
 	 */

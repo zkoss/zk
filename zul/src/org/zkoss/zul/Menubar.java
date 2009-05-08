@@ -97,10 +97,10 @@ public class Menubar extends XulElement implements org.zkoss.zul.api.Menubar {
 		final String attrs = super.getOuterAttrs();
 		return _autodrop ?  attrs + " z.autodrop=\"true\"": attrs;
 	}
-	public boolean insertBefore(Component child, Component insertBefore) {
+	public void beforeChildAdded(Component child, Component refChild) {
 		if (!(child instanceof Menu) && !(child instanceof Menuitem) && !(child instanceof Menuseparator))
 			throw new UiException("Unsupported child for menubar: "+child);
-		return super.insertBefore(child, insertBefore);
+		super.beforeChildAdded(child, refChild);
 	}
 
 	public void onDrawNewChild(Component child, StringBuffer out)

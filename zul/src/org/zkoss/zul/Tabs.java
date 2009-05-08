@@ -102,20 +102,24 @@ public class Tabs extends XulElement implements org.zkoss.zul.api.Tabs {
 		return "z-tabs" + added;
 	}
 	//-- Component --//
-	public void setParent(Component parent) {
+	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Tabbox))
 			throw new UiException("Wrong parent: "+parent);
-
+		super.beforeParentChanged(parent);
+	}
+	public void setParent(Component parent) {
 		final Tabbox oldp = (Tabbox)getParent();
 		super.setParent(parent);
 
 		invalidateIfAccordion(oldp);
 		invalidateIfAccordion((Tabbox)parent);
 	}
-	public boolean insertBefore(Component child, Component insertBefore) {
+	public void beforeChildAdded(Component child, Component refChild) {
 		if (!(child instanceof Tab))
 			throw new UiException("Unsupported child for tabs: "+child);
-
+		super.beforeChildAdded(child, refChild);
+	}
+	public boolean insertBefore(Component child, Component refChild) {
 		boolean sel = getChildren().isEmpty(), desel = false;
 		if (sel) invalidate();
 		final Tab newtab = (Tab)child;
@@ -124,7 +128,7 @@ public class Tabs extends XulElement implements org.zkoss.zul.api.Tabs {
 			sel = desel = true;					//trun on later
 		}
 
-		if (super.insertBefore(child, insertBefore)) {
+		if (super.insertBefore(child, refChild)) {
 			final Tabbox tabbox = getTabbox();
 
 			if (sel)

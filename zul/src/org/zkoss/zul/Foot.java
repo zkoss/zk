@@ -45,15 +45,15 @@ public class Foot extends XulElement implements org.zkoss.zul.api.Foot {
 	}
 
 	//-- Component --//
-	public void setParent(Component parent) {
+	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Grid))
 			throw new UiException("Wrong parent: "+parent);
-		super.setParent(parent);
+		super.beforeParentChanged(parent);
 	}
-	public boolean insertBefore(Component child, Component insertBefore) {
+	public void beforeChildAdded(Component child, Component refChild) {
 		if (!(child instanceof Footer))
 			throw new UiException("Unsupported child for foot: "+child);
-		return super.insertBefore(child, insertBefore);
+		super.beforeChildAdded(child, refChild);
 	}
 
 	public String getZclass() {

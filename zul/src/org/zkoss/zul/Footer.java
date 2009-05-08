@@ -132,9 +132,9 @@ public class Footer  extends LabelImageElement implements org.zkoss.zul.api.Foot
 	}
 
 	//-- Component --//
-	public void setParent(Component parent) {
+	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Foot))
 			throw new UiException("Wrong parent: "+parent);
-		super.setParent(parent);
+		super.beforeParentChanged(parent);
 	}
 }

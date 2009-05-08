@@ -93,14 +93,14 @@ public class Listhead extends HeadersElement implements org.zkoss.zul.api.Listhe
 		return sb.toString();
 	}
 
-	public void setParent(Component parent) {
+	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Listbox))
 			throw new UiException("Wrong parent: "+parent);
-		super.setParent(parent);
+		super.beforeParentChanged(parent);
 	}
-	public boolean insertBefore(Component child, Component insertBefore) {
+	public void beforeChildAdded(Component child, Component refChild) {
 		if (!(child instanceof Listheader))
 			throw new UiException("Unsupported child for listhead: "+child);
-		return super.insertBefore(child, insertBefore);
+		super.beforeChildAdded(child, refChild);
 	}
 }

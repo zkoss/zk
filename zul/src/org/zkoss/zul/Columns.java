@@ -203,10 +203,10 @@ public class Columns extends HeadersElement implements org.zkoss.zul.api.Columns
 	public String getZclass() {
 		return _zclass == null ? "z-columns" : _zclass;
 	}
-	public void setParent(Component parent) {
+	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Grid))
 			throw new UiException("Unsupported parent for columns: "+parent);
-		super.setParent(parent);
+		super.beforeParentChanged(parent);
 	}
 	public String getOuterAttrs() {
 		final StringBuffer sb =
@@ -230,10 +230,10 @@ public class Columns extends HeadersElement implements org.zkoss.zul.api.Columns
 		return vis;
 	}
 	
-	public boolean insertBefore(Component child, Component insertBefore) {
+	public void beforeChildAdded(Component child, Component refChild) {
 		if (!(child instanceof Column))
 			throw new UiException("Unsupported child for columns: "+child);
-		return super.insertBefore(child, insertBefore);
+		super.beforeChildAdded(child, refChild);
 	}
 	public void onChildAdded(Component child) {
 		super.onChildAdded(child);

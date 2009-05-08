@@ -380,20 +380,20 @@ public abstract class LayoutRegion extends XulElement implements org.zkoss.zkex.
 		}
 	}
 
-	public boolean insertBefore(Component child, Component insertBefore) {
+	public void beforeChildAdded(Component child, Component refChild) {
 		if (getChildren().size() > 0)
 			throw new UiException("Only one child is allowed: " + this);
-		return super.insertBefore(child, insertBefore);
+		super.beforeChildAdded(child, refChild);
 	}
 	public void invalidate() {
 		super.invalidate();
 		Borderlayout layout = (Borderlayout)getParent();
 		if (layout != null) layout.resize();
 	}
-	public void setParent(Component parent) {
+	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Borderlayout))
 			throw new UiException("Wrong parent: "+parent);
-		super.setParent(parent);
+		super.beforeParentChanged(parent);
 	}
 	public String getOuterAttrs() {
 		final StringBuffer sb = new StringBuffer(80).append(super

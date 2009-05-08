@@ -1333,18 +1333,43 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 		}
 		return null;
 	}
-	public boolean insertBefore(Component newChild, Component refChild) {
+	public void beforeChildAdded(Component newChild, Component refChild) {
 		if (newChild instanceof Listitem) {
 			if (newChild instanceof Listgroup && inSelectMold())
 				throw new UnsupportedOperationException("Unsupported Listgroup in Select mold!");
-
-			final boolean isReorder = newChild.getParent() == this;
-			if (newChild instanceof Listgroupfoot){
+			if (newChild instanceof Listgroupfoot) {
 				if (!hasGroup())
 					throw new UiException("Listgroupfoot cannot exist alone, you have to add a Listgroup first");
-				if (refChild == null){
+				if (refChild == null) {
 					if (getLastChild() instanceof Listgroupfoot)
 						throw new UiException("Only one Goupfooter is allowed per Listgroup");
+				}
+			}
+		} else if (newChild instanceof Listhead) {
+			if (_listhead != null && _listhead != newChild)
+				throw new UiException("Only one listhead is allowed: "+this);
+		} else if (newChild instanceof Listfoot) {
+			if (_listfoot != null && _listfoot != newChild)
+				throw new UiException("Only one listfoot is allowed: "+this);
+			if (inSelectMold())
+				log.warning("Mold select ignores listfoot");
+		} else if (newChild instanceof Paging) {
+			if (_paging != null && _paging != newChild)
+				throw new UiException("Only one paging is allowed: "+this);
+			if (_pgi != null)
+				throw new UiException("External paging cannot coexist with child paging");
+			if (!inPagingMold())
+				throw new UiException("The child paging is allowed only in the paging mold");
+		} else if (!(newChild instanceof Auxhead)) {
+			throw new UiException("Unsupported child for Listbox: "+newChild);
+		}
+		super.beforeChildAdded(newChild, refChild);
+	}
+	public boolean insertBefore(Component newChild, Component refChild) {
+		if (newChild instanceof Listitem) {
+			final boolean isReorder = newChild.getParent() == this;
+			if (newChild instanceof Listgroupfoot){
+				if (refChild == null){
 					if (isReorder) {
 						final int idx = ((Listgroupfoot)newChild).getIndex();				
 						final int[] ginfo = getGroupsInfoAt(idx);
@@ -1487,22 +1512,17 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 				}
 				afterInsert(newChild);
 				return true;
-			}
-			return false;
+			} //insert
 		} else if (newChild instanceof Listhead) {
-			if (_listhead != null && _listhead != newChild)
-				throw new UiException("Only one listhead is allowed: "+this);
-
 			final boolean added = _listhead == null;
 			refChild = fixRefChildForHeader(refChild);
-			_listhead = (Listhead)newChild;
 			if (super.insertBefore(newChild, refChild)) {
+				_listhead = (Listhead)newChild;
 				if (added)
 					++_hdcnt; //it may be moved, not inserted
 				invalidate(); //required since it might be the first child
 				return true;
 			}
-			return false;
 		} else if (newChild instanceof Auxhead) {
 			final boolean added = newChild.getParent() != this;
 			refChild = fixRefChildForHeader(refChild);
@@ -1513,33 +1533,26 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 					//with _listhead
 				return true;
 			}
-			return false;
 		} else if (newChild instanceof Listfoot) {
-			if (_listfoot != null && _listfoot != newChild)
-				throw new UiException("Only one listfoot is allowed: "+this);
-
-			if (inSelectMold())
-				log.warning("Mold select ignores listfoot");
-			invalidate();
-				//we place listfoot and treeitem at different div, so...
-			_listfoot = (Listfoot)newChild;
 			refChild = _paging; //the last two: listfoot and paging
-			return super.insertBefore(newChild, refChild);
+			if (super.insertBefore(newChild, refChild)) {
+				invalidate();
+					//we place listfoot and treeitem at different div, so...
+				_listfoot = (Listfoot)newChild;
+				return true;
+			}
 		} else if (newChild instanceof Paging) {
-			if (_paging != null && _paging != newChild)
-				throw new UiException("Only one paging is allowed: "+this);
-			if (_pgi != null)
-				throw new UiException("External paging cannot coexist with child paging");
-			if (!inPagingMold())
-				throw new UiException("The child paging is allowed only in the paging mold");
-
-			invalidate();
-			_pgi = _paging = (Paging)newChild;
 			refChild = null; //the last: paging
-			return super.insertBefore(newChild, refChild);
+			if (super.insertBefore(newChild, refChild)) {
+				invalidate();
+				_pgi = _paging = (Paging)newChild;
+				return true;
+			}
 		} else {
-			throw new UiException("Unsupported child for Listbox: "+newChild);
+			return super.insertBefore(newChild, refChild);
+				//impossible but to make it more extensible
 		}
+		return false;
 	}
 	private Component fixRefChildForHeader(Component refChild) {
 		if (refChild != null && refChild.getParent() != this)

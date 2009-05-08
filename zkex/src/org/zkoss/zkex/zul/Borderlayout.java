@@ -156,7 +156,7 @@ public class Borderlayout extends HtmlBasedComponent implements org.zkoss.zkex.z
 		smartUpdate("z.resize", "");
 	}
 
-	public boolean insertBefore(Component child, Component insertBefore) {
+	public void beforeChildAdded(Component child, Component refChild) {
 		if (!(child instanceof LayoutRegion))
 			throw new UiException("Unsupported child for Borderlayout: "
 					+ child);
@@ -164,28 +164,50 @@ public class Borderlayout extends HtmlBasedComponent implements org.zkoss.zkex.z
 			if (_north != null && child != _north)
 				throw new UiException("Only one north child is allowed: "
 						+ this);
-			_north = (North) child;
 		} else if (child instanceof South) {
 			if (_south != null && child != _south)
 				throw new UiException("Only one south child is allowed: "
 						+ this);
-			_south = (South) child;
 		} else if (child instanceof West) {
 			if (_west != null && child != _west)
 				throw new UiException("Only one west child is allowed: " + this);
-			_west = (West) child;
 		} else if (child instanceof East) {
 			if (_east != null && child != _east)
 				throw new UiException("Only one east child is allowed: " + this);
-			_east = (East) child;
 		} else if (child instanceof Center) {
 			if (_center != null && child != _center)
 				throw new UiException("Only one center child is allowed: "
 						+ this);
+		}
+		super.beforeChildAdded(child, refChild);
+	}
+	public boolean insertBefore(Component child, Component refChild) {
+		if (child instanceof North) {
+			if (!super.insertBefore(child, refChild))
+				return false;
+			_north = (North) child;
+		} else if (child instanceof South) {
+			if (!super.insertBefore(child, refChild))
+				return false;
+			_south = (South) child;
+		} else if (child instanceof West) {
+			if (!super.insertBefore(child, refChild))
+				return false;
+			_west = (West) child;
+		} else if (child instanceof East) {
+			if (!super.insertBefore(child, refChild))
+				return false;
+			_east = (East) child;
+		} else if (child instanceof Center) {
+			if (!super.insertBefore(child, refChild))
+				return false;
 			_center = (Center) child;
+		} else {
+			if (!super.insertBefore(child, refChild))
+				return false;
 		}
 		smartUpdate("z.chchg", true);
-		return super.insertBefore(child, insertBefore);
+		return true;
 	}
 	
 	public void onChildRemoved(Component child) {

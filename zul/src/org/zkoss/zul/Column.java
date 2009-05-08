@@ -538,9 +538,9 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 	}
 
 	//-- Component --//
-	public void setParent(Component parent) {
+	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Columns))
 			throw new UiException("Unsupported parent for column: "+parent);
-		super.setParent(parent);
+		super.beforeParentChanged(parent);
 	}
 }

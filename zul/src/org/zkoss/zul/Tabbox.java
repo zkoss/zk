@@ -347,31 +347,43 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 		}
 	}
 
-	public boolean insertBefore(Component child, Component insertBefore) {
+	public void beforeChildAdded(Component child, Component refChild) {
 		if (child instanceof Tabs) {
 			if (_tabs != null && _tabs != child)
 				throw new UiException("Only one tabs is allowed: " + this);
-
-			_tabs = (Tabs) child;
-			for (Iterator it = _tabs.getChildren().iterator(); it.hasNext();) {
-				final Tab tab = (Tab) it.next();
-				if (tab.isSelected()) {
-					_seltab = tab;
-					break;
-				}
-			}
-
-			addTabsListeners();
 		} else if (child instanceof Tabpanels) {
 			if (_tabpanels != null && _tabpanels != child)
 				throw new UiException("Only one tabpanels is allowed: " + this);
-			_tabpanels = (Tabpanels) child;
 		} else {
 			throw new UiException("Unsupported child for tabbox: " + child);
 		}
-		if (super.insertBefore(child, insertBefore)) {
-			invalidate(); //DSP might implement diff for children order
-			return true;
+		super.beforeChildAdded(child, refChild);
+	}
+	public boolean insertBefore(Component child, Component refChild) {
+		if (child instanceof Tabs) {
+			if (super.insertBefore(child, refChild)) {
+				_tabs = (Tabs) child;
+				for (Iterator it = _tabs.getChildren().iterator(); it.hasNext();) {
+					final Tab tab = (Tab) it.next();
+					if (tab.isSelected()) {
+						_seltab = tab;
+						break;
+					}
+				}
+
+				addTabsListeners();
+				invalidate(); //DSP might implement diff for children order
+				return true;
+			}
+		} else if (child instanceof Tabpanels) {
+			if (super.insertBefore(child, refChild)) {
+				_tabpanels = (Tabpanels) child;
+				invalidate(); //DSP might implement diff for children order
+				return true;
+			}
+		} else {
+			return super.insertBefore(child, refChild);
+				//impossible but make it more extensible
 		}
 		return false;
 	}

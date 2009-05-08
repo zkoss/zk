@@ -3,6 +3,7 @@ ZK 3.6.2
 * Features
   2787715: Messagebox shall recognize linebreak
   2788162: Support the script directive (<?scrpt?> )
+  2788752: Introduce beforeParentChanged, beforeChildAdded...
 
 * Bugs
   2787077: Listbox-Paging was broken with fix for #2782751

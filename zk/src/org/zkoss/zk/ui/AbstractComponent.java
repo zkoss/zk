@@ -812,6 +812,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			return; //nothing changed
 
 		checkParentChild(parent, this);
+		beforeParentChanged(parent);
 
 		final boolean idSpaceChanged =
 			parent != null ?
@@ -967,6 +968,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (newChild == refChild)
 			return false; //nothing changed (Listbox and other assumes this)
 
+		beforeChildAdded(newChild, refChild);
+
 		final AbstractComponent nc = (AbstractComponent)newChild;
 		final boolean moved = nc._parent == this; //moved in the same parent
 		if (moved) {
@@ -1048,6 +1051,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		final AbstractComponent oc = (AbstractComponent)child;
 		if (oc._parent != this)
 			return false; //nothing to do
+
+		beforeChildRemoved(child);
 
 		setNext(oc._prev, oc._next);
 		setPrev(oc._next, oc._prev);
@@ -1158,6 +1163,24 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		else setPage(null);
 	}
 
+	/** Default: does nothing.
+	 * @see ComponentCtrl#beforeChildAdded
+	 * @since 3.6.2
+	 */
+	public void beforeChildAdded(Component child, Component insertBefore) {
+	}
+	/** Default: does nothing.
+	 * @see ComponentCtrl#beforeChildRemoved
+	 * @since 3.6.2
+	 */
+	public void beforeChildRemoved(Component child) {
+	}
+	/** Default: does nothing.
+	 * @see ComponentCtrl#beforeParentChanged
+	 * @since 3.6.2
+	 */
+	public void beforeParentChanged(Component parent) {
+	}
 	/** Default: does nothing.
 	 * @see ComponentCtrl#onChildAdded
 	 */

@@ -218,14 +218,14 @@ public class Treerow extends XulElement implements org.zkoss.zul.api.Treerow {
 		return super.setVisible(visible);
 	}
 	
-	public void setParent(Component parent) {
+	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Treeitem))
 			throw new UiException("Wrong parent: "+parent);
-		super.setParent(parent);
+		super.beforeParentChanged(parent);
 	}
-	public boolean insertBefore(Component child, Component insertBefore) {
+	public void beforeChildAdded(Component child, Component refChild) {
 		if (!(child instanceof Treecell))
 			throw new UiException("Unsupported child for tree row: "+child);
-		return super.insertBefore(child, insertBefore);
+		super.beforeChildAdded(child, refChild);
 	}
 }

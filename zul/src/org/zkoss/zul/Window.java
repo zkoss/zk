@@ -794,18 +794,27 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 	}
 
 	//-- Component --//
-	public boolean insertBefore(Component child, Component insertBefore) {
+	public void beforeChildAdded(Component child, Component refChild) {
 		if (child instanceof Caption) {
 			if (_caption != null && _caption != child)
 				throw new UiException("Only one caption is allowed: "+this);
-			insertBefore = getFirstChild();
-				//always makes caption as the first child
-			_caption = (Caption)child;
-			invalidate();
-		} else if (insertBefore instanceof Caption) {
+		} else if (refChild instanceof Caption) {
 			throw new UiException("caption must be the first child");
+		}		
+		super.beforeChildAdded(child, refChild);
+	}
+	public boolean insertBefore(Component child, Component refChild) {
+		if (child instanceof Caption) {
+			refChild = getFirstChild();
+				//always makes caption as the first child
+			if (super.insertBefore(child, refChild)) {
+				_caption = (Caption)child;
+				invalidate();
+				return true;
+			}
+			return false;
 		}
-		return super.insertBefore(child, insertBefore);
+		return super.insertBefore(child, refChild);
 	}
 	public void onChildRemoved(Component child) {
 		if (child instanceof Caption) {

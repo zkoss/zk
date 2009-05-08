@@ -372,19 +372,24 @@ public class Panel extends XulElement implements org.zkoss.zul.api.Panel {
 		if ("tbar".equals(name)) {
 			if (_tbar != null)
 				throw new UiException("Only one top toolbar child is allowed: "+this);
-			_tbar = toolbar;
 		} else if ("bbar".equals(name)) {
 			if (_bbar != null)
 				throw new UiException("Only one bottom toolbar child is allowed: "+this);
-			_bbar = toolbar;
 		} else if ("fbar".equals(name)) {
 			if (_fbar != null)
 				throw new UiException("Only one foot toolbar child is allowed: "+this);
-			_fbar = toolbar;
 		} else {
 			throw new UiException("Uknown toolbar: "+name);
 		}
-		if(super.insertBefore(toolbar, null)) {
+
+		if (super.insertBefore(toolbar, null)) {
+			if ("tbar".equals(name)) {
+				_tbar = toolbar;
+			} else if ("bbar".equals(name)) {
+				_bbar = toolbar;
+			} else if ("fbar".equals(name)) {
+				_fbar = toolbar;
+			}
 			invalidate();
 			return true;
 		}
@@ -511,44 +516,68 @@ public class Panel extends XulElement implements org.zkoss.zul.api.Panel {
 	}
 	
 	//-- Component --//
-	public boolean insertBefore(Component newChild, Component refChild) {
+	public void beforeChildAdded(Component newChild, Component refChild) {
 		if (newChild instanceof Caption) {
 			if (_caption != null && _caption != newChild)
 				throw new UiException("Only one caption is allowed: "+this);
-			refChild = getFirstChild();
-				//always makes caption as the first child
-			_caption = (Caption)newChild;
 		} else if (refChild instanceof Caption) {
 			throw new UiException("caption must be the first child");
 		} else if (newChild instanceof Panelchildren) {
 			if (_panelchildren != null && _panelchildren != newChild)
 				throw new UiException("Only one panelchildren child is allowed: "+this);
-			_panelchildren = (Panelchildren) newChild;
 		} else if (newChild instanceof Toolbar) {
-			if (refChild instanceof Panelchildren || (refChild == null && (getChildren().isEmpty()))) {
+			if (refChild instanceof Panelchildren
+			|| (refChild == null && (getChildren().isEmpty()))) {
 				if(_tbar != null && _tbar != newChild)
 					throw new UiException("Only one top toolbar child is allowed: "+this);
-				_tbar = (Toolbar) newChild;
 			} else if (refChild == null || refChild == _fbar) {
 				if (_bbar != null && _bbar != newChild) {
 					if (refChild != null && refChild == _fbar) 
 						throw new UiException("Only one bottom toolbar child is allowed: "+this);
 					if (_fbar != null && _fbar != newChild)
 						throw new UiException("Only one foot toolbar child is allowed: "+this);
-					_fbar = (Toolbar) newChild;
-				} else {
-					_bbar = (Toolbar) newChild; 
 				}
 			} else {
 				throw new UiException("Only three toolbars child is allowed: " + this);
 			}
-			
 		} else {
 			throw new UiException("Unsupported child for Panel: " + newChild);
 		}
-		if(super.insertBefore(newChild, refChild)) {
-			invalidate();
-			return true;
+		super.beforeChildAdded(newChild, refChild);
+	}
+	public boolean insertBefore(Component newChild, Component refChild) {
+		if (newChild instanceof Caption) {
+			refChild = getFirstChild();
+				//always makes caption as the first child
+			if (super.insertBefore(newChild, refChild)) {
+				_caption = (Caption)newChild;
+				invalidate();
+				return true;
+			}
+		} else if (newChild instanceof Panelchildren) {
+			if (super.insertBefore(newChild, refChild)) {
+				_panelchildren = (Panelchildren) newChild;
+				invalidate();
+				return true;
+			}
+		} else if (newChild instanceof Toolbar) {
+			if (super.insertBefore(newChild, refChild)) {
+				if (refChild instanceof Panelchildren
+				|| (refChild == null && getChildren().size() == 1)) {
+					_tbar = (Toolbar) newChild;
+				} else if (refChild == null || refChild == _fbar) {
+					if (_bbar != null && _bbar != newChild) {
+						_fbar = (Toolbar) newChild;
+					} else {
+						_bbar = (Toolbar) newChild; 
+					}
+				}
+				invalidate();
+				return true;
+			}
+		} else {
+			return super.insertBefore(newChild, refChild);
+				//impossible but to make it more extensible
 		}
 		return false;
 	}

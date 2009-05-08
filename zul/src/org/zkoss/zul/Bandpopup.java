@@ -43,9 +43,9 @@ public class Bandpopup extends XulElement implements org.zkoss.zul.api.Bandpopup
 			throw new UnsupportedOperationException("Use Bandbox.setOpen(false) instead");
 		return true;
 	}
-	public void setParent(Component parent) {
+	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Bandbox))
 			throw new UiException("Bandpopup's parent must be Bandbox");
-		super.setParent(parent);
+		super.beforeParentChanged(parent);
 	}
 }

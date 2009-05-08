@@ -443,13 +443,15 @@ public class Treeitem extends XulElement implements org.zkoss.zul.api.Treeitem {
 	//and the related codes are in treerow
 
 	//-- Component --//
+	public void beforeParentChanged(Component parent) {
+		if (parent != null && !(parent instanceof Treechildren))
+			throw new UiException("Wrong parent: "+parent);
+		super.beforeParentChanged(parent);
+	}
 	public void setParent(Component parent) {
 		final Component oldp = getParent();
 		if (oldp == parent)
 			return; //nothing changed
-
-		if (parent != null && !(parent instanceof Treechildren))
-			throw new UiException("Wrong parent: "+parent);
 
 		Treeitem affected = null; //what to invalidate
 		if (oldp != null) {
@@ -484,21 +486,36 @@ public class Treeitem extends XulElement implements org.zkoss.zul.api.Treeitem {
 			if (tree != null) tree.onTreeitemAdded(this);
 		}
 	}
-	public boolean insertBefore(Component child, Component insertBefore) {
+	public void beforeChildAdded(Component child, Component refChild) {
 		if (child instanceof Treerow) {
 			if (_treerow != null && _treerow != child)
 				throw new UiException("Only one treerow is allowed: "+this);
-			_treerow = (Treerow)child;
 		} else if (child instanceof Treechildren) {
 			if (_treechildren != null && _treechildren != child)
 				throw new UiException("Only one treechildren is allowed: "+this);
-			_treechildren = (Treechildren)child;
-			if (_treerow != null)
-				_treerow.invalidate();
 		} else {
 			throw new UiException("Unsupported child for tree item: "+child);
 		}
-		return super.insertBefore(child, insertBefore);
+		super.beforeChildAdded(child, refChild);
+	}
+	public boolean insertBefore(Component child, Component refChild) {
+		if (child instanceof Treerow) {
+			if (super.insertBefore(child, refChild)) {
+				_treerow = (Treerow)child;
+				return true;
+			}
+		} else if (child instanceof Treechildren) {
+			if (super.insertBefore(child, refChild)) {
+				_treechildren = (Treechildren)child;
+				if (_treerow != null)
+					_treerow.invalidate();
+				return true;
+			}
+		} else {
+			return super.insertBefore(child, refChild);
+				//impossible but more extensible
+		}
+		return false;
 	}
 	public void onChildAdded(Component child) {
 		super.onChildAdded(child);

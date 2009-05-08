@@ -182,10 +182,12 @@ public class Comboitem extends LabelImageElement implements org.zkoss.zul.api.Co
 	}
 
 	//-- super --//
-	public void setParent(Component parent) {
+	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Combobox))
 			throw new UiException("Comboitem's parent must be Combobox");		
-
+		super.beforeParentChanged(parent);
+	}
+	public void setParent(Component parent) {
 		final Combobox old = (Combobox)getParent();
 		final boolean reIndex =
 			parent != old && old != null && old.getSelectedItem() == this;

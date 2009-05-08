@@ -603,10 +603,10 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 	}
 
 	//-- Component --//
-	public boolean insertBefore(Component newChild, Component refChild) {
+	public void beforeChildAdded(Component newChild, Component refChild) {
 		if (!(newChild instanceof Comboitem))
 			throw new UiException("Unsupported child for Combobox: "+newChild);
-		return super.insertBefore(newChild, refChild);
+		super.beforeChildAdded(newChild, refChild);
 	}
 	/** Childable. */
 	public boolean isChildable() {

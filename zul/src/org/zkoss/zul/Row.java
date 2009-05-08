@@ -372,20 +372,28 @@ public class Row extends XulElement implements org.zkoss.zul.api.Row {
 	}
 
 	//-- Component --//
-	public void setParent(Component parent) {
+	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Rows))
 			throw new UiException("Unsupported parent for row: "+parent);
-		super.setParent(parent);
+		super.beforeParentChanged(parent);
 	}
 	
-	public boolean insertBefore(Component newChild, Component refChild) {
+	public void beforeChildAdded(Component newChild, Component refChild) {
 		if (newChild instanceof Detail) {
 			if (_detail != null && _detail != newChild)
 				throw new UiException("Only one detail is allowed: "+this);
-			_detail = (Detail) newChild;
-			
+		}
+		super.beforeChildAdded(newChild, refChild);
+	}
+	public boolean insertBefore(Component newChild, Component refChild) {
+		if (newChild instanceof Detail) {
 			//move to the first child
-			refChild = getChildren().isEmpty() ? null : (Component) getChildren().get(0); 
+			refChild = getChildren().isEmpty() ? null : (Component) getChildren().get(0);
+			if (super.insertBefore(newChild, refChild)) {
+				_detail = (Detail) newChild;
+				return true;
+			}
+			return false;			
 		} else if (refChild != null && refChild == _detail) {
 			if (getChildren().size() <= 1) refChild = null;
 			else refChild = (Component) getChildren().get(1);

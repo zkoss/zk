@@ -58,6 +58,34 @@ public interface ComponentCtrl {
 	 */
 	public void setComponentDefinition(ComponentDefinition compdef);
 
+	/** Called before adding a child.
+	 * If a component accepts only certain types of children, it shall
+	 * override this method and throw an exception for an illegal child.
+	 *
+	 * @param child the child to be added (never null).
+	 * @param insertBefore another child component that the new child
+	 * will be inserted before it. If null, the new child will be the
+	 * last child.
+	 * @since 3.6.2
+	 */
+	public void beforeChildAdded(Component child, Component insertBefore);
+	/** Called before removing a child.
+	 * If a component denies a certain child to be removed, it shall
+	 * override this method to avoid it.
+	 *
+	 * @param child the child to be removed (never null)
+	 * @since 3.6.2
+	 */
+	public void beforeChildRemoved(Component child);
+	/** Called before changing the parent.
+	 * If a component can be a child of certain parents, it shall override
+	 * this method and throws an exception for an illegal parent.
+	 *
+	 * @param parent the new parent. If null, it means detachment.
+	 * @since 3.6.2
+	 */
+	public void beforeParentChanged(Component parent);
+
 	/** Called when a child is added.
 	 * If a component want to optimize the update, it might do something
 	 * different. Otherwise, it does nothing.

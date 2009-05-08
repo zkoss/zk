@@ -137,9 +137,9 @@ public class Treecol extends HeaderElement implements org.zkoss.zul.api.Treecol 
 	}
 
 	//-- Component --//
-	public void setParent(Component parent) {
+	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Treecols))
 			throw new UiException("Wrong parent: "+parent);
-		super.setParent(parent);
+		super.beforeParentChanged(parent);
 	}
 }

@@ -132,9 +132,9 @@ public class Area extends AbstractComponent implements org.zkoss.zul.api.Area {
 		id = getId();
 		if (!old.equals(id)) smartUpdate("z.aid", id);
 	}
-	public void setParent(Component parent) {
+	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Imagemap))
 			throw new UiException("Area's parent must be imagemap, not "+parent);
-		super.setParent(parent);
+		super.beforeParentChanged(parent);
 	}
 }

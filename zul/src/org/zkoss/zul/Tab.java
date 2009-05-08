@@ -272,10 +272,10 @@ public class Tab extends LabelImageElement implements org.zkoss.zul.api.Tab {
 		return false;
 	}
 
-	public void setParent(Component parent) {
+	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Tabs))
 			throw new UiException("Wrong parent: " + parent);
-		super.setParent(parent);
+		super.beforeParentChanged(parent);
 	}
 
 	// -- ComponentCtrl --//
