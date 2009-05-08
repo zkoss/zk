@@ -7,6 +7,7 @@ ZK 3.6.2
 
 * Bugs
   2787077: Listbox-Paging was broken with fix for #2782751
+  2788875: Https.getOriginPathInfo() & getOriginQueryString() exchange
 
 	--------
 ZK 3.6.1
