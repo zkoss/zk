@@ -110,6 +110,12 @@ public class Menu extends LabelImageElement implements org.zkoss.zul.api.Menu {
 		}
 		super.beforeChildAdded(child, refChild);
 	}
+	
+	public void onChildRemoved(Component child) {
+		_popup = null;
+		super.onChildRemoved(child);
+	}
+	
 	public boolean insertBefore(Component child, Component refChild) {
 		if (child instanceof Menupopup) {
 			if (super.insertBefore(child, refChild)) {
