@@ -193,8 +193,9 @@ public class HtmlPageRenders {
 			return ""; //nothing to generate
 		exec.setAttribute(ATTR_LANG_JS_GENED, Boolean.TRUE);
 
-		if (wapp == null) wapp = exec.getDesktop().getWebApp();
-		if (deviceType == null) deviceType = exec.getDesktop().getDeviceType();
+		final Desktop desktop = exec.getDesktop();
+		if (wapp == null) wapp = desktop.getWebApp();
+		if (deviceType == null) deviceType = desktop.getDeviceType();
 		final Configuration config = wapp.getConfiguration();
 
 		final StringBuffer sb = new StringBuffer(1536);
@@ -209,6 +210,7 @@ public class HtmlPageRenders {
 		sb.append("\n<script>\n")
 			.append("zkver('").append(wapp.getVersion())
 			.append("','").append(wapp.getBuild())
+			.append("','").append(desktop.getUpdateURI(null))
 			.append('\'');
 
 		for (Iterator it = LanguageDefinition.getByDeviceType(deviceType).iterator();

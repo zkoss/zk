@@ -197,7 +197,7 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 	private void setSelectedCategory(Listitem item) {
 		DemoItem di = (DemoItem) item.getValue();
 		_selected = (Div) main.getFellow(di.getCateId());
-		String deselect = _selected != null ? "onSelect($e('"+ _selected.getUuid() + "'));" : "";
+		String deselect = _selected != null ? "onSelect('"+ _selected.getUuid() + "');" : "";
 		if (Executions.getCurrent().isBrowser("ie6-")) {
 			Clients.evalJavaScript(deselect + "fixImage4IE6();");
 		} else {
@@ -239,7 +239,7 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 			}
 			itemList.setModel(new ListModelList(item));
 		} else itemList.setModel(new ListModelList(items));
-		String deselect = _selected != null ? "onSelect($e('"+ _selected.getUuid() + "'), true);" : "";
+		String deselect = _selected != null ? "onSelect('"+ _selected.getUuid() + "', true);" : "";
 		if (Executions.getCurrent().isBrowser("ie6-")) {
 			itemList.renderAll();
 			Clients.evalJavaScript(deselect + "fixImage4IE6();");

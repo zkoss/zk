@@ -32,7 +32,13 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<zscript language="Java">
 	import org.zkoss.zkex.zul.*;
 	</zscript>
-	
+
+	<component>
+		<component-name>borderlayout</component-name>
+		<extends>borderlayout</extends>
+		<component-class>org.zkoss.zkex.zul.Borderlayout</component-class>
+		<!--widget-class>zul.layout.Borderlayout</widget-class-->
+	</component>	
 	<component>
 		<component-name>captcha</component-name>
 		<extends>captcha</extends>
@@ -41,6 +47,12 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<attribute-name>captcha-engine</attribute-name>
 			<attribute-value>org.zkoss.zkex.zul.impl.JHLabsCaptchaEngine</attribute-value>
 		</custom-attribute>
+	</component>
+	<component>
+		<component-name>center</component-name>
+		<extends>center</extends>
+		<component-class>org.zkoss.zkex.zul.Center</component-class>
+		<!--widget-class>zul.layout.Center</widget-class-->
 	</component>
 	<component>
 		<component-name>chart</component-name>
@@ -74,6 +86,12 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<mold-name>default</mold-name>
 			<mold-uri>~./zkex/zul/html/detail.dsp</mold-uri>
 		</mold>
+	</component>
+	<component>
+		<component-name>east</component-name>
+		<extends>east</extends>
+		<component-class>org.zkoss.zkex.zul.East</component-class>
+		<!--widget-class>zul.layout.East</widget-class-->
 	</component>
 	<component>
 		<component-name>fisheye</component-name>
@@ -133,5 +151,23 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<mold-name>default</mold-name>
 			<mold-uri>~./zkex/zul/html/listgroupfoot.dsp</mold-uri>
 		</mold>
+	</component>
+	<component>
+		<component-name>north</component-name>
+		<extends>north</extends>
+		<component-class>org.zkoss.zkex.zul.North</component-class>
+		<!--widget-class>zul.layout.North</widget-class-->
+	</component>	
+	<component>
+		<component-name>south</component-name>
+		<extends>south</extends>
+		<component-class>org.zkoss.zkex.zul.South</component-class>
+		<!--widget-class>zul.layout.South</widget-class-->
+	</component>
+	<component>
+		<component-name>west</component-name>
+		<extends>west</extends>
+		<component-class>org.zkoss.zkex.zul.West</component-class>
+		<!--widget-class>zul.layout.West</widget-class-->
 	</component>
 </language-addon>

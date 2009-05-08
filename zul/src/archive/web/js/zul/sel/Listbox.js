@@ -93,7 +93,7 @@ zul.sel.ItemIter = zk.$extends(zk.Object, {
 	},
 	next: function () {
 		var p = this.p;
-		this.p = box.nextItem(p);
+		if (p) this.p = p.parent.nextItem(p);
 		return p;
 	}
 });

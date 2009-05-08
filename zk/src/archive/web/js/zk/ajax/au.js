@@ -14,7 +14,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 zAu = {
 	comURI: function (uri, dt, ignoreSessId) {
-		var au = zk.Desktop.$(dt).updateURI;
+		var au = zk.Desktop.$(dt);
+		au = (au ? au: zk).updateURI;
 		if (!uri) return au;
 
 		if (uri.charAt(0) != '/') uri = '/' + uri;

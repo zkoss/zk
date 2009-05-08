@@ -31,7 +31,7 @@ zk.def(zul.wgt.Separator = zk.$extends(zul.Widget, {
 		var s = this.$supers('domStyle_', arguments);
 		if (!this._isPercentGecko()) return s;
 
-		var v = zk.parseInt(_spacing.substring(0, _spacing.length() - 1).trim());
+		var v = zk.parseInt(_spacing.substring(0, _spacing.length - 1).trim());
 		if (v <= 0) return s;
 		v = v >= 2 ? (v / 2) + "%": "1%";
 
@@ -40,13 +40,13 @@ zk.def(zul.wgt.Separator = zk.$extends(zul.Widget, {
 	},
 	getWidth: function () {
 		var wd = this.$supers('getWidth', arguments);
-		return !this.isVertical() || (wd != null && wd.length() > 0)
+		return !this.isVertical() || (wd != null && wd.length > 0)
 			|| this._isPercentGecko() ? wd: this._spacing;
 		
 	},
 	getHeight: function () {
 		var hgh = this.$supers('getHeight', arguments);
-		return this.isVertical() || (hgh != null && hgh.length() > 0)
+		return this.isVertical() || (hgh != null && hgh.length > 0)
 			|| this._isPercentGecko() ? hgh: this._spacing;
 	},
 	_isPercentGecko: function () {

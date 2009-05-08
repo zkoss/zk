@@ -463,10 +463,11 @@ public class DefinitionLoaders {
 	}
 	private static WidgetDefinition getWidgetDefinition(
 	LanguageDefinition langdef, ComponentDefinition compdef, String wgtnm) {
-		if (langdef.hasWidgetDefinition(wgtnm))
-			return langdef.getWidgetDefinition(wgtnm);
+		WidgetDefinition wgtdef = langdef.getWidgetDefinitionIfAny(wgtnm);
+		if (wgtdef != null)
+			return wgtdef;
 
-		WidgetDefinition wgtdef = new WidgetDefinitionImpl(wgtnm, compdef.isBlankPreserved());
+		wgtdef = new WidgetDefinitionImpl(wgtnm, compdef.isBlankPreserved());
 		langdef.addWidgetDefinition(wgtdef);
 		return wgtdef;
 	}

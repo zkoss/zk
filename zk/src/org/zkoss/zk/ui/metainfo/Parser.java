@@ -451,6 +451,10 @@ public class Parser {
 				//Resolve later since might be defined in zscript
 		}
 
+		String wgtnm = (String)params.remove("widgetClass");
+		if (wgtnm != null)
+			compdef.setDefaultWidgetClass(wgtnm);
+
 		pgdef.addComponentDefinition(compdef);
 
 		String moldURI = (String)params.remove("moldURI");

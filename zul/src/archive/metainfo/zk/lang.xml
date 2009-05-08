@@ -209,7 +209,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-name>default</mold-name>
 			<mold-uri>mold/borderlayout.js</mold-uri>
 		</mold>
-	</component>	
+	</component>
 	<component>
 		<component-name>button</component-name>
 		<component-class>org.zkoss.zul.Button</component-class>
