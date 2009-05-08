@@ -532,18 +532,21 @@ zDom = { //static methods
 			document.body.appendChild(tsd);
 		}
 
-		for (var ss = zDom._TEXT_STYLES, j = ss.length; --j >= 0;)
-			tsd.style[ss[j]] = zDom.getStyle(el, ss[j]);
+		for (var ss = zDom._TEXT_STYLES, j = ss.length; --j >= 0;) {
+			var nm = ss[j].$camel();
+			tsd.style[nm] = zDom.getStyle(el, nm);
+		}
 
 		tsd.innerHTML = txt;
 		return [tsd.offsetWidth, tsd.offsetHeight];
 	},
 	//refer to http://www.w3schools.com/css/css_text.asp
 	_TEXT_STYLES: [
-		'fontFamily', 'fontSize', 'fontWeight', 'fontStyle',
-		'letterSpacing', 'lineHeight', 'textAlign', 'textDecoration',
-		'textIndent', 'textShadow', 'textTransform', 'textOverflow',
-		'direction', 'wordSpacing', 'whiteSpace'],
+		'font-family', 'font-size', 'font-weight', 'font-style',
+		'letter-spacing', 'line-height', 'text-align', 'text-decoration',
+		'text-indent', 'text-shadow', 'text-transform', 'text-overflow',
+		'direction', 'word-spacing', 'white-space'],
+	_TEXT_STYLES2: ["color", "background-color", "background"],
 
 	dimension: function (el, revised) {
 		var display = zDom.getStyle(el,  'display');
@@ -608,20 +611,29 @@ zDom = { //static methods
 		}
 	},
 
-	_txtstyles: ["color", "background-color", "background",	"white-space"],
-
 	filterTextStyle: function (style, plus) {
-		var ts = "";
-		for (var j = 0, k = 0; k >= 0; j = k + 1) {
-			k = style.indexOf(';', j);
-			var s = k >= 0 ? style.substring(j, k): style.substring(j);
-			var l = s.indexOf(':');
-			var nm = l < 0 ? s.trim(): s.substring(0, l).trim();
-
-			if (nm.startsWith("font")  || nm.startsWith("text")
-			|| zDom._txtstyles.$contains(nm) || (plus && plus.$contains(nm)))
-				ts += s + ';';
+		if (typeof style == 'string') {
+			var ts = "";
+			if (style)
+				for (var j = 0, k = 0; k >= 0; j = k + 1) {
+					k = style.indexOf(';', j);
+					var s = k >= 0 ? style.substring(j, k): style.substring(j),
+						l = s.indexOf(':'),
+						nm = l < 0 ? s.trim(): s.substring(0, l).trim();
+					if (nm && (zDom._TEXT_STYLES.$contains(nm)
+					|| zDom._TEXT_STYLES2.$contains(nm)
+					|| (plus && plus.$contains(nm))))
+						ts += s + ';';
+				}
+			return ts;
 		}
+
+		var ts = {};
+		for (var nm in style)
+			if (zDom._TEXT_STYLES.$contains(nm)
+			|| zDom._TEXT_STYLES2.$contains(nm)
+			|| (plus && plus.$contains(nm)))
+				ts[nm] = style[nm];
 		return ts;
 	},
 

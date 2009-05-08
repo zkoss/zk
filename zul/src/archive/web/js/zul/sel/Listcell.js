@@ -22,14 +22,8 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 	getZclass: function () {
 		return this._zclass == null ? "z-listcell" : this._zclass;
 	},
-	updateDomStyle_: function () {
-		this.$supers('updateDomStyle_', arguments);
-
-		var n = this.getNode();
-		if (n) {
-			var label = zDom.firstChild(n, "DIV");
-			if (label) zDom.setStyles(label, zDom.parseStyle(zDom.filterTextStyle(this.domStyle_())));
-		}
+	getTextNode_: function () {
+		return zDom.firstChild(this.getNode(), "DIV");
 	},
 	domContent_: function () {
 		var s1 = this.$supers('domContent_', arguments),

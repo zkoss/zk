@@ -63,14 +63,8 @@ _zkc = zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		}
 		return this.$supers('doClick_', arguments);
 	},
-	updateDomStyle_: function () {
-		this.$supers('updateDomStyle_', arguments);
-
-		var n = this.getNode();
-		if (n) {
-			var label = zDom.firstChild(n, "LABEL");
-			if (label) zDom.setStyles(label, zDom.parseStyle(zDom.filterTextStyle(this.domStyle_())));
-		}
+	getTextNode_: function () {
+		return zDom.firstChild(this.getNode(), "LABEL");
 	}
 });
 if (zk.gecko2Only)

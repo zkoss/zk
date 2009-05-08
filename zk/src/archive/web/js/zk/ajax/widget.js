@@ -490,8 +490,15 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 	},
 	updateDomStyle_: function () {
-		if (this.desktop)
-			zDom.setStyles(this.getNode(), zDom.parseStyle(this.domStyle_()));
+		if (this.desktop) {
+			var s = zDom.parseStyle(this.domStyle_());
+			zDom.setStyles(this.getNode(), s);
+
+			var n = this.getTextNode_();
+			if (n) zDom.setStyles(n, zDom.filterTextStyle(s));
+		}
+	},
+	getTextNode_: function () {
 	},
 
 	domStyle_: function (no) {

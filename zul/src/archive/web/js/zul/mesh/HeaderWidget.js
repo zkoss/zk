@@ -39,6 +39,9 @@ zk.def(zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		var attrs = this.$supers('domAttrs_', arguments);
 		return attrs + this.getColAttrs();
 	},
+	getTextNode_: function () {
+		return zDom.firstChild(this.getNode(), "DIV");
+	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
 		if (this.parent.isSizable()) this._initsz();
@@ -206,7 +209,7 @@ zk.def(zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		var uuid = this.uuid,
 			zcls = this.getZclass();
 		out.push('<th', this.domAttrs_(), '><div id="', uuid, '$cave" class="',
-				zcls, '-cnt">', this.domContent_());
+				zcls, '-cnt"', this.domTextStyleAttr_(), '>', this.domContent_());
 
 		if (this.parent.menupopup && this.parent.menupopup != 'none')
 			out.push('<a id="', uuid, '$btn"  href="javascript:;" class="', zcls, '-btn"></a>');
