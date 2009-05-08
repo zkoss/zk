@@ -423,7 +423,7 @@ public class ComponentsCtrl {
 		public String getDefaultWidgetClass() {
 			return null;
 		}
-		public void setDefaultWidgetClass(String widgetClass) {
+		public void setDefaultWidgetClass(String widgetClass, boolean replaceDefaultMold) {
 			throw new UnsupportedOperationException();
 		}
 		public String getZ2CURI(Component comp, String moldName) {

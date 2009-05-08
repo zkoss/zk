@@ -19,13 +19,16 @@ zk = {
 	lastPointer: [0, 0],
 	currentPointer: [0, 0],
 
-	$package: function (name) {
+	$package: function (name, end) { //end used only by WpdExtendlet
 		for (var j = 0, ref = window;;) {
 			var k = name.indexOf('.', j),
 				nm = k >= 0 ? name.substring(j, k): name.substring(j);
 			var nxt = ref[nm];
 			if (!nxt) nxt = ref[nm] = {};
-			if (k < 0) return nxt;
+			if (k < 0) {
+				if (end !== false) zPkg.end(name);
+				return nxt;
+			}
 			ref = nxt;
 			j = k + 1;
 		}

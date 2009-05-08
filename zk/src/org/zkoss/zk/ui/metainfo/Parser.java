@@ -452,13 +452,15 @@ public class Parser {
 		}
 
 		String wgtnm = (String)params.remove("widgetClass");
+		if (wgtnm == null)
+			wgtnm = (String)params.remove("widget-class");
 		if (wgtnm != null)
-			compdef.setDefaultWidgetClass(wgtnm);
+			compdef.setDefaultWidgetClass(wgtnm, true);
 
 		pgdef.addComponentDefinition(compdef);
 
 		String moldURI = (String)params.remove("moldURI");
-		if (moldURI == null) moldURI = (String)params.remove("mold-uri"); //backward comaptible (2.4.x)
+		if (moldURI == null) moldURI = (String)params.remove("mold-uri");
 		if (!isEmpty(moldURI))
 			throw new UnsupportedOperationException("moldURI not supported in 5.0. Use <?script?> or lang-addon.xml instead, "+pi.getLocator());
 

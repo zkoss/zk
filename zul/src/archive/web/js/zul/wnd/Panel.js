@@ -5,7 +5,7 @@
 	Description:
 
 	History:
-		Mon Jan 12 18:31:03     2009, Created by jumperchen
+		Mon Jan 12 18:31:03 2009, Created by jumperchen
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
@@ -146,25 +146,25 @@ zk.def(zul.wnd.Panel = zk.$extends(zul.Widget, {
 			tb = this.getSubnode('tb'),
 			bb = this.getSubnode('bb'),
 			fb = this.getSubnode('fb');
-	    if (this.isFramable()) {
+		if (this.isFramable()) {
 			var body = this.getSubnode('body'),
 				ft = zDom.lastChild(body, "DIV"),
 				title = this.getSubnode('cap');
-	        h += ft.offsetHeight;
+			h += ft.offsetHeight;
 			if (this.panelchildren)
 				h += zDom.padBorderHeight(this.panelchildren.getNode().parentNode);
 			if (title)
-		        h += zDom.padBorderHeight(title.parentNode);
-	    }
+				h += zDom.padBorderHeight(title.parentNode);
+		}
 		if (tb) h += tb.offsetHeight;
 		if (bb) h += bb.offsetHeight;
 		if (fb) h += fb.offsetHeight;
-	    return h;
+		return h;
 	},
 	_titleHeight: function (n) {
-		var cap = this.getSubnode('cap');
+		var cap = this.getSubnode('cap'),
 			top = this.isFramable() ?
-					zDom.firstChild(n, "DIV").offsetHeight : 0;
+				zDom.firstChild(n, 'DIV').offsetHeight: 0;
 		return cap ? cap.offsetHeight + top : top;
 	},
 	_syncMaximized: function (cmp) {

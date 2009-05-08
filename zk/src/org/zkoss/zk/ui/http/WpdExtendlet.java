@@ -159,7 +159,7 @@ public class WpdExtendlet implements Extendlet {
 		if (!zk) {
 			write(out, "_z='");
 			write(out, name);
-			write(out, "';try{_zkpk=zk.$package(_z);\n");
+			write(out, "';try{_zkpk=zk.$package(_z,false);\n");
 
 			depends = root.getAttributeValue("depends");
 			if (depends != null)

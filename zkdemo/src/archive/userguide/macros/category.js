@@ -1,7 +1,7 @@
 // category.js
 
 zk.$package('userguide');
-zPkg.load('zul.wgt', function () {
+zPkg.load('zul.wgt', null, function () {
 userguide.Categorybar = zk.$extends(zul.wgt.Div, {
 	bind_: function () {
 		this.$supers('bind_', arguments);

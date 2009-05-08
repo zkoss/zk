@@ -439,7 +439,7 @@ implements ComponentDefinition, java.io.Serializable {
 		return propmap;
 	}
 
-	public void addMold(String name, String widgetType, String z2cURI) {
+	public void addMold(String name, String widgetClass, String z2cURI) {
 		if (name == null || name.length() == 0)
 			throw new IllegalArgumentException();
 
@@ -449,10 +449,10 @@ implements ComponentDefinition, java.io.Serializable {
 		final Object[] old = (Object[])_molds.get(name);
 		ExValue z2cval = z2cURI != null ? new ExValue(z2cURI, String.class): null;
 		if (old != null) {
-			if (widgetType != null) old[0] = widgetType;
+			if (widgetClass != null) old[0] = widgetClass;
 			if (z2cval != null) old[1] = z2cval;
 		} else {
-			_molds.put(name, new Object[] {widgetType, z2cval});
+			_molds.put(name, new Object[] {widgetClass, z2cval});
 		}
 	}
 	public boolean hasMold(String name) {
@@ -467,13 +467,18 @@ implements ComponentDefinition, java.io.Serializable {
 			final Object[] info = (Object[])_molds.get(moldName);
 			if (info != null) return (String)info[0];
 		}
-		return null;
+		return _defWgtClass;
 	}
 	public String getDefaultWidgetClass() {
 		return _defWgtClass;
 	}
-	public void setDefaultWidgetClass(String widgetClass) {
+	public void setDefaultWidgetClass(String widgetClass, boolean replaceDefaultMold) {
 		_defWgtClass = widgetClass;
+		if (widgetClass != null && replaceDefaultMold) {
+			Object[] info = (Object[])_molds.get("default");
+			if (info != null) info[0] = widgetClass;
+			else addMold("default", widgetClass, null);
+		}
 	}
 	public String getZ2CURI(Component comp, String moldName) {
 		if (_molds != null) {

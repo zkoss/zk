@@ -421,7 +421,7 @@ public class DefinitionLoaders {
 			WidgetDefinition wgtdef = null;
 			if (wgtnm != null) {
 				wgtdef = getWidgetDefinition(langdef, compdef, wgtnm);
-				compdef.setDefaultWidgetClass(wgtnm);
+				compdef.setDefaultWidgetClass(wgtnm, false);
 			}
 
 			s = el.getElementValue("component-apply", true);
