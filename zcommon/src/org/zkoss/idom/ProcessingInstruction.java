@@ -18,7 +18,7 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 package org.zkoss.idom;
 
 import java.util.Map;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Iterator;
 import java.util.Collections;
 import java.io.IOException;
@@ -89,7 +89,7 @@ implements org.w3c.dom.ProcessingInstruction {
 	/** Returns the parsed data in the form of Map (never null).
 	 */
 	public final Map parseData() {
-		return parseToMap(null, getData());
+		return parseToMap(new LinkedHashMap(), getData());
 	}
 	/**
 	 * Sets the raw data with a data map.
