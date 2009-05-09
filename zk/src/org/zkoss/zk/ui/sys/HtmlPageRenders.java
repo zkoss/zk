@@ -555,6 +555,7 @@ public class HtmlPageRenders {
 			out.write(">");
 			Files.write(out, ((StringWriter)rc.extra).getBuffer());
 			out.write("</div>");
+			Files.write(out, ((StringWriter)rc.perm).getBuffer());
 		}
 	}
 	/** Generates the content of a standalone componnent that
@@ -642,11 +643,17 @@ public class HtmlPageRenders {
 		 * It is never null.
 		 */
 		public final Writer extra;
+		/** The extra writer used to generate the content that exists
+		 * after the other being replaced with ZK widgets (never null).
+		 * It is currenlty used only to generate CSS style.
+		 */
+		public final Writer perm;
 		/** Indicates whether to generate crawlable content.
 		 */
 		public final boolean crawlable;
 		private RenderContext(boolean crawlable) {
 			this.extra = new StringWriter();
+			this.perm = new StringWriter();
 			this.crawlable = crawlable;
 		}
 	}

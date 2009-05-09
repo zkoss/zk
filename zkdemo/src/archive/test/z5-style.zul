@@ -17,7 +17,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	You shall see the background color changed when
 	pressing the buttons in order.
     <separator/>
-    The 3rd botton work slow in IE6, IE7 and doesn't work in SA, it won't fixed.
+    The 3rd botton work slow in IE6, IE7 and doesn't work in SA, it won't be fixed.
     <separator/>
 	<div id="anchor">
 	<zscript><![CDATA[
@@ -42,7 +42,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		onClick='setStyle("s1", "body {color: white}")'/>
 	<button label="Change text color to black"
 		onClick='setStyle("s1", "body {color: black}")'/>
-	<button label="Add label" onClick='anchor.insertBefore(new Label("Hi. "), s0)'/>
+	<button label="Add label (work only if after clicking 1 or 2, but not 3)" onClick='anchor.insertBefore(new Label("Hi. "), s0)'/>
 	</div>
 	<style id="s5">
 	.z5 {

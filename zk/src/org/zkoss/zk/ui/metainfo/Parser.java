@@ -455,7 +455,7 @@ public class Parser {
 		if (wgtnm == null)
 			wgtnm = (String)params.remove("widget-class");
 		if (wgtnm != null)
-			compdef.setDefaultWidgetClass(wgtnm, true);
+			compdef.setDefaultWidgetClass(wgtnm);
 
 		pgdef.addComponentDefinition(compdef);
 

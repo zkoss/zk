@@ -54,7 +54,6 @@ zk.def(zul.utl.Timer = zk.$extends(zk.Widget, {
 
 	//super//
 	redraw: function () {
-		return '';
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);

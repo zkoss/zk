@@ -148,24 +148,23 @@ public class Style extends AbstractComponent implements org.zkoss.zul.api.Style 
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 
-		render(renderer, "src", getEncodedURL());
-
+		boolean gened = false;
 		if (_content != null) {
 			final HtmlPageRenders.RenderContext rc =
 				HtmlPageRenders.getRenderContext(null);
 			if (rc != null) {
-				final Writer out = rc.extra;
-				out.write("\n<style type=\"text/css\">\n");
+				final Writer out = rc.perm;
+					//don't use rc.extra which will be replaced with widgets later
+				out.write("\n<style id=\"");
+				out.write(getUuid());
+				out.write("$css\" type=\"text/css\">\n");
 				out.write(_content);
 				out.write("\n</style>\n");
-
-				render(renderer, "content", _content);
-				//we have to re-gen later (in widget's redraw)
-				//(since IE cannot retrieve the content of style)
-				//
-				//both src and content are generated (src for rerender)
+				gened = true;
 			}
 		}
+		if (!gened)
+			render(renderer, "src", getEncodedURL());
 	}
 
 	//Component//
