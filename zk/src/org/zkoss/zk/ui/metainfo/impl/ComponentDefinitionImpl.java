@@ -447,13 +447,12 @@ implements ComponentDefinition, java.io.Serializable {
 			_molds = new HashMap(2);
 
 		final Object[] old = (Object[])_molds.get(name);
-		ExValue z2cval = z2cURI != null ? new ExValue(z2cURI, String.class): null;
-		if (old != null) {
-			if (widgetClass != null) old[0] = widgetClass;
-			if (z2cval != null) old[1] = z2cval;
-		} else {
-			_molds.put(name, new Object[] {widgetClass, z2cval});
-		}
+		_molds.put(name, new Object[] {
+			widgetClass != null ? widgetClass: old != null ? old[0]: null,
+			z2cURI != null ? new ExValue(z2cURI, String.class):
+				old != null ? old[1]: null});
+			//Note: clone() assume value of _molds is immutable, so
+			//create a new array instead of updating old directly
 	}
 	public boolean hasMold(String name) {
 		return _molds != null && _molds.containsKey(name);
@@ -472,13 +471,20 @@ implements ComponentDefinition, java.io.Serializable {
 	public String getDefaultWidgetClass() {
 		return _defWgtClass;
 	}
-	public void setDefaultWidgetClass(String widgetClass, boolean replaceDefaultMold) {
+	public void setDefaultWidgetClass(String widgetClass) {
+		final String oldwc = _defWgtClass;
 		_defWgtClass = widgetClass;
-		if (widgetClass != null && replaceDefaultMold) {
-			Object[] info = (Object[])_molds.get("default");
-			if (info != null) info[0] = widgetClass;
-			else addMold("default", widgetClass, null);
-		}
+
+		//replace mold's widget class if it is the old default one
+		if (oldwc != null && _molds != null)
+			for (Iterator it = _molds.entrySet().iterator(); it.hasNext();) {
+				final Map.Entry me = (Map.Entry)it.next();
+				final Object[] info = (Object[])me.getValue();
+				if (oldwc.equals(info[0]))
+					me.setValue(new Object[] {widgetClass, info[1]});
+				//Note: clone() assume value of _molds is immutable, so
+				//create a new array instead of updating old directly
+			}
 	}
 	public String getZ2CURI(Component comp, String moldName) {
 		if (_molds != null) {

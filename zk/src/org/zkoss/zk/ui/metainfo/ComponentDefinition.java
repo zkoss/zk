@@ -254,10 +254,9 @@ public interface ComponentDefinition extends Cloneable {
 	/** Sets the default widget class.
 	 * @param widgetClass the name of the widget class (JavaScript class),
 	 * including the package name.
-	 * @param replaceDefaultMold whether to replace the default mold.
 	 * @since 5.0.0
 	 */
-	public void setDefaultWidgetClass(String widgetClass, boolean replaceDefaultMold);
+	public void setDefaultWidgetClass(String widgetClass);
 	/** Returns the URI of the ZCS-to-CSS converter for the specified mold.
 	 *
 	 * <p>ZCS is ZK cacasding style that allows developers to customize
