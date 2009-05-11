@@ -53,6 +53,10 @@ import org.zkoss.zul.mesg.MZul;
  *
  * <p>Since 3.6.2, there are three modes: auto, instant and defer (default).
  * The behavior prior to 3.6.2 is the same as the defer mode.
+ * To be fully backward compatible, the default mode is <code>defer</code>.
+ * However, we recommend you change it by specifying a library variable named
+ * <code>org.zkoss.zul.include.mode</code> to be <code>auto</code>,
+ * since the auto mode is more intuitive and easier to handle.
  *
  * <h3>The instant mode</h3>
  *
@@ -147,7 +151,7 @@ public class Include extends XulElement implements org.zkoss.zul.api.Include {
 	private static final Log log = Log.lookup(Include.class);
 	private String _src;
 	private Map _dynams;
-	private String _mode = "defer";
+	private String _mode = getDefaultMode();
 	private boolean _localized;
 	private boolean _progressing;
 	private boolean _afterComposed;
@@ -470,4 +474,10 @@ public class Include extends XulElement implements org.zkoss.zul.api.Include {
 				else exec.removeAttribute(nm);
 			}
 	}
+	private static String getDefaultMode() {
+		if (_defMode == null)
+			_defMode = Library.getProperty("org.zkoss.zul.include.mode", "defer");
+		return _defMode;
+	}
+	private static String _defMode;
 }

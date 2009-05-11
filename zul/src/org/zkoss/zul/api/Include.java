@@ -32,6 +32,13 @@ import org.zkoss.zul.mesg.MZul;//for javadoc
  * <p>
  * Non-XUL extension.
  * 
+ * <p>Since 3.6.2, there are three modes: auto, instant and defer (default).
+ * The behavior prior to 3.6.2 is the same as the defer mode.
+ * To be fully backward compatible, the default mode is <code>defer</code>.
+ * However, we recommend you change it by specifying a library variable named
+ * <code>org.zkoss.zul.include.mode</code> to be <code>auto</code>,
+ * since the auto mode is more intuitive and easier to handle.
+ *
  * <h3>The instant mode</h3>
  *
  * <p>In the instant mode, the page to be included are loaded 'instantly'

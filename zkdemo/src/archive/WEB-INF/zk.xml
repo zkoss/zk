@@ -39,6 +39,13 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</log>
 	-->
 
+	<!-- Turn on the following if want to use auto as the default.
+	-->
+	<library-property>
+		<name>org.zkoss.zul.include.mode</name>
+		<value>auto</value>
+	</library-property>
+
 	<!-- Turn on if you want to use language addons.
 	<language-config>
 		<addon-uri>/WEB-INF/lang-addon.xml</addon-uri>
