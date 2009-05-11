@@ -26,38 +26,46 @@ import org.zkoss.zk.ui.AbstractComponent;
 
 /**
  * A component to generate script codes that will be evaluated at the client.
- * It is similar to HTML SCRIPT tag, except it is not evaluated immediately.
- * Rather, it is evaluated after all widgets are created and mounted
- * to the DOM tree.
+ * It is similar to HTML SCRIPT tag, except the defer option ({@link #setDefer})
+ * will cause the evaluation of JavaScript until the widget has been
+ * instantiated and mounted to the DOM tree.
  *
  * <p>Note: it is the script codes running at the client, not at the
  * server. Don't confuse it with the <code>zscript</code> element.
  *
  * <p>There are several way to embed script codes in a ZUML page:
  *
- * <p>Approach 1: Specify the URL of the JS file
+ * <p>Approach 1: Specify the URL of the JS file. In this case,
+ * <code>defer</code> is meaningless. The JavaScript codes
+ * are evaluated as soon as the file is loaded.
  * <pre><code>&lt;script src="my.js"/&gt;
  * </code></pre>
  *
- * <p>Approach 2: Specify the JavaScript codes directly
- * <pre><code>&lt;script&gt;
+ * <p>Approach 2: Specify the JavaScript codes directly without defer.
+ * The JavaScript codes are evaluated immediately before the widget is
+ * instantiated, so you cannot access any widget. Rather, it is used to
+ * do desktop-level initialization, such as defining a widget class, and 
+ * a global function.
+ * <pre><code>&lt;script defer="true"&gt;
+ * zk.$package('foo');
+ * zPkg.load('zul.wgt', null, function () {
+ * foo.Foo = zk.$extends(zul.Widget, {
+ * //...
+ *&lt;/script&gt;
+ * </code></pre>
+ *
+ * <p>Approach 3: Specify the JavaScript codes directly with defer.
+ * The JavaScipt codes are evaluated after the widget is instantiated and
+ * mounted. Moreover, <code>this</code> references to the script widget,
+ * so you can access the widgets as follows.
+ * <pre><code>&lt;script defer="true"&gt;
  * this.getFellow('l').setValue('new value');
  * //...
  *&lt;/script&gt;
  * </code></pre>
  *
- * <p>Notice that, since 5.0, the JavaScript codes are evaluated after
- * the widgets are created and mounted. In other words, it is always deferred.
- * Moreover, codes specified in Approach 2 are evaluated as a method of
- * the peer widget. Thus, you can access this widget with <code>this</code>
- *
- * <p>Notice that JavaScript codes specified in Approach 1 might be evaluated
- * later than codes in other formats since it takes another HTTP request to
- * load the JavaScript file.
- *
- * <p>If you want to run the codes immediately without waiting the widgets
- * to be created, you can use the script directive, or
- * specify it in language addon.
+ * <p>Alternative to Approach 1, you can use the script directive
+ * as shown below..
  *
  * <pre><code>&lt:?script src="/js/mine.js"?/&gt;</code></pre>
  *
@@ -67,6 +75,7 @@ public class Script extends AbstractComponent implements org.zkoss.zul.api.Scrip
 	private String _src, _charset;
 	private String _content;
 	private String _packages;
+	private boolean _defer;
 
 	public Script() {
 	}
@@ -128,16 +137,28 @@ public class Script extends AbstractComponent implements org.zkoss.zul.api.Scrip
 		}
 	}
 
-	/** @deprecated As of release 5.0.0, it is meaningless since it is always
-	 * deferred
+	/** Returns whether to defer the execution of the script codes
+	 * until the widget is instantiated and mounted.
+	 *
+	 * <p>Default: false.
+	 *
+	 * <p>Specifying false (default), if you want to do the desktop-level
+	 * (or class-level) initialization, such as defining a widget class
+	 * or a global function.
+	 * <p>Specifying true, if you want to access widgets. Notice that
+	 * <code>this</code> references to this script widget.
 	 */
 	public boolean isDefer() {
-		return true;
+		return _defer;
 	}
-	/** @deprecated As of release 5.0.0, it is meaningless since it is always
-	 * deferred
+	/** Sets whether to defer the execution of the script codes.
+	 * @see #isDefer
 	 */
 	public void setDefer(boolean defer) {
+		if (_defer != defer) {
+			_defer = defer;
+			invalidate();
+		}
 	}
 
 	/** Returns the content of the script element.
@@ -190,21 +211,28 @@ public class Script extends AbstractComponent implements org.zkoss.zul.api.Scrip
 			smartUpdate("packages", _packages);
 		}
 	}
-	//-- Component --//
-	/** Not childable. */
-	protected boolean isChildable() {
-		return false;
-	}
+
 	//super//
+	public void redraw(java.io.Writer out) throws java.io.IOException {
+		if (!_defer && _content != null)
+			out.write(_content);
+		super.redraw(out);
+	}
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 
-		if (_content != null)
+		if (_defer && _content != null)
 			renderer.renderDirectly("content", "function(){\n" + _content + '}');
-		render(renderer, "src", getEncodedSrcURL());
+		if (_src != null)
+			render(renderer, "src", getEncodedSrcURL());
+
 		render(renderer, "charset", _charset);
 		render(renderer, "packages", _packages);
+	}
+	/** Not childable. */
+	protected boolean isChildable() {
+		return false;
 	}
 
 	private String getEncodedSrcURL() {

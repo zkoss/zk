@@ -58,12 +58,20 @@
 		<source>../zul/codegen/archive/web/js/zul/menu/zk.wpd</source>
 	</javascript>
 	<javascript>
+		<destination>lib/js/mesh.js</destination>
+		<source>../zul/codegen/archive/web/js/zul/mesh/zk.wpd</source>
+	</javascript>
+	<javascript>
+		<destination>lib/js/sel.js</destination>
+		<source>../zul/codegen/archive/web/js/zul/sel/zk.wpd</source>
+	</javascript>
+	<javascript>
 		<destination>lib/js/tab.js</destination>
 		<source>../zul/codegen/archive/web/js/zul/tab/zk.wpd</source>
 	</javascript>
 	<javascript>
 		<destination>lib/js/utl.js</destination>
-		<source>../zul/codegen/archive/web/js/zul/utl/zk.wpd</source>
+		<source>../zul/codegen/archive/web/js/zul/utl/zklt.wpd</source>
 	</javascript>
 	<javascript>
 		<destination>lib/js/wgt.js</destination>
@@ -81,10 +89,12 @@
 		<source>../zul/codegen/archive/web/js/zul/zklt.wpd</source>
 		<source>../zul/codegen/archive/web/js/zul/wgt/zk.wpd</source>
 		<source>../zul/codegen/archive/web/js/zul/box/zk.wpd</source>
+		<source>../zul/codegen/archive/web/js/zul/mesh/zk.wpd</source>
 		<source>../zul/codegen/archive/web/js/zul/grid/zk.wpd</source>
 		<source>../zul/codegen/archive/web/js/zul/inp/zk.wpd</source>
 		<source>../zul/codegen/archive/web/js/zul/menu/zk.wpd</source>
-		<source>../zul/codegen/archive/web/js/zul/utl/zk.wpd</source>
+		<source>../zul/codegen/archive/web/js/zul/utl/zklt.wpd</source>
+		<source>../zul/codegen/archive/web/js/zul/sel/zk.wpd</source>
 		<source>../zul/codegen/archive/web/js/zul/wnd/zk.wpd</source>
 		<source>../zul/codegen/archive/web/js/zul/tab/zk.wpd</source>
 		<source>../zul/codegen/archive/web/js/zul/layout/zk.wpd</source>

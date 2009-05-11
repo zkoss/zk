@@ -58,8 +58,8 @@ import org.zkoss.zk.ui.impl.NativeHelpers;
 public class HtmlNativeComponent extends AbstractComponent
 implements DynamicTag, Native {
 	private static final Helper _helper = new HtmlHelper();
-	private static final String ATTR_TOP_NATIVE = "org.zkoss.zk.top-native";
-	private static final String ATTR_RENDER_CONTEXT = "org.zkoss.zk.render-context";
+	private static final String ATTR_TOP_NATIVE = "org.zkoss.zk.native.top";
+	private static final String ATTR_RENDER_CONTEXT = "org.zkoss.zk.native.renderContext";
 
 	private String _tag;
 	private String _prolog = "", _epilog = "";

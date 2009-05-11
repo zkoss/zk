@@ -19,7 +19,7 @@ xmlns:zk="http://www.zkoss.org/2005/zk">
  <head>
 	<title>Native Complete Page</title>
 	<script>
-	setTimeout(function(){zk.log("You shall see this");},0); //test if quote is escaped
+	setTimeout(function(){zk.log("You shall see this");},1000); //test if quote is escaped
 	</script>
 	<zkhead/>
  </head>
@@ -48,6 +48,16 @@ xmlns:zk="http://www.zkoss.org/2005/zk">
 	The background shall be dark grey and text color is white.
 	<u:button label="change to lite grey and black text"
 		onClick='s1.setContent(".z5 {background: #ccc;color: black}")'/>
+	</div>
+	<style>
+	.z5a {
+		background: #aaa;
+		color: white;
+		width: 50%;
+	}
+	</style>
+	<div class="z5a">
+		background: #aaa; color: white; width: 50%;
 	</div>
  </body>
 </html>

@@ -31,7 +31,12 @@ xmlns:w="http://www.zkoss.org/2005/zk/client">
 	</label>
 	<separator bar="true"/>
 	<script>
-	var inf = this.getFellow('inf'); //this is the script widget
+	function getInf(wgt) {
+		return wgt.getFellow('inf');
+	}
+	</script>
+	<script defer="true">
+	var inf = getInf(this); //this is the script widget
 	var btn = new zul.wgt.Button({label: 'Append+',
 		listeners: {onClick: function () {
 				inf.setValue(inf.getValue() + '+');
@@ -41,7 +46,7 @@ xmlns:w="http://www.zkoss.org/2005/zk/client">
 	this.parent.appendChild(btn);
 	</script>
 
-	<script>
+	<script defer="true">
 	var btn = new zul.wgt.Button(),
 		wnd = this.getSpaceOwner();
 	btn.setLabel('Add');

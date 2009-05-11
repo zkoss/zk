@@ -55,4 +55,14 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<button label="change to lite grey and black text"
 		onClick='s5.setContent(".z5 {background: #ccc;color: black}")'/>
 	</div>
+	<n:style xmlns:n="http://www.zkoss.org/2005/zk/native">
+	.z5a {
+		background: #aaa;
+		color: white;
+		width: 50%;
+	}
+	</n:style>
+	<div class="z5a">
+		background: #aaa; color: white; width: 50%;
+	</div>
 </window>

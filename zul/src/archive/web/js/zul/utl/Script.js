@@ -90,7 +90,6 @@ zul.utl.Script = zk.$extends(zk.Widget, {
 
 	//super//
 	redraw: function () {
-		return '';
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);

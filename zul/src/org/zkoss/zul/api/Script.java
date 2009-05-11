@@ -110,13 +110,21 @@ public interface Script {
 	 */
 	public void setSrc(String src);
 
-	/** @deprecated As of release 5.0.0, it is meaningless since it is always
-	 * deferred
+	/** Returns whether to defer the execution of the script codes
+	 * until the widget is instantiated and mounted.
+	 *
+	 * <p>Default: false.
+	 *
+	 * <p>Specifying false (default), if you want to do the desktop-level
+	 * (or class-level) initialization, such as defining a widget class
+	 * or a global function.
+	 * <p>Specifying true, if you want to access widgets. Notice that
+	 * <code>this</code> references to this script widget.
 	 */
 	public boolean isDefer();
 
-	/** @deprecated As of release 5.0.0, it is meaningless since it is always
-	 * deferred
+	/** Sets whether to defer the execution of the script codes.
+	 * @see #isDefer
 	 */
 	public void setDefer(boolean defer);
 
