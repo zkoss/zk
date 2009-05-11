@@ -623,7 +623,7 @@ public class LanguageDefinition {
 	public void setMacroTemplate(Class klass, String moldURI) {
 		_macrotmpl = klass != null ? new MacroTemplate(klass, moldURI): null;
 	}
-	/** Returns the component definition for the specified condition.
+	/** Instantiates and returns the component definition for the specified condition.
 	 *
 	 * @param pgdef the page definition the macro definitioin belongs to.
 	 * If null, it belongs to this language definition.

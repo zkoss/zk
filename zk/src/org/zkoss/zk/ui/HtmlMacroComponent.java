@@ -68,7 +68,7 @@ public class HtmlMacroComponent extends HtmlBasedComponent implements Macro {
 	public void afterCompose() {
 		final Execution exec = Executions.getCurrent();
 		if (exec == null)
-			throw new IllegalStateException("No execution available.");
+			throw new IllegalStateException("No execution available");
 
 		if (isInline()) {
 			if (_inlines != null)
