@@ -112,10 +112,10 @@ public class Area extends AbstractComponent implements org.zkoss.zul.api.Area {
 	}
 
 	//-- super --//
-	public void setParent(Component parent) {
+	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Imagemap))
 			throw new UiException("Area's parent must be imagemap, not "+parent);
-		super.setParent(parent);
+		super.beforeParentChanged(parent);
 	}
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {

@@ -185,10 +185,10 @@ public class Fisheyebar extends XulElement implements org.zkoss.zkex.zul.api.Fis
 		super.onChildRemoved(child);
 		smartUpdate("z.childchg", true);
 	}
-	//-- Component --//
-	public boolean insertBefore(Component child, Component insertBefore) {
+	//-- ComponentCtrl --//
+	public void beforeChildAdded(Component child, Component refChild) {
 		if (!(child instanceof Fisheye))
 			throw new UiException("Unsupported child for fisheyebar: "+child);
-		return super.insertBefore(child, insertBefore);
+		super.beforeChildAdded(child, refChild);
 	}
 }

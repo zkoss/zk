@@ -48,10 +48,10 @@ public class Caption extends LabelImageElement implements org.zkoss.zul.api.Capt
 	}
 
 	//-- Component --//
-	public void setParent(Component parent) {
+	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Window)
 		&& !(parent instanceof Groupbox) && !(parent instanceof Panel))
 			throw new UiException("Wrong parent: "+parent);
-		super.setParent(parent);
+		super.beforeParentChanged(parent);
 	}
 }

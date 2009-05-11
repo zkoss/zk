@@ -59,11 +59,11 @@ public class Tablelayout extends XulElement implements org.zkoss.zkmax.zul.api.T
 		return _columns;
 	}
 
-	public boolean insertBefore(Component child, Component insertBefore) {
+	public void beforeChildAdded(Component child, Component refChild) {
 		if (!(child instanceof Tablechildren))
 			throw new UiException("Unsupported child for Tablelayout: "
 					+ child);
-		return super.insertBefore(child, insertBefore);
+		super.beforeChildAdded(child, refChild);
 	}
 	
 	/**

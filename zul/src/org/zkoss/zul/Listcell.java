@@ -159,9 +159,9 @@ public class Listcell extends LabelImageElement implements org.zkoss.zul.api.Lis
 	}
 
 	//-- Component --//
- 	public void setParent(Component parent) {
+	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Listitem))
 			throw new UiException("Wrong parent: "+parent);
-		super.setParent(parent);
+		super.beforeParentChanged(parent);
 	}
 }

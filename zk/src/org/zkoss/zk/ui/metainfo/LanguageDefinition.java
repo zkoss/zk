@@ -633,7 +633,7 @@ public class LanguageDefinition {
 			throw new IllegalArgumentException("Illegal macro class: "+klass);
 		_macrocls = klass;
 	}
-	/** Returns the component definition for the specified condition.
+	/** Instantiates and returns the component definition for the specified condition.
 	 *
 	 * @param pgdef the page definition the macro definitioin belongs to.
 	 * If null, it belongs to this language definition.

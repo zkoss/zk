@@ -39,11 +39,11 @@ public class Columnlayout extends XulElement implements org.zkoss.zkex.zul.api.C
 	public Columnlayout() {
 	}
 
-	public boolean insertBefore(Component child, Component insertBefore) {
+	public void beforeChildAdded(Component child, Component refChild) {
 		if (!(child instanceof Columnchildren))
 			throw new UiException("Unsupported child for Columnlayout: "
 					+ child);
-		return super.insertBefore(child, insertBefore);
+		super.beforeChildAdded(child, refChild);
 	}
 	public String getZclass() {
 		return _zclass == null ? "z-column-layout" : _zclass;

@@ -185,24 +185,31 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 		return null;
 	}
 	//-- Component --//
-	public void setParent(Component parent) {
+	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Grid))
 			throw new UiException("Unsupported parent for rows: "+parent);
-		super.setParent(parent);
+		super.beforeParentChanged(parent);
 	}
-	public boolean insertBefore(Component child, Component refChild) {
+	public void beforeChildAdded(Component child, Component refChild) {
 		if (!(child instanceof Row))
 			throw new UiException("Unsupported child for rows: "+child);
-		Row newItem = (Row) child;
-		final int jfrom = hasGroup() && newItem.getParent() == this ? newItem.getIndex(): -1;	
-
-		final boolean isReorder = child.getParent() == this;
-		if (newItem instanceof Groupfoot){
+		if (child instanceof Groupfoot){
 			if (!hasGroup())
 				throw new UiException("Groupfoot cannot exist alone, you have to add a Group first");
 			if (refChild == null) {
 				if (getLastChild() instanceof Groupfoot)
 					throw new UiException("Only one Goupfooter is allowed per Group");
+			}
+		}
+		super.beforeChildAdded(child, refChild);
+	}
+	public boolean insertBefore(Component child, Component refChild) {
+		Row newItem = (Row) child;
+		final int jfrom = hasGroup() && newItem.getParent() == this ? newItem.getIndex(): -1;	
+
+		final boolean isReorder = child.getParent() == this;
+		if (newItem instanceof Groupfoot){
+			if (refChild == null) {
 				if (isReorder) {
 					final int idx = newItem.getIndex();				
 					final int[] ginfo = getGroupsInfoAt(idx);

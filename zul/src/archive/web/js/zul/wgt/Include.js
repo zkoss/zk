@@ -17,9 +17,7 @@ zk.def(zul.wgt.Include = zk.$extends(zul.Widget, {
 
 	//super//
 	redraw: function (out) {
-		out.push('<div id="', this.uuid, '"');
-		if (this.style) out.push(' style="', this.style, '"');
-		out.push('>');
+		out.push('<div', this.domAttrs_(), '>');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
 		out.push(this._content, '</div>');

@@ -249,22 +249,22 @@ public class Https extends Servlets {
 	 * Unlike getPathInfo, it won't be affected by forwarding.
 	 */
 	public static final String getOriginPathInfo(ServletRequest request) {
-		String path = (String)request.getAttribute(Attributes.FORWARD_QUERY_STRING);
+		String path = (String)request.getAttribute(Attributes.FORWARD_PATH_INFO);
 		return path != null ? path:
 			isForwarded(request) ? null: //null is valid even included
 			request instanceof HttpServletRequest ?
-				((HttpServletRequest)request).getQueryString(): null;
+				((HttpServletRequest)request).getPathInfo(): null;
 	}
 	/**
 	 * Gets the query string regardless of being forwarded or not.
 	 * Unlike getQueryString, it won't be affected by forwarding.
 	 */
 	public static final String getOriginQueryString(ServletRequest request) {
-		String path = (String)request.getAttribute(Attributes.FORWARD_PATH_INFO);
+		String path = (String)request.getAttribute(Attributes.FORWARD_QUERY_STRING);
 		return path != null ? path:
 			isForwarded(request) ? null: //null is valid even included
 			request instanceof HttpServletRequest ?
-				((HttpServletRequest)request).getPathInfo(): null;
+				((HttpServletRequest)request).getQueryString(): null;
 	}
 
 	/** Returns the servlet path + path info + query string.

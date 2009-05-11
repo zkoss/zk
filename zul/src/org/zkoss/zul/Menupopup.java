@@ -46,10 +46,10 @@ public class Menupopup extends Popup implements org.zkoss.zul.api.Menupopup {
 	}
 
 	//-- Component --//
-	public boolean insertBefore(Component child, Component insertBefore) {
+	public void beforeChildAdded(Component child, Component refChild) {
 		if (!(child instanceof Menuitem)
 		&& !(child instanceof Menuseparator) && !(child instanceof Menu))
 			throw new UiException("Unsupported child for menupopup: "+child);
-		return super.insertBefore(child, insertBefore);
+		super.beforeChildAdded(child, refChild);
 	}
 }

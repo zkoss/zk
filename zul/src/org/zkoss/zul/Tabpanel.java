@@ -107,9 +107,9 @@ public class Tabpanel extends XulElement implements org.zkoss.zul.api.Tabpanel {
 	public boolean isVisible() {
 		return super.isVisible() && isSelected();
 	}
-	public void setParent(Component parent) {
+	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Tabpanels))
 			throw new UiException("Wrong parent: "+parent);
-		super.setParent(parent);
+		super.beforeParentChanged(parent);
 	}
 }

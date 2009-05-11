@@ -47,15 +47,15 @@ public class Listfoot extends XulElement implements org.zkoss.zul.api.Listfoot {
 	}
 
 	//-- Component --//
-	public void setParent(Component parent) {
+	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Listbox))
 			throw new UiException("Wrong parent: "+parent);
-		super.setParent(parent);
+		super.beforeParentChanged(parent);
 	}
-	public boolean insertBefore(Component child, Component insertBefore) {
+	public void beforeChildAdded(Component child, Component refChild) {
 		if (!(child instanceof Listfooter))
 			throw new UiException("Unsupported child for listfoot: "+child);
-		return super.insertBefore(child, insertBefore);
+		super.beforeChildAdded(child, refChild);
 	}
 	public String getZclass() {
 		return _zclass == null ? "z-listfoot" : _zclass;

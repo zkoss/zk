@@ -200,11 +200,11 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zul.api.Men
 	}
 
 	//-- Component --//
-	public void setParent(Component parent) {
+	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Menupopup)
 		&& !(parent instanceof Menubar))
 			throw new UiException("Unsupported parent for menuitem: "+parent);
-		super.setParent(parent);
+		super.beforeParentChanged(parent);
 	}
 	/** Not childable. */
 	protected boolean isChildable() {

@@ -73,21 +73,38 @@ public class Menu extends LabelImageElement implements org.zkoss.zul.api.Menu {
 		return _zclass == null ? "z-menu" : _zclass;
 	}
 
-	public void setParent(Component parent) {
+	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Menubar)
 		&& !(parent instanceof Menupopup))
 			throw new UiException("Unsupported parent for menu: "+parent);
-		super.setParent(parent);
+		super.beforeParentChanged(parent);
 	}
-	public boolean insertBefore(Component child, Component insertBefore) {
+	public void beforeChildAdded(Component child, Component refChild) {
 		if (child instanceof Menupopup) {
 			if (_popup != null && _popup != child)
 				throw new UiException("Only one menupopup is allowed: "+this);
-			_popup = (Menupopup)child;
 		} else {
 			throw new UiException("Unsupported child for menu: "+child);
 		}
-		return super.insertBefore(child, insertBefore);
+		super.beforeChildAdded(child, refChild);
+	}
+	
+	public void onChildRemoved(Component child) {
+		_popup = null;
+		super.onChildRemoved(child);
+	}
+	
+	public boolean insertBefore(Component child, Component refChild) {
+		if (child instanceof Menupopup) {
+			if (super.insertBefore(child, refChild)) {
+				_popup = (Menupopup)child;
+				return true;
+			}
+		} else {
+			return super.insertBefore(child, refChild);
+				//impossible but make it more extensible
+		}
+		return false;
 	}
 
 	//Cloneable//

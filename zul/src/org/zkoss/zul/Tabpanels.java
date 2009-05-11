@@ -47,15 +47,15 @@ public class Tabpanels extends XulElement implements org.zkoss.zul.api.Tabpanels
 		return getTabbox();
 	}
 	//-- Component --//
-	public void setParent(Component parent) {
+	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Tabbox))
 			throw new UiException("Wrong parent: "+parent);
-		super.setParent(parent);
+		super.beforeParentChanged(parent);
 	}
-	public boolean insertBefore(Component child, Component insertBefore) {
+	public void beforeChildAdded(Component child, Component refChild) {
 		if (!(child instanceof Tabpanel))
 			throw new UiException("Unsupported child for tabpanels: "+child);
-		return super.insertBefore(child, insertBefore);
+		super.beforeChildAdded(child, refChild);
 	}
 	/** Returns the style class.
 	 * @since 3.5.0

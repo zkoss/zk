@@ -42,17 +42,17 @@ public class Portalchildren extends XulElement implements org.zkoss.zkmax.zul.ap
 		return _zclass == null ? "z-portal-children" : _zclass;
 	}
 	
-	public void setParent(Component parent) {
+	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Portallayout))
 			throw new UiException("Wrong parent: " + parent);
-		super.setParent(parent);
+		super.beforeParentChanged(parent);
 	}
 	
-	public boolean insertBefore(Component child, Component insertBefore) {
+	public void beforeChildAdded(Component child, Component refChild) {
 		if (!(child instanceof Panel))
 			throw new UiException("Unsupported child for Portalchildren: "
 					+ child);
-		return super.insertBefore(child, insertBefore);
+		super.beforeChildAdded(child, refChild);
 	}
 	
 	public void onChildAdded(Component child) {

@@ -416,10 +416,10 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 	}
 
 	//-- Component --//
-	public void setParent(Component parent) {
+	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Listhead))
 			throw new UiException("Wrong parent: "+parent);
-		super.setParent(parent);
+		super.beforeParentChanged(parent);
 	}
 
 	//Cloneable//

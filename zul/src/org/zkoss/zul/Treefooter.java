@@ -117,10 +117,9 @@ public class Treefooter extends LabelImageElement implements org.zkoss.zul.api.T
 		return _zclass == null ? "z-treefooter" : _zclass;
 	}
 
-	//-- Component --//
-	public void setParent(Component parent) {
+	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Treefoot))
 			throw new UiException("Wrong parent: "+parent);
-		super.setParent(parent);
+		super.beforeParentChanged(parent);
 	}
 }

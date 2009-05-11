@@ -121,10 +121,10 @@ public class Detail extends XulElement implements org.zkoss.zul.api.Detail {
 	public String getZclass() {
 		return _zclass == null ? "z-detail" : _zclass;
 	}
-	public void setParent(Component parent) {
+	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Row))
 			throw new UiException("Unsupported parent for detail: "+parent);
-		super.setParent(parent);
+		super.beforeParentChanged(parent);
 	}
 
 	//-- ComponentCtrl --//

@@ -97,16 +97,16 @@ public class Tablechildren extends XulElement implements org.zkoss.zkmax.zul.api
 	}
 
 	//super//
-	public void setParent(Component parent) {
+	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Tablelayout))
 			throw new UiException("Wrong parent: " + parent);
-		super.setParent(parent);
+		super.beforeParentChanged(parent);
 	}
 	
-	public boolean insertBefore(Component child, Component insertBefore) {
+	public void beforeChildAdded(Component child, Component refChild) {
 		if (!(child instanceof Panel))
 			throw new UiException("Unsupported child for Tablechildren: "
 					+ child);
-		return super.insertBefore(child, insertBefore);
+		super.beforeChildAdded(child, refChild);
 	}
 }

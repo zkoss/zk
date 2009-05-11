@@ -93,10 +93,10 @@ public class Menubar extends XulElement implements org.zkoss.zul.api.Menubar {
 		return _zclass == null ? "z-menubar" +
 				("vertical".equals(getOrient()) ? "-ver" : "-hor") : _zclass;
 	}
-	public boolean insertBefore(Component child, Component insertBefore) {
+	public void beforeChildAdded(Component child, Component refChild) {
 		if (!(child instanceof Menu) && !(child instanceof Menuitem) && !(child instanceof Menuseparator))
 			throw new UiException("Unsupported child for menubar: "+child);
-		return super.insertBefore(child, insertBefore);
+		super.beforeChildAdded(child, refChild);
 	}
 	// super
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)

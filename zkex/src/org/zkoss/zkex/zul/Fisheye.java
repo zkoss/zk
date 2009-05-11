@@ -89,10 +89,10 @@ public class Fisheye extends XulElement implements org.zkoss.zkex.zul.api.Fishey
 		throw new UnsupportedOperationException("readonly");
 	}
 	
-	public void setParent(Component parent) {
+	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Fisheyebar))
 			throw new UiException("Unsupported parent for fisheye: "+parent);
-		super.setParent(parent);
+		super.beforeParentChanged(parent);
 	}
 	/** Not childable. */
 	protected boolean isChildable() {

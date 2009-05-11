@@ -45,9 +45,9 @@ public class Imagemap extends Image implements org.zkoss.zul.api.Imagemap{
 	protected boolean isChildable() {
 		return true;
 	}
-	public boolean insertBefore(Component newChild, Component refChild) {
+	public void beforeChildAdded(Component newChild, Component refChild) {
 		if (!(newChild instanceof Area))
 			throw new UiException("Unsupported child for imagemap: "+newChild);
-		return super.insertBefore(newChild, refChild);
+		super.beforeChildAdded(newChild, refChild);
 	}
 }

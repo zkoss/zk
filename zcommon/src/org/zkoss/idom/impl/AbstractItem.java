@@ -20,7 +20,7 @@ package org.zkoss.idom.impl;
 import java.util.List;
 import java.util.Collections;
 import java.util.Map;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.io.Serializable;
 import java.util.regex.Pattern;
 
@@ -338,7 +338,7 @@ implements Item, Node, Serializable, Cloneable {
 	public Object setUserData(String key, Object data, UserDataHandler handler) {
 		if (handler != null)
 			throw new UnsupportedOperationException("DOM Level 3");
-		if (_usrdta == null) _usrdta = new HashMap();
+		if (_usrdta == null) _usrdta = new LinkedHashMap();
 		return _usrdta.put(key, data);
 	}
 	public Object getUserData(String key) {

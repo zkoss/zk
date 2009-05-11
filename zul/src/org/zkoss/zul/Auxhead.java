@@ -40,9 +40,9 @@ public class Auxhead extends XulElement implements org.zkoss.zul.api.Auxhead {
 		return _zclass == null ? "z-auxhead" : _zclass;
 	}
 	//super//
-	public boolean insertBefore(Component child, Component insertBefore) {
+	public void beforeChildAdded(Component child, Component refChild) {
 		if (!(child instanceof Auxheader))
 			throw new UiException("Unsupported child: "+child);
-		return super.insertBefore(child, insertBefore);
+		super.beforeChildAdded(child, refChild);
 	}
 }

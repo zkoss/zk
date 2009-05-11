@@ -45,6 +45,14 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</log>
 	-->
 
+	<!-- Turn on the following if you want to be fully backward-compatible
+		with version prior to 5.0
+	<library-property>
+		<name>org.zkoss.zul.include.mode</name>
+		<value>defe</value>
+	</library-property>
+	-->
+
 	<!-- Turn on if you want to use language addons.
 	<language-config>
 		<addon-uri>/WEB-INF/lang-addon.xml</addon-uri>
