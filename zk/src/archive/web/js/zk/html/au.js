@@ -1488,6 +1488,11 @@ zkau._onDocMouseout = function (evt) {
 		} else
 			zkau._tipz = null;
 };
+/** Bug #2789915 */
+zkau.cleanhvig = function (cmp) {
+	if (zkau._hviz && $uuid(zkau._hviz.id) == cmp.id)
+		zkau._hviz = null;
+};
 /** window.onresize */
 zkau._onResize = function () {
 	if (!zk.booted)
