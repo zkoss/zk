@@ -51,39 +51,45 @@ import org.zkoss.zul.mesg.MZul;
  *
  * <p>Non-XUL extension.
  *
- * <p>Since 3.6.2, there are three modes: auto (default), child and page.
- * The behavior prior to 3.6.2 is the same as the page mode.
- * To be 100% backward compatible, you can specify a library variable named
- * org.zkoss.zul.include.mode to be <code>page</code>. 
+ * <p>Since 3.6.2, there are three modes: auto, instant and defer (default).
+ * The behavior prior to 3.6.2 is the same as the defer mode.
  *
- * <h3>The auto mode (default)</h3>
+ * <h3>The instant mode</h3>
+ *
+ * <p>In the instant mode, the page to be included are loaded 'instantly'
+ * with {@link Execution#createComponents} when {@link #afterCompose}
+ * is called. Furthermore, the components are created as the child components
+ * of this include component (like a macro component).
+ *
+ * <p>Notices:
+ * <ul>
+ * <li>The instant mode supports only ZUML pages.</li>
+ * <li>The isntance mode doesn't support {@link #setProgressing} nor
+ * {@link #setLocalized}</li>
+ * </ul>
+ *
+ * <h3>The defer mode (default)</h3>
+ *
+ * <p>In the defer mode (the only mode supported by ZK prior to 3.6.2),
+ * the page is included by servlet container (the <code>include</code> method
+ * of <code>javax.servlet.RequestDispatcher</code>) in the render phase
+ * (i.e., after all components are created). The page can be any
+ * servlet; not limited to a ZUML page.
+ *
+ * <p>If it is eventually another ZUML page, a ZK page ({@link org.zkoss.zk.ui.Page})
+ * is created and added to the current desktop.
+ * You can access them only via inter-page API (see{@link org.zkoss.zk.ui.Path}).
+ *
+ * <h3>The auto mode</h3>
  *
  * <p>In the auto mode, the include component decides the mode based on
  * the name specified in the src property ({@link #setSrc}).
  * If <code>src</code> is ended with the extension named <code>.zul</code>
- * or <code>.zhtml</code>, the <code>child</code> mode is assumed.
- * Otherwise, the <code>page</code> mode is assumed.
+ * or <code>.zhtml</code>, the <code>instant</code> mode is assumed.
+ * Otherwise, the <code>defer</code> mode is assumed.
  *
  * <p>Notice that invoking {@link #setProgressing} or {@link #setLocalized}
- * with true will imply the <code>page</code> page (if the mode is <code>auto</code>).
- *
- * <h3>The child mode</h3>
- *
- * In the child mode, the include component assumes the page to be included
- * is a page that generate ZK components, such as a ZUL page and a richlet
- * In the child mode, the components are created as the child components
- * of this include component in {@link #afterCompose} (like a macro component).
- *
- * <p>Notice that don't invoke {@link #setProgressing} or {@link #setLocalized}
- * in the child mode.
- *
- * <h3>The page mode</h3>
- *
- * <p>In the page mode (the only mode supported by ZK prior to 3.6.2),
- * the page is included by servlet container (the <code>include</code> method
- * of <code>javax.servlet.RequestDispatcher</code>). The page can be any
- * servlet. If it is eventually another ZUML page, a ZK page ({@link org.zkoss.zk.ui.Page})
- * is created and added to the current desktop.
+ * with true will imply the <code>defer</code> mode (if the mode is <code>auto</code>).
  *
  * <h3>Passing Parameters</h3>
  *
@@ -110,20 +116,20 @@ import org.zkoss.zul.mesg.MZul;
  *
  * <h3>Macro Component versus {@link Include}</h3>
  *
- * If the include component is in the child mode, it is almost the same as
+ * If the include component is in the instant mode, it is almost the same as
  * a macro component. On the other hand, if in the pag mode, they are different:
  * <ol>
- * <li>{@link Include} (in page mode) could include anything include ZUML,
+ * <li>{@link Include} (in defer mode) could include anything include ZUML,
  * JSP or any other
  * servlet, while a macro component could embed only a ZUML page.</li>
- * <li>If {@link Include} (in page mode) includes a ZUML page, a
- * {@link org.zkoss.zk.ui.Page} instance is created as a child
- * of {@link Include}. On the other hand, a macro component makes
+ * <li>If {@link Include} (in defer mode) includes a ZUML page, a
+ * {@link org.zkoss.zk.ui.Page} instance is created which is owned
+ * by {@link Include}. On the other hand, a macro component makes
  * the created components as the direct children -- i.e.,
  * you can browse them with {@link org.zkoss.zk.ui.Component#getChildren}.</li>
- * <li>{@link Include} (in page mode) creates components in the Rendering phase,
+ * <li>{@link Include} (in defer mode) creates components in the Rendering phase,
  * while a macro component creates components in {@link org.zkoss.zk.ui.HtmlMacroComponent#afterCompose}.</li>
- * <li>{@link Include#invalidate} (in page mode) will cause it to re-include
+ * <li>{@link Include#invalidate} (in defer mode) will cause it to re-include
  * the page (and then recreate the page if it includes a ZUML page).
  * However, {@link org.zkoss.zk.ui.HtmlMacroComponent#invalidate} just causes it to redraw
  * and update the content at the client -- like any other component does.
@@ -141,11 +147,11 @@ public class Include extends XulElement implements org.zkoss.zul.api.Include {
 	private static final Log log = Log.lookup(Include.class);
 	private String _src;
 	private Map _dynams;
-	private String _mode = "auto";
+	private String _mode = "defer";
 	private boolean _localized;
 	private boolean _progressing;
 	private boolean _afterComposed;
-	private boolean _childMode;
+	private boolean _instantMode;
 	/** 0: not yet handled, 1: wait for echoEvent, 2: done. */
 	private byte _progressStatus;
 
@@ -166,12 +172,12 @@ public class Include extends XulElement implements org.zkoss.zul.api.Include {
 	 */
 	public void setProgressing(boolean progressing) {
 		if (_progressing != progressing) {
-			if (progressing && "child".equals(_mode))
-				throw new UnsupportedOperationException("progressing not allowed in child mode");
+			if (progressing && "instant".equals(_mode))
+				throw new UnsupportedOperationException("progressing not allowed in instant mode");
 
 			_progressing = progressing;
 			if (_progressing)
-				fixMode(); //becomes page mode if auto
+				fixMode(); //becomes defer mode if auto
 			checkProgressing();
 		}
 	}
@@ -216,32 +222,33 @@ public class Include extends XulElement implements org.zkoss.zul.api.Include {
 		if (!Objects.equals(_src, src)) {
 			_src = src;
 			fixMode();
-			if (!_childMode) invalidate();
+			if (!_instantMode) invalidate();
 		}
 	}
 
 	/** Returns the inclusion mode.
-	 * There are three modes: auto, child and page.
-	 * The behavior prior to 3.6.2 is the same as the page mode.
-	 * To be 100% backward compatible, you can specify a library variable named
-	 * org.zkoss.zul.include.mode to be <code>page</code>. 
-	 * <p>Default: auto.
+	 * There are three modes: auto, instant and defer.
+	 * The behavior prior to 3.6.2 is the same as the defer mode.
+	 * <p>It is recommended to use the auto mode if possible
+	 * The reason to have <code>defer</code> as the default is to
+	 * be backward compatible.
+	 * <p>Default: defer.
 	 * @since 3.6.2
 	 */
 	public String getMode() {
 		return _mode;
 	}
 	/** Sets the inclusion mode.
-	 * @param mode the inclusion mode: auto, child or page.
+	 * @param mode the inclusion mode: auto, instant or defer.
 	 * @since 3.6.2
 	 */
 	public void setMode(String mode) throws WrongValueException {
 		if (!_mode.equals(mode)) {
-			if (!"auto".equals(mode) && !"child".equals(mode)
-			&& !"page".equals(mode))
+			if (!"auto".equals(mode) && !"instant".equals(mode)
+			&& !"defer".equals(mode))
 				throw new WrongValueException("Unknown mode: "+mode);
-			if ((_localized || _progressing) && "child".equals(_mode))
-				throw new UnsupportedOperationException("localized/progressing not allowed in child mold");
+			if ((_localized || _progressing) && "instant".equals(mode))
+				throw new UnsupportedOperationException("localized/progressing not allowed in instant mold");
 
 			_mode = mode;
 			fixMode();
@@ -249,25 +256,24 @@ public class Include extends XulElement implements org.zkoss.zul.api.Include {
 	}
 	private void fixMode() {
 		fixModeOnly();
-		if (_childMode && _afterComposed)
+		if (_instantMode && _afterComposed)
 			afterCompose();
 	}
 	private void fixModeOnly() { //called by afterCompose
-		boolean oldChildMode = _childMode;
+		boolean oldInstantMode = _instantMode;
 		if ("auto".equals(_mode)) {
-			if (_src != null && !_progressing && !_localized
-			&& !isDefaultPageMode()) {
+			if (_src != null && !_progressing && !_localized) {
 				final int j = _src.lastIndexOf('?');
 				final String src = j >= 0 ? _src.substring(0, j): _src;
-				_childMode = src.endsWith(".zul") || src.endsWith(".zhtml");
+				_instantMode = src.endsWith(".zul") || src.endsWith(".zhtml");
 			} else
-				_childMode = false;
+				_instantMode = false;
 		} else
-			_childMode = "child".equals(_mode);
+			_instantMode = "instant".equals(_mode);
 
 		getChildren().clear();
 
-		if (_childMode != oldChildMode)
+		if (_instantMode != oldInstantMode)
 			invalidate();
 	}
 
@@ -284,13 +290,13 @@ public class Include extends XulElement implements org.zkoss.zul.api.Include {
 	 */
 	public final void setLocalized(boolean localized) {
 		if (_localized != localized) {
-			if (localized && "child".equals(_mode))
-				throw new UnsupportedOperationException("localized not supported in child mode yet");
+			if (localized && "instant".equals(_mode))
+				throw new UnsupportedOperationException("localized not supported in instant mode yet");
 
 			_localized = localized;
 			if (_localized)
-				fixMode();  //becomes page mode if auto
-			if (!_childMode) //always childMode but future we might support
+				fixMode();  //becomes defer mode if auto
+			if (!_instantMode) //always instant mode but future we might support
 				invalidate();
 		}
 	}
@@ -299,7 +305,7 @@ public class Include extends XulElement implements org.zkoss.zul.api.Include {
 	public void afterCompose() {
 		_afterComposed = true;
 		fixModeOnly();
-		if (_childMode) {
+		if (_instantMode) {
 			final Execution exec = getDesktop().getExecution();
 			final Map old = setupDynams(exec);
 			try {
@@ -360,10 +366,10 @@ public class Include extends XulElement implements org.zkoss.zul.api.Include {
 	/** Default: not childable.
 	 */
 	public boolean isChildable() {
-		return _childMode;
+		return _instantMode;
 	}
 	public void redraw(Writer out) throws IOException {
-		if (_childMode) {
+		if (_instantMode) {
 			drawTagBegin(out);
 			for (Component c = getFirstChild(); c != null; c = c.getNextSibling())
 				c.redraw(out);
@@ -464,12 +470,4 @@ public class Include extends XulElement implements org.zkoss.zul.api.Include {
 				else exec.removeAttribute(nm);
 			}
 	}
-	private static boolean isDefaultPageMode() {
-		if (_defaultPageMode == null) {
-			final String mode = Library.getProperty("org.zkoss.zul.include.mode");
-			_defaultPageMode = Boolean.valueOf("page".equals(mode));
-		}
-		return _defaultPageMode.booleanValue();
-	}
-	private static Boolean _defaultPageMode;
 }

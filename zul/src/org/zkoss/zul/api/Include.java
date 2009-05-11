@@ -32,39 +32,42 @@ import org.zkoss.zul.mesg.MZul;//for javadoc
  * <p>
  * Non-XUL extension.
  * 
- * <p>Since 3.6.2, there are three modes: auto (default), child and page.
- * The behavior prior to 3.6.2 is the same as the page mode.
- * To be 100% backward compatible, you can specify a library variable named
- * org.zkoss.zul.include.mode to be <code>page</code>. 
+ * <h3>The instant mode</h3>
  *
- * <h3>The auto mode (default)</h3>
+ * <p>In the instant mode, the page to be included are loaded 'instantly'
+ * with {@link Execution#createComponents} when {@link #afterCompose}
+ * is called. Furthermore, the components are created as the child components
+ * of this include component (like a macro component).
+ *
+ * <p>Notices:
+ * <ul>
+ * <li>The instant mode supports only ZUML pages.</li>
+ * <li>The isntance mode doesn't support {@link #setProgressing} nor
+ * {@link #setLocalized}</li>
+ * </ul>
+ *
+ * <h3>The defer mode (default)</h3>
+ *
+ * <p>In the defer mode (the only mode supported by ZK prior to 3.6.2),
+ * the page is included by servlet container (the <code>include</code> method
+ * of <code>javax.servlet.RequestDispatcher</code>) in the render phase
+ * (i.e., after all components are created). The page can be any
+ * servlet; not limited to a ZUML page.
+ *
+ * <p>If it is eventually another ZUML page, a ZK page ({@link org.zkoss.zk.ui.Page})
+ * is created and added to the current desktop.
+ * You can access them only via inter-page API (see{@link org.zkoss.zk.ui.Path}).
+ *
+ * <h3>The auto mode</h3>
  *
  * <p>In the auto mode, the include component decides the mode based on
  * the name specified in the src property ({@link #setSrc}).
  * If <code>src</code> is ended with the extension named <code>.zul</code>
- * or <code>.zhtml</code>, the <code>child</code> mode is assumed.
- * Otherwise, the <code>page</code> mode is assumed.
+ * or <code>.zhtml</code>, the <code>instant</code> mode is assumed.
+ * Otherwise, the <code>defer</code> mode is assumed.
  *
  * <p>Notice that invoking {@link #setProgressing} or {@link #setLocalized}
- * with true will imply the <code>page</code> page (if the mode is <code>auto</code>).
- *
- * <h3>The child mode</h3>
- *
- * In the child mode, the include component assumes the page to be included
- * is a page that generate ZK components, such as a ZUL page and a richlet
- * In the child mode, the components are created as the child components
- * of this include component in {@link #afterCompose} (like a macro component).
- *
- * <p>Notice that don't invoke {@link #setProgressing} or {@link #setLocalized}
- * in the child mode.
- *
- * <h3>The page mode</h3>
- *
- * <p>In the page mode (the only mode supported by ZK prior to 3.6.2),
- * the page is included by servlet container (the <code>include</code> method
- * of <code>javax.servlet.RequestDispatcher</code>). The page can be any
- * servlet. If it is eventually another ZUML page, a ZK page ({@link org.zkoss.zk.ui.Page})
- * is created and added to the current desktop.
+ * with true will imply the <code>defer</code> mode (if the mode is <code>auto</code>).
  *
  * <h3>Passing Parameters</h3>
  *
@@ -91,20 +94,20 @@ import org.zkoss.zul.mesg.MZul;//for javadoc
  *
  * <h3>Macro Component versus {@link Include}</h3>
  *
- * If the include component is in the child mode, it is almost the same as
+ * If the include component is in the instant mode, it is almost the same as
  * a macro component. On the other hand, if in the pag mode, they are different:
  * <ol>
- * <li>{@link Include} (in page mode) could include anything include ZUML,
+ * <li>{@link Include} (in defer mode) could include anything include ZUML,
  * JSP or any other
  * servlet, while a macro component could embed only a ZUML page.</li>
- * <li>If {@link Include} (in page mode) includes a ZUML page, a
- * {@link org.zkoss.zk.ui.Page} instance is created as a child
- * of {@link Include}. On the other hand, a macro component makes
+ * <li>If {@link Include} (in defer mode) includes a ZUML page, a
+ * {@link org.zkoss.zk.ui.Page} instance is created which is owned
+ * by {@link Include}. On the other hand, a macro component makes
  * the created components as the direct children -- i.e.,
  * you can browse them with {@link org.zkoss.zk.ui.Component#getChildren}.</li>
- * <li>{@link Include} (in page mode) creates components in the Rendering phase,
+ * <li>{@link Include} (in defer mode) creates components in the Rendering phase,
  * while a macro component creates components in {@link org.zkoss.zk.ui.HtmlMacroComponent#afterCompose}.</li>
- * <li>{@link Include#invalidate} (in page mode) will cause it to re-include
+ * <li>{@link Include#invalidate} (in defer mode) will cause it to re-include
  * the page (and then recreate the page if it includes a ZUML page).
  * However, {@link org.zkoss.zk.ui.HtmlMacroComponent#invalidate} just causes it to redraw
  * and update the content at the client -- like any other component does.
@@ -191,16 +194,17 @@ DynamicPropertied, AfterCompose {
 	public void setLocalized(boolean localized);
 
 	/** Returns the inclusion mode.
-	 * There are three modes: auto, child and page.
-	 * The behavior prior to 3.6.2 is the same as the page mode.
-	 * To be 100% backward compatible, you can specify a library variable named
-	 * org.zkoss.zul.include.mode to be <code>page</code>. 
-	 * <p>Default: auto.
+	 * There are three modes: auto, instant and defer.
+	 * The behavior prior to 3.6.2 is the same as the defer mode.
+	 * <p>It is recommended to use the auto mode if possible
+	 * The reason to have <code>defer</code> as the default is to
+	 * be backward compatible.
+	 * <p>Default: defer.
 	 * @since 3.6.2
 	 */
 	public String getMode();
 	/** Sets the inclusion mode.
-	 * @param mode the inclusion mode: auto, child or page.
+	 * @param mode the inclusion mode: auto, instant or defer.
 	 * @since 3.6.2
 	 */
 	public void setMode(String mode) throws WrongValueException;
