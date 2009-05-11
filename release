@@ -81,6 +81,7 @@ else
 fi
 
 rm -rf /tmp/zk
+rm -rf /tmp/maven
 maindir="$(pwd)"
 echo "Working directory $maindir"
 
@@ -258,6 +259,31 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 			sed -e "s/{version}/$ver/" $maindir/$1/pom.xml > $1/pom.xml
 			cp $maindir/dist/lib/$1.jar $1/$1-$ver.jar
 			jar cfM $1-$ver-bundle.jar -C $1 .
+		}
+		mkdir -p maven
+		mkdir -p /tmp/maven
+		cd maven
+		mvnrepo zcommon
+		mvnrepo zweb
+		mvnrepo zk
+		mvnrepo zul
+		mvnrepo zhtml
+		mvnrepo zml
+		mvnrepo zkex
+		mvnrepo zkmax
+		mvnrepo zkplus
+		mv *-bundle.jar /tmp/maven
+		cd ..
+		rm -rf maven
+	else
+		#Prepare maven repository
+		function mvnrepo {
+			local vertamp=$ver-$stamp
+			mkdir -p $1
+			cp /tmp/zk/$binnm/dist/src/$1-sources.jar $1/$1-$ver-$stamp-sources.jar
+			sed -e "s/{version}/$vertamp/" $maindir/$1/pom.xml > $1/pom.xml
+			cp $maindir/dist/lib/$1.jar $1/$1-$ver-$stamp.jar
+			jar cfM $1-$ver-$stamp-bundle.jar -C $1 .
 		}
 		mkdir -p maven
 		mkdir -p /tmp/maven
