@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.io.Writer;
 import java.io.IOException;
 
+import org.zkoss.lang.Library;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.mesg.Messages;
@@ -34,13 +35,13 @@ import org.zkoss.web.Attributes;
 import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zk.ui.ext.DynamicPropertied;
 
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.mesg.MZul;
@@ -50,16 +51,49 @@ import org.zkoss.zul.mesg.MZul;
  *
  * <p>Non-XUL extension.
  *
- * <p>If the servlet is eventually another ZUML page, the page will be
- * added to the current desktop in the rendering phase.
+ * <p>Since 3.6.2, there are three modes: auto (default), child and page.
+ * The behavior prior to 3.6.2 is the same as the page mode.
+ * To be 100% backward compatible, you can specify a library variable named
+ * org.zkoss.zul.include.mode to be <code>page</code>. 
  *
- * <p>There are two ways to pass parameters to the included page.
- * First, you can use the query string:
- * <pre><code>&lt;include src="/WEB-INF/mypage?arg=something"/&gt;</code></pre>
+ * <h3>The auto mode (default)</h3>
  *
- * <p>Second, since ZK 3.0.4,
+ * <p>In the auto mode, the include component decides the mode based on
+ * the name specified in the src property ({@link #setSrc}).
+ * If <code>src</code> is ended with the extension named <code>.zul</code>
+ * or <code>.zhtml</code>, the <code>child</code> mode is assumed.
+ * Otherwise, the <code>page</code> mode is assumed.
+ *
+ * <p>Notice that invoking {@link #setProgressing} or {@link #setLocalized}
+ * with true will imply the <code>page</code> page (if the mode is <code>auto</code>).
+ *
+ * <h3>The child mode</h3>
+ *
+ * In the child mode, the include component assumes the page to be included
+ * is a page that generate ZK components, such as a ZUL page and a richlet
+ * In the child mode, the components are created as the child components
+ * of this include component in {@link #afterCompose} (like a macro component).
+ *
+ * <p>Notice that don't invoke {@link #setProgressing} or {@link #setLocalized}
+ * in the child mode.
+ *
+ * <h3>The page mode</h3>
+ *
+ * <p>In the page mode (the only mode supported by ZK prior to 3.6.2),
+ * the page is included by servlet container (the <code>include</code> method
+ * of <code>javax.servlet.RequestDispatcher</code>). The page can be any
+ * servlet. If it is eventually another ZUML page, a ZK page ({@link org.zkoss.zk.ui.Page})
+ * is created and added to the current desktop.
+ *
+ * <h3>Passing Parameters</h3>
+ *
+ * <p>There are two ways to pass parameters to the included page:
+ * <p>First, since ZK 3.0.4,
  * you can use {@link #setDynamicProperty}, or, in ZUL,
  * <pre><code>&lt;include src="/WEB-INF/mypage" arg="something"/&gt;</code></pre>
+ *
+ * <p>Second, you can use the query string:
+ * <pre><code>&lt;include src="/WEB-INF/mypage?arg=something"/&gt;</code></pre>
  *
  * <p>With the query string, you can pass only the String values.
  * and the parameter can be accessed by {@link Execution#getParameter}
@@ -67,7 +101,7 @@ import org.zkoss.zul.mesg.MZul;
  * Or, you can access it with the param variable in EL expressions.
  *
  * <p>On the other hand, the dynamic properties ({@link #setDynamicProperty})
- * are passed to the included page thru the request's attributes.
+ * are passed to the included page thru the request's attributes
  * You can pass any type of objects you want.
  * In the included page, you can access them by use of
  * {@link Execution#getAttribute} or javax.servlet.ServletRequest's
@@ -76,17 +110,20 @@ import org.zkoss.zul.mesg.MZul;
  *
  * <h3>Macro Component versus {@link Include}</h3>
  *
+ * If the include component is in the child mode, it is almost the same as
+ * a macro component. On the other hand, if in the pag mode, they are different:
  * <ol>
- * <li>{@link Include} could include anything include ZUML, JSP or any other
+ * <li>{@link Include} (in page mode) could include anything include ZUML,
+ * JSP or any other
  * servlet, while a macro component could embed only a ZUML page.</li>
- * <li>If {@link Include} includes a ZUML page, a
+ * <li>If {@link Include} (in page mode) includes a ZUML page, a
  * {@link org.zkoss.zk.ui.Page} instance is created as a child
  * of {@link Include}. On the other hand, a macro component makes
  * the created components as the direct children -- i.e.,
  * you can browse them with {@link org.zkoss.zk.ui.Component#getChildren}.</li>
- * <li>{@link Include} creates components in the Rendering phase,
+ * <li>{@link Include} (in page mode) creates components in the Rendering phase,
  * while a macro component creates components in {@link org.zkoss.zk.ui.HtmlMacroComponent#afterCompose}.</li>
- * <li>{@link Include#invalidate} will cause it to re-include
+ * <li>{@link Include#invalidate} (in page mode) will cause it to re-include
  * the page (and then recreate the page if it includes a ZUML page).
  * However, {@link org.zkoss.zk.ui.HtmlMacroComponent#invalidate} just causes it to redraw
  * and update the content at the client -- like any other component does.
@@ -100,12 +137,15 @@ import org.zkoss.zul.mesg.MZul;
  * @author tomyeh
  * @see Iframe
  */
-public class Include extends XulElement implements DynamicPropertied, org.zkoss.zul.api.Include {
+public class Include extends XulElement implements org.zkoss.zul.api.Include {
 	private static final Log log = Log.lookup(Include.class);
 	private String _src;
 	private Map _dynams;
+	private String _mode = "auto";
 	private boolean _localized;
 	private boolean _progressing;
+	private boolean _afterComposed;
+	private boolean _childMode;
 	/** 0: not yet handled, 1: wait for echoEvent, 2: done. */
 	private byte _progressStatus;
 
@@ -126,7 +166,12 @@ public class Include extends XulElement implements DynamicPropertied, org.zkoss.
 	 */
 	public void setProgressing(boolean progressing) {
 		if (_progressing != progressing) {
+			if (progressing && "child".equals(_mode))
+				throw new UnsupportedOperationException("progressing not allowed in child mode");
+
 			_progressing = progressing;
+			if (_progressing)
+				fixMode(); //becomes page mode if auto
 			checkProgressing();
 		}
 	}
@@ -165,15 +210,67 @@ public class Include extends XulElement implements DynamicPropertied, org.zkoss.
 	 * the parameter with ${param.b} in a.zul.
 	 * @see #setDynamicProperty
 	 */
-	public void setSrc(String src) throws WrongValueException {
+	public void setSrc(String src) {
 		if (src != null && src.length() == 0) src = null;
 
 		if (!Objects.equals(_src, src)) {
 			_src = src;
-			invalidate();
+			fixMode();
+			if (!_childMode) invalidate();
 		}
 	}
-	
+
+	/** Returns the inclusion mode.
+	 * There are three modes: auto, child and page.
+	 * The behavior prior to 3.6.2 is the same as the page mode.
+	 * To be 100% backward compatible, you can specify a library variable named
+	 * org.zkoss.zul.include.mode to be <code>page</code>. 
+	 * <p>Default: auto.
+	 * @since 3.6.2
+	 */
+	public String getMode() {
+		return _mode;
+	}
+	/** Sets the inclusion mode.
+	 * @param mode the inclusion mode: auto, child or page.
+	 * @since 3.6.2
+	 */
+	public void setMode(String mode) throws WrongValueException {
+		if (!_mode.equals(mode)) {
+			if (!"auto".equals(mode) && !"child".equals(mode)
+			&& !"page".equals(mode))
+				throw new WrongValueException("Unknown mode: "+mode);
+			if ((_localized || _progressing) && "child".equals(_mode))
+				throw new UnsupportedOperationException("localized/progressing not allowed in child mold");
+
+			_mode = mode;
+			fixMode();
+		}
+	}
+	private void fixMode() {
+		fixModeOnly();
+		if (_childMode && _afterComposed)
+			afterCompose();
+	}
+	private void fixModeOnly() { //called by afterCompose
+		boolean oldChildMode = _childMode;
+		if ("auto".equals(_mode)) {
+			if (_src != null && !_progressing && !_localized
+			&& !isDefaultPageMode()) {
+				final int j = _src.lastIndexOf('?');
+				final String src = j >= 0 ? _src.substring(0, j): _src;
+				_childMode = src.endsWith(".zul") || src.endsWith(".zhtml");
+			} else
+				_childMode = false;
+		} else
+			_childMode = "child".equals(_mode);
+
+		getChildren().clear();
+
+		if (_childMode != oldChildMode)
+			invalidate();
+	}
+
 	/** Returns whether the source depends on the current Locale.
 	 * If true, it will search xxx_en_US.yyy, xxx_en.yyy and xxx.yyy
 	 * for the proper content, where src is assumed to be xxx.yyy.
@@ -187,8 +284,29 @@ public class Include extends XulElement implements DynamicPropertied, org.zkoss.
 	 */
 	public final void setLocalized(boolean localized) {
 		if (_localized != localized) {
+			if (localized && "child".equals(_mode))
+				throw new UnsupportedOperationException("localized not supported in child mode yet");
+
 			_localized = localized;
-			invalidate();
+			if (_localized)
+				fixMode();  //becomes page mode if auto
+			if (!_childMode) //always childMode but future we might support
+				invalidate();
+		}
+	}
+
+	//AfterCompose//
+	public void afterCompose() {
+		_afterComposed = true;
+		fixModeOnly();
+		if (_childMode) {
+			final Execution exec = getDesktop().getExecution();
+			final Map old = setupDynams(exec);
+			try {
+				exec.createComponents(_src, this, null);
+			} finally {
+				restoreDynams(exec, old);
+			}
 		}
 	}
 
@@ -242,28 +360,42 @@ public class Include extends XulElement implements DynamicPropertied, org.zkoss.
 	/** Default: not childable.
 	 */
 	public boolean isChildable() {
-		return false;
+		return _childMode;
 	}
 	public void redraw(Writer out) throws IOException {
+		if (_childMode) {
+			drawTagBegin(out);
+			for (Component c = getFirstChild(); c != null; c = c.getNextSibling())
+				c.redraw(out);
+			drawTagEnd(out);
+			return; //done
+		}
+
 		final UiEngine ueng =
 			((WebAppCtrl)getDesktop().getWebApp()).getUiEngine();
 		ueng.pushOwner(this);
 		try {
-			out.write("<div id=\"");
-			out.write(getUuid());
-			out.write('"');
-			out.write(getOuterAttrs());
-			out.write(getInnerAttrs());
-			out.write(">\n");
+			drawTagBegin(out);
 			if (_progressStatus == 1) {
 				_progressStatus = 2;
 			} else if (_src != null && _src.length() > 0) {
 				include(out);
 			}
-			out.write("\n</div>");
+			drawTagEnd(out);
 		} finally {
 			ueng.popOwner();
 		}
+	}
+	private void drawTagBegin(Writer out) throws IOException {
+		out.write("<div id=\"");
+		out.write(getUuid());
+		out.write('"');
+		out.write(getOuterAttrs());
+		out.write(getInnerAttrs());
+		out.write(">\n");
+	}
+	private void drawTagEnd(Writer out) throws IOException {
+		out.write("\n</div>");
 	}
 	private void include(Writer out) throws IOException {
 		final Desktop desktop = getDesktop();
@@ -332,4 +464,12 @@ public class Include extends XulElement implements DynamicPropertied, org.zkoss.
 				else exec.removeAttribute(nm);
 			}
 	}
+	private static boolean isDefaultPageMode() {
+		if (_defaultPageMode == null) {
+			final String mode = Library.getProperty("org.zkoss.zul.include.mode");
+			_defaultPageMode = Boolean.valueOf("page".equals(mode));
+		}
+		return _defaultPageMode.booleanValue();
+	}
+	private static Boolean _defaultPageMode;
 }

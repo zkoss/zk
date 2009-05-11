@@ -23,6 +23,7 @@ import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;//for javadoc
 import org.zkoss.zk.ui.util.Clients;//for javadoc
 import org.zkoss.zk.ui.ext.DynamicPropertied;
+import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zul.mesg.MZul;//for javadoc
 
 /**
@@ -31,69 +32,95 @@ import org.zkoss.zul.mesg.MZul;//for javadoc
  * <p>
  * Non-XUL extension.
  * 
- * <p>
- * If the servlet is eventually another ZUML page, the page will be added to the
- * current desktop in the rendering phase.
- * 
- * <p>
- * There are two ways to pass parameters to the included page. First, you can
- * use the query string:
- * 
- * <pre>
- * &lt;code&gt;&lt;include src=&quot;/WEB-INF/mypage?arg=something&quot;/&gt;&lt;/code&gt;
- * </pre>
- * 
- * <p>
- * Second, since ZK 3.0.4, you can use {@link #setDynamicProperty}, or, in ZUL,
- * 
- * <pre>
- * &lt;code&gt;&lt;include src=&quot;/WEB-INF/mypage&quot; arg=&quot;something&quot;/&gt;&lt;/code&gt;
- * </pre>
- * 
- * <p>
- * With the query string, you can pass only the String values. and the parameter
- * can be accessed by {@link Execution#getParameter} or
- * javax.servlet.ServletRequest's getParameter. Or, you can access it with the
- * param variable in EL expressions.
- * 
- * <p>
- * On the other hand, the dynamic properties ({@link #setDynamicProperty}) are
- * passed to the included page thru the request's attributes. You can pass any
- * type of objects you want. In the included page, you can access them by use of
+ * <p>Since 3.6.2, there are three modes: auto (default), child and page.
+ * The behavior prior to 3.6.2 is the same as the page mode.
+ * To be 100% backward compatible, you can specify a library variable named
+ * org.zkoss.zul.include.mode to be <code>page</code>. 
+ *
+ * <h3>The auto mode (default)</h3>
+ *
+ * <p>In the auto mode, the include component decides the mode based on
+ * the name specified in the src property ({@link #setSrc}).
+ * If <code>src</code> is ended with the extension named <code>.zul</code>
+ * or <code>.zhtml</code>, the <code>child</code> mode is assumed.
+ * Otherwise, the <code>page</code> mode is assumed.
+ *
+ * <p>Notice that invoking {@link #setProgressing} or {@link #setLocalized}
+ * with true will imply the <code>page</code> page (if the mode is <code>auto</code>).
+ *
+ * <h3>The child mode</h3>
+ *
+ * In the child mode, the include component assumes the page to be included
+ * is a page that generate ZK components, such as a ZUL page and a richlet
+ * In the child mode, the components are created as the child components
+ * of this include component in {@link #afterCompose} (like a macro component).
+ *
+ * <p>Notice that don't invoke {@link #setProgressing} or {@link #setLocalized}
+ * in the child mode.
+ *
+ * <h3>The page mode</h3>
+ *
+ * <p>In the page mode (the only mode supported by ZK prior to 3.6.2),
+ * the page is included by servlet container (the <code>include</code> method
+ * of <code>javax.servlet.RequestDispatcher</code>). The page can be any
+ * servlet. If it is eventually another ZUML page, a ZK page ({@link org.zkoss.zk.ui.Page})
+ * is created and added to the current desktop.
+ *
+ * <h3>Passing Parameters</h3>
+ *
+ * <p>There are two ways to pass parameters to the included page:
+ * <p>First, since ZK 3.0.4,
+ * you can use {@link #setDynamicProperty}, or, in ZUL,
+ * <pre><code>&lt;include src="/WEB-INF/mypage" arg="something"/&gt;</code></pre>
+ *
+ * <p>Second, you can use the query string:
+ * <pre><code>&lt;include src="/WEB-INF/mypage?arg=something"/&gt;</code></pre>
+ *
+ * <p>With the query string, you can pass only the String values.
+ * and the parameter can be accessed by {@link Execution#getParameter}
+ * or javax.servlet.ServletRequest's getParameter.
+ * Or, you can access it with the param variable in EL expressions.
+ *
+ * <p>On the other hand, the dynamic properties ({@link #setDynamicProperty})
+ * are passed to the included page thru the request's attributes
+ * You can pass any type of objects you want.
+ * In the included page, you can access them by use of
  * {@link Execution#getAttribute} or javax.servlet.ServletRequest's
- * getAttribute. Or, you can access with the requestScope variable in EL
- * expressions.
- * 
+ * getAttribute. Or, you can access with the requestScope variable
+ * in EL expressions.
+ *
  * <h3>Macro Component versus {@link Include}</h3>
- * 
+ *
+ * If the include component is in the child mode, it is almost the same as
+ * a macro component. On the other hand, if in the pag mode, they are different:
  * <ol>
- * <li>{@link Include} could include anything include ZUML, JSP or any other
+ * <li>{@link Include} (in page mode) could include anything include ZUML,
+ * JSP or any other
  * servlet, while a macro component could embed only a ZUML page.</li>
- * <li>If {@link Include} includes a ZUML page, a {@link org.zkoss.zk.ui.Page}
- * instance is created as a child of {@link Include}. On the other hand, a macro
- * component makes the created components as the direct children -- i.e., you
- * can browse them with {@link org.zkoss.zk.ui.Component#getChildren}.</li>
- * <li>{@link Include} creates components in the Rendering phase, while a macro
- * component creates components in
- * {@link org.zkoss.zk.ui.HtmlMacroComponent#afterCompose}.</li>
- * <li>{@link Include#invalidate} will cause it to re-include the page (and then
- * recreate the page if it includes a ZUML page). However,
- * {@link org.zkoss.zk.ui.HtmlMacroComponent#invalidate} just causes it to
- * redraw and update the content at the client -- like any other component does.
- * To re-create, you have to invoke
- * {@link org.zkoss.zk.ui.HtmlMacroComponent#recreate}.</li>
+ * <li>If {@link Include} (in page mode) includes a ZUML page, a
+ * {@link org.zkoss.zk.ui.Page} instance is created as a child
+ * of {@link Include}. On the other hand, a macro component makes
+ * the created components as the direct children -- i.e.,
+ * you can browse them with {@link org.zkoss.zk.ui.Component#getChildren}.</li>
+ * <li>{@link Include} (in page mode) creates components in the Rendering phase,
+ * while a macro component creates components in {@link org.zkoss.zk.ui.HtmlMacroComponent#afterCompose}.</li>
+ * <li>{@link Include#invalidate} (in page mode) will cause it to re-include
+ * the page (and then recreate the page if it includes a ZUML page).
+ * However, {@link org.zkoss.zk.ui.HtmlMacroComponent#invalidate} just causes it to redraw
+ * and update the content at the client -- like any other component does.
+ To re-create, you have to invoke {@link org.zkoss.zk.ui.HtmlMacroComponent#recreate}.</li>
  * </ol>
- * 
- * <p>
- * In additions to macro and {@link Include}, you can use the fulfill attribute
- * as follows: <code><div fulfill="=/my/foo.zul">...</div>
+ *
+ * <p>In additions to macro and {@link Include}, you can use the fulfill
+ * attribute as follows:
+ * <code>&lt;div fulfill="=/my/foo.zul"&gt;...&lt;/div&gt;
  * 
  * @author tomyeh
  * @see Iframe
  * @since 3.5.2
  */
 public interface Include extends org.zkoss.zul.impl.api.XulElement,
-		DynamicPropertied {
+DynamicPropertied, AfterCompose {
 
 	/**
 	 * Sets whether to show the {@link MZul#PLEASE_WAIT} message before a long
@@ -148,6 +175,33 @@ public interface Include extends org.zkoss.zul.impl.api.XulElement,
 	 *            ${param.b} in a.zul.
 	 * @see #setDynamicProperty
 	 */
-	public void setSrc(String src) throws WrongValueException;
+	public void setSrc(String src);
 
+	/** Returns whether the source depends on the current Locale.
+	 * If true, it will search xxx_en_US.yyy, xxx_en.yyy and xxx.yyy
+	 * for the proper content, where src is assumed to be xxx.yyy.
+	 *
+	 * <p>Default: false;
+	 * @since 3.6.2
+	 */
+	public boolean isLocalized();
+	/** Sets whether the source depends on the current Locale.
+	 * @since 3.6.2
+	 */
+	public void setLocalized(boolean localized);
+
+	/** Returns the inclusion mode.
+	 * There are three modes: auto, child and page.
+	 * The behavior prior to 3.6.2 is the same as the page mode.
+	 * To be 100% backward compatible, you can specify a library variable named
+	 * org.zkoss.zul.include.mode to be <code>page</code>. 
+	 * <p>Default: auto.
+	 * @since 3.6.2
+	 */
+	public String getMode();
+	/** Sets the inclusion mode.
+	 * @param mode the inclusion mode: auto, child or page.
+	 * @since 3.6.2
+	 */
+	public void setMode(String mode) throws WrongValueException;
 }

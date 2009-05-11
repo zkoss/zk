@@ -2,6 +2,7 @@
 ZK 3.6.2
 * Features
   2787715: Messagebox shall recognize linebreak
+  2789884: Include supports macro (page-less) mode
   2788162: Support the script directive (<?scrpt?> )
   2788752: Introduce beforeParentChanged, beforeChildAdded...
 
