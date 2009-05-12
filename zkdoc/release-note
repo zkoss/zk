@@ -9,6 +9,7 @@ ZK 3.6.2
   2790392: <?function-mapper?> supports more readable than arg0, arg1..
   2788752: Introduce beforeParentChanged, beforeChildAdded...
   2790402: Servlets support utility to return normalized path
+  2790420: Allow specify binder's name in AnnotateDataBinderInit
   
 * Bugs
   2787077: Listbox-Paging was broken with fix for #2782751
