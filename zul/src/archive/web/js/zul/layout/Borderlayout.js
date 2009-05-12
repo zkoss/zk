@@ -61,42 +61,53 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 	// private
 	// returns the ambit of the specified cmp for region calculation. 
 	_getAmbit: function (wgt, ignoreSplit) {
-		var region = wgt.getPosition();
+		var ambit, mars = this._getMargins(wgt), region = wgt.getPosition();
 		if (region && !wgt.isOpen()) {
 			var colled = wgt.getSubnode('colled');
-			return {
+			ambit = {
+				x: mars.left,
+				y: mars.top,
 				w: colled ? colled.offsetWidth : 0,
 				h: colled ? colled.offsetHeight : 0
 			};
+			ignoreSplit = true;
+		} else {
+			var w = wgt.getWidth() || '',
+				h = wgt.getHeight() || '',
+				widx = w.indexOf('%'),
+				hidx = h.indexOf('%');
+			ambit = {
+				x: mars.left,
+				y: mars.top,
+				w: widx > 0 ?
+					Math.max(
+						Math.floor(this.getNode().offsetWidth * zk.parseInt(w.substring(0, widx)) / 100),
+						0) : wgt.getSubnode('real').offsetWidth, 
+				h: hidx > 0 ?
+					Math.max(
+						Math.floor(this.getNode().offsetHeight * zk.parseInt(h.substring(0, hidx)) / 100),
+						0) : wgt.getSubnode('real').offsetHeight
+			};
 		}
-		var w = wgt.getWidth() || '',
-			h = wgt.getHeight() || '',
-			widx = w.indexOf('%'),
-			hidx = h.indexOf('%');
-
-		var ambit = {
-			w: widx > 0 ?
-				Math.max(
-					Math.floor(this.getNode().offsetWidth * zk.parseInt(w.substring(0, widx)) / 100),
-					0) : wgt.getSubnode('real').offsetWidth, 
-			h: hidx > 0 ?
-				Math.max(
-					Math.floor(this.getNode().offsetHeight * zk.parseInt(h.substring(0, hidx)) / 100),
-					0) : wgt.getSubnode('real').offsetHeight
-		};
-		if (region && !ignoreSplit) {
-			var split = wgt.getSubnode('split') || {offsetHeight:0, offsetWidth:0};
-			wgt._fixSplit();
-			switch (region) {
-				case this.$class.NORTH:
-				case this.$class.SOUTH:
-					ambit.h += split.offsetHeight;
-					break;
-				case this.$class.WEST:
-				case this.$class.EAST:
-					ambit.w += split.offsetWidth;
-					break;
-			}
+		var split = ignoreSplit ? {offsetHeight:0, offsetWidth:0} : wgt.getSubnode('split') || {offsetHeight:0, offsetWidth:0};
+		if (!ignoreSplit) wgt._fixSplit();
+		switch (region) {
+		case this.$class.NORTH:
+		case this.$class.SOUTH:
+			ambit.h += split.offsetHeight;
+			ambit.ts = ambit.y + ambit.h + mars.bottom; // total size;
+			ambit.w = mars.left + mars.right;
+			if (region == 'south')
+				ambit.y = ambit.h + mars.bottom;
+			break;
+		case this.$class.WEST:
+		case this.$class.EAST:
+			ambit.h = mars.top + mars.bottom;
+			ambit.w += split.offsetWidth;
+			ambit.ts = ambit.x + ambit.w + mars.right; // total size;
+			if (region == 'east')
+				ambit.x = ambit.w + mars.right; 
+			break;
 		}
 		return ambit;
 	},
@@ -108,66 +119,51 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 			this._resize();
 	},
 	_resize: function (isOnSize) {
-		if (!this.isRealVisible()) return;
 		this._isOnSize = isOnSize;
+		if (!this.isRealVisible()) return;
 		var el = this.getNode(),
 			width = el.offsetWidth,
 			height = el.offsetHeight,
-			cW = width,
-			cH = height,
-			cY = 0,
-			cX = 0;
-
-		if (this.north && zDom.isVisible(this.north.getNode())) {
-			var ambit = this._getAmbit(this.north),
-				mars = this._getMargins(this.north);
-			ambit.w = width - (mars.left + mars.right);
-			ambit.x = mars.left;
-			ambit.y = mars.top;
-			cY = ambit.h + ambit.y + mars.bottom;
-			cH -= cY;
-			this._resizeWgt(this.north, ambit);
-		}
-		if (this.south && zDom.isVisible(this.south.getNode())) {
-			var ambit = this._getAmbit(this.south),
-				mars = this._getMargins(this.south),
-				total = (ambit.h + mars.top + mars.bottom);
-			ambit.w = width - (mars.left + mars.right);
-			ambit.x = mars.left;
-			ambit.y = height - total + mars.top;
-			cH -= total;
-			this._resizeWgt(this.south, ambit);
-		}
-		if (this.west && zDom.isVisible(this.west.getNode())) {
-			var ambit = this._getAmbit(this.west),
-				mars = this._getMargins(this.west),
-				total = (ambit.w + mars.left + mars.right);
-			ambit.h = cH - (mars.top + mars.bottom);
-			ambit.x = mars.left;
-			ambit.y = cY + mars.top;
-			cX += total;
-			cW -= total;
-			this._resizeWgt(this.west, ambit);
-		}
-		if (this.east && zDom.isVisible(this.east.getNode())) {
-			var ambit = this._getAmbit(this.east),
-				mars = this._getMargins(this.east),
-				total = (ambit.w + mars.left + mars.right);
-			ambit.h = cH - (mars.top + mars.bottom);
-			ambit.x = width - total + mars.left;
-			ambit.y = cY + mars.top;
-			cW -= total;
-			this._resizeWgt(this.east, ambit);
+			center = { 
+				x: 0,
+				y: 0,
+				w: width,
+				h: height
+			};
+		for (var region, ambit, margin,	rs = ['north', 'south', 'west', 'east'],
+				j = 0, k = rs.length; j < k; ++j) {
+			region = this[rs[j]];
+			if (region && zDom.isVisible(region.getNode())) {
+				ambit = this._getAmbit(region);
+				switch (rs[j]) {
+				case 'north':
+				case 'south':
+					ambit.w = width - ambit.w;
+					if (rs[j] == 'north') 
+						center.y = ambit.ts;
+					else
+						ambit.y = height - ambit.y;
+					center.h -= ambit.ts;
+					break;
+				default:
+					ambit.y += center.y;
+					ambit.h = center.h - ambit.h;
+					if (rs[j] == 'east')
+						ambit.x = width - ambit.x;
+					else center.x += ambit.ts;
+					center.w -= ambit.ts;
+					break;
+				}
+				this._resizeWgt(region, ambit);
+			}
 		}
 		if (this.center && zDom.isVisible(this.center.getNode())) {
-			var mars = this._getMargins(this.center),
-				ambit = {
-					x: cX + mars.left,
-					y: cY + mars.top,
-					w: cW - (mars.left + mars.right),
-					h: cH - (mars.top + mars.bottom)
-				};
-			this._resizeWgt(this.center, ambit);
+			var mars = this._getMargins(this.center);
+			center.x += mars.left;
+			center.y += mars.top;
+			center.w -= mars.left + mars.right;
+			center.h -= mars.top + mars.bottom;
+			this._resizeWgt(this.center, center);
 		}
 		zDom.cleanVisibility(el);
 		this._isOnSize = false; // reset

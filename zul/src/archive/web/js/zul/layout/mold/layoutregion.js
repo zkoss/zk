@@ -24,7 +24,7 @@ function (out) {
 		out.push('<div id="', uuid, '$cap" class="', zcls, '-header">');
 		if (noCenter) {
 			out.push('<div id="', uuid, '$btn" class="', pzcls,
-					'-tool ', zcls, '-collapse"');
+					'-icon ', zcls, '-colps"');
 			if (!this.isCollapsible())
 				out.push(' style="display:none;"');
 			out.push('></div>');
@@ -39,11 +39,11 @@ function (out) {
 	out.push('</div></div>');
 	
 	if (noCenter) {
-		out.push('<div id="', uuid, '$split" class="', zcls, '-split"></div>');
+		out.push('<div id="', uuid, '$split" class="', zcls, '-splt"></div>');
 		if (this.getTitle()) {
 			out.push('<div id="', uuid, '$colled" class="', zcls,
-					'-collapsed" style="display:none"><div id="',
-					uuid, '$btned" class="', pzcls, '-tool ', zcls, '-expand"');
+					'-colpsd" style="display:none"><div id="',
+					uuid, '$btned" class="', pzcls, '-icon ', zcls, '-exp"');
 			if (!this.isCollapsible())
 				out.push(' style="display:none;"');
 				

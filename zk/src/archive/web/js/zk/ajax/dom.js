@@ -44,10 +44,7 @@ zDom = { //static methods
 		return n && (!n.style || (n.style.display != "none" && (!strict || n.style.visibility != "hidden")));
 	},
 	isRealVisible: function (n, strict) {
-		for (; n; n = zDom.parentNode(n))
-			if (!zDom.isVisible(n, strict))
-				return false;
-		return true;
+		return zDom.isVisible(n, strict) && n && (n.offsetWidth > 0 || n.offsetHeight > 0);
 	},
 	isAncestor: function (p, c) {
 		if (!p) return true;

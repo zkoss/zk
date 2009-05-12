@@ -16,7 +16,7 @@
 	height: 16px;
 	float: right;
 	background: transparent no-repeat 0 0;
-	background-image : url(${c:encodeURL('~./zkex/zul/img/layout/borderlayout-btn.gif')});
+	background-image : url(${c:encodeURL('~./zul/img/layout/borderlayout-btn.gif')});
 	margin-left: 2px;
 	cursor: pointer;
 }
@@ -103,7 +103,7 @@
 	padding: 5px 3px 4px 5px;
 	border-bottom: 1px solid #9ecad8;
 	background: transparent repeat-x 0 0;
-	background-image: url(${c:encodeURL('~./zkex/zul/img/layout/borderlayout-hm.png')});
+	background-image: url(${c:encodeURL('~./zul/img/layout/borderlayout-hm.png')});
 	white-space: nowrap;
 	overflow: hidden;
 	line-height: 15px;
