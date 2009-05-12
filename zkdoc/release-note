@@ -10,7 +10,8 @@ ZK 3.6.2
   2787077: Listbox-Paging was broken with fix for #2782751
   2788875: Https.getOriginPathInfo() & getOriginQueryString() exchange
   2789915: Click the button to reset the hoverImage will fail
-
+  2790393: Forward event listener shall be called immediately
+  
 	--------
 ZK 3.6.1
 * Features
