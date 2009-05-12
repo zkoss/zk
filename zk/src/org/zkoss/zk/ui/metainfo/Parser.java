@@ -249,16 +249,7 @@ public class Parser {
 			if (isEmpty(clsnm))
 				throw new UiException("The class attribute is required, "+pi.getLocator());
 
-			final List args = new LinkedList();
-			for (int j = 0;; ++j) {
-				final String arg = (String)params.remove("arg" + j);
-				if (arg == null) break;
-				args.add(arg);
-			}
-
-			if (!params.isEmpty())
-				log.warning("Ignored unknown attributes: "+params.keySet()+", "+pi.getLocator());
-
+			final Map args = new LinkedHashMap(params);
 			if ("variable-resolver".equals(target))
 				pgdef.addVariableResolverInfo(
 					clsnm.indexOf("${") >= 0 ? //class supports EL
