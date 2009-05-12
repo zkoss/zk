@@ -94,16 +94,15 @@ public class Composition implements Initiator, InitiatorExt {
 		// do nothing
 	}
 
-	public void doInit(Page page, Object[] args) throws Exception {
+	public void doInit(Page page, Map args) throws Exception {
 		//first called doInit, last called doAfterCompose
 		final Execution exec = Executions.getCurrent();
 		if (exec.getAttribute(RESOLVE_COMPOSITION) == null) {
 			exec.setAttribute(RESOLVE_COMPOSITION, this);
 		}
 		final Component parent = (Component) exec.getAttribute(PARENT);
-		for (int j=0; j < args.length; ++j) {
-			exec.createComponents((String)args[j], parent, null);
-		}
+		for (Iterator it = args.values().iterator(); it.hasNext();)
+			exec.createComponents((String)it.next(), parent, null);
 	}
 
 	public void doAfterCompose(Page page, Component[] comps) throws Exception {

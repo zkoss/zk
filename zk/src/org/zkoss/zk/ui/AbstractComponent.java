@@ -2574,7 +2574,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 						}
 					}
 
-					Events.postEvent(
+					//bug #2790393 Forward event listener shall be called immediately
+					//(since 3.6.2) change from postEvent to sendEvent to
+					//make forward event deterministic
+					Events.sendEvent(
 						new ForwardEvent((String)fwd[1], target, event, fwd[2]));
 				}
 		}

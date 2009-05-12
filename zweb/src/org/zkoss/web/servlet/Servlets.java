@@ -16,47 +16,36 @@ Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.web.servlet;
 
-import java.util.List;
-import java.util.LinkedList;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Collections;
-import java.util.Locale;
-import java.util.Properties;
-import java.io.InputStream;
 import java.io.IOException;
-import java.io.StringWriter;
-import java.io.PrintWriter;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
 import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.ServletException;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
-import org.zkoss.mesg.MCommon;
-import org.zkoss.lang.D;
-import org.zkoss.lang.Objects;
-import org.zkoss.lang.Classes;
-import org.zkoss.lang.Exceptions;
-import org.zkoss.lang.SystemException;
-import org.zkoss.util.Checksums;
-import org.zkoss.util.CacheMap;
-import org.zkoss.util.CollectionsX;
-import org.zkoss.util.Locales;
-import org.zkoss.util.logging.Log;
-import org.zkoss.util.resource.Locator;
-import org.zkoss.util.resource.Locators;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.input.SAXBuilder;
-
+import org.zkoss.lang.SystemException;
+import org.zkoss.util.CacheMap;
+import org.zkoss.util.Checksums;
+import org.zkoss.util.Locales;
+import org.zkoss.util.resource.Locator;
+import org.zkoss.util.resource.Locators;
 import org.zkoss.web.Attributes;
 import org.zkoss.web.servlet.http.Encodes;
 import org.zkoss.web.util.resource.ExtendletContext;
@@ -1143,5 +1132,103 @@ public class Servlets {
 		 * @return true if it matches, false if unable to identify
 		 */
 		public boolean isBrowser(String userAgent, String type);
+	}
+	
+	/** Returns the normal path; that is, will elminate the double dots 
+	 * ".."(parent) and single dot "."(current) in the path as possible. e.g. 
+	 * /abc/../def would be normalized to /def; /abc/./def would be
+	 * normalized to /abc/def; /abc//def would be normalized to /abc/def.
+	 * <p>Note that if found no way to navigate the path, it is deemed as an illegal path. e.g. 
+	 * /../abc or /../../abc is deemed as illegal path since we don't
+	 * know how to continue doing the normalize.
+	 * @since 3.6.2
+	 */
+	public static String getNormalPath(String path) {
+		final int sz = path.length();
+		final StringBuffer sb = new StringBuffer(path);
+		final IntStack slashes = new IntStack(32); //most 32 slash in a path
+		slashes.push(-1);
+		int j = 0, colon = -100, dot1 = -100, dot2 = -100;
+		for (; j < sb.length(); ++j) {
+			final char c = sb.charAt(j);
+			switch(c) {
+			case '/':
+				if (dot1 >= 0) { //single dot or double dots
+					if (dot2 >= 0) { //double dots
+						int preslash = slashes.pop();
+						if (preslash == 0) { //special case "/../"
+							throw new IllegalArgumentException("Illegal path: "+path);
+						}
+						if (slashes.isEmpty()) {
+							slashes.push(-1);
+						}
+						dot2 = -100;
+					}
+					int b = slashes.peek();
+					sb.delete(b + 1, j+1);
+					j = b;
+					dot1 = -100;
+				} else { //no dot
+					int s = slashes.peek();
+					if (s >= 0) {
+						if (j == (s+1)) { //consequtive slashs
+							if (colon == (s-1)) { //e.g. "http://abc"
+								slashes.clear();
+								slashes.push(-1);
+								slashes.push(j);
+							} else {
+								--j;
+								sb.delete(j, j+1);
+							}
+							continue;
+						}
+					}
+					slashes.push(j);
+				}
+				break;
+			case '.':
+				if (dot1 < 0) {
+					if (slashes.peek() == (j-1))
+						dot1 = j;
+				} else if (dot2 < 0){
+					dot2 = j;
+				} else { //more than 2 consecutive dots
+					throw new IllegalArgumentException("Illegal path: "+path);
+				}
+				break;
+			case ':': 
+				if (colon >= 0) {
+					throw new IllegalArgumentException("Illegal path: "+path);
+				}
+				colon = j;
+			default:
+				dot1 = dot2 = -100;
+			}
+		}
+		return sb.toString();
+	}
+	
+	private static class IntStack {
+		private int _top = -1;
+		private int[] _value;
+		
+		public IntStack(int sz) {
+			_value = new int[sz];
+		}
+		public boolean isEmpty() {
+			return _top < 0;
+		}
+		public int peek() {
+			return _top >= 0 && _top < _value.length ? _value[_top] : -100;  
+		}
+		public int pop() {
+			return _value[_top--];
+		}
+		public void push(int val) {
+			_value[++_top] = val;
+		}
+		public void clear() {
+			_top = -1;
+		}
 	}
 }

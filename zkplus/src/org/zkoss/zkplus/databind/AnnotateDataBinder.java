@@ -245,11 +245,19 @@ public class AnnotateDataBinder extends DataBinder {
 	private static final long serialVersionUID = 200808191510L;
 	
 	/**
+	 * No argument constructor to be used by {@link AnnotateDataBinderInit}.
+	 * @since 3.6.2
+	 */
+	public AnnotateDataBinder() {
+		//no argument contructor
+	}
+	
+	/**
 	 * Constructor that read all binding annotations of the components inside the specified desktop.
 	 * @param desktop the ZUML desktop.
 	 */
 	public AnnotateDataBinder(Desktop desktop) {
-		this(desktop, true);
+		init(desktop, true);
 	}
 	
 	/**
@@ -257,7 +265,7 @@ public class AnnotateDataBinder extends DataBinder {
 	 * @param page the ZUML page.
 	 */
 	public AnnotateDataBinder(Page page) {
-		this(page, true);
+		init(page, true);
 	}
 	
 	/**
@@ -265,7 +273,7 @@ public class AnnotateDataBinder extends DataBinder {
 	 * @param comp the ZUML component.
 	 */
 	public AnnotateDataBinder(Component comp) {
-		this(comp, true);
+		init(comp, true);
 	}
 
 	/**
@@ -274,7 +282,7 @@ public class AnnotateDataBinder extends DataBinder {
 	 * @since 3.0.0
 	 */
 	public AnnotateDataBinder(Component[] comps) {
-		this(comps, true);
+		init(comps, true);
 	}
 	
 	/**
@@ -283,10 +291,7 @@ public class AnnotateDataBinder extends DataBinder {
 	 * @param defaultConfig whether load default binding configuration defined in lang-addon.xml
 	 */
 	public AnnotateDataBinder(Desktop desktop, boolean defaultConfig) {
-		setDefaultConfig(defaultConfig);
-		for (final Iterator	it = desktop.getComponents().iterator(); it.hasNext(); ) {
-			loadAnnotations((Component) it.next());
-		}			
+		init(desktop, defaultConfig);
 	}
 	
 	/**
@@ -295,10 +300,7 @@ public class AnnotateDataBinder extends DataBinder {
 	 * @param defaultConfig whether load default binding configuration defined in lang-addon.xml
 	 */
 	public AnnotateDataBinder(Page page, boolean defaultConfig) {
-		setDefaultConfig(defaultConfig);
-		for (final Iterator it = page.getRoots().iterator(); it.hasNext(); ) {
-			loadAnnotations((Component) it.next());
-		}
+		init(page, defaultConfig);
 	}
 	
 	/**
@@ -308,10 +310,7 @@ public class AnnotateDataBinder extends DataBinder {
 	 * @since 3.0.0
 	 */
 	public AnnotateDataBinder(Component[] comps, boolean defaultConfig) {
-		setDefaultConfig(defaultConfig);
-		for (int j = 0; j < comps.length; ++j) {
-			loadAnnotations(comps[j]);
-		}
+		init(comps, defaultConfig);
 	}
 	
 	/**
@@ -320,10 +319,58 @@ public class AnnotateDataBinder extends DataBinder {
 	 * @param defaultConfig whether load default binding configuration defined in lang-addon.xml
 	 */
 	public AnnotateDataBinder(Component comp, boolean defaultConfig) {
+		init(comp, defaultConfig);
+	}
+	
+	/**
+	 * Initialization that read all binding annotations of the components inside the specified desktop.
+	 * @param desktop the ZUML desktop.
+	 * @param defaultConfig whether load default binding configuration defined in lang-addon.xml
+	 * @since 3.6.2
+	 */
+	public void init(Desktop desktop, boolean defaultConfig) {
+		setDefaultConfig(defaultConfig);
+		for (final Iterator	it = desktop.getComponents().iterator(); it.hasNext(); ) {
+			loadAnnotations((Component) it.next());
+		}			
+	}
+	
+	/**
+	 * Initialization that read all binding annotations of the components inside the specified page.
+	 * @param page the ZUML page.
+	 * @param defaultConfig whether load default binding configuration defined in lang-addon.xml
+	 * @since 3.6.2
+	 */
+	public void init(Page page, boolean defaultConfig) {
+		setDefaultConfig(defaultConfig);
+		for (final Iterator it = page.getRoots().iterator(); it.hasNext(); ) {
+			loadAnnotations((Component) it.next());
+		}
+	}
+	
+	/**
+	 * Initialization that read all binding annotations of the given component array.
+	 * @param comps the Component array
+	 * @param defaultConfig whether load default binding configuration defined in lang-addon.xml
+	 * @since 3.6.2
+	 */
+	public void init(Component[] comps, boolean defaultConfig) {
+		setDefaultConfig(defaultConfig);
+		for (int j = 0; j < comps.length; ++j) {
+			loadAnnotations(comps[j]);
+		}
+	}
+	
+	/**
+	 * Initialization that read all binding annotations in the components inside the specified component (inclusive).
+	 * @param comp the ZUML component.
+	 * @param defaultConfig whether load default binding configuration defined in lang-addon.xml
+	 * @since 3.6.2
+	 */
+	public void init(Component comp, boolean defaultConfig) {
 		setDefaultConfig(defaultConfig);
 		loadAnnotations(comp);
 	}
-	
 	
 	private void loadAnnotations(Component comp) {
 		loadComponentAnnotation(comp);

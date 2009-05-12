@@ -18,11 +18,16 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.metainfo;
 
+import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.LinkedHashMap;
 
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.reflect.Fields;
 import org.zkoss.util.logging.Log;
 
 import org.zkoss.zk.ui.Page;
@@ -43,88 +48,43 @@ import org.zkoss.zk.xel.Evaluator;
  *
  * @author tomyeh
  */
-public class InitiatorInfo {
+public class InitiatorInfo extends ArgumentInfo {
 //	private static final Log log = Log.lookup(InitiatorInfo.class);
 
 	/** A class, an ExValue or an Initiator. */
 	private final Object _init;
-	/** The arguments, never null (might with zero length). */
-	private final ExValue[] _args;
 
 	/** Constructs with a class, and {@link #newInitiator} will
 	 * instantiate a new instance.
+	 * @since 3.6.2
 	 */
-	public InitiatorInfo(Class cls, String[] args) {
+	public InitiatorInfo(Class cls, Map args) {
+		super(args);
 		checkClass(cls);
 		_init = cls;
-		_args = toExValues(args);
-	}
-	/** Constructs with a class, and {@link #newInitiator} will
-	 * instantiate a new instance.
-	 */
-	public InitiatorInfo(Class cls, List args) {
-		checkClass(cls);
-		_init = cls;
-		_args = toExValues(args);
 	}
 	/** Constructs with a class name and {@link #newInitiator} will
 	 * instantiate a new instance.
 	 *
 	 * @param clsnm the class name; it could be an EL expression.
+	 * @since 3.6.2
 	 */
-	public InitiatorInfo(String clsnm, String[] args)
+	public InitiatorInfo(String clsnm, Map args)
 	throws ClassNotFoundException {
+		super(args);
 		_init = toClass(clsnm);
-		_args = toExValues(args);
-	}
-	/** Constructs with a class name and {@link #newInitiator} will
-	 * instantiate a new instance.
-	 *
-	 * @param clsnm the class name; it could be an EL expression.
-	 */
-	public InitiatorInfo(String clsnm, List args)
-	throws ClassNotFoundException {
-		_init = toClass(clsnm);
-		_args = toExValues(args);
 	}
 	/** Constructs with an initiator that will be reuse each time
 	 * {@link #newInitiator} is called.
+	 * @since 3.6.2
 	 */
-	public InitiatorInfo(Initiator init, String[] args) {
+	public InitiatorInfo(Initiator init, Map args) {
+		super(args);
 		if (init == null)
 			throw new IllegalArgumentException("null");
 		_init = init;
-		_args = toExValues(args);
-	}
-	/** Constructs with an initiator that will be reuse each time
-	 * {@link #newInitiator} is called.
-	 */
-	public InitiatorInfo(Initiator init, List args) {
-		if (init == null)
-			throw new IllegalArgumentException("null");
-		_init = init;
-		_args = toExValues(args);
 	}
 
-	private static ExValue[] toExValues(String[] args) {
-		if (args == null || args.length == 0)
-			return new ExValue[0];
-
-		final ExValue[] evals = new ExValue[args.length];
-		for (int j = evals.length; --j >= 0;)
-			evals[j] = new ExValue(args[j], Object.class);
-		return evals;
-	}
-	private static ExValue[] toExValues(Collection args) {
-		if (args == null || args.isEmpty())
-			return new ExValue[0];
-
-		final ExValue[] evals = new ExValue[args.size()];
-		int j = 0;
-		for (Iterator it = args.iterator(); it.hasNext();)
-			evals[j++] = new ExValue((String)it.next(), Object.class);
-		return evals;
-	}
 	private static Object toClass(String clsnm) throws ClassNotFoundException {
 		if (clsnm == null || clsnm.length() == 0)
 			throw new IllegalArgumentException();
@@ -146,17 +106,26 @@ public class InitiatorInfo {
 			throw new UiException(Initiator.class+" must be implemented: "+cls);
 	}
 
-	/** Creaetes and returns the initiator.
+	/** Creates and returns the initiator, or null if no initiator is resolved.
+	 * Notice that {@link Initiator#doInit} was called before returned.
 	 */
 	public Initiator newInitiator(PageDefinition pgdef, Page page)
 	throws Exception {
+		return newInitiator(pgdef.getEvaluator(), page);
+	}
+	/** Creates and returns the initiator, or null if no initiator is resolved.
+	 * Notice that {@link Initiator#doInit} was called before returned.
+	 * @since 3.6.2
+	 */
+	public Initiator newInitiator(Evaluator eval, Page page)
+	throws Exception {
 		if (_init instanceof Initiator)
-			return (Initiator)_init;
+			return doInit((Initiator)_init, eval, page);
 
 		final Class cls;
 		if (_init instanceof ExValue) {
 			final String clsnm = (String)
-				((ExValue)_init).getValue(pgdef.getEvaluator(), page);
+				((ExValue)_init).getValue(eval, page);
 			if (clsnm == null || clsnm.length() == 0) {
 //				if (log.debugable()) log.debug("Ingore "+_init+" due to empty");
 				return null; //ignore it!!
@@ -171,16 +140,19 @@ public class InitiatorInfo {
 		} else {
 			cls = (Class)_init;
 		}
-		return (Initiator)cls.newInstance();
+		return doInit((Initiator)cls.newInstance(), eval, page);
 	}
-	/** Returns the arguments array (and evaluates EL if necessary).
-	 * @since 3.0.2
-	 */
-	public Object[] resolveArguments(PageDefinition pgdef, Page page) {
-		final Evaluator eval = pgdef.getEvaluator();
-		final Object[] args = new Object[_args.length];
-		for (int j = 0; j < args.length; ++j) //eval order is important
-			args[j] = _args[j].getValue(eval, page);
-		return args;
+	private Initiator doInit(Initiator init, Evaluator eval, Page page)
+	throws Exception {
+		final Map args = resolveArguments(eval, page);
+		try {
+			init.doInit(page, args);
+		} catch (AbstractMethodError ex) { //backward compatible prior to 3.6.2
+			final Method m = init.getClass().getMethod(
+				"doInit", new Class[] {Page.class, Object[].class});
+			Fields.setAccessible(m, true);
+			m.invoke(init, new Object[] {page, toArray(args)});
+		}
+		return init;
 	}
 }

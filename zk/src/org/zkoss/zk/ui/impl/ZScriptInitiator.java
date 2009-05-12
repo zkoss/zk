@@ -18,7 +18,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.impl;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.metainfo.ZScript;
@@ -41,7 +41,7 @@ public class ZScriptInitiator implements Initiator {
 		if (script == null) throw new IllegalArgumentException("null");
 		_zscript = script;
 	}
-	public void doInit(Page page, Object[] args) throws Exception {
+	public void doInit(Page page, Map args) throws Exception {
 		final Namespace ns = Namespaces.beforeInterpret(page);
 		try {
 			page.interpret(

@@ -26,8 +26,6 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-import org.zkoss.lang.Classes;
-import org.zkoss.lang.Objects;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.xel.Expressions;
@@ -38,14 +36,9 @@ import org.zkoss.xel.taglib.Taglibs;
 import org.zkoss.xel.taglib.Taglib;
 import org.zkoss.xml.HTMLs;
 
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.util.Condition;
 import org.zkoss.zk.ui.util.Initiator;
-import org.zkoss.zk.scripting.Namespace;
-import org.zkoss.zk.scripting.Namespaces;
-import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.sys.PageConfig;
 import org.zkoss.zk.xel.Evaluator;
@@ -333,11 +326,8 @@ public class PageDefinition extends NodeInfo {
 		for (Iterator it = _initdefs.iterator(); it.hasNext();) {
 			final InitiatorInfo def = (InitiatorInfo)it.next();
 			try {
-				final Initiator init = def.newInitiator(this, page);
-				if (init != null) {
-					init.doInit(page, def.resolveArguments(this, page));
-					inits.add(init);
-				}
+				final Initiator init = def.newInitiator(getEvaluator(), page);
+				if (init != null) inits.add(init);
 			} catch (Throwable ex) {
 				throw UiException.Aide.wrap(ex);
 			}

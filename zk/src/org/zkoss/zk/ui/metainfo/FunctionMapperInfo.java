@@ -18,14 +18,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.metainfo;
 
-import java.util.Iterator;
-import java.util.Collection;
+import java.util.Map;
 
 import org.zkoss.lang.Classes;
 import org.zkoss.xel.FunctionMapper;
 
 import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.Evaluator;
@@ -42,18 +40,17 @@ import org.zkoss.zk.xel.Evaluator;
  * @author tomyeh
  * @since 3.5.0
  */
-public class FunctionMapperInfo {
+public class FunctionMapperInfo extends ArgumentInfo {
 	/** A class, an ExValue or an FunctionMapper. */
 	private final Object _mapper;
-	/** The arguments, never null (might with zero length). */
-	private final ExValue[] _args;
 
 	/** Constructs with a class.
+	 * @since 3.6.1
 	 */
-	public FunctionMapperInfo(Class cls, Collection args) {
+	public FunctionMapperInfo(Class cls, Map args) {
+		super(args);
 		checkClass(cls);
 		_mapper = cls;
-		_args = toExValues(args);
 	}
 	/** Constructs with a class.
 	 */
@@ -69,8 +66,10 @@ public class FunctionMapperInfo {
 	 *
 	 * @param clsnm the class name; it could be an EL expression.
 	 */
-	public FunctionMapperInfo(String clsnm, Collection args)
+	public FunctionMapperInfo(String clsnm, Map args)
 	throws ClassNotFoundException {
+		super(args);
+
 		if (clsnm == null || clsnm.length() == 0)
 			throw new IllegalArgumentException("empty");
 
@@ -85,7 +84,6 @@ public class FunctionMapperInfo {
 		} else {
 			_mapper = new ExValue(clsnm, String.class);
 		}
-		_args = toExValues(args);
 	}
 	/** Constructs with a class name.
 	 *
@@ -98,33 +96,31 @@ public class FunctionMapperInfo {
 	 * {@link #newFunctionMapper} is called.
 	 */
 	public FunctionMapperInfo(FunctionMapper mapper) {
+		super(null);
+
 		if (mapper == null)
 			throw new IllegalArgumentException("null");
 		_mapper = mapper;
-		_args = new ExValue[0];
-	}
-	private static ExValue[] toExValues(Collection args) {
-		if (args == null || args.isEmpty())
-			return new ExValue[0];
-
-		final ExValue[] evals = new ExValue[args.size()];
-		int j = 0;
-		for (Iterator it = args.iterator(); it.hasNext();)
-			evals[j++] = new ExValue((String)it.next(), Object.class);
-		return evals;
 	}
 
-	/** Creaetes and returns the function mapper for the specified page.
+	/** Creates and returns the function mapper for the specified pagedefinition and page.
 	 */
 	public FunctionMapper newFunctionMapper(PageDefinition pgdef, Page page)
+	throws Exception {
+		return newFunctionMapper(pgdef.getEvaluator(), page);
+	}
+	
+	/** Creates and returns the function mapper for the specified evaluator and page.
+	 * @since 3.6.2
+	 */
+	public FunctionMapper newFunctionMapper(Evaluator eval, Page page)
 	throws Exception {
 		if (_mapper instanceof FunctionMapper)
 			return (FunctionMapper)_mapper;
 
 		final Class cls;
 		if (_mapper instanceof ExValue) {
-			final String clsnm = (String)((ExValue)_mapper)
-				.getValue(pgdef.getEvaluator(), page);
+			final String clsnm = (String)((ExValue)_mapper).getValue(eval, page);
 			if (clsnm == null || clsnm.length() == 0) {
 				return null; //ignore it!!
 			}
@@ -139,17 +135,7 @@ public class FunctionMapperInfo {
 			cls = (Class)_mapper;
 		}
 
-		return (FunctionMapper)(_args.length == 0 ? cls.newInstance():
-			Classes.newInstance(cls, resolveArguments(pgdef, page)));
-	}
-	/** Returns the arguments array (by evaluating EL if necessary).
-	 */
-	private Object[] resolveArguments(PageDefinition pgdef, Page page) {
-		final Evaluator eval = pgdef.getEvaluator();
-		final Object[] args = new Object[_args.length];
-		for (int j = 0; j < args.length; ++j) //eval order is important
-			args[j] = _args[j].getValue(eval, page);
-		return args;
+		return (FunctionMapper)newInstance(cls, eval, page);
 	}
 
 	//Object//

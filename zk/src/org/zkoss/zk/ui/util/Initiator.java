@@ -18,6 +18,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.util;
 
+import java.util.Map;
+
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 
@@ -57,11 +59,14 @@ public interface Initiator {
 	 * and {@link Page#getAttribute} are all available.
 	 *
 	 * @param page the page being evaluated
-	 * @param args an array of arguments passed with
-	 * the arg0, arg1, arg2 and arg3 attributes (of the init directive).
-	 * If no argument is specified, args is an array with zero length.
+	 * @param args a map of arguments.
+	 * Prior to 3.6.2, it is an array. To upgrade, use args.get("arg0")
+	 * instead of args[0], args.get("arg1") instead of args[1] and so on.
+	 * Of course, it is better to have a more meaningful name for
+	 * each argument.
+	 * If no argument is specified, args is an empty map (never null).
 	 */
-	public void doInit(Page page, Object[] args) throws Exception;
+	public void doInit(Page page, Map args) throws Exception;
 	/** Called after all components are created (aka., composed),
 	 * and before any event is processed.
 	 *
