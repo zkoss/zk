@@ -6,7 +6,8 @@ ZK 3.6.2
   2788162: Support the script directive (<?scrpt?> )
   2790025: <?init?> supports more readable format than arg0, arg1...
   2788752: Introduce beforeParentChanged, beforeChildAdded...
-
+  2790402: Servlets support utility to return normalized path
+  
 * Bugs
   2787077: Listbox-Paging was broken with fix for #2782751
   2788875: Https.getOriginPathInfo() & getOriginQueryString() exchange
