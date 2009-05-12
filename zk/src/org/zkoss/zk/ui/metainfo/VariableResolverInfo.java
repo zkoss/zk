@@ -118,9 +118,17 @@ public class VariableResolverInfo {
 		return evals;
 	}
 
-	/** Creaetes and returns the variable resolver for the specified page.
+	/** Creates and returns the variable resolver for the specified page.
 	 */
 	public VariableResolver newVariableResolver(PageDefinition pgdef, Page page)
+	throws Exception {
+		return newVariableResolver(pgdef.getEvaluator(), page);
+	}
+		
+	/** Creates and returns the variable resolver for the specified page.
+	 * @since 3.6.2
+	 */
+	public VariableResolver newVariableResolver(Evaluator eval, Page page)
 	throws Exception {
 		if (_resolver instanceof VariableResolver)
 			return (VariableResolver)_resolver;
@@ -128,7 +136,7 @@ public class VariableResolverInfo {
 		final Class cls;
 		if (_resolver instanceof ExValue) {
 			final String clsnm = (String)((ExValue)_resolver)
-				.getValue(pgdef.getEvaluator(), page);
+				.getValue(eval, page);
 			if (clsnm == null || clsnm.length() == 0) {
 //				if (log.debugable()) log.debug("Ingore "+_resolver+" due to empty");
 				return null; //ignore it!!
@@ -145,12 +153,11 @@ public class VariableResolverInfo {
 		}
 
 		return (VariableResolver)(_args.length == 0 ? cls.newInstance():
-			Classes.newInstance(cls, resolveArguments(pgdef, page)));
+			Classes.newInstance(cls, resolveArguments(eval, page)));
 	}
 	/** Returns the arguments array (by evaluating EL if necessary).
 	 */
-	private Object[] resolveArguments(PageDefinition pgdef, Page page) {
-		final Evaluator eval = pgdef.getEvaluator();
+	private Object[] resolveArguments(Evaluator eval, Page page) {
 		final Object[] args = new Object[_args.length];
 		for (int j = 0; j < args.length; ++j) //eval order is important
 			args[j] = _args[j].getValue(eval, page);

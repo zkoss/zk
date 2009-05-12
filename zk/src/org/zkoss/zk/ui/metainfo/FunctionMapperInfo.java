@@ -114,17 +114,24 @@ public class FunctionMapperInfo {
 		return evals;
 	}
 
-	/** Creaetes and returns the function mapper for the specified page.
+	/** Creates and returns the function mapper for the specified pagedefinition and page.
 	 */
 	public FunctionMapper newFunctionMapper(PageDefinition pgdef, Page page)
+	throws Exception {
+		return newFunctionMapper(pgdef.getEvaluator(), page);
+	}
+	
+	/** Creates and returns the function mapper for the specified evaluator and page.
+	 * @since 3.6.2
+	 */
+	public FunctionMapper newFunctionMapper(Evaluator eval, Page page)
 	throws Exception {
 		if (_mapper instanceof FunctionMapper)
 			return (FunctionMapper)_mapper;
 
 		final Class cls;
 		if (_mapper instanceof ExValue) {
-			final String clsnm = (String)((ExValue)_mapper)
-				.getValue(pgdef.getEvaluator(), page);
+			final String clsnm = (String)((ExValue)_mapper).getValue(eval, page);
 			if (clsnm == null || clsnm.length() == 0) {
 				return null; //ignore it!!
 			}
@@ -140,12 +147,11 @@ public class FunctionMapperInfo {
 		}
 
 		return (FunctionMapper)(_args.length == 0 ? cls.newInstance():
-			Classes.newInstance(cls, resolveArguments(pgdef, page)));
+			Classes.newInstance(cls, resolveArguments(eval, page)));
 	}
 	/** Returns the arguments array (by evaluating EL if necessary).
 	 */
-	private Object[] resolveArguments(PageDefinition pgdef, Page page) {
-		final Evaluator eval = pgdef.getEvaluator();
+	private Object[] resolveArguments(Evaluator eval, Page page) {
 		final Object[] args = new Object[_args.length];
 		for (int j = 0; j < args.length; ++j) //eval order is important
 			args[j] = _args[j].getValue(eval, page);
