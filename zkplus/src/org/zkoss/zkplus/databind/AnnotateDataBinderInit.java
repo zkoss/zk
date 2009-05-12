@@ -38,16 +38,19 @@ import org.zkoss.zk.ui.util.InitiatorExt;
  * <p>Put the init PI as follows:</p>
  * <pre>
  * &lt;?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" 
- * 	[arg0|root="component|component-path"] [arg1|loadDefault="true|false"]?>
+ * 	[root="component|component-path"] [loadDefault="true|false"]?>
  * </pre>
- * <p>Where the arg0 (or root) is the component itself (via EL expression) or the component path that 
+ * <p>Where the root attribute is the component itself (via EL expression) or the component path that 
  * specifies the component the AnnotateDataBinder covers. You can use absolute path that 
  * starts with "//" (search from Desktop) or "/" (search from Page); or you can use relative
  * path(supported since ZK 3.0.8) that starts with "./" or "../" (relative to the Id Space of 
- * the page's root components). If the arg0 is not specified or set to string "page", 
+ * the page's root components). If the root attribute is not specified or set to string "page", 
  * the AnnotateDataBinder will default to cover the whole page.</p>
- * <p>Where the arg1 (or loadDefault) is used to decide whether to load default binding configuration defined in lang-addon.xml. 
- * If the arg1 is not specified it is default to true.</p>
+ * <p>Where the loadDefault attribute is used to decide whether to load default binding configuration defined in lang-addon.xml. 
+ * If the loadDefault attribute is not specified it is default to true.</p>
+ *
+ * <p>For application design to run ZK prior to 3.6.2, it can use arg0 instead
+ * of root, and arg1 instead of loadDefault.
  *
  * @author Henri Chen
  * @see AnnotateDataBinder
@@ -72,9 +75,9 @@ import org.zkoss.zk.ui.util.InitiatorExt;
 	}
 	public void doInit(Page page, Map args) {
 		if (!args.isEmpty()) {
-			Object arg0 = args.get("arg0");
+			Object arg0 = args.get("root");
 			if (arg0 == null) {
-				arg0 = args.get("root");
+				arg0 = args.get("arg0"); //backward compatible
 			}
 			if (arg0 != null) {
 				if (arg0 instanceof String) {
@@ -88,9 +91,9 @@ import org.zkoss.zk.ui.util.InitiatorExt;
 		}
 		
 		if (args.size() > 1) {
-			_defaultConfig = (String)args.get("arg1");
+			_defaultConfig = (String)args.get("loadDefault");
 			if (_defaultConfig == null) {
-				_defaultConfig = (String)args.get("loadDefault");
+				_defaultConfig = (String)args.get("arg1"); //backward compatible
 			}
 		}
 	}
