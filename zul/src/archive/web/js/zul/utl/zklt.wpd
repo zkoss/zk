@@ -11,7 +11,7 @@
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 
-<package name="" language="xul/html">
+<package name="zul.utl" language="xul/html">
 	<widget name="Timer"/>
 	<widget name="Iframe"/>
 </package>
