@@ -41,6 +41,7 @@ ZK 3.6.2
 * Features
   2787715: Messagebox shall recognize linebreak
   2789884: Include supports macro (page-less) mode
+  2790411: A way to use createComponents in the working thread
   2788162: Support the script directive (<?scrpt?> )
   2790025: <?init?> supports more readable format than arg0, arg1...
   2790391: <?variable-resolve?> supports more readable format than arg0...
@@ -48,6 +49,8 @@ ZK 3.6.2
   2788752: Introduce beforeParentChanged, beforeChildAdded...
   2790402: Servlets support utility to return normalized path
   2790420: Allow specify binder's name in AnnotateDataBinderInit
+  2790441: Enhance GenericAutowireComposer to wire vars before onCreate
+  2787711: Hope paging setTotalSize() won't affect inputing active page
   
 * Bugs
   2787077: Listbox-Paging was broken with fix for #2782751

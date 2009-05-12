@@ -34,6 +34,7 @@ import org.zkoss.zk.xel.Evaluator;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
+import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.ServerPush;
 
 /**
@@ -121,7 +122,7 @@ public class Executions {
 	 *
 	 * <p>It resolves "*" contained in URI, if any, to the proper Locale,
 	 * and the browser code.
-	 * Refer to {@link org.zkoss.web.servlet.Servlets#locate(ServletContext, ServletRequest, String, Locator)}
+	 * Refer to {@link org.zkoss.web.servlet.Servlets#locate(javax.servlet.ServletContext, ServletRequest, String, Locator)}
 	 * for details. 
 	 *
 	 * @exception NullPointerException if the current execution is not
@@ -282,6 +283,315 @@ public class Executions {
 	String extension, Component parent, Map arg)
 	throws IOException {
 		return getCurrent().createComponentsDirectly(reader, extension, parent, arg);
+	}
+
+	/** Creates components that don't belong to any page
+	 * from the specified page definition.
+	 *
+	 * <p>Unlike {@link #createComponents(PageDefinition,Component,Map)},
+	 * this method can be inovked without the current execution, such as
+	 * a working thread. In this case, the wapp argument must be specified.
+	 *
+	 * @param wapp the Web application. It is optional and used only if
+	 * no current execution (e.g., in a working thread).
+	 * @param pagedef the page definition to use. It cannot be null.
+	 * @param arg a map of parameters that is accessible by the arg variable
+	 * in EL, or by {@link Execution#getArg}.
+	 * Ignored if null.
+	 * @return the first component being created.
+	 * @see #createComponents(WebApp, String, Map)
+	 * @since 3.6.2
+	 */
+	public static Component[] createComponents(WebApp wapp, PageDefinition pagedef, Map arg) {
+		final Execution exec = beforeCC(wapp);
+		try {
+			return exec.createComponents(pagedef, arg);
+		} finally {
+			afterCC(exec);
+		}
+	}
+	/** Creates components that don't belong to any page
+	 * from a page file specified by an URI.
+	 *
+	 * <p>It loads the page definition from the specified URI (by
+	 * use {@link #getPageDefinition} ), and then
+	 * invokes {@link #createComponents(WebApp,PageDefinition,Map)}
+	 * to create components.
+	 *
+	 * <p>Unlike {@link #createComponents(String,Component,Map)},
+	 * this method can be inovked without the current execution, such as
+	 * a working thread. In this case, the wapp argument must be specified.
+	 *
+	 * @param wapp the Web application. It is optional and used only if
+	 * no current execution (e.g., in a working thread).
+	 * @param arg a map of parameters that is accessible by the arg variable
+	 * in EL, or by {@link Execution#getArg}.
+	 * Ignored if null.
+	 * @see #createComponents(WebApp, PageDefinition, Map)
+	 * @see #createComponentsDirectly(WebApp, String, String, Map)
+	 * @see #createComponentsDirectly(WebApp, Document, String, Map)
+	 * @see #createComponentsDirectly(WebApp, Reader, String, Map)
+	 * @since 3.6.2
+	 */
+	public static Component[] createComponents(WebApp wapp, String uri, Map arg) {
+		final Execution exec = beforeCC(wapp);
+		try {
+			return exec.createComponents(uri, arg);
+		} finally {
+			afterCC(exec);
+		}
+	}
+	/** Creates components that don't belong to any page
+	 * from the raw content specified by a string.
+	 *
+	 * <p>The raw content is parsed to a page defintion by use of
+	 * {@link #getPageDefinitionDirectly(WebApp,String,String)}, and then
+	 * invokes {@link #createComponents(WebApp,PageDefinition,Map)}
+	 * to create components.
+	 *
+	 * <p>Unlike {@link #createComponentsDirectly(String,String,Component,Map)},
+	 * this method can be inovked without the current execution, such as
+	 * a working thread. In this case, the wapp argument must be specified.
+	 *
+	 * @param wapp the Web application. It is optional and used only if
+	 * no current execution (e.g., in a working thread).
+	 * @param content the raw content of the page. It must be in ZUML.
+	 * @param extension the default extension if the content doesn't specify
+	 * an language. In other words, if
+	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
+	 * is called.
+	 * If extension is null and the content doesn't specify a language,
+	 * the language called "xul/html" is assumed.
+	 * @param arg a map of parameters that is accessible by the arg variable
+	 * in EL, or by {@link Execution#getArg}.
+	 * Ignored if null.
+	 * @see #createComponents(WebApp, PageDefinition, Map)
+	 * @see #createComponents(WebApp, String, Map)
+	 * @see #createComponentsDirectly(WebApp, Document, String, Map)
+	 * @see #createComponentsDirectly(WebApp, Reader, String, Map)
+	 * @since 3.6.2
+	 */
+	public static Component[]
+	createComponentsDirectly(WebApp wapp, String content, String extension,
+	Map arg) {
+		final Execution exec = beforeCC(wapp);
+		try {
+			return exec.createComponentsDirectly(content, extension, arg);
+		} finally {
+			afterCC(exec);
+		}
+	}
+	/** Creates components that don't belong to any page
+	 * from the raw content specified by a DOM tree.
+	 *
+	 * <p>The raw content is parsed to a page defintion by use of
+	 * {@link #getPageDefinitionDirectly(WebApp,Document, String)}, and then
+	 * invokes {@link #createComponents(WebApp,PageDefinition,Map)}
+	 * to create components.
+	 *
+	 * <p>Unlike {@link #createComponentsDirectly(Document,String,Component,Map)},
+	 * this method can be inovked without the current execution, such as
+	 * a working thread. In this case, the wapp argument must be specified.
+	 *
+	 * @param wapp the Web application. It is optional and used only if
+	 * no current execution (e.g., in a working thread).
+	 * @param content the raw content in DOM.
+	 * @param extension the default extension if the content doesn't specify
+	 * an language. In other words, if
+	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
+	 * is called.
+	 * If extension is null and the content doesn't specify a language,
+	 * the language called "xul/html" is assumed.
+	 * @param arg a map of parameters that is accessible by the arg variable
+	 * in EL, or by {@link Execution#getArg}.
+	 * Ignored if null.
+	 * @see #createComponents(WebApp, PageDefinition, Map)
+	 * @see #createComponents(WebApp, String, Map)
+	 * @see #createComponentsDirectly(WebApp, Document, String, Map)
+	 * @see #createComponentsDirectly(WebApp, Reader, String, Map)
+	 * @since 3.6.2
+	 */
+	public static Component[]
+	createComponentsDirectly(WebApp wapp, Document content, String extension,
+	Map arg) {
+		final Execution exec = beforeCC(wapp);
+		try {
+			return exec.createComponentsDirectly(content, extension, arg);
+		} finally {
+			afterCC(exec);
+		}
+	}
+	/** Creates components that don't belong to any page
+	 * from the raw content read from the specified reader.
+	 *
+	 * <p>Unl
+	 *
+	 * <p>The raw content is loaded and parsed to a page defintion by use of
+	 * {@link #getPageDefinitionDirectly(WebApp,Reader,String)}, and then
+	 * invokes {@link #createComponents(WebApp,PageDefinition,Map)}
+	 * to create components.
+	 *
+	 * <p>Unlike {@link #createComponentsDirectly(Reader,String,Component,Map)},
+	 * this method can be inovked without the current execution, such as
+	 * a working thread. In this case, the wapp argument must be specified.
+	 *
+	 * @param wapp the Web application. It is optional and used only if
+	 * no current execution (e.g., in a working thread).
+	 * @param reader the reader to retrieve the raw content in ZUML.
+	 * @param extension the default extension if the content doesn't specify
+	 * an language. In other words, if
+	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
+	 * is called.
+	 * If extension is null and the content doesn't specify a language,
+	 * the language called "xul/html" is assumed.
+	 * @param arg a map of parameters that is accessible by the arg variable
+	 * in EL, or by {@link Execution#getArg}.
+	 * Ignored if null.
+	 * @see #createComponents(WebApp, PageDefinition, Map)
+	 * @see #createComponents(WebApp, String, Map)
+	 * @see #createComponentsDirectly(WebApp, Document, String, Map)
+	 * @see #createComponentsDirectly(WebApp, String, String, Map)
+	 * @since 3.6.2
+	 */
+	public static Component[] createComponentsDirectly(WebApp wapp, Reader reader, String extension,
+	Map arg) throws IOException {
+		final Execution exec = beforeCC(wapp);
+		try {
+			return exec.createComponentsDirectly(reader, extension, arg);
+		} finally {
+			afterCC(exec);
+		}
+	}
+
+	/** Returns the page definition from the page file specified by an URI.
+	 *
+	 * <p>Like {@link #createComponents(WebApp,PageDefinition,Map)},
+	 * this method can be inovked without the current execution, such as
+	 * a working thread. In this case, the wapp argument must be specified.
+	 *
+	 * @param wapp the Web application. It is optional and used only if
+	 * no current execution (e.g., in a working thread).
+	 * @param uri the URI of the page file.
+	 *
+	 * @see #getPageDefinitionDirectly(WebApp, String, String)
+	 * @see #getPageDefinitionDirectly(WebApp, Document, String)
+	 * @see #getPageDefinitionDirectly(WebApp, Reader, String)
+	 * @since 3.6.2
+	 */
+	public static PageDefinition getPageDefinition(WebApp wapp, String uri) {
+		final Execution exec = beforeCC(wapp);
+		try {
+			return exec.getPageDefinition(uri);
+		} finally {
+			afterCC(exec);
+		}
+	}
+	/** Converts the specified page content to a page definition.
+	 *
+	 * <p>Like {@link #createComponents(WebApp,PageDefinition,Map)},
+	 * this method can be inovked without the current execution, such as
+	 * a working thread. In this case, the wapp argument must be specified.
+	 *
+	 * @param wapp the Web application. It is optional and used only if
+	 * no current execution (e.g., in a working thread).
+	 * @param content the raw content of the page. It must be in ZUML.
+	 * @param extension the default extension if the content doesn't specify
+	 * an language. In other words, if
+	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
+	 * is called.
+	 * If extension is null and the content doesn't specify a language,
+	 * the language called "xul/html" is assumed.
+	 * @see #getPageDefinitionDirectly(WebApp, Document, String)
+	 * @see #getPageDefinitionDirectly(WebApp, Reader, String)
+	 * @see #getPageDefinition
+	 * @since 3.6.2
+	 */
+	public PageDefinition
+	getPageDefinitionDirectly(WebApp wapp, String content, String extension) {
+		final Execution exec = beforeCC(wapp);
+		try {
+			return exec.getPageDefinitionDirectly(content, extension);
+		} finally {
+			afterCC(exec);
+		}
+	}
+	/** Converts the specified page content, in DOM, to a page definition.
+	 *
+	 * <p>Like {@link #createComponentsDirectly(WebApp,Document,String,Map)},
+	 * this method can be inovked without the current execution, such as
+	 * a working thread. In this case, the wapp argument must be specified.
+	 *
+	 * @param wapp the Web application. It is optional and used only if
+	 * no current execution (e.g., in a working thread).
+	 * @param content the raw content of the page in DOM.
+	 * @param extension the default extension if the content doesn't specify
+	 * an language. In other words, if
+	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
+	 * is called.
+	 * If extension is null and the content doesn't specify a language,
+	 * the language called "xul/html" is assumed.
+	 * @see #getPageDefinitionDirectly(WebApp, String, String)
+	 * @see #getPageDefinitionDirectly(WebApp, Reader, String)
+	 * @see #getPageDefinition
+	 * @since 3.6.2
+	 */
+	public PageDefinition
+	getPageDefinitionDirectly(WebApp wapp, Document content, String extension) {
+		final Execution exec = beforeCC(wapp);
+		try {
+			return exec.getPageDefinitionDirectly(content, extension);
+		} finally {
+			afterCC(exec);
+		}
+	}
+	/** Reads the raw content from a reader and converts it into
+	 * a page definition.
+	 *
+	 * <p>Like {@link #createComponentsDirectly(WebApp,Reader,String,Map)},
+	 * this method can be inovked without the current execution, such as
+	 * a working thread. In this case, the wapp argument must be specified.
+	 *
+	 * @param wapp the Web application. It is optional and used only if
+	 * no current execution (e.g., in a working thread).
+	 * @param reader used to input the raw content of the page. It must be in ZUML.
+	 * @param extension the default extension if the content doesn't specify
+	 * an language. In other words, if
+	 * the content doesn't specify an language, {@link LanguageDefinition#getByExtension}
+	 * is called.
+	 * If extension is null and the content doesn't specify a language,
+	 * the language called "xul/html" is assumed.
+	 * @see #getPageDefinitionDirectly(WebApp, String, String)
+	 * @see #getPageDefinitionDirectly(WebApp, Document, String)
+	 * @see #getPageDefinition
+	 * @since 3.6.2
+	 */
+	public PageDefinition
+	getPageDefinitionDirectly(WebApp wapp, Reader reader, String extension)
+	throws IOException {
+		final Execution exec = beforeCC(wapp);
+		try {
+			return exec.getPageDefinitionDirectly(reader, extension);
+		} finally {
+			afterCC(exec);
+		}
+	}
+
+	private static final Execution beforeCC(WebApp wapp) {
+		Execution exec = Executions.getCurrent();
+		if (exec == null)
+			((WebAppCtrl)wapp).getUiEngine()
+				.activate(exec = CCExecution.newInstance(wapp));
+		return exec;
+		
+	}
+	private static final void afterCC(Execution exec) {
+		if (exec instanceof CCExecution) {
+			try {
+				((WebAppCtrl)exec.getDesktop().getWebApp())
+					.getUiEngine().deactivate(exec);
+			} catch (Throwable ex) {
+			}
+		}
 	}
 
 	/** Sends a temporary redirect response to the client using the specified

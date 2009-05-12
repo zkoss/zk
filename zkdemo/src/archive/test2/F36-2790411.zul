@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F36-2790411.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue May 12 14:44:34     2009, Created by tomyeh
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<window title="Test of createComponents in working thread">
+	<button label="create">
+		<attribute name="onClick"><![CDATA[
+		Thread thd = new org.zkoss.zkdemo.test2.F2790411Thread(
+			desktop.getWebApp(), "/test2/F36-2790411-sub.zul");
+		thd.start();
+		while (!thd.isDone())
+			Thread.sleep(200);
+		String errmsg = thd.getError();
+		if (errmsg != null)
+			new Label(errmsg).setParent(self.parent);
+		else
+			thd.getResult().setParent(self.parent);
+		]]></attribute>
+	</button>
+</window>

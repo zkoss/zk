@@ -93,7 +93,6 @@ public class Paging extends XulElement implements org.zkoss.zul.api.Paging, Pagi
 			_ttsz = size;
 			smartUpdate("totalSize", _ttsz);
 			updatePageNum();
-			if (_detailed) invalidate();
 		}
 	}
 	private void updatePageNum() {

@@ -45,6 +45,7 @@ import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.Express;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.xel.Evaluator;
 
@@ -187,8 +188,20 @@ abstract public class GenericAutowireComposer extends GenericComposer implements
 	public void doAfterCompose(Component comp) throws Exception {
 		super.doAfterCompose(comp);
 		
-		//wire variables to reference fields (include implicit objects)
+		//wire variables to reference fields (include implicit objects) ASAP
 		Components.wireVariables(comp, this, _separator);
+	
+		//register event to wire variables just before component onCreate
+		comp.addEventListener("onCreate", new BeforeCreateWireListener());
+	}
+	
+	private class BeforeCreateWireListener implements EventListener, Express {
+		public void onEvent(Event event) throws Exception {
+			//wire variables again so some late created object can be wired in(e.g. DataBinder)
+			Components.wireVariables(event.getTarget(), GenericAutowireComposer.this, _separator);
+			//called only once
+			event.getTarget().removeEventListener("onCreate", this);
+		}
 	}
 	
 	/** Shortcut to call Messagebox.show(String).
