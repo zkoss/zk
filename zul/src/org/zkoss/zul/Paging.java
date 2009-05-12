@@ -119,7 +119,9 @@ public class Paging extends XulElement implements org.zkoss.zul.api.Paging, Pagi
 		if (_ttsz != size) {
 			_ttsz = size;
 			updatePageNum();
-			if (_detailed) invalidate();
+			if (_detailed) {
+				smartUpdate("z.info", getInfoText());
+			}
 		}
 	}
 	private void updatePageNum() {
@@ -190,22 +192,28 @@ public class Paging extends XulElement implements org.zkoss.zul.api.Paging, Pagi
 			if (_npg == 1) invalidate();
 		}
 	}
-
+	
+	/**
+	 * Returns the information text of the paging, if {@link #isDetailed()} is enabled.
+	 * @since 3.6.2
+	 */
+	protected String getInfoText() {
+		int lastItem = (_actpg+1) * _pgsz;
+		return "[ " + (_actpg * _pgsz + 1) + (!"os".equals(getMold()) ? " - " + (lastItem > _ttsz ? _ttsz : lastItem) : "")+ " / " + _ttsz + " ]";
+	}
 	/**
 	 * Returns the HTML tags of paging information.
 	 * <p>Default: <code>active-page-number / total-numbers-of-pages</code>
 	 * <p>Developers can override this method to show different information.
 	 * @since 3.5.0
+	 * @see #getInfoText()
 	 */
 	public String getInfoTags() {
 		if (_ttsz == 0)
 			return "";
 
 		final StringBuffer sb = new StringBuffer(512);
-		int lastItem = (_actpg+1) * _pgsz;
-		sb.append("<div class=\"").append(getZclass()).append("-info\">[ ")
-			.append(_actpg * _pgsz + 1).append(" - ").append(lastItem > _ttsz ? _ttsz : lastItem)
-			.append(" / ").append(_ttsz).append(" ]</div>");
+		sb.append("<div id=\"").append(getUuid()).append("!info\" class=\"").append(getZclass()).append("-info\">").append(getInfoText()).append("</div>");
 		return sb.toString();
 	}
 	
@@ -213,6 +221,7 @@ public class Paging extends XulElement implements org.zkoss.zul.api.Paging, Pagi
 	 * <p>Used only for component development. Not accessible by
 	 * application developers.
 	 * @since 3.5.2
+	 * @see #getInfoText()
 	 */
 	public String getInnerTags() {
 		final StringBuffer sb = new StringBuffer(512);
@@ -251,8 +260,7 @@ public class Paging extends XulElement implements org.zkoss.zul.api.Paging, Pagi
 				appendAnchor(zcs, sb, Messages.get(MZul.LAST), _npg - 1);
 		}
 		if (_detailed)
-			sb.append("<span>[").append(_actpg * _pgsz + 1).append('/')
-				.append(_ttsz).append("]</span>");
+			sb.append("<span id=\"" + getUuid() + "!info\">").append(getInfoText()).append("</span>");
 		return sb.toString();
 	}
 	private static final void appendAnchor(String zclass, StringBuffer sb, String label, int val) {

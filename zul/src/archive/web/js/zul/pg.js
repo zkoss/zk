@@ -239,6 +239,14 @@ zkPg = {
 		}
 		zkPg.down_btn = null;
 		zk.unlisten(document.body, "mouseup", zkPg.onup);
+	},
+	setAttr: function (cmp, nm, val) {
+		if (nm == "z.info") {
+			var info = $e(cmp, "info");
+			if (info) info.innerHTML = val;
+			return true;
+		}
+		return false;
 	}
 };
 //Paging-os//
@@ -247,5 +255,13 @@ zkPgOS = {
 		var cmp = $parentByType(anc, "PgOS");
 		if (cmp)
 			zkau.send({uuid: cmp.id, cmd: "onPaging", data: [pgno]});
+	},
+	setAttr: function (cmp, nm, val) {
+		if (nm == "z.info") {
+			var info = $e(cmp, "info");
+			if (info) info.innerHTML = val;
+			return true;
+		}
+		return false;
 	}
 };

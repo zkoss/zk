@@ -11,6 +11,7 @@ ZK 3.6.2
   2790402: Servlets support utility to return normalized path
   2790420: Allow specify binder's name in AnnotateDataBinderInit
   2790441: Enhance GenericAutowireComposer to wire vars before onCreate
+  2787711: Hope paging setTotalSize() won't affect inputing active page
   
 * Bugs
   2787077: Listbox-Paging was broken with fix for #2782751
