@@ -23,7 +23,7 @@ import org.zkoss.zul.Textbox;
  * @author tomyeh
  */
 public class B2227929Initiator implements org.zkoss.zk.ui.util.Initiator {
-	public void doInit(Page page, Object[] args) throws Exception {
+	public void doInit(Page page, java.util.Map args) throws Exception {
 	}
 	public void doAfterCompose(Page page) throws Exception {
 		page.getFirstRoot().appendChild(new Textbox());

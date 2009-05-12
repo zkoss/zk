@@ -20,7 +20,10 @@ package org.zkoss.zk.ui.metainfo;
 
 import java.util.Iterator;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.LinkedHashMap;
 
 import org.zkoss.lang.Classes;
 import org.zkoss.util.logging.Log;
@@ -49,20 +52,13 @@ public class InitiatorInfo {
 	/** A class, an ExValue or an Initiator. */
 	private final Object _init;
 	/** The arguments, never null (might with zero length). */
-	private final ExValue[] _args;
+	private final Map _args;
 
 	/** Constructs with a class, and {@link #newInitiator} will
 	 * instantiate a new instance.
+	 * @since 3.6.2
 	 */
-	public InitiatorInfo(Class cls, String[] args) {
-		checkClass(cls);
-		_init = cls;
-		_args = toExValues(args);
-	}
-	/** Constructs with a class, and {@link #newInitiator} will
-	 * instantiate a new instance.
-	 */
-	public InitiatorInfo(Class cls, List args) {
+	public InitiatorInfo(Class cls, Map args) {
 		checkClass(cls);
 		_init = cls;
 		_args = toExValues(args);
@@ -71,59 +67,33 @@ public class InitiatorInfo {
 	 * instantiate a new instance.
 	 *
 	 * @param clsnm the class name; it could be an EL expression.
+	 * @since 3.6.2
 	 */
-	public InitiatorInfo(String clsnm, String[] args)
-	throws ClassNotFoundException {
-		_init = toClass(clsnm);
-		_args = toExValues(args);
-	}
-	/** Constructs with a class name and {@link #newInitiator} will
-	 * instantiate a new instance.
-	 *
-	 * @param clsnm the class name; it could be an EL expression.
-	 */
-	public InitiatorInfo(String clsnm, List args)
+	public InitiatorInfo(String clsnm, Map args)
 	throws ClassNotFoundException {
 		_init = toClass(clsnm);
 		_args = toExValues(args);
 	}
 	/** Constructs with an initiator that will be reuse each time
 	 * {@link #newInitiator} is called.
+	 * @since 3.6.2
 	 */
-	public InitiatorInfo(Initiator init, String[] args) {
-		if (init == null)
-			throw new IllegalArgumentException("null");
-		_init = init;
-		_args = toExValues(args);
-	}
-	/** Constructs with an initiator that will be reuse each time
-	 * {@link #newInitiator} is called.
-	 */
-	public InitiatorInfo(Initiator init, List args) {
+	public InitiatorInfo(Initiator init, Map args) {
 		if (init == null)
 			throw new IllegalArgumentException("null");
 		_init = init;
 		_args = toExValues(args);
 	}
 
-	private static ExValue[] toExValues(String[] args) {
-		if (args == null || args.length == 0)
-			return new ExValue[0];
-
-		final ExValue[] evals = new ExValue[args.length];
-		for (int j = evals.length; --j >= 0;)
-			evals[j] = new ExValue(args[j], Object.class);
-		return evals;
-	}
-	private static ExValue[] toExValues(Collection args) {
+	private static Map toExValues(Map args) {
 		if (args == null || args.isEmpty())
-			return new ExValue[0];
+			return null;
 
-		final ExValue[] evals = new ExValue[args.size()];
-		int j = 0;
-		for (Iterator it = args.iterator(); it.hasNext();)
-			evals[j++] = new ExValue((String)it.next(), Object.class);
-		return evals;
+		for (Iterator it = args.entrySet().iterator(); it.hasNext();) {
+			final Map.Entry me = (Map.Entry)it.next();
+			me.setValue(new ExValue((String)me.getValue(), Object.class));
+		}
+		return args;
 	}
 	private static Object toClass(String clsnm) throws ClassNotFoundException {
 		if (clsnm == null || clsnm.length() == 0)
@@ -174,13 +144,19 @@ public class InitiatorInfo {
 		return (Initiator)cls.newInstance();
 	}
 	/** Returns the arguments array (and evaluates EL if necessary).
-	 * @since 3.0.2
+	 * @since 3.6.2
 	 */
-	public Object[] resolveArguments(PageDefinition pgdef, Page page) {
+	public Map resolveArguments(PageDefinition pgdef, Page page) {
+		if (_args == null)
+			return Collections.EMPTY_MAP;
+
 		final Evaluator eval = pgdef.getEvaluator();
-		final Object[] args = new Object[_args.length];
-		for (int j = 0; j < args.length; ++j) //eval order is important
-			args[j] = _args[j].getValue(eval, page);
+		final Map args = new LinkedHashMap(); //eval order is important
+		for (Iterator it = _args.entrySet().iterator(); it.hasNext();) {
+			final Map.Entry me = (Map.Entry)it.next();
+			args.put(me.getKey(),
+				((ExValue)me.getValue()).getValue(eval, page));
+		}
 		return args;
 	}
 }

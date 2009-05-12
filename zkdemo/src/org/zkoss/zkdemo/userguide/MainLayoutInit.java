@@ -40,7 +40,7 @@ public class MainLayoutInit implements Initiator {
 	public void doFinally() throws Exception {		
 	}
 
-	public void doInit(Page page, Object[] args) throws Exception {
+	public void doInit(Page page, java.util.Map args) throws Exception {
 		if (Library.getProperty("org.zkoss.zkdemo.theme.silvergray") != null) {
 			Library.setProperty("org.zkoss.zkdemo.theme.cookie", FontSizeThemeProvider.getSkinCookie(Executions.getCurrent()));
 		}

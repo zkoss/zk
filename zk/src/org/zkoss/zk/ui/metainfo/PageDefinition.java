@@ -18,9 +18,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.metainfo;
 
+import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.HashMap;
@@ -28,6 +30,7 @@ import java.util.LinkedHashMap;
 
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
+import org.zkoss.lang.reflect.Fields;
 import org.zkoss.util.resource.Locator;
 import org.zkoss.xel.ExpressionFactory;
 import org.zkoss.xel.Expressions;
@@ -335,7 +338,15 @@ public class PageDefinition extends NodeInfo {
 			try {
 				final Initiator init = def.newInitiator(this, page);
 				if (init != null) {
-					init.doInit(page, def.resolveArguments(this, page));
+					final Map args = def.resolveArguments(this, page);
+					try {
+						init.doInit(page, args);
+					} catch (AbstractMethodError ex) { //backward compatible prior to 3.6.2
+						final Method m = init.getClass().getMethod(
+							"doInit", new Class[] {Page.class, Object[].class});
+						Fields.setAccessible(m, true);
+						m.invoke(init, new Object[] {page, args2array(args)});
+					}
 					inits.add(init);
 				}
 			} catch (Throwable ex) {
@@ -343,6 +354,20 @@ public class PageDefinition extends NodeInfo {
 			}
 		}
 		return inits;
+	}
+	private static Object[] args2array(Map args) {
+		if (args.isEmpty())
+			return new Object[0];
+
+		final List lst = new LinkedList();
+		for (int j = 0;;j++) {
+			final String nm = "arg" + j;
+			final Object o = args.get(nm);
+			if (o == null && !args.containsKey(nm))
+				break;
+			lst.add(o);
+		}
+		return (Object[])lst.toArray(new Object[lst.size()]);
 	}
 
 	/** Adds a defintion of {@link VariableResolver}.

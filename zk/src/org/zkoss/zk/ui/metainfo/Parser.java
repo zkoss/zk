@@ -28,6 +28,7 @@ import java.util.ListIterator;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Set;
 import java.util.LinkedHashSet;
 import java.io.File;
@@ -311,19 +312,10 @@ public class Parser {
 	/** Process the init directive. */
 	private void parseInitDirective(PageDefinition pgdef,
 	ProcessingInstruction pi, Map params) throws Exception {
-		final List args = new LinkedList();
-		for (int j = 0;; ++j) {
-			final String arg = (String)params.remove("arg" + j);
-			if (arg == null) break;
-			args.add(arg);
-		}
-
 		final String clsnm = (String)params.remove("class");
 		final String zsrc = (String)params.remove("zscript");
 
-		if (!params.isEmpty())
-			log.warning("Ignored unknown attributes: "+params.keySet()+", "+pi.getLocator());
-
+		final Map args = new LinkedHashMap(params);
 		if (isEmpty(clsnm)) {
 			if (isEmpty(zsrc))
 				throw new UiException("Either the class or zscript attribute must be specified, "+pi.getLocator());
