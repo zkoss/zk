@@ -574,10 +574,10 @@ public class Binding implements java.io.Serializable {
 		}
 	}
 	
-	private static abstract class ExpressBaseEventListener implements EventListener, Express, java.io.Serializable {
+	private static abstract class BaseEventListener implements EventListener, java.io.Serializable {
 		protected List _dataTargets;
 		
-		public ExpressBaseEventListener() {
+		public BaseEventListener() {
 			_dataTargets = new ArrayList(8);
 		}
 		
@@ -586,7 +586,7 @@ public class Binding implements java.io.Serializable {
 		}
 	}
 	
-	private abstract static class BaseLoadEventListener extends ExpressBaseEventListener {
+	private abstract static class BaseLoadEventListener extends BaseEventListener {
 		public BaseLoadEventListener() {
 			super();
 		}
@@ -604,7 +604,7 @@ public class Binding implements java.io.Serializable {
 		}
 	}
 	
-	private static class LoadEventListener extends BaseLoadEventListener {
+	private static class LoadEventListener extends BaseLoadEventListener implements Express {
 		private static final long serialVersionUID = 200808191313L;
 		public LoadEventListener() {
 			super();
@@ -625,7 +625,8 @@ public class Binding implements java.io.Serializable {
 			if (event instanceof AfterEvent) {
 				handleEvent((Event) event.getData());
 			} else { //post AfterEvent to make sure it is called after
-				Events.postEvent(new AfterEvent(event.getName()+"LoadAfter", event));
+				//enforce the event is the last processed
+				Events.postEvent(-10100, new AfterEvent(event.getName()+"LoadAfter", event));
 			}
 		}
 	}
@@ -647,12 +648,13 @@ public class Binding implements java.io.Serializable {
 			if (event instanceof AfterEvent) {
 				handleEvent((Event) event.getData());
 			} else { //post AfterEvent to make sure it is called after
-				Events.postEvent(new AfterEvent(event.getName()+"SaveAfter", event));
+				//enforce the event is the last processed
+				Events.postEvent(-10100, new AfterEvent(event.getName()+"SaveAfter", event));
 			}
 		}
 	}
 	
-	private static class SaveEventListener extends BaseSaveEventListener {
+	private static class SaveEventListener extends BaseSaveEventListener implements Express {
 		private static final long serialVersionUID = 200808191313L;
 		public SaveEventListener() {
 			super();
@@ -662,7 +664,7 @@ public class Binding implements java.io.Serializable {
 		}
 	}
 	
-	private static abstract class BaseSaveEventListener extends ExpressBaseEventListener {
+	private static abstract class BaseSaveEventListener extends BaseEventListener {
 		public BaseSaveEventListener() {
 			super();
 		}

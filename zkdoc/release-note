@@ -16,6 +16,7 @@ ZK 3.6.2
   2788875: Https.getOriginPathInfo() & getOriginQueryString() exchange
   2789915: Click the button to reset the hoverImage will fail
   2790393: Forward event listener shall be called immediately
+  2790417: load-after and save-after shall be the last processed
 
 * Upgrade Notes
   * The signature of doInit of org.zkoss.zk.ui.util.Initiator is changed.
