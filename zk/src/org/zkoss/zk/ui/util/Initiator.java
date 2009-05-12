@@ -61,7 +61,7 @@ public interface Initiator {
 	 * @param page the page being evaluated
 	 * @param args a map of arguments.
 	 * Prior to 3.6.2, it is an array. To upgrade, use args.get("arg0")
-	 * instead of args[0], args("arg1") instead of args[1] and so on.
+	 * instead of args[0], args.get("arg1") instead of args[1] and so on.
 	 * Of course, it is better to have a more meaningful name for
 	 * each argument.
 	 * If no argument is specified, args is an empty map (never null).

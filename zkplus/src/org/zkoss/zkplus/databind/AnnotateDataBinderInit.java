@@ -16,6 +16,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkplus.databind;
 
+import java.util.Map;
+
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Path;
 import org.zkoss.zk.ui.Component;
@@ -35,16 +37,17 @@ import org.zkoss.zk.ui.util.InitiatorExt;
  * </ol>
  * <p>Put the init PI as follows:</p>
  * <pre>
- * &lt;?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" [arg0="component|component-path"] [arg1="true|false"]?>
+ * &lt;?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" 
+ * 	[arg0|root="component|component-path"] [arg1|loadDefault="true|false"]?>
  * </pre>
- * <p>Where the arg0 is the component itself (via EL expression) or the component path that 
+ * <p>Where the arg0 (or root) is the component itself (via EL expression) or the component path that 
  * specifies the component the AnnotateDataBinder covers. You can use absolute path that 
  * starts with "//" (search from Desktop) or "/" (search from Page); or you can use relative
  * path(supported since ZK 3.0.8) that starts with "./" or "../" (relative to the Id Space of 
- * the root components of the zul page). If the arg0 is not specified or set to string "page", 
+ * the page's root components). If the arg0 is not specified or set to string "page", 
  * the AnnotateDataBinder will default to cover the whole page.</p>
- * <p>Where the arg1 is used to decide whether to load default binding configuration defined in lang-addon.xml. 
- * If the arg1 is not specified it is default to true. Note that you have to specify arg0 if you want to specify arg1.</p>
+ * <p>Where the arg1 (or loadDefault) is used to decide whether to load default binding configuration defined in lang-addon.xml. 
+ * If the arg1 is not specified it is default to true.</p>
  *
  * @author Henri Chen
  * @see AnnotateDataBinder
@@ -67,20 +70,28 @@ import org.zkoss.zk.ui.util.InitiatorExt;
 	public void doFinally() {
 		// do nothing
 	}
-	public void doInit(Page page, java.lang.Object[] args) {
-		if (args.length > 0) {
-			Object arg0 = args[0];
-			if (arg0 instanceof String) {
-				_compPath = (String) arg0;
-			} else if (arg0 instanceof Component) {
-				_comp = (Component) arg0;
-			} else if (!(arg0 instanceof Page)) {
-				throw new UiException("arg0 has to be String, Component, or Page: "+arg0);
+	public void doInit(Page page, Map args) {
+		if (!args.isEmpty()) {
+			Object arg0 = args.get("arg0");
+			if (arg0 == null) {
+				arg0 = args.get("root");
+			}
+			if (arg0 != null) {
+				if (arg0 instanceof String) {
+					_compPath = (String) arg0;
+				} else if (arg0 instanceof Component) {
+					_comp = (Component) arg0;
+				} else if (!(arg0 instanceof Page)) {
+					throw new UiException("arg0/root has to be String, Component, or Page: "+arg0);
+				}
 			}
 		}
 		
-		if (args.length > 1) {
-			_defaultConfig = (String)args[1];
+		if (args.size() > 1) {
+			_defaultConfig = (String)args.get("arg1");
+			if (_defaultConfig == null) {
+				_defaultConfig = (String)args.get("loadDefault");
+			}
 		}
 	}
 	
@@ -124,5 +135,4 @@ import org.zkoss.zk.ui.util.InitiatorExt;
 		}
 		_binder.loadAll(); //load data bean properties into UI components
 	}
-	
 }
