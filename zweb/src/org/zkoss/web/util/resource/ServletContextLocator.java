@@ -49,7 +49,7 @@ public class ServletContextLocator implements Locator {
 			final int len = dir.length();
 			if (len == 0) dir = null;
 			else {
-				if (dir.charAt(0) != '/') throw new IllegalArgumentException(dir);
+				if (dir.charAt(0) != '/') throw new IllegalArgumentException("Absolute path required: "+dir);
 				if (dir.charAt(len - 1) != '/') dir += '/';
 			}
 		}

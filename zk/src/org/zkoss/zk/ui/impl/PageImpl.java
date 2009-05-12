@@ -606,7 +606,8 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			setVariable("applicationScope", wapp.getAttributes());
 			final Session sess = _desktop.getSession();
 			setVariable("session", sess);
-			setVariable("sessionScope", sess.getAttributes());
+			setVariable("sessionScope",
+				sess != null ? sess.getAttributes(): Collections.EMPTY_MAP);
 		}
 	}
 	public void destroy() {

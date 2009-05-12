@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F36-2790411-sub.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue May 12 14:45:59     2009, Created by tomyeh
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<window title="Subwidow" border="normal">
+	It is correct if you saw this.
+	It is created by a working thread.
+</window>

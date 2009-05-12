@@ -196,19 +196,20 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		_exec = exec; //fake
 		try {
 			final WebAppCtrl wappc = (WebAppCtrl)_wapp;
-			final DesktopCache dc = wappc.getDesktopCache(_sess);
+			final DesktopCache dc = _sess != null ? wappc.getDesktopCache(_sess): null;
+				//_sess is null if in a working thread
 			final IdGenerator idgen = wappc.getIdGenerator();
 			if (idgen != null)
 				_id = idgen.nextDesktopId(this);
 			if (_id == null)
-				_id = Strings.encode(
-					new StringBuffer(12).append("g"), dc.getNextKey()).toString();
+				_id = nextDesktopId(dc);
 			updateUuidPrefix();
 
 			config.invokeDesktopInits(this, request); //it might throw exception
-			if (exec.isVoided()) return; //sendredirect or forward
+			if (exec != null && exec.isVoided()) return; //sendredirect or forward
 
-			dc.addDesktop(this); //add to cache after invokeDesktopInits
+			if (dc != null)
+				dc.addDesktop(this); //add to cache after invokeDesktopInits
 
 			final Monitor monitor = config.getMonitor();
 			if (monitor != null) {
@@ -222,6 +223,19 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			_exec = null;
 		}
 	}
+	private static String nextDesktopId(DesktopCache dc) {
+		if (dc != null)
+			return Strings.encode(
+				new StringBuffer(12).append("g"), dc.getNextKey()).toString();
+
+		final int v;
+		synchronized (DesktopImpl.class) {
+			v = _keyWithoutDC++;
+		}
+		return Strings.encode(new StringBuffer(12).append("_g"), v).toString();
+	}
+	private static int _keyWithoutDC;
+
 	/** Initialization for contructor and de-serialized. */
 	private void init() {
 		_rque = newRequestQueue();
@@ -277,7 +291,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			_devType = deviceType;
 			_dev = null;
 
-			((SessionCtrl)_sess).setDeviceType(_devType);
+			if (_sess != null) //not in a working thread
+				((SessionCtrl)_sess).setDeviceType(_devType);
 		}
 	}
 	public Execution getExecution() {
@@ -508,13 +523,16 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		if (id == null || id.length() <= 1 || id.charAt(0) != 'g')
 			throw new IllegalArgumentException("Invalid desktop ID. You have to recover to the original value, not creating a new value: "+id);
 
-		final DesktopCache dc = ((WebAppCtrl)_wapp).getDesktopCache(_sess);
-		dc.removeDesktop(this);
+		//_sess and dc are null if in a working thread
+		final DesktopCache dc = _sess != null ? ((WebAppCtrl)_wapp).getDesktopCache(_sess): null;
+		if (dc != null)
+			dc.removeDesktop(this);
 
 		_id = id;
 		updateUuidPrefix();
 
-		dc.addDesktop(this);
+		if (dc != null)
+			dc.addDesktop(this);
 	}
 	public void recoverDidFail(Throwable ex) {
 		((WebAppCtrl)_wapp).getDesktopCache(_sess).removeDesktop(this);
@@ -856,6 +874,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 	//Server Push//
 	public boolean enableServerPush(boolean enable) {
+		if (_sess == null)
+			throw new IllegalStateException("Server push cannot be enabled in a working thread");
+
 		final boolean old = _spush != null;
 		if (old != enable) {
 			final Integer icnt = (Integer)_sess.getAttribute(ATTR_PUSH_COUNT);

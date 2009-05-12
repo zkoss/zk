@@ -3,6 +3,7 @@ ZK 3.6.2
 * Features
   2787715: Messagebox shall recognize linebreak
   2789884: Include supports macro (page-less) mode
+  2790411: A way to use createComponents in the working thread
   2788162: Support the script directive (<?scrpt?> )
   2790025: <?init?> supports more readable format than arg0, arg1...
   2790391: <?variable-resolve?> supports more readable format than arg0...

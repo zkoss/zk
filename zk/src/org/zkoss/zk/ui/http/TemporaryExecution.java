@@ -1,4 +1,4 @@
-/* DonutExecution.java
+/* TemporaryExecution.java
 
 	Purpose:
 		
@@ -34,22 +34,10 @@ import org.zkoss.zk.ui.sys.ExecutionsCtrl;
  *
  * @author tomyeh
  */
-/*package*/ class DonutExecution extends ExecutionImpl {
-	/** Creates a donut execution based on the specified one.
-	 * @param exec the execution to create a donut execution from
-	 */
-	/*public static final Execution newInstance(Execution exec) {
-		final Desktop desktop = exec.getDesktop();
-		return new DonutExecution(
-			(ServletContext)desktop.getWebApp().getNativeContext(),
-			(HttpServletRequest)exec.getNativeRequest(),
-			(HttpServletResponse)exec.getNativeResponse(),
-			desktop);
-	}*/
-
+/*package*/ class TemporaryExecution extends ExecutionImpl {
 	/** Constructor.
 	 */
-	public DonutExecution(ServletContext ctx, HttpServletRequest request,
+	/*package*/ TemporaryExecution(ServletContext ctx, HttpServletRequest request,
 	HttpServletResponse response, Desktop desktop) {
 		super(ctx, request, response, desktop, null);
 	}

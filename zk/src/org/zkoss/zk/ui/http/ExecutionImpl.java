@@ -265,7 +265,7 @@ public class ExecutionImpl extends AbstractExecution {
 	public void forward(Writer out, String page, Map params, int mode)
 	throws IOException {
 		final Visualizer uv = getVisualizer();
-			//uv is null if it is called in DesktopInit (with DonutExecution)
+			//uv is null if it is called in DesktopInit (with TemporaryExecution)
 		if (uv != null && uv.isEverAsyncUpdate())
 			throw new IllegalStateException("Use sendRedirect instead when processing user's request");
 

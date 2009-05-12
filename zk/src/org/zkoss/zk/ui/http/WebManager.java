@@ -214,6 +214,15 @@ public class WebManager {
 	public final ClassWebResource getClassWebResource() {
 		return _cwr;
 	}
+	/** Returns the URI for asynchronous update.
+	 *
+	 * <p>You rarely need this method unless for implementing special
+	 * components, such as file upload.
+	 * @since 3.6.2
+	 */
+	public String getUpdateURI() {
+		return _updateURI;
+	}
 
 	/** Returns the Web application.
 	 * Notice: a Web application is allocated for each servlet.
@@ -359,7 +368,7 @@ public class WebManager {
 			//which is true except this moment (before desktop is created)
 
 		final Execution exec = ExecutionsCtrl.getCurrent();
-		final DonutExecution de = new DonutExecution(
+		final TemporaryExecution de = new TemporaryExecution(
 			_ctx, (HttpServletRequest)request,
 			(HttpServletResponse)response, null);
 		ExecutionsCtrl.setCurrent(de);
@@ -397,7 +406,7 @@ public class WebManager {
 	ServletResponse response, String path) {
 		final DesktopCtrl desktopCtrl = (DesktopCtrl)ri.getDesktop();
 		final Execution exec = ExecutionsCtrl.getCurrent();
-		DonutExecution de = new DonutExecution(
+		TemporaryExecution de = new TemporaryExecution(
 			(ServletContext)ri.getWebApp().getNativeContext(),
 			(HttpServletRequest)ri.getNativeRequest(),
 			(HttpServletResponse)response, ri.getDesktop());
@@ -424,7 +433,7 @@ public class WebManager {
 	ServletResponse response, String path) {
 		final DesktopCtrl desktopCtrl = (DesktopCtrl)ri.getDesktop();
 		final Execution exec = ExecutionsCtrl.getCurrent();
-		DonutExecution de = new DonutExecution(
+		TemporaryExecution de = new TemporaryExecution(
 			(ServletContext)ri.getWebApp().getNativeContext(),
 			(HttpServletRequest)ri.getNativeRequest(),
 			(HttpServletResponse)response, ri.getDesktop());

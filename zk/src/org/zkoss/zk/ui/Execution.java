@@ -605,7 +605,7 @@ public interface Execution extends Scope {
 	 *
 	 * <p>It loads the page definition from the specified URI (by
 	 * use {@link #getPageDefinition} ), and then
-	 * invokes {@link #createComponents(PageDefinition,Component,Map)}
+	 * invokes {@link #createComponents(PageDefinition,Map)}
 	 * to create components.
 	 *
 	 * @param arg a map of parameters that is accessible by the arg variable
@@ -623,7 +623,7 @@ public interface Execution extends Scope {
 	 *
 	 * <p>The raw content is parsed to a page defintion by use of
 	 * {@link #getPageDefinitionDirectly(String, String)}, and then
-	 * invokes {@link #createComponents(PageDefinition,Component,Map)}
+	 * invokes {@link #createComponents(PageDefinition,Map)}
 	 * to create components.
 	 *
 	 * @param content the raw content of the page. It must be in ZUML.
@@ -649,7 +649,7 @@ public interface Execution extends Scope {
 	 *
 	 * <p>The raw content is parsed to a page defintion by use of
 	 * {@link #getPageDefinitionDirectly(Document, String)}, and then
-	 * invokes {@link #createComponents(PageDefinition,Component,Map)}
+	 * invokes {@link #createComponents(PageDefinition,Map)}
 	 * to create components.
 	 *
 	 * @param content the raw content in DOM.
@@ -675,7 +675,7 @@ public interface Execution extends Scope {
 	 *
 	 * <p>The raw content is loaded and parsed to a page defintion by use of
 	 * {@link #getPageDefinitionDirectly(Reader,String)}, and then
-	 * invokes {@link #createComponents(PageDefinition,Component,Map)}
+	 * invokes {@link #createComponents(PageDefinition,Map)}
 	 * to create components.
 	 *
 	 * @param reader the reader to retrieve the raw content in ZUML.

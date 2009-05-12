@@ -87,6 +87,9 @@ public class UiEngineImpl implements UiEngine {
 	public UiEngineImpl() {
 	}
 
+	/** Global Visualizers. */
+	private static final Map _gvs = new HashMap();
+
 	//-- UiEngine --//
 	public void start(WebApp wapp) {
 		_wapp = wapp;
@@ -1655,6 +1658,9 @@ public class UiEngineImpl implements UiEngine {
 	}
 	/** Returns a map of (Page, UiVisualizer). */
 	private static Map getVisualizers(Session sess) {
+		if (sess == null)
+			return _gvs;
+
 		synchronized (sess) {
 			final String attr = "org.zkoss.zk.ui.Visualizers";
 			Map eis = (Map)sess.getAttribute(attr);
