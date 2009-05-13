@@ -709,9 +709,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>progressmeter</component-name>
 		<component-class>org.zkoss.zul.Progressmeter</component-class>
+		<widget-class>zul.wgt.Progressmeter</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/progressmeter.dsp</mold-uri>
+			<mold-uri>mold/progressmeter.js</mold-uri>
 		</mold>
 	</component>
 	<component>

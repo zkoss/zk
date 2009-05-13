@@ -18,9 +18,13 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.io.IOException;
+
 import org.zkoss.xml.HTMLs;
+import org.zkoss.xml.XMLs;
 
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -49,7 +53,7 @@ public class Progressmeter extends XulElement implements org.zkoss.zul.api.Progr
 			throw new UiException("Illegal value: "+value+". Range: 0 ~ 100");
 		if (_val != value) {
 			_val = value;
-			smartUpdate("z.value", _val);
+			smartUpdate("value", _val);
 		}
 	}
 	/** Returns the current value of the progress meter.
@@ -80,5 +84,13 @@ public class Progressmeter extends XulElement implements org.zkoss.zul.api.Progr
 	//-- Component --//
 	protected boolean isChildable() {
 		return false;
+	}
+	
+	//super//
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws IOException {
+		super.renderProperties(renderer);
+		render(renderer, "value", _val);
+		
 	}
 }
