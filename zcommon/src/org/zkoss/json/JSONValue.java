@@ -102,10 +102,75 @@ public class JSONValue {
 		if(value instanceof List)
 			return JSONArray.toJSONString((List)value);
 
-		if (value.getClass().isArray())
+		if (value.getClass().isArray()) {
 			if (value instanceof Object[])
 				return JSONArray.toJSONString((Object[])value);
+			if (value instanceof int[])
+				return JSONArray.toJSONString((int[])value);
+			if (value instanceof double[])
+				return JSONArray.toJSONString((double[])value);
+			if (value instanceof long[])
+				return JSONArray.toJSONString((long[])value);
+			if (value instanceof float[])
+				return JSONArray.toJSONString((float[])value);
+			if (value instanceof short[])
+				return JSONArray.toJSONString((short[])value);
+			if (value instanceof byte[])
+				return JSONArray.toJSONString((byte[])value);
+			if (value instanceof boolean[])
+				return JSONArray.toJSONString((boolean[])value);
+			if (value instanceof char[])
+				return JSONArray.toJSONString((char[])value);
+		}
 		return value.toString();
+	}
+	/** Converts an integer to JSON text
+	 * <p>patched by tomyeh
+	 */
+	public static String toJSONString(int value) {
+		return Integer.toString(value);
+	}
+	/** Converts a long to JSON text
+	 * <p>patched by tomyeh
+	 */
+	public static String toJSONString(long value) {
+		return Long.toString(value);
+	}
+	/** Converts a short to JSON text
+	 * <p>patched by tomyeh
+	 */
+	public static String toJSONString(short value) {
+		return Long.toString(value);
+	}
+	/** Converts a double to JSON text
+	 * <p>patched by tomyeh
+	 */
+	public static String toJSONString(double value) {
+		return Double.toString(value);
+	}
+	/** Converts a float to JSON text
+	 * <p>patched by tomyeh
+	 */
+	public static String toJSONString(float value) {
+		return Float.toString(value);
+	}
+	/** Converts a byte to JSON text
+	 * <p>patched by tomyeh
+	 */
+	public static String toJSONString(byte value) {
+		return Byte.toString(value);
+	}
+	/** Converts a boolean to JSON text
+	 * <p>patched by tomyeh
+	 */
+	public static String toJSONString(boolean value) {
+		return Boolean.toString(value);
+	}
+	/** Converts a char to JSON text
+	 * <p>patched by tomyeh
+	 */
+	public static String toJSONString(char value) {
+		return toJSONString("" + value);
 	}
 
 	/**

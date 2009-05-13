@@ -65,6 +65,118 @@ public class JSONArray extends LinkedList implements List, JSONAware {
 		}
 		return sb.append(']').toString();
 	}
+	/** Convert an integer array to JSON text.
+	 * <p>patched by tomyeh
+	 */
+	public static String toJSONString(int[] ary) {
+		if (ary == null)
+			return "null";
+
+		final StringBuffer sb = new StringBuffer().append('[');
+		for (int j = 0; j < ary.length;) {
+			if (j > 0) sb.append(',');
+			sb.append(JSONValue.toJSONString(ary[j]));
+		}
+		return sb.append(']').toString();
+	}
+	/** Convert a long array to JSON text.
+	 * <p>patched by tomyeh
+	 */
+	public static String toJSONString(long[] ary) {
+		if (ary == null)
+			return "null";
+
+		final StringBuffer sb = new StringBuffer().append('[');
+		for (int j = 0; j < ary.length;) {
+			if (j > 0) sb.append(',');
+			sb.append(JSONValue.toJSONString(ary[j]));
+		}
+		return sb.append(']').toString();
+	}
+	/** Convert a short array to JSON text.
+	 * <p>patched by tomyeh
+	 */
+	public static String toJSONString(short[] ary) {
+		if (ary == null)
+			return "null";
+
+		final StringBuffer sb = new StringBuffer().append('[');
+		for (int j = 0; j < ary.length;) {
+			if (j > 0) sb.append(',');
+			sb.append(JSONValue.toJSONString(ary[j]));
+		}
+		return sb.append(']').toString();
+	}
+	/** Convert a float array to JSON text.
+	 * <p>patched by tomyeh
+	 */
+	public static String toJSONString(float[] ary) {
+		if (ary == null)
+			return "null";
+
+		final StringBuffer sb = new StringBuffer().append('[');
+		for (int j = 0; j < ary.length;) {
+			if (j > 0) sb.append(',');
+			sb.append(JSONValue.toJSONString(ary[j]));
+		}
+		return sb.append(']').toString();
+	}
+	/** Convert a double array to JSON text.
+	 * <p>patched by tomyeh
+	 */
+	public static String toJSONString(double[] ary) {
+		if (ary == null)
+			return "null";
+
+		final StringBuffer sb = new StringBuffer().append('[');
+		for (int j = 0; j < ary.length;) {
+			if (j > 0) sb.append(',');
+			sb.append(JSONValue.toJSONString(ary[j]));
+		}
+		return sb.append(']').toString();
+	}
+	/** Convert a byte array to JSON text.
+	 * <p>patched by tomyeh
+	 */
+	public static String toJSONString(byte[] ary) {
+		if (ary == null)
+			return "null";
+
+		final StringBuffer sb = new StringBuffer().append('[');
+		for (int j = 0; j < ary.length;) {
+			if (j > 0) sb.append(',');
+			sb.append(JSONValue.toJSONString(ary[j]));
+		}
+		return sb.append(']').toString();
+	}
+	/** Convert a boolean array to JSON text.
+	 * <p>patched by tomyeh
+	 */
+	public static String toJSONString(boolean[] ary) {
+		if (ary == null)
+			return "null";
+
+		final StringBuffer sb = new StringBuffer().append('[');
+		for (int j = 0; j < ary.length;) {
+			if (j > 0) sb.append(',');
+			sb.append(JSONValue.toJSONString(ary[j]));
+		}
+		return sb.append(']').toString();
+	}
+	/** Convert a char array to JSON text.
+	 * <p>patched by tomyeh
+	 */
+	public static String toJSONString(char[] ary) {
+		if (ary == null)
+			return "null";
+
+		final StringBuffer sb = new StringBuffer().append('[');
+		for (int j = 0; j < ary.length;) {
+			if (j > 0) sb.append(',');
+			sb.append(JSONValue.toJSONString(ary[j]));
+		}
+		return sb.append(']').toString();
+	}
 
 	/** Encodes this object to a JSON string.
 	 * It is the same as {@link #toString()}.
