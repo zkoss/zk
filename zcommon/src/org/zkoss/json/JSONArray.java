@@ -51,6 +51,20 @@ public class JSONArray extends LinkedList implements List, JSONAware {
         sb.append(']');
 		return sb.toString();
 	}
+	/** Convert an object array to JSON text.
+	 * <p>patched by tomyeh
+	 */
+	public static String toJSONString(Object[] ary) {
+		if (ary == null)
+			return "null";
+
+		final StringBuffer sb = new StringBuffer().append('[');
+		for (int j = 0; j < ary.length;) {
+			if (j > 0) sb.append(',');
+			sb.append(JSONValue.toJSONString(ary[j]));
+		}
+		return sb.append(']').toString();
+	}
 
 	/** Encodes this object to a JSON string.
 	 * It is the same as {@link #toString()}.

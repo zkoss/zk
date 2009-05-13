@@ -101,7 +101,10 @@ public class JSONValue {
 		
 		if(value instanceof List)
 			return JSONArray.toJSONString((List)value);
-		
+
+		if (value.getClass().isArray())
+			if (value instanceof Object[])
+				return JSONArray.toJSONString((Object[])value);
 		return value.toString();
 	}
 
