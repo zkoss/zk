@@ -14,40 +14,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
+zk.def(zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	_selected : false,
 	_closable : false,
 	_disabled : false,
 
-	isClosable: function() {
-		return this._closable;
-	},
-	setClosable: function(closable) {
-		if(this._closable != closable) {
-			this._closable = closable;
-			this.rerender();
-		}
-	},
-	isSelected: function() {
-		return this._selected;
-	},
-	setSelected: function(selected) {
-		if (this._selected != selected) {
-			if (this.getNode()) {
-				this._selected = selected;
-				this._selTab(this, false);
-			}
-		}
-	},
-	isDisabled: function() {
-		return this._disabled;
-	},
-	setDisabled: function(disabled) {
-		if (this._disabled != disabled) {
-			this._disabled = disabled;
-			this.rerender();
-		}
-	},
 	getTabbox: function() {
 		return this.parent ? this.parent.parent : null;
 	},
@@ -194,5 +165,14 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		var closebtn = this.getSubnode('close');
 		if (closebtn)
 			this.domUnlisten_(closebtn, "click", '_domClosebtnClick');		
+	}
+}), { //zk.def
+	closable: _zkf = function() {
+		this.rerender();
+	},
+	disabled: _zkf,
+	selected: function(selected) {
+		if (this.getNode())
+			this._selTab(this, false);
 	}
 });

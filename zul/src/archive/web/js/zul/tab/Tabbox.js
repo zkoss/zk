@@ -14,7 +14,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-zul.tab.Tabbox = zk.$extends(zul.Widget, {
+zk.def(zul.tab.Tabbox = zk.$extends(zul.Widget, {
 	_orient: "horizontal",
 	_tabscroll: true,
 	getTabs: function () {
@@ -25,29 +25,9 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 		//The tabpanels must in index 1
 		return this.getChildAt(1);
 	},
-	isTabscroll: function() {
-		return this._tabscroll;
-	},
-	setTabscroll: function(tabscroll) {
-		if (this._tabscroll != tabscroll) {
-			this._tabscroll = tabscroll;
-			this.rerender();
-		}
-	},
 	getZclass: function () {
 		return this._zclass == null ? "z-tabbox" +
 			( this.inAccordionMold() ? "-" + this.getMold() : this.isVertical() ? "-ver" : "") : this._zclass;
-	},
-	setOrient: function(orient) {
-		if ("horizontal" == orient || "vertical" == orient || !this.inAccordionMold()) {
-			if (this._orient != orient) {
-				this._orient = orient;
-				this.rerender();
-			}
-		}
-	},
-	getOrient: function () {
-		return this._orient;
 	},
 	isHorizontal: function() {
 		return "horizontal" == this.getOrient();
@@ -95,17 +75,6 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
             }
         }
 	},
-	getPanelSpacing: function() {
-		return this._panelSpacing;
-	},
-	setPanelSpacing: function(panelSpacing) {
-		if (panelSpacing != null && panelSpacing.length == 0)
-			panelSpacing = null;
-		if (this._panelSpacing != panelSpacing) {
-			this._panelSpacing = panelSpacing;
-			this.rerender();
-		}
-	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
 		this.tabs = this.getTabs();
@@ -123,5 +92,15 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 				}
 			})
 		);
+	}
+}), {//zk.def
+	tabscroll: _zkf = function () {
+		this.rerender();
+	},
+	orient: _zkf,
+	panelSpacing: function(v) {
+		if (v != null && v.length == 0)
+			this._panelSpacing = v = null;
+		this.rerender();
 	}
 });
