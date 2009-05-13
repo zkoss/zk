@@ -24,22 +24,23 @@ zk.Widget = zk.$extends(zk.Object, {
 		this._lsns = {}; //listeners(evtnm,listener)
 		this._$lsns = {}; //listners registered by setListener(evtnm, fn)
 		this._subnodes = {}; //store sub nodes for widget(domId, domNode)
-		
-		if (props) {
-			var mold = props.mold;
-			if (mold != null) {
-				if (mold) this._mold = mold;
-				delete props.mold; //avoid setMold being called
+
+		this.$afterInit(function () {
+			if (props) {
+				var mold = props.mold;
+				if (mold != null) {
+					if (mold) this._mold = mold;
+					delete props.mold; //avoid setMold being called
+				}
+				for (var nm in props)
+					this.set(nm, props[nm]);
 			}
 
-			for (var nm in props)
-				this.set(nm, props[nm]);
-		}
-
-		if (zk.light) { //id == uuid
-			if (this.id) this.uuid = this.id; //setId was called
-			else this.uuid = this.id = zk.Widget.nextUuid();
-		} else if (!this.uuid) this.uuid = zk.Widget.nextUuid();
+			if (zk.light) { //id == uuid
+				if (this.id) this.uuid = this.id; //setId was called
+				else this.uuid = this.id = zk.Widget.nextUuid();
+			} else if (!this.uuid) this.uuid = zk.Widget.nextUuid();
+		});
 	},
 
 	getSpaceOwner: function () {

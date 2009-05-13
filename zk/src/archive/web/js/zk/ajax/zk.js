@@ -50,6 +50,13 @@ zk = {
 
 		var jclass = function() {
 			this.$init.apply(this, arguments);
+
+			var ais = this._$ais;
+			if (ais) {
+				delete this._$ais;
+				for (var j = ais.length; --j >= 0;)
+					ais[j].call(this);
+			}
 		};
 
 		if (typeof superclass == 'string') {
@@ -388,6 +395,9 @@ if (zk.air = zk.agent.indexOf("adobeair") >= 0)
 zk.Object = function () {};
 zk.Object.prototype = {
 	$init: zk.$void,
+	$afterInit: function (f) {
+		(this._$ais = this._$ais || []).unshift(f); //reverse
+	},
 	$class: zk.Object,
 	$instanceof: function (cls) {
 		if (cls) {
