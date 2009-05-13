@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
+zk.def(zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	_open: true,
 	_border: "normal",
 	_maxsize: 2000,
@@ -22,59 +22,6 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		this.$supers('$init', arguments);
 		this._margins = [0, 0, 0, 0];
 		this._cmargins = [5, 5, 5, 5];
-	},
-	getTitle: function () {
-		return this._title;
-	},
-	setTitle: function (title) {
-		if (this._title != title) {
-			this._title = title;
-			this.rerender();
-		}
-	},
-	getBorder: function () {
-		return this._border;
-	},
-	setBorder: function (border) {
-		if (!border || '0' == border)
-			border = "none";
-		if (this._border != border) {
-			this._border = border;
-			this.updateDomClass_();
-		}
-	},
-	isSplittable: function () {
-		return this._splittable;
-	},
-	setSplittable: function (splittable) {
-		if (this._splittable != splittable) {
-			this._splittable = splittable;
-			if (this.parent && this.desktop)
-				this.parent.resize();
-		}
-	},
-	setMaxsize: function (maxsize) {
-		if (this._maxsize != maxsize)
-			this._maxsize = maxsize;
-	},
-	getMaxsize: function () {
-		return this._maxsize;
-	},
-	setMinsize: function (minsize) {
-		if (this._minsize != minsize)
-			this._minsize = minsize;
-	},
-	getMinsize: function () {
-		return this._minsize;
-	},
-	isFlex: function () {
-		return this._flex;
-	},
-	setFlex: function (flex) {
-		if (this._flex != flex) {
-			this._flex = flex;
-			this.rerender();
-		}
 	},
 	getMargins: function () {
 		return zUtl.intsToString(this._margins);
@@ -94,81 +41,6 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			this._cmargins = zUtl.stringToInts(cmargins, 0);
 			if (this.parent && this.desktop)
 				this.parent.resize();
-		}
-	},
-	isCollapsible: function () {
-		return this._collapsible;
-	},
-	setCollapsible: function (collapsible) {
-		if (this._collapsible != collapsible) {
-			this._collapsible = collapsible;
-			var btn = this.getSubnode(this.isOpen() ? 'btn' : 'btned');
-			if (btn)
-				btn.style.display = collapsible ? '' : 'none';
-		}
-	},
-	isAutoscroll: function () {
-		return this._autoscroll;
-	},
-	setAutoscroll: function (autoscroll) {
-		if (this._autoscroll != autoscroll) {
-			this._autoscroll = autoscroll;
-			var cave = this.getSubnode('cave');
-			if (cave) {
-				var bodyEl = this.isFlex() && this.firstChild ?
-						this.firstChild.getNode() : cave;
-				if (autoscroll) {
-					bodyEl.style.overflow = "auto";
-					bodyEl.style.position = "relative";
-					this.domListen_(bodyEl, "scroll");
-				} else {
-					bodyEl.style.overflow = "hidden";
-					bodyEl.style.position = "";
-					this.domUnlisten_(bodyEl, "scroll");
-				}
-			}
-		}
-	},
-	isOpen: function () {
-		return this._open;
-	},
-	setOpen: function (open, fromServer, nonAnima) {
-		if (this._open != open) {
-			this._open = open;
-			if (!this.getNode() || !this.isCollapsible())
-				return; //nothing changed
-
-			var colled = this.getSubnode('colled'),
-				real = this.getSubnode('real');
-			if (open) {
-				if (colled) {
-					if (!nonAnima) 
-						zAnima.slideOut(this, colled, {
-							anchor: this.sanchor,
-							duration: 200,
-							afterAnima: this.$class.afterSlideOut
-						});
-					else {
-						zDom[open ? 'show' : 'hide'](real);
-						zDom[!open ? 'show' : 'hide'](colled);
-						zWatch.fireDown(open ? 'onShow' : 'onHide', {visible:true}, this);
-					}
-				}
-			} else {
-				if (colled && !nonAnima) 
-					zAnima.slideOut(this, real, {
-							anchor: this.sanchor,
-							beforeAnima: this.$class.beforeSlideOut,
-							afterAnima: this.$class.afterSlideOut
-						});
-				else {
-					if (colled)
-						zDom[!open ? 'show' : 'hide'](colled);
-					zDom[open ? 'show' : 'hide'](real);
-				}
-			}
-			if (nonAnima) this.parent.resize();
-			if (!fromServer) this.fire('onOpen', {open:open});
 		}
 	},
 	domClass_: function (no) {
@@ -688,5 +560,80 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			+'px;cursor:'+el.style.cursor+';"></div>';
 		document.body.insertAdjacentHTML("afterBegin", html);
 		return zDom.$("zk_layoutghost");
+	}
+}), {//zk.def
+	title: _zkf = function () {
+		this.rerender();
+	},
+	flex: _zkf,
+	border: function (border) {
+		if (!border || '0' == border)
+			this._border = border = "none";
+		this.updateDomClass_();
+	},
+
+	splittable: function (splittable) {
+		if (this.parent && this.desktop)
+			this.parent.resize();
+	},
+	maxsize: null,
+	minsize: null,
+
+	collapsible: function (collapsible) {
+		var btn = this.getSubnode(this.isOpen() ? 'btn' : 'btned');
+		if (btn)
+			btn.style.display = collapsible ? '' : 'none';
+	},
+	autoscroll: function (autoscroll) {
+		var cave = this.getSubnode('cave');
+		if (cave) {
+			var bodyEl = this.isFlex() && this.firstChild ?
+					this.firstChild.getNode() : cave;
+			if (autoscroll) {
+				bodyEl.style.overflow = "auto";
+				bodyEl.style.position = "relative";
+				this.domListen_(bodyEl, "scroll");
+			} else {
+				bodyEl.style.overflow = "hidden";
+				bodyEl.style.position = "";
+				this.domUnlisten_(bodyEl, "scroll");
+			}
+		}
+	},
+	open: function (open, fromServer, nonAnima) {
+		if (!this.getNode() || !this.isCollapsible())
+			return; //nothing changed
+
+		var colled = this.getSubnode('colled'),
+			real = this.getSubnode('real');
+		if (open) {
+			if (colled) {
+				if (!nonAnima) 
+					zAnima.slideOut(this, colled, {
+						anchor: this.sanchor,
+						duration: 200,
+						afterAnima: this.$class.afterSlideOut
+					});
+				else {
+					zDom[open ? 'show' : 'hide'](real);
+					zDom[!open ? 'show' : 'hide'](colled);
+					zWatch.fireDown(open ? 'onShow' : 'onHide', {visible:true}, this);
+				}
+			}
+		} else {
+			if (colled && !nonAnima) 
+				zAnima.slideOut(this, real, {
+						anchor: this.sanchor,
+						beforeAnima: this.$class.beforeSlideOut,
+						afterAnima: this.$class.afterSlideOut
+					});
+			else {
+				if (colled)
+					zDom[!open ? 'show' : 'hide'](colled);
+				zDom[open ? 'show' : 'hide'](real);
+			}
+		}
+		if (nonAnima) this.parent.resize();
+		if (!fromServer) this.fire('onOpen', {open:open});
 	}
 });

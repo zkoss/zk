@@ -12,56 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.utl.Script = zk.$extends(zk.Widget, {
-	/** Returns the content of JavaScript codes to execute.
-	 */
-	getContent: function () {
-		return this._content;
-	},
-	/** Sets the content of JavaScript code snippet to execute.
-	 * <p>Note: the codes won't be evaluated until it is attached the
-	 * DOM tree. If it is attached, the JavaScript code sippet is executed
-	 * immediately. In additions, it executes only once.
-	 * <p>When the JavaScript code snipped is executed, you can access
-	 * this widget by use of <code>this</code>. In other words,
-	 * it was executed in the context of a member method of this widget.
-	 * @param cnt the content. It could be a String instance, or
-	 * a Function instance.
-	 */
-	setContent: function (cnt) {
-		this._content = cnt;
-		if (cnt) {
-			this._fn = typeof cnt == 'function' ? cnt: new Function(cnt);
-			if (this.desktop) //check parent since no this.getNode()
-				this._exec();
-		} else
-			this._fn = null;
-	},
-	/** Returns the src of the JavaScript file.
-	 */
-	getSrc: function () {
-		return this._src;
-	},
-	/** Sets the src (URI) of the JavaScript file.
-	 */
-	setSrc: function (src) {
-		this._src = src;
-		if (src) {
-			this._srcrun = false;
-			if (this.desktop)
-				this._exec();
-		}
-	},
-
-	/** Returns the charset. */
-	getCharset: function () {
-		return this._charset;
-	},
-	/** Sets the charset. */
-	setCharset: function (charset) {
-		this._charset = charset;
-	},
-
+zk.def(zul.utl.Script = zk.$extends(zk.Widget, {
 	_exec: function () {
 		var pkgs = this.packages; //not visible to client (since meaningless)
 		if (!pkgs) return this._exec0();
@@ -95,4 +46,21 @@ zul.utl.Script = zk.$extends(zk.Widget, {
 		this.$supers('bind_', arguments);
 		this._exec();
 	}
+}), { //zk.def
+	content: function (cnt) {
+		if (cnt) {
+			this._fn = typeof cnt == 'function' ? cnt: new Function(cnt);
+			if (this.desktop) //check parent since no this.getNode()
+				this._exec();
+		} else
+			this._fn = null;
+	},
+	src: function (src) {
+		if (src) {
+			this._srcrun = false;
+			if (this.desktop)
+				this._exec();
+		}
+	},
+	charset: null
 });

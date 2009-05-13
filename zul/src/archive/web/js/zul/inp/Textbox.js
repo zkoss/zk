@@ -16,15 +16,6 @@ zk.def(zul.inp.Textbox = zk.$extends(zul.inp.InputWidget, {
 	_value: '',
 	_rows: 1,
 
-	setType: function (type) {
-		if (this._type != type) {
-			this._type = type;
-			var inp = this.getInputNode();
-			if (inp)
-				inp.type = type;
-		}
-	},
-
 	//super//
 	textAttrs_: function () {
 		var html = this.$supers('textAttrs_', arguments);
@@ -45,5 +36,10 @@ zk.def(zul.inp.Textbox = zk.$extends(zul.inp.InputWidget, {
 		var inp = this.getInputNode();
 		if (inp && this.isMultiline())
 			inp.rows = v;
+	},
+	type: function (type) {
+		var inp = this.getInputNode();
+		if (inp)
+			inp.type = type;
 	}
 });

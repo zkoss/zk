@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.layout.East = zk.$extends(zul.layout.LayoutRegion, {
+zul.layout.East = zk.$extends(_zkbc = zul.layout.LayoutRegion, {
 	setHeight: zk.$void, // readonly
 	sanchor: 'r',
 
@@ -23,10 +23,6 @@ zul.layout.East = zk.$extends(zul.layout.LayoutRegion, {
 	getPosition: function () {
 		return zul.layout.Borderlayout.EAST;
 	},
-	getSize: function () {
-		return this.getWidth();
-	},
-	setSize: function (size) {
-		this.setWidth(size);
-	}
+	getSize: _zkbc.prototype.getWidth,
+	setSize: _zkbc.prototype.setWidth
 });

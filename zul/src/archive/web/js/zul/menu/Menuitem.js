@@ -12,82 +12,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
+zk.def(zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 	_value: "",
 
-	isCheckmark: function () {
-		return this._checkmark;
-	},
-	setCheckmark: function (checkmark) {
-		if (this._checkmark != checkmark) {
-			this._checkmark = checkmark;
-			this.rerender();
-		}
-	},
-	setDisabled: function (disabled) {
-		if (this._disabled != disabled) {
-			this._disabled = disabled;
-			this.rerender();
-		}
-	},
-	isDisabled: function () {
-		return this._disabled;
-	},
-	getValue: function () {
-		return this._value;
-	},
-	setValue: function (value) {
-		if (!value)	value = "";
-		this._value = value;
-	},
-	isChecked: function () {
-		return this._checked;
-	},
-	setChecked: function (checked) {
-		if (this._checked != checked) {
-			this._checked = checked;
-			if (this._checked)
-				this._checkmark = this._checked;
-			var n = this.getNode();
-			if (n && !this.isTopmost() && !this.getImage()) {
-				var zcls = this.getZclass();
-				zDom.rmClass(n, zcls + '-cnt-ck');
-				zDom.rmClass(n, zcls + '-cnt-unck');
-				if (this._checkmark)
-					zDom.addClass(n, zcls + (this._checked ? '-cnt-ck' : '-cnt-unck'));
-			}
-		}
-	},
-	isAutocheck: function () {
-		return this._autocheck;
-	},
-	setAutocheck: function (autocheck) {
-		if (this._autocheck != autocheck)
-			this._autocheck = autocheck;
-	},
-	getHref: function () {
-		return this._href;
-	},
-	setHref: function (href) {
-		if (this._href != href) {
-			this._href = href;
-			this.rerender();
-		}
-	},
-	getTarget: function () {
-		return this._target;
-	},
-	setTarget: function (target) {
-		if (this._target !=  target) {
-			this._target = target;
-			var anc = this.getSubnode('a');
-			if (anc) {
-				if (this.isTopmost())
-					anc = anc.parentNode;
-				anc.target = this._target;
-			}
-		}
-	},
 	isTopmost: function () {
 		return this._topmost;
 	},
@@ -236,5 +163,33 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 			n = top ? wgt.getSubnode('a') : wgt.getNode(),
 			cls = wgt.getZclass() + (top ? '-body-over' : '-over');
 		zDom.rmClass(n, cls);
+	}
+}), {//zk.def
+	checkmark: _zkf = function () {
+		this.rerender();
+	},
+	disabled: _zkf,
+	href: _zkf,
+	value: null,
+	checked: function (checked) {
+		if (checked)
+			this._checkmark = checked;
+		var n = this.getNode();
+		if (n && !this.isTopmost() && !this.getImage()) {
+			var zcls = this.getZclass();
+			zDom.rmClass(n, zcls + '-cnt-ck');
+			zDom.rmClass(n, zcls + '-cnt-unck');
+			if (this._checkmark)
+				zDom.addClass(n, zcls + (checked ? '-cnt-ck' : '-cnt-unck'));
+		}
+	},
+	autocheck: null,
+	target: function (target) {
+		var anc = this.getSubnode('a');
+		if (anc) {
+			if (this.isTopmost())
+				anc = anc.parentNode;
+			anc.target = this._target;
+		}
 	}
 });

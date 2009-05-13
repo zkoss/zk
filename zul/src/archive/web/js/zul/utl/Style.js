@@ -12,17 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.utl.Style = zk.$extends(zk.Widget, {
-	getSrc: function () {
-		return this._src;
-	},
-	setSrc: function (src) {
-		if (this._src != src) {
-			this._src = src;
-			if (this.desktop) this._updLink();
-		}
-	},
-
+zk.def(zul.utl.Style = zk.$extends(zk.Widget, {
 	//super//
 	bind_: function () {
 		this.$supers('bind_', arguments);
@@ -62,5 +52,9 @@ zul.utl.Style = zk.$extends(zk.Widget, {
 				return lns[j];
 	},
 	redraw: function () { //nothing to do
+	}
+}), {
+	src: function () {
+		if (this.desktop) this._updLink();
 	}
 });

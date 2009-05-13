@@ -52,6 +52,7 @@ import org.zkoss.web.util.resource.ExtendletContext;
 import org.zkoss.web.util.resource.ExtendletConfig;
 import org.zkoss.web.util.resource.ExtendletLoader;
 
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.WidgetDefinition;
 
@@ -145,6 +146,8 @@ public class WpdExtendlet implements Extendlet {
 	private Object parse(InputStream is, String path) throws Exception {
 		final Element root = new SAXBuilder(true, false, true).build(is).getRootElement();
 		final String name = IDOMs.getRequiredAttributeValue(root, "name");
+		if (name.length() == 0)
+			throw new UiException("The name attribute must be specified, "+root.getLocator());
 		final boolean zk = "zk".equals(name);
 		final String lang = root.getAttributeValue("language");
 		final LanguageDefinition langdef = //optional

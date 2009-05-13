@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.inp.InputWidget = zk.$extends(zul.Widget, {
+zk.def(zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	_maxlength: 0,
 	_cols: 0,
 	_tabindex: -1,
@@ -44,83 +44,6 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	getInputNode: function () {
 		return this.getNode();
-	},
-
-	getName: function () {
-		return this._name;
-	},
-	setName: function (name) {
-		if (this._name != name) {
-			this._name = name;
-			var inp = this.getInputNode();
-			if (inp)
-				inp.name = name;
-		}
-	},
-	isDisabled: function () {
-		return this._disabled;
-	},
-	setDisabled: function (disabled) {
-		if (this._disabled != disabled) {
-			this._disabled = disabled;
-			var inp = this.getInputNode();
-			if (inp) {
-				inp.disabled = disabled;
-				var zcls = this.getZclass(),
-					fnm = disabled ? 'addClass': 'rmClass';
-				zDom[fnm](this.getNode(), zcls + '-disd');
-				zDom[fnm](inp, zcls + '-text-disd');
-			}
-		}
-	},
-	isReadonly: function () {
-		return this._readonly;
-	},
-	setReadonly: function (readonly) {
-		if (this._readonly != readonly) {
-			this._readonly = readonly;
-			var inp = this.getInputNode();
-			if (inp) {
-				inp.readOnly = readonly;
-				zDom[readonly ? 'addClass': 'rmClass'](inp,
-					this.getZclass() + '-readonly');
-			}
-		}
-	},
-
-	getCols: function () {
-		return this._cols;
-	},
-	setCols: function (cols) {
-		if (this._cols != cols) {
-			this._cols = cols;
-			var inp = this.getInputNode();
-			if (inp)
-				if (this.isMultiline()) inp.cols = cols;
-				else inp.size = cols;
-		}
-	},
-	getMaxlength: function () {
-		return this._maxlength;
-	},
-	setMaxlengths: function (maxlength) {
-		if (this._maxlength != maxlength) {
-			this._maxlength = maxlength;
-			var inp = this.getInputNode();
-			if (inp && !this.isMultiline())
-				inp.maxLength = maxlength;
-		}
-	},
-	getTabindex: function () {
-		return this._tabindex;
-	},
-	setTabindex: function (tabindex) {
-		if (this._tabindex != tabindex) {
-			this._tabindex = tabindex;
-			var inp = this.getInputNode();
-			if (inp)
-				inp.tabIndex = tabindex;
-		}
 	},
 
 	domAttrs_: function (no) {
@@ -419,5 +342,46 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	beforeCtrlKeys_: function (evt) {
 		this.updateChange_();
+	}
+}), {
+	name: function (name) {
+		var inp = this.getInputNode();
+		if (inp)
+			inp.name = name;
+	},
+	disabled: function (disabled) {
+		var inp = this.getInputNode();
+		if (inp) {
+			inp.disabled = disabled;
+			var zcls = this.getZclass(),
+				fnm = disabled ? 'addClass': 'rmClass';
+			zDom[fnm](this.getNode(), zcls + '-disd');
+			zDom[fnm](inp, zcls + '-text-disd');
+		}
+	},
+	readonly: function (readonly) {
+		var inp = this.getInputNode();
+		if (inp) {
+			inp.readOnly = readonly;
+			zDom[readonly ? 'addClass': 'rmClass'](inp,
+				this.getZclass() + '-readonly');
+		}
+	},
+
+	cols: function (cols) {
+		var inp = this.getInputNode();
+		if (inp)
+			if (this.isMultiline()) inp.cols = cols;
+			else inp.size = cols;
+	},
+	maxlengths: function (maxlength) {
+		var inp = this.getInputNode();
+		if (inp && !this.isMultiline())
+			inp.maxLength = maxlength;
+	},
+	tabindex: function (tabindex) {
+		var inp = this.getInputNode();
+		if (inp)
+			inp.tabIndex = tabindex;
 	}
 });
