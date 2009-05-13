@@ -144,7 +144,7 @@ zk.def(zul.wnd.Window = zk.$extends(zul.Widget, {
 			handle.style.cursor = "move";
 			var $Window = this.$class;
 			this._drag = new zk.Draggable(this, null, {
-				handle: handle, overlay: true, stackup: true,
+				handle: handle, stackup: true,
 				starteffect: $Window._startmove,
 				ghosting: $Window._ghostmove,
 				endghosting: $Window._endghostmove,

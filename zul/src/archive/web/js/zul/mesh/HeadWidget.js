@@ -19,9 +19,9 @@ zk.def(zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 	},
 	onColSize: function (evt) {
 		var owner = this.parent;
-		if (!owner.isFixedLayout()) owner.$class.adjustHeadWidth(owner);
+		if (!owner.isFixedLayout()) owner.$class._adjHeadWd(owner);
 		owner.fire('onInnerWidth', owner.eheadtbl.style.width);
-		owner.fireScrollRender(zk.gecko ? 200 : 60);
+		owner.fireOnRender(zk.gecko ? 200 : 60);
 	},
 	unbind_: function () {
 		if (this.hdfaker) zDom.remove(this.hdfaker);

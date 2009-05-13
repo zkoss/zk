@@ -38,14 +38,17 @@ zk.def(zul.mesh.Paging = zk.$extends(zul.Widget, {
 				this._activePage = this._pageCount - 1;
 		}
 	},
+	infoText_: function () {
+		var lastItem = (this._activePage+1) * this._pageSize;
+		return "[ " + (this._activePage * this._pageSize + 1) + ("os" != this.getMold() ?
+			" - " + (lastItem > this._totalSize ? this._totalSize : lastItem) : "")+ " / " + this._totalSize + " ]";
+	},
 	_infoTags: function () {
 		if (this._totalSize == 0)
 			return "";
 		var lastItem = (this._activePage+1) * this._pageSize,
 			out = [];
-		out.push('<div class="', this.getZclass(), '-info">[ ', lastItem + 1,
-				' - ', lastItem > this._totalSize ? this._totalSize : lastItem, ' / ',
-				this._totalSize, ' ]</div>');
+		out.push('<div id="', this.uuid ,'$info" class="', this.getZclass(), '-info">', this.infoText_(), '</div>');
 		return out.join('');
 	},
 	_innerTags: function () {
@@ -85,7 +88,7 @@ zk.def(zul.mesh.Paging = zk.$extends(zul.Widget, {
 				this.appendAnchor(zcs, out, msgzul.LAST, this._pageCount - 1);
 		}
 		if (this._detailed)
-			out.push('<span>[', this._activePage * this._pageSize + 1, '/', this._totalSize, "]</span>");
+			out.push('<span id="', this.uuid ,'$info">', this.infoText_(), "</span>");
 		return out.join('');
 	},
 	appendAnchor: function (zclass, out, label, val, seld) {
@@ -333,7 +336,13 @@ zk.def(zul.mesh.Paging = zk.$extends(zul.Widget, {
 }), { //zk.def
 	totalSize: function () {
 		this._updatePageNum();
-		if (this._detailed) rerender();
+		if (this._detailed) {
+			if (this.isBothPaging()) this.rerender();
+			else {
+				var info = this.getSubnode("info");
+				if (info) info.innerHTML = this.infoText_();
+			}
+		}
 	},
 	pageIncrement: _zkf = function () {
 		this.rerender();

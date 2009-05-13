@@ -180,7 +180,7 @@ zDom = { //static methods
 	},
 	ncols: function (row, visibleOnly) {
 		var cnt = 0, cells;
-		if (row && (cells = rows.cells)) {
+		if (row && (cells = row.cells)) {
 			for (var j = 0, cl = cells.length; j < cl; ++j)
 				if (!visibleOnly || zDom.isVisible(cl)) {
 					var span = cells[j].colSpan;

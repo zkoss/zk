@@ -83,7 +83,7 @@ zk.def(zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 
 			if (this.isTopmost()) {
 				this.domUnlisten_(anc, "focus");
-				this.domUnisten_(anc, "blur");
+				this.domUnlisten_(anc, "blur");
 			}
 		}
 

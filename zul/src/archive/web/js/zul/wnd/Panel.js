@@ -238,7 +238,7 @@ zk.def(zul.wnd.Panel = zk.$extends(zul.Widget, {
 			handle.style.cursor = "move";
 			var $Panel = this.$class;
 			this._drag = new zk.Draggable(this, null, {
-				handle: handle, overlay: true, stackup: true,
+				handle: handle, stackup: true,
 				starteffect: $Panel._startmove,
 				ignoredrag: $Panel._ignoremove,
 				endeffect: $Panel._aftermove});

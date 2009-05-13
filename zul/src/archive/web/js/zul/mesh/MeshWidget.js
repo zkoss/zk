@@ -320,7 +320,6 @@ zk.def(zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	}
 }, { //static
 	_adjHeadWd: function (wgt) {
-		// function (hdfaker, bdfaker, ftfaker, rows) {
 		var hdfaker = wgt.ehdfaker,
 			bdfaker = wgt.ebdfaker,
 			ftfaker = wgt.eftfaker;

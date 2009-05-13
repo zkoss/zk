@@ -77,13 +77,13 @@ zk.Draggable = zk.$extends(zk.Object, {
 		//disable selection
 		zDom.disableSelection(document.body); // Bug #1820433
 		zDom.clearSelection(); // Bug #2721980
-		if (this.opts.overlay) { // Bug #1911280
-			this._overlay = document.createElement("DIV");
-			document.body.appendChild(this._overlay);
-			this._overlay = zDom.setOuterHTML(this._overlay,
-				'<div class="z-dd-overlay" id="zk_dd_overlay"></div>');
-			zDom.disableSelection(this._overlay);
-			var st = this._overlay.style;
+		if (this.opts.stackup) { // Bug #1911280
+			this.stackup = document.createElement("DIV");
+			document.body.appendChild(this.stackup);
+			this.stackup = zDom.setOuterHTML(this.stackup,
+				'<div class="z-dd-stackup"></div>');
+			zDom.disableSelection(this.stackup);
+			var st = this.stackup.style;
 			st.width = zDom.pageWidth() + "px";
 			st.height = zDom.pageHeight() + "px";
 		}
@@ -191,9 +191,9 @@ zk.Draggable = zk.$extends(zk.Object, {
 
 	_finishDrag: function(evt, success) {
 		this.dragging = false;
-		if (this._overlay) {
-			zDom.remove(this._overlay);
-			delete this._overlay;
+		if (this.stackup) {
+			zDom.remove(this.stackup);
+			delete this.stackup;
 		}
 
 		//enable selection back and clear selection if any

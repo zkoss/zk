@@ -93,7 +93,9 @@ zk.debug.Debugger = zk.$extends(zk.Object, {
 				if (end >= 0 && end < mid) {
 					content = text.substring(0, end + 2);
 					handler.startTag(deep, content, true);
-					text = text.substring(end + 2);
+					text = text.substring(end + 2).trim();
+					if (text.startsWith('</')) 
+						deep--;
 				} else {
 					content = text.substring(0, mid + 1);
 					text = text.substring(mid + 1).trim();
