@@ -706,14 +706,28 @@ zDom = { //static methods
 		return map;
 	},
 
-	redoCSS: function (el) {
+	redoCSS: zk.ie ? function (el, timeout) {
 		el = zDom.$(el);
 		if (el) {
 			try {
+				var z = el.style.zoom;
+				el.style.zoom = 1;
 				el.className += ' ';
+				if (el.offsetHeight);
 				el.className.trim();
-			} catch (e) {
-			}
+				setTimeout(function () {try {
+					el.style.zoom = z;
+				} catch (e){}}, timeout > 0 ? timeout: 1);
+			} catch (e) {}
+		}
+	} : function (el) {
+		el = $e(el);
+		if (el) {
+			try {
+				el.className += ' ';
+				if (el.offsetHeight);
+				el.className.trim();
+			} catch (e) {}
 		}
 	},
 	reOuter: function (el) {
