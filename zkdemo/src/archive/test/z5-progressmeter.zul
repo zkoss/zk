@@ -1,0 +1,28 @@
+<?page title="test progressmeter" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window id="win" title="progressmeter test" border="normal">
+	<progressmeter id="pp" value="50" />
+	
+	<vbox>
+		<hbox>
+			<button label="width=200px" onClick='pp.setWidth("200px");' />
+			<button label="width=20%" onClick='pp.setWidth("20%");' />
+			<button label="win.width=40%" onClick='win.setWidth("40%");' />
+			<button label="height=100px"
+				onClick='pp.setHeight("100px");' />
+			<button label="value=30" onClick='pp.setValue(30);' />
+		</hbox>
+		<hbox>
+			<button label="width=100px" onClick='pp.setWidth("100px");' />
+			<button label="width=70%" onClick='pp.setWidth("70%");' />
+			<button label="win.width=100%" onClick='win.setWidth("100%");' />
+			<button label="height=50px" onClick='pp.setHeight("50px");' />
+			<button label="value=60" onClick='pp.setValue(60);' />
+		</hbox>
+	</vbox>
+	<zscript>
+		pp.setWidth("100px");
+		pp.setValue(60);
+	</zscript>
+	</window>
+</zk>
