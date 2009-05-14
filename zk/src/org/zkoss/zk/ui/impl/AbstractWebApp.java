@@ -270,7 +270,9 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 	 * {@link DesktopCacheProvider#sessionWillPassivate}.
 	 */
 	public void sessionWillPassivate(Session sess) {
-		_provider.sessionWillPassivate(sess);
+		if (_provider != null)
+			_provider.sessionWillPassivate(sess);
+//Provider might be stopped before sessionDidActivate is called (Tomcat 5.5.2)
 	}
 	/** Invokes {@link #getDesktopCacheProvider}'s
 	 * {@link DesktopCacheProvider#sessionDidActivate}.

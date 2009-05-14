@@ -107,20 +107,21 @@ public class SimpleSession implements Session, SessionCtrl {
 	public SimpleSession(WebApp wapp, HttpSession hsess, Object request) {
 		this(wapp, (Object)hsess, request);
 	}
-	/** Construts a ZK session with a Portlet session.
+	/** Construts a ZK session with either a HTTP session or a Portlet session.
 	 *
 	 * <p>Note: it assumes the scope of attributes is
 	 * PortletSession.APPLICATION_SCOPE.
 	 *
-	 * @param psess the original Portlet session.
+	 * @param psess the original session, either an instance of
+	 * HttpSession or PortletSession.
+	 * Notice: we don't declare PortletSession in API
+	 * to avoid this class failed to be loaded in some system (without
+	 * portlet-api.jar)
 	 * @param request the original request causing this session to be created.
 	 * If portlet, it is javax.portlet.RenderRequest.
-	 * @since 3.0.5
+	 * @since 3.6.2
 	 */
-	public SimpleSession(WebApp wapp, PortletSession psess, Object request) {
-		this(wapp, (Object)psess, request);
-	}
-	private SimpleSession(WebApp wapp, Object navsess, Object request) {
+	public SimpleSession(WebApp wapp, Object navsess, Object request) {
 		if (wapp == null || navsess == null)
 			throw new IllegalArgumentException();
 
