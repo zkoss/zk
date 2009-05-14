@@ -19,6 +19,7 @@ import java.io.*;
 
 import org.zkoss.lang.SystemException;
 import org.zkoss.util.Locales;
+import org.zkoss.util.logging.Log;
 import org.zkoss.io.Files;
 import org.zkoss.io.FileWriter;
 import org.zkoss.io.FileReader;
@@ -34,7 +35,12 @@ import org.zkoss.zk.ui.http.WpdExtendlet;
  * @author tomyeh
  */
 public class Lighter {
+	private static int _cnt = 0;
+
 	public static void main(String[] args) throws Exception {
+		Log.setHierarchy(false);
+		Log.lookup("org.zkoss").setLevel(Log.ERROR);
+
 		if (args.length != 1) {
 			System.err.println("ZK Lighter - ZK Light JavaScript/CSS Generator\n\n"
 			+"Usage:\n\tjava -classpath $CP org.zkoss.zklighter.Lighter zklighter.xml\n");
@@ -50,6 +56,7 @@ public class Lighter {
 			else if ("copy".equals(nm)) copy(el);
 			else throw new IOException("Unknown "+nm+", "+el.getLocator());
 		}
+		System.out.println(_cnt+" files are processed successfully");
 	}
 
 	//copy//
@@ -57,10 +64,10 @@ public class Lighter {
 		final File dst = new File(IDOMs.getRequiredElementValue(el, "destination"));
 		for (Iterator it = el.getElements("source").iterator(); it.hasNext();) {
 			final File src = new File(((Element)it.next()).getText(true));
-			System.out.println("Copy "+src+" to "+dst);
 			if (dst.isFile())
 				throw new IOException("Directory required: "+dst);
 			dst.mkdirs();
+			++_cnt;
 			Files.copy(dst, src, Files.CP_UPDATE|Files.CP_SKIP_SVN);
 		}
 	}
@@ -110,7 +117,7 @@ public class Lighter {
 			dst = new File(dst.getParent(), sb.toString());
 		}
 
-		System.out.println("Generate "+dst);
+		++_cnt;
 		dst.getParentFile().mkdirs();
 		FileOutputStream out = new FileOutputStream(dst);
 		try {
@@ -149,7 +156,7 @@ public class Lighter {
 	private static
 	void outCombinedCSS(File dst, List srcs, List browsers, CSSInfo ci)
 	throws IOException {
-		System.out.println("Generate "+dst);
+		++_cnt;
 		Writer out = new FileWriter(dst, "UTF-8");
 		try {
 			boolean ignoreInclude = false;
@@ -167,8 +174,8 @@ public class Lighter {
 	}
 	private static void outCSS(File dst, List srcs, String browser, CSSInfo ci)
 	throws IOException {
+		++_cnt;
 		dst = renByBrowser(dst, browser);
-		System.out.println("Generate "+dst);
 		Writer out = new FileWriter(dst, "UTF-8");
 		try {
 			for (Iterator it = srcs.iterator(); it.hasNext();) {
