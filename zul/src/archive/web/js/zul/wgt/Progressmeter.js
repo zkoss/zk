@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.wgt.Progressmeter = zk.$extends(zul.Widget, {
+zk.def(zul.wgt.Progressmeter = zk.$extends(zul.Widget, {
 	//super//
 	_value: 0,
 	getZclass: function () {
@@ -24,7 +24,7 @@ zul.wgt.Progressmeter = zk.$extends(zul.Widget, {
 			img = this.getSubnode("img");
 		if (img) {
 			if (zk.ie6Only) img.style.width = ""; //Bug 1899749
-				img.style.width = Math.round((n.clientWidth * this._value) / 100) + "px";
+			img.style.width = Math.round((n.clientWidth * this._value) / 100) + "px";
 		}
 	},
 	onSize: _zkf,
@@ -44,11 +44,8 @@ zul.wgt.Progressmeter = zk.$extends(zul.Widget, {
 		this.$supers('setWidth', arguments);
 		this._fixImgWidth();
 	}
-});
-
-//getter setter part...
-zk.def(zul.wgt.Progressmeter,{
-	value: function (val) {
+}), { //zk.def
+	value: function () {
 		if(this.getNode()) 
 			this._fixImgWidth();
 	}
