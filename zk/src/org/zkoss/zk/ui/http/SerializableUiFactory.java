@@ -45,12 +45,18 @@ public class SerializableUiFactory extends AbstractUiFactory {
 
 	public Session newSession(WebApp wapp, Object nativeSess, Object request) {
 		if (_uiFactory == null) {
-			if (_uiFactoryClass == null)
-				throw new UnsupportedOperationException("Clustering supported only in the Enterprise edition");
-			try {
-				_uiFactory = (UiFactory)_uiFactoryClass.newInstance();
-			} catch (Throwable ex) {
-				throw UiException.Aide.wrap(ex);
+			synchronized (this) {
+				if (_uiFactory == null) {
+					if (_uiFactoryClass == null)
+						throw new UnsupportedOperationException("Clustering supported only in the Enterprise edition");
+					final UiFactory uif;
+					try {
+						uif = (UiFactory)_uiFactoryClass.newInstance();
+					} catch (Throwable ex) {
+						throw UiException.Aide.wrap(ex);
+					}
+					_uiFactory = uif;
+				}
 			}
 		}
 
