@@ -59,7 +59,7 @@ public class JSONArray extends LinkedList implements List, JSONAware {
 			return "null";
 
 		final StringBuffer sb = new StringBuffer().append('[');
-		for (int j = 0; j < ary.length;) {
+		for (int j = 0; j < ary.length; j++) {
 			if (j > 0) sb.append(',');
 			sb.append(JSONValue.toJSONString(ary[j]));
 		}
