@@ -790,15 +790,8 @@ zAu.cmd1 = {
 		child.insertHTML(document.body, "beforeEnd");
 	},
 	rm: function (uuid, wgt) {
-		if (wgt) {
-			var p = wgt.parent;
-			if (p) p.removeChild(wgt);
-			else {
-				p = wgt.getNode();
-				wgt.unbind_();
-				zDom.remove(p);
-			}
-		}
+		if (wgt)
+			wgt.detach();
 	},
 	focus: function (uuid, wgt) {
 		setTimeout(function() {wgt.focus();}, 5);

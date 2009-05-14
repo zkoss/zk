@@ -31,7 +31,7 @@ zk.def(zul.menu.Menubar = zk.$extends(zul.Widget, {
 			zDom.insertHTMLBeforeEnd(this.getNode(),
 				this.encloseChildHTML_({child: child, vertical: 'vertical' == this.getOrient()}));
 
-		child.bind_(desktop);
+		zk.Widget.bind(child, desktop);
 	},
 	removeChildHTML_: function (child, prevsib) {
 		this.$supers('removeChildHTML_', arguments);

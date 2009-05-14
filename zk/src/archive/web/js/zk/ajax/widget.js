@@ -211,7 +211,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		else {
 			var n = this.getNode();
 			if (n) {
-				this.unbind_();
+				zk.Widget.unbind(this);
 				zDom.remove(n);
 			}
 		}
@@ -257,7 +257,8 @@ zk.Widget = zk.$extends(zk.Object, {
 		var node = this.getNode(), kidnode = child.getNode();
 			dt = this.desktop, kiddt = child.desktop,
 			oldpt = child.parent;
-		child._node = this._node = child.desktop = this.desktop = null; //to avoid bind_ and unbind_
+		child._node = this._node = child.desktop = this.desktop = null;
+			//to avoid bind_ and unbind_
 		try {
 			oldpt.removeChild(child);
 			this.insertBefore(child, moveBefore);
@@ -587,10 +588,10 @@ zk.Widget = zk.$extends(zk.Object, {
 		var p = this.parent;
 		if (p) p.replaceChildHTML_(this, n, desktop, skipper);
 		else {
-			var oldwgt = zk.Widget.$(n);
-			if (oldwgt) oldwgt.unbind_(skipper); //unbind first (w/o removal)
+			var Widget = zk.Widget, oldwgt = Widget.$(n);
+			if (oldwgt) Widget.unbind(oldwgt, skipper); //unbind first (w/o removal)
 			zDom.setOuterHTML(n, this._redrawHTML(skipper));
-			this.bind_(desktop, skipper);
+			Widget.bind(this, desktop, skipper);
 		}
 
 		if (cf && !zk.currentFocus) cf.focus();
@@ -602,7 +603,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	insertHTML: function (n, where, desktop) {
 		n.insertAdjacentHTML(where, this._redrawHTML());
-		this.bind_(desktop);
+		zk.Widget.bind(this, desktop);
 	},
 	_redrawHTML: function (skipper) {
 		var out = [];
@@ -631,10 +632,10 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 
 	replaceChildHTML_: function (child, n, desktop, skipper) {
-		var oldwgt = zk.Widget.$(n);
-		if (oldwgt) oldwgt.unbind_(skipper); //unbind first (w/o removal)
+		var Widget = zk.Widget, oldwgt = Widget.$(n);
+		if (oldwgt) Widget.unbind(oldwgt, skipper); //unbind first (w/o removal)
 		zDom.setOuterHTML(n, child._redrawHTML(skipper));
-		child.bind_(desktop, skipper);
+		Widget.bind(child, desktop, skipper);
 	},
 	insertChildHTML_: function (child, before, desktop) {
 		var bfn, ben;
@@ -663,7 +664,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			zDom.insertHTMLBefore(bfn, child._redrawHTML());
 		else
 			zDom.insertHTMLBeforeEnd(ben, child._redrawHTML());
-		child.bind_(desktop);
+		zk.Widget.bind(child, desktop);
 	},
 	getCaveNode_: function () {
 		return this.getSubnode('cave') || this.getNode();
@@ -686,7 +687,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		var n = child.getNode();
 		if (!n) child._prepareRemove(n = []);
 
-		child.unbind_();
+		zk.Widget.unbind(child);
 
 		if (n.$array)
 			for (var j = n.length; --j >= 0;)
@@ -718,7 +719,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		return n;
 	},
 
-	bind_: function (desktop, skipper) {
+	bind_: function (desktop, skipper, after) {
 		zk.Widget._binds[this.uuid] = this;
 
 		if (!desktop) desktop = zk.Desktop.$(this.uuid);
@@ -729,9 +730,9 @@ zk.Widget = zk.$extends(zk.Object, {
 
 		for (var child = this.firstChild; child; child = child.nextSibling)
 			if (!skipper || !skipper.skipped(this, child))
-				child.bind_(desktop); //don't pass skipper
+				child.bind_(desktop, null, after); //don't pass skipper
 	},
-	unbind_: function (skipper) {
+	unbind_: function (skipper, after) {
 		delete zk.Widget._binds[this.uuid];
 
 		this._node = this.desktop = null;
@@ -741,7 +742,7 @@ zk.Widget = zk.$extends(zk.Object, {
 
 		for (var child = this.firstChild; child; child = child.nextSibling)
 			if (!skipper || !skipper.skipped(this, child))
-				child.unbind_(); //don't pass skipper
+				child.unbind_(null, after); //don't pass skipper
 	},
 
 	focus: function (timeout) {
@@ -1052,6 +1053,19 @@ zk.Widget = zk.$extends(zk.Object, {
 		return null;
 	},
 	_binds: {}, //Map(uuid, wgt): bind but no node
+
+	bind: function (wgt, desktop, skipper) {
+		var after = [];
+		wgt.bind_(desktop, skipper, after);
+		for (var j = 0, len = after.length; j < len;)
+			after[j++].call(wgt);
+	},
+	unbind: function (wgt, skipper) {
+		var after = [];
+		wgt.unbind_(skipper, after);
+		for (var j = 0, len = after.length; j < len;)
+			after[j++].call(wgt);
+	},
 
 	//Event Handling//
 	_dome2fn: function (evtnm) {//evtnm => fnm

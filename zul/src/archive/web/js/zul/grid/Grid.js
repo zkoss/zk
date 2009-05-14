@@ -64,7 +64,7 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 			this.rows = child;
 			if (this.ebodytbl) {
 				zDom.insertHTMLBeforeEnd(this.ebodytbl, child._redrawHTML());
-				child.bind_(desktop);
+				zk.Widget.bind(child, desktop);
 				return;
 			}
 		} 

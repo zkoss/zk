@@ -79,7 +79,7 @@ zk.def(zul.grid.Row = zk.$extends(zul.Widget, {
 				this.encloseChildHTML_({child: child, index: child.getChildIndex(),
 						zclass: this.getZclass(), cls: cls}));
 		
-		child.bind_(desktop);
+		zk.Widget.bind(child, desktop);
 	},
 	removeChildHTML_: function (child, prevsib) {
 		this.$supers('removeChildHTML_', arguments);

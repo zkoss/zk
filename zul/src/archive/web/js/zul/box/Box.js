@@ -66,7 +66,7 @@ zk.def(zul.box.Box = zk.$extends(zul.Widget, {
 				this.isVertical() ? tbs[0]: tbs[0].rows[0],
 				this.encloseChildHTML_(child, true));
 		}
-		child.bind_(desktop);
+		zk.Widget.bind(child, desktop);
 	},
 	removeChildHTML_: function (child, prevsib) {
 		this.$supers('removeChildHTML_', arguments);

@@ -242,7 +242,7 @@ zkm = {
 			inf = crInf1.shift();
 		if (inf) {
 			var wgt = inf[1];
-			if (inf[2]) wgt.bind_(inf[0]); //binding
+			if (inf[2]) zk.Widget.bind(wgt, inf[0]); //binding
 			else wgt.replaceHTML(wgt.uuid, inf[0]);
 			return zkm.exec(zkm.mtBL0); //loop back to check if loading
 		}
