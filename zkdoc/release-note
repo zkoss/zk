@@ -58,6 +58,7 @@ ZK 3.6.2
   2789915: Click the button to reset the hoverImage will fail
   2790393: Forward event listener shall be called immediately
   2790417: load-after and save-after shall be the last processed
+  2791499: SerializableUiFactory causes NPE when Web app stops (Tomcat)
 
 * Upgrade Notes
   * The signature of doInit of org.zkoss.zk.ui.util.Initiator is changed.

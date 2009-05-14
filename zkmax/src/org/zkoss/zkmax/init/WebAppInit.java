@@ -20,6 +20,7 @@ package org.zkoss.zkmax.init;
 
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zkmax.au.http.AuDownloader;
+import org.zkoss.zkmax.ui.http.SerializableUiFactory;
 
 /**
  * The initialization of zkmax.
@@ -30,5 +31,6 @@ import org.zkoss.zkmax.au.http.AuDownloader;
 public class WebAppInit implements org.zkoss.zk.ui.util.WebAppInit {
 	public void init(WebApp wapp) throws Exception {
 		AuDownloader.init(wapp);
+		SerializableUiFactory.init();
 	}
 }
