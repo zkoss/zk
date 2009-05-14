@@ -211,7 +211,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		else {
 			var n = this.getNode();
 			if (n) {
-				zk.Widget.unbind(this);
+				this.unbind();
 				zDom.remove(n);
 			}
 		}
@@ -588,10 +588,10 @@ zk.Widget = zk.$extends(zk.Object, {
 		var p = this.parent;
 		if (p) p.replaceChildHTML_(this, n, desktop, skipper);
 		else {
-			var Widget = zk.Widget, oldwgt = Widget.$(n);
-			if (oldwgt) Widget.unbind(oldwgt, skipper); //unbind first (w/o removal)
+			var oldwgt = zk.Widget.$(n);
+			if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
 			zDom.setOuterHTML(n, this._redrawHTML(skipper));
-			Widget.bind(this, desktop, skipper);
+			this.bind(desktop, skipper);
 		}
 
 		if (cf && !zk.currentFocus) cf.focus();
@@ -603,7 +603,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	insertHTML: function (n, where, desktop) {
 		n.insertAdjacentHTML(where, this._redrawHTML());
-		zk.Widget.bind(this, desktop);
+		this.bind(desktop);
 	},
 	_redrawHTML: function (skipper) {
 		var out = [];
@@ -632,10 +632,10 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 
 	replaceChildHTML_: function (child, n, desktop, skipper) {
-		var Widget = zk.Widget, oldwgt = Widget.$(n);
-		if (oldwgt) Widget.unbind(oldwgt, skipper); //unbind first (w/o removal)
+		var oldwgt = zk.Widget.$(n);
+		if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
 		zDom.setOuterHTML(n, child._redrawHTML(skipper));
-		Widget.bind(child, desktop, skipper);
+		child.bind(desktop, skipper);
 	},
 	insertChildHTML_: function (child, before, desktop) {
 		var bfn, ben;
@@ -664,7 +664,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			zDom.insertHTMLBefore(bfn, child._redrawHTML());
 		else
 			zDom.insertHTMLBeforeEnd(ben, child._redrawHTML());
-		zk.Widget.bind(child, desktop);
+		child.bind(desktop);
 	},
 	getCaveNode_: function () {
 		return this.getSubnode('cave') || this.getNode();
@@ -687,7 +687,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		var n = child.getNode();
 		if (!n) child._prepareRemove(n = []);
 
-		zk.Widget.unbind(child);
+		child.unbind();
 
 		if (n.$array)
 			for (var j = n.length; --j >= 0;)
@@ -717,6 +717,19 @@ zk.Widget = zk.$extends(zk.Object, {
 			this._nodeSolved = true;
 		}
 		return n;
+	},
+
+	bind: function (desktop, skipper) {
+		var after = [];
+		this.bind_(desktop, skipper, after);
+		for (var j = 0, len = after.length; j < len;)
+			after[j++].call(this);
+	},
+	unbind: function (skipper) {
+		var after = [];
+		this.unbind_(skipper, after);
+		for (var j = 0, len = after.length; j < len;)
+			after[j++].call(this);
 	},
 
 	bind_: function (desktop, skipper, after) {
@@ -1053,19 +1066,6 @@ zk.Widget = zk.$extends(zk.Object, {
 		return null;
 	},
 	_binds: {}, //Map(uuid, wgt): bind but no node
-
-	bind: function (wgt, desktop, skipper) {
-		var after = [];
-		wgt.bind_(desktop, skipper, after);
-		for (var j = 0, len = after.length; j < len;)
-			after[j++].call(wgt);
-	},
-	unbind: function (wgt, skipper) {
-		var after = [];
-		wgt.unbind_(skipper, after);
-		for (var j = 0, len = after.length; j < len;)
-			after[j++].call(wgt);
-	},
 
 	//Event Handling//
 	_dome2fn: function (evtnm) {//evtnm => fnm
