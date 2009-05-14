@@ -90,7 +90,7 @@ public class Progressmeter extends XulElement implements org.zkoss.zul.api.Progr
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws IOException {
 		super.renderProperties(renderer);
-		render(renderer, "value", _val);
+		render(renderer, "value", ""+_val);
 		
 	}
 }
