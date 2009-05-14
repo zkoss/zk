@@ -94,7 +94,8 @@ public class WpdExtendlet implements Extendlet {
 		try {
 			final Object rawdata = _cache.get(path);
 			if (rawdata == null) {
-				if (Servlets.isIncluded(request)) log.error("Failed to load the resource: "+path);
+				if (Servlets.isIncluded(request))
+					log.error("Failed to load the resource: "+path);
 					//It might be eaten, so log the error
 				response.sendError(response.SC_NOT_FOUND, path);
 				return;
@@ -147,7 +148,7 @@ public class WpdExtendlet implements Extendlet {
 		final Element root = new SAXBuilder(true, false, true).build(is).getRootElement();
 		final String name = IDOMs.getRequiredAttributeValue(root, "name");
 		if (name.length() == 0)
-			throw new UiException("The name attribute must be specified, "+root.getLocator());
+			log.error("The name attribute must be specified, "+root.getLocator());
 		final boolean zk = "zk".equals(name);
 		final String lang = root.getAttributeValue("language");
 		final LanguageDefinition langdef = //optional
@@ -242,13 +243,23 @@ public class WpdExtendlet implements Extendlet {
 					log.error("Failed to load molds for widget "+wgtflnm+".\nCause: "+Exceptions.getMessage(ex));
 				}
 			} else if ("script".equals(elnm)) {
+				String browser = el.getAttributeValue("browser");
+				if (browser != null && wc == null)
+					log.error("browser attribute not called in a cachable WPD, "+el.getLocator());
 				String jspath = el.getAttributeValue("src");
 				if (jspath != null && jspath.length() > 0) {
-					if (wc != null && jspath.indexOf('*') >= 0) {
+					if (wc != null
+					&& (browser != null || jspath.indexOf('*') >= 0)) {
 						move(wc, out);
-						wc.add(jspath);
-					} else if (!writeResource(out, jspath, dir, true)) {
-						log.error("Failed to load script "+jspath+", "+el.getLocator());
+						wc.add(jspath, browser);
+					} else {
+						if (browser != null) {
+							final Locator loc = (Locator)_loc.get();
+							if (loc != null && !Servlets.isBrowser(loc.request, browser))
+								continue;
+						}
+						if (!writeResource(out, jspath, dir, true))
+							log.error("Failed to load script "+jspath+", "+el.getLocator());
 					}
 				}
 
@@ -264,7 +275,7 @@ public class WpdExtendlet implements Extendlet {
 				try {
 					cls = Classes.forNameByThread(clsnm);
 				} catch (ClassNotFoundException ex) {
-					log.error("Class not found: "+clsnm+", "+el.getLocator(), ex);
+					log.error("Class not found: "+clsnm+", "+el.getLocator());
 					continue; //to report as many errors as possible
 				}
 
@@ -276,7 +287,7 @@ public class WpdExtendlet implements Extendlet {
 						continue;
 					}
 				} catch (NoSuchMethodException ex) {
-					log.error("Method not found in "+clsnm+": "+mtdnm+" "+el.getLocator(), ex);
+					log.error("Method not found in "+clsnm+": "+mtdnm+" "+el.getLocator());
 					continue;
 				}
 
@@ -387,8 +398,8 @@ public class WpdExtendlet implements Extendlet {
 		private void add(Method mtd) {
 			_cnt.add(mtd);
 		}
-		private void add(String jspath) {
-			_cnt.add(jspath);
+		private void add(String jspath, String browser) {
+			_cnt.add(new String[] {jspath, browser});
 		}
 		private byte[] toByteArray() throws ServletException, IOException {
 			final ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -399,25 +410,30 @@ public class WpdExtendlet implements Extendlet {
 				else if (o instanceof Method)
 					write(out, (Method)o);
 				else {
-					final String jspath = (String)o;
-					if (!writeResource(out, jspath, _dir, true))
-						log.error("Failed to load script "+jspath);
+					final String[] inf = (String[])o;
+					if (inf[1] != null) {
+						final Locator loc = (Locator)_loc.get();
+						if (loc != null && !Servlets.isBrowser(loc.request, inf[1]))
+							continue;
+					}
+					if (!writeResource(out, inf[0], _dir, true))
+						log.error("Failed to load script "+inf[0]);
 				}
 			}
 			return out.toByteArray();
 		}
 	}
 	/*package*/ class Locator { //don't use private since WpdContent needs it
-		private HttpServletRequest _request;
+		private HttpServletRequest request;
 		private Locator(HttpServletRequest request) {
-			_request = request;
+			this.request = request;
 		}
 		/*package*/
 		InputStream getResourceAsStream(String path, boolean locate)
 		throws IOException, ServletException {
 			if (locate)
 				path = Servlets.locate(_webctx.getServletContext(),
-					_request, path, _webctx.getLocator());
+					this.request, path, _webctx.getLocator());
 
 			if (_cache.getCheckPeriod() >= 0) {
 				//Due to Web server might cache the result, we use URL if possible
