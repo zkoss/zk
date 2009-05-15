@@ -1171,7 +1171,7 @@ zk._evalInit = function () {
 
 			if (getZKAttr(n, "zid")) zkau.initzid(n);
 			if (getZKAttr(n, "drag")) zkau.initdrag(n);
-			if (getZKAttr(n, "drop")) zkau.initdrop(n);
+//			if (getZKAttr(n, "drop")) zkau.initdrop(n);
 
 			var type = $type(n);
 			if (type) {
@@ -1302,7 +1302,7 @@ zk._cleanupAt = function (n) {
 	if (getZKAttr(n, "zid")) zkau.cleanzid(n);
 	if (getZKAttr(n, "zidsp")) zkau.cleanzidsp(n);
 	if (getZKAttr(n, "drag")) zkau.cleandrag(n);
-	if (getZKAttr(n, "drop")) zkau.cleandrop(n);
+//	if (getZKAttr(n, "drop")) zkau.cleandrop(n);
 	if (getZKAttr(n, "hvig")) zkau.cleanhvig(n);
 
 	var type = $type(n);

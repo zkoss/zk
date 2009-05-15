@@ -63,7 +63,6 @@ zkau._evts = {}; //(dtid, Array()): events that are not sent yet
 zkau._js4resps = []; //JS to eval upon response
 zkau._metas = {}; //(id, meta)
 zkau._drags = {}; //(id, zDraggable): draggables
-zkau._drops = []; //dropables
 zkau._zidsp = {}; //ID spaces: {owner's uuid, {id, uuid}}
 zkau._stamp = 0; //used to make a time stamp
 zkau.initZIndex = 30; // less than 30 is used for Component developer.
@@ -2005,12 +2004,8 @@ zkau.cleandrag = function (n) {
 	}
 	zk.eval(n, "cleandrag");
 };
-zkau.initdrop = function (n) {
-	zkau._drops.unshift(n); //last created, first matched
-};
-zkau.cleandrop = function (n) {
-	zkau._drops.remove(n);
-};
+//zkau.initdrop = function (n) {};
+//zkau.cleandrop = function (n) {};
 
 zkau._ignoredrag = function (el, pointer) {
 	return zk.eval(el, "ignoredrag", null, pointer);
@@ -2447,7 +2442,7 @@ zkau.cmd1 = {
 			zkau.setAttr(cmp, nm, val);
 			done = true;
 		} else if ("z.drop" == nm) {
-			if (!getZKAttr(cmp, "drop")) zkau.initdrop(cmp);
+//			if (!getZKAttr(cmp, "drop")) zkau.initdrop(cmp);
 			zkau.setAttr(cmp, nm, val);
 			done = true;
 		} else if ("zid" == nm) {
@@ -2471,7 +2466,7 @@ zkau.cmd1 = {
 			zkau.rmAttr(cmp, nm);
 			done = true;
 		} else if ("z.drop" == nm) {
-			zkau.cleandrop(cmp);
+//			zkau.cleandrop(cmp);
 			zkau.rmAttr(cmp, nm);
 			done = true;
 		}
