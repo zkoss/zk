@@ -13,7 +13,7 @@ This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 zul.layout.Columnchildren = zk.$extends(zul.Widget, {
-	/** TODO the panel child not implement the fire maximize yet
+    /** TODO the panel child not implement the fire maximize yet
 	onChildOuter: function (child) {
 		child.se
 		this.listen()
@@ -40,15 +40,27 @@ zul.layout.Columnchildren = zk.$extends(zul.Widget, {
 			}
 		}
 	},*/
+	beforeParentChanged_: function(parent){
+		if (parent && !parent.$instanceof(zul.layout.Columnlayout))
+			alert("Wrong parent: "+ parent.className);
+		else
+			this.$supers('beforeParentChanged_', arguments);	
+	},
+	onChildAdded_: function(child){
+		if (!child.$instanceof(zul.wnd.Panel))
+			alert("Unsupported child for Columnchildren: "+ child.className);
+		else
+			this.$supers('onChildAdded_', arguments);
+	},
 	getZclass: function(){
 		var zcls = this._zclass;
 		return zcls != null ? zcls: "z-column-children";
 	},
-	bind_: function () {//after compose
+	bind_: function () {//after compose		
 		this.$supers('bind_', arguments); 
-		var n = this.getNode();
+		var n=this.getNode();
 		n._width = n.style.width;
-		/** TODO the panel child not implement the fire maximize yet
+		/*
 		var cave = this.getSubnode("cave"),
 			cns = cave;
 		do{
@@ -58,7 +70,7 @@ zul.layout.Columnchildren = zk.$extends(zul.Widget, {
 		*/
 	},
 	unbind_: function () {
-		/** TODO the panel child not implement the fire maximize yet
+		/*
 		var cave = this.getSubnode("cave"),
 			cns = cave;
 		do{

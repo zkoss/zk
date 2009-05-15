@@ -51,4 +51,5 @@ public class Columnchildren extends XulElement implements org.zkoss.zkex.zul.api
 					+ child);
 		super.beforeChildAdded(child, refChild);
 	}
+
 }

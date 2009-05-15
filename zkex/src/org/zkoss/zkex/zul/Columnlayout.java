@@ -45,27 +45,8 @@ public class Columnlayout extends XulElement implements org.zkoss.zkex.zul.api.C
 					+ child);
 		super.beforeChildAdded(child, refChild);
 	}
+	
 	public String getZclass() {
 		return _zclass == null ? "z-column-layout" : _zclass;
-	}
-
-	/**
-	 * When add child, layout will be rerender
-	 * 
-	 * @see ComponentCtrl#onChildAdded
-	 */
-	public void onChildAdded(Component child) {
-		super.onChildAdded(child);
-		smartUpdate("childchg", true);
-	}
-
-	/**
-	 * When remove child, layout will be rerender
-	 * 
-	 * @see ComponentCtrl#onChildRemoved
-	 */
-	public void onChildRemoved(Component child) {
-		super.onChildRemoved(child);
-		smartUpdate("childchg", true);
 	}
 }

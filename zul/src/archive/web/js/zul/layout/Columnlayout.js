@@ -14,11 +14,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 
 zul.layout.Columnlayout = zk.$extends(zul.Widget, {
-	_childchg: false,
 	beforeChildAdded_: function(child, refChild){
 		if (!child.$instanceof(zul.layout.Columnchildren))
-			alert("Unsupported child for Columnlayout: "+ child)
-		this.$supers('beforeChildAdded_', arguments);
+			alert("Unsupported child for Columnlayout: "+ child.className);
+		else
+			this.$supers('beforeChildAdded_', arguments);
 	},
 	getZclass: function(){
 		var zcls = this._zclass;
@@ -107,13 +107,4 @@ zul.layout.Columnlayout = zk.$extends(zul.Widget, {
 	}
 });
 
-
-//getter setter part...
-zk.def(zul.layout.Columnlayout,{
-	childchg : function(v){
-		if(v && this.getNode())
-			this.render(this.getNode(), true);
-		return true;
-	}
-});
 
