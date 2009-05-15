@@ -272,9 +272,6 @@ zkau._onRespReady = function () {
 
 			if (zk.pfmeter) zkau.pfrecv(reqInf.dtid, zkau._pfGetIds(req));
 
-			if (zkau._revertpending) zkau._revertpending();
-				//revert any pending when the first response is received
-
 			var sid = req.getResponseHeader("ZK-SID");
 			if (req.status == 200) { //correct
 				if (sid && sid != zkau._seqId) {
@@ -1989,11 +1986,11 @@ zkau._zidOwner = function (n) {
 //Drag & Drop//
 zkau.initdrag = function (n) {
 	zkau._drags[n.id] = new zDraggable(n, {
-		starteffect: zk.voidf, // bug #1886342: we cannot use the zkau.closeFloats function in this situation.
+		starteffect: zk.voidf, //bug 1886342: we cannot use zkau.closeFloats here
 		endeffect: zkau._enddrag, change: zkau._dragging,
 		ghosting: zkau._ghostdrag, z_dragdrop: true,
 		constraint: zkau._constraint,
-		revert: zkau._revertdrag, ignoredrag: zkau._ignoredrag, zindex: 88800
+		ignoredrag: zkau._ignoredrag, zindex: 88800
 	});
 	zk.eval(n, "initdrag");
 };
@@ -2014,9 +2011,9 @@ zkau._dragging = function (dg, pointer, evt) {
 	var target = Event.element(evt);
 	if (target == dg.zk_lastTarget) return;
 
-	var e = zkau._getDrop(dg.z_elorg || dg.element, pointer, evt);
-	var flag = e && e == dg.zk_lastDrop;
-	if (!e || e != dg.zk_lastDrop) {
+	var e = zkau._getDrop(dg.z_elorg || dg.element, pointer, evt),
+		flag = e && e == dg.zk_lastDrop;
+	if (!flag) {
 		zkau._cleanLastDrop(dg);
 		if (e) {
 			dg.zk_lastDrop = e;
@@ -2033,25 +2030,6 @@ zkau._dragging = function (dg, pointer, evt) {
 	}
 	dg.zk_lastTarget = target;
 };
-zkau._revertdrag = function (cmp, pointer, evt) {
-	if (zkau._getDrop(cmp, pointer, evt) == null)
-		return true;
-
-	//Note: we hve to revert when zkau._onRespReady called, since app might
-	//change cmp's position
-	var dg = zkau._drags[cmp.id];
-	zkau._revertpending = function () {
-		if (dg.z_x != null) {
-			cmp.style.left = dg.z_x;
-			cmp.style.top = dg.z_y;
-			delete dg.z_x;
-			delete dg.z_y;
-		}
-		delete zkau._revertpending; //exec once
-	};
-	return false;
-};
-
 zkau._enddrag = function (cmp, evt) {
 	zkau._cleanLastDrop(zkau._drags[cmp.id]);
 	var pointer = [Event.pointerX(evt), Event.pointerY(evt)];
@@ -2138,7 +2116,6 @@ zkau._ghostdrag = function (dg, ghosting, evt) {
 				msg = target.textContent || target.innerText;
 			if (!msg) msg = "";
 			if (msg.length > 10) msg = msg.substring(0,10) + "...";
-			var el = dg.element;
 			document.body.insertAdjacentHTML("beforeEnd",
 				'<div id="zk_ddghost" class="z-drop-ghost" style="position:absolute;top:'
 				+ofs[1]+'px;left:'+ofs[0]+'px;"><div class="z-drop-cnt"><span id="zk_ddghost!img" class="z-drop-disallow"></span>&nbsp;'+msg+'</div></div>');
@@ -2146,17 +2123,18 @@ zkau._ghostdrag = function (dg, ghosting, evt) {
 			var el  = dg.element.cloneNode(true);
 			el.id = "zk_ddghost";
 			el.style.position = "absolute";
-			var xy = zkau._proxyXY(evt);
-			el.style.top = xy[1] + "px";
-			el.style.left = xy[0] + "px";
+			el.style.top = ofs[1] + "px";
+			el.style.left = ofs[0] + "px";
 			document.body.appendChild(el);
 		}
+		zk.addClass(dg.element, 'z-dragged');
 		dg.element = $e("zk_ddghost");
 		if (special) dg.element._img = $e(dg.element.id + "!img");
 		document.body.style.cursor = "pointer";
 	} else {
 		dg.element._img = null;
 		zkau.endGhostToDIV(dg);
+		zk.rmClass(dg.element, 'z-dragged');
 		document.body.style.cursor = "";
 	}
 	return false;

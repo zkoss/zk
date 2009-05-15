@@ -1118,18 +1118,14 @@ zkSel._shallIgnoreEvent = function (el) {
 
 /** row's onmouseover. */
 zkSel.onover = function (evt) {
-	if (!zk.dragging) {
-		if (!evt) evt = window.event;
-		var row = zkSel.getNearestRow(Event.element(evt));
-		if (row) Selectable_effect(row);
-	}
+	if (!evt) evt = window.event;
+	var row = zkSel.getNearestRow(Event.element(evt));
+	if (row) Selectable_effect(row);
 };
 /** row's onmouseout. */
 zkSel.onout = function (evt) {
-	if (!zk.dragging) {
-		if (!evt) evt = window.event;
-		zkSel.onoutTo(zkSel.getNearestRow(Event.element(evt)));
-	}
+	if (!evt) evt = window.event;
+	zkSel.onoutTo(zkSel.getNearestRow(Event.element(evt)));
 };
 zkSel.onoutTo = function (row) {
 	if (row) Selectable_effect(row, true);

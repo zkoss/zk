@@ -153,18 +153,14 @@ zkCmit.onclick = function (evt) {
 
 /** onmouoseover(evt). */
 zkCmit.onover = function (evt) {
-	if (!zk.dragging) {
-		if (!evt) evt = window.event;
-		var item = $parentByTag(Event.element(evt), "TR");
-		if (item) Comboitem_effect(item);
-	}
+	if (!evt) evt = window.event;
+	var item = $parentByTag(Event.element(evt), "TR");
+	if (item) Comboitem_effect(item);
 };
 /** onmouseout(evt). */
 zkCmit.onout = function (evt) {
-	if (!zk.dragging) {
-		if (!evt) evt = window.event;
-		zkCmit.onoutTo($parentByTag(Event.element(evt), "TR"));
-	}
+	if (!evt) evt = window.event;
+	zkCmit.onoutTo($parentByTag(Event.element(evt), "TR"));
 };
 zkCmit.onoutTo = function (item) {
 	if (item) Comboitem_effect(item, true);
