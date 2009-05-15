@@ -284,7 +284,7 @@ div.z-debugbox {
 
 <%-- Drag-Drop --%>
 .z-dragged {
-	background: #E3F0FF;
+	background: #E0EAF0; color: #888;
 }
 .z-drag-over {
 	background: #ADD2FF;
