@@ -171,4 +171,22 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zkex.zul.West</component-class>
 		<!--widget-class>zul.layout.West</widget-class-->
 	</component>
+		<component>
+		<component-name>columnlayout</component-name>
+		<component-class>org.zkoss.zkex.zul.Columnlayout</component-class>
+		<widget-class>zul.layout.Columnlayout</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/columnlayout.js</mold-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>columnchildren</component-name>
+		<component-class>org.zkoss.zkex.zul.Columnchildren</component-class>
+		<widget-class>zul.layout.Columnchildren</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/columnchildren.js</mold-uri>
+		</mold>
+	</component>
 </language-addon>

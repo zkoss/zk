@@ -56,7 +56,7 @@ public class Columnlayout extends XulElement implements org.zkoss.zkex.zul.api.C
 	 */
 	public void onChildAdded(Component child) {
 		super.onChildAdded(child);
-		smartUpdate("z.childchg", true);
+		smartUpdate("childchg", true);
 	}
 
 	/**
@@ -66,6 +66,6 @@ public class Columnlayout extends XulElement implements org.zkoss.zkex.zul.api.C
 	 */
 	public void onChildRemoved(Component child) {
 		super.onChildRemoved(child);
-		smartUpdate("z.childchg", true);
+		smartUpdate("childchg", true);
 	}
 }

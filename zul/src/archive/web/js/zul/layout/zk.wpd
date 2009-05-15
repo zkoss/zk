@@ -19,4 +19,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<widget name="Center"/>
 	<widget name="East"/>
 	<widget name="West"/>
+	<widget name="Columnlayout"/>
+	<widget name="Columnchildren"/>
 </package>
