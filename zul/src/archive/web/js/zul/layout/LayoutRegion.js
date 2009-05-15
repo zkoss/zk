@@ -137,8 +137,11 @@ zk.def(zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 					endeffect: $LayoutRegion._endeffect					
 				});	
 				if (!this.isOpen()) {
-					this._open = true;
-					this.setOpen(false, true, true);
+					var colled = this.getSubnode('colled'),
+						real = this.getSubnode('real');
+					if (colled)
+						zDom.show(colled);
+					zDom.hide(real);
 				}
 			}
 		}
@@ -264,90 +267,61 @@ zk.def(zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			el = layout.getNode(),
 			width = el.offsetWidth,
 			height = el.offsetHeight,
-			cH = height,
-			cY = 0,
-			cX = 0,
-			n = layout.north,
-			s = layout.south,
-			e = layout.east,
-			w = layout.west,
-			c = layout.center;
+			center = {
+				x: 0,
+				y: 0,
+				w: width,
+				h: height
+			};
+		
 		this._open = true;
-		if (n && (zDom.isVisible(n.getNode()) || zDom.isVisible(n.getSubnode('colled')))) {
-			var ignoreSplit = n == this,
-				ambit = layout._getAmbit(n, ignoreSplit),
-				mars = layout._getMargins(n);
-			ambit.w = width - (mars.left + mars.right);
-			ambit.x = mars.left;
-			ambit.y = mars.top;
-			cY = ambit.h + ambit.y + mars.bottom;
-			cH -= cY;
-			if (ignoreSplit) {
-				ambit.w = this.getSubnode('colled').offsetWidth;
-				if (inclusive) {
-					var cmars = layout._arrayToObject(this._cmargins);
-					ambit.w += cmars.left + cmars.right;
+		
+		for (var region, ambit, margin,	rs = ['north', 'south', 'west', 'east'],
+				j = 0, k = rs.length; j < k; ++j) {
+			region = layout[rs[j]];
+			if (region && (zDom.isVisible(region.getNode())
+					|| zDom.isVisible(region.getSubnode('colled')))) {
+				var ignoreSplit = region == this,
+				ambit = layout._getAmbit(region, ignoreSplit);
+				switch (rs[j]) {
+				case 'north':
+				case 'south':
+					ambit.w = width - ambit.w;
+					if (rs[j] == 'north') 
+						center.y = ambit.ts;
+					else
+						ambit.y = height - ambit.y;
+					center.h -= ambit.ts;
+					if (ignoreSplit) {
+						ambit.w = this.getSubnode('colled').offsetWidth;
+						if (inclusive) {
+							var cmars = layout._arrayToObject(this._cmargins);
+							ambit.w += cmars.left + cmars.right;
+						}
+						layout._resizeWgt(region, ambit, true);
+						this._open = false;
+						return;
+					}
+					break;
+				default:
+					ambit.y += center.y;
+					ambit.h = center.h - ambit.h;
+					if (rs[j] == 'east')
+						ambit.x = width - ambit.x;
+					else center.x += ambit.ts;
+					center.w -= ambit.ts;
+					if (ignoreSplit) {
+						ambit.h = this.getSubnode('colled').offsetHeight;
+						if (inclusive) {
+							var cmars = layout._arrayToObject(this._cmargins);
+							ambit.h += cmars.top + cmars.bottom;
+						}
+						layout._resizeWgt(region, ambit, true);
+						this._open = false;
+						return;
+					}
+					break;
 				}
-				layout._resizeWgt(n, ambit, true);
-				this._open = false;
-				return;
-			}
-		}
-		if (s && (zDom.isVisible(s.getNode()) || zDom.isVisible(s.getSubnode('colled')))) {
-			var ignoreSplit = s == this,
-				ambit = layout._getAmbit(s, ignoreSplit),
-				mars = layout._getMargins(s),
-				total = (ambit.h + mars.top + mars.bottom);
-			ambit.w = width - (mars.left + mars.right);
-			ambit.x = mars.left;
-			ambit.y = height - total + mars.top;
-			cH -= total;
-			if (ignoreSplit) {
-				ambit.w = this.getSubnode('colled').offsetWidth;
-				if (inclusive) {
-					var cmars = layout._arrayToObject(this._cmargins);
-					ambit.w += cmars.left + cmars.right;
-				}
-				layout._resizeWgt(s, ambit, true);
-				this._open = false;
-				return;
-			}
-		}
-		if (w && (zDom.isVisible(w.getNode()) || zDom.isVisible(w.getSubnode('colled')))) {
-			var ignoreSplit = w == this,
-				ambit = layout._getAmbit(w, ignoreSplit),
-				mars = layout._getMargins(w);
-			ambit.h = cH - (mars.top + mars.bottom);
-			ambit.x = mars.left;
-			ambit.y = cY + mars.top;
-			if (ignoreSplit) {
-				ambit.h = this.getSubnode('colled').offsetHeight
-				if (inclusive) {
-					var cmars = layout._arrayToObject(this._cmargins);
-					ambit.h += cmars.top + cmars.bottom;
-				}
-				layout._resizeWgt(w, ambit, true);
-				this._open = false;
-				return;
-			}
-		}
-		if (e && (zDom.isVisible(e.getNode()) || zDom.isVisible(e.getSubnode('colled')))) {
-			var ignoreSplit = e == this,
-				ambit = layout._getAmbit(e, ignoreSplit),
-				mars = layout._getMargins(e),
-				total = (ambit.w + mars.left + mars.right); 
-			ambit.h = cH - (mars.top + mars.bottom);
-			ambit.x = width - total + mars.left;
-			ambit.y = cY + mars.top;
-			if (ignoreSplit) {
-				ambit.h = this.getSubnode('colled').offsetHeight
-				if (inclusive) {
-					var cmars = layout._arrayToObject(this._cmargins);
-					ambit.h += cmars.top + cmars.bottom;
-				}
-				layout._resizeWgt(e, ambit, true);
-				this._open = false;
-				return;
 			}
 		}
 	},

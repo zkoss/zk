@@ -359,24 +359,20 @@ public abstract class LayoutRegion extends XulElement implements org.zkoss.zul.a
 		render(renderer, "title", _title);
 		if (!"normal".equals(_border))
 			render(renderer, "border", _border);
-		if (_splittable)
-			render(renderer, "splittable", _splittable);
 		if (_maxsize != 2000)
 			renderer.render("maxsize", _maxsize);
 		if (_minsize != 0)
 			renderer.render("minsize", _minsize);
-		if (_flex)
-			render(renderer, "flex", _flex);
-		
+
+		render(renderer, "splittable", _splittable);
+		render(renderer, "flex", _flex);
 		render(renderer, "margins", getMargins());
 		render(renderer, "cmargins", getCmargins());
-
-		if (_collapsible)
-			render(renderer, "collapsible", _collapsible);
-		if (_autoscroll)
-			render(renderer, "autoscroll", _autoscroll);
+		render(renderer, "collapsible", _collapsible);
+		render(renderer, "autoscroll", _autoscroll);
+		
 		if (!_open)
-			render(renderer, "open", _open);
+			renderer.render("open", _open);
 	}
 	/** Processes an AU request.
 	 *
