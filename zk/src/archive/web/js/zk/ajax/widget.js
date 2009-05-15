@@ -791,6 +791,35 @@ zk.def(zk.Widget = zk.$extends(zk.Object, {
 			|| this.getNode();
 		return n ? n.textContent || n.innerText: '';
 	},
+	shallDragMessage_: function () {
+		var tn = this.getNode();
+		return "TR" == tn || "TD" == tn || "TH" == tn;
+	},
+	cloneDrag_: function (drag, ofs) {
+		//See also bug 1783363 and 1766244
+
+		zDom.addClass(this.getNode(), 'z-dragged');
+
+		var WDD = zk.WgtDD, dgelm;
+		if (this.shallDragMessage_()) {
+			var msg = this.dragMessage_();
+			if (msg.length > 10) msg = msg.substring(0,10) + "...";
+			dgelm = WDD.ghostByMessage(drag, ofs, msg);
+		}else {
+			dgelm = WDD.ghostByClone(drag, ofs);
+		}
+
+		drag._orgcursor = document.body.style.cursor;
+		document.body.style.cursor = "pointer";
+		return dgelm;
+	},
+	uncloneDrag_: function (drag) {
+		document.body.style.cursor = drag._orgcursor || '';
+
+		var n = this.getNode();
+		if (n)
+			zDom.rmClass(n, 'z-dragged');
+	},
 
 	focus: function (timeout) {
 		var node = this.getNode();
@@ -1428,8 +1457,10 @@ zk.RefWidget = zk.$extends(zk.Widget, {
 
 zk.WgtDD = {
 	_getDrop: function (drag, pt, evt) {
-		var dragType = drag.control._draggable;
-		for (var wgt = zk.Widget.$(evt); wgt; wgt = wgt.parent) {
+		var dragged = drag.control,
+			dragType = dragged._draggable;
+			//drag to itself not allowed
+		for (var wgt = zk.Widget.$(evt); wgt && wgt != dragged; wgt = wgt.parent) {
 			var dropType = wgt._droppable;
 			if (dropType == 'true') return wgt;
 			if (dropType && dragType != "true")
@@ -1486,45 +1517,27 @@ zk.WgtDD = {
 		drag._lastDropTo = dropTo; //do it after _cleanLastDrop
 	},
 	ghosting: function (drag, ofs, evt) {
-		//Tom Yeh: 20060227: Use a 'fake' DIV if
-		//1) FF cannot handle z-index well if listitem is dragged across two listboxes
-		//2) Safari's ghosting position is wrong
-		//3) Opera's width is wrong if cloned
-				//See also bug 1783363 and 1766244
-
-		var WDD = zk.WgtDD, dgelm,
-			wgt = drag.control,
-			tn = zDom.tag(drag.node);
-			special = "TR" == tn || "TD" == tn || "TH" == tn;
-		ofs = WDD._pointer(evt);
-		if (special) {
-			var msg = wgt.dragMessage_();
-			if (msg.length > 10) msg = msg.substring(0,10) + "...";
-			document.body.insertAdjacentHTML("beforeEnd",
-				'<div id="zk_ddghost" class="z-drop-ghost" style="position:absolute;top:'
-				+ofs[1]+'px;left:'+ofs[0]+'px;"><div class="z-drop-cnt"><span id="zk_ddghost$img" class="z-drop-disallow"></span>&nbsp;'+msg+'</div></div>');
-			dgelm = zDom.$("zk_ddghost");
-			drag._dragImg = zDom.$("zk_ddghost$img");
-		}else {
-			dgelm = drag.node.cloneNode(true);
-			dgelm.id = "zk_ddghost";
-			zk.copy(dgelm.style, {
-				position: "absolute", left: ofs[0] + "px", top: ofs[1] + "px"
-			});
-			document.body.appendChild(dgelm);
-		}
-		zDom.addClass(drag.node, 'z-dragged');
-		drag._orgcursor = document.body.style.cursor;
-		document.body.style.cursor = "pointer";
-		return dgelm;
+		return drag.control.cloneDrag_(drag, zk.WgtDD._pointer(evt));
 	},
 	endghosting: function (drag, origin) {
+		drag.control.uncloneDrag_(drag);
 		drag._dragImg = null;
-		document.body.style.cursor = drag._orgcursor || '';
-
-		var n = drag.orgnode || drag.node;
-		if (n)
-			zDom.rmClass(n, 'z-dragged');
+	},
+	ghostByMessage: function (drag, ofs, msg) {
+		document.body.insertAdjacentHTML("beforeEnd",
+			'<div id="zk_ddghost" class="z-drop-ghost" style="position:absolute;top:'
+			+ofs[1]+'px;left:'+ofs[0]+'px;"><div class="z-drop-cnt"><span id="zk_ddghost$img" class="z-drop-disallow"></span>&nbsp;'+msg+'</div></div>');
+		drag._dragImg = zDom.$("zk_ddghost$img");
+		return zDom.$("zk_ddghost");
+	},
+	ghostByClone: function (drag, ofs) {
+		var dgelm = drag.node.cloneNode(true);
+		dgelm.id = "zk_ddghost";
+		zk.copy(dgelm.style, {
+			position: "absolute", left: ofs[0] + "px", top: ofs[1] + "px"
+		});
+		document.body.appendChild(dgelm);
+		return dgelm;
 	},
 	constraint: function (drag, pt, evt) {
 		return zk.WgtDD._pointer(evt);
