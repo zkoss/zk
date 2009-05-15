@@ -14,7 +14,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 zul.grid.Groupfoot = zk.$extends(zul.grid.Row, {
 	getZclass: function () {
-		return this._zclass != null ? this._zclass : "z-group-foot";
+		return this._zclass != null ? this._zclass : "z-groupfoot";
 	},
 	isStripeable_: function () {
 		return false;
