@@ -18,14 +18,6 @@ zk.def(zul.grid.Row = zk.$extends(zul.Widget, {
 	},
 	setVisible: function (visible) {
 		if (this.isVisible() != visible) {
-			// TODO: for rows.getGroup
-			/**final Rows rows = (Rows) getParent();
-			if (rows != null) {
-				final Group g = rows.getGroup(getIndex());
-				if (g == null || g.isOpen())
-					rows.addVisibleItemCount(visible ? 1 : -1);
-			}*/
-			
 			this.$supers('setVisible', arguments);
 			if (this.isStripeable_() && this.parent)
 				this.parent.stripe();
@@ -47,12 +39,12 @@ zk.def(zul.grid.Row = zk.$extends(zul.Widget, {
 		return this._zclass != null ? this._zclass : "z-row";
 	},
 	getGroup: function () {
-		// TODO: for group
-		/**
-		if (this instanceof Group) return (Group)this;
-		final Rows rows = (Rows) getParent();
-		return (rows != null) ? rows.getGroup(getIndex()) : null;
-		*/
+		// TODO: this performance is not good.
+		if (this.parent && this.parent.hasGroup())
+			for (var w = this.previousSibling; w; w = w.previousSibling)
+				if (w.$instanceof(zul.grid.Group)) return w;
+				
+		return null;
 	},
 	setStyle: function (style) {
 		if (this._style != style) {
@@ -151,6 +143,14 @@ zk.def(zul.grid.Row = zk.$extends(zul.Widget, {
 		return true;
 	},
 	//-- super --//
+	domStyle_: function (no) {
+		if (no && no.visible)
+			return this.$supers('domStyle_', arguments);
+			
+		var style = this.$supers('domStyle_', arguments),
+			group = this.getGroup();
+		return group && !group.isOpen() ? style + "display:none;" : style;
+	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 		if (child.$instanceof(zul.grid.Detail))

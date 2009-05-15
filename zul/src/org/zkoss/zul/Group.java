@@ -49,6 +49,10 @@ public class Group extends Row implements org.zkoss.zul.api.Group {
 	private boolean _open = true;	
 	private transient List _items;
 	
+	static {
+		addClientEvent(Group.class, Events.ON_OPEN, CE_IMPORTANT);
+	}
+	
 	public Group() {
 		init();
 	}
@@ -162,7 +166,7 @@ public class Group extends Row implements org.zkoss.zul.api.Group {
 	public void setOpen(boolean open) {
 		if (_open != open) {
 			_open = open;
-			smartUpdate("z.open", _open);
+			smartUpdate("open", _open);
 			final Rows rows = (Rows) getParent();
 			if (rows != null)
 				rows.addVisibleItemCount(isOpen() ? getVisibleItemCount() : -getVisibleItemCount());
@@ -215,7 +219,14 @@ public class Group extends Row implements org.zkoss.zul.api.Group {
 	public String getZclass() {
 		return _zclass == null ? "z-group" : _zclass;
 	}
-
+	// super
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+		
+		if (!isOpen()) render(renderer, "open", false);
+	}
+	
 	//-- ComponentCtrl --//
 	/** Processes an AU request.
 	 *

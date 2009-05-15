@@ -114,9 +114,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>group</component-name>
 		<component-class>org.zkoss.zul.Group</component-class>
+		<widget-class>zul.grid.Group</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zkex/zul/html/group.dsp</mold-uri>
+			<mold-uri>mold/group.js</mold-uri>
 		</mold>
 	</component>
 	<component>

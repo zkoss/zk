@@ -110,7 +110,7 @@ td.z-group-inner {
 	font-size: ${fontSizeM};
 	font-family: ${fontFamilyT};
 }
-.z-group-inner .z-group-cnt span, .z-group-inner .z-group-cnt {
+.z-group-inner .z-group-cnt .z-label, .z-group-inner .z-group-cnt {
 	color:#2C559C;
 	padding: 4px 2px; width: auto;
 	font-weight: bold;
@@ -118,7 +118,12 @@ td.z-group-inner {
 	font-family: ${fontFamilyT};
 }
 .z-group-img {
-	width: 18px; min-height: 18px; height: 100%;
+	width: 18px;
+	min-height: 18px;
+	height: 100%;
+	display:-moz-inline-box;
+	vertical-align: top;
+	display: inline-block;
 	background-image: url(${c:encodeURL('~./zul/img/common/toggle.gif')});
 	background-repeat: no-repeat;
 	vertical-align: top; cursor: pointer; border: 0;
@@ -134,7 +139,7 @@ td.z-group-inner {
 	background: #E9F2FB repeat-x 0 0;
 	background-image:url(${c:encodeURL('~./zul/img/grid/groupfoot_bg.gif')});
 }
-.z-groupfoot-inner .z-groupfoot-cnt span, .z-groupfoot-inner .z-groupfoot-cnt {
+.z-groupfoot-inner .z-groupfoot-cnt .z-label, .z-groupfoot-inner .z-groupfoot-cnt {
 	color: #2C559C;
 	font-weight: bold;
 	font-size: ${fontSizeM};
