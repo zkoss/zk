@@ -635,8 +635,8 @@ zDom = { //static methods
 	},
 
 	getStyle: function(el, style) {
-		var st = el.style;
-	  	if (!st)
+		var st;
+		if (!el || !(st = el.style))
 	  		return null; //possible when dragging in IE
 
 		style = style.$camel();

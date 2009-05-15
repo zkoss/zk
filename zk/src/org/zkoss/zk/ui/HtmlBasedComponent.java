@@ -74,6 +74,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 		addClientEvent(HtmlBasedComponent.class, Events.ON_OK, 0);
 		addClientEvent(HtmlBasedComponent.class, Events.ON_CANCEL, 0);
 		addClientEvent(HtmlBasedComponent.class, Events.ON_CTRL_KEY, 0);
+		addClientEvent(HtmlBasedComponent.class, Events.ON_DROP, 0);
 	}
 
 	protected HtmlBasedComponent() {
@@ -313,7 +314,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	 * <p>If there are several types of draggable objects and this
 	 * component accepts only some of them, you could assign a list of
 	 * identifiers that this component accepts, separated by comma.
-	 * For example, if this component accpets dg1 and dg2, then
+	 * For example, if this component accepts dg1 and dg2, then
 	 * assign "dg1, dg2" to this attribute.
 	 *
 	 * @param droppable "false", null or "" to denote not-droppable;
@@ -377,7 +378,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 		render(renderer, "style", _style);
 		render(renderer, "left", _left);
 		render(renderer, "top", _top);
-		render(renderer, "draggble", _draggable); //getDraggable is final
+		render(renderer, "draggable", _draggable); //getDraggable is final
 		render(renderer, "droppable", _droppable);  //getDroppable is final
 
 		if (_zIndex >= 0) renderer.render("zIndex", _zIndex);
@@ -398,6 +399,9 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 		|| cmd.equals(Events.ON_DOUBLE_CLICK)
 		|| cmd.equals(Events.ON_RIGHT_CLICK)) {
 			Events.postEvent(MouseEvent.getMouseEvent(request));
+		} else if (cmd.equals(Events.ON_OK) || cmd.equals(Events.ON_CANCEL)
+		|| cmd.equals(Events.ON_CTRL_KEY)) {
+			Events.postEvent(KeyEvent.getKeyEvent(request));
 		} else if (cmd.equals(Events.ON_MOVE)) {
 			MoveEvent evt = MoveEvent.getMoveEvent(request);
 			_left = evt.getLeft();
@@ -412,9 +416,9 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 			ZIndexEvent evt = ZIndexEvent.getZIndexEvent(request);
 			_zIndex = evt.getZIndex();
 			Events.postEvent(evt);
-		} else if (cmd.equals(Events.ON_OK) || cmd.equals(Events.ON_CANCEL)
-		|| cmd.equals(Events.ON_CTRL_KEY)) {
-			Events.postEvent(KeyEvent.getKeyEvent(request));
+		} else if (cmd.equals(Events.ON_DROP)) {
+			DropEvent evt = DropEvent.getDropEvent(request);
+			Events.postEvent(evt);
 		} else
 			super.service(request, everError);
 	}

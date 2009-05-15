@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.Widget = zk.$extends(zk.Object, {
+zk.def(zk.Widget = zk.$extends(zk.Object, {
 	_visible: true,
 	nChildren: 0,
 	bindLevel: -1,
@@ -741,6 +741,8 @@ zk.Widget = zk.$extends(zk.Object, {
 		var p = this.parent;
 		this.bindLevel = p ? p.bindLevel + 1: 0;
 
+		if (this._draggable) this.initdrag_();
+
 		for (var child = this.firstChild; child; child = child.nextSibling)
 			if (!skipper || !skipper.skipped(this, child))
 				child.bind_(desktop, null, after); //don't pass skipper
@@ -756,6 +758,38 @@ zk.Widget = zk.$extends(zk.Object, {
 		for (var child = this.firstChild; child; child = child.nextSibling)
 			if (!skipper || !skipper.skipped(this, child))
 				child.unbind_(null, after); //don't pass skipper
+
+		if (this._draggable) this.cleandrag_();
+	},
+	initdrag_: function () {
+		var WDD = zk.WgtDD;
+		this._drag = new zk.Draggable(this, null, {
+			starteffect: zk.$void, //see bug #1886342
+			endeffect: WDD.enddrag, change: WDD.dragging,
+			ghosting: WDD.ghosting, endghosting: WDD.endghosting,
+			constraint: WDD.constraint,
+			ignoredrag: WDD.ignoredrag,
+			zIndex: 88800
+		});
+	},
+	cleandrag_: function () {
+		var drag = this._drag;
+		if (drag) {
+			this._drag = null;
+			drag.destroy();
+		}
+	},
+	ingoredrag_: function (pt) {
+		return false;
+	},
+	dropEffect_: function (undo) {
+		var n = this.getNode();
+		if (n) zDom[undo ? "rmClass" : "addClass"] (n, "z-drag-over");
+	},
+	dragMessage_: function () {
+		var n = this.getSubnode('cave') || this.getSubnode('real')
+			|| this.getNode();
+		return n ? n.textContent || n.innerText: '';
 	},
 
 	focus: function (timeout) {
@@ -1172,9 +1206,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			throw 'widget not found: '+wgtnm;
 		return new cls();
 	}
-});
-
-zk.def(zk.Widget, {
+}), {
 	mold: function () {
 		this.rerender();
 	},
@@ -1204,6 +1236,29 @@ zk.def(zk.Widget, {
 	tooltiptext: function (v) {
 		var n = this.getNode();
 		if (n) n.title = v || '';
+	},
+
+	draggable: function (v) {
+		if (!v || "false" == v)
+			this._draggable = v = null;
+
+		var n = this.getNode();
+		if (this.desktop)
+			if (v) this.initdrag_();
+			else this.cleandrag_();
+	},
+	droppable: function (v) {
+		if (!v || "false" == v)
+			this._droppable = v = null;
+
+		var dropTypes;
+		if (v && v != "true") {
+			dropTypes = v.split(',');
+			for (var j = dropTypes.length; --j >= 0;)
+				if (!(dropTypes[j] = dropTypes[j].trim()))
+					dropTypes.$removeAt(j);
+		}
+		this._dropTypes = dropTypes;
 	}
 });
 
@@ -1370,3 +1425,111 @@ zk.RefWidget = zk.$extends(zk.Widget, {
 		//no need to call super since it is bound
 	}
 });
+
+zk.WgtDD = {
+	_getDrop: function (drag, pt, evt) {
+		var dragType = drag.control._draggable;
+		for (var wgt = zk.Widget.$(evt); wgt; wgt = wgt.parent) {
+			var dropType = wgt._droppable;
+			if (dropType == 'true') return wgt;
+			if (dropType && dragType != "true")
+				for (var dropType = wgt._dropTypes, j = dropType.length; --j >= 0;)
+					if (dragType == dropType[j])
+						return wgt;
+		}
+	},
+	_cleanLastDrop: function (drag) {
+		if (drag) {
+			var drop;
+			if (drop = drag._lastDrop) {
+				drag._lastDrop = null;
+				drop.dropEffect_(true);
+			}
+			drag._lastDropTo = null;
+		}
+	},
+	_pointer: function (evt) {
+		return [zEvt.x(evt) + 10, zEvt.y(evt) + 5];
+	},
+
+	enddrag: function (drag, evt) {
+		zk.WgtDD._cleanLastDrop(drag);
+		var pt = zEvt.pointer(evt),
+			wgt = zk.WgtDD._getDrop(drag, pt, evt);
+		if (wgt) {
+			var data = zk.copy(zEvt.mouseData(evt, wgt.getNode()), {
+				dragged: drag.control, x: pt[0], y: pt[0]
+			});
+			wgt.fire('onDrop', data, null, 38);
+		}
+	},
+	dragging: function (drag, pt, evt) {
+		var dropTo;
+		if (!evt || (dropTo = zEvt.target(evt)) == drag._lastDropTo)
+			return;
+
+		var dropw = zk.WgtDD._getDrop(drag, pt, evt),
+			found = dropw && dropw == drag._lastDrop;
+		if (!found) {
+			zk.WgtDD._cleanLastDrop(drag); //clean _lastDrop
+			if (dropw) {
+				drag._lastDrop = dropw;
+				dropw.dropEffect_();
+				found = true;
+			}
+		}
+
+		var dragImg = drag._dragImg;
+		if (dragImg)
+			dragImg.className = found ? 'z-drop-allow': 'z-drop-disallow';
+
+		drag._lastDropTo = dropTo; //do it after _cleanLastDrop
+	},
+	ghosting: function (drag, ofs, evt) {
+		//Tom Yeh: 20060227: Use a 'fake' DIV if
+		//1) FF cannot handle z-index well if listitem is dragged across two listboxes
+		//2) Safari's ghosting position is wrong
+		//3) Opera's width is wrong if cloned
+				//See also bug 1783363 and 1766244
+
+		var WDD = zk.WgtDD, dgelm,
+			wgt = drag.control,
+			tn = zDom.tag(drag.node);
+			special = "TR" == tn || "TD" == tn || "TH" == tn;
+		ofs = WDD._pointer(evt);
+		if (special) {
+			var msg = wgt.dragMessage_();
+			if (msg.length > 10) msg = msg.substring(0,10) + "...";
+			document.body.insertAdjacentHTML("beforeEnd",
+				'<div id="zk_ddghost" class="z-drop-ghost" style="position:absolute;top:'
+				+ofs[1]+'px;left:'+ofs[0]+'px;"><div class="z-drop-cnt"><span id="zk_ddghost$img" class="z-drop-disallow"></span>&nbsp;'+msg+'</div></div>');
+			dgelm = zDom.$("zk_ddghost");
+			drag._dragImg = zDom.$("zk_ddghost$img");
+		}else {
+			dgelm = drag.node.cloneNode(true);
+			dgelm.id = "zk_ddghost";
+			zk.copy(dgelm.style, {
+				position: "absolute", left: ofs[0] + "px", top: ofs[1] + "px"
+			});
+			document.body.appendChild(dgelm);
+		}
+		zDom.addClass(drag.node, 'z-dragged');
+		drag._orgcursor = document.body.style.cursor;
+		document.body.style.cursor = "pointer";
+		return dgelm;
+	},
+	endghosting: function (drag, origin) {
+		drag._dragImg = null;
+		document.body.style.cursor = drag._orgcursor || '';
+
+		var n = drag.orgnode || drag.node;
+		if (n)
+			zDom.rmClass(n, 'z-dragged');
+	},
+	constraint: function (drag, pt, evt) {
+		return zk.WgtDD._pointer(evt);
+	},
+	ignoredrag: function (drag, pt, evt) {
+		return drag.control.ingoredrag_(pt);
+	}
+};

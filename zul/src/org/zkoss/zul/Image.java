@@ -36,6 +36,7 @@ import org.zkoss.zul.impl.Utils;
 /**
  * An image.
  *
+ * <p>See also <a href="http://docs.zkoss.org/wiki/ZK/How-Tos/Concepts-and-Tricks#How_to_fix_the_alpha_transparency_problem_of_PNG_files_found_in_IE6.3F">how to fix the alpha transparency problem of PNG files found in IE6?</a>
  * @author tomyeh
  */
 public class Image extends XulElement implements org.zkoss.zul.api.Image{

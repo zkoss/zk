@@ -227,9 +227,6 @@ zAu = {
 
 				if (zk.pfmeter) zAu.pfrecv(reqInf.dt, zAu._pfGetIds(req));
 
-				if (zAu._revertpending) zAu._revertpending();
-					//revert any pending when the first response is received
-
 				var sid = req.getResponseHeader("ZK-SID");
 				if (req.status == 200) { //correct
 					if (sid && sid != zAu._seqId) {

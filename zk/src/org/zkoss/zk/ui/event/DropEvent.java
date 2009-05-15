@@ -18,7 +18,13 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.event;
 
+import java.util.Map;
+
+import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.au.AuRequest;
+import org.zkoss.zk.au.AuRequests;
 
 /**
  * Represents an event cause by user's dragging and dropping a component.
@@ -30,6 +36,27 @@ import org.zkoss.zk.ui.Component;
  */
 public class DropEvent extends MouseEvent {
 	private final Component _dragged;
+
+	/** Converts an AU request to a drop event.
+	 * @since 5.0.0
+	 */
+	public static DropEvent getDropEvent(AuRequest request) {
+		final Component comp = request.getComponent();
+		if (comp == null)
+			throw new UiException(MZk.ILLEGAL_REQUEST_COMPONENT_REQUIRED, request);
+		final Map data = request.getData();
+		if (data == null)
+			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
+				new Object[] {data, request});
+
+		final String name = request.getCommand();
+		final int keys = AuRequests.parseKeys(data);
+		return new DropEvent(name, comp,
+			request.getDesktop().getComponentByUuid((String)data.get("dragged")),
+			AuRequests.getInt(data, "x", 0), AuRequests.getInt(data, "y", 0),
+			AuRequests.getInt(data, "pageX", 0), AuRequests.getInt(data, "pageY", 0),
+			keys);
+	}
 
 	/** Constructs a drop event.
 	 * @param dragged The component being dragged and drop to {@link #getTarget}.

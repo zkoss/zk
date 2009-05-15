@@ -94,7 +94,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 		if(this.opts.ghosting)
 			if (typeof this.opts.ghosting == 'function') {
 				this.delta = this._currentDelta();
-				this.z_elorg = this.node;
+				this.orgnode = this.node;
 
 				var ofs = zDom.cmOffset(this.node);
 				this.z_scrl = zDom.scrollOffset(this.node);
@@ -158,7 +158,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 		this._updateInnerOfs();
 
 		this._draw(pointer, evt);
-		if (this.opts.change) this.opts.change(this, pointer);
+		if (this.opts.change) this.opts.change(this, pointer, evt);
 		this._syncStackup();
 
 		if(this.opts.scroll) {
@@ -211,12 +211,12 @@ zk.Draggable = zk.$extends(zk.Object, {
 		if(this.opts.ghosting)
 			if (typeof this.opts.ghosting == 'function') {
 				if (this.opts.endghosting)
-					this.opts.endghosting(this, this.z_elorg);
-				if (this.node != this.z_elorg) {
+					this.opts.endghosting(this, this.orgnode);
+				if (this.node != this.orgnode) {
 					zDom.remove(this.node);
-					this.node = this.z_elorg;
+					this.node = this.orgnode;
 				}
-				delete this.z_elorg;
+				delete this.orgnode;
 			} else {
 				if (this.z_orgpos != "absolute") { //Bug 1514789
 					zDom.relativize(node);
@@ -406,7 +406,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 
 		if(this.opts.change) {
 			var evt = window.event;
-			this.opts.change(this, evt ? zEvt.pointer(evt): zdg._lastPointer);
+			this.opts.change(this, evt ? zEvt.pointer(evt): zdg._lastPointer, evt);
 		}
 	},
 
