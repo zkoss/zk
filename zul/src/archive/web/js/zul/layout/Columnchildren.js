@@ -76,14 +76,14 @@ zul.layout.Columnchildren = zk.$extends(zul.Widget, {
 		do{
 			zWatch.unlisten("maximize",cns);
 			zWatch.unlisten("onOuter",cns);
-		}while(cns = zDom.nextSibling(cns,"DIV"))
-		this.$supers('unbind_', arguments);
+		}while(cns = zDom.nextSibling(cns,"DIV"));
 		*/
+		this.$supers('unbind_', arguments);
 	},
 	setWidth: function(val){
 		this.$supers('setWidth', arguments);
 		if(this.getNode())
-			this.getNode()._width=val;
+			this.getNode()._width = val;
 		if(this.parent)
 			this.parent.render(this.parent.getNode(),true);
 	}
