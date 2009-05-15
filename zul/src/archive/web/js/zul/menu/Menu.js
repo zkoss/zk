@@ -15,12 +15,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	domContent_: function () {
 		var label = zUtl.encodeXML(this.getLabel()),
-			img = this._image;
-
-		
-		img = '<span class="' + this.getZclass() + '-img"' + (img ? ' style="background-image:url('
-			+ img + ')"' : '')
-			+ '></span>';
+			img = '<span class="' + this.getZclass() + '-img"' +
+				(this._image ? ' style="background-image:url(' + this._image + ')"' : '')
+				+ '></span>';
 		return label ? img + ' ' + label: img;
 	},
 	isTopmost: function () {
