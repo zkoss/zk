@@ -1,10 +1,10 @@
 <?page title="ZK Test2 Platform"?>
 <zk xmlns:h="http://www.w3.org/1999/xhtml">
-<h:script>
+<script>
 function newWindow(url){
 	zk.go(url, 0, "_zktest2");
 }
-</h:script>
+</script>
 <h:form id="newform" target="_blank" method="post"/>
 	<borderlayout id="main" use="org.zkoss.zkdemo.test2.MainLayout">
 	<west title="ZK ${desktop.webApp.version}, build ${desktop.webApp.build}" size="355px" collapsible="true" maxsize="600" splittable="true" flex="true">
@@ -14,7 +14,7 @@ function newWindow(url){
 					<tabbox mold="accordion-lite">				
 						<tabs>
 							<tab label="Normal"/>
-							<tab label="Advance"/>
+							<tab label="Advance" selected="true"/>
 						</tabs>
 						<tabpanels>
 							<tabpanel>
