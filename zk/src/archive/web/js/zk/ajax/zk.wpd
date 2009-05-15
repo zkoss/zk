@@ -29,6 +29,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<script src="numfmt.js"/>
 	<script src="msgfmt.js"/>
 
+	<script src="alphafix.js" browser="ie6-"/>
+
 	<!-- load lang here to minimize # of JS files -->
 	<script src="lang/mesg*.js"/>
 	<function class="org.zkoss.zk.fn.DspFns" name="outLocaleJavaScript"/>

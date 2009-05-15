@@ -1300,12 +1300,14 @@ zk.copy(zDom,
 	_fixDom: function () {
 		var n = zDom._fxns.shift();
 		if (n) {
+			zDom._alphafix(n);
 			zDom._fixBU(n.getElementsByTagName("A")); //Bug 1635685, 1612312
 			zDom._fixBU(n.getElementsByTagName("AREA")); //Bug 1896749
 
 			if (zDom._fxns.length) setTimeout(zDom._fixDom, 300);
 		}
 	},
+	_alphafix: zk.$void, //override if ie6Only
 	_unfixDom: function (n) {
 		if (n) {
 			zDom._unfixBU(n.getElementsByTagName("A"));

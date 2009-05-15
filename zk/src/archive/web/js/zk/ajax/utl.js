@@ -240,6 +240,18 @@ zUtl = { //static methods
 			}
 		}
 	},
+
+	format: function (s) {
+		var args = arguments;
+		var regex = new RegExp("%([1-" + arguments.length + "])", "g");
+		return String(s).replace(regex, function (match, index) {
+			return index < args.length ? args[index] : match;
+		});
+	},
+	regexEscape: function (s) {
+		return String(s).replace(/([\/()[\]{}|*+-.,^$?\\])/g, "\\$1");
+	},
+
 	intsToString: function (ary) {
 		if (!ary) return "";
 

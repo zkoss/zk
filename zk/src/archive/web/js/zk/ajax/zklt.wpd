@@ -30,5 +30,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<script src="numfmt.js"/>
 	<script src="msgfmt.js"/>
 
+	<script src="alphafix.js"/>
 	<script src="ext/json2.js"/>
 </package>
