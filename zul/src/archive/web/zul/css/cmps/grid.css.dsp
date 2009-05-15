@@ -62,7 +62,7 @@ div.z-grid-pgi-t {
 div.z-grid-footer {
 	background: #DAE7F6; border-top: 1px solid #9EB6CE;
 }
-div.z-footer-cnt, div.z-row-cnt, div.z-group-cnt, div.z-groupfoot-cnt, div.z-column-cnt {
+div.z-footer-cnt, div.z-row-cnt, div.z-group-cnt, div.z-group-foot-cnt, div.z-column-cnt {
 	border: 0; margin: 0; padding: 0;
 	font-family: ${fontFamilyC};
 	font-size: ${fontSizeM}; font-weight: normal;
@@ -72,7 +72,7 @@ div.z-footer-cnt, div.z-column-cnt{
 }
 .z-word-wrap div.z-row-cnt,
 .z-word-wrap div.z-group-cnt,
-.z-word-wrap div.z-groupfoot-cnt,
+.z-word-wrap div.z-group-foot-cnt,
 .z-word-wrap div.z-footer-cnt, .z-word-wrap div.z-column-cnt {
 	word-wrap: break-word;
 }
@@ -83,7 +83,7 @@ tr.z-grid-faker, tr.z-grid-faker th, tr.z-grid-faker div {
 	padding-top: 0 !important;	padding-right: 0 !important; padding-bottom: 0 !important;padding-left: 0 !important;
 	margin-top: 0 !important; margin-right : 0 !important;margin-bottom: 0 !important;margin-left: 0 !important;
 } <%-- these above css cannot be overrided--%>
-td.z-row-inner, td.z-groupfoot-inner {
+td.z-row-inner, td.z-group-foot-inner {
 	padding: 2px; overflow: hidden;
 }
 div.z-row-cnt {
@@ -134,12 +134,12 @@ td.z-group-inner {
 .z-group-img-close {
 	background-position: 0px 0px;
 }
-<%-- Groupfooter --%>
-.z-groupfoot {
+<%-- Group foot --%>
+.z-group-foot {
 	background: #E9F2FB repeat-x 0 0;
 	background-image:url(${c:encodeURL('~./zul/img/grid/groupfoot_bg.gif')});
 }
-.z-groupfoot-inner .z-groupfoot-cnt .z-label, .z-groupfoot-inner .z-groupfoot-cnt {
+.z-group-foot-inner .z-group-foot-cnt .z-label, .z-group-foot-inner .z-group-foot-cnt {
 	color: #2C559C;
 	font-weight: bold;
 	font-size: ${fontSizeM};
