@@ -34,10 +34,9 @@ zk.def(zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 	},
 	domContent_: function () {
 		var label = zUtl.encodeXML(this.getLabel()),
-			img = this._image;
-		if (!img) img = zAu.comURI('web/img/spacer.gif');
-
-		img = '<img src="' + img + '" align="absmiddle" class="' + this.getZclass() + '-img"/>';
+			img = '<span class="' + this.getZclass() + '-img"' +
+				(this._image ? ' style="background-image:url(' + this._image + ')"' : '')
+				+ '></span>';
 		return label ? img + ' ' + label: img;
 	},
 	domStyle_: function (no) {

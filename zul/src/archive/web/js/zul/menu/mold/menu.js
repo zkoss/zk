@@ -29,7 +29,7 @@ function (out) {
 		}
 
 		out.push('" style="width: auto;"><tbody><tr><td class="', zcls,
-				'-inner-l"><span class="', zcls, '-space"></span></td></td><td class="', zcls,
+				'-inner-l"><span class="', zcls, '-space"></span></td><td class="', zcls,
 				'-inner-m"><div><button id="', uuid,
 				'$b" type="button" class="', zcls, '-btn"');
 		if (this.getImage())

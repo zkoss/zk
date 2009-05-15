@@ -42,7 +42,7 @@ zk.def(zul.menu.Menubar = zk.$extends(zul.Widget, {
 			child = opts.child,
 			isVert = opts.vertical;
 		if (isVert) {
-			out.push('<td id="', child.uuid, '$chdextr"');
+			out.push('<tr id="', child.uuid, '$chdextr"');
 			if (child.getHeight())
 				out.push(' height="', child.getHeight(), '"');
 			out.push('>');

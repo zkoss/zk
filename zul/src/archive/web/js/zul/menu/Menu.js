@@ -16,9 +16,11 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	domContent_: function () {
 		var label = zUtl.encodeXML(this.getLabel()),
 			img = this._image;
-		if (!img) img = zAu.comURI('web/img/spacer.gif');
 
-		img = '<img src="' + img + '" align="absmiddle" class="' + this.getZclass() + '-img"/>';
+		
+		img = '<span class="' + this.getZclass() + '-img"' + (img ? ' style="background-image:url('
+			+ img + ')"' : '')
+			+ '></span>';
 		return label ? img + ' ' + label: img;
 	},
 	isTopmost: function () {

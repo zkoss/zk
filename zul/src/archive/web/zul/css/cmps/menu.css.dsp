@@ -226,7 +226,11 @@
 .z-menu-popup-cnt .z-menu-item .z-menu-item-img {
 	background-position:center center;
 	border:0px;
-	height:16px;
+	height: 100%;
+	display:-moz-inline-box;
+	vertical-align: top;
+	display: inline-block;
+	min-height: 16px;
 	margin-right:9px;
 	padding:0;
 	vertical-align:top;
