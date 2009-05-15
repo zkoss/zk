@@ -304,6 +304,9 @@ div.z-log button {
 }
 
 <%-- Drag-Drop --%>
+.z-dragged {
+	background: #E3F0FF;
+}
 .z-drag-over {
 	background: #ADD2FF;
 }

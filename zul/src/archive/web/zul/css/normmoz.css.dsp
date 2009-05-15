@@ -10,14 +10,14 @@ span.z-combobox-btn, span.z-datebox-btn, span.z-bandbox-btn, span.z-timebox-btn,
 	margin: 0; padding: 0;
 }
 <%-- tree.css.dsp, grid.css.dsp, and listbox.css.dsp --%>
-.z-word-wrap div.z-treecell-cnt, .z-word-wrap div.z-treefooter-cnt, <%-- Tree --%>
-	.z-word-wrap div.z-treecol-cnt,
-.z-word-wrap div.z-row-cnt, <%-- Grid --%>
+.z-word-wrap div.z-treecell-cnt, .z-word-wrap div.z-treefooter-cnt, 
+.z-word-wrap div.z-treecol-cnt,
+.z-word-wrap div.z-row-cnt, 
 .z-word-wrap div.z-group-cnt,
 .z-word-wrap div.z-groupfoot-cnt,
 .z-word-wrap div.z-footer-cnt, .z-word-wrap div.z-column-cnt,
-.z-word-wrap div.z-listcell-cnt, .z-word-wrap div.z-listfooter-cnt, <%-- Listbox --%>
-	.z-word-wrap div.z-listheader-cnt {
+.z-word-wrap div.z-listcell-cnt, .z-word-wrap div.z-listfooter-cnt,
+.z-word-wrap div.z-listheader-cnt {
 	overflow: hidden;
 	-moz-binding: url(${c:encodeURL('~./zk/wordwrap.xml#wordwrap')});
 }
