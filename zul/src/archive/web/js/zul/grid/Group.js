@@ -85,7 +85,7 @@ zk.def(zul.grid.Group = zk.$extends(zul.grid.Row, {
 				//always send since the client has to update Openable
 	},
 	_openItemNow: function (toOpen) {
-		for (var r, w = this.nextSibling; w && (!w.$instanceof(zul.grid.Group) || !w.$instanceof(zul.grid.Groupfoot));
+		for (var r, w = this.nextSibling; w && (!w.$instanceof(zul.grid.Group) && !w.$instanceof(zul.grid.Groupfoot));
 				w = w.nextSibling)
 			if (w.isVisible())
 				zDom[toOpen ? "show" : "hide"](w.getNode());

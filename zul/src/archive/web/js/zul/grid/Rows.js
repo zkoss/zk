@@ -77,5 +77,5 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 		if (child.$instanceof(zul.grid.Group))
 			this._groupsInfo.$remove(child);
 		this._syncStripe();
-	},
+	}
 });
