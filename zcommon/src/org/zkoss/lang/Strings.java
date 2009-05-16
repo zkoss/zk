@@ -40,7 +40,7 @@ public class Strings {
 	/** Used with {@link #escape} to escape a string in
 	 * JavaScript. It assumes the string will be enclosed with a single quote.
 	 */
-	public static final String ESCAPE_JAVASCRIPT = "'\n\r\t\f\\";
+	public static final String ESCAPE_JAVASCRIPT = "'\n\r\t\f\\/";
 	/**
 	 * Returns true if the string is null or empty.
 	 */
@@ -260,42 +260,51 @@ public class Strings {
 	 * To escape a string in JavaScript code snippet, you can use {@link #ESCAPE_JAVASCRIPT}.
 	 * @see #unescape
 	 */
-	public static final String escape(String s, String specials) {
-		if (s == null)
+	public static final String escape(String src, String specials) {
+		if (src == null)
 			return null;
 
 		StringBuffer sb = null;
 		int j = 0;
-		for (int k, len = s.length(); (k = anyOf(s, specials, j)) < len;) {
-			if (sb == null)
-				sb = new StringBuffer(len + 4);
-			
-			char cc = s.charAt(k);
+		for (int k, j2 = 0, len = src.length(); (k = anyOf(src, specials, j2)) < len;) {
+			char cc = src.charAt(k);
 			switch (cc) {
 			case '\n': cc = 'n'; break;
 			case '\t': cc = 't'; break;
 			case '\r': cc = 'r'; break;
 			case '\f': cc = 'f'; break;
+			case '/':
+				//escape </script>
+				if (specials == ESCAPE_JAVASCRIPT //handle it specially
+				&& (k <= 0 || src.charAt(k-1) != '<' || k+8 > len
+					|| !"script>".equalsIgnoreCase(src.substring(k+1, k+8)))) {
+					j2 = k + 1;
+					continue;
+				}
 			}
-			sb.append(s.substring(j, k)).append('\\').append(cc);
-			j = k + 1;
+			if (sb == null)
+				sb = new StringBuffer(len + 4);
+			sb.append(src.substring(j, k)).append('\\').append(cc);
+			j2 = j = k + 1;
 		}
 		if (sb == null)
-			return s; //nothing changed
-		return sb.append(s.substring(j)).toString();
+			return src; //nothing changed
+		return sb.append(src.substring(j)).toString();
 	}
 	/** @deprecated As of release 5.0.0, use {@link #escape(StringBuffer,CharSequence,String)}
 	 * instead.
 	 */
 	public static final StringBuffer
-	appendEscape(StringBuffer sb, String s, String specials) {
-		return escape(sb, (CharSequence)s, specials);
+	appendEscape(StringBuffer sb, String src, String specials) {
+		return escape(sb, (CharSequence)src, specials);
 	}
 	/** Escapes (aka. quote) the special characters with backslash
 	 * and appends it the specified string buffer.
 	 *
 	 * @param dst the destination buffer to append to.
 	 * @param src the source to escape from.
+	 * @param specials a string of characters that shall be escaped/quoted
+	 * To escape a string in JavaScript code snippet, you can use {@link #ESCAPE_JAVASCRIPT}.
 	 * @since 5.0.0
 	 */
 	public static final
@@ -303,8 +312,8 @@ public class Strings {
 		if (src == null)
 			return dst;
 
-		for (int j = 0, len = src.length();;) {
-			int k = j;
+		for (int j = 0, j2 = 0, len = src.length();;) {
+			int k = j2;
 			for (; k < len && specials.indexOf(src.charAt(k)) < 0; ++k)
 				;
 			if (k >= len)
@@ -316,9 +325,17 @@ public class Strings {
 			case '\t': cc = 't'; break;
 			case '\r': cc = 'r'; break;
 			case '\f': cc = 'f'; break;
+			case '/':
+				//escape </script>
+				if (specials == ESCAPE_JAVASCRIPT //handle it specially
+				&& (k <= 0 || src.charAt(k-1) != '<' || k+8 > len
+					|| !"script>".equalsIgnoreCase(src.subSequence(k+1, k+8).toString()))) {
+					j2 = k + 1;
+					continue;
+				}
 			}
 			dst.append(src.subSequence(j, k)).append('\\').append(cc);
-			j = k + 1;
+			j2 = j = k + 1;
 		}
 	}
 	/** Un-escape the quoted string.

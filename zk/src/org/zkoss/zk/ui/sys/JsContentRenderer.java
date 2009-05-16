@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.Date;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.lang.Strings;
 
 /**
  * An implementation of {@link ContentRenderer} that renders
@@ -57,18 +58,7 @@ public class JsContentRenderer implements ContentRenderer {
 		if (value == null) _buf.append((String)null);
 		else {
 			_buf.append('\'');
-			for (int j = 0, len = value.length(); j < len; ++j) {
-				char cc = value.charAt(j);
-				switch (cc) {
-				case '\'':
-				case '\\': _buf.append('\\'); break;
-				case '\n': _buf.append('\\'); cc = 'n'; break;
-				case '\t': _buf.append('\\'); cc = 't'; break;
-				case '\r': _buf.append('\\'); cc = 'r'; break;
-				case '\f': _buf.append('\\'); cc = 'f'; break;
-				}
-				_buf.append(cc);
-			}
+			Strings.escape(_buf, value, Strings.ESCAPE_JAVASCRIPT);
 			_buf.append('\'');
 		}
 	}
