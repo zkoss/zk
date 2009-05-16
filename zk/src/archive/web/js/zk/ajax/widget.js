@@ -761,9 +761,10 @@ zk.def(zk.Widget = zk.$extends(zk.Object, {
 
 		if (this._draggable) this.cleandrag_();
 	},
+
 	initdrag_: function () {
 		var WDD = zk.WgtDD;
-		this._drag = new zk.Draggable(this, null, {
+		this._drag = new zk.Draggable(this, this.getDragNode_(), {
 			starteffect: zk.$void, //see bug #1886342
 			endeffect: WDD.enddrag, change: WDD.dragging,
 			ghosting: WDD.ghosting, endghosting: WDD.endghosting,
@@ -779,6 +780,9 @@ zk.def(zk.Widget = zk.$extends(zk.Object, {
 			drag.destroy();
 		}
 	},
+	getDragNode_: function () {
+		return this.getNode();
+	},
 	ingoredrag_: function (pt) {
 		return false;
 	},
@@ -792,7 +796,7 @@ zk.def(zk.Widget = zk.$extends(zk.Object, {
 		return n ? n.textContent || n.innerText: '';
 	},
 	shallDragMessage_: function () {
-		var tn = this.getNode();
+		var tn = zDom.tag(this.getNode());
 		return "TR" == tn || "TD" == tn || "TH" == tn;
 	},
 	cloneDrag_: function (drag, ofs) {
