@@ -741,7 +741,7 @@ zk.def(zk.Widget = zk.$extends(zk.Object, {
 		var p = this.parent;
 		this.bindLevel = p ? p.bindLevel + 1: 0;
 
-		if (this._draggable) this.initdrag_();
+		if (this._draggable) this.initDrag_();
 
 		for (var child = this.firstChild; child; child = child.nextSibling)
 			if (!skipper || !skipper.skipped(this, child))
@@ -759,10 +759,10 @@ zk.def(zk.Widget = zk.$extends(zk.Object, {
 			if (!skipper || !skipper.skipped(this, child))
 				child.unbind_(null, after); //don't pass skipper
 
-		if (this._draggable) this.cleandrag_();
+		if (this._draggable) this.cleanDrag_();
 	},
 
-	initdrag_: function () {
+	initDrag_: function () {
 		var WDD = zk.WgtDD;
 		this._drag = new zk.Draggable(this, this.getDragNode_(), {
 			starteffect: zk.$void, //see bug #1886342
@@ -773,7 +773,7 @@ zk.def(zk.Widget = zk.$extends(zk.Object, {
 			zIndex: 88800
 		});
 	},
-	cleandrag_: function () {
+	cleanDrag_: function () {
 		var drag = this._drag;
 		if (drag) {
 			this._drag = null;
@@ -783,14 +783,14 @@ zk.def(zk.Widget = zk.$extends(zk.Object, {
 	getDragNode_: function () {
 		return this.getNode();
 	},
-	ingoredrag_: function (pt) {
+	ingoreDrag_: function (pt) {
 		return false;
 	},
-	dropEffect_: function (undo) {
+	dropEffect_: function (over) {
 		var n = this.getNode();
-		if (n) zDom[undo ? "rmClass" : "addClass"] (n, "z-drag-over");
+		if (n) zDom[over ? "addClass" : "rmClass"] (n, "z-drag-over");
 	},
-	dragMessage_: function () {
+	getDragMessage_: function () {
 		var n = this.getSubnode('cave') || this.getSubnode('real')
 			|| this.getNode();
 		return n ? n.textContent || n.innerText: '';
@@ -802,11 +802,9 @@ zk.def(zk.Widget = zk.$extends(zk.Object, {
 	cloneDrag_: function (drag, ofs) {
 		//See also bug 1783363 and 1766244
 
-		zDom.addClass(this.getNode(), 'z-dragged');
-
 		var WDD = zk.WgtDD, dgelm;
 		if (this.shallDragMessage_()) {
-			var msg = this.dragMessage_();
+			var msg = this.getDragMessage_();
 			if (msg.length > 10) msg = msg.substring(0,10) + "...";
 			dgelm = WDD.ghostByMessage(drag, ofs, msg);
 		}else {
@@ -815,6 +813,7 @@ zk.def(zk.Widget = zk.$extends(zk.Object, {
 
 		drag._orgcursor = document.body.style.cursor;
 		document.body.style.cursor = "pointer";
+		zDom.addClass(this.getNode(), 'z-dragged'); //after clone
 		return dgelm;
 	},
 	uncloneDrag_: function (drag) {
@@ -1277,8 +1276,8 @@ zk.def(zk.Widget = zk.$extends(zk.Object, {
 
 		var n = this.getNode();
 		if (this.desktop)
-			if (v) this.initdrag_();
-			else this.cleandrag_();
+			if (v) this.initDrag_();
+			else this.cleanDrag_();
 	},
 	droppable: function (v) {
 		if (!v || "false" == v)
@@ -1478,7 +1477,7 @@ zk.WgtDD = {
 			var drop;
 			if (drop = drag._lastDrop) {
 				drag._lastDrop = null;
-				drop.dropEffect_(true);
+				drop.dropEffect_();
 			}
 			drag._lastDropTo = null;
 		}
@@ -1509,7 +1508,7 @@ zk.WgtDD = {
 			zk.WgtDD._cleanLastDrop(drag); //clean _lastDrop
 			if (dropw) {
 				drag._lastDrop = dropw;
-				dropw.dropEffect_();
+				dropw.dropEffect_(true);
 				found = true;
 			}
 		}
@@ -1547,6 +1546,6 @@ zk.WgtDD = {
 		return zk.WgtDD._pointer(evt);
 	},
 	ignoredrag: function (drag, pt, evt) {
-		return drag.control.ingoredrag_(pt);
+		return drag.control.ingoreDrag_(pt);
 	}
 };
