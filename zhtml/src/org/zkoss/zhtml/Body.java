@@ -46,7 +46,7 @@ public class Body extends AbstractTag {
 	public void redraw(java.io.Writer out) throws java.io.IOException {
 		final Execution exec = Executions.getCurrent();
 		if (!PageRenderer.isDirectContent(exec))
-			throw new IllegalStateException();
+			throw new UnsupportedOperationException("The parent of body must be html");
 
 		final StringWriter bufout = new StringWriter();
 		super.redraw(bufout);

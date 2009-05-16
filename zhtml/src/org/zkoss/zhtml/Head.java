@@ -51,7 +51,7 @@ public class Head extends AbstractTag {
 	//--Component-//
 	public void redraw(java.io.Writer out) throws java.io.IOException {
 		if (!PageRenderer.isDirectContent(null))
-			throw new IllegalStateException();
+			throw new UnsupportedOperationException("The parent of head must be html");
 
 		final StringWriter bufout = new StringWriter();
 		super.redraw(bufout);

@@ -794,7 +794,9 @@ zDom = { //static methods
 	},
 	setOuterHTML: function(n, html) {
 		n = zDom.$(n);
-		var parent = n.parentNode, sib = n.previousSibling;
+		var parent = n.parentNode,
+			prev = n.previousSibling,
+			nxt = n.nextSibling;
 
 		zDom.unfixDom(n); //undo fix of browser issues
 
@@ -824,18 +826,10 @@ zDom = { //static methods
 		}
 
 		if (!html) n = null;
-		else if (sib) n = sib.nextSibling;
+		else if (prev) n = prev.nextSibling;
 		else n = parent.firstChild;
 
-		zDom.fixDom(n);  //fix browser issues
-
-		/* Turn it on if need to fix this limitation (about script)
-		if (n && !zk.gecko && n.getElementsByTagName) {
-			//ie/safari/opera doesn't run script in it, so eval manually
-			var ns = n.getElementsByTagName("SCRIPT");
-			for (var j = 0, len = ns.length; j < len; ++j)
-				eval(ns[j].text);
-		}*/
+		zDom.fixDom(n, nxt);  //fix browser issues
 		return n;
 	},
 	_rmOuter: function (html) {
@@ -1283,11 +1277,26 @@ if (zk.ie) {
 	};
 }
 
+if (!zk.gecko)
+	zDom._fixScript = function (n) {
+		if (n && n.getElementsByTagName) {
+			//ie/safari/opera doesn't run script in it, so eval manually
+			var ns = n.getElementsByTagName("SCRIPT");
+			for (var j = 0, len = ns.length; j < len; ++j) {
+				n = ns[j];
+				eval(n.text);
+				if (n.src)
+					zDom.appendScript(n.src, n.charset);
+			}
+		}
+	};
+
 //fix DOM
 zk.copy(zDom,
   zk.ie ? {
-	fixDom: function (n) {
-		if (n) {
+	fixDom: function (n, nxt) {
+		for (; n && n != nxt; n = n.nextSibling) {
+			zDom._fixScript(n);
 			zDom._fxns.push(n);
 			setTimeout(zDom._fixDom, 100);
 		}
@@ -1340,7 +1349,10 @@ zk.copy(zDom,
 		zk.skipBfUnload = false;
 	}
   }: {
-	fixDom: zk.$void,
+	fixDom: zk.gecko ? zk.$void: function (n, nxt) {
+		for (; n && n != nxt; n = n.nextSibling)
+			zDom._fixScript(n);
+	},
 	unfixDom: zk.$void
   });
 
