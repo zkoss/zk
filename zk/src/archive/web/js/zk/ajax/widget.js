@@ -1411,7 +1411,10 @@ zk.Native = zk.$extends(zk.Widget, {
 
 	redraw: function (out) {
 		var s = this.prolog;
-		if (s) out.push(s);
+		if (s) {
+			if (zk.ie) this._patchScript(out, s);
+			out.push(s);
+		}
 
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
@@ -1420,6 +1423,18 @@ zk.Native = zk.$extends(zk.Widget, {
 		if (s) out.push(s);
 	}
 });
+
+//pacth IE7 bug: script ignored if it is the first child (script2.zul)
+if (zk.ie)
+	zk.Native.prototype._patchScript = function (out, s) {
+		if (this.previousSibling || s.indexOf('<script') < 0)
+			return;
+
+		for (var j = out.length, cnt = 0; --j >= 0;)
+			if (out[j].indexOf('<') >= 0 && ++cnt > 1)
+				return; //more than one
+	 	out.push('<span style="display:none;font-size:0">&#160;</span>');
+	};
 
 zk.Macro = zk.$extends(zk.Widget, {
 	className: 'zk.Macro',
