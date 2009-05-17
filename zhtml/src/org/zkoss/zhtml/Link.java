@@ -30,13 +30,4 @@ public class Link extends AbstractTag {
 	public Link() {
 		super("link");
 	}
-
-	//super//
-	public void redraw(java.io.Writer out) throws java.io.IOException {
-		if (!PageRenderer.isDirectContent(null))
-			throw new IllegalStateException();
-
-		super.redraw(out);
-		out.write('\n');
-	}
 }

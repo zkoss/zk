@@ -39,7 +39,7 @@ public class Title extends AbstractTag {
 	}
 	public void redraw(java.io.Writer out) throws java.io.IOException {
 		if (!PageRenderer.isDirectContent(null))
-			throw new IllegalStateException();
+			throw new UnsupportedOperationException("The parent of title must be head");
 
 		super.redraw(out);
 		out.write('\n');

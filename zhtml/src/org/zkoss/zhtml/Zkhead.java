@@ -48,7 +48,7 @@ public class Zkhead extends AbstractComponent {
 		final Execution exec = Executions.getCurrent();
 		if (exec != null) {
 			if (!PageRenderer.isDirectContent(exec))
-				throw new IllegalStateException();
+			throw new UnsupportedOperationException("The parent of zkhead must be head");
 
 			final String zktags = HtmlPageRenders.outZkTags(exec, getDesktop());
 			if (zktags != null) out.write(zktags);
