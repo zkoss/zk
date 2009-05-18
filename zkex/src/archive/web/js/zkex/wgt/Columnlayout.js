@@ -28,15 +28,15 @@ zkex.wgt.Columnlayout = zk.$extends(zul.Widget, {
 			return;
 			
 		if(zk.ie6Only && cmp)
-			this.getSubnode("real").style.width = "0px";
+			this.getSubnode("cave").style.width = "0px";
 			
 		var w = zDom.revisedWidth(cmp, cmp.offsetWidth),
 			h = zDom.revisedHeight(cmp, cmp.offsetHeight, true),
 			total = w,
-			real = this.getSubnode("real"),
-			cns = zDom.firstChild(real, "DIV");
+			cave = this.getSubnode("cave"),
+			cns = zDom.firstChild(cave, "DIV");
 			
-		real.style.width = total + "px";
+		cave.style.width = total + "px";
 		
 		do{
 			if (this._isLegalChild(cns) && cns._width.endsWith("px") > 0)
@@ -45,7 +45,7 @@ zkex.wgt.Columnlayout = zk.$extends(zul.Widget, {
 		
 		total = Math.max(0, total);
 		
-		cns = zDom.firstChild(real, "DIV")
+		cns = zDom.firstChild(cave, "DIV")
 		do{
 			if (this._isLegalChild(cns) && cns._width.indexOf("%") > 0) {
 				cns.style.width = (total ? Math.max(0, Math.floor(zk.parseInt(cns._width) / 100 * total) - zDom.padBorderWidth(cns)) : 0) + "px";
@@ -56,9 +56,6 @@ zkex.wgt.Columnlayout = zk.$extends(zul.Widget, {
 	},
 	onSize: _zkf,
 	onShow: _zkf,
-	getCaveNode_: function () {
- 		return this.getSubnode("real");
- 	},
 	onChildAdded_: function(child){
 		this.$supers('onChildAdded_', arguments);	
 		this.render(this.getNode());
