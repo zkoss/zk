@@ -1427,10 +1427,11 @@ zk.Native = zk.$extends(zk.Widget, {
 //pacth IE7 bug: script ignored if it is the first child (script2.zul)
 if (zk.ie)
 	zk.Native.prototype._patchScript = function (out, s) {
-		if (this.previousSibling || s.indexOf('<script') < 0)
+		var j;
+		if (this.previousSibling || s.indexOf('<script') < 0
+		|| (j = out.length) > 20)
 			return;
-
-		for (var j = out.length, cnt = 0; --j >= 0;)
+		for (var cnt = 0; --j >= 0;)
 			if (out[j].indexOf('<') >= 0 && ++cnt > 1)
 				return; //more than one
 	 	out.push('<span style="display:none;font-size:0">&#160;</span>');
