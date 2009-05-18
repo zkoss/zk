@@ -95,21 +95,21 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<!--widget-class>zul.layout.East</widget-class-->
 	</component>
 	<component>
-		<component-name>fisheye</component-name>
-		<component-class>org.zkoss.zkex.zul.Fisheye</component-class>
-		<widget-class>zkex.utl.Fisheye</widget-class>
+		<component-name>fisheyebar</component-name>
+		<component-class>org.zkoss.zkex.zul.Fisheyebar</component-class>
+		<widget-class>zkex.menu.Fisheyebar</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zkex/zul/html/fisheye.dsp</mold-uri>
+			<mold-uri>mold/fisheyebar.js</mold-uri>
 		</mold>
 	</component>
 	<component>
-		<component-name>fisheyebar</component-name>
-		<component-class>org.zkoss.zkex.zul.Fisheyebar</component-class>
-		<widget-class>zkex.utl.Fisheyebar</widget-class>
+		<component-name>fisheye</component-name>
+		<component-class>org.zkoss.zkex.zul.Fisheye</component-class>
+		<widget-class>zkex.menu.Fisheye</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zkex/zul/html/fisheyebar.dsp</mold-uri>
+			<mold-uri>mold/fisheye.js</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -130,7 +130,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<mold-uri>mold/groupfoot.js</mold-uri>
 		</mold>		
 	</component>
-	<component>
+<!--	<component>
 		<component-name>jasperreport</component-name>
 		<component-class>org.zkoss.zkex.zul.Jasperreport</component-class>
 		<widget-class>zkex.utl.Jasperreport</widget-class>
@@ -138,7 +138,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<mold-name>default</mold-name>
 			<mold-uri>mold/jasperreport.js</mold-uri>
 		</mold>
-	</component>
+	</component>-->
 	<component>
 		<component-name>listgroup</component-name>
 		<component-class>org.zkoss.zul.Listgroup</component-class>
@@ -176,7 +176,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<component>
 		<component-name>columnlayout</component-name>
 		<component-class>org.zkoss.zkex.zul.Columnlayout</component-class>
-		<widget-class>zul.layout.Columnlayout</widget-class>
+		<widget-class>zkex.wgt.Columnlayout</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/columnlayout.js</mold-uri>
@@ -185,7 +185,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>columnchildren</component-name>
 		<component-class>org.zkoss.zkex.zul.Columnchildren</component-class>
-		<widget-class>zul.layout.Columnchildren</widget-class>
+		<widget-class>zkex.wgt.Columnchildren</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/columnchildren.js</mold-uri>
