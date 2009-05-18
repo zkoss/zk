@@ -11,6 +11,6 @@
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 
-<package name="zkex.utl" language="xul/html">
-	<widget name="Jasperreport" depends="zul.utl"/>
+<package name="zkex.utl" language="xul/html" depends="zul.utl">
+	<widget name="Jasperreport"/>
 </package>

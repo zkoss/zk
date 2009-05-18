@@ -11,6 +11,6 @@
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 
-<package name="zkex.grid" language="xul/html">
-	<widget name="Detail" depends="zul.grid"/>
+<package name="zkex.grid" language="xul/html" depends="zul.grid">
+	<widget name="Detail"/>
 </package>
