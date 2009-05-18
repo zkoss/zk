@@ -44,7 +44,7 @@ public class DetailDefault implements ComponentRenderer {
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).write(">");
 		wh.write("<div id=\"").write(uuid).write("!img\" class=\"").write(self.getZclass())
 			.write("-img\"></div><div id=\"").write(uuid).write("!cave\" style=\"").write(self.getContentStyle())
-			.write("\" class=\"").write(self.getContentSclass()).write("\">")
+			.write(";display:none;\" class=\"").write(self.getContentSclass()).write("\">")
 			.writeChildren(self).write("</div></div>");
 	}
 }

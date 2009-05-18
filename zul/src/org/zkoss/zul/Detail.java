@@ -46,7 +46,6 @@ import org.zkoss.zul.impl.XulElement;
  */
 public class Detail extends XulElement implements org.zkoss.zul.api.Detail {
 	private boolean _open;
-	private String _img;
 	/** The style used for the content block. */
 	private String _cntStyle;
 	/** The style class used for the content block. */
@@ -60,7 +59,7 @@ public class Detail extends XulElement implements org.zkoss.zul.api.Detail {
 	 * Returns the CSS style for the content block of the window.
 	 */
 	public String getContentStyle() {
-		return _cntStyle != null ? _cntStyle + " ;display:none;" : "display:none;";
+		return _cntStyle;
 	}
 	/** 
 	 * Sets the CSS style for the content block of the window.
