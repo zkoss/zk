@@ -19,7 +19,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import org.zkoss.lang.Objects;
-import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.*;
@@ -45,11 +44,14 @@ import org.zkoss.zul.impl.XulElement;
  */
 public class Detail extends XulElement implements org.zkoss.zul.api.Detail {
 	private boolean _open;
-	private String _img;
 	/** The style used for the content block. */
 	private String _cntStyle;
 	/** The style class used for the content block. */
 	private String _cntscls;
+	
+	static {
+		addClientEvent(Detail.class, Events.ON_OPEN, CE_IMPORTANT);
+	}
 	
 	public Detail() {
 		setWidth("18px");
@@ -59,7 +61,7 @@ public class Detail extends XulElement implements org.zkoss.zul.api.Detail {
 	 * Returns the CSS style for the content block of the window.
 	 */
 	public String getContentStyle() {
-		return _cntStyle != null ? _cntStyle + " ;display:none;" : "display:none;";
+		return _cntStyle;
 	}
 	/** 
 	 * Sets the CSS style for the content block of the window.
@@ -69,7 +71,7 @@ public class Detail extends XulElement implements org.zkoss.zul.api.Detail {
 	public void setContentStyle(String style) {
 		if (!Objects.equals(_cntStyle, style)) {
 			_cntStyle = style;
-			smartUpdate("z.cntStyle", getContentStyle());
+			smartUpdate("contentStyle", getContentStyle());
 		}
 	}
 
@@ -85,7 +87,7 @@ public class Detail extends XulElement implements org.zkoss.zul.api.Detail {
 	public void setContentSclass(String scls) {
 		if (!Objects.equals(_cntscls, scls)) {
 			_cntscls = scls;
-			smartUpdate("z.cntScls", _cntscls);
+			smartUpdate("contentSclass", _cntscls);
 		}
 	}
 	/**
@@ -107,7 +109,7 @@ public class Detail extends XulElement implements org.zkoss.zul.api.Detail {
 	public void setOpen(boolean open) {
 		if (_open != open) {
 			_open = open;
-			smartUpdate("z.open", _open);
+			smartUpdate("open", _open);
 		}
 	}
 	
@@ -121,6 +123,17 @@ public class Detail extends XulElement implements org.zkoss.zul.api.Detail {
 	public String getZclass() {
 		return _zclass == null ? "z-detail" : _zclass;
 	}
+
+	// super
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		render(renderer, "open", this.isOpen());
+		render(renderer, "contentSclass", this.getContentSclass());
+		render(renderer, "contentStyle", this.getContentStyle());
+	}
+	
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Row))
 			throw new UiException("Unsupported parent for detail: "+parent);

@@ -82,9 +82,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>detail</component-name>
 		<component-class>org.zkoss.zul.Detail</component-class>
+		<widget-class>zkex.grid.Detail</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zkex/zul/html/detail.dsp</mold-uri>
+			<mold-uri>mold/detail.js</mold-uri>
 		</mold>
 	</component>
 	<component>

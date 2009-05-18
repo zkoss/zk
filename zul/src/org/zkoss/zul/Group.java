@@ -224,7 +224,7 @@ public class Group extends Row implements org.zkoss.zul.api.Group {
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 		
-		if (!isOpen()) render(renderer, "open", false);
+		if (!isOpen()) renderer.render("open", false);
 	}
 	
 	//-- ComponentCtrl --//

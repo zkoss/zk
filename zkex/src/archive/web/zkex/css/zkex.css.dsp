@@ -36,19 +36,27 @@
 }
 <%-- Detail --%>
 .z-detail {
-	height: 100%; padding: 0!important; overflow: hidden;
-	-o-text-overflow: ellipsis; text-overflow: ellipsis; white-space:nowrap;
+	height: 100%;
+	padding: 0!important;
+	overflow: hidden;
+	white-space: nowrap;
 }
-tr.z-row td.z-detail-outer {
-	background: #bae2f0 url(${c:encodeURL('~./zul/img/grid/detail-bg.gif')}) repeat-y left;
-	vertical-align: top; border-top: none; border-left: 1px solid white;
-	border-right: 1px solid #CCC; border-bottom: 1px solid #DDD;
+.z-detail .z-detail-img {
+	cursor:pointer;
+	width: 100%;
+	height: 18px;
+	background: transparent no-repeat 4px 3px;
+	background-image: url(${c:encodeURL('~./zul/img/grid/row-expand.png')}); 
 }
-.z-detail-img {
-	background-image: url(${c:encodeURL('~./zul/img/grid/row-expand.gif')});
-	width: 100%; height: 18px; background-position: 4px 2px;
-	background-repeat: no-repeat; background-color: transparent; 
+.z-detail.z-detail-expd .z-detail-img {
+	background-position: -12px 3px;
 }
-.z-detail-expanded .z-detail-img {
-	background-position: -21px 2px;
+tr.z-row .z-detail-outer {
+	background: #C6E8FC repeat-y left;
+	border-top: none;
+	border-left: 1px solid white;
+	border-right: 1px solid #C0C0C0;
+	border-bottom: 1px solid #D0D0D0;
+	vertical-align: top;
+	background-image: url(${c:encodeURL('~./zul/img/grid/detail-bg.png')});
 }
