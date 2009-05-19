@@ -37,9 +37,9 @@ import org.zkoss.zul.impl.LabelImageElement;
 public class Button extends LabelImageElement implements org.zkoss.zul.api.Button {
 	private String _orient = "horizontal", _dir = "normal";
 	private String _href, _target;
+	private String _autodisable;
 	private int _tabindex = -1;
 	private boolean _disabled;
-	private boolean _once;
 
 	static {
 		addClientEvent(Button.class, Events.ON_FOCUS, CE_DUPLICATE_IGNORE);
@@ -72,22 +72,43 @@ public class Button extends LabelImageElement implements org.zkoss.zul.api.Butto
 		}
 	}
 
-	/** Returns whether to disable the button after the user clicks it.
-	 * In other words, the user can only click it once. It is useful
-	 * to avoid unncessary redudant requests if it takes long to execute.
-	 * <p>Default: false.
+	/** Returns a list of component IDs that shall be disabled when the user
+	 * clicks this button.
+	 *
+	 * <p>To represent the button itself, the developer can specify <code>self</code>.
+	 * For example, <code>&lt;button id="ok" autodisable="self,cancel"/></code>
+	 * is the same as <code>&lt;button id="ok" autodisable="ok,cancel"/></code>
+	 * that will disable
+	 * both the ok and cancel buttons when an user clicks it.
+	 *
+	 * <p>The button being disabled will be enabled automatically
+	 * once the client receives a response from the server.
+	 * In other words, the server doesn't notice if a button is disabled
+	 * with this method.
+	 *
+	 * <p>However, if you prefer to enable them later manually, you can
+	 * prefix with '+'. For example,
+	 * <code>&lt;button id="ok" autodisable="+self,+cancel"/></code>
+	 *
+	 * <p>Then, you have to enable them manually such as
+	 * <pre><code>if (something_happened){
+	 *  ok.setDisabled(false);
+	 *  cancel.setDisabled(false);
+	 *</code></pre>
+	 *
+	 * <p>Default: null.
 	 * @since 5.0.0
 	 */
-	public boolean isOnce() {
-		return _once;
+	public String getAutodisable() {
+		return _autodisable;
 	}
 	/** Sets whether to disable the button after the user clicks it.
 	 * @since 5.0.0
 	 */
-	public void setOnce(boolean once) {
-		if (_once != once) {
-			_once = once;
-			smartUpdate("once", once);
+	public void setAutodisable(String autodisable) {
+		if (_autodisable != autodisable) {
+			_autodisable = autodisable;
+			smartUpdate("autodisable", autodisable);
 		}
 	}
 
@@ -202,7 +223,7 @@ public class Button extends LabelImageElement implements org.zkoss.zul.api.Butto
 		if (!"horizontal".equals(_orient)) render(renderer, "orient", _orient);
 
 		render(renderer, "disabled", _disabled);
-		if (_once) renderer.render("once", true);
+		render(renderer, "autodisable", _autodisable);
 		render(renderer, "href", getEncodedHref());
 		render(renderer, "target", _target);
 	}

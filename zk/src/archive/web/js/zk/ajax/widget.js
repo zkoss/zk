@@ -852,6 +852,12 @@ zk.def(zk.Widget = zk.$extends(zk.Object, {
 		return true;
 	},
 
+	//server comm//
+	smartUpdate: function (nm, val, timeout) {
+		zAu.send(new zk.Event(this, 'setAttr', [nm, val]),
+			timeout >= 0 ? timeout: -1);
+	},
+
 	//widget event//
 	fireX: function (evt, timeout) {
 		evt.currentTarget = this;

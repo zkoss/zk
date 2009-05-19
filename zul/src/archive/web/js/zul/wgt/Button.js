@@ -88,12 +88,35 @@ zk.def(zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	},
 	doClick_: function (evt) {
 		if (!this._disabled) {
+			var ads = this._autodisable, aded;
+			if (ads) {
+				ads = ads.split(',');
+				for (var j = ads.length; --j >= 0;) {
+					var ad = ads[j].trim();
+					if (ad) {
+						var perm;
+						if (perm = ad.charAt(0) == '+')
+							ad = ad.substring(1);
+						ad = "self" == ad ? this: this.getFellow(ad);
+						if (ad) {
+							ad.setDisabled(true);
+							if (this.inServer)
+								if (perm)
+									ad.smartUpdate('disabled', true);
+								else if (!aded) aded = [ad];
+								else aded.push(ad);
+						}
+					}
+				}
+			}
+			if (aded) zWatch.listen('onResponse', new zul.wgt.ADBS(aded));
+
 			this.fireX(evt);
 
 			if (!evt.stopped) {
 				var href = this._href;
 				if (href)
-					zUtl.go(href, false, this.getTarget(), "target");
+					zUtl.go(href, false, this._target, "target");
 			}
 		}
 		//Unlike DOM, we don't proprogate to parent (so no calling $supers)
@@ -145,5 +168,17 @@ zk.def(zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	tabindex: function (v) {
 		var n = this.getNode();
 		if (n) (this.getSubnode('btn') || n).tabIndex = v >= 0 ? v: '';
+	},
+	autodisable: null
+});
+//handle autodisabled buttons
+zul.wgt.ADBS = zk.$extends(zk.Object, {
+	$init: function (ads) {
+		this._ads = ads;
+	},
+	onResponse: function () {
+		for (var ads = this._ads, ad; ad = ads.shift();)
+			ad.setDisabled(false);
+		zWatch.unlisten('onResponse', this);
 	}
 });

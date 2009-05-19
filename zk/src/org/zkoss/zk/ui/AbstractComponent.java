@@ -18,6 +18,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui;
 
+import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.Set;
@@ -173,6 +174,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * @since 3.5.0 (becomes protected)
 	 */
 	protected boolean _visible = true;
+	private transient boolean _byClient;
 
 	/** Constructs a component with auto-generated ID.
 	 * @since 3.0.7 (becomes public)
@@ -1196,8 +1198,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 	}
 
-	/** Smart-updates a property of the widget at the client
-	 * with the specified value.
+	/** Smart-updates a property of the peer widget associated with
+	 * the component, running at the client, with the specified value.
 	 *
 	 * <p>The second invocation with the same property will replace the previous
 	 * call. In other words, the same property will be set only once in
@@ -1232,9 +1234,11 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * <p>In addition, the value can be any kind of objects that
 	 * the client accepts (marshaled by JSON).
 	 * @since 5.0.0 (become protected)
+	 * @see #updateByClient
 	 */
 	protected void smartUpdate(String attr, Object value) {
-		if (_page != null) getThisUiEngine().addSmartUpdate(this, attr, value);
+		if (_page != null && !_byClient)
+			getThisUiEngine().addSmartUpdate(this, attr, value);
 	}
 	/** A special smart update to update a value in int.
 	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
@@ -2058,8 +2062,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 	/** Handles an AU request.
 	 *
-	 * <p>Default: it convests the request to an event (by
-	 * {@link Event#getEvent}) and then posts the event
+	 * <p>Default: it handles echo and setAttr, and it convests other request
+	 * to an event (by {@link Event#getEvent}) and then posts the event
 	 * (by {@link Events#postEvent}).
 	 *
 	 * <p>Application developer can plug the custom service to handle
@@ -2076,8 +2080,49 @@ implements Component, ComponentCtrl, java.io.Serializable {
 					new Object[] {data, this});
 			final List data2 = (List)data.get("");
 			Events.postEvent(new Event((String)data2.get(0), this, data2.get(1)));
+		} else if ("setAttr".equals(cmd)) {
+			final Map data = request.getData();
+			if (data == null)
+				throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
+					new Object[] {data, this});
+			final List data2 = (List)data.get("");
+			updateByClient((String)data2.get(0), data2.get(1));
 		} else
 			Events.postEvent(Event.getEvent(request));
+	}
+
+	/** Called when the widget running at the client asks the server
+	 * to update a value (with an AU request named <code>setAttr</code>).
+	 *
+	 * <p>By default, it uses reflection to find out the setter to update
+	 * the value. Nothing happens if the method is not found.
+	 * You can override it if necessary.
+	 *
+	 * <p>Notice: this method will disable {@link #smartUpdate} when
+	 * calling the setter
+	 *
+	 * <p>See also <a href="http://docs.zkoss.org/wiki/Zk.Widget#smartUpdate">zk.Widget.smartUpdate()</a>.
+	 * @since 5.0.0
+	 */
+	protected void updateByClient(String name, Object value) {
+		Method m;
+		Object[] args = new Object[] {value};
+		try {
+			m = Classes.getMethodByObject(getClass(),
+				Classes.toMethodName(name, "set"), args);
+		} catch (NoSuchMethodException ex) {
+			if (log.debugable()) log.debug("setter not found", ex);
+			return; //ingore it
+		}
+
+		_byClient = true;
+		try {
+			m.invoke(this, args);
+		} catch (Throwable ex) {
+			throw UiException.Aide.wrap(ex);
+		} finally {
+			_byClient = false;
+		}
 	}
 
 	//-- Object --//
