@@ -29,7 +29,7 @@ import org.zkoss.zk.ui.impl.AbstractUiFactory;
  * The instances returned by {@link #newSession} is serializable, such that
  * session can be stored when the Web server stops and restore after it starts.
  *
- * <p>Since ZK 5.0.0, use {@link org.zkoss.zkmax.ui.http.SerializableUiFactory}
+ * <p>Since ZK 5.0.0, use org.zkoss.zkmax.ui.http.SerializableUiFactory
  * instead of this class.
  * 
  * @author tomyeh
