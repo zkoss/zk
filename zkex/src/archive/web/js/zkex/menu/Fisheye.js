@@ -13,7 +13,7 @@ This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 
-zkex.menu.Fisheye = zk.$extends(zul.Widget, {
+zk.def( zkex.menu.Fisheye = zk.$extends(zul.Widget, {
 	_image: "",
 	_label: "",
 	getZclass: function () {
@@ -26,7 +26,7 @@ zkex.menu.Fisheye = zk.$extends(zul.Widget, {
 		return false;
 	},
 	doMouseOver_: function (evt) {
-		if (!evt) evt = window.event;
+		//this.$super('doMouseOut_', arguments);
 		var cmp = this.getNode(),
 			label = this.getSubnode("label");
 			
@@ -43,7 +43,7 @@ zkex.menu.Fisheye = zk.$extends(zul.Widget, {
 		zDom.cleanVisibility(label);
 	},
 	doMouseOut_: function (evt) {
-		if (!evt) evt = window.event;
+		//this.$super('doMouseOut_', arguments);
 		this.getSubnode("label").style.display = "none";
 	},
 	bind_: function () {//after compose
@@ -52,30 +52,16 @@ zkex.menu.Fisheye = zk.$extends(zul.Widget, {
 			img=this.getSubnode("img"),
 			label=this.getSubnode("label");
 		zDom.disableSelection(cmp);
-		if (zk.ie6Only && img.src.endsWith(".png")) {
-			img.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+img.src+"', sizingMethod='scale')";
-			img.src = zAu.comURI('web/img/spacer.gif');
-		}
 		
 		// store the two attributes for better performance.
 		cmp.mh = zDom.sumStyles(label, "tb", zDom.margins);
 		cmp.mw = zDom.sumStyles(label, "lr", zDom.margins);
-	},
-	unbind_: function () {
-		this.$supers('unbind_', arguments);
 	}
-})
-
-//add getter and setter part
-zk.def(zkex.menu.Fisheye, { 
-	label: function () {
+}), { 
+	label: _zkf = function () {
 		if(this.getNode()){
 			this.rerender();
 		}
 	},
-	image: function () {
-		if(this.getNode()){
-			this.rerender();
-		}
-	}
+	image: _zkf
 });

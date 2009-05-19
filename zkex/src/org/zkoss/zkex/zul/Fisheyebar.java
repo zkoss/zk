@@ -156,7 +156,6 @@ public class Fisheyebar extends XulElement implements org.zkoss.zkex.zul.api.Fis
 			throw new WrongValueException("Empty attachEdge not allowed");
 		if (!_attachEdge.equals(attachEdge)) {
 			_attachEdge = attachEdge;
-			System.out.println("attachedge:"+attachEdge);
 			smartUpdate("attachedge", attachEdge);
 		}
 	}
@@ -173,7 +172,7 @@ public class Fisheyebar extends XulElement implements org.zkoss.zkex.zul.api.Fis
 			throw new WrongValueException("Empty labelEdge not allowed");
 		if (!_labelEdge.equals(labelEdge)) {
 			_labelEdge = labelEdge;
-			smartUpdate("z.labeledge", labelEdge);
+			smartUpdate("labeledge", labelEdge);
 		}
 	}
 
@@ -190,14 +189,14 @@ public class Fisheyebar extends XulElement implements org.zkoss.zkex.zul.api.Fis
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws IOException {
 		super.renderProperties(renderer);
-		render(renderer, "itemwd", ""+_itemwd);
-		render(renderer, "itemhgh", ""+_itemhgh);
-		render(renderer, "itemmaxwd", ""+_itemmaxwd);
-		render(renderer, "itemmaxhgh", ""+_itemmaxhgh);
-		render(renderer, "itempadding", ""+_itemPadding);
-		render(renderer, "orient", ""+_orient);
-		render(renderer, "attachedge", ""+_attachEdge);
-		render(renderer, "labeledge", ""+_labelEdge);
+		render(renderer, "itemwd", String.valueOf(_itemwd));
+		render(renderer, "itemhgh", String.valueOf(_itemhgh));
+		render(renderer, "itemmaxwd", String.valueOf(_itemmaxwd));
+		render(renderer, "itemmaxhgh", String.valueOf(_itemmaxhgh));
+		render(renderer, "itempadding", String.valueOf(_itemPadding));
+		render(renderer, "orient", _orient);
+		render(renderer, "attachedge", _attachEdge);
+		render(renderer, "labeledge", _labelEdge);
 		
 	}
 }

@@ -13,7 +13,7 @@ This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 
-zkex.menu.Fisheyebar = zk.$extends(zul.Widget, {
+zk.def(zkex.menu.Fisheyebar = zk.$extends(zul.Widget, {
 	_itemwd : 50, 
 	_itemhgh : 50,
 	_itemmaxwd : 200, 
@@ -131,6 +131,8 @@ zkex.menu.Fisheyebar = zk.$extends(zul.Widget, {
 		return {l: l, r: r, t: t, b: b};
 	},
 	syncAttr: function() {
+		if(!this.getNode())
+			return;
 		// sync zk attributes
 		this.icnt= this.nChildren;
 		this.iw = this._itemwd;
@@ -186,6 +188,8 @@ zkex.menu.Fisheyebar = zk.$extends(zul.Widget, {
 		}
 		this.el.style.width = bw + "px";
 		this.el.style.height = bh + "px";
+		
+		this.onSize();
 	},
 	_calc: function(x, y) {
 		if (x <= this.box.x + 4 && x >= this.box.x - 4 && y <= this.box.y + 4 && y >= this.box.y - 4)
@@ -375,51 +379,31 @@ zkex.menu.Fisheyebar = zk.$extends(zul.Widget, {
 		this.box.r = this.box.l + this.tw;
 		this.box.b = this.box.t + this.th;
 	}
-})
-
-//add getter and setter part
-zk.def(zkex.menu.Fisheyebar, { 
+}), { 
 	itemwd: function (v) {
 		this._itemwd = zk.parseInt(v);
-		if(this.getNode()){
-			this.syncAttr();
-			this.onSize();
-		}
+		this.syncAttr();
 	},
 	itemhgh: function (v) {
 		this._itemhgh = zk.parseInt(v);
-		if(this.getNode()){
-			this.syncAttr();
-			this.onSize();
-		}
+		this.syncAttr();
+		
 	},
 	itemmaxwd: function (v) {
 		this._itemmaxwd = zk.parseInt(v);
-		if(this.getNode()){
-			this.syncAttr();
-			this.onSize();
-		}
+		this.syncAttr();
 	},
 	itemmaxhgh: function (v) {
 		this._itemmaxhgh = zk.parseInt(v);
-		if(this.getNode()){
-			this.syncAttr();
-			this.onSize();
-		}
+		this.syncAttr();
 	},
-	itempadding:function (v) {
+	itempadding: function (v) {
 		this._itempadding = zk.parseInt(v);
-		if(this.getNode()){
-			this.syncAttr();
-			this.onSize();
-		}
+		this.syncAttr();
 	},
-	orient: _zkf1=function (v) {
-		if(this.getNode()){
-			this.syncAttr();
-			this.onSize();
-		}
+	orient: _zkf = function(){
+		this.syncAttr();
 	},
-	attachedge: _zkf1,
-	labeledge: _zkf1 
+	attachedge: _zkf,
+	labeledge: _zkf 
 });

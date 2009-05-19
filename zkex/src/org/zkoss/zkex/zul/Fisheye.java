@@ -23,6 +23,7 @@ import java.io.IOException;
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zul.impl.LabelImageElement;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -33,45 +34,14 @@ import org.zkoss.zul.impl.XulElement;
  * @author jumperchen
  * @since 3.5.0
  */
-public class Fisheye extends XulElement implements org.zkoss.zkex.zul.api.Fisheye {
+public class Fisheye extends LabelImageElement implements org.zkoss.zkex.zul.api.Fisheye {
 	private String _image, _label = "";
 
 	public Fisheye() {
 	}
 	public Fisheye(String label, String image) {
-		this();
 		setLabel(label);
 		setImage(image);
-	}
-	/** Returns the label (never null).
-	 * <p>Default: "".
-	 */
-	public String getLabel() {
-		return _label;
-	}
-	/** Sets the label.
-	 */
-	public void setLabel(String label) {
-		if (label == null) label = "";
-		if (!Objects.equals(_label, label)) {
-			_label = label;
-			invalidate();
-		}
-	}
-	/** Returns the image URI.
-	 * <p>Default: null.
-	 */
-	public String getImage() {
-		return _image;
-	}
-	/** Sets the image URI.
-	 */
-	public void setImage(String image) {
-		if (image != null && image.length() == 0) image = null;
-		if (!Objects.equals(_image, image)) {
-			_image = image;
-			invalidate();
-		}
 	}
 	//-- super --//
 	public String getZclass() {
@@ -99,11 +69,5 @@ public class Fisheye extends XulElement implements org.zkoss.zkex.zul.api.Fishey
 	/** Not childable. */
 	protected boolean isChildable() {
 		return false;
-	}
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws IOException {
-		super.renderProperties(renderer);
-		render(renderer, "label", ""+_label);
-		render(renderer, "image", ""+_image);
 	}
 }
