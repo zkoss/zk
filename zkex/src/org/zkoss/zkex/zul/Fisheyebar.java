@@ -18,6 +18,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkex.zul;
 
+import java.io.IOException;
+
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -55,7 +57,7 @@ public class Fisheyebar extends XulElement implements org.zkoss.zkex.zul.api.Fis
 	
 		if (_itemwd != itemwd) {
 			_itemwd = itemwd;
-			smartUpdate("z.itemwidth", itemwd);
+			smartUpdate("itemwd", itemwd);
 		}
 	}
 	/** Returns the item height of {@link Fisheye}.
@@ -71,7 +73,7 @@ public class Fisheyebar extends XulElement implements org.zkoss.zkex.zul.api.Fis
 	
 		if (_itemhgh != itemhgh) {
 			_itemhgh = itemhgh;
-			smartUpdate("z.itemheight", itemhgh);
+			smartUpdate("itemhgh", itemhgh);
 		}
 	}
 	
@@ -88,7 +90,7 @@ public class Fisheyebar extends XulElement implements org.zkoss.zkex.zul.api.Fis
 	
 		if (_itemmaxwd != itemmaxwd) {
 			_itemmaxwd = itemmaxwd;
-			smartUpdate("z.itemmaxwidth", itemmaxwd);
+			smartUpdate("itemmaxwd", itemmaxwd);
 		}
 	}
 	/** Returns the item maximal height of {@link Fisheye}.
@@ -104,7 +106,7 @@ public class Fisheyebar extends XulElement implements org.zkoss.zkex.zul.api.Fis
 	
 		if (_itemmaxhgh != itemmaxhgh) {
 			_itemmaxhgh = itemmaxhgh;
-			smartUpdate("z.itemmaxheight", itemmaxhgh);
+			smartUpdate("itemmaxhgh", itemmaxhgh);
 		}
 	}
 	
@@ -121,7 +123,7 @@ public class Fisheyebar extends XulElement implements org.zkoss.zkex.zul.api.Fis
 	
 		if (_itemPadding != itemPadding) {
 			_itemPadding = itemPadding;
-			smartUpdate("z.itempadding", itemPadding);
+			smartUpdate("itempadding", itemPadding);
 		}
 	}
 	
@@ -138,7 +140,7 @@ public class Fisheyebar extends XulElement implements org.zkoss.zkex.zul.api.Fis
 	
 		if (!Objects.equals(_orient, orient)) {
 			_orient = orient;
-			smartUpdate("z.orient", orient);
+			smartUpdate("orient", orient);
 		}
 	}
 	/** Returns the attach edge.
@@ -154,7 +156,8 @@ public class Fisheyebar extends XulElement implements org.zkoss.zkex.zul.api.Fis
 			throw new WrongValueException("Empty attachEdge not allowed");
 		if (!_attachEdge.equals(attachEdge)) {
 			_attachEdge = attachEdge;
-			smartUpdate("z.attachedge", attachEdge);
+			System.out.println("attachedge:"+attachEdge);
+			smartUpdate("attachedge", attachEdge);
 		}
 	}
 	/** Returns the label edge.
@@ -177,18 +180,24 @@ public class Fisheyebar extends XulElement implements org.zkoss.zkex.zul.api.Fis
 	public String getZclass() {
 		return _zclass == null ? "z-fisheyebar" : _zclass;
 	}
-	public void onChildAdded(Component child) {
-		super.onChildAdded(child);
-		smartUpdate("z.childchg", true);
-	}
-	public void onChildRemoved(Component child) {
-		super.onChildRemoved(child);
-		smartUpdate("z.childchg", true);
-	}
 	//-- ComponentCtrl --//
 	public void beforeChildAdded(Component child, Component refChild) {
 		if (!(child instanceof Fisheye))
 			throw new UiException("Unsupported child for fisheyebar: "+child);
 		super.beforeChildAdded(child, refChild);
+	}
+	//super//
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws IOException {
+		super.renderProperties(renderer);
+		render(renderer, "itemwd", ""+_itemwd);
+		render(renderer, "itemhgh", ""+_itemhgh);
+		render(renderer, "itemmaxwd", ""+_itemmaxwd);
+		render(renderer, "itemmaxhgh", ""+_itemmaxhgh);
+		render(renderer, "itempadding", ""+_itemPadding);
+		render(renderer, "orient", ""+_orient);
+		render(renderer, "attachedge", ""+_attachEdge);
+		render(renderer, "labeledge", ""+_labelEdge);
+		
 	}
 }

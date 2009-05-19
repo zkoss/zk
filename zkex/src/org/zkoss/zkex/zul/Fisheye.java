@@ -18,6 +18,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkex.zul;
 
+import java.io.IOException;
+
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -97,5 +99,11 @@ public class Fisheye extends XulElement implements org.zkoss.zkex.zul.api.Fishey
 	/** Not childable. */
 	protected boolean isChildable() {
 		return false;
+	}
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws IOException {
+		super.renderProperties(renderer);
+		render(renderer, "label", ""+_label);
+		render(renderer, "image", ""+_image);
 	}
 }
