@@ -278,12 +278,12 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	else
 		#Prepare maven repository
 		function mvnrepo {
-			local vertamp=$ver-$stamp
+			local vertamp=`echo $ver | sed 's/-/./'`.$(date +%Y%m%d)
 			mkdir -p $1
-			cp /tmp/zk/$binnm/dist/src/$1-sources.jar $1/$1-$ver-$stamp-sources.jar
+			cp /tmp/zk/$binnm/dist/src/$1-sources.jar $1/$1-$vertamp-sources.jar
 			sed -e "s/{version}/$vertamp/" $maindir/$1/pom.xml > $1/pom.xml
-			cp $maindir/dist/lib/$1.jar $1/$1-$ver-$stamp.jar
-			jar cfM $1-$ver-$stamp-bundle.jar -C $1 .
+			cp $maindir/dist/lib/$1.jar $1/$1-$vertamp.jar
+			jar cfM $1-$vertamp-bundle.jar -C $1 .
 		}
 		mkdir -p maven
 		mkdir -p /tmp/maven
