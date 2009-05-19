@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F50-2787713.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue May 19 10:24:46     2009, Created by tomyeh
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<window title="test of autodisable">
+1. After click OK, you shall see both buttons disabled for 3 seconds,
+	and then the OK button is enabled
+<separator/>
+2. After click Cancel, you shall see both buttons disabled for 3 seconds,
+	and then the Cancel button is enabled
+<separator bar="true"/>
+
+<button id="ok" label="OK" autodisable="self,+cancel"
+	onClick='org.zkoss.lang.Threads.sleep(3000); new Label("(ok)").setParent(self.parent)'/>
+<button id="cancel" label="Cancel" autodisable="+ok,cancel"
+	onClick='org.zkoss.lang.Threads.sleep(3000); new Label("(cancel)").setParent(self.parent)'/>
+
+<separator bar="true"/>
+<button label="enable all" onClick="ok.disabled = cancel.disabled = false"/>
+<button label="disable all" onClick="ok.disabled = cancel.disabled = true"/>
+</window>
