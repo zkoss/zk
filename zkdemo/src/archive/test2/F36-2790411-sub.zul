@@ -13,7 +13,8 @@ F36-2790411-sub.zul
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 -->
-<window title="Subwidow" border="normal">
+<window title="Subwidow" border="normal"
+apply="org.zkoss.zkdemo.test2.F2790411Composer">
 	It is correct if you saw this.
 	It is created by a working thread.
 </window>
