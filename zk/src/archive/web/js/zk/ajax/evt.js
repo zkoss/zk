@@ -12,176 +12,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
-zEvt = {
-	target: function(evt) {
-		evt = evt || window.event;
-		return evt.target || evt.srcElement;
-	},
-	stop: function(evt) {
-		evt = evt || window.event;
-		if (evt.preventDefault) {
-			evt.preventDefault();
-			evt.stopPropagation();
-		} else {
-			evt.returnValue = false;
-			evt.cancelBubble = true;
-			if (!evt.shiftKey && !evt.ctrlKey)
-				evt.keyCode = 0; //Bug 1834891
-		}
-	},
-
-	leftClick: function(evt) {
-		evt = evt || window.event;
-		return evt.which == 1 || evt.button == 0 || evt.button == 1;
-	},
-	rightClick: function (evt) {
-		evt = evt || window.event;
-		return evt.which == 3 || evt.button == 2;
-	},
-	mouseData: function (evt, target) {
-		evt = evt || window.event;
-		var ofs = zDom.cmOffset(target ? target: zEvt.target(evt)),
-			px = zEvt.x(evt), py = zEvt.y(evt);
-		return zk.copy({
-			x: px - ofs[0], y: py - ofs[1],
-			pageX: px, pageY: py
-			}, zEvt.metaData(evt));
-	},
-	keyData: function (evt) {
-		evt = evt || window.event;
-		return zk.copy({
-			keyCode: zEvt.keyCode(evt),
-			charCode: zEvt.charCode(evt)
-			}, zEvt.metaData(evt));
-	},
-	metaData: function (evt) {
-		evt = evt || window.event;
-		var inf = {};
-		if (evt.altKey) inf.altKey = true;
-		if (evt.ctrlKey) inf.ctrlKey = true;
-		if (evt.shiftKey) inf.shiftKey = true;
-		if (zEvt.leftClick(evt)) inf.leftClick = true;
-		if (zEvt.rightClick(evt)) inf.rightClick = true;
-		return inf;
-	},
-	filterMetaData: function (data) {
-		var inf = {}
-		if (data.altKey) inf.altKey = true;
-		if (data.ctrlKey) inf.ctrlKey = true;
-		if (data.shiftKey) inf.shiftKey = true;
-		if (data.leftClick) inf.leftClick = true;
-		if (data.rightClick) inf.rightClick = true;
-		return inf;
-	},
-
-	x: function (evt) {
-		evt = evt || window.event;
-		return evt.pageX || (evt.clientX +
-			(document.documentElement.scrollLeft || document.body.scrollLeft));
-  	},
-	y: function(evt) {
-		evt = evt || window.event;
-		return evt.pageY || (evt.clientY +
-			(document.documentElement.scrollTop || document.body.scrollTop));
-	},
-	pointer: function (evt) {
-		return [zEvt.x(evt), zEvt.y(evt)];
-	},
-
-	charCode: function(evt) {
-		evt = evt || window.event;
-		return evt.charCode || evt.keyCode;
-	},
-	keyCode: function(evt) {
-		evt = evt || window.event;
-		var k = evt.keyCode || evt.charCode;
-		return zk.safari ? (zEvt.safariKeys[k] || k) : k;
-	},
-
-	listen: zk.ie ? function (el, evtnm, fn) {
-		el.attachEvent('on' + evtnm, fn);
-	}: function (el, evtnm, fn) {
-		el.addEventListener(evtnm, fn, false);
-	},
-	unlisten: zk.ie ? function (el, evtnm, fn) {
-		try {
-			el.detachEvent('on' + evtnm, fn);
-		} catch (e) {
-		}
-	}: function (el, evtnm, fn) {
-		el.removeEventListener(evtnm, fn, false);
-	},
-	fire: document.createEvent ? function (el, evtnm) {
-		var evt = document.createEvent('HTMLEvents');
-		evt.initEvent(evtnm, false, false);
-		el.dispatchEvent(evt);
-	}: function (el, evtnm) {
-		el.fireEvent('on' + evtnm);
-	},
-
-	enableESC: function () {
-		if (zDom._noESC) {
-			zEvt.unlisten(document, "keydown", zDom._noESC);
-			delete zDom._noESC;
-		}
-		if (zDom._onErrChange) {
-			window.onerror = zDom._oldOnErr;
-			if (zDom._oldOnErr) delete zDom._oldOnErr;
-			delete zDom._onErrChange;
-		}
-	},
-	disableESC: function () {
-		if (!zDom._noESC) {
-			zDom._noESC = function (evt) {
-				evt = evt || window.event;
-				if (evt.keyCode == 27) {
-					zEvt.stop(evt);
-					return false;//eat
-				}
-				return true;
-			};
-			zEvt.listen(document, "keydown", zDom._noESC);
-
-			//FUTURE: onerror not working in Safari and Opera
-			//if error occurs, loading will be never ended, so try to ignore
-			//we cannot use zEvt.listen. reason: no way to get back msg...(FF)
-			zDom._oldOnErr = window.onerror;
-			zDom._onErrChange = true;
-			window.onerror =
-	function (msg, url, lineno) {
-		//We display errors only for local class web resource
-		//It is annoying to show error if google analytics's js not found
-		var au = zAu.comURI();
-		if (au && url.indexOf(location.host) >= 0) {
-			var v = au.lastIndexOf(';');
-			v = v >= 0 ? au.substring(0, v): au;
-			if (url.indexOf(v + "/web/") >= 0) {
-				msg = mesg.FAILED_TO_LOAD + url + "\n" + mesg.FAILED_TO_LOAD_DETAIL
-					+ "\n" + mesg.CAUSE + msg+" (line "+lineno + ")";
-				if (zk.error) zk.error(msg);
-				else alert(msg);
-				return true;
-			}
-		}
-	};
-		}
-	}
-};
-
-if (zk.safari)
-	zEvt.safariKeys = {
-		25: 9, 	   // SHIFT-TAB
-		63232: 38, // up
-		63233: 40, // down
-		63234: 37, // left
-		63235: 39, // right
-		63272: 46, // delete
-		63273: 36, // home
-		63275: 35, // end
-		63276: 33, // pgup
-		63277: 34  // pgdn
-	};
-
 zk.Event = zk.$extends(zk.Object, {
 	$init: function (target, name, data, opts, domEvent) {
 		this.currentTarget = this.target = target;
@@ -372,3 +202,173 @@ zWatch = {
 	_wts: {}
 };
 zWatch.listen('onBindLevelMove', zWatch);
+
+zEvt = {
+	target: function(evt) {
+		evt = evt || window.event;
+		return evt.target || evt.srcElement;
+	},
+	stop: function(evt) {
+		evt = evt || window.event;
+		if (evt.preventDefault) {
+			evt.preventDefault();
+			evt.stopPropagation();
+		} else {
+			evt.returnValue = false;
+			evt.cancelBubble = true;
+			if (!evt.shiftKey && !evt.ctrlKey)
+				evt.keyCode = 0; //Bug 1834891
+		}
+	},
+
+	leftClick: function(evt) {
+		evt = evt || window.event;
+		return evt.which == 1 || evt.button == 0 || evt.button == 1;
+	},
+	rightClick: function (evt) {
+		evt = evt || window.event;
+		return evt.which == 3 || evt.button == 2;
+	},
+	mouseData: function (evt, target) {
+		evt = evt || window.event;
+		var ofs = zDom.cmOffset(target ? target: zEvt.target(evt)),
+			px = zEvt.x(evt), py = zEvt.y(evt);
+		return zk.copy({
+			x: px - ofs[0], y: py - ofs[1],
+			pageX: px, pageY: py
+			}, zEvt.metaData(evt));
+	},
+	keyData: function (evt) {
+		evt = evt || window.event;
+		return zk.copy({
+			keyCode: zEvt.keyCode(evt),
+			charCode: zEvt.charCode(evt)
+			}, zEvt.metaData(evt));
+	},
+	metaData: function (evt) {
+		evt = evt || window.event;
+		var inf = {};
+		if (evt.altKey) inf.altKey = true;
+		if (evt.ctrlKey) inf.ctrlKey = true;
+		if (evt.shiftKey) inf.shiftKey = true;
+		if (zEvt.leftClick(evt)) inf.leftClick = true;
+		if (zEvt.rightClick(evt)) inf.rightClick = true;
+		return inf;
+	},
+	filterMetaData: function (data) {
+		var inf = {}
+		if (data.altKey) inf.altKey = true;
+		if (data.ctrlKey) inf.ctrlKey = true;
+		if (data.shiftKey) inf.shiftKey = true;
+		if (data.leftClick) inf.leftClick = true;
+		if (data.rightClick) inf.rightClick = true;
+		return inf;
+	},
+
+	x: function (evt) {
+		evt = evt || window.event;
+		return evt.pageX || (evt.clientX +
+			(document.documentElement.scrollLeft || document.body.scrollLeft));
+  	},
+	y: function(evt) {
+		evt = evt || window.event;
+		return evt.pageY || (evt.clientY +
+			(document.documentElement.scrollTop || document.body.scrollTop));
+	},
+	pointer: function (evt) {
+		return [zEvt.x(evt), zEvt.y(evt)];
+	},
+
+	charCode: function(evt) {
+		evt = evt || window.event;
+		return evt.charCode || evt.keyCode;
+	},
+	keyCode: function(evt) {
+		evt = evt || window.event;
+		var k = evt.keyCode || evt.charCode;
+		return zk.safari ? (zEvt.safariKeys[k] || k) : k;
+	},
+
+	listen: zk.ie ? function (el, evtnm, fn) {
+		el.attachEvent('on' + evtnm, fn);
+	}: function (el, evtnm, fn) {
+		el.addEventListener(evtnm, fn, false);
+	},
+	unlisten: zk.ie ? function (el, evtnm, fn) {
+		try {
+			el.detachEvent('on' + evtnm, fn);
+		} catch (e) {
+		}
+	}: function (el, evtnm, fn) {
+		el.removeEventListener(evtnm, fn, false);
+	},
+	fire: document.createEvent ? function (el, evtnm) {
+		var evt = document.createEvent('HTMLEvents');
+		evt.initEvent(evtnm, false, false);
+		el.dispatchEvent(evt);
+	}: function (el, evtnm) {
+		el.fireEvent('on' + evtnm);
+	},
+
+	enableESC: function () {
+		if (zDom._noESC) {
+			zEvt.unlisten(document, "keydown", zDom._noESC);
+			delete zDom._noESC;
+		}
+		if (zDom._onErrChange) {
+			window.onerror = zDom._oldOnErr;
+			if (zDom._oldOnErr) delete zDom._oldOnErr;
+			delete zDom._onErrChange;
+		}
+	},
+	disableESC: function () {
+		if (!zDom._noESC) {
+			zDom._noESC = function (evt) {
+				evt = evt || window.event;
+				if (evt.keyCode == 27) {
+					zEvt.stop(evt);
+					return false;//eat
+				}
+				return true;
+			};
+			zEvt.listen(document, "keydown", zDom._noESC);
+
+			//FUTURE: onerror not working in Safari and Opera
+			//if error occurs, loading will be never ended, so try to ignore
+			//we cannot use zEvt.listen. reason: no way to get back msg...(FF)
+			zDom._oldOnErr = window.onerror;
+			zDom._onErrChange = true;
+			window.onerror =
+	function (msg, url, lineno) {
+		//We display errors only for local class web resource
+		//It is annoying to show error if google analytics's js not found
+		var au = zAu.comURI();
+		if (au && url.indexOf(location.host) >= 0) {
+			var v = au.lastIndexOf(';');
+			v = v >= 0 ? au.substring(0, v): au;
+			if (url.indexOf(v + "/web/") >= 0) {
+				msg = mesg.FAILED_TO_LOAD + url + "\n" + mesg.FAILED_TO_LOAD_DETAIL
+					+ "\n" + mesg.CAUSE + msg+" (line "+lineno + ")";
+				if (zk.error) zk.error(msg);
+				else alert(msg);
+				return true;
+			}
+		}
+	};
+		}
+	}
+};
+
+if (zk.safari)
+	zEvt.safariKeys = {
+		25: 9, 	   // SHIFT-TAB
+		63232: 38, // up
+		63233: 40, // down
+		63234: 37, // left
+		63235: 39, // right
+		63272: 46, // delete
+		63273: 36, // home
+		63275: 35, // end
+		63276: 33, // pgup
+		63277: 34  // pgdn
+	};
