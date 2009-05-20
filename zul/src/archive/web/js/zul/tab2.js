@@ -89,12 +89,13 @@ zkTab2 = {
 				zk.listen(btn, "mouseout", this._onMouseOut);
 			}
 		}
-		var meta = $parent(cmp);
+		var meta = cmp.parentNode,
+			uuid = $uuid(meta);
 		if (!meta._toscroll)
 			meta._toscroll = function () {
-				zkTabs2.scrollcheck($uuid(meta));
+				zkTabs2.scrollcheck(uuid);
 			};
-		zk.addInit(meta._toscroll, false, $uuid(meta) );
+		zk.addInit(meta._toscroll, false, uuid);
 	},
 	setAttr: function(cmp, name, value) {
 		switch (name) {
@@ -106,8 +107,8 @@ zkTab2 = {
 			case "style.height":
 				zkau.setAttr(cmp, name, value);
 				zk.beforeSizeAt(cmp);
-				zkTabs2.scrollcheck($uuid($parent(cmp)));
-				zkTabs2._fixWidth($uuid($parent(cmp)));
+				zkTabs2.scrollcheck($uuid(cmp.parentNode));
+				zkTabs2._fixWidth(cmp.parentNode);
 				zk.onSizeAt(cmp);
 				return true;
 		}
@@ -135,10 +136,9 @@ zkTab2 = {
 	selTab: function(tab, notify) {
 		var tabbox = $e(getZKAttr(tab, "box"));
 		if (zkTabbox2._isVert(tabbox))
-			zkTabs2.scrollcheck($uuid($parent(tab)),"vsel",tab);
+			zkTabs2.scrollcheck($uuid(tab.parentNode),"vsel",tab);
 		else if (!zkTabbox2._isAccord(tabbox))
-			zkTabs2.scrollcheck($uuid($parent(tab)),"sel",tab);
-		tab = $e(tab);
+			zkTabs2.scrollcheck($uuid(tab.parentNode),"sel",tab);
 		if (!tab)
 			return;
 
@@ -151,18 +151,16 @@ zkTab2 = {
 		}
 	},
 	cleanup: function(cmp) {
-		var parent = $parent(cmp);
-		if (parent)
-			parent._toscroll = null;//clean init
-			parent = $outer($parent(cmp));
-		var tbx = $e(getZKAttr(cmp, "box"));
+		cmp.parentNode._toscroll = null;//clean init
+		var tabs = $outer(cmp.parentNode),
+			tbx = $e(getZKAttr(cmp, "box"));
 		if (!zkTabbox2._isAccord(tbx)) { //if delete tab , need scroll back !
 		zk.addCleanup(function () {
-			zkTabs2.scrollcheck(parent.id, "cln", cmp);
+			zkTabs2.scrollcheck(tabs.id, "cln", cmp);
 				if (zkTabbox2._isVert(tbx)) {
-					zkTabs2._fixHgh(tbx, parent);
+					zkTabs2._fixHgh(tbx, tabs);
 				}
-			}, false, parent.id + "Tabbox2");
+			}, false, tabs.id + "Tabbox2");
 		}
 	},
 	/** Returns the selected tab by giving any tab as the reference point. */
@@ -175,13 +173,7 @@ zkTab2 = {
 		}
 
 		//non-accordion: we can use sibling directly
-		var node = tab;
-
-		for (node = tab; node = node.nextSibling;)
-			if (getZKAttr(node, "sel") == "true")
-				return node;
-
-		for (node = tab; node = node.previousSibling;)
+		for (var node = tab.parentNode.firstChild; node; node = node.nextSibling)
 			if (getZKAttr(node, "sel") == "true")
 				return node;
 
@@ -201,13 +193,10 @@ zkTab2 = {
 		var panel = $e(getZKAttr(tab, "panel"));
 		if (!panel) return false;
 
-		for (var node = panel; node = node.nextSibling;)
+		for (var node = panel.parentNode.firstChild; node; node = node.nextSibling)
 			if (getZKAttr($real(node), "animating"))
 				return true;
 
-		for (var node = panel; node = node.previousSibling;)
-			if (getZKAttr($real(node), "animating"))
-				return true;
 		return false;
 	},
 	/** Returns the selected tab by specified any HTML tag containing it. */
@@ -244,7 +233,7 @@ zkTab2 = {
 
 		if (!accd) {
 			var tabs = $parentByType(tab, "Tabs2");
-			   if (tabs) zkTabs2._fixWidth(tabs.id);
+			   if (tabs) zkTabs2._fixWidth(tabs);
 		}
 
 		if (notify)
@@ -284,17 +273,10 @@ zkTab2 = {
 // tabs //
 zkTabs2 = {
 	init: function(cmp) {
-		zkTabs2._fixWidth(cmp.id);
-		//horizontal
-		var btn = $e(cmp.id + "!right");
-		zkTabs2._arrowlistener(btn);
-		btn = $e(cmp.id + "!left");
-		zkTabs2._arrowlistener(btn);
-		//vertical
-		btn = $e(cmp.id + "!down");
-		zkTabs2._arrowlistener(btn);
-		btn = $e(cmp.id + "!up");
-		zkTabs2._arrowlistener(btn);
+		zkTabs2._fixWidth(cmp);
+		for (var btn, key = ['right', 'left', 'down', 'up'], le = key.length; --le >= 0;)
+			if ((btn = $e(cmp.id, key[le])))
+				zk.listen(btn, 'click', zkTabs2.onClickArrow);
 
 		var meta = $parent(cmp);
 		if (!meta.initscroll)
@@ -303,17 +285,16 @@ zkTabs2 = {
 			};
 		zk.addInit(meta.initscroll, false, meta.id);
 	},
-	_arrowlistener : function(cmp) {
-		//For Bug- 2436434
-		if (cmp) {
-			zk.unlisten(cmp, "click", zkTabs2.onClickArrow);
-			zk.listen(cmp, "click", zkTabs2.onClickArrow);
+	setAttr: function (cmp, nm, val) {
+		if (nm == 'z.initscroll') {
+			zk.addInit(cmp.parentNode.initscroll, false, cmp.parentNode.id);
+			return true;
 		}
+		return false;
 	},
 	_showbutton : function(cmp) {
-		var tbx = $parentByType(cmp, "Tabbox2"),
-			tabs = $parentByType(cmp, "Tabs2"),
-			zcls = getZKAttr(tabs, "zcls");
+		var tbx = cmp.parentNode,
+			zcls = getZKAttr(cmp, "zcls");
 		if (tbx._scrolling) {
 			if (zkTabbox2._isVert(tbx)) {//vertical
 				zk.addClass($e(cmp.id,"header"), zcls + "-header-scroll");
@@ -327,9 +308,8 @@ zkTabs2 = {
 		}
 	},
 	_hidebutton : function(cmp) {
-		var tbx = $parentByType(cmp, "Tabbox2"),
-			tabs = $parentByType(cmp, "Tabs2"),
-			zcls = getZKAttr(tabs, "zcls");
+		var tbx = cmp.parentNode,
+			zcls = getZKAttr(cmp, "zcls");
 		if (!tbx._scrolling) {
 			if (zkTabbox2._isVert(tbx)) {//vertical
 				zk.rmClass($e(cmp.id,"header"), zcls + "-header-scroll");
@@ -343,30 +323,28 @@ zkTabs2 = {
 		}
 	},
 	onVisi: function(cmp) {
-		if (zkTabbox2._isVert($parent($e(cmp.id)))) {
+		if (zkTabbox2._isVert(cmp.parentNode)) {
 			cmp.style.height = "";
 		} else {
 			cmp.style.width = "";
 		}
-		zkTabs2._fixWidth(cmp.id);
+		zkTabs2._fixWidth(cmp);
 		zkTabs2.scrollcheck(cmp.id);
 	},
 	onSize: function(cmp) {
-		zkTabs2._fixWidth(cmp.id);
+		zkTabs2._fixWidth(cmp);
 		zkTabs2.scrollcheck(cmp.id);
 		zk.cleanVisibility($parentByType(cmp, "Tabbox2"));
 	},
 	beforeSize: function(cmp) {
-		if (zkTabbox2._isVert($parent($e(cmp.id)))) {
+		if (zkTabbox2._isVert($parent(cmp))) {
 			cmp.style.height = "";
-		}else{
+		} else {
 			cmp.style.width = "";
 		}
 	},
 	cleanup: function(cmp) {
-		cmp._width = null;
-		var meta = $parent(cmp);
-		if(meta) meta.initscroll = null;
+		cmp._width = cmp.parentNode.initscroll = null;
 	},
 	/** Check Tab Auto scrolling
 	 * @param {string} : uuid .
@@ -375,7 +353,7 @@ zkTabs2 = {
 	 */
 	scrollcheck: function(uuid, way, cmp) {
 		var tbsdiv = $e(uuid),
-			tabbox = $parentByType($e(uuid), "Tabbox2");
+			tabbox = $parentByType(tbsdiv, "Tabbox2");
 
 		if (!zk.isRealVisible(tabbox) || !zkTabbox2._isScroll(tabbox)) return;
 		if (!tbsdiv) return;	// tabbox is delete , no need to check scroll
@@ -387,7 +365,7 @@ zkTabs2 = {
 				tab = zk.childNodes(ul_si, zkTabs2._isLegalTab),
 				upbtn = $e(uuid + "!up"),
 				downbtn = $e(uuid + "!down");
-				for (var i=0,count=tab.length;i<count;i++) {
+				for (var i = 0, count = tab.length; i < count; i++) {
 					cldheight = cldheight + tab[i].offsetHeight;
 				}
 				if (tabbox._scrolling) { //already in scrolling status
@@ -400,7 +378,7 @@ zkTabs2 = {
 					}
 					switch (way) {
 						case "init":
-							if (cmp == null) cmp = zkTab2._getSelTab(zk.firstChild(ul_si,"LI"));
+							if (cmp == null) cmp = zkTab2._getSelTab(zk.firstChild(ul_si, "LI"));
 							var ost = cmp.offsetTop,
 								tosh = cmp.offsetHeight,
 								sct = header.scrollTop,
@@ -435,7 +413,8 @@ zkTabs2 = {
 						header.style.height = Math.max(tabbox.offsetHeight - 36, 0) + "px";
 						if (way == "end") {
 							var d = cldheight - header.offsetHeight - header.scrollTop + 2;
-							d < 0 ? "" : zkTabs2._tabscroll(uuid, "down", d);
+							if (d >= 0)
+								zkTabs2._tabscroll(uuid, "down", d);
 						}
 					}
 				}
@@ -497,7 +476,7 @@ zkTabs2 = {
 					header.style.width = Math.max(tabbox.offsetWidth - 38, 0) + "px";
 					if (way == "sel") {
 						var d = childwidth - header.offsetWidth - header.scrollLeft + 2;
-						d < 0 ? "" : zkTabs2._tabscroll(uuid, "right", d);
+						if (d >= 0) zkTabs2._tabscroll(uuid, "right", d);
 					}
 				}
 			}
@@ -507,9 +486,10 @@ zkTabs2 = {
 	onClickArrow: function(evt) {
 		if (!evt) evt = window.event;
 		var ele = Event.element(evt),
-		uuid = $outer(ele).id,
-		move = 0,
-		head = $e(uuid + "!header");
+			uuid = $outer(ele).id,
+			move = 0,
+			head = $e(uuid + "!header");
+		
 		//Scroll to next right tab
 		if (ele.id == uuid + "!right") {
 			var hosw = head.offsetWidth,
@@ -517,15 +497,13 @@ zkTabs2 = {
 				a =  zk.childNodes($e(uuid + "!cave"), zkTabs2._isLegalTab);
 			if (!a.length) return; // nothing to do
 			for (var i = 0, count = a.length; i < count; i++) {
-				if ($type(a[i]) == "Tab2") {
-					if (a[i].offsetLeft + a[i].offsetWidth > scl + hosw) {
-						move = a[i].offsetLeft + a[i].offsetWidth - scl - hosw;
-						if (!move || isNaN(move))
-							return null;
-						zkTabs2._tabscroll(uuid, "right", move);
-						return;
-					};
-				}
+				if (a[i].offsetLeft + a[i].offsetWidth > scl + hosw) {
+					move = a[i].offsetLeft + a[i].offsetWidth - scl - hosw;
+					if (!move || isNaN(move))
+						return null;
+					zkTabs2._tabscroll(uuid, "right", move);
+					return;
+				};
 			};
 		} else if (ele.id == uuid + "!left") {//Scroll to next left tab
 				var a =  zk.childNodes($e(uuid + "!cave"), zkTabs2._isLegalTab),
@@ -623,14 +601,14 @@ zkTabs2 = {
 	_isLegalLI: function (n) {return $tag(n) == "LI";},
 	/** Fix the width of header. */
 	_fixWidth: function(uuid) {
-		var tbx = $parent($e(uuid)),
-			tabs =  $e(uuid),
-			head = $e(uuid + "!header");
+		var tabs = typeof uuid == 'string' ? $e(uuid) : uuid, 
+			tbx = tabs.parentNode,
+			head = $e(tabs.id + "!header");
 		zkTabs2._fixHgh(tbx, tabs);
 		if (zkTabbox2._isVert(tbx)) {
-			ul = zk.firstChild($e(tabs, "header"), "UL"),
-			li = zk.childNodes(ul, zkTabs2._isLegalLI);
-			var most = 0;
+			var ul = zk.firstChild(head, "UL"),
+				li = zk.childNodes(ul, zkTabs2._isLegalLI),
+				most = 0;
 			 //li in IE doesn't have width...
 			 if (tabs.style.width) {
 			 	tabs._width = tabs.style.width;;
@@ -668,12 +646,13 @@ zkTabs2 = {
 		}
 	},
 	_fixHgh: function (tabbox, tabs) {
-		if ($e(tabbox.id) == null || $e(tabs) == null) return;
+		if (!tabbox || !tabs) return;
 		//fix tabpanels's height if tabbox's height is specified
 		//Ignore accordion since its height is controlled by each tabpanel
 		if (zkTabbox2._isVert(tabbox)) {
 			var child = zk.childNodes(tabbox, function (n) {return ($tag(n) == "DIV");}),
-			ul = zk.firstChild($e(tabs, "header"), "UL"),
+			head = $e(tabs, "header"),
+			ul = zk.firstChild(head, "UL"),
 			li = zk.childNodes(ul, zkTabs2._isLegalLI);
 			if (tabbox.style.height) {
 				zkTabs2._forceStyle(tabs, "h", zk.revisedSize(tabs,tabbox.offsetHeight,true)+"px");
@@ -683,9 +662,9 @@ zkTabs2 = {
 			}
 			//coz we have to make the header full
 			if (tabbox._scrolling) {
-				zkTabs2._forceStyle($e(tabs, "header"),"h", tabs.offsetHeight - 38 + "px");
+				zkTabs2._forceStyle(head,"h", tabs.offsetHeight - 38 + "px");
 			} else {
-				zkTabs2._forceStyle($e(tabs, "header"),"h", zk.revisedSize($e(tabs, "header"),tabs.offsetHeight,true) + "px");
+				zkTabs2._forceStyle(head,"h", zk.revisedSize(head,tabs.offsetHeight,true) + "px");
 			}
 			//separator(+border)
 			zkTabs2._forceStyle(child[1],"h",zk.revisedSize(child[1],tabs.offsetHeight,true)+"px");
@@ -736,37 +715,26 @@ if (zk.ie6Only) {
 ////
 //tabpanel2//
 zkTabpanel2 = {
-	init: function(cmp) {
-		var tbx = $e(getZKAttr(cmp, "box"));
-		this._fixPanelHgh(tbx,cmp);
-	},
-
 	onVisi: function(cmp) {
 		var tbx = $e(getZKAttr(cmp, "box"));
-		this._fixPanelHgh(tbx,cmp);//Bug 2104974
+		this._fixPanelHgh(tbx, cmp);//Bug 2104974
 		if (zk.ie) zk.redoCSS(tbx); //Bug 2526699 - (add zk.ie7)
 	},
-	_fixPanelHgh: function(tabbox,tabpanel){
+	_fixPanelHgh: function(tabbox, cmp) {
 		if (!zkTabbox2._isAccord(tabbox)) {
 			var hgh = tabbox.style.height,
-				panels = $parent(tabpanel);
-			if (panels) {
-				for (var pos, n = panels.firstChild; n; n = n.nextSibling) {
-					if (n.id) {
-						if (zk.ie) { // Bug: 1968434, this solution is very dirty but necessary.
-							pos = n.style.position;
-							n.style.position = "relative";
-						}
-						if (hgh && hgh != "auto") {//tabbox has height
-							hgh = zk.getVflexHeight(panels);
-							zk.setOffsetHeight(n, hgh);
-						}
-						//let real div 100% height
-						zk.addClass($e(n.id + "!real"), getZKAttr(n, "zcls") + "-cnt");
-						if (zk.ie) n.style.position = pos;
-					}
-				}
+				pos;
+			if (zk.ie) { // Bug: 1968434, this solution is very dirty but necessary.
+				pos = cmp.style.position;
+				cmp.style.position = "relative";
 			}
+			if (hgh && hgh != "auto") {//tabbox has height
+				hgh = zk.getVflexHeight(cmp.parentNode);
+				zk.setOffsetHeight(cmp, hgh);
+			}
+			//let real div 100% height
+			zk.addClass($e(cmp.id + "!real"), getZKAttr(cmp, "zcls") + "-cnt");
+			if (zk.ie) cmp.style.position = pos;
 		}
 	}
 }
