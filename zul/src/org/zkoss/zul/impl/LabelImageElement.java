@@ -36,7 +36,7 @@ import org.zkoss.zk.ui.ext.render.DynamicMedia;
  * 
  * @author tomyeh
  */
-public class LabelImageElement extends LabelElement implements org.zkoss.zul.impl.api.LabelImageElement{
+abstract public class LabelImageElement extends LabelElement implements org.zkoss.zul.impl.api.LabelImageElement{
 	private String _src;
 	/** The image. _src and _image cannot be both non-null. */
 	private Image _image;
@@ -48,6 +48,20 @@ public class LabelImageElement extends LabelElement implements org.zkoss.zul.imp
 	private byte _imgver;
 	/** Count the version of {@link #_hoverimg}. */
 	private byte _hoverimgver;
+
+	protected LabelImageElement() {
+	}
+	/** @since 5.0.0
+	 */
+	protected LabelImageElement(String label, String image) {
+		setLabel(label);
+		setImage(image);
+	}
+	/** @since 5.0.0
+	 */
+	protected LabelImageElement(String label) {
+		setLabel(label);
+	}
 
 	/** Returns the image URI.
 	 * <p>Default: null.

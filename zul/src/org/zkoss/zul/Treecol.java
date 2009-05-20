@@ -37,7 +37,7 @@ public class Treecol extends HeaderElement implements org.zkoss.zul.api.Treecol 
 	public Treecol() {
 	}
 	public Treecol(String label) {
-		setLabel(label);
+		super(label);
 	}
 	/* Constructs a tree header with label and image.
 	 *
@@ -45,8 +45,7 @@ public class Treecol extends HeaderElement implements org.zkoss.zul.api.Treecol 
 	 * @param src the URI of the image. Ignored if null or empty.
 	 */
 	public Treecol(String label, String src) {
-		setLabel(label);
-		setImage(src);
+		super(label, src);
 	}
 	/* Constructs a tree header with label, image and width.
 	 *

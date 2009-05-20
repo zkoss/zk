@@ -49,13 +49,10 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zul.api.Men
 	public Menuitem() {
 	}
 	public Menuitem(String label) {
-		this();
-		setLabel(label);
+		super(label);
 	}
 	public Menuitem(String label, String src) {
-		this();
-		setLabel(label);
-		setImage(src);
+		super(label, src);
 	}
 	
 	/** Returns whether the check mark shall be displayed in front

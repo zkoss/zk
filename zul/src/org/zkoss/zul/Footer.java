@@ -42,11 +42,10 @@ public class Footer  extends LabelImageElement implements org.zkoss.zul.api.Foot
 	public Footer() {
 	}
 	public Footer(String label) {
-		setLabel(label);
+		super(label);
 	}
 	public Footer(String label, String src) {
-		setLabel(label);
-		setImage(src);
+		super(label, src);
 	}
 
 	/** Returns the grid that this belongs to.

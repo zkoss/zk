@@ -72,8 +72,7 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 	public Column() {
 	}
 	public Column(String label) {
-		this();
-		setLabel(label);
+		super(label);
 	}
 	/* Constructs a grid header with label and image.
 	 *
@@ -81,9 +80,7 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 	 * @param src the URI of the image, or null to ignore.
 	 */
 	public Column(String label, String src) {
-		this();
-		setLabel(label);
-		setImage(src);
+		super(label, src);
 	}
 	/* Constructs a grid header with label, image and width.
 	 *
@@ -93,9 +90,7 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 	 * @since 3.0.4
 	 */
 	public Column(String label, String src, String width) {
-		this();
-		setLabel(label);
-		setImage(src);
+		super(label, src);
 		setWidth(width);
 	}
 

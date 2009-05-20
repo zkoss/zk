@@ -57,11 +57,10 @@ public class Treecell extends LabelImageElement implements org.zkoss.zul.api.Tre
 	public Treecell() {
 	}
 	public Treecell(String label) {
-		setLabel(label);
+		super(label);
 	}
 	public Treecell(String label, String src) {
-		setLabel(label);
-		setImage(src);
+		super(label, src);
 	}
 
 	/** Return the tree that owns this cell.

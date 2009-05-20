@@ -48,13 +48,10 @@ public class Comboitem extends LabelImageElement implements org.zkoss.zul.api.Co
 	public Comboitem() {
 	}
 	public Comboitem(String label) {
-		this();
-		setLabel(label);
+		super(label);
 	}
 	public Comboitem(String label, String image) {
-		this();
-		setLabel(label);
-		setImage(image);
+		super(label, image);
 	}
 	
 	/**

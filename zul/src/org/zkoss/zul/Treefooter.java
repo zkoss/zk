@@ -43,11 +43,10 @@ public class Treefooter extends LabelImageElement implements org.zkoss.zul.api.T
 	public Treefooter() {
 	}
 	public Treefooter(String label) {
-		setLabel(label);
+		super(label);
 	}
 	public Treefooter(String label, String src) {
-		setLabel(label);
-		setImage(src);
+		super(label, src);
 	}
 
 	/** Returns the tree that this belongs to.

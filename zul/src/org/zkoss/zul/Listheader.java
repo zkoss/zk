@@ -62,15 +62,14 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 	public Listheader() {
 	}
 	public Listheader(String label) {
-		setLabel(label);
+		super(label);
 	}
 	/* Constructs a list header with label and image.
 	 *
 	 * @param src the URI of the image. Ignored if null or empty.
 	 */
 	public Listheader(String label, String src) {
-		setLabel(label);
-		setImage(src);
+		super(label, src);
 	}
 	/* Constructs a list header with label, image and width.
 	 *
@@ -79,8 +78,7 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 	 * @since 3.0.4
 	 */
 	public Listheader(String label, String src, String width) {
-		setLabel(label);
-		setImage(src);
+		super(label, src);
 		setWidth(width);
 	}
 

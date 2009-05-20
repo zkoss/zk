@@ -35,14 +35,12 @@ import org.zkoss.zul.impl.XulElement;
  * @since 3.5.0
  */
 public class Fisheye extends LabelImageElement implements org.zkoss.zkex.zul.api.Fisheye {
-	private String _image, _label = "";
-
 	public Fisheye() {
 	}
 	public Fisheye(String label, String image) {
-		setLabel(label);
-		setImage(image);
+		super(label, image);
 	}
+
 	//-- super --//
 	public String getZclass() {
 		return _zclass == null ? "z-fisheye" : _zclass;

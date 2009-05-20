@@ -39,11 +39,10 @@ public class Auxheader extends HeaderElement implements org.zkoss.zul.api.Auxhea
 	public Auxheader() {
 	}
 	public Auxheader(String label) {
-		setLabel(label);
+		super(label);
 	}
 	public Auxheader(String label, String src) {
-		setLabel(label);
-		setImage(src);
+		super(label, src);
 	}
 
 	/** Returns number of columns to span this header.

@@ -43,11 +43,10 @@ public class Listfooter extends LabelImageElement implements org.zkoss.zul.api.L
 	public Listfooter() {
 	}
 	public Listfooter(String label) {
-		setLabel(label);
+		super(label);
 	}
 	public Listfooter(String label, String src) {
-		setLabel(label);
-		setImage(src);
+		super(label, src);
 	}
 
 	/** Returns the listbox that this belongs to.

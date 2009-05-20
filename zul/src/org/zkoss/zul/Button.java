@@ -49,12 +49,10 @@ public class Button extends LabelImageElement implements org.zkoss.zul.api.Butto
 	public Button() {
 	}
 	public Button(String label) {
-		this();
-		setLabel(label);
+		super(label);
 	}
 	public Button(String label, String image) {
-		this(label);
-		setImage(image);
+		super(label, image);
 	}
 	
 	/** Returns whether it is disabled.

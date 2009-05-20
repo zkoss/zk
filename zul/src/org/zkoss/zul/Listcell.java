@@ -43,11 +43,10 @@ public class Listcell extends LabelImageElement implements org.zkoss.zul.api.Lis
 	public Listcell() {
 	}
 	public Listcell(String label) {
-		setLabel(label);
+		super(label);
 	}
 	public Listcell(String label, String src) {
-		setLabel(label);
-		setImage(src);
+		super(label, src);
 	}
 
 	/** Returns the list box that it belongs to.

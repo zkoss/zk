@@ -52,11 +52,10 @@ public class Toolbarbutton extends LabelImageElement implements org.zkoss.zul.ap
 	public Toolbarbutton() {
 	}
 	public Toolbarbutton(String label) {
-		setLabel(label);
+		super(label);
 	}
 	public Toolbarbutton(String label, String image) {
-		setLabel(label);
-		setImage(image);
+		super(label, image);
 	}
 
 	// super

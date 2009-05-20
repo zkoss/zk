@@ -467,7 +467,7 @@
 			<xs:element ref="div" />
 			<xs:element ref="doublebox" />
 			<xs:element ref="fckeditor" />
-			<xs:element ref="fisheyelist" />
+			<xs:element ref="fisheyebar" />
 			<xs:element ref="gmaps" />
 			<xs:element ref="grid" />
 			<xs:element ref="groupbox" />
@@ -527,7 +527,7 @@
 				<xs:element ref="div" />
 				<xs:element ref="doublebox" />
 				<xs:element ref="fckeditor" />
-				<xs:element ref="fisheyelist" />
+				<xs:element ref="fisheyebar" />
 				<xs:element ref="gmaps" />
 				<xs:element ref="grid" />
 				<xs:element ref="groupbox" />
@@ -947,6 +947,7 @@
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="label" type="xs:string" use="optional" />
 		<xs:attribute name="image" type="xs:string" use="optional" />
+		<xs:attribute name="imageContent" type="xs:string" use="optional" />
 	</xs:complexType>
     
     <!-- fisheyebar -->
@@ -2433,47 +2434,6 @@
 		<xs:attribute name="onSave" type="xs:string" use="optional" />
 		<xs:attribute name="customConfigurationsPath" type="xs:string" use="optional" />
 	</xs:complexType>
-    <!-- fisheyeitem -->
-	<xs:element name="fisheyeitem" type="fisheyeitemType" />
-	<xs:complexType name="fisheyeitemType">
-		<xs:group ref="baseGroup" minOccurs="0" maxOccurs="unbounded" />
-		<xs:attributeGroup ref="abstractComponentAttrGroup" />
-		<xs:attribute name="label" type="xs:string" use="optional" />
-		<xs:attribute name="image" type="xs:string" use="optional" />
-	</xs:complexType>
-    <!-- fisheyelist -->
-	<xs:element name="fisheyelist" type="fisheyelistType" />
-	<xs:complexType name="fisheyelistType">
-		<xs:choice minOccurs="0" maxOccurs="unbounded">
-			<xs:group ref="baseGroup" />
-			<xs:element ref="fisheyeitem" />
-		</xs:choice>
-		<xs:attributeGroup ref="htmlBasedComponentAttrGroup" />
-		<xs:attribute name="itemWidth" type="intType" use="optional" />
-		<xs:attribute name="itemHeight" type="intType" use="optional" />
-		<xs:attribute name="itemMaxWidth" type="intType" use="optional" />
-		<xs:attribute name="itemMaxHeight" type="intType" use="optional" />
-		<xs:attribute name="itemPadding" type="intType" use="optional" />
-		<xs:attribute name="orient" type="orientAttrType" use="optional" />
-		<xs:attribute name="attachEdge" type="fisheyeEdgeAttrType" use="optional" />
-		<xs:attribute name="labelEdge" type="fisheyeEdgeAttrType" use="optional" />
-	</xs:complexType>
-	<xs:simpleType name="fisheyeEdgeAttrType">
-		<xs:union>
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="center" />
-					<xs:enumeration value="left" />
-					<xs:enumeration value="right" />
-					<xs:enumeration value="top" />
-					<xs:enumeration value="bottom" />
-				</xs:restriction>
-			</xs:simpleType>
-			<xs:simpleType>
-				<xs:restriction base="annotationType" />
-			</xs:simpleType>
-		</xs:union>
-	</xs:simpleType>
     <!-- gmapsGroup -->
 	<xs:group name="gmapsGroup">
 		<xs:choice>

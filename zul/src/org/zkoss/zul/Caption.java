@@ -35,11 +35,10 @@ public class Caption extends LabelImageElement implements org.zkoss.zul.api.Capt
 	public Caption() {
 	}
 	public Caption(String label) {
-		setLabel(label);
+		super(label);
 	}
 	public Caption(String label, String src) {
-		setLabel(label);
-		setImage(src);
+		super(label, src);
 	}
 
 	// super

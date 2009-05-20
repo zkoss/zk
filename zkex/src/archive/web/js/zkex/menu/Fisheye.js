@@ -13,28 +13,12 @@ This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 
-zkex.menu.Fisheye = zk.$extends(zul.Widget, {
-	_image: "",
-	_label: "",
-
-	$define: { 
-		label: _zkf = function () {
-			if(this.getNode()){
-				this.rerender();
-			}
-		},
-		image: _zkf
-	},
-
+zkex.menu.Fisheye = zk.$extends(zul.LabelImageWidget, {
 	getZclass: function () {
 		var zcls = this._zclass;
 		return zcls != null ? zcls: "z-fisheye";
 	},
-	setWidth: function () {},
-	setHeight: function() {},
-	isChildable: function(){
-		return false;
-	},
+
 	doMouseOver_: function (evt) {
 		//this.$super('doMouseOut_', arguments);
 		var cmp = this.getNode(),

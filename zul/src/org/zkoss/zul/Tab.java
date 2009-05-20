@@ -47,15 +47,13 @@ public class Tab extends LabelImageElement implements org.zkoss.zul.api.Tab {
 	public Tab() {}
 
 	public Tab(String label) {
-		this();
-		setLabel(label);
+		super(label);
 	}
 
 	public Tab(String label, String image) {
-		this();
-		setLabel(label);
-		setImage(image);
+		super(label, image);
 	}
+
 	//-- super --//
 	public void setWidth(String width) {
 		if (getTabbox().isVertical()){

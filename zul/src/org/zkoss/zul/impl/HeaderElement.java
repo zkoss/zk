@@ -30,6 +30,19 @@ import org.zkoss.zk.ui.UiException;
 abstract public class HeaderElement extends LabelImageElement implements org.zkoss.zul.impl.api.HeaderElement{
 	private String _align, _valign;
 
+	protected HeaderElement() {
+	}
+	/** @since 5.0.0
+	 */
+	protected HeaderElement(String label) {
+		super(label);
+	}
+	/** @since 5.0.0
+	 */
+	protected HeaderElement(String label, String image) {
+		super(label, image);
+	}
+
 	/** Returns the horizontal alignment of this column.
 	 * <p>Default: null (system default: left unless CSS specified).
 	 */

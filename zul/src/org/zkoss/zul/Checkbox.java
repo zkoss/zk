@@ -55,11 +55,10 @@ public class Checkbox extends LabelImageElement implements org.zkoss.zul.api.Che
 	public Checkbox() {
 	}
 	public Checkbox(String label) {
-		setLabel(label);
+		super(label);
 	}
 	public Checkbox(String label, String image) {
-		setLabel(label);
-		setImage(image);
+		super(label, image);
 	}
 
 	/** Returns whether it is disabled.

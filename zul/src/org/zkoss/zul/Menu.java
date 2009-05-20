@@ -40,13 +40,10 @@ public class Menu extends LabelImageElement implements org.zkoss.zul.api.Menu {
 	public Menu() {
 	}
 	public Menu(String label) {
-		this();
-		setLabel(label);
+		super(label);
 	}
 	public Menu(String label, String src) {
-		this();
-		setLabel(label);
-		setImage(src);
+		super(label, src);
 	}
 
 	/** Returns whether this is an top-level menu, i.e., not owning
