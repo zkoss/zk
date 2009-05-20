@@ -84,8 +84,10 @@ function zkopt(opts) {
 		case "kd": zk.keepDesktop = val; break;
 		case "pf": zk.pfmeter = val; break;
 		case "cd": zk.clickFilterDelay = val; break;
+		case "ed": zk.edition = val == 'e' ? 'enterprise': 'professional';
 		}
 	}
+	if (!zk.edition) zk.edition = 'standard';
 }
 
 function zkmld(wgtcls, molds) {

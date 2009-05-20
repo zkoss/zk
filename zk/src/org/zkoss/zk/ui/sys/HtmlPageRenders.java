@@ -42,6 +42,7 @@ import org.zkoss.xml.XMLs;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
+import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
@@ -227,6 +228,12 @@ public class HtmlPageRenders {
 
 		sb.append(");");
 		final int jdot = sb.length();
+
+		if (WebApps.getFeature("enterprise"))
+			sb.append(",ed:'e'");
+		else if (WebApps.getFeature("professional"))
+			sb.append(",ed:'p'");
+
 		int v = config.getProcessingPromptDelay();
 		if (v != 900) sb.append(",pd:").append(v);
 		v = config.getTooltipDelay();
