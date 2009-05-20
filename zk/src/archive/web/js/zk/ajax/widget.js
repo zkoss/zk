@@ -775,7 +775,16 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 		return n;
 	},
-
+	getPage: function () {
+		if (this.desktop && this.desktop.nChildren == 1)
+			return this.desktop.firstChild;
+			
+		for (var page = this.parent; page; page = page.parent)
+			if (page.$instanceof(zk.Page))
+				return page;
+				
+		return null;
+	},
 	bind: function (desktop, skipper) {
 		var after = [];
 		this.bind_(desktop, skipper, after);
