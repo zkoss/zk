@@ -22,6 +22,7 @@ ZK 3.6.2
   2790417: load-after and save-after shall be the last processed
   2791499: SerializableUiFactory causes NPE when Web app stops (Tomcat)
   2792105: Highlight effect not revert if dragging listitem to non-droppable area
+  2794205: IE6 the errorbox moves away
 
 * Upgrade Notes
   * The signature of doInit of org.zkoss.zk.ui.util.Initiator is changed.

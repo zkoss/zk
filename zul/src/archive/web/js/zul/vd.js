@@ -273,7 +273,7 @@ zkVld._errbox = function () {
 		//if we slide, opera will slide it at the top of screen and position it
 		//later. No sure it is a bug of script.aculo.us or Opera
 	if (zk.ie6Only) setTimeout(function () {
-		box._stackup = zk.makeStackup(box, id);
+		box._stackup = zk.makeStackup(box);
 	}, 0);
 	zul.initMovable(box, {
 		zindex: box.style.zIndex, starteffect: zk.voidf,
