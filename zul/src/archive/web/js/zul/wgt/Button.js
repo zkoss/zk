@@ -82,14 +82,14 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			n = this.getSubnode('btn');
 		}
 
-		this.domListen_(n, "focus");
-		this.domListen_(n, "blur");
+		this.domListen_(n, "onFocus", "doFocus_");
+		this.domListen_(n, "onBlur", "doBlur_");
 	},
 	unbind_: function () {
 		var n = this._mold == 'os' ? this.getNode(): this.getSubnode('btn');
 		if (n) {
-			this.domUnlisten_(n, "focus");
-			this.domUnlisten_(n, "blur");
+			this.domUnlisten_(n, "onFocus", "doFocus_");
+			this.domUnlisten_(n, "onBlur", "doBlur_");
 		}
 
 		this.$supers('unbind_', arguments);

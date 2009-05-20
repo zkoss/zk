@@ -69,7 +69,7 @@ zul.grid.Group = zk.$extends(zul.grid.Row, {
 		out.push('</div></td>');
 		if (!opts.out) return out.join('');
 	},
-	domClick_: function (evt) {
+	_doImgClick: function (evt) {
 		var toOpen = !this.isOpen(), grid = this.getGrid();
 		this._openItem(toOpen);
 		
@@ -78,7 +78,7 @@ zul.grid.Group = zk.$extends(zul.grid.Row, {
 			if (!grid.paging) grid.onSize(); 
 				// group in paging will invalidate the whole rows.
 		}
-		zEvt.stop(evt);
+		evt.stop();
 	},
 	_openItem: function (open, silent) {
 		this._open = open;
@@ -104,7 +104,7 @@ zul.grid.Group = zk.$extends(zul.grid.Row, {
 		var n = this.getNode(),
 			img = this.getSubnode("img");
 		if (img)
-			this.domListen_(img, "click");
+			this.domListen_(img, 'onClick', '_doImgClick');
 		var table = n.parentNode.parentNode;
 		if (table.tBodies.length > 1) {
 			var span = 0;
@@ -116,7 +116,7 @@ zul.grid.Group = zk.$extends(zul.grid.Row, {
 		}
 	},
 	unbind_: function (skipper, after) {
-		this.domUnlisten_(this.eimg, "click");
+		this.domUnlisten_(this.eimg, 'onClick', '_doImgClick');
 		var prev = this.getGroup();
 		if (prev)
 			after.push(function () {

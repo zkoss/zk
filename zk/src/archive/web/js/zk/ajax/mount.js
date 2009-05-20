@@ -413,13 +413,13 @@ zkm = {
 	docMouseDown: function (evt) {
 		evt = evt || window.event;
 		var target = zEvt.target(evt),
-			$Widget = zk.Widget,
-			wgt = $Widget.$(evt, true);
+			Widget = zk.Widget,
+			wgt = Widget.$(evt, true);
 		zk.lastPointer[0] = zEvt.x(evt);
 		zk.lastPointer[1] = zEvt.y(evt);
 
 		if (target != document.body && target != document.body.parentNode) //not click on scrollbar
-			$Widget.domMouseDown(wgt); //null if mask
+			Widget._domMouseDown(wgt); //null if mask
 
 		if (wgt)
 			zkm._doEvt(new zk.Event(wgt, 'onMouseDown', zkm._mouseData(evt, wgt), null, evt));

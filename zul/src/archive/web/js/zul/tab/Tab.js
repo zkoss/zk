@@ -48,11 +48,10 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 			index = this.getIndex();
 		return tabpanels.getChildAt(index);
 	},
-	_domClosebtnClick : function(evt) {
-		if (!evt) evt = window.event;
+	_doCloseClick : function(evt) {
 		if (!this._disabled) {
 			this.fire('onClose');
-			zEvt.stop(evt);
+			evt.stop();
 		}
 	},
 	_sliding: function(tab) {
@@ -166,7 +165,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		this.$supers('bind_', arguments);
 		var closebtn = this.getSubnode('close');
 		if (closebtn) {
-			this.domListen_(closebtn, "click", '_domClosebtnClick');
+			this.domListen_(closebtn, "onClick", '_doCloseClick');
 			if (!closebtn.style.cursor)
 				closebtn.style.cursor = "default";
 		}
@@ -175,6 +174,6 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		this.$supers('unbind_', arguments);
 		var closebtn = this.getSubnode('close');
 		if (closebtn)
-			this.domUnlisten_(closebtn, "click", '_domClosebtnClick');		
+			this.domUnlisten_(closebtn, "onClick", '_doCloseClick');
 	}
 });

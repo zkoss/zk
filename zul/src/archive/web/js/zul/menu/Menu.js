@@ -60,31 +60,32 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		this.$supers('bind_', arguments);
 
 		if (!this.isTopmost()) {
-			var anc = this.getSubnode('a'), n = this.getNode();
-			this.domListen_(anc, "focus");
-			this.domListen_(anc, "blur");
-			this.domListen_(n, "mouseover");
-			this.domListen_(n, "mouseout");
+			var anc = this.getSubnode('a'),
+				n = this.getNode();
+			this.domListen_(anc, "onFocus", "doFocus_");
+			this.domListen_(anc, "onBlur", "doBlur_");
+			this.domListen_(n, "onMouseOver");
+			this.domListen_(n, "onMouseOut");
 		} else {
 			if (zk.ie) this._fixBtn();
 
 			var anc = this.getSubnode('a');
-			this.domListen_(anc, "mouseover");
-			this.domListen_(anc, "mouseout");
+			this.domListen_(anc, "onMouseOver");
+			this.domListen_(anc, "onMouseOut");
 		}
 	},
 	unbind_: function () {
 		if (!this.isTopmost()) {
 			var anc = this.getSubnode('a'),
 				n = this.getNode();
-			this.domUnlisten_(anc, "focus");
-			this.domUnlisten_(anc, "blur");
-			this.domUnlisten_(n, "mouseover");
-			this.domUnlisten_(n, "mouseout");
+			this.domUnlisten_(anc, "onFocus", "doFocus_");
+			this.domUnlisten_(anc, "onBlur", "doBlur_");
+			this.domUnlisten_(n, "onMouseOver");
+			this.domUnlisten_(n, "onMouseOut");
 		} else {
-			var n = this.getNode();
-			this.domUnlisten_(n, "mouseover");
-			this.domUnlisten_(n, "mouseout");
+			var anc = this.getSubnode('a');
+			this.domUnlisten_(anc, "onMouseOver");
+			this.domUnlisten_(anc, "onMouseOut");
 		}
 
 		this.$supers('unbind_', arguments);
@@ -100,11 +101,11 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		}
 		this.fireX(evt);
 	},
-	domMouseover_: function (evt) {
+	_doMouseOver: function (evt) { //not zk.Widget.doMouseOver_
 		if (this.$class._isActive(this)) return;
 
 		var	topmost = this.isTopmost();
-		if (topmost && zk.ie && !zDom.isAncestor(this.getSubnode('a'), zEvt.target(evt)))
+		if (topmost && zk.ie && !zDom.isAncestor(this.getSubnode('a'), evt.domTarget))
 				return; // don't activate
 
 		this.$class._addActive(this);
@@ -131,13 +132,12 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 			}
 		}
 	},
-	domMouseout_: function (evt) {
+	_doMouseOut: function (evt) { //not zk.Widget.doMouseOut_
 		if (zk.ie) {
 			var n = this.getSubnode('a'),
 				xy = zDom.revisedOffset(n),
-				p = zEvt.pointer(evt),
-				x = p[0],
-				y = p[1],
+				x = evt.px,
+				y = evt.py,
 				diff = this.isTopmost() ? 1 : 0,
 				vdiff = this.isTopmost() && 'vertical' == this.parent.getOrient() ? 1 : 0;
 			if (x - diff > xy[0] && x <= xy[0] + n.offsetWidth && y - diff > xy[1] &&

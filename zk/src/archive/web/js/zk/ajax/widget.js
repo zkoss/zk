@@ -1111,49 +1111,13 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 
 	//DOM event handling//
-	domListen_: function (n, evtnm, fnm) {
-		if (!fnm) fnm = zk.Widget._dome2fn(evtnm);
-		if (fnm = this._domfInDesign(fnm))
-			zEvt.listen(n, evtnm, fnm);
+	domListen_: function (n, evtnm, fn) {
+		if (inf = zk.Widget._domevti(this, evtnm, fn))
+			zEvt.listen(n, inf[0], inf[1]);
 	},
-	domUnlisten_: function (n, evtnm, fnm) {
-		if (!fnm) fnm = zk.Widget._dome2fn(evtnm);
-		if (fnm = this._domfInDesign(fnm))
-			zEvt.unlisten(n, evtnm, fnm);
-	},
-	_domfInDesign: function (fn) { //fn in design mode
-		if (this.inDesign) {
-			if (fn.startsWith('_dom'))
-				fn = '_domDesign' + fn.substring(4);
-			else
-				fn = 'domDesign' + (fn.startsWith('dom') ? fn.substring(3): fn);
-			fn = this[fn];
-			return fn ? this.proxy(fn): null;
-		}
-
-		var f = this[fn];
-		if (!f)
-			throw fn + ' not defined in ' + this.className;
-		return this.proxy(f);
-	},
-	domFocus_: function (devt) {
-		if (this.canActivate()) {
-			zk.currentFocus = this;
-			zWatch.fire('onFloatUp', null, this); //notify all
-
-			var evt = new zk.Event(this, 'onFocus', null, null, devt);
-			this.doFocus_(evt);
-			if (evt.domStopped) zEvt.stop(devt);
-		}
-	},
-	domBlur_: function (devt) {
-		//due to domMouseDown called, zk.currentFocus already corrected,
-		//so we clear it only if caused by other case
-		if (!zk._cfByMD) zk.currentFocus = null;
-
-		var evt = new zk.Event(this, 'onFocus', null, null, devt);
-		this.doBlur_(evt);
-		if (evt.domStopped) zEvt.stop(devt);
+	domUnlisten_: function (n, evtnm, fn) {
+		if (fn = zk.Widget._domevti(this, evtnm, fn))
+			zEvt.unlisten(n, inf[0], inf[1]);
 	},
 	toJSON: function () {
 		return this.uuid;
@@ -1197,10 +1161,86 @@ zk.Widget = zk.$extends(zk.Object, {
 	_binds: {}, //Map(uuid, wgt): bind but no node
 
 	//Event Handling//
-	_dome2fn: function (evtnm) {//evtnm => fnm
-		return 'dom' + evtnm.charAt(0).toUpperCase() + evtnm.substring(1) + '_';
+	_domevti: function (wgt, evtnm, fn) { //proxy event listener
+		evtnm = evtnm.substring(2);
+		if (!fn) {
+			fn = '_do';
+			if (wgt.inDesign) fn += 'Design';
+			fn += evtnm;
+		} else if (wgt.inDesign)
+			fn = fn.startsWith('_do') ? '_doDesign' + fn.substring(3):
+				'doDesign' + (fn.startsWith('do') ? fn.substring(2): fn);
+
+		var f = wgt[fn];
+		if (!f) {
+			if (!wgt.inDesign)
+				throw 'Listener ' + fn + ' not found in ' + wgt.className;
+			return null;
+		}
+		return [evtnm == 'DoubleClick' ? 'dblclick': evtnm.toLowerCase(),
+			zk.Widget._domevtproxy(wgt, f)];
 	},
-	domMouseDown: function (wgt) {
+	_domevtproxy: function (wgt, f) {
+		var fps = wgt._$evproxs, fp;
+		if (!fps) wgt._$evproxs = fps = {};
+		else if (fp = fps[f]) return fp;
+		return fps[f] = zk.Widget._domevtproxy0(wgt, f);
+	},
+	_domevtproxy0: function (wgt, f) {
+		return function (devt) {
+			if (!devt) devt = window.event;
+			var args = [], evt;
+			for (var j = arguments.length; --j > 0;)
+				args.unshift(arguments[j]);
+			args.unshift(evt = zk.Widget._toEvent(devt, wgt));
+
+			switch (devt.type){
+			case 'focus':
+				if (wgt.canActivate()) {
+					zk.currentFocus = wgt;
+					zWatch.fire('onFloatUp', null, wgt); //notify all
+					break;
+				}
+				return; //ignore it
+			case 'blur':
+				//due to _domMouseDown called, zk.currentFocus already corrected,
+				//so we clear it only if caused by other case
+				if (!zk._cfByMD) zk.currentFocus = null;
+			}
+
+			var ret = f.apply(wgt, args);
+			if (evt.domStopped) zEvt.stop(devt);
+			return typeof ret == 'undefined' ? evt.returnValue: ret;
+		};
+	},
+	_toEvent: function (devt, wgt) { //DOM event to zk.Event
+		var type = devt.type,
+			target = zk.Widget.$(zEvt.target) || wgt,
+			data, opts;
+
+		if (type.startsWith('mouse')) {
+			if (type.length > 5)
+				type = 'mouse' + type.charAt(5).toUpperCase() + type.substring(6);
+			data = zkm._mouseData(devt, target);
+		} else if (type.startsWith('key')) {
+			if (type.length > 3)
+				type = 'key' + type.charAt(3).toUpperCase() + type.substring(4);
+			data = zEvt.keyData(devt);
+		} else if (type == 'dblclick') {
+			data = zkm._mouseData(devt, target);
+			opts = {ctl:true};
+			type = 'DoubleClick';
+		} else {
+			if (type == 'click') {
+				data = zkm._mouseData(devt, target);
+				opts = {ctl:true};
+			}
+			type = type.charAt(0).toUpperCase() + type.substring(1);
+		}
+		return new zk.Event(target, 'on' + type, data, opts, devt);
+	},
+
+	_domMouseDown: function (wgt) { //called by drag.js
 		var modal = zk.currentModal;
 		if (modal && !wgt) {
 			var cf = zk.currentFocus;

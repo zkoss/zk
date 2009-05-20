@@ -54,11 +54,11 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				if (autoscroll) {
 					bodyEl.style.overflow = "auto";
 					bodyEl.style.position = "relative";
-					this.domListen_(bodyEl, "scroll");
+					this.domListen_(bodyEl, "onScroll");
 				} else {
 					bodyEl.style.overflow = "hidden";
 					bodyEl.style.position = "";
-					this.domUnlisten_(bodyEl, "scroll");
+					this.domUnlisten_(bodyEl, "onScroll");
 				}
 			}
 		},
@@ -230,14 +230,14 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		if (this.isAutoscroll()) {
 			var bodyEl = this.isFlex() && this.firstChild ?
 					this.firstChild.getNode() : this.getSubnode('cave');
-			this.domListen_(bodyEl, "scroll");
+			this.domListen_(bodyEl, "onScroll");
 		}
 	},
 	unbind_: function () {
 		if (this.isAutoscroll()) {
 			var bodyEl = this.isFlex() && this.firstChild ?
 					this.firstChild.getNode() : this.getSubnode('cave');
-			this.domUnlisten_(bodyEl, "scroll");
+			this.domUnlisten_(bodyEl, "onScroll");
 		}
 		if (this.getSubnode('split')) {			
 			if (this._drag) {
@@ -247,7 +247,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		}
 		this.$supers('unbind_', arguments);
 	},
-	domScroll_: function () {
+	_doScroll: function () {
 		zWatch.fireDown('onScroll', null, this);
 	},
 	doMouseOver_: function (evt) {

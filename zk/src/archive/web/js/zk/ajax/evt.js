@@ -18,7 +18,7 @@ zk.Event = zk.$extends(zk.Object, {
 		this.name = name;
 		this.data = data;
 		if (data && typeof data == 'object' && !data.$array)
-			zk.copy(this, data);
+			zk.$default(this, data);
 
 		this.opts = opts;
 		this.domEvent = domEvent = domEvent || window.event;

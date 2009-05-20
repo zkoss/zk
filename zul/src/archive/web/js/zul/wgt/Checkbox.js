@@ -61,16 +61,16 @@ _zkc = zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		if (zk.gecko2Only)
 			zEvt.listen(n, "click", zul.wgt.Checkbox._domClick);
 			// bug #2233787 : this is a bug of firefox 2, it need get currentTarget
-		this.domListen_(n, "focus");
-		this.domListen_(n, "blur");
+		this.domListen_(n, "onFocus", "doFocus_");
+		this.domListen_(n, "onBlur", "doBlur_");
 	},
 	unbind_: function () {
 		var n = this.getSubnode('real');
 		
 		if (zk.gecko2Only)
 			zEvt.unlisten(n, "click", zul.wgt.Checkbox._domClick);
-		this.domUnlisten_(n, "focus");
-		this.domUnlisten_(n, "blur");
+		this.domUnlisten_(n, "onFocus", "doFocus_");
+		this.domUnlisten_(n, "onBlur", "doBlur_");
 
 		this.$supers('unbind_', arguments);
 	},

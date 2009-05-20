@@ -192,7 +192,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			inp = this.getInputNode();
 		if (btn) {
 			this._auxb = new zul.Auxbutton(this, btn, inp);
-			this.domListen_(btn, 'click', '_domBtn');
+			this.domListen_(btn, 'onClick', '_doBtnClick');
 		}
 		zWatch.listen('onSize', this);
 		zWatch.listen('onShow', this);
@@ -205,7 +205,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		if (btn) {
 			this._auxb.cleanup();
 			this._auxb = null;
-			this.domUnlisten_(btn, 'click', '_domBtn');
+			this.domUnlisten_(btn, 'onClick', '_doBtnClick');
 		}
 
 		zWatch.unlisten('onSize', this);
@@ -215,10 +215,10 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 
 		this.$supers('unbind_', arguments);
 	},
-	_domBtn: function (devt) {
+	_doBtnClick: function (evt) {
 		if (this._open) this.close({focus:true,sendOnOpen:true});
 		else this.open({focus:true,sendOnOpen:true});
-		zEvt.stop(devt);
+		evt.stop();
 	},
 	doKeyDown_: function (evt) {
 		this._doKeyDown(evt);

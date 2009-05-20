@@ -458,15 +458,17 @@ zk.Object.prototype = {
 	},
 
 	proxy: function (f) {
-		var fps = this._$proxies;
+		var fps = this._$proxies, fp;
 		if (!fps) this._$proxies = fps = {};
-		if (fps[f]) return fps[f];
+		else if (fp = fps[f]) return fp;
+		return fps[f] = zk._proxy(this, f);
+	}
+};
 
-		var o = this;
-		return fps[f] = function () {
+zk._proxy = function (o, f) {
+	return function () {
 			return f.apply(o, arguments);
 		};
-	}
 };
 
 zk.Class = function () {}

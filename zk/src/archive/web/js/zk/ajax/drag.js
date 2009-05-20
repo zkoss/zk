@@ -288,7 +288,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 
 		var c = this.control;
 		if (c && !c.$instanceof(zk.Widget)) c = null;
-		zk.Widget.domMouseDown(c); //since event is stopped
+		zk.Widget._domMouseDown(c); //since event is stopped
 	},
 	_keyPress: function(evt) {
 		if(zEvt.keyCode(evt) == zEvt.ESC) {

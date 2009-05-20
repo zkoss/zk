@@ -160,8 +160,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			this.updateChange_();
 	},
 
-	//dom event//
-	domSelect_: function (devt) {
+	_doSelect: function (evt) {
 		if (this.isListen('onSelection')) {
 			var inp = this.getInputNode(),
 				sr = zDom.getSelectionRange(inp),
@@ -335,17 +334,17 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	bind_: function () {
 		this.$supers('bind_', arguments);
 		var inp = this.getInputNode();
-		this.domListen_(inp, "focus");
-		this.domListen_(inp, "blur");
-		this.domListen_(inp, "select");
+		this.domListen_(inp, "onFocus", "doFocus_");
+		this.domListen_(inp, "onBlur", "doBlur_");
+		this.domListen_(inp, "onSelect");
 	},
 	unbind_: function () {
 		this.clearErrorMessage(true);
 
 		var n = this.getInputNode();
-		this.domUnlisten_(n, "focus");
-		this.domUnlisten_(n, "blur");
-		this.domUnlisten_(n, "select");
+		this.domUnlisten_(n, "onFocus", "doFocus_");
+		this.domUnlisten_(n, "onBlur", "doBlur_");
+		this.domUnlisten_(n, "onSelect");
 
 		this.$supers('unbind_', arguments);
 	},

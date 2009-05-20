@@ -90,29 +90,28 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		this.$supers('bind_', arguments);
 
 		if (!this.isDisabled()) {
-			var anc = this.getSubnode('a'),
-				n = this.getNode();
-
-			this.domListen_(n, "mouseover");
-			this.domListen_(n, "mouseout");
+			var n = this.getNode();
+			this.domListen_(n, "onMouseOver");
+			this.domListen_(n, "onMouseOut");
 
 			if (this.isTopmost()) {
-				this.domListen_(anc, "focus");
-				this.domListen_(anc, "blur");
+				var anc = this.getSubnode('a');
+				this.domListen_(anc, "onFocus", "doFocus_");
+				this.domListen_(anc, "onBlur", "doBlur_");
 			}
 		}
 		if (zk.ie && this.isTopmost()) this._fixBtn();
 	},
 	unbind_: function () {
 		if (!this.isDisabled()) {
-			var anc = this.getSubnode('a'),
-				n = this.getNode();
-			this.domUnlisten_(n, "mouseover");
-			this.domUnlisten_(n, "mouseout");
+			var n = this.getNode();
+			this.domUnlisten_(n, "onMouseOver");
+			this.domUnlisten_(n, "onMouseOut");
 
 			if (this.isTopmost()) {
-				this.domUnlisten_(anc, "focus");
-				this.domUnlisten_(anc, "blur");
+				var anc = this.getSubnode('a');
+				this.domUnlisten_(anc, "onFocus", "doFocus_");
+				this.domUnlisten_(anc, "onBlur", "doBlur_");
 			}
 		}
 
@@ -146,29 +145,28 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 			zWatch.fire('onFloatUp', null, this); //notify all
 		}
 	},
-	domMouseover_: function (evt) {
+	_doMouseOver: function (evt) { //not zk.Widget.doMouseOver_
 		if (this.$class._isActive(this)) return;
 		if (!this.isDisabled()) {
-			if (this.isTopmost() && zk.ie && !zDom.isAncestor(this.getSubnode('a'), zEvt.target(evt)))
+			if (zk.ie && this.isTopmost() && !zDom.isAncestor(this.getSubnode('a'), evt.domTarget))
 				return;
 
 			this.$class._addActive(this);
 			zWatch.fire('onFloatUp', null, this); //notify all
 		}
 	},
-	domMouseout_: function (evt) {
+	_doMouseOut: function (evt) { //not zk.Widget.doMouseOut_
 		if (!this.isDisabled()) {
 			if (zk.ie) {
-					var n = this.getSubnode('a'),
-						xy = zDom.revisedOffset(n),
-						p = zEvt.pointer(evt),
-						x = p[0],
-						y = p[1],
-						diff = this.isTopmost() ? 1 : 0;
-					if (x - diff > xy[0] && x <= xy[0] + n.offsetWidth && y - diff > xy[1] &&
-						y <= xy[1] + n.offsetHeight)
-						return; // don't deactivate;
-				}
+				var n = this.getSubnode('a'),
+					xy = zDom.revisedOffset(n),
+					x = evt.px,
+					y = evt.py,
+					diff = this.isTopmost() ? 1 : 0;
+				if (x - diff > xy[0] && x <= xy[0] + n.offsetWidth && y - diff > xy[1] &&
+					y <= xy[1] + n.offsetHeight)
+					return; // don't deactivate;
+			}
 			this.$class._rmActive(this);
 		}
 	}
