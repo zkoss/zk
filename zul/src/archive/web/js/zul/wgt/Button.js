@@ -128,7 +128,13 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 					}
 				}
 			}
-			if (aded) zWatch.listen('onResponse', new zul.wgt.ADBS(aded));
+			if (aded) {
+				aded = new zul.wgt.ADBS(aded);
+				if (this.isListen('onClick', {asapOnly:true}))
+					zWatch.listen('onResponse', aded);
+				else
+					setTimeout(function () {aded.onResponse();}, 800);
+			}
 
 			this.fireX(evt);
 
