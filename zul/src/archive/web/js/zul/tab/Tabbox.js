@@ -14,9 +14,22 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-zk.def(zul.tab.Tabbox = zk.$extends(zul.Widget, {
+zul.tab.Tabbox = zk.$extends(zul.Widget, {
 	_orient: "horizontal",
 	_tabscroll: true,
+
+	$define: {
+		tabscroll: _zkf = function () {
+			this.rerender();
+		},
+		orient: _zkf,
+		panelSpacing: function(v) {
+			if (v != null && v.length == 0)
+				this._panelSpacing = v = null;
+			this.rerender();
+		}
+	},
+
 	getTabs: function () {
 		//The tabs must in index 0
 		return this.getChildAt(0);
@@ -92,15 +105,5 @@ zk.def(zul.tab.Tabbox = zk.$extends(zul.Widget, {
 				}
 			})
 		);
-	}
-}), {//zk.def
-	tabscroll: _zkf = function () {
-		this.rerender();
-	},
-	orient: _zkf,
-	panelSpacing: function(v) {
-		if (v != null && v.length == 0)
-			this._panelSpacing = v = null;
-		this.rerender();
 	}
 });

@@ -12,12 +12,42 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.def(zul.med.Flash = zk.$extends(zul.Widget, {
+zul.med.Flash = zk.$extends(zul.Widget, {
 	_wmode: 'transparent',
 	_quality: 'high',
 	_autoplay: true,
 	_loop: false,
 	_version: '6,0,0,0',
+
+	$define: {
+		version: function () {
+			this.rerender();
+		},
+		src: function (v) {
+			var n = this._embedNode();
+			if (n) n.movie = v || '';
+		},
+		wmode: function (wmode) {
+			var n = this._embedNode();
+			if (n) n.wmode = v || '';
+		},
+		bgcolor: function (v) {
+			var n = this._embedNode();
+			if (n) n.bgcolor = v || '';
+		},
+		quality: function (v) {
+			var n = this._embedNode();
+			if (n) n.quality = v || '';
+		},
+		autoplay: function (autoplay) {
+			var n = this._embedNode();
+			if (n) n.autoplay = v || '';
+		},
+		loop: function (v) {
+			var n = this._embedNode();
+			if (n) n.loop = v || '';
+		}
+	},
 
 	//super//
 	setHeight: function (height) {
@@ -33,34 +63,5 @@ zk.def(zul.med.Flash = zk.$extends(zul.Widget, {
 
 	_embedNode: function () {
 		return this.getSubnode('emb');
-	}
-}), { //zk.def
-	version: function () {
-		this.rerender();
-	},
-	src: function (v) {
-		var n = this._embedNode();
-		if (n) n.movie = v || '';
-	},
-
-	wmode: function (wmode) {
-		var n = this._embedNode();
-		if (n) n.wmode = v || '';
-	},
-	bgcolor: function (v) {
-		var n = this._embedNode();
-		if (n) n.bgcolor = v || '';
-	},
-	quality: function (v) {
-		var n = this._embedNode();
-		if (n) n.quality = v || '';
-	},
-	autoplay: function (autoplay) {
-		var n = this._embedNode();
-		if (n) n.autoplay = v || '';
-	},
-	loop: function (v) {
-		var n = this._embedNode();
-		if (n) n.loop = v || '';
 	}
 });

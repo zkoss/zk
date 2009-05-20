@@ -12,7 +12,19 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.def(zul.sel.Listitem = zk.$extends(zul.Widget, {
+zul.sel.Listitem = zk.$extends(zul.Widget, {
+	$define: {
+		checkable: function () {
+			this.rerender();
+		},
+		selected: function () {
+	//		if (this.parent)
+	//			this.parent.toggleItemSelection(this);
+		},
+		disabled: function () {
+		}
+	},
+
 	//super//
 	getZclass: function () {
 		return this._zclass == null ? "z-listitem" : this._zclass;
@@ -24,15 +36,5 @@ zk.def(zul.sel.Listitem = zk.$extends(zul.Widget, {
 			keys: zEvt.metaData(evt)
 		});
 		this.$supers('doClick_', arguments);
-	}
-}), { // zk.def
-	checkable: function () {
-		this.rerender();
-	},
-	selected: function () {
-//		if (this.parent)
-//			this.parent.toggleItemSelection(this);
-	},
-	disabled: function () {
 	}
 });

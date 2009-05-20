@@ -12,9 +12,16 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.def(zul.wgt.Toolbar = zk.$extends(zul.Widget, {
+zul.wgt.Toolbar = zk.$extends(zul.Widget, {
 	_orient: "horizontal",
 	_align: "start",
+
+	$define: {
+		align: _zkf = function () {
+			this.rerender();
+		},
+		orient: _zkf
+	},
 
 	// super
 	getZclass: function(){
@@ -37,9 +44,4 @@ zk.def(zul.wgt.Toolbar = zk.$extends(zul.Widget, {
 			this.rerender();
 	}
 	
-}), { //zk.def
-	align: _zkf = function () {
-		this.rerender();
-	},
-	orient: _zkf
 });

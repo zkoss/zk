@@ -12,10 +12,17 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.def(zul.med.Applet = zk.$extends(zul.Widget, {
+zul.med.Applet = zk.$extends(zul.Widget, {
 	$init: function() {
 		this._params = {};
 		this.$supers('$init', arguments);
+	},
+
+	$define: {
+		code: function (v) {
+			var n = this.getNode();
+			if (n) n.code = v || '';
+		}
 	},
 
 	invoke: zk.ie ? function() {
@@ -92,10 +99,5 @@ zk.def(zul.med.Applet = zk.$extends(zul.Widget, {
 		var params = this._params;
 		for (var nm in params)
 			out.push('<param name="', zUtl.encodeXML(nm), '" value="', zUtl.encodeXML(params[nm]), '"/>');
-	}
-}), { //zk.def
-	code: function (v) {
-		var n = this.getNode();
-		if (n) n.code = v || '';
 	}
 });

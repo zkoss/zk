@@ -12,8 +12,17 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.def(zul.grid.Group = zk.$extends(zul.grid.Row, {
+zul.grid.Group = zk.$extends(zul.grid.Row, {
 	_open: true,
+
+	$define: {
+		open: function (open) {
+			this._openItem(open, true);
+			if (open)
+				this.getGrid().stripe();
+		}
+	},
+
 	getItems: function () {
 		var item = [];
 		for (var w = this.nextSibling; w && !w.$instanceof(zul.grid.Group); w = w.nextSibling)
@@ -116,11 +125,5 @@ zk.def(zul.grid.Group = zk.$extends(zul.grid.Row, {
 			});
 		else this._openItemNow(true, true);
 		this.$supers('unbind_', arguments);
-	}
-}), { //zk.def
-	open: function (open) {
-		this._openItem(open, true);
-		if (open)
-			this.getGrid().stripe();
 	}
 });

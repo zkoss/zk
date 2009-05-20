@@ -14,10 +14,21 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-zk.def(zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
+zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	_selected : false,
 	_closable : false,
 	_disabled : false,
+
+	$define: {
+		closable: _zkf = function() {
+			this.rerender();
+		},
+		disabled: _zkf,
+		selected: function(selected) {
+			if (this.getNode())
+				this._selTab(this, false);
+		}
+	},
 
 	getTabbox: function() {
 		return this.parent ? this.parent.parent : null;
@@ -165,14 +176,5 @@ zk.def(zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		var closebtn = this.getSubnode('close');
 		if (closebtn)
 			this.domUnlisten_(closebtn, "click", '_domClosebtnClick');		
-	}
-}), { //zk.def
-	closable: _zkf = function() {
-		this.rerender();
-	},
-	disabled: _zkf,
-	selected: function(selected) {
-		if (this.getNode())
-			this._selTab(this, false);
 	}
 });

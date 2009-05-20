@@ -12,11 +12,34 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.def(zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
+zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 	_orient: "horizontal",
 	_dir: "normal",
 	_tabindex: -1,
-	
+
+	$define: {
+		disabled: function () {
+			this.rerender(); //bind and unbind
+		},
+		dir: _zkf = function () {
+			var n = this.getNode();
+			if (n) n.innerHTML = this.domContent_();
+		},
+		orient: _zkf,
+		href: function (v) {
+			var n = this.getNode();
+			if (n) n.href = v || '';
+		},
+		target: function (v) {
+			var n = this.getNode();
+			if (n) n.target = v || '';
+		},
+		tabindex: function (v) {
+			var n = this.getNode();
+			if (n) n.tabIndex = v < 0 ? '' : v;
+		}
+	},
+
 	// super//
 	getZclass: function(){
 		var zcls = this._zclass;
@@ -75,26 +98,5 @@ zk.def(zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		else
 			this.fireX(evt);
 			//Unlike DOM, we don't proprogate to parent (so not call $supers)
-	}
-}), { //zk.def
-	disabled: function () {
-		this.rerender(); //bind and unbind
-	},
-	dir: _zkf = function () {
-		var n = this.getNode();
-		if (n) n.innerHTML = this.domContent_();
-	},
-	orient: _zkf,
-	href: function (v) {
-		var n = this.getNode();
-		if (n) n.href = v || '';
-	},
-	target: function (v) {
-		var n = this.getNode();
-		if (n) n.target = v || '';
-	},
-	tabindex: function (v) {
-		var n = this.getNode();
-		if (n) n.tabIndex = v < 0 ? '' : v;
 	}
 });

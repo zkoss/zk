@@ -12,8 +12,18 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.def(zul.wgt.Separator = zk.$extends(zul.Widget, {
+zul.wgt.Separator = zk.$extends(zul.Widget, {
 	_orient: 'horizontal',
+
+	$define: { //zk.def
+		orient: _zkf = function () {
+			this.updateDomClass_();
+		},
+		bar: _zkf,
+		spacing: function () {
+			this.updateDomStyle_();
+		}
+	},
 
 	isVertical: function () {
 		return this._orient == 'vertical';
@@ -51,13 +61,5 @@ zk.def(zul.wgt.Separator = zk.$extends(zul.Widget, {
 	},
 	_isPercentGecko: function () {
 		return zk.gecko && this._spacing != null && this._spacing.endsWith("%");
-	}
-}), { //zk.def
-	orient: _zkf = function () {
-		this.updateDomClass_();
-	},
-	bar: _zkf,
-	spacing: function () {
-		this.updateDomStyle_();
 	}
 });

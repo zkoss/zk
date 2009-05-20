@@ -12,10 +12,17 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.def(zul.grid.Columns = zk.$extends(zul.mesh.HeadWidget, {
+zul.grid.Columns = zk.$extends(zul.mesh.HeadWidget, {
 	_menupopup: "none",
 	_columnshide: true,
 	_columnsgroup: true,
+
+	$define: {
+		columnshide: null, //TODO: postOnInitLater()?
+		columnsgroup: null, //TODO: postOnInitLater()?
+		columnsgroup: null,
+		menupopup: null //TODO: rerender, postOnInitLater?
+	},
 	
 	getGrid: function () {
 		return this.parent;
@@ -41,9 +48,4 @@ zk.def(zul.grid.Columns = zk.$extends(zul.mesh.HeadWidget, {
 	getZclass: function () {
 		return this._zclass == null ? "z-columns" : this._zclass;
 	}
-}), { //zk.def
-	columnshide: null, //TODO: postOnInitLater()?
-	columnsgroup: null, //TODO: postOnInitLater()?
-	columnsgroup: null,
-	menupopup: null //TODO: rerender, postOnInitLater?
 });

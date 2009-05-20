@@ -12,8 +12,15 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.def(zul.menu.Menubar = zk.$extends(zul.Widget, {
+zul.menu.Menubar = zk.$extends(zul.Widget, {
 	_orient: "horizontal",
+
+	$define: {
+		orient: function () {
+			this.rerender();
+		},
+		autodrop: null
+	},
 
 	getZclass: function () {
 		return this._zclass == null ? "z-menubar" +
@@ -52,9 +59,4 @@ zk.def(zul.menu.Menubar = zk.$extends(zul.Widget, {
 			out.push('</tr>');
 		if (!opts.out) return out.join('');
 	}
-}), {//zk.def
-	orient: function () {
-		this.rerender();
-	},
-	autodrop: null
 });

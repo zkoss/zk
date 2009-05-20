@@ -12,10 +12,20 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.def(zul.wgt.Radiogroup = zk.$extends(zul.Widget, {
+zul.wgt.Radiogroup = zk.$extends(zul.Widget, {
 	_orient: 'horizontal',
 	_jsel: -1,
-	
+
+	$define: { //zk.def
+		orient: function () {
+			this.rerender();
+		},
+		name: function (v) {
+			for (var items = this.getItems(), i = items.length; --i >= 0;)
+				items[i].setName(name);
+		}
+	},
+
 	getItemAtIndex: function (index) {
 		if (index < 0)
 			return null;
@@ -115,13 +125,5 @@ zk.def(zul.wgt.Radiogroup = zk.$extends(zul.Widget, {
 			}
 		}
 		return -1;
-	}
-}), { //zk.def
-	orient: function () {
-		this.rerender();
-	},
-	name: function (v) {
-		for (var items = this.getItems(), i = items.length; --i >= 0;)
-			items[i].setName(name);
 	}
 });

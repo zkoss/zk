@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.def(zk.Widget = zk.$extends(zk.Object, {
+zk.Widget = zk.$extends(zk.Object, {
 	_visible: true,
 	nChildren: 0,
 	bindLevel: -1,
@@ -43,6 +43,63 @@ zk.def(zk.Widget = zk.$extends(zk.Object, {
 		});
 	},
 
+	$define: {
+		mold: function () {
+			this.rerender();
+		},
+		style: function () {
+			this.updateDomStyle_();
+		},
+		sclass: _zkf = function () {
+			this.updateDomClass_();
+		},
+		zclass: _zkf,
+		width: function (v) {
+			var n = this.getNode();
+			if (n) n.style.width = v || '';
+		},
+		height: function (v) {
+			var n = this.getNode();
+			if (n) n.style.height = v || '';
+		},
+		left: function (v) {
+			var n = this.getNode();
+			if (n) n.style.left = v || '';
+		},
+		top: function (v) {
+			var n = this.getNode();
+			if (n) n.style.top = v || '';
+		},
+		tooltiptext: function (v) {
+			var n = this.getNode();
+			if (n) n.title = v || '';
+		},
+
+		draggable: [
+			_zkf = function (v) {
+				return v && "false" != v ? v: null;
+			},
+			function (v) {
+				var n = this.getNode();
+				if (this.desktop)
+					if (v) this.initDrag_();
+					else this.cleanDrag_();
+			}
+		],
+		droppable: [
+			_zkf,
+			function (v) {
+				var dropTypes;
+				if (v && v != "true") {
+					dropTypes = v.split(',');
+					for (var j = dropTypes.length; --j >= 0;)
+						if (!(dropTypes[j] = dropTypes[j].trim()))
+							dropTypes.$removeAt(j);
+				}
+				this._dropTypes = dropTypes;
+			}
+		]
+	},
 	getSpaceOwner: function () {
 		for (var w = this; w; w = w.parent)
 			if (w._fellows) return w;
@@ -1243,60 +1300,6 @@ zk.def(zk.Widget = zk.$extends(zk.Object, {
 		if (!cls)
 			throw 'widget not found: '+wgtnm;
 		return new cls();
-	}
-}), {
-	mold: function () {
-		this.rerender();
-	},
-	style: function () {
-		this.updateDomStyle_();
-	},
-	sclass: _zkf = function () {
-		this.updateDomClass_();
-	},
-	zclass: _zkf,
-	width: function (v) {
-		var n = this.getNode();
-		if (n) n.style.width = v || '';
-	},
-	height: function (h) {
-		var n = this.getNode();
-		if (n) n.style.height = h || '';
-	},
-	left: function (v) {
-		var n = this.getNode();
-		if (n) n.style.left = v || '';
-	},
-	top: function (v) {
-		var n = this.getNode();
-		if (n) n.style.top = v || '';
-	},
-	tooltiptext: function (v) {
-		var n = this.getNode();
-		if (n) n.title = v || '';
-	},
-
-	draggable: function (v) {
-		if (!v || "false" == v)
-			this._draggable = v = null;
-
-		var n = this.getNode();
-		if (this.desktop)
-			if (v) this.initDrag_();
-			else this.cleanDrag_();
-	},
-	droppable: function (v) {
-		if (!v || "false" == v)
-			this._droppable = v = null;
-
-		var dropTypes;
-		if (v && v != "true") {
-			dropTypes = v.split(',');
-			for (var j = dropTypes.length; --j >= 0;)
-				if (!(dropTypes[j] = dropTypes[j].trim()))
-					dropTypes.$removeAt(j);
-		}
-		this._dropTypes = dropTypes;
 	}
 });
 

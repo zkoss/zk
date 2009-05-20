@@ -12,7 +12,31 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.def(zul.wgt.Image = zk.$extends(zul.Widget, {
+zul.wgt.Image = zk.$extends(zul.Widget, {
+	$define: {
+		src: function (v) {
+			var n = this.getImageNode_();
+			if (n) n.src = v || '';
+		},
+		hover: null,
+		align: function (v) {
+			var n = this.getImageNode_();
+			if (n) n.align = v || '';
+		},
+		border: function (v) {
+			var n = this.getImageNode_();
+			if (n) n.border = v || '';
+		},
+		hspace: function (v) {
+			var n = this.getImageNode_();
+			if (n) n.hspace = v;
+		},
+		vspace: function (v) {
+			var n = this.getImageNode_();
+			if (n) n.vspace = v;
+		}
+	},
+
 	getImageNode_: function () {
 		return this.getNode();
 	},
@@ -53,27 +77,5 @@ zk.def(zul.wgt.Image = zk.$extends(zul.Widget, {
 		if (v = this._vspace) 
 			attr += ' vspace="' + v + '"';
 		return attr;
-	}
-}), { //zk.def
-	src: function (v) {
-		var n = this.getImageNode_();
-		if (n) n.src = v || '';
-	},
-	hover: null,
-	align: function (v) {
-		var n = this.getImageNode_();
-		if (n) n.align = v || '';
-	},
-	border: function (v) {
-		var n = this.getImageNode_();
-		if (n) n.border = v || '';
-	},
-	hspace: function (v) {
-		var n = this.getImageNode_();
-		if (n) n.hspace = v;
-	},
-	vspace: function (v) {
-		var n = this.getImageNode_();
-		if (n) n.vspace = v;
 	}
 });

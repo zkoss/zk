@@ -12,7 +12,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.def(zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
+zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	_pagingPosition: "bottom",
 
 	$init: function () {
@@ -25,6 +25,47 @@ zk.def(zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	_innerHeight: "100%",
 	_innerTop: "height:0px;display:none",
 	_innerBottom: "height:0px;display:none",
+
+	$define: {
+		pagingPosition: _zkf = function () {
+			this.rerender();
+		},
+		fixedLayout: _zkf,
+
+		vflex: function (vflex) {
+			var n = this.getNode();
+			if (n) {
+				if (vflex) {
+					// added by Jumper for IE to get a correct offsetHeight so we need 
+					// to add this command faster than the this._calcSize() function.
+					var hgh = n.style.height;
+					if (!hgh || hgh == "auto") n.style.height = "99%"; // avoid border 1px;
+				}
+				this.onSize();
+			}
+		},
+
+		model: null,
+		innerWidth: function (v) {
+			if (v == null) this._innerWidth = v = "100%";
+			if (this.eheadtbl) this.eheadtbl.style.width = v;
+			if (this.ebodytbl) this.ebodytbl.style.width = v;
+			if (this.efoottbl) this.efoottbl.style.width = v;
+		},
+		//ROD
+		innerHeight: function (v) {
+			if (v == null) this._innerHeight = v = "100%";
+			// TODO for ROD Mold
+		},
+		innerTop: function (v) {
+			if (v == null) this._innerTop = v = "height:0px;display:none";
+			// TODO for ROD Mold
+		},
+		innerBottom: function (v) {
+			if (v == null) this._innerBottom = v = "height:0px;display:none";
+			// TODO for ROD Mold
+		}
+	},
 
 	getPageSize: function () {
 		return this.paging.getPageSize();
@@ -451,46 +492,5 @@ zk.def(zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	
 		if (fakeRow)
 			src.parentNode.removeChild(src);
-	}
-}), { //zk.def
-	pagingPosition: _zkf = function () {
-		this.rerender();
-	},
-	fixedLayout: _zkf,
-
-	vflex: function (vflex) {
-		var n = this.getNode();
-		if (n) {
-			if (vflex) {
-				// added by Jumper for IE to get a correct offsetHeight so we need 
-				// to add this command faster than the this._calcSize() function.
-				var hgh = n.style.height;
-				if (!hgh || hgh == "auto") n.style.height = "99%"; // avoid border 1px;
-			}
-			this.onSize();
-		}
-	},
-
-	model: null,
-
-	innerWidth: function (v) {
-		if (v == null) this._innerWidth = v = "100%";
-		if (this.eheadtbl) this.eheadtbl.style.width = v;
-		if (this.ebodytbl) this.ebodytbl.style.width = v;
-		if (this.efoottbl) this.efoottbl.style.width = v;
-	},
-
-	//ROD
-	innerHeight: function (v) {
-		if (v == null) this._innerHeight = v = "100%";
-		// TODO for ROD Mold
-	},
-	innerTop: function (v) {
-		if (v == null) this._innerTop = v = "height:0px;display:none";
-		// TODO for ROD Mold
-	},
-	innerBottom: function (v) {
-		if (v == null) this._innerBottom = v = "height:0px;display:none";
-		// TODO for ROD Mold
 	}
 });

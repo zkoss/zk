@@ -12,8 +12,15 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.def(zul.grid.Footer = zk.$extends(zul.LabelImageWidget, {
+zul.grid.Footer = zk.$extends(zul.LabelImageWidget, {
 	_span: 1,
+
+	$define: {
+		span: function (v) {
+			var n = this.getNode();
+			if (n) n.colSpan = v;
+		}
+	},
 	
 	getGrid: function () {
 		return this.parent ? this.parent.parent : null;
@@ -29,10 +36,5 @@ zk.def(zul.grid.Footer = zk.$extends(zul.LabelImageWidget, {
 	},
 	getZclass: function () {
 		return this._zclass == null ? "z-footer" : this._zclass;
-	}
-}), { //zk.def
-	span: function (v) {
-		var n = this.getNode();
-		if (n) n.colSpan = v;
 	}
 });

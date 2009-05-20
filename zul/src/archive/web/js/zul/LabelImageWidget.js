@@ -12,8 +12,19 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.def(zul.LabelImageWidget = zk.$extends(zul.Widget, {
+zul.LabelImageWidget = zk.$extends(zul.Widget, {
 	_label: '',
+
+	$define: {
+		label: function () {
+			this.updateDomContent_();
+		},
+		image: function (v) {
+			var n = this.getImageNode_();
+			if (n) n.src = v || '';
+		},
+		hoverImage: null
+	},
 
 	updateDomContent_: function () {
 		this.rerender();
@@ -57,13 +68,4 @@ zk.def(zul.LabelImageWidget = zk.$extends(zul.Widget, {
 		this._eimg = null;
 		this.$supers('unbind_', arguments);
 	}
-}), { //zk.def
-	label: function () {
-		this.updateDomContent_();
-	},
-	image: function (v) {
-		var n = this.getImageNode_();
-		if (n) n.src = v || '';
-	},
-	hoverImage: null
 });

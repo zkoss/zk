@@ -15,7 +15,27 @@ it will be useful, but WITHOUT ANY WARRANTY.
 _zkc = zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 	_tabindex: -1,
 	_checked: false,
-	
+
+	$define: {
+		disabled: function (v) {
+			var n = this.getSubnode('real');
+			if (n) n.disabled = v;
+		},
+		checked: function (v) {
+			var n = this.getSubnode('real');
+			if (n) n.checked = v;
+		},
+		name: function (v) {
+			var n = this.getSubnode('real');
+			if (n) n.name = v || '';
+		},
+		tabindex: function (v) {
+			var n = this.getSubnode('real');
+			if (n) n.tabIndex = v >= 0 ? v: '';
+		}
+	},
+
+	//super//
 	getZclass: function () {
 		var zcls = this._zclass;
 		return zcls != null ? zcls: "z-checkbox";
@@ -73,21 +93,3 @@ if (zk.gecko2Only)
 			//bug #2233787 : this is a bug of firefox 2, it need get currentTarget
 	};
 
-zk.def(_zkc,{
-	disabled: function (v) {
-		var n = this.getSubnode('real');
-		if (n) n.disabled = v;
-	},
-	checked: function (v) {
-		var n = this.getSubnode('real');
-		if (n) n.checked = v;
-	},
-	name: function (v) {
-		var n = this.getSubnode('real');
-		if (n) n.name = v || '';
-	},
-	tabindex: function (v) {
-		var n = this.getSubnode('real');
-		if (n) n.tabIndex = v >= 0 ? v: '';
-	}
-});

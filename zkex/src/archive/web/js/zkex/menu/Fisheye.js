@@ -13,9 +13,19 @@ This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 
-zk.def( zkex.menu.Fisheye = zk.$extends(zul.Widget, {
+zkex.menu.Fisheye = zk.$extends(zul.Widget, {
 	_image: "",
 	_label: "",
+
+	$define: { 
+		label: _zkf = function () {
+			if(this.getNode()){
+				this.rerender();
+			}
+		},
+		image: _zkf
+	},
+
 	getZclass: function () {
 		var zcls = this._zclass;
 		return zcls != null ? zcls: "z-fisheye";
@@ -57,11 +67,4 @@ zk.def( zkex.menu.Fisheye = zk.$extends(zul.Widget, {
 		cmp.mh = zDom.sumStyles(label, "tb", zDom.margins);
 		cmp.mw = zDom.sumStyles(label, "lr", zDom.margins);
 	}
-}), { 
-	label: _zkf = function () {
-		if(this.getNode()){
-			this.rerender();
-		}
-	},
-	image: _zkf
 });

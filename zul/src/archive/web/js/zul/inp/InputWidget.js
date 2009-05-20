@@ -12,11 +12,54 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.def(zul.inp.InputWidget = zk.$extends(zul.Widget, {
+zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	_maxlength: 0,
 	_cols: 0,
 	_tabindex: -1,
 	_type: 'text',
+
+	$define: {
+		name: function (name) {
+			var inp = this.getInputNode();
+			if (inp)
+				inp.name = name;
+		},
+		disabled: function (disabled) {
+			var inp = this.getInputNode();
+			if (inp) {
+				inp.disabled = disabled;
+				var zcls = this.getZclass(),
+					fnm = disabled ? 'addClass': 'rmClass';
+				zDom[fnm](this.getNode(), zcls + '-disd');
+				zDom[fnm](inp, zcls + '-text-disd');
+			}
+		},
+		readonly: function (readonly) {
+			var inp = this.getInputNode();
+			if (inp) {
+				inp.readOnly = readonly;
+				zDom[readonly ? 'addClass': 'rmClass'](inp,
+					this.getZclass() + '-readonly');
+			}
+		},
+
+		cols: function (cols) {
+			var inp = this.getInputNode();
+			if (inp)
+				if (this.isMultiline()) inp.cols = cols;
+				else inp.size = cols;
+		},
+		maxlengths: function (maxlength) {
+			var inp = this.getInputNode();
+			if (inp && !this.isMultiline())
+				inp.maxLength = maxlength;
+		},
+		tabindex: function (tabindex) {
+			var inp = this.getInputNode();
+			if (inp)
+				inp.tabIndex = tabindex;
+		}
+	},
 
 	getType: function () {
 		return this._type;
@@ -342,46 +385,5 @@ zk.def(zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	beforeCtrlKeys_: function (evt) {
 		this.updateChange_();
-	}
-}), {
-	name: function (name) {
-		var inp = this.getInputNode();
-		if (inp)
-			inp.name = name;
-	},
-	disabled: function (disabled) {
-		var inp = this.getInputNode();
-		if (inp) {
-			inp.disabled = disabled;
-			var zcls = this.getZclass(),
-				fnm = disabled ? 'addClass': 'rmClass';
-			zDom[fnm](this.getNode(), zcls + '-disd');
-			zDom[fnm](inp, zcls + '-text-disd');
-		}
-	},
-	readonly: function (readonly) {
-		var inp = this.getInputNode();
-		if (inp) {
-			inp.readOnly = readonly;
-			zDom[readonly ? 'addClass': 'rmClass'](inp,
-				this.getZclass() + '-readonly');
-		}
-	},
-
-	cols: function (cols) {
-		var inp = this.getInputNode();
-		if (inp)
-			if (this.isMultiline()) inp.cols = cols;
-			else inp.size = cols;
-	},
-	maxlengths: function (maxlength) {
-		var inp = this.getInputNode();
-		if (inp && !this.isMultiline())
-			inp.maxLength = maxlength;
-	},
-	tabindex: function (tabindex) {
-		var inp = this.getInputNode();
-		if (inp)
-			inp.tabIndex = tabindex;
 	}
 });

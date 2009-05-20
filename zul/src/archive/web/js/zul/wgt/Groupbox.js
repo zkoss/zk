@@ -12,9 +12,31 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.def(zul.wgt.Groupbox = zk.$extends(zul.Widget, {
+zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	_open: true,
 	_closable: true,
+
+	$define: { //zk.def
+		open: function (open, fromServer) {
+			var node = this.getNode();
+			if (node) {
+				var panel = this.getSubnode('panel');
+				if (panel) { //!legend
+					if (open) zAnima.slideDown(this, panel, {afterAnima: this._afterSlideDown});
+					else zAnima.slideUp(this, panel, {beforeAnima: this._beforeSlideUp});
+				} else {
+					zDom[open ? 'rmClass': 'addClass'](node, this.getZclass() + "-colpsd");
+					zWatch.fireDown(open ? 'onShow': 'onHide', {visible:true}, this);
+				}
+				if (!fromServer) this.fire('onOpen', {open:open});
+			}
+		},
+		closable: _zkf = function () {
+			this._updateDomOuter();
+		},
+		contentStyle: _zkf,
+		contentSclass: _zkf
+	},
 
 	isLegend: function () {
 		return this._mold == 'default';
@@ -120,24 +142,4 @@ zk.def(zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		}
 		return html;
 	}
-}), { //zk.def
-	open: function (open, fromServer) {
-		var node = this.getNode();
-		if (node) {
-			var panel = this.getSubnode('panel');
-			if (panel) { //!legend
-				if (open) zAnima.slideDown(this, panel, {afterAnima: this._afterSlideDown});
-				else zAnima.slideUp(this, panel, {beforeAnima: this._beforeSlideUp});
-			} else {
-				zDom[open ? 'rmClass': 'addClass'](node, this.getZclass() + "-colpsd");
-				zWatch.fireDown(open ? 'onShow': 'onHide', {visible:true}, this);
-			}
-			if (!fromServer) this.fire('onOpen', {open:open});
-		}
-	},
-	closable: _zkf = function () {
-		this._updateDomOuter();
-	},
-	contentStyle: _zkf,
-	contentSclass: _zkf
 });

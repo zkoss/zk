@@ -12,9 +12,17 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.def(zul.wgt.Progressmeter = zk.$extends(zul.Widget, {
-	//super//
+zul.wgt.Progressmeter = zk.$extends(zul.Widget, {
 	_value: 0,
+
+	$define: {
+		value: function () {
+			if(this.getNode()) 
+				this._fixImgWidth();
+		}
+	},
+
+	//super//
 	getZclass: function () {
 		var zcls = this._zclass;
 		return zcls != null ? zcls: "z-progressmeter";
@@ -43,11 +51,6 @@ zk.def(zul.wgt.Progressmeter = zk.$extends(zul.Widget, {
 	setWidth : function (val){
 		this.$supers('setWidth', arguments);
 		this._fixImgWidth();
-	}
-}), { //zk.def
-	value: function () {
-		if(this.getNode()) 
-			this._fixImgWidth();
 	}
 });
 

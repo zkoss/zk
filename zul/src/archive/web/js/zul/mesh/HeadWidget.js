@@ -12,11 +12,18 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.def(zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
+zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 	$init: function () {
 		this.$supers('$init', arguments);
 		this.listen('onColSize', this, null, -1000);
 	},
+
+	$define: {
+		sizable: function () {
+			this.rerender();
+		}
+	},
+
 	onColSize: function (evt) {
 		var owner = this.parent;
 		if (!owner.isFixedLayout()) owner.$class._adjHeadWd(owner);
@@ -35,9 +42,5 @@ zk.def(zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
 		out.push('</tr>');
-	}
-}), { //zk.set
-	sizable: function () {
-		this.rerender();
 	}
 });

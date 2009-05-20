@@ -13,7 +13,7 @@ This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 
-zk.def(zkex.menu.Fisheyebar = zk.$extends(zul.Widget, {
+zkex.menu.Fisheyebar = zk.$extends(zul.Widget, {
 	_itemwd : 50, 
 	_itemhgh : 50,
 	_itemmaxwd : 200, 
@@ -22,6 +22,36 @@ zk.def(zkex.menu.Fisheyebar = zk.$extends(zul.Widget, {
 	_orient : "horizontal", 
 	_attachedge : "center",
 	_labeledge : "bottom",
+
+	$define: { 
+		itemwd: function (v) {
+			this._itemwd = zk.parseInt(v);
+			this.syncAttr();
+		},
+		itemhgh: function (v) {
+			this._itemhgh = zk.parseInt(v);
+			this.syncAttr();
+			
+		},
+		itemmaxwd: function (v) {
+			this._itemmaxwd = zk.parseInt(v);
+			this.syncAttr();
+		},
+		itemmaxhgh: function (v) {
+			this._itemmaxhgh = zk.parseInt(v);
+			this.syncAttr();
+		},
+		itempadding: function (v) {
+			this._itempadding = zk.parseInt(v);
+			this.syncAttr();
+		},
+		orient: _zkf = function(){
+			this.syncAttr();
+		},
+		attachedge: _zkf,
+		labeledge: _zkf 
+	},
+
 	getZclass: function () {
 		var zcls = this._zclass;
 		return zcls != null ? zcls: "z-fisheyebar";
@@ -379,31 +409,4 @@ zk.def(zkex.menu.Fisheyebar = zk.$extends(zul.Widget, {
 		this.box.r = this.box.l + this.tw;
 		this.box.b = this.box.t + this.th;
 	}
-}), { 
-	itemwd: function (v) {
-		this._itemwd = zk.parseInt(v);
-		this.syncAttr();
-	},
-	itemhgh: function (v) {
-		this._itemhgh = zk.parseInt(v);
-		this.syncAttr();
-		
-	},
-	itemmaxwd: function (v) {
-		this._itemmaxwd = zk.parseInt(v);
-		this.syncAttr();
-	},
-	itemmaxhgh: function (v) {
-		this._itemmaxhgh = zk.parseInt(v);
-		this.syncAttr();
-	},
-	itempadding: function (v) {
-		this._itempadding = zk.parseInt(v);
-		this.syncAttr();
-	},
-	orient: _zkf = function(){
-		this.syncAttr();
-	},
-	attachedge: _zkf,
-	labeledge: _zkf 
 });

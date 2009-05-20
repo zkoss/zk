@@ -12,13 +12,40 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.def(zul.mesh.Paging = zk.$extends(zul.Widget, {
+zul.mesh.Paging = zk.$extends(zul.Widget, {
 	_pageSize: 20,
 	_totalSize: 0,
 	_pageCount: 1,
 	_activePage: 0,
 	_pageIncrement: 10,
 	_autohide: 10,
+
+	$define: { //zk.def
+		totalSize: function () {
+			this._updatePageNum();
+			if (this._detailed) {
+				if (this.isBothPaging()) this.rerender();
+				else {
+					var info = this.getSubnode("info");
+					if (info) info.innerHTML = this.infoText_();
+				}
+			}
+		},
+		pageIncrement: _zkf = function () {
+			this.rerender();
+		},
+		detailed: _zkf,
+		pageCount: _zkf, //TODO: smarter algorithm
+		activePage: null, //TODO this.fire('onPagingImpl', this._activePage);
+		pageSize: function () {
+			this._updatePageNum();
+			// TODO this.fire('onPagingImpl', this._activePage);
+		},
+		autohide: function () {
+			if (this._pageCount == 1) this.rerender();
+		}
+	},
+
 	replaceHTML: function () {
 		if (this.isBothPaging())
 			this.parent.rerender();
@@ -332,29 +359,5 @@ zk.def(zul.mesh.Paging = zk.$extends(zul.Widget, {
 		}
 		zul.mesh.Paging._downbtn = null;
 		zEvt.unlisten(document.body, "mouseup", zul.mesh.Paging._domMouseUp);
-	}
-}), { //zk.def
-	totalSize: function () {
-		this._updatePageNum();
-		if (this._detailed) {
-			if (this.isBothPaging()) this.rerender();
-			else {
-				var info = this.getSubnode("info");
-				if (info) info.innerHTML = this.infoText_();
-			}
-		}
-	},
-	pageIncrement: _zkf = function () {
-		this.rerender();
-	},
-	detailed: _zkf,
-	pageCount: _zkf, //TODO: smarter algorithm
-	activePage: null, //TODO this.fire('onPagingImpl', this._activePage);
-	pageSize: function () {
-		this._updatePageNum();
-		// TODO this.fire('onPagingImpl', this._activePage);
-	},
-	autohide: function () {
-		if (this._pageCount == 1) this.rerender();
 	}
 });

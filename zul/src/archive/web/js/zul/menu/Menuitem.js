@@ -12,8 +12,38 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.def(zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
+zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 	_value: "",
+
+	$define: {
+		checkmark: _zkf = function () {
+			this.rerender();
+		},
+		disabled: _zkf,
+		href: _zkf,
+		value: null,
+		checked: function (checked) {
+			if (checked)
+				this._checkmark = checked;
+			var n = this.getNode();
+			if (n && !this.isTopmost() && !this.getImage()) {
+				var zcls = this.getZclass();
+				zDom.rmClass(n, zcls + '-cnt-ck');
+				zDom.rmClass(n, zcls + '-cnt-unck');
+				if (this._checkmark)
+					zDom.addClass(n, zcls + (checked ? '-cnt-ck' : '-cnt-unck'));
+			}
+		},
+		autocheck: null,
+		target: function (target) {
+			var anc = this.getSubnode('a');
+			if (anc) {
+				if (this.isTopmost())
+					anc = anc.parentNode;
+				anc.target = this._target;
+			}
+		}
+	},
 
 	isTopmost: function () {
 		return this._topmost;
@@ -162,33 +192,5 @@ zk.def(zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 			n = top ? wgt.getSubnode('a') : wgt.getNode(),
 			cls = wgt.getZclass() + (top ? '-body-over' : '-over');
 		zDom.rmClass(n, cls);
-	}
-}), {//zk.def
-	checkmark: _zkf = function () {
-		this.rerender();
-	},
-	disabled: _zkf,
-	href: _zkf,
-	value: null,
-	checked: function (checked) {
-		if (checked)
-			this._checkmark = checked;
-		var n = this.getNode();
-		if (n && !this.isTopmost() && !this.getImage()) {
-			var zcls = this.getZclass();
-			zDom.rmClass(n, zcls + '-cnt-ck');
-			zDom.rmClass(n, zcls + '-cnt-unck');
-			if (this._checkmark)
-				zDom.addClass(n, zcls + (checked ? '-cnt-ck' : '-cnt-unck'));
-		}
-	},
-	autocheck: null,
-	target: function (target) {
-		var anc = this.getSubnode('a');
-		if (anc) {
-			if (this.isTopmost())
-				anc = anc.parentNode;
-			anc.target = this._target;
-		}
 	}
 });

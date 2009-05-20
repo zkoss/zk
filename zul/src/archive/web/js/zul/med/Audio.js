@@ -12,7 +12,29 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.def(zul.med.Audio = zk.$extends(zul.Widget, {
+zul.med.Audio = zk.$extends(zul.Widget, {
+	$define: {
+		src: function () {
+			this.rerender(); //At least IE failed if change n.src only
+		},
+		align: function (v) {
+			var n = this.getNode();
+			if (n) n.align = v || '';
+		},
+		border: function (v) {
+			var n = this.getNode();
+			if (n) n.border = v || '';
+		},
+		autostart: function (v) {
+			var n = this.getNode();
+			if (n) n.autostart = v;
+		},
+		loop: function (v) {
+			var n = this.getNode();
+			if (n) n.loop = v;
+		}
+	},
+
 	play: function () {
 		var n = this.getNode();
 		if (n) {
@@ -77,25 +99,5 @@ zk.def(zul.med.Audio = zk.$extends(zul.Widget, {
 		if (v = this._loop) 
 			attr += ' loop="' + v + '"';
 		return attr;
-	}
-}), { //zk.def
-	src: function () {
-		this.rerender(); //At least IE failed if change n.src only
-	},
-	align: function (v) {
-		var n = this.getNode();
-		if (n) n.align = v || '';
-	},
-	border: function (v) {
-		var n = this.getNode();
-		if (n) n.border = v || '';
-	},
-	autostart: function (v) {
-		var n = this.getNode();
-		if (n) n.autostart = v;
-	},
-	loop: function (v) {
-		var n = this.getNode();
-		if (n) n.loop = v;
 	}
 });

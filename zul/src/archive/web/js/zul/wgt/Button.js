@@ -12,10 +12,29 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.def(zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
+zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	_orient: "horizontal",
 	_dir: "normal",
 	_tabindex: -1,
+
+	$define: {
+		href: null,
+		target: null,
+		dir: _zkf = function () {
+			this.updateDomContent_();
+		},
+		orient: _zkf,
+		disabled: function (v) {
+			if (this.desktop)
+				if (this._mold == 'os') this.getNode().disabled = v;
+				else this.rerender(); //bind and unbind required
+		},
+		tabindex: function (v) {
+			var n = this.getNode();
+			if (n) (this.getSubnode('btn') || n).tabIndex = v >= 0 ? v: '';
+		},
+		autodisable: null
+	},
 
 	//super//
 	focus: function (timeout) {
@@ -152,24 +171,6 @@ zk.def(zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		}
 		this.$supers('doMouseUp_', arguments);
 	}
-}), { //zk.def
-	once: null,
-	href: null,
-	target: null,
-	dir: _zkf = function () {
-		this.updateDomContent_();
-	},
-	orient: _zkf,
-	disabled: function (v) {
-		if (this.desktop)
-			if (this._mold == 'os') this.getNode().disabled = v;
-			else this.rerender(); //bind and unbind required
-	},
-	tabindex: function (v) {
-		var n = this.getNode();
-		if (n) (this.getSubnode('btn') || n).tabIndex = v >= 0 ? v: '';
-	},
-	autodisable: null
 });
 //handle autodisabled buttons
 zul.wgt.ADBS = zk.$extends(zk.Object, {

@@ -12,7 +12,26 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.def(zul.utl.Script = zk.$extends(zk.Widget, {
+zul.utl.Script = zk.$extends(zk.Widget, {
+	$define: {
+		content: function (cnt) {
+			if (cnt) {
+				this._fn = typeof cnt == 'function' ? cnt: new Function(cnt);
+				if (this.desktop) //check parent since no this.getNode()
+					this._exec();
+			} else
+				this._fn = null;
+		},
+		src: function (src) {
+			if (src) {
+				this._srcrun = false;
+				if (this.desktop)
+					this._exec();
+			}
+		},
+		charset: null
+	},
+
 	_exec: function () {
 		var pkgs = this.packages; //not visible to client (since meaningless)
 		if (!pkgs) return this._exec0();
@@ -46,21 +65,4 @@ zk.def(zul.utl.Script = zk.$extends(zk.Widget, {
 		this.$supers('bind_', arguments);
 		this._exec();
 	}
-}), { //zk.def
-	content: function (cnt) {
-		if (cnt) {
-			this._fn = typeof cnt == 'function' ? cnt: new Function(cnt);
-			if (this.desktop) //check parent since no this.getNode()
-				this._exec();
-		} else
-			this._fn = null;
-	},
-	src: function (src) {
-		if (src) {
-			this._srcrun = false;
-			if (this.desktop)
-				this._exec();
-		}
-	},
-	charset: null
 });

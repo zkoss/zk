@@ -86,7 +86,10 @@ zk = {
 	},
 	_$extends: function (jclass, superclass, members, staticMembers) {
 		var thisprototype = jclass.prototype,
-			superprototype = superclass.prototype;
+			superprototype = superclass.prototype,
+			define = members['$define'];
+		if (typeof define != 'undefined')
+			delete members['$define'];
 		zk.copy(thisprototype, superprototype); //inherit non-static
 		zk.copy(thisprototype, members);
 
@@ -100,6 +103,8 @@ zk = {
 		thisprototype._$super = superprototype;
 		jclass.$class = zk.Class;
 		jclass.superclass = superclass;
+
+		if (define) zk.define(jclass, define);
 	},
 	$default: function (opts, defaults) {
 		opts = opts || {};
@@ -123,21 +128,27 @@ zk = {
 			fn.apply(objs[j], args);
 	},
 
-	def: function (klass, props) {
+	define: function (klass, props) {
 		for (var nm in props) {
-			var nm1 = '_' + nm;
+			var nm1 = '_' + nm,
 				nm2 = nm.charAt(0).toUpperCase() + nm.substring(1),
-				pt = klass.prototype;
-			pt['set' + nm2] = zk._def(nm1, props[nm]);
+				pt = klass.prototype,
+				after = props[nm], before;
+			if (after && after.$array) {
+				before = after.length ? after[0]: null;
+				after = after.length > 1 ? after[1]: null;
+			}
+			pt['set' + nm2] = zk._def(nm1, before, after);
 			pt['get' + nm2] = pt['is' + nm2] =
 				new Function('return this.' + nm1 + ';');
 		}
 	},
-	_def: function (nm, func) {
+	_def: function (nm, before, after) {
 		return function (v) {
+			if (before) v = before.apply(this, arguments);
 			if (this[nm] != v) {
 				this[nm] = v;
-				if (func) func.apply(this, arguments);
+				if (after) after.apply(this, arguments);
 			}
 		};
 	},

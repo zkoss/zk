@@ -12,9 +12,57 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.def(zul.box.Splitter = zk.$extends(zul.Widget, {
+zul.box.Splitter = zk.$extends(zul.Widget, {
 	_collapse: "none",
 	_open: true,
+
+	$define: {
+		open: function(open, opts) {
+			var node = this.getNode();
+			if (!node) return;
+			var colps = this.getCollapse();
+			if (!colps || "none" == colps) return; //nothing to do
+
+			var nd = this.getSubnode('chdex'),
+				tn = zDom.tag(nd),
+				vert = this.isVertical(),
+				$Splitter = this.$class,
+				before = colps == "before",
+				sib = before ? $Splitter._prev(nd, tn): $Splitter._next(nd, tn),
+				sibwgt = zk.Widget.$(sib),
+				fd = vert ? "height": "width", diff;
+			if (sib) {
+				sibwgt.setDomVisible_(sib, open); //fire onShow/onHide
+				sibwgt.parent._fixChildDomVisible(sibwgt, open);
+
+				diff = zk.parseInt(sib.style[fd]);
+				if (!before && sibwgt && !sibwgt.nextSibling) {
+					var sp = this.getSubnode('chdex2');
+					if (sp) {
+						sp.style.display = open ? '': 'none'; //no onShow/onHide
+						diff += zk.parseInt(sp.style[fd]);
+					}
+				}
+			}
+
+			sib = before ? $Splitter._next(nd, tn): $Splitter._prev(nd, tn);
+			if (sib) {
+				diff = zk.parseInt(sib.style[fd]) + (open ? -diff: diff);
+				if (diff < 0) diff = 0;
+				sib.style[fd] = diff + "px";
+				if (open) zWatch.fireDown('onSize', null, sibwgt);
+			}
+
+			node.style.cursor = !open ? "default" : vert ? "s-resize": "e-resize";
+			this._fixNSDomClass();
+			this._fixbtn();
+			this._fixszAll();
+
+			if (!opts || opts.sendOnOpen)
+				this.fire('onOpen', {open:open});
+				//if fromServer, opts is true
+		}
+	},
 
 	/** Returns if it is a vertical box. */
 	isVertical: function () {
@@ -351,54 +399,6 @@ zk.def(zul.box.Splitter = zk.$extends(zul.Widget, {
 			for (n = n.firstChild; n; n = n.nextSibling)
 				$Splitter._fixKidSplts(n);
 		}
-	}
-}), {//zk.def
-	open: function(open, opts) {
-		var node = this.getNode();
-		if (!node) return;
-		var colps = this.getCollapse();
-		if (!colps || "none" == colps) return; //nothing to do
-
-		var nd = this.getSubnode('chdex'),
-			tn = zDom.tag(nd),
-			vert = this.isVertical(),
-			$Splitter = this.$class,
-			before = colps == "before",
-			sib = before ? $Splitter._prev(nd, tn): $Splitter._next(nd, tn),
-			sibwgt = zk.Widget.$(sib),
-			fd = vert ? "height": "width", diff;
-		if (sib) {
-			sibwgt.setDomVisible_(sib, open); //fire onShow/onHide
-			sibwgt.parent._fixChildDomVisible(sibwgt, open);
-
-			diff = zk.parseInt(sib.style[fd]);
-
-			if (!before && sibwgt && !sibwgt.nextSibling) {
-				var sp = this.getSubnode('chdex2');
-				if (sp) {
-					sp.style.display = open ? '': 'none'; //no onShow/onHide
-					diff += zk.parseInt(sp.style[fd]);
-				}
-			}
-		}
-
-		sib = before ? $Splitter._next(nd, tn): $Splitter._prev(nd, tn);
-		if (sib) {
-			diff = zk.parseInt(sib.style[fd]) + (open ? -diff: diff);
-			if (diff < 0) diff = 0;
-			sib.style[fd] = diff + "px";
-			if (open) zWatch.fireDown('onSize', null, sibwgt);
-		}
-
-		node.style.cursor = !open ? "default" : vert ? "s-resize": "e-resize";
-		this._fixNSDomClass();
-
-		this._fixbtn();
-		this._fixszAll();
-
-		if (!opts || opts.sendOnOpen)
-			this.fire('onOpen', {open:open});
-			//if fromServer, opts is true
 	}
 });
 

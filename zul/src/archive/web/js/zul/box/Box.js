@@ -12,10 +12,19 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.def(zul.box.Box = zk.$extends(zul.Widget, {
+zul.box.Box = zk.$extends(zul.Widget, {
 	_mold: 'vertical',
 	_align: 'start',
 	_pack: 'start',
+
+	$define: {
+		align: function () {
+			this.rerender(); //TODO: a better algoithm
+		},
+		pack: function () {
+			this.rerender(); //TODO: a better algoithm
+		}
+	},
 
 	/** Returns if it is a vertical box. */
 	isVertical: function () {
@@ -254,12 +263,5 @@ zk.def(zul.box.Box = zk.$extends(zul.Widget, {
 	},
 	_toHalign: function (v) {
 		return v ? "start" == v ? "left": "end" == v ? "right": v: null;
-	}
-}), { //zk.def
-	align: function () {
-		this.rerender(); //TODO: a better algoithm
-	},
-	pack: function () {
-		this.rerender(); //TODO: a better algoithm
 	}
 });

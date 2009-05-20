@@ -13,7 +13,7 @@ This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 zPkg.load('zul.wgt');
-zk.def(zul.wnd.Window = zk.$extends(zul.Widget, {
+zul.wnd.Window = zk.$extends(zul.Widget, {
 	_mode: 'embedded',
 	_border: 'none',
 	_minheight: 100,
@@ -28,6 +28,30 @@ zk.def(zul.wnd.Window = zk.$extends(zul.Widget, {
 		this.listen('onMove', this, null, -1000);
 		this.listen('onZIndex', this, null, -1000);
 		this._skipper = new zul.wnd.Skipper(this);
+	},
+
+	$define: { //zk.def
+		mode: _zkf = function () {
+			this._updateDomOuter();
+		},
+		title: _zkf,
+		border: _zkf,
+		closable: _zkf,
+		sizable: _zkf,
+		maximized: _zkf,
+		maximizable: _zkf,
+		minimized: _zkf,
+		minimizable: _zkf,
+		contentStyle: _zkf,
+		contentSclass: _zkf,
+
+		position: function (pos) {
+			if (this.desktop && this._mode != 'embedded')
+				this._updateDomPos(); //TODO: handle pos = 'parent'
+		},
+
+		minheight: null, //TODO
+		minwidth: null //TODO
 	},
 
 	doOverlapped: function () {
@@ -553,28 +577,6 @@ zk.def(zul.wnd.Window = zk.$extends(zul.Widget, {
 		wgt._syncShadow();
 		wgt._fireOnMove(zEvt.metaData(evt));
 	}
-}), { //zk.def
-	mode: _zkf = function () {
-		this._updateDomOuter();
-	},
-	title: _zkf,
-	border: _zkf,
-	closable: _zkf,
-	sizable: _zkf,
-	maximized: _zkf,
-	maximizable: _zkf,
-	minimized: _zkf,
-	minimizable: _zkf,
-	contentStyle: _zkf,
-	contentSclass: _zkf,
-
-	position: function (pos) {
-		if (this.desktop && this._mode != 'embedded')
-			this._updateDomPos(); //TODO: handle pos = 'parent'
-	},
-
-	minheight: null, //TODO
-	minwidth: null //TODO
 });
 
 zul.wnd.Skipper = zk.$extends(zk.Skipper, {

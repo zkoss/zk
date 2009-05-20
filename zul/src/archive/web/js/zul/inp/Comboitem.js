@@ -12,7 +12,21 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.def(zul.inp.Comboitem = zk.$extends(zul.LabelImageWidget, {
+zul.inp.Comboitem = zk.$extends(zul.LabelImageWidget, {
+	$define: {
+		disabled: function (v) {
+			var n = this.getNode();
+			if (n) {
+				var zcls = this.getZclass() + '-disd';
+				v ? zDom.addClass(n, zcls): zDom.rmClass(n, zcls);
+			}
+		},
+		description: _zkf = function () {
+			this.rerender();
+		},
+		content: _zkf
+	},
+
 	//super
 	doMouseOver_: function () {
 		if (!this._disabled) {
@@ -56,16 +70,4 @@ zk.def(zul.inp.Comboitem = zk.$extends(zul.LabelImageWidget, {
 		var zcs = this._zclass;
 		return zcs != null ? zcs: "z-comboitem";
 	}
-}), { //zk.def
-	disabled: function (v) {
-		var n = this.getNode();
-		if (n) {
-			var zcls = this.getZclass() + '-disd';
-			v ? zDom.addClass(n, zcls): zDom.rmClass(n, zcls);
-		}
-	},
-	description: _zkf = function () {
-		this.rerender();
-	},
-	content: _zkf
 });

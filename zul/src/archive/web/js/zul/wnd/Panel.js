@@ -13,7 +13,7 @@ This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 zPkg.load('zul.wgt');
-zk.def(zul.wnd.Panel = zk.$extends(zul.Widget, {
+zul.wnd.Panel = zk.$extends(zul.Widget, {
 	_border: "none",
 	_title: "",
 	_open: true,
@@ -23,6 +23,81 @@ zk.def(zul.wnd.Panel = zk.$extends(zul.Widget, {
 		this.listen('onClose', this, null, -1000);
 		this.listen('onMove', this, null, -1000);
 	},
+
+	$define: {
+		framable: _zkf = function () {
+			this.rerender(); //TODO: like Window, use _updateDomOuter
+		},
+		movable: _zkf,
+		floatable: _zkf,
+		maximizable: _zkf,
+		minimizable: _zkf,
+		collapsible: _zkf,
+		closable: _zkf,
+		border: _zkf,
+		title: _zkf,
+
+		open: function (open, fromServer) {
+			var node = this.getNode();
+			if (node) {
+				var zcls = this.getZclass(),
+					body = this.getSubnode('body');
+				if (body) {
+					if (open) {
+						zDom.rmClass(node, zcls + '-colpsd');
+						zAnima.slideDown(this, body, {
+							afterAnima: this._afterSlideDown
+						});
+					} else {
+						zDom.addClass(node, zcls + '-colpsd');
+						this._hideShadow();
+
+						// windows 2003 with IE6 will cause an error when user toggles the panel in portallayout.
+						if (zk.ie6Only && !node.style.width)
+							node.runtimeStyle.width = "100%";
+
+						zAnima.slideUp(this, body, {
+							beforeAnima: this._beforeSlideUp
+						});
+					}
+				}
+				if (fromServer) this.fire('onOpen', {open:open});
+			}
+		},
+
+		maximized: null, //TODO
+		minimized: function (minimized, fromServer) {
+			/** TODO
+			 * if (_minimized) {
+				_maximized = false;
+				setVisible0(false); //avoid dead loop
+			} else setVisible0(true);
+			*/
+			var node = this.getNode();
+			if (node) {
+				var s = node.style, l = s.left, t = s.top, w = s.width, h = s.height;
+				if (minimized) {
+					zWatch.fireDown('onHide', {visible:true}, this);
+					zDom.hide(node);
+				} else {
+					zDom.show(node);
+					zWatch.fireDown('onShow', {visible:true}, this);
+				}
+				if (!fromServer) {
+					var wgt = this;
+					this.fire('onMinimize', {
+						left: s.left,
+						top: s.top,
+						width: s.width,
+						height: s.height,
+						minimized: minimized
+					});
+				}
+			}
+		}
+	},
+
+	//super//
 	setVisible: function (visible, fromServer) {
 		if (this._visible != visible) {
 			/** TODO
@@ -111,7 +186,7 @@ zk.def(zul.wnd.Panel = zk.$extends(zul.Widget, {
 	},
 	_fixWdh: zk.ie7 ? function () {
 		if (!this.isFramable() || !this.panelchildren) return;
-		
+
 		var n = this.getNode(),
 			wdh = n.style.width,
 			tl = zDom.firstChild(n, "DIV"),
@@ -121,7 +196,6 @@ zk.def(zul.wnd.Panel = zk.$extends(zul.Widget, {
 			fl = this.getSubnode("fb") ? zDom.previousSibling(bl, "DIV"): null,
 			body = this.panelchildren.getNode(),
 			cm = body.parentNode;
-			
 
 		if (!wdh || wdh == "auto") {
 			var diff = zDom.padBorderWidth(cm.parentNode) + zDom.padBorderWidth(cm.parentNode.parentNode);
@@ -450,76 +524,5 @@ zk.def(zul.wnd.Panel = zk.$extends(zul.Widget, {
 			left: x + 'px',
 			top: y + 'px'
 		}, zEvt.metaData(evt)), {ignorable: true});
-	}
-}), { //zk.def
-	framable: _zkf = function () {
-		this.rerender(); //TODO: like Window, use _updateDomOuter
-	},
-	movable: _zkf,
-	floatable: _zkf,
-	maximizable: _zkf,
-	minimizable: _zkf,
-	collapsible: _zkf,
-	closable: _zkf,
-	border: _zkf,
-	title: _zkf,
-
-	open: function (open, fromServer) {
-		var node = this.getNode();
-		if (node) {
-			var zcls = this.getZclass(),
-				body = this.getSubnode('body');
-			if (body) {
-				if (open) {
-					zDom.rmClass(node, zcls + '-colpsd');
-					zAnima.slideDown(this, body, {
-						afterAnima: this._afterSlideDown
-					});
-				} else {
-					zDom.addClass(node, zcls + '-colpsd');
-					this._hideShadow();
-
-					// windows 2003 with IE6 will cause an error when user toggles the panel in portallayout.
-					if (zk.ie6Only && !node.style.width)
-						node.runtimeStyle.width = "100%";
-
-					zAnima.slideUp(this, body, {
-						beforeAnima: this._beforeSlideUp
-					});
-				}
-			}
-			if (fromServer) this.fire('onOpen', {open:open});
-		}
-	},
-
-	maximized: null, //TODO
-	minimized: function (minimized, fromServer) {
-		/** TODO
-		 * if (_minimized) {
-			_maximized = false;
-			setVisible0(false); //avoid dead loop
-		} else setVisible0(true);
-		*/
-		var node = this.getNode();
-		if (node) {
-			var s = node.style, l = s.left, t = s.top, w = s.width, h = s.height;
-			if (minimized) {
-				zWatch.fireDown('onHide', {visible:true}, this);
-				zDom.hide(node);
-			} else {
-				zDom.show(node);
-				zWatch.fireDown('onShow', {visible:true}, this);
-			}
-			if (!fromServer) {
-				var wgt = this;
-				this.fire('onMinimize', {
-					left: s.left,
-					top: s.top,
-					width: s.width,
-					height: s.height,
-					minimized: minimized
-				});
-			}
-		}
 	}
 });

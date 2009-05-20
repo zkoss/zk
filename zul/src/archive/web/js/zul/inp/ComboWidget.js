@@ -12,8 +12,17 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.def(zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
+zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	_buttonVisible: true,
+
+	$define: {
+		buttonVisible: function (v) {
+			var n = this.getSubnode('btn');
+			if (n)
+				v ? zDom.show(n): zDom.hide(n);
+		},
+		autodrop: null
+	},
 
 	onSize: _zkf = function () {
 		this._auxb.fixpos();
@@ -258,11 +267,4 @@ zk.def(zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	},
 	onChildRemoved_: _zkf,
 	onChildVisible_: _zkf
-}), { //zk.def
-	buttonVisible: function (v) {
-		var n = this.getSubnode('btn');
-		if (n)
-			v ? zDom.show(n): zDom.hide(n);
-	},
-	autodrop: null
 });
