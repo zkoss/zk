@@ -74,6 +74,8 @@ function zkver() {
 }
 
 function zkopt(opts) {
+	zk.feature = {standard: true};
+
 	for (var nm in opts) {
 		var val = opts[nm];
 		switch (nm) {
@@ -84,10 +86,15 @@ function zkopt(opts) {
 		case "kd": zk.keepDesktop = val; break;
 		case "pf": zk.pfmeter = val; break;
 		case "cd": zk.clickFilterDelay = val; break;
-		case "ed": zk.edition = val == 'e' ? 'enterprise': 'professional';
+		case "ed":
+			switch (val) {
+			case 'e':
+				zk.feature.enterprise = true;
+			case 'p':
+				zk.feature.professional = true;
+			}
 		}
 	}
-	if (!zk.edition) zk.edition = 'standard';
 }
 
 function zkmld(wgtcls, molds) {

@@ -986,13 +986,17 @@ zk.Widget = zk.$extends(zk.Object, {
 			}
 		return false;
 	},
-	isListen: function (evtnm, any) {
+	isListen: function (evtnm, opts) {
 		var v = this._asaps[evtnm];
 		if (v) return true;
-		if (any) {
+		if (opts && opts.asapOnly) {
+			v = this.$class._importantEvts;
+			return v && v[evtnm];
+		}
+		if (opts && opts.any) {
 			if (v != null) return true;
 			v = this.$class._importantEvts;
-			if (v && v[evtnm]) return true;
+			if (v && v[evtnm] != null) return true;
 		}
 
 		var lsns = this._lsns[evtnm];
