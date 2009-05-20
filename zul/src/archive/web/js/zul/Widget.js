@@ -188,7 +188,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 		var target = evt.target, wgt = target;
 		for (;; wgt = wgt.parent) {
 			if (!wgt) return;
-			if (!wgt.isListen(evtnm, true)) continue;
+			if (!wgt.isListen(evtnm, {any:true})) continue;
 
 			if (okcancel)
 				break
