@@ -30,8 +30,8 @@ zPkg = {
 		var afpk = zPkg._afpklds[pkg];
 		if (afpk) {
 			delete zPkg._afpklds[pkg];
-			for (var fn, aflds = zPkg._aflds; fn = afpk.pop();)
-				aflds.unshift(fn);
+			var afs = zPkg._afld0s;
+			afs.push.apply(afs, afpk); //add all
 		}
 
 		if (!zPkg._updCnt()) {
@@ -40,11 +40,15 @@ zPkg = {
 				zUtl.destroyProgressbox("zk_loadprog");
 			} catch (ex) {
 			}
-			for (var fn, aflds = zPkg._aflds; fn = aflds.shift();) {
-				fn();
-				if (zPkg._updCnt()) break; //some loading
-			}
+			zPkg._end(zPkg._afld0s) && zPkg._end(zPkg._aflds);
 		}
+	},
+	_end: function (afs) {
+		for (var fn; fn = afs.shift();) {
+			fn();
+			if (zPkg._updCnt()) return false; //some loading
+		}
+		return true;
 	},
 	isLoaded: function (pkg) {
 		return zPkg._lded[pkg];
@@ -52,6 +56,14 @@ zPkg = {
 	load: function (pkg, dt, func) {
 		if (func) zk.afterLoad(pkg, func, true);
 
+		var ready = true;
+		for (var pkgs = pkg.split(','), j = pkgs.length; --j >= 0;) {
+			pkg = pkgs[j].trim();
+			ready = ready && zPkg._load(pkg, dt);
+		}
+		return ready;
+	},
+	_load: function (pkg, dt) {
 		if (!pkg || zPkg._lding[pkg])
 			return !zPkg.loading;
 			//since pkg might be loading (-> return false)
@@ -82,10 +94,12 @@ zPkg = {
 
 		e.src = zAu.comURI(uri, dt);
 		document.getElementsByTagName("HEAD")[0].appendChild(e);
+		return false;
 	},
 	_lded: {'zk': true}, //loaded
 	_lding: {'zk': true}, //loading (include loaded)
 	_ldings: [], //loading (exclude loaded)
+	_afld0s: [],
 	_aflds: [],
 	_afpklds: {}, //after pkg loaded
 	_deps: {},
@@ -137,18 +151,23 @@ zPkg = {
 zk.afterLoad = function (a, b, front) { //part of zk
 	if (typeof a == 'string') {
 		if (!b) return;
-		if (zPkg._lded[a]) a = b;
-		else {
-			var afpk = zPkg._afpklds;
-			if (afpk[a]) afpk[a].push(b);
-			else afpk[a] = [b];
-			return;
+
+		for (var pkgs = a.split(','), j = pkgs.length; --j >= 0;) {
+			a = pkgs[j].trim();
+			if (a && !zPkg._lded[a]) {
+				var afpk = zPkg._afpklds;
+				if (afpk[a]) afpk[a].push(b);
+				else afpk[a] = [b];
+				return true;
+			}
 		}
+
+		//all loaded
+		a = b;
 	}
 
 	if (zPkg.loading) {
-		if (front) zPkg._aflds.unshift(a);
-		else zPkg._aflds.push(a);
+		(front ? zPkg._afld0s: zPkg._aflds).push(a);
 		return true;
 	}
 	a();
