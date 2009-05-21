@@ -56,13 +56,13 @@ zPkg = {
 	load: function (pkg, dt, func) {
 		if (func) zk.afterLoad(pkg, func, true);
 
-		var ready = true;
+		var loading;
 		for (var pkgs = pkg.split(','), j = pkgs.length; --j >= 0;) {
 			pkg = pkgs[j].trim();
 			if (!zPkg._load(pkg, dt))
-				ready = false;
+				loading = true;
 		}
-		return ready;
+		return !loading;
 	},
 	_load: function (pkg, dt) {
 		if (!pkg || zPkg._lding[pkg])
