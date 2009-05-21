@@ -284,7 +284,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		wgt.setOpen(!wgt.isOpen());
 	},
 
-	//drag&drop
+	//drag
 	_ignoresizing: function (draggable, pointer, evt) {
 		var wgt = draggable.control;
 		if (!wgt.isOpen()) return true;

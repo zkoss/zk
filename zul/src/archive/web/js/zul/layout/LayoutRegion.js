@@ -477,9 +477,9 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		zEvt.unlisten(document, "click", this.proxy(this._docClick));
 		this._isSlideUp = this._isSlide = false;
 	},
-	// Drag and drop
+	//drag
 	_ignoredrag: function (dg, pointer, evt) {
-			var target = zEvt.target(evt),
+			var target = evt.domTarget,
 				wgt = dg.control;
 			if (!target || target != wgt.getSubnode('split')) return true;
 			if (wgt.isSplittable() && wgt.isOpen()) {			
@@ -557,7 +557,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		wgt.fire('onSize', zk.copy({
 			width: wgt.getSubnode('real').style.width,
 			height: wgt.getSubnode('real').style.height
-		}, zEvt.metaData(evt)));
+		}, evt.data));
 	},
 	_snap: function (dg, pointer) {
 		var wgt = dg.control,

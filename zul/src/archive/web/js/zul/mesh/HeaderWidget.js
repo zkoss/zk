@@ -127,7 +127,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 }, { //static
 	_faker: ["hdfaker", "bdfaker", "ftfaker"],
 	
-	//dragdrop//
+	//drag
 	_ghostsizing: function (dg, ofs, evt) {
 		var wgt = dg.control,
 			el = wgt.getMeshWidget().eheadtbl;
@@ -211,7 +211,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			index: cidx,
 			column: wgt,
 			width: wd + "px"
-		}, zEvt.metaData(evt)), null, 0);
+		}, evt.data), null, 0);
 	},
 
 	redraw: function (out) {

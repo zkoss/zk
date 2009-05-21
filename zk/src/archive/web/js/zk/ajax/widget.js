@@ -1205,7 +1205,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			var args = [], evt;
 			for (var j = arguments.length; --j > 0;)
 				args.unshift(arguments[j]);
-			args.unshift(evt = zk.Widget._toEvent(devt, wgt));
+			args.unshift(evt = zEvt.toEvent(devt, wgt));
 
 			switch (devt.type){
 			case 'focus':
@@ -1222,35 +1222,10 @@ zk.Widget = zk.$extends(zk.Object, {
 			}
 
 			var ret = f.apply(wgt, args);
+			if (typeof ret == 'undefined') ret = evt.returnValue;
 			if (evt.domStopped) zEvt.stop(devt);
-			return typeof ret == 'undefined' ? evt.returnValue: ret;
+			return devt.type == 'dblclick' && typeof ret == 'undefined' ? false: ret;
 		};
-	},
-	_toEvent: function (devt, wgt) { //DOM event to zk.Event
-		var type = devt.type,
-			target = zk.Widget.$(zEvt.target) || wgt,
-			data, opts;
-
-		if (type.startsWith('mouse')) {
-			if (type.length > 5)
-				type = 'mouse' + type.charAt(5).toUpperCase() + type.substring(6);
-			data = zkm._mouseData(devt, target);
-		} else if (type.startsWith('key')) {
-			if (type.length > 3)
-				type = 'key' + type.charAt(3).toUpperCase() + type.substring(4);
-			data = zEvt.keyData(devt);
-		} else if (type == 'dblclick') {
-			data = zkm._mouseData(devt, target);
-			opts = {ctl:true};
-			type = 'DoubleClick';
-		} else {
-			if (type == 'click') {
-				data = zkm._mouseData(devt, target);
-				opts = {ctl:true};
-			}
-			type = type.charAt(0).toUpperCase() + type.substring(1);
-		}
-		return new zk.Event(target, 'on' + type, data, opts, devt);
 	},
 
 	_domMouseDown: function (wgt) { //called by drag.js
@@ -1541,7 +1516,7 @@ zk.WgtDD = {
 		var dragged = drag.control,
 			dragType = dragged._draggable;
 			//drag to itself not allowed
-		for (var wgt = zk.Widget.$(evt); wgt && wgt != dragged; wgt = wgt.parent) {
+		for (var wgt = evt.target; wgt && wgt != dragged; wgt = wgt.parent) {
 			var dropType = wgt._droppable;
 			if (dropType == 'true') return wgt;
 			if (dropType && dragType != "true")
@@ -1561,23 +1536,21 @@ zk.WgtDD = {
 		}
 	},
 	_pointer: function (evt) {
-		return [zEvt.x(evt) + 10, zEvt.y(evt) + 5];
+		return [evt.pageX + 10, evt.pageY + 5];
 	},
 
 	enddrag: function (drag, evt) {
 		zk.WgtDD._cleanLastDrop(drag);
-		var pt = zEvt.pointer(evt),
+		var pt = [evt.pageX, evt.pageY],
 			wgt = zk.WgtDD._getDrop(drag, pt, evt);
 		if (wgt) {
-			var data = zk.copy(zEvt.mouseData(evt, wgt.getNode()), {
-				dragged: drag.control, x: pt[0], y: pt[0]
-			});
+			var data = zk.copy({dragged: drag.control}, evt.data);
 			wgt.fire('onDrop', data, null, 38);
 		}
 	},
 	dragging: function (drag, pt, evt) {
 		var dropTo;
-		if (!evt || (dropTo = zEvt.target(evt)) == drag._lastDropTo)
+		if (!evt || (dropTo = evt.domTarget) == drag._lastDropTo)
 			return;
 
 		var dropw = zk.WgtDD._getDrop(drag, pt, evt),

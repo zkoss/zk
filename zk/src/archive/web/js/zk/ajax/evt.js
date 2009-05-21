@@ -221,6 +221,34 @@ zEvt = {
 		}
 	},
 
+	toEvent: function (evt, wgt) {
+		evt = evt || window.event;
+		var type = evt.type,
+			target = zk.Widget.$(evt) || wgt,
+			data, opts;
+
+		if (type.startsWith('mouse')) {
+			if (type.length > 5)
+				type = 'mouse' + type.charAt(5).toUpperCase() + type.substring(6);
+			data = zkm._mouseData(evt, target);
+		} else if (type.startsWith('key')) {
+			if (type.length > 3)
+				type = 'key' + type.charAt(3).toUpperCase() + type.substring(4);
+			data = zEvt.keyData(evt);
+		} else if (type == 'dblclick') {
+			data = zkm._mouseData(evt, target);
+			opts = {ctl:true};
+			type = 'DoubleClick';
+		} else {
+			if (type == 'click') {
+				data = zkm._mouseData(evt, target);
+				opts = {ctl:true};
+			}
+			type = type.charAt(0).toUpperCase() + type.substring(1);
+		}
+		return new zk.Event(target, 'on' + type, data, opts, evt);
+	},
+
 	leftClick: function(evt) {
 		evt = evt || window.event;
 		return evt.which == 1 || evt.button == 0 || evt.button == 1;

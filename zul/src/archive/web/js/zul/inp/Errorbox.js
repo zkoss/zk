@@ -161,7 +161,7 @@ zul.inp.Errorbox = zk.$extends('zul.wgt.Popup', {
 		errbox._fixarrow();
 	},
 	_ignoredrag: function (dg, pointer, evt) {
-		return zEvt.target(evt) == dg.control.getSubnode('c') && zDom.hasClass(dg.control.getSubnode('c'), 'z-errbox-close-over');
+		return evt.domTarget == dg.control.getSubnode('c') && zDom.hasClass(dg.control.getSubnode('c'), 'z-errbox-close-over');
 	},
 	_change: function (dg) {
 		var errbox = dg.control,

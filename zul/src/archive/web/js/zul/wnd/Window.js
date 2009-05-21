@@ -559,11 +559,11 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	_ignoremove: function (dg, pointer, evt) {
 		var el = dg.node,
 			wgt = dg.control;
-		switch (zEvt.target(evt)) {
-			case wgt.getSubnode('close'):
-			case wgt.getSubnode('max'):
-			case wgt.getSubnode('min'):
-				return true; //ignore special buttons
+		switch (evt.domTarget) {
+		case wgt.getSubnode('close'):
+		case wgt.getSubnode('max'):
+		case wgt.getSubnode('min'):
+			return true; //ignore special buttons
 		}
 		if (!wgt.isSizable()
 		|| (el.offsetTop + 4 < pointer[1] && el.offsetLeft + 4 < pointer[0] 
@@ -575,7 +575,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		dg.node.style.visibility = "";
 		var wgt = dg.control;
 		wgt._syncShadow();
-		wgt._fireOnMove(zEvt.metaData(evt));
+		wgt._fireOnMove(evt.data);
 	}
 });
 

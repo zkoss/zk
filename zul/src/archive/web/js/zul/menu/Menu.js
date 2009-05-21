@@ -136,8 +136,8 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		if (zk.ie) {
 			var n = this.getSubnode('a'),
 				xy = zDom.revisedOffset(n),
-				x = evt.px,
-				y = evt.py,
+				x = evt.pageX,
+				y = evt.pageY,
 				diff = this.isTopmost() ? 1 : 0,
 				vdiff = this.isTopmost() && 'vertical' == this.parent.getOrient() ? 1 : 0;
 			if (x - diff > xy[0] && x <= xy[0] + n.offsetWidth && y - diff > xy[1] &&

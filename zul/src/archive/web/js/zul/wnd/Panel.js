@@ -505,12 +505,12 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	},
 	_ignoremove: function (dg, pointer, evt) {
 		var wgt = dg.control;
-		switch (zEvt.target(evt)) {
-			case wgt.getSubnode('close'):
-			case wgt.getSubnode('max'):
-			case wgt.getSubnode('min'):
-			case wgt.getSubnode('exp'):
-				return true; //ignore special buttons
+		switch (evt.domTarget) {
+		case wgt.getSubnode('close'):
+		case wgt.getSubnode('max'):
+		case wgt.getSubnode('min'):
+		case wgt.getSubnode('exp'):
+			return true; //ignore special buttons
 		}
 		return false;
 	},
@@ -523,6 +523,6 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		wgt.fire('onMove', zk.copy({
 			left: x + 'px',
 			top: y + 'px'
-		}, zEvt.metaData(evt)), {ignorable: true});
+		}, evt.data), {ignorable: true});
 	}
 });

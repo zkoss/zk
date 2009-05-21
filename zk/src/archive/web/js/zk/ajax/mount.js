@@ -435,8 +435,8 @@ zkm = {
 	},
 	_mouseData: function (evt, wgt) {
 		var n = zEvt.target(evt);
-		if (!n || !n.id || n.id.indexOf('$') >= 0)
-			n = wgt.getNode(); //use n if possible for better performance
+		if (wgt && (!n || n.id != wgt.uuid))
+			n = wgt.getNode();
 		return zEvt.mouseData(evt, n);
 	},
 	docMouseUp: function (evt) {
