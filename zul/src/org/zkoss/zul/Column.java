@@ -67,6 +67,7 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 
 	static {
 		addClientEvent(Column.class, Events.ON_SORT, CE_DUPLICATE_IGNORE);
+		addClientEvent(Column.class, Events.ON_GROUP, CE_DUPLICATE_IGNORE);
 	}
 	
 	public Column() {
@@ -360,6 +361,9 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 			Namespaces.afterInterpret();
 		}
 		fixDirection(grid, ascending);
+
+		// sometimes the items at client side are out of date
+		grid.getRows().invalidate();
 		
 		return true;
 	}
@@ -496,6 +500,9 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 		}
 
 		fixDirection(grid, ascending);
+	
+		// sometimes the items at client side are out of date
+		grid.getRows().invalidate();
 		return true;
 	}
 
@@ -542,6 +549,16 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 		if ("ascending".equals(dir)) sort(false);
 		else if ("descending".equals(dir)) sort(true);
 		else if (!sort(true)) sort(false);
+	}
+	
+	/** It invokes {@link #group(boolean)} to group list items and maintain
+	 * {@link #getSortDirection}.
+	 */
+	public void onGroup() {
+		final String dir = getSortDirection();
+		if ("ascending".equals(dir)) group(false);
+		else if ("descending".equals(dir)) group(true);
+		else if (!group(true)) group(false);
 	}
 
 	public String getZclass() {

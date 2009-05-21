@@ -90,6 +90,17 @@ zul.menu.Menupopup = zk.$extends('zul.wgt.Popup', {
 			}
 		}
 		this.$super('open', ref, offset, position, opts);
+		var sdw = this._shadow,
+			n = this.getNode(),
+			st = n.style;
+		if (sdw) {
+			var opts = sdw.opts, l = n.offsetLeft, t = n.offsetTop; 
+			if (zDom.innerX() + zDom.innerWidth() - n.offsetWidth == l)
+				st.left = (l - opts.right) + "px";
+			else if (zDom.innerY() + zDom.innerHeight() - n.offsetHeight == t)
+				st.top = (t - opts.bottom) + "px";
+		}
+		this._syncShadow();
 	},
 	onFloatUp: function(wgt) {
 		if (!this.isVisible())

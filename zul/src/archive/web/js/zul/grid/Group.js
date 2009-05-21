@@ -32,10 +32,6 @@ zul.grid.Group = zk.$extends(zul.grid.Row, {
 	getItemCount: function () {
 		return this.getItems().length;
 	},
-	getGroupfootIndex: function () {
-	},
-	getGroupfoot: function () {
-	},
 	getZclass: function () {
 		return this._zclass != null ? this._zclass : "z-group";
 	},
@@ -96,7 +92,7 @@ zul.grid.Group = zk.$extends(zul.grid.Row, {
 	_openItemNow: function (toOpen) {
 		for (var r, w = this.nextSibling; w && (!w.$instanceof(zul.grid.Group) && !w.$instanceof(zul.grid.Groupfoot));
 				w = w.nextSibling)
-			if (w.isVisible())
+			if (w.desktop && w.isVisible())
 				zDom[toOpen ? "show" : "hide"](w.getNode());
 	},
 	bind_: function () {		
@@ -116,7 +112,7 @@ zul.grid.Group = zk.$extends(zul.grid.Row, {
 		}
 	},
 	unbind_: function (skipper, after) {
-		this.domUnlisten_(this.eimg, 'onClick', '_doImgClick');
+		this.domUnlisten_(this.getSubnode("img"), 'onClick', '_doImgClick');
 		var prev = this.getGroup();
 		if (prev)
 			after.push(function () {

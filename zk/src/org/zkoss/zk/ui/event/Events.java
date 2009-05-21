@@ -130,6 +130,11 @@ public class Events {
 	 * to notify a request for sorting.
 	 */
 	public static final String ON_SORT = "onSort";
+	/** The onGroup event (used with {@link Event})
+	 * to notify a request for grouping.
+	 * @since 5.0.0
+	 */
+	public static final String ON_GROUP = "onGroup";
 	/** The onUpload event (used with {@link UploadEvent}.
 	 */
 	public static final String ON_UPLOAD = "onUpload";

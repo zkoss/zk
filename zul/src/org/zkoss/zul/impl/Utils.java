@@ -211,6 +211,12 @@ public class Utils {
 		addLocaleJS(sb, "LAST", MZul.LAST);
 		addLocaleJS(sb, "PREV", MZul.PREV);
 		addLocaleJS(sb, "NEXT", MZul.NEXT);
+		
+		addLocaleJS(sb, "GRID_GROUP", MZul.GRID_GROUP);
+		addLocaleJS(sb, "GRID_OTHER", MZul.GRID_OTHER);
+		addLocaleJS(sb, "GRID_ASC", MZul.GRID_ASC);
+		addLocaleJS(sb, "GRID_DESC", MZul.GRID_DESC);
+		addLocaleJS(sb, "GRID_COLUMNS", MZul.GRID_COLUMNS);
 
 		int j = sb.length() - 1;
 		if (sb.charAt(j) == ',') sb.setLength(j);
