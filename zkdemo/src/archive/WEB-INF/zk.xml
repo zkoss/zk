@@ -32,11 +32,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<repeat-uuid>true</repeat-uuid>
 	</desktop-config>
 	-->
-	<!-- Turn on if you want to make your Web application crawlable by
-		search engines.
-	<client-config>
+	<!-- Turn on if you want to make your Web application crawlable (indexed)
+		by search engines.
+	<system-config>
 		<crawlable>true</crawlable>
-	</client-config>
+	</system-config>
 	-->
 	<!--
 	<log>

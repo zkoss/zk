@@ -397,6 +397,9 @@ public class ConfigParser {
 				s = el.getElementValue("response-charset", true);
 				if (s != null) config.setResponseCharset(s);
 
+				s = el.getElementValue("crawlable", true);
+				if (s != null) config.setCrawlable(!"false".equals(s));
+
 				Class cls = parseClass(el, "upload-charset-finder-class",
 					CharsetFinder.class);
 				if (cls != null)
@@ -556,9 +559,6 @@ public class ConfigParser {
 		String s = conf.getElementValue("keep-across-visits", true);
 		if (s != null)
 			config.setKeepDesktopAcrossVisits(!"false".equals(s));
-
-		s = conf.getElementValue("crawlable", true);
-		if (s != null) config.setCrawlable(!"false".equals(s));
 
 		s = conf.getElementValue("debug-js", true);
 		if (s != null) config.setDebugJS(!"false".equals(s));

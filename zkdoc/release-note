@@ -4,7 +4,8 @@ ZK 5.0.0
   2787713: Button automatically disable itself after clicked
   2491275: ZHTML checkbox fire onCheck (in addition to onClick)
   2794752: Fisheye supports dynamic images
-  
+  2794753: An option to specify whether the content can be crawled
+
 * Bugs
 
 * Upgrade Notes
