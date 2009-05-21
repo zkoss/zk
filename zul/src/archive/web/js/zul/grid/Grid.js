@@ -32,7 +32,11 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 				this.rows.stripe();
 		}
 	},
-
+	rerender: function () {
+		this.$supers('rerender', arguments);
+		if (this.rows)
+			this.rows._syncStripe();		
+	},
 	//-- super --//
 	getZclass: function () {
 		return this._zclass == null ? "z-grid" : this._zclass;

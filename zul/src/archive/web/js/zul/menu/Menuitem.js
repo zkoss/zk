@@ -142,7 +142,12 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 					// Bug #1886352 and #2154611
 					//Note: we cannot eat onclick. or, <a> won't work
 			}
-			zWatch.fire('onFloatUp', null, this); //notify all
+			if (!topmost)
+				for (var p = this.parent; p; p = p.parent)
+					if (p.$instanceof(zul.menu.Menupopup))
+						p._shallClose = true;
+			this.$class._rmActive(this);
+			zWatch.fire('onFloatUp', this.getPage()); //notify all				
 		}
 	},
 	_doMouseOver: function (evt) { //not zk.Widget.doMouseOver_

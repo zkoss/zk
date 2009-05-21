@@ -21,9 +21,6 @@ zul.menu.Menupopup = zk.$extends('zul.wgt.Popup', {
 	getZclass: function () {
 		return this._zclass == null ? "z-menu-popup" : this._zclass;
 	},
-	getSelectedItem: function () {
-		return this.getSelectedItemAt(this.getSelectedIndex());
-	},
 	_isActiveItem: function (wgt) {
 		return wgt.isVisible() && (wgt.$instanceof(zul.menu.Menu) || (wgt.$instanceof(zul.menu.Menuitem) && !wgt.isDisabled()));
 	},

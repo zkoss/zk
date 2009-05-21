@@ -220,7 +220,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		out.push('<th', this.domAttrs_(), '><div id="', uuid, '$cave" class="',
 				zcls, '-cnt"', this.domTextStyleAttr_(), '>', this.domContent_());
 
-		if (this.parent.menupopup && this.parent.menupopup != 'none')
+		if (this.parent._menupopup && this.parent._menupopup != 'none')
 			out.push('<a id="', uuid, '$btn"  href="javascript:;" class="', zcls, '-btn"></a>');
 	
 		for (var w = this.firstChild; w; w = w.nextSibling)
