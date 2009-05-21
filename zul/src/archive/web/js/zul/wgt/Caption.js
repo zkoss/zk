@@ -31,13 +31,6 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 		img = '<img src="' + img + '" align="absmiddle" />';
 		return label ? img + ' ' + label: img;
 	},
-	unbind_: function () {
-		var n = this.getNode(), parent = this.parent;
-		if (n && parent.$instanceof(zul.wgt.Groupbox))
-			zEvt.unlisten(n, "click", zul.wgt.Caption.ongbclk);
-
-		this.$supers('unbind_', arguments);
-	},
 	doClick_: function () {
 		if (this.parent.$instanceof(zul.wgt.Groupbox))
 			this.parent.setOpen(!this.parent.isOpen());

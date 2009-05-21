@@ -206,8 +206,8 @@ zul.Widget = zk.$extends(zk.Widget, {
 			if (w == wgt) break;
 		}
 
-		wgt.fire(evtnm, zk.copy({keyCode: keyCode, reference: target},
-			zEvt.filterMetaData(evt)), {ctl: true});
+		wgt.fire(evtnm, zk.copy({reference: target}, evt.data),
+			{ctl: true});
 		evt.stop();
 		//TODO: Bug 1756559
 

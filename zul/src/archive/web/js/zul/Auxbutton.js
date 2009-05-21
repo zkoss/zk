@@ -34,9 +34,11 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 		zDom.enableSelection(btn); //unlisten in IE
 		zDom.enableSelection(this._img);
 
-		zEvt.unlisten(btn, 'mouseover', this.proxy(this._domOver));
-		zEvt.unlisten(btn, 'mouseout', this.proxy(this._domOut));
-		zEvt.unlisten(btn, 'mousedown', this.proxy(this._domDown));
+		if (!wgt.inDesign) {
+			zEvt.unlisten(btn, 'mouseover', this.proxy(this._domOver));
+			zEvt.unlisten(btn, 'mouseout', this.proxy(this._domOut));
+			zEvt.unlisten(btn, 'mousedown', this.proxy(this._domDown));
+		}
 	},
 	fixpos: function () {
 		var btn = this._btn;
