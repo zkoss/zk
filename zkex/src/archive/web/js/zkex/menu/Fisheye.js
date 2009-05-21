@@ -20,7 +20,7 @@ zkex.menu.Fisheye = zk.$extends(zul.LabelImageWidget, {
 	},
 
 	doMouseOver_: function (evt) {
-		//this.$super('doMouseOut_', arguments);
+		//not callback
 		var cmp = this.getNode(),
 			label = this.getSubnode("label");
 			
@@ -37,7 +37,7 @@ zkex.menu.Fisheye = zk.$extends(zul.LabelImageWidget, {
 		zDom.cleanVisibility(label);
 	},
 	doMouseOut_: function (evt) {
-		//this.$super('doMouseOut_', arguments);
+		//not callback
 		this.getSubnode("label").style.display = "none";
 	},
 	bind_: function () {//after compose
@@ -48,7 +48,7 @@ zkex.menu.Fisheye = zk.$extends(zul.LabelImageWidget, {
 		zDom.disableSelection(cmp);
 		
 		// store the two attributes for better performance.
-		cmp.mh = zDom.sumStyles(label, "tb", zDom.margins);
-		cmp.mw = zDom.sumStyles(label, "lr", zDom.margins);
+		this._mh = zDom.sumStyles(label, "tb", zDom.margins);
+		this._mw = zDom.sumStyles(label, "lr", zDom.margins);
 	}
 });

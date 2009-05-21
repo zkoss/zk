@@ -14,42 +14,26 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 
 zkex.menu.Fisheyebar = zk.$extends(zul.Widget, {
-	_itemwd : 50, 
-	_itemhgh : 50,
-	_itemmaxwd : 200, 
-	_itemmaxhgh : 200, 
-	_itempadding : 10,
+	_itemWidth : 50, 
+	_itemHeight : 50,
+	_itemMaxWidth : 200, 
+	_itemMaxHeight : 200, 
+	_itemPadding : 10,
 	_orient : "horizontal", 
-	_attachedge : "center",
-	_labeledge : "bottom",
+	_attachEdge : "center",
+	_labelEdge : "bottom",
 
 	$define: { 
-		itemwd: function (v) {
-			this._itemwd = zk.parseInt(v);
+		itemWidth: _zkf = function () {
 			this.syncAttr();
 		},
-		itemhgh: function (v) {
-			this._itemhgh = zk.parseInt(v);
-			this.syncAttr();
-			
-		},
-		itemmaxwd: function (v) {
-			this._itemmaxwd = zk.parseInt(v);
-			this.syncAttr();
-		},
-		itemmaxhgh: function (v) {
-			this._itemmaxhgh = zk.parseInt(v);
-			this.syncAttr();
-		},
-		itempadding: function (v) {
-			this._itempadding = zk.parseInt(v);
-			this.syncAttr();
-		},
-		orient: _zkf = function(){
-			this.syncAttr();
-		},
-		attachedge: _zkf,
-		labeledge: _zkf 
+		itemHeight: _zkf,
+		itemMaxWidth: _zkf,
+		itemMaxHeight: _zkf,
+		itemPadding: _zkf,
+		orient: _zkf,
+		attachEdge: _zkf,
+		labelEdge: _zkf 
 	},
 
 	getZclass: function () {
@@ -128,12 +112,12 @@ zkex.menu.Fisheyebar = zk.$extends(zul.Widget, {
 		zDom.cleanVisibility(this.el);
 	},
 	getAttachEdge: function () {
-		var edge = this._attachedge;
+		var edge = this._attachEdge;
 		return edge == "center" || (this.isHor && (edge == "left" || edge == "right" )) 
 			|| (!this.isHor && (edge == "top" || edge == "bottom")) ? "center" : edge;
 	},
 	getLabelEdge: function () {
-		var edge = this._labeledge;
+		var edge = this._labelEdge;
 		if (edge == "center" || (this.isHor && (edge == "left" || edge == "right"))) edge = "top";
 		else if (!this.isHor && (edge == "top" || edge == "bottom")) edge = "left";
 		return edge;
@@ -165,15 +149,15 @@ zkex.menu.Fisheyebar = zk.$extends(zul.Widget, {
 			return;
 		// sync zk attributes
 		this.icnt= this.nChildren;
-		this.iw = this._itemwd;
-		this.ih = this._itemhgh;
-		this.imw = this._itemmaxwd;
-		this.imh = this._itemmaxhgh;
+		this.iw = this._itemWidth;
+		this.ih = this._itemHeight;
+		this.imw = this._itemMaxWidth;
+		this.imh = this._itemMaxHeight;
 		this.isHor = (this._orient == "horizontal");
 		this.aEdge = this.getAttachEdge();
 		this.lEdge = this.getLabelEdge();
 		this.pbox = this.getProximitybox();
-		this.ip = this._itempadding;
+		this.ip = this._itemPadding;
 
 		var bw = (this.isHor ? this.icnt : 1) * this.iw,
 			bh = (this.isHor ? 1 : this.icnt) * this.ih;
@@ -378,8 +362,8 @@ zkex.menu.Fisheyebar = zk.$extends(zul.Widget, {
 	_fixLab: function(child) {
 		var itm = child.getNode(), label = child.getSubnode("label"),
 			x = 0, y = 0, edge = this.lEdge,
-			h = itm.mh + label.offsetHeight,
-			w = itm.mw + label.offsetWidth;
+			h = child._mh + label.offsetHeight,
+			w = child._mw + label.offsetWidth;
 		if (!zDom.isVisible(label)) return;
 		switch (edge) {
 			case "top":
