@@ -59,7 +59,8 @@ zPkg = {
 		var ready = true;
 		for (var pkgs = pkg.split(','), j = pkgs.length; --j >= 0;) {
 			pkg = pkgs[j].trim();
-			ready = ready && zPkg._load(pkg, dt);
+			if (!zPkg._load(pkg, dt))
+				ready = false;
 		}
 		return ready;
 	},
@@ -150,7 +151,7 @@ zPkg = {
 };
 zk.afterLoad = function (a, b, front) { //part of zk
 	if (typeof a == 'string') {
-		if (!b) return;
+		if (!b) return true;
 
 		for (var pkgs = a.split(','), j = pkgs.length; --j >= 0;) {
 			a = pkgs[j].trim();
@@ -158,7 +159,7 @@ zk.afterLoad = function (a, b, front) { //part of zk
 				var afpk = zPkg._afpklds;
 				if (afpk[a]) afpk[a].push(b);
 				else afpk[a] = [b];
-				return true;
+				return false;
 			}
 		}
 
@@ -168,7 +169,8 @@ zk.afterLoad = function (a, b, front) { //part of zk
 
 	if (zPkg.loading) {
 		(front ? zPkg._afld0s: zPkg._aflds).push(a);
-		return true;
+		return false;
 	}
 	a();
+	return true;
 };
