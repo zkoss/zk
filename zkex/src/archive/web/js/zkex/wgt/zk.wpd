@@ -14,4 +14,6 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 <package name="zkex.wgt" language="xul/html">
 	<widget name="Columnlayout" depends="zul.wgt"/>
 	<widget name="Columnchildren" depends="zul.wgt"/>
+	<widget name="Tablelayout" depends="zul.wgt"/>
+	<widget name="Tablechildren" depends="zul.wgt"/>
 </package>

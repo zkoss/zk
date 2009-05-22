@@ -191,4 +191,22 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<mold-uri>mold/columnchildren.js</mold-uri>
 		</mold>
 	</component>
+	<component>
+		<component-name>tablelayout</component-name>
+		<component-class>org.zkoss.zkex.zul.Tablelayout</component-class>
+		<widget-class>zkex.wgt.Tablelayout</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/tablelayout.js</mold-uri>
+		</mold>
+	</component>
+	<component>
+		<component-name>tablechildren</component-name>
+		<component-class>org.zkoss.zkex.zul.Tablechildren</component-class>
+		<widget-class>zkex.wgt.Tablechildren</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/tablechildren.js</mold-uri>
+		</mold>
+	</component>
 </language-addon>
