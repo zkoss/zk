@@ -51,23 +51,22 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 			var hgh = zDom.getStyle(tabbox.getNode(),"height");
 			var panels = this.parent;
 			if (panels) {
-                for (var pos, n = panels.firstChild; n; n = n.nextSibling) {
-                    if (n.id) {
-                        if (zk.ie) { // Bug: 1968434, this solution is very dirty but necessary.
-                            pos = n.style.position;
-                            n.style.position = "relative";
-                        }
-                        if (hgh && hgh != "auto") {//tabbox has height
-                            hgh = zDom.vflexHeight(panels);
-                            zDom.revisedHeight(n, hgh);
-                        }
-                        //let real div 100% height
-                        zk.log(zDom.$(this.uuid, "$real"));
-                        zDom.addClass(zDom.$(this.uuid, "$real"), this.getZclass() + "-cnt");
-                        if (zk.ie)
-                            n.style.position = pos;
-                    }
-                }
+				for (var pos, n = panels.firstChild; n; n = n.nextSibling) {
+					if (n.id) {
+						if (zk.ie) { // Bug: 1968434, this solution is very dirty but necessary.
+							pos = n.style.position;
+							n.style.position = "relative";
+						}
+						if (hgh && hgh != "auto") {//tabbox has height
+							hgh = zDom.vflexHeight(panels);
+							zDom.revisedHeight(n, hgh);
+						}
+						//let real div 100% height
+						zDom.addClass(this.getSubnode("real"), this.getZclass() + "-cnt");
+						if (zk.ie)
+							n.style.position = pos;
+					}
+				}
 			}
 		}*/
 	}

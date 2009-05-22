@@ -30,11 +30,8 @@ zul.sel.Listitem = zk.$extends(zul.Widget, {
 		return this._zclass == null ? "z-listitem" : this._zclass;
 	},
 	doClick_: function(evt) {
-		this.parent.fire('onSelect', {
-			items: [this.uuid],
-			reference: this.uuid,
-			keys: zEvt.metaData(evt)
-		});
+		this.parent.fire('onSelect',
+			zk.copy({items: [this.uuid], reference: this.uuid}, evt.data));
 		this.$supers('doClick_', arguments);
 	}
 });
