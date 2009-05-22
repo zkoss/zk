@@ -20,12 +20,12 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 
 	$define: {
 		name: function (name) {
-			var inp = this.getInputNode();
+			var inp = this.getInputNode_();
 			if (inp)
 				inp.name = name;
 		},
 		disabled: function (disabled) {
-			var inp = this.getInputNode();
+			var inp = this.getInputNode_();
 			if (inp) {
 				inp.disabled = disabled;
 				var zcls = this.getZclass(),
@@ -35,7 +35,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			}
 		},
 		readonly: function (readonly) {
-			var inp = this.getInputNode();
+			var inp = this.getInputNode_();
 			if (inp) {
 				inp.readOnly = readonly;
 				zDom[readonly ? 'addClass': 'rmClass'](inp,
@@ -44,18 +44,18 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		},
 
 		cols: function (cols) {
-			var inp = this.getInputNode();
+			var inp = this.getInputNode_();
 			if (inp)
 				if (this.isMultiline()) inp.cols = cols;
 				else inp.size = cols;
 		},
 		maxlengths: function (maxlength) {
-			var inp = this.getInputNode();
+			var inp = this.getInputNode_();
 			if (inp && !this.isMultiline())
 				inp.maxLength = maxlength;
 		},
 		tabindex: function (tabindex) {
-			var inp = this.getInputNode();
+			var inp = this.getInputNode_();
 			if (inp)
 				inp.tabIndex = tabindex;
 		}
@@ -78,14 +78,14 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 
 		if ((!value || !value.error) && (fromServer || this._value != value)) {
 			this._value = value;
-			var inp = this.getInputNode();
+			var inp = this.getInputNode_();
 			if (inp) {
 				inp.value = value = this.coerceToString_(value);
 				if (fromServer) inp.defaultValue = value; //not clear error if by client app
 			}
 		}
 	},
-	getInputNode: function () {
+	getInputNode_: function () {
 		return this.getNode();
 	},
 
@@ -141,7 +141,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		this.$supers('doFocus_', arguments);
 
 		if (zDom.tag(evt.domTarget)) { //Bug 2111900
-			var inp = this.getInputNode();
+			var inp = this.getInputNode_();
 			if (this.isListen('onChanging')) {
 				this._lastChg = inp.value;
 				this._tidChg = setInterval(this.proxy(this._onChanging), 500);
@@ -154,7 +154,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 
 		this._stopOnChanging();
 
-		var inp = this.getInputNode();
+		var inp = this.getInputNode_();
 		zDom.rmClass(inp, this.getZclass() + '-focus');
 		if (!zk.alerting && this.shallUpdate_(zk.currentFocus))
 			this.updateChange_();
@@ -162,7 +162,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 
 	_doSelect: function (evt) {
 		if (this.isListen('onSelection')) {
-			var inp = this.getInputNode(),
+			var inp = this.getInputNode_(),
 				sr = zDom.getSelectionRange(inp),
 				b = sr[0], e = sr[1];
 			this.fire('onSelection', {start: b, end: e,
@@ -187,7 +187,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		}
 		if (!remainError) {
 			this._errmsg = null;
-			zDom.rmClass(this.getInputNode(), this.getZclass() + "-text-invalid");
+			zDom.rmClass(this.getInputNode_(), this.getZclass() + "-text-invalid");
 		}
 		if (revalidate)
 			delete this._lastRawValVld; //cause re-valid
@@ -202,7 +202,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		this._errmsg = msg;
 
 		if (this.desktop) { //err not visible if not attached
-			zDom.addClass(this.getInputNode(), this.getZclass() + "-text-invalid");
+			zDom.addClass(this.getInputNode_(), this.getZclass() + "-text-invalid");
 
 			var cst = this._cst, errbox;
 			if (cst) {
@@ -265,7 +265,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	updateChange_: function () {
 		if (zul.inp.validating) return false; //avoid deadloop (when both focus and blur fields invalid)
 
-		var inp = this.getInputNode(),
+		var inp = this.getInputNode_(),
 			value = inp.value;
 		if (value == this._lastRawValVld)
 			return false; //not changed
@@ -285,7 +285,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		return true;
 	},
 	_onChanging: function () {
-		var inp = this.getInputNode(),
+		var inp = this.getInputNode_(),
 			val = this.valueEnter__ || inp.value;
 		if (this._lastChg != val) {
 			this._lastChg = val;
@@ -296,7 +296,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		}
 	},
 	_onChangeData: function (val, selbk) {
-		var inf = {value: val, start: zDom.getSelectionRange(this.getInputNode())[0]}
+		var inf = {value: val, start: zDom.getSelectionRange(this.getInputNode_())[0]}
 		if (selbk) inf.bySelectBack =  true;
 		return inf;
 	},
@@ -311,7 +311,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	//super//
 	focus: function (timeout) {
 		if (this.isVisible() && this.canActivate({checkOnly:true})) {
-			zDom.focus(this.getInputNode(), timeout);
+			zDom.focus(this.getInputNode_(), timeout);
 			return true;
 		}
 		return false;
@@ -333,7 +333,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
-		var inp = this.getInputNode();
+		var inp = this.getInputNode_();
 		this.domListen_(inp, "onFocus", "doFocus_");
 		this.domListen_(inp, "onBlur", "doBlur_");
 		this.domListen_(inp, "onSelect");
@@ -341,7 +341,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	unbind_: function () {
 		this.clearErrorMessage(true);
 
-		var n = this.getInputNode();
+		var n = this.getInputNode_();
 		this.domUnlisten_(n, "onFocus", "doFocus_");
 		this.domUnlisten_(n, "onBlur", "doBlur_");
 		this.domUnlisten_(n, "onSelect");
@@ -371,7 +371,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		if (this.isMultiline()) {
 			var maxlen = this._maxlength;
 			if (maxlen > 0) {
-				var inp = this.getInputNode(), val = inp.value;
+				var inp = this.getInputNode_(), val = inp.value;
 				if (val != inp.defaultValue && val.length > maxlen)
 					inp.value = val.substring(0, maxlen);
 			}

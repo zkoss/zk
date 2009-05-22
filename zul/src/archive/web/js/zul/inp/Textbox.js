@@ -22,12 +22,12 @@ zul.inp.Textbox = zk.$extends(zul.inp.InputWidget, {
 		},
 		tabbable: null,
 		rows: function (v) {
-			var inp = this.getInputNode();
+			var inp = this.getInputNode_();
 			if (inp && this.isMultiline())
 				inp.rows = v;
 		},
 		type: function (type) {
-			var inp = this.getInputNode();
+			var inp = this.getInputNode_();
 			if (inp)
 				inp.type = type;
 		}

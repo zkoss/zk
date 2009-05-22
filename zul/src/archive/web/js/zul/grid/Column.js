@@ -274,7 +274,9 @@ zul.grid.Column = zk.$extends(zul.mesh.HeaderWidget, {
 		var n = this.getNode();
 		this.domListen_(n, "onMouseOver");
 		this.domListen_(n, "onMouseOut");
-		this.domListen_(this.getSubnode('btn'), "onClick");
+		var btn = this.getSubnode('btn');
+		if (btn)
+			this.domListen_(btn, "onClick");
 	},
 	unbind_: function () {
 		var n = this.getNode();

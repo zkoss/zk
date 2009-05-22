@@ -47,7 +47,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			this.focus();
 
 		var pp = this.getSubnode('pp'),
-			inp = this.getInputNode();
+			inp = this.getInputNode_();
 		if (!pp) return;
 
 		zWatch.fire('onFloatUp', null, this); //notify all
@@ -131,7 +131,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		if (n) zDom.rmClass(n, this.getZclass() + '-btn-over');
 
 		if (opts && opts.sendOnOpen)
-			this.fire('onOpen', {open:false, value: this.getInputNode().value});
+			this.fire('onOpen', {open:false, value: this.getInputNode_().value});
 
 		zWatch.fireDown("onHide", {visible:true}, this);
 	},
@@ -182,14 +182,14 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	},
 
 	//super
-	getInputNode: function () {
+	getInputNode_: function () {
 		return this.getSubnode('real');
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
 
 		var btn = this.getSubnode('btn'),
-			inp = this.getInputNode();
+			inp = this.getInputNode_();
 		if (btn) {
 			this._auxb = new zul.Auxbutton(this, btn, inp);
 			this.domListen_(btn, 'onClick', '_doBtnClick');
