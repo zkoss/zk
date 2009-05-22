@@ -477,7 +477,7 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 						_it.next();
 				}
 			}
-			while (!row.isVisible())
+			while (!row.isVisible() && _it.hasNext())
 				row = (Row)_it.next();
 			return row;
 		}
