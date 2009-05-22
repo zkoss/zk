@@ -35,6 +35,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 			zIndex: 1000,
 			scrollSensitivity: 20,
 			scrollSpeed: 15,
+			initSensitivity: 3,
 			delay: 0
 		});
 
@@ -155,12 +156,21 @@ zk.Draggable = zk.$extends(zk.Object, {
 		}
 	},
 
-	_updateDrag: function (pointer, evt) {
-		if(!this.dragging) this._startDrag(evt);
+	_updateDrag: function (pt, evt) {
+		var Drag = zk.Draggable;
+		if(!this.dragging) {
+			var v = this.opts.initSensitivity
+			if (v && (pt[0] <= Drag._initPt[0] + v
+			&& pt[0] >= Drag._initPt[0] - v
+			&& pt[1] <= Drag._initPt[1] + v
+			&& pt[1] >= Drag._initPt[1] - v))
+				return;
+			this._startDrag(evt);
+		}
 		this._updateInnerOfs();
 
-		this._draw(pointer, evt);
-		if (this.opts.change) this.opts.change(this, pointer, evt);
+		this._draw(pt, evt);
+		if (this.opts.change) this.opts.change(this, pt, evt);
 		this._syncStackup();
 
 		if(this.opts.scroll) {
@@ -177,11 +187,12 @@ zk.Draggable = zk.$extends(zk.Object, {
 				p.push(p[1]+this.opts.scroll.offsetHeight);
 			}
 
-			var speed = [0,0];
-			if(pointer[0] < (p[0]+this.opts.scrollSensitivity)) speed[0] = pointer[0]-(p[0]+this.opts.scrollSensitivity);
-			if(pointer[1] < (p[1]+this.opts.scrollSensitivity)) speed[1] = pointer[1]-(p[1]+this.opts.scrollSensitivity);
-			if(pointer[0] > (p[2]-this.opts.scrollSensitivity)) speed[0] = pointer[0]-(p[2]-this.opts.scrollSensitivity);
-			if(pointer[1] > (p[3]-this.opts.scrollSensitivity)) speed[1] = pointer[1]-(p[3]-this.opts.scrollSensitivity);
+			var speed = [0,0],
+				v = this.opts.scrollSensitivity;
+			if(pt[0] < (p[0]+v)) speed[0] = pt[0]-(p[0]+v);
+			if(pt[1] < (p[1]+v)) speed[1] = pt[1]-(p[1]+v);
+			if(pt[0] > (p[2]-v)) speed[0] = pt[0]-(p[2]-v);
+			if(pt[1] > (p[3]-v)) speed[1] = pt[1]-(p[3]-v);
 			this._startScrolling(speed);
 		}
 
@@ -228,10 +239,10 @@ zk.Draggable = zk.$extends(zk.Object, {
 				this._clone = null;
 			}
 
-		var pointer = [evt.pageX, evt.pageY];
+		var pt = [evt.pageX, evt.pageY];
 		var revert = this.opts.revert;
 		if(revert && typeof revert == 'function')
-			revert = revert(this, pointer, evt);
+			revert = revert(this, pt, evt);
 
 		var d = this._currentDelta();
 		if(revert && this.opts.reverteffect) {
@@ -260,7 +271,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 			return;
 
 		// abort on form elements, fixes a Firefox issue
-		var target = evt.domTarget
+		var target = evt.domTarget,
 			tag = zDom.tag(target);
 		if(tag=='INPUT' || tag=='SELECT' || tag=='OPTION' || tag=='BUTTON' || tag=='TEXTAREA')
 			return;
@@ -270,35 +281,20 @@ zk.Draggable = zk.$extends(zk.Object, {
 			if (zDom.getStyle(n, 'position') == 'absolute')
 				return;
 
-		var pointer = [evt.pageX, evt.pageY];
-		if (this.opts.ignoredrag && this.opts.ignoredrag(this, pointer, evt)) {
+		var pt = [evt.pageX, evt.pageY];
+		if (this.opts.ignoredrag && this.opts.ignoredrag(this, pt, evt)) {
 			if (evt.domStopped) zEvt.stop(devt);
 			return;
 		}
 
 		var pos = zDom.cmOffset(node);
-		this.offset = [pointer[0] - pos[0], pointer[1] - pos[1]];
+		this.offset = [pt[0] - pos[0], pt[1] - pos[1]];
 
-		Drag._activate(this);
-
-		//Bug 1845026
-		//We need to ensure that the onBlur evt is fired before the onSelect evt for consistent among four browsers. 
-		if (zk.currentFocus) {
-			var f = zk.currentFocus.getNode();
-			if (f && target != f && typeof f.blur == "function") {
-				f.blur();
-				if (this.dead) return;
-			}
-		}
-
+		Drag._activate(this, devt, pt);
 		zEvt.stop(devt);
-
-		var c = this.control;
-		if (c && !c.$instanceof(zk.Widget)) c = null;
-		zk.Widget._domMouseDown(c); //since event is stopped
 	},
 	_keypress: function (devt) {
-		if(zEvt.keyCode(devt) == zEvt.ESC) {
+		if(zEvt.keyCode(devt) == 27) {
 			this._finishDrag(zEvt.toEvent(devt), false);
 			zEvt.stop(devt);
 		}
@@ -472,21 +468,25 @@ zk.Draggable = zk.$extends(zk.Object, {
 			Drag.activedg = null;
 	},
 
-	_activate: function (dg) {
+	_activate: function (dg, devt, pt) {
 		var Drag = zk.Draggable;
-		if(zk.opera || dg.opts.delay) { 
-			Drag._timeout = setTimeout(function () { 
-				zk.Draggable._timeout = null; 
-				window.focus(); 
-				zk.Draggable.activedg = dg; 
-			}, dg.opts.delay); 
-		} else {
-			window.focus(); // allows keypress events if window isn't currently focused, fails for Safari
-			Drag.activedg = dg;
-		}
+		Drag._timeout = setTimeout(function () { 
+			Drag._timeout = null; 
+			Drag.activedg = dg; 
+		}, dg.opts.delay);
+		Drag._initPt = pt;
+		Drag._initEvt = zEvt.toEvent(devt, dg.control);
 	},
 	_deactivate: function () {
 		zk.Draggable.activedg = null;
+		setTimeout("zk.Draggable._initEvt=null", 0);
+	},
+
+	ignoreMouseUp: function () { //called by mount
+		return zk.dragging ? true: zk.Draggable._initEvt;
+	},
+	ignoreClick: function () { //called by mount
+		return zk.dragging;
 	},
 
 	_docmousemove: function (devt) {
@@ -495,15 +495,15 @@ zk.Draggable = zk.$extends(zk.Object, {
 		if(!dg || dg.dead) return;
 
 		var evt = zEvt.toEvent(devt),
-			pointer = [evt.pageX, evt.pageY];
+			pt = [evt.pageX, evt.pageY];
 		// Mozilla-based browsers fire successive mousemove events with
 		// the same coordinates, prevent needless redrawing (moz bug?)
-		if(Drag._lastPt && Drag._lastPt[0] == pointer [0]
-		&& Drag._lastPt[1] == pointer [1])
+		if(Drag._lastPt && Drag._lastPt[0] == pt [0]
+		&& Drag._lastPt[1] == pt [1])
 			return;
 
-		Drag._lastPt = pointer;
-		dg._updateDrag(pointer, evt);
+		Drag._lastPt = pt;
+		dg._updateDrag(pt, evt);
 		if (evt.domStopped) zEvt.stop(devt);
 	},
 	_docmouseup: function (devt) {

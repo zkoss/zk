@@ -266,6 +266,9 @@ zk.Widget = zk.$extends(zk.Object, {
 	detach: function () {
 		if (this.parent) this.parent.removeChild(this);
 		else {
+			var cf = zk.currentFocus;
+			if (cf && zUtl.isAncestor(this, cf))
+				zk.currentFocus = null;
 			var n = this.getNode();
 			if (n) {
 				this.unbind();
@@ -434,12 +437,12 @@ zk.Widget = zk.$extends(zk.Object, {
 	setTopmost: function () {
 		if (!this.desktop) return -1;
 
-		for (var wgt = this; wgt; wgt = wgt.parent)
+		for (var wgt = this, Widget = zk.Widget; wgt; wgt = wgt.parent)
 			if (wgt._floating) {
 				var zi = wgt._topZIndex();
 				wgt._setZIndex(zi, true);
 
-				for (var fs = zk.Widget._floatings, j = 0, fl = fs.length;
+				for (var fs = Widget._floatings, j = 0, fl = fs.length;
 				j < fl; ++j) { //parent first
 					var w = fs[j].widget;
 					if (wgt != w && zUtl.isAncestor(wgt, w) && w.isVisible()) {
@@ -637,7 +640,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 
 		var cf = zk.currentFocus;
-		if (cf && zUtl.isAncestor(this, cf, true)) {
+		if (cf && zUtl.isAncestor(this, cf)) {
 			zk.currentFocus = null;
 		} else
 			cf = null;
@@ -741,6 +744,10 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 	},
 	removeChildHTML_: function (child, prevsib) {
+		var cf = zk.currentFocus;
+		if (cf && zUtl.isAncestor(child, cf))
+			zk.currentFocus = null;
+
 		var n = child.getNode();
 		if (!n) child._prepareRemove(n = []);
 
@@ -1125,11 +1132,13 @@ zk.Widget = zk.$extends(zk.Object, {
 
 	//DOM event handling//
 	domListen_: function (n, evtnm, fn) {
+		var inf;
 		if (inf = zk.Widget._domevti(this, evtnm, fn))
 			zEvt.listen(n, inf[0], inf[1]);
 	},
 	domUnlisten_: function (n, evtnm, fn) {
-		if (fn = zk.Widget._domevti(this, evtnm, fn))
+		var inf;
+		if (inf = zk.Widget._domevti(this, evtnm, fn))
 			zEvt.unlisten(n, inf[0], inf[1]);
 	},
 	toJSON: function () {
@@ -1219,6 +1228,12 @@ zk.Widget = zk.$extends(zk.Object, {
 				//due to _domMouseDown called, zk.currentFocus already corrected,
 				//so we clear it only if caused by other case
 				if (!zk._cfByMD) zk.currentFocus = null;
+				break;
+			case 'click':
+			case 'dblclick':
+			case 'mouseup': //we cannot simulate mousedown:(
+				if (zk.Draggable.ignoreClick())
+					return;
 			}
 
 			var ret = f.apply(wgt, args);
@@ -1228,7 +1243,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		};
 	},
 
-	_domMouseDown: function (wgt) { //called by drag.js
+	_domMouseDown: function (wgt, fake) { //called by mount
 		var modal = zk.currentModal;
 		if (modal && !wgt) {
 			var cf = zk.currentFocus;
@@ -1237,10 +1252,12 @@ zk.Widget = zk.$extends(zk.Object, {
 			if (cf && zUtl.isAncestor(modal, cf)) cf.focus(0);
 			else modal.focus(0);
 		} else if (!wgt || wgt.canActivate()) {
-			zk.currentFocus = wgt;
-			zk._cfByMD = true;
-			setTimeout(zk.Widget._clearCFByMD, 0);
-				//turn it off later since onBlur_ needs it
+			if (!fake) {
+				zk.currentFocus = wgt;
+				zk._cfByMD = true;
+				setTimeout(zk.Widget._clearCFByMD, 0);
+					//turn it off later since onBlur_ needs it
+			}
 			if (wgt) zWatch.fire('onFloatUp', null, wgt); //notify all
 		}
 	},

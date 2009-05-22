@@ -1030,14 +1030,16 @@ zDom = { //static methods
 	},
 
 	//focus/select//
-	focus: function (n, timeout) {
+	focus: function (n, timeout, opts) {
 		n = zDom.$(n);
 		if (!n || !n.focus) return false;
 			//ie: INPUT's focus not function
 
 		var tag = zDom.tag(n);
-		if (tag != 'BUTTON' && tag != 'INPUT' && tag != 'SELECT'
-		&& tag != 'IFRAME') return false;
+		if ((!opts || !opts.force)
+		&& (tag != 'BUTTON' && tag != 'INPUT' && tag != 'A'
+		&& tag != 'SELECT' && tag != 'IFRAME'))
+			return false;
 
 		if (timeout >= 0) setTimeout(function() {zDom._focus(n);}, timeout);
 		else zDom._focus(n);

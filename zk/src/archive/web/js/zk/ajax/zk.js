@@ -373,35 +373,37 @@ if (!Array.prototype.indexOf)
 		return -1;
 	};
 
-zk.agent = navigator.userAgent.toLowerCase();
-zk.safari = zk.agent.indexOf("safari") >= 0;
-zk.opera = zk.agent.indexOf("opera") >= 0;
-zk.gecko = zk.agent.indexOf("gecko/") >= 0 && !zk.safari && !zk.opera;
-if (zk.gecko) {
-	var j = zk.agent.indexOf("firefox/");
-	j = zk.parseInt(zk.agent.substring(j + 8));
-	zk.gecko3 = j >= 3;
-	zk.gecko2Only = !zk.gecko3;
+(function () {
+	zk.agent = navigator.userAgent.toLowerCase();
+	zk.safari = zk.agent.indexOf("safari") >= 0;
+	zk.opera = zk.agent.indexOf("opera") >= 0;
+	zk.gecko = zk.agent.indexOf("gecko/") >= 0 && !zk.safari && !zk.opera;
+	if (zk.gecko) {
+		var j = zk.agent.indexOf("firefox/");
+		j = zk.parseInt(zk.agent.substring(j + 8));
+		zk.gecko3 = j >= 3;
+		zk.gecko2Only = !zk.gecko3;
 
-	zk.xbodyClass = 'gecko gecko' + j;
-} else if (zk.opera) {
-	zk.xbodyClass = 'opera';
-} else {
-	var j = zk.agent.indexOf("msie ");
-	zk.ie = j >= 0;
-	if (zk.ie) {
-		j = zk.parseInt(zk.agent.substring(j + 5));
-		zk.ie7 = j >= 7; //ie7 or later
-		zk.ie8All = j >= 8; //ie8 or later (including compatible)
-		zk.ie8 = j >= 8 && document.documentMode >= 8; //ie8 or later
-		zk.ie6Only = !zk.ie7;
-
-		zk.xbodyClass = 'ie ie' + j;
-	} else if (zk.safari)
-		zk.xbodyClass = 'safari';
-}
-if (zk.air = zk.agent.indexOf("adobeair") >= 0)
-	zk.xbodyClass = 'air';
+		zk.xbodyClass = 'gecko gecko' + j;
+	} else if (zk.opera) {
+		zk.xbodyClass = 'opera';
+	} else {
+		var j = zk.agent.indexOf("msie ");
+		zk.ie = j >= 0;
+		if (zk.ie) {
+			j = zk.parseInt(zk.agent.substring(j + 5));
+			zk.ie7 = j >= 7; //ie7 or later
+			zk.ie8All = j >= 8; //ie8 or later (including compatible)
+			zk.ie8 = j >= 8 && document.documentMode >= 8; //ie8 or later
+			zk.ie6Only = !zk.ie7;
+	
+			zk.xbodyClass = 'ie ie' + j;
+		} else if (zk.safari)
+			zk.xbodyClass = 'safari';
+	}
+	if (zk.air = zk.agent.indexOf("adobeair") >= 0)
+		zk.xbodyClass = 'air';
+})();
 
 zk.Object = function () {};
 zk.Object.prototype = {

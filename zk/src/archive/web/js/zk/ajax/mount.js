@@ -152,7 +152,7 @@ zkm = {
 		var ebc = zk.xbodyClass;
 		if (ebc) {
 			zk.xbodyClass = null;
-			var n = document.body
+			var n = document.body,
 				cn = n.className;
 			if (cn.length) cn += ' ';
 			n.className = cn + ebc;
@@ -372,9 +372,9 @@ zkm = {
 
 	/** Loads package of a widget tree. */
 	pkgLoad: function (w) {
-		var type = w.type; j = type.lastIndexOf('.');
-		if (j >= 0)
-			zPkg.load(type.substring(0, j), zkm.curdt);
+		var type = w.type, i = type.lastIndexOf('.');
+		if (i >= 0)
+			zPkg.load(type.substring(0, i), zkm.curdt);
 
 		//z_pk: pkgs to load
 		var pkgs = w.z_pk;
@@ -419,19 +419,25 @@ zkm = {
 		if (wevt.domStopped)
 			zEvt.stop(wevt.domEvent);
 	},
-	docMouseDown: function (evt) {
-		evt = evt || window.event;
-		var target = zEvt.target(evt),
-			Widget = zk.Widget,
-			wgt = Widget.$(evt, true);
-		zk.lastPointer[0] = zEvt.x(evt);
-		zk.lastPointer[1] = zEvt.y(evt);
+	docMouseDown: function (devt) {
+		devt = devt || window.event;
+		var wgt = zk.Widget.$(devt, true);
+		zkm._docMouseDown(
+			new zk.Event(wgt, 'onMouseDown', zkm._mouseData(devt, wgt), null, devt),
+			wgt);
+	},
+	_docMouseDown: function (evt, wgt, fake) {
+		zk.lastPointer[0] = evt.pageX;
+		zk.lastPointer[1] = evt.pageY;
 
+		if (!wgt) wgt = evt.target;
+
+		var target = evt.domTarget;
 		if (target != document.body && target != document.body.parentNode) //not click on scrollbar
-			Widget._domMouseDown(wgt); //null if mask
+			zk.Widget._domMouseDown(wgt, fake); //wgt is null if mask
 
 		if (wgt)
-			zkm._doEvt(new zk.Event(wgt, 'onMouseDown', zkm._mouseData(evt, wgt), null, evt));
+			zkm._doEvt(evt);
 	},
 	_mouseData: function (evt, wgt) {
 		var n = zEvt.target(evt);
@@ -440,6 +446,14 @@ zkm = {
 		return zEvt.mouseData(evt, n);
 	},
 	docMouseUp: function (evt) {
+		var e = zk.Draggable.ignoreMouseUp();
+		if (e === true)
+			return; //ingore
+		if (e != null) {
+			zkm._docMouseDown(e, null, true); //simulate mousedown
+			zkm._simFocus(e.target); //simulate focus
+		}
+
 		evt = evt || window.event;
 		var wgt = zk.mouseCapture;
 		if (wgt) zk.mouseCapture = null;
@@ -447,6 +461,34 @@ zkm = {
 		if (wgt)
 			zkm._doEvt(new zk.Event(wgt, 'onMouseUp', zkm._mouseData(evt, wgt), null, evt));
 	},
+	_simFocus: function (wgt) {
+		var cf = zk.currentFocus;
+		if (!cf || wgt == cf)
+			return;
+
+		for (var fcfn = zk.Widget.prototype.focus, focused;; wgt = wgt.parent) {
+			if (!wgt) {
+				window.blur();
+				if (cf == zk.currentFocus)
+					for (var n = cf.getNode(),
+					tns = ['INPUT','A','BUTTON'], j = tns.length; --j >=0;) {
+						var ns = n.getElementsByTagName(tns[j]);
+						if (ns.length > 0) {
+							zDom.focus(ns[0]);
+							break;
+						}
+					}
+				break;
+			}
+			if (!focused || wgt.focus !== fcfn) {
+				focused = true;
+				wgt.focus();
+				if (cf != zk.currentFocus)
+					break;
+			}
+		}
+	},
+
 	docMouseMove: function (evt) {
 		evt = evt || window.event;
 		zk.currentPointer[0] = zEvt.x(evt);
@@ -500,7 +542,7 @@ zkm = {
 			zkm._doEvt(new zk.Event(wgt, 'onKeyPress', zEvt.keyData(evt), null, evt));
 	},
 	docClick: function (evt) {
-		if (zk.processing) return;
+		if (zk.processing || zk.Draggable.ignoreClick()) return;
 
 		evt = evt || window.event;
 		if (evt.which == 1 || (evt.button == 0 || evt.button == 1)) {
@@ -511,7 +553,7 @@ zkm = {
 		}		
 	},
 	docDblClick: function (evt) {
-		if (zk.processing) return;
+		if (zk.processing || zk.Draggable.ignoreClick()) return;
 
 		evt = evt || window.event;
 		var wgt = zk.Widget.$(evt, true);

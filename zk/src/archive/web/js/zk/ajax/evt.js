@@ -229,11 +229,11 @@ zEvt = {
 
 		if (type.startsWith('mouse')) {
 			if (type.length > 5)
-				type = 'mouse' + type.charAt(5).toUpperCase() + type.substring(6);
+				type = 'Mouse' + type.charAt(5).toUpperCase() + type.substring(6);
 			data = zkm._mouseData(evt, target);
 		} else if (type.startsWith('key')) {
 			if (type.length > 3)
-				type = 'key' + type.charAt(3).toUpperCase() + type.substring(4);
+				type = 'Key' + type.charAt(3).toUpperCase() + type.substring(4);
 			data = zEvt.keyData(evt);
 		} else if (type == 'dblclick') {
 			data = zkm._mouseData(evt, target);
