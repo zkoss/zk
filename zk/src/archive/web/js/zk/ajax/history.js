@@ -33,8 +33,8 @@ zHistory = {
 		}
 	},
 	getBookmark: function () {
-		var nm = location.hash;
-		var j = nm.indexOf('#');
+		var nm = location.hash,
+			j = nm.indexOf('#');
 		return j >= 0 ? decodeURIComponent(nm.substring(j + 1)): '';
 	},
 	/** bookmark iframe */
@@ -49,8 +49,8 @@ zHistory = {
 	}: zk.$void,
 	/** called when history.html is loaded*/
 	onHistoryLoaded: zk.ie ? function (src) {
-		var j = src.indexOf('?');
-		var nm = j >= 0 ? src.substring(j + 1): '';
+		var j = src.indexOf('?'),
+			nm = j >= 0 ? src.substring(j + 1): '';
 		location.hash = nm ? /*zk.safari ? nm:*/ '#' + nm: '';
 		zHistory.checkBookmark();
 	}: zk.$void,

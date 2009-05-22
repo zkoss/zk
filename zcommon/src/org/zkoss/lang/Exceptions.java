@@ -445,7 +445,8 @@ public class Exceptions {
 				j = k;
 
 				ignoreCount = inStack(frame, "java.")
-					|| inStack(frame, "javax.") || inStack(frame, "sun.");
+					|| inStack(frame, "javax.") || inStack(frame, "sun.")
+					|| inStack(frame, "bsh.");
 			}
 		} else {
 			if (sb == null)

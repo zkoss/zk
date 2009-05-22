@@ -286,7 +286,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	_fixHgh: function () {
 		if (!this.isRealVisible()) return;
 		var n = this.getNode(),
-			hgh = n.style.height
+			hgh = n.style.height,
 			cave = this.getSubnode('cave'),
 			cvh = cave.style.height;
 		if (hgh && hgh != "auto") {
@@ -300,7 +300,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	_offsetHeight: function (n) {
 		var h = n.offsetHeight - 1 - this._titleHeight(n);
 		if(this._mode != 'embedded' && this._mode != 'popup') {
-			var cave = this.getSubnode('cave'), bl = zDom.lastChild(n, "DIV"),
+			var cave = this.getSubnode('cave'),
+				bl = zDom.lastChild(n, "DIV"),
 				cap = this.getSubnode("cap");
 			h -= bl.offsetHeight;
 			if (cave)
