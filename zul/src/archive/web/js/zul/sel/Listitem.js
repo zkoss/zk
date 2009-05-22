@@ -24,7 +24,16 @@ zul.sel.Listitem = zk.$extends(zul.Widget, {
 		disabled: function () {
 		}
 	},
-
+	isStripeable_: function () {
+		return true;
+	},	
+	setVisible: function (visible) {
+		if (this.isVisible() != visible) {
+			this.$supers('setVisible', arguments);
+			if (this.isStripeable_() && this.parent)
+				this.parent.stripe();
+		}
+	},
 	//super//
 	getZclass: function () {
 		return this._zclass == null ? "z-listitem" : this._zclass;

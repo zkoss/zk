@@ -145,9 +145,8 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 			if (!topmost)
 				for (var p = this.parent; p; p = p.parent)
 					if (p.$instanceof(zul.menu.Menupopup))
-						p._shallClose = true;
-			this.$class._rmActive(this);
-			zWatch.fire('onFloatUp', this.getPage()); //notify all				
+						p.close({sendOnOpen:true});
+			this.$class._rmActive(this);				
 		}
 	},
 	_doMouseOver: function (evt) { //not zk.Widget.doMouseOver_

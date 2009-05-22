@@ -76,7 +76,6 @@ zul.menu.Menupopup = zk.$extends('zul.wgt.Popup', {
 		if (item) item.$class._rmActive(item);
 		this._curIndex = -1;
 		this.$class._rmActive(this);
-		// TODO for columns' menu zk.fire(pp, "close");
 	},
 	open: function (ref, offset, position, opts) {
 		if (this.parent.$instanceof(zul.menu.Menu)) {
