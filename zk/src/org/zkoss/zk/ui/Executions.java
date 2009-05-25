@@ -303,11 +303,11 @@ public class Executions {
 	 * @since 3.6.2
 	 */
 	public static Component[] createComponents(WebApp wapp, PageDefinition pagedef, Map arg) {
-		final Execution exec = beforeCC(wapp);
+		final CCInfo cci = beforeCC(wapp);
 		try {
-			return exec.createComponents(pagedef, arg);
+			return cci.exec.createComponents(pagedef, arg);
 		} finally {
-			afterCC(exec);
+			afterCC(cci);
 		}
 	}
 	/** Creates components that don't belong to any page
@@ -334,11 +334,11 @@ public class Executions {
 	 * @since 3.6.2
 	 */
 	public static Component[] createComponents(WebApp wapp, String uri, Map arg) {
-		final Execution exec = beforeCC(wapp);
+		final CCInfo cci = beforeCC(wapp);
 		try {
-			return exec.createComponents(uri, arg);
+			return cci.exec.createComponents(uri, arg);
 		} finally {
-			afterCC(exec);
+			afterCC(cci);
 		}
 	}
 	/** Creates components that don't belong to any page
@@ -374,11 +374,11 @@ public class Executions {
 	public static Component[]
 	createComponentsDirectly(WebApp wapp, String content, String extension,
 	Map arg) {
-		final Execution exec = beforeCC(wapp);
+		final CCInfo cci = beforeCC(wapp);
 		try {
-			return exec.createComponentsDirectly(content, extension, arg);
+			return cci.exec.createComponentsDirectly(content, extension, arg);
 		} finally {
-			afterCC(exec);
+			afterCC(cci);
 		}
 	}
 	/** Creates components that don't belong to any page
@@ -414,11 +414,11 @@ public class Executions {
 	public static Component[]
 	createComponentsDirectly(WebApp wapp, Document content, String extension,
 	Map arg) {
-		final Execution exec = beforeCC(wapp);
+		final CCInfo cci = beforeCC(wapp);
 		try {
-			return exec.createComponentsDirectly(content, extension, arg);
+			return cci.exec.createComponentsDirectly(content, extension, arg);
 		} finally {
-			afterCC(exec);
+			afterCC(cci);
 		}
 	}
 	/** Creates components that don't belong to any page
@@ -455,11 +455,11 @@ public class Executions {
 	 */
 	public static Component[] createComponentsDirectly(WebApp wapp, Reader reader, String extension,
 	Map arg) throws IOException {
-		final Execution exec = beforeCC(wapp);
+		final CCInfo cci = beforeCC(wapp);
 		try {
-			return exec.createComponentsDirectly(reader, extension, arg);
+			return cci.exec.createComponentsDirectly(reader, extension, arg);
 		} finally {
-			afterCC(exec);
+			afterCC(cci);
 		}
 	}
 
@@ -479,11 +479,11 @@ public class Executions {
 	 * @since 3.6.2
 	 */
 	public static PageDefinition getPageDefinition(WebApp wapp, String uri) {
-		final Execution exec = beforeCC(wapp);
+		final CCInfo cci = beforeCC(wapp);
 		try {
-			return exec.getPageDefinition(uri);
+			return cci.exec.getPageDefinition(uri);
 		} finally {
-			afterCC(exec);
+			afterCC(cci);
 		}
 	}
 	/** Converts the specified page content to a page definition.
@@ -508,11 +508,11 @@ public class Executions {
 	 */
 	public PageDefinition
 	getPageDefinitionDirectly(WebApp wapp, String content, String extension) {
-		final Execution exec = beforeCC(wapp);
+		final CCInfo cci = beforeCC(wapp);
 		try {
-			return exec.getPageDefinitionDirectly(content, extension);
+			return cci.exec.getPageDefinitionDirectly(content, extension);
 		} finally {
-			afterCC(exec);
+			afterCC(cci);
 		}
 	}
 	/** Converts the specified page content, in DOM, to a page definition.
@@ -537,11 +537,11 @@ public class Executions {
 	 */
 	public PageDefinition
 	getPageDefinitionDirectly(WebApp wapp, Document content, String extension) {
-		final Execution exec = beforeCC(wapp);
+		final CCInfo cci = beforeCC(wapp);
 		try {
-			return exec.getPageDefinitionDirectly(content, extension);
+			return cci.exec.getPageDefinitionDirectly(content, extension);
 		} finally {
-			afterCC(exec);
+			afterCC(cci);
 		}
 	}
 	/** Reads the raw content from a reader and converts it into
@@ -568,29 +568,39 @@ public class Executions {
 	public PageDefinition
 	getPageDefinitionDirectly(WebApp wapp, Reader reader, String extension)
 	throws IOException {
-		final Execution exec = beforeCC(wapp);
+		final CCInfo cci = beforeCC(wapp);
 		try {
-			return exec.getPageDefinitionDirectly(reader, extension);
+			return cci.exec.getPageDefinitionDirectly(reader, extension);
 		} finally {
-			afterCC(exec);
+			afterCC(cci);
 		}
 	}
 
-	private static final Execution beforeCC(WebApp wapp) {
+	private static final CCInfo beforeCC(WebApp wapp) {
 		Execution exec = Executions.getCurrent();
-		if (exec == null)
-			((WebAppCtrl)wapp).getUiEngine()
-				.activate(exec = CCExecution.newInstance(wapp));
-		return exec;
+		if (exec != null)
+			return new CCInfo(exec, false);
+
+		((WebAppCtrl)wapp).getUiEngine()
+			.activate(exec = CCExecution.newInstance(wapp));
+		return new CCInfo(exec, true);
 		
 	}
-	private static final void afterCC(Execution exec) {
-		if (exec instanceof CCExecution) {
+	private static final void afterCC(CCInfo cci) {
+		if (cci.created) {
 			try {
-				((WebAppCtrl)exec.getDesktop().getWebApp())
-					.getUiEngine().deactivate(exec);
+				((WebAppCtrl)cci.exec.getDesktop().getWebApp())
+					.getUiEngine().deactivate(cci.exec);
 			} catch (Throwable ex) {
 			}
+		}
+	}
+	private static class CCInfo {
+		private final Execution exec;
+		private final boolean created;
+		private CCInfo(Execution exec, boolean created) {
+			this.exec = exec;
+			this.created = created;
 		}
 	}
 
