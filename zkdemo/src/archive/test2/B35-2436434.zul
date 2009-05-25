@@ -17,8 +17,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 -->
-click add and scroll to right, IE 7 should scroll to the right position.
 <zk>
+click add and scroll to right, IE 7 should scroll to the right position.
   <hbox>
     <button label="add" onClick="add()" />
     <textbox id="txb" value="this is a tab" width="150px" />

@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.net.URL;
 import javax.servlet.ServletContext;
 
+import org.zkoss.lang.Library;
 import org.zkoss.util.resource.LabelLocator;
 
 /**
@@ -40,10 +41,20 @@ public class ServletLabelLocator implements LabelLocator {
 
 	//-- LabelLocator --//
 	public URL locate(Locale locale) throws IOException {
+		init();
 		return _ctx.getResource(
-			locale == null ? "/WEB-INF/i3-label.properties":
-				"/WEB-INF/i3-label_" + locale + ".properties");
+			locale == null ? PREFIX + SUFFIX: PREFIX + '_' + locale + SUFFIX);
 	}
+	private static final void init() {
+		if (PREFIX == null) {
+			String s = Library.getProperty("org.zkoss.util.label.web.location", 
+				"/WEB-INF/i3-label.properties");
+			int j = s.lastIndexOf('.');
+			PREFIX = j >= 0 ? s.substring(0, j): s;
+			SUFFIX = j >= 0 ? s.substring(j): "";
+		}
+	}
+	private static String PREFIX, SUFFIX;
 
 	//-- Object --//
 	public int hashCode() {

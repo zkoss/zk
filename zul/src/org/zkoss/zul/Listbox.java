@@ -1716,7 +1716,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 						_it.next();
 				}
 			}
-			while (!item.isVisible())
+			while (!item.isVisible() && _it.hasNext())
 				item = (Listitem)_it.next();
 			return item;
 		}

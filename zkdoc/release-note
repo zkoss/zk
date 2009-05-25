@@ -54,7 +54,8 @@ ZK 3.6.2
   2790420: Allow specify binder's name in AnnotateDataBinderInit
   2790441: Enhance GenericAutowireComposer to wire vars before onCreate
   2787711: Hope paging setTotalSize() won't affect inputing active page
-  
+  2790669: zk should provide a way to load i18n prop. files by zk.xml
+
 * Bugs
   2787077: Listbox-Paging was broken with fix for #2782751
   2788875: Https.getOriginPathInfo() & getOriginQueryString() exchange
@@ -63,6 +64,7 @@ ZK 3.6.2
   2790417: load-after and save-after shall be the last processed
   2791499: SerializableUiFactory causes NPE when Web app stops (Tomcat)
   2792105: Highlight effect not revert if dragging listitem to non-droppable area
+  2794205: IE6 the errorbox moves away
 
 * Upgrade Notes
   * The signature of doInit of org.zkoss.zk.ui.util.Initiator is changed.

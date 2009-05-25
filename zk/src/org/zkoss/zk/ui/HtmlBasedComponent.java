@@ -319,7 +319,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	 *
 	 * @param droppable "false", null or "" to denote not-droppable;
 	 * "true" for accepting any draggable types; a list of identifiers,
-	 * separated by comma for identifiers of draggables this compoent
+	 * separated by comma for identifiers of draggables this component
 	 * accept (to be dropped in).
 	 */
 	public void setDroppable(String droppable) {
@@ -332,7 +332,8 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 			smartUpdate("droppable", _droppable); //getDroppable is final
 		}
 	}
-	/** Returns the identifier of a droppable type of objects, or "false"
+	/** Returns the identifier, or a list of identifiers of a droppable type
+	 * of objects, or "false"
 	 * if not droppable (never null nor empty).
 	 */
 	public final String getDroppable() { //Note: it is final
