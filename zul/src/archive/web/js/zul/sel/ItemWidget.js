@@ -18,8 +18,9 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 			this.rerender();
 		},
 		selected: function () {
-	//		if (this.parent)
-	//			this.parent.toggleItemSelection(this);
+	//		p = this.getMeshWidget();
+	//		if (p)
+	//			p.toggleItemSelection(this);
 		},
 		disabled: function () {
 		}
@@ -27,18 +28,23 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 
 	isStripeable_: function () {
 		return true;
-	},	
+	},
+	getMeshWidget: function () {
+		return this.parent;
+	},
 
 	//super//
 	setVisible: function (visible) {
 		if (this.isVisible() != visible) {
 			this.$supers('setVisible', arguments);
-			if (this.isStripeable_() && this.parent)
-				this.parent.stripe();
+			if (this.isStripeable_()) {
+				var p = this.getMeshWidget();
+				if (p) p.stripe();
 		}
 	},
 	doClick_: function(evt) {
-		this.parent.fire('onSelect',
+		var p = this.getMeshWidget();
+		p.fire('onSelect',
 			zk.copy({items: [this.uuid], reference: this.uuid}, evt.data));
 		this.$supers('doClick_', arguments);
 	}
