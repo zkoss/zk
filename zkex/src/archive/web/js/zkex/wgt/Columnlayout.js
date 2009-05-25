@@ -22,7 +22,7 @@ zkex.wgt.Columnlayout = zk.$extends(zul.Widget, {
 		return n.id && zDom.tag(n) == "DIV"; 
 	},
 	//the columnchild will call it
-	render: _zkf = function(n){
+	render: _zkf = function(){
 		var cmp = this.getNode();
 		if (!zDom.isRealVisible(cmp)) 
 			return;
@@ -58,11 +58,11 @@ zkex.wgt.Columnlayout = zk.$extends(zul.Widget, {
 	onShow: _zkf,
 	onChildAdded_: function(child){
 		this.$supers('onChildAdded_', arguments);	
-		this.render(this.getNode());
+		this.render();
 	},
 	onChildRemoved_: function(child){
 		this.$supers('onChildRemoved_', arguments);	
-		this.render(this.getNode());
+		this.render();
 	},
 	bind_: function () {//after compose
 		this.$supers('bind_', arguments); 
