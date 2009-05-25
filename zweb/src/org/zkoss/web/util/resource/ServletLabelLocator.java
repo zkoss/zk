@@ -47,7 +47,7 @@ public class ServletLabelLocator implements LabelLocator {
 	}
 	private static final void init() {
 		if (PREFIX == null) {
-			String s = Library.getProperty("org.zkoss.web.resource.label.location", 
+			String s = Library.getProperty("org.zkoss.util.label.web.location", 
 				"/WEB-INF/i3-label.properties");
 			int j = s.lastIndexOf('.');
 			PREFIX = j >= 0 ? s.substring(0, j): s;
