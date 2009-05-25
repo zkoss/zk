@@ -316,7 +316,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<!-- Uncommet to control whether the label propeties files are located.
 		Default: /WEB-INF/i3-label.properties
 	<library-property>
-		<name>org.zkoss.web.resource.label.location</name>
+		<name>org.zkoss.util.label.web.location</name>
 		<value>/WEB-INF/i3-label.properties</value>
 	</library-property>
 	-->
