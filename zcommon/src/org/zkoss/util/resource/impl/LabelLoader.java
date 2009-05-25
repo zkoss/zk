@@ -177,7 +177,7 @@ public class LabelLoader {
 		if (_warcharset == null) {
 			_warcharset = Library.getProperty("org.zkoss.util.label.web.charset", null);
 			if (_warcharset == null)
-				_warcharset = Library.getProperty("org.zkoss.util.label.WEB-INF.charset", "UTF-8");
+				_warcharset = Library.getProperty("org.zkoss.util.label.WEB-INF.charset", "UTF-8"); //backward compatible
 		}
 
 		try {
