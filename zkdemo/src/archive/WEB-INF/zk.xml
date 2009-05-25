@@ -313,6 +313,14 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</library-property>
 	-->
 
+	<!-- Uncommet to control whether the label propeties files are located.
+		Default: /WEB-INF/i3-label.properties
+	<library-property>
+		<name>org.zkoss.web.resource.label.location</name>
+		<value>/WEB-INF/i3-label.properties</value>
+	</library-property>
+	-->
+
 	<!-- Uncomment it if you prefer to keep the desktops when an user browses to
 		another URL or reloads the page.
 	<client-config>
