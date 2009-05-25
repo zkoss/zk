@@ -320,6 +320,13 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<value>/WEB-INF/i3-label.properties</value>
 	</library-property>
 	-->
+	<!-- Uncommet to control the encoding of the labe properties files
+		Default: UTF-8
+	<library-property>
+		<name>org.zkoss.util.label.web.charset</name>
+		<value>UTF-8</value>
+	</library-property>
+	-->
 
 	<!-- Uncomment it if you prefer to keep the desktops when an user browses to
 		another URL or reloads the page.
