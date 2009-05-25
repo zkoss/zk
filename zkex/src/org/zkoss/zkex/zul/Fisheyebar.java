@@ -190,15 +190,15 @@ public class Fisheyebar extends XulElement implements org.zkoss.zkex.zul.api.Fis
 	throws IOException {
 		super.renderProperties(renderer);
 		if(_itemwd != 50)
-			render(renderer, "itemWidth", new Integer(_itemwd));
+			renderer.render("itemWidth", _itemwd);
 		if(_itemhgh != 50)
-			render(renderer, "itemHeight", new Integer(_itemhgh));
+			renderer.render("itemHeight", _itemhgh);
 		if(_itemmaxwd != 200)
-			render(renderer, "itemMaxWidth", new Integer(_itemmaxwd));
+			renderer.render("itemMaxWidth", _itemmaxwd);
 		if(_itemmaxhgh != 200)
-			render(renderer, "itemMaxHeight", new Integer(_itemmaxhgh));
+			renderer.render("itemMaxHeight", _itemmaxhgh);
 		if(_itemPadding != 10)
-			render(renderer, "itemPadding", new Integer(_itemPadding));
+			renderer.render("itemPadding", _itemPadding);
 		if(!_orient.equals("horizontal"))
 			render(renderer, "orient", _orient);
 		if(!_attachEdge.equals("center"))

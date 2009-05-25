@@ -23,6 +23,12 @@ zkex.menu.Fisheyebar = zk.$extends(zul.Widget, {
 	_attachEdge : "center",
 	_labelEdge : "bottom",
 
+	$init: function () {
+		this.$supers('$init', arguments);
+		this.units = 2;
+		this.subts = 0.5;
+		this.box = {x: -1, y:- 1, l: -1, r: -1, t: -1, b: -1};
+	},
 	$define: { 
 		itemWidth: _zkf = function () {
 			this.syncAttr();
@@ -42,11 +48,6 @@ zkex.menu.Fisheyebar = zk.$extends(zul.Widget, {
 	},
 	bind_: function () {//after compose
 		this.$supers('bind_', arguments); 
-		this.id = this.uuid;
-		this.el = this.getNode();
-		this.units = 2;
-		this.subts = 0.5;
-		this.box = {x: -1, y:- 1, l: -1, r: -1, t: -1, b: -1};
 		this._init();
 		this.syncAttr();
 		this.onSize();
@@ -56,11 +57,12 @@ zkex.menu.Fisheyebar = zk.$extends(zul.Widget, {
 		zWatch.unlisten('onSize', this);
 		zEvt.unlisten(document.documentElement, "mousemove", this._onMouseMove);
 		zEvt.unlisten(document.documentElement, "mouseout", this._onBodyOut);
-		this.el = this.pbox = this.box = this._onMouseMove = this._onBodyOut = null;
+		this.pbox = this._onMouseMove = this._onBodyOut = null;
 		this.$supers('unbind_', arguments);
 	},
 	_init: function () {
-		zDom.disableSelection(this.el);
+		var n = this.getNode();
+		zDom.disableSelection(n);
 		this.syncAttr();
 		var meta = this;
 		if(!this._onMouseMove)
@@ -109,7 +111,7 @@ zkex.menu.Fisheyebar = zk.$extends(zul.Widget, {
 			};
 		zEvt.listen(document.documentElement, "mousemove", this._onMouseMove);
 		zEvt.listen(document.documentElement, "mouseout", this._onBodyOut);
-		zDom.cleanVisibility(this.el);
+		zDom.cleanVisibility(n);
 	},
 	getAttachEdge: function () {
 		var edge = this._attachEdge;
@@ -200,8 +202,9 @@ zkex.menu.Fisheyebar = zk.$extends(zul.Widget, {
 			is.width = (100 - 2 * this.ip) + "%";
 			is.height = (100 - 2 * this.ip) + "%";
 		}
-		this.el.style.width = bw + "px";
-		this.el.style.height = bh + "px";
+		var n = this.getNode();
+		n.style.width = bw + "px";
+		n.style.height = bh + "px";
 		
 		this.onSize();
 	},
@@ -387,7 +390,7 @@ zkex.menu.Fisheyebar = zk.$extends(zul.Widget, {
 		label.style.top = y + "px";
 	},
 	onSize: function() {
-		var offs = zDom.revisedOffset(this.el);
+		var offs = zDom.revisedOffset(this.getNode());
 		this.box.l = offs[0] - this.pbox.l;
 		this.box.t = offs[1] - this.pbox.t;
 		this.box.r = this.box.l + this.tw;

@@ -28,11 +28,10 @@ zkex.menu.Fisheye = zk.$extends(zul.LabelImageWidget, {
 			label.style.display = "block";
 			label.style.visibility = "hidden";
 		}
-		var meta = this.parent;
-		if (meta) {
-			if (!meta.active)
-				meta.active = true;
-			meta._fixLab(this);
+		var fbar = this.parent;
+		if (fbar) {
+			fbar.active = true;
+			fbar._fixLab(this);
 		}
 		zDom.cleanVisibility(label);
 	},
