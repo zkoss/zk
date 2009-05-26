@@ -23,7 +23,7 @@ zkmax.layout.Tablelayout = zk.$extends(zul.Widget, {
 	
 	getZclass: function () {
 		var zcls = this._zclass;
-		return zcls != null ? zcls: "z-table-layout";
+		return zcls != null ? zcls: "z-tablelayout";
 	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);

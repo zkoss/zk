@@ -20,6 +20,6 @@
 }
 
 <%-- Table Layout--%>
-td.z-table-children {
+td.z-tablechildren {
 	vertical-align: top;
 }

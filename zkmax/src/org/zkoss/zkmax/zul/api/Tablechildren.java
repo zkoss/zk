@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.WrongValueException;
  * The child component of Tablechildren only can be Panel.
  * 
  * <p>
- * Default {@link org.zkoss.zkmax.zul.Tablechildren#getZclass}: z-table-children.
+ * Default {@link org.zkoss.zkmax.zul.Tablechildren#getZclass}: z-tablechildren.
  * 
  * @author robbiecheng
  * @since 3.5.0

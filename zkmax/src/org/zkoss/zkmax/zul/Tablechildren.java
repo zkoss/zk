@@ -33,7 +33,7 @@ import org.zkoss.zul.impl.XulElement;
  * The cell of Tablelayout. <br> 
  * The child component of Tablechildren only can be Panel.
  * 
- * <p>Default {@link #getZclass}: z-table-children.
+ * <p>Default {@link #getZclass}: z-tablechildren.
  * 
  * @author robbiecheng
  * @since 3.5.0
@@ -42,7 +42,7 @@ public class Tablechildren extends XulElement implements org.zkoss.zkmax.zul.api
 	private int _colspan = 1, _rowspan = 1;
 	
 	public Tablechildren() {
-		setZclass("z-table-children");
+		setZclass("z-tablechildren");
 	}
 	
 	/** Returns number of columns to span this header.
@@ -102,8 +102,8 @@ public class Tablechildren extends XulElement implements org.zkoss.zkmax.zul.api
 	throws IOException {
 		super.renderProperties(renderer);
 		if(_rowspan != 1)
-			render(renderer, "rowspan", new Integer(_rowspan));
+			renderer.render("rowspan", _rowspan);
 		if(_colspan != 1)
-			render(renderer, "colspan", new Integer(_colspan));
+			renderer.render("colspan", _colspan);
 	}
 }

@@ -26,7 +26,7 @@ import org.zkoss.zk.ui.WrongValueException;
  * create complex layouts within the table.
  * 
  * <p>
- * Default {@link org.zkoss.zkmax.zul.Tablelayout#getZclass}: z-table-layout.
+ * Default {@link org.zkoss.zkmax.zul.Tablelayout#getZclass}: z-tablelayout.
  * 
  * @author robbiecheng
  * @since 3.5.0

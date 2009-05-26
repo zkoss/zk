@@ -14,10 +14,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
 	out.push('<td', this.domAttrs_()+' ');
-	if(this.getRowspan()!=1)
-		out.push(' rowspan="',this.getRowspan(),'" ');
-	if(this.getColspan()!=1)
-		out.push(' colspan="',this.getColspan(),'" ');
+	var v;
+	if((v = this.getRowspan())!=1)
+		out.push(' rowspan="',v,'"');
+	if((v = this.getColspan())!=1)
+		out.push(' colspan="',v,'"');
 	out.push('>');
 	for (var w = this.firstChild; w; w = w.nextSibling)
 		w.redraw(out);
