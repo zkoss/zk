@@ -362,34 +362,57 @@ zk.override = function (obj, fn, supobj, func) {
 	obj[fn] = func;
 };
 
+zk._rdcss = [];
 /**
  * Forces the browser to redo the CSS.
  * @since 3.5.0
  */
-zk.redoCSS = zk.ie ? function (el, timeout) {
-	el = $e(el);
-	if (el) {
+zk.redoCSS = function (el, timeout) {
+	zk._rdcss.push(el);
+	setTimeout(zk._redoCSS, timeout >= 0 ? timeout : 100);
+};
+zk._cleanCSS = function(el, z) {
+	setTimeout(function() {
 		try {
-			var z = el.style.zoom;
-			el.style.zoom = 1;
-			el.className += ' ';
-			if (el.offsetHeight);
-			el.className.trim();
-			setTimeout(function () {try {
-				el.style.zoom = z;
-			} catch (e){}}, timeout > 0 ? timeout: 1);
-		} catch (e) {
-		}
+			el.style.zoom = z;
+		} catch (e) {}
+	});
+};
+zk._redoCSS = zk.ie ? function () {
+	if (zk._rdcss.length) {
+		try {
+			var el;
+			while ((el = zk._rdcss.pop())) {
+				var z = el.style.zoom;
+				el.style.zoom = 1;
+				el.className += ' ';
+				if (el.offsetHeight) 
+					;
+				el.className.trim();
+				zk._cleanCSS(el, z);
+			}
+		} catch (e) {}
+		
+		// just in case
+		setTimeout(zk._redoCSS);
 	}
 } : function (el) {
-	el = $e(el);
-	if (el) {
+	if (zk._rdcss.length) {
 		try {
-			el.className += ' ';
-			if (el.offsetHeight);
-			el.className.trim();
+			var el;
+			while ((el = zk._rdcss.pop())) {
+				if (el) {
+					el.className += ' ';
+					if (el.offsetHeight) 
+						;
+					el.className.trim();
+				}
+			}
 		} catch (e) {
 		}
+		
+		// just in case
+		setTimeout(zk._redoCSS);
 	}
 };
 /**

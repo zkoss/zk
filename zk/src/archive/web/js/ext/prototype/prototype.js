@@ -1085,39 +1085,44 @@ Element.Methods = {
     window.scrollTo(pos[0], pos[1]);
     return element;
   },
-
-  getStyle: function(element, style) {
-    element = z$(element);
-  	if (!element.style)
-  		return null; //possible when dragging in IE
-
-    if (['float','cssFloat'].include(style))
-      style = (typeof element.style.styleFloat != 'undefined' ? 'styleFloat' : 'cssFloat');
-    style = style.camelize();
-    var value = element.style[style];
-    if (!value) {
-      if (document.defaultView && document.defaultView.getComputedStyle) {
-        var css = document.defaultView.getComputedStyle(element, null);
-        value = css ? css[style] : null;
-      } else if (element.currentStyle) {
-        value = element.currentStyle[style];
-      }
-    }
-
-    if((value == 'auto') && ['width','height'].include(style) && (element.getStyle('display') != 'none'))
-      value = element['offset'+style.capitalize()] + 'px';
-
-    if (window.opera && ['left', 'top', 'right', 'bottom'].include(style))
-      if (Element.getStyle(element, 'position') == 'static') value = 'auto';
-    if(style == 'opacity') {
-      if(value) return parseFloat(value);
-      if(value = (element.getStyle('filter') || '').match(/alpha\(opacity=(.*)\)/))
-        if(value[1]) return parseFloat(value[1]) / 100;
-      return 1.0;
-    }
-    return value == 'auto' ? null : value;
-  },
-
+	propCache: {},
+	camelRe: /(-[a-z])/gi,
+ 	chkCache: function (prop) {
+		return Element.propCache[prop] || (Element.propCache[prop] = prop.replace(Element.camelRe, Element._camelFn));
+    },
+	_camelFn: function (m, a) {
+		return a.charAt(1).toUpperCase();
+	},
+	//This prototype is provided by the Ext Core Library 3.0 Beta of Ext JS, LLC. and is distributed under
+	/// the MIT license.
+	//http://www.ibiblio.org/pub/Linux/LICENSES/mit.license
+	getStyle : function() {
+		var view = document.defaultView;
+		return view && view.getComputedStyle ? function(el, prop) {
+			if (el == document) 
+				return null;
+			var v, cs;
+			prop = prop == 'float' ? 'cssFloat' : prop;
+			return (v = el.style[prop]) ? v : (cs = view.getComputedStyle(el, "")) ? cs[Element.chkCache(prop)] : null;
+		} : function(el, prop) {
+			if (el == document) 
+				return null;
+			var m, cs;
+			if (prop == 'opacity') {
+				if (el.style.filter.match) {
+					if (m = el.style.filter.match(/alpha\(opacity=(.*)\)/i)) {
+						var fv = parseFloat(m[1]);
+						if (!isNaN(fv)) {
+							return fv ? fv / 100 : 0;
+						}
+					}
+				}
+				return 1;
+			}
+			prop = prop == 'float' ? 'styleFloat' : prop;
+			return el.style[prop] || ((cs = el.currentStyle) ? cs[Element.chkCache(prop)] : null);
+		};
+	}(),
   setStyle: function(element, style) {
     element = z$(element);
     for (var name in style) {
@@ -1142,7 +1147,6 @@ Element.Methods = {
     }
     return element;
   },
-
   getDimensions: function(element) {
     element = z$(element);
     var display = z$(element).getStyle('display');

@@ -300,7 +300,8 @@ zk.Grid.prototype = {
 		if (zk.isRealVisible(this.element)) {
 			this._calcSize();// Bug #1813722
 			this._render(155);
-			if (zk.ie7) zk.redoCSS(this.element); // Bug 2096807
+			// it seems no longer to be fixed with this, commented by jumperchen on 2009/05/26
+			//if (zk.ie7) zk.redoCSS(this.element); // Bug 2096807
 		}
 	}
 };
