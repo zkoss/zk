@@ -1358,7 +1358,7 @@ zk.Widget = zk.$extends(zk.Object, {
 
 			if (!opts || opts.descendant)
 				for (var fn = zk.Widget.disableDomUpdate,
-				w = w.firstChild; w; w = w.nextSibling)
+				w = wgt.firstChild; w; w = w.nextSibling)
 					fn(w, opts, inf);
 		}
 		return inf;
@@ -1366,7 +1366,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	restoreDomUpdate: function (inf, opts) {
 		var wgt;
 		for (var i; i = inf.shift();) {
-			if (!wgt) wgt = w;
+			if (!wgt) wgt = i.w;
 			zk.copy(i.w,
 				{_node: i.n, _subnodes: i.s, desktop: i.d});
 		}

@@ -105,35 +105,38 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 		if (!body || body.hasGroup()) return false;
 		
 		var it = mesh.getBodyWidgetIterator(),
-			parent = mesh.parent;
-		
-		body.parent.removeChild(body);
+			inf = zk.Widget.disableDomUpdate(mesh);
+			
 		evt.stop();
-		var d = [], col = this.getChildIndex();
-		for (var i = 0, z = 0, w; (w = it.next()); z++)
-			for (var k = 0, cell = w.firstChild; cell; cell = cell.nextSibling, k++) 
-				if (k == col) {
-					d[i++] = {
-						wgt: cell,
-						index: z
-					};
+		try {
+			var d = [], col = this.getChildIndex();
+			for (var i = 0, z = 0, w; (w = it.next()); z++) 
+				for (var k = 0, cell = w.firstChild; cell; cell = cell.nextSibling, k++) 
+					if (k == col) {
+						d[i++] = {
+							wgt: cell,
+							index: z
+						};
+					}
+			
+			var dsc = dir == "ascending" ? -1 : 1, fn = this.sorting, isNumber = sorter == "client(number)";
+			d.sort(function(a, b) {
+				var v = fn(a.wgt, b.wgt, isNumber) * dsc;
+				if (v == 0) {
+					v = (a.index < b.index ? -1 : 1);
 				}
-		
-		var dsc = dir == "ascending" ? -1 : 1,
-			fn = this.sorting,
-			isNumber = sorter == "client(number)";
-		d.sort(function(a, b) {
-			var v = fn(a.wgt, b.wgt, isNumber) * dsc;
-			if (v == 0) {
-				v = (a.index < b.index ? -1 : 1);
+				return v;
+			});
+			for (var i = 0, k = d.length; i < k; i++) {
+				body.appendChild(d[i].wgt.parent);
 			}
-			return v;
-		});
-		for (var i = 0, k = d.length;  i < k; i++) {
-			body.appendChild(d[i].wgt.parent);
+			this._fixDirection(ascending);
+			
+		} finally {
+			zk.Widget.restoreDomUpdate(inf, {
+				rerender: true
+			});
 		}
-		this._fixDirection(ascending);
-		(mesh == body ? parent : mesh).appendChild(body);
 		return true;
 	},
 	sorting: function(a, b, isNumber) {
