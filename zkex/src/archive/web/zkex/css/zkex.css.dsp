@@ -61,7 +61,3 @@ tr.z-row .z-detail-outer {
 	background-image: url(${c:encodeURL('~./zul/img/grid/detail-bg.png')});
 }
 
-<%-- Table Layout--%>
-td.z-table-children {
-	vertical-align: top;
-}

@@ -18,6 +18,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkmax.zul;
 
+import java.io.IOException;
+
 import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
@@ -57,15 +59,8 @@ public class Tablechildren extends XulElement implements org.zkoss.zkmax.zul.api
 			throw new WrongValueException("Positive only");
 		if (_colspan != colspan) {
 			_colspan = colspan;			
-			final Component parent = getParent();
-			if (parent != null)
-				parent.invalidate();
-			else {
-				final Execution exec = Executions.getCurrent();
-				if (exec != null && exec.isExplorer())
-					invalidate();
-				else smartUpdate("colspan", Integer.toString(_colspan));
-			}
+			
+			smartUpdate("colspan", Integer.toString(_colspan));
 				
 		}
 	}
@@ -84,15 +79,9 @@ public class Tablechildren extends XulElement implements org.zkoss.zkmax.zul.api
 			throw new WrongValueException("Positive only");
 		if (_rowspan != rowspan) {
 			_rowspan = rowspan;
-			final Component parent = getParent();
-			if (parent != null)
-				parent.invalidate();
-			else {
-				final Execution exec = Executions.getCurrent();
-				if (exec != null && exec.isExplorer())
-					invalidate();
-				else smartUpdate("rowspan", Integer.toString(_rowspan));
-			}
+			
+			smartUpdate("rowspan", Integer.toString(_rowspan));
+			
 		}
 	}
 
@@ -108,5 +97,13 @@ public class Tablechildren extends XulElement implements org.zkoss.zkmax.zul.api
 			throw new UiException("Unsupported child for Tablechildren: "
 					+ child);
 		super.beforeChildAdded(child, refChild);
+	}
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws IOException {
+		super.renderProperties(renderer);
+		if(_rowspan != 1)
+			render(renderer, "rowspan", new Integer(_rowspan));
+		if(_colspan != 1)
+			render(renderer, "colspan", new Integer(_colspan));
 	}
 }

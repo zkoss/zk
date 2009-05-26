@@ -18,6 +18,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.io.IOException;
+
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
 
@@ -40,9 +42,15 @@ public class Slider extends XulElement implements org.zkoss.zul.api.Slider {
 	private String _orient = "horizontal";
 	private int _curpos, _maxpos = 100, _pginc = 10;
 	/** The name. */
-	private String _name;
+	private String _name="";
 	private String _slidingtext = "{0}";
 
+	static {
+		addClientEvent(Slider.class, Events.ON_SCROLL, CE_DUPLICATE_IGNORE);
+		addClientEvent(Slider.class, Events.ON_SCROLLING, CE_BUSY_IGNORE);
+	}
+
+	
 	public Slider() {
 		setWidth("207px");
 	}
@@ -88,18 +96,9 @@ public class Slider extends XulElement implements org.zkoss.zul.api.Slider {
 	public void setOrient(String orient) throws WrongValueException {
 		if (!"horizontal".equals(orient) && !"vertical".equals(orient))
 			throw new WrongValueException("orient cannot be "+orient);
-
-		if (!Objects.equals(_orient, orient)) {
-			_orient = orient;
-			if ("vertical".equals(_orient)) {
-				setWidth(null);
-				setHeight("207px");
-			} else {
-				setWidth("207px");
-				setHeight(null);
-			}
-			invalidate();
-		}
+		_orient = orient;
+		smartUpdate("orient", _orient);
+		
 	}
 	/**
 	 * Returns the sliding text.
@@ -120,7 +119,7 @@ public class Slider extends XulElement implements org.zkoss.zul.api.Slider {
 			slidingtext = "{0}";
 		if (!_slidingtext.equals(slidingtext)) {
 			_slidingtext = slidingtext;
-			smartUpdate("z.slidingtext", _slidingtext);
+			smartUpdate("slidingtext", _slidingtext);
 		}
 	}
 	/** Returns the current position of the slider.
@@ -141,7 +140,7 @@ public class Slider extends XulElement implements org.zkoss.zul.api.Slider {
 
 		if (_curpos != curpos) {
 			_curpos = curpos;
-			smartUpdate("z.curpos", _curpos);
+			smartUpdate("curpos", _curpos);
 		}
 	}
 
@@ -165,7 +164,7 @@ public class Slider extends XulElement implements org.zkoss.zul.api.Slider {
 			if (_curpos > maxpos)
 				setCurpos(maxpos);
 			_maxpos = maxpos;
-			smartUpdate("z.maxpos", _maxpos);
+			smartUpdate("maxpos", _maxpos);
 		}
 	}
 	
@@ -195,7 +194,7 @@ public class Slider extends XulElement implements org.zkoss.zul.api.Slider {
 			throw new WrongValueException("Nonpositive is not allowed: "+pginc);
 		if (_pginc != pginc) {
 			_pginc = pginc;
-			smartUpdate("z.pginc", _pginc);
+			smartUpdate("pginc", _pginc);
 		}
 	}
 
@@ -227,7 +226,7 @@ public class Slider extends XulElement implements org.zkoss.zul.api.Slider {
 		if (name != null && name.length() == 0) name = null;
 		if (!Objects.equals(_name, name)) {
 			_name = name;
-			smartUpdate("z.name", _name);
+			smartUpdate("name", _name);
 		}
 	}
 	
@@ -276,5 +275,22 @@ public class Slider extends XulElement implements org.zkoss.zul.api.Slider {
 			Events.postEvent(evt);
 		} else
 			super.service(request, everError);
+	}
+	
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws IOException {
+		super.renderProperties(renderer);
+		if(!_orient.equals("horizontal"))
+			renderer.render("orient", _orient);
+		if(!_slidingtext.equals("{0}"))
+			renderer.render("slidingtext", _slidingtext);
+		if(_curpos != 0)
+			renderer.render("curpos", _curpos);
+		if(_maxpos != 100)
+			renderer.render("maxpos", _maxpos);
+		if(_pginc != 10)
+			renderer.render("pageIncrement", _pginc);
+		if(!_name.equals(""))
+			renderer.render("name", _name);
 	}
 }

@@ -18,6 +18,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkmax.zul;
 
+import java.io.IOException;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
@@ -48,7 +50,7 @@ public class Tablelayout extends XulElement implements org.zkoss.zkmax.zul.api.T
 			throw new WrongValueException("Positive only");
 		if (_columns != columns) {
 			_columns = columns;
-			invalidate();
+			smartUpdate("columns", _columns);
 		}
 	}
 
@@ -66,24 +68,11 @@ public class Tablelayout extends XulElement implements org.zkoss.zkmax.zul.api.T
 		super.beforeChildAdded(child, refChild);
 	}
 	
-	/**
-	 * When remove child, layout will be rerender
-	 * 
-	 * @see ComponentCtrl#onChildRemoved
-	 */
-	public void onChildRemoved(Component child) {
-		super.onChildRemoved(child);
-		invalidate();
-	}
-	
-	/**
-	 * When add child, layout will be rerender
-	 * 
-	 * @see ComponentCtrl#onChildAdded
-	 */
-	public void onChildAdded(Component child) {
-		super.onChildAdded(child);
-		invalidate();
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws IOException {
+		super.renderProperties(renderer);
+		if(_columns != 1)
+			render(renderer, "columns", new Integer(_columns));
 	}
 	
 }

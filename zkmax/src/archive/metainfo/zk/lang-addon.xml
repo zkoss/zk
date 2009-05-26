@@ -112,17 +112,19 @@ def alert(m):
 	<component>
 		<component-name>tablechildren</component-name>
 		<component-class>org.zkoss.zkmax.zul.Tablechildren</component-class>
+		<widget-class>zkmax.layout.Tablechildren</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.TablechildrenDefault</mold-uri>
+			<mold-uri>mold/tablechildren.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>tablelayout</component-name>
 		<component-class>org.zkoss.zkmax.zul.Tablelayout</component-class>
+		<widget-class>zkmax.layout.Tablelayout</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.TablelayoutDefault</mold-uri>
+			<mold-uri>mold/tablelayout.js</mold-uri>
 		</mold>
 	</component>	
 </language-addon>

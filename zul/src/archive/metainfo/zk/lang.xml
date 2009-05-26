@@ -1046,4 +1046,21 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</mold>
 		<preserve-blank/>
 	</component>
+	<component>
+		<component-name>slider</component-name>
+		<component-class>org.zkoss.zul.Slider</component-class>
+		<widget-class>zul.sld.Slider</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/slider.js</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>sphere</mold-name>
+			<mold-uri>mold/slider.js</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>scale</mold-name>
+			<mold-uri>mold/slider.js</mold-uri>
+		</mold>
+	</component>
 </language>

@@ -176,7 +176,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<component>
 		<component-name>columnlayout</component-name>
 		<component-class>org.zkoss.zkex.zul.Columnlayout</component-class>
-		<widget-class>zkex.wgt.Columnlayout</widget-class>
+		<widget-class>zkex.layout.Columnlayout</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/columnlayout.js</mold-uri>
@@ -185,28 +185,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>columnchildren</component-name>
 		<component-class>org.zkoss.zkex.zul.Columnchildren</component-class>
-		<widget-class>zkex.wgt.Columnchildren</widget-class>
+		<widget-class>zkex.layout.Columnchildren</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/columnchildren.js</mold-uri>
-		</mold>
-	</component>
-	<component>
-		<component-name>tablelayout</component-name>
-		<component-class>org.zkoss.zkex.zul.Tablelayout</component-class>
-		<widget-class>zkex.wgt.Tablelayout</widget-class>
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>mold/tablelayout.js</mold-uri>
-		</mold>
-	</component>
-	<component>
-		<component-name>tablechildren</component-name>
-		<component-class>org.zkoss.zkex.zul.Tablechildren</component-class>
-		<widget-class>zkex.wgt.Tablechildren</widget-class>
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>mold/tablechildren.js</mold-uri>
 		</mold>
 	</component>
 </language-addon>
