@@ -317,7 +317,7 @@ zkMenu2 = { // menu
 		}
 
 		if (!pp._shadow)
-			pp._shadow = new zk.Shadow(pp, {autoShow: true, stackup: true});
+			pp._shadow = new zk.Shadow(pp, {autoShow: true, stackup: !getZKAttr(pp, 'stackup')});
 		else pp._shadow.sync();
 
 		zkMenu2._pop.addFloatId(pp.id);
