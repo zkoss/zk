@@ -370,7 +370,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 	setZindex: _zkf,
 	focus: function (timeout) {
-		if (this.desktop) {
+		if (this.desktop && this.isVisible() && this.canActivate({checkOnly:true})) {
 			var cap = this.caption;
 			for (var w = this.firstChild; w; w = w.nextSibling)
 				if (w != cap && w.focus(timeout))

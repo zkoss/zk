@@ -38,7 +38,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 
 	//super//
 	focus: function (timeout) {
-		if (this.isVisible() && this.canActivate({checkOnly:true})) {
+		if (this.desktop && this.isVisible() && this.canActivate({checkOnly:true})) {
 			zDom.focus(this.getSubnode('btn') ? this.getSubnode('btn'): this.getNode(), timeout);
 			return true;
 		}

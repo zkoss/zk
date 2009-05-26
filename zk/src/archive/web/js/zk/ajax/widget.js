@@ -898,8 +898,9 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 
 	focus: function (timeout) {
-		var node = this.getNode();
-		if (node && this.isVisible() && this.canActivate({checkOnly:true})) {
+		var node;
+		if (this.isVisible() && this.canActivate({checkOnly:true})
+		&& (node = this.getNode())) {
 			if (zDom.focus(node, timeout)) {
 				zk.currentFocus = this;
 				this.setTopmost();

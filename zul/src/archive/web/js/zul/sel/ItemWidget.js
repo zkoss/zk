@@ -40,6 +40,7 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 			if (this.isStripeable_()) {
 				var p = this.getMeshWidget();
 				if (p) p.stripe();
+			}
 		}
 	},
 	doClick_: function(evt) {
