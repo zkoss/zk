@@ -17,6 +17,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 
 	$init: function () {
 		this.$supers('$init', arguments);
+		this._groupsInfo = [];
 	},
 
 	$define: {
@@ -24,7 +25,15 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			if (this.desktop) ;//TODO: recalc size
 		}
 	},
-
+	getGroupCount: function () {
+		return this._groupsInfo.length;
+	},
+	getGroups: function () {
+		return this._groupsInfo;
+	},
+	hasGroup: function () {
+		return this._groupsInfo.length;
+	},
 	nextItem: function (p) {
 		if (p)
 			while ((p = p.nextSibling)
@@ -111,13 +120,13 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			this.paging = null;
 		else {
 			if (child == this.firstItem) {
-				for (var p = this.firstChild, Listitem = zul.sel.ListItem;
+				for (var p = this.firstChild, Listitem = zul.sel.Listitem;
 				p && !p.$instanceof(Listitem); p = p.nextSibling)
 					;
 				this.firstItem = p;
 			}
 			if (child == this.lastItem) {
-				for (var p = this.lastChild, Listitem = zul.sel.ListItem;
+				for (var p = this.lastChild, Listitem = zul.sel.Listitem;
 				p && !p.$instanceof(Listitem); p = p.previousSibling)
 					;
 				this.lastItem = p;

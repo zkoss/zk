@@ -172,7 +172,7 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 		if (type.startsWith("client")) {
 			setSortAscending(type);
 			setSortDescending(type);
-		} else 	if ("auto".equals(type)) {
+		} else if ("auto".equals(type)) {
 			if (getSortAscending() == null)
 				setSortAscending(new RowComparator(this, true, false, false));
 			if (getSortDescending() == null)

@@ -43,12 +43,6 @@ zul.grid.Columns = zk.$extends(zul.mesh.HeadWidget, {
 			this._mpop = null;
 		}
 	},
-	_getMpopId: function () {
-		/**final String mpop = getMenupopup();
-		if ("none".equals(mpop)) return "zk_n_a";
-		if ("auto".equals(mpop)) return _menupopup.getId();
-		return mpop;*/
-	},
 	getZclass: function () {
 		return this._zclass == null ? "z-columns" : this._zclass;
 	},

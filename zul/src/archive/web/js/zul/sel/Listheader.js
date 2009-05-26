@@ -12,10 +12,11 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.sel.Listheader = zk.$extends(zul.mesh.HeaderWidget, {
+zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 	getListbox: zul.mesh.HeaderWidget.prototype.getMeshWidget,
-
-	//super//
+	
+	getMeshBody: zul.mesh.HeaderWidget.prototype.getMeshWidget,
+	
 	//super//
 	getZclass: function () {
 		return this._zclass == null ? "z-listheader" : this._zclass;

@@ -82,7 +82,8 @@ public interface Listheader extends org.zkoss.zul.impl.api.HeaderElement {
 	 * {@link #setSortDescending} are called with null. Therefore, no more
 	 * sorting is available to users for this column.
 	 */
-	public void setSort(String type);
+	public void setSort(String type) throws ClassNotFoundException,
+	InstantiationException, IllegalAccessException;
 
 	/**
 	 * Returns the ascending sorter, or null if not available.

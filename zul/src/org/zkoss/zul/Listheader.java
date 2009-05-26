@@ -33,6 +33,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Namespaces;
 
@@ -56,9 +57,15 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 
 	private String _sortDir = "natural";
 	private transient Comparator _sortAsc, _sortDsc;
+	private String _sortAscNm = "none";
+	private String _sortDscNm = "none";
 	private Object _value;
 	private int _maxlength;
 
+	static {
+		addClientEvent(Listheader.class, Events.ON_SORT, CE_DUPLICATE_IGNORE);
+	}
+	
 	public Listheader() {
 	}
 	public Listheader(String label) {
@@ -142,7 +149,16 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 
 	/** Sets the type of the sorter.
 	 * You might specify either "auto", "auto(FIELD_NAME1[,FIELD_NAME2] ...)"(since 3.5.3) or "none".
-	 *
+	 * 
+	 * <p>If "client" or "client(number)" is specified,
+	 * the sort functionality will be done by Javascript at client without notifying
+	 * to server, that is, the order of the component in the row is out of sync.
+	 * <ul>
+	 * <li> "client" : it is treated by a string</li>
+	 * <li> "client(number)" : it is treated by a number</li>
+	 * </ul>
+	 * <p>Note: client sorting cannot work in model case. (since 5.0.0)
+	 * 
 	 * <p>If "auto" is specified,
 	 * {@link #setSortAscending} and/or {@link #setSortDescending} 
 	 * are called with {@link ListitemComparator}, if
@@ -161,8 +177,13 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 	 * {@link #setSortDescending} are called with null.
 	 * Therefore, no more sorting is available to users for this column.
 	 */
-	public void setSort(String type) {
-		if ("auto".equals(type)) {
+	public void setSort(String type) throws ClassNotFoundException,
+			InstantiationException, IllegalAccessException {
+		if (type == null) return;
+		if (type.startsWith("client")) {
+			setSortAscending(type);
+			setSortDescending(type);
+		} else if ("auto".equals(type)) {
 			if (getSortAscending() == null)
 				setSortAscending(new ListitemComparator(this, true, true));
 			if (getSortDescending() == null)
@@ -205,9 +226,12 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 	 */
 	public void setSortAscending(Comparator sorter) {
 		if (!Objects.equals(_sortAsc, sorter)) {
-			if (sorter == null) smartUpdate("sortAscending", false);
-			else if (_sortAsc == null) smartUpdate("sortAscending", true);
 			_sortAsc = sorter;
+			String nm = _sortAsc == null ? "none" : "fromServer";
+			if (!_sortAscNm.equals(nm)) {
+				_sortAscNm = nm;
+				smartUpdate("sortAscending", _sortAscNm);
+			}
 		}
 	}
 	/** Sets the ascending sorter with the class name, or null for
@@ -216,7 +240,11 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 	public void setSortAscending(String clsnm)
 	throws ClassNotFoundException, InstantiationException,
 	IllegalAccessException {
-		setSortAscending(toComparator(clsnm));
+		if (!Strings.isBlank(clsnm) && clsnm.startsWith("client") && !_sortAscNm.equals(clsnm)) {
+			_sortAscNm = clsnm;
+			smartUpdate("sortAscending", clsnm);
+		} else
+			setSortAscending(toComparator(clsnm));
 	}
 
 	/** Returns the descending sorter, or null if not available.
@@ -239,9 +267,12 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 	 */
 	public void setSortDescending(Comparator sorter) {
 		if (!Objects.equals(_sortDsc, sorter)) {
-			if (sorter == null) smartUpdate("sortDescending", false);
-			else if (_sortDsc == null) smartUpdate("sortDescending", true);
 			_sortDsc = sorter;
+			String nm = _sortDsc == null ? "none" : "fromServer";
+			if (!_sortDscNm.equals(nm)) {
+				_sortDscNm = nm;
+				smartUpdate("sortDescending", _sortDscNm);
+			}
 		}
 	}
 	/** Sets the descending sorter with the class name, or null for
@@ -250,7 +281,11 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 	public void setSortDescending(String clsnm)
 	throws ClassNotFoundException, InstantiationException,
 	IllegalAccessException {
-		setSortDescending(toComparator(clsnm));
+		if (!Strings.isBlank(clsnm) && clsnm.startsWith("client") && !_sortDscNm.equals(clsnm)) {
+			_sortDscNm = clsnm;
+			smartUpdate("sortDescending", clsnm);
+		} else
+			setSortDescending(toComparator(clsnm));
 	}
 
 	private Comparator toComparator(String clsnm)
@@ -369,6 +404,10 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 			hd.setSortDirection(
 				hd != this ? "natural": ascending ? "ascending": "descending");
 		}
+
+		// sometimes the items at client side are out of date
+		box.invalidate();
+		
 		return true;
 	}
 	/** Sorts the items. If with group, each group is sorted independently.
@@ -420,6 +459,21 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 		super.beforeParentChanged(parent);
 	}
 
+	// super
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+		
+		if (!"none".equals(_sortDscNm))
+			render(renderer, "sortDescending", _sortDscNm);
+
+		if (!"none".equals(_sortAscNm))
+			render(renderer, "sortAscending", _sortAscNm);
+		
+		if (!"natural".equals(_sortDir))
+			render(renderer, "sortDirection", _sortDir);
+	}
+	
 	//Cloneable//
 	public Object clone() {
 		final Listheader clone = (Listheader)super.clone();
