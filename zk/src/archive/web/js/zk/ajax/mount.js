@@ -421,7 +421,7 @@ zkm = {
 	},
 	docMouseDown: function (devt) {
 		devt = devt || window.event;
-		var wgt = zk.Widget.$(devt, true);
+		var wgt = zk.Widget.$(devt, {child:true});
 		zkm._docMouseDown(
 			new zk.Event(wgt, 'onMouseDown', zkm._mouseData(devt, wgt), null, devt),
 			wgt);
@@ -457,7 +457,7 @@ zkm = {
 		evt = evt || window.event;
 		var wgt = zk.mouseCapture;
 		if (wgt) zk.mouseCapture = null;
-		else wgt = zk.Widget.$(evt, true);
+		else wgt = zk.Widget.$(evt, {child:true});
 		if (wgt)
 			zkm._doEvt(new zk.Event(wgt, 'onMouseUp', zkm._mouseData(evt, wgt), null, evt));
 	},
@@ -495,7 +495,7 @@ zkm = {
 		zk.currentPointer[1] = zEvt.y(evt);
 
 		var wgt = zk.mouseCapture;
-		if (!wgt) wgt = zk.Widget.$(evt, true);
+		if (!wgt) wgt = zk.Widget.$(evt, {child:true});
 		if (wgt)
 			zkm._doEvt(new zk.Event(wgt, 'onMouseMove', zkm._mouseData(evt, wgt), null, evt));
 	},
@@ -504,19 +504,19 @@ zkm = {
 		zk.currentPointer[0] = zEvt.x(evt);
 		zk.currentPointer[1] = zEvt.y(evt);
 
-		var wgt = zk.Widget.$(evt, true);
+		var wgt = zk.Widget.$(evt, {child:true});
 		if (wgt)
 			zkm._doEvt(new zk.Event(wgt, 'onMouseOver', zkm._mouseData(evt, wgt), null, evt));
 	},
 	docMouseOut: function (evt) {
 		evt = evt || window.event;
-		var wgt = zk.Widget.$(evt, true);
+		var wgt = zk.Widget.$(evt, {child:true});
 		if (wgt)
 			zkm._doEvt(new zk.Event(wgt, 'onMouseOut', zkm._mouseData(evt, wgt), null, evt));
 	},
 	docKeyDown: function (evt) {
 		evt = evt || window.event;
-		var wgt = zk.Widget.$(evt, true);
+		var wgt = zk.Widget.$(evt, {child:true});
 		if (wgt) {
 			var wevt = new zk.Event(wgt, 'onKeyDown', zEvt.keyData(evt), null, evt);
 			zkm._doEvt(wevt);
@@ -530,14 +530,14 @@ zkm = {
 		evt = evt || window.event;
 		var wgt = zk.keyCapture;
 		if (wgt) zk.keyCapture = null;
-		else wgt = zk.Widget.$(evt, true);
+		else wgt = zk.Widget.$(evt, {child:true});
 		if (wgt)
 			zkm._doEvt(new zk.Event(wgt, 'onKeyUp', zEvt.keyData(evt), null, evt));
 	},
 	docKeyPress: function (evt) {
 		evt = evt || window.event;
 		var wgt = zk.keyCapture;
-		if (!wgt) wgt = zk.Widget.$(evt, true);
+		if (!wgt) wgt = zk.Widget.$(evt, {child:true});
 		if (wgt)
 			zkm._doEvt(new zk.Event(wgt, 'onKeyPress', zEvt.keyData(evt), null, evt));
 	},
@@ -546,7 +546,7 @@ zkm = {
 
 		evt = evt || window.event;
 		if (evt.which == 1 || (evt.button == 0 || evt.button == 1)) {
-			var wgt = zk.Widget.$(evt, true);
+			var wgt = zk.Widget.$(evt, {child:true});
 			if (wgt)
 				zkm._doEvt(new zk.Event(wgt, 'onClick', zkm._mouseData(evt, wgt), {ctl:true}, evt));
 			//don't return anything. Otherwise, it replaces event.returnValue in IE (Bug 1541132)
@@ -556,7 +556,7 @@ zkm = {
 		if (zk.processing || zk.Draggable.ignoreClick()) return;
 
 		evt = evt || window.event;
-		var wgt = zk.Widget.$(evt, true);
+		var wgt = zk.Widget.$(evt, {child:true});
 		if (wgt) {
 			var wevt = new zk.Event(wgt, 'onDoubleClick', zkm._mouseData(evt, wgt), {ctl:true}, evt);
 			zkm._doEvt(wevt);
@@ -571,7 +571,7 @@ zkm = {
 		zk.lastPointer[0] = zEvt.x(evt);
 		zk.lastPointer[1] = zEvt.y(evt);
 
-		var wgt = zk.Widget.$(evt, true);
+		var wgt = zk.Widget.$(evt, {child:true});
 		if (wgt) {
 			var wevt = new zk.Event(wgt, 'onRightClick', zkm._mouseData(evt, wgt), {ctl:true}, evt);
 			zkm._doEvt(wevt);

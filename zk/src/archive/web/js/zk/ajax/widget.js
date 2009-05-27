@@ -647,7 +647,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		var p = this.parent;
 		if (p) p.replaceChildHTML_(this, n, desktop, skipper);
 		else {
-			var oldwgt = zk.Widget.$(n);
+			var oldwgt = zk.Widget.$(n, {exact:true});
 			if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
 			zDom.setOuterHTML(n, this._redrawHTML(skipper));
 			this.bind(desktop, skipper);
@@ -691,7 +691,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 
 	replaceChildHTML_: function (child, n, desktop, skipper) {
-		var oldwgt = zk.Widget.$(n);
+		var oldwgt = zk.Widget.$(n, {exact:true});
 		if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
 		zDom.setOuterHTML(n, child._redrawHTML(skipper));
 		child.bind(desktop, skipper);
@@ -1147,7 +1147,7 @@ zk.Widget = zk.$extends(zk.Object, {
 
 }, {
 	_floatings: [], //[{widget,node}]
-	$: function (n, strict) {
+	$: function (n, opts) {
 		var binds = zk.Widget._binds;
 		if (typeof n == 'string') {
 			var j = n.indexOf('$');
@@ -1165,15 +1165,19 @@ zk.Widget = zk.$extends(zk.Object, {
 				var j = id.indexOf('$');
 				if (j >= 0) {
 					id = id.substring(0, j);
-					if (strict) {
+					if (opts && opts.child) {
 						var wgt = binds[id];
 						if (wgt) {
 							var n2 = wgt.getNode();
-							return n2 && zDom.isAncestor(n2, n) ? wgt: null;
+							if (n2 && zDom.isAncestor(n2, n)) return wgt;
 						}
+						if (opts && opts.exact) break;
+						continue;
 					}
 				}
-				return binds[id];
+				wgt = binds[id];
+				if (wgt) return wgt;
+				if (opts && opts.exact) break;
 			}
 		}
 		return null;
