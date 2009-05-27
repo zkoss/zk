@@ -18,7 +18,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 	_maxpos: 100,
 	_pageIncrement: 10,
 	_slidingtext: "{0}",
-	
+
 	$define: {
 		orient: function() {
 			if ("vertical" == this._orient) {
@@ -31,19 +31,25 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			this.rerender();
 		},
 		curpos: _zkf = function(){
-			if(this.desktop)
+			if(this.desktop){
 				this._fixPos();
+				this.inp.value = this._curpos;
+			}
 		},
 		maxpos: function(){
-			if(this._curpos > this._maxpos)
-				this._curpos = this._maxpos;
-			if(this.desktop)
-				this._fixPos();
+			if(this._curpos > this._maxpos){
+				this.inp.value = this._curpos = this._maxpos;
+				if(this.desktop)
+					this._fixPos();
+			}
 		},
 		slidingtext: _zkf = function(){
 		},
 		pageIncrement: _zkf,
-		name: _zkf
+		name: function(){
+			if(this.desktop)
+				this.inp.name = this._name;
+		}
 		
 	},
 	getZclass: function () {
@@ -159,6 +165,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		
 		widget._fixPos();
 		widget.btn.title = pos;
+		widget.inp.value = pos;
 		zDom.remove(widget.slidetip);
 		widget.slidetip = null;
 	},
@@ -214,31 +221,13 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 	isVertical: function(){
 		return "vertical" == this._orient;
 	},
-	_formOf: function () {
-		var n = this.node;
-		for (; n; n = n.parentNode)
-			if (n.tagName == "FORM")
-				return n;
-	},	
-	onsubmit: function () {
-		var nm = this._name;
-		if (!nm || !this.form) return;
-
-		var val = this._curpos,
-			el = this.form.elements[nm];
-		if (el) el.value = val;
-		else {
-			var inp = document.createElement("INPUT");
-			inp.type = "hidden";
-			inp.name = nm;
-			inp.value = val;
-			if (parent) parent.appendChild(inp);
-		}
-	},
 	bind_: function () {
 		this.$supers('bind_', arguments); 
 		this.inner = this.getSubnode("inner");
 		this.btn = this.getSubnode("btn");
+		this.inp = this.getSubnode("inp");
+		if(this._name)
+			this.inp.name = this._name;
 		if(this.inScaleMold()){
 			this.node = this.getSubnode("real");
 		}else
@@ -257,19 +246,9 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		zWatch.listen('onSize', this);
 		zWatch.listen('onShow', this);
 		
-		this.form = this._formOf();
-		if (this.form && !this.fnSubmit) {
-			this.fnSubmit = function () {
-				this.onsubmit();
-			};
-			this.domListen_(this.form, "submit", this.fnSubmit);
-		}
 	},
 	unbind_: function (){
-		if (this.fnSubmit)
-			this.domUnlisten_(this.form, "submit", this.fnSubmit);
-
-		this.inner = this.btn = this.node = this.fnSubmit = null;
+		this.inp = this.inner = this.btn = this.node  = null;
 		if (this._drag) {
 			this._drag.destroy();
 			this._drag = null;
