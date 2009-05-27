@@ -1186,11 +1186,15 @@ zk.Widget = zk.$extends(zk.Object, {
 
 	//Event Handling//
 	_domevti: function (wgt, evtnm, fn) { //proxy event listener
-		evtnm = evtnm.substring(2);
 		if (!fn) {
-			fn = '_do';
-			if (wgt.inDesign) fn += 'Design';
-			fn += evtnm;
+			var nms = zk.Widget[wgt.inDesign ? '_domevtfnD': '_domevtfn'];
+			fn = nms[evtnm];
+			if (!fn) {
+				fn = '_do';
+				if (wgt.inDesign) fn += 'Design';
+				fn += evtnm.substring(2);
+				nms[evtnm] = fn;
+			}
 		} else if (wgt.inDesign)
 			fn = fn.startsWith('_do') ? '_doDesign' + fn.substring(3):
 				'doDesign' + (fn.startsWith('do') ? fn.substring(2): fn);
@@ -1201,9 +1205,15 @@ zk.Widget = zk.$extends(zk.Object, {
 				throw 'Listener ' + fn + ' not found in ' + wgt.className;
 			return null;
 		}
-		return [evtnm == 'DoubleClick' ? 'dblclick': evtnm.toLowerCase(),
-			zk.Widget._domevtproxy(wgt, f)];
+		var domns = zk.Widget._domevtn,
+			domn = domns[evtnm];
+		if (!domn)
+			domn = domns[evtnm] = evtnm.substring(2).toLowerCase();
+		return [domn, zk.Widget._domevtproxy(wgt, f)];
 	},
+	_domevtfn: {},
+	_domevtfnD: {},
+	_domevtn: {onDoubleClick: 'dblclick'},
 	_domevtproxy: function (wgt, f) {
 		var fps = wgt._$evproxs, fp;
 		if (!fps) wgt._$evproxs = fps = {};
