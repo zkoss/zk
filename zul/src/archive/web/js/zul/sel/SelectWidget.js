@@ -44,8 +44,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	unbind_: function () {
 		var btn = this.getSubnode('a');
 		if (btn) {
-			this.domUnisten_(btn, 'onFocus', 'doFocus_');
-			this.domUnisten_(btn, 'onBlur', 'doBlur_');
+			this.domUnlisten_(btn, 'onFocus', 'doFocus_');
+			this.domUnlisten_(btn, 'onBlur', 'doBlur_');
 		}
 		this.$supers('unbind_', arguments);
 	}

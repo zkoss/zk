@@ -145,12 +145,20 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 
 zul.sel.ItemIter = zk.$extends(zk.Object, {
 	$init: function (box) {
-		this.p = box.firstItem;
+		this.box = box;
+	},
+	_init: function () {
+		if (!this._isInit) {
+			this._isInit = true;
+			this.p = this.box.firstItem;
+		}
 	},
 	hasNext: function () {
+		this._init();
 		return this.p;
 	},
 	next: function () {
+		this._init();
 		var p = this.p;
 		if (p) this.p = p.parent.nextItem(p);
 		return p;

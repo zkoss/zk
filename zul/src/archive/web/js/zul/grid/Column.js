@@ -39,74 +39,79 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 			return false;
 		}
 		
-		var grid = this.getGrid();
-		if (!grid || grid.isModel()) return false;
+		var mesh = this.getMeshWidget();
+		if (!mesh || mesh.isModel()) return false;
 			// if in model, the sort should be done by server
 			
-		var	rows = grid.rows;		
-		if (!rows) return false;
-		rows.parent.removeChild(rows);
+		var	body = this.getMeshBody();
+		if (!body) return false;
 		evt.stop();
 		
-		if (rows.hasGroup()) {
-			for (var gs = rows.getGroups(), len = gs.length; --len >= 0;)
-				rows.removeChild(gs[len]);
-		}
-		
-		var d = [], col = this.getChildIndex();
-		for (var i = 0, z = 0, row = rows.firstChild; row; row = row.nextSibling, z++)
-			for (var k = 0, cell = row.firstChild; cell; cell = cell.nextSibling, k++) 
-				if (k == col) {
-					d[i++] = {
-						wgt: cell,
-						index: z
-					};
-				}
-		
-		var dsc = dir == "ascending" ? -1 : 1,
-			fn = this.sorting,
-			isNumber = sorter == "client(number)";
-		d.sort(function(a, b) {
-			var v = fn(a.wgt, b.wgt, isNumber) * dsc;
-			if (v == 0) {
-				v = (a.index < b.index ? -1 : 1);
+		var desktop = body.desktop,
+			node = body.getNode();
+		try {
+			body.unbind();
+			if (body.hasGroup()) {
+				for (var gs = body.getGroups(), len = gs.length; --len >= 0;) 
+					body.removeChild(gs[len]);
 			}
-			return v;
-		});
-		
-		// clear all
-		for (var c = rows.firstChild, p; c;) {
-			p = c.nextSibling;
-			rows.removeChild(c);
-			c = p;
-		}
-		
-		for (var previous, row, index = this.getChildIndex(), i = 0, k = d.length;  i < k; i++) {
-			row = d[i];
-			if (!previous || fn(previous.wgt, row.wgt, isNumber) != 0) {
-				//new group
-				var group,
-					cell = row.wgt.parent.getChildAt(index);
-				if (cell && cell.$instanceof(zul.wgt.Label)) {
-					group = new zul.grid.Group();
-					group.appendChild(new zul.wgt.Label({value: cell.getValue()}));
-				} else {
-					var cc = cell.firstChild;
-					if (cc && cc.$instanceof(zul.wgt.Label)) {
-						group = new zul.grid.Group();
-						group.appendChild(new zul.wgt.Label({value: cc.getValue()}));
-					} else {
-						group = new zul.grid.Group();
-						group.appendChild(new zul.wgt.Label({value: msgzul.GRID_OTHER}));
+			
+			var d = [], col = this.getChildIndex();
+			for (var i = 0, z = 0, it = mesh.getBodyWidgetIterator(), w; (w = it.next()); z++) 
+				for (var k = 0, cell = w.firstChild; cell; cell = cell.nextSibling, k++) 
+					if (k == col) {
+						d[i++] = {
+							wgt: cell,
+							index: z
+						};
 					}
+			
+			var dsc = dir == "ascending" ? -1 : 1, fn = this.sorting, isNumber = sorter == "client(number)";
+			d.sort(function(a, b) {
+				var v = fn(a.wgt, b.wgt, isNumber) * dsc;
+				if (v == 0) {
+					v = (a.index < b.index ? -1 : 1);
 				}
-				rows.appendChild(group);
+				return v;
+			});
+			
+			// clear all
+			for (;body.firstChild;)
+				body.removeChild(body.firstChild);
+			
+			for (var previous, row, index = this.getChildIndex(), i = 0, k = d.length; i < k; i++) {
+				row = d[i];
+				if (!previous || fn(previous.wgt, row.wgt, isNumber) != 0) {
+					//new group
+					var group, cell = row.wgt.parent.getChildAt(index);
+					if (cell && cell.$instanceof(zul.wgt.Label)) {
+						group = new zul.grid.Group();
+						group.appendChild(new zul.wgt.Label({
+							value: cell.getValue()
+						}));
+					} else {
+						var cc = cell.firstChild;
+						if (cc && cc.$instanceof(zul.wgt.Label)) {
+							group = new zul.grid.Group();
+							group.appendChild(new zul.wgt.Label({
+								value: cc.getValue()
+							}));
+						} else {
+							group = new zul.grid.Group();
+							group.appendChild(new zul.wgt.Label({
+								value: msgzul.GRID_OTHER
+							}));
+						}
+					}
+					body.appendChild(group);
+				}
+				body.appendChild(row.wgt.parent);
+				previous = row;
 			}
-			rows.appendChild(row.wgt.parent);
-			previous = row;
+			this._fixDirection(ascending);
+		} finally {
+			body.replaceHTML(node, desktop);
 		}
-		this._fixDirection(ascending);
-		grid.appendChild(rows);
 		return true;
 	},
 	setLabel: function (label) {

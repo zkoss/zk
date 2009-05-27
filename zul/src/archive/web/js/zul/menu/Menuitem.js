@@ -145,7 +145,8 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 			if (!topmost)
 				for (var p = this.parent; p; p = p.parent)
 					if (p.$instanceof(zul.menu.Menupopup))
-						p.close({sendOnOpen:true});
+						if (p.isOpen()) p.close({sendOnOpen:true});
+						
 			this.$class._rmActive(this);				
 		}
 	},

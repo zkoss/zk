@@ -104,13 +104,14 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 		
 		if (!body || body.hasGroup()) return false;
 		
-		var it = mesh.getBodyWidgetIterator(),
-			inf = zk.Widget.disableDomUpdate(mesh);
+		var desktop = body.desktop,
+			node = body.getNode();
 			
 		evt.stop();
 		try {
+			body.unbind();
 			var d = [], col = this.getChildIndex();
-			for (var i = 0, z = 0, w; (w = it.next()); z++) 
+			for (var i = 0, z = 0, it = mesh.getBodyWidgetIterator(), w; (w = it.next()); z++) 
 				for (var k = 0, cell = w.firstChild; cell; cell = cell.nextSibling, k++) 
 					if (k == col) {
 						d[i++] = {
@@ -133,9 +134,7 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 			this._fixDirection(ascending);
 			
 		} finally {
-			zk.Widget.restoreDomUpdate(inf, {
-				rerender: true
-			});
+			body.replaceHTML(node, desktop);
 		}
 		return true;
 	},

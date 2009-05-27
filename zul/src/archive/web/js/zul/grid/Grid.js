@@ -86,13 +86,21 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 
 zul.grid.RowIter = zk.$extends(zk.Object, {
 	$init: function (grid) {
-		var rows = grid.rows;
-		this.p = rows ? rows.firstChild: null;
+		this.grid = grid;
+	},
+	_init: function () {
+		if (!this._isInit) {
+			this._isInit = true;
+			this.p = this.grid.rows ? this.grid.rows.firstChild: null;
+		}
 	},
 	hasNext: function () {
+		this._init();
 		return this.p;
 	},
+	
 	next: function () {
+		this._init();
 		var p = this.p;
 		if (p) this.p = p.nextSibling;
 		return p;
