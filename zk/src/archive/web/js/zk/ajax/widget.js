@@ -1177,8 +1177,8 @@ zk.Widget = zk.$extends(zk.Object, {
 				}
 				wgt = binds[id];
 				if (wgt) return wgt;
-				if (opts && opts.exact) break;
 			}
+			if (opts && opts.exact) break;
 		}
 		return null;
 	},
