@@ -1169,14 +1169,11 @@ zk.Widget = zk.$extends(zk.Object, {
 						var wgt = binds[id];
 						if (wgt) {
 							var n2 = wgt.getNode();
-							if (n2 && zDom.isAncestor(n2, n)) return wgt;
-							continue;
+							return n2 && zDom.isAncestor(n2, n) ? wgt: null;
 						}
 					}
-				} else if (strict)
-					break;
-				wgt = binds[id];
-				if (wgt) return wgt;
+				}
+				return binds[id];
 			}
 		}
 		return null;
