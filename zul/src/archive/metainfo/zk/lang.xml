@@ -767,22 +767,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</mold>
 	</component>
 	<component>
-		<component-name>slider</component-name>
-		<component-class>org.zkoss.zul.Slider</component-class>
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/slider2.dsp</mold-uri>
-		</mold>
-		<mold>
-			<mold-name>scale</mold-name>
-			<mold-uri>~./zul/html/slider2.dsp</mold-uri>
-		</mold>
-		<mold>
-			<mold-name>sphere</mold-name>
-			<mold-uri>~./zul/html/slider2.dsp</mold-uri>
-		</mold>
-	</component>
-	<component>
 		<component-name>south</component-name>
 		<component-class>org.zkoss.zul.South</component-class>
 		<widget-class>zul.layout.South</widget-class>
@@ -825,6 +809,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<widget-class>zul.box.Splitter</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
+			<mold-uri>mold/splitter.js</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>os</mold-name>
 			<mold-uri>mold/splitter.js</mold-uri>
 		</mold>
 	</component>
@@ -1049,7 +1037,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>slider</component-name>
 		<component-class>org.zkoss.zul.Slider</component-class>
-		<widget-class>zul.sld.Slider</widget-class>
+		<widget-class>zul.inp.Slider</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/slider.js</mold-uri>

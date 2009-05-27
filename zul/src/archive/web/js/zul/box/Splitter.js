@@ -101,9 +101,10 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 
 	//super//
 	getZclass: function () {
-		var zcls = this._zclass;
-		return zcls ? zcls:
-			"z-splitter" + (this.isVertical() ? "-ver" : "-hor");
+		var zcls = this._zclass,
+			name = this.getMold() == "os" ? "z-splitter-os" : "z-splitter";
+			
+		return zcls ? zcls:	name + (this.isVertical() ? "-ver" : "-hor");
 	},
 	setZclass: function () {
 		this.$supers('setZclass', arguments);

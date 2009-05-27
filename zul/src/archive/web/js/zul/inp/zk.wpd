@@ -25,4 +25,5 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<widget name="Comboitem"/>
 	<widget name="Bandbox"/>
 	<widget name="Bandpopup"/>
+	<widget name="Slider"/>
 </package>
