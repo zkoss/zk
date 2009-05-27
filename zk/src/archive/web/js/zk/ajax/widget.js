@@ -314,12 +314,10 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (moveBefore && !(beforeNode = moveBefore.getNode()))
 			return false;
 
-		var Widget = zk.Widget,
-			node = this.getNode(), kidnode = child.getNode(),
-			oldpt = child.parent,
-			opts = {descendant:false},
-			bkinf = Widget.disableDomUpdate(this, opts);
-		Widget.disableDomUpdate(child, opts, bkinf); //to avoid bind_ and unbind_
+		var node = this.getNode(), kidnode = child.getNode(),
+			dt = this.desktop, kiddt = child.desktop,
+			oldpt = child.parent;
+		child._node = this._node = child.desktop = this.desktop = null; //avoid bind_ and unbind_
 		try {
 			oldpt.removeChild(child);
 			this.insertBefore(child, moveBefore);
@@ -330,11 +328,12 @@ zk.Widget = zk.$extends(zk.Object, {
 			//Not calling unbind and bind, so handle bindLevel here
 			var v = this.bindLevel + 1;
 			if (child.bindLevel != v) {
-				Widget._fixBindLevel(child, v);
+				zk.Widget._fixBindLevel(child, v);
 				zWatch.fire('onBindLevelMove', null, child);
 			}
 		} finally {
-			Widget.restoreDomUpdate(bkinf);
+			this.desktop = dt; child.desktop = kiddt;
+			this._node = node; child._node = kidnode;
 		}
 
 		oldpt.onChildRemoved_(child);
@@ -1346,32 +1345,6 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (!cls)
 			throw 'widget not found: '+wgtnm;
 		return new cls();
-	},
-
-	disableDomUpdate: function (wgt, opts, inf) {
-		if (!inf) inf = [];
-
-		if (wgt.desktop) {
-			inf.push({w: wgt, n: wgt._node, s: wgt._subnodes, d: wgt.desktop});
-			wgt._node = wgt.desktop = null;
-			wgt._subnodes = {};
-
-			if (!opts || opts.descendant)
-				for (var fn = zk.Widget.disableDomUpdate,
-				w = wgt.firstChild; w; w = w.nextSibling)
-					fn(w, opts, inf);
-		}
-		return inf;
-	},
-	restoreDomUpdate: function (inf, opts) {
-		var wgt;
-		for (var i; i = inf.shift();) {
-			if (!wgt) wgt = i.w;
-			zk.copy(i.w,
-				{_node: i.n, _subnodes: i.s, desktop: i.d});
-		}
-		if (wgt && opts && opts.rerender)
-			wgt.rerender(opts.skipper);
 	}
 });
 
