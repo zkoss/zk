@@ -1093,9 +1093,7 @@ Element.Methods = {
 	_camelFn: function (m, a) {
 		return a.charAt(1).toUpperCase();
 	},
-	//This prototype is provided by the Ext Core Library 3.0 Beta of Ext JS, LLC. and is distributed under
-	/// the MIT license.
-	//http://www.ibiblio.org/pub/Linux/LICENSES/mit.license
+	//Based on Ext Core Library 3.0 Beta which is distributed under MIT license
 	getStyle : function() {
 		var view = document.defaultView;
 		return view && view.getComputedStyle ? function(el, prop) {
