@@ -626,7 +626,7 @@ zkCmbox._hilite = function (uuid, selback, bUp, reminder, keycode) {
 	} else if (keycode && (keycode == 8 || keycode == 46))
 		inp.setAttribute("zk_typeAhead", inp.value);
 
-	if (found) found.scrollIntoView(); //make sure found is visible
+	zk.scrollIntoView(pp, found); //make sure found is visible
 	pp.setAttribute("zk_ckval", inpval);
 };
 zkCmbox._prev = function (rows, index, including) {

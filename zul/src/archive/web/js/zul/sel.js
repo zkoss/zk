@@ -322,7 +322,7 @@ zk.Selectable.prototype = {
 			if (ctrl) this.focus(lastrow);
 			else this.select(lastrow, zkau.getKeys(evt));
 			this._syncFocus(lastrow);
-			lastrow.scrollIntoView(); // Bug #1823947 and #1823278
+			zk.scrollIntoView(this.body, lastrow); // Bug #1823947 and #1823278
 		}
 
 		switch (Event.keyCode(evt)) {
@@ -459,7 +459,7 @@ zk.Selectable.prototype = {
 		case "select": //select by uuid
 			var row = $e(val);
 			this._selectOne(row, false);
-			if (row) row.scrollIntoView();
+			zk.scrollIntoView(this.body, row);
 			return true;
 		case "selectAll":
 			this._selectAll();

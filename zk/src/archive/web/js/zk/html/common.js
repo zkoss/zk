@@ -1749,11 +1749,35 @@ zk.restoreStyle = function (el, nm) {
 		}
 	}
 };
-
-zk.scrollIntoView = function (outer, inner) {
-	if (inner && inner.scrollIntoView) inner.scrollIntoView();
+zk.scrollIntoView = function (outer, inner, info) {
+	if (outer && inner) {
+		var ooft = zk.revisedOffset(outer),
+			ioft = info ? info.oft : zk.revisedOffset(inner),		 
+			top = ioft[1] - ooft[1] + outer.scrollTop,
+			ih = info ? info.h : inner.offsetHeight,
+			bottom = top + ih,
+			updated;
+			
+		if (outer.clientHeight < inner.offsetHeight || outer.scrollTop > top) {
+			outer.scrollTop = top;
+			updated = true;
+		} else if (bottom > outer.clientHeight + outer.scrollTop) {
+			outer.scrollTop = bottom - (outer.clientHeight + (inner.parentNode == outer ? 0 : outer.scrollTop));
+			updated = true;
+		}
+		if (updated || !info) {
+			if (!info)
+				info = {
+					oft: ioft,
+					h: inner.offsetHeight,
+					el: inner
+				};
+			else info.oft = zk.revisedOffset(info.el);
+		}
+        outer.scrollTop = outer.scrollTop;
+		return info; 
+	}
 };
-
 /** Go to the specified uri.
  * @param overwrite whether to overwrite the history
  * @param target the target frame (ignored if overwrite is true
