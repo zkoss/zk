@@ -35,8 +35,9 @@ ZK 5.0.0
     rather than XulElement
   + The Z-class name of comboitem, bandpopup, groupfoot, listcell, listfoot,
 	listfooter, listgroup, listgroupfoot, listhead, listheader, listitem,
-	treecell, treechildren, treecol, treecols, treefoot, treefooter, and treerow
-    are renamed to be consistent with the component name. For example,
+	treecell, treechildren, treecol, treecols, treefoot, treefooter, treerow,
+	table-children, and table-layout
+	are renamed to be consistent with the component name. For example,
     z-combo-item is renamed to z-comboitem, and z-list-cell renamed to z-listcell.
 
 	--------

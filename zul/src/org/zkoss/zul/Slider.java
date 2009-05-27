@@ -42,7 +42,7 @@ public class Slider extends XulElement implements org.zkoss.zul.api.Slider {
 	private String _orient = "horizontal";
 	private int _curpos, _maxpos = 100, _pginc = 10;
 	/** The name. */
-	private String _name="";
+	private String _name;
 	private String _slidingtext = "{0}";
 
 	static {
@@ -96,9 +96,10 @@ public class Slider extends XulElement implements org.zkoss.zul.api.Slider {
 	public void setOrient(String orient) throws WrongValueException {
 		if (!"horizontal".equals(orient) && !"vertical".equals(orient))
 			throw new WrongValueException("orient cannot be "+orient);
-		_orient = orient;
-		smartUpdate("orient", _orient);
-		
+		if (!_orient.equals(orient)) {
+			_orient = orient;
+			smartUpdate("orient", _orient);
+		}
 	}
 	/**
 	 * Returns the sliding text.
@@ -194,7 +195,7 @@ public class Slider extends XulElement implements org.zkoss.zul.api.Slider {
 			throw new WrongValueException("Nonpositive is not allowed: "+pginc);
 		if (_pginc != pginc) {
 			_pginc = pginc;
-			smartUpdate("pginc", _pginc);
+			smartUpdate("pageIncrement", _pginc);
 		}
 	}
 
@@ -290,7 +291,7 @@ public class Slider extends XulElement implements org.zkoss.zul.api.Slider {
 			renderer.render("maxpos", _maxpos);
 		if(_pginc != 10)
 			renderer.render("pageIncrement", _pginc);
-		if(!_name.equals(""))
+		if(_name != null)
 			renderer.render("name", _name);
 	}
 }

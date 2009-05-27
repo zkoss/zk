@@ -17,7 +17,6 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 	_curpos: 0,
 	_maxpos: 100,
 	_pageIncrement: 10,
-	_name: "",
 	_slidingtext: "{0}",
 	
 	$define: {
