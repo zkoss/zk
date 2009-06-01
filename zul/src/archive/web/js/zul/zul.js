@@ -317,6 +317,9 @@ zulHdr.resizeAll = function (meta, cmp, icol, col, wd, keys) {
 	zkau.sendasap({uuid: cmp.id, cmd: "onColSize",
 		data: [icol, col.id, (wd+"px"), keys]});
 	meta._render(zk.gecko ? 200: 60); // just in case.
+	
+	// bug #2799258
+	zk.onSizeAt(meta.element);
 };
 zulHdr.cleanup = function (cmp) {
 	zulHdr.setSizable(cmp, false);

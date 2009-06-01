@@ -921,6 +921,14 @@ zk.Selectable.prototype = {
 			// note: we have to invoke the body.offestHeight to resolve the scrollbar disappearing in IE6
 			// and IE7 at initializing phase.
 			// 2008/03/28 The unnecessary scroll bar will appear when the vflex is true.
+			
+			// bug #2799258
+			var h = this.element.style.height;
+			if (!h || h == "auto") {
+				h = zk.gecko ? this.body.offsetHeight - this.body.clientHeight : this.body.offsetWidth - this.body.clientWidth;
+				if (h > 11)
+					this.body.style.height = hgh + h + "px";
+			}
 		} else {
 			//if no hgh but with horz scrollbar, IE will show vertical scrollbar, too
 			//To fix the bug, we extend the height
@@ -932,6 +940,13 @@ zk.Selectable.prototype = {
 						(this.body.offsetHeight * 2 - this.body.clientHeight) + "px";
 			} else {
 				this.body.style.height = "";
+			}
+			
+			// bug #2799258
+			if (!hgh || hgh == "auto") {
+				hgh = this.body.offsetWidth - this.body.clientWidth;
+				if (hgh > 11)
+					this.body.style.height = this.body.offsetHeight + hgh + "px";
 			}
 		}
 	},

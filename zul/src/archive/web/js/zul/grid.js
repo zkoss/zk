@@ -183,14 +183,23 @@ zk.Grid.prototype = {
 		this.updSize();
 			//Bug 1659601: we cannot do it in init(); or, IE failed!
 		var tblwd = this.body.clientWidth;
-		if (zk.ie) //By experimental: see zk-blog.txt
-			if (this.headtbl && this.headtbl.offsetWidth != this.bodytbl.offsetWidth)
+		if (zk.ie) {//By experimental: see zk-blog.txt
+			if (this.headtbl && this.headtbl.offsetWidth != this.bodytbl.offsetWidth) 
 				this.bodytbl.style.width = ""; //reset
 			if (tblwd && this.body.offsetWidth == this.bodytbl.offsetWidth && this.body.offsetWidth - tblwd > 11) { //scrollbar
-				if (--tblwd < 0) tblwd = 0;
+				if (--tblwd < 0) 
+					tblwd = 0;
 				this.bodytbl.style.width = tblwd + "px";
 			}
-
+			
+			// bug #2799258
+			var hgh = this.element.style.height;
+			if (!hgh || hgh == "auto") {
+				hgh = this.body.offsetWidth - this.body.clientWidth;
+				if (hgh > 11) 
+					this.body.style.height = this.body.offsetHeight + hgh + "px";
+			}
+		}
 		if (this.headtbl) {
 			if (tblwd) this.head.style.width = tblwd + 'px';
 			if (getZKAttr(this.element, "fixed") != "true")
