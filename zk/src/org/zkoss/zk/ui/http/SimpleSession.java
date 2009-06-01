@@ -112,7 +112,7 @@ public class SimpleSession implements Session, SessionCtrl {
 	 * <p>Note: it assumes the scope of attributes is
 	 * PortletSession.APPLICATION_SCOPE.
 	 *
-	 * @param psess the original session, either an instance of
+	 * @param navsess the original session, either an instance of
 	 * HttpSession or PortletSession.
 	 * Notice: we don't declare PortletSession in API
 	 * to avoid this class failed to be loaded in some system (without
