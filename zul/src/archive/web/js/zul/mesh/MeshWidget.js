@@ -301,16 +301,25 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 		//Bug 1659601: we cannot do it in init(); or, IE failed!
 		var tblwd = this.ebody.clientWidth;
-		if (zk.ie) //By experimental: see zk-blog.txt
-			if (this.eheadtbl && this.eheadtbl.offsetWidth
-					!= this.ebodytbl.offsetWidth)
+		if (zk.ie) {//By experimental: see zk-blog.txt
+			if (this.eheadtbl &&
+			this.eheadtbl.offsetWidth !=
+			this.ebodytbl.offsetWidth) 
 				this.ebodytbl.style.width = ""; //reset 
-			if (tblwd && this.ebody.offsetWidth == this.ebodytbl.offsetWidth
-					&& this.ebody.offsetWidth - tblwd > 11) { //scrollbar
-				if (--tblwd < 0) tblwd = 0;
+			if (tblwd && this.ebody.offsetWidth == this.ebodytbl.offsetWidth &&
+			this.ebody.offsetWidth - tblwd > 11) { //scrollbar
+				if (--tblwd < 0) 
+					tblwd = 0;
 				this.ebodytbl.style.width = tblwd + "px";
 			}
-				
+			// bug #2799258
+			var hgh = this.getHeight();
+			if (!hgh || hgh == "auto") {
+				hgh = this.ebody.offsetWidth - this.ebody.clientWidth;
+				if (hgh > 11) 
+					this.ebody.style.height = this.ebody.offsetHeight + hgh + "px";
+			}
+		}
 		if (this.ehead) {
 			if (tblwd) this.ehead.style.width = tblwd + 'px';
 			if (!this.isFixedLayout() && this.ebodyrows && this.ebodyrows.length)

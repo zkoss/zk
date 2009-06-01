@@ -531,7 +531,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	scrollIntoView: function () {
 		var n = this.getNode();
-		if (n) n.scrollIntoView();
+		if (n) zDom.scrollIntoView(n);
 	},
 
 	redraw: function (out) {

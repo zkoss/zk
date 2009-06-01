@@ -731,7 +731,7 @@ zAu.cmd0 = { //no uuid at all
 		if (w) w.scrollIntoView();
 		else {
 			w = zDom.$(id);
-			if (w && w.scrollIntoView) w.scrollIntoView();
+			if (w) zDom.scrollIntoView(w);
 		}
 	}
 };

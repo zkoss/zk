@@ -88,7 +88,40 @@ zDom = { //static methods
 		var pos = zDom.cmOffset(n);
 		scrollTo(pos[0], pos[1]);
 	},
-
+	scrollIntoView: function (id) {
+		var n = zDom.$(id);
+		for (var p = n, c; (p = p.parentNode) && n != document.body; n = p)
+			c = zDom._scrollIntoView(p, n, c);
+	},
+	_scrollIntoView: function (outer, inner, info) {
+		if (outer && inner) {
+			var ooft = zDom.revisedOffset(outer),
+				ioft = info ? info.oft : zDom.revisedOffset(inner),		 
+				top = ioft[1] - ooft[1] + outer.scrollTop,
+				ih = info ? info.h : inner.offsetHeight,
+				bottom = top + ih,
+				updated;
+				
+			if (outer.clientHeight < inner.offsetHeight || outer.scrollTop > top) {
+				outer.scrollTop = top;
+				updated = true;
+			} else if (bottom > outer.clientHeight + outer.scrollTop) {
+				outer.scrollTop = bottom - (outer.clientHeight + (inner.parentNode == outer ? 0 : outer.scrollTop));
+				updated = true;
+			}
+			if (updated || !info) {
+				if (!info)
+					info = {
+						oft: ioft,
+						h: inner.offsetHeight,
+						el: inner
+					};
+				else info.oft = zDom.revisedOffset(info.el);
+			}
+	        outer.scrollTop = outer.scrollTop;
+			return info; 
+		}
+	},
 	margins: {l: "margin-left", r: "margin-right", t: "margin-top", b: "margin-bottom"},
 	borders: {l: "border-left-width", r: "border-right-width", t: "border-top-width", b: "border-bottom-width"},
 	paddings: {l: "padding-left", r: "padding-right", t: "padding-top", b: "padding-bottom"},
