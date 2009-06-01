@@ -364,6 +364,9 @@ zk.copy(Array.prototype, {
 	},
 	$clone: function() {
 		return [].concat(this);
+	},
+	$clear: function () {
+		this.length = 0;
 	}
 });
 if (!Array.prototype.indexOf)

@@ -215,6 +215,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<widget-class>zul.wgt.Button</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
+			<mold-uri>mold/button-os.js</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>trendy</mold-name>
 			<mold-uri>mold/button.js</mold-uri>
 		</mold>
 		<mold>
@@ -528,11 +532,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-uri>mold/listbox.js</mold-uri>
 		</mold>
 		<mold>
-			<mold-name>select</mold-name>
-			<mold-uri>mold/select.js</mold-uri>
-			<widget-class>zul.sel.Select</widget-class>
-		</mold>
-		<mold>
 			<mold-name>paging</mold-name>
 			<mold-uri>mold/listbox.js</mold-uri>
 		</mold>
@@ -664,6 +663,15 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</mold>
 	</component>
 	<component>
+		<component-name>option</component-name>
+		<component-class>org.zkoss.zul.Option</component-class>
+		<widget-class>zul.sel.Option</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/option.js</mold-uri>
+		</mold>
+	</component>
+	<component>
 		<component-name>paging</component-name>
 		<component-class>org.zkoss.zul.Paging</component-class>
 		<widget-class>zul.mesh.Paging</widget-class>
@@ -755,6 +763,15 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<component-class>org.zkoss.zul.Script</component-class>
 		<widget-class>zul.utl.Script</widget-class>
 		<text-as>content</text-as><!-- treat text within the element as the content property -->
+	</component>
+	<component>
+		<component-name>select</component-name>
+		<component-class>org.zkoss.zul.Select</component-class>
+		<widget-class>zul.sel.Select</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/select.js</mold-uri>
+		</mold>
 	</component>
 	<component>
 		<component-name>separator</component-name>

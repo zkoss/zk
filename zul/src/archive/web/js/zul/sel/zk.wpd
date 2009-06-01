@@ -19,4 +19,6 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 	<widget name="Listcell"/>
 	<widget name="Listhead"/>
 	<widget name="Listheader"/>
+	<widget name="Option"/>
+	<widget name="Select"/>	
 </package>

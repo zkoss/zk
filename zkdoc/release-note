@@ -39,7 +39,9 @@ ZK 5.0.0
 	table-children, and table-layout
 	are renamed to be consistent with the component name. For example,
     z-combo-item is renamed to z-comboitem, and z-list-cell renamed to z-listcell.
-
+  + The default mold of the button is changed as the os mold, and the default mold of the button
+    in ZK 3.6.x called the trendy mold. 
+  + The select mold in Listbox is removed, replaced with both Select and Option component.
 	--------
 ZK 3.6.2
 * Features
