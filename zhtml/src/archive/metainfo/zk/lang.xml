@@ -25,6 +25,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<version-uid>5.0.0</version-uid>
 	</version>
 
+	<renderer-class>org.zkoss.zhtml.impl.PageRenderer</renderer-class>
 	<case-insensitive/>
 
 	<javascript src="~./js/zk/ajax/zk.wpd" charset="UTF-8"/>
@@ -113,8 +114,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<reserved-attribute>use</reserved-attribute>
 		-->
 	</dynamic-tag>
-
-	<page-renderer-class>org.zkoss.zhtml.impl.PageRenderer</page-renderer-class>
 
 	<component>
 		<component-name>a</component-name>

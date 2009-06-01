@@ -25,10 +25,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		<version-uid>5.0.0</version-uid>
 	</version>
 
-	<!-- Note: JavaScript that are listed here will be loaded no matter
+	<renderer-class>org.zkoss.zul.impl.PageRenderer</renderer-class>
+
+	<!-- Note: JavaScript/CSS that are listed here will be loaded no matter
 		what language is used.
 	-->
-
 	<javascript src="~./js/zk/ajax/zk.wpd" charset="UTF-8"/>
 	<javascript src="~./js/zul/zk.wpd" charset="UTF-8"/>
 
@@ -47,8 +48,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		Messagebox.show("" + m);
 	}
 	</zscript>
-
-	<page-renderer-class>org.zkoss.zul.impl.PageRenderer</page-renderer-class>
 
 	<!-- 
 		Note: '~./' means it is located in the class path starting from

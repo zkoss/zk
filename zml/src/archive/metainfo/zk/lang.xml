@@ -22,12 +22,12 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<version-uid>5.0.0</version-uid>
 	</version>
 
+	<renderer-class>org.zkoss.zml.impl.PageRenderer</renderer-class>
+
 	<!-- Indicates all tags are from a native namespace.
 		They are represented by as few as native components.
 	 -->
 	<native-namespace>true</native-namespace>
-
-	<page-renderer-class>org.zkoss.zml.impl.PageRenderer</page-renderer-class>
 
 	<!-- Defines the component and attribute names used to represent
 	a label when a plain text is found in ZUL XML.

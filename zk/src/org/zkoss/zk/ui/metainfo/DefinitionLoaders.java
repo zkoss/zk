@@ -224,7 +224,7 @@ public class DefinitionLoaders {
 			//if (log.debugable()) log.debug("Load language: "+lang+", "+ns);
 
 			PageRenderer pageRenderer = (PageRenderer)
-				locateClass(IDOMs.getRequiredElementValue(root, "page-renderer-class"))
+				locateClass(IDOMs.getRequiredElementValue(root, "renderer-class"))
 				.newInstance();
 
 			final List exts = parseExtensions(root);

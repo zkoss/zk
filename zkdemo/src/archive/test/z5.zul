@@ -124,9 +124,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<zscript><![CDATA[
 	l.value = "<ul><li>A label with HTML content</li></ul>";
 	]]></zscript>
-	<html><![CDATA[
+	<html onClick='alert("html clicked")'><![CDATA[
 	<ul>
 		<li>This is the content of the html component</li>
+		<li id="something">Try to click me (test of zk.Widget.$)</li>
 	</ul>
 	]]></html>
 	Macro: <macro title="macro"/>
