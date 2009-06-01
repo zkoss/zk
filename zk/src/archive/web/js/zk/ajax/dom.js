@@ -738,29 +738,53 @@ zDom = { //static methods
 		}
 		return map;
 	},
-
-	redoCSS: zk.ie ? function (el, timeout) {
-		el = zDom.$(el);
-		if (el) {
+	_rdcss: [],
+	redoCSS: function (el, timeout) {
+		zDom._rdcss.push(el);
+		setTimeout(zDom._redoCSS, timeout >= 0 ? timeout : 100);
+	},
+	_cleanCSS: function(el, z) {
+		setTimeout(function() {
 			try {
-				var z = el.style.zoom;
-				el.style.zoom = 1;
-				el.className += ' ';
-				if (el.offsetHeight);
-				el.className.trim();
-				setTimeout(function () {try {
-					el.style.zoom = z;
-				} catch (e){}}, timeout > 0 ? timeout: 1);
+				el.style.zoom = z;
 			} catch (e) {}
+		});
+	},
+	_redoCSS: zk.ie ? function () {
+		if (zDom._rdcss.length) {
+			try {
+				var el;
+				while ((el = zDom._rdcss.pop())) {
+					var z = el.style.zoom;
+					el.style.zoom = 1;
+					el.className += ' ';
+					if (el.offsetHeight) 
+						;
+					el.className.trim();
+					zDom._cleanCSS(el, z);
+				}
+			} catch (e) {}
+			
+			// just in case
+			setTimeout(zDom._redoCSS);
 		}
 	} : function (el) {
-		el = $e(el);
-		if (el) {
+		if (zDom._rdcss.length) {
 			try {
-				el.className += ' ';
-				if (el.offsetHeight);
-				el.className.trim();
-			} catch (e) {}
+				var el;
+				while ((el = zDom._rdcss.pop())) {
+					if (el) {
+						el.className += ' ';
+						if (el.offsetHeight) 
+							;
+						el.className.trim();
+					}
+				}
+			} catch (e) {
+			}
+			
+			// just in case
+			setTimeout(zDom._redoCSS);
 		}
 	},
 	reOuter: function (el) {

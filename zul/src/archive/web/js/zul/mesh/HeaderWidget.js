@@ -212,6 +212,9 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			column: wgt,
 			width: wd + "px"
 		}, evt.data), null, 0);
+		
+		// bug #2799258
+		zWatch.fireDown('onSize', null, wgt.getMeshWidget());
 	},
 
 	redraw: function (out) {
