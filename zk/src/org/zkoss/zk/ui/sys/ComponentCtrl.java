@@ -352,4 +352,33 @@ public interface ComponentCtrl {
 	 * @see Component#setAuService
 	 */
 	public void service(AuRequest request, boolean everError);
+
+	/** Sets whether to disable the update of the client widget.
+	 * By default, if a component is attached to a page, modications that
+	 * change the visual representation will be sent to the client to
+	 * ensure the consistency.
+	 * <p>Though rarely needed, you can disable the synchronization of
+	 * the visual representation, if you prefer to update the client batchly
+	 *or the modification is caused by the client.
+	 * <p><b>Notice</b>:
+	 * <ul>
+	 * <li>Once disabled, it not only affects the synchronization of
+	 * this component but also all its descendants.</li>
+	 * <li>The disable remains until the end of this execution
+	 * (or the invocation of this method with false). In other words,
+	 * it is enabled automatically in the next execution.</li>
+	 * <li>The updates, if any, before calling this method will still be sent
+	 * to the client.</li>
+	 * <li>It does nothing, if there is no current execution.</li>
+	 * </ul>
+	 *
+	 * <p>Also notice that, with {@link Component#invalidate},
+	 * it is easy to synchronize the content of a component
+	 * (and its descendants) to the client.
+	 *
+	 * @return whether it has been disabled before this invocation, i.e.,
+	 * the previous disable status
+	 * @since 3.6.2
+	 */
+	public boolean disableClientUpdate(boolean disable);
 }

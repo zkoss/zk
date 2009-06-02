@@ -450,8 +450,16 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/** Returns the UI engine based on {@link #_page}'s getDesktop().
 	 * Don't call this method when _page is null.
 	 */
-	private final UiEngine getThisUiEngine() {
+	private final UiEngine getAttachedUiEngine() {
 		return ((WebAppCtrl)_page.getDesktop().getWebApp()).getUiEngine();
+	}
+	/** Returns the UI engine of the current execution, or null
+	 * if no current execution.
+	 */
+	private final UiEngine getCurrentUiEngine() {
+		final Execution exec = Executions.getCurrent();
+		return exec != null ?
+			((WebAppCtrl)exec.getDesktop().getWebApp()).getUiEngine(): null;
 	}
 
 	//-- Component --//
@@ -631,7 +639,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			removeFromIdSpaces(this);
 			if (rawId) { //we have to change UUID
 				if (_page != null) {
-					getThisUiEngine().addUuidChanged(this, false);
+					getAttachedUiEngine().addUuidChanged(this, false);
 						//called before uuid is changed
 					((DesktopCtrl)_page.getDesktop()).removeComponent(this);
 				}
@@ -1157,11 +1165,11 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	public boolean isInvalidated() {
-		return _page == null || getThisUiEngine().isInvalidated(this);
+		return _page == null || getAttachedUiEngine().isInvalidated(this);
 	}
 	public void invalidate() {
 		if (_page != null)
-			getThisUiEngine().addInvalidate(this);
+			getAttachedUiEngine().addInvalidate(this);
 	}
 
 	/** Causes a response to be sent to the client.
@@ -1189,12 +1197,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	protected void response(String key, AuResponse response) {
 		//if response not depend on this component, it must be generated
 		if (_page != null) {
-			getThisUiEngine().addResponse(key, response);
+			getAttachedUiEngine().addResponse(key, response);
 		} else if (response.getDepends() != this) {
-			final Execution exec = Executions.getCurrent();
-			if (exec != null)
-				((WebAppCtrl)exec.getDesktop().getWebApp())
-					.getUiEngine().addResponse(key, response);
+			final UiEngine uieng = getCurrentUiEngine();
+			if (uieng != null) uieng.addResponse(key, response);
 		}
 	}
 
@@ -1238,7 +1244,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 */
 	protected void smartUpdate(String attr, Object value) {
 		if (_page != null && !_byClient)
-			getThisUiEngine().addSmartUpdate(this, attr, value);
+			getAttachedUiEngine().addSmartUpdate(this, attr, value);
 	}
 	/** A special smart update to update a value in int.
 	 * <p>It will invoke {@link #smartUpdate(String,Object)} to update
@@ -1424,6 +1430,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			else
 				invalidate();
 		}
+	}
+
+	public boolean disableClientUpdate(boolean disable) {
+		final UiEngine uieng =
+			_page != null ? getAttachedUiEngine(): getCurrentUiEngine();
+		return uieng != null && uieng.disableClientUpdate(this, disable);
 	}
 
 	//-- in the redrawing phase --//

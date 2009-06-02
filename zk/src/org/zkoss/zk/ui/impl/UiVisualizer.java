@@ -80,6 +80,8 @@ import org.zkoss.zk.au.out.*;
 	private final Set _attached = new LinkedHashSet(32);
 	/** A set of moved components (parent changed or page changed). */
 	private final Set _moved = new LinkedHashSet(32);
+	/** A set of components whose client-update is disabled. */
+	private Set _updDisabled;
 	/** A map of detached components (detached only -- not moved thereafter).
 	 * (comp, comp's parent).
 	 */
@@ -188,7 +190,8 @@ import org.zkoss.zk.au.out.*;
 	/** Invalidates the whole page.
 	 */
 	public void addInvalidate(Page page) {
-		if (_recovering || _disabled || page == null || !_exec.isAsyncUpdate(page))
+		if (_recovering || _disabled || page == null
+		|| !_exec.isAsyncUpdate(page))
 			return; //nothing to do
 
 		if (_pgInvalid == null)
@@ -200,7 +203,8 @@ import org.zkoss.zk.au.out.*;
 	 */
 	public void addInvalidate(Component comp) {
 		final Page page = comp.getPage();
-		if (_recovering || _disabled || page == null || !_exec.isAsyncUpdate(page))
+		if (_recovering || _disabled || page == null
+		|| !_exec.isAsyncUpdate(page) || isCUDisabled(comp))
 			return; //nothing to do
 		if (_ending) throw new IllegalStateException("ended");
 
@@ -225,13 +229,44 @@ import org.zkoss.zk.au.out.*;
 		if (respmap != null)
 			respmap.put(attr, new TimedValue(_timed++, comp, attr, value));
 	}
+	/** Sets whether to disable the update of the client widget.
+	 * By default, if a component is attached to a page, modications that
+	 * change the visual representation will be sent to the client to
+	 * ensure the consistency.
+	 *
+	 * @return whether it has been disabled before this invocation, i.e.,
+	 * the previous disable status
+	 * @since 3.6.2
+	 */
+	public boolean disableClientUpdate(Component comp, boolean disable) {
+		if (disable) {
+			if (_updDisabled == null)
+				_updDisabled = new HashSet(4);
+			return !_updDisabled.add(comp);
+		}
+
+		final boolean ret = _updDisabled != null && _updDisabled.remove(comp);
+		if (ret && _updDisabled.isEmpty())
+			_updDisabled = null;
+		return ret;
+	}
+	private final boolean isCUDisabled(Component comp) {
+		if (_updDisabled != null) {
+			//no need to check comp.getPage() since it was checked before calling
+			for (; comp != null; comp = comp.getParent())
+				if (_updDisabled.contains(comp))
+					return true;
+		}
+		return false;
+	}
+
 	/** Returns the response map for the specified attribute, or null if
 	 * nothing to do.
 	 */
 	private Map getAttrRespMap(Component comp, String attr) {
 		final Page page = comp.getPage();
 		if (_recovering || _disabled || page == null || !_exec.isAsyncUpdate(page)
-		|| _invalidated.contains(comp))
+		|| _invalidated.contains(comp) || isCUDisabled(comp))
 			return null; //nothing to do
 		if (_ending) throw new IllegalStateException("ended");
 
@@ -254,7 +289,8 @@ import org.zkoss.zk.au.out.*;
 	public void addMoved(Component comp, Component oldparent, Page oldpg, Page newpg) {
 		if (_recovering || _disabled || (newpg == null && oldpg == null)
 		|| (newpg == null && !_exec.isAsyncUpdate(oldpg)) //detach from loading pg
-		|| (oldpg == null && !_exec.isAsyncUpdate(newpg))) //attach to loading pg
+		|| (oldpg == null && !_exec.isAsyncUpdate(newpg)) //attach to loading pg
+		|| isCUDisabled(comp) || (oldparent != null && isCUDisabled(oldparent)))
 			return; //to avoid redundant AuRemove
 		if (_ending) throw new IllegalStateException("ended");
 
@@ -280,7 +316,8 @@ import org.zkoss.zk.au.out.*;
 	 */
 	public void addUuidChanged(Component comp, boolean addOnlyMoved) {
 		if ((!addOnlyMoved || _moved.contains(comp))
-		&& (_idChgd == null || !_idChgd.containsKey(comp))) {
+		&& (_idChgd == null || !_idChgd.containsKey(comp))
+		&& !isCUDisabled(comp)) {
 			if (_idChgd == null) _idChgd = new LinkedHashMap(23);
 			_idChgd.put(comp, comp.getUuid());
 		}
@@ -300,10 +337,13 @@ import org.zkoss.zk.au.out.*;
 		if (response == null)
 			throw new IllegalArgumentException();
 
+		final Object depends = response.getDepends(); //Page or Component
+		if (depends instanceof Component && isCUDisabled((Component)depends))
+			return; //nothing to do
+
 		if (_responses == null)
 			_responses = new HashMap();
 
-		final Object depends = response.getDepends(); //Page or Component
 		Map respmap = (Map)_responses.get(depends);
 		if (respmap == null)
 			_responses.put(depends, respmap = new HashMap());

@@ -406,4 +406,15 @@ public interface UiEngine {
 	 */
 	public boolean ceaseSuspendedThread(
 		Desktop desktop, EventProcessingThread evtthd, String cause);
+
+	/** Sets whether to disable the update of the client widget.
+	 * By default, if a component is attached to a page, modications that
+	 * change the visual representation will be sent to the client to
+	 * ensure the consistency.
+	 *
+	 * @return whether it has been disabled before this invocation, i.e.,
+	 * the previous disable status
+	 * @since 3.6.2
+	 */
+	public boolean disableClientUpdate(Component comp, boolean disable);
 }

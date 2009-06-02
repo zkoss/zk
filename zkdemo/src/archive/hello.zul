@@ -19,4 +19,5 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 -->
 <window title="My First window" border="normal" width="200px">
 	Hello, World!
+	<button label="Hi" onClick='alert("Welcome")'/>
 </window>
