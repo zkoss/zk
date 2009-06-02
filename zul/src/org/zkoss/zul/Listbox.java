@@ -2472,17 +2472,29 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 		
-		render(renderer, "oddRowSclass", getOddRowSclass());
-		render(renderer, "fixedLayout", isFixedLayout());
-		render(renderer, "vflex", _vflex);
-		
-		if (_model != null)
-			render(renderer, "model", true);
-
-		if (!"bottom".equals(_pagingPosition))
-			render(renderer, "pagingPosition", _pagingPosition);
-		if (!"100%".equals(_innerWidth))
-			render(renderer, "innerWidth", _innerWidth);		
+		if (inSelectMold()) {
+			render(renderer, "name", _name);
+			if (_tabindex > 0)
+				renderer.render("rows", getRows());
+			render(renderer, "multiple", isMultiple());
+			render(renderer, "disabled", isDisabled());
+			if (_tabindex >= 0)
+				renderer.render("tabindex", getTabindex());
+			if (_maxlength > 0)
+				renderer.render("maxlength", getMaxlength());
+		} else {
+			render(renderer, "oddRowSclass", getOddRowSclass());
+			render(renderer, "fixedLayout", isFixedLayout());
+			render(renderer, "vflex", _vflex);
+			
+			if (_model != null)
+				render(renderer, "model", true);
+	
+			if (!"bottom".equals(_pagingPosition))
+				render(renderer, "pagingPosition", _pagingPosition);
+			if (!"100%".equals(_innerWidth))
+				render(renderer, "innerWidth", _innerWidth);
+		}
 	}
 	/** Processes an AU request.
 	 *

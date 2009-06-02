@@ -13,12 +13,7 @@ This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 zul.sel.Option = zk.$extends(zul.Widget, {
-	_label: '',
-
 	$define: {
-		label: function () {
-			this.rerender();
-		},
 		disabled: function (disabled) {
 			var n = this.getNode();
 			if (n) n.disabled = disabled ? 'disabled' : '';
@@ -37,8 +32,14 @@ zul.sel.Option = zk.$extends(zul.Widget, {
 	isSelected: function () {
 		return this._selected;
 	},
+	getLabel: function () {
+		return this.firstChild ? this.firstChild.getLabel() : null; 
+	},
+	getMaxlength: function () {
+		return this.parent ? this.parent.getMaxlength() : 0;
+	},
 	domLabel_: function () {
-		return zUtl.encodeXML(this.getLabel());
+		return zUtl.encodeXML(this.getLabel(), {maxlength: this.getMaxlength()});
 	},
 	domAttrs_: function () {
 		return this.$supers('domAttrs_', arguments) + (this.isDisabled() ? ' disabled="disabled"' :'') +

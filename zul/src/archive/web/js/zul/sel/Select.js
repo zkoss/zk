@@ -15,7 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.sel.Select = zk.$extends(zul.Widget, {
 	_selectedIndex: -1,
 	_tabindex: -1,
-	_size: 0,
+	_rows: 0,
 	$init: function () {
 		this.$supers('$init', arguments);
 		this._selItems = [];
@@ -41,9 +41,13 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 			var n = this.getNode();
 			if (n) n.name = name;
 		},
-		size: function (size) {
+		rows: function (rows) {
 			var n = this.getNode();
-			if (n) n.size = size;
+			if (n) n.size = rows;
+		},
+		maxlength: function (maxlength) {
+			if (this.desktop)
+				this.rerender();
 		}
 	},
 	toggleItemSelection: function (item) {
@@ -94,7 +98,7 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 			+ (this.isMultiple() ? ' multiple="multiple"' : '')
 			+ (this.getSelectedIndex() > -1 ? ' selectedIndex=' + this.getSelectedIndex() : '')
 			+ (this.getTabindex() > -1 ? ' tabindex=' + this.getTabindex(): '')
-			+ (this.getSize() > 0 ? ' size=' + this.getSize(): '')
+			+ (this.getRows() > 0 ? ' size=' + this.getRows(): '')
 			+ (this.getName() ? ' name="' + this.getName() + '"': '');
 	},
 	bind_: function () {

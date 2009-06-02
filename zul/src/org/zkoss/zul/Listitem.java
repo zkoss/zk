@@ -307,7 +307,20 @@ public class Listitem extends XulElement implements org.zkoss.zul.api.Listitem {
 	protected void smartUpdate(String name, boolean value) { //make it accessible in this package
 		super.smartUpdate(name, value);
 	}
+	
+	public String getMold() {
+		return getParent() != null ? "default".equals(getParent().getMold()) ?
+				super.getMold()	: getParent().getMold()	: super.getMold();
+	}
 
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		render(renderer, "selected", isSelected());
+		render(renderer, "disabled", isDisabled());
+	}
+	
 	//-- Component --//
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Listbox))

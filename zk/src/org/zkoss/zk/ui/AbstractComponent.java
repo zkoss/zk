@@ -1406,7 +1406,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/** Returns the mold used to render this component.
 	 * Default: "default"
 	 */
-	public final String getMold() {
+	public String getMold() {
 		return _mold;
 	}
 	public void setMold(String mold) {

@@ -26,7 +26,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		orient: _zkf,
 		disabled: function (v) {
 			if (this.desktop)
-				if (this._mold == 'os') this.getNode().disabled = v;
+				if (this._mold != 'trendy') this.getNode().disabled = v;
 				else this.rerender(); //bind and unbind required
 		},
 		tabindex: function (v) {
@@ -66,13 +66,13 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 
 	getZclass: function () {
 		var zcls = this._zclass;
-		return zcls != null ? zcls: this._mold == 'os' ? "z-button-os": "z-button";
+		return zcls != null ? zcls: this._mold != 'trendy' ? "z-button-os": "z-button";
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
 
 		var n;
-		if (this._mold == 'os') {
+		if (this._mold != 'trendy') {
 			n = this.getNode();
 		} else {
 			if (this._disabled) return;
@@ -86,7 +86,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		this.domListen_(n, "onBlur", "doBlur_");
 	},
 	unbind_: function () {
-		var n = this._mold == 'os' ? this.getNode(): this.getSubnode('btn');
+		var n = this._mold != 'trendy' ? this.getNode(): this.getSubnode('btn');
 		if (n) {
 			this.domUnlisten_(n, "onFocus", "doFocus_");
 			this.domUnlisten_(n, "onBlur", "doBlur_");
@@ -96,12 +96,12 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	},
 
 	doFocus_: function (evt) {
-		if (this._mold != 'os')
+		if (this._mold == 'trendy')
 			zDom.addClass(this.getSubnode('box'), this.getZclass() + "-focus");
 		this.$supers('doFocus_', arguments);
 	},
 	doBlur_: function (evt) {
-		if (this._mold != 'os')
+		if (this._mold == 'trendy')
 			zDom.rmClass(this.getSubnode('box'), this.getZclass() + "-focus");
 		this.$supers('doBlur_', arguments);
 	},

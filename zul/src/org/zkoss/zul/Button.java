@@ -227,7 +227,7 @@ public class Button extends LabelImageElement implements org.zkoss.zul.api.Butto
 	}
 	public String getZclass() {
 		return _zclass != null ? _zclass:
-			"os".equals(getMold()) ? "z-button-os": "z-button";
+			!"trendy".equals(getMold()) ? "z-button-os": "z-button";
 	}
 
 	//Component//

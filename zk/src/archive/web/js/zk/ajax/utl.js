@@ -48,7 +48,19 @@ zUtl = { //static methods
 
 		var k = 0, tl = txt.length,
 			pre = opts && opts.pre,
-			multiline = pre || (opts && opts.multiline);
+			multiline = pre || (opts && opts.multiline),
+			maxlength = opts ? opts.maxlength : 0;
+			
+		if (maxlength) {
+			if (tl > maxlength) {
+				if (!multiline) {
+					var j = maxlength;
+					while (j > 0 && txt.charAt(j - 1) == ' ')
+						--j;
+					return txt.substring(0, j) + '...';
+				}
+			}
+		}
 		for (var j = 0; j < tl; ++j) {
 			var cc = txt.charAt(j);
 			if (cc == '\n') {
