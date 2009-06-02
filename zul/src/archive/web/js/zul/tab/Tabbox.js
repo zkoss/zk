@@ -45,6 +45,9 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 	isHorizontal: function() {
 		return "horizontal" == this.getOrient();
 	},
+	isTabScroll: function() {
+		return true == this._tabscroll;
+	},
 	isVertical: function() {
 		return "vertical" == this.getOrient();
 	},
@@ -88,22 +91,45 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
             }
         }
 	},
+	onSize: _zkf = function() {
+		this.getTabs().onSize();
+	},
+	onVisi: _zkf,
 	bind_: function () {
 		this.$supers('bind_', arguments);
 		this.tabs = this.getTabs();
 		this.tabpanels = this.getTabpanels();
+		this._scrolling = false;
+		zWatch.listen('onSize', this);
 //		if (this.inAccordionMold()) {
 //			zDom.cleanVisibility(this.getNode());
 //		}
 		zk.afterMount(
 			this.proxy(function () {
 				if (this.inAccordionMold()) {
-					;
+					//@TODO
+
 				} else {
-					var x = this._selTab, wgt = zDom.$(x), tab = zk.Widget.$(wgt);
-					tab.setSelected(true);
+					var x = this._selTab,
+						wgt = zDom.$(x),
+						tab = zk.Widget.$(wgt);
+					if (tab)
+						tab.setSelected(true);
 				}
 			})
 		);
+	},
+	unbind_: function () {
+		zWatch.unlisten("onSize", this);
+		this.$supers('unbind_', arguments);
+	},
+	//super//
+	setWidth: function (width) {
+		this.$supers('setWidth', arguments);
+		zWatch.fireDown('onSize', null, this);
+	},
+	setHeight: function (height) {
+		this.$supers('setHeight', arguments);
+		zWatch.fireDown('onSize', null, this);
 	}
 });

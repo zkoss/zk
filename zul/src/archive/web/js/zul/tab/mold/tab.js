@@ -16,15 +16,18 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 function (out) {
 	var zcls = this.getZclass(),
-		uuid = this.uuid;;
+		tbx = this.getTabbox(),
+		uuid = this.uuid;
 	out.push('<li ', this.domAttrs_(), '>');
 	if (this.isClosable()) {
 		out.push('<a id="', uuid, '$close" class="', zcls, '-close"', 'onClick="return false;" ></a>');
+	} else if (tbx.isVertical()) {
+		out.push('<a class="', zcls, '-noclose" ></a>');
 	}
-	out.push('<a id="', uuid, '$a" class="', zcls, '-body"', 'onClick="return false;" href="#">','<em id="', uuid, '$em">');
+	out.push('<div id="', uuid, '$hl" class="', zcls, '-hl"><div id="', uuid, '$hr" class="', zcls, '-hr">');
 	if (this.isClosable())
-		out.push('<span id="',uuid, '$inner" class="',zcls, '-inner ', zcls, '-close-inner">');
+		out.push('<div id="',uuid, '$hm" class="',zcls, '-hm ', zcls, '-hm-close">');
 	else
-		out.push('<span id="',uuid, '$inner" class="',zcls, '-inner ">');
-	out.push('<span class="', zcls, '-text">',this.domContent_(),'</span></span></em></a></li>');
+		out.push('<div id="',uuid, '$hm" class="',zcls, '-hm ">');
+	out.push('<span class="', zcls, '-text">',this.domContent_(),'</span></div></div></div></li>');
 }

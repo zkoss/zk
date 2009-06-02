@@ -423,7 +423,7 @@
 .z-tab-ver .z-tab-ver-hm {
 	overflow: hidden;
 	cursor: pointer;
-	padding-left: 5px;
+	padding: 0 15px 0 5px;
 	background: transparent repeat-y scroll -512px 0;
 	background-image: url(${c:encodeURL('~./zul/img/tab/tab-v-hm.png')});
 	zoom: 1;
@@ -575,6 +575,15 @@
 .z-tabbox-ver .z-tabpanel-ver {
 	padding: 5px;
 	zoom: 1;
+}
+.z-tabbox-ver .z-tabpanels-ver {
+	float: left;
+	border-left: none;
+}
+.ie6 .z-tabbox-ver .z-tabpanels-ver {
+	zoom: 1;
+	float: none;!important;
+	border-left: none;
 }
 .z-tabpanel {
 	border-top: none;

@@ -22,27 +22,32 @@ function (out) {
 		tabbox = this.getTabbox();
 	if (tabbox.inAccordionMold()) {//Accordion
 		out.push('<div id="',uuid ,'"' ,' class="',zcls ,'-outer">' );
-		if (tabbox.getMold() == "accordion" && tabbox.getPanelSpacing() != null && this.getIndex() != 0) {
+		if (tabbox.getPanelSpacing() != null && this.getIndex() != 0) {
 			out.push('<div style="margin:0;display:list-item;width:100%;height:',tabbox.getpanelSpacing(),';"></div>');
 		}
 		out.push('<div id="',tab.uuid,'"',tab.domAttrs_(),'>',
-		'<div align="left" class="',tabzcs,'-header" >');
-		if (tab.isClosable()) {
-			out.push('<a id="',tab.uuid,'$close"  class="',tabzcs,'-close"></a>');
-		}
-		out.push('<a href="javascript:;" id="',tab.uuid,'$a" class="',tabzcs,'-tl">',
-		'<em class="',tabzcs,'-tr">','<span class="',tabzcs,'-tm">','<span class="',tabzcs,'-text">',
-		tab.domContent_(),'</span></span></em></a></div></div>'
-		);
+				'<div align="left" class="',tabzcs,'-header" >',
+				'<div class="',tabzcs,'-tl" ><div class="',tabzcs,'-tr" ></div></div>',
+				'<div class="',tabzcs,'-hl" >',
+				'<div class="',tabzcs,'-hr" >',
+				'<div class="',tabzcs,'-hm" >');
+				if (tab.isClosable()) {
+					out.push('<a id="',tab.uuid,'$close"  class="',tabzcs,'-close"></a>');
+				}
+		out.push('<span class="',tabzcs,'-text">',tab.domContent_(),'</span></div></div></div></div></div>');
 		out.push('<div id="',uuid,'$real"', this.domAttrs_(),'>',
 			'<div id="',uuid,'$cave" >');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 				w.redraw(out);
 		out.push('</div></div></div>');
 	} else {//Default Mold
-		out.push('<div id="', uuid,'"' ,this.domAttrs_(), '>', '<div id="', uuid, '$real">')
-			for (var w = this.firstChild; w; w = w.nextSibling)
-				w.redraw(out);
-		out.push('</div></div>');
+		out.push('<div id="', uuid,'"' ,this.domAttrs_(), '>');
+		if (tabbox.isHorizontal())
+			out.push('<div id="', uuid, '$real">');
+		for (var w = this.firstChild; w; w = w.nextSibling)
+			w.redraw(out);
+		if (tabbox.isHorizontal())
+			out.push('</div>');
+		out.push('</div>');
 	}
 }

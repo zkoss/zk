@@ -43,6 +43,7 @@ public class Tab extends LabelImageElement implements org.zkoss.zul.api.Tab {
 	private boolean _disabled;
 	static {
 		addClientEvent(Tab.class, Events.ON_CLOSE, 0);
+		addClientEvent(Tab.class, Events.ON_SELECT, CE_IMPORTANT);
 	}
 	public Tab() {}
 

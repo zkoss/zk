@@ -981,6 +981,15 @@ zDom = { //static methods
 			;
 		return el;
 	},
+	childNodes: function (el, fn) {
+		var nodes = [];
+		if (el) {
+			for (var n = el.firstChild; n; n = n.nextSibling)
+				if (n.nodeType == 1 && (!(typeof fn == "function") || fn(n))) nodes.push(n);
+			return nodes;
+		}
+		return null;
+	},
 	firstChild: function (el, tagName, descendant) {
 		if (el) {
 			for (var n = el.firstChild; n; n = n.nextSibling)

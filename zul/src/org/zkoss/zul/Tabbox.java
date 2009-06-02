@@ -243,7 +243,7 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 			_seltab = tab;
 			_seltab.setSelectedDirectly(true);
 			if (!byClient)
-				smartUpdate("z.sel", _seltab.getUuid());
+				smartUpdate("selected", _seltab.getUuid());
 		}
 	}
 
@@ -284,7 +284,7 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 	 */
 	public void setOrient(String orient) throws WrongValueException {
 		if (!"horizontal".equals(orient) && !"vertical".equals(orient))
-			throw new WrongValueException(orient);
+			throw new WrongValueException("Unknow orient : " + orient);
 		if (inAccordionMold())
 			throw new WrongValueException("Unsupported vertical orient in mold : "+getMold());
 		if (!Objects.equals(_orient, orient)) {

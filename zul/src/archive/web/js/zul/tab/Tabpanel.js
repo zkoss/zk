@@ -27,10 +27,6 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 		( tabbox._mold == "default" ? ( tabbox.isVertical() ? "-ver": "" ) : "-" + tabbox._mold):
 		this._zclass;
 	},
-	bind_: function() {
-		this.$supers('bind_', arguments);
-		this._fixPanelHgh();
-	},
 	getLinkedTab: function() {
 		var tabbox =  this.getTabbox(),
 			tabs = tabbox.getTabs(),
@@ -46,19 +42,19 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 	},
 	_fixPanelHgh: function() {
 		var tabbox = this.getTabbox();
-		//@TODO Fix
-		/*if (!tabbox.inAccordionMold()) {
-			var hgh = zDom.getStyle(tabbox.getNode(),"height");
-			var panels = this.parent;
-			if (panels) {
-				for (var pos, n = panels.firstChild; n; n = n.nextSibling) {
+		if (!tabbox.inAccordionMold()) {
+			var tbx = tabbox.getNode(),
+				tabpanels = this.parent,
+				hgh = zDom.getStyle(tbx, "height");
+			if (tabpanels) {
+				for (var pos, n = tabpanels.firstChild; n; n = n.nextSibling) {
 					if (n.id) {
 						if (zk.ie) { // Bug: 1968434, this solution is very dirty but necessary.
 							pos = n.style.position;
 							n.style.position = "relative";
 						}
 						if (hgh && hgh != "auto") {//tabbox has height
-							hgh = zDom.vflexHeight(panels);
+							hgh = zDom.vflexHeight(tabpanels);
 							zDom.revisedHeight(n, hgh);
 						}
 						//let real div 100% height
@@ -68,7 +64,15 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 					}
 				}
 			}
-		}*/
+		}
+	},
+	onVisi: function() {
+		//this._fixPanelHgh();		//Bug 2104974
+		//if (zk.ie) zk.redoCSS(tbx); //Bug 2526699 - (add zk.ie7)
+	},
+	bind_: function() {
+		this.$supers('bind_', arguments);
+		//this._fixPanelHgh();
 	}
 
 });
