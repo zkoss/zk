@@ -131,7 +131,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<!-- ///////////// -->
 	<!-- DSP (optional) -->
 	<!-- Uncomment if you want to use Potix DSP in your Website
-	-->
 	<servlet>
 		<servlet-name>dspLoader</servlet-name>
 		<servlet-class>org.zkoss.web.servlet.dsp.InterpreterServlet</servlet-class>
@@ -144,6 +143,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<servlet-name>dspLoader</servlet-name>
 		<url-pattern>*.dsp</url-pattern>
 	</servlet-mapping>
+	-->
 
 	<!-- /////////// -->
 	<!-- Miscellaneous -->

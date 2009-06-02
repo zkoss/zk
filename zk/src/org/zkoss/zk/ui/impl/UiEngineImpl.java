@@ -288,6 +288,9 @@ public class UiEngineImpl implements UiEngine {
 			throw new IllegalArgumentException();
 		getCurrentVisualizer().addUuidChanged(comp, addOnlyMoved);
 	}
+	public boolean disableClientUpdate(Component comp, boolean disable) {
+		return getCurrentVisualizer().disableClientUpdate(comp, disable);
+	}
 
 	//-- Creating a new page --//
 	public void execNewPage(Execution exec, Richlet richlet, Page page,
