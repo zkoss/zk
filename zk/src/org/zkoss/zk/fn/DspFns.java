@@ -69,16 +69,15 @@ public class DspFns {
  	}
 
 	/** Returns HTML tags to include style sheets of the specified device
-	 * of the current application (never null).
+	 * for the current application (never null).
 	 *
-	 * <p>It is the same as {@link HtmlPageRenders#outDeviceStyleSheets}
-	 * except this method is used for DSP pages.
+	 * <p>This method is used for DSP pages.
 	 * @param deviceType the device type. If null, ajax is assumed.
 	 */
 	public static final String outDeviceStyleSheets(String deviceType) {
 		final Execution exec = Executions.getCurrent();
  		if (exec != null)
-			return HtmlPageRenders.outDeviceStyleSheets(exec, null, null);
+			return HtmlPageRenders.outLangStyleSheets(exec, null, null);
 
 	 	return JspFns.outDeviceStyleSheets(
 			ServletFns.getCurrentServletContext(),

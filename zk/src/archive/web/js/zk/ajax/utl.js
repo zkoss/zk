@@ -212,6 +212,10 @@ zUtl = { //static methods
 	},
 
 	//HTTP//
+	https: function () {
+		var p = location.protocol;
+		return p && "https:" == p.toLowerCase();
+	},
 	go: function (url, overwrite, target) {
 		if (!url) {
 			location.reload();

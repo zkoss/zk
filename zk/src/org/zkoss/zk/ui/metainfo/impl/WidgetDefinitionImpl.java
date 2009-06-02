@@ -36,7 +36,7 @@ import org.zkoss.zk.ui.UiException;
 public class WidgetDefinitionImpl implements WidgetDefinition {
 	/** The widget class. */
 	private final String _class;
-	/** A map of molds (String mold, String moldURI). */
+	/** A map of molds (String mold, [String moldURI,String cssURI,String z2cURI]). */
 	private Map _molds;
 	/** Whether to preserve the blank text. */
 	private final boolean _blankpresv;
@@ -53,27 +53,34 @@ public class WidgetDefinitionImpl implements WidgetDefinition {
 	public boolean isBlankPreserved() {
 		return _blankpresv;
 	}
-	public void addMold(String name, String moldURI) {
-		if (moldURI == null || moldURI.length() == 0 || name == null
-		|| name.length() == 0)
+	public void addMold(String name, String moldURI, String cssURI, String z2cURI) {
+		if (name == null || name.length() == 0)
 			throw new IllegalArgumentException();
 
 		if (_molds == null)
 			_molds = new HashMap(2);
-		Object old = _molds.put(name, moldURI);
-		if (old != null && !Objects.equals(old, moldURI)) {
-			_molds.put(name, old);
-			throw new UiException("Different mold URIs, "+old+" and "+moldURI+" cannot be mapped to the same widget, "+_class);
-			//We assume mold URI can be decided by widget class and mold
-			//(no need of component definition), so we must prevent
-			//misuse (such as overriding with a diff URI but same widget class)
-		}
+		_molds.put(name, new String[] {moldURI, cssURI, z2cURI});
 	}
 	public String getMoldURI(String name) {
 		if (_molds == null)
 			return null;
 
-		return (String)_molds.get(name);
+		final String[] info = (String[])_molds.get(name);
+		return info != null ? info[0]: null;
+	}
+	public String getCSSURI(String name) {
+		if (_molds == null)
+			return null;
+
+		final String[] info = (String[])_molds.get(name);
+		return info != null ? info[1]: null;
+	}
+	public String getZ2CURI(String name) {
+		if (_molds == null)
+			return null;
+
+		final String[] info = (String[])_molds.get(name);
+		return info != null ? info[2]: null;
 	}
 	public boolean hasMold(String name) {
 		return _molds != null && _molds.containsKey(name);

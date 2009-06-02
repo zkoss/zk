@@ -60,7 +60,7 @@ implements ComponentDefinition, java.io.Serializable {
 	private EvaluatorRef _evalr;
 	/** Either String or Class. */
 	private Object _implcls;
-	/** A map of (String mold, [String widget, ExValue z2cURI]). */
+	/** A map of (String mold, String widget). */
 	private Map _molds;
 	/** The default widget class. */
 	private String _defWgtClass;
@@ -439,20 +439,14 @@ implements ComponentDefinition, java.io.Serializable {
 		return propmap;
 	}
 
-	public void addMold(String name, String widgetClass, String z2cURI) {
+	public void addMold(String name, String widgetClass) {
 		if (name == null || name.length() == 0)
 			throw new IllegalArgumentException();
 
 		if (_molds == null)
 			_molds = new HashMap(2);
 
-		final Object[] old = (Object[])_molds.get(name);
-		_molds.put(name, new Object[] {
-			widgetClass != null ? widgetClass: old != null ? old[0]: null,
-			z2cURI != null ? new ExValue(z2cURI, String.class):
-				old != null ? old[1]: null});
-			//Note: clone() assume value of _molds is immutable, so
-			//create a new array instead of updating old directly
+		_molds.put(name, widgetClass);
 	}
 	public boolean hasMold(String name) {
 		return _molds != null && _molds.containsKey(name);
@@ -463,8 +457,8 @@ implements ComponentDefinition, java.io.Serializable {
 	}
 	public String getWidgetClass(String moldName) {
 		if (_molds != null) {
-			final Object[] info = (Object[])_molds.get(moldName);
-			if (info != null) return (String)info[0];
+			final String wc = (String)_molds.get(moldName);
+			if (wc != null) return wc;
 		}
 		return _defWgtClass;
 	}
@@ -479,23 +473,9 @@ implements ComponentDefinition, java.io.Serializable {
 		if (oldwc != null && _molds != null)
 			for (Iterator it = _molds.entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
-				final Object[] info = (Object[])me.getValue();
-				if (oldwc.equals(info[0]))
-					me.setValue(new Object[] {widgetClass, info[1]});
-				//Note: clone() assume value of _molds is immutable, so
-				//create a new array instead of updating old directly
+				if (oldwc.equals(me.getValue()))
+					me.setValue(widgetClass);
 			}
-	}
-	public String getZ2CURI(Component comp, String moldName) {
-		if (_molds != null) {
-			final Object[] info = (Object[])_molds.get(moldName);
-			if (info != null) {
-				final ExValue z2c = (ExValue)info[1];
-				if (z2c != null)
-					return toAbsoluteURI((String)z2c.getValue(_evalr, comp));
-			}
-		}
-		return null;
 	}
 
 	private String toAbsoluteURI(String uri) {

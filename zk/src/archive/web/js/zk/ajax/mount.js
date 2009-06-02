@@ -17,8 +17,6 @@ var _zkmt = zUtl.now(); //JS loaded
 zkreg = zk.Widget.register; //a shortcut for WPD loader
 
 function zkboot(dtid, updateURI, force) {
-	if (!zk.sysInited) zkm.sysInit();
-
 	var zkdt = zk.Desktop, dt;
 	if (!force) {
 		if (dtid) {
@@ -67,7 +65,6 @@ function zkver() {
 	var args = arguments, len = args.length;
 	zk.version = args[0];
 	zk.build = args[1];
-	zk.updateURI = args[2];
 
 	for (var j = 3; j < len; j += 2)
 		zPkg.setVersion(args[j], args[j + 1]);
@@ -110,7 +107,7 @@ function zkmld(wgtcls, molds) {
 	}		
 }
 function zkam(fn) {
-	if (zk.mounting || !zk.sysInited) {
+	if (zk.mounting || !zk.domReady) {
 		zkm._afMts.push(fn);
 		return true;
 	}
@@ -146,9 +143,6 @@ zkm = {
 	},
 
 	sysInit: function() {
-		zk.sysInited = true;
-		zkm.sysInit = null; //free
-
 		var ebc = zk.xbodyClass;
 		if (ebc) {
 			zk.xbodyClass = null;
@@ -201,26 +195,14 @@ zkm = {
 			zkm.mtAU(stub);
 		} else { //browser loading
 			zk.bootstrapping = true;
-			if (zk.sysInited)
+			if (zk.domReady)
 				zkm.mtBL();
-			else if (document.readyState) {
-				var tid = setInterval(function(){
-					if (/loaded|complete/.test(document.readyState)) {
-						clearInterval(tid);
-						zkm.mtBL();
-					}
-				}, 50);
-			} else //gecko
-				setTimeout(zkm.mtBL, 120);
-				//don't count on DOMContentLoaded since the page might
-				//be loaded by another ajax solution (i.e., portal)
-				//Also, Bug 1619959: FF not fire it if in 2nd iframe
+			else
+				zkm._afterDomReady = zkm.mtBL;
 		}
 	},
 	/** mount for browser loading */
 	mtBL: function() {
-		if (!zk.sysInited) zkm.sysInit();
-
 		if (zPkg.loading) {
 			zk.afterLoad(zkm.mtBL);
 			return;
@@ -584,7 +566,7 @@ zkm = {
 		zWatch.fire('onScroll'); //notify all
 	},
 	docResize: function () {
-		if (!zk.sysInited || zk.mounting)
+		if (!zk.domReady || zk.mounting)
 			return; //IE6: it sometimes fires an "extra" onResize in loading
 
 	//Tom Yeh: 20051230:
@@ -689,3 +671,52 @@ zk.beforeUnload = function (fn, opts) { //part of zk
 	if (opts && opts.remove) zkm._bfs.$remove(fn);
 	else zkm._bfs.push(fn);
 };
+
+(function () {
+	//based on YUI 3/Dean Edwards
+	var ready = function () {
+		if (!zk.domReady) {
+			zk.domReady = true;
+			zkm.sysInit();
+			var f = zkm._afterDomReady;
+			if (f) {
+				delete zkm._afterDomReady;
+				f();
+			}
+		}
+	};
+	if (zk.ie) {
+		var iv = setInterval(function () {
+			try {
+				// throws an error if doc is not ready
+				document.documentElement.doScroll('left');
+				clearInterval(iv);
+				iv = null;
+				ready();
+			} catch (ex) {
+			}
+		}, 20);
+	} else if (document.readyState) {
+		var iv = setInterval(function() {
+			if (/loaded|complete/.test(document.readyState)) {
+				clearInterval(iv);
+				iv = null;
+				ready();
+			}
+		}, 20);
+	} else {
+		//Bug 1619959: FF not always fire DOMContentLoaded (such as in 2nd iframe)
+		//so we have to use onload, too
+		try {
+			zEvt.listen(document, "DOMContentLoaded", ready);
+		} catch (ex) { //ignore
+		}
+
+		var old = window.onload;
+		window.onload = function () {
+			ready();
+			if (old)
+				old.apply(window, arguments);
+		};
+	}
+})();

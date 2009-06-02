@@ -196,7 +196,8 @@ public class HtmlPageRenders {
 
 		final Desktop desktop = exec.getDesktop();
 		if (wapp == null) wapp = desktop.getWebApp();
-		if (deviceType == null) deviceType = desktop.getDeviceType();
+		if (deviceType == null)
+			deviceType = desktop != null ? desktop.getDeviceType(): "ajax";
 		final Configuration config = wapp.getConfiguration();
 
 		final StringBuffer sb = new StringBuffer(1536);
@@ -211,7 +212,6 @@ public class HtmlPageRenders {
 		sb.append("\n<script>\n")
 			.append("zkver('").append(wapp.getVersion())
 			.append("','").append(wapp.getBuild())
-			.append("','").append(desktop.getUpdateURI(null))
 			.append('\'');
 
 		for (Iterator it = LanguageDefinition.getByDeviceType(deviceType).iterator();
@@ -281,7 +281,7 @@ public class HtmlPageRenders {
 		return sb.toString();
 	}
 	/** Returns HTML tags to include all style sheets that are
-	 * defined in all languages (never null).
+	 * defined in all languages of the specified device (never null).
 	 *
 	 * <p>In addition to style sheets defined in lang.xml and lang-addon.xml,
 	 * it also include:
@@ -313,43 +313,6 @@ public class HtmlPageRenders {
 			append(sb, (StyleSheet)it.next(), exec, null);
 
 		if (sb.length() > 0) sb.append('\n');
-		return sb.toString();
-	}
-	/** Returns HTML tags to include style sheets of the specified device
-	 * of the current application (never null).
-	 *
-	 * <p>Unlike {@link #outLangStyleSheets}, it uses the current
-	 *  servlet context
-	 * to look for the style sheets. Thus, this method can be used even
-	 * if the current execution is not available ({@link Executions#getCurrent}
-	 * can be null).
-	 *
-	 * <p>In summary:<br/>
-	 * {@link #outLangStyleSheets} is used to design the component
-	 * templates, while {@link #outDeviceStyleSheets} is used by DSP/JSP
-	 * that does nothing with ZUML pages (i.e., not part of an execution).
-	 *
-	 * @param exec the execution (never null)
-	 * @param wapp the Web application.
-	 * If null, exec.getDesktop().getWebApp() is used.
-	 * So you have to specify it if the execution is not associated
-	 * with desktop (a fake execution).
-	 * @param deviceType the device type, such as ajax.
-	 * If null, exec.getDesktop().getDeviceType() is used.
-	 * So you have to specify it if the execution is not associated
-	 * with desktop (a fake execution).
-	 */
-	public static final
-	String outDeviceStyleSheets(Execution exec, WebApp wapp, String deviceType) {
-		//Don't use exec.getAttribute since it might be null
-		if (exec.getAttribute(ATTR_LANG_CSS_GENED) != null)
-			return ""; //nothing to generate
-		exec.setAttribute(ATTR_LANG_CSS_GENED, Boolean.TRUE);
-
-		final StringBuffer sb = new StringBuffer(256);
-		final List ss = getStyleSheets(exec, wapp, deviceType);
-		for (Iterator it = ss.iterator(); it.hasNext();)
-			append(sb, (StyleSheet)it.next(), exec, null);
 		return sb.toString();
 	}
 

@@ -431,18 +431,19 @@ public class DefinitionLoaders {
 			for (Iterator i = el.getElements("mold").iterator(); i.hasNext();) {
 				final Element e = (Element)i.next();
 				final String nm = IDOMs.getRequiredElementValue(e, "mold-name");
-				final String z2c = e.getElementValue("z2c-uri", true);
-				final String uri = e.getElementValue("mold-uri", true);
+				final String moldURI = e.getElementValue("mold-uri", true);
+				final String cssURI = e.getElementValue("css-uri", true);
+				final String z2cURI = e.getElementValue("z2c-uri", true);
 				final String wn = e.getElementValue("widget-class", true);
-				noEL("mold-uri", uri, e); //5.0 limitation
+				noEL("mold-uri", moldURI, e); //5.0 limitation
 
-				compdef.addMold(nm, wn != null ? wn: wgtnm, z2c);
+				compdef.addMold(nm, wn != null ? wn: wgtnm);
 
 				WidgetDefinition wd =
 					wn !=  null ? getWidgetDefinition(langdef, compdef, wn): wgtdef;
-				if (uri != null) {
+				if (moldURI != null) {
 					if (wd != null)
-						wd.addMold(nm, uri);
+						wd.addMold(nm, moldURI, cssURI, z2cURI);
 					else
 						log.warning("mold-uri for "+name+" ignored because widget-class is required, "+e.getLocator());
 				}

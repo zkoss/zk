@@ -188,8 +188,7 @@ zk = {
 	//Processing//
 	startProcessing: function (timeout) {
 		zk.processing = true;
-		setTimeout(zk.sysInited ? zk._showproc: zk._showprocmk, timeout > 0 ? timeout: 0);
-			//Note: zk.sysInited might be cleared before _showproc
+		setTimeout(zk.domReady ? zk._showproc: zk._showprocmk, timeout > 0 ? timeout: 0);
 	},
 	endProcessing: function() {
 		zk.processing = false;
@@ -226,7 +225,7 @@ zk = {
 
 	//DEBUG//
 	error: function (msg) {
-		if (!zk.sysInited) {
+		if (!zk.domReady) {
 			setTimeout(function () {zk.error(msg)}, 100);
 			return;
 		}

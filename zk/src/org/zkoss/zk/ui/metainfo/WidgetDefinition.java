@@ -41,10 +41,12 @@ public interface WidgetDefinition {
 	/** Adds the mold URI for the specified mold.
 	 *
 	 * @param name the mold name.
-	 * @param moldURI an URI of the mold; never null nor empty.
+	 * @param moldURI an URI of the mold. Ignored if null.
+	 * @param cssURI an URI of the CSS. Ignored if null.
+	 * @param z2cURI an URI of the ZCS-to-CSS converter. Not supported yet.
 	 * Since 5.0, it doesn't allow any XEL expressions.
 	 */
-	public void addMold(String name, String moldURI);
+	public void addMold(String name, String moldURI, String cssURI, String z2cURI);
 	/** Returns the URI (String) of the mold, or null if not available.
 	 *
 	 * <p>If the mold URI contains an expression, it will be evaluated first

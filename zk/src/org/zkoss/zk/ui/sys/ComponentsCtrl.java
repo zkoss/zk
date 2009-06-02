@@ -414,7 +414,7 @@ public class ComponentsCtrl {
 		public Component newInstance(Class cls) {
 			throw new UnsupportedOperationException();
 		}
-		public void addMold(String name, String widgetClass, String z2cURI) {
+		public void addMold(String name, String widgetClass) {
 			throw new UnsupportedOperationException();
 		}
 		public String getWidgetClass(String moldName) {
@@ -425,9 +425,6 @@ public class ComponentsCtrl {
 		}
 		public void setDefaultWidgetClass(String widgetClass) {
 			throw new UnsupportedOperationException();
-		}
-		public String getZ2CURI(Component comp, String moldName) {
-			return null;
 		}
 		public boolean hasMold(String name) {
 			return false;

@@ -442,10 +442,14 @@ public class Parser {
 
 		pgdef.addComponentDefinition(compdef);
 
-		String moldURI = (String)params.remove("moldURI");
-		if (moldURI == null) moldURI = (String)params.remove("mold-uri");
-		if (!isEmpty(moldURI))
+		Object o = params.remove("moldURI");
+		if (o == null) o = params.remove("mold-uri");
+		if (o != null)
 			throw new UnsupportedOperationException("moldURI not supported in 5.0. Use <?script?> or lang-addon.xml instead, "+pi.getLocator());
+
+		o = params.remove("cssURI");
+		if (o != null)
+			throw new UnsupportedOperationException("cssURI not supported in 5.0. Use <?link?> or lang-addon.xml instead, "+pi.getLocator());
 
 		compdef.setApply((String)params.remove("apply"));
 

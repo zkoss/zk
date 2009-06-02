@@ -66,10 +66,9 @@ public class JspFns {
 		}
  	}
 	/** Returns HTML tags to include style sheets of the specified device
-	 * of the current application (never null).
+	 * for the current application (never null).
 	 *
-	 * <p>It is the same as {@link DspFns#outDeviceStyleSheets}
-	 * except this method is used for JSP pages.
+	 * <p>This method is used for JSP pages.
 	 * @param deviceType the device type. If null, ajax is assumed.
 	 */
 	public static final String outDeviceStyleSheets(ServletContext ctx,
@@ -80,7 +79,7 @@ public class JspFns {
 		ExecutionsCtrl.setCurrent(exec);
  		((ExecutionCtrl)exec).onActivate();
 		try {
-			return HtmlPageRenders.outDeviceStyleSheets(exec,
+			return HtmlPageRenders.outLangStyleSheets(exec,
 				WebManager.getWebManager(ctx).getWebApp(),
 				deviceType != null ? deviceType: "ajax");
 		} finally {
