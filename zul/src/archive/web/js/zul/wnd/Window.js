@@ -121,7 +121,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			anchor: this._shadow.getBottomElement(),
 				//bug 1510218: we have to make it as a sibling
 			zIndex: this._zIndex,
-			stackup: zk.ie6Only,
+			stackup: (zk.useStackup === undefined ? zk.ie6Only: zk.useStackup),
 			visible: realVisible});
 
 		if (realVisible) {
