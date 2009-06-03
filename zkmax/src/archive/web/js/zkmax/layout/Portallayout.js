@@ -181,7 +181,11 @@ zkmax.layout.Portallayout = zk.$extends(zul.Widget, {
 				toCol.appendChild(panel);
 			}
 			//TODO work around there exist some un-expected results in widget.appendChild & insertBefore
-			proxy.parentNode.insertBefore(panelNode, proxy);
+			//zk.log(proxy.parentNode.id);
+			//zk.log(panelNode.id);
+			//zk.log(nextSibling.uuid);
+			//zk.log(toCol.uuid);
+			//proxy.parentNode.insertBefore(panelNode, proxy);
 			
 			for(var i = 0; i < toCol.nChildren; i++){
 				var relatedPanel = toCol.getChildAt(i);

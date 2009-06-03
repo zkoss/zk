@@ -314,7 +314,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (moveBefore && !(beforeNode = moveBefore.getNode()))
 			return false;
 
-		var node = this.getNode(), kidnode = child.getNode(),
+		var node = this.getCaveNode_() ? this.getCaveNode_():this.getNode(), kidnode = child.getNode(),
 			dt = this.desktop, kiddt = child.desktop,
 			oldpt = child.parent;
 		child._node = this._node = child.desktop = this.desktop = null; //avoid bind_ and unbind_
@@ -323,8 +323,9 @@ zk.Widget = zk.$extends(zk.Object, {
 			this.insertBefore(child, moveBefore);
 
 			zDom.remove(kidnode);
-			node.parentNode.insertBefore(kidnode, beforeNode);
 
+			node.insertBefore(kidnode, beforeNode);
+			
 			//Not calling unbind and bind, so handle bindLevel here
 			var v = this.bindLevel + 1;
 			if (child.bindLevel != v) {
