@@ -314,9 +314,9 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (moveBefore && !(beforeNode = moveBefore.getNode()))
 			return false;
 
-		var node = this.getCaveNode_() ? this.getCaveNode_():this.getNode(), kidnode = child.getNode(),
+		var node = this.getNode(), kidnode = child.getNode(),
 			dt = this.desktop, kiddt = child.desktop,
-			oldpt = child.parent;
+			oldpt = child.parent, cave = this.getCaveNode_();
 		child._node = this._node = child.desktop = this.desktop = null; //avoid bind_ and unbind_
 		try {
 			oldpt.removeChild(child);
@@ -324,7 +324,7 @@ zk.Widget = zk.$extends(zk.Object, {
 
 			zDom.remove(kidnode);
 
-			node.insertBefore(kidnode, beforeNode);
+			(cave || node).insertBefore(kidnode, beforeNode);
 			
 			//Not calling unbind and bind, so handle bindLevel here
 			var v = this.bindLevel + 1;
@@ -332,10 +332,7 @@ zk.Widget = zk.$extends(zk.Object, {
 				zk.Widget._fixBindLevel(child, v);
 				zWatch.fire('onBindLevelMove', null, child);
 			}
-		}catch(e){
-			//will crash... if don't catch 2009/6/3 kindalu
-			//when call insertBefore on portalchildren @ Portallayout.js.
-		}finally {
+		} finally {
 			this.desktop = dt; child.desktop = kiddt;
 			this._node = node; child._node = kidnode;
 		}
