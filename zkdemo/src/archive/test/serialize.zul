@@ -45,6 +45,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 	<zscript>
 	int cnt = 0;
+	void anyfunc() { //used to test serialization of desktop
+	}
 	</zscript>
 	<button label="Clone list">
 		<attribute name="onClick">{
@@ -83,6 +85,9 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	ByteArrayOutputStream boa = new ByteArrayOutputStream();
 	new ObjectOutputStream(boa).writeObject(desktop);
 	vb.insertBefore(new Label(boa.toByteArray().length+" bytes copied"), self);
+
+	byte[] bs = boa.toByteArray();
+	vb.insertBefore(new Label("readback:"+new ObjectInputStream(new ByteArrayInputStream(bs)).readObject()), self); //read back
 		}</attribute>
 	</button>
 	<button label="Serialize All Desktops">
