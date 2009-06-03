@@ -13,6 +13,17 @@ This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
+	_colspan: 1,
+	$define: {
+		colspan: [
+			function (colspan) {
+				return colspan > 1 ? colspan: 1;
+			},
+			function () {
+				var n = this.getNode();
+				if (n) n.colSpan = this._colspan;
+			}]
+	},
 	getListbox: function () {
 		var p = this.parent;
 		return p ? p.parent: null;
@@ -28,7 +39,7 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 	domContent_: function () {
 		var s1 = this.$supers('domContent_', arguments),
 			s2 = this._colHtmlPre();
-		return s1 ? s2 ? s1 + '&nbsp;' + s2: s1: s2;
+		return s1 ? s2 ? s2 + '&nbsp;' + s1: s1: s2;
 	},
 	_colHtmlPre: function () {
 		var s = '',
@@ -43,8 +54,8 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 				.append("\" align=\"absmiddle\"/>");
 			}*/
 			if (box.isCheckmark()) {
-				var item = this.parent;
-				var chkable = item.isCheckable();
+				var item = this.parent,
+					chkable = item.isCheckable();
 				s += '<input type="' + (box.isMultiple() ? 'checkbox': 'radio')
 					+ '" id="' + item.uuid + '$cm"';
 				if (!chkable || item.isDisabled())
@@ -59,5 +70,26 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 			}
 		}
 		return s;
+	},
+	doMouseOver_: function(evt) {
+		if (zk.gecko && (this._draggable || this.parent._draggable)) {
+			var tag = zDom.tag(evt.domTarget);
+			if (tag != "INPUT" && tag != "TEXTAREA") {
+				var n = this.getNode();
+				if (n) n.firstChild.style.MozUserSelect = "none";
+			}
+		}
+		this.$supers('doMouseOver_', arguments);
+	},
+	doMouseOut_: function(evt) {
+		if (zk.gecko && (this._draggable || this.parent._draggable)) {
+			var n = this.getNode();
+			if (n) n.firstChild.style.MozUserSelect = "none";
+		}
+		this.$supers('doMouseOut_', arguments);
+	},
+	domAttrs_: function () {
+		return this.$supers('domAttrs_', arguments)
+			+ (this._colspan > 1 ? ' colspan="' + this._colspan + '"' : '');
 	}
 });

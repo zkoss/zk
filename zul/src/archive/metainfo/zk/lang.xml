@@ -598,6 +598,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-uri>mold/listitem.js</mold-uri>
 		</mold>
 		<mold>
+			<mold-name>paging</mold-name>
+			<mold-uri>mold/listitem.js</mold-uri>
+		</mold>
+		<mold>
 			<mold-name>select</mold-name>
 			<widget-class>zul.sel.Option</widget-class>
 			<mold-uri>mold/option.js</mold-uri>

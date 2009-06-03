@@ -80,7 +80,7 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 				this.clearSelection();
 			} else {
 				item._selected = false;
-				this._selItems.$clear();				
+				this._selItems.$remove(item);				
 			}
 		}
 	},
@@ -107,11 +107,12 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 		this.domListen_(n, 'onChange');
 		this.domListen_(n, 'onFocus', 'doFocus_');
 		this.domListen_(n, 'onBlur', 'doBlur_');
-
-		if (zk.gecko || zk.safari)
-			this.domListen_(n, "onKeyUp");
 	},
 	unbind_: function () {
+		var n = this.getNode();
+		this.domUnlisten_(n, 'onChange');
+		this.domUnlisten_(n, 'onFocus', 'doFocus_');
+		this.domUnlisten_(n, 'onBlur', 'doBlur_');
 		this.$supers('unbind_', arguments);
 	},
 	_doChange: function (evt) {		
@@ -142,9 +143,11 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 			delete zkau.lateReq;
 		}*/
 	},
-	_doKeyUp: function (evt) {		
-		if (this.isMultiple() || this.getSelectedIndex() === evt.domTarget.selectedIndex)
-			return; //not change or unnecessary.
-		this._doChange(evt);
+	doKeyUp_: function (evt) {
+		if (zk.gecko || zk.safari) {
+			if (this.isMultiple() || this.getSelectedIndex() === evt.domTarget.selectedIndex) 
+				return; //not change or unnecessary.
+			this._doChange(evt);
+		} else this.$supers('doKeyUp_', arguments);
 	}
 });

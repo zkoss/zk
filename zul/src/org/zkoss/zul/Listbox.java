@@ -608,7 +608,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 			item.setSelectedDirectly(true);
 			_selItems.add(item);
 			if (inSelectMold()) smartUpdate("selectedIndex", _jsel);
-			else smartUpdate("select", item.getUuid());
+			else smartUpdate("selectedItem", item.getUuid());
 				//Bug 1734950: don't count on index (since it may change)
 				//On the other hand, it is OK with select-mold since
 				//it invalidates if items are added or removed
@@ -664,7 +664,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 			} else {
 				if (item.getIndex() < _jsel || _jsel < 0) {
 					_jsel = item.getIndex();
-					if (!inSelectMold()) smartUpdate("select", getSelUuid());
+					if (!inSelectMold()) smartUpdate("selectedItem", getSelUuid());
 				}
 				item.setSelectedDirectly(true);
 				_selItems.add(item);
@@ -704,7 +704,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 				} else {
 					smartUpdateSelection();
 					if (oldSel != _jsel)
-						smartUpdate("select", getSelUuid());
+						smartUpdate("selectedItem", getSelUuid());
 				}
 			}
 		}
@@ -759,7 +759,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 			if (inSelectMold())
 				smartUpdate("selectedIndex", -1);
 			else
-				smartUpdate("select", null);
+				smartUpdate("selectedItem", null);
 				//Bug 1734950: don't count on index (since it may change)
 		}
 	}
@@ -1365,12 +1365,12 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 				if (newItem.isSelected()) {
 					if (_jsel < 0) {
 						_jsel = newIndex;
-						if (!inSelectMold()) smartUpdate("select", getSelUuid());
+						if (!inSelectMold()) smartUpdate("selectedItem", getSelUuid());
 						_selItems.add(newItem);
 					} else if (_multiple) {
 						if (_jsel > newIndex) {
 							_jsel = newIndex;
-							if (!inSelectMold()) smartUpdate("select", getSelUuid());
+							if (!inSelectMold()) smartUpdate("selectedItem", getSelUuid());
 						}
 						_selItems.add(newItem);
 					} else { //deselect
@@ -1389,7 +1389,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 					}
 
 					if (oldjsel != _jsel && !inSelectMold())
-						smartUpdate("select", getSelUuid());
+						smartUpdate("selectedItem", getSelUuid());
 				}
 				
 				if (newChild instanceof Listgroup) {
@@ -1520,12 +1520,12 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 				_selItems.remove(item);
 				if (_jsel == index) {
 					fixSelectedIndex(index);
-					if (!inSelectMold()) smartUpdate("select", getSelUuid());
+					if (!inSelectMold()) smartUpdate("selectedItem", getSelUuid());
 				}
 			} else {
 				if (_jsel >= index) {
 					--_jsel;
-					if (!inSelectMold()) smartUpdate("select", getSelUuid());
+					if (!inSelectMold()) smartUpdate("selectedItem", getSelUuid());
 				}
 			}
 			if (child instanceof Listgroup) {
@@ -2486,6 +2486,9 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 			render(renderer, "oddRowSclass", getOddRowSclass());
 			render(renderer, "fixedLayout", isFixedLayout());
 			render(renderer, "vflex", _vflex);
+
+			render(renderer, "checkmark", isCheckmark());
+			render(renderer, "multiple", isMultiple());
 			
 			if (_model != null)
 				render(renderer, "model", true);

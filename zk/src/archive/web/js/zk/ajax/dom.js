@@ -88,9 +88,10 @@ zDom = { //static methods
 		var pos = zDom.cmOffset(n);
 		scrollTo(pos[0], pos[1]);
 	},
-	scrollIntoView: function (id) {
+	scrollIntoView: function (id, parent) {
 		var n = zDom.$(id);
-		for (var p = n, c; (p = p.parentNode) && n != document.body; n = p)
+		parent = parent || document.body;
+		for (var p = n, c; (p = p.parentNode) && n != parent; n = p)
 			c = zDom._scrollIntoView(p, n, c);
 	},
 	_scrollIntoView: function (outer, inner, info) {

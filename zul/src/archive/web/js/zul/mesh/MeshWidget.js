@@ -100,11 +100,14 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		this.$supers('setWidth', arguments);
 		if (this.eheadtbl) this.eheadtbl.style.width = "";
 		if (this.efoottbl) this.efoottbl.style.width = "";
+		if (this.desktop)
+			this.onSize();
 	},
 	setStyle: function (style) {
 		if (this._style != style) {
 			this.$supers('setStyle', arguments);
-			this.onSize();
+			if (this.desktop)
+				this.onSize();
 		}
 	},
 
@@ -168,8 +171,10 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			}
 
 		if (this.ebody) {
-			if (this.ebodytbl.tBodies && this.ebodytbl.tBodies[this.ehead ? 1 : 0])
-				this.ebodyrows = this.ebodytbl.tBodies[this.ehead ? 1 : 0].rows;
+			var bds = this.ebodytbl.tBodies;
+			if (!bds || !bds.length || (this.ehead && bds.length < 2))
+				this.ebodytbl.appendChild(document.createElement("TBODY"));
+			this.ebodyrows = this.ebodytbl.tBodies[this.ehead ? 1 : 0].rows;
 				//Note: bodyrows is null in FF if no rows, so no err msg
 		}
 		if (this.ehead) {
@@ -238,7 +243,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				
 			this._calcSize();// Bug #1813722
 			this.fireOnRender(155);
-			if (zk.ie7) zDom.redoCSS(this.getNode()); // Bug 2096807
 		}
 	},
 	onShow: _zkf,
@@ -250,19 +254,21 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			n.style.height = "";
 			n.style.height = hgh;
 		}
+		
+		var pgHgh = 0
+		if (this.paging) {
+			var pgit = this.getSubnode('pgit'),
+				pgib = this.getSubnode('pgib');
+			if (pgit) pgHgh += pgit.offsetHeight;
+			if (pgib) pgHgh += pgib.offsetHeight;
+		}
 		return n.offsetHeight - 2 - (this.ehead ? this.ehead.offsetHeight : 0)
-			- (this.efoot ? this.efoot.offsetHeight : 0); // Bug #1815882 and Bug #1835369
+			- (this.efoot ? this.efoot.offsetHeight : 0) - pgHgh; // Bug #1815882 and Bug #1835369
 	},
 	/* set the height. */
 	_setHgh: function (hgh) {
 		if (this.isVflex() || (hgh && hgh != "auto" && hgh.indexOf('%') < 0)) {
-			var h =  this._vflexSize(hgh); 
-			if (this.paging) {
-				/** TODO 
-				 * var pgit = $e(this.id + "!pgit"), pgib = $e(this.id + "!pgib");
-				if (pgit) h -= pgit.offsetHeight;
-				if (pgib) h -= pgib.offsetHeight;*/
-			}
+			var h = this._vflexSize(hgh); 
 			if (h < 0) h = 0;
 
 			this.ebody.style.height = h + "px";

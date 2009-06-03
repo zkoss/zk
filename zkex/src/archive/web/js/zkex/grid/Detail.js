@@ -12,10 +12,25 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.def(zkex.grid.Detail = zk.$extends(zul.Widget,{
+zkex.grid.Detail = zk.$extends(zul.Widget,{
 	$init: function () {
 		this.$supers('$init', arguments);
 		this.setWidth("18px");
+	},
+	$define: {
+		open: function () {
+			this.open(this._open, true);
+		},
+		contentStyle: function () {
+			var cave = this.getSubnode('cave');
+			if (cave)
+				cave.cssText = this._contentStyle || '';
+		},
+		contentSclass: function () {
+			var cave = this.getSubnode('cave');
+			if (cave)
+				cave.className = this._contentSclass || '';
+		}
 	},
 	getZclass: function () {
 		return this._zclass != null ? this._zclass : "z-detail";
@@ -87,19 +102,5 @@ zk.def(zkex.grid.Detail = zk.$extends(zul.Widget,{
 			if (!silent)
 				this.fire('onOpen', {open: open});
 		}
-	}
-}),{ // zk.def
-	open: function () {
-		this.open(this._open, true);
-	},
-	contentStyle: function () {
-		var cave = this.getSubnode('cave');
-		if (cave)
-			cave.cssText = this._contentStyle || '';
-	},
-	contentSclass: function () {
-		var cave = this.getSubnode('cave');
-		if (cave)
-			cave.className = this._contentSclass || '';
 	}
 });

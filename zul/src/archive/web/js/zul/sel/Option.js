@@ -17,7 +17,8 @@ zul.sel.Option = zk.$extends(zul.Widget, {
 		disabled: function (disabled) {
 			var n = this.getNode();
 			if (n) n.disabled = disabled ? 'disabled' : '';
-		}
+		},
+		value: null
 	},
 	setSelected: function (selected) {
 		if (this._selected != selected) {

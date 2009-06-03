@@ -178,7 +178,6 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		this._fixWdh();
 		this._fixHgh();
 		this._syncShadow();
-		if (zk.ie) zDom.redoCSS(this.getNode()); //Bug 2685842
 	},
 	onShow: _zkf,
 	onHide: function () {

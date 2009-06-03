@@ -20,7 +20,6 @@ package org.zkoss.zul;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
-import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -112,7 +111,7 @@ public class Listitem extends XulElement implements org.zkoss.zul.api.Listitem {
 	public void setCheckable(boolean checkable) {
 		if (_checkable != checkable) {
 			_checkable = checkable;
-			invalidate();
+			smartUpdate("checkable", checkable);
 		}
 	}
 	
@@ -153,7 +152,7 @@ public class Listitem extends XulElement implements org.zkoss.zul.api.Listitem {
 				if (listbox.inSelectMold())
 					smartUpdate("value", _value);
 				else if (listbox.getName() != null)
-					smartUpdate("z.value", _value);
+					smartUpdate("value", _value);
 		}
 	}
 
@@ -168,10 +167,7 @@ public class Listitem extends XulElement implements org.zkoss.zul.api.Listitem {
 	public void setDisabled(boolean disabled) {
 		if (_disabled != disabled) {
 			_disabled = disabled;
-			if (inSelectMold())
-				smartUpdate("disabled", _disabled);
-			else
-				invalidate();
+			smartUpdate("disabled", _disabled);
 		}
 	}
 	/** Returns whether it is selected.
@@ -264,7 +260,7 @@ public class Listitem extends XulElement implements org.zkoss.zul.api.Listitem {
 					//reason: the client doesn't init (for better performance)
 					//i.e., z.skipsib is specified for unloaded items
 				else
-					smartUpdate("z.loaded", _loaded);
+					smartUpdate("_loaded", _loaded);
 		}
 	}
 	/** Returns whether the content of this item is loaded.
@@ -290,7 +286,7 @@ public class Listitem extends XulElement implements org.zkoss.zul.api.Listitem {
 	}
 	public boolean setVisible(boolean visible) {
 		if (isVisible() != visible) {
-			smartUpdate("z.visible", visible);
+			smartUpdate("visible", visible);
 			final Listbox listbox = (Listbox) getParent();
 			if (listbox != null) {
 				final Listgroup g = listbox.getListgroupAt(getIndex());
@@ -319,6 +315,8 @@ public class Listitem extends XulElement implements org.zkoss.zul.api.Listitem {
 
 		render(renderer, "selected", isSelected());
 		render(renderer, "disabled", isDisabled());
+		if (!isCheckable())
+			renderer.render("checkable", false);
 	}
 	
 	//-- Component --//

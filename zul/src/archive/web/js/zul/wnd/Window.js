@@ -235,7 +235,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			this._updateDomPos();
 			this._syncShadow();
 		}
-		if (zk.ie) zDom.redoCSS(this.getNode()); //Bug 2685842
 	},
 	onShow: _zkf,
 	onFloatUp: function (wgt) {
