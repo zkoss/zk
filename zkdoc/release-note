@@ -27,6 +27,9 @@ ZK 3.6.2
   2796335: Borderlayout+Tabbox+Tree will cause Tab disappear
   2799258: Increasing col's width causes a unnecessary scrollbar (IE)
   2794303: panel cannot contain a caption and a title
+  2796829: Include onCtrlKeys attribute in bandbox XSD
+  2784569: Missing src property for menuitem component in XSD
+  2784298: Missing properties in XSD for panel [2]
 
 * Upgrade Notes
   * The signature of doInit of org.zkoss.zk.ui.util.Initiator is changed.
