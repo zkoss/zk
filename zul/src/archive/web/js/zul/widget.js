@@ -383,7 +383,7 @@ zkPop = {
 		}
 		zkPop._pop.addFloatId(ctx.id, true); //it behaves like Popup (rather than dropdown)
 		zkau.hideCovered();
-		if (zk.ie6Only) {
+		if ((zk.useStackup === undefined ? zk.ie6Only: zk.useStackup)) {
 			if (!ctx._stackup)
 				ctx._stackup = zk.makeStackup(ctx);
 			else {

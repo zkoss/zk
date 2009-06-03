@@ -14,6 +14,7 @@ ZK 3.6.2
   2790441: Enhance GenericAutowireComposer to wire vars before onCreate
   2787711: Hope paging setTotalSize() won't affect inputing active page
   2790669: zk should provide a way to load i18n prop. files by zk.xml
+  2800446: A way to enable or disable the stackup in JS
 
 * Bugs
   2787077: Listbox-Paging was broken with fix for #2782751
@@ -30,6 +31,7 @@ ZK 3.6.2
   2796829: Include onCtrlKeys attribute in bandbox XSD
   2784569: Missing src property for menuitem component in XSD
   2784298: Missing properties in XSD for panel [2]
+  2795318: Context menu stops working on modal windows: Safari
 
 * Upgrade Notes
   * The signature of doInit of org.zkoss.zk.ui.util.Initiator is changed.

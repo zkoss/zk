@@ -356,7 +356,7 @@ zkWnd2.getShadow = function (cmp) {
  */
 zkWnd2.initShadow = function (cmp) {
 	if (!cmp._shadow && getZKAttr(cmp, "shadow") != 'false')
-		cmp._shadow = new zk.Shadow(cmp, {stackup: true, left: -4, right: 4, top: -2, bottom: 3});
+		cmp._shadow = new zk.Shadow(cmp, {stackup: (zk.useStackup === undefined ? zk.ie6Only: zk.useStackup), left: -4, right: 4, top: -2, bottom: 3});
 	return cmp._shadow;
 };
 /**

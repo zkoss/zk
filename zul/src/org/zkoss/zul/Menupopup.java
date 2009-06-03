@@ -49,11 +49,6 @@ public class Menupopup extends Popup implements org.zkoss.zul.api.Menupopup {
 		final StringBuffer sb =
 			new StringBuffer(64).append(super.getOuterAttrs());
 		
-		final String stackup = getDesktop().getWebApp().getConfiguration()
-		.getPreference("org.zkoss.zul.Menupopup.disableStackup", null);
-		if (stackup != null)
-			HTMLs.appendAttribute(sb, "z.stackup", stackup);
-		
 		appendAsapAttr(sb, Events.ON_OPEN);
 		if (typeRequired())
 				sb.append(" z.type=\"zul.menu2.Mpop2\"");

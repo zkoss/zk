@@ -890,7 +890,7 @@ zkDtbox._repos = function (uuid) {
 		zk.position(pp, inp, "after-start");
 
 		if (!pp._shadow)
-			pp._shadow = new zk.Shadow(pp, {left: -4, right: 4, top: 2, bottom: 3, autoShow: true, stackup: true});
+			pp._shadow = new zk.Shadow(pp, {left: -4, right: 4, top: 2, bottom: 3, autoShow: true, stackup: (zk.useStackup === undefined ? zk.ie6Only: zk.useStackup)});
 		else
 			pp._shadow.sync();
 		zkau.hideCovered();
