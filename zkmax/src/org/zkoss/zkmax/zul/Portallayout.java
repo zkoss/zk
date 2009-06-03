@@ -45,6 +45,10 @@ import org.zkoss.zul.impl.XulElement;
  */
 public class Portallayout extends XulElement implements org.zkoss.zkmax.zul.api.Portallayout {
 
+	static {
+		addClientEvent(Portallayout.class, ZkMaxEvents.ON_PORTAL_MOVE, CE_IMPORTANT);
+	}
+	
 	public Portallayout() {
 	}
 	
@@ -97,14 +101,6 @@ public class Portallayout extends XulElement implements org.zkoss.zkmax.zul.api.
 			throw new UiException("Unsupported child for Portallayout: "
 					+ child);
 		super.beforeChildAdded(child, refChild);
-	}
-	public void onChildAdded(Component child) {
-		super.onChildAdded(child);
-		smartUpdate("z.childchg", true);
-	}
-	public void onChildRemoved(Component child) {
-		super.onChildRemoved(child);
-		smartUpdate("z.childchg", true);
 	}
 
 	/** Processes an AU request.

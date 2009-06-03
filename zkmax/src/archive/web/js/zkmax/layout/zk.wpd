@@ -14,4 +14,6 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 <package name="zkmax.layout" language="xul/html">
 	<widget name="Tablelayout" depends="zul.wgt"/>
 	<widget name="Tablechildren" depends="zul.wgt"/>
+	<widget name="Portallayout" depends="zul.wgt"/>
+	<widget name="Portalchildren" depends="zul.wgt"/>
 </package>

@@ -92,21 +92,22 @@ def alert(m):
 	org.zkoss.zul.Messagebox.show(m)
 
 	</zscript>
-
 	<component>
 		<component-name>portallayout</component-name>
 		<component-class>org.zkoss.zkmax.zul.Portallayout</component-class>
+		<widget-class>zkmax.layout.Portallayout</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.PortallayoutDefault</mold-uri><!-- same as menupopup -->
+			<mold-uri>mold/portallayout.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>portalchildren</component-name>
 		<component-class>org.zkoss.zkmax.zul.Portalchildren</component-class>
+		<widget-class>zkmax.layout.Portalchildren</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>class:org.zkoss.zkmax.zul.render.PortalchildrenDefault</mold-uri><!-- same as menupopup -->
+			<mold-uri>mold/portalchildren.js</mold-uri>
 		</mold>
 	</component>
 	<component>

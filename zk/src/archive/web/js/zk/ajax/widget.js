@@ -331,7 +331,10 @@ zk.Widget = zk.$extends(zk.Object, {
 				zk.Widget._fixBindLevel(child, v);
 				zWatch.fire('onBindLevelMove', null, child);
 			}
-		} finally {
+		}catch(e){
+			//will crash... if don't catch 2009/6/3 kindalu
+			//when call insertBefore on portalchildren @ Portallayout.js.
+		}finally {
 			this.desktop = dt; child.desktop = kiddt;
 			this._node = node; child._node = kidnode;
 		}

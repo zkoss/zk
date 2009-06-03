@@ -55,22 +55,6 @@ public class Portalchildren extends XulElement implements org.zkoss.zkmax.zul.ap
 		super.beforeChildAdded(child, refChild);
 	}
 	
-	public void onChildAdded(Component child) {
-		super.onChildAdded(child);
-		final Portallayout layout = (Portallayout)getParent();
-		if (!_noSmartUpdate && layout != null) {
-			layout.smartUpdateDirectly("z.reset", true);
-		}
-	}
-	
-	public void onChildRemoved(Component child) {
-		super.onChildRemoved(child);
-		final Portallayout layout = (Portallayout)getParent();
-		if (!_noSmartUpdate && layout != null) {
-			layout.smartUpdateDirectly("z.reset", true);
-		}
-	}
-
 	/** Sets whether to disable the smart update.
 	 * <p>Used only for component development.
 	 * @since 5.0.0

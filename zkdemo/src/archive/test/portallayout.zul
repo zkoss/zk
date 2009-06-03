@@ -1,0 +1,36 @@
+<portallayout>
+	<portalchildren style="padding: 5px" width="30%">
+		<panel height="150px" title="Google Tools" border="normal" collapsible="true" closable="true" maximizable="true" style="margin-bottom:10px">
+			<panelchildren>
+				
+			</panelchildren>
+		</panel>
+		<panel height="300px" title="LabPixies Clock" border="normal" collapsible="true" closable="true" maximizable="true" style="margin-bottom:10px">
+			<panelchildren>
+				
+			</panelchildren>
+		</panel>
+	</portalchildren>
+	
+	<portalchildren style="padding: 5px" width="30%">
+		<panel height="300px" title="ToDo" border="normal" collapsible="true" closable="true" maximizable="true" style="margin-bottom:10px">
+			<panelchildren>
+				
+			</panelchildren>
+		</panel>
+		<panel height="100px" title="Wikipedia" border="normal" collapsible="true" closable="true" maximizable="true" style="margin-bottom:10px">
+			<panelchildren>
+				
+			</panelchildren>
+		</panel>
+	</portalchildren>
+	
+	<portalchildren style="padding: 5px" width="40%">
+		<panel height="400px" title="Trio" border="normal" collapsible="true" closable="true" maximizable="true" style="margin-bottom:10px">
+			<panelchildren>
+				
+			</panelchildren>
+		</panel>
+	</portalchildren>
+</portallayout>
+			
