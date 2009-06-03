@@ -26,6 +26,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <tr valign="middle">
 	<td align="left" class="${zcls}-l">${self.imgTag}<c:out value="${self.compoundLabel}" nbsp="true"/></td><%-- bug 1688261: nbsp is required --%>
 	<td align="right" class="${zcls}-r" id="${self.uuid}!cave"><c:forEach var="child" items="${self.children}">${z:redraw(child, null)}</c:forEach></td>
+<c:if test="${self.collapsibleVisible}">
+	<td width="16"><div id="${puuid}!exp" class="${pzcls}-icon ${pzcls}-exp"></div></td>
+</c:if>
 <c:if test="${self.minimizableVisible}">
 	<td width="16"><div id="${puuid}!minimize" class="${pzcls}-icon ${pzcls}-min"></div></td>
 </c:if>

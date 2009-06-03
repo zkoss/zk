@@ -40,6 +40,7 @@ import org.zkoss.zk.ui.ext.render.Floating;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.MinimizeEvent;
 
+import org.zkoss.zul.ext.Framable;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -79,7 +80,7 @@ import org.zkoss.zul.impl.XulElement;
  *
  * @author tomyeh
  */
-public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Window {
+public class Window extends XulElement implements Framable, IdSpace, org.zkoss.zul.api.Window {
 	private static final Log log = Log.lookup(Window.class);
 	private static String _onshow = null;
 	private transient Caption _caption;
@@ -986,6 +987,14 @@ public class Window extends XulElement implements IdSpace, org.zkoss.zul.api.Win
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Unimplemented, just exists to fulfill {@link Framable}
+	 * @since 3.6.2
+	 */
+	public boolean isCollapsible() {
+		return false;
 	}
 
 }

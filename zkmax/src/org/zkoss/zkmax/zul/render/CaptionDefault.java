@@ -66,6 +66,13 @@ public class CaptionDefault implements ComponentRenderer {
 			wh.write("<td align=\"right\" class=\"").write(zcls).write("-r\" id=\"").write(uuid).write("!cave\">")
 				.writeChildren(self)
 				.writeln("</td>");
+			if (self.isCollapsibleVisible()) {
+				wh.write("<td width=\"16\"><div id=\"")
+					.write(puuid)
+					.write("!exp\" class=\"")
+					.write(pzcls).write("-icon ").write(pzcls)
+					.write("-exp\"></div></td>");
+			}
 			if (self.isMinimizableVisible()) {
 				wh.write("<td width=\"16\"><div id=\"")
 					.write(puuid)

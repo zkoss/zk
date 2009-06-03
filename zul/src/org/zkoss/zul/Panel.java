@@ -32,6 +32,7 @@ import org.zkoss.zk.ui.ext.client.Openable;
 import org.zkoss.zk.ui.ext.client.Updatable;
 import org.zkoss.zk.ui.ext.render.Floating;
 import org.zkoss.zk.ui.ext.render.MultiBranch;
+import org.zkoss.zul.ext.Framable;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -59,7 +60,7 @@ import org.zkoss.zul.impl.XulElement;
  * @author jumperchen
  * @since 3.5.0
  */
-public class Panel extends XulElement implements org.zkoss.zul.api.Panel {
+public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Panel {
 	/** disable smartUpdate; usually caused by the client. */
 	private boolean _noSmartUpdate;
 	private transient Component _noSmartParent;

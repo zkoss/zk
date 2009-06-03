@@ -26,6 +26,7 @@ ZK 3.6.2
   2794205: IE6 the errorbox moves away
   2796335: Borderlayout+Tabbox+Tree will cause Tab disappear
   2799258: Increasing col's width causes a unnecessary scrollbar (IE)
+  2794303: panel cannot contain a caption and a title
 
 * Upgrade Notes
   * The signature of doInit of org.zkoss.zk.ui.util.Initiator is changed.

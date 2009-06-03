@@ -21,6 +21,7 @@ package org.zkoss.zul;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 
+import org.zkoss.zul.ext.Framable;
 import org.zkoss.zul.impl.LabelImageElement;
 
 /**
@@ -71,17 +72,28 @@ public class Caption extends LabelImageElement implements org.zkoss.zul.api.Capt
 		return (p instanceof Groupbox) && ((Groupbox)p).isLegend();
 	}
 	/** Returns whether to display the closable button.
-	 * <p>Default: it returns true if the parent is window and {@link Window#isClosable}
+	 * <p>Default: it returns true if the parent is framable and {@link Framable#isClosable}
 	 * is true.
 	 *
 	 * <p>It is mainly used for component implementation.
 	 */
 	public boolean isClosableVisible() {
 		final Component p = getParent();
-		return (p instanceof Window) && ((Window)p).isClosable();
+		return (p instanceof Framable) && ((Framable)p).isClosable();
+	}
+	/** Returns whether to display the toggle button.
+	 * <p>Default: it returns true if the parent is framable and {@link Framable#isClosable}
+	 * is true.
+	 *
+	 * <p>It is mainly used for component implementation.
+	 * @since 3.6.2
+	 */
+	public boolean isCollapsibleVisible() {
+		final Component p = getParent();
+		return (p instanceof Framable) && ((Framable)p).isCollapsible();
 	}
 	/** Returns whether to display the maximizable button.
-	 * <p>Default: it returns true if the parent is window and {@link Window#isMaximizable}
+	 * <p>Default: it returns true if the parent is framable and {@link Framable#isMaximizable}
 	 * is true.
 	 *
 	 * <p>It is mainly used for component implementation.
@@ -89,10 +101,10 @@ public class Caption extends LabelImageElement implements org.zkoss.zul.api.Capt
 	 */
 	public boolean isMaximizableVisible() {
 		final Component p = getParent();
-		return (p instanceof Window) && ((Window)p).isMaximizable();
+		return (p instanceof Framable) && ((Framable)p).isMaximizable();
 	}
 	/** Returns whether to display the minimizable button.
-	 * <p>Default: it returns true if the parent is window and {@link Window#isMinimizable}
+	 * <p>Default: it returns true if the parent is framable and {@link Framable#isMinimizable}
 	 * is true.
 	 *
 	 * <p>It is mainly used for component implementation.
@@ -100,7 +112,7 @@ public class Caption extends LabelImageElement implements org.zkoss.zul.api.Capt
 	 */
 	public boolean isMinimizableVisible() {
 		final Component p = getParent();
-		return (p instanceof Window) && ((Window)p).isMinimizable();
+		return (p instanceof Framable) && ((Framable)p).isMinimizable();
 	}
 	// super
 	public String getZclass() {
