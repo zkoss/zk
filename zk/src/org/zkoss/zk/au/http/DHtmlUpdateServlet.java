@@ -465,6 +465,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			return;
 		}
 
+		sess.setAttribute("_z_gae_fix", new Integer(0)); //enforce GAE to write session
 		((SessionCtrl)sess).notifyClientRequest(keepAlive);
 
 //		if (log.debugable()) log.debug("AU request: "+aureqs);

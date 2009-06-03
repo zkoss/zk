@@ -201,6 +201,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 		final RequestInfo ri = new RequestInfoImpl(
 			wapp, sess, desktop, request,
 			PageDefinitions.getLocator(wapp, path));
+		sess.setAttribute("_z_gae_fix", new Integer(0));
 		((SessionCtrl)sess).notifyClientRequest(true);
 
 		final boolean compress = _compress && !Servlets.isIncluded(request);

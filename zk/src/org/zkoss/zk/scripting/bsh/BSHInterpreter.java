@@ -475,7 +475,7 @@ implements SerializableAware, HierachicalAware {
 					Fields.setAccessible(f, true);
 					final Object old = f.get(mtds[j]);
 					try {
-						f.set(mtds[j], null);				
+						f.set(mtds[j], null);
 						s.writeObject(mtds[j]);
 					} finally {
 						f.set(mtds[j], old);
