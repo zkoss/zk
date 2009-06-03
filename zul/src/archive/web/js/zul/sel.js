@@ -774,14 +774,15 @@ zk.Selectable.prototype = {
 		}
 
 		var tblwd = this.body.clientWidth;
-		if (zk.ie) //By experimental: see zk-blog.txt
-			if (this.headtbl && this.headtbl.offsetWidth != this.bodytbl.offsetWidth)
+		if (zk.ie) {//By experimental: see zk-blog.txt
+			if (this.headtbl && this.headtbl.offsetWidth != this.bodytbl.offsetWidth) 
 				this.bodytbl.style.width = ""; //reset
 			if (tblwd && this.body.offsetWidth == this.bodytbl.offsetWidth && this.body.offsetWidth - tblwd > 11) {
-				if (--tblwd < 0) tblwd = 0;
+				if (--tblwd < 0) 
+					tblwd = 0;
 				this.bodytbl.style.width = tblwd + "px";
 			}
-
+		}
 		if (this.headtbl) {
 			if (tblwd) this.head.style.width = tblwd + 'px';
 			if (getZKAttr(this.element, "fixed") != "true")
