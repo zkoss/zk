@@ -44,6 +44,7 @@ ZK 3.6.2
   2800879: Rowcomparator NOT Serializable
   2784736: On demand Menupopup items on IE looks transparent
   2787785: Wrong Slovenian locale (Singhalese -> Slovenian)
+  2788618: datebox with constraint="no future"
 
 * Upgrade Notes
   * The signature of doInit of org.zkoss.zk.ui.util.Initiator is changed.

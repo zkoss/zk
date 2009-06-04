@@ -276,7 +276,13 @@ zk.Cal.prototype = {
 		}
 	},
 	_invalid: function (d) {
-		return zkDtbox._invalid(d, this.begin, this.end);
+		// clean the date time. Bug #2788618
+		var d2 = new Date(d.getTime());
+		
+		d2.setHours(0);
+		d2.setMinutes(0);
+		d2.setMilliseconds(0);
+		return zkDtbox._invalid(d2, this.begin, this.end);
 	},
 	_outcell: function (cell, sel, disd) {
 		if (sel) this.curcell = cell;
@@ -666,7 +672,14 @@ zkDtbox.validate = function (cmp) {
 		if (bd || ed) {
 			if (bd) bd = new Date($int(bd) * 1000);
 			if (ed) ed = new Date($int(ed) * 1000);
-			if (zkDtbox._invalid(d, bd, ed)) {
+			
+			// clean the date time. Bug #2788618
+			var d2 = new Date(d.getTime());
+			
+			d2.setHours(0);
+			d2.setMinutes(0);
+			d2.setMilliseconds(0);
+			if (zkDtbox._invalid(d2, bd, ed)) {
 				var s = msgzul.OUT_OF_RANGE + " (";
 				if (bd) bd = zk.formatDate(bd, fmt);
 				if (ed) ed = zk.formatDate(ed, fmt);
