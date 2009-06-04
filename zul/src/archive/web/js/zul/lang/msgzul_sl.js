@@ -1,4 +1,4 @@
-/* mesgzul_si.js "charset=utf-8"
+/* mesgzul_sl.js "charset=utf-8"
 
 {{IS_NOTE
 	Purpose:
