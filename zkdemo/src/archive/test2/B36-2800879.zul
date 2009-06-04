@@ -1,23 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-grid.zul
+B36-2800879.zul
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
-		Mon Oct 13 12:22:27     2008, Created by jumperchen
-}}IS_NOTE
+		Thu Jun  4 14:04:26     2009, Created by jumperchen
 
-Copyright (C) 2008 Potix Corporation. All Rights Reserved.
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
-{{IS_RIGHT
-}}IS_RIGHT
 -->
 <window title="Test of Grid's Serialization">
+	Please press on the "Clone" and the "Clone by Serialization" button, and then they should not appear any error.
 <vbox id="vb">
 	<grid id="grid">
 		<columns sizable="true" menupopup="auto">
@@ -69,3 +66,4 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	</button>
 </vbox>
 </window>
+

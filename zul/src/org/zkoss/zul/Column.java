@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Iterator;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 
 import org.zkoss.lang.Objects;
@@ -37,7 +36,6 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Namespaces;
 
 import org.zkoss.zul.impl.HeaderElement;
@@ -59,7 +57,7 @@ import org.zkoss.zul.mesg.MZul;
  */
 public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 	private String _sortDir = "natural";
-	private Comparator _sortAsc, _sortDsc;
+	private transient Comparator _sortAsc, _sortDsc;
 	private Object _value;
 
 	public Column() {
@@ -542,5 +540,82 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 		if (parent != null && !(parent instanceof Columns))
 			throw new UiException("Unsupported parent for column: "+parent);
 		super.beforeParentChanged(parent);
+	}
+	
+
+	//Cloneable//
+	public Object clone() {
+		final Column clone = (Column)super.clone();
+		clone.fixClone();
+		return clone;
+	}
+	private void fixClone() {
+		if (_sortAsc instanceof RowComparator) {
+			final RowComparator c = (RowComparator)_sortAsc;
+			if (c.getColumn() == this && c.isAscending())
+				_sortAsc =
+					new RowComparator(this, true, c.shallIgnoreCase(), false);
+		}
+		if (_sortDsc instanceof RowComparator) {
+			final RowComparator c = (RowComparator)_sortDsc;
+			if (c.getColumn() == this && !c.isAscending())
+				_sortDsc =
+					new RowComparator(this, false, c.shallIgnoreCase(), false);
+		}
+	}
+
+	//Serializable//
+	//NOTE: they must be declared as private
+	private synchronized void writeObject(java.io.ObjectOutputStream s)
+	throws java.io.IOException {
+		s.defaultWriteObject();
+
+		boolean written = false;
+		if (_sortAsc instanceof RowComparator) {
+			final RowComparator c = (RowComparator)_sortAsc;
+			if (c.getColumn() == this && c.isAscending()) {
+				s.writeBoolean(true);
+				s.writeBoolean(c.shallIgnoreCase());
+				written = true;
+			}
+		}
+		if (!written) {
+			s.writeBoolean(false);
+			s.writeObject(_sortAsc);
+		}
+
+		written = false;
+		if (_sortDsc instanceof RowComparator) {
+			final RowComparator c = (RowComparator)_sortDsc;
+			if (c.getColumn() == this && !c.isAscending()) {
+				s.writeBoolean(true);
+				s.writeBoolean(c.shallIgnoreCase());
+				written = true;
+			}
+		}
+		if (!written) {
+			s.writeBoolean(false);
+			s.writeObject(_sortDsc);
+		}
+	}
+	private synchronized void readObject(java.io.ObjectInputStream s)
+	throws java.io.IOException, ClassNotFoundException {
+		s.defaultReadObject();
+
+		boolean b = s.readBoolean();
+		if (b) {
+			final boolean igcs = s.readBoolean();
+			_sortAsc = new RowComparator(this, true, igcs, false);
+		} else {
+			_sortAsc = (RowComparator)s.readObject();
+		}
+
+		b = s.readBoolean();
+		if (b) {
+			final boolean igcs = s.readBoolean();
+			_sortDsc = new RowComparator(this, false, igcs, false);
+		} else {
+			_sortDsc = (RowComparator)s.readObject();
+		}
 	}
 }
