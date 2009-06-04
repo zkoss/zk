@@ -2021,12 +2021,12 @@ zk.parseDate = function (txt, fmt, strict) {
 		hr = val.getHours(),
 		min = val.getMinutes();
 
-	var	ts = [], mindex = fmt.indexOf("MMM"), ary = [];
+	var	ts = [], mindex = fmt.indexOf("MMM"), aindex = fmt.indexOf("a"), ary = [];
 	for (var i = 0, j = txt.length; i < j; i++) {
 		var c = txt.charAt(i);
 		if (c.match(/\d/)) {
 			ary.push(c);
-		} else if (mindex > -1 && mindex <= i) {
+		} else if ((mindex > -1 && mindex <= i) || (aindex > -1 && aindex <= i)) {
 			if (c.match(/\w/)) {
 				ary.push(c);
 			} else {
@@ -2142,6 +2142,12 @@ zk.parseDate = function (txt, fmt, strict) {
 				min = $int(token);
 				if (isNaN(min)) return null; //failed
 				break;
+			case 'a':
+				var apm = txt.substring(j);
+				if(apm.startsWith(zk.APM[1])){
+					hr+=12;
+				}
+				break
 			//default: ignored
 			}
 			j = k - 1;

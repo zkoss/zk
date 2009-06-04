@@ -299,6 +299,7 @@ zk.Cal.prototype = {
 			d = zk.getIntAttr(cell, "zk_day"),
 			hr = this.date.getHours(),
 			min = this.date.getMinutes();
+		
 		if (!zkCal._seled(cell)) { //!selected
 			var monofs = zk.getIntAttr(cell, "zk_monofs"),
 				now = new Date(y, m + monofs, d, hr, min);
@@ -319,6 +320,7 @@ zk.Cal.prototype = {
 				}
 			}
 		}
+		
 		this._onupdate({close: true});
 	},
 	_onmonclk: function (cell) {

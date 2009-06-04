@@ -725,6 +725,8 @@ zkDbbox = {};
 zkInpEl = {};
 zkInpEl.baseChars = "+0123456789" + zk.MINUS + zk.PERCENT + zk.GROUPING;
 zkInpEl.ignoreKeys = function (evt, keys) {
+	if(evt.altKey || evt.ctrlKey)
+		return;
 	var k = Event.keyCode(evt);
 	if(!zk.ie && k < 47) return;
 	var c = Event.charCode(evt);

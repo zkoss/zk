@@ -26,7 +26,10 @@ ZK 3.6.2
   2791499: SerializableUiFactory causes NPE when Web app stops (Tomcat)
   2792105: Highlight effect not revert if dragging listitem to non-droppable area
   2794205: IE6 the errorbox moves away
+  2794714: Bug: GRAVE: NoSuchElementException in Paging
+  2796144: Datebox with format="MM/dd/yyyy hh:mm a" loses am/pm
   2796335: Borderlayout+Tabbox+Tree will cause Tab disappear
+  2797773: Copy / Paste on NumberInputElement not working
   2799258: Increasing col's width causes a unnecessary scrollbar (IE)
   2800851: BSHInterpreter doesn't serialize variables defined in Window
   2794303: panel cannot contain a caption and a title
