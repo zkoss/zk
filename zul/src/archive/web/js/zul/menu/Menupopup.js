@@ -88,7 +88,7 @@ zul.menu.Menupopup = zk.$extends('zul.wgt.Popup', {
 					else position = 'end_before';
 			}
 		}
-		this.$super('open', ref, offset, position, opts);
+		this.$super('open', ref, offset, position, opts || {sendOnOpen: true, disableMask: true});
 		var sdw = this._shadow,
 			n = this.getNode(),
 			st = n.style;
@@ -144,7 +144,10 @@ zul.menu.Menupopup = zk.$extends('zul.wgt.Popup', {
 			var pp = this.getNode();
 			if (!pp.style.width) {// Bug 2105158 and Bug 1911129
 				var ul = this.getSubnode('cave');
-				pp.style.width = ul.offsetWidth + zDom.padBorderWidth(pp) + "px";
+				if (ul.childNodes.length)
+					pp.style.width = ul.offsetWidth + zDom.padBorderWidth(pp) + "px";
+				else
+					zWatch.listen('onResponse', this);
 			}
 		}
 		this._syncShadow();
@@ -171,6 +174,16 @@ zul.menu.Menupopup = zk.$extends('zul.wgt.Popup', {
 		this._shadow = null;
 		zWatch.unlisten('onHide', this);
 		this.$supers('unbind_', arguments);
+	},
+	onResponse: function () {
+		var pp = this.getNode();
+		if (!pp.style.width) {// Bug 2105158 and Bug 1911129
+			var ul = this.getSubnode('cave');
+			if (ul.childNodes.length) { // Bug 2784736
+				pp.style.width = ul.offsetWidth + zDom.padBorderWidth(pp) + "px";
+				zWatch.unlisten('onResponse', this);
+			}
+		}
 	},
 	doKeyDown_: function (evt) {
 		var w = this._currentChild(),
