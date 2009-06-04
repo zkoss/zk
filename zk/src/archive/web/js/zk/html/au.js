@@ -1275,7 +1275,7 @@ zkau._onDocMousedown = function (evt) {
 	zkau.closeFloatsOnFocus(el);
 	zkau.autoZIndex(el);
 	
-	// bug #2799334, we have to enforce to trigger a focus event. IE only
+	// bug #2799334 and #2635555, we have to enforce to trigger a focus event. IE only
 	if (zk.ie)
 		try {
 			zkau.currentFocus.focus();

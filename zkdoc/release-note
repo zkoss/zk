@@ -35,6 +35,7 @@ ZK 3.6.2
   2796461: The height of datebox's popup should count on its content
   2787876: a bug of textbox with constrain
   2799334: focus doesn't get back from popup
+  2635555: Textbox lost cursor after cancel fileupload in IE
 
 * Upgrade Notes
   * The signature of doInit of org.zkoss.zk.ui.util.Initiator is changed.
