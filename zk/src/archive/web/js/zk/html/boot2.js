@@ -1,4 +1,4 @@
-/* boot.js
+/* boot2.js
 
 {{IS_NOTE
 	Purpose:
@@ -77,10 +77,6 @@ zk._progress = function () {
 };
 
 //-- utilities --//
-zk.https = function () {
-	var p = location.protocol;
-	return p && "https:" == p.toLowerCase();
-};
 /** Returns the x coordination of the visible part. */
 zk.innerX = function () {
 	return window.pageXOffset

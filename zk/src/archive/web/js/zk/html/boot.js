@@ -1493,7 +1493,11 @@ zk.loadJS = function (uri, fn, dtid) {
 	e.src = uri;
 	document.getElementsByTagName("HEAD")[0].appendChild(e);
 };
-
+//-- utilities --//
+zk.https = function () {
+	var p = location.protocol;
+	return p && "https:" == p.toLowerCase();
+};
 //-- bootstrapping --//
 zk.loading = 0;
 zk._modules = {}; //Map(String nm, boolean loaded)
