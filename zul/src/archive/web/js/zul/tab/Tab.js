@@ -89,23 +89,13 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 				var pl = panel.getNode();
 				zDom[toSel ? "show" : "hide"](pl);
 			}
-
 		if (!accd) {
 			var tabs = this.parent;
 			   if (tabs) tabs._fixWidth();
 		}
-
 		if (notify) {
 			this.fire('onSelect', {items: [this.uuid], reference: this.uuid});
-		}
-		/* //oriional
-		 * if (notify)
-			zkau.sendasap({
-				uuid: tab.id,
-				cmd: "onSelect",
-				data: [tab.id]
-			});
-		*/
+		}		
 	},
 	/**
 	 * Get selected tab
@@ -133,16 +123,14 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	_getSelTabFromTop: function() {
 		var tabbox = this.getTabbox(),
 			t = tabbox.getSelectedTab();
-			return t;
+		return t;
 	},
 	//protected
 	doClick_: function(evt) {
 		if (!evt) evt = window.event;
 		if (this._disabled)
 			return;
-		//@TODO
-		zk.log("test");
-			this._selTab(true);
+		this._selTab(true);
 	},
 	domClass_: function (no) {
 		var scls = this.$supers('domClass_', arguments);
