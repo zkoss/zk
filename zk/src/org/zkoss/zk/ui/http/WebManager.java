@@ -45,6 +45,7 @@ import org.zkoss.web.util.resource.ServletLabelResovler;
 import org.zkoss.web.util.resource.ClassWebResource;
 
 import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.WebApps;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
@@ -109,7 +110,8 @@ public class WebManager {
 		if (getWebManagerIfAny(ctx) != null)
 			throw new UiException("Only one Web manager is allowed in one context: "+ctx);
 
-		log.info("Starting ZK "+org.zkoss.zk.Version.RELEASE+" (build: "+
+		log.info("Starting ZK "+org.zkoss.zk.Version.RELEASE+' '
+			+WebApps.getEdition()+" (build: "+
 			org.zkoss.zk.ui.impl.AbstractWebApp.loadBuild() + ')');
 
 		_ctx = ctx;
