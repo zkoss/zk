@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2796461.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Thu Jun  4 10:01:01     2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+<style>
+.z-calendar-calmon td, .z-calendar-calday td, .z-calendar-calday td a, .z-calendar-calday td a:visited, .z-datebox-calmon td, .z-datebox-calday td, .z-datebox-calday td a, .z-datebox-calday td a:visited {
+   font-size: 20px;
+}
+</style>
+Please press the icon on the right of the box, and then the popup should not appear with a scroll bar.
+<datebox/>
+</zk>

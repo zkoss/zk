@@ -857,7 +857,7 @@ zkDtbox.open = function (pp) {
 
 	//fix size
 	if (pp.offsetHeight > 200) {
-		pp.style.height = "200px";
+		//pp.style.height = "200px"; commented by the bug #2796461
 		pp.style.width = "auto"; //recalc
 	} else if (pp.offsetHeight < 10) {
 		pp.style.height = "10px"; //minimal
