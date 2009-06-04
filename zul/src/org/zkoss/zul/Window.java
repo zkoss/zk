@@ -990,11 +990,10 @@ public class Window extends XulElement implements Framable, IdSpace, org.zkoss.z
 	}
 	
 	/**
-	 * Unimplemented, just exists to fulfill {@link Framable}
+	 * Always return false.
 	 * @since 3.6.2
 	 */
 	public boolean isCollapsible() {
 		return false;
 	}
-
 }
