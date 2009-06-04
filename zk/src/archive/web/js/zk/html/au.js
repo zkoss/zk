@@ -1274,6 +1274,12 @@ zkau._onDocMousedown = function (evt) {
 	zkau.currentFocus = el;
 	zkau.closeFloatsOnFocus(el);
 	zkau.autoZIndex(el);
+	
+	// bug #2799334, we have to enforce to trigger a focus event. IE only
+	if (zk.ie)
+		try {
+			zkau.currentFocus.focus();
+		} catch (e) {}
 };
 /** Handles the left click. */
 zkau._onDocLClick = function (evt) {
