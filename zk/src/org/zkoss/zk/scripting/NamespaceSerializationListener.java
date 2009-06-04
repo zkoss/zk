@@ -29,11 +29,9 @@ package org.zkoss.zk.scripting;
  */
 public interface NamespaceSerializationListener {
 	/** Called when a namespace is going to serialize this object.
-	 * @param comp the namespace's owner
 	 */
 	public void willSerialize(Namespace ns);
 	/** Called when a namespace has de-serialized this object back.
-	 * @param comp the namespace's owner
 	 */
 	public void didDeserialize(Namespace ns);
 }
