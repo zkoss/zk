@@ -1,0 +1,4 @@
+<zk>
+now support copy paste by ctrl key in intbox
+<intbox value="1234567"/>
+</zk>
