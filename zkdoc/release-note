@@ -37,6 +37,7 @@ ZK 3.6.2
   2799334: focus doesn't get back from popup
   2635555: Textbox lost cursor after cancel fileupload in IE
   2800879: Rowcomparator NOT Serializable
+  2784736: On demand Menupopup items on IE looks transparent
 
 * Upgrade Notes
   * The signature of doInit of org.zkoss.zk.ui.util.Initiator is changed.

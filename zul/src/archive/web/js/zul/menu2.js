@@ -313,7 +313,8 @@ zkMenu2 = { // menu
 
 		if (zk.ie7 && !pp.style.width) { // Bug 2105158 and Bug 1911129
 			var ul = $e(pp.id + "!cave");
-			pp.style.width = ul.offsetWidth + zk.getPadBorderWidth(pp) + "px";
+			if (ul.childNodes.length)
+				pp.style.width = ul.offsetWidth + zk.getPadBorderWidth(pp) + "px";
 		}
 
 		if (!pp._shadow)
@@ -437,6 +438,15 @@ zkMenusp2 = { //menuseparator
 };
 
 zkMpop2 = { //menupopup
+	setAttr: zk.ie7 ? function (cmp, nm, val) {
+		if (nm == "z.closemask") { // Bug 2784736
+			if (!cmp.style.width) { // Bug 2105158 and Bug 1911129
+				var ul = $e(cmp.id + "!cave");
+				if (ul.childNodes.length)
+					cmp.style.width = ul.offsetWidth + zk.getPadBorderWidth(cmp) + "px";
+			}
+		}
+	}: zk.voidf,
 	position: function (el, dim, where) {
 		where = where || "overlap";
 		var x = dim.left, y = dim.top,
