@@ -26,7 +26,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		disabled: _zkf,
 		selected: function(selected) {
 			if (this.getNode())
-				this._selTab(this, false);
+				this._selTab(false);
 		}
 	},
 	getTabbox: function() {
@@ -52,29 +52,15 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 			evt.stop();
 		}
 	},
-	_sliding: function(tab) {
+	_selTab: function(notify, init) {
 		var tabbox = this.getTabbox(),
-			panel = this.getLinkedPanel();
-		if (!panel || !tabbox || !tabbox.inAccordionMold())
-			return false;
-
-		/*for (var node = panel; node = node.nextSibling;)
-			if (getZKAttr($real(node), "animating"))
-				return true;
-
-		for (var node = panel; node = node.previousSibling;)
-			if (getZKAttr($real(node), "animating"))
-				return true;*/
-		return false;
-	},
-	_selTab: function(tab, notify) {
-		var tabbox = this.getTabbox(),
+			tab = this,
 			tbx = tabbox.getNode();
 		var tabs = this.parent,
 			tb =  tab.getNode(),
 			old = this._getSelTab(tab);
 		if (!tb) return;
-		if (old != tb || !notify) {
+		if (old != tb || init) {
 			if (tabbox.isVertical())
 				tabs._scrollcheck("vsel",tb);
 			else if (!tabbox.inAccordionMold())
@@ -89,6 +75,8 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 			tab = zk.Widget.$(tb);
 		if (tab._selected == toSel && notify) //notify if init tab is selected
 			return;
+		if (toSel)
+			tabbox.setSelectedTab(tab);
 		tab._selected = toSel;
 		zDom[toSel ? "addClass" : "rmClass"](tb, this.getZclass() + "-seld" );
 		var accd = tabbox.inAccordionMold(),
@@ -96,7 +84,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		if (panel)
 			if (accd && animation) {
 				var p = panel.getSubnode("real");
-				zAnima[toSel ? "slideDown" : "slideUp"](p);
+				zAnima[toSel ? "slideDown" : "slideUp"](this,p);
 			} else {
 				var pl = panel.getNode();
 				zDom[toSel ? "show" : "hide"](pl);
@@ -127,7 +115,8 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		var tabbox = this.getTabbox();
 		if (!tab) return null;
 		if (tabbox.inAccordionMold()) {
-			//@TODO Accordion
+			var t = this._getSelTabFromTop()
+			return t.getNode();
 		} else {
 			var node = tab;//Notice : not DOM node
 			for (node = tab; node = node.nextSibling;)
@@ -141,14 +130,19 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		}
 		return null;
 	},
+	_getSelTabFromTop: function() {
+		var tabbox = this.getTabbox(),
+			t = tabbox.getSelectedTab();
+			return t;
+	},
 	//protected
 	doClick_: function(evt) {
 		if (!evt) evt = window.event;
 		if (this._disabled)
 			return;
 		//@TODO
-//		if (!this._sliding(tab)) //Bug 1571408
-			this._selTab(this, true);
+		zk.log("test");
+			this._selTab(true);
 	},
 	domClass_: function (no) {
 		var scls = this.$supers('domClass_', arguments);
@@ -178,8 +172,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		var tabs = this.parent;
 		after.push(function () {
 			if (selected)
-				tab._selTab(tab, false);
-
+				tab._selTab(false, true);
 			if (tabs._init)
 				tabs._scrollcheck("init");
 
@@ -193,6 +186,21 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	},
 	//event handler//
 	onClose: function () {
-		zk.log(this._selected);
+		var tabbox = this.getTabbox();
+		if (tabbox.inAccordionMold()) {
+
+		} else {
+			var tab = this;
+			for (tab = this; tab = tab.nextSibling;)
+				if (!tab.isDisabled()) {
+					tab._selTab(true);
+					return null;
+				}
+			for (tab = this; tab = tab.previousSibling;)
+				if (!tab.isDisabled()) {
+					tab._selTab(true);
+					return null;
+				}
+		}
 	}
 });

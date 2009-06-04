@@ -81,7 +81,6 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		var tbsdiv = this.getNode(),
 			tabbox = this.getTabbox(),
 			tbx = tabbox.getNode();
-
 		if (!tabbox.isRealVisible() || !tabbox.isTabScroll()) return;
 		if (!tbsdiv) return;	// tabbox is delete , no need to check scroll
 		if (tabbox.isVertical()) {//vertical
@@ -180,7 +179,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 					tabbox._scrolling = true;
 					this._showbutton(true);
 					var cave = zDom.$(this.uuid, "cave"),
-						temp = tabbox.offsetWidth - this._getArrowSize();
+						temp = tabbox.offsetWidth - this._getArrowSize();//coz show button then getsize again
 					cave.style.width = "5555px";
 					header.style.width = temp > 0 ? temp + "px" : "";
 					if (way == "sel") {
@@ -189,8 +188,6 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 						} else if (cmpOffsetLeft + cmpOffsetWidth > headerScrollLeft + headerOffsetWidth) {
 							this._doScroll("right", cmpOffsetLeft + cmpOffsetWidth - headerScrollLeft - headerOffsetWidth);
 						}
-						/*var d = childWidth - header.offsetWidth - header.scrollLeft + 2;
-						if (d >= 0) this._doScroll("right", d);*/
 					}
 				}
 			}

@@ -94,19 +94,6 @@ public class Tab extends LabelImageElement implements org.zkoss.zul.api.Tab {
 	 * Default: detach itself and the corresponding {@link Tabpanel}.
 	 */
 	public void onClose() {
-		if (_selected) {
-			final Tabs tabs = (Tabs) getParent();
-			if (tabs != null) {
-				Tab t = null;
-				t = this.getPreviousSibling() != null ? 
-						(Tab)this.getPreviousSibling() :
-							this.getNextSibling() != null ? 
-								(Tab)this.getNextSibling():
-									null;
-				if (t != null ) t.setSelected(true);
-			}
-		}
-
 		final Tabpanel panel = getLinkedPanel();
 		if (panel != null)
 			panel.detach();
