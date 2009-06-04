@@ -498,12 +498,13 @@ zkTxbox.init = function (cmp, onfocus, onblur) {
 
 	//Bug 1486556: we have to enforce zkTxbox to send value back for validating
 	//at the server
-	var sa = getZKAttr($outer(cmp), "srvald");
+	/** commented by the bug #2787876
+	 * var sa = getZKAttr($outer(cmp), "srvald");
 	if (sa && sa != "fmt") {
 		var old = cmp.value;
 		cmp.defaultValue = old + "-";
 		if (old != cmp.value) cmp.value = old; //Bug 1490079
-	}
+	}*/
 	var outer = $outer(cmp),
 		zcls = getZKAttr(outer, "zcls");
 	if (cmp.readOnly) {
@@ -606,8 +607,11 @@ zkTxbox._noonblur = function (inp) {
  * It checks whether the content is really changed and sends event if so.
  */
 zkTxbox.onupdate = function (inp) {
-	var newval = inp.value;
-	if (newval != inp.defaultValue) { //changed
+	var newval = inp.value,
+		sa = getZKAttr($outer(inp), "srvald");
+	
+	// bug #2787876 and  #1486556
+	if ((sa && sa != "fmt") || newval != inp.defaultValue) { //changed
 		inp.defaultValue = newval;
 		var uuid = $uuid(inp),
 			sr = zk.getSelectionRange(inp);
