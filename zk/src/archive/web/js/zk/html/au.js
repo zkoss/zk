@@ -1270,16 +1270,21 @@ zkau._onDocMousedown = function (evt) {
 	|| !zkau.canFocus(el)) return;
 
 	zkau._savepos(evt);
-
+	var old = zkau.currentFocus;
 	zkau.currentFocus = el;
 	zkau.closeFloatsOnFocus(el);
 	zkau.autoZIndex(el);
 	
 	// bug #2799334 and #2635555, we have to enforce to trigger a focus event. IE only
-	if (zk.ie)
-		try {
-			zkau.currentFocus.focus();
-		} catch (e) {}
+	if (zk.ie) {
+		setTimeout(function () {
+			try {
+				if ((!old.offsetWidth && !old.offsetHeight)) {
+					zkau.currentFocus.focus();
+				}
+			} catch (e) {}
+		});
+	}
 };
 /** Handles the left click. */
 zkau._onDocLClick = function (evt) {
