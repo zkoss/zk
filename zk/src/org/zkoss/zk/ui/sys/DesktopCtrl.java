@@ -83,12 +83,6 @@ public interface DesktopCtrl {
 	 */
 	public void removePage(Page page);
 
-	/** Sets the execution (used to represent a lock).
-	 * Called only internally (by UIEngine's implementation to activate
-	 * an execution).
-	 */
-	public void setExecution(Execution exec);
-
 	/** Sets the bookmark when receiving the onBookmarkChange command
 	 * from the client.
 	 */
@@ -366,4 +360,26 @@ if (c.isEmpty()) {
 	 * @since 3.5.2
 	 */
 	public void deactivateServerPush();
+
+	/** Sets the execution (used to represent a lock).
+	 * <p>Used only to implement {@link UiEngine}.
+	 */
+	public void setExecution(Execution exec);
+	/** Returns the visualizer associated with this desktop.
+	 * <p>Used only to implement {@link UiEngine}.
+	 * @since 3.6.2
+	 */
+	public Visualizer getVisualizer();
+	/** Sets the visualizer associated with is desktop.
+	 * <p>Used only to implement {@link UiEngine}.
+	 * @since 3.6.2
+	 */
+	public void setVisualizer(Visualizer uv);
+	/** Returns the lock used to activate an execution.
+	 * Before calling {@link #setVisualizer}, this object returned
+	 * by this method must be locked first.
+	 * <p>Used only to implement {@link UiEngine}.
+	 * @since 3.6.2
+	 */
+	public Object getActivationLock();
 }

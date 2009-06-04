@@ -87,9 +87,6 @@ public class UiEngineImpl implements UiEngine {
 	public UiEngineImpl() {
 	}
 
-	/** Global Visualizers. */
-	private static final Map _gvs = new HashMap();
-
 	//-- UiEngine --//
 	public void start(WebApp wapp) {
 		_wapp = wapp;
@@ -1518,19 +1515,20 @@ public class UiEngineImpl implements UiEngine {
 			//Not support both asyncupd and recovering are true yet
 
 		final Desktop desktop = exec.getDesktop();
+		final DesktopCtrl desktopCtrl = (DesktopCtrl)desktop;
 		final Session sess = desktop.getSession();
 //		if (log.finerable()) log.finer("Activating "+desktop);
 
 		//lock desktop
 		final UiVisualizer uv;
-		final Map eis = getVisualizers(sess);
-		synchronized (eis) {
+		final Object uvlock = desktopCtrl.getActivationLock();
+		synchronized (uvlock) {
 			for (;;) {
-				final UiVisualizer old = (UiVisualizer)eis.get(desktop);
+				final Visualizer old = desktopCtrl.getVisualizer();
 				if (old == null) break; //grantable
 
 				try {
-					eis.wait(120*1000);
+					uvlock.wait(120*1000);
 				} catch (InterruptedException ex) {
 					throw UiException.Aide.wrap(ex);
 				}
@@ -1540,22 +1538,22 @@ public class UiEngineImpl implements UiEngine {
 				throw new org.zkoss.zk.ui.DesktopUnavailableException("Unable to activate destroyed desktop, "+desktop);
 
 			//grant
-			eis.put(desktop, uv = new UiVisualizer(exec, asyncupd, recovering));
-			((DesktopCtrl)desktop).setExecution(exec);
+			desktopCtrl.setVisualizer(uv = new UiVisualizer(exec, asyncupd, recovering));
+			desktopCtrl.setExecution(exec);
 		}
 
 //		if (log.finerable()) log.finer("Activated "+desktop);
 
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
-		execCtrl.setVisualizer(uv);
 		ExecutionsCtrl.setCurrent(exec);
 		try {
 			execCtrl.onActivate();
-		} catch (Throwable ex) {
-			ExecutionsCtrl.setCurrent(null); //just in case
-			synchronized (eis) {
-				eis.put(desktop, null);
-				((DesktopCtrl)desktop).setExecution(null);
+		} catch (Throwable ex) { //just in case
+			ExecutionsCtrl.setCurrent(null);
+			synchronized (uvlock) {
+				desktopCtrl.setVisualizer(null);
+				desktopCtrl.setExecution(null);
+				uvlock.notify(); //wakeup pending threads
 			}
 			throw UiException.Aide.wrap(ex);
 		}
@@ -1573,14 +1571,14 @@ public class UiEngineImpl implements UiEngine {
 
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 		final Desktop desktop = exec.getDesktop();
+		final DesktopCtrl desktopCtrl = (DesktopCtrl)desktop;
 		try {
 			//Unlock desktop
-			final Map eis = getVisualizers(desktop.getSession());
-			synchronized (eis) {
-				final Object o = eis.remove(desktop);
-				assert D.OFF || o != null;
-				((DesktopCtrl)desktop).setExecution(null);
-				eis.notify(); //wakeup doActivate's wait
+			final Object uvlock = desktopCtrl.getActivationLock();
+			synchronized (uvlock) {
+				desktopCtrl.setVisualizer(null);
+				desktopCtrl.setExecution(null);
+				uvlock.notify(); //wakeup doActivate's wait
 			}
 		} finally {
 			try {
@@ -1590,7 +1588,6 @@ public class UiEngineImpl implements UiEngine {
 			}
 			ExecutionsCtrl.setCurrent(null);
 			execCtrl.setCurrentPage(null);
-			execCtrl.setVisualizer(null);
 		}
 
 		final SessionCtrl sessCtrl = (SessionCtrl)desktop.getSession();
@@ -1610,23 +1607,18 @@ public class UiEngineImpl implements UiEngine {
 			"old dt: "+olduv.getExecution().getDesktop()+", new:"+desktop;
 
 		final UiVisualizer uv = new UiVisualizer(olduv, curExec);
-		final Map eis = getVisualizers(sess);
-		synchronized (eis) {
-			eis.put(desktop, uv);
-			((DesktopCtrl)desktop).setExecution(curExec);
-		}
+		final DesktopCtrl desktopCtrl = (DesktopCtrl)desktop;
+		desktopCtrl.setVisualizer(uv);
+		desktopCtrl.setExecution(curExec);
 
 		final ExecutionCtrl curCtrl = (ExecutionCtrl)curExec;
-		curCtrl.setVisualizer(uv);
 		ExecutionsCtrl.setCurrent(curExec);
 		try {
 			curCtrl.onActivate();
 		} catch (Throwable ex) { //just in case
 			ExecutionsCtrl.setCurrent(olduv.getExecution());
-			synchronized (eis) {
-				eis.put(desktop, olduv);
-				((DesktopCtrl)desktop).setExecution(olduv.getExecution());
-			}
+			desktopCtrl.setVisualizer(olduv);
+			desktopCtrl.setExecution(olduv.getExecution());
 			throw UiException.Aide.wrap(ex);
 		}
 		return uv;
@@ -1648,28 +1640,12 @@ public class UiEngineImpl implements UiEngine {
 				log.warningBriefly("Failed to deactive", ex);
 			}
 
-			final Map eis = getVisualizers(desktop.getSession());
-			synchronized (eis) {
-				eis.put(desktop, olduv);
-				((DesktopCtrl)desktop).setExecution(oldexec);
-			}
+			final DesktopCtrl desktopCtrl = (DesktopCtrl)desktop;
+			desktopCtrl.setVisualizer(olduv);
+			desktopCtrl.setExecution(oldexec);
 		} finally {
 			ExecutionsCtrl.setCurrent(oldexec);
 			curCtrl.setCurrentPage(null);
-			curCtrl.setVisualizer(null); //free memory
-		}
-	}
-	/** Returns a map of (Page, UiVisualizer). */
-	private static Map getVisualizers(Session sess) {
-		if (sess == null)
-			return _gvs;
-
-		synchronized (sess) {
-			final String attr = "org.zkoss.zk.ui.Visualizers";
-			Map eis = (Map)sess.getAttribute(attr);
-			if (eis == null)
-				sess.setAttribute(attr, eis = new HashMap());
-			return eis;
 		}
 	}
 

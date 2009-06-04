@@ -104,10 +104,6 @@ public interface ExecutionCtrl {
 	 */
 	public boolean isRecovering();
 
-	/** Sets the {@link Visualizer} for this execution.
-	 * It could be anything that {@link UiEngine} requires.
-	 */
-	public void setVisualizer(Visualizer ei);
 	/** Returns the {@link Visualizer} for this execution
 	 * (set by {@link #setVisualizer}.
 	 */

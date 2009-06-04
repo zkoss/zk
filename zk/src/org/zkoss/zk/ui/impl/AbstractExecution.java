@@ -55,7 +55,6 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	private Desktop _desktop;
 	private Page _curpage;
 	private PageDefinition _curpgdef;
-	private Visualizer _ei;
 	/** A list of EventInfo. */
 	private final List _evtInfos = new LinkedList();
 	/** A stack of args being pushed by {@link #pushArg}. */
@@ -150,7 +149,7 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	}
 
 	public boolean isActivated() {
-		return _ei != null;
+		return getVisualizer() != null;
 	}
 	public void onActivate() {
 	}
@@ -158,14 +157,12 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	}
 
 	public boolean isRecovering() {
-		return _ei != null && _ei.isRecovering();
+		Visualizer uv = getVisualizer();
+		return uv != null && uv.isRecovering();
 	}
 
-	public void setVisualizer(Visualizer ei) {
-		_ei = ei;
-	}
 	public Visualizer getVisualizer() {
-		return _ei;
+		return _desktop != null ? ((DesktopCtrl)_desktop).getVisualizer(): null;
 	}
 
 	public String toAbsoluteURI(String uri, boolean skipInclude) {
