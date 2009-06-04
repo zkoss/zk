@@ -22,6 +22,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 <c:include page="~./js/ext/aculo/effects.js"/>
 <c:include page="~./js/ext/aculo/dragdrop.js"/>
 <c:include page="~./js/zk/html/boot.js"/>
+<c:include page="~./js/zk/html/boot2.js"/>
 <c:include page="~./js/zk/html/lang/mesg*.js"/>
 <c:include page="~./js/zk/html/common.js"/>
 <c:include page="~./js/zk/html/au.js"/>
