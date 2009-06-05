@@ -18,33 +18,35 @@ ZK 3.6.2
   2800446: A way to enable or disable the stackup in JS
 
 * Bugs
+  2635555: Textbox lost cursor after cancel fileupload in IE
+  2784298: Missing properties in XSD for panel [2]
+  2784569: Missing src property for menuitem component in XSD
+  2784736: On demand Menupopup items on IE looks transparent
   2787077: Listbox-Paging was broken with fix for #2782751
+  2787785: Wrong Slovenian locale (Singhalese -> Slovenian)
+  2787876: a bug of textbox with constrain
+  2788618: datebox with constraint="no future"
   2788875: Https.getOriginPathInfo() & getOriginQueryString() exchange
   2789915: Click the button to reset the hoverImage will fail
+  2789990: listbox behaves odd in IE7
   2790393: Forward event listener shall be called immediately
   2790417: load-after and save-after shall be the last processed
   2791499: SerializableUiFactory causes NPE when Web app stops (Tomcat)
   2792105: Highlight effect not revert if dragging listitem to non-droppable area
   2794205: IE6 the errorbox moves away
+  2794303: panel cannot contain a caption and a title
   2794714: Bug: GRAVE: NoSuchElementException in Paging
+  2795318: Context menu stops working on modal windows: Safari
   2796144: Datebox with format="MM/dd/yyyy hh:mm a" loses am/pm
   2796335: Borderlayout+Tabbox+Tree will cause Tab disappear
+  2796461: The height of datebox's popup should count on its content
+  2796829: Include onCtrlKeys attribute in bandbox XSD
   2797773: Copy / Paste on NumberInputElement not working
   2799258: Increasing col's width causes a unnecessary scrollbar (IE)
-  2800851: BSHInterpreter doesn't serialize variables defined in Window
-  2794303: panel cannot contain a caption and a title
-  2796829: Include onCtrlKeys attribute in bandbox XSD
-  2784569: Missing src property for menuitem component in XSD
-  2784298: Missing properties in XSD for panel [2]
-  2795318: Context menu stops working on modal windows: Safari
-  2796461: The height of datebox's popup should count on its content
-  2787876: a bug of textbox with constrain
   2799334: focus doesn't get back from popup
-  2635555: Textbox lost cursor after cancel fileupload in IE
+  2800851: BSHInterpreter doesn't serialize variables defined in Window
   2800879: Rowcomparator NOT Serializable
-  2784736: On demand Menupopup items on IE looks transparent
-  2787785: Wrong Slovenian locale (Singhalese -> Slovenian)
-  2788618: datebox with constraint="no future"
+  
 
 * Upgrade Notes
   * The signature of doInit of org.zkoss.zk.ui.util.Initiator is changed.
