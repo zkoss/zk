@@ -22,7 +22,7 @@ zkmax.layout.Portallayout = zk.$extends(zul.Widget, {
 		this.$supers('bind_', arguments); 
 		zWatch.listen('onSize', this);
 		zWatch.listen('onShow', this);
-		if (zk.ie6Only) zWatch.listen('beforeSize', this);
+		
 		for(var portalChildren = this.firstChild; portalChildren; portalChildren = portalChildren.nextSibling)
 			for(var panel = portalChildren.firstChild; panel; panel = panel.nextSibling)
 				this._initDrag(panel);
@@ -32,7 +32,7 @@ zkmax.layout.Portallayout = zk.$extends(zul.Widget, {
 		this._cleanupDrag();			
 		zWatch.unlisten('onSize', this);
 		zWatch.unlisten('onShow', this);
-		if (zk.ie6Only) zWatch.unlisten('beforeSize', this);
+		
 		for(var portalChildren = this.firstChild; portalChildren; portalChildren = portalChildren.nextSibling)
 			for(var panel = portalChildren.firstChild; panel; panel = panel.nextSibling)
 				this._cleanDrag(panel.uuid);
@@ -168,11 +168,10 @@ zkmax.layout.Portallayout = zk.$extends(zul.Widget, {
 		var panel = dg.control,
 			panelNode = panel.getNode(),
 			fromCol = panel.parent,
-			proxy = panel.getSubnode("proxy"),
+			proxy = zDom.$(panelNode.id + "$proxy"), 
 			toCol = zk.Widget.$(proxy.parentNode.id.split("$")[0]),
 			change = zDom.nextSibling(dg.node, "DIV") != proxy,
 			portallayout = panel.parent.parent;
-			
 		if (change) {
 			if(proxy.nextSibling){
 				var nextSibling = zk.Widget.$(proxy.nextSibling.id.split("$")[0]);
@@ -275,26 +274,26 @@ zkmax.layout.Portallayout = zk.$extends(zul.Widget, {
 		cave.style.width = total + "px";
 		
 		do{
-			if (this._isLegalChild(cns) && cns._width.endsWith("px") > 0)
-				total -= (zk.parseInt(cns._width) + zDom.padBorderWidth(cns));
+			var oriWidth = zk.Widget.$(cns.id)._oriWidth;
+			if (this._isLegalChild(cns) && oriWidth.endsWith("px") > 0)
+				total -= (zk.parseInt(oriWidth) + zDom.padBorderWidth(cns));
 		}while(cns = zDom.nextSibling(cns,"DIV"))
 		
 		total = Math.max(0, total);
 		
 		cns = zDom.firstChild(cave, "DIV")
 		do{
-			if (this._isLegalChild(cns) && cns._width.indexOf("%") > 0) {
-				cns.style.width = (total ? Math.max(0, Math.floor(zk.parseInt(cns._width) / 100 * total) - zDom.padBorderWidth(cns)) : 0) + "px";
+			var oriWidth = zk.Widget.$(cns.id)._oriWidth;
+			if (this._isLegalChild(cns) && oriWidth.indexOf("%") > 0) {
+				cns.style.width = (total ? Math.max(0, Math.floor(zk.parseInt(oriWidth) / 100 * total) - zDom.padBorderWidth(cns)) : 0) + "px";
 			}
 		}while(cns = zDom.nextSibling(cns,"DIV"))
 		zDom.cleanVisibility(cmp);
 	},
 	onSize: _zkf,
 	onVisi: _zkf,
-	beforeSize: zk.ie6Only ? function(wgt){
-		/*TODO: beforeSize got widget, not DOM element
-		if(cmp && cmp.id)
-			zDom.$(cmp.id.split("$")[0]).style.width = "0px";
-		*/
-	}: zk.$void
+	setWidth: function(){
+		this.$supers('setWidth', arguments);
+		this.onSize();
+	}
 });

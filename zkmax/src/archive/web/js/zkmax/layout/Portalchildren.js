@@ -17,10 +17,15 @@ zkmax.layout.Portalchildren = zk.$extends(zul.Widget, {
 		var zcls = this._zclass;
 		return zcls != null ? zcls: "z-portal-children";
 	},
-	/*wait the panel to finish
 	bind_: function() {
 		this.$supers('bind_', arguments);
+		var cmp = this.getNode();
+		this._oriWidth = cmp.style.width;
+		/*wait the panel to finish
+		 * then implement onChildMaximize... follow columnchildren.js
+		 * */
 	},
+	/*wait the panel to finish
 	onChildOuter: function (child) {
 		zk.on(child, "maximize", zkPortalChildren.onChildMaximize);
 	},
