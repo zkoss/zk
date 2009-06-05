@@ -48,6 +48,12 @@ public class WebApps {
 		return "professional".equals(f) ? _profed:
 			"enterprise".equals(f) ? _entped: false;
 	}
+	/** Returns the edition, such as Enterprise, Professional and Standard.
+	 * @since 3.6.2
+	 */
+	public static String getEdition() {
+		return _entped ? "Enterprise": _profed ? "Professional": "Standard";
+	}
 	/** Features. */
 	private static final boolean
 		_profed = Classes.existsByThread("org.zkoss.zkex.Version"),

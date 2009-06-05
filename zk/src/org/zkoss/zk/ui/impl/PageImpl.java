@@ -940,7 +940,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			willSerialize(val); //always called even not serializable
 
 			if (isVariableSerializable(nm, val)
-			&& (val instanceof java.io.Serializable || val instanceof java.io.Externalizable)) {
+			&& (val == null || val instanceof java.io.Serializable || val instanceof java.io.Externalizable)) {
 				s.writeObject(nm);
 				s.writeObject(val);
 			}
@@ -957,7 +957,8 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 				((SerializableAware)ip).write(s,
 					new SerializableAware.Filter() {
 						public boolean accept(String name, Object value) {
-							return isVariableSerializable(name, value);
+							return isVariableSerializable(name, value)
+							&& (value == null || value instanceof java.io.Serializable || value instanceof java.io.Externalizable);
 						}
 					});
 			}
@@ -1036,7 +1037,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	private final static Set _nonSerNames = new HashSet();
 	static {
 		final String[] nms = {
-			"log", "page", "desktop", "pageScope", "desktopScope",
+			"alert", "log", "page", "desktop", "pageScope", "desktopScope",
 			"applicationScope", "requestScope", "spaceOwner",
 			"session", "sessionScope", "execution"};
 		for (int j = 0; j < nms.length; ++j)

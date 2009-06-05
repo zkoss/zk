@@ -41,6 +41,7 @@ ZK 5.0.0
     z-combo-item is renamed to z-comboitem, and z-list-cell renamed to z-listcell.
   + The default mold of the button is changed as the os mold, and the default mold of the button
     in ZK 3.6.x called the trendy mold.
+
 	--------
 ZK 3.6.2
 * Features
@@ -57,6 +58,8 @@ ZK 3.6.2
   2790441: Enhance GenericAutowireComposer to wire vars before onCreate
   2787711: Hope paging setTotalSize() won't affect inputing active page
   2790669: zk should provide a way to load i18n prop. files by zk.xml
+  2800849: Support Google App Engine
+  2800446: A way to enable or disable the stackup in JS
 
 * Bugs
   2787077: Listbox-Paging was broken with fix for #2782751
@@ -68,8 +71,24 @@ ZK 3.6.2
   2792105: Highlight effect not revert if dragging listitem to non-droppable area
   2794205: IE6 the errorbox moves away
   2794714: Bug: GRAVE: NoSuchElementException in Paging
+  2796144: Datebox with format="MM/dd/yyyy hh:mm a" loses am/pm
   2796335: Borderlayout+Tabbox+Tree will cause Tab disappear
+  2797773: Copy / Paste on NumberInputElement not working
   2799258: Increasing col's width causes a unnecessary scrollbar (IE)
+  2800851: BSHInterpreter doesn't serialize variables defined in Window
+  2794303: panel cannot contain a caption and a title
+  2796829: Include onCtrlKeys attribute in bandbox XSD
+  2784569: Missing src property for menuitem component in XSD
+  2784298: Missing properties in XSD for panel [2]
+  2795318: Context menu stops working on modal windows: Safari
+  2796461: The height of datebox's popup should count on its content
+  2787876: a bug of textbox with constrain
+  2799334: focus doesn't get back from popup
+  2635555: Textbox lost cursor after cancel fileupload in IE
+  2800879: Rowcomparator NOT Serializable
+  2784736: On demand Menupopup items on IE looks transparent
+  2787785: Wrong Slovenian locale (Singhalese -> Slovenian)
+  2788618: datebox with constraint="no future"
 
 
 * Upgrade Notes
@@ -80,6 +99,10 @@ ZK 3.6.2
     you can do
     	Object o = args.get("cookie");
     	if (o == null) args.get("arg0"); //backward compatible to old apps
+  * About the issue when the overlapped component covers over the PDF file,
+  the overlapped component will be in back of the PDF file, the fixed has been
+  changed to specify the following code (Default, the IE6 browser will be taken)
+  	<?script content="zk.useStackup = true;" ?>
   
 	--------
 ZK 3.6.1

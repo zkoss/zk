@@ -21,7 +21,15 @@ package org.zkoss.zk.scripting.bsh;
 import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import java.util.LinkedList;
 import java.util.Collection;
+import java.io.Serializable;
+import java.io.Externalizable;
+import java.io.ObjectOutputStream;
+import java.io.ObjectInputStream;
+import java.io.IOException;
 
 import bsh.BshClassManager;
 import bsh.NameSpace;
@@ -34,6 +42,7 @@ import bsh.UtilEvalError;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.reflect.Fields;
 import org.zkoss.xel.Function;
+import org.zkoss.util.logging.Log;
 
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
@@ -64,10 +73,12 @@ import org.zkoss.zk.scripting.HierachicalAware;
  */
 public class BSHInterpreter extends GenericInterpreter
 implements SerializableAware, HierachicalAware {
+	/*package*/ static final Log log = Log.lookup(BSHInterpreter.class);
+
 	/** A variable of {@link Namespace}. The value is an instance of
 	 * BeanShell's NameSpace.
 	 */
-	private static final String VAR_NS = "z_bshnS";
+	private static final String VAR_NSW = "z_bshnsw";
 	private bsh.Interpreter _ip;
 	private GlobalNS _bshns;
 
@@ -214,7 +225,7 @@ implements SerializableAware, HierachicalAware {
 		_ip.setNameSpace(_bshns);
 	}
 	public void destroy() {
-		getOwner().getNamespace().unsetVariable(VAR_NS, false);
+		getOwner().getNamespace().unsetVariable(VAR_NSW, false);
 		
 		//bug 1814819 ,clear variable, dennis
 		try{
@@ -267,29 +278,45 @@ implements SerializableAware, HierachicalAware {
 		if (ns == getOwner().getNamespace())
 			return _bshns;
 
-		NSX nsx = (NSX)ns.getVariable(VAR_NS, true);
-		if (nsx != null)
-			return nsx.ns;
+		NSWrap nsw = (NSWrap)ns.getVariable(VAR_NSW, true);
+		if (nsw != null)
+			return nsw.unwrap(ns);
 
 		//bind bshns and ns
-		Namespace p = ns.getParent();
-		NameSpace bshns = //Bug 1831534: we have to pass class manager
-			new NS(p != null ? prepareNS(p): _bshns, _ip.getClassManager(), ns);
-				//Bug 1899353: we have to use _bshns instead of null (Reason: unknown)
-		ns.setVariable(VAR_NS, new NSX(bshns), true);
+		final NS bshns = newNS(ns);
+		ns.setVariable(VAR_NSW, NSWrap.getInstance(bshns), true);
 		return bshns;
+	}
+	/*package*/ NS newNS(Namespace ns) {
+		Namespace p = ns.getParent();
+		return new NS(p != null ? prepareNS(p): _bshns, _ip.getClassManager(), ns);
+			//Bug 1831534: we have to pass class manager
+			//Bug 1899353: we have to use _bshns instead of null (Reason: unknown)
 	}
 	/** Prepares the namespace for detached components. */
 	private static NameSpace prepareDetachedNS(Namespace ns) {
-		NSX nsx = (NSX)ns.getVariable(VAR_NS, true);
-		if (nsx != null)
-			return nsx.ns;
+		NSWrap nsw = (NSWrap)ns.getVariable(VAR_NSW, true);
+		if (nsw != null)
+			return nsw.unwrap(ns);
 
 		//bind bshns and ns
 		Namespace p = ns.getParent();
 		NameSpace bshns = new NS(p != null ? prepareDetachedNS(p): null, null, ns);
-		ns.setVariable(VAR_NS, new NSX(bshns), true);
+		ns.setVariable(VAR_NSW, NSWrap.getInstance(bshns), true);
 		return bshns;
+	}
+
+	/*package*/ static BSHInterpreter getInterpreter(Namespace ns) {
+		Page owner = ns.getOwnerPage();
+		if (owner != null) {
+			for (Iterator it = owner.getLoadedInterpreters().iterator();
+			it.hasNext();) {
+				final Object ip = it.next();
+				if (ip instanceof BSHInterpreter)
+					return (BSHInterpreter)ip;
+			}
+		}
+		return null;
 	}
 
 	//supporting classes//
@@ -378,8 +405,8 @@ implements SerializableAware, HierachicalAware {
 		}
 	}
 	/** The per-Namespace NameSpace. */
-	private static class NS extends AbstractNS {
-		private final Namespace _ns;
+	/*package*/ static class NS extends AbstractNS {
+		private Namespace _ns;
 
 		private NS(NameSpace parent, BshClassManager classManager, Namespace ns) {
 			super(parent, classManager, "ns" + System.identityHashCode(ns));
@@ -390,25 +417,13 @@ implements SerializableAware, HierachicalAware {
 		//super//
 		/** Search _ns instead. */
 		protected Object getFromNamespace(String name) {
-			final BSHInterpreter ip = getInterpreter();
+			final BSHInterpreter ip = getInterpreter(_ns);
 			if (ip != null && ip.getCurrent() == null)
 				return getImplicit(name); //ignore ns
 
 			Object v = _ns.getVariable(name, true);
 			return v != null || _ns.containsVariable(name, true) ? v: getImplicit(name); 
 				//local-only since getVariableImpl will look up its parent
-		}
-		private BSHInterpreter getInterpreter() {
-			Page owner = _ns.getOwnerPage();
-			if (owner != null) {
-				for (Iterator it = owner.getLoadedInterpreters().iterator();
-				it.hasNext();) {
-					final Object ip = it.next();
-					if (ip instanceof BSHInterpreter)
-						return (BSHInterpreter)ip;
-				}
-			}
-			return null;
 		}
 	}
 	private static class NSCListener implements NamespaceChangeListener {
@@ -422,7 +437,7 @@ implements SerializableAware, HierachicalAware {
 		}
 		public void onParentChanged(Namespace newparent) {
 			if (newparent != null) {
-				final BSHInterpreter ip = _bshns.getInterpreter();
+				final BSHInterpreter ip = getInterpreter(_bshns._ns);
 				_bshns.setParent(
 					ip != null ? ip.prepareNS(newparent):
 						prepareDetachedNS(newparent));
@@ -432,37 +447,43 @@ implements SerializableAware, HierachicalAware {
 			_bshns.setParent(null);
 		}
 	}
-	/** Non-serializable namespace. It is used to prevent itself from
-	 * being serialized
-	 */
-	private static class NSX {
-		final NameSpace ns;
-		private NSX(NameSpace ns) {
-			this.ns = ns;
-		}
-	}
 
 	//SerializableAware//
-	public void write(java.io.ObjectOutputStream s, Filter filter)
-	throws java.io.IOException {
+	public void write(ObjectOutputStream s, Filter filter)
+	throws IOException {
+		write(_bshns, s, filter);
+	}
+	public void read(ObjectInputStream s)
+	throws IOException, ClassNotFoundException {
+		read(_bshns, s);
+	}
+
+	/*package*/ static void write(NameSpace ns, ObjectOutputStream s, Filter filter)
+	throws IOException {
 		//1. variables
-		final String[] vars = _bshns.getVariableNames();
+		final String[] vars = ns.getVariableNames();
 		for (int j = vars != null ? vars.length: 0; --j >= 0;) {
 			final String nm = vars[j];
 			if (nm != null && !"bsh".equals(nm)) {
-				final Object val = get(nm);
-				if ((val == null || (val instanceof java.io.Serializable)
-					|| (val instanceof java.io.Externalizable))
-				&& (filter == null || filter.accept(nm, val))) {
-					s.writeObject(nm);
-					s.writeObject(val);
+				try {
+					final Object val = ns.getVariable(nm, false);
+					if ((val == null || (val instanceof Serializable)
+						|| (val instanceof Externalizable))
+					&& (filter == null || filter.accept(nm, val))) {
+						s.writeObject(nm);
+						s.writeObject(val);
+					}
+				} catch (IOException ex) {
+					throw ex;
+				} catch (Throwable ex) {
+					log.warning("Ignored failure to write "+nm, ex);
 				}
 			}
 		}
 		s.writeObject(null); //denote end-of-vars
 
 		//2. methods
-		final BshMethod[] mtds = _bshns.getMethods();
+		final BshMethod[] mtds = ns.getMethods();
 		for (int j = mtds != null ? mtds.length: 0; --j >= 0;) {
 			final String nm = mtds[j].getName();
 			if (filter == null || filter.accept(nm, mtds[j])) {
@@ -475,15 +496,15 @@ implements SerializableAware, HierachicalAware {
 					Fields.setAccessible(f, true);
 					final Object old = f.get(mtds[j]);
 					try {
-						f.set(mtds[j], null);				
+						f.set(mtds[j], null);
 						s.writeObject(mtds[j]);
 					} finally {
 						f.set(mtds[j], old);
 					}
-				} catch (java.io.IOException ex) {
+				} catch (IOException ex) {
 					throw ex;
 				} catch (Throwable ex) {
-					throw UiException.Aide.wrap(ex);
+					log.warning("Ignored failure to write "+nm, ex);
 				} finally {
 					if (f != null) Fields.setAccessible(f, acs);
 				}
@@ -498,17 +519,17 @@ implements SerializableAware, HierachicalAware {
 			f = Classes.getAnyField(NameSpace.class, "importedClasses");
 			acs = f.isAccessible();
 			Fields.setAccessible(f, true);
-			final Map clses = (Map)f.get(_bshns);
+			final Map clses = (Map)f.get(ns);
 			if (clses != null)
 				for (Iterator it = clses.values().iterator(); it.hasNext();) {
 					final String clsnm = (String)it.next();
 					if (!clsnm.startsWith("bsh."))
 						s.writeObject(clsnm);
 				}
-		} catch (java.io.IOException ex) {
+		} catch (IOException ex) {
 			throw ex;
 		} catch (Throwable ex) {
-			throw UiException.Aide.wrap(ex);
+			log.warning("Ignored failure to write imported classes", ex);
 		} finally {
 			if (f != null) Fields.setAccessible(f, acs);
 		}
@@ -521,7 +542,7 @@ implements SerializableAware, HierachicalAware {
 			f = Classes.getAnyField(NameSpace.class, "importedPackages");
 			acs = f.isAccessible();
 			Fields.setAccessible(f, true);
-			final Collection pkgs = (Collection)f.get(_bshns);
+			final Collection pkgs = (Collection)f.get(ns);
 			if (pkgs != null)
 				for (Iterator it = pkgs.iterator(); it.hasNext();) {
 					final String pkgnm = (String)it.next();
@@ -529,26 +550,32 @@ implements SerializableAware, HierachicalAware {
 					&& !pkgnm.startsWith("javax.swing"))
 						s.writeObject(pkgnm);
 				}
-		} catch (java.io.IOException ex) {
+		} catch (IOException ex) {
 			throw ex;
 		} catch (Throwable ex) {
-			throw UiException.Aide.wrap(ex);
+			log.warning("Ignored failure to write imported packages", ex);
 		} finally {
 			if (f != null) Fields.setAccessible(f, acs);
 		}
 		s.writeObject(null); //denote end-of-cls
 	}
-	public void read(java.io.ObjectInputStream s)
-	throws java.io.IOException, ClassNotFoundException {
+	/*package*/ static void read(NameSpace ns, ObjectInputStream s)
+	throws IOException {
 		for (;;) {
-			final String nm = (String)s.readObject();
-			if (nm == null) break; //no more
+			try {
+				final String nm = (String)s.readObject();
+				if (nm == null) break; //no more
 
-			set(nm, s.readObject());
+				ns.setVariable(nm, s.readObject(), false);
+			} catch (IOException ex) {
+				throw ex;
+			} catch (Throwable ex) {
+				log.warning("Ignored failure to read", ex);
+			}
 		}
 
-		try {
-			for (;;) {
+		for (;;) {
+			try {
 				final BshMethod mtd = (BshMethod)s.readObject();
 				if (mtd == null) break; //no more
 
@@ -559,31 +586,42 @@ implements SerializableAware, HierachicalAware {
 					f = Classes.getAnyField(BshMethod.class, "declaringNameSpace");
 					acs = f.isAccessible();
 					Fields.setAccessible(f, true);
-					f.set(mtd, _bshns);				
-				} catch (Throwable ex) {
-					throw UiException.Aide.wrap(ex);
+					f.set(mtd, ns);				
 				} finally {
 					if (f != null) Fields.setAccessible(f, acs);
 				}
-
-				_bshns.setMethod(mtd.getName(), mtd);
+				ns.setMethod(mtd.getName(), mtd);
+			} catch (IOException ex) {
+				throw ex;
+			} catch (Throwable ex) {
+				log.warning("Ignored failure to read", ex);
 			}
-		} catch (UtilEvalError ex) {
-			throw UiException.Aide.wrap(ex);
 		}
 
 		for (;;) {
-			final String nm = (String)s.readObject();
-			if (nm == null) break; //no more
+			try {
+				final String nm = (String)s.readObject();
+				if (nm == null) break; //no more
 
-			_bshns.importClass(nm);
+				ns.importClass(nm);
+			} catch (IOException ex) {
+				throw ex;
+			} catch (Throwable ex) {
+				log.warning("Ignored failure to read", ex);
+			}
 		}
 
 		for (;;) {
-			final String nm = (String)s.readObject();
-			if (nm == null) break; //no more
+			try {
+				final String nm = (String)s.readObject();
+				if (nm == null) break; //no more
 
-			_bshns.importPackage(nm);
+				ns.importPackage(nm);
+			} catch (IOException ex) {
+				throw ex;
+			} catch (Throwable ex) {
+				log.warning("Ignored failure to read", ex);
+			}
 		}
 	}
 
@@ -607,6 +645,126 @@ implements SerializableAware, HierachicalAware {
 		}
 		public java.lang.reflect.Method toMethod() {
 			return null;
+		}
+	}
+}
+
+/** Used to prevent to serialize NameSpace directly.
+ */
+/*package*/ class NSWrap {
+	protected NameSpace _bshns;
+	/*package*/ static NSWrap getInstance(NameSpace ns) {
+		if (ns instanceof BSHInterpreter.NS) return new NSWrapX(ns);
+		return new NSWrap(ns);
+	}
+	protected NSWrap(NameSpace ns) {
+		_bshns = ns;
+	}
+	public NSWrap() {
+	}
+	public NameSpace unwrap(Namespace ns) {
+		return _bshns;
+	}
+}
+/*package*/ class NSWrapX extends NSWrap implements Serializable {
+	private static final Log log = BSHInterpreter.log;
+	private Map _vars;
+	private List _mtds, _clses, _pkgs;
+
+	/*package*/ NSWrapX(NameSpace ns) {
+		super(ns);
+	}
+	public NSWrapX() {
+	}
+	public NameSpace unwrap(Namespace ns) {
+		if (_bshns == null) {
+			_bshns = BSHInterpreter.getInterpreter(ns).newNS(ns);
+			if (_vars != null) {
+				for (Iterator it = _vars.entrySet().iterator(); it.hasNext();) {
+					final Map.Entry me = (Map.Entry)it.next();
+					try {
+						_bshns.setVariable((String)me.getKey(), me.getValue(), false);
+					} catch (Throwable ex) {
+						log.warning("Ignored failure of set "+me.getKey(), ex);
+					}
+				}
+				_vars = null;
+			}
+			if (_mtds != null) {
+				for (Iterator it = _mtds.iterator(); it.hasNext();) {
+					final BshMethod mtd = (BshMethod)it.next();
+					try {
+						_bshns.setMethod(mtd.getName(), mtd);
+					} catch (Throwable ex) {
+						log.warning("Ignored failure of set "+mtd, ex);
+					}
+				}
+				_mtds = null;
+			}
+			if (_clses != null) {
+				for (Iterator it = _clses.iterator(); it.hasNext();) {
+					final String name = (String)it.next();
+					try {
+						_bshns.importClass(name);
+					} catch (Throwable ex) {
+						log.warning("Ignored failure of import class "+name, ex);
+					}
+				}
+				_clses = null;
+			}
+			if (_pkgs != null) {
+				for (Iterator it = _pkgs.iterator(); it.hasNext();) {
+					final String name = (String)it.next();
+					try {
+						_bshns.importPackage(name);
+					} catch (Throwable ex) {
+						log.warning("Ignored failure of import package "+name, ex);
+					}
+				}
+				_pkgs = null;
+			}
+		}
+		return _bshns;
+	}
+	private synchronized void writeObject(ObjectOutputStream s)
+	throws IOException {
+		s.defaultWriteObject();
+
+		s.writeBoolean(_bshns != null);
+		if (_bshns != null) {
+			BSHInterpreter.write(_bshns, s, new BSHInterpreter.Filter() {
+				public boolean accept(String name, Object value) {
+					return value == null || value instanceof Serializable || value instanceof Externalizable;
+				}
+			});
+		}
+	}
+	private synchronized void readObject(ObjectInputStream s)
+	throws IOException, ClassNotFoundException {
+		s.defaultReadObject();
+
+		if (s.readBoolean()) {
+			BSHInterpreter.read(new NameSpace(null, null, "nst") {
+				public void setVariable(String name, Object value, boolean strictJava) {
+					if (_vars == null) _vars = new HashMap();
+					_vars.put(name, value);
+				}
+				public void setMethod(String name, BshMethod mtd) {
+					if (_mtds == null) _mtds = new LinkedList();
+					_mtds.add(mtd);
+				}
+				public void importClass(String name) {
+					if (_clses == null) _clses = new LinkedList();
+					_clses.add(name);
+				}
+				public void importPackage(String name) {
+					if (_pkgs == null) _pkgs = new LinkedList();
+					_pkgs.add(name);
+				}
+				public void loadDefaultImports() {
+					 //to speed up the formance
+				}
+			}, s);
 		}
 	}
 }

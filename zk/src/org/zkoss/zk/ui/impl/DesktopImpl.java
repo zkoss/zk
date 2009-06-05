@@ -70,6 +70,7 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.EventProcessingThread;
 import org.zkoss.zk.ui.sys.IdGenerator;
 import org.zkoss.zk.ui.sys.ServerPush;
+import org.zkoss.zk.ui.sys.Visualizer;
 import org.zkoss.zk.ui.impl.EventInterceptors;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuService;
@@ -148,10 +149,15 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private final EventInterceptors _eis = new EventInterceptors();
 	private transient List _dtCleans, _execInits, _execCleans,
 		_uiCycles, _ausvcs;
+
+	private transient Visualizer _uv;
+	private transient Object _uvLock;
+
 	private transient Map _lastRes;
 	private static final int MAX_RESPONSE_ID = 999;
 	/** The response sequence ID. */
 	private int _resId; //so next will be 1
+
 	/** Whether any onPiggyback listener is registered. */
 	private boolean _piggybackListened;
 	/** Whether the server push shall stop after deactivate. */
@@ -240,6 +246,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 	/** Initialization for contructor and de-serialized. */
 	private void init() {
+		_uvLock = new Object();
 		_rque = newRequestQueue();
 		_comps = new HashMap(64);
 		_attrs = new HashMap();
@@ -468,6 +475,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	public void setExecution(Execution exec) {
 		_exec = exec;
 	}
+
 	public void service(AuRequest request, boolean everError) {
 		if (_ausvcs != null)
 			for (Iterator it = _ausvcs.iterator(); it.hasNext();)
@@ -492,6 +500,16 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			invalidate();
 		} else
 			Events.postEvent(Event.getEvent(request));
+	}
+
+	public Visualizer getVisualizer() {
+		return _uv;
+	}
+	public void setVisualizer(Visualizer uv) {
+		_uv = uv;
+	}
+	public Object getActivationLock() {
+		return _uvLock;
 	}
 
 	public int getNextKey() {

@@ -91,6 +91,7 @@ import org.zkoss.zk.au.AuService;
 import org.zkoss.zk.au.out.AuClientInfo;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Interpreter;
+import org.zkoss.zk.scripting.NamespaceSerializationListener;
 import org.zkoss.zk.scripting.util.SimpleNamespace;
 
 /**
@@ -2444,6 +2445,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				final Object val = _spaceInfo.ns.getVariable(nm, true);
 				willSerialize(val); //always called even if not serializable
 
+				if (val instanceof NamespaceSerializationListener)
+					((NamespaceSerializationListener)val).willSerialize(_spaceInfo.ns);
+
 				if (isVariableSerializable(nm, val)
 				&& (val instanceof java.io.Serializable || val instanceof java.io.Externalizable)) {
 					s.writeObject(nm);
@@ -2553,6 +2557,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				Object val = s.readObject();
 				_spaceInfo.ns.setVariable(nm, val, true);
 				didDeserialize(val);
+				if (val instanceof NamespaceSerializationListener)
+					((NamespaceSerializationListener)val).didDeserialize(_spaceInfo.ns);
 			}
 
 			//restore ID space by binding itself and all children
