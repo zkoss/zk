@@ -29,14 +29,14 @@ function (out) {
 				'<div id="', uuid, '$down"></div></div><div id="', uuid,
 				'$line" class="', zcls, '-space" ></div>');
 	} else {
-		out.push('<div id="', uuid, '$right">','</div>',
-			'<div id="', uuid, '$left">','</div>','<div id="', uuid, '$header"',
-			' class="', zcls, '-header" >','<ul id="', uuid, '$cave"','class="', zcls, '-cnt">');
+		out.push('<div id="', uuid, '$right">', '</div>',
+			'<div id="', uuid, '$left">', '</div>', '<div id="', uuid, '$header"',
+			' class="', zcls, '-header" >', '<ul id="', uuid, '$cave"', 'class="', zcls, '-cnt">');
 			for (var w = this.firstChild; w; w = w.nextSibling)
 				w.redraw(out);
-		out.push('<li id="', uuid,'$edge"',
-			' class="', zcls, '-edge" ></li><div class="z-clear"></div></ul>',
-			'</div><div id="', uuid, '$line"',
+		out.push('<li id="', uuid, '$edge"', ' class="', zcls, '-edge" ></li>',
+			'<div id="',uuid,'$clear" class="z-clear"> </div>',
+			'</ul></div><div id="', uuid, '$line"',
 			' class="', zcls, '-space" ></div></div>');
 	}
 }

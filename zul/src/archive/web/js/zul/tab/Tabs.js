@@ -58,17 +58,17 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		zWatch.listen("onShow", this);
 
 		for (var btn, key = ['right', 'left', 'down', 'up'], le = key.length; --le >= 0;)
-			if ((btn = zDom.$(this.uuid, key[le])))
+			if ((btn = this.getSubnode(key[le])))
 				this.domListen_(btn, "onClick");
 
 		this._init = false
-		var tabs = this;
-
-		after.push(function () {
-			tabs._scrollcheck("init");
-			tabs._fixHgh();
-			tabs._init = true;
-		});
+		zk.afterMount(
+			this.proxy(function () {
+				this._scrollcheck("init");
+				this._fixHgh();
+				this._init = true;
+			})
+		);
 		this._fixWidth();
 	},
 	unbind_: function () {
@@ -84,8 +84,8 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		if (!tabbox.isRealVisible() || !tabbox.isTabScroll()) return;
 		if (!tbsdiv) return;	// tabbox is delete , no need to check scroll
 		if (tabbox.isVertical()) {//vertical
-			var header =  zDom.$(this.uuid, "header"),
-				cave =  zDom.$(this.uuid, "cave"),
+			var header =  this.getSubnode("header"),
+				cave =  this.getSubnode("cave"),
 				headerOffsetHeight = header.offsetHeight,
 				headerScrollTop = header.scrollTop,
 				sel = tabbox.getSelectedTab(),
@@ -112,6 +112,11 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 						this._doScroll(d >= 0 ? "down" : "up", d >= 0 ? d : Math.abs(d));
 						break;
 					case "init":
+						if (cmpOffsetTop < headerScrollTop) {
+							this._doScroll("up", headerScrollTop - cmpOffsetTop);
+						} else if (cmpOffsetTop + cmpOffsetHeight > headerScrollTop + headerOffsetHeight) {
+							this._doScroll("down", cmpOffsetTop + cmpOffsetHeight - headerScrollTop - headerOffsetHeight);
+						}
 						break;
 					case "vsel":
 						if (cmpOffsetTop < headerScrollTop) {
@@ -135,8 +140,8 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				}
 			}
 		} else if(!tabbox.inAccordionMold()) {
-			var cave =  zDom.$(this.uuid, "cave"),
-				header =  zDom.$(this.uuid, "header"),
+			var cave = this.getSubnode("cave"),
+				header = this.getSubnode("header"),
 			 	allTab = zDom.childNodes(cave),
 			 	sel = tabbox.getSelectedTab(),
 				cmp = tb ? tb : ( sel ? sel.getNode() : null),
@@ -154,7 +159,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				if (childWidth <= headerOffsetWidth + btnsize) {
 					tabbox._scrolling = false;
 					this._showbutton(false);
-					header.style.width = Math.max(tabbox.offsetWidth, 0) + "px";
+					header.style.width = Math.max(tbx.offsetWidth, 0) + "px";
 					header.scrollLeft = 0;
 				}
 				// scroll to specific position
@@ -164,6 +169,11 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 						this._doScroll( d>=0 ? "right" : "left", d>=0 ? d : Math.abs(d));
 						break;
 					case "init":
+						if (cmpOffsetLeft < headerScrollLeft) {
+							this._doScroll("left", headerScrollLeft - cmpOffsetLeft);
+						} else if (cmpOffsetLeft + cmpOffsetWidth > headerScrollLeft + headerOffsetWidth) {
+							this._doScroll("right", cmpOffsetLeft + cmpOffsetWidth - headerScrollLeft - headerOffsetWidth);
+						}
 						break;
 					case "sel":
 						if (cmpOffsetLeft < headerScrollLeft) {
@@ -178,7 +188,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				if (childWidth - (headerOffsetWidth - 10) > 0) {
 					tabbox._scrolling = true;
 					this._showbutton(true);
-					var cave = zDom.$(this.uuid, "cave"),
+					var cave = this.getSubnode("cave"),
 						temp = tabbox.offsetWidth - this._getArrowSize();//coz show button then getsize again
 					cave.style.width = "5555px";
 					header.style.width = temp > 0 ? temp + "px" : "";
@@ -197,7 +207,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		if (move <= 0)
 			return;
 		var step,
-			header = zDom.$(this.uuid, "header");
+			header = this.getSubnode("header");
 		//the tab bigger , the scroll speed faster
 		step = move <= 60 ? 5 : eval(5 * (zk.parseInt(move / 60) + 1));
 		var run = setInterval(function() {
@@ -233,8 +243,8 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 	_getArrowSize: function() {
 		var tabbox = this.getTabbox(),
 			isVer = tabbox.isVertical(),
-			btnA = isVer ? zDom.$(this.uuid, "up") : zDom.$(this.uuid, "left"),
-			btnB = isVer ? zDom.$(this.uuid, "down") : zDom.$(this.uuid, "right");
+			btnA = isVer ? this.getSubnode("up") : this.getSubnode("left"),
+			btnB = isVer ? this.getSubnode("down") : this.getSubnode("right");
 		return btnA && btnB ? (isVer ? btnA.offsetHeight + btnB.offsetHeight :
 			btnA.offsetWidth + btnB.offsetWidth ) : 0;
 	},
@@ -243,13 +253,13 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 			zcls = this.getZclass();
 		if (tabbox.isTabScroll()) {
 			if (tabbox.isVertical()) {//vertical
-				zDom[show == true? "addClass" : "rmClass"](zDom.$(this.uuid, "header"), zcls + "-header-scroll");
-				zDom[show == true? "addClass" : "rmClass"](zDom.$(this.uuid, "down"), zcls + "-down-scroll");
-				zDom[show == true? "addClass" : "rmClass"](zDom.$(this.uuid, "up"), zcls + "-up-scroll");
+				zDom[show == true? "addClass" : "rmClass"](this.getSubnode("header"), zcls + "-header-scroll");
+				zDom[show == true? "addClass" : "rmClass"](this.getSubnode("down"), zcls + "-down-scroll");
+				zDom[show == true? "addClass" : "rmClass"](this.getSubnode("up"), zcls + "-up-scroll");
 			}else {//horizontal
-				zDom[show == true? "addClass" : "rmClass"](zDom.$(this.uuid, "header"), zcls + "-header-scroll");
-				zDom[show == true? "addClass" : "rmClass"](zDom.$(this.uuid, "right"), zcls + "-right-scroll");
-				zDom[show == true? "addClass" : "rmClass"](zDom.$(this.uuid, "left"), zcls + "-left-scroll");
+				zDom[show == true? "addClass" : "rmClass"](this.getSubnode("header"), zcls + "-header-scroll");
+				zDom[show == true? "addClass" : "rmClass"](this.getSubnode("right"), zcls + "-right-scroll");
+				zDom[show == true? "addClass" : "rmClass"](this.getSubnode("left"), zcls + "-left-scroll");
 			}
 		}
 	},
@@ -257,8 +267,8 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		var ele = evt.domTarget;
 			move = 0,
 			tabbox = this.getTabbox(),
-			cave = zDom.$(this.uuid, "cave"),
-			head = zDom.$(this.uuid, "header"),
+			cave = this.getSubnode("cave"),
+			head = this.getSubnode("header"),
 			allTab =  zDom.childNodes(cave),
 			scrollLength = tabbox.isVertical() ? head.scrollTop : head.scrollLeft,
 			offsetLength = tabbox.isVertical() ? head.offsetHeight : head.offsetWidth;
@@ -323,10 +333,10 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		var tabs = this.getNode(),
 			tabbox = this.getTabbox(),
 			tbx = tabbox.getNode(),
-			cave = zDom.$(this.uuid, "cave"),
-			head = zDom.$(this.uuid, "header"),
-			l = zDom.$(this.uuid, "left"),
-			r = zDom.$(this.uuid, "right"),
+			cave = this.getSubnode("cave"),
+			head = this.getSubnode("header"),
+			l = this.getSubnode("left"),
+			r = this.getSubnode("right"),
 			btnsize = tabbox._scrolling ? l && r ? l.offsetWidth + r.offsetWidth : 0 : 0;
 			this._fixHgh();
 			if (this.parent.isVertical()) {
@@ -335,7 +345,8 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				 if (tabs.style.width) {
 				 	tabs._width = tabs.style.width;;
 				 } else {
-					this._forceStyle(tabs,"w",tabs._width != null ? tabs._width : cave.offsetWidth + "px");
+					 //vertical tabs have default width 50px
+					this._forceStyle(tabs,"w",tabs._width != null ? tabs._width : "50px");
 				 }
 			} else if(!tabbox.inAccordionMold()) {
 				if (tbx.offsetWidth < btnsize) return;
@@ -343,19 +354,11 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 					if (!tbx.style.width) {
 						this._forceStyle(tbx,"w","100%");
 						this._forceStyle(tabs,"w",zDom.revisedWidth(tabs,tbx.offsetWidth)+ "px");
-						if (tabbox._scrolling) {
-							this._forceStyle(head,"w",tbx.offsetWidth - btnsize + "px");
-						} else {
-							this._forceStyle(head,"w",zDom.revisedWidth(head,tbx.offsetWidth)+ "px");
-						}
+						this._forceStyle(head,"w",(tabbox._scrolling ? tbx.offsetWidth - btnsize : zDom.revisedWidth(head,tbx.offsetWidth)) + "px");
 					} else {
 						this._forceStyle(tabs,"w",zDom.revisedWidth(tabs,tbx.offsetWidth)+ "px");
 						this._forceStyle(head,"w",tabs.style.width);
-						if (tabbox._scrolling) {
-							this._forceStyle(head,"w",head.offsetWidth - btnsize + "px");
-						} else {
-							this._forceStyle(head,"w",head.offsetWidth + "px");
-						}
+						this._forceStyle(head,"w",(tabbox._scrolling ? head.offsetWidth - btnsize : head.offsetWidth) + "px");
 					}
 				} else {
 					if (!tbx.style.width) {
@@ -371,15 +374,15 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		var tabs = this.getNode(),
 			tabbox = this.getTabbox(),
 			tbx = tabbox.getNode(),
-			head = zDom.$(this.uuid, "header"),
-			u = zDom.$(this.uuid, "up"),
-			d = zDom.$(this.uuid, "down"),
+			head = this.getSubnode("header"),
+			u = this.getSubnode("up"),
+			d = this.getSubnode("down"),
 			btnsize = u && d ? isNaN(u.offsetHeight + d.offsetHeight) ? 0 : u.offsetHeight + d.offsetHeight : 0;
 		//fix tabpanels's height if tabbox's height is specified
 		//Ignore accordion since its height is controlled by each tabpanel
 		if (tabbox.isVertical()) {
 			var child = zDom.childNodes(tbx, function (n) {return (zDom.tag(n) == "DIV");}),
-			allTab = zDom.childNodes(zDom.$(this.uuid, "cave"));
+			allTab = zDom.childNodes(this.getSubnode("cave"));
 			if (tbx.style.height) {
 				this._forceStyle(tabs, "h", zDom.revisedHeight(tabs,tbx.offsetHeight,true)+"px");
 			} else {

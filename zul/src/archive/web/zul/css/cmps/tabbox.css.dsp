@@ -663,6 +663,7 @@
 	zoom: 1;
 }
 .z-tab-accordion-close {
+	background-color: transparent;
 	background-repeat: no-repeat;
 	background-image: url(${c:encodeURL('~./zul/img/common/close-off.gif')});
 	cursor: pointer;

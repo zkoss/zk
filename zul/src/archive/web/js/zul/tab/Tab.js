@@ -52,22 +52,27 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 			evt.stop();
 		}
 	},
+	_toggleBtnOver : function(evt) {
+		var zcls = this.getZclass(),
+			cmp = evt.domTarget;
+		zDom.toggleClass(cmp, zcls + "-close-over");
+
+	},
 	_selTab: function(notify, init) {
 		var tabbox = this.getTabbox(),
-			tab = this,
-			tbx = tabbox.getNode();
-		var tabs = this.parent,
-			tb =  tab.getNode(),
-			old = this._getSelTab(tab);
-		if (!tb) return;
-		if (old != tb || init) {
+			tabs = this.parent,
+			tbx = tabbox.getNode(),
+			newtb =  this.getNode(),
+			oldtb = this._getSelTab();
+		if (!newtb) return;
+		if (oldtb != newtb || init) {
 			if (tabbox.isVertical())
-				tabs._scrollcheck("vsel",tb);
+				tabs._scrollcheck("vsel",newtb);
 			else if (!tabbox.inAccordionMold())
-				tabs._scrollcheck("sel",tb);
-			if (old)
-				this._setTabSel(old, false, false, notify);
-			this._setTabSel(tb, true, notify, notify);
+				tabs._scrollcheck("sel",newtb);
+			if (oldtb)
+				this._setTabSel(oldtb, false, false, notify);
+			this._setTabSel(newtb, true, notify, notify);
 		}
 	},
 	_setTabSel: function(tb, toSel, notify, animation) {
@@ -86,7 +91,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 				var p = panel.getSubnode("real");
 				zAnima[toSel ? "slideDown" : "slideUp"](this,p);
 			} else {
-				var pl = panel.getNode();
+				var pl = accd ? panel.getSubnode("real") : panel.getNode(); //Can't use getSubnode coz
 				zDom[toSel ? "show" : "hide"](pl);
 			}
 		if (!accd) {
@@ -95,28 +100,28 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		}
 		if (notify) {
 			this.fire('onSelect', {items: [this.uuid], reference: this.uuid});
-		}		
+		}
 	},
 	/**
 	 * Get selected tab
 	 * @param {Object} tab
 	 */
-	_getSelTab: function(tab) {
+	_getSelTab: function() {
 		var tabbox = this.getTabbox();
-		if (!tab) return null;
+		if (!this) return null;
 		if (tabbox.inAccordionMold()) {
 			var t = this._getSelTabFromTop()
 			return t.getNode();
 		} else {
-			var node = tab;//Notice : not DOM node
-			for (node = tab; node = node.nextSibling;)
+			var node = this;//Notice : not DOM node
+			for (node = this; node = node.nextSibling;)
 				if (node._selected)
 					return node.getNode();
-			for (node = tab; node = node.previousSibling;)
+			for (node = this; node = node.previousSibling;)
 				if (node._selected)
 					return node.getNode();
-			if (tab._selected)
-				return tab.getNode();
+			if (this._selected)
+				return this.getNode();
 		}
 		return null;
 	},
@@ -150,18 +155,23 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	bind_: function (desktop, skipper, after) {
 		this.$supers('bind_', arguments);
 		var closebtn = this.getSubnode('close'),
+			tabs = this.parent,
 			tab = this,
 			selected = this._selected;
 		if (closebtn) {
 			this.domListen_(closebtn, "onClick", '_doCloseClick');
 			if (!closebtn.style.cursor)
 				closebtn.style.cursor = "default";
+			if (zk.ie6Only) {
+				this.domListen_(closebtn, "onMouseOver", '_toggleBtnOver');
+				this.domListen_(closebtn, "onMouseOut", '_toggleBtnOver');
+			}
 		}
-		var tabs = this.parent;
-		after.push(function () {
-			if (selected)
+
+		after.push( function () {
+			if (selected) {
 				tab._selTab(false, true);
-			if (tabs._init)
+			} else if (tabs._init)
 				tabs._scrollcheck("init");
 
 		});
@@ -174,21 +184,17 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	},
 	//event handler//
 	onClose: function () {
-		var tabbox = this.getTabbox();
-		if (tabbox.inAccordionMold()) {
-
-		} else {
-			var tab = this;
-			for (tab = this; tab = tab.nextSibling;)
-				if (!tab.isDisabled()) {
-					tab._selTab(true);
-					return null;
-				}
-			for (tab = this; tab = tab.previousSibling;)
-				if (!tab.isDisabled()) {
-					tab._selTab(true);
-					return null;
-				}
-		}
+		var tabbox = this.getTabbox(),
+			tab = this;
+		for (tab = this; tab = tab.nextSibling;)
+			if (!tab.isDisabled()) {
+				tab._selTab(true);
+				return null;
+			}
+		for (tab = this; tab = tab.previousSibling;)
+			if (!tab.isDisabled()) {
+				tab._selTab(true);
+				return null;
+			}
 	}
 });

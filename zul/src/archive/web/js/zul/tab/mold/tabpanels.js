@@ -15,7 +15,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 function (out) {
-	out.push('<div id="', this.uuid,'"' ,this.domAttrs_(), '>');
+	out.push('<div id="', this.uuid,'"', this.domAttrs_(), '>');
 	for (var w = this.firstChild; w; w = w.nextSibling)
 		w.redraw(out);
 	out.push('</div>');

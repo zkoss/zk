@@ -625,6 +625,9 @@ zDom = { //static methods
 		return re;
 	},
 	//class and style//
+	toggleClass: function (el, clsnm) {
+		zDom[ this.hasClass(el, clsnm) ? "rmClass" : "addClass"](el, clsnm); 
+	},
 	hasClass: function (el, clsnm) {
 		return el && el.className && el.className.match(zDom._clsRegEx(clsnm)) != null;
 	},
