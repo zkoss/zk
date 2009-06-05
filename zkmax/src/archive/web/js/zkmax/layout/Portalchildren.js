@@ -17,22 +17,10 @@ zkmax.layout.Portalchildren = zk.$extends(zul.Widget, {
 		var zcls = this._zclass;
 		return zcls != null ? zcls: "z-portal-children";
 	},
-	/** Sets whether to disable the smart update.
-	 * <p>Used only for component development.
-	 * @since 5.0.0
-	 */
-	disableSmartUpdate: function(v){
-		this._noSmartUpdate = v;
-	},
+	/*wait the panel to finish
 	bind_: function() {
 		this.$supers('bind_', arguments);
-		var cmp = this.getNode();
-		cmp._width = cmp.style.width;
-		/*wait the panel to finish
-		 * then implement onChildMaximize... follow columnchildren.js
-		 * */
 	},
-	/*wait the panel to finish
 	onChildOuter: function (child) {
 		zk.on(child, "maximize", zkPortalChildren.onChildMaximize);
 	},

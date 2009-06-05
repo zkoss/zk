@@ -54,9 +54,6 @@ import org.zkoss.zul.impl.XulElement;
  * @since 3.5.0
  */
 public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Panel {
-	/** disable smartUpdate; usually caused by the client. */
-	private boolean _noSmartUpdate;
-	private transient Component _noSmartParent;
 	private transient Toolbar _tbar, _bbar, _fbar;
 	private transient Panelchildren _panelchildren;
 	private transient Caption _caption;
@@ -634,20 +631,5 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 			Events.postEvent(evt);
 		} else
 			super.service(request, everError);
-	}
-
-	protected void addMoved(Component oldparent, Page oldpg, Page newpg) {
-		if (!_noSmartUpdate || _noSmartParent != getParent()) {
-			super.addMoved(oldparent, oldpg, newpg);
-		}
-	}
-
-	/** Sets whether to disable the smart update.
-	 * <p>Used only for component development.
-	 * @since 5.0.0
-	 */
-	public void disableSmartUpdate(boolean noSmartUpdate, Component noSmartParent) {
-		_noSmartUpdate = noSmartUpdate;
-		_noSmartParent = noSmartParent;
 	}
 }

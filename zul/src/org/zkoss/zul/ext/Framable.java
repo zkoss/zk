@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		2009/6/3 下午 5:07:59 , Created by jumperchen
+		2009/6/3 pm 5:07:59 , Created by jumperchen
 }}IS_NOTE
 
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
@@ -35,7 +35,6 @@ public interface Framable {
 	public boolean isMaximizable();
 	/**
 	 * Returns whether to display the minimizing button.
-	 * @return
 	 */
 	public boolean isMinimizable();
 	/**

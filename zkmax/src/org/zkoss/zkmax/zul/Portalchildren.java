@@ -31,10 +31,7 @@ import org.zkoss.zul.impl.XulElement;
  * @author jumperchen
  * @since 3.5.0
  */
-public class Portalchildren extends XulElement implements org.zkoss.zkmax.zul.api.Portalchildren {
-	/** disable smartUpdate; usually caused by the client. */
-	private boolean _noSmartUpdate;
-	
+public class Portalchildren extends XulElement implements org.zkoss.zkmax.zul.api.Portalchildren {	
 	public Portalchildren() {
 	}
 
@@ -53,13 +50,5 @@ public class Portalchildren extends XulElement implements org.zkoss.zkmax.zul.ap
 			throw new UiException("Unsupported child for Portalchildren: "
 					+ child);
 		super.beforeChildAdded(child, refChild);
-	}
-	
-	/** Sets whether to disable the smart update.
-	 * <p>Used only for component development.
-	 * @since 5.0.0
-	 */
-	public void disableSmartUpdate(boolean noSmartUpdate) {
-		_noSmartUpdate = noSmartUpdate;
 	}
 }

@@ -175,7 +175,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * @since 3.5.0 (becomes protected)
 	 */
 	protected boolean _visible = true;
-	private transient boolean _byClient;
+	private transient boolean _disableSmartUpdate;
 
 	/** Constructs a component with auto-generated ID.
 	 * @since 3.0.7 (becomes public)
@@ -1244,7 +1244,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * @see #updateByClient
 	 */
 	protected void smartUpdate(String attr, Object value) {
-		if (_page != null && !_byClient)
+		if (_page != null && !_disableSmartUpdate)
 			getAttachedUiEngine().addSmartUpdate(this, attr, value);
 	}
 	/** A special smart update to update a value in int.
@@ -1437,6 +1437,32 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		final UiEngine uieng =
 			_page != null ? getAttachedUiEngine(): getCurrentUiEngine();
 		return uieng != null && uieng.disableClientUpdate(this, disable);
+	}
+	/** Sets whether to disable the smart update of the client widget.
+	 * Unlike {@link #disableClientUpdate}, this method disables only
+	 * the invocation of the smart update ({@link #smartUpdate})
+	 * against this component.
+	 * In additions, it won't be enabled automatically after the execution
+	 * is done. Therefore, it is usually called in the following pattern.
+	 * <pre><code>disableSmartUpdate(true);
+	 *try {
+	 *  smartUpdate(something, somevalue);
+	 *} finally {
+	 *  disableSmartUpdate(false);
+	 *}</code></pre>
+	 *
+	 * @see #smartUpdate
+	 * @see #disableClientUpdate
+	 * @since 5.0.0
+	 */
+	protected void disableSmartUpdate(boolean disable) {
+		_disableSmartUpdate = disable;
+	}
+	/** Retuns whether the smart update is disabled for this component.
+	 * @since 5.0.0
+	 */
+	protected boolean isSmartUpdateDisabled() {
+		return _disableSmartUpdate;
 	}
 
 	//-- in the redrawing phase --//
@@ -2128,13 +2154,13 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			return; //ingore it
 		}
 
-		_byClient = true;
+		_disableSmartUpdate = true;
 		try {
 			m.invoke(this, args);
 		} catch (Throwable ex) {
 			throw UiException.Aide.wrap(ex);
 		} finally {
-			_byClient = false;
+			_disableSmartUpdate = false;
 		}
 	}
 

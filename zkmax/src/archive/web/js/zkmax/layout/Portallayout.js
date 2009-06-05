@@ -22,7 +22,7 @@ zkmax.layout.Portallayout = zk.$extends(zul.Widget, {
 		this.$supers('bind_', arguments); 
 		zWatch.listen('onSize', this);
 		zWatch.listen('onShow', this);
-		zWatch.listen('beforeSize', this);
+		if (zk.ie6Only) zWatch.listen('beforeSize', this);
 		for(var portalChildren = this.firstChild; portalChildren; portalChildren = portalChildren.nextSibling)
 			for(var panel = portalChildren.firstChild; panel; panel = panel.nextSibling)
 				this._initDrag(panel);
@@ -32,7 +32,7 @@ zkmax.layout.Portallayout = zk.$extends(zul.Widget, {
 		this._cleanupDrag();			
 		zWatch.unlisten('onSize', this);
 		zWatch.unlisten('onShow', this);
-		zWatch.unlisten('beforeSize', this);
+		if (zk.ie6Only) zWatch.unlisten('beforeSize', this);
 		for(var portalChildren = this.firstChild; portalChildren; portalChildren = portalChildren.nextSibling)
 			for(var panel = portalChildren.firstChild; panel; panel = panel.nextSibling)
 				this._cleanDrag(panel.uuid);
@@ -168,7 +168,7 @@ zkmax.layout.Portallayout = zk.$extends(zul.Widget, {
 		var panel = dg.control,
 			panelNode = panel.getNode(),
 			fromCol = panel.parent,
-			proxy = zDom.$(panelNode.id + "$proxy"),
+			proxy = panel.getSubnode("proxy"),
 			toCol = zk.Widget.$(proxy.parentNode.id.split("$")[0]),
 			change = zDom.nextSibling(dg.node, "DIV") != proxy,
 			portallayout = panel.parent.parent;
@@ -291,9 +291,10 @@ zkmax.layout.Portallayout = zk.$extends(zul.Widget, {
 	},
 	onSize: _zkf,
 	onVisi: _zkf,
-	beforeSize: function(cmp){
-		if(zk.ie6Only && cmp && cmp.id)
+	beforeSize: zk.ie6Only ? function(wgt){
+		/*TODO: beforeSize got widget, not DOM element
+		if(cmp && cmp.id)
 			zDom.$(cmp.id.split("$")[0]).style.width = "0px";
-	}
-	
+		*/
+	}: zk.$void
 });

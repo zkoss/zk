@@ -105,7 +105,7 @@ public class Portallayout extends XulElement implements org.zkoss.zkmax.zul.api.
 
 	/** Processes an AU request.
 	 *
-	 * <p>Default: in addition to what are handled by {@link XulElement#process},
+	 * <p>Default: in addition to what are handled by {@link XulElement#service},
 	 * it also handles onPortalMove.
 	 * @since 5.0.0
 	 */
@@ -113,29 +113,18 @@ public class Portallayout extends XulElement implements org.zkoss.zkmax.zul.api.
 		final String cmd = request.getCommand();
 		if (cmd.equals(ZkMaxEvents.ON_PORTAL_MOVE)) {
 			PortalMoveEvent evt = PortalMoveEvent.getPortalMoveEvent(request);
+			disableClientUpdate(true);
 			try {
-				evt.getFrom().disableSmartUpdate(true);
 				final Portalchildren to = evt.getTo();
-				to.disableSmartUpdate(true);
-				final Panel dragged = evt.getDragged();
-				dragged.disableSmartUpdate(true, to);
 				final int droppedIndex = evt.getDroppedIndex();
-				to.insertBefore(dragged,
+				to.insertBefore(evt.getDragged(),
 					droppedIndex < to.getChildren().size() ?
 						(Component)to.getChildren().get(droppedIndex) : null);
 			} finally {
-				evt.getDragged().disableSmartUpdate(false, null);
-				evt.getFrom().disableSmartUpdate(false);
-				evt.getTo().disableSmartUpdate(false);
+				disableClientUpdate(false);
 			}
 			Events.postEvent(evt);
 		} else
 			super.service(request, everError);
-	}
-
-	/** Called by Portalchildren to call smart update.
-	 */
-	/*package*/ void smartUpdateDirectly(String name, boolean value) {
-		super.smartUpdate(name, value);
 	}
 }
