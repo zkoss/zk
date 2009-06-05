@@ -104,8 +104,8 @@ public interface ExecutionCtrl {
 	 */
 	public boolean isRecovering();
 
-	/** Returns the {@link Visualizer} for this execution
-	 * (set by {@link #setVisualizer}.
+	/** Returns the {@link Visualizer} for this execution.
+	 * It is the same as {@link DesktopCtrl#getVisualizer}.
 	 */
 	public Visualizer getVisualizer();
 

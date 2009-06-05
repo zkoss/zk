@@ -1279,7 +1279,7 @@ zkau._onDocMousedown = function (evt) {
 	if (zk.ie) {
 		setTimeout(function () {
 			try {
-				if ((!old.offsetWidth && !old.offsetHeight)) {
+				if (!old.offsetWidth && !old.offsetHeight) {
 					zkau.currentFocus.focus();
 				}
 			} catch (e) {}
