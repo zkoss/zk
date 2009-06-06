@@ -158,6 +158,12 @@ getResourcePaths("/catalog/") returns {"/catalog/index.html", "/catalog/products
 	 */
 	public Iterator getInitParameterNames();
 
+	/** Returns the URI for asynchronous update.
+	 * @see Desktop#getUpdateURI
+	 * @since 3.6.2
+	 */
+	public String getUpdateURI();
+
 	/** Returns the configuration.
 	 */
 	public Configuration getConfiguration();
