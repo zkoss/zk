@@ -403,8 +403,9 @@ public interface ComponentCtrl {
 	 */
 	public Command getCommand(String cmdId);
 
-	/** Sets whether to disable the update of the client widget.
-	 * By default, if a component is attached to a page, modications that
+	/** Sets whether to disable the update of the client widgets of
+	 * this component and its descendants.
+	 * <p>By default, if a component is attached to a page, modications that
 	 * change the visual representation will be sent to the client to
 	 * ensure the consistency.
 	 * <p>Though rarely needed, you can disable the synchronization of
