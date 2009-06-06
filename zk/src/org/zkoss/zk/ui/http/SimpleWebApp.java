@@ -83,6 +83,10 @@ public class SimpleWebApp extends AbstractWebApp {
 		return _attrs;
 	}
 
+	public String getUpdateURI() {
+		return WebManager.getWebManager(this).getUpdateURI();
+	}
+
 	public WebApp getWebApp(String uripath) {
 		final ServletContext another = _ctx.getContext(uripath);
 		if (another != null) {

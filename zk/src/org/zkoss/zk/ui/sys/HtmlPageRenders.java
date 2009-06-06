@@ -212,6 +212,7 @@ public class HtmlPageRenders {
 		sb.append("\n<script>\n")
 			.append("zkver('").append(wapp.getVersion())
 			.append("','").append(wapp.getBuild())
+			.append("','").append(wapp.getUpdateURI())
 			.append('\'');
 
 		for (Iterator it = LanguageDefinition.getByDeviceType(deviceType).iterator();

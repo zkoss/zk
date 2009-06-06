@@ -222,9 +222,8 @@ public class WebManager {
 		return _cwr;
 	}
 	/** Returns the URI for asynchronous update.
-	 *
-	 * <p>You rarely need this method unless for implementing special
-	 * components, such as file upload.
+	 * @see Desktop#getUpdateURI
+	 * @see WebApp#getUpdateURI
 	 * @since 3.6.2
 	 */
 	public String getUpdateURI() {

@@ -65,6 +65,7 @@ function zkver() {
 	var args = arguments, len = args.length;
 	zk.version = args[0];
 	zk.build = args[1];
+	zk.updateURI = args[2];
 
 	for (var j = 3; j < len; j += 2)
 		zPkg.setVersion(args[j], args[j + 1]);
