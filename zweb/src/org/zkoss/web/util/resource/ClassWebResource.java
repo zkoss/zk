@@ -635,7 +635,7 @@ public class ClassWebResource {
 		/** Returns whether the page can be directly included.
 		 */
 		private boolean isDirectInclude(String path) {
-			final String ext = Servlets.getExtension(path);
+			final String ext = Servlets.getExtension(path, false);
 			final Extendlet extlet = ext != null ? getExtendlet(ext): null;
 			if (extlet != null) {
 				try {

@@ -21,6 +21,7 @@ import java.util.TimeZone;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.zkoss.util.TimeZones;
 import org.zkoss.util.logging.Log;
@@ -46,35 +47,71 @@ import org.zkoss.zk.ui.sys.SessionsCtrl;
  * @author tomyeh
  */
 public class I18Ns {
-//	private static final Log log = Log.lookup(I18Ns.class);
+	private static final Log log = Log.lookup(I18Ns.class);
 	private static final String ATTR_SETUP = "org.zkoss.zk.ui.http.charset.setup";
 
 	/** Sets up the internationalization attributes, inclluding locale
 	 * and time zone.
+	 *
+	 * @param sess the session. It cannot be null.
 	 * @param charset the response's charset. If null or empty,
 	 * response.setCharacterEncoding won't be called, i.e., the container's
 	 * default is used.
 	 */
 	public static final Object setup(Session sess,
 	ServletRequest request, ServletResponse response, String charset) {
+		return setup((Object)sess, request, response, charset);
+	}
+	/** Sets up the internationalization attributes, inclluding locale
+	 * and time zone.
+	 *
+	 * <p>This method is used only for requests that don't
+	 * count on {@link Session}.
+	 *
+	 * @param sess the HTTP session. It cannot be null.
+	 * @param charset the response's charset. If null or empty,
+	 * response.setCharacterEncoding won't be called, i.e., the container's
+	 * default is used.
+	 * @since 3.6.2
+	 */
+	public static final Object setup(HttpSession sess,
+	ServletRequest request, ServletResponse response, String charset) {
+		return setup((Object)sess, request, response, charset);
+	}
+	private static final Object setup(Object sess,
+	ServletRequest request, ServletResponse response, String charset) {
 		final Object[] old;
 		if (request.getAttribute(ATTR_SETUP) != null) { //has been setup
 			old = null;
 		} else {
-			//Invoke the request interceptors
-			sess.getWebApp().getConfiguration()
-				.invokeRequestInterceptors(sess, request, response);
+			final HttpSession hsess;
+			if (sess instanceof Session) {
+				final Session se = (Session)sess;
+				//Invoke the request interceptors
+				se.getWebApp().getConfiguration()
+					.invokeRequestInterceptors(se, request, response);
 
-			final Object ol = Charsets.setup(request, response, charset);
+				hsess = (HttpSession)se.getNativeSession();
+			} else {
+				hsess = (HttpSession)sess;
+			}
+
+			final Object ol = Charsets.setup(hsess, request, response, charset);
 				//Charsets will handle PREFERRED_LOCALE
-			final Object otz = TimeZones.setThreadLocal(
-				(TimeZone)sess.getAttribute(Attributes.PREFERRED_TIME_ZONE));
+
+			Object tz = hsess.getAttribute(Attributes.PREFERRED_TIME_ZONE);
+			if (tz != null && !(tz instanceof TimeZone)) {
+				log.warning(Attributes.PREFERRED_TIME_ZONE+" ignored. TimeZone is required, not "+tz.getClass());
+				tz = null;
+			}
+			final Object otz = TimeZones.setThreadLocal((TimeZone)tz);
 
 			request.setAttribute(ATTR_SETUP, Boolean.TRUE); //mark as setup
 			old = new Object[] {ol, otz};
 		}
 
-		SessionsCtrl.setCurrent(sess);
+		if (sess instanceof Session)
+			SessionsCtrl.setCurrent((Session)sess);
 		return old;
 	}
 	/* Cleans up the inernationalization attributes.
