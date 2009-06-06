@@ -100,9 +100,9 @@ public class I18Ns {
 				//Charsets will handle PREFERRED_LOCALE
 
 			Object tz = hsess.getAttribute(Attributes.PREFERRED_TIME_ZONE);
-			if (!(tz instanceof TimeZone)) {
-				tz = null;
+			if (tz != null && !(tz instanceof TimeZone)) {
 				log.warning(Attributes.PREFERRED_TIME_ZONE+" ignored. TimeZone is required, not "+tz.getClass());
+				tz = null;
 			}
 			final Object otz = TimeZones.setThreadLocal((TimeZone)tz);
 
