@@ -34,6 +34,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpSession;
 
 import org.zkoss.mesg.Messages;
 import org.zkoss.lang.Classes;
@@ -316,15 +317,17 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		final String pi = Https.getThisPathInfo(request);
 //		if (log.finerable()) log.finer("Path info: "+pi);
 
-		final Session sess = WebManager.getSession(_ctx, request, false);
 		final boolean withpi = pi != null && pi.length() != 0;
 		if (withpi && pi.startsWith(ClassWebResource.PATH_PREFIX)) {
+			//use HttpSession to avoid loading SerializableSession in GAE
+			final ClassWebResource cwr = getClassWebResource();
+			final HttpSession sess =
+				shallSession(cwr, pi) ? request.getSession(false): null;
 			final Object old = sess != null?
 				I18Ns.setup(sess, request, response, "UTF-8"):
-				Charsets.setup(request, response, "UTF-8");
+				Charsets.setup(sess, request, response, "UTF-8");
 			try {
-				getClassWebResource()
-					.service(request, response,
+				cwr.service(request, response,
 						pi.substring(ClassWebResource.PATH_PREFIX.length()));
 			} finally {
 				if (sess != null) I18Ns.cleanup(request, old);
@@ -333,6 +336,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			return; //done
 		}
 
+		final Session sess = WebManager.getSession(_ctx, request, false);
 		if (sess == null) {
 			if (withpi) {
 				final AuProcessor proc = getAuProcessorByPath(pi);
@@ -377,6 +381,9 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	void doPost(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
 		doGet(request, response);
+	}
+	private static boolean shallSession(ClassWebResource cwr, String pi) {
+		return cwr.getExtendlet(Servlets.getExtension(pi)) != null;
 	}
 
 	//-- ASYNC-UPDATE --//

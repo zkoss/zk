@@ -59,7 +59,7 @@ public class Charsets {
 	}
 
 	/** Sets up the charset for the request and response based on
-	 * {@link #getPreferredLocale}. After setting up, you shall invoke
+	 * {@link #getPreferredLocale(HttpSession,ServletRequest)}. After setting up, you shall invoke
 	 * {@link #cleanup} before exiting.
 	 *
 	 * <pre><code> final Object old = setup(request, response, null);
@@ -78,17 +78,18 @@ public class Charsets {
 	 * However, if you are writing libraries to be as independent of
 	 * web.xml as possible, you might choose to invoke this method directly.
 	 *
+	 * @param sess the session to look for the preferred locale. Ignored if null.
 	 * @param charset the response's charset. If null or empty,
 	 * response.setCharacterEncoding won't be called, i.e., the container's
 	 * default is used.
 	 * @return an object that must be passed to {@link #cleanup}
 	 */
 	public static final
-	Object setup(ServletRequest request, ServletResponse response, String charset) {
+	Object setup(HttpSession sess, ServletRequest request, ServletResponse response, String charset) {
 		if (hasSetup(request)) //processed before?
 			return Objects.UNKNOWN;
 
-		final Locale locale = getPreferredLocale(request);
+		final Locale locale = getPreferredLocale(sess, request);
 		response.setLocale(locale);
 		if (charset != null && charset.length() > 0) {
 			try {
@@ -121,6 +122,18 @@ public class Charsets {
 
 		markSetup(request, true);
 		return Locales.setThreadLocal(locale);
+	}
+	/** Sets up the charset for the request and response based on
+	 * {@link #getPreferredLocale(HttpSession,ServletRequest)}.
+	 * It is the same as setup(request.getSession(false), request, response, charset);
+	 */
+	public static final Object
+	setup(ServletRequest request, ServletResponse response, String charset) {
+		return setup(getSession(request), request, response, charset);
+	}
+	private static final HttpSession getSession(ServletRequest request) {
+		return request instanceof HttpServletRequest ?
+			((HttpServletRequest)request).getSession(false): null;
 	}
 	/** Cleans up what has been set in {@link #setup}.
 	 * Some invocation are not undo-able, so this method only does the basic
@@ -164,28 +177,33 @@ public class Charsets {
 	 * {@link Attributes#PREFERRED_LOCALE}. If so, return it.</li>
 	 * <li>Otherwise, use ServletRequest.getLocale().</li>
 	 * </ol>
+	 *
+	 * @param sess the session to look for the preferred locale. Ignored if null.
 	 */
-	public static final Locale getPreferredLocale(ServletRequest request) {
-		if (request instanceof HttpServletRequest) {
-			final HttpSession sess =
-				((HttpServletRequest)request).getSession(false);
-			if (sess != null) {
-				final Object v = sess.getAttribute(Attributes.PREFERRED_LOCALE);
-				if (v != null) {
-					if (v instanceof Locale)
-						return (Locale)v;
-					log.warning(Attributes.PREFERRED_LOCALE+" ignored. Locale is required, not "+v.getClass());
-				}
+	public static final
+	Locale getPreferredLocale(HttpSession sess, ServletRequest request) {
+		if (sess != null) {
+			final Object v = sess.getAttribute(Attributes.PREFERRED_LOCALE);
+			if (v != null) {
+				if (v instanceof Locale)
+					return (Locale)v;
+				log.warning(Attributes.PREFERRED_LOCALE+" ignored. Locale is required, not "+v.getClass());
 			}
 		}
 
 		final Locale l = request.getLocale();
 		return l != null ? l: Locale.getDefault();
 	}
+	/** Returns the preferred locale of the specified request.
+	 * It is the same as getPreferredLocale(request.getSession(false), request).
+	 */
+	public static final Locale getPreferredLocale(ServletRequest request) {
+		return getPreferredLocale(getSession(request), request);
+	}
 	/** Sets the preferred locale for the current session of the specified
 	 * request.
 	 * @param locale the preferred Locale. If null, it means no preferred
-	 * locale (and then {@link #getPreferredLocale} use request.getLocale
+	 * locale (and then {@link #getPreferredLocale(HttpSession,ServletRequest)} use request.getLocale
 	 * instead).
 	 */
 	public static final
