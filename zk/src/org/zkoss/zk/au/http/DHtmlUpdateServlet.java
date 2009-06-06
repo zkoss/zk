@@ -298,7 +298,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		&& !Servlets.isIncluded(request)) {
 			//If a resource processor is registered for the extension,
 			//we assume the content is dynamic
-			final String ext = Servlets.getExtension(pi);
+			final String ext = Servlets.getExtension(pi, false);
 			if (ext == null
 			|| getClassWebResource().getExtendlet(ext) == null) {
 				if (_lastModified == 0) _lastModified = new Date().getTime();
@@ -383,7 +383,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		doGet(request, response);
 	}
 	private static boolean shallSession(ClassWebResource cwr, String pi) {
-		return cwr.getExtendlet(Servlets.getExtension(pi)) != null;
+		return cwr.getExtendlet(Servlets.getExtension(pi, false)) != null;
 	}
 
 	//-- ASYNC-UPDATE --//
