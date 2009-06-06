@@ -1180,7 +1180,7 @@ zk.setInnerHTML = function (el, html) {
  */
 zk.setOuterHTML = function (el, html) {
 	//NOTE: Safari doesn't support __defineSetter__
-	var p = el.parentNode;
+	var p = el.parentNode, prev = el.previousSibling, nxt = el.nextSibling;
 	if (zk.ie || zk.opera) {
 		var tn = $tag(el);
 		if (tn == "TD" || tn == "TH" || tn == "TABLE" || tn == "TR"
@@ -1202,13 +1202,10 @@ zk.setOuterHTML = function (el, html) {
 		p.replaceChild(df, el);
 	}
 
-	for (p = p.firstChild; p; p = p.nextSibling) {
-		if ($tag(p)) { //skip Text
+	for (p = prev ? prev.nextSibling: p.firstChild; p && p != nxt; p = p.nextSibling)
+		if ($tag(p)) //skip Text
 			if (!$visible(p)) zk._hideExtr(p);
 			else zk._showExtr(p);
-			break;
-		}
-	}
 };
 
 /** Returns the next sibling with the specified tag name, or null if not found.
