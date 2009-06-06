@@ -46,7 +46,7 @@ ZK 3.6.2
   2799334: focus doesn't get back from popup
   2800851: BSHInterpreter doesn't serialize variables defined in Window
   2800879: Rowcomparator NOT Serializable
-  
+  2801878: Missing properties in radiogroup and radio components in XSD
 
 * Upgrade Notes
   * The signature of doInit of org.zkoss.zk.ui.util.Initiator is changed.
