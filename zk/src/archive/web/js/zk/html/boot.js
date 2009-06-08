@@ -278,22 +278,34 @@ if (zk.ie) { //Bug 1741959: avoid memory leaks
 	zk.listen = function (el, evtnm, fn) {
 		zk._listen(el, evtnm, fn);
 
-		var ls = zk._ltns[el];
-		if (!ls) zk._ltns[el] = ls = {};
-		var fns = ls[evtnm];
-		if (!fns) ls[evtnm] = fns = [];
-		fns.push(fn);
+		var id = _zklnid(el),
+			ls = zk._ltns[id];
+		if (!ls) zk._ltns[id] = ls = [];
+		ls.push([el, evtnm, fn]);
 	};
+	function _zklnid(el) {
+		return el.id || _zkAnyPid(el)
+		|| (el == document ? '_doc_': el == window ? '_win_': el);
+	}
+	function _zkAnyPid(el) {
+		while (el = el.parentNode) {
+			var id = el.id;
+			if (id) return id;
+		}
+	}
 
 	zk._unlisten = zk.unlisten;
 	zk.unlisten = function (el, evtnm, fn) {
 		zk._unlisten(el, evtnm, fn);
 
-		var ls = zk._ltns[el];
-		var fns = ls ? ls[evtnm]: null;
-		if (fns) {
-			fns.remove(fn);
-			if (!fns.length) delete ls[evtnm];
+		var id = _zklnid(el);
+		for (var ls = zk._ltns[id], j = ls ? ls.length: 0, inf; --j >= 0;) {
+			inf = ls[j];
+			if (el == inf[0] && evtnm == inf[1] && fn == inf[2]) {
+				ls.splice(j, 1);
+				if (!ls.length) delete zk._ltns[id];
+				break;
+			}
 		}
 	};
 
@@ -302,44 +314,39 @@ if (zk.ie) { //Bug 1741959: avoid memory leaks
 	 */
 	zk.unlistenAll = function (el) {
 		if (el) {
-			var ls = zk._ltns[el];
+			var id = _zklnid(el),
+				ls = zk._ltns[id];
 			if (ls) {
-				zk._unltns.push([el, ls]);
-				delete zk._ltns[el];
-				setTimeout(zk._unlistenOne, 10000 + 20000*Math.random());
-					//Note: the performance is not good, so delay 10~30s
+				zk._unltns.push(ls);
+				delete zk._ltns[id];
+				setTimeout(zk._unlistenOne, 2000 + 8000*Math.random());
+					//Note: the performance is not good, so delay 2~10s
 			}
 		} else {
-			while (zk._unltns.length)
-				zk._unlistenOne();
+			while (zk._unlistenOne())
+				;
 
-			for (var el in zk._ltns) {
-				var ls = zk._ltns[el];
+			for (var id in zk._ltns) {
+				var ls = zk._ltns[id];
 				if (ls) {
-					delete zk._ltns[el];
-					zk._unlistenNode(el, ls);
+					delete zk._ltns[id];
+					zk._unlistenNode(ls);
 				}
 			}
 		}
 	};
 	zk._unlistenOne = function () {
-		if (zk._unltns.length) {
-			var inf = zk._unltns.shift();
-			zk._unlistenNode(inf[0], inf[1]);
-		}
+		var ls = zk._unltns.shift();
+		return ls && !zk._unlistenNode(ls);
 	};
-	zk._unlistenNode = function (el, ls) {
-		for (var evtnm in ls) {
-			var fns = ls[evtnm];
-			delete ls[evtnm];
-			for (var j = fns.length; --j >= 0;) {
-				try {
-					zk._unlisten(el, evtnm, fns[j]);
-					fns[j] = null; //just in case
-				} catch (e) { //ignore
-				}
+	zk._unlistenNode = function (ls) {
+		for (var inf; inf = ls.shift();) {
+			try {
+				zk._unlisten(inf[0], inf[1], inf[2]);
+			} catch (e) { //ignore
+				if (zk.debugJS)
+					throw e;
 			}
-			fns.length = 0; //just in case
 		}
 	};
 } else {
@@ -1309,15 +1316,14 @@ zk._cleanupAt = function (n) {
 	if (type) {
 		zk.eval(n, "cleanup", type);
 		zkau.cleanupMeta(n); //note: it is called only if type is defined
-		zk.unlistenAll(n); //Bug 1741959: memory leaks
 		zk._visicmps.remove(n.id);
 		zk._hidecmps.remove(n.id);
 		zk._szcmps.remove(n.id);
 		zk._bfszcmps.remove(n.id);
 		zk._scrlcmps.remove(n.id);
 	}
-	// bug #2313106 whatever it is, we shall invoke zk.unAll()
-	zk.unAll(n); // since 3.5.0
+	if (n.id) zk.unlistenAll(n); //Bug 1741959: memory leaks
+	zk.unAll(n); //bug #2313106 whatever it is, we shall invoke zk.unAll()
 	
 	for (n = n.firstChild; n; n = n.nextSibling)
 		if (n.nodeType == 1) zk._cleanupAt(n); //recursive for child component
