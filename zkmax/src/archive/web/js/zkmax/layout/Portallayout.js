@@ -20,8 +20,7 @@ zkmax.layout.Portallayout = zk.$extends(zul.Widget, {
 	},
 	bind_: function() {
 		this.$supers('bind_', arguments); 
-		zWatch.listen('onSize', this);
-		zWatch.listen('onShow', this);
+		zWatch.listen({onSize: this, onShow: this});
 		
 		for(var portalChildren = this.firstChild; portalChildren; portalChildren = portalChildren.nextSibling)
 			for(var panel = portalChildren.firstChild; panel; panel = panel.nextSibling)
@@ -30,8 +29,7 @@ zkmax.layout.Portallayout = zk.$extends(zul.Widget, {
 	},
 	unbind_: function (cmp) {
 		this._cleanupDrag();			
-		zWatch.unlisten('onSize', this);
-		zWatch.unlisten('onShow', this);
+		zWatch.unlisten({onSize: this, onShow: this});
 		
 		for(var portalChildren = this.firstChild; portalChildren; portalChildren = portalChildren.nextSibling)
 			for(var panel = portalChildren.firstChild; panel; panel = panel.nextSibling)

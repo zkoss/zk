@@ -48,7 +48,7 @@ zul.grid.Columns = zk.$extends(zul.mesh.HeadWidget, {
 	},
 	bind_: function (dt, skipper, after) {
 		this.$supers('bind_', arguments);
-		zWatch.listen('onResponse', this);
+		zWatch.listen({onResponse: this});
 		var w = this;
 		if (this._menupopup == 'auto') {
 			after.push(function() {
@@ -57,7 +57,7 @@ zul.grid.Columns = zk.$extends(zul.mesh.HeadWidget, {
 		}
 	},
 	unbind_: function () {
-		zWatch.unlisten('onResponse', this);
+		zWatch.unlisten({onResponse: this});
 		if (this._mpop) {
 			this._mpop.parent.removeChild(this._mpop);
 			this._shallSync = this._mpop = null;			

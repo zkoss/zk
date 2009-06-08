@@ -62,11 +62,11 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
-		zWatch.listen('onResponse', this);
+		zWatch.listen({onResponse: this});
 		zk.afterMount(this.proxy(this.onResponse));
 	},
 	unbind_: function () {
-		zWatch.unlisten('onResponse', this);
+		zWatch.unlisten({onResponse: this});
 		this.$supers('unbind_', arguments);
 	},
 	onResponse: function () {

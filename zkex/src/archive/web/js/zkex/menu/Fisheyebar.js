@@ -51,10 +51,10 @@ zkex.menu.Fisheyebar = zk.$extends(zul.Widget, {
 		this._init();
 		this.syncAttr();
 		this.onSize();
-		zWatch.listen('onSize', this);
+		zWatch.listen({onSize: this});
 	},
 	unbind_: function () {
-		zWatch.unlisten('onSize', this);
+		zWatch.unlisten({onSize: this});
 		zEvt.unlisten(document.documentElement, "mousemove", this._onMouseMove);
 		zEvt.unlisten(document.documentElement, "mouseout", this._onBodyOut);
 		this.pbox = this._onMouseMove = this._onBodyOut = null;

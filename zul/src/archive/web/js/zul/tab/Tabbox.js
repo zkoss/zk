@@ -100,7 +100,7 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 		this.tabs = this.getTabs();
 		this.tabpanels = this.getTabpanels();
 		this._scrolling = false;
-		zWatch.listen('onSize', this);
+		zWatch.listen({onSize: this});
 		if (this.inAccordionMold()) {
 			zDom.cleanVisibility(this.getNode());
 		}
@@ -115,7 +115,7 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 		);
 	},
 	unbind_: function () {
-		zWatch.unlisten("onSize", this);
+		zWatch.unlisten({onSize: this});
 		this.$supers('unbind_', arguments);
 	},
 	//super//

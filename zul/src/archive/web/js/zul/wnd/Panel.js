@@ -356,24 +356,19 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	bind_: function () {
 		this.$supers('bind_', arguments);
 
-		zWatch.listen("onSize", this);
-		zWatch.listen("onShow", this);
-		zWatch.listen("onHide", this);
+		zWatch.listen({onSize: this, onShow: this, onHide: this});
 
 		var uuid = this.uuid,
 			$Panel = this.$class;
 
 		if (this.isFloatable()) {
-			zWatch.listen('onFloatUp', this);
+			zWatch.listen({onFloatUp: this});
 			this.setFloating_(true);
 			this._initFloat();
 		}
 	},
 	unbind_: function () {
-		zWatch.unlisten("onSize", this);
-		zWatch.unlisten("onShow", this);
-		zWatch.unlisten('onFloatUp', this);
-		zWatch.unlisten("onHide", this);
+		zWatch.unlisten({onSize: this, onShow: this, onHide: this, onFloatUp: this});
 		this.setFloating_(false);
 
 		if (this._shadow) {

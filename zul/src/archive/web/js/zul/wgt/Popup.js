@@ -40,7 +40,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			
 			// register onResponse to remove the progress bar after receiving
 			// the response from server.
-			zWatch.listen('onResponse', this);		
+			zWatch.listen({onResponse: this});		
 		}
 		if ((zk.useStackup === undefined ? zk.ie6Only: zk.useStackup)) {
 			if (!this._stackup)
@@ -82,7 +82,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	},
 	onResponse: function () {
 		if (this.mask) this.mask.destroy();
-		zWatch.unlisten('onResponse', this);
+		zWatch.unlisten({onResponse: this});
 		this.mask = null;
 	},
 	close: function (opts) {
@@ -113,8 +113,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
-		zWatch.listen('onFloatUp', this);
-		zWatch.listen('onShow', this);
+		zWatch.listen({onFloatUp: this, onShow: this});
 		this.setFloating_(true);
 	},
 	unbind_: function () {
@@ -123,8 +122,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			this._stackup = null;
 		}
 		
-		zWatch.unlisten('onFloatUp', this);
-		zWatch.unlisten('onShow', this);
+		zWatch.unlisten({onFloatUp: this, onShow: this});
 		this.setFloating_(false);
 		this.$supers('unbind_', arguments);
 	},

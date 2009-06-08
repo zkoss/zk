@@ -54,8 +54,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 	},
 	bind_: function (desktop, skipper, after) {
 		this.$supers('bind_', arguments);
-		zWatch.listen("onSize", this);
-		zWatch.listen("onShow", this);
+		zWatch.listen({onSize: this, onShow: this});
 
 		for (var btn, key = ['right', 'left', 'down', 'up'], le = key.length; --le >= 0;)
 			if ((btn = this.getSubnode(key[le])))
@@ -72,8 +71,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		this._fixWidth();
 	},
 	unbind_: function () {
-		zWatch.unlisten("onSize", this);
-		zWatch.unlisten("onShow", this);
+		zWatch.unlisten({onSize: this, onShow: this});
 
 		this.$supers('unbind_', arguments);
 	},

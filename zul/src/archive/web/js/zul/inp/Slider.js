@@ -243,8 +243,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		}
 		this._makeDraggable();
 		
-		zWatch.listen('onSize', this);
-		zWatch.listen('onShow', this);
+		zWatch.listen({onSize: this, onShow: this});
 		
 	},
 	unbind_: function (){
@@ -253,8 +252,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			this._drag.destroy();
 			this._drag = null;
 		}
-		zWatch.unlisten('onSize', this);
-		zWatch.unlisten('onShow', this);
+		zWatch.unlisten({onSize: this, onShow: this});
 		this.$supers('unbind_', arguments); 
 	}
 

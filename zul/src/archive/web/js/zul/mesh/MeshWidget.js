@@ -125,9 +125,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			this.domListen_(this.ebody, 'onScroll');
 			this.ebody.style.overflow = ''; // clear
 		}
-		zWatch.listen("onSize", this);
-		zWatch.listen("onShow", this);
-		zWatch.listen("beforeSize", this);
+		zWatch.listen({onSize: this, onShow: this, beforeSize: this});
 	},
 	unbind_: function () {
 		if (this.ebody)
@@ -136,9 +134,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		this.ebody = this.ehead = this.efoot = this.ebodytbl
 			= this.eheadtbl = this.efoottbl = null;
 		
-		zWatch.unlisten("onSize", this);
-		zWatch.unlisten("onShow", this);
-		zWatch.unlisten("beforeSize", this);
+		zWatch.unlisten({onSize: this, onShow: this, beforeSize: this});
 		
 		this.$supers('unbind_', arguments);
 	},

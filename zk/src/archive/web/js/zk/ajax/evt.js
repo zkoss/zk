@@ -55,29 +55,37 @@ zk.Event = zk.$extends(zk.Object, {
 });
 
 zWatch = {
-	listen: function (name, o) {
-		var wts = zWatch._wts[name];
-		if (wts) {
-			var bindLevel = o.bindLevel;
-			if (bindLevel != null) {
-				for (var j = wts.length;;) {
-					if (--j < 0) {
-						wts.unshift(o);
-						break;
+	listen: function (infs) {
+		for (name in infs) {
+			var wts = zWatch._wts[name],
+				o = infs[name];
+			if (wts) {
+				var bindLevel = o.bindLevel;
+				if (bindLevel != null) {
+					for (var j = wts.length;;) {
+						if (--j < 0) {
+							wts.unshift(o);
+							break;
+						}
+						if (bindLevel >= wts[j].bindLevel) { //parent first
+							wts.$addAt(j + 1, o);
+							break;
+						}
 					}
-					if (bindLevel >= wts[j].bindLevel) { //parent first
-						wts.$addAt(j + 1, o);
-						break;
-					}
-				}
+				} else
+					wts.push(o);
 			} else
-				wts.push(o);
-		} else
-			wts = zWatch._wts[name] = [o];
+				wts = zWatch._wts[name] = [o];
+		}
 	},
-	unlisten: function (name, o) {
-		var wts = zWatch._wts[name];
-		return wts && wts.$remove(o);
+	unlisten: function (infs) {
+		var found = false;
+		for (name in infs) {
+			var wts = zWatch._wts[name];
+			if (wts && wts.$remove(infs[name]))
+				found = true;
+		}
+		return found;
 	},
 	unlistenAll: function (name) {
 		delete zWatch._wts[name];
@@ -201,7 +209,7 @@ zWatch = {
 	},
 	_wts: {}
 };
-zWatch.listen('onBindLevelMove', zWatch);
+zWatch.listen({onBindLevelMove: zWatch});
 
 zEvt = {
 	target: function(evt) {

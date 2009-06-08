@@ -131,7 +131,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			if (aded) {
 				aded = new zul.wgt.ADBS(aded);
 				if (this.isListen('onClick', {asapOnly:true}))
-					zWatch.listen('onResponse', aded);
+					zWatch.listen({onResponse: aded});
 				else
 					setTimeout(function () {aded.onResponse();}, 800);
 			}
@@ -186,6 +186,6 @@ zul.wgt.ADBS = zk.$extends(zk.Object, {
 	onResponse: function () {
 		for (var ads = this._ads, ad; ad = ads.shift();)
 			ad.setDisabled(false);
-		zWatch.unlisten('onResponse', this);
+		zWatch.unlisten({onResponse: this});
 	}
 });

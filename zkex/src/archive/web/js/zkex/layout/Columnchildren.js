@@ -50,16 +50,14 @@ zkex.layout.Columnchildren = zk.$extends(zul.Widget, {
 		var cave = this.getSubnode("cave"),
 			cns = cave;
 		do{
-			zWatch.listen("onChildMaximize",cns);
-			zWatch.listen("onChildOuter",cns);
+			zWatch.listen({onChildMaximize: cns, onChildOuter: cns});
 		}while(cns = zDom.nextSibling(cns,"DIV"))*/
 	},
 	/*unbind_: function () {
 		var cave = this.getSubnode("cave"),
 			cns = cave;
 		do{
-			zWatch.unlisten("maximize",cns);
-			zWatch.unlisten("onOuter",cns);
+			zWatch.unlisten({maximize: cns, onOuter: cns});
 		}while(cns = zDom.nextSibling(cns,"DIV"));
 		this.$supers('unbind_', arguments);
 	},*/

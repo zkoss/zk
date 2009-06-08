@@ -40,11 +40,11 @@ zul.inp.Errorbox = zk.$extends('zul.wgt.Popup', {
 			ignoredrag: $Errorbox._ignoredrag,
 			change: $Errorbox._change
 		});
-		zWatch.listen('onScroll', this);
+		zWatch.listen({onScroll: this});
 	},
 	unbind_: function () {
 		this._drag.destroy();
-		zWatch.unlisten('onScroll', this);
+		zWatch.unlisten({onScroll: this});
 
 		this.$supers('unbind_', arguments);
 		this._drag = null;

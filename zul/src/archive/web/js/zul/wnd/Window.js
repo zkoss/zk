@@ -407,10 +407,9 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		var $Window = this.$class;
 
 		var mode = this._mode;
-		zWatch.listen('onSize', this);
-		zWatch.listen('onShow', this);
+		zWatch.listen({onSize: this, onShow: this});
 		if (mode != 'embedded') {
-			zWatch.listen('onFloatUp', this);
+			zWatch.listen({onFloatUp: this});
 			this.setFloating_(true);
 
 			if (mode == 'modal' || mode == 'highlighted') this._doModal();
@@ -436,9 +435,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		}
 		
 		zDom.undoVParent(node);
-		zWatch.unlisten('onFloatUp', this);
-		zWatch.unlisten('onSize', this);
-		zWatch.unlisten('onShow', this);
+		zWatch.unlisten({onFloatUp: this, onSize: this, onShow: this});
 		this.setFloating_(false);
 
 		if (zk.currentModal == this) {

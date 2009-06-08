@@ -112,14 +112,12 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		this.$supers('bind_', arguments);
 
 		if (!this.isLegend()) {
-			zWatch.listen("onSize", this);
-			zWatch.listen("onShow", this);
+			zWatch.listen({onSize: this, onShow: this});
 		}
 	},
 	unbind_: function () {
 		if (!this.isLegend()) {
-			zWatch.unlisten("onSize", this);
-			zWatch.unlisten("onShow", this);
+			zWatch.unlisten({onSize: this, onShow: this});
 		}
 		this.$supers('unbind_', arguments);
 	},

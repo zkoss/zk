@@ -183,17 +183,13 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	_bindWatch: function () {
 		if (!this._watchBound) {
 			this._watchBound = true;
-			zWatch.listen("onSize", this);
-			zWatch.listen("onShow", this);
-			zWatch.listen("onHide", this);
+			zWatch.listen({onSize: this, onShow: this, onHide: this});
 		}
 	},
 	unbind_: function () {
 		if (this._watchBound) {
 			this._watchBound = false;
-			zWatch.unlisten("onSize", this);
-			zWatch.unlisten("onShow", this);
-			zWatch.unlisten("onHide", this);
+			zWatch.unlisten({onSize: this, onShow: this, onHide: this});
 		}
 
 		this.$supers('unbind_', arguments);

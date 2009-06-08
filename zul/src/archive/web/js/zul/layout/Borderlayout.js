@@ -50,12 +50,10 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
-		zWatch.listen("onSize", this);
-		zWatch.listen("onShow", this);
+		zWatch.listen({onSize: this, onShow: this});
 	},
 	unbind_: function () {
-		zWatch.unlisten("onSize", this);
-		zWatch.unlisten("onShow", this);
+		zWatch.unlisten({onSize: this, onShow: this});
 		this.$supers('unbind_', arguments);
 	},
 	// private
