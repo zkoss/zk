@@ -150,25 +150,25 @@ zul.grid.ColumnMenupopup = zk.$extends(zul.menu.Menupopup, {
 	_init: function () {
 		var w = this._columns,
 			zcls = w.getZclass();
-			
-		this.listen('onOpen', w, w._onMenuPopup);
+
+		this.listen({onOpen: [w, w._onMenuPopup]});
 		
 		if (zk.feature.professional && w.isColumnsgroup()) {
 			var group = new zul.menu.Menuitem({label: msgzul.GRID_GROUP});
 				group.setSclass(zcls + '-menu-grouping');
-				group.listen('onClick', w, w._onGroup);
+				group.listen({onClick: [w, w._onGroup]});
 			this.appendChild(group);
 			this._group = group;
 		}
 		var asc = new zul.menu.Menuitem({label: msgzul.GRID_ASC});
 			asc.setSclass(zcls + '-menu-asc');
-			asc.listen('onClick', w, w._onAsc);
+			asc.listen({onClick: [w, w._onAsc]});
 		this._asc = asc;
 		this.appendChild(asc);
 		
 		var desc = new zul.menu.Menuitem({label: msgzul.GRID_DESC});
 		desc.setSclass(zcls + '-menu-dsc');
-		desc.listen('onClick', w, w._onDesc);
+		desc.listen({onClick: [w, w._onDesc]});
 		this._desc = desc;
 		this.appendChild(desc);
 		this.syncColMenu();
@@ -192,7 +192,7 @@ zul.grid.ColumnMenupopup = zk.$extends(zul.menu.Menupopup, {
 					checked: c.isVisible()
 				});
 				item._col = c.uuid;
-				item.listen('onClick', w, w._onColVisi);
+				item.listen({onClick: [w, w._onColVisi]});
 				this.appendChild(item);
 			}
 		}

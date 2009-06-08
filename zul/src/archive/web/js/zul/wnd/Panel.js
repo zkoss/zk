@@ -20,8 +20,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 
 	$init: function () {
 		this.$supers('$init', arguments);
-		this.listen('onClose', this, null, -1000);
-		this.listen('onMove', this, null, -1000);
+		this.listen({onClose: this, onMove: this}, -1000);
 	},
 
 	$define: {

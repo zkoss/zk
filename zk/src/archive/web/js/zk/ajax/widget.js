@@ -22,7 +22,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	$init: function (props) {
 		this._asaps = {}; //event listened at server
 		this._lsns = {}; //listeners(evtnm,listener)
-		this._$lsns = {}; //listners registered by setListener(evtnm, fn)
+		this._bklsns = {}; //backup for listners by setListener
 		this._subnodes = {}; //store sub nodes for widget(domId, domNode)
 
 		this.$afterInit(function () {
@@ -940,11 +940,11 @@ zk.Widget = zk.$extends(zk.Object, {
 			len = lsns ? lsns.length: 0;
 		if (len) {
 			for (var j = 0; j < len;) {
-				var inf = lsns[j++], o = inf[1],
+				var inf = lsns[j++], o = inf[0],
 					oldevt = o.$event;
 				o.$event = evt;
 				try {
-					(inf[2] || o[evtnm]).call(o, evt);
+					(inf[1] || o[evtnm]).call(o, evt);
 				} finally {
 					o.$event = oldevt;
 				}
@@ -973,60 +973,81 @@ zk.Widget = zk.$extends(zk.Object, {
 	fire: function (evtnm, data, opts, timeout) {
 		return this.fireX(new zk.Event(this, evtnm, data, opts), timeout);
 	},
-	listen: function (evtnm, listener, fn, priority) {
-		if (!priority) priority = 0;
-		var inf = [priority, listener, fn],
-			lsns = this._lsns[evtnm];
-		if (!lsns) lsns = this._lsns[evtnm] = [inf];
-		else
-			for (var j = lsns.length; --j >= 0;)
-				if (lsns[j][0] >= priority) {
-					lsns.$addAt(j + 1, inf);
-					break;
+	listen: function (infs, priority) {
+		priority = priority ? priority: 0;
+		for (var evt in infs) {
+			var inf = infs[evt];
+			if (inf.$array) inf = [inf[0]||this, inf[1]];
+			else if (typeof inf == 'function') inf = [this, inf];
+			else inf = [inf||this, null];
+			inf.priority = priority;
+
+			var lsns = this._lsns[evt];
+			if (!lsns) this._lsns[evt] = [inf];
+			else
+				for (var j = lsns.length;;)
+					if (--j < 0 || lsns[j].priority >= priority) {
+						lsns.$addAt(j + 1, inf);
+						break;
+					}
+		}
+	},
+	unlisten: function (infs) {
+		var found = false;
+		l_out:
+		for (var evt in infs) {
+			var inf = infs[evt],
+				lsns = this._lsns[evt], lsn;
+			for (var j = lsns ? lsns.length: 0; --j >= 0;) {
+				lsn = lsns[j];
+				if (inf.$array) inf = [inf[0]||this, inf[1]];
+				else if (typeof inf == 'function') inf = [this, inf];
+				else inf = [inf||this, null];
+				if (lsn[0] == inf[0] && lsn[1] == inf[1]) {
+					lsns.$removeAt(j);
+					found = true;
+					continue l_out;
 				}
-	},
-	unlisten: function (evtnm, listener, fn) {
-		var lsns = this._lsns[evtnm];
-		for (var j = lsns ? lsns.length: 0; --j >= 0;)
-			if (lsns[j][1] == listener && lsns[j][2] == fn) {
-				lsns.$removeAt(j);
-				return true;
 			}
-		return false;
+		}
+		return found;
 	},
-	isListen: function (evtnm, opts) {
-		var v = this._asaps[evtnm];
+	isListen: function (evt, opts) {
+		var v = this._asaps[evt];
 		if (v) return true;
 		if (opts && opts.asapOnly) {
 			v = this.$class._importantEvts;
-			return v && v[evtnm];
+			return v && v[evt];
 		}
 		if (opts && opts.any) {
 			if (v != null) return true;
 			v = this.$class._importantEvts;
-			if (v && v[evtnm] != null) return true;
+			if (v && v[evt] != null) return true;
 		}
 
-		var lsns = this._lsns[evtnm];
+		var lsns = this._lsns[evt];
 		return lsns && lsns.length;
 	},
 	setListeners: function (infs) {
-		for (var evtnm in infs)
-			this._setListener(evtnm, infs[evtnm]);
+		for (var evt in infs)
+			this._setListener(evt, infs[evt]);
 	},
 	setListener: function (inf) {
 		this._setListener(inf[0], inf[1]);
 	},
-	_setListener: function (evtnm, fn) {
-		var lsns = this._$lsns,
-			oldfn = lsns[evtnm];
+	_setListener: function (evt, fn) {
+		var bklsns = this._bklsns,
+			oldfn = bklsns[evt],
+			inf = {};
 		if (oldfn) { //unlisten first
-			delete lsns[evtnm];
-			this.unlisten(evtnm, this, oldfn);
+			delete bklsns[evt];
+			inf[evt] = oldfn
+			this.unlisten(inf);
 		}
 		if (fn) {
-			if (typeof fn != 'function') fn = new Function(fn);
-			this.listen(evtnm, this, lsns[evtnm] = fn);
+			inf[evt] = bklsns[evt]
+				= typeof fn != 'function' ? new Function(fn): fn;
+			this.listen(inf);
 		}
 	},
 	setMethods: function (infs) {

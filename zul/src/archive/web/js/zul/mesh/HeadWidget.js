@@ -15,7 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 	$init: function () {
 		this.$supers('$init', arguments);
-		this.listen('onColSize', this, null, -1000);
+		this.listen({onColSize: this}, -1000);
 	},
 
 	$define: {

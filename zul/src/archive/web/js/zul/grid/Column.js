@@ -17,7 +17,7 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 
 	$init: function () {
 		this.$supers('$init', arguments);
-		this.listen('onGroup', this, null, -1000);
+		this.listen({onGroup: this}, -1000);
 	},
 	getMeshBody: function () {
 		var grid = this.getGrid();

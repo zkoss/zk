@@ -25,6 +25,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<attribute name="onClick">
 	Label l2 = new Label("abc");
 	l2.setWidth("200px");
+	l2.setSclass("z-inline-block");
 	hb.insertBefore(l2, l);
 		</attribute>
 	</button>

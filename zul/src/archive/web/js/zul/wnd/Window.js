@@ -24,9 +24,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 
 		this.$supers('$init', arguments);
 
-		this.listen('onClose', this, null, -1000);
-		this.listen('onMove', this, null, -1000);
-		this.listen('onZIndex', this, null, -1000);
+		this.listen({onClose: this,	onMove: this, onZIndex: this}, -1000);
 		this._skipper = new zul.wnd.Skipper(this);
 	},
 

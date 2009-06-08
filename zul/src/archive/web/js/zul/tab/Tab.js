@@ -17,7 +17,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	$init: function () {
 		this.$supers('$init', arguments);
-		this.listen('onClose', this, null, -1000);
+		this.listen({onClose: this}, -1000);
 	},
 	$define: {
 		closable: _zkf = function() {

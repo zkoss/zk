@@ -47,13 +47,13 @@ xmlns:w="http://www.zkoss.org/2005/zk/client">
 	</script>
 
 	<script defer="true">
-	var btn = new zul.wgt.Button(),
-		wnd = this.getSpaceOwner();
+	var btn = new zul.wgt.Button();
 	btn.setLabel('Add');
-	btn.listen('onClick', btn);
-	btn.onClick = function () {
-		appendTo(wnd);
-	}
+	btn.listen({
+		onClick: function () {
+			appendTo(this.getSpaceOwner());
+		}
+	});
 	this.parent.appendChild(btn);
 	</script>
 	<button label="Append-"
