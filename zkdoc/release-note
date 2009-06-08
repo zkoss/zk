@@ -18,7 +18,6 @@ ZK 3.6.2
   2800446: A way to enable or disable the stackup in JS
 
 * Bugs
-  2635555: Textbox lost cursor after cancel fileupload in IE
   2784298: Missing properties in XSD for panel [2]
   2784569: Missing src property for menuitem component in XSD
   2784736: On demand Menupopup items on IE looks transparent
