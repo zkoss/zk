@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		2009/6/3 下午 5:07:59 , Created by jumperchen
+		Jun 3, 2009 5:03:50 PM , Created by jumperchen
 }}IS_NOTE
 
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
