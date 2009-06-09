@@ -19,6 +19,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul.api;
 
 import org.zkoss.zk.ui.Execution;//for javadoc
+import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;//for javadoc
 import org.zkoss.zk.ui.util.Clients;//for javadoc
@@ -130,7 +131,7 @@ import org.zkoss.zul.mesg.MZul;//for javadoc
  * @since 3.5.2
  */
 public interface Include extends org.zkoss.zul.impl.api.XulElement,
-DynamicPropertied, AfterCompose {
+DynamicPropertied, AfterCompose, IdSpace {
 
 	/**
 	 * Sets whether to show the {@link MZul#PLEASE_WAIT} message before a long

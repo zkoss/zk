@@ -5,6 +5,8 @@ import org.zkoss.zk.ui.SuspendNotAllowedException;
 import org.zkoss.zk.ui.event.Events;//for javadoc
 import org.zkoss.zk.ui.event.MinimizeEvent;//for javadoc
 
+import org.zkoss.zul.ext.Framable;
+
 /**
  * A generic window.
  * 
@@ -51,7 +53,7 @@ import org.zkoss.zk.ui.event.MinimizeEvent;//for javadoc
  * 
  * @since 3.5.2
  */
-public interface Window extends org.zkoss.zul.impl.api.XulElement {
+public interface Window extends org.zkoss.zul.impl.api.XulElement, Framable, IdSpace {
 	/**
 	 * Returns whether the window is maximized.
 	 * 
