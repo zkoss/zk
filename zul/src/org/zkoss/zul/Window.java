@@ -32,17 +32,15 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.SuspendNotAllowedException;
-import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.event.*;
 
-import org.zkoss.zul.ext.Framable;
 import org.zkoss.zul.impl.XulElement;
 
 /**
  * A window.
  *
  * <p>Unlike other elements, each {@link Window} is an independent ID space
- * (by implementing {@link IdSpace}).
+ * (by implementing {@link org.zkoss.zk.ui.IdSpace}).
  * It means a window and all its descendants forms a ID space and
  * the ID of each of them is unique in this space.
  * You could retrieve any of them in this space by calling {@link #getFellow}.
@@ -74,7 +72,7 @@ import org.zkoss.zul.impl.XulElement;
  * <p>Default {@link #getZclass}: z-window-{@link #getMode()}.(since 3.5.0)
  * @author tomyeh
  */
-public class Window extends XulElement implements Framable, IdSpace, org.zkoss.zul.api.Window {
+public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	private static final Log log = Log.lookup(Window.class);
 	private static String _onshow = null;
 	private transient Caption _caption;

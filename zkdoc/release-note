@@ -62,13 +62,12 @@ ZK 3.6.2
   2800446: A way to enable or disable the stackup in JS
 
 * Bugs
-  2635555: Textbox lost cursor after cancel fileupload in IE
   2784298: Missing properties in XSD for panel [2]
   2784569: Missing src property for menuitem component in XSD
   2784736: On demand Menupopup items on IE looks transparent
   2787077: Listbox-Paging was broken with fix for #2782751
   2787785: Wrong Slovenian locale (Singhalese -> Slovenian)
-  2787876: a bug of textbox with constrain
+  2787876: a bug of textbox with constraint
   2788618: datebox with constraint="no future"
   2788875: Https.getOriginPathInfo() & getOriginQueryString() exchange
   2789915: Click the button to reset the hoverImage will fail
@@ -91,6 +90,7 @@ ZK 3.6.2
   2800851: BSHInterpreter doesn't serialize variables defined in Window
   2800879: Rowcomparator NOT Serializable
   2801878: Missing properties in radiogroup and radio components in XSD
+  2803344: Executions.createComponents cannot handle ~./x?y
 
 
 * Upgrade Notes

@@ -20,7 +20,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <window>
 This includes another page.
 	<window id="embed" title="Includee" border="true">
-	<include id="inc" src="include2.zul"/>
+	<include id="inc" src="include2.zul" mode="defer"/>
 	</window>
 	<button label="Change to slider.zul">
 		<attribute name="onClick">
@@ -51,12 +51,14 @@ This includes another page.
 	<button label="Remove Includee" onClick="embed.detach()"/>
 
 	<window title="The second includee" border="true">
-	<include id="inc2" src="menu.zul"/>
+	<include id="inc2" src="menu.zul" mode="defer"/>
 	</window>
 And, it includes '~./html/alert.dsp'
-	<include src="~./html/alert.dsp"/>
+	<include src="~./html/alert.dsp" mode="auto"/>
 And, it includes '~./zul/html/fileuploaddlg.zul?title=Title&amp;message=Message'
 Note: title and message has no effect since fileuploaddlg uses arg
-while parameters in the query string are part of param
-	<include src="~./zul/html/fileuploaddlg.zul?title=Title&amp;message=Message"/>
+while parameters in the query string are part of param.
+	<include src="~./zul/html/fileuploaddlg.zul?title=Title&amp;message=Message" mode="defer"/>
+instant mode:
+	<include src="~./zul/html/fileuploaddlg.zul?title=Title&amp;message=Message" mode="instant"/>
 </window>
