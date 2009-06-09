@@ -75,7 +75,7 @@ public class ClassWebResource {
 
 	private final ServletContext _ctx;
 	private final String _mappingURI;
-	private final ClassWebContext _cwc;
+	private final CWC _cwc;
 	/** An array of extensions that have to be compressed (with gzip). */
 	private String[] _compressExts;
 	/** Map(String ext, Extendlet). */
@@ -107,13 +107,20 @@ public class ClassWebResource {
 	 * the class path (with {@link #PATH_PREFIX}).
 	 */
 	public static URL getResource(String uri) {
-		return Locators.getDefault().getResource(PATH_PREFIX + uri);
+		return Locators.getDefault().getResource(PATH_PREFIX + fixURI(uri));
 	}
 	/** Returns the resource in a stream of the specified URI by searching
 	 * the class path (with {@link #PATH_PREFIX}).
 	 */
 	public static InputStream getResourceAsStream(String uri) {
-		return Locators.getDefault().getResourceAsStream(PATH_PREFIX + uri);
+		return Locators.getDefault().getResourceAsStream(PATH_PREFIX + fixURI(uri));
+	}
+	private static String fixURI(String uri) {
+		int j = uri.lastIndexOf('?');
+		if (j >= 0) uri = uri.substring(0, j);
+		j = uri.lastIndexOf(";jsession");
+		if (j >= 0) uri = uri.substring(0, j);
+		return uri;
 	}
 	/** Returns the instance (singlton in the whole app) for
 	 * handling resources located in class path.
@@ -121,8 +128,7 @@ public class ClassWebResource {
 	public static final
 	ClassWebResource getInstance(ServletContext ctx, String mappingURI) {
 		synchronized (ctx) {
-			final ClassWebContext cwc =
-				(ClassWebContext)Servlets.getExtendletContext(ctx, ".");
+			final CWC cwc = (CWC)Servlets.getExtendletContext(ctx, ".");
 			if (cwc != null)
 				return cwc.getClassWebResource();
 
@@ -140,7 +146,7 @@ public class ClassWebResource {
 
 		_ctx = ctx;
 		_mappingURI = mappingURI;
-		_cwc = new ClassWebContext();
+		_cwc = new CWC();
 
 		addExtendlet("dsp", new DspExtendlet());
 	}
@@ -413,8 +419,8 @@ public class ClassWebResource {
 		_debugJS = debug;
 	}
 
-	//-- Work with ClassWebContext --//
-	/** Works with {@link ClassWebContext} to
+	//-- Work with CWC --//
+	/** Works with {@link CWC} to
 	 * load resources from class path (thru this servlet).
 	 */
 	private void web(HttpServletRequest request,
@@ -573,7 +579,7 @@ public class ClassWebResource {
 	 * An implementation of ExtendletContext to load resources from
 	 * the class path rooted at /web.
 	 */
-	private class ClassWebContext implements ExtendletContext {
+	private class CWC implements ExtendletContext {
 		private final Locator _locator = new Locator() {
 			public String getDirectory() {
 				return null;
