@@ -55,6 +55,7 @@ import org.zkoss.zk.ui.util.ExecutionInit;
 import org.zkoss.zk.ui.util.UiLifeCycle;
 import org.zkoss.zk.ui.util.Monitor;
 import org.zkoss.zk.ui.util.DesktopSerializationListener;
+import org.zkoss.zk.ui.util.DesktopActivationListener;
 import org.zkoss.zk.ui.util.EventInterceptor;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
@@ -71,6 +72,7 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.EventProcessingThread;
 import org.zkoss.zk.ui.sys.IdGenerator;
 import org.zkoss.zk.ui.sys.ServerPush;
+import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.Visualizer;
 import org.zkoss.zk.ui.impl.EventInterceptors;
 import org.zkoss.zk.au.out.AuBookmark;
@@ -600,19 +602,79 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 
 	public void sessionWillPassivate(Session sess) {
-		for (Iterator it = _pages.values().iterator(); it.hasNext();)
-			((PageCtrl)it.next()).sessionWillPassivate(this);
-
-		if (_dev != null) _dev.sessionWillPassivate(this);
+		Execution exec = Executions.getCurrent();
+		if (exec != null) { //not possible, but just in case
+			sessWillPassivate();
+		} else {
+			exec = new org.zkoss.zk.ui.impl.PhantomExecution(this);
+			final UiEngine uieng = ((WebAppCtrl)_wapp).getUiEngine();
+			uieng.activate(exec);
+			try {
+				sessWillPassivate();
+			} finally {
+				uieng.deactivate(exec);
+			}
+		}
 	}
 	public void sessionDidActivate(Session sess) {
 		_sess = sess;
 		_wapp = sess.getWebApp();
 
+		Execution exec = Executions.getCurrent();
+		if (exec != null) { //not possible, but just in case
+			sessDidActivate();
+		} else {
+			exec = new org.zkoss.zk.ui.impl.PhantomExecution(this);
+			final UiEngine uieng = ((WebAppCtrl)_wapp).getUiEngine();
+			uieng.activate(exec);
+			try {
+				sessDidActivate();
+			} finally {
+				uieng.deactivate(exec);
+			}
+		}
+	}
+	private void sessWillPassivate() {
+		for (Iterator it = _pages.values().iterator(); it.hasNext();)
+			((PageCtrl)it.next()).sessionWillPassivate(this);
+
+		if (_dev != null) _dev.sessionWillPassivate(this);
+
+		willPassivate(_attrs.values());
+		willPassivate(_dtCleans);
+		willPassivate(_execInits);
+		willPassivate(_execCleans);
+		willPassivate(_uiCycles);
+	}
+	private void sessDidActivate() {
 		if (_dev != null) _dev.sessionDidActivate(this);
 
 		for (Iterator it = _pages.values().iterator(); it.hasNext();)
 			((PageCtrl)it.next()).sessionDidActivate(this);
+
+		didActivate(_attrs.values());
+		didActivate(_dtCleans);
+		didActivate(_execInits);
+		didActivate(_execCleans);
+		didActivate(_uiCycles);
+	}
+	private void willPassivate(Collection c) {
+		if (c != null)
+			for (Iterator it = c.iterator(); it.hasNext();)
+				willPassivate(it.next());
+	}
+	private void willPassivate(Object o) {
+		if (o instanceof DesktopActivationListener)
+			((DesktopActivationListener)o).willPassivate(this);
+	}
+	private void didActivate(Collection c) {
+		if (c != null)
+			for (Iterator it = c.iterator(); it.hasNext();)
+				didActivate(it.next());
+	}
+	private void didActivate(Object o) {
+		if (o instanceof DesktopActivationListener)
+			((DesktopActivationListener)o).didActivate(this);
 	}
 
 	//-- Serializable --//

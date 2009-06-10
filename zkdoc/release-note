@@ -15,6 +15,7 @@ ZK 3.6.2
   2787711: Hope paging setTotalSize() won't affect inputing active page
   2790669: zk should provide a way to load i18n prop. files by zk.xml
   2800849: Support Google App Engine
+  2803894: GenericComposer supports clustering (Serializable)
   2800446: A way to enable or disable the stackup in JS
 
 * Bugs

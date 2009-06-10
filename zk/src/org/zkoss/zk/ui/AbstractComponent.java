@@ -56,6 +56,7 @@ import org.zkoss.zk.ui.ext.NonFellow;
 import org.zkoss.zk.ui.ext.render.ZidRequired;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.util.ComponentSerializationListener;
+import org.zkoss.zk.ui.util.ComponentActivationListener;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zk.ui.util.DeferredValue;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
@@ -88,7 +89,7 @@ import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.out.AuClientInfo;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Interpreter;
-import org.zkoss.zk.scripting.NamespaceSerializationListener;
+import org.zkoss.zk.scripting.NamespaceActivationListener;
 import org.zkoss.zk.scripting.util.SimpleNamespace;
 
 /**
@@ -113,7 +114,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private transient SpaceInfo _spaceInfo;
 	private transient Map _attrs;
 		//don't create it dynamically because _ip bind it at constructor
-	/** A map of event listener: Map(evtnm, EventListener)). */
+	/** A map of event listener: Map(evtnm, List(EventListener)). */
 	private transient Map _listeners;
 	/** The extra controls. */
 	private transient Object _xtrl;
@@ -1675,16 +1676,52 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	public void sessionWillPassivate(Page page) {
-		//nothing to do
+		willPassivate(_attrs.values());
+
+		if (_listeners != null)
+			for (Iterator it = _listeners.values().iterator(); it.hasNext();)
+				willPassivate((Collection)it.next());
+
+		if (this instanceof IdSpace) {
+			willPassivate(_spaceInfo.attrs.values());
+
+			//Invoke NamespaceActivationListener after all loaded
+			for (Iterator it = _spaceInfo.ns.getVariableNames().iterator();
+			it.hasNext();) {
+				final Object val = _spaceInfo.ns.getVariable((String)it.next(), true);
+				willPassivate(val);
+				if (val instanceof NamespaceActivationListener)
+					((NamespaceActivationListener)val).willPassivate(_spaceInfo.ns);
+			}
+		}
 	}
 	public void sessionDidActivate(Page page) {
-		sessionDidActivate0(page, this, true);
+		sessDidActivate0(page, this, true);
+
+		didActivate(_attrs.values());
+
+		if (_listeners != null)
+			for (Iterator it = _listeners.values().iterator(); it.hasNext();)
+				didActivate((Collection)it.next());
+
+		if (this instanceof IdSpace) {
+			didActivate(_spaceInfo.attrs.values());
+
+			//Invoke NamespaceActivationListener after all loaded
+			for (Iterator it = _spaceInfo.ns.getVariableNames().iterator();
+			it.hasNext();) {
+				final Object val = _spaceInfo.ns.getVariable((String)it.next(), true);
+				didActivate(val);
+				if (val instanceof NamespaceActivationListener)
+					((NamespaceActivationListener)val).didActivate(_spaceInfo.ns);
+			}
+		}
 	}
 	/** 
 	 * @param pageLevelIdSpace whether this component's ID space is
 	 * at the page level.
 	 */
-	private static void sessionDidActivate0(Page page,
+	private static void sessDidActivate0(Page page,
 	AbstractComponent comp, boolean pageLevelIdSpace) {
 		comp._page = page;
 
@@ -1696,8 +1733,26 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 
 		for (AbstractComponent p = comp._first; p != null; p = p._next) {
-			sessionDidActivate0(page, p, pageLevelIdSpace); //recursive
+			sessDidActivate0(page, p, pageLevelIdSpace); //recursive
 		}
+	}
+	private void willPassivate(Collection c) {
+		if (c != null)
+			for (Iterator it = c.iterator(); it.hasNext();)
+				willPassivate(it.next());
+	}
+	private void willPassivate(Object o) {
+		if (o instanceof ComponentSerializationListener)
+			((ComponentActivationListener)o).willPassivate(this);
+	}
+	private void didActivate(Collection c) {
+		if (c != null)
+			for (Iterator it = c.iterator(); it.hasNext();)
+				didActivate(it.next());
+	}
+	private void didActivate(Object o) {
+		if (o instanceof ComponentSerializationListener)
+			((ComponentActivationListener)o).didActivate(this);
 	}
 
 	/** Returns the extra controls that tell ZK how to handle this component
@@ -2062,9 +2117,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				final Object val = _spaceInfo.ns.getVariable(nm, true);
 				willSerialize(val); //always called even if not serializable
 
-				if (val instanceof NamespaceSerializationListener)
-					((NamespaceSerializationListener)val).willSerialize(_spaceInfo.ns);
-
 				if (isVariableSerializable(nm, val)
 				&& (val instanceof java.io.Serializable || val instanceof java.io.Externalizable)) {
 					s.writeObject(nm);
@@ -2158,6 +2210,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			for (AbstractComponent child = _first; child != null; child = child._next)
 				fixSpaceParentDown(child,  _spaceInfo.ns);
 
+			//restore ID space by binding itself and all children
+			if (!ComponentsCtrl.isAutoId(getIdDirectly(this)))
+				bindToIdSpace(this);
+			for (Iterator it = getChildren().iterator(); it.hasNext();)
+				addToIdSpacesDown((Component)it.next(), this);
+
 			//read _spaceInfo.attrs
 			Serializables.smartRead(s, _spaceInfo.attrs);
 			didDeserialize(_spaceInfo.attrs.values());
@@ -2170,15 +2228,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				Object val = s.readObject();
 				_spaceInfo.ns.setVariable(nm, val, true);
 				didDeserialize(val);
-				if (val instanceof NamespaceSerializationListener)
-					((NamespaceSerializationListener)val).didDeserialize(_spaceInfo.ns);
 			}
-
-			//restore ID space by binding itself and all children
-			if (!ComponentsCtrl.isAutoId(getIdDirectly(this)))
-				bindToIdSpace(this);
-			for (Iterator it = getChildren().iterator(); it.hasNext();)
-				addToIdSpacesDown((Component)it.next(), this);
 		}
 
 		//restore _forwards

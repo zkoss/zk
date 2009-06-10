@@ -45,6 +45,7 @@ import org.zkoss.zk.ui.sys.DesktopCache;
 import org.zkoss.zk.ui.util.Monitor;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.SessionSerializationListener;
+import org.zkoss.zk.ui.util.SessionActivationListener;
 import org.zkoss.zk.ui.impl.Attributes;
 
 /** A non-serializable implementation of {@link org.zkoss.zk.ui.Session}.
@@ -439,19 +440,11 @@ public class SimpleSession implements Session, SessionCtrl {
 	 * <p>Refer to {@link SerializableSession} for how to use this method.
 	 */
 	protected void sessionWillPassivate() {
+		((WebAppCtrl)_wapp).sessionWillPassivate(this);
+
 		for (Enumeration en = getAttrNames(); en.hasMoreElements();) {
 			final String nm = (String)en.nextElement();
 			willPassivate(getAttribute(nm));
-		}
-
-		((WebAppCtrl)_wapp).sessionWillPassivate(this);
-	}
-	private void willPassivate(Object o) {
-		if (o instanceof SessionSerializationListener) {
-			try {
-				((SessionSerializationListener)o).willPassivate(this);
-			} catch (AbstractMethodError ex) { //backward compatible
-			}
 		}
 	}
 	/** Used by the deriving class to post-process a session after
@@ -482,10 +475,18 @@ public class SimpleSession implements Session, SessionCtrl {
 			didActivate(getAttribute(nm));
 		}
 	}
-	private void didActivate(Object o) {
-		if (o instanceof SessionSerializationListener) {
+	private void willPassivate(Object o) {
+		if (o instanceof SessionActivationListener) {
 			try {
-				((SessionSerializationListener)o).didActivate(this);
+				((SessionActivationListener)o).willPassivate(this);
+			} catch (AbstractMethodError ex) { //backward compatible
+			}
+		}
+	}
+	private void didActivate(Object o) {
+		if (o instanceof SessionActivationListener) {
+			try {
+				((SessionActivationListener)o).didActivate(this);
 			} catch (AbstractMethodError ex) { //backward compatible
 			}
 		}

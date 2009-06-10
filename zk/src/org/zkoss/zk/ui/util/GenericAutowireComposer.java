@@ -101,67 +101,67 @@ abstract public class GenericAutowireComposer extends GenericComposer implements
 	/** Implicit Object; the applied component itself. 
 	 * @since 3.0.7
 	 */ 
-	protected Component self;
+	protected transient Component self;
 	/** Implicit Object; the space owner of the applied component.
 	 * @since 3.0.7
 	 */
-	protected IdSpace spaceOwner;
+	protected transient IdSpace spaceOwner;
 	/** Implicit Object; the page.
 	 * @since 3.0.7
 	 */
-	protected Page page;
+	protected transient Page page;
 	/** Implicit Object; the desktop.
 	 * @since 3.0.7
 	 */
-	protected Desktop desktop;
+	protected transient Desktop desktop;
 	/** Implicit Object; the session.
 	 * @since 3.0.7
 	 */
-	protected Session session;
+	protected transient Session session;
 	/** Implicit Object; the web application.
 	 * @since 3.0.7
 	 */
-	protected WebApp application;
+	protected transient WebApp application;
 	/** Implicit Object; a map of attributes defined in the applied component.
 	 * @since 3.0.7
 	 */
-	protected Map componentScope;
+	protected transient Map componentScope;
 	/** Implicit Object; a map of attributes defined in the ID space contains the applied component.
 	 * @since 3.0.7
 	 */
-	protected Map spaceScope;
+	protected transient Map spaceScope;
 	/** Implicit Object; a map of attributes defined in the page.
 	 * @since 3.0.7
 	 */
-	protected Map pageScope;
+	protected transient Map pageScope;
 	/** Implicit Object; a map of attributes defined in the desktop.
 	 * @since 3.0.7
 	 */
-	protected Map desktopScope;
+	protected transient Map desktopScope;
 	/** Implicit Object; a map of attributes defined in the session.
 	 * @since 3.0.7
 	 */
-	protected Map sessionScope;
+	protected transient Map sessionScope;
 	/** Implicit Object; a map of attributes defined in the web application.
 	 * @since 3.0.7
 	 */
-	protected Map applicationScope;
+	protected transient Map applicationScope;
 	/** Implicit Object; a map of attributes defined in the request.
 	 * @since 3.0.7
 	 */
-	protected Map requestScope;
+	protected transient Map requestScope;
 	/** Implicit Object; the current execution.
 	 * @since 3.0.7
 	 */
-	protected Execution execution;
+	protected transient Execution execution;
 	/** Implicit Object; the arg argument passed to the createComponents method. It is never null.
 	 * @since 3.0.8
 	 */
-	protected Map arg;
+	protected transient Map arg;
 	/** Implicit Object; the param argument passed from the http request.
 	 * @since 3.6.1
 	 */
-	protected Map param;
+	protected transient Map param;
 	
 	/** The separator. */
 	protected final char _separator;

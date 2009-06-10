@@ -23,10 +23,13 @@ import java.lang.reflect.Method;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.GenericEventListener;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.util.Composer;
 import org.zkoss.zk.ui.util.ComposerExt;
+import org.zkoss.zk.scripting.Namespace;
+import org.zkoss.zk.scripting.NamespaceActivationListener;
 
 /**
  * <p>An abstract composer that you can extend and write intuitive onXxx event handler methods;
@@ -65,7 +68,8 @@ import org.zkoss.zk.ui.util.ComposerExt;
  * @author robbiecheng
  * @since 3.0.1
  */
-abstract public class GenericComposer extends GenericEventListener implements Composer, ComposerExt{
+abstract public class GenericComposer extends GenericEventListener
+implements Composer, ComposerExt, NamespaceActivationListener {
     
 	/**
 	 * Registers onXxx events to the supervised component; a subclass that override
@@ -100,5 +104,23 @@ abstract public class GenericComposer extends GenericEventListener implements Co
 	//since 3.6.1
 	public void doFinally() throws Exception {
 		//do nothing
+	}
+
+	//NamespaceActivationListener//
+	/** Called when a namespace is going to passivate this object.
+	 * Default: does nothing.
+	 */
+	public void willPassivate(Namespace ns) {
+	}
+	/** Called when a namespace has activated this object back.
+	 * Default: invokes {@link #doAfterCompose}.
+	 * @since 3.6.2
+	 */
+	public void didActivate(Namespace ns) {
+		try {
+			doAfterCompose(ns.getOwner());
+		} catch (Throwable ex) {
+			throw UiException.Aide.wrap(ex);
+		}
 	}
 }

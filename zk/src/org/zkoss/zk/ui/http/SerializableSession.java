@@ -32,7 +32,7 @@ import org.zkoss.zk.ui.sys.WebAppCtrl;
  */
 public class SerializableSession extends SimpleSession
 implements HttpSessionActivationListener, java.io.Serializable {
-    private static final long serialVersionUID = 20080421L;
+	private static final long serialVersionUID = 20080421L;
 
 	/** Constructor.
 	 *

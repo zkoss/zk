@@ -43,12 +43,4 @@ public interface SessionSerializationListener {
 	 * moment to call back this method.
 	 */
 	public void didDeserialize(Session session);
-	/** Called when a session has just been activated.
-	 * @since 3.0.8
-	 */
-	public void didActivate(Session session);
-	/** Called when a session is about to be passivated.
-	 * @since 3.0.8
-	 */
-	public void willPassivate(Session session);
 }
