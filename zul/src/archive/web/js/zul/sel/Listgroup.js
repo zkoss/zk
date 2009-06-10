@@ -1,31 +1,31 @@
-/* Group.js
+/* Listgroup.js
 
 	Purpose:
 		
 	Description:
 		
 	History:
-		Thu May 14 10:15:04     2009, Created by jumperchen
+		Wed Jun 10 09:29:45     2009, Created by jumperchen
 
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.grid.Group = zk.$extends(zul.grid.Row, {
+zul.sel.Listgroup = zk.$extends(zul.sel.Listitem, {
 	_open: true,
 
 	$define: {
 		open: function (open) {
 			this._openItem(open, true);
 			if (open)
-				this.getGrid().stripe();
+				this.getListbox().stripe();
 		}
 	},
 
 	getItems: function () {
 		var item = [];
-		for (var w = this.nextSibling; w && !w.$instanceof(zul.grid.Group); w = w.nextSibling)
+		for (var w = this.nextSibling; w && !w.$instanceof(zul.sel.Listgroup); w = w.nextSibling)
 			item.push(w);
 		return item;
 	},
@@ -33,16 +33,10 @@ zul.grid.Group = zk.$extends(zul.grid.Row, {
 		return this.getItems().length;
 	},
 	getZclass: function () {
-		return this._zclass != null ? this._zclass : "z-group";
+		return this._zclass != null ? this._zclass : "z-listgroup";
 	},
 	getLabel: function () {
-		return this.firstChild != null && this.firstChild.$instanceof(zul.wgt.Label) ?
-			this.firstChild.getValue() : null;
-	},
-	domImage_: function () {
-		var zcls = this.getZclass();
-		return '<span id="' + this.uuid + '$img" class="' + zcls + '-img ' + zcls
-			 + '-img-' + (this._open ? 'open' : 'close') + '"></span>';
+		return this.firstChild != null ? this.firstChild.getLabel() : null;
 	},
 	/** A combination of image ([[#domImage_]]) and label ([[#domLabel_]]). */
 	domContent_: function () {
@@ -53,25 +47,13 @@ zul.grid.Group = zk.$extends(zul.grid.Row, {
 	isStripeable_: function () {
 		return false;
 	},
-	encloseChildHTML_: function (opts) {
-		var out = opts.out || [],
-			child = opts.child;
-		out.push('<td id="', child.uuid, '$chdextr"', this._childAttrs(child, opts.index),
-				'>', '<div id="', child.uuid, '$cell" class="', opts.zclass, '-cnt ',
-				opts.cls, '">');
-		if (child == this.firstChild)
-			out.push(this.domContent_());
-		child.redraw(out);
-		out.push('</div></td>');
-		if (!opts.out) return out.join('');
-	},
 	_doImgClick: function (evt) {
-		var toOpen = !this.isOpen(), grid = this.getGrid();
+		var toOpen = !this.isOpen(), listbox = this.getListbox();
 		this._openItem(toOpen);
 		
-		if (toOpen || grid.getModel()) {
+		if (toOpen || listbox.getModel()) {
 			if (toOpen) this.parent.stripe();
-			if (!grid.paging) grid.onSize(); 
+			if (!listbox.paging) listbox.onSize(); 
 				// group in paging will invalidate the whole rows.
 		}
 		evt.stop();
@@ -90,25 +72,24 @@ zul.grid.Group = zk.$extends(zul.grid.Row, {
 				//always send since the client has to update Openable
 	},
 	_openItemNow: function (toOpen) {
-		for (var r, w = this.nextSibling; w && (!w.$instanceof(zul.grid.Group) && !w.$instanceof(zul.grid.Groupfoot));
+		for (var r, w = this.nextSibling; w && (!w.$instanceof(zul.sel.Listgroup) && !w.$instanceof(zul.sel.Listgroupfoot));
 				w = w.nextSibling)
 			if (w.desktop && w.isVisible())
 				zDom[toOpen ? "show" : "hide"](w.getNode());
 	},
 	beforeParentChanged_: function (p) {
 		if (p == null) {
-			var rows = this.parent,
-				prev = rows.hasGroup();
+			var box = this.getListbox(),
+			prev = box.hasGroup();
 				
 			if (prev) {
-				for (var g = rows.getGroups(), c = rows.getGroupCount(); --c >= 0;) {
+				for (var g = box.getGroups(), c = box.getGroupCount(); --c >= 0;) {
 					if (g[c] == this) {
 						prev = g[--c];
 						break;
 					}
 				}
 			}
-		
 			if (prev)
 				this._unbindafter = [function () {
 					if (prev)

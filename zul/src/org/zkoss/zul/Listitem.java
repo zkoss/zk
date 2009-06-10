@@ -305,8 +305,8 @@ public class Listitem extends XulElement implements org.zkoss.zul.api.Listitem {
 	}
 	
 	public String getMold() {
-		return getParent() != null ? "default".equals(getParent().getMold()) ?
-				super.getMold()	: getParent().getMold()	: super.getMold();
+		return getParent() != null ? "select".equals(getParent().getMold()) ?
+				"select" : super.getMold(): super.getMold();
 	}
 
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)

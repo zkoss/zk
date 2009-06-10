@@ -41,18 +41,25 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 			s2 = this._colHtmlPre();
 		return s1 ? s2 ? s2 + '&nbsp;' + s1: s1: s2;
 	},
+	domClass_: function (no) {
+		var scls = this.$supers('domClass_', arguments);
+		if ((!no || !no.zclass) && (this.parent.$instanceof(zul.sel.Listgroup)
+			|| this.parent.$instanceof(zul.sel.Listgroupfoot))) {
+			var zcls = this.parent.getZclass();
+			scls += ' ' + zcls + '-inner';
+		}
+		return scls;
+	},
 	_colHtmlPre: function () {
 		var s = '',
 			box = this.getListbox();
 		if (box != null && this.parent.firstChild == this) {
-			//TODO
-			/*if (item instanceof Listgroup) {
-				sb.append("<img src=\"")
-				.append(getDesktop().getExecution().encodeURL("~./img/spacer.gif"))
-				.append("\" class=\"").append(item.getZclass()+"-img ")
-				.append(item.getZclass()).append(((Listgroup) item).isOpen() ? "-img-open" : "-img-close")
-				.append("\" align=\"absmiddle\"/>");
-			}*/
+			if (this.parent.$instanceof(zul.sel.Listgroup)) {
+				var zcls = this.parent.getZclass();
+				s = '<span id="' + this.parent.uuid + '$img" class="' + zcls + '-img ' + zcls
+					+ '-img-' + (this.parent._open ? 'open' : 'close') + '"></span>';
+			}
+				
 			if (box.isCheckmark()) {
 				var item = this.parent,
 					chkable = item.isCheckable();

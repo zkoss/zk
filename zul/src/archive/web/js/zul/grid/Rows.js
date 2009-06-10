@@ -25,7 +25,7 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 		return this._groupsInfo.length;
 	},
 	getGroups: function () {
-		return this._groupsInfo;
+		return this._groupsInfo.$clone();
 	},
 	hasGroup: function () {
 		return this._groupsInfo.length;

@@ -119,10 +119,15 @@ td.z-listgroup-inner div.z-listcell-cnt {
 	font-size: ${fontSizeM};
 	font-family: ${fontFamilyT};
 }
-.z-listgroup-img{
-	width: 18px; min-height: 18px; height: 100%;
-	background: transparent no-repeat scroll 0 0;
+.z-listgroup-img {
+	width: 18px;
+	min-height: 18px;
+	height: 100%;
+	display:-moz-inline-box;
+	vertical-align: top;
+	display: inline-block;
 	background-image: url(${c:encodeURL('~./zul/img/common/toggle.gif')});
+	background-repeat: no-repeat;
 	vertical-align: top; cursor: pointer; border: 0;
 }
 .z-listgroup-img-open {

@@ -42,6 +42,11 @@ import org.zkoss.zul.impl.XulElement;
 public class Listgroup extends Listitem implements org.zkoss.zul.api.Listgroup {
 	private boolean _open = true;
 	private transient List _items;
+
+	static {
+		addClientEvent(Group.class, Events.ON_OPEN, CE_IMPORTANT);
+	}
+	
 	public Listgroup() {
 		init();
 	}
@@ -170,8 +175,14 @@ public class Listgroup extends Listitem implements org.zkoss.zul.api.Listgroup {
 		s.defaultReadObject();
 		init();
 	}
-	
+
 	//-- ComponentCtrl --//
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+		
+		if (!isOpen()) renderer.render("open", false);
+	}
 	/** Processes an AU request.
 	 *
 	 * <p>Default: in addition to what are handled by {@link XulElement#service},

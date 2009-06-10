@@ -29,7 +29,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		return this._groupsInfo.length;
 	},
 	getGroups: function () {
-		return this._groupsInfo;
+		return this._groupsInfo.$clone();
 	},
 	hasGroup: function () {
 		return this._groupsInfo.length;
@@ -102,6 +102,8 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 		if (child.$instanceof(zul.sel.Listitem)) {
+			if (child.$instanceof(zul.sel.Listgroup))
+				this._groupsInfo.push(child);
 			if (!this.firstItem || !this.previousItem(child))
 				this.firstItem = child;
 			if (!this.lastItem || !this.nextItem(child))
@@ -135,6 +137,9 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 					;
 				this.lastItem = p;
 			}
+				
+			if (child.$instanceof(zul.sel.Listgroup))
+				this._groupsInfo.$remove(child);
 		}
 		this._syncStripe();
 	},

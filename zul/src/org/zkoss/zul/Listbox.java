@@ -1258,7 +1258,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 					throw new UiException("Listgroupfoot cannot exist alone, you have to add a Listgroup first");
 				if (refChild == null) {
 					if (getLastChild() instanceof Listgroupfoot)
-						throw new UiException("Only one Goupfooter is allowed per Listgroup");
+						throw new UiException("Only one Listgroupfoot is allowed per Listgroup");
 				}
 			}
 		} else if (newChild instanceof Listhead) {
@@ -1302,7 +1302,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 					if (g == null)
 						throw new UiException("Listgroupfoot cannot exist alone, you have to add a Listgroup first");				
 					if (g[2] != -1)
-						throw new UiException("Only one Goupfooter is allowed per Listgroup");
+						throw new UiException("Only one Listgroupfoot is allowed per Listgroup");
 					if (idx != (g[0] + g[1]))
 						throw new UiException("Listgroupfoot must be placed after the last Row of the Listgroup");
 					g[2] = idx-1;
@@ -1320,7 +1320,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 					if (g == null)
 						throw new UiException("Listgroupfoot cannot exist alone, you have to add a Listgroup first");				
 					if (g[2] != -1)
-						throw new UiException("Only one Goupfooter is allowed per Listgroup");
+						throw new UiException("Only one Listgroupfoot is allowed per Listgroup");
 					if (idx + 1  != (g[0] + g[1]))
 						throw new UiException("Listgroupfoot must be placed after the last Row of the Listgroup");
 					g[2] = idx;

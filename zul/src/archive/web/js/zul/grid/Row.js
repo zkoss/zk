@@ -165,7 +165,8 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 	},
 	//-- super --//
 	domStyle_: function (no) {
-		if (no && no.visible)
+		if ((this.$instanceof(zul.grid.Group) || this.$instanceof(zul.grid.Groupfoot))
+				|| (no && no.visible))
 			return this.$supers('domStyle_', arguments);
 			
 		var style = this.$supers('domStyle_', arguments),

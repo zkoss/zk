@@ -142,17 +142,19 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>listgroup</component-name>
 		<component-class>org.zkoss.zul.Listgroup</component-class>
+		<widget-class>zul.sel.Listgroup</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zkex/zul/html/listgroup.dsp</mold-uri>
+			<mold-uri>mold/listgroup.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>listgroupfoot</component-name>
 		<component-class>org.zkoss.zul.Listgroupfoot</component-class>
+		<widget-class>zul.sel.Listgroupfoot</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zkex/zul/html/listgroupfoot.dsp</mold-uri>
+			<mold-uri>mold/listgroupfoot.js</mold-uri>
 		</mold>
 	</component>
 	<component>
