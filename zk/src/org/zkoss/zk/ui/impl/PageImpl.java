@@ -70,6 +70,7 @@ import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
 import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zk.ui.util.Condition;
 import org.zkoss.zk.ui.util.PageSerializationListener;
+import org.zkoss.zk.ui.util.PageActivationListener;
 import org.zkoss.zk.ui.ext.Includer;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
@@ -89,6 +90,7 @@ import org.zkoss.zk.scripting.Interpreters;
 import org.zkoss.zk.scripting.HierachicalAware;
 import org.zkoss.zk.scripting.SerializableAware;
 import org.zkoss.zk.scripting.Namespace;
+import org.zkoss.zk.scripting.NamespaceActivationListener;
 import org.zkoss.zk.scripting.InterpreterNotFoundException;
 import org.zkoss.zk.scripting.util.AbstractNamespace;
 
@@ -854,6 +856,22 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	public void sessionWillPassivate(Desktop desktop) {
 		for (Iterator it = getRoots().iterator(); it.hasNext();)
 			((ComponentCtrl)it.next()).sessionWillPassivate(this);
+
+		willPassivate(_attrs.values());
+
+		if (_listeners != null)
+			for (Iterator it = _listeners.values().iterator(); it.hasNext();)
+				willPassivate((Collection)it.next());
+
+		willPassivate(_resolvers);
+
+		for (Iterator it = _ns.getVariableNames().iterator();
+		it.hasNext();) {
+			final Object val = _ns.getVariable((String)it.next(), true);
+			willPassivate(val);
+			if (val instanceof NamespaceActivationListener)
+				((NamespaceActivationListener)val).willPassivate(_ns);
+		}
 	}
 	public void sessionDidActivate(Desktop desktop) {
 		_desktop = desktop;
@@ -867,6 +885,40 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			((ComponentCtrl)it.next()).sessionDidActivate(this);
 
 		initVariables(); //since some variables depend on desktop
+
+		didActivate(_attrs.values());
+
+		if (_listeners != null)
+			for (Iterator it = _listeners.values().iterator(); it.hasNext();)
+				didActivate((Collection)it.next());
+
+		didActivate(_resolvers);
+
+		for (Iterator it = _ns.getVariableNames().iterator();
+		it.hasNext();) {
+			final Object val = _ns.getVariable((String)it.next(), true);
+			didActivate(val);
+			if (val instanceof NamespaceActivationListener)
+				((NamespaceActivationListener)val).didActivate(_ns);
+		}
+	}
+	private void willPassivate(Collection c) {
+		if (c != null)
+			for (Iterator it = c.iterator(); it.hasNext();)
+				willPassivate(it.next());
+	}
+	private void willPassivate(Object o) {
+		if (o instanceof PageSerializationListener)
+			((PageActivationListener)o).willPassivate(this);
+	}
+	private void didActivate(Collection c) {
+		if (c != null)
+			for (Iterator it = c.iterator(); it.hasNext();)
+				didActivate(it.next());
+	}
+	private void didActivate(Object o) {
+		if (o instanceof PageSerializationListener)
+			((PageActivationListener)o).didActivate(this);
 	}
 
 	public LanguageDefinition getLanguageDefinition() {

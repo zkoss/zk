@@ -222,6 +222,8 @@ public class WebManager {
 		return _cwr;
 	}
 	/** Returns the URI for asynchronous update.
+	 * <p>Notice that the returned URI is not encoded, i.e., it doesn't
+	 * proceed with the servlet context prefix.
 	 * @see Desktop#getUpdateURI
 	 * @see WebApp#getUpdateURI
 	 * @since 3.6.2

@@ -28,8 +28,6 @@ import org.zkoss.zk.ui.Session;
  * attribute ({@link Session#setAttribute})
  * to see whether this interface is implemented.
  * If implemented, {@link #willSerialize} will be called.
- * Similarly, {@link #didActivate} is called when the session has just
- * been activated.
  *
  * @author tomyeh
  * @since 2.4.0
@@ -43,12 +41,4 @@ public interface SessionSerializationListener {
 	 * moment to call back this method.
 	 */
 	public void didDeserialize(Session session);
-	/** Called when a session has just been activated.
-	 * @since 3.0.8
-	 */
-	public void didActivate(Session session);
-	/** Called when a session is about to be passivated.
-	 * @since 3.0.8
-	 */
-	public void willPassivate(Session session);
 }

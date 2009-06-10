@@ -35,14 +35,14 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 
 /**
  * A 'phantom' execution that is used when no request/response available.
- * For example, it is used when a session is invalidated.
+ * For example, it is used when a session is invalidated, or activated.
  *
  * @author tomyeh
  */
 /*package*/ class PhantomExecution extends AbstractExecution {
 	private boolean _voided;
 
-	/*package*/ PhantomExecution(Desktop desktop) {
+	public PhantomExecution(Desktop desktop) {
 		super(desktop, null);
 	}
 

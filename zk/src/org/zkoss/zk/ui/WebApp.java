@@ -159,6 +159,9 @@ getResourcePaths("/catalog/") returns {"/catalog/index.html", "/catalog/products
 	public Iterator getInitParameterNames();
 
 	/** Returns the URI for asynchronous update.
+	 * <p>Both {@link #getUpdateURI} and {@link Desktop#getUpdateURI}
+	 * are encoded with {@link Execution#encodeURL}, if the current
+	 * execution is available.
 	 * @see Desktop#getUpdateURI
 	 * @since 3.6.2
 	 */

@@ -31,56 +31,65 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
 
 /**
  * <p>The DataBinder that reads ZUML annotations to create binding info.</p>
- * <p>You have two ways to annotate ZK components. For ZK data binding, you can use &lt;a:bind> annotation expression 
- * or @{...} annotaion expression.</p>
+ * <p>You have two ways to annotate ZK components. For ZK data binding, you can use @{...} annotaion expression or &lt;a:bind> 
+ * annotation expression.</p>
  * <p>To use &lt;a:bind> annotation expression, in the ZUML page you must declare the XML namespace,
  * xmlns:a="http://www.zkoss.org/2005/zk/annotation" first. Then declare &lt;a:bind> before component to make the annotation.</p>
- * <p>However, since ZK 2.4, you can choose to annotate directly on the component attribute with intuitive @{...} expression.</p>
- *
+ * 
+ *<p>We suggest annotating directly on the component property with intuitive @{...} expression because it is more readable.</p>
+ * 
  * <p>For example, the following annotation associates the 
- * attibute "value" of the component "textbox" to the bean's value "person.address.city".</p>
- * <p>&lt;a:bind> way:</p>
- * <pre>
- * &lt;a:bind value="person.address.city"/>
- * &lt;textbox/>
- * </pre>
+ * property "value" of the component "textbox" to the bean's value "person.address.city".</p>
  * <p>@{...} way:</p>
  * <pre>
  * &lt;textbox value="@{person.address.city}"/>
  * </pre>
  * <p>The @{...} pattern tells the ZUML parser that this is for annotation.</p>
+ * 
+ * <p>&lt;a:bind> way:</p>
+ * <pre>
+ * &lt;a:bind value="person.address.city"/>
+ * &lt;textbox/>
+ * </pre>
  *
- * <p>You can put more metainfo inside the &lt;a:bind> or @{...} so this DataBinder knows what to do. The complete format 
+ * <p>You can put more metainfo inside the @{...} or &lt;a:bind> so this DataBinder knows what to do. The complete format 
  * is like this:</p>
+ * <p>@{...} way:</p>
+ * <pre>
+ * &lt;componentX attrY="@{bean's value,[tag='expression']...}"/>
+ * </pre>
+ * 
  * <p>&lt;a:bind> way:</p> 
  * <pre>
  * &lt;a:bind attrY="bean's value;[tag:expression]..."/>
  * &lt;componentX/>
  * </pre>
  *
- * <p>@{...} way:</p>
- * <pre>
- * &lt;componentX attrY="@{bean's value,[tag='expression']...}"/>
- * </pre>
- *
- * <p>This associates the componentX's attribute attrY to the bean's value. The bean's value is something
+ * <p>This associates the componentX's property attrY to the bean's value. The bean's value is something
  * in the form of beanid.field1.field2... You can either call {@link DataBinder#bindBean} to bind the beanid to a
  * real bean object or you can neglect it and this DataBinder would try to find it from the variables map via
  * ({@link org.zkoss.zk.ui.Component#getVariable} method. That is, all those variables defined in zscript are 
  * accessible by this DataBinder. Note that you can choose either two formats of annotations as your will and you 
  * can even hybrid them together though it is not generally a good practice.</p>
  *
- * <p>The tag:expression or tag='expression' is a generic form to bind more metainfo to the attrY of the componentX. 
+ * <p>The tag='expression' or tag:expression is a generic form to bind more metainfo to the attrY of the componentX. 
  * The currently supported tags includes "load-when", "save-when", "access", "converter", "load-after"(since 3.6.1), 
  * and "save-after"(since 3.6.1).</p>
  * 
  * <ul>
  * <li>load-when. You can specify the events concerned when to load the attribute of the component from the bean.
  * Multiple definition is allowed and would be called one by one.
- * For example, the following code snip tells DataBinder that the attribute "value" of Label "fullName" will load 
+ * For example, the following code snip tells DataBinder that the property "value" of Label "fullName" will load 
  * from "person.fullName" when the Textbox "firstName" or "lastName" fire "onChange" event.
  *
- * <p>The &lt;a:bind> way that declare in front of the Component:</p>
+ * <p>The @{...} way that specify directly on the Component's property:</p>
+ * <pre>
+ * &lt;textbox id="firstname" value="@{person.firstName}"/>
+ * &lt;textbox id="lastname" value="@{person.lastName}"/>
+ * &lt;label id="fullname" value="@{person.fullName, load-when='firstname.onChange,lastname.onChange'}"/>
+ * </pre>
+ * 
+ * <p>Or the &lt;a:bind> way that declare in front of the Component:</p>
  * <pre>
  * &lt;a:bind value="person.firstName"/>
  * &lt;textbox id="firstname"/>
@@ -91,48 +100,50 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  * &lt;a:bind value="person.fullName; load-when:firstname.onChange; load-when:lastname.onChange"/>
  * &lt;label id="fullname"/>
  * </pre>
- * <p>Or the @{...} way that specify directly on the Component's attribute:</p>
- * <pre>
- * &lt;textbox id="firstname" value="@{person.firstName}"/>
- * &lt;textbox id="lastname" value="@{person.lastName}"/>
- * &lt;label id="fullname" value="@{person.fullName, load-when='firstname.onChange,lastname.onChange'}"/>
- * </pre>
  * </li>
  *
  * <li>save-when. You can specify the events concerned when to save the attribute of the component into the bean.
  * Since ZK version 3.0.0, you can specify multiple events in save-when tag (i.e. before ZK 3.0.0, you can specify only
  * one event). The events specified, if fired, will trigger
  * this DataBinder to save the attribute of the component into the specified bean. For example, the following code snip tells 
- * DataBinder that the attribute "value" of Textbox "firstName" will 
+ * DataBinder that the property "value" of Textbox "firstName" will 
  * save into "person.firstName" when the Textbox itself fire "onChange" event.
  *
- * <p>The &lt;a:bind> way that declare in front of the Component:</p>
+ * <p>The @{...} way that specify directly on the Component's property:</p>
+ * <pre>
+ * &lt;textbox id="firstName" value="@{person.firstName, save-when='self.onChange'}"/>
+ * </pre>
+ *
+ * <p>Or the &lt;a:bind> way that declare in front of the Component:</p>
  * <pre>
  * &lt;a:bind value="person.firstName; save-when:self.onChange"/>
  * &lt;textbox id="firstName"/>
  * </pre>
  *
- * <p>Or the @{...} way that specify directly on the Component's attribute:</p>
- * <pre>
- * &lt;textbox id="firstName" value="@{person.firstName, save-when='self.onChange'}"/>
- * </pre>
- *
  * <p>However, you don't generally specify the save-when tag. If you don't specify it, the default events are used
- * depends on the natural charactieric of the component's attribute as defined in lang-addon.xml. For example, 
- * the save-when of Label.value is default to none while that of Textbox.value is default to self.onChange. 
+ * depends on the natural characteristic of the component's property as defined in lang-addon.xml. For example, 
+ * the save-when of Label.value is default to "none" while that of Textbox.value is default to "self.onChange". 
  * That is, the following example is the same as the above one.</p>
- * <p>The &lt;a:bind> way that declare in front of the Component:</p>
+ * <p>The @{...} way that specify directly on the Component's property:</p>
+ * <pre>
+ * &lt;textbox id="firstName" value="@{person.firstName}"/>
+ * </pre>
+ * <p>Or the &lt;a:bind> way that declare in front of the Component:</p>
  * <pre>
  * &lt;a:bind value="person.firstName"/>
  * &lt;textbox id="firstName"/>
  * </pre>
- * <p>Or the @{...} way that specify directly on the Component's attribute:</p>
- * <pre>
- * &lt;textbox id="firstName" value="@{person.firstName}"/>
- * </pre>
  *
  * <p>On the other hand, you might not specify the save-when tag nor you want the default events to be used. Then you
  * can specify a "none" keyword or simply leave empty to indicate such cases.</p>
+ * <pre>
+ * &lt;textbox id="firstName" value="@{person.firstName, save-when='none'}"/>
+ * </pre>
+ * or
+ * <pre>
+ * &lt;textbox id="firstName" value="@{person.firstName, save-when=''}"/>
+ * </pre>
+ * or
  * <pre>
  * &lt;a:bind value="person.firstName; save-when:none;"/>
  * &lt;textbox id="firstName"/>
@@ -142,18 +153,17 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  * &lt;a:bind value="person.firstName; save-when: ;"/>
  * &lt;textbox id="firstName"/>
  * </pre>
- * or
- * <pre>
- * &lt;textbox id="firstName" value="@{person.firstName, save-when='none'}"/>
- * </pre>
- * or
- * <pre>
- * &lt;textbox id="firstName" value="@{person.firstName, save-when=''}"/>
- * </pre>
  * </li>
  *
- * <p>Since 3.1, if you specify some tags other than the supported tags, they will be put into an argument Map 
- * and is stored as a component attribute "bindingArgs". e.g. Also from 3.1, we start to support the "distinct" 
+ * <p>(Since 3.1) If you specify some tags other than the supported tags, they will be put into an argument Map 
+ * and is stored as a component custom attribute "bindingArgs" (no matter annotated in which property of the component). 
+ * e.g. 
+ * <per><code>
+ * &lt;label id="mylabel" value="@{person.name, answer='yes'}" style="@{person.mystyle, question='no'}"> 
+ * </code></pre> 
+ * <p>Then mylabel.getAttribute("bindingArgs") will return a Map with {answer=yes, question=no} two entries</p>
+ * 
+ * <p>(Since 3.1) We start to support the "distinct" 
  * concept for collection components with "model" attribute(i.e. Grid, Listbox, Comobobox, etc.). You can
  * specify as follows to tell the Data Binder that there might be one same object in multiple entries.</p>
  * <pre><code>
@@ -171,11 +181,19 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  * <p>The default value for distinct is "true". However, if you specify distinct=false, the Data Binder will 
  * scan the whole ListModel to find out all items with the specified objects (thus worse performance if a 
  * big ListModel).</p>
- *
+ * 
+ * <p>(Since 3.6.2) if you specify some tags other than the supported tags, they will be put into an argument Map 
+ * and is stored as a component attribute "Xxx_bindingArgs" where the Xxx is the name of the annotated component property. e.g.
+ * <pre><code>
+ * &lt;label id="mylabel" value="@{person.name, answer='yes'}" style="@{person.mystyle, question='no'}"> 
+ * </code></pre> 
+ * <p>Then mylabel.getAttribute("value_bindingArgs") will return a Map with {answer=yes} entry and 
+ * mylabel.getAttribute("style_bindingArgs") will return another Map with {question=no} entry.</p>
+ * 
  * <p>Since 3.0.0, DataBinder supports validation phase before doing a save. Note that a DataBinder "save" is triggered by
  * a component event as specified on the "save-when" tag. Before doing a save, it first fires an onBindingSave event to each 
  * data-binding component and then it fires an onBindingValidate event to the event triggering component before really saving 
- * component attribute contents into bean's 
+ * component property contents into bean's 
  * property. So application developers get the chance to handle the value validation before saving. In the following example
  * when end user click the "savebtn" button, an "onBindingSave" is first fired to "firtName" and "lastName" textboxes and 
  * then an "onBindingValidate" is fired to "savebtn" button. Application developers can register proper event handlers to do 
@@ -202,20 +220,21 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  * is default to "both" access mode. For example, the following code snips tells DataBinder that Textbox "firstName" 
  * would allowing doing save into bean only not the other way.
  *
- * <p>The &lt;a:bind> way that declare in front of the Component:</p>
+ * <p>The @{...} way that specify directly on the Component's property:</p>
+ * <pre>
+ * &lt;textbox id="firstName" value="@{person.firstName, access='save'}"/>
+ * </pre>
+ * 
+ * <p>Or the &lt;a:bind> way that declare in front of the Component:</p>
  * <pre>
  * &lt;a:bind value="person.firstName;access:save;"/>
  * &lt;textbox id="firstName"/>
  * </pre>
  *
- * <p>Or the @{...} way that specify directly on the Component's attribute:</p>
- * <pre>
- * &lt;textbox id="firstName" value="@{person.firstName, access='save'}"/>
- * </pre>
  * </li>
  *
  * <li>converter. You can specify the class name of the converter that implments the {@link TypeConverter} interface.
- * It is used to convert the value between component attribute and bean field.  Multiple definition is NOT allowed 
+ * It is used to convert the value between component property and bean field.  Multiple definition is NOT allowed 
  * and the later defined would override the previous defined one.
  * Most of the time you don't have to specify this since this DataBinder supports converting most commonly 
  * used types. However, if you specify the TypeConverter class name, this DataBinder will new an instance and use 
@@ -237,6 +256,9 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  * 
  * @since 2.4.0 Supporting @{...} annotations.
  * @since 3.0.0 Supporting multiple events of save-when tag and validation phase.
+ * @since 3.1.0 Supporting bidningArgs; suport "distinct" on collection data binding. 
+ * @since 3.6.1 Support load-after, save-after
+ * @since 3.6.2 Support Xxx_bindingArgs
  * @author Henri Chen
  * @see AnnotateDataBinderInit
  * @see DataBinder

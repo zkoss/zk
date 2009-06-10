@@ -59,6 +59,7 @@ ZK 3.6.2
   2787711: Hope paging setTotalSize() won't affect inputing active page
   2790669: zk should provide a way to load i18n prop. files by zk.xml
   2800849: Support Google App Engine
+  2803894: GenericComposer supports clustering (Serializable)
   2800446: A way to enable or disable the stackup in JS
 
 * Bugs
@@ -91,6 +92,7 @@ ZK 3.6.2
   2800879: Rowcomparator NOT Serializable
   2801878: Missing properties in radiogroup and radio components in XSD
   2803344: Executions.createComponents cannot handle ~./x?y
+  2803575: bindingArgs shall merge extra binding arguments together
 
 
 * Upgrade Notes
@@ -102,9 +104,11 @@ ZK 3.6.2
     	Object o = args.get("cookie");
     	if (o == null) args.get("arg0"); //backward compatible to old apps
   * About the issue when the overlapped component covers over the PDF file,
-  the overlapped component will be in back of the PDF file, the fixed has been
-  changed to specify the following code (Default, the IE6 browser will be taken)
+    the overlapped component will be in back of the PDF file, the fixed has been
+    changed to specify the following code (Default, the IE6 browser will be taken)
   	<?script content="zk.useStackup = true;" ?>
+  * org.zkoss.zk.ui.util.SessionSerializationListener is splitted to two
+    interfaces: SessionSerializationListener and SessionActivationListener
   
 	--------
 ZK 3.6.1
