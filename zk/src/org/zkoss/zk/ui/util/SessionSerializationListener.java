@@ -28,8 +28,6 @@ import org.zkoss.zk.ui.Session;
  * attribute ({@link Session#setAttribute})
  * to see whether this interface is implemented.
  * If implemented, {@link #willSerialize} will be called.
- * Similarly, {@link #didActivate} is called when the session has just
- * been activated.
  *
  * @author tomyeh
  * @since 2.4.0

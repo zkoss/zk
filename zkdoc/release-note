@@ -59,9 +59,11 @@ ZK 3.6.2
     	Object o = args.get("cookie");
     	if (o == null) args.get("arg0"); //backward compatible to old apps
   * About the issue when the overlapped component covers over the PDF file,
-  the overlapped component will be in back of the PDF file, the fixed has been
-  changed to specify the following code (Default, the IE6 browser will be taken)
+    the overlapped component will be in back of the PDF file, the fixed has been
+    changed to specify the following code (Default, the IE6 browser will be taken)
   	<?script content="zk.useStackup = true;" ?>
+  * org.zkoss.zk.ui.util.SessionSerializationListener is splitted to two
+    interfaces: SessionSerializationListener and SessionActivationListener
   
 	--------
 ZK 3.6.1
