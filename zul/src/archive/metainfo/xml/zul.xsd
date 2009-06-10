@@ -344,6 +344,22 @@
 			</xs:simpleType>
 		</xs:union>
 	</xs:simpleType>
+	<xs:simpleType name="zslangAttrType">
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Java" />
+					<xs:enumeration value="JavaScript" />
+					<xs:enumeration value="Groovy" />
+					<xs:enumeration value="Ruby" />
+					<xs:enumeration value="Python" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="annotationType" />
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
     <!--
     ATTRIBUTEGROUP
     -->
@@ -2422,6 +2438,7 @@
 				<xs:attributeGroup ref="zkAttrGroup" />
 				<xs:attribute name="src" type="xs:string" use="optional" />
 				<xs:attribute name="deferred" type="xs:string" use="optional" />
+				<xs:attribute name="language" type="zslangAttrType" use="optional" />
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>

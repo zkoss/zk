@@ -48,6 +48,7 @@ ZK 3.6.2
   2800879: Rowcomparator NOT Serializable
   2801878: Missing properties in radiogroup and radio components in XSD
   2803344: Executions.createComponents cannot handle ~./x?y
+  2803575: bindingArgs shall merge extra binding arguments together
 
 * Upgrade Notes
   * The signature of doInit of org.zkoss.zk.ui.util.Initiator is changed.

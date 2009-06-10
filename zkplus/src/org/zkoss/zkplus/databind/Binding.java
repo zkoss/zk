@@ -19,6 +19,7 @@ package org.zkoss.zkplus.databind;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -348,7 +349,17 @@ public class Binding implements java.io.Serializable {
 	private void myLoadAttribute(Component comp, Object bean) {
 		try {
 			//since 3.1, 20080416, support bindingArgs for non-supported tag
-			comp.setAttribute(DataBinder.ARGS, _args);
+			//bug #2803575, merge bindingArgs together since a component can have
+			//multiple bindings on different attributes.
+			Map bindArgs = (Map) comp.getAttribute(DataBinder.ARGS);
+			if (bindArgs == null) {
+				bindArgs = new HashMap();
+				comp.setAttribute(DataBinder.ARGS, bindArgs);
+			}
+			if (_args != null) {
+				bindArgs.putAll(_args);
+				comp.setAttribute(_attr+"_"+DataBinder.ARGS, _args);
+			}
 			
 			if (_converter != null) {
 				bean = _converter.coerceToUi(bean, comp);
