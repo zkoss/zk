@@ -31,6 +31,8 @@ import javax.servlet.ServletContext;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.web.servlet.xel.AttributesMap;
 
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Configuration;
@@ -84,7 +86,9 @@ public class SimpleWebApp extends AbstractWebApp {
 	}
 
 	public String getUpdateURI() {
-		return WebManager.getWebManager(this).getUpdateURI();
+		final String uri = WebManager.getWebManager(this).getUpdateURI();
+		final Execution exec = Executions.getCurrent();
+		return exec != null ? exec.encodeURL(uri): uri;
 	}
 
 	public WebApp getWebApp(String uripath) {
