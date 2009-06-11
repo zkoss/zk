@@ -319,7 +319,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (!hgh || hgh == "auto") {
 				hgh = this.ebody.offsetWidth - this.ebody.clientWidth;
 				if (hgh > 11) 
-					this.ebody.style.height = this.ebody.offsetHeight + zDom.scrollbarWidth(); + "px";
+					this.ebody.style.height = this.ebody.offsetHeight + zDom.scrollbarWidth() + "px";
 			}
 		}
 		if (this.ehead) {
