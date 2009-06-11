@@ -64,13 +64,17 @@ import org.zkoss.zk.scripting.NamespaceActivationListener;
  * first composer applied to the component, a shorter variable name
  * composed of the component id and a String "composer" would be also available for use. 
  * Per the above example, you can also reference this composer with the name "xwin$composer"</p>
+ *
+ * <p>Since 3.6.2, this composer becomes serializable, so it is better to
+ * declare members to be wired as transient, since it will re-write automatically
+ * after the session has been activated.
  * 
  * @author robbiecheng
  * @since 3.0.1
  */
 abstract public class GenericComposer extends GenericEventListener
-implements Composer, ComposerExt, NamespaceActivationListener {
-    
+implements Composer, ComposerExt, NamespaceActivationListener,
+java.io.Serializable {
 	/**
 	 * Registers onXxx events to the supervised component; a subclass that override
 	 * this method should remember to call super.doAfterCompose(comp) or it will not 
