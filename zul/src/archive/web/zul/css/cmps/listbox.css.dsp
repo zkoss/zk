@@ -55,6 +55,9 @@ div.z-list-footer-cnt, div.z-list-cell-cnt, div.z-list-header-cnt {
 	font-family: ${fontFamilyC};
 	font-size: ${fontSizeM}; font-weight: normal;
 }
+div.z-list-cell-cnt {
+	padding: 1px 0 1px 0;
+}
 div.z-list-footer-cnt, div.z-list-header-cnt {
 	overflow: hidden;
 }

@@ -67,6 +67,9 @@ div.z-footer-cnt, div.z-row-cnt, div.z-group-cnt, div.z-group-foot-cnt, div.z-co
 	font-family: ${fontFamilyC};
 	font-size: ${fontSizeM}; font-weight: normal;
 }
+div.z-row-cnt {
+	padding: 1px 0 1px 0;
+}
 div.z-footer-cnt, div.z-column-cnt{
 	overflow: hidden;
 }
