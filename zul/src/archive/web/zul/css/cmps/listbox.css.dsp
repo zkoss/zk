@@ -35,7 +35,7 @@ div.z-listbox-header th.z-list-header-sort-dsc div.z-list-header-cnt {
 	background-image: url(${c:encodeURL('~./zul/img/sort/v_dsc.gif')});
 }
 div.z-listbox-body {
-	background: white; border: 0; overflow: hidden; width: 100%; position: relative;
+	background: white; border: 0; overflow: auto; width: 100%; position: relative;
 }
 div.z-listbox-pgi-b {
 	border-top: 1px solid #AAB; overflow: hidden;
