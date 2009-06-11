@@ -13,11 +13,16 @@ This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
+	_rows: 0,
 	$init: function () {
 		this.$supers('$init', arguments);
 		this._selItems = [];
 	},
 	$define: {
+		rows: function (rows) {
+			if (this.desktop)
+				this.onSize();
+		},
 		checkmark: function (checkmark) {
 			if (this.desktop)
 				this.rerender();
@@ -248,7 +253,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			if (!h || h == "auto") {
 				h = zk.gecko ? this.ebody.offsetHeight - this.ebody.clientHeight : this.ebody.offsetWidth - this.ebody.clientWidth;
 				if (h > 11)
-					this.ebody.style.height = hgh + h + "px";
+					this.ebody.style.height = hgh + zDom.scrollbarWidth() + "px";
 			}
 		} else {
 			//if no hgh but with horz scrollbar, IE will show vertical scrollbar, too
@@ -267,7 +272,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			if (!hgh || hgh == "auto") {
 				hgh = this.ebody.offsetWidth - this.ebody.clientWidth;
 				if (hgh > 11)
-					this.ebody.style.height = this.ebody.offsetHeight + hgh + "px";
+					this.ebody.style.height = this.ebody.offsetHeight + zDom.scrollbarWidth() + "px";
 			}
 		}
 	},

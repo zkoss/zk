@@ -179,8 +179,14 @@ zDom = { //static methods
 	padBorderHeight: function (el) {
 		return zDom.sumStyles(el, "tb", zDom.borders) + zDom.sumStyles(el, "tb", zDom.paddings);
 	},
-	scrollbarWidth: function (el) {
-		return (el.offsetWidth - el.clientWidth) + zDom.sumStyles(el, "lr", zDom.borders);
+	scrollbarWidth: function () {
+		var tsd = zk._sbwDiv;
+		if (!tsd) {
+			tsd = zk._sbwDiv = document.createElement("DIV");
+			tsd.style.cssText = "top:-1000px;left:-1000px;position:absolute;visibility:hidden;border:none;width:50px;height:50px;overflow:scroll;";
+			document.body.appendChild(tsd);
+		}
+		return tsd.offsetWidth - tsd.clientWidth;
 	},
 	vflexHeight: function (el) {
 		var hgh = el.parentNode.clientHeight;
