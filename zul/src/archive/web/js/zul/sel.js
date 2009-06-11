@@ -928,7 +928,7 @@ zk.Selectable.prototype = {
 			if (!h || h == "auto") {
 				h = zk.gecko ? this.body.offsetHeight - this.body.clientHeight : this.body.offsetWidth - this.body.clientWidth;
 				if (h > 11)
-					this.body.style.height = hgh + h + "px";
+					this.body.style.height = hgh + zk.getScrollBarWidth() + "px";
 			}
 		} else {
 			//if no hgh but with horz scrollbar, IE will show vertical scrollbar, too
@@ -938,7 +938,7 @@ zk.Selectable.prototype = {
 			&& this.body.offsetWidth - this.body.clientWidth > 11) {
 				if (!nVisiRows) this.body.style.height = ""; // bug #1806152 if start with 0px and no hgh, IE doesn't calculate the height of the element.
 				else this.body.style.height =
-						(this.body.offsetHeight * 2 - this.body.clientHeight) + "px";
+						(this.body.offsetHeight + zk.getScrollBarWidth()) + "px";
 			} else {
 				this.body.style.height = "";
 			}
@@ -947,7 +947,7 @@ zk.Selectable.prototype = {
 			if (!hgh || hgh == "auto") {
 				hgh = this.body.offsetWidth - this.body.clientWidth;
 				if (hgh > 11)
-					this.body.style.height = this.body.offsetHeight + hgh + "px";
+					this.body.style.height = this.body.offsetHeight + zk.getScrollBarWidth() + "px";
 			}
 		}
 	},

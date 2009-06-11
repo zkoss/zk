@@ -197,7 +197,7 @@ zk.Grid.prototype = {
 			if (!hgh || hgh == "auto") {
 				hgh = this.body.offsetWidth - this.body.clientWidth;
 				if (hgh > 11) 
-					this.body.style.height = this.body.offsetHeight + hgh + "px";
+					this.body.style.height = this.body.offsetHeight + zk.getScrollBarWidth() + "px";
 			}
 		}
 		if (this.headtbl) {

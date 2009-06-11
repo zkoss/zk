@@ -180,6 +180,19 @@ zk.getTextSize = function (el, txt) {
 	tsd.innerHTML = txt;
 	return [tsd.offsetWidth, tsd.offsetHeight];
 };
+/**
+ * Returns the width of browser's scrollbar
+ * @since 3.6.2
+ */
+zk.getScrollBarWidth = function () {
+	var tsd = zk._sbwDiv;
+	if (!tsd) {
+		tsd = zk._sbwDiv = document.createElement("DIV");
+		tsd.style.cssText = "top:-1000px;left:-1000px;position:absolute;visibility:hidden;border:none;width:50px;height:50px;overflow:scroll;";
+		document.body.appendChild(tsd);
+	}
+	return tsd.offsetWidth - tsd.clientWidth;
+};
 //refer to http://www.w3schools.com/css/css_text.asp
 zk.TEXT_STYLES = [
 	'fontFamily', 'fontSize', 'fontWeight', 'fontStyle',
