@@ -198,6 +198,9 @@ zk.Grid.prototype = {
 				hgh = this.body.offsetWidth - this.body.clientWidth;
 				if (hgh > 11) 
 					this.body.style.height = this.body.offsetHeight + zk.getScrollBarWidth() + "px";
+					
+				// resync
+				tblwd = this.body.clientWidth;
 			}
 		}
 		if (this.headtbl) {
