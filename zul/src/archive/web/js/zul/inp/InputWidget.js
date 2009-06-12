@@ -17,7 +17,6 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	_cols: 0,
 	_tabindex: -1,
 	_type: 'text',
-
 	$define: {
 		name: function (name) {
 			var inp = this.getInputNode_();
@@ -72,6 +71,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		return this._value;
 	},
 	setValue: function (value, fromServer) {
+		
 		if (fromServer) this.clearErrorMessage(true);
 		else if (value == this._lastRawValVld) return; //not changed
  		else value = this._validate(value);
@@ -118,6 +118,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		if (v) html += ' name="' + v + '"';
 		if (this._disabled) html += ' disabled="disabled"';
 		if (this._readonly) html += ' readonly="readonly"';
+		
 		return html;
 	},
 	_areaText: function () {
@@ -212,7 +213,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 
 			if (!errbox) this._errbox = this.showError_(msg);
 
-			if (!noOnError)
+			if (noOnError==false)
 				this.fire('onError', {value: val, message: msg});
 		}
 	},
@@ -254,6 +255,16 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			return val;
 		} finally {
 			zul.inp.validating = false;
+		}
+	},
+	ignoreKeys: function (domEvt, keys) {
+		if(domEvt.altKey || domEvt.ctrlKey)
+			return;
+		var k = zEvt.keyCode(domEvt);
+		if(!zk.ie && k < 32) return;
+		var c = zEvt.charCode(domEvt);
+		if(keys.indexOf(String.fromCharCode(c)) === -1){
+			zEvt.stop(domEvt);
 		}
 	},
 	showError_: function (msg) {

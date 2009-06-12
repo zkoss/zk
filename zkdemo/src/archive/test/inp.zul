@@ -1,0 +1,86 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window id="win" title="all input" border="normal">
+ 	textbox <textbox id="b1" value="Jerry" width="150px" />
+ 	<button label="setValue = '123456789'">
+		<attribute name="onClick">
+			b1.setValue("123456789");
+		</attribute>
+	</button>
+	<separator/>
+	textbox + password<textbox id="b2" type="password" value="123456789" width="150px" />
+	 <button label="setValue = '123456789'">
+		<attribute name="onClick">
+			b2.setValue("123456789");
+		</attribute>
+	</button>
+	<separator/>
+	intbox + constraint <intbox id="b3" value="19" constraint="no negative,no zero"/>
+	<button label="setValue = 123456789">
+		<attribute name="onClick">
+			b3.setValue(123456789);
+		</attribute>
+	</button>
+	<separator/> 
+ 	spinner <spinner id="b4" constraint="max 100, min 5" value="10" />
+ 	<button label="setValue = 123456789">
+		<attribute name="onClick">
+			b4.setValue(123456789);
+		</attribute>
+	</button>
+	<separator/>
+	timebox <timebox id="b5" />
+	<zscript>
+		Date dt = new Date();
+		dt.setTime(123456);
+		b5.setValue(dt);
+	</zscript>
+	<button label="setValue = new Date(123456789)">
+		<attribute name="onClick">
+			b5.setValue(new Date(123456789));
+		</attribute>
+	</button>
+ 	<separator/>
+	intbox <intbox id="b6" constraint="no negative,no zero" width="150px" value="12345678" />
+	<button label="setValue = 123456789">
+		<attribute name="onClick">
+			b6.setValue(123456789);
+		</attribute>
+	</button>
+	<separator/>
+	longbox <longbox id="b7" value="10"/>
+	<button label="setValue = 123456789">
+		<attribute name="onClick">
+			b7.setValue(123456789);
+		</attribute>
+	</button>
+	<separator/>
+	doublebox <doublebox id="b8" value="10"/>
+	<button label="setValue = 123456789">
+		<attribute name="onClick">
+			b8.setValue(123456789);
+		</attribute>
+	</button>
+	<separator/>
+	decimalbox <decimalbox id="b9" format="##,###,###.##" value="987654.321" width="150px" onChange="alert(db.getValue())"/>
+	<button label="setValue = 123456.789">
+		<attribute name="onClick">
+			b9.setValue("123456.789");
+		</attribute>
+	</button>
+</window>
+
+<button label="hide">
+	<attribute name="onClick">
+		win.setVisible(false);
+	</attribute>
+</button>
+<button label="show">
+	<attribute name="onClick">
+		win.setVisible(true);
+	</attribute>
+</button>
+</zk>
+<!--
+
+-->

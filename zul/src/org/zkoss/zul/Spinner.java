@@ -18,6 +18,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.io.IOException;
+
 import javax.swing.SpinnerNumberModel;
 
 import org.zkoss.lang.Objects;
@@ -90,7 +92,7 @@ public class Spinner extends NumberInputElement implements org.zkoss.zul.api.Spi
 	public void setStep(int step) {
 		if (_step != step) {
 			_step = step;
-			smartUpdate("z.step", _step);
+			smartUpdate("step", _step);
 		}
 	}
 	
@@ -105,7 +107,7 @@ public class Spinner extends NumberInputElement implements org.zkoss.zul.api.Spi
 	public void setButtonVisible(boolean visible) {
 		if (_btnVisible != visible) {
 			_btnVisible = visible;
-			smartUpdate("z.btnVisi", visible);
+			smartUpdate("buttonVisible", visible);
 		}
 	}
 
@@ -140,5 +142,13 @@ public class Spinner extends NumberInputElement implements org.zkoss.zul.api.Spi
 	protected String coerceToString(Object value) {
 		return value != null && getFormat() == null ? value.toString()
 				: formatNumber(value, null);
+	}
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws IOException {
+		super.renderProperties(renderer);
+		if(_step != 1)
+			renderer.render("step", _step);
+		if(_btnVisible != true)
+			renderer.render("buttonVisible", _btnVisible);
 	}
 }

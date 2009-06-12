@@ -84,6 +84,9 @@ public class Decimalbox extends NumberInputElement implements org.zkoss.zul.api.
 		validate(value);
 		setRawValue(value);
 	}
+	public void setValue(String str){
+		this.setValue(new BigDecimal(str));
+	}
 
 	/** Returns the scale for the decimal number storing in this component,
 	 * or {@link #AUTO} if the scale is decided automatically (based on

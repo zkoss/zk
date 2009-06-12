@@ -27,5 +27,8 @@ zul.inp.Doublebox = zk.$extends(zul.inp.Intbox, {
 	getZclass: function () {
 		var zcs = this._zclass;
 		return zcs != null ? zcs: "z-doublebox";
+	},
+	doKeyPress_: function(evt){
+		this.ignoreKeys(evt.domEvent, "0123456789"+zk.MINUS+zk.DECIMAL);
 	}
 });

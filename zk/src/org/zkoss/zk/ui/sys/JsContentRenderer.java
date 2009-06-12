@@ -18,6 +18,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.sys;
 
+import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Iterator;
 import java.util.Date;
@@ -118,7 +119,10 @@ public class JsContentRenderer implements ContentRenderer {
 			renderValue(((Character)value).charValue());
 			return;
 		}
-
+		if (value instanceof BigDecimal) {
+			renderValue(((BigDecimal)value).toString());
+			return;
+		}
 		//handle array
 		if (value instanceof Object[]) {
 			_buf.append('[');

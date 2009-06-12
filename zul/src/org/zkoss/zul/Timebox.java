@@ -98,7 +98,7 @@ public class Timebox extends InputElement implements org.zkoss.zul.api.Timebox {
 	public void setButtonVisible(boolean visible) {
 		if (_btnVisible != visible) {
 			_btnVisible = visible;
-			smartUpdate("z.btnVisi", visible);
+			smartUpdate("buttonVisible", visible);
 		}
 	}
 	/** Returns the URI of the button image.
@@ -153,7 +153,10 @@ public class Timebox extends InputElement implements org.zkoss.zul.api.Timebox {
 		final DateFormat df = getDateFormat();
 		return value != null ? df.format((Date)value): "";
 	}
-	
+	public void setRawValue(Object value) {
+		super.setRawValue(value);
+		smartUpdate("value", this.coerceToString(this.getValue()));
+	}
 	/** Returns the date format of the time only,
 	 *
 	 * <p>Default: it uses SimpleDateFormat to format the date.
@@ -169,5 +172,13 @@ public class Timebox extends InputElement implements org.zkoss.zul.api.Timebox {
 	// super
 	public String getZclass() {
 		return _zclass == null ?  "z-timebox" : _zclass;
+	}
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+		if(this.getValue()!=null)
+			render(renderer, "value", this.coerceToString(this.getValue()));
+		if(_btnVisible != true)
+			renderer.render("buttonVisible", _btnVisible);
 	}
 }

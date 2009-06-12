@@ -38,6 +38,7 @@ import org.zkoss.zul.Constraint;
 import org.zkoss.zul.ClientConstraint;
 import org.zkoss.zul.CustomConstraint;
 import org.zkoss.zul.SimpleConstraint;
+import org.zkoss.zul.Timebox;
 import org.zkoss.zul.ext.Constrainted;
 
 /**
@@ -654,7 +655,8 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
 		super.renderProperties(renderer);
-		render(renderer, "value", _value);
+		if (!(this instanceof Timebox))
+			render(renderer, "value", _value);
 		render(renderer, "readonly", _readonly);
 		render(renderer, "disabled", _disabled);
 		render(renderer, "name", _name);
