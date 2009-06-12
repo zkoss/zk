@@ -64,22 +64,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		</custom-attribute>
 	</component>	
 	<component>
-		<component-name>columnchildren</component-name>
-		<component-class>org.zkoss.zkex.zul.Columnchildren</component-class>
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>~./zkex/zul/html/columnchildren.dsp</mold-uri>
-		</mold>
-	</component>
-	<component>
-		<component-name>columnlayout</component-name>
-		<component-class>org.zkoss.zkex.zul.Columnlayout</component-class>
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>~./zkex/zul/html/columnlayout.dsp</mold-uri>
-		</mold>
-	</component>
-	<component>
 		<component-name>detail</component-name>
 		<component-class>org.zkoss.zul.Detail</component-class>
 		<widget-class>zkex.grid.Detail</widget-class>
