@@ -196,7 +196,7 @@ zk.Grid.prototype = {
 			var hgh = this.element.style.height;
 			if (!hgh || hgh == "auto") {
 				hgh = this.body.offsetWidth - this.body.clientWidth;
-				if (hgh > 11) 
+				if (this.bodyrows.length && hgh > 11) 
 					this.body.style.height = this.body.offsetHeight + zk.getScrollBarWidth() + "px";
 					
 				// resync

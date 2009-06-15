@@ -927,7 +927,7 @@ zk.Selectable.prototype = {
 			var h = this.element.style.height;
 			if (!h || h == "auto") {
 				h = zk.gecko ? this.body.offsetHeight - this.body.clientHeight : this.body.offsetWidth - this.body.clientWidth;
-				if (h > 11)
+				if (this.bodyrows.length && h > 11)
 					this.body.style.height = hgh + zk.getScrollBarWidth() + "px";
 			}
 		} else {
@@ -946,7 +946,7 @@ zk.Selectable.prototype = {
 			// bug #2799258
 			if (!hgh || hgh == "auto") {
 				hgh = this.body.offsetWidth - this.body.clientWidth;
-				if (hgh > 11)
+				if (this.bodyrows.length && hgh > 11)
 					this.body.style.height = this.body.offsetHeight + zk.getScrollBarWidth() + "px";
 			}
 		}
