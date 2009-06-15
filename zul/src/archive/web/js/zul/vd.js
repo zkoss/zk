@@ -517,7 +517,10 @@ zkTxbox.init = function (cmp, onfocus, onblur) {
 };
 zkTxbox.cleanup = zkTxbox.onHide = function (cmp) {
 	var inp = $real(cmp);
-	if (inp) zkVld.closeErrbox(inp.id, true);
+	if (inp) {	
+		zkTxbox._scanStop(inp);
+		zkVld.closeErrbox(inp.id, true);
+	}
 };
 
 zkTxbox.onselect = function (evt) {
