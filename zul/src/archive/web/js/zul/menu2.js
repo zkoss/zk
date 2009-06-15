@@ -529,8 +529,9 @@ zkMpop2 = { //menupopup
 		} else if (ctx._shadow) ctx._shadow.sync();
 	},
 	cleanup: function (ctx) {
-		if (ctx._stackup)
-			zk.remove(ctx._stackup);
-		ctx._stackup = null;
+		if (ctx && ctx._shadow) {
+			ctx._shadow.cleanup();
+			ctx._shadow = null;
+		}
 	}
 };
