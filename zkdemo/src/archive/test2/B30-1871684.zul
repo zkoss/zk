@@ -18,7 +18,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native">
-	<n:p>You should see one treeitem only.</n:p>
+	<n:p>You should see one item only, and click "Try" to make it invisible.</n:p>
 	<window title="tree demo" border="normal">
 		<tree id="tree" width="90%">
 			<treechildren>

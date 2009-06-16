@@ -5,13 +5,10 @@ reproducible step.<br/>
 1.select Henry and Dennis<br/>
 2.click toogle multiple ,<br/>
 3.click toogle multiple again.<br/>
-4.disselect (Mary,) Henry.<br/>
-5.click invalidate.<br/>
+4.Disselect Henry.<br/>
+5.Click invalidate.<br/>
 <br/>
-If Henry is still selected, it is bug.<br/>
-<br/>
-it also happen when you select Mary,John,Jane at step 1(, and disselect
-Jane,John in step 4).<br/>
+Henry should <b>NOT</b> be selected.<br/>
 <br/>
 ]]></html>
 	<button label="Toggle multiple" onClick="box.multiple = !box.multiple"/>

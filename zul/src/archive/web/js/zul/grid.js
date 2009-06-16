@@ -313,7 +313,7 @@ zk.Grid.prototype = {
 			this._calcSize();// Bug #1813722
 			this._render(155);
 			// it seems no longer to be fixed with this, commented by jumperchen on 2009/05/26
-			//if (zk.ie7) zk.redoCSS(this.element); // Bug 2096807
+			if (zk.ie7) zk.redoCSS(this.element); // Bug 2096807 && Test Case Z35-grid-0102.zul
 		}
 	}
 };
