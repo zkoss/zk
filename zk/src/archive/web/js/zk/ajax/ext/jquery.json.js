@@ -15,7 +15,7 @@
  */
  
 (function($) {   
-    function toIntegersAtLease(n) 
+    $._toIntAL = function(n) 
     // Format integers to have at least two digits.
     {    
         return n < 10 ? '0' + n : n;
@@ -26,8 +26,8 @@
     // it's damned usefull.
     {
         return this.getUTCFullYear()   + '-' +
-             toIntegersAtLease(this.getUTCMonth()) + '-' +
-             toIntegersAtLease(this.getUTCDate());
+             $._toIntAL(this.getUTCMonth()) + '-' +
+             $._toIntAL(this.getUTCDate());
     };
 
     var escapeable = /["\\\x00-\x1f\x7f-\x9f]/g;
@@ -41,7 +41,7 @@
             '\\': '\\\\'
         };
         
-    $.quoteString = function(string)
+    $._quoteStr = function(string)
     // Places quotes around a string, inteligently.
     // If the string contains no control characters, no quote characters, and no
     // backslash characters, then we can safely slap some quotes around it.
@@ -63,7 +63,7 @@
         return '"' + string + '"';
     };
     
-    $.toJSON = function(o, compact)
+    $.toJSON = function(o)
     {
         var type = typeof(o);
         
@@ -77,24 +77,21 @@
         // Is it a string?
         if (type == "string") 
         {
-            return $.quoteString(o);
+            return $._quoteStr(o);
         }
         
         // Does it have a .toJSON function?
         if (type == "object" && typeof o.toJSON == "function") 
-            return o.toJSON(compact);
+            return o.toJSON();
         
         // Is it an array?
         if (type != "function" && typeof(o.length) == "number") 
         {
             var ret = [];
             for (var i = 0; i < o.length; i++) {
-                ret.push( $.toJSON(o[i], compact) );
+                ret.push( $.toJSON(o[i]) );
             }
-            if (compact)
-                return "[" + ret.join(",") + "]";
-            else
-                return "[" + ret.join(", ") + "]";
+            return "[" + ret.join(",") + "]";
         }
         
         // If it's a function, we have to warn somebody!
@@ -111,27 +108,19 @@
             if (type == "number")
                 name = '"' + k + '"';
             else if (type == "string")
-                name = $.quoteString(k);
+                name = $._quoteStr(k);
             else
                 continue;  //skip non-string or number keys
             
-            var val = $.toJSON(o[k], compact);
+            var val = $.toJSON(o[k]);
             if (typeof(val) != "string") {
                 // skip non-serializable values
                 continue;
             }
             
-            if (compact)
-                ret.push(name + ":" + val);
-            else
-                ret.push(name + ": " + val);
+            ret.push(name + ":" + val);
         }
         return "{" + ret.join(", ") + "}";
-    };
-    
-    $.compactJSON = function(o)
-    {
-        return $.toJSON(o, true);
     };
     
     $.evalJSON = function(src)
