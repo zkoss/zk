@@ -120,7 +120,7 @@
             
             ret.push(name + ":" + val);
         }
-        return "{" + ret.join(", ") + "}";
+        return "{" + ret.join(",") + "}";
     };
     
     $.evalJSON = function(src)
