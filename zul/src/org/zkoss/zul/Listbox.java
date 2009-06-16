@@ -36,7 +36,6 @@ import org.zkoss.lang.D;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
-import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -2474,7 +2473,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 		
 		if (inSelectMold()) {
 			render(renderer, "name", _name);
-			if (_tabindex > 0)
+			if (_rows > 0)
 				renderer.render("rows", getRows());
 			render(renderer, "multiple", isMultiple());
 			render(renderer, "disabled", isDisabled());

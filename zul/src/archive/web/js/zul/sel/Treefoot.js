@@ -1,22 +1,22 @@
-/* Listfoot.js
+/* Treefoot.js
 
 	Purpose:
 		
 	Description:
 		
 	History:
-		Tue Jun  9 18:03:06     2009, Created by jumperchen
+		Wed Jun 10 15:32:41     2009, Created by jumperchen
 
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 This program is distributed under GPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.sel.Listfoot = zk.$extends(zul.Widget, {
-	getListbox: function () {
+zul.sel.Treefoot = zk.$extends(zul.Widget, {
+	getTree: function () {
 		return this.parent;
 	},
 	getZclass: function () {
-		return this._zclass == null ? "z-listfoot" : this._zclass;
+		return this._zclass == null ? "z-treefoot" : this._zclass;
 	}
 });

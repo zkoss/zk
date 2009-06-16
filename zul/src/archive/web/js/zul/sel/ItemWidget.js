@@ -27,8 +27,9 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	},
 	setSelected: function (selected) {
 		if (this._selected != selected) {
-			if (this.parent)
-				this.parent.toggleItemSelection(this);
+			var mesh = this.getMeshWidget();
+			if (mesh)
+				mesh.toggleItemSelection(this);
 				
 			this._setSelectedDirectly(selected);
 		}
@@ -171,16 +172,19 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		// make sure the target is the ItemWidget
 		evt.target = this;
 		this.getMeshWidget()._doClick(evt);
+		evt.stop({propagation: true});
 		this.$supers('doClick_', arguments);
 	},
 	doMouseOver_: function(evt) {
 		if (this.isDisabled()) return;
 		this._toggleEffect();
+		evt.stop();
 		this.$supers('doMouseOver_', arguments);
 	},
 	doMouseOut_: function(evt) {
 		if (this.isDisabled()) return;
 		this._toggleEffect(true);
+		evt.stop({propagation: true});
 		this.$supers('doMouseOut_', arguments);
 	},
 	doKeyDown_: function (evt) {
@@ -189,10 +193,12 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		if (!zk.gecko3 || (tag != "INPUT" && tag != "TEXTAREA"))
 			zDom.disableSelection(mate.getNode());
 		mate._doKeyDown(evt);
+		evt.stop({propagation: true});
 		this.$supers('doKeyDown_', arguments);
 	},
 	doKeyUp_: function (evt) {
 		zDom.enableSelection(this.getMeshWidget().getNode());
+		evt.stop({propagation: true});
 		this.$supers('doKeyUp_', arguments);
 	}
 });

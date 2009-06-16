@@ -24,5 +24,14 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 	<widget name="Listgroup"/>
 	<widget name="Listgroupfoot"/>
 	<widget name="Option"/>
-	<widget name="Select"/>	
+	<widget name="Select"/>
+	<widget name="Tree"/>
+	<widget name="Treecol"/>
+	<widget name="Treecols"/>
+	<widget name="Treechildren"/>
+	<widget name="Treeitem"/>
+	<widget name="Treerow"/>
+	<widget name="Treecell"/>
+	<widget name="Treefoot"/>
+	<widget name="Treefooter"/>
 </package>

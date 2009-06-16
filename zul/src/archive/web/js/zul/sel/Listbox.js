@@ -13,17 +13,9 @@ This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
-	_rows: 0,
-
 	$init: function () {
 		this.$supers('$init', arguments);
 		this._groupsInfo = [];
-	},
-
-	$define: {
-		rows: function (rows) {
-			if (this.desktop) ;//TODO: recalc size
-		}
 	},
 	getGroupCount: function () {
 		return this._groupsInfo.length;

@@ -36,6 +36,26 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 	getTextNode_: function () {
 		return zDom.firstChild(this.getNode(), "DIV");
 	},
+	getMaxlength: function () {
+		var box = this.getListbox();
+		if (!box) return 0;
+		if (box.getMold() == 'select')
+			return box.getMaxlength();
+		var lc = this.getListheader();
+		return lc ? lc.getMaxlength() : 0;
+	},
+	getListheader: function () {
+		var box = this.getListbox();
+		if (box && box.listhead) {
+			var j = this.getChildIndex();
+			if (j < box.listhead.nChildren)
+				return box.listhead.getChildAt(j);
+		}
+		return null;
+	},
+	domLabel_: function () {
+		return zUtl.encodeXML(this.getLabel(), {maxlength: this.getMaxlength()});
+	},
 	domContent_: function () {
 		var s1 = this.$supers('domContent_', arguments),
 			s2 = this._colHtmlPre();

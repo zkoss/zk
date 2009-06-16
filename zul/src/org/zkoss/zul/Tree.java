@@ -34,7 +34,6 @@ import org.zkoss.lang.D;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.lang.Objects;
 import org.zkoss.util.logging.Log;
-import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
@@ -98,7 +97,12 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	private transient Paging _paging;
 	private transient EventListener _pgListener, _pgImpListener;
 	private String _pagingPosition = "bottom";
-
+	
+	static {
+		addClientEvent(Tree.class, "onInnerWidth", CE_DUPLICATE_IGNORE|CE_IMPORTANT);
+		addClientEvent(Tree.class, Events.ON_SELECT, CE_IMPORTANT);
+	}
+	
 	public Tree() {
 		init();
 	}
@@ -396,7 +400,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	public void setFixedLayout(boolean fixedLayout) {
 		if(_fixedLayout != fixedLayout) {
 			_fixedLayout = fixedLayout;
-			invalidate();
+			smartUpdate("fixedLayout", fixedLayout);
 		}
 	}
 	/**
@@ -468,7 +472,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 
 		if (_rows != rows) {
 			_rows = rows;
-			smartUpdate("z.size", _rows);
+			smartUpdate("rows", _rows);
 		}
 	}
 
@@ -498,8 +502,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		if (name != null && name.length() == 0) name = null;
 		if (!Objects.equals(_name, name)) {
 			_name = name;
-			if (_name != null) smartUpdate("z.name", _name);
-			else invalidate(); //1) generate _value; 2) add submit listener
+			smartUpdate("name", name);
 		}
 	}
 
@@ -518,7 +521,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	public void setCheckmark(boolean checkmark) {
 		if (_checkmark != checkmark) {
 			_checkmark = checkmark;
-			invalidate();
+			smartUpdate("checkmark", checkmark);
 		}
 	}
 
@@ -540,7 +543,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	public void setVflex(boolean vflex) {
 		if (_vflex != vflex) {
 			_vflex = vflex;
-			smartUpdate("z.flex", _vflex);
+			smartUpdate("flex", _vflex);
 		}
 	}
 
@@ -565,7 +568,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		if (innerWidth == null) innerWidth = "100%";
 		if (!_innerWidth.equals(innerWidth)) {
 			_innerWidth = innerWidth;
-			smartUpdate("z.innerWidth", innerWidth);
+			smartUpdate("innerWidth", innerWidth);
 		}
 	}
 	/**
@@ -615,8 +618,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 				}
 				//No need to update z.selId because z.multiple will do the job
 			}
-			if (isCheckmark()) invalidate(); //change check mark
-			else smartUpdate("z.multiple", _multiple);
+			smartUpdate("multiple", _multiple);
 		}
 	}
 
@@ -698,9 +700,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	 * attribute of the tree).
 	 */
 	private String getSelectedId() {
-		//NOTE: Treerow's uuid; not Treeitem's
-		final Treerow tr = _sel != null ? _sel.getTreerow(): null;
-		return tr != null ? tr.getUuid(): "zk_n_a";
+		return _sel != null ? _sel.getUuid(): "";
 	}
 
 	/** Returns a readonly list of all descending {@link Treeitem}
@@ -744,9 +744,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 				item.setSelectedDirectly(true);
 				_selItems.add(item);
 
-				final Treerow tr = item.getTreerow();
-				if (tr != null)
-					smartUpdate("select", tr.getUuid());
+				smartUpdate("selectedItem", item.getUuid());
 			}
 			if (inPagingMold())
 				setActivePage(item);
@@ -777,7 +775,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 				_selItems.add(item);
 				smartUpdateSelection();
 				if (fixSelected())
-					smartUpdate("z.selId", getSelectedId());
+					smartUpdate("selectedItem", getSelectedId());
 			}
 		}
 	}
@@ -805,9 +803,6 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 				item.setSelectedDirectly(false);
 				_selItems.remove(item);
 				smartUpdateSelection();
-				if (fixSelected())
-					smartUpdate("z.selId", getSelectedId());
-				//No need to use response because such info is carried on tags
 			}
 		}
 	}
@@ -827,11 +822,8 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		final StringBuffer sb = new StringBuffer(80);
 		for (Iterator it = _selItems.iterator(); it.hasNext();) {
 			final Treeitem item = (Treeitem)it.next();
-			final Treerow tr = item.getTreerow();
-			if (tr != null) {
-				if (sb.length() > 0) sb.append(',');
-				sb.append(tr.getUuid());
-			}			
+			if (sb.length() > 0) sb.append(',');
+			sb.append(item.getUuid());			
 		}
 		smartUpdate("chgSel", sb.toString());
 	}
@@ -864,7 +856,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 			}
 			_selItems.clear();
 			_sel = null;
-			smartUpdate("select", "");
+			smartUpdate("selectedItem", "");
 		}
 	}
 	/** Selects all items.
@@ -1025,28 +1017,24 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		if (newChild instanceof Treecols) {
 			if (super.insertBefore(newChild, refChild)) {
 				_treecols = (Treecols)newChild;
-				invalidate();
 				return true;
 			}
 		} else if (newChild instanceof Treefoot) {
 			refChild = _paging; //the last two: listfoot and paging
 			if (super.insertBefore(newChild, refChild)) {
 				_treefoot = (Treefoot)newChild;
-				invalidate();
 				return true;
 			}
 		} else if (newChild instanceof Treechildren) {
 			if (super.insertBefore(newChild, refChild)) {
 				_treechildren = (Treechildren)newChild;
 				fixSelectedSet();
-				invalidate();
 				return true;
 			}
 		} else if (newChild instanceof Paging) {
 			refChild = null; //the last: paging
 			if (super.insertBefore(newChild, refChild)) {
 				_pgi = _paging = (Paging)newChild;
-				invalidate();
 				return true;
 			}
 		} else { //Auxhead
@@ -1067,7 +1055,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 			fixSel = _sel == item;
 			if (fixSel && !_multiple) {
 				_sel = null;
-				smartUpdate("z.selId", getSelectedId());
+				smartUpdate("selectedItem", getSelectedId());
 				assert _selItems.isEmpty();
 			}
 		}
@@ -1093,7 +1081,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 				if (_sel == null)
 					_sel = item;
 				_selItems.add(item);
-				smartUpdate("z.selId", getSelectedId());
+				smartUpdate("selectedItem", getSelectedId());
 			}
 		}
 	}
@@ -1111,7 +1099,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 				if (_sel == item) {
 					if (!_multiple) {
 						_sel = null;
-						smartUpdate("z.selId", getSelectedId());
+						smartUpdate("selectedItem", getSelectedId());
 						assert _selItems.isEmpty();
 						return; //done
 					}
@@ -1861,7 +1849,20 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	}
 	
 	// AREA JEFF ADDED END
-	
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+		
+		render(renderer, "name", _name);
+		if (_rows > 0)
+			renderer.render("rows", getRows());
+
+		render(renderer, "selectedItem", getSelectedId());
+		render(renderer, "multiple", isMultiple());
+		render(renderer, "checkmark", isCheckmark());
+		render(renderer, "vflex", isVflex());
+		render(renderer, "fixedLayout", isFixedLayout());
+	}
 	/** Processes an AU request.
 	 *
 	 * <p>Default: in addition to what are handled by {@link XulElement#service},

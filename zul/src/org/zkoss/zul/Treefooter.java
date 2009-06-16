@@ -112,6 +112,14 @@ public class Treefooter extends LabelImageElement implements org.zkoss.zul.api.T
 	}
 
 	//-- super --//
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+		
+		if (_span > 1)
+			renderer.render("colspan", _span);
+	}
+	
 	public String getZclass() {
 		return _zclass == null ? "z-treefooter" : _zclass;
 	}

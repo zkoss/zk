@@ -38,6 +38,9 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 					}
 					
 				this._selItems.push(item);
+				
+				// reset the selected id
+				this._chgSel = item.uuid;
 			}
 			if (this._checkmark && this.desktop)
 				this.rerender();
@@ -506,12 +509,16 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 
 		if (step) {
 			if (shift) this._toggleSelect(row, true, evt);
-			for (; (row = step > 0 ? row.nextSibling: row.previousSibling);) {
-				if (row.$instanceof(zul.sel.ItemWidget) && !row.isDisabled()) {
-					if (shift) this._toggleSelect(row, true, evt);
+			var nrow = row.getNode();
+			for (; (nrow = step > 0 ? nrow.nextSibling: nrow.previousSibling);) {
+				var r = zk.Widget.$(nrow);
+				if (r.$instanceof(zul.sel.Treerow))
+					r = r.parent;
+				if (!r.isDisabled()) {
+					if (shift) this._toggleSelect(r, true, evt);
 
-					if (row.isVisible()) {
-						if (!shift) lastrow = row;
+					if (zDom.isVisible(nrow)) {
+						if (!shift) lastrow = r;
 						if (!endless) {
 							if (step > 0) --step;
 							else ++step;

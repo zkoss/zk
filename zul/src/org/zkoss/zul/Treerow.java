@@ -158,11 +158,6 @@ public class Treerow extends XulElement implements org.zkoss.zul.api.Treerow {
 		if (!comp.isVisible()) return false;
 		return true;
 	}
-	public boolean setVisible(boolean visible) {
-		if (isVisible() != visible) 
-			smartUpdate("z.visible", visible);
-		return super.setVisible(visible);
-	}
 	
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Treeitem))
@@ -173,12 +168,4 @@ public class Treerow extends XulElement implements org.zkoss.zul.api.Treerow {
 		if (!(child instanceof Treecell))
 			throw new UiException("Unsupported child for tree row: "+child);
 		super.beforeChildAdded(child, refChild);
-	}
-
-	protected void smartUpdate(String name, Object value) { //make it accessible in this package
-		super.smartUpdate(name, value);
-	}
-	protected void smartUpdate(String name, boolean value) { //make it accessible in this package
-		super.smartUpdate(name, value);
-	}
-}
+	}}

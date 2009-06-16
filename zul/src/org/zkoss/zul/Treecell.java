@@ -189,6 +189,13 @@ public class Treecell extends LabelImageElement implements org.zkoss.zul.api.Tre
 	}
 
 	//-- Component --//
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+		
+		if (_span > 1)
+			renderer.render("colspan", _span);
+	}
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Treerow))
 			throw new UiException("Wrong parent: "+parent);

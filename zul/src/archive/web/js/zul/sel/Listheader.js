@@ -17,6 +17,24 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 	
 	getMeshBody: zul.mesh.HeaderWidget.prototype.getMeshWidget,
 	
+	$define: {
+		maxlength: [function (v) {
+			return !v || v < 0 ? 0 : v; 
+		}, function () {
+			if (this.desktop)
+				this.updateCells_();
+		}]
+	},
+	updateCells_: function () {
+		var box = this.getListbox();
+		if (box == null || box.getMold() == 'select')
+			return;
+
+		var jcol = this.getChildIndex();
+		for (var it = this.getBodyWidgetIterator(), w; (w = it.next());)
+			if (jcol < w.nChildren)
+				return w.getChildAt(jcol).rerender();
+	},
 	//super//
 	getZclass: function () {
 		return this._zclass == null ? "z-listheader" : this._zclass;

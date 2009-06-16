@@ -147,7 +147,7 @@ td.z-listgroupfoot-inner div.z-listcell-cnt {
 	font-size: ${fontSizeM};
 	font-family: ${fontFamilyT};
 }
-<%-- ZK Column's sizing --%>
-.z-listbox-header .z-listheader.z-listheader-sizing, .z-grid-header .z-listheader.z-listheader-sizing .z-listheader-cnt {
+<%-- ZK Listhead's sizing --%>
+.z-listbox-header .z-listheader.z-listheader-sizing, .z-listbox-header .z-listheader.z-listheader-sizing .z-listheader-cnt {
 	cursor: e-resize;
 }

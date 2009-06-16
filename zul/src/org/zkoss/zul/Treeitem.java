@@ -54,7 +54,10 @@ public class Treeitem extends XulElement implements org.zkoss.zul.api.Treeitem {
 	 * the tree owning this item is using a tree model.
 	 */
 	private boolean _loaded;
-	
+
+	static {
+		addClientEvent(Treeitem.class, Events.ON_OPEN, CE_IMPORTANT);
+	}
 	public Treeitem() {
 	}
 	public Treeitem(String label) {
@@ -137,8 +140,7 @@ public class Treeitem extends XulElement implements org.zkoss.zul.api.Treeitem {
 	/*package*/ void setLoaded(boolean loaded){
 		if (_loaded != loaded) {
 			_loaded = loaded;
-			if (_treerow != null)
-				_treerow.smartUpdate("z.lod", !_loaded);
+			smartUpdate("_loaded", _loaded);
 		}
 	}
 	
@@ -210,7 +212,7 @@ public class Treeitem extends XulElement implements org.zkoss.zul.api.Treeitem {
 
 			final Tree tree = getTree();
 			if (tree != null && tree.getName() != null)
-				smartUpdate("z.value", Objects.toString(_value));
+				smartUpdate("value", _value);
 		}
 	}
 
@@ -227,8 +229,7 @@ public class Treeitem extends XulElement implements org.zkoss.zul.api.Treeitem {
 			_open = open;
 			//Note: _treerow might not be ready yet because it might be
 			//initialized before creating child components (for ZK pages)
-			if (_treerow != null)
-				_treerow.smartUpdate("z.open", _open);
+			smartUpdate("open", _open);
 			//If the item is open, its tree has model and not rendered, render the item
 			boolean shouldNotify = _treechildren != null && isVisible();
 			if(_open) {
@@ -376,15 +377,6 @@ public class Treeitem extends XulElement implements org.zkoss.zul.api.Treeitem {
 	}
 
 	//-- super --//
-
-	//this is declared to make it accessible to Treerow
-	/*obsolete protected boolean isAsapRequired(String evtnm) {
-		return super.isAsapRequired(evtnm);
-	}*/
-	protected void smartUpdate(String attr, Object value) {
-		if (_treerow != null) _treerow.smartUpdate(attr, value);
-	}
-
 	/** No callable. Use {@link Treerow#setDraggable} isntead.
 	 */
 	public void setDraggable(String draggable) {
@@ -400,8 +392,7 @@ public class Treeitem extends XulElement implements org.zkoss.zul.api.Treeitem {
 
 	public boolean setVisible(boolean visible) {
 		if(isVisible() != visible){
-			if (isVisible() != visible && _treerow != null) 
-				_treerow.smartUpdate("z.visible", visible);
+			smartUpdate("visible", visible);
 			int count = isOpen() && _treechildren != null ?
 					_treechildren.getVisibleItemCount() + 1: 1;
 					boolean result = super.setVisible(visible);
@@ -568,6 +559,16 @@ public class Treeitem extends XulElement implements org.zkoss.zul.api.Treeitem {
 	}
 
 	//-- ComponentCtrl --//
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+		
+		render(renderer, "value", getValue());
+		render(renderer, "selected", isSelected());
+		render(renderer, "disabled", isDisabled());
+		render(renderer, "open", isOpen());
+		render(renderer, "_loaded", isLoaded());
+	}
 	/** Processes an AU request.
 	 *
 	 * <p>Default: in addition to what are handled by {@link XulElement#service},

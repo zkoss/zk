@@ -935,80 +935,89 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>tree</component-name>
 		<component-class>org.zkoss.zul.Tree</component-class>
+		<widget-class>zul.sel.Tree</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/tree.dsp</mold-uri>
+			<mold-uri>mold/tree.js</mold-uri>
 		</mold>
 		<mold>
 			<mold-name>paging</mold-name>
-			<mold-uri>~./zul/html/tree-pg.dsp</mold-uri>
+			<mold-uri>mold/tree.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>treecell</component-name>
 		<component-class>org.zkoss.zul.Treecell</component-class>
+		<widget-class>zul.sel.Treecell</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/treecell.dsp</mold-uri>
+			<mold-uri>mold/treecell.js</mold-uri>
 		</mold>
 		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>treechildren</component-name>
 		<component-class>org.zkoss.zul.Treechildren</component-class>
+		<widget-class>zul.sel.Treechildren</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/treechildren.dsp</mold-uri>
+			<mold-uri>mold/treechildren.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>treecol</component-name>
 		<component-class>org.zkoss.zul.Treecol</component-class>
+		<widget-class>zul.sel.Treecol</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/treecol.dsp</mold-uri>
+			<mold-uri>mold/treecol.js</mold-uri>
 		</mold>
 		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>treecols</component-name>
 		<component-class>org.zkoss.zul.Treecols</component-class>
+		<widget-class>zul.sel.Treecols</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/treecols.dsp</mold-uri>
+			<mold-uri>mold/treecols.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>treefoot</component-name>
 		<component-class>org.zkoss.zul.Treefoot</component-class>
+		<widget-class>zul.sel.Treefoot</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/treefoot.dsp</mold-uri>
+			<mold-uri>mold/treefoot.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>treefooter</component-name>
 		<component-class>org.zkoss.zul.Treefooter</component-class>
+		<widget-class>zul.sel.Treefooter</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/treefooter.dsp</mold-uri>
+			<mold-uri>mold/treefooter.js</mold-uri>
 		</mold>
 		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>treeitem</component-name>
 		<component-class>org.zkoss.zul.Treeitem</component-class>
+		<widget-class>zul.sel.Treeitem</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/treeitem.dsp</mold-uri>
+			<mold-uri>mold/treeitem.js</mold-uri>
 		</mold>
 	</component>
 	<component>
 		<component-name>treerow</component-name>
 		<component-class>org.zkoss.zul.Treerow</component-class>
+		<widget-class>zul.sel.Treerow</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/treerow.dsp</mold-uri>
+			<mold-uri>mold/treerow.js</mold-uri>
 		</mold>
 	</component>
 	<component>
