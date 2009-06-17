@@ -50,6 +50,7 @@ ZK 3.6.2
   2803344: Executions.createComponents cannot handle ~./x?y
   2803575: bindingArgs shall merge extra binding arguments together
   2806414: onOK with onChanging causes a Javascript error in Textbox
+  2807475: Focus problem with menupop & textbox in ie
 
 * Upgrade Notes
   * The signature of doInit of org.zkoss.zk.ui.util.Initiator is changed.

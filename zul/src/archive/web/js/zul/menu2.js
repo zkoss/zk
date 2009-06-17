@@ -329,9 +329,12 @@ zkMenu2 = { // menu
 			if (zk.ie && zkMenu2.isTop(menu))
 				setTimeout(function (){try {
 					anc.focus();
+					zkau.currentFocus = anc;
 				} catch (e){}},10); // Bug 2614901
-			else
+			else {
 				anc.focus();
+				zkau.currentFocus = anc;
+			}
 		}
 	},
 	/** Closes the menu. */
