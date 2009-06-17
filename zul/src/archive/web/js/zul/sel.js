@@ -782,6 +782,17 @@ zk.Selectable.prototype = {
 					tblwd = 0;
 				this.bodytbl.style.width = tblwd + "px";
 			}
+			
+			// bug #2799258
+			var hgh = this.element.style.height;
+			if (!hgh || hgh == "auto") {
+				if (this._visihgh !== null && (this.body.offsetHeight - this.body.clientHeight)
+						< zk.getScrollBarWidth()) 
+						this.body.style.height = this._visihgh + "px"; 
+					
+				// resync
+				tblwd = this.body.clientWidth;
+			}
 		}
 		if (this.headtbl) {
 			if (tblwd) this.head.style.width = tblwd + 'px';
@@ -825,6 +836,7 @@ zk.Selectable.prototype = {
 		var rows = this.bodyrows,
 			hgh = this.element.style.height,
 			isHgh = hgh && hgh != "auto" && hgh.indexOf('%') < 0;
+		this._visihgh = null;
 		if (isHgh) {
 			hgh = $int(hgh);
 			if (hgh) {
@@ -926,28 +938,31 @@ zk.Selectable.prototype = {
 			// bug #2799258
 			var h = this.element.style.height;
 			if (!h || h == "auto") {
-				h = zk.gecko ? this.body.offsetHeight - this.body.clientHeight : this.body.offsetWidth - this.body.clientWidth;
-				if (this.bodyrows.length && h > 11)
+				h = this.body.offsetHeight - this.body.clientHeight;
+				if (this.bodyrows.length && h > 11) {
 					this.body.style.height = hgh + zk.getScrollBarWidth() + "px";
+					this._visihgh = hgh;// cache
+				}
 			}
 		} else {
 			//if no hgh but with horz scrollbar, IE will show vertical scrollbar, too
 			//To fix the bug, we extend the height
-			hgh = this.element.style.height;
+			hgh = this.element.style.height
 			if (zk.ie && (!hgh || hgh == "auto")
 			&& this.body.offsetWidth - this.body.clientWidth > 11) {
 				if (!nVisiRows) this.body.style.height = ""; // bug #1806152 if start with 0px and no hgh, IE doesn't calculate the height of the element.
 				else this.body.style.height =
-						(this.body.offsetHeight + zk.getScrollBarWidth()) + "px";
+						(this.body.offsetHeight) + "px";
 			} else {
 				this.body.style.height = "";
 			}
-			
 			// bug #2799258
 			if (!hgh || hgh == "auto") {
-				hgh = this.body.offsetWidth - this.body.clientWidth;
-				if (this.bodyrows.length && hgh > 11)
+				hgh = this.body.offsetHeight - this.body.clientHeight;
+				if (this.bodyrows.length && hgh > 11) {
+					this._visihgh = this.body.offsetHeight; // cache
 					this.body.style.height = this.body.offsetHeight + zk.getScrollBarWidth() + "px";
+				}
 			}
 		}
 	},
