@@ -51,7 +51,8 @@ ZK 3.6.2
   2803575: bindingArgs shall merge extra binding arguments together
   2806414: onOK with onChanging causes a Javascript error in Textbox
   2807475: Focus problem with menupop & textbox in ie
-
+  2806116: Javadoc misleading on TypeConverter interface
+  
 * Upgrade Notes
   * The signature of doInit of org.zkoss.zk.ui.util.Initiator is changed.
     It is backward compatible if you prefer not to re-compile your codes.

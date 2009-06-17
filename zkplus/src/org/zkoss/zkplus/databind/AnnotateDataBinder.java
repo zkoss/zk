@@ -39,7 +39,7 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  *<p>We suggest annotating directly on the component property with intuitive @{...} expression because it is more readable.</p>
  * 
  * <p>For example, the following annotation associates the 
- * property "value" of the component "textbox" to the bean's value "person.address.city".</p>
+ * attribute "value" of the component "textbox" to the bean's value "person.address.city".</p>
  * <p>@{...} way:</p>
  * <pre>
  * &lt;textbox value="@{person.address.city}"/>
@@ -65,11 +65,12 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  * &lt;componentX/>
  * </pre>
  *
- * <p>This associates the componentX's property attrY to the bean's value. The bean's value is something
+ * <p>This associates the componentX's attribute attrY to the bean's value. The bean's value is something
  * in the form of beanid.field1.field2... You can either call {@link DataBinder#bindBean} to bind the beanid to a
  * real bean object or you can neglect it and this DataBinder would try to find it from the variables map via
- * ({@link org.zkoss.zk.ui.Component#getVariable} method. That is, all those variables defined in zscript are 
- * accessible by this DataBinder. Note that you can choose either two formats of annotations as your will and you 
+ * {@link org.zkoss.zk.ui.Page#getZScriptVariable} then {@link org.zkoss.zk.ui.Component#getVariable} method. 
+ * That is, all those variables defined in zscript are also accessible by this DataBinder. Note that you can choose 
+ * either two formats of annotations as your will and you 
  * can even hybrid them together though it is not generally a good practice.</p>
  *
  * <p>The tag='expression' or tag:expression is a generic form to bind more metainfo to the attrY of the componentX. 
@@ -78,11 +79,12 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  * 
  * <ul>
  * <li>load-when. You can specify the events concerned when to load the attribute of the component from the bean.
- * Multiple definition is allowed and would be called one by one.
- * For example, the following code snip tells DataBinder that the property "value" of Label "fullName" will load 
+ * Multiple definition is allowed and would be called one by one. Note that binding is executed BEFORE other event
+ * listeners you defined. (If you want the loading to be executed AFTER your event listener, use load-after).
+ * For example, the following code snip tells DataBinder that the attribute "value" of Label "fullName" will load 
  * from "person.fullName" when the Textbox "firstName" or "lastName" fire "onChange" event.
  *
- * <p>The @{...} way that specify directly on the Component's property:</p>
+ * <p>The @{...} way that specify directly on the Component's attribute:</p>
  * <pre>
  * &lt;textbox id="firstname" value="@{person.firstName}"/>
  * &lt;textbox id="lastname" value="@{person.lastName}"/>
@@ -101,15 +103,22 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  * &lt;label id="fullname"/>
  * </pre>
  * </li>
+ * <li>(Since 3.6.1) load-after. Similar to load-when. You can specify the events concerned when to load the 
+ * attribute of the component from the bean. The only difference is that the loading is done <b>AFTER</b> other
+ * event listeners listening to the same event are processed; while in load-when the loading is done <b>BEFORE</b> other
+ * event listeners listening to the same event are processed. 
+ * </li>
  *
  * <li>save-when. You can specify the events concerned when to save the attribute of the component into the bean.
  * Since ZK version 3.0.0, you can specify multiple events in save-when tag (i.e. before ZK 3.0.0, you can specify only
  * one event). The events specified, if fired, will trigger
- * this DataBinder to save the attribute of the component into the specified bean. For example, the following code snip tells 
+ * this DataBinder to save the attribute of the component into the specified bean. Note that binding is executed BEFORE other event
+ * listeners you defined. (If you want the saving to be executed AFTER your event listener, use save-after).
+ * For example, the following code snip tells 
  * DataBinder that the property "value" of Textbox "firstName" will 
  * save into "person.firstName" when the Textbox itself fire "onChange" event.
  *
- * <p>The @{...} way that specify directly on the Component's property:</p>
+ * <p>The @{...} way that specify directly on the Component's attribute:</p>
  * <pre>
  * &lt;textbox id="firstName" value="@{person.firstName, save-when='self.onChange'}"/>
  * </pre>
@@ -124,7 +133,7 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  * depends on the natural characteristic of the component's property as defined in lang-addon.xml. For example, 
  * the save-when of Label.value is default to "none" while that of Textbox.value is default to "self.onChange". 
  * That is, the following example is the same as the above one.</p>
- * <p>The @{...} way that specify directly on the Component's property:</p>
+ * <p>The @{...} way that specify directly on the Component's attribute:</p>
  * <pre>
  * &lt;textbox id="firstName" value="@{person.firstName}"/>
  * </pre>
@@ -154,58 +163,11 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  * &lt;textbox id="firstName"/>
  * </pre>
  * </li>
- *
- * <p>(Since 3.1) If you specify some tags other than the supported tags, they will be put into an argument Map 
- * and is stored as a component custom attribute "bindingArgs" (no matter annotated in which property of the component). 
- * e.g. 
- * <per><code>
- * &lt;label id="mylabel" value="@{person.name, answer='yes'}" style="@{person.mystyle, question='no'}"> 
- * </code></pre> 
- * <p>Then mylabel.getAttribute("bindingArgs") will return a Map with {answer=yes, question=no} two entries</p>
- * 
- * <p>(Since 3.1) We start to support the "distinct" 
- * concept for collection components with "model" attribute(i.e. Grid, Listbox, Comobobox, etc.). You can
- * specify as follows to tell the Data Binder that there might be one same object in multiple entries.</p>
- * <pre><code>
- * &lt;grid model="@{persons, distinct=false}" ...>
- *    ...
- * &lt;/grid>
- * </code></pre>
- * <p>or</p>
- * <pre><code>
- * &lt;a:bind model="persons; distinct:false"/>
- * &lt;grid ...>
- *    ...
- * &lt;/grid>
- * </code></pre>
- * <p>The default value for distinct is "true". However, if you specify distinct=false, the Data Binder will 
- * scan the whole ListModel to find out all items with the specified objects (thus worse performance if a 
- * big ListModel).</p>
- * 
- * <p>(Since 3.6.2) if you specify some tags other than the supported tags, they will be put into an argument Map 
- * and is stored as a component attribute "Xxx_bindingArgs" where the Xxx is the name of the annotated component property. e.g.
- * <pre><code>
- * &lt;label id="mylabel" value="@{person.name, answer='yes'}" style="@{person.mystyle, question='no'}"> 
- * </code></pre> 
- * <p>Then mylabel.getAttribute("value_bindingArgs") will return a Map with {answer=yes} entry and 
- * mylabel.getAttribute("style_bindingArgs") will return another Map with {question=no} entry.</p>
- * 
- * <p>Since 3.0.0, DataBinder supports validation phase before doing a save. Note that a DataBinder "save" is triggered by
- * a component event as specified on the "save-when" tag. Before doing a save, it first fires an onBindingSave event to each 
- * data-binding component and then it fires an onBindingValidate event to the event triggering component before really saving 
- * component property contents into bean's 
- * property. So application developers get the chance to handle the value validation before saving. In the following example
- * when end user click the "savebtn" button, an "onBindingSave" is first fired to "firtName" and "lastName" textboxes and 
- * then an "onBindingValidate" is fired to "savebtn" button. Application developers can register proper event handlers to do 
- * what they want to do.</p>
- * <pre>
- * &lt;textbox id="firstName" value="@{person.firstName, save-when="savebtn.onClick"}" onBindingSave="..."/>
- * &lt;textbox id="lastName" value="@{person.lastName, save-when="savebtn.onClick"}" onBindingSave="..."/>
- * &lt;button id="savebtn" label="save" onBindingValidate="..."/>
- * </pre>
- * 
- * <p>Note that the original textbox constraint mechanism is still there. This DataBinder validation phase is an 
- * add-on feature that can be applied to all components and attributes that use data binding mechanism.</p>
+ * <li>(Since 3.6.1) save-after. Similar to save-when. You can specify the events concerned when to save the
+ * attribute of the component to the bean. The only difference is that the saving is done <b>AFTER</b> other
+ * event listeners listening to the same event are processed; while in save-when the saving is done <b>BEFORE</b> other
+ * event listeners listening to the same event are processed.
+ *</li>
  *
  * <li>access. You can set the access mode of the attrY of the componentX to be "both"(load/save),  
  * "load"(load Only), "save"(save Only), or "none"(neither).  Multiple definition is NOT allowed 
@@ -220,7 +182,7 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  * is default to "both" access mode. For example, the following code snips tells DataBinder that Textbox "firstName" 
  * would allowing doing save into bean only not the other way.
  *
- * <p>The @{...} way that specify directly on the Component's property:</p>
+ * <p>The @{...} way that specify directly on the Component's attribute:</p>
  * <pre>
  * &lt;textbox id="firstName" value="@{person.firstName, access='save'}"/>
  * </pre>
@@ -234,25 +196,68 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
  * </li>
  *
  * <li>converter. You can specify the class name of the converter that implments the {@link TypeConverter} interface.
- * It is used to convert the value between component property and bean field.  Multiple definition is NOT allowed 
+ * It is used to convert the value between component attribute and bean field.  Multiple definition is NOT allowed 
  * and the later defined would override the previous defined one.
  * Most of the time you don't have to specify this since this DataBinder supports converting most commonly 
  * used types. However, if you specify the TypeConverter class name, this DataBinder will new an instance and use 
  * it to cast the class.
  * </li>
  * 
- * <li>(Since 3.6.1) load-after. Similar to load-when. You can specify the events concerned when to load the 
- * attribute of the component from the bean. The only difference is that the loading is done <b>AFTER</b> other
- * event listeners listening to the same event are processed; while in load-when the loading is done <b>BEFORE</b> other
- * event listeners listening to the same event are processed. 
- * </li>
- * 
- * <li>(Since 3.6.1) save-after. Similar to save-when. You can specify the events concerned when to save the
- * attribute of the component to the bean. The only difference is that the saving is done <b>AFTER</b> other
- * event listeners listening to the same event are processed; while in save-when the saving is done <b>BEFORE</b> other
- * event listeners listening to the same event are processed.
- *</li>
  * </ul>
+ * <p>(Since 3.1) If you specify some tags other than the supported tags, they will be put into an argument Map 
+ * and is stored as a component's custom attribute (componentScope) with key name "bindingArgs" (no matter annotated 
+ * in which attribute of the component). 
+ * e.g. 
+ * <per><code>
+ * &lt;label id="mylabel" value="@{person.name, answer='yes'}" style="@{person.mystyle, question='no'}"> 
+ * </code></pre> 
+ * <p>Then mylabel.getAttribute("bindingArgs") will return a Map with {answer=yes, question=no} two entries</p>
+ * 
+ * <p>(Since 3.1) We support the "distinct" 
+ * concept for collection components with "model" attribute(i.e. Grid, Listbox, Comobobox, etc.). You can
+ * specify as follows to tell the Data Binder that there might be one same object in multiple entries.</p>
+ * <pre><code>
+ * &lt;grid model="@{persons, distinct=false}" ...>
+ *    ...
+ * &lt;/grid>
+ * </code></pre>
+ * <p>or</p>
+ * <pre><code>
+ * &lt;a:bind model="persons; distinct:false"/>
+ * &lt;grid ...>
+ *    ...
+ * &lt;/grid>
+ * </code></pre>
+ * <p>The default value for distinct is "true". However, if you specify distinct=false, the DataBinder will 
+ * scan the whole ListModel to find out all items with the specified objects (thus worse performance if a 
+ * big ListModel).</p>
+ * 
+ * <p>(Since 3.6.2) if you specify some tags other than the supported tags, they will be put into an argument Map 
+ * and is stored as a component's custom attribute(componentScope) with key name "Xxx_bindingArgs" where the Xxx 
+ * is the name of the annotated component attribute. e.g.
+ * <pre><code>
+ * &lt;label id="mylabel" value="@{person.name, answer='yes'}" style="@{person.mystyle, question='no'}"> 
+ * </code></pre> 
+ * <p>Then mylabel.getAttribute("value_bindingArgs") will return a Map with {answer=yes} entry and 
+ * mylabel.getAttribute("style_bindingArgs") will return another Map with {question=no} entry.</p>
+ * 
+ * <p>Since 3.0.0, DataBinder supports validation phase before doing a save. Note that a DataBinder "save" is triggered by
+ * a component event as specified on the "save-when" or "save-after" tag. Before doing a save, it first fires an onBindingSave 
+ * event to each data-binding component and then it fires an onBindingValidate event to the event triggering component before really saving 
+ * component property contents into bean's 
+ * property. So application developers get the chance to handle the value validation before saving. In the following example
+ * when end user click the "savebtn" button, an "onBindingSave" is first fired to "firtName" and "lastName" textboxes and 
+ * then an "onBindingValidate" is fired to "savebtn" button. Application developers can register proper event handlers to do 
+ * what they want to do.</p>
+ * <pre>
+ * &lt;textbox id="firstName" value="@{person.firstName, save-when="savebtn.onClick"}" onBindingSave="..."/>
+ * &lt;textbox id="lastName" value="@{person.lastName, save-when="savebtn.onClick"}" onBindingSave="..."/>
+ * &lt;button id="savebtn" label="save" onBindingValidate="..."/>
+ * </pre>
+ * 
+ * <p>Note that the original textbox constraint mechanism is still there. This DataBinder validation phase is an 
+ * add-on feature that can be applied to all components and attributes that use data binding mechanism.</p>
+ *
  * 
  * @since 2.4.0 Supporting @{...} annotations.
  * @since 3.0.0 Supporting multiple events of save-when tag and validation phase.
