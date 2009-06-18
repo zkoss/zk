@@ -419,6 +419,7 @@
 		<xs:attribute name="popup" type="xs:string" use="optional" />
 		<xs:attribute name="tooltip" type="xs:string" use="optional" />
 		<xs:attribute name="onCtrlKey" type="xs:string" use="optional" />
+		<xs:attribute name="ctrlKeys" type="xs:string" use="optional" />
 	</xs:attributeGroup>
 	<xs:attributeGroup name="inputElementAttrGroup">
 		<xs:attributeGroup ref="xulElementAttrGroup" />
@@ -2268,7 +2269,6 @@
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="border" type="windowBorderAttrType" use="optional" />
 		<xs:attribute name="title" type="xs:string" use="optional" />
-		<xs:attribute name="ctrlKeys" type="windowCtrlKeysAttrType" use="optional" />
 		<xs:attribute name="mode" type="windowModeAttrType" use="optional" />
 		<xs:attribute name="closable" type="booleanType" use="optional" />
 		<xs:attribute name="sizable" type="booleanType" use="optional" />

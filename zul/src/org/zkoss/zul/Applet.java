@@ -47,6 +47,7 @@ import org.zkoss.zul.impl.XulElement;
 public class Applet extends XulElement implements DynamicPropertied,
 org.zkoss.zul.api.Applet {
 	private String _code = "";
+	private String _codebase = "";
 	private final Map _params = new LinkedHashMap();
 
 	/** Return the code of the applet, i.e., the URI of the Java class.
@@ -58,6 +59,18 @@ org.zkoss.zul.api.Applet {
 	 */
 	public void setCode(String code) {
 		_code = code;
+		invalidate();
+	}
+	
+	/** Return the code of the applet, i.e., the URI of the Java class.
+	 */
+	public String getCodebase() {
+		return _codebase;
+	}
+	/** Sets the code of the applet, i.e., the URI of the Java class.
+	 */
+	public void setCodebase(String codebase) {
+		_codebase = codebase;
 		invalidate();
 	}
 
@@ -140,6 +153,7 @@ org.zkoss.zul.api.Applet {
 	public String getOuterAttrs() {
 		final StringBuffer sb = new StringBuffer(80).append(super.getOuterAttrs());
 		HTMLs.appendAttribute(sb, "code", _code);
+		HTMLs.appendAttribute(sb, "codebase", _codebase);
 		return sb.toString();
 	}
 	/** No child is allowed.
