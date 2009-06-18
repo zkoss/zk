@@ -36,7 +36,7 @@ zPkg = {
 
 		if (!zPkg._updCnt()) {
 			try {
-				zEvt.enableESC();
+				zk.enableESC();
 				zUtl.destroyProgressbox("zk_loadprog");
 			} catch (ex) {
 			}
@@ -76,7 +76,7 @@ zPkg = {
 
 		zPkg._ldings.unshift(pkg);
 		if (zPkg._updCnt() == 1) {
-			zEvt.disableESC();
+			zk.disableESC();
 			setTimeout(zPkg._pgbox, 380);
 		}
 
@@ -116,7 +116,7 @@ zPkg = {
 	_updCnt: function () {
 		zPkg.loading = zPkg._ldings.length;
 		try {
-			var n = zDom.$("zk_loadcnt");
+			var n = jq("#zk_loadcnt").$();
 			if (n) n.innerHTML = zPkg._ldmsg();
 		} catch (ex) {
 		}
@@ -124,7 +124,7 @@ zPkg = {
 	},
 	_pgbox: function () {
 		if (zPkg.loading || window.dbg_progressbox) { //dbg_progressbox: debug purpose
-			var n = zDom.$("zk_loadprog");
+			var n = jq("#zk_loadprog").$();
 			if (!n)
 				zUtl.progressbox("zk_loadprog",
 					'Loading <span id="zk_loadcnt">'+zPkg._ldmsg()+'</span>',

@@ -25,12 +25,12 @@ zul.utl.Style = zk.$extends(zk.Widget, {
 		this._updLink();
 	},
 	unbind_: function () {
-		zDom.remove(this._getLink());
+		jq(this._getLink()).remove();
 		this.$supers('unbind_', arguments);
 	},
 	_updLink: function () {
 		if (this._src) {
-			zDom.remove(this.uuid + '$css');
+			jq(this.uuid + '$css').remove();
 
 			var head = this._getHead(),
 				ln = this._getLink(head),

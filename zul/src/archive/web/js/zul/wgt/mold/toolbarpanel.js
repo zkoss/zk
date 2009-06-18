@@ -16,7 +16,7 @@ function (out) {
 	var zcls = this.getZclass();
 	out.push('<div ', this.domAttrs_(), '>', '<div class="', zcls, '-body ',
 				zcls, '-', this.getAlign(), '" >', '<table id="', this.uuid,
-				'$cnt" class="', zcls, '-cnt"', zUtl.cellps0, '><tbody>');
+				'-cnt" class="', zcls, '-cnt"', zUtl.cellps0, '><tbody>');
 	if ('vertical' != this.getOrient()) {
 		out.push("<tr>");
 		for (var w = this.firstChild; w; w = w.nextSibling) {

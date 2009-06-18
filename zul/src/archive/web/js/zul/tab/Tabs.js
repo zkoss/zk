@@ -36,11 +36,10 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 	onShow: _zkf,
 	insertChildHTML_: function (child, before, desktop) {
 		var last = child.previousSibling;
-		if (before || !last) {
-			zDom.insertHTMLBefore(before.getNode(), child._redrawHTML());
-		} else {
-			zDom.insertHTMLAfter(last.getNode(), child._redrawHTML());
-		}
+		if (before || !last)
+			jq(before.getNode()).before(child._redrawHTML());
+		else
+			jq(last.getNode()).after(child._redrawHTML());
 		child.bind(desktop);
 	},
 	domClass_: function (no) {
@@ -407,11 +406,11 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		if ( zk.parseInt(value) < 0 || value == null) return;
 		switch(attr) {
 		case "h":
-			cmp.style.height = zk.ie6Only ? "0px" : ""; // recalculate for IE6
+			cmp.style.height = zk.ie6_ ? "0px" : ""; // recalculate for IE6
 			cmp.style.height = value;
 			break;
 		case "w":
-			cmp.style.width = zk.ie6Only ? "0px" : ""; // recalculate for IE6
+			cmp.style.width = zk.ie6_ ? "0px" : ""; // recalculate for IE6
 			cmp.style.width = "";
 			cmp.style.width = value;
 			break;

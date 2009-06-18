@@ -12,16 +12,21 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 
 <package name="zk" cacheable="false">
-	<script>//Copyright (C) 2009 Potix Corporation. Distributed under GPL 3.0
+	<script>//ZK, Copyright (C) 2009 Potix Corporation. Distributed under GPL 3.0
+//jQuery, Copyright (c) 2009 John Resig
 if(!window.zk){</script><!-- may be loaded multiple times because specified in lang.xml -->
+	<script src="ext/jquery.js"/>
 	<script src="zk.js"/>
-	<script src="math.js"/>
-	<script src="utl.js"/>
 	<script src="dom.js"/>
-	<script src="evt.js"/>
+	<script src="domie.js" browser="ie"/>
+	<script src="domie6.js" browser="ie6-"/>
+	<script src="domopera.js" browser="opera"/>
+	<script src="domsafari.js" browser="safari"/>
 	<script src="drag.js"/>
 	<script src="effect.js"/>
-	<script src="anima.js"/>
+	<script src="math.js"/>
+	<script src="utl.js"/>
+	<script src="evt.js"/>
 	<script src="widget.js"/>
 	<script src="pkg.js"/>
 	<script src="mount.js"/>
@@ -30,12 +35,10 @@ if(!window.zk){</script><!-- may be loaded multiple times because specified in l
 	<script src="numfmt.js"/>
 	<script src="msgfmt.js"/>
 
-	<script src="alphafix.js" browser="ie6-"/>
-
 	<!-- load lang here to minimize # of JS files -->
 	<script src="lang/mesg*.js"/>
 	<function class="org.zkoss.zk.fn.DspFns" name="outLocaleJavaScript"/>
 
-	<script src="ext/json2.js"/>
+	<script src="ext/jquery.json.js"/>
 	<script>}</script>
 </package>

@@ -30,20 +30,20 @@ function (out, skipper) {
 			zcls, '-tr"></div></div><div class="',
 			zcls, '-hl"><div class="', zcls,
 			'-hr"><div class="', zcls, '-hm"><div id="',
-			uuid, '$cap" class="', zcls, '-header">');
+			uuid, '-cap" class="', zcls, '-header">');
 
 		if (caption) caption.redraw(out);
 		else {
 			if (this.isClosable())
-				out.push('<div id="', uuid, '$close" class="', zcls, '-icon ', zcls, '-close"></div>');
+				out.push('<div id="', uuid, '-close" class="', zcls, '-icon ', zcls, '-close"></div>');
 			if (this.isMaximizable()) {
-				out.push('<div id="', uuid, '$max" class="', zcls, '-icon ', zcls, '-max');
+				out.push('<div id="', uuid, '-max" class="', zcls, '-icon ', zcls, '-max');
 				if (this.isMaximized())
 					out.push(' ', zcls, '-maxd');
 				out.push('"></div>');
 			}
 			if (this.isMinimizable())
-				out.push('<div id="' + uuid, '$min" class="', zcls, '-icon ', zcls, '-min"></div>');
+				out.push('<div id="' + uuid, '-min" class="', zcls, '-icon ', zcls, '-min"></div>');
 			out.push(zUtl.encodeXML(title));
 		}
 		out.push('</div></div></div></div>');
@@ -56,7 +56,7 @@ function (out, skipper) {
 			'"><div class="', zcls, '-cr', noborder,
 			'"><div class="', zcls, '-cm', noborder, '">');
 
-	out.push('<div id="', uuid, '$cave" class="');
+	out.push('<div id="', uuid, '-cave" class="');
 	if (contentSclass) out.push(contentSclass, ' ');
 	out.push(zcls, '-cnt', noborder, '"');
 	if (contentStyle) out.push(' style="', contentStyle, '"');

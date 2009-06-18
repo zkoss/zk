@@ -39,7 +39,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	//super//
 	focus: function (timeout) {
 		if (this.desktop && this.isVisible() && this.canActivate({checkOnly:true})) {
-			zDom.focus(this.getSubnode('btn') ? this.getSubnode('btn'): this.getNode(), timeout);
+			zk(this.getSubnode('btn')||this.getNode()).focus(timeout);
 			return true;
 		}
 		return false;
@@ -77,7 +77,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		} else {
 			if (this._disabled) return;
 
-			zDom.disableSelection(this.getSubnode('box'));
+			zk(this.getSubnode('box')).disableSelection();
 
 			n = this.getSubnode('btn');
 		}
@@ -97,12 +97,12 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 
 	doFocus_: function (evt) {
 		if (this._mold == 'trendy')
-			zDom.addClass(this.getSubnode('box'), this.getZclass() + "-focus");
+			jq(this.getSubnode('box')).addClass(this.getZclass() + "-focus");
 		this.$supers('doFocus_', arguments);
 	},
 	doBlur_: function (evt) {
 		if (this._mold == 'trendy')
-			zDom.rmClass(this.getSubnode('box'), this.getZclass() + "-focus");
+			jq(this.getSubnode('box')).removeClass(this.getZclass() + "-focus");
 		this.$supers('doBlur_', arguments);
 	},
 	doClick_: function (evt) {
@@ -148,21 +148,20 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	},
 	doMouseOver_: function () {
 		if (!this._disabled)
-			zDom.addClass(this.getSubnode('box'), this.getZclass() + "-over");
+			jq(this.getSubnode('box')).addClass(this.getZclass() + "-over");
 		this.$supers('doMouseOver_', arguments);
 	},
 	doMouseOut_: function () {
 		if (!this._disabled && this != zul.wgt.Button._curdn)
-			zDom.rmClass(this.getSubnode('box'), this.getZclass() + "-over");
+			jq(this.getSubnode('box')).removeClass(this.getZclass() + "-over");
 		this.$supers('doMouseOut_', arguments);
 	},
 	doMouseDown_: function () {
 		if (!this._disabled) {
-			var box = this.getSubnode('box'),
-				zcls = this.getZclass();
-			zDom.addClass(box, zcls + "-clk");
-			zDom.addClass(box, zcls + "-over");
-			zDom.focus(this.getSubnode('btn'), 30);
+			var zcls = this.getZclass();
+			jq(this.getSubnode('box')).addClass(zcls + "-clk")
+				.addClass(zcls + "-over")
+			zk(this.getSubnode('btn')).focus(30);
 		}
 
 		zk.mouseCapture = this; //capture mouse up
@@ -170,10 +169,9 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	},
 	doMouseUp_: function () {
 		if (!this._disabled) {
-			var box = this.getSubnode('box'),
-				zcls = this.getZclass();
-			zDom.rmClass(box, zcls + "-clk");
-			zDom.rmClass(box, zcls + "-over");
+			var zcls = this.getZclass();
+			jq(this.getSubnode('box')).removeClass(zcls + "-clk")
+				.removeClass(zcls + "-over");
 		}
 		this.$supers('doMouseUp_', arguments);
 	}

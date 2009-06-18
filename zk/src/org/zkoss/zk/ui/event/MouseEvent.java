@@ -58,6 +58,10 @@ public class MouseEvent extends Event {
 	/** Indicatees whether the right button is clicked.
 	 */
 	public static final int RIGHT_CLICK = 0x200;
+	/** Indicatees whether the middle button is clicked.
+	 * @since 5.0.0
+	 */
+	public static final int MIDDLE_CLICK = 0x400;
 
 	/** Converts an AU request to a mouse event.
 	 * @since 5.0.0

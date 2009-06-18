@@ -66,28 +66,27 @@ zul.box.Box = zk.$extends(zul.Widget, {
 
 	insertChildHTML_: function (child, before, desktop) {
 		if (before) {
-			zDom.insertHTMLBefore(before.getSubnode('chdex'), this.encloseChildHTML_(child));
+			jq(before.getSubnode('chdex')).before(this.encloseChildHTML_(child));
 		} else {
 			var n = this.getNode(), tbs = n.tBodies;
 			if (!tbs || !tbs.length)
 				n.appendChild(document.createElement("TBODY"));
-			zDom.insertHTMLBeforeEnd(
-				this.isVertical() ? tbs[0]: tbs[0].rows[0],
+			jq(this.isVertical() ? tbs[0]: tbs[0].rows[0]).append(
 				this.encloseChildHTML_(child, true));
 		}
 		child.bind(desktop);
 	},
 	removeChildHTML_: function (child, prevsib) {
 		this.$supers('removeChildHTML_', arguments);
-		zDom.remove(child.uuid + '$chdex');
-		zDom.remove(child.uuid + '$chdex2');
+		jq(child.uuid + '-chdex').remove();
+		jq(child.uuid + '-chdex2').remove();
 		if (prevsib && this.lastChild == prevsib) //child is last
-			zDom.remove(prevsib.uuid + '$chdex2');
+			jq(prevsib.uuid + '-chdex2').remove();
 	},
 	encloseChildHTML_: function (child, prefixSpace, out) {
 		var oo = [];
 		if (this.isVertical()) {
-			oo.push('<tr id="', child.uuid, '$chdex"',
+			oo.push('<tr id="', child.uuid, '-chdex"',
 				this._childOuterAttrs(child),
 				'><td', this._childInnerAttrs(child),
 				'>');
@@ -101,7 +100,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				if (pre) oo.unshift(this._spacingHTML(pre));
 			}
 		} else {
-			oo.push('<td id="', child.uuid, '$chdex"',
+			oo.push('<td id="', child.uuid, '-chdex"',
 				this._childOuterAttrs(child),
 				this._childInnerAttrs(child),
 				'>');
@@ -129,7 +128,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			spstyle = spacing ? (vert?'height:':'width:') + spacing: '';
 
 		oo.push('<t', vert?'r':'d', ' id="', child.uuid,
-			'$chdex2" class="', this.getZclass(), '-sep"');
+			'-chdex2" class="', this.getZclass(), '-sep"');
 
 		var s = spstyle;
 		if (spacing0 || !child.isVisible()) s = 'display:none' + s;
@@ -233,7 +232,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			if (zDom.isVisible(d))
 				if (vert) {
 					var diff = d.offsetHeight;
-					if(d.id && !d.id.endsWith("$chdex2")) { //TR
+					if(d.id && !d.id.endsWith("-chdex2")) { //TR
 						//Bug 1917905: we have to manipulate height of TD in Safari
 						if (d.cells.length) {
 							var c = d.cells[0];
@@ -244,7 +243,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 					total -= diff;
 				} else {
 					var diff = d.offsetWidth;
-					if(d.id && !d.id.endsWith("$chdex2")) //TD
+					if(d.id && !d.id.endsWith("-chdex2")) //TD
 						d.style.width = zDom.revisedWidth(d, i ? diff: total) + "px";
 					total -= diff;
 				}

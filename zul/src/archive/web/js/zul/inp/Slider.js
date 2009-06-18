@@ -166,7 +166,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		widget._fixPos();
 		widget.btn.title = pos;
 		widget.inp.value = pos;
-		zDom.remove(widget.slidetip);
+		jq(widget.slidetip).remove();
 		widget.slidetip = null;
 	},
 	_realpos: function (dg) {

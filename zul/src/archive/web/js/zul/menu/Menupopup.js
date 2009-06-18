@@ -59,7 +59,7 @@ zul.menu.Menupopup = zk.$extends('zul.wgt.Popup', {
 	},
 	_syncShadow: function () {
 		if (!this._shadow)
-			this._shadow = new zk.eff.Shadow(this.getNode(), {stackup:(zk.useStackup === undefined ? zk.ie6Only: zk.useStackup)});
+			this._shadow = new zk.eff.Shadow(this.getNode(), {stackup:(zk.useStackup === undefined ? zk.ie6_: zk.useStackup)});
 		this._shadow.sync();
 	},
 	_hideShadow: function () {
@@ -94,9 +94,9 @@ zul.menu.Menupopup = zk.$extends('zul.wgt.Popup', {
 			st = n.style;
 		if (sdw) {
 			var opts = sdw.opts, l = n.offsetLeft, t = n.offsetTop; 
-			if (zDom.innerX() + zDom.innerWidth() - n.offsetWidth == l)
+			if (jq.innerX() + jq.innerWidth() - n.offsetWidth == l)
 				st.left = (l - opts.right) + "px";
-			else if (zDom.innerY() + zDom.innerHeight() - n.offsetHeight == t)
+			else if (jq.innerY() + jq.innerHeight() - n.offsetHeight == t)
 				st.top = (t - opts.bottom) + "px";
 		}
 		this._syncShadow();

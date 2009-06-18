@@ -153,28 +153,26 @@ zkm = {
 			n.className = cn + ebc;
 		}
 
-		zEvt.listen(document, "keydown", zkm.docKeyDown);
-		zEvt.listen(document, "keyup", zkm.docKeyUp);
-		zEvt.listen(document, "keypress", zkm.docKeyPress);
+		jq(document).keydown(zkm.docKeyDown)
+			.keyup(zkm.docKeyUp)
+			.keypress(zkm.docKeyPress)
+			.mousedown(zkm.docMouseDown)
+			.mouseup(zkm.docMouseUp)
+			.mousemove(zkm.docMouseMove)
+			.mouseover(zkm.docMouseOver)
+			.mouseout(zkm.docMouseOut)
+			.click(zkm.docClick)
+			.dblclick(zkm.docDblClick)
+			.bind("contextmenu", zkm.docCtxMenu);
 
-		zEvt.listen(document, "mousedown", zkm.docMouseDown);
-		zEvt.listen(document, "mouseup", zkm.docMouseUp);
-		zEvt.listen(document, "mousemove", zkm.docMouseMove);
-		zEvt.listen(document, "mouseover", zkm.docMouseOver);
-		zEvt.listen(document, "mouseout", zkm.docMouseOut);
-
-		zEvt.listen(document, "click", zkm.docClick);
-		zEvt.listen(document, "dblclick", zkm.docDblClick);
-		zEvt.listen(document, "contextmenu", zkm.docCtxMenu);
-
-		zEvt.listen(window, "resize", zkm.docResize);
-		zEvt.listen(window, "scroll", zkm.docScroll);
-
-		zkm._oldUnload = window.onunload;
-		window.onunload = zkm.wndUnload; //unable to use zEvt.listen
+		jq(window).resize(zkm.docResize)
+			.scroll(zkm.docScroll)
+			.unload(zkm.docUnload);
 
 		zkm._oldBfUnload = window.onbeforeunload;
 		window.onbeforeunload = zkm.wndBfUnload;
+
+		zk.domReady = true;
 	},
 	mount: function() {
 		//1. load JS
@@ -196,10 +194,7 @@ zkm = {
 			zkm.mtAU(stub);
 		} else { //browser loading
 			zk.bootstrapping = true;
-			if (zk.domReady)
-				zkm.mtBL();
-			else
-				zkm._afterDomReady = zkm.mtBL;
+			jq(zkm.mtBL);
 		}
 	},
 	/** mount for browser loading */
@@ -324,9 +319,9 @@ zkm = {
 			v = props.z_ea;
 			if (v) {
 				delete props.z_ea;
-				var embed = zDom.$(uuid);
-				if (embed) {
-					var val = embed.innerHTML;
+				var embed = jq(uuid);
+				if (embed.length) {
+					var val = embed[0].innerHTML;
 					if (v.charAt(0) == '$') { //decode
 						v = v.substring(1);
 						val = zUtl.decodeXML(val);
@@ -400,13 +395,12 @@ zkm = {
 			wgt['do' + post].call(wgt, wevt);
 
 		if (wevt.domStopped)
-			zEvt.stop(wevt.domEvent);
+			wevt.domEvent.stop();
 	},
-	docMouseDown: function (devt) {
-		devt = devt || window.event;
-		var wgt = zk.Widget.$(devt, {child:true});
+	docMouseDown: function (evt) {
+		var wgt = zk.Widget.$(evt, {child:true});
 		zkm._docMouseDown(
-			new zk.Event(wgt, 'onMouseDown', zkm._mouseData(devt, wgt), null, devt),
+			new zk.Event(wgt, 'onMouseDown', zkm._mouseData(evt, wgt), null, evt),
 			wgt);
 	},
 	_docMouseDown: function (evt, wgt, fake) {
@@ -423,10 +417,10 @@ zkm = {
 			zkm._doEvt(evt);
 	},
 	_mouseData: function (evt, wgt) {
-		var n = zEvt.target(evt);
+		var n = evt.target;
 		if (wgt && (!n || n.id != wgt.uuid))
 			n = wgt.getNode();
-		return zEvt.mouseData(evt, n);
+		return evt.mouseData(n);
 	},
 	docMouseUp: function (evt) {
 		var e = zk.Draggable.ignoreMouseUp();
@@ -437,7 +431,6 @@ zkm = {
 			zkm._simFocus(e.target); //simulate focus
 		}
 
-		evt = evt || window.event;
 		var wgt = zk.mouseCapture;
 		if (wgt) zk.mouseCapture = null;
 		else wgt = zk.Widget.$(evt, {child:true});
@@ -457,7 +450,7 @@ zkm = {
 					tns = ['INPUT','A','BUTTON'], j = tns.length; --j >=0;) {
 						var ns = n.getElementsByTagName(tns[j]);
 						if (ns.length > 0) {
-							zDom.focus(ns[0]);
+							zk(ns[0]).focus();
 							break;
 						}
 					}
@@ -473,9 +466,8 @@ zkm = {
 	},
 
 	docMouseMove: function (evt) {
-		evt = evt || window.event;
-		zk.currentPointer[0] = zEvt.x(evt);
-		zk.currentPointer[1] = zEvt.y(evt);
+		zk.currentPointer[0] = evt.pageX;
+		zk.currentPointer[1] = evt.pageY;
 
 		var wgt = zk.mouseCapture;
 		if (!wgt) wgt = zk.Widget.$(evt, {child:true});
@@ -483,51 +475,47 @@ zkm = {
 			zkm._doEvt(new zk.Event(wgt, 'onMouseMove', zkm._mouseData(evt, wgt), null, evt));
 	},
 	docMouseOver: function (evt) {
-		evt = evt || window.event;
-		zk.currentPointer[0] = zEvt.x(evt);
-		zk.currentPointer[1] = zEvt.y(evt);
+		zk.currentPointer[0] = evt.pageX;
+		zk.currentPointer[1] = evt.pageY;
 
 		var wgt = zk.Widget.$(evt, {child:true});
 		if (wgt)
 			zkm._doEvt(new zk.Event(wgt, 'onMouseOver', zkm._mouseData(evt, wgt), null, evt));
 	},
 	docMouseOut: function (evt) {
-		evt = evt || window.event;
 		var wgt = zk.Widget.$(evt, {child:true});
 		if (wgt)
 			zkm._doEvt(new zk.Event(wgt, 'onMouseOut', zkm._mouseData(evt, wgt), null, evt));
 	},
 	docKeyDown: function (evt) {
-		evt = evt || window.event;
 		var wgt = zk.Widget.$(evt, {child:true});
 		if (wgt) {
-			var wevt = new zk.Event(wgt, 'onKeyDown', zEvt.keyData(evt), null, evt);
+			var wevt = new zk.Event(wgt, 'onKeyDown', evt.keyData(), null, evt);
 			zkm._doEvt(wevt);
 			if (!wgt.inDesign && !wevt.stopped && wgt.afterKeyDown_)
 				wgt.afterKeyDown_(wevt);
 		}
-		if (zEvt.keyCode(evt) == 27 && zAu.shallIgnoreESC()) //Bug 1927788: prevent FF from closing connection
-			zEvt.stop(evt); //eat
+
+		if (evt.keyCode == 27
+		&& (zkm._noESC > 0 || zAu.shallIgnoreESC())) //Bug 1927788: prevent FF from closing connection
+			return false; //eat
 	},
 	docKeyUp: function (evt) {
-		evt = evt || window.event;
 		var wgt = zk.keyCapture;
 		if (wgt) zk.keyCapture = null;
 		else wgt = zk.Widget.$(evt, {child:true});
 		if (wgt)
-			zkm._doEvt(new zk.Event(wgt, 'onKeyUp', zEvt.keyData(evt), null, evt));
+			zkm._doEvt(new zk.Event(wgt, 'onKeyUp', evt.keyData(), null, evt));
 	},
 	docKeyPress: function (evt) {
-		evt = evt || window.event;
 		var wgt = zk.keyCapture;
 		if (!wgt) wgt = zk.Widget.$(evt, {child:true});
 		if (wgt)
-			zkm._doEvt(new zk.Event(wgt, 'onKeyPress', zEvt.keyData(evt), null, evt));
+			zkm._doEvt(new zk.Event(wgt, 'onKeyPress', evt.keyData(), null, evt));
 	},
 	docClick: function (evt) {
 		if (zk.processing || zk.Draggable.ignoreClick()) return;
 
-		evt = evt || window.event;
 		if (evt.which == 1 || (evt.button == 0 || evt.button == 1)) {
 			var wgt = zk.Widget.$(evt, {child:true});
 			if (wgt)
@@ -538,7 +526,6 @@ zkm = {
 	docDblClick: function (evt) {
 		if (zk.processing || zk.Draggable.ignoreClick()) return;
 
-		evt = evt || window.event;
 		var wgt = zk.Widget.$(evt, {child:true});
 		if (wgt) {
 			var wevt = new zk.Event(wgt, 'onDoubleClick', zkm._mouseData(evt, wgt), {ctl:true}, evt);
@@ -550,9 +537,8 @@ zkm = {
 	docCtxMenu: function (evt) {
 		if (zk.processing) return;
 
-		evt = evt || window.event;
-		zk.lastPointer[0] = zEvt.x(evt);
-		zk.lastPointer[1] = zEvt.y(evt);
+		zk.lastPointer[0] = evt.pageX;
+		zk.lastPointer[1] = evt.pageY;
 
 		var wgt = zk.Widget.$(evt, {child:true});
 		if (wgt) {
@@ -614,7 +600,7 @@ zkm = {
 	},
 	_resz: {},
 
-	wndUnload: function () {
+	docUnload: function () {
 		zk.unloading = true; //to disable error message
 
 		//20061109: Tom Yeh: Failed to disable Opera's cache, so it's better not
@@ -627,22 +613,18 @@ zkm = {
 			try {
 				var dts = zk.Desktop.all;
 				for (var dtid in dts) {
-					var req = zUtl.newAjax(),
-						content = "dtid="+dtid+"&cmd.0="+
-							(bRmDesktop?"rmDesktop":"dummy"),
-						dt = dts[dtid],
-						uri = zAu.comURI(null, dt);
-					req.open("POST", zk.ie ? uri+"?"+content: uri, true);
-					req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-					if (zk.pfmeter) zAu._pfsend(dt, req, true);
-					if (zk.ie) req.send(null);
-					else req.send(content);
+					var dt = dts[dtid];
+					jq.ajax(zk.$default({
+						url: zAu.comURI(null, dt),
+						data: {dtid: dtid, 'cmd_0': bRmDesktop?"rmDesktop":"dummy"},
+						beforeSend: function (xhr) {
+							if (zk.pfmeter) zAu._pfsend(dt, xhr, true);
+						}
+					}, jq.zkAjax));
 				}
 			} catch (e) { //silent
 			}
 		}
-
-		if (zkm._oldUnload) zkm._oldUnload.apply(window, arguments);
 	},
 	wndBfUnload: function () {
 		if (!zk.skipBfUnload) {
@@ -663,61 +645,23 @@ zkm = {
 		zk.unloading = true; //FF3 aborts ajax before calling window.onunload
 		//Return nothing
 	},
-	_bfs: []
+	_bfs: [],
+	_noESC: 0
 };
 zkble = zkm.end;
 zke = zkpge = zkm.pop;
 
-zk.beforeUnload = function (fn, opts) { //part of zk
-	if (opts && opts.remove) zkm._bfs.$remove(fn);
-	else zkm._bfs.push(fn);
-};
-
-(function () {
-	//based on YUI 3/Dean Edwards
-	var ready = function () {
-		if (!zk.domReady) {
-			zk.domReady = true;
-			zkm.sysInit();
-			var f = zkm._afterDomReady;
-			if (f) {
-				delete zkm._afterDomReady;
-				f();
-			}
-		}
-	};
-	if (zk.ie) {
-		var iv = setInterval(function () {
-			try {
-				// throws an error if doc is not ready
-				document.documentElement.doScroll('left');
-				clearInterval(iv);
-				iv = null;
-				ready();
-			} catch (ex) {
-			}
-		}, 20);
-	} else if (document.readyState) {
-		var iv = setInterval(function() {
-			if (/loaded|complete/.test(document.readyState)) {
-				clearInterval(iv);
-				iv = null;
-				ready();
-			}
-		}, 20);
-	} else {
-		//Bug 1619959: FF not always fire DOMContentLoaded (such as in 2nd iframe)
-		//so we have to use onload, too
-		try {
-			zEvt.listen(document, "DOMContentLoaded", ready);
-		} catch (ex) { //ignore
-		}
-
-		var old = window.onload;
-		window.onload = function () {
-			ready();
-			if (old)
-				old.apply(window, arguments);
-		};
+zk.copy(zk, {
+	beforeUnload: function (fn, opts) { //part of zk
+		if (opts && opts.remove) zkm._bfs.$remove(fn);
+		else zkm._bfs.push(fn);
+	},
+	disableESC: function () {
+		++zkm._noESC;
+	},
+	enableESC: function () {
+		--zkm._noESC;
 	}
-})();
+});
+
+jq(zkm.sysInit);

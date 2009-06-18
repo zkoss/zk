@@ -18,7 +18,7 @@ function (out, skipper) {
 	var cap = this.caption;
 	if (cap) cap.redraw(out);
 
-	out.push('<div id="', this.uuid, '$cave"', this._contentAttrs(), '>');
+	out.push('<div id="', this.uuid, '-cave"', this._contentAttrs(), '>');
 	
 	if (!skipper)
 		for (var w = this.firstChild; w; w = w.nextSibling)

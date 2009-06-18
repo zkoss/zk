@@ -89,7 +89,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	setHeight: function (height) {
 		this.$supers('setHeight', arguments);
 		if (this.desktop) {
-			if (zk.ie6Only && this.ebody) 
+			if (zk.ie6_ && this.ebody) 
 				this.ebody.style.height = height;
 			// IE6 cannot shrink its height, we have to specify this.body's height to equal the element's height. 
 			this._setHgh(height);
@@ -224,7 +224,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	//watch//
 	beforeSize: function () {
 		// IE6 needs to reset the width of each sub node if the width is a percentage
-		var wd = zk.ie6Only ? this.getWidth() : this.getNode().style.width;
+		var wd = zk.ie6_ ? this.getWidth() : this.getNode().style.width;
 		if (!wd || wd == "auto" || wd.indexOf('%') >= 0) {
 			if (this.ebody) this.ebody.style.width = "";
 			if (this.ehead) this.ehead.style.width = "";
@@ -244,7 +244,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	onShow: _zkf,
 	_vflexSize: function (hgh) {
 		var n = this.getNode();
-		if (zk.ie6Only) { 
+		if (zk.ie6_) { 
 			// ie6 must reset the height of the element,
 			// otherwise its offsetHeight might be wrong.
 			n.style.height = "";

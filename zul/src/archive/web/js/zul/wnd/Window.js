@@ -70,20 +70,21 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 
 	_doOverlapped: function () {
 		var pos = this.getPosition(),
-			n = this.getNode();
+			n = this.getNode(),
+			$n = zk(n);
 		if (!pos && !n.style.top && !n.style.left) {
-			var xy = zDom.revisedOffset(n);
+			var xy = $n.revisedOffset();
 			n.style.left = xy[0] + "px";
 			n.style.top = xy[1] + "px";
 		} else if (pos == "parent")
 			this._posByParent();
 
-		zDom.makeVParent(n);
+		$n.makeVParent();
 		this._syncShadow();
 		this._updateDomPos();
 
 		if (this.isRealVisible()) {
-			zDom.cleanVisibility(n);
+			$n.cleanVisibility();
 			this.setTopmost();
 		}
 
@@ -91,15 +92,16 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 	_doModal: function () {
 		var pos = this.getPosition(),
-			n = this.getNode();
+			n = this.getNode(),
+			$n = zk(n);
 		if (pos == "parent") this._posByParent();
 
-		zDom.makeVParent(n);
+		$n.makeVParent();
 		this._syncShadow();
 		this._updateDomPos(true);
 
 		if (!pos) { //adjust y (to upper location)
-			var top = zk.parseInt(n.style.top), y = zDom.innerY();
+			var top = zk.parseInt(n.style.top), y = jq.innerY();
 			if (y) {
 				var y1 = top - y;
 				if (y1 > 100) n.style.top = top - (y1 - 100) + "px";
@@ -110,16 +112,16 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		//Note: modal must be visible
 		var realVisible = this.isRealVisible();
 		if (realVisible) {
-			zDom.cleanVisibility(n);
+			$n.cleanVisibility();
 			this.setTopmost();
 		}
 
 		this._mask = new zk.eff.FullMask({
-			id: this.uuid + "$mask",
+			id: this.uuid + "-mask",
 			anchor: this._shadow.getBottomElement(),
 				//bug 1510218: we have to make it as a sibling
 			zIndex: this._zIndex,
-			stackup: (zk.useStackup === undefined ? zk.ie6Only: zk.useStackup),
+			stackup: (zk.useStackup === undefined ? zk.ie6_: zk.useStackup),
 			visible: realVisible});
 
 		if (realVisible) {
@@ -134,7 +136,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	/** Must be called before calling makeVParent. */
 	_posByParent: function () {
 		var n = this.getNode(),
-			ofs = zDom.revisedOffset(n.parentNode),
+			ofs = zk(n.parentNode).revisedOffset(),
 			left = zk.parseInt(n.style.left), top = zk.parseInt(n.style.top);
 		this._offset = ofs;
 		n.style.left = ofs[0] + zk.parseInt(n.style.left) + "px";
@@ -164,14 +166,14 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		var handle = this.getSubnode('cap');
 		if (handle && !this._drag) {
 			handle.style.cursor = "move";
-			var $Window = this.$class;
+			var Window = this.$class;
 			this._drag = new zk.Draggable(this, null, {
 				handle: handle, stackup: true,
-				starteffect: $Window._startmove,
-				ghosting: $Window._ghostmove,
-				endghosting: $Window._endghostmove,
-				ignoredrag: $Window._ignoremove,
-				endeffect: $Window._aftermove});
+				starteffect: Window._startmove,
+				ghosting: Window._ghostmove,
+				endghosting: Window._endghostmove,
+				ignoredrag: Window._ignoremove,
+				endeffect: Window._aftermove});
 		}
 	},
 	_updateDomPos: function (force) {
@@ -182,7 +184,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		var st = n.style;
 		st.position = "absolute"; //just in case
 		var ol = st.left, ot = st.top;
-		zDom.center(n, pos);
+		zk(n).center(pos);
 		var sdw = this._shadow;
 		if (pos && sdw) {
 			var opts = sdw.opts, l = n.offsetLeft, t = n.offsetTop; 
@@ -269,10 +271,11 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			bl = zDom.lastChild(n, "DIV");
 			
 		if (!wdh || wdh == "auto") {
-			var diff = zDom.padBorderWidth(cave.parentNode) + zDom.padBorderWidth(cave.parentNode.parentNode);
+			var $cavp = zk(cave.parentNode),
+				diff = $cavp.padBorderWidth() + $cavp.parent().padBorderWidth();
 			if (tl) tl.firstChild.style.width = cave.offsetWidth + diff + "px";
 			if (hl) hl.firstChild.firstChild.style.width = Math.max(0, cave.offsetWidth
-				- (zDom.padBorderWidth(hl) + zDom.padBorderWidth(hl.firstChild) - diff)) + "px";
+				- (zk(hl).padBorderWidth() + zk(hl.firstChild).padBorderWidth() - diff)) + "px";
 			if (bl) bl.firstChild.style.width = cave.offsetWidth + diff + "px";
 		} else {
 			if (tl) tl.firstChild.style.width = "";
@@ -287,10 +290,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			cave = this.getSubnode('cave'),
 			cvh = cave.style.height;
 		if (hgh && hgh != "auto") {
-			if (zk.ie6Only) cave.style.height = "0px";
-			zDom.setOffsetHeight(cave, this._offsetHeight(n));
+			if (zk.ie6_) cave.style.height = "0px";
+			zk(cave).setOffsetHeight(this._offsetHeight(n));
 		} else if (cvh && cvh != "auto") {
-			if (zk.ie6Only) cave.style.height = "0px";
+			if (zk.ie6_) cave.style.height = "0px";
 			cave.style.height = "";
 		}
 	},
@@ -302,11 +305,11 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				cap = this.getSubnode("cap");
 			h -= bl.offsetHeight;
 			if (cave)
-				h -= zDom.padBorderHeight(cave.parentNode);
+				h -= zk(cave.parentNode).padBorderHeight();
 			if (cap)
-				h -= zDom.padBorderHeight(cap.parentNode);
+				h -= zk(cap.parentNode).padBorderHeight();
 		}
-		return h - zDom.padBorderHeight(n);
+		return h - zk(n).padBorderHeight();
 	},
 	_titleHeight: function (n) {
 		var cap = this.getSubnode('cap'),
@@ -321,9 +324,9 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			x = zk.parseInt(node.style.left),
 			y = zk.parseInt(node.style.top);
 		if (pos == 'parent') {
-			var vparent = zDom.vparent(node);
+			var vparent = node.vparent;
 			if (vparent) {
-				var ofs = zDom.reviseOffset(vparent);
+				var ofs = zk(vparent).reviseOffset();
 				x -= ofs[0];
 				y -= ofs[1];
 			}
@@ -404,8 +407,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	bind_: function () {
 		this.$supers('bind_', arguments);
 
-		var $Window = this.$class;
-
 		var mode = this._mode;
 		zWatch.listen({onSize: this, onShow: this});
 		if (mode != 'embedded') {
@@ -434,7 +435,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			this._mask = null;
 		}
 		
-		zDom.undoVParent(node);
+		zk(node).undoVParent();
 		zWatch.unlisten({onFloatUp: this, onSize: this, onShow: this});
 		this.setFloating_(false);
 
@@ -445,15 +446,15 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			this._prevfocus = this._prevmodal = null;
 		}
 
-		var $Window = this.$class;
+		var Window = this.$class;
 		for (var nms = ['close', 'max', 'min'], j = 3; --j >=0;) {
 			var nm = nms[j],
 				n = this['e' + nm ];
 			if (n) {
 				this['e' + nm ] = null;
-				zEvt.unlisten(n, 'click', $Window[nm + 'click']);
-				zEvt.unlisten(n, 'mouseover', $Window[nm + 'over']);
-				zEvt.unlisten(n, 'mouseout', $Window[nm + 'out']);
+				zEvt.unlisten(n, 'click', Window[nm + 'click']);
+				zEvt.unlisten(n, 'mouseover', Window[nm + 'over']);
+				zEvt.unlisten(n, 'mouseout', Window[nm + 'out']);
 			}
 		}
 		this.$supers('unbind_', arguments);
@@ -480,15 +481,15 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	doMouseOver_: function (evt) {
 		switch (evt.domTarget) {
 		case this.getSubnode('close'):
-			zDom.addClass(this.getSubnode('close'), this.getZclass() + '-close-over');
+			zk(this.getSubnode('close')).addClass(this.getZclass() + '-close-over');
 			break;
 		case this.getSubnode('max'):
 			var zcls = this.getZclass(),
 				added = this.isMaximized() ? ' ' + zcls + '-maxd-over' : '';
-			zDom.addClass(this.getSubnode('max'), zcls + '-max-over' + added);
+			zk(this.getSubnode('max')).addClass(zcls + '-max-over' + added);
 			break;
 		case this.getSubnode('min'):
-			zDom.addClass(this.getSubnode('min'), this.getZclass() + '-min-over');
+			zk(this.getSubnode('min')).addClass(this.getZclass() + '-min-over');
 			break;
 		}
 		this.$supers('doMouseOver_', arguments);
@@ -496,17 +497,17 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	doMouseOut_: function (evt) {
 		switch (evt.domTarget) {
 		case this.getSubnode('close'):
-			zDom.rmClass(this.getSubnode('close'), this.getZclass() + '-close-over');
+			zk(this.getSubnode('close')).removeClass(this.getZclass() + '-close-over');
 			break;
 		case this.getSubnode('max'):
 			var zcls = this.getZclass(),
-				max = this.getSubnode('max');
+				$max = zk(this.getSubnode('max'));
 			if (this.isMaximized())
-				zDom.rmClass(max, zcls + '-maxd-over');
-			zDom.rmClass(max, zcls + '-max-over');
+				$max.removeClass(zcls + '-maxd-over');
+			$max.removeClass(zcls + '-max-over');
 			break;
 		case this.getSubnode('min'):
-			zDom.rmClass(this.getSubnode('min'), this.getZclass() + '-min-over');
+			zk(this.getSubnode('min')).removeClass(this.getZclass() + '-min-over');
 			break;
 		}
 		this.$supers('doMouseOut_', arguments);

@@ -13,6 +13,14 @@ This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 zUtl = { //static methods
+	//Character
+	is: function (cc, opts) {
+		return (opts.digit && cc >= '0' && cc <= '9')
+			|| (opts.upper && cc >= 'A' && cc <= 'Z')
+			|| (opts.lower && cc >= 'a' && cc <= 'z')
+			|| opts[cc];
+	},
+
 	//HTML/XML
 	loadXML: function (url, callback) {
 		var doc = document.implementation;
@@ -163,17 +171,17 @@ zUtl = { //static methods
 			for (var c = zk.Page.contained.length, e = zk.Page.contained[--c]; e; e = zk.Page.contained[--c]) {
 				if (!e._applyMask)
 					e._applyMask = new zk.eff.Mask({
-						id: e.uuid + "$mask",
+						id: e.uuid + "-mask",
 						anchor: e.getNode()
 					});
 			}
 			return;
 		}
 
-		var x = zDom.innerX(), y = zDom.innerY(),
+		var x = jq.innerX(), y = jq.innerY(),
 			style = ' style="left:'+x+'px;top:'+y+'px"',
-			idtxt = id + '$t',
-			idmsk = id + '$m',
+			idtxt = id + '-t',
+			idmsk = id + '-m',
 			html = '<div id="'+id+'"';
 		if (mask)
 			html += '><div id="' + idmsk + '" class="z-modal-mask"'+style+'></div';
@@ -182,26 +190,28 @@ zUtl = { //static methods
 			+msg+'</div></div></div>'
 		var n = document.createElement("DIV");
 		document.body.appendChild(n);
-		n = zDom.setOuterHTML(n, html);
+		var $n = jq(n).replaceWith(html);
+		n = $n.$();
 
-		var txt = zDom.$(idtxt);
+		var $txt = jq(idtxt);
 		if (mask)
 			n.z_mask = new zk.eff.FullMask({
-				mask: zDom.$(idmsk),
-				zIndex: zDom.getStyle(txt, 'z-index') - 1
+				mask: zk(idmsk).$(),
+				zIndex: $txt.css('z-index') - 1
 			});
 
-		if (mask && txt) { //center
-			txt.style.left = (zDom.innerWidth() - txt.offsetWidth) / 2 + x + "px";
-			txt.style.top = (zDom.innerHeight() - txt.offsetHeight) / 2 + y + "px";
+		if (mask && $txt.length) { //center
+			var st = $txt.$().style;
+			st.left = (jq.innerWidth() - txt.offsetWidth) / 2 + x + "px";
+			st.top = (jq.innerHeight() - txt.offsetHeight) / 2 + y + "px";
 		}
-		zDom.cleanVisibility(n);
+		$n.zk.cleanVisibility();
 	},
 	destroyProgressbox: function (id) {
-		var n = zDom.$(id);
-		if (n) {
-			if (n.z_mask) n.z_mask.destroy();
-			zDom.remove(n);
+		var $n = jq(id, zk), n;
+		if ($n.length) {
+			if (n = $n[0].z_mask) n.destroy();
+			$n.remove();
 		}
 
 		for (var c = zk.Page.contained.length, e = zk.Page.contained[--c]; e; e = zk.Page.contained[--c])
@@ -223,7 +233,7 @@ zUtl = { //static methods
 			location.replace(url);
 		} else if (target) {
 			//we have to process query string because browser won't do it
-			//even if we use zDom.insertHTMLBeforeEnd("<form...")
+			//even if we use jq().append("<form...")
 			try {
 				var frm = document.createElement("FORM");
 				document.body.appendChild(frm);
@@ -242,18 +252,6 @@ zUtl = { //static methods
 			}
 		} else {
 			location.href = url;
-		}
-	},
-
-	newAjax: function () {
-		if (window.XMLHttpRequest) {
-			return new XMLHttpRequest();
-		} else {
-			try {
-				return new ActiveXObject('Msxml2.XMLHTTP');
-			} catch (e2) {
-				return new ActiveXObject('Microsoft.XMLHTTP');
-			}
 		}
 	},
 

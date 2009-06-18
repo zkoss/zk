@@ -60,6 +60,11 @@ public class AuRequests {
 			if (getBoolean(data, "altKey")) keys |= MouseEvent.ALT_KEY;
 			if (getBoolean(data, "ctrlKey")) keys |= MouseEvent.CTRL_KEY;
 			if (getBoolean(data, "shiftKey")) keys |= MouseEvent.SHIFT_KEY;
+			switch (getInt(data, "which", -1)) {
+			case 1: keys |= MouseEvent.LEFT_CLICK; break;
+			case 2: keys |= MouseEvent.MIDDLE_CLICK; break;
+			case 3: keys |= MouseEvent.RIGHT_CLICK; break;
+			}
 		}
 		return keys;
 	}

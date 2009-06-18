@@ -58,17 +58,16 @@ _zkc = zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 
 		var n = this.getSubnode('real');
 
-		if (zk.gecko2Only)
-			zEvt.listen(n, "click", zul.wgt.Checkbox._domClick);
-			// bug #2233787 : this is a bug of firefox 2, it need get currentTarget
+		if (zk.gecko2_)
+			jq(n).click(zul.wgt.Checkbox._domClick);
 		this.domListen_(n, "onFocus", "doFocus_");
 		this.domListen_(n, "onBlur", "doBlur_");
 	},
 	unbind_: function () {
 		var n = this.getSubnode('real');
 		
-		if (zk.gecko2Only)
-			zEvt.unlisten(n, "click", zul.wgt.Checkbox._domClick);
+		if (zk.gecko2_)
+			jq(n).unbind("click", zul.wgt.Checkbox._domClick);
 		this.domUnlisten_(n, "onFocus", "doFocus_");
 		this.domUnlisten_(n, "onBlur", "doBlur_");
 
@@ -87,9 +86,9 @@ _zkc = zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		return zDom.firstChild(this.getNode(), "LABEL");
 	}
 });
-if (zk.gecko2Only)
+if (zk.gecko2_)
 	_zkc._domClick = function (evt) {
-		evt.z_target = evt.currentTarget;
+		evt.target = evt.currentTarget;
 			//bug #2233787 : this is a bug of firefox 2, it need get currentTarget
 	};
 

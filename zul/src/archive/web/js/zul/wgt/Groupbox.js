@@ -25,7 +25,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 					if (open) zAnima.slideDown(this, panel, {afterAnima: this._afterSlideDown});
 					else zAnima.slideUp(this, panel, {beforeAnima: this._beforeSlideUp});
 				} else {
-					zDom[open ? 'rmClass': 'addClass'](node, this.getZclass() + "-colpsd");
+					jq(node)[open ? 'removeClass': 'addClass'](this.getZclass() + "-colpsd");
 					zWatch.fireDown(open ? 'onShow': 'onHide', {visible:true}, this);
 				}
 				if (!fromServer) this.fire('onOpen', {open:open});
@@ -62,9 +62,9 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		if (hgh && hgh != "auto") {
 			var n = this.getSubnode('cave');
 			if (n) {
-				if (zk.ie6Only) n.style.height = "";
+				if (zk.ie6_) n.style.height = "";
 				n.style.height =
-					zDom.revisedHeight(n, zDom.vflexHeight(n.parentNode), true)
+					zk(n).revisedHeight(zk(n.parentNode).vflexHeight(), true)
 					+ "px";
 					//we use n.parentNode(=this.getSubnode('panel')) to calc vflex,
 					//so we have to subtract margin, too
@@ -72,7 +72,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		}
 		setTimeout(this.proxy(this._fixShadow), 500);
 			//shadow raraly needs to fix so OK to delay for better performance
-			//(getSubnode('sdw') a bit slow due to zDom.$)
+			//(getSubnode('sdw') a bit slow due to jq)
 	},
 	onShow: _zkf,
 	_afterSlideDown: function (n) {
@@ -85,7 +85,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		var sdw = this.getSubnode('sdw');
 		if (sdw)
 			sdw.style.display =
-				zk.parseInt(zDom.getStyle(this.getSubnode('cave'), "border-bottom-width")) ? "": "none";
+				zk.parseInt(jq(this.getSubnode('cave')).css("border-bottom-width")) ? "": "none";
 				//if no border-bottom, hide the shadow
 	},
 	updateDomStyle_: function () {

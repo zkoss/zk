@@ -19,14 +19,14 @@ function (out) {
 
 	out.push('<span', this.domAttrs_({style:1,domclass:1}), ' class="', zcls, '"');
 	if (!this.isVisible()) out.push(' style="display:none"');
-	out.push('><table id="', this.uuid, '$box"', zUtl.cellps0);
+	out.push('><table id="', this.uuid, '-box"', zUtl.cellps0);
 	if (tabi && !zk.gecko && !zk.safari) out.push(tabi);
 	var s = this.domStyle_();
 	if (s) out.push(' style="', s, '"');
 	s = this.domClass_();
 	if (s) out.push(' class="', s, '"');
 
-	var btn = '<button id="' + this.uuid + '$btn" class="' + zcls + '"',
+	var btn = '<button id="' + this.uuid + '-btn" class="' + zcls + '"',
 	s = this.isDisabled();
 	if (s) btn += ' disabled="disabled"';
 	if (tabi && (zk.gecko || zk.safari)) btn += tabi;

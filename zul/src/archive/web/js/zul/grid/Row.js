@@ -1,4 +1,4 @@
-/* Row.js
+3/* Row.js
 
 	Purpose:
 		
@@ -83,12 +83,12 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 	},
 	insertChildHTML_: function (child, before, desktop) {
 		var cls = this.getGrid().isFixedLayout() ? 'z-overflow-hidden' : '';
-		if (before) {
-			zDom.insertHTMLBefore(before.getSubnode('chdextr'),
+		if (before)
+			jq(before.getSubnode('chdextr')).before(
 				this.encloseChildHTML_({child: child, index: child.getChildIndex(),
 						zclass: this.getZclass(), cls: cls}));
-		} else
-			zDom.insertHTMLBeforeEnd(this.getNode(),
+		else
+			jq(this.getNode()).append(
 				this.encloseChildHTML_({child: child, index: child.getChildIndex(),
 						zclass: this.getZclass(), cls: cls}));
 		

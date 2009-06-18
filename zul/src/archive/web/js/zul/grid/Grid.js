@@ -67,7 +67,7 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 		if (child.$instanceof(zul.grid.Rows)) {
 			this.rows = child;
 			if (this.ebodytbl) {
-				zDom.insertHTMLBeforeEnd(this.ebodytbl, child._redrawHTML());
+				jq(this.ebodytbl).append(child._redrawHTML());
 				child.bind(desktop);
 				return;
 			}

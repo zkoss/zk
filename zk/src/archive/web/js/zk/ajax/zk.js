@@ -12,7 +12,16 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk = {
+jq = jQuery;
+zk = function (sel) {
+	return jq(sel, zk).zk;
+};
+(zk.copy = function (dst, src) {
+	dst = dst || {};
+	for (var p in src)
+		dst[p] = src[p];
+	return dst;
+})(zk, {
 	procDelay: 900,
 	tipDelay: 800,
 	resendDelay: -1,
@@ -109,23 +118,24 @@ zk = {
 	$default: function (opts, defaults) {
 		opts = opts || {};
 		for (var p in defaults)
-			if (opts[p] == null)
+			if (opts[p] === undefined)
 				opts[p] = defaults[p];
 		return opts;
 	},
-	copy: function (dst, src) {
-		if (!dst) dst = {};
-		if (src)
-			for (var p in src)
-				dst[p] = src[p];
-		return dst;
-	},
+
 	forEach: function (objs, fn) {
 		var args = [];
 		for (var j = arguments.length; --j >= 2;)
 			args.unshift(arguments[j]);
 		for (var j = 0, len = objs.length; j < len;)
 			fn.apply(objs[j], args);
+	},
+
+	override: function (dst, backup, src) {
+		for (var nm in src) {
+			backup[nm] = dst[nm];
+			dst[nm] = src[nm];
+		}
 	},
 
 	define: function (klass, props) {
@@ -213,7 +223,7 @@ zk = {
 	},
 	_showproc0: function (mask) {
 		if (zk.processing) {
-			if (zDom.$("zk_proc") || zDom.$("zk_showBusy"))
+			if (jq("#zk_proc").length || jq("#zk_showBusy").length)
 				return;
 
 			var msg;
@@ -235,19 +245,18 @@ zk = {
 			x = (zk._errcnt * 5) % 50, y = (zk._errcnt * 5) % 50,
 			box = document.createElement("DIV");
 		document.body.appendChild(box);
-		var html =
-	 '<div class="z-error" style="left:'+(zDom.innerX()+x)+'px;top:'+(zDom.innerY()+y)
+		box = jq(box).replaceWith(
+	'<div class="z-error" style="left:'+(jq.innerX()+x)+'px;top:'+(jq.innerY()+y)
 	+'px;" id="'+id+'"><table cellpadding="2" cellspacing="2" width="100%"><tr>'
 	+'<td align="right"><div id="'+id
-	+'$p"><a href="javascript:zk._sendRedraw()">redraw</a>&nbsp;'
-	+'<a href="javascript:zDom.remove(\''+id+'\')">close</a></div></td></tr>'
+	+'-p"><span class="btn" onclick="zk._sendRedraw()">redraw</span>&nbsp;'
+	+'<span class="btn" onclick="jq(\'#'+id+'\').remove()">close</span></div></td></tr>'
 	+'<tr valign="top"><td class="z-error-msg">'+zUtl.encodeXML(msg, {multiline:true}) //Bug 1463668: security
-	+'</td></tr></table></div>';
-		box = zDom.setOuterHTML(box, html);
+	+'</td></tr></table></div>');
 
 		try {
 			new zk.Draggable(null, box, {
-				handle: zDom.$(id+'$p'), zIndex: box.style.zIndex,
+				handle: zk(id+'-p').$(), zIndex: box.style.zIndex,
 				starteffect: zk.$void, starteffect: zk.$void,
 				endeffect: zk.$void});
 		} catch (e) {
@@ -255,7 +264,7 @@ zk = {
 	},
 	errorDismiss: function () {
 		for (var j = zk._errcnt; j; --j)
-			zDom.remove("zk_err" + j);
+			jq("#zk_err" + j).remove();
 	},
 	_sendRedraw: function () {
 		zk.errorDismiss();
@@ -273,23 +282,23 @@ zk = {
 	},
 	_log0: function () {
 		if (zk._msg) {
-			var console = zDom.$("zk_log");
-			if (!console) {
+			var console = jq("#zk_log");
+			if (!console.length) {
 				console = document.createElement("DIV");
 				document.body.appendChild(console);
-				var html =
+				jq(console).replaceWith(
 	'<div id="zk_logbox" class="z-log">'
-	+'<button onclick="zDom.remove(\'zk_logbox\');">X</button><br/>'
-	+'<textarea id="zk_log" rows="10"></textarea></div>';
-				zDom.setOuterHTML(console, html);
-				console = zDom.$("zk_log");
+	+'<button onclick="jq(\'#zk_logbox\').remove()">X</button><br/>'
+	+'<textarea id="zk_log" rows="10"></textarea></div>');
+				console = jq("#zk_log");
 			}
+			console = console[0];
 			console.value += zk._msg;
 			console.scrollTop = console.scrollHeight;
 			zk._msg = null;
 		}
 	}
-};
+});
 
 zk.copy(String.prototype, {
 	startsWith: function (prefix) {
@@ -384,7 +393,7 @@ if (!Array.prototype.indexOf)
 		var j = zk.agent.indexOf("firefox/");
 		j = zk.parseInt(zk.agent.substring(j + 8));
 		zk.gecko3 = j >= 3;
-		zk.gecko2Only = !zk.gecko3;
+		zk.gecko2_ = !zk.gecko3;
 
 		zk.xbodyClass = 'gecko gecko' + j;
 	} else if (zk.opera) {
@@ -397,7 +406,7 @@ if (!Array.prototype.indexOf)
 			zk.ie7 = j >= 7; //ie7 or later
 			zk.ie8All = j >= 8; //ie8 or later (including compatible)
 			zk.ie8 = j >= 8 && document.documentMode >= 8; //ie8 or later
-			zk.ie6Only = !zk.ie7;
+			zk.ie6_ = !zk.ie7;
 	
 			zk.xbodyClass = 'ie ie' + j;
 		} else if (zk.safari)

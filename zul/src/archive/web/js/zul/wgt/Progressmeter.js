@@ -31,7 +31,7 @@ zul.wgt.Progressmeter = zk.$extends(zul.Widget, {
 		var n = this.getNode(), 
 			img = this.getSubnode("img");
 		if (img) {
-			if (zk.ie6Only) img.style.width = ""; //Bug 1899749
+			if (zk.ie6_) img.style.width = ""; //Bug 1899749
 			img.style.width = Math.round((n.clientWidth * this._value) / 100) + "px";
 		}
 	},

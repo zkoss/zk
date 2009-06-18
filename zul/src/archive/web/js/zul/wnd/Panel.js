@@ -52,7 +52,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 						this._hideShadow();
 
 						// windows 2003 with IE6 will cause an error when user toggles the panel in portallayout.
-						if (zk.ie6Only && !node.style.width)
+						if (zk.ie6_ && !node.style.width)
 							node.runtimeStyle.width = "100%";
 
 						zAnima.slideUp(this, body, {
@@ -225,10 +225,10 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		var n = this.getNode(),
 			body = this.panelchildren.getNode(),
 			hgh = n.style.height;
-		if (zk.ie6Only && ((hgh && hgh != "auto" )|| body.style.height)) body.style.height = "0px";
+		if (zk.ie6_ && ((hgh && hgh != "auto" )|| body.style.height)) body.style.height = "0px";
 		if (hgh && hgh != "auto")
 			zDom.setOffsetHeight(body, this._offsetHeight(n));
-		if (zk.ie6Only) zDom.redoCSS(body);
+		if (zk.ie6_) zDom.redoCSS(body);
 	},
 	_offsetHeight: function (n) {
 		var h = n.offsetHeight - 1;
@@ -265,7 +265,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			s = cmp.style;
 
 		// Sometimes, the clientWidth/Height in IE6 is wrong.
-		var sw = zk.ie6Only && op.clientWidth == 0 ? (op.offsetWidth - zk.sumStyles(op, "rl", zk.borders)) : op.clientWidth;
+		var sw = zk.ie6_ && op.clientWidth == 0 ? (op.offsetWidth - zk.sumStyles(op, "rl", zk.borders)) : op.clientWidth;
 		if (!floated) {
 			sw -= zk.sumStyles(op, "rl", zk.paddings);
 			sw = zk.revisedSize(cmp, sw);
@@ -273,7 +273,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		if (sw < 0) sw = 0;
 		s.width = sw + "px";
 		if (getZKAttr(cmp, "open") == "true") {
-			var sh = zk.ie6Only && op.clientHeight == 0 ? (op.offsetHeight - zk.sumStyles(op, "tb", zk.borders)) : op.clientHeight;
+			var sh = zk.ie6_ && op.clientHeight == 0 ? (op.offsetHeight - zk.sumStyles(op, "tb", zk.borders)) : op.clientHeight;
 			if (!floated) {
 				sh -= zk.sumStyles(op, "tb", zk.paddings);
 				sh = zk.revisedSize(cmp, sh, true);

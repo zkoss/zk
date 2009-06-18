@@ -103,7 +103,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 
 		if (!this._shadow)
 			this._shadow = new zk.eff.Shadow(pp,
-				{left: -4, right: 4, top: -2, bottom: 3, stackup: (zk.useStackup === undefined ? zk.ie6Only: zk.useStackup)});
+				{left: -4, right: 4, top: -2, bottom: 3, stackup: (zk.useStackup === undefined ? zk.ie6_: zk.useStackup)});
 
 		if (opts && opts.sendOnOpen)
 			this.fire('onOpen', {open:true, value: inp.value});
@@ -154,7 +154,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 					//Note: we have to set width to auto and then 100%
 					//Otherwise, the width is too wide in IE
 			} else {
-				var wd = zDom.innerWidth() - 20;
+				var wd = jq.innerWidth() - 20;
 				if (wd < cb.offsetWidth) wd = cb.offsetWidth;
 				if (pp.offsetWidth > wd) pp.style.width = wd;
 			}

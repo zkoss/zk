@@ -46,7 +46,7 @@ div.z-error {
 	position:absolute; z-index:99000;
 	width:550px; border:1px solid #963; background-color:#fcc090
 }
-div.z-error a {
+div.z-error .btn {
 	color: #555; text-decoration: none; font-size: ${fontSizeS};
 	background-color: #ffd8a8; padding: 1px 3px;
 	border: 1px solid #766;

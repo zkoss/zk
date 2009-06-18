@@ -136,7 +136,7 @@ zkmax.layout.Portallayout = zk.$extends(zul.Widget, {
 		zDom.hide(cmp);			
 	},
 	_cleanupProxy: function (cmp) {
-		zDom.remove(zDom.$(cmp.id+"$proxy"));
+		jq(cmp.id+"-proxy").remove();
 		zDom.show(cmp);
 	},
 	_ghostMove: function (dg, ofs, evt) {
@@ -260,7 +260,7 @@ zkmax.layout.Portallayout = zk.$extends(zul.Widget, {
 		if (!zDom.isRealVisible(cmp)) 
 			return;
 			
-		if(zk.ie6Only && cmp)
+		if(zk.ie6_ && cmp)
 			this.getSubnode("cave").style.width = "0px";
 			
 		var w = zDom.revisedWidth(cmp, cmp.offsetWidth),

@@ -17,7 +17,7 @@ function (out) {
 		zcls = this.getZclass(),
 		rg = this.getRadiogroup();
 	out.push('<span', this.domAttrs_(), '>', '<input type="radio" id="', uuid,
-				'$real"', this.contentAttrs_(), '/><label for="', uuid, '$real"',
+				'-real"', this.contentAttrs_(), '/><label for="', uuid, '-real"',
 				this.domTextStyleAttr_(), ' class="', zcls, '-cnt">', this.domContent_(),
 				'</label>', (rg && rg.getOrient() == 'vertical' ? '<br/></span>' : '</span>'));
 }

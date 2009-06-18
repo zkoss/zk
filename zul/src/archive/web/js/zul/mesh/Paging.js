@@ -193,7 +193,6 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 			wgt.fire('onPaging', pgno);
 	},
 	_domKeyDown: function (evt) {
-		if (!evt) evt = window.event;
 		var inp = zEvt.target(evt),
 			wgt = zk.Widget.$(inp);
 		if (inp.disabled || inp.readOnly)
@@ -216,37 +215,36 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 			break;		
 		case 38: case 33: //up, PageUp
 			wgt.$class._increase(inp, wgt, 1);
-			zEvt.stop(evt);
+			evt.stop();
 			break;
 		case 39://right
 			break;		
 		case 40: case 34: //down, PageDown
 			wgt.$class._increase(inp, wgt, -1);
-			zEvt.stop(evt);
+			evt.stop();
 			break;
 		case 36://home
 			wgt.$class.go(wgt,0);
-			zEvt.stop(evt);
+			evt.stop();
 			break;
 		case 35://end
 			wgt.$class.go(wgt, wgt._pageCount - 1);
-			zEvt.stop(evt);
+			evt.stop();
 			break;
 		case 9: case 8: case 46: //tab, backspace, delete 
 			break;
 		case 13: //enter
 			wgt.$class._increase(inp, wgt, 0);
 			wgt.$class.go(wgt, inp.value-1);
-			zEvt.stop(evt);
+			evt.stop();
 			break;
 		default:
 			if (!(code >= 112 && code <= 123) //F1-F12
 			&& !evt.ctrlKey && !evt.altKey)
-				zEvt.stop(evt);
+				evt.stop();
 		}
 	},
 	_domBlur: function (evt) {
-		if (!evt) evt = window.event;
 		var inp = zEvt.target(evt),
 			wgt = zk.Widget.$(inp);
 		if (inp.disabled || inp.readOnly)
@@ -254,7 +252,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		
 		wgt.$class._increase(inp, wgt, 0);
 		wgt.$class.go(wgt, inp.value-1);
-		zEvt.stop(evt);
+		evt.stop();
 	},
 	_increase: function (inp, wgt, add){
 		var value = zk.parseInt(inp.value);
@@ -264,7 +262,6 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		inp.value = value;
 	},
 	_domfirstClick: function (evt) {
-		if (!evt) evt = window.event;
 		var wgt = zk.Widget.$(evt),
 			zcls = wgt.getZclass();
 		
@@ -277,7 +274,6 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		}
 	},
 	_domprevClick: function (evt) {		
-		if (!evt) evt = window.event;
 		var wgt = zk.Widget.$(evt),
 			ap = wgt.getActivePage(),
 			zcls = wgt.getZclass();
@@ -293,7 +289,6 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		}
 	},
 	_domnextClick: function (evt) {
-		if (!evt) evt = window.event;
 		var wgt = zk.Widget.$(evt),
 			ap = wgt.getActivePage(),
 			pc = wgt.getPageCount(),
@@ -310,7 +305,6 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		}
 	},
 	_domlastClick: function (evt) {
-		if (!evt) evt = window.event;
 		var wgt = zk.Widget.$(evt),
 			pc = wgt.getPageCount(),
 			zcls = wgt.getZclass();
@@ -325,7 +319,6 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		
 	},
 	_domMouseOver: function (evt) {
-		if (!evt) evt = window.event;
 		var target = zEvt.target(evt),
 			table = zDom.ancestor(target, "TABLE"),
 			zcls = zk.Widget.$(target).getZclass();
@@ -333,14 +326,12 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 			zDom.addClass(table, zcls + "-btn-over");
 	},
 	_domMouseOut: function (evt) {
-		if (!evt) evt = window.event;
 		var target = zEvt.target(evt),
 			table = zDom.ancestor(target, "TABLE"),
 			wgt = zk.Widget.$(target);
 		zDom.rmClass(table, wgt.getZclass() + "-btn-over");
 	},
 	_domMouseDown: function (evt) {		
-		if (!evt) evt = window.event;
 		var target = zEvt.target(evt),
 			table = zDom.ancestor(target, "TABLE"),
 			wgt = zk.Widget.$(target),
@@ -352,7 +343,6 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		zEvt.listen(document.body, "mouseup", wgt.$class._domMouseUp);
 	},
 	_domMouseUp: function (evt) {
-		if (!evt) evt = window.event;
 		if (zul.mesh.Paging._downbtn) {
 			var zcls = zk.Widget.$(zul.mesh.Paging._downbtn).getZclass();
 			zDom.rmClass(zul.mesh.Paging._downbtn, zcls + "-btn-clk");

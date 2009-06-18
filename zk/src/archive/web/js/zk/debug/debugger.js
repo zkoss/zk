@@ -16,13 +16,12 @@ zk.debug.Debugger = zk.$extends(zk.Object, {
 	outId: 'zk_debugger',
 	
 	getConsole: function () {
-		var console = zDom.$(this.outId);
-		if (!console) {
+		var console = z$(this.outId);
+		if (!console.length) {
 			console = document.createElement("DIV");
-			var html = '<div id="' + this.outId +'" class="z-debug-domtree"></div>';
 			document.body.appendChild(console);
-			zDom.setOuterHTML(console, html);
-			console = zDom.$(this.outId);
+			jq(console).replaceWith('<div id="' + this.outId +'" class="z-debug-domtree"></div>');
+			console = jq(this.outId).$();
 		}
 		return console;
 	},
@@ -42,18 +41,15 @@ zk.debug.Debugger = zk.$extends(zk.Object, {
 			handler = new zk.debug.DefaultHandler();
 		this.parseHTML(text, handler);
 		var console = this.getConsole();
-		var isEmpty = console.innerHTML == "";
 		console.innerHTML += '<div class="z-debug-domtree-header">'
-				+ '<div class="z-debug-domtree-close" onclick="zDom.remove(\''
-				+ this.outId + '\')" onmouseover="zDom.addClass(this, \'z-debug-domtree-close-over\');"'
-				+ ' onmouseout="zDom.rmClass(this, \'z-debug-domtree-close-over\');"></div> [' + wgt.className + '] '
+				+ '<div class="z-debug-domtree-close" onclick="jq(\'#'
+				+ this.outId + '\').remove()" onmouseover="jq(this).addClass(\'z-debug-domtree-close-over\');"'
+				+ ' onmouseout="jq(this).removeClass(\'z-debug-domtree-close-over\');"></div> [' + wgt.className + '] '
 				+ wgt.uuid + '&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red;">ErrorNumber: '
 				+ handler.getErrorNumber() + '</span></div><div class="z-debug-domtree-body">' + handler.toHTML() + '</div>';
 				
-		if (!isEmpty) {
-			if (zk.ie && console.offsetHeight){} 
-			console.scrollTop = console.scrollHeight;
-		}
+		if (zk.ie && console.offsetHeight){} 
+		console.scrollTop = console.scrollHeight;
 	},
 	parseHTML: function(text, handler) {
 		var begin, content, deep = 0, empty;

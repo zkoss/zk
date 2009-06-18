@@ -52,7 +52,7 @@ zAu = {
 	//Error Handling//
 	confirmRetry: function (msgCode, msg2) {
 		var msg = mesg[msgCode];
-		return zDom.confirm((msg?msg:msgCode)+'\n'+mesg.TRY_AGAIN+(msg2?"\n\n("+msg2+")":""));
+		return jq.confirm((msg?msg:msgCode)+'\n'+mesg.TRY_AGAIN+(msg2?"\n\n("+msg2+")":""));
 	},
 	showError: function (msgCode, msg2, cmd, ex) {
 		var msg = mesg[msgCode];
@@ -411,7 +411,7 @@ zAu = {
 			|| (data && data.$array))
 				data = {'':data};
 			if (data)
-				content += "&data_"+j+"="+encodeURIComponent(zJSON.stringify(data));
+				content += "&data_"+j+"="+encodeURIComponent(jq.toJSON(data));
 		}
 
 		if (content)
@@ -424,13 +424,13 @@ zAu = {
 		return true;
 	},
 	_sendNow2: function(reqInf) {
-		var req = zUtl.newAjax(),
+		var req = jq.zkAjax.xhr(),
 			uri = zAu._useQS(reqInf) ? reqInf.uri + '?' + reqInf.content: null;
 		zAu.sentTime = zUtl.now(); //used by server-push (zkex)
 		try {
 			req.onreadystatechange = zAu._onRespReady;
 			req.open("POST", uri ? uri: reqInf.uri, true);
-			req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+			req.setRequestHeader("Content-Type", jq.zkAjax.contentType);
 			req.setRequestHeader("ZK-SID", reqInf.sid);
 			if (zAu._errcode) {
 				req.setRequestHeader("ZK-Error-Report", zAu._errcode);
@@ -493,7 +493,7 @@ zAu = {
 
 			var cmds = que[j];
 			if (rid == cmds.rid || !rid || !cmds.rid //match
-			|| zAu._dtids.length > 1) { //ignore multi-desktops (risky but...)
+			|| zk.widget._ndt > 1) { //ignore multi-desktops (risky but...)
 				que.splice(j, 1);
 
 				var oldrid = rid;
@@ -625,7 +625,7 @@ zAu.cmd0 = { //no uuid at all
 		zk.error(dt1);
 	},
 	alert: function (msg) {
-		zDom.alert(msg);
+		jq.alert(msg);
 	},
 	redirect: function (url, target) {
 		try {
@@ -648,17 +648,17 @@ zAu.cmd0 = { //no uuid at all
 		zAu.send(new zk.Event(zk.Desktop.$(dtid), "onClientInfo", 
 			[new Date().getTimezoneOffset(),
 			screen.width, screen.height, screen.colorDepth,
-			zDom.innerWidth(), zDom.innerHeight(), zDom.innerX(), zDom.innerY()]));
+			jq.innerWidth(), jq.innerHeight(), jq.innerX(), jq.innerY()]));
 	},
 	download: function (url) {
 		if (url) {
-			var ifr = zDom.$('zk_download');
+			var ifr = zk('zk_download').$();
 			if (ifr) {
 				ifr.src = url; //It is OK to reuse the same iframe
 			} else {
 				var html = '<iframe src="'+url
 				+'" id="zk_download" name="zk_download" style="visibility:hidden;width:0;height:0;border:0" frameborder="0"></iframe>';
-				zDom.insertHTMLBeforeEnd(document.body, html);
+				jq(document.body).append(html);
 			}
 		}
 	},
@@ -687,7 +687,7 @@ zAu.cmd0 = { //no uuid at all
 		zk.confirmClose = msg;
 	},
 	showBusy: function (msg, open) {
-		zDom.remove("zk_showBusy"); //since user might want to show diff msg
+		jq("#zk_showBusy").remove(); //since user might want to show diff msg
 
 		if (open) {
 			zUtl.destroyProgressbox("zk_loadprog");
@@ -707,9 +707,9 @@ zAu.cmd0 = { //no uuid at all
 				wgt = zk.Widget.$(uuid);
 			if (wgt) {
 				if (wgt.showErrorMessage) wgt.showErrorMessage(msg);
-				else zDom.alert(msg);
+				else jq.alert(msg);
 			} else if (!uuid) //keep silent if component (of uuid) not exist (being detaced)
-				zDom.alert(msg);
+				jq.alert(msg);
 		}
 	},
 	submit: function (id) {
@@ -718,7 +718,7 @@ zAu.cmd0 = { //no uuid at all
 			if (n && n.submit)
 				n.submit();
 			else {
-				n = zDom.$(id);
+				n = zk(id).$();
 				if (n && n.submit) {
 					zEvt.fire(n, 'submit');
 					n.submit();
@@ -729,10 +729,7 @@ zAu.cmd0 = { //no uuid at all
 	scrollIntoView: function (id) {
 		var w = zk.Widget.$(id);
 		if (w) w.scrollIntoView();
-		else {
-			w = zDom.$(id);
-			if (w) zDom.scrollIntoView(w);
-		}
+		else zk(id).scrollIntoView();
 	}
 };
 zAu.cmd1 = {

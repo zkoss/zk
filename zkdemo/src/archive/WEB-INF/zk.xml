@@ -49,7 +49,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		with version prior to 5.0
 	<library-property>
 		<name>org.zkoss.zul.include.mode</name>
-		<value>defe</value>
+		<value>defer</value>
 	</library-property>
 	-->
 

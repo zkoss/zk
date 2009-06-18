@@ -68,8 +68,8 @@ zkex.menu.Fisheyebar = zk.$extends(zul.Widget, {
 		if(!this._onMouseMove)
 			this._onMouseMove = function (evt) {
 				
-				var x = zEvt.x(evt),
-					y = zEvt.y(evt);
+				var x = evt.pageX,
+					y = evt.pageY;
 				if ((x >= meta.box.l) && (x <= meta.box.r) &&
 					(y >= meta.box.t) && (y <= meta.box.b)) {
 					if (!meta.active) {
@@ -98,8 +98,8 @@ zkex.menu.Fisheyebar = zk.$extends(zul.Widget, {
 			};
 		if (!this._onBodyOut)
 			this._onBodyOut = function (evt) {
-				var x = zEvt.x(evt),
-					y = zEvt.y(evt);
+				var x = evt.pageX,
+					y = evt.pageY;
 					offs = zDom.revisedOffset(document.body),
 					t = offs[1], 
 					b = t + document.body.offsetHeight,

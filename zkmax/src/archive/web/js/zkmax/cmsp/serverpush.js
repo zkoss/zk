@@ -33,13 +33,13 @@ zkmax.cmsp.SPush = zk.$extends(zk.Object, {
 		}
 	},
 	_send: function () {
-		var req = this._req = zUtl.newAjax(),
+		var req = this._req = jq.zkAjax.xhr(),
 			dt = this.desktop;
 		zAu.sentTime = zUtl.now();
 		try {
 			req.onreadystatechange = this.proxy(this._onRespReady);
 			req.open("POST", zAu.comURI("/comet?dtid="+dt.id, dt, false), true);
-			req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+			req.setRequestHeader("Content-Type", jq.zkAjax.contentType);
 			req.setRequestHeader("ZK-SID", this._sid);
 			req.send(null);
 		} catch (e) {

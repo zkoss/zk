@@ -30,23 +30,23 @@ function (out) {
 			' width="100%"><tr valign="middle"><td align="left" class="',
 			zcls, '-l">', (cnt?cnt:'&nbsp;'), //Bug 1688261: nbsp required
 			'</td><td align="right" class="', zcls,
-			'-r" id="', this.uuid, '$cave">');
+			'-r" id="', this.uuid, '-cave">');
 	for (var w = this.firstChild; w; w = w.nextSibling)
 		w.redraw(out);
 
 	out.push('</td>');
 	if (this._isMinimizeVisible())
-		out.push('<td width="16"><div id="', puuid, '$min" class="',
+		out.push('<td width="16"><div id="', puuid, '-min" class="',
 				pzcls, '-tool ', pzcls, '-minimize"></div></td>');
 	if (this._isMaximizeVisible()) {
-		out.push('<td width="16"><div id="', puuid, '$max" class="',
+		out.push('<td width="16"><div id="', puuid, '-max" class="',
 				pzcls, '-tool ', pzcls, '-maximize');
 		if (parent.isMaximized())
 			out.push(' ', pzcls, '-maximized');
 		out.push('"></div></td>');
 	}
 	if (this._isCloseVisible())
-		out.push('<td width="16"><div id="', puuid, '$close" class="',
+		out.push('<td width="16"><div id="', puuid, '-close" class="',
 				pzcls, '-tool ', pzcls, '-close"></div></td>');
 
 	out.push('</tr></table>');

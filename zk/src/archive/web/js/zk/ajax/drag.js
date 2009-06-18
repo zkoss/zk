@@ -21,13 +21,13 @@ zk.Draggable = zk.$extends(zk.Object, {
 		var Drag = zk.Draggable;
 		if (!Drag._stackup) {
 		//IE: if we don't insert stackup at beginning, dragging is slow
-			var n = Drag._stackup = zDom.newStackup(null, 'z_ddstkup');
-			zDom.hide(n);
+			var n = Drag._stackup = jq.newStackup(null, 'z_ddstkup');
+			jq(n).hide();
 			document.body.appendChild(n);
 		}
 
 		this.control = control;
-		this.node = node = node ? zDom.$(node): control.node || control.getNode();
+		this.node = node = node ? jq(node).$(): control.node || control.getNode();
 		if (!node)
 			throw "Handle required for "+control;
 
@@ -47,11 +47,11 @@ zk.Draggable = zk.$extends(zk.Object, {
 				opts.starteffect = Drag._defStartEffect;
 		}
 
-		if(opts.handle) this.handle = zDom.$(opts.handle);
+		if(opts.handle) this.handle = jq(opts.handle).$();
 		if(!this.handle) this.handle = node;
 
 		if(opts.scroll && !opts.scroll.scrollTo && !opts.scroll.outerHTML) {
-			opts.scroll = zDom.$(opts.scroll);
+			opts.scroll = jq(opts.scroll).$();
 			this._isScrollChild = zUtl.isAncestor(opts.scroll, node);
 		}
 
@@ -59,12 +59,12 @@ zk.Draggable = zk.$extends(zk.Object, {
 		this.opts = opts;
 		this.dragging = false;   
 
-		zEvt.listen(this.handle, "mousedown", this.proxy(this._mousedown));
+		jq(this.handle).mousedown(this.proxy(this._mousedown));
 
 		Drag._register(this);
 	},
 	destroy: function () {
-		zEvt.unlisten(this.handle, "mousedown", this.proxy(this._mousedown));
+		jq(this.handle).unbind("mousedown", this.proxy(this._mousedown));
 		zk.Draggable._unregister(this);
 		this.node = this.control = this.handle = null;
 		this.dead = true;
@@ -72,23 +72,22 @@ zk.Draggable = zk.$extends(zk.Object, {
 
 	/** [left, right] of this node. */
 	_currentDelta: function () {
-		return [zk.parseInt(zDom.getStyle(this.node, 'left')),
-			zk.parseInt(zDom.getStyle(this.node, 'top'))];
+		var $node = jq(this.node);
+		return [zk.parseInt($node.css('left')), zk.parseInt($node.css('top'))];
 	},
 
 	_startDrag: function (evt) {
 		//disable selection
-		zDom.disableSelection(document.body); // Bug #1820433
-		zDom.clearSelection(); // Bug #2721980
+		zk(document.body).disableSelection(); // Bug #1820433
+		jq.clearSelection(); // Bug #2721980
 		if (this.opts.stackup) { // Bug #1911280
 			this.stackup = document.createElement("DIV");
 			document.body.appendChild(this.stackup);
-			this.stackup = zDom.setOuterHTML(this.stackup,
-				'<div class="z-dd-stackup"></div>');
-			zDom.disableSelection(this.stackup);
+			this.stackup = jq(this.stackup).replaceWith('<div class="z-dd-stackup"></div>');
+			zk(this.stackup).disableSelection();
 			var st = this.stackup.style;
-			st.width = zDom.pageWidth() + "px";
-			st.height = zDom.pageHeight() + "px";
+			st.width = jq.pageWidth() + "px";
+			st.height = jq.pageHeight() + "px";
 		}
 		zk.dragging = this.dragging = true;
 
@@ -99,9 +98,10 @@ zk.Draggable = zk.$extends(zk.Object, {
 				this.delta = this._currentDelta();
 				this.orgnode = this.node;
 
-				var ofs = zDom.cmOffset(this.node);
-				this.z_scrl = zDom.scrollOffset(this.node);
-				this.z_scrl[0] -= zDom.innerX(); this.z_scrl[1] -= zDom.innerY();
+				var $node = zk(this.node),
+					ofs = $node.cmOffset();
+				this.z_scrl = $node.scrollOffset();
+				this.z_scrl[0] -= jq.innerX(); this.z_scrl[1] -= jq.innerY();
 					//Store scrolling offset since _draw not handle DIV well
 				ofs[0] -= this.z_scrl[0]; ofs[1] -= this.z_scrl[1];
 
@@ -110,14 +110,14 @@ zk.Draggable = zk.$extends(zk.Object, {
 				this._clone = node.cloneNode(true);
 				this.z_orgpos = node.style.position; //Bug 1514789
 				if (this.z_orgpos != 'absolute')
-					zDom.absolutize(node);
+					jq(node).absolutize();
 				node.parentNode.insertBefore(this._clone, node);
 			}
 
 		if (this.opts.stackup) {
 			var defStackup = Drag._stackup;
-			if (zDom.isVisible(defStackup)) //in use
-				this._stackup = zDom.newStackup(node, node.id + '$ddstk');
+			if (zk(defStackup).isVisible()) //in use
+				this._stackup = jq.newStackup(node, node.id + '$ddstk');
 			else {
 				this._stackup = defStackup;
 				this._syncStackup();
@@ -126,7 +126,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 		}
 
 		if(this.opts.zIndex) { //after ghosting
-			this.originalZ = zk.parseInt(zDom.getStyle(node, 'z-index'));
+			this.originalZ = zk.parseInt(jq(node).css('z-index'));
 			node.style.zIndex = this.opts.zIndex;
 		}
 
@@ -180,7 +180,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 			if (this.opts.scroll == window) {
 				with(this._getWindowScroll(this.opts.scroll)) { p = [ left, top, left+width, top+height ];}
 			} else {
-				p = zDom.viewportOffset(this.opts.scroll);
+				p = zk(this.opts.scroll).viewportOffset();
 				p[0] += this.opts.scroll.scrollLeft + this._innerOfs[0];
 				p[1] += this.opts.scroll.scrollTop + this._innerOfs[1];
 				p.push(p[0]+this.opts.scroll.offsetWidth);
@@ -205,18 +205,18 @@ zk.Draggable = zk.$extends(zk.Object, {
 	_finishDrag: function (evt, success) {
 		this.dragging = false;
 		if (this.stackup) {
-			zDom.remove(this.stackup);
+			jq(this.stackup).remove();
 			delete this.stackup;
 		}
 
 		//enable selection back and clear selection if any
-		zDom.enableSelection(document.body);
-		setTimeout(zDom.clearSelection, 0);
+		jq(document.body).enableSelection();
+		setTimeout(jq.clearSelection, 0);
 
 		var stackup = this._stackup;
 		if (stackup) {
-			if (stackup == zk.Draggable._stackup) zDom.hide(stackup);
-			else zDom.remove(stackup);
+			if (stackup == zk.Draggable._stackup) jq(stackup).hide();
+			else jq(stackup).remove();
 			delete this._stackup;
 		}
 
@@ -226,16 +226,16 @@ zk.Draggable = zk.$extends(zk.Object, {
 				if (this.opts.endghosting)
 					this.opts.endghosting(this, this.orgnode);
 				if (this.node != this.orgnode) {
-					zDom.remove(this.node);
+					jq(this.node).remove();
 					this.node = this.orgnode;
 				}
 				delete this.orgnode;
 			} else {
 				if (this.z_orgpos != "absolute") { //Bug 1514789
-					zDom.relativize(node);
+					zk(this.node).relativize();
 					node.style.position = this.z_orgpos;
 				}
-				zDom.remove(this._clone);
+				jq(this._clone).remove();
 				this._clone = null;
 			}
 
@@ -266,37 +266,37 @@ zk.Draggable = zk.$extends(zk.Object, {
 	_mousedown: function (devt) {
 		var node = this.node,
 			Drag = zk.Draggable,
-			evt = zEvt.toEvent(devt);
+			evt = jq.event.toEvent(devt);
 		if(Drag._dragging[node] || !evt.leftClick)
 			return;
 
 		// abort on form elements, fixes a Firefox issue
 		var target = evt.domTarget,
-			tag = zDom.tag(target);
+			tag = target.tagName;
 		if(tag=='INPUT' || tag=='SELECT' || tag=='OPTION' || tag=='BUTTON' || tag=='TEXTAREA')
 			return;
 
 		//Skip popup/dropdown (of combobox and others)
 		for (var n = target; n && n != node; n = n.parentNode)
-			if (zDom.getStyle(n, 'position') == 'absolute')
+			if (jq(n).css('position') == 'absolute')
 				return;
 
 		var pt = [evt.pageX, evt.pageY];
 		if (this.opts.ignoredrag && this.opts.ignoredrag(this, pt, evt)) {
-			if (evt.domStopped) zEvt.stop(devt);
+			if (evt.domStopped) devt.stop();
 			return;
 		}
 
-		var pos = zDom.cmOffset(node);
+		var pos = zk(node).cmOffset();
 		this.offset = [pt[0] - pos[0], pt[1] - pos[1]];
 
 		Drag._activate(this, devt, pt);
-		zEvt.stop(devt);
+		devt.stop();
 	},
 	_keypress: function (devt) {
-		if(zEvt.keyCode(devt) == 27) {
-			this._finishDrag(zEvt.toEvent(devt), false);
-			zEvt.stop(devt);
+		if(devt.keyCode == 27) {
+			this._finishDrag(jq.event.toEvent(devt), false);
+			devt.stop();
 		}
 	},
 
@@ -311,9 +311,10 @@ zk.Draggable = zk.$extends(zk.Object, {
 
 	_draw: function (point, evt) {
 		var node = this.node,
-			pos = zDom.cmOffset(node);
+			$node = zk(node),
+			pos = $node.cmOffset();
 		if(this.opts.ghosting) {
-			var r = zDom.scrollOffset(node);
+			var r = $node.scrollOffset();
 			pos[0] += r[0] - this._innerOfs[0]; pos[1] += r[1] - this._innerOfs[1];
 		}
 
@@ -410,14 +411,14 @@ zk.Draggable = zk.$extends(zk.Object, {
 
 		if(this.opts.change) {
 			var devt = window.event,
-				evt = devt ? zEvt.toEvent(devt): null;
+				evt = devt ? jq.event.toEvent(devt): null;
 			this.opts.change(this,
 				evt ? [evt.pageX, evt.pageY]: Drag._lastPt, evt);
 		}
 	},
 
 	_updateInnerOfs: function () {
-		this._innerOfs = [zDom.innerX(), zDom.innerY()];
+		this._innerOfs = [jq.innerX(), jq.innerY()];
 	},
 	_getWindowScroll: function (w) {
 		var T, L, W, H;
@@ -449,21 +450,19 @@ zk.Draggable = zk.$extends(zk.Object, {
 
 	_register: function (dg) {
 		var Drag = zk.Draggable;
-		if(Drag._drags.length == 0) {
-			zEvt.listen(document, "mouseup", Drag._docmouseup);
-			zEvt.listen(document, "mousemove", Drag._docmousemove);
-			zEvt.listen(document, "keypress", Drag._dockeypress);
-		}
+		if(Drag._drags.length == 0)
+			jq(document).mouseup(Drag._docmouseup)
+				.mousemove(Drag._docmousemove)
+				.keypress(Drag._dockeypress);
 		Drag._drags.push(dg);
 	},
 	_unregister: function (dg) {
 		var Drag = zk.Draggable;
 		Drag._drags.$remove(dg);
-		if(Drag._drags.length == 0) {
-			zEvt.unlisten(document, "mouseup", Drag._docmouseup);
-			zEvt.unlisten(document, "mousemove", Drag._docmousemove);
-			zEvt.unlisten(document, "keypress", Drag._dockeypress);
-		}
+		if(Drag._drags.length == 0)
+			jq(document).unbind("mouseup", Drag._docmouseup)
+				.unbind("mousemove", Drag._docmousemove)
+				.unbind("keypress", Drag._dockeypress);
 		if (Drag.activedg == dg) //just in case
 			Drag.activedg = null;
 	},
@@ -475,7 +474,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 			Drag.activedg = dg; 
 		}, dg.opts.delay);
 		Drag._initPt = pt;
-		Drag._initEvt = zEvt.toEvent(devt, dg.control);
+		Drag._initEvt = jq.event.toEvent(devt, dg.control);
 	},
 	_deactivate: function () {
 		zk.Draggable.activedg = null;
@@ -494,7 +493,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 			dg = Drag.activedg;
 		if(!dg || dg.dead) return;
 
-		var evt = zEvt.toEvent(devt),
+		var evt = jq.event.toEvent(devt),
 			pt = [evt.pageX, evt.pageY];
 		// Mozilla-based browsers fire successive mousemove events with
 		// the same coordinates, prevent needless redrawing (moz bug?)
@@ -504,7 +503,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 
 		Drag._lastPt = pt;
 		dg._updateDrag(pt, evt);
-		if (evt.domStopped) zEvt.stop(devt);
+		if (evt.domStopped) devt.stop();
 	},
 	_docmouseup: function (devt) {
 		var Drag = zk.Draggable,
@@ -517,9 +516,9 @@ zk.Draggable = zk.$extends(zk.Object, {
 
 		Drag._lastPt = null;
 		var evt;
-		dg._endDrag(evt = zEvt.toEvent(devt));
+		dg._endDrag(evt = jq.event.toEvent(devt));
 		Drag.activedg = null;
-		if (evt.domStopped) zEvt.stop(devt);
+		if (evt.domStopped) devt.stop();
 	},
 	_dockeypress: function (devt) {
 		var Drag = zk.Draggable,
@@ -530,7 +529,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 	//default effect//
 	_defStartEffect: function (dg) {
 		var node = dg.node;
-		node._$opacity = zDom.getStyle(node, 'opacity');
+		node._$opacity = jq(node).css('opacity');
 		zk.Draggable._dragging[node] = true;
 		new zk.eff.Opacity(node, {duration:0.2, from:node._$opacity, to:0.7}); 
 	},

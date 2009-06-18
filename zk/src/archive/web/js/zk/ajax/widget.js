@@ -272,7 +272,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			var n = this.getNode();
 			if (n) {
 				this.unbind();
-				zDom.remove(n);
+				jq(n).remove();
 			}
 		}
 	},
@@ -322,7 +322,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			oldpt.removeChild(child);
 			this.insertBefore(child, moveBefore);
 
-			zDom.remove(kidnode);
+			jq(kidnode).remove();
 
 			(cave || node).insertBefore(kidnode, beforeNode);
 			
@@ -347,7 +347,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		for (var wgt = this; wgt; wgt = wgt.parent) {
 			if (!wgt.isVisible()) return false;
 			var n = wgt.getNode();
-			if (n && !zDom.isVisible(n)) return false; //possible (such as in a hbox)
+			if (n && !zk(n).isVisible()) return false; //possible (such as in a hbox)
 		}
 		return true;
 	},
@@ -356,7 +356,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (!strict || !visible)
 			return visible;
 		var n = this.getNode();
-		return !n || zDom.isVisible(n);
+		return !n || zk(n).isVisible();
 	},
 	setVisible: function (visible, fromServer) {
 		if (this._visible != visible) {
@@ -531,8 +531,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (n) n.scrollLeft = val;
 	},
 	scrollIntoView: function () {
-		var n = this.getNode();
-		if (n) zDom.scrollIntoView(n);
+		zk(this.getNode()).scrollIntoView();
 	},
 
 	redraw: function (out) {
@@ -553,11 +552,11 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	updateDomStyle_: function () {
 		if (this.desktop) {
-			var s = zDom.parseStyle(this.domStyle_());
-			zDom.setStyles(this.getNode(), s);
+			var s = jq.parseStyle(this.domStyle_());
+			zk(this.getNode()).css(s);
 
 			var n = this.getTextNode_();
-			if (n) zDom.setStyles(n, zDom.filterTextStyle(s));
+			if (n) zk(n).css(jq.filterTextStyle(s));
 		}
 	},
 	getTextNode_: function () {
@@ -627,7 +626,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	domTextStyleAttr_: function () {
 		var s = this.getStyle();
 		if (s) {
-			s = zDom.filterTextStyle(s);
+			s = jq.filterTextStyle(s);
 			if (s) s = ' style="' + s + '"';
 		}
 		return s;
@@ -650,7 +649,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		else {
 			var oldwgt = zk.Widget.$(n, {exact:true});
 			if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
-			zDom.setOuterHTML(n, this._redrawHTML(skipper));
+			zk(n).jq.replaceWith(this._redrawHTML(skipper));
 			this.bind(desktop, skipper);
 		}
 
@@ -694,7 +693,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	replaceChildHTML_: function (child, n, desktop, skipper) {
 		var oldwgt = zk.Widget.$(n, {exact:true});
 		if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
-		zDom.setOuterHTML(n, child._redrawHTML(skipper));
+		zk(n).jq.replaceWith(child._redrawHTML(skipper));
 		child.bind(desktop, skipper);
 	},
 	insertChildHTML_: function (child, before, desktop) {
@@ -721,9 +720,9 @@ zk.Widget = zk.$extends(zk.Object, {
 			}
 
 		if (bfn)
-			zDom.insertHTMLBefore(bfn, child._redrawHTML());
+			jq(bfn).before(child._redrawHTML());
 		else
-			zDom.insertHTMLBeforeEnd(ben, child._redrawHTML());
+			jq(ben).append(child._redrawHTML());
 		child.bind(desktop);
 	},
 	getCaveNode_: function () {
@@ -753,11 +752,7 @@ zk.Widget = zk.$extends(zk.Object, {
 
 		child.unbind();
 
-		if (n.$array)
-			for (var j = n.length; --j >= 0;)
-				zDom.remove(n[j]);
-		else
-			zDom.remove(n);
+		jq(n).remove();
 	},
 	_prepareRemove: function (ary) {
 		for (var w = this.firstChild; w; w = w.nextSibling) {
@@ -771,13 +766,13 @@ zk.Widget = zk.$extends(zk.Object, {
 			return this.getNode();
 		var n = this._subnodes[name];
 		if (!n && this.desktop)
-			n = this._subnodes[name] = zDom.$(this.uuid, name);
+			n = this._subnodes[name] = zk(this.uuid + '-' + name).$();
 		return n;
 	},
 	getNode: function () {
 		var n = this._node;
 		if (!n && this.desktop && !this._nodeSolved) {
-			this._node = n = zDom.$(this.uuid);
+			this._node = n = zk(this.uuid).$();
 			this._nodeSolved = true;
 		}
 		return n;
@@ -861,7 +856,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	dropEffect_: function (over) {
 		var n = this.getNode();
-		if (n) zDom[over ? "addClass" : "rmClass"] (n, "z-drag-over");
+		if (n) jq(n)[over ? "addClass" : "removeClass"]("z-drag-over");
 	},
 	getDragMessage_: function () {
 		var n = this.getSubnode('cave') || this.getSubnode('real')
@@ -869,7 +864,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		return n ? n.textContent || n.innerText: '';
 	},
 	shallDragMessage_: function () {
-		var tn = zDom.tag(this.getNode());
+		var tn = this.getNode().tagName;
 		return "TR" == tn || "TD" == tn || "TH" == tn;
 	},
 	cloneDrag_: function (drag, ofs) {
@@ -886,22 +881,20 @@ zk.Widget = zk.$extends(zk.Object, {
 
 		drag._orgcursor = document.body.style.cursor;
 		document.body.style.cursor = "pointer";
-		zDom.addClass(this.getNode(), 'z-dragged'); //after clone
+		jq(this.getNode()).addClass('z-dragged'); //after clone
 		return dgelm;
 	},
 	uncloneDrag_: function (drag) {
 		document.body.style.cursor = drag._orgcursor || '';
 
-		var n = this.getNode();
-		if (n)
-			zDom.rmClass(n, 'z-dragged');
+		jq(this.getNode()).removeClass('z-dragged');
 	},
 
 	focus: function (timeout) {
 		var node;
 		if (this.isVisible() && this.canActivate({checkOnly:true})
 		&& (node = this.getNode())) {
-			if (zDom.focus(node, timeout)) {
+			if (zk(node).focus(timeout)) {
 				zk.currentFocus = this;
 				this.setTopmost();
 				return true;
@@ -1156,12 +1149,12 @@ zk.Widget = zk.$extends(zk.Object, {
 	domListen_: function (n, evtnm, fn) {
 		var inf;
 		if (inf = zk.Widget._domevti(this, evtnm, fn))
-			zEvt.listen(n, inf[0], inf[1]);
+			zk(n).jq.bind(inf[0], inf[1]);
 	},
 	domUnlisten_: function (n, evtnm, fn) {
 		var inf;
 		if (inf = zk.Widget._domevti(this, evtnm, fn))
-			zEvt.unlisten(n, inf[0], inf[1]);
+			zk(n).jq.unbind(inf[0], inf[1]);
 	},
 	toJSON: function () {
 		return this.uuid;
@@ -1172,26 +1165,25 @@ zk.Widget = zk.$extends(zk.Object, {
 	$: function (n, opts) {
 		var binds = zk.Widget._binds;
 		if (typeof n == 'string') {
-			var j = n.indexOf('$');
+			var j = n.indexOf('-');
 			return binds[j >= 0 ? n.substring(0, j): n];
 		}
 
 		if (!n || zk.Widget.isInstance(n)) return n;
 		else if (!n.nodeType) //skip Element
-			n = n.z_target || n.target || n.srcElement || n; //check DOM event first
-				//z_target: used if we have to override the default
+			n = n.target || n; //check DOM event first
 
-		for (; n; n = zDom.parentNode(n)) {
+		for (; n; n = n.vparent||n.parentNode) {
 			var id = n.id;
 			if (id) {
-				var j = id.indexOf('$');
+				var j = id.indexOf('-');
 				if (j >= 0) {
 					id = id.substring(0, j);
 					if (opts && opts.child) {
 						var wgt = binds[id];
 						if (wgt) {
 							var n2 = wgt.getNode();
-							if (n2 && zDom.isAncestor(n2, n)) return wgt;
+							if (n2 && jq.isAncestor(n2, n)) return wgt;
 						}
 						if (opts && opts.exact) break;
 						continue;
@@ -1244,11 +1236,10 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	_domevtproxy0: function (wgt, f) {
 		return function (devt) {
-			if (!devt) devt = window.event;
 			var args = [], evt;
 			for (var j = arguments.length; --j > 0;)
 				args.unshift(arguments[j]);
-			args.unshift(evt = zEvt.toEvent(devt, wgt));
+			args.unshift(evt = jq.event.toEvent(devt, wgt));
 
 			switch (devt.type){
 			case 'focus':
@@ -1272,7 +1263,7 @@ zk.Widget = zk.$extends(zk.Object, {
 
 			var ret = f.apply(wgt, args);
 			if (typeof ret == 'undefined') ret = evt.returnValue;
-			if (evt.domStopped) zEvt.stop(devt);
+			if (evt.domStopped) devt.stop();
 			return devt.type == 'dblclick' && typeof ret == 'undefined' ? false: ret;
 		};
 	},
@@ -1302,7 +1293,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	//uuid//
 	uuid: function (id) {
 		var uuid = typeof id == 'object' ? id.id || '' : id,
-			j = uuid.indexOf('$');
+			j = uuid.indexOf('-');
 		return j >= 0 ? uuid.substring(0, j): id;
 	},
 	nextUuid: function () {
@@ -1427,7 +1418,7 @@ zk.Desktop = zk.$extends(zk.Widget, {
 	},
 	_exists: function () {
 		var id = this._pguid; //_pguid not assigned at beginning
-		return !id || zDom.$(id);
+		return !id || zk(id).$();
 	},
 	bind_: zk.$void,
 	unbind_: zk.$void,
@@ -1475,16 +1466,16 @@ zk.Skipper = zk.$extends(zk.Object, {
 		return wgt.caption != child;
 	},
 	skip: function (wgt, skipId) {
-		var skip = zDom.$(skipId || (wgt.uuid + '$cave'));
+		var skip = zk(skipId || (wgt.uuid + '-cave')).$();
 		if (skip && skip.firstChild) {
-			zDom.remove(skip);
+			jq(skip).remove();
 			return skip;
 		}
 		return null;
 	},
 	restore: function (wgt, skip) {
 		if (skip) {
-			var loc = zDom.$(skip.id);
+			var loc = zk(skip.id).$();
 			for (var el; el = skip.firstChild;) {
 				skip.removeChild(el);
 				loc.appendChild(el);
@@ -1631,9 +1622,9 @@ zk.WgtDD = {
 	ghostByMessage: function (drag, ofs, msg) {
 		document.body.insertAdjacentHTML("beforeEnd",
 			'<div id="zk_ddghost" class="z-drop-ghost" style="position:absolute;top:'
-			+ofs[1]+'px;left:'+ofs[0]+'px;"><div class="z-drop-cnt"><span id="zk_ddghost$img" class="z-drop-disallow"></span>&nbsp;'+msg+'</div></div>');
-		drag._dragImg = zDom.$("zk_ddghost$img");
-		return zDom.$("zk_ddghost");
+			+ofs[1]+'px;left:'+ofs[0]+'px;"><div class="z-drop-cnt"><span id="zk_ddghost-img" class="z-drop-disallow"></span>&nbsp;'+msg+'</div></div>');
+		drag._dragImg = jq("#zk_ddghost-img").$();
+		return jq("#zk_ddghost").$();
 	},
 	ghostByClone: function (drag, ofs) {
 		var dgelm = drag.node.cloneNode(true);

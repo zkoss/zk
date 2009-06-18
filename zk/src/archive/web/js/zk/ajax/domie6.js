@@ -1,4 +1,4 @@
-/* alphafix.js
+/* domie6.js
 
 	Purpose:
 		Fix the alpha transparency issue found in IE6
@@ -15,20 +15,21 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-if (zk.ie6Only) { //since zklt.wpd will include it
-zk.copy(zDom, {
+zk.copy(zjq, {
 	_afed: [], //filtered img
 	_AF_IMGLD: _zkf = 'DXImageTransform.Microsoft.AlphaImageLoader',
 	_AF_FILTER: "progid:" + _zkf + "(src='%1',sizingMethod='scale')",
+
+	//override//
 	_alphafix: function (n) {
-		var regex = zDom.IE6_ALPHAFIX;
+		var regex = jq.IE6_ALPHAFIX;
 		if (!regex) return;
 
 		if (typeof regex == 'string')
-			regex = zDom.IE6_ALPHAFIX
+			regex = jq.IE6_ALPHAFIX
 				= new RegExp(zUtl.regexEscape(regex) + "$", "i");
-		if (!zDom.SPACER_GIF)
-			zDom.SPACER_GIF = zAu.comURI('web/img/spacer.gif');
+		if (!jq.SPACER_GIF)
+			jq.SPACER_GIF = zAu.comURI('web/img/spacer.gif');
 
 		var imgs = n.getElementsByTagName("img");
 		for (var j = imgs.length; --j >= 0; ) {
@@ -36,14 +37,15 @@ zk.copy(zDom, {
 				k = src.lastIndexOf(';');
 			if (k >= 0) src = src.substring(0, k);
 			if (regex.test(img.src)) {
-				zDom._afFix(img);
-				zEvt.listen(img, "propertychange", function() {
-				 	if (!zDom._afPrint && event.propertyName == "src"
-				 	&& img.src.indexOf('spacer.gif') < 0)
-				 		zDom._afFix(img);
-			 	});
+				jq._afFix(img);
+				jq(img).bind("propertychange", jq._onpropchange);
 			}
 		}
+	},
+	_onpropchange: function () {
+	 	if (!jq._afPrint && event.propertyName == "src"
+	 	&& this.src.indexOf('spacer.gif') < 0)
+	 		jq._afFix(this);
 	},
 	_afFix: function (img) {
 		var ni = new Image(img.width, img.height);
@@ -54,34 +56,33 @@ zk.copy(zDom, {
 		};
 		ni.src = img.src; //store the original url (we'll put it back when it's printed)
 		img.pngSrc = img.src; //add the AlphaImageLoader thingy
-		zDom._addFilter(img);
+		jq._addFilter(img);
 	},
 	_addFilter: function (img) {
-		var filter = img.filters[zDom._AF_IMGLD];
+		var filter = img.filters[jq._AF_IMGLD];
 		if (filter) {
 			filter.src = img.src;
 			filter.enabled = true;
 		} else {
 			img.runtimeStyle.filter =
-				zUtl.format(zDom._AF_FILTER, img.src);
-			zDom._afed.push(img);
+				zUtl.format(jq._AF_FILTER, img.src);
+			jq._afed.push(img);
 		}
-		img.src = zDom.SPACER_GIF; //remove the real image
+		img.src = jq.SPACER_GIF; //remove the real image
 	},
 	_rmFilter: function (img) {
 		img.src = img.pngSrc;
-		img.filters[zDom._AF_IMGLD].enabled = false;
+		img.filters[jq._AF_IMGLD].enabled = false;
 	}
 });
 
-zEvt.listen(window, "beforeprint", function() {
-	zDom._afPrint = true;
-	for (var ns = zDom._afed, i = 0, len = ns.length; i < len; i++)
-		zDom._rmFilter(ns[i]);
-});
-zEvt.listen(window, "afterprint", function() {
-	for (var ns = zDom._afed, i = 0, len = ns.length; i < len; i++)
-		zDom._addFilter(ns[i]);
-	zDom._afPrint = false;
-});
-} //ie6Only
+jq(window).bind("beforeprint", function() {
+		jq._afPrint = true;
+		for (var ns = jq._afed, i = 0, len = ns.length; i < len; i++)
+			jq._rmFilter(ns[i]);
+	})
+	.bind("afterprint", function() {
+		for (var ns = jq._afed, i = 0, len = ns.length; i < len; i++)
+			jq._addFilter(ns[i]);
+		jq._afPrint = false;
+	});

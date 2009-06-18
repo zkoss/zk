@@ -132,7 +132,6 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	},
 	//protected
 	doClick_: function(evt) {
-		if (!evt) evt = window.event;
 		if (this._disabled)
 			return;
 		this._selTab(true);
@@ -162,7 +161,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 			this.domListen_(closebtn, "onClick", '_doCloseClick');
 			if (!closebtn.style.cursor)
 				closebtn.style.cursor = "default";
-			if (zk.ie6Only) {
+			if (zk.ie6_) {
 				this.domListen_(closebtn, "onMouseOver", '_toggleBtnOver');
 				this.domListen_(closebtn, "onMouseOut", '_toggleBtnOver');
 			}

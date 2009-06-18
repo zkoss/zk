@@ -41,8 +41,8 @@ zHistory = {
 	_bkIframe: zk.ie ? function (nm) {
 		//Bug 2019171: we have to create iframe frist
 		var url = zAu.comURI("/web/js/zk/html/history.html", null, true),
-			ifr = zDom.$('zk_histy');
-		if (!ifr) ifr = zDom.newFrame('zk_histy', url, "display:none");
+			ifr = zk('zk_histy').$();
+		if (!ifr) ifr = jq.newFrame('zk_histy', url, "display:none");
 
 		if (nm) url += '?' +encodeURIComponent(nm);
 		ifr.src = url;
@@ -72,9 +72,10 @@ zHistory = {
 			}
 			if (l1.hash && "#" != l1.hash) url += l1.hash;
 
-			if (zDom.getAttr(ifr, "z_xsrc") != ifr.src) {//the first zul page being loaded
+			var $ifr = jq(ifr);
+			if ($ifr.attr("z_xsrc") != ifr.src) {//the first zul page being loaded
 				var ifrsrc = ifr.src, loc = location.pathname;
-				zDom.setAttr(ifr, "z_xsrc", ifrsrc);
+				ifr.attr("z_xsrc", ifrsrc);
 
 			//The first zul page might or might not be ifr.src
 			//We have to compare ifr.src with location
@@ -86,14 +87,14 @@ zHistory = {
 				loc = zHistory._simplifyURL(loc);
 				if (ifrsrc.endsWith(loc)
 				|| loc.endsWith(ifrsrc)) { //the non-zul page is ifr.src
-					zDom.setAttr(ifr, "z_xurl", url);
+					$ifr.attr("z_xurl", url);
 					return; //not notify if changed by server
 				}
 			}
 
-			if (parent.onIframeURLChange && zDom.getAttr(ifr, "z_xurl") != url) {
+			if (parent.onIframeURLChange && $ifr.attr("z_xurl") != url) {
 				parent.onIframeURLChange(ifr.id, url);
-				zDom.setAttr(ifr, "z_xurl", url);
+				$ifr.attr("z_xurl", url);
 			}
 		} catch (e) { //due to JS sandbox, we cannot access if not from same host
 			if (zk.debugJS) zk.log("Unable to access parent frame");

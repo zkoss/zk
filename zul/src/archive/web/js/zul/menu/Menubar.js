@@ -32,10 +32,10 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 	},
 	insertChildHTML_: function (child, before, desktop) {
 		if (before)
-			zDom.insertHTMLBefore(before.getSubnode('chdextr'),
+			jq(before.getSubnode('chdextr')).before(
 				this.encloseChildHTML_({child: child, vertical: 'vertical' == this.getOrient()}));
 		else
-			zDom.insertHTMLBeforeEnd(this.getNode(),
+			jq(this.getNode()).append(
 				this.encloseChildHTML_({child: child, vertical: 'vertical' == this.getOrient()}));
 
 		child.bind(desktop);
