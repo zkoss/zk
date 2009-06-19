@@ -1,5 +1,6 @@
 	--------
 ZK 3.6.2
+June 23, 2009
 * Features
   2787715: Messagebox shall recognize linebreak
   2789884: Include supports macro (page-less) mode
@@ -72,6 +73,7 @@ ZK 3.6.2
   
 	--------
 ZK 3.6.1
+April 28, 2009
 * Features
   2677655: A way to use ID as UUID for unit test purpse
   2724923: Support scrollIntoView to scroll an element to become visible

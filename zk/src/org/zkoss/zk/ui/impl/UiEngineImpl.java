@@ -1432,8 +1432,11 @@ public class UiEngineImpl implements UiEngine {
 		if (config.isEventThreadEnabled()) {
 			EventProcessingThreadImpl evtthd = null;
 			synchronized (_idles) {
-				if (!_idles.isEmpty())
+				while (!_idles.isEmpty() && evtthd == null) {
 					evtthd = (EventProcessingThreadImpl)_idles.remove(0);
+					if (evtthd.isCeased()) //just in case
+						evtthd = null;
+				}
 			}
 
 			if (evtthd == null)

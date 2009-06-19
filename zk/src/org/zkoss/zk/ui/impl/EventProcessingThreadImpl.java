@@ -48,7 +48,7 @@ import org.zkoss.zk.ui.sys.EventProcessingThread;
  */
 public class EventProcessingThreadImpl extends Thread
 implements EventProcessingThread {
-//	private static final Log log = Log.lookup(EventProcessingThreadImpl.class);
+	private static final Log log = Log.lookup(EventProcessingThreadImpl.class);
 
 	/** The processor. */
 	private EventProcessor _proc;
@@ -203,7 +203,11 @@ implements EventProcessingThread {
 				Execution exec = getExecution();
 				if (exec != null) {
 					_acted = false;
-					((ExecutionCtrl)exec).onDeactivate();
+					try {
+						((ExecutionCtrl)exec).onDeactivate();
+					} catch (Throwable ex) {
+						log.warningBriefly("Ignored deactivate failure", ex);
+					}
 				}
 
 				//let the main thread continue
@@ -431,7 +435,11 @@ implements EventProcessingThread {
 //						if (log.finerable()) log.finer("Real processing is done: "+_proc);
 						if (exec != null && _acted) { //_acted is false if suspended is killed
 							_acted = false;
-							((ExecutionCtrl)exec).onDeactivate();
+							try {
+								((ExecutionCtrl)exec).onDeactivate();
+							} catch (Throwable ex) {
+								log.warningBriefly("Ignored deactivate failure", ex);
+							}
 						}
 						cleanup();
 
@@ -444,6 +452,7 @@ implements EventProcessingThread {
 					if (evtAvail)
 						_evtmutex.notify();
 						//wake the main thread OR the resuming thread
+
 					if (_ceased == null)
 						_evtmutex.wait();
 						//wait the main thread to issue another request
@@ -456,7 +465,11 @@ implements EventProcessingThread {
 				System.out.println("The event processing thread stops");
 				//Don't use log because it might be stopped
 			}
-		} catch (InterruptedException ex) {
+		} catch (Throwable ex) {
+			if (_ceased == null) _ceased = Exceptions.getMessage(ex);
+			if (Exceptions.findCause(ex, InterruptedException.class) == null)
+				throw UiException.Aide.wrap(ex);
+
 			if (_silent) {
 //				if (log.debugable())
 //					log.debug("The event processing thread interrupted: "+Exceptions.getMessage(ex)
@@ -467,6 +480,10 @@ implements EventProcessingThread {
 			}
 		} finally {
 			--_nThd;
+			if (_ceased == null) {
+				_ceased = "Unknow reason";
+				System.out.println("The event processing thread is stopped with unknown cause");
+			}
 		}
 	}
 	/** Invokes {@link Configuration#newEventThreadCleanups}.
