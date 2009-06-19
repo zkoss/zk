@@ -99,7 +99,7 @@ function adjustHgh(table) {
 </script>
 </head>
 <body onload="init()">
-	<form id="form" enctype="multipart/form-data" method="POST" onsubmit="submitUpload()">
+	<form id="form" enctype="multipart/form-data" method="POST" >
 	<%-- We have to encode dtid and uuid in action rather than hidden fields,
 		because 1) dtid must be ready before parsing multi-part requests.
 		2) parsing multi-part might fail
@@ -124,8 +124,8 @@ function adjustHgh(table) {
 	<table border="0" width="100%">
 	<tr align="left">
 		<td colspan="2" style="border: outset 1px">
-		<input class="button" type="submit" value="${c:l('mesg:org.zkoss.zul.mesg.MZul:UPLOAD_SUBMIT')}" onclick="parent.zk.progress()"/>
-		<input class="button" type="button" value="${c:l('mesg:org.zkoss.zul.mesg.MZul:UPLOAD_CANCEL')}" onclick="cancelUpload()"/>
+		<input class="button" type="submit"  />
+		<input class="button" type="button"/>
 		</td>
 	<tr>
 	</table>

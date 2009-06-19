@@ -1,0 +1,10 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<div height="300px" width="100px"/>
+<button label="say good night">
+	<attribute name="onClick">
+		java.lang.Thread.sleep(5000);
+		alert("hi");
+	</attribute>
+</button>
+</zk>
