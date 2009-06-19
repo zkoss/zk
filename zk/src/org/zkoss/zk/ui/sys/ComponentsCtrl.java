@@ -37,6 +37,7 @@ import org.zkoss.util.Cache;
 import org.zkoss.util.Maps;
 
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Path;
@@ -181,6 +182,9 @@ public class ComponentsCtrl {
 					target = deferred ? (Object)path:
 						".".equals(path) ? comp:
 							Path.getComponent(comp.getSpaceOwner(), path);
+					if (target == null && comp instanceof IdSpace && comp.getParent() != null) {
+						target = Path.getComponent(comp.getParent().getSpaceOwner(), path);
+					}
 				}
 			} else {
 				target = defaultComp;
