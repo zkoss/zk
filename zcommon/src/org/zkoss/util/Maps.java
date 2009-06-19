@@ -421,6 +421,7 @@ public class Maps {
 		if (multiple && o != null) {
 			if (o instanceof List) {
 				((List)o).add(value);
+				map.put(name, o);
 			} else {
 				final List l = new LinkedList();
 				l.add(o);
