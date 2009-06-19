@@ -31,6 +31,7 @@ import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.*;
 
+import org.zkoss.zul.impl.InputElement;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -45,16 +46,17 @@ public class Calendar extends XulElement implements org.zkoss.zul.api.Calendar {
 	private Date _value;
 	/** The name. */
 	private String _name;
-	private boolean _compact;
 
 	/** Contructs a calendar whose value is default to today.
 	 */
+	static {
+		addClientEvent(Calendar.class, Events.ON_CHANGE, CE_IMPORTANT|CE_REPEAT_IGNORE);
+	}
 	public Calendar() {
 		this(null);
 	}
 	public Calendar(Date value) {
 		_value = value != null ? value: Dates.today();
-		_compact = "zh".equals(Locales.getCurrent().getLanguage());
 	}
 
 	/** Returns the time zone that this date box belongs to, or null if
@@ -84,7 +86,7 @@ public class Calendar extends XulElement implements org.zkoss.zul.api.Calendar {
 		if (value == null) value = Dates.today();
 		if (!value.equals(_value)) {
 			_value = value;
-			smartUpdate("z.value", getDateFormat().format(_value));
+			smartUpdate("date", getDateFormat().format(_value));
 		}
 	}
 
@@ -94,21 +96,6 @@ public class Calendar extends XulElement implements org.zkoss.zul.api.Calendar {
 		final TimeZone tz = _tzone != null ? _tzone: TimeZones.getCurrent();
 		df.setTimeZone(tz);
 		return df;
-	}
-
-	/** Returns whether to use a compact layout.
-	 * <p>Default: true if zh_TW or zh_CN; false otherwise.
-	 */
-	public boolean isCompact() {
-		return _compact;
-	}
-	/** Sets whether to use a compact layout.
-	 */
-	public void setCompact(boolean compact) {
-		if (_compact != compact) {
-			_compact = compact;
-			invalidate();
-		}
 	}
 
 	/** Returns the name of this component.
@@ -139,7 +126,7 @@ public class Calendar extends XulElement implements org.zkoss.zul.api.Calendar {
 		if (name != null && name.length() == 0) name = null;
 		if (!Objects.equals(_name, name)) {
 			_name = name;
-			smartUpdate("z.name", _name);
+			smartUpdate("name", _name);
 		}
 	}
 
@@ -159,7 +146,7 @@ public class Calendar extends XulElement implements org.zkoss.zul.api.Calendar {
 		final String cmd = request.getCommand();
 		if (cmd.equals(Events.ON_CHANGE)) {
 			InputEvent evt = InputEvent.getInputEvent(request);
-
+			
 			final String value = evt.getValue();
 			try {
 				final Date newval = getDateFormat().parse(value);
@@ -171,7 +158,17 @@ public class Calendar extends XulElement implements org.zkoss.zul.api.Calendar {
 			}
 
 			Events.postEvent(evt);
-		} else
+		} else {
+			
 			super.service(request, everError);
+		}
+	}
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+			throws java.io.IOException {
+		super.renderProperties(renderer);
+		if (_name != null)
+			render(renderer, "name", _name);
+		render(renderer, "date", getDateFormat().format(_value));
+
 	}
 }

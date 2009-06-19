@@ -33,6 +33,7 @@ if(!window.zk){</script><!-- may be loaded multiple times because specified in l
 	<script src="history.js"/>
 	<script src="au.js"/>
 	<script src="numfmt.js"/>
+	<script src="datefmt.js"/>
 	<script src="msgfmt.js"/>
 
 	<!-- load lang here to minimize # of JS files -->

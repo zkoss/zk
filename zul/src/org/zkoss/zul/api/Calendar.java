@@ -62,18 +62,6 @@ public interface Calendar extends org.zkoss.zul.impl.api.XulElement {
 	public void setValue(Date value);
 
 	/**
-	 * Returns whether to use a compact layout.
-	 * <p>
-	 * Default: true if zh_TW or zh_CN; false otherwise.
-	 */
-	public boolean isCompact();
-
-	/**
-	 * Sets whether to use a compact layout.
-	 */
-	public void setCompact(boolean compact);
-
-	/**
 	 * Returns the name of this component.
 	 * <p>
 	 * Default: null.

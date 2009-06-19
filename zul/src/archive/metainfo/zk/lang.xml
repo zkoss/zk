@@ -242,9 +242,14 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>calendar</component-name>
 		<component-class>org.zkoss.zul.Calendar</component-class>
+		<widget-class>zul.db.Calendar</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/calendar.dsp</mold-uri>
+			<mold-uri>mold/calendar.js</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>popup</mold-name>
+			<mold-uri>mold/calendarpop.js</mold-uri>
 		</mold>
 	</component>
 	<component>
@@ -335,9 +340,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<component>
 		<component-name>datebox</component-name>
 		<component-class>org.zkoss.zul.Datebox</component-class>
+		<widget-class>zul.db.Datebox</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/datebox2.dsp</mold-uri>
+			<mold-uri>mold/datebox.js</mold-uri>
 		</mold>
 	</component>
 	<component>

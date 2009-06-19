@@ -15,7 +15,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
-*/
+ */
 package org.zkoss.zul;
 
 import java.util.Map;
@@ -34,6 +34,7 @@ import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.au.out.AuInvoke;
 
 import org.zkoss.zul.mesg.MZul;
@@ -42,63 +43,80 @@ import org.zkoss.zul.impl.Utils;
 
 /**
  * An edit box for holding a date.
- *
- * <p>The default format ({@link #getFormat}) depends on JVM's setting
- * and the current user's locale. That is,
+ * 
+ * <p>
+ * The default format ({@link #getFormat}) depends on JVM's setting and the
+ * current user's locale. That is,
  * <code>DateFormat.getDateInstance(DateFormat,DEFAULT, Locales.getCurrent).</code>
  * You might override {@link #getDefaultFormat} to provide your own default
  * format.
- * <p>Default {@link #getZclass}: z-datebox.(since 3.5.0)
+ * <p>
+ * Default {@link #getZclass}: z-datebox.(since 3.5.0)
+ * 
  * @author tomyeh
  */
-public class Datebox extends FormatInputElement implements org.zkoss.zul.api.Datebox {
+public class Datebox extends FormatInputElement implements
+		org.zkoss.zul.api.Datebox {
 	private TimeZone _tzone;
 	private boolean _compact, _btnVisible = true, _lenient = true;
+	static {
+		addClientEvent(Datebox.class, Events.ON_FOCUS, CE_DUPLICATE_IGNORE);
+		addClientEvent(Datebox.class, Events.ON_BLUR, CE_DUPLICATE_IGNORE);
+	}
 
 	public Datebox() {
 		setFormat(getDefaultFormat());
 		setCols(11);
 		_compact = "zh".equals(Locales.getCurrent().getLanguage());
 	}
+
 	public Datebox(Date date) throws WrongValueException {
 		this();
 		setValue(date);
 	}
 
-	/** Returns the default format, which is used when contructing
-	 * a datebox.
-	 * <p>The default format ({@link #getFormat}) depends on JVM's setting
-	 * and the current user's locale. That is,
+	/**
+	 * Returns the default format, which is used when contructing a datebox.
+	 * <p>
+	 * The default format ({@link #getFormat}) depends on JVM's setting and the
+	 * current user's locale. That is,
 	 * <code>DateFormat.getDateInstance(DateFormat,DEFAULT, Locales.getCurrent).</code>
-	 *
-	 * <p>You might override this method to provide your own default format.
+	 * 
+	 * <p>
+	 * You might override this method to provide your own default format.
 	 */
 	protected String getDefaultFormat() {
-		final DateFormat df = DateFormat.getDateInstance(
-			DateFormat.DEFAULT, Locales.getCurrent());
+		final DateFormat df = DateFormat.getDateInstance(DateFormat.DEFAULT,
+				Locales.getCurrent());
 		if (df instanceof SimpleDateFormat) {
-			final String fmt = ((SimpleDateFormat)df).toPattern();
+			final String fmt = ((SimpleDateFormat) df).toPattern();
 			if (fmt != null && !"M/d/yy h:mm a".equals(fmt))
-				return fmt; //note: JVM use "M/d/yy h:mm a" if not found!
+				return fmt; // note: JVM use "M/d/yy h:mm a" if not found!
 		}
 		return "yyyy/MM/dd";
 	}
 
-	/** Returns whether or not date/time parsing is to be lenient.
-	 *
-	 * <p>With lenient parsing, the parser may use heuristics to interpret
-	 * inputs that do not precisely match this object's format.
-	 * With strict parsing, inputs must match this object's format.
+	/**
+	 * Returns whether or not date/time parsing is to be lenient.
+	 * 
+	 * <p>
+	 * With lenient parsing, the parser may use heuristics to interpret inputs
+	 * that do not precisely match this object's format. With strict parsing,
+	 * inputs must match this object's format.
 	 */
 	public boolean isLenient() {
 		return _lenient;
 	}
-	/** Returns whether or not date/time parsing is to be lenient.
-	 * <p>Default: true.
-	 *
-	 * <p>With lenient parsing, the parser may use heuristics to interpret
-	 * inputs that do not precisely match this object's format.
-	 * With strict parsing, inputs must match this object's format.
+
+	/**
+	 * Returns whether or not date/time parsing is to be lenient.
+	 * <p>
+	 * Default: true.
+	 * 
+	 * <p>
+	 * With lenient parsing, the parser may use heuristics to interpret inputs
+	 * that do not precisely match this object's format. With strict parsing,
+	 * inputs must match this object's format.
 	 */
 	public void setLenient(boolean lenient) {
 		if (_lenient != lenient) {
@@ -106,13 +124,18 @@ public class Datebox extends FormatInputElement implements org.zkoss.zul.api.Dat
 			smartUpdate("lenient", _lenient);
 		}
 	}
-	/** Returns whether to use a compact layout.
-	 * <p>Default: true if zh_TW or zh_CN; false otherwise.
+
+	/**
+	 * Returns whether to use a compact layout.
+	 * <p>
+	 * Default: true if zh_TW or zh_CN; false otherwise.
 	 */
 	public boolean isCompact() {
 		return _compact;
 	}
-	/** Sets whether to use a compact layout.
+
+	/**
+	 * Sets whether to use a compact layout.
 	 */
 	public void setCompact(boolean compact) {
 		if (_compact != compact) {
@@ -121,14 +144,20 @@ public class Datebox extends FormatInputElement implements org.zkoss.zul.api.Dat
 		}
 	}
 
-	/** Returns whether the button (on the right of the textbox) is visible.
-	 * <p>Default: true.
+	/**
+	 * Returns whether the button (on the right of the textbox) is visible.
+	 * <p>
+	 * Default: true.
+	 * 
 	 * @since 2.4.1
 	 */
 	public boolean isButtonVisible() {
 		return _btnVisible;
 	}
-	/** Sets whether the button (on the right of the textbox) is visible.
+
+	/**
+	 * Sets whether the button (on the right of the textbox) is visible.
+	 * 
 	 * @since 2.4.1
 	 */
 	public void setButtonVisible(boolean visible) {
@@ -138,22 +167,28 @@ public class Datebox extends FormatInputElement implements org.zkoss.zul.api.Dat
 		}
 	}
 
-	/** Returns the value (in Date), might be null unless
-	 * a constraint stops it.
-	 * @exception WrongValueException if user entered a wrong value
+	/**
+	 * Returns the value (in Date), might be null unless a constraint stops it.
+	 * 
+	 * @exception WrongValueException
+	 *                if user entered a wrong value
 	 */
 	public Date getValue() throws WrongValueException {
-		return (Date)getTargetValue();
+		return (Date) getTargetValue();
 	}
-	/** Sets the value (in Date).
-	 * @exception WrongValueException if value is wrong
+
+	/**
+	 * Sets the value (in Date).
+	 * 
+	 * @exception WrongValueException
+	 *                if value is wrong
 	 */
 	public void setValue(Date value) throws WrongValueException {
 		validate(value);
 		setRawValue(value);
 	}
 
-	/** Sets the date format.
+/** Sets the date format.
 <p>The following pattern letters are defined:
 <table border=0 cellspacing=3 cellpadding=0>
 
@@ -219,56 +254,68 @@ public class Datebox extends FormatInputElement implements org.zkoss.zul.api.Dat
 		if (format == null || format.length() == 0)
 			format = getDefaultFormat();
 		else
-			getDateFormat(format); //make sure the format is correct
+			getDateFormat(format); // make sure the format is correct
 		super.setFormat(format);
 	}
 
-	/** Returns the time zone that this date box belongs to, or null if
-	 * the default time zone is used.
-	 * <p>The default time zone is determined by {@link TimeZones#getCurrent}.
+	/**
+	 * Returns the time zone that this date box belongs to, or null if the
+	 * default time zone is used.
+	 * <p>
+	 * The default time zone is determined by {@link TimeZones#getCurrent}.
 	 */
 	public TimeZone getTimeZone() {
 		return _tzone;
 	}
-	/** Sets the time zone that this date box belongs to, or null if
-	 * the default time zone is used.
-	 * <p>The default time zone is determined by {@link TimeZones#getCurrent}.
+
+	/**
+	 * Sets the time zone that this date box belongs to, or null if the default
+	 * time zone is used.
+	 * <p>
+	 * The default time zone is determined by {@link TimeZones#getCurrent}.
 	 */
 	public void setTimeZone(TimeZone tzone) {
 		_tzone = tzone;
 	}
 
-	/** Drops down or closes the calendar to select a date.
-	 *
+	/**
+	 * Drops down or closes the calendar to select a date.
+	 * 
 	 * @since 3.0.1
 	 * @see #open
 	 * @see #close
 	 */
 	public void setOpen(boolean open) {
-		if (open) open();
-		else close();
+		if (open)
+			open();
+		else
+			close();
 	}
-	/** Drops down the calendar to select a date.
-	 * The same as setOpen(true).
-	 *
+
+	/**
+	 * Drops down the calendar to select a date. The same as setOpen(true).
+	 * 
 	 * @since 3.0.1
 	 */
 	public void open() {
 		response("dropdn", new AuInvoke(this, "dropdn", true));
 	}
-	/** Closes the calendar if it was dropped down.
-	 * The same as setOpen(false).
-	 *
+
+	/**
+	 * Closes the calendar if it was dropped down. The same as setOpen(false).
+	 * 
 	 * @since 3.0.1
 	 */
 	public void close() {
 		response("dropdn", new AuInvoke(this, "dropdn", false));
 	}
 
-	//-- super --//
+	// -- super --//
 	public void setConstraint(String constr) {
-		setConstraint(constr != null ? new SimpleDateConstraint(constr): null); //Bug 2564298
+		setConstraint(constr != null ? new SimpleDateConstraint(constr) : null); // Bug
+																					// 2564298
 	}
+
 	protected Object coerceFromString(String value) throws WrongValueException {
 		if (value == null || value.length() == 0)
 			return null;
@@ -280,31 +327,45 @@ public class Datebox extends FormatInputElement implements org.zkoss.zul.api.Dat
 		try {
 			date = df.parse(value);
 		} catch (ParseException ex) {
-			throw showCustomError(
-				new WrongValueException(this, MZul.DATE_REQUIRED,
-					new Object[] {value, fmt}));
+			throw showCustomError(new WrongValueException(this,
+					MZul.DATE_REQUIRED, new Object[] { value, fmt }));
 		}
 		return date;
 	}
+
 	protected String coerceToString(Object value) {
 		final DateFormat df = getDateFormat(getFormat());
-		return value != null ? df.format((Date)value): "";
+		return value != null ? df.format((Date) value) : "";
 	}
-	/** Returns the date format of the specified format
-	 *
-	 * <p>Default: it uses SimpleDateFormat to format the date.
-	 *
-	 * @param fmt the pattern.
+
+	/**
+	 * Returns the date format of the specified format
+	 * 
+	 * <p>
+	 * Default: it uses SimpleDateFormat to format the date.
+	 * 
+	 * @param fmt
+	 *            the pattern.
 	 */
 	protected DateFormat getDateFormat(String fmt) {
 		final DateFormat df = new SimpleDateFormat(fmt, Locales.getCurrent());
-		final TimeZone tz = _tzone != null ? _tzone: TimeZones.getCurrent();
+		final TimeZone tz = _tzone != null ? _tzone : TimeZones.getCurrent();
 		df.setTimeZone(tz);
 		return df;
 	}
 
-	// super
 	public String getZclass() {
 		return _zclass == null ? "z-datebox" : _zclass;
+	}
+
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+			throws java.io.IOException {
+		super.renderProperties(renderer);
+		if (_compact)
+			render(renderer, "compact", _compact);
+		if (_btnVisible)
+			render(renderer, "buttonVisible", _btnVisible);
+		if (_lenient)
+			render(renderer, "lenient", _lenient);
 	}
 }
