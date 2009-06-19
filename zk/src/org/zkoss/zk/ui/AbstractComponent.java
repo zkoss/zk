@@ -25,6 +25,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.AbstractSequentialList;
 import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
@@ -1497,8 +1498,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				final List fwds = (List)info[1];
 				for (Iterator it = fwds.iterator(); it.hasNext();) {
 					final Object[] fwd = (Object[])it.next();
-					if (Objects.equals(fwd[0], target)
-					&& Objects.equals(fwd[1], targetEvent)) { //found
+					if (Objects.equals(fwd[1], targetEvent)
+					&& (Objects.equals(fwd[0], target)
+					|| (target instanceof Component && fwd[0] instanceof String
+					&& Objects.equals(Components.pathToComponent((String)fwd[0], this), target)))) { //found
 						it.remove(); //remove it
 
 						if (fwds.isEmpty()) { //no more event
@@ -2275,7 +2278,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		public void onEvent(Event event) {
 			final Object[] info = (Object[])_forwards.get(_orgEvent);
 			if (info != null)
-				for (Iterator it = ((List)info[1]).iterator(); it.hasNext();) {
+				for (Iterator it = new ArrayList((List)info[1]).iterator();
+				it.hasNext();) {
 					final Object[] fwd = (Object[])it.next();
 					Component target =
 						fwd[0] instanceof String ?

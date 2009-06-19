@@ -55,6 +55,7 @@ June 23, 2009
   2807870: ctrlKeys missing from XSD of bandbox
   2807657: Applet and CodeBase 
   2806116: Javadoc misleading on TypeConverter interface
+  2809040: The forward condition doesn't accept multiple values
   
 * Upgrade Notes
   * The signature of doInit of org.zkoss.zk.ui.util.Initiator is changed.
