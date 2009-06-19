@@ -511,9 +511,7 @@ zkau._send = function (dtid, evt, timeout) {
 		zkau._ctli = evt.uuid;
 		zkau._ctlc = evt.cmd;
 	}
-	
-	zk_clkflto++;
-	
+
 	zkau._events(dtid).push(evt);
 
 	//Note: we don't send immediately (Bug 1593674)
@@ -778,7 +776,6 @@ zkau._doCmds1 = function (cmds) {
 		if (processed && (!cmds || !cmds.length))
 			zkau._evalOnResponse();
 	}
-	zk_clkflto=0;
 	return true;
 };
 /** Process a command.
