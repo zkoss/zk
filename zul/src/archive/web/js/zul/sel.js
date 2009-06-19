@@ -817,7 +817,7 @@ zk.Selectable.prototype = {
 			this._calcSize();// Bug #1813722
 			this._render(155);
 			// it seems no longer to be fixed with this, commented by jumperchen on 2009/05/26
-			if (zk.ie7) zk.redoCSS(this.element); // Bug 2096807 && Test Case Z35-listbox-0002.zul
+			if (zk.ie7 && this.paging) zk.redoCSS(this.element); // Bug 2096807 && Test Case Z35-listbox-0002.zul
 		}
 	},
 	/** Returns the visible row at the specified index. */
