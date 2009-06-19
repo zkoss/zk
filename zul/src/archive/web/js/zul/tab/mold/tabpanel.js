@@ -24,8 +24,8 @@ function (out) {
 		out.push('<div class="', zcls, '-outer" id="', uuid, '">');
 		if (tab)
 			tab.redraw(out);
-		out.push('<div id="', uuid, '$real"', this.domAttrs_(), '>',
-				'<div id="', uuid, '$cave">');
+		out.push('<div id="', uuid, '-real"', this.domAttrs_(), '>',
+				'<div id="', uuid, '-cave">');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
 		out.push('</div></div></div>');
@@ -33,7 +33,7 @@ function (out) {
 	} else {//Default Mold
 		out.push('<div id="', uuid, '"' , this.domAttrs_(), '>');
 		if (tabbox.isHorizontal())
-			out.push('<div id="', uuid, '$real">');
+			out.push('<div id="', uuid, '-real">');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
 		if (tabbox.isHorizontal())

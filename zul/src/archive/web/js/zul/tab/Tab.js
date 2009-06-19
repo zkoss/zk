@@ -55,7 +55,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	_toggleBtnOver : function(evt) {
 		var zcls = this.getZclass(),
 			cmp = evt.domTarget;
-		zDom.toggleClass(cmp, zcls + "-close-over");
+		jq(cmp).toggleClass(zcls + "-close-over");
 
 	},
 	_selTab: function(notify, init) {
@@ -77,13 +77,17 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	},
 	_setTabSel: function(tb, toSel, notify, animation) {
 		var tabbox = this.getTabbox(),
+			zcls = this.getZclass(),
 			tab = zk.Widget.$(tb);
 		if (tab._selected == toSel && notify) //notify if init tab is selected
 			return;
 		if (toSel)
 			tabbox.setSelectedTab(tab);
 		tab._selected = toSel;
-		zDom[toSel ? "addClass" : "rmClass"](tb, this.getZclass() + "-seld" );
+		if (toSel)
+			jq(tb).addClass(zcls + "-seld");
+		else 
+			jq(tb).removeClass(zcls + "-seld");
 		var accd = tabbox.inAccordionMold(),
 			panel = tab.getLinkedPanel();
 		if (panel)
@@ -92,7 +96,10 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 				zAnima[toSel ? "slideDown" : "slideUp"](this,p);
 			} else {
 				var pl = accd ? panel.getSubnode("real") : panel.getNode(); //Can't use getSubnode coz
-				zDom[toSel ? "show" : "hide"](pl);
+				if (toSel)
+					jq(pl).show();
+				else 
+					jq(pl).hide()
 			}
 		if (!accd) {
 			var tabs = this.parent;

@@ -31,7 +31,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		var tabbox = this.getTabbox();
 			this._fixWidth();
 		if (tabbox.getNode())
-			zDom.cleanVisibility(tabbox.getNode());
+			jq(tabbox.getNode()).zk.cleanVisibility();
 	},
 	onShow: _zkf,
 	insertChildHTML_: function (child, before, desktop) {
@@ -90,7 +90,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				cmpOffsetTop = cmp ? cmp.offsetTop : 0,
 				cmpOffsetHeight = cmp ? cmp.offsetHeight : 0,
 				childHeight = 0,
-				allTab = zDom.childNodes(cave),
+				allTab = jq(cave).children(),
 				btnsize = this._getArrowSize();
 			for (var i = 0, count = allTab.length; i < count; i++)
 				childHeight = childHeight + allTab[i].offsetHeight;
@@ -139,7 +139,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		} else if(!tabbox.inAccordionMold()) {
 			var cave = this.getSubnode("cave"),
 				header = this.getSubnode("header"),
-			 	allTab = zDom.childNodes(cave),
+			 	allTab = jq(cave).children(),
 			 	sel = tabbox.getSelectedTab(),
 				cmp = tb ? tb : ( sel ? sel.getNode() : null),
 			 	cmpOffsetLeft = cmp ? cmp.offsetLeft : null,
@@ -249,28 +249,42 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		var tabbox = this.getTabbox(),
 			zcls = this.getZclass();
 		if (tabbox.isTabScroll()) {
+			var header = this.getSubnode("header");
+				
 			if (tabbox.isVertical()) {//vertical
-				zDom[show == true? "addClass" : "rmClass"](this.getSubnode("header"), zcls + "-header-scroll");
-				zDom[show == true? "addClass" : "rmClass"](this.getSubnode("down"), zcls + "-down-scroll");
-				zDom[show == true? "addClass" : "rmClass"](this.getSubnode("up"), zcls + "-up-scroll");
+				if (show == true) {
+					jq(header).addClass(zcls + "-header-scroll");
+					jq(this.getSubnode("down")).addClass(zcls + "-down-scroll");
+					jq(this.getSubnode("up")).addClass(zcls + "-up-scroll");
+				} else {
+					jq(header).removeClass(zcls + "-header-scroll");
+					jq(this.getSubnode("down")).removeClass(zcls + "-down-scroll");
+					jq(this.getSubnode("up")).removeClass(zcls + "-up-scroll");
+				}				
 			}else {//horizontal
-				zDom[show == true? "addClass" : "rmClass"](this.getSubnode("header"), zcls + "-header-scroll");
-				zDom[show == true? "addClass" : "rmClass"](this.getSubnode("right"), zcls + "-right-scroll");
-				zDom[show == true? "addClass" : "rmClass"](this.getSubnode("left"), zcls + "-left-scroll");
+				if (show == true) {
+					jq(header).addClass(zcls + "-header-scroll");
+					jq(this.getSubnode("right")).addClass(zcls + "-right-scroll");
+					jq(this.getSubnode("left")).addClass(zcls + "-left-scroll");
+				} else {
+					jq(header).removeClass(zcls + "-header-scroll");
+					jq(this.getSubnode("right")).removeClass(zcls + "-right-scroll");
+					jq(this.getSubnode("left")).removeClass(zcls + "-left-scroll");
+				}		
 			}
 		}
 	},
 	_doClick: function(evt) {
-		var ele = evt.domTarget;
+		var ele = evt.domTarget,
 			move = 0,
 			tabbox = this.getTabbox(),
 			cave = this.getSubnode("cave"),
 			head = this.getSubnode("header"),
-			allTab =  zDom.childNodes(cave),
+			allTab =  jq(cave).children(),
 			scrollLength = tabbox.isVertical() ? head.scrollTop : head.scrollLeft,
 			offsetLength = tabbox.isVertical() ? head.offsetHeight : head.offsetWidth;
 	//Scroll to next right tab
-		if (ele.id == this.uuid + "$right") {
+		if (ele.id == this.uuid + "-right") {
 			if (!allTab.length) return; // nothing to do
 			for (var i = 0, count = allTab.length; i < count; i++) {
 				if (allTab[i].offsetLeft + allTab[i].offsetWidth > scrollLength + offsetLength) {
@@ -281,12 +295,12 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 					return;
 				};
 			};
-		} else if (ele.id == this.uuid + "$left") {//Scroll to next left tab
+		} else if (ele.id == this.uuid + "-left") {//Scroll to next left tab
 				if (!allTab.length) return; // nothing to do
 				for (var i = 0, count = allTab.length; i < count; i++) {
 					if (allTab[i].offsetLeft >= scrollLength) {
 						//if no Sibling tab no sroll
-						tabli = zDom.previousSibling(allTab[i], "LI");
+						var tabli = jq(allTab[i]).prev("li")[0];
 						if (tabli == null)  return;
 						move = scrollLength - tabli.offsetLeft;
 						if (isNaN(move)) return;
@@ -298,11 +312,11 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				if (isNaN(move)) return;
 				this._doScroll("left", move);
 				return;
-		} else if (ele.id == this.uuid + "$up") {
+		} else if (ele.id == this.uuid + "-up") {
 				if (!allTab.length) return; // nothing to do
 				for (var i = 0, count = allTab.length; i < count; i++) {
 					if (allTab[i].offsetTop >= scrollLength) {
-						var preli = zDom.previousSibling(allTab[i], "LI");
+						var preli = jq(allTab[i]).prev("li")[0];
 						if (preli == null) return;
 						move = scrollLength - preli.offsetTop ;
 						this._doScroll("up", move);
@@ -314,7 +328,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				move = scrollLength - preli.offsetTop ;
 				this._doScroll("up", move);
 				return;
-		} else if (ele.id == this.uuid + "$down") {
+		} else if (ele.id == this.uuid + "-down") {
 			if (!allTab.length) return; //nothing to do
 			for (var i = 0, count = allTab.length; i < count; i++) {
 				if (allTab[i].offsetTop + allTab[i].offsetHeight > scrollLength + offsetLength ) {
@@ -350,10 +364,10 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				if (tabbox.isTabScroll()) {
 					if (!tbx.style.width) {
 						this._forceStyle(tbx,"w","100%");
-						this._forceStyle(tabs,"w",zDom.revisedWidth(tabs,tbx.offsetWidth)+ "px");
-						this._forceStyle(head,"w",(tabbox._scrolling ? tbx.offsetWidth - btnsize : zDom.revisedWidth(head,tbx.offsetWidth)) + "px");
+						this._forceStyle(tabs,"w",jq(tabs).zk.revisedWidth(tbx.offsetWidth)+ "px");
+						this._forceStyle(head,"w",(tabbox._scrolling ? tbx.offsetWidth - btnsize : jq(head).zk.revisedWidth(tbx.offsetWidth)) + "px");
 					} else {
-						this._forceStyle(tabs,"w",zDom.revisedWidth(tabs,tbx.offsetWidth)+ "px");
+						this._forceStyle(tabs,"w",jq(tabs).zk.revisedWidth(tbx.offsetWidth)+ "px");
 						this._forceStyle(head,"w",tabs.style.width);
 						this._forceStyle(head,"w",(tabbox._scrolling ? head.offsetWidth - btnsize : head.offsetWidth) + "px");
 					}
@@ -374,28 +388,29 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 			head = this.getSubnode("header"),
 			u = this.getSubnode("up"),
 			d = this.getSubnode("down"),
+			cave =  this.getSubnode("cave"),
 			btnsize = u && d ? isNaN(u.offsetHeight + d.offsetHeight) ? 0 : u.offsetHeight + d.offsetHeight : 0;
 		//fix tabpanels's height if tabbox's height is specified
 		//Ignore accordion since its height is controlled by each tabpanel
 		if (tabbox.isVertical()) {
-			var child = zDom.childNodes(tbx, function (n) {return (zDom.tag(n) == "DIV");}),
-			allTab = zDom.childNodes(this.getSubnode("cave"));
+			var child = jq(tbx).children('div');
+			allTab = jq(cave).children();
 			if (tbx.style.height) {
-				this._forceStyle(tabs, "h", zDom.revisedHeight(tabs,tbx.offsetHeight,true)+"px");
+				this._forceStyle(tabs, "h", jq(tabs).zk.revisedHeight(tbx.offsetHeight,true)+"px");
 			} else {
 				this._forceStyle(tbx,"h", allTab.length*35+"px");//give it default height
-				this._forceStyle(tabs, "h", zDom.revisedHeight(tabs,tbx.offsetHeight,true)+"px");
+				this._forceStyle(tabs, "h", jq(tabs).zk.revisedHeight(tabs,tbx.offsetHeight,true)+"px");
 			}
 			//coz we have to make the header full
 			if (tabbox._scrolling) {
 				this._forceStyle(head,"h", tabs.offsetHeight - btnsize + "px");
 			} else {
-				this._forceStyle(head,"h", zDom.revisedHeight(head,tabs.offsetHeight,true) + "px");
+				this._forceStyle(head,"h", jq(head).zk.revisedHeight(tabs.offsetHeight,true) + "px");
 			}
 			//separator(+border)
-			this._forceStyle(child[1],"h",zDom.revisedHeight(child[1],tabs.offsetHeight,true)+"px");
+			this._forceStyle(child[1],"h",jq(child[1]).zk.revisedHeight(tabs.offsetHeight,true)+"px");
 			//tabpanels(+border)
-			this._forceStyle(child[2],"h",zDom.revisedHeight(child[1],tabs.offsetHeight,true)+"px");
+			this._forceStyle(child[2],"h",jq(child[1]).zk.revisedHeight(tabs.offsetHeight,true)+"px");
 		} else {
 			if (head) //accordion have no head
 				head.style.height="";

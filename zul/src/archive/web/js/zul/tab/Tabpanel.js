@@ -45,7 +45,7 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 		if (!tabbox.inAccordionMold()) {
 			var tbx = tabbox.getNode(),
 				tabpanels = this.parent.getNode(),
-				hgh = zDom.getStyle(tbx, "height");
+				hgh = jq(tbx).css("height");
 			if (tabpanels) {
 				for (var pos, n = tabpanels.firstChild; n; n = n.nextSibling) {
 					if (n.id) {
@@ -55,11 +55,11 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 							n.style.position = "relative";
 						}
 						if (hgh && hgh != "auto") {//tabbox has height
-							hgh = zDom.vflexHeight(tabpanels);
-							zDom.setOffsetHeight(n, hgh);
+							hgh = jq(tabpanels).zk.vflexHeight();
+							jq(n).zk.setOffsetHeight(hgh);
 						}
 						//let real div 100% height
-						zDom.addClass(this.getSubnode("real"), this.getZclass() + "-cnt");
+						jq(this.getSubnode("real")).addClass(this.getZclass() + "-cnt");
 						if (zk.ie && pos)
 							n.style.position = pos;
 					}

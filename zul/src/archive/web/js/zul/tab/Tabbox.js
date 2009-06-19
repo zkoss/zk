@@ -55,7 +55,7 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 		return this.getMold().indexOf("accordion") < 0 ? false : true;
 	},
 	getSelectedIndex: function() {
-		var tabnode = zDom.$(this._selTab),
+		var tabnode = jq("#"+this._selTab),
 		    tab = zk.Widget.$(tabnode);
 		return tab != null ? tab.getIndex() : -1 ;
 	},
@@ -65,7 +65,7 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 		this.setSelectedTab(tabs.getChildAt(index));
 	},
 	getSelectedPanel: function() {
-		var tabnode = zDom.$(this._selTab),
+		var tabnode = jq("#"+this._selTab),
 		    tab = zk.Widget.$(tabnode);
 		return tab != null ? tab.getLinkedPanel() : null;
 	},
@@ -77,7 +77,7 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 		this.setSelectedTab(tab);
 	},
 	getSelectedTab: function() {
-		var tabnode = zDom.$(this._selTab);
+		var tabnode = jq("#"+this._selTab);
 		return zk.Widget.$(tabnode);
 	},
 	setSelectedTab: function(tab) {
@@ -102,12 +102,11 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 		this._scrolling = false;
 		zWatch.listen({onSize: this});
 		if (this.inAccordionMold()) {
-			zDom.cleanVisibility(this.getNode());
+			jq(this.getNode()).zk.cleanVisibility();
 		}
 		zk.afterMount(
 			this.proxy(function () {
-				var x = this._selTab,
-					wgt = zDom.$(x),
+				var wgt = jq("#"+this._selTab),
 					tab = zk.Widget.$(wgt);
 				if (tab)
 					tab.setSelected(true);
