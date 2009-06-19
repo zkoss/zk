@@ -1187,11 +1187,11 @@ zk._evalInit = function () {
 					//We put child in front of parent (by use of push)
 					//note: init is called child child-first, but
 					//onVisi/onHide is called parent-first
-					if (o["onVisi"]) zk._tvisicmps.push(n.id); //child-first
-					if (o["onHide"]) zk._thidecmps.push(n.id); //child-first
-					if (o["onSize"]) zk._tszcmps.push(n.id); //child-first
-					if (o["beforeSize"]) zk._tbfszcmps.push(n.id); //child-first
-					if (o["onScroll"]) zk._tscrlcmps.push(n.id); //child-first
+					if (o["onVisi"]) zk._tvisicmps.push(n); //child-first
+					if (o["onHide"]) zk._thidecmps.push(n); //child-first
+					if (o["onSize"]) zk._tszcmps.push(n); //child-first
+					if (o["beforeSize"]) zk._tbfszcmps.push(n); //child-first
+					if (o["onScroll"]) zk._tscrlcmps.push(n); //child-first
 				}
 			}
 
@@ -1316,11 +1316,11 @@ zk._cleanupAt = function (n) {
 	if (type) {
 		zk.eval(n, "cleanup", type);
 		zkau.cleanupMeta(n); //note: it is called only if type is defined
-		zk._visicmps.remove(n.id);
-		zk._hidecmps.remove(n.id);
-		zk._szcmps.remove(n.id);
-		zk._bfszcmps.remove(n.id);
-		zk._scrlcmps.remove(n.id);
+		zk._visicmps.remove(n);
+		zk._hidecmps.remove(n);
+		zk._szcmps.remove(n);
+		zk._bfszcmps.remove(n);
+		zk._scrlcmps.remove(n);
 	}
 	if (n.id) zk.unlistenAll(n); //Bug 1741959: memory leaks
 	zk.unAll(n); //bug #2313106 whatever it is, we shall invoke zk.unAll()
@@ -1339,12 +1339,11 @@ zk._cleanupAt = function (n) {
 zk.onVisiAt = function (n) {
 	//Note: process from last since zk.unwatch assumes it
 	for (var elms = zk._visicmps, j = elms.length; --j >= 0;) { //parent first
-		var elm = $e(elms[j]);
-		for (var e = elm; e; e = $parent(e)) {
+		for (var e = elms[j]; e; e = $parent(e)) {
 			if (!$visible(e))
 				break;
 			if (e == n || !n) { //elm is a child of n
-				zk.eval(elm, "onVisi");
+				zk.eval(elms[j], "onVisi");
 				break;
 			}
 		}
@@ -1367,12 +1366,11 @@ zk.onHideAt = function (n) {
 
 	//Note: process from last since zk.unwatch assumes it
 	for (var elms = zk._hidecmps, j = elms.length; --j >= 0;) { //parent first
-		var elm = $e(elms[j]);
-		for (var e = elm; e; e = $parent(e)) {
+		for (var e = elms[j]; e; e = $parent(e)) {
 			if (!$visible(e)) //yes, ignore hidden ones
 				break;
 			if (e == n || !n) { //elm is a child of n
-				zk.eval(elm, "onHide");
+				zk.eval(elms[j], "onHide");
 				break;
 			}
 		}
@@ -1388,12 +1386,11 @@ zk.onHideAt = function (n) {
 zk.onSizeAt = function (n) {
 	//Note: process from last since zk.unwatch assumes it
 	for (var elms = zk._szcmps, j = elms.length; --j >= 0;) { //parent first
-		var elm = $e(elms[j]);
-		for (var e = elm; e; e = $parent(e)) {
+		for (var e = elms[j]; e; e = $parent(e)) {
 			if (!$visible(e))
 				break;
 			if (!n || e == n) { //elm is a child of n
-				zk.eval(elm, "onSize");
+				zk.eval(elms[j], "onSize");
 				break;
 			}
 		}
@@ -1416,12 +1413,11 @@ zk.onSizeAt = function (n) {
 zk.beforeSizeAt = function (n) {
 	//Note: process from last since zk.unwatch assumes it
 	for (var elms = zk._bfszcmps, j = elms.length; --j >= 0;) { //parent first
-		var elm = $e(elms[j]);
-		for (var e = elm; e; e = $parent(e)) {
+		for (var e = elms[j]; e; e = $parent(e)) {
 			if (!$visible(e))
 				break;
 			if (!n || e == n) { //elm is a child of n
-				zk.eval(elm, "beforeSize");
+				zk.eval(elms[j], "beforeSize");
 				break;
 			}
 		}
@@ -1438,12 +1434,11 @@ zk.onScrollAt = function (n) {
 	if (zkau.valid) zkau.valid.onScrollAt(n); // Bug #1819264
 	//Note: process from last since zk.unwatch assumes it
 	for (var elms = zk._scrlcmps, j = elms.length; --j >= 0;) { //parent first
-		var elm = $e(elms[j]);
-		for (var e = elm; e; e = $parent(e)) {
+		for (var e = elms[j]; e; e = $parent(e)) {
 			if (!$visible(e))
 				break;
 			if (!n || e == n) { //elm is a child of n
-				zk.eval(elm, "onScroll");
+				zk.eval(elms[j], "onScroll");
 				break;
 			}
 		}
