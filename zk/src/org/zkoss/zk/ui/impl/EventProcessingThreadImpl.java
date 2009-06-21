@@ -399,8 +399,7 @@ implements EventProcessingThread {
 		++_nThd;
 		try {
 			while (_ceased == null) {
-				final boolean evtAvail = !isIdle();
-				if (evtAvail) {
+				if (!isIdle()) {
 					final Configuration config =
 						_proc.getDesktop().getWebApp().getConfiguration();
 					boolean cleaned = false;
@@ -449,8 +448,7 @@ implements EventProcessingThread {
 				}
 
 				synchronized (_evtmutex) {
-					if (evtAvail)
-						_evtmutex.notify();
+					_evtmutex.notify();
 						//wake the main thread OR the resuming thread
 
 					if (_ceased == null)
@@ -458,31 +456,21 @@ implements EventProcessingThread {
 						//wait the main thread to issue another request
 				}
 			}
-
-			if (_silent) {
-//				if (log.debugable()) log.debug("The event processing thread stops");
-			} else {
-				System.out.println("The event processing thread stops");
-				//Don't use log because it might be stopped
-			}
+//			System.out.println(Thread.currentThread()+" stopped: "+_ceased);
 		} catch (Throwable ex) {
-			if (_ceased == null) _ceased = Exceptions.getMessage(ex);
+			if (_ceased == null)
+				_ceased = Exceptions.getMessage(ex);
+
 			if (Exceptions.findCause(ex, InterruptedException.class) == null)
 				throw UiException.Aide.wrap(ex);
-
-			if (_silent) {
-//				if (log.debugable())
-//					log.debug("The event processing thread interrupted: "+Exceptions.getMessage(ex)
-//						+"\n"+Exceptions.getBriefStackTrace(ex));
-			} else {	
-				System.out.println("The event processing thread interrupted: "+Exceptions.getMessage(ex));
-				//Don't use log because it might be stopped
-			}
+//			System.out.println(Thread.currentThread()+" interrupted silently: "+_ceased);
 		} finally {
 			--_nThd;
-			if (_ceased == null) {
-				_ceased = "Unknow reason";
-				System.out.println("The event processing thread is stopped with unknown cause");
+			synchronized (_evtmutex) { //just in case
+				final boolean abnormal = _ceased == null;
+				if (abnormal) _ceased = "Unknow reason";
+				_evtmutex.notify();
+//				if (abnormal) System.out.println(Thread.currentThread()+" stopped with unknown cause");
 			}
 		}
 	}
