@@ -17,14 +17,26 @@ zkApplet = {
 	invoke: zk.ie ? function(id){
 		var cmp = $e(id);
 		if (cmp && arguments.length >= 2) {
-			var expr = "cmp." + arguments[1] + '(';
-			for (var j = 2; j < arguments.length;) {
-				if (j != 2) expr += ',';
-				var s = arguments[j++];
-				expr += '"' + (s ? s.replace('"', '\\"'): '') + '"';
+			if(arguments.length < 4){
+				var expr = "cmp." + arguments[1] + '(';
+				for (var j = 2; j < arguments.length;) {
+					if (j != 2) expr += ',';
+					var s = arguments[j++];
+					expr += '"' + (s ? s.replace('"', '\\"'): '') + '"';
+				}
+			}else{
+				var expr = "cmp." + arguments[1] + '([';
+				for (var j = 2; j < arguments.length;) {
+					if (j != 2) expr += ',';
+					var s = arguments[j++];
+					expr += '"' + (s ? s.replace('"', '\\"'): '') + '"';
+				}
 			}
 			try {
-				eval(expr + ');');
+				if(arguments.length < 4)
+					eval(expr + ');');
+				else
+					eval(expr + ']);');
 			} catch (e) {
 				zk.error("Failed to invoke applet's method: " + expr);
 			}
@@ -39,9 +51,16 @@ zkApplet = {
 				return;
 			}
 			try {
-				var args = [];
-				for (var j = 2; j < arguments.length;)
-					args.push(arguments[j++]);
+				var args = [],
+					arrayArg = [];
+				if(arguments.length < 4){
+					for (var j = 2; j < arguments.length;)
+						args.push(arguments[j++]);
+				}else{
+					for (var j = 2; j < arguments.length;)
+						arrayArg.push(arguments[j++]);
+					args.push(arrayArg);
+				}
 				func.apply(cmp, args);
 			} catch (e) {
 				zk.error("Failed to invoke applet's method: " + fn);

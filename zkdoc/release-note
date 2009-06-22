@@ -152,6 +152,7 @@ April 28, 2009
   2782751: listbox fails to restore activepage if re-set the model
   2783767: BSHInterperter does not respect HierachicalAware spec.
   2786500: Menupopup fails when invoking open() method
+  2807824: Applet and setField
 
 	--------
 ZK 3.6.0
