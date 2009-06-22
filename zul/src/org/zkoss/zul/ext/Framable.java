@@ -35,7 +35,6 @@ public interface Framable {
 	public boolean isMaximizable();
 	/**
 	 * Returns whether to display the minimizing button.
-	 * @return
 	 */
 	public boolean isMinimizable();
 	/**
