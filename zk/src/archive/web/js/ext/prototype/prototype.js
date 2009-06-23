@@ -1102,7 +1102,7 @@ Element.Methods = {
 			var v, cs;
 			prop = prop == 'float' ? 'cssFloat' : prop;
 			prop = (v = el.style[prop]) ? v : (cs = view.getComputedStyle(el, "")) ? cs[Element.chkCache(prop)] : null;
-    		return prop == 'auto' ? null : prop;
+    		return prop == 'auto' ? '' : prop;
 		} : function(el, prop) {
 			if (el == document) 
 				return null;
@@ -1120,7 +1120,7 @@ Element.Methods = {
 			}
 			prop = prop == 'float' ? 'styleFloat' : prop;
 			prop = el.style[prop] || ((cs = el.currentStyle) ? cs[Element.chkCache(prop)] : null);
-			return prop == 'auto' ? null : prop;
+			return prop == 'auto' ? '' : prop;
 		};
 	}(),
   setStyle: function(element, style) {
