@@ -1101,8 +1101,8 @@ Element.Methods = {
 				return null;
 			var v, cs;
 			prop = prop == 'float' ? 'cssFloat' : prop;
-			var result = (v = el.style[prop]) ? v : (cs = view.getComputedStyle(el, "")) ? cs[Element.chkCache(prop)] : null;
-    		return result == 'auto' ? null : result;
+			prop = (v = el.style[prop]) ? v : (cs = view.getComputedStyle(el, "")) ? cs[Element.chkCache(prop)] : null;
+    		return prop == 'auto' ? null : prop;
 		} : function(el, prop) {
 			if (el == document) 
 				return null;
@@ -1119,8 +1119,8 @@ Element.Methods = {
 				return 1;
 			}
 			prop = prop == 'float' ? 'styleFloat' : prop;
-			var result = el.style[prop] || ((cs = el.currentStyle) ? cs[Element.chkCache(prop)] : null);
-			return result == 'auto' ? null : result;
+			prop = el.style[prop] || ((cs = el.currentStyle) ? cs[Element.chkCache(prop)] : null);
+			return prop == 'auto' ? null : prop;
 		};
 	}(),
   setStyle: function(element, style) {
