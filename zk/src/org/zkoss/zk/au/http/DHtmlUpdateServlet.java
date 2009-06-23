@@ -351,8 +351,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				//Bug 1859776: need send response to client for redirect or others
 				final String dtid = request.getParameter("dtid");
 				if (dtid != null)
-					sessionTimeout(request, response,
-						dtid, request.getParameter("cmd.0"));
+					sessionTimeout(request, response, dtid);
 			}
 			return;
 		}
@@ -418,7 +417,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				desktop = recover(sess, request, response, wappc, dtid);
 
 			if (desktop == null) {
-				sessionTimeout(request, response, dtid, cmdId);
+				sessionTimeout(request, response, dtid);
 				return;
 			}
 		}
@@ -483,7 +482,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		out.close(request, response);
 	}
 	private void sessionTimeout(HttpServletRequest request,
-	HttpServletResponse response, String dtid, String cmdId)
+	HttpServletResponse response, String dtid)
 	throws ServletException, IOException {
 		final String sid = request.getHeader("ZK-SID");
 		if (sid != null)
@@ -492,25 +491,32 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		final AuWriter out =
 			AuWriters.newInstance().open(request, response, 0);
 
-		if (!"rmDesktop".equals(cmdId) && !Events.ON_RENDER.equals(cmdId)
-		&& !Events.ON_TIMER.equals(cmdId)
-		&& !Events.ON_CLIENT_INFO.equals(cmdId)
-		&& !Events.ON_MOVE.equals(cmdId)
-		&& !Events.ON_SIZE.equals(cmdId)
-		&& !Events.ON_Z_INDEX.equals(cmdId)
-		&& !"dummy".equals(cmdId)) {//possible in FF due to cache
-			final String deviceType = getDeviceType(request);
-			String uri = Devices.getTimeoutURI(deviceType);
-			final AuResponse resp;
-			if (uri != null) {
-				if (uri.length() != 0)
-					uri = Encodes.encodeURL(_ctx, request, response, uri);
-				resp = new AuSendRedirect(uri, null);
-			} else {
-				resp = new AuObsolete(
-					dtid, Messages.get(MZk.UPDATE_OBSOLETE_PAGE, dtid));
+		for (int j = 0;; ++j) {
+			final String cmdId = request.getParameter("cmd_"+j);
+			if (cmdId == null)
+				break;
+
+			if (!"rmDesktop".equals(cmdId) && !Events.ON_RENDER.equals(cmdId)
+			&& !Events.ON_TIMER.equals(cmdId)
+			&& !Events.ON_CLIENT_INFO.equals(cmdId)
+			&& !Events.ON_MOVE.equals(cmdId)
+			&& !Events.ON_SIZE.equals(cmdId)
+			&& !Events.ON_Z_INDEX.equals(cmdId)
+			&& !"dummy".equals(cmdId)) {//possible in FF due to cache
+				final String deviceType = getDeviceType(request);
+				String uri = Devices.getTimeoutURI(deviceType);
+				final AuResponse resp;
+				if (uri != null) {
+					if (uri.length() != 0)
+						uri = Encodes.encodeURL(_ctx, request, response, uri);
+					resp = new AuSendRedirect(uri, null);
+				} else {
+					resp = new AuObsolete(
+						dtid, Messages.get(MZk.UPDATE_OBSOLETE_PAGE, dtid));
+				}
+				out.write(resp);
+				break; //found
 			}
-			out.write(resp);
 		}
 
 		out.close(request, response);

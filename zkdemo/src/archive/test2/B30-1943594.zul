@@ -6,8 +6,11 @@ xmlns="http://www.zkoss.org/2005/zul">
 <html><![CDATA[
 <ul>
 <li>
-Click dropdown and select an item, then a modal dialog shall not be shown.</li>
-<li>Click combobox's dropdown button and then click datebox's dropdown button, then a modal dialog shall show up, that is correct.</li>
+Click dropdown and select an item. A exception dialog shall show up.
+Click OK to close the  dialog. Then, the dialog shall <b>NOT</b> re-appear again.</li>
+<li>Click combobox's dropdown button and then click datebox's dropdown button.
+A exception dialog shall show up.Click OK to close the dialog. Then, the dialog shall <b>not</b>
+re-appear again.</li>
 </ul>
 ]]></html>
 

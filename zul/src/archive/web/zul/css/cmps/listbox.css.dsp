@@ -35,7 +35,7 @@ div.z-listbox-header th.z-listheader-sort-dsc div.z-listheader-cnt {
 	background-image: url(${c:encodeURL('~./zul/img/sort/v_dsc.gif')});
 }
 div.z-listbox-body {
-	background: white; border: 0; overflow: hidden; width: 100%; position: relative;
+	background: white; border: 0; overflow: auto; width: 100%; position: relative;
 }
 div.z-listbox-pgi-b {
 	border-top: 1px solid #AAB; overflow: hidden;
@@ -54,6 +54,9 @@ div.z-listfooter-cnt, div.z-listcell-cnt, div.z-listheader-cnt {
 	border: 0; margin: 0; padding: 0;
 	font-family: ${fontFamilyC};
 	font-size: ${fontSizeM}; font-weight: normal;
+}
+div.z-listcell-cnt {
+	padding: 1px 0 1px 0;
 }
 div.z-listfooter-cnt, div.z-listheader-cnt {
 	overflow: hidden;

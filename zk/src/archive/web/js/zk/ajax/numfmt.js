@@ -36,7 +36,7 @@ zNumFormat = {
 			if (!ignore)
 				ignore = (cc < '0' || cc > '9')
 				&& cc != zk.DECIMAL && cc != zk.MINUS && cc != '+'
-				&& (zk.isWhitespace(cc) || cc == zk.GROUPING || cc == ')'
+				&& (zUtl.isChar(cc,{whitespace:1}) || cc == zk.GROUPING || cc == ')'
 					|| (fmt && fmt.indexOf(cc) >= 0));
 			if (ignore) {
 				if (!sb) sb = val.substring(0, j);

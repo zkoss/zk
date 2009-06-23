@@ -163,19 +163,11 @@ zk = function (sel) {
 		};
 	},
 
-	$void: function() {
-		return '';
-	},
+	$void: function () {},
 
 	parseInt: function (v, b) {
 		v = v ? parseInt(v, b || 10): 0;
 		return isNaN(v) ? 0: v;
-	},
-	isDigit: function (c) {
-		return c >= '0' && c <= '9';
-	},
-	isWhitespace: function (cc) {
-		return cc == ' ' || cc == '\t' || cc == '\n' || cc == '\r';
 	},
 
 	set: function (o, name, value, extra) {

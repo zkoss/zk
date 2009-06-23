@@ -49,6 +49,7 @@ import org.zkoss.zk.au.out.AuInvoke;
 public class Applet extends HtmlBasedComponent implements DynamicPropertied,
 org.zkoss.zul.api.Applet {
 	private String _code = "";
+	private String _codebase = "";
 	private final Map _params = new LinkedHashMap();
 
 	/** Return the code of the applet, i.e., the URI of the Java class.
@@ -60,6 +61,20 @@ org.zkoss.zul.api.Applet {
 	 */
 	public void setCode(String code) {
 		_code = code;
+		invalidate();
+	}
+	
+	/** Return the code of the applet, i.e., the URI of the Java class.
+	 * @since 3.6.2
+	 */
+	public String getCodebase() {
+		return _codebase;
+	}
+	/** Sets the code of the applet, i.e., the URI of the Java class.
+	 * @since 3.6.2
+	 */
+	public void setCodebase(String codebase) {
+		_codebase = codebase;
 		invalidate();
 	}
 

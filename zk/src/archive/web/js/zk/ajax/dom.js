@@ -19,7 +19,7 @@ zk.override(jq.fn, zjq._fn = {}, {
 	init: function (sel, ctx) {
 		if (ctx === zk) {
 			if (sel && typeof sel == 'string'
-			&& zUtl.is(sel.charAt(0), {digit:1,upper:1,lower:1,'_':1})) {
+			&& zUtl.isChar(sel.charAt(0), {digit:1,upper:1,lower:1,'_':1})) {
 				var el = document.getElementById(sel);
 				if (!el || el.id == sel) {
 					var ret = jq(el || []);
@@ -575,27 +575,14 @@ zjq.prototype = { //ZK extension
 
 	//selection//
 	disableSelection: function () {
-		var el = this.$();
-		if (el)
-			if (zk.gecko)
-				el.style.MozUserSelect = "none";
-			else if (zk.safari)
-				el.style.KhtmlUserSelect = "none";
-			else if (zk.ie)
-				el.onselectstart = function (evt) {
-					var n = evt.target, tag = n.tagName;
-					return tag == "TEXTAREA" || tag == "INPUT" && (n.type == "text" || n.type == "password");
-				};
+		return this.jq.each(function () {
+			zjq._disbSel(this);
+		});
 	},
 	enableSelection: function () {
-		var el = this.$();
-		if (el)
-			if (zk.gecko)
-				el.style.MozUserSelect = "";
-			else if (zk.safari)
-				el.style.KhtmlUserSelect = "";
-			else if (zk.ie)
-				el.onselectstart = null;
+		return this.jq.each(function () {
+			zjq._enbSel(this);
+		});
 	}
 };
 
@@ -917,6 +904,24 @@ zk.copy(zjq, { //private
 			}, 0);
 		} //IE throws exception when select() in some cases
 	},
+
+	_disbSel: zk.gecko ? function (el) {
+		el.style.MozUserSelect = "none";
+	}: zk.safari ? function (el) {
+		el.style.KhtmlUserSelect = "none";
+	}: zk.ie ? function (el) {
+		el.onselectstart = function (evt) {
+			var n = evt.target, tag = n.tagName;
+			return tag == "TEXTAREA" || tag == "INPUT" && (n.type == "text" || n.type == "password");
+		};
+	}: zk.$void,
+	_enbSel:  zk.gecko ? function (el) {
+		el.style.MozUserSelect = "";
+	}: zk.safari ? function (el) {
+		el.style.KhtmlUserSelect = "";
+	}: zk.ie ? function (el) {
+		el.onselectstart = null;
+	}: zk.$void,
 
 	//refer to http://www.w3schools.com/css/css_text.asp
 	_TEXT_STYLES: [

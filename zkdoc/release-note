@@ -44,6 +44,7 @@ ZK 5.0.0
 
 	--------
 ZK 3.6.2
+June 23, 2009
 * Features
   2787715: Messagebox shall recognize linebreak
   2789884: Include supports macro (page-less) mode
@@ -93,7 +94,14 @@ ZK 3.6.2
   2801878: Missing properties in radiogroup and radio components in XSD
   2803344: Executions.createComponents cannot handle ~./x?y
   2803575: bindingArgs shall merge extra binding arguments together
-
+  2806414: onOK with onChanging causes a Javascript error in Textbox
+  2807475: Focus problem with menupop & textbox in ie
+  2807870: ctrlKeys missing from XSD of bandbox
+  2807657: Applet and CodeBase 
+  2806116: Javadoc misleading on TypeConverter interface
+  2809040: The forward condition doesn't accept multiple values
+  2809054: Unable to remove the forward condition in forward event
+  
 
 * Upgrade Notes
   * The signature of doInit of org.zkoss.zk.ui.util.Initiator is changed.
@@ -112,6 +120,7 @@ ZK 3.6.2
   
 	--------
 ZK 3.6.1
+April 28, 2009
 * Features
   2677655: A way to use ID as UUID for unit test purpse
   2724923: Support scrollIntoView to scroll an element to become visible

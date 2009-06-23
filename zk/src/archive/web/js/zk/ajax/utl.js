@@ -14,10 +14,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 zUtl = { //static methods
 	//Character
-	is: function (cc, opts) {
+	isChar: function (cc, opts) {
 		return (opts.digit && cc >= '0' && cc <= '9')
 			|| (opts.upper && cc >= 'A' && cc <= 'Z')
 			|| (opts.lower && cc >= 'a' && cc <= 'z')
+			|| (opts.whitespace && (cc == ' ' || cc == '\t' || cc == '\n' || cc == '\r'))
 			|| opts[cc];
 	},
 

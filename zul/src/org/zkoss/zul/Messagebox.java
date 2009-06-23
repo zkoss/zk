@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 import org.zkoss.mesg.Messages;
+import org.zkoss.util.logging.Log;
 
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Executions;
@@ -40,6 +41,7 @@ import org.zkoss.zul.impl.MessageboxDlg;
  * @author tomyeh
  */
 public class Messagebox {
+	private static final Log log = Log.lookup(Messagebox.class);
 	private static String _templ = "~./zul/html/messagebox.zul";
 
 	/** A symbol consisting of a question mark in a circle.
@@ -246,9 +248,13 @@ public class Messagebox {
 			try {
 				dlg.doModal();
 			} catch (Throwable ex) {
-				dlg.detach();
 				if (ex instanceof InterruptedException)
 					throw (InterruptedException)ex;
+				try {
+					dlg.detach();
+				} catch (Throwable ex2) {
+					log.warningBriefly("Failed to detach when recovering from an error", ex2);
+				}
 				throw UiException.Aide.wrap(ex);
 			}
 			return dlg.getResult();

@@ -27,7 +27,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<component>
 		<override/>
 		<component-name>button</component-name>
-		<style-class>blue</style-class>
+		<property>
+			<property-name>sclass</property-name>
+			<property-value>myclass</property-value>
+		</property>
 	</component>
 	-->
 

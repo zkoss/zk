@@ -123,7 +123,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		var oo = [],
 			spacing = this.spacing,
 			spacing0 = spacing && spacing.startsWith('0')
-				&& (spacing.length == 1 || zk.isDigit(spacing.charAt(1))),
+				&& (spacing.length == 1 || zUtl.isChar(spacing.charAt(1),{digit:1})),
 			vert = this.isVertical(),
 			spstyle = spacing ? (vert?'height:':'width:') + spacing: '';
 

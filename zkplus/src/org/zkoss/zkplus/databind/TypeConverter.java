@@ -33,12 +33,16 @@ public interface TypeConverter {
 	/** Convert an value object to UI component attribute type.
 	 * @param val the object to be corece to UI component attribute type.
 	 * @param comp associated component
+	 * @return the converted value suitable for assigning into UI compoenent attribute; or {@link #IGNORE} 
+	 * if you want DataBinder to ignore the assignment.
 	 */
 	public Object coerceToUi(Object val, Component comp);
 
 	/** Convert an value object to bean property type.
 	 * @param val the object to be corece to backend bean property type.
 	 * @param comp associated component
+	 * @return the converted value suitable for assigning into backend bean property; or {@link #IGNORE} 
+	 * if you want DataBinder to ignore the assignment.
 	 */
 	public Object coerceToBean(Object val, Component comp);
 }
