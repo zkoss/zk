@@ -61,8 +61,10 @@ zjq.prototype = { //ZK extension
 	},
 
 	scrollTo: function () {
-		var pos = this.cmOffset();
-		scrollTo(pos[0], pos[1]);
+		if (this.jq.length) {
+			var pos = this.cmOffset();
+			scrollTo(pos[0], pos[1]);
+		}
 	},
 	scrollIntoView: function (parent) {
 		var n = this.jq.$();
@@ -74,9 +76,8 @@ zjq.prototype = { //ZK extension
 	},
 
 	sumStyles: function (areas, styles) {
-		var $jq = this.jq,
-			val = 0;
-		for (var i = 0, len = areas.length; i < len; i++){
+		var val = 0;
+		for (var i = 0, len = areas.length, $jq = this.jq; i < len; i++){
 			 var w = zk.parseInt($jq.css(styles[areas.charAt(i)]));
 			 if (!isNaN(w)) val += w;
 		}
@@ -529,7 +530,7 @@ zjq.prototype = { //ZK extension
 	},
 
 	getSelectionRange: function() {
-		var inp = this.jq[0];
+		var inp = this.jq.$();
 		try {
 			if (document.selection != null && inp.selectionStart == null) { //IE
 				var range = document.selection.createRange();
@@ -551,8 +552,9 @@ zjq.prototype = { //ZK extension
 			return [0, 0];
 		}
 	},
-	setSelectionRange: function (inp, start, end) {
-		var len = inp.value.length;
+	setSelectionRange: function (start, end) {
+		var inp = this.jq[0],
+			len = inp.value.length;
 		if (start < 0) start = 0;
 		if (start > len) start = len;
 		if (end < 0) end = 0;
