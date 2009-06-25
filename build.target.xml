@@ -275,8 +275,10 @@ if="deploy.jboss.required">
 	 author="true" protected="true" version="true" use="true"
 	 windowtitle="${project.name} ${project.version} API"
 	 doctitle="${project.name} ${project.version} API"
-	 additionalparam="-breakiterator -source ${source.version}"
-	 bottom="Copyright &amp;copy; 2005-2009 Potix Corporation. All Rights Reserved.">
+	 additionalparam="-breakiterator -source ${source.version}">
+	 <bottom><![CDATA[Copyright &amp;copy; 2005-2009 Potix Corporation. All Rights Reserved.
+	 	<!--{{JAVASCRIPT_OUTPUT}}-->
+	 ]]></bottom>
 		<classpath>
 			<pathelement path="${javadoc.class.path}"/>
 		</classpath>
