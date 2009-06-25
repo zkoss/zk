@@ -75,7 +75,6 @@ zk.copy(zjq, {
 	//fix DOM
 	_fixDom: function (n, nxt) { //exclude nxt (if null, means to the end)
 		for (; n && n != nxt; n = n.nextSibling) {
-zk.log('fix '+n.tagName+':'+n.id);
 			zjq._fxns.push(n);
 			setTimeout(zjq._fixDom0, 100);
 		}

@@ -578,7 +578,7 @@ zkm = {
 		if (!resz.time) return; //already handled
 
 		var now = zUtl.now();
-		if (zk.mounting || zPkg.loading || zAnima.count || now < resz.time) {
+		if (zk.mounting || zPkg.loading || now < resz.time) {
 			setTimeout(zkm.docDidResize, 10);
 			return;
 		}

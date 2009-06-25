@@ -26,7 +26,7 @@ zjq._sfKeys = {
 };
 zk.override(jq.event, zjq._evt = {}, {
 	fix: function (evt) {
-		evt = zjq._evt.fix(evt);
+		evt = zjq._evt.fix.apply(this, arguments);
 		var v = zjq._sfKeys[evt.keyCode];
 		if (v) evt.keyCode = v;
 		return evt;
