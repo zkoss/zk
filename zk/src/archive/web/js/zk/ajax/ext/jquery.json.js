@@ -96,7 +96,7 @@
         
         // If it's a function, we have to warn somebody!
         if (type == "function") {
-            throw new TypeError("Unable to convert object of type 'function' to json.");
+            throw "Unable to json function";
         }
         
         // It's probably an object, then.
@@ -113,12 +113,10 @@
                 continue;  //skip non-string or number keys
             
             var val = $.toJSON(o[k]);
-            if (typeof(val) != "string") {
-                // skip non-serializable values
-                continue;
-            }
-            
-            ret.push(name + ":" + val);
+            if (typeof(val) == "string")
+	            ret.push(name + ":" + val);
+
+            // skip non-serializable values
         }
         return "{" + ret.join(",") + "}";
     };
@@ -139,7 +137,7 @@
         
         if (/^[\],:{}\s]*$/.test(filtered))
             return eval("(" + src + ")");
-        else
-            throw new SyntaxError("Error parsing JSON, source is not valid.");
+
+        throw "source might not be safe";
     };
 })(jQuery);
