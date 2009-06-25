@@ -245,6 +245,7 @@ zjq.prototype = { //ZK extension
 
 		if (!skipx) el.style.left = ofs[0] + "px";
 		if (!skipy) el.style.top =  ofs[1] + "px";
+		return this;
 	},
 	position: function (dim, where, opts) {
 		where = where || "overlap";
@@ -313,6 +314,7 @@ zjq.prototype = { //ZK extension
 			ofs = this.toStyleOffset(x, y);
 		el.style.left = ofs[0] + "px";
 		el.style.top = ofs[1] + "px";
+		return this;
 	},
 
 	scrollOffset: function() {
@@ -721,6 +723,7 @@ zk.copy(jq, { //ZK extension to jq
 		e.charset = charset || "UTF-8";
 		e.src = src;
 		document.getElementsByTagName("HEAD")[0].appendChild(e);
+		return this;
 	},
 	newFrame: function (id, src, style) {
 		if (!src) src = zk.ie ? "javascript:false;": "";
@@ -766,6 +769,7 @@ zk.copy(jq, { //ZK extension to jq
 		} finally {
 			try {zk.alerting = false;} catch (e) {} //doc might be unloaded
 		}
+		return this;
 	}
 });
 
