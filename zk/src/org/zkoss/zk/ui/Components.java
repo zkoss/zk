@@ -28,6 +28,7 @@ import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -62,7 +63,7 @@ public class Components {
 
 	/** Sorts the components in the list.
 	 *
-	 * <p>Note: you cannot use Collections.sort to sort
+	 * <p>Note: you cannot use {@link Collections#sort} to sort
 	 * {@link Component#getChildren} because Collections.sort might cause
 	 * some replicated item in the list.
 	 * @see #sort(List, int, int, Comparator)
@@ -620,28 +621,37 @@ public class Components {
 		if ("spaceOwner".equals(fdname))
 			return comp.getSpaceOwner();
 		if ("page".equals(fdname))
-			return comp.getPage();
+			return getPage(comp);
 		if ("desktop".equals(fdname))
-			return comp.getDesktop();
+			return getDesktop(comp);
 		if ("session".equals(fdname))
-			return comp.getDesktop().getSession();
+			return getSession(comp);
 		if ("application".equals(fdname))
-			return comp.getDesktop().getWebApp();
+			return getWebApp(comp);
 		if ("componentScope".equals(fdname))
 			return comp.getAttributes();
 		if ("spaceScope".equals(fdname)) {
 			final IdSpace spaceOwner = comp.getSpaceOwner();
-			return (spaceOwner instanceof Page) ? 
-					comp.getPage().getAttributes() : ((Component)spaceOwner).getAttributes();
+			return spaceOwner instanceof Page ? ((Page)spaceOwner).getAttributes():
+				spaceOwner instanceof Component ? ((Component)spaceOwner).getAttributes():
+					Collections.EMPTY_MAP;
 		}
-		if ("pageScope".equals(fdname))
-			return comp.getPage().getAttributes();
-		if ("desktopScope".equals(fdname))
-			return comp.getDesktop().getAttributes();
-		if ("sessionScope".equals(fdname))
-			return comp.getDesktop().getSession().getAttributes();
-		if ("applicationScope".equals(fdname))
-			return comp.getDesktop().getWebApp().getAttributes();
+		if ("pageScope".equals(fdname)) {
+			final Page page = getPage(comp);
+			return page != null ? page.getAttributes(): Collections.EMPTY_MAP;
+		}
+		if ("desktopScope".equals(fdname)) {
+			final Desktop dt = getDesktop(comp);
+			return dt != null ? dt.getAttributes(): Collections.EMPTY_MAP;
+		}
+		if ("sessionScope".equals(fdname)) {
+			final Session sess = getSession(comp);
+			return sess != null ? sess.getAttributes(): Collections.EMPTY_MAP;
+		}
+		if ("applicationScope".equals(fdname)) {
+			final WebApp app = getWebApp(comp);
+			return app != null ? app.getAttributes(): Collections.EMPTY_MAP;
+		}
 		if ("requestScope".equals(fdname))
 			return REQUEST_SCOPE_PROXY;
 		if ("execution".equals(fdname))
@@ -651,6 +661,38 @@ public class Components {
 		if ("param".equals(fdname))
 			return PARAM_PROXY;
 		//20090314, Henri Chen: No way to suppport "event" with an event proxy becuase org.zkoss.zk.Event is not an interface
+		return null;
+	}
+	private static Desktop getDesktop(Component comp) {
+		final Desktop dt = comp.getDesktop();
+		if (dt != null) return dt;
+		final Execution exec = Executions.getCurrent();
+		return exec != null ? exec.getDesktop(): null;
+	}
+	private static WebApp getWebApp(Component comp) {
+		final Desktop dt = getDesktop(comp);
+		return dt != null ? dt.getWebApp(): null;
+	}
+	private static Session getSession(Component comp) {
+		final Desktop dt = getDesktop(comp);
+		return dt != null ? dt.getSession(): null;
+	}
+	private static Page getPage(Component comp) {
+		Page page = comp.getPage();
+		if (page != null) return page;
+
+		final Execution exec = Executions.getCurrent();
+		if (exec != null) {
+			page = ((ExecutionCtrl)exec).getCurrentPage();
+			if (page != null) return page;
+
+			final Desktop dt = exec.getDesktop();
+			if (dt != null) { //just in case
+				final Collection pgs = dt.getPages();
+				if (pgs != null && !pgs.isEmpty())
+					return (Page)pgs.iterator().next();
+			}
+		}
 		return null;
 	}
 
