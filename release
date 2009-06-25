@@ -390,6 +390,7 @@ fi
 
 #Prepare the doc
 if [ "$target" == "official" ]; then
+	$maindir/bin/javadoc "$javadocdir/ZK"
 	mkdir -p /tmp/zk/doc
 
 	cd $maindir/zkdoc
