@@ -977,15 +977,12 @@ zk.copy(jq.Event.prototype, { //ZK extension to jQuery.Event
 });
 
 zk.copy(jq.event, {
-	stop: function (evt) {
-		evt.stop();
-	},
 	filterMetaData: function (data) {
 		var inf = {}
 		if (data.altKey) inf.altKey = true;
 		if (data.ctrlKey) inf.ctrlKey = true;
 		if (data.shiftKey) inf.shiftKey = true;
-		data.which = inf.which || 0;
+		inf.which = data.which || 0;
 		return inf;
 	},
 	toEvent: function (evt, wgt) {
