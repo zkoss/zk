@@ -64,13 +64,13 @@ org.zkoss.zul.api.Applet {
 		invalidate();
 	}
 	
-	/** Return the code of the applet, i.e., the URI of the Java class.
+	/** Return the codebase of the applet, i.e., the URI of the Java class.
 	 * @since 3.6.2
 	 */
 	public String getCodebase() {
 		return _codebase;
 	}
-	/** Sets the code of the applet, i.e., the URI of the Java class.
+	/** Sets the codebase of the applet, i.e., the URI of the Java class.
 	 * @since 3.6.2
 	 */
 	public void setCodebase(String codebase) {
