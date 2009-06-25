@@ -812,7 +812,8 @@ public class Components {
 				while (true) {
 					final Component parent = ((Component)xidspace).getParent();
 					if (parent == null) {//hit page
-						injectFellow(((Component)xidspace).getPage());
+						final Page page = ((Component)xidspace).getPage();
+						if (page != null) injectFellow(page);
 						break;
 					}
 					xidspace = parent.getSpaceOwner();
@@ -892,7 +893,8 @@ public class Components {
 					|| pg.containsVariable(fdname);
 			} else {
 				final Component cmp = (Component) x;
-				return cmp.getPage().getZScriptVariable(cmp, fdname) != null
+				final Page page = getPage(cmp);
+				return (page != null && page.getZScriptVariable(cmp, fdname) != null)
 					|| cmp.containsVariable(fdname, false);
 			}
 		}
@@ -908,7 +910,8 @@ public class Components {
 				return arg;
 			} else {
 				final Component cmp = (Component) x;
-				Object arg = cmp.getPage().getZScriptVariable(cmp, fdname);
+				final Page page = getPage(cmp);
+				Object arg = page != null ? page.getZScriptVariable(cmp, fdname): null;
 				if (arg == null) {
 					arg = cmp.getVariable(fdname, false);
 				}
