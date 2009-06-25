@@ -29,9 +29,13 @@ import org.zkoss.zk.ui.event.Event;
 public interface EventProcessingThread {
 	/** Returns whether it is ceased.
 	 *
-	 * <p>The event processing is ceased automatically.
+	 * <p>The event processing thread is ceased automatically.
 	 * If you want to cease it manually, you can invoke
 	 * {@link DesktopCtrl#ceaseSuspendedThread}.
+	 *
+	 * <p>An event processing thread is ceased if {@link DesktopCtrl#ceaseSuspendedThread}
+	 * was called manually, or if it is dead ({@link #isAlive} returns false).
+	 * That is, it returns true if it is going to die, or dead already.
 	 */
 	public boolean isCeased();
 	/** Returns whether it is suspended.

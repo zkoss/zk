@@ -129,6 +129,7 @@ public class Configuration {
 	private CharsetFinder _charsetFinderUpload;
 	/** The event interceptors. */
 	private final EventInterceptors _eis = new EventInterceptors();
+	private int _evtTimeWarn = 600; //sec
 	/** whether to use the event processing thread. */
 	private boolean _useEvtThd = true;
 	/** keep-across-visits. */
@@ -2012,6 +2013,23 @@ public class Configuration {
 		_eis.afterProcessEvent(event);
 	}
 
+	/** Returns the time, in seconds, to show a warning message
+	 * if an event has been processinged longer than it.
+	 * <p>Default: 600
+	 * @since 3.6.3
+	 */
+	public int getEventTimeWarning() {
+		return _evtTimeWarn;
+	}
+	/** Set the time, in seconds, to show a warning message
+	 * if an event has been processinged longer than it.
+	 * @param secs the number of seconds.
+	 * If a non-positive number is specified, no warning message at all.
+	 * @since 3.6.3
+	 */
+	public void setEventTimeWarning(int secs) {
+		_evtTimeWarn = secs;
+	}
 	/** Adds an error page.
 	 *
 	 * @param deviceType the device type: ajax or mil

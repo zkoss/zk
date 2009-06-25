@@ -341,6 +341,7 @@ public class ConfigParser {
 			//  disable-event-thread
 			//	max-spare-threads
 			//  max-suspended-threads
+			//	event-time-warning
 			//  max-upload-size
 			//  upload-charset
 			//  upload-charset-finder-class
@@ -368,6 +369,9 @@ public class ConfigParser {
 				v = parseInteger(el, "max-suspended-threads", false);
 				if (v != null) config.setMaxSuspendedThreads(v.intValue());
 
+				v = parseInteger(el, "event-time-warning", false);
+				if (v != null) config.setEventTimeWarning(v.intValue());
+				
 				v = parseInteger(el, "max-upload-size", false);
 				if (v != null) config.setMaxUploadSize(v.intValue());
 
