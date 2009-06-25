@@ -65,6 +65,7 @@ zjq.prototype = { //ZK extension
 			var pos = this.cmOffset();
 			scrollTo(pos[0], pos[1]);
 		}
+		return this;
 	},
 	scrollIntoView: function (parent) {
 		var n = this.jq.$();
@@ -73,6 +74,7 @@ zjq.prototype = { //ZK extension
 			for (var p = n, c; (p = p.parentNode) && n != parent; n = p)
 				c = zjq._scrollIntoView(p, n, c);
 		}
+		return this;
 	},
 
 	sumStyles: function (areas, styles) {
@@ -90,6 +92,7 @@ zjq.prototype = { //ZK extension
 			+ zk.parseInt($jq.css("margin-top"))
 			+ zk.parseInt($jq.css("margin-bottom"));
 		$jq[0].style.height = Math.max(0, hgh) + "px";
+		return this;
 	},
 
 	revisedOffset: function (ofs) {
@@ -341,7 +344,7 @@ zjq.prototype = { //ZK extension
 
 	absolutize: function() {
 		var el = this.jq[0];
-		if (el.style.position == 'absolute') return;
+		if (el.style.position == 'absolute') return this;
 
 		var offsets = zjq._posOffset(),
 			left = offsets[0], top = offsets[1],
@@ -351,10 +354,11 @@ zjq.prototype = { //ZK extension
 		st.position = 'absolute';
 		st.top = top + 'px';
 		st.left = left + 'px';
+		return this;
 	},
 	relativize: function() {
 		var el = this.jq[0];
-		if (el.style.position == 'relative') return;
+		if (el.style.position == 'relative') return this;
 
 		var st = el.style;
 		st.position = 'relative';
@@ -363,6 +367,7 @@ zjq.prototype = { //ZK extension
 
 		st.top = top + 'px';
 		st.left = left + 'px';
+		return this;
 	},
 
 	offsetWidth: function () {
@@ -475,12 +480,13 @@ zjq.prototype = { //ZK extension
 	redoCSS: function (timeout) {
 		zjq._rdcss.push(this.jq[0]);
 		setTimeout(zjq._redoCSS, timeout >= 0 ? timeout : 100);
+		return this;
 	},
 
 	makeVParent: function () {
 		var el = this.jq[0],
 			p = el.parentNode;
-		if (el.vparent || p == document.body) return; //called twice or not necessary
+		if (el.vparent || p == document.body) return this; //called twice or not necessary
 
 		var sib = el.nextSibling,
 			agtx = el.z_vpagtx = document.createElement("SPAN");
@@ -490,6 +496,7 @@ zjq.prototype = { //ZK extension
 
 		el.vparent = p;
 		document.body.appendChild(el);
+		return this;
 	},
 	undoVParent: function () {
 		var el = this.jq[0],
@@ -503,6 +510,7 @@ zjq.prototype = { //ZK extension
 			} else
 				p.appendChild(el);
 		}
+		return this;
 	},
 
 	//focus/select//
@@ -573,6 +581,7 @@ zjq.prototype = { //ZK extension
 			}
 			range.select();
 		}
+		return this;
 	},
 
 	//selection//
