@@ -18,9 +18,9 @@
 	padding-bottom:10px;
 }
 .z-calendar-left {
-	border-right: 5px solid #656565;
-	border-top: 5px solid white;
-	border-bottom: 5px solid white;
+	border-right: 6px solid #656565;
+	border-top: 6px solid white;
+	border-bottom: 6px solid white;
 	border-left: 0;
 	height: 0;
 	width: 0;
@@ -30,9 +30,9 @@
 	line-height: 0;
 }
 .z-calendar-right {
-	border-left: 5px solid #656565;
-	border-top: 5px solid white;
-	border-bottom: 5px solid white;
+	border-left: 6px solid #656565;
+	border-top: 6px solid white;
+	border-bottom: 6px solid white;
 	border-right: 0;
 	height: 0;
 	width: 0;
@@ -54,10 +54,14 @@
 	text-align: center;
 	white-space: nowrap;
 }
+.z-calendar-calctrl .z-calendar-ctrler {
+	cursor: pointer;
+}
 .z-calendar-calyear td,
 .z-calendar-calmon td {
 	padding: 9px 3px;
 	text-align: center;
+	cursor: pointer;
 }
 .z-calendar-caldayrow td,
 .z-calendar td a,
@@ -82,12 +86,18 @@
 .z-calendar-calmon td.z-calendar-seld,
 .z-calendar-calday td.z-calendar-seld {
 	background: #CCE0FB; 
-	border: 1px solid #CCE0FB;
 }
-.z-datebox-calmon td.z-datebox-over-seld,.z-datebox-calday td.z-datebox-over-seld{
-	background: #6eadff;
+.z-calendar td.z-calendar-over-seld,
+.z-datebox-calmon td.z-datebox-over-seld,
+.z-datebox-calday td.z-datebox-over-seld {
+	background: #5FA4FF;
 }
+.z-calendar td.z-calendar-over-seld a {
+	color: white;
+}
+
 /*.z-calendar-caldow td,*/
+
 .z-datebox-caldow td {
 	font-size: ${fontSizeS}; color: #333; font-weight: bold;
 	padding: 1px 2px; background: #e8e8f0; text-align: center;
