@@ -248,7 +248,7 @@ zk = function (sel) {
 
 		try {
 			new zk.Draggable(null, box, {
-				handle: zk(id+'-p').$(), zIndex: box.style.zIndex,
+				handle: jq(id+'-p', zk)[0], zIndex: box.style.zIndex,
 				starteffect: zk.$void, starteffect: zk.$void,
 				endeffect: zk.$void});
 		} catch (e) {

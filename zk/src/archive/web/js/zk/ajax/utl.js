@@ -192,17 +192,17 @@ zUtl = { //static methods
 		var n = document.createElement("DIV");
 		document.body.appendChild(n);
 		var $n = jq(n).replaceWith(html);
-		n = $n.$();
+		n = $n[0];
 
 		var $txt = jq(idtxt);
 		if (mask)
 			n.z_mask = new zk.eff.FullMask({
-				mask: zk(idmsk).$(),
+				mask: jq(idmsk, zk)[0],
 				zIndex: $txt.css('z-index') - 1
 			});
 
 		if (mask && $txt.length) { //center
-			var st = $txt.$().style;
+			var st = $txt[0].style;
 			st.left = (jq.innerWidth() - txt.offsetWidth) / 2 + x + "px";
 			st.top = (jq.innerHeight() - txt.offsetHeight) / 2 + y + "px";
 		}

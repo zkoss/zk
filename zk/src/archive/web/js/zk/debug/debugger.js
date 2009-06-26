@@ -21,7 +21,7 @@ zk.debug.Debugger = zk.$extends(zk.Object, {
 			console = document.createElement("DIV");
 			document.body.appendChild(console);
 			jq(console).replaceWith('<div id="' + this.outId +'" class="z-debug-domtree"></div>');
-			console = jq(this.outId).$();
+			console = jq(this.outId, zk)[0];
 		}
 		return console;
 	},

@@ -652,7 +652,7 @@ zAu.cmd0 = { //no uuid at all
 	},
 	download: function (url) {
 		if (url) {
-			var ifr = zk('zk_download').$();
+			var ifr = jq('#zk_download')[0];
 			if (ifr) {
 				ifr.src = url; //It is OK to reuse the same iframe
 			} else {
@@ -718,7 +718,7 @@ zAu.cmd0 = { //no uuid at all
 			if (n && n.submit)
 				n.submit();
 			else {
-				n = zk(id).$();
+				n = zk(id).jq[0];
 				if (n && n.submit) {
 					zEvt.fire(n, 'submit');
 					n.submit();
@@ -781,7 +781,7 @@ zAu.cmd1 = {
 		eval(code);
 	},
 	_asBodyChild: function (child) {
-		child.insertHTML(document.body, "beforeEnd");
+		child.insertHTML(document.body, "append");
 	},
 	rm: function (uuid, wgt) {
 		if (wgt)

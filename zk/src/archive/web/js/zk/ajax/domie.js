@@ -14,7 +14,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 zk.override(jq.fn, zjq._fn, {
 	before: function () {
-		var e = this.$(), ref;
+		var e = this[0], ref;
 		if (e) ref = e.previousSibling;
 
 		ret = zjq._fn.before.apply(this, arguments);
@@ -23,7 +23,7 @@ zk.override(jq.fn, zjq._fn, {
 		return ret;
 	},
 	after: function () {
-		var e = this.$(), ref;
+		var e = this[0], ref;
 		if (e) ref = e.nextSibling;
 
 		ret = zjq._fn.after.apply(this, arguments);
@@ -32,7 +32,7 @@ zk.override(jq.fn, zjq._fn, {
 		return ret;
 	},
 	append: function () {
-		var e = this.$(), ref;
+		var e = this[0], ref;
 		if (e) ref = e.lastChild;
 
 		ret = zjq._fn.append.apply(this, arguments);
@@ -41,7 +41,7 @@ zk.override(jq.fn, zjq._fn, {
 		return ret;
 	},
 	prepend: function () {
-		var e = this.$(), ref;
+		var e = this[0], ref;
 		if (e) ref = e.firstChild;
 
 		ret = zjq._fn.prepend.apply(this, arguments);
@@ -50,7 +50,7 @@ zk.override(jq.fn, zjq._fn, {
 		return ret;
 	},
 	replaceWith: function () {
-		var e = this.$(), ref, ref2;
+		var e = this[0], ref, ref2;
 		if (e) {
 			ref = e.previousSibling;
 			ref2 = e.nextSibling;
@@ -62,7 +62,7 @@ zk.override(jq.fn, zjq._fn, {
 		return ret;
 	},
 	html: function (content) {
-		var e = content === undefined ? null: this.$();
+		var e = content === undefined ? null: this[0];
 
 		ret = zjq._fn.html.apply(this, arguments);
 

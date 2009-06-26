@@ -116,7 +116,7 @@ zPkg = {
 	_updCnt: function () {
 		zPkg.loading = zPkg._ldings.length;
 		try {
-			var n = jq("#zk_loadcnt").$();
+			var n = jq("#zk_loadcnt")[0];
 			if (n) n.innerHTML = zPkg._ldmsg();
 		} catch (ex) {
 		}
@@ -124,7 +124,7 @@ zPkg = {
 	},
 	_pgbox: function () {
 		if (zPkg.loading || window.dbg_progressbox) { //dbg_progressbox: debug purpose
-			var n = jq("#zk_loadprog").$();
+			var n = jq("#zk_loadprog")[0];
 			if (!n)
 				zUtl.progressbox("zk_loadprog",
 					'Loading <span id="zk_loadcnt">'+zPkg._ldmsg()+'</span>',

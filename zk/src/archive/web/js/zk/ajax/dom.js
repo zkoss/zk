@@ -37,26 +37,28 @@ zk.override(jq.fn, zjq._fn = {}, {
 		return ret;
 	}
 });
-(jq.fn.init.prototype = jq.fn).$ = function () {
-	return this.length ? this[0]: null;
-};
+jq.fn.init.prototype = jq.fn;
 
 zjq.prototype = { //ZK extension
-	$: function () {
-		return this.jq.length ? this.jq[0]: null;
+	widget: function () {
+		var ws = [];
+		for (var j = this.length; --j >= 0;) {
+			var w = zk.Widget.$(this[j]);
+			if (w) ws.unshift(w);
+		}
+		return ws;
 	},
-
 	cleanVisibility: function () {
 		return this.jq.each(function () {
 			zjq._cleanVisi(this);
 		});
 	},
 	isVisible: function (strict) {
-		var n = this.jq.$();
+		var n = this.jq[0];
 		return n && (!n.style || (n.style.display != "none" && (!strict || n.style.visibility != "hidden")));
 	},
 	isRealVisible: function (strict) {
-		var n = this.jq.$();
+		var n = this.jq[0];
 		return n && this.isVisible(strict) && (n.offsetWidth > 0 || n.offsetHeight > 0);
 	},
 
@@ -68,7 +70,7 @@ zjq.prototype = { //ZK extension
 		return this;
 	},
 	scrollIntoView: function (parent) {
-		var n = this.jq.$();
+		var n = this.jq[0];
 		if (n) {
 			parent = parent || document.body;
 			for (var p = n, c; (p = p.parentNode) && n != parent; n = p)
@@ -517,7 +519,7 @@ zjq.prototype = { //ZK extension
 
 	//focus/select//
 	focus: function (timeout) {
-		var n = this.$();
+		var n = this.jq[0];
 		if (!n || !n.focus) return false;
 			//ie: INPUT's focus not function
 
@@ -531,7 +533,7 @@ zjq.prototype = { //ZK extension
 		return true;
 	},
 	select: function (n, timeout) {
-		var n = this.$();
+		var n = this.jq[0];
 		if (!n || typeof n.select != 'function') return false;
 
 		if (timeout >= 0) setTimeout(function() {zjq._select(n);}, timeout);
@@ -540,7 +542,7 @@ zjq.prototype = { //ZK extension
 	},
 
 	getSelectionRange: function() {
-		var inp = this.jq.$();
+		var inp = this.jq[0];
 		try {
 			if (document.selection != null && inp.selectionStart == null) { //IE
 				var range = document.selection.createRange();
@@ -733,7 +735,7 @@ zk.copy(jq, { //ZK extension to jq
 		if (style) html += ' style="'+style+'"';
 		html += '></iframe>';
 		jq(document.body).append(html);
-		return zk(id).$();
+		return zk(id).jq[0];
 	},
 	newStackup: function (el, id, anchor) {
 		var ifr = document.createElement('iframe');

@@ -661,7 +661,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 	},
 	insertHTML: function (n, where, desktop) {
-		n.insertAdjacentHTML(where, this._redrawHTML());
+		zk(n).jq[where](this._redrawHTML());
 		this.bind(desktop);
 	},
 	_redrawHTML: function (skipper) {
@@ -766,13 +766,13 @@ zk.Widget = zk.$extends(zk.Object, {
 			return this.getNode();
 		var n = this._subnodes[name];
 		if (!n && this.desktop)
-			n = this._subnodes[name] = zk(this.uuid + '-' + name).$();
+			n = this._subnodes[name] = jq(this.uuid + '-' + name, zk)[0];
 		return n;
 	},
 	getNode: function () {
 		var n = this._node;
 		if (!n && this.desktop && !this._nodeSolved) {
-			this._node = n = zk(this.uuid).$();
+			this._node = n = jq(this.uuid, zk)[0];
 			this._nodeSolved = true;
 		}
 		return n;
@@ -1418,7 +1418,7 @@ zk.Desktop = zk.$extends(zk.Widget, {
 	},
 	_exists: function () {
 		var id = this._pguid; //_pguid not assigned at beginning
-		return !id || zk(id).$();
+		return !id || jq(id, zk)[0];
 	},
 	bind_: zk.$void,
 	unbind_: zk.$void,
@@ -1466,7 +1466,7 @@ zk.Skipper = zk.$extends(zk.Object, {
 		return wgt.caption != child;
 	},
 	skip: function (wgt, skipId) {
-		var skip = zk(skipId || (wgt.uuid + '-cave')).$();
+		var skip = jq(skipId || (wgt.uuid + '-cave'), zk)[0];
 		if (skip && skip.firstChild) {
 			jq(skip).remove();
 			return skip;
@@ -1475,7 +1475,7 @@ zk.Skipper = zk.$extends(zk.Object, {
 	},
 	restore: function (wgt, skip) {
 		if (skip) {
-			var loc = zk(skip.id).$();
+			var loc = jq(skip.id, zk)[0];
 			for (var el; el = skip.firstChild;) {
 				skip.removeChild(el);
 				loc.appendChild(el);
@@ -1620,11 +1620,11 @@ zk.WgtDD = {
 		drag._dragImg = null;
 	},
 	ghostByMessage: function (drag, ofs, msg) {
-		document.body.insertAdjacentHTML("beforeEnd",
+		jq(document.body).append(
 			'<div id="zk_ddghost" class="z-drop-ghost" style="position:absolute;top:'
 			+ofs[1]+'px;left:'+ofs[0]+'px;"><div class="z-drop-cnt"><span id="zk_ddghost-img" class="z-drop-disallow"></span>&nbsp;'+msg+'</div></div>');
-		drag._dragImg = jq("#zk_ddghost-img").$();
-		return jq("#zk_ddghost").$();
+		drag._dragImg = jq("#zk_ddghost-img")[0];
+		return jq("#zk_ddghost")[0];
 	},
 	ghostByClone: function (drag, ofs) {
 		var dgelm = drag.node.cloneNode(true);

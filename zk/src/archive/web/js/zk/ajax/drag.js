@@ -27,7 +27,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 		}
 
 		this.control = control;
-		this.node = node = node ? jq(node).$(): control.node || control.getNode();
+		this.node = node = node ? jq(node, zk)[0]: control.node || control.getNode();
 		if (!node)
 			throw "Handle required for "+control;
 
@@ -47,11 +47,11 @@ zk.Draggable = zk.$extends(zk.Object, {
 				opts.starteffect = Drag._defStartEffect;
 		}
 
-		if(opts.handle) this.handle = jq(opts.handle).$();
+		if(opts.handle) this.handle = jq(opts.handle, zk)[0];
 		if(!this.handle) this.handle = node;
 
 		if(opts.scroll && !opts.scroll.scrollTo && !opts.scroll.outerHTML) {
-			opts.scroll = jq(opts.scroll).$();
+			opts.scroll = jq(opts.scroll, zk)[0];
 			this._isScrollChild = zUtl.isAncestor(opts.scroll, node);
 		}
 

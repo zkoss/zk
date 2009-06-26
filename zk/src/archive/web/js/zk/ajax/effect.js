@@ -36,7 +36,7 @@ zk.eff.Shadow = zk.$extends(zk.Object, {
 		this.node = element;
 		var sdwid = element.id + "$sdw";
 		jq(element).before('<div id="'+sdwid+this._HTML);
-		this.shadow = jq(sdwid).$();
+		this.shadow = jq(sdwid, zk)[0];
 	},
 	destroy: function () {
 		jq(this.shadow).remove();
@@ -123,10 +123,10 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 
 			html += '></div>'
 			if (opts.anchor)
-				opts.anchor.insertAdjacentHTML('beforeBegin', html);
+				jq(opts.anchor, zk).before(html);
 			else
-				document.body.insertAdjacentHTML('beforeEnd', html);
-			mask = this.mask = jq(maskId).$();
+				jq(document.body).append(html);
+			mask = this.mask = jq(maskId, zk)[0];
 		}
 		if (opts.stackup)
 			this.stackup = zk(mask).newStackup(mask.id + '$mkstk');
@@ -205,7 +205,7 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 		if (!$anchor.length || !$anchor.isRealVisible(true)) return; //nothing do to.
 		
 		var maskId = opts.id || 'z_applymask',
-			progbox = jq(maskId).$();
+			progbox = jq(maskId, zk)[0];
 		
 		if (progbox) return this;
 		
@@ -223,8 +223,8 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 		+ '<div id="'+maskId+'-z_loading" class="z-apply-loading"><div class="z-apply-loading-indicator">'
 		+ '<span class="z-apply-loading-icon"></span> '
 		+ msg+ '</div></div></div>');
-		var loading = zk(maskId+"-z_loading").$(),
-			mask = this.mask = zk(maskId).$();
+		var loading = jq(maskId+"-z_loading", zk)[0],
+			mask = this.mask = jq(maskId, zk)[0];
 		
 		if (loading) {
 			if (loading.offsetHeight > h) 
