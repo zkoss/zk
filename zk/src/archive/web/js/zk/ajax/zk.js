@@ -237,7 +237,7 @@ zk = function (sel) {
 			x = (zk._errcnt * 5) % 50, y = (zk._errcnt * 5) % 50,
 			box = document.createElement("DIV");
 		document.body.appendChild(box);
-		box = jq(box).replaceWith(
+		jq(box).replaceWith(
 	'<div class="z-error" style="left:'+(jq.innerX()+x)+'px;top:'+(jq.innerY()+y)
 	+'px;" id="'+id+'"><table cellpadding="2" cellspacing="2" width="100%"><tr>'
 	+'<td align="right"><div id="'+id
@@ -247,7 +247,7 @@ zk = function (sel) {
 	+'</td></tr></table></div>');
 
 		try {
-			new zk.Draggable(null, box, {
+			new zk.Draggable(null, box = jq(id, zk)[0], {
 				handle: jq(id+'-p', zk)[0], zIndex: box.style.zIndex,
 				starteffect: zk.$void, starteffect: zk.$void,
 				endeffect: zk.$void});

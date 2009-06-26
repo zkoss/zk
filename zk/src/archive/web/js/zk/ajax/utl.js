@@ -191,7 +191,8 @@ zUtl = { //static methods
 			+msg+'</div></div></div>'
 		var n = document.createElement("DIV");
 		document.body.appendChild(n);
-		var $n = jq(n).replaceWith(html);
+		jq(n).replaceWith(html);
+		var $n = jq(id, zk);
 		n = $n[0];
 
 		var $txt = jq(idtxt);
