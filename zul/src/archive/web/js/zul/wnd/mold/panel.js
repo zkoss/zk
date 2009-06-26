@@ -27,26 +27,26 @@ function (out, skipper) {
 			out.push('<div class="', zcls, '-tl"><div class="', zcls, '-tr"></div></div>');
 			out.push('<div class="', zcls, '-hl"><div class="', zcls, '-hr"><div class="', zcls, '-hm">');
 		}
-		out.push('<div id="', uuid, '$cap" class="', zcls, '-header ');
+		out.push('<div id="', uuid, '-cap" class="', zcls, '-header ');
 			if (!framable && noborder) {
 				out.push(zcls, '-header-noborder');		
 			}
 		out.push('">');
 		if (!caption) {
 			if (this.isClosable())
-				out.push('<div id="', uuid, '$close" class="', zcls, '-icon ',
+				out.push('<div id="', uuid, '-close" class="', zcls, '-icon ',
 						zcls, '-close"></div>');
 			if (this.isMaximizable()) {
-				out.push('<div id="', uuid, '$max" class="', zcls, '-icon ', zcls, '-max');
+				out.push('<div id="', uuid, '-max" class="', zcls, '-icon ', zcls, '-max');
 				if (this.isMaximized())
 					out.push(' ', zcls, '-maxd');
 				out.push('"></div>');
 			}
 			if (this.isMinimizable())
-				out.push('<div id="', uuid, '$min" class="', zcls, '-icon ',
+				out.push('<div id="', uuid, '-min" class="', zcls, '-icon ',
 						zcls, '-min"></div>');
 			if (this.isCollapsible())
-				out.push('<div id="', uuid, '$exp" class="', zcls, '-icon ',
+				out.push('<div id="', uuid, '-exp" class="', zcls, '-icon ',
 						zcls, '-exp"></div>');
 			out.push(zUtl.encodeXML(title));
 		} else caption.redraw(out);
@@ -59,7 +59,7 @@ function (out, skipper) {
 	}
 			
 	
-	out.push('<div id="', uuid, '$body" class="', zcls, '-body"');
+	out.push('<div id="', uuid, '-body" class="', zcls, '-body"');
 	
 	if (!this.isOpen()) out.push(' style="display:none;"');
 	
@@ -74,7 +74,7 @@ function (out, skipper) {
 		out.push('">');		
 	}
 	if (this.tbar) {
-		out.push('<div id="', uuid, '$tb" class="', zcls, '-top');
+		out.push('<div id="', uuid, '-tb" class="', zcls, '-top');
 		
 		if (noborder)
 			out.push(' ', zcls, '-top-noborder');
@@ -90,7 +90,7 @@ function (out, skipper) {
 		this.panelchildren.redraw(out);
 		
 	if (this.bbar) {
-		out.push('<div id="', uuid, '$bb" class="', zcls, '-btm');
+		out.push('<div id="', uuid, '-bb" class="', zcls, '-btm');
 		
 		if (noborder)
 			out.push(' ', zcls, '-btm-noborder');
@@ -111,7 +111,7 @@ function (out, skipper) {
 		out.push('"><div class="', zcls, '-fr"><div class="', zcls, '-fm">');
 	}
 	if (this.fbar) {
-		out.push('<div id="', uuid, '$fb" class="', zcls, '-btm2">');
+		out.push('<div id="', uuid, '-fb" class="', zcls, '-btm2">');
 		this.fbar.redraw(out);
 		out.push('</div>');
 	}
