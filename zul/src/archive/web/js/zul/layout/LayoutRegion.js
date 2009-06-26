@@ -604,12 +604,11 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		return [x, y];
 	},
 	_ghosting: function (dg, ofs, evt) {
-		var el = dg.node,
-			html = '<div id="zk_layoutghost" style="font-size:0;line-height:0;background:#AAA;position:absolute;top:'
+		var el = dg.node, $el = zk(el);
+		jq(document.body).prepend('<div id="zk_layoutghost" style="font-size:0;line-height:0;background:#AAA;position:absolute;top:'
 			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
-			+zDom.offsetWidth(el)+'px;height:'+zDom.offsetHeight(el)
-			+'px;cursor:'+el.style.cursor+';"></div>';
-		document.body.insertAdjacentHTML("afterBegin", html);
-		return zDom.$("zk_layoutghost");
+			+$el.offsetWidth()+'px;height:'+$el.offsetHeight()
+			+'px;cursor:'+el.style.cursor+';"></div>');
+		return jq("#zk_layoutghost")[0];
 	}
 });

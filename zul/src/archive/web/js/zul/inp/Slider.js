@@ -134,7 +134,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		widget.btn.title = ""; //to avoid annoying effect
 		widget.slidepos = widget._curpos;
 
-		document.body.insertAdjacentHTML("beforeEnd",
+		jq(document.body).append(
 			'<div id="zul_slidetip" class="z-slider-pp" style="position:absolute;display:none;z-index:60000;background-color:white;border: 1px outset">'
 			+ widget.slidepos+'</div>');
 

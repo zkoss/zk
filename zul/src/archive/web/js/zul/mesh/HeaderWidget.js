@@ -136,11 +136,11 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		
 		ofs[1] = of[1];
 		ofs[0] += zDom.offsetWidth(n);
-		document.body.insertAdjacentHTML("afterBegin",
+		jq(document.body).prepend(
 			'<div id="zk_hdghost" style="position:absolute;top:'
 			+ofs[1]+'px;left:'+ofs[0]+'px;width:3px;height:'+zDom.offsetHeight(el.parentNode.parentNode)
 			+'px;background:darkgray"></div>');
-		return zDom.$("zk_hdghost");		
+		return jq("#zk_hdghost")[0];
 	},
 	_endghostsizing: function (dg, origin) {
 		dg._zszofs = zDom.revisedOffset(dg.node)[0] - zDom.revisedOffset(origin)[0];

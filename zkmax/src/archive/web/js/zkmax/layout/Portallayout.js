@@ -146,11 +146,11 @@ zkmax.layout.Portallayout = zk.$extends(zul.Widget, {
 		header = zDom.nextSibling(top, 'DIV'),
 		fakeT = top.cloneNode(true),
 		fakeH = header.cloneNode(true);
-		var html = '<div id="zk_ddghost" class="z-panel-move-ghost" style="position:absolute;top:'
+		jq(document.body).prepend(
+			'<div id="zk_ddghost" class="z-panel-move-ghost" style="position:absolute;top:'
 			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
 			+zDom.offsetWidth(dg.node)+'px;height:'+zDom.offsetHeight(dg.node)
-			+'px;z-index:'+dg.node.style.zIndex+'"><dl></dl></div>';
-		document.body.insertAdjacentHTML("afterBegin", html);
+			+'px;z-index:'+dg.node.style.zIndex+'"><dl></dl></div>');
 		dg._zoffs = ofs;
 		dg._cns = widget.firstChild.getNode();
 		dg._widths = widget._getColWidths();

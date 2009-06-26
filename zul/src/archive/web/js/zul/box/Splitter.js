@@ -301,12 +301,12 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	},
 	_ghostsizing: function (draggable, ofs, evt) {
 		var node = draggable.node;
-		var html = '<div id="zk_ddghost" style="font-size:0;line-height:0;background:#AAA;position:absolute;top:'
+		jq(document.body).prepend(
+			'<div id="zk_ddghost" style="font-size:0;line-height:0;background:#AAA;position:absolute;top:'
 			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
 			+zDom.offsetWidth(node)+'px;height:'+zDom.offsetHeight(node)
-			+'px;"></div>';
-		document.body.insertAdjacentHTML("afterBegin", html);
-		return zDom.$("zk_ddghost");
+			+'px;"></div>');
+		return jq("#zk_ddghost")[0];
 	},
 	_endDrag: function (draggable) {
 		var wgt = draggable.control,
