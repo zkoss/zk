@@ -516,7 +516,7 @@ zkm = {
 	docClick: function (evt) {
 		if (zk.processing || zk.Draggable.ignoreClick()) return;
 
-		if (evt.which == 1 || (evt.button == 0 || evt.button == 1)) {
+		if (evt.which == 1) {
 			var wgt = zk.Widget.$(evt, {child:true});
 			if (wgt)
 				zkm._doEvt(new zk.Event(wgt, 'onClick', zkm._mouseData(evt, wgt), {ctl:true}, evt));

@@ -83,9 +83,9 @@ zk.Draggable = zk.$extends(zk.Object, {
 		if (this.opts.stackup) { // Bug #1911280
 			var stackup = document.createElement("DIV");
 			document.body.appendChild(stackup);
-			stackup = jq(stackup).replaceWith('<div class="z-dd-stackup"></div>');
-			stackup.zk.disableSelection();
-			var st = (this.stackup = stackup[0]).style;
+			stackup.className = "z-dd-stackup";
+			zk(stackup).disableSelection();
+			var st = (this.stackup = stackup).style;
 			st.width = jq.pageWidth() + "px";
 			st.height = jq.pageHeight() + "px";
 		}
@@ -225,8 +225,8 @@ zk.Draggable = zk.$extends(zk.Object, {
 			if (typeof this.opts.ghosting == 'function') {
 				if (this.opts.endghosting)
 					this.opts.endghosting(this, this.orgnode);
-				if (this.node != this.orgnode) {
-					jq(this.node).remove();
+				if (node != this.orgnode) {
+					jq(node).remove();
 					this.node = this.orgnode;
 				}
 				delete this.orgnode;
@@ -410,9 +410,8 @@ zk.Draggable = zk.$extends(zk.Object, {
 		}
 
 		if(this.opts.change) {
-			var devt = window.event;
-			if (devt) devt = jq.Event(devt);
-			var evt = devt ? jq.event.toEvent(devt): null;
+			var devt = window.event ? jq.event.fix(window.event): null,
+				evt = devt ? jq.event.toEvent(devt): null;
 			this.opts.change(this,
 				evt ? [evt.pageX, evt.pageY]: Drag._lastPt, evt);
 		}
