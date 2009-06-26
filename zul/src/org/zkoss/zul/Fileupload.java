@@ -18,9 +18,15 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Set;
+
+import javax.servlet.http.HttpSession;
 
 import org.zkoss.mesg.Messages;
 import org.zkoss.zul.mesg.MZul;
@@ -36,17 +42,17 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.au.AuRequests;
+import org.zkoss.zk.au.out.AuInvoke;
 
-import org.zkoss.zul.impl.FileuploadDlg;
 
 /**
  * A fileupload dialog used to let user upload a file.
  *
- * <p>There are two ways to use {@link Fileupload}:
+ * <p>There are two ways to use {@link SWFUpload}:
  *
  * <h3>1. Open as a modal dialog:</h3>
  *
- * <p>You don't create {@link Fileupload} directly. Rather, use {@link #get()}
+ * <p>You don't create {@link SWFUpload} directly. Rather, use {@link #get()}
  * or {@link #get(String, String)}.
  *
  * <h3>2. Embed as part of the page:</h3>
@@ -63,16 +69,29 @@ import org.zkoss.zul.impl.FileuploadDlg;
  * @author tomyeh
  * @see Filedownload
  */
-public class Fileupload extends HtmlBasedComponent implements org.zkoss.zul.api.Fileupload { //not XulElement since not applicable
-	private static String _templ = "~./zul/html/fileuploaddlg.zul";
-
+public class Fileupload extends HtmlBasedComponent { //not XulElement since not applicable
+	
 	//Used when embedded as a component
 	/** The maximal alllowed number of files to upload. */
 	private int _maxnum = 1;
 	/** Wether to treat the uploaded file(s) as binary. */
 	private boolean _native;
 	private int _maxsize = -1;
+	private List meds = new LinkedList();
+	private HashMap progressMap = new HashMap();
 	
+	public void setProgress(String fid, long readSize, long totalSize){
+		long lArray[] = {readSize, totalSize};
+		progressMap.remove(fid);
+		progressMap.put(fid, lArray);
+	}
+	
+	public void addMedia(Media med){
+		meds.add(med);
+	}
+	public List getMedia(){
+		return meds;
+	}
 	/**
 	 * Returns the maximal allowed upload size of the component, in kilobytes, or 
 	 * a negative value if no limit.
@@ -166,11 +185,17 @@ public class Fileupload extends HtmlBasedComponent implements org.zkoss.zul.api.
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if (cmd.equals("updateResult")) {
-			Events.postEvent(
-				new UploadEvent(Events.ON_UPLOAD, Fileupload.this,
-				FileuploadDlg.parseResult(
-					(List)AuRequests.getUpdateResult(request))));
-		} else
+		
+		} else if(cmd.equals("getUploadInfo")){
+			Map map = request.getData();
+			String fid = String.valueOf(map.get("fid"));
+			
+			if(fid == null)	return;
+			
+			long lArray[] =  (long [])progressMap.get(fid);
+			response("popup", new AuInvoke(this, "uploadProgress", 
+					 new Object[] {fid, new Long(lArray[0]),new Long(lArray[1])}));
+		}else
 			super.service(request, everError);
 	}
 
@@ -315,28 +340,9 @@ public class Fileupload extends HtmlBasedComponent implements org.zkoss.zul.api.
 	public static
 	Media[] get(String message, String title, int max, int maxsize, boolean alwaysNative)
 	throws InterruptedException {
-		final Map params = new HashMap(8);
-		final Execution exec = Executions.getCurrent();
-		params.put("message", message == null ?
-			Messages.get(MZul.UPLOAD_MESSAGE): message);
-		params.put("title", title == null ?
-			Messages.get(MZul.UPLOAD_TITLE): title);
-		params.put("max", new Integer(max == 0 ? 1 : max > 1000 ? 1000: max < -1000 ? -1000 : max));
-		params.put("native", Boolean.valueOf(alwaysNative));
-		params.put("maxsize", String.valueOf(maxsize));
+
 		
-		final FileuploadDlg dlg = (FileuploadDlg)
-			exec.createComponents(
-				_templ, null, params);
-		try {
-			dlg.doModal();
-		} catch (Throwable ex) {
-			dlg.detach();
-			if (ex instanceof InterruptedException)
-				throw (InterruptedException)ex;
-			throw UiException.Aide.wrap(ex);
-		}
-		return dlg.getResult();
+		return null;
 	}
 
 	/** Sets the template used to create the upload modal dialog.
@@ -347,17 +353,22 @@ public class Fileupload extends HtmlBasedComponent implements org.zkoss.zul.api.
 	 * <p>In other words, just adjust the label and layout and don't
 	 * change the component's ID.
 	 *
-	 * <p>Note: the template has no effect, if you use {@link Fileupload} as
+	 * <p>Note: the template has no effect, if you use {@link SWFUpload} as
 	 * a component (and embed it to a page).
 	 */
 	public static void setTemplate(String uri) {
-		if (uri == null || uri.length() == 0)
-			throw new IllegalArgumentException("empty");
-		_templ = uri;
+
 	}
 	/** Returns the template used to create the upload modal dialog.
 	 */
 	public static String getTemplate() {
-		return _templ;
+		return null;
+	}
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws IOException {
+		super.renderProperties(renderer);
+		String jsessionid = ((HttpSession) this.getDesktop().getSession().getNativeSession()).getId();
+		renderer.render("jsessionid", jsessionid);
+		
 	}
 }

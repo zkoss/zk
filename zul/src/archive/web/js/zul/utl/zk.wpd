@@ -16,4 +16,5 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<widget name="Timer"/>
 	<widget name="Style"/>
 	<widget name="Iframe"/>
+	<widget name="Fileupload"/>
 </package>
