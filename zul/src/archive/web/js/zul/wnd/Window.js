@@ -266,10 +266,12 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		var n = this.getNode(),
 			cave = this.getSubnode('cave').parentNode,
 			wdh = n.style.width,
-			tl = zDom.firstChild(n, "DIV"),
-			hl = tl && this.getSubnode("cap") ? zDom.nextSibling(tl, "DIV") : null,
-			bl = zDom.lastChild(n, "DIV");
-			
+			$n = jq(n),
+			$tl = $n.find('>div:first'),
+			tl = $tl[0],
+			hl = tl && this.getSubnode("cap") ? $tl.next('div:first')[0]: null,
+			bl = $n.find('>div:last')[0];
+
 		if (!wdh || wdh == "auto") {
 			var $cavp = zk(cave.parentNode),
 				diff = $cavp.padBorderWidth() + $cavp.parent().padBorderWidth();
@@ -301,7 +303,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		var h = n.offsetHeight - 1 - this._titleHeight(n);
 		if(this._mode != 'embedded' && this._mode != 'popup') {
 			var cave = this.getSubnode('cave'),
-				bl = zDom.lastChild(n, "DIV"),
+				bl = jq(n).find('>div:last')[0],
 				cap = this.getSubnode("cap");
 			h -= bl.offsetHeight;
 			if (cave)
@@ -313,10 +315,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 	_titleHeight: function (n) {
 		var cap = this.getSubnode('cap'),
-			tl = zDom.firstChild(n, "DIV");
+			$tl = jq(n).find('>div:first'), tl = $tl[0];
 		return cap ? cap.offsetHeight + tl.offsetHeight:
 			this._mode != 'embedded' && this._mode != 'popup' ?
-				zDom.nextSibling(tl, "DIV").offsetHeight: 0;
+				$tl.next('div:first')[0].offsetHeight: 0;
 	},
 
 	_fireOnMove: function (keys) {
@@ -527,20 +529,22 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		var wnd = dg.control,
 			el = dg.node;
 		wnd._hideShadow();
-		var top = zDom.firstChild(el, "DIV"),
-			header = zDom.nextSibling(top, 'DIV'),
+		var $el = jq(el),
+			$top = $el.find('>div:first'),
+			top = $top[0],
+			header = $top.next('div:first')[0],
 			fakeT = top.cloneNode(true),
 			fakeH = header.cloneNode(true),
 			html = '<div id="zk_wndghost" class="z-window-move-ghost" style="position:absolute;top:'
 			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
-			+zDom.offsetWidth(el)+'px;height:'+zDom.offsetHeight(el)
+			+$el.zk.offsetWidth()+'px;height:'+$el.zk.offsetHeight()
 			+'px;z-index:'+el.style.zIndex+'"><dl></dl></div>';
 		document.body.insertAdjacentHTML("afterBegin", html);
 		dg._wndoffs = ofs;
 		el.style.visibility = "hidden";
 		var h = el.offsetHeight - top.offsetHeight - header.offsetHeight;
-		el = zDom.$("zk_wndghost");
-		el.firstChild.style.height = zDom.revisedHeight(el.firstChild, h) + "px";
+		el = jq("#zk_wndghost")[0];
+		el.firstChild.style.height = zk(el.firstChild).revisedHeight(h) + "px";
 		el.insertBefore(fakeT, el.firstChild);
 		el.insertBefore(fakeH, el.lastChild);
 		return el;

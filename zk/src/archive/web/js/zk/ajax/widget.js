@@ -649,7 +649,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		else {
 			var oldwgt = zk.Widget.$(n, {exact:true});
 			if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
-			zk(n).jq.replaceWith(this._redrawHTML(skipper));
+			jq(n, zk).replaceWith(this._redrawHTML(skipper));
 			this.bind(desktop, skipper);
 		}
 
@@ -661,7 +661,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 	},
 	insertHTML: function (n, where, desktop) {
-		zk(n).jq[where](this._redrawHTML());
+		jq(n, zk)[where](this._redrawHTML());
 		this.bind(desktop);
 	},
 	_redrawHTML: function (skipper) {
@@ -693,7 +693,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	replaceChildHTML_: function (child, n, desktop, skipper) {
 		var oldwgt = zk.Widget.$(n, {exact:true});
 		if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
-		zk(n).jq.replaceWith(child._redrawHTML(skipper));
+		jq(n, zk).replaceWith(child._redrawHTML(skipper));
 		child.bind(desktop, skipper);
 	},
 	insertChildHTML_: function (child, before, desktop) {
@@ -1149,12 +1149,12 @@ zk.Widget = zk.$extends(zk.Object, {
 	domListen_: function (n, evtnm, fn) {
 		var inf;
 		if (inf = zk.Widget._domevti(this, evtnm, fn))
-			zk(n).jq.bind(inf[0], inf[1]);
+			jq(n, zk).bind(inf[0], inf[1]);
 	},
 	domUnlisten_: function (n, evtnm, fn) {
 		var inf;
 		if (inf = zk.Widget._domevti(this, evtnm, fn))
-			zk(n).jq.unbind(inf[0], inf[1]);
+			jq(n, zk).unbind(inf[0], inf[1]);
 	},
 	toJSON: function () {
 		return this.uuid;

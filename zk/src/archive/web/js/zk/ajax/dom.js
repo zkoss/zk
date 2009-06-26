@@ -979,6 +979,9 @@ zk.copy(jq.Event.prototype, { //ZK extension to jQuery.Event
 });
 
 zk.copy(jq.event, {
+	stop: function (evt) {
+		evt.stop();
+	},
 	filterMetaData: function (data) {
 		var inf = {}
 		if (data.altKey) inf.altKey = true;
