@@ -539,7 +539,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
 			+$el.zk.offsetWidth()+'px;height:'+$el.zk.offsetHeight()
 			+'px;z-index:'+el.style.zIndex+'"><dl></dl></div>';
-		document.body.insertAdjacentHTML("afterBegin", html);
+		jq(document.body).prepend(html);
 		dg._wndoffs = ofs;
 		el.style.visibility = "hidden";
 		var h = el.offsetHeight - top.offsetHeight - header.offsetHeight;

@@ -81,11 +81,11 @@ zk.Draggable = zk.$extends(zk.Object, {
 		zk(document.body).disableSelection(); // Bug #1820433
 		jq.clearSelection(); // Bug #2721980
 		if (this.opts.stackup) { // Bug #1911280
-			this.stackup = document.createElement("DIV");
-			document.body.appendChild(this.stackup);
-			this.stackup = jq(this.stackup).replaceWith('<div class="z-dd-stackup"></div>');
-			zk(this.stackup).disableSelection();
-			var st = this.stackup.style;
+			var stackup = document.createElement("DIV");
+			document.body.appendChild(stackup);
+			stackup = jq(stackup).replaceWith('<div class="z-dd-stackup"></div>');
+			stackup.zk.disableSelection();
+			var st = (this.stackup = stackup[0]).style;
 			st.width = jq.pageWidth() + "px";
 			st.height = jq.pageHeight() + "px";
 		}
@@ -210,7 +210,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 		}
 
 		//enable selection back and clear selection if any
-		jq(document.body).enableSelection();
+		zk(document.body).enableSelection();
 		setTimeout(jq.clearSelection, 0);
 
 		var stackup = this._stackup;
@@ -267,7 +267,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 		var node = this.node,
 			Drag = zk.Draggable,
 			evt = jq.event.toEvent(devt);
-		if(Drag._dragging[node] || !evt.leftClick)
+		if(Drag._dragging[node] || evt.which != 1)
 			return;
 
 		// abort on form elements, fixes a Firefox issue
@@ -410,8 +410,9 @@ zk.Draggable = zk.$extends(zk.Object, {
 		}
 
 		if(this.opts.change) {
-			var devt = window.event,
-				evt = devt ? jq.event.toEvent(devt): null;
+			var devt = window.event;
+			if (devt) devt = jq.Event(devt);
+			var evt = devt ? jq.event.toEvent(devt): null;
 			this.opts.change(this,
 				evt ? [evt.pageX, evt.pageY]: Drag._lastPt, evt);
 		}

@@ -991,7 +991,6 @@ zk.copy(jq.event, {
 		return inf;
 	},
 	toEvent: function (evt, wgt) {
-		evt = evt || window.event;
 		var type = evt.type,
 			target = zk.Widget.$(evt) || wgt,
 			data, opts;
