@@ -34,7 +34,7 @@ zul.utl.Iframe = zk.$extends(zul.Widget, {
 		},
 		autohide: function (v) {
 			var n = this.getNode();
-			if (n) zDom.setAttr(n, 'z_autohide', v);
+			if (n) jq(n).attr('z_autohide', v);
 		}
 	},
 	//super//
