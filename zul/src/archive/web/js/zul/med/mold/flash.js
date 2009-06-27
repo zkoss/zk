@@ -27,7 +27,7 @@ function (out) {
 	if (bgc = this._bgcolor)
 		out.push('<param name="bgcolor" value="', bgc, '"');
 
-	out.push('<embed id="', this.uuid, '$emb" src="', this._src,
+	out.push('<embed id="', this.uuid, '-emb" src="', this._src,
 		'" type="application/x-shockwave-flash" wmode="', this._wmode,
 		'" quality="', this._quality,
 		'" autoplay="', this._autoplay,

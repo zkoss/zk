@@ -44,7 +44,7 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 				try {
 					n.Play(); //Firefox
 				} catch (e) {
-					zDom.alert(msgzul.NO_AUDIO_SUPPORT+'\n'+e.message);
+					jq.alert(msgzul.NO_AUDIO_SUPPORT+'\n'+e.message);
 				}
 			}
 		}
@@ -60,7 +60,7 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 					n.Stop();
 				} catch (e) {
 					if (!silent)
-						zDom.alert(msgzul.NO_AUDIO_SUPPORT+'\n'+e.message);
+						jq.alert(msgzul.NO_AUDIO_SUPPORT+'\n'+e.message);
 				}
 			}
 		}
@@ -75,7 +75,7 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 				try {
 					n.Pause();
 				} catch (e) {
-					zDom.alert(msgzul.NO_AUDIO_SUPPORT+'\n'+e.message);
+					jq.alert(msgzul.NO_AUDIO_SUPPORT+'\n'+e.message);
 				}
 			}
 		}
