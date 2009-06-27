@@ -558,9 +558,9 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	_shallIgnoreEvent: function(evt) {
 		var tn = evt.domTarget.tagName;
 		return !evt.domTarget || !evt.target.canActivate() ||
-		((tn == "INPUT" && !evt.domTarget.id.endsWith('$cm')) ||
+		((tn == "INPUT" && !evt.domTarget.id.endsWith('-cm')) ||
 		tn == "TEXTAREA" ||
-		(tn == "BUTTON" && !evt.domTarget.id.endsWith('$a')) ||
+		(tn == "BUTTON" && !evt.domTarget.id.endsWith('-a')) ||
 		tn == "SELECT" ||
 		tn == "OPTION" ||
 		(zPkg.isLoaded('zul.wgt') && evt.target.$instanceof(zul.wgt.Button)))

@@ -75,7 +75,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 			return "";
 		var lastItem = (this._activePage+1) * this._pageSize,
 			out = [];
-		out.push('<div id="', this.uuid ,'$info" class="', this.getZclass(), '-info">', this.infoText_(), '</div>');
+		out.push('<div id="', this.uuid ,'-info" class="', this.getZclass(), '-info">', this.infoText_(), '</div>');
 		return out.join('');
 	},
 	_innerTags: function () {
@@ -115,7 +115,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 				this.appendAnchor(zcs, out, msgzul.LAST, this._pageCount - 1);
 		}
 		if (this._detailed)
-			out.push('<span id="', this.uuid ,'$info">', this.infoText_(), "</span>");
+			out.push('<span id="', this.uuid ,'-info">', this.infoText_(), "</span>");
 		return out.join('');
 	},
 	appendAnchor: function (zclass, out, label, val, seld) {

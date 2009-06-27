@@ -17,7 +17,7 @@ function (out) {
 		zcls = this.getZclass(),
 		tags = zk.ie || zk.gecko ? 'a' : 'button';
 	out.push('<div', this.domAttrs_(), '><', tags, ' id="', uuid,
-			'$a" tabindex="-1" onclick="return false;" href="javascript:;"',
+			'-a" tabindex="-1" onclick="return false;" href="javascript:;"',
 			' style="padding:0 !important; margin:0 !important; border:0 !important;',
 			' background: transparent !important; font-size: 1px !important;',
 			' width: 1px !important; height: 1px !important;-moz-outline: 0 none;',

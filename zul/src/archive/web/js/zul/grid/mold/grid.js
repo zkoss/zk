@@ -35,7 +35,7 @@ function (out) {
 		out.push('<div id="', uuid, '-head" class="', zcls, '-header">',
 			'<table', wdAttr, zUtl.cellps0,
 			' style="table-layout:fixed;', wdStyle,'">');
-		this.domFaker_(out, '$hdfaker', zcls);
+		this.domFaker_(out, '-hdfaker', zcls);
 		
 		for (var hds = this.heads, j = 0, len = hds.length; j < len;)
 			hds[j++].redraw(out);
@@ -53,7 +53,7 @@ function (out) {
 	out.push('>');
 	
 	if (this.columns)
-		this.domFaker_(out, '$bdfaker', zcls);
+		this.domFaker_(out, '-bdfaker', zcls);
 
 	if (this.rows) this.rows.redraw(out);
 
@@ -63,7 +63,7 @@ function (out) {
 		out.push('<div id="', uuid, '-foot" class="', zcls, '-footer">',
 			'<table', wdAttr, zUtl.cellps0, ' style="table-layout:fixed;', wdStyle,'">');
 		if (this.columns) 
-			this.domFaker_(out, '$ftfaker', zcls);
+			this.domFaker_(out, '-ftfaker', zcls);
 			
 		this.foot.redraw(out);
 		out.push('</table></div>');

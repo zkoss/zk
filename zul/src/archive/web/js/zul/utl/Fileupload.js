@@ -1335,9 +1335,6 @@ function uploadComplete(file) {
 	setTimeout('jq("#'+pTable.id+'").remove();',10000);
 }
 
-function dummy() {
-	
-}
 /** 2.2 zk flash upload widget **/
 //our code section start
 zul.utl.Fileupload = zk.$extends(zul.Widget, {
@@ -1366,13 +1363,13 @@ zul.utl.Fileupload = zk.$extends(zul.Widget, {
 				file_queue_limit : "0",
 
 				// Event Handler Settings (all my handlers are in the Handler.js file)
-				file_dialog_start_handler : dummy,
-				file_queued_handler : dummy,
-				file_queue_error_handler : dummy,
+				file_dialog_start_handler : zk.$void,
+				file_queued_handler : zk.$void,
+				file_queue_error_handler : zk.$void,
 				file_dialog_complete_handler : fileDialogComplete,
 				upload_start_handler : uploadStart,
 				upload_progress_handler : uploadProgress,
-				upload_error_handler : dummy,
+				upload_error_handler : zk.$void,
 				upload_success_handler : uploadSuccess,
 				upload_complete_handler : uploadComplete,
 

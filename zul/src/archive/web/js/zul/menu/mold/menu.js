@@ -18,7 +18,7 @@ function (out) {
 
 	if (this.isTopmost()) {
 		out.push('<td align="left"', this.domAttrs_(), '><table id="', uuid,
-				'$a"', zUtl.cellps0, ' class="', zcls, '-body');
+				'-a"', zUtl.cellps0, ' class="', zcls, '-body');
 
 		if (this.getImage()) {
 			out.push(' ', zcls, '-body');
@@ -31,7 +31,7 @@ function (out) {
 		out.push('" style="width: auto;"><tbody><tr><td class="', zcls,
 				'-inner-l"><span class="', zcls, '-space"></span></td><td class="', zcls,
 				'-inner-m"><div><button id="', uuid,
-				'$b" type="button" class="', zcls, '-btn"');
+				'-b" type="button" class="', zcls, '-btn"');
 		if (this.getImage())
 			out.push(' style="background-image:url(', this.getImage(), ')"');
 
@@ -43,7 +43,7 @@ function (out) {
 
 	} else {
 		out.push('<li', this.domAttrs_(), '><a href="javascript:;" id="', uuid,
-				'$a" class="', zcls, '-cnt ', zcls, '-cnt-img">', this.domContent_(), '</a>');
+				'-a" class="', zcls, '-cnt ', zcls, '-cnt-img">', this.domContent_(), '</a>');
 		if (this.menupopup) this.menupopup.redraw(out);
 
 		out.push('</li>');

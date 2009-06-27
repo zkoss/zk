@@ -36,7 +36,7 @@ function (out) {
 			'-inp" value="', this.getActivePage() + 1, '" size="3"/></td>',
 			'<td><span class="', zcls, '-text">/ ', this.getPageCount(), '</span></td>',
 			'<td><span class="', zcls, '-sep"/></td><td><table id="', uuid,
-			'$next" name="', uuid, '-next"', zUtl.cellps0, ' class="', zcls, '-btn">',
+			'-next" name="', uuid, '-next"', zUtl.cellps0, ' class="', zcls, '-btn">',
 			'<tbody><tr><td class="', zcls, '-btn-l"><i>&#160;</i></td><td class="',
 			zcls, '-btn-m"><em unselectable="on"><button type="button" class="',
 			zcls, '-next"> </button></em></td><td class="', zcls, '-btn-r"><i>&#160;</i></td>',

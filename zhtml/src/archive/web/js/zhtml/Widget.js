@@ -18,8 +18,8 @@ zhtml.Widget = zk.$extends(zk.Native, {
 		if (n)
 			switch (nm) {
 			case 'visibility':
-				if ('true' == val) zDom.show(n);
-				else zDom.hide(n);
+				if ('true' == val) jq(n).show();
+				else jq(n).hide();
 				break;
 			case 'checked':
 				n.checked = n.defaultChecked = 'true' == val;
@@ -28,7 +28,7 @@ zhtml.Widget = zk.$extends(zk.Native, {
 				n.value = n.defaultValue = val;
 				break;
 			case 'style':
-				zDom.setStyles(n, zDom.parseStyle(val));
+				zk(n).setStyles(jq.parseStyle(val));
 				break;
 			case 'class':
 				n.className = val;
@@ -54,7 +54,7 @@ zhtml.Widget = zk.$extends(zk.Native, {
 	},
 	_onChangeData: function (val, selbak) {
 		return {value: val,
-			start: zDom.getSelectionRange(this.getNode())[0],
+			start: zk(this.getNode()).getSelectionRange()[0],
 			marshal: this._onChangeMarshal}
 	},
 	_onChangeMarshal: function () {
@@ -62,7 +62,7 @@ zhtml.Widget = zk.$extends(zk.Native, {
 	},
 	doClick_: function (wevt) {
 		var n = this.getNode();
-		if (zDom.tag(n) != 'INPUT')
+		if (n.tagName != 'INPUT')
 			this.$supers('doClick_', arguments);
 		else if (!n.disabled) {
 			if (n.type == 'checkbox' || n.type == 'radio')

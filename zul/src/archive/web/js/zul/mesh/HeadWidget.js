@@ -31,9 +31,9 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		owner.fireOnRender(zk.gecko ? 200 : 60);
 	},
 	unbind_: function () {
-		jq(this.hdfaker).remove();
-		jq(this.bdfaker).remove();
-		jq(this.ftfaker).remove();
+		jq(this.hdfaker||[]).remove();
+		jq(this.bdfaker||[]).remove();
+		jq(this.ftfaker||[]).remove();
 		this.$supers('unbind_', arguments);
 	}
 },{ //static

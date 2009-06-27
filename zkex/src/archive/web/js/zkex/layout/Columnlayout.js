@@ -19,7 +19,7 @@ zkex.layout.Columnlayout = zk.$extends(zul.Widget, {
 		return zcls != null ? zcls: "z-column-layout";
 	},
 	_isLegalChild: function (n) {
-		return n.id && zDom.tag(n) == "DIV"; 
+		return n.id && n.tagName == "DIV"; 
 	},
 	//the columnchild will call it
 	render: _zkf = function(){

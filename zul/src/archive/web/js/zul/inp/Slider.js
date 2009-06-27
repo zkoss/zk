@@ -80,7 +80,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 	},
 	onup_: function(evt){
 		var btn = zul.sld.Slider.down_btn;
-		var uuid = btn.id.split("$")[0];
+		var uuid = btn.id.split("-")[0];
 		var widget = zk.Widget.$(uuid);
 		var zcls = widget.getZclass();
 		if (btn)
@@ -138,7 +138,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			'<div id="zul_slidetip" class="z-slider-pp" style="position:absolute;display:none;z-index:60000;background-color:white;border: 1px outset">'
 			+ widget.slidepos+'</div>');
 
-		widget.slidetip =  document.getElementById("zul_slidetip");
+		widget.slidetip =  jq("#zul_slidetip")[0];
 		if (widget.slidetip) {
 			widget.slidetip.style.display = "block";
 			zk(widget.slidetip).position(widget.getNode(), widget.isVertical()? "end_before" : "after_start");

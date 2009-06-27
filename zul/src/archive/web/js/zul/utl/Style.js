@@ -25,7 +25,7 @@ zul.utl.Style = zk.$extends(zk.Widget, {
 		this._updLink();
 	},
 	unbind_: function () {
-		jq(this._getLink()).remove();
+		jq(this._getLink()||[]).remove();
 		this.$supers('unbind_', arguments);
 	},
 	_updLink: function () {

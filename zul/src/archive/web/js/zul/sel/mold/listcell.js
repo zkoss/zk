@@ -14,7 +14,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
 	out.push('<td', this.domAttrs_(), '><div id="', this.uuid,
-		'$cave" class="', this.getZclass() + '-cnt');
+		'-cave" class="', this.getZclass() + '-cnt');
 
 	var box = this.getListbox();
 	if (box != null && box.isFixedLayout())

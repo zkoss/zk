@@ -36,7 +36,7 @@ function (out) {
 		out.push('<div id="', uuid, '-head" class="', zcls, '-header">',
 			'<table', wdAttr, zUtl.cellps0,
 			' style="table-layout:fixed;', wdStyle,'">');
-		this.domFaker_(out, '$hdfaker', zcls);
+		this.domFaker_(out, '-hdfaker', zcls);
 		
 		for (var hds = this.heads, j = 0, len = hds.length; j < len;)
 			hds[j++].redraw(out);
@@ -55,14 +55,14 @@ function (out) {
 	out.push('>');
 	
 	if(this.listhead)
-		this.domFaker_(out, '$bdfaker', zcls);
+		this.domFaker_(out, '-bdfaker', zcls);
 
 
 	for (var item = this.firstItem; item; item = this.nextItem(item))
 		item.redraw(out);
 
 	out.push('</table><', tag, ' id="', uuid,
-		'$a" tabindex="-1" onclick="return false;" href="javascript:;" style="position:absolute;left:0px;top:0px;padding:0 !important;margin:0 !important;border:0 !important;background:transparent !important;font-size:1px !important;width:1px !important;height:1px !important;-moz-outline:0 none;outline:0 none;-moz-user-select:text;-khtml-user-select:text;"></',
+		'-a" tabindex="-1" onclick="return false;" href="javascript:;" style="position:absolute;left:0px;top:0px;padding:0 !important;margin:0 !important;border:0 !important;background:transparent !important;font-size:1px !important;width:1px !important;height:1px !important;-moz-outline:0 none;outline:0 none;-moz-user-select:text;-khtml-user-select:text;"></',
 		tag, '>');
 	out.push("</div>");
 
@@ -70,7 +70,7 @@ function (out) {
 		out.push('<div id="', uuid, '-foot" class="', zcls, '-footer">',
 			'<table', wdAttr, zUtl.cellps0, ' style="table-layout:fixed;', wdStyle,'">');
 		if (this.listhead) 
-			this.domFaker_(out, '$ftfaker', zcls);
+			this.domFaker_(out, '-ftfaker', zcls);
 			
 		this.listfoot.redraw(out);
 		out.push('</table></div>');

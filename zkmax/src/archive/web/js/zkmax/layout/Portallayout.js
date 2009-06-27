@@ -136,12 +136,12 @@ zkmax.layout.Portallayout = zk.$extends(zul.Widget, {
 		zDom.hide(cmp);			
 	},
 	_cleanupProxy: function (cmp) {
-		jq(cmp.id+"-proxy").remove();
+		jq(cmp.id+"-proxy", zk).remove();
 		zDom.show(cmp);
 	},
 	_ghostMove: function (dg, ofs, evt) {
 		var widget = dg.control.parent.parent;
-		dg.node = zk.Widget.$(dg.handle.id.split("$")[0]).getNode();
+		dg.node = zk.Widget.$(dg.handle.id.split("-")[0]).getNode();
 		var top = zDom.firstChild(dg.node, "DIV"),
 		header = zDom.nextSibling(top, 'DIV'),
 		fakeT = top.cloneNode(true),
@@ -172,7 +172,7 @@ zkmax.layout.Portallayout = zk.$extends(zul.Widget, {
 			portallayout = panel.parent.parent;
 		if (change) {
 			if(proxy.nextSibling){
-				var nextSibling = zk.Widget.$(proxy.nextSibling.id.split("$")[0]);
+				var nextSibling = zk.Widget.$(proxy.nextSibling.id.split("-")[0]);
 				toCol.insertBefore(panel, nextSibling);
 			}else{
 				toCol.appendChild(panel);
@@ -233,10 +233,10 @@ zkmax.layout.Portallayout = zk.$extends(zul.Widget, {
 		return pos;
 	},
 	_isLegalChild: function (n) {
-		return n.id && zDom.tag(n) == "DIV";  
+		return n.id && n.tagName == "DIV";  
 	},
 	_isVisibleChild: function (n) {
-		return zDom.tag(n) == "DIV" && zDom.isVisible(n); 
+		return n.tagName == "DIV" && zDom.isVisible(n); 
 	},
 	onChildAdded_: function(child){
 		this.$supers('onChildAdded_', arguments);
