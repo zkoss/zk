@@ -269,7 +269,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			$n = jq(n),
 			$tl = $n.find('>div:first'),
 			tl = $tl[0],
-			hl = tl && this.getSubnode("cap") ? $tl.next('div:first')[0]: null,
+			hl = tl && this.getSubnode("cap") ? $tl.nextAll('div:first')[0]: null,
 			bl = $n.find('>div:last')[0];
 
 		if (!wdh || wdh == "auto") {
@@ -318,7 +318,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			$tl = jq(n).find('>div:first'), tl = $tl[0];
 		return cap ? cap.offsetHeight + tl.offsetHeight:
 			this._mode != 'embedded' && this._mode != 'popup' ?
-				$tl.next('div:first')[0].offsetHeight: 0;
+				$tl.nextAll('div:first')[0].offsetHeight: 0;
 	},
 
 	_fireOnMove: function (keys) {
@@ -532,7 +532,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		var $el = jq(el),
 			$top = $el.find('>div:first'),
 			top = $top[0],
-			header = $top.next('div:first')[0],
+			header = $top.nextAll('div:first')[0],
 			fakeT = top.cloneNode(true),
 			fakeH = header.cloneNode(true),
 			html = '<div id="zk_wndghost" class="z-window-move-ghost" style="position:absolute;top:'

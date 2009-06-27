@@ -209,7 +209,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		//since IE won't fit it even if height 100% is specified
 		if (zk.ie) {
 			var p = node.parentNode;
-			if (zDom.tag(p) == "TD") {
+			if (p.tagName == "TD") {
 				var nm = vert ? "height": "width",
 					sz = vert ? p.clientHeight: p.clientWidth;
 				if ((node.style[nm] == "100%" || this._box100) && sz) {
@@ -224,19 +224,19 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		//as expected (since style.width/height might be "")
 
 		var nd = vert ? node.rows: node.rows[0].cells,
-			total = vert ? zDom.revisedHeight(node, node.offsetHeight):
-				zDom.revisedWidth(node, node.offsetWidth);
+			total = vert ? zk(node).revisedHeight(node.offsetHeight):
+				zk(node).revisedWidth(node.offsetWidth);
 
 		for (var i = nd.length; --i >= 0;) {
 			var d = nd[i];
-			if (zDom.isVisible(d))
+			if (zk(d).isVisible())
 				if (vert) {
 					var diff = d.offsetHeight;
 					if(d.id && !d.id.endsWith("-chdex2")) { //TR
 						//Bug 1917905: we have to manipulate height of TD in Safari
 						if (d.cells.length) {
 							var c = d.cells[0];
-							c.style.height = zDom.revisedHeight(c, i ? diff: total) + "px";
+							c.style.height = zk(c).revisedHeight(i ? diff: total) + "px";
 						}
 						d.style.height = ""; //just-in-case
 					}
@@ -244,7 +244,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				} else {
 					var diff = d.offsetWidth;
 					if(d.id && !d.id.endsWith("-chdex2")) //TD
-						d.style.width = zDom.revisedWidth(d, i ? diff: total) + "px";
+						d.style.width = zk(d).revisedWidth(i ? diff: total) + "px";
 					total -= diff;
 				}
 		}

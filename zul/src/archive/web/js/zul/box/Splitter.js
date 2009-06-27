@@ -24,11 +24,10 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			if (!colps || "none" == colps) return; //nothing to do
 
 			var nd = this.getSubnode('chdex'),
-				tn = zDom.tag(nd),
 				vert = this.isVertical(),
-				$Splitter = this.$class,
+				Splitter = this.$class,
 				before = colps == "before",
-				sib = before ? $Splitter._prev(nd, tn): $Splitter._next(nd, tn),
+				sib = before ? Splitter._prev(nd): Splitter._next(nd),
 				sibwgt = zk.Widget.$(sib),
 				fd = vert ? "height": "width", diff;
 			if (sib) {
@@ -45,7 +44,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 				}
 			}
 
-			sib = before ? $Splitter._next(nd, tn): $Splitter._prev(nd, tn);
+			sib = before ? Splitter._next(nd): Splitter._prev(nd);
 			if (sib) {
 				diff = zk.parseInt(sib.style[fd]) + (open ? -diff: diff);
 				if (diff < 0) diff = 0;
@@ -124,7 +123,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			//Bug 1921830: if spiltter is invalidated...
 
 		var node = this.getNode(),
-			$Splitter = this.$class;
+			Splitter = this.$class;
 			vert = this.isVertical();
 			btn = this.button = this.getSubnode('btn');
 		node.style.cursor = this.isOpen() ?
@@ -132,27 +131,28 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		btn.style.cursor = "pointer";
 
 		if (!this.inDesign) {
+			var $btn = jq(btn);
 			if (zk.ie) {
-				zEvt.listen(btn, "mouseover", $Splitter.onover);
-				zEvt.listen(btn, "mouseout", $Splitter.onout);
+				$btn.mouseover(Splitter.onover);
+				$btn.mouseout(Splitter.onout);
 			}
-			zEvt.listen(btn, "click", $Splitter.onclick);
+			$btn.click(Splitter.onclick);
 		}
 
 		this._fixbtn();
 
 		this._drag = new zk.Draggable(this, node, {
-			constraint: this.getOrient(), ignoredrag: $Splitter._ignoresizing,
-			ghosting: $Splitter._ghostsizing, overlay: true,
-			snap: $Splitter._snap, endeffect: $Splitter._endDrag});
+			constraint: this.getOrient(), ignoredrag: Splitter._ignoresizing,
+			ghosting: Splitter._ghostsizing, overlay: true,
+			snap: Splitter._snap, endeffect: Splitter._endDrag});
 
 		if (!this.isOpen()) {
-			var nd = this.getSubnode('chdex'), tn = zDom.tag(nd),
+			var nd = this.getSubnode('chdex'),
 				colps = this.getCollapse();
 			if (!colps || "none" == colps) return; //nothing to do
 
-			var sib = colps == "before" ? $Splitter._prev(nd, tn): $Splitter._next(nd, tn);
-			zDom.hide(sib); //no onHide at bind_
+			var sib = colps == "before" ? Splitter._prev(nd): Splitter._next(nd);
+			jq(sib).hide(); //no onHide at bind_
 			var sibwgt = zk.Widget.$(sib);
 			sibwgt.parent._fixChildDomVisible(sibwgt, false);
 
@@ -162,14 +162,15 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	unbind_: function () {
 		zWatch.unlisten({onSize: this, beforeSize: this, onShow: this});
 
-		var $Splitter = this.$class,
+		var Splitter = this.$class,
 			btn = this.button;
 		if (btn) {
+			var $btn = jq(btn);
 			if (zk.ie) {
-				zEvt.unlisten(btn, "mouseover", $Splitter.onover);
-				zEvt.unlisten(btn, "mouseout", $Splitter.onout);
+				$btn.unbind("mouseover", Splitter.onover);
+				$btn.unbind("mouseout", Splitter.onout);
 			}
-			zEvt.unlisten(btn, "click", $Splitter.onclick);
+			$btn.unbind("click", Splitter.onclick);
 		}
 
 		this._drag.destroy();
@@ -194,32 +195,27 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		if (inner) this._fixbtn();
 	},
 	_fixNSDomClass: function () {
-		var node = this.getNode(),
-			zcls = this.getZclass(),
-			open = this.isOpen();
-		if(open && zDom.hasClass(node, zcls+"-ns"))
-			zDom.rmClass(node, zcls+"-ns");
-		else if (!open && !zDom.hasClass(node, zcls+"-ns"))
-			zDom.addClass(node, zcls+"-ns");
+		jq(this.getNode())
+			[this.isOpen()?'removeClass':'addClass'](this.getZclass()+"-ns");
 	},
 	_fixbtn: function () {
-		var btn = this.button,
+		var $btn = jq(this.button),
 			colps = this.getCollapse();
 		if (!colps || "none" == colps) {
-			btn.style.display = "none";
+			$btn.hide();
 		} else {
 			var zcls = this.getZclass(),
 				before = colps == "before";
 			if (!this.isOpen()) before = !before;
 
 			if (this.isVertical()) {
-				zDom.rmClass(btn, zcls + "-btn-" + (before ? "b" : "t"));
-				zDom.addClass(btn, zcls + "-btn-" + (before ? "t" : "b"));
+				$btn.removeClass(zcls + "-btn-" + (before ? "b" : "t"));
+				$btn.addClass(zcls + "-btn-" + (before ? "t" : "b"));
 			} else {
-				zDom.rmClass(btn, zcls + "-btn-" + (before ? "r" : "l"));
-				zDom.addClass(btn, zcls + "-btn-" + (before ? "l" : "r"));
+				$btn.removeClass(zcls + "-btn-" + (before ? "r" : "l"));
+				$btn.addClass(zcls + "-btn-" + (before ? "l" : "r"));
 			}
-			btn.style.display = "";
+			$btn.show();
 		}
 	},
 	_fixsz: _zkf = function () {
@@ -277,7 +273,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 },{
 	onclick: function (evt) {
 		var wgt = zk.Widget.$(evt);
-		zDom.rmClass(wgt.button, wgt.getZclass() + "-btn-visi");
+		jq(wgt.button).removeClass(wgt.getZclass() + "-btn-visi");
 		wgt.setOpen(!wgt.isOpen());
 	},
 
@@ -287,32 +283,30 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		if (!wgt.isOpen()) return true;
 
 		var run = draggable.run = {},
-			node = wgt.getNode();
-		run.org = zDom.cmOffset(node);
-		var nd = wgt.getSubnode('chdex'),
-			tn = zDom.tag(nd),
-			$Splitter = zul.box.Splitter;
-		run.prev = $Splitter._prev(nd, tn);
-		run.next = $Splitter._next(nd, tn);
+			node = wgt.getNode(),
+			nd = wgt.getSubnode('chdex'),
+			Splitter = zul.box.Splitter;
+		run.prev = Splitter._prev(nd);
+		run.next = Splitter._next(nd);
 		run.prevwgt = wgt.previousSibling;
 		run.nextwgt = wgt.nextSibling;
-		run.z_offset = zDom.cmOffset(node);
+		run.z_offset = zk(node).cmOffset();
 		return false;
 	},
 	_ghostsizing: function (draggable, ofs, evt) {
-		var node = draggable.node;
+		var $node = zk(draggable.node);
 		jq(document.body).prepend(
 			'<div id="zk_ddghost" style="font-size:0;line-height:0;background:#AAA;position:absolute;top:'
 			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
-			+zDom.offsetWidth(node)+'px;height:'+zDom.offsetHeight(node)
+			+$node.offsetWidth()+'px;height:'+$node.offsetHeight()
 			+'px;"></div>');
 		return jq("#zk_ddghost")[0];
 	},
 	_endDrag: function (draggable) {
 		var wgt = draggable.control,
 			node = wgt.getNode(),
-			$Splitter = zul.box.Splitter,
-			flInfo = $Splitter._fixLayout(wgt),
+			Splitter = zul.box.Splitter,
+			flInfo = Splitter._fixLayout(wgt),
 			run = draggable.run, diff, fd;
 
 		if (wgt.isVertical()) {
@@ -347,7 +341,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		if (run.nextwgt) zWatch.fireDown('onSize', null, run.nextwgt);
 		if (run.prevwgt) zWatch.fireDown('onSize', null, run.prevwgt);
 
-		$Splitter._unfixLayout(flInfo);
+		Splitter._unfixLayout(flInfo);
 			//Stange (not know the cause yet): we have to put it
 			//befor _fixszAll and after onSize
 
@@ -379,22 +373,22 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		return [x, y];
 	},
 
-	_next: function (n, tn) {
-		return zDom.nextSibling(zDom.nextSibling(n, tn), tn);
+	_next: function (n) {
+		return jq(n).next().next()[0];
 	},
-	_prev: function (n, tn) {
-		return zDom.previousSibling(zDom.previousSibling(n, tn), tn);
+	_prev: function (n) {
+		return jq(n).prev().prev()[0];
 	},
 
 	_fixKidSplts: function (n) {
-		if (zDom.isVisible(n)) { //n might not be an element
+		if (zk(n).isVisible()) { //n might not be an element
 			var wgt = n.z_wgt, //don't use zk.Widget.$ since we check each node
-				$Splitter = zul.box.Splitter;
-			if (wgt && wgt.$instanceof($Splitter))
+				Splitter = zul.box.Splitter;
+			if (wgt && wgt.$instanceof(Splitter))
 				wgt._fixsz();
 
 			for (n = n.firstChild; n; n = n.nextSibling)
-				$Splitter._fixKidSplts(n);
+				Splitter._fixKidSplts(n);
 		}
 	}
 });
@@ -402,11 +396,11 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 if (zk.ie) {
 	zul.box.Splitter.onover = function (evt) {
 		var wgt = zk.Widget.$(evt);
-		zDom.addClass(wgt.button, wgt.getZclass() + '-btn-visi');
+		$(wgt.button).addClass(wgt.getZclass() + '-btn-visi');
 	};
 	zul.box.Splitter.onout = function (evt) {
 		var wgt = zk.Widget.$(evt);
-		zDom.rmClass(wgt.button, wgt.getZclass() + '-btn-visi');
+		$(wgt.button).removeClass(wgt.getZclass() + '-btn-visi');
 	};
 }
 /** Use fix table layout */
