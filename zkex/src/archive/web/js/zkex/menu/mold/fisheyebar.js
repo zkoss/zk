@@ -14,7 +14,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
 	out.push('<div', this.domAttrs_(), '><div id="',
-	this.uuid,'$cave"', 'class="', this.getZclass(),'-inner">');
+	this.uuid, '-cave"', 'class="', this.getZclass(),'-inner">');
 	
 	for (var w = this.firstChild; w; w = w.nextSibling)
 		w.redraw(out);

@@ -96,13 +96,13 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 	},
 	removeChildHTML_: function (child, prevsib) {
 		this.$supers('removeChildHTML_', arguments);
-		zDom.remove(child.uuid + '$chdextr');
+		jq(child.uuid + '-chdextr', zk).remove();
 	},
 	encloseChildHTML_: function (opts) {
 		var out = opts.out || [],
 			child = opts.child;
-		out.push('<td id="', child.uuid, '$chdextr"', this._childAttrs(child, opts.index),
-				'>', '<div id="', child.uuid, '$cell" class="', opts.zclass, '-cnt ',
+		out.push('<td id="', child.uuid, '-chdextr"', this._childAttrs(child, opts.index),
+				'>', '<div id="', child.uuid, '-cell" class="', opts.zclass, '-cnt ',
 				opts.cls, '">');
 		child.redraw(out);
 		out.push('</div></td>');

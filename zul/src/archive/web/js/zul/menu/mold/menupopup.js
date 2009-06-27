@@ -22,7 +22,7 @@ function (out) {
 			' background: transparent !important; font-size: 1px !important;',
 			' width: 1px !important; height: 1px !important;-moz-outline: 0 none;',
 			' outline: 0 none;	-moz-user-select: text; -khtml-user-select: text;"></',
-			tags, '><ul class="', zcls, '-cnt" id="', uuid, '$cave">');
+			tags, '><ul class="', zcls, '-cnt" id="', uuid, '-cave">');
 
 	for (var w = this.firstChild; w; w = w.nextSibling)
 		w.redraw(out);

@@ -26,14 +26,14 @@ function (out) {
 	if (inPaging && this.paging) {
 		pgpos = this.getPagingPosition();
 		if (pgpos == 'top' || pgpos == 'both') {
-			out.push('<div id="', uuid, '$pgit" class="', zcls, '-pgi-t">');
+			out.push('<div id="', uuid, '-pgit" class="', zcls, '-pgi-t">');
 			this.paging.redraw(out);
 			out.push('</div>');
 		}
 	}
 
 	if(this.listhead){
-		out.push('<div id="', uuid, '$head" class="', zcls, '-header">',
+		out.push('<div id="', uuid, '-head" class="', zcls, '-header">',
 			'<table', wdAttr, zUtl.cellps0,
 			' style="table-layout:fixed;', wdStyle,'">');
 		this.domFaker_(out, '$hdfaker', zcls);
@@ -43,13 +43,13 @@ function (out) {
 	
 		out.push('</table></div>');
 	}
-	out.push('<div id="', uuid, '$body" class="', zcls, '-body"');
+	out.push('<div id="', uuid, '-body" class="', zcls, '-body"');
 
 	var hgh = this.getHeight();
 	if (hgh) out.push(' style="overflow:hidden;height:', hgh, '"');
 	else if (this.getRows() > 1) out.push(' style="overflow:hidden;height:"', this.getRows() * 15, 'px"');
 	
-	out.push('><table', wdAttr, zUtl.cellps0, ' id="', uuid, '$cave"');
+	out.push('><table', wdAttr, zUtl.cellps0, ' id="', uuid, '-cave"');
 	if (this.isFixedLayout())
 		out.push(' style="table-layout:fixed;', wdStyle,'"');		
 	out.push('>');
@@ -67,7 +67,7 @@ function (out) {
 	out.push("</div>");
 
 	if (this.listfoot) {
-		out.push('<div id="', uuid, '$foot" class="', zcls, '-footer">',
+		out.push('<div id="', uuid, '-foot" class="', zcls, '-footer">',
 			'<table', wdAttr, zUtl.cellps0, ' style="table-layout:fixed;', wdStyle,'">');
 		if (this.listhead) 
 			this.domFaker_(out, '$ftfaker', zcls);
@@ -77,7 +77,7 @@ function (out) {
 	}
 
 	if (pgpos == 'bottom' || pgpos == 'both') {
-		out.push('<div id="', uuid, '$pgib" class="', zcls, '-pgi-b">');
+		out.push('<div id="', uuid, '-pgib" class="', zcls, '-pgi-b">');
 		this.paging.redraw(out);
 		out.push('</div>');
 	}

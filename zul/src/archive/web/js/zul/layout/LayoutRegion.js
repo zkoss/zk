@@ -77,8 +77,8 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 							afterAnima: this.$class.afterSlideOut
 						});
 					else {
-						zDom[open ? 'show' : 'hide'](real);
-						zDom[!open ? 'show' : 'hide'](colled);
+						jq(real)[open ? 'show' : 'hide']();
+						jq(colled)[!open ? 'show' : 'hide']();
 						zWatch.fireDown(open ? 'onShow' : 'onHide', {visible:true}, this);
 					}
 				}
@@ -91,8 +91,8 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 						});
 				else {
 					if (colled)
-						zDom[!open ? 'show' : 'hide'](colled);
-					zDom[open ? 'show' : 'hide'](real);
+						jq(colled)[!open ? 'show' : 'hide']();
+					jq(real)[open ? 'show' : 'hide']();
 				}
 			}
 			if (nonAnima) this.parent.resize();
@@ -166,7 +166,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		if (this.desktop) {
 			var real = this.getSubnode('real');
 			if (real) {
-				zDom.setStyles(real, zDom.parseStyle(this.domStyle_()));
+				zk(real).setStyles(jq.parseStyle(this.domStyle_()));
 				if (this.parent) 
 					this.parent.resize();
 			}

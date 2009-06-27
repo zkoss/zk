@@ -117,7 +117,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 		if (this.opts.stackup) {
 			var defStackup = Drag._stackup;
 			if (zk(defStackup).isVisible()) //in use
-				this._stackup = jq.newStackup(node, node.id + '$ddstk');
+				this._stackup = jq.newStackup(node, node.id + '-ddstk');
 			else {
 				this._stackup = defStackup;
 				this._syncStackup();

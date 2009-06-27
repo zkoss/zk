@@ -91,7 +91,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	_createFaker: function (n, postfix) {
 		var t = document.createElement("TH"), 
 			d = document.createElement("DIV");
-		t.id = n.id + "$" + postfix;
+		t.id = n.id + "-" + postfix;
 		t.className = n.className;
 		t.style.cssText = n.style.cssText;
 		d.style.overflow = "hidden";
@@ -220,11 +220,11 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	redraw: function (out) {
 		var uuid = this.uuid,
 			zcls = this.getZclass();
-		out.push('<th', this.domAttrs_(), '><div id="', uuid, '$cave" class="',
+		out.push('<th', this.domAttrs_(), '><div id="', uuid, '-cave" class="',
 				zcls, '-cnt"', this.domTextStyleAttr_(), '>', this.domContent_());
 
 		if (this.parent._menupopup && this.parent._menupopup != 'none')
-			out.push('<a id="', uuid, '$btn"  href="javascript:;" class="', zcls, '-btn"></a>');
+			out.push('<a id="', uuid, '-btn"  href="javascript:;" class="', zcls, '-btn"></a>');
 	
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);

@@ -10,10 +10,10 @@ userguide.Categorybar = zk.$extends(zul.wgt.Div, {
 	redraw: function (out) {
 		var uuid = this.uuid;
 		out.push('<div', this.domAttrs_(), '>',
-			'<div id="', uuid, '$right"></div>',
-			'<div id="', uuid, '$left"></div>',
-			'<div id="', uuid, '$body" class="', this.getZclass(), '-body">',
-			'<div id="', uuid, '$cave">');
+			'<div id="', uuid, '-right"></div>',
+			'<div id="', uuid, '-left"></div>',
+			'<div id="', uuid, '-body" class="', this.getZclass(), '-body">',
+			'<div id="', uuid, '-cave">');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
 		out.push('<div class="z-clear"></div></div></div></div>');

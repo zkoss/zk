@@ -131,7 +131,7 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 		for (var region, ambit, margin,	rs = ['north', 'south', 'west', 'east'],
 				j = 0, k = rs.length; j < k; ++j) {
 			region = this[rs[j]];
-			if (region && zDom.isVisible(region.getNode())) {
+			if (region && zk(region.getNode()).isVisible()) {
 				ambit = this._getAmbit(region);
 				switch (rs[j]) {
 				case 'north':
@@ -155,7 +155,7 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 				this._resizeWgt(region, ambit);
 			}
 		}
-		if (this.center && zDom.isVisible(this.center.getNode())) {
+		if (this.center && zk(this.center.getNode()).isVisible()) {
 			var mars = this._getMargins(this.center);
 			center.x += mars.left;
 			center.y += mars.top;
@@ -163,7 +163,7 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 			center.h -= mars.top + mars.bottom;
 			this._resizeWgt(this.center, center);
 		}
-		zDom.cleanVisibility(el);
+		zk(el).cleanVisibility();
 		this._isOnSize = false; // reset
 	},
 	_arrayToObject: function (array) {
@@ -185,46 +185,47 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 			if (colled) {
 				colled.style.left = ambit.x + "px";
 				colled.style.top = ambit.y + "px";
-				colled.style.height = zDom.revisedHeight(colled, ambit.h) + "px";
-				colled.style.width = zDom.revisedWidth(colled, ambit.w) + "px";
+				var $colled = zk(colled);
+				colled.style.height = $colled.revisedHeight(ambit.h) + "px";
+				colled.style.width = $colled.revisedWidth(ambit.w) + "px";
 			}
 		}
 	},
 	_resizeSplit: function (wgt, ambit) {
 		var split = wgt.getSubnode('split');
-		if (!zDom.isVisible(split)) return ambit;
+		if (!zk(split).isVisible()) return ambit;
 		var sAmbit = {
 				w: split.offsetWidth, 
 				h: split.offsetHeight
 			},
 			s = split.style;
 		switch (wgt.getPosition()) {
-			case this.$class.NORTH:
-				ambit.h -= sAmbit.h;
-			  	s.left = ambit.x + "px";
-				s.top = (ambit.y + ambit.h) + "px";
-				s.width = (ambit.w < 0 ? 0 : ambit.w) + "px";
-				break;
-			case this.$class.SOUTH:
-				ambit.h -= sAmbit.h;
-				ambit.y += sAmbit.h;
-				s.left = ambit.x + "px";
-				s.top = (ambit.y - sAmbit.h) + "px";
-				s.width = (ambit.w < 0 ? 0 : ambit.w) + "px";
-				break;
-			case this.$class.WEST:
-				ambit.w -= sAmbit.w;
-				s.left = (ambit.x + ambit.w) + "px";
-				s.top = ambit.y + "px";
-				s.height = (ambit.h < 0 ? 0 : ambit.h) + "px";
-				break;
-			case this.$class.EAST:
-				ambit.w -= sAmbit.w;
-				s.left = ambit.x + "px";
-				s.top = ambit.y + "px";
-				s.height = (ambit.h < 0 ? 0 : ambit.h) + "px";
-				ambit.x += sAmbit.w;
-				break;
+		case this.$class.NORTH:
+			ambit.h -= sAmbit.h;
+		  	s.left = ambit.x + "px";
+			s.top = (ambit.y + ambit.h) + "px";
+			s.width = (ambit.w < 0 ? 0 : ambit.w) + "px";
+			break;
+		case this.$class.SOUTH:
+			ambit.h -= sAmbit.h;
+			ambit.y += sAmbit.h;
+			s.left = ambit.x + "px";
+			s.top = (ambit.y - sAmbit.h) + "px";
+			s.width = (ambit.w < 0 ? 0 : ambit.w) + "px";
+			break;
+		case this.$class.WEST:
+			ambit.w -= sAmbit.w;
+			s.left = (ambit.x + ambit.w) + "px";
+			s.top = ambit.y + "px";
+			s.height = (ambit.h < 0 ? 0 : ambit.h) + "px";
+			break;
+		case this.$class.EAST:
+			ambit.w -= sAmbit.w;
+			s.left = ambit.x + "px";
+			s.top = ambit.y + "px";
+			s.height = (ambit.h < 0 ? 0 : ambit.h) + "px";
+			ambit.x += sAmbit.w;
+			break;
 		}
 		return ambit;
 	},
@@ -235,14 +236,14 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 			bodyEl = wgt.isFlex() && wgt.firstChild ?
 						wgt.firstChild.getNode() : wgt.getSubnode('cave');
 		if (!this._ignoreResize(el, ambit.w, ambit.h)) {
-			ambit.w = zDom.revisedWidth(el, ambit.w);
+			ambit.w = zk(el).revisedWidth(ambit.w);
 			el.style.width = ambit.w + "px";
-			ambit.w = zDom.revisedWidth(bodyEl, ambit.w);
+			ambit.w = zk(bodyEl).revisedWidth(ambit.w);
 			bodyEl.style.width = ambit.w + "px";
 
-			ambit.h = zDom.revisedHeight(el, ambit.h);
+			ambit.h = zk(el).revisedHeight(ambit.h);
 			el.style.height = ambit.h + "px";
-			ambit.h = zDom.revisedHeight(bodyEl, ambit.h);
+			ambit.h = zk(bodyEl).revisedHeight(ambit.h);
 			if (wgt.getSubnode('cap')) ambit.h = Math.max(0, ambit.h - wgt.getSubnode('cap').offsetHeight);
 			bodyEl.style.height = ambit.h + "px";
 			if (wgt.isAutoscroll()) { 

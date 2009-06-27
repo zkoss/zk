@@ -84,7 +84,7 @@ zkmax.layout.Portallayout = zk.$extends(zul.Widget, {
 		var panel = dg.control,
 			portalchild = panel.parent,
 			portallayout = portalchild.parent,
-			proxyNode = zDom.$(panel.uuid + "$proxy");
+			proxyNode = zDom.$(panel.uuid + "-proxy");
 		
 		var widths = dg._widths,
 			cIndex = widths.length,
@@ -123,7 +123,7 @@ zkmax.layout.Portallayout = zk.$extends(zul.Widget, {
 			cs = cmp.style;
 			
 		s.width = "auto";
-		proxy.id = cmp.id + "$proxy";
+		proxy.id = cmp.id + "-proxy";
 		s.marginTop = cs.marginTop;
 		s.marginLeft = cs.marginLeft;
 		s.marginRight = cs.marginRight;
@@ -166,8 +166,8 @@ zkmax.layout.Portallayout = zk.$extends(zul.Widget, {
 		var panel = dg.control,
 			panelNode = panel.getNode(),
 			fromCol = panel.parent,
-			proxy = zDom.$(panelNode.id + "$proxy"), 
-			toCol = zk.Widget.$(proxy.parentNode.id.split("$")[0]),
+			proxy = jq(panelNode.id + "-proxy", zk)[0], 
+			toCol = zk.Widget.$(proxy.parentNode.id.split("-")[0]),
 			change = zDom.nextSibling(dg.node, "DIV") != proxy,
 			portallayout = panel.parent.parent;
 		if (change) {

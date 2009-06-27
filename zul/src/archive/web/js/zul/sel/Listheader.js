@@ -67,7 +67,7 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 			box = this.getListbox();
 		if (box != null && this.parent.firstChild == this 
 		&& box.isCheckmark() && box.isMultiple())
-			s = '<input type="checkbox" id="' + this.uuid + '$cm"/>'
+			s = '<input type="checkbox" id="' + this.uuid + '-cm"/>'
 				+ (s ? '&nbsp;' + s:'');
 		return s;
 	}

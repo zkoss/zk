@@ -30,7 +30,7 @@ zul.utl.Style = zk.$extends(zk.Widget, {
 	},
 	_updLink: function () {
 		if (this._src) {
-			jq(this.uuid + '$css').remove();
+			jq(this.uuid + '-css', zk).remove();
 
 			var head = this._getHead(),
 				ln = this._getLink(head),

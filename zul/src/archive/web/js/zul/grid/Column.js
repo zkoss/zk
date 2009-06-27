@@ -157,18 +157,18 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 		if (this.parent._menupopup || this.parent._menupopup != 'none') {
 			var btn = this.getSubnode('btn'),
 				n = this.getNode();
-			zDom.addClass(n, this.getZclass() + "-over");
+			jq(n).addClass(this.getZclass() + "-over");
 			if (btn) btn.style.height = n.offsetHeight - 1 + "px";
 		}
 	},
 	_doMouseOut: function (evt) {
 		if (this.parent._menupopup || this.parent._menupopup != 'none') {
 			var btn = this.getSubnode('btn'),
-				n = this.getNode(),
+				n = this.getNode(), $n = jq(n),
 				zcls = this.getZclass();
-			if (!zDom.hasClass(n, zcls + "-visi") &&
-				(!zk.ie || !zDom.isAncestor(n, evt.domEvent.relatedTarget || evt.domEvent.toElement)))
-					zDom.removeClass(n, zcls + "-over");
+			if (!$n.hasClass(zcls + "-visi") &&
+				(!zk.ie || !$n.zk.isAncestor(evt.domEvent.relatedTarget || evt.domEvent.toElement)))
+					$n.removeClass(zcls + "-over");
 		}
 	},
 	_doClick: function (evt) {
@@ -178,13 +178,13 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 				btn = this.getSubnode('btn'),
 				zcls = this.getZclass();
 				
-			zDom.addClass(n, zcls + "-visi");
+			jq(n).addClass(zcls + "-visi");
 			
 			if (pp == 'auto' && this.parent._mpop)
 				pp = this.parent._mpop;
 
 			if (zul.menu.Menupopup.isInstance(pp)) {
-				var ofs = zDom.revisedOffset(btn),
+				var ofs = zk(btn).revisedOffset(),
 					asc = this.getSortAscending() != 'none',
 					desc = this.getSortDescending() != 'none';
 				pp.getAscitem().setVisible(asc);

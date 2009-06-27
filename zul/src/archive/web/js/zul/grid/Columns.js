@@ -123,8 +123,8 @@ zul.grid.Columns = zk.$extends(zul.mesh.HeadWidget, {
 		if (this._mref) {
 			var zcls = this._mref.getZclass(),
 				n = this._mref.getNode();
-			zDom.removeClass(n, zcls + '-visi');
-			zDom.removeClass(n, zcls + '-over');
+			jq(n).removeClass(n, zcls + '-visi')
+				.removeClass(n, zcls + '-over');
 		}
 		this._mref = evt.data.reference; 
 	}

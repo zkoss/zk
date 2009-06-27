@@ -21,7 +21,7 @@ function (out) {
 				this.getHref() ? this.getHref() : 'javascript:;', '"');
 		if (this.getTarget())
 			out.push(' target="', this.getTarget(), '"');
-		out.push(' class="', zcls, '-cnt"><table id="', uuid, '$a"', zUtl.cellps0,
+		out.push(' class="', zcls, '-cnt"><table id="', uuid, '-a"', zUtl.cellps0,
 				' class="', zcls, '-body');
 		if (this.getImage()) {
 			out.push(' ', zcls, '-body');
@@ -47,6 +47,6 @@ function (out) {
 		out.push('<a href="', this.getHref() ? this.getHref() : 'javascript:;', '"');
 		if (this.getTarget())
 			out.push(' target="', this.getTarget(), '"');
-		out.push(' id="', uuid, '$a" class="', cls, '">', this.domContent_(), '</a></li>');
+		out.push(' id="', uuid, '-a" class="', cls, '">', this.domContent_(), '</a></li>');
 	}
 }

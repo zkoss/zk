@@ -76,7 +76,7 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 		if (box != null && this.parent.firstChild == this) {
 			if (this.parent.$instanceof(zul.sel.Listgroup)) {
 				var zcls = this.parent.getZclass();
-				s = '<span id="' + this.parent.uuid + '$img" class="' + zcls + '-img ' + zcls
+				s = '<span id="' + this.parent.uuid + '-img" class="' + zcls + '-img ' + zcls
 					+ '-img-' + (this.parent._open ? 'open' : 'close') + '"></span>';
 			}
 				
@@ -84,7 +84,7 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 				var item = this.parent,
 					chkable = item.isCheckable();
 				s += '<input type="' + (box.isMultiple() ? 'checkbox': 'radio')
-					+ '" id="' + item.uuid + '$cm"';
+					+ '" id="' + item.uuid + '-cm"';
 				if (!chkable || item.isDisabled())
 					s += ' disabled="disabled"';
 				if (item.isSelected())

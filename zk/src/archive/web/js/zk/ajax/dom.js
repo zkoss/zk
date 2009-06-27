@@ -598,6 +598,12 @@ zjq.prototype = { //ZK extension
 		return this.jq.each(function () {
 			zjq._enbSel(this);
 		});
+	},
+
+	setStyles: function (styles) {
+		var $ = this.jq;
+		for (var nm in styles)
+			$.css(nm, styles[nm]);
 	}
 };
 
@@ -744,7 +750,7 @@ zk.copy(jq, { //ZK extension to jq
 	},
 	newStackup: function (el, id, anchor) {
 		var ifr = document.createElement('iframe');
-		ifr.id = id || (el ? el.id + "$ifrstk": 'z_ifrstk');
+		ifr.id = id || (el ? el.id + "-ifrstk": 'z_ifrstk');
 		ifr.style.cssText = "position:absolute;overflow:hidden;filter:alpha(opacity=0)";
 		ifr.frameBorder = "no";
 		ifr.tabIndex = -1;

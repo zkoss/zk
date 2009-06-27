@@ -41,7 +41,7 @@ zul.grid.Group = zk.$extends(zul.grid.Row, {
 	},
 	domImage_: function () {
 		var zcls = this.getZclass();
-		return '<span id="' + this.uuid + '$img" class="' + zcls + '-img ' + zcls
+		return '<span id="' + this.uuid + '-img" class="' + zcls + '-img ' + zcls
 			 + '-img-' + (this._open ? 'open' : 'close') + '"></span>';
 	},
 	/** A combination of image ([[#domImage_]]) and label ([[#domLabel_]]). */
@@ -56,8 +56,8 @@ zul.grid.Group = zk.$extends(zul.grid.Row, {
 	encloseChildHTML_: function (opts) {
 		var out = opts.out || [],
 			child = opts.child;
-		out.push('<td id="', child.uuid, '$chdextr"', this._childAttrs(child, opts.index),
-				'>', '<div id="', child.uuid, '$cell" class="', opts.zclass, '-cnt ',
+		out.push('<td id="', child.uuid, '-chdextr"', this._childAttrs(child, opts.index),
+				'>', '<div id="', child.uuid, '-cell" class="', opts.zclass, '-cnt ',
 				opts.cls, '">');
 		if (child == this.firstChild)
 			out.push(this.domContent_());
@@ -81,8 +81,8 @@ zul.grid.Group = zk.$extends(zul.grid.Row, {
 		var img = this.getSubnode('img'),
 			zcls = this.getZclass();
 		if (img) {
-			zDom[open ? "removeClass" : "addClass"](img, zcls + "-img-close");
-			zDom[open ? "addClass" : "removeClass"](img, zcls + "-img-open");
+			jq(img)[open ? "removeClass" : "addClass"](zcls + "-img-close")
+				[open ? "addClass" : "removeClass"](zcls + "-img-open");
 		}
 		this._openItemNow(open);
 		if (!silent)
@@ -93,7 +93,7 @@ zul.grid.Group = zk.$extends(zul.grid.Row, {
 		for (var r, w = this.nextSibling; w && (!w.$instanceof(zul.grid.Group) && !w.$instanceof(zul.grid.Groupfoot));
 				w = w.nextSibling)
 			if (w.desktop && w.isVisible())
-				zDom[toOpen ? "show" : "hide"](w.getNode());
+				jq(w.getNode())[toOpen ? "show" : "hide"]();
 	},
 	beforeParentChanged_: function (p) {
 		if (p == null) {
@@ -127,7 +127,7 @@ zul.grid.Group = zk.$extends(zul.grid.Row, {
 		if (table.tBodies.length > 1) {
 			var span = 0;
 			for (var row = table.rows[0], i = row.cells.length; --i >=0;)
-				if(zDom.isVisible(row.cells[i])) span++;
+				if(zk(row.cells[i]).isVisible()) span++;
 			for (var cells = n.cells, i = cells.length; --i >= 0;)
 				span -= cells[i].colSpan;
 			if (span > 0 && n.cells.length) n.cells[n.cells.length - 1].colSpan += span;

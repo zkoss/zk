@@ -17,13 +17,13 @@ function (out) {
 		zcls = this.getZclass(),
 		noCenter = this.getPosition() != zul.layout.Borderlayout.CENTER,
 		pzcls = this.parent.getZclass();
-	out.push('<div id="', uuid,  '">', '<div id="', uuid, '$real"',
+	out.push('<div id="', uuid,  '">', '<div id="', uuid, '-real"',
 			this.domAttrs_({id: 1}), '>');
 			
 	if (this.getTitle()) {
-		out.push('<div id="', uuid, '$cap" class="', zcls, '-header">');
+		out.push('<div id="', uuid, '-cap" class="', zcls, '-header">');
 		if (noCenter) {
-			out.push('<div id="', uuid, '$btn" class="', pzcls,
+			out.push('<div id="', uuid, '-btn" class="', pzcls,
 					'-icon ', zcls, '-colps"');
 			if (!this.isCollapsible())
 				out.push(' style="display:none;"');
@@ -31,7 +31,7 @@ function (out) {
 		}
 		out.push(zUtl.encodeXML(this.getTitle()), '</div>');
 	}
-	out.push('<div id="', uuid, '$cave" class="', zcls, '-body">');
+	out.push('<div id="', uuid, '-cave" class="', zcls, '-body">');
 	
 	for (var w = this.firstChild; w; w = w.nextSibling)
 		w.redraw(out);
@@ -39,11 +39,11 @@ function (out) {
 	out.push('</div></div>');
 	
 	if (noCenter) {
-		out.push('<div id="', uuid, '$split" class="', zcls, '-splt"></div>');
+		out.push('<div id="', uuid, '-split" class="', zcls, '-splt"></div>');
 		if (this.getTitle()) {
-			out.push('<div id="', uuid, '$colled" class="', zcls,
+			out.push('<div id="', uuid, '-colled" class="', zcls,
 					'-colpsd" style="display:none"><div id="',
-					uuid, '$btned" class="', pzcls, '-icon ', zcls, '-exp"');
+					uuid, '-btned" class="', pzcls, '-icon ', zcls, '-exp"');
 			if (!this.isCollapsible())
 				out.push(' style="display:none;"');
 				

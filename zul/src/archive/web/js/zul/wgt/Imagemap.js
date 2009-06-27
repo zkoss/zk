@@ -45,14 +45,14 @@ zul.wgt.Imagemap = zk.$extends(zul.wgt.Image, {
 			this._fixchd(false);
 	},
 	_fixchd: function (bArea) {
-		var mapid = this.uuid + '$map';
+		var mapid = this.uuid + '-map';
 		img = this.getImageNode_();
 		img.useMap = bArea ? '#' + mapid : '';
 		img.isMap = !bArea;
 	},
 	contentAttrs_: function () {
 		var attr = this.$supers('contentAttrs_', arguments);
-		return attr +(this.firstChild ? ' usemap="#' + this.uuid + '$map"':
+		return attr +(this.firstChild ? ' usemap="#' + this.uuid + '-map"':
 			' ismap="ismap"');
 	},
 

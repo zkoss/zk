@@ -15,14 +15,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 function (out) {
 	var uuid = this.uuid;
 	if ('vertical' == this.getOrient()) {
-		out.push('<div', this.domAttrs_(), '><table id="', uuid, '$cave"',
+		out.push('<div', this.domAttrs_(), '><table id="', uuid, '-cave"',
 				zUtl.cellps0, '>');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			this.encloseChildHTML_({out: out, child: w, vertical: true});
 		out.push('</table></div>');
 	} else {
 		out.push('<div', this.domAttrs_(), '><table', zUtl.cellps0, '>',
-				'<tr valign="bottom" id="', uuid, '$cave">')
+				'<tr valign="bottom" id="', uuid, '-cave">')
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
 		out.push('</tr></table></div>');

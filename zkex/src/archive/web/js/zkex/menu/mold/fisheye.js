@@ -13,10 +13,9 @@ This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
-	
 	out.push('<div', this.domAttrs_(), '><img id="',
-	this.uuid,'$img"','src="',this.getImage() ,'" class="',this.getZclass(),'-img"/>',
-	'<div id="',this.uuid,'$label" style="display:none;" class="',this.getZclass(),'-text">');
+	this.uuid, '-img"','src="',this.getImage() ,'" class="',this.getZclass(),'-img"/>',
+	'<div id="',this.uuid, '-label" style="display:none;" class="',this.getZclass(),'-text">');
 	
 	out.push(this.getLabel());
 	

@@ -184,7 +184,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			var vert = this.isVertical(),
 				zcls = this.getZclass();;
 			if (vert) p = p.parentNode; //TR
-			if (p && p.id.endsWith("$chdex")) {
+			if (p && p.id.endsWith("-chdex")) {
 				p.className = zcls + "-outer";
 				if (vert)
 					node.parentNode.className = zcls + "-outer-td";

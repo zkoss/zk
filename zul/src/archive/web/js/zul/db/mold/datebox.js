@@ -18,12 +18,12 @@ function (out) {
 	var zcls = this.getZclass(),		
 		uuid = this.uuid;
 	out.push('<span id="', uuid, '"',this.domAttrs_() ,
-			'><input id="', uuid, '$real" class="', zcls,'-inp" autocomplete="off"', this.textAttrs_(), ' />',
-			'<span id="', uuid, '$btn" class="', zcls, '-btn"');
+			'><input id="', uuid, '-real" class="', zcls,'-inp" autocomplete="off"', this.textAttrs_(), ' />',
+			'<span id="', uuid, '-btn" class="', zcls, '-btn"');
 	if (!this._buttonVisible)
 		out.push(' style="display:none"');		
 		
 	out.push('><span class="', zcls, '-img" ></span></span><div id="',
-			uuid, '$pp" class="', zcls, '-pp" style="display:none" tabindex="-1"></div></span>');
+			uuid, '-pp" class="', zcls, '-pp" style="display:none" tabindex="-1"></div></span>');
 
 }

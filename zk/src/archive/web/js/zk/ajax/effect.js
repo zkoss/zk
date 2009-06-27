@@ -34,7 +34,7 @@ zk.eff.Shadow = zk.$extends(zk.Object, {
 		}
 
 		this.node = element;
-		var sdwid = element.id + "$sdw";
+		var sdwid = element.id + "-sdw";
 		jq(element).before('<div id="'+sdwid+this._HTML);
 		this.shadow = jq(sdwid, zk)[0];
 	},
@@ -84,7 +84,7 @@ zk.eff.Shadow = zk.$extends(zk.Object, {
 		if(opts.stackup && node) {
 			if(!stackup)
 				stackup = this.stackup =
-					jq.newStackup(node, node.id + '$sdwstk', shadow);
+					jq.newStackup(node, node.id + '-sdwstk', shadow);
 
 			st = stackup.style;
 			st.left = l +"px";
@@ -129,7 +129,7 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 			mask = this.mask = jq(maskId, zk)[0];
 		}
 		if (opts.stackup)
-			this.stackup = zk(mask).newStackup(mask.id + '$mkstk');
+			this.stackup = zk(mask).newStackup(mask.id + '-mkstk');
 
 		this._syncPos();
 
