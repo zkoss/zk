@@ -454,9 +454,9 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				n = this['e' + nm ];
 			if (n) {
 				this['e' + nm ] = null;
-				zEvt.unlisten(n, 'click', Window[nm + 'click']);
-				zEvt.unlisten(n, 'mouseover', Window[nm + 'over']);
-				zEvt.unlisten(n, 'mouseout', Window[nm + 'out']);
+				jq(n).unbind('click', Window[nm + 'click'])
+					.unbind('mouseover', Window[nm + 'over'])
+					.unbind('mouseout', Window[nm + 'out']);
 			}
 		}
 		this.$supers('unbind_', arguments);

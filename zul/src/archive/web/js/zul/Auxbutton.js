@@ -25,11 +25,10 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 		$btn.zk.disableSelection();
 		$img.zk.disableSelection();
 
-		if (!wgt.inDesign) {
-			$btn.mouseover(this.proxy(this._domOver));
-			$btn.mouseout(this.proxy(this._domOut));
-			$btn.mousedown(this.proxy(this._domDown));
-		}
+		if (!wgt.inDesign)
+			$btn.mouseover(this.proxy(this._domOver))
+				.mouseout(this.proxy(this._domOut))
+				.mousedown(this.proxy(this._domDown));
 	},
 	cleanup: function () {
 		var $btn = jq(this._btn);
@@ -37,11 +36,10 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 		$btn.zk.enableSelection();
 		zk(this._img).enableSelection();
 
-		if (!wgt.inDesign) {
-			$btn.unbind('mouseover', this.proxy(this._domOver));
-			$btn.unbind('mouseout', this.proxy(this._domOut));
-			$btn.unbind('mousedown', this.proxy(this._domDown));
-		}
+		if (!wgt.inDesign)
+			$btn.unbind('mouseover', this.proxy(this._domOver))
+				.unbind('mouseout', this.proxy(this._domOut))
+				.unbind('mousedown', this.proxy(this._domDown));
 	},
 	fixpos: function () {
 		var btn = this._btn;

@@ -132,10 +132,9 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 
 		if (!this.inDesign) {
 			var $btn = jq(btn);
-			if (zk.ie) {
-				$btn.mouseover(Splitter.onover);
-				$btn.mouseout(Splitter.onout);
-			}
+			if (zk.ie)
+				$btn.mouseover(Splitter.onover)
+					.mouseout(Splitter.onout);
 			$btn.click(Splitter.onclick);
 		}
 
@@ -166,10 +165,9 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			btn = this.button;
 		if (btn) {
 			var $btn = jq(btn);
-			if (zk.ie) {
-				$btn.unbind("mouseover", Splitter.onover);
-				$btn.unbind("mouseout", Splitter.onout);
-			}
+			if (zk.ie)
+				$btn.unbind("mouseover", Splitter.onover)
+					.unbind("mouseout", Splitter.onout);
 			$btn.unbind("click", Splitter.onclick);
 		}
 
