@@ -1170,8 +1170,10 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 
 		if (!n || zk.Widget.isInstance(n)) return n;
-		else if (!n.nodeType) //skip Element
-			n = n.target || n; //check DOM event first
+		else if (!n.nodeType) { //skip Element
+			var e = n.originalEvent;
+			n = (e?e.z_target:null) || n.target || n; //check DOM event first
+		}
 
 		for (; n; n = n.vparent||n.parentNode) {
 			var id = n.id;

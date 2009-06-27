@@ -17,32 +17,35 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 		this._wgt = wgt;
 		this._btn = btn;
 		this._ref = ref;
-		this._img = zDom.firstChild(btn, 'SPAN');
 
-		zDom.disableSelection(btn);
-		zDom.disableSelection(this._img);
+		var $btn = jq(btn),
+			$img = $btn.find('>span:first');
+		this._img = $img[0];
+
+		$btn.zk.disableSelection();
+		$img.zk.disableSelection();
 
 		if (!wgt.inDesign) {
-			zEvt.listen(btn, 'mouseover', this.proxy(this._domOver));
-			zEvt.listen(btn, 'mouseout', this.proxy(this._domOut));
-			zEvt.listen(btn, 'mousedown', this.proxy(this._domDown));
+			$btn.mouseover(this.proxy(this._domOver));
+			$btn.mouseout(this.proxy(this._domOut));
+			$btn.mousedown(this.proxy(this._domDown));
 		}
 	},
 	cleanup: function () {
-		var btn = this._btn;
+		var $btn = jq(this._btn);
 
-		zDom.enableSelection(btn); //unlisten in IE
-		zDom.enableSelection(this._img);
+		$btn.zk.enableSelection();
+		zk(this._img).enableSelection();
 
 		if (!wgt.inDesign) {
-			zEvt.unlisten(btn, 'mouseover', this.proxy(this._domOver));
-			zEvt.unlisten(btn, 'mouseout', this.proxy(this._domOut));
-			zEvt.unlisten(btn, 'mousedown', this.proxy(this._domDown));
+			$btn.unbind('mouseover', this.proxy(this._domOver));
+			$btn.unbind('mouseout', this.proxy(this._domOut));
+			$btn.unbind('mousedown', this.proxy(this._domDown));
 		}
 	},
 	fixpos: function () {
 		var btn = this._btn;
-		if (zDom.isRealVisible(btn) && btn.style.position != 'relative') {
+		if (zk(btn).isRealVisible() && btn.style.position != 'relative') {
 			var ref = this._ref, img = this._img,
 				refh = ref.offsetHeight,
 				imgh = img.offsetHeight;
@@ -55,7 +58,7 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 			var v = refh - imgh;
 			if (v)
 				img.style.height = Math.max(0,
-					zk.parseInt(zDom.getStyle(img, 'height')) + v) + 'px';
+					zk.parseInt(jq(img).css('height')) + v) + 'px';
 
 			v = ref.offsetTop - img.offsetTop;
 			btn.style.position = "relative";
@@ -66,12 +69,12 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 	_domOver: function () {
 		var wgt = this._wgt;
 		if (!wgt.isDisabled() && !zk.dragging)
-			zDom.addClass(this._btn, wgt.getZclass() + "-btn-over");
+			jq(this._btn).addClass(wgt.getZclass() + "-btn-over");
 	},
 	_domOut: function () {
 		var wgt = this._wgt;
 		if (!wgt.isDisabled() && !zk.dragging)
-			zDom.rmClass(this._btn, wgt.getZclass() + "-btn-over");
+			jq(this._btn).removeClass(wgt.getZclass() + "-btn-over");
 	},
 	_domDown: function () {
 		var wgt = this._wgt;
@@ -80,8 +83,8 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 				curab = $Auxbutton._curab;
 			if (curab) curab._domUp();
 
-			zDom.addClass(this._btn, wgt.getZclass() + "-btn-clk");
-			zEvt.listen(document.body, "mouseup", this.proxy(this._domUp));
+			jq(this._btn).addClass(wgt.getZclass() + "-btn-clk");
+			jq(document.body).mouseup(this.proxy(this._domUp));
 
 			$Auxbutton._curab = this;
 		}
@@ -91,8 +94,8 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 			curab = $Auxbutton._curab;
 		if (curab) {
 			$Auxbutton._curab = null;
-			zDom.rmClass(curab._btn, curab._wgt.getZclass() + "-btn-clk");
-			zEvt.unlisten(document.body, "mouseup", curab.proxy(this._domUp));
+			jq(curab._btn).removeClass(curab._wgt.getZclass() + "-btn-clk");
+			jq(document.body).unbind("mouseup", curab.proxy(this._domUp));
 		}
 	}
 });

@@ -21,8 +21,8 @@ zk.Event = zk.$extends(zk.Object, {
 			zk.$default(this, data);
 
 		this.opts = opts;
-		this.domEvent = domEvent;
-		if (domEvent) this.domTarget = domEvent.target;
+		if (this.domEvent = domEvent)
+			this.domTarget = domEvent.target;
 	},
 	addOptions: function (opts) {
 		this.opts = zk.copy(this.opts, opts);

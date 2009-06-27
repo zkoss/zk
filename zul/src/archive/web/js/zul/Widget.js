@@ -161,7 +161,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 		var keyCode = evt.keyCode, evtnm = "onCtrlKey", okcancel;
 		switch (keyCode) {
 		case 13: //ENTER
-			var target = evt.domTarget, tn = zDom.tag(target);
+			var target = evt.domTarget, tn = target.tagName;
 			if (tn == "TEXTAREA" || tn == "BUTTON"
 			|| (tn == "INPUT" && target.type.toLowerCase() == "button"))
 				return; //don't change button's behavior (Bug 1556836)

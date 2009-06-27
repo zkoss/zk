@@ -60,7 +60,7 @@ zul.LabelImageWidget = zk.$extends(zul.Widget, {
 	getImageNode_: function () {
 		if (!this._eimg && this._image) {
 			var n = this.getNode();
-			if (n) this._eimg = zDom.firstChild(n, "IMG", true);
+			if (n) this._eimg = jq(n).find('img:first')[0];
 		}
 		return this._eimg;
 	},

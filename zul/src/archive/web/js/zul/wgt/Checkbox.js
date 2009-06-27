@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-_zkc = zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
+zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 	_tabindex: -1,
 	_checked: false,
 
@@ -83,12 +83,16 @@ _zkc = zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		return this.$supers('doClick_', arguments);
 	},
 	getTextNode_: function () {
-		return zDom.firstChild(this.getNode(), "LABEL");
+		return jq(this.getNode()).find('label:first')[0];
 	}
-});
-if (zk.gecko2_)
-	_zkc._domClick = function (evt) {
-		evt.target = evt.currentTarget;
-			//bug #2233787 : this is a bug of firefox 2, it need get currentTarget
-	};
+}, zk.gecko2_ ? {
+	_domClick: function (evt) {
+		var e = evt.originalEvent;
+		if (e) e.z_target = e.currentTarget;
+			//bug 2233787: bug of firefox 2, use currentTarget not target
+			//if pressing arrow keys
+			//It is used by zk.Widget.$
+			//Store it in originalEvent (since jq will construct another)
+	}
+}:null);
 
