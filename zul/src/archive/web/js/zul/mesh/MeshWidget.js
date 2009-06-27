@@ -152,17 +152,17 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	_bindDomNode: function () {
 		for (var n = this.getNode().firstChild; n; n = n.nextSibling)
 			switch(n.id) {
-			case this.uuid + '$head':
+			case this.uuid + '-head':
 				this.ehead = n;
-				this.eheadtbl = zDom.firstChild(n, 'TABLE');
+				this.eheadtbl = jq(n).find('>table:first')[0];
 				break;
-			case this.uuid + '$body':
+			case this.uuid + '-body':
 				this.ebody = n;
-				this.ebodytbl = zDom.firstChild(n, 'TABLE');
+				this.ebodytbl = jq(n).find('>table:first')[0];
 				break;
-			case this.uuid + '$foot':
+			case this.uuid + '-foot':
 				this.efoot = n;
-				this.efoottbl = zDom.firstChild(n, 'TABLE');
+				this.efoottbl = jq(n).find('>table:first')[0];
 				break;
 			}
 
@@ -205,9 +205,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			min = this.ebody.scrollTop, max = min + this.ebody.offsetHeight;
 		for (var j = 0, it = this.getBodyWidgetIterator(), w; (w = it.next()); j++) {
 			if (w.isVisible()) {
-				var row = rows[j],
-					top = zDom.offsetTop(row);
-				if (top + zDom.offsetHeight(row) < min) continue;
+				var row = rows[j], $row = zk(row),
+					top = $row.offsetTop();
+				if (top + $row.offsetHeight() < min) continue;
 				if (top > max) break; //Bug 1822517
 				if (!w._loaded)
 					items.push(w);
@@ -292,7 +292,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		//note: we don't solve this bug for paging yet
 		var wd = n.style.width;
 		if (!wd || wd == "auto" || wd.indexOf('%') >= 0) {
-			wd = zDom.revisedWidth(n, n.offsetWidth);
+			wd = zk(n).revisedWidth(n.offsetWidth);
 			if (wd < 0) wd = 0;
 			if (wd) wd += "px";
 		}
@@ -319,7 +319,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (!hgh || hgh == "auto") {
 				hgh = this.ebody.offsetWidth - this.ebody.clientWidth;
 				if (hgh > 11) 
-					this.ebody.style.height = this.ebody.offsetHeight + zDom.scrollbarWidth() + "px";
+					this.ebody.style.height = this.ebody.offsetHeight + jq.scrollbarWidth() + "px";
 			}
 		}
 		if (this.ehead) {
@@ -376,7 +376,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			bdfaker = wgt.ebdfaker,
 			ftfaker = wgt.eftfaker;
 		if (!hdfaker || !bdfaker || !hdfaker.cells.length
-		|| !bdfaker.cells.length || !zDom.isRealVisible(hdfaker)
+		|| !bdfaker.cells.length || !zk(hdfaker).isRealVisible()
 		|| !wgt.getBodyWidgetIterator().hasNext()) return;
 		
 		var hdtable = wgt.ehead.firstChild, head = wgt.head.getNode();
@@ -411,15 +411,15 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (wgt.efoot) wgt.efoot.firstChild.style.width = hdtable.style.width;
 		
 		for (var i = bdfaker.cells.length; --i >= 0;) {
-			if (!zDom.isVisible(hdfaker.cells[i])) continue;
+			if (!zk(hdfaker.cells[i]).isVisible()) continue;
 			var wd = i != 0 ? bdfaker.cells[i].offsetWidth : count;
-			bdfaker.cells[i].style.width = zDom.revisedWidth(bdfaker.cells[i], wd) + "px";
+			bdfaker.cells[i].style.width = zk(bdfaker.cells[i]).revisedWidth(wd) + "px";
 			hdfaker.cells[i].style.width = bdfaker.cells[i].style.width;
 			if (ftfaker) ftfaker.cells[i].style.width = bdfaker.cells[i].style.width;
-			var cpwd = zDom.revisedWidth(head.cells[i], zk.parseInt(hdfaker.cells[i].style.width));
+			var cpwd = zk(head.cells[i]).revisedWidth(zk.parseInt(hdfaker.cells[i].style.width));
 			head.cells[i].style.width = cpwd + "px";
 			var cell = head.cells[i].firstChild;
-			cell.style.width = zDom.revisedWidth(cell, cpwd) + "px";
+			cell.style.width = zk(cell).revisedWidth(cpwd) + "px";
 			count -= wd;
 		}
 		
@@ -446,9 +446,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		for (var j = 0, it = wgt.getBodyWidgetIterator(), w; (w = it.next());) {
 			if (!w.isVisible() || !w._loaded) continue;
 
-			var row = srcrows[j++],
-				cells = row.cells, nc = zDom.ncols(row),
-				valid = cells.length == nc && zDom.isVisible(row);
+			var row = srcrows[j++], $row = zk(row),
+				cells = row.cells, nc = $row.ncols(),
+				valid = cells.length == nc && $row.isVisible();
 				//skip with colspan and invisible
 			if (valid && nc >= ncols) {
 				maxnc = ncols;
@@ -484,7 +484,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			var d = dst.cells[j], s = src.cells[j];
 			if (zk.opera) {
 				sum += s.offsetWidth;
-				d.style.width = zDom.revisedWidth(s, s.offsetWidth);
+				d.style.width = zk(s).revisedWidth(s.offsetWidth);
 			} else {
 				d.style.width = s.offsetWidth + "px";
 				if (maxnc > 1) { //don't handle single cell case (bug 1729739)

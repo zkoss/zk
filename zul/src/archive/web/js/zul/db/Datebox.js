@@ -24,7 +24,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		buttonVisible: function () {
 			var n = this.getSubnode('btn');
 			if (n)
-				v ? zDom.show(n): zDom.hide(n);
+				v ? jq(n).show(): jq(n).hide();
 		}
 	},
 	onSize: _zkf = function () {

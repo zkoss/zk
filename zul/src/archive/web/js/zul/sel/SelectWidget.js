@@ -65,7 +65,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			this._selectedItem = item;
 			if (item) {
 				this._selectOne(item, false);
-				zDom.scrollIntoView(item, this.ebody);
+				zk(item).scrollIntoView(this.ebody);
 			}
 		}
 	},
@@ -113,7 +113,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		var n = this.getNode(),
 			wd = n.style.width;
 		if (!wd || wd == "auto" || wd.indexOf('%') >= 0) {
-			wd = zDom.revisedWidth(n, n.offsetWidth);
+			wd = zk(n).revisedWidth(n.offsetWidth);
 			if (wd < 0) wd = 0;
 			if (wd) wd += "px";
 		}
@@ -166,10 +166,11 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 					for (;; ++j) {//no need to check length again
 						if (j >= rl) break l_out;
 						r = rows[j];
-						if (zDom.isVisible(r)) break;
+						if (zk(r).isVisible()) break;
 					}
 
-					h = zDom.offsetTop(r) + zDom.offsetHeight(r);
+					var $r = zk(r);
+					h = $r.offsetTop() + $r.offsetHeight();
 					if (h >= hgh) {
 						if (h > hgh + 2) ++sz; //experimental
 						break;
@@ -193,7 +194,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		var nVisiRows = 0, nRows = this.getRows(), lastVisiRow, firstVisiRow, midVisiRow;
 		for (var j = 0, rl = rows.length; j < rl; ++j) { //tree might collapse some items
 			var r = rows[j];
-			if (zDom.isVisible(r)) {
+			if (zk(r).isVisible()) {
 				++nVisiRows;
 				if (!firstVisiRow) firstVisiRow = r;
 
@@ -219,7 +220,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				}
 				if (hgh < 25) hgh = 25;
 
-				var rowhgh = zDom.offsetHeight(firstVisiRow);
+				var rowhgh = zk(firstVisiRow).offsetHeight();
 				if (!rowhgh) rowhgh = this._headHgh(20);
 
 				nRows = Math.round((hgh - diff)/ rowhgh);
@@ -235,9 +236,11 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			if (!hgh) {
 				if (!nVisiRows) hgh = this._headHgh(20) * nRows;
 				else if (nRows <= nVisiRows) {
-					hgh = zDom.offsetTop(midVisiRow) + zDom.offsetHeight(midVisiRow);
+					var $midVisiRow = zk(midVisiRow);
+					hgh = $midVisiRow.offsetTop() + $midVisiRow.offsetHeight();
 				} else {
-					hgh = zDom.offsetTop(lastVisiRow) + zDom.offsetHeight(lastVisiRow);
+					var $lastVisiRow = zk(lastVisiRow);
+					hgh = $lastVisiRow.offsetTop() + $lastVisiRow.offsetHeight();
 					hgh = Math.ceil((nRows * hgh) / nVisiRows);
 				}
 				if (zk.ie) hgh += diff; //strange in IE (or scrollbar shown)
@@ -256,7 +259,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			if (!h || h == "auto") {
 				h = zk.gecko ? this.ebody.offsetHeight - this.ebody.clientHeight : this.ebody.offsetWidth - this.ebody.clientWidth;
 				if (h > 11)
-					this.ebody.style.height = hgh + zDom.scrollbarWidth() + "px";
+					this.ebody.style.height = hgh + jq.scrollbarWidth() + "px";
 			}
 		} else {
 			//if no hgh but with horz scrollbar, IE will show vertical scrollbar, too
@@ -275,7 +278,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			if (!hgh || hgh == "auto") {
 				hgh = this.ebody.offsetWidth - this.ebody.clientWidth;
 				if (hgh > 11)
-					this.ebody.style.height = this.ebody.offsetHeight + zDom.scrollbarWidth() + "px";
+					this.ebody.style.height = this.ebody.offsetHeight + jq.scrollbarWidth() + "px";
 			}
 		}
 	},
@@ -357,7 +360,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 						break;
 					}
 			}
-			zDom.focus(btn, timeout);
+			zk(btn).focus(timeout);
 			return true;
 		}
 		return false;
@@ -396,7 +399,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			return;
 			
 		var target = evt.domTarget,
-			tn = zDom.tag(target),
+			tn = target.tagName,
 			tw = zk.Widget.$(target);
 		if ((tn != "TR" && target.onclick)
 				|| tn == "A" ||(tw != row &&
@@ -458,7 +461,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			case 32: //SPACE
 			case 36: //Home
 			case 35: //End
-				if (zDom.tag(evt.domTarget) != "A")
+				if (evt.domTarget.tagName != "A")
 					this.focus();
 				evt.stop();
 				return false;
@@ -517,7 +520,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				if (!r.isDisabled()) {
 					if (shift) this._toggleSelect(r, true, evt);
 
-					if (zDom.isVisible(nrow)) {
+					if (zk(nrow).isVisible()) {
 						if (!shift) lastrow = r;
 						if (!endless) {
 							if (step > 0) --step;
@@ -532,7 +535,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			if (ctrl) this._focus(lastrow);
 			else this._select(lastrow, evt);
 			this._syncFocus(lastrow);
-			zDom.scrollIntoView(lastrow, this.ebody); // Bug #1823947 and #1823278
+			zk(lastrow).scrollIntoView(this.ebody); // Bug #1823947 and #1823278
 		}
 
 		switch (data.keyCode) {
@@ -553,7 +556,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	_doLeft: zk.$void,
 	_doRight: zk.$void,
 	_shallIgnoreEvent: function(evt) {
-		var tn = zDom.tag(evt.domTarget);
+		var tn = evt.domTarget.tagName;
 		return !evt.domTarget || !evt.target.canActivate() ||
 		((tn == "INPUT" && !evt.domTarget.id.endsWith('$cm')) ||
 		tn == "TEXTAREA" ||
@@ -566,13 +569,13 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	_syncFocus: function (row) {
 		var focusEl = this.getSubnode('a'),
 			n = row.getNode(),
-			offs = zDom.revisedOffset(n);
+			offs = zk(n).revisedOffset();
 		offs = this._toStyleOffset(focusEl, offs[0] + this.ebody.scrollLeft, offs[1]);
 		focusEl.style.top = offs[1] + "px";
 		focusEl.style.left = offs[0] + "px";
 	},
 	_toStyleOffset: function (el, x, y) {
-		var ofs1 = zDom.revisedOffset(el),
+		var ofs1 = zk(el).revisedOffset(),
 			x2 = zk.parseInt(el.style.left), y2 = zk.parseInt(el.style.top);;
 		return [x - ofs1[0] + x2, y  - ofs1[1] + y2];
 	},

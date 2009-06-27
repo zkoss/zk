@@ -77,7 +77,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		if (!scOdd) return;
 		for (var j = 0, even = true, it = this.getBodyWidgetIterator(), w; (w = it.next()); j++) {
 			if (w.isVisible() && w.isStripeable_()) {
-				zDom[even ? 'removeClass' : 'addClass'](w.getNode(), scOdd);
+				jq(w.getNode())[even ? 'removeClass' : 'addClass'](scOdd);
 				even = !even;
 			}
 		}

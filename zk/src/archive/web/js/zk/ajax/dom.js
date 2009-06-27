@@ -607,6 +607,11 @@ zk.copy(jq, { //ZK extension to jq
 		contentType: "application/x-www-form-urlencoded;charset=UTF-8"
 	}, jq.ajaxSettings),
 
+	$$: function (id, subId) {
+		return typeof id == 'string' ?
+			id ? document.getElementsByName(id + (subId ? '-' + subId : '')): null: id;
+	},
+
 	isAncestor: function (p, c) {
 		if (!p) return true;
 		for (; c; c = c.vparent||c.parentNod)

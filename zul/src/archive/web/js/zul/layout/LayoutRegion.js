@@ -324,7 +324,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		this.$supers('doClick_', arguments);		
 	},
 	_docClick: function (evt) {
-		var target = zEvt.target(evt);
+		var target = evt.target;
 		if (this._isSlide && !zDom.isAncestor(this.getSubnode('real'), target)) {
 			if (this.getSubnode('btned') == target) {
 				this.$class.afterSlideUp.apply(this, [target]);
@@ -464,7 +464,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	},
 	// a callback function after the collapsed region slides down
 	afterSlideDown: function (n) {
-		zEvt.listen(document, "click", this.proxy(this._docClick));
+		jq(document).click(this.proxy(this._docClick));
 	},
 	// a callback function after the collapsed region slides up
 	afterSlideUp: function (n) {
@@ -474,7 +474,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		n._lastSize = null;// reset size for Borderlayout
 		s.zIndex = "";
 		this.getSubnode('btn').style.display = "";
-		zEvt.unlisten(document, "click", this.proxy(this._docClick));
+		jq(document).unbind("click", this.proxy(this._docClick));
 		this._isSlideUp = this._isSlide = false;
 	},
 	//drag

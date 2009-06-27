@@ -34,7 +34,7 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 		return this._zclass == null ? "z-listcell" : this._zclass;
 	},
 	getTextNode_: function () {
-		return zDom.firstChild(this.getNode(), "DIV");
+		return jq(this.getNode()).find('>div:first')[0];
 	},
 	getMaxlength: function () {
 		var box = this.getListbox();
@@ -100,7 +100,7 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 	},
 	doMouseOver_: function(evt) {
 		if (zk.gecko && (this._draggable || this.parent._draggable)) {
-			var tag = zDom.tag(evt.domTarget);
+			var tag = evt.domTarget.tagName;
 			if (tag != "INPUT" && tag != "TEXTAREA") {
 				var n = this.getNode();
 				if (n) n.firstChild.style.MozUserSelect = "none";

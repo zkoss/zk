@@ -49,7 +49,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		return attrs + this.getColAttrs();
 	},
 	getTextNode_: function () {
-		return zDom.firstChild(this.getNode(), "DIV");
+		return jq(this.getNode()).find('>div:first')[0];
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
@@ -79,7 +79,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	},
 	_fixedFaker: function () {
 		var n = this.getNode(),
-			index = zDom.cellIndex(n),
+			index = zk(n).cellIndex(),
 			owner = this.getMeshWidget();
 		for (var faker, fs = this.$class._faker, i = fs.length; --i >= 0;) {
 			faker = owner['e' + fs[i]]; // internal element
@@ -100,7 +100,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	},
 	doClick_: function (evt) {
 		if (!zk.dragging && zk.Widget.$(evt.domTarget) == this && this.isSortable_() 
-			&& zDom.tag(evt.domTarget) != "INPUT") {
+			&& evt.domTarget.tagName != "INPUT") {
 			this.fire('onSort');
 			evt.stop();
 		}
@@ -108,17 +108,17 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	doMouseMove_: function (evt) {
 		if (zk.dragging || !this.parent.isSizable()) return;
 		var n = this.getNode(),
-			ofs = zDom.revisedOffset(n); // Bug #1812154
+			ofs = zk(n).revisedOffset(); // Bug #1812154
 		if (this._insizer(evt.pageX - ofs[0])) {
-			zDom.addClass(n, this.getZclass() + "-sizing");
+			jq(n).addClass(this.getZclass() + "-sizing");
 		} else {
-			zDom.removeClass(n, this.getZclass() + "-sizing");
+			jq(n).removeClass(this.getZclass() + "-sizing");
 		}
 	},
 	doMouseOut_: function (evt) {
 		if (this.parent.isSizable()) {
 			var n = this.getNode()
-			zDom.removeClass(n, this.getZclass() + "-sizing");
+			jq(n).removeClass(this.getZclass() + "-sizing");
 		}
 	},
 	_insizer: function (x) {
@@ -130,50 +130,50 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	//drag
 	_ghostsizing: function (dg, ofs, evt) {
 		var wgt = dg.control,
-			el = wgt.getMeshWidget().eheadtbl;
-			of = zDom.revisedOffset(el),
+			el = wgt.getMeshWidget().eheadtbl,
+			of = zk(el).revisedOffset(),
 			n = wgt.getNode();
 		
 		ofs[1] = of[1];
-		ofs[0] += zDom.offsetWidth(n);
+		ofs[0] += zk(n).offsetWidth();
 		jq(document.body).prepend(
 			'<div id="zk_hdghost" style="position:absolute;top:'
-			+ofs[1]+'px;left:'+ofs[0]+'px;width:3px;height:'+zDom.offsetHeight(el.parentNode.parentNode)
+			+ofs[1]+'px;left:'+ofs[0]+'px;width:3px;height:'+zk(el.parentNode.parentNode).offsetHeight()
 			+'px;background:darkgray"></div>');
 		return jq("#zk_hdghost")[0];
 	},
 	_endghostsizing: function (dg, origin) {
-		dg._zszofs = zDom.revisedOffset(dg.node)[0] - zDom.revisedOffset(origin)[0];
+		dg._zszofs = zk(dg.node).revisedOffset()[0] - zk(origin).revisedOffset()[0];
 	},
 	_snapsizing: function (dg, pointer) {
-		var n = dg.control.getNode(),
-			ofs = zDom.revisedOffset(n);
-		pointer[0] += zDom.offsetWidth(n); 
+		var n = dg.control.getNode(), $n = zk(n),
+			ofs = $n.revisedOffset();
+		pointer[0] += $n.offsetWidth(); 
 		if (ofs[0] + dg._zmin >= pointer[0])
 			pointer[0] = ofs[0] + dg._zmin;
 		return pointer;
 	},
 	_ignoresizing: function (dg, pointer, evt) {
 		var wgt = dg.control,
-			n = wgt.getNode(),
-			ofs = zDom.revisedOffset(n); // Bug #1812154
+			n = wgt.getNode(), $n = zk(n),
+			ofs = $n.revisedOffset(); // Bug #1812154
 			
 		if (wgt._insizer(pointer[0] - ofs[0])) {
-			dg._zmin = 10 + zDom.padBorderWidth(n);		
-				return false;
+			dg._zmin = 10 + $n.padBorderWidth();
+			return false;
 		}
 		return true;
 	},
 	_aftersizing: function (dg, evt) {
 		var wgt = dg.control,
-			n = wgt.getNode(),
+			n = wgt.getNode(), $n = zk(n),
 			owner = wgt.getMeshWidget(),
 			wd = dg._zszofs,
 			table = owner.eheadtbl,
 			head = table.tBodies[0].rows[0], 
-			rwd = zDom.revisedWidth(n, wd),
+			rwd = $n.revisedWidth(wd),
 			cells = head.cells,
-			cidx = zDom.cellIndex(n),
+			cidx = $n.cellIndex(),
 			total = 0;
 			
 		for (var k = cells.length; --k >= 0;)
@@ -196,9 +196,9 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		head.cells[cidx].style.width = wd + "px";
 		n.style.width = rwd + "px";
 		var cell = n.firstChild;
-		cell.style.width = zDom.revisedWidth(cell, rwd) + "px";
+		cell.style.width = zk(cell).revisedWidth(rwd) + "px";
 		
-		table.style.width = total + wd + "px";		
+		table.style.width = total + wd + "px";
 		if (owner.efoottbl)
 			owner.efoottbl.style.width = table.style.width;
 		

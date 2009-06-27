@@ -37,7 +37,7 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	_setSelectedDirectly: function (selected) {
 		var n = this.getNode();
 		if (n) {
-			zDom[selected ? 'addClass' : 'removeClass'](n, this.getZclass() + '-seld');
+			jq(n)[selected ? 'addClass' : 'removeClass'](this.getZclass() + '-seld');
 			var cm = this.getSubnode('cm');
 			if (cm) {
 				cm.checked = selected;
@@ -60,7 +60,7 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	},
 	_getVisibleChild: function (row) {
 		for (var i = 0, j = row.cells.length; i < j; i++)
-			if (zDom.isVisible(row.cells[i])) return row.cells[i];
+			if (zk(row.cells[i]).isVisible()) return row.cells[i];
 		return row;
 	},
 	//super//
@@ -86,10 +86,11 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		var n = this.getNode(),
 			zcls = this.getZclass();
 		if (undo) {
-			zDom.removeClass(n, zcls + "-over-seld");
-			zDom.removeClass(n, zcls + "-over");
+			jq(n).removeClass(zcls + "-over-seld")
+				.removeClass(zcls + "-over");
 		} else {
-			zDom.addClass(n, zDom.hasClass(n, zcls + "-seld") ? zcls + "-over-seld" : zcls + "-over");	
+			var $n = jq(n);
+			$n.addClass($n.hasClass(zcls + "-seld") ? zcls + "-over-seld" : zcls + "-over");
 		}
 	},
 	focus: function (timeout) {
@@ -97,7 +98,7 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		if (this.isVisible() && this.canActivate({checkOnly:true})) {
 			var cm = this.getSubnode('cm');
 			if (cm) {
-				zDom.focus(cm, timeout);
+				zk(cm).focus(timeout);
 				return true;
 			} else 
 				this._doFocusIn();
@@ -124,15 +125,15 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	_doFocusIn: function () {
 		var n = this.getNode();
 		if (n)
-			zDom.addClass(this._getVisibleChild(n), this.getZclass() + "-focus");
+			jq(this._getVisibleChild(n)).addClass(this.getZclass() + "-focus");
 	},
 	_doFocusOut: function () {
 		var n = this.getNode();
 		if (n) {
 			var zcls = this.getZclass();
-			zDom.removeClass(n, zcls + "-focus");
+			jq(n).removeClass(zcls + "-focus");
 			for (var i = n.cells.length; --i >= 0;)
-				zDom.removeClass(n.cells[i], zcls + "-focus");
+				jq(n.cells[i]).removeClass(zcls + "-focus");
 		}
 	},
 	_doFocus: function (evt) {
@@ -161,7 +162,7 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 			this._checkAll();
 		} else {
 			var r = this.getSubnode('cm');
-			for (var nms = zDom.$$(r.name), i = nms.length; --i >= 0;)
+			for (var nms = jq.$$(r.name), i = nms.length; --i >= 0;)
 				nms[i].defaultChecked = false;
 			r.defaultChecked = r.checked;
 		}
@@ -188,16 +189,16 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		this.$supers('doMouseOut_', arguments);
 	},
 	doKeyDown_: function (evt) {
-		var tag = zDom.tag(evt.domTarget),
+		var tag = evt.domTarget.tagName,
 			mate = this.getMeshWidget();
 		if (!zk.gecko3 || (tag != "INPUT" && tag != "TEXTAREA"))
-			zDom.disableSelection(mate.getNode());
+			zk(mate.getNode()).disableSelection();
 		mate._doKeyDown(evt);
 		evt.stop({propagation: true});
 		this.$supers('doKeyDown_', arguments);
 	},
 	doKeyUp_: function (evt) {
-		zDom.enableSelection(this.getMeshWidget().getNode());
+		zk(this.getMeshWidget().getNode()).enableSelection();
 		evt.stop({propagation: true});
 		this.$supers('doKeyUp_', arguments);
 	}
