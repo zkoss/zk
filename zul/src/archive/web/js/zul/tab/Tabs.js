@@ -300,7 +300,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				for (var i = 0, count = allTab.length; i < count; i++) {
 					if (allTab[i].offsetLeft >= scrollLength) {
 						//if no Sibling tab no sroll
-						var tabli = jq(allTab[i]).prev("li")[0];
+						var tabli = jq(allTab[i]).prevAll("li")[0];
 						if (tabli == null)  return;
 						move = scrollLength - tabli.offsetLeft;
 						if (isNaN(move)) return;
