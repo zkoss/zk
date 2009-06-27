@@ -1,37 +1,59 @@
 /*
- * jQuery JSON Plugin
- * version: 1.0 (2008-04-17)
- *
- * This document is licensed as free software under the terms of the
- * MIT License: http://www.opensource.org/licenses/mit-license.php
- *
- * Brantley Harris technically wrote this plugin, but it is based somewhat
- * on the JSON.org website's http://www.json.org/json2.js, which proclaims:
- * "NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.", a sentiment that
- * I uphold.  I really just cleaned it up.
- *
- * It is also based heavily on MochiKit's serializeJSON, which is 
- * copywrited 2005 by Bob Ippolito.
- */
- 
-(function($) {   
-    $._toIntAL = function(n) 
-    // Format integers to have at least two digits.
-    {    
+    http://www.JSON.org/json2.js
+    2009-06-18
+
+    Public Domain.
+
+    NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
+
+    See http://www.JSON.org/js.html
+*/
+
+/*jslint evil: true */
+
+/*members "", "\b", "\t", "\n", "\f", "\r", "\"", JSON, "\\", apply,
+    call, charCodeAt, getUTCDate, getUTCFullYear, getUTCHours,
+    getUTCMinutes, getUTCMonth, getUTCSeconds, hasOwnProperty, join,
+    lastIndex, length, parse, prototype, push, replace, slice, stringify,
+    test, toJSON, toString, valueOf
+*/
+
+// Create a JSON object only if one does not already exist. We create the
+// methods in a closure to avoid creating global variables.
+
+//Tom//var JSON = JSON || {};
+
+(function ($) {
+
+    function f(n) {
+        // Format integers to have at least two digits.
         return n < 10 ? '0' + n : n;
     }
 
-    Date.prototype.toJSON = function(date)
-    // Yes, it polutes the Date namespace, but we'll allow it here, as
-    // it's damned usefull.
-    {
-        return this.getUTCFullYear()   + '-' +
-             $._toIntAL(this.getUTCMonth()) + '-' +
-             $._toIntAL(this.getUTCDate());
-    };
+    if (typeof Date.prototype.toJSON !== 'function') {
 
-    var escapeable = /["\\\x00-\x1f\x7f-\x9f]/g;
-    var meta = {    // table of character substitutions
+        Date.prototype.toJSON = function (key) {
+
+            return this.valueOf() ? this.getUTCFullYear()   + '-' +
+                 f(this.getUTCMonth() + 1) + '-' +
+                 f(this.getUTCDate())      + 'T' +
+                 f(this.getUTCHours())     + ':' +
+                 f(this.getUTCMinutes())   + ':' +
+                 f(this.getUTCSeconds())   + 'Z' : null;
+        };
+
+        String.prototype.toJSON =
+        Number.prototype.toJSON =
+        Boolean.prototype.toJSON = function (key) {
+            return this.valueOf();
+        };
+    }
+
+    var cx = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,
+        escapable = /[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,
+        gap,
+        indent,
+        meta = {    // table of character substitutions
             '\b': '\\b',
             '\t': '\\t',
             '\n': '\\n',
@@ -39,105 +61,197 @@
             '\r': '\\r',
             '"' : '\\"',
             '\\': '\\\\'
-        };
-        
-    $._quoteStr = function(string)
-    // Places quotes around a string, inteligently.
-    // If the string contains no control characters, no quote characters, and no
-    // backslash characters, then we can safely slap some quotes around it.
-    // Otherwise we must also replace the offending characters with safe escape
-    // sequences.
-    {
-        if (escapeable.test(string))
-        {
-            return '"' + string.replace(escapeable, function (a) 
-            {
+        },
+        rep;
+
+
+    function quote(string) {
+
+// If the string contains no control characters, no quote characters, and no
+// backslash characters, then we can safely slap some quotes around it.
+// Otherwise we must also replace the offending characters with safe escape
+// sequences.
+
+        escapable.lastIndex = 0;
+        return escapable.test(string) ?
+            '"' + string.replace(escapable, function (a) {
                 var c = meta[a];
-                if (typeof c === 'string') {
-                    return c;
-                }
-                c = a.charCodeAt();
-                return '\\u00' + Math.floor(c / 16).toString(16) + (c % 16).toString(16);
-            }) + '"';
+                return typeof c === 'string' ? c :
+                    '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
+            }) + '"' :
+            '"' + string + '"';
+    }
+
+
+    function str(key, holder) {
+
+// Produce a string from holder[key].
+
+        var i,          // The loop counter.
+            k,          // The member key.
+            v,          // The member value.
+            length,
+            mind = gap,
+            partial,
+            value = holder[key];
+
+// If the value has a toJSON method, call it to obtain a replacement value.
+
+        if (value && typeof value === 'object' &&
+                typeof value.toJSON === 'function') {
+            value = value.toJSON(key);
         }
-        return '"' + string + '"';
-    };
-    
-    $.toJSON = function(o)
-    {
-        var type = typeof(o);
-        
-        if (type == "undefined")
-            return "undefined";
-        else if (type == "number" || type == "boolean")
-            return o + "";
-        else if (o === null)
-            return "null";
-        
-        // Is it a string?
-        if (type == "string") 
-        {
-            return $._quoteStr(o);
+
+// If we were called with a replacer function, then call the replacer to
+// obtain a replacement value.
+
+        if (typeof rep === 'function') {
+            value = rep.call(holder, key, value);
         }
-        
-        // Does it have a .toJSON function?
-        if (type == "object" && typeof o.toJSON == "function") 
-            return o.toJSON();
-        
-        // Is it an array?
-        if (type != "function" && typeof(o.length) == "number") 
-        {
-            var ret = [];
-            for (var i = 0; i < o.length; i++) {
-                ret.push( $.toJSON(o[i]) );
+
+// What happens next depends on the value's type.
+
+        switch (typeof value) {
+        case 'string':
+            return quote(value);
+
+        case 'number':
+
+// JSON numbers must be finite. Encode non-finite numbers as null.
+
+            return isFinite(value) ? String(value) : 'null';
+
+        case 'boolean':
+        case 'null':
+
+// If the value is a boolean or null, convert it to a string. Note:
+// typeof null does not produce 'null'. The case is included here in
+// the remote chance that this gets fixed someday.
+
+            return String(value);
+
+// If the type is 'object', we might be dealing with an object or an array or
+// null.
+
+        case 'object':
+
+// Due to a specification blunder in ECMAScript, typeof null is 'object',
+// so watch out for that case.
+
+            if (!value) {
+                return 'null';
             }
-            return "[" + ret.join(",") + "]";
-        }
-        
-        // If it's a function, we have to warn somebody!
-        if (type == "function") {
-            throw "Unable to json function";
-        }
-        
-        // It's probably an object, then.
-        var ret = [];
-        for (var k in o) {
-            var name;
-            type = typeof(k);
-            
-            if (type == "number")
-                name = '"' + k + '"';
-            else if (type == "string")
-                name = $._quoteStr(k);
-            else
-                continue;  //skip non-string or number keys
-            
-            var val = $.toJSON(o[k]);
-            if (typeof(val) == "string")
-	            ret.push(name + ":" + val);
 
-            // skip non-serializable values
-        }
-        return "{" + ret.join(",") + "}";
-    };
-    
-    $.evalJSON = function(src)
-    // Evals JSON that we know to be safe.
-    {
-        return eval("(" + src + ")");
-    };
-    
-    $.secureEvalJSON = function(src)
-    // Evals JSON in a way that is *more* secure.
-    {
-        var filtered = src;
-        filtered = filtered.replace(/\\["\\\/bfnrtu]/g, '@');
-        filtered = filtered.replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']');
-        filtered = filtered.replace(/(?:^|:|,)(?:\s*\[)+/g, '');
-        
-        if (/^[\],:{}\s]*$/.test(filtered))
-            return eval("(" + src + ")");
+// Make an array to hold the partial results of stringifying this object value.
 
-        throw "source might not be safe";
-    };
-})(jQuery);
+            gap += indent;
+            partial = [];
+
+// Is the value an array?
+
+            if (Object.prototype.toString.apply(value) === '[object Array]') {
+
+// The value is an array. Stringify every element. Use null as a placeholder
+// for non-JSON values.
+
+                length = value.length;
+                for (i = 0; i < length; i += 1) {
+                    partial[i] = str(i, value) || 'null';
+                }
+
+// Join all of the elements together, separated with commas, and wrap them in
+// brackets.
+
+                v = partial.length === 0 ? '[]' :
+                    gap ? '[\n' + gap +
+                            partial.join(',\n' + gap) + '\n' +
+                                mind + ']' :
+                          '[' + partial.join(',') + ']';
+                gap = mind;
+                return v;
+            }
+
+// If the replacer is an array, use it to select the members to be stringified.
+
+            if (rep && typeof rep === 'object') {
+                length = rep.length;
+                for (i = 0; i < length; i += 1) {
+                    k = rep[i];
+                    if (typeof k === 'string') {
+                        v = str(k, value);
+                        if (v) {
+                            partial.push(quote(k) + (gap ? ': ' : ':') + v);
+                        }
+                    }
+                }
+            } else {
+
+// Otherwise, iterate through all of the keys in the object.
+
+                for (k in value) {
+                    if (Object.hasOwnProperty.call(value, k)) {
+                        v = str(k, value);
+                        if (v) {
+                            partial.push(quote(k) + (gap ? ': ' : ':') + v);
+                        }
+                    }
+                }
+            }
+
+// Join all of the member texts together, separated with commas,
+// and wrap them in braces.
+
+            v = partial.length === 0 ? '{}' :
+                gap ? '{\n' + gap + partial.join(',\n' + gap) + '\n' +
+                        mind + '}' : '{' + partial.join(',') + '}';
+            gap = mind;
+            return v;
+        }
+    }
+
+// If the JSON object does not yet have a stringify method, give it one.
+
+//Tom//    if (typeof JSON.stringify !== 'function') {
+        $.toJSON = function (value, replacer, space) {
+
+// The stringify method takes a value and an optional replacer, and an optional
+// space parameter, and returns a JSON text. The replacer can be a function
+// that can replace values, or an array of strings that will select the keys.
+// A default replacer method can be provided. Use of the space parameter can
+// produce text that is more easily readable.
+
+            var i;
+            gap = '';
+            indent = '';
+
+// If the space parameter is a number, make an indent string containing that
+// many spaces.
+
+            if (typeof space === 'number') {
+                for (i = 0; i < space; i += 1) {
+                    indent += ' ';
+                }
+
+// If the space parameter is a string, it will be used as the indent string.
+
+            } else if (typeof space === 'string') {
+                indent = space;
+            }
+
+// If there is a replacer, it must be a function or an array.
+// Otherwise, throw an error.
+
+            rep = replacer;
+            if (replacer && typeof replacer !== 'function' &&
+                    (typeof replacer !== 'object' ||
+                     typeof replacer.length !== 'number')) {
+                throw new Error('JSON.stringify');
+            }
+
+// Make a fake root object containing our value under the key of ''.
+// Return the result of stringifying the value.
+
+            return str('', {'': value});
+        };
+//Tom//    }
+}(jQuery));
