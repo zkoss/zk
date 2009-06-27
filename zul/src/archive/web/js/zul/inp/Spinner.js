@@ -67,20 +67,17 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 	onSize: _zkf = function () { //from zul.fixDropBtn2
 		var btn = this.btn;
 		//note: isRealVisible handles null argument
-		if (zDom.isRealVisible(btn) && btn.style.position != "relative") {
+		if (zk(btn).isRealVisible() && btn.style.position != "relative") {
 			var inp = this.inp, img = btn.firstChild;
 			if (!inp.offsetHeight || !img.offsetHeight) {
-				setTimeout("_zkf()", 66);
+				setTimeout(function () {this.onSize();}, 66);
 				return;
 			}
-			$int = function(v,b){
-				v = v ? parseInt(v, b || 10): 0;
-				return isNaN(v) ? 0: v;
-			} 
+
 			//Bug 1738241: don't use align="xxx"
 			var v = inp.offsetHeight - img.offsetHeight;
 			if (v !== 0) {
-				var imghgh = $int(zDom.getStyle(img, "height")) + v;
+				var imghgh = zk.parseInt(jq(img).css("height")) + v;
 				img.style.height = (imghgh < 0 ? 0 : imghgh) + "px";
 			}
 
@@ -94,31 +91,30 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 	onHide: zul.inp.Textbox.onHide,
 	validate: zul.inp.Intbox.validate,
 	doKeyPress_: function(evt){
-		this.ignoreKeys(evt.domEvent, "0123456789" + zk.MINUS);
-		this.$supers('doKeyPress_', arguments);
+		if (!this._shallIgnore(evt, zul.inp.InputWidget._allowKeys))
+			this.$supers('doKeyPress_', arguments);
 	},
 	doKeyDown_: function(evt){
 		var inp = this.inp;
 		if (inp.disabled || inp.readOnly)
 			return;
 	
-		var code =zEvt.keyCode(evt);
-		switch (code) {
-			case 38://up
-				this.checkValue();
-				this._increase(true);
-				zEvt.stop(evt.domEvent);
-				break;
-			case 40://down
-				this.checkValue();
-				this._increase(false);
-				zEvt.stop(evt.domEvent);
-				break;
+		switch (evt.keyCode) {
+		case 38://up
+			this.checkValue();
+			this._increase(true);
+			evt.stop();
+			return;
+		case 40://down
+			this.checkValue();
+			this._increase(false);
+			evt.stop();
+			return;
 		}
 		this.$supers('doKeyDown_', arguments);
 	},
 	ondropbtnup: function (evt) {
-		zDom.rmClass(this._currentbtn, this.getZclass() + "-btn-clk");
+		jq(this._currentbtn).removeClass(this.getZclass() + "-btn-clk");
 		this.domUnlisten_(document.body, "mouseup", "ondropbtnup");
 		this._currentbtn = null;
 	},
@@ -127,7 +123,7 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 		if (this.inp && !this.inp.disabled && !zk.dragging) {
 			if (this._currentbtn)
 				this.ondropbtnup(evt);
-			zDom.addClass(btn, this.getZclass() + "-btn-clk");
+			jq(btn).addClass(this.getZclass() + "-btn-clk");
 			this.domListen_(document.body, "mouseup", "ondropbtnup");
 			this._currentbtn = btn;
 		}
@@ -139,9 +135,9 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 		this.checkValue();
 
 		btn = zk.opera || zk.safari ? btn : btn.firstChild,
-		ofs = zDom.revisedOffset(btn);
+		ofs = zk(btn).revisedOffset();
 		
-		if ((zEvt.y(evt) - ofs[1]) < btn.offsetHeight / 2) { //up
+		if ((evt.pageY - ofs[1]) < btn.offsetHeight / 2) { //up
 			this._increase(true);
 			this._startAutoIncProc(true);
 		} else {	// down
@@ -176,7 +172,7 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 	},
 	_btnOut: function(evt){
 		if (this.inp && !this.inp.disabled && !zk.dragging)
-			zDom.rmClass(this.btn, this.getZclass()+"-btn-over");
+			jq(this.btn).removeClass(this.getZclass()+"-btn-over");
 			
 		var inp = this.inp;
 		if(inp.disabled) return;
@@ -185,7 +181,7 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 	},
 	_btnOver: function(evt){
 		if (this.inp && !this.inp.disabled && !zk.dragging)
-			zDom.addClass(this.btn, this.getZclass()+"-btn-over");
+			jq(this.btn).addClass(this.getZclass()+"-btn-over");
 	},
 	_increase: function (is_add){
 		var inp = this.inp,

@@ -60,24 +60,20 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		}
 		return {error: zMsgFormat.format(msgzul.DATE_REQUIRED + "HH:mm ,rather than: " + value)};
 	},
-	$int: function(v,b){
-				v = v ? parseInt(v, b || 10): 0;
-				return isNaN(v) ? 0: v;
-	},
 	onSize: _zkf = function () { //from zul.fixDropBtn2
 		var btn = this.btn;
 		//note: isRealVisible handles null argument
-		if (zDom.isRealVisible(btn) && btn.style.position != "relative") {
+		if (zk(btn).isRealVisible() && btn.style.position != "relative") {
 			var inp = this.inp, img = btn.firstChild;
 			if (!inp.offsetHeight || !img.offsetHeight) {
-				setTimeout("_zkf()", 66);
+				setTimeout(function () {this.onSize()}, 66);
 				return;
 			}
 		
 			//Bug 1738241: don't use align="xxx"
 			var v = inp.offsetHeight - img.offsetHeight;
 			if (v !== 0) {
-				var imghgh = this.$int(zDom.getStyle(img, "height")) + v;
+				var imghgh = zk.parseInt(jq(img).css("height")) + v;
 				img.style.height = (imghgh < 0 ? 0 : imghgh) + "px";
 			}
 
@@ -113,52 +109,52 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			return;
 	
 		this.lastPos = sels[0];
-		var code =zEvt.keyCode(evt);
+		var code = evt.keyCode;
 		switch(code){
-			case 48:case 96://0
-			case 49:case 97://1
-			case 50:case 98://2
-			case 51:case 99://3
-			case 52:case 100://4
-			case 53:case 101://5
-			case 54:case 102://6
-			case 55:case 103://7
-			case 56:case 104://8
-			case 57:case 105://9
-				code = code - (code>=96?96:48);
-				this._setTimeDigit(code);
-				zEvt.stop(evt.domEvent);
-				break;
-			case 37://left
-				break;
-			case 38://up
-				this.onUp();
-				zEvt.stop(evt.domEvent);
-				break;
-			case 39://right
-				break;
-			case 40://down
-				this.onDown();
-				zEvt.stop(evt.domEvent);
-				break;
-			case 46://del
-				this.clearTime();
-				zEvt.stop(evt.domEvent);
-				break;
-			case 9:
-				//zkTxbox.onupdate(inp);
-				break
-			case 13: case 27: case 35:case 36://enter,esc,tab,home,end
-				break;
-			default:
-				if (!(code >= 112 && code <= 123) //F1-F12
-				&& !evt.domEvent.ctrlKey && !evt.domEvent.altKey)
-					zEvt.stop(evt.domEvent);
+		case 48:case 96://0
+		case 49:case 97://1
+		case 50:case 98://2
+		case 51:case 99://3
+		case 52:case 100://4
+		case 53:case 101://5
+		case 54:case 102://6
+		case 55:case 103://7
+		case 56:case 104://8
+		case 57:case 105://9
+			code = code - (code>=96?96:48);
+			this._setTimeDigit(code);
+			evt.stop();
+			return;
+		case 37://left
+			break;
+		case 38://up
+			this.onUp();
+			evt.stop();
+			return;
+		case 39://right
+			break;
+		case 40://down
+			this.onDown();
+			evt.stop();
+			return;
+		case 46://del
+			this.clearTime();
+			evt.stop();
+			return;
+		case 9:
+			//zkTxbox.onupdate(inp);
+			break
+		case 13: case 27: case 35:case 36://enter,esc,tab,home,end
+			break;
+		default:
+			if (!(code >= 112 && code <= 123) //F1-F12
+			&& !evt.ctrlKey && !evt.altKey)
+				evt.stop();
 		}
 		this.$supers('doKeyDown_', arguments);
 	},
 	ondropbtnup: function (evt) {
-		zDom.rmClass(this._currentbtn, this.getZclass() + "-btn-clk");
+		jq(this._currentbtn).removeClass(this.getZclass() + "-btn-clk");
 		this.domUnlisten_(document.body, "mouseup", "ondropbtnup");
 		this._currentbtn = null;
 	},
@@ -167,7 +163,7 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		if (this.inp && !this.inp.disabled) {
 			if (this._currentbtn)
 				this.ondropbtnup(evt);
-			zDom.addClass(btn, this.getZclass() + "-btn-clk");
+			jq(btn).addClass(this.getZclass() + "-btn-clk");
 			this.domListen_(document.body, "mouseup", "ondropbtnup");
 			this._currentbtn = btn;
 		}
@@ -177,8 +173,8 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		if(inp.disabled) return;
 		
 		var btn = zk.opera || zk.safari ? btn : btn.firstChild,
-			ofs = zDom.revisedOffset(btn);
-		if ((zEvt.y(evt) - ofs[1]) < btn.offsetHeight / 2) { //up
+			ofs = zk(btn).revisedOffset();
+		if ((evt.pageY - ofs[1]) < btn.offsetHeight / 2) { //up
 			this.onUp();
 			this._startAutoIncProc(true);
 		} else {
@@ -199,7 +195,7 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	_btnOut: function(evt){
 		if (this.inp && !this.inp.disabled && !zk.dragging)
-			zDom.rmClass(this.btn, this.getZclass()+"-btn-over");
+			jq(this.btn).removeClass(this.getZclass()+"-btn-over");
 			
 		var inp = this.inp;
 		if(inp.disabled || zk.dragging) return;
@@ -208,10 +204,10 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	_btnOver: function(evt){
 		if (this.inp && !this.inp.disabled && !zk.dragging)
-			zDom.addClass(this.btn, this.getZclass()+"-btn-over");
+			jq(this.btn).addClass(this.getZclass()+"-btn-over");
 	},
 	_selrange: function (){
-			var sel = zDom.getSelectionRange(this.inp);
+			var sel = zk(this.inp).getSelectionRange();
 			if(sel[0]>sel[1]){
 				var t = sel[1];
 				sel[1] = sel[0];
@@ -222,14 +218,12 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	_calInc: function (cmp){
 		var pos = this._checkPosition();
 		switch(pos){
-			case this.POS_MIN:
-				return 60;
-				break;
-			case this.POS_HOUR:
-				return 3600;
-				break;
-			default:
-				return 0;
+		case this.POS_MIN:
+			return 60;
+		case this.POS_HOUR:
+			return 3600;
+		default:
+			return 0;
 		}
 	},
 	onUp: function(cmp) {
@@ -253,12 +247,12 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	_markPositionSel: function() {
 		var pos = this._checkPosition();
 		switch (pos) {
-			case this.POS_HOUR:
-				this._markselection(0, 2);
-				break;
-			case this.POS_MIN:
-				this._markselection(3, 5);
-				break;
+		case this.POS_HOUR:
+			this._markselection(0, 2);
+			break;
+		case this.POS_MIN:
+			this._markselection(3, 5);
+			break;
 		}
 	},
 	_check: function(timestr) {
@@ -267,8 +261,8 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		}
 		var ta = timestr.split(':');
 		if (ta.length == 2) {
-			var hour = this.$int(ta[0]),
-				min = this.$int(ta[1]),
+			var hour = zk.parseInt(ta[0]),
+				min = zk.parseInt(ta[1]),
 				hiterr = false;
 			if (isNaN(hour) || hour > 23 || hour < 0) {
 				return false;
@@ -303,42 +297,42 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			min = this.lastTime.getMinutes(),
 			newpos = 0;
 		switch (sel[0]) {
-			case 0:
-				if (n > 2) {
-					hour = n;
-					newpos = 3;
-				} else {
-					hour = hour % 10 + n * 10;
-					newpos = 1;
-				}
-				if (hour > 23)
-					return;
-	
-				break;
-			case 1:
-				hour = hour - hour % 10 + n;
-				if (hour > 23)
-					return;
+		case 0:
+			if (n > 2) {
+				hour = n;
 				newpos = 3;
-				break;
-			case 3:
-				if (n > 5) {
-					min = n;
-				} else {
-					min = min % 10 + n * 10;
-				}
-				if (min > 59)
-					return;
-				newpos = 4;
-				break;
-			case 4:
-				min = min - min % 10 + n;
-				if (min > 59)
-					return;
-				newpos = 4;
-				break;
-			default:
+			} else {
+				hour = hour % 10 + n * 10;
+				newpos = 1;
+			}
+			if (hour > 23)
 				return;
+
+			break;
+		case 1:
+			hour = hour - hour % 10 + n;
+			if (hour > 23)
+				return;
+			newpos = 3;
+			break;
+		case 3:
+			if (n > 5) {
+				min = n;
+			} else {
+				min = min % 10 + n * 10;
+			}
+			if (min > 59)
+				return;
+			newpos = 4;
+			break;
+		case 4:
+			min = min - min % 10 + n;
+			if (min > 59)
+				return;
+			newpos = 4;
+			break;
+		default:
+			return;
 		}
 		var newtimestr = this._formatFixed(hour, 2) + ":" + this._formatFixed(min, 2);
 		this.setTime(newtimestr);
@@ -350,8 +344,8 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		}
 		var inp = this.inp,
 			ta = timestr.split(':'),
-			hour = this.$int(ta[0]),
-			min = this.$int(ta[1]),
+			hour = zk.parseInt(ta[0]),
+			min = zk.parseInt(ta[1]),
 			newtimestr = this._formatFixed(hour, 2) + ":" + this._formatFixed(min, 2);
 	
 		this.lastTime.setHours(hour);

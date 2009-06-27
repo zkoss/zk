@@ -168,7 +168,7 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 				zcls = this.getZclass();
 			if (!zDom.hasClass(n, zcls + "-visi") &&
 				(!zk.ie || !zDom.isAncestor(n, evt.domEvent.relatedTarget || evt.domEvent.toElement)))
-					zDom.rmClass(n, zcls + "-over");
+					zDom.removeClass(n, zcls + "-over");
 		}
 	},
 	_doClick: function (evt) {

@@ -175,6 +175,6 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		var top = wgt.isTopmost(),
 			n = top ? wgt.getSubnode('a') : wgt.getNode(),
 			cls = wgt.getZclass() + (top ? '-body-over' : '-over');
-		zDom.rmClass(n, cls);
+		zDom.removeClass(n, cls);
 	}
 });

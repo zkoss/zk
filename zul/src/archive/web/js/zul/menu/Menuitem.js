@@ -28,8 +28,8 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 			var n = this.getNode();
 			if (n && !this.isTopmost() && !this.getImage()) {
 				var zcls = this.getZclass();
-				zDom.rmClass(n, zcls + '-cnt-ck');
-				zDom.rmClass(n, zcls + '-cnt-unck');
+				zDom.removeClass(n, zcls + '-cnt-ck');
+				zDom.removeClass(n, zcls + '-cnt-unck');
 				if (this._checkmark)
 					zDom.addClass(n, zcls + (checked ? '-cnt-ck' : '-cnt-unck'));
 			}
@@ -127,7 +127,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 				anc = this.getSubnode('a');
 
 			if (topmost) {
-				zDom.rmClass(anc, this.getZclass() + '-body-over');
+				zDom.removeClass(anc, this.getZclass() + '-body-over');
 				anc = anc.parentNode;
 			}
 			if ('javascript:;' == anc.href) {
@@ -194,6 +194,6 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		var top = wgt.isTopmost(),
 			n = top ? wgt.getSubnode('a') : wgt.getNode(),
 			cls = wgt.getZclass() + (top ? '-body-over' : '-over');
-		zDom.rmClass(n, cls);
+		zDom.removeClass(n, cls);
 	}
 });

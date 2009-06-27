@@ -329,7 +329,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		var target = zEvt.target(evt),
 			table = zDom.ancestor(target, "TABLE"),
 			wgt = zk.Widget.$(target);
-		zDom.rmClass(table, wgt.getZclass() + "-btn-over");
+		zDom.removeClass(table, wgt.getZclass() + "-btn-over");
 	},
 	_domMouseDown: function (evt) {		
 		var target = zEvt.target(evt),
@@ -345,7 +345,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 	_domMouseUp: function (evt) {
 		if (zul.mesh.Paging._downbtn) {
 			var zcls = zk.Widget.$(zul.mesh.Paging._downbtn).getZclass();
-			zDom.rmClass(zul.mesh.Paging._downbtn, zcls + "-btn-clk");
+			zDom.removeClass(zul.mesh.Paging._downbtn, zcls + "-btn-clk");
 		}
 		zul.mesh.Paging._downbtn = null;
 		zEvt.unlisten(document.body, "mouseup", zul.mesh.Paging._domMouseUp);

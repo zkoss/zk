@@ -52,11 +52,11 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 
 		if (oldsel && oldsel.parent == this) { //we don't clear _sel precisely, so...
 			var n = oldsel.getNode();
-			if (n) zDom.rmClass(n, oldsel.getZclass() + '-seld');
+			if (n) jq(n).removeClass(oldsel.getZclass() + '-seld');
 		}
 
 		if (sel && !sel.isDisabled())
-			zDom.addClass(sel.getNode(), sel.getZclass() + '-seld');
+			jq(sel.getNode()).addClass(sel.getZclass() + '-seld');
 
 		if (opts.sendOnSelect && this._lastsel != sel) {
 			this._lastsel = sel;
@@ -99,7 +99,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			}
 
 			if (sel) { //exact match
-				var ofs = zDom.getSelectionRange(inp);
+				var ofs = zk(inp).getSelectionRange();
 				if (ofs[0] == 0 && ofs[1] == val.length) //full selected
 					sel = this._next(sel, bUp); //next
 			} else {
@@ -128,7 +128,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		var inp = this.getInputNode_(),
 			val = inp.value = sel ? sel.getLabel(): '';
 		if (val)
-			zDom.setSelectionRange(inp, 0, val.length)
+			zk(inp).setSelectionRange(0, val.length)
 		this._hilite2(sel, opts);
 	},
 	otherPressed_: function (evt) {
@@ -143,7 +143,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 
 		var inp = this.getInputNode_(),
 			val = inp.value,
-			ofs = zDom.getSelectionRange(inp)
+			ofs = zk(inp).getSelectionRange()
 			fchild = this.firstChild;
 		if (!val || !fchild
 		|| ofs[0] != val.length || ofs[0] != ofs[1]) //not at end
@@ -162,7 +162,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			if (!item.isDisabled() && item.isVisible()
 			&& item.getLabel().toLowerCase().startsWith(val)) {
 				inp.value = item.getLabel();
-				zDom.setSelectionRange(inp, val.length, inp.value.length);
+				zk(inp).setSelectionRange(val.length, inp.value.length);
 				this._hilite2(item);
 				return;
 			}

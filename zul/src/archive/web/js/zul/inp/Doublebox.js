@@ -29,6 +29,9 @@ zul.inp.Doublebox = zk.$extends(zul.inp.Intbox, {
 		return zcs != null ? zcs: "z-doublebox";
 	},
 	doKeyPress_: function(evt){
-		this.ignoreKeys(evt.domEvent, "0123456789"+zk.MINUS+zk.DECIMAL);
+		if (!this._shallIgnore(evt, zul.inp.Doublebox._allowKeys))
+			this.$supers('doKeyPress_', arguments);
 	}
+},{
+	_allowKeys: zul.inp.InputWidget._allowKeys+zk.DECIMAL+zk.PERCENT+zk.GROUPING
 });

@@ -28,16 +28,16 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			if (inp) {
 				inp.disabled = disabled;
 				var zcls = this.getZclass(),
-					fnm = disabled ? 'addClass': 'rmClass';
-				zDom[fnm](this.getNode(), zcls + '-disd');
-				zDom[fnm](inp, zcls + '-text-disd');
+					fnm = disabled ? 'addClass': 'removeClass';
+				jq(this.getNode())[fnm](zcls + '-disd');
+				jq(inp)[fnm](zcls + '-text-disd');
 			}
 		},
 		readonly: function (readonly) {
 			var inp = this.getInputNode_();
 			if (inp) {
 				inp.readOnly = readonly;
-				zDom[readonly ? 'addClass': 'rmClass'](inp,
+				jq(inp)[readonly ? 'addClass': 'removeClass'](
 					this.getZclass() + '-readonly');
 			}
 		},
@@ -141,13 +141,13 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	doFocus_: function (evt) {
 		this.$supers('doFocus_', arguments);
 
-		if (zDom.tag(evt.domTarget)) { //Bug 2111900
+		if (evt.domTarget.tagName) { //Bug 2111900
 			var inp = this.getInputNode_();
 			if (this.isListen('onChanging')) {
 				this._lastChg = inp.value;
 				this._tidChg = setInterval(this.proxy(this._onChanging), 500);
 			}
-			zDom.addClass(inp, this.getZclass() + '-focus');
+			jq(inp).addClass(this.getZclass() + '-focus');
 		}
 	},
 	doBlur_: function (evt) {
@@ -156,7 +156,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		this._stopOnChanging();
 
 		var inp = this.getInputNode_();
-		zDom.rmClass(inp, this.getZclass() + '-focus');
+		jq(inp).removeClass(this.getZclass() + '-focus');
 		if (!zk.alerting && this.shallUpdate_(zk.currentFocus))
 			this.updateChange_();
 	},
@@ -164,7 +164,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	_doSelect: function (evt) {
 		if (this.isListen('onSelection')) {
 			var inp = this.getInputNode_(),
-				sr = zDom.getSelectionRange(inp),
+				sr = zk(inp).getSelectionRange(),
 				b = sr[0], e = sr[1];
 			this.fire('onSelection', {start: b, end: e,
 				selected: inp.value.substring(b, e)});
@@ -188,7 +188,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		}
 		if (!remainError) {
 			this._errmsg = null;
-			zDom.rmClass(this.getInputNode_(), this.getZclass() + "-text-invalid");
+			jq(this.getInputNode_()).removeClass(this.getZclass() + "-text-invalid");
 		}
 		if (revalidate)
 			delete this._lastRawValVld; //cause re-valid
@@ -203,7 +203,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		this._errmsg = msg;
 
 		if (this.desktop) { //err not visible if not attached
-			zDom.addClass(this.getInputNode_(), this.getZclass() + "-text-invalid");
+			jq(this.getInputNode_()).addClass(this.getZclass() + "-text-invalid");
 
 			var cst = this._cst, errbox;
 			if (cst) {
@@ -257,14 +257,11 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			zul.inp.validating = false;
 		}
 	},
-	ignoreKeys: function (domEvt, keys) {
-		if(domEvt.altKey || domEvt.ctrlKey)
-			return;
-		var k = zEvt.keyCode(domEvt);
-		if(!zk.ie && k < 32) return;
-		var c = zEvt.charCode(domEvt);
-		if(keys.indexOf(String.fromCharCode(c)) === -1){
-			zEvt.stop(domEvt);
+	_shallIgnore: function (evt, keys) {
+		if (!evt.altKey && !evt.ctrlKey && (zk.ie || evt.keyCode >= 32)
+		&& keys.indexOf(String.fromCharCode(evt.charCode)) < 0) {
+			evt.stop();
+			return true;
 		}
 	},
 	showError_: function (msg) {
@@ -307,7 +304,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		}
 	},
 	_onChangeData: function (val, selbk) {
-		var inf = {value: val, start: zDom.getSelectionRange(this.getInputNode_())[0]}
+		var inf = {value: val,
+			start: zk(this.getInputNode_()).getSelectionRange()[0]}
 		if (selbk) inf.bySelectBack =  true;
 		return inf;
 	},
@@ -322,7 +320,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	//super//
 	focus: function (timeout) {
 		if (this.isVisible() && this.canActivate({checkOnly:true})) {
-			zDom.focus(this.getInputNode_(), timeout);
+			zk(this.getInputNode_()).focus(timeout);
 			return true;
 		}
 		return false;
@@ -363,13 +361,15 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		var keyCode = evt.keyCode;
 		if (keyCode == 9 && !evt.altKey && !evt.ctrlKey && !evt.shiftKey
 		&& this._tabbable) {
-			var sr = zDom.getSelectionRange(inp),
+			var inp = this.getInputNode_(),
+				$inp = zk(inp),
+				sr = $inp.getSelectionRange(),
 				val = inp.value;
 			val = val.substring(0, sr[0]) + '\t' + val.substring(sr[1]);
 			inp.value = val;
 
 			val = sr[0] + 1;
-			zDom.setSelectionRange(inp, val, val);
+			$inp.setSelectionRange(inp, val, val);
 
 			evt.stop();
 			return;
@@ -396,4 +396,6 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	beforeCtrlKeys_: function (evt) {
 		this.updateChange_();
 	}
+},{
+	_allowKeys: "0123456789"+zk.MINUS
 });

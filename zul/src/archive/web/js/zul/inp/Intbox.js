@@ -39,6 +39,7 @@ zul.inp.Intbox = zk.$extends(zul.inp.FormatWidget, {
 		return zcs != null ? zcs: "z-intbox";
 	},
 	doKeyPress_: function(evt){
-		this.ignoreKeys(evt.domEvent, "0123456789"+zk.MINUS);
+		if (!this._shallIgnore(evt, zul.inp.InputWidget._allowKeys))
+			this.$supers('doKeyPress_', arguments);
 	}
 });

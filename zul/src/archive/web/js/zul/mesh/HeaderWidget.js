@@ -112,13 +112,13 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		if (this._insizer(evt.pageX - ofs[0])) {
 			zDom.addClass(n, this.getZclass() + "-sizing");
 		} else {
-			zDom.rmClass(n, this.getZclass() + "-sizing");
+			zDom.removeClass(n, this.getZclass() + "-sizing");
 		}
 	},
 	doMouseOut_: function (evt) {
 		if (this.parent.isSizable()) {
 			var n = this.getNode()
-			zDom.rmClass(n, this.getZclass() + "-sizing");
+			zDom.removeClass(n, this.getZclass() + "-sizing");
 		}
 	},
 	_insizer: function (x) {

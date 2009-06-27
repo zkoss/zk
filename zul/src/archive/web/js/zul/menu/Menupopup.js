@@ -70,7 +70,7 @@ zul.menu.Menupopup = zk.$extends('zul.wgt.Popup', {
 		this._hideShadow();
 		var menu = this.parent;
 		if (menu.$instanceof(zul.menu.Menu) && menu.isTopmost())
-			zDom.rmClass(menu.getSubnode('a'), menu.getZclass() + "-body-seld");
+			zDom.removeClass(menu.getSubnode('a'), menu.getZclass() + "-body-seld");
 
 		var item = this._currentChild();
 		if (item) item.$class._rmActive(item);

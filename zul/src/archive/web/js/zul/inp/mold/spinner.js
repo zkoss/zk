@@ -16,8 +16,8 @@ function (out) {
 	var zcls = this.getZclass();
 	
 	out.push('<span', this.domAttrs_({text:true}), '>');
-	out.push('<input id="', this.uuid,'$real"', 'class="', this.getZclass(),'-inp"',this.textAttrs_(),'/>');
-	out.push('<span id="', this.uuid,'$btn"', 'class="', this.getZclass(),'-btn" ');
+	out.push('<input id="', this.uuid,'-real"', 'class="', this.getZclass(),'-inp"',this.textAttrs_(),'/>');
+	out.push('<span id="', this.uuid,'-btn"', 'class="', this.getZclass(),'-btn" ');
 	
 	if(!this.isButtonVisible())
 		out.push('" style="display:none"');

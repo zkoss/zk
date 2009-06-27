@@ -33,12 +33,12 @@ zul.inp.Errorbox = zk.$extends('zul.wgt.Popup', {
 	bind_: function () {
 		this.$supers('bind_', arguments);
 
-		var $Errorbox = zul.inp.Errorbox;
+		var Errorbox = zul.inp.Errorbox;
 		this._drag = new zk.Draggable(this, null, {
 			starteffect: zk.$void,
-			endeffect: $Errorbox._enddrag,
-			ignoredrag: $Errorbox._ignoredrag,
-			change: $Errorbox._change
+			endeffect: Errorbox._enddrag,
+			ignoredrag: Errorbox._ignoredrag,
+			change: Errorbox._change
 		});
 		zWatch.listen({onScroll: this});
 	},
@@ -64,22 +64,22 @@ zul.inp.Errorbox = zk.$extends('zul.wgt.Popup', {
 		var el = evt.domTarget;
 		if (el == this.getSubnode('c')) {
 			var y = evt.pageY,
-				size = zk.parseInt(zDom.getStyle(el, 'padding-right'))
-				offs = zDom.revisedOffset(el);
-			if (y >= offs[1] && y < offs[1] + size)	zDom.addClass(el, 'z-errbox-close-over');
-			else zDom.rmClass(el, 'z-errbox-close-over');
+				$el = jq(el),
+				size = zk.parseInt($el.css('padding-right'))
+				offs = $el.zk.revisedOffset();
+			$el[y >= offs[1] && y < offs[1] + size ? 'addClass':'removeClass']('z-errbox-close-over');
 		} else this.$supers('doMouseMove_', arguments);
 	},
 	doMouseOut_: function (evt) {
 		var el = evt.domTarget;
 		if (el == this.getSubnode('c'))
-			zDom.rmClass(el, 'z-errbox-close-over');
+			jq(el).removeClass('z-errbox-close-over');
 		else
 			this.$supers('doMouseOut_', arguments);
 	},
 	doClick_: function (evt) {
 		var el = evt.domTarget;
-		if (el == this.getSubnode('c') && zDom.hasClass(el, 'z-errbox-close-over'))
+		if (el == this.getSubnode('c') && jq(el).hasClass('z-errbox-close-over'))
 			this.parent.clearErrorMessage(true, true);
 		else {
 			this.$supers('doClick_', arguments);
@@ -94,9 +94,9 @@ zul.inp.Errorbox = zk.$extends('zul.wgt.Popup', {
 	prologHTML_: function (out) {
 		var id = this.uuid;
 		out.push('<div id="', id);
-		out.push('$a" class="z-errbox-left z-arrow" title="')
+		out.push('-a" class="z-errbox-left z-arrow" title="')
 		out.push(zUtl.encodeXML(mesg.GOTO_ERROR_FIELD));
-		out.push('"><div id="', id, '$c" class="z-errbox-right z-errbox-close"><div class="z-errbox-center">');
+		out.push('"><div id="', id, '-c" class="z-errbox-right z-errbox-close"><div class="z-errbox-center">');
 		out.push(zUtl.encodeXML(this.msg, {multiline:true})); //Bug 1463668: security
 		out.push('</div></div></div>');
 	},
@@ -119,21 +119,21 @@ zul.inp.Errorbox = zk.$extends('zul.wgt.Popup', {
 		}
 	},
 	_uncover: function (el) {
-		var elofs = zDom.cmOffset(el),
+		var elofs = zk(el).cmOffset(),
 			node = this.getNode(),
-			nodeofs = zDom.cmOffset(node);
+			nodeofs = zk(node).cmOffset();
 
-		if (zDom.isOverlapped(
+		if (jq.isOverlapped(
 		elofs, [el.offsetWidth, el.offsetHeight],
 		nodeofs, [node.offsetWidth, node.offsetHeight])) {
 			var parent = this.parent.getNode(), y;
-			var ptofs = zDom.cmOffset(parent),
+			var ptofs = zk(parent).cmOffset(),
 				pthgh = parent.offsetHeight,
 				ptbtm = ptofs[1] + pthgh;
 			y = elofs[1] + el.offsetHeight <=  ptbtm ? ptbtm: ptofs[1] - node.offsetHeight;
 				//we compare bottom because default is located below
 
-			var ofs = zDom.toStyleOffset(node, 0, y);
+			var ofs = zk(node).toStyleOffset(0, y);
 			node.style.top = ofs[1] + "px";
 			this._fixarrow();
 		}
@@ -142,8 +142,8 @@ zul.inp.Errorbox = zk.$extends('zul.wgt.Popup', {
 		var parent = this.parent.getNode(),
 			node = this.getNode(),
 			arrow = this.getSubnode('a'),
-			ptofs = zDom.revisedOffset(parent),
-			nodeofs = zDom.revisedOffset(node);
+			ptofs = zk(parent).revisedOffset(),
+			nodeofs = zk(node).revisedOffset();
 		var dx = nodeofs[0] - ptofs[0], dy = nodeofs[1] - ptofs[1], dir;
 		if (dx >= parent.offsetWidth - 2) {
 			dir = dy < -10 ? "ld": dy >= parent.offsetHeight - 2 ? "lu": "l";
@@ -161,7 +161,8 @@ zul.inp.Errorbox = zk.$extends('zul.wgt.Popup', {
 		errbox._fixarrow();
 	},
 	_ignoredrag: function (dg, pointer, evt) {
-		return evt.domTarget == dg.control.getSubnode('c') && zDom.hasClass(dg.control.getSubnode('c'), 'z-errbox-close-over');
+		var c = dg.control.getSubnode('c');
+		return evt.domTarget == c && jq(c).hasClass('z-errbox-close-over');
 	},
 	_change: function (dg) {
 		var errbox = dg.control,

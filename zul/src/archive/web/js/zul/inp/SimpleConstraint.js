@@ -48,7 +48,7 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 					this._errmsg = cst.substring(j + 1).trim();
 					return; //done
 				}
-				if (!zk.isWhitespace(cc))
+				if (!zUtl.isChar(cc,{whitespace:1}))
 					break;
 			}
 

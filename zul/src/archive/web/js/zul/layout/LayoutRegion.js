@@ -185,7 +185,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		this.$supers('onChildRemoved_', arguments);
 		if (child.$instanceof(zul.layout.Borderlayout)) {
 			this.setFlex(false);
-			zDom.rmClass(this.getNode(), this.getZclass() + "-nested");
+			zDom.removeClass(this.getNode(), this.getZclass() + "-nested");
 		}
 		if (this.parent && this.desktop)
 			this.parent.resize();
@@ -270,13 +270,13 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		if (this.getSubnode('btn')) {
 			switch (evt.domTarget) {
 			case this.getSubnode('btn'):
-				zDom.rmClass(this.getSubnode('btn'), this.getZclass() + '-colps-over');
+				zDom.removeClass(this.getSubnode('btn'), this.getZclass() + '-colps-over');
 				break;
 			case this.getSubnode('btned'):
-				zDom.rmClass(this.getSubnode('btned'), this.getZclass() + '-exp-over');
+				zDom.removeClass(this.getSubnode('btned'), this.getZclass() + '-exp-over');
 				// don't break
 			case this.getSubnode('colled'):
-				zDom.rmClass(this.getSubnode('colled'), this.getZclass() + '-colpsd-over');
+				zDom.removeClass(this.getSubnode('colled'), this.getZclass() + '-colpsd-over');
 				break;
 			}
 		}

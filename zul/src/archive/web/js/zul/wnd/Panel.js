@@ -43,7 +43,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 					body = this.getSubnode('body');
 				if (body) {
 					if (open) {
-						zDom.rmClass(node, zcls + '-colpsd');
+						zDom.removeClass(node, zcls + '-colpsd');
 						zAnima.slideDown(this, body, {
 							afterAnima: this._afterSlideDown
 						});
@@ -425,20 +425,20 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	doMouseOut_: function (evt) {
 		switch (evt.domTarget) {
 		case this.getSubnode('close'):
-			zDom.rmClass(this.getSubnode('close'), this.getZclass() + '-close-over');
+			zDom.removeClass(this.getSubnode('close'), this.getZclass() + '-close-over');
 			break;
 		case this.getSubnode('max'):
 			var zcls = this.getZclass(),
 				max = this.getSubnode('max');
 			if (this.isMaximized())
-				zDom.rmClass(max, zcls + '-maxd-over');
-			zDom.rmClass(max, zcls + '-max-over');
+				zDom.removeClass(max, zcls + '-maxd-over');
+			zDom.removeClass(max, zcls + '-max-over');
 			break;
 		case this.getSubnode('min'):
-			zDom.rmClass(this.getSubnode('min'), this.getZclass() + '-mini-over');
+			zDom.removeClass(this.getSubnode('min'), this.getZclass() + '-mini-over');
 			break;
 		case this.getSubnode('exp'):
-			zDom.rmClass(this.getSubnode('exp'), this.getZclass() + '-exp-over');
+			zDom.removeClass(this.getSubnode('exp'), this.getZclass() + '-exp-over');
 			break;
 		}
 		this.$supers('doMouseOut_', arguments);

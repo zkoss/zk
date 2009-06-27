@@ -81,8 +81,8 @@ zul.grid.Group = zk.$extends(zul.grid.Row, {
 		var img = this.getSubnode('img'),
 			zcls = this.getZclass();
 		if (img) {
-			zDom[open ? "rmClass" : "addClass"](img, zcls + "-img-close");
-			zDom[open ? "addClass" : "rmClass"](img, zcls + "-img-open");
+			zDom[open ? "removeClass" : "addClass"](img, zcls + "-img-close");
+			zDom[open ? "addClass" : "removeClass"](img, zcls + "-img-open");
 		}
 		this._openItemNow(open);
 		if (!silent)

@@ -18,7 +18,7 @@ zul.inp.Comboitem = zk.$extends(zul.LabelImageWidget, {
 			var n = this.getNode();
 			if (n) {
 				var zcls = this.getZclass() + '-disd';
-				v ? zDom.addClass(n, zcls): zDom.rmClass(n, zcls);
+				v ? jq(n).addClass(zcls): jq(n).removeClass(zcls);
 			}
 		},
 		description: _zkf = function () {
@@ -31,8 +31,9 @@ zul.inp.Comboitem = zk.$extends(zul.LabelImageWidget, {
 	doMouseOver_: function () {
 		if (!this._disabled) {
 			var n = this.getNode(),
+				$n = jq(n),
 				zcls = this.getZclass();
-			zDom.addClass(n, zDom.hasClass(n, zcls + '-seld') ?
+			$n.addClass($n.hasClass(zcls + '-seld') ?
 				zcls + "-over-seld": zcls + "-over");
 		}
 		this.$supers('doMouseOver_', arguments);
@@ -44,8 +45,8 @@ zul.inp.Comboitem = zk.$extends(zul.LabelImageWidget, {
 	_doMouseOut: function () {
 		var n = this.getNode(),
 			zcls = this.getZclass();
-		zDom.rmClass(n, zcls + '-over');
-		zDom.rmClass(n, zcls + '-over-seld');
+		jq(n).removeClass(zcls + '-over')
+			.removeClass(zcls + '-over-seld');
 	},
 
 	doClick_: function (evt) {

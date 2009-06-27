@@ -19,7 +19,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		buttonVisible: function (v) {
 			var n = this.getSubnode('btn');
 			if (n)
-				v ? zDom.show(n): zDom.hide(n);
+				v ? jq(n).show(): jq(n).hide();
 		},
 		autodrop: null
 	},
@@ -73,12 +73,13 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		//NOTE: since the parent/child relation is changed, new listitem
 		//must be inserted into the popup (by use of uuid!child) rather
 		//than invalidate!!
-		zDom.makeVParent(pp);
+		var $pp = zk(pp);
+		$pp.makeVParent();
 
 		// throw in
 		pp.style.left = "";
 		this._fixsz(ppofs);//fix size
-		zDom.position(pp, inp, "after_start");
+		$pp.position(inp, "after_start");
 		pp.style.display = "none";
 		pp.style.visibility = "";
 
@@ -122,13 +123,13 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		if (!pp) return;
 
 		pp.style.display = "none";
-		zDom.undoVParent(pp);
+		zk(pp).undoVParent();
 		if (this._shadow) {
 			this._shadow.destroy();
 			this._shadow = null;
 		}
 		var n = this.getSubnode('btn');
-		if (n) zDom.rmClass(n, this.getZclass() + '-btn-over');
+		if (n) jq(n).removeClass(this.getZclass() + '-btn-over');
 
 		if (opts && opts.sendOnOpen)
 			this.fire('onOpen', {open:false, value: this.getInputNode_().value});

@@ -64,7 +64,7 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 					if (n.rows[j].id == w.uuid)
 						break;
 				}
-				zDom[even ? 'rmClass' : 'addClass'](n.rows[j], scOdd);
+				zDom[even ? 'removeClass' : 'addClass'](n.rows[j], scOdd);
 				w.fire("onStripe");
 				even = !even;
 			}

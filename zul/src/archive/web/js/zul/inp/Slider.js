@@ -72,29 +72,29 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 	},
 	doMouseOver_: function (evt) {
 		this.$supers('doMouseOver_', arguments);
-		zDom.addClass(this.btn, this.getZclass() + "-btn-over");
+		jq(this.btn).addClass(this.getZclass() + "-btn-over");
 	},
 	doMouseOut_: function (evt) {
 		this.$supers('doMouseOut_', arguments);
-		zDom.rmClass(this.btn, this.getZclass() + "-btn-over");
+		jq(this.btn).removeClass(this.getZclass() + "-btn-over");
 	},
 	onup_: function(evt){
 		var btn = zul.sld.Slider.down_btn;
 		var uuid = btn.id.split("$")[0];
 		var widget = zk.Widget.$(uuid);
 		var zcls = widget.getZclass();
-		if(btn){
-			zDom.rmClass(btn, zcls + "-btn-drag");
-			zDom.rmClass(btn, zcls + "-btn-over");
-		}
+		if (btn)
+			jq(btn).removeClass(zcls + "-btn-drag")
+				.removeClass(zcls + "-btn-over");
+
 		zul.sld.Slider.down_btn=null;
-		zEvt.unlisten(document.body, "mouseup", widget.onup_);
+		jq(document.body).unbind("mouseup", widget.onup_);
 		
 	},
 	doMouseDown_: function(evt) {
 		this.$supers('doMouseDown_', arguments);
-		zDom.addClass(this.btn, this.getZclass() + "-btn-drag");
-		zEvt.listen(document.body, "mouseup", this.onup_);
+		jq(this.btn).addClass(this.getZclass() + "-btn-drag");
+		jq(document.body).mouseup(this.onup_);
 		zul.sld.Slider.down_btn = this.btn;
 	},
 	_makeDraggable: function(){
@@ -113,8 +113,8 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 			var	widget = dg.control;
 		}
 		var btn = widget.getSubnode("btn");
-		var ofs = zDom.cmOffset(widget.getNode());
-		ofs = zDom.toStyleOffset(btn, ofs[0], ofs[1]);
+		var ofs = zk(widget.getNode()).cmOffset();
+		ofs = zk(btn).toStyleOffset(ofs[0], ofs[1]);
 		if (x <= ofs[0]) {
 			x = ofs[0];
 		} else {
@@ -141,7 +141,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		widget.slidetip =  document.getElementById("zul_slidetip");
 		if (widget.slidetip) {
 			widget.slidetip.style.display = "block";
-			zDom.position(widget.slidetip, widget.getNode(), widget.isVertical()? "end_before" : "after_start");
+			zk(widget.slidetip).position(widget.getNode(), widget.isVertical()? "end_before" : "after_start");
 		}
 	},
 	_dragging: function (dg) {
@@ -170,8 +170,8 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		widget.slidetip = null;
 	},
 	_realpos: function (dg) {
-		var	btnofs = zDom.cmOffset(this.btn),
-			refofs = zDom.cmOffset(this.node),
+		var	btnofs = zk(this.btn).cmOffset(),
+			refofs = zk(this.node).cmOffset(),
 			maxpos = this._maxpos,
 			pos;
 		if (this.isVertical()) {
@@ -193,15 +193,15 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		if (this.isVertical()) {
 			var ht = this._getHeight(),
 				x = ht > 0 ? Math.round((this._curpos * ht)/this._maxpos): 0,
-				ofs = zDom.cmOffset(this.node);
-			ofs = zDom.toStyleOffset(this.btn, ofs[0], ofs[1]);
+				ofs = zk(this.node).cmOffset();
+			ofs = zk(this.btn).toStyleOffset(ofs[0], ofs[1]);
 			ofs = this._snap(0, ofs[1] + x);
 			this.btn.style.top = ofs[1] + "px";
 		} else {
 			var wd = this._getWidth(),
 				x = wd > 0 ? Math.round((this._curpos * wd)/this._maxpos): 0,
-				ofs = zDom.cmOffset(this.node);
-			ofs = zDom.toStyleOffset(this.btn, ofs[0], ofs[1]);
+				ofs = zk(this.node).cmOffset();
+			ofs = zk(this.btn).toStyleOffset(ofs[0], ofs[1]);
 			ofs = this._snap(ofs[0] + x, 0);
 			this.btn.style.left = ofs[0] + "px";
 		}

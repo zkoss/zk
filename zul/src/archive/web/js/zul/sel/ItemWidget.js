@@ -37,7 +37,7 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	_setSelectedDirectly: function (selected) {
 		var n = this.getNode();
 		if (n) {
-			zDom[selected ? 'addClass' : 'rmClass'](n, this.getZclass() + '-seld');
+			zDom[selected ? 'addClass' : 'removeClass'](n, this.getZclass() + '-seld');
 			var cm = this.getSubnode('cm');
 			if (cm) {
 				cm.checked = selected;
@@ -86,8 +86,8 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		var n = this.getNode(),
 			zcls = this.getZclass();
 		if (undo) {
-			zDom.rmClass(n, zcls + "-over-seld");
-			zDom.rmClass(n, zcls + "-over");
+			zDom.removeClass(n, zcls + "-over-seld");
+			zDom.removeClass(n, zcls + "-over");
 		} else {
 			zDom.addClass(n, zDom.hasClass(n, zcls + "-seld") ? zcls + "-over-seld" : zcls + "-over");	
 		}
@@ -130,9 +130,9 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		var n = this.getNode();
 		if (n) {
 			var zcls = this.getZclass();
-			zDom.rmClass(n, zcls + "-focus");
+			zDom.removeClass(n, zcls + "-focus");
 			for (var i = n.cells.length; --i >= 0;)
-				zDom.rmClass(n.cells[i], zcls + "-focus");
+				zDom.removeClass(n.cells[i], zcls + "-focus");
 		}
 	},
 	_doFocus: function (evt) {

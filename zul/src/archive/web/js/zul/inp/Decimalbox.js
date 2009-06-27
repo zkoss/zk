@@ -88,6 +88,7 @@ zul.inp.Decimalbox = zk.$extends(zul.inp.Doublebox, {
 		return zcs != null ? zcs: "z-decimalbox";
 	},
 	doKeyPress_: function(evt){
-		this.ignoreKeys(evt.domEvent, "0123456789"+zk.MINUS+zk.DECIMAL+zk.PERCENT + zk.GROUPING);
+		if (!this._shallIgnore(evt, zul.inp.Doublebox._allowKeys))
+			this.$supers('doKeyPress_', arguments);
 	}
 });
