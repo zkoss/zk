@@ -70,7 +70,7 @@ zul.menu.Menupopup = zk.$extends('zul.wgt.Popup', {
 		this._hideShadow();
 		var menu = this.parent;
 		if (menu.$instanceof(zul.menu.Menu) && menu.isTopmost())
-			zDom.removeClass(menu.getSubnode('a'), menu.getZclass() + "-body-seld");
+			jq(menu.getSubnode('a')).removeClass(menu.getZclass() + "-body-seld");
 
 		var item = this._currentChild();
 		if (item) item.$class._rmActive(item);
@@ -145,7 +145,7 @@ zul.menu.Menupopup = zk.$extends('zul.wgt.Popup', {
 			if (!pp.style.width) {// Bug 2105158 and Bug 1911129
 				var ul = this.getSubnode('cave');
 				if (ul.childNodes.length)
-					pp.style.width = ul.offsetWidth + zDom.padBorderWidth(pp) + "px";
+					pp.style.width = ul.offsetWidth + zk(pp).padBorderWidth() + "px";
 				else
 					zWatch.listen({onResponse: this});
 			}
@@ -156,7 +156,7 @@ zul.menu.Menupopup = zk.$extends('zul.wgt.Popup', {
 
 			// just in case
 			if (zk.ie)
-				zDom.cleanVisibility(this.getNode());
+				zk(this.getNode()).cleanVisibility();
 
 			anc.focus();
 		}
@@ -180,7 +180,7 @@ zul.menu.Menupopup = zk.$extends('zul.wgt.Popup', {
 		if (!pp.style.width) {// Bug 2105158 and Bug 1911129
 			var ul = this.getSubnode('cave');
 			if (ul.childNodes.length) { // Bug 2784736
-				pp.style.width = ul.offsetWidth + zDom.padBorderWidth(pp) + "px";
+				pp.style.width = ul.offsetWidth + zk(pp).padBorderWidth() + "px";
 				zWatch.unlisten({onResponse: this});
 			}
 		}

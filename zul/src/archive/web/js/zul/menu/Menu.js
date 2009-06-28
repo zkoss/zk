@@ -53,8 +53,10 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	/** Removes the extra space (IE only) */
 	_fixBtn: function () {
 		var btn = this.getSubnode('b');
-		if (!btn || !btn.innerHTML.trim()) return;
-		btn.style.width = zDom.textSize(btn, btn.innerHTML)[0] + zDom.padBorderWidth(btn) + "px";
+		if (btn) {
+			var txt = btn.innerHTML, $btn = zk(btn);
+			btn.style.width = ($btn.textSize(txt)[0] + $btn.padBorderWidth()) + "px";
+		}
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
@@ -91,8 +93,10 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		this.$supers('unbind_', arguments);
 	},
 	doClick_: function (evt) {
-		if (this.isTopmost() && !zDom.isAncestor(this.getSubnode('a'), evt.domTarget)) return;
-		zDom.addClass(this.getSubnode('a'), this.getZclass() + '-body-seld');
+		var $a = zk(this.getSubnode('a'));
+		if (this.isTopmost() && !$a.isAncestor(evt.domTarget)) return;
+
+		$a.jq.addClass(this.getZclass() + '-body-seld');
 		if (this.menupopup) {
 			this.menupopup._shallClose = false;
 			if (this.isTopmost())
@@ -105,7 +109,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		if (this.$class._isActive(this)) return;
 
 		var	topmost = this.isTopmost();
-		if (topmost && zk.ie && !zDom.isAncestor(this.getSubnode('a'), evt.domTarget))
+		if (topmost && zk.ie && !zk(this.getSubnode('a')).isAncestor(evt.domTarget))
 				return; // don't activate
 
 		this.$class._addActive(this);
@@ -135,7 +139,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	_doMouseOut: function (evt) { //not zk.Widget.doMouseOut_
 		if (zk.ie) {
 			var n = this.getSubnode('a'),
-				xy = zDom.revisedOffset(n),
+				xy = zk(n).revisedOffset(),
 				x = evt.pageX,
 				y = evt.pageY,
 				diff = this.isTopmost() ? 1 : 0,
@@ -161,13 +165,13 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		var top = wgt.isTopmost(),
 			n = top ? wgt.getSubnode('a') : wgt.getNode(),
 			cls = wgt.getZclass() + (top ? '-body-over' : '-over');
-		return zDom.hasClass(n, cls);
+		return jq(n).hasClass(cls);
 	},
 	_addActive: function (wgt) {
 		var top = wgt.isTopmost(),
 			n = top ? wgt.getSubnode('a') : wgt.getNode(),
 			cls = wgt.getZclass() + (top ? '-body-over' : '-over');
-		zDom.addClass(n, cls);
+		jq(n).addClass(cls);
 		if (!top && wgt.parent.parent.$instanceof(zul.menu.Menu))
 			this._addActive(wgt.parent.parent);
 	},
@@ -175,6 +179,6 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		var top = wgt.isTopmost(),
 			n = top ? wgt.getSubnode('a') : wgt.getNode(),
 			cls = wgt.getZclass() + (top ? '-body-over' : '-over');
-		zDom.removeClass(n, cls);
+		jq(n).removeClass(cls);
 	}
 });

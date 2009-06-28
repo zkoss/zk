@@ -42,7 +42,7 @@ zul.menu.Menubar = zk.$extends(zul.Widget, {
 	},
 	removeChildHTML_: function (child, prevsib) {
 		this.$supers('removeChildHTML_', arguments);
-		zDom.remove(child.uuid + '-chdextr');
+		jq(child.uuid + '-chdextr', zk).remove();
 	},
 	encloseChildHTML_: function (opts) {
 		var out = opts.out || [],
