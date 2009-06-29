@@ -19,17 +19,14 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.au.http;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
@@ -53,12 +50,11 @@ import org.zkoss.zk.au.out.AuObsolete;
 import org.zkoss.zk.au.out.AuSendRedirect;
 import org.zkoss.zk.device.Devices;
 import org.zkoss.zk.mesg.MZk;
+import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.http.WebManager;
-import org.zkoss.zk.ui.sys.DesktopCache;
+import org.zkoss.zk.ui.ext.Updatable;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.util.CharsetFinder;
 import org.zkoss.zk.ui.util.Configuration;
@@ -97,11 +93,11 @@ public class AuUploader implements AuProcessor{
 			return; //session time out do nothing
 		}
 		
-		Fileupload fileUpload=(Fileupload) desktop.getComponentByUuid(uuid);
+		AbstractComponent fileupload=(Fileupload) desktop.getComponentByUuid(uuid);
 		
 		FileItemFactory factory = new DiskFileItemFactory();
 		ServletFileUpload upload = new ServletFileUpload(factory);
-		upload.setProgressListener(new ProgressCallback(fileUpload,fid));
+		upload.setProgressListener(new ProgressCallback(fileupload,fid));
 		upload.setHeaderEncoding("UTF-8"); //Deal with Chinese/Japanese/.... file names
 		try {
 			List items = upload.parseRequest(request);
@@ -114,7 +110,7 @@ public class AuUploader implements AuProcessor{
 					}
 					Media med = convertFileType(item, desktop);
 					if(med != null){
-						fileUpload.addMedia(med);
+						((Updatable)fileupload.getExtraCtrl()).addMedia(med);
 					}				
 				}
 			}
@@ -278,15 +274,14 @@ public class AuUploader implements AuProcessor{
 
 	class ProgressCallback implements ProgressListener {
 		Desktop desktop;
-		Fileupload fileupload;
+		AbstractComponent fileupload;
 		String fid;
-		ProgressCallback(Fileupload fileupload, String fid){
-			this.desktop = desktop;
+		ProgressCallback(AbstractComponent fileupload, String fid){
 			this.fileupload = fileupload;
 			this.fid = fid;
 		}
 		public void update(long pBytesRead, long pContentLength, int pItems) {
-			fileupload.setProgress(this.fid, pBytesRead ,pContentLength);
+			 ((Updatable)fileupload.getExtraCtrl()).setProgress(this.fid, pBytesRead ,pContentLength);
 		}
 	}
 }

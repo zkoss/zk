@@ -40,6 +40,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.UploadEvent;
+import org.zkoss.zk.ui.ext.Updatable;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.au.AuRequests;
 import org.zkoss.zk.au.out.AuInvoke;
@@ -48,11 +49,11 @@ import org.zkoss.zk.au.out.AuInvoke;
 /**
  * A fileupload dialog used to let user upload a file.
  *
- * <p>There are two ways to use {@link SWFUpload}:
+ * <p>There are two ways to use {@link Fileupload}:
  *
  * <h3>1. Open as a modal dialog:</h3>
  *
- * <p>You don't create {@link SWFUpload} directly. Rather, use {@link #get()}
+ * <p>You don't create {@link Fileupload} directly. Rather, use {@link #get()}
  * or {@link #get(String, String)}.
  *
  * <h3>2. Embed as part of the page:</h3>
@@ -69,7 +70,7 @@ import org.zkoss.zk.au.out.AuInvoke;
  * @author tomyeh
  * @see Filedownload
  */
-public class Fileupload extends HtmlBasedComponent { //not XulElement since not applicable
+public class Fileupload extends HtmlBasedComponent{ //not XulElement since not applicable
 	
 	//Used when embedded as a component
 	/** The maximal alllowed number of files to upload. */
@@ -86,7 +87,7 @@ public class Fileupload extends HtmlBasedComponent { //not XulElement since not 
 		progressMap.put(fid, lArray);
 	}
 	
-	public void addMedia(Media med){
+	public void addMedia(Object med){
 		meds.add(med);
 	}
 	public List getMedia(){
@@ -353,7 +354,7 @@ public class Fileupload extends HtmlBasedComponent { //not XulElement since not 
 	 * <p>In other words, just adjust the label and layout and don't
 	 * change the component's ID.
 	 *
-	 * <p>Note: the template has no effect, if you use {@link SWFUpload} as
+	 * <p>Note: the template has no effect, if you use {@link Fileupload} as
 	 * a component (and embed it to a page).
 	 */
 	public static void setTemplate(String uri) {
@@ -370,5 +371,26 @@ public class Fileupload extends HtmlBasedComponent { //not XulElement since not 
 		String jsessionid = ((HttpSession) this.getDesktop().getSession().getNativeSession()).getId();
 		renderer.render("jsessionid", jsessionid);
 		
+	}
+	
+	protected Object newExtraCtrl() {
+		return new ExtraCtrl();
+	}
+	/** A utility class to implement {@link #getExtraCtrl}.
+	 * It is used only by component developers.
+	 */
+	protected class ExtraCtrl extends Window.ExtraCtrl implements Updatable {
+		//-- Updatable --//
+		/** Updates the result from the client.
+		 * Callback by the System AuUpload.java only Don't invoke it directly.
+		 *
+		 * @param result a list of media instances, or null
+		 */
+		public void setProgress(String fid, long readSize, long totalSize){
+			Fileupload.this.setProgress(fid, readSize, totalSize);
+		}
+		public void addMedia(Object obj){
+			Fileupload.this.addMedia(obj);
+		}
 	}
 }
