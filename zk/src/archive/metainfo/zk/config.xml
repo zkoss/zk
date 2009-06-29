@@ -25,6 +25,26 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<interpreter-class>org.zkoss.zk.scripting.bsh.BSHInterpreter</interpreter-class>
 	</zscript-config>
 
+	<zscript-config>
+		<language-name>JavaScript</language-name>
+		<interpreter-class>org.zkoss.zk.scripting.rhino.RhinoInterpreter</interpreter-class>
+	</zscript-config>
+
+	<zscript-config>
+		<language-name>Groovy</language-name>
+		<interpreter-class>org.zkoss.zk.scripting.groovy.GroovyInterpreter</interpreter-class>
+	</zscript-config>
+
+	<zscript-config>
+		<language-name>Ruby</language-name>
+		<interpreter-class>org.zkoss.zk.scripting.jruby.JRubyInterpreter</interpreter-class>
+	</zscript-config>
+
+	<zscript-config>
+		<language-name>Python</language-name>
+		<interpreter-class>org.zkoss.zk.scripting.jython.JythonInterpreter</interpreter-class>
+	</zscript-config>
+
 	<device-config>
 		<device-type>ajax</device-type>
 		<device-class>org.zkoss.zk.device.AjaxDevice</device-class>

@@ -20,26 +20,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<version-uid>5.0.0</version-uid>
 	</version>
 
-	<zscript-config>
-		<language-name>JavaScript</language-name>
-		<interpreter-class>org.zkoss.zkmax.scripting.rhino.RhinoInterpreter</interpreter-class>
-	</zscript-config>
-
-	<zscript-config>
-		<language-name>Groovy</language-name>
-		<interpreter-class>org.zkoss.zkmax.scripting.groovy.GroovyInterpreter</interpreter-class>
-	</zscript-config>
-
-	<zscript-config>
-		<language-name>Ruby</language-name>
-		<interpreter-class>org.zkoss.zkmax.scripting.jruby.JRubyInterpreter</interpreter-class>
-	</zscript-config>
-
-	<zscript-config>
-		<language-name>Python</language-name>
-		<interpreter-class>org.zkoss.zkmax.scripting.jython.JythonInterpreter</interpreter-class>
-	</zscript-config>
-
 	<system-config>
 		<au-writer-class>org.zkoss.zkmax.au.http.SmartAuWriter</au-writer-class>
 	</system-config>

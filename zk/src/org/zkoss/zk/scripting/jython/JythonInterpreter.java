@@ -1,4 +1,4 @@
-package org.zkoss.zkmax.scripting.jython;
+package org.zkoss.zk.scripting.jython;
 
 import org.python.core.Py;
 import org.python.core.PyObject;

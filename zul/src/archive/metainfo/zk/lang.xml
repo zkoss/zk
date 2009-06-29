@@ -48,6 +48,55 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		Messagebox.show("" + m);
 	}
 	</zscript>
+	<zscript language="JavaScript">
+	importPackage(Packages.java.util);
+	importPackage(Packages.java.lang);
+	importClass(Packages.org.zkoss.zk.ui.util.Clients);
+	importPackage(Packages.org.zkoss.zk.ui.event);
+	importPackage(Packages.org.zkoss.zk.ui);
+	importPackage(Packages.org.zkoss.zul);
+	function alert(m) {
+		Messagebox.show(m);
+	}
+	</zscript>
+	<!-- Groovy "forgot" what are imported, so we have to import each time
+	-->
+	<zscript language="Groovy" each-time="true">
+	import java.util.*
+	import java.lang.*
+	import org.zkoss.zk.ui.util.Clients
+	import org.zkoss.zk.ui.event.*
+	import org.zkoss.zk.ui.*
+	import org.zkoss.zul.*
+	</zscript>
+	<zscript language="Groovy">
+	alert = {m -> Messagebox.show(m)}
+	</zscript>
+	<zscript language="Ruby">
+	require 'java'
+	module Java
+		include_package 'java.util'
+		include_package 'java.lang'
+		include_class 'org.zkoss.zk.ui.util.Clients'
+		include_package 'org.zkoss.zk.ui.event'
+		include_package 'org.zkoss.zk.ui'
+		include_package 'org.zkoss.zul'
+	end
+	def alert (m)
+		Java::Messagebox.show m
+	end
+	</zscript>
+		<zscript language="Python">
+import java.util
+import java.lang
+import org.zkoss.zk.ui.util.Clients
+import org.zkoss.zk.ui.event
+import org.zkoss.zk.ui
+import org.zkoss.zul
+
+def alert(m):
+	org.zkoss.zul.Messagebox.show(m)
+	</zscript>
 
 	<!-- 
 		Note: '~./' means it is located in the class path starting from

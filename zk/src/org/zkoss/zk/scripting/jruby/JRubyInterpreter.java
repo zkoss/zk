@@ -16,7 +16,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
-package org.zkoss.zkmax.scripting.jruby;
+package org.zkoss.zk.scripting.jruby;
 
 import java.util.Iterator;
 
