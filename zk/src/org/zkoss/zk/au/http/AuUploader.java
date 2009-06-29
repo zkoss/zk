@@ -93,7 +93,7 @@ public class AuUploader implements AuProcessor{
 			return; //session time out do nothing
 		}
 		
-		AbstractComponent fileupload=(Fileupload) desktop.getComponentByUuid(uuid);
+		AbstractComponent fileupload=(AbstractComponent) desktop.getComponentByUuid(uuid);
 		
 		FileItemFactory factory = new DiskFileItemFactory();
 		ServletFileUpload upload = new ServletFileUpload(factory);
