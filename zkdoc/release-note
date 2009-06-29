@@ -7,8 +7,7 @@ August, 2009
   2813778: Upgrade to jython 2.5
 
 * Bugs
-  
-
+  2813877: Window resize outline miss
 	--------
 ZK 3.6.2
 June 23, 2009
