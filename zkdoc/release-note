@@ -2,8 +2,9 @@
 ZK 3.6.3
 August, 2009
 * Features
-	2811973 - Log the event thread that takes too long to execute
-
+  2811973: Log the event thread that takes too long to execute
+  2813737: Support new "dial" chart	
+  
 	--------
 ZK 3.6.2
 June 23, 2009

@@ -363,4 +363,51 @@ dateFormat="yyyy/MM/dd" />
 <zscript>
   wind.setModel(windmodel);
 </zscript>
+
+<label value="dial"/>
+<window onOK="doOK()" width="350px">
+<zscript>
+<![CDATA[
+    import org.zkoss.zul.DialModel;
+    import org.zkoss.zul.DialModelScale;
+
+    int val= 40;
+
+	DialModel dialmodel = new DialModel();
+	DialModelScale scale = dialmodel.newScale(0.0, 100.0, -120.0, -300.0, 10.0, 4);//scale's configuration data
+	scale.setText("Temperature");
+	scale.newRange(80, 100, "#FF0000", 0.83, 0.89);
+	scale.newRange(60, 80, "#FFC426", 0.83, 0.89);
+	scale.setValue(val);
+
+	doOK() {
+		val = dbx.getValue();
+		if (val > 100) {
+			val = 100;
+		} else if (val < 0) {
+			val = 0;
+		}
+		dbx.value = val;
+		slx.curpos = val;
+		scale.setValue(val);
+		if (val > 80) {
+			scale.setNeedleColor(scale.getRange(0).getRangeColor());
+		} else if (val > 60) {
+			scale.setNeedleColor(scale.getRange(1).getRangeColor());
+		} else {
+			scale.setNeedleColor(dialmodel.getFrameFgColor());
+		}
+    }
+]]>
+</zscript>
+<chart id="dial" title="Dial Plot" width="300" height="300" type="dial" threeD="false" fgAlpha="128"/>
+<zscript>
+  dial.setModel(dialmodel);
+</zscript>
+	<hbox>
+		<slider id="slx" curpos="${val}" onScroll="dbx.value=self.curpos; doOK()"/>
+		<intbox id="dbx" value="${val}" onChange="doOK()"/>
+	</hbox>
+</window>
+
 </vbox>

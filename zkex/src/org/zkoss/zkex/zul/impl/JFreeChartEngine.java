@@ -18,48 +18,104 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zkex.zul.impl;
 
-import org.zkoss.zul.*;
-import org.zkoss.zul.GanttModel.GanttTask;
-import org.zkoss.zul.WaferMapModel.IntPair;
-import org.zkoss.zul.impl.ChartEngine;
-import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.util.TimeZones;
-import org.zkoss.lang.Objects;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GradientPaint;
+import java.awt.Paint;
+import java.awt.Point;
+import java.awt.Transparency;
+import java.awt.image.BufferedImage;
+import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.TimeZone;
+import java.util.Map.Entry;
 
-import org.jfree.chart.*;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartRenderingInfo;
+import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.DateAxis;
-import org.jfree.chart.encoders.*;
-import org.jfree.chart.plot.*;
-import org.jfree.chart.renderer.*;
+import org.jfree.chart.encoders.EncoderUtil;
+import org.jfree.chart.encoders.ImageFormat;
+import org.jfree.chart.entity.CategoryItemEntity;
+import org.jfree.chart.entity.CategoryLabelEntity;
+import org.jfree.chart.entity.ChartEntity;
+import org.jfree.chart.entity.JFreeChartEntity;
+import org.jfree.chart.entity.LegendItemEntity;
+import org.jfree.chart.entity.PieSectionEntity;
+import org.jfree.chart.entity.PlotEntity;
+import org.jfree.chart.entity.TickLabelEntity;
+import org.jfree.chart.entity.TitleEntity;
+import org.jfree.chart.entity.XYItemEntity;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.Plot;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.PolarPlot;
+import org.jfree.chart.plot.WaferMapPlot;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.plot.dial.DialBackground;
+import org.jfree.chart.plot.dial.DialCap;
+import org.jfree.chart.plot.dial.DialPlot;
+import org.jfree.chart.plot.dial.DialPointer;
+import org.jfree.chart.plot.dial.DialTextAnnotation;
+import org.jfree.chart.plot.dial.DialValueIndicator;
+import org.jfree.chart.plot.dial.StandardDialFrame;
+import org.jfree.chart.plot.dial.StandardDialRange;
+import org.jfree.chart.plot.dial.StandardDialScale;
+import org.jfree.chart.renderer.WaferMapRenderer;
 import org.jfree.chart.title.LegendTitle;
-import org.jfree.chart.entity.*;
+import org.jfree.data.category.CategoryDataset;
+import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.gantt.GanttCategoryDataset;
 import org.jfree.data.gantt.Task;
 import org.jfree.data.gantt.TaskSeries;
 import org.jfree.data.gantt.TaskSeriesCollection;
-import org.jfree.data.general.*;
-import org.jfree.data.category.*;
-import org.jfree.data.xy.*;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.general.DefaultValueDataset;
+import org.jfree.data.general.PieDataset;
+import org.jfree.data.general.WaferMapDataset;
 import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.TimeSeriesCollection;
-import org.jfree.util.TableOrder;
-
-import java.text.DateFormat;
-import java.text.MessageFormat;
-import java.text.SimpleDateFormat;
-import java.util.Collection;
-import java.util.List;
-import java.util.Date;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.HashMap;
-import java.util.TimeZone;
-import java.awt.image.BufferedImage;
-import java.awt.Paint;
-import java.awt.Color;
-import java.awt.Transparency;
-import java.util.Iterator;
+import org.jfree.data.xy.DefaultOHLCDataset;
+import org.jfree.data.xy.DefaultTableXYDataset;
+import org.jfree.data.xy.DefaultWindDataset;
+import org.jfree.data.xy.DefaultXYZDataset;
+import org.jfree.data.xy.IntervalXYDataset;
+import org.jfree.data.xy.OHLCDataItem;
+import org.jfree.data.xy.OHLCDataset;
+import org.jfree.data.xy.TableXYDataset;
+import org.jfree.data.xy.WindDataset;
+import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
+import org.jfree.data.xy.XYZDataset;
+import org.jfree.ui.GradientPaintTransformType;
+import org.jfree.ui.StandardGradientPaintTransformer;
+import org.zkoss.lang.Objects;
+import org.zkoss.util.TimeZones;
+import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zul.Area;
+import org.zkoss.zul.CategoryModel;
+import org.zkoss.zul.Chart;
+import org.zkoss.zul.ChartModel;
+import org.zkoss.zul.DialModel;
+import org.zkoss.zul.DialModelRange;
+import org.zkoss.zul.DialModelScale;
+import org.zkoss.zul.GanttModel;
+import org.zkoss.zul.HiLoModel;
+import org.zkoss.zul.PieModel;
+import org.zkoss.zul.WaferMapModel;
+import org.zkoss.zul.XYModel;
+import org.zkoss.zul.XYZModel;
+import org.zkoss.zul.GanttModel.GanttTask;
+import org.zkoss.zul.WaferMapModel.IntPair;
+import org.zkoss.zul.impl.ChartEngine;
 
 
 /**
@@ -240,6 +296,9 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 			if (chart.getDateFormat() != null) {
 				_dateFormat.applyPattern(chart.getDateFormat());
 			}
+		} else if (Chart.DIAL.equals(chart.getType())) {
+			_chartImpl = new Dial();
+			
 		} else 
 			throw new UiException("Unsupported chart type yet: "+chart.getType());
 
@@ -475,7 +534,8 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 		for (final Iterator it = model.getSeries().iterator(); it.hasNext();) {
 			final Comparable series = (Comparable) it.next();
 			final org.jfree.data.time.TimeSeries tser = 
-				new org.jfree.data.time.TimeSeries(series, pclass);
+				new org.jfree.data.time.TimeSeries(series);
+				//new org.jfree.data.time.TimeSeries(series, pclass); //deprecated since JFreeChart 10.0.13
 			final int size = model.getDataCount(series);
 			for(int j = 0; j < size; ++j) {
 				final RegularTimePeriod period = RegularTimePeriod.createInstance(
@@ -1709,6 +1769,183 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 		}
 	}
 
+	/** dial 
+	 * @since 3.6.3
+	 */
+	private class Dial extends ChartImpl {
+		public void render(Chart chart, Area area, ChartEntity info) {
+/*			System.out.println("dial info:"+info);
+			if (info instanceof LegendItemEntity) {
+				area.setAttribute("entity", "LEGEND");
+				Integer seq = (Integer)chart.getAttribute("LEGEND_SEQ");
+				seq = seq == null ? new Integer(0) : new Integer(seq.intValue()+1);
+				chart.setAttribute("LEGEND_SEQ", seq);
+				decodeLegendInfo(area, (LegendItemEntity)info, chart);
+			} else {
+				area.setAttribute("entity", "TITLE");
+				if (chart.isShowTooltiptext()) {
+					area.setTooltiptext(chart.getTitle());
+				}
+			}
+*/		}
+		
+		public JFreeChart createChart(Chart chart) {
+			final ChartModel model0 = (ChartModel) chart.getModel();
+			if (!(model0 instanceof DialModel)) {
+				throw new UiException("model must be a org.zkoss.zul.DialModel");
+			}
+			final DialPlot plot = new DialPlot();
+			plot.setView(0.0, 0.0, 1.0, 1.0);
+			final DialModel model = (DialModel) model0;
+			
+			//prepare the DialFrame
+			//TODO ArcDialFrame?
+			StandardDialFrame dialFrame = new StandardDialFrame();
+			final int[] bgRGB = model.getFrameBgRGB();
+			if (bgRGB != null) {
+				dialFrame.setBackgroundPaint(new Color(bgRGB[0], bgRGB[1], bgRGB[2], model.getFrameBgAlpha()));
+			}
+			final int[] fgRGB = model.getFrameBgRGB();
+			if (fgRGB != null) {
+				dialFrame.setForegroundPaint(new Color(fgRGB[0], fgRGB[1], fgRGB[2]));
+			}
+			//new ArcDialFrame(-120, -300)
+			//dialFrame.setInnerRadius(0.2);
+			//dialFrame.setOuterRadius(0.95);
+			plot.setDialFrame(dialFrame);
+			
+			//prepare DialBackground
+			final int[] bgRGB2 = model.getFrameBgRGB2();
+			if (bgRGB2 != null) {
+				final GradientPaint gp = new GradientPaint(
+					new Point(), new Color(bgRGB[0], bgRGB[1], bgRGB[2]), 
+					new Point(), new Color(bgRGB2[0], bgRGB2[1], bgRGB2[2]));
+				final DialBackground db = new DialBackground(gp);
+				final String direction = model.getGradientDirection();
+				GradientPaintTransformType type = GradientPaintTransformType.VERTICAL;
+				if ("vertical".equalsIgnoreCase(direction)) {
+					type = GradientPaintTransformType.VERTICAL;
+				} else if ("horizontal".equalsIgnoreCase(direction)) {
+					type = GradientPaintTransformType.HORIZONTAL;
+				} else if ("center_vertical".equalsIgnoreCase(direction)) {
+					type = GradientPaintTransformType.CENTER_VERTICAL;
+				} else if ("center_horizontal".equalsIgnoreCase(direction)) {
+					type = GradientPaintTransformType.CENTER_HORIZONTAL;
+				} else {
+					type = GradientPaintTransformType.VERTICAL;
+				}
+				db.setGradientPaintTransformer(new StandardGradientPaintTransformer(type));
+				plot.setBackground(db);
+			}
+			
+			//prepare DialCap
+			final DialCap cap = new DialCap();
+			final double capRadius = model.getCapRadius();
+			cap.setRadius(capRadius);
+			plot.setCap(cap);
+			
+			//handle the dial data scale.
+			for (int j=0, len=model.size(); j < len; ++j) {
+				final DialModelScale scale = model.getScale(j);
+				
+				//prepare the dataset
+				final DefaultValueDataset dataset0 = new DefaultValueDataset(scale.getValue());
+				plot.setDataset(0, dataset0);
+	
+				//prepare the text annotation
+				final double textRadius = scale.getTextRadius();
+				final String text = scale.getText();
+				if (text != null && text.length() > 0 && textRadius > 0) {
+					DialTextAnnotation annotation0 = new DialTextAnnotation(text);
+					Font font = scale.getTextFont();
+					if (font == null) {
+						font = new Font("Dialog", Font.BOLD, 14);
+					}
+					annotation0.setFont(font);
+					annotation0.setRadius(textRadius);
+					plot.addLayer(annotation0);
+				}
+				
+				//prepare the value indicator
+				final double valueRadius = scale.getValueRadius();
+				if (valueRadius > 0) {
+					DialValueIndicator dvi = new DialValueIndicator(j);
+					Font font = scale.getValueFont();
+					if (font == null) {
+						font = new Font("Dialog", Font.PLAIN, 10);
+					}
+					dvi.setFont(font);
+					dvi.setOutlinePaint(Color.darkGray);
+					dvi.setRadius(valueRadius);
+					dvi.setAngle(scale.getValueAngle());
+					plot.addLayer(dvi);
+				}
+				
+				//prepare the scale
+				double low = scale.getScaleLowerBound();
+				double up = scale.getScaleUpperBound();
+				double sa = scale.getScaleStartAngle();
+				double ext = scale.getScaleExtent();
+				double ti = scale.getMajorTickInterval();
+				int tc = scale.getMinorTickCount();
+				
+				StandardDialScale dscale = new StandardDialScale(low, up, sa, ext, ti, (int) tc);
+				
+				//handle the tick
+				dscale.setTickRadius(scale.getTickRadius());
+				dscale.setTickLabelOffset(0.15);
+				Font font = scale.getValueFont();
+				if (font == null) {
+					font = new Font("Dialog", Font.PLAIN, 14);
+				}
+				dscale.setTickLabelFont(font);
+				int[] tickRGB = scale.getTickRGB();
+				if (tickRGB != null) {
+					Paint tickColor = new Color(tickRGB[0], tickRGB[1], tickRGB[2]);
+					dscale.setMajorTickPaint(tickColor);
+					dscale.setMinorTickPaint(tickColor);
+				}
+				plot.addScale(j, dscale);
+				plot.mapDatasetToScale(j, j);
+	
+				//prepare color ranges
+				for(int k=0, klen=scale.rangeSize(); k < klen; ++k) {
+					final DialModelRange rng = scale.getRange(k);
+					int[] rngRGB = rng.getRangeRGB();
+					if (rngRGB == null) {
+						rngRGB = new int[] {0x00, 0x00, 0xFF};
+					}
+					final StandardDialRange range = new StandardDialRange(rng.getLowerBound(), rng.getUpperBound(), new Color(rngRGB[0], rngRGB[1], rngRGB[2]));
+		            range.setInnerRadius(rng.getInnerRadius());
+		            range.setOuterRadius(rng.getOuterRadius());
+		            plot.addLayer(range);
+				}
+				
+	            //prepare the needle (pin or pointer), radius/fillPaint/outlinePaint/
+				final String type = scale.getNeedleType();
+				final double needleRadius = scale.getNeedleRadius();
+				int[] needleRGB = scale.getNeedleRGB();
+				if (needleRGB == null) {
+					needleRGB = model.getFrameFgRGB();
+				}
+				DialPointer needle = new DialPointer.Pointer(j);
+				needle.setRadius(needleRadius);
+				if ("pin".equalsIgnoreCase(type)) {
+					needle = new DialPointer.Pin(j);
+					((DialPointer.Pin)needle).setPaint(new Color(needleRGB[0], needleRGB[1], needleRGB[2]));
+				} else {
+					((DialPointer.Pointer)needle).setFillPaint(new Color(needleRGB[0], needleRGB[1], needleRGB[2]));
+				}
+				
+				plot.addLayer(needle);
+			}
+			//prepare JFreeChart
+			JFreeChart jchart = new JFreeChart(plot);
+			
+			return jchart;
+		}
+	}
+	
 	private PlotOrientation getOrientation(String orient) {
 		return "horizontal".equals(orient) ?
 			PlotOrientation.HORIZONTAL : PlotOrientation.VERTICAL;

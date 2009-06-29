@@ -51,6 +51,7 @@ import java.util.TimeZone;
  *   <tr><td>bar</td><td>{@link CategoryModel}</td><td>Yes</td></tr>
  *   <tr><td>bubble</td><td>{@link XYZModel}</td><td>No</td></tr>
  *   <tr><td>candlestick</td><td>{@link HiLoModel}</td><td>No</td></tr>
+ *   <tr><td>dial</td><td>@{link DialModel}</td><td>No</td></tr>
  *   <tr><td>gantt</td><td>{@link GanttModel}</td><td>No</td></tr>
  *   <tr><td>highlow</td><td>{@link HiLoModel}</td><td>No</td></tr>
  *   <tr><td>histogram</td><td>{@link XYModel}</td><td>No</td></tr>
@@ -95,6 +96,7 @@ public class Chart extends Imagemap implements org.zkoss.zul.api.Chart {
 	public static final String WAFERMAP = "wafermap"; //@since 3.5.0
 	public static final String GANTT = "gantt"; //@since 3.5.0
 	public static final String WIND = "wind"; //@since 3.5.0
+	public static final String DIAL = "dial"; //@since 3.6.3
 	
 	private static final Map DEFAULT_MODEL = new HashMap();
 	static {
@@ -115,9 +117,10 @@ public class Chart extends Imagemap implements org.zkoss.zul.api.Chart {
 		DEFAULT_MODEL.put(CANDLESTICK, "org.zkoss.zul.SimpleHiLoModel");
 		DEFAULT_MODEL.put(HIGHLOW, "org.zkoss.zul.SimpleHiLoModel");
 		DEFAULT_MODEL.put(BUBBLE, "org.zkoss.zul.SimpleXYZModel"); //@since 3.5.0
-//		DEFAULT_MODEL.put(WAFERMAP, "org.zkoss.zul.WaferMapModel"); //@since 3.5.0
+		DEFAULT_MODEL.put(WAFERMAP, "org.zkoss.zul.WaferMapModel"); //@since 3.5.0
 		DEFAULT_MODEL.put(GANTT, "org.zkoss.zul.GanttModel"); //@since 3.5.0
 		DEFAULT_MODEL.put(WIND, "org.zkoss.zul.SimpleXYZModel"); //@since 3.5.0
+		DEFAULT_MODEL.put(DIAL, "org.zkoss.zul.DialModel"); //@since 3.6.3 
 	}
 	
 	//Time Series Chart Period
