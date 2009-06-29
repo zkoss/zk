@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Specification-Title: ZK Demo
-Specification-Version: 3.6.2
+Specification-Version: 3.6.3
 Specification-Vendor: Potix Corporation
 Implementation-Title: org.zkoss.zkdemo
 Implementation-URL: http://www.zkoss.org/
-Implementation-Version: 3.6.2
+Implementation-Version: 3.6.3
 Implementation-Vendor: Potix Corporation

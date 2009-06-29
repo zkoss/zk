@@ -14,7 +14,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 <config>
 	<version>
 		<version-class>org.zkoss.web.Version</version-class>
-		<version-uid>3.6.2</version-uid>
+		<version-uid>3.6.3</version-uid>
 	</version>
 	<taglib>
 		<taglib-uri>http://www.zkoss.org/dsp/web/core</taglib-uri>
