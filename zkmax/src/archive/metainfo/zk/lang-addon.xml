@@ -87,10 +87,10 @@ import org.zkoss.zk.ui.event
 import org.zkoss.zk.ui
 import org.zkoss.zul
 import org.zkoss.zkex.zul
+import org.zkoss.zkmax.zul
 
 def alert(m):
 	org.zkoss.zul.Messagebox.show(m)
-
 	</zscript>
 
 	<!-- the renderer version of components -->
