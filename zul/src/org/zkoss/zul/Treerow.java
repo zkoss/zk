@@ -148,7 +148,9 @@ public class Treerow extends XulElement implements org.zkoss.zul.api.Treerow {
 		return !(comp instanceof Treechildren)
 			|| ((Treechildren)comp).isVisible(); //recursive
 	}
-	
+	public void smartUpdate(String attr, Object value) {
+		super.smartUpdate(attr, value);
+	}
 	private boolean isBothVisible() {
 		if (!super.isVisible())
 			return false;
