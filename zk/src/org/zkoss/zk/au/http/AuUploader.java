@@ -58,7 +58,6 @@ import org.zkoss.zk.ui.ext.Updatable;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.util.CharsetFinder;
 import org.zkoss.zk.ui.util.Configuration;
-import org.zkoss.zul.Fileupload;
 
 
 /**
