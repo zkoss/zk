@@ -68,7 +68,7 @@ function zips
 
 				if [ ! -f "$dstfl" ] || [ "$f" -nt "$dstfl" ] ;  then
 					local cvt=false
-					if [ "${f%.css.dsp}" != "$f" ] ; then
+					if [ "${f%.css.dsp}" != "$f" ] || [ "${f%.css}" != "$f" ] ; then
 						cvt=true
 					fi
 					if [ $cvt = true ] ; then

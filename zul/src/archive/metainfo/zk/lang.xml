@@ -285,10 +285,12 @@ def alert(m):
 		<mold>
 			<mold-name>horizontal</mold-name>
 			<mold-uri>mold/hbox.js</mold-uri>
+			<css-uri>css/box.css.dsp</css-uri>
 		</mold>
 		<mold>
 			<mold-name>vertical</mold-name>
 			<mold-uri>mold/vbox.js</mold-uri>
+			<css-uri>css/box.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
@@ -506,10 +508,12 @@ def alert(m):
 		<mold>
 			<mold-name>horizontal</mold-name>
 			<mold-uri>mold/hbox.js</mold-uri>
+			<css-uri>css/box.css.dsp</css-uri>
 		</mold>
 		<mold>
 			<mold-name>vertical</mold-name>
 			<mold-uri>mold/vbox.js</mold-uri>
+			<css-uri>css/box.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
@@ -1085,10 +1089,12 @@ def alert(m):
 		<mold>
 			<mold-name>horizontal</mold-name>
 			<mold-uri>mold/hbox.js</mold-uri>
+			<css-uri>css/box.css.dsp</css-uri>
 		</mold>
 		<mold>
 			<mold-name>vertical</mold-name>
 			<mold-uri>mold/vbox.js</mold-uri>
+			<css-uri>css/box.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>

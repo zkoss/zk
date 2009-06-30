@@ -89,7 +89,7 @@ function zips
 					if [ "${f%.js}" != "$f" ] ; then
 						cvt=true
 						type=
-					elif [ "${f%.css.dsp}" != "$f" ] ; then
+					elif [ "${f%.css.dsp}" != "$f" ] || [ "${f%.css}" != "$f" ] ; then
 						cvt=true
 						type="--type css"
 					fi

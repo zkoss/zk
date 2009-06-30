@@ -497,8 +497,6 @@ span.z-progressmeter-img {
 <c:include page="~./zul/css/cmps/calendar.css.dsp"/>
 <%-- Widget (Textbox, Intbox, Longbox, and so on) --%>
 <c:include page="~./zul/css/cmps/widget.css.dsp"/>
-<%-- Box, Splitter, Vbox, and Hbox --%>
-<c:include page="~./zul/css/cmps/box.css.dsp"/>
 <%-- Popup --%>
 <c:include page="~./zul/css/cmps/popup.css.dsp"/>
 <%-- Menu --%>
