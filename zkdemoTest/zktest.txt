@@ -1,40 +1,40 @@
-[1;37mNAME[m
+NAME
     zktest -- An unit test script for ZK
 
-[1;37mSYNOPSIS[m
-    [1;37mzktest[m [-bhq] [-acit] [expression]
+SYNOPSIS
+    zktest [-bhq] [-acit] [expression]
 
-[1;37mDESCRIPTION[m
+DESCRIPTION
     zktest is a small utility fot unit test of zkdemoTest. These tests are made by
     using Selenium Test Suite (http://seleniumhq.org/).
 
-[1;37mOPTIONS[m
-    [1;37m-a, --all[m
+OPTIONS
+    -a, --all
         Do test(s) for all the cases in zkdemoTest.
 
-    [1;37m-b, --browser[m
+    -b, --browser
         Open the test report in browser after doing test cases.
 
-    [1;37m-c, --category[m=[0;4mcategory[m
-        Do test(s) cases starting with [0;4mcategory[m, only one category can be selected.
+    -c, --category=category
+        Do test(s) cases starting with category, only one category can be selected.
 
-    [1;37m-h, --help[m
+    -h, --help
         Show this help.
 
-    [1;37m-i, --id[m=[4mid[m
-        Do test(s) specific case which have [4mid[m.
+    -i, --id=id
+        Do test(s) specific case which have id.
 
-    [1;37m-q, --quiet[m
+    -q, --quiet
         Do test(s) in quiet mode. This option only works when using -t(tag).
 
-    [1;37m-t, --tag[m=[4mtags[m
-        Do test(s) cases match tag(s) in [4mconfig.properties[m of zkdemoTest.
+    -t, --tag=tags
+        Do test(s) cases match tag(s) in config.properties of zkdemoTest.
         The tags can be multiple and non-case-sensitive, using comma as logical
         "AND" and space as logical "OR".
-        i.e., zktest [1;37m-t[m "A,Tabbox",
-              zktest [1;37m--tag[m "B Window PANEL".
+        i.e., zktest -t "A,Tabbox",
+              zktest --tag "B Window PANEL".
 
-[1;37mCOPYRIGHT[m
+COPYRIGHT
     Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
     This program is distributed under GPL Version 3.0 in the hope that
