@@ -2610,6 +2610,9 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 				//isCropper is called after a component is removed, so
 				//we have to test >= rather than >
 		}
+		public boolean inSameCropScope(Component p) {
+			return false;
+		}
 		public Set getAvailableAtClient() {
 			if (!isCropper())
 				return null;

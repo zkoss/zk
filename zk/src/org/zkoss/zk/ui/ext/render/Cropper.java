@@ -20,6 +20,8 @@ package org.zkoss.zk.ui.ext.render;
 
 import java.util.Set;
 
+import org.zkoss.zk.ui.Component;
+
 /**
  * Implemented by the object returned by {@link org.zkoss.zk.ui.sys.ComponentCtrl#getExtraCtrl}
  * if not all of the children of a component are available at the client.
@@ -46,7 +48,7 @@ public interface Cropper {
 	public boolean isCropper();
 	/** Returns a set of child components that are available at the client,
 	 * or null if ALL available. The child components in the returned set
-	 * must be in the same order of {@link org.zkoss.zk.ui.Component#getChildren}.
+	 * must be in the same order of {@link Component#getChildren}.
 	 * In order words, you must use LinkedHashSet or similar to ensure the order
 	 * in the returned set.
 	 *
@@ -54,4 +56,21 @@ public interface Cropper {
 	 * all children are available at the client.
 	 */
 	public Set getAvailableAtClient();
+	/** Returns if the specified ancestor is in the same crop scope.
+	 * If the ancestor and this component are in the same scope,
+	 * this component is assumed to be visible as long as it is not cropped
+	 * by its parent -- even if the ancestor is cropped.
+	 *
+	 * <p>It is meaningful only for multi-level component, such as tree.
+	 * In a multi-level component, it is suggested to implement as a single
+	 * scope and {@link #getAvailableAtClient} returns all available items,
+	 * not just the child of this component.
+	 *
+	 * <p>For single-level cropping (such as listbox and grid), just returns
+	 * false.
+	 *
+	 * @param p an ancestor of this component to check
+	 * @since 3.6.3
+	 */
+	public boolean inSameCropScope(Component p);
 }

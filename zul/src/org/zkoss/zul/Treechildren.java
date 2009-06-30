@@ -328,6 +328,15 @@ public class Treechildren extends XulElement implements org.zkoss.zul.api.Treech
 			final Tree tree = getTree();
 			return tree != null && tree.inPagingMold();
 		}
+		public boolean inSameCropScope(Component anc) {
+			for (Component p, c = Treechildren.this; (p = c.getParent()) != null; c = p) {
+				if (p == anc)
+					return true;
+				if (p instanceof Tree)
+					break;
+			}
+			return false;
+		}
 		public Set getAvailableAtClient() {
 			if (!isCropper()) return null;
 
@@ -352,20 +361,10 @@ public class Treechildren extends XulElement implements org.zkoss.zul.api.Treech
 				map = tree.getVisibleItems();
 				Executions.getCurrent().setAttribute(attrnm, map);
 			}
-
-			//If parent is not in map, all its children not visible
-			if (parent != tree && !map.containsKey(parent))
-				return Collections.EMPTY_SET;
-
-			final Set avail = new LinkedHashSet(32);
-			for (Iterator it = getChildren().iterator();it.hasNext();) {
-				Treeitem item = (Treeitem)it.next();
-				if (!map.containsKey(item))
-					if (avail.isEmpty() || !item.isVisible()) continue;
-					else break;
-				avail.add(item);
-			}
-			return avail;
+			return map.keySet();
+				//yes, we return all visible items, not just direct children
+				//in other words, we consider the whole tree as a single scope
+				//See also bug 2814504
 		}
 	}
 }
