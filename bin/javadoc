@@ -10,7 +10,7 @@ cd $rootdst
 function subfolder {
 	local rootdst="$1"
 	for f in *; do
-		if [ "$f" != "CVS" ] ; then
+		if [ "$f" != "CVS" ] && [ "$f" != ".svn" ] ; then
 			dstfl=$dst/$f
 			if [ -d "$f" ] ; then
 				(
