@@ -83,7 +83,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		pp.style.display = "none";
 		pp.style.visibility = "";
 
-		zAnima.slideDown(this, pp, {afterAnima: this._afterSlideDown});
+		zk(pp).slideDown(this, {afterAnima: this._afterSlideDown});
 
 		//FF issue:
 		//If both horz and vert scrollbar are visible:

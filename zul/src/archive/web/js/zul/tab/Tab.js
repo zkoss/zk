@@ -93,7 +93,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		if (panel)
 			if (accd && animation) {
 				var p = panel.getSubnode("real");
-				zAnima[toSel ? "slideDown" : "slideUp"](this,p);
+				zk(p)[toSel ? "slideDown" : "slideUp"](this);
 			} else {
 				var pl = accd ? panel.getSubnode("real") : panel.getNode(); //Can't use getSubnode coz
 				if (toSel)

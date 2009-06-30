@@ -71,7 +71,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			if (open) {
 				if (colled) {
 					if (!nonAnima) 
-						zAnima.slideOut(this, colled, {
+						zk(colled).slideOut(this, {
 							anchor: this.sanchor,
 							duration: 200,
 							afterAnima: this.$class.afterSlideOut
@@ -84,7 +84,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				}
 			} else {
 				if (colled && !nonAnima) 
-					zAnima.slideOut(this, real, {
+					zk(real).slideOut(this, {
 							anchor: this.sanchor,
 							beforeAnima: this.$class.beforeSlideOut,
 							afterAnima: this.$class.afterSlideOut
@@ -176,7 +176,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		this.$supers('onChildAdded_', arguments);
 		if (child.$instanceof(zul.layout.Borderlayout)) {
 			this.setFlex(true);
-			zDom.addClass(this.getNode(), this.getZclass() + "-nested");
+			jq(this.getNode()).addClass(this.getZclass() + "-nested");
 		}
 		if (this.parent && this.desktop)
 			this.parent.resize();
@@ -185,7 +185,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		this.$supers('onChildRemoved_', arguments);
 		if (child.$instanceof(zul.layout.Borderlayout)) {
 			this.setFlex(false);
-			zDom.removeClass(this.getNode(), this.getZclass() + "-nested");
+			jq(this.getNode()).removeClass(this.getZclass() + "-nested");
 		}
 		if (this.parent && this.desktop)
 			this.parent.resize();
@@ -217,8 +217,8 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 					var colled = this.getSubnode('colled'),
 						real = this.getSubnode('real');
 					if (colled)
-						zDom.show(colled);
-					zDom.hide(real);
+						jq(colled).show();
+					jq(real).hide();
 				}
 			}
 		}
@@ -254,13 +254,13 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		if (this.getSubnode('btn')) {
 			switch (evt.domTarget) {
 			case this.getSubnode('btn'):
-				zDom.addClass(this.getSubnode('btn'), this.getZclass() + '-colps-over');
+				jq(this.getSubnode('btn')).addClass(this.getZclass() + '-colps-over');
 				break;
 			case this.getSubnode('btned'):
-				zDom.addClass(this.getSubnode('btned'), this.getZclass() + '-exp-over');
+				jq(this.getSubnode('btned')).addClass(this.getZclass() + '-exp-over');
 				// don't break
 			case this.getSubnode('colled'):
-				zDom.addClass(this.getSubnode('colled'), this.getZclass() + '-colpsd-over');
+				jq(this.getSubnode('colled')).addClass(this.getZclass() + '-colpsd-over');
 				break;
 			}
 		}
@@ -270,13 +270,13 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		if (this.getSubnode('btn')) {
 			switch (evt.domTarget) {
 			case this.getSubnode('btn'):
-				zDom.removeClass(this.getSubnode('btn'), this.getZclass() + '-colps-over');
+				jq(this.getSubnode('btn')).removeClass(this.getZclass() + '-colps-over');
 				break;
 			case this.getSubnode('btned'):
-				zDom.removeClass(this.getSubnode('btned'), this.getZclass() + '-exp-over');
+				jq(this.getSubnode('btned')).removeClass(this.getZclass() + '-exp-over');
 				// don't break
 			case this.getSubnode('colled'):
-				zDom.removeClass(this.getSubnode('colled'), this.getZclass() + '-colpsd-over');
+				jq(this.getSubnode('colled')).removeClass(this.getZclass() + '-colpsd-over');
 				break;
 			}
 		}
@@ -288,7 +288,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			switch (target) {
 			case this.getSubnode('btn'):
 			case this.getSubnode('btned'):
-				if (this._isSlide || zAnima.count) return;
+				if (this._isSlide || zk.animating()) return;
 				if (this.getSubnode('btned') == target) {
 					var s = this.getSubnode('real').style;
 					s.visibilty = "hidden";
@@ -314,7 +314,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				this.getSubnode('btn').style.display = "none"; 
 				s.visibilty = "";
 				s.display = "none";
-				zAnima.slideDown(this, real, {
+				zk(real).slideDown(this, {
 					anchor: this.sanchor,
 					afterAnima: this.$class.afterSlideDown
 				});
@@ -325,14 +325,14 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	},
 	_docClick: function (evt) {
 		var target = evt.target;
-		if (this._isSlide && !zDom.isAncestor(this.getSubnode('real'), target)) {
+		if (this._isSlide && !jq.isAncestor(this.getSubnode('real'), target)) {
 			if (this.getSubnode('btned') == target) {
 				this.$class.afterSlideUp.apply(this, [target]);
 				this.setOpen(true, false, true);
 			} else 
-				if ((!this._isSlideUp && this.$class.uuid(target) != this.uuid) || !zAnima.count) {
+				if ((!this._isSlideUp && this.$class.uuid(target) != this.uuid) || !zk.animating()) {
 					this._isSlideUp = true;
-					zAnima.slideUp(this, this.getSubnode('real'), {
+					zk(this.getSubnode('real')).slideUp(this, {
 						anchor: this.sanchor,
 						afterAnima: this.$class.afterSlideUp
 					});
@@ -356,8 +356,8 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		for (var region, ambit, margin,	rs = ['north', 'south', 'west', 'east'],
 				j = 0, k = rs.length; j < k; ++j) {
 			region = layout[rs[j]];
-			if (region && (zDom.isVisible(region.getNode())
-					|| zDom.isVisible(region.getSubnode('colled')))) {
+			if (region && (zk(region.getNode()).isVisible()
+					|| zk(region.getSubnode('colled')).isVisible())) {
 				var ignoreSplit = region == this,
 				ambit = layout._getAmbit(region, ignoreSplit);
 				switch (rs[j]) {
@@ -403,7 +403,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		}
 	},
 	_fixSplit: function () {
-		zDom[this.isSplittable() ? 'show' : 'hide'](this.getSubnode('split'));	
+		jq(this.getSubnode('split'))[this.isSplittable() ? 'show' : 'hide']();	
 	},
 	_alignTo: function () {
 		var from = this.getSubnode('colled'),
@@ -443,7 +443,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	// a callback function after the component slides out.
 	afterSlideOut: function (n) {
 		if (this.isOpen()) 
-			zAnima.slideIn(this, this.getSubnode('real'), {
+			zk(this.getSubnode('real')).slideIn(this, {
 				anchor: this.sanchor,
 				afterAnima: this.$class.afterSlideIn
 			});
@@ -452,7 +452,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				s = colled.style;
 			s.zIndex = ""; // reset z-index refered to the beforeSlideOut()
 			s.visibility = "";
-			zAnima.slideIn(this, colled, {
+			zk(colled).slideIn(this, {
 				anchor: this.sanchor,				
 				duration: 200
 			});
@@ -490,10 +490,9 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 					ol = wgt.parent,
 					real = wgt.getSubnode('real'),
 					mars = ol._arrayToObject(wgt._margins),
-					lr = zDom.padBorderWidth(real)
-						+ (pos == $Layout.WEST ? mars.left : mars.right),
-					tb = zDom.padBorderWidth(real)
-						+ (pos == $Layout.NORTH ? mars.top : mars.bottom),
+					pbw = zk(real).padBorderWidth(),
+					lr = pbw + (pos == $Layout.WEST ? mars.left : mars.right),
+					tb = pbw + (pos == $Layout.NORTH ? mars.top : mars.bottom),
 					min = 0,
 					uuid = wgt.uuid;
 				switch (pos) {
@@ -520,7 +519,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 					if (r) {
 						if ($Layout.CENTER == r.getPosition()) {
 							maxs = Math.min(maxs, (real.offsetWidth
-									+ zDom.revisedWidth(r.getSubnode('real'), r.getSubnode('real').offsetWidth))- min);
+									+ zk(r.getSubnode('real')).revisedWidth(r.getSubnode('real').offsetWidth))- min);
 						} else {
 							maxs = Math.min(maxs, ol.getNode().offsetWidth
 									- r.getSubnode('real').offsetWidth - r.getSubnode('split').offsetWidth - wgt.getSubnode('split').offsetWidth - min); 
@@ -530,7 +529,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 					}
 					break;						
 				}
-				var ofs = zDom.cmOffset(real);
+				var ofs = zk(real).cmOffset();
 				dg._rootoffs = {
 					maxs: maxs,
 					mins: mins,

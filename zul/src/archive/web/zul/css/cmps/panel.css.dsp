@@ -223,6 +223,7 @@
 	background-repeat : no-repeat;
 	width: 16px;
 	height: 16px;
+	cursor: pointer;
 }
 .z-panel-min {
 	background-position: 0 0;

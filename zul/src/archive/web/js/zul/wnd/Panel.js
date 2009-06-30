@@ -40,27 +40,21 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			var node = this.getNode();
 			if (node) {
 				var zcls = this.getZclass(),
-					body = this.getSubnode('body');
-				if (body) {
+					$body = jq(this.getSubnode('body'));
+				if ($body[0] && !$body.is(':animated')) {
 					if (open) {
 						jq(node).removeClass(zcls + '-colpsd');
-						zAnima.slideDown(this, body, {
-							afterAnima: this._afterSlideDown
-						});
+						$body.zk.slideDown(this, {afterAnima: this._afterSlideDown});
 					} else {
 						jq(node).addClass(zcls + '-colpsd');
 						this._hideShadow();
-
 						// windows 2003 with IE6 will cause an error when user toggles the panel in portallayout.
 						if (zk.ie6_ && !node.style.width)
 							node.runtimeStyle.width = "100%";
-
-						zAnima.slideUp(this, body, {
-							beforeAnima: this._beforeSlideUp
-						});
+						$body.zk.slideUp(this, {beforeAnima: this._beforeSlideUp});
 					}
+					if (fromServer) this.fire('onOpen', {open:open});
 				}
-				if (fromServer) this.fire('onOpen', {open:open});
 			}
 		},
 
@@ -185,13 +179,13 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	_fixWdh: zk.ie7 ? function () {
 		if (!this.isFramable() || !this.panelchildren) return;
 
-		var n = this.getNode(), $n = jq(n),
-			wdh = n.style.width,
-			$tl = $n.find('>div:first'), tl = $tl[0],
-			hl = this.getSubnode("cap") ? $tl.nextAll('div:first')[0]: null,
-			$bl = $n.find('>div:last').find('>div:last'), bl = $bl[0],
+		var $n = jq(this.getNode()),
+			wdh = $n[0].style.width,
+			tl = $n.find('> :first-child')[0],
+			hl = this.getSubnode("cap") ? jq(tl).next()[0] : null,
+			bl = $n.find("> :last-child")[0],
 			bb = this.getSubnode("bb"),
-			fl = this.getSubnode("fb") ? $bl.prevAll('div:first')[0]: null,
+			fl = this.getSubnode("fb") ? jq(bl).prev()[0]: null,
 			body = this.panelchildren.getNode(),
 			cm = body.parentNode;
 
@@ -207,7 +201,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			if (bb) bb.style.width = zk(bb).revisedWidth(body.offsetWidth);
 			if (fl) {
 				fl.firstChild.firstChild.style.width = Math.max(cm.offsetWidth - (zk(fl).padBorderWidth()
-					+ zk(fl.firstChild).padBorderWidth() - diff), 0) + "px";
+					+  zk(fl.firstChild).padBorderWidth() - diff), 0) + "px";
 			}
 			if (bl) {
 				bl.firstChild.style.width = cm.offsetWidth + diff + "px";
@@ -235,7 +229,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		h -= this._titleHeight(n);
 		if (this.isFramable()) {
 			var body = this.panelchildren.getNode(),
-				bl = jq(this.getSubnode('body')).find('>div:last')[0],
+				bl = jq(this.getSubnode('body')).find(':last')[0],
 				title = this.getSubnode('cap');
 			h -= bl.offsetHeight;
 			if (body)
@@ -255,7 +249,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	_titleHeight: function (n) {
 		var cap = this.getSubnode('cap'),
 			top = this.isFramable() ?
-				jq(n).find('>div:first')[0].offsetHeight: 0;
+				jq(n).find('> div:first-child')[0].offsetHeight: 0;
 		return cap ? cap.offsetHeight + top : top;
 	},
 	_syncMaximized: function (cmp) {
@@ -429,10 +423,10 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			break;
 		case this.getSubnode('max'):
 			var zcls = this.getZclass(),
-				max = this.getSubnode('max');
+				$n = jq(this.getSubnode('max'));
 			if (this.isMaximized())
-				jq(max).removeClass(zcls + '-maxd-over');
-			jq(max).removeClass(zcls + '-max-over');
+				$n.removeClass(zcls + '-maxd-over');
+			$n.removeClass(zcls + '-max-over');
 			break;
 		case this.getSubnode('min'):
 			jq(this.getSubnode('min')).removeClass(this.getZclass() + '-mini-over');

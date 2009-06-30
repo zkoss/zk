@@ -620,7 +620,7 @@ zk.copy(jq, { //ZK extension to jq
 
 	isAncestor: function (p, c) {
 		if (!p) return true;
-		for (; c; c = c.vparent||c.parentNod)
+		for (; c; c = c.vparent||c.parentNode)
 			if (p == c)
 				return true;
 		return false;

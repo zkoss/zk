@@ -22,8 +22,8 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 			if (node) {
 				var panel = this.getSubnode('panel');
 				if (panel) { //!legend
-					if (open) zAnima.slideDown(this, panel, {afterAnima: this._afterSlideDown});
-					else zAnima.slideUp(this, panel, {beforeAnima: this._beforeSlideUp});
+					if (open) zk(panel).slideDown(this, {afterAnima: this._afterSlideDown});
+					else zk(panel).slideUp(this, {beforeAnima: this._beforeSlideUp});
 				} else {
 					jq(node)[open ? 'removeClass': 'addClass'](this.getZclass() + "-colpsd");
 					zWatch.fireDown(open ? 'onShow': 'onHide', {visible:true}, this);

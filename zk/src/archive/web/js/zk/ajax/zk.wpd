@@ -22,6 +22,7 @@ if(!window.zk){</script><!-- may be loaded multiple times because specified in l
 	<script src="domie6.js" browser="ie6-"/>
 	<script src="domopera.js" browser="opera"/>
 	<script src="domsafari.js" browser="safari"/>
+	<script src="anima.js"/>
 	<script src="drag.js"/>
 	<script src="effect.js"/>
 	<script src="math.js"/>
