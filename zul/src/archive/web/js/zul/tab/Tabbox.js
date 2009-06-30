@@ -55,7 +55,7 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 		return this.getMold().indexOf("accordion") < 0 ? false : true;
 	},
 	getSelectedIndex: function() {
-		var tabnode = jq("#"+this._selTab),
+		var tabnode = zk(this._selTab).jq[0],
 		    tab = zk.Widget.$(tabnode);
 		return tab != null ? tab.getIndex() : -1 ;
 	},
@@ -65,7 +65,7 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 		this.setSelectedTab(tabs.getChildAt(index));
 	},
 	getSelectedPanel: function() {
-		var tabnode = jq("#"+this._selTab),
+		var tabnode = zk(this._selTab).jq[0],
 		    tab = zk.Widget.$(tabnode);
 		return tab != null ? tab.getLinkedPanel() : null;
 	},
@@ -77,7 +77,7 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 		this.setSelectedTab(tab);
 	},
 	getSelectedTab: function() {
-		var tabnode = jq("#"+this._selTab);
+		var tabnode = zk(this._selTab).jq[0];
 		return zk.Widget.$(tabnode);
 	},
 	setSelectedTab: function(tab) {
@@ -106,7 +106,7 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 		}
 		zk.afterMount(
 			this.proxy(function () {
-				var wgt = jq("#"+this._selTab),
+				var wgt = zk(this._selTab).jq[0],
 					tab = zk.Widget.$(wgt);
 				if (tab)
 					tab.setSelected(true);
