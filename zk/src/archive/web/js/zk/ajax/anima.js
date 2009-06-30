@@ -145,7 +145,7 @@ zk.copy(zjq.prototype, {
 		var anchor = opts ? opts.anchor || 't': 't',
 			prop = ['top', 'left'],
 			anima = {},
-			css = {display: 'block'},
+			css = {},
 			dims = this.dimension();
 			
 		opts = opts || {};
@@ -170,7 +170,7 @@ zk.copy(zjq.prototype, {
 		}
 			
 		this._defAnimaOpts(wgt, opts, prop);
-		return this.jq.css(css).animate(anima, {
+		return this.jq.css(css).show().animate(anima, {
 			queue: false, easing: opts.easing, duration: opts.duration || 500,
 			complete: opts.afterAnima
 		});
