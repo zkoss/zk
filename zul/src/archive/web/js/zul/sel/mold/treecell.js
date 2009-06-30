@@ -14,7 +14,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
 	out.push('<td', this.domAttrs_(), '><div id="', this.uuid,
-		'$cave" class="', this.getZclass() + '-cnt');
+		'-cave" class="', this.getZclass() + '-cnt');
 
 	var tree = this.getTree();
 	if (tree != null && tree.isFixedLayout())

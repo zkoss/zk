@@ -79,7 +79,7 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 						sb.push(' style="visibility:hidden;"/>');
 					else 
 						//NOTE: use Treerow's uuid! NOT Treeitem's!
-						sb.push(' id="', this.parent.uuid, '$cm"/>');
+						sb.push(' id="', this.parent.uuid, '-cm"/>');
 				}
 			}
 			var iconScls = tree ? tree.getZclass() : "",
@@ -134,7 +134,7 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 		if (button) {
 			var item = this.parent.parent;
 			if (item && item.treerow)
-				sb.push(' id="', item.treerow.uuid, '$open"');
+				sb.push(' id="', item.treerow.uuid, '-open"');
 		}
 
 		sb.push('></span>');

@@ -156,7 +156,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 	_doMouseOver: function (evt) { //not zk.Widget.doMouseOver_
 		if (this.$class._isActive(this)) return;
 		if (!this.isDisabled()) {
-			if (zk.ie && this.isTopmost() && !zk(this.getSubnode('a')).isAncestor(evt.domTarget))
+			if (zk.ie && this.isTopmost() && !jq.isAncestor(this.getSubnode('a'), evt.domTarget))
 				return;
 
 			this.$class._addActive(this);

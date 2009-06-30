@@ -21,18 +21,18 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 		sortDirection: function (v) {
 			var n = this.getNode();
 			if (n) {
-				var zcls = this.getZclass();
-				zDom.rmClass(n, zcls + "-sort-dsc");
-				zDom.rmClass(n, zcls + "-sort-asc");
+				var zcls = this.getZclass(),
+					$n = jq(n);
+				$n.removeClass(zcls + "-sort-dsc").removeClass(zcls + "-sort-asc");
 				switch (v) {
 				case "ascending":
-					zDom.addClass(n, zcls + "-sort-asc");
+					$n.addClass(zcls + "-sort-asc");
 					break;
 				case "descending":
-					zDom.addClass(n, zcls + "-sort-dsc");
+					$n.addClass(zcls + "-sort-dsc");
 					break;
 				default: // "natural"
-					zDom.addClass(n, zcls + "-sort");
+					$n.addClass(zcls + "-sort");
 					break;
 				}
 			}
@@ -42,12 +42,13 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 			var n = this.getNode(),
 				zcls = this.getZclass();
 			if (n) {
+				var $n = jq(n);
 				if (v == "none") {
-					zDom.rmClass(n, zcls + "-sort-asc");
+					$n.removeClass(zcls + "-sort-asc");
 					if (this._sortDescending == "none")
-						zDom.rmClass(n, zcls + "-sort");					
+						$n.removeClass(zcls + "-sort");					
 				} else
-					zDom.addClass(n, zcls + "-sort");
+					$n.addClass(zcls + "-sort");
 			}
 		},
 		sortDescending: function (v) {
@@ -55,18 +56,19 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 			var n = this.getNode(),
 				zcls = this.getZclass();
 			if (n) {
+				var $n = jq(n);
 				if (v == "none") {
-					zDom.rmClass(n, zcls + "-sort-dsc");
+					$n.removeClass(zcls + "-sort-dsc");
 					if (this._sortAscending == "none")
-						zDom.rmClass(n, zcls + "-sort");					
+						$n.removeClass(zcls + "-sort");					
 				} else
-					zDom.addClass(n, zcls + "-sort");
+					$n.addClass(zcls + "-sort");
 			}
 		}
 	},
 	$init: function () {
 		this.$supers('$init', arguments);
-		this.listen('onSort', this, null, -1000);
+		this.listen({onSort: this}, -1000);
 	},
 	setSort: function (type) {
 		if (type && type.startsWith('client')) {

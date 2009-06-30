@@ -93,15 +93,19 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		this.$supers('unbind_', arguments);
 	},
 	doClick_: function (evt) {
-		var $a = zk(this.getSubnode('a'));
-		if (this.isTopmost() && !$a.isAncestor(evt.domTarget)) return;
+		if (this.isTopmost() && !jq.isAncestor(this.getSubnode('a'), evt.domTarget)) return;
 
-		$a.jq.addClass(this.getZclass() + '-body-seld');
+		jq(this.getSubnode('a')).addClass(this.getZclass() + '-body-seld');
 		if (this.menupopup) {
 			this.menupopup._shallClose = false;
 			if (this.isTopmost())
 				this.getMenubar()._lastTarget = this;
-			if (!this.menupopup.isOpen()) this.menupopup.open();
+			if (!this.menupopup.isOpen()) 
+				this.menupopup.open();
+			else {
+				var anc = this.menupopup.getSubnode('a');
+				if (anc) anc.focus(); // force to get a focus 
+			}
 		}
 		this.fireX(evt);
 	},
@@ -109,7 +113,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		if (this.$class._isActive(this)) return;
 
 		var	topmost = this.isTopmost();
-		if (topmost && zk.ie && !zk(this.getSubnode('a')).isAncestor(evt.domTarget))
+		if (topmost && zk.ie && !jq.isAncestor(this.getSubnode('a'), evt.domTarget))
 				return; // don't activate
 
 		this.$class._addActive(this);

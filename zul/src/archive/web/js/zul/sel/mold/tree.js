@@ -26,24 +26,24 @@ function (out) {
 	if (inPaging && this.paging) {
 		pgpos = this.getPagingPosition();
 		if (pgpos == 'top' || pgpos == 'both') {
-			out.push('<div id="', uuid, '$pgit" class="', zcls, '-pgi-t">');
+			out.push('<div id="', uuid, '-pgit" class="', zcls, '-pgi-t">');
 			this.paging.redraw(out);
 			out.push('</div>');
 		}
 	}
 	
 	if (this.treecols) {
-		out.push('<div id="', uuid, '$head" class="', zcls, '-header">',
+		out.push('<div id="', uuid, '-head" class="', zcls, '-header">',
 				'<table', width, zUtl.cellps0,
 				' style="table-layout:fixed;', wdStyle,'">');
-		this.domFaker_(out, '$hdfaker', zcls);
+		this.domFaker_(out, '-hdfaker', zcls);
 		
 		for (var hds = this.heads, j = 0, len = hds.length; j < len;)
 			hds[j++].redraw(out);
 	
 		out.push('</table></div>');
 	}
-	out.push('<div id="', uuid, '$body" class="', zcls, '-body"><table', width,
+	out.push('<div id="', uuid, '-body" class="', zcls, '-body"><table', width,
 		zUtl.cellps0);
 	
 	if (this.isFixedLayout())
@@ -52,27 +52,27 @@ function (out) {
 	out.push('>');
 	
 	if (this.treecols)
-		this.domFaker_(out, '$bdfaker', zcls);
+		this.domFaker_(out, '-bdfaker', zcls);
 		
 	if (this.treechildren)
 		this.treechildren.redraw(out);
 	
 	out.push('</table><', tag, ' id="', uuid,
-		'$a" tabindex="-1" onclick="return false;" href="javascript:;" style="position:absolute;left:0px;top:0px;padding:0 !important;margin:0 !important;border:0 !important;background:transparent !important;font-size:1px !important;width:1px !important;height:1px !important;-moz-outline:0 none;outline:0 none;-moz-user-select:text;-khtml-user-select:text;"></',
+		'-a" tabindex="-1" onclick="return false;" href="javascript:;" style="position:absolute;left:0px;top:0px;padding:0 !important;margin:0 !important;border:0 !important;background:transparent !important;font-size:1px !important;width:1px !important;height:1px !important;-moz-outline:0 none;outline:0 none;-moz-user-select:text;-khtml-user-select:text;"></',
 		tag, '>');
 	out.push("</div>");
 	
 	if (this.treefoot) {
-		out.push('<div id="', uuid, '$foot" class="', zcls, '-footer">',
+		out.push('<div id="', uuid, '-foot" class="', zcls, '-footer">',
 				'<table', width, zUtl.cellps0, ' style="table-layout:fixed;', wdStyle,'">');
 		if (this.treecols) 
-			this.domFaker_(out, '$ftfaker', zcls);
+			this.domFaker_(out, '-ftfaker', zcls);
 			
 		this.treefoot.redraw(out);
 		out.push('</table></div>');
 	}
 	if (pgpos == 'bottom' || pgpos == 'both') {
-		out.push('<div id="', uuid, '$pgib" class="', zcls, '-pgi-b">');
+		out.push('<div id="', uuid, '-pgib" class="', zcls, '-pgi-b">');
 		this.paging.redraw(out);
 		out.push('</div>');
 	}

@@ -167,7 +167,7 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 				n = this.getNode(), $n = jq(n),
 				zcls = this.getZclass();
 			if (!$n.hasClass(zcls + "-visi") &&
-				(!zk.ie || !$n.zk.isAncestor(evt.domEvent.relatedTarget || evt.domEvent.toElement)))
+				(!zk.ie || !$n.isAncestor(evt.domEvent.relatedTarget || evt.domEvent.toElement)))
 					$n.removeClass(zcls + "-over");
 		}
 	},
