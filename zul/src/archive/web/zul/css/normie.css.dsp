@@ -177,19 +177,6 @@ span.z-drop-disallow {
 .z-errbox.z-popup .z-popup-cr {
 	background-image: url(${c:encodeURL('~./zul/img/errbox/pp-clr.gif')});
 }
-<%-- box.css.dsp --%>
-.z-splitter-ver-btn-l, .z-splitter-hor-btn-l {
-	background-image: url(${c:encodeURL('~./zul/img/splt/colps-l.gif')});
-}
-.z-splitter-ver-btn-r, .z-splitter-hor-btn-r {
-	background-image: url(${c:encodeURL('~./zul/img/splt/colps-r.gif')});
-}
-.z-splitter-ver-btn-t, .z-splitter-hor-btn-t {
-	background-image: url(${c:encodeURL('~./zul/img/splt/colps-t.gif')});
-}
-.z-splitter-ver-btn-b, .z-splitter-hor-btn-b {
-	background-image: url(${c:encodeURL('~./zul/img/splt/colps-b.gif')});
-}
 <%-- grid.css.dsp --%>
 .z-columns-menu-grouping .z-menu-item-img {
 	background-image:  url(${c:encodeURL('~./zul/img/grid/menu-group.gif')});

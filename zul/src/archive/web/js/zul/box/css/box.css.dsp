@@ -120,3 +120,24 @@ tr.z-vbox-sep {
 	width: 50px; min-height: 8px; height: 8px;
 	background-image: url(${c:encodeURL('~./zul/img/splt/colps-b-os.gif')});
 }
+
+<c:if test="${c:browser('ie6-')}">
+.z-splitter-ver-btn-l, .z-splitter-hor-btn-l {
+	background-image: url(${c:encodeURL('~./zul/img/splt/colps-l.gif')});
+}
+.z-splitter-ver-btn-r, .z-splitter-hor-btn-r {
+	background-image: url(${c:encodeURL('~./zul/img/splt/colps-r.gif')});
+}
+.z-splitter-ver-btn-t, .z-splitter-hor-btn-t {
+	background-image: url(${c:encodeURL('~./zul/img/splt/colps-t.gif')});
+}
+.z-splitter-ver-btn-b, .z-splitter-hor-btn-b {
+	background-image: url(${c:encodeURL('~./zul/img/splt/colps-b.gif')});
+}
+</c:if>
+
+<c:if test="${c:isGecko()}">
+div.z-splitter-hor, div.z-splitter-ver, div.z-splitter-os-hor, div.z-splitter-os-ver {
+	-moz-user-select: none;
+}
+</c:if>

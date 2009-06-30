@@ -24,7 +24,3 @@ span.z-combobox-btn, span.z-datebox-btn, span.z-bandbox-btn, span.z-timebox-btn,
 span.z-word-wrap {<%-- label use only --%>
 	display: block;
 }
-<%-- box.css.dsp --%>
-div.z-splitter-hor, div.z-splitter-ver, div.z-splitter-os-hor, div.z-splitter-os-ver {
-	-moz-user-select: none;
-}
