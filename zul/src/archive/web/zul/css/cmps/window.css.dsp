@@ -1,6 +1,10 @@
 <%@ page contentType="text/css;charset=UTF-8" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 
+.z-window-modal-resize-faker,
+.z-window-overlapped-resize-faker,
+.z-window-popup-resize-faker,
+.z-window-highlighted-resize-faker,
 .z-window-resize-faker {
 	position: absolute;
 	border: 1px dashed #1854C2;

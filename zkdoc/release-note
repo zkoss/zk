@@ -46,8 +46,12 @@ ZK 5.0.0
 ZK 3.6.3
 August, 2009
 * Features
-	2811973 - Log the event thread that takes too long to execute
+  2811973: Log the event thread that takes too long to execute
+  2813737: Support new "dial" chart	
+  2813778: Upgrade to jython 2.5
 
+* Bugs
+  2813877: Window resize outline miss
 	--------
 ZK 3.6.2
 June 23, 2009

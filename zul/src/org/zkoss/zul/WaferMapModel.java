@@ -39,10 +39,16 @@ import java.util.Collection;
  * @since 3.5.0
  */
 public class WaferMapModel extends AbstractChartModel {
-	private int _xsize;
-	private int _ysize;
-	private double _space;
+	private int _xsize = 100;
+	private int _ysize = 100;
+	private double _space = 1d;
 	private Map _values; //(IntPair, Number)
+	
+	/**
+	 * data model to be used with wafermap chart.
+	 */
+	public WaferMapModel() {
+	}
 	
 	/**
 	 * data model to be used with wafermap chart.
@@ -77,6 +83,26 @@ public class WaferMapModel extends AbstractChartModel {
 	 */
 	public int getYsize() {
 		return _ysize;
+	}
+	
+	/**
+	 * Returns the x size of the wafer matrix.
+	 */
+	public void setXsize(int xsize) {
+		if (xsize != _xsize) {
+			_xsize = xsize;
+			fireEvent(ChartDataEvent.CHANGED, null, null);
+		}
+	}
+	
+	/**
+	 * Returns the y size of the wafer matrix.
+	 */
+	public void setYsize(int ysize) {
+		if (ysize != _ysize) {
+			_ysize = ysize;
+			fireEvent(ChartDataEvent.CHANGED, null, null);
+		}
 	}
 	
 	/**
@@ -181,3 +207,4 @@ public class WaferMapModel extends AbstractChartModel {
 		}
 	}
 }
+\
