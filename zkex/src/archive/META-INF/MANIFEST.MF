@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-Specification-Title: ZK and ZUL Component Extension
-Specification-Version: 5.0.0
-Specification-Vendor: Potix Corporation
-Implementation-Title: org.zkoss.zkex
-Implementation-URL: http://www.zkoss.org/zkex
-Implementation-Version: 5.0.0
-Implementation-Vendor: Potix Corporation
