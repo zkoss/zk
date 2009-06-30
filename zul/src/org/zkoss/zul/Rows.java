@@ -537,6 +537,9 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 				//isCropper is called after a component is removed, so
 				//we have to test >= rather than >
 		}
+		public boolean inSameCropScope(Component p) {
+			return false; //only one level
+		}
 		public Set getAvailableAtClient() {
 			if (!isCropper())
 				return null;
