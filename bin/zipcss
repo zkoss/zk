@@ -56,7 +56,7 @@ function zips
 	local dst="$1"
 	local parent=$2
 	for f in *; do
-		if [ "$f" != "CVS" ] ; then
+		if [ "$f" != "CVS" ] && [ "$f" != ".svn" ] ; then
 			dstfl=$dst/$f
 			if [ -d "$f" ] ; then
 				(

@@ -487,8 +487,6 @@ span.z-progressmeter-img {
 <c:include page="~./zul/css/cmps/toolbar.css.dsp"/>
 <%-- Slider --%>
 <c:include page="~./zul/css/cmps/slider.css.dsp"/>
-<%-- Button --%>
-<c:include page="~./zul/css/cmps/button.css.dsp"/>
 <%-- Paging --%>
 <c:include page="~./zul/css/cmps/paging.css.dsp"/>
 <%-- Panel --%>

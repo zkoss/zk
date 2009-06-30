@@ -39,7 +39,6 @@ import org.zkoss.lang.Exceptions;
 import org.zkoss.io.Files;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.ResourceCache;
-import org.zkoss.util.resource.Loader;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.util.IDOMs;
@@ -113,8 +112,7 @@ public class WpdExtendlet implements Extendlet {
 			if (bs != null) data = bs; //yes, browser support compress
 		}
 		response.setContentLength(data.length);
-		final OutputStream os = response.getOutputStream();
-		os.write(data);
+		response.getOutputStream().write(data);
 		response.flushBuffer();
 	}
 	/** Sets whether to generate JS files that is easy to debug. */
@@ -148,7 +146,7 @@ public class WpdExtendlet implements Extendlet {
 		final Element root = new SAXBuilder(true, false, true).build(is).getRootElement();
 		final String name = IDOMs.getRequiredAttributeValue(root, "name");
 		if (name.length() == 0)
-			log.error("The name attribute must be specified, "+root.getLocator());
+			throw new UiException("The name attribute must be specified, "+root.getLocator());
 		final boolean zk = "zk".equals(name);
 		final String lang = root.getAttributeValue("language");
 		final LanguageDefinition langdef = //optional

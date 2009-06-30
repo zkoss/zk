@@ -418,6 +418,7 @@ public class DefinitionLoaders {
 				compdef.setBlankPreserved(true);
 
 			String wgtnm = el.getElementValue("widget-class", true);
+			noEL("widget-class", wgtnm, el);
 			WidgetDefinition wgtdef = null;
 			if (wgtnm != null) {
 				wgtdef = getWidgetDefinition(langdef, compdef, wgtnm);
@@ -432,10 +433,11 @@ public class DefinitionLoaders {
 				final Element e = (Element)i.next();
 				final String nm = IDOMs.getRequiredElementValue(e, "mold-name");
 				final String moldURI = e.getElementValue("mold-uri", true);
-				final String cssURI = e.getElementValue("css-uri", true);
+				String cssURI = e.getElementValue("css-uri", true);
 				final String z2cURI = e.getElementValue("z2c-uri", true);
 				final String wn = e.getElementValue("widget-class", true);
 				noEL("mold-uri", moldURI, e); //5.0 limitation
+				noEL("css-uri", cssURI, e);
 
 				compdef.addMold(nm, wn != null ? wn: wgtnm);
 
@@ -446,6 +448,16 @@ public class DefinitionLoaders {
 						wd.addMold(nm, moldURI, cssURI, z2cURI);
 					else
 						log.warning("mold-uri for "+name+" ignored because widget-class is required, "+e.getLocator());
+				}
+
+				if (cssURI != null && cssURI.length() > 0) {
+					final char cc = cssURI.charAt(0);
+					if (cc != '/' && cc != '~') {
+						String n = wn != null ? wn: wgtnm;
+						int k = n.lastIndexOf('.');
+						cssURI = "~./js/" + n.substring(0, k).replace('.', '/') + '/' + cssURI;
+					}
+					langdef.addCSSURI(cssURI);
 				}
 			}
 

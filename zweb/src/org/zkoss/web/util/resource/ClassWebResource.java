@@ -79,7 +79,7 @@ public class ClassWebResource {
 	/** An array of extensions that have to be compressed (with gzip). */
 	private String[] _compressExts;
 	/** Map(String ext, Extendlet). */
-	private final Map _extlets = new HashMap(4);
+	private final Map _extlets = new HashMap();
 	/** Filers for requests. Map(String ext, FastReadArray(Filter)). */
 	private final Map _reqfilters = new HashMap(2);
 	/** Filers for includes. Map(String ext, FastReadArray(Filter)). */
@@ -628,7 +628,8 @@ public class ClassWebResource {
 				request.setAttribute(attrnm, Boolean.TRUE);
 					//so Servlets.isIncluded returns correctly
 				try {
-					service(request, response, uri.substring(2));
+					service(request, response,
+						Servlets.locate(_ctx, request, uri.substring(2), _cwc.getLocator()));
 				} finally {
 					request.removeAttribute(attrnm);
 					request.setAttribute(Attributes.ARG, old);

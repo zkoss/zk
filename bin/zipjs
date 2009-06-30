@@ -3,7 +3,7 @@
 #
 #{{IS_NOTE
 #	Purpose:
-#		Copy and compress Javascript
+#		Copy and compress Javascript and CSS
 #	Description:
 #		
 #	History:
@@ -74,7 +74,7 @@ function zips
 	local dst="$1"
 	local parent=$4
 	for f in *; do
-		if [ "$f" != "CVS" ] ; then
+		if [ "$f" != "CVS" ] && [ "$f" != ".svn" ] ; then
 			dstfl=$dst/$f
 			if [ -d "$f" ] ; then
 				(
@@ -88,17 +88,21 @@ function zips
 					local cvt=false
 					if [ "${f%.js}" != "$f" ] ; then
 						cvt=true
+						type=
+					elif [ "${f%.css.dsp}" != "$f" ] ; then
+						cvt=true
+						type="--type css"
 					fi
 					if [ $cvt = true ] ; then
 						echo Compress $f
 						if [ "$TERM" = "cygwin" ] ; then
 							dstfl=$(cygpath -wa $dstfl)
 						fi
-						java -jar $jarfl --charset UTF-8 "$f" -o "$dstfl" 2>&1
+						java -jar $jarfl --charset UTF-8 $type "$f" -o "$dstfl" 2>&1
 						if [ $? != 0 ] ; then
 							echo "Warning failed to compress, use copy instead: $f"
 							cvt=false
-						else
+						elif [ "$type" = "" ] ; then #JS
 							if [ "$TERM" = "cygwin" ] ; then
 								srcfile=$(cygpath -wa $dst/${f%.js}.src.js)
   							else

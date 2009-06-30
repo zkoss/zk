@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- zk.wcs
+	Purpose:
+		Generates the CSS for a particular language
+	Description:
+		
+	History:
+		Mon Jun 29 16:21:26     2009, Created by tomyeh
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+-->
+
+<css language="xul/html">
+	<stylesheet href="~./zul/css/norm*.css.dsp*"/>
+</css>

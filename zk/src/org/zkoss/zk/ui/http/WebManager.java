@@ -180,6 +180,7 @@ public class WebManager {
 
 		_cwr.setDebugJS(config.isDebugJS());
 		_cwr.addExtendlet("wpd", new WpdExtendlet());
+		_cwr.addExtendlet("wcs", new WcsExtendlet());
 
 		//Register resource processors for each extension
 		//FUTURE: Extendlet can be specified in zk.xml

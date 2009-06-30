@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Collections;
@@ -145,6 +146,8 @@ public class LanguageDefinition {
 	private EvaluatorRef _evalr;
 	/** The page renderer. */
 	private PageRenderer _pgrend;
+	/** A set of CSS URI. */
+	private final Set _cssURIs = new LinkedHashSet();
 	/** Whether it is a native language. */
 	private final boolean _native;
 
@@ -774,6 +777,22 @@ public class LanguageDefinition {
 	}
 	private EvaluatorRef newEvaluatorRef() {
 		return new LangEvalRef(this);
+	}
+
+	/** Adds the URI of a CSS file that is part of this language.
+	 * @param cssURI the URI of a CSS file
+	 * @since 5.0.0
+	 */
+	public void addCSSURI(String cssURI) {
+		if (cssURI == null || cssURI.length() == 0)
+			throw new IllegalArgumentException();
+		_cssURIs.add(cssURI);
+	}
+	/** Returns a readonly collection of the URIs of CSS files of this language.
+	 * @since 5.0.0
+	 */
+	public Collection getCSSURIs() {
+		return _cssURIs;
 	}
 
 	//Object//
