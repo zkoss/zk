@@ -23,8 +23,14 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 			img.className = open ? cn.replace('-close', '-open') : cn.replace('-open', '-close');
 			this._showKids(open);
 			this.getMeshWidget().onSize();
-			if (!fromServer)
+			if (!fromServer) {
+				var inPaging = this.getTree().inPagingMold();
+				if (inPaging)
+					this.set('$$onOpen', true);
 				this.fire('onOpen', {open: open});
+				if (inPaging)
+					this.set('$$onOpen', false);
+			}
 		}
 	},
 	rerender: function () {

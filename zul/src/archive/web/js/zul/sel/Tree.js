@@ -45,7 +45,7 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 		else if (child.$instanceof(zul.sel.Treechildren)) {
 			this.treechildren = child;
 			this._fixSelectedSet();
-		} else if (child.$instanceof(zul.sel.Paging))
+		} else if (child.$instanceof(zul.mesh.Paging))
 			this.paging = child;
 	},
 	onChildRemoved_: function (child) {
