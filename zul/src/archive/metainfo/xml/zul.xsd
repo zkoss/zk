@@ -1967,7 +1967,7 @@
 	<xs:element name="toolbar" type="toolbarType" />
 	<xs:complexType name="toolbarType">
 		<xs:choice minOccurs="0" maxOccurs="unbounded">
-			<xs:group ref="anyGroup" />
+			<xs:group ref="baseGroup" />
 			<xs:element ref="toolbarbutton" />
 			<xs:element ref="button" />
 			<xs:element ref="image" />
@@ -2386,8 +2386,6 @@
 			<xs:element ref="detail" />
 			<xs:element ref="east" />
 			<xs:element ref="fisheye" />
-			<xs:element ref="fisheyebar" />
-			<xs:element ref="fisheyeitem" />
 			<xs:element ref="foot" />
 			<xs:element ref="footer" />
 			<xs:element ref="ginfo" />
