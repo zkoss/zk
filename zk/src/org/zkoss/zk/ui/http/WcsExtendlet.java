@@ -80,11 +80,19 @@ public class WcsExtendlet implements Extendlet {
 
 		final StringWriter sw = new StringWriter();
 		for (int j = 0; j < wi.uris.length; ++j) {
-			_webctx.include(request, HttpBufferedResponse.getInstance(response, sw), wi.uris[j], null);
+			try {
+				_webctx.include(request, HttpBufferedResponse.getInstance(response, sw), wi.uris[j], null);
+			} catch (Throwable ex) {
+				log.realCauseBriefly("Unable to load "+wi.uris[j], ex);
+			}
 		}
 		for (Iterator it = wi.langdef.getCSSURIs().iterator(); it.hasNext();) {
 			final String uri = (String)it.next();
-			_webctx.include(request, HttpBufferedResponse.getInstance(response, sw), uri, null);
+			try {
+				_webctx.include(request, HttpBufferedResponse.getInstance(response, sw), uri, null);
+			} catch (Throwable ex) {
+				log.realCauseBriefly("Unable to load "+uri, ex);
+			}
 		}
 
 		response.setContentType("text/css;charset=UTF-8");
