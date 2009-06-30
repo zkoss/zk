@@ -47,6 +47,8 @@ zk.copy(zjq.prototype, {
 			anima = {},
 			css = {overflow: 'hidden'},
 			dims = this.dimension();
+			
+		opts = opts || {};
 		this._saveProp(this.jq, prop);
 		switch (anchor) {
 		case 't':
@@ -83,6 +85,8 @@ zk.copy(zjq.prototype, {
 			anima = {},
 			css = {overflow: 'hidden'},
 			dims = this.dimension();
+			
+		opts = opts || {};
 		this._saveProp(this.jq, prop);
 		switch (anchor) {
 		case 't':
@@ -114,6 +118,8 @@ zk.copy(zjq.prototype, {
 			prop = ['top', 'left'],
 			anima = {},
 			dims = this.dimension();
+			
+		opts = opts || {};
 		this._saveProp(this.jq, prop);
 		switch (anchor) {
 		case 't':
@@ -141,6 +147,8 @@ zk.copy(zjq.prototype, {
 			anima = {},
 			css = {display: 'block'},
 			dims = this.dimension();
+			
+		opts = opts || {};
 		this._saveProp(this.jq, prop);
 		switch (anchor) {
 		case 't':
