@@ -1498,8 +1498,13 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (xc instanceof Cropper) {
 			final Set crop = ((Cropper)xc).getAvailableAtClient();
 			if (crop != null) {
-				for (Iterator it = crop.iterator(); it.hasNext();)
-					((ComponentCtrl)it.next()).redraw(out);
+				for (Iterator it = crop.iterator(); it.hasNext();) {
+					final Component c = (Component)it.next();
+					if (c.getParent() == this)
+						((ComponentCtrl)c).redraw(out);
+					//Note: getAvialableAtClient might return all level
+					//of children in the same crop scope
+				}
 				return;
 			}
 		}
