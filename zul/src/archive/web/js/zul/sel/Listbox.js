@@ -99,7 +99,10 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			if (!this.firstItem || !this.previousItem(child))
 				this.firstItem = child;
 			if (!this.lastItem || !this.nextItem(child))
-				this.lastItem = child;
+				this.lastItem = child;	
+			
+			if (child.isSelected() && !this._selItems.$contains(child))
+				this._selItems.push(child);
 		} else if (child.$instanceof(zul.sel.Listhead))
 			this.listhead = child;
 		else if (child.$instanceof(zul.mesh.Paging))
@@ -129,9 +132,11 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 					;
 				this.lastItem = p;
 			}
-				
 			if (child.$instanceof(zul.sel.Listgroup))
 				this._groupsInfo.$remove(child);
+			
+			if (child.isSelected())
+				this._selItems.$remove(child);
 		}
 		this._syncStripe();
 	},

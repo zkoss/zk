@@ -2470,11 +2470,12 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
 		super.renderProperties(renderer);
+
+		if (_rows > 0)
+			renderer.render("rows", getRows());
 		
 		if (inSelectMold()) {
 			render(renderer, "name", _name);
-			if (_rows > 0)
-				renderer.render("rows", getRows());
 			render(renderer, "multiple", isMultiple());
 			render(renderer, "disabled", isDisabled());
 			if (_tabindex >= 0)
