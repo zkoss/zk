@@ -23,16 +23,15 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<javascript src="/js/my.js" charset="UTF-8"/>
 	-->
 
-	<!-- an example
+	<!-- an example -->
 	<component>
-		<override/>
 		<component-name>button</component-name>
+		<extends>button</extends>
 		<property>
-			<property-name>sclass</property-name>
-			<property-value>myclass</property-value>
+			<property-name>mold</property-name>
+			<property-value>trendy</property-value>
 		</property>
 	</component>
-	-->
 
 	<!-- a macro component
 	<component>
