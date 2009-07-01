@@ -762,6 +762,8 @@ zAu.cmd1 = {
 			p.insertBefore(child, wgt.nextSibling);
 			if (p.$instanceof(zk.Desktop))
 				zAu.cmd1._asBodyChild(child);
+			zWatch.fireDown('beforeSize', null, child);
+			zWatch.fireDown('onSize', null, child);
 		};
 		zk.mounting = true;
 		eval(code);
@@ -769,6 +771,8 @@ zAu.cmd1 = {
 	addBfr: function (uuid, wgt, code) {
 		zAu.stub = function (child) {
 			wgt.parent.insertBefore(child, wgt);
+			zWatch.fireDown('beforeSize', null, child);
+			zWatch.fireDown('onSize', null, child);
 		};
 		zk.mounting = true;
 		eval(code);
@@ -776,6 +780,8 @@ zAu.cmd1 = {
 	addChd: function (uuid, wgt, code) {
 		zAu.stub = function (child) {
 			wgt.appendChild(child);
+			zWatch.fireDown('beforeSize', null, child);
+			zWatch.fireDown('onSize', null, child);
 		};
 		zk.mounting = true;
 		eval(code);

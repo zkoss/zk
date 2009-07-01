@@ -28,10 +28,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		this._zclass;
 	},
 	onSize: _zkf = function () {
-		var tabbox = this.getTabbox();
-			this._fixWidth();
-		if (tabbox.getNode())
-			jq(tabbox.getNode()).zk.cleanVisibility();
+		this._fixWidth();
 	},
 	onShow: _zkf,
 	insertChildHTML_: function (child, before, desktop) {

@@ -36,7 +36,7 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 		$btn.zk.enableSelection();
 		zk(this._img).enableSelection();
 
-		if (!wgt.inDesign)
+		if (!this._wgt.inDesign)
 			$btn.unbind('mouseover', this.proxy(this._domOver))
 				.unbind('mouseout', this.proxy(this._domOut))
 				.unbind('mousedown', this.proxy(this._domDown));

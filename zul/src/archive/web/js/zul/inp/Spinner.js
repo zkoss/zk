@@ -226,8 +226,7 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 		this.timeId = null;
 		var inp = this.inp = this.getSubnode("real");
 		var btn = this.btn = this.getSubnode("btn");
-		zWatch.listen('onShow', this);
-		zWatch.listen('onSize', this);
+		zWatch.listen({onSize: this, onShow: this});
 		if(btn){
 			this.domListen_(btn, "onmousedown", "_btnDown");
 			this.domListen_(btn, "onmouseup", "_btnUp");
@@ -241,8 +240,8 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 			clearTimeout(this.timerId);
 			this.timerId = null;
 		}
-		zWatch.unlisten('onShow', this);
-		zWatch.unlisten('onSize', this);
+		zWatch.unlisten({onSize: this, onShow: this});
+		var btn = this.btn;
 		if(btn){
 			this.domUnlisten_(btn, "onmousedown", "_btnDown");
 			this.domUnlisten_(btn, "onmouseup", "_btnUp");

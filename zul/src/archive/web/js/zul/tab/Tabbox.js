@@ -92,7 +92,7 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
         }
 	},
 	onSize: _zkf = function() {
-		this.getTabs().onSize();
+		zk(this.getNode()).cleanVisibility();
 	},
 	onShow: _zkf,
 	bind_: function () {
@@ -101,9 +101,6 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 		this.tabpanels = this.getTabpanels();
 		this._scrolling = false;
 		zWatch.listen({onSize: this, onShow: this});
-		if (this.inAccordionMold()) {
-			jq(this.getNode()).zk.cleanVisibility();
-		}
 		zk.afterMount(
 			this.proxy(function () {
 				var wgt = zk(this._selTab).jq[0],
