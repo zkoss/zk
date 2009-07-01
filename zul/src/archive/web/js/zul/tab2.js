@@ -21,9 +21,8 @@
 ////
 // tabbox //
 zkTabbox2 = {
-	init: function(cmp) {
-		if (zkTabbox2._isAccord(cmp))
-			zk.cleanVisibility(cmp);
+	onSize: function(cmp) {
+		zk.cleanVisibility(cmp);
 	},
 	setAttr: function(cmp, name, value) {
 		switch (name) {
@@ -334,7 +333,6 @@ zkTabs2 = {
 	onSize: function(cmp) {
 		zkTabs2._fixWidth(cmp);
 		zkTabs2.scrollcheck(cmp.id);
-		zk.cleanVisibility($parentByType(cmp, "Tabbox2"));
 	},
 	beforeSize: function(cmp) {
 		if (zkTabbox2._isVert($parent(cmp))) {
