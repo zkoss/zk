@@ -40,6 +40,7 @@ import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.util.ComposerExt;
 import org.zkoss.zk.ui.util.GenericForwardComposer;
 import org.zkoss.zul.Borderlayout;
+import org.zkoss.zul.Button;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Include;
 import org.zkoss.zul.ListModel;
@@ -66,7 +67,7 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 	
 	Div header;
 
-	Div _selected;
+	Button _selected;
 
 	public MainLayoutComposer() {
 		initKey();
@@ -108,10 +109,10 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 	}
 
 	public void onCategorySelect(ForwardEvent event) {
-		Div div = (Div) event.getOrigin().getTarget();
+		Button btn = (Button) event.getOrigin().getTarget();
 		Listitem item = null;
-		if (_selected != div) {
-			_selected = div;
+		if (_selected != btn) {
+			_selected = btn;
 		} else {
 			item = itemList.getSelectedItem();
 		}
@@ -134,7 +135,7 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 			final DemoItem[] items = getItems();
 			for (int i = 0; i < items.length; i++) {
 				if (items[i].getId().equals(id)) {
-					_selected = (Div)main.getFellow(items[i].getCateId());
+					_selected = (Button)main.getFellow(items[i].getCateId());
 					itemList.setModel(getSelectedModel());
 					itemList.renderAll();
 					Listitem item = ((Listitem)itemList.getFellow(id));
@@ -196,7 +197,7 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 	}
 	private void setSelectedCategory(Listitem item) {
 		DemoItem di = (DemoItem) item.getValue();
-		_selected = (Div) main.getFellow(di.getCateId());
+		_selected = (Button) main.getFellow(di.getCateId());
 		String deselect = _selected != null ? "onSelect('"+ _selected.getUuid() + "');" : "";
 		if (Executions.getCurrent().isBrowser("ie6-")) {
 			Clients.evalJavaScript(deselect + "fixImage4IE6();");
