@@ -30,22 +30,21 @@ zk.copy(zjq, {
 				= new RegExp(zUtl.regexEscape(regex) + "$", "i");
 		if (!jq.SPACER_GIF)
 			jq.SPACER_GIF = zAu.comURI('web/img/spacer.gif');
-
 		var imgs = n.getElementsByTagName("img");
 		for (var j = imgs.length; --j >= 0; ) {
 			var img = imgs[j], src = img.src,
 				k = src.lastIndexOf(';');
 			if (k >= 0) src = src.substring(0, k);
 			if (regex.test(img.src)) {
-				jq._afFix(img);
-				jq(img).bind("propertychange", jq._onpropchange);
+				zjq._afFix(img);
+				jq(img).bind("propertychange", zjq._onpropchange);
 			}
 		}
 	},
 	_onpropchange: function () {
-	 	if (!jq._afPrint && event.propertyName == "src"
+	 	if (!zjq._afPrint && event.propertyName == "src"
 	 	&& this.src.indexOf('spacer.gif') < 0)
-	 		jq._afFix(this);
+	 		zjq._afFix(this);
 	},
 	_afFix: function (img) {
 		var ni = new Image(img.width, img.height);
@@ -56,33 +55,33 @@ zk.copy(zjq, {
 		};
 		ni.src = img.src; //store the original url (we'll put it back when it's printed)
 		img.pngSrc = img.src; //add the AlphaImageLoader thingy
-		jq._addFilter(img);
+		zjq._addFilter(img);
 	},
 	_addFilter: function (img) {
-		var filter = img.filters[jq._AF_IMGLD];
+		var filter = img.filters[zjq._AF_IMGLD];
 		if (filter) {
 			filter.src = img.src;
 			filter.enabled = true;
 		} else {
 			img.runtimeStyle.filter =
-				zUtl.format(jq._AF_FILTER, img.src);
-			jq._afed.push(img);
+				zUtl.format(zjq._AF_FILTER, img.src);
+			zjq._afed.push(img);
 		}
 		img.src = jq.SPACER_GIF; //remove the real image
 	},
 	_rmFilter: function (img) {
 		img.src = img.pngSrc;
-		img.filters[jq._AF_IMGLD].enabled = false;
+		img.filters[zjq._AF_IMGLD].enabled = false;
 	}
 });
 
 jq(window).bind("beforeprint", function() {
-		jq._afPrint = true;
-		for (var ns = jq._afed, i = 0, len = ns.length; i < len; i++)
-			jq._rmFilter(ns[i]);
+		zjq._afPrint = true;
+		for (var ns = zjq._afed, i = 0, len = ns.length; i < len; i++)
+			zjq._rmFilter(ns[i]);
 	})
 	.bind("afterprint", function() {
-		for (var ns = jq._afed, i = 0, len = ns.length; i < len; i++)
-			jq._addFilter(ns[i]);
-		jq._afPrint = false;
+		for (var ns = zjq._afed, i = 0, len = ns.length; i < len; i++)
+			zjq._addFilter(ns[i]);
+		zjq._afPrint = false;
 	});
