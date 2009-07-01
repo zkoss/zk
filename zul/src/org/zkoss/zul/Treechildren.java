@@ -328,14 +328,9 @@ public class Treechildren extends XulElement implements org.zkoss.zul.api.Treech
 			final Tree tree = getTree();
 			return tree != null && tree.inPagingMold();
 		}
-		public boolean inSameCropScope(Component anc) {
-			for (Component p, c = Treechildren.this; (p = c.getParent()) != null; c = p) {
-				if (p == anc)
-					return true;
-				if (p instanceof Tree)
-					break;
-			}
-			return false;
+		public Component getCropOwner() {
+			return getTree();
+				//the whole tree is a single cropping scope
 		}
 		public Set getAvailableAtClient() {
 			if (!isCropper()) return null;

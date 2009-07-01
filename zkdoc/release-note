@@ -52,6 +52,7 @@ August, 2009
 
 * Bugs
   2813877: Window resize outline miss
+  2814504: Failed to update treeitem (paging) if its parent is cropped
 
 	--------
 ZK 3.6.2
@@ -112,7 +113,7 @@ June 23, 2009
   2806116: Javadoc misleading on TypeConverter interface
   2809040: The forward condition doesn't accept multiple values
   2809054: Unable to remove the forward condition in forward event
-  
+
 
 * Upgrade Notes
   * The signature of doInit of org.zkoss.zk.ui.util.Initiator is changed.

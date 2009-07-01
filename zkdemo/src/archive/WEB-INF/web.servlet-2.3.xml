@@ -76,7 +76,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 	
 	<!-- ///////////// -->
 	<!-- DSP (optional) -->
-	<!-- We need it to show zkdemo correctly (due to categorybar.dsp)
+	<!-- Uncomment it if you want to use DSP
+	However, it is turned on since zkdemo/userguide uses DSP to generate CSS.
 	-->
 	<servlet>
 		<servlet-name>dspLoader</servlet-name>
@@ -110,13 +111,13 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 		<servlet-name>zkLoader</servlet-name>
 		<url-pattern>/zk/*</url-pattern>
 	</servlet-mapping>
-	
 	<servlet-mapping>
 		<servlet-name>auEngine</servlet-name>
 		<url-pattern>/zkau/*</url-pattern>
 	</servlet-mapping>
 
-	<!-- Optional. Uncomment it if you want to handle .dsp
+	<!-- Optional.
+	However, it is turned on since zkdemo/userguide uses DSP to generate CSS.
 	-->
 	<servlet-mapping>
 		<servlet-name>dspLoader</servlet-name>

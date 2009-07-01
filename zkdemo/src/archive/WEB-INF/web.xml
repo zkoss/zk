@@ -137,7 +137,8 @@ Copyright (C) 2004 Potix Corporation. All Rights Reserved.
 
 	<!-- ///////////// -->
 	<!-- DSP (optional) -->
-	<!-- We need it to show zkdemo correctly (due to categorybar.dsp)
+	<!-- Uncomment it if you want to use DSP
+	However, it is turned on since zkdemo/userguide uses DSP to generate CSS.
 	-->
 	<servlet>
 		<servlet-name>dspLoader</servlet-name>

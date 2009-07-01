@@ -385,19 +385,15 @@ import org.zkoss.zk.au.out.*;
 				continue;
 			}
 
-			Cropper cc = null;
 			for (Component p, c = comp; (p = c.getParent()) != null; c = p) {
-				if (cc != null && cc.inSameCropScope(p))
-					continue; //skip p (check only once if in the same scope)
-
-				cc = null;
 				final Set avail = getAvailableAtClient(p, croppingInfos);
 				if (avail != null) {
 					if (!avail.contains(c)) {
 						it.remove();
 						break;
 					}
-					cc = (Cropper)((ComponentCtrl)p).getExtraCtrl();
+					p = ((Cropper)((ComponentCtrl)p).getExtraCtrl()).getCropOwner();
+					if (p == null) break;
 				}
 			}
 		}
