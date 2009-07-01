@@ -155,3 +155,12 @@ zk.copy(zjq, {
 		});
 	}
 });
+
+zk.override(jq.event, zjq._evt = {}, {
+	fix: function (evt) {
+		evt = zjq._evt.fix.apply(this, arguments);
+		if (!evt.which && evt.button === 0)
+			evt.which = 1; //IE
+		return evt;
+	}
+});

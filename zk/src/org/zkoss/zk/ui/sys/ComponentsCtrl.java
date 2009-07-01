@@ -275,49 +275,10 @@ public class ComponentsCtrl {
 			comp.addForward(orgEvent, (Component)target, (String)result[1], data);
 	}
 
-	/** Parses a script by resolving #{xx} to make it executable
-	 * at the client.
-	 *
-	 * @param comp the component used to resolve the EL expression.
-	 * @param script the Java script to convert
-	 * @since 2.4.0
+	/** @deprecated As of release 5.0.0, use the script component instead.
 	 */
 	public static String parseClientScript(Component comp, String script) {
-		StringBuffer sb = null;
-		for (int j = 0, len = script.length();;) {
-			final int k = script.indexOf("#{", j);
-			if (k < 0)
-				return sb != null ?
-					sb.append(script.substring(j)).toString(): script;
-
-			final int l = script.indexOf('}', k + 2);
-			if (l < 0)
-				throw new WrongValueException("Illegal script: unclosed EL expression.\n"+script);
-
-			if (sb == null) sb = new StringBuffer(len);
-			sb.append(script.substring(j, k));
-
-			//eval EL
-			Object val = Executions.evaluate(comp,
-				'$' + script.substring(k + 1, l + 1), Object.class);
-			if (val == null || (val instanceof Number)) {
-				sb.append(val);
-			} else if (val instanceof Component) {
-				sb.append(" zDom.$('")
-					.append(Strings.escape(((Component)val).getUuid(), "'\\"))
-					.append("')");
-			} else if (val instanceof Date) {
-				sb.append(" new Date(").append(((Date)val).getTime())
-					.append(')');
-			} else { //FUTURE: regex
-				sb.append('\'')
-					.append(Strings.escape(val.toString(), Strings.ESCAPE_JAVASCRIPT))
-					.append('\'');
-			}
-
-			//next
-			j = l + 1;
-		}
+		return "";
 	}
 
 	/** Returns the method for handling the specified event, or null

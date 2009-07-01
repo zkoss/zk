@@ -32,7 +32,7 @@ zk.zuml.Parser = {
 		return l ? l == 1 ? cwgts[0]: cwgts: null;
 	},
 	createFromNode: function (node, opts, vars) {
-		var node = zDom.$(node),
+		var node = jq(node, zk)[0],
 			txt = node.innerHTML,
 			j = txt.indexOf('<!--');
 		if (j >= 0)
