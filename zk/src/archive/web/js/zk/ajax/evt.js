@@ -99,10 +99,9 @@ zWatch = {
 
 			wts = wts.$clone(); //make a copy since unlisten might happen
 			if (opts) {
-				if (opts.visible)
-					for (var j = wts.length; --j >= 0;)
-						if (!zWatch._visible(wts[j]))
-							wts.splice(j, 1);
+				for (var j = wts.length; --j >= 0;)
+					if (!zWatch._visible(wts[j]))
+						wts.splice(j, 1);
 
 				if (opts.timeout >= 0) {
 					setTimeout(
@@ -137,8 +136,7 @@ zWatch = {
 			for (var j = 3, l = arguments.length; j < l;)
 				args.push(arguments[j++]);
 
-			var found, bindLevel = origin.bindLevel,
-				visibleOnly = opts && opts.visible;
+			var found, bindLevel = origin.bindLevel;
 			if (bindLevel != null) {
 				found = [];
 				for (var j = wts.length, o; --j >= 0;) { //child first
@@ -150,8 +148,7 @@ zWatch = {
 						break; //found this (and no descendant ahead)
 					}
 
-					var fn = visibleOnly ? zWatch._visibleChild: zUtl.isAncestor;
-					if (fn(origin, o)) found.unshift(o); //parent first
+					if (zWatch._visibleChild(origin, o)) found.unshift(o); //parent first
 				}
 			} else
 				found = wts.$clone(); //make a copy since unlisten might happen

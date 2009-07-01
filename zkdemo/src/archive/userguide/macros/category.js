@@ -5,7 +5,7 @@ zPkg.load('zul.wgt', null, function () {
 userguide.Categorybar = zk.$extends(zul.wgt.Div, {
 	bind_: function () {
 		this.$supers('bind_', arguments);
-		zDom.disableSelection(this.getNode());
+		zk(this.getNode()).disableSelection();
 	},
 	redraw: function (out) {
 		var uuid = this.uuid;

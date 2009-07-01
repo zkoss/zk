@@ -207,7 +207,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		}
 	},
 	onSize: _zkf,
-	onVisi: _zkf,
+	onShow: _zkf,
 	inScaleMold: function () {
 		if(this.getMold() == "scale")
 			return true;

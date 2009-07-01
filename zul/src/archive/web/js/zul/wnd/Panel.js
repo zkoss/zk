@@ -70,11 +70,11 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			if (node) {
 				var s = node.style, l = s.left, t = s.top, w = s.width, h = s.height;
 				if (minimized) {
-					zWatch.fireDown('onHide', {visible:true}, this);
+					zWatch.fireDown('onHide', null, this);
 					jq(node).hide();
 				} else {
 					jq(node).show();
-					zWatch.fireDown('onShow', {visible:true}, this);
+					zWatch.fireDown('onShow', null, this);
 				}
 				if (!fromServer) {
 					var wgt = this;
@@ -293,10 +293,10 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		return this._zclass == null ?  "z-panel" : this._zclass;
 	},
 	_afterSlideDown: function (n) {
-		zWatch.fireDown("onShow", {visible:true}, this);
+		zWatch.fireDown("onShow", null, this);
 	},
 	_beforeSlideUp: function (n) {
-		zWatch.fireDown("onHide", {visible:true}, this);
+		zWatch.fireDown("onHide", null, this);
 	},
 	_initFloat: function () {
 		var n = this.getNode();

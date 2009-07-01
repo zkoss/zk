@@ -110,7 +110,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			this.fire('onOpen', {open:true, value: inp.value});
 	},
 	_afterSlideDown: function (n) {
-		zWatch.fireDown("onShow", {visible:true}, this);
+		zWatch.fireDown("onShow", null, this);
 		if (this._shadow) this._shadow.sync();
 	},
 	close: function (opts) {
@@ -134,7 +134,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		if (opts && opts.sendOnOpen)
 			this.fire('onOpen', {open:false, value: this.getInputNode_().value});
 
-		zWatch.fireDown("onHide", {visible:true}, this);
+		zWatch.fireDown("onHide", null, this);
 	},
 	_fixsz: function (ppofs) {
 		var pp = this.getSubnode('pp');

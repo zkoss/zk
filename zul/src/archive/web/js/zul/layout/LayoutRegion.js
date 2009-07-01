@@ -79,7 +79,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 					else {
 						jq(real)[open ? 'show' : 'hide']();
 						jq(colled)[!open ? 'show' : 'hide']();
-						zWatch.fireDown(open ? 'onShow' : 'onHide', {visible:true}, this);
+						zWatch.fireDown(open ? 'onShow' : 'onHide', null, this);
 					}
 				}
 			} else {

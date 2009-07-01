@@ -44,41 +44,37 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 		var tabbox = this.getTabbox();
 		if (!tabbox.inAccordionMold()) {
 			var tbx = tabbox.getNode(),
-				tabpanels = this.parent.getNode(),
-				hgh = jq(tbx).css("height");
-			if (tabpanels) {
-				for (var pos, n = tabpanels.firstChild; n; n = n.nextSibling) {
-					if (n.id) {
-						if (zk.ie) { // Bug: 1968434, this solution is very dirty but necessary.
-							if (n.style.position)
-								pos = n.style.position;
-							n.style.position = "relative";
-						}
-						if (hgh && hgh != "auto") {//tabbox has height
-							hgh = jq(tabpanels).zk.vflexHeight();
-							jq(n).zk.setOffsetHeight(hgh);
-						}
-						//let real div 100% height
-						jq(this.getSubnode("real")).addClass(this.getZclass() + "-cnt");
-						if (zk.ie && pos)
-							n.style.position = pos;
-					}
-				}
+				n = this.getNode(),
+				hgh = tbx.style.height,
+				pos;
+			
+			if (zk.ie) { // Bug: 1968434, this solution is very dirty but necessary.
+				if (n.style.position)
+					pos = n.style.position;
+				n.style.position = "relative";
 			}
+			if (hgh && hgh != "auto") {//tabbox has height
+				hgh = zk(n.parentNode).vflexHeight();
+				zk(n).setOffsetHeight(hgh);
+			}
+			//let real div 100% height
+			jq(this.getSubnode("real")).addClass(this.getZclass() + "-cnt");
+			if (zk.ie && pos)
+				n.style.position = pos;
 		}
 	},
-	onVisi: function() {
+	onSize: _zkf = function() {
 		this._fixPanelHgh();		//Bug 2104974
-		if (zk.ie) zk.redoCSS(tbx); //Bug 2526699 - (add zk.ie7)
+		if (zk.ie) zk(tbx).redoCSS(); //Bug 2526699 - (add zk.ie7)
 	},
+	onShow: _zkf,
 	bind_: function() {
 		this.$supers('bind_', arguments);
-		zk.afterMount(
-			this.proxy(function () {
-				this._fixPanelHgh();
-			})
-		);
-
+		zWatch.listen({onSize: this, onShow: this});
+	},
+	unbind_: function () {
+		zWatch.unlisten({onSize: this, onShow: this});
+		this.$supers('unbind_', arguments);
 	}
 
 });

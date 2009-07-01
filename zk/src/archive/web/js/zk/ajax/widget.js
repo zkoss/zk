@@ -399,9 +399,9 @@ zk.Widget = zk.$extends(zk.Object, {
 				}
 			}
 
-			zWatch.fireDown('onShow', {visible:true}, this);
+			zWatch.fireDown('onShow', null, this);
 		} else {
-			zWatch.fireDown('onHide', {visible:true}, this);
+			zWatch.fireDown('onHide', null, this);
 
 			for (var fs = zk.Widget._floatings, j = fs.length,
 			bindLevel = this.bindLevel; --j >= 0;) {
