@@ -533,8 +533,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			$top = $el.find('>div:first'),
 			top = $top[0],
 			header = $top.nextAll('div:first')[0],
-			fakeT = top.cloneNode(true),
-			fakeH = header.cloneNode(true),
+			fakeT = jq(top).clone()[0],
+			fakeH = jq(header).clone()[0],
 			html = '<div id="zk_wndghost" class="z-window-move-ghost" style="position:absolute;top:'
 			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
 			+$el.zk.offsetWidth()+'px;height:'+$el.zk.offsetHeight()
