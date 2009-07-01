@@ -44,11 +44,11 @@
 	<z:button label="Submit by Clients.submitForm" onClick='Clients.submitForm("fm2")'/>
 	<script>
 	var hcnt = 0, scnt = ['first', 'second', 'third', 'fourth'];
-	zEvt.listen(zDom.$('fm2'), 'submit', function () {
+	jq('#fm2').bind('submit', function () {
 		var hidden = document.createElement("INPUT");
 		hidden.type = 'hidden';
 		hidden.value = hidden.name = scnt[hcnt++ % 4];
-		var fm2 = zDom.$('fm2');
+		var fm2 = jq('#fm2')[0];
 		fm2.appendChild(hidden);
 	});
 	</script>

@@ -107,7 +107,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 
 				node = this.node = this.opts.ghosting(this, ofs, evt);
 			} else {
-				this._clone = node.cloneNode(true);
+				this._clone = zk(node).cloneNode(true);
 				this.z_orgpos = node.style.position; //Bug 1514789
 				if (this.z_orgpos != 'absolute')
 					jq(node).absolutize();

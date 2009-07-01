@@ -604,6 +604,11 @@ zjq.prototype = { //ZK extension
 		var $ = this.jq;
 		for (var nm in styles)
 			$.css(nm, styles[nm]);
+	},
+
+	cloneNode: function (b) {
+		var n = this.jq[0];
+		return n ? n.cloneNode(b): null;
 	}
 };
 
@@ -749,6 +754,7 @@ zk.copy(jq, { //ZK extension to jq
 		return zk(id).jq[0];
 	},
 	newStackup: function (el, id, anchor) {
+		el = jq(el||[], zk)[0];
 		var ifr = document.createElement('iframe');
 		ifr.id = id || (el ? el.id + "-ifrstk": 'z_ifrstk');
 		ifr.style.cssText = "position:absolute;overflow:hidden;filter:alpha(opacity=0)";

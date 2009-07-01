@@ -54,7 +54,7 @@ zk.copy(zjq, {
 			ni = null;
 		};
 		ni.src = img.src; //store the original url (we'll put it back when it's printed)
-		img.pngSrc = img.src; //add the AlphaImageLoader thingy
+		img._pngSrc = img.src; //add the AlphaImageLoader thingy
 		zjq._addFilter(img);
 	},
 	_addFilter: function (img) {
@@ -63,22 +63,42 @@ zk.copy(zjq, {
 			filter.src = img.src;
 			filter.enabled = true;
 		} else {
-			img.runtimeStyle.filter =
-				zUtl.format(zjq._AF_FILTER, img.src);
+			img.runtimeStyle.filter = zUtl.format(zjq._AF_FILTER, img.src);
 			zjq._afed.push(img);
 		}
 		img.src = jq.SPACER_GIF; //remove the real image
 	},
 	_rmFilter: function (img) {
-		img.src = img.pngSrc;
+		img.src = img._pngSrc;
 		img.filters[zjq._AF_IMGLD].enabled = false;
+	}
+});
+
+zk.copy(zjq.prototype, {
+	cloneNode: function (b) {
+		var n = this.jq[0];
+		if (n) {
+			var c = n.cloneNode(b);
+			if (n.tagName == 'IMG' && n._pngSrc) {
+				c.src = n._pngSrc;
+				setTimeout(function() {zjq._afFix(c);}, 0); //we have to wait
+			}
+			return c;
+		}
 	}
 });
 
 jq(window).bind("beforeprint", function() {
 		zjq._afPrint = true;
-		for (var ns = zjq._afed, i = 0, len = ns.length; i < len; i++)
-			zjq._rmFilter(ns[i]);
+		for (var ns = zjq._afed, i = 0, len = ns.length; i < len; i++) {
+			var n = ns[i];
+			try {
+				zjq._rmFilter(n);
+			} catch (e) {
+				ns.$removeAt(i--); //no longer avail
+				len--;
+			}
+		}
 	})
 	.bind("afterprint", function() {
 		for (var ns = zjq._afed, i = 0, len = ns.length; i < len; i++)

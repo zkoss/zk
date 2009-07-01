@@ -13,7 +13,7 @@ z5-alphafix.zul
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 -->
-<?script content="zDom.IE6_ALPHAFIX='.png';"?>
+<?script content="jq.IE6_ALPHAFIX='.png';"?>
 <window title="Test of alphafix" border="normal">
 	<image src="/test2/img/circle.png" draggable="true"/>
 	<image src="/test2/img/circle.png" draggable="true" width="200px" height="160px"/>

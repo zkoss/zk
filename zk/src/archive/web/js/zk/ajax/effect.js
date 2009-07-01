@@ -104,7 +104,7 @@ zk.eff.Shadow = zk.$extends(zk.Object, {
 zk.eff.FullMask = zk.$extends(zk.Object, {
 	$init: function (opts) {
 		opts = opts || {};
-		var mask = this.mask = opts.mask;
+		var mask = this.mask = jq(opts.mask||[], zk)[0];
 		if (this.mask) {
 			if (opts.anchor)
 				opts.anchor.parentNode.insertBefore(mask, opts.anchor);
@@ -129,7 +129,7 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 			mask = this.mask = jq(maskId, zk)[0];
 		}
 		if (opts.stackup)
-			this.stackup = zk(mask).newStackup(mask.id + '-mkstk');
+			this.stackup = jq.newStackup(mask, mask.id + '-mkstk');
 
 		this._syncPos();
 

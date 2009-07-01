@@ -1631,7 +1631,7 @@ zk.WgtDD = {
 		return jq("#zk_ddghost")[0];
 	},
 	ghostByClone: function (drag, ofs) {
-		var dgelm = drag.node.cloneNode(true);
+		var dgelm = zk(drag.node).cloneNode(true);
 		dgelm.id = "zk_ddghost";
 		zk.copy(dgelm.style, {
 			position: "absolute", left: ofs[0] + "px", top: ofs[1] + "px"
