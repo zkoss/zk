@@ -48,7 +48,7 @@ import org.zkoss.zk.ui.AbstractComponent;
  * a global function.
  * <pre><code>&lt;script defer="true"&gt;
  * zk.$package('foo');
- * zPkg.load('zul.wgt', null, function () {
+ * zPkg.load('zul.wgt', function () {
  * foo.Foo = zk.$extends(zul.Widget, {
  * //...
  *&lt;/script&gt;

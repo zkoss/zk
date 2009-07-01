@@ -170,7 +170,7 @@ public class WpdExtendlet implements Extendlet {
 				} else if (depends != null) {
 					write(out, "zPkg.load('");
 					write(out, depends);
-					write(out, "',null,function(){\n_zkpk=");
+					write(out, "',function(){\n_zkpk=");
 					write(out, name);
 					write(out, ";\n");
 				}

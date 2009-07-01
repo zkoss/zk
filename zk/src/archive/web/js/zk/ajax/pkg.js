@@ -54,6 +54,13 @@ zPkg = {
 		return zPkg._lded[pkg];
 	},
 	load: function (pkg, dt, func) {
+		if (typeof dt == 'function')
+			if (func) throw 'At most one function allowed';
+			else {
+				func = dt;
+				dt = null;
+			}
+
 		if (func) zk.afterLoad(pkg, func, true);
 
 		var loading;
@@ -147,30 +154,32 @@ zPkg = {
 				else deps[a] = [b];
 			}
 	},
-	_pkgVers: {}
-};
-zk.afterLoad = function (a, b, front) { //part of zk
-	if (typeof a == 'string') {
-		if (!b) return true;
+	_pkgVers: {},
 
-		for (var pkgs = a.split(','), j = pkgs.length; --j >= 0;) {
-			a = pkgs[j].trim();
-			if (a && !zPkg._lded[a]) {
-				var afpk = zPkg._afpklds;
-				if (afpk[a]) afpk[a].push(b);
-				else afpk[a] = [b];
-				return false;
+	afterLoad: function (a, b, front) { //part of zk
+		if (typeof a == 'string') {
+			if (!b) return true;
+
+			for (var pkgs = a.split(','), j = pkgs.length; --j >= 0;) {
+				a = pkgs[j].trim();
+				if (a && !zPkg._lded[a]) {
+					var afpk = zPkg._afpklds;
+					if (afpk[a]) afpk[a].push(b);
+					else afpk[a] = [b];
+					return false;
+				}
 			}
+
+			//all loaded
+			a = b;
 		}
 
-		//all loaded
-		a = b;
-	}
-
-	if (zPkg.loading) {
-		(front ? zPkg._afld0s: zPkg._aflds).push(a);
-		return false;
-	}
-	a();
-	return true;
+		if (zPkg.loading) {
+			(front ? zPkg._afld0s: zPkg._aflds).push(a);
+			return false;
+		}
+		a();
+		return true;
+}
 };
+zk.afterLoad = zPkg.afterLoad;
