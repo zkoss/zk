@@ -74,17 +74,17 @@ zk.copy(zjq, {
 	}
 });
 
-zk.copy(zjq.prototype, {
-	cloneNode: function (b) {
-		var n = this.jq[0];
-		if (n) {
-			var c = n.cloneNode(b);
+zk.override(jq.fn, zjq._fn, {
+	clone: function () {
+		var clone = zjq._fn.clone.apply(this, arguments), n, nc;
+		for (var j = 0; j < this.length; ++j) {
+			n = this[j];
 			if (n.tagName == 'IMG' && n._pngSrc) {
-				c.src = n._pngSrc;
-				setTimeout(function() {zjq._afFix(c);}, 0); //we have to wait
+				(nc = clone[j]).src = n._pngSrc;
+				setTimeout(function() {zjq._afFix(nc);}, 0); //we have to wait
 			}
-			return c;
 		}
+		return clone;
 	}
 });
 

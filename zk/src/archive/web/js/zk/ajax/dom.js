@@ -604,11 +604,6 @@ zjq.prototype = { //ZK extension
 		var $ = this.jq;
 		for (var nm in styles)
 			$.css(nm, styles[nm]);
-	},
-
-	cloneNode: function (b) {
-		var n = this.jq[0];
-		return n ? n.cloneNode(b): null;
 	}
 };
 
