@@ -3,7 +3,7 @@
 <title>ZHTML Demo</title>
 <zkhead/>
 </head>
-<body>
+<body style="height:auto">
 	<h1>ZHTML Demo</h1>
 	<ul id="ul">
 		<li>The first item.</li>
