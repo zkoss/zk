@@ -8,8 +8,6 @@
 	</script>
 	<script type="text/javascript" src="/zkdemo/zkau/web/js/zul/zk.wpd" charset="UTF-8">
 	</script>
-	<script type="text/javascript" src="/zkdemo/zkau/web/js/zk/zuml/zk.wpd" charset="UTF-8">
-	</script>
 </head>
 <body>
 	<h1>Demostration of Pure Client in ZK 5</h1>
@@ -29,14 +27,13 @@
 	</div>
 	<script>
 	jq(function() {
-		zkboot('booksuggest', '/zkdemo/zkau'); //register AU path
-		zk.debugJS = true; //turn on debug
+		zk.stateless('booksuggest');
 
-		zPkg.load('zul.wgt,zul.wnd,zul.inp', function () {
+		zPkg.load('zk.zuml,zul.wgt,zul.wnd,zul.inp', function () {
 			var main = zk.zuml.Parser.createFromNode('main');
 
 			//handle AU response
-			zk.Widget.$('main').suggest = function (bookInfo) {
+			main.suggest = function (bookInfo) {
 				var suggestInfo = zk.Widget.$('suggestInfo');
 				if (suggestInfo) suggestInfo.detach();
 				main.appendChild(zk.zuml.Parser.createFromNode('suggestInfo', {replaceHTML:false}, {infos: bookInfo}));

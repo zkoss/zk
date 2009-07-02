@@ -637,7 +637,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	replaceHTML: function (n, desktop, skipper) {
 		if (!desktop) {
 			desktop = this.desktop;
-			if (!zk.Desktop._ndt) zkboot('z_auto');
+			if (!zk.Desktop._ndt) zk.stateless();
 		}
 
 		var cf = zk.currentFocus;
@@ -1405,7 +1405,7 @@ zk.Desktop = zk.$extends(zk.Widget, {
 	bindLevel: 0,
 	className: 'zk.Desktop',
 
-	$init: function (dtid, updateURI) {
+	$init: function (dtid, updateURI, stateless) {
 		this.$super('$init', {uuid: dtid}); //id also uuid
 
 		this._aureqs = [];
@@ -1413,7 +1413,8 @@ zk.Desktop = zk.$extends(zk.Widget, {
 		var zkdt = zk.Desktop, dts = zkdt.all, dt = dts[dtid];
 		if (!dt) {
 			this.uuid = this.id = dtid;
-			this.updateURI = updateURI;
+			this.updateURI = updateURI || zk.updateURI;
+			this.stateless = stateless;
 			dts[dtid] = this;
 			++zkdt._ndt;
 			if (!zkdt._dt) zkdt._dt = this; //default desktop

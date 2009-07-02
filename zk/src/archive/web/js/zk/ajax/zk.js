@@ -289,7 +289,16 @@ zk = function (sel) {
 			console.scrollTop = console.scrollHeight;
 			zk._msg = null;
 		}
-	}
+	},
+
+	stateless: function (dtid) {
+		var Desktop = zk.Desktop, dt;
+		if (!dtid) dtid = 'z_auto' + zk._ssc++;
+		dt = Desktop.all[dtid];
+		if (dt && !dt.stateless) throw "Desktop conflict";
+		return dt || new Desktop(dtid, null, true);
+	},
+	_ssc: 0
 });
 
 zk.copy(String.prototype, {

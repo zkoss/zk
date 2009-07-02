@@ -393,7 +393,7 @@ zAu = {
 		zAu._ignorable = ignorable;
 
 		//Consider XML (Pros: ?, Cons: larger packet)
-		var content = "", $Event = zk.Event;
+		var content = "";
 		for (var j = 0, el = es.length; el; ++j, --el) {
 			var aureq = es.shift(),
 				evtnm = aureq.name,
@@ -414,13 +414,15 @@ zAu = {
 				content += "&data_"+j+"="+encodeURIComponent(jq.toJSON(data));
 		}
 
-		if (content)
+		if (content) {
+			if (dt.stateless) content = '&ss=1' + content;
 			zAu._sendNow2({
 				sid: zAu._seqId, uri: uri || zAu.comURI(null, dt),
 				dt: dt, content: "dtid=" + dt.id + content,
 				ctli: ctli, ctlc: ctlc, implicit: implicit,
 				ignorable: ignorable, tmout: 0
 			});
+		}
 		return true;
 	},
 	_sendNow2: function(reqInf) {

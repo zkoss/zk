@@ -16,21 +16,6 @@ var _zkmt = zUtl.now(); //JS loaded
 
 zkreg = zk.Widget.register; //a shortcut for WPD loader
 
-function zkboot(dtid, updateURI, force) {
-	var zkdt = zk.Desktop, dt;
-	if (!force) {
-		if (dtid) {
-			dt = zkdt.all[dtid];
-			if (dt) {
-				if (!dt.updateURI) dt.updateURI = updateURI;
-				return dt;
-			}
-		} else
-			dt = zkdt._dt;
-	}
-	return dt || new zkdt(dtid, updateURI);
-}
-
 function zkblbg(binding) {
 	zk.mounting = true;
 	zkm.binding = binding;
