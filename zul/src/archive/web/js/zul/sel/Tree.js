@@ -178,7 +178,7 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 		if (!row.isOpen()) {
 			row.setOpen(true);
 		}
-	},
+	}
 });
 zul.sel.TreeItemIter = zk.$extends(zk.Object, {
 	$init: function (tree) {
