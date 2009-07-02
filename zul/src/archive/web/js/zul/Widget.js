@@ -154,7 +154,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 	_smartFellow: function (id) {
 		return id ? id.startsWith('uuid(') && id.endsWith(')') ?
 			zk.Widget.$(id.substring(5, id.length - 1)):
-			this.getFellow(id, true): null;
+			this.$f(id, true): null;
 	},
 
 	afterKeyDown_: function (evt) {

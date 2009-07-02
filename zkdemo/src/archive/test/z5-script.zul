@@ -32,7 +32,7 @@ xmlns:w="http://www.zkoss.org/2005/zk/client">
 	<separator bar="true"/>
 	<script>
 	function getInf(wgt) {
-		return wgt.getFellow('inf');
+		return wgt.$f('inf');
 	}
 	</script>
 	<script defer="true">
@@ -51,17 +51,17 @@ xmlns:w="http://www.zkoss.org/2005/zk/client">
 	btn.setLabel('Add');
 	btn.listen({
 		onClick: function () {
-			appendTo(this.getSpaceOwner());
+			appendTo(this.$s());
 		}
 	});
 	this.parent.appendChild(btn);
 	</script>
 	<button label="Append-"
-		w:onClick="var inf=this.getFellow('inf'); inf.setValue(inf.getValue() + '-');"
+		w:onClick="var inf=this.$f('inf'); inf.setValue(inf.getValue() + '-');"
 		onClick='inf2.value += "-"'/>
 	<button label="Append*">
 		<attribute w:name="onClick">
-		var inf = this.getFellow('inf');
+		var inf = this.$f('inf');
 		inf.setValue(inf.getValue() + '*');
 		</attribute>
 	</button>

@@ -100,18 +100,20 @@ zk.Widget = zk.$extends(zk.Object, {
 			}
 		]
 	},
-	getSpaceOwner: function () {
+	$s: _zkf = function () {
 		for (var w = this; w; w = w.parent)
 			if (w._fellows) return w;
 		return null;
 	},
-	getFellow: function (id, global) {
-		var ow = this.getSpaceOwner();
+	getSpaceOwner: _zkf,
+	$f: _zkf = function (id, global) {
+		var ow = this.$s();
 		if (!ow) return null;
 
 		var f = ow._fellows[id];
 		return f || !global || zk.light ? f: zk.Widget._global[id];
 	},
+	getFellow: _zkf,
 	getId: function () {
 		return this.id;
 	},
@@ -553,7 +555,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	updateDomStyle_: function () {
 		if (this.desktop) {
 			var s = jq.parseStyle(this.domStyle_());
-			zk(this.getNode()).css(s);
+			zk(this.getNode()).setStyles(s);
 
 			var n = this.getTextNode_();
 			if (n) zk(n).css(jq.filterTextStyle(s));
@@ -1320,7 +1322,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (wgt._fellows) wgt._fellows[wgt.id] = wgt;
 		var p = wgt.parent;
 		if (p) {
-			p = p.getSpaceOwner();
+			p = p.$s();
 			if (p) p._fellows[wgt.id] = wgt;
 		}
 	},
@@ -1328,13 +1330,13 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (wgt._fellows) delete wgt._fellows[wgt.id];
 		var p = wgt.parent;
 		if (p) {
-			p = p.getSpaceOwner();
+			p = p.$s();
 			if (p) delete p._fellows[wgt.id];
 		}
 	},
 	_addIdSpaceDown: function (wgt) {
 		var ow = wgt.parent;
-		ow = ow ? ow.getSpaceOwner(): null;
+		ow = ow ? ow.$s(): null;
 		if (ow) {
 			var fn = zk.Widget._addIdSpaceDown0;
 			fn(wgt, ow, fn);
@@ -1347,7 +1349,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	_rmIdSpaceDown: function (wgt) {
 		var ow = wgt.parent;
-		ow = ow ? ow.getSpaceOwner(): null;
+		ow = ow ? ow.$s(): null;
 		if (ow) {
 			var fn = zk.Widget._rmIdSpaceDown0;
 			fn(wgt, ow, fn);

@@ -223,7 +223,7 @@ public class Script extends AbstractComponent implements org.zkoss.zul.api.Scrip
 		super.renderProperties(renderer);
 
 		if (_defer && _content != null)
-			renderer.renderDirectly("content", "function(){\n" + _content + '}');
+			renderer.renderDirectly("content", "function(){\n" + _content + "\n}");
 		if (_src != null)
 			render(renderer, "src", getEncodedSrcURL());
 

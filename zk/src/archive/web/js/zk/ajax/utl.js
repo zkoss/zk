@@ -290,7 +290,7 @@ zUtl = { //static methods
 			j = k + 1;
 		}
 		return list;
-	},
+	}
 };
 (function () {
 	var encs = zUtl._encs, decs = zUtl._decs;

@@ -116,7 +116,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 						var perm;
 						if (perm = ad.charAt(0) == '+')
 							ad = ad.substring(1);
-						ad = "self" == ad ? this: this.getFellow(ad);
+						ad = "self" == ad ? this: this.$f(ad);
 						if (ad) {
 							ad.setDisabled(true);
 							if (this.inServer)
