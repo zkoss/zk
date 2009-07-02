@@ -18,6 +18,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.io.IOException;
+import java.io.Writer;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Collection;
@@ -34,6 +36,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.ext.render.Cropper;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
 
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.ext.Paginal;
@@ -312,6 +315,13 @@ public class Treechildren extends XulElement implements org.zkoss.zul.api.Treech
 		}
 		public void remove() {
 			throw new UnsupportedOperationException();
+		}
+	}
+	
+	protected void redrawChildren(Writer out) throws IOException {
+		if (getAttribute(Attributes.SHALL_RENDER_ITEM) == null) {
+			for (Iterator it = getVisibleChildrenIterator(); it.hasNext();)
+				((ComponentCtrl)it.next()).redraw(out);
 		}
 	}
 	//-- ComponentCtrl --//

@@ -18,6 +18,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.io.IOException;
+import java.io.Writer;
 import java.util.List;
 import java.util.Iterator;
 
@@ -26,7 +28,9 @@ import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.*;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
 
+import org.zkoss.zul.ext.Paginal;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -526,6 +530,63 @@ public class Treeitem extends XulElement implements org.zkoss.zul.api.Treeitem {
 			super.invalidate();
 	}
 
+	// Returns whether the treeitem should be visited.
+	private static final boolean shallVisitTree(Tree tree, Component child) {
+		final Treeitem item = (Treeitem) child;
+		int count = item.isOpen() && item.getTreechildren() != null ? 
+				item.getTreechildren().getVisibleItemCount(): 0;
+		Integer visited = (Integer)tree.getAttribute(Attributes.VISITED_ITEM_COUNT);
+		final Paginal pgi = tree.getPaginal();
+		final int ofs = pgi.getActivePage() * pgi.getPageSize();
+		int visit = visited != null ? visited.intValue() + 1 : 1;
+		boolean shoulbBeVisited = ofs < visit + count;
+		if (visited == null) visited = new Integer(shoulbBeVisited ? 1 : count + 1);
+		else visited = new Integer(visited.intValue()+ (shoulbBeVisited ? 1 : count + 1));
+
+		Integer total = (Integer)tree.getAttribute(Attributes.VISITED_ITEM_TOTAL);
+		if (total == null) total = new Integer(count + 1);
+		else total = new Integer(total.intValue() + count + 1);
+		tree.setAttribute(Attributes.VISITED_ITEM_COUNT, visited);
+		tree.setAttribute(Attributes.VISITED_ITEM_TOTAL, total);
+		return shoulbBeVisited;
+	}
+
+	// Returns whether the specified should be rendered.
+	static final boolean shallRenderTree(Tree tree) {
+		Integer visited = (Integer)tree.getAttribute(Attributes.VISITED_ITEM_COUNT);
+		final Paginal pgi = tree.getPaginal();
+		final int ofs = pgi.getActivePage() * pgi.getPageSize();
+		if(ofs < visited.intValue()) {
+			// count the rendered item
+			Integer renderedCount = (Integer) tree.getAttribute(Attributes.RENDERED_ITEM_COUNT);
+			if (renderedCount == null) renderedCount = new Integer(1);
+			else renderedCount = new Integer(renderedCount.intValue() + 1);
+			tree.setAttribute(Attributes.RENDERED_ITEM_COUNT, renderedCount);
+			return true;
+		}
+		return false;
+	}
+	
+	protected void redrawChildren(Writer out) throws IOException {
+		Tree tree = getTree();
+		if (!tree.inPagingMold()) {
+			super.redrawChildren(out);
+		} else if (isVisible() && shallVisitTree(tree, this)) {
+			if (shallRenderTree(tree)) {
+				ComponentCtrl child = (ComponentCtrl) getTreerow();
+				if (child != null)
+					child.redraw(out);
+			}
+			boolean close = !isOpen();
+			ComponentCtrl child = (ComponentCtrl) getTreechildren();
+			if (child != null) {
+				if (close) ((Component)child).setAttribute(Attributes.SHALL_RENDER_ITEM, Boolean.TRUE);
+				child.redraw(out);
+				if (close) ((Component)child).removeAttribute(Attributes.SHALL_RENDER_ITEM);
+			}			
+		}
+	}
+	
 	//Cloneable//
 	public Object clone() {
 		final Treeitem clone = (Treeitem)super.clone();

@@ -18,6 +18,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
+import java.io.IOException;
+import java.io.Writer;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +41,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.*;
+import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.au.AuRequests;
 
 import org.zkoss.zul.event.PagingEvent;
@@ -1846,6 +1849,15 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	 */
 	public org.zkoss.zul.api.Treeitem renderItemByPathApi(int[] path) {
 		return renderItemByPath(path);
+	}
+
+	protected void redrawChildren(Writer out) throws IOException {
+		super.redrawChildren(out);
+		if (inPagingMold()) {
+			removeAttribute(Attributes.RENDERED_ITEM_COUNT);
+			removeAttribute(Attributes.VISITED_ITEM_COUNT);
+			removeAttribute(Attributes.VISITED_ITEM_TOTAL);
+		}
 	}
 	
 	// AREA JEFF ADDED END

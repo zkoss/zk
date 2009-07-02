@@ -30,4 +30,19 @@ public class Attributes {
 	 * @since 3.0.7
 	 */
 	public static final String RENDERED_ITEM_COUNT = "org.zkoss.zul.RenderedItemCount";
+	/**
+	 * It is used to count the count of the visible Treeitem without its Treechildren.
+	 * @since 3.0.7
+	 */
+	public static final String VISITED_ITEM_COUNT = "org.zkoss.zul.VisitedItemCount";
+	/**
+	 * It is used to count the total of the visible Treeitem, including its Treechildren.
+	 * @since 3.0.7
+	 */
+	public static final String VISITED_ITEM_TOTAL = "org.zkoss.zul.VisitedItemTotal";
+	/**
+	 * It is used to check whether Treechildren should render its children or not
+	 * @since 5.0.0
+	 */
+	public static final String SHALL_RENDER_ITEM = "org.zkoss.zul.ShallRenderItem";
 }
