@@ -12,7 +12,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 
 <package name="zk">
-	<script>//Copyright (C) 2009 Potix Corporation. Distributed under LGPL 3.0</script>
 	<script src="zk.js"/>
 	<script>zk.light = '0.6';</script>
 	<script src="dom.js"/>

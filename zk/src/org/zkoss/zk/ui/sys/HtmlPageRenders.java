@@ -198,7 +198,6 @@ public class HtmlPageRenders {
 		if (wapp == null) wapp = desktop.getWebApp();
 		if (deviceType == null)
 			deviceType = desktop != null ? desktop.getDeviceType(): "ajax";
-		final Configuration config = wapp.getConfiguration();
 
 		final StringBuffer sb = new StringBuffer(1536);
 
@@ -209,70 +208,16 @@ public class HtmlPageRenders {
 		for (Iterator it = jses.iterator(); it.hasNext();)
 			append(sb, (JavaScript)it.next());
 
-		sb.append("\n<script>\n")
-			.append("zkver('").append(wapp.getVersion())
-			.append("','").append(wapp.getBuild())
-			.append("','").append(wapp.getUpdateURI())
-			.append('\'');
-
-		for (Iterator it = LanguageDefinition.getByDeviceType(deviceType).iterator();
-		it.hasNext();) {
-			final LanguageDefinition langdef = (LanguageDefinition)it.next();
-			final Set mods = langdef.getJavaScriptModules().entrySet();
-			if (!mods.isEmpty())
-				for (Iterator e = mods.iterator(); e.hasNext();) {
-					final Map.Entry me = (Map.Entry)e.next();
-					sb.append(",'").append(me.getKey())
-					  .append("','").append(me.getValue()).append('\'');
-				}
-		}
-
-		sb.append(");");
-		final int jdot = sb.length();
-
+		sb.append("\n<!-- ZK ").append(wapp.getVersion());
 		if (WebApps.getFeature("enterprise"))
-			sb.append(",ed:'e'");
+			sb.append('e');
 		else if (WebApps.getFeature("professional"))
-			sb.append(",ed:'p'");
+			sb.append('p');
+		sb.append(' ').append(wapp.getBuild())
+			.append(" -->\n");
 
-		int v = config.getProcessingPromptDelay();
-		if (v != 900) sb.append(",pd:").append(v);
-		v = config.getTooltipDelay();
-		if (v != 800) sb.append(",td:").append(v);
-		v = config.getResendDelay();
-		if (v >= 0) sb.append(",rd:").append(v);
-		v = config.getClickFilterDelay();
-		if (v >= 0) sb.append(",cd:").append(v);
-		if (config.isDebugJS()) sb.append(",dj:1");
-		if (config.isKeepDesktopAcrossVisits()
-		|| exec.getAttribute(Attributes.NO_CACHE) == null)
-			sb.append(",kd:1");
-		if (config.getPerformanceMeter() != null)
-			sb.append(",pf:1");
-		if (sb.length() > jdot) {
-			sb.replace(jdot, jdot + 1, "\nzkopt({");
-			sb.append("});\n");
-		}
-
-		final int[] cers = config.getClientErrorReloadCodes();
-		if (cers.length > 0) {
-			final int k = sb.length();
-			for (int j = 0; j < cers.length; ++j) {
-				final String uri = config.getClientErrorReload(cers[j]);
-				if (uri != null) {
-					if (k != sb.length()) sb.append(',');
-					sb.append(cers[j]).append(",'")
-						.append(Strings.escape(uri, Strings.ESCAPE_JAVASCRIPT))
-						.append('\'');
-				}
-			}
-			if (k != sb.length()) {
-				sb.insert(k, "zAu.setErrorURI(");
-				sb.append(");\n");
-			}
-		}
-
-		sb.append("\n</script>\n");
+		if (exec.getAttribute(Attributes.NO_CACHE) == null)
+			sb.append("<script>zkopt({kd:1});</script>");
 
 		final Device device = Devices.getDevice(deviceType);
 		final String s = device.getEmbedded();

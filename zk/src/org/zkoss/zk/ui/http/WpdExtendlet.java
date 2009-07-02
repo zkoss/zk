@@ -19,6 +19,7 @@ import java.lang.reflect.Modifier;
 import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedList;
+import java.util.Set;
 import java.util.Map;
 import java.util.HashMap;
 import java.io.File;
@@ -35,6 +36,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.Strings;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.io.Files;
 import org.zkoss.util.logging.Log;
@@ -46,14 +48,18 @@ import org.zkoss.io.Files;
 
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.http.Https;
+import org.zkoss.web.servlet.http.Encodes;
 import org.zkoss.web.util.resource.Extendlet;
 import org.zkoss.web.util.resource.ExtendletContext;
 import org.zkoss.web.util.resource.ExtendletConfig;
 import org.zkoss.web.util.resource.ExtendletLoader;
 
+import org.zkoss.zk.ui.WebApps;
+import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 import org.zkoss.zk.ui.metainfo.WidgetDefinition;
+import org.zkoss.zk.ui.util.Configuration;
 
 /**
  * The extendlet to handle WPD (Widget Package Descriptor).
@@ -89,7 +95,7 @@ public class WpdExtendlet implements Extendlet {
 	HttpServletResponse response, String path, String extra)
 	throws ServletException, IOException {
 		byte[] data;
-		_loc.set(new Locator(request));
+		_loc.set(new Locator(request, response));
 		try {
 			final Object rawdata = _cache.get(path);
 			if (rawdata == null) {
@@ -122,12 +128,15 @@ public class WpdExtendlet implements Extendlet {
 	/** Returns whether to generate JS files that is easy to debug. */
 	public boolean isDebugJS() {
 		if (_debugJS == null) {
-			final WebManager wm = WebManager.getWebManager(_webctx.getServletContext());
-			if (wm == null) return true; //just in case
-			_debugJS = Boolean.valueOf(wm.getWebApp().getConfiguration().isDebugJS());
+			final WebApp wapp = getWebApp();
+			if (wapp == null) return true; //zk lighter
+			_debugJS = Boolean.valueOf(wapp.getConfiguration().isDebugJS());
 		}
 		return _debugJS.booleanValue();
-
+	}
+	private WebApp getWebApp() {
+		final WebManager wm = WebManager.getWebManager(_webctx.getServletContext());
+		return wm != null ? wm.getWebApp(): null;
 	}
 	/** Parses and return the specified file.
 	 * It is used by ZK Lighter to generate JavaScript files.
@@ -158,7 +167,11 @@ public class WpdExtendlet implements Extendlet {
 
 		final ByteArrayOutputStream out = new ByteArrayOutputStream(1024*8);
 		String depends = null;
-		if (!zk) {
+		if (zk) {
+			write(out, "//ZK, Copyright (C) 2009 Potix Corporation. Distributed under GPL 3.0\n"
+				+ "//jQuery, Copyright (c) 2009 John Resig\n"
+				+ "if(!window.zk){");//may be loaded multiple times because specified in lang.xml
+		} else {
 			write(out, "_z='");
 			write(out, name);
 			write(out, "';try{_zkpk=zk.$package(_z,false);\n");
@@ -299,7 +312,12 @@ public class WpdExtendlet implements Extendlet {
 				log.warning("Unknown element "+elnm+", "+el.getLocator());
 			}
 		}
-		if (!zk) {
+		if (zk) {
+			final WebApp wapp = getWebApp();
+			if (wapp != null)
+				writeAppInfo(out, wapp);
+			write(out, '}'); //end of if
+		} else {
 			if (depends != null)
 				write(out, "\n});");
 			write(out, "\n}finally{zPkg.end(_z);}");
@@ -372,6 +390,78 @@ public class WpdExtendlet implements Extendlet {
 		}
 	}
 
+	private void writeAppInfo(OutputStream out, WebApp wapp)
+	throws IOException, ServletException {
+		final StringBuffer sb = new StringBuffer(256);
+		sb.append("\nzkver('").append(wapp.getVersion())
+			.append("','").append(wapp.getBuild());
+		final Locator loc = (Locator)_loc.get();
+		if (loc != null)
+			sb.append("','")
+				.append(Encodes.encodeURL(
+					_webctx.getServletContext(),
+					loc.request, loc.response, wapp.getUpdateURI(false)));
+		sb.append('\'');
+
+		for (Iterator it = LanguageDefinition.getByDeviceType("ajax").iterator();
+		it.hasNext();) {
+			final LanguageDefinition langdef = (LanguageDefinition)it.next();
+			final Set mods = langdef.getJavaScriptModules().entrySet();
+			if (!mods.isEmpty())
+				for (Iterator e = mods.iterator(); e.hasNext();) {
+					final Map.Entry me = (Map.Entry)e.next();
+					sb.append(",'").append(me.getKey())
+					  .append("','").append(me.getValue()).append('\'');
+				}
+		}
+
+		sb.append(");");
+		final int jdot = sb.length();
+
+		if (WebApps.getFeature("enterprise"))
+			sb.append(",ed:'e'");
+		else if (WebApps.getFeature("professional"))
+			sb.append(",ed:'p'");
+
+		final Configuration config = wapp.getConfiguration();
+		int v = config.getProcessingPromptDelay();
+		if (v != 900) sb.append(",pd:").append(v);
+		v = config.getTooltipDelay();
+		if (v != 800) sb.append(",td:").append(v);
+		v = config.getResendDelay();
+		if (v >= 0) sb.append(",rd:").append(v);
+		v = config.getClickFilterDelay();
+		if (v >= 0) sb.append(",cd:").append(v);
+		if (config.isDebugJS()) sb.append(",dj:1");
+		if (config.isKeepDesktopAcrossVisits())
+			sb.append(",kd:1");
+		if (config.getPerformanceMeter() != null)
+			sb.append(",pf:1");
+		if (sb.length() > jdot) {
+			sb.replace(jdot, jdot + 1, "zkopt({");
+			sb.append("});\n");
+		}
+
+		final int[] cers = config.getClientErrorReloadCodes();
+		if (cers.length > 0) {
+			final int k = sb.length();
+			for (int j = 0; j < cers.length; ++j) {
+				final String uri = config.getClientErrorReload(cers[j]);
+				if (uri != null) {
+					if (k != sb.length()) sb.append(',');
+					sb.append(cers[j]).append(",'")
+						.append(Strings.escape(uri, Strings.ESCAPE_JAVASCRIPT))
+						.append('\'');
+				}
+			}
+			if (k != sb.length()) {
+				sb.insert(k, "zAu.setErrorURI(");
+				sb.append(");\n");
+			}
+		}
+		write(out, sb.toString());
+	}
+
 	private class WpdLoader extends ExtendletLoader {
 		private WpdLoader() {
 		}
@@ -423,9 +513,12 @@ public class WpdExtendlet implements Extendlet {
 	}
 	/*package*/ class Locator { //don't use private since WpdContent needs it
 		private HttpServletRequest request;
-		private Locator(HttpServletRequest request) {
+		private HttpServletResponse response;
+		private Locator(HttpServletRequest request, HttpServletResponse response) {
 			this.request = request;
+			this.response = response;
 		}
+
 		/*package*/
 		InputStream getResourceAsStream(String path, boolean locate)
 		throws IOException, ServletException {
@@ -451,7 +544,7 @@ public class WpdExtendlet implements Extendlet {
 	class FileLocator extends Locator {
 		private String _parent;
 		private FileLocator(File file) {
-			super(null);
+			super(null, null);
 			_parent = file.getParent();
 		}
 		InputStream getResourceAsStream(String path, boolean locate)

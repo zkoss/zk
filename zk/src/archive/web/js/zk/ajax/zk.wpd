@@ -12,9 +12,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 
 <package name="zk" cacheable="false">
-	<script>//ZK, Copyright (C) 2009 Potix Corporation. Distributed under GPL 3.0
-//jQuery, Copyright (c) 2009 John Resig
-if(!window.zk){</script><!-- may be loaded multiple times because specified in lang.xml -->
 	<script src="ext/jquery.js"/>
 	<script src="zk.js"/>
 	<script src="dom.js"/>
@@ -42,5 +39,4 @@ if(!window.zk){</script><!-- may be loaded multiple times because specified in l
 	<function class="org.zkoss.zk.fn.DspFns" name="outLocaleJavaScript"/>
 
 	<script src="ext/jquery.json.js"/>
-	<script>}</script>
 </package>

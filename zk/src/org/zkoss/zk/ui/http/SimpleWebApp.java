@@ -86,9 +86,11 @@ public class SimpleWebApp extends AbstractWebApp {
 	}
 
 	public String getUpdateURI() {
+		return getUpdateURI(true);
+	}
+	public String getUpdateURI(boolean encode) {
 		final String uri = WebManager.getWebManager(this).getUpdateURI();
-		final Execution exec = Executions.getCurrent();
-		return exec != null ? exec.encodeURL(uri): uri;
+		return encode ? Executions.getCurrent().encodeURL(uri): uri;
 	}
 
 	public WebApp getWebApp(String uripath) {

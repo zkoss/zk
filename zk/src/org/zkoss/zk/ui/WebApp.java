@@ -160,12 +160,22 @@ getResourcePaths("/catalog/") returns {"/catalog/index.html", "/catalog/products
 
 	/** Returns the URI for asynchronous update.
 	 * <p>Both {@link #getUpdateURI} and {@link Desktop#getUpdateURI}
-	 * are encoded with {@link Execution#encodeURL}, if the current
-	 * execution is available.
+	 * are encoded with {@link Execution#encodeURL}
 	 * @see Desktop#getUpdateURI
+	 * @exception NullPointerException if the current execution is not available
 	 * @since 3.6.2
 	 */
 	public String getUpdateURI();
+	/** Returns the URI for asynchronous update that can be encoded or
+	 * not.
+	 *
+	 * @param encode whether to encode with {@link Execution#encodeURL}.
+	 * It is the same as {@link #getEncodeURI()} if <code>encode</code> is true.
+	 * @since 5.0.0
+	 * @exception NullPointerException if the current execution is not available
+	 * and encode is true.
+	 */
+	public String getUpdateURI(boolean encode);
 
 	/** Returns the configuration.
 	 */
