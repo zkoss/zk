@@ -19,15 +19,15 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 	//-- super --//
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
-		if (child.$instanceof(zul.layout.North))
+		if (child.getPosition() == zul.layout.Borderlayout.NORTH)
 			this.north = child;
-		else if (child.$instanceof(zul.layout.South))
+		else if (child.getPosition() == zul.layout.Borderlayout.SOUTH)
 			this.south = child;
-		else if (child.$instanceof(zul.layout.Center))
+		else if (child.getPosition() == zul.layout.Borderlayout.CENTER)
 			this.center = child;
-		else if (child.$instanceof(zul.layout.West))
+		else if (child.getPosition() == zul.layout.Borderlayout.WEST)
 			this.west = child;
-		else if (child.$instanceof(zul.layout.East))
+		else if (child.getPosition() == zul.layout.Borderlayout.EAST)
 			this.east = child;
 		this.resize();
 	},

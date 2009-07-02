@@ -41,63 +41,9 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		maxsize: null,
 		minsize: null,
 
-		collapsible: function (collapsible) {
-			var btn = this.getSubnode(this.isOpen() ? 'btn' : 'btned');
-			if (btn)
-				btn.style.display = collapsible ? '' : 'none';
-		},
-		autoscroll: function (autoscroll) {
-			var cave = this.getSubnode('cave');
-			if (cave) {
-				var bodyEl = this.isFlex() && this.firstChild ?
-						this.firstChild.getNode() : cave;
-				if (autoscroll) {
-					bodyEl.style.overflow = "auto";
-					bodyEl.style.position = "relative";
-					this.domListen_(bodyEl, "onScroll");
-				} else {
-					bodyEl.style.overflow = "hidden";
-					bodyEl.style.position = "";
-					this.domUnlisten_(bodyEl, "onScroll");
-				}
-			}
-		},
-		open: function (open, fromServer, nonAnima) {
-			if (!this.getNode() || !this.isCollapsible())
-				return; //nothing changed
-	
-			var colled = this.getSubnode('colled'),
-				real = this.getSubnode('real');
-			if (open) {
-				if (colled) {
-					if (!nonAnima) 
-						zk(colled).slideOut(this, {
-							anchor: this.sanchor,
-							duration: 200,
-							afterAnima: this.$class.afterSlideOut
-						});
-					else {
-						jq(real)[open ? 'show' : 'hide']();
-						jq(colled)[!open ? 'show' : 'hide']();
-						zWatch.fireDown(open ? 'onShow' : 'onHide', null, this);
-					}
-				}
-			} else {
-				if (colled && !nonAnima) 
-					zk(real).slideOut(this, {
-							anchor: this.sanchor,
-							beforeAnima: this.$class.beforeSlideOut,
-							afterAnima: this.$class.afterSlideOut
-						});
-				else {
-					if (colled)
-						jq(colled)[!open ? 'show' : 'hide']();
-					jq(real)[open ? 'show' : 'hide']();
-				}
-			}
-			if (nonAnima) this.parent.resize();
-			if (!fromServer) this.fire('onOpen', {open:open});
-		}
+		collapsible: null,
+		autoscroll: null,
+		open: null
 	},
 
 	getMargins: function () {
@@ -195,7 +141,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		if (this.parent)
 			this.parent.resize();
 	},
-	bind_: function () {
+	bind_: function(){
 		this.$supers('bind_', arguments);
 		if (this.getPosition() != zul.layout.Borderlayout.CENTER) {
 			var split = this.getSubnode('split');			
@@ -203,16 +149,6 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				this._fixSplit();
 				var vert = this._isVertical(),
 					$LayoutRegion = this.$class;
-				
-				this._drag = new zk.Draggable(this, split, {
-					constraint: vert ? 'vertical': 'horizontal',
-					ghosting: $LayoutRegion._ghosting,
-					snap: $LayoutRegion._snap,
-					zIndex: 12000,
-					overlay: true,
-					ignoredrag: $LayoutRegion._ignoredrag,
-					endeffect: $LayoutRegion._endeffect					
-				});	
 				if (!this.isOpen()) {
 					var colled = this.getSubnode('colled'),
 						real = this.getSubnode('real');
@@ -222,6 +158,10 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 				}
 			}
 		}
+		var btn = this.getSubnode('btn');
+		if (btn)
+			btn.style.display = 'none';
+				
 		var n = this.getNode(),
 			real = n.firstChild;
 					
