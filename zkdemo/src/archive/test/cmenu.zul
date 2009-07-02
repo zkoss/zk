@@ -1,0 +1,60 @@
+<zk>
+	<zscript>
+		List items = new org.zkoss.zkdemo.userguide.BigList(10); //a big list of Integer
+	</zscript>
+	<button label="change menupopup" onClick='cols.setMenupopup("abc")'/>
+	<button label="add Column">
+		<attribute name="onClick"><![CDATA[ 
+			Column c = new Column("Col " + cols.getChildren().size());
+			c.setParent(cols);
+		]]></attribute>
+	</button>
+	<grid id="grid" fixedLayout='true' height="500px">
+		<columns id="cols" menupopup="auto" sizable="true">
+			<column label="Col 0" sort="client"/>
+			<column label="Col 1"  sort="client(number)"/>
+			<column label="Col 2" sort="auto"/>
+			<column label="Col 3" sort="none"/>
+		</columns>
+		<rows id="rows">
+			<!-- <row id="row1" visible="false"><button label="tste"/></row> -->
+			<row forEach="${items}">
+			<!-- <grid><rows><row> -->
+				<label value="${each}"/>
+				<label value="${9 - each}"/>
+				<label value="Text ${each}"/>
+				<label value="Text 5 ${each}"/>
+				<!-- </row></rows></grid> -->
+			</row>
+		</rows>
+	</grid>
+	<button label="add Row">
+		<attribute name="onClick">
+			row = new Row();
+			row.appendChild(new Label("New Cell 1"));
+			row.appendChild(new Label("New Cell 2"));
+			row.appendChild(new Label("New Cell 2"));
+			row.appendChild(new Label("New Cell 1"));
+			rows.appendChild(row);
+			row1 = new Row();
+			row1.appendChild(new Label("New Cell 1"));
+			row1.appendChild(new Label("New Cell 2"));
+			row1.appendChild(new Label("New Cell 3"));
+			row1.appendChild(new Label("New Cell 4"));
+			rows.appendChild(row1);
+		</attribute>
+	</button>
+	<div id="div"></div>
+	<button label="visible row1">
+		<attribute name="onClick">
+			rows.firstChild.visible = !rows.firstChild.visible;
+		</attribute>
+	</button>
+	<button label="change style">
+		<attribute name="onClick">
+		for (Component c = rows.firstChild; c != null; c = c.nextSibling) {
+			c.style="background:blue;color:white;";
+		}
+		</attribute>
+	</button>
+</zk>
