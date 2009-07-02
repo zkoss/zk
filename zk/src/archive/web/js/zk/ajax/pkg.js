@@ -16,22 +16,28 @@ zPkg = {
 	loading: 0,
 
 	/** Called after the whole package is declared. */
-	end: function (pkg) {
+	end: function (pkg, wait) {
 		zPkg._ldings.$remove(pkg);
-		zPkg._lded[pkg] = zPkg._lding[pkg] = true;
+		zPkg._lding[pkg] = true;
 
-		var deps = zPkg._deps[pkg];
-		if (deps) {
-			delete zPkg._deps[pkg];
-			for (var pn; pn = deps.unshift();)
-				zPkg.load(pn);
-		}
+		if (wait) zPkg._wait.push(pkg);
+		else {
+			zPkg._wait.$remove(pkg);
+			zPkg._lded[pkg] = true;
 
-		var afpk = zPkg._afpklds[pkg];
-		if (afpk) {
-			delete zPkg._afpklds[pkg];
-			var afs = zPkg._afld0s;
-			afs.push.apply(afs, afpk); //add all
+			var afpk = zPkg._afpklds[pkg];
+			if (afpk) {
+				delete zPkg._afpklds[pkg];
+				var afs = zPkg._afld0s;
+				afs.push.apply(afs, afpk); //add all
+			}
+
+			var deps = zPkg._deps[pkg];
+			if (deps) {
+				delete zPkg._deps[pkg];
+				for (var pn; pn = deps.unshift();)
+					zPkg.load(pn);
+			}
 		}
 
 		if (!zPkg._updCnt()) {
@@ -40,15 +46,18 @@ zPkg = {
 				zUtl.destroyProgressbox("zk_loadprog");
 			} catch (ex) {
 			}
-			zPkg._end(zPkg._afld0s) && zPkg._end(zPkg._aflds);
+			zPkg._end(zPkg._afld0s);
+			zPkg._end(zPkg._aflds, 1);
 		}
 	},
-	_end: function (afs) {
+	_end: function (afs, wait) {
 		for (var fn; fn = afs.shift();) {
+			if (zPkg._updCnt() || (wait && zPkg._wait.length)) {
+				afs.unshift(fn);
+				return;
+			}
 			fn();
-			if (zPkg._updCnt()) return false; //some loading
 		}
-		return true;
 	},
 	isLoaded: function (pkg) {
 		return zPkg._lded[pkg];
@@ -81,7 +90,7 @@ zPkg = {
 		//We don't use e.onload since Safari doesn't support t
 		//See also Bug 1815074
 
-		zPkg._ldings.unshift(pkg);
+		zPkg._ldings.push(pkg);
 		if (zPkg._updCnt() == 1) {
 			zk.disableESC();
 			setTimeout(zPkg._pgbox, 380);
@@ -106,6 +115,7 @@ zPkg = {
 	},
 	_lded: {'zk': true}, //loaded
 	_lding: {'zk': true}, //loading (include loaded)
+	_wait: [], //loaded but not inited
 	_ldings: [], //loading (exclude loaded)
 	_afld0s: [],
 	_aflds: [],

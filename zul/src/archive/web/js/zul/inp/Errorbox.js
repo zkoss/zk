@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.inp.Errorbox = zk.$extends('zul.wgt.Popup', {
+zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 	$init: function () {
 		this.$supers('$init', arguments);
 		this.setWidth("260px");

@@ -68,32 +68,6 @@ zk = function (sel) {
 			}
 		};
 
-		if (typeof superclass == 'string') {
-			var sc = zk.$import(superclass);
-			if (!sc) {
-				sc = superclass.lastIndexOf('.');
-				if (sc > 0)  {
-					sc = superclass.substring(0, sc);
-					if (!zPkg.load(sc)) {
-						zk.afterLoad(function () {
-							var sc = zk.$import(superclass);
-							if (!sc)
-								throw "unknown superclass "+superclass;
-							zk._$extends(jclass,
-								sc, members, staticMembers);
-						});
-						return jclass;
-					}
-				}
-				throw "superclass not found, "+superclass;
-			}
-			superclass = sc;
-		}
-
-		this._$extends(jclass, superclass, members, staticMembers);
-		return jclass;
-	},
-	_$extends: function (jclass, superclass, members, staticMembers) {
 		var thisprototype = jclass.prototype,
 			superprototype = superclass.prototype,
 			define = members['$define'];
@@ -114,6 +88,8 @@ zk = function (sel) {
 		jclass.superclass = superclass;
 
 		if (define) zk.define(jclass, define);
+
+		return jclass;
 	},
 	$default: function (opts, defaults) {
 		opts = opts || {};

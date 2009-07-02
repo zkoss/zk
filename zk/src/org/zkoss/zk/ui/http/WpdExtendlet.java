@@ -172,21 +172,17 @@ public class WpdExtendlet implements Extendlet {
 				+ "//jQuery, Copyright (c) 2009 John Resig\n"
 				+ "if(!window.zk){");//may be loaded multiple times because specified in lang.xml
 		} else {
+			depends = root.getAttributeValue("depends");
+			if (depends != null && depends.length() == 0)
+				depends = null;
+			if (depends != null) {
+				write(out, "zPkg.load('");
+				write(out, depends);
+				write(out, "',function(){var ");
+			}
 			write(out, "_z='");
 			write(out, name);
-			write(out, "';try{_zkpk=zk.$package(_z,false);\n");
-
-			depends = root.getAttributeValue("depends");
-			if (depends != null)
-				if (depends.length() == 0) {
-					depends = null;
-				} else if (depends != null) {
-					write(out, "zPkg.load('");
-					write(out, depends);
-					write(out, "',function(){\n_zkpk=");
-					write(out, name);
-					write(out, ";\n");
-				}
+			write(out, "';try{var _zkpk=zk.$package(_z,false);\n");
 		}
 
 		final Map moldInfos = new HashMap();
@@ -318,9 +314,12 @@ public class WpdExtendlet implements Extendlet {
 				writeAppInfo(out, wapp);
 			write(out, '}'); //end of if
 		} else {
-			if (depends != null)
-				write(out, "\n});");
 			write(out, "\n}finally{zPkg.end(_z);}");
+			if (depends != null) {
+				write(out, "});zPkg.end('");
+				write(out, name);
+				write(out, "',1);");
+			}
 		}
 
 		if (wc != null) {
