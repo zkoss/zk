@@ -529,7 +529,7 @@ implements org.zkoss.zul.api.Include, Includer {
 	}
 	private static String getDefaultMode() {
 		if (_defMode == null)
-			_defMode = Library.getProperty("org.zkoss.zul.include.mode", "auto");
+			_defMode = Library.getProperty("org.zkoss.zul.include.mode", "defer");
 		return _defMode;
 	}
 	private static String _defMode;

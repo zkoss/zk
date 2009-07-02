@@ -15,7 +15,6 @@ ZK 5.0.0
   + Mold URIs are no longer stored in ComponentDefinition.
     Rather, they are in a new class, WidgetDefinition.
   + Macro URI is no longer supported.
-  + The include component's mode is default to auto (instead of defer)
   + disable-behind-modal is deprecated (always false)
   + PageCtrl: addRoot, removeRoot, moveRoot, addFellow and removeFellow
     are removed
