@@ -74,10 +74,11 @@ zk.override(jq.fn, zjq._fn, {
 zk.copy(zjq, {
 	//fix DOM
 	_fixDom: function (n, nxt) { //exclude nxt (if null, means to the end)
-		for (; n && n != nxt; n = n.nextSibling) {
-			if (n.nodeType == 1) zjq._fxns.push(n);
-			setTimeout(zjq._fixDom0, 100);
-		}
+		for (; n && n != nxt; n = n.nextSibling)
+			if (n.nodeType == 1) {
+				zjq._fxns.push(n);
+				setTimeout(zjq._fixDom0, 100);
+			}
 	},
 	_unfixDom: function (n) {
 		if (n && !zjq._fxns.$remove(n))

@@ -197,7 +197,7 @@ public class WpdExtendlet implements Extendlet {
 				final String wgtnm = IDOMs.getRequiredAttributeValue(el, "name");
 				final String jspath = wgtnm + ".js"; //eg: /js/zul/wgt/Div.js
 				if (!writeResource(out, jspath, dir, false)) {
-					log.error("Failed to load widget "+wgtnm+": "+jspath+" not found, "+el.getLocator());
+					log.error("Widget "+wgtnm+": "+jspath+" not found, "+el.getLocator());
 					continue;
 				}
 
@@ -244,7 +244,7 @@ public class WpdExtendlet implements Extendlet {
 								write(out, "zk.$void;zk.error('");
 								write(out, uri);
 								write(out, " not found')");
-								log.error("Failed to load mold "+mold+" for widget "+wgtflnm+". Cause: "+uri+" not found");
+								log.error("Failed to load mold "+mold+" for widget "+wgtflnm+": "+uri+" not found");
 							}
 							write(out, ';');
 						}
@@ -270,7 +270,7 @@ public class WpdExtendlet implements Extendlet {
 								continue;
 						}
 						if (!writeResource(out, jspath, dir, true))
-							log.error("Failed to load script "+jspath+", "+el.getLocator());
+							log.error(jspath+" not found, "+el.getLocator());
 					}
 				}
 
@@ -339,13 +339,9 @@ public class WpdExtendlet implements Extendlet {
 		final InputStream is =
 			((Locator)_loc.get()).getResourceAsStream(path, locate);
 		if (is == null) {
-			final boolean debugJS = isDebugJS();
-			if (debugJS) write(out, "zk.log(");
-			write(out, "'Failed to load ");
+			write(out, "zk.log('");
 			write(out, path);
-			write(out, '\'');
-			if (debugJS) write(out, ')');
-			write(out, ';');
+			write(out, " not found');");
 			return false;
 		}
 
@@ -505,7 +501,7 @@ public class WpdExtendlet implements Extendlet {
 							continue;
 					}
 					if (!writeResource(out, inf[0], _dir, true))
-						log.error("Failed to load script "+inf[0]);
+						log.error(inf[0] + " not found");
 				}
 			}
 			return out.toByteArray();
