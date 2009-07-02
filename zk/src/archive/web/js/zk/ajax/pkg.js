@@ -82,7 +82,7 @@ zPkg = {
 	},
 	_load: function (pkg, dt) {
 		if (!pkg || zPkg._lding[pkg])
-			return !zPkg.loading;
+			return !zPkg.loading && !zPkg._wait.length;
 			//since pkg might be loading (-> return false)
 
 		zPkg._lding[pkg] = true;
@@ -166,16 +166,27 @@ zPkg = {
 	},
 	_pkgVers: {},
 
-	afterLoad: function (a, b, front) { //part of zk
+	afterLoad: function (a, b, front) {
 		if (typeof a == 'string') {
 			if (!b) return true;
 
 			for (var pkgs = a.split(','), j = pkgs.length; --j >= 0;) {
-				a = pkgs[j].trim();
-				if (a && !zPkg._lded[a]) {
+				var p = pkgs[j].trim();
+				if (p && !zPkg._lded[p]) {
+					while (--j >= 0) {
+						var p2 = pkgs[j].trim();
+						if (p2 && !zPkg._lded[p2]) { //yes, more
+							var a1 = a, b1 = b;
+							b = function () {
+								zk.afterLoad(a1, b1, front); //check again
+							};
+							break;
+						}
+					}
+
 					var afpk = zPkg._afpklds;
-					if (afpk[a]) afpk[a].push(b);
-					else afpk[a] = [b];
+					if (afpk[p]) afpk[p].push(b);
+					else afpk[p] = [b];
 					return false;
 				}
 			}
@@ -184,7 +195,7 @@ zPkg = {
 			a = b;
 		}
 
-		if (zPkg.loading) {
+		if (zPkg.loading || zPkg._wait.length) {
 			(front ? zPkg._afld0s: zPkg._aflds).push(a);
 			return false;
 		}
@@ -192,4 +203,4 @@ zPkg = {
 		return true;
 }
 };
-zk.afterLoad = zPkg.afterLoad;
+zk.afterLoad = zPkg.afterLoad; //part of zk
