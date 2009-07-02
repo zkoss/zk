@@ -224,10 +224,6 @@ zUtl = { //static methods
 	},
 
 	//HTTP//
-	https: function () {
-		var p = location.protocol;
-		return p && "https:" == p.toLowerCase();
-	},
 	go: function (url, overwrite, target) {
 		if (!url) {
 			location.reload();
@@ -295,12 +291,9 @@ zUtl = { //static methods
 		}
 		return list;
 	},
-	_init: function () {
-		delete zUtl._init;
-
-		var encs = zUtl._encs, decs = zUtl._decs;
-		for (var v in decs)
-			encs[decs[v]] = v;
-	}
 };
-zUtl._init();
+(function () {
+	var encs = zUtl._encs, decs = zUtl._decs;
+	for (var v in decs)
+		encs[decs[v]] = v;
+})();
