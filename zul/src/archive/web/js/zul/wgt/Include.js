@@ -18,8 +18,13 @@ zul.wgt.Include = zk.$extends(zul.Widget, {
 	$define: {
 		content: function (v) {
 			var n = this.getNode();
-			if (n) n.innerHTML = v || '';
-		}
+			if (n) {
+				if (v && this._comment)
+					v = '<!--\n' + v + '\n-->';
+				n.innerHTML = v  || '';
+			}
+		},
+		comment: null
 	},
 
 	//super//
@@ -27,6 +32,11 @@ zul.wgt.Include = zk.$extends(zul.Widget, {
 		out.push('<div', this.domAttrs_(), '>');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
-		out.push(this._content, '</div>');
+		if (this._comment)
+			out.push('<!--\n');
+		out.push(this._content);
+		if (this._comment)
+			out.push('\n-->');
+		out.push('</div>');
 	}
 });

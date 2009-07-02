@@ -1291,7 +1291,8 @@
 		<xs:attribute name="src" type="xs:string" use="optional" />
 		<xs:attribute name="localized" type="booleanType" use="optional" />
 		<xs:attribute name="progressing" type="booleanType" use="optional" />
-		<xs:attribute name="mode" type="booleanType" use="optional" />
+		<xs:attribute name="mode" type="xs:string" use="optional" />
+		<xs:attribute name="comment" type="booleanType" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
     <!-- intbox -->

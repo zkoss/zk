@@ -161,6 +161,7 @@ implements org.zkoss.zul.api.Include, Includer {
 	private boolean _progressing;
 	private boolean _afterComposed;
 	private boolean _instantMode;
+	private boolean _comment;
 	/** 0: not yet handled, 1: wait for echoEvent, 2: done. */
 	private byte _progressStatus;
 
@@ -307,6 +308,35 @@ implements org.zkoss.zul.api.Include, Includer {
 		}
 	}
 
+	/** Returns whether to generate the included content inside
+	 * the HTML comment.
+	 * <p>Default: false.
+	 *
+	 * <p>It is useful if you want to include non-HTML content.
+	 * For example, 
+	 * <pre><code><include src="a.xml" comment="true"/></code></pre>
+	 * Then, it will generate
+	 * <pre><code>&lt;div id="uuid"&gt;
+	 *&lt;!--
+	 * //the content of a.xml
+	 *--&gt;
+	 *</div></code></pre>
+	 *
+	 * <p>Notice that it is ignored in the instance mode ({@link #getMode}).
+	 * @since 5.0.0
+	 */
+	public boolean isComment() {
+		return _comment;
+	}
+	/** Sets  whether to generate the included content inside
+	 * the HTML comment.
+	 * @see #isComment
+	 * @since 5.0.0
+	 */
+	public void setComment(boolean comment) {
+		_comment = comment;
+	}
+
 	//Includer//
 	public Page getChildPage() {
 		return _childpg;
@@ -407,7 +437,11 @@ implements org.zkoss.zul.api.Include, Includer {
 						rc.extra.write("<div id=\"");
 						rc.extra.write(getUuid());
 						rc.extra.write("\">");
+						if (_comment)
+							rc.extra.write("\n<!--\n");
 						Files.write(rc.extra, sw.getBuffer());
+						if (_comment)
+							rc.extra.write("\n-->\n");
 						rc.extra.write("</div>");
 
 						out.write("zkm.top().props.z_ea='content';");
@@ -499,4 +533,11 @@ implements org.zkoss.zul.api.Include, Includer {
 		return _defMode;
 	}
 	private static String _defMode;
+
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		if (_comment) renderer.render("comment", true);
+	}
 }
