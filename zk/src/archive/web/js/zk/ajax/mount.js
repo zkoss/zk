@@ -226,9 +226,8 @@ zkm = {
 		if (zkm._crInf0.length || zkm._crInf1.length)
 			return; //another page started
 
-		zkm._afmt(zkm.mtBL1);
-
 		zk.mounting = zk.bootstrapping = false;
+		zkm._afmt(zkm.mtBL1);
 		zk.endProcessing();
 
 		zHistory.onURLChange();
@@ -258,15 +257,15 @@ zkm = {
 	},
 	mtAU0: function () {
 		if (zAu._moreCmds()) {
-			zkm._afmt(zkm.mtAU0);
 			zk.mounting = false;
+			zkm._afmt(zkm.mtAU0);
 			zAu.doCmds();
 			return; //wait zAu to call (it might not call back)
 		}
 
+		zk.mounting = false;
 		zkm._afmt(zkm.mtAU0);
 
-		zk.mounting = false;
 		zAu.doCmds(); //server-push (w/ afterLoad) and pfdone
 		zkm._afmt(zkm.mtAU0);
 	},
