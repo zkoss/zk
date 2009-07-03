@@ -1881,12 +1881,17 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	//-- ComponentCtrl --//
-	public void setComponentDefinition(ComponentDefinition compdef) {
+	public void setDefinition(ComponentDefinition compdef) {
 		if (compdef == null)
 			throw new IllegalArgumentException("null");
 		if (!compdef.isInstance(this))
 			throw new IllegalArgumentException("Incompatible "+compdef+" for "+this);
 		_def = compdef;
+	}
+	/** @deprecated As of release 3.6.3, replaced with {@link #setDefinition}.
+	 */
+	public void setComponentDefinition(ComponentDefinition compdef) {
+		setDefinition(compdef);
 	}
 
 	public ZScript getEventHandler(String evtnm) {

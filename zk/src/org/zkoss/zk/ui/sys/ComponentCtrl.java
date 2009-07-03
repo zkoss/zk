@@ -55,6 +55,9 @@ public interface ComponentCtrl {
 	 *
 	 * @exception IllegalArgumentException if compdef is null
 	 */
+	public void setDefinition(ComponentDefinition compdef);
+	/** @deprecated As of release 3.6.3, replaced with {@link #setDefinition}.
+	 */
 	public void setComponentDefinition(ComponentDefinition compdef);
 
 	/** Called before adding a child.
