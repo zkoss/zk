@@ -6,6 +6,7 @@ ZK 5.0.0
   2491275: ZHTML checkbox fire onCheck (in addition to onClick)
   2794752: Fisheye supports dynamic images
   2794753: An option to specify whether the content can be crawled
+  2816083: Spec change: definition in page has lower priority from class
 
 * Bugs
 
@@ -41,6 +42,9 @@ ZK 5.0.0
     z-combo-item is renamed to z-comboitem, and z-list-cell renamed to z-listcell.
   + The default mold of the button is changed as the os mold, and the default mold of the button
     in ZK 3.6.x called the trendy mold.
+  + When instantiating a component manually, the component definition
+    will be resolved from the language definition first, and then page
+    definition (if they have the same implementation class)
 
 	--------
 ZK 3.6.3

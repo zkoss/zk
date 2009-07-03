@@ -228,9 +228,14 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			final ComponentDefinition compdef =
 				pgdef != null ? pgdef.getComponentDefinition(cls, true):
 				page != null ? 	page.getComponentDefinition(cls, true): null;
-			if (compdef != null) return compdef;
+			if (compdef != null && compdef.getLanguageDefinition() != null)
+				return compdef; //already from langdef (not from pgdef)
 
-			return lookupDefinitionByDeviceType(exec.getDesktop().getDeviceType(), cls);
+			final ComponentDefinition compdef2 =
+				lookupDefinitionByDeviceType(exec.getDesktop().getDeviceType(), cls);
+			return compdef != null && (compdef2 == null ||
+			!Objects.equals(compdef.getImplementationClass(), compdef2.getImplementationClass())) ?
+				compdef: compdef2; //Feature 2816083: use compdef2 if same class
 		}
 
 		for (Iterator it = LanguageDefinition.getDeviceTypes().iterator(); it.hasNext();) {
@@ -248,6 +253,20 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			final LanguageDefinition ld = (LanguageDefinition)it.next();
 			try {
 				return ld.getComponentDefinition(cls);
+			} catch (DefinitionNotFoundException ex) { //ignore
+			}
+		}
+		return null;
+	}
+	private final ComponentDefinition
+	lookupDefinitionByDeviceType(String deviceType, String name) {
+		for (Iterator it = LanguageDefinition.getByDeviceType(deviceType).iterator();
+		it.hasNext();) {
+			final LanguageDefinition ld = (LanguageDefinition)it.next();
+			try {
+				final ComponentDefinition def = ld.getComponentDefinition(name);
+				if (def.isInstance(this))
+					return def;
 			} catch (DefinitionNotFoundException ex) { //ignore
 			}
 		}
@@ -1888,10 +1907,33 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			throw new IllegalArgumentException("Incompatible "+compdef+" for "+this);
 		_def = compdef;
 	}
-	/** @deprecated As of release 3.6.3, replaced with {@link #setDefinition}.
-	 */
-	public void setComponentDefinition(ComponentDefinition compdef) {
-		setDefinition(compdef);
+	public void setDefinition(String name) {
+		final Execution exec = Executions.getCurrent();
+		if (exec != null) {
+			final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
+			final PageDefinition pgdef = execCtrl.getCurrentPageDefinition();
+			final Page page = execCtrl.getCurrentPage();
+
+			ComponentDefinition compdef =
+				pgdef != null ? pgdef.getComponentDefinition(name, true):
+				page != null ? 	page.getComponentDefinition(name, true): null;
+			if (compdef == null)
+				compdef = lookupDefinitionByDeviceType(exec.getDesktop().getDeviceType(), name);
+			if (compdef != null) {
+				setDefinition(compdef);
+				return;
+			}
+		} else {
+			for (Iterator it = LanguageDefinition.getDeviceTypes().iterator(); it.hasNext();) {
+				final ComponentDefinition compdef =
+					lookupDefinitionByDeviceType((String)it.next(), name);
+				if (compdef != null) {
+					setDefinition(compdef);
+					return;
+				}
+			}
+		}
+		throw new ComponentNotFoundException(name+" not found");
 	}
 
 	public ZScript getEventHandler(String evtnm) {

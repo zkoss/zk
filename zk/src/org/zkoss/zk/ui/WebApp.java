@@ -170,7 +170,7 @@ getResourcePaths("/catalog/") returns {"/catalog/index.html", "/catalog/products
 	 * not.
 	 *
 	 * @param encode whether to encode with {@link Execution#encodeURL}.
-	 * It is the same as {@link #getEncodeURI()} if <code>encode</code> is true.
+	 * It is the same as {@link #getUpdateURI()} if <code>encode</code> is true.
 	 * @since 5.0.0
 	 * @exception NullPointerException if the current execution is not available
 	 * and encode is true.

@@ -56,9 +56,14 @@ public interface ComponentCtrl {
 	 * @exception IllegalArgumentException if compdef is null
 	 */
 	public void setDefinition(ComponentDefinition compdef);
-	/** @deprecated As of release 3.6.3, replaced with {@link #setDefinition}.
+	/** Sets the component definition by specifing the name.
+	 *
+	 * @param defname the name of the component definition
+	 * @exception IllegalArgumentException if defname is null
+	 * @exception DefinitionNotFoundException if the component definition not found
+	 * @since 5.0.0
 	 */
-	public void setComponentDefinition(ComponentDefinition compdef);
+	public void setDefinition(String defname);
 
 	/** Called before adding a child.
 	 * If a component accepts only certain types of children, it shall
