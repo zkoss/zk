@@ -96,10 +96,13 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 				zk(p)[toSel ? "slideDown" : "slideUp"](this);
 			} else {
 				var pl = accd ? panel.getSubnode("real") : panel.getNode(); //Can't use getSubnode coz
-				if (toSel)
+				if (toSel) {
 					jq(pl).show();
-				else 
-					jq(pl).hide()
+					zWatch.fireDown('onShow', null, pl);
+				} else {
+					jq(pl).hide();
+					zWatch.fireDown('onHide', null, pl);
+				}
 			}
 		if (!accd) {
 			var tabs = this.parent;

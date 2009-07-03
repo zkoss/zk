@@ -87,7 +87,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		}
 	},
 	onSize: function () {
-		if (this.isRealVisible()) {
+		if (this.isRealVisible()) {// sometimes the caller is not zWatch
 			var n = this.getNode();
 			if (n._lastsz && n._lastsz.height == n.offsetHeight && n._lastsz.width == n.offsetWidth) {
 				this.fireOnRender(155);
@@ -96,12 +96,6 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				
 			this._calcSize();// Bug #1813722
 			this.fireOnRender(155);
-			
-			
-			// ToBeFixed
-			//if (zk.opera && meta.body && meta._scrollTop)
-			//	meta.body.scrollTop = meta._scrollTop;
-			 
 		}
 	},
 	/** Calculates the size. */

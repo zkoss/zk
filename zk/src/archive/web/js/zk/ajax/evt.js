@@ -55,6 +55,9 @@ zk.Event = zk.$extends(zk.Object, {
 });
 
 zWatch = {
+	_visibleEvent: {
+		onSize: true, onShow: true, onHide: true, beforeSize: true
+	},
 	listen: function (infs) {
 		for (name in infs) {
 			var wts = zWatch._wts[name],
@@ -98,11 +101,13 @@ zWatch = {
 				args.push(arguments[j++]);
 
 			wts = wts.$clone(); //make a copy since unlisten might happen
-			if (opts) {
+			
+			if (zWatch._visibleEvent[name])
 				for (var j = wts.length; --j >= 0;)
 					if (!zWatch._visible(wts[j]))
 						wts.splice(j, 1);
-
+						
+			if (opts) {
 				if (opts.timeout >= 0) {
 					setTimeout(
 					function () {
@@ -143,11 +148,10 @@ zWatch = {
 					o = wts[j];
 					var diff = bindLevel > o.bindLevel;
 					if (diff > 0) break;//nor ancestor, nor this (&sibling)
-					if (!diff && origin == o) {
+					if (!diff && origin == o && zWatch._visible(o)) {
 						found.unshift(o);
 						break; //found this (and no descendant ahead)
 					}
-
 					if (zWatch._visibleChild(origin, o)) found.unshift(o); //parent first
 				}
 			} else
@@ -176,17 +180,15 @@ zWatch = {
 			}
 		}
 	},
-	_visibleChild: function (p, c) {
-		for (; c; c = c.parent) {
-			if (p == c) return true; //check parent before visible
-			if (c.isVisible && !c.isVisible(true)) break;
-		}
-		return false;
+	_visible: function (c) {
+		return c.getNode && c.getNode() && zk(c.getNode()).isRealVisible();
 	},
-	_visible: function (w) {
-		for (; w; w = w.parent)
-			if (w.isVisible && !w.isVisible(true)) return false;
-		return true;
+	_visibleChild: function (p, c) {
+		if (zWatch._visible(c))
+			for (; c; c = c.parent)
+				if (p == c) return true;
+		
+		return false;
 	},
 	onBindLevelMove: function () {
 		zWatch._dirty = true;

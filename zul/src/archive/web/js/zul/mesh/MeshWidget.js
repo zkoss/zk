@@ -197,7 +197,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		this._pendOnRender = false;
 
 		var rows = this.ebodyrows;
-		if (!this._model || !rows || !rows.length) return;
+		if (!this.desktop || !this._model || !rows || !rows.length) return;
 
 		//Note: we have to calculate from top to bottom because each row's
 		//height might diff (due to different content)
@@ -232,7 +232,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 	},
 	onSize: _zkf = function () {
-		if (this.isRealVisible()) {
+		if (this.isRealVisible()) { // sometimes the caller is not zWatch
 			var n = this.getNode();
 			if (n._lastsz && n._lastsz.height == n.offsetHeight && n._lastsz.width == n.offsetWidth) {
 				this.fireOnRender(155); // force to render while using live grouping

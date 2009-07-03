@@ -7,12 +7,12 @@ userguide.Categorybar = zk.$extends(zul.wgt.Div, {
 		this.$supers('bind_', arguments);
 		zk(this.getNode()).disableSelection();
 		
-		zWatch.listen({onSize: this, onShow: this});
+		zWatch.listen({onSize: this});
 		this.onChildAdded_();//for updating sum of category width
 		this.scrollEvent = false;
 	},
 	unbind_: function () {
-		zWatch.unlisten({onSize: this, onShow: this});
+		zWatch.unlisten({onSize: this});
 		this.$supers('unbind_', arguments);
 	},
 	onSize: function(evt){	
@@ -42,8 +42,8 @@ userguide.Categorybar = zk.$extends(zul.wgt.Div, {
 			jq(this.getSubnode("left"))
 			.mouseover(function(){
 				jq(cave).animate({
-					marginLeft: cave.distance+"px"
-				},1000);
+					marginLeft: "0px"
+				},400);
 			})
 			.mouseout(function(){
 				jq(cave).stop(true);
@@ -52,8 +52,8 @@ userguide.Categorybar = zk.$extends(zul.wgt.Div, {
 			jq(this.getSubnode("right"))
 			.mouseover(function(){
 				jq(cave).animate({
-					marginLeft: "0px"
-				},1000);
+					marginLeft: cave.distance + "px"
+				},400);
 			})
 			.mouseout(function(){
 				jq(cave).stop(true);

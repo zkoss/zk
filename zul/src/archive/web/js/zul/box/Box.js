@@ -194,7 +194,6 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		this.$supers('unbind_', arguments);
 	},
 	onSize: _zkf = function () {
-		if (!this.isRealVisible()) return;
 
 		var $Splitter = zul.box.Splitter;
 		for (var c = this.firstChild;; c = c.nextSibling) {
