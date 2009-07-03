@@ -26,9 +26,8 @@ zul.inp.Decimalbox = zk.$extends(zul.inp.Doublebox, {
 	},
 	coerceToString_: function (value) {
 		if (!value) return '';
-		
 		//caculate number of fixed decimals
-		var fmtStr=this.getFormat(),
+		var fmtStr=this.getFormat()+"",
 			pureFmtStr = fmtStr.replace(/[^#.]/g,'');
 		var ind = pureFmtStr.indexOf('.');
 		if(ind > 0)
