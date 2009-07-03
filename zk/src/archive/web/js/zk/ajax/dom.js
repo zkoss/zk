@@ -438,7 +438,7 @@ zjq.prototype = { //ZK extension
 
 		for (var ss = zjq._TEXT_STYLES, j = ss.length; --j >= 0;) {
 			var nm = ss[j].$camel();
-			tsd.style[nm] = zjq.getStyle(el, nm);
+			tsd.style[nm] = jq(el).css(nm);
 		}
 
 		tsd.innerHTML = txt;
