@@ -202,14 +202,11 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 	$init: function (obj) {
 		this.$supers('$init', arguments);
 	},
-	_choiceData: function () {
+	_choiceData: function (evt) {
 		this.$supers('_choiceData', arguments);
 		var db = this.parent,
 		    input = db.getSubnode("real");
 		input.value = this._date;
 		db.fire('onChange', {value: this._date});
-	},
-	unbind_: function () {
-		this.$supers('unbind_', arguments);
 	}
 });

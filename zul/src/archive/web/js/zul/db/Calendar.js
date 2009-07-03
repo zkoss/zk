@@ -112,14 +112,15 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	},
 	_choiceData: function (evt) {
 		var target = evt.domTarget.tagName == "TD" ? jq(evt.domTarget).children('a')[0]:
-					evt.domTarget.tagName == "A" ? evt.domTarget : null;
-		if (target && !isNaN(target.textContent)) {
+					evt.domTarget.tagName == "A" ? evt.domTarget : null,
+			val = jq(target).text(); 
+		if (target && !isNaN(val)) {
 			var cell = target.parentNode,
 				dateobj = this._getDateObj();
 			switch(this._view) {
 				case "day" :
 					this._setTime(null, cell._monofs != null && cell._monofs != 0 ?
-							dateobj.getMonth() + cell._monofs : null, target.textContent);
+							dateobj.getMonth() + cell._monofs : null, val);
 					this.rerender();
 					break;
 				case "month" :
@@ -128,12 +129,12 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 					this._setView("day");
 					break;
 				case "year" :
-					this._setTime(target.textContent);
+					this._setTime(val);
 					this._setView("month");
 					break;
 				case "decade" :
 					//Decade mode Set Year Also
-					this._setTime(target.textContent.split("-")[0]);
+					this._setTime(val.split("-")[0]);
 					this._setView("year");
 					break;
 			}
