@@ -39,8 +39,16 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		var title = this.getSubnode("title"),
 			mid = this.getSubnode("mid"),
 			ly = this.getSubnode("ly"),
-			ry = this.getSubnode("ry");
-
+			ry = this.getSubnode("ry"),
+			zcls = this.getZclass();
+		jq(title).hover(
+			function () {
+				$(this).toggleClass(zcls + "-title-over");
+			},
+			function () {
+			    $(this).toggleClass(zcls + "-title-over");
+			}
+		);
 		this._markCal();
 		this.domListen_(title, "onClick", '_changeView');
 		this.domListen_(mid, "onClick", '_choiceData');
@@ -104,10 +112,10 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	},
 	_choiceData: function (evt) {
 		var target = evt.domTarget.tagName == "TD" ? jq(evt.domTarget).children('a')[0]:
-					evt.domTarget.tagName == "A" ? evt.domTarget : null,
-			cell = target.parentNode,
-			dateobj = this._getDateObj();
-		if (target) {
+					evt.domTarget.tagName == "A" ? evt.domTarget : null;
+		if (target && !isNaN(target.textContent)) {
+			var cell = target.parentNode,
+				dateobj = this._getDateObj();
 			switch(this._view) {
 				case "day" :
 					this._setTime(null, cell._monofs != null && cell._monofs != 0 ?

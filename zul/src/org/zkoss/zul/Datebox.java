@@ -28,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.text.ParseException;
 
 import org.zkoss.lang.Objects;
+import org.zkoss.util.Dates;
 import org.zkoss.util.Locales;
 import org.zkoss.util.TimeZones;
 import org.zkoss.xml.HTMLs;
@@ -58,16 +59,16 @@ import org.zkoss.zul.impl.Utils;
 public class Datebox extends FormatInputElement implements
 		org.zkoss.zul.api.Datebox {
 	private TimeZone _tzone;
-	private boolean _compact, _btnVisible = true, _lenient = true;
+	private boolean _btnVisible = true,_lenient = true,_open = false;
 	static {
 		addClientEvent(Datebox.class, Events.ON_FOCUS, CE_DUPLICATE_IGNORE);
 		addClientEvent(Datebox.class, Events.ON_BLUR, CE_DUPLICATE_IGNORE);
+		addClientEvent(Datebox.class, Events.ON_CHANGE, CE_IMPORTANT|CE_REPEAT_IGNORE);
 	}
 
 	public Datebox() {
 		setFormat(getDefaultFormat());
 		setCols(11);
-		_compact = "zh".equals(Locales.getCurrent().getLanguage());
 	}
 
 	public Datebox(Date date) throws WrongValueException {
@@ -126,25 +127,6 @@ public class Datebox extends FormatInputElement implements
 	}
 
 	/**
-	 * Returns whether to use a compact layout.
-	 * <p>
-	 * Default: true if zh_TW or zh_CN; false otherwise.
-	 */
-	public boolean isCompact() {
-		return _compact;
-	}
-
-	/**
-	 * Sets whether to use a compact layout.
-	 */
-	public void setCompact(boolean compact) {
-		if (_compact != compact) {
-			_compact = compact;
-			smartUpdate("compact", compact);
-		}
-	}
-
-	/**
 	 * Returns whether the button (on the right of the textbox) is visible.
 	 * <p>
 	 * Default: true.
@@ -184,6 +166,7 @@ public class Datebox extends FormatInputElement implements
 	 *                if value is wrong
 	 */
 	public void setValue(Date value) throws WrongValueException {
+		if (value == null) value = Dates.today();
 		validate(value);
 		setRawValue(value);
 	}
@@ -298,7 +281,7 @@ public class Datebox extends FormatInputElement implements
 	 * @since 3.0.1
 	 */
 	public void open() {
-		response("dropdn", new AuInvoke(this, "dropdn", true));
+		smartUpdate("open", true);
 	}
 
 	/**
@@ -307,7 +290,7 @@ public class Datebox extends FormatInputElement implements
 	 * @since 3.0.1
 	 */
 	public void close() {
-		response("dropdn", new AuInvoke(this, "dropdn", false));
+		smartUpdate("open", false);
 	}
 
 	// -- super --//
@@ -361,11 +344,11 @@ public class Datebox extends FormatInputElement implements
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 			throws java.io.IOException {
 		super.renderProperties(renderer);
-		if (_compact)
-			render(renderer, "compact", _compact);
 		if (_btnVisible)
 			render(renderer, "buttonVisible", _btnVisible);
 		if (_lenient)
 			render(renderer, "lenient", _lenient);
+		
+		render(renderer, "date", getValue());
 	}
 }

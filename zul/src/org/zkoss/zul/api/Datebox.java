@@ -63,18 +63,6 @@ public interface Datebox extends org.zkoss.zul.impl.api.FormatInputElement {
 	public void setLenient(boolean lenient);
 
 	/**
-	 * Returns whether to use a compact layout.
-	 * <p>
-	 * Default: true if zh_TW or zh_CN; false otherwise.
-	 */
-	public boolean isCompact();
-
-	/**
-	 * Sets whether to use a compact layout.
-	 */
-	public void setCompact(boolean compact);
-
-	/**
 	 * Returns whether the button (on the right of the textbox) is visible.
 	 * <p>
 	 * Default: true.

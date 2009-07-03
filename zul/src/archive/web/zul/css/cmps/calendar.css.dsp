@@ -9,6 +9,12 @@
 	font-weight: normal;
 	width: 215px;
 }
+.z-datebox-pp .z-calendar {
+	border: 0 none;
+}
+.z-calendat-title-over {
+	color: #8FADFF;
+}
 
 <%-- Calendar and Datebox --%>
 .z-calendar-tdl,
