@@ -234,8 +234,10 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	onSize: _zkf = function () {
 		if (this.isRealVisible()) {
 			var n = this.getNode();
-			if (n._lastsz && n._lastsz.height == n.offsetHeight && n._lastsz.width == n.offsetWidth)
+			if (n._lastsz && n._lastsz.height == n.offsetHeight && n._lastsz.width == n.offsetWidth) {
+				this.fireOnRender(155); // force to render while using live grouping
 				return; // unchanged
+			}
 				
 			this._calcSize();// Bug #1813722
 			this.fireOnRender(155);
