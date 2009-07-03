@@ -1,4 +1,3 @@
-<%@ page contentType="text/css;charset=UTF-8" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 
 .z-fieldset legend{
@@ -83,13 +82,13 @@
 .z-groupbox-bl {
 	background: transparent no-repeat 0 bottom;
 	background-image: url(${c:encodeURL('~./img/shdlf.gif')});
-	padding-left: 6px;
+	padding-left: 6px; height: 6px; font-size: 0; line-height: 0;
 	zoom: 1;
 }
 .z-groupbox-br {
 	background: transparent no-repeat right bottom;
 	background-image: url(${c:encodeURL('~./img/shdrg.gif')});
-	padding-right: 6px;
+	padding-right: 6px; height: 6px; font-size: 0; line-height: 0;
 	zoom: 1;
 }
 .z-groupbox-bm {

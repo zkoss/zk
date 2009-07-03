@@ -63,16 +63,22 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 			var n = this.getSubnode('cave');
 			if (n) {
 				if (zk.ie6_) n.style.height = "";
-				n.style.height =
-					zk(n).revisedHeight(zk(n.parentNode).vflexHeight(), true)
-					+ "px";
-					//we use n.parentNode(=this.getSubnode('panel')) to calc vflex,
-					//so we have to subtract margin, too
+				var fix = function() {
+					n.style.height =
+						zk(n).revisedHeight(zk(n.parentNode).vflexHeight(), true)
+						+ "px";
+						//we use n.parentNode(=this.getSubnode('panel')) to calc vflex,
+						//so we have to subtract margin, too
+				};
+				fix();
+				if (zk.gecko) setTimeout(fix, 0);
+					//Gecko bug: height is wrong if the browser visits the page first time
+					//(reload won't reproduce the problem) test case: test/z5.zul
 			}
 		}
 		setTimeout(this.proxy(this._fixShadow), 500);
 			//shadow raraly needs to fix so OK to delay for better performance
-			//(getSubnode('sdw') a bit slow due to jq)
+			//(getSubnode('sdw') a bit slow due to document.getElementById)
 	},
 	onShow: _zkf,
 	_afterSlideDown: function (n) {

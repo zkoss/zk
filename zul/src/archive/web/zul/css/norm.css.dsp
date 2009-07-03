@@ -479,8 +479,6 @@ span.z-progressmeter-img {
 <c:include page="~./zul/css/cmps/window.css.dsp"/>
 <%-- Caption --%>
 <c:include page="~./zul/css/cmps/caption.css.dsp"/>
-<%-- Groupbox --%>
-<c:include page="~./zul/css/cmps/groupbox.css.dsp"/>
 <%-- Separator --%>
 <c:include page="~./zul/css/cmps/separator.css.dsp"/>
 <%-- Toolbar and Toolbarbutton --%>

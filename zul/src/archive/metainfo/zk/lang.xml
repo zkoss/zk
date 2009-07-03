@@ -494,10 +494,12 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/groupbox.js</mold-uri>
+			<css-uri>css/groupbox.css.dsp</css-uri>
 		</mold>
 		<mold>
 			<mold-name>3d</mold-name>
 			<mold-uri>mold/groupbox3d.js</mold-uri>
+			<css-uri>css/groupbox.css.dsp</css-uri>
 		</mold>
 		<preserve-blank/>
 	</component>	
