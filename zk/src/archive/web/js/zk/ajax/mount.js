@@ -226,13 +226,7 @@ zkm = {
 		if (zkm._crInf0.length || zkm._crInf1.length)
 			return; //another page started
 
-		for (var fn; fn = zkm._afMts.shift();) {
-			fn();
-			if (zPkg.loading) {
-				zk.afterLoad(zkm.mtBL1); //fn might load packages
-				return;
-			}
-		}
+		zkm._afmt(zkm.mtBL1);
 
 		zk.mounting = zk.bootstrapping = false;
 		zk.endProcessing();
@@ -264,21 +258,26 @@ zkm = {
 	},
 	mtAU0: function () {
 		if (zAu._moreCmds()) {
+			zkm._afmt(zkm.mtAU0);
 			zk.mounting = false;
 			zAu.doCmds();
-			return; //wait zAu to call
+			return; //wait zAu to call (it might not call back)
 		}
 
-		for (var fn; fn = zkm._afMts.shift();) {
-			fn();
-			if (zPkg.loading) {
-				zk.afterLoad(zkm.mtAU0); //fn might load packages
-				return;
-			}
-		}
+		zkm._afmt(zkm.mtAU0);
 
 		zk.mounting = false;
 		zAu.doCmds(); //server-push (w/ afterLoad) and pfdone
+		zkm._afmt(zkm.mtAU0);
+	},
+	_afmt: function (fnext) {
+		for (var fn; fn = zkm._afMts.shift();) {
+			fn();
+			if (zPkg.loading) {
+				zk.afterLoad(fnext); //fn might load packages
+				return;
+			}
+		}
 	},
 
 	/** create the widget tree. */
