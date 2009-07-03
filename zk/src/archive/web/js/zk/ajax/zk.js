@@ -58,6 +58,7 @@ zk = function (sel) {
 			throw 'unknown superclass';
 
 		var jclass = function() {
+			this.sysId = zk._sysId++;
 			this.$init.apply(this, arguments);
 
 			var ais = this._$ais;
@@ -91,6 +92,7 @@ zk = function (sel) {
 
 		return jclass;
 	},
+	_sysId: 0,
 	$default: function (opts, defaults) {
 		opts = opts || {};
 		for (var p in defaults)
