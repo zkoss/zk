@@ -53,6 +53,7 @@ import org.zkoss.zk.mesg.MZk;
 import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ext.Updatable;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
@@ -66,14 +67,21 @@ import org.zkoss.zk.ui.util.Configuration;
  * @author tomyeh
  * @since 3.0.2
  */
-public class AuUploader implements AuProcessor{
+public class AuUploader implements AuExtension {
 	private static final Log log = Log.lookup(AuUploader.class);
+
+	private final ServletContext _ctx;
+
+	public AuUploader(ServletContext ctx) {
+		_ctx = ctx;
+	}
 
 	/** Processes a file uploaded from the client.
 	 */
-	public void process(Session sess, ServletContext ctx,
-			HttpServletRequest request, HttpServletResponse response, String pathInfo)
-	throws ServletException, IOException {		
+	public void service(
+	HttpServletRequest request, HttpServletResponse response, String pathInfo)
+	throws ServletException, IOException {
+		final Session sess = Sessions.getCurrent(false);
 		if (sess == null) {
 			response.sendError(response.SC_GONE, Messages.get(MZk.PAGE_NOT_FOUND, pathInfo));
 			return;
@@ -119,41 +127,41 @@ public class AuUploader implements AuProcessor{
 		//returns ok to swfupload. Otherwise swfupload will be at 100% for ever
 		response.getOutputStream().println("200 OK");
 	}
-	private void sessionTimeout(ServletContext ctx, HttpServletRequest request,
-			HttpServletResponse response, String dtid)
-			throws ServletException, IOException {
-				final String sid = request.getHeader("ZK-SID");
-				if (sid != null)
-					response.setHeader("ZK-SID", sid);
+	private void sessionTimeout(HttpServletRequest request,
+	HttpServletResponse response, String dtid)
+	throws ServletException, IOException {
+		final String sid = request.getHeader("ZK-SID");
+		if (sid != null)
+			response.setHeader("ZK-SID", sid);
 
-				final AuWriter out =
-					AuWriters.newInstance().open(request, response, 0);
+		final AuWriter out =
+			AuWriters.newInstance().open(request, response, 0);
 
-						String uri = Devices.getTimeoutURI(getDeviceType(request));
-						final AuResponse resp;
-						if (uri != null) {
-							if (uri.length() != 0)
-								uri = Encodes.encodeURL(ctx, request, response, uri);
-							resp = new AuSendRedirect(uri, null);
-						} else {
-							resp = new AuObsolete(
-								dtid, Messages.get(MZk.UPDATE_OBSOLETE_PAGE, dtid));
-						}
-						out.write(resp);
-
-				out.close(request, response);
-			}
-			private static String getDeviceType(HttpServletRequest request) {
-				final String agt = request.getHeader("user-agent");
-				if (agt != null && agt.length() > 0) {
-					try {
-						return Devices.getDeviceByClient(agt).getType();
-					} catch (Throwable ex) {
-						log.warning("Unknown device for "+agt);
-					}
+				String uri = Devices.getTimeoutURI(getDeviceType(request));
+				final AuResponse resp;
+				if (uri != null) {
+					if (uri.length() != 0)
+						uri = Encodes.encodeURL(_ctx, request, response, uri);
+					resp = new AuSendRedirect(uri, null);
+				} else {
+					resp = new AuObsolete(
+						dtid, Messages.get(MZk.UPDATE_OBSOLETE_PAGE, dtid));
 				}
-				return "ajax";
+				out.write(resp);
+
+		out.close(request, response);
+	}
+	private static String getDeviceType(HttpServletRequest request) {
+		final String agt = request.getHeader("user-agent");
+		if (agt != null && agt.length() > 0) {
+			try {
+				return Devices.getDeviceByClient(agt).getType();
+			} catch (Throwable ex) {
+				log.warning("Unknown device for "+agt);
 			}
+		}
+		return "ajax";
+	}
 	private static Media convertFileType(FileItem fi, Desktop desktop) throws IOException{
 		String ctype = fi.getContentType(),
 			ctypelc = ctype.toLowerCase();

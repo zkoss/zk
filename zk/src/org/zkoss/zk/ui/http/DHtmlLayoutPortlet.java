@@ -152,7 +152,7 @@ public class DHtmlLayoutPortlet extends GenericPortlet {
 			handleError(sess, request, response, path, ex, null);
 		} finally {
 			SessionsCtrl.requestExit(sess);
-			SessionsCtrl.setCurrent(null);
+			SessionsCtrl.setCurrent((Session)null);
 		}
 	}
 

@@ -122,7 +122,7 @@ public class I18Ns {
 		if (old != null) {
 			request.removeAttribute(ATTR_SETUP);
 
-			SessionsCtrl.setCurrent(null);
+			SessionsCtrl.setCurrent((Session)null);
 
 			final Object[] op = (Object[])old;
 			TimeZones.setThreadLocal((TimeZone)op[1]);

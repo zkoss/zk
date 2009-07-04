@@ -12,6 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+zk.spaceless = zk.spaceless || zk.light; //id == uuid
 zk.Widget = zk.$extends(zk.Object, {
 	_visible: true,
 	nChildren: 0,
@@ -36,7 +37,7 @@ zk.Widget = zk.$extends(zk.Object, {
 					this.set(nm, props[nm]);
 			}
 
-			if (zk.light) { //id == uuid
+			if (zk.spaceless) {
 				if (this.id) this.uuid = this.id; //setId was called
 				else this.uuid = this.id = zk.Widget.nextUuid();
 			} else if (!this.uuid) this.uuid = zk.Widget.nextUuid();
@@ -111,7 +112,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (!ow) return null;
 
 		var f = ow._fellows[id];
-		return f || !global || zk.light ? f: zk.Widget._global[id];
+		return f || !global || zk.spaceless ? f: zk.Widget._global[id];
 	},
 	getFellow: _zkf,
 	getId: function () {
@@ -119,20 +120,20 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	setId: function (id) {
 		if (id != this.id) {
-			if (zk.light && this.desktop)
+			if (zk.spaceless && this.desktop)
 				throw 'id cannot be changed after bound'; //since there might be subnodes
 
 			var $Widget = zk.Widget, old = this.id;
 			if (old) {
-				if (!zk.light) delete $Widget._global[id];
+				if (!zk.spaceless) delete $Widget._global[id];
 				$Widget._rmIdSpace(this);
 			}
 
 			this.id = id;
-			if (zk.light) this.uuid = id;
+			if (zk.spaceless) this.uuid = id;
 
 			if (id) {
-				if (!zk.light) $Widget._global[id] = this;
+				if (!zk.spaceless) $Widget._global[id] = this;
 				$Widget._addIdSpace(this);
 			}
 		}
@@ -1414,7 +1415,10 @@ zk.Desktop = zk.$extends(zk.Widget, {
 		if (!dt) {
 			this.uuid = this.id = dtid;
 			this.updateURI = updateURI || zk.updateURI;
-			this.stateless = stateless;
+			if (this.stateless = stateless) {
+				this.subURI = '/ss';
+				zk.spaceless = true;
+			}
 			dts[dtid] = this;
 			++zkdt._ndt;
 			if (!zkdt._dt) zkdt._dt = this; //default desktop

@@ -414,15 +414,13 @@ zAu = {
 				content += "&data_"+j+"="+encodeURIComponent(jq.toJSON(data));
 		}
 
-		if (content) {
-			if (dt.stateless) content = '&ss=1' + content;
+		if (content)
 			zAu._sendNow2({
-				sid: zAu._seqId, uri: uri || zAu.comURI(null, dt),
+				sid: zAu._seqId, uri: uri || zAu.comURI(dt.subURI, dt),
 				dt: dt, content: "dtid=" + dt.id + content,
 				ctli: ctli, ctlc: ctlc, implicit: implicit,
 				ignorable: ignorable, tmout: 0
 			});
-		}
 		return true;
 	},
 	_sendNow2: function(reqInf) {
@@ -564,10 +562,6 @@ zAu = {
 				zWatch.fire('onResponse', {timeout:0}); //use setTimeout
 		}
 		return true;
-	},
-	//Used by zkm.mtAU to know any pending
-	_moreCmds: function () {
-		return zAu._cmdsQue.length
 	},
 
 	/** Cleans up if we detect obsolete or other severe errors. */

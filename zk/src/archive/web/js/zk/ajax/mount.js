@@ -256,13 +256,6 @@ zkm = {
 		zkm.mtAU0();
 	},
 	mtAU0: function () {
-		if (zAu._moreCmds()) {
-			zk.mounting = false;
-			zkm._afmt(zkm.mtAU0);
-			zAu.doCmds();
-			return; //wait zAu to call (it might not call back)
-		}
-
 		zk.mounting = false;
 		zkm._afmt(zkm.mtAU0);
 

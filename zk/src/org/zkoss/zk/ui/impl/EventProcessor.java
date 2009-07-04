@@ -26,6 +26,7 @@ import java.lang.reflect.Method;
 
 import org.zkoss.util.logging.Log;
 
+import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
@@ -265,7 +266,7 @@ public class EventProcessor {
 	 */
 	public void cleanup() {
 		ExecutionsCtrl.setCurrent(null);
-		SessionsCtrl.setCurrent(null);
+		SessionsCtrl.setCurrent((Session)null);
 	}
 
 	private Page getPage() {

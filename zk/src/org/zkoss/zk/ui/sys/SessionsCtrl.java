@@ -36,6 +36,14 @@ public class SessionsCtrl extends Sessions {
 	public static final void setCurrent(Session sess) {
 		_sess.set(sess);
 	}
+	/** Sets the session for the current thread.
+	 * Unlike {@link #setCurrent(Session)}, the session is resovled
+	 * later (when {@link #getCurrent} is called).
+	 * @since 5.0.0
+	 */
+	public static final void setCurrent(SessionResolver sr) {
+		_sess.set(sr);
+	}
 	/** Returns the current {@link SessionCtrl}.
 	 */
 	public static final SessionCtrl getCurrentCtrl() {
