@@ -383,10 +383,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</xel-config>
 	-->
 
-	<!-- Map of AU servlets
+	<!-- Map of AU statelesslet
 	-->
 	<statelesslet>
-		<description>Test of AU servlets</description>
+		<description>Test of AU statelesslet</description>
 		<statelesslet-name>booksuggest</statelesslet-name>
 		<statelesslet-class>org.zkoss.zkdemo.test.BookSuggest</statelesslet-class>
 		<!-- Any number of parameters
@@ -395,9 +395,5 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 			<param-value>foo</param-value>
 		</init-param>
 		-->
-	</au-service>
-	<statelesslet-mapping>
-		<statelesslet-name>booksuggest</statelesslet-name>
-		<desktop-pattern>/booksuggest</desktop-pattern>
-	</statelesslet-mapping>
+	</statelesslet>
 </zk>

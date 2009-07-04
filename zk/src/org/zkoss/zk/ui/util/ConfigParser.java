@@ -37,7 +37,7 @@ public interface ConfigParser {
 	 *
 	 * @param config the configuration to store the info.
 	 * The info can be stored with {@link Configuration#setAttribute}.
-	 * @param root the element in zk.xml to be parsed
+	 * @param el the element in zk.xml to be parsed
 	 * @return whether the specified element is parsed by this parser.
 	 * Return false if this parser doesn't recoginize it.
 	 */
