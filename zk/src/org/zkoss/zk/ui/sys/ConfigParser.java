@@ -21,6 +21,7 @@ package org.zkoss.zk.ui.sys;
 import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.List;
+import java.util.LinkedList;
 import java.util.Map;
 import java.net.URL;
 
@@ -49,6 +50,7 @@ import org.zkoss.zk.ui.impl.Attributes;
 import org.zkoss.zk.scripting.Interpreters;
 import org.zkoss.zk.device.Devices;
 import org.zkoss.zk.au.AuWriters;
+import org.zkoss.zk.au.AuWriter;
 
 /**
  * Used to parse WEB-INF/zk.xml, metainfo/zk/zk.xml 
@@ -64,6 +66,7 @@ public class ConfigParser {
 	private static final int MAX_VERSION_SEGMENT = 4;
 	private static int[] _zkver;
 	private static boolean _syscfgLoaded;
+	private static List _parsers;
 
 	/** Checks and returns whether the loaded document's version is correct.
 	 * It is the same as checkVersion(url, doc, false).
@@ -194,10 +197,15 @@ public class ConfigParser {
 	private static void parseSystemConfig(Element root) throws Exception {
 		final Element el = root.getElement("system-config");
 		if (el != null) {
-			String s = el.getElementValue("au-writer-class", true);
-			if (s != null)
-				AuWriters.setImplementationClass(
-					s.length() == 0 ? null: Classes.forNameByThread(s));
+			Class cls = parseClass(el, "au-writer-class", AuWriter.class);
+			if (cls != null)
+				AuWriters.setImplementationClass(cls);
+			cls = parseClass(el, "config-parser-class", org.zkoss.zk.ui.util.ConfigParser.class);
+			if (cls != null) {
+				if (_parsers == null)
+					_parsers = new LinkedList();
+				_parsers.add(cls.newInstance());
+			}
 		}
 	}
 	private static void parseClientConfig(Element root) throws Exception {
@@ -221,12 +229,10 @@ public class ConfigParser {
 		}
 	}
 	private static void parseListener(Configuration config, Element el) {
-		final String clsnm = IDOMs.getRequiredElementValue(el, "listener-class");
 		try {
-			final Class cls = Classes.forNameByThread(clsnm);
-			config.addListener(cls);
-		} catch (Throwable ex) {
-			throw new UiException("Unable to load "+clsnm+", at "+el.getLocator(), ex);
+			config.addListener(parseClass(el, "listener-class", null, true));
+		} catch (Exception ex) {
+			throw UiException.Aide.wrap(ex);
 		}
 	}
 
@@ -247,6 +253,7 @@ public class ConfigParser {
 	 */
 	public void parse(Element root, Configuration config, Locator locator)
 	throws Exception {
+		l_out:
 		for (Iterator it = root.getElements().iterator(); it.hasNext();) {
 			final Element el = (Element)it.next();
 			final String elnm = el.getName();
@@ -270,7 +277,7 @@ public class ConfigParser {
 						config.addRichlet(name, clsnm, params);
 						config.addRichletMapping(name, path);
 					} catch (Throwable ex) {
-						throw new UiException("Illegal richlet definition at "+el.getLocator(), ex);
+						log.error("Illegal richlet definition at "+el.getLocator(), ex);
 					}
 				} else { //syntax since 2.4.0
 					final String nm =
@@ -278,7 +285,7 @@ public class ConfigParser {
 					try {
 						config.addRichlet(nm, clsnm, params);
 					} catch (Throwable ex) {
-						throw new UiException("Illegal richlet definition at "+el.getLocator(), ex);
+						log.error("Illegal richlet definition at "+el.getLocator(), ex);
 					}
 				}
 			} else if ("richlet-mapping".equals(elnm)) { //syntax since 2.4.0
@@ -289,7 +296,7 @@ public class ConfigParser {
 				try {
 					config.addRichletMapping(nm, path);
 				} catch (Throwable ex) {
-					throw new UiException("Illegal richlet mapping at "+el.getLocator(), ex);
+					log.error("Illegal richlet mapping at "+el.getLocator(), ex);
 				}
 			} else if ("desktop-config".equals(elnm)) {
 			//desktop-config
@@ -439,10 +446,9 @@ public class ConfigParser {
 				if (cls != null)
 					Encodes.setURLEncoder((Encodes.URLEncoder)cls.newInstance());
 
-				s = el.getElementValue("au-writer-class", true);
-				if (s != null)
-					AuWriters.setImplementationClass(
-						s.length() == 0 ? null: Classes.forNameByThread(s));
+				cls = parseClass(el, "au-writer-class", AuWriter.class);
+				if (cls != null)
+					AuWriters.setImplementationClass(cls);
 			} else if ("xel-config".equals(elnm)) {
 			//xel-config
 			//	evaluator-class
@@ -462,21 +468,14 @@ public class ConfigParser {
 					org.zkoss.util.logging.LogService.init(base, null); //start the log service
 			} else if ("error-page".equals(elnm)) {
 			//error-page
-				final String clsnm =
-					IDOMs.getRequiredElementValue(el, "exception-type");
+				final Class cls =
+					parseClass(el, "exception-type", Throwable.class, true);
 				final String loc =
 					IDOMs.getRequiredElementValue(el, "location");
 				String devType = el.getElementValue("device-type", true);
 				if (devType == null) devType = "ajax";
 				else if (devType.length() == 0)
-					throw new UiException("device-type not specified at "+el.getLocator());
-
-				final Class cls;
-				try {
-					cls = Classes.forNameByThread(clsnm);
-				} catch (Throwable ex) {
-					throw new UiException("Unable to load "+clsnm+", at "+el.getLocator(), ex);
-				}
+					log.error("device-type not specified at "+el.getLocator());
 
 				config.addErrorPage(devType, cls, loc);
 			} else if ("preference".equals(elnm)) {
@@ -492,7 +491,14 @@ public class ConfigParser {
 				final String val = IDOMs.getRequiredElementValue(el, "value");
 				System.setProperty(nm, val);
 			} else {
-				throw new UiException("Unknown element: "+elnm+", at "+el.getLocator());
+				if (_parsers != null)
+					for (Iterator e = _parsers.iterator(); e.hasNext();) {
+						org.zkoss.zk.ui.util.ConfigParser parser =
+							(org.zkoss.zk.ui.util.ConfigParser)e.next();
+						if (parser.parse(config, el))
+							continue l_out;
+					}
+				log.error("Unknown element: "+elnm+", at "+el.getLocator());
 			}
 		}
 	}
@@ -599,20 +605,36 @@ public class ConfigParser {
 	/** Parse a class, if specified, whether it implements cls.
 	 */
 	private static Class parseClass(Element el, String elnm, Class cls) {
+		return parseClass(el, elnm, cls, false);
+	}
+	private static
+	Class parseClass(Element el, String elnm, Class cls, boolean required) {
 		//Note: we throw exception rather than warning to make sure
 		//the developer correct it
 		final String clsnm = el.getElementValue(elnm, true);
 		if (clsnm != null && clsnm.length() != 0) {
 			try {
 				final Class klass = Classes.forNameByThread(clsnm);
-				if (cls != null && !cls.isAssignableFrom(klass))
-					throw new UiException(clsnm+" must implement "+cls.getName()+", "+el.getLocator());
+				if (cls != null && !cls.isAssignableFrom(klass)) {
+					String msg = clsnm+" must implement "+cls.getName()+", "+el.getLocator();
+					if (required)
+						throw new UiException(msg);
+					log.error(msg);
+					return null;
+				}
 //				if (log.debuggable()) log.debug("Using "+clsnm+" for "+cls);
 				return klass;
 			} catch (Throwable ex) {
-				throw new UiException("Unable to load "+clsnm+", at "+el.getLocator(), ex);
+				String msg = ex instanceof ClassNotFoundException ?
+					clsnm + " not found": "Unable to load "+clsnm;
+				msg += ", at "+el.getLocator();
+				if (required)
+					throw new UiException(msg, ex);
+				log.error(msg);
+				return null;
 			}
-		}
+		} else if (required)
+			throw new UiException(elnm+" required, at "+el.getLocator());
 		return null;
 	}
 

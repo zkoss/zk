@@ -7,6 +7,7 @@ ZK 5.0.0
   2794752: Fisheye supports dynamic images
   2794753: An option to specify whether the content can be crawled
   2816083: Spec change: definition in page has lower priority from class
+  2816588: A way to parse app-specific configuration in zk.xml
 
 * Bugs
 

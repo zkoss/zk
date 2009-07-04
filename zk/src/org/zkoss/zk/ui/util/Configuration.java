@@ -130,6 +130,8 @@ public class Configuration {
 	/** The event interceptors. */
 	private final EventInterceptors _eis = new EventInterceptors();
 	private int _evtTimeWarn = 600; //sec
+	/** A map of attributes. */
+	private final Map _attrs = new HashMap();
 	/** whether to use the event processing thread. */
 	private boolean _useEvtThd = true;
 	/** keep-across-visits. */
@@ -2024,6 +2026,36 @@ public class Configuration {
 	 */
 	public void afterProcessEvent(Event event) {
 		_eis.afterProcessEvent(event);
+	}
+
+	/** Returns a map of application-specific attributes.
+	 * @since 5.0.0
+	 */
+	public Map getAttributes() {
+		return _attrs;
+	}
+	/** Returns the value of an application-specific attribute, or
+	 * null if not found.
+	 * @since 5.0.0
+	 */
+	public Object getAttribute(String name) {
+		return _attrs.get(name);
+	}
+	/** Returns the value of an application-specific attribute.
+	 * @param value the value of the attribute. If null, it means removal,
+	 * i.e., {@link #removeAttribute}.
+	 * @return the previous value, or null if no such value.
+	 * @since 5.0.0
+	 */
+	public Object setAttribute(String name, Object value) {
+		return value != null ? _attrs.put(name, value): removeAttribute(name);
+	}
+	/** Removes the value of an application-specific attribute.
+	 * @return the previous value, or null if no such value.
+	 * @since 5.0.0
+	 */
+	public Object removeAttribute(String name) {
+		return _attrs.remove(name);
 	}
 
 	/** Returns the time, in seconds, to show a warning message
