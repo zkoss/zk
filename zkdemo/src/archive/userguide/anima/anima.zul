@@ -51,17 +51,17 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			<caption label="Appear" />
 			<label sclass="ctl" value="SlideDown">
 				<attribute w:name="onClick">
-				jq(this.$f('t').getNode()).hide().slideDown();
+				jq(this.$f('t')).hide().slideDown();
 				</attribute>
 			</label>
 			<label sclass="ctl" value="Appear">
 				<attribute w:name="onClick">
-				jq(this.$f('t').getNode()).hide().fadeIn();
+				jq(this.$f('t')).hide().fadeIn();
 				</attribute>
 			</label>
 			<label sclass="ctl"	value="Slowly">
 				<attribute w:name="onClick">
-				jq(this.$f('t').getNode()).hide().fadeIn(2500);
+				jq(this.$f('t')).hide().fadeIn(2500);
 				</attribute>
 			</label>
 		</groupbox>
@@ -69,12 +69,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			<caption label="Disappear" />
 			<label sclass="ctl" value="SlideUp">
 				<attribute w:name="onClick">
-				jq(this.$f('t').getNode()).show().slideUp();
+				jq(this.$f('t')).show().slideUp();
 				</attribute>
 			</label>
 			<label sclass="ctl" value="Fade">
 				<attribute w:name="onClick">
-				jq(this.$f('t').getNode()).show().fadeOut();
+				jq(this.$f('t')).show().fadeOut();
 				</attribute>
 			</label>
 		</groupbox>
