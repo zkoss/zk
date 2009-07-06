@@ -154,8 +154,13 @@ zWatch = {
 					}
 					if (zWatch._visibleChild(origin, o)) found.unshift(o); //parent first
 				}
-			} else
+			} else {
 				found = wts.$clone(); //make a copy since unlisten might happen
+				if (zWatch._visibleEvent[name])
+					for (var j = found.length; --j >= 0;)
+						if (!zWatch._visible(found[j]))
+							found.splice(j, 1);
+			}
 
 			if (opts && opts.timeout >= 0) {
 				setTimeout(
