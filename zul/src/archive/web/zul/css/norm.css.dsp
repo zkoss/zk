@@ -134,7 +134,6 @@ div.z-log button {
 	top: 0; left: 0;
 	filter: alpha(opacity=60); <%-- IE --%>
 	opacity: .6;
-	z-index: 30000;
 	zoom: 1;
 	background: #E0E1E3;
 }
@@ -169,7 +168,7 @@ div.z-log button {
 	height: 100%;
 	background: #E0E1E3;
 	position: absolute;
-	z-index: 89000;
+	z-index: 9000;
 	top: 0;
 	left: 0;
 	filter: alpha(opacity=60);
@@ -189,7 +188,7 @@ div.z-log button {
 	position: absolute;
 	background-color: #CEDFEC;
 	border: 1px solid #99C6E9;
-	z-index: 89500;
+	z-index: 9500;
 	padding: 3px;
 	cursor: wait;
 	overflow: hidden;
