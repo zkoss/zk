@@ -123,7 +123,7 @@ public class Configuration {
 		_sessPushMax = -1,
 		_sessTimeout = 0, _sparThdMax = 100, _suspThdMax = -1,
 		_maxUploadSize = 5120, _maxProcTime = 3000,
-		_promptDelay = 900, _tooltipDelay = 800, _resendDelay = -1,
+		_promptDelay = 900, _tooltipDelay = 800, _resendDelay,
 		_clkFilterDelay = 0;
 	private String _charsetResp = "UTF-8", _charsetUpload = "UTF-8";
 	private CharsetFinder _charsetFinderUpload;

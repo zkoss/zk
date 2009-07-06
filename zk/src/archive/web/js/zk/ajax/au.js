@@ -441,7 +441,7 @@ zAu = {
 
 			zAu._areq = req;
 			zAu._areqInf = reqInf;
-			if (zk.resendDelay > 0)
+			if (zk.resendDelay > 0 && !reqInf.dt.subURI/*!statelss*/)
 				zAu._areqInf.tfn = setTimeout(zAu._areqTmout, zk.resendDelay + reqInf.tmout);
 
 			if (uri) req.send(null);
