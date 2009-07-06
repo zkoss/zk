@@ -124,6 +124,9 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			this.setFlex(true);
 			jq(this.getNode()).addClass(this.getZclass() + "-nested");
 		}
+		
+		// reset
+		(this.getSubnode('real') || {})._lastSize = null;
 		if (this.parent && this.desktop)
 			this.parent.resize();
 	},
@@ -133,6 +136,9 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			this.setFlex(false);
 			jq(this.getNode()).removeClass(this.getZclass() + "-nested");
 		}
+		
+		// reset
+		(this.getSubnode('real') || {})._lastSize = null;
 		if (this.parent && this.desktop)
 			this.parent.resize();
 	},
