@@ -325,7 +325,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			oldpt.removeChild(child);
 			this.insertBefore(child, moveBefore);
 
-			jq(kidnode).remove();
+			kidnode.parentNode.removeChild(kidnode); //don't use jq().remove()
 
 			(cave || node).insertBefore(kidnode, beforeNode);
 			
@@ -1473,7 +1473,8 @@ zk.Skipper = zk.$extends(zk.Object, {
 	skip: function (wgt, skipId) {
 		var skip = jq(skipId || (wgt.uuid + '-cave'), zk)[0];
 		if (skip && skip.firstChild) {
-			jq(skip).remove();
+			skip.parentNode.removeChild(skip);
+				//don't use jq to remove, since it unlisten events
 			return skip;
 		}
 		return null;
