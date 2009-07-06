@@ -121,15 +121,16 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		}
 
 		// check if the popup is one of the wgt's children
-		for (var floatFound, wgt = this.parent; wgt; wgt = wgt.parent) {
-			if (wgt == org) {
-				if (this._shallClose) break;
-				if (!floatFound)
-					this.setTopmost();
-				return;
+		if (org && org.$instanceof(zul.menu.Menu))
+			for (var floatFound, wgt = this.parent; wgt; wgt = wgt.parent) {
+				if (wgt == org) {
+					if (this._shallClose) break;
+					if (!floatFound)
+						this.setTopmost();
+					return;
+				}
+				floatFound = floatFound || wgt.isFloating_();
 			}
-			floatFound = floatFound || wgt.isFloating_();
-		}
 
 		// check if the popup is an active menu
 		if (!this._shallClose && this.parent.$instanceof(zul.menu.Menu)) {
@@ -169,6 +170,8 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		zWatch.listen({onHide: this});
 	},
 	unbind_: function () {
+		if (this.isOpen())
+			this.close();
 		if (this._shadow)
 			this._shadow.destroy();
 		this._shadow = null;

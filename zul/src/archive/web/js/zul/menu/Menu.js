@@ -160,6 +160,8 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 				zWatch.fire('onFloatUp', {
 					timeout: 10
 				}, this); //notify all
+			} else {
+				this.$class._rmActive(this);
 			}
 		} else if (this.menupopup && !this.menupopup.isOpen())
 			this.$class._rmActive(this);
