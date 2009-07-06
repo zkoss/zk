@@ -138,11 +138,10 @@ public class ConfigParser {
 					if (checkVersion(res.url, res.document)) {
 						final Element el = res.document.getRootElement();
 						if (!syscfgLoaded) {
-							parseZScriptConfig(el);
-							parseDeviceConfig(el);
-							parseSystemConfig(el);
-							parseClientConfig(el);
-							//parseDesktopConfig(el);
+							parseSubZScriptConfig(el);
+							parseSubDeviceConfig(el);
+							parseSubSystemConfig(el);
+							parseSubClientConfig(config, el);
 						}
 
 						if (config != null) {
@@ -158,7 +157,7 @@ public class ConfigParser {
 			throw UiException.Aide.wrap(ex); //abort
 		}
 	}
-	private static void parseZScriptConfig(Element root) {
+	private static void parseSubZScriptConfig(Element root) {
 		for (Iterator it = root.getElements("zscript-config").iterator();
 		it.hasNext();) {
 			final Element el = (Element)it.next();
@@ -166,35 +165,36 @@ public class ConfigParser {
 				//Note: zscript-config is applied to the whole system, not just langdef
 		}
 	}
-	private static void parseDeviceConfig(Element root) {
+	private static void parseSubDeviceConfig(Element root) {
 		for (Iterator it = root.getElements("device-config").iterator();
 		it.hasNext();) {
 			final Element el = (Element)it.next();
 			Devices.add(el);
 		}
 	}
-	private static void parseSystemConfig(Element root) throws Exception {
-		final Element el = root.getElement("system-config");
-		if (el != null) {
+	private static void parseSubSystemConfig(Element root) throws Exception {
+		for (Iterator it = root.getElements("system-config").iterator();
+		it.hasNext();) {
+			final Element el = (Element)it.next();
 			String s = el.getElementValue("au-writer-class", true);
 			if (s != null)
 				AuWriters.setImplementationClass(
 					s.length() == 0 ? null: Classes.forNameByThread(s));
 		}
 	}
-	private static void parseClientConfig(Element root) throws Exception {
-		final Element el = root.getElement("client-config");
-		if (el != null) {
-			Integer v = parseInteger(el, "resend-delay", false);
-			if (v != null)
-				Library.setProperty(Attributes.RESEND_DELAY, v.toString());
+	/** Unlike other private parseXxx, config might be null. */
+	private static void parseSubClientConfig(Configuration config, Element root) throws Exception {
+		for (Iterator it = root.getElements("client-config").iterator();
+		it.hasNext();) {
+			final Element el = (Element)it.next();
+			if (config != null) parseClientConfig(config, el);
+			else {
+				Integer v = parseInteger(el, "resend-delay", false);
+				if (v != null)
+					Library.setProperty(Attributes.RESEND_DELAY, v.toString());
+			}
 		}
 	}
-	/*private static void parseDesktopConfig(Element root) throws Exception {
-		final Element el = root.getElement("desktop-config");
-		if (el != null) {
-		}
-	}*/
 	private static void parseListeners(Configuration config, Element root)
 	throws Exception {
 		for (Iterator it = root.getElements("listener").iterator();
