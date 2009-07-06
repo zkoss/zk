@@ -16,8 +16,8 @@ zk.debug.Debugger = zk.$extends(zk.Object, {
 	outId: 'zk_debugger',
 	
 	getConsole: function () {
-		var console = z$(this.outId);
-		if (!console.length) {
+		var console = jq(this.outId, zk)[0];
+		if (!console) {
 			console = document.createElement("DIV");
 			document.body.appendChild(console);
 			jq(console).replaceWith('<div id="' + this.outId +'" class="z-debug-domtree"></div>');

@@ -423,7 +423,7 @@
 .z-tab-ver .z-tab-ver-hm {
 	overflow: hidden;
 	cursor: pointer;
-	padding: 0 15px 0 5px;
+	padding-left: 5px;
 	background: transparent repeat-y scroll -512px 0;
 	background-image: url(${c:encodeURL('~./zul/img/tab/tab-v-hm.png')});
 	zoom: 1;

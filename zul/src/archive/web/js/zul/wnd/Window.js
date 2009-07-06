@@ -483,15 +483,15 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	doMouseOver_: function (evt) {
 		switch (evt.domTarget) {
 		case this.getSubnode('close'):
-			zk(this.getSubnode('close')).addClass(this.getZclass() + '-close-over');
+			jq(this.getSubnode('close')).addClass(this.getZclass() + '-close-over');
 			break;
 		case this.getSubnode('max'):
 			var zcls = this.getZclass(),
 				added = this.isMaximized() ? ' ' + zcls + '-maxd-over' : '';
-			zk(this.getSubnode('max')).addClass(zcls + '-max-over' + added);
+			jq(this.getSubnode('max')).addClass(zcls + '-max-over' + added);
 			break;
 		case this.getSubnode('min'):
-			zk(this.getSubnode('min')).addClass(this.getZclass() + '-min-over');
+			jq(this.getSubnode('min')).addClass(this.getZclass() + '-min-over');
 			break;
 		}
 		this.$supers('doMouseOver_', arguments);
@@ -499,17 +499,17 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	doMouseOut_: function (evt) {
 		switch (evt.domTarget) {
 		case this.getSubnode('close'):
-			zk(this.getSubnode('close')).removeClass(this.getZclass() + '-close-over');
+			jq(this.getSubnode('close')).removeClass(this.getZclass() + '-close-over');
 			break;
 		case this.getSubnode('max'):
 			var zcls = this.getZclass(),
-				$max = zk(this.getSubnode('max'));
+				$max = jq(this.getSubnode('max'));
 			if (this.isMaximized())
 				$max.removeClass(zcls + '-maxd-over');
 			$max.removeClass(zcls + '-max-over');
 			break;
 		case this.getSubnode('min'):
-			zk(this.getSubnode('min')).removeClass(this.getZclass() + '-min-over');
+			jq(this.getSubnode('min')).removeClass(this.getZclass() + '-min-over');
 			break;
 		}
 		this.$supers('doMouseOut_', arguments);

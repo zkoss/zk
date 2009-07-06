@@ -18,12 +18,11 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	_pack: 'start',
 
 	$define: {
-		align: function () {
+		align: _zkf = function () {
 			this.rerender(); //TODO: a better algoithm
 		},
-		pack: function () {
-			this.rerender(); //TODO: a better algoithm
-		}
+		pack: _zkf,
+		spacing: _zkf
 	},
 
 	/** Returns if it is a vertical box. */
@@ -121,17 +120,17 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	},
 	_spacingHTML: function (child) {
 		var oo = [],
-			spacing = this.spacing,
+			spacing = this._spacing,
 			spacing0 = spacing && spacing.startsWith('0')
 				&& (spacing.length == 1 || zUtl.isChar(spacing.charAt(1),{digit:1})),
 			vert = this.isVertical(),
-			spstyle = spacing ? (vert?'height:':'width:') + spacing: '';
+			spstyle = spacing ? (vert?'height:':'width:') + spacing: 'px';
 
 		oo.push('<t', vert?'r':'d', ' id="', child.uuid,
 			'-chdex2" class="', this.getZclass(), '-sep"');
 
 		var s = spstyle;
-		if (spacing0 || !child.isVisible()) s = 'display:none' + s;
+		if (spacing0 || !child.isVisible()) s = 'display:none;' + s;
 		if (s) oo.push(' style="', s, '"');
 
 		oo.push('>', vert?'<td>':'', zUtl.img0, vert?'</td></tr>':'</td>');
