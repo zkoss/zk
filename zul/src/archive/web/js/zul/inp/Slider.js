@@ -79,15 +79,16 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		jq(this.btn).removeClass(this.getZclass() + "-btn-over");
 	},
 	onup_: function(evt){
-		var btn = zul.sld.Slider.down_btn;
-		var uuid = btn.id.split("-")[0];
-		var widget = zk.Widget.$(uuid);
-		var zcls = widget.getZclass();
-		if (btn)
+		var btn = zul.inp.Slider.down_btn;
+		if (btn){
+			var uuid = btn.id.split("-")[0];
+			var widget = zk.Widget.$(uuid);
+			var zcls = widget.getZclass();
 			jq(btn).removeClass(zcls + "-btn-drag")
 				.removeClass(zcls + "-btn-over");
+		}
 
-		zul.sld.Slider.down_btn=null;
+		zul.inp.Slider.down_btn=null;
 		jq(document.body).unbind("mouseup", widget.onup_);
 		
 	},
@@ -95,7 +96,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		this.$supers('doMouseDown_', arguments);
 		jq(this.btn).addClass(this.getZclass() + "-btn-drag");
 		jq(document.body).mouseup(this.onup_);
-		zul.sld.Slider.down_btn = this.btn;
+		zul.inp.Slider.down_btn = this.btn;
 	},
 	_makeDraggable: function(){
 		this._drag = new zk.Draggable(this, this.btn, {
