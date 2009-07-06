@@ -938,14 +938,8 @@ zk.Widget = zk.$extends(zk.Object, {
 			len = lsns ? lsns.length: 0;
 		if (len) {
 			for (var j = 0; j < len;) {
-				var inf = lsns[j++], o = inf[0],
-					oldevt = o.$event;
-				o.$event = evt;
-				try {
-					(inf[1] || o[evtnm]).call(o, evt);
-				} finally {
-					o.$event = oldevt;
-				}
+				var inf = lsns[j++], o = inf[0];
+				(inf[1] || o[evtnm]).call(o, evt);
 				if (evt.stopped) return evt; //no more processing
 			}
 		}
@@ -1044,7 +1038,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 		if (fn) {
 			inf[evt] = bklsns[evt]
-				= typeof fn != 'function' ? new Function(fn): fn;
+				= typeof fn != 'function' ? new Function("var event=arguments[0];"+fn): fn;
 			this.listen(inf);
 		}
 	},

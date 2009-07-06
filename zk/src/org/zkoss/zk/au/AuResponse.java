@@ -48,8 +48,9 @@ public class AuResponse {
 	protected Object[] _data;
 
 	/** Constructs a component-independent response.
+	 * @since 5.0.0 (becomes public)
 	 */
-	protected AuResponse(String cmd) {
+	public AuResponse(String cmd) {
 		this(cmd, (Component)null, (Object[])null);
 	}
 	/** Constructs a component-independent response.
@@ -57,13 +58,15 @@ public class AuResponse {
 	 * @param data the data. It can be null, String, Date,
 	 * and any kind of objects that
 	 * the client accepts (marshaled by JSON).
+	 * @since 5.0.0 (becomes public)
 	 */
-	protected AuResponse(String cmd, Object data) {
+	public AuResponse(String cmd, Object data) {
 		this(cmd, (Component)null, data);
 	}
 	/** Constructs a component-independent response.
+	 * @since 5.0.0 (becomes public)
 	 */
-	protected AuResponse(String cmd, Object[] data) {
+	public AuResponse(String cmd, Object[] data) {
 		this(cmd, (Component)null, data);
 	}
 	/** Constructs a response with one or zero data.
@@ -79,13 +82,15 @@ public class AuResponse {
 	 * It is used only to optimize what responses to send.
 	 *
 	 * @param data specifies the data to be sent. If null, no data at all.
+	 * @since 5.0.0 (becomes public)
 	 */
-	protected AuResponse(String cmd, Component depends, Object data) {
+	public AuResponse(String cmd, Component depends, Object data) {
 		this(cmd, depends, data != null ? new Object[] {data}: null);
 	}
 	/** Constructs a response with multiple data.
+	 * @since 5.0.0 (becomes public)
 	 */
-	protected AuResponse(String cmd, Component depends, Object[] data) {
+	public AuResponse(String cmd, Component depends, Object[] data) {
 		if (cmd == null || cmd.length() == 0)
 			throw new IllegalArgumentException("cmd");
 		_cmd = cmd;
@@ -93,8 +98,9 @@ public class AuResponse {
 		_data = data;
 	}
 	/** Constructs a response with single data.
+	 * @since 5.0.0 (becomes public)
 	 */
-	protected AuResponse(String cmd, Page depends, Object data) {
+	public AuResponse(String cmd, Page depends, Object data) {
 		this(cmd, depends, data != null ? new Object[] {data}: null);
 	}
 	/** Constructs a response with multiple data.
@@ -103,9 +109,9 @@ public class AuResponse {
 	 * or null.
 	 * @exception IllegalArgumentException if an element of data
 	 * is neither String nor DeferredValue.
-	 * @since 3.0.5
+	 * @since 5.0.0 (becomes public)
 	 */
-	protected AuResponse(String cmd, Page depends, Object[] data) {
+	public AuResponse(String cmd, Page depends, Object[] data) {
 		if (cmd == null || cmd.length() == 0)
 			throw new IllegalArgumentException("cmd");
 		_cmd = cmd;
