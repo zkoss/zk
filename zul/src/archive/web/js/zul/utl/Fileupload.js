@@ -1278,10 +1278,10 @@ function uploadStart(file) {
 	pTable.id = file.id;
 	pTable.cellspacing = "0";
 	pTable.cellpadding = "0";
-	pTable.className = "progressWrapper";
+	pTable.className = "z-progressWrapper";
 	
-	jq(pTable).html('<tr class="progressContainer"><td><div class="progressName"></div></td><td><div class="progressBarInProgressWrapper"><div class="progressBarInProgress"/></div></td><td><a class="progressCancel" href="#"> </a></td></tr>');
-	var progressName = jq(pTable).find(".progressName")[0];
+	jq(pTable).html('<tr class="z-progressContainer"><td><div class="z-progressName"></div></td><td><div class="z-progressBarInProgressWrapper"><div class="z-progressBarInProgress"/></div></td><td><a class="z-progressCancel" href="#"> </a></td></tr>');
+	var progressName = jq(pTable).find(".z-progressName")[0];
 	
 	//generate fileSizeString
 	var fileSizeStr="";
@@ -1296,10 +1296,10 @@ function uploadStart(file) {
 	jq("#"+targetID)[0].appendChild(pTable);
 	
 	//cache
-	pTable.progressFname = jq(pTable).find(".progressName")[0];
-	pTable.progressBarWrapper = jq(pTable).find(".progressBarInProgressWrapper")[0];
-	pTable.progressBar = jq(pTable).find(".progressBarInProgress")[0];
-	pTable.progressCancelBtn = jq(pTable).find(".progressCancel")[0];
+	pTable.progressFname = jq(pTable).find(".z-progressName")[0];
+	pTable.progressBarWrapper = jq(pTable).find(".z-progressBarInProgressWrapper")[0];
+	pTable.progressBar = jq(pTable).find(".z-progressBarInProgress")[0];
+	pTable.progressCancelBtn = jq(pTable).find(".z-progressCancel")[0];
 	
 	var swfUploadInstance = this;
 	var fileID = file.id;
@@ -1430,21 +1430,21 @@ zul.utl.Fileupload = zk.$extends(zul.Widget, {
 		var pTable = document.createElement('table');
 		pTable.cellspacing = "0";
 		pTable.cellpadding = "0";
-		pTable.className = "progressWrapper";
+		pTable.className = "z-progressWrapper";
 		
-		jq(pTable).html('<tr class="progressContainer"><td><div class="progressName"></div></td><td><div class="progressBarInProgressWrapper"><div class="progressBarInProgress"/></div></td><td><a class="progressCancel" href="#"> </a></td></tr>');
+		jq(pTable).html('<tr class="z-progressContainer"><td><div class="z-progressName"></div></td><td><div class="z-progressBarInProgressWrapper"><div class="z-progressBarInProgress"/></div></td><td><a class="z-progressCancel" href="#"> </a></td></tr>');
 		
 		//show filename
-		var progressFname = jq(pTable).find(".progressName")[0];
+		var progressFname = jq(pTable).find(".z-progressName")[0];
 		progressFname.innerHTML = file.value.match(/[^\/\\]+$/);
 				
 		status.appendChild(pTable);
 		
 		//cache
 		pTable.progressFname = progressFname;
-		pTable.progressBarWrapper = jq(pTable).find(".progressBarInProgressWrapper")[0];
-		pTable.progressBar = jq(pTable).find(".progressBarInProgress")[0];
-		pTable.progressCancelBtn = jq(pTable).find(".progressCancel")[0];
+		pTable.progressBarWrapper = jq(pTable).find(".z-progressBarInProgressWrapper")[0];
+		pTable.progressBar = jq(pTable).find(".z-progressBarInProgress")[0];
+		pTable.progressCancelBtn = jq(pTable).find(".z-progressCancel")[0];
 			
 		var fid = new Date().getTime();
 		pTable.id=this.uuid +"-"+fid;

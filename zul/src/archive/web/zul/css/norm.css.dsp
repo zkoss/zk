@@ -509,3 +509,5 @@ span.z-progressmeter-img {
 <c:include page="~./zul/css/cmps/tabbox.css.dsp"/>
 <%-- Borderlayout --%>
 <c:include page="~./zul/css/cmps/layout.css.dsp"/>
+<%-- Fileupload --%>
+<c:include page="~./zul/css/cmps/fileupload.css.dsp"/>

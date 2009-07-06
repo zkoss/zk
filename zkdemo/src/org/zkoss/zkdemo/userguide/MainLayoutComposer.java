@@ -198,7 +198,8 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 	private void setSelectedCategory(Listitem item) {
 		DemoItem di = (DemoItem) item.getValue();
 		_selected = (Button) main.getFellow(di.getCateId());
-		String deselect = _selected != null ? "onSelect('"+ _selected.getUuid() + "');" : "";
+		String deselect = _selected != null ? "jq('#"+ _selected.getUuid() + 
+		"').addClass('demo-seld').siblings().removeClass('demo-seld');" : "";
 		if (Executions.getCurrent().isBrowser("ie6-")) {
 			Clients.evalJavaScript(deselect + "fixImage4IE6();");
 		} else {
