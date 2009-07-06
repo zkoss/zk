@@ -67,6 +67,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 	},
 	close: function () {
 		this.$supers('close', arguments);
+		jq(this.getNode()).hide(); // force to hide the element
 		this._hideShadow();
 		var menu = this.parent;
 		if (menu.$instanceof(zul.menu.Menu) && menu.isTopmost())
