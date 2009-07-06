@@ -33,7 +33,7 @@ zk.override(jq.fn, zjq._fn = {}, {
 			ctx = null;
 		}
 		if (zk.Widget.isInstance(sel)) {
-			sel = sel.getNode() || sel.uuid;
+			sel = sel.getNode() || '#' + sel.uuid;
 		}
 		var ret = zjq._fn.init.call(this, sel, ctx);
 		ret.zk = new zjq(ret);
