@@ -141,17 +141,9 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		}
 	},
 	_doMouseOut: function (evt) { //not zk.Widget.doMouseOut_
-		if (zk.ie) {
-			var n = this.getSubnode('a'),
-				xy = zk(n).revisedOffset(),
-				x = evt.pageX,
-				y = evt.pageY,
-				diff = this.isTopmost() ? 1 : 0,
-				vdiff = this.isTopmost() && 'vertical' == this.parent.getOrient() ? 1 : 0;
-			if (x - diff > xy[0] && x <= xy[0] + n.offsetWidth && y - diff > xy[1] &&
-					y - vdiff <= xy[1] + n.offsetHeight)
-				return; // don't deactivate;
-		}
+		if (jq.isAncestor(this.getSubnode('a'), evt.domEvent.relatedTarget || evt.domEvent.toElement))
+			return; // don't deactivate
+	
 		var	topmost = this.isTopmost();
 		if (topmost) {
 			if (this.menupopup && this.getMenubar().isAutodrop()) {

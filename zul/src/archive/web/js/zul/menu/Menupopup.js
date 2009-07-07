@@ -122,7 +122,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		}
 
 		// check if the popup is one of the wgt's children
-		if (org && org.$instanceof(zul.menu.Menu))
+		if (org && org.$instanceof(zul.menu.Menu)) {
 			for (var floatFound, wgt = this.parent; wgt; wgt = wgt.parent) {
 				if (wgt == org) {
 					if (this._shallClose) break;
@@ -132,12 +132,13 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 				}
 				floatFound = floatFound || wgt.isFloating_();
 			}
-
-		// check if the popup is an active menu
-		if (!this._shallClose && this.parent.$instanceof(zul.menu.Menu)) {
-			var menubar = this.parent.getMenubar();
-			if (menubar && menubar._lastTarget == this.parent)
-				return;
+			
+			// check if the popup is an active menu
+			if (!this._shallClose && this.parent.$instanceof(zul.menu.Menu)) {
+				var menubar = this.parent.getMenubar();
+				if (menubar && menubar._lastTarget == this.parent) 
+					return;
+			}
 		}
 		this.close({sendOnOpen:true});
 	},

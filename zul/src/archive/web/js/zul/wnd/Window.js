@@ -523,7 +523,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			 el.style.top = el.offsetTop + "px";
 		if(el.style.left && el.style.left.indexOf("%") >= 0)
 			 el.style.left = el.offsetLeft + "px";
-		//TODO zkau.closeFloats();
+		zWatch.fire('onFloatUp', null, dg.control); //notify all
 	},
 	_ghostmove: function (dg, ofs, evt) {
 		var wnd = dg.control,
