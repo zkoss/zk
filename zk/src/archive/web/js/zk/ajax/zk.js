@@ -346,9 +346,6 @@ zk.copy(Array.prototype, {
 		}
 		return false;
 	},
-	$removeAt: function (j) {
-		if (j < this.length) this.splice(j, 1);
-	},
 	$clone: function() {
 		return [].concat(this);
 	},

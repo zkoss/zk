@@ -95,7 +95,7 @@ zk.Widget = zk.$extends(zk.Object, {
 					dropTypes = v.split(',');
 					for (var j = dropTypes.length; --j >= 0;)
 						if (!(dropTypes[j] = dropTypes[j].trim()))
-							dropTypes.$removeAt(j);
+							dropTypes.splice(j, 1);
 				}
 				this._dropTypes = dropTypes;
 			}
@@ -492,7 +492,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			} else {
 				for (var j = fs.length; --j >= 0;)
 					if (fs[j].widget == this)
-						fs.$removeAt(j);
+						fs.splice(j, 1);
 				this._floating = false;
 			}
 		}
@@ -996,7 +996,7 @@ zk.Widget = zk.$extends(zk.Object, {
 				else if (typeof inf == 'function') inf = [this, inf];
 				else inf = [inf||this, null];
 				if (lsn[0] == inf[0] && lsn[1] == inf[1]) {
-					lsns.$removeAt(j);
+					lsns.splice(j, 1);
 					found = true;
 					continue l_out;
 				}

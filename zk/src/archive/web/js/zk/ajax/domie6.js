@@ -95,7 +95,7 @@ jq(window).bind("beforeprint", function() {
 			try {
 				zjq._rmFilter(n);
 			} catch (e) {
-				ns.$removeAt(i--); //no longer avail
+				ns.splice(i--, 1); //no longer avail
 				len--;
 			}
 		}
