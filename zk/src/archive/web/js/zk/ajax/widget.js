@@ -51,13 +51,10 @@ zk.Widget = zk.$extends(zk.Object, {
 		style: function () {
 			this.updateDomStyle_();
 		},
-		sclass: function () {
+		sclass: _zkf = function () {
 			this.updateDomClass_();
 		},
-		zclass: function(){
-			if (this.desktop)
-				this.redraw();
-		},
+		zclass: _zkf,
 		width: function (v) {
 			var n = this.getNode();
 			if (n) n.style.width = v || '';
