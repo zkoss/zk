@@ -19,16 +19,14 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 /**
- * This component is a west region.
+ * A west region of a border layout.
  * <p>Default {@link #getZclass}: z-west.(since 3.5.0)
  * 
- * <p>Default: {@link #getCmargins()} is "0,5,5,0" (since 3.5.0)</p>
  * @author jumperchen
  * @since 5.0.0
  */
 public class West extends LayoutRegion implements org.zkoss.zul.api.West {
 	public West() {
-		setCmargins("0,5,5,0");
 	}
 
 	/**

@@ -58,7 +58,7 @@ package org.zkoss.zul.api;
  * </pre>
  * 
  * <p>
- * Default {@link org.zkoss.zul.Borderlayout#getZclass}: z-border-layout. (since 3.5.0)
+ * Default {@link org.zkoss.zul.Borderlayout#getZclass}: z-borderlayout. (since 3.5.0)
  * 
  * @author jumperchen
  * @since 5.0.0

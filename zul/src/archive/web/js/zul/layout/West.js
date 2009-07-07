@@ -12,21 +12,13 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.layout.West = zk.$extends(zul.layout.LayoutRegion, {
+zul.layout.West = zk.$extends(_zkbc = zul.layout.LayoutRegion, zul.layout._West = {
 	setHeight: zk.$void, // readonly
 	sanchor: 'l',
 
-	$init: function () {
-		this.$supers('$init', arguments);
-		this.setCmargins("0,5,5,0");
-	},
 	getPosition: function () {
 		return zul.layout.Borderlayout.WEST;
 	},
-	getSize: function () {
-		return this.getWidth();
-	},
-	setSize: function (size) {
-		this.setWidth(size);
-	}
+	getSize: _zkbc.prototype.getWidth,
+	setSize: _zkbc.prototype.setWidth
 });

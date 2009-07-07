@@ -12,14 +12,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.layout.East = zk.$extends(_zkbc = zul.layout.LayoutRegion, {
+zul.layout.East = zk.$extends(_zkbc = zul.layout.LayoutRegion, zul.layout._East = {
 	setHeight: zk.$void, // readonly
 	sanchor: 'r',
 
-	$init: function () {
-		this.$supers('$init', arguments);
-		this.setCmargins("0,5,5,0");
-	},
 	getPosition: function () {
 		return zul.layout.Borderlayout.EAST;
 	},

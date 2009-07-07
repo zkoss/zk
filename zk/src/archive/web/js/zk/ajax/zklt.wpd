@@ -12,18 +12,22 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 
 <package name="zk">
+	<script src="ext/jquery.js"/>
 	<script src="zk.js"/>
-	<script>zk.light = '0.6';</script>
+
+	<script>zk.light = '0.7';</script>
 	<script src="dom.js"/>
 	<script>if(zk.ie){</script>
-	<script src="domie.js"/>
-	<script>if(zk.ie6_){</script>
-	<script src="domie6.js"/>
+		<script src="domie.js"/>
+		<script>if(zk.ie6_){</script>
+			<script src="domie6.js"/>
 	<script>}}else if(zk.opera){</script>
-	<script src="domopera.js"/>
+		<script src="domopera.js"/>
 	<script>}else if(zk.safari){</script>
-	<script src="domsafari.js"/>
+		<script src="domsafari.js"/>
 	<script>}</script>
+
+	<script src="anima.js"/>
 	<script src="drag.js"/>
 	<script src="effect.js"/>
 	<script src="math.js"/>
@@ -35,6 +39,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<script src="history.js"/>
 	<script src="au.js"/>
 	<script src="numfmt.js"/>
+	<script src="datefmt.js"/>
 	<script src="msgfmt.js"/>
+
 	<script src="ext/jquery.json.js"/>
 </package>

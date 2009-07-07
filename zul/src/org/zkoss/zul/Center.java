@@ -19,14 +19,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 /**
- * This component is a center region.
- * <p>
- * <strong>Note:</strong> This component doesn't support the following method,
- * including {@link #setSplittable(boolean)}, {@link #setOpen(boolean)},
- * {@link #setCollapsible(boolean)}, {@link #setMaxsize(int)},
- * {@link #setMinsize(int)}, {@link #setHeight(String)},
- * {@link #setWidth(String)}, {@link #getSize()}, {@link #setSize(String)},
- * and {@link #setVisible(boolean)}.
+ * A center region of a borderlayout.
  * 
  * <p>Default {@link #getZclass}: z-center.(since 3.5.0)
  * @author jumperchen
@@ -37,47 +30,8 @@ public class Center extends LayoutRegion implements org.zkoss.zul.api.Center {
 	public Center() {
 	}
 
-	/**
-	 * Center region can't be enabled the collapsed margin functionality.
-	 * @since 3.5.0
-	 */
-	public void setCmargins(String cmargins) {
-		throw new UnsupportedOperationException("readonly");
-	}
-
-	/**
-	 * Center region can't be enabled the split functionality.
-	 */
-	public void setSplittable(boolean splittable) {
-		throw new UnsupportedOperationException("readonly");
-	}
-
-	/**
-	 * Center region can't be closed.
-	 */
-	public void setOpen(boolean open) {
-		throw new UnsupportedOperationException("readonly");
-	}
-
-	/**
-	 * Center region can't be enabled the collapse functionality.
-	 */
-	public void setCollapsible(boolean collapsible) {
-		throw new UnsupportedOperationException("readonly");
-	}
-
-	/**
-	 * Center region can't be enabled the split functionality.
-	 */
-	public void setMaxsize(int maxsize) {
-		throw new UnsupportedOperationException("readonly");
-	}
-
-	/**
-	 * Center region can't be enabled the split functionality.
-	 */
-	public void setMinsize(int minsize) {
-		throw new UnsupportedOperationException("readonly");
+	public String getZclass() {
+		return _zclass == null ? "z-center" : _zclass;
 	}
 
 	/**

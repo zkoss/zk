@@ -19,7 +19,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 /**
- * This component is a north region.
+ * A north region of a border layout.
  * <p>Default {@link #getZclass}: z-north.(since 3.5.0)
  * 
  * @author jumperchen

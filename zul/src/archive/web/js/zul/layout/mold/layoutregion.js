@@ -20,16 +20,16 @@ function (out) {
 	out.push('<div id="', uuid,  '">', '<div id="', uuid, '-real"',
 			this.domAttrs_({id: 1}), '>');
 			
-	if (this.getTitle()) {
+	if (this._title) {
 		out.push('<div id="', uuid, '-cap" class="', zcls, '-header">');
 		if (noCenter) {
 			out.push('<div id="', uuid, '-btn" class="', pzcls,
 					'-icon ', zcls, '-colps"');
-			if (!this.isCollapsible())
+			if (!this._collapsible)
 				out.push(' style="display:none;"');
 			out.push('></div>');
 		}
-		out.push(zUtl.encodeXML(this.getTitle()), '</div>');
+		out.push(zUtl.encodeXML(this._title), '</div>');
 	}
 	out.push('<div id="', uuid, '-cave" class="', zcls, '-body">');
 	
@@ -40,11 +40,11 @@ function (out) {
 	
 	if (noCenter) {
 		out.push('<div id="', uuid, '-split" class="', zcls, '-splt"></div>');
-		if (this.getTitle()) {
+		if (this._title) {
 			out.push('<div id="', uuid, '-colled" class="', zcls,
 					'-colpsd" style="display:none"><div id="',
 					uuid, '-btned" class="', pzcls, '-icon ', zcls, '-exp"');
-			if (!this.isCollapsible())
+			if (!this._collapsible)
 				out.push(' style="display:none;"');
 				
 			out.push('></div></div>');

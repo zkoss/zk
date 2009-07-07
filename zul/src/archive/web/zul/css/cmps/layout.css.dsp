@@ -1,7 +1,7 @@
 <%@ page contentType="text/css;charset=UTF-8" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 <%-- Borderlayout --%>
-.z-border-layout {
+.z-borderlayout {
     width:100%;
     height:100%;
     overflow: hidden;
@@ -10,7 +10,7 @@
 	position: relative;
 	visibility: hidden;
 }
-.z-border-layout-icon {
+.z-borderlayout-icon {
 	overflow: hidden;
 	width: 16px;
 	height: 16px;

@@ -19,14 +19,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul.api;
 
 /**
- * This component is a center region.
- * <p>
- * <strong>Note:</strong> This component doesn't support the following method,
- * including {@link #setSplittable(boolean)}, {@link #setOpen(boolean)},
- * {@link #setCollapsible(boolean)}, {@link #setMaxsize(int)},
- * {@link #setMinsize(int)}, {@link org.zkoss.zul.Center#setHeight(String)},
- * {@link org.zkoss.zul.Center#setWidth(String)}, {@link #getSize()}, {@link #setSize(String)}, and
- * {@link org.zkoss.zul.Center#setVisible(boolean)}.
+ * A center region of a border layout.
  * 
  * <p>
  * Default {@link org.zkoss.zul.Center#getZclass}: z-center.(since 3.5.0)

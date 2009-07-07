@@ -19,7 +19,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 /**
- * This component is a south region.
+ * A south region of a border layout.
  * <p>Default {@link #getZclass}: z-south.(since 3.5.0)
  * 
  * @author jumperchen

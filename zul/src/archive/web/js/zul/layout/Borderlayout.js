@@ -19,15 +19,16 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 	//-- super --//
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
-		if (child.getPosition() == zul.layout.Borderlayout.NORTH)
+		var BL = zul.layout.Borderlayout;
+		if (child.getPosition() == BL.NORTH)
 			this.north = child;
-		else if (child.getPosition() == zul.layout.Borderlayout.SOUTH)
+		else if (child.getPosition() == BL.SOUTH)
 			this.south = child;
-		else if (child.getPosition() == zul.layout.Borderlayout.CENTER)
+		else if (child.getPosition() == BL.CENTER)
 			this.center = child;
-		else if (child.getPosition() == zul.layout.Borderlayout.WEST)
+		else if (child.getPosition() == BL.WEST)
 			this.west = child;
-		else if (child.getPosition() == zul.layout.Borderlayout.EAST)
+		else if (child.getPosition() == BL.EAST)
 			this.east = child;
 		this.resize();
 	},
@@ -46,7 +47,7 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 		this.resize();
 	},
 	getZclass: function () {
-		return this._zclass == null ? "z-border-layout" : this._zclass;
+		return this._zclass == null ? "z-borderlayout" : this._zclass;
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
@@ -59,8 +60,8 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 	// private
 	// returns the ambit of the specified cmp for region calculation. 
 	_getAmbit: function (wgt, ignoreSplit) {
-		var ambit, mars = this._getMargins(wgt), region = wgt.getPosition();
-		if (region && !wgt.isOpen()) {
+		var ambit, mars = wgt.getCurrentMargins_(), region = wgt.getPosition();
+		if (region && !wgt._open) {
 			var colled = wgt.getSubnode('colled');
 			ambit = {
 				x: mars.left,
@@ -87,19 +88,20 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 						0) : wgt.getSubnode('real').offsetHeight
 			};
 		}
-		var split = ignoreSplit ? {offsetHeight:0, offsetWidth:0} : wgt.getSubnode('split') || {offsetHeight:0, offsetWidth:0};
+		var split = ignoreSplit ? {offsetHeight:0, offsetWidth:0} : wgt.getSubnode('split') || {offsetHeight:0, offsetWidth:0},
+			BL = this.$class;
 		if (!ignoreSplit) wgt._fixSplit();
 		switch (region) {
-		case this.$class.NORTH:
-		case this.$class.SOUTH:
+		case BL.NORTH:
+		case BL.SOUTH:
 			ambit.h += split.offsetHeight;
 			ambit.ts = ambit.y + ambit.h + mars.bottom; // total size;
 			ambit.w = mars.left + mars.right;
 			if (region == 'south')
 				ambit.y = ambit.h + mars.bottom;
 			break;
-		case this.$class.WEST:
-		case this.$class.EAST:
+		case BL.WEST:
+		case BL.EAST:
 			ambit.h = mars.top + mars.bottom;
 			ambit.w += split.offsetWidth;
 			ambit.ts = ambit.x + ambit.w + mars.right; // total size;
@@ -108,9 +110,6 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 			break;
 		}
 		return ambit;
-	},
-	_getMargins: function (wgt) {
-		return this._arrayToObject(wgt.isOpen() ? wgt._margins : wgt._cmargins);
 	},
 	resize: function () {
 		if (this.desktop)
@@ -156,7 +155,7 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 			}
 		}
 		if (this.center && zk(this.center.getNode()).isVisible()) {
-			var mars = this._getMargins(this.center);
+			var mars = this.center.getCurrentMargins_();
 			center.x += mars.left;
 			center.y += mars.top;
 			center.w -= mars.left + mars.right;
@@ -166,11 +165,8 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 		zk(el).cleanVisibility();
 		this._isOnSize = false; // reset
 	},
-	_arrayToObject: function (array) {
-		return {top: array[0], left: array[1], right: array[2], bottom: array[3]};
-	},
 	_resizeWgt: function (wgt, ambit, ignoreSplit) {
-		if (wgt.isOpen()) {
+		if (wgt._open) {
 			if (!ignoreSplit && wgt.getSubnode('split')) {
 				wgt._fixSplit();
 				 ambit = this._resizeSplit(wgt, ambit);
@@ -198,28 +194,29 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 				w: split.offsetWidth, 
 				h: split.offsetHeight
 			},
-			s = split.style;
+			s = split.style,
+			BL = this.$class;
 		switch (wgt.getPosition()) {
-		case this.$class.NORTH:
+		case BL.NORTH:
 			ambit.h -= sAmbit.h;
 		  	s.left = ambit.x + "px";
 			s.top = (ambit.y + ambit.h) + "px";
 			s.width = (ambit.w < 0 ? 0 : ambit.w) + "px";
 			break;
-		case this.$class.SOUTH:
+		case BL.SOUTH:
 			ambit.h -= sAmbit.h;
 			ambit.y += sAmbit.h;
 			s.left = ambit.x + "px";
 			s.top = (ambit.y - sAmbit.h) + "px";
 			s.width = (ambit.w < 0 ? 0 : ambit.w) + "px";
 			break;
-		case this.$class.WEST:
+		case BL.WEST:
 			ambit.w -= sAmbit.w;
 			s.left = (ambit.x + ambit.w) + "px";
 			s.top = ambit.y + "px";
 			s.height = (ambit.h < 0 ? 0 : ambit.h) + "px";
 			break;
-		case this.$class.EAST:
+		case BL.EAST:
 			ambit.w -= sAmbit.w;
 			s.left = ambit.x + "px";
 			s.top = ambit.y + "px";

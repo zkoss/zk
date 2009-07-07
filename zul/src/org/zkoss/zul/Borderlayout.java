@@ -25,8 +25,9 @@ import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
 
 /**
- * A border layout lays out a container, arranging and resizing its components
- * to fit in five regions: north, south, east, west, and center. Each region may
+ * A border layout is a layout container for arranging and resizing
+ * child components to fit in five regions: north, south, east, west, and center.
+ * Each region may
  * contain no more than one component, and is identified by a corresponding
  * constant: <code>NORTH</code>, <code>SOUTH</code>, <code>EAST</code>,
  * <code>WEST</code>, and <code>CENTER</code>. When adding a component to
@@ -64,7 +65,7 @@ import org.zkoss.zk.ui.UiException;
  * 
  * </pre>
  * 
- * <p>Default {@link #getZclass}: z-border-layout. (since 3.5.0)
+ * <p>Default {@link #getZclass}: z-borderlayout. (since 3.5.0)
  * 
  * @author jumperchen
  * @since 5.0.0
@@ -217,7 +218,7 @@ public class Borderlayout extends HtmlBasedComponent implements org.zkoss.zul.ap
 	}
 
 	public String getZclass() {
-		return _zclass == null ? "z-border-layout" : _zclass;
+		return _zclass == null ? "z-borderlayout" : _zclass;
 	}
 	//Cloneable//
 	public Object clone() {

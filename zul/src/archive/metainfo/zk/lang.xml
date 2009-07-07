@@ -184,6 +184,17 @@ def alert(m):
 	</component>
 	-->
 
+	<component><!-- abstract component but for sharing molds -->
+		<component-name>layoutregion</component-name>
+		<component-class>org.zkoss.zul.LayoutRegion</component-class>
+		<widget-class>zul.layout.LayoutRegion</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/layoutregion.js</mold-uri>
+		</mold>
+		<preserve-blank/>
+	</component>
+
 	<component>
 		<component-name>applet</component-name>
 		<component-class>org.zkoss.zul.Applet</component-class>
@@ -326,14 +337,10 @@ def alert(m):
 		<preserve-blank/>
 	</component>
 	<component>
+		<extends>layoutregion</extends>
 		<component-name>center</component-name>
 		<component-class>org.zkoss.zul.Center</component-class>
 		<widget-class>zul.layout.Center</widget-class>
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>mold/layoutregion.js</mold-uri>
-		</mold>
-		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>chart</component-name>
@@ -429,14 +436,10 @@ def alert(m):
 		</mold>
 	</component>
 	<component>
+		<extends>layoutregion</extends>
 		<component-name>east</component-name>
 		<component-class>org.zkoss.zul.East</component-class>
 		<widget-class>zul.layout.East</widget-class>
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>mold/layoutregion.js</mold-uri>
-		</mold>
-		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>fileupload</component-name>
@@ -677,14 +680,10 @@ def alert(m):
 		</mold>
 	</component>
 	<component>
+		<extends>layoutregion</extends>
 		<component-name>north</component-name>
 		<component-class>org.zkoss.zul.North</component-class>
 		<widget-class>zul.layout.North</widget-class>
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>mold/layoutregion.js</mold-uri>
-		</mold>
-		<preserve-blank/>
 	</component>	
 	<component><!-- Feature 2493161 -->
 		<component-name>macro</component-name>
@@ -839,14 +838,10 @@ def alert(m):
 		</mold>
 	</component>
 	<component>
+		<extends>layoutregion</extends>
 		<component-name>south</component-name>
 		<component-class>org.zkoss.zul.South</component-class>
 		<widget-class>zul.layout.South</widget-class>
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>mold/layoutregion.js</mold-uri>
-		</mold>
-		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>space</component-name>
@@ -1100,14 +1095,10 @@ def alert(m):
 		</mold>
 	</component>
 	<component>
+		<extends>layoutregion</extends>
 		<component-name>west</component-name>
 		<component-class>org.zkoss.zul.West</component-class>
 		<widget-class>zul.layout.West</widget-class>
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>mold/layoutregion.js</mold-uri>
-		</mold>
-		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>window</component-name>
