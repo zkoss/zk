@@ -16,7 +16,14 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	_autocomplete: true,
 
 	$define: {
-		autocomplete: null
+		autocomplete: null,
+		repos: function () {
+			if (this.desktop) {
+				this._typeahead(this._bDel);
+				this._bDel = null;
+			}
+			this._repos = false;
+		}
 	},
 
 	//called by SimpleConstraint
@@ -134,7 +141,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	otherPressed_: function (evt) {
 		var wgt = this,
 			bDel = evt.keyCode;
-		bDel = bDel == zk.Event.BS || bDel == zk.Event.DEL;
+		this._bDel = bDel = bDel == zk.Event.BS || bDel == zk.Event.DEL;
 		setTimeout(function () {wgt._typeahead(bDel);}, 0);
 			//use timeout, since, when key down, value not ready yet
 	},

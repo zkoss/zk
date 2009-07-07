@@ -151,9 +151,10 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			jq(this.getSubnode('box')).addClass(this.getZclass() + "-over");
 		this.$supers('doMouseOver_', arguments);
 	},
-	doMouseOut_: function () {
+	doMouseOut_: function (evt) {
 		if (!this._disabled && this != zul.wgt.Button._curdn)
-			jq(this.getSubnode('box')).removeClass(this.getZclass() + "-over");
+			if (!zk.ie || !jq.isAncestor(this.getSubnode('box'), evt.domEvent.relatedTarget || evt.domEvent.toElement))
+				jq(this.getSubnode('box')).removeClass(this.getZclass() + "-over");
 		this.$supers('doMouseOut_', arguments);
 	},
 	doMouseDown_: function () {
