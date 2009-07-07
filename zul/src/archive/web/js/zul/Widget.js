@@ -125,7 +125,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 				var self = this;
 				setTimeout(function() {
 					popup.open(self, [evt.pageX, evt.pageY], null, {sendOnOpen:true});
-				}, 50);
+				}, 0);
 				evt.stop();
 			}
 		}
