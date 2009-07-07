@@ -396,11 +396,11 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				this._forceStyle(tabs, "h", jq(tabs).zk.revisedHeight(tbx.offsetHeight,true)+"px");
 			} else {
 				this._forceStyle(tbx,"h", allTab.length*35+"px");//give it default height
-				this._forceStyle(tabs, "h", jq(tabs).zk.revisedHeight(tabs,tbx.offsetHeight,true)+"px");
+				this._forceStyle(tabs, "h", jq(tabs).zk.revisedHeight(tbx.offsetHeight,true)+"px");
 			}
 			//coz we have to make the header full
 			if (tabbox._scrolling) {
-				this._forceStyle(head,"h", tabs.offsetHeight - btnsize + "px");
+				this._forceStyle(head,"h", (tabs.offsetHeight - btnsize) + "px");
 			} else {
 				this._forceStyle(head,"h", jq(head).zk.revisedHeight(tabs.offsetHeight,true) + "px");
 			}
@@ -415,7 +415,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 	},
 
 	_forceStyle: function(cmp,attr,value) {
-		if ( zk.parseInt(value) < 0 || value == null) return;
+		if ( zk.parseInt(value) < 0 || value==null) return;
 		switch(attr) {
 		case "h":
 			cmp.style.height = zk.ie6_ ? "0px" : ""; // recalculate for IE6
