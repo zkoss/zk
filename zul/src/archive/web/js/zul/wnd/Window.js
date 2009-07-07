@@ -18,6 +18,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	_border: 'none',
 	_minheight: 100,
 	_minwidth: 200,
+	_shadow: true,
 
 	$init: function () {
 		if (!zk.light) this._fellows = {};
@@ -83,7 +84,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this._syncShadow();
 		this._updateDomPos();
 
-		if (this.isRealVisible()) {
+		if (zk(this.getNode()).isRealVisible()) {
 			$n.cleanVisibility();
 			this.setTopmost();
 		}
@@ -110,7 +111,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		}
 
 		//Note: modal must be visible
-		var realVisible = this.isRealVisible();
+		var realVisible = $n.isRealVisible();
 		if (realVisible) {
 			$n.cleanVisibility();
 			this.setTopmost();
@@ -118,7 +119,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 
 		this._mask = new zk.eff.FullMask({
 			id: this.uuid + "-mask",
-			anchor: this._shadow.getBottomElement(),
+			anchor: this._shadowWgt ? this._shadowWgt.getBottomElement() : null,
 				//bug 1510218: we have to make it as a sibling
 			zIndex: this._zIndex,
 			stackup: (zk.useStackup === undefined ? zk.ie6_: zk.useStackup),
@@ -144,22 +145,22 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 	_syncShadow: function () {
 		if (this._mode == 'embedded') {
-			if (this._shadow) {
-				this._shadow.destroy();
-				this._shadow = null;
+			if (this._shadowWgt) {
+				this._shadowWgt.destroy();
+				this._shadowWgt = null;
 			}
 		} else {
-			if (!this._shadow)
-				this._shadow = new zk.eff.Shadow(this.getNode(),
+			if (!this._shadowWgt && this._shadow)
+				this._shadowWgt = new zk.eff.Shadow(this.getNode(),
 					{left: -4, right: 4, top: -2, bottom: 3, stackup: true});
-			this._shadow.sync();
+			this._shadowWgt.sync();
 		}
 	},
 	_syncMask: function () {
-		if (this._mask) this._mask.sync(this._shadow.getBottomElement());
+		if (this._mask && this._shadowWgt) this._mask.sync(this._shadowWgt.getBottomElement());
 	},
 	_hideShadow: function () {
-		var shadow = this._shadow;
+		var shadow = this._shadowWgt;
 		if (shadow) shadow.hide();
 	},
 	_makeFloat: function () {
@@ -185,7 +186,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		st.position = "absolute"; //just in case
 		var ol = st.left, ot = st.top;
 		zk(n).center(pos);
-		var sdw = this._shadow;
+		var sdw = this._shadowWgt;
 		if (pos && sdw) {
 			var opts = sdw.opts, l = n.offsetLeft, t = n.offsetTop; 
 			if (pos.indexOf("left") >= 0 && opts.left < 0)
@@ -262,7 +263,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			}
 	},
 	_fixWdh: zk.ie7 ? function () {
-		if (this._mode == 'embedded' || this._mode == 'popup' || !this.isRealVisible()) return;
+		if (this._mode == 'embedded' || this._mode == 'popup' || !zk(this.getNode()).isRealVisible()) return;
 		var n = this.getNode(),
 			cave = this.getSubnode('cave').parentNode,
 			wdh = n.style.width,
@@ -286,7 +287,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		}
 	} : zk.$void,
 	_fixHgh: function () {
-		if (!this.isRealVisible()) return;
+		if (!zk(this.getNode()).isRealVisible()) return;
 		var n = this.getNode(),
 			hgh = n.style.height,
 			cave = this.getSubnode('cave'),
@@ -424,9 +425,9 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		node.style.visibility = 'hidden'; //avoid unpleasant effect
 
 		//we don't check this._mode here since it might be already changed
-		if (this._shadow) {
-			this._shadow.destroy();
-			this._shadow = null;
+		if (this._shadowWgt) {
+			this._shadowWgt.destroy();
+			this._shadowWgt = null;
 		}
 		if (this._drag) {
 			this._drag.destroy();

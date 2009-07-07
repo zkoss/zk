@@ -694,7 +694,7 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	public void setShadow(boolean shadow) {
 		if (_shadow != shadow) {
 			_shadow = shadow;
-			smartUpdate("z.shadow", shadow);
+			smartUpdate("shadow", shadow);
 		}
 	}
 	/** Returns how to position the window at the client screen.
@@ -811,7 +811,8 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 		if (_minheight != 100) renderer.render("minheight", _minheight);
 		if (_minwidth != 200) renderer.render("minwidth", _minwidth);
 		if (!"none".equals(_border)) renderer.render("border", _border);
-
+		if (!isShadow())
+			renderer.render("shadow", false);
 		if (_mode != EMBEDDED) renderer.render("mode", modeToString(_mode));
 			//render mode as the last property
 	}
