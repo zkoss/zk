@@ -98,10 +98,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		-->
 	</session-config>
 
-	<!-- Turn on if you prefer to use the native (Servlet) thread
-	to process the events, instead of forking the event processing thread
+	<!-- Turn on if you want to use the event processing thread, instead
+	of the servlet thread, to process the events.
+	Notice: It is disabled by default since ZK 5.0
 	<system-config>
-		<disable-event-thread/>
+		<disable-event-thread>false</disable-event-thread>
 	</system-config>
 	-->
 	<!-- Turn on the following if you want to use ZK with a clustering server

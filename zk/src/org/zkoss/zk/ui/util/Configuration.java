@@ -133,7 +133,7 @@ public class Configuration {
 	/** A map of attributes. */
 	private final Map _attrs = new HashMap();
 	/** whether to use the event processing thread. */
-	private boolean _useEvtThd = true;
+	private boolean _useEvtThd; //disabled by default since ZK 5
 	/** keep-across-visits. */
 	private boolean _keepDesktop;
 	/** Whether to keep the session alive when receiving onTimer.
@@ -1543,7 +1543,7 @@ public class Configuration {
 	}
 	/** Sets whether to use the event processing thread.
 	 *
-	 * <p>Default: enabled.
+	 * <p>Default: disabled.
 	 *
 	 * @exception IllegalStateException if there is suspended thread
 	 * and use is false.

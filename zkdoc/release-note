@@ -13,6 +13,12 @@ ZK 5.0.0
 * Bugs
 
 * Upgrade Notes
+  + Event processing thread is disabled by default. It means doModal
+    will be degenerated to doHighlighted.
+    To turn it on, specify the following in zk.xml:
+   	<system-config>
+		<disable-event-thread>false</disable-event-thread>
+	</system-config>
   + LanguageDefinition: getCompleteURI, getDesktopURI and getPageURI
     are replaced by getPageRenderer.
   + Mold URIs are no longer stored in ComponentDefinition.
@@ -57,6 +63,7 @@ August, 2009
   2811973: Log the event thread that takes too long to execute
   2813737: Support new "dial" chart	
   2813778: Upgrade to jython 2.5
+  2817733: doModal degenerate to doHilighted if event thread disabled
 
 * Bugs
   2813877: Window resize outline miss

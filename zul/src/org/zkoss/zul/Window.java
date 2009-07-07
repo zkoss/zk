@@ -534,17 +534,12 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	public void doModal()
 	throws InterruptedException, SuspendNotAllowedException {
 		Desktop desktop = getDesktop();
-		if (desktop == null) {
-			handleFailedModal(_mode, isVisible());
+		if (desktop == null)
 			throw new SuspendNotAllowedException("Not attached, "+this);
-		}
-		if (!Components.isRealVisible(getParent())) {
-			handleFailedModal(_mode, isVisible());
-			throw new SuspendNotAllowedException("Parent not visible, "+this);
-		}
+
 		if (!desktop.getWebApp().getConfiguration().isEventThreadEnabled()) {
-			handleFailedModal(_mode, isVisible());
-			throw new SuspendNotAllowedException("Event processing thread is disabled");
+			doHighlighted();
+			return;
 		}
 
 		checkOverlappable(MODAL);
