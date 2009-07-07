@@ -48,13 +48,16 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<iframe id="iframe" src="http://www.google.com" width="500px" height="400px"
 		style="border: 1px solid gray" />
 	<separator bar="true" />
-	<button label="Upload your media">
+	<hbox>
+	<fileupload id = "fupload"/>
+	<button label="show data in iframe">
 		<attribute name="onClick">{
-		Object media = Fileupload.get();
+		Object media = fupload.getMedia().iterator().next();
 		if (media != null)
 			iframe.setContent(media);
 		}</attribute>
 	</button>
+	</hbox>
 </zk>
 			]]></attribute>
 						</textbox>
