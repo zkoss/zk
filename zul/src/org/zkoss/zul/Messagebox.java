@@ -56,7 +56,7 @@ public class Messagebox {
 	/** A symbol of a lowercase letter i in a circle.
 	 * <p>Since 3.5.0, they are actually style class names to display the icon.
 	 */
-	public static final String INFORMATION = "z-msgbox z-msgbox-imformation";
+	public static final String INFORMATION = "z-msgbox z-msgbox-information";
 	/** A symbol consisting of a white X in a circle with a red background.
 	 * <p>Since 3.5.0, they are actually style class names to display the icon.
 	 */
