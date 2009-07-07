@@ -322,21 +322,6 @@ zk.copy(Array.prototype, {
 		}
 		return false;
 	},
-	$add: function (o, overwrite) {
-		if (overwrite)
-			for (var tl = this.length, j = 0; j < tl; ++j)
-				if (o == this[j]) {
-					this[j] = o;
-					return false;
-				}
- 		this.push(o);
- 		return true;
-	},
-	$addAt: function (j, o) {
-		var l = this.length;
-		if (j >= l) this.push(o);
-		else this.splice(j, 0, o);
-	},
 	$remove: function (o) {
 		for (var j = 0, tl = this.length; j < tl; ++j) {
 			if (o == this[j]) {
@@ -348,9 +333,6 @@ zk.copy(Array.prototype, {
 	},
 	$clone: function() {
 		return [].concat(this);
-	},
-	$clear: function () {
-		this.length = 0;
 	}
 });
 if (!Array.prototype.indexOf)

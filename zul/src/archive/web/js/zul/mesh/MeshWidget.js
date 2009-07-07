@@ -358,7 +358,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (nsib)
 			for (var hds = this.heads, j = 0, len = hds.length; j < len; ++j)
 				if (hds[j] == nsib) {
-					this.heads.$addAt(j, child);
+					this.heads.splice(j, 0, child);
 					return; //done
 				}
 		this.heads.push(child);

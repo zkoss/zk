@@ -71,7 +71,7 @@ zWatch = {
 							break;
 						}
 						if (bindLevel >= wts[j].bindLevel) { //parent first
-							wts.$addAt(j + 1, o);
+							wts.splice(j + 1, 0, o);
 							break;
 						}
 					}

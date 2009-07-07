@@ -484,7 +484,7 @@ zk.Widget = zk.$extends(zk.Object, {
 						break;
 					}
 					if (bindLevel >= fs[j].widget.bindLevel) { //parent first
-						fs.$addAt(j + 1, inf);
+						fs.splice(j + 1, 0, inf);
 						break;
 					}
 				}
@@ -979,7 +979,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			else
 				for (var j = lsns.length;;)
 					if (--j < 0 || lsns[j].priority >= priority) {
-						lsns.$addAt(j + 1, inf);
+						lsns.splice(j + 1, 0, inf);
 						break;
 					}
 		}
