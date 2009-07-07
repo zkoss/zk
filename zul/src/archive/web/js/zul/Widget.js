@@ -120,7 +120,12 @@ zul.Widget = zk.$extends(zk.Widget, {
 			var popup = this._smartFellow(this._popup);
 			if (popup) {
 				evt._popuped = true;
-				popup.open(this, [evt.pageX, evt.pageY], null, {sendOnOpen:true});
+				
+				// to avoid a focus in IE, we have to pop up it later. for example, userguide/#t5
+				var self = this;
+				setTimeout(function() {
+					popup.open(self, [evt.pageX, evt.pageY], null, {sendOnOpen:true});
+				}, 50);
 				evt.stop();
 			}
 		}
