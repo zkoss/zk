@@ -534,8 +534,8 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 		Desktop desktop = getDesktop();
 		if (desktop == null) desktop = Executions.getCurrent().getDesktop();
 		if (!desktop.getWebApp().getConfiguration().isEventThreadEnabled()) {
-			handleFailedModal(_mode, isVisible());
-			throw new SuspendNotAllowedException("Event processing thread is disabled");
+			doHighlighted();
+			return;
 		}
 
 		checkOverlappable(MODAL);
