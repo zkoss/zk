@@ -273,7 +273,7 @@ public class DialModelScale implements Serializable {
 	
 	/**
 	 * returns the number of minor ticks between major tick.
-	 * @return
+	 * @return the number of minor ticks between major tick.
 	 */
 	public int getMinorTickCount() {
 		return _minorTickCount;
@@ -403,7 +403,7 @@ public class DialModelScale implements Serializable {
 	
 	/**
 	 * Sets the needle type of this scale ("pointer" or "pin")
-	 * @param the needle type of this scale ("pointer" or "pin")
+	 * @param type the needle type of this scale ("pointer" or "pin")
 	 */
 	public void setNeedleType(String type) {
 		if (_needleType != type) {
@@ -448,7 +448,7 @@ public class DialModelScale implements Serializable {
 	
 	/**
 	 * Sets the radius percentage(0 ~ 1) of the scale's needle; default to 0.9.
-	 * @return the radius percentage(0 ~ 1) of the scale's needle; default to 0.9.
+	 * @param radius the radius percentage(0 ~ 1) of the scale's needle; default to 0.9.
 	 */
 	public void setNeedleRadius(double radius) {
 		if (_needleRadius != radius) {

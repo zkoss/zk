@@ -105,25 +105,24 @@ public class DialModel extends AbstractChartModel {
 	}
 	
 	/**
-	 * Remove the DialModelScale of the specified index.
-	 * @param index
+	 * Remove the specified DialModelScale from this DialModel.
+	 * @param scale
 	 */
-	public void removeScale(DialModelScale entry) {
-		_series.remove(entry);
+	public void removeScale(DialModelScale scale) {
+		_series.remove(scale);
 		fireEvent(ChartDataEvent.REMOVED, null, null);
 	}
 	
 	/**
-	 * Get value of the specified index.
-	 * @param series the series
-	 * @param category the category.
+	 * Get value of the scale per the specified index.
+	 * @param index the scale index.
 	 */
 	public double getValue(int index) {
 		return getScale(index).getValue();
 	}
 
 	/**
-	 * add or update the value of a specified index.
+	 * add or update the value of a specified scale index.
 	 * @param index the index of the Scale
 	 * @param value the value
 	 */
@@ -283,7 +282,7 @@ public class DialModel extends AbstractChartModel {
 	
 	/**
 	 * Sets the radius percentage(0 ~ 1) of the meter's cap; default to 0.07.
-	 * @return the radius percentage(0 ~ 1) of the meter's cap.
+	 * @param radius the radius percentage(0 ~ 1) of the meter's cap.
 	 */
 	public void setCapRadius(double radius) {
 		_capRadius = radius;

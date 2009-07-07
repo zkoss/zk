@@ -94,7 +94,7 @@ public class DialModelRange implements Serializable {
 	
 	/**
 	 * Sets the inner radius percentage(0 ~ 1) of the dial range; default to 0.7.
-	 * @param the inner radius percentage(0 ~ 1) of the dial range; default to 0.7.
+	 * @param radius the inner radius percentage(0 ~ 1) of the dial range; default to 0.7.
 	 */
 	public void setInnerRadius(double radius) {
 		_innerRadius = radius;
@@ -110,7 +110,7 @@ public class DialModelRange implements Serializable {
 	
 	/**
 	 * Sets the outer radius percentage(0 ~ 1) of the dial range; default to 0.8.
-	 * @param the outer radius percentage(0 ~ 1) of the dial range; default to 0.8.
+	 * @param radius the outer radius percentage(0 ~ 1) of the dial range; default to 0.8.
 	 */
 	public void setOuterRadius(double radius) {
 		_outerRadius = radius;
