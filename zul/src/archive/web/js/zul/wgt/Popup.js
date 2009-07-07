@@ -125,13 +125,13 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		this.setFloating_(false);
 		this.$supers('unbind_', arguments);
 	},
-	onShow: zk.ie7 ? function (wgt) {
-		var node = wgt.getNode(),
+	onShow: zk.ie7 ? function () {
+		var node = this.getNode(),
 			wdh = node.style.width,
 			cn = jq(node).children('div'),
 			fir = cn[0],
 			last = cn[1],
-			n = wgt.getSubnode('cave').parentNode;
+			n = this.getSubnode('cave').parentNode;
 		
 		if (!wdh || wdh == "auto") { //Popup will disappear when width is null in IE 
 			var diff = zk(n.parentNode).padBorderWidth() + zk(n.parentNode.parentNode).padBorderWidth();

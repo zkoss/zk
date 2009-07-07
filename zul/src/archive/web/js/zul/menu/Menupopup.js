@@ -159,8 +159,8 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 			// just in case
 			if (zk.ie)
 				zk(this.getNode()).cleanVisibility();
-
-			anc.focus();
+			if(zk(anc).isRealVisible())
+				anc.focus();
 		}
 	},
 	onHide: function (wgt) {
