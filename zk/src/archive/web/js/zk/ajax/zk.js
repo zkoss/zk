@@ -138,6 +138,7 @@ zk = function (sel) {
 				this[nm] = v;
 				if (after) after.apply(this, arguments);
 			}
+			return this;
 		};
 	},
 

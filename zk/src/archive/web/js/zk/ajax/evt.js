@@ -80,15 +80,14 @@ zWatch = {
 			} else
 				wts = zWatch._wts[name] = [o];
 		}
+		return this;
 	},
 	unlisten: function (infs) {
-		var found = false;
 		for (name in infs) {
 			var wts = zWatch._wts[name];
-			if (wts && wts.$remove(infs[name]))
-				found = true;
+			wts && wts.$remove(infs[name]);
 		}
-		return found;
+		return this;
 	},
 	unlistenAll: function (name) {
 		delete zWatch._wts[name];

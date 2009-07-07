@@ -104,15 +104,14 @@ zk.Widget = zk.$extends(zk.Object, {
 	$s: _zkf = function () {
 		for (var w = this; w; w = w.parent)
 			if (w._fellows) return w;
-		return null;
 	},
 	getSpaceOwner: _zkf,
 	$f: _zkf = function (id, global) {
-		var ow = this.$s();
-		if (!ow) return null;
-
-		var f = ow._fellows[id];
-		return f || !global || zk.spaceless ? f: zk.Widget._global[id];
+		var f = this.$s();
+		if (f) {
+			f = f._fellows[id];
+			return f || !global || zk.spaceless ? f: zk.Widget._global[id];
+		}
 	},
 	getFellow: _zkf,
 	getId: function () {
@@ -137,6 +136,7 @@ zk.Widget = zk.$extends(zk.Object, {
 				$Widget._addIdSpace(this);
 			}
 		}
+		return this;
 	},
 
 	set: function (name, value, extra) {
@@ -154,13 +154,13 @@ zk.Widget = zk.$extends(zk.Object, {
 			zk.set(this, name, value, extra);
 		else
 			zk.set(this, name, value);
+		return this;
 	},
 	getChildAt: function (j) {
 		if (j >= 0)
 			for (var w = this.firstChild; w; w = w.nextSibling)
 				if (--j < 0)
 					return w;
-		return null;
 	},
 	getChildIndex: function () {
 		var w = this.parent, j = 0;
@@ -174,6 +174,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (children)
 			for (var j = 0, l = children.length; j < l;)
 				this.appendChild(children[j++]);
+		return this;
 	},
 	appendChild: function (child) {
 		if (child == this.lastChild)
@@ -370,6 +371,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			if (this.desktop) this._setVisible(visible);
 			if (p && !visible) p.onChildVisible_(this, false); //become invisible
 		}
+		return this;
 	},
 	_setVisible: function (visible) {
 		var parent = this.parent,
@@ -528,13 +530,16 @@ zk.Widget = zk.$extends(zk.Object, {
 	setScrollTop: function (val) {
 		var n = this.getNode();
 		if (n) n.scrollTop = val;
+		return this;
 	},
 	setScrollLeft: function (val) {
 		var n = this.getNode();
 		if (n) n.scrollLeft = val;
+		return this;
 	},
 	scrollIntoView: function () {
 		zk(this.getNode()).scrollIntoView();
+		return this;
 	},
 
 	redraw: function (out) {
@@ -662,12 +667,14 @@ zk.Widget = zk.$extends(zk.Object, {
 			zWatch.fireDown('beforeSize', null, this);
 			zWatch.fireDown('onSize', null, this);
 		}
+		return this;
 	},
 	insertHTML: function (n, where, desktop) {
 		jq(n, zk)[where](this._redrawHTML());
 		this.bind(desktop);
 		zWatch.fireDown('beforeSize', null, this);
 		zWatch.fireDown('onSize', null, this);
+		return this;
 	},
 	_redrawHTML: function (skipper) {
 		var out = [];
@@ -687,12 +694,13 @@ zk.Widget = zk.$extends(zk.Object, {
 
 						zWatch.fireDown('beforeSize', null, this);
 						zWatch.fireDown('onSize', null, this);
-						return; //done
+						return this; //done
 					}
 				}
 				this.replaceHTML(n);
 			}
 		}
+		return this;
 	},
 
 	replaceChildHTML_: function (child, n, desktop, skipper) {
@@ -797,12 +805,14 @@ zk.Widget = zk.$extends(zk.Object, {
 		this.bind_(desktop, skipper, after);
 		for (var j = 0, len = after.length; j < len;)
 			after[j++].call(this);
+		return this;
 	},
 	unbind: function (skipper) {
 		var after = [];
 		this.unbind_(skipper, after);
 		for (var j = 0, len = after.length; j < len;)
 			after[j++].call(this);
+		return this;
 	},
 
 	bind_: function (desktop, skipper, after) {
@@ -928,6 +938,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	smartUpdate: function (nm, val, timeout) {
 		zAu.send(new zk.Event(this, 'setAttr', [nm, val]),
 			timeout >= 0 ? timeout: -1);
+		return this;
 	},
 
 	//widget event//
@@ -983,9 +994,9 @@ zk.Widget = zk.$extends(zk.Object, {
 						break;
 					}
 		}
+		return this;
 	},
 	unlisten: function (infs) {
-		var found = false;
 		l_out:
 		for (var evt in infs) {
 			var inf = infs[evt],
@@ -997,12 +1008,11 @@ zk.Widget = zk.$extends(zk.Object, {
 				else inf = [inf||this, null];
 				if (lsn[0] == inf[0] && lsn[1] == inf[1]) {
 					lsns.splice(j, 1);
-					found = true;
 					continue l_out;
 				}
 			}
 		}
-		return found;
+		return this;
 	},
 	isListen: function (evt, opts) {
 		var v = this._asaps[evt];
@@ -1149,11 +1159,13 @@ zk.Widget = zk.$extends(zk.Object, {
 		var inf;
 		if (inf = zk.Widget._domevti(this, evtnm, fn))
 			jq(n, zk).bind(inf[0], inf[1]);
+		return this;
 	},
 	domUnlisten_: function (n, evtnm, fn) {
 		var inf;
 		if (inf = zk.Widget._domevti(this, evtnm, fn))
 			jq(n, zk).unbind(inf[0], inf[1]);
+		return this;
 	},
 	toJSON: function () {
 		return this.uuid;
