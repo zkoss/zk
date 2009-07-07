@@ -10,6 +10,7 @@ August, 2009
   2813877: Window resize outline miss
   2814504: Failed to update treeitem (paging) if its parent is cropped
   2817260: Configuration.getResendDelay not inited correctly if zkmax
+  2817728: Comet push doesn't stop if it is disabled in working thread
 
 	--------
 ZK 3.6.2

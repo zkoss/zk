@@ -79,12 +79,14 @@ zkCmsp._onRespReady = function () {
 				if (req && req.readyState == 4) {
 					zkCmsp._reqs[dtid] = null;
 
-					switch (req.getResponseHeader("ZK-Error")) {
-					case "404": //SC_NOT_FOUND: server restart
-					case "410": //SC_GONE: session timeout
+					var v;
+					if ((v=req.getResponseHeader("ZK-Error")) == "404"/*SC_NOT_FOUND: server restart*/
+					|| v == "410"/*SC_GONE: session timeout*/
+					|| req.getResponseHeader("ZK-Comet-Error") == "Disabled") {
 						zkCmsp.stop(dtid);
 						return;
 					}
+
 					if (req.status == 200) {
 						var sid = req.getResponseHeader("ZK-SID");
 						if (!sid || sid == zkCmsp._sid) {
