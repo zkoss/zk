@@ -31,11 +31,13 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 			if (n && this.rows)
 				this.rows.stripe();
 		}
+		return this;
 	},
 	rerender: function () {
 		this.$supers('rerender', arguments);
 		if (this.rows)
-			this.rows._syncStripe();		
+			this.rows._syncStripe();
+		return this;
 	},
 	//-- super --//
 	getZclass: function () {

@@ -60,26 +60,25 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 
 		if (zk.gecko2_)
 			jq(n).click(zul.wgt.Checkbox._domClick);
-		this.domListen_(n, "onFocus", "doFocus_");
-		this.domListen_(n, "onBlur", "doBlur_");
+		this.domListen_(n, "onFocus", "doFocus_")
+			.domListen_(n, "onBlur", "doBlur_");
 	},
 	unbind_: function () {
 		var n = this.getSubnode('real');
 		
 		if (zk.gecko2_)
 			jq(n).unbind("click", zul.wgt.Checkbox._domClick);
-		this.domUnlisten_(n, "onFocus", "doFocus_");
-		this.domUnlisten_(n, "onBlur", "doBlur_");
+		this.domUnlisten_(n, "onFocus", "doFocus_")
+			.domUnlisten_(n, "onBlur", "doBlur_");
 
 		this.$supers('unbind_', arguments);
 	},
 	doClick_: function (evt) {
 		var real = this.getSubnode('real'),
 			checked = real.checked;
-		if (checked != this._checked) { //changed
-			this.setChecked(checked); //so Radio has a chance to override it
-			this.fire('onCheck', checked);
-		}
+		if (checked != this._checked) //changed
+			this.setChecked(checked) //so Radio has a chance to override it
+				.fire('onCheck', checked);
 		return this.$supers('doClick_', arguments);
 	},
 	getTextNode_: function () {

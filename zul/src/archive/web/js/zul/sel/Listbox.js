@@ -51,6 +51,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			if (n && this.rows)
 				this.stripe();
 		}
+		return this;
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
@@ -82,10 +83,12 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			}
 		}
 		this._shallStripe = false;
+		return this;
 	},
 	rerender: function () {
 		this.$supers('rerender', arguments);
 		this._syncStripe();		
+		return this;
 	},
 	//-- super --//
 	getZclass: function () {

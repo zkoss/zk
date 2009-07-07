@@ -64,30 +64,30 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		if (!this.isTopmost()) {
 			var anc = this.getSubnode('a'),
 				n = this.getNode();
-			this.domListen_(anc, "onFocus", "doFocus_");
-			this.domListen_(anc, "onBlur", "doBlur_");
-			this.domListen_(n, "onMouseOver");
-			this.domListen_(n, "onMouseOut");
+			this.domListen_(anc, "onFocus", "doFocus_")
+				.domListen_(anc, "onBlur", "doBlur_")
+				.domListen_(n, "onMouseOver")
+				.domListen_(n, "onMouseOut");
 		} else {
 			if (zk.ie) this._fixBtn();
 
 			var anc = this.getSubnode('a');
-			this.domListen_(anc, "onMouseOver");
-			this.domListen_(anc, "onMouseOut");
+			this.domListen_(anc, "onMouseOver")
+				.domListen_(anc, "onMouseOut");
 		}
 	},
 	unbind_: function () {
 		if (!this.isTopmost()) {
 			var anc = this.getSubnode('a'),
 				n = this.getNode();
-			this.domUnlisten_(anc, "onFocus", "doFocus_");
-			this.domUnlisten_(anc, "onBlur", "doBlur_");
-			this.domUnlisten_(n, "onMouseOver");
-			this.domUnlisten_(n, "onMouseOut");
+			this.domUnlisten_(anc, "onFocus", "doFocus_")
+				.domUnlisten_(anc, "onBlur", "doBlur_")
+				.domUnlisten_(n, "onMouseOver")
+				.domUnlisten_(n, "onMouseOut");
 		} else {
 			var anc = this.getSubnode('a');
-			this.domUnlisten_(anc, "onMouseOver");
-			this.domUnlisten_(anc, "onMouseOut");
+			this.domUnlisten_(anc, "onMouseOver")
+				.domUnlisten_(anc, "onMouseOut");
 		}
 
 		this.$supers('unbind_', arguments);

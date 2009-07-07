@@ -50,25 +50,25 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			}
 		);
 		this._markCal();
-		this.domListen_(title, "onClick", '_changeView');
-		this.domListen_(mid, "onClick", '_choiceData');
-		this.domListen_(ly, "onClick", '_doclickArrow');
-		this.domListen_(ry, "onClick", '_doclickArrow');
-		this.domListen_(mid, "onMouseOver", '_doMouseEffect');
-		this.domListen_(mid, "onMouseOut", '_doMouseEffect');
+		this.domListen_(title, "onClick", '_changeView')
+			.domListen_(mid, "onClick", '_choiceData')
+			.domListen_(ly, "onClick", '_doclickArrow')
+			.domListen_(ry, "onClick", '_doclickArrow')
+			.domListen_(mid, "onMouseOver", '_doMouseEffect')
+			.domListen_(mid, "onMouseOut", '_doMouseEffect');
 	},
 	unbind_: function () {
 		var title = this.getSubnode("title"),
 			mid = this.getSubnode("mid"),
 			ly = this.getSubnode("ly"),
 			ry = this.getSubnode("ry");
-		this.domUnlisten_(title, "onClick", '_changeView');
-		this.domUnlisten_(mid, "onClick", '_choiceData');
-		this.domUnlisten_(ly, "onClick", '_doclickArrow');
-		this.domUnlisten_(ry, "onClick", '_doclickArrow');
-		this.domUnlisten_(mid, "onMouseOver", '_doMouseEffect');
-		this.domUnlisten_(mid, "onMouseOut", '_doMouseEffect');
-		this.$supers('unbind_', arguments);
+		this.domUnlisten_(title, "onClick", '_changeView')
+			.domUnlisten_(mid, "onClick", '_choiceData')
+			.domUnlisten_(ly, "onClick", '_doclickArrow')
+			.domUnlisten_(ry, "onClick", '_doclickArrow')
+			.domUnlisten_(mid, "onMouseOver", '_doMouseEffect')
+			.domUnlisten_(mid, "onMouseOut", '_doMouseEffect')
+			.$supers('unbind_', arguments);
 	},
 	_doclickArrow: function (evt) {
 		var node = evt.domTarget,

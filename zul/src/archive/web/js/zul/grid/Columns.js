@@ -36,12 +36,14 @@ zul.grid.Columns = zk.$extends(zul.mesh.HeadWidget, {
 			else 
 				this.$superts('rerender', arguments);
 		}
+		return this;
 	},
 	setPopup: function (mpop) {
 		if (zk.Widget.isInstance(mpop)) {
 			this._menupopup = mpop;
 			this._mpop = null;
 		}
+		return this;
 	},
 	getZclass: function () {
 		return this._zclass == null ? "z-columns" : this._zclass;
@@ -90,6 +92,7 @@ zul.grid.Columns = zk.$extends(zul.mesh.HeadWidget, {
 		this._shallSync = false;
 		if (this._mpop)
 			this._mpop.syncColMenu();
+		return this;
 	},
 	_onColVisi: function (evt) {
 		var item = evt.currentTarget,

@@ -24,9 +24,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 // Flash Player Version Detection - Rev 1.6
 // Detect Client Browser type
 // Copyright(c) 2005-2006 Adobe Macromedia Software, LLC. All rights reserved.
-var isIE  = (navigator.appVersion.indexOf("MSIE") != -1) ? true : false;
-var isWin = (navigator.appVersion.toLowerCase().indexOf("win") != -1) ? true : false;
-var isOpera = (navigator.userAgent.indexOf("Opera") != -1) ? true : false;
+(function () {
+var isWin = navigator.appVersion.toLowerCase().indexOf("win") != -1;
 
 function ControlVersion()
 {
@@ -135,7 +134,7 @@ function GetSwfVer(){
 	else if (navigator.userAgent.toLowerCase().indexOf("webtv/2.5") != -1) flashVer = 3;
 	// older WebTV supports Flash 2
 	else if (navigator.userAgent.toLowerCase().indexOf("webtv") != -1) flashVer = 2;
-	else if ( isIE && isWin && !isOpera ) {
+	else if ( zk.ie && isWin && !zk.opera ) {
 		flashVer = ControlVersion();
 	}	
 	return flashVer;
@@ -148,7 +147,7 @@ function DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision)
 	if (versionStr == -1 ) {
 		return false;
 	} else if (versionStr != 0) {
-		if(isIE && isWin && !isOpera) {
+		if(zk.ie && isWin && !zk.opera) {
 			// Given "WIN 2,0,0,11"
 			tempArray         = versionStr.split(" "); 	// ["WIN", "2,0,0,11"]
 			tempString        = tempArray[1];			// "2,0,0,11"
@@ -1349,46 +1348,46 @@ zul.utl.Fileupload = zk.$extends(zul.Widget, {
 	bind_: function () {//after compose
 		this.$supers('bind_', arguments); 
 		this.upload = new SWFUpload({
-				// Backend Settings
-				//the swfupload bug of firefox and flash with sessionid documented at 
-				//http://swfupload.org/forum/generaldiscussion/1008
-				upload_url: zAu.comURI("/upload")+";jsessionid="+this._jsessionid+"?uuid="+this.uuid+"&dtid="+this.desktop.id+"&maxsize=-1",
-				post_params: {},
+			// Backend Settings
+			//the swfupload bug of firefox and flash with sessionid documented at 
+			//http://swfupload.org/forum/generaldiscussion/1008
+			upload_url: zAu.comURI("/upload")+";jsessionid="+this._jsessionid+"?uuid="+this.uuid+"&dtid="+this.desktop.id+"&maxsize=-1",
+			post_params: {},
 
-				// File Upload Settings
-				file_size_limit : "102400",	// 100MB
-				file_types : "*.*",
-				file_types_description : "All Files",
-				file_upload_limit : "10",
-				file_queue_limit : "0",
+			// File Upload Settings
+			file_size_limit : "102400",	// 100MB
+			file_types : "*.*",
+			file_types_description : "All Files",
+			file_upload_limit : "10",
+			file_queue_limit : "0",
 
-				// Event Handler Settings (all my handlers are in the Handler.js file)
-				file_dialog_start_handler : zk.$void,
-				file_queued_handler : zk.$void,
-				file_queue_error_handler : zk.$void,
-				file_dialog_complete_handler : fileDialogComplete,
-				upload_start_handler : uploadStart,
-				upload_progress_handler : uploadProgress,
-				upload_error_handler : zk.$void,
-				upload_success_handler : uploadSuccess,
-				upload_complete_handler : uploadComplete,
+			// Event Handler Settings (all my handlers are in the Handler.js file)
+			file_dialog_start_handler : zk.$void,
+			file_queued_handler : zk.$void,
+			file_queue_error_handler : zk.$void,
+			file_dialog_complete_handler : fileDialogComplete,
+			upload_start_handler : uploadStart,
+			upload_progress_handler : uploadProgress,
+			upload_error_handler : zk.$void,
+			upload_success_handler : uploadSuccess,
+			upload_complete_handler : uploadComplete,
 
-				// Button Settings
-				button_image_url : zAu.comURI('web/zul/img/fileupload/swfuploadbtn.png'),
-				button_placeholder_id : this.uuid+"-file",
-				button_width: 61,
-				button_height: 22,
-				
-				// Flash Settings
-				flash_url : zAu.comURI('web/zul/img/fileupload/swfupload.swf'),
-				
-				custom_settings : {
-					progressTarget : this.uuid+"-fsuploadprogress"
-				},
-				
-				// Debug Settings
-				debug: false
-			});
+			// Button Settings
+			button_image_url : zAu.comURI('web/zul/img/fileupload/swfuploadbtn.png'),
+			button_placeholder_id : this.uuid+"-file",
+			button_width: 61,
+			button_height: 22,
+			
+			// Flash Settings
+			flash_url : zAu.comURI('web/zul/img/fileupload/swfupload.swf'),
+			
+			custom_settings : {
+				progressTarget : this.uuid+"-fsuploadprogress"
+			},
+			
+			// Debug Settings
+			debug: false
+		});
 	},
 	unbind_: function () {
 		this.$supers('unbind_', arguments);
@@ -1520,3 +1519,4 @@ zul.utl.Fileupload = zk.$extends(zul.Widget, {
 	}
 });
 }
+})();

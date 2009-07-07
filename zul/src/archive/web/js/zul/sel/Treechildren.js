@@ -27,6 +27,7 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 			for (var w = this.firstChild; w; w = w.nextSibling)
 				w.rerender();
 		}
+		return this;
 	},
 	isVisible: function () {
 		if (!this.$supers('isVisible', arguments))

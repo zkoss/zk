@@ -47,6 +47,7 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 				}
 			}
 		}
+		return this;
 	},
 	setSelected: _zkf,
 	isSelected: zul.wgt.Checkbox.prototype.isChecked,

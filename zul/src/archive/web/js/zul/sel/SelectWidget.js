@@ -364,19 +364,17 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	bind_: function () {
 		this.$supers('bind_', arguments);
 		var btn = this.getSubnode('a');
-		if (btn) {
-			this.domListen_(btn, 'onFocus', 'doFocus_');
-			this.domListen_(btn, 'onKeyDown');
-			this.domListen_(btn, 'onBlur', 'doBlur_');
-		}
+		if (btn)
+			this.domListen_(btn, 'onFocus', 'doFocus_')
+				.domListen_(btn, 'onKeyDown')
+				.domListen_(btn, 'onBlur', 'doBlur_');
 	},
 	unbind_: function () {
 		var btn = this.getSubnode('a');
-		if (btn) {
-			this.domUnlisten_(btn, 'onFocus', 'doFocus_');
-			this.domUnlisten_(btn, 'onKeyDown');
-			this.domUnlisten_(btn, 'onBlur', 'doBlur_');
-		}
+		if (btn)
+			this.domUnlisten_(btn, 'onFocus', 'doFocus_')
+				.domUnlisten_(btn, 'onKeyDown')
+				.domUnlisten_(btn, 'onBlur', 'doBlur_');
 		this.$supers('unbind_', arguments);
 	},
 	doBlur_: function (evt) {

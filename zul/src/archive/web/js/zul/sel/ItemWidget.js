@@ -107,19 +107,16 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
-		var box = this.getMeshWidget();
-		if (box.isCheckmark() && this.isCheckable()) {
-			var cm = this.getSubnode('cm');
-			this.domListen_(cm, 'onFocus');
-			this.domListen_(cm, 'onBlur', '_doFocusOut');
-		}
+		var cm = this.getSubnode('cm');
+		if (cm)
+			this.domListen_(cm, 'onFocus')
+				.domListen_(cm, 'onBlur', '_doFocusOut');
 	},
 	unbind_: function () {
 		var cm = this.getSubnode('cm');
-		if (cm) {
-			this.domUnlisten_(cm, 'onFocus');
-			this.domUnlisten_(cm, 'onBlur', '_doFocusOut');
-		}
+		if (cm)
+			this.domUnlisten_(cm, 'onFocus')
+				.domUnlisten_(cm, 'onBlur', '_doFocusOut');
 		this.$supers('unbind_', arguments);
 	},
 	_doFocusIn: function () {

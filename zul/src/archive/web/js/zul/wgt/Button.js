@@ -83,15 +83,15 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			if (zk.ie) zWatch.listen({onSize: this, onShow: this});
 		}
 
-		this.domListen_(n, "onFocus", "doFocus_");
-		this.domListen_(n, "onBlur", "doBlur_");
+		this.domListen_(n, "onFocus", "doFocus_")
+			.domListen_(n, "onBlur", "doBlur_");
 	},
 	unbind_: function () {
 		var trendy = this._mold == 'trendy',
 			n = !trendy ? this.getNode(): this.getSubnode('btn');
 		if (n) {
-			this.domUnlisten_(n, "onFocus", "doFocus_");
-			this.domUnlisten_(n, "onBlur", "doBlur_");
+			this.domUnlisten_(n, "onFocus", "doFocus_")
+				.domUnlisten_(n, "onBlur", "doBlur_");
 		}
 		if (zk.ie && trendy)
 			zWatch.unlisten({onSize: this, onShow: this});

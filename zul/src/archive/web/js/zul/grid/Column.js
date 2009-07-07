@@ -138,16 +138,16 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 	bind_: function () {
 		this.$supers('bind_', arguments);
 		var n = this.getNode();
-		this.domListen_(n, "onMouseOver");
-		this.domListen_(n, "onMouseOut");
+		this.domListen_(n, "onMouseOver")
+			.domListen_(n, "onMouseOut");
 		var btn = this.getSubnode('btn');
 		if (btn)
 			this.domListen_(btn, "onClick");
 	},
 	unbind_: function () {
 		var n = this.getNode();
-		this.domUnlisten_(n, "onMouseOver");
-		this.domUnlisten_(n, "onMouseOut");
+		this.domUnlisten_(n, "onMouseOver")
+			.domUnlisten_(n, "onMouseOut");
 		var btn = this.getSubnode('btn');
 		if (btn)
 			this.domUnlisten_(btn, "onClick");

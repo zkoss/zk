@@ -445,12 +445,11 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		var btn = this.btn = this.getSubnode("btn");
 		
 		zWatch.listen({onSize: this, onShow: this});			
-		if(btn){
-			this.domListen_(btn, "onmousedown", "_btnDown");
-			this.domListen_(btn, "onmouseup", "_btnUp");
-			this.domListen_(btn, "onmouseout", "_btnOut");
-			this.domListen_(btn, "mouseover", "_btnOver");
-		}
+		if(btn)
+			this.domListen_(btn, "onmousedown", "_btnDown")
+				.domListen_(btn, "onmouseup", "_btnUp")
+				.domListen_(btn, "onmouseout", "_btnOut")
+				.domListen_(btn, "mouseover", "_btnOver");
 		if(inp.value)
 			this._setTime(inp.value);
 		else
@@ -465,12 +464,11 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		}
 		zWatch.unlisten({onSize: this, onShow: this});
 		var btn = this._btn;
-		if(btn){
-			this.domUnlisten_(btn, "onmousedown", "_btnDown");
-			this.domUnlisten_(btn, "onmouseup", "_btnUp");
-			this.domUnlisten_(btn, "onmouseout", "_btnOut");
-			this.domUnlisten_(btn, "mouseover", "_btnOver");
-		}
+		if(btn)
+			this.domUnlisten_(btn, "onmousedown", "_btnDown")
+				.domUnlisten_(btn, "onmouseup", "_btnUp")
+				.domUnlisten_(btn, "onmouseout", "_btnOut")
+				.domUnlisten_(btn, "mouseover", "_btnOver");
 		//zkTxbox.cleanup(cmp);
 		this.$supers('unbind_', arguments);
 	}

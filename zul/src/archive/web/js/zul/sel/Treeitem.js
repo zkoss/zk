@@ -40,6 +40,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 			if (this.treechildren)
 				this.treechildren.rerender();
 		}
+		return this;
 	},
 	_showKids: function (open) {
 		if (this.treechildren) {
@@ -113,6 +114,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 	},
 	setImage: function (image) {
 		this._autoFirstCell().setImage(image);
+		return this;
 	},
 	getParentItem: function () {
 		var p = this.parent && this.parent.parent ? this.parent.parent : null;
@@ -123,6 +125,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 			this.$supers('setVisible', arguments);
 			if (this.treerow) this.treerow.setVisible(visible);
 		}
+		return this;
 	},
 	
 	beforeParentChanged_: function(newParent) {

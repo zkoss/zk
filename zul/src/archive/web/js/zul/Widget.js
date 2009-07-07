@@ -22,6 +22,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 		if (zk.Widget.isInstance(context))
 			context = 'uuid(' + context.uuid + ')';
 		this._context = context;
+		return this;
 	},
 	getPopup: function () {
 		return this._popup;
@@ -30,6 +31,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 		if (zk.Widget.isInstance(popup))
 			popup = 'uuid(' + popup.uuid + ')';
 		this._popup = popup;
+		return this;
 	},
 	getTooltip: function () {
 		return this._tooltip;
@@ -38,6 +40,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 		if (zk.Widget.isInstance(tooltip))
 			tooltip = 'uuid(' + tooltip.uuid + ')';
 		this._tooltip = tooltip;
+		return this;
 	},
 	getCtrlKeys: function () {
 		return this._ctrlKeys;
@@ -112,6 +115,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 
 		this._parsedCtlKeys = parsed;
 		this._ctrlKeys = keys;
+		return this;
 	},
 
 	//super//
