@@ -31,6 +31,10 @@ public class East extends LayoutRegion implements org.zkoss.zkex.zul.api.East {
 		setCmargins("0,5,5,0");
 	}
 
+	public String getZclass() {
+		return _zclass == null ? "z-east" : _zclass;
+	}
+
 	/**
 	 * Returns {@link Borderlayout#EAST}.
 	 */

@@ -37,6 +37,10 @@ public class Center extends LayoutRegion implements org.zkoss.zkex.zul.api.Cente
 	public Center() {
 	}
 
+	public String getZclass() {
+		return _zclass == null ? "z-center" : _zclass;
+	}
+
 	/**
 	 * Center region can't be enabled the collapsed margin functionality.
 	 * @since 3.5.0
