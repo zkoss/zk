@@ -31,10 +31,6 @@ public class West extends LayoutRegion implements org.zkoss.zkex.zul.api.West {
 		setCmargins("0,5,5,0");
 	}
 
-	public String getZclass() {
-		return _zclass == null ? "z-west" : _zclass;
-	}
-
 	/**
 	 * Returns {@link Borderlayout#WEST}.
 	 */

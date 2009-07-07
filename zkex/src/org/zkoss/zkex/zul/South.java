@@ -29,10 +29,6 @@ public class South extends LayoutRegion implements org.zkoss.zkex.zul.api.South 
 	public South() {
 	}
 
-	public String getZclass() {
-		return _zclass == null ? "z-south" : _zclass;
-	}
-
 	/**
 	 * Returns {@link Borderlayout#SOUTH}.
 	 */

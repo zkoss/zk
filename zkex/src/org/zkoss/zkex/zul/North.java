@@ -29,10 +29,6 @@ public class North extends LayoutRegion implements org.zkoss.zkex.zul.api.North 
 	public North() {
 	}
 
-	public String getZclass() {
-		return _zclass == null ? "z-north" : _zclass;
-	}
-
 	/**
 	 * Returns {@link Borderlayout#NORTH}.
 	 */
