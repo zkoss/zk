@@ -80,21 +80,35 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			zk(this.getSubnode('box')).disableSelection();
 
 			n = this.getSubnode('btn');
+			if (zk.ie) zWatch.listen({onSize: this, onShow: this});
 		}
 
 		this.domListen_(n, "onFocus", "doFocus_");
 		this.domListen_(n, "onBlur", "doBlur_");
 	},
 	unbind_: function () {
-		var n = this._mold != 'trendy' ? this.getNode(): this.getSubnode('btn');
+		var trendy = this._mold == 'trendy',
+			n = !trendy ? this.getNode(): this.getSubnode('btn');
 		if (n) {
 			this.domUnlisten_(n, "onFocus", "doFocus_");
 			this.domUnlisten_(n, "onBlur", "doBlur_");
 		}
+		if (zk.ie && trendy)
+			zWatch.unlisten({onSize: this, onShow: this});
 
 		this.$supers('unbind_', arguments);
 	},
-
+	onSize: _zkf = zk.ie ? function () {
+		var box = this.getSubnode('box');
+		if (box.style.height && box.offsetHeight) {
+			var cellHgh = zk.parseInt(jq(box.rows[0].cells[0]).css('height'));
+			if (cellHgh != box.rows[0].cells[0].offsetHeight) {
+				box.rows[1].style.height = Math.max(box.offsetHeight -
+				cellHgh - zk.parseInt(jq(box.rows[2].cells[0]).css('height')), 0) + 'px';
+			}
+		}
+	} : zk.$void,
+	onShow: _zkf,
 	doFocus_: function (evt) {
 		if (this._mold == 'trendy')
 			jq(this.getSubnode('box')).addClass(this.getZclass() + "-focus");

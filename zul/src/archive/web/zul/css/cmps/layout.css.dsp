@@ -108,6 +108,7 @@
 	overflow: hidden;
 	line-height: 15px;
 	zoom: 1;
+	cursor: default;
 }
 .z-north-exp,
 .z-south-exp {

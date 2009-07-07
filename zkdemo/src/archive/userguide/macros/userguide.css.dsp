@@ -108,6 +108,7 @@ ul ul ul li	{list-style: url(${c:encodeURL('/img/z-bullet3.gif')}) square}
 .demo-category {
 	margin-top: 10px; float:left; height: 80px; width: 90px;
 	text-align:center;
+	cursor: pointer;
 }
 .demo-category-img {
 	width: 48px;

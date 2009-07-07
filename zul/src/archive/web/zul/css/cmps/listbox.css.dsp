@@ -60,6 +60,7 @@ div.z-listcell-cnt {
 }
 div.z-listfooter-cnt, div.z-listheader-cnt {
 	overflow: hidden;
+	cursor: default;
 }
 .z-word-wrap div.z-listcell-cnt, .z-word-wrap div.z-listfooter-cnt,
 	.z-word-wrap div.z-listheader-cnt {

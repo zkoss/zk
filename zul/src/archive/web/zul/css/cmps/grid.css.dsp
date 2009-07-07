@@ -72,6 +72,7 @@ div.z-row-cnt {
 }
 div.z-footer-cnt, div.z-column-cnt{
 	overflow: hidden;
+	cursor: default;
 }
 .z-word-wrap div.z-row-cnt,
 .z-word-wrap div.z-group-cnt,

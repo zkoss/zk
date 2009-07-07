@@ -134,6 +134,7 @@
 	overflow: hidden; zoom: 1; color: #222222; padding-bottom: 4px;
 	font-family: ${fontFamilyC};
 	font-size: ${fontSizeM}; font-weight: normal;
+	cursor: default;
 }
 .z-window-modal-header, .z-window-popup-header, .z-window-highlighted-header,
 	.z-window-overlapped-header {

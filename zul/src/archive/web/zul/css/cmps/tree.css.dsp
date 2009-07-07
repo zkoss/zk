@@ -76,6 +76,7 @@ div.z-treecell-cnt {
 }
 div.z-treefooter-cnt, div.z-treecol-cnt{
 	overflow: hidden;
+	cursor: default;
 }
 .z-word-wrap div.z-treecell-cnt, .z-word-wrap div.z-treefooter-cnt,
 	.z-word-wrap div.z-treecol-cnt {
