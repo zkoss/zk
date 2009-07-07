@@ -45,8 +45,8 @@ jq.fn.init.prototype = jq.fn;
 zjq.prototype = { //ZK extension
 	widget: function () {
 		var ws = [];
-		for (var j = this.length; --j >= 0;) {
-			var w = zk.Widget.$(this[j]);
+		for (var j = this.jq.length; j--;) {
+			var w = zk.Widget.$(this.jq[j]);
 			if (w) ws.unshift(w);
 		}
 		return ws;
@@ -962,6 +962,24 @@ zk.copy(zjq, { //private
 		'text-indent', 'text-shadow', 'text-transform', 'text-overflow',
 		'direction', 'word-spacing', 'white-space'],
 	_TEXT_STYLES2: ["color", "background-color", "background"]
+});
+
+zk.copy(jq.prototype, { //ZK extension to jQuery
+	sync: function () {
+		var wgt = this.zk.widget()[0];
+		if (wgt) {
+			var elem = this[0];
+			jq.timers.push(
+			function () {
+				for (var i = jq.timers.length; i--;)
+					if (jq.timers[i].elem === elem)
+						return true;
+				
+				zWatch.fireDown('onSize', null, wgt);
+				return false;
+			});
+		}
+	}
 });
 
 zk.copy(jq.Event.prototype, { //ZK extension to jQuery.Event
