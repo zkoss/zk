@@ -116,7 +116,6 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		if (topmost && zk.ie && !jq.isAncestor(this.getSubnode('a'), evt.domTarget))
 				return; // don't activate
 
-		this.$class._addActive(this);
 		if (!topmost) {
 			if (this.menupopup) this.menupopup._shallClose = false;
 			zWatch.fire('onFloatUp', null, this); //notify all
@@ -139,6 +138,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 				}
 			}
 		}
+		this.$class._addActive(this);
 	},
 	_doMouseOut: function (evt) { //not zk.Widget.doMouseOut_
 		if (jq.isAncestor(this.getSubnode('a'), evt.domEvent.relatedTarget || evt.domEvent.toElement))
@@ -146,14 +146,12 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	
 		var	topmost = this.isTopmost();
 		if (topmost) {
+			this.$class._rmActive(this);
 			if (this.menupopup && this.getMenubar().isAutodrop()) {
-				this.$class._rmActive(this);
 				if (this.menupopup.isOpen()) this.menupopup._shallClose = true;
 				zWatch.fire('onFloatUp', {
 					timeout: 10
 				}, this); //notify all
-			} else {
-				this.$class._rmActive(this);
 			}
 		} else if (this.menupopup && !this.menupopup.isOpen())
 			this.$class._rmActive(this);

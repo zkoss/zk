@@ -114,6 +114,8 @@ userguide.Category = zk.$extends(zul.wgt.Button, {
 		jq(this.getNode()).addClass("demo-over");
 	},
 	doMouseOut_: function (evt) {
+		if (jq.isAncestor(this.getNode(), evt.domEvent.relatedTarget || evt.domEvent.toElement))
+			return; //nothing to do
 		jq(this.getNode()).removeClass("demo-over");
 	},
 	doClick_: function (evt){
