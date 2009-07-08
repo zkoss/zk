@@ -808,6 +808,7 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/progressmeter.js</mold-uri>
+			<css-uri>css/progressmeter.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>

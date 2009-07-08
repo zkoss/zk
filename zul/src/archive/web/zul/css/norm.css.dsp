@@ -125,7 +125,7 @@ div.z-log button {
 }
 .z-upload-icon {
 	overflow: hidden;
-	background-image: url(${c:encodeURL('~./zk/img/prgmeter.png')});
+	background-image: url(${c:encodeURL('~./zul/img/misc/prgmeter.png')});
 }
 .z-modal-mask {
 	width: 100%;
@@ -213,6 +213,7 @@ div.z-log button {
 	z-index: 16800;
 	background-image: url(${c:encodeURL('~./img/spacer.gif')});
 }
+
 <%-- Fix float issue for CSS --%>
 .z-clear {
 	clear: both;
@@ -222,6 +223,7 @@ div.z-log button {
 	font-size: 0;
 	overflow: hidden;
 }
+
 <%-- Shadow --%>
 .z-shadow {
 	position: absolute;
@@ -338,47 +340,7 @@ div.z-drop-cnt {
 	font-weight: normal;
 	font-family: ${fontFamilyC};
 }
-<%-- ZK Massagebox --%>
-.z-msgbox{
-	display: -moz-inline-box;
-	display: inline-block;
-	background-repeat: no-repeat;
-	vertical-align: top;
-	cursor: pointer;
-	border: 0;
-	width: 32px;
-	height: 32px;
-}
-.z-msgbox-question {
-	background-image: url(${c:encodeURL('~./zul/img/msgbox/question-btn.png')});
-}
-.z-msgbox-exclamation {
-	background-image: url(${c:encodeURL('~./zul/img/msgbox/warning-btn.png')});
-}
-.z-msgbox-imformation {
-	background-image: url(${c:encodeURL('~./zul/img/msgbox/info-btn.png')});
-}
-.z-msgbox-error {
-	background-image: url(${c:encodeURL('~./zul/img/msgbox/stop-btn.png')});
-}
 
-<%-- Progressmeter --%>
-div.z-progressmeter {
-	background: #E0E8F3 repeat-x scroll 0 0 ;
-	background-image: url(${c:encodeURL('~./zk/img/prgmeter_bg.png')});
-	border:1px solid #6F9CDB;
-	text-align: left;
-	height: 17px;
-}
-span.z-progressmeter-img {
-	display: -moz-inline-box;
-	display: inline-block;
-	background: #A4C6F2 repeat-x scroll left center;
-	background-image: url(${c:encodeURL('~./zk/img/prgmeter.png')});
-	height: 17px;
-	line-height: 0;
-	font-size: 0;
-}
 <%-- Auxheader --%>
 .z-auxheader-cnt {
 	font-size: ${fontSizeM}; font-weight: normal;
@@ -422,30 +384,11 @@ span.z-drop-allow,
 span.z-drop-disallow {
 	background-image: url(${c:encodeURL('~./zul/img/misc/drag.gif')});
 }
-.z-msgbox-question {
-	background-image: url(${c:encodeURL('~./zul/img/msgbox/question-btn.gif')});
-}
-.z-msgbox-exclamation {
-	background-image: url(${c:encodeURL('~./zul/img/msgbox/warning-btn.gif')});
-}
-.z-msgbox-imformation {
-	background-image: url(${c:encodeURL('~./zul/img/msgbox/info-btn.gif')});
-}
-.z-msgbox-error {
-	background-image: url(${c:encodeURL('~./zul/img/msgbox/stop-btn.gif')});
-}
 </c:if>
 </c:if>
 
 <%-- Gecko --%>
 <c:if test="${c:isGecko()}">
-.z-word-wrap div.z-treecell-cnt, .z-word-wrap div.z-treefooter-cnt, 
-.z-word-wrap div.z-treecol-cnt,
-.z-word-wrap div.z-listcell-cnt, .z-word-wrap div.z-listfooter-cnt,
-.z-word-wrap div.z-listheader-cnt {
-	overflow: hidden;
-	-moz-binding: url(${c:encodeURL('~./zk/wordwrap.xml#wordwrap')});
-}
 span.z-word-wrap {<%-- label use only --%>
 	display: block;
 }

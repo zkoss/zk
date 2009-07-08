@@ -337,6 +337,31 @@
 	min-width: 45pt;
 	width: 100%;
 }
+
+.z-msgbox {
+	display: -moz-inline-box;
+	display: inline-block;
+	background-repeat: no-repeat;
+	vertical-align: top;
+	cursor: pointer;
+	border: 0;
+	width: 32px;
+	height: 32px;
+}
+.z-msgbox-question {
+	background-image: url(${c:encodeURL('~./zul/img/msgbox/question-btn.png')});
+}
+.z-msgbox-exclamation {
+	background-image: url(${c:encodeURL('~./zul/img/msgbox/warning-btn.png')});
+}
+.z-msgbox-imformation {
+	background-image: url(${c:encodeURL('~./zul/img/msgbox/info-btn.png')});
+}
+.z-msgbox-error {
+	background-image: url(${c:encodeURL('~./zul/img/msgbox/stop-btn.png')});
+}
+
+<!-- IE -->
 <c:if test="${c:isExplorer()}">
 .z-messagebox-btn {
 	width: 47pt;
@@ -424,5 +449,18 @@
 .z-window-highlighted-cr,
 .z-window-overlapped-cr {
 	background-image: url(${c:encodeURL('~./zul/img/wnd/wnd-ol-clr.gif')});
+}
+
+.z-msgbox-question {
+	background-image: url(${c:encodeURL('~./zul/img/msgbox/question-btn.gif')});
+}
+.z-msgbox-exclamation {
+	background-image: url(${c:encodeURL('~./zul/img/msgbox/warning-btn.gif')});
+}
+.z-msgbox-imformation {
+	background-image: url(${c:encodeURL('~./zul/img/msgbox/info-btn.gif')});
+}
+.z-msgbox-error {
+	background-image: url(${c:encodeURL('~./zul/img/msgbox/stop-btn.gif')});
 }
 </c:if>
