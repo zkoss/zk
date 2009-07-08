@@ -30,6 +30,7 @@
 	position: absolute;
 	overflow: hidden;
 	background-color: white;
+	width: 100%;
 }
 .z-west-noborder,
 .z-center-noborder,
