@@ -407,10 +407,6 @@ span.z-progressmeter-img {
 .z-word-wrap .z-auxheader-cnt {
 	word-wrap: break-word;
 }
-<%-- Combobox, Bandbox, Timebox, Datebox, and Spinner --%>
-<c:include page="~./zul/css/cmps/combo.css.dsp"/>
-<%-- Calendar and Datebox --%>
-<c:include page="~./zul/css/cmps/calendar.css.dsp"/>
 <%-- Grid --%>
 <c:include page="~./zul/css/cmps/grid.css.dsp"/>
 <%-- Listbox --%>
@@ -508,14 +504,6 @@ span.z-vfiletree-last-open, span.z-vfiletree-last-close, span.z-vfiletree-tee, s
 	height: 18px;
 }
 
-<%-- combo.css.dsp --%>
-.z-combobox-pp .z-comboitem-inner {<%--description--%>
-	padding-left: 5px;
-}
-.z-calendar-calyear td, .z-datebox-calyear td {
-	color: black; <%-- 1735084 --%>
-}
-
 <%-- IE 6 GIF  --%>
 <c:if test="${c:browser('ie6-')}">
 span.z-drop-allow,
@@ -581,11 +569,8 @@ span.z-vfiletree-tee, span.z-vfiletree-last {
 </c:if>
 </c:if>
 
-<%-- combo.css.dsp --%>
-span.z-combobox-btn, span.z-datebox-btn, span.z-bandbox-btn, span.z-timebox-btn,
-span.z-spinner-btn {<%-- button at the right edge --%>
-	margin: 0; padding: 0;
-}
+<%-- Gecko --%>
+<c:if test="${c:isGecko()}">
 <%-- tree.css.dsp, grid.css.dsp, and listbox.css.dsp --%>
 .z-word-wrap div.z-treecell-cnt, .z-word-wrap div.z-treefooter-cnt, 
 .z-word-wrap div.z-treecol-cnt,
