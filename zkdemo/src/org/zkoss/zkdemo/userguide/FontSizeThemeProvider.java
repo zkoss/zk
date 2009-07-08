@@ -34,7 +34,8 @@ import org.zkoss.zk.ui.util.ThemeProvider;
  */
 public class FontSizeThemeProvider implements ThemeProvider{
 
-	private static String _cssPrefix = "~./zul/css/norm";
+	private static String _cssPrefix = "~./zul/css/zk.wcs";
+	private static String _cssSrcPrefix = "/css/zk";
 	private static String _fsCookieName = "zkdemotfs";
 	private static String _skinCookieName = "zkdemoskin";
 	
@@ -42,9 +43,13 @@ public class FontSizeThemeProvider implements ThemeProvider{
 		int size = uris.size();
 		for(int i=0;i<size;i++){
 			String uri = (String)uris.get(i);
+			System.out.println(uri);
 			if(uri.startsWith(_cssPrefix)){
-				uri = _cssPrefix+getFontSizeCookie(exe)+uri.substring(_cssPrefix.length());
-				uris.set(i,uri);
+				String fsc = getFontSizeCookie(exe);
+				if (!"".equals(fsc)) {
+					uri = _cssSrcPrefix+getFontSizeCookie(exe)+ ".css.dsp";
+					uris.set(i,uri);
+				}
 			}
 		}
 		if ("silvergray".equals(getSkinCookie(exe))) {
