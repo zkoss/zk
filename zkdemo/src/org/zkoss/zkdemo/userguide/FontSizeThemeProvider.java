@@ -43,7 +43,6 @@ public class FontSizeThemeProvider implements ThemeProvider{
 		int size = uris.size();
 		for(int i=0;i<size;i++){
 			String uri = (String)uris.get(i);
-			System.out.println(uri);
 			if(uri.startsWith(_cssPrefix)){
 				String fsc = getFontSizeCookie(exe);
 				if (!"".equals(fsc)) {
