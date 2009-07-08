@@ -19,7 +19,7 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 
 	$define: {
 		sortDirection: function (v) {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) {
 				var zcls = this.getZclass(),
 					$n = jq(n);
@@ -39,7 +39,7 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 		},
 		sortAscending: function (v) {
 			if (!v) this._sortAscending = v = "none";
-			var n = this.getNode(),
+			var n = this.$n(),
 				zcls = this.getZclass();
 			if (n) {
 				var $n = jq(n);
@@ -53,7 +53,7 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 		},
 		sortDescending: function (v) {
 			if (!v) this._sortDescending = v = "none";
-			var n = this.getNode(),
+			var n = this.$n(),
 				zcls = this.getZclass();
 			if (n) {
 				var $n = jq(n);
@@ -107,7 +107,7 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 		if (!body || body.hasGroup()) return false;
 		
 		var desktop = body.desktop,
-			node = body.getNode();
+			node = body.$n();
 			
 		evt.stop();
 		try {

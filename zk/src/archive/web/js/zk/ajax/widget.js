@@ -58,23 +58,23 @@ zk.Widget = zk.$extends(zk.Object, {
 			this.rerender();
 		},
 		width: function (v) {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) n.style.width = v || '';
 		},
 		height: function (v) {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) n.style.height = v || '';
 		},
 		left: function (v) {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) n.style.left = v || '';
 		},
 		top: function (v) {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) n.style.top = v || '';
 		},
 		tooltiptext: function (v) {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) n.title = v || '';
 		},
 
@@ -83,7 +83,7 @@ zk.Widget = zk.$extends(zk.Object, {
 				return v && "false" != v ? v: null;
 			},
 			function (v) {
-				var n = this.getNode();
+				var n = this.$n();
 				if (this.desktop)
 					if (v) this.initDrag_();
 					else this.cleanDrag_();
@@ -95,7 +95,7 @@ zk.Widget = zk.$extends(zk.Object, {
 				var dropTypes;
 				if (v && v != "true") {
 					dropTypes = v.split(',');
-					for (var j = dropTypes.length; --j >= 0;)
+					for (var j = dropTypes.length; j--;)
 						if (!(dropTypes[j] = dropTypes[j].trim()))
 							dropTypes.splice(j, 1);
 				}
@@ -103,13 +103,13 @@ zk.Widget = zk.$extends(zk.Object, {
 			}
 		]
 	},
-	$s: _zkf = function () {
+	$o: _zkf = function () {
 		for (var w = this; w; w = w.parent)
 			if (w._fellows) return w;
 	},
 	getSpaceOwner: _zkf,
 	$f: _zkf = function (id, global) {
-		var f = this.$s();
+		var f = this.$o();
 		if (f) {
 			f = f._fellows[id];
 			return f || !global || zk.spaceless ? f: zk.Widget._global[id];
@@ -275,7 +275,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			var cf = zk.currentFocus;
 			if (cf && zUtl.isAncestor(this, cf))
 				zk.currentFocus = null;
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) {
 				this.unbind();
 				jq(n).remove();
@@ -283,7 +283,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 	},
 	_replaceWgt: function (newwgt) { //called by au's outer
-		var node = this.getNode(),
+		var node = this.$n(),
 			p = newwgt.parent = this.parent,
 			s = newwgt.previousSibling = this.previousSibling;
 		if (s) s.nextSibling = newwgt;
@@ -317,12 +317,12 @@ zk.Widget = zk.$extends(zk.Object, {
 			return false;
 
 		var beforeNode = null;
-		if (moveBefore && !(beforeNode = moveBefore.getNode()))
+		if (moveBefore && !(beforeNode = moveBefore.$n()))
 			return false;
 
-		var node = this.getNode(), kidnode = child.getNode(),
+		var node = this.$n(), kidnode = child.$n(),
 			dt = this.desktop, kiddt = child.desktop,
-			oldpt = child.parent, cave = this.getCaveNode_();
+			oldpt = child.parent, cave = this.getCaveNode();
 		child._node = this._node = child.desktop = this.desktop = null; //avoid bind_ and unbind_
 		try {
 			oldpt.removeChild(child);
@@ -352,7 +352,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	isRealVisible: function () {
 		for (var wgt = this; wgt; wgt = wgt.parent) {
 			if (!wgt.isVisible()) return false;
-			var n = wgt.getNode();
+			var n = wgt.$n();
 			if (n && !zk(n).isVisible()) return false; //possible (such as in a hbox)
 		}
 		return true;
@@ -361,7 +361,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		var visible = this._visible;
 		if (!strict || !visible)
 			return visible;
-		var n = this.getNode();
+		var n = this.$n();
 		return !n || zk(n).isVisible();
 	},
 	setVisible: function (visible, fromServer) {
@@ -378,7 +378,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	_setVisible: function (visible) {
 		var parent = this.parent,
 			parentVisible = !parent || parent.isRealVisible(),
-			node = this.getNode(),
+			node = this.$n(),
 			floating = this._floating;
 
 		if (!parentVisible) {
@@ -399,7 +399,7 @@ zk.Widget = zk.$extends(zk.Object, {
 				if (this != w && this._floatVisibleDependent(w)) {
 					zi = zi >= 0 ? ++zi: w._topZIndex();
 					var n = fs[j].node;
-					if (n != w.getNode()) w.setFloatZIndex_(n, zi); //only a portion
+					if (n != w.$n()) w.setFloatZIndex_(n, zi); //only a portion
 					else w._setZIndex(zi, true);
 
 					w.setDomVisible_(n, true, {visibility:1});
@@ -411,7 +411,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			zWatch.fireDown('onHide', null, this);
 
 			for (var fs = zk.Widget._floatings, j = fs.length,
-			bindLevel = this.bindLevel; --j >= 0;) {
+			bindLevel = this.bindLevel; j--;) {
 				var w = fs[j].widget;
 				if (bindLevel >= w.bindLevel)
 					break; //skip non-descendant (and this)
@@ -454,7 +454,7 @@ zk.Widget = zk.$extends(zk.Object, {
 					var w = fs[j].widget;
 					if (wgt != w && zUtl.isAncestor(wgt, w) && w.isVisible()) {
 						var n = fs[j].node
-						if (n != w.getNode()) w.setFloatZIndex_(n, ++zi); //only a portion
+						if (n != w.$n()) w.setFloatZIndex_(n, ++zi); //only a portion
 						else w._setZIndex(++zi, true);
 					}
 				}
@@ -465,7 +465,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	/** Returns the topmost z-index for this widget.*/
 	_topZIndex: function () {
 		var zi = 1800; // we have to start from 1800 depended on all the css files.
-		for (var fs = zk.Widget._floatings, j = fs.length; --j >= 0;) {
+		for (var fs = zk.Widget._floatings, j = fs.length; j--;) {
 			var w = fs[j].widget;
 			if (w._zIndex >= zi && !zUtl.isAncestor(this, w) && w.isVisible())
 				zi = w._zIndex + 1;
@@ -480,7 +480,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			var fs = zk.Widget._floatings;
 			if (floating) {
 				//parent first
-				var inf = {widget: this, node: opts && opts.node? opts.node: this.getNode()},
+				var inf = {widget: this, node: opts && opts.node? opts.node: this.$n()},
 					bindLevel = this.bindLevel;
 				for (var j = fs.length;;) {
 					if (--j < 0) {
@@ -494,12 +494,13 @@ zk.Widget = zk.$extends(zk.Object, {
 				}
 				this._floating = true;
 			} else {
-				for (var j = fs.length; --j >= 0;)
+				for (var j = fs.length; j--;)
 					if (fs[j].widget == this)
 						fs.splice(j, 1);
 				this._floating = false;
 			}
 		}
+		return this;
 	},
 
 	getZIndex: _zkf = function () {
@@ -507,40 +508,41 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	getZindex: _zkf,
 	setZIndex: _zkf = function (zIndex) { //2nd arg is fromServer
-		this._setZIndex(zIndex);
+		return this._setZIndex(zIndex);
 	},
 	setZindex: _zkf,
 	_setZIndex: function (zIndex, fire) {
 		if (this._zIndex != zIndex) {
 			this._zIndex = zIndex;
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) {
 				n.style.zIndex = zIndex = zIndex >= 0 ? zIndex: '';
 				if (fire) this.fire('onZIndex', zIndex, {ignorable: true});
 			}
 		}
+		return this;
 	},
 
 	getScrollTop: function () {
-		var n = this.getNode();
+		var n = this.$n();
 		return n ? n.scrollTop: 0;
 	},
 	getScrollLeft: function () {
-		var n = this.getNode();
+		var n = this.$n();
 		return n ? n.scrollLeft: 0;
 	},
 	setScrollTop: function (val) {
-		var n = this.getNode();
+		var n = this.$n();
 		if (n) n.scrollTop = val;
 		return this;
 	},
 	setScrollLeft: function (val) {
-		var n = this.getNode();
+		var n = this.$n();
 		if (n) n.scrollLeft = val;
 		return this;
 	},
 	scrollIntoView: function () {
-		zk(this.getNode()).scrollIntoView();
+		zk(this.$n()).scrollIntoView();
 		return this;
 	},
 
@@ -556,20 +558,20 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	updateDomClass_: function () {
 		if (this.desktop) {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) n.className = this.domClass_();
 		}
 	},
 	updateDomStyle_: function () {
 		if (this.desktop) {
 			var s = jq.parseStyle(this.domStyle_());
-			zk(this.getNode()).setStyles(s);
+			zk(this.$n()).setStyles(s);
 
-			var n = this.getTextNode_();
+			var n = this.getTextNode();
 			if (n) zk(n).css(jq.filterTextStyle(s));
 		}
 	},
-	getTextNode_: function () {
+	getTextNode: function () {
 	},
 
 	domStyle_: function (no) {
@@ -685,7 +687,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	rerender: function (skipper) {
 		if (this.desktop) {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) {
 				if (skipper) {
 					var skipInfo = skipper.skip(this);
@@ -719,7 +721,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 		if (!before)
 			for (var w = this;;) {
-				ben = w.getCaveNode_();
+				ben = w.getCaveNode();
 				if (ben) break;
 
 				var w2 = w.nextSibling;
@@ -740,8 +742,8 @@ zk.Widget = zk.$extends(zk.Object, {
 			jq(ben).append(child._redrawHTML());
 		child.bind(desktop);
 	},
-	getCaveNode_: function () {
-		return this.getSubnode('cave') || this.getNode();
+	getCaveNode: function () {
+		return this.$n('cave') || this.$n();
 	},
 	_getBeforeNode: function () {
 		for (var w = this; w; w = w.nextSibling) {
@@ -750,7 +752,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 	},
 	_getFirstNodeDown: function () {
-		var n = this.getNode();
+		var n = this.$n();
 		if (n) return n;
 		for (var w = this.firstChild; w; w = w.nextSibling) {
 			n = w._getFirstNodeDown();
@@ -762,7 +764,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (cf && zUtl.isAncestor(child, cf))
 			zk.currentFocus = null;
 
-		var n = child.getNode();
+		var n = child.$n();
 		if (!n) child._prepareRemove(n = []);
 
 		child.unbind();
@@ -771,20 +773,18 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	_prepareRemove: function (ary) {
 		for (var w = this.firstChild; w; w = w.nextSibling) {
-			var n = w.getNode();
+			var n = w.$n();
 			if (n) ary.push(n);
 			else w._prepareRemove(ary);
 		}
 	},
-	getSubnode: function (name) {
-		if (!name)
-			return this.getNode();
-		var n = this._subnodes[name];
-		if (!n && this.desktop)
-			n = this._subnodes[name] = jq(this.uuid + '-' + name, zk)[0];
-		return n;
-	},
-	getNode: function () {
+	$n: _zkf = function (name) {
+		if (name) {
+			var n = this._subnodes[name];
+			if (!n && this.desktop)
+				n = this._subnodes[name] = jq(this.uuid + '-' + name, zk)[0];
+			return n;
+		}
 		var n = this._node;
 		if (!n && this.desktop && !this._nodeSolved) {
 			this._node = n = jq(this.uuid, zk)[0];
@@ -792,6 +792,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 		return n;
 	},
+	getNode: _zkf,
 	getPage: function () {
 		if (this.desktop && this.desktop.nChildren == 1)
 			return this.desktop.firstChild;
@@ -849,7 +850,7 @@ zk.Widget = zk.$extends(zk.Object, {
 
 	initDrag_: function () {
 		var WDD = zk.WgtDD;
-		this._drag = new zk.Draggable(this, this.getDragNode_(), {
+		this._drag = new zk.Draggable(this, this.getDragNode(), {
 			starteffect: zk.$void, //see bug #1886342
 			endeffect: WDD.enddrag, change: WDD.dragging,
 			ghosting: WDD.ghosting, endghosting: WDD.endghosting,
@@ -865,23 +866,22 @@ zk.Widget = zk.$extends(zk.Object, {
 			drag.destroy();
 		}
 	},
-	getDragNode_: function () {
-		return this.getNode();
+	getDragNode: function () {
+		return this.$n();
 	},
 	ingoreDrag_: function (pt) {
 		return false;
 	},
 	dropEffect_: function (over) {
-		var n = this.getNode();
+		var n = this.$n();
 		if (n) jq(n)[over ? "addClass" : "removeClass"]("z-drag-over");
 	},
 	getDragMessage_: function () {
-		var n = this.getSubnode('cave') || this.getSubnode('real')
-			|| this.getNode();
+		var n = this.$n('real') || this.getCaveNode();
 		return n ? n.textContent || n.innerText: '';
 	},
 	shallDragMessage_: function () {
-		var tn = this.getNode().tagName;
+		var tn = this.$n().tagName;
 		return "TR" == tn || "TD" == tn || "TH" == tn;
 	},
 	cloneDrag_: function (drag, ofs) {
@@ -898,19 +898,19 @@ zk.Widget = zk.$extends(zk.Object, {
 
 		drag._orgcursor = document.body.style.cursor;
 		document.body.style.cursor = "pointer";
-		jq(this.getNode()).addClass('z-dragged'); //after clone
+		jq(this.$n()).addClass('z-dragged'); //after clone
 		return dgelm;
 	},
 	uncloneDrag_: function (drag) {
 		document.body.style.cursor = drag._orgcursor || '';
 
-		jq(this.getNode()).removeClass('z-dragged');
+		jq(this.$n()).removeClass('z-dragged');
 	},
 
 	focus: function (timeout) {
 		var node;
 		if (this.isVisible() && this.canActivate({checkOnly:true})
-		&& (node = this.getNode())) {
+		&& (node = this.$n())) {
 			if (zk(node).focus(timeout)) {
 				zk.currentFocus = this;
 				this.setTopmost();
@@ -1003,7 +1003,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		for (var evt in infs) {
 			var inf = infs[evt],
 				lsns = this._lsns[evt], lsn;
-			for (var j = lsns ? lsns.length: 0; --j >= 0;) {
+			for (var j = lsns ? lsns.length: 0; j--;) {
 				lsn = lsns[j];
 				if (inf.$array) inf = [inf[0]||this, inf[1]];
 				else if (typeof inf == 'function') inf = [this, inf];
@@ -1197,7 +1197,7 @@ zk.Widget = zk.$extends(zk.Object, {
 					if (opts && opts.child) {
 						var wgt = binds[id];
 						if (wgt) {
-							var n2 = wgt.getNode();
+							var n2 = wgt.$n();
 							if (n2 && jq.isAncestor(n2, n)) return wgt;
 						}
 						if (opts && opts.exact) break;
@@ -1331,7 +1331,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (wgt._fellows) wgt._fellows[wgt.id] = wgt;
 		var p = wgt.parent;
 		if (p) {
-			p = p.$s();
+			p = p.$o();
 			if (p) p._fellows[wgt.id] = wgt;
 		}
 	},
@@ -1339,13 +1339,13 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (wgt._fellows) delete wgt._fellows[wgt.id];
 		var p = wgt.parent;
 		if (p) {
-			p = p.$s();
+			p = p.$o();
 			if (p) delete p._fellows[wgt.id];
 		}
 	},
 	_addIdSpaceDown: function (wgt) {
 		var ow = wgt.parent;
-		ow = ow ? ow.$s(): null;
+		ow = ow ? ow.$o(): null;
 		if (ow) {
 			var fn = zk.Widget._addIdSpaceDown0;
 			fn(wgt, ow, fn);
@@ -1358,7 +1358,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	_rmIdSpaceDown: function (wgt) {
 		var ow = wgt.parent;
-		ow = ow ? ow.$s(): null;
+		ow = ow ? ow.$o(): null;
 		if (ow) {
 			var fn = zk.Widget._rmIdSpaceDown0;
 			fn(wgt, ow, fn);
@@ -1530,7 +1530,7 @@ if (zk.ie)
 		if (this.previousSibling || s.indexOf('<script') < 0
 		|| (j = out.length) > 20)
 			return;
-		for (var cnt = 0; --j >= 0;)
+		for (var cnt = 0; j--;)
 			if (out[j].indexOf('<') >= 0 && ++cnt > 1)
 				return; //more than one
 	 	out.push('<span style="display:none;font-size:0">&#160;</span>');
@@ -1582,7 +1582,7 @@ zk.WgtDD = {
 			var dropType = wgt._droppable;
 			if (dropType == 'true') return wgt;
 			if (dropType && dragType != "true")
-				for (var dropType = wgt._dropTypes, j = dropType.length; --j >= 0;)
+				for (var dropType = wgt._dropTypes, j = dropType.length; j--;)
 					if (dragType == dropType[j])
 						return wgt;
 		}

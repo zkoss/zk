@@ -22,27 +22,27 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 	},
 	$define: {
 		multiple: function (multiple) {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) n.multiple = multiple ? 'multiple' : '';
 		},
 		disabled: function (disabled) {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) n.disabled = disabled ? 'disabled' : '';
 		},
 		selectedIndex: function (selectedIndex) {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) n.selectedIndex = selectedIndex;
 		},
 		tabindex: function (tabindex) {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) n.tabindex = tabindex >= 0 ? tabindex: '';
 		},
 		name: function (name) {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) n.name = name;
 		},
 		rows: function (rows) {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) n.size = rows;
 		},
 		maxlength: function (maxlength) {
@@ -103,20 +103,20 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
-		var n = this.getNode();
+		var n = this.$n();
 		this.domListen_(n, 'onChange')
 			.domListen_(n, 'onFocus', 'doFocus_')
 			.domListen_(n, 'onBlur', 'doBlur_');
 	},
 	unbind_: function () {
-		var n = this.getNode();
+		var n = this.$n();
 		this.domUnlisten_(n, 'onChange')
 			.domUnlisten_(n, 'onFocus', 'doFocus_')
 			.domUnlisten_(n, 'onBlur', 'doBlur_')
 			.$supers('unbind_', arguments);
 	},
 	_doChange: function (evt) {		
-		var data = [], reference, n = this.getNode();
+		var data = [], reference, n = this.$n();
 		if (this.isMultiple()) {
 			var opts = n.options;
 			for (var j = 0, ol = opts.length; j < ol; ++j) {

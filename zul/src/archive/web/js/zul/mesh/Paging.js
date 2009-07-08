@@ -26,7 +26,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 			if (this._detailed) {
 				if (this.isBothPaging()) this.rerender();
 				else {
-					var info = this.getSubnode("info");
+					var info = this.$n("info");
 					if (info) info.innerHTML = this.infoText_();
 				}
 			}

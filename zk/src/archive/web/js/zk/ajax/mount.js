@@ -395,7 +395,7 @@ zkm = {
 	_mouseData: function (evt, wgt) {
 		var n = evt.target;
 		if (wgt && (!n || n.id != wgt.uuid))
-			n = wgt.getNode();
+			n = wgt.$n();
 		return evt.mouseData(n);
 	},
 	docMouseUp: function (evt) {
@@ -422,7 +422,7 @@ zkm = {
 			if (!wgt) {
 				window.blur();
 				if (cf == zk.currentFocus)
-					for (var n = cf.getNode(),
+					for (var n = cf.$n(),
 					tns = ['INPUT','A','BUTTON'], j = tns.length; --j >=0;) {
 						var ns = n.getElementsByTagName(tns[j]);
 						if (ns.length > 0) {

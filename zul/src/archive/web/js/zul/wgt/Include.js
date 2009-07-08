@@ -17,7 +17,7 @@ zul.wgt.Include = zk.$extends(zul.Widget, {
 
 	$define: {
 		content: function (v) {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) {
 				if (v && this._comment)
 					v = '<!--\n' + v + '\n-->';

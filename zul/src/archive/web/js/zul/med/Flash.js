@@ -62,6 +62,6 @@ zul.med.Flash = zk.$extends(zul.Widget, {
 	},
 
 	_embedNode: function () {
-		return this.getSubnode('emb');
+		return this.$n('emb');
 	}
 });

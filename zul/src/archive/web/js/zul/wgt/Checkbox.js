@@ -18,19 +18,19 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 
 	$define: {
 		disabled: function (v) {
-			var n = this.getSubnode('real');
+			var n = this.$n('real');
 			if (n) n.disabled = v;
 		},
 		checked: function (v) {
-			var n = this.getSubnode('real');
+			var n = this.$n('real');
 			if (n) n.checked = v;
 		},
 		name: function (v) {
-			var n = this.getSubnode('real');
+			var n = this.$n('real');
 			if (n) n.name = v || '';
 		},
 		tabindex: function (v) {
-			var n = this.getSubnode('real');
+			var n = this.$n('real');
 			if (n) n.tabIndex = v >= 0 ? v: '';
 		}
 	},
@@ -56,7 +56,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 	bind_: function (desktop) {
 		this.$supers('bind_', arguments);
 
-		var n = this.getSubnode('real');
+		var n = this.$n('real');
 
 		if (zk.gecko2_)
 			jq(n).click(zul.wgt.Checkbox._domClick);
@@ -64,7 +64,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 			.domListen_(n, "onBlur", "doBlur_");
 	},
 	unbind_: function () {
-		var n = this.getSubnode('real');
+		var n = this.$n('real');
 		
 		if (zk.gecko2_)
 			jq(n).unbind("click", zul.wgt.Checkbox._domClick);
@@ -74,15 +74,15 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 		this.$supers('unbind_', arguments);
 	},
 	doClick_: function (evt) {
-		var real = this.getSubnode('real'),
+		var real = this.$n('real'),
 			checked = real.checked;
 		if (checked != this._checked) //changed
 			this.setChecked(checked) //so Radio has a chance to override it
 				.fire('onCheck', checked);
 		return this.$supers('doClick_', arguments);
 	},
-	getTextNode_: function () {
-		return jq(this.getNode()).find('label:first')[0];
+	getTextNode: function () {
+		return jq(this.$n()).find('label:first')[0];
 	}
 }, zk.gecko2_ ? {
 	_domClick: function (evt) {

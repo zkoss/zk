@@ -60,7 +60,7 @@ zul.sel.Listgroup = zk.$extends(zul.sel.Listitem, {
 	},
 	_openItem: function (open, silent) {
 		this._open = open;
-		var img = this.getSubnode('img'),
+		var img = this.$n('img'),
 			zcls = this.getZclass();
 		if (img) {
 			zDom[open ? "rmClass" : "addClass"](img, zcls + "-img-close");
@@ -75,7 +75,7 @@ zul.sel.Listgroup = zk.$extends(zul.sel.Listitem, {
 		for (var r, w = this.nextSibling; w && (!w.$instanceof(zul.sel.Listgroup) && !w.$instanceof(zul.sel.Listgroupfoot));
 				w = w.nextSibling)
 			if (w.desktop && w.isVisible())
-				zDom[toOpen ? "show" : "hide"](w.getNode());
+				zDom[toOpen ? "show" : "hide"](w.$n());
 	},
 	beforeParentChanged_: function (p) {
 		if (p == null) {
@@ -100,8 +100,8 @@ zul.sel.Listgroup = zk.$extends(zul.sel.Listitem, {
 	},
 	bind_: function () {		
 		this.$supers('bind_', arguments);
-		var n = this.getNode(),
-			img = this.getSubnode("img");
+		var n = this.$n(),
+			img = this.$n("img");
 		if (img)
 			this.domListen_(img, 'onClick', '_doImgClick');
 		var table = n.parentNode.parentNode;
@@ -115,7 +115,7 @@ zul.sel.Listgroup = zk.$extends(zul.sel.Listitem, {
 		}
 	},
 	unbind_: function (skipper, after) {
-		this.domUnlisten_(this.getSubnode("img"), 'onClick', '_doImgClick');
+		this.domUnlisten_(this.$n("img"), 'onClick', '_doImgClick');
 		if (this._unbindafter && this._unbindafter.length) after.push(this._unbindafter.pop());
 		this._unbindafter = null;
 		this.$supers('unbind_', arguments);

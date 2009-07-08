@@ -17,7 +17,7 @@ zul.wgt.Progressmeter = zk.$extends(zul.Widget, {
 
 	$define: {
 		value: function () {
-			if(this.getNode()) 
+			if(this.$n()) 
 				this._fixImgWidth();
 		}
 	},
@@ -28,8 +28,8 @@ zul.wgt.Progressmeter = zk.$extends(zul.Widget, {
 		return zcls != null ? zcls: "z-progressmeter";
 	},
 	_fixImgWidth: _zkf = function() {
-		var n = this.getNode(), 
-			img = this.getSubnode("img");
+		var n = this.$n(), 
+			img = this.$n("img");
 		if (img) {
 			if (zk.ie6_) img.style.width = ""; //Bug 1899749
 			img.style.width = Math.round((n.clientWidth * this._value) / 100) + "px";

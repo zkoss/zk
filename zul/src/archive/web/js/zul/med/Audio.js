@@ -18,25 +18,25 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 			this.rerender(); //At least IE failed if change n.src only
 		},
 		align: function (v) {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) n.align = v || '';
 		},
 		border: function (v) {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) n.border = v || '';
 		},
 		autostart: function (v) {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) n.autostart = v;
 		},
 		loop: function (v) {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) n.loop = v;
 		}
 	},
 
 	play: function () {
-		var n = this.getNode();
+		var n = this.$n();
 		if (n) {
 			try { //Note: we cannot do "if (n.play)" in IE
 				n.play();
@@ -51,7 +51,7 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 	},
 
 	stop: function (silent) {
-		var n = this.getNode();
+		var n = this.$n();
 		if (n) {
 			try { //Note: we cannot do "if (n.stop)" in IE
 				n.stop();
@@ -67,7 +67,7 @@ zul.med.Audio = zk.$extends(zul.Widget, {
 	},
 
 	pause: function () {
-		var n = this.getNode();
+		var n = this.$n();
 		if (n) {
 			try { //Note: we cannot do "if (n.pause)" in IE
 				n.pause();

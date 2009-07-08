@@ -17,7 +17,7 @@ zul.wgt.Label = zk.$extends(zul.Widget, {
 
 	$define: {
 		value: _zkf = function () {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) n.innerHTML = this.getEncodedText();
 		},
 		multiline: _zkf,

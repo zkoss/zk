@@ -5,7 +5,7 @@ zPkg.load('zul.wgt', function () {
 userguide.Categorybar = zk.$extends(zul.wgt.Div, {
 	bind_: function () {
 		this.$supers('bind_', arguments);
-		zk(this.getNode()).disableSelection();
+		zk(this.$n()).disableSelection();
 		
 		zWatch.listen({onSize: this});
 		this.onChildAdded_();//for updating sum of category width
@@ -16,30 +16,30 @@ userguide.Categorybar = zk.$extends(zul.wgt.Div, {
 		this.$supers('unbind_', arguments);
 	},
 	onSize: function(evt){	
-		var width = jq(this.getNode()).width();
+		var width = jq(this.$n()).width();
 		//with scorll or not
 		if(width < this.childWidth){
-			jq(this.getSubnode("left")).addClass("demo-categorybar-left-scroll");
-			jq(this.getSubnode("right")).addClass("demo-categorybar-right-scroll");
-			jq(this.getSubnode("body")).addClass("demo-categorybar-body-scroll")
+			jq(this.$n("left")).addClass("demo-categorybar-left-scroll");
+			jq(this.$n("right")).addClass("demo-categorybar-right-scroll");
+			jq(this.$n("body")).addClass("demo-categorybar-body-scroll")
 									   .width((width-40)+"px");
 			this._addScollEvent();	
 		}else{
-			jq(this.getSubnode("left")).removeClass("demo-categorybar-left-scroll");
-			jq(this.getSubnode("right")).removeClass("demo-categorybar-right-scroll");
-			jq(this.getSubnode("body")).removeClass("demo-categorybar-body-scroll")
+			jq(this.$n("left")).removeClass("demo-categorybar-left-scroll");
+			jq(this.$n("right")).removeClass("demo-categorybar-right-scroll");
+			jq(this.$n("body")).removeClass("demo-categorybar-body-scroll")
 									   .width(width+"px");
-			this.getSubnode("cave").style.marginLeft="0px";
+			this.$n("cave").style.marginLeft="0px";
 		}
 		
 	},
 	_addScollEvent:function(){
 		//update the animiation distance every time it called
-		this.getSubnode("cave").distance = jq(this.getSubnode("body")).width() - this.childWidth;
+		this.$n("cave").distance = jq(this.$n("body")).width() - this.childWidth;
 		
 		if(this.scrollEvent == false){	//only do at first time
-			var cave = this.getSubnode("cave");
-			jq(this.getSubnode("left"))
+			var cave = this.$n("cave");
+			jq(this.$n("left"))
 			.mouseover(function(){
 				jq(cave).animate({
 					marginLeft: "0px"
@@ -49,7 +49,7 @@ userguide.Categorybar = zk.$extends(zul.wgt.Div, {
 				jq(cave).stop(true);
 			});
 			
-			jq(this.getSubnode("right"))
+			jq(this.$n("right"))
 			.mouseover(function(){
 				jq(cave).animate({
 					marginLeft: cave.distance + "px"
@@ -64,22 +64,22 @@ userguide.Categorybar = zk.$extends(zul.wgt.Div, {
 	onChildAdded_: function (/*child*/) {
 		if(this.desktop){
 			var childWidth=0;
-			jq(this.getSubnode("cave")).children().each(
+			jq(this.$n("cave")).children().each(
 				function(){
 					childWidth += jq(this).width();
 			});
-			jq(this.getSubnode("cave")).width(childWidth+"px");
+			jq(this.$n("cave")).width(childWidth+"px");
 			this.childWidth = childWidth;
 		}
 	},
 	onChildRemoved_: function (/*child*/) {
 		if(this.desktop){
 			var childWidth=0;
-			jq(this.getSubnode("cave")).children().each(
+			jq(this.$n("cave")).children().each(
 				function(){
 					childWidth += jq(this).width();
 			});
-			jq(this.getSubnode("cave")).width(childWidth+"px");
+			jq(this.$n("cave")).width(childWidth+"px");
 			this.childWidth = childWidth;
 		}
 	},
@@ -111,16 +111,16 @@ userguide.Category = zk.$extends(zul.wgt.Button, {
 		out.push('</div></div>');
 	},
 	doMouseOver_: function (evt) {
-		jq(this.getNode()).addClass("demo-over");
+		jq(this.$n()).addClass("demo-over");
 	},
 	doMouseOut_: function (evt) {
-		if (jq.isAncestor(this.getNode(), evt.domEvent.relatedTarget || evt.domEvent.toElement))
+		if (jq.isAncestor(this.$n(), evt.domEvent.relatedTarget || evt.domEvent.toElement))
 			return; //nothing to do
-		jq(this.getNode()).removeClass("demo-over");
+		jq(this.$n()).removeClass("demo-over");
 	},
 	doClick_: function (evt){
 		this.$supers('doClick_', arguments);
-		jq(this.getNode()).addClass("demo-seld")
+		jq(this.$n()).addClass("demo-seld")
 						  .siblings().removeClass("demo-seld");
 	}
 });

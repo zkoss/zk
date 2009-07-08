@@ -46,8 +46,8 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 		}else
 			this.$supers('setConstraint', arguments);
 	},
-	getInputNode_: function(){
-		return this.getSubnode("real");
+	getInputNode: function(){
+		return this.$n("real");
 	},
 	coerceFromString_: function (value) {//copy from intbox
 		if (!value) return null;
@@ -224,8 +224,8 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 	bind_: function () {//after compose
 		this.$supers('bind_', arguments); 
 		this.timeId = null;
-		var inp = this.inp = this.getSubnode("real");
-		var btn = this.btn = this.getSubnode("btn");
+		var inp = this.inp = this.$n("real");
+		var btn = this.btn = this.$n("btn");
 		zWatch.listen({onSize: this, onShow: this});
 		if(btn){
 			this.domListen_(btn, "onmousedown", "_btnDown");

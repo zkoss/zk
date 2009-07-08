@@ -49,15 +49,15 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		this._fixChildDomVisible(child, child._visible);
 	},
 	_fixChildDomVisible: function (child, visible) {
-		var n = child.getSubnode('chdex');
+		var n = child.$n('chdex');
 		if (n) n.style.display = visible ? '': 'none';
-		n = child.getSubnode('chdex2');
+		n = child.$n('chdex2');
 		if (n) n.style.display = visible ? '': 'none';
 
 		if (this.lastChild == child) {
 			n = child.previousSibling;
 			if (n) {
-				n = n.getSubnode('chdex2');
+				n = n.$n('chdex2');
 				if (n) n.style.display = visible ? '': 'none';
 			}
 		}
@@ -65,9 +65,9 @@ zul.box.Box = zk.$extends(zul.Widget, {
 
 	insertChildHTML_: function (child, before, desktop) {
 		if (before) {
-			jq(before.getSubnode('chdex')).before(this.encloseChildHTML_(child));
+			jq(before.$n('chdex')).before(this.encloseChildHTML_(child));
 		} else {
-			var n = this.getNode(), tbs = n.tBodies;
+			var n = this.$n(), tbs = n.tBodies;
 			if (!tbs || !tbs.length)
 				n.appendChild(document.createElement("TBODY"));
 			jq(this.isVertical() ? tbs[0]: tbs[0].rows[0]).append(
@@ -201,7 +201,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				break;
 		}
 
-		var vert = this.isVertical(), node = this.getNode();
+		var vert = this.isVertical(), node = this.$n();
 
 		//Bug 1916473: with IE, we have make the whole table to fit the table
 		//since IE won't fit it even if height 100% is specified

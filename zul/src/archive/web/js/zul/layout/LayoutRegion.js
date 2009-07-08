@@ -60,20 +60,20 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	//-- super --//
 	setWidth: function (width) {
 		this._width = width;
-		var real = this.getSubnode('real');
+		var real = this.$n('real');
 		if (real) real.style.width = width ? width: '';
 		return this;
 	},
 	setHeight: function (height) {
 		this._height = height;
-		var real = this.getSubnode('real');
+		var real = this.$n('real');
 		if (real) real.style.height = height ? height: '';
 		return this;
 	},
 	setVisible: function (visible) {
 		if (this._visible != visible) {
 			this.$supers('setVisible', arguments);
-			var real = this.getSubnode('real');
+			var real = this.$n('real');
 			if (real) {
 				real.style.display = real.parentNode.style.display;
 				this.parent.resize();
@@ -83,7 +83,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	},	
 	updateDomClass_: function () {
 		if (this.desktop) {
-			var real = this.getSubnode('real');
+			var real = this.$n('real');
 			if (real) {
 				real.className = this.domClass_();
 				if (this.parent) 
@@ -93,7 +93,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	},
 	updateDomStyle_: function () {
 		if (this.desktop) {
-			var real = this.getSubnode('real');
+			var real = this.$n('real');
 			if (real) {
 				zk(real).setStyles(jq.parseStyle(this.domStyle_()));
 				if (this.parent) 
@@ -105,11 +105,11 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		this.$supers('onChildAdded_', arguments);
 		if (child.$instanceof(zul.layout.Borderlayout)) {
 			this.setFlex(true);
-			jq(this.getNode()).addClass(this.getZclass() + "-nested");
+			jq(this.$n()).addClass(this.getZclass() + "-nested");
 		}
 		
 		// reset
-		(this.getSubnode('real') || {})._lastSize = null;
+		(this.$n('real') || {})._lastSize = null;
 		if (this.parent && this.desktop)
 			this.parent.resize();
 	},
@@ -117,11 +117,11 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		this.$supers('onChildRemoved_', arguments);
 		if (child.$instanceof(zul.layout.Borderlayout)) {
 			this.setFlex(false);
-			jq(this.getNode()).removeClass(this.getZclass() + "-nested");
+			jq(this.$n()).removeClass(this.getZclass() + "-nested");
 		}
 		
 		// reset
-		(this.getSubnode('real') || {})._lastSize = null;
+		(this.$n('real') || {})._lastSize = null;
 		if (this.parent && this.desktop)
 			this.parent.resize();
 	},
@@ -134,13 +134,13 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	bind_: function(){
 		this.$supers('bind_', arguments);
 		if (this.getPosition() != zul.layout.Borderlayout.CENTER) {
-			var split = this.getSubnode('split');			
+			var split = this.$n('split');			
 			if (split) {
 				this._fixSplit();
 				var vert = this._isVertical();
 				if (!this._open) {
-					var colled = this.getSubnode('colled'),
-						real = this.getSubnode('real');
+					var colled = this.$n('colled'),
+						real = this.$n('real');
 					if (colled)
 						jq(colled).show();
 					jq(real).hide();
@@ -148,21 +148,21 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			}
 		}
 				
-		var n = this.getNode(),
+		var n = this.$n(),
 			real = n.firstChild;
 					
 		if (this._open && !this.isVisible()) n.style.display = "none";
 		
 		if (this.isAutoscroll()) {
 			var bodyEl = this.isFlex() && this.firstChild ?
-					this.firstChild.getNode() : this.getSubnode('cave');
+					this.firstChild.$n() : this.$n('cave');
 			this.domListen_(bodyEl, "onScroll");
 		}
 	},
 	unbind_: function () {
 		if (this.isAutoscroll()) {
 			var bodyEl = this.isFlex() && this.firstChild ?
-					this.firstChild.getNode() : this.getSubnode('cave');
+					this.firstChild.$n() : this.$n('cave');
 			this.domUnlisten_(bodyEl, "onScroll");
 		}
 		this.$supers('unbind_', arguments);
@@ -171,7 +171,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		zWatch.fireDown('onScroll', null, this);
 	},
 	_fixSplit: function () {
-		jq(this.getSubnode('split'))[this._splittable ? 'show' : 'hide']();
+		jq(this.$n('split'))[this._splittable ? 'show' : 'hide']();
 	},
 	_isVertical : function () {
 		var BL = zul.layout.Borderlayout;

@@ -18,17 +18,17 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 			return this._align;
 		},
 		align: function (v) {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n)
 				n.align = v;
 		},
 		nowrap: function (v) {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n)
 				n.noWrap = v;
 		},
 		valign: function (v) {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n)
 				n.vAlign = v;
 		}
@@ -84,11 +84,11 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 	insertChildHTML_: function (child, before, desktop) {
 		var cls = this.getGrid().isFixedLayout() ? 'z-overflow-hidden' : '';
 		if (before)
-			jq(before.getSubnode('chdextr')).before(
+			jq(before.$n('chdextr')).before(
 				this.encloseChildHTML_({child: child, index: child.getChildIndex(),
 						zclass: this.getZclass(), cls: cls}));
 		else
-			jq(this.getNode()).append(
+			jq(this.$n()).append(
 				this.encloseChildHTML_({child: child, index: child.getChildIndex(),
 						zclass: this.getZclass(), cls: cls}));
 		
@@ -188,13 +188,13 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 /** // TODO for drag and drop
  * if (zk.gecko) {
 	zul.grid.Row.prototype.doMouseOver_ = function (evt) {
-		var target = this._getDirectChildByElement(evt.domTarget, this.getNode());
+		var target = this._getDirectChildByElement(evt.domTarget, this.$n());
 		if (target)
 			target.firstChild.style.MozUserSelect = "none";
 		this.$supers('doMouseOver_', arguments);
 	};
 	zul.grid.Row.prototype.doMouseOut_ = function (evt) {
-		var target = this._getDirectChildByElement(evt.domTarget, this.getNode());
+		var target = this._getDirectChildByElement(evt.domTarget, this.$n());
 		if (target)
 			target.firstChild.style.MozUserSelect = "";
 		this.$supers('doMouseOut_', arguments);

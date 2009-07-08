@@ -26,7 +26,7 @@ zhtml.Text = zk.$extends(zhtml.Widget, {
 		if (!value) value = '';
 		if (this._value != value) {
 			this._value = value;
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) n.innerHTML = zUtl.encodeXML(value);
 		}
 	},

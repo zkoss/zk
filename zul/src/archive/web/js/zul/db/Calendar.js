@@ -36,10 +36,10 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	bind_: function (){
 		this.$supers('bind_', arguments);
 		this._dateobj = this._date ? zDateFormat.parseDate(this._date, "yyyy/MM/dd") : new Date();
-		var title = this.getSubnode("title"),
-			mid = this.getSubnode("mid"),
-			ly = this.getSubnode("ly"),
-			ry = this.getSubnode("ry"),
+		var title = this.$n("title"),
+			mid = this.$n("mid"),
+			ly = this.$n("ly"),
+			ry = this.$n("ry"),
 			zcls = this.getZclass();
 		jq(title).hover(
 			function () {
@@ -58,10 +58,10 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			.domListen_(mid, "onMouseOut", '_doMouseEffect');
 	},
 	unbind_: function () {
-		var title = this.getSubnode("title"),
-			mid = this.getSubnode("mid"),
-			ly = this.getSubnode("ly"),
-			ry = this.getSubnode("ry");
+		var title = this.$n("title"),
+			mid = this.$n("mid"),
+			ly = this.$n("ly"),
+			ry = this.$n("ry");
 		this.domUnlisten_(title, "onClick", '_changeView')
 			.domUnlisten_(mid, "onClick", '_choiceData')
 			.domUnlisten_(ly, "onClick", '_doclickArrow')
@@ -163,9 +163,9 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		this.fire('onChange', {value: this._date});
 	},
 	_changeView : function (evt) {
-		var tm = this.getSubnode("tm"),
-			ty = this.getSubnode("ty"),
-			tyd = this.getSubnode("tyd");
+		var tm = this.$n("tm"),
+			ty = this.$n("ty"),
+			tyd = this.$n("tyd");
 		if (evt.domTarget == tm)
 			this._setView("month");
 		else if (evt.domTarget == ty)
@@ -190,8 +190,8 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			v = new Date(y, m, 1).getDay()- zk.DOW_1ST;
 		//hightlight month & year
 		for (var j = 0; j < 12; ++j) {
-			var mon = this.getSubnode("m" + j),
-				year = this.getSubnode("y" + j),
+			var mon = this.$n("m" + j),
+				year = this.$n("y" + j),
 				yy = y % 10 + 1;
 			if (mon) {
 				if (m == j) {
@@ -211,7 +211,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 
 		if (v < 0) v += 7;
 		for (var j = 0, cur = -v + 1; j < 6; ++j) {
-			var week = this.getSubnode("w" + j);
+			var week = this.$n("w" + j);
 			if ( week != null) {
 				for (var k = 0; k < 7; ++k, ++cur) {
 					v = cur <= 0 ? prev + cur: cur <= last ? cur: cur - last;

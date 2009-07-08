@@ -44,8 +44,8 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	isButtonVisible: function(){
 		return _buttonVisible;
 	},
-	getInputNode_: function(){
-		return this.getSubnode("real");
+	getInputNode: function(){
+		return this.$n("real");
 	},
 	coerceFromString_: function (value) {
 		if (!value) return null;
@@ -441,8 +441,8 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		this.runCount = 0;
 		this.timerId = null;
 		
-		var inp = this.inp = this.getSubnode("real");
-		var btn = this.btn = this.getSubnode("btn");
+		var inp = this.inp = this.$n("real");
+		var btn = this.btn = this.$n("btn");
 		
 		zWatch.listen({onSize: this, onShow: this});			
 		if(btn)

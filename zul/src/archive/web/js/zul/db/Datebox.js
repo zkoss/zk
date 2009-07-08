@@ -28,7 +28,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	$define: {
 		buttonVisible: function () {
-			var n = this.getSubnode('btn');
+			var n = this.$n('btn');
 			if (n)
 				v ? jq(n).show(): jq(n).hide();
 		}
@@ -56,7 +56,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		//@TODO
 	},
 	setOpen: function(open) {
-		var pp = this.getSubnode("pp");
+		var pp = this.$n("pp");
 		if (pp) {
 			if (!jq(pp).zk.isVisible()) this.open();
 			else this.close(true);
@@ -68,8 +68,8 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		//zkau.closeFloats(pp); //including popups
 		//zkau._dtbox.setFloatId(pp.id);
 		var uuid = this.id,
-			db = this.getNode(),
-			pp = this.getSubnode("pp");
+			db = this.$n(),
+			pp = this.$n("pp");
 		if (!db || !pp) return;
 		var zcls = this.getZclass();
 		pp.className=db.className+" "+pp.className;
@@ -104,7 +104,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			if (wd < db.offsetWidth) wd = db.offsetWidth;
 			if (pp.offsetWidth > wd) pp.style.width = wd;
 		}
-		var input = this.getSubnode("real"),
+		var input = this.$n("real"),
 			dbobj = this;
 		jq(pp).zk.position(input, "after_start");
 		setTimeout(function () {
@@ -116,8 +116,8 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	close: function (focus) {
 		var uuid = this.id,
-			db = this.getNode(),
-			pp = this.getSubnode("pp");
+			db = this.$n(),
+			pp = this.$n("pp");
 
 		if (!db || !jq(pp).zk.isVisible()) return;
 		var zcls = this.getZclass();
@@ -132,7 +132,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		//No special child, so no need to: zk.onHideAt(pp);
 		//zkau.hideCovered();
 
-		var btn = this.getSubnode("btn");
+		var btn = this.$n("btn");
 		if (btn)
 			jq(btn).removeClass(zcls + "-btn-over");
 
@@ -141,13 +141,13 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			;
 		//this.$supers('close', arguments);
 	},
-	getInputNode_: function () {
-		return this.getSubnode('real');
+	getInputNode: function () {
+		return this.$n('real');
 	},
 	bind_: function (){
 		this.$supers('bind_', arguments);
-		var btn = this.getSubnode('btn'),
-			inp = this.getInputNode_();
+		var btn = this.$n('btn'),
+			inp = this.getInputNode();
 		if (btn) {
 			this._auxb = new zul.Auxbutton(this, btn, inp);
 			this.domListen_(btn, 'onClick', '_doBtnClick');
@@ -156,7 +156,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		zWatch.listen({onSize: this, onShow: this, onFloatUp: this});
 	},
 	unbind_: function () {
-		var btn = this.getSubnode('btn');
+		var btn = this.$n('btn');
 		if (btn) {
 			this._auxb.cleanup();
 			this._auxb = null;
@@ -178,8 +178,8 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		var db = zk(uuid).jq[0];
 		if (!db) return;
 		var dbobj = zk.Widget.$(db),
-			pp = dbobj.getSubnode("pp"),
-			input = dbobj.getSubnode("real");
+			pp = dbobj.$n("pp"),
+			input = dbobj.$n("real");
 
 		if(pp) {
 			jq(pp).zk.position(input, "after_start");
@@ -205,7 +205,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 	_choiceData: function (evt) {
 		this.$supers('_choiceData', arguments);
 		var db = this.parent,
-		    input = db.getSubnode("real");
+		    input = db.$n("real");
 		input.value = this._date;
 		db.fire('onChange', {value: this._date});
 	}

@@ -22,20 +22,20 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 			this.rerender(); //bind and unbind
 		},
 		dir: _zkf = function () {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) n.innerHTML = this.domContent_();
 		},
 		orient: _zkf,
 		href: function (v) {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) n.href = v || '';
 		},
 		target: function (v) {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) n.target = v || '';
 		},
 		tabindex: function (v) {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) n.tabIndex = v < 0 ? '' : v;
 		}
 	},
@@ -49,13 +49,13 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 	bind_: function(){
 		this.$supers('bind_', arguments);
 		if (!this._disabled) {
-			var n = this.getNode();
+			var n = this.$n();
 			this.domListen_(n, "onFocus", "doFocus_")
 				.domListen_(n, "onBlur", "doBlur_");
 		}
 	},
 	unbind_: function(){
-		var n = this.getNode();
+		var n = this.$n();
 		this.domUnlisten_(n, "onFocus", "doFocus_")
 			.domUnlisten_(n, "onBlur", "doBlur_");
 

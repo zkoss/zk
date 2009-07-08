@@ -17,7 +17,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 	_checkable: true,
 	$define: {
 		open: function (open, fromServer) {
-			var img = this.getSubnode('open');
+			var img = this.$n('open');
 			if (!img) return;
 			var cn = img.className;
 			img.className = open ? cn.replace('-close', '-open') : cn.replace('-open', '-close');
@@ -45,7 +45,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 	_showKids: function (open) {
 		if (this.treechildren) {
 			for (var w = this.treechildren.firstChild; w; w = w.nextSibling) {
-				w.getNode().style.display = open ? '' : 'none';
+				w.$n().style.display = open ? '' : 'none';
 				if (w.isOpen())
 					w._showKids(open);
 			}
@@ -57,7 +57,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		return null;		
 	},
 	getNode: function () {
-		if (this.treerow) return this.treerow.getNode();
+		if (this.treerow) return this.treerow.$n();
 		return null;
 	},
 	getZclass: function () {
@@ -65,7 +65,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		return null;
 	},
 	getSubnode: function (nm) {
-		if (this.treerow) return this.treerow.getSubnode(nm);
+		if (this.treerow) return this.treerow.$n(nm);
 		return null;
 	},
 	getTree: _zkf,
@@ -160,7 +160,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 	},
 	doClick_: function(evt) {
 		if (this.isDisabled()) return;
-		if (evt.domTarget == this.getSubnode('open')) {
+		if (evt.domTarget == this.$n('open')) {
 			this.setOpen(!this._open);
 			evt.stop();
 		} else this.$supers('doClick_', arguments);

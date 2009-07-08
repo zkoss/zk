@@ -41,7 +41,7 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
-		var cm = this.getSubnode('cm');
+		var cm = this.$n('cm');
 		if (cm) {
 			this.getListbox()._headercm = cm;
 			this.domListen_(cm, 'onClick');
@@ -49,7 +49,7 @@ zul.sel.Listheader = zk.$extends(zul.mesh.SortWidget, {
 	},
 	unbind_: function () {
 		this.$supers('unbind_', arguments);
-		var cm = this.getSubnode('cm');
+		var cm = this.$n('cm');
 		if (cm) {
 			this.getListbox()._headercm = null;
 			this.domUnlisten_(cm, 'onClick');

@@ -15,7 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.inp.Comboitem = zk.$extends(zul.LabelImageWidget, {
 	$define: {
 		disabled: function (v) {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) {
 				var zcls = this.getZclass() + '-disd';
 				v ? jq(n).addClass(zcls): jq(n).removeClass(zcls);
@@ -30,7 +30,7 @@ zul.inp.Comboitem = zk.$extends(zul.LabelImageWidget, {
 	//super
 	doMouseOver_: function () {
 		if (!this._disabled) {
-			var n = this.getNode(),
+			var n = this.$n(),
 				$n = jq(n),
 				zcls = this.getZclass();
 			$n.addClass($n.hasClass(zcls + '-seld') ?
@@ -43,7 +43,7 @@ zul.inp.Comboitem = zk.$extends(zul.LabelImageWidget, {
 		this.$supers('doMouseOut_', arguments);
 	},
 	_doMouseOut: function () {
-		var n = this.getNode(),
+		var n = this.$n(),
 			zcls = this.getZclass();
 		jq(n).removeClass(zcls + '-over')
 			.removeClass(zcls + '-over-seld');

@@ -165,7 +165,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		if (shadow) shadow.hide();
 	},
 	_makeFloat: function () {
-		var handle = this.getSubnode('cap');
+		var handle = this.$n('cap');
 		if (handle && !this._drag) {
 			handle.style.cursor = "move";
 			var Window = this.$class;
@@ -266,12 +266,12 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	_fixWdh: zk.ie7 ? function () {
 		if (this._mode == 'embedded' || this._mode == 'popup' || !zk(this.$n()).isRealVisible()) return;
 		var n = this.$n(),
-			cave = this.getSubnode('cave').parentNode,
+			cave = this.$n('cave').parentNode,
 			wdh = n.style.width,
 			$n = jq(n),
 			$tl = $n.find('>div:first'),
 			tl = $tl[0],
-			hl = tl && this.getSubnode("cap") ? $tl.nextAll('div:first')[0]: null,
+			hl = tl && this.$n("cap") ? $tl.nextAll('div:first')[0]: null,
 			bl = $n.find('>div:last')[0];
 
 		if (!wdh || wdh == "auto") {
@@ -291,7 +291,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		if (!zk(this.$n()).isRealVisible()) return;
 		var n = this.$n(),
 			hgh = n.style.height,
-			cave = this.getSubnode('cave'),
+			cave = this.$n('cave'),
 			cvh = cave.style.height;
 		if (hgh && hgh != "auto") {
 			if (zk.ie6_) cave.style.height = "0px";
@@ -304,9 +304,9 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	_offsetHeight: function (n) {
 		var h = n.offsetHeight - 1 - this._titleHeight(n);
 		if(this._mode != 'embedded' && this._mode != 'popup') {
-			var cave = this.getSubnode('cave'),
+			var cave = this.$n('cave'),
 				bl = jq(n).find('>div:last')[0],
-				cap = this.getSubnode("cap");
+				cap = this.$n("cap");
 			h -= bl.offsetHeight;
 			if (cave)
 				h -= zk(cave.parentNode).padBorderHeight();
@@ -316,7 +316,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		return h - zk(n).padBorderHeight();
 	},
 	_titleHeight: function (n) {
-		var cap = this.getSubnode('cap'),
+		var cap = this.$n('cap'),
 			$tl = jq(n).find('>div:first'), tl = $tl[0];
 		return cap ? cap.offsetHeight + tl.offsetHeight:
 			this._mode != 'embedded' && this._mode != 'popup' ?
@@ -465,13 +465,13 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 	doClick_: function (evt) {
 		switch (evt.domTarget) {
-		case this.getSubnode('close'):
+		case this.$n('close'):
 			this.fire('onClose');
 			break;
-		case this.getSubnode('max'):
+		case this.$n('max'):
 			// TODO
 			break;
-		case this.getSubnode('min'):
+		case this.$n('min'):
 			// TODO 
 			// if (this.isMinimizable())
 			//	this.setMinimized(!this.isMinimized());
@@ -484,34 +484,34 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 	doMouseOver_: function (evt) {
 		switch (evt.domTarget) {
-		case this.getSubnode('close'):
-			jq(this.getSubnode('close')).addClass(this.getZclass() + '-close-over');
+		case this.$n('close'):
+			jq(this.$n('close')).addClass(this.getZclass() + '-close-over');
 			break;
-		case this.getSubnode('max'):
+		case this.$n('max'):
 			var zcls = this.getZclass(),
 				added = this.isMaximized() ? ' ' + zcls + '-maxd-over' : '';
-			jq(this.getSubnode('max')).addClass(zcls + '-max-over' + added);
+			jq(this.$n('max')).addClass(zcls + '-max-over' + added);
 			break;
-		case this.getSubnode('min'):
-			jq(this.getSubnode('min')).addClass(this.getZclass() + '-min-over');
+		case this.$n('min'):
+			jq(this.$n('min')).addClass(this.getZclass() + '-min-over');
 			break;
 		}
 		this.$supers('doMouseOver_', arguments);
 	},
 	doMouseOut_: function (evt) {
 		switch (evt.domTarget) {
-		case this.getSubnode('close'):
-			jq(this.getSubnode('close')).removeClass(this.getZclass() + '-close-over');
+		case this.$n('close'):
+			jq(this.$n('close')).removeClass(this.getZclass() + '-close-over');
 			break;
-		case this.getSubnode('max'):
+		case this.$n('max'):
 			var zcls = this.getZclass(),
-				$max = jq(this.getSubnode('max'));
+				$max = jq(this.$n('max'));
 			if (this.isMaximized())
 				$max.removeClass(zcls + '-maxd-over');
 			$max.removeClass(zcls + '-max-over');
 			break;
-		case this.getSubnode('min'):
-			jq(this.getSubnode('min')).removeClass(this.getZclass() + '-min-over');
+		case this.$n('min'):
+			jq(this.$n('min')).removeClass(this.getZclass() + '-min-over');
 			break;
 		}
 		this.$supers('doMouseOut_', arguments);
@@ -562,9 +562,9 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		var el = dg.node,
 			wgt = dg.control;
 		switch (evt.domTarget) {
-		case wgt.getSubnode('close'):
-		case wgt.getSubnode('max'):
-		case wgt.getSubnode('min'):
+		case wgt.$n('close'):
+		case wgt.$n('max'):
+		case wgt.$n('min'):
 			return true; //ignore special buttons
 		}
 		if (!wgt.isSizable()

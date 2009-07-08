@@ -15,7 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.sel.Option = zk.$extends(zul.Widget, {
 	$define: {
 		disabled: function (disabled) {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) n.disabled = disabled ? 'disabled' : '';
 		},
 		value: null
@@ -25,7 +25,7 @@ zul.sel.Option = zk.$extends(zul.Widget, {
 			if (this.parent)
 				this.parent.toggleItemSelection(this);
 			
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) n.selected = selected ? 'selected' : '';
 			this._selected = selected;
 		}

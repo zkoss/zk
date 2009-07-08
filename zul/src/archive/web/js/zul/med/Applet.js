@@ -20,13 +20,13 @@ zul.med.Applet = zk.$extends(zul.Widget, {
 
 	$define: {
 		code: function (v) {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) n.code = v || '';
 		}
 	},
 
 	invoke: zk.ie ? function() {
-		var n = this.getNode();
+		var n = this.$n();
 		if (n && arguments.length >= 1) {
 			var expr = "n." + arguments[0] + '(';
 			for (var j = 1; j < arguments.length;) {
@@ -41,7 +41,7 @@ zul.med.Applet = zk.$extends(zul.Widget, {
 			}
 		}
 	}: function(){
-		var n = this.getNode();
+		var n = this.$n();
 		if (n && arguments.length >= 1) {
 			var fn = arguments[0],
 				func = n[fn];
@@ -60,11 +60,11 @@ zul.med.Applet = zk.$extends(zul.Widget, {
 		}
 	},
 	getField: function (name) {
-		var n = this.getNode();
+		var n = this.$n();
 		return n ? n[name]: null;
 	},
 	setField: function (name, value) {
-		var n = this.getNode();
+		var n = this.$n();
 		if (n)
 			try {
 				n[name] = value;

@@ -24,11 +24,11 @@ zul.wgt.Imagemap = zk.$extends(zul.wgt.Image, {
 	},
 
 	//super//
-	getImageNode_: function () {
-		return this.getSubnode("real");
+	getImageNode: function () {
+		return this.$n("real");
 	},
-	getCaveNode_: function () {
-		return this.getSubnode("map");
+	getCaveNode: function () {
+		return this.$n("map");
 	},
 	doClick_: function (evt) {
 		//does nothing (so zk.Widget won't fire onClick)
@@ -46,7 +46,7 @@ zul.wgt.Imagemap = zk.$extends(zul.wgt.Image, {
 	},
 	_fixchd: function (bArea) {
 		var mapid = this.uuid + '-map';
-		img = this.getImageNode_();
+		img = this.getImageNode();
 		img.useMap = bArea ? '#' + mapid : '';
 		img.isMap = !bArea;
 	},

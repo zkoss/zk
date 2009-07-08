@@ -1408,7 +1408,7 @@ zul.utl.Fileupload = zk.$extends(zul.Widget, {
 	},
 	bind_: function () {//after compose
 		this.$supers('bind_', arguments); 
-		var file = this.getSubnode("file");
+		var file = this.$n("file");
 		var widget = this;
 		if (zk.gecko) {
 			file.style.left="-33px";
@@ -1416,9 +1416,9 @@ zul.utl.Fileupload = zk.$extends(zul.Widget, {
     	widget.domListen_(file,"onChange","uploadStart");
 	},
 	uploadStart: function(){
-		var status = this.getSubnode("fsuploadprogress");
-		var form = this.getNode();
-		var file = this.getSubnode("file");
+		var status = this.$n("fsuploadprogress");
+		var form = this.$n();
+		var file = this.$n("file");
 		var formAction=zAu.comURI("/upload")+"?uuid="+this.uuid+"&dtid="+this.desktop.id+"&maxsize=-1";
 		
 		//for testing session timeout or not
@@ -1480,7 +1480,7 @@ zul.utl.Fileupload = zk.$extends(zul.Widget, {
 	
 	},
 	uploadProgress: function(fid, byteRead, totalSize){
-		var pTable = this.getSubnode(fid);
+		var pTable = this.$n(fid);
 		if(!pTable) return
 		
 		var percentage = (parseInt(byteRead)*100/parseInt(totalSize)).toFixed(0);

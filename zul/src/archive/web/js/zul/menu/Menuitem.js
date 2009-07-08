@@ -25,7 +25,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		checked: function (checked) {
 			if (checked)
 				this._checkmark = checked;
-			var n = this.getNode();
+			var n = this.$n();
 			if (n && !this.isTopmost() && !this.getImage()) {
 				var zcls = this.getZclass(),
 					$n = jq(n);
@@ -37,7 +37,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		},
 		autocheck: null,
 		target: function (target) {
-			var anc = this.getSubnode('a');
+			var anc = this.$n('a');
 			if (anc) {
 				if (this.isTopmost())
 					anc = anc.parentNode;
@@ -83,7 +83,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 	},
 	/** Removes the extra space (IE only) */
 	_fixBtn: function () {
-		var btn = this.getSubnode('b');
+		var btn = this.$n('b');
 		if (btn) {
 			var txt = btn.innerHTML, $btn = zk(btn);
 			btn.style.width = ($btn.textSize(txt)[0] + $btn.padBorderWidth()) + "px";
@@ -93,12 +93,12 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		this.$supers('bind_', arguments);
 
 		if (!this.isDisabled()) {
-			var n = this.getNode();
+			var n = this.$n();
 			this.domListen_(n, "onMouseOver")
 				.domListen_(n, "onMouseOut");
 
 			if (this.isTopmost()) {
-				var anc = this.getSubnode('a');
+				var anc = this.$n('a');
 				this.domListen_(anc, "onFocus", "doFocus_")
 					.domListen_(anc, "onBlur", "doBlur_");
 			}
@@ -107,12 +107,12 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 	},
 	unbind_: function () {
 		if (!this.isDisabled()) {
-			var n = this.getNode();
+			var n = this.$n();
 			this.domUnlisten_(n, "onMouseOver")
 				.domUnlisten_(n, "onMouseOut");
 
 			if (this.isTopmost()) {
-				var anc = this.getSubnode('a');
+				var anc = this.$n('a');
 				this.domUnlisten_(anc, "onFocus", "doFocus_")
 					.domUnlisten_(anc, "onBlur", "doBlur_");
 			}
@@ -127,7 +127,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 			if (!this.$class._isActive(this)) return;
 
 			var topmost = this.isTopmost(),
-				anc = this.getSubnode('a');
+				anc = this.$n('a');
 
 			if (topmost) {
 				jq(anc).removeClass(this.getZclass() + '-body-over');
@@ -140,7 +140,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 				}
 				this.fireX(evt);
 			} else {
-				if (zk.ie && topmost && this.getNode().id != anc.id)
+				if (zk.ie && topmost && this.$n().id != anc.id)
 					zUtl.go(anc.href, false, anc.target);
 					// Bug #1886352 and #2154611
 					//Note: we cannot eat onclick. or, <a> won't work
@@ -156,7 +156,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 	_doMouseOver: function (evt) { //not zk.Widget.doMouseOver_
 		if (this.$class._isActive(this)) return;
 		if (!this.isDisabled()) {
-			if (zk.ie && this.isTopmost() && !jq.isAncestor(this.getSubnode('a'), evt.domTarget))
+			if (zk.ie && this.isTopmost() && !jq.isAncestor(this.$n('a'), evt.domTarget))
 				return;
 
 			this.$class._addActive(this);
@@ -166,7 +166,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 	_doMouseOut: function (evt) { //not zk.Widget.doMouseOut_
 		if (!this.isDisabled()) {
 			if (zk.ie) {
-				var n = this.getSubnode('a'),
+				var n = this.$n('a'),
 					xy = zk(n).revisedOffset(),
 					x = evt.pageX,
 					y = evt.pageY,
@@ -181,13 +181,13 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 }, {
 	_isActive: function (wgt) {
 		var top = wgt.isTopmost(),
-			n = top ? wgt.getSubnode('a') : wgt.getNode(),
+			n = top ? wgt.$n('a') : wgt.$n(),
 			cls = wgt.getZclass() + (top ? '-body-over' : '-over');
 		return jq(n).hasClass(cls);
 	},
 	_addActive: function (wgt) {
 		var top = wgt.isTopmost(),
-			n = top ? wgt.getSubnode('a') : wgt.getNode(),
+			n = top ? wgt.$n('a') : wgt.$n(),
 			cls = wgt.getZclass() + (top ? '-body-over' : '-over');
 		jq(n).addClass(cls);
 		if (!top && wgt.parent.parent.$instanceof(zul.menu.Menu))
@@ -195,7 +195,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 	},
 	_rmActive: function (wgt) {
 		var top = wgt.isTopmost(),
-			n = top ? wgt.getSubnode('a') : wgt.getNode(),
+			n = top ? wgt.$n('a') : wgt.$n(),
 			cls = wgt.getZclass() + (top ? '-body-over' : '-over');
 		jq(n).removeClass(cls);
 	}

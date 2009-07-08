@@ -25,7 +25,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		},
 		disabled: _zkf,
 		selected: function(selected) {
-			if (this.getNode())
+			if (this.$n())
 				this._selTab(false);
 		}
 	},
@@ -61,8 +61,8 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	_selTab: function(notify, init) {
 		var tabbox = this.getTabbox(),
 			tabs = this.parent,
-			tbx = tabbox.getNode(),
-			newtb =  this.getNode(),
+			tbx = tabbox.$n(),
+			newtb =  this.$n(),
 			oldtb = this._getSelTab();
 		if (!newtb) return;
 		if (oldtb != newtb || init) {
@@ -92,10 +92,10 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 			panel = tab.getLinkedPanel();
 		if (panel)
 			if (accd && animation) {
-				var p = panel.getSubnode("real");
+				var p = panel.$n("real");
 				zk(p)[toSel ? "slideDown" : "slideUp"](this);
 			} else {
-				var pl = accd ? panel.getSubnode("real") : panel.getNode(); //Can't use getSubnode coz
+				var pl = accd ? panel.$n("real") : panel.$n(); //Can't use getSubnode coz
 				if (toSel) {
 					jq(pl).show();
 					zWatch.fireDown('onShow', null, pl);
@@ -121,17 +121,17 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		if (!this) return null;
 		if (tabbox.inAccordionMold()) {
 			var t = this._getSelTabFromTop()
-			return t.getNode();
+			return t.$n();
 		} else {
 			var node = this;//Notice : not DOM node
 			for (node = this; node = node.nextSibling;)
 				if (node._selected)
-					return node.getNode();
+					return node.$n();
 			for (node = this; node = node.previousSibling;)
 				if (node._selected)
-					return node.getNode();
+					return node.$n();
 			if (this._selected)
-				return this.getNode();
+				return this.$n();
 		}
 		return null;
 	},
@@ -163,7 +163,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	},
 	bind_: function (desktop, skipper, after) {
 		this.$supers('bind_', arguments);
-		var closebtn = this.getSubnode('close'),
+		var closebtn = this.$n('close'),
 			tabs = this.parent,
 			tab = this,
 			selected = this._selected;
@@ -186,7 +186,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	},
 	unbind_: function () {
 		this.$supers('unbind_', arguments);
-		var closebtn = this.getSubnode('close');
+		var closebtn = this.$n('close');
 		if (closebtn) {
 			this.domUnlisten_(closebtn, "onClick", '_doCloseClick');
 			if (zk.ie6_)

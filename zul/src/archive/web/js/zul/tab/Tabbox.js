@@ -92,7 +92,7 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
         }
 	},
 	onSize: _zkf = function() {
-		zk(this.getNode()).cleanVisibility();
+		zk(this.$n()).cleanVisibility();
 	},
 	onShow: _zkf,
 	bind_: function () {

@@ -47,7 +47,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		if (!scls) scls = null;
 		if (this._scOddRow != scls) {
 			this._scOddRow = scls;
-			var n = this.getNode();
+			var n = this.$n();
 			if (n && this.rows)
 				this.stripe();
 		}
@@ -78,7 +78,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		if (!scOdd) return;
 		for (var j = 0, even = true, it = this.getBodyWidgetIterator(), w; (w = it.next()); j++) {
 			if (w.isVisible() && w.isStripeable_()) {
-				jq(w.getNode())[even ? 'removeClass' : 'addClass'](scOdd);
+				jq(w.$n())[even ? 'removeClass' : 'addClass'](scOdd);
 				even = !even;
 			}
 		}

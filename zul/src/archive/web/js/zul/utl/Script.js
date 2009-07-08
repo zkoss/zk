@@ -17,7 +17,7 @@ zul.utl.Script = zk.$extends(zk.Widget, {
 		content: function (cnt) {
 			if (cnt) {
 				this._fn = typeof cnt == 'function' ? cnt: new Function(cnt);
-				if (this.desktop) //check parent since no this.getNode()
+				if (this.desktop) //check parent since no this.$n()
 					this._exec();
 			} else
 				this._fn = null;

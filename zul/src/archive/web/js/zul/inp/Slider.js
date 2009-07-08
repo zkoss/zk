@@ -67,8 +67,8 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 	},
 	$init: function (){
 			this.$supers('$init', arguments);
-			this.inner = this.getSubnode("inner");
-			this.button = this.getSubnode("btn");
+			this.inner = this.$n("inner");
+			this.button = this.$n("btn");
 	},
 	doMouseOver_: function (evt) {
 		this.$supers('doMouseOver_', arguments);
@@ -113,8 +113,8 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		}else{
 			var	widget = dg.control;
 		}
-		var btn = widget.getSubnode("btn");
-		var ofs = zk(widget.getNode()).cmOffset();
+		var btn = widget.$n("btn");
+		var ofs = zk(widget.$n()).cmOffset();
 		ofs = zk(btn).toStyleOffset(ofs[0], ofs[1]);
 		if (x <= ofs[0]) {
 			x = ofs[0];
@@ -142,7 +142,7 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 		widget.slidetip =  jq("#zul_slidetip")[0];
 		if (widget.slidetip) {
 			widget.slidetip.style.display = "block";
-			zk(widget.slidetip).position(widget.getNode(), widget.isVertical()? "end_before" : "after_start");
+			zk(widget.slidetip).position(widget.$n(), widget.isVertical()? "end_before" : "after_start");
 		}
 	},
 	_dragging: function (dg) {
@@ -224,15 +224,15 @@ zul.inp.Slider = zk.$extends(zul.Widget, {
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments); 
-		this.inner = this.getSubnode("inner");
-		this.btn = this.getSubnode("btn");
-		this.inp = this.getSubnode("inp");
+		this.inner = this.$n("inner");
+		this.btn = this.$n("btn");
+		this.inp = this.$n("inp");
 		if(this._name)
 			this.inp.name = this._name;
 		if(this.inScaleMold()){
-			this.node = this.getSubnode("real");
+			this.node = this.$n("real");
 		}else
-			this.node = this.getNode();
+			this.node = this.$n();
 		
 		if (this._orient == "vertical") {
 			this.btn.style.top="0px";

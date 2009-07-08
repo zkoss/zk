@@ -48,7 +48,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	},
 	_hilite: function (opts) {
 		this._hilite2(
-			this._findItem(this.getInputNode_().value,
+			this._findItem(this.getInputNode().value,
 				this._isStrict() || (opts && opts.strict)), opts);
 	},
 	_hilite2: function (sel, opts) {
@@ -58,12 +58,12 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		this._sel = sel;
 
 		if (oldsel && oldsel.parent == this) { //we don't clear _sel precisely, so...
-			var n = oldsel.getNode();
+			var n = oldsel.$n();
 			if (n) jq(n).removeClass(oldsel.getZclass() + '-seld');
 		}
 
 		if (sel && !sel.isDisabled())
-			jq(sel.getNode()).addClass(sel.getZclass() + '-seld');
+			jq(sel.$n()).addClass(sel.getZclass() + '-seld');
 
 		if (opts.sendOnSelect && this._lastsel != sel) {
 			this._lastsel = sel;
@@ -87,7 +87,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		this._updnSel(evt, true);
 	},
 	_updnSel: function (evt, bUp) {
-		var inp = this.getInputNode_(),
+		var inp = this.getInputNode(),
 			val = inp.value, sel;
 		if (val) {
 			val = val.toLowerCase();
@@ -132,7 +132,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		return item ? item: bUp ? this.lastChild: this.firstChild;
 	},
 	_select: function (sel, opts) {
-		var inp = this.getInputNode_(),
+		var inp = this.getInputNode(),
 			val = inp.value = sel ? sel.getLabel(): '';
 		if (val)
 			zk(inp).setSelectionRange(0, val.length)
@@ -148,7 +148,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	_typeahead: function (bDel) {
 		if (zk.currentFocus != this) return;
 
-		var inp = this.getInputNode_(),
+		var inp = this.getInputNode(),
 			val = inp.value,
 			ofs = zk(inp).getSelectionRange()
 			fchild = this.firstChild;

@@ -27,7 +27,7 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 		if (!scls) scls = null;
 		if (this._scOddRow != scls) {
 			this._scOddRow = scls;
-			var n = this.getNode();
+			var n = this.$n();
 			if (n && this.rows)
 				this.rows.stripe();
 		}

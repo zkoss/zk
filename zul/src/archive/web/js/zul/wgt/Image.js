@@ -15,44 +15,44 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.wgt.Image = zk.$extends(zul.Widget, {
 	$define: {
 		src: function (v) {
-			var n = this.getImageNode_();
+			var n = this.getImageNode();
 			if (n) n.src = v || '';
 		},
 		hover: null,
 		align: function (v) {
-			var n = this.getImageNode_();
+			var n = this.getImageNode();
 			if (n) n.align = v || '';
 		},
 		border: function (v) {
-			var n = this.getImageNode_();
+			var n = this.getImageNode();
 			if (n) n.border = v || '';
 		},
 		hspace: function (v) {
-			var n = this.getImageNode_();
+			var n = this.getImageNode();
 			if (n) n.hspace = v;
 		},
 		vspace: function (v) {
-			var n = this.getImageNode_();
+			var n = this.getImageNode();
 			if (n) n.vspace = v;
 		}
 	},
 
-	getImageNode_: function () {
-		return this.getNode();
+	getImageNode: function () {
+		return this.$n();
 	},
 
 	//super
 	doMouseOver_: function () {
 		var hover = this._hover;
 		if (hover) {
-			var img = this.getImageNode_();
+			var img = this.getImageNode();
 			if (img) img.src = hover;
 		}
 		this.$supers('doMouseOver_', arguments);
 	},
 	doMouseOut_: function () {
 		if (this._hover) {
-			var img = this.getImageNode_();
+			var img = this.getImageNode();
 			if (img) img.src = this._src || '';
 		}
 		this.$supers('doMouseOut_', arguments);

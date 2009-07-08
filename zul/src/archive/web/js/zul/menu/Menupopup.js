@@ -59,7 +59,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 	},
 	_syncShadow: function () {
 		if (!this._shadow)
-			this._shadow = new zk.eff.Shadow(this.getNode(), {stackup:(zk.useStackup === undefined ? zk.ie6_: zk.useStackup)});
+			this._shadow = new zk.eff.Shadow(this.$n(), {stackup:(zk.useStackup === undefined ? zk.ie6_: zk.useStackup)});
 		this._shadow.sync();
 	},
 	_hideShadow: function () {
@@ -67,11 +67,11 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 	},
 	close: function () {
 		this.$supers('close', arguments);
-		jq(this.getNode()).hide(); // force to hide the element
+		jq(this.$n()).hide(); // force to hide the element
 		this._hideShadow();
 		var menu = this.parent;
 		if (menu.$instanceof(zul.menu.Menu) && menu.isTopmost())
-			jq(menu.getSubnode('a')).removeClass(menu.getZclass() + "-body-seld");
+			jq(menu.$n('a')).removeClass(menu.getZclass() + "-body-seld");
 
 		var item = this._currentChild();
 		if (item) item.$class._rmActive(item);
@@ -81,7 +81,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 	open: function (ref, offset, position, opts) {
 		if (this.parent.$instanceof(zul.menu.Menu)) {
 			if (!offset) {
-				ref = this.parent.getSubnode('a');
+				ref = this.parent.$n('a');
 				if (!position)
 					if (this.parent.isTopmost())
 						position = this.parent.parent.getOrient() == 'vertical'
@@ -91,7 +91,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		}
 		this.$super('open', ref, offset, position, opts || {sendOnOpen: true, disableMask: true});
 		var sdw = this._shadow,
-			n = this.getNode(),
+			n = this.$n(),
 			st = n.style;
 		if (sdw) {
 			var opts = sdw.opts, l = n.offsetLeft, t = n.offsetTop; 
@@ -144,9 +144,9 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 	},
 	onShow: function (wgt) {
 		if (zk.ie7) {
-			var pp = this.getNode();
+			var pp = this.$n();
 			if (!pp.style.width) {// Bug 2105158 and Bug 1911129
-				var ul = this.getSubnode('cave');
+				var ul = this.$n('cave');
 				if (ul.childNodes.length)
 					pp.style.width = ul.offsetWidth + zk(pp).padBorderWidth() + "px";
 				else
@@ -154,12 +154,12 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 			}
 		}
 		this._syncShadow();
-		var anc = this.getSubnode('a');
+		var anc = this.$n('a');
 		if (anc) {
 
 			// just in case
 			if (zk.ie)
-				zk(this.getNode()).cleanVisibility();
+				zk(this.$n()).cleanVisibility();
 			if(zk(anc).isRealVisible())
 				anc.focus();
 		}
@@ -181,9 +181,9 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		this.$supers('unbind_', arguments);
 	},
 	onResponse: function () {
-		var pp = this.getNode();
+		var pp = this.$n();
 		if (!pp.style.width) {// Bug 2105158 and Bug 1911129
-			var ul = this.getSubnode('cave');
+			var ul = this.$n('cave');
 			if (ul.childNodes.length) { // Bug 2784736
 				pp.style.width = ul.offsetWidth + zk(pp).padBorderWidth() + "px";
 				zWatch.unlisten({onResponse: this});
@@ -206,7 +206,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 			if (this.parent.$instanceof(zul.menu.Menu) && !this.parent.isTopmost()) {
 				var pp = this.parent.parent;
 				if (pp) {
-					var anc = pp.getSubnode('a');
+					var anc = pp.$n('a');
 					if (anc) anc.focus();
 				}
 			}

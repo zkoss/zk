@@ -17,7 +17,7 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 	_span: 1,
 	$define: {
 		span: function (v) {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) n.colSpan = v;
 		}
 	},
@@ -51,8 +51,8 @@ zul.sel.Treecell = zk.$extends(zul.LabelImageWidget, {
 	domLabel_: function () {
 		return zUtl.encodeXML(this.getLabel(), {maxlength: this.getMaxlength()});
 	},
-	getTextNode_: function () {
-		return zDom.firstChild(this.getNode(), "DIV");
+	getTextNode: function () {
+		return zDom.firstChild(this.$n(), "DIV");
 	},
 	domContent_: function () {
 		var s1 = this.$supers('domContent_', arguments),

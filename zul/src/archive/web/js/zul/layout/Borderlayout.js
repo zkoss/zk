@@ -62,7 +62,7 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 	_getAmbit: function (wgt, ignoreSplit) {
 		var ambit, mars = wgt.getCurrentMargins_(), region = wgt.getPosition();
 		if (region && !wgt._open) {
-			var colled = wgt.getSubnode('colled');
+			var colled = wgt.$n('colled');
 			ambit = {
 				x: mars.left,
 				y: mars.top,
@@ -80,15 +80,15 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 				y: mars.top,
 				w: widx > 0 ?
 					Math.max(
-						Math.floor(this.getNode().offsetWidth * zk.parseInt(w.substring(0, widx)) / 100),
-						0) : wgt.getSubnode('real').offsetWidth, 
+						Math.floor(this.$n().offsetWidth * zk.parseInt(w.substring(0, widx)) / 100),
+						0) : wgt.$n('real').offsetWidth, 
 				h: hidx > 0 ?
 					Math.max(
-						Math.floor(this.getNode().offsetHeight * zk.parseInt(h.substring(0, hidx)) / 100),
-						0) : wgt.getSubnode('real').offsetHeight
+						Math.floor(this.$n().offsetHeight * zk.parseInt(h.substring(0, hidx)) / 100),
+						0) : wgt.$n('real').offsetHeight
 			};
 		}
-		var split = ignoreSplit ? {offsetHeight:0, offsetWidth:0} : wgt.getSubnode('split') || {offsetHeight:0, offsetWidth:0},
+		var split = ignoreSplit ? {offsetHeight:0, offsetWidth:0} : wgt.$n('split') || {offsetHeight:0, offsetWidth:0},
 			BL = this.$class;
 		if (!ignoreSplit) wgt._fixSplit();
 		switch (region) {
@@ -118,7 +118,7 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 	_resize: function (isOnSize) {
 		this._isOnSize = isOnSize;
 		if (!this.isRealVisible()) return;
-		var el = this.getNode(),
+		var el = this.$n(),
 			width = el.offsetWidth,
 			height = el.offsetHeight,
 			center = { 
@@ -130,7 +130,7 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 		for (var region, ambit, margin,	rs = ['north', 'south', 'west', 'east'],
 				j = 0, k = rs.length; j < k; ++j) {
 			region = this[rs[j]];
-			if (region && zk(region.getNode()).isVisible()) {
+			if (region && zk(region.$n()).isVisible()) {
 				ambit = this._getAmbit(region);
 				switch (rs[j]) {
 				case 'north':
@@ -154,7 +154,7 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 				this._resizeWgt(region, ambit);
 			}
 		}
-		if (this.center && zk(this.center.getNode()).isVisible()) {
+		if (this.center && zk(this.center.$n()).isVisible()) {
 			var mars = this.center.getCurrentMargins_();
 			center.x += mars.left;
 			center.y += mars.top;
@@ -167,17 +167,17 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 	},
 	_resizeWgt: function (wgt, ambit, ignoreSplit) {
 		if (wgt._open) {
-			if (!ignoreSplit && wgt.getSubnode('split')) {
+			if (!ignoreSplit && wgt.$n('split')) {
 				wgt._fixSplit();
 				 ambit = this._resizeSplit(wgt, ambit);
 			}
-			var s = wgt.getSubnode('real').style; 
+			var s = wgt.$n('real').style; 
 			s.left = ambit.x + "px";
 			s.top = ambit.y + "px";
 			this._resizeBody(wgt, ambit);
 		} else {
-			wgt.getSubnode('split').style.display = "none";
-			var colled = wgt.getSubnode('colled');
+			wgt.$n('split').style.display = "none";
+			var colled = wgt.$n('colled');
 			if (colled) {
 				colled.style.left = ambit.x + "px";
 				colled.style.top = ambit.y + "px";
@@ -188,7 +188,7 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 		}
 	},
 	_resizeSplit: function (wgt, ambit) {
-		var split = wgt.getSubnode('split');
+		var split = wgt.$n('split');
 		if (!zk(split).isVisible()) return ambit;
 		var sAmbit = {
 				w: split.offsetWidth, 
@@ -229,9 +229,9 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 	_resizeBody: function (wgt, ambit) {
 		ambit.w = Math.max(0, ambit.w);
 		ambit.h = Math.max(0, ambit.h);
-		var el = wgt.getSubnode('real'),
+		var el = wgt.$n('real'),
 			bodyEl = wgt.isFlex() && wgt.firstChild ?
-						wgt.firstChild.getNode() : wgt.getSubnode('cave');
+						wgt.firstChild.$n() : wgt.$n('cave');
 		if (!this._ignoreResize(el, ambit.w, ambit.h)) {
 			ambit.w = zk(el).revisedWidth(ambit.w);
 			el.style.width = ambit.w + "px";
@@ -241,7 +241,7 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 			ambit.h = zk(el).revisedHeight(ambit.h);
 			el.style.height = ambit.h + "px";
 			ambit.h = zk(bodyEl).revisedHeight(ambit.h);
-			if (wgt.getSubnode('cap')) ambit.h = Math.max(0, ambit.h - wgt.getSubnode('cap').offsetHeight);
+			if (wgt.$n('cap')) ambit.h = Math.max(0, ambit.h - wgt.$n('cap').offsetHeight);
 			bodyEl.style.height = ambit.h + "px";
 			if (wgt.isAutoscroll()) { 
 				bodyEl.style.overflow = "auto";

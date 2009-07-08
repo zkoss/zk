@@ -15,11 +15,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.wgt.Area = zk.$extends(zk.Widget, {
 	$define: {
 		shape: function (v) {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) n.shape = v || '';
 		},
 		coords: function (coords) {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) n.coords = v || '';
 		}
 	},

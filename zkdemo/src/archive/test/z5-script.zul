@@ -51,7 +51,7 @@ xmlns:w="http://www.zkoss.org/2005/zk/client">
 	btn.setLabel('Add');
 	btn.listen({
 		onClick: function () {
-			appendTo(this.$s());
+			appendTo(this.$o());
 		}
 	});
 	this.parent.appendChild(btn);

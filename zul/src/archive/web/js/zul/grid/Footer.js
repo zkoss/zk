@@ -17,7 +17,7 @@ zul.grid.Footer = zk.$extends(zul.LabelImageWidget, {
 
 	$define: {
 		span: function (v) {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) n.colSpan = v;
 		}
 	},

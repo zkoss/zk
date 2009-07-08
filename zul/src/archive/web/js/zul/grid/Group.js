@@ -78,7 +78,7 @@ zul.grid.Group = zk.$extends(zul.grid.Row, {
 	},
 	_openItem: function (open, silent) {
 		this._open = open;
-		var img = this.getSubnode('img'),
+		var img = this.$n('img'),
 			zcls = this.getZclass();
 		if (img) {
 			jq(img)[open ? "removeClass" : "addClass"](zcls + "-img-close")
@@ -93,7 +93,7 @@ zul.grid.Group = zk.$extends(zul.grid.Row, {
 		for (var r, w = this.nextSibling; w && (!w.$instanceof(zul.grid.Group) && !w.$instanceof(zul.grid.Groupfoot));
 				w = w.nextSibling)
 			if (w.desktop && w.isVisible())
-				jq(w.getNode())[toOpen ? "show" : "hide"]();
+				jq(w.$n())[toOpen ? "show" : "hide"]();
 	},
 	beforeParentChanged_: function (p) {
 		if (p == null) {
@@ -119,8 +119,8 @@ zul.grid.Group = zk.$extends(zul.grid.Row, {
 	},
 	bind_: function () {		
 		this.$supers('bind_', arguments);
-		var n = this.getNode(),
-			img = this.getSubnode("img");
+		var n = this.$n(),
+			img = this.$n("img");
 		if (img)
 			this.domListen_(img, 'onClick', '_doImgClick');
 		var table = n.parentNode.parentNode;
@@ -134,7 +134,7 @@ zul.grid.Group = zk.$extends(zul.grid.Row, {
 		}
 	},
 	unbind_: function (skipper, after) {
-		this.domUnlisten_(this.getSubnode("img"), 'onClick', '_doImgClick');
+		this.domUnlisten_(this.$n("img"), 'onClick', '_doImgClick');
 		if (this._unbindafter && this._unbindafter.length) after.push(this._unbindafter.pop());
 		this._unbindafter = null;
 		this.$supers('unbind_', arguments);

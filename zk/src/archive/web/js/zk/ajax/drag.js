@@ -27,7 +27,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 		}
 
 		this.control = control;
-		this.node = node = node ? jq(node, zk)[0]: control.node || control.getNode();
+		this.node = node = node ? jq(node, zk)[0]: control.node || control.$n();
 		if (!node)
 			throw "Handle required for "+control;
 

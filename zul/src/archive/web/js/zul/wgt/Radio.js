@@ -15,7 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 	$define: {
 		value: function (v) {
-			var n = this.getSubnode('real');
+			var n = this.$n('real');
 			if (n) n.value = v || '';
 		}
 	},
@@ -28,7 +28,7 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 	setChecked: _zkf = function (checked) {
 		if (checked != this._checked) {
 			this._checked = checked;
-			var n = this.getSubnode('real');
+			var n = this.$n('real');
 			if (n) {
 				n.checked = checked || false;
 
@@ -38,7 +38,7 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 					if (checked) {
 						for (var items = group.getItems(), i = items.length; i--;) {
 							if (items[i] != this) {
-								items[i].getSubnode('real').checked = false;
+								items[i].$n('real').checked = false;
 								items[i]._checked = false;
 							}
 						}

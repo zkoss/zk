@@ -48,8 +48,8 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		var attrs = this.$supers('domAttrs_', arguments);
 		return attrs + this.getColAttrs();
 	},
-	getTextNode_: function () {
-		return jq(this.getNode()).find('>div:first')[0];
+	getTextNode: function () {
+		return jq(this.$n()).find('>div:first')[0];
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
@@ -64,7 +64,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		this.$supers('unbind_', arguments);
 	},
 	_initsz: function () {
-		var n = this.getNode();
+		var n = this.$n();
 		if (n && !this._drag) {
 			var $Header = this.$class;
 			this._drag = new zk.Draggable(this, null, {
@@ -78,12 +78,12 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		}
 	},
 	_fixedFaker: function () {
-		var n = this.getNode(),
+		var n = this.$n(),
 			index = zk(n).cellIndex(),
 			owner = this.getMeshWidget();
 		for (var faker, fs = this.$class._faker, i = fs.length; i--;) {
 			faker = owner['e' + fs[i]]; // internal element
-			if (faker && !this.getSubnode(fs[i])) 
+			if (faker && !this.$n(fs[i])) 
 				faker[faker.cells.length > index ? "insertBefore" : "appendChild"]
 					(this._createFaker(n, fs[i]), faker.cells[index]);
 		}
@@ -107,7 +107,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	},
 	doMouseMove_: function (evt) {
 		if (zk.dragging || !this.parent.isSizable()) return;
-		var n = this.getNode(),
+		var n = this.$n(),
 			ofs = zk(n).revisedOffset(); // Bug #1812154
 		if (this._insizer(evt.pageX - ofs[0])) {
 			jq(n).addClass(this.getZclass() + "-sizing");
@@ -117,12 +117,12 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	},
 	doMouseOut_: function (evt) {
 		if (this.parent.isSizable()) {
-			var n = this.getNode()
+			var n = this.$n()
 			jq(n).removeClass(this.getZclass() + "-sizing");
 		}
 	},
 	_insizer: function (x) {
-		return x >= this.getNode().offsetWidth - 10;
+		return x >= this.$n().offsetWidth - 10;
 	}
 }, { //static
 	_faker: ["hdfaker", "bdfaker", "ftfaker"],
@@ -132,7 +132,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		var wgt = dg.control,
 			el = wgt.getMeshWidget().eheadtbl,
 			of = zk(el).revisedOffset(),
-			n = wgt.getNode();
+			n = wgt.$n();
 		
 		ofs[1] = of[1];
 		ofs[0] += zk(n).offsetWidth();
@@ -146,7 +146,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		dg._zszofs = zk(dg.node).revisedOffset()[0] - zk(origin).revisedOffset()[0];
 	},
 	_snapsizing: function (dg, pointer) {
-		var n = dg.control.getNode(), $n = zk(n),
+		var n = dg.control.$n(), $n = zk(n),
 			ofs = $n.revisedOffset();
 		pointer[0] += $n.offsetWidth(); 
 		if (ofs[0] + dg._zmin >= pointer[0])
@@ -155,7 +155,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	},
 	_ignoresizing: function (dg, pointer, evt) {
 		var wgt = dg.control,
-			n = wgt.getNode(), $n = zk(n),
+			n = wgt.$n(), $n = zk(n),
 			ofs = $n.revisedOffset(); // Bug #1812154
 			
 		if (wgt._insizer(pointer[0] - ofs[0])) {
@@ -166,7 +166,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	},
 	_aftersizing: function (dg, evt) {
 		var wgt = dg.control,
-			n = wgt.getNode(), $n = zk(n),
+			n = wgt.$n(), $n = zk(n),
 			owner = wgt.getMeshWidget(),
 			wd = dg._zszofs,
 			table = owner.eheadtbl,

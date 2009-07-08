@@ -125,7 +125,7 @@ zul.grid.Columns = zk.$extends(zul.mesh.HeadWidget, {
 	_onMenuPopup: function (evt) {
 		if (this._mref) {
 			var zcls = this._mref.getZclass(),
-				n = this._mref.getNode();
+				n = this._mref.$n();
 			jq(n).removeClass(zcls + '-visi').removeClass(zcls + '-over');
 		}
 		this._mref = evt.data.reference; 

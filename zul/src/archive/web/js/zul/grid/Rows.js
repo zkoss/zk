@@ -56,7 +56,7 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 	stripe: function () {
 		var scOdd = this.getGrid().getOddRowSclass();
 		if (!scOdd) return;
-		var n = this.getNode();
+		var n = this.$n();
 		for (var j = 0, w = this.firstChild, even = true; w; w = w.nextSibling, ++j) {
 			if (w.isVisible() && w.isStripeable_()) {
 				// check whether is a legal Row or not for zkex.grid.Detail

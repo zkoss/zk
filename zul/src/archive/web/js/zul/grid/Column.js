@@ -48,7 +48,7 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 		evt.stop();
 		
 		var desktop = body.desktop,
-			node = body.getNode();
+			node = body.$n();
 		try {
 			body.unbind();
 			if (body.hasGroup()) {
@@ -137,34 +137,34 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
-		var n = this.getNode();
+		var n = this.$n();
 		this.domListen_(n, "onMouseOver")
 			.domListen_(n, "onMouseOut");
-		var btn = this.getSubnode('btn');
+		var btn = this.$n('btn');
 		if (btn)
 			this.domListen_(btn, "onClick");
 	},
 	unbind_: function () {
-		var n = this.getNode();
+		var n = this.$n();
 		this.domUnlisten_(n, "onMouseOver")
 			.domUnlisten_(n, "onMouseOut");
-		var btn = this.getSubnode('btn');
+		var btn = this.$n('btn');
 		if (btn)
 			this.domUnlisten_(btn, "onClick");
 		this.$supers('unbind_', arguments);
 	},
 	_doMouseOver: function(evt) {
 		if (this.parent._menupopup || this.parent._menupopup != 'none') {
-			var btn = this.getSubnode('btn'),
-				n = this.getNode();
+			var btn = this.$n('btn'),
+				n = this.$n();
 			jq(n).addClass(this.getZclass() + "-over");
 			if (btn) btn.style.height = n.offsetHeight - 1 + "px";
 		}
 	},
 	_doMouseOut: function (evt) {
 		if (this.parent._menupopup || this.parent._menupopup != 'none') {
-			var btn = this.getSubnode('btn'),
-				n = this.getNode(), $n = jq(n),
+			var btn = this.$n('btn'),
+				n = this.$n(), $n = jq(n),
 				zcls = this.getZclass();
 			if (!$n.hasClass(zcls + "-visi") &&
 				(!zk.ie || !jq.isAncestor(n, evt.domEvent.relatedTarget || evt.domEvent.toElement)))
@@ -174,8 +174,8 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 	_doClick: function (evt) {
 		if (this.parent._menupopup || this.parent._menupopup != 'none') {
 			var pp = this.parent._menupopup,
-				n = this.getNode(),
-				btn = this.getSubnode('btn'),
+				n = this.$n(),
+				btn = this.$n('btn'),
 				zcls = this.getZclass();
 				
 			jq(n).addClass(zcls + "-visi");

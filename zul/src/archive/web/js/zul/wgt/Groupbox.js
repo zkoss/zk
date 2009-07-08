@@ -18,9 +18,9 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 
 	$define: { //zk.def
 		open: function (open, fromServer) {
-			var node = this.getNode();
+			var node = this.$n();
 			if (node) {
-				var panel = this.getSubnode('panel');
+				var panel = this.$n('panel');
 				if (panel) { //!legend
 					if (open) zk(panel).slideDown(this, {afterAnima: this._afterSlideDown});
 					else zk(panel).slideUp(this, {beforeAnima: this._beforeSlideUp});
@@ -58,16 +58,16 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 
 	//watch//
 	onSize: _zkf = function () {
-		var hgh = this.getNode().style.height;
+		var hgh = this.$n().style.height;
 		if (hgh && hgh != "auto") {
-			var n = this.getSubnode('cave');
+			var n = this.$n('cave');
 			if (n) {
 				if (zk.ie6_) n.style.height = "";
 				var fix = function() {
 					n.style.height =
 						zk(n).revisedHeight(zk(n.parentNode).vflexHeight(), true)
 						+ "px";
-						//we use n.parentNode(=this.getSubnode('panel')) to calc vflex,
+						//we use n.parentNode(=this.$n('panel')) to calc vflex,
 						//so we have to subtract margin, too
 				};
 				fix();
@@ -78,7 +78,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		}
 		setTimeout(this.proxy(this._fixShadow), 500);
 			//shadow raraly needs to fix so OK to delay for better performance
-			//(getSubnode('sdw') a bit slow due to document.getElementById)
+			//($n('sdw') a bit slow due to document.getElementById)
 	},
 	onShow: _zkf,
 	_afterSlideDown: function (n) {
@@ -88,10 +88,10 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 		zWatch.fireDown("onHide", null, this);
 	},
 	_fixShadow: function () {
-		var sdw = this.getSubnode('sdw');
+		var sdw = this.$n('sdw');
 		if (sdw)
 			sdw.style.display =
-				zk.parseInt(jq(this.getSubnode('cave')).css("border-bottom-width")) ? "": "none";
+				zk.parseInt(jq(this.$n('cave')).css("border-bottom-width")) ? "": "none";
 				//if no border-bottom, hide the shadow
 	},
 	updateDomStyle_: function () {

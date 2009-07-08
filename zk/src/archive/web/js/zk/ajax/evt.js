@@ -185,7 +185,7 @@ zWatch = {
 		}
 	},
 	_visible: function (c) {
-		return c.getNode && c.getNode() && zk(c.getNode()).isRealVisible();
+		return c.getNode && c.$n() && zk(c.$n()).isRealVisible();
 	},
 	_visibleChild: function (p, c) {
 		if (zWatch._visible(c))

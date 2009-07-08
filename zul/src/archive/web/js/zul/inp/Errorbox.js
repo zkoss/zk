@@ -62,7 +62,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 	},
 	doMouseMove_: function (evt) {
 		var el = evt.domTarget;
-		if (el == this.getSubnode('c')) {
+		if (el == this.$n('c')) {
 			var y = evt.pageY,
 				$el = jq(el),
 				size = zk.parseInt($el.css('padding-right'))
@@ -72,14 +72,14 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 	},
 	doMouseOut_: function (evt) {
 		var el = evt.domTarget;
-		if (el == this.getSubnode('c'))
+		if (el == this.$n('c'))
 			jq(el).removeClass('z-errbox-close-over');
 		else
 			this.$supers('doMouseOut_', arguments);
 	},
 	doClick_: function (evt) {
 		var el = evt.domTarget;
-		if (el == this.getSubnode('c') && jq(el).hasClass('z-errbox-close-over'))
+		if (el == this.$n('c') && jq(el).hasClass('z-errbox-close-over'))
 			this.parent.clearErrorMessage(true, true);
 		else {
 			this.$supers('doClick_', arguments);
@@ -114,19 +114,19 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 		for (; top2 && !top2.isFloating_(); top2 = top2.parent)
 			;
 		if (top1 == top2) { //uncover if sibling
-			var n = wgt.getNode();
+			var n = wgt.$n();
 			if (n) this._uncover(n);
 		}
 	},
 	_uncover: function (el) {
 		var elofs = zk(el).cmOffset(),
-			node = this.getNode(),
+			node = this.$n(),
 			nodeofs = zk(node).cmOffset();
 
 		if (jq.isOverlapped(
 		elofs, [el.offsetWidth, el.offsetHeight],
 		nodeofs, [node.offsetWidth, node.offsetHeight])) {
-			var parent = this.parent.getNode(), y;
+			var parent = this.parent.$n(), y;
 			var ptofs = zk(parent).cmOffset(),
 				pthgh = parent.offsetHeight,
 				ptbtm = ptofs[1] + pthgh;
@@ -139,9 +139,9 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 		}
 	},
 	_fixarrow: function () {
-		var parent = this.parent.getNode(),
-			node = this.getNode(),
-			arrow = this.getSubnode('a'),
+		var parent = this.parent.$n(),
+			node = this.$n(),
+			arrow = this.$n('a'),
 			ptofs = zk(parent).revisedOffset(),
 			nodeofs = zk(node).revisedOffset();
 		var dx = nodeofs[0] - ptofs[0], dy = nodeofs[1] - ptofs[1], dir;
@@ -161,14 +161,14 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 		errbox._fixarrow();
 	},
 	_ignoredrag: function (dg, pointer, evt) {
-		var c = dg.control.getSubnode('c');
+		var c = dg.control.$n('c');
 		return evt.domTarget == c && jq(c).hasClass('z-errbox-close-over');
 	},
 	_change: function (dg) {
 		var errbox = dg.control,
 			stackup = errbox._stackup;
 		if (stackup) {
-			var el = errbox.getNode();
+			var el = errbox.$n();
 			stackup.style.top = el.style.top;
 			stackup.style.left = el.style.left;
 		}

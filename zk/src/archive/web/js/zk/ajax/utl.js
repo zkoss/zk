@@ -173,7 +173,7 @@ zUtl = { //static methods
 				if (!e._applyMask)
 					e._applyMask = new zk.eff.Mask({
 						id: e.uuid + "-mask",
-						anchor: e.getNode()
+						anchor: e.$n()
 					});
 			}
 			return;

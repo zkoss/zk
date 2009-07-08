@@ -37,10 +37,10 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		title: _zkf,
 
 		open: function (open, fromServer) {
-			var node = this.getNode();
+			var node = this.$n();
 			if (node) {
 				var zcls = this.getZclass(),
-					$body = jq(this.getSubnode('body'));
+					$body = jq(this.$n('body'));
 				if ($body[0] && !$body.is(':animated')) {
 					if (open) {
 						jq(node).removeClass(zcls + '-colpsd');
@@ -66,7 +66,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				setVisible0(false); //avoid dead loop
 			} else setVisible0(true);
 			*/
-			var node = this.getNode();
+			var node = this.$n();
 			if (node) {
 				var s = node.style, l = s.left, t = s.top, w = s.width, h = s.height;
 				if (minimized) {
@@ -179,14 +179,14 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	_fixWdh: zk.ie7 ? function () {
 		if (!this.isFramable() || !this.panelchildren) return;
 
-		var $n = jq(this.getNode()),
+		var $n = jq(this.$n()),
 			wdh = $n[0].style.width,
 			tl = $n.find('> :first-child')[0],
-			hl = this.getSubnode("cap") ? jq(tl).next()[0] : null,
+			hl = this.$n("cap") ? jq(tl).next()[0] : null,
 			bl = $n.find("> :last-child")[0],
-			bb = this.getSubnode("bb"),
-			fl = this.getSubnode("fb") ? jq(bl).prev()[0]: null,
-			body = this.panelchildren.getNode(),
+			bb = this.$n("bb"),
+			fl = this.$n("fb") ? jq(bl).prev()[0]: null,
+			body = this.panelchildren.$n(),
 			cm = body.parentNode;
 
 		if (!wdh || wdh == "auto") {
@@ -216,8 +216,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	} : zk.$void,
 	_fixHgh: function () {
 		if (!this.panelchildren || !this.isRealVisible()) return;
-		var n = this.getNode(),
-			body = this.panelchildren.getNode(),
+		var n = this.$n(),
+			body = this.panelchildren.$n(),
 			hgh = n.style.height;
 		if (zk.ie6_ && ((hgh && hgh != "auto" )|| body.style.height)) body.style.height = "0px";
 		if (hgh && hgh != "auto")
@@ -228,9 +228,9 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		var h = n.offsetHeight - 1;
 		h -= this._titleHeight(n);
 		if (this.isFramable()) {
-			var body = this.panelchildren.getNode(),
-				bl = jq(this.getSubnode('body')).find(':last')[0],
-				title = this.getSubnode('cap');
+			var body = this.panelchildren.$n(),
+				bl = jq(this.$n('body')).find(':last')[0],
+				title = this.$n('cap');
 			h -= bl.offsetHeight;
 			if (body)
 				h -= zk(body.parentNode).padBorderHeight();
@@ -238,16 +238,16 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				h -= zk(title.parentNode).padBorderHeight();
 		}
 		h -= zk(n).padBorderHeight();
-		var tb = this.getSubnode('tb'),
-			bb = this.getSubnode('bb'),
-			fb = this.getSubnode('fb');
+		var tb = this.$n('tb'),
+			bb = this.$n('bb'),
+			fb = this.$n('fb');
 		if (tb) h -= tb.offsetHeight;
 		if (bb) h -= bb.offsetHeight;
 		if (fb) h -= fb.offsetHeight;
 		return h;
 	},
 	_titleHeight: function (n) {
-		var cap = this.getSubnode('cap'),
+		var cap = this.$n('cap'),
 			top = this.isFramable() ?
 				jq(n).find('> div:first-child')[0].offsetHeight: 0;
 		return cap ? cap.offsetHeight + top : top;
@@ -299,7 +299,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		zWatch.fireDown("onHide", null, this);
 	},
 	_initFloat: function () {
-		var n = this.getNode();
+		var n = this.$n();
 		if (!n.style.top && !n.style.left) {
 			var xy = zk(n).revisedOffset();
 			n.style.left = xy[0] + "px";
@@ -318,7 +318,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		}
 	},
 	_initMove: function (cmp) {
-		var handle = this.getSubnode('cap');
+		var handle = this.$n('cap');
 		if (handle && !this._drag) {
 			handle.style.cursor = "move";
 			var $Panel = this.$class;
@@ -337,7 +337,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			}
 		} else {
 			if (!this._shadow)
-				this._shadow = new zk.eff.Shadow(this.getNode(),
+				this._shadow = new zk.eff.Shadow(this.$n(),
 					{left: -4, right: 4, top: -2, bottom: 3, stackup:true});
 			this._shadow.sync();
 		}
@@ -377,17 +377,17 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	},
 	doClick_: function (evt) {
 		switch (evt.domTarget) {
-		case this.getSubnode('close'):
+		case this.$n('close'):
 			this.fire('onClose');
 			break;
-		case this.getSubnode('max'):
+		case this.$n('max'):
 			// TODO
 			break;
-		case this.getSubnode('min'):
+		case this.$n('min'):
 			if (this.isMinimizable())
 				this.setMinimized(!this.isMinimized());
 			break;
-		case this.getSubnode('exp'):
+		case this.$n('exp'):
 			if (this.isCollapsible())
 				this.setOpen(!this.isOpen());
 			break;
@@ -399,40 +399,40 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	},
 	doMouseOver_: function (evt) {
 		switch (evt.domTarget) {
-		case this.getSubnode('close'):
-			jq(this.getSubnode('close')).addClass(this.getZclass() + '-close-over');
+		case this.$n('close'):
+			jq(this.$n('close')).addClass(this.getZclass() + '-close-over');
 			break;
-		case this.getSubnode('max'):
+		case this.$n('max'):
 			var zcls = this.getZclass(),
 				added = this.isMaximized() ? ' ' + zcls + '-maxd-over' : '';
-			jq(this.getSubnode('max')).addClass(zcls + '-max-over' + added);
+			jq(this.$n('max')).addClass(zcls + '-max-over' + added);
 			break;
-		case this.getSubnode('min'):
-			jq(this.getSubnode('min')).addClass(this.getZclass() + '-mini-over');
+		case this.$n('min'):
+			jq(this.$n('min')).addClass(this.getZclass() + '-mini-over');
 			break;
-		case this.getSubnode('exp'):
-			jq(this.getSubnode('exp')).addClass(this.getZclass() + '-exp-over');
+		case this.$n('exp'):
+			jq(this.$n('exp')).addClass(this.getZclass() + '-exp-over');
 			break;
 		}
 		this.$supers('doMouseOver_', arguments);
 	},
 	doMouseOut_: function (evt) {
 		switch (evt.domTarget) {
-		case this.getSubnode('close'):
-			jq(this.getSubnode('close')).removeClass(this.getZclass() + '-close-over');
+		case this.$n('close'):
+			jq(this.$n('close')).removeClass(this.getZclass() + '-close-over');
 			break;
-		case this.getSubnode('max'):
+		case this.$n('max'):
 			var zcls = this.getZclass(),
-				$n = jq(this.getSubnode('max'));
+				$n = jq(this.$n('max'));
 			if (this.isMaximized())
 				$n.removeClass(zcls + '-maxd-over');
 			$n.removeClass(zcls + '-max-over');
 			break;
-		case this.getSubnode('min'):
-			jq(this.getSubnode('min')).removeClass(this.getZclass() + '-mini-over');
+		case this.$n('min'):
+			jq(this.$n('min')).removeClass(this.getZclass() + '-mini-over');
 			break;
-		case this.getSubnode('exp'):
-			jq(this.getSubnode('exp')).removeClass(this.getZclass() + '-exp-over');
+		case this.$n('exp'):
+			jq(this.$n('exp')).removeClass(this.getZclass() + '-exp-over');
 			break;
 		}
 		this.$supers('doMouseOut_', arguments);
@@ -493,10 +493,10 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	_ignoremove: function (dg, pointer, evt) {
 		var wgt = dg.control;
 		switch (evt.domTarget) {
-		case wgt.getSubnode('close'):
-		case wgt.getSubnode('max'):
-		case wgt.getSubnode('min'):
-		case wgt.getSubnode('exp'):
+		case wgt.$n('close'):
+		case wgt.$n('max'):
+		case wgt.$n('min'):
+		case wgt.$n('exp'):
 			return true; //ignore special buttons
 		}
 		return false;
@@ -504,7 +504,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	_aftermove: function (dg, evt) {
 		var wgt = dg.control;
 		wgt._syncShadow();
-		var node = wgt.getNode(),
+		var node = wgt.$n(),
 			x = zk.parseInt(node.style.left),
 			y = zk.parseInt(node.style.top);
 		wgt.fire('onMove', zk.copy({

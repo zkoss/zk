@@ -19,22 +19,22 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	_type: 'text',
 	$define: {
 		name: function (name) {
-			var inp = this.getInputNode_();
+			var inp = this.getInputNode();
 			if (inp)
 				inp.name = name;
 		},
 		disabled: function (disabled) {
-			var inp = this.getInputNode_();
+			var inp = this.getInputNode();
 			if (inp) {
 				inp.disabled = disabled;
 				var zcls = this.getZclass(),
 					fnm = disabled ? 'addClass': 'removeClass';
-				jq(this.getNode())[fnm](zcls + '-disd');
+				jq(this.$n())[fnm](zcls + '-disd');
 				jq(inp)[fnm](zcls + '-text-disd');
 			}
 		},
 		readonly: function (readonly) {
-			var inp = this.getInputNode_();
+			var inp = this.getInputNode();
 			if (inp) {
 				inp.readOnly = readonly;
 				jq(inp)[readonly ? 'addClass': 'removeClass'](
@@ -43,18 +43,18 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		},
 
 		cols: function (cols) {
-			var inp = this.getInputNode_();
+			var inp = this.getInputNode();
 			if (inp)
 				if (this.isMultiline()) inp.cols = cols;
 				else inp.size = cols;
 		},
 		maxlengths: function (maxlength) {
-			var inp = this.getInputNode_();
+			var inp = this.getInputNode();
 			if (inp && !this.isMultiline())
 				inp.maxLength = maxlength;
 		},
 		tabindex: function (tabindex) {
-			var inp = this.getInputNode_();
+			var inp = this.getInputNode();
 			if (inp)
 				inp.tabIndex = tabindex;
 		}
@@ -78,15 +78,15 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 
 		if ((!value || !value.error) && (fromServer || this._value != value)) {
 			this._value = value;
-			var inp = this.getInputNode_();
+			var inp = this.getInputNode();
 			if (inp) {
 				inp.value = value = this.coerceToString_(value);
 				if (fromServer) inp.defaultValue = value; //not clear error if by client app
 			}
 		}
 	},
-	getInputNode_: function () {
-		return this.getNode();
+	getInputNode: function () {
+		return this.$n();
 	},
 
 	domAttrs_: function (no) {
@@ -142,7 +142,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		this.$supers('doFocus_', arguments);
 
 		if (evt.domTarget.tagName) { //Bug 2111900
-			var inp = this.getInputNode_();
+			var inp = this.getInputNode();
 			if (this.isListen('onChanging')) {
 				this._lastChg = inp.value;
 				this._tidChg = setInterval(this.proxy(this._onChanging), 500);
@@ -155,7 +155,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 
 		this._stopOnChanging();
 
-		var inp = this.getInputNode_();
+		var inp = this.getInputNode();
 		jq(inp).removeClass(this.getZclass() + '-focus');
 		if (!zk.alerting && this.shallUpdate_(zk.currentFocus))
 			this.updateChange_();
@@ -163,7 +163,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 
 	_doSelect: function (evt) {
 		if (this.isListen('onSelection')) {
-			var inp = this.getInputNode_(),
+			var inp = this.getInputNode(),
 				sr = zk(inp).getSelectionRange(),
 				b = sr[0], e = sr[1];
 			this.fire('onSelection', {start: b, end: e,
@@ -188,7 +188,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		}
 		if (!remainError) {
 			this._errmsg = null;
-			jq(this.getInputNode_()).removeClass(this.getZclass() + "-text-invalid");
+			jq(this.getInputNode()).removeClass(this.getZclass() + "-text-invalid");
 		}
 		if (revalidate)
 			delete this._lastRawValVld; //cause re-valid
@@ -203,7 +203,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		this._errmsg = msg;
 
 		if (this.desktop) { //err not visible if not attached
-			jq(this.getInputNode_()).addClass(this.getZclass() + "-text-invalid");
+			jq(this.getInputNode()).addClass(this.getZclass() + "-text-invalid");
 
 			var cst = this._cst, errbox;
 			if (cst) {
@@ -274,7 +274,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	updateChange_: function () {
 		if (zul.inp.validating) return false; //avoid deadloop (when both focus and blur fields invalid)
 
-		var inp = this.getInputNode_(),
+		var inp = this.getInputNode(),
 			value = inp.value;
 		if (value == this._lastRawValVld)
 			return false; //not changed
@@ -294,7 +294,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		return true;
 	},
 	_onChanging: function () {
-		var inp = this.getInputNode_(),
+		var inp = this.getInputNode(),
 			val = this.valueEnter__ || inp.value;
 		if (this._lastChg != val) {
 			this._lastChg = val;
@@ -306,7 +306,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	_onChangeData: function (val, selbk) {
 		var inf = {value: val,
-			start: zk(this.getInputNode_()).getSelectionRange()[0]}
+			start: zk(this.getInputNode()).getSelectionRange()[0]}
 		if (selbk) inf.bySelectBack =  true;
 		return inf;
 	},
@@ -321,7 +321,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	//super//
 	focus: function (timeout) {
 		if (this.isVisible() && this.canActivate({checkOnly:true})) {
-			zk(this.getInputNode_()).focus(timeout);
+			zk(this.getInputNode()).focus(timeout);
 			return true;
 		}
 		return false;
@@ -343,7 +343,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
-		var inp = this.getInputNode_();
+		var inp = this.getInputNode();
 		this.domListen_(inp, "onFocus", "doFocus_")
 			.domListen_(inp, "onBlur", "doBlur_")
 			.domListen_(inp, "onSelect");
@@ -351,7 +351,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	unbind_: function () {
 		this.clearErrorMessage(true);
 
-		var n = this.getInputNode_();
+		var n = this.getInputNode();
 		this.domUnlisten_(n, "onFocus", "doFocus_")
 			.domUnlisten_(n, "onBlur", "doBlur_")
 			.domUnlisten_(n, "onSelect")
@@ -361,7 +361,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		var keyCode = evt.keyCode;
 		if (keyCode == 9 && !evt.altKey && !evt.ctrlKey && !evt.shiftKey
 		&& this._tabbable) {
-			var inp = this.getInputNode_(),
+			var inp = this.getInputNode(),
 				$inp = zk(inp),
 				sr = $inp.getSelectionRange(),
 				val = inp.value;
@@ -382,7 +382,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		if (this.isMultiline()) {
 			var maxlen = this._maxlength;
 			if (maxlen > 0) {
-				var inp = this.getInputNode_(), val = inp.value;
+				var inp = this.getInputNode(), val = inp.value;
 				if (val != inp.defaultValue && val.length > maxlen)
 					inp.value = val.substring(0, maxlen);
 			}

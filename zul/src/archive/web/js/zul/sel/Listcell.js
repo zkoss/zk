@@ -20,7 +20,7 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 				return colspan > 1 ? colspan: 1;
 			},
 			function () {
-				var n = this.getNode();
+				var n = this.$n();
 				if (n) n.colSpan = this._colspan;
 			}]
 	},
@@ -33,8 +33,8 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 	getZclass: function () {
 		return this._zclass == null ? "z-listcell" : this._zclass;
 	},
-	getTextNode_: function () {
-		return jq(this.getNode()).find('>div:first')[0];
+	getTextNode: function () {
+		return jq(this.$n()).find('>div:first')[0];
 	},
 	getMaxlength: function () {
 		var box = this.getListbox();
@@ -102,7 +102,7 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 		if (zk.gecko && (this._draggable || this.parent._draggable)) {
 			var tag = evt.domTarget.tagName;
 			if (tag != "INPUT" && tag != "TEXTAREA") {
-				var n = this.getNode();
+				var n = this.$n();
 				if (n) n.firstChild.style.MozUserSelect = "none";
 			}
 		}
@@ -110,7 +110,7 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 	},
 	doMouseOut_: function(evt) {
 		if (zk.gecko && (this._draggable || this.parent._draggable)) {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) n.firstChild.style.MozUserSelect = "none";
 		}
 		this.$supers('doMouseOut_', arguments);

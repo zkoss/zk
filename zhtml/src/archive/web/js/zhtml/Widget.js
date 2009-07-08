@@ -14,7 +14,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 zhtml.Widget = zk.$extends(zk.Native, {
 	setDynamicProperty: function (prop) {
-		var n = this.getNode(), nm = prop[0], val = prop[1];
+		var n = this.$n(), nm = prop[0], val = prop[1];
 		if (n)
 			switch (nm) {
 			case 'visibility':
@@ -42,7 +42,7 @@ zhtml.Widget = zk.$extends(zk.Native, {
 			}
 	},
 	_doChange: function (evt, timeout) {
-		var n = this.getNode();
+		var n = this.$n();
 		if (n) {
 			var val = n.value;
 			if (val != n.defaultValue) {
@@ -54,14 +54,14 @@ zhtml.Widget = zk.$extends(zk.Native, {
 	},
 	_onChangeData: function (val, selbak) {
 		return {value: val,
-			start: zk(this.getNode()).getSelectionRange()[0],
+			start: zk(this.$n()).getSelectionRange()[0],
 			marshal: this._onChangeMarshal}
 	},
 	_onChangeMarshal: function () {
 		return [this.value, false, this.start];
 	},
 	doClick_: function (wevt) {
-		var n = this.getNode();
+		var n = this.$n();
 		if (n.tagName != 'INPUT')
 			this.$supers('doClick_', arguments);
 		else if (!n.disabled) {
@@ -72,7 +72,7 @@ zhtml.Widget = zk.$extends(zk.Native, {
 		}
 	},
 	_doCheck: function (timeout) {
-		var n = this.getNode();
+		var n = this.$n();
 		if (n) {
 			var val = n.checked;
 			if (val != n.defaultChecked) { //changed
@@ -85,13 +85,13 @@ zhtml.Widget = zk.$extends(zk.Native, {
 		this.$supers('bind_', arguments);
 		if (this.isListen('onChange', {any:true})) {
 			this._doChange(null, -1);
-			this.domListen_(this.getNode(), 'onChange');
+			this.domListen_(this.$n(), 'onChange');
 		}
 		if (this.isListen('onCheck', {any:true}))
 			this._doCheck(-1);
 	},
 	unbind_: function () {
-		this.domUnlisten_(this.getNode(), 'onChange');
+		this.domUnlisten_(this.$n(), 'onChange');
 		this.$supers('unbind_', arguments);
 	}
 });

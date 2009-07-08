@@ -79,7 +79,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	setHeight: function (height) {
 		if (this._height != height) {
 			this._height = height;
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) {
 				 n.style.height = v || '';
 				this.onSize();
@@ -88,7 +88,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	onSize: function () {
 		if (this.isRealVisible()) {// sometimes the caller is not zWatch
-			var n = this.getNode();
+			var n = this.$n();
 			if (n._lastsz && n._lastsz.height == n.offsetHeight && n._lastsz.width == n.offsetWidth) {
 				this.fireOnRender(155);
 				return; // unchanged
@@ -106,7 +106,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		//IE: element's width will be extended to fit body
 		//FF and IE: sometime a horizontal scrollbar appear (though it shalln't)
 		//note: we don't solve this bug for paging yet
-		var n = this.getNode(),
+		var n = this.$n(),
 			wd = n.style.width;
 		if (!wd || wd == "auto" || wd.indexOf('%') >= 0) {
 			wd = zk(n).revisedWidth(n.offsetWidth);
@@ -146,7 +146,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	_calcHgh: function () {
 		var rows = this.ebodyrows,
-			n = this.getNode(),
+			n = this.$n(),
 			hgh = n.style.height,
 			isHgh = hgh && hgh != "auto" && hgh.indexOf('%') < 0;
 		if (isHgh) {
@@ -289,8 +289,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	_headHgh: function (defVal) {
 		var hgh = this.ehead ? this.ehead.offsetHeight : 0;
 		if (this.paging) {
-			var pgit = this.getSubnode('pgit'),
-				pgib = this.getSubnode('pgib');
+			var pgit = this.$n('pgit'),
+				pgib = this.$n('pgib');
 			if (pgit) h += pgit.offsetHeight;
 			if (pgib) h += pgib.offsetHeight;
 		}
@@ -348,7 +348,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	focus: function (timeout) {
 		var btn;
 		if (this.isVisible() && this.canActivate({checkOnly:true})
-		&& (btn = this.getSubnode('a'))) {
+		&& (btn = this.$n('a'))) {
 			if (this._focusItem) {
 				for (var it = this.getBodyWidgetIterator(), w; (w = it.next());)
 					if (this._isFocus(w)) {
@@ -363,14 +363,14 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
-		var btn = this.getSubnode('a');
+		var btn = this.$n('a');
 		if (btn)
 			this.domListen_(btn, 'onFocus', 'doFocus_')
 				.domListen_(btn, 'onKeyDown')
 				.domListen_(btn, 'onBlur', 'doBlur_');
 	},
 	unbind_: function () {
-		var btn = this.getSubnode('a');
+		var btn = this.$n('a');
 		if (btn)
 			this.domUnlisten_(btn, 'onFocus', 'doFocus_')
 				.domUnlisten_(btn, 'onKeyDown')
@@ -401,7 +401,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			return;
 
 		var	row = evt.target,
-			checkmark = target == row.getSubnode('cm');
+			checkmark = target == row.$n('cm');
 			
 		if (checkmark) {
 			if (this.isMultiple()) {
@@ -506,7 +506,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 
 		if (step) {
 			if (shift) this._toggleSelect(row, true, evt);
-			var nrow = row.getNode();
+			var nrow = row.$n();
 			for (; (nrow = step > 0 ? nrow.nextSibling: nrow.previousSibling);) {
 				var r = zk.Widget.$(nrow);
 				if (r.$instanceof(zul.sel.Treerow))
@@ -561,8 +561,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	/** maintain the offset of the focus proxy*/
 	_syncFocus: function (row) {
-		var focusEl = this.getSubnode('a'),
-			n = row.getNode(),
+		var focusEl = this.$n('a'),
+			n = row.$n(),
 			offs = zk(n).revisedOffset();
 		offs = this._toStyleOffset(focusEl, offs[0] + this.ebody.scrollLeft, offs[1]);
 		focusEl.style.top = offs[1] + "px";

@@ -33,7 +33,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		fixedLayout: _zkf,
 
 		vflex: function (vflex) {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) {
 				if (vflex) {
 					// added by Jumper for IE to get a correct offsetHeight so we need 
@@ -116,8 +116,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (this.isVflex()) {
 			// added by Jumper for IE to get a correct offsetHeight so we need 
 			// to add this command faster than the this._calcSize() function.
-			var hgh = this.getNode().style.height;
-			if (!hgh || hgh == "auto") this.getNode().style.height = "99%"; // avoid border 1px;
+			var hgh = this.$n().style.height;
+			if (!hgh || hgh == "auto") this.$n().style.height = "99%"; // avoid border 1px;
 		}
 		this._bindDomNode();
 		this._fixHeaders();
@@ -150,7 +150,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 	},
 	_bindDomNode: function () {
-		for (var n = this.getNode().firstChild; n; n = n.nextSibling)
+		for (var n = this.$n().firstChild; n; n = n.nextSibling)
 			switch(n.id) {
 			case this.uuid + '-head':
 				this.ehead = n;
@@ -224,7 +224,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	//watch//
 	beforeSize: function () {
 		// IE6 needs to reset the width of each sub node if the width is a percentage
-		var wd = zk.ie6_ ? this.getWidth() : this.getNode().style.width;
+		var wd = zk.ie6_ ? this.getWidth() : this.$n().style.width;
 		if (!wd || wd == "auto" || wd.indexOf('%') >= 0) {
 			if (this.ebody) this.ebody.style.width = "";
 			if (this.ehead) this.ehead.style.width = "";
@@ -233,7 +233,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 	onSize: _zkf = function () {
 		if (this.isRealVisible()) { // sometimes the caller is not zWatch
-			var n = this.getNode();
+			var n = this.$n();
 			if (n._lastsz && n._lastsz.height == n.offsetHeight && n._lastsz.width == n.offsetWidth) {
 				this.fireOnRender(155); // force to render while using live grouping
 				return; // unchanged
@@ -245,7 +245,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	},
 	onShow: _zkf,
 	_vflexSize: function (hgh) {
-		var n = this.getNode();
+		var n = this.$n();
 		if (zk.ie6_) { 
 			// ie6 must reset the height of the element,
 			// otherwise its offsetHeight might be wrong.
@@ -255,8 +255,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		
 		var pgHgh = 0
 		if (this.paging) {
-			var pgit = this.getSubnode('pgit'),
-				pgib = this.getSubnode('pgib');
+			var pgit = this.$n('pgit'),
+				pgib = this.$n('pgib');
 			if (pgit) pgHgh += pgit.offsetHeight;
 			if (pgib) pgHgh += pgib.offsetHeight;
 		}
@@ -280,12 +280,12 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			//body.offsetWidth. The grid's body's height is 0 if init called
 			//after grid become visible (due to opening an accordion tab)
 			this.ebody.style.height = "";
-			this.getNode().style.height = hgh;
+			this.$n().style.height = hgh;
 		}
 	},
 	/** Calculates the size. */
 	_calcSize: function () {
-		var n = this.getNode();
+		var n = this.$n();
 		this._setHgh(n.style.height);
 		//Bug 1553937: wrong sibling location
 		//Otherwise,
@@ -381,7 +381,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		|| !bdfaker.cells.length || !zk(hdfaker).isRealVisible()
 		|| !wgt.getBodyWidgetIterator().hasNext()) return;
 		
-		var hdtable = wgt.ehead.firstChild, head = wgt.head.getNode();
+		var hdtable = wgt.ehead.firstChild, head = wgt.head.$n();
 		if (!head) return; 
 		if (zk.opera) {
 			if (!hdtable.style.width) {

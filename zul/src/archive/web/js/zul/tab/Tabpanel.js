@@ -43,8 +43,8 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 	_fixPanelHgh: function() {
 		var tabbox = this.getTabbox();
 		if (!tabbox.inAccordionMold()) {
-			var tbx = tabbox.getNode(),
-				n = this.getNode(),
+			var tbx = tabbox.$n(),
+				n = this.$n(),
 				hgh = tbx.style.height,
 				pos;
 			
@@ -58,14 +58,14 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 				zk(n).setOffsetHeight(hgh);
 			}
 			//let real div 100% height
-			jq(this.getSubnode("real")).addClass(this.getZclass() + "-cnt");
+			jq(this.$n("real")).addClass(this.getZclass() + "-cnt");
 			if (zk.ie && pos)
 				n.style.position = pos;
 		}
 	},
 	onSize: _zkf = function() {
 		this._fixPanelHgh();		//Bug 2104974
-		if (zk.ie) zk(this.getTabbox().getNode()).redoCSS(); //Bug 2526699 - (add zk.ie7)
+		if (zk.ie) zk(this.getTabbox().$n()).redoCSS(); //Bug 2526699 - (add zk.ie7)
 	},
 	onShow: _zkf,
 	bind_: function() {

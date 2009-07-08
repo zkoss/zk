@@ -35,10 +35,10 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		}
 	},
 	_setSelectedDirectly: function (selected) {
-		var n = this.getNode();
+		var n = this.$n();
 		if (n) {
 			jq(n)[selected ? 'addClass' : 'removeClass'](this.getZclass() + '-seld');
-			var cm = this.getSubnode('cm');
+			var cm = this.$n('cm');
 			if (cm) {
 				cm.checked = selected;
 				this._checkClick();
@@ -83,7 +83,7 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		return scls;
 	},
 	_toggleEffect: function (undo) {
-		var n = this.getNode(),
+		var n = this.$n(),
 			zcls = this.getZclass();
 		if (undo) {
 			jq(n).removeClass(zcls + "-over-seld")
@@ -96,7 +96,7 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	focus: function (timeout) {
 		this.getMeshWidget()._focusItem = this;
 		if (this.isVisible() && this.canActivate({checkOnly:true})) {
-			var cm = this.getSubnode('cm');
+			var cm = this.$n('cm');
 			if (cm) {
 				zk(cm).focus(timeout);
 				return true;
@@ -107,25 +107,25 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
-		var cm = this.getSubnode('cm');
+		var cm = this.$n('cm');
 		if (cm)
 			this.domListen_(cm, 'onFocus')
 				.domListen_(cm, 'onBlur', '_doFocusOut');
 	},
 	unbind_: function () {
-		var cm = this.getSubnode('cm');
+		var cm = this.$n('cm');
 		if (cm)
 			this.domUnlisten_(cm, 'onFocus')
 				.domUnlisten_(cm, 'onBlur', '_doFocusOut');
 		this.$supers('unbind_', arguments);
 	},
 	_doFocusIn: function () {
-		var n = this.getNode();
+		var n = this.$n();
 		if (n)
 			jq(this._getVisibleChild(n)).addClass(this.getZclass() + "-focus");
 	},
 	_doFocusOut: function () {
-		var n = this.getNode();
+		var n = this.$n();
 		if (n) {
 			var zcls = this.getZclass();
 			jq(n).removeClass(zcls + "-focus");
@@ -142,7 +142,7 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	_checkAll: function () {
 		var box = this.getMeshWidget();		
 		if (!box || !box._headercm) return;
-		var cm = this.getSubnode('cm');
+		var cm = this.$n('cm');
 		if (cm && !cm.checked) {
 			box._headercm.checked = false;
 			return;
@@ -150,7 +150,7 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		var checked;
 		for (var it = box.getBodyWidgetIterator(), w; (w = it.next());)
 			if (!w.isDisabled())
-				if (!(checked = (w.getSubnode('cm') || {}).checked)) break;
+				if (!(checked = (w.$n('cm') || {}).checked)) break;
 		
 		if (checked) box._headercm.checked = true;
 	},
@@ -158,7 +158,7 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		if (this.getMeshWidget().isMultiple()) {
 			this._checkAll();
 		} else {
-			var r = this.getSubnode('cm');
+			var r = this.$n('cm');
 			for (var nms = jq.$$(r.name), i = nms.length; i--;)
 				nms[i].defaultChecked = false;
 			r.defaultChecked = r.checked;
@@ -181,7 +181,7 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	},
 	doMouseOut_: function(evt) {
 		if (this.isDisabled() ||
-				jq.isAncestor(this.getNode(), evt.domEvent.relatedTarget || evt.domEvent.toElement))
+				jq.isAncestor(this.$n(), evt.domEvent.relatedTarget || evt.domEvent.toElement))
 			return;
 			
 		this._toggleEffect(true);
@@ -192,13 +192,13 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		var tag = evt.domTarget.tagName,
 			mate = this.getMeshWidget();
 		if (!zk.gecko3 || (tag != "INPUT" && tag != "TEXTAREA"))
-			zk(mate.getNode()).disableSelection();
+			zk(mate.$n()).disableSelection();
 		mate._doKeyDown(evt);
 		evt.stop({propagation: true});
 		this.$supers('doKeyDown_', arguments);
 	},
 	doKeyUp_: function (evt) {
-		zk(this.getMeshWidget().getNode()).enableSelection();
+		zk(this.getMeshWidget().$n()).enableSelection();
 		evt.stop({propagation: true});
 		this.$supers('doKeyUp_', arguments);
 	}

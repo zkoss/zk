@@ -15,7 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.inp.FormatWidget = zk.$extends(zul.inp.InputWidget, {
 	$define: { //zk.def
 		format: function () {
-			var inp = this.getInputNode_();
+			var inp = this.getInputNode();
 			if (inp)
 				inp.value = this.coerceToString_(this._value);
 		}

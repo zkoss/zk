@@ -17,7 +17,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 
 	$define: {
 		buttonVisible: function (v) {
-			var n = this.getSubnode('btn');
+			var n = this.$n('btn');
 			if (n)
 				v ? jq(n).show(): jq(n).hide();
 		},
@@ -46,8 +46,8 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		if (opts && opts.focus)
 			this.focus();
 
-		var pp = this.getSubnode('pp'),
-			inp = this.getInputNode_();
+		var pp = this.$n('pp'),
+			inp = this.getInputNode();
 		if (!pp) return;
 
 		zWatch.fire('onFloatUp', null, this); //notify all
@@ -58,7 +58,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		pp.style.height = "auto";
 		pp.style.zIndex = 88000; //on-top of everything
 
-		var pp2 = this.getSubnode("cave");
+		var pp2 = this.$n("cave");
 		if (pp2) pp2.style.width = pp2.style.height = "auto";
 
 		pp.style.position = "absolute"; //just in case
@@ -119,7 +119,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		if (opts && opts.focus)
 			this.focus();
 
-		var pp = this.getSubnode('pp');
+		var pp = this.$n('pp');
 		if (!pp) return;
 
 		pp.style.display = "none";
@@ -128,19 +128,19 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			this._shadow.destroy();
 			this._shadow = null;
 		}
-		var n = this.getSubnode('btn');
+		var n = this.$n('btn');
 		if (n) jq(n).removeClass(this.getZclass() + '-btn-over');
 
 		if (opts && opts.sendOnOpen)
-			this.fire('onOpen', {open:false, value: this.getInputNode_().value});
+			this.fire('onOpen', {open:false, value: this.getInputNode().value});
 
 		zWatch.fireDown("onHide", null, this);
 	},
 	_fixsz: function (ppofs) {
-		var pp = this.getSubnode('pp');
+		var pp = this.$n('pp');
 		if (!pp) return;
 
-		var pp2 = this.getSubnode('cave');
+		var pp2 = this.$n('cave');
 		if (ppofs[1] == "auto" && pp.offsetHeight > 250) {
 			pp.style.height = "250px";
 		} else if (pp.offsetHeight < 10) {
@@ -148,7 +148,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		}
 
 		if (ppofs[0] == "auto") {
-			var cb = this.getNode();
+			var cb = this.$n();
 			if (pp.offsetWidth < cb.offsetWidth) {
 				pp.style.width = cb.offsetWidth + "px";
 				if (pp2) pp2.style.width = "100%";
@@ -183,14 +183,14 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	},
 
 	//super
-	getInputNode_: function () {
-		return this.getSubnode('real');
+	getInputNode: function () {
+		return this.$n('real');
 	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
 
-		var btn = this.getSubnode('btn'),
-			inp = this.getInputNode_();
+		var btn = this.$n('btn'),
+			inp = this.getInputNode();
 		if (btn) {
 			this._auxb = new zul.Auxbutton(this, btn, inp);
 			this.domListen_(btn, 'onClick', '_doBtnClick');
@@ -200,7 +200,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	unbind_: function () {
 		this.close();
 
-		var btn = this.getSubnode('btn');
+		var btn = this.$n('btn');
 		if (btn) {
 			this._auxb.cleanup();
 			this._auxb = null;

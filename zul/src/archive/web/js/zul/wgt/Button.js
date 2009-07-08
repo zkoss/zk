@@ -26,12 +26,12 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		orient: _zkf,
 		disabled: function (v) {
 			if (this.desktop)
-				if (this._mold != 'trendy') this.getNode().disabled = v;
+				if (this._mold != 'trendy') this.$n().disabled = v;
 				else this.rerender(); //bind and unbind required
 		},
 		tabindex: function (v) {
-			var n = this.getNode();
-			if (n) (this.getSubnode('btn') || n).tabIndex = v >= 0 ? v: '';
+			var n = this.$n();
+			if (n) (this.$n('btn') || n).tabIndex = v >= 0 ? v: '';
 		},
 		autodisable: null
 	},
@@ -39,7 +39,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	//super//
 	focus: function (timeout) {
 		if (this.desktop && this.isVisible() && this.canActivate({checkOnly:true})) {
-			zk(this.getSubnode('btn')||this.getNode()).focus(timeout);
+			zk(this.$n('btn')||this.$n()).focus(timeout);
 			return true;
 		}
 		return false;
@@ -73,13 +73,13 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 
 		var n;
 		if (this._mold != 'trendy') {
-			n = this.getNode();
+			n = this.$n();
 		} else {
 			if (this._disabled) return;
 
-			zk(this.getSubnode('box')).disableSelection();
+			zk(this.$n('box')).disableSelection();
 
-			n = this.getSubnode('btn');
+			n = this.$n('btn');
 			if (zk.ie) zWatch.listen({onSize: this, onShow: this});
 		}
 
@@ -88,7 +88,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	},
 	unbind_: function () {
 		var trendy = this._mold == 'trendy',
-			n = !trendy ? this.getNode(): this.getSubnode('btn');
+			n = !trendy ? this.$n(): this.$n('btn');
 		if (n) {
 			this.domUnlisten_(n, "onFocus", "doFocus_")
 				.domUnlisten_(n, "onBlur", "doBlur_");
@@ -99,7 +99,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		this.$supers('unbind_', arguments);
 	},
 	onSize: _zkf = zk.ie ? function () {
-		var box = this.getSubnode('box');
+		var box = this.$n('box');
 		if (box.style.height && box.offsetHeight) {
 			var cellHgh = zk.parseInt(jq(box.rows[0].cells[0]).css('height'));
 			if (cellHgh != box.rows[0].cells[0].offsetHeight) {
@@ -111,12 +111,12 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	onShow: _zkf,
 	doFocus_: function (evt) {
 		if (this._mold == 'trendy')
-			jq(this.getSubnode('box')).addClass(this.getZclass() + "-focus");
+			jq(this.$n('box')).addClass(this.getZclass() + "-focus");
 		this.$supers('doFocus_', arguments);
 	},
 	doBlur_: function (evt) {
 		if (this._mold == 'trendy')
-			jq(this.getSubnode('box')).removeClass(this.getZclass() + "-focus");
+			jq(this.$n('box')).removeClass(this.getZclass() + "-focus");
 		this.$supers('doBlur_', arguments);
 	},
 	doClick_: function (evt) {
@@ -162,21 +162,21 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	},
 	doMouseOver_: function () {
 		if (!this._disabled)
-			jq(this.getSubnode('box')).addClass(this.getZclass() + "-over");
+			jq(this.$n('box')).addClass(this.getZclass() + "-over");
 		this.$supers('doMouseOver_', arguments);
 	},
 	doMouseOut_: function (evt) {
 		if (!this._disabled && this != zul.wgt.Button._curdn
-		&& !(zk.ie && jq.isAncestor(this.getSubnode('box'), evt.domEvent.relatedTarget || evt.domEvent.toElement)))
-			jq(this.getSubnode('box')).removeClass(this.getZclass() + "-over");
+		&& !(zk.ie && jq.isAncestor(this.$n('box'), evt.domEvent.relatedTarget || evt.domEvent.toElement)))
+			jq(this.$n('box')).removeClass(this.getZclass() + "-over");
 		this.$supers('doMouseOut_', arguments);
 	},
 	doMouseDown_: function () {
 		if (!this._disabled) {
 			var zcls = this.getZclass();
-			jq(this.getSubnode('box')).addClass(zcls + "-clk")
+			jq(this.$n('box')).addClass(zcls + "-clk")
 				.addClass(zcls + "-over")
-			zk(this.getSubnode('btn')).focus(30);
+			zk(this.$n('btn')).focus(30);
 		}
 
 		zk.mouseCapture = this; //capture mouse up
@@ -185,7 +185,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	doMouseUp_: function () {
 		if (!this._disabled) {
 			var zcls = this.getZclass();
-			jq(this.getSubnode('box')).removeClass(zcls + "-clk")
+			jq(this.$n('box')).removeClass(zcls + "-clk")
 				.removeClass(zcls + "-over");
 		}
 		this.$supers('doMouseUp_', arguments);

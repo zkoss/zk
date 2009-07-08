@@ -17,23 +17,23 @@ zul.utl.Iframe = zk.$extends(zul.Widget, {
 
 	$define: {
 		src: function (v) {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) n.src = v || '';
 		},
 		scrolling: function (v) {
 			if (!v) this._scrolling = v = "auto";
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) n.scrolling = v;
 		},
 		align: function (v) {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) n.align = v || '';
 		},
 		name: function (v) {
 			if (n) n.name = v || '';
 		},
 		autohide: function (v) {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n) jq(n).attr('z_autohide', v);
 		}
 	},

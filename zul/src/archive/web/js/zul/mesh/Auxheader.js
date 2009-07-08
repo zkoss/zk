@@ -18,13 +18,13 @@ zul.mesh.Auxheader = zk.$extends(zul.mesh.HeaderWidget, {
 
 	$define: {
 		colspan: function (v) {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n)
 				if (zk.ie) this.rerender(); //IE's limitation
 				else n.colSpan = v;
 		},
 		rowspan: function (v) {
-			var n = this.getNode();
+			var n = this.$n();
 			if (n)
 				if (zk.ie) this.rerender(); //IE's limitation
 				else n.rowSpan = v;

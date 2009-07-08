@@ -34,7 +34,7 @@ zul.utl.Style = zk.$extends(zk.Widget, {
 
 			var head = this._getHead(),
 				ln = this._getLink(head),
-				n = this.getNode();
+				n = this.$n();
 			if (n) n.innerHTML = '';
 			if (ln) ln.href = this._src;
 			else {
