@@ -1,4 +1,3 @@
-<%@ page contentType="text/css;charset=UTF-8" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 
 <%-- os mold --%>
@@ -185,3 +184,13 @@
 	right:8px;
 	top:5px;
 }
+
+<%-- IE 6 GIF  --%>
+<c:if test="${c:browser('ie6-')}">
+.z-paging-btn .z-paging-next,
+.z-paging-btn .z-paging-prev,
+.z-paging-btn .z-paging-last,
+.z-paging-btn .z-paging-first {	
+	background-image:url(${c:encodeURL('~./zul/img/paging/pg-btn.gif')}) !important;
+}
+</c:if>

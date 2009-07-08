@@ -702,6 +702,7 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/menu.js</mold-uri>
+			<css-uri>css/menu.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
@@ -711,6 +712,7 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/menubar.js</mold-uri>
+			<css-uri>css/menu.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
@@ -729,6 +731,7 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/menupopup.js</mold-uri>
+			<css-uri>css/menu.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
@@ -747,10 +750,12 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/paging.js</mold-uri>
+			<css-uri>css/paging.css.dsp</css-uri>
 		</mold>
 		<mold>
 			<mold-name>os</mold-name>
 			<mold-uri>mold/paging.js</mold-uri>
+			<css-uri>css/paging.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
@@ -842,6 +847,7 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/separator.js</mold-uri>
+			<css-uri>css/separator.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
@@ -857,6 +863,7 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/space.js</mold-uri>
+			<css-uri>css/separator.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
@@ -1129,14 +1136,17 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/slider.js</mold-uri>
+			<css-uri>css/slider.css.dsp</css-uri>
 		</mold>
 		<mold>
 			<mold-name>sphere</mold-name>
 			<mold-uri>mold/slider.js</mold-uri>
+			<css-uri>css/slider.css.dsp</css-uri>
 		</mold>
 		<mold>
 			<mold-name>scale</mold-name>
 			<mold-uri>mold/slider.js</mold-uri>
+			<css-uri>css/slider.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>

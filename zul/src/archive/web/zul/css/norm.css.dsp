@@ -118,7 +118,7 @@ div.z-log button {
 	opacity: 1;
 }
 
-.z-label, .z-radio-cnt, .z-checkbox-cnt, .z-slider-pp, input.button, input.file,
+.z-label, .z-radio-cnt, .z-checkbox-cnt, input.button, input.file,
 .z-loading {
 	font-family: ${fontFamilyC};
 	font-size: ${fontSizeM}; font-weight: normal;
@@ -407,18 +407,10 @@ span.z-progressmeter-img {
 .z-word-wrap .z-auxheader-cnt {
 	word-wrap: break-word;
 }
-<%-- Separator --%>
-<c:include page="~./zul/css/cmps/separator.css.dsp"/>
-<%-- Slider --%>
-<c:include page="~./zul/css/cmps/slider.css.dsp"/>
-<%-- Paging --%>
-<c:include page="~./zul/css/cmps/paging.css.dsp"/>
 <%-- Combobox, Bandbox, Timebox, Datebox, and Spinner --%>
 <c:include page="~./zul/css/cmps/combo.css.dsp"/>
 <%-- Calendar and Datebox --%>
 <c:include page="~./zul/css/cmps/calendar.css.dsp"/>
-<%-- Menu --%>
-<c:include page="~./zul/css/cmps/menu.css.dsp"/>
 <%-- Grid --%>
 <c:include page="~./zul/css/cmps/grid.css.dsp"/>
 <%-- Listbox --%>
@@ -556,47 +548,7 @@ span.z-drop-disallow {
 tr.z-listitem td.z-listitem-focus {
 	background-image: url(${c:encodeURL('~./zul/img/common/focusd.gif')});
 }
-<%-- paging.css.dsp --%>
-.z-paging-btn .z-paging-next,
-.z-paging-btn .z-paging-prev,
-.z-paging-btn .z-paging-last,
-.z-paging-btn .z-paging-first {	
-	background-image:url(${c:encodeURL('~./zul/img/paging/pg-btn.gif')}) !important;
-}
-<%-- slider.css.dsp --%>
-.z-slider-sphere-hor,
-.z-slider-scale,
-.z-slider-hor,
-.z-slider-sphere-hor-center,
-.z-slider-scale-center,
-.z-slider-hor-center {
-	background-image:url(${c:encodeURL('~./zul/img/slider/slider-bg.gif')});
-}
-.z-slider-sphere-hor-btn,
-.z-slider-scale-btn,
-.z-slider-hor-btn {
-    background-image : url(${c:encodeURL('~./zul/img/slider/slider-square.gif')});
-}
-.z-slider-scale-btn {
-	background-image : url(${c:encodeURL('~./zul/img/slider/slider-scale.gif')});
-}
-.z-slider-sphere-ver,
-.z-slider-ver,
-.z-slider-sphere-ver-center,
-.z-slider-ver-center {
-	background-image:url(${c:encodeURL('~./zul/img/slider/slider-bg-ver.gif')});
-}
 
-.z-slider-sphere-ver-btn,
-.z-slider-ver-btn {
-	background-image : url(${c:encodeURL('~./zul/img/slider/slider-v-square.gif')});
-}
-.z-slider-sphere-hor-btn {
-	background-image : url(${c:encodeURL('~./zul/img/slider/slider-circle.gif')});
-}
-.z-slider-sphere-ver-btn {
-	background-image : url(${c:encodeURL('~./zul/img/slider/slider-v-circle.gif')});
-}
 <%-- tabbox.css.dsp --%>
 .z-tab-hl,
 .z-tab-hr {
