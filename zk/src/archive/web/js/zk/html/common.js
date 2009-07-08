@@ -1772,7 +1772,7 @@ zk.scrollIntoView = function (outer, inner, info) {
 			outer.scrollTop = top;
 			updated = true;
 		} else if (bottom > outer.clientHeight + outer.scrollTop) {
-			outer.scrollTop = bottom - (outer.clientHeight + (inner.parentNode == outer ? 0 : outer.scrollTop));
+			outer.scrollTop = !info ? bottom :  bottom - (outer.clientHeight + (inner.parentNode == outer ? 0 : outer.scrollTop));
 			updated = true;
 		}
 		if (updated || !info) {
