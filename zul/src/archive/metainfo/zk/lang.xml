@@ -415,6 +415,7 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/input.js</mold-uri>
+			<css-uri>css/input.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
@@ -434,6 +435,7 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/input.js</mold-uri>
+			<css-uri>css/input.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
@@ -579,6 +581,7 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/input.js</mold-uri>
+			<css-uri>css/input.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
@@ -678,6 +681,7 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/input.js</mold-uri>
+			<css-uri>css/input.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
@@ -776,6 +780,7 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/popup.js</mold-uri>
+			<css-uri>css/popup.css.dsp</css-uri>
 		</mold>
 		<preserve-blank/>
 	</component>
@@ -954,6 +959,7 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/textbox.js</mold-uri>
+			<css-uri>css/input.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
