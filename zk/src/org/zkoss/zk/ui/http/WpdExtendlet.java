@@ -15,7 +15,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.http;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedList;
@@ -28,28 +27,21 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.URL;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.zkoss.lang.Classes;
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.io.Files;
-import org.zkoss.util.logging.Log;
-import org.zkoss.util.resource.ResourceCache;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.util.IDOMs;
-import org.zkoss.io.Files;
 
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.http.Https;
 import org.zkoss.web.servlet.http.Encodes;
-import org.zkoss.web.util.resource.Extendlet;
 import org.zkoss.web.util.resource.ExtendletContext;
 import org.zkoss.web.util.resource.ExtendletConfig;
 import org.zkoss.web.util.resource.ExtendletLoader;
@@ -69,33 +61,15 @@ import org.zkoss.zk.ui.util.Configuration;
  * @author tomyeh
  * @since 5.0.0
  */
-public class WpdExtendlet implements Extendlet {
-	private static final Log log = Log.lookup(WpdExtendlet.class);
-
-	private ExtendletContext _webctx;
-	/** DSP Interpretation cache. */
-	private ResourceCache _cache;
-	private Boolean _debugJS;
-	/** The locator. */
-	private ThreadLocal _loc = new ThreadLocal();
-
+public class WpdExtendlet extends AbstractExtendlet {
 	public void init(ExtendletConfig config) {
-		_webctx = config.getExtendletContext();
-		final WpdLoader loader = new WpdLoader();
-		_cache = new ResourceCache(loader, 16);
-		_cache.setMaxSize(1024);
-		_cache.setLifetime(60*60*1000); //1hr
-		final int checkPeriod = loader.getCheckPeriod();
-		_cache.setCheckPeriod(checkPeriod >= 0 ? checkPeriod: 60*60*1000); //1hr
-	}
-	public boolean getFeature(int feature) {
-		return feature == ALLOW_DIRECT_INCLUDE;
+		init(config, new WpdLoader());
 	}
 	public void service(HttpServletRequest request,
 	HttpServletResponse response, String path, String extra)
 	throws ServletException, IOException {
 		byte[] data;
-		_loc.set(new Locator(request, response));
+		setProvider(new Provider(request, response));
 		try {
 			final Object rawdata = _cache.get(path);
 			if (rawdata == null) {
@@ -109,7 +83,7 @@ public class WpdExtendlet implements Extendlet {
 			data = rawdata instanceof byte[] ? (byte[])rawdata:
 				((WpdContent)rawdata).toByteArray();
 		} finally {
-			_loc.set(null);
+			setProvider(null);
 		}
 
 		response.setContentType("text/javascript;charset=UTF-8");
@@ -121,33 +95,17 @@ public class WpdExtendlet implements Extendlet {
 		response.getOutputStream().write(data);
 		response.flushBuffer();
 	}
-	/** Sets whether to generate JS files that is easy to debug. */
-	public void setDebugJS(boolean debugJS) {
-		_debugJS = Boolean.valueOf(debugJS);
-	}
-	/** Returns whether to generate JS files that is easy to debug. */
-	public boolean isDebugJS() {
-		if (_debugJS == null) {
-			final WebApp wapp = getWebApp();
-			if (wapp == null) return true; //zk lighter
-			_debugJS = Boolean.valueOf(wapp.getConfiguration().isDebugJS());
-		}
-		return _debugJS.booleanValue();
-	}
-	private WebApp getWebApp() {
-		return _webctx != null ? WebManager.getWebManager(_webctx.getServletContext()).getWebApp(): null;
-	}
 	/** Parses and return the specified file.
 	 * It is used by ZK Lighter to generate JavaScript files.
 	 */
 	public byte[] service(File fl) throws Exception {
-		_loc.set(new FileLocator(fl));
+		setProvider(new FileProvider(fl, isDebugJS()));
 		try {
 			final Object rawdata = parse(new FileInputStream(fl), fl.getPath());
 			return rawdata instanceof byte[] ? (byte[])rawdata:
 				((WpdContent)rawdata).toByteArray();
 		} finally {
-			_loc.set(null);
+			setProvider(null);
 		}
 	}
 	private Object parse(InputStream is, String path) throws Exception {
@@ -260,8 +218,8 @@ public class WpdExtendlet implements Extendlet {
 						wc.add(jspath, browser);
 					} else {
 						if (browser != null) {
-							final Locator loc = (Locator)_loc.get();
-							if (loc != null && !Servlets.isBrowser(loc.request, browser))
+							final Provider provider = getProvider();
+							if (provider != null && !Servlets.isBrowser(provider.request, browser))
 								continue;
 						}
 						if (!writeResource(out, jspath, dir, true))
@@ -275,34 +233,14 @@ public class WpdExtendlet implements Extendlet {
 					write(out, '\n'); //might terminate with //
 				}
 			} else if ("function".equals(elnm)) {
-				final String clsnm = IDOMs.getRequiredAttributeValue(el, "class");
-				final String mtdnm = IDOMs.getRequiredAttributeValue(el, "name");
-				final Class cls;
-				try {
-					cls = Classes.forNameByThread(clsnm);
-				} catch (ClassNotFoundException ex) {
-					log.error("Class not found: "+clsnm+", "+el.getLocator());
-					continue; //to report as many errors as possible
-				}
-
-				final Method mtd;
-				try {
-					mtd = cls.getMethod(mtdnm, new Class[0]);
-					if ((mtd.getModifiers() & Modifier.STATIC) == 0) {
-						log.error("Not a static method: "+mtd);
-						continue;
+				final Method mtd = getMethod(el);
+				if (mtd != null)
+					if (wc != null) {
+						move(wc, out);
+						wc.add(mtd);
+					} else {
+						write(out, mtd);
 					}
-				} catch (NoSuchMethodException ex) {
-					log.error("Method not found in "+clsnm+": "+mtdnm+" "+el.getLocator());
-					continue;
-				}
-
-				if (wc != null) {
-					move(wc, out);
-					wc.add(mtd);
-				} else {
-					write(out, mtd);
-				}
 			} else {
 				log.warning("Unknown element "+elnm+", "+el.getLocator());
 			}
@@ -335,7 +273,7 @@ public class WpdExtendlet implements Extendlet {
 			path = Files.normalize(dir, path);
 
 		final InputStream is =
-			((Locator)_loc.get()).getResourceAsStream(path, locate);
+			(getProvider()).getResourceAsStream(path, locate);
 		if (is == null) {
 			write(out, "zk.log('");
 			write(out, path);
@@ -369,11 +307,9 @@ public class WpdExtendlet implements Extendlet {
 	}
 	private void write(OutputStream out, Method mtd) throws IOException {
 		try {
-			write(out, (String)mtd.invoke(null, new Object[0]));
+			write(out, invoke(mtd));
 		} catch (IOException ex) {
 			throw ex;
-		} catch (Throwable ex) { //log and eat ex
-			log.error("Unable to invoke "+mtd, ex);
 		}
 	}
 	private void move(WpdContent wc, ByteArrayOutputStream out) {
@@ -389,12 +325,12 @@ public class WpdExtendlet implements Extendlet {
 		final StringBuffer sb = new StringBuffer(256);
 		sb.append("\nzkver('").append(wapp.getVersion())
 			.append("','").append(wapp.getBuild());
-		final Locator loc = (Locator)_loc.get();
-		if (loc != null)
+		final Provider provider = getProvider();
+		if (provider != null)
 			sb.append("','")
 				.append(Encodes.encodeURL(
-					_webctx.getServletContext(),
-					loc.request, loc.response, wapp.getUpdateURI(false)));
+					getServletContext(),
+					provider.request, provider.response, wapp.getUpdateURI(false)));
 		sb.append('\'');
 
 		for (Iterator it = LanguageDefinition.getByDeviceType("ajax").iterator();
@@ -494,8 +430,8 @@ public class WpdExtendlet implements Extendlet {
 				else {
 					final String[] inf = (String[])o;
 					if (inf[1] != null) {
-						final Locator loc = (Locator)_loc.get();
-						if (loc != null && !Servlets.isBrowser(loc.request, inf[1]))
+						final Provider provider = getProvider();
+						if (provider != null && !Servlets.isBrowser(provider.request, inf[1]))
 							continue;
 					}
 					if (!writeResource(out, inf[0], _dir, true))
@@ -503,54 +439,6 @@ public class WpdExtendlet implements Extendlet {
 				}
 			}
 			return out.toByteArray();
-		}
-	}
-	/*package*/ class Locator { //don't use private since WpdContent needs it
-		private HttpServletRequest request;
-		private HttpServletResponse response;
-		private Locator(HttpServletRequest request, HttpServletResponse response) {
-			this.request = request;
-			this.response = response;
-		}
-
-		/*package*/
-		InputStream getResourceAsStream(String path, boolean locate)
-		throws IOException, ServletException {
-			if (locate)
-				path = Servlets.locate(_webctx.getServletContext(),
-					this.request, path, _webctx.getLocator());
-
-			if (_cache.getCheckPeriod() >= 0) {
-				//Due to Web server might cache the result, we use URL if possible
-				try {
-					URL url = _webctx.getResource(path);
-					if (url != null)
-						return url.openStream();
-				} catch (Throwable ex) {
-					log.warningBriefly("Unable to read from URL: "+path, ex);
-				}
-			}
-
-			//Note: _webctx will handle the renaming for debugJS (.src.js)
-			return _webctx.getResourceAsStream(path);
-		}
-	}
-	class FileLocator extends Locator {
-		private String _parent;
-		private FileLocator(File file) {
-			super(null, null);
-			_parent = file.getParent();
-		}
-		InputStream getResourceAsStream(String path, boolean locate)
-		throws IOException {
-			if (isDebugJS()) {
-				final int j = path.lastIndexOf('.');
-				if (j >= 0)
-					path = 	path.substring(0, j) + ".src" + path.substring(j);
-			}
-			final File file = new File(_parent, path);
-			return locate ? new FileInputStream(Files.locate(file.getPath())):
-				new FileInputStream(file);
 		}
 	}
 }

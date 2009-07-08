@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Iterator;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.lang.reflect.Method;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,7 +33,6 @@ import org.zkoss.idom.util.IDOMs;
 import org.zkoss.web.servlet.Servlets;
 import org.zkoss.web.servlet.http.Https;
 import org.zkoss.web.servlet.http.HttpBufferedResponse;
-import org.zkoss.web.util.resource.Extendlet;
 import org.zkoss.web.util.resource.ExtendletConfig;
 import org.zkoss.web.util.resource.ExtendletContext;
 import org.zkoss.web.util.resource.ExtendletLoader;
@@ -48,23 +48,9 @@ import org.zkoss.zk.ui.metainfo.LanguageDefinition;
  * @author tomyeh
  * @since 5.0.0
  */
-public class WcsExtendlet implements Extendlet {
-	private static final Log log = Log.lookup(WcsExtendlet.class);
-
-	private ExtendletContext _webctx;
-	private ResourceCache _cache;
-
+public class WcsExtendlet extends AbstractExtendlet {
 	public void init(ExtendletConfig config) {
-		_webctx = config.getExtendletContext();
-		final WcsLoader loader = new WcsLoader();
-		_cache = new ResourceCache(loader, 16);
-		_cache.setMaxSize(1024);
-		_cache.setLifetime(60*60*1000); //1hr
-		final int checkPeriod = loader.getCheckPeriod();
-		_cache.setCheckPeriod(checkPeriod >= 0 ? checkPeriod: 60*60*1000); //1hr
-	}
-	public boolean getFeature(int feature) {
-		return feature == ALLOW_DIRECT_INCLUDE;
+		init(config, new WcsLoader());
 	}
 	public void service(HttpServletRequest request,
 	HttpServletResponse response, String path, String extra)
@@ -79,12 +65,18 @@ public class WcsExtendlet implements Extendlet {
 		}
 
 		final StringWriter sw = new StringWriter();
-		for (int j = 0; j < wi.uris.length; ++j) {
-			try {
-				_webctx.include(request, HttpBufferedResponse.getInstance(response, sw), wi.uris[j], null);
-			} catch (Throwable ex) {
-				log.realCauseBriefly("Unable to load "+wi.uris[j], ex);
+		for (int j = 0; j < wi.items.length; ++j) {
+			final Object o = wi.items[j];
+			if (o instanceof String) {
+				try {
+					_webctx.include(request, HttpBufferedResponse.getInstance(response, sw), (String)o, null);
+				} catch (Throwable ex) {
+					log.realCauseBriefly("Unable to load "+wi.items[j], ex);
+				}
+			} else { //static method
+				sw.write(invoke((Method)o));
 			}
+			sw.write('\n');
 		}
 		for (Iterator it = wi.langdef.getCSSURIs().iterator(); it.hasNext();) {
 			final String uri = (String)it.next();
@@ -112,19 +104,23 @@ public class WcsExtendlet implements Extendlet {
 		if (lang.length() == 0)
 			throw new UiException("The language attribute must be specified, "+root.getLocator());
 
-		final List uris = new LinkedList();
+		final List items = new LinkedList();
 		for (Iterator it = root.getElements().iterator(); it.hasNext();) {
 			final Element el = (Element)it.next();
-			if ("stylesheet".equals(el.getName())) {
+			final String elnm = el.getName();
+			if ("stylesheet".equals(elnm)) {
 				final String href = IDOMs.getRequiredAttributeValue(el, "href");
 				if (href.length() != 0)
-					uris.add(href);
+					items.add(href);
 				else
 					log.warning("Ingored stylesheet: href required, " + el.getLocator());
+			} else if ("function".equals(elnm)) {
+				final Method mtd = getMethod(el);
+				if (mtd != null) items.add(mtd);
 			} else
 				log.warning("Ignored unknown element, " + el.getLocator());
 		}
-		return new WcsInfo(lang, uris);
+		return new WcsInfo(lang, items);
 	}
 
 	private class WcsLoader extends ExtendletLoader {
@@ -141,10 +137,11 @@ public class WcsExtendlet implements Extendlet {
 	}
 	private static class WcsInfo {
 		private final LanguageDefinition langdef;
-		private final String[] uris;
-		private WcsInfo(String lang, List uris) {
+		/** A list of URI or static method. */
+		private final Object[] items;
+		private WcsInfo(String lang, List items) {
 			this.langdef = LanguageDefinition.lookup(lang);
-			this.uris = (String[])uris.toArray(new String[uris.size()]);
+			this.items = (Object[])items.toArray(new Object[items.size()]);
 		}
 	}
 }
