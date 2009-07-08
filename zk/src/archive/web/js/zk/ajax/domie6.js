@@ -31,7 +31,7 @@ zk.copy(zjq, {
 		if (!jq.SPACER_GIF)
 			jq.SPACER_GIF = zAu.comURI('web/img/spacer.gif');
 		var imgs = n.getElementsByTagName("img");
-		for (var j = imgs.length; --j >= 0; ) {
+		for (var j = imgs.length; j--; ) {
 			var img = imgs[j], src = img.src,
 				k = src.lastIndexOf(';');
 			if (k >= 0) src = src.substring(0, k);

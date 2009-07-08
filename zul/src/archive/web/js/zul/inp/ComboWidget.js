@@ -94,7 +94,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 				var gap = pp.offsetHeight - pp.clientHeight;
 				if (gap > 10 && pp.offsetHeight < 150) { //scrollbar
 					var hgh = 0;
-					for (var j = rows.length; --j >= 0;)
+					for (var j = rows.length; j--;)
 						hgh += rows[j].offsetHeight;
 					pp.style.height = (hgh + 20) + "px";
 						//add the height of scrollbar (18 is an experimental number)

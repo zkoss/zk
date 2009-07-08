@@ -470,7 +470,7 @@ zAu = {
 	_useQS: zk.ie ? function (reqInf) {
 		var s = reqInf.content, j = s.length, prev, cc;
 		if (j + reqInf.uri.length < 2000) {
-			while (--j >= 0) {
+			while (j--) {
 				cc = s.charAt(j);
 				if (cc == '%' && prev >= '8') //%8x, %9x...
 					return false;
@@ -691,7 +691,7 @@ zAu.cmd0 = { //no uuid at all
 		}
 	},
 	closeErrbox: function () {
-		for (var i = arguments.length; --i >= 0;) {
+		for (var i = arguments.length; i--;) {
 			var wgt = zk.Widget.$(arguments[i]);
 			if (wgt && wgt.clearErrorMessage)
 				wgt.clearErrorMessage();

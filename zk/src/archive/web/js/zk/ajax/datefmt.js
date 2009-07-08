@@ -15,7 +15,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zDateFormat = {
 	checkDate : function (ary, txt) {
 		if (txt.length)
-			for (var j = ary.length; --j >= 0;) {
+			for (var j = ary.length; j--;) {
 				var k = txt.indexOf(ary[j]);
 				if (k >= 0)
 					txt = txt.substring(0, k) + txt.substring(k + ary[j].length);
@@ -24,7 +24,7 @@ zDateFormat = {
 	},
 	digitFixed : function (val, digits) {
 		var s = "" + val;
-		for (var j = digits - s.length; --j >= 0;)
+		for (var j = digits - s.length; j--;)
 			s = "0" + s;
 		return s;
 	},
@@ -184,7 +184,7 @@ zDateFormat = {
 			txt = this.checkDate(zk.S2MON, txt);
 			txt = this.checkDate(zk.FMON, txt);
 			txt = this.checkDate(zk.APM, txt);
-			for (var j = txt.length; --j >= 0;) {
+			for (var j = txt.length; j--;) {
 				var cc = txt.charAt(j);
 				if ((cc > '9' || cc < '0') && fmt.indexOf(cc) < 0)
 					return null; //failed

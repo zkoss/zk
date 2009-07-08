@@ -162,7 +162,7 @@ zkm = {
 	mount: function() {
 		//1. load JS
 		var cfi = zkm._crInf0;
-		for (var j = cfi.length; --j >= 0;) {
+		for (var j = cfi.length; j--;) {
 			var inf = cfi[j];
 			if (!inf.jsLoad) {
 				inf.jsLoad = true;

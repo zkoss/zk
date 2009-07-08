@@ -53,7 +53,7 @@ zul.utl.Style = zk.$extends(zk.Widget, {
 	_getLink: function (head) {
 		head = head || this._getHead();
 		for (var lns = head.getElementsByTagName("LINK"), j = lns.length,
-		uuid = this.uuid; --j >= 0;)
+		uuid = this.uuid; j--;)
 			if (lns[j].id == uuid)
 				return lns[j];
 	},

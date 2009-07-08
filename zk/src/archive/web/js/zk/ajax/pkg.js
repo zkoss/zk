@@ -73,7 +73,7 @@ zPkg = {
 		if (func) zk.afterLoad(pkg, func, true);
 
 		var loading;
-		for (var pkgs = pkg.split(','), j = pkgs.length; --j >= 0;) {
+		for (var pkgs = pkg.split(','), j = pkgs.length; j--;) {
 			pkg = pkgs[j].trim();
 			if (!zPkg._load(pkg, dt))
 				loading = true;
@@ -170,10 +170,10 @@ zPkg = {
 		if (typeof a == 'string') {
 			if (!b) return true;
 
-			for (var pkgs = a.split(','), j = pkgs.length; --j >= 0;) {
+			for (var pkgs = a.split(','), j = pkgs.length; j--;) {
 				var p = pkgs[j].trim();
 				if (p && !zPkg._lded[p]) {
-					while (--j >= 0) {
+					while (j--) {
 						var p2 = pkgs[j].trim();
 						if (p2 && !zPkg._lded[p2]) { //yes, more
 							var a1 = a, b1 = b;

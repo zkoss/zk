@@ -276,7 +276,7 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	_formatFixed: function (val, digits) {
 		var s = "" + val;
-		for (var j = digits - s.length; --j >= 0;)
+		for (var j = digits - s.length; j--;)
 			s = "0" + s;
 		return s;
 	},

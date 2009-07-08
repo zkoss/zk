@@ -129,7 +129,7 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		if (n) {
 			var zcls = this.getZclass();
 			jq(n).removeClass(zcls + "-focus");
-			for (var i = n.cells.length; --i >= 0;)
+			for (var i = n.cells.length; i--;)
 				jq(n.cells[i]).removeClass(zcls + "-focus");
 		}
 	},
@@ -159,7 +159,7 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 			this._checkAll();
 		} else {
 			var r = this.getSubnode('cm');
-			for (var nms = jq.$$(r.name), i = nms.length; --i >= 0;)
+			for (var nms = jq.$$(r.name), i = nms.length; i--;)
 				nms[i].defaultChecked = false;
 			r.defaultChecked = r.checked;
 		}

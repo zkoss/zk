@@ -386,7 +386,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (zk.opera) {
 			if (!hdtable.style.width) {
 				var isFixed = true, tt = wgt.ehead.offsetWidth;
-				for(var i = hdfaker.cells.length; --i >=0;) {
+				for(var i = hdfaker.cells.length; i--;) {
 					if (!hdfaker.cells[i].style.width || hdfaker.cells[i].style.width.indexOf("%") >= 0) {
 						isFixed = false; 
 						break;
@@ -412,7 +412,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (bdtable) bdtable.style.width = hdtable.style.width;
 		if (wgt.efoot) wgt.efoot.firstChild.style.width = hdtable.style.width;
 		
-		for (var i = bdfaker.cells.length; --i >= 0;) {
+		for (var i = bdfaker.cells.length; i--;) {
 			if (!zk(hdfaker.cells[i]).isVisible()) continue;
 			var wd = i != 0 ? bdfaker.cells[i].offsetWidth : count;
 			bdfaker.cells[i].style.width = zk(bdfaker.cells[i]).revisedWidth(wd) + "px";
@@ -478,11 +478,11 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	
 		//we have to clean up first, since, in FF, if dst contains %
 		//the copy might not be correct
-		for (var j = maxnc; --j >=0;)
+		for (var j = maxnc; j--;)
 			dst.cells[j].style.width = "";
 	
 		var sum = 0;
-		for (var j = maxnc; --j >= 0;) {
+		for (var j = maxnc; j--;) {
 			var d = dst.cells[j], s = src.cells[j];
 			if (zk.opera) {
 				sum += s.offsetWidth;

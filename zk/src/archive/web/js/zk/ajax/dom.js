@@ -382,7 +382,7 @@ zjq.prototype = { //ZK extension
 		if (!zk.safari || el.tagName != "TR") return el.offsetWidth;
 
 		var wd = 0;
-		for (var cells = el.cells, j = cells.length; --j >= 0;)
+		for (var cells = el.cells, j = cells.length; j--;)
 			wd += cells[j].offsetWidth;
 		return wd;
 	},
@@ -391,7 +391,7 @@ zjq.prototype = { //ZK extension
 		if (!zk.safari || el.tagName != "TR") return el.offsetHeight;
 
 		var hgh = 0;
-		for (var cells = el.cells, j = cells.length; --j >= 0;) {
+		for (var cells = el.cells, j = cells.length; j--;) {
 			var h = cells[j].offsetHeight;
 			if (h > hgh) hgh = h;
 		}
@@ -439,7 +439,7 @@ zjq.prototype = { //ZK extension
 			document.body.appendChild(tsd);
 		}
 
-		for (var ss = zjq._TEXT_STYLES, j = ss.length; --j >= 0;) {
+		for (var ss = zjq._TEXT_STYLES, j = ss.length; j--;) {
 			var nm = ss[j].$camel();
 			tsd.style[nm] = jq(el).css(nm);
 		}
@@ -964,7 +964,7 @@ zk.copy(zjq, { //private
 	_TEXT_STYLES2: ["color", "background-color", "background"]
 });
 
-zk.copy(jq.prototype, { //ZK extension to jQuery
+zk.copy(jq.prototype, { //Extension to jq() directly
 	zsync: function (evtnm) {
 		var wgt = this.zk.widget()[0];
 		if (wgt) {

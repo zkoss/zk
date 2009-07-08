@@ -102,7 +102,7 @@ zWatch = {
 			wts = wts.$clone(); //make a copy since unlisten might happen
 			
 			if (zWatch._visibleEvent[name])
-				for (var j = wts.length; --j >= 0;)
+				for (var j = wts.length; j--;)
 					if (!zWatch._visible(wts[j]))
 						wts.splice(j, 1);
 						
@@ -143,7 +143,7 @@ zWatch = {
 			var found, bindLevel = origin.bindLevel;
 			if (bindLevel != null) {
 				found = [];
-				for (var j = wts.length, o; --j >= 0;) { //child first
+				for (var j = wts.length, o; j--;) { //child first
 					o = wts[j];
 					var diff = bindLevel > o.bindLevel;
 					if (diff > 0) break;//nor ancestor, nor this (&sibling)
@@ -156,7 +156,7 @@ zWatch = {
 			} else {
 				found = wts.$clone(); //make a copy since unlisten might happen
 				if (zWatch._visibleEvent[name])
-					for (var j = found.length; --j >= 0;)
+					for (var j = found.length; j--;)
 						if (!zWatch._visible(found[j]))
 							found.splice(j, 1);
 			}

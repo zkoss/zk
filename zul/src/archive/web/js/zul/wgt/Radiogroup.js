@@ -21,7 +21,7 @@ zul.wgt.Radiogroup = zk.$extends(zul.Widget, {
 			this.rerender();
 		},
 		name: function (v) {
-			for (var items = this.getItems(), i = items.length; --i >= 0;)
+			for (var items = this.getItems(), i = items.length; i--;)
 				items[i].setName(name);
 		}
 	},

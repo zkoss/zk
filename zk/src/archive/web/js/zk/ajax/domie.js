@@ -103,7 +103,7 @@ zk.copy(zjq, {
 		}
 	},
 	_fixBU: function (ns) {
-		for (var j = ns.length; --j >= 0;) {
+		for (var j = ns.length; j--;) {
 			var n = ns[j];
 			if (!n.z_fixed && n.href.indexOf("javascript:") >= 0) {
 				n.z_fixed = true;
@@ -112,7 +112,7 @@ zk.copy(zjq, {
 		}
 	},
 	_unfixBU: function (ns) {
-		for (var j = ns.length; --j >= 0;) {
+		for (var j = ns.length; j--;) {
 			var n = ns[j];
 			if (n.z_fixed) {
 				n.z_fixed = false;

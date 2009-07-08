@@ -36,7 +36,7 @@ zul.wgt.Radio = zk.$extends(zul.wgt.Checkbox, {
 				if (group) {
 					// bug #1893575 : we have to clean all of the radio at the same group.
 					if (checked) {
-						for (var items = group.getItems(), i = items.length; --i >= 0;) {
+						for (var items = group.getItems(), i = items.length; i--;) {
 							if (items[i] != this) {
 								items[i].getSubnode('real').checked = false;
 								items[i]._checked = false;

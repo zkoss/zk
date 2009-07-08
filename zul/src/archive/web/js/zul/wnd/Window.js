@@ -72,7 +72,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 
 	_doOverlapped: function () {
 		var pos = this.getPosition(),
-			n = this.getNode(),
+			n = this.$n(),
 			$n = zk(n);
 		if (!pos && !n.style.top && !n.style.left) {
 			var xy = $n.revisedOffset();
@@ -85,7 +85,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this._syncShadow();
 		this._updateDomPos();
 
-		if (zk(this.getNode()).isRealVisible()) {
+		if (zk(this.$n()).isRealVisible()) {
 			$n.cleanVisibility();
 			this.setTopmost();
 		}
@@ -94,7 +94,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 	_doModal: function () {
 		var pos = this.getPosition(),
-			n = this.getNode(),
+			n = this.$n(),
 			$n = zk(n);
 		if (pos == "parent") this._posByParent();
 
@@ -137,7 +137,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 	/** Must be called before calling makeVParent. */
 	_posByParent: function () {
-		var n = this.getNode(),
+		var n = this.$n(),
 			ofs = zk(n.parentNode).revisedOffset(),
 			left = zk.parseInt(n.style.left), top = zk.parseInt(n.style.top);
 		this._offset = ofs;
@@ -152,7 +152,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			}
 		} else if (this._shadow) {
 			if (!this._shadowWgt)
-				this._shadowWgt = new zk.eff.Shadow(this.getNode(),
+				this._shadowWgt = new zk.eff.Shadow(this.$n(),
 					{left: -4, right: 4, top: -2, bottom: 3, stackup: true});
 			this._shadowWgt.sync();
 		}
@@ -179,7 +179,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		}
 	},
 	_updateDomPos: function (force) {
-		var n = this.getNode(), pos = this._position;
+		var n = this.$n(), pos = this._position;
 		if (pos == "parent"/*handled by the caller*/ || (!pos && !force))
 			return;
 
@@ -264,8 +264,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			}
 	},
 	_fixWdh: zk.ie7 ? function () {
-		if (this._mode == 'embedded' || this._mode == 'popup' || !zk(this.getNode()).isRealVisible()) return;
-		var n = this.getNode(),
+		if (this._mode == 'embedded' || this._mode == 'popup' || !zk(this.$n()).isRealVisible()) return;
+		var n = this.$n(),
 			cave = this.getSubnode('cave').parentNode,
 			wdh = n.style.width,
 			$n = jq(n),
@@ -288,8 +288,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		}
 	} : zk.$void,
 	_fixHgh: function () {
-		if (!zk(this.getNode()).isRealVisible()) return;
-		var n = this.getNode(),
+		if (!zk(this.$n()).isRealVisible()) return;
+		var n = this.$n(),
 			hgh = n.style.height,
 			cave = this.getSubnode('cave'),
 			cvh = cave.style.height;
@@ -324,7 +324,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 
 	_fireOnMove: function (keys) {
-		var pos = this._position, node = this.getNode(),
+		var pos = this._position, node = this.$n(),
 			x = zk.parseInt(node.style.left),
 			y = zk.parseInt(node.style.top);
 		if (pos == 'parent') {
@@ -422,7 +422,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		}
 	},
 	unbind_: function () {
-		var node = this.getNode();
+		var node = this.$n();
 		node.style.visibility = 'hidden'; //avoid unpleasant effect
 
 		//we don't check this._mode here since it might be already changed
@@ -451,7 +451,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		}
 
 		var Window = this.$class;
-		for (var nms = ['close', 'max', 'min'], j = 3; --j >=0;) {
+		for (var nms = ['close', 'max', 'min'], j = 3; j--;) {
 			var nm = nms[j],
 				n = this['e' + nm ];
 			if (n) {

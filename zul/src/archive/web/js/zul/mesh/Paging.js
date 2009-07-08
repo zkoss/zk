@@ -140,13 +140,13 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 			Paging = this.$class;
 
 		if (!this.inDesign)
-			for (var i = inputs.length; --i>=0;)
+			for (var i = inputs.length; i--;)
 				jq(inputs[i]).keydown(Paging._domKeyDown)
 					.blur(Paging._domBlur);
 		
-		for (var postfix = ['first', 'prev', 'last', 'next'], k = postfix.length; --k >=0; ) {
+		for (var postfix = ['first', 'prev', 'last', 'next'], k = postfix.length; k--; ) {
 			var btn = jq.$$(uuid, postfix[k]);
-			for (var j = btn.length; --j>=0;) {
+			for (var j = btn.length; j--;) {
 				if (!this.inDesign)
 					jq(btn[j]).mouseover(Paging._domMouseOver)
 						.mouseout(Paging._domMouseOut)
@@ -167,13 +167,13 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		if (this.getMold() != "os") {
 			var uuid = this.uuid, inputs = jq.$$(uuid, 'real'), Paging = this.$class;
 			
-			for (var i = inputs.length; --i >= 0;)
+			for (var i = inputs.length; i--;)
 				jq(inputs[i]).unbind("keydown", Paging._domKeyDown)
 					.unbind("blur", Paging._domBlur);
 			
-			for (var postfix = ['first', 'prev', 'last', 'next'], k = postfix.length; --k >= 0;) {
+			for (var postfix = ['first', 'prev', 'last', 'next'], k = postfix.length; k--;) {
 				var btn = jq.$$(uuid, postfix[k]);
-				for (var j = btn.length; --j >= 0;) {
+				for (var j = btn.length; j--;) {
 					jq(btn[j]).unbind("mouseover", Paging._domMouseOver)
 						.unbind("mouseout", Paging._domMouseOut)
 						.unbind("mousedown", Paging._domMouseDown)
@@ -265,8 +265,8 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		if (wgt.getActivePage() != 0) {
 			wgt.$class.go(wgt, 0);
 			var uuid = wgt.uuid;
-			for (var postfix = ['first', 'prev'], k = postfix.length; --k >= 0;)
-				for (var btn = jq.$$(uuid, postfix[k]), i = btn.length; --i >= 0;)
+			for (var postfix = ['first', 'prev'], k = postfix.length; k--;)
+				for (var btn = jq.$$(uuid, postfix[k]), i = btn.length; i--;)
 					jq(btn[i]).addClass(zcls + "-btn-disd");
 		}
 	},
@@ -279,8 +279,8 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 			wgt.$class.go(wgt, ap - 1);
 			if (ap - 1 == 0) {
 				var uuid = wgt.uuid;
-				for (var postfix = ['first', 'prev'], k = postfix.length; --k >= 0;)
-					for (var btn = jq.$$(uuid, postfix[k]), i = btn.length; --i >= 0;)
+				for (var postfix = ['first', 'prev'], k = postfix.length; k--;)
+					for (var btn = jq.$$(uuid, postfix[k]), i = btn.length; i--;)
 						jq(btn[i]).addClass(zcls + "-btn-disd");
 			}
 		}
@@ -295,8 +295,8 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 			wgt.$class.go(wgt, ap + 1);
 			if (ap + 1 == pc - 1) {
 				var uuid = wgt.uuid;
-				for (var postfix = ['last', 'next'], k = postfix.length; --k >= 0;)
-					for (var btn = jq.$$(uuid, postfix[k]), i = btn.length; --i >= 0;)
+				for (var postfix = ['last', 'next'], k = postfix.length; k--;)
+					for (var btn = jq.$$(uuid, postfix[k]), i = btn.length; i--;)
 						jq(btn[i]).addClass(zcls + "-btn-disd");
 			}
 		}
@@ -309,8 +309,8 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		if (wgt.getActivePage() < pc - 1) {
 			wgt.$class.go(wgt, pc - 1);
 			var uuid = wgt.uuid;
-			for (var postfix = ['last', 'next'], k = postfix.length; --k >= 0;)
-				for (var btn = jq.$$(uuid, postfix[k]), i = btn.length; --i >= 0;)
+			for (var postfix = ['last', 'next'], k = postfix.length; k--;)
+				for (var btn = jq.$$(uuid, postfix[k]), i = btn.length; i--;)
 					jq(btn[i]).addClass(zcls + "-btn-disd");
 		}
 		

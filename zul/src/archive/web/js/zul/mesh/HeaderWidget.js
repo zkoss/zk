@@ -81,7 +81,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		var n = this.getNode(),
 			index = zk(n).cellIndex(),
 			owner = this.getMeshWidget();
-		for (var faker, fs = this.$class._faker, i = fs.length; --i >= 0;) {
+		for (var faker, fs = this.$class._faker, i = fs.length; i--;) {
 			faker = owner['e' + fs[i]]; // internal element
 			if (faker && !this.getSubnode(fs[i])) 
 				faker[faker.cells.length > index ? "insertBefore" : "appendChild"]
@@ -176,7 +176,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			cidx = $n.cellIndex(),
 			total = 0;
 			
-		for (var k = cells.length; --k >= 0;)
+		for (var k = cells.length; k--;)
 			if (k !== cidx) total += cells[k].offsetWidth;
 
 		// For Opera, the code of adjusting width must be in front of the adjusting table.

@@ -124,7 +124,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			var ads = this._autodisable, aded;
 			if (ads) {
 				ads = ads.split(',');
-				for (var j = ads.length; --j >= 0;) {
+				for (var j = ads.length; j--;) {
 					var ad = ads[j].trim();
 					if (ad) {
 						var perm;

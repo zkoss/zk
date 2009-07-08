@@ -107,9 +107,9 @@ zul.sel.Listgroup = zk.$extends(zul.sel.Listitem, {
 		var table = n.parentNode.parentNode;
 		if (table.tBodies.length > 1) {
 			var span = 0;
-			for (var row = table.rows[0], i = row.cells.length; --i >=0;)
+			for (var row = table.rows[0], i = row.cells.length; i--;)
 				if(zDom.isVisible(row.cells[i])) span++;
-			for (var cells = n.cells, i = cells.length; --i >= 0;)
+			for (var cells = n.cells, i = cells.length; i--;)
 				span -= cells[i].colSpan;
 			if (span > 0 && n.cells.length) n.cells[n.cells.length - 1].colSpan += span;
 		}

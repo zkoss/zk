@@ -225,7 +225,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			total = vert ? zk(node).revisedHeight(node.offsetHeight):
 				zk(node).revisedWidth(node.offsetWidth);
 
-		for (var i = nd.length; --i >= 0;) {
+		for (var i = nd.length; i--;) {
 			var d = nd[i];
 			if (zk(d).isVisible())
 				if (vert) {

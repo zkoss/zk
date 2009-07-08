@@ -58,24 +58,24 @@ zk = function (sel) {
 			throw 'unknown superclass';
 
 		var jclass = function() {
-			this.$id = zk._$id++;
+			this.$oid = ++zk._$oid;
 			this.$init.apply(this, arguments);
 
 			var ais = this._$ais;
 			if (ais) {
 				delete this._$ais;
-				for (var j = ais.length; --j >= 0;)
+				for (var j = ais.length; j--;)
 					ais[j].call(this);
 			}
 		};
 
-		var thisprototype = jclass.prototype,
-			superprototype = superclass.prototype,
+		var thispt = jclass.prototype,
+			superpt = superclass.prototype,
 			define = members['$define'];
 		if (typeof define != 'undefined')
 			delete members['$define'];
-		zk.copy(thisprototype, superprototype); //inherit non-static
-		zk.copy(thisprototype, members);
+		zk.copy(thispt, superpt); //inherit non-static
+		zk.copy(thispt, members);
 
 		for (var p in superclass) //inherit static
 			if (p != 'prototype')
@@ -83,8 +83,8 @@ zk = function (sel) {
 
 		zk.copy(jclass, staticMembers);
 
-		thisprototype.$class = jclass;
-		thisprototype._$super = superprototype;
+		thispt.$class = jclass;
+		thispt._$super = superpt;
 		jclass.$class = zk.Class;
 		jclass.superclass = superclass;
 
@@ -92,7 +92,7 @@ zk = function (sel) {
 
 		return jclass;
 	},
-	_$id: 0,
+	_$oid: 0,
 	$default: function (opts, defaults) {
 		opts = opts || {};
 		for (var p in defaults)

@@ -135,8 +135,7 @@ public class WpdExtendlet implements Extendlet {
 		return _debugJS.booleanValue();
 	}
 	private WebApp getWebApp() {
-		final WebManager wm = WebManager.getWebManager(_webctx.getServletContext());
-		return wm != null ? wm.getWebApp(): null;
+		return _webctx != null ? WebManager.getWebManager(_webctx.getServletContext()).getWebApp(): null;
 	}
 	/** Parses and return the specified file.
 	 * It is used by ZK Lighter to generate JavaScript files.
