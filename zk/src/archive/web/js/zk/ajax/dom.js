@@ -965,7 +965,7 @@ zk.copy(zjq, { //private
 });
 
 zk.copy(jq.prototype, { //ZK extension to jQuery
-	sync: function () {
+	zsync: function (evtnm) {
 		var wgt = this.zk.widget()[0];
 		if (wgt) {
 			var elem = this[0];
@@ -975,7 +975,7 @@ zk.copy(jq.prototype, { //ZK extension to jQuery
 					if (jq.timers[i].elem === elem)
 						return true;
 				
-				zWatch.fireDown('onSize', null, wgt);
+				zWatch.fireDown(evtnm || 'onSize', null, wgt);
 				return false;
 			});
 		}
