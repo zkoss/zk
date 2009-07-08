@@ -457,14 +457,6 @@ span.z-progressmeter-img {
 	line-height: 0;
 	font-size: 0;
 }
-.z-messagebox {
-	word-break: break-all;
-	overflow:auto;
-}
-.z-messagebox-btn {
-	min-width: 45pt;
-	width: 100%;
-}
 <%-- Auxheader --%>
 .z-auxheader-cnt {
 	font-size: ${fontSizeM}; font-weight: normal;
@@ -474,20 +466,12 @@ span.z-progressmeter-img {
 .z-word-wrap .z-auxheader-cnt {
 	word-wrap: break-word;
 }
-<%-- Window --%>
-<c:include page="~./zul/css/cmps/window.css.dsp"/>
-<%-- Caption --%>
-<c:include page="~./zul/css/cmps/caption.css.dsp"/>
 <%-- Separator --%>
 <c:include page="~./zul/css/cmps/separator.css.dsp"/>
-<%-- Toolbar and Toolbarbutton --%>
-<c:include page="~./zul/css/cmps/toolbar.css.dsp"/>
 <%-- Slider --%>
 <c:include page="~./zul/css/cmps/slider.css.dsp"/>
 <%-- Paging --%>
 <c:include page="~./zul/css/cmps/paging.css.dsp"/>
-<%-- Panel --%>
-<c:include page="~./zul/css/cmps/panel.css.dsp"/>
 <%-- Combobox, Bandbox, Timebox, Datebox, and Spinner --%>
 <c:include page="~./zul/css/cmps/combo.css.dsp"/>
 <%-- Calendar and Datebox --%>
@@ -534,10 +518,6 @@ option {
 </c:otherwise>
 </c:choose>
 
-.z-messagebox-btn {
-	width: 47pt;
-	text-overflow: ellipsis;
-}
 <%-- Widget.css.dsp --%>
 .z-textbox-disd *, .z-decimalbox-disd *, .z-intbox-disd *, .z-longbox-disd *, .z-doublebox-disd * {
 	filter: alpha(opacity=60);
@@ -612,29 +592,8 @@ span.z-vfiletree-last-open, span.z-vfiletree-last-close, span.z-vfiletree-tee, s
 	color: black; <%-- 1735084 --%>
 }
 
-<%-- Append New --%>
-<c:if test="${c:isExplorer7()}">
-.z-panel-tm {
-	overflow: visible;
-}
-</c:if>
-.z-panel-header {
-	zoom: 1;
-}
-.z-panel-btm {
-	position: relative;
-}
-<%-- groupbox.css.dsp --%>
-<c:if test="${c:isExplorer7()}">
-.z-groupbox-body {
-	zoom: 1;
-}
-</c:if>
-
-
 <%-- IE 6 GIF  --%>
 <c:if test="${c:browser('ie6-')}">
-<%-- norm.css.dsp --%>
 span.z-drop-allow,
 span.z-drop-disallow {
 	background-image: url(${c:encodeURL('~./zul/img/misc/drag.gif')});
@@ -709,13 +668,6 @@ tr.z-listitem td.z-listitem-focus {
 .z-paging-btn .z-paging-last,
 .z-paging-btn .z-paging-first {	
 	background-image:url(${c:encodeURL('~./zul/img/paging/pg-btn.gif')}) !important;
-}
-<%-- panel.css.dsp --%>
-.z-panel-tl,
-.z-panel-tr,
-.z-panel-bl,
-.z-panel-br {
-	background-image:url(${c:encodeURL('~./zul/img/wnd/panel-corner.gif')});
 }
 <%-- popup.css.dsp --%>
 .z-popup .z-popup-tl,
@@ -794,101 +746,9 @@ span.z-vfiletree-ico,span.z-vfiletree-firstspacer {
 span.z-vfiletree-tee, span.z-vfiletree-last {
 	background-image: url(${c:encodeURL('~./zul/img/tree/ventity.gif')});
 }
-<%-- window.css.dsp --%>
-.z-window-modal-tl,
-.z-window-modal-tr,
-.z-window-modal-bl,
-.z-window-modal-br,
-.z-window-overlapped-tl,
-.z-window-overlapped-tr,
-.z-window-overlapped-bl,
-.z-window-overlapped-br,
-.z-window-highlighted-tl,
-.z-window-highlighted-tr,
-.z-window-highlighted-bl,
-.z-window-highlighted-br {
-	background-image: url(${c:encodeURL('~./zul/img/wnd/wnd-ol-corner.gif')});
-}
-.z-window-embedded-tl,
-.z-window-embedded-tr {
-	background-image: url(${c:encodeURL('~./zul/img/wnd/wnd-corner.gif')});
-}
-.z-window-popup-tl,
-.z-window-popup-tr {
-	background-image: url(${c:encodeURL('~./zul/img/wnd/wnd-pop-corner.gif')});
-}
-.z-window-modal-hr,
-.z-window-highlighted-hr,
-.z-window-overlapped-hr,
- .z-window-popup-hr {
-	background-image: url(${c:encodeURL('~./zul/img/wnd/wnd-ol-hr.gif')});
-}
-.z-window-embedded-hr,
-.z-window-embedded-hr-noborder {
-	background-image: url(${c:encodeURL('~./zul/img/wnd/wnd-hr.gif')});
-}
-.z-window-popup-hr {
-	background-image: url(${c:encodeURL('~./zul/img/wnd/wnd-pop-hr.gif')});
-}
-.z-window-modal-hl,
-.z-window-highlighted-hl,
-.z-window-overlapped-hl,
-.z-window-popup-hl {
-	background-image: url(${c:encodeURL('~./zul/img/wnd/wnd-ol-hl.gif')});
-}
-.z-window-embedded-hl,
-.z-window-embedded-hl-noborder {
-	background-image: url(${c:encodeURL('~./zul/img/wnd/wnd-hl.gif')});
-}
-.z-window-popup-hl {
-	background-image: url(${c:encodeURL('~./zul/img/wnd/wnd-pop-hl.gif')});
-}
-.z-window-modal-hm,
-.z-window-highlighted-hm,
-.z-window-overlapped-hm,
-.z-window-popup-hm {
-	background-image: url(${c:encodeURL('~./zul/img/wnd/wnd-ol-hm.gif')});
-}
-.z-window-embedded-hm,
-.z-window-embedded-hm-noborder {
-	background-image: url(${c:encodeURL('~./zul/img/wnd/wnd-hm.gif')});
-}
-.z-window-popup-hm {
-	background-image: url(${c:encodeURL('~./zul/img/wnd/wnd-pop-hm.gif')});
-}
-.z-window-modal-cl,
-.z-window-highlighted-cl,
-.z-window-overlapped-cl,
-.z-window-modal-cr,
-.z-window-highlighted-cr,
-.z-window-overlapped-cr {
-	background-image: url(${c:encodeURL('~./zul/img/wnd/wnd-ol-clr.gif')});
-}
-
-.z-groupbox-tl {
-	background-image:url(${c:encodeURL('~./zul/img/groupbox/groupbox-corner.gif')});
-}
-.z-groupbox-tr{
-	background-image:url(${c:encodeURL('~./zul/img/groupbox/groupbox-corner.gif')});
-}
-
-.z-groupbox-hl {
-	background-image:url(${c:encodeURL('~./zul/img/groupbox/groupbox-hl.gif')});
-}
-.z-groupbox-hr {
-	background-image:url(${c:encodeURL('~./zul/img/groupbox/groupbox-hr.gif')});
-}
-.z-groupbox-hm {
-	background-image:url(${c:encodeURL('~./zul/img/groupbox/groupbox-hm.gif')});
-}
 </c:if>
 </c:if>
 
-<%-- Gecko --%>
-<c:if test="${c:isGecko()}">
-.z-messagebox-btn {
-	width: 45pt;
-}
 <%-- combo.css.dsp --%>
 span.z-combobox-btn, span.z-datebox-btn, span.z-bandbox-btn, span.z-timebox-btn,
 span.z-spinner-btn {<%-- button at the right edge --%>
@@ -916,10 +776,5 @@ span.z-word-wrap {<%-- label use only --%>
 option {
 	font-family: ${fontFamilyC};
 	font-size: ${fontSizeXS}; font-weight: normal;
-}
-
-<%-- Append New --%>
-.z-messagebox-btn {
-	width: 47pt;
 }
 </c:if>

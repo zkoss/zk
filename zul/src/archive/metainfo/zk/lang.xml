@@ -333,6 +333,7 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
  			<mold-uri>mold/caption.js</mold-uri>
+			<css-uri>css/caption.css</css-uri>
 		</mold>
 		<preserve-blank/>
 	</component>
@@ -755,6 +756,7 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/panel.js</mold-uri>
+			<css-uri>css/panel.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
@@ -975,10 +977,12 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/toolbar.js</mold-uri>
+			<css-uri>css/toolbar.css.dsp</css-uri>
 		</mold>
 		<mold>
 			<mold-name>panel</mold-name>
 			<mold-uri>mold/toolbarpanel.js</mold-uri>
+			<css-uri>css/toolbar.css.dsp</css-uri>
 		</mold>
 		<preserve-blank/>
 	</component>
@@ -989,6 +993,7 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/toolbarbutton.js</mold-uri>
+			<css-uri>css/toolbar.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
@@ -1107,6 +1112,7 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/window.js</mold-uri>
+			<css-uri>css/window.css.dsp</css-uri>
 		</mold>
 		<preserve-blank/>
 	</component>
