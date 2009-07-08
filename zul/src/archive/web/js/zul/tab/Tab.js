@@ -95,7 +95,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 				var p = panel.$n("real");
 				zk(p)[toSel ? "slideDown" : "slideUp"](this);
 			} else {
-				var pl = accd ? panel.$n("real") : panel.$n(); //Can't use getSubnode coz
+				var pl = accd ? panel.$n("real") : panel.$n(); //Can't use $n coz
 				if (toSel) {
 					jq(pl).show();
 					zWatch.fireDown('onShow', null, pl);

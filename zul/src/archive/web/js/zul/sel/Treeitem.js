@@ -64,7 +64,7 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 		if (this.treerow) return this.treerow.getZclass();
 		return null;
 	},
-	getSubnode: function (nm) {
+	$n: function (nm) {
 		if (this.treerow) return this.treerow.$n(nm);
 		return null;
 	},
