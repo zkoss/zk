@@ -268,6 +268,7 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/borderlayout.js</mold-uri>
+			<css-uri>css/layout.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
@@ -341,8 +342,8 @@ def alert(m):
 		<preserve-blank/>
 	</component>
 	<component>
-		<extends>layoutregion</extends>
 		<component-name>center</component-name>
+		<extends>layoutregion</extends>
 		<component-class>org.zkoss.zul.Center</component-class>
 		<widget-class>zul.layout.Center</widget-class>
 	</component>
@@ -401,7 +402,6 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/comboitem.js</mold-uri>
-			<css-uri>css/combo.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
@@ -445,17 +445,19 @@ def alert(m):
 		</mold>
 	</component>
 	<component>
-		<extends>layoutregion</extends>
 		<component-name>east</component-name>
+		<extends>layoutregion</extends>
 		<component-class>org.zkoss.zul.East</component-class>
 		<widget-class>zul.layout.East</widget-class>
 	</component>
 	<component>
 		<component-name>fileupload</component-name>
 		<component-class>org.zkoss.zul.Fileupload</component-class>
+		<widget-class>zul.utl.Fileupload</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
-			<mold-uri>~./zul/html/fileupload.dsp</mold-uri>
+			<mold-uri>mold/fileupload.js</mold-uri>
+			<css-uri>css/fileupload.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
@@ -493,10 +495,12 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/grid.js</mold-uri>
+			<css-uri>css/grid.css.dsp</css-uri>
 		</mold>
 		<mold>
 			<mold-name>paging</mold-name>
 			<mold-uri>mold/grid.js</mold-uri>
+			<css-uri>css/grid.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
@@ -607,6 +611,7 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/listbox.js</mold-uri>
+			<css-uri>css/listbox.css.dsp</css-uri>
 		</mold>
 		<mold>
 			<mold-name>select</mold-name>
@@ -616,6 +621,7 @@ def alert(m):
 		<mold>
 			<mold-name>paging</mold-name>
 			<mold-uri>mold/listbox.js</mold-uri>
+			<css-uri>css/listbox.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
@@ -690,12 +696,6 @@ def alert(m):
 			<css-uri>css/input.css.dsp</css-uri>
 		</mold>
 	</component>
-	<component>
-		<extends>layoutregion</extends>
-		<component-name>north</component-name>
-		<component-class>org.zkoss.zul.North</component-class>
-		<widget-class>zul.layout.North</widget-class>
-	</component>	
 	<component><!-- Feature 2493161 -->
 		<component-name>macro</component-name>
 		<component-class>org.zkoss.zk.ui.HtmlMacroComponent</component-class>
@@ -749,6 +749,12 @@ def alert(m):
 			<mold-uri>mold/menuseparator.js</mold-uri>
 		</mold>
 	</component>
+	<component>
+		<component-name>north</component-name>
+		<extends>layoutregion</extends>
+		<component-class>org.zkoss.zul.North</component-class>
+		<widget-class>zul.layout.North</widget-class>
+	</component>	
 	<component>
 		<component-name>paging</component-name>
 		<component-class>org.zkoss.zul.Paging</component-class>
@@ -857,10 +863,24 @@ def alert(m):
 		</mold>
 	</component>
 	<component>
-		<extends>layoutregion</extends>
-		<component-name>south</component-name>
-		<component-class>org.zkoss.zul.South</component-class>
-		<widget-class>zul.layout.South</widget-class>
+		<component-name>slider</component-name>
+		<component-class>org.zkoss.zul.Slider</component-class>
+		<widget-class>zul.inp.Slider</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/slider.js</mold-uri>
+			<css-uri>css/slider.css.dsp</css-uri>
+		</mold>
+		<mold>
+			<mold-name>sphere</mold-name>
+			<mold-uri>mold/slider.js</mold-uri>
+			<css-uri>css/slider.css.dsp</css-uri>
+		</mold>
+		<mold>
+			<mold-name>scale</mold-name>
+			<mold-uri>mold/slider.js</mold-uri>
+			<css-uri>css/slider.css.dsp</css-uri>
+		</mold>
 	</component>
 	<component>
 		<component-name>space</component-name>
@@ -906,6 +926,12 @@ def alert(m):
 		</mold>
 	</component>
 	<component>
+		<component-name>south</component-name>
+		<extends>layoutregion</extends>
+		<component-class>org.zkoss.zul.South</component-class>
+		<widget-class>zul.layout.South</widget-class>
+	</component>
+	<component>
 		<component-name>style</component-name>
 		<component-class>org.zkoss.zul.Style</component-class>
 		<widget-class>zul.utl.Style</widget-class>
@@ -918,14 +944,17 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/tabbox.js</mold-uri>	
+			<css-uri>css/tabbox.css.dsp</css-uri>
 		</mold>
 		<mold>
 			<mold-name>accordion</mold-name>
 			<mold-uri>mold/tabbox-accd.js</mold-uri>
+			<css-uri>css/tabbox.css.dsp</css-uri>
 		</mold>
 		<mold>
 			<mold-name>accordion-lite</mold-name>
 			<mold-uri>mold/tabbox-accd-lite.js</mold-uri>
+			<css-uri>css/tabbox.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
@@ -1023,10 +1052,12 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/tree.js</mold-uri>
+			<css-uri>css/tree.css.dsp</css-uri>
 		</mold>
 		<mold>
 			<mold-name>paging</mold-name>
 			<mold-uri>mold/tree.js</mold-uri>
+			<css-uri>css/tree.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>
@@ -1120,8 +1151,8 @@ def alert(m):
 		</mold>
 	</component>
 	<component>
-		<extends>layoutregion</extends>
 		<component-name>west</component-name>
+		<extends>layoutregion</extends>
 		<component-class>org.zkoss.zul.West</component-class>
 		<widget-class>zul.layout.West</widget-class>
 	</component>
@@ -1135,34 +1166,5 @@ def alert(m):
 			<css-uri>css/window.css.dsp</css-uri>
 		</mold>
 		<preserve-blank/>
-	</component>
-	<component>
-		<component-name>slider</component-name>
-		<component-class>org.zkoss.zul.Slider</component-class>
-		<widget-class>zul.inp.Slider</widget-class>
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>mold/slider.js</mold-uri>
-			<css-uri>css/slider.css.dsp</css-uri>
-		</mold>
-		<mold>
-			<mold-name>sphere</mold-name>
-			<mold-uri>mold/slider.js</mold-uri>
-			<css-uri>css/slider.css.dsp</css-uri>
-		</mold>
-		<mold>
-			<mold-name>scale</mold-name>
-			<mold-uri>mold/slider.js</mold-uri>
-			<css-uri>css/slider.css.dsp</css-uri>
-		</mold>
-	</component>
-	<component>
-		<component-name>fileupload</component-name>
-		<component-class>org.zkoss.zul.Fileupload</component-class>
-		<widget-class>zul.utl.Fileupload</widget-class>
-		<mold>
-			<mold-name>default</mold-name>
-			<mold-uri>mold/fileupload.js</mold-uri>
-		</mold>
 	</component>
 </language>

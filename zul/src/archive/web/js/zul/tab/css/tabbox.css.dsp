@@ -1,4 +1,3 @@
-<%@ page contentType="text/css;charset=UTF-8" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 
 <%-- ZK Tabbox --%>
@@ -808,3 +807,34 @@
 	cursor: default;
 	color: gray;
 }
+
+<c:if test="${c:browser('ie6-')}">
+.z-tab-hl,
+.z-tab-hr {
+	background-image: url(${c:encodeURL('~./zul/img/tab/tab-corner.gif')});
+}
+.z-tab-hm {
+	background-image: url(${c:encodeURL('~./zul/img/tab/tab-hm.gif')});
+}
+.z-tab-ver-hl,
+.z-tab-ver-hl .z-tab-ver-hr {
+	background-image: url(${c:encodeURL('~./zul/img/tab/tab-v-corner.gif')});
+}
+.z-tab-ver .z-tab-ver-hm {
+	background-image: url(${c:encodeURL('~./zul/img/tab/tab-v-hm.png')});
+}
+.z-tab-accordion-tl,
+.z-tab-accordion-tr {
+	background-image: url(${c:encodeURL('~./zul/img/tab/accd-corner.gif')});
+}
+<%-- tree.css.dsp --%>
+tr.z-treerow td.z-treerow-focus {
+	background-image: url(${c:encodeURL('~./zul/img/common/focusd.gif')});
+}
+span.z-vfiletree-ico,span.z-vfiletree-firstspacer {
+	background-image: url(${c:encodeURL('~./zul/img/tree/vfolder-toggle.gif')});
+}
+span.z-vfiletree-tee, span.z-vfiletree-last {
+	background-image: url(${c:encodeURL('~./zul/img/tree/ventity.gif')});
+}
+</c:if>

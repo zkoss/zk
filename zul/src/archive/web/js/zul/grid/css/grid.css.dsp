@@ -1,4 +1,3 @@
-<%@ page contentType="text/css;charset=UTF-8" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 
 <%-- Grid --%>
@@ -182,3 +181,55 @@ a.z-column-btn:hover {
 .z-grid-header .z-column.z-column-sizing, .z-grid-header .z-column.z-column-sizing .z-column-cnt {
 	cursor: e-resize;
 }
+
+<%-- IE --%>
+<c:if test="${c:isExplorer()}">
+div.z-grid-header, div.z-grid-footer {
+	position:relative; <%-- Bug 1712708 and 1926094 --%>
+}
+div.z-grid-header th.z-column, div.z-grid-header th.z-auxheader {
+	text-overflow: ellipsis;
+}
+div.z-column-cnt, .z-auxheader-cnt {
+	white-space: nowrap; <%-- Bug #1839960  --%>
+}
+div.z-footer-cnt, div.z-row-cnt, div.z-group-cnt, div.z-groupfoot-cnt, div.z-column-cnt,
+.z-auxheader-cnt {
+	position: relative; <%-- Bug #1825896  --%>
+}
+div.z-row-cnt, div.z-group-cnt, div.z-groupfoot-cnt {
+	width: 100%;
+}
+div.z-grid-body {
+	position: relative; <%-- Bug 1766244 --%>
+}
+tr.z-grid-faker {
+	position: absolute; top: -1000px; left: -1000px;<%-- fixed a white line for IE --%>
+}
+
+<c:if test="${c:browser('ie6-')}">
+div.z-grid {
+	position:relative; <%-- Bug 1914215 and Bug 1914054 --%>
+}
+.z-columns-menu-grouping .z-menu-item-img {
+	background-image:  url(${c:encodeURL('~./zul/img/grid/menu-group.gif')});
+}
+.z-columns-menu-asc .z-menu-item-img {
+	background-image:  url(${c:encodeURL('~./zul/img/grid/menu-arrowup.gif')});
+}
+.z-columns-menu-dsc .z-menu-item-img {
+	background-image:  url(${c:encodeURL('~./zul/img/grid/menu-arrowdown.gif')});
+}
+</c:if>
+</c:if>
+
+<%-- Gecko --%>
+<c:if test="${c:isGecko()}">
+.z-word-wrap div.z-row-cnt, 
+.z-word-wrap div.z-group-cnt,
+.z-word-wrap div.z-groupfoot-cnt,
+.z-word-wrap div.z-footer-cnt, .z-word-wrap div.z-column-cnt {
+	overflow: hidden;
+	-moz-binding: url(${c:encodeURL('~./zk/wordwrap.xml#wordwrap')});
+}
+</c:if>
