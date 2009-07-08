@@ -181,5 +181,5 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 },{
 	_aryToObject: function (array) {
 		return {top: array[0], left: array[1], right: array[2], bottom: array[3]};
-	},
+	}
 });
