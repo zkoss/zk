@@ -180,8 +180,8 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		this.$supers('doMouseOver_', arguments);
 	},
 	doMouseOut_: function(evt) {
-		if (this.isDisabled() ||
-				jq.isAncestor(this.$n(), evt.domEvent.relatedTarget || evt.domEvent.toElement))
+		if (this.isDisabled() || (zk.ie &&
+				jq.isAncestor(this.$n(), evt.domEvent.relatedTarget || evt.domEvent.toElement)))
 			return;
 			
 		this._toggleEffect(true);

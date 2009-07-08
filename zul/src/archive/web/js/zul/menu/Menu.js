@@ -141,7 +141,7 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 		this.$class._addActive(this);
 	},
 	_doMouseOut: function (evt) { //not zk.Widget.doMouseOut_
-		if (jq.isAncestor(this.$n('a'), evt.domEvent.relatedTarget || evt.domEvent.toElement))
+		if (zk.ie && jq.isAncestor(this.$n('a'), evt.domEvent.relatedTarget || evt.domEvent.toElement))
 			return; // don't deactivate
 	
 		var	topmost = this.isTopmost();
