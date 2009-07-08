@@ -51,6 +51,19 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 		</description>
 	</function>
 	<function>
+		<name>outDeviceCSSContent</name>
+		<function-class>org.zkoss.zk.fn.DspFns</function-class>
+		<function-signature>
+	java.lang.String outDeviceCSSContent(java.lang.String)
+		</function-signature>
+		<description>
+	Generates and returns the complete CSS content of all components in the
+	specified device.
+	This method is designed to use with DSP pages.
+	@param deviceType the device type. If null, ajax is assumed.
+		</description>
+	</function>
+	<function>
 		<name>outZkHtmlTags</name>
 		<function-class>org.zkoss.zk.fn.DspFns</function-class>
 		<function-signature>

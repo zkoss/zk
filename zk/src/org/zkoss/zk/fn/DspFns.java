@@ -68,6 +68,20 @@ public class DspFns {
 			deviceType);
  	}
 
+	/** Generates the complete CSS content of all components in the
+	 * specified device.
+	 * <p>Notice that it generates the content, while
+	 * {@link #outDeviceStyleSheets} generates the HTML tag that
+	 * will include the content.
+	 * @since 5.0.0
+	 */
+	public static String outDeviceCSSContent(String deviceType) {
+	 	return JspFns.outDeviceCSSContent(
+			ServletFns.getCurrentServletContext(),
+			(HttpServletRequest)ServletFns.getCurrentRequest(),
+			(HttpServletResponse)ServletFns.getCurrentResponse(),
+			deviceType);
+	}
 	/** Returns HTML tags to include style sheets of the specified device
 	 * for the current application (never null).
 	 *
