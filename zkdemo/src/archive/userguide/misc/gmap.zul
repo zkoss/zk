@@ -20,7 +20,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <window id="demo" apply="org.zkoss.zkdemo.userguide.DemoWindowComposer">
 	<html><![CDATA[
 	<h4>Demo of Google Maps</h4>
-	<p><a href="http://maps.google.com">Google Maps</a> is a popular maps service developed by Google. <a href="javascript:;" onclick="if (!zk.isVisible($e('infos'))) {anima.slideDown($e('infos'));} else {anima.slideUp($e('infos'));}">More..</a></p>
+	<p><a href="http://maps.google.com">Google Maps</a> is a popular maps service developed by Google. <a href="javascript:;" onclick="if (jq('#infos').is(':hidden')) {jq('#infos').slideDown();} else {jq('#infos').slideUp();}">More..</a></p>
 	<p style="display:none;" id="infos">In this demo, user can enter the new center(latitude and longitude) of the maps and the maps would 
 	move to show the new location. User can also drag the maps around to a new location and see the 
 	current center of the maps.</p>

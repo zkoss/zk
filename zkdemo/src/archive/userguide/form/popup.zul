@@ -21,7 +21,7 @@
 	apply="org.zkoss.zkdemo.userguide.DemoWindowComposer">
 	<html><![CDATA[
 		<h4>Form with Popup</h4>
-		<p>Demonstrate a series of popup components in a form. <a href="javascript:;" onclick="if (!zk.isVisible($e('infos'))) {anima.slideDown($e('infos'));} else {anima.slideUp($e('infos'));}">More..</a></p>		
+		<p>Demonstrate a series of popup components in a form. <a href="javascript:;" onclick="if (jq('#infos').is(':hidden')) {jq('#infos').slideDown();} else {jq('#infos').slideUp();}">More..</a></p>		
 		<ul style="display:none;" id="infos">
 			<li>A tooltip is shown when mouse over, disappear in 0.5 second if mouse leave.</li>
             <li>A popup is shown when mouse click, disappear when losing focus.</li>

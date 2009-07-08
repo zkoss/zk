@@ -21,7 +21,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<html><![CDATA[
 <h4>SIMILE Timeplot</h4>
 <p><a href="http://simile.mit.edu/timeplot/" target="zkdemo">Timeplot</a> is a DHTML-based AJAXy widget for plotting time
-series and overlay time-based events over them. <a href="javascript:;" onclick="if (!zk.isVisible($e('infos'))) {anima.slideDown($e('infos'));} else {anima.slideUp($e('infos'));}">More..</a></p>  
+series and overlay time-based events over them. <a href="javascript:;" onclick="if (jq('#infos').is(':hidden')) {jq('#infos').slideDown();} else {jq('#infos').slideUp();}">More..</a></p>  
 <div style="display:none;" id="infos">
 <p>You can populate Timeplot with data by pointing it to an space
 or comma separated file. Timeplot also supports Timeline's XML format, meaning that you can reuse the same data

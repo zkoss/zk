@@ -22,7 +22,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<h4>Localization</h4>
 	<p>Localization is supported via an EL function "l" of taglib, meaning label. <br />
 	Try changing your browser's preferred language to <u>Japanese</u> or other language, reload this page, and see what happens.
-	<a href="javascript:;" onclick="if (!zk.isVisible($e('infos'))) {anima.slideDown($e('infos'));} else {anima.slideUp($e('infos'));}">More..</a></p>
+	<a href="javascript:;" onclick="if (jq('#infos').is(':hidden')) {jq('#infos').slideDown();} else {jq('#infos').slideUp();}">More..</a></p>
 	<div style="display:none;" id="infos">
 	<p>All labels are defined in the WEB-INF/i3-label.properties of the war file, and developers should specify the 
 	following line in the .zul page to retrive the localized text. </p>

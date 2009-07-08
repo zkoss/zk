@@ -20,7 +20,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <window id="demo" apply="org.zkoss.zkdemo.userguide.DemoWindowComposer">
 	<html><![CDATA[
 		<h4>Grid with grouping control</h4>
-		<p>Grid allows single level grouping. </p> <a href="javascript:;" onclick="if (!zk.isVisible($e('infos'))) {anima.slideDown($e('infos'));} else {anima.slideUp($e('infos'));}">More..</a>
+		<p>Grid allows single level grouping. </p> <a href="javascript:;" onclick="if (jq('#infos').is(':hidden')) {jq('#infos').slideDown();} else {jq('#infos').slideUp();}">More..</a>
 		<p style="display:none" id="infos">Each group are declared from its following row till the beginning of next group. Group can be invisible without labels. Each visible group can be collapsed by clicking on the small expansion button next to its label.</p>
 	]]></html>
 	<separator/>
