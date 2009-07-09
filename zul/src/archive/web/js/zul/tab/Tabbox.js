@@ -52,7 +52,7 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 		return "vertical" == this.getOrient();
 	},
 	inAccordionMold: function () {
-		return this.getMold().indexOf("accordion") < 0 ? false : true;
+		return this.getMold().indexOf("accordion") != -1;
 	},
 	getSelectedIndex: function() {
 		var tabnode = zk(this._selTab).jq[0],

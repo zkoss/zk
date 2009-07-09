@@ -46,7 +46,10 @@ zk.copy(zjq.prototype, {
 		
 		var aftfn = opts.afterAnima;
 		opts.afterAnima = function () {
-			if (mode == 'hide') self.jq.hide();
+			if (mode == 'hide') {
+				zWatch.fireDown('onHide', null, wgt);
+				self.jq.hide();
+			} else zWatch.fireDown('onShow', null, wgt);
 			if (prop) self._restoreProp(prop);
 			if (aftfn) aftfn.call(wgt, self.jq.context);
 		};

@@ -93,7 +93,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		if (panel)
 			if (accd && animation) {
 				var p = panel.$n("real");
-				zk(p)[toSel ? "slideDown" : "slideUp"](this);
+				zk(p)[toSel ? "slideDown" : "slideUp"](panel);
 			} else {
 				var pl = accd ? panel.$n("real") : panel.$n(); //Can't use $n coz
 				if (toSel) {
