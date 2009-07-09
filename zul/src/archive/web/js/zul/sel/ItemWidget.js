@@ -121,8 +121,14 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	},
 	_doFocusIn: function () {
 		var n = this.$n();
-		if (n)
-			jq(this._getVisibleChild(n)).addClass(this.getZclass() + "-focus");
+		var widget = this;
+		if (n){
+			jq(widget._getVisibleChild(n)).addClass(this.getZclass() + "-focus");
+			jq(n).siblings().each(function(){
+				var n = this[0];
+				jq(widget._getVisibleChild(n)).removeClass(this.getZclass() + "-focus");
+			});
+		}
 	},
 	_doFocusOut: function () {
 		var n = this.$n();
