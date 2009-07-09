@@ -126,7 +126,8 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 			jq(widget._getVisibleChild(n)).addClass(this.getZclass() + "-focus");
 			jq(n).siblings().each(function(){
 				var n = this[0];
-				jq(widget._getVisibleChild(n)).removeClass(this.getZclass() + "-focus");
+				if(n)
+					jq(widget._getVisibleChild(n)).removeClass(this.getZclass() + "-focus");
 			});
 		}
 	},
