@@ -49,7 +49,10 @@ zk.copy(zjq.prototype, {
 			if (mode == 'hide') {
 				zWatch.fireDown('onHide', null, wgt);
 				self.jq.hide();
-			} else zWatch.fireDown('onShow', null, wgt);
+			} else {
+				if (zk.ie) zk(self.jq[0]).redoCSS(); // fixed a bug of the finished animation for IE
+				zWatch.fireDown('onShow', null, wgt);
+			}
 			if (prop) self._restoreProp(prop);
 			if (aftfn) aftfn.call(wgt, self.jq.context);
 		};
