@@ -1411,11 +1411,10 @@ zul.utl.Fileupload = zk.$extends(zul.Widget, {
 	bind_: function () {//after compose
 		this.$supers('bind_', arguments); 
 		var file = this.$n("file");
-		var widget = this;
 		if (zk.gecko) {
 			file.style.left="-33px";
 		}
-    	widget.domListen_(file,"onChange","uploadStart");
+    	this.domListen_(file,"onChange","uploadStart");
 	},
 	uploadStart: function(){
 		var status = this.$n("fsuploadprogress");
@@ -1516,7 +1515,7 @@ zul.utl.Fileupload = zk.$extends(zul.Widget, {
 		}
 	},
 	unbind_: function () {
-		widget.domUnlisten_(file,"onChange","uploadStart");
+		this.domUnlisten_(this.$n("file"),"onChange","uploadStart");
 		this.$supers('unbind_', arguments);
 	}
 });
