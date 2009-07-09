@@ -2512,7 +2512,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 			Set selItems = evt.getSelectedItems();
 			_noSmartUpdate = true;
 			try {
-				if (evt.isClearAll())
+				if (AuRequests.getBoolean(request.getData(), "clearAll"))
 					clearSelection();
 				final boolean paging = inPagingMold();
 				if (!_multiple
