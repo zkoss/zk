@@ -40,6 +40,7 @@ public class SelectEvent extends Event {
 	private final Set _selectedItems;
 	private final Component _ref;
 	private final int _keys;
+	private final boolean _clearAll;
 
 	/** Indicates whether the Alt key is pressed.
 	 * It might be returned as part of {@link #getKeys}.
@@ -70,6 +71,7 @@ public class SelectEvent extends Event {
 		return new SelectEvent(request.getCommand(), comp,
 			AuRequests.convertToItems(desktop, (List)data.get("items")),
 			desktop.getComponentByUuidIfAny((String)data.get("reference")),
+			AuRequests.getBoolean(data, "clearAll"),
 			AuRequests.parseKeys(data));
 	}
 
@@ -77,7 +79,7 @@ public class SelectEvent extends Event {
 	 * @param selectedItems a set of items that shall be selected.
 	 */
 	public SelectEvent(String name, Component target, Set selectedItems) {
-		this(name, target, selectedItems, null, 0);
+		this(name, target, selectedItems, null, false, 0);
 	}
 
 	/** Constructs a selection event.
@@ -85,7 +87,7 @@ public class SelectEvent extends Event {
 	 */
 	public SelectEvent(String name, Component target, Set selectedItems,
 	Component ref) {
-		this(name, target, selectedItems, ref, 0);
+		this(name, target, selectedItems, ref, false, 0);
 	}
 	/** Constructs a selection event.
 	 * @param selectedItems a set of items that shall be selected.
@@ -94,11 +96,12 @@ public class SelectEvent extends Event {
 	 * @since 3.6.0
 	 */
 	public SelectEvent(String name, Component target, Set selectedItems,
-	Component ref, int keys) {
+	Component ref, boolean clearAll, int keys) {
 		super(name, target);
 		_selectedItems = selectedItems != null ?
 			selectedItems: Collections.EMPTY_SET;
 		_ref = ref;
+		_clearAll = clearAll;
 		_keys = keys;
 	}
 	/** Returns the selected items (never null).
@@ -116,7 +119,15 @@ public class SelectEvent extends Event {
 	 */
 	public Component getReference() {
 		return _ref;
-	} 
+	}
+	
+	/**
+	 * Returns whether to clear all the selected items.
+	 * @since 5.0.0
+	 */
+	public boolean isClearAll() {
+		return _clearAll;
+	}
 
 	/** Returns what keys were pressed when the mouse is clicked, or 0 if
 	 * none of them was pressed.

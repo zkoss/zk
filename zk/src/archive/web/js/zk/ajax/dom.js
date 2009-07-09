@@ -692,7 +692,7 @@ zk.copy(jq, { //ZK extension to jq
 		}
 	},
 
-	filterTextCSS: function (style, plus) {
+	filterTextStyle: function (style, plus) {
 		if (typeof style == 'string') {
 			var ts = "";
 			if (style)

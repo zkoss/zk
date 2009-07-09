@@ -121,23 +121,15 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 	},
 	_doFocusIn: function () {
 		var n = this.$n();
-		var widget = this;
-		if (n){
-			jq(widget._getVisibleChild(n)).addClass(this.getZclass() + "-focus");
-			jq(n).siblings().each(function(){
-				var n = this[0];
-				if(n)
-					jq(widget._getVisibleChild(n)).removeClass(this.getZclass() + "-focus");
-			});
-		}
+		if (n)
+			jq(this._getVisibleChild(n)).addClass(this.getZclass() + "-focus");
 	},
 	_doFocusOut: function () {
 		var n = this.$n();
 		if (n) {
 			var zcls = this.getZclass();
 			jq(n).removeClass(zcls + "-focus");
-			for (var i = n.cells.length; i--;)
-				jq(n.cells[i]).removeClass(zcls + "-focus");
+			jq(n.cells).removeClass(zcls + "-focus");
 		}
 	},
 	_doFocus: function (evt) {

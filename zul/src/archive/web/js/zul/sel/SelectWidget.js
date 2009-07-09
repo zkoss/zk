@@ -378,8 +378,10 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		this.$supers('unbind_', arguments);
 	},
 	doBlur_: function (evt) {
-		if (this._focusItem)
+		if (this._focusItem) {
 			this._lastSelectedItem = this._focusItem;
+			this._focusItem._doFocusOut();
+		}
 		this._focusItem = null;
 		this.$supers('doBlur_', arguments);
 	},
@@ -674,7 +676,11 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		for (var it = this.getSelectedItems(), len = it.length; --len >=0;)
 			if (it[len].isSelected())
 				data.push(it[len].uuid);
-		this.fire('onSelect', zk.copy({items: data, reference: reference}, evt.data));
+		var edata = evt.data, keep;
+		if (this._multiple)
+			keep = edata.ctrlKey || edata.shiftKey || (evt.domTarget.id ? evt.domTarget.id.endsWith('-cm') : false);
+			
+		this.fire('onSelect', zk.copy({items: data, reference: reference, clearAll: !keep}, edata));
 	},
 	/** Changes the specified row as focused. */
 	_focus: function (row) {
