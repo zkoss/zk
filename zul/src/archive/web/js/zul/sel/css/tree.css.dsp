@@ -1,4 +1,4 @@
-<%@ page contentType="text/css;charset=UTF-8" %>
+oo<%@ page contentType="text/css;charset=UTF-8" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 
 <%-- Tree --%>
@@ -69,9 +69,6 @@ div.z-treefooter-cnt, div.z-treecell-cnt, div.z-treecol-cnt {
 	border: 0; margin: 0; padding: 0;
 	font-family: ${fontFamilyC};
 	font-size: ${fontSizeM}; font-weight: normal;
-}
-div.z-treecell-cnt {
-	padding: 1px 0 1px 0;
 }
 div.z-treefooter-cnt, div.z-treecol-cnt{
 	overflow: hidden;
