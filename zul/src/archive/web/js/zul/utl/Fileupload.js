@@ -24,7 +24,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 // Flash Player Version Detection - Rev 1.6
 // Detect Client Browser type
 // Copyright(c) 2005-2006 Adobe Macromedia Software, LLC. All rights reserved.
-(function () {
+
+//use closure will crash flash version
+//(function () {
 var isWin = navigator.appVersion.toLowerCase().indexOf("win") != -1;
 
 function ControlVersion()
@@ -1519,4 +1521,4 @@ zul.utl.Fileupload = zk.$extends(zul.Widget, {
 	}
 });
 }
-})();
+//})();

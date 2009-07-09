@@ -102,3 +102,6 @@ a.z-progressCancel:hover {
     -moz-opacity: 0;
     filter:progid:DXImageTransform.Microsoft.Alpha(opacity=0);
 }
+.z-swfupload, .z-jsupload{
+	margin:0px;
+}
