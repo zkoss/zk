@@ -71,9 +71,6 @@ div.z-tree-footer-cnt, div.z-tree-cell-cnt, div.z-tree-col-cnt {
 	font-family: ${fontFamilyC};
 	font-size: ${fontSizeM}; font-weight: normal;
 }
-div.z-tree-cell-cnt {
-	padding: 1px 0 1px 0;
-}
 div.z-tree-footer-cnt, div.z-tree-col-cnt{
 	overflow: hidden;
 }
