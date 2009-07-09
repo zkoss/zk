@@ -200,7 +200,7 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 		_selected = (Button) main.getFellow(di.getCateId());
 		String deselect = _selected != null ? "jq('#"+ _selected.getUuid() + 
 		"').addClass('demo-seld').siblings().removeClass('demo-seld');" : "";
-		if (Executions.getCurrent().isBrowser("ie6-")) {
+		if (Executions.getCurrent().isBrowser("ie6_")) {
 			Clients.evalJavaScript(deselect + "fixImage4IE6();");
 		} else {
 			Clients.evalJavaScript(deselect);

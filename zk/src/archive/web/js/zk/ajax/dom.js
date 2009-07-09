@@ -27,12 +27,13 @@ zk.override(jq.fn, zjq._fn = {}, {
 					ret.selector = '#' + sel;
 					ret.zk = new zjq(ret);
 					return ret;
+					
 				}
 				sel = '#' + sel;
 			}
 			ctx = null;
 		}
-		if (zk.Widget.isInstance(sel)) {
+		if (zk.Widget && zk.Widget.isInstance(sel)) {
 			sel = sel.$n() || '#' + sel.uuid;
 		}
 		var ret = zjq._fn.init.call(this, sel, ctx);
