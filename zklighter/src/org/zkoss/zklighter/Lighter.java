@@ -27,7 +27,8 @@ import org.zkoss.idom.Element;
 import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.util.IDOMs;
 
-import org.zkoss.zk.ui.http.WpdExtendlet;
+import org.zkoss.zk.ui.http.FileWpdExtendlet;
+import org.zkoss.zk.ui.http.FileWcsExtendlet;
 
 /**
  * The entry of ZK Lighter
@@ -46,13 +47,14 @@ public class Lighter {
 			+"Usage:\n\tjava -classpath $CP org.zkoss.zklighter.Lighter zklighter.xml\n");
 			System.exit(-1);
 		}
-		final WpdExtendlet wpd = new WpdExtendlet();
+		final FileWpdExtendlet wpd = new FileWpdExtendlet();
+		final FileWcsExtendlet wcs = new FileWcsExtendlet();
 		for (Iterator it = new SAXBuilder(true, false, true).build(args[0])
 		.getRootElement().getElements().iterator(); it.hasNext();) {
 			final Element el = (Element)it.next();
 			final String nm = el.getName();
 			if ("javascript".equals(nm)) genJS(wpd, el);
-			else if ("css".equals(nm)) genCSS(el);
+			else if ("css".equals(nm)) genCSS(wcs, el);
 			else if ("copy".equals(nm)) copy(el);
 			else throw new IOException("Unknown "+nm+", "+el.getLocator());
 		}
@@ -73,7 +75,7 @@ public class Lighter {
 	}
 
 	//JS//
-	private static void genJS(WpdExtendlet wpd, Element el) throws IOException {
+	private static void genJS(FileWpdExtendlet wpd, Element el) throws IOException {
 		final File dst = new File(IDOMs.getRequiredElementValue(el, "destination"));
 		final List srcs = new LinkedList();
 		for (Iterator it = el.getElements("source").iterator(); it.hasNext();) {
@@ -99,7 +101,7 @@ public class Lighter {
 			outJS(wpd, dst, srcs, null, true);
 		}
 	}
-	private static void outJS(WpdExtendlet wpd, File dst, List srcs,
+	private static void outJS(FileWpdExtendlet wpd, File dst, List srcs,
 	String locale, boolean debugJS) throws IOException {
 		wpd.setDebugJS(debugJS);
 		if (debugJS || locale != null) {
@@ -124,14 +126,15 @@ public class Lighter {
 			for (Iterator it = srcs.iterator(); it.hasNext();)
 				out.write(wpd.service((File)it.next()));
 		} catch (Throwable ex) {
-			out.close();
 			if (ex instanceof IOException) throw (IOException)ex;
 			throw SystemException.Aide.wrap(ex);
+		} finally {
+			out.close();
 		}
 	}
 
 	//CSS//
-	private static void genCSS(Element el) throws IOException {
+	private static void genCSS(FileWcsExtendlet wcs, Element el) throws IOException {
 		final File dst = new File(IDOMs.getRequiredElementValue(el, "destination"));
 		final List srcs = new LinkedList();
 		for (Iterator it = el.getElements("source").iterator(); it.hasNext();) {
@@ -139,62 +142,34 @@ public class Lighter {
 			final File fl = new File(e.getText(true));
 			if (!fl.exists())
 				throw new FileNotFoundException("Not found: "+fl+", "+e.getLocator());
-			srcs.add(fl);
-		}
-
-		final CSSInfo ci = new CSSInfo(el);
-		ci.pure = false;
-		final List browsers = new LinkedList();
-		for (Iterator it = el.getElements("browser").iterator(); it.hasNext();) {
-			browsers.add(((Element)it.next()).getText(true));
+			srcs.add(new Object[] {
+				fl, IDOMs.getRequiredAttributeValue(e, "class-web-path")});
 		}
 
 		//merge all browser CSS into one
-		ci.pure = true;
-		outCombinedCSS(dst, srcs, browsers, ci);
+		outCSS(wcs, new CSSInfo(el), dst, srcs);
 	}
 	private static
-	void outCombinedCSS(File dst, List srcs, List browsers, CSSInfo ci)
+	void outCSS(FileWcsExtendlet wcs, CSSInfo ci, File dst, List srcs)
 	throws IOException {
 		++_cnt;
-		Writer out = new FileWriter(dst, "UTF-8");
-		try {
-			boolean ignoreInclude = false;
-			for (Iterator ito = browsers.iterator(); ito.hasNext();) {
-				final String browser = (String)ito.next();
-				for (Iterator it = srcs.iterator(); it.hasNext();) {
-					File src = (File)it.next();
-					outCSS(out, renByBrowser(src, browser), ci, ignoreInclude);
-				}
-				ignoreInclude = true;
-			}
-		} finally {
-			out.close();
-		}
-	}
-	private static void outCSS(File dst, List srcs, String browser, CSSInfo ci)
-	throws IOException {
-		++_cnt;
-		dst = renByBrowser(dst, browser);
 		Writer out = new FileWriter(dst, "UTF-8");
 		try {
 			for (Iterator it = srcs.iterator(); it.hasNext();) {
-				File src = (File)it.next();
-				outCSS(out, renByBrowser(src, browser), ci, false);
+				final Object[] inf = (Object[])it.next();
+				ci.source = (File)inf[0];
+				ci.classWebPath = (String)inf[1];
+				out.write(wcs.service(ci.source, new Includer(ci)));
 			}
+		} catch (Throwable ex) {
+			if (ex instanceof IOException) throw (IOException)ex;
+			throw SystemException.Aide.wrap(ex);
 		} finally {
 			out.close();
 		}
 	}
-	private static File renByBrowser(File fl, String browser) {
-		final String nm = fl.getName();
-		final int j = nm.indexOf('.', nm.lastIndexOf('/') +1); 
-		return new File(fl.getParent(),
-			j >= 0 ? nm.substring(0, j) + browser + nm.substring(j):
-				nm + browser);
-	}
 	private static
-	void outCSS(Writer out, File src, CSSInfo ci, boolean ignoreInclude)
+	void outCSS(Writer out, CSSInfo ci, File src)
 	throws IOException {
 		ci.source = src;
 		ci.lineno = 1;
@@ -214,7 +189,7 @@ public class Lighter {
 					throw new IOException(ci.message("Non-terminated <"));
 
 				if (cc == 'c' && in.charAt(j++) == ':') { //restrict but safer
-					outDirective(out, in.substring(j, k), ci, ignoreInclude);
+					outDirective(out, ci, in.substring(j, k));
 				} else if (cc != '/' && cc != '%')
 					throw new IOException(ci.message("Unknown <"+cc));
 				j = k;
@@ -228,23 +203,13 @@ public class Lighter {
 	throws IOException {
 		int j = cnt.indexOf("encodeURL");
 		if (j < 0) {
-			if (ci.pure) {
-				String s = (String)ci.vars.get(cnt);
-				if (s != null)
-					out.write(s);
-				else if (isFormula(cnt)) //formula
-					out.write('?'); //mark error
-				else
-					throw new IOException(ci.message("Unknown EL, ${"+ cnt+"}"));
-			} else {
-				if (isFormula(cnt)) //formula
-					out.write('?'); //mark error
-				else {
-					out.write("${");
-					out.write(cnt);
-					out.write('}');
-				}
-			}
+			String s = (String)ci.vars.get(cnt);
+			if (s != null)
+				out.write(s);
+			else if (isFormula(cnt)) //formula
+				out.write('?'); //mark error
+			else
+				throw new IOException(ci.message("Unknown EL, ${"+ cnt+"}"));
 			return;
 		}
 
@@ -274,46 +239,17 @@ public class Lighter {
 		}
 		return false;
 	}
-	private static void outDirective(Writer out, String cnt, CSSInfo ci,
-	boolean ignoreInclude)
+	private static void outDirective(Writer out, CSSInfo ci, String cnt)
 	throws IOException {
 		int j = cnt.indexOf(' ');
 		if (j < 0) j = cnt.length();
 
 		String nm = cnt.substring(0, j);
 		if ("include".equals(nm)) {
-			if (ignoreInclude) return; //nothing to do
-
 			j = cnt.indexOf("page=\"", j);
 			if (j < 0)
 				throw new IOException(ci.message("The page attribute not found"));
-			nm = cnt.substring(j += 6, cnt.indexOf('"', j));
-			if (!nm.startsWith("~./"))
-				throw new IOException(ci.message("Unknown URI: "+nm));
-			nm = nm.substring(2);
-			j = nm.length();
-
-			for (String path = ci.source.getPath().replace('\\', '/');;) {
-				int k = nm.lastIndexOf('/', j);
-				if (k < 0)
-					throw new IOException(ci.message("Unmatched URI: "+nm));
-				final String s = nm.substring(0, k + 1);
-				j = path.indexOf(s);
-				if (j >= 0) { //found
-					nm = path.substring(0, j + s.length()) + nm.substring(k + 1);
-					break;
-				}
-				j = k - 1;
-			}
-
-			int oldln = ci.lineno;
-			File oldsrc = ci.source;
-			try {
-				outCSS(out, new File(nm), ci, false);
-			} finally {
-				ci.lineno = oldln;
-				ci.source = oldsrc;
-			}
+			include(out, ci, cnt.substring(j += 6, cnt.indexOf('"', j)));
 		} else if ("choose".equals(nm) || "when".equals(nm) || "otherwise".equals(nm)
 		|| "if".equals(nm) || "set".equals(nm)) {
 			out.write("//?");
@@ -321,15 +257,38 @@ public class Lighter {
 		} else
 			throw new IOException(ci.message("Unknown <c:"+nm));
 	}
+	private static void include(Writer out, CSSInfo ci, String uri)
+	throws IOException {
+		if (!uri.startsWith("~./"))
+			throw new IOException(ci.message("Unknown URI: "+uri));
+
+		int oldln = ci.lineno;
+		File oldsrc = ci.source;
+		try {
+			outCSS(out, ci, new File(ci.classWebPath + uri.substring(2)));
+		} finally {
+			ci.lineno = oldln;
+			ci.source = oldsrc;
+		}
+	}
+
+	private static class Includer implements FileWcsExtendlet.Includer {
+		private final CSSInfo _ci;
+		private Includer(CSSInfo ci) {
+			_ci = ci;
+		}
+		public void include(String uri, Writer out) throws IOException {
+			Lighter.include(out, _ci, uri);
+		}
+	}
 	private static class CSSInfo {
 		private final Map vars = new HashMap();
 		private final Map translates = new LinkedHashMap();
-		/** Whether to generate pure CSS, i.e., containing no ${xxx}. */
-		private boolean pure;
 		/** The current line number in {@link #source}. */
 		private int lineno;
 		/** The source file to parse. */
 		private File source;
+		private String classWebPath;
 
 		private CSSInfo(Element el) {
 			for (Iterator it = el.getElements("variable").iterator(); it.hasNext();) {

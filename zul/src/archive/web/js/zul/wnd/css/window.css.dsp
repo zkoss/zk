@@ -361,7 +361,7 @@
 	background-image: url(${c:encodeURL('~./zul/img/msgbox/stop-btn.png')});
 }
 
-<!-- IE -->
+<%-- IE --%>
 <c:if test="${c:isExplorer()}">
 .z-messagebox-btn {
 	width: 47pt;

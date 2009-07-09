@@ -21,6 +21,7 @@
 		<locale>id</locale>
 		<locale>it</locale>
 		<locale>ja</locale>
+		<locale>kr</locale>
 		<locale>nl</locale>
 		<locale>pt</locale>
 		<locale>ro</locale>
@@ -36,6 +37,10 @@
 	<javascript>
 		<destination>lib/js/box.js</destination>
 		<source>../zul/codegen/archive/web/js/zul/box/zk.wpd</source>
+	</javascript>
+	<javascript>
+		<destination>lib/js/db.js</destination>
+		<source>../zul/codegen/archive/web/js/zul/db/zk.wpd</source>
 	</javascript>
 	<javascript>
 		<destination>lib/js/grid.js</destination>
@@ -90,9 +95,10 @@
 		<source>../zul/codegen/archive/web/js/zul/wgt/zk.wpd</source>
 		<source>../zul/codegen/archive/web/js/zul/box/zk.wpd</source>
 		<source>../zul/codegen/archive/web/js/zul/mesh/zk.wpd</source>
+		<source>../zul/codegen/archive/web/js/zul/menu/zk.wpd</source>
 		<source>../zul/codegen/archive/web/js/zul/grid/zk.wpd</source>
 		<source>../zul/codegen/archive/web/js/zul/inp/zk.wpd</source>
-		<source>../zul/codegen/archive/web/js/zul/menu/zk.wpd</source>
+		<source>../zul/codegen/archive/web/js/zul/db/zk.wpd</source>
 		<source>../zul/codegen/archive/web/js/zul/utl/zklt.wpd</source>
 		<source>../zul/codegen/archive/web/js/zul/sel/zk.wpd</source>
 		<source>../zul/codegen/archive/web/js/zul/wnd/zk.wpd</source>
@@ -111,12 +117,8 @@
 
 	<css>
 		<destination>lib/css/norm.css</destination>
-		<source>../zul/src/archive/web/zul/css/norm.css.dsp</source>
-
-		<browser>ie</browser>
-		<browser>moz</browser>
-		<browser>saf</browser>
-		<browser>opr</browser>
+		<source class-web-path="../zul/src/archive/web">../zul/src/archive/web/zul/css/zk.wcs</source>
+			<!-- class-web-path: used to convert ~./ -->
 
 		<encodeURL prefix="">
 			<translate from="~./zk/img" to="zkrc"/>

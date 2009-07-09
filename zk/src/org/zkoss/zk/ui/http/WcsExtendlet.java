@@ -98,7 +98,7 @@ public class WcsExtendlet extends AbstractExtendlet {
 		response.flushBuffer();
 	}
 
-	private Object parse(InputStream is, String path) throws Exception {
+	/*package*/ Object parse(InputStream is, String path) throws Exception {
 		final Element root = new SAXBuilder(true, false, true).build(is).getRootElement();
 		final String lang = IDOMs.getRequiredAttributeValue(root, "language");
 		if (lang.length() == 0)
@@ -135,10 +135,10 @@ public class WcsExtendlet extends AbstractExtendlet {
 			return _webctx;
 		}
 	}
-	private static class WcsInfo {
-		private final LanguageDefinition langdef;
+	/*package*/ static class WcsInfo {
+		/*package*/ final LanguageDefinition langdef;
 		/** A list of URI or static method. */
-		private final Object[] items;
+		/*package*/ final Object[] items;
 		private WcsInfo(String lang, List items) {
 			this.langdef = LanguageDefinition.lookup(lang);
 			this.items = (Object[])items.toArray(new Object[items.size()]);

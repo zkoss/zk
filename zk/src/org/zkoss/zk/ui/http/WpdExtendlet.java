@@ -22,7 +22,6 @@ import java.util.Set;
 import java.util.Map;
 import java.util.HashMap;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.ByteArrayOutputStream;
@@ -95,20 +94,8 @@ public class WpdExtendlet extends AbstractExtendlet {
 		response.getOutputStream().write(data);
 		response.flushBuffer();
 	}
-	/** Parses and return the specified file.
-	 * It is used by ZK Lighter to generate JavaScript files.
-	 */
-	public byte[] service(File fl) throws Exception {
-		setProvider(new FileProvider(fl, isDebugJS()));
-		try {
-			final Object rawdata = parse(new FileInputStream(fl), fl.getPath());
-			return rawdata instanceof byte[] ? (byte[])rawdata:
-				((WpdContent)rawdata).toByteArray();
-		} finally {
-			setProvider(null);
-		}
-	}
-	private Object parse(InputStream is, String path) throws Exception {
+	/*package*/
+	Object parse(InputStream is, String path) throws Exception {
 		final Element root = new SAXBuilder(true, false, true).build(is).getRootElement();
 		final String name = IDOMs.getRequiredAttributeValue(root, "name");
 		if (name.length() == 0)
@@ -404,7 +391,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 			return _webctx;
 		}
 	}
-	private class WpdContent {
+	/*package*/ class WpdContent {
 		private final String _dir;
 		private final List _cnt = new LinkedList();
 		private WpdContent(String dir) {
@@ -419,7 +406,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 		private void add(String jspath, String browser) {
 			_cnt.add(new String[] {jspath, browser});
 		}
-		private byte[] toByteArray() throws ServletException, IOException {
+		/*package*/ byte[] toByteArray() throws ServletException, IOException {
 			final ByteArrayOutputStream out = new ByteArrayOutputStream();
 			for (Iterator it = _cnt.iterator(); it.hasNext();) {
 				final Object o = it.next();
