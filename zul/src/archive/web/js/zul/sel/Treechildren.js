@@ -29,6 +29,26 @@ zul.sel.Treechildren = zk.$extends(zul.Widget, {
 		}
 		return this;
 	},
+	insertChildHTML_: function (child, before, desktop) {
+		var bfn, ben;
+		if (before) {
+			bfn = before._getBeforeNode();
+			if (!bfn) before = null;
+		} else {
+			ben = this.getCaveNode() || this.parent.getCaveNode();
+		}
+
+		if (bfn)
+			jq(bfn).before(child._redrawHTML());
+		else
+			jq(ben).after(child._redrawHTML());
+		child.bind(desktop);
+	},
+	getCaveNode: function () {
+		for (var cn, w = this.lastChild; w; w = w.previousSibling)
+			if ((cn = w.getCaveNode()))
+				return cn;
+	},
 	isVisible: function () {
 		if (!this.$supers('isVisible', arguments))
 			return false;

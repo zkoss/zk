@@ -24,11 +24,12 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 			this._showKids(open);
 			this.getMeshWidget().onSize();
 			if (!fromServer) {
-				var inPaging = this.getTree().inPagingMold();
-				if (inPaging)
+				var tree = this.getTree(),
+					indemand = tree.inPagingMold() || tree.isModel();
+				if (indemand)
 					this.set('$$onOpen', true);
 				this.fire('onOpen', {open: open});
-				if (inPaging)
+				if (indemand)
 					this.set('$$onOpen', false);
 			}
 		}
