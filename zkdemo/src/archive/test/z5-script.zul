@@ -19,7 +19,7 @@ xmlns:w="http://www.zkoss.org/2005/zk/client">
 
 	<label id="inf"/>
 	<label id="inf2">
-		<attribute w:name="$setValue">
+		<attribute w:name="setValue">
 		function (value, fromServer) {
 			this.$setValue(value, fromServer);
 			if (this.desktop) {
