@@ -379,6 +379,8 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 		return this;
 	},
+	show: function () {this.setVisible(true);},
+	hide: function () {this.setVisible(false);},
 	_setVisible: function (visible) {
 		var parent = this.parent,
 			parentVisible = !parent || parent.isRealVisible(),
