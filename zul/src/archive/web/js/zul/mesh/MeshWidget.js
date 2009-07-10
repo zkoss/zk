@@ -204,13 +204,12 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		var items = [],
 			min = this.ebody.scrollTop, max = min + this.ebody.offsetHeight;
 		for (var j = 0, it = this.getBodyWidgetIterator(), w; (w = it.next()); j++) {
-			if (w.isVisible()) {
+			if (w.isVisible() && !w._loaded) {
 				var row = rows[j], $row = zk(row),
 					top = $row.offsetTop();
 				if (top + $row.offsetHeight() < min) continue;
 				if (top > max) break; //Bug 1822517
-				if (!w._loaded)
-					items.push(w);
+				items.push(w);
 			}
 		}
 		if (items.length)
