@@ -1120,7 +1120,7 @@ public class Parser {
 				if (name.length() == 0)
 					throw new UiException("Unknown client attribute: "+name);
 					//currently, support only method override
-				compInfo.addWidgetMethod(name, value, cond);
+				compInfo.addWidgetOverride(name, value, cond);
 				return;
 			}
 		}

@@ -71,13 +71,15 @@ public interface ContentRenderer {
 	 * They are both String instances.
 	 */
 	public void renderWidgetListeners(Map listeners);
-	/** Renders the client code snippet to override the methods of
-	 * the peer widget.
-	 * @param methods the map of methods to override the peer widget.
+	/** Renders the client code snippet to override the methods
+	 * and values of the peer widget.
+	 *
+	 * @param values the map of methods or values to override the peer widget.
 	 * The key is the method name (such as setValue), and the value
-	 * the method definition
-	 * (such as <code>function (value) {this.$setValue(value);}</code>).
-	 * They are both String instances.
+	 * must be a valid JavaScript snippet that can be evaluated to
+	 * a value. They are both instances of String.
+	 * In fact, the map will be generated as:
+	 * <code>{name1: value1, name2: value2}</code>.
 	 */
-	public void renderWidgetMethods(Map methods);
+	public void renderWidgetOverrides(Map values);
 }

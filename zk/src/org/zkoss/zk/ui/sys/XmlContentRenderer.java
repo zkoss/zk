@@ -134,7 +134,7 @@ public class XmlContentRenderer implements ContentRenderer {
 	}
 	/** It is the same as <code>render(name, script)</code>.
 	 */
-	public void renderWidgetMethods(Map methods) {
-		renderWidgetMethods(methods);
+	public void renderWidgetOverrides(Map methods) {
+		renderWidgetOverrides(methods);
 	}
 }

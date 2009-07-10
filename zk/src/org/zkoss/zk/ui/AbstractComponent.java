@@ -161,8 +161,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private EventHandlerMap _evthds;
 	/** A map of client event hanlders, Map(String evtnm, String script). */
 	private Map _wgtlsns;
-	/** A map of client methods, Map(String mtdnm, String script). */
-	private Map _wgtmtds;
+	/** A map of client properties to override, Map(String name, String script). */
+	private Map _wgtovds;
 	/** A map of forward conditions:
 	 * Map(String orgEvt, [listener, List([target or targetPath,targetEvent])]).
 	 */
@@ -774,25 +774,25 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return _wgtlsns != null ? _wgtlsns.keySet(): Collections.EMPTY_SET;
 	}
 
-	public String setWidgetMethod(String mtdnm, String script) {
-		if (mtdnm == null)
+	public String setWidgetOverride(String name, String script) {
+		if (name == null)
 			throw new IllegalArgumentException();
 
 		final String old;
 		if (script != null) {
-			if (_wgtmtds == null) _wgtmtds = new LinkedHashMap();
-			old = (String)_wgtmtds.put(mtdnm, script);
+			if (_wgtovds == null) _wgtovds = new LinkedHashMap();
+			old = (String)_wgtovds.put(name, script);
 		} else
-			old = _wgtmtds != null ? (String)_wgtmtds.remove(mtdnm): null;
+			old = _wgtovds != null ? (String)_wgtovds.remove(name): null;
 		if (!Objects.equals(script, old))
-			smartUpdateWidgetMethod(mtdnm, script);
+			smartUpdateWidgetOverride(name, script);
 		return old;
 	}
-	public String getWidgetMethod(String mtdnm) {
-		return _wgtmtds != null ? (String)_wgtmtds.get(mtdnm): null;
+	public String getWidgetOverride(String name) {
+		return _wgtovds != null ? (String)_wgtovds.get(name): null;
 	}
-	public Set getWidgetMethodNames() {
-		return _wgtmtds != null ? _wgtmtds.keySet(): Collections.EMPTY_SET;
+	public Set getWidgetOverrideNames() {
+		return _wgtovds != null ? _wgtovds.keySet(): Collections.EMPTY_SET;
 	}
 
 	public Map getAttributes(int scope) {
@@ -1360,14 +1360,14 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * method. Devices that don't support it have to override this method
 	 * to throw UnsupportedOperationException.
 	 *
-	 * @param mtdnm the method name, such as setValue
+	 * @param name the method name, such as setValue
 	 * @param script the script. If null, the previous method override
 	 * will be remove. And, the method defined in original widget will
 	 * be restored.
 	 * @since 5.0.0
 	 */
-	protected void smartUpdateWidgetMethod(String mtdnm, String script) {
-		smartUpdate("method", new String[] {mtdnm, script});
+	protected void smartUpdateWidgetOverride(String name, String script) {
+		smartUpdate("method", new String[] {name, script});
 	}
 
 	public void detach() {
@@ -1571,7 +1571,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 
 		renderer.renderWidgetListeners(_wgtlsns);
-		renderer.renderWidgetMethods(_wgtmtds);
+		renderer.renderWidgetOverrides(_wgtovds);
 	}
 	/** Adds this widget class to indicate that its important events
 	 * are generated
@@ -2428,8 +2428,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			clone._evthds = (EventHandlerMap)_evthds.clone();
 		if (_wgtlsns != null)
 			clone._wgtlsns = new LinkedHashMap(_wgtlsns);
-		if (_wgtmtds != null)
-			clone._wgtmtds = new LinkedHashMap(_wgtmtds);
+		if (_wgtovds != null)
+			clone._wgtovds = new LinkedHashMap(_wgtovds);
 
 		//2. clone children (deep cloning)
 		cloneChildren(clone);

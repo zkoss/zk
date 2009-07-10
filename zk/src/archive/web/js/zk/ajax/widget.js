@@ -23,7 +23,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	$init: function (props) {
 		this._asaps = {}; //event listened at server
 		this._lsns = {}; //listeners(evtnm,listener)
-		this._bklsns = {}; //backup for listners by setListener
+		this._bklsns = {}; //backup for listners by setListeners
 		this._subnodes = {}; //store sub nodes for widget(domId, domNode)
 
 		this.$afterInit(function () {
@@ -151,7 +151,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			this._asaps[name.substring(1)] = value;
 		else if (name.length > 2 && name.startsWith('on')
 		&& (cc = name.charAt(2)) >= 'A' && cc <= 'Z')
-			this.setListener([name, value]);
+			this._setListener(name, value);
 		else if (arguments.length >= 3)
 			zk.set(this, name, value, extra);
 		else
@@ -811,14 +811,14 @@ zk.Widget = zk.$extends(zk.Object, {
 		var after = [];
 		this.bind_(desktop, skipper, after);
 		for (var j = 0, len = after.length; j < len;)
-			after[j++].call(this);
+			after[j++]();
 		return this;
 	},
 	unbind: function (skipper) {
 		var after = [];
 		this.unbind_(skipper, after);
 		for (var j = 0, len = after.length; j < len;)
-			after[j++].call(this);
+			after[j++]();
 		return this;
 	},
 
@@ -1040,7 +1040,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		for (var evt in infs)
 			this._setListener(evt, infs[evt]);
 	},
-	setListener: function (inf) {
+	setListener: function (inf) { //used by server
 		this._setListener(inf[0], inf[1]);
 	},
 	_setListener: function (evt, fn) {
@@ -1058,24 +1058,20 @@ zk.Widget = zk.$extends(zk.Object, {
 			this.listen(inf);
 		}
 	},
-	setMethods: function (infs) {
-		for (var mtdnm in infs)
-			this._setMethod(mtdnm, infs[mtdnm]);
-	},
-	setMethod: function (inf) {
-		this._setMethod(inf[0], inf[1]);
-	},
-	_setMethod: function (mtdnm, fn) {
-		if (fn) {
-			if (typeof fn != 'function') fn = eval(fn);
-			var oldnm = '$' + mtdnm;
-			if (!this[oldnm]) this[oldnm] = this[mtdnm]; //only once
-			this[mtdnm] = fn;
-				//use eval, since complete func decl
-		} else {
-			var oldnm = '$' + mtdnm;
-			this[mtdnm] = this[oldnm]; //restore
-			delete this[oldnm];
+	setOverrides: function (infs) { //used by server
+		for (var nm in infs) {
+			var val = infs[nm];
+			if (val) {
+				var oldnm = '$' + nm;
+				if (this[oldnm] == null && this[nm]) //only once
+					this[oldnm] = this[nm];
+				this[nm] = val;
+					//use eval, since complete func decl
+			} else {
+				var oldnm = '$' + nm;
+				this[nm] = this[oldnm]; //restore
+				delete this[oldnm];
+			}
 		}
 	},
 

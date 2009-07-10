@@ -321,15 +321,25 @@ public class JsContentRenderer implements ContentRenderer {
 		_buf.setCharAt(_buf.length() - 1, '}');
 	}
 	/** Renders the JavaScript codes nippet to override the methods
-	 * of the peer widget.
+	 * and values of the peer widget.
+	 * This method uses the widget's setOverrides method (at client),
+	 * so, if the value is a method, it will preserve the previous method
+	 * as '$' + method_name
+	 *
+	 * @param values a map of methods and values. Notice that the value
+	 * must be a valid JavaScript snippet that can be evaluated to
+	 * a value. In fact, the map will be generated as:
+	 * <code>{name1: value1, name2: value2}</code>.
+	 * Examples of values: <code>function () {}</code>, <code>123</code>,
+	 * <code>new Date()</code>, and <code>"a literal string"</code>
 	 */
-	public void renderWidgetMethods(Map methods) {
-		if (methods == null || methods.isEmpty())
+	public void renderWidgetOverrides(Map values) {
+		if (values == null || values.isEmpty())
 			return;
 
-		renderName("methods");
+		renderName("overrides");
 		_buf.append('{');
-		for (Iterator it = methods.entrySet().iterator(); it.hasNext();) {
+		for (Iterator it = values.entrySet().iterator(); it.hasNext();) {
 			final Map.Entry me = (Map.Entry)it.next();
 			_buf.append(me.getKey()).append(":\n")
 				.append(me.getValue()).append("\n,");

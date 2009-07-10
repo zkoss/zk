@@ -22,13 +22,13 @@ import org.zkoss.zk.xel.impl.EvaluatorRef;
 
 /**
  * Represents a client-side event listener for the peer widget.
- * Notice that, unlike {@link WidgetMethod}, {@link #getScript} has only
+ * Notice that, unlike {@link WidgetOverride}, {@link #getScript} has only
  * the function's body (without <code>function (event)</code>).
  *
  * @author tomyeh
  * @since 5.0.0
  * @see EventHandler
- * @see WidgetMethod
+ * @see WidgetOverride
  */
 public class WidgetListener extends EvalRefStub
 implements Condition, java.io.Serializable {

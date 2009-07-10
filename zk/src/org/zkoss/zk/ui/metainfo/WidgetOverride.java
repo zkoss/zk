@@ -1,4 +1,4 @@
-/* WidgetMethod.java
+/* WidgetOverride.java
 
 	Purpose:
 		
@@ -30,19 +30,19 @@ import org.zkoss.zk.xel.impl.EvaluatorRef;
  * @since 5.0.0
  * @see WidgetListener
  */
-public class WidgetMethod extends WidgetListener {
+public class WidgetOverride extends WidgetListener {
 	/**
 	 * @param name the the method name, such as setValue.
 	 * @param evalr the evaluator reference. It is required if cond is not null.
 	 * @exception IllegalArgumentException if script is null
 	 * or (cond is not null but evalr is null)
 	 */
-	public WidgetMethod(EvaluatorRef evalr, String name, String script, ConditionImpl cond) {
+	public WidgetOverride(EvaluatorRef evalr, String name, String script, ConditionImpl cond) {
 		super(evalr, name, script, cond);
 	}
 
 	public void assign(Component comp) {
 		if (isEffective(comp))
-			comp.setWidgetMethod(_name, _script);
+			comp.setWidgetOverride(_name, _script);
 	}
 }

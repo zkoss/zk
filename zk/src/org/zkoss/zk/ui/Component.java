@@ -824,25 +824,31 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 * <p>Notice that, since it is not extending, so this.$super references
 	 * the superclass's method, rather than the <i>old</i> method.
 	 *
-	 * @param mtdnm the method name, such as setValue
-	 * @param script the method definition, such as <code>function (arg) {...}</code>.
-	 * If not null, this method will be added to the peer widget,
-	 * and the old method, if any, will be overriden.
-	 * If null, the previous method will be stored
+	 * @param name the property name to override,
+	 * such as <code>setValue</code> and <code>miles</code>.
+	 * @param script the method definition, such as <code>function (arg) {...}</code>,
+	 * or a value, such as <code>123</code> and <code>new Date()</code>.
+	 * If not null, this method will be added to the peer widget.
+	 * If there was a method with the same name, it will be renamed to
+	 * <code>$<i>name</i></code> so can you call it back.
+	 * <pre><code>&lt;label w:setValue="function (value) {
+	 *  this.$setValue(value); //old method
+	 *}"/&gt;</code></pre>
+	 * If null, the previous method, if any, will be stored.
 	 * @return the previous script if any
 	 * @since 5.0.0
 	 */
-	public String setWidgetMethod(String mtdnm, String script);
+	public String setWidgetOverride(String name, String script);
 	/** Returns the script of the method definition to override
 	 * widget's method, or null if not found.
 	 * @since 5.0.0
 	 */
-	public String getWidgetMethod(String mtdnm);
-	/** Returns a readonly collection of method names (String) that
+	public String getWidgetOverride(String name);
+	/** Returns a readonly collection of the property names (String) that
 	 * shall be overriden, or an empty collection if none is registered.
 	 * @since 5.0.0
 	 */
-	public Set getWidgetMethodNames();
+	public Set getWidgetOverrideNames();
 
 	/** Sets an AU service to process the AU request before the component's
 	 * default handling.
