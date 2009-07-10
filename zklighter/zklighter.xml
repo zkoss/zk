@@ -116,7 +116,7 @@
 	</copy>
 
 	<css>
-		<destination>lib/css/norm.css</destination>
+		<destination>lib/css/zk.css</destination>
 		<source class-web-path="../zul/src/archive/web">../zul/src/archive/web/zul/css/zk.wcs</source>
 			<!-- class-web-path: used to convert ~./ -->
 
