@@ -7,28 +7,32 @@ userguide.Categorybar = zk.$extends(zul.wgt.Div, {
 		this.$supers('bind_', arguments);
 		zk(this.$n()).disableSelection();
 		
-		zWatch.listen({onSize: this});
+		zWatch.listen({onSize: this, beforeSize: this});
 		this.onChildAdded_();//for updating sum of category width
 		this.scrollEvent = false;
 	},
 	unbind_: function () {
-		zWatch.unlisten({onSize: this});
+		zWatch.unlisten({onSize: this, beforeSize: this});
 		this.$supers('unbind_', arguments);
 	},
+	beforeSize: zk.ie6_ ? function(evt){
+			this.$n("body").style.width = "";
+			jq(this.$n("body")).removeClass("demo-categorybar-body-scroll");
+	}: zk.$void,
 	onSize: function(evt){	
-		var width = jq(this.$n()).width();
+		var width = this.$n().offsetWidth;
 		//with scorll or not
 		if(width < this.childWidth){
 			jq(this.$n("left")).addClass("demo-categorybar-left-scroll");
 			jq(this.$n("right")).addClass("demo-categorybar-right-scroll");
 			jq(this.$n("body")).addClass("demo-categorybar-body-scroll")
-									   .width((width-40)+"px");
+								.width((width-40)+"px");
 			this._addScollEvent();	
 		}else{
 			jq(this.$n("left")).removeClass("demo-categorybar-left-scroll");
 			jq(this.$n("right")).removeClass("demo-categorybar-right-scroll");
 			jq(this.$n("body")).removeClass("demo-categorybar-body-scroll")
-									   .width(width+"px");
+								.width(width+"px");
 			this.$n("cave").style.marginLeft="0px";
 		}
 		
