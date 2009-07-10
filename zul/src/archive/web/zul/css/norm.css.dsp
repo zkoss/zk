@@ -374,7 +374,7 @@ option {
 </c:otherwise>
 </c:choose>
 
-<%-- IE 6  --%>
+<%-- IE6  --%>
 <c:if test="${c:browser('ie6-')}">
 .z-shadow {
 	background: #888; zoom: 1; display: none;
@@ -384,8 +384,8 @@ span.z-drop-allow,
 span.z-drop-disallow {
 	background-image: url(${c:encodeURL('~./zul/img/misc/drag.gif')});
 }
-</c:if>
-</c:if>
+</c:if><%-- IE6 --%>
+</c:if><%--IE --%>
 
 <%-- Gecko --%>
 <c:if test="${c:isGecko()}">
