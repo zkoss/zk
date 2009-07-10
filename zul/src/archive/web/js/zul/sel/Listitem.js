@@ -22,6 +22,14 @@ zul.sel.Listitem = zk.$extends(zul.sel.ItemWidget, {
 				
 		return null;
 	},
+	setLabel: function (val) {
+		this._autoFirstCell().setLabel(val);
+	},
+	_autoFirstCell: function () {
+		if (!this.firstChild)
+			this.appendChild(new zul.sel.Listcell());
+		return this.firstChild;
+	},
 	//super//
 	getZclass: function () {
 		return this._zclass == null ? "z-listitem" : this._zclass;
