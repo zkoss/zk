@@ -282,6 +282,10 @@ zk.Widget = zk.$extends(zk.Object, {
 			}
 		}
 	},
+	clear: function () {
+		while (this.lastChild)
+			this.removeChild(this.lastChild);
+	},
 	_replaceWgt: function (newwgt) { //called by au's outer
 		var node = this.$n(),
 			p = newwgt.parent = this.parent,
