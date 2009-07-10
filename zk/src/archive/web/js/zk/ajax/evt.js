@@ -20,7 +20,7 @@ zk.Event = zk.$extends(zk.Object, {
 		if (data && typeof data == 'object' && !data.$array)
 			zk.$default(this, data);
 
-		this.opts = opts;
+		this.opts = opts||{};
 		if (this.domEvent = domEvent)
 			this.domTarget = domEvent.target;
 	},

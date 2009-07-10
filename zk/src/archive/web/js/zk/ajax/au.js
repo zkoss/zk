@@ -84,11 +84,8 @@ zAu = {
 	},
 
 	send: function (aureq, timeout) {
-		if (timeout < 0) {
-			var opts = aureq.opts;
-			if (!opts) opts = aureq.opts = {};
-			opts.implicit = true;
-		}
+		if (timeout < 0)
+			aureq.opts = zk.copy(aureq.opts, {implicit: true});
 
 		var t = aureq.target;
 		if (t) {
@@ -316,8 +313,8 @@ zAu = {
 	},
 
 	_send: function (dt, aureq, timeout) {
-		var opts = aureq.opts, clkfd = zk.clickFilterDelay;
-		if (clkfd > 0 && opts && opts.ctl) {
+		var clkfd = zk.clickFilterDelay;
+		if (clkfd > 0 && (aureq.opts||{}).ctl) {
 			//Don't send the same request if it is in processing
 			if (zAu._areqInf && zAu._areqInf.ctli == aureq.uuid
 			&& zAu._areqInf.ctlc == aureq.cmd)
@@ -374,8 +371,7 @@ zAu = {
 		//decide implicit and ignorable
 		var implicit = true, ignorable = true, ctli, ctlc, uri;
 		for (var j = 0, el = es.length; j < el; ++j) {
-			var aureq = es[j], opts = aureq.opts;
-			if (!opts) aureq.opts = opts = {};
+			var aureq = es[j], opts = aureq.opts = aureq.opts||{};
 			if (opts.uri != uri) {
 				if (j) break;
 				uri = opts.uri;

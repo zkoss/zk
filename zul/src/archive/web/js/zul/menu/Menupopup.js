@@ -217,7 +217,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 			break;
 		case 13: //ENTER
 			if (w && w.$instanceof(zul.menu.Menuitem)) {
-				w.doClick_(new zk.Event(w, 'onClick', {}, null));
+				w.doClick_(new zk.Event(w, 'onClick'));
 				zWatch.fire('onFloatUp', null, w); //notify all
 				this.close({sendOnOpen:true});
 			}
