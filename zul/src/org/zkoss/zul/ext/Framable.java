@@ -41,5 +41,10 @@ public interface Framable {
 	 * Returns whether to show a toggle button.
 	 */
 	public boolean isCollapsible();
+	/**
+	 * Returns whether is maximized.
+	 * @since 3.6.3
+	 */
+	public boolean isMaximized();
 }
 

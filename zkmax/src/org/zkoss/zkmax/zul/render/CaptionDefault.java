@@ -22,15 +22,13 @@ import java.io.Writer;
 import java.io.IOException;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zk.ui.render.Out;
 
 import org.zkoss.zul.Caption;
-import org.zkoss.zul.Window;
+import org.zkoss.zul.ext.Framable;
 
 /**
  * {@link Caption}'s default mold.
@@ -86,7 +84,7 @@ public class CaptionDefault implements ComponentRenderer {
 					.write("!maximize\" class=\"")
 					.write(pzcls).write("-icon ").write(pzcls)
 					.write("-max");
-				if (((Window)self.getParent()).isMaximized())
+				if (((Framable)self.getParent()).isMaximized())
 					wh.write(" ").write(pzcls).write("-maxd");
 				wh.write("\"></div></td>");
 			}

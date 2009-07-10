@@ -13,6 +13,7 @@ August, 2009
   2817260: Configuration.getResendDelay not inited correctly if zkmax
   2817728: Comet push doesn't stop if it is disabled in working thread
   2818308: ScrollIntoView got a wrong position, if not need be
+  2819040: Panel couldn't contain caption child
 
 	--------
 ZK 3.6.2
