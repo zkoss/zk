@@ -22,8 +22,6 @@ function (out) {
 	if(!this.isButtonVisible())
 		out.push('" style="display:none"');
 	
-	out.push('><img class="', zcls, '-img" onmousedown="return false;"');
-	out.push( 'src="',zAu.comURI('web/img/spacer.gif'),'"/></span></span>');
+	out.push('><span class="', zcls, '-img"></span></span></span>');
 	
 }
-		

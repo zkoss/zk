@@ -268,6 +268,7 @@
 	background-repeat : no-repeat;
 	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0;
 	border-bottom: 1px solid #86A4BE;
+	display:-moz-inline-box; display:inline-block;
 }
 .z-spinner-btn-over .z-spinner-img {
 	background-position: -17px 0;
