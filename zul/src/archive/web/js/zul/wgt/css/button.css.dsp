@@ -14,7 +14,7 @@ button.z-button {
 	display: block; width: 1px !important; overflow: hidden;
 	font-size: 1px !important; line-height: 1px !important;
 }
-<c:if test="${c:isGecko() and !c:isGecko3()}">
+<c:if test="${c:browser('gecko2-')}">
 table.z-button {
 	table-layout:fixed;
 }

@@ -128,37 +128,6 @@ zkm = {
 		zkm.binding = false;
 	},
 
-	sysInit: function() {
-		var ebc = zk.xbodyClass;
-		if (ebc) {
-			zk.xbodyClass = null;
-			var n = document.body,
-				cn = n.className;
-			if (cn.length) cn += ' ';
-			n.className = cn + ebc;
-		}
-
-		jq(document).keydown(zkm.docKeyDown)
-			.keyup(zkm.docKeyUp)
-			.keypress(zkm.docKeyPress)
-			.mousedown(zkm.docMouseDown)
-			.mouseup(zkm.docMouseUp)
-			.mousemove(zkm.docMouseMove)
-			.mouseover(zkm.docMouseOver)
-			.mouseout(zkm.docMouseOut)
-			.click(zkm.docClick)
-			.dblclick(zkm.docDblClick)
-			.bind("contextmenu", zkm.docCtxMenu);
-
-		jq(window).resize(zkm.docResize)
-			.scroll(zkm.docScroll)
-			.unload(zkm.docUnload);
-
-		zkm._oldBfUnload = window.onbeforeunload;
-		window.onbeforeunload = zkm.wndBfUnload;
-
-		zk.domReady = true;
-	},
 	mount: function() {
 		//1. load JS
 		var cfi = zkm._crInf0;
@@ -640,4 +609,25 @@ zk.copy(zk, {
 	}
 });
 
-jq(zkm.sysInit);
+jq(function() {
+	jq(document).keydown(zkm.docKeyDown)
+		.keyup(zkm.docKeyUp)
+		.keypress(zkm.docKeyPress)
+		.mousedown(zkm.docMouseDown)
+		.mouseup(zkm.docMouseUp)
+		.mousemove(zkm.docMouseMove)
+		.mouseover(zkm.docMouseOver)
+		.mouseout(zkm.docMouseOut)
+		.click(zkm.docClick)
+		.dblclick(zkm.docDblClick)
+		.bind("contextmenu", zkm.docCtxMenu);
+
+	jq(window).resize(zkm.docResize)
+		.scroll(zkm.docScroll)
+		.unload(zkm.docUnload);
+
+	zkm._oldBfUnload = window.onbeforeunload;
+	window.onbeforeunload = zkm.wndBfUnload;
+
+	zk.domReady = true;
+});

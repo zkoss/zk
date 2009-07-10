@@ -348,15 +348,16 @@ if (!Array.prototype.indexOf)
 	zk.safari = zk.agent.indexOf("safari") >= 0;
 	zk.opera = zk.agent.indexOf("opera") >= 0;
 	zk.gecko = zk.agent.indexOf("gecko/") >= 0 && !zk.safari && !zk.opera;
+	var bodycls;
 	if (zk.gecko) {
 		var j = zk.agent.indexOf("firefox/");
 		j = zk.parseInt(zk.agent.substring(j + 8));
 		zk.gecko3 = j >= 3;
 		zk.gecko2_ = !zk.gecko3;
 
-		zk.xbodyClass = 'gecko gecko' + j;
+		bodycls = 'gecko gecko' + j;
 	} else if (zk.opera) {
-		zk.xbodyClass = 'opera';
+		bodycls = 'opera';
 	} else {
 		var j = zk.agent.indexOf("msie ");
 		zk.ie = j >= 0;
@@ -367,12 +368,20 @@ if (!Array.prototype.indexOf)
 			zk.ie8 = j >= 8 && document.documentMode >= 8; //ie8 or later
 			zk.ie6_ = !zk.ie7;
 	
-			zk.xbodyClass = 'ie ie' + j;
+			bodycls = 'ie ie' + j;
 		} else if (zk.safari)
-			zk.xbodyClass = 'safari';
+			bodycls = 'safari';
 	}
 	if (zk.air = zk.agent.indexOf("adobeair") >= 0)
-		zk.xbodyClass = 'air';
+		bodycls = 'air';
+
+	if (bodycls)
+		jq(function () {
+			var n = document.body,
+				cn = n.className;
+			if (cn) cn += ' ';
+			n.className = cn + bodycls;
+		});
 })();
 
 zk.Object = function () {};
