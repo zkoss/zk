@@ -431,7 +431,7 @@ public class Configuration {
 		}
 		return cleanups.isEmpty() ? null: cleanups;
 	}
-	/** @deprecatd As of release 3.6.3, replaced with {@link #newEventThreadCleanups(Component,Event,List,boolean)}
+	/** @deprecated As of release 3.6.3, replaced with {@link #newEventThreadCleanups(Component,Event,List,boolean)}
 	 */
 	public List newEventThreadCleanups(Component comp, Event evt, List errs) {
 		return newEventThreadCleanups(comp, evt, errs, false);
