@@ -179,24 +179,14 @@ zk = function (sel) {
 		jq(function(){zk._showproc(true);}); //might called before doc ready
 	},
 	_showproc: function (mask) {
-		if (zk.processing) {
-			if (jq("#zk_proc").length || jq("#zk_showBusy").length)
-				return;
-
-			var msg;
-			try {msg = mesg.PLEASE_WAIT;} catch (e) {msg = "Processing...";}
-				//when the first boot, mesg might not be ready
-			zUtl.progressbox("zk_proc", msg, mask);
-		}
+		if (zk.processing
+		&& !jq("#zk_proc").length && !jq("#zk_showBusy").length)
+			zUtl.progressbox("zk_proc", window.mesg?mesg.PLEASE_WAIT:'Processing...', mask);
 	},
 
 	//DEBUG//
 	error: function (msg) {
-		if (!jq.isReady) {
-			setTimeout(function () {zk.error(msg)}, 100);
-			return;
-		}
-
+		jq(function() {
 		if (!zk._errcnt) zk._errcnt = 1;
 		var id = "zk_err" + zk._errcnt++,
 			x = (zk._errcnt * 5) % 50, y = (zk._errcnt * 5) % 50,
@@ -218,6 +208,7 @@ zk = function (sel) {
 				endeffect: zk.$void});
 		} catch (e) {
 		}
+			});
 	},
 	errorDismiss: function () {
 		for (var j = zk._errcnt; j; --j)
@@ -235,9 +226,9 @@ zk = function (sel) {
 		}
 
 		zk._msg = (zk._msg ? zk._msg + msg: msg) + '\n';
-		setTimeout(zk._log0, 600);
+		setTimeout(function(){jq(zk._log);}, 300);
 	},
-	_log0: function () {
+	_log: function () {
 		if (zk._msg) {
 			var console = jq("#zk_log");
 			if (!console.length) {
