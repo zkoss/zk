@@ -1470,8 +1470,8 @@ public class UiEngineImpl implements UiEngine {
 			} finally {
 				EventProcessor.inEventListener(false);
 				if (errs == null) //not cleanup yet
-					cleanups = config.newEventThreadCleanups(comp, event, null);
-				config.invokeEventThreadCompletes(cleanups, comp, event, errs);
+					cleanups = config.newEventThreadCleanups(comp, event, null, false);
+				config.invokeEventThreadCompletes(cleanups, comp, event, errs, false);
 			}
 		}
 	}
