@@ -169,30 +169,16 @@ zk = function (sel) {
 	//Processing//
 	startProcessing: function (timeout) {
 		zk.processing = true;
-		setTimeout(zk.domReady ? zk._showproc: zk._showprocmk, timeout > 0 ? timeout: 0);
+		setTimeout(jq.isReady ? zk._showproc: zk._showprocmk, timeout > 0 ? timeout: 0);
 	},
 	endProcessing: function() {
 		zk.processing = false;
 		zUtl.destroyProgressbox("zk_proc");
 	},
 	_showprocmk: function () {
-		//it might be called before doc ready
-		if (document.readyState
-		&& !/loaded|complete/.test(document.readyState)) {
-			var tid = setInterval(function(){
-				if (/loaded|complete/.test(document.readyState)) {
-					clearInterval(tid);
-					zk._showprocmk();
-				}
-			}, 0);
-			return;
-		}
-		zk._showproc0(true);
+		jq(function(){zk._showproc(true);}); //might called before doc ready
 	},
-	_showproc: function () {
-		zk._showproc0();
-	},
-	_showproc0: function (mask) {
+	_showproc: function (mask) {
 		if (zk.processing) {
 			if (jq("#zk_proc").length || jq("#zk_showBusy").length)
 				return;
@@ -206,7 +192,7 @@ zk = function (sel) {
 
 	//DEBUG//
 	error: function (msg) {
-		if (!zk.domReady) {
+		if (!jq.isReady) {
 			setTimeout(function () {zk.error(msg)}, 100);
 			return;
 		}

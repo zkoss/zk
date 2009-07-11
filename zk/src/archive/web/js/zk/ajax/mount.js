@@ -93,7 +93,7 @@ function zkmld(wgtcls, molds) {
 	}		
 }
 function zkam(fn) {
-	if (zk.mounting || !zk.domReady) {
+	if (zk.mounting || !jq.isReady) {
 		zkm._afMts.push(fn);
 		return true;
 	}
@@ -498,7 +498,7 @@ zkm = {
 		zWatch.fire('onScroll'); //notify all
 	},
 	docResize: function () {
-		if (!zk.domReady || zk.mounting)
+		if (!jq.isReady || zk.mounting)
 			return; //IE6: it sometimes fires an "extra" onResize in loading
 
 	//Tom Yeh: 20051230:
@@ -628,6 +628,4 @@ jq(function() {
 
 	zkm._oldBfUnload = window.onbeforeunload;
 	window.onbeforeunload = zkm.wndBfUnload;
-
-	zk.domReady = true;
 });
