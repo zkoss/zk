@@ -114,7 +114,6 @@
 
 
 <c:if test="${c:isExplorer()}">
-<%-- IE only --%>
 .z-menu-inner-m .z-menu-btn{
 	padding-right:4px;
 }

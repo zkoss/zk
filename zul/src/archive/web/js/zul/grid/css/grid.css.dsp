@@ -193,8 +193,8 @@ div.z-grid-header th.z-column, div.z-grid-header th.z-auxheader {
 div.z-column-cnt, .z-auxheader-cnt {
 	white-space: nowrap; <%-- Bug #1839960  --%>
 }
-div.z-footer-cnt, div.z-row-cnt, div.z-group-cnt, div.z-groupfoot-cnt, div.z-column-cnt,
-.z-auxheader-cnt {
+div.z-footer-cnt, div.z-row-cnt, div.z-group-cnt,
+div.z-groupfoot-cnt, div.z-column-cnt, .z-auxheader-cnt {
 	position: relative; <%-- Bug #1825896  --%>
 }
 div.z-row-cnt, div.z-group-cnt, div.z-groupfoot-cnt {
@@ -228,7 +228,8 @@ div.z-grid {
 .z-word-wrap div.z-row-cnt, 
 .z-word-wrap div.z-group-cnt,
 .z-word-wrap div.z-groupfoot-cnt,
-.z-word-wrap div.z-footer-cnt, .z-word-wrap div.z-column-cnt {
+.z-word-wrap div.z-footer-cnt,
+.z-word-wrap div.z-column-cnt {
 	overflow: hidden;
 	-moz-binding: url(${c:encodeURL('~./zk/wordwrap.xml#wordwrap')});
 }

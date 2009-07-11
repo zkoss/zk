@@ -160,14 +160,15 @@ td.z-listgroupfoot-inner div.z-listcell-cnt {
 div.z-listbox-header, div.z-listbox-footer {
 	position:relative; <%-- Bug 1712708 and 1926094 --%>
 }
-div.z-listbox-header th.z-listheader, div.z-listbox-header th.z-auxheader {
+div.z-listbox-header th.z-listheader,
+div.z-listbox-header th.z-auxheader {
 	text-overflow: ellipsis;
 }
 div.z-listheader-cnt, .z-auxheader-cnt {
 	white-space: nowrap; <%-- Bug #1839960  --%>
 }
-div.z-listfooter-cnt, div.z-listcell-cnt, div.z-listheader-cnt,
-.z-auxheader-cnt {
+div.z-listfooter-cnt, div.z-listcell-cnt,
+div.z-listheader-cnt, .z-auxheader-cnt {
 	position: relative; <%-- Bug #1825896  --%>
 }
 div.z-listcell-cnt {
@@ -192,7 +193,8 @@ tr.z-listitem td.z-listitem-focus {
 
 <%-- Gecko --%>
 <c:if test="${c:isGecko()}">
-.z-word-wrap div.z-listcell-cnt, .z-word-wrap div.z-listfooter-cnt,
+.z-word-wrap div.z-listcell-cnt,
+.z-word-wrap div.z-listfooter-cnt,
 .z-word-wrap div.z-listheader-cnt {
 	overflow: hidden;
 	-moz-binding: url(${c:encodeURL('~./zk/wordwrap.xml#wordwrap')});
