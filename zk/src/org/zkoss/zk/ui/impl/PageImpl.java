@@ -845,11 +845,11 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			((Includer)_owner).setChildPage(this);
 	}
 
-	/** @deprecated */
+	/** @deprecated since 5.0.0 */
  	public Component getDefaultParent() {
  		return null;
  	}
-	/** @deprecated */
+	/** @deprecated since 5.0.0 */
  	public void setDefaultParent(Component comp) {
  	}
 

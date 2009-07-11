@@ -318,11 +318,6 @@ public class ExecutionImpl extends AbstractExecution {
 	public String getRemoteHost() {
 		return _request.getRemoteHost();
 	}
-	/** @deprecated As of release 3.0.1, replaced with {@link #getRemoteHost}.
-	 */
-	public String getRemoteName() {
-		return getRemoteHost();
-	}
 	public String getRemoteAddr() {
 		return _request.getRemoteAddr();
 	}
@@ -401,17 +396,6 @@ public class ExecutionImpl extends AbstractExecution {
 	public void setContentType(String contentType) {
 		if (_response instanceof HttpServletResponse)
 			((HttpServletResponse)_response).setContentType(contentType);
-	}
-
-	/** @deprecated As of release 3.0.7, replaced with {@link org.zkoss.zk.ui.Execution#getAttribute}.
-	 */
-	public Object getRequestAttribute(String name) {
-		return getAttribute(name);
-	}
-	/** @deprecated As of release 3.0.7, replaced with {@link org.zkoss.zk.ui.Execution#setAttribute}.
-	 */
-	public void setRequestAttribute(String name, Object value) {
-		setAttribute(name, value);
 	}
 
 	public boolean isBrowser() {

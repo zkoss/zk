@@ -74,10 +74,6 @@ public class CacheMap implements Map, Cache, java.io.Serializable, Cloneable {
     private static final long serialVersionUID = 20070907L;
 	//private static final Log log = Log.lookup(CacheMap.class);
 
-	/** @deprecated As of release 3.0.0, replaced by {@link Cache#DEFAULT_MAX_SIZE}.
-	 */
-	public static final int DEFAULT_MAXSIZE = 1024;
-
 	/** The map to store the mappings. */
 	private Map _map; //it is OK to serialized
 	/** The minimal lifetime. */

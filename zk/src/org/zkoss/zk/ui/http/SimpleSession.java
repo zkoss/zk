@@ -282,16 +282,6 @@ public class SimpleSession implements Session, SessionCtrl {
 	public String getLocalAddr() {
 		return _localAddr;
 	}
-	/** @deprecated As of release 3.0.1, replaced with {@link #getRemoteAddr}.
-	 */
-	public String getClientAddr() {
-		return getRemoteAddr();
-	}
-	/** @deprecated As of release 3.0.1, replaced with {@link #getRemoteHost}.
-	 */
-	public String getClientHost() {
-		return getRemoteHost();
-	}
 
 	public void invalidateNow() {
 		_invalid = true;

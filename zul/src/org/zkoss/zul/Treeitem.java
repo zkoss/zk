@@ -319,18 +319,6 @@ public class Treeitem extends XulElement implements org.zkoss.zul.api.Treeitem {
 		return cell;
 	}
 
-	/** @deprecated As of release 3.5.0, it is redundant since it
-	 * the same as {@link #getImage}.
-	 */
-	public String getSrc() {
-		return getImage();
-	}
-	/** @deprecated As of release 3.5.0, it is redundant since it
-	 * the same as {@link #setImage}.
-	 */
-	public void setSrc(String src) {
-		setImage(src);
-	}
 	/** Returns the image of the {@link Treecell} it contains.
 	 */
 	public String getImage() {

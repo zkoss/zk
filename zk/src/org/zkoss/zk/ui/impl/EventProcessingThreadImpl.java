@@ -123,6 +123,9 @@ implements EventProcessingThread {
 			process0();
 		} finally {
 			_proc = oldproc;
+			if (_ceased != null)
+				throw new InterruptedException(_ceased);
+				//Bug 2819521: cease() resumes suspend threads, which shall stop
 			setup();
 		}
 	}
@@ -385,15 +388,14 @@ implements EventProcessingThread {
 
 	private void invokeEventThreadCompletes(Configuration config,
 	Component comp, Event event) throws UiException {
-		if (_evtThdCleanups != null && !_evtThdCleanups.isEmpty()) {
-			final List errs = _ex != null ? null: new LinkedList();
+		final List errs = new LinkedList();
+		if (_ex != null) errs.add(_ex);
 
-			config.invokeEventThreadCompletes(_evtThdCleanups, comp, event, errs);
+		if (_evtThdCleanups != null && !_evtThdCleanups.isEmpty())
+			config.invokeEventThreadCompletes(_evtThdCleanups, comp, event, errs, _ceased != null);
 
-			if (errs != null && !errs.isEmpty())
-				throw UiException.Aide.wrap((Throwable)errs.get(0));
-		}
 		_evtThdCleanups = null;
+		_ex = errs.isEmpty() ? null: (Throwable)errs.get(0);
 	}
 	/** Setup for execution. */
 	synchronized private void setup() {
@@ -445,10 +447,12 @@ implements EventProcessingThread {
 					} catch (Throwable ex) {
 						cleaned = true;
 						newEventThreadCleanups(config, ex);
+							//ex will be assigned to _ex if newEventThreadCleanups not 'eat' it
 					} finally {
 						--_nBusyThd;
 
-						if (!cleaned) newEventThreadCleanups(config, _ex);
+						if (!cleaned)
+							newEventThreadCleanups(config, _ex);
 
 //						if (log.finerable()) log.finer("Real processing is done: "+_proc);
 						if (exec != null && _acted) { //_acted is false if suspended is killed
@@ -463,6 +467,11 @@ implements EventProcessingThread {
 
 						Locales.setThreadLocal(_locale = null);
 						TimeZones.setThreadLocal(_timeZone = null);
+
+						if (_ex != null) {
+							if (_ceased == null) log.realCause(_ex);
+							_ex = null;
+						}
 					}
 				}
 
@@ -499,7 +508,7 @@ implements EventProcessingThread {
 		final List errs = new LinkedList();
 		if (ex != null) errs.add(ex);
 		_evtThdCleanups =
-			config.newEventThreadCleanups(getComponent(), getEvent(), errs);
+			config.newEventThreadCleanups(getComponent(), getEvent(), errs, _ceased != null);
 		_ex = errs.isEmpty() ? null: (Throwable)errs.get(0);
 			//propogate back the first exception
 	}

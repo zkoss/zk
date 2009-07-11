@@ -326,9 +326,6 @@ public interface Execution extends Scope {
 	 * the IP address.
 	 */
 	public String getRemoteHost();
-	/** @deprecated As of release 3.0.1, replaced by {@link #getRemoteHost}.
-	 */
-	public String getRemoteName();
 	/**  Returns the Internet Protocol (IP) address of the client or last
 	 * proxy that sent the request.
 	 */

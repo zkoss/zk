@@ -121,18 +121,6 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 			}
 		}
 	}
-	/** 
-	 * @deprecated As of release As of release 3.5.1 
-	 */
-	public int getVisibleBegin() {
-		return 0;
-	}
-	/** 
-	 * @deprecated As of release As of release 3.5.1 
-	 */
-	public int getVisibleEnd() {
-		return Integer.MAX_VALUE;
-	}
 	
 	/*package*/ void fixGroupIndex(int j, int to, boolean infront) {
 		for (Iterator it = getChildren().listIterator(j);

@@ -1208,12 +1208,6 @@ public class Components {
 			return exec().getRemoteHost();
 		}
 
-		/** @deprecated
-		 */
-		public String getRemoteName() {
-			return exec().getRemoteName();
-		}
-
 		public String getRemoteUser() {
 			return exec().getRemoteUser();
 		}

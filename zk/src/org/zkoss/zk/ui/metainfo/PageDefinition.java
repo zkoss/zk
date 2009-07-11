@@ -765,7 +765,7 @@ public class PageDefinition extends NodeInfo {
 		return _eval;
 	}
 	private Evaluator newEvaluator() {
-		return new SimpleEvaluator(getFunctionMapper(), _expfcls);
+		return new SimpleEvaluator(getTaglibMapper(), _expfcls);
 	}
 	/** Returns the evaluator reference (never null).
 	 *
@@ -780,11 +780,6 @@ public class PageDefinition extends NodeInfo {
 		return new PageEvalRef(this);
 	}
 
-	/** @deprecated As of release 3.5.0, replaced by {@link #getTaglibMapper}.
-	 */
-	public FunctionMapper getFunctionMapper() {
-		return getTaglibMapper();
-	}
 	/** Returns the mapper representing the functions defined in
 	 * taglib and xel-method.
 	 *

@@ -939,7 +939,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 	 *
 	 * @param pgi the paging controller. If null and {@link #getMold} is "paging",
 	 * a paging controller is created automatically as a child component
-	 * (see {@link #getPaging}).
+	 * (see {@link #getPagingChild}).
 	 */
 	public void setPaginal(Paginal pgi) {
 		if (!Objects.equals(pgi, _pgi)) {
@@ -1032,18 +1032,6 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 	public org.zkoss.zul.api.Paging getPagingChildApi() {
 		return getPagingChild();
 	}
-	/** @deprecated As of release 3.0.7, replaced with {@link #getPagingChild}
-	 * to avoid the confusion with {@link #getPaginal}.
-	 */
-	public Paging getPaging() {
-		return getPagingChild();
-	}
-	/** 
-	 * @since 3.5.2
-	 */
-	public org.zkoss.zul.api.Paging getPagingApi() {		
-		return getPagingChild();
-	}
 	/** Returns the page size, aka., the number items per page.
 	 * @exception IllegalStateException if {@link #getPaginal} returns null,
 	 * i.e., mold is not "paging" and no external controller is specified.
@@ -1132,18 +1120,6 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 				invalidate(); // the set of visible items might change
 			}
 		}
-	}
-	/** 
-	 * @deprecated As of release 3.5.1 
-	 */
-	public int getVisibleBegin() {
-		return 0;
-	}
-	/** 
-	 * @deprecated As of release 3.5.1 
-	 */
-	public int getVisibleEnd() {
-		return Integer.MAX_VALUE;
 	}
 
 	/** Returns the style class for the odd rows.
@@ -1897,7 +1873,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 	 * <p>Default: 7.
 	 *
 	 * <p>It is used only if live data ({@link #setModel(ListModel)} and
-	 * not paging ({@link #getPaging}.
+	 * not paging ({@link #getPagingChild}.
 	 * 
 	 * <p>Note: if the "pre-load-size" attribute of component is specified, it's prior to the original value.(@since 3.0.4)
 	 * @since 2.4.1
@@ -1909,7 +1885,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 	/** Sets the number of items to preload when receiving
 	 * the rendering request from the client.
 	 * <p>It is used only if live data ({@link #setModel(ListModel)} and
-	 * not paging ({@link #getPaging}.
+	 * not paging ({@link #getPagingChild}.
 	 *
 	 * @param sz the number of items to preload. If zero, no preload
 	 * at all.

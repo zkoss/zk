@@ -166,37 +166,6 @@ public class Groupbox extends XulElement implements org.zkoss.zul.api.Groupbox {
 		_legend = Boolean.valueOf(legend);
 	}
 
-	/** Returns the look of the caption.
-	 * It is, in fact, a portion of the style class that are used
-	 * to generate the style for the caption.
-	 *
-	 * <p>If the style class ({@link #getSclass}) of this groupbox is not
-	 * defined and the mold is "default", then "groupbox" is returned.
-	 *
-	 * <p>If the mold is "default" or "3d", and the style class is defined,
-	 * say "lite", then this method return "groupbox-lite".
-	 *
-	 * <p>If the mold is not "default", and the style class is not defined,
-	 * this method returns:<br>
-	 * <code>"groupbox-" + getMold()</code>
-	 *
-	 * <p>If the mold is not "default" and the style class is defined,
-	 * this method returns<br/>
-	 * <code>"groupbox-" + getMold() + "-" + getSclass()</code>
-	 *
-	 * <p>With this method, the caption generates the style class
-	 * for the caption accordingly. For example, if the mold is "3d"
-	 * and the style class not defined, then
-	 * "groupbox-3d-tl" for the top-left corner of the caption,
-	 * "groupbox-3d-tm" for the top-middle border, and so on.
-	 *
-	 * @since 3.0,0
-	 * @deprecated As of release 3.5.0
-	 */
-	public String getCaptionLook() {
-		return null;
-	}
-
 	//-- Component --//
 	public void beforeChildAdded(Component child, Component refChild) {
 		if (child instanceof Caption) {

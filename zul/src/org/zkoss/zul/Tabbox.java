@@ -316,20 +316,6 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 			_zclass;
 	}
 
-	/**
-	 * @deprecated As of release 3.5.2
-	 */
-	public String getTabLook() {
-		String scls = getZclass();
-		if ("vertical".equals(_orient)){
-			String postfix = "-v";
-			return scls != null ? scls + postfix: postfix;
-		}else{
-			return scls;
-		}
-
-	}
-
 	// -- Component --//
 	/**
 	 * Auto-creates {@link Tabpanel} and select one of tabs if necessary.

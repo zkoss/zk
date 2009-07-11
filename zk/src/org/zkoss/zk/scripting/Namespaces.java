@@ -148,30 +148,6 @@ try {
 		return defValue;
 	}
 
-	/** @deprecated As of release 3.6.1, it is replaced with {@link #beforeInterpret(Component)}.
-	 */
-	public static final Namespace beforeInterpret(Map backup, Component comp,
-	boolean pushNS) {
-		return beforeInterpret(comp);
-	}
-	/** @deprecated As of release 3.6.1, it is replaced with {@link #beforeInterpret(Page)}.
-	 */
-	public static final Namespace beforeInterpret(Map backup, Page page,
-	boolean pushNS) {
-		return beforeInterpret(page);
-	}
-	/** @deprecated As of release 3.6.1, it is replaced with {@link #afterInterpret}.
-	 */
-	public static final void afterInterpret(Map backup, Namespace ns,
-	boolean popNS) {
-		afterInterpret();
-	}
-	/** @deprecated As of release 3.6.1, it is replaced with {@link #setImplicit}.
-	 */
-	public static final void backupVariable(Map backup, Namespace ns, String name) {
-		//due to incompatible restore, we cannot store backup
-	}
-
 	/** Returns the current namespace.
 	 * The current namespace is the event target's namespace if this thread
 	 * is processing an event ({@link org.zkoss.zk.ui.event.Event#getTarget}.

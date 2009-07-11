@@ -1458,15 +1458,15 @@ public class UiEngineImpl implements UiEngine {
 			} catch (Throwable ex) {
 				errs = new LinkedList();
 				errs.add(ex);
-				cleanups = config.newEventThreadCleanups(comp, event, errs);
+				cleanups = config.newEventThreadCleanups(comp, event, errs, false);
 
 				if (!errs.isEmpty())
 					throw UiException.Aide.wrap((Throwable)errs.get(0));
 			} finally {
 				EventProcessor.inEventListener(false);
 				if (errs == null) //not cleanup yet
-					cleanups = config.newEventThreadCleanups(comp, event, null);
-				config.invokeEventThreadCompletes(cleanups, comp, event, errs);
+					cleanups = config.newEventThreadCleanups(comp, event, null, false);
+				config.invokeEventThreadCompletes(cleanups, comp, event, errs, false);
 			}
 		}
 	}

@@ -89,11 +89,6 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 	public String getRemoteHost() {
 		return "n/a";
 	}
-	/** @deprecated As of release 3.0.1, replaced with {@link #getRemoteHost}.
-	 */
-	public String getRemoteName() {
-		return "n/a";
-	}
 	public String getRemoteAddr() {
 		return "n/a";
 	}
@@ -186,17 +181,6 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 	}
 	public void setContentType(String contentType) {
 		throw new UnsupportedOperationException();
-	}
-
-	/** @deprecated As of release 3.0.7, replaced with {@link org.zkoss.zk.ui.Execution#getAttribute}.
-	 */
-	public Object getRequestAttribute(String name) {
-		return getAttribute(name);
-	}
-	/** @deprecated As of release 3.0.7, replaced with {@link org.zkoss.zk.ui.Execution#setAttribute}.
-	 */
-	public void setRequestAttribute(String name, Object value) {
-		setAttribute(name, value);
 	}
 
 	public Object getNativeRequest() {

@@ -65,20 +65,6 @@ public interface Detail extends org.zkoss.zul.impl.api.XulElement {
 	public void setContentSclass(String scls);
 
 	/**
-	 * Returns the URI of the button image.
-	 */
-	public String getImage();
-
-	/**
-	 * Sets the URI of the button image.
-	 * 
-	 * @param img
-	 *            the URI of the button image. If null or empty, the default URI
-	 *            is used.
-	 */
-	public void setImage(String img);
-
-	/**
 	 * Sets whether the detail is open.
 	 */
 	public void setOpen(boolean open);

@@ -48,11 +48,6 @@ public interface Bandbox extends Textbox {
 	public org.zkoss.zul.api.Bandpopup getDropdownApi();
 
 	/**
-	 * Closes the popup ({@link #getDropdownApi}).
-	 */
-	public void closeDropdown();
-
-	/**
 	 * Sets whether to automatically drop the list if users is changing this
 	 * text box.
 	 */

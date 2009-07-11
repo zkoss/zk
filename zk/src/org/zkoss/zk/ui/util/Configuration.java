@@ -409,9 +409,11 @@ public class Configuration {
 	 * Note: you can manipulate the list directly to add or clean up exceptions.
 	 * For example, if exceptions are fixed correctly, you can call errs.clear()
 	 * such that no error message will be displayed at the client.
+	 * @param silent whether not to log the exception
 	 * @return a list of {@link EventThreadCleanup}, or null
+	 * @since 3.6.3
 	 */
-	public List newEventThreadCleanups(Component comp, Event evt, List errs) {
+	public List newEventThreadCleanups(Component comp, Event evt, List errs, boolean silent) {
 		final Class[] ary = (Class[])_evtCleans.toArray();
 		if (ary.length == 0) return null;
 
@@ -425,11 +427,13 @@ public class Configuration {
 				cleanups.add(cleanup);
 			} catch (Throwable t) {
 				if (errs != null) errs.add(t);
-				log.error("Failed to invoke "+klass, t);
+				if (!silent)
+					log.error("Failed to invoke "+klass, t);
 			}
 		}
 		return cleanups.isEmpty() ? null: cleanups;
 	}
+
 	/** Invoke {@link EventThreadCleanup#complete} for each instance returned by
 	 * {@link #newEventThreadCleanups}.
 	 *
@@ -443,9 +447,11 @@ public class Configuration {
 	 * @param errs used to hold the exceptions that are thrown by
 	 * {@link EventThreadCleanup#complete}.
 	 * If null, all exceptions are ignored (but logged).
+	 * @param silent whether not to log the exception
+	 * @since 3.6.3
 	 */
 	public void invokeEventThreadCompletes(List cleanups, Component comp, Event evt,
-	List errs) {
+	List errs, boolean silent) {
 		if (cleanups == null || cleanups.isEmpty()) return;
 
 		for (Iterator it = cleanups.iterator(); it.hasNext();) {
@@ -454,7 +460,8 @@ public class Configuration {
 				fn.complete(comp, evt);
 			} catch (Throwable ex) {
 				if (errs != null) errs.add(ex);
-				log.error("Failed to invoke "+fn, ex);
+				if (!silent)
+					log.error("Failed to invoke "+fn, ex);
 			}
 		}
 	}
@@ -1431,12 +1438,6 @@ public class Configuration {
 	public void setSessionMaxDesktops(int max) {
 		_sessDktMax = max;
 	}
-	/**
-	 * @deprecated As of release 3.0.1, replaced with {@link #setSessionMaxDesktops}.
-	 */
-	public void setMaxDesktops(int max) {
-		setSessionMaxDesktops(max);
-	}
 	/** Returns the maximal allowed number of desktop per session.
 	 *
 	 * <p>A negative value indicates there is no limit.
@@ -1444,12 +1445,6 @@ public class Configuration {
 	 */
 	public int getSessionMaxDesktops() {
 		return _sessDktMax;
-	}
-	/**
-	 * @deprecated As of release 3.0.1, replaced with {@link #getSessionMaxDesktops}.
-	 */
-	public int getMaxDesktops() {
-		return getSessionMaxDesktops();
 	}
 	/** Specifies the maximal allowed number of concurrent requests
 	 * per session.
@@ -1562,16 +1557,6 @@ public class Configuration {
 	 */
 	public boolean isEventThreadEnabled() {
 		return _useEvtThd;
-	}
-
-	/** @deprecated since 5.0.0
-	 */
-	public boolean isDisableBehindModalEnabled() {
-		return false;
-	}
-	/** @deprecated since 5.0.0
-	 */
-	public void enableDisableBehindModal(boolean enable) {
 	}
 
 	/** Returns the monitor for this application, or null if not set.

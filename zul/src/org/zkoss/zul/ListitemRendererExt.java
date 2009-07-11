@@ -82,14 +82,6 @@ return cell;
 	 * the first cell (of the passed list item).
 	 */
 	public static final int DETACH_ON_RENDER = 0x0001;
-	/** @deprecated As of release 3.5.0, all rendered list items
-	 * are detached to minimize the side effect.
-	 */
-	public static final int DETACH_ON_UNLOAD = 0x0002;
-	/** @deprecated As of release 3.5.0, all rendered list items
-	 * are detached to minimize the side effect.
-	 */
-	public static final int RETAIN_CELLS_ON_UNLOAD = 0x0004;
 	/** Returns how a listbox shall render the live data.
 	 *
 	 * <p>Note: if this interface is not implemented, {@link #DETACH_ON_RENDER}

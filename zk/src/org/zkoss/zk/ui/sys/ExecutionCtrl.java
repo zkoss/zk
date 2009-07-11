@@ -145,13 +145,6 @@ public interface ExecutionCtrl {
 	 */
 	public void setContentType(String contentType);
 
-	/** @deprecated As of release 3.0.7, replaced with {@link org.zkoss.zk.ui.Execution#getAttribute}.
-	 */
-	public Object getRequestAttribute(String name);
-	/** @deprecated As of release 3.0.7, replaced with {@link org.zkoss.zk.ui.Execution#setAttribute}.
-	 */
-	public void setRequestAttribute(String name, Object value);
-
 	/** Sets the desktop associated with this execution.
 	 * You rarely need to use this method, since the desktop is associated
 	 * when this execution is created.

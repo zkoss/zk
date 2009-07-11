@@ -90,19 +90,7 @@ public class Detail extends XulElement implements org.zkoss.zul.api.Detail {
 			smartUpdate("contentSclass", _cntscls);
 		}
 	}
-	/**
-	 * @deprecated As of release 3.5.2
-	 */
-	public String getImage() {
-		return null;
-	}
-	
-	/** 
-	 * @deprecated As of release 3.5.2
-	 */
-	public void setImage(String img) {
-	}
-	
+
 	/**
 	 * Sets whether the detail is open.
 	 */

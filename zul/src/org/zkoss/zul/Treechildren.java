@@ -185,55 +185,6 @@ public class Treechildren extends XulElement implements org.zkoss.zul.api.Treech
 			((Tree)parent).addVisibleItemCount(count);
 		_visibleItemCount += count;
 	}
-	
-	/** @deprecated As of release 3.0.7, the page size is controlled
-	 * by {@link Tree#getPageSize} rather than this method.
-	 * It always return -1 since 3.0.7.
-	 */
-	public int getPageSize() {
-		return -1;
-	}
-	/** @deprecated As of release 3.0.7, the page size is controlled
-	 * by {@link Tree#setPageSize} rather than this method.
-	 * It always does nothing since 3.0.7
-	 */
-	public void setPageSize(int size) throws WrongValueException {
-	}
-
-	/** @deprecated As of release 3.0.7, the page size is controlled
-	 * by {@link Tree#getPageSize} rather than this method.
-	 * It always return 1 since 3.0.7.
-	 */
-	public int getPageCount() {
-		return 1;
-	}
-	/** @deprecated As of release 3.0.7, the page size is controlled
-	 * by {@link Tree#getPageSize} rather than this method.
-	 * It always return 0 since 3.0.7.
-	 */
-	public int getActivePage() {
-		return 0;
-	}
-	/** @deprecated As of release 3.0.7, the page size is controlled
-	 * by {@link Tree#setPageSize} rather than this method.
-	 * It always does nothing since 3.0.7
-	 */
-	public void setActivePage(int pg) throws WrongValueException {
-	}
-	/** @deprecated As of release 3.0.7, the page size is controlled
-	 * by {@link Tree#setPageSize} rather than this method.
-	 * It always returns 0 since 3.0.7
-	 */
-	public int getVisibleBegin() {
-		return 0;
-	}
-	/** @deprecated As of release 3.0.7, the page size is controlled
-	 * by {@link Tree#setPageSize} rather than this method.
-	 * It always returns Integer.MAX_VALUE since 3.0.7
-	 */
-	public int getVisibleEnd() {
-		return Integer.MAX_VALUE;
-	}
 
 	//-- Component --//
 	public void beforeParentChanged(Component parent) {

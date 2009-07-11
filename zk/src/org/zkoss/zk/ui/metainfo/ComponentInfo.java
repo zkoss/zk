@@ -194,11 +194,11 @@ implements Cloneable, Condition, java.io.Externalizable {
 
 	/** Adds a Sting child.
 	 * Note: it is callable only if this is an instance of {@link NativeInfo}
-	 * or {@link #getComponentDefinition} is {@link ComponentDefinition#ZK}.
+	 * or {@link #getComponentDefinition} is {@link ZkInfo#ZK}.
 	 *
 	 * @exception IllegalStateException if this is not an instance of
 	 * {@link NativeInfo}, nor {@link #getComponentDefinition} is not
-	 * {@link ComponentDefinition#ZK}.
+	 * {@link ZkInfo#ZK}.
 	 * @since 3.5.0
 	 */
 	public void appendChild(TextInfo text) {
@@ -353,16 +353,6 @@ implements Cloneable, Condition, java.io.Externalizable {
 			throw UiException.Aide.wrap(ex);
 		}
 	}
-	/** @deprecated As of release 3.5.0, replaced with {@link #resolveComposer}.
-	 */
-	public Composer getComposer(Page page) {
-		return getComposer(page, null);
-	}
-	/** @deprecated As of release 3.5.0, replaced with {@link #resolveComposer}.
-	 */
-	public Composer getComposer(Page page, Component comp) {
-		return resolveComposer(page, comp);
-	}
 	private static void toComposers(List composers, ExValue[] apply,
 	Evaluator eval, Page page, Component comp)
 	throws Exception {
@@ -420,7 +410,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 * instances, or null if no apply attribute.
 	 *
 	 * @since 3.0.0
-	 * @see #getComposer
+	 * @see #resolveComposer
 	 */
 	public String getApply() {
 		if (_apply == null)
@@ -616,11 +606,6 @@ implements Cloneable, Condition, java.io.Externalizable {
 				ForEachImpl.getInstance(
 					_evalr, page, _forEach, _forEachInfo[0], _forEachInfo[1]);
 	}
-	/** @deprecated As of release 3.5.0, replaced with {@link #resolveForEach}.
-	 */
-	public ForEach getForEach(Page page, Component comp) {
-		return resolveForEach(page, comp);
-	}
 	/** Sets the forEach attribute, which is usually an expression.
 	 * @param expr the expression to return a collection of objects, or
 	 * null/empty to denote no iteration.
@@ -643,16 +628,6 @@ implements Cloneable, Condition, java.io.Externalizable {
 		return _forEach != null;
 	}
 
-	/** @deprecated As of release 3.6.0, replaced with {@link #getImplementation}.
-	 */
-	public String getImplementationClass() {
-		return getImplementation();
-	}
-	/** @deprecated As of release 3.6.0, replaced with {@link #setImplementation}.
-	 */
-	public void setImplementationClass(String clsnm) {
-		setImplementation(clsnm);
-	}
 	/** Returns the class name or an expression returning a class instance,
 	 * a class name, or a component.
 	 * It is the same value that {@link #setImplementation} was called.
@@ -718,7 +693,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 	/** Creates an component based on this info (never null).
 	 * It is the same as newInstance(page, null).
 	 *
-	 * <p>If the implementation class ({@link #getImplementationClass})
+	 * <p>If the implementation class ({@link #getImplementation})
 	 * doesn't have any EL expression, or its EL expresson doesn't
 	 * referece to the self variable, the result is the same.
 	 *
@@ -732,7 +707,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 	/** Resolves and returns the class for the component represented
 	 * by this info (never null).
 	 *
-	 * <p>Unlike {@link #getImplementationClass},
+	 * <p>Unlike {@link #getImplementation},
 	 * this method will resolve a class name (String) to a class (Class),
 	 * if necessary.
 	 *
@@ -756,7 +731,7 @@ implements Cloneable, Condition, java.io.Externalizable {
 	 * by this info (never null).
 	 * It is the same as resolveImplementationClass(page, null).
 	 *
-	 * <p>If the implementation class ({@link #getImplementationClass})
+	 * <p>If the implementation class ({@link #getImplementation})
 	 * doesn't have any EL expression, or its EL expresson doesn't
 	 * referece to the self variable, the result is the same.
 	 *

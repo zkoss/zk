@@ -354,7 +354,7 @@
 .z-msgbox-exclamation {
 	background-image: url(${c:encodeURL('~./zul/img/msgbox/warning-btn.png')});
 }
-.z-msgbox-imformation {
+.z-msgbox-information {
 	background-image: url(${c:encodeURL('~./zul/img/msgbox/info-btn.png')});
 }
 .z-msgbox-error {
@@ -457,7 +457,7 @@
 .z-msgbox-exclamation {
 	background-image: url(${c:encodeURL('~./zul/img/msgbox/warning-btn.gif')});
 }
-.z-msgbox-imformation {
+.z-msgbox-information {
 	background-image: url(${c:encodeURL('~./zul/img/msgbox/info-btn.gif')});
 }
 .z-msgbox-error {

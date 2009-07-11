@@ -277,13 +277,6 @@ public interface Desktop extends Scope {
 	 */
 	public boolean isServerPushEnabled();
 
-	/** @deprecated As of release 3.0.6, replaced by {@link #addListener}.
-	 */
-	public void addEventInterceptor(EventInterceptor ei);
-	/** @deprecated As of release 3.0.6, replaced by {@link #removeListener}.
-	 */
-	public boolean removeEventInterceptor(EventInterceptor ei);
-
 	/** Adds a listener.
 	 *
 	 * <p>Note: if the listener is added twice, it will be invoked

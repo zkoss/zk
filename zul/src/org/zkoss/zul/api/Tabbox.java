@@ -145,11 +145,4 @@ public interface Tabbox extends org.zkoss.zul.impl.api.XulElement {
 	 * 
 	 */
 	public boolean isVertical();
-
-	/**
-	 * Returns the look of the {@link Tab} and {@link Tabbox}.
-	 * 
-	 */
-	public String getTabLook();
-
 }

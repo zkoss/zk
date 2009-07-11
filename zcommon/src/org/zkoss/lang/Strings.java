@@ -255,7 +255,7 @@ public class Strings {
 	 * backspace. Thus, if you want to preserve backslash, you have
 	 * invoke escape(s, "\\") before calling Maps.parse().
 	 *
-	 * @param s the string to process. If null, null is returned.
+	 * @param src the string to process. If null, null is returned.
 	 * @param specials a string of characters that shall be escaped/quoted
 	 * To escape a string in JavaScript code snippet, you can use {@link #ESCAPE_JAVASCRIPT}.
 	 * @see #unescape

@@ -36,9 +36,4 @@ public interface SessionSerializationListener {
 	/** Called when a session is going to serialize this object.
 	 */
 	public void willSerialize(Session session);
-	/** Called when a session has de-serialized this object back.
-	 * @deprecated As of release 3.0.8, no way to find the right
-	 * moment to call back this method.
-	 */
-	public void didDeserialize(Session session);
 }
