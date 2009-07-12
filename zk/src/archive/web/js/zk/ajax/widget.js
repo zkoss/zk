@@ -1425,7 +1425,7 @@ zk.Desktop = zk.$extends(zk.Widget, {
 		if (!dt) {
 			this.uuid = this.id = dtid;
 			this.updateURI = updateURI || zk.updateURI;
-			if (this.stateless = stateless) {
+			if (this.stateless = stateless && !zk.light) {
 				this.subURI = '/ss';
 				zk.spaceless = true;
 			}

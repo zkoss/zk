@@ -211,7 +211,7 @@ zAu = {
 		if (reqInf) {
 			zAu._preqInf = null;
 			if (zAu._seqId == reqInf.sid)
-				zAu._sendNow2(reqInf);
+				zAu._sendNow(reqInf);
 		}
 	},
 	/** Called when the response is received from _areq. */
@@ -407,11 +407,11 @@ zAu = {
 			|| (data && data.$array))
 				data = {'':data};
 			if (data)
-				content += "&data_"+j+"="+encodeURIComponent(jq.toJSON(data));
+				content += "&data_"+j+"="+encodeURIComponent(zAu._JSON(target, data));
 		}
 
 		if (content)
-			zAu._sendNow2({
+			zAu._sendNow({
 				sid: zAu._seqId, uri: uri || zAu.comURI(dt.subURI, dt),
 				dt: dt, content: "dtid=" + dt.id + content,
 				ctli: ctli, ctlc: ctlc, implicit: implicit,
@@ -419,7 +419,15 @@ zAu = {
 			});
 		return true;
 	},
-	_sendNow2: function(reqInf) {
+	_JSON: function (target, data) {
+		if (data.pageX != null && data.x == null)  {
+			var ofs = zk(target||[]).cmOffset();
+			data.x = data.pageX - ofs[0];
+			data.y = data.pageY - ofs[1];
+		}
+		return jq.toJSON(data);
+	},
+	_sendNow: function(reqInf) {
 		var req = jq.zkAjax.xhr(),
 			uri = zAu._useQS(reqInf) ? reqInf.uri + '?' + reqInf.content: null;
 		zAu.sentTime = zUtl.now(); //used by server-push (zkex)

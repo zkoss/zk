@@ -345,7 +345,7 @@ zkm = {
 	docMouseDown: function (evt) {
 		var wgt = zk.Widget.$(evt, {child:true});
 		zkm._docMouseDown(
-			new zk.Event(wgt, 'onMouseDown', zkm._mouseData(evt, wgt), null, evt),
+			new zk.Event(wgt, 'onMouseDown', evt.mouseData(), null, evt),
 			wgt);
 	},
 	_docMouseDown: function (evt, wgt, fake) {
@@ -361,12 +361,6 @@ zkm = {
 		if (wgt)
 			zkm._doEvt(evt);
 	},
-	_mouseData: function (evt, wgt) {
-		var n = evt.target;
-		if (wgt && (!n || n.id != wgt.uuid))
-			n = wgt.$n();
-		return evt.mouseData(n);
-	},
 	docMouseUp: function (evt) {
 		var e = zk.Draggable.ignoreMouseUp();
 		if (e === true)
@@ -380,7 +374,7 @@ zkm = {
 		if (wgt) zk.mouseCapture = null;
 		else wgt = zk.Widget.$(evt, {child:true});
 		if (wgt)
-			zkm._doEvt(new zk.Event(wgt, 'onMouseUp', zkm._mouseData(evt, wgt), null, evt));
+			zkm._doEvt(new zk.Event(wgt, 'onMouseUp', evt.mouseData(), null, evt));
 	},
 	_simFocus: function (wgt) {
 		var cf = zk.currentFocus;
@@ -417,7 +411,7 @@ zkm = {
 		var wgt = zk.mouseCapture;
 		if (!wgt) wgt = zk.Widget.$(evt, {child:true});
 		if (wgt)
-			zkm._doEvt(new zk.Event(wgt, 'onMouseMove', zkm._mouseData(evt, wgt), null, evt));
+			zkm._doEvt(new zk.Event(wgt, 'onMouseMove', evt.mouseData(), null, evt));
 	},
 	docMouseOver: function (evt) {
 		zk.currentPointer[0] = evt.pageX;
@@ -425,12 +419,12 @@ zkm = {
 
 		var wgt = zk.Widget.$(evt, {child:true});
 		if (wgt)
-			zkm._doEvt(new zk.Event(wgt, 'onMouseOver', zkm._mouseData(evt, wgt), null, evt));
+			zkm._doEvt(new zk.Event(wgt, 'onMouseOver', evt.mouseData(), null, evt));
 	},
 	docMouseOut: function (evt) {
 		var wgt = zk.Widget.$(evt, {child:true});
 		if (wgt)
-			zkm._doEvt(new zk.Event(wgt, 'onMouseOut', zkm._mouseData(evt, wgt), null, evt));
+			zkm._doEvt(new zk.Event(wgt, 'onMouseOut', evt.mouseData(), null, evt));
 	},
 	docKeyDown: function (evt) {
 		var wgt = zk.Widget.$(evt, {child:true});
@@ -464,7 +458,7 @@ zkm = {
 		if (evt.which == 1) {
 			var wgt = zk.Widget.$(evt, {child:true});
 			if (wgt)
-				zkm._doEvt(new zk.Event(wgt, 'onClick', zkm._mouseData(evt, wgt), {ctl:true}, evt));
+				zkm._doEvt(new zk.Event(wgt, 'onClick', evt.mouseData(), {ctl:true}, evt));
 			//don't return anything. Otherwise, it replaces event.returnValue in IE (Bug 1541132)
 		}		
 	},
@@ -473,7 +467,7 @@ zkm = {
 
 		var wgt = zk.Widget.$(evt, {child:true});
 		if (wgt) {
-			var wevt = new zk.Event(wgt, 'onDoubleClick', zkm._mouseData(evt, wgt), {ctl:true}, evt);
+			var wevt = new zk.Event(wgt, 'onDoubleClick', evt.mouseData(), {ctl:true}, evt);
 			zkm._doEvt(wevt);
 			if (wevt.domStopped)
 				return false;
@@ -487,7 +481,7 @@ zkm = {
 
 		var wgt = zk.Widget.$(evt, {child:true});
 		if (wgt) {
-			var wevt = new zk.Event(wgt, 'onRightClick', zkm._mouseData(evt, wgt), {ctl:true}, evt);
+			var wevt = new zk.Event(wgt, 'onRightClick', evt.mouseData(), {ctl:true}, evt);
 			zkm._doEvt(wevt);
 			if (wevt.domStopped)
 				return false;

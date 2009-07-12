@@ -986,13 +986,10 @@ zk.copy(jq.Event.prototype, { //ZK extension to jQuery.Event
 		this.preventDefault();
 		this.stopPropagation();
 	},
-	mouseData: function (target) {
-		var ofs = zk(target || this.target).cmOffset(),
-			px = this.pageX, py = this.pageY;
+	mouseData: function () {
 		return zk.copy({
-			x: px - ofs[0], y: py - ofs[1],
-			pageX: px, pageY: py
-			}, this.metaData());
+			pageX: this.pageX, pageY: this.pageY
+		}, this.metaData());
 	},
 	keyData: function () {
 		return zk.copy({
@@ -1030,18 +1027,18 @@ zk.copy(jq.event, {
 		if (type.startsWith('mouse')) {
 			if (type.length > 5)
 				type = 'Mouse' + type.charAt(5).toUpperCase() + type.substring(6);
-			data = zkm._mouseData(evt, target);
+			data = evt.mouseData();
 		} else if (type.startsWith('key')) {
 			if (type.length > 3)
 				type = 'Key' + type.charAt(3).toUpperCase() + type.substring(4);
 			data = evt.keyData();
 		} else if (type == 'dblclick') {
-			data = zkm._mouseData(evt, target);
+			data = evt.mouseData();
 			opts = {ctl:true};
 			type = 'DoubleClick';
 		} else {
 			if (type == 'click') {
-				data = zkm._mouseData(evt, target);
+				data = evt.mouseData();
 				opts = {ctl:true};
 			}
 			type = type.charAt(0).toUpperCase() + type.substring(1);
