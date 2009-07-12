@@ -20,6 +20,6 @@ function appendTo(wgt) {
 }
 
 function createWidgets(parent) {
-	zk.zuml.Parser.createWidgets(parent,
+	zk.zuml.Parser.create(parent,
 		'<div forEach="${[1, 2]}">${each}: <textbox value="${each}"/></div>');
 }

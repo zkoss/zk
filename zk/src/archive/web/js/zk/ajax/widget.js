@@ -667,7 +667,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		else {
 			var oldwgt = zk.Widget.$(n, {exact:true});
 			if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
-			jq(n, zk).replaceWith(this._redrawHTML(skipper));
+			jq(n).replaceWith(this._redrawHTML(skipper));
 			this.bind(desktop, skipper);
 		}
 
@@ -680,7 +680,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		return this;
 	},
 	insertHTML: function (n, where, desktop) {
-		jq(n, zk)[where](this._redrawHTML());
+		jq(n)[where](this._redrawHTML());
 		this.bind(desktop);
 		zWatch.fireDown('beforeSize', null, this);
 		zWatch.fireDown('onSize', null, this);
@@ -716,7 +716,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	replaceChildHTML_: function (child, n, desktop, skipper) {
 		var oldwgt = zk.Widget.$(n, {exact:true});
 		if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
-		jq(n, zk).replaceWith(child._redrawHTML(skipper));
+		jq(n).replaceWith(child._redrawHTML(skipper));
 		child.bind(desktop, skipper);
 	},
 	insertChildHTML_: function (child, before, desktop) {
@@ -1180,6 +1180,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	$: function (n, opts) {
 		var binds = zk.Widget._binds;
 		if (typeof n == 'string') {
+			if (n.charAt(0) == '#') n = n.substring(1);
 			var j = n.indexOf('-');
 			return binds[j >= 0 ? n.substring(0, j): n];
 		}

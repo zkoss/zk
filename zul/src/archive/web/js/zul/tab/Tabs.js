@@ -34,9 +34,9 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 	insertChildHTML_: function (child, before, desktop) {
 		var last = child.previousSibling;
 		if (before || !last)
-			jq(before.$n()).before(child._redrawHTML());
+			jq(before).before(child._redrawHTML());
 		else
-			jq(last.$n()).after(child._redrawHTML());
+			jq(last).after(child._redrawHTML());
 		child.bind(desktop);
 	},
 	domClass_: function (no) {

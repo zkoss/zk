@@ -91,7 +91,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<menubar>
 	<menu label="Modifier la couleur de fond">
 	<menupopup>
-	<menuitem src="/test2/img/inet.png"
+	<menuitem image="/test2/img/inet.png"
 	onClick="alert(&quot;ok&quot;)"/>
 	</menupopup>
 	</menu>

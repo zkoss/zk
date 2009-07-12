@@ -29,11 +29,11 @@
 	<separator />
 	<label value="1. Basic Functionality"></label>
 	<menubar id="menubar">
-		<menu label="File" src="/test2/img/m1.gif">
+		<menu label="File" image="/test2/img/m1.gif">
 			<menupopup>
-				<menuitem src="/test2/img/m1.gif" label="New" onClick="alert(self.label)" />
-				<menuitem src="/test2/img/m2.gif" label="Open" onClick="alert(self.label)" />
-				<menuitem src="/test2/img/m3.gif" label="Save" onClick="alert(self.label)" />
+				<menuitem image="/test2/img/m1.gif" label="New" onClick="alert(self.label)" />
+				<menuitem image="/test2/img/m2.gif" label="Open" onClick="alert(self.label)" />
+				<menuitem image="/test2/img/m3.gif" label="Save" onClick="alert(self.label)" />
 				<menuseparator />
 				<menuitem label="Exit" onClick="alert(self.label)" />
 			</menupopup>
@@ -49,7 +49,7 @@
 				</menu>
 			</menupopup>
 		</menu>
-		<menu src="/test2/img/m2.gif" />
+		<menu image="/test2/img/m2.gif" />
 	</menubar>
 	<window title="More Menu Demo" border="normal">
 		<menubar id="menubar" autodrop="true">

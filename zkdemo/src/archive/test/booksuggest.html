@@ -30,13 +30,13 @@
 		zk.stateless('booksuggest');
 
 		zPkg.load('zk.zuml,zul.wgt,zul.wnd,zul.inp,zul.grid', function () {
-			var main = zk.zuml.Parser.createFromNode('main');
+			var main = zk.zuml.Parser.createAt('#main');
 
 			//handle AU response
 			main.suggest = function (bookInfo) {
 				var suggestInfo = zk.Widget.$('suggestInfo');
 				if (suggestInfo) suggestInfo.detach();
-				main.appendChild(zk.zuml.Parser.createFromNode('suggestInfo', {replaceHTML:false}, {infos: bookInfo}));
+				main.appendChild(zk.zuml.Parser.createAt('#suggestInfo', {replaceHTML:false}, {infos: bookInfo}));
 			};
 		});
 	});

@@ -13,7 +13,7 @@ This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 zk.zuml.Parser = {
-	createWidgets: function (parent, doc, vars) {
+	create: function (parent, doc, vars) {
 		if (typeof doc == 'string')
 			doc = zUtl.parseXML(doc);
 
@@ -31,13 +31,13 @@ zk.zuml.Parser = {
 		var l = cwgts.length;
 		return l ? l == 1 ? cwgts[0]: cwgts: null;
 	},
-	createFromNode: function (node, opts, vars) {
-		var node = jq(node, zk)[0],
+	createAt: function (node, opts, vars) {
+		var node = jq(node)[0],
 			txt = node.innerHTML,
 			j = txt.indexOf('<!--');
 		if (j >= 0)
 			txt = txt.substring(j + 4, txt.lastIndexOf('-->'));
-		var wgt = this.createWidgets(null, '<div>' + txt.trim() + '</div>', vars),
+		var wgt = this.create(null, '<div>' + txt.trim() + '</div>', vars),
 			cwgts = [];
 
 		for (var w = wgt.firstChild, sib; w;) {

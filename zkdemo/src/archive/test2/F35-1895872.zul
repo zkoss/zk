@@ -26,7 +26,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 					<menupopup>
 						<menuitem label="New"
 							onClick="alert(self.label)" />
-						<menuitem disabled="true" src="/test2/img/folder.gif"
+						<menuitem disabled="true" image="/test2/img/folder.gif"
 							label="Disabled item" onClick="alert(self.label)" />
 						<menuitem label="Save"
 							onClick="alert(self.label)" />
@@ -35,15 +35,15 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 							onClick="alert(self.label)" />
 					</menupopup>
 				</menu>
-				<menuitem disabled="true" src="/test2/img/folder.gif"
+				<menuitem disabled="true" image="/test2/img/folder.gif"
 					label="Disabled item" onClick="alert(self.label)" />
-				<menu label="Help" src="/test2/img/folder.gif">
+				<menu label="Help" image="/test2/img/folder.gif">
 					<menupopup>
 						<menuitem label="Index"
 							onClick="alert(self.label)" />
 						<menu label="About">
 							<menupopup>
-								<menuitem src="/test2/img/folder.gif"
+								<menuitem image="/test2/img/folder.gif"
 									label="About ZK" onClick="alert(self.label)" />
 								<menuitem label="About Potix"
 									onClick="alert(self.label)" />
@@ -51,7 +51,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 						</menu>
 					</menupopup>
 				</menu>
-				<menu src="/test2/img/folder.gif">
+				<menu image="/test2/img/folder.gif">
 					<menupopup>
 						<menuitem label="Index"
 							onClick="alert(self.label)" />
@@ -89,7 +89,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 					<menupopup>
 						<menuitem label="New"
 							onClick="alert(self.label)" checkmark="true" autocheck="true" />
-						<menuitem disabled="true" src="/test2/img/folder.gif"
+						<menuitem disabled="true" image="/test2/img/folder.gif"
 							label="Disabled item" onClick="alert(self.label)" />
 						<menuitem label="Save"
 							onClick="alert(self.label)" />
@@ -98,15 +98,15 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 							onClick="alert(self.label)" />
 					</menupopup>
 				</menu>
-				<menuitem disabled="true" src="/test2/img/folder.gif"
+				<menuitem disabled="true" image="/test2/img/folder.gif"
 					label="Disabled item" onClick="alert(self.label)" />
-				<menu label="Help" src="/test2/img/folder.gif">
+				<menu label="Help" image="/test2/img/folder.gif">
 					<menupopup>
 						<menuitem label="Index"
 							onClick="alert(self.label)" />
 						<menu label="About">
 							<menupopup>
-								<menuitem src="/test2/img/folder.gif"
+								<menuitem image="/test2/img/folder.gif"
 									label="About ZK" onClick="alert(self.label)" />
 								<menuitem label="About Potix"
 									onClick="alert(self.label)" />
@@ -114,7 +114,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 						</menu>
 					</menupopup>
 				</menu>
-				<menu src="/test2/img/folder.gif">
+				<menu image="/test2/img/folder.gif">
 					<menupopup>
 						<menuitem label="Index"
 							onClick="alert(self.label)" />

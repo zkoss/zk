@@ -184,7 +184,7 @@ zkm = {
 		if (inf) {
 			var wgt = inf[1];
 			if (inf[2]) wgt.bind(inf[0]); //binding
-			else wgt.replaceHTML(wgt.uuid, inf[0]);
+			else wgt.replaceHTML('#' + wgt.uuid, inf[0]);
 			return zkm.exec(zkm.mtBL0); //loop back to check if loading
 		}
 

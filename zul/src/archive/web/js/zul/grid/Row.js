@@ -88,7 +88,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 				this.encloseChildHTML_({child: child, index: child.getChildIndex(),
 						zclass: this.getZclass(), cls: cls}));
 		else
-			jq(this.$n()).append(
+			jq(this).append(
 				this.encloseChildHTML_({child: child, index: child.getChildIndex(),
 						zclass: this.getZclass(), cls: cls}));
 		

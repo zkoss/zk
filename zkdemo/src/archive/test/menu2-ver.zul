@@ -1,46 +1,46 @@
 <zk><vbox>
 	<menubar id="menubar" width="100%" orient="vertical">
-		<menu label="Project" src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png">
+		<menu label="Project" image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png">
 			<menupopup>
-				<menuitem src="/img/Centigrade-Widget-Icons/BriefcaseSpark-16x16.png" label="New"  checked="true"
+				<menuitem image="/img/Centigrade-Widget-Icons/BriefcaseSpark-16x16.png" label="New"  checked="true"
 					onClick="alert(self.label)" />
 				<menuitem label="New2"  checked="true"
 					onClick="self.checked = !self.checked" />
 				<menuitem label="New3"
 					onClick="self.checked = !self.checked" />
-				<menuitem src="/img/Centigrade-Widget-Icons/BriefcaseOpen-16x16.png" label="Open"
+				<menuitem image="/img/Centigrade-Widget-Icons/BriefcaseOpen-16x16.png" label="Open"
 					onClick="alert(self.label)" disabled="true"/>
-				<menuitem src="/img/Centigrade-Widget-Icons/DisketteBlack-16x16.png" label="Save"
+				<menuitem image="/img/Centigrade-Widget-Icons/DisketteBlack-16x16.png" label="Save"
 					onClick="alert(self.label)" disabled="true"/>
 				<menuseparator />
 				<menuitem label="Google"
 					href="http://www.google.com"/>
 				<menuitem label="New2"  checked="true" disabled="true"
 					onClick="self.checked = !self.checked" />
-				<menuitem label="Exit" src="/img/Centigrade-Widget-Icons/DoorOpen-16x16.png" onClick="alert(self.label)" />
+				<menuitem label="Exit" image="/img/Centigrade-Widget-Icons/DoorOpen-16x16.png" onClick="alert(self.label)" />
 				<menu label="sub">
 					<menupopup>
-						<menuitem src="/img/Centigrade-Widget-Icons/BriefcaseSpark-16x16.png" label="New"  checked="true"
+						<menuitem image="/img/Centigrade-Widget-Icons/BriefcaseSpark-16x16.png" label="New"  checked="true"
 							onClick="alert(self.label)" />
 						<menuitem label="New2"  checked="true"
 							onClick="self.checked = !self.checked" />
 						<menuitem label="New3"
 							onClick="self.checked = !self.checked" />
-						<menuitem src="/img/Centigrade-Widget-Icons/BriefcaseOpen-16x16.png" label="Open"
+						<menuitem image="/img/Centigrade-Widget-Icons/BriefcaseOpen-16x16.png" label="Open"
 							onClick="alert(self.label)" disabled="true"/>
-						<menuitem src="/img/Centigrade-Widget-Icons/DisketteBlack-16x16.png" label="Save"
+						<menuitem image="/img/Centigrade-Widget-Icons/DisketteBlack-16x16.png" label="Save"
 							onClick="alert(self.label)" disabled="true"/>
 						<menuseparator />
 						<menuitem label="New2"  checked="true" disabled="true"
 							onClick="self.checked = !self.checked" />
-						<menuitem label="Exit" src="/img/Centigrade-Widget-Icons/DoorOpen-16x16.png" onClick="alert(self.label)" />
+						<menuitem label="Exit" image="/img/Centigrade-Widget-Icons/DoorOpen-16x16.png" onClick="alert(self.label)" />
 						<menuitem label="Google"
 							href="http://www.google.com"/>
 					</menupopup>
 				</menu>
 			</menupopup>
 		</menu>
-		<menu label="Help" src="/img/Centigrade-Widget-Icons/QuestionmarkButton-16x16.png">
+		<menu label="Help" image="/img/Centigrade-Widget-Icons/QuestionmarkButton-16x16.png">
 			<menupopup>
 				<menuitem label="Index" onClick="alert(self.label)" checked="true"/>
 				<menu label="About">
@@ -53,23 +53,23 @@
 				</menu>
 			</menupopup>
 		</menu>
-		<menu src="/img/Centigrade-Widget-Icons/Spyglass-16x16.png">
+		<menu image="/img/Centigrade-Widget-Icons/Spyglass-16x16.png">
 			<menupopup>
 				<menuitem label="Index" onClick="alert(self.label)" />
 			</menupopup>
 		</menu>
-		<menuitem src="/img/Centigrade-Widget-Icons/BriefcaseSpark-16x16.png" label="New" checked="true"
+		<menuitem image="/img/Centigrade-Widget-Icons/BriefcaseSpark-16x16.png" label="New" checked="true"
 			onClick="alert(self.label)" />
 		<menuitem label="Google"
 			href="http://www.google.com"/>
-		<menuitem src="/img/Centigrade-Widget-Icons/DisketteBlack-16x16.png"
+		<menuitem image="/img/Centigrade-Widget-Icons/DisketteBlack-16x16.png"
 			onClick="alert(self.label)"/>
 			
-		<menuitem src="/img/Centigrade-Widget-Icons/BriefcaseSpark-16x16.png" label="New"
+		<menuitem image="/img/Centigrade-Widget-Icons/BriefcaseSpark-16x16.png" label="New"
 			onClick="alert(self.label)"  disabled="true"/>
 		<menuitem label="Open"
 			onClick="alert(self.label)" disabled="true"/>
-		<menuitem src="/img/Centigrade-Widget-Icons/DisketteBlack-16x16.png"
+		<menuitem image="/img/Centigrade-Widget-Icons/DisketteBlack-16x16.png"
 			onClick="alert(self.label)" disabled="true"/>
 	</menubar>
 	</vbox>

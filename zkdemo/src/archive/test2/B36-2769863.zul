@@ -21,25 +21,25 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
   it should not have scroll bar !
   <menubar id="menubar" width="200px">
     <menu label="Project"
-      src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png">
+      image="/img/Centigrade-Widget-Icons/Briefcase-16x16.png">
       <menupopup>
-	<menuitem src="/img/Centigrade-Widget-Icons/BriefcaseSpark-16x16.png"
+	<menuitem image="/img/Centigrade-Widget-Icons/BriefcaseSpark-16x16.png"
 	  label="New"
 	  onClick="alert(self.label)" />
-	<menuitem src="/img/Centigrade-Widget-Icons/BriefcaseOpen-16x16.png"
+	<menuitem image="/img/Centigrade-Widget-Icons/BriefcaseOpen-16x16.png"
 	  label="Open"
 	  onClick="alert(self.label)" />
-	<menuitem src="/img/Centigrade-Widget-Icons/DisketteBlack-16x16.png"
+	<menuitem image="/img/Centigrade-Widget-Icons/DisketteBlack-16x16.png"
 	  label="Save"
 	  onClick="alert(self.label)" />
 	<menuseparator />
 	<menuitem label="Exit"
-	  src="/img/Centigrade-Widget-Icons/DoorOpen-16x16.png"
+	  image="/img/Centigrade-Widget-Icons/DoorOpen-16x16.png"
 	  onClick="alert(self.label)" />
       </menupopup>
     </menu>
     <menu label="Help"
-      src="/img/Centigrade-Widget-Icons/QuestionmarkButton-16x16.png">
+      image="/img/Centigrade-Widget-Icons/QuestionmarkButton-16x16.png">
       <menupopup>
 	<menuitem label="Index" onClick="alert(self.label)" />
 	<menu label="About">
@@ -52,7 +52,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 	</menu>
       </menupopup>
     </menu>
-    <menu src="/img/Centigrade-Widget-Icons/Spyglass-16x16.png">
+    <menu image="/img/Centigrade-Widget-Icons/Spyglass-16x16.png">
       <menupopup>
 	<menuitem label="Index" onClick="alert(self.label)" />
       </menupopup>
