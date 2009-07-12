@@ -190,7 +190,14 @@ public class Lighter {
 
 				if (cc == 'c' && in.charAt(j++) == ':') { //restrict but safer
 					outDirective(out, ci, in.substring(j, k));
-				} else if (cc != '/' && cc != '%')
+				} else if (cc == '%') {
+					if (in.charAt(j + 1) == '-') {
+						k = in.indexOf("--%>", ++j);
+						if (k < 0)
+							throw new IOException("Non-terminated <%--");
+						k += 3;
+					}
+				} else if (cc != '/')
 					throw new IOException(ci.message("Unknown <"+cc));
 				j = k;
 			} else {
