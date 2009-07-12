@@ -214,6 +214,18 @@ public class Listitem extends XulElement implements org.zkoss.zul.api.Listitem {
 		return cell;
 	}
 
+	/** @deprecated As of release 3.5.0, it is redundant since it
+	 * is the same {@link #getImage}.
+	 */
+	public String getSrc() {
+		return getImage();
+	}
+	/** @deprecated As of release 3.5.0, it is redundant since it
+	 * is the same {@link #getSrc}.
+	 */
+	public void setSrc(String src) {
+		setImage(src);
+	}
 	/** Returns the image of the {@link Listcell} it contains.
 	 */
 	public String getImage() {

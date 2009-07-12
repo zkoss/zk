@@ -84,6 +84,18 @@ abstract public class LabelImageElement extends LabelElement implements org.zkos
 			smartUpdate("image", new EncodedImageURL());
 		}
 	}
+	/** @deprecated As of release 3.5.0, it is redudant since
+	 * it is the same as {@link #getImage}
+	 */
+	public String getSrc() {
+		return getImage();
+	}
+	/** @deprecated As of release 3.5.0, it is redudant since
+	 * it is the same as {@link #setImage}
+	 */
+	public void setSrc(String src) {
+		setImage(src);
+	}
 
 	/** Sets the content directly.
 	 * <p>Default: null.
