@@ -247,12 +247,13 @@ zk = function (sel) {
 		}
 	},
 
-	stateless: function (dtid) {
+	stateless: function (dtid, updateURI) {
 		var Desktop = zk.Desktop, dt;
-		if (!dtid) dtid = 'z_auto' + zk._ssc++;
+		dtid = dtid || ('z_auto' + zk._ssc++);
 		dt = Desktop.all[dtid];
 		if (dt && !dt.stateless) throw "Desktop conflict";
-		return dt || new Desktop(dtid, null, true);
+		zk.updateURI = zk.updateURI || updateURI;
+		return dt || new Desktop(dtid, updateURI, true);
 	},
 	_ssc: 0
 });
