@@ -248,7 +248,8 @@
 }
 <%-- Bug-2432784
 <c:if test="${c:isExplorer7()}">
-.z-tab-disd .z-tab-hl, .z-tab-disd-seld .z-tab-hl {	room: 1 }</c:if>
+.z-tab-disd .z-tab-hl, .z-tab-disd-seld .z-tab-hl {	room: 1 }
+</c:if>
 --%>
 .z-tab-disd .z-tab-hl:hover,
 .z-tab-disd-seld .z-tab-hl:hover {
@@ -826,15 +827,5 @@
 .z-tab-accordion-tl,
 .z-tab-accordion-tr {
 	background-image: url(${c:encodeURL('~./zul/img/tab/accd-corner.gif')});
-}
-<%-- tree.css.dsp --%>
-tr.z-treerow td.z-treerow-focus {
-	background-image: url(${c:encodeURL('~./zul/img/common/focusd.gif')});
-}
-span.z-vfiletree-ico,span.z-vfiletree-firstspacer {
-	background-image: url(${c:encodeURL('~./zul/img/tree/vfolder-toggle.gif')});
-}
-span.z-vfiletree-tee, span.z-vfiletree-last {
-	background-image: url(${c:encodeURL('~./zul/img/tree/ventity.gif')});
 }
 </c:if>

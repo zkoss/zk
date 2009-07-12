@@ -305,7 +305,8 @@ div.z-filetree-header th.z-treecol, div.z-filetree-header th.z-auxheader,
 div.z-vfiletree-header th.z-treecol, div.z-vfiletree-header th.z-auxheader {
 	text-overflow: ellipsis;
 }
-div.z-treecol-cnt, div.z-dottreecol-cnt, div.z-filetreecol-cnt, div.z-vfiletreecol-cnt, .z-auxheader-cnt {
+div.z-treecol-cnt, div.z-dottreecol-cnt, div.z-filetreecol-cnt,
+div.z-vfiletreecol-cnt, .z-auxheader-cnt {
 	white-space: nowrap; <%-- Bug #1839960  --%>
 }
 div.z-treefooter-cnt, div.z-treecell-cnt, div.z-treecol-cnt,
@@ -315,23 +316,38 @@ div.z-vfiletreefooter-cnt, div.z-vfiletreecell-cnt, div.z-vfiletreecol-cnt,
 .z-auxheader-cnt {
 	position: relative; <%-- Bug #1825896  --%>
 }
-div.z-treecell-cnt, div.z-dottreecell-cnt, div.z-filetreecell-cnt, div.z-vfiletreecell-cnt {
+div.z-treecell-cnt, div.z-dottreecell-cnt,
+div.z-filetreecell-cnt, div.z-vfiletreecell-cnt {
 	width: 100%;
 }
-div.z-tree-body, div.z-dottree-body, div.z-filetree-body, div.z-vfiletree-body {
+div.z-tree-body, div.z-dottree-body,
+div.z-filetree-body, div.z-vfiletree-body {
 	position: relative; <%-- Bug 1766244  --%>
 }
-tr.z-tree-faker, tr.z-dottree-faker, tr.z-filetree-faker, tr.z-vfiletree-faker {
+tr.z-tree-faker, tr.z-dottree-faker,
+tr.z-filetree-faker, tr.z-vfiletree-faker {
 	position: absolute; top: -1000px; left: -1000px;<%-- fixed a white line for IE --%>
 }
-span.z-tree-root-open, span.z-tree-root-close, span.z-tree-tee-open, span.z-tree-tee-close,
-span.z-tree-last-open, span.z-tree-last-close, span.z-tree-tee, span.z-tree-vbar, span.z-tree-last, span.z-tree-spacer,
-span.z-dottree-root-open, span.z-dottree-root-close, span.z-dottree-tee-open, span.z-dottree-tee-close,
-span.z-dottree-last-open, span.z-dottree-last-close, span.z-dottree-tee, span.z-dottree-vbar, span.z-dottree-last, span.z-dottree-spacer,
-span.z-filetree-root-open, span.z-filetree-root-close, span.z-filetree-tee-open, span.z-filetree-tee-close,
-span.z-filetree-last-open, span.z-filetree-last-close, span.z-filetree-tee, span.z-filetree-vbar, span.z-filetree-last, span.z-filetree-spacer,
-span.z-vfiletree-root-open, span.z-vfiletree-root-close, span.z-vfiletree-tee-open, span.z-vfiletree-tee-close,
-span.z-vfiletree-last-open, span.z-vfiletree-last-close, span.z-vfiletree-tee, span.z-vfiletree-vbar, span.z-vfiletree-last, span.z-vfiletree-spacer {
+span.z-tree-root-open, span.z-tree-root-close,
+span.z-tree-tee-open, span.z-tree-tee-close,
+span.z-tree-last-open, span.z-tree-last-close,
+span.z-tree-tee, span.z-tree-vbar,
+span.z-tree-last, span.z-tree-spacer,
+span.z-dottree-root-open, span.z-dottree-root-close,
+span.z-dottree-tee-open, span.z-dottree-tee-close,
+span.z-dottree-last-open, span.z-dottree-last-close,
+span.z-dottree-tee, span.z-dottree-vbar,
+span.z-dottree-last, span.z-dottree-spacer,
+span.z-filetree-root-open, span.z-filetree-root-close,
+span.z-filetree-tee-open, span.z-filetree-tee-close,
+span.z-filetree-last-open, span.z-filetree-last-close,
+span.z-filetree-tee, span.z-filetree-vbar,
+span.z-filetree-last, span.z-filetree-spacer,
+span.z-vfiletree-root-open, span.z-vfiletree-root-close,
+span.z-vfiletree-tee-open, span.z-vfiletree-tee-close,
+span.z-vfiletree-last-open, span.z-vfiletree-last-close,
+span.z-vfiletree-tee, span.z-vfiletree-vbar,
+span.z-vfiletree-last, span.z-vfiletree-spacer {
 	height: 18px;
 }
 
@@ -342,12 +358,19 @@ div.z-tree, div.z-dottree, div.z-filetree, div.z-vfiletree {
 tr.z-treerow td.z-treerow-focus {
 	background-image: url(${c:encodeURL('~./zul/img/common/focusd.gif')});
 }
+span.z-vfiletree-ico, span.z-vfiletree-firstspacer {
+	background-image: url(${c:encodeURL('~./zul/img/tree/vfolder-toggle.gif')});
+}
+span.z-vfiletree-tee, span.z-vfiletree-last {
+	background-image: url(${c:encodeURL('~./zul/img/tree/ventity.gif')});
+}
 </c:if>
 </c:if>
 
 <%-- Gecko --%>
 <c:if test="${c:isGecko()}">
-.z-word-wrap div.z-treecell-cnt, .z-word-wrap div.z-treefooter-cnt, 
+.z-word-wrap div.z-treecell-cnt,
+.z-word-wrap div.z-treefooter-cnt, 
 .z-word-wrap div.z-treecol-cnt {
 	overflow: hidden;
 	-moz-binding: url(${c:encodeURL('~./zk/wordwrap.xml#wordwrap')});

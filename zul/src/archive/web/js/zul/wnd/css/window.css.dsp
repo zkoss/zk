@@ -406,7 +406,7 @@
 .z-window-modal-hr,
 .z-window-highlighted-hr,
 .z-window-overlapped-hr,
- .z-window-popup-hr {
+.z-window-popup-hr {
 	background-image: url(${c:encodeURL('~./zul/img/wnd/wnd-ol-hr.gif')});
 }
 .z-window-embedded-hr,
