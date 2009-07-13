@@ -329,11 +329,10 @@ zkMenu2 = { // menu
 			if (zk.ie && zkMenu2.isTop(menu))
 				setTimeout(function (){try {
 					anc.focus();
-					zkau.currentFocus = anc;
+					zkau.currentFocus = anc; // Bug 2807475
 				} catch (e){}},10); // Bug 2614901
 			else {
 				anc.focus();
-				zkau.currentFocus = anc;
 			}
 		}
 	},
