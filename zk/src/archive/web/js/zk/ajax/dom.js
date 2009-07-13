@@ -39,14 +39,14 @@ zk.override(jq.fn, zjq._fn = {}, {
 		return ret;
 	},
 	replaceWith: function (w, desktop, skipper) {
-		if (!zk.Widget.isInstance(w)) {
+		if (!zk.Widget.isInstance(w))
 			return zjq._fn.replaceWith.apply(this, arguments);
 
 		var n = this[0];
 		if (n) w.replaceHTML(n, desktop, skipper);
 		return this;
 	}
-}});
+});
 jq.fn.init.prototype = jq.fn;
 
 jq.each(['before','after','append','prepend'], function (i, nm) {
