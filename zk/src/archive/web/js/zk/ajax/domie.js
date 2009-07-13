@@ -12,12 +12,12 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.override(jq.fn, zjq._fn, {
+zk.override(jq.fn, zjq._fnie = {}, {
 	before: function () {
 		var e = this[0], ref;
 		if (e) ref = e.previousSibling;
 
-		ret = zjq._fn.before.apply(this, arguments);
+		ret = zjq._fnie.before.apply(this, arguments);
 
 		if (e) zjq._fixDom(ref ? ref.nextSibling: e.parentNode.firstChild, e);
 		return ret;
@@ -26,7 +26,7 @@ zk.override(jq.fn, zjq._fn, {
 		var e = this[0], ref;
 		if (e) ref = e.nextSibling;
 
-		ret = zjq._fn.after.apply(this, arguments);
+		ret = zjq._fnie.after.apply(this, arguments);
 
 		if (e) zjq._fixDom(e.nextSibling, ref);
 		return ret;
@@ -35,7 +35,7 @@ zk.override(jq.fn, zjq._fn, {
 		var e = this[0], ref;
 		if (e) ref = e.lastChild;
 
-		ret = zjq._fn.append.apply(this, arguments);
+		ret = zjq._fnie.append.apply(this, arguments);
 
 		if (e) zjq._fixDom(ref ? ref.nextSibling: e.firstChild);
 		return ret;
@@ -44,7 +44,7 @@ zk.override(jq.fn, zjq._fn, {
 		var e = this[0], ref;
 		if (e) ref = e.firstChild;
 
-		ret = zjq._fn.prepend.apply(this, arguments);
+		ret = zjq._fnie.prepend.apply(this, arguments);
 
 		if (e) zjq._fixDom(e.firstChild, ref);
 		return ret;
@@ -56,7 +56,7 @@ zk.override(jq.fn, zjq._fn, {
 			ref2 = e.nextSibling;
 		}
 
-		ret = zjq._fn.replaceWith.apply(this, arguments);
+		ret = zjq._fnie.replaceWith.apply(this, arguments);
 
 		if (e) zjq._fixDom(ref ? ref.nextSibling: e.parentNode.firstChild, ref2);
 		return ret;
@@ -64,7 +64,7 @@ zk.override(jq.fn, zjq._fn, {
 	html: function (content) {
 		var e = content === undefined ? null: this[0];
 
-		ret = zjq._fn.html.apply(this, arguments);
+		ret = zjq._fnie.html.apply(this, arguments);
 
 		if (e) zjq._fixDom(e.firstChild);
 		return ret;

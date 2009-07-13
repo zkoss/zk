@@ -37,9 +37,34 @@ zk.override(jq.fn, zjq._fn = {}, {
 		var ret = zjq._fn.init.call(this, sel, ctx);
 		ret.zk = new zjq(ret);
 		return ret;
+	},
+	replaceWith: function (w, desktop, skipper) {
+		if (!zk.Widget.isInstance(w)) {
+			return zjq._fn.replaceWith.apply(this, arguments);
+
+		var n = this[0];
+		if (n) w.replaceHTML(n, desktop, skipper);
+		return this;
 	}
 });
 jq.fn.init.prototype = jq.fn;
+
+jq.each(['before','after','append','prepend'], function (i, nm) {
+	zjq._fn[nm] = jq.fn[nm];
+	jq.fn[nm] = function (w, desktop) {
+		if (!zk.Widget.isInstance(w))
+			return zjq._fn[nm].apply(this, arguments);
+
+		if (!this.length) return this;
+		if (!zk.Desktop._ndt) zk.stateless();
+
+		var ret = zjq._fn[nm].call(this, w._redrawHTML());
+		w.bind(desktop);
+		zWatch.fireDown('beforeSize', null, w);
+		zWatch.fireDown('onSize', null, w);
+		return ret;
+	};
+});
 
 zjq.prototype = { //ZK extension
 	widget: function () {

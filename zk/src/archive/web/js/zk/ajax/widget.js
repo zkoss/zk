@@ -679,13 +679,6 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 		return this;
 	},
-	insertHTML: function (n, where, desktop) {
-		jq(n)[where](this._redrawHTML());
-		this.bind(desktop);
-		zWatch.fireDown('beforeSize', null, this);
-		zWatch.fireDown('onSize', null, this);
-		return this;
-	},
 	_redrawHTML: function (skipper) {
 		var out = [];
 		this.redraw(out, skipper);

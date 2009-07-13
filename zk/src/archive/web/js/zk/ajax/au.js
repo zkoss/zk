@@ -787,7 +787,7 @@ zAu.cmd1 = {
 		eval(code);
 	},
 	_asBodyChild: function (child) {
-		child.insertHTML(document.body, "append");
+		jq(document.body).append(child);
 	},
 	rm: function (uuid, wgt) {
 		if (wgt)
