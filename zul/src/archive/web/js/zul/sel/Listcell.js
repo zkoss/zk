@@ -95,8 +95,9 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 					s += ' style="visibility:hidden"';
 				s += '/>';
 			}
+			if (s) return s;
 		}
-		return s;
+		return (!this.getImage() && !this.getLabel() && !this.firstChild) ? "&nbsp;": '';
 	},
 	doMouseOver_: function(evt) {
 		if (zk.gecko && (this._draggable || this.parent._draggable)) {
