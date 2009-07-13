@@ -46,7 +46,7 @@ zk.override(jq.fn, zjq._fn = {}, {
 		if (n) w.replaceHTML(n, desktop, skipper);
 		return this;
 	}
-});
+}});
 jq.fn.init.prototype = jq.fn;
 
 jq.each(['before','after','append','prepend'], function (i, nm) {
