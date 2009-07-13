@@ -21,7 +21,7 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 	show: function (owner, msg) {
 		this.parent = owner; //fake
 		this.msg = msg;
-		this.insertHTML(document.body, "append");
+		jq(document.body).append(this);
 		this.open(owner, null, "end_before", {overflow:true});
 	},
 	destroy: function () {
