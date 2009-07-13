@@ -123,7 +123,6 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 	private transient Collection _heads;
 	private int _hdcnt;
 	private String _innerWidth = "100%";
-	private transient ListboxDrawerEngine _engine;
 	
 	private String _pagingPosition = "bottom";
 	/** The name. */
@@ -297,12 +296,6 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 	 */
 	public Collection getHeads() {
 		return _heads;
-	}
-	/** ROD mold use only.
-	 */
-	/*package*/ final boolean inSpecialMold() {
-		final String mold = (String) getAttribute("special-mold-name");
-		return mold != null && getMold().equals(mold);
 	}
 	
 	/** Returns whether the HTML's select tag is used.
@@ -1650,8 +1643,6 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 	 * @since 3.5.1
 	 */
 	public Iterator getVisibleChildrenIterator() {
-		if (inSpecialMold())
-			return _engine.getVisibleChildrenIterator();
 		return new VisibleChildrenIterator();
 	}
 	/**
@@ -2068,36 +2059,33 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 	 */
 	public void onInitRender() {
 		removeAttribute(ATTR_ON_INIT_RENDER_POSTED);
-		if (inSpecialMold()) {
-			_engine.onInitRender();
-		} else {
-			final Renderer renderer = new Renderer();
-			try {
-				int pgsz, ofs;
-				if (inPagingMold()) {
-					pgsz = _pgi.getPageSize();
-					ofs = _pgi.getActivePage() * pgsz;
-					final int cnt = getItemCount();
-					if (ofs >= cnt) { //not possible; just in case
-						ofs = cnt - pgsz;
-						if (ofs < 0) ofs = 0;
-					}
-				} else {
-					pgsz = inSelectMold() ? getItemCount(): _rows > 0 ? _rows + 5 : 20;
-					ofs = 0;
-					//we don't know # of visible rows, so a 'smart' guess
-					//It is OK since client will send back request if not enough
+
+		final Renderer renderer = new Renderer();
+		try {
+			int pgsz, ofs;
+			if (inPagingMold()) {
+				pgsz = _pgi.getPageSize();
+				ofs = _pgi.getActivePage() * pgsz;
+				final int cnt = getItemCount();
+				if (ofs >= cnt) { //not possible; just in case
+					ofs = cnt - pgsz;
+					if (ofs < 0) ofs = 0;
 				}
-	
-				int j = 0;
-				for (Iterator it = getItems().listIterator(ofs);
-				j < pgsz && it.hasNext(); ++j)
-					renderer.render((Listitem)it.next());
-			} catch (Throwable ex) {
-				renderer.doCatch(ex);
-			} finally {
-				renderer.doFinally();
+			} else {
+				pgsz = inSelectMold() ? getItemCount(): _rows > 0 ? _rows + 5 : 20;
+				ofs = 0;
+				//we don't know # of visible rows, so a 'smart' guess
+				//It is OK since client will send back request if not enough
 			}
+
+			int j = 0;
+			for (Iterator it = getItems().listIterator(ofs);
+			j < pgsz && it.hasNext(); ++j)
+				renderer.render((Listitem)it.next());
+		} catch (Throwable ex) {
+			renderer.doCatch(ex);
+		} finally {
+			renderer.doFinally();
 		}
 	}
 	private void postOnInitRender() {
@@ -2328,8 +2316,6 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 			} else if (inPagingMold()) { //change to paging
 				if (_pgi != null) addPagingListener(_pgi);
 				else newInternalPaging();
-			} else if (inSpecialMold() && _engine == null) {
-				_engine = new ListboxDrawerEngine(this);
 			}
 		}
 	}
@@ -2583,8 +2569,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 	implements Cropper {
 		//--Cropper--//
 		public boolean isCropper() {
-			return (inPagingMold() && getPageSize() <= getItemCount())
-				|| inSpecialMold();
+			return (inPagingMold() && getPageSize() <= getItemCount());
 				//Single page is considered as not a cropper.
 				//isCropper is called after a component is removed, so
 				//we have to test >= rather than >
@@ -2595,8 +2580,6 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 		public Set getAvailableAtClient() {
 			if (!isCropper())
 				return null;
-			if (inSpecialMold())
-				return _engine.getAvailableAtClient();
 
 			final Set avail = new LinkedHashSet(32);
 			avail.addAll(_heads);

@@ -20,11 +20,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		this.heads = [];
 	},
 
-	//ROD Mold
 	_innerWidth: "100%",
-	_innerHeight: "100%",
-	_innerTop: "height:0px;display:none",
-	_innerBottom: "height:0px;display:none",
 
 	$define: {
 		pagingPosition: _zkf = function () {
@@ -51,19 +47,6 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (this.eheadtbl) this.eheadtbl.style.width = v;
 			if (this.ebodytbl) this.ebodytbl.style.width = v;
 			if (this.efoottbl) this.efoottbl.style.width = v;
-		},
-		//ROD
-		innerHeight: function (v) {
-			if (v == null) this._innerHeight = v = "100%";
-			// TODO for ROD Mold
-		},
-		innerTop: function (v) {
-			if (v == null) this._innerTop = v = "height:0px;display:none";
-			// TODO for ROD Mold
-		},
-		innerBottom: function (v) {
-			if (v == null) this._innerBottom = v = "height:0px;display:none";
-			// TODO for ROD Mold
 		}
 	},
 

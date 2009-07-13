@@ -429,9 +429,6 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 	 * @since 3.5.1
 	 */
 	public Iterator getVisibleChildrenIterator() {
-		final Grid grid = getGrid();
-		if (grid != null && grid.inSpecialMold())
-			return grid.getDrawerEngine().getVisibleChildrenIterator();
 		return new VisibleChildrenIterator();
 	}
 	/**
@@ -520,9 +517,8 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 		public boolean isCropper() {
 			final Grid grid = getGrid();
 			return grid != null &&
-				((grid.inPagingMold()
-					&& grid.getPageSize() <= getChildren().size())
-				|| grid.inSpecialMold());
+				(grid.inPagingMold()
+				&& grid.getPageSize() <= getChildren().size());
 				//Single page is considered as not a cropper.
 				//isCropper is called after a component is removed, so
 				//we have to test >= rather than >
@@ -535,9 +531,6 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 				return null;
 
 			final Grid grid = getGrid();
-			if (grid.inSpecialMold())
-				return grid.getDrawerEngine().getAvailableAtClient();
-
 			final Set avail = new LinkedHashSet(32);
 			final Paginal pgi = grid.getPaginal();
 			int pgsz = pgi.getPageSize();

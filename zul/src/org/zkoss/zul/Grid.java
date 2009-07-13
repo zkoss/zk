@@ -121,7 +121,6 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	/** the # of rows to preload. */
 	private int _preloadsz = 7;
 	private String _innerWidth = "100%";
-	private transient GridDrawerEngine _engine;
 	private boolean _fixedLayout, _vflex;
 	
 	static {
@@ -448,18 +447,6 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	 */
 	/*package*/ boolean inPagingMold() {
 		return "paging".equals(getMold());
-	}
-
-	/** ROD mold use only.
-	 */
-	/*package*/ final boolean inSpecialMold() {
-		final String mold = (String) getAttribute("special-mold-name");
-		return mold != null && getMold().equals(mold);
-	}
-	/** ROD mold use only.
-	 */
-	/*package*/ final GridDrawerEngine getDrawerEngine() {
-		return _engine;
 	}
 	
 	//-- ListModel dependent codes --//
@@ -859,36 +846,33 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	 */
 	public void onInitRender() {
 		removeAttribute(ATTR_ON_INIT_RENDER_POSTED);
-		if (inSpecialMold()) {
-			_engine.onInitRender();
-		} else {
-			final Renderer renderer = new Renderer();
-			try {
-				int pgsz, ofs;
-				if (inPagingMold()) {
-					pgsz = _pgi.getPageSize();
-					ofs = _pgi.getActivePage() * pgsz;
-					final int cnt = _rows.getChildren().size();
-					if (ofs >= cnt) { //not possible; just in case
-						ofs = cnt - pgsz;
-						if (ofs < 0) ofs = 0;
-					}
-				} else {
-					pgsz = 20;
-					ofs = 0;
-					//we don't know # of visible rows, so a 'smart' guess
-					//It is OK since client will send back request if not enough
+
+		final Renderer renderer = new Renderer();
+		try {
+			int pgsz, ofs;
+			if (inPagingMold()) {
+				pgsz = _pgi.getPageSize();
+				ofs = _pgi.getActivePage() * pgsz;
+				final int cnt = _rows.getChildren().size();
+				if (ofs >= cnt) { //not possible; just in case
+					ofs = cnt - pgsz;
+					if (ofs < 0) ofs = 0;
 				}
-	
-				int j = 0;
-				for (Iterator it = _rows.getChildren().listIterator(ofs);
-				j < pgsz && it.hasNext(); ++j)
-					renderer.render((Row)it.next());
-			} catch (Throwable ex) {
-				renderer.doCatch(ex);
-			} finally {
-				renderer.doFinally();
+			} else {
+				pgsz = 20;
+				ofs = 0;
+				//we don't know # of visible rows, so a 'smart' guess
+				//It is OK since client will send back request if not enough
 			}
+
+			int j = 0;
+			for (Iterator it = _rows.getChildren().listIterator(ofs);
+			j < pgsz && it.hasNext(); ++j)
+				renderer.render((Row)it.next());
+		} catch (Throwable ex) {
+			renderer.doCatch(ex);
+		} finally {
+			renderer.doFinally();
 		}
 	}
 	private void postOnInitRender() {
@@ -1144,8 +1128,6 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 			} else if (inPagingMold()) { //change to paging
 				if (_pgi != null) addPagingListener(_pgi);
 				else newInternalPaging();
-			} else if (inSpecialMold() && _engine == null) {
-				_engine = new GridDrawerEngine(this);
 			}
 		}
 	}
