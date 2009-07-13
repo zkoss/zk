@@ -41,6 +41,7 @@ import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.sys.UiEngine;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
+import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.ext.Includer;
@@ -342,6 +343,11 @@ implements org.zkoss.zul.api.Include, Includer {
 		return _childpg;
 	}
 	public void setChildPage(Page page) {
+		if (_childpg != null && page == null) {
+			final Desktop desktop = getDesktop();
+			if (desktop != null)
+				((DesktopCtrl)desktop).removePage(_childpg);
+		}
 		_childpg = page;
 	}
 
@@ -413,6 +419,8 @@ implements org.zkoss.zul.api.Include, Includer {
 		return _instantMode;
 	}
 	protected void redrawChildren(Writer out) throws IOException {
+		setChildPage(null);
+
 		if (_instantMode) {
 			super.redrawChildren(out);
 			return; //done
@@ -468,6 +476,7 @@ implements org.zkoss.zul.api.Include, Includer {
 		try {
 			exec.include(out, src, null, 0);
 		} catch (Throwable err) {
+			setChildPage(null);
 		//though DHtmlLayoutServlet handles exception, we still have to
 		//handle it because src might not be ZUML
 			final String errpg =
@@ -529,7 +538,7 @@ implements org.zkoss.zul.api.Include, Includer {
 	}
 	private static String getDefaultMode() {
 		if (_defMode == null)
-			_defMode = Library.getProperty("org.zkoss.zul.include.mode", "defer");
+			_defMode = Library.getProperty("org.zkoss.zul.include.mode", "auto");
 		return _defMode;
 	}
 	private static String _defMode;

@@ -879,7 +879,7 @@ import org.zkoss.zk.au.out.*;
 	}
 	/** Returns the owner component for this execution, or null if
 	 * this execution is not owned by any component.
-	 * The owner is the top of the stack pushed by {@link #getOwner}.
+	 * The owner is the top of the stack pushed by {@link #setOwner}.
 	 */
 	public Component getOwner() {
 		return _owner;

@@ -34,7 +34,12 @@ import org.zkoss.web.Attributes;
 import org.zkoss.web.servlet.Servlets;
 
 import org.zkoss.zk.mesg.MZk;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
+import org.zkoss.zk.ui.ext.Includer;
 
 /**
  * A collection of utilities for this package.
@@ -75,6 +80,16 @@ import org.zkoss.zk.ui.UiException;
 					throw UiException.Aide.wrap(err);
 			}
 			response.sendError(HttpServletResponse.SC_NOT_FOUND, path);
+		}
+	}
+	/** Resets the child page of the owner, if any.
+	 */
+	/*package*/ static void resetOwner() {
+		final Execution exec = Executions.getCurrent();
+		if (exec != null) {
+			final Component comp = ((ExecutionCtrl)exec).getVisualizer().getOwner();
+			if (comp instanceof Includer)
+				((Includer)comp).setChildPage(null);
 		}
 	}
 }

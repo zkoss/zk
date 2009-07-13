@@ -45,11 +45,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</log>
 	-->
 
-	<!-- Turn on the following if want to use auto as the default.
-		System default: defer
+	<!-- Turn on the following if want to use the defer mode as the default,
+		which is compatible to 3.x
 	<library-property>
 		<name>org.zkoss.zul.include.mode</name>
-		<value>auto</value>
+		<value>defer</value>
 	</library-property>
 	-->
 

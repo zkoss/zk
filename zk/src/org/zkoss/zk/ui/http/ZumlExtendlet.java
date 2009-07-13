@@ -167,6 +167,8 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
 	private void handleError(Session sess, HttpServletRequest request,
 	HttpServletResponse response, String path, Throwable err)
 	throws ServletException, IOException {
+		Utils.resetOwner();
+
 		//Note: if not included, it is handled by Web container
 		if (err != null && Servlets.isIncluded(request)) {
 			//Bug 1802487 and 1714094
