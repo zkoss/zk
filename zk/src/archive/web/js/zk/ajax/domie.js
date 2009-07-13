@@ -57,8 +57,10 @@ zk.override(jq.fn, zjq._fnie = {}, {
 		}
 
 		ret = zjq._fnie.replaceWith.apply(this, arguments);
-
-		if (e) zjq._fixDom(ref ? ref.nextSibling: e.parentNode.firstChild, ref2);
+		try{//catch ie audio exception
+			if (e) zjq._fixDom(ref ? ref.nextSibling: e.parentNode.firstChild, ref2);
+		}catch(e){
+		}
 		return ret;
 	},
 	html: function (content) {
