@@ -564,7 +564,7 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 		} else if (newChild instanceof Toolbar) {
 			if (super.insertBefore(newChild, refChild)) {
 				if (refChild instanceof Panelchildren
-				|| (refChild == null && getChildren().size() == 1)) {
+				|| (refChild == null && (getChildren().size() == (_caption != null ? 2 : 1)))) {
 					_tbar = (Toolbar) newChild;
 				} else if (refChild == null || refChild == _fbar) {
 					if (_bbar != null && _bbar != newChild) {
