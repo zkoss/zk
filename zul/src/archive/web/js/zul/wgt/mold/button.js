@@ -17,7 +17,7 @@ function (out) {
 		tabi = this._tabindex;
 	tabi = tabi >= 0 ? ' tabindex="' + tabi + '"': '';
 
-	out.push('<span', this.domAttrs_({style:1,domclass:1}), ' class="', zcls, '"');
+	out.push('<span', this.domAttrs_({domStyle:1,domclass:1}), ' class="', zcls, '"');
 	if (!this.isVisible()) out.push(' style="display:none"');
 	out.push('><table id="', this.uuid, '-box"', zUtl.cellps0);
 	if (tabi && !zk.gecko && !zk.safari) out.push(tabi);
