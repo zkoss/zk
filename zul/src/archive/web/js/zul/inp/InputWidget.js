@@ -258,7 +258,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		}
 	},
 	_shallIgnore: function (evt, keys) {
-		var code = zk.ie ? evt.keyCode : evt.charCode;
+		var code = (zk.ie||zk.opera) ? evt.keyCode : evt.charCode;
 		if (!evt.altKey && !evt.ctrlKey && (zk.ie || code >= 32)
 		&& keys.indexOf(String.fromCharCode(code)) < 0) {
 			evt.stop();
