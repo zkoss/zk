@@ -63,7 +63,9 @@
 	border:0;
 }
 .z-east-splt,
-.z-west-splt {
+.z-west-splt,
+.z-north-splt,
+.z-south-splt {
 	position: absolute;
 	height: 6px;
 	width: 6px;
@@ -76,15 +78,10 @@
 }
 .z-north-splt,
 .z-south-splt {
-	position: absolute;
-	height: 6px;
-	width: 6px;
 	background: #C4DCFB top;
 	background-image:url("${c:encodeURL('~./zul/img/splt/splt-v.png')}");
 	cursor: s-resize;
 	cursor: row-resize;	
-	line-height: 0;
-	font-size: 0;
 }
 .z-west-header,
 .z-center-header,
