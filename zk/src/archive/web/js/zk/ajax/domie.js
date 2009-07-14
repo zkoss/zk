@@ -57,10 +57,8 @@ zk.override(jq.fn, zjq._fnie = {}, {
 		}
 
 		ret = zjq._fnie.replaceWith.apply(this, arguments);
-		try{//catch ie audio exception
-			if (e) zjq._fixDom(ref ? ref.nextSibling: e.parentNode.firstChild, ref2);
-		}catch(e){
-		}
+
+		if (e) zjq._fixDom(ref ? ref.nextSibling: e.parentNode.firstChild, ref2);
 		return ret;
 	},
 	html: function (content) {
@@ -77,9 +75,12 @@ zk.copy(zjq, {
 	//fix DOM
 	_fixDom: function (n, nxt) { //exclude nxt (if null, means to the end)
 		for (; n && n != nxt; n = n.nextSibling)
-			if (n.nodeType == 1) {
-				zjq._fxns.push(n);
-				setTimeout(zjq._fixDom0, 100);
+			try {
+				if (n.nodeType == 1) {
+					zjq._fxns.push(n);
+					setTimeout(zjq._fixDom0, 100);
+				}
+			} catch (e) { //some IE element (such as audio) not accessible
 			}
 	},
 	_unfixDom: function (n) {
