@@ -1848,7 +1848,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 			Set selItems = evt.getSelectedItems();
 			_noSmartUpdate = true;
 			try {
-				if (AuRequests.getBoolean(request.getData(), "clearAll"))
+				if (AuRequests.getBoolean(request.getData(), "clearFirst"))
 					clearSelection();
 				
 				final boolean paging = inPagingMold();

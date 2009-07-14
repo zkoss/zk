@@ -679,8 +679,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		var edata = evt.data, keep;
 		if (this._multiple)
 			keep = edata.ctrlKey || edata.shiftKey || (evt.domTarget.id ? evt.domTarget.id.endsWith('-cm') : false);
-			
-		this.fire('onSelect', zk.copy({items: data, reference: reference, clearAll: !keep}, edata));
+
+		this.fire('onSelect', zk.copy({items: data, reference: reference, clearFirst: !keep}, edata));
 	},
 	/** Changes the specified row as focused. */
 	_focus: function (row) {
