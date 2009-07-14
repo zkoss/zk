@@ -13,31 +13,23 @@ This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 zk.zuml.Parser = {
-	create: function (parent, doc, vars) {
+	create: function (parent, doc, args) {
 		if (typeof doc == 'string')
 			doc = zUtl.parseXML(doc);
 
-		var cwgts = [], oldvars;
-		if (vars) {
-			oldvars = window._;
-			window._ = vars;
-		}
-		try {
-			zk.zuml.Parser._cw(parent, doc.documentElement, cwgts);
-		} finally {
-			if (vars) window._ = oldvars;
-		}
+		var cwgts = [];
+		zk.zuml.Parser._cw(parent, doc.documentElement, cwgts, args);
 
 		var l = cwgts.length;
 		return l ? l == 1 ? cwgts[0]: cwgts: null;
 	},
-	createAt: function (node, opts, vars) {
+	createAt: function (node, opts, args) {
 		var node = jq(node)[0],
 			txt = node.innerHTML,
 			j = txt.indexOf('<!--');
 		if (j >= 0)
 			txt = txt.substring(j + 4, txt.lastIndexOf('-->'));
-		var wgt = this.create(null, '<div>' + txt.trim() + '</div>', vars),
+		var wgt = this.create(null, '<div>' + txt.trim() + '</div>', args),
 			cwgts = [];
 
 		for (var w = wgt.firstChild, sib; w;) {
@@ -66,31 +58,31 @@ zk.zuml.Parser = {
 
 		return l == 1 ? cwgts[0]: cwgts;
 	},
-	_cw: function (parent, e, cwgts) {
+	_cw: function (parent, e, cwgts, args) {
 		if (!e) return null;
 
 		var $Parser = zk.zuml.Parser,
-			forEach = $Parser._eval(parent, e.getAttribute('forEach'));
+			forEach = $Parser._eval(parent, e.getAttribute('forEach'), args);
 		if (forEach != null) {
 			var oldEach = window.each;
 			for (var l = forEach.length, j = 0; j < l; j++) {
 				window.each = forEach[j];
-				$Parser._cw2(parent, e, cwgts);
+				$Parser._cw2(parent, e, cwgts, args);
 			}
 			window.each = oldEach;
 		} else
-			$Parser._cw2(parent, e, cwgts);
+			$Parser._cw2(parent, e, cwgts, args);
 	},
-	_cw2: function (parent, e, cwgts) {
+	_cw2: function (parent, e, cwgts, args) {
 		var $Parser = zk.zuml.Parser;
-		var ifc = $Parser._eval(parent, e.getAttribute('if')),
-			unless = $Parser._eval(parent, e.getAttribute('unless'));
+		var ifc = $Parser._eval(parent, e.getAttribute('if'), args),
+			unless = $Parser._eval(parent, e.getAttribute('unless'), args);
 		if ((ifc == null || ifc) && (unless == null || !unless)) {
 			var tn = e.tagName, wgt;
 			if ("zk" == tn) {
 				wgt = parent;
 			} else if ("attribute" == tn) {
-				var attnm = $Parser._eval(parent, e.getAttribute('name'));
+				var attnm = $Parser._eval(parent, e.getAttribute('name'), args);
 				if (!attnm)
 					throw "The name attribute required, "+e;
 				parent.set(attnm, zUtl.getElementValue(e));
@@ -104,25 +96,25 @@ zk.zuml.Parser = {
 
 				for (var l = atts.length, j = 0; j < l; ++j) {
 					var att = atts[j];
-					wgt.set(att.name, $Parser._eval(wgt, att.value));
+					wgt.set(att.name, $Parser._eval(wgt, att.value, args));
 				}
 			}
 
 			for (e = e.firstChild; e; e = e.nextSibling) {
 				var nt = e.nodeType;
-				if (nt == 1) $Parser._cw(wgt, e);
+				if (nt == 1) $Parser._cw(wgt, e, null, args);
 				else if (nt == 3) {
 					var txt = e.nodeValue;
 					if (txt.trim().length || wgt.blankPreserved) {
 						var w = new zk.Native();
-						w.prolog = $Parser._eval(wgt, txt);
+						w.prolog = $Parser._eval(wgt, txt, args);
 						wgt.appendChild(w);
 					}
 				}
 			}
 		}
 	},
-	_eval: function (wgt, s) {
+	_eval: function (wgt, s, args) {
 		if (s)
 			for (var j = 0, k, l, t, last = s.length - 1, s2;;) {
 				k = s.indexOf('${', j);
@@ -142,8 +134,8 @@ zk.zuml.Parser = {
 				t = s.substring(k + 2, l); //EL
 
 				try {
-					var fn = new Function('return ' + t);
-					t = wgt ? fn.call(wgt): fn();
+					var fn = new Function('var _=arguments[0];return ' + t);
+					t = wgt ? fn.call(wgt, args): fn(args);
 				} catch (e) {
 					throw 'Failed to evaluate '+t;
 				}
