@@ -383,8 +383,6 @@ public class Fileupload extends HtmlBasedComponent{ //not XulElement since not a
 		//-- Updatable --//
 		/** Updates the result from the client.
 		 * Callback by the System AuUpload.java only Don't invoke it directly.
-		 *
-		 * @param result a list of media instances, or null
 		 */
 		public void setProgress(String fid, long readSize, long totalSize){
 			Fileupload.this.setProgress(fid, readSize, totalSize);

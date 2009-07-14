@@ -30,7 +30,7 @@ package org.zkoss.zk.ui.ext;
  * <li>DHtmlUpdateServlet than store the result in desktop's attribute,
  * and ask client to do a standard async-update called updateResult.
  * <li>When client sends the updateResult request to the server, server invokes
- * {@link #setResult} to put the upload result to the component.
+ * {@link #setProgress} to put the upload result to the component.
  * </ol>
  *
  * @author tomyeh

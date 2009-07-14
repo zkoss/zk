@@ -191,7 +191,7 @@ zUtl = { //static methods
 		var $n = jq(id, zk);
 		n = $n[0];
 
-		var $txt = jq(idtxt);
+		var $txt = jq(idtxt, zk);
 		if (mask)
 			n.z_mask = new zk.eff.FullMask({
 				mask: jq(idmsk, zk)[0],
@@ -199,7 +199,8 @@ zUtl = { //static methods
 			});
 
 		if (mask && $txt.length) { //center
-			var st = $txt[0].style;
+			var txt = $txt[0],
+				st = txt.style;
 			st.left = (jq.innerWidth() - txt.offsetWidth) / 2 + x + "px";
 			st.top = (jq.innerHeight() - txt.offsetHeight) / 2 + y + "px";
 		}
