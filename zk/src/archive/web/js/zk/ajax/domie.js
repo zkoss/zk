@@ -19,7 +19,9 @@ zk.override(jq.fn, zjq._fnie = {}, {
 
 		ret = zjq._fnie.before.apply(this, arguments);
 
-		if (e) zjq._fixDom(ref ? ref.nextSibling: e.parentNode.firstChild, e);
+		if (e) zjq._fixDom(ref ? ref.nextSibling:
+			e.parentNode ? e.parentNode.firstChild: null, e);
+			//IE: som element might have no parent node (such as audio)
 		return ret;
 	},
 	after: function () {
@@ -58,7 +60,9 @@ zk.override(jq.fn, zjq._fnie = {}, {
 
 		ret = zjq._fnie.replaceWith.apply(this, arguments);
 
-		if (e) zjq._fixDom(ref ? ref.nextSibling: e.parentNode.firstChild, ref2);
+		if (e) zjq._fixDom(ref ? ref.nextSibling:
+			e.parentNode ? e.parentNode.firstChild: null, ref2);
+			//IE: som element might have no parent node (such as audio)
 		return ret;
 	},
 	html: function (content) {
@@ -75,12 +79,9 @@ zk.copy(zjq, {
 	//fix DOM
 	_fixDom: function (n, nxt) { //exclude nxt (if null, means to the end)
 		for (; n && n != nxt; n = n.nextSibling)
-			try {
-				if (n.nodeType == 1) {
-					zjq._fxns.push(n);
-					setTimeout(zjq._fixDom0, 100);
-				}
-			} catch (e) { //some IE element (such as audio) not accessible
+			if (n.nodeType == 1) {
+				zjq._fxns.push(n);
+				setTimeout(zjq._fixDom0, 100);
 			}
 	},
 	_unfixDom: function (n) {
