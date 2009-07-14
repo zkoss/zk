@@ -26,11 +26,11 @@
 	
 <%-- Borderlayout --%>
 .z-border-layout {
-    width:100%;
-    height:100%;
-    overflow: hidden;
-    background-color:#CDE6F5;
-    border: 0;
+	width:100%;
+	height:100%;
+	overflow: hidden;
+	background-color:#CDE6F5;
+	border: 0;
 	position: relative;
 	visibility: hidden;
 }
@@ -62,58 +62,29 @@
 .z-south-noborder {
 	border:0;
 }
-.z-west {
-    z-index: 12;
-}
-.z-center {
-	z-index: 8;
-}
-.z-east {
-    z-index: 10;
-}
-.z-north {
-    z-index: 16;
-}
-.z-south {
-	z-index: 14;
-} 
 .z-east-splt,
 .z-west-splt {
-    position: absolute;
-    height: 6px;
-    width: 6px;
-    z-index: 12;
-    background: #C4DCFB left;
-    background-image:url("${c:encodeURL('~./zul/img/splt/splt-h.png')}");
-    cursor: e-resize;
-    cursor: col-resize;
-    line-height: 1px;
-    font-size: 1px;
+	position: absolute;
+	height: 6px;
+	width: 6px;
+	background: #C4DCFB left;
+	background-image:url("${c:encodeURL('~./zul/img/splt/splt-h.png')}");
+	cursor: e-resize;
+	cursor: col-resize;
+	line-height: 0;
+	font-size: 0;
 }
 .z-north-splt,
 .z-south-splt {
-    position: absolute;
-    height: 6px;
-    width: 6px;
-    z-index: 12;
-    background: #C4DCFB top;
-    background-image:url("${c:encodeURL('~./zul/img/splt/splt-v.png')}");
-    cursor: s-resize;
-    cursor: row-resize;    
-    line-height: 1px;
-    font-size: 1px;
-}
-.z-west-splt {
-    z-index: 11;
-}
-.z-east-splt {
-    z-index: 9;
-}
-.z-north-splt {
-    z-index: 15;
-}
-.z-south-splt {
-	z-index: 13;
+	position: absolute;
+	height: 6px;
+	width: 6px;
+	background: #C4DCFB top;
+	background-image:url("${c:encodeURL('~./zul/img/splt/splt-v.png')}");
+	cursor: s-resize;
+	cursor: row-resize;	
+	line-height: 0;
+	font-size: 0;
 }
 .z-west-header,
 .z-center-header,
@@ -185,23 +156,10 @@
 	background-color: #E1F0F2;
 	width: 22px;
 	height: 22px;
-	z-index: 30;
 	border: 1px solid #9ECAD8;
 	overflow: hidden;
 	position: absolute;
 }
-.z-west-colpsd {
-    z-index: 12;
-}
-.z-east-colpsd {
-    z-index: 10;
-}
-.z-north-colpsd {
-    z-index: 16;
-}
-.z-south-colpsd {
-	z-index: 14;
-} 
 .z-east-colpsd-over,
 .z-west-colpsd-over,
 .z-south-colpsd-over,
@@ -209,6 +167,34 @@
 	cursor: pointer;
 	background-color: #EEFCFF;
 }
+.z-west, .z-west-colpsd {
+	z-index: 12;
+}
+.z-center {
+	z-index: 8;
+}
+.z-east, .z-east-colpsd {
+	z-index: 10;
+}
+.z-north, .z-north-colpsd {
+	z-index: 16;
+}
+.z-south, .z-south-colpsd {
+	z-index: 14;
+} 
+.z-west-splt {
+	z-index: 11;
+}
+.z-east-splt {
+	z-index: 9;
+}
+.z-north-splt {
+	z-index: 15;
+}
+.z-south-splt {
+	z-index: 13;
+}
+
 <%-- Column Layout--%>
 .z-column-layout {
 	visibility: hidden;
@@ -216,21 +202,21 @@
 	zoom: 1;
 }
 .z-column-children {
-    margin: 0;
-    padding: 0;
-    float: left;
-    overflow: hidden;
-    zoom: 1;
+	margin: 0;
+	padding: 0;
+	float: left;
+	overflow: hidden;
+	zoom: 1;
 }
 .z-column-children-cnt {
-    overflow: hidden;
+	overflow: hidden;
 }
 .z-column-children-body {
-    overflow: hidden;
-    zoom: 1;
+	overflow: hidden;
+	zoom: 1;
 }
 .z-column-layout-inner {
-    overflow: hidden;
+	overflow: hidden;
 }
 <%-- Fisheyebar--%>
 .z-fisheye-text {

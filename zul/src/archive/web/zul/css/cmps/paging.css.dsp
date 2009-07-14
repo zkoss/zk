@@ -109,7 +109,8 @@
 	border:0 none;
 	cursor:default;
 	display:block;
-	font-size:1px;
+	font-size:0;
+	line-height:0;
 	height:16px;
 	margin:0 2px;
 	overflow:hidden;

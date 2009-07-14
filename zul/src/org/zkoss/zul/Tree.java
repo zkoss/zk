@@ -255,7 +255,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	 *
 	 * @param pgi the paging controller. If null and {@link #getMold} is "paging",
 	 * a paging controller is created automatically as a child component
-	 * (see {@link #getPaging}).
+	 * (see {@link #getPagingChild}).
 	 * @since 3.0.7
 	 */
 	public void setPaginal(Paginal pgi) {

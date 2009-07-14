@@ -318,7 +318,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	 *
 	 * @param pgi the paging controller. If null and {@link #getMold} is "paging",
 	 * a paging controller is created automatically as a child component
-	 * (see {@link #getPaging}).
+	 * (see {@link #getPagingChild}).
 	 */
 	public void setPaginal(Paginal pgi) {
 		if (!Objects.equals(pgi, _pgi)) {
@@ -688,7 +688,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	 * <p>Default: 7.
 	 *
 	 * <p>It is used only if live data ({@link #setModel(ListModel)} and
-	 * not paging ({@link #getPaging}.
+	 * not paging ({@link #getPagingChild}.
 	 *
 	 * <p>Note: if the "pre-load-size" attribute of component is specified, it's prior to the original value.(@since 3.0.4)
 	 * @since 2.4.1
@@ -700,7 +700,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	/** Sets the number of rows to preload when receiving
 	 * the rendering request from the client.
 	 * <p>It is used only if live data ({@link #setModel(ListModel)} and
-	 * not paging ({@link #getPaging}.
+	 * not paging ({@link #getPagingChild}.
 	 *
 	 * @param sz the number of rows to preload. If zero, no preload
 	 * at all.

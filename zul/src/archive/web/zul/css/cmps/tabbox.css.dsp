@@ -23,8 +23,8 @@
 	height: 2px;
 	border: 1px solid #7EAAC6;
 	border-top: 0 none;
-	font-size: 1px;
-	line-height: 1px;
+	font-size: 0;
+	line-height: 0;
 	background: #F2FCFF none repeat scroll 0 0;
 }
 .z-tabs-scroll .z-tabs-space {
@@ -140,13 +140,13 @@
 }
 .z-tabs-edge {
 	float: left;
-	line-height: 1px !important;
+	line-height: 0 !important;
+	font-size: 0 !important;
 	width: 1px;
 	margin: 0 !important;
 	padding: 0 !important;
 	border: 0 none !important;
 	background: transparent !important;
-	font-size: 1px !important;
 	overflow: hidden;
 	zoom: 1;
 }
@@ -323,9 +323,9 @@
 	background: #F2FCFF none repeat scroll 0 0;
 	border: 1px solid #7EAAC6;
 	border-top: 0 none;
-	font-size: 1px;
+	font-size: 0;
+	line-height: 0;
 	width: 2px;
-	line-height: 1px;
 }
 .z-tabs-ver-scroll .z-tabs-ver-space {
 	background: none;
@@ -346,8 +346,8 @@
 	margin: 0 !important;
 	padding: 0 !important;
 	border: 0 none !important;
-	font-size: 1px !important;
-	line-height: 1px !important;
+	font-size: 0 !important;
+	line-height: 0 !important;
 	overflow: hidden;
 	zoom: 1;
 	background: transparent !important;
@@ -453,7 +453,8 @@
 	background: #F2FCFF none repeat scroll 0 0;
 	border: 1px solid #7EAAC6;
 	border-left: 0 none;
-	font-size: 1px;
+	font-size: 0;
+	line-height: 0;
 	width: 2px;
 	position: relative;
 }

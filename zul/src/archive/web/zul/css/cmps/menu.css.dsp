@@ -46,9 +46,9 @@
 .z-menubar-hor .z-menu-item-body .z-menu-item-inner-l,.z-menubar-hor .z-menu-item-body .z-menu-item-inner-r,
 .z-menubar-ver .z-menu-body .z-menu-inner-l,.z-menubar-ver .z-menu-body .z-menu-inner-r,
 .z-menubar-ver .z-menu-item-body .z-menu-item-inner-l,.z-menubar-ver .z-menu-item-body .z-menu-item-inner-r{
-	font-size:1px;
+	font-size:0;
+	line-height:0;
 	height:21px;
-	line-height:1px;
 	width:3px;
 }
 
@@ -275,15 +275,15 @@
 
 <%--define separator--%>
 .z-menu-popup-cnt .z-menu-separator {
-	font-size:1px;
-	line-height:1px;
+	font-size:0;
+	line-height:0;
 }
 .z-menu-popup-cnt .z-menu-separator-inner {
 	background-color:#E0E0E0;
 	border-bottom:1px solid #FFFFFF;
 	display:block;
-	font-size:1px;
-	line-height:1px;
+	font-size:0;
+	line-height:0;
 	margin:2px 3px;
 	overflow:hidden;
 	width:auto;
