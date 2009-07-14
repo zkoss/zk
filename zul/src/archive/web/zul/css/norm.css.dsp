@@ -341,6 +341,22 @@ div.z-drop-cnt {
 	font-family: ${fontFamilyC};
 }
 
+<%-- Focus Anchor --%>
+.z-focus-a {
+	position: absolute;
+	left: 0px; top: 0px;
+	padding: 0 !important;
+	margin: 0 !important;
+	border: 0 !important;
+	background: transparent !important;
+	font-size: 0 !important;
+	line-height: 0 !important;
+	width:1px !important;
+	height:1px !important;
+	-moz-outline:0 none; outline:0 none;
+	-moz-user-select:text; -khtml-user-select:text;
+}
+
 <%-- Auxheader --%>
 .z-auxheader-cnt {
 	font-size: ${fontSizeM}; font-weight: normal;

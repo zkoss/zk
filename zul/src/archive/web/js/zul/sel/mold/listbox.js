@@ -62,7 +62,7 @@ function (out) {
 		item.redraw(out);
 
 	out.push('</table><', tag, ' id="', uuid,
-		'-a" tabindex="-1" onclick="return false;" href="javascript:;" style="position:absolute;left:0px;top:0px;padding:0 !important;margin:0 !important;border:0 !important;background:transparent !important;font-size:1px !important;width:1px !important;height:1px !important;-moz-outline:0 none;outline:0 none;-moz-user-select:text;-khtml-user-select:text;"></',
+		'-a" tabindex="-1" onclick="return false;" href="javascript:;" class="z-focus-a"></',
 		tag, '>');
 	out.push("</div>");
 

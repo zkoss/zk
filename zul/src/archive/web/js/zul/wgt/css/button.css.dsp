@@ -7,12 +7,15 @@
 button.z-button {
 	padding:0 !important; margin:0 !important; border:0 !important;
 	background: transparent !important;
-	font-size: 1px !important; width: 3px !important;
+	font-size: 0 !important;
+	line-height: 0 !important;
+	width: 3px !important;
 	height: ${c:isGecko() ? 0: 1}px !important;
 }
 .z-button .z-button-cr * {
 	display: block; width: 1px !important; overflow: hidden;
-	font-size: 1px !important; line-height: 1px !important;
+	font-size: 0 !important;
+	line-height: 0 !important;
 }
 <c:if test="${c:browser('gecko2-')}">
 table.z-button {

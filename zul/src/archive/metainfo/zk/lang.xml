@@ -268,7 +268,7 @@ def alert(m):
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/borderlayout.js</mold-uri>
-			<css-uri>css/layout.css.dsp</css-uri>
+			<css-uri>css/borderlayout.css.dsp</css-uri>
 		</mold>
 	</component>
 	<component>

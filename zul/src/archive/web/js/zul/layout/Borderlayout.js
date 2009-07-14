@@ -57,7 +57,6 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 		zWatch.unlisten({onSize: this, onShow: this});
 		this.$supers('unbind_', arguments);
 	},
-	// private
 	// returns the ambit of the specified cmp for region calculation. 
 	_getAmbit: function (wgt, ignoreSplit) {
 		var ambit, mars = wgt.getCurrentMargins_(), region = wgt.getPosition();

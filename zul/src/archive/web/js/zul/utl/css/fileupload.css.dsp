@@ -40,6 +40,7 @@
 .z-progressBarComplete,
 .z-progressBarError {
 	font-size: 0;
+	line-height: 0;
 	width: 0%;
 	height: 100%;
 	background-color: #27F;
@@ -63,6 +64,7 @@
 
 a.z-progressCancel {
 	font-size: 0;
+	line-height: 0;
 	display: block;
 	height: 14px;
 	width: 14px;

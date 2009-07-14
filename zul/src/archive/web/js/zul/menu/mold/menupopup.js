@@ -18,10 +18,7 @@ function (out) {
 		tags = zk.ie || zk.gecko ? 'a' : 'button';
 	out.push('<div', this.domAttrs_(), '><', tags, ' id="', uuid,
 			'-a" tabindex="-1" onclick="return false;" href="javascript:;"',
-			' style="padding:0 !important; margin:0 !important; border:0 !important;',
-			' background: transparent !important; font-size: 1px !important;',
-			' width: 1px !important; height: 1px !important;-moz-outline: 0 none;',
-			' outline: 0 none;	-moz-user-select: text; -khtml-user-select: text;"></',
+			' class="z-focus-a"></',
 			tags, '><ul class="', zcls, '-cnt" id="', uuid, '-cave">');
 
 	for (var w = this.firstChild; w; w = w.nextSibling)
