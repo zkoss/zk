@@ -368,7 +368,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		var n = this.$n();
 		return !n || zk(n).isVisible();
 	},
-	setVisible: function (visible, fromServer) {
+	setVisible: function (visible) {
 		if (this._visible != visible) {
 			this._visible = visible;
 
@@ -513,7 +513,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		return this._zIndex;
 	},
 	getZindex: _zkf,
-	setZIndex: _zkf = function (zIndex) { //2nd arg is fromServer
+	setZIndex: _zkf = function (zIndex) {
 		return this._setZIndex(zIndex);
 	},
 	setZindex: _zkf,

@@ -53,7 +53,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 							node.runtimeStyle.width = "100%";
 						$body.zk.slideUp(this, {beforeAnima: this._beforeSlideUp});
 					}
-					if (fromServer) this.fire('onOpen', {open:open});
+					if (!fromServer) this.fire('onOpen', {open:open});
 				}
 			}
 		},
@@ -91,7 +91,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	},
 
 	//super//
-	setVisible: function (visible, fromServer) {
+	setVisible: function (visible) {
 		if (this._visible != visible) {
 			/** TODO
 			 * if (this.isMaximized()) {
