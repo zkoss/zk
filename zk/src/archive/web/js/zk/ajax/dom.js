@@ -826,8 +826,8 @@ zk.copy(zjq, { //private
 				ih = info ? info.h : inner.offsetHeight,
 				bottom = top + ih,
 				updated;
-				
-			if (outer.clientHeight < inner.offsetHeight || outer.scrollTop > top) {
+			//for fix the listbox(livedate) keydown select always at top
+			if (/*outer.clientHeight < inner.offsetHeight || */ outer.scrollTop > top) {
 				outer.scrollTop = top;
 				updated = true;
 			} else if (bottom > outer.clientHeight + outer.scrollTop) {

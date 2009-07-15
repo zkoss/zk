@@ -466,7 +466,6 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		this.$supers('doKeyDown_', arguments);
 	},
 	_doKeyDown: function (evt) {
-		zk.log("_doKeyDown");
 		if (zAu.processing() || this._shallIgnoreEvent(evt))
 			return true;
 
@@ -510,7 +509,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		if (step) {
 			if (shift) this._toggleSelect(row, true, evt);
 			var nrow = row.$n();
-			for (; nrow && (nrow = step > 0 ? nrow.nextSibling: nrow.previousSibling);) {
+			for (;nrow && (nrow = step > 0 ? nrow.nextSibling: nrow.previousSibling);) {
 				var r = zk.Widget.$(nrow);
 				if (r.$instanceof(zul.sel.Treerow))
 					r = r.parent;
@@ -532,7 +531,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			if (ctrl) this._focus(lastrow);
 			else this._select(lastrow, evt);
 			this._syncFocus(lastrow);
-			zjq._scrollIntoView(this.body, lastrow);// Bug #1823947 and #1823278
+			zk(lastrow).scrollIntoView(this.ebody); // Bug #1823947 and #1823278
 		}
 
 		switch (data.keyCode) {
