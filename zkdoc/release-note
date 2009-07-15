@@ -18,6 +18,7 @@ August, 2009
   2820552: Panel fails to combine the caption with three toolbars
   2820527: Hiding column not work
   2815010: Live data problem
+  2821745: Groupbox fail to open if in the closing animation
 
 	--------
 ZK 3.6.2

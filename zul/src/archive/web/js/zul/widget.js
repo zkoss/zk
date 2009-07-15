@@ -68,9 +68,8 @@ zkGrbox = {
 		var gb = $e(gb);
 		if (gb) {
 			var panel = $e(gb.id + "!slide");
-			if (panel && open != $visible(panel)
-			&& !panel.getAttribute("zk_visible")
-			&& (!ignorable || !getZKAttr(panel, "animating"))) {
+			if (panel && !panel.getAttribute("zk_visible")
+			&& (!ignorable || (!getZKAttr(panel, "animating") && open != $visible(panel)))) {
 				if (open) anima.slideDown(panel);
 				else anima.slideUp(panel);
 
