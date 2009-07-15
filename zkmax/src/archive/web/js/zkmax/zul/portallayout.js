@@ -81,6 +81,10 @@ zkPortalLayout = {
 		if (panels[rIndex])
 			zk[rIndex < lenth ? 'insertBefore' : 'insertAfter']($e(zkau.getGhostOrgin(dg), "proxy"), panels[rIndex]);
 		else $e(cns[cIndex], "cave").appendChild($e(zkau.getGhostOrgin(dg), "proxy"));
+		
+		if(zk.ie6Only){ 
+			zk.redoCSS($e(cns[cIndex], "cave").parentNode);
+		}
 	},
 	_ignoreMove: function (cmp, pointer, event) {
 		return getZKAttr(cmp, "maximized") == "true" || zkPanel._ignoreMove(cmp, pointer, event);
