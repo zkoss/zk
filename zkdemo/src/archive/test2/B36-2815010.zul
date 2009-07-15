@@ -1,0 +1,94 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+When trying to select all listitems from dynamically filled listbox or grid
+and use them, loosing not loaded items...
+Please try this :
+	<columnlayout>
+		<columnchildren width="50%">
+			<panel title="Available projects:">
+				<panelchildren>
+					<zscript>
+String[] data = new String[30];
+for(int j=0; j &lt; data.length; ++j) {
+data[j] = "option "+j;
+}
+ListModel strset = new SimpleListModel(data);
+</zscript>
+					<listbox id="left" width="200px" rows="10"
+						model="&#36;{strset}" checkmark="true" multiple="true">
+						<listhead>
+							<listheader label="Load on Demend"
+								sort="auto" />
+						</listhead>
+					</listbox>
+
+				</panelchildren>
+			</panel>
+		</columnchildren>
+		<columnchildren width="100px">
+			<panel>
+				<panelchildren style="margin: 70px 34px;">
+					<image sclass="pointer"
+						src="/img/Centigrade-Widget-Icons/ButtonArrowRightDouble-32x32.png"
+						tooltiptext="Add Project">
+						<attribute name="onClick">
+Set items = left.getSelectedItems();
+if (items.isEmpty()) {
+alert("Please select at least one project to add!");
+} else {
+List al = new ArrayList(items);
+for (Iterator it = al.iterator(); it.hasNext();) {
+Listitem li = (Listitem)it.next();
+li.setSelected(false);
+right.appendChild(li);
+}
+}
+</attribute>
+					</image>
+					<separator height="15px" />
+					<image sclass="pointer"
+						src="/img/Centigrade-Widget-Icons/ButtonArrowLeftDouble-32x32.png"
+						tooltiptext="Remove Project">
+						<attribute name="onClick">
+Set items = right.getSelectedItems();
+if (items.isEmpty()) {
+alert("Please select at least one project to remove!");
+} else {
+List al = new ArrayList(items);
+for (Iterator it = al.iterator(); it.hasNext();) {
+Listitem li = (Listitem)it.next();
+li.setSelected(false);
+left.appendChild(li);
+}
+}
+</attribute>
+					</image>
+				</panelchildren>
+			</panel>
+		</columnchildren>
+		<columnchildren width="50%">
+			<panel title="Configured projects:" height="">
+				<panelchildren>
+					<listbox id="right" multiple="true" height="300px"
+						oddRowSclass="non-odd" fixedLayout="true" checkmark="true">
+						<listitem>
+							<listcell
+								src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png"
+								label="ZK" />
+						</listitem>
+						<listitem>
+							<listcell
+								src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png"
+								label="ZK Studio" />
+						</listitem>
+						<listitem>
+							<listcell
+								src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png"
+								label="ZK Spring" />
+						</listitem>
+					</listbox>
+				</panelchildren>
+			</panel>
+		</columnchildren>
+	</columnlayout>
+</zk>

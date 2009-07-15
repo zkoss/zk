@@ -17,6 +17,7 @@ August, 2009
   2819521: Console shows Exception if do modal in sendEvent + F5
   2820552: Panel fails to combine the caption with three toolbars
   2820527: Hiding column not work
+  2815010: Live data problem
 
 	--------
 ZK 3.6.2

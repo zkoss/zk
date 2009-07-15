@@ -2015,7 +2015,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 	 * @param min the lower index that a range of invalidated items
 	 * @param max the higher index that a range of invalidated items
 	 */
-	private void syncModel(int min, int max) {
+	void syncModel(int min, int max) {
 		final int newsz = _model.getSize();
 		final int oldsz = getItemCount();
 
