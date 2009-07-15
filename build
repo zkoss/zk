@@ -482,14 +482,16 @@ if [ "$javadocAll" = "true" ] ; then
 	touch javadoctmp/tmp
 	for target in $targetList ; do
 		echo "copy $target"
-		if [ -d $target/src/org ] ; then
-			cp -rp $target/src/org* javadoctmp/src
-		fi
-		if [ -d $target/codegen/org ] ; then
-			cp -rp $target/codegen/org* javadoctmp/src
-		fi
-		if [ -f $target/classpath ] ; then
-			cat $target/classpath >> javadoctmp/tmp
+		if [ "$target" != "zkdemo" ] ; then
+			if [ -d $target/src/org ] ; then
+				cp -rp $target/src/org* javadoctmp/src
+			fi
+			if [ -d $target/codegen/org ] ; then
+				cp -rp $target/codegen/org* javadoctmp/src
+			fi
+			if [ -f $target/classpath ] ; then
+				cat $target/classpath >> javadoctmp/tmp
+			fi
 		fi
 	done
 	sort javadoctmp/tmp | uniq >> javadoctmp/classpath
