@@ -74,23 +74,23 @@ tr.z-vbox-sep {
 <%-- OS look-and-feel --%>
 .z-splitter-os-ver-btn-t, .z-splitter-os-ver-btn-b,
 .z-splitter-os-hor-btn-l, .z-splitter-os-hor-btn-r {
-    font-size:0;
+	font-size:0;
 }
 .z-splitter-os-hor-outer {
 	background: transparent repeat-y top right;
-    background-image:url(${c:encodeURL('~./zul/img/splt/splt-h.gif')});
-    max-width: 8px; width: 8px;
+	background-image:url(${c:encodeURL('~./zul/img/splt/splt-h-os.gif')});
+	max-width: 8px; width: 8px;
 }
 .z-splitter-os-ver-outer .z-splitter-os-ver-outer-td {
 	background: transparent repeat-x bottom left;
-    background-image:url(${c:encodeURL('~./zul/img/splt/splt-v.gif')});
+	background-image:url(${c:encodeURL('~./zul/img/splt/splt-v-os.gif')});
    	max-height: 8px; height: 8px;
 }
 .z-splitter-os-hor, .z-splitter-os-hor-ns {
-    font-size:0; max-width: 8px; width: 8px;
+	font-size:0; max-width: 8px; width: 8px;
 }
 .z-splitter-os-ver, .z-splitter-os-ver-ns {
-    font-size:0; max-height: 8px; height: 8px;
+	font-size:0; max-height: 8px; height: 8px;
 }
 .z-splitter-os-ver-btn-t:hover, .z-splitter-os-ver-btn-b:hover,
 .z-splitter-os-hor-btn-l:hover, .z-splitter-os-hor-btn-r:hover {

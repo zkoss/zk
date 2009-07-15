@@ -47,16 +47,27 @@ public interface WidgetDefinition {
 	 * Since 5.0, it doesn't allow any XEL expressions.
 	 */
 	public void addMold(String name, String moldURI, String cssURI, String z2cURI);
-	/** Returns the URI (String) of the mold, or null if not available.
-	 *
-	 * <p>If the mold URI contains an expression, it will be evaluated first
-	 * before returning.
+	/** Returns the URI (String) of the template to generate the mold,
+	 * or null if not available.
+	 * For Ajax clients, the template is a JavaScript method.
 	 *
 	 * @param name the mold name
 	 * @return an URI in String
 	 * @see org.zkoss.zk.ui.AbstractComponent#redraw
 	 */
 	public String getMoldURI(String name);
+	/** Returns the URI (String) of the CSS file of the mold, or null
+	 * if not available.
+	 * @param name the mold name
+	 * @return an URI in String
+	 */
+	public String getCSSURI(String name);
+	/** Returns the URI (String) of the Z2C file of the mold, or null
+	 * if not available.
+	 * @param name the mold name
+	 * @return an URI in String
+	 */
+	public String getZ2CURI(String name);
 
 	/** Returns whether to preserve the blank text.
 	 * If false, the blank text (a non-empty string consisting of whitespaces)

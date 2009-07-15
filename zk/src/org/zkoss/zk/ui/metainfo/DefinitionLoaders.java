@@ -443,11 +443,11 @@ public class DefinitionLoaders {
 
 				WidgetDefinition wd =
 					wn !=  null ? getWidgetDefinition(langdef, compdef, wn): wgtdef;
-				if (moldURI != null) {
+				if (moldURI != null || cssURI != null || z2cURI != null) {
 					if (wd != null)
 						wd.addMold(nm, moldURI, cssURI, z2cURI);
 					else
-						log.warning("mold-uri for "+name+" ignored because widget-class is required, "+e.getLocator());
+						log.warning("Mold for "+name+" ignored because widget-class is required, "+e.getLocator());
 				}
 
 				if (cssURI != null && cssURI.length() > 0) {
