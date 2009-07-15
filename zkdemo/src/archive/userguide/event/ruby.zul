@@ -60,8 +60,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 						</textbox>
 					</panelchildren>
 					<toolbar mold="panel">
-						<button id="tryBtn" label="Try me!"/>
-						<button id="reloadBtn" label="Reload" height="18px"/>
+						<button id="tryBtn" visible="${desktop.execution.serverName != &quot;www.zkoss.org&quot; and desktop.execution.serverName != &quot;www.potix.com&quot;}" label="Try me!"/>
+						<button id="reloadBtn" visible="${desktop.execution.serverName != &quot;www.zkoss.org&quot; and desktop.execution.serverName != &quot;www.potix.com&quot;}" label="Reload" height="18px"/>
 					</toolbar>
 				</panel>
 			</tabpanel>

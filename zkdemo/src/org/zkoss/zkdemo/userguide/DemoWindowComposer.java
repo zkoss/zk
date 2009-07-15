@@ -78,7 +78,10 @@ public class DemoWindowComposer extends GenericForwardComposer {
 		Components.removeAllChildren(view);
 		String code = codeView.getValue();
 		try {
-			Executions.createComponentsDirectly(code, "zul", view, null);
+			if (tryBtn.isVisible())
+				Executions.createComponentsDirectly(code, "zul", view, null);
+			else 
+				Executions.createComponents("/userguide/macros/warning.zul", view, null);
 		} catch (RuntimeException e) {
 			if ("true".equalsIgnoreCase(System.getProperty("zkdemo.debug")))
 				System.out.println("\n Error caused by zkdemo at : " + new java.util.Date() + "\n code: " + code);
