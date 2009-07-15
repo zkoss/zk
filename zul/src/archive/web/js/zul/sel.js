@@ -319,10 +319,12 @@ zk.Selectable.prototype = {
 			}
 		}
 		if (lastrow) {
+			zk.log(lastrow.childNodes[1].firstChild.innerHTML +" "+ lastrow.id);
 			if (ctrl) this.focus(lastrow);
 			else this.select(lastrow, zkau.getKeys(evt));
 			this._syncFocus(lastrow);
-			zk.scrollIntoView(this.body, lastrow); // Bug #1823947 and #1823278
+			//have to check each parent, may call zk.scrollIntoView several times sync with zk5
+			zkau.cmd0.scrollIntoView(lastrow);
 		}
 
 		switch (Event.keyCode(evt)) {
