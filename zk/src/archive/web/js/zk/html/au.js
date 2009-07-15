@@ -140,8 +140,8 @@ zkau._onDocScroll = function () {
 	zkau._fixOffset($e("zk_prog"), ix, iy);
 	var d = $e("zk_debugbox");
 	if (d) {
-		d.style.top = iy + zk.innerHeight() - d.offsetHeight - 20 + "px";
-		d.style.left = ix + zk.innerWidth() - d.offsetWidth - 20 + "px";
+		d.style.top = zk.px(iy + zk.innerHeight() - d.offsetHeight - 20);
+		d.style.left = zk.px(ix + zk.innerWidth() - d.offsetWidth - 20);
 	}
 
 	zk.onScrollAt();
@@ -150,8 +150,8 @@ zkau._fixOffset = function (el, x, y) {
 	if (!el) return;
 	var ix = $int(getZKAttr(el, "x")), iy = $int(getZKAttr(el, "y"));
 	var top = $int(el.style.top) + (y - iy), left = $int(el.style.left) + (x - ix);
-	el.style.top = top + "px";
-	el.style.left = left + "px";
+	el.style.top = zk.px(top);
+	el.style.left = zk.px(left);
 	setZKAttr(el, "x", x);
 	setZKAttr(el, "y", y);
 };
@@ -1355,8 +1355,8 @@ zkau._autopos = function (el, x, y) {
 	}
 
 	ofs = zk.toStyleOffset(el, x, y);
-	el.style.left = ofs[0] + "px";
-	el.style.top = ofs[1] + "px";
+	el.style.left = zk.px(ofs[0]);
+	el.style.top = zk.px(ofs[1]);
 };
 
 /** Handles the double click. */
@@ -1768,8 +1768,8 @@ zkau.sendOnMove = function (cmp, keys) {
 	var left = cmp.style.left, top = cmp.style.top;
 	if (offset && getZKAttr(cmp, "pos") == "parent") {
 		var xy = offset.split(",");
-		left = $int(left) - $int(xy[0]) + "px";
-		top = $int(top) - $int(xy[1]) + "px";
+		left = zk.px($int(left) - $int(xy[0]));
+		top = zk.px($int(top) - $int(xy[1]));
 	}
 	zkau.sendasap({uuid: cmp.id, cmd: "onMove",
 		data: [left, top, keys ? keys: ""], ignorable: true}); //yes, ignorable since it is implicit for modal window
@@ -2134,8 +2134,8 @@ zkau._ghostdrag = function (dg, ghosting, evt) {
 			var el  = dg.element.cloneNode(true);
 			el.id = "zk_ddghost";
 			el.style.position = "absolute";
-			el.style.top = ofs[1] + "px";
-			el.style.left = ofs[0] + "px";
+			el.style.top = zk.px(ofs[1]);
+			el.style.left = zk.px(ofs[0]);
 			document.body.appendChild(el);
 		}
 		zk.addClass(dg.element, 'z-dragged');
@@ -2254,7 +2254,7 @@ zkau.updateUploadInfo = function (p, cb) {
 		}
 		if (p >= 0 && p <= 100) {
 			img.style.height = "10px"; //avoid being scaled when setting width
-			img.style.width = (p * 2) + "px";
+			img.style.width = zk.px(p * 2);
 		}
 	}
 };

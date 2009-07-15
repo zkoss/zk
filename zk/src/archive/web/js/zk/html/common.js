@@ -162,6 +162,12 @@ if (zk.ie) {
 
 //////
 // More zk utilities (defined also in boot.js) //
+/** Convert a number to px that can be used
+ * @since 3.6.3
+ */
+zk.px = function (v) {
+	return Math.max(v, 0) + "px";
+};
 /** Returns an array to indicate the size of the text if it is placed
  * inside the element.
  * @since 3.6.0
@@ -266,14 +272,14 @@ zk.Shadow.prototype = {
 			wd = w - opts.left + opts.right,
 			hgh = h - opts.top + opts.bottom,
 			st = shadow.style;
-		st.left = (l + opts.left) + "px";
-		st.top = (t + opts.top) + "px";
-		st.width = Math.max(wd, 0) + "px";
+		st.left = zk.px(l + opts.left);
+		st.top = zk.px(t + opts.top);
+		st.width = zk.px(wd);
 		st.display = "block";
-		if (zk.ie6Only) st.height = Math.max(hgh, 0) + "px";
+		if (zk.ie6Only) st.height = zk.px(hgh);
 		else {
 			var cns = shadow.childNodes;
-			cns[1].style.height = Math.max(hgh - cns[0].offsetHeight - cns[2].offsetHeight, 0) + "px";
+			cns[1].style.height = zk.px(hgh - cns[0].offsetHeight - cns[2].offsetHeight);
 		}
 
 		var stackup = this.stackup;
@@ -349,11 +355,11 @@ zk.applyMask = function (rel, message) {
 	var loading = $e(rel.id+"!z-loading"), progbox = $e(rel.id + "!progbox");
 	if (loading) {
 		if (loading.offsetHeight > rel.offsetHeight)
-			loading.style.height = zk.revisedSize(loading, rel.offsetHeight, true) + "px";
+			loading.style.height = zk.px(zk.revisedSize(loading, rel.offsetHeight, true));
 		if (loading.offsetWidth > rel.offsetWidth)
-			loading.style.width = zk.revisedSize(loading, rel.offsetWidth) + "px";
-		loading.style.top = (xy[1] + ((h - loading.offsetHeight) /2)) + "px";
-		loading.style.left = (xy[0] + ((w - loading.offsetWidth) /2)) + "px";
+			loading.style.width = zk.px(zk.revisedSize(loading, rel.offsetWidth));
+		loading.style.top = zk.px(xy[1] + ((h - loading.offsetHeight) /2));
+		loading.style.left = zk.px(xy[0] + ((w - loading.offsetWidth) /2));
 	}
 	progbox.style.visibility = "";
 	return progbox;
@@ -559,7 +565,7 @@ zk.setOffsetHeight = function (el, hgh) {
 	hgh = hgh - zk.getPadBorderHeight(el)
 		- $int(Element.getStyle(el, "margin-top"))
 		- $int(Element.getStyle(el, "margin-bottom"));
-	el.style.height = (hgh > 0 ? hgh: 0) + "px";
+	el.style.height = zk.px(hgh);
 };
 
 zk.borders = ["borderTopWidth", "borderRightWidth", "borderBottomWidth", "borderLeftWidth"];

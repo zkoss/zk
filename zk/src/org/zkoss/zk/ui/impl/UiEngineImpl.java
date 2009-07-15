@@ -1463,7 +1463,7 @@ public class UiEngineImpl implements UiEngine {
 			} catch (Throwable ex) {
 				errs = new LinkedList();
 				errs.add(ex);
-				cleanups = config.newEventThreadCleanups(comp, event, errs);
+				cleanups = config.newEventThreadCleanups(comp, event, errs, false);
 
 				if (!errs.isEmpty())
 					throw UiException.Aide.wrap((Throwable)errs.get(0));

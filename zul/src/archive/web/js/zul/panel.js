@@ -287,16 +287,13 @@ zkPanel = {
 					sh -= zk.getPaddingHeight(op);
 					sh = zk.revisedSize(cmp, sh, true);
 				}
-				if (sw < 0) sw = 0;
-				if (sh < 0) sh = 0;
-
-				s.width = sw + "px";
-				s.height = sh + "px";
+				s.width = zk.px(sw);
+				s.height = zk.px(sh);
 				cmp._lastSize = {l:l, t:t, w:w, h:h};
 
 				// restore.
-				s.top = "0px";
-				s.left = "0px";
+				s.top = "0";
+				s.left = "0";
 			} else {
 				var max = $e(cmp.id + "!maximize");
 				zk.rmClass(max, cls + "-maxd");
@@ -387,16 +384,14 @@ zkPanel = {
 			sw -= zk.getPaddingWidth(op);
 			sw = zk.revisedSize(cmp, sw);
 		}
-		if (sw < 0) sw = 0;
-		s.width = sw + "px";
+		s.width = zk.px(sw);
 		if (getZKAttr(cmp, "open") == "true") {
 			var sh = zk.ie6Only && op.clientHeight == 0 ? (op.offsetHeight - zk.getBorderHeight(op)) : op.clientHeight;
 			if (!floated) {
 				sh -= zk.getPaddingHeight(op);
 				sh = zk.revisedSize(cmp, sh, true);
 			}
-			if (sh < 0) sh = 0;
-			s.height = sh + "px";
+			s.height = zk.px(sh);
 		}
 	},
 	_fixWdh: zk.ie7 ? function (cmp) {
@@ -413,19 +408,19 @@ zkPanel = {
 		if (!wdh || wdh == "auto") {
 			var diff = zk.getPadBorderWidth(n.parentNode) + zk.getPadBorderWidth(n.parentNode.parentNode);
 			if (tl) {
-				tl.firstChild.style.width = n.offsetWidth + diff + "px";
+				tl.firstChild.style.width = zk.px(n.offsetWidth + diff);
 			}
 			if (hl) {
-				hl.firstChild.firstChild.style.width = Math.max(n.offsetWidth - (zk.getPadBorderWidth(hl)
-					+ zk.getPadBorderWidth(hl.firstChild) - diff), 0) + "px";
+				hl.firstChild.firstChild.style.width = zk.px(n.offsetWidth - (zk.getPadBorderWidth(hl)
+					+ zk.getPadBorderWidth(hl.firstChild) - diff));
 			}
 			if (bb) bb.style.width = zk.revisedSize(bb, body.offsetWidth);
 			if (fl) {
-				fl.firstChild.firstChild.style.width = Math.max(n.offsetWidth - (zk.getPadBorderWidth(fl)
-					+ zk.getPadBorderWidth(fl.firstChild) - diff), 0) + "px";
+				fl.firstChild.firstChild.style.width = zk.px(n.offsetWidth - (zk.getPadBorderWidth(fl)
+					+ zk.getPadBorderWidth(fl.firstChild) - diff));
 			}
 			if (bl) {
-				bl.firstChild.style.width = n.offsetWidth + diff + "px";
+				bl.firstChild.style.width = zk.px(n.offsetWidth + diff);
 			}
 		} else {
 			if (tl) tl.firstChild.style.width = "";

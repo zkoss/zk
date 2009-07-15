@@ -179,8 +179,8 @@ zk._domsg = function () {
 			zk._setOuterHTML(console, html);
 			console = $e("zk_msg");
 			var d = $e("zk_debugbox");
-			d.style.top = zk.innerY() + zk.innerHeight() - d.offsetHeight - 20 + "px";
-			d.style.left = zk.innerX() + zk.innerWidth() - d.offsetWidth - 20 + "px";
+			d.style.top = zk.px(zk.innerY() + zk.innerHeight() - d.offsetHeight - 20);
+			d.style.left = zk.px(zk.innerX() + zk.innerWidth() - d.offsetWidth - 20);
 			zk.cleanVisibility(d);
 		}
 		console.value = console.value + zk._msg + '\n';

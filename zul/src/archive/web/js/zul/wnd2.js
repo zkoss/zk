@@ -164,16 +164,13 @@ zkWnd2.maximize = function (cmp, maximized, silent) {
 				sh -= zk.getPaddingHeight(op);
 				sh = zk.revisedSize(cmp, sh, true);
 			}
-			if (sw < 0) sw = 0;
-			if (sh < 0) sh = 0;
-
-			s.width = sw + "px";
-			s.height = sh + "px";
+			s.width = zk.px(sw);
+			s.height = zk.px(sh);
 			cmp._lastSize = {l:l, t:t, w:w, h:h};
 
 			// restore.
-			s.top = "0px";
-			s.left = "0px";
+			s.top = "0";
+			s.left = "0";
 		} else {
 			var max = $e(cmp, "maximize");
 			zk.rmClass(max, cls + "-maxd");
@@ -274,11 +271,8 @@ zkWnd2.syncMaximized = function (cmp) {
 		sh -= zk.getPaddingHeight(op);
 		sh = zk.revisedSize(cmp, sh, true);
 	}
-	if (sw < 0) sw = 0;
-	if (sh < 0) sh = 0;
-
-	s.width = sw + "px";
-	s.height = sh + "px";
+	s.width = zk.px(sw);
+	s.height = zk.px(sh);
 };
 zkWnd2._fixWdh = zk.ie7 ? function (cmp) {
 	if (zkWnd2._embedded(cmp) || zkWnd2._popup(cmp) || !zk.isRealVisible(cmp)) return;
@@ -290,14 +284,14 @@ zkWnd2._fixWdh = zk.ie7 ? function (cmp) {
 	if (!wdh || wdh == "auto") {
 		var diff = zk.getPadBorderWidth(n.parentNode) + zk.getPadBorderWidth(n.parentNode.parentNode);
 		if (tl) {
-			tl.firstChild.style.width = n.offsetWidth + diff + "px";
+			tl.firstChild.style.width = zk.px(n.offsetWidth + diff);
 		}
 		if (hl) {
-			hl.firstChild.firstChild.style.width = Math.max(n.offsetWidth - (zk.getPadBorderWidth(hl)
-				+ zk.getPadBorderWidth(hl.firstChild) - diff), 0) + "px";
+			hl.firstChild.firstChild.style.width = zk.px(n.offsetWidth - (zk.getPadBorderWidth(hl)
+				+ zk.getPadBorderWidth(hl.firstChild) - diff));
 		}
 		if (bl) {
-			bl.firstChild.style.width = n.offsetWidth + diff + "px";
+			bl.firstChild.style.width = zk.px(n.offsetWidth + diff);
 		}
 	} else {
 		if (tl) tl.firstChild.style.width = "";
@@ -309,7 +303,7 @@ zkWnd2._fixHgh = function (cmp) {
 	if (!zk.isRealVisible(cmp)) return; //Bug #1944729
 	var hgh = cmp.style.height,
 		n = $e(cmp.id + "!cave");
-	if (zk.ie6Only && ((hgh && hgh != "auto" )|| n.style.height)) n.style.height = "0px";
+	if (zk.ie6Only && ((hgh && hgh != "auto" )|| n.style.height)) n.style.height = "0";
 	if (hgh && hgh != "auto")
 		zk.setOffsetHeight(n, zkWnd2.getOffsetHeight(cmp));
 };
@@ -483,8 +477,8 @@ zkWnd2.setAttr = function (cmp, nm, val) {
 			if (pos == "parent" && val != pos) {
 				var left = cmp.style.left, top = cmp.style.top;
 				var xy = getZKAttr(cmp, "offset").split(",");
-				left = $int(left) - $int(xy[0]) + "px";
-				top = $int(top) - $int(xy[1]) + "px";
+				left = zk.px($int(left) - $int(xy[0]));
+				top = zk.px($int(top) - $int(xy[1]));
 				cmp.style.left = left;
 				cmp.style.top = top;
 				rmZKAttr(cmp, "offset");
@@ -494,8 +488,8 @@ zkWnd2.setAttr = function (cmp, nm, val) {
 					var xy = zk.revisedOffset(parent),
 						left = $int(cmp.style.left), top = $int(cmp.style.top);
 					setZKAttr(cmp, "offset", xy[0]+ "," + xy[1]);
-					cmp.style.left = xy[0] + $int(cmp.style.left) + "px";
-					cmp.style.top = xy[1] + $int(cmp.style.top) + "px";
+					cmp.style.left = zk.px(xy[0] + $int(cmp.style.left));
+					cmp.style.top = zk.px(xy[1] + $int(cmp.style.top));
 				}
 			}
 			zkWnd2._center(cmp, null, val);
@@ -530,9 +524,9 @@ zkWnd2.setAttr = function (cmp, nm, val) {
 				zkWnd2.hideShadow(cmp);
 				var xy = offset.split(",");
 				if (nm == "style.top") {
-					cmp.style.top = $int(xy[1]) + $int(val) + "px";
+					cmp.style.top = zk.px($int(xy[1]) + $int(val));
 				} else {
-					cmp.style.left = $int(xy[0]) + $int(val) + "px";
+					cmp.style.left = zk.px($int(xy[0]) + $int(val));
 				}
 				zkWnd2.syncShadow(cmp);
 				return true;
@@ -679,18 +673,18 @@ zkWnd2._resize = function (cmp, t, l, h, w, keys) {
 	cmp.style.visibility = "hidden";
 	if (w != cmp.offsetWidth || h != cmp.offsetHeight) {
 		if (w != cmp.offsetWidth) {
-			cmp.style.width = w + "px";
+			cmp.style.width = zk.px(w);
 			zkWnd2._fixWdh(cmp);
 		}
 		if (h != cmp.offsetHeight) {
-			cmp.style.height = h + "px";
+			cmp.style.height = zk.px(h);
 			zkWnd2._fixHgh(cmp);
 		}
 		zkau.sendOnSize(cmp, keys);
 	}
 	if (l != cmp.offsetLeft || t != cmp.offsetTop) {
-		if (l != null) cmp.style.left = l + "px";
-		if (t != null) cmp.style.top = t + "px";
+		if (l != null) cmp.style.left = zk.px(l);
+		if (t != null) cmp.style.top = zk.px(t);
 		zkau.sendOnMove(cmp, keys);
 	}
 	zkWnd2.syncShadow(cmp);
@@ -732,13 +726,13 @@ zkWnd2._draw = function (dg, pointer) {
 			pointer[1] = dg.z_box.height + dg.z_box.top - dg.z_box.minHeight;
 			h = dg.z_box.minHeight;
 		}
-		dg.element.style.height = h + "px";
-		dg.element.style.top = pointer[1] + "px";
+		dg.element.style.height = zk.px(h);
+		dg.element.style.top = zk.px(pointer[1]);
 	}
 	if (dg.z_dir >= 4 && dg.z_dir <= 6) {
 		var h = dg.z_box.height + pointer[1] - dg.z_box.top;
 		if (h < dg.z_box.minHeight) h = dg.z_box.minHeight;
-		dg.element.style.height = h + "px";
+		dg.element.style.height = zk.px(h);
 	}
 	if (dg.z_dir >= 6 && dg.z_dir <= 8) {
 		var w = dg.z_box.width + dg.z_box.left - pointer[0];
@@ -746,13 +740,13 @@ zkWnd2._draw = function (dg, pointer) {
 			pointer[0] = dg.z_box.width + dg.z_box.left - dg.z_box.minWidth;
 			w = dg.z_box.minWidth;
 		}
-		dg.element.style.width = w + "px";
-		dg.element.style.left = pointer[0] + "px";
+		dg.element.style.width = zk.px(w);
+		dg.element.style.left = zk.px(pointer[0]);
 	}
 	if (dg.z_dir >= 2 && dg.z_dir <= 4) {
 		var w =  dg.z_box.width + pointer[0] - dg.z_box.left;
 		if (w < dg.z_box.minWidth) w = dg.z_box.minWidth;
-		dg.element.style.width = w + "px";
+		dg.element.style.width = zk.px(w);
 	}
 };
 ////////
@@ -858,8 +852,8 @@ zkWnd2._doOverpop = function (cmp, storage, replace) {
 		var xy = zk.revisedOffset(cmp.parentNode),
 			left = $int(cmp.style.left), top = $int(cmp.style.top);
 		setZKAttr(cmp, "offset", xy[0]+ "," + xy[1]);
-		cmp.style.left = xy[0] + $int(cmp.style.left) + "px";
-		cmp.style.top = xy[1] + $int(cmp.style.top) + "px";
+		cmp.style.left = zk.px(xy[0] + $int(cmp.style.left));
+		cmp.style.top = zk.px(xy[1] + $int(cmp.style.top));
 	}
 	if (isV) zk.setVParent(cmp);
 
@@ -921,8 +915,8 @@ zkWnd2._doModal = function (cmp, replace) {
 			var xy = zk.revisedOffset(cmp.parentNode),
 				left = $int(cmp.style.left), top = $int(cmp.style.top);
 			setZKAttr(cmp, "offset", xy[0]+ "," + xy[1]);
-			cmp.style.left = xy[0] + $int(cmp.style.left) + "px";
-			cmp.style.top = xy[1] + $int(cmp.style.top) + "px";
+			cmp.style.left = zk.px(xy[0] + $int(cmp.style.left));
+			cmp.style.top = zk.px(xy[1] + $int(cmp.style.top));
 		}
 		zk.setVParent(cmp);
 	}
@@ -942,7 +936,7 @@ zkWnd2._doModal = function (cmp, replace) {
 		if (y) {
 			var y1 = top - y;
 			if (y1 > 100) {
-				cmp.style.top = top - (y1 - 100) + "px";
+				cmp.style.top = zk.px(top - (y1 - 100));
 			}
 		} else if (top > 100){
 			cmp.style.top = "100px";
@@ -1068,14 +1062,14 @@ zkWnd2._center = function (cmp, zi, pos) {
 		var opts = sw.opts, l = cmp.offsetLeft, t = cmp.offsetTop,
 			s = cmp.style;
 		if (pos.indexOf("left") >= 0 && opts.left < 0)
-			s.left = (l - opts.left) + "px";
+			s.left = zk.px(l - opts.left);
 		else if (pos.indexOf("right") >= 0 && opts.right > 0)
-			s.left = (l - opts.right) + "px";
+			s.left = zk.px(l - opts.right);
 
 		if (pos.indexOf("top") >= 0 && opts.top < 0)
-			s.top = (t - opts.top) + "px";
+			s.top = zk.px(t - opts.top);
 		else if (pos.indexOf("bottom") >= 0 && opts.bottom > 0)
-			s.top = (t - opts.bottom) + "px";
+			s.top = zk.px(t - opts.bottom);
 	}
 	zkau.sendOnMove(cmp);
 
@@ -1129,8 +1123,8 @@ zkWnd2._ghostmove = function (dg, ghosting, pointer) {
 	} else {
 		var org = zkau.getGhostOrgin(dg);
 		if (org) {
-			org.style.top = org.offsetTop + dg.element.offsetTop - dg._zoffs[1] + "px";
-			org.style.left = org.offsetLeft + dg.element.offsetLeft - dg._zoffs[0] + "px";
+			org.style.top = zk.px(org.offsetTop + dg.element.offsetTop - dg._zoffs[1]);
+			org.style.left = zk.px(org.offsetLeft + dg.element.offsetLeft - dg._zoffs[0]);
 		}
 		zkau.endGhostToDIV(dg);
 		document.body.style.cursor = "";
