@@ -57,7 +57,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<mold-name>default</mold-name>
 			<mold-uri>~./zkex/zul/html/layoutregion2.dsp</mold-uri>
 		</mold>
-		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>chart</component-name>
@@ -99,7 +98,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<mold-name>default</mold-name>
 			<mold-uri>~./zkex/zul/html/layoutregion2.dsp</mold-uri>
 		</mold>
-		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>fisheye</component-name>
@@ -164,7 +162,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<mold-name>default</mold-name>
 			<mold-uri>~./zkex/zul/html/layoutregion2.dsp</mold-uri>
 		</mold>
-		<preserve-blank/>
 	</component>	
 	<component>
 		<component-name>south</component-name>
@@ -173,7 +170,6 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<mold-name>default</mold-name>
 			<mold-uri>~./zkex/zul/html/layoutregion2.dsp</mold-uri>
 		</mold>
-		<preserve-blank/>
 	</component>
 	<component>
 		<component-name>west</component-name>
@@ -182,6 +178,5 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<mold-name>default</mold-name>
 			<mold-uri>~./zkex/zul/html/layoutregion2.dsp</mold-uri>
 		</mold>
-		<preserve-blank/>
 	</component>
 </language-addon>
