@@ -26,6 +26,7 @@ import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zul.Tabbox;
 import org.zkoss.zul.Tabs;
+import org.zkoss.zul.Toolbar;
 
 /**
  * {@link Tabs}'s default mold. It forwards to {@link Tabs2DefaultV} if the
@@ -50,8 +51,16 @@ public class Tabs2Default implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final String zcs = self.getZclass() + '-';
 		final String uuid = self.getUuid();
+		final Toolbar tb = tabbox.getToolbar();
+		final boolean isAuxtb = tabbox.isTabscroll() && tb != null;
+		
 		wh.write("<div id=\"" + uuid + "\"").write(" z.type=\"zul.tab2.Tabs2\"").write(self.getOuterAttrs())
 				.write(self.getInnerAttrs()).writeln('>');
+		
+		if (isAuxtb) {
+			wh.write("<div class=\"").write(tb.getZclass()).write("-outer\">")
+				.write(tb);
+		}
 		wh.write("<div id=\"" + uuid + "!right").writeln("\"></div>");
 		wh.write("<div id=\"" + uuid + "!left").writeln("\"></div>");
 		wh.write("<div id=\"" + uuid + "!header\"").writeln(
@@ -63,6 +72,9 @@ public class Tabs2Default implements ComponentRenderer {
 		wh.writeln("<div id=\"" + uuid + "!clear\" class=\"z-clear\"></div>");
 		wh.writeln("</ul>");
 		wh.writeln("</div>");
+		if (isAuxtb) {
+			wh.write("</div>");
+		}
 		wh.writeln("<div id=\"" + uuid + "!line\" class=\"" + zcs
 				+ "space\" ></div>");
 		wh.writeln("</div>");

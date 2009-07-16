@@ -76,9 +76,8 @@ zkTab2 = {
 	init: function(cmp) {
 		//onClick
 		zk.listen(cmp, "click", zkTab2.onclick);
-		var tabbox = $e(getZKAttr(cmp, "box"));
-		//close Button
-		var btn = $e(cmp.id + "!close");
+		var tabbox = $e(getZKAttr(cmp, "box")),
+			btn = $e(cmp.id + "!close");//close Button
 		if (btn) {
 			zk.listen(btn, "click", zkTab2.onCloseBtnClick);
 			if (!btn.style.cursor)
@@ -88,13 +87,11 @@ zkTab2 = {
 				zk.listen(btn, "mouseout", this._onMouseOut);
 			}
 		}
-		var meta = cmp.parentNode,
-			uuid = $uuid(meta);
-		if (!meta._toscroll)
-			meta._toscroll = function () {
-				zkTabs2.scrollcheck(uuid);
+		if (!tabbox._toscroll)
+			tabbox._toscroll = function () {
+				zkTabs2.scrollcheck($uuid(cmp.parentNode));
 			};
-		zk.addInit(meta._toscroll, false, uuid);
+		zk.addInitLater(tabbox._toscroll, false, tabbox.id);
 	},
 	setAttr: function(cmp, name, value) {
 		switch (name) {
@@ -154,7 +151,7 @@ zkTab2 = {
 		var tabs = $outer(cmp.parentNode),
 			tbx = $e(getZKAttr(cmp, "box"));
 		if (!zkTabbox2._isAccord(tbx)) { //if delete tab , need scroll back !
-		zk.addCleanup(function () {
+		zk.addCleanupLater(function () {
 			zkTabs2.scrollcheck(tabs.id, "cln", cmp);
 				if (zkTabbox2._isVert(tbx)) {
 					zkTabs2._fixHgh(tbx, tabs);
@@ -272,24 +269,18 @@ zkTab2 = {
 // tabs //
 zkTabs2 = {
 	init: function(cmp) {
-		zkTabs2._fixWidth(cmp);
-		for (var btn, key = ['right', 'left', 'down', 'up'], le = key.length; --le >= 0;)
-			if ((btn = $e(cmp.id, key[le])))
-				zk.listen(btn, 'click', zkTabs2.onClickArrow);
+		var tabbox = $parentByType(cmp, 'Tabbox2');
+		if (!zkTabbox2._isAccord(tabbox) && zkTabbox2._isScroll(tabbox)) {
+			for (var btn, key = ['right', 'left', 'down', 'up'], le = key.length; le--;)
+				if ((btn = $e(cmp.id, key[le])))
+					zk.listen(btn, 'click', zkTabs2.onClickArrow);
 
-		var meta = $parent(cmp);
-		if (!meta.initscroll)
-			meta.initscroll = function () {
-				zkTabs2.scrollcheck(cmp.id,"init");
-			};
-		zk.addInit(meta.initscroll, false, meta.id);
-	},
-	setAttr: function (cmp, nm, val) {
-		if (nm == 'z.initscroll') {
-			zk.addInit(cmp.parentNode.initscroll, false, cmp.parentNode.id);
-			return true;
+			if (!tabbox.initscroll)
+				tabbox.initscroll = function() {
+					zkTabs2.scrollcheck(cmp.id, "init");
+				};
+			zk.addInitLater(tabbox.initscroll, false, tabbox.id);
 		}
-		return false;
 	},
 	_showbutton : function(cmp) {
 		var tbx = cmp.parentNode,
@@ -418,32 +409,51 @@ zkTabs2 = {
 					}
 				}
 		} else if(!zkTabbox2._isAccord(tabbox)) {
-			var cave = $e(uuid + "!cave"), 
+			var cave = $e(uuid + "!cave"),
 				header = $e(uuid + "!header"),
 			 	alltab = zk.childNodes(cave, zkTabs2._isLegalTab),
 				headwidth = header.offsetWidth,
 				childwidth = 0,
 				leftbtn = $e(uuid + "!left"),
-				rightbtn = $e(uuid + "!right");
-			for (var i = 0, count = alltab.length; i < count; i++)
-				childwidth = childwidth + $int(alltab[i].offsetWidth);// + 2;
+				rightbtn = $e(uuid + "!right"),
+				toolbar = $e(getZKAttr(tabbox, 'toolbar'));
+
+			for (var i = alltab.length; i--;)
+				childwidth += alltab[i].offsetWidth;// + 2;
+
+
 
 			if (tabbox._scrolling) { //already in scrolling status
+				if (toolbar) {
+					var outer, hgh;
+						
+					// fixed FF2's bug
+					if (zk.gecko2Only) {
+						outer = toolbar.parentNode.parentNode;
+						outer.style.height = '';
+						hgh = outer.offsetHeight;
+					}
+					rightbtn.style.right = toolbar.offsetWidth + 'px';
+					if (zk.gecko2Only)
+						outer.style.height = zk.revisedSize(outer, hgh, true) + 'px';
+				}
+					
 				if (tbsdiv.offsetWidth < (leftbtn ? leftbtn.offsetWidth : 0) + (rightbtn ? rightbtn.offsetWidth : 0))  return;
 				if (childwidth <= (headwidth + (leftbtn ? leftbtn.offsetWidth : 0))) {
 					tabbox._scrolling = false;
 					zkTabs2._hidebutton(tbsdiv);
-					header.style.width = Math.max(tabbox.offsetWidth - 2, 0) + "px";
+					header.style.width = Math.max((tabbox.offsetWidth - (toolbar ? toolbar.offsetWidth : 0)) - 2, 0) + "px";
 					header.scrollLeft = 0;
 				}
 				// scroll to specific position
 				switch (way) {
 					case "init":
-						if (cmp == null)
-							cmp = zkTab2._getSelTab(zk.firstChild(cave,"LI"));
-						var cmpOffsetLeft = cmp.offsetLeft, 
-							cmpOffsetWidth = cmp.offsetWidth, 
-							scl = header.scrollLeft, 
+						if (!cmp && !(cmp = zkTab2._getSelTab(zk.firstChild(cave,"LI"))))
+							return; // nothing to do
+						
+						var cmpOffsetLeft = cmp.offsetLeft,
+							cmpOffsetWidth = cmp.offsetWidth,
+							scl = header.scrollLeft,
 							hosw = headwidth;
 						if (cmpOffsetLeft < scl) {
 							zkTabs2._tabscroll(uuid, "left", scl - cmpOffsetLeft + 2);
@@ -472,7 +482,7 @@ zkTabs2 = {
 					zkTabs2._showbutton(tbsdiv);
 					var caveul = $e(getZKAttr(tabbox, "tabs"),"cave");
 					caveul.style.width = "5432px";
-					header.style.width = Math.max(tabbox.offsetWidth - 38, 0) + "px";
+					header.style.width = Math.max(tabbox.offsetWidth - (toolbar ? toolbar.offsetWidth : 0) - 38, 0) + "px";
 					if (way == "sel") {
 						var d = childwidth - header.offsetWidth - header.scrollLeft + 2;
 						if (d >= 0) zkTabs2._tabscroll(uuid, "right", d);
@@ -600,7 +610,7 @@ zkTabs2 = {
 	_isLegalLI: function (n) {return $tag(n) == "LI";},
 	/** Fix the width of header. */
 	_fixWidth: function(uuid) {
-		var tabs = typeof uuid == 'string' ? $e(uuid) : uuid, 
+		var tabs = typeof uuid == 'string' ? $e(uuid) : uuid,
 			tbx = tabs.parentNode,
 			head = $e(tabs.id + "!header");
 		zkTabs2._fixHgh(tbx, tabs);
@@ -617,21 +627,22 @@ zkTabs2 = {
 		} else {
 			if (tbx.offsetWidth < 36) return;
 			if (zkTabbox2._isScroll(tbx)) {
+				var toolbar = $e(getZKAttr(tbx, 'toolbar'));
 				if (!tbx.style.width) {
 					zkTabs2._forceStyle(tbx,"w","100%");
 					zkTabs2._forceStyle(tabs,"w",zk.revisedSize(tabs,tbx.offsetWidth)+ "px");
 					if (tbx._scrolling) {
-						zkTabs2._forceStyle(head,"w",tbx.offsetWidth - 38 + "px");
+						zkTabs2._forceStyle(head,"w",tbx.offsetWidth - (toolbar ? toolbar.offsetWidth : 0) - 38 + "px");
 					} else {
-						zkTabs2._forceStyle(head,"w",zk.revisedSize(head,tbx.offsetWidth)+ "px");
+						zkTabs2._forceStyle(head,"w",zk.revisedSize(head,tbx.offsetWidth - (toolbar ? toolbar.offsetWidth : 0))+ "px");
 					}
 				} else {
 					zkTabs2._forceStyle(tabs,"w",zk.revisedSize(tabs,tbx.offsetWidth)+ "px");
 					zkTabs2._forceStyle(head,"w",tabs.style.width);
 					if (tbx._scrolling) {
-						zkTabs2._forceStyle(head,"w",head.offsetWidth - 36 + "px");
+						zkTabs2._forceStyle(head,"w",head.offsetWidth - (toolbar ? toolbar.offsetWidth : 0) - 36 + "px");
 					} else {
-						zkTabs2._forceStyle(head,"w",head.offsetWidth + "px");
+						zkTabs2._forceStyle(head,"w",head.offsetWidth - (toolbar ? toolbar.offsetWidth : 0) + "px");
 					}
 				}
 			} else {

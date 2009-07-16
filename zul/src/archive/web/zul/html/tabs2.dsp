@@ -21,6 +21,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:set var="self" value="${requestScope.arg.self}"/>
 <c:set var="zcs" value="${self.zclass}-"/>
 <div id="${self.uuid}" z.type="zul.tab2.Tabs2"${self.outerAttrs}${self.innerAttrs}>
+	<c:if test="${self.parent.tabscroll and !empty self.parent.toolbar}"><div class="${self.parent.toolbar.zclass}-outer">${z:redraw(self.parent.toolbar, null)}</c:if>
 	<div id="${self.uuid}!right" ></div>
 	<div id="${self.uuid}!left" ></div>
 	<div id="${self.uuid}!header" class="${c:cat(zcs,'header')}" >
@@ -32,5 +33,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<div id="${self.uuid}!clear" class="z-clear"> </div>
 		</ul>
 	</div>
+	<c:if test="${self.parent.tabscroll and !empty self.parent.toolbar}"></div></c:if>
 	<div id="${self.uuid}!line" class="${c:cat(zcs,'space')}" ></div>
 </div>

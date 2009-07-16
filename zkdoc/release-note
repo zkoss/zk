@@ -6,6 +6,7 @@ August, 2009
   2813737: Support new "dial" chart	
   2813778: Upgrade to jython 2.5
   2817733: doModal degenerate to doHilighted if event thread disabled
+  2821761: Tabbox support extra tabs to display other cmps on the bar
 
 * Bugs
   2813877: Window resize outline miss
