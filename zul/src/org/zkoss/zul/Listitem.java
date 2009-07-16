@@ -317,15 +317,6 @@ public class Listitem extends XulElement implements org.zkoss.zul.api.Listitem {
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Listbox))
 			throw new UiException("Listitem's parent must be Listbox, not "+parent);
-		
-		//load this if is unloaded
-		Listbox curParent = (Listbox) this.getParent();
-		if(curParent!=null && parent != curParent && !this.isLoaded()){
-			curParent.renderItem(this);
-			int indexOfThis = curParent.getIndexOfItem(this);
-			if(indexOfThis>0)
-				curParent.syncModel(indexOfThis, indexOfThis);
-		}
 		super.beforeParentChanged(parent);
 	}
 	public void beforeChildAdded(Component child, Component refChild) {
