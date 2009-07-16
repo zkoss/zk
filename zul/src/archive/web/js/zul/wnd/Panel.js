@@ -192,19 +192,19 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		if (!wdh || wdh == "auto") {
 			var diff = zk(cm.parentNode).padBorderWidth() + zk(cm.parentNode.parentNode).padBorderWidth();
 			if (tl) {
-				tl.firstChild.style.width = cm.offsetWidth + diff + "px";
+				tl.firstChild.style.width = jq.px(cm.offsetWidth + diff);
 			}
 			if (hl) {
-				hl.firstChild.firstChild.style.width = Math.max(cm.offsetWidth - (zk(hl).padBorderWidth()
-					+ zk(hl.firstChild).padBorderWidth() - diff), 0) + "px";
+				hl.firstChild.firstChild.style.width = jq.px(cm.offsetWidth - (zk(hl).padBorderWidth()
+					+ zk(hl.firstChild).padBorderWidth() - diff));
 			}
 			if (bb) bb.style.width = zk(bb).revisedWidth(body.offsetWidth);
 			if (fl) {
-				fl.firstChild.firstChild.style.width = Math.max(cm.offsetWidth - (zk(fl).padBorderWidth()
-					+  zk(fl.firstChild).padBorderWidth() - diff), 0) + "px";
+				fl.firstChild.firstChild.style.width = jq.px(cm.offsetWidth - (zk(fl).padBorderWidth()
+					+  zk(fl.firstChild).padBorderWidth() - diff));
 			}
 			if (bl) {
-				bl.firstChild.style.width = cm.offsetWidth + diff + "px";
+				bl.firstChild.style.width = jq.px(cm.offsetWidth + diff);
 			}
 		} else {
 			if (tl) tl.firstChild.style.width = "";
@@ -219,7 +219,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		var n = this.$n(),
 			body = this.panelchildren.$n(),
 			hgh = n.style.height;
-		if (zk.ie6_ && ((hgh && hgh != "auto" )|| body.style.height)) body.style.height = "0px";
+		if (zk.ie6_ && ((hgh && hgh != "auto" )|| body.style.height)) body.style.height = "0";
 		if (hgh && hgh != "auto")
 			zk(body).setOffsetHeight(this._offsetHeight(n));
 		if (zk.ie6_) zk(body).redoCSS();
@@ -264,16 +264,14 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			sw -= zk.sumStyles(op, "rl", zk.paddings);
 			sw = zk.revisedSize(cmp, sw);
 		}
-		if (sw < 0) sw = 0;
-		s.width = sw + "px";
+		s.width = jq.px(sw);
 		if (getZKAttr(cmp, "open") == "true") {
 			var sh = zk.ie6_ && op.clientHeight == 0 ? (op.offsetHeight - zk.sumStyles(op, "tb", zk.borders)) : op.clientHeight;
 			if (!floated) {
 				sh -= zk.sumStyles(op, "tb", zk.paddings);
 				sh = zk.revisedSize(cmp, sh, true);
 			}
-			if (sh < 0) sh = 0;
-			s.height = sh + "px";
+			s.height = jq.px(sh);
 		}*/
 	},
 	onFloatUp: function (wgt) {
@@ -302,8 +300,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		var n = this.$n();
 		if (!n.style.top && !n.style.left) {
 			var xy = zk(n).revisedOffset();
-			n.style.left = xy[0] + "px";
-			n.style.top = xy[1] + "px";
+			n.style.left = jq.px(xy[0]);
+			n.style.top = jq.px(xy[1]);
 		}
 
 		n.style.position = "absolute";
@@ -504,12 +502,10 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	_aftermove: function (dg, evt) {
 		var wgt = dg.control;
 		wgt._syncShadow();
-		var node = wgt.$n(),
-			x = zk.parseInt(node.style.left),
-			y = zk.parseInt(node.style.top);
+		var node = wgt.$n();
 		wgt.fire('onMove', zk.copy({
-			left: x + 'px',
-			top: y + 'px'
+			left: node.style.left,
+			top: node.style.top
 		}, evt.data), {ignorable: true});
 	}
 });

@@ -70,14 +70,14 @@ zk.eff.Shadow = zk.$extends(zk.Object, {
 			wd = Math.max(0, w - opts.left + opts.right),
 			hgh = Math.max(0, h - opts.top + opts.bottom),
 			st = shadow.style;
-		st.left = (l + opts.left) + "px";
-		st.top = (t + opts.top) + "px";
-		st.width = wd + "px";
+		st.left = jq.px(l + opts.left);
+		st.top = jq.px(t + opts.top);
+		st.width = jq.px(wd);
 		st.display = "block";
-		if (zk.ie6_) st.height = hgh + "px";
+		if (zk.ie6_) st.height = jq.px(hgh);
 		else {
 			var cns = shadow.childNodes;
-			cns[1].style.height = Math.max(0, hgh - cns[0].offsetHeight - cns[2].offsetHeight) + "px";
+			cns[1].style.height = jq.px(hgh - cns[0].offsetHeight - cns[2].offsetHeight);
 		}
 
 		var stackup = this.stackup;
@@ -87,10 +87,10 @@ zk.eff.Shadow = zk.$extends(zk.Object, {
 					jq.newStackup(node, node.id + '-sdwstk', shadow);
 
 			st = stackup.style;
-			st.left = l +"px";
-			st.top = t +"px";
-			st.width = w +"px";
-			st.height = h +"px";
+			st.left = jq.px(l);
+			st.top = jq.px(t);
+			st.width = jq.px(w);
+			st.height = jq.px(h);
 			st.zIndex = zk.parseInt($node.css("zIndex"));
 			st.display = "block";
 		}
@@ -180,10 +180,10 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 		var n = this.mask,
 			ofs = zk(n).toStyleOffset(jq.innerX(), jq.innerY()),
 			st = n.style;
-		st.left = ofs[0] + "px";
-		st.top = ofs[1] + "px";
-		st.width = jq.innerWidth() + "px";
-		st.height = jq.innerHeight() + "px";
+		st.left = jq.px(ofs[0]);
+		st.top = jq.px(ofs[1]);
+		st.width = jq.px(jq.innerWidth());
+		st.height = jq.px(jq.innerHeight());
 		st.display = "block";
 
 		n = this.stackup;
@@ -228,11 +228,11 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 		
 		if (loading) {
 			if (loading.offsetHeight > h) 
-				loading.style.height = zk(loading).revisedHeight(h) + "px";
+				loading.style.height = jq.px(zk(loading).revisedHeight(h));
 			if (loading.offsetWidth > w)
-				loading.style.width = zk(loading).revisedWidth(w) + "px";
-			loading.style.top = (xy[1] + ((h - loading.offsetHeight) /2)) + "px";
-			loading.style.left = (xy[0] + ((w - loading.offsetWidth) /2)) + "px";
+				loading.style.width = jq.px(zk(loading).revisedWidth(w));
+			loading.style.top = jq.px(xy[1] + ((h - loading.offsetHeight) /2));
+			loading.style.left = jq.px(xy[0] + ((w - loading.offsetWidth) /2));
 		}
 		
 		mask.style.visibility = "";

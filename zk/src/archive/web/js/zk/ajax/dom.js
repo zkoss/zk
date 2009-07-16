@@ -120,7 +120,7 @@ zjq.prototype = { //ZK extension
 		hgh -= this.padBorderHeight()
 			+ zk.parseInt($jq.css("margin-top"))
 			+ zk.parseInt($jq.css("margin-bottom"));
-		$jq[0].style.height = Math.max(0, hgh) + "px";
+		$jq[0].style.height = jq.px(hgh);
 		return this;
 	},
 
@@ -272,8 +272,8 @@ zjq.prototype = { //ZK extension
 
 		var ofs = this.toStyleOffset(x, y);
 
-		if (!skipx) el.style.left = ofs[0] + "px";
-		if (!skipy) el.style.top =  ofs[1] + "px";
+		if (!skipx) el.style.left = jq.px(ofs[0]);
+		if (!skipy) el.style.top =  jq.px(ofs[1]);
 		return this;
 	},
 	position: function (dim, where, opts) {
@@ -341,8 +341,8 @@ zjq.prototype = { //ZK extension
 
 		var el = this.jq[0],
 			ofs = this.toStyleOffset(x, y);
-		el.style.left = ofs[0] + "px";
-		el.style.top = ofs[1] + "px";
+		el.style.left = jq.px(ofs[0]);
+		el.style.top = jq.px(ofs[1]);
 		return this;
 	},
 
@@ -383,8 +383,8 @@ zjq.prototype = { //ZK extension
 		el._$orgLeft = left - parseFloat(st.left  || 0);
 		el._$orgTop = top  - parseFloat(st.top || 0);
 		st.position = 'absolute';
-		st.top = top + 'px';
-		st.left = left + 'px';
+		st.top = jq.px(top);
+		st.left = jq.px(left);
 		return this;
 	},
 	relativize: function() {
@@ -396,8 +396,8 @@ zjq.prototype = { //ZK extension
 		var top  = parseFloat(st.top  || 0) - (el._$orgTop || 0),
 			left = parseFloat(st.left || 0) - (el._$orgLeft || 0);
 
-		st.top = top + 'px';
-		st.left = left + 'px';
+		st.top = jq.px(top);
+		st.left = jq.px(left);
 		return this;
 	},
 
@@ -635,6 +635,10 @@ zjq.prototype = { //ZK extension
 };
 
 zk.copy(jq, { //ZK extension to jq
+	px: function (v) {
+		return Math.max(v, 0) + "px";
+	},
+
 	zkAjax: zk.$default({
 		global: false,
 		contentType: "application/x-www-form-urlencoded;charset=UTF-8"

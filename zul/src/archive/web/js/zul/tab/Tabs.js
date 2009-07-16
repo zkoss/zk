@@ -97,7 +97,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				if (childHeight <= headerOffsetHeight + btnsize) {
 					tabbox._scrolling = false;
 					this._showbutton(false)
-					header.style.height= Math.max(tbx.offsetHeight-2, 0) + "px";
+					header.style.height= jq.px(tbx.offsetHeight-2);
 					header.scrollTop = 0;
 				}
 				switch (way) {
@@ -153,7 +153,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				if (childWidth <= headerOffsetWidth + btnsize) {
 					tabbox._scrolling = false;
 					this._showbutton(false);
-					header.style.width = Math.max(tbx.offsetWidth, 0) + "px";
+					header.style.width = jq.px(tbx.offsetWidth);
 					header.scrollLeft = 0;
 				}
 				// scroll to specific position

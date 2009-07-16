@@ -136,12 +136,12 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		if (!wdh || wdh == "auto") { //Popup will disappear when width is null in IE 
 			var diff = zk(n.parentNode).padBorderWidth() + zk(n.parentNode.parentNode).padBorderWidth();
 			if (fir) {
-				fir.firstChild.style.width = Math.max(0, n.offsetWidth - (zk(fir).padBorderWidth()
-					+ zk(fir.firstChild).padBorderWidth() - diff)) + "px";
+				fir.firstChild.style.width = jq.px(n.offsetWidth - (zk(fir).padBorderWidth()
+					+ zk(fir.firstChild).padBorderWidth() - diff));
 			}
 			if (last) {
-				last.firstChild.style.width = Math.max(0, n.offsetWidth - (zk(last).padBorderWidth()
-					+ zk(last.firstChild).padBorderWidth() - diff)) + "px";
+				last.firstChild.style.width = jq.px(n.offsetWidth - (zk(last).padBorderWidth()
+					+ zk(last.firstChild).padBorderWidth() - diff));
 			}
 		} else {
 			if (fir) fir.firstChild.style.width = "";

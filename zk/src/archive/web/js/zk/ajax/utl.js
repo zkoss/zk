@@ -201,8 +201,8 @@ zUtl = { //static methods
 		if (mask && $txt.length) { //center
 			var txt = $txt[0],
 				st = txt.style;
-			st.left = (jq.innerWidth() - txt.offsetWidth) / 2 + x + "px";
-			st.top = (jq.innerHeight() - txt.offsetHeight) / 2 + y + "px";
+			st.left = jq.px((jq.innerWidth() - txt.offsetWidth) / 2 + x);
+			st.top = jq.px((jq.innerHeight() - txt.offsetHeight) / 2 + y);
 		}
 		$n.zk.cleanVisibility();
 	},

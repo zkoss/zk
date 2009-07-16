@@ -20,5 +20,21 @@ zul.layout.South = zk.$extends(_zkbc = zul.layout.LayoutRegion, zul.layout._Sout
 		return zul.layout.Borderlayout.SOUTH;
 	},
 	getSize: _zkbc.prototype.getHeight,
-	setSize: _zkbc.prototype.setHeight
+	setSize: _zkbc.prototype.setHeight,
+
+	_ambit2: function (ambit, mars, split) {
+		ambit.w = mars.left + mars.right;
+		ambit.h += split.offsetHeight;
+		ambit.ts = ambit.y + ambit.h + mars.bottom; // total size;
+		ambit.y = ambit.h + mars.bottom;
+	},
+	_reszSp2: function (ambit, split) {
+		ambit.h -= split.h;
+		ambit.y += split.h;
+		return {
+			left: jq.px(ambit.x),
+			top: jq.px(ambit.y - split.h),
+			width: jq.px(ambit.w)
+		};
+	}
 });

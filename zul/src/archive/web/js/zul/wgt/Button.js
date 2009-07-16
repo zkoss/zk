@@ -103,8 +103,8 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		if (box.style.height && box.offsetHeight) {
 			var cellHgh = zk.parseInt(jq(box.rows[0].cells[0]).css('height'));
 			if (cellHgh != box.rows[0].cells[0].offsetHeight) {
-				box.rows[1].style.height = Math.max(box.offsetHeight -
-				cellHgh - zk.parseInt(jq(box.rows[2].cells[0]).css('height')), 0) + 'px';
+				box.rows[1].style.height = jq.px(box.offsetHeight -
+				cellHgh - zk.parseInt(jq(box.rows[2].cells[0]).css('height')));
 			}
 		}
 	} : zk.$void,

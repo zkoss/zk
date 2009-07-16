@@ -76,8 +76,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			$n = zk(n);
 		if (!pos && !n.style.top && !n.style.left) {
 			var xy = $n.revisedOffset();
-			n.style.left = xy[0] + "px";
-			n.style.top = xy[1] + "px";
+			n.style.left = jq.px(xy[0]);
+			n.style.top = jq.px(xy[1]);
 		} else if (pos == "parent")
 			this._posByParent();
 
@@ -106,7 +106,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			var top = zk.parseInt(n.style.top), y = jq.innerY();
 			if (y) {
 				var y1 = top - y;
-				if (y1 > 100) n.style.top = top - (y1 - 100) + "px";
+				if (y1 > 100) n.style.top = jq.px(top - (y1 - 100));
 			} else if (top > 100)
 				n.style.top = "100px";
 		}
@@ -141,8 +141,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			ofs = zk(n.parentNode).revisedOffset(),
 			left = zk.parseInt(n.style.left), top = zk.parseInt(n.style.top);
 		this._offset = ofs;
-		n.style.left = ofs[0] + zk.parseInt(n.style.left) + "px";
-		n.style.top = ofs[1] + zk.parseInt(n.style.top) + "px";
+		n.style.left = jq.px(ofs[0] + zk.parseInt(n.style.left));
+		n.style.top = jq.px(ofs[1] + zk.parseInt(n.style.top));
 	},
 	_syncShadow: function () {
 		if (this._mode == 'embedded') {
@@ -191,13 +191,13 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		if (pos && sdw) {
 			var opts = sdw.opts, l = n.offsetLeft, t = n.offsetTop; 
 			if (pos.indexOf("left") >= 0 && opts.left < 0)
-				st.left = (l - opts.left) + "px";
+				st.left = jq.px(l - opts.left);
 			else if (pos.indexOf("right") >= 0 && opts.right > 0)
-				st.left = (l - opts.right) + "px";
+				st.left = jq.px(l - opts.right);
 			if (pos.indexOf("top") >= 0 && opts.top < 0)
-				st.top = (t - opts.top) + "px";
+				st.top = jq.px(t - opts.top);
 			else if (pos.indexOf("bottom") >= 0 && opts.bottom > 0)
-				st.top = (t - opts.bottom) + "px";
+				st.top = jq.px(t - opts.bottom);
 		}
 		this._syncShadow();
 		if (ol != st.left || ot != st.top)
@@ -277,10 +277,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		if (!wdh || wdh == "auto") {
 			var $cavp = zk(cave.parentNode),
 				diff = $cavp.padBorderWidth() + $cavp.parent().padBorderWidth();
-			if (tl) tl.firstChild.style.width = cave.offsetWidth + diff + "px";
-			if (hl) hl.firstChild.firstChild.style.width = Math.max(0, cave.offsetWidth
-				- (zk(hl).padBorderWidth() + zk(hl.firstChild).padBorderWidth() - diff)) + "px";
-			if (bl) bl.firstChild.style.width = cave.offsetWidth + diff + "px";
+			if (tl) tl.firstChild.style.width = jq.px(cave.offsetWidth + diff);
+			if (hl) hl.firstChild.firstChild.style.width = jq.px(cave.offsetWidth
+				- (zk(hl).padBorderWidth() + zk(hl.firstChild).padBorderWidth() - diff));
+			if (bl) bl.firstChild.style.width = jq.px(cave.offsetWidth + diff);
 		} else {
 			if (tl) tl.firstChild.style.width = "";
 			if (hl) hl.firstChild.style.width = "";
@@ -546,15 +546,15 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		el.style.visibility = "hidden";
 		var h = el.offsetHeight - top.offsetHeight - header.offsetHeight;
 		el = jq("#zk_wndghost")[0];
-		el.firstChild.style.height = zk(el.firstChild).revisedHeight(h) + "px";
+		el.firstChild.style.height = jq.px(zk(el.firstChild).revisedHeight(h));
 		el.insertBefore(fakeT, el.firstChild);
 		el.insertBefore(fakeH, el.lastChild);
 		return el;
 	},
 	_endghostmove: function (dg, origin) {
 		var el = dg.node; //ghost
-		origin.style.top = origin.offsetTop + el.offsetTop - dg._wndoffs[1] + "px";
-		origin.style.left = origin.offsetLeft + el.offsetLeft - dg._wndoffs[0] + "px";
+		origin.style.top = jq.px(origin.offsetTop + el.offsetTop - dg._wndoffs[1]);
+		origin.style.left = jq.px(origin.offsetLeft + el.offsetLeft - dg._wndoffs[0]);
 
 		document.body.style.cursor = "";
 	},

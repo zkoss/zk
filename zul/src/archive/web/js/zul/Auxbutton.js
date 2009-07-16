@@ -55,8 +55,7 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 			//Bug 1738241: don't use align="xxx"
 			var v = refh - imgh;
 			if (v)
-				img.style.height = Math.max(0,
-					zk.parseInt(jq(img).css('height')) + v) + 'px';
+				img.style.height = jq.px(zk.parseInt(jq(img).css('height')) + v);
 
 			v = ref.offsetTop - img.offsetTop;
 			btn.style.position = "relative";
