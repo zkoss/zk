@@ -75,7 +75,7 @@ zHistory = {
 			var $ifr = jq(ifr);
 			if ($ifr.attr("z_xsrc") != ifr.src) {//the first zul page being loaded
 				var ifrsrc = ifr.src, loc = location.pathname;
-				ifr.attr("z_xsrc", ifrsrc);
+				$ifr.attr("z_xsrc", ifrsrc);
 
 			//The first zul page might or might not be ifr.src
 			//We have to compare ifr.src with location

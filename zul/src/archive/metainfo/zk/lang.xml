@@ -192,7 +192,6 @@ def alert(m):
 			<mold-name>default</mold-name>
 			<mold-uri>mold/layoutregion.js</mold-uri>
 		</mold>
-		<preserve-blank/>
 	</component>
 
 	<component>

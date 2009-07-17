@@ -39,6 +39,7 @@ zk.Widget = zk.$extends(zk.Object, {
 
 			if (zk.spaceless) {
 				if (this.id) this.uuid = this.id; //setId was called
+				else if (this.uuid) this.id = this.uuid;
 				else this.uuid = this.id = zk.Widget.nextUuid();
 			} else if (!this.uuid) this.uuid = zk.Widget.nextUuid();
 		});

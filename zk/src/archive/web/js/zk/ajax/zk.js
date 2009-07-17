@@ -1,9 +1,9 @@
 /* zk.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Mon Sep 29 17:17:26 2008, Created by tomyeh
 
@@ -134,10 +134,9 @@ zk = function (sel) {
 	_def: function (nm, before, after) {
 		return function (v) {
 			if (before) v = before.apply(this, arguments);
-			if (this[nm] != v) {
-				this[nm] = v;
-				if (after) after.apply(this, arguments);
-			}
+			var o = this[nm];
+			this[nm] = v;
+			if (after && o !== v) after.apply(this, arguments);
 			return this;
 		};
 	},
@@ -345,7 +344,7 @@ if (!Array.prototype.indexOf)
 			zk.ie8All = j >= 8; //ie8 or later (including compatible)
 			zk.ie8 = j >= 8 && document.documentMode >= 8; //ie8 or later
 			zk.ie6_ = !zk.ie7;
-	
+
 			bodycls = 'ie ie' + j;
 		} else if (zk.safari)
 			bodycls = 'safari';
