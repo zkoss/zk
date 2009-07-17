@@ -77,16 +77,4 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	@param deviceType the device type. If null, ajax is assumed.
 		</description>
 	</function>
-
-	<function>
-		<name>outLocaleJavaScript</name>
-		<function-class>org.zkoss.zk.fn.DspFns</function-class>
-		<function-signature>
-	java.lang.String outLocaleJavaScript()
-		</function-signature>
-		<description>
-	Returns date relevant labels in JavaScript.
-	This method is designed to use with DSP pages.
-		</description>
-	</function>
 </taglib>

@@ -98,9 +98,9 @@ import org.zkoss.zk.ui.WebApp;
 	}
 
 	/** Returns the static method defined in an element, or null if failed. */
-	/*package*/ static Method getMethod(Element el) {
+	/*package*/ static MethodInfo getMethodInfo(Element el) {
 		final String clsnm = IDOMs.getRequiredAttributeValue(el, "class");
-		final String mtdnm = IDOMs.getRequiredAttributeValue(el, "name");
+		final String sig = IDOMs.getRequiredAttributeValue(el, "signature");
 		final Class cls;
 		try {
 			cls = Classes.forNameByThread(clsnm);
@@ -110,22 +110,29 @@ import org.zkoss.zk.ui.WebApp;
 		}
 
 		try {
-			final Method mtd = cls.getMethod(mtdnm, new Class[0]);
+			final Method mtd = Classes.getMethodBySignature(cls, sig, null);
 			if ((mtd.getModifiers() & Modifier.STATIC) == 0) {
 				log.error("Not a static method: "+mtd);
 				return null;
 			}
-			return mtd;
+
+			final Object[] args = new Object[mtd.getParameterTypes().length];
+			for (int j = 0; j < args.length; ++j)
+				args[j] = el.getAttributeValue("arg" + j);
+				
+			return new MethodInfo(mtd, args);
+		} catch (ClassNotFoundException ex) {
+			log.realCauseBriefly("Unable to load class when resolving "+sig+" "+el.getLocator(), ex);
 		} catch (NoSuchMethodException ex) {
-			log.error("Method not found in "+clsnm+": "+mtdnm+" "+el.getLocator());
-			return null;
+			log.error("Method not found in "+clsnm+": "+sig+" "+el.getLocator());
 		}
+		return null;
 	}
 	/** Invokes a static method.*/
-	/*package*/ String invoke(Method mtd) {
+	/*package*/ String invoke(MethodInfo mi) {
 		final Provider provider = getProvider();
-		final Class[] argTypes = mtd.getParameterTypes();
-		final Object[] args = new Object[argTypes.length];
+		final Class[] argTypes = mi.method.getParameterTypes();
+		final Object[] args = mi.arguments;
 		if (provider != null)
 			for (int j = 0; j < args.length; ++j)
 				if (ServletRequest.class.isAssignableFrom(argTypes[j]))
@@ -135,10 +142,10 @@ import org.zkoss.zk.ui.WebApp;
 				else if (ServletContext.class.isAssignableFrom(argTypes[j]))
 					args[j] = getServletContext();
 		try {
-			Object o = mtd.invoke(null, args);
+			Object o = mi.method.invoke(null, args);
 			return o instanceof String ? (String)o: "";
 		} catch (Throwable ex) { //log and eat ex
-			log.error("Unable to invoke "+mtd, ex);
+			log.error("Unable to invoke "+mi.method, ex);
 			return "";
 		}
 	}
@@ -149,6 +156,14 @@ import org.zkoss.zk.ui.WebApp;
 	}
 
 	//utility class
+	/*package*/ static class MethodInfo {
+		final Method method;
+		final Object[] arguments;
+		MethodInfo(Method method, Object[] arguments) {
+			this.method = method;
+			this.arguments = arguments;
+		}
+	}
 	/*package*/ class Provider { //don't use private since WpdContent needs it
 		/*package*/ final HttpServletRequest request;
 		/*package*/ final HttpServletResponse response;

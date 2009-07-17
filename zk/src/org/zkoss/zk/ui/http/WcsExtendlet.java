@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Iterator;
 import java.io.InputStream;
 import java.io.StringWriter;
-import java.lang.reflect.Method;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -74,7 +73,7 @@ public class WcsExtendlet extends AbstractExtendlet {
 					log.realCauseBriefly("Unable to load "+wi.items[j], ex);
 				}
 			} else { //static method
-				sw.write(invoke((Method)o));
+				sw.write(invoke((MethodInfo)o));
 			}
 			sw.write('\n');
 		}
@@ -115,7 +114,7 @@ public class WcsExtendlet extends AbstractExtendlet {
 				else
 					log.warning("Ingored stylesheet: href required, " + el.getLocator());
 			} else if ("function".equals(elnm)) {
-				final Method mtd = getMethod(el);
+				final MethodInfo mtd = getMethodInfo(el);
 				if (mtd != null) items.add(mtd);
 			} else
 				log.warning("Ignored unknown element, " + el.getLocator());

@@ -14,7 +14,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zk.ui.http;
 
-import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -45,7 +44,7 @@ public class FileWcsExtendlet extends WcsExtendlet{
 						log.realCauseBriefly("Unable to load "+wi.items[j], ex);
 					}
 				} else { //static method
-					sw.write(invoke((Method)o));
+					sw.write(invoke((MethodInfo)o));
 				}
 				sw.write('\n');
 			}

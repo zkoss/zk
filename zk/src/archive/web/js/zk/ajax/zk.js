@@ -42,12 +42,19 @@ zk = function (sel) {
 			j = k + 1;
 		}
 	},
-	$import: function (name) {
+	$import: function (name, fn) {
 		for (var j = 0, ref = window;;) {
 			var k = name.indexOf('.', j),
 				nm = k >= 0 ? name.substring(j, k): name.substring(j);
 			var nxt = ref[nm];
-			if (k < 0 || !nxt) return nxt;
+			if (k < 0 || !nxt) {
+				if (fn)
+					if (nxt) fn(nxt);
+					else
+						zPkg.load(name.substring(0, name.lastIndexOf('.')),
+							function () {fn(zk.$import(name));});
+				return nxt;
+			}
 			ref = nxt;
 			j = k + 1;
 		}

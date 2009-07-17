@@ -14,7 +14,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.http;
 
-import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedList;
@@ -64,6 +63,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 	public void init(ExtendletConfig config) {
 		init(config, new WpdLoader());
 	}
+
 	public void service(HttpServletRequest request,
 	HttpServletResponse response, String path, String extra)
 	throws ServletException, IOException {
@@ -220,7 +220,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 					write(out, '\n'); //might terminate with //
 				}
 			} else if ("function".equals(elnm)) {
-				final Method mtd = getMethod(el);
+				final MethodInfo mtd = getMethodInfo(el);
 				if (mtd != null)
 					if (wc != null) {
 						move(wc, out);
@@ -292,7 +292,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 		final byte[] bs = new byte[] {(byte)cc};
 		out.write(bs, 0, 1);
 	}
-	private void write(OutputStream out, Method mtd) throws IOException {
+	private void write(OutputStream out, MethodInfo mtd) throws IOException {
 		try {
 			write(out, invoke(mtd));
 		} catch (IOException ex) {
@@ -400,7 +400,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 		private void add(byte[] bs) {
 			_cnt.add(bs);
 		}
-		private void add(Method mtd) {
+		private void add(MethodInfo mtd) {
 			_cnt.add(mtd);
 		}
 		private void add(String jspath, String browser) {
@@ -412,8 +412,8 @@ public class WpdExtendlet extends AbstractExtendlet {
 				final Object o = it.next();
 				if (o instanceof byte[])
 					out.write((byte[])o);
-				else if (o instanceof Method)
-					write(out, (Method)o);
+				else if (o instanceof MethodInfo)
+					write(out, (MethodInfo)o);
 				else {
 					final String[] inf = (String[])o;
 					if (inf[1] != null) {

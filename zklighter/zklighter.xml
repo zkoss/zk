@@ -2,7 +2,6 @@
 	<javascript>
 		<destination>lib/js/zk.js</destination>
 		<source>../zk/codegen/archive/web/js/zk/ajax/zklt.wpd</source>
-		<source>../zk/codegen/archive/web/js/zk/zuml/zk.wpd</source>
 		<source>../zul/codegen/archive/web/js/zul/zklt.wpd</source>
 	</javascript>
 	<javascript>

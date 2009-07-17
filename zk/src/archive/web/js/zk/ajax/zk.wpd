@@ -37,7 +37,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 	<!-- load lang here to minimize # of JS files -->
 	<script src="lang/mesg*.js"/>
-	<function class="org.zkoss.zk.fn.DspFns" name="outLocaleJavaScript"/>
+	<function class="org.zkoss.zk.ui.http.Wpds"
+		signature="java.lang.String outLocaleJavaScript()"/>
 
 	<script src="ext/jquery.json.js"/>
 
@@ -48,6 +49,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	  the current response will be passed.
 	If the class of an argument is ServletContext (or derives),
 	  the current servlet context will be passed.
-	<function class="foo.Foo" name="outFoo"/>
+	<function class="foo.Foo"
+		signature="java.lang.String outFoo(java.lang.String)"
+		arg0="the-first-arg"/>
 	-->
 </package>
