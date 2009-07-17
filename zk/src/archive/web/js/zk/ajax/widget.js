@@ -831,6 +831,8 @@ zk.Widget = zk.$extends(zk.Object, {
 		for (var child = this.firstChild; child; child = child.nextSibling)
 			if (!skipper || !skipper.skipped(this, child))
 				child.bind_(desktop, null, after); //don't pass skipper
+
+		zk.Widget._addBind(this);
 	},
 	unbind_: function (skipper, after) {
 		delete zk.Widget._binds[this.uuid];
@@ -845,6 +847,8 @@ zk.Widget = zk.$extends(zk.Object, {
 				child.unbind_(null, after); //don't pass skipper
 
 		if (this._draggable) this.cleanDrag_();
+
+		zk.Widget._addUnbind(this);
 	},
 
 	initDrag_: function () {
@@ -1367,6 +1371,21 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 
 	_global: {}, //a global ID space
+
+	_addBind: function (wgt) {
+		if (wgt.isListen('onBind'))
+			zk.afterMount(function () {
+				if (wgt.desktop) //might be unbound
+					wgt.fire('onBind');
+			});
+	},
+	_addUnbind: function (wgt) {
+		if (wgt.isListen('onUnbind'))
+			zk.afterMount(function () {
+				if (!wgt.desktop) //might be bound
+					wgt.fire('onUnbind');
+			});
+	},
 
 	_wgtcs: {},
 	register: function (cls, clsnm, blankprev) {
