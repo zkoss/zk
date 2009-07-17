@@ -100,16 +100,24 @@ zk.zuml.Parser = {
 				}
 			}
 
+			var prolog;
 			for (e = e.firstChild; e; e = e.nextSibling) {
 				var nt = e.nodeType;
-				if (nt == 1) $Parser._cw(wgt, e, null, args);
-				else if (nt == 3) {
-					var txt = e.nodeValue;
-					if (txt.trim().length || wgt.blankPreserved) {
-						var w = new zk.Native();
-						w.prolog = $Parser._eval(wgt, txt, args);
-						wgt.appendChild(w);
+				if (nt == 1) {
+					var ws = [];
+					$Parser._cw(wgt, e, ws, args);
+					if (prolog && (ws = ws[0])) {
+						ws.prolog = prolog;
+						prolog = null;
 					}
+				} else if (nt == 3) {
+					var txt = $Parser._eval(wgt, e.nodeValue, args);
+					if (txt.trim().length) {
+						var w = new zk.Native();
+						w.prolog = txt;
+						wgt.appendChild(w);
+					} else if (wgt.blankPreserved)
+						prolog = txt;
 				}
 			}
 		}

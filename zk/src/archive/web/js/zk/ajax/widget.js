@@ -1386,7 +1386,6 @@ zk.Widget = zk.$extends(zk.Object, {
 
 zk.Page = zk.$extends(zk.Widget, {//unlik server, we derive from Widget!
 	_style: "width:100%;height:100%",
-	className: 'zk.Page',
 
 	$init: function (props, contained) {
 		this._fellows = {};
@@ -1405,6 +1404,7 @@ zk.Page = zk.$extends(zk.Widget, {//unlik server, we derive from Widget!
 },{
 	contained: []
 });
+zk.Widget.register(zk.Page, 'zk.Page', true);
 
 zk.Desktop = zk.$extends(zk.Widget, {
 	bindLevel: 0,
