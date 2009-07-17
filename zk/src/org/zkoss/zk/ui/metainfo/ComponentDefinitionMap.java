@@ -55,13 +55,22 @@ implements Cloneable, java.io.Serializable {
 	}
 
 
-	/** Returns a collection of component definitions, {@link ComponentDefinition},
-	 *  defined in this map.
+	/** Returns a readonly collection of the names (String)
+	 * of component definitions defined in this map.
 	 */
 	public Collection getNames() {
 		return _compdefs != null ?
 			_compdefs.keySet(): (Collection)Collections.EMPTY_LIST;
 	}
+	/** Returns a readonly collection of component definitions
+	 * ({@link ComponentDefinition}) defined in this map.
+	 * @since 3.6.3
+	 */
+	public Collection getDefinitions() {
+		return _compdefs != null ?
+			_compdefs.values(): (Collection)Collections.EMPTY_LIST;
+	}
+
 	/** Adds a component definition to this map.
 	 *
 	 * <p>Thread safe.

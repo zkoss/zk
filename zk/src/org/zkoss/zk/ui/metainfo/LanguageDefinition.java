@@ -418,6 +418,12 @@ public class LanguageDefinition {
 	public List getExtensions() {
 		return _exts;
 	}
+	/** Returns a readonly collection of all component definitions in this language.
+	 * @since 3.6.3
+	 */
+	public Collection getComponentDefinitions() {
+		return _compdefs.getDefinitions();
+	}
 	/** Returns the map of components defined in this language (never null).
 	 */
 	public ComponentDefinitionMap getComponentDefinitionMap() {
