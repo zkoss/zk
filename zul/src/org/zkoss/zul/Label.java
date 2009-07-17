@@ -32,6 +32,8 @@ import org.zkoss.zul.impl.XulElement;
 /**
  * A label.
  * 
+ * <p>Default {@link #getZclass}: z-label.
+ *
  * @author tomyeh
  */
 public class Label extends XulElement implements org.zkoss.zul.api.Label {
