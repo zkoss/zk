@@ -1390,10 +1390,14 @@ zk.Widget = zk.$extends(zk.Object, {
 
 	_wgtcs: {},
 	register: function (cls, clsnm, blankprev) {
+		var wgtcs = zk.Widget._wgtcs;
+		if (arguments.length == 1) //query
+			return wgtcs[cls];
+
 		cls.prototype.className = clsnm;
 		var j = clsnm.lastIndexOf('.');
 		if (j >= 0) clsnm = clsnm.substring(j + 1);
-		zk.Widget._wgtcs[clsnm.substring(0,1).toLowerCase()+clsnm.substring(1)] = cls;
+		wgtcs[clsnm.substring(0,1).toLowerCase()+clsnm.substring(1)] = cls;
 		if (blankprev) cls.prototype.blankPreserved = true;
 	},
 	newInstance: function (wgtnm) {
