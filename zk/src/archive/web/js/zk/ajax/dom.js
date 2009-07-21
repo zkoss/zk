@@ -774,8 +774,8 @@ zk.copy(jq, { //ZK extension to jq
 			//IE: prevent secure/nonsecure warning with HTTPS
 
 		var html = '<iframe id="'+id+'" name="'+id+'" src="'+src+'"';
-		if (style) html += ' style="'+style+'"';
-		html += '></iframe>';
+		if (style == null) style = 'display:none';
+		html += ' style="'+style+'"></iframe>';
 		jq(document.body).append(html);
 		return zk(id).jq[0];
 	},

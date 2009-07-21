@@ -42,7 +42,7 @@ zHistory = {
 		//Bug 2019171: we have to create iframe frist
 		var url = zAu.comURI("/web/js/zk/html/history.html", null, true),
 			ifr = jq('#zk_histy')[0];
-		if (!ifr) ifr = jq.newFrame('zk_histy', url, "display:none");
+		if (!ifr) ifr = jq.newFrame('zk_histy', url);
 
 		if (nm) url += '?' +encodeURIComponent(nm);
 		ifr.src = url;

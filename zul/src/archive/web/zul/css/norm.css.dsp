@@ -123,10 +123,6 @@ div.z-log button {
 	font-family: ${fontFamilyC};
 	font-size: ${fontSizeM}; font-weight: normal;
 }
-.z-upload-icon {
-	overflow: hidden;
-	background-image: url(${c:encodeURL('~./zul/img/misc/prgmeter.png')});
-}
 .z-modal-mask {
 	width: 100%;
 	height: 100%;
@@ -355,6 +351,46 @@ div.z-drop-cnt {
 	height:1px !important;
 	-moz-outline:0 none; outline:0 none;
 	-moz-user-select:text; -khtml-user-select:text;
+}
+
+<%-- upload button --%>
+span.z-upload {
+	position: relative;
+	padding: 0; margin: 0;
+	font-size: 0; width: 0; height: 0;
+	display:-moz-inline-box; display:inline-block;
+}
+span.z-upload input {
+	position: absolute;
+	cursor: pointer;
+	font-size: 45pt;
+	z-index: 1; margin: 0; padding: 0;
+	opacity: 0;
+	filter: alpha(opacity=0); <%-- IE --%>
+}
+.z-upload-icon {
+	overflow: hidden;
+	background-image: url(${c:encodeURL('~./zul/img/misc/prgmeter.png')});
+}
+
+<%-- fileupload dialog --%>
+.z-fileupload-img {
+	width: 16px;
+	padding-top: 4px;
+}
+.z-fileupload-add {
+	cursor: pointer;
+	background: transparent no-repeat 0 -23px;
+	background-image: url(${c:encodeURL('~./zul/img/misc/fileupload.gif')});
+	width: 16px;
+	height: 17px;
+}
+.z-fileupload-rm {
+	cursor: pointer;
+	background: transparent no-repeat 0 0;
+	background-image: url(${c:encodeURL('~./zul/img/misc/fileupload.gif')});
+	width: 16px;
+	height: 17px;
 }
 
 <%-- Auxheader --%>

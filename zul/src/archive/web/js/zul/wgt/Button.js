@@ -33,7 +33,14 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			var n = this.$n();
 			if (n) (this.$n('btn') || n).tabIndex = v >= 0 ? v: '';
 		},
-		autodisable: null
+		autodisable: null,
+		upload: function (v) {
+			var n = this.$n();
+			if (n) {
+				this._cleanUpld();
+				if (v && v != 'false') this._initUpld();
+			}
+		}
 	},
 
 	//super//
@@ -85,8 +92,12 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 
 		this.domListen_(n, "onFocus", "doFocus_")
 			.domListen_(n, "onBlur", "doBlur_");
+
+		if (this._upload) this._initUpld();
 	},
 	unbind_: function () {
+		if (this._upload) this._cleanUpld();
+
 		var trendy = this._mold == 'trendy',
 			n = !trendy ? this.$n(): this.$n('btn');
 		if (n) {
@@ -98,6 +109,19 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 
 		this.$supers('unbind_', arguments);
 	},
+	_initUpld: function () {
+		var v;
+		if (v = this._upload)
+			this._uplder = new zul.Upload(this, null, v);
+	},
+	_cleanUpld: function () {
+		var v;
+		if (v = this._uplder) {
+			this._uplder = null;
+			v.destroy();
+		}
+	},
+
 	onSize: _zkf = zk.ie ? function () {
 		var box = this.$n('box');
 		if (box.style.height && box.offsetHeight) {
@@ -176,7 +200,8 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			var zcls = this.getZclass();
 			jq(this.$n('box')).addClass(zcls + "-clk")
 				.addClass(zcls + "-over")
-			zk(this.$n('btn')).focus(30);
+			if (!zk.ie || !this._uplder) zk(this.$n('btn')).focus(30);
+				//change focus will disable upload in IE
 		}
 
 		zk.mouseCapture = this; //capture mouse up
@@ -187,6 +212,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			var zcls = this.getZclass();
 			jq(this.$n('box')).removeClass(zcls + "-clk")
 				.removeClass(zcls + "-over");
+			if (zk.ie && this._uplder) zk(this.$n('btn')).focus(30);
 		}
 		this.$supers('doMouseUp_', arguments);
 	}

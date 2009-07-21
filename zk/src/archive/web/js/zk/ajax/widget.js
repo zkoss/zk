@@ -1086,7 +1086,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (!this.fireX(evt).stopped) {
 			var p = this.parent;
 			if (p) p.doDoubleClick_(evt);
-		}	
+		}
 	},
 	doRightClick_: function (evt) {
 		if (!this.fireX(evt).stopped) {
@@ -1186,7 +1186,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (!n || zk.Widget.isInstance(n)) return n;
 		else if (!n.nodeType) { //skip Element
 			var e = n.originalEvent;
-			n = (e?e.z_target:null) || n.target || n; //check DOM event first
+			n = (e?e.z$target:null) || n.target || n; //check DOM event first
 		}
 
 		for (; n; n = n.vparent||n.parentNode) {

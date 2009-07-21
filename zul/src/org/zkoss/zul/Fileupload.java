@@ -18,15 +18,9 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.Set;
-
-import javax.servlet.http.HttpSession;
 
 import org.zkoss.mesg.Messages;
 import org.zkoss.zul.mesg.MZul;
@@ -40,11 +34,9 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.UploadEvent;
-import org.zkoss.zk.ui.ext.Updatable;
 import org.zkoss.zk.ui.util.Configuration;
-import org.zkoss.zk.au.AuRequests;
-import org.zkoss.zk.au.out.AuInvoke;
 
+import org.zkoss.zul.impl.FileuploadDlg;
 
 /**
  * A fileupload dialog used to let user upload a file.
@@ -67,32 +59,21 @@ import org.zkoss.zk.au.out.AuInvoke;
  *
  * <p>A non-XUL extension.
  *
+ * <p>Default {@link #getZclass}: z-fileupload. (since 5.0.0)
+ *
  * @author tomyeh
  * @see Filedownload
  */
-public class Fileupload extends HtmlBasedComponent{ //not XulElement since not applicable
-	
+public class Fileupload extends HtmlBasedComponent implements org.zkoss.zul.api.Fileupload { //not XulElement since not applicable
+	private static String _templ = "~./zul/html/fileuploaddlg.zul";
+
 	//Used when embedded as a component
 	/** The maximal alllowed number of files to upload. */
 	private int _maxnum = 1;
 	/** Wether to treat the uploaded file(s) as binary. */
 	private boolean _native;
 	private int _maxsize = -1;
-	private List meds = new LinkedList();
-	private HashMap progressMap = new HashMap();
 	
-	public void setProgress(String fid, long readSize, long totalSize){
-		long lArray[] = {readSize, totalSize};
-		progressMap.remove(fid);
-		progressMap.put(fid, lArray);
-	}
-	
-	public void addMedia(Object med){
-		meds.add(med);
-	}
-	public List getMedia(){
-		return meds;
-	}
 	/**
 	 * Returns the maximal allowed upload size of the component, in kilobytes, or 
 	 * a negative value if no limit.
@@ -111,6 +92,9 @@ public class Fileupload extends HtmlBasedComponent{ //not XulElement since not a
 	public void setMaxsize(int maxsize) {
 		if (maxsize < 0) maxsize = -1;
 		_maxsize = maxsize;
+	}
+	public String getZclass() {
+		return _zclass == null ? "z-fileupload" : _zclass;
 	}
 	/** No child is allowed. */
 	protected boolean isChildable() {
@@ -173,10 +157,9 @@ public class Fileupload extends HtmlBasedComponent{ //not XulElement since not a
 	 * @since 2.4.0
 	 */
 	public void onClose() {
-		invalidate();
+		invalidate(); //TODO
 	}
 
-	//-- ComponentCtrl --//
 	/** Processes an AU request.
 	 *
 	 * <p>Default: in addition to what are handled by {@link HtmlBasedComponent#service},
@@ -186,16 +169,9 @@ public class Fileupload extends HtmlBasedComponent{ //not XulElement since not a
 	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
 		final String cmd = request.getCommand();
 		if (cmd.equals("updateResult")) {
-		
+			//TODO
 		} else if(cmd.equals("getUploadInfo")){
-			Map map = request.getData();
-			String fid = String.valueOf(map.get("fid"));
-			
-			if(fid == null)	return;
-			
-			long lArray[] =  (long [])progressMap.get(fid);
-			response("popup", new AuInvoke(this, "uploadProgress", 
-					 new Object[] {fid, new Long(lArray[0]),new Long(lArray[1])}));
+			//TODO
 		}else
 			super.service(request, everError);
 	}
@@ -341,9 +317,28 @@ public class Fileupload extends HtmlBasedComponent{ //not XulElement since not a
 	public static
 	Media[] get(String message, String title, int max, int maxsize, boolean alwaysNative)
 	throws InterruptedException {
-
+		final Map params = new HashMap(8);
+		final Execution exec = Executions.getCurrent();
+		params.put("message", message == null ?
+			Messages.get(MZul.UPLOAD_MESSAGE): message);
+		params.put("title", title == null ?
+			Messages.get(MZul.UPLOAD_TITLE): title);
+		params.put("max", new Integer(max == 0 ? 1 : max > 1000 ? 1000: max < -1000 ? -1000 : max));
+		params.put("native", Boolean.valueOf(alwaysNative));
+		params.put("maxsize", String.valueOf(maxsize));
 		
-		return null;
+		final FileuploadDlg dlg = (FileuploadDlg)
+			exec.createComponents(
+				_templ, null, params);
+		try {
+			dlg.doModal();
+		} catch (Throwable ex) {
+			dlg.detach();
+			if (ex instanceof InterruptedException)
+				throw (InterruptedException)ex;
+			throw UiException.Aide.wrap(ex);
+		}
+		return dlg.getResult();
 	}
 
 	/** Sets the template used to create the upload modal dialog.
@@ -358,37 +353,13 @@ public class Fileupload extends HtmlBasedComponent{ //not XulElement since not a
 	 * a component (and embed it to a page).
 	 */
 	public static void setTemplate(String uri) {
-
+		if (uri == null || uri.length() == 0)
+			throw new IllegalArgumentException("empty");
+		_templ = uri;
 	}
 	/** Returns the template used to create the upload modal dialog.
 	 */
 	public static String getTemplate() {
-		return null;
-	}
-	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
-	throws IOException {
-		super.renderProperties(renderer);
-		String jsessionid = ((HttpSession) this.getDesktop().getSession().getNativeSession()).getId();
-		renderer.render("jsessionid", jsessionid);
-		
-	}
-	
-	protected Object newExtraCtrl() {
-		return new ExtraCtrl();
-	}
-	/** A utility class to implement {@link #getExtraCtrl}.
-	 * It is used only by component developers.
-	 */
-	protected class ExtraCtrl extends Window.ExtraCtrl implements Updatable {
-		//-- Updatable --//
-		/** Updates the result from the client.
-		 * Callback by the System AuUpload.java only Don't invoke it directly.
-		 */
-		public void setProgress(String fid, long readSize, long totalSize){
-			Fileupload.this.setProgress(fid, readSize, totalSize);
-		}
-		public void addMedia(Object obj){
-			Fileupload.this.addMedia(obj);
-		}
+		return _templ;
 	}
 }

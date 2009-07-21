@@ -59,7 +59,7 @@ zul.Auxbutton = zk.$extends(zk.Object, {
 
 			v = ref.offsetTop - img.offsetTop;
 			btn.style.position = "relative";
-			btn.style.top = v + "px";
+			btn.style.top = v + "px"; //might be negative
 			if (zk.safari) btn.style.left = "-2px";
 		}
 	},

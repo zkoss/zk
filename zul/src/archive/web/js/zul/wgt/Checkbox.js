@@ -87,7 +87,7 @@ zul.wgt.Checkbox = zk.$extends(zul.LabelImageWidget, {
 }, zk.gecko2_ ? {
 	_domClick: function (evt) {
 		var e = evt.originalEvent;
-		if (e) e.z_target = e.currentTarget;
+		if (e) e.z$target = e.currentTarget;
 			//bug 2233787: bug of firefox 2, use currentTarget not target
 			//if pressing arrow keys
 			//It is used by zk.Widget.$

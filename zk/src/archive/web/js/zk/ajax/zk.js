@@ -234,7 +234,7 @@ zk = function (sel) {
 		for (var j = 0, len = ars.length; j < len; j++) {
 			if (msg) msg += ", ";
 			var ar = ars[j];
-			if (ar.$array) msg += '[' + zk._log(ar) + ']';
+			if (ar && ar.$array) msg += '[' + zk._log(ar) + ']';
 			else msg += ar;
 		}
 		return msg;

@@ -38,6 +38,7 @@ public class Button extends LabelImageElement implements org.zkoss.zul.api.Butto
 	private String _orient = "horizontal", _dir = "normal";
 	private String _href, _target;
 	private String _autodisable;
+	private String _upload;
 	private int _tabindex = -1;
 	private boolean _disabled;
 
@@ -189,6 +190,7 @@ public class Button extends LabelImageElement implements org.zkoss.zul.api.Butto
 			smartUpdate("target", _target);
 		}
 	}
+
 	/** Returns the tab order of this component.
 	 * <p>Default: -1 (means the same as browser's default).
 	 */
@@ -201,6 +203,46 @@ public class Button extends LabelImageElement implements org.zkoss.zul.api.Butto
 		if (_tabindex != tabindex) {
 			_tabindex = tabindex;
 			smartUpdate("tabindex", _tabindex);
+		}
+	}
+
+	/** Returns non-null if this button is used for file upload, or null otherwise.
+	 * Refer to {@link #setUpload} for more details.
+	 * @since 5.0.0
+	 */
+	public String getUpload() {
+		return _upload;
+	}
+	/** Sets the JavaScript class at the client to handle the upload if this
+	 * button is used for file upload.
+	 * <p>Default: null.
+	 *
+	 * <p>For example, the following example declares a button for file upload:
+	 * <pre><code>&lt;button label="Upload" upload="true"
+	 * onUpload="handle(event.media)"/&gt;</code></pre>
+	 *
+	 * <p>As shown above, after the file is uploaded, an instance of
+	 * {@link UploadEvent} is sent this component.
+	 *
+	 * <p>If you want to customize the handling of the file upload at
+	 * the client, you can specify a JavaScript class when calling
+	 * this method:
+	 * <code>&lt;button upload="foo.Upload"/&gt;</code>
+	 *
+	 * @param upload a JavaScript class to handle the file upload
+	 * at the client, or "true" if the default class is used,
+	 * or null or "false" to disable the file download (and then
+	 * this button behaves like a normal button).
+	 * @since 5.0.0
+	 */
+	public void setUpload(String upload) {
+		if (upload != null
+		&& (upload.length() == 0 || "false".equals(upload)))
+			upload = null;
+
+		if (!Objects.equals(upload, _upload)) {
+			_upload = upload;
+			smartUpdate("upload", _upload);
 		}
 	}
 
@@ -224,6 +266,7 @@ public class Button extends LabelImageElement implements org.zkoss.zul.api.Butto
 		render(renderer, "autodisable", _autodisable);
 		render(renderer, "href", getEncodedHref());
 		render(renderer, "target", _target);
+		render(renderer, "upload", _upload);
 	}
 	public String getZclass() {
 		return _zclass != null ? _zclass:

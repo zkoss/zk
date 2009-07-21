@@ -1,0 +1,22 @@
+<window title="Test of fileupload" border="normal"
+xmlns:w="http://www.zkoss.org/2005/zk/client">
+	<grid>
+		<columns>
+			<column width="100pt"/>
+			<column/>
+		</columns>
+		<rows>
+			<row>
+				Select a file: 
+				<button label="Upload" upload="true"
+					onUpload="img.setContent(event.media)"/>
+			</row>
+			<row>
+				Result: <image id="img"/>
+			</row>
+		</rows>
+	</grid>
+	Select a file: 
+	<button label="Upload" upload="true" onUpload="img.setContent(event.media)"/>
+	<button label="add before" w:onClick="jq(this.$o()).prepend('New&lt;br/&gt;')"/>
+</window>
