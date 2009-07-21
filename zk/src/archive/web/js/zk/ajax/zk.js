@@ -224,17 +224,22 @@ zk = function (sel) {
 		zk.errorDismiss();
 		zAu.send(new zk.Event(null, 'redraw'));
 	},
-	log: function (vararg) {
-		var ars = arguments, msg = '';
+	log: function () {
+		var msg = zk._log(arguments);
+		zk._msg = (zk._msg ? zk._msg + msg: msg) + '\n';
+		setTimeout(function(){jq(zk._log2);}, 300);
+	},
+	_log: function (ars) {
+		var msg = '';
 		for (var j = 0, len = ars.length; j < len; j++) {
 			if (msg) msg += ", ";
-			msg += ars[j];
+			var ar = ars[j];
+			if (ar.$array) msg += '[' + zk._log(ar) + ']';
+			else msg += ar;
 		}
-
-		zk._msg = (zk._msg ? zk._msg + msg: msg) + '\n';
-		setTimeout(function(){jq(zk._log);}, 300);
+		return msg;
 	},
-	_log: function () {
+	_log2: function () {
 		if (zk._msg) {
 			var console = jq("#zk_log");
 			if (!console.length) {
@@ -386,7 +391,7 @@ zk.Object.prototype = {
 		}
 		return false;
 	},
-	$super: function (mtdnm, vararg) {
+	$super: function (mtdnm) {
 		var args = [];
 		for (var j = arguments.length; --j > 0;)
 			args.unshift(arguments[j]);
