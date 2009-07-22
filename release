@@ -128,15 +128,15 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	cp -rp zk /tmp/zk/$srcnm
 	cp -rp zul /tmp/zk/$srcnm
 	cp -rp zhtml /tmp/zk/$srcnm
-	cp -rp zml /tmp/zk/$srcnm
-	cp -rp zkex /tmp/zk/$srcnm
-	cp -rp zkmax /tmp/zk/$srcnm
+	#cp -rp zml /tmp/zk/$srcnm
+	#cp -rp zkex /tmp/zk/$srcnm
+	#cp -rp zkmax /tmp/zk/$srcnm
 	cp -rp zkplus /tmp/zk/$srcnm
 	cp zkdoc/COPYING zkdoc/release-note zkdoc/how-to-build-zk /tmp/zk/$srcnm/doc
 
 	cd /tmp/zk/$srcnm
 	rm -rf zcommon/debug zweb/debug zk/debug zul/debug zhtml/debug
-	rm -rf zml/debug zkex/debug zkmax/debug zkplus/debug
+	#rm -rf zml/debug zkex/debug zkmax/debug zkplus/debug
 	find -name .svn | xargs rm -rf
 
 	cd /tmp/zk
@@ -150,9 +150,9 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	mkdir -p src/zk
 	mkdir -p src/zul
 	mkdir -p src/zhtml
-	mkdir -p src/zml
-	mkdir -p src/zkex
-	mkdir -p src/zkmax
+	#mkdir -p src/zml
+	#mkdir -p src/zkex
+	#mkdir -p src/zkmax
 	mkdir -p src/zkplus
 	cd $srcnm
 	cp -rp zcommon/codegen/* zcommon/src/* ../src/zcommon
@@ -160,9 +160,9 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	cp -rp zk/codegen/* zk/src/* ../src/zk
 	cp -rp zul/codegen/* zul/src/* ../src/zul
 	cp -rp zhtml/codegen/* zhtml/src/* ../src/zhtml
-	cp -rp zml/codegen/* zml/src/* ../src/zml
-	cp -rp zkex/codegen/* zkex/src/* ../src/zkex
-	cp -rp zkmax/codegen/* zkmax/src/* ../src/zkmax
+	#cp -rp zml/codegen/* zml/src/* ../src/zml
+	#cp -rp zkex/codegen/* zkex/src/* ../src/zkex
+	#cp -rp zkmax/codegen/* zkmax/src/* ../src/zkmax
 	cp -rp zkplus/codegen/* zkplus/src/* ../src/zkplus
 	cd ..
 	rm -rf $srcnm
@@ -175,9 +175,9 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	jar cfM zk-sources.jar -C zk .
 	jar cfM zul-sources.jar -C zul .
 	jar cfM zhtml-sources.jar -C zhtml .
-	jar cfM zml-sources.jar -C zml .
-	jar cfM zkex-sources.jar -C zkex .
-	jar cfM zkmax-sources.jar -C zkmax .
+	#jar cfM zml-sources.jar -C zml .
+	#jar cfM zkex-sources.jar -C zkex .
+	#jar cfM zkmax-sources.jar -C zkmax .
 	jar cfM zkplus-sources.jar -C zkplus .
 	chmod 644 *.jar
 	mv *-sources.jar ..
@@ -218,8 +218,10 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 		#JasperReport
 
 	cp dist/lib/zcommon.jar dist/lib/zcommons-el.jar dist/lib/zweb.jar /tmp/zk/$binnm/dist/lib/
-	cp dist/lib/zk.jar dist/lib/zul.jar dist/lib/zhtml.jar dist/lib/zml.jar /tmp/zk/$binnm/dist/lib/
-	cp dist/lib/zkex.jar dist/lib/zkmax.jar dist/lib/zkplus.jar /tmp/zk/$binnm/dist/lib/
+	cp dist/lib/zk.jar dist/lib/zul.jar dist/lib/zhtml.jar dist/lib/zkplus.jar /tmp/zk/$binnm/dist/lib/
+	if [ "$target" == "official" ] ; then
+		cp dist/lib/zkex.jar dist/lib/zkmax.jar dist/lib/zml.jar /tmp/zk/$binnm/dist/lib/
+	fi
 	cp dist/lib/fckez.jar dist/lib/gmapsz.jar /tmp/zk/$binnm/dist/lib/zkforge
 	cp dist/lib/timelinez.jar /tmp/zk/$binnm/dist/lib/zkforge
 	cp dist/lib/timeplotz.jar /tmp/zk/$binnm/dist/lib/zkforge
@@ -228,7 +230,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 
 	cp -rp zweb/src/archive/web/WEB-INF/tld/web /tmp/zk/$binnm/dist/WEB-INF/tld
 	cp -rp zk/src/archive/web/WEB-INF/tld/zk /tmp/zk/$binnm/dist/WEB-INF/tld
-	cp -rp zul/src/archive/web/WEB-INF/tld/zul /tmp/zk/$binnm/dist/WEB-INF/tld
+	#cp -rp zul/src/archive/web/WEB-INF/tld/zul /tmp/zk/$binnm/dist/WEB-INF/tld
 
 	cp zul/src/archive/metainfo/xml/*.xsd /tmp/zk/$binnm/dist/xsd
 	cp zkdoc/release-note zkdoc/COPYING /tmp/zk/$binnm/doc
@@ -252,7 +254,10 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 		#Prepare maven repository
 		function mvnrepo {
 			mkdir -p $1
-			cp /tmp/zk/$binnm/dist/src/$1-sources.jar $1/$1-$ver-sources.jar
+			if [ $2 ] ; then
+				cp /tmp/zk/$binnm/dist/src/$1-sources.jar $1/$1-$ver-sources.jar
+			fi
+			
 			sed -e "s/{version}/$ver/" $maindir/$1/pom.xml > $1/pom.xml
 			cp $maindir/dist/lib/$1.jar $1/$1-$ver.jar
 			jar cfM $1-$ver-bundle.jar -C $1 .
@@ -260,15 +265,15 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 		mkdir -p maven
 		mkdir -p /tmp/maven
 		cd maven
-		mvnrepo zcommon
-		mvnrepo zweb
-		mvnrepo zk
-		mvnrepo zul
-		mvnrepo zhtml
+		mvnrepo zcommon true
+		mvnrepo zweb true
+		mvnrepo zk true
+		mvnrepo zul true
+		mvnrepo zhtml true
 		mvnrepo zml
 		mvnrepo zkex
 		mvnrepo zkmax
-		mvnrepo zkplus
+		mvnrepo zkplus true
 		mv *-bundle.jar /tmp/maven
 		cd ..
 		rm -rf maven
@@ -277,7 +282,10 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 		function mvnrepo {
 			local vertamp=`echo $ver | sed 's/-/./'`.$(date +%Y%m%d)
 			mkdir -p $1
-			cp /tmp/zk/$binnm/dist/src/$1-sources.jar $1/$1-$vertamp-sources.jar
+			if [ $2 ] ; then
+				cp /tmp/zk/$binnm/dist/src/$1-sources.jar $1/$1-$vertamp-sources.jar
+			fi
+			
 			sed -e "s/{version}/$vertamp/" $maindir/$1/pom.xml > $1/pom.xml
 			cp $maindir/dist/lib/$1.jar $1/$1-$vertamp.jar
 			jar cfM $1-$vertamp-bundle.jar -C $1 .
@@ -285,15 +293,15 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 		mkdir -p maven
 		mkdir -p /tmp/maven
 		cd maven
-		mvnrepo zcommon
-		mvnrepo zweb
-		mvnrepo zk
-		mvnrepo zul
-		mvnrepo zhtml
+		mvnrepo zcommon true
+		mvnrepo zweb true
+		mvnrepo zk true
+		mvnrepo zul true
+		mvnrepo zhtml true
 		mvnrepo zml
 		mvnrepo zkex
 		mvnrepo zkmax
-		mvnrepo zkplus
+		mvnrepo zkplus true
 		mv *-bundle.jar /tmp/maven
 		cd ..
 		rm -rf maven
