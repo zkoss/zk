@@ -180,7 +180,7 @@ span.z-button {
 	background-position:-6px 0px;
 }
 .z-button-clk .z-button-cm {
-    background-position:0 -1000px;
+	background-position:0 -1000px;
 }
 .z-button-clk .z-button-cr {
 	background-position:-9px 0px;

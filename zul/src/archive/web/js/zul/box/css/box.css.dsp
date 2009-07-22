@@ -10,33 +10,33 @@ tr.z-vbox-sep {
 <%-- Splitter --%>
 .z-splitter-ver-btn-t ,.z-splitter-ver-btn-b,
 .z-splitter-hor-btn-l, .z-splitter-hor-btn-r {
-    font-size:0;
+	font-size:0;
 }
 .z-splitter-hor-outer {
-    background: transparent repeat-y top right;
-    background-image:url(${c:encodeURL('~./zul/img/splt/splt-h-ns.png')});
-    max-width: 8px; width: 8px;
+	background: transparent repeat-y top right;
+	background-image:url(${c:encodeURL('~./zul/img/splt/splt-h-ns.png')});
+	max-width: 8px; width: 8px;
 }
 .z-splitter-ver-outer .z-splitter-ver-outer-td {
  	background: transparent repeat-x bottom left;
-    background-image:url(${c:encodeURL('~./zul/img/splt/splt-v-ns.png')});
-    max-height: 8px; height: 8px;
+	background-image:url(${c:encodeURL('~./zul/img/splt/splt-v-ns.png')});
+	max-height: 8px; height: 8px;
 }
 .z-splitter-hor {
 	background: transparent no-repeat center left;
-    background-image:url(${c:encodeURL('~./zul/img/splt/splt-h.png')});
-    font-size:0; max-width: 8px; width: 8px;
+	background-image:url(${c:encodeURL('~./zul/img/splt/splt-h.png')});
+	font-size:0; max-width: 8px; width: 8px;
 }
 .z-splitter-ver {
 	background: transparent no-repeat top center;
-    background-image:url(${c:encodeURL('~./zul/img/splt/splt-v.png')});
-    font-size:0; max-height: 8px; height: 8px;
+	background-image:url(${c:encodeURL('~./zul/img/splt/splt-v.png')});
+	font-size:0; max-height: 8px; height: 8px;
 }
 .z-splitter-hor-ns {
-    background-image: none; background-position: none;
+	background-image: none; background-position: none;
 }
 .z-splitter-ver-ns {
-    background-image: none; background-position: none;
+	background-image: none; background-position: none;
 }
 .z-splitter-ver-btn-t:hover, .z-splitter-ver-btn-b:hover,
 .z-splitter-hor-btn-l:hover, .z-splitter-hor-btn-r:hover {

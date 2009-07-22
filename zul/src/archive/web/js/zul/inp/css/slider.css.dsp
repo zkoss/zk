@@ -15,7 +15,7 @@
 .z-slider-sphere-hor-center,
 .z-slider-scale-center,
 .z-slider-hor-center {
-    background:transparent no-repeat scroll right -22px;
+	background:transparent no-repeat scroll right -22px;
 	background-image:url(${c:encodeURL('~./zul/img/slider/slider-bg.png')});
 	font-size:0;
 	height:22px;
@@ -27,8 +27,8 @@
 .z-slider-sphere-hor-btn,
 .z-slider-scale-btn,
 .z-slider-hor-btn {
-    width: 14px; height: 15px; position: absolute; left: 0; top: 3px;
-    background-color : transparent;
+	width: 14px; height: 15px; position: absolute; left: 0; top: 3px;
+	background-color : transparent;
 	background-image : url(${c:encodeURL('~./zul/img/slider/slider-square.png')});
 	background-repeat : no-repeat;
 	background-position : 0 0;
@@ -39,7 +39,7 @@
 
 <%-- Scale style --%>
 .z-slider-scale-tick {
-    background-image:url(${c:encodeURL('~./zul/img/slider/ticks.gif')});
+	background-image:url(${c:encodeURL('~./zul/img/slider/ticks.gif')});
 	padding-top:6px;
 	width:214px;
 }
@@ -58,7 +58,7 @@
 
 .z-slider-sphere-ver-center,
 .z-slider-ver-center {
-    background:transparent no-repeat scroll -22px bottom;
+	background:transparent no-repeat scroll -22px bottom;
 	background-image:url(${c:encodeURL('~./zul/img/slider/slider-bg-ver.png')});
 	font-size:0;
 	width:22px;
@@ -70,8 +70,8 @@
 
 .z-slider-sphere-ver-btn,
 .z-slider-ver-btn {
-    width: 15px; height: 15px; position: absolute; left: 4px; bottom: 0;
-    background-color : transparent;
+	width: 15px; height: 15px; position: absolute; left: 4px; bottom: 0;
+	background-color : transparent;
 	background-image : url(${c:encodeURL('~./zul/img/slider/slider-v-square.png')});
 	background-repeat : no-repeat;
 	background-position : 0 0;
@@ -94,14 +94,14 @@
 .z-slider-sphere-ver-btn-over,
 .z-slider-ver-btn-over,
 .z-slider-scale-btn-over {
-    background-position: -15px 0px;
+	background-position: -15px 0px;
 }
 .z-slider-hor-btn-drag,
 .z-slider-sphere-hor-btn-drag,
 .z-slider-sphere-ver-btn-drag,
 .z-slider-ver-btn-drag,
 .z-slider-scale-btn-drag {
-    background-position: -30px 0px;
+	background-position: -30px 0px;
 }
 
 .z-slider-pp {
@@ -122,7 +122,7 @@
 .z-slider-sphere-hor-btn,
 .z-slider-scale-btn,
 .z-slider-hor-btn {
-    background-image : url(${c:encodeURL('~./zul/img/slider/slider-square.gif')});
+	background-image : url(${c:encodeURL('~./zul/img/slider/slider-square.gif')});
 }
 .z-slider-scale-btn {
 	background-image : url(${c:encodeURL('~./zul/img/slider/slider-scale.gif')});
