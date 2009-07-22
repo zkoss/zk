@@ -258,8 +258,8 @@ zk = function (sel) {
 		}
 	},
 
-	ajaxURI: function (uri, dt, opts) {
-		var ctx = zk.Desktop.$(dt),
+	ajaxURI: function (uri, opts) {
+		var ctx = zk.Desktop.$(opts?opts.desktop:null),
 			au = opts && opts.au;
 		ctx = (ctx ? ctx: zk)[au ? 'updateURI': 'contextURI'];
 		if (!uri) return ctx;

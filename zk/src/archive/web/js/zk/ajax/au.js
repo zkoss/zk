@@ -388,7 +388,7 @@ zAu = {
 
 		if (content)
 			zAu._sendNow({
-				sid: zAu._seqId, uri: uri || zk.ajaxURI(null, dt, {au:true}),
+				sid: zAu._seqId, uri: uri || zk.ajaxURI(null, {desktop:dt,au:true}),
 				dt: dt, content: "dtid=" + dt.id + content,
 				ctli: ctli, ctlc: ctlc, implicit: implicit,
 				ignorable: ignorable, tmout: 0

@@ -109,7 +109,7 @@ zPkg = {
 		if (modver) uri = "/web/_zv" + modver + "/js" + uri;
 		else uri = "/web/js" + uri;
 
-		e.src = zk.ajaxURI(uri, dt, {au:true});
+		e.src = zk.ajaxURI(uri, {desktop:dt,au:true});
 		document.getElementsByTagName("HEAD")[0].appendChild(e);
 		return false;
 	},

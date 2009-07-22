@@ -575,7 +575,7 @@ zkm = {
 				for (var dtid in dts) {
 					var dt = dts[dtid];
 					jq.ajax(zk.$default({
-						url: zk.ajaxURI(null, dt, {au:true}),
+						url: zk.ajaxURI(null, {desktop:dt,au:true}),
 						data: {dtid: dtid, 'cmd_0': bRmDesktop?"rmDesktop":"dummy"},
 						beforeSend: function (xhr) {
 							if (zk.pfmeter) zAu._pfsend(dt, xhr, true);

@@ -29,7 +29,7 @@ zk.copy(zjq, {
 			regex = jq.IE6_ALPHAFIX
 				= new RegExp(zUtl.regexEscape(regex) + "$", "i");
 		if (!zk.SPACER_URI)
-			zk.SPACER_URI = zk.ajaxURI('web/img/spacer.gif', null, {au:true});
+			zk.SPACER_URI = zk.ajaxURI('web/img/spacer.gif', {au:true});
 		var imgs = n.getElementsByTagName("img");
 		for (var j = imgs.length; j--; ) {
 			var img = imgs[j], src = img.src,
