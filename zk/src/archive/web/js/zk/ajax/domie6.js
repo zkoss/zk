@@ -28,8 +28,8 @@ zk.copy(zjq, {
 		if (typeof regex == 'string')
 			regex = jq.IE6_ALPHAFIX
 				= new RegExp(zUtl.regexEscape(regex) + "$", "i");
-		if (!jq.SPACER_GIF)
-			jq.SPACER_GIF = zAu.comURI('web/img/spacer.gif');
+		if (!zk.SPACER_URI)
+			zk.SPACER_URI = zk.ajaxURI('web/img/spacer.gif', null, {au:true});
 		var imgs = n.getElementsByTagName("img");
 		for (var j = imgs.length; j--; ) {
 			var img = imgs[j], src = img.src,
@@ -66,7 +66,7 @@ zk.copy(zjq, {
 			img.runtimeStyle.filter = zUtl.format(zjq._AF_FILTER, img.src);
 			zjq._afed.push(img);
 		}
-		img.src = jq.SPACER_GIF; //remove the real image
+		img.src = zk.SPACER_URI; //remove the real image
 	},
 	_rmFilter: function (img) {
 		img.src = img._pngSrc;

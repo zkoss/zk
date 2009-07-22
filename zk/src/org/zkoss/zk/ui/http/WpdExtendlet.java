@@ -26,6 +26,7 @@ import java.io.OutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -313,12 +314,20 @@ public class WpdExtendlet extends AbstractExtendlet {
 		sb.append("\nzkver('").append(wapp.getVersion())
 			.append("','").append(wapp.getBuild());
 		final Provider provider = getProvider();
-		if (provider != null)
+		if (provider != null) {
+			final ServletContext ctx = getServletContext();
+			String s = Encodes.encodeURL(ctx, provider.request, provider.response, "/");
+			int j = s.lastIndexOf('/'); //might have jsessionid=...
+			if (j >= 0) s = s.substring(0, j) + s.substring(j + 1);
+
 			sb.append("','")
-				.append(Encodes.encodeURL(
-					getServletContext(),
-					provider.request, provider.response, wapp.getUpdateURI(false)));
-		sb.append('\'');
+				.append(s)
+				.append("','")
+				.append(Encodes.encodeURL(ctx, provider.request, provider.response,
+					wapp.getUpdateURI(false)))
+				.append('\'');
+		} else
+			sb.append("','',''");
 
 		for (Iterator it = LanguageDefinition.getByDeviceType("ajax").iterator();
 		it.hasNext();) {

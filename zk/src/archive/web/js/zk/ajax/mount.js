@@ -23,10 +23,10 @@ function zkblbg(binding) {
 	zk.startProcessing(t > 0 ? t: 0);
 }
 
-function zkpgbg(pguid, style, dtid, contained, updateURI) {
+function zkpgbg(pguid, style, dtid, contained, contextURI, updateURI) {
 	var props = {};
 	if (style) props.style = style;
-	if (dtid) zkdtbg(dtid, updateURI)._pguid = pguid;
+	if (dtid) zkdtbg(dtid, contextURI, updateURI)._pguid = pguid;
 	zkm.push({type: "#p", uuid: pguid, contained: contained, props: props});
 }
 function zkbg(type, uuid, mold, props) {
@@ -35,12 +35,15 @@ function zkbg(type, uuid, mold, props) {
 function zkb2(uuid, type, props) { //zhtml
 	zkm.push({type: type||'zhtml.Widget', uuid: uuid, props: props});
 }
-function zkdtbg(dtid, updateURI) {
+function zkdtbg(dtid, contextURI, updateURI) {
 	var dt = zk.Desktop.$(dtid);
 	if (dt == null) {
-		dt = new zk.Desktop(dtid, updateURI);
+		dt = new zk.Desktop(dtid, contextURI, updateURI);
 		if (zk.pfmeter) zAu.pfrecv(dt, dtid);
-	} else if (updateURI) dt.updateURI = updateURI;
+	} else {
+		if (updateURI) dt.updateURI = updateURI;
+		if (contextURI) dt.contextURI = contextURI;
+	}
 	zkm.curdt = dt;
 	return dt;
 }
@@ -50,9 +53,10 @@ function zkver() {
 	var args = arguments, len = args.length;
 	zk.version = args[0];
 	zk.build = args[1];
-	zk.updateURI = args[2];
+	zk.contextURI = args[2];
+	zk.updateURI = args[3];
 
-	for (var j = 3; j < len; j += 2)
+	for (var j = 4; j < len; j += 2)
 		zPkg.setVersion(args[j], args[j + 1]);
 }
 
@@ -571,7 +575,7 @@ zkm = {
 				for (var dtid in dts) {
 					var dt = dts[dtid];
 					jq.ajax(zk.$default({
-						url: zAu.comURI(null, dt),
+						url: zk.ajaxURI(null, dt, {au:true}),
 						data: {dtid: dtid, 'cmd_0': bRmDesktop?"rmDesktop":"dummy"},
 						beforeSend: function (xhr) {
 							if (zk.pfmeter) zAu._pfsend(dt, xhr, true);

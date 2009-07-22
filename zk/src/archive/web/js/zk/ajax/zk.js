@@ -258,13 +258,43 @@ zk = function (sel) {
 		}
 	},
 
-	stateless: function (dtid, updateURI) {
+	ajaxURI: function (uri, dt, opts) {
+		var ctx = zk.Desktop.$(dt),
+			au = opts && opts.au;
+		ctx = (ctx ? ctx: zk)[au ? 'updateURI': 'contextURI'];
+		if (!uri) return ctx;
+
+		var abs = uri.charAt(0) == '/';
+		if (au && !abs) {
+			abs = true;
+			uri = '/' + uri; //non-au supports relative path
+		}
+
+		var j = ctx.lastIndexOf(';'), k = ctx.lastIndexOf('?');
+		if (j < 0 && k < 0) return abs ? ctx + uri: uri;
+
+		if (k >= 0 && (j < 0 || k < j)) j = k;
+		var prefix = abs ? ctx.substring(0, j): '';
+
+		if (opts && opts.ignoreSession)
+			return prefix + uri;
+
+		var suffix = ctx.substring(j),
+			l = uri.indexOf('?');
+		return l >= 0 ?
+			k >= 0 ?
+			  prefix + uri.substring(0, l) + suffix + '&' + uri.substring(l+1):
+			  prefix + uri.substring(0, l) + suffix + uri.substring(l):
+			prefix + uri + suffix;
+	},
+	stateless: function (dtid, contextURI, updateURI) {
 		var Desktop = zk.Desktop, dt;
 		dtid = dtid || ('z_auto' + zk._ssc++);
 		dt = Desktop.all[dtid];
 		if (dt && !dt.stateless) throw "Desktop conflict";
 		zk.updateURI = zk.updateURI || updateURI;
-		return dt || new Desktop(dtid, updateURI, true);
+		zk.contextURI = zk.contextURI || contextURI;
+		return dt || new Desktop(dtid, contextURI, updateURI, true);
 	},
 	_ssc: 0
 });

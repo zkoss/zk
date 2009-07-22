@@ -337,7 +337,8 @@ public class ExecutionImpl extends AbstractExecution {
 		return _request.getLocalPort();
 	}
 	public String getContextPath() {
-		return _request.getContextPath();
+		final String s = _request.getContextPath();
+		return s == null || "/".equals(s) ? "": s; //to avoid bug in some Web server
 	}
 	public String getScheme() {
 		return _request.getScheme();

@@ -383,18 +383,4 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<evaluator-class>org.zkoss.zkmax.xel.el21.ApacheELFactory</evaluator-class>
 	</xel-config>
 	-->
-
-	<!-- Map of AU statelesslet
-	-->
-	<statelesslet>
-		<description>Test of AU statelesslet</description>
-		<statelesslet-name>booksuggest</statelesslet-name>
-		<statelesslet-class>org.zkoss.zkdemo.test.BookSuggest</statelesslet-class>
-		<!-- Any number of parameters
-		<init-param>
-			<param-name>foo</param-name>
-			<param-value>foo</param-value>
-		</init-param>
-		-->
-	</statelesslet>
 </zk>

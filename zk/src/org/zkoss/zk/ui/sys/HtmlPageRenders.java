@@ -450,6 +450,8 @@ public class HtmlPageRenders {
 				out.write("',");
 				out.write(contained ? '1': '0');
 				out.write(",'");
+				out.write(getContextURI(exec));
+				out.write("','");
 				out.write(desktop.getUpdateURI(null));
 				out.write('\'');
 			}
@@ -532,13 +534,23 @@ public class HtmlPageRenders {
 		if (desktop != null) {
 			sb.append("<script>zkdtbg('")
 				.append(desktop.getId()).append("','")
-				.append(desktop.getUpdateURI(null))
+				.append(getContextURI(exec))
+				.append("','").append(desktop.getUpdateURI(null))
 				.append("');</script>\n");
 		}
 
 		sb.append(outResponseJavaScripts(exec));
 		return sb.toString();
 	}
+	private static String getContextURI(Execution exec) {
+		if (exec != null) {
+			String s = exec.encodeURL("/");
+			int j = s.lastIndexOf('/'); //might have jsessionid=...
+			return j >= 0 ? s.substring(0, j) + s.substring(j + 1): s;
+		}
+		return "";
+	}
+
 	/** Generates and returns the ZK specific HTML tags such as stylesheet
 	 * and JavaScript for a desktop.
 	 *

@@ -24,7 +24,7 @@ zul.Upload = zk.$extends(zk.Object, {
 
 		var ref = wgt.$n(), dt = wgt.desktop,
 			html = '<span class="z-upload"><form enctype="multipart/form-data" method="POST" action="'
-			+ zAu.comURI('/upload', dt)
+			+ (zk.UPLOAD_URI?zk.UPLOAD_URI:zk.ajaxURI('/upload', dt, {au:true}))
 			+ '" target="zk_upld_"><input type="file" hidefocus="true" style="height:'
 			+ ref.offsetHeight + 'px"/><input type="hidden" name="dtid" value="'
 			+ dt.id + '"/><input type="hidden" name="uuid" value="'

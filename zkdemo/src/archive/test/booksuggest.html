@@ -18,7 +18,7 @@
 		<window id="main" title="Book Suggest" border="normal">
 			What is your favorite?
 			<combobox id="favorite" readonly="true" cols="30"
-			onSelect="event.addOptions({toServer:true})">
+			onSelect="loadSuggest(event.data.items[0])">
 				<comboitem id="bm" label="Biographies and Memoirs"/>
 				<comboitem id="ci" label="Computer and Internet"/>
 				<comboitem id="lf" label="Literature and Fiction"/>
@@ -28,22 +28,27 @@
 		-->
 	</div>
 	<script>
+	zk.spaceless = true;
 	jq(function() {
-		zk.stateless('booksuggest');
-
-		zk.zuml.Parser.createAt('#main', null, null, function (wgt) {
-			//handle AU response
-			wgt.suggest = function (bookInfo) {
-				var suggestInfo = zk.Widget.$('suggestInfo');
-				if (suggestInfo) suggestInfo.detach();
-				zk.zuml.Parser.createAt('#suggestInfo',
-					{replaceHTML:false}, {infos: bookInfo},
-					function (w) {
-						wgt.appendChild(w);
-					});
-			};
-		});
+		zk.zuml.Parser.createAt('#main');
 	});
+	function loadSuggest(item) {
+		 jq.ajax({
+			   type: 'POST',
+			   url: zk.ajaxURI('/booksuggest'),
+			   dataType: 'json',
+			   data: 'bookId=' + item.id,
+			   success: function (bookInfo) {
+					var suggestInfo = zk.Widget.$('suggestInfo');
+					if (suggestInfo) suggestInfo.detach();
+					zk.zuml.Parser.createAt('#suggestInfo',
+						{replaceHTML:false}, {infos: bookInfo},
+						function (w) {
+							zk.Widget.$('main').appendChild(w);
+						});
+				}
+			 });
+	}
 	</script>
 	<div id="suggestInfo" style="display:none">
 		<!--

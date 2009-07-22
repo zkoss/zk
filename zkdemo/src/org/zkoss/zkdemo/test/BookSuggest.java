@@ -19,37 +19,32 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.LinkedHashMap;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.*;
+import javax.servlet.http.*;
 
-import org.zkoss.zkmax.stateless.*;
+import org.zkoss.json.JSONArray;
 
 /**
- * Used with z5.html to demostrate the client-centric programming model.
+ * Used with booksuggest.html to demostrate the client-centric programming model.
  *
  * @author tomyeh
  * @since 5.0.0
  */
-public class BookSuggest implements Statelesslet {
+public class BookSuggest extends HttpServlet {
 	private Map _bookInfos;
 
-	public void service(HttpServletRequest hreq, HttpServletResponse hres)
+	public void service(HttpServletRequest request, HttpServletResponse response)
 	throws javax.servlet.ServletException, java.io.IOException {
-		AuRequest areq = AuRequest.getInstance(hreq);
-		if ("onSelect".equals(areq.getCommand())) {
-			List items = (List)areq.getData().get("items");
-			List bookInfo = (List)_bookInfos.get(items.get(0));
-			AuResponse.output(hreq, hres, "invoke",
-				new Object[] {
-					"main"/*widget ID*/, "suggest"/*method name*/,
-					bookInfo/*suggest's 1st argument*/
-				});
+		final String bookId = request.getParameter("bookId");
+		if (bookId != null) {
+			List bookInfo = (List)_bookInfos.get(bookId);
+			response.getWriter().append(JSONArray.toJSONString(bookInfo));
 		}
 	}
 
 	public void destroy() {
 	}
-	public void init(StatelessletConfig config) {
+	public void init(ServletConfig config) {
 		_bookInfos = new LinkedHashMap();
 
 		String[] cats = {"bm", "ci", "lf"};

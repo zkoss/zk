@@ -13,30 +13,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
 zAu = {
-	comURI: function (uri, dt, ignoreSessId) {
-		var au = zk.Desktop.$(dt);
-		au = (au ? au: zk).updateURI;
-		if (!uri) return au;
-
-		if (uri.charAt(0) != '/') uri = '/' + uri;
-
-		var j = au.lastIndexOf(';'), k = au.lastIndexOf('?');
-		if (j < 0 && k < 0) return au + uri;
-
-		if (k >= 0 && (j < 0 || k < j)) j = k;
-		var prefix = au.substring(0, j);
-
-		if (ignoreSessId)
-			return prefix + uri;
-
-		var suffix = au.substring(j);
-		var l = uri.indexOf('?');
-		return l >= 0 ?
-			k >= 0 ?
-			  prefix + uri.substring(0, l) + suffix + '&' + uri.substring(l+1):
-			  prefix + uri.substring(0, l) + suffix + uri.substring(l):
-			prefix + uri + suffix;
-	},
 	/** Called by mount.js when onReSize */
 	_onClientInfo: function () {
 		if (zAu._cInfoReg)
@@ -412,7 +388,7 @@ zAu = {
 
 		if (content)
 			zAu._sendNow({
-				sid: zAu._seqId, uri: uri || zAu.comURI(dt.subURI, dt),
+				sid: zAu._seqId, uri: uri || zk.ajaxURI(null, dt, {au:true}),
 				dt: dt, content: "dtid=" + dt.id + content,
 				ctli: ctli, ctlc: ctlc, implicit: implicit,
 				ignorable: ignorable, tmout: 0
@@ -428,13 +404,13 @@ zAu = {
 		return jq.toJSON(data);
 	},
 	_sendNow: function(reqInf) {
-		var req = jq.zkAjax.xhr(),
+		var req = zAu._ajax.xhr(),
 			uri = zAu._useQS(reqInf) ? reqInf.uri + '?' + reqInf.content: null;
 		zAu.sentTime = zUtl.now(); //used by server-push (zkex)
 		try {
 			req.onreadystatechange = zAu._onRespReady;
 			req.open("POST", uri ? uri: reqInf.uri, true);
-			req.setRequestHeader("Content-Type", jq.zkAjax.contentType);
+			req.setRequestHeader("Content-Type", zAu._ajax.contentType);
 			req.setRequestHeader("ZK-SID", reqInf.sid);
 			if (zAu._errcode) {
 				req.setRequestHeader("ZK-Error-Report", zAu._errcode);
@@ -445,7 +421,7 @@ zAu = {
 
 			zAu._areq = req;
 			zAu._areqInf = reqInf;
-			if (zk.resendDelay > 0 && !reqInf.dt.subURI/*!statelss*/)
+			if (zk.resendDelay > 0)
 				zAu._areqInf.tfn = setTimeout(zAu._areqTmout, zk.resendDelay + reqInf.tmout);
 
 			if (uri) req.send(null);
@@ -470,7 +446,12 @@ zAu = {
 			zAu._cleanupOnFatal(reqInf.ignorable);
 		}
 	},
-	//IE: use query string if possible to avoid IE incomplete-request problem
+	_ajax: zk.$default({
+		global: false,
+		contentType: "application/x-www-form-urlencoded;charset=UTF-8"
+	}, jq.ajaxSettings),
+
+	//IE: use query string if possible to avoid incomplete-request problem
 	_useQS: zk.ie ? function (reqInf) {
 		var s = reqInf.content, j = s.length, prev, cc;
 		if (j + reqInf.uri.length < 2000) {

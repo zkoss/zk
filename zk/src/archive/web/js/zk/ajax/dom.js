@@ -639,11 +639,6 @@ zk.copy(jq, { //ZK extension to jq
 		return Math.max(v, 0) + "px";
 	},
 
-	zkAjax: zk.$default({
-		global: false,
-		contentType: "application/x-www-form-urlencoded;charset=UTF-8"
-	}, jq.ajaxSettings),
-
 	$$: function (id, subId) {
 		return typeof id == 'string' ?
 			id ? document.getElementsByName(id + (subId ? '-' + subId : '')): null: id;

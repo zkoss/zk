@@ -60,7 +60,8 @@ zul.wgt.Imagemap = zk.$extends(zul.wgt.Image, {
 		var Imagemap = zul.wgt.Imagemap,
 			url = Imagemap._doneURI;
 		return url ? url:
-			Imagemap._doneURI = zAu.comURI('/web/zul/html/imagemap-done.html');
+			Imagemap._doneURI = zk.IMAGEMAP_DONE_URI ? zk.IMAGEMAP_DONE_URI:
+				zk.ajaxURI('/web/zul/html/imagemap-done.html', this.desktop, {au:true});
 	}
 },{
 	/** Called by imagemap-done.html. */

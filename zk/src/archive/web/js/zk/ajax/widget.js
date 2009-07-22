@@ -12,7 +12,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.spaceless = zk.spaceless || zk.light; //id == uuid
 zk.Widget = zk.$extends(zk.Object, {
 	_visible: true,
 	nChildren: 0,
@@ -1434,7 +1433,7 @@ zk.Desktop = zk.$extends(zk.Widget, {
 	bindLevel: 0,
 	className: 'zk.Desktop',
 
-	$init: function (dtid, updateURI, stateless) {
+	$init: function (dtid, contextURI, updateURI, stateless) {
 		this.$super('$init', {uuid: dtid}); //id also uuid
 
 		this._aureqs = [];
@@ -1443,15 +1442,15 @@ zk.Desktop = zk.$extends(zk.Widget, {
 		if (!dt) {
 			this.uuid = this.id = dtid;
 			this.updateURI = updateURI || zk.updateURI;
-			if (this.stateless = stateless && !zk.light) {
-				this.subURI = '/ss';
-				zk.spaceless = true;
-			}
+			this.contextURI = contextURI || zk.contextURI;
+			this.stateless = stateless;
 			dts[dtid] = this;
 			++zkdt._ndt;
 			if (!zkdt._dt) zkdt._dt = this; //default desktop
-		} else if (updateURI)
-			dt.updateURI = updateURI;
+		} else {
+			if (updateURI) dt.updateURI = updateURI;
+			if (contextURI) dt.contextURI = contextURI;
+		}
 
 		zkdt.sync();
 	},
