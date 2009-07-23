@@ -43,7 +43,7 @@ zul.grid.Rows = zk.$extends(zul.Widget, {
 		this.$supers('unbind_', arguments);
 	},
 	onResponse: function () {
-		if (this._shallStripe) {
+		if (this.desktop && this._shallStripe) { //since afterMount 
 			this.stripe();
 			this.getGrid().onSize();
 		}

@@ -29,9 +29,8 @@
 	</div>
 	<script>
 	zk.spaceless = true;
-	jq(function() {
-		zk.zuml.Parser.createAt('#main');
-	});
+	zk.zuml.Parser.createAt('#main');
+
 	function loadSuggest(item) {
 		 jq.ajax({
 			   type: 'POST',

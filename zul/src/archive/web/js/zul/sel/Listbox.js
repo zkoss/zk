@@ -63,7 +63,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		this.$supers('unbind_', arguments);
 	},
 	onResponse: function () {
-		if (this._shallStripe) {
+		if (this.desktop && this._shallStripe) {
 			this.stripe();
 			this.onSize();
 		}

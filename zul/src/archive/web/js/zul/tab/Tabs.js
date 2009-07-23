@@ -59,9 +59,11 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		this._init = false
 		zk.afterMount(
 			this.proxy(function () {
-				this._scrollcheck("init");
-				this._fixHgh();
-				this._init = true;
+				if (this.desktop) {
+					this._scrollcheck("init");
+					this._fixHgh();
+					this._init = true;
+				}
 			})
 		);
 		this._fixWidth();
