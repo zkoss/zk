@@ -108,14 +108,6 @@ zk = function (sel) {
 		return opts;
 	},
 
-	forEach: function (objs, fn) {
-		var args = [];
-		for (var j = arguments.length; --j >= 2;)
-			args.unshift(arguments[j]);
-		for (var j = 0, len = objs.length; j < len;)
-			fn.apply(objs[j], args);
-	},
-
 	override: function (dst, backup, src) {
 		for (var nm in src) {
 			backup[nm] = dst[nm];
