@@ -344,6 +344,10 @@ public interface ComponentCtrl {
 
 	/** Handles an AU request.
 	 *
+	 * <p>Notice: don't invoke this method directly. Rather, invoke
+	 * {@link ComponentsCtrl#service} instead.
+	 * This method is designed to be overriden.
+	 *
 	 * <p>To send reponses to the client, use
 	 * {@link org.zkoss.zk.ui.AbstractComponent#smartUpdate},
 	 * {@link org.zkoss.zk.ui.AbstractComponent#response}
@@ -352,7 +356,7 @@ public interface ComponentCtrl {
 	 * method.
 	 *
 	 * <p>Application developer can plug the custom service to handle
-	 * the AU request by {@link Component#setAuService}.
+	 * the AU request by calling {@link Component#setAuService}.
 	 *
 	 * @param everError whether any error ever occured before
 	 * processing this request.

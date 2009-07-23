@@ -1225,9 +1225,7 @@ public class UiEngineImpl implements UiEngine {
 		execCtrl.setCurrentPage(request.getPage());
 		final Component comp = request.getComponent();
 		if (comp != null) {
-			final AuService svc = comp.getAuService();
-			if (svc == null || !svc.service(request, everError))
-				((ComponentCtrl)comp).service(request, everError);
+			ComponentsCtrl.service(comp, request, everError);
 		} else {
 			((DesktopCtrl)request.getDesktop()).service(request, everError);
 		}
