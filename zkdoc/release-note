@@ -2,6 +2,7 @@
 ZK 5.0.0
 * Features
   2817315: Support client-centric programming model
+  2825713: EventQueue support application-level publish (by sever-push)
   2787713: Button automatically disable itself after clicked
   2815551: Include supports non-HTML content (by use of comment)
   2491275: ZHTML checkbox fire onCheck (in addition to onClick)
