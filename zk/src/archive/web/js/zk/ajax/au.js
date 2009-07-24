@@ -404,13 +404,14 @@ zAu = {
 		return jq.toJSON(data);
 	},
 	_sendNow: function(reqInf) {
-		var req = zAu._ajax.xhr(),
+		var setting = zAu.ajaxSettings,
+			req = setting.xhr(),
 			uri = zAu._useQS(reqInf) ? reqInf.uri + '?' + reqInf.content: null;
 		zAu.sentTime = zUtl.now(); //used by server-push (zkex)
 		try {
 			req.onreadystatechange = zAu._onRespReady;
 			req.open("POST", uri ? uri: reqInf.uri, true);
-			req.setRequestHeader("Content-Type", zAu._ajax.contentType);
+			req.setRequestHeader("Content-Type", setting.contentType);
 			req.setRequestHeader("ZK-SID", reqInf.sid);
 			if (zAu._errcode) {
 				req.setRequestHeader("ZK-Error-Report", zAu._errcode);
@@ -446,7 +447,7 @@ zAu = {
 			zAu._cleanupOnFatal(reqInf.ignorable);
 		}
 	},
-	_ajax: zk.$default({
+	ajaxSettings: zk.$default({
 		global: false,
 		contentType: "application/x-www-form-urlencoded;charset=UTF-8"
 	}, jq.ajaxSettings),
@@ -478,7 +479,7 @@ zAu = {
 
 			var cmds = que[j];
 			if (rid == cmds.rid || !rid || !cmds.rid //match
-			|| zk.widget._ndt > 1) { //ignore multi-desktops (risky but...)
+			|| zk.Desktop._ndt > 1) { //ignore multi-desktops (risky but...)
 				que.splice(j, 1);
 
 				var oldrid = rid;

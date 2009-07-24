@@ -580,7 +580,7 @@ zkm = {
 						beforeSend: function (xhr) {
 							if (zk.pfmeter) zAu._pfsend(dt, xhr, true);
 						}
-					}, jq.zkAjax));
+					}, zAu.ajaxSettings));
 				}
 			} catch (e) { //silent
 			}
