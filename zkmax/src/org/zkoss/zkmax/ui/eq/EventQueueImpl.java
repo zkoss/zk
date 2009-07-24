@@ -42,8 +42,9 @@ import org.zkoss.zkmax.ui.eq.EventQueue;
 	/*package*/ EventQueueImpl() {
 		_dummy.addEventListener("onQueue", new EventListener() {
 			public void onEvent(Event event) throws Exception {
+				final Event evt = (Event)event.getData();
 				for (Iterator it = _listeners.iterator(); it.hasNext();)
-					((EventListener)it.next()).onEvent(event);
+					((EventListener)it.next()).onEvent(evt);
 			}
 		});
 	}
