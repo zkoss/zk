@@ -89,7 +89,7 @@ zAu = {
 	},
 
 	////Ajax receive////
-	pushCmds: function (dt, req) {
+	_pushCmds: function (dt, req) {
 		var rt = req.responseText;
 		if (!rt) {
 			if (zk.pfmeter) zAu.pfdone(dt, zAu._pfGetIds(req));
@@ -207,7 +207,7 @@ zAu = {
 						return;
 					} //if sid null, always process (usually for error msg)
 
-					if (zAu.pushCmds(reqInf.dt, req)) { //valid response
+					if (zAu._pushCmds(reqInf.dt, req)) { //valid response
 						//advance SID to avoid receive the same response twice
 						if (sid && ++zAu._seqId > 9999) zAu._seqId = 1;
 						zAu._areqTry = 0;
@@ -285,7 +285,7 @@ zAu = {
 				zAu._send2(dts[dtid], 0);
 		}
 
-		zAu.doCmds();
+		zAu._doCmds();
 	},
 
 	_send: function (dt, aureq, timeout) {
@@ -467,7 +467,7 @@ zAu = {
 		return false;
 	}: zk.$void,
 
-	doCmds: function () {
+	_doCmds: function () {
 		_zkmt = zUtl.now(); //used by zkm.exec
 
 		for (var fn; fn = zAu._dcfns.shift();)
@@ -519,7 +519,7 @@ zAu = {
 						if (v > 500 || (v < 0 && v > -500)) r = r2;
 					}
 					zAu._resId = r;
-					zAu.doCmds();
+					zAu._doCmds();
 				}
 			}, 3600);
 		} else

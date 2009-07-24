@@ -298,29 +298,20 @@ if (c.isEmpty()) {
 	//Response Utilities//
 	/** Called when ZK Update Engine has sent a response to the client.
 	 *
-	 * <p>Note: the implementation has to maintain one last-sent
-	 * response information for each channel, since a different channel
-	 * has different set of request IDs and might resend in a different
-	 * condition.
-	 *
-	 * @param channel the request channel.
-	 * For example, "au" for AU requests and "cm" for Comet requests.
 	 * @param reqId the request ID that the response is generated for.
 	 * Ingore if null.
-	 * @param resInfo the response infomation. Ignored if reqId is null.
-	 * The real value depends on the caller.
-	 * @since 3.5.0
+	 * @param resInfo the response. Ignored if reqId is null.
+	 * @since 5.0.0
 	 */
-	public void responseSent(String channel, String reqId,
-	Object resInfo);
-	/** Returns the information of response for the last request, or null
+	public void responseSent(String reqId, Object resInfo);
+	/** Returns the response for the last request, or null
 	 * if no response yet, or the specified request ID doesn't match
 	 * the last one (passed to {@link #responseSent}).
 	 * <p>The return value is the value passed to resInfo when calling
-	 * {@link #responseSent}. The real value depends on the caller.
-	 * @since 3.5.0
+	 * {@link #responseSent}.
+	 * @since 5.0.0
 	 */
-	public Object getLastResponse(String channel, String reqId);
+	public Object getLastResponse(String reqId);
 	/** Returns the sequence ID of the response.
 	 * The client and server uses the sequence ID to make sure
 	 * the responses are processed in the correct order.
@@ -343,6 +334,21 @@ if (c.isEmpty()) {
 	 * @since 3.5.0
 	 */
 	public void setResponseId(int resId);
+	/** Adds the responses to the so-called piggy-back queue.
+	 * The responses in the piggy-back queue will be sent in
+	 * the next AU request.
+	 * <p>This method is useful for working thread that
+	 * wants to sent the responses back to the client.
+	 * A typical example is the Comet-based server push.
+	 *
+	 * @param response the responses to be appended to the piggy-back queue.
+	 * @param reset whether to reset the piggy-back queue after
+	 * returning the queued responses.
+	 * @return all responses in the piggy-back queue, or null
+	 * if nothing in the queue.
+	 * @since 5.0.0
+	 */
+	public List piggyResponse(List response, boolean reset);
 
 	/** Activates the server push.
 	 * It is called by {@link org.zkoss.zk.ui.Executions#activate}.

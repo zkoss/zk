@@ -328,32 +328,15 @@ public interface UiEngine {
 	 */
 	public void deactivate(Execution exec);
 
-	/** Checks whether the request is duplicated.
-	 * Due to HTTP (and ZK Client Engine), the same request might be sent
-	 * multiple times.
-	 * And, this method is used to handle the duplicate request.
-	 *
-	 * <p>It must be called before {@link #beginUpdate} and {@link #endUpdate}.
-	 * And, you shall not call {@link #beginUpdate} and {@link #endUpdate},
-	 * if this method return true.
-	 *
-	 * @return whether the request is duplicated.
-	 * If duplicate (true), the response is generated automatically
-	 * and no more processing is required.
-	 * @since 3.5.0
-	 */
-	public boolean isRequestDuplicate(Execution exec, AuWriter out)
-	throws IOException;
 	/** Activates and prepare for asynchronous update
 	 * @since 3.5.0
 	 */
 	public void beginUpdate(Execution exec);
 	/** Executes posted events, deactive and ends the asynchronous update.
 	 *
-	 * @param out the AU writer to generate the responses to; never null.
-	 * @since 3.5.0
+	 * @since 5.0.0
 	 */
-	public void endUpdate(Execution exec, AuWriter out)
+	public void endUpdate(Execution exec)
 	throws IOException;
 
 	/** Retrieve the native content for a property of the specified component.

@@ -232,7 +232,7 @@ zkm = {
 		zk.mounting = false;
 		zkm._afmt(zkm.mtAU0);
 
-		zAu.doCmds(); //server-push (w/ afterLoad) and pfdone
+		zAu._doCmds(); //server-push (w/ afterLoad) and pfdone
 		zkm._afmt(zkm.mtAU0);
 	},
 	_afmt: function (fnext) {

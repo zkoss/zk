@@ -49,12 +49,6 @@ public class HttpAuWriter implements AuWriter{
 	}
 
 	//AuWriter//
-	/** Returns au to represent the response channel for AU requests.
-	 * @since 3.5.0
-	 */
-	public String getChannel() {
-		return "au";
-	}
 	/** Opens the connection.
 	 *
 	 * <p>Default: it creates an object to store the responses.

@@ -33,12 +33,6 @@ import java.io.IOException;
  * @see AuWriters#setImplementationClass
  */
 public interface AuWriter {
-	/** Returns the request channel.
-	 * A channel is a kind of connections between client and server.
-	 * For example, AU is "au", while Comet is "cm".
-	 * @since 3.5.0
-	 */
-	public String getChannel();
 	/** Initializes the writer.
 	 *
 	 * @param request the request (HttpServletRequest if HTTP)

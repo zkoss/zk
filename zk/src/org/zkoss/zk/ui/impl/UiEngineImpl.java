@@ -864,24 +864,11 @@ public class UiEngineImpl implements UiEngine {
 	}
 
 	//-- Asynchronous updates --//
-	public boolean isRequestDuplicate(Execution exec, AuWriter out)
-	throws IOException {
-		final String sid = ((ExecutionCtrl)exec).getRequestId();
-		if (sid != null) {
-			doActivate(exec, true, false);
-			try {
-				return isReqDup0(exec, out, sid);
-			} finally {
-				doDeactivate(exec); //deactive
-			}
-		}
-		return false;
-	}
 	private boolean isReqDup0(Execution exec, AuWriter out, String sid)
 	throws IOException {
 		final Desktop desktop = exec.getDesktop();
 		final Object[] resInfo = (Object[])((DesktopCtrl)desktop)
-			.getLastResponse(out.getChannel(), sid);
+			.getLastResponse(sid);
 		if (resInfo != null) {
 			if (log.debugable()) {
 				final Object req = exec.getNativeRequest();
@@ -901,7 +888,7 @@ public class UiEngineImpl implements UiEngine {
 		desktop.getWebApp().getConfiguration().invokeExecutionInits(exec, null);
 		((DesktopCtrl)desktop).invokeExecutionInits(exec, null);
 	}
-	public void endUpdate(Execution exec, AuWriter out)
+	public void endUpdate(Execution exec)
 	throws IOException {
 		boolean cleaned = false;
 		final Desktop desktop = exec.getDesktop();
@@ -917,13 +904,7 @@ public class UiEngineImpl implements UiEngine {
 				resumeAll(desktop, uv, null);
 			} while ((event = nextEvent(uv)) != null);
 
-			List responses = uv.getResponses();
-			final int resId = desktopCtrl.getResponseId(true);
-			desktopCtrl.responseSent(
-				out.getChannel(), execCtrl.getRequestId(),
-				new Object[] {new Integer(resId), responses});
-			out.writeResponseId(resId);
-			out.write(responses);
+			desktopCtrl.piggyResponse(uv.getResponses(), false);
 
 			cleaned = true;
 			desktopCtrl.invokeExecutionCleanups(exec, null, null);
@@ -1050,8 +1031,11 @@ public class UiEngineImpl implements UiEngine {
 			else
 				responses.add(new AuEcho(desktop)); //ask client to echo if any pending
 
+			List prs = desktopCtrl.piggyResponse(null, true);
+			if (prs != null) responses.addAll(0, prs);
+
 			final int resId = desktopCtrl.getResponseId(true);
-			desktopCtrl.responseSent(out.getChannel(), sid,
+			desktopCtrl.responseSent(sid,
 				new Object[] {new Integer(resId), responses});
 			out.writeResponseId(resId);
 			out.write(responses);

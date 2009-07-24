@@ -155,7 +155,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	private transient Visualizer _uv;
 	private transient Object _uvLock;
 
-	private transient Map _lastRes;
+	private transient ReqResult _lastRes;
+	private transient List _piggyRes;
+
 	private static final int MAX_RESPONSE_ID = 999;
 	/** The response sequence ID. */
 	private int _resId; //so next will be 1
@@ -252,7 +254,6 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		_rque = newRequestQueue();
 		_comps = new HashMap(64);
 		_attrs = new HashMap();
-		_lastRes = new HashMap(4);
 	}
 	/** Updates _uuidPrefix based on _id. */
 	private void updateUuidPrefix() {
@@ -1091,13 +1092,13 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 
 	//AU Response//
-	public void responseSent(String channel, String reqId, Object response) {
+	public void responseSent(String reqId, Object response) {
 		if (reqId != null)
-			_lastRes.put(channel, new Object[] {reqId, response});
+			_lastRes = new ReqResult(reqId, response);
 	}
-	public Object getLastResponse(String channel, String reqId) {
-		final Object[] info = (Object[])_lastRes.get(channel);
-		return info != null && Objects.equals(reqId, info[0]) ? info[1]: null;
+	public Object getLastResponse(String reqId) {
+		return _lastRes != null && _lastRes.id.equals(reqId) ?
+			_lastRes.response: null;
 	}
 	public int getResponseId(boolean advance) {
 		if (advance && ++_resId > MAX_RESPONSE_ID)
@@ -1109,12 +1110,32 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			throw new IllegalArgumentException("Invalid response ID: "+resId);
 		_resId = resId < 0 ? 0: resId;
 	}
+	public List piggyResponse(List response, boolean reset) {
+		if (response != null) {
+			if (_piggyRes == null)
+				_piggyRes = response;
+			else
+				_piggyRes.addAll(response);
+		}
+
+		List l = _piggyRes;
+		if (reset) _piggyRes = null;
+		return l;
+	}
 
 	public void invalidate() {
 		for (Iterator it = _pages.values().iterator(); it.hasNext();) {
 			final Page page = (Page)it.next();
 			if (((PageCtrl)page).getOwner() == null)
 				page.invalidate();
+		}
+	}
+	private static class ReqResult {
+		private final String id;
+		private final Object response;
+		private ReqResult(String id, Object response) {
+			this.id = id;
+			this.response = response;
 		}
 	}
 }
