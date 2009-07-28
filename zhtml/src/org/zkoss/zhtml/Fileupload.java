@@ -20,8 +20,6 @@ package org.zkoss.zhtml;
 
 import org.zkoss.util.media.Media;
 
-import org.zkoss.zk.ui.UiException;
-
 /**
  * A fileupload dialog used to let user upload a file.
  *
@@ -32,7 +30,7 @@ import org.zkoss.zk.ui.UiException;
  * 
  * @author tomyeh
  */
-public class Fileupload {
+public class Fileupload extends org.zkoss.zul.Fileupload {
 	/** Opens a modal dialog with the default message and title,
 	 * and let user upload a file.
 	 * @return the uploaded content, or null if not ready.
