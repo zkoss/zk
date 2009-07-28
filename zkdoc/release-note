@@ -20,7 +20,9 @@ August, 2009
   2820527: Hiding column not work
   2821745: Groupbox fail to open if in the closing animation
   2828189: Fileupload won't check max-upload-size in zk.xml if ms is -1
-
+  2827671: Serializable error with FieldComparator
+  2816139: zul.xsd error in ZK 3.6.2 (with Eclipse 3.4 Ganymede)
+  
 	--------
 ZK 3.6.2
 June 23, 2009

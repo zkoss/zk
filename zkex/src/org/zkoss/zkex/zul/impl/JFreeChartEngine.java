@@ -1893,8 +1893,8 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 				
 				//handle the tick
 				dscale.setTickRadius(scale.getTickRadius());
-				dscale.setTickLabelOffset(0.15);
-				Font font = scale.getValueFont();
+				dscale.setTickLabelOffset(scale.getTickLabelOffset());
+				Font font = scale.getTickFont();
 				if (font == null) {
 					font = new Font("Dialog", Font.PLAIN, 14);
 				}

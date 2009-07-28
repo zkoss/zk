@@ -1965,7 +1965,7 @@
 	<xs:element name="toolbar" type="toolbarType" />
 	<xs:complexType name="toolbarType">
 		<xs:choice minOccurs="0" maxOccurs="unbounded">
-			<xs:group ref="anyGroup" />
+			<xs:group ref="baseGroup" />
 			<xs:element ref="toolbarbutton" />
 			<xs:element ref="button" />
 			<xs:element ref="image" />
