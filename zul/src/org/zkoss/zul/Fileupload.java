@@ -89,7 +89,6 @@ public class Fileupload extends HtmlBasedComponent implements org.zkoss.zul.api.
 	 * @since 3.6.0
 	 */
 	public void setMaxsize(int maxsize) {
-		if (maxsize < 0) maxsize = -1;
 		_maxsize = maxsize;
 	}
 	/** No child is allowed. */
