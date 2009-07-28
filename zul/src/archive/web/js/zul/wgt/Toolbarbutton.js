@@ -98,6 +98,5 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		else
 			this.fireX(evt);
 			//Unlike DOM, we don't proprogate to parent (so not call $supers)
-		this.$supers('doClick_', arguments);
 	}
 });
