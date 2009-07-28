@@ -61,8 +61,9 @@ ZK 5.0.0
 ZK 3.6.3
 August, 2009
 * Features
-  2811973: Log the event thread that takes too long to execute
+  2821761: Tabbox support extra tabs to display other cmps on the bar
   2813737: Support new "dial" chart	
+  2811973: Log the event thread that takes too long to execute
   2813778: Upgrade to jython 2.5
   2817733: doModal degenerate to doHilighted if event thread disabled
 
@@ -74,7 +75,13 @@ August, 2009
   2818308: ScrollIntoView got a wrong position, if not need be
   2819040: Panel couldn't contain caption child
   2819521: Console shows Exception if do modal in sendEvent + F5
-
+  2820552: Panel fails to combine the caption with three toolbars
+  2820527: Hiding column not work
+  2821745: Groupbox fail to open if in the closing animation
+  2828189: Fileupload won't check max-upload-size in zk.xml if ms is -1
+  2827671: Serializable error with FieldComparator
+  2816139: zul.xsd error in ZK 3.6.2 (with Eclipse 3.4 Ganymede)
+  
 	--------
 ZK 3.6.2
 June 23, 2009

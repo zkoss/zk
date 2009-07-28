@@ -18,10 +18,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zhtml;
 
-import org.zkoss.util.media.Media;
-
-import org.zkoss.zk.ui.UiException;
-
 /**
  * A fileupload dialog used to let user upload a file.
  *
@@ -32,23 +28,5 @@ import org.zkoss.zk.ui.UiException;
  * 
  * @author tomyeh
  */
-public class Fileupload {
-	/** Opens a modal dialog with the default message and title,
-	 * and let user upload a file.
-	 * @return the uploaded content, or null if not ready.
-	 */
-	public static Media get() throws InterruptedException {
-		return get(null, null);
-	}
-	/** Opens a modal dialog with the specified message and title,
-	 * and let user upload a file.
-	 *
-	 * @param message the message. If null, the default is used.
-	 * @param title the title. If null, the default is used.
-	 * @return the uploaded content, or null if not ready.
-	 */
-	public static Media get(String message, String title)
-	throws InterruptedException {
-		return org.zkoss.zul.Fileupload.get(message, title);
-	}
+public class Fileupload extends org.zkoss.zul.Fileupload {
 }

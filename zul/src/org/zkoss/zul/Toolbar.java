@@ -83,7 +83,7 @@ public class Toolbar extends XulElement implements org.zkoss.zul.api.Toolbar {
 	
 	// super
 	public String getZclass() {
-		return _zclass == null ? "z-toolbar" +
+		return _zclass == null ? "z-toolbar" + (getParent() instanceof Tabbox ? "-tabs" : "") +
 				(inPanelMold() ? "-panel" : "") : _zclass;
 	}
 

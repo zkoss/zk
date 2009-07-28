@@ -151,9 +151,6 @@ public class Tabs extends XulElement implements org.zkoss.zul.api.Tabs {
 		final Tabbox tabbox = getTabbox();
 		if (tabbox != null)
 			((Tab)child).removeEventListener(Events.ON_SELECT, tabbox._listener);
-
-		if (tabbox == null && !tabbox.inAccordionMold())
-			smartUpdate("z.initscroll", true); //fixWidth
 	}
 	public void onChildAdded(Component child) {
 		super.onChildAdded(child);

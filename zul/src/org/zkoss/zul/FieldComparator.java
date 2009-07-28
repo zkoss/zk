@@ -196,7 +196,7 @@ public class FieldComparator implements Comparator, Serializable {
 		return results;
 	}
 		
-	private static class FieldInfo {
+	private static class FieldInfo implements Serializable {
 		private String fieldname;
 		private boolean asc;
 		private String func;

@@ -54,6 +54,7 @@ public class DialModelScale implements Serializable {
 	private double _tickRadius = 0.88; //0.88, 0.50
 	private String _tickColor; //FrameFgColor, 0xFF0000
 	private int[] _tickRGB; //background red, green, blue (0 ~ 255, 0 ~ 255, 0 ~ 255)
+	private double _tickLabelOffset = 0.20; //offset between tick and tick label
 	
 	//scale
 	double _lowerBound;
@@ -313,6 +314,25 @@ public class DialModelScale implements Serializable {
 	public void setTickRadius(double radius) {
 		if (_tickRadius != radius) {
 			_tickRadius = radius;
+			fireEvent(ChartDataEvent.CHANGED);
+		}
+	}
+	
+	/**
+	 * Returns the radius offset in percentage(0 ~ 1) between the tick and tick label.
+	 * @return the radius offset in percentage(0 ~ 1) between the tick and tick label.
+	 */
+	public double getTickLabelOffset() {
+		return _tickLabelOffset;
+	}
+
+	/**
+	 * Sets the radius offset in percentage(0 ~ 1) between the tick and tick label.
+	 * @param tickLabelOffset the radius offset in percentage(0 ~ 1) between the tick and tick label.
+	 */
+	public void setTickLabelOffset(double tickLabelOffset) {
+		if (_tickLabelOffset != tickLabelOffset) {
+			_tickLabelOffset = tickLabelOffset;
 			fireEvent(ChartDataEvent.CHANGED);
 		}
 	}

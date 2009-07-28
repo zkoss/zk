@@ -51,12 +51,16 @@ import org.zkoss.zul.impl.XulElement;
  * <dd>The accordion tabbox.</dd>
  * </dl>
  *
+ * <p>{@link Toolbar} only works in the horizontal default mold and
+ * the {@link #isTabscroll()} to be true. (since 3.6.3)
+ *  
  * <p>Default {@link #getZclass}: z-tabbox. (since 3.5.0)
  *
  * @author tomyeh
  */
 public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 	private transient Tabs _tabs;
+	private transient Toolbar _toolbar;
 	private transient Tabpanels _tabpanels;
 	private transient Tab _seltab;
 	private String _panelSpacing;
@@ -85,6 +89,15 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 	 */
 	public Tabs getTabs() {
 		return _tabs;
+	}
+
+	/**
+	 * Returns the auxiliary toolbar that this tabbox owns.
+	 * 
+	 * @since 3.6.3
+	 */
+	public Toolbar getToolbar() {
+		return _toolbar;
 	}
 	/**
 	 * Returns the tabs that this tabbox owns.
@@ -333,7 +346,10 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 	}
 
 	public void beforeChildAdded(Component child, Component refChild) {
-		if (child instanceof Tabs) {
+		if (child instanceof Toolbar) {
+			if (_toolbar != null && _toolbar != child)
+				throw new UiException("Only one Toolbar is allowed: " + this);
+		} else if (child instanceof Tabs) {
 			if (_tabs != null && _tabs != child)
 				throw new UiException("Only one tabs is allowed: " + this);
 		} else if (child instanceof Tabpanels) {
@@ -366,6 +382,12 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 				invalidate(); //DSP might implement diff for children order
 				return true;
 			}
+		} else if (child instanceof Toolbar) {
+			if (super.insertBefore(child, refChild)) {
+				_toolbar = (Toolbar) child;
+				invalidate(); //DSP might implement diff for children order
+				return true;
+			}
 		} else {
 			return super.insertBefore(child, refChild);
 				//impossible but make it more extensible
@@ -374,12 +396,14 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 	}
 
 	public void onChildRemoved(Component child) {
-		if (child instanceof Tabs) {
+		if (_tabs == child) {
 			removeTabsListeners();
 			_tabs = null;
 			_seltab = null;
-		} else if (child instanceof Tabpanels) {
+		} else if (_tabpanels ==  child) {
 			_tabpanels = null;
+		} else if (_toolbar == child) {
+			_toolbar = null;
 		}
 		super.onChildRemoved(child);
 	}
@@ -414,6 +438,8 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 		int cnt = 0;
 		if (clone._tabs != null)
 			++cnt;
+		if (clone._toolbar != null)
+			++cnt;
 		if (clone._tabpanels != null)
 			++cnt;
 		if (cnt > 0)
@@ -434,6 +460,10 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 						break;
 					}
 				}
+				if (--cnt == 0)
+					break;
+			} else if (child instanceof Toolbar) {
+				_toolbar = (Toolbar) child;
 				if (--cnt == 0)
 					break;
 			} else if (child instanceof Tabpanels) {
