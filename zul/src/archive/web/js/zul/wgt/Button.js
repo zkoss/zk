@@ -36,7 +36,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		autodisable: null,
 		upload: function (v) {
 			var n = this.$n();
-			if (n) {
+			if (n && !this._disabled) {
 				this._cleanUpld();
 				if (v && v != 'false') this._initUpld();
 			}
@@ -93,10 +93,10 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		this.domListen_(n, "onFocus", "doFocus_")
 			.domListen_(n, "onBlur", "doBlur_");
 
-		if (this._upload) this._initUpld();
+		if (!this._disabled && this._upload) this._initUpld();
 	},
 	unbind_: function () {
-		if (this._upload) this._cleanUpld();
+		if (!this._disabled && this._upload) this._cleanUpld();
 
 		var trendy = this._mold == 'trendy',
 			n = !trendy ? this.$n(): this.$n('btn');

@@ -412,9 +412,13 @@ zkm = {
 
 	_eproxy: function (evt) { //handle proxy
 		var n;
-		if (((n = evt.target) && (n = n.z$proxy))
-		|| ((n = evt.originalTarget) && (n = n.z$proxy)))
-			evt.target = n;
+		
+		// Firefox 3.5 will cause an error.
+		try {
+			if (((n = evt.target) && (n = n.z$proxy)) ||
+			((n = evt.originalTarget) && (n = n.z$proxy))) 
+				evt.target = n;
+		} catch (e) {}
 	},
 	docMouseMove: function (evt) {
 		zkm._eproxy(evt);

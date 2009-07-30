@@ -34,4 +34,5 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<widget name="Chart"/>
 	<widget name="Captcha"/>
 	<widget name="Progressmeter"/>
+	<widget name="Fileupload"/>
 </package>

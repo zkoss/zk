@@ -392,7 +392,12 @@ span.z-upload input {
 	width: 16px;
 	height: 17px;
 }
-
+.z-fileupload-progress {
+	width: 300px;
+}
+.z-fileupload-manager {
+	width: 350px;
+}
 <%-- Auxheader --%>
 .z-auxheader-cnt {
 	font-size: ${fontSizeM}; font-weight: normal;

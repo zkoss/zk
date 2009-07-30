@@ -42,6 +42,7 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zul.api.Men
 	private boolean _autocheck, _checked;
 	private boolean _disabled = false;
 	private boolean _checkmark;
+	private String _upload;
 
 	static {
 		addClientEvent(Menuitem.class, Events.ON_CHECK, CE_IMPORTANT);
@@ -196,6 +197,55 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zul.api.Men
 		return !(getParent() instanceof Menupopup);
 	}
 
+	/** Returns non-null if this button is used for file upload, or null otherwise.
+	 * Refer to {@link #setUpload} for more details.
+	 * @since 5.0.0
+	 */
+	public String getUpload() {
+		return _upload;
+	}
+	/** Sets the JavaScript class at the client to handle the upload if this
+	 * button is used for file upload.
+	 * <p>Default: null.
+	 *
+	 * <p>For example, the following example declares a button for file upload:
+	 * <pre><code>&lt;button label="Upload" upload="true"
+	 * onUpload="handle(event.media)"/&gt;</code></pre>
+	 *
+	 * <p>As shown above, after the file is uploaded, an instance of
+	 * {@link UploadEvent} is sent this component.
+	 *
+	 * <p>If you want to customize the handling of the file upload at
+	 * the client, you can specify a JavaScript class when calling
+	 * this method:
+	 * <code>&lt;button upload="foo.Upload"/&gt;</code>
+	 *
+	 * <p> Another options for the upload can be specified as follows:
+	 *  <pre><code>&lt;button label="Upload" upload="true,maxsize=-1,native"</code></pre>
+	 *  <ul>
+	 *  <li>maxsize: the maximal allowed upload size of the component, in kilobytes, or 
+	 * a negative value if no limit.</li>
+	 *  <li>native: Sets whether to treat the uploaded file(s) as binary, i.e.,
+	 * not to convert it to image, audio or text files.</li>
+	 *  </ul>
+	 *  
+	 * @param upload a JavaScript class to handle the file upload
+	 * at the client, or "true" if the default class is used,
+	 * or null or "false" to disable the file download (and then
+	 * this button behaves like a normal button).
+	 * @since 5.0.0
+	 */
+	public void setUpload(String upload) {
+		if (upload != null
+		&& (upload.length() == 0 || "false".equals(upload)))
+			upload = null;
+
+		if (!Objects.equals(upload, _upload)) {
+			_upload = upload;
+			smartUpdate("upload", _upload);
+		}
+	}
+
 	//-- Component --//
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Menupopup)
@@ -218,6 +268,7 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zul.api.Men
 		if (_autocheck) render(renderer, "autocheck", _autocheck);
 		if (_href != null) render(renderer, "href", _href);
 		if (_target != null) render(renderer, "target", _target);
+		render(renderer, "upload", _upload);
 		render(renderer, "value", _value);
 	}
 

@@ -21,6 +21,8 @@ package org.zkoss.zk.au.http;
 import java.io.File;
 import java.io.OutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -42,16 +44,17 @@ import org.zkoss.zk.ui.impl.Attributes;
 	private static final Log log = Log.lookup(ZkFileItemFactory.class);
 
 	private final Desktop _desktop;
+	private final String _key;
 	/** The total length (content length). */
 	private long _cbtotal;
 	/** # of bytes being received. */
 	private long _cbrcv;
 
-	/*package*/ ZkFileItemFactory(Desktop desktop, HttpServletRequest request) {
+	/*package*/ ZkFileItemFactory(Desktop desktop, HttpServletRequest request, String key) {
     	setSizeThreshold(1024*128);	// maximum size that will be stored in memory
 
 		_desktop = desktop;
-
+		_key = key;
 		long cbtotal = 0;
 		String ctlen = request.getHeader("content-length");
 		if (ctlen != null)
@@ -62,9 +65,13 @@ import org.zkoss.zk.ui.impl.Attributes;
 				log.warning(ex);
 			}
 		_cbtotal = cbtotal;
-
-		_desktop.setAttribute(Attributes.UPLOAD_PERCENT, new Integer(0));
-		_desktop.setAttribute(Attributes.UPLOAD_SIZE, new Long(_cbtotal));
+		
+		if (_desktop.getAttribute(Attributes.UPLOAD_PERCENT) == null) {
+			_desktop.setAttribute(Attributes.UPLOAD_PERCENT, new HashMap());
+			_desktop.setAttribute(Attributes.UPLOAD_SIZE, new HashMap());
+		}
+		((Map)_desktop.getAttribute(Attributes.UPLOAD_PERCENT)).put(key, new Integer(0));
+		((Map)_desktop.getAttribute(Attributes.UPLOAD_SIZE)).put(key, new Long(_cbtotal));
 	}
 
 	/*package*/ void onProgress(long cbRead) {
@@ -73,8 +80,7 @@ import org.zkoss.zk.ui.impl.Attributes;
 			_cbrcv = cbRead;
 			percent = (int)(_cbrcv * 100 / _cbtotal);
 		}
-
-		_desktop.setAttribute(Attributes.UPLOAD_PERCENT, new Integer(percent));
+		((Map)_desktop.getAttribute(Attributes.UPLOAD_PERCENT)).put(_key, new Integer(percent));
 	}
 
 	//-- FileItemFactory --//

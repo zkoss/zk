@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.FileUploadBase.IOFileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.servlet.ServletRequestContext;
 
@@ -41,7 +42,6 @@ import org.zkoss.lang.D;
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.mesg.Messages;
-import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.media.Media;
 import org.zkoss.util.media.AMedia;
@@ -52,7 +52,6 @@ import org.zkoss.sound.AAudio;
 import org.zkoss.web.servlet.Servlets;
 
 import org.zkoss.zk.mesg.MZk;
-import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.Desktop;
@@ -60,6 +59,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.CharsetFinder;
+import org.zkoss.zk.ui.impl.Attributes;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 
@@ -85,29 +85,54 @@ public class AuUploader implements AuExtension {
 	throws ServletException, IOException {
 		final Session sess = Sessions.getCurrent(false);
 		if (sess == null) {
-			response.sendError(response.SC_GONE, Messages.get(MZk.PAGE_NOT_FOUND, pathInfo));
+			response.setIntHeader("ZK-Error", HttpServletResponse.SC_GONE);
 			return;
 		}
 
 		final Map attrs = new HashMap();
-		String alert = null, uuid = null, nextURI = null;
+		String alert = null, uuid = null, nextURI = null, sid = null;
+		Desktop desktop = null;
 		try {
 			if (!isMultipartContent(request)) {
-				alert = "enctype must be multipart/form-data";
+				final String cmd = request.getParameter("cmd");
+				final String dtid = request.getParameter("dtid");
+				if ("uploadInfo".equals(cmd)) {
+					uuid = request.getParameter("wid");
+					sid = request.getParameter("sid");
+					desktop = ((WebAppCtrl)sess.getWebApp()).getDesktopCache(sess).getDesktop(dtid);
+					Map precent = (Map) desktop.getAttribute(Attributes.UPLOAD_PERCENT);
+					Map size = (Map)desktop.getAttribute(Attributes.UPLOAD_SIZE);
+					final String key = uuid + '_' + sid;
+					Object sinfo = size.get(key);
+					if (sinfo instanceof String) {
+						response.getWriter().append("error:" + sinfo);
+						size.remove(key);
+						precent.remove(key);
+						return;
+					}
+					final Integer p = (Integer)precent.get(key);
+					final Long cb = (Long)sinfo;
+					response.getWriter().append((p != null ? p.intValue(): -1)+ ","
+								+(cb != null ? cb.longValue(): -1));
+					return;
+				} else 
+					alert = "enctype must be multipart/form-data";
 			} else {
 				uuid = request.getParameter("uuid");
+				sid = request.getParameter("sid");
 				if (uuid == null || uuid.length() == 0) {
-					alert = "uuid is required";
+					alert = "uuid is required!";
 				} else {
 					attrs.put("uuid", uuid);
+					attrs.put("sid", sid);
 
-					final String dtid = (String)request.getParameter("dtid");
+					final String dtid = request.getParameter("dtid");
 					if (dtid == null || dtid.length() == 0) {
-						alert = "dtid is required";
+						alert = "dtid is required!";
 					} else {
-						final Desktop desktop = ((WebAppCtrl)sess.getWebApp())
+						desktop = ((WebAppCtrl)sess.getWebApp())
 							.getDesktopCache(sess).getDesktop(dtid);
-						final Map params = parseRequest(request, desktop);
+						final Map params = parseRequest(request, desktop, uuid + '_' + sid);
 						nextURI = (String)params.get("nextURI");
 						processItems(desktop, params, attrs);
 					}
@@ -124,13 +149,34 @@ public class AuUploader implements AuExtension {
 
 			if (ex instanceof ComponentNotFoundException) {
 				alert = Messages.get(MZk.UPDATE_OBSOLETE_PAGE, uuid);
+			} else if (ex instanceof IOFileUploadException) {
+				log.info("Stop file upload!");
 			} else {
 				alert = handleError(ex);
 			}
-		}
 
-		if (alert != null)
-			attrs.put("alert", alert);
+			if (desktop != null) {
+				Map precent = (Map) desktop.getAttribute(Attributes.UPLOAD_PERCENT);
+				Map size = (Map)desktop.getAttribute(Attributes.UPLOAD_SIZE);
+				final String key = uuid + '_' + sid;
+				if (precent != null) {
+					precent.remove(key);
+					size.remove(key);
+				}
+			}
+		}
+		if (attrs.get("contentId") == null && alert == null)
+			alert = "contentId is required!";
+			
+		if (alert != null) {
+			Map precent = (Map) desktop.getAttribute(Attributes.UPLOAD_PERCENT);
+			Map size = (Map)desktop.getAttribute(Attributes.UPLOAD_SIZE);
+			final String key = uuid + '_' + sid;
+			if (precent != null) {
+				precent.remove(key); 
+				size.put(key, alert);
+			}
+		}
 		if (D.ON && log.finerable()) log.finer(attrs);
 
 		if (nextURI == null || nextURI.length() == 0)
@@ -278,10 +324,10 @@ public class AuUploader implements AuExtension {
 	 * (String nm, FileItem/String/List(FileItem/String)).
 	 */
 	private static Map parseRequest(HttpServletRequest request,
-	Desktop desktop)
+	Desktop desktop, String key)
 	throws FileUploadException {
 		final Map params = new HashMap();
-		final ZkFileItemFactory fty = new ZkFileItemFactory(desktop, request);
+		final ZkFileItemFactory fty = new ZkFileItemFactory(desktop, request, key);
 		final ServletFileUpload sfu = new ServletFileUpload(fty);
 
 		sfu.setProgressListener(fty.new ProgressCallback());
@@ -289,9 +335,7 @@ public class AuUploader implements AuExtension {
 		final Configuration conf = desktop.getWebApp().getConfiguration();
 		int maxsz = conf.getMaxUploadSize();
 		try {
-			int mz = Integer.parseInt(request.getParameter("maxsize"));
-			if (mz != -1)
-				maxsz = mz;
+			maxsz = Integer.parseInt(request.getParameter("maxsize"));
 		} catch (NumberFormatException e) {}
 		
 		sfu.setSizeMax(maxsz >= 0 ? 1024L*maxsz: -1);

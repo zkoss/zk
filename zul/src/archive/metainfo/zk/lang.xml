@@ -453,7 +453,7 @@ def alert(m):
 		<component-name>fileupload</component-name>
 		<extends>button</extends>
 		<component-class>org.zkoss.zul.Fileupload</component-class>
-		<widget-class>zul.utl.Fileupload</widget-class>
+		<widget-class>zul.wgt.Fileupload</widget-class>
 	</component>
 	<component>
 		<component-name>flash</component-name>

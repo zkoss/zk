@@ -453,7 +453,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		else if (child.$instanceof(zul.wnd.Panelchildren))
 			this.panelchildren = child;
 		else if (child.$instanceof(zul.wgt.Toolbar)) {
-			if (this.firstChild == child)
+			if (this.firstChild == child || child.previousSibling == this.caption)
 				this.tbar = child;
 			else if (this.lastChild == child && child.previousSibling.$instanceof(zul.wgt.Toolbar))
 				this.fbar = child;

@@ -90,7 +90,7 @@ public class AuRequests {
 			throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 				new Object[] {data, request});
 
-		final String key = (String)data.get("");
+		final String key = (String)data.get("contentId");
 		final Object result = request.getDesktop().removeAttribute(key);
 		if (result == null)
 			throw new UiException("Content not found: "+key);

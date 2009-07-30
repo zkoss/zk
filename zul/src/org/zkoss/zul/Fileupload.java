@@ -18,7 +18,6 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -26,16 +25,11 @@ import org.zkoss.mesg.Messages;
 import org.zkoss.zul.mesg.MZul;
 import org.zkoss.util.media.Media;
 
-import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.UploadEvent;
-import org.zkoss.zk.ui.util.Configuration;
-
 import org.zkoss.zul.impl.FileuploadDlg;
 
 /**
@@ -64,86 +58,36 @@ import org.zkoss.zul.impl.FileuploadDlg;
  * @author tomyeh
  * @see Filedownload
  */
-public class Fileupload extends HtmlBasedComponent implements org.zkoss.zul.api.Fileupload { //not XulElement since not applicable
+public class Fileupload extends Button implements org.zkoss.zul.api.Fileupload { //not XulElement since not applicable
 	private static String _templ = "~./zul/html/fileuploaddlg.zul";
 
-	//Used when embedded as a component
-	/** The maximal alllowed number of files to upload. */
-	private int _maxnum = 1;
-	/** Wether to treat the uploaded file(s) as binary. */
-	private boolean _native;
-	private int _maxsize = -1;
-	
-	/**
-	 * Returns the maximal allowed upload size of the component, in kilobytes, or 
-	 * a negative value if no limit.
-	 * <p> Default: -1.
-	 * @since 3.6.0
+	/** @deprecated As of release 5.0.0, replaced with {@link #setUpload(String)}
 	 */
 	public int getMaxsize() {
-		return _maxsize;
+		return -1;
 	}
-	/**
-	 * Sets the maximal allowed upload size of the component, in kilobytes.
-	 * <p>Note: {@link Configuration#setMaxUploadSize(int)} is also allowed to limit the size,
-	 * if the maximal size is -1.
-	 * @since 3.6.0
+	/** @deprecated As of release 5.0.0, replaced with {@link #setUpload(String)}
 	 */
 	public void setMaxsize(int maxsize) {
-		_maxsize = maxsize;
-	}
-	public String getZclass() {
-		return _zclass == null ? "z-fileupload" : _zclass;
-	}
-	/** No child is allowed. */
-	protected boolean isChildable() {
-		return false;
 	}
 
-	/** Returns the maximal allowed number of files to upload.
-	 * @since 2.4.0
+	/** @deprecated As of release 5.0.0, replaced with {@link #setUpload(String)}
 	 */
 	public int getNumber() {
-		return _maxnum;
+		return 1;
 	}
-	/** Sets the maximal allowed number of files to upload.
-	 * <p>Default: 1.
-	 * @param maxnum the maximal allowed number (positive or negative).
-	 * Since 3.0.2, the value can be negative, which means no limitation at all and the end user can upload
-	 * any numbers he wants (since 3.0.2)
-	 * @exception WrongValueException if non-positive, or it exceeds 1000
-	 * @since 2.4.0
+	/** @deprecated As of release 5.0.0, replaced with {@link #setUpload(String)}
 	 */
 	public void setNumber(int maxnum) throws WrongValueException {
-		if (maxnum < -1000 || maxnum == 0 || maxnum > 1000)
-			throw new WrongValueException(
-				maxnum == 0 ? "Positive or Negative is required": "Number too big (maximal 1000)");
-		_maxnum = maxnum;
 	}
-	/** Returns whether to treat the uploaded file(s) as binary, i.e.,
-	 * not to convert it to image, audio or text files.
-	 * <p>Default: false.
-	 * @since 3.0.0
-	 * @see org.zkoss.zk.ui.util.Configuration#getUploadCharset
-	 * @see org.zkoss.zk.ui.util.Configuration#getUploadCharsetFinder
+	/** @deprecated As of release 5.0.0, replaced with {@link #setUpload(String)}
 	 */
 	public boolean isNative() {
-		return _native;
+		return false;
 	}
-	/** Sets whether to treat the uploaded file(s) as binary, i.e.,
-	 * not to convert it to image, audio or text files.
-	 *
-	 * @param alwaysNative  whether to treat the uploaded file as binary
-	 * stream, regardless its content type.
-	 * If false (the default), it will convert to
-	 * {@link org.zkoss.image.Image}, {@link org.zkoss.sound.Audio},
-	 * binary stream, or text files depending on the content type.
-	 * @since 3.0.0
-	 * @see org.zkoss.zk.ui.util.Configuration#setUploadCharset
-	 * @see org.zkoss.zk.ui.util.Configuration#setUploadCharsetFinder
+	/** @deprecated As of release 5.0.0, replaced with {@link #setUpload(String)}
 	 */
 	public void setNative(boolean alwaysNative) {
-		_native = alwaysNative;
 	}
 
 	/** Hanldes the onClose event which is sent when file(s) is uploaded
@@ -157,22 +101,6 @@ public class Fileupload extends HtmlBasedComponent implements org.zkoss.zul.api.
 	 */
 	public void onClose() {
 		invalidate(); //TODO
-	}
-
-	/** Processes an AU request.
-	 *
-	 * <p>Default: in addition to what are handled by {@link HtmlBasedComponent#service},
-	 * it also handles updateResult.
-	 * @since 5.0.0
-	 */
-	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
-		final String cmd = request.getCommand();
-		if (cmd.equals("updateResult")) {
-			//TODO
-		} else if(cmd.equals("getUploadInfo")){
-			//TODO
-		}else
-			super.service(request, everError);
 	}
 
 	/////Open as a Modal Dialog/////

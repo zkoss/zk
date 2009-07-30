@@ -43,6 +43,13 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 					anc = anc.parentNode;
 				anc.target = this._target;
 			}
+		},
+		upload: function (v) {
+			var n = this.$n();
+			if (n) {
+				this._cleanUpld();
+				if (v && v != 'false') this._initUpld();
+			}
 		}
 	},
 
@@ -93,24 +100,18 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		this.$supers('bind_', arguments);
 
 		if (!this.isDisabled()) {
-			var n = this.$n();
-			this.domListen_(n, "onMouseOver")
-				.domListen_(n, "onMouseOut");
-
 			if (this.isTopmost()) {
 				var anc = this.$n('a');
 				this.domListen_(anc, "onFocus", "doFocus_")
 					.domListen_(anc, "onBlur", "doBlur_");
 			}
+			if (this._upload) this._initUpld();
 		}
 		if (zk.ie && this.isTopmost()) this._fixBtn();
 	},
 	unbind_: function () {
 		if (!this.isDisabled()) {
-			var n = this.$n();
-			this.domUnlisten_(n, "onMouseOver")
-				.domUnlisten_(n, "onMouseOut");
-
+			if (this._upload) this._cleanUpld();
 			if (this.isTopmost()) {
 				var anc = this.$n('a');
 				this.domUnlisten_(anc, "onFocus", "doFocus_")
@@ -120,6 +121,25 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 
 		this.$supers('unbind_', arguments);
 	},
+	_initUpld: function () {
+		zWatch.listen(zk.ie7 ? {onShow: this, onSize: this} : {onShow: this});
+		var v;
+		if (v = this._upload)
+			this._uplder = new zul.Upload(this, this.isTopmost() ? this.$n() : this.$n('a'), v);
+	},
+	_cleanUpld: function () {
+		var v;
+		if (v = this._uplder) {
+			zWatch.unlisten(zk.ie7 ? {onShow: this, onSize: this} : {onShow: this});
+			this._uplder = null;
+			v.destroy();
+		}
+	},
+	onShow: _zkf = function () {
+		if (this._uplder)
+			this._uplder.sync();
+	},
+	onSize: zk.ie7 ? _zkf : zk.$void, 
 	doClick_: function (evt) {
 		if (this._disabled)
 			evt.stop();
@@ -148,22 +168,24 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 			if (!topmost)
 				for (var p = this.parent; p; p = p.parent)
 					if (p.$instanceof(zul.menu.Menupopup))
-						if (p.isOpen()) p.close({sendOnOpen:true});
+						// if close the popup before choosing a file, the file chooser can't be triggered.
+						if (p.isOpen() && !this._uplder)							
+							p.close({sendOnOpen:true});
 						
 			this.$class._rmActive(this);				
 		}
 	},
-	_doMouseOver: function (evt) { //not zk.Widget.doMouseOver_
+	doMouseOver_: function (evt) { //not zk.Widget.doMouseOver_
 		if (this.$class._isActive(this)) return;
 		if (!this.isDisabled()) {
-			if (zk.ie && this.isTopmost() && !jq.isAncestor(this.$n('a'), evt.domTarget))
+			if (zk.ie && this.isTopmost() && !this._uplder && !jq.isAncestor(this.$n('a'), evt.domTarget))
 				return;
 
 			this.$class._addActive(this);
 			zWatch.fire('onFloatUp', null, this); //notify all
 		}
 	},
-	_doMouseOut: function (evt) { //not zk.Widget.doMouseOut_
+	doMouseOut_: function (evt) { //not zk.Widget.doMouseOut_
 		if (!this.isDisabled()) {
 			if (zk.ie) {
 				var n = this.$n('a'),

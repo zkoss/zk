@@ -229,6 +229,15 @@ public class Button extends LabelImageElement implements org.zkoss.zul.api.Butto
 	 * this method:
 	 * <code>&lt;button upload="foo.Upload"/&gt;</code>
 	 *
+	 * <p> Another options for the upload can be specified as follows:
+	 *  <pre><code>&lt;button label="Upload" upload="true,maxsize=-1,native"</code></pre>
+	 *  <ul>
+	 *  <li>maxsize: the maximal allowed upload size of the component, in kilobytes, or 
+	 * a negative value if no limit.</li>
+	 *  <li>native: treating the uploaded file(s) as binary, i.e., not to convert it to
+	 * image, audio or text files.</li>
+	 *  </ul>
+	 *  
 	 * @param upload a JavaScript class to handle the file upload
 	 * at the client, or "true" if the default class is used,
 	 * or null or "false" to disable the file download (and then

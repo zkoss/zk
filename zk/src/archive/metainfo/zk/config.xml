@@ -52,4 +52,8 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 <div class="noscript"><p>Sorry, JavaScript must be enabled.<br/>Change your browser options, then <a href="">try again</a>.</p></div>
 		]]></unavailable-message>
 	</device-config>
+	
+	<listener>
+		<listener-class>org.zkoss.zk.au.http.UploadInfoService$DesktopInit</listener-class>
+	</listener>
 </config>
