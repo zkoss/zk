@@ -14,6 +14,7 @@ ZK 5.0.0
 * Bugs
 
 * Upgrade Notes
+  + The signature of ClientConstraint is changed.
   + Event processing thread is disabled by default. It means doModal
     will be degenerated to doHighlighted.
     To turn it on, specify the following in zk.xml:

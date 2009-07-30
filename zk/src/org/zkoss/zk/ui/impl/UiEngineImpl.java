@@ -1093,7 +1093,6 @@ public class UiEngineImpl implements UiEngine {
 	 */
 	private static final
 	void handleError(Throwable ex, UiVisualizer uv, List errs) {
-		final Throwable err = ex;
 		final Throwable t = Exceptions.findCause(ex, Expectable.class);
 		if (t == null) {
 			if (ex instanceof org.xml.sax.SAXException
@@ -1140,7 +1139,7 @@ public class UiEngineImpl implements UiEngine {
 			return;
 		}
 
-		errs.add(err);
+		errs.add(ex);
 	}
 	/** Post-process the errors to represent them to the user.
 	 * Note: errs must be non-empty

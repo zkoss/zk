@@ -21,8 +21,8 @@ package org.zkoss.zul;
 import org.zkoss.zk.ui.Component;
 
 /**
- * Addition interface implemented with {@link Constraint} to denote
- * how to validate at the client.
+ * Addition interface implemented with {@link Constraint} to handle
+ * the validation at the client.
  *
  * <p>Note: this interface is ignored if {@link CustomConstraint}
  * is also implemented, since {@link CustomConstraint} causes
@@ -50,19 +50,22 @@ public interface ClientConstraint {
 	 *  return "'no empty'";
 	 *}</code></pre>
 	 *
-	 * <p>The validator coule implement the validate and showCustomError
+	 * <p>The validator could implement the <code>validate</code>,
+	 * and <code>showCustomError</code> methods, and an optional property,
+	 * <code>serverValidate</code>
 	 * methods as follow. <code>validate</code> is required,
-	 * while <code>showCustomError</code> is optional.
+	 * while <code>showCustomError</code> and <code>serverValidate</code> are optional.
 	 *
-	 * <pre><code>String validate(Widget wgt, String value);</code></pre>
-	 * <pre><code>Object showCustomError(Widget wgt, String errmsg);</code></pre>
+	 * <pre><code>String validate(Widget wgt, String value);
+	 *Object showCustomError(Widget wgt, String errmsg);
+	 *boolean serverValidate;</code></pre>
 	 *
 	 * <p>Refer to <a href="http://docs.zkoss.org/wiki/Zul.inp.InputWidget#setConstraint">zul.inpu.InputWidget#setContraint</a>
 	 * <a href="http://docs.zkoss.org/wiki/Zul.inp.SimpleConstraint">zul.inp.SimpleConstraint</a>
 	 * for details.
 	 *
-	 * <p>Notice that, since 5.0.0, {@link ClientConstraint} has the higher priority than
-	 * {@link CustomConstraint}. In other words, {@link CustomConstraint}
+	 * <p>Notice that {@link CustomConstraint} has the higher priority than
+	 * {@link ClientConstraint}. In other words, {@link ClientConstraint}
  	 * is ignored if both defined.
 	 *
 	 * @return the code snippet that will be evaluated at client to

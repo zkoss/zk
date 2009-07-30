@@ -594,10 +594,10 @@ zjq.prototype = { //ZK extension
 	setSelectionRange: function (start, end) {
 		var inp = this.jq[0],
 			len = inp.value.length;
-		if (start < 0) start = 0;
+		if (start == null || start < 0) start = 0;
 		if (start > len) start = len;
+		if (end == null || end > len) end = len;
 		if (end < 0) end = 0;
-		if (end > len) end = len;
 
 		if (inp.setSelectionRange) {
 			inp.setSelectionRange(start, end);

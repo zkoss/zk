@@ -60,6 +60,10 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		}
 	},
 
+	select: function (start, end) {
+		zk(this.getInputNode()).setSelectionRange(start, end);
+	},
+
 	getType: function () {
 		return this._type;
 	},
@@ -71,12 +75,17 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		return this._value;
 	},
 	setValue: function (value, fromServer) {
-		
+		var vi;
 		if (fromServer) this.clearErrorMessage(true);
 		else if (value == this._lastRawValVld) return; //not changed
- 		else value = this._validate(value);
+ 		else {
+ 			vi = this._validate(value);
+ 			value = vi.value;
+ 		}
 
-		if ((!value || !value.error) && (fromServer || this._value != value)) {
+		//Note: for performance reason, we don't send value back if
+		//the validation shall be done at server, i.e., if (vi.server)
+		if ((!vi || !vi.error) && (fromServer || this._value != value)) {
 			this._value = value;
 			var inp = this.getInputNode();
 			if (inp) {
@@ -126,10 +135,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 
 	setConstraint: function (cst) {
-		if (typeof cst == 'string')
+		if (typeof cst == 'string' && cst.charAt(0) != '['/*by server*/)
 			this._cst = new zul.inp.SimpleConstraint(cst);
-		else if (cst == true) //by-server
-			this._cst = true;
 		else
 			this._cst = cst;
 		if (this._cst) delete this._lastRawValVld; //revalidate required
@@ -206,38 +213,38 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			jq(this.getInputNode()).addClass(this.getZclass() + "-text-invalid");
 
 			var cst = this._cst, errbox;
-			if (cst) {
-				errbox = cst.showCustomError;
-				if (errbox) errbox = errbox.call(cst, this, msg);
+			if (cst != "[c") {
+				if (cst && (errbox = cst.showCustomError))
+					errbox = errbox.call(cst, this, msg);
+
+				if (!errbox) this._errbox = this.showError_(msg);
 			}
 
-			if (!errbox) this._errbox = this.showError_(msg);
-
-			if (noOnError==false)
+			if (noOnError === false)
 				this.fire('onError', {value: val, message: msg});
 		}
 	},
 	validate_: function (val) {
-		if (this._cst) {
-			if (this._cst == true) { //by server
-				return; //TODO
-			}
-			return this._cst.validate(this, val);
+		var cst;
+		if (cst = this._cst) {
+			if (typeof cst == "string") return false; //by server
+			var msg = cst.validate(this, val);
+			if (!msg && cst.serverValidate) return false; //client + server
+			return msg;
 		}
 	},
 	_validate: function (value) {
 		zul.inp.validating = true;
 		try {
-			var val = value;
+			var val = value, msg;
 			if (typeof val == 'string' || val == null) {
 				val = this.coerceFromString_(val);
-				if (val) {
-					var msg = val.error;
-					if (msg) {
-						this.clearErrorMessage(true);
-						this._markError(msg, val);
-						return val;
-					}
+				if (val && (msg = val.error)) {
+					this.clearErrorMessage(true);
+					if (this._cst == "[c") //CustomConstraint
+						return {error: msg, server: true};
+					this._markError(msg, val);
+					return val;
 				}
 			}
 
@@ -245,14 +252,16 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			if (!this.desktop) this._errmsg = null;
 			else {
 				this.clearErrorMessage(true);
-				var msg = this.validate_(val);
+				msg = this.validate_(val);
+				if (msg === false)
+					return {value: val, server: true};
 				if (msg) {
 					this._markError(msg, val);
 					return {error: msg};
 				} else
 					this._lastRawValVld = value; //raw
 			}
-			return val;
+			return {value: val};
 		} finally {
 			zul.inp.validating = false;
 		}
@@ -280,16 +289,22 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			return false; //not changed
 
 		var wasErr = this._errmsg,
-			val = this._validate(value);
-		if (!val || !val.error) {
-			inp.value = value = this.coerceToString_(val);
-			//reason to use defaultValue rather than this._value is
-			//to save the trouble of coerceToString issue
-			if (wasErr || value != inp.defaultValue) {
-				this._value = val;
-				inp.defaultValue = value;
-				this.fire('onChange', this._onChangeData(value), null, 150);
+			vi = this._validate(value);
+		if (!vi.error || vi.server) {
+			var upd;
+			if (!vi.error) {
+				inp.value = value = this.coerceToString_(vi.value);
+				//reason to use defaultValue rather than this._value is
+				//to save the trouble of coerceToString issue
+				upd = wasErr || value != inp.defaultValue;
+				if (upd) {
+					this._value = vi.value; //vi - not coerced
+					inp.defaultValue = value;
+				}
 			}
+			if (upd || vi.server)
+				this.fire('onChange', this._onChangeData(value),
+					vi.server ? {toServer:true}: null, 150);
 		}
 		return true;
 	},

@@ -91,6 +91,8 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 			f.NO_TODAY = true;
 		else if (cst == "strict")
 			f.STRICT = true;
+		else if (zk.debugJS)
+			zk.error("Unknown constraint: "+cst);
 	},
 	_cvtNum: function (v) { //compatible with server side
 		var f = {};

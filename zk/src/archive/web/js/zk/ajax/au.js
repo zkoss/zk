@@ -779,6 +779,9 @@ zAu.cmd1 = {
 		setTimeout(function() {wgt.focus();}, 5);
 			//consecutive call wgt.focus causes error in FF
 	},
+	select: function (uuid, wgt, s, e) {
+		if (wgt.select) wgt.select(s, e);
+	},
 	invoke: function (uuid, wgt, func, vararg) {
 		var args = [];
 		for (var j = arguments.length; --j > 2;)

@@ -29,7 +29,7 @@ import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
-import org.zkoss.zk.au.out.AuSetAttribute;
+import org.zkoss.zk.au.out.AuSelect;
 import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.Namespaces;
 
@@ -408,8 +408,7 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	/** Selects the whole text in this input.
 	 */
 	public void select() {
-		response("setAttr", new AuSetAttribute(this, "z.sel", "all"));
-			//don't use smartUpdate due to Bug 1985081
+		response("select", new AuSelect(this));
 	}
 
 	//-- Constrainted --//
@@ -420,7 +419,32 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 		if (!Objects.equals(_constr, constr)) {
 			_constr = constr;
 			_valided = false;
-			invalidate(); //TODO
+
+			boolean constrDone = false;
+			if (_constr instanceof CustomConstraint) { //client ignored if custom
+				smartUpdate("constraint", "[c"); //implies validated at server
+				return;
+			} else if (_constr instanceof ClientConstraint) {
+				final ClientConstraint cc = (ClientConstraint)_constr;
+				try {
+					smartUpdate("z_pk", cc.getClientPackages());
+
+					final String js = cc.getClientConstraint();
+					if (js != null) {
+						final char c = js.length() > 0 ? js.charAt(0): (char)0;
+						if (c != '\'' && c != '"') {
+							smartUpdate("z_al",
+								"{constraint:function(){\nreturn "+js+";}}");
+						} else {
+							smartUpdate("constraint", js);
+						}
+						return;
+					}
+				} catch (AbstractMethodError ex) {
+					log.warning("Ignore incompatible constraint: "+cc);
+				}
+			}
+			smartUpdate("constraint", _constr != null ? "[s": null);
 		}
 	}
 	public final Constraint getConstraint() {
@@ -578,8 +602,7 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	 * @param end the end position of the text (excluded)
 	 */
 	public void setSelectionRange(int start, int end) {
-		if (start <= end)
-			response("setAttr", new AuSetAttribute(this, "z.sel", start + "," + end));
+		response("select", new AuSelect(this, start, end));
 	}
 
 	/** Checks whether user entered a wrong value (and not correct it yet).
@@ -665,7 +688,10 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 		if (_tabindex >= 0) renderer.render("tabindex", _tabindex);
 
 		boolean constrDone = false;
-		if (_constr instanceof ClientConstraint) {
+		if (_constr instanceof CustomConstraint) { //client ignored if custom
+			renderer.render("constraint", "[c"); //implies validated at server
+			constrDone = true;
+		} else if (_constr instanceof ClientConstraint) {
 			final ClientConstraint cc = (ClientConstraint)_constr;
 			try {
 				render(renderer, "z_pk", cc.getClientPackages());
@@ -686,6 +712,6 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 			}
 		}
 		if (!constrDone && _constr != null)
-			renderer.render("constraint", true);
+			renderer.render("constraint", "[s");
 	}
 }
