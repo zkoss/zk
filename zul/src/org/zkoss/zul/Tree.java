@@ -618,7 +618,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 						it.remove();
 					}
 				}
-				//No need to update z.selId because z.multiple will do the job
+				//No need to update selId because z.multiple will do the job
 			}
 			smartUpdate("multiple", _multiple);
 		}
@@ -698,7 +698,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	}
 	
 
-	/** Returns the ID of the selected item (it is stored as the z.selId
+	/** Returns the ID of the selected item (it is stored as the selId
 	 * attribute of the tree).
 	 */
 	private String getSelectedId() {
