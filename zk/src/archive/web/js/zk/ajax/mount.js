@@ -279,12 +279,14 @@ zkm = {
 				}
 			}
 
-			//z_al: evaluated after load
+			//z_al: afterLoad
 			v = props.z_al;
 			if (v) {
 				delete props.z_al;
-				for (var p in v)
-					props[p] = v[p](); //must be func
+				zk.afterLoad(function () {
+					for (var p in v)
+						props[p] = v[p](); //must be func
+				});
 			}
 		}
 
@@ -307,9 +309,7 @@ zkm = {
 		var pkgs = w.z_pk;
 		if (pkgs) {
 			delete w.z_pk;
-			pkgs = pkgs.split(',');
-			for (var j = 0, l = pkgs.length; j < l;)
-				zPkg.load(pkgs[j++].trim());
+			zPkg.load(pkgs);
 		}
 
 		for (var children = w.children, len = children.length, j = 0; j < len;++j)

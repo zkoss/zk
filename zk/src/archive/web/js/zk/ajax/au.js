@@ -716,7 +716,14 @@ zAu.cmd0 = { //no uuid at all
 };
 zAu.cmd1 = {
 	setAttr: function (uuid, wgt, nm, val) {
-		wgt.set(nm, val, true); //3rd arg: fromServer
+		if (nm == 'z_pk') zPkg.load(val); //load pkgs
+		else if (nm == 'z_al') { //afterLoad
+			zk.afterLoad(function () {
+				for (var p in val)
+					props[p] = v[p](); //must be func
+			});
+		} else
+			wgt.set(nm, val, true); //3rd arg: fromServer
 	},
 	outer: function (uuid, wgt, code) {
 		zAu.stub = function (newwgt) {
