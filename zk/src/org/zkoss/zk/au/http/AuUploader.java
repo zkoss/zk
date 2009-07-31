@@ -167,6 +167,10 @@ public class AuUploader implements AuExtension {
 			alert = "contentId is required!";
 			
 		if (alert != null) {
+			if (desktop == null) {
+				response.setIntHeader("ZK-Error", HttpServletResponse.SC_GONE);
+				return;
+			}
 			Map precent = (Map) desktop.getAttribute(Attributes.UPLOAD_PERCENT);
 			Map size = (Map)desktop.getAttribute(Attributes.UPLOAD_SIZE);
 			final String key = uuid + '_' + sid;

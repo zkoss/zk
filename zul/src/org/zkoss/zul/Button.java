@@ -248,7 +248,8 @@ public class Button extends LabelImageElement implements org.zkoss.zul.api.Butto
 		if (upload != null
 		&& (upload.length() == 0 || "false".equals(upload)))
 			upload = null;
-
+		if (upload != null && !"trendy".equals(getMold()))
+			setMold("trendy");
 		if (!Objects.equals(upload, _upload)) {
 			_upload = upload;
 			smartUpdate("upload", _upload);

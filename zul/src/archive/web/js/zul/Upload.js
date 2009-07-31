@@ -220,9 +220,13 @@ zul.Uploader = zk.$extends(zk.Object, {
 				complete: function(req, status) {
 					var v;
 					if ((v = req.getResponseHeader("ZK-Error")) == "404"/*SC_NOT_FOUND: server restart*/ ||
-							v == "410" || status == 410/*SC_GONE: session timeout*/ ||
-							req.getResponseHeader("ZK-Comet-Error") == "Disabled") {
+							v == "410" || status == 'error' || status == 410/*SC_GONE: session timeout*/) {
 						zul.Uploader.clearInterval(self.id);
+						var wgt = self.getWidget();
+						if (wgt) {
+							self.cancel();
+							zul.Upload.error(mesg.FAILED_TO_RESPONSE, wgt.uuid, self._sid);
+						}
 						return;
 					}
 				}
@@ -265,7 +269,7 @@ zul.UploadViewer = zk.$extends(zk.Object, {
 			var flman = zul.UploadViewer.flman;
 			if (!flman || !flman.desktop) {
 				if (flman) flman.detach();
-				flman = new zul.UploadManager();
+				zul.UploadViewer.flman = flman = new zul.UploadManager();
 				uplder.getWidget().getPage().appendChild(flman);
 			}
 			flman.removeFile(uplder);
