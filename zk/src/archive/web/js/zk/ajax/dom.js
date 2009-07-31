@@ -5,7 +5,7 @@
 	Description:
 		
 	History:
-		Fri Jun 12 10:44:53     2009, Created by tomyeh
+		Fri Jun 12 10:44:53 2009, Created by tomyeh
 
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
@@ -842,7 +842,7 @@ zk.copy(zjq, { //private
 					};
 				else info.oft = zk(info.el).revisedOffset();
 			}
-	        outer.scrollTop = outer.scrollTop;
+			outer.scrollTop = outer.scrollTop;
 			return info; 
 		}
 	},
