@@ -27,6 +27,7 @@ zk = function (sel) {
 	resendDelay: -1,
 	lastPointer: [0, 0],
 	currentPointer: [0, 0],
+	loading: 0,
 
 	$package: function (name, end) { //end used only by WpdExtendlet
 		for (var j = 0, ref = window;;) {
@@ -35,7 +36,7 @@ zk = function (sel) {
 			var nxt = ref[nm];
 			if (!nxt) nxt = ref[nm] = {};
 			if (k < 0) {
-				if (end !== false) zPkg.end(name);
+				if (end !== false) zk.setLoaded(name);
 				return nxt;
 			}
 			ref = nxt;
@@ -51,7 +52,7 @@ zk = function (sel) {
 				if (fn)
 					if (nxt) fn(nxt);
 					else
-						zPkg.load(name.substring(0, name.lastIndexOf('.')),
+						zk.load(name.substring(0, name.lastIndexOf('.')),
 							function () {fn(zk.$import(name));});
 				return nxt;
 			}

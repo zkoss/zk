@@ -12,7 +12,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zPkg.load('zul.wgt');
 zul.wnd.Window = zk.$extends(zul.Widget, {
 	_mode: 'embedded',
 	_border: 'none',

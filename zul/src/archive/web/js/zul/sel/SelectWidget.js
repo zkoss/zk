@@ -559,7 +559,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		(tn == "BUTTON" && !evt.domTarget.id.endsWith('-a')) ||
 		tn == "SELECT" ||
 		tn == "OPTION" ||
-		(zPkg.isLoaded('zul.wgt') && evt.target.$instanceof(zul.wgt.Button)))
+		(zk.isLoaded('zul.wgt') && evt.target.$instanceof(zul.wgt.Button)))
 	},
 	/** maintain the offset of the focus proxy*/
 	_syncFocus: function (row) {

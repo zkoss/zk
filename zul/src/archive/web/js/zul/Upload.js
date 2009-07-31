@@ -114,7 +114,7 @@ zul.Upload = zk.$extends(zk.Object, {
 	error: function (msg, uuid, sid) {
 		var wgt = zk.Widget.$(uuid);
 		if (wgt)
-			zPkg.load("zul.wnd", function () {
+			zk.load("zul.wnd", function () {
 				var wnd = new zul.wnd.Window({
 					closable: true,
 					width: '400px',
@@ -287,7 +287,7 @@ zul.UploadViewer = zk.$extends(zk.Object, {
 			if (zul.UploadManager)
 				addUM(uplder, flnm);
 			else
-				zPkg.load('zul.wgt,zul.box', function() {
+				zk.load('zul.wgt,zul.box', function() {
 					zul.UploadManager = zk.$extends(zul.wgt.Popup, {
 						_files: {},
 						$init: function () {

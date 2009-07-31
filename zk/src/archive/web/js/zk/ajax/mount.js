@@ -57,7 +57,7 @@ function zkver() {
 	zk.updateURI = args[3];
 
 	for (var j = 4; j < len; j += 2)
-		zPkg.setVersion(args[j], args[j + 1]);
+		zk.setVersion(args[j], args[j + 1]);
 }
 
 function zkopt(opts) {
@@ -157,7 +157,7 @@ zkm = {
 	},
 	/** mount for browser loading */
 	mtBL: function() {
-		if (zPkg.loading) {
+		if (zk.loading) {
 			zk.afterLoad(zkm.mtBL);
 			return;
 		}
@@ -178,7 +178,7 @@ zkm = {
 		if (zkm._crInf0.length)
 			return; //another page started
 
-		if (zPkg.loading) {
+		if (zk.loading) {
 			zk.afterLoad(zkm.mtBL0);
 			return;
 		}
@@ -213,7 +213,7 @@ zkm = {
 
 	/** mount for AU */
 	mtAU: function (stub) {
-		if (zPkg.loading) {
+		if (zk.loading) {
 			zk.afterLoad(function () {zkm.mtAU(stub);});
 			return;
 		}
@@ -238,7 +238,7 @@ zkm = {
 	_afmt: function (fnext) {
 		for (var fn; fn = zkm._afMts.shift();) {
 			fn();
-			if (zPkg.loading) {
+			if (zk.loading) {
 				zk.afterLoad(fnext); //fn might load packages
 				return;
 			}
@@ -303,13 +303,13 @@ zkm = {
 	pkgLoad: function (w) {
 		var type = w.type, i = type.lastIndexOf('.');
 		if (i >= 0)
-			zPkg.load(type.substring(0, i), zkm.curdt);
+			zk.load(type.substring(0, i), zkm.curdt);
 
 		//z_pk: pkgs to load
 		var pkgs = w.z_pk;
 		if (pkgs) {
 			delete w.z_pk;
-			zPkg.load(pkgs);
+			zk.load(pkgs);
 		}
 
 		for (var children = w.children, len = children.length, j = 0; j < len;++j)
@@ -542,7 +542,7 @@ zkm = {
 		if (!resz.time) return; //already handled
 
 		var now = zUtl.now();
-		if (zk.mounting || zPkg.loading || now < resz.time || zk.animating()) {
+		if (zk.mounting || zk.loading || now < resz.time || zk.animating()) {
 			setTimeout(zkm.docDidResize, 10);
 			return;
 		}

@@ -716,7 +716,7 @@ zAu.cmd0 = { //no uuid at all
 };
 zAu.cmd1 = {
 	setAttr: function (uuid, wgt, nm, val) {
-		if (nm == 'z_pk') zPkg.load(val); //load pkgs
+		if (nm == 'z_pk') zk.load(val); //load pkgs
 		else if (nm == 'z_al') { //afterLoad
 			zk.afterLoad(function () {
 				for (var p in val)

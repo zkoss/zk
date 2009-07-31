@@ -1,7 +1,7 @@
 // category.js
 
 zk.$package('userguide');
-zPkg.load('zul.wgt', function () {
+zk.load('zul.wgt', function () {
 userguide.Categorybar = zk.$extends(zul.wgt.Div, {
 	bind_: function () {
 		this.$supers('bind_', arguments);
@@ -102,7 +102,7 @@ userguide.Categorybar = zk.$extends(zul.wgt.Div, {
 });
 });
 
-zPkg.load('zul.wgt', function () {
+zk.load('zul.wgt', function () {
 userguide.Category = zk.$extends(zul.wgt.Button, {
 	redraw: function (out) {
 		var zcls = this.getZclass();

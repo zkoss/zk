@@ -37,11 +37,9 @@ zul.utl.Script = zk.$extends(zk.Widget, {
 		if (!pkgs) return this._exec0();
 
 		this.packages = null; //only once
-		pkgs = pkgs.split(',');
-		for (var j = 0, l = pkgs.length; j < l;)
-			zPkg.load(pkgs[j++].trim());
+		zk.load(pkgs);
 
-		if (zPkg.loading)
+		if (zk.loading)
 			zk.afterLoad(this.proxy(this._exec0));
 		else
 			this._exec0();

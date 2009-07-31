@@ -15,7 +15,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 <window title="test 2 of input" border="normal">
 <script>
-zPkg.load('zul.inp', function () {
+zk.load('zul.inp', function () {
 	ClientServerConstraint = zk.$extends(zul.inp.SimpleConstraint, {
 		serverValidate: true
 	});

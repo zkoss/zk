@@ -14,10 +14,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 {{IS_RIGHT
 }}IS_RIGHT
 */
-zPkg.load('zul.db');
-zPkg.load('zul.inp');
-
-
 zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	_compact: false,
 	_buttonVisible: true,

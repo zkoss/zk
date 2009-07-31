@@ -1,7 +1,7 @@
 /* pkg.js
 
 	Purpose:
-		zPkg: the package utilities
+		The package utilities (part of zk)
 	Description:
 		
 	History:
@@ -12,92 +12,35 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zPkg = {
-	loading: 0,
+zk.copy(zk, (function() {
+	var loaded = {'zk': true}, //loaded
+		loading = {'zk': true}, //loading (include loaded)
+		xloadings = [], //loading (exclude loaded)
+		semiLoads = [], //loaded but not inited
+		afterLoadFronts = [],
+		afterLoads = [],
+		afterPkgLoad = {}, //after pkg loaded
+		pkgdepend = {},
+		pkgver = {};
 
-	/** Called after the whole package is declared. */
-	end: function (pkg, wait) {
-		zPkg._ldings.$remove(pkg);
-		zPkg._lding[pkg] = true;
-
-		if (wait) zPkg._wait.push(pkg);
-		else {
-			zPkg._wait.$remove(pkg);
-			zPkg._lded[pkg] = true;
-
-			var afpk = zPkg._afpklds[pkg];
-			if (afpk) {
-				delete zPkg._afpklds[pkg];
-				var afs = zPkg._afld0s;
-				afs.push.apply(afs, afpk); //add all
-			}
-
-			var deps = zPkg._deps[pkg];
-			if (deps) {
-				delete zPkg._deps[pkg];
-				for (var pn; pn = deps.unshift();)
-					zPkg.load(pn);
-			}
-		}
-
-		if (!zPkg._updCnt()) {
-			try {
-				zk.enableESC();
-				zUtl.destroyProgressbox("zk_loadprog");
-			} catch (ex) {
-			}
-			zPkg._end(zPkg._afld0s);
-			zPkg._end(zPkg._aflds, 1);
-		}
-	},
-	_end: function (afs, wait) {
-		for (var fn; fn = afs.shift();) {
-			if (zPkg._updCnt() || (wait && zPkg._wait.length)) {
-				afs.unshift(fn);
-				return;
-			}
-			fn();
-		}
-	},
-	isLoaded: function (pkg) {
-		return zPkg._lded[pkg];
-	},
-	load: function (pkg, dt, func) {
-		if (typeof dt == 'function')
-			if (func) throw 'At most one function allowed';
-			else {
-				func = dt;
-				dt = null;
-			}
-
-		if (func) zk.afterLoad(pkg, func, true);
-
-		var loading;
-		for (var pkgs = pkg.split(','), j = pkgs.length; j--;) {
-			pkg = pkgs[j].trim();
-			if (!zPkg._load(pkg, dt))
-				loading = true;
-		}
-		return !loading;
-	},
-	_load: function (pkg, dt) {
-		if (!pkg || zPkg._lding[pkg])
-			return !zPkg.loading && !zPkg._wait.length;
+	function doLoad(pkg, dt) {
+		if (!pkg || loading[pkg])
+			return !zk.loading && !semiLoads.length;
 			//since pkg might be loading (-> return false)
 
-		zPkg._lding[pkg] = true;
+		loading[pkg] = true;
 
 		//We don't use e.onload since Safari doesn't support t
 		//See also Bug 1815074
 
-		zPkg._ldings.push(pkg);
-		if (zPkg._updCnt() == 1) {
+		xloadings.push(pkg);
+		if (updCnt() == 1) {
 			zk.disableESC();
-			setTimeout(zPkg._pgbox, 380);
+			setTimeout(prgbox, 380);
 		}
 
 		var modver = pkg.indexOf('.');
-		if (modver) modver = zPkg.getVersion(pkg.substring(0, modver));
+		if (modver) modver = zk.getVersion(pkg.substring(0, modver));
 		if (!modver) modver = zk.build;
 
 		var e = document.createElement("script"),
@@ -112,59 +55,115 @@ zPkg = {
 		e.src = zk.ajaxURI(uri, {desktop:dt,au:true});
 		document.getElementsByTagName("HEAD")[0].appendChild(e);
 		return false;
-	},
-	_lded: {'zk': true}, //loaded
-	_lding: {'zk': true}, //loading (include loaded)
-	_wait: [], //loaded but not inited
-	_ldings: [], //loading (exclude loaded)
-	_afld0s: [],
-	_aflds: [],
-	_afpklds: {}, //after pkg loaded
-	_deps: {},
-
-	_ldmsg: function () {
+	}
+	function doEnd(afs, wait) {
+		for (var fn; fn = afs.shift();) {
+			if (updCnt() || (wait && semiLoads.length)) {
+				afs.unshift(fn);
+				return;
+			}
+			fn();
+		}
+	}
+	function loadmsg() {
 		var msg = '';
-		for (var lding = zPkg._ldings, j = lding.length; --j >=0;) {
+		for (var lding = xloadings, j = lding.length; --j >=0;) {
 			if (msg) msg += ', ';
 			msg += lding[j];
 		}
 		return msg;
-	},
-	_updCnt: function () {
-		zPkg.loading = zPkg._ldings.length;
+	}
+	function updCnt() {
+		zk.loading = xloadings.length;
 		try {
 			var n = jq("#zk_loadcnt")[0];
-			if (n) n.innerHTML = zPkg._ldmsg();
+			if (n) n.innerHTML = loadmsg();
 		} catch (ex) {
 		}
-		return zPkg.loading;
-	},
-	_pgbox: function () {
-		if (zPkg.loading || window.dbg_progressbox) { //dbg_progressbox: debug purpose
+		return zk.loading;
+	}
+	function prgbox() {
+		if (zk.loading || window.dbg_progressbox) { //dbg_progressbox: debug purpose
 			var n = jq("#zk_loadprog")[0];
 			if (!n)
 				zUtl.progressbox("zk_loadprog",
-					'Loading <span id="zk_loadcnt">'+zPkg._ldmsg()+'</span>',
+					'Loading <span id="zk_loadcnt">'+loadmsg()+'</span>',
 					true);
 		}	
+	}
+
+  return { //internal utility
+	setLoaded: function (pkg, wait) {
+		xloadings.$remove(pkg);
+		loading[pkg] = true;
+
+		if (wait) semiLoads.push(pkg);
+		else {
+			semiLoads.$remove(pkg);
+			loaded[pkg] = true;
+
+			var afpk = afterPkgLoad[pkg];
+			if (afpk) {
+				delete afterPkgLoad[pkg];
+				var afs = afterLoadFronts;
+				afs.push.apply(afs, afpk); //add all
+			}
+
+			var deps = pkgdepend[pkg];
+			if (deps) {
+				delete pkgdepend[pkg];
+				for (var pn; pn = deps.unshift();)
+					zk.load(pn);
+			}
+		}
+
+		if (!updCnt()) {
+			try {
+				zk.enableESC();
+				zUtl.destroyProgressbox("zk_loadprog");
+			} catch (ex) {
+			}
+			doEnd(afterLoadFronts);
+			doEnd(afterLoads, 1);
+		}
+	},
+	isLoaded: function (pkg) {
+		return loaded[pkg];
+	},
+	load: function (pkg, dt, func) {
+		if (typeof dt == 'function')
+			if (func) throw 'At most one function allowed';
+			else {
+				func = dt;
+				dt = null;
+			}
+
+		if (func) zk.afterLoad(pkg, func, true);
+
+		var loading;
+		for (var pkgs = pkg.split(','), j = pkgs.length; j--;) {
+			pkg = pkgs[j].trim();
+			if (!doLoad(pkg, dt))
+				loading = true;
+		}
+		return !loading;
 	},
 
 	getVersion: function (pkg) {
-		return zPkg._pkgVers[pkg];
+		return pkgver[pkg];
 	},
 	setVersion: function (pkg, ver) {
-		zPkg._pkgVers[pkg] = ver;
+		pkgver[pkg] = ver;
 	},
 	depends: function (a, b) {
 		if (a && b) //a depends on b
-			if (zPkg._lded[a]) zPkg.load(b);
+			if (loaded[a]) zk.load(b);
 			else {
-				var deps = zPkg._deps;
+				var deps = pkgdepend;
 				if (deps[a]) deps[a].push(b);
 				else deps[a] = [b];
 			}
 	},
-	_pkgVers: {},
 
 	afterLoad: function (a, b, front) {
 		if (typeof a == 'string') {
@@ -172,10 +171,10 @@ zPkg = {
 
 			for (var pkgs = a.split(','), j = pkgs.length; j--;) {
 				var p = pkgs[j].trim();
-				if (p && !zPkg._lded[p]) {
+				if (p && !loaded[p]) {
 					while (j--) {
 						var p2 = pkgs[j].trim();
-						if (p2 && !zPkg._lded[p2]) { //yes, more
+						if (p2 && !loaded[p2]) { //yes, more
 							var a1 = a, b1 = b;
 							b = function () {
 								zk.afterLoad(a1, b1, front); //check again
@@ -184,7 +183,7 @@ zPkg = {
 						}
 					}
 
-					var afpk = zPkg._afpklds;
+					var afpk = afterPkgLoad;
 					if (afpk[p]) afpk[p].push(b);
 					else afpk[p] = [b];
 					return false;
@@ -195,12 +194,12 @@ zPkg = {
 			a = b;
 		}
 
-		if (zPkg.loading || zPkg._wait.length) {
-			(front ? zPkg._afld0s: zPkg._aflds).push(a);
+		if (zk.loading || semiLoads.length) {
+			(front ? afterLoadFronts: afterLoads).push(a);
 			return false;
 		}
 		a();
 		return true;
-}
-};
-zk.afterLoad = zPkg.afterLoad; //part of zk
+	}
+  }
+})());

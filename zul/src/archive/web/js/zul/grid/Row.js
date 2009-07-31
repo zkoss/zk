@@ -136,7 +136,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 		}
 
 		var style = this.domStyle_({visible:1, width:1, height:1}),
-			isDetail = zPkg.isLoaded('zkex.grid') && child.$instanceof(zkex.grid.Detail);
+			isDetail = zk.isLoaded('zkex.grid') && child.$instanceof(zkex.grid.Detail);
 		if (isDetail) {
 			var wd = child.getWidth();
 			if (wd) 

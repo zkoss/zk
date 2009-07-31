@@ -121,7 +121,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 			if (depends != null && depends.length() == 0)
 				depends = null;
 			if (depends != null) {
-				write(out, "zPkg.load('");
+				write(out, "zk.load('");
 				write(out, depends);
 				write(out, "',function(){var ");
 			}
@@ -239,9 +239,9 @@ public class WpdExtendlet extends AbstractExtendlet {
 				writeAppInfo(out, wapp);
 			write(out, '}'); //end of if
 		} else {
-			write(out, "\n}finally{zPkg.end(_z);}");
+			write(out, "\n}finally{zk.setLoaded(_z);}");
 			if (depends != null) {
-				write(out, "});zPkg.end('");
+				write(out, "});zk.setLoaded('");
 				write(out, name);
 				write(out, "',1);");
 			}
