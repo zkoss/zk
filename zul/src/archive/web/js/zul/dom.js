@@ -84,11 +84,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				mode: opts.mode||'modal'
 			});
 
-			var dt = opts.desktop || zk.Desktop.$(), p;
-			if (!dt) dt = zk.stateless();
-			if ((p = dt.firstChild) && p.$instanceof(zk.Page))
-				dt = p;
-			dt.appendChild(wnd);
+			var p = opts.desktop || zk.Desktop.$();
+			if (p && (p = p.firstChild) && p.desktop)
+				p.appendChild(wnd);
+			else
+				jq(document.body).append(wnd);
 		});
   	};
 })();

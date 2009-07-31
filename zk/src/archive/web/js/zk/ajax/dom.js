@@ -388,7 +388,49 @@ zjq.prototype = { //ZK extension
 		} while (el);
 		return [l, t];
 	},
-	cmOffset: function () {
+	cmOffset: (function () {
+		function cmOffset0(el) {
+			var t = 0, l = 0, operaBug;
+			//Fix gecko difference, the offset of gecko excludes its border-width when its CSS position is relative or absolute
+			if (zk.gecko) {
+				var p = el.parentNode;
+				while (p && p != document.body) {
+					var $p = jq(p),
+						style = $p.css("position");
+					if (style == "relative" || style == "absolute") {
+						t += zk.parseInt($p.css("border-top-width"));
+						l += zk.parseInt($p.css("border-left-width"));
+					}
+					p = p.offsetParent;
+				}
+			}
+
+			do {
+				//Bug 1577880: fix originated from http://dev.rubyonrails.org/ticket/4843
+				var $el = jq(el);
+				if ($el.css("position") == 'fixed') {
+					t += zk.innerY() + el.offsetTop;
+					l += zk.innerX() + el.offsetLeft;
+					break;
+				} else {
+					//Fix opera bug. If the parent of "INPUT" or "SPAN" is "DIV"
+					// and the scrollTop of "DIV" is more than 0, the offsetTop of "INPUT" or "SPAN" always is wrong.
+					if (zk.opera) {
+						if (operaBug && el.nodeName == "DIV" && el.scrollTop != 0)
+							t += el.scrollTop || 0;
+						operaBug = el.nodeName == "SPAN" || el.nodeName == "INPUT";
+					}
+					t += el.offsetTop || 0;
+					l += el.offsetLeft || 0;
+					//Bug 1721158: In FF, el.offsetParent is null in this case
+					el = zk.gecko && el != document.body ?
+						zjq._ofsParent(el): el.offsetParent;
+				}
+			} while (el);
+			return [l, t];
+		}
+
+	  return function () {
 		//fix safari's bug: TR has no offsetXxx
 		var el = this.jq[0];
 		if (zk.safari && el.tagName === "TR" && el.cells.length)
@@ -397,19 +439,41 @@ zjq.prototype = { //ZK extension
 		//fix gecko and safari's bug: if not visible before, offset is wrong
 		if (!(zk.gecko || zk.safari)
 		|| this.isVisible() || this.offsetWidth())
-			return zjq._cmOffset(el);
+			return cmOffset0(el);
 
 		el.style.display = "";
-		var ofs = zjq._cmOffset(el);
+		var ofs = cmOffset0(el);
 		el.style.display = "none";
 		return ofs;
-	},
+	  };
+	})(),
 
-	absolutize: function() {
+	absolutize: (function () {
+		function posOffset(el) {
+			if (zk.safari && el.tagName === "TR" && el.cells.length)
+				el = el.cells[0];
+
+			var t = 0, l = 0;
+			do {
+				t += el.offsetTop  || 0;
+				l += el.offsetLeft || 0;
+				//Bug 1721158: In FF, el.offsetParent is null in this case
+				el = zk.gecko && el != document.body ?
+					zjq._ofsParent(el): el.offsetParent;
+				if (el) {
+					if(el.tagName=='BODY') break;
+					var p = jq(el).css('position');
+					if (p == 'relative' || p == 'absolute') break;
+				}
+			} while (el);
+			return [l, t];
+		}
+
+	  return function() {
 		var el = this.jq[0];
 		if (el.style.position == 'absolute') return this;
 
-		var offsets = zjq._posOffset(),
+		var offsets = posOffset(el),
 			left = offsets[0], top = offsets[1],
 			st = el.style;
 		el._$orgLeft = left - parseFloat(st.left  || 0);
@@ -418,7 +482,8 @@ zjq.prototype = { //ZK extension
 		st.top = jq.px(top);
 		st.left = jq.px(left);
 		return this;
-	},
+	  };
+	})(),
 	relativize: function() {
 		var el = this.jq[0];
 		if (el.style.position == 'relative') return this;
@@ -505,21 +570,21 @@ zjq.prototype = { //ZK extension
 	},
 
 	dimension: (function () {
-		function addOfsToDim(dim, revised) {
+		function addOfsToDim($el, dim, revised) {
 			if (revised) {
-				var ofs = this.revisedOffset();
+				var ofs = $el.revisedOffset();
 				dim.left = ofs[0];
 				dim.top = ofs[1];
 			} else {
-				dim.left = this.offsetLeft();
-				dim.top = this.offsetTop();
+				dim.left = $el.offsetLeft();
+				dim.top = $el.offsetTop();
 			}
 			return dim;
 		}
 	  return function (revised) {
 		var display = this.jq.css('display');
 		if (display != 'none' && display != null) // Safari bug
-			return addOfsToDim(
+			return addOfsToDim(this,
 				{width: this.offsetWidth(), height: this.offsetHeight()}, revised);
 
 	// All *Width and *Height properties give 0 on elements with display none,
@@ -532,7 +597,7 @@ zjq.prototype = { //ZK extension
 		st.position = 'absolute';
 		st.display = 'block';
 		try {
-			return addOfsToDim(
+			return addOfsToDim(this,
 				{width: this.offsetWidth(), height: this.offsetHeight()}, revised);
 		} finally {
 			st.display = originalDisplay;
@@ -803,15 +868,17 @@ zk.copy(jq, { //ZK extension to jq
 	borders: {l: "border-left-width", r: "border-right-width", t: "border-top-width", b: "border-bottom-width"},
 	paddings: {l: "padding-left", r: "padding-right", t: "padding-top", b: "padding-bottom"},
 
-	scrollbarWidth: function () {
-		var tsd = zjq._sbwDiv;
-		if (!tsd) {
-			tsd = zjq._sbwDiv = document.createElement("DIV");
-			tsd.style.cssText = "top:-1000px;left:-1000px;position:absolute;visibility:hidden;border:none;width:50px;height:50px;overflow:scroll;";
-			document.body.appendChild(tsd);
+	scrollbarWidth: (function () {
+		var sbwDiv;
+	  return function () {
+		if (!sbwDiv) {
+			sbwDiv = document.createElement("DIV");
+			sbwDiv.style.cssText = "top:-1000px;left:-1000px;position:absolute;visibility:hidden;border:none;width:50px;height:50px;overflow:scroll;";
+			document.body.appendChild(sbwDiv);
 		}
-		return tsd.offsetWidth - tsd.clientWidth;
-	},
+		return sbwDiv.offsetWidth - sbwDiv.clientWidth;
+	  };
+	})(),
 	isOverlapped: function (ofs1, dim1, ofs2, dim2) {
 		var o1x1 = ofs1[0], o1x2 = dim1[0] + o1x1,
 			o1y1 = ofs1[1], o1y2 = dim1[1] + o1y1;
@@ -935,46 +1002,6 @@ zk.copy(zjq, { //private
 	_cleanVisi: function (n) { //override later
 		n.style.visibility = "inherit";
 	},
-	_cmOffset: function (el) {
-		var t = 0, l = 0, operaBug;
-		//Fix gecko difference, the offset of gecko excludes its border-width when its CSS position is relative or absolute
-		if (zk.gecko) {
-			var p = el.parentNode;
-			while (p && p != document.body) {
-				var $p = jq(p),
-					style = $p.css("position");
-				if (style == "relative" || style == "absolute") {
-					t += zk.parseInt($p.css("border-top-width"));
-					l += zk.parseInt($p.css("border-left-width"));
-				}
-				p = p.offsetParent;
-			}
-		}
-
-		do {
-			//Bug 1577880: fix originated from http://dev.rubyonrails.org/ticket/4843
-			var $el = jq(el);
-			if ($el.css("position") == 'fixed') {
-				t += zk.innerY() + el.offsetTop;
-				l += zk.innerX() + el.offsetLeft;
-				break;
-			} else {
-				//Fix opera bug. If the parent of "INPUT" or "SPAN" is "DIV"
-				// and the scrollTop of "DIV" is more than 0, the offsetTop of "INPUT" or "SPAN" always is wrong.
-				if (zk.opera) {
-					if (operaBug && el.nodeName == "DIV" && el.scrollTop != 0)
-						t += el.scrollTop || 0;
-					operaBug = el.nodeName == "SPAN" || el.nodeName == "INPUT";
-				}
-				t += el.offsetTop || 0;
-				l += el.offsetLeft || 0;
-				//Bug 1721158: In FF, el.offsetParent is null in this case
-				el = zk.gecko && el != document.body ?
-					zjq._ofsParent(el): el.offsetParent;
-			}
-		} while (el);
-		return [l, t];
-	},
 	_ofsParent: function (el) {
 		if (el.offsetParent) return el.offsetParent;
 		if (el == document.body) return el;
@@ -984,25 +1011,6 @@ zk.copy(zjq, { //private
 				return el;
 
 		return document.body;
-	},
-	_posOffset: function(el) {
-		if (zk.safari && el.tagName === "TR" && el.cells.length)
-			el = el.cells[0];
-
-		var t = 0, l = 0;
-		do {
-			t += el.offsetTop  || 0;
-			l += el.offsetLeft || 0;
-			//Bug 1721158: In FF, el.offsetParent is null in this case
-			el = zk.gecko && el != document.body ?
-				zjq._ofsParent(el): el.offsetParent;
-			if (el) {
-				if(el.tagName=='BODY') break;
-				var p = jq(el).css('position');
-				if (p == 'relative' || p == 'absolute') break;
-			}
-		} while (el);
-		return [l, t];
 	},
 
 	//refer to http://www.w3schools.com/css/css_text.asp
