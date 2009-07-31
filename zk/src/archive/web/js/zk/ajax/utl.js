@@ -12,6 +12,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+(function () {
+	var _decs = {lt: '<', gt: '>', amp: '&', quot: '"'},
+		_encs = {};
+	for (var v in _decs)
+		_encs[_decs[v]] = v;
+
 zUtl = { //static methods
 	//Character
 	isChar: function (cc, opts) {
@@ -80,7 +86,7 @@ zUtl = { //static methods
 					k = j + 1;
 				}
 			} else {
-				var enc = zUtl._encs[cc];
+				var enc = _encs[cc];
 				if (enc) {
 					out += txt.substring(k, j) + '&' + enc + ';';
 					k = j + 1;
@@ -100,7 +106,7 @@ zUtl = { //static methods
 			if (cc == '&') {
 				var l = txt.indexOf(';', j + 1);
 				if (l >= 0) {
-					var dec = zUtl._decs[txt.substring(j + 1, l)];
+					var dec = _decs[txt.substring(j + 1, l)];
 					if (dec) {
 						out += txt.substring(k, j) + dec;
 						k = (j = l) + 1;
@@ -111,8 +117,6 @@ zUtl = { //static methods
 		return !k ? txt:
 			k < tl ? out + txt.substring(k): out;
 	},
-	_decs: {lt: '<', gt: '>', amp: '&', quot: '"'},
-	_encs: {},
 
 	renType: function (url, type) {
 		var j = url.lastIndexOf(';');
@@ -289,8 +293,4 @@ zUtl = { //static methods
 		return list;
 	}
 };
-(function () {
-	var encs = zUtl._encs, decs = zUtl._decs;
-	for (var v in decs)
-		encs[decs[v]] = v;
 })();
