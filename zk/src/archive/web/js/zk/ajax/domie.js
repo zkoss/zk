@@ -12,14 +12,52 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.override(jq.fn, zjq._fnie = {}, {
+(function () {
+	var fxNodes = [], //what to fix
+		$fns = {}; //super's fn
+	//fix DOM
+	function fixDom(n, nxt) { //exclude nxt (if null, means to the end)
+		for (; n && n != nxt; n = n.nextSibling)
+			if (n.nodeType == 1) {
+				fxNodes.push(n);
+				setTimeout(fixDom0, 100);
+			}
+	}
+	function fixDom0() {
+		var n = fxNodes.shift();
+		if (n) {
+			zjq._alphafix(n);
+			fixBU(n.getElementsByTagName("A")); //Bug 1635685, 1612312
+			fixBU(n.getElementsByTagName("AREA")); //Bug 1896749
+
+			if (fxNodes.length) setTimeout(fixDom0, 300);
+		}
+	}
+	function fixBU(ns) {
+		for (var j = ns.length; j--;) {
+			var n = ns[j];
+			if (!n.z_fixed && n.href.indexOf("javascript:") >= 0) {
+				n.z_fixed = true;
+				jq(n).click(doSkipBfUnload);
+			}
+		}
+	}
+	function doSkipBfUnload() {
+		zk.skipBfUnload = true;
+		setTimeout(unSkipBfUnload, 0); //restore
+	}
+	function unSkipBfUnload() {
+		zk.skipBfUnload = false;
+	}
+
+zk.override(jq.fn, $fns, {
 	before: function () {
 		var e = this[0], ref;
 		if (e) ref = e.previousSibling;
 
-		ret = zjq._fnie.before.apply(this, arguments);
+		ret = $fns.before.apply(this, arguments);
 
-		if (e) zjq._fixDom(ref ? ref.nextSibling:
+		if (e) fixDom(ref ? ref.nextSibling:
 			e.parentNode ? e.parentNode.firstChild: null, e);
 			//IE: som element might have no parent node (such as audio)
 		return ret;
@@ -28,27 +66,27 @@ zk.override(jq.fn, zjq._fnie = {}, {
 		var e = this[0], ref;
 		if (e) ref = e.nextSibling;
 
-		ret = zjq._fnie.after.apply(this, arguments);
+		ret = $fns.after.apply(this, arguments);
 
-		if (e) zjq._fixDom(e.nextSibling, ref);
+		if (e) fixDom(e.nextSibling, ref);
 		return ret;
 	},
 	append: function () {
 		var e = this[0], ref;
 		if (e) ref = e.lastChild;
 
-		ret = zjq._fnie.append.apply(this, arguments);
+		ret = $fns.append.apply(this, arguments);
 
-		if (e) zjq._fixDom(ref ? ref.nextSibling: e.firstChild);
+		if (e) fixDom(ref ? ref.nextSibling: e.firstChild);
 		return ret;
 	},
 	prepend: function () {
 		var e = this[0], ref;
 		if (e) ref = e.firstChild;
 
-		ret = zjq._fnie.prepend.apply(this, arguments);
+		ret = $fns.prepend.apply(this, arguments);
 
-		if (e) zjq._fixDom(e.firstChild, ref);
+		if (e) fixDom(e.firstChild, ref);
 		return ret;
 	},
 	replaceWith: function () {
@@ -58,9 +96,9 @@ zk.override(jq.fn, zjq._fnie = {}, {
 			ref2 = e.nextSibling;
 		}
 
-		ret = zjq._fnie.replaceWith.apply(this, arguments);
+		ret = $fns.replaceWith.apply(this, arguments);
 
-		if (e) zjq._fixDom(ref ? ref.nextSibling:
+		if (e) fixDom(ref ? ref.nextSibling:
 			e.parentNode ? e.parentNode.firstChild: null, ref2);
 			//IE: som element might have no parent node (such as audio)
 		return ret;
@@ -68,70 +106,15 @@ zk.override(jq.fn, zjq._fnie = {}, {
 	html: function (content) {
 		var e = content === undefined ? null: this[0];
 
-		ret = zjq._fnie.html.apply(this, arguments);
+		ret = $fns.html.apply(this, arguments);
 
-		if (e) zjq._fixDom(e.firstChild);
+		if (e) fixDom(e.firstChild);
 		return ret;
 	}
 });
+})();
 
-zk.copy(zjq, {
-	//fix DOM
-	_fixDom: function (n, nxt) { //exclude nxt (if null, means to the end)
-		for (; n && n != nxt; n = n.nextSibling)
-			if (n.nodeType == 1) {
-				zjq._fxns.push(n);
-				setTimeout(zjq._fixDom0, 100);
-			}
-	},
-	_unfixDom: function (n) {
-		if (n && !zjq._fxns.$remove(n))
-			setTimeout(function() {zjq._unfixDom0(n);}, 1000);
-	},
-	_fxns: [], //what to fix
-	_fixDom0: function () {
-		var n = zjq._fxns.shift();
-		if (n) {
-			zjq._alphafix(n);
-			zjq._fixBU(n.getElementsByTagName("A")); //Bug 1635685, 1612312
-			zjq._fixBU(n.getElementsByTagName("AREA")); //Bug 1896749
-
-			if (zjq._fxns.length) setTimeout(zjq._fixDom0, 300);
-		}
-	},
-	_alphafix: zk.$void, //override if ie6_
-	_unfixDom0: function (n) {
-		if (n) {
-			zjq._unfixBU(n.getElementsByTagName("A"));
-			zjq._unfixBU(n.getElementsByTagName("AREA"));
-		}
-	},
-	_fixBU: function (ns) {
-		for (var j = ns.length; j--;) {
-			var n = ns[j];
-			if (!n.z_fixed && n.href.indexOf("javascript:") >= 0) {
-				n.z_fixed = true;
-				jq(n).click(zjq._doSkipBfUnload);
-			}
-		}
-	},
-	_unfixBU: function (ns) {
-		for (var j = ns.length; j--;) {
-			var n = ns[j];
-			if (n.z_fixed) {
-				n.z_fixed = false;
-				jq(n).unbind("click", zjq._doSkipBfUnload);
-			}
-		}
-	},
-	_doSkipBfUnload: function () {
-		zk.skipBfUnload = true;
-		setTimeout(zjq._unSkipBfUnload, 0); //restore
-	},
-	_unSkipBfUnload: function () {
-		zk.skipBfUnload = false;
-	}
-});
+zjq._alphafix = zk.$void; //overriden if ie6_
 
 zk.override(jq.event, zjq._evt = {}, {
 	fix: function (evt) {
