@@ -605,7 +605,7 @@ zAu.cmd0 = { //no uuid at all
 		zk.error(dt1);
 	},
 	alert: function (msg) {
-		jq.alert(msg);
+		jq.alert(msg, {icon:'ERROR'});
 	},
 	redirect: function (url, target) {
 		try {

@@ -218,6 +218,14 @@ public class Utils {
 		addLocaleJS(sb, "GRID_DESC", MZul.GRID_DESC);
 		addLocaleJS(sb, "GRID_COLUMNS", MZul.GRID_COLUMNS);
 
+		addLocaleJS(sb, "OK", MZul.OK);
+		addLocaleJS(sb, "CANCEL", MZul.CANCEL);
+		addLocaleJS(sb, "YES", MZul.YES);
+		addLocaleJS(sb, "NO", MZul.NO);
+		addLocaleJS(sb, "RETRY", MZul.RETRY);
+		addLocaleJS(sb, "ABORT", MZul.ABORT);
+		addLocaleJS(sb, "IGNORE", MZul.IGNORE);
+
 		int j = sb.length() - 1;
 		if (sb.charAt(j) == ',') sb.setLength(j);
 

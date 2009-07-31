@@ -22,7 +22,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <window title="${arg.title}" border="normal" width="250pt" closable="true"
 use="org.zkoss.zul.impl.MessageboxDlg">
 	<hbox>
-		<div class="${arg.icon}"/>
+		<div sclass="${arg.icon}"/>
 		<div sclass="z-messagebox" width="210pt">
 			<label value="${arg.message}" multiline="true"/>
 		</div>

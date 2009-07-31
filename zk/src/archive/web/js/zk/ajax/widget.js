@@ -1437,6 +1437,7 @@ zk.Desktop = zk.$extends(zk.Widget, {
 		this.$super('$init', {uuid: dtid}); //id also uuid
 
 		this._aureqs = [];
+		this.desktop = this;
 
 		var zkdt = zk.Desktop, dts = zkdt.all, dt = dts[dtid];
 		if (!dt) {

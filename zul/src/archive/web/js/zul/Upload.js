@@ -113,22 +113,10 @@ zul.Upload = zk.$extends(zk.Object, {
 	},
 	error: function (msg, uuid, sid) {
 		var wgt = zk.Widget.$(uuid);
-		if (wgt)
-			zk.load("zul.wnd", function () {
-				var wnd = new zul.wnd.Window({
-					closable: true,
-					width: '400px',
-					title: 'Fail to upload!',
-					border: 'normal',
-					mode: 'modal',
-					children: [
-						new zul.wgt.Image({src: zk.ajaxURI('/web/zul/img/msgbox/warning-btn.png', {au:true})}),
-						new zul.wgt.Label({value: ' ' + msg})
-					]
-				});
-				wgt.getPage().appendChild(wnd);
-				zul.Upload.close(uuid, sid);
-			});
+		if (wgt) {
+			jq.alert(msg, {desktop: wgt.desktop, icon: 'ERROR'});
+			zul.Upload.close(uuid, sid);
+		}
 	},
 	close: function (uuid, sid) {
 		var wgt = zk.Widget.$(uuid);

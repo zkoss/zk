@@ -809,7 +809,6 @@ zk.copy(jq, { //ZK extension to jq
 		} finally {
 			try {zk.alerting = false;} catch (e) {} //doc might be unloaded
 		}
-		return this;
 	}
 });
 
