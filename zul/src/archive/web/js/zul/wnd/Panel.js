@@ -441,7 +441,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			var zcls = this.getZclass();
 			var added = "normal" == this.getBorder() ? '' : zcls + '-noborder';
 			if (added) scls += (scls ? ' ': '') + added;
-			addded = this.isOpen() ? '' : zcls + '-colpsd';
+			added = this.isOpen() ? '' : zcls + '-colpsd';
 			if (added) scls += (scls ? ' ': '') + added;
 		}
 		return scls;
