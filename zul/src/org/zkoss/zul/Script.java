@@ -17,12 +17,14 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 package org.zkoss.zul;
 
 import java.util.Iterator;
+import java.io.Writer;
 
 import org.zkoss.lang.Objects;
 import org.zkoss.xml.HTMLs;
 
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.AbstractComponent;
+import org.zkoss.zk.ui.sys.HtmlPageRenders;
 
 /**
  * A component to generate script codes that will be evaluated at the client.
@@ -35,9 +37,8 @@ import org.zkoss.zk.ui.AbstractComponent;
  *
  * <p>There are several way to embed script codes in a ZUML page:
  *
- * <p>Approach 1: Specify the URL of the JS file. In this case,
- * <code>defer</code> is meaningless. The JavaScript codes
- * are evaluated as soon as the file is loaded.
+ * <p>Approach 1: Specify the URL of the JS file without defer.
+ * The JavaScript codes are evaluated as soon as the file is loaded.
  * <pre><code>&lt;script src="my.js"/&gt;
  * </code></pre>
  *
@@ -224,8 +225,23 @@ public class Script extends AbstractComponent implements org.zkoss.zul.api.Scrip
 
 		if (_defer && _content != null)
 			renderer.renderDirectly("content", "function(){\n" + _content + "\n}");
-		if (_src != null)
-			render(renderer, "src", getEncodedSrcURL());
+		if (_src != null) {
+			final HtmlPageRenders.RenderContext rc =
+				_defer ? null: HtmlPageRenders.getRenderContext(null);
+			if (rc != null) {
+				final Writer out = rc.extra;
+				out.write("\n<script type=\"text/javascript\" src=\"");
+				out.write(getEncodedSrcURL());
+				out.write('"');
+				if (_charset != null) {
+					out.write(" charset=\"");
+					out.write(_charset);
+					out.write('"');
+				}
+				out.write(">\n</script>\n");
+			} else
+				render(renderer, "src", getEncodedSrcURL());
+		}
 
 		render(renderer, "charset", _charset);
 		render(renderer, "packages", _packages);
