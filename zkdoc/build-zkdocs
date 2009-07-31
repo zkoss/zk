@@ -30,6 +30,13 @@ xsltproc --output /usr/ptroot/doc/styleguide/ --stringparam html.stylesheet "sty
 xsltproc --output /usr/ptroot/doc/styleguide-single/index.html --stringparam html.stylesheet "styleguide.css" /usr/docbook/html/docbook-styleguide.xsl styleguide/ZK-styleguide.xml
 fi
 
+if [ "$mode" = "compdevguide" ] ; then
+echo "Buiding component developer's guide"
+stylepath=`pwd | xargs cygpath -w`"\compdevguide\ZK-compdevguide.odt"
+soffice -invisible "macro:///Standard.Module1.SaveAsDocbook($stylepath)"
+xsltproc --output /usr/ptroot/doc/compdevguide/ --stringparam html.stylesheet "compdevguide.css" /usr/docbook/html/chunk-compdevguide.xsl compdevguide/ZK-compdevguide.xml
+fi
+
 if [ "$mode" = "quickstart" ]||[ "$mode" = "all" ] ; then
 echo "Buiding quickstart guide"
 quickpath=`pwd | xargs cygpath -w`"\quickstart\ZK-quickstart.odt"

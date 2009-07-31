@@ -1,23 +1,23 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <book lang="en-US">
 <title>The Component Development Guide</title>
 <subtitle>Version 3.0.5 and later</subtitle>
 <bookinfo>
 <copyright>
-<year>2008</year>
+<year>2009</year>
 <holder>Potix Corporation. All rights reserved.</holder>
 </copyright>
 </bookinfo>
 <para/>
 <para>
-<graphic fileref="images/potix.jpg" width="5.002cm"/>
+<graphic fileref="images/potix.jpg"/>
 </para>
 <para>SIMPLY RICH</para>
 <para>ZKTM</para>
-<para>May 2008</para>
+<para>June 2008</para>
 <para>Potix Corporation</para>
-<para>Revision 1</para>
+<para>Revision 4</para>
 <para/>
 <para/>
 <para>Copyright © Potix Corporation. All rights reserved.</para>
@@ -32,8 +32,9 @@
 <para>The Component Development Guide describes how to develop ZK components. For ZK concepts and features refer to the Developer's Guide. For installation refer to the Quick Start Guide. For a full description of component properties and methods refer to the Developer's Reference.</para>
 <para>In this chapter, we will introduce you the basic concepts of ZK components and component development.</para><sect1><title>Two Sides of a Component</title>
 <para>A component consists of two parts: view and handle. They are like two sides of the same coin. The view is the visual part of a component, which is running at the browser and interacts with the user. The handle is a Java object running at the server and interacts with the application.</para>
+<para/>
 <para>
-<graphic fileref="images/ComponentTwoSides.gif" width="15.839cm"/>
+<graphic fileref="images/ComponentTwoSides.gif"/>
 </para><sect2><title>View</title>
 <para>The view is the visual part of a component. It is the appearance that the user sees and interacts with. When a component is created and attached to a page, its view is created at the client to provide the visual appearance.</para>
 <para>For example, when the application creates a button (at the server), the button-look view will be created accordingly at the client, so the user can click it.</para></sect2><sect2><title>Handle</title>
@@ -53,7 +54,12 @@
 </footnote>. However, from component's viewpoint, all other phases are the same, so you might say there are the rendering phase and the non-rendering phases.</para><sect2><title>The Non-Rendering Phases</title>
 <para>In the phases other than Rendering, the application and ZK are allowed to access any methods of the component except the redraw method. It is the component's job to notify ZK if a component needs to be redrawn, or some states of the view have to change.</para>
 <para>For example, you have a method that will cause the client to redraw the view, then you can call back the invalidate method.</para>
-<programlisting>public MyComp extends org.zkoss.zk.ui.AbstractComponent {&#13;    public void setValue(String value) {    &#13;        _value = value;        &#13;        invalidate();        &#13;    }    &#13;}&#13;</programlisting>
+<programlisting>public MyComp extends org.zkoss.zk.ui.AbstractComponent {&#13;</programlisting>
+<para>public void setValue(String value) {</para>
+<para>_value = value;</para>
+<para>invalidate();</para>
+<para>}</para>
+<para>}</para>
 <para>The invocation of invalidate notifies that a component has to be redrawn in the Rendering phase. It doesn't redraw it immediately. Rather, ZK accumulates all these updates and processes them later in the Rendering phase.</para></sect2><sect2><title>The Rendering Phase</title>
 <para>After all events are processed, ZK starts the rendering phase to redraw components that are invalidated in other phases. In other words, if a component's invalidate method was ever called, ZK will invoke the redraw method in the Rendering phase.</para>
 <para>In the Rendering phase, only the redraw method is invoked and the invalidate method cannot be called – it also implies almost all methods other than redraw shall not be called.</para><sect3><title>Molds</title>
@@ -64,8 +70,9 @@
 </footnote> and JSP.</para></sect3></sect2></sect1><sect1><title>Trilogy of Component Development</title>
 <para>From development perspectives, there are three steps to implement a ZK component. First, you have to design the view. Second, you have to implement the handle (as a Java class) at the server. Finally, you have to configure it with a XML file, such that it is accessible to the applications.</para>
 <para>How to implement the view depends on the client technology. For example, HTML tags and Java codes are required for the Ajax browsers, while Java MIDlet is required for Java Mobile clients. For the convenience of description, we focus on the Ajax browsers in this guide. The following illustrates the relationship among them.</para>
+<para/>
 <para>
-<graphic fileref="images/ComponentTrilogy.gif" width="13.034cm"/>
+<graphic fileref="images/ComponentTrilogy.gif"/>
 </para><sect2><title>Development of View</title>
 <para>For Ajax browsers, the view of a component is basically a collection of HTML tags and, optionally, JavaScript methods. The HTML tags are the visual presentation, while JavaScript methods initialize, clean up, listen to browser events and communicate with the server.</para><sect3><title>HTML Tags</title>
 <para>For Ajax browser, the visual presentation is implemented with a collection of HTML tags. For example, assume you want to use the HTML's BUTTON tag to represent a component, and then the visual presentation might look as follows.</para>
@@ -135,7 +142,7 @@
 </row></tbody></tgroup>
 </informaltable></sect3><sect3><title>Extra Controls</title>
 <para>To encapsulate API that are used only for component development, we introduce a concept called extra controls (aka., extra interfaces). If a component needs to provide some extra interfaces that will be used only for component development, it can override the newExtraCtrl method to instantiate an instance carrying the extra interfaces. For example, Slider allows the client to change the position of the slider, and then it has to implements the org.zkoss.zk.ui.ext.client.Scrollable interface. As depicted below, Slider first implements the ExtraCtrl class to implement the Scrollable interface. Then, Slider overrides newExtraCtrl to instantiate an ExtraCtrl instance.</para>
-<programlisting>public class Slider extends org.zkoss.zk.ui.HtmlBasedComponent {&#13;    private int _curpos;    &#13;protected Object newExtraCtrl() {&#13;return new ExtraCtrl();&#13;}&#13;protected class ExtraCtrl extends HtmlBasedComponent.ExtraCtrl&#13;implements Scrollable {&#13;            public final void setCurposByClient(int curpos) {            &#13;            _curpos = curpos;            &#13;        }        &#13;    }    &#13;}&#13;</programlisting>
+<programlisting>public class Slider extends org.zkoss.zk.ui.HtmlBasedComponent {&#13;    private int _curpos;    &#13;    protected Object newExtraCtrl() {return new ExtraCtrl();}protected class ExtraCtrl extends HtmlBasedComponent.ExtraCtrl    &#13;                                    implements Scrollable {public final void setCurposByClient(int curpos) {_curpos = curpos;}}}                                    &#13;</programlisting>
 <para>Notice that you generally have to extend from base class's extra controls, such that it inherits all extra controls. In the above case, it extends from the HtmlBasedComponent.ExtraCtrl class.</para></sect3></sect2><sect2><title>The org.zkoss.zk.ui.HtmlBasedComponent Class</title>
 <para>If you are implementing a component for HTML-based browser, you might consider to extend from HtmlBasedComponent. It extends from AbstractComponent to provide more HTML features, such as CSS style, CSS class, width, height, drag-and-drop, tooltip text, and so on. By extending from HtmlBasedComponent, your component inherits the HTML features for free – no special initialization, implementation, or invocation is required.</para>
 <para>In additions, it provides </para><sect3><title>Utilities to Generate the View</title>
@@ -214,7 +221,7 @@
 <para>Note: ZK optimizes the invalidates before invoking the redraw method. For example, a component will be redrawn at most one time, even if it is invalidated multiple times, or its parent is invalidated, too.</para></sect3><sect3><title>Smart Updates</title>
 <para>public void smartUpdate(String attrName, String value);public void smartUpdate(String attrName, DeferredValue value);public void smartUpdate(String attrName, boolean value);public void smartUpdate(String attrName, int value);</para>
 <para>A smart update is used to modify an attribute of the view. Unlike an invalidate, it won't cause the component to be redrawn.</para>
-<programlisting>public void setReadonly(boolean readonly) {&#13;    if (_readonly != readonly) {    &#13;_readonly = readonly;&#13;        smartUpdate("readOnly", _readonly);        &#13;    }    &#13;}&#13;</programlisting>
+<programlisting>public void setReadonly(boolean readonly) {&#13;                    if (_readonly != readonly) {_readonly = readonly;smartUpdate("readOnly", _readonly);                    &#13;    }}    &#13;</programlisting>
 <para>By default, ZK Client Engine will update the attribute of the most outer DOM element (of the view) with the specified name. For example, assume the most outer DOM element of the above example is elem, it is equivalent to invoke the following JavaScript codes at the client:</para>
 <programlisting>elem.readOnly = _readonly;&#13;</programlisting>
 <para>ZK Client Engine is smart enough to invoke the correct method for updating a field. For example, elem.className for the class attribute, elem.setAttribute() for unrecognized attributes, and so on.</para>
@@ -234,12 +241,13 @@
 <para>Note: Unlike smart updates, the AU response is sent to the client even if the component it depends is invalidated (until the component is removed).</para></sect4><sect4><title>Built-in AU Responses</title>
 <para>There are a lot of built-in AU responses such as AuAlert, AuInvoke, AuPrint and so on in the org.zkoss.zk.au.out package. When you think you have to develop your own AU response, check Javadoc first if any of them fulfills your requirement.</para>
 <para>AuInvoke and AuScript are AU response used to invoke the JavaScript codes at the client. AuInoke is used to invoke a JavaScript method depending on the component's type, while AuScript invokes a piece of codes regardless if it is part of a component's view.</para>
-<programlisting>public void play() {&#13;    response("play", new AuScript(this, "alert('Hi')"));    &#13;}&#13;</programlisting>
+<programlisting>public void play() {&#13;    response("play", new AuScript(this, "alert('Hi')"));    &#13;</programlisting>
+<para>}</para>
 <para>We discuss how to create your custom AU response in the later chapter, since it requires some JavaScript codes.</para></sect4></sect3></sect2><sect2><title>Request to the Server</title>
 <para>To notify what happens at the client, the view has to send an AU request (org.zkoss.zk.au.AuRequest) to the server. The AU request is processed by the so-called command. Whether to update the component and whether to post an event depends on how a command is implemented.</para><sect3><title>Command</title>
 <para>A command (org.zkoss.zk.au.Command) is used to process certain type of AU requests. When ZK Update Engine receives an AU request, it associates a command with it. Then, it invokes the process method of the command to process it. The processing, depending on the requirement, usually updates the content of the component and then posts an event to notify the application.</para>
 <para>For example, the org.zkoss.zk.au.in.RemoveCommand command is registered to process all AU requests called remove. Thus, if an AU request called remove is received, the process method of RemoveCommand will be invoked. Here is how RemoveCommand is implemented:</para>
-<programlisting>public class RemoveCommand extends Command {&#13;    public RemoveCommand(String evtnm, int flags) {    &#13;        super(evtnm, flags);        &#13;    }    &#13;    protected void process(AuRequest request) {    &#13;        final Component comp = request.getComponent();        &#13;        if (comp != null) comp.detach();        &#13;    }    &#13;}&#13;</programlisting>
+<programlisting>                                        public class RemoveCommand extends Command {public RemoveCommand(String evtnm, int flags) {super(evtnm, flags);}protected void process(AuRequest request) {final Component comp = request.getComponent();if (comp != null) comp.detach();}}                                        &#13;</programlisting>
 <para>Note: ZK uses the same command instance for the same type of AU requests, so concurrent access of the command is possible.</para>
 <para>See Also: Refer to the Process Request at the Server section in the next chapter for more details.</para></sect3><sect3><title>Event</title>
 <para>When a command processing a request, it might post one or several events. For example, InputCommand will post the onChange event as an instance of org.zkoss.zk.ui.event.InputEvent. The events are queued until all commands are processed. In other words, the events are processed by the application, after the components have been updated.</para>
@@ -247,9 +255,9 @@
 <para>On the other hand, we can utilize the stop-propagation feature to allow the application to customize some behavior. For example, the list box sorts the list items in the onSort listener, such that the application can provide its own sorting by adding its own listener and stop the event propagation.</para></sect3></sect2></sect1><sect1><title>Miscellaneous Features</title><sect2><title>Drag-and-Drop, Tooltip and Context Menu</title>
 <para>They are supported automatically with custom JavaScript codes as long as you extends your component handle from org.zkoss.zul.impl.XulElement.</para></sect2><sect2><title>Click, Right Click and Double Click</title>
 <para>The onClick, onRightClick and onDoubleClick events are handled automatically by ZK Client Engine. All you need to do is to generate the correct attributes by use of the appendAsapAttr method.</para>
-<programlisting>public String getOuterAttrs() {&#13;    final StringBuffer sb = new StringBuffer(super.getOuterAttrs());    &#13;    appendAsapAttr(sb, Events.ON_CLICK);    &#13;    appendAsapAttr(sb, Events.ON_DOUBLE_CLICK);    &#13;    appendAsapAttr(sb, Events.ON_RIGHT_CLICK);    &#13;    return sb.otString();    &#13;}&#13;</programlisting>
+<programlisting>public String getOuterAttrs() {final StringBuffer sb = new StringBuffer(super.getOuterAttrs());appendAsapAttr(sb, Events.ON_CLICK);appendAsapAttr(sb, Events.ON_DOUBLE_CLICK);appendAsapAttr(sb, Events.ON_RIGHT_CLICK);return sb.otString();                    &#13;}&#13;</programlisting>
 <para>HtmlBasedCcomponent provides an utility called getAllOnClickAttrs to simplify the job.</para>
-<programlisting>public String getOuterAttrs() {&#13;    String attrs = super.getOuterAttrs();    &#13;    String clkattrs = getAllOnClickAttrs();    &#13;    rerturn clkattrs != null ? attrs + clkattrs: attrs;    &#13;}&#13;</programlisting></sect2></sect1></chapter>
+<programlisting>public String getOuterAttrs() {String attrs = super.getOuterAttrs();    &#13;        String clkattrs = getAllOnClickAttrs();rerturn clkattrs != null ? attrs + clkattrs: attrs;        &#13;}&#13;</programlisting></sect2></sect1></chapter>
 <chapter>
 <title>3. View</title>
 <para>The view is the visual presentation of a component at the client. Depending on the client, it could be HTML tags plus JavaScript codes, MIDlet, XML node and Flash. For sake of description, we discuss only the view for the Ajax browsers, i.e., HTML tags plus JavaScript codes.</para><sect1><title>HTML Tags</title>
@@ -258,9 +266,9 @@
 <para>When the view being rendered, the related information is passed through the request attribute called arg, which is a Map instance. In arg, the component being rendered is stored in the entry called self. That is, you can retrieve it with the following EL expression:</para>
 <programlisting>${requestScope.arg.self}&#13;</programlisting>
 <para>With Java codes, you can retrieve it as follows.</para>
-<programlisting>void doGet(HttpServletRequest request, HttpServletResponse response) {&#13;    Component self = (Component)((Map)request.getAttribute("arg")).get("self");    &#13;...&#13;</programlisting>
+<programlisting>void doGet(HttpServletRequest request, HttpServletResponse response) {&#13;    Component self = (Component)((Map)request.getAttribute("arg")).get("self");...    &#13;</programlisting>
 <para>Here is the example of org.zkoss.zul.Image's view (in DSP):</para>
-<programlisting>&lt;%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %&gt;&#13;&lt;c:set var="self" value="${requestScope.arg.self}"/&gt;&#13;&lt;img id="${self.uuid}" z.type="zul.widget.Img"${self.outerAttrs}${self.innerAttrs}/&gt;&#13;</programlisting>
+<programlisting>&lt;%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %&gt;&lt;c:set var="self" value="${requestScope.arg.self}"/&gt;&lt;img id="${self.uuid}" z.type="zul.widget.Img"${self.outerAttrs}${self.innerAttrs}/&gt;&#13;</programlisting>
 <para>where</para>
 <itemizedlist>
 <listitem>
@@ -274,33 +282,46 @@
 </listitem>
 </itemizedlist>
 <para>Notice that each view must have exactly one topmost HTML element – which is img in the above case. The following view is incorrect since it has two topmost element.</para>
-<programlisting>&lt;%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %&gt;&#13;&lt;c:set var="self" value="${requestScope.arg.self}"/&gt;&#13;&lt;img id="${self.uuid}" ${self.outerAttrs}${self.innerAttrs}/&gt;&#13;&lt;img/&gt;&#13;</programlisting>
+<programlisting>&lt;%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %&gt;&lt;c:set var="self" value="${requestScope.arg.self}"/&gt;&lt;img id="${self.uuid}" ${self.outerAttrs}${self.innerAttrs}/&gt;&#13;&lt;img/&gt;&#13;</programlisting>
 <para>To correct it, you can enclose them with span or div.</para>
 <programlisting>&lt;span id="${self.uuid}" ${self.outerAttrs}${self.innerAttrs}/&gt;&#13;    &lt;img/&gt;    &#13;    &lt;img/&gt;    &#13;&lt;/span&gt;&#13;</programlisting></sect2><sect2><title>DSP File Location</title>
 <para>Depending on your requirement, you can place the DSP file representing a view in the Web application, or in a JAR library.</para>
 <para>If you put in the Web application, say, /WEB-INF/myaddon/button.dsp, just specify the correct path in the mold-uri element as follows.</para>
 <programlisting>&lt;component&gt;&#13;    &lt;mold&gt;    &#13;        &lt;mold-name&gt;default&lt;/mold-name&gt;        &#13;        &lt;mold-uri&gt;/WEB-INF/myaddon/button.dsp&lt;/mold-uri&gt;        &#13;    &lt;/mold&gt;    &#13;...&#13;</programlisting>
 <para>If you want to put it to a JAR file, you must place it under the /web directory. For example, /web/myaddon/button.dsp is a legal path, and the mold URI is as follows.</para>
-<programlisting>&lt;component&gt;&#13;    &lt;mold&gt;    &#13;        &lt;mold-name&gt;default&lt;/mold-name&gt;        &#13;        &lt;mold-uri&gt;~./myaddon/button.dsp&lt;/mold-uri&gt;        &#13;&lt;/mold&gt;&#13;...&#13;</programlisting>
+<programlisting>&lt;component&gt;&#13;    &lt;mold&gt;    &#13;        &lt;mold-name&gt;default&lt;/mold-name&gt;        &#13;        &lt;mold-uri&gt;~./myaddon/button.dsp&lt;/mold-uri&gt;        &#13;</programlisting>
+<para>&lt;/mold&gt;</para>
+<para>...</para>
 <para>where "~." means the /web directory in a JAR file, or locatable by classpath.</para></sect2><sect2><title>Component Renderer</title>
 <para>DSP is an easy way to design a component view, but the performance of EL expressions is much slower than native Java codes. To maximize the performance with native Java codes, you can develop either a Servlet or a so-called component renderer.</para>
 <para>A component renderer is a Java class used to render a view directly. It must implement the org.zkoss.zk.ui.render.ComponentRenderer interface, which has only one method: render. For example, the following is the renderer of Image:</para>
 <programlisting>public class ImageDefault implements ComponentRenderer {&#13;    public void render(Component comp, Writer out) throws IOException {    &#13;        final Image self = (Image)comp;        &#13;        out.write("&lt;img id=\"");        &#13;        out.write(self.getUuid());        &#13;        out.write("\" z.type=\"zul.widget.Img\"");        &#13;        out.write(self.getOuterAttrs());        &#13;        out.write(self.getInnerAttrs());        &#13;        out.write("/&gt;");        &#13;    }    &#13;}&#13;</programlisting>
 <para>Then, the mold URI must start with "class:" and end with the class name, as shown below.</para>
-<programlisting>&lt;component&gt;&#13;    &lt;mold&gt;    &#13;        &lt;mold-name&gt;default&lt;/mold-name&gt;        &#13;        &lt;mold-uri&gt;class:org.zkoss.zkmax.zul.render.ImageDefault&lt;/mold-uri&gt;        &#13;&lt;/mold&gt;&#13;...&#13;</programlisting></sect2></sect1><sect1><title>JavaScript Codes</title>
+<programlisting>&lt;component&gt;&#13;    &lt;mold&gt;    &#13;        &lt;mold-name&gt;default&lt;/mold-name&gt;        &#13;        &lt;mold-uri&gt;class:org.zkoss.zkmax.zul.render.ImageDefault&lt;/mold-uri&gt;        &#13;</programlisting>
+<para>&lt;/mold&gt;</para>
+<para>...</para></sect2></sect1><sect1><title>JavaScript Codes</title>
 <para>In addition to the visual representation, a component view usually has some codes running at the client to, say, initialize the view and interact with the user. For Ajax devices, the client codes are written in JavaScript. For sake of convenience, we discuss only Ajax devices here.</para><sect2><title>Component Type</title>
 <para>Each component that requires the JavaScript codes to run at the client must provide an unique type in the z.type attribute. For example,</para>
 <programlisting>&lt;BUTTON id="z_ed_0" z.type="mycomps.MyButton"&gt;I am a button&lt;/BUTTON&gt;&#13;</programlisting>
 <para>The syntax is</para>
 <programlisting>dir1.dir2.file.Type&#13;</programlisting>
 <para>The part after the last dot (.) is the name of the type. The part before the last dot is the path of the JavaScript file that must be loaded (to handle the view). ZK use the type as a naming convention to call the proper JavaScript methods. For example, assume the type is Tx. Then, if the zkT.init method is declared, it will be called when ZK is initializing the component at the client.</para>
-<programlisting>ZkTp = {}&#13;zkTp.init = function (cmp) {&#13;zk.listen(cmp, "onClick", zkTp.onclick);&#13;}&#13;zkTp.onclick = function (evt) {&#13;var el = Event.element(evt);&#13;...&#13;};&#13;</programlisting></sect2><sect2><title>JavaScript File Location</title>
+<programlisting>zkTp = {}&#13;zkTp.init = function (cmp) {&#13;</programlisting>
+<para>zk.listen(cmp, "onClick", zkTp.onclick);</para>
+<para>}</para>
+<para>zkTp.onclick = function (evt) {</para>
+<para>var el = Event.element(evt);</para>
+<para>...</para>
+<para>};</para></sect2><sect2><title>JavaScript File Location</title>
 <para>As described in the previous section. the first part of the z.type attribute is the path of the JavaScript to load. For example, assume the z.type attribute is a.b.c.Tx, then ZK will load the file in the path /web/js/a/b/c.js, right before initializing the view.</para>
 <para>Notice that the path must be locatable by classpath, and it always stats at /web/js.</para></sect2></sect1><sect1><title>Initialization and Cleanup</title><sect2><title>Initialization</title>
 <para>When ZK Client Engine initializes a component view, it first check if the z.type attribute is defined. If not specified, it means no JavaScript codes required and it ends the initialization of this component.</para>
 <para>If z.type is specified, say, widget.SuperButton, ZK Client Engine first loads the JavaScript file, /web/js/widget.js, and then check if any method called zkSuperButton.init. Invoke it if found. We call this method as the init callback.</para>
 <para>A component view usually registered event listeners in this method. For example,</para>
-<programlisting>zkSuperButton = {} //declare zkSuperButton to hold init, cleanup and other methods&#13;&#13;zkSuperButton.init = function (cmp) {&#13;zk.listen(cmp, "focus", zkau.onfocus);&#13;zk.listen(cmp, "blur", zkau.onblur);&#13;};&#13;</programlisting>
+<programlisting>zkSuperButton = {} //declare zkSuperButton to hold init, cleanup and other methods&#13;</programlisting>
+<para/>
+<programlisting>zkSuperButton.init = function (cmp) {&#13;</programlisting>
+<para>zk.listen(cmp, "focus", zkau.onfocus);zk.listen(cmp, "blur", zkau.onblur);};</para>
 <para>The initialization order is starting from the child, then to the parent, to the parent's parent, and so on.</para>
 <para>After init is called, it invokes zkSuperButton.beforeSize and zkSuperButton.onSize, if any, to initialize the size of the view. Components rarely need to provide these two methods, unless they are providing the layout, such as Hbox and Borderlayout. We will talk more about them in the ZK Callbacks section.</para></sect2><sect2><title>Cleanup</title>
 <para>When a component is about to be removed, ZK will check if the cleanup callback exists (i.e., zkSuperButton.cleanup in the above example). Invoke it if found.</para>
@@ -323,7 +344,8 @@
 <footnote>
 <para>Available in ZK 3.0.5 or later.</para>
 </footnote>
-<programlisting>zkType.beforeSize = function (cmp) {&#13;};&#13;zkType.onSize = function (cmp) {&#13;};&#13;</programlisting>
+<programlisting>zkType.beforeSize = function (cmp) {&#13;};&#13;zkType.onSize = function (cmp) {&#13;</programlisting>
+<para>};</para>
 <para>When the browser window or a resizable parent (such as Borderlayout) is resized, ZK Client Engine first call the beforeSize callback for all components that are affected, and then call the onSize callback for them. In other words, it is a two-pass mechanism. The beforSize callback is used to do some preparation. For example, you might have to reset style.width in the beforeSize callback and then set the correct size in the onSize callback.</para>
 <para>The order of invocations is the parent first. The topmost parent that is affected is called first, then its child, then its grandchild, and so on.</para>
 <para>Notes</para>
@@ -491,6 +513,17 @@
 <para>script</para>
 <para>It could be a function or a string containing JavaScript codes.</para>
 </entry>
+</row>
+<row>
+<entry>
+<para>zk.addOnLoad(nm, script)</para>
+<para>Register a callback function that will be called after a module is loaded.</para>
+<para>Applicable: 3.0.6 or later</para>
+<para>nm</para>
+<para>The module name, such as "zul.sel".</para>
+<para>script</para>
+<para>It could be a function or a string containing JavaScript codes.</para>
+</entry>
 </row></tbody></tgroup>
 </informaltable></sect3><sect3><title>More Utilities to Send Requests</title>
 <para>Here is a list of methods to simply the sending of particular AU requests, such as onClose. They are all based on zkau.send.</para>
@@ -525,6 +558,12 @@
 <para>zkau.sendOnClose</para>
 <para>Sends the onClose command that causes the onClose event being sent to the component. How the onClose event is handled depends on the component. For window, it is detached.</para>
 </entry>
+</row>
+<row>
+<entry>
+<para>zkau.sendRedraw (ZK 3.1 or later)</para>
+<para>Sends the redraw command to redraw all desktops in the browser window. It is usually used to recover from severe errors.</para>
+</entry>
 </row></tbody></tgroup>
 </informaltable></sect3></sect2><sect2><title>Process Request at the Server</title>
 <para>When an AU request arrives at the server, it is packed as an instance of org.zkoss.zk.au.AuRequest by associating with a command (org.zkoss.zk.au.Command). The command is responsible to process the associated request. ZK Update Engine doesn't assume anything but invoking the command's process method. Up to the component developer, the command might then update the component's state, post an event or others when process is invoked.</para><sect3><title>Global and Component-specific Commands</title>
@@ -556,7 +595,13 @@
 <para>Of course, you can still implement as component-specific – just return it in several implementations of the getCommand method.</para>
 </footnote>. Since it is available to all components, make sure the naming doesn't conflict with others.</para>
 <para>A global command is extended from the org.zkoss.zk.au.Command class.</para>
-<programlisting>class FlyCommand extends Command {&#13;public FlyCommand(String id, int flags) {&#13;super(id, flags);&#13;}&#13;protected process(AuRequest request) {&#13;final SuperButton btn = (SuperButton)request.getComponent();&#13;        btn.doFly();        &#13;Events.postEvent(new Event(getId(), btn, request.getData()));&#13;}&#13;}&#13;</programlisting>
+<programlisting>class FlyCommand extends Command {&#13;</programlisting>
+<para>public FlyCommand(String id, int flags) {super(id, flags);</para>
+<para>}</para>
+<para>protected process(AuRequest request) {</para>
+<programlisting>        final SuperButton btn = (SuperButton)request.getComponent();        &#13;        btn.doFly();        &#13;</programlisting>
+<para>Events.postEvent(new Event(getId(), btn, request.getData()));}</para>
+<para>}</para>
 <para>Since it is global, you have to instantiate an instance at startup. A typical usage is to declare a static instance of a class. For example,</para>
 <programlisting>public class SuperButton extends AbstractComponent {&#13;    static {    &#13;            new FlyCommand("onFly", 0); //register itself automatically}            &#13;...&#13;</programlisting>
 <para>It is interesting to note you don't need to keep a reference to a global command. It is registered automatically as soon as it is instantiated.</para>
@@ -566,17 +611,43 @@
 <para>Note: You don't have to follow this. First, it is simply a design pattern we use to implement components. Second, command related methods can be encapsulated well if you use only component-specific commands.</para>
 <para>Here is how it use. Let us assume you don't want doFly to be accessed by applications. The easiest way is to declare it as private or protected and then implement it as a component-specific command as we did in the Develop Your Own Component-specific Command section.</para>
 <para>However, what if FlyCommand has to be a global command? First, you can design an interface, say, Flyable.</para>
-<programlisting>public interface Flyable {&#13;public void doFly();&#13;}&#13;</programlisting>
+<programlisting>public interface Flyable {&#13;</programlisting>
+<para>public void doFly();</para>
+<para>}</para>
 <para>Then, in the component implementation, we can do as follows.</para>
-<programlisting>public class SuperButton extends AbstractComponent {&#13;    public Object newExtraCtrl() {    &#13;        return new ExtraCtrl();        &#13;    }    &#13;    private void doFly() { //make it inaccessible    &#13;        //whatever        &#13;    }    &#13;    private class ExtraCtrl implements Flyable {    &#13;public void doFly() {&#13;SuperButto.this.doFly();&#13;}&#13;}&#13;...&#13;</programlisting>
+<programlisting>public class SuperButton extends AbstractComponent {&#13;    public Object newExtraCtrl() {    &#13;        return new ExtraCtrl();        &#13;    }    &#13;    private void doFly() { //make it inaccessible    &#13;        //whatever        &#13;    }    &#13;    private class ExtraCtrl implements Flyable {    &#13;</programlisting>
+<para>public void doFly() {</para>
+<para>SuperButto.this.doFly();</para>
+<para>}</para>
+<para>}</para>
+<para>...</para>
 <para>where we override newExtraCtrl rather than getExtraCtrl, since getExtraCtrl handles the lifecycle of the extra control and will invoke newExtraCtrl to instantiate the object.</para>
 <para>Finally, you can implement FlyCommand this way:</para>
-<programlisting>class FlyCommand extends Command {&#13;public FlyCommand(String id, int flags) {&#13;super(id, flags);&#13;}&#13;protected process(AuRequest request) {&#13;final Component comp = request.getComponent();&#13;        if (comp instanceof Flyable)        &#13;((Flyable)comp).doFly();&#13;Events.postEvent(new Event(getId(), comp, request.getData()));&#13;}&#13;}&#13;</programlisting></sect4></sect3></sect2><sect2><title>Process Smart Updates</title>
+<programlisting>class FlyCommand extends Command {&#13;</programlisting>
+<para>public FlyCommand(String id, int flags) {super(id, flags);</para>
+<para>}</para>
+<para>protected process(AuRequest request) {</para>
+<programlisting>        final Component comp = request.getComponent();        &#13;        if (comp instanceof Flyable)        &#13;            ((Flyable)comp).doFly();            &#13;</programlisting>
+<para>Events.postEvent(new Event(getId(), comp, request.getData()));</para>
+<para>}</para>
+<para>}</para></sect4></sect3></sect2><sect2><title>Process Smart Updates</title>
 <para>Handling the smart updates sent from the server is straightforward. Just declare a callback called setAttr. For example, assume the component type is SuperButton, then the setAttr callback is as follows.</para>
-<programlisting>zkSuperButton.setAttr = function (cmp, name, value) {&#13;if ("fly" == name) {&#13;//whatever&#13;}&#13;return false;&#13;}&#13;</programlisting>
+<programlisting>zkSuperButton.setAttr = function (cmp, name, value) {&#13;</programlisting>
+<para>if ("fly" == name) {</para>
+<para>//whatever</para>
+<para>}</para>
+<para>return false;</para>
+<para>}</para>
 <para>The return value is whether you want the default behavior to take place, i.e., whether to update the attribute. More precisely, zkau.setAttr(cmp, name, value) will be called if false is returned.</para>
 <para>If you prefer to update the attribute first, you can invoke zkau.setAttr manually. For example,</para>
-<programlisting>zkSuperButton.setAttr = function (cmp, name, value) {&#13;if ("disabled" == name) {&#13;zkau.setAttr(cmp, name, value); //update cmp.disabled first&#13;//whatever&#13;return true; //attribute has been updated&#13;}&#13;return false;&#13;}&#13;</programlisting><sect3><title>Smart Updates with Multiple Values<footnote>
+<programlisting>zkSuperButton.setAttr = function (cmp, name, value) {&#13;</programlisting>
+<para>if ("disabled" == name) {</para>
+<para>zkau.setAttr(cmp, name, value); //update cmp.disabled first</para>
+<para>//whatever</para>
+<para>return true; //attribute has been updated</para>
+<para>}</para>
+<para>return false;</para>
+<para>}</para><sect3><title>Smart Updates with Multiple Values<footnote>
 <para>Available in ZK 3.0.5 or later.</para>
 </footnote>
 </title>
@@ -586,7 +657,10 @@
 <para>When implementing a sophisticated component, you might want to pass multiple values (i.e., an array of values) to an attribute. At the server side, you invoke the smartUpdateValues method. At the client, the setAttr callback will be called with additional arguments. For example, at the server, you invoke</para>
 <programlisting>smartUpdateValues("fly", new String[] {"low", "fast"});&#13;</programlisting>
 <para>Then, at the client, you can handle it as follows.</para>
-<programlisting>zkSuperButton.setAttr = function (cmp, name, value1, value2) {&#13;if ("fly" == name) {&#13;fly(value1, value2);&#13;...&#13;</programlisting>
+<programlisting>zkSuperButton.setAttr = function (cmp, name, value1, value2) {&#13;</programlisting>
+<para>if ("fly" == name) {</para>
+<para>fly(value1, value2);</para>
+<para>...</para>
 <para>JavaScript Tip: You can use arguments.length to determine how many arguments are passed.</para></sect3></sect2><sect2><title>Process AU Responses</title>
 <para>There are many built-in responses you can use (in the org.zkoss.zk.au.out package). However, the invoke (AuInvoke) and script (AuScript) responses are almost all you need.</para><sect3><title>The invoke Response</title>
 <para>The invoke response is used to invoke a callback. For example, you can send an AU response at the server as follows.</para>
@@ -596,18 +670,30 @@
 <para>Tip: As shown above, we can use a AU response and a smart update to do the similar task (fly in this example). But, there is a difference: the AU response is sent even if the component is invalidated, while the smart update won't.</para>
 <para>Thus, if the init callback will handle everything, the smart update shall be used (otherwise, you will do it twice when it is invalidated).</para></sect3><sect3><title>The script Response</title>
 <para>The script response is used to execute any JavaScript codes at the client, not just the callbacks. For example,</para>
-<programlisting>public void fly() {&#13;    response("ctrl",    &#13;new AuScript(this, "zkSuperButton.fly('" + getUuid() + "','low','fast')"));&#13;}&#13;</programlisting>
+<programlisting>public void fly() {&#13;    response("ctrl",    &#13;</programlisting>
+<para>new AuScript(this, "zkSuperButton.fly('" + getUuid() + "','low','fast')"));</para>
+<para>}</para>
 <para>Since the JavaScript codes are hardcoded, it is sometimes not easy to support multiple molds. For example, assume you want to use the same Java class to implement another mold. Then, the JavaScript codes that implements fly might be different. So, you might have to do as follows.</para>
-<programlisting>public void fly() {&#13;    response("ctrl",    &#13;new AuScript(this,&#13;("SuperButton".equals(getMold()) ? "zkSuperButton": "zkGiantButton")&#13;+ ".fly('" + getUuid() + "','low','fast')"));&#13;}&#13;</programlisting>
+<programlisting>public void fly() {&#13;    response("ctrl",    &#13;</programlisting>
+<para>new AuScript(this,</para>
+<para>("SuperButton".equals(getMold()) ? "zkSuperButton": "zkGiantButton")</para>
+<para>+ ".fly('" + getUuid() + "','low','fast')"));</para>
+<para>}</para>
 <para>On the other hand, if you use the invoke response, you can have the same response but define a different component type, say GiantButton. Then, you don't modify Java class. Rather, provide another callback:</para>
-<programlisting>zkGiantButton.fly = function (cmp, height, speed) {&#13;    //whatever    &#13;}&#13;</programlisting>
+<programlisting>    zkGiantButton.fly = function (cmp, height, speed) {//whatever    &#13;</programlisting>
+<para>}</para>
 <para>In general, the invoke response is recommended if applicable.</para></sect3><sect3><title>Develop Your Own AU Responses</title>
 <para>Unlike the AU request's commands, you rarely need to develop your own AU response since the invoke response can serve almost everything. However, if you prefer to provide your own response, you can follow the instructions described in this section.</para>
 <para>First, you have to implement a Java class extending from the org.zkoss.zk.au.AuResponse class.</para>
-<programlisting>public AuFly extends AuResponse {&#13;    public AuFly(SuperButton comp, String height, String speed) {    &#13;super("fly", comp, new String[] {comp.getUuid(), height, speed});&#13;}&#13;}&#13;</programlisting>
+<programlisting>public AuFly extends AuResponse {&#13;    public AuFly(SuperButton comp, String height, String speed) {    &#13;</programlisting>
+<para>super("fly", comp, new String[] {comp.getUuid(), height, speed});</para>
+<para>}</para>
+<para>}</para>
 <para>where "fly" is the response name, and the third argument (String[]) of AuResponse's constructor will be passed to the client. The response name must be unique. The third argument is called the response data.</para>
 <para>Then, at the client side, you shall provide a method called zkau.cmd1.fly to handle it.</para>
-<programlisting>zkau.cmd1.fly = function (uuid, cmp, height, speed) {&#13;//whatever&#13;}&#13;</programlisting>
+<programlisting>zkau.cmd1.fly = function (uuid, cmp, height, speed) {&#13;</programlisting>
+<para>//whatever</para>
+<para>}</para>
 <para>There are two set of response handlers: zkau.cmd0 and zkau.cmd1. zkau.cmd0 is used to handle responses that are applied to the whole browser window, while zkau.cmd1 is for individual component.</para>
 <para>If zkau.cmd1 is overridden, the first element of the response data must be the component UUID (comp.getUuid() in the above example). Then, ZK Client Engine will convert it to a reference to a component, and then invoke the response's handler with UUID and the reference as the first two arguments (refer to zkau.cmd.fly in the above example).</para></sect3></sect2></sect1><sect1><title>JavaScript Utilities</title>
 <para>To be added.</para></sect1></chapter>
@@ -656,7 +742,14 @@
 <para>[Required if mold is specified]</para>
 <para>Specified the mold name. The default mold shall be named as default.</para></sect4><sect4><title>The mold-uri Element</title>
 <para>[Required if mold is specified][EL is allowed]</para>
-<para>Specifies the mold URI.</para></sect4><sect4><title>The custom-attribute Element</title>
+<para>Specifies the mold URI.</para></sect4><sect4><title>The text-as Element</title>
+<para>[Optional]</para>
+<para>Specifies a property name that the text inside the element in the ZUL file will be assigned to. For example, comboitem declares text-as as follows.</para>
+<programlisting>&lt;component&gt;&#13;    &lt;component-name&gt;comboitem&lt;/component-name&gt;    &#13;    &lt;text-as&gt;content&lt;/text-as&gt;    &#13;...&#13;</programlisting>
+<para>Then, the following ZUL fragment</para>
+<programlisting>&lt;comboitem&gt;This is the text assigned to the content property&lt;/comboitem&gt;&#13;</programlisting>
+<para>is equivalent to</para>
+<programlisting>&lt;comboitem content="This is the text assigned to the content property"/&gt;&#13;</programlisting></sect4><sect4><title>The custom-attribute Element</title>
 <para>[Optional]</para>
 <programlisting>&lt;custom-attribute&gt;&#13;    &lt;attribute-name&gt;my.attr&lt;/attribute-name&gt;    &#13;    &lt;attribute-value&gt;my value&lt;/attribute-value&gt;    &#13;&lt;/custom-attribute&gt;&#13;</programlisting>
 <para>Specifies an attribute in the component scope. In other words, the setAttribute method of the Component interface will be called to store the attribute.</para></sect4><sect4><title>The property Element</title>
@@ -699,7 +792,7 @@
 <para>Specified the namespace that also uniquely identifies this language.</para></sect3><sect3><title>The extension Element</title>
 <para>[Required; Multiple]</para>
 <programlisting>&lt;extension&gt;zul&lt;/extension&gt;&#13;&lt;extension&gt;xul&lt;/extension&gt;&#13;</programlisting>
-<para>Specified the file extension that shall be considered as using this language. For example, if zul is specified, this language will be used as the default language for all files with the .zul extension. Of course, the file can change the language later with the page directive.</para></sect3><sect3><title>The verson Element</title>
+<para>Specified the file extension that shall be considered as using this language. For example, if zul is specified, this language will be used as the default language for all files with the .zul extension. Of course, the file can change the language later with the page directive.</para></sect3><sect3><title>The version Element</title>
 <para>[Optional<footnote>
 <para>It is required for ZK 3.0.4 and prior.</para>
 </footnote>]</para>
@@ -709,5 +802,36 @@
 </footnote>. To ensure the correct XML file is loaded, you have to specify a class carrying the version. The class must have a static data member called UID as shown below.</para>
 <programlisting>public class Version {&#13;    public static final String UID = "3.0.5";    &#13;}&#13;</programlisting>
 <para>Then, ZK will compare UID with the value specified in version-uid, and the language is ignored if not matched – it means the XML file is not from the same JAR file being loaded.</para>
-<para>ZK Version that this language requires is specified in the zk-version element. The language is ignored if ZK installed is an older version.</para></sect3></sect2></sect1></chapter>
+<para>ZK Version that this language requires is specified in the zk-version element. The language is ignored if ZK installed is an older version.</para></sect3><sect3><title>The javascript Element</title>
+<para>[Optional][Multiple]</para>
+<programlisting>&lt;javascript src="~./js/zk/zk.js.dsp" charset="UTF-8"/&gt;&#13;</programlisting>
+<para>Specifies a JavaScript file that must be loaded when a ZUML page is sent to the browser. It is actually generated inside HTML HEAD tag.</para></sect3><sect3><title>The stylesheet Element</title>
+<para>[Optional][Multiple]</para>
+<programlisting>&lt;stylesheet href="~./zul/css/norm*.css.dsp*" type="text/css"/&gt;&#13;</programlisting>
+<para>Specifies a CSS file that must be loaded when a ZUML page is sent to the browser. It is actually generated inside HTML HEAD tag.</para></sect3><sect3><title>The zscript Element</title>
+<para>[Optional][Multiple]</para>
+<programlisting>&lt;zscript language="Java"&gt;&#13;void alert(String m) {&#13;    Messagebox.show(m);    &#13;}&#13;&lt;/zscript&gt;&#13;</programlisting>
+<para>Specifies a snippet of zscript codes that will be evaluated before ZK evaluates the zscript codes embedded in a ZUML page. The snippet is evaluated only once. If you want it to be evaluated each time the embedded zscript codes is evaluated, you can specify the each-time attribute as follows.</para>
+<programlisting>&lt;zscript language="Groovy" each-time="true"&gt;&#13;import java.util.*&#13;&lt;/zscript&gt;&#13;</programlisting></sect3><sect3><title>The mold Element</title>
+<para>[Optional][Multiple]</para>
+<programlisting>&lt;mold&gt;&#13;    &lt;mold-name&gt;desktop&lt;/mold-name&gt;    &#13;    &lt;mold-uri&gt;~./zul/html/desktop.dsp&lt;/mold-uri&gt;    &#13;&lt;/mold&gt;&#13;</programlisting>
+<para>Specifies the URL used to render a desktop or a page. Only three mold names are accepeted: desktop, page and complete. The desktop mold is used if a ZK page is standalone, i.e., not included by another page. The page mold is used if a ZK page is included by another page. The complete mold is used if a page is declared to be complete. , i.e., the complete attribute of the page directive is true; refer to the Developer's Reference.</para></sect3><sect3><title>The label-template Element</title>
+<para>[Required]</para>
+<programlisting>&lt;label-template&gt;&#13;    &lt;component-name&gt;label&lt;/component-name&gt;    &#13;    &lt;component-attribute&gt;value&lt;/component-attribute&gt;    &#13;&lt;/label-template&gt;&#13;</programlisting>
+<para>Specifies the component that is used to represent a label. When ZK loader encounters a piece of text, it converts it to a component specified here. For example, based on the label-template example listed above, the following codes</para>
+<programlisting>&lt;window&gt;&#13;Test&#13;&lt;/window&gt;&#13;</programlisting>
+<para>is equivalent to</para>
+<programlisting>&lt;window&gt;&#13;&lt;label value="Test"/&gt;&#13;&lt;/window&gt;&#13;</programlisting><sect4><title>The raw Element</title>
+<para>[Optional]</para>
+<programlisting>&lt;label-template&gt;&#13;    &lt;component-name&gt;label&lt;/component-name&gt;    &#13;    &lt;component-attribute&gt;value&lt;/component-attribute&gt;    &#13;    &lt;raw/&gt;    &#13;&lt;/label-template&gt;&#13;</programlisting>
+<para>Specifies whether the language prefer to use the raw labels.</para>
+<para>By raw labels we mean the text shall not be trimmed and shall be generated directly to the output (rather than wrapping with, say, SPAN).</para>
+<para>For example, the ZHTML and ZML languages specify this option, while the ZUL language doesn't.</para></sect4></sect3><sect3><title>The macro-template Element</title>
+<para>[Required]</para>
+<programlisting>&lt;macro-template&gt;&#13;    &lt;macro-class&gt;org.zkoss.zk.ui.HtmlMacroComponent&lt;/macro-class&gt;    &#13;    &lt;macro-uri&gt;~./zul/html/macro.dsp&lt;/macro-uri&gt;    &#13;&lt;/macro-template&gt;&#13;</programlisting>
+<para>Specifies the class used to represent a macro component, and the URI used to render it.</para>
+<para>The class specified in the macro-class element must implement the org.zkoss.zk.ui.ext.Macro interface.</para></sect3><sect3><title>The native-template Element</title>
+<para>[Required]</para>
+<programlisting>&lt;native-template&gt;&#13;    &lt;native-class&gt;org.zkoss.zk.ui.HtmlNativeComponent&lt;/native-class&gt;    &#13;&lt;/native-template&gt;&#13;</programlisting>
+<para>Specifies the class used to represent a native component. It must implement the import org.zkoss.zk.ui.ext.DynamicTag and org.zkoss.zk.ui.ext.Native interfaces</para></sect3></sect2></sect1></chapter>
 </book>

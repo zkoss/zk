@@ -5,14 +5,12 @@
 <subtitle>Version 3.6.2</subtitle>
 <bookinfo>
 <copyright>
-<year>2007</year>
+<year>2009</year>
 <holder>Potix Corporation. All rights reserved.</holder>
 </copyright>
 </bookinfo>
 <para>
-<graphic fileref="images/2000009A000011C5000007882B1A34C6.jpg">2
-			
-		</graphic>
+<graphic fileref="images/2000009A000011C5000007882B1A34C6.jpg"/>
 </para>
 <para>SIMPLY RICH</para>
 <para>ZKTM</para>
@@ -135,9 +133,7 @@
 <listitem>
 <para>Start Tomcat by finding its start program in the Programs Menu (located in the Start menu). Look under Apache Tomcat 6.0 and select "Monitor Tomcat". Click the Start button to activates the server.</para>
 <para>
-<graphic fileref="images/tomcat.png">2
-			
-		</graphic>
+<graphic fileref="images/tomcat.png"/>
 </para>
 </listitem>
 <listitem>
@@ -145,9 +141,7 @@
 </listitem>
 </orderedlist>
 <para>
-<graphic fileref="images/tomcat2.png">2
-			
-		</graphic>
+<graphic fileref="images/tomcat2.png"/>
 </para>
 <para>At this point, you should see the Tomcat home page, which is provided by the Tomcat Web server running on your computer. </para>
 <para>To shut down your server and remove the Console window, select "Stop Tomcat" in the same menu of where you selected "Stop Tomcat".</para>
@@ -189,9 +183,7 @@
 </orderedlist>
 <para>Use Tomcat Monitor to activates the Server.</para>
 <para>
-<graphic fileref="images/tomcat.png">2
-			
-		</graphic>
+<graphic fileref="images/tomcat.png"/>
 </para>
 <orderedlist>
 <listitem>
@@ -200,9 +192,7 @@
 </listitem>
 </orderedlist>
 <para>
-<graphic fileref="images/hello.gif">2
-			
-		</graphic>
+<graphic fileref="images/hello.gif"/>
 </para></sect1></chapter>
 <chapter>
 <title>2. Creating an Application from Scratch (with IDE)</title><sect1><title>Installing Eclipse IDE</title>
@@ -241,21 +231,15 @@
 <para>On the Preferences Window, select ZK/ZK Packages.</para>
 </listitem>
 <listitem>
-<para>On the right panel of the ZK Packages preference page in Preferences Window, select Add Directory if you have extract the ZK Library zip file, point the location to the extracted file folder, then click OK; Otherwise select Add File if you didn't had extract the zip file, then select the ZK Package zip file.<graphic fileref="images/import_ZK-1.png">2
-			
-		</graphic>
+<para>On the right panel of the ZK Packages preference page in Preferences Window, select Add Directory if you have extract the ZK Library zip file, point the location to the extracted file folder, then click OK; Otherwise select Add File if you didn't had extract the zip file, then select the ZK Package zip file.<graphic fileref="images/import_ZK-1.png"/>
 </para>
 </listitem>
 <listitem>
-<para>It will popup a confirm window, click OK.<graphic fileref="images/import_ZK-3.png">2
-			
-		</graphic>
+<para>It will popup a confirm window, click OK.<graphic fileref="images/import_ZK-3.png"/>
 </para>
 </listitem>
 <listitem>
-<para>Type the alias name as you like for this imported package on next window, click OK.<graphic fileref="images/import_ZK-4.png">2
-			
-		</graphic>
+<para>Type the alias name as you like for this imported package on next window, click OK.<graphic fileref="images/import_ZK-4.png"/>
 </para>
 </listitem>
 <listitem>
@@ -264,23 +248,17 @@
 </orderedlist>
 <para>In ZK Packages preferences page, you can check the check box of the imported ZK Packages on the ZK Package list as the default ZK library for any ZK Web application you will create later. If you don't select anyone as a default ZK library, ZK Studio will automatically choose the latest version of those imported ZK Packages.</para>
 <para>
-<graphic fileref="images/GlobalPreference_ZKPackages.png">2
-			
-		</graphic>You can remove unwanted ZK package in ZK Packages preferences page in Preferences Window by select the row in ZK Package then click Remove.</para></sect1><sect1><title>Create a New Dynamic Web Project</title>
+<graphic fileref="images/GlobalPreference_ZKPackages.png"/>You can remove unwanted ZK package in ZK Packages preferences page in Preferences Window by select the row in ZK Package then click Remove.</para></sect1><sect1><title>Create a New Dynamic Web Project</title>
 <orderedlist>
 <listitem>
 <para>Click [File]/[New]/[Dynamic Web Project] in Eclipse main menu</para>
 </listitem>
 <listitem>
-<para>Type the project name, click "Modify..." in the Configuration Column<graphic fileref="images/CreateZKProject_34-1.png">2
-			
-		</graphic>
+<para>Type the project name, click "Modify..." in the Configuration Column<graphic fileref="images/CreateZKProject_34-1.png"/>
 </para>
 </listitem>
 <listitem>
-<para>On the left side of pop-up Project Facets Window, select ZK Supports, then Click OK.<graphic fileref="images/CreateZKProject_34-2.png">2
-			
-		</graphic>
+<para>On the left side of pop-up Project Facets Window, select ZK Supports, then Click OK.<graphic fileref="images/CreateZKProject_34-2.png"/>
 </para>
 </listitem>
 <listitem>
@@ -290,27 +268,19 @@
 <para>If you don't want to modify the default directory of Context Root, Content Directory, Java Source Directory, just click Next.</para>
 </listitem>
 <listitem>
-<para>On the next page you can choose which ZK packages you want to use for this Dynamic Web Project. It will automatically choose the default ZK packages configured in the ZK Packages preferences page in Preferences Window of Eclipse.<graphic fileref="images/CreateZKProject_33-3.png">2
-			
-		</graphic>You can select other ZK packages installed in Eclipse by click the combo box.</para>
+<para>On the next page you can choose which ZK packages you want to use for this Dynamic Web Project. It will automatically choose the default ZK packages configured in the ZK Packages preferences page in Preferences Window of Eclipse.<graphic fileref="images/CreateZKProject_33-3.png"/>You can select other ZK packages installed in Eclipse by click the combo box.</para>
 </listitem>
 <listitem>
 <para>Click Finish, the New Project Wizard will setup a Dynamic Web Project ready for development.</para>
 </listitem>
 </orderedlist>
-<para>Tips:You can see a ZK mark on the project's right top icon to indicate that this project is support ZK:<graphic fileref="images/hasZKLibrary.png">2
-			
-		</graphic>
+<para>Tips:You can see a ZK mark on the project's right top icon to indicate that this project is support ZK:<graphic fileref="images/hasZKLibrary.png"/>
 </para>
 <para>Create New ZUL File</para>
 <para>Using New File Command</para>
-<para>You can create new ZUL file via [File]/[New]/[File] command in Eclipse main menu.<graphic fileref="images/NewZULFileMethod1-1.png">2
-			
-		</graphic>
+<para>You can create new ZUL file via [File]/[New]/[File] command in Eclipse main menu.<graphic fileref="images/NewZULFileMethod1-1.png"/>
 </para>
-<para>But you have to input the ".zul" extension for that file yourself, and the newly create zul file will be empty content without any template code inside.<graphic fileref="images/NewZULFileMethod1-2.png">2
-			
-		</graphic>
+<para>But you have to input the ".zul" extension for that file yourself, and the newly create zul file will be empty content without any template code inside.<graphic fileref="images/NewZULFileMethod1-2.png"/>
 </para>
 <para>Using New ZUL File Wizard</para>
 <orderedlist>
@@ -318,23 +288,17 @@
 <para>There are two ways to open New ZUL File Wizard:</para>
 <orderedlist>
 <listitem>
-<para>Right click on the opened project which has been created as Dynamic Web Project in "Project Explorer" view or "Package Explorer" view, select [New]/[ZUL].<graphic fileref="images/NewZULFileRightClick.png">2
-			
-		</graphic>
+<para>Right click on the opened project which has been created as Dynamic Web Project in "Project Explorer" view or "Package Explorer" view, select [New]/[ZUL].<graphic fileref="images/NewZULFileRightClick.png"/>
 </para>
 </listitem>
 <listitem>
-<para>Click [File]/[New]/[ZUL] in Eclipse main menu when you select an opened project which has been created as Dynamic Web Project.<graphic fileref="images/NewZULFileMainMenu.png">2
-			
-		</graphic>
+<para>Click [File]/[New]/[ZUL] in Eclipse main menu when you select an opened project which has been created as Dynamic Web Project.<graphic fileref="images/NewZULFileMainMenu.png"/>
 </para>
 </listitem>
 </orderedlist>
 </listitem>
 <listitem>
-<para>Type the file name you want in File name textbox, select the options your want in the beneath check box.(you can refer to developer's guide for the meaning of these instructions:<ulink url="http://www.zkoss.org/doc/devguide-single/index.html#id457941">http://www.zkoss.org/doc/devguide-single/index.html#id457941</ulink> <ulink url="http://www.zkoss.org/doc/devref-single/index.html#id385772">http://www.zkoss.org/doc/devref-single/index.html#id385772</ulink> ), click Finish.<graphic fileref="images/NewZULFileWizard1.png">2
-			
-		</graphic>
+<para>Type the file name you want in File name textbox, select the options your want in the beneath check box.(you can refer to developer's guide for the meaning of these instructions:<ulink url="http://www.zkoss.org/doc/devguide-single/index.html#id457941">http://www.zkoss.org/doc/devguide-single/index.html#id457941</ulink> <ulink url="http://www.zkoss.org/doc/devref-single/index.html#id385772">http://www.zkoss.org/doc/devref-single/index.html#id385772</ulink> ), click Finish.<graphic fileref="images/NewZULFileWizard1.png"/>
 </para>
 </listitem>
 <listitem>
@@ -345,9 +309,7 @@
 <para>To run the ZUL File (that is, to run a ZK Web application in Eclipse), follow the instructions:</para>
 <orderedlist>
 <listitem>
-<para>Configure Apache Tomcat server configuration in Eclipse:You have to create a valid Apache Tomcat server configuration of the Apache Tomcat Server (The extracted tomcat zip file which is described in <link linkend="Application Servers">Application Severs</link> section) in Server/Runtime Environments preference page in Eclipse's Preference Window.<graphic fileref="images/ServerRuntimePreference1.png">2
-			
-		</graphic>Please refer to the "Choose a Server Runtime Environment" section in the "WTP Tutorials – Building and Running a Web Application" article on Eclipse: website <ulink url="http://www.eclipse.org/webtools/community/tutorials/BuildJ2EEWebApp/BuildJ2EEWebApp.html">http://www.eclipse.org/webtools/community/tutorials/BuildJ2EEWebApp/BuildJ2EEWebApp.html</ulink>Or you can refer "2.Define a Server Runtime" in this smalltalk:<ulink url="http://www.zkoss.org/smalltalks/eclipse/ek.html">http://www.zkoss.org/smalltalks/eclipse/ek.html</ulink>
+<para>Configure Apache Tomcat server configuration in Eclipse:You have to create a valid Apache Tomcat server configuration of the Apache Tomcat Server (The extracted tomcat zip file which is described in <link linkend="Application Servers">Application Severs</link> section) in Server/Runtime Environments preference page in Eclipse's Preference Window.<graphic fileref="images/ServerRuntimePreference1.png"/>Please refer to the "Choose a Server Runtime Environment" section in the "WTP Tutorials – Building and Running a Web Application" article on Eclipse: website <ulink url="http://www.eclipse.org/webtools/community/tutorials/BuildJ2EEWebApp/BuildJ2EEWebApp.html">http://www.eclipse.org/webtools/community/tutorials/BuildJ2EEWebApp/BuildJ2EEWebApp.html</ulink>Or you can refer "2.Define a Server Runtime" in this smalltalk:<ulink url="http://www.zkoss.org/smalltalks/eclipse/ek.html">http://www.zkoss.org/smalltalks/eclipse/ek.html</ulink>
 </para>
 </listitem>
 <listitem>

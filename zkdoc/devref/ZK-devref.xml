@@ -20873,9 +20873,7 @@
 </row></tbody></tgroup>
 </informaltable>
 <para/>
-<para/></sect3></sect2></sect1></chapter>
-<chapter>
-<title/><sect2><sect2><title>Spinner</title>
+<para/></sect3></sect2><sect2><title>Spinner</title>
 <para>An edit box for holding a constrained integer. </para>
 <para>
 <graphic fileref="images/Spinner.PNG">2
@@ -21084,7 +21082,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2></sect2><sect2><sect2><title/></sect2></sect2><sect2><sect2 id="South"><title>South</title>
+<para/></sect3></sect2><sect2><title/></sect2><sect2 id="South"><title>South</title>
 <para>This component is a south region. The default class of CSS is specified "layout-region-south".</para>
 <para/>
 <para>
@@ -21246,7 +21244,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2></sect2><sect2><sect2 id="Separator"><title>Separator</title>
+<para/></sect3></sect2><sect2 id="Separator"><title>Separator</title>
 <para>
 <code>Space is a </code>
 <code>Separator</code>
@@ -21406,7 +21404,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2></sect2><sect2><sect2 id="Splitter"><title>Splitter</title>
+<para/></sect3></sect2><sect2 id="Splitter"><title>Splitter</title>
 <para>
 <code>An element which should appear before or after an element inside a box (Box, Vbox and Hbox).</code>
 </para>
@@ -21581,7 +21579,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2></sect2><sect2><sect2><title>Style</title>
+<para/></sect3></sect2><sect2><title>Style</title>
 <para>The style component used to specify <code>CSS</code> styles for the owner desktop.</para>
 <para>Note: a <code>style </code>component can appear anywhere in a <code>ZUML</code> page, but it affects all components in the same <code>desktop</code>. </para>
 <para>
@@ -21716,7 +21714,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2></sect2><sect2><sect2 id="Tab"><title>Tab</title>
+<para/></sect3></sect2><sect2 id="Tab"><title>Tab</title>
 <para>A specific tab. Clicking on the tab brings the tab panel to the front. You could put a label and an image on it by <code>label </code>and <code>image </code>properties. </para>
 <para>By setting the <code>closable </code>property to true, a close button is shown for the tab, such that user could close the tab and the corresponding tab panel by clicking the button. Once user clicks on the close button, an <code>onClose </code>event is sent to the tab. It is processed by the <code>onClose </code>method of <code>Tab. </code>Then, <code>onClose, </code>by default, detaches the tab itself and the corresponding tab panel.</para>
 <para>
@@ -22038,7 +22036,7 @@
 </para>
 </entry>
 </row></tbody></tgroup>
-</informaltable></sect3></sect2></sect2><sect2><sect2><title/></sect2></sect2><sect2><sect2><title/></sect2></sect2><sect2><sect2 id="TableChildren"><title>TableChildren</title>
+</informaltable></sect3></sect2><sect2><title/></sect2><sect2><title/></sect2><sect2 id="TableChildren"><title>TableChildren</title>
 <para>The cell of Tablelayout. The child component of Tablechildren only can be Panel.</para>
 <para>
 <graphic fileref="images/Tablelayout.PNG">2
@@ -22092,7 +22090,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2></sect2><sect2><sect2><title/></sect2></sect2><sect2><sect2><title>TableLayout</title>
+<para/></sect3></sect2><sect2><title/></sect2><sect2><title>TableLayout</title>
 <para>Tablelayout lay outs a container as an HTML table whose columns can be specified, and rowspan and colspan of its child can also be specified to create complex layouts within the table.</para>
 <para>
 <graphic fileref="images/Tablelayout.PNG">2
@@ -22177,7 +22175,7 @@
 </row></tbody></tgroup>
 </informaltable>
 <para/>
-<para/></sect3></sect2></sect2><sect2><sect2 id="Tabbox"><title>Tabbox</title>
+<para/></sect3></sect2><sect2 id="Tabbox"><title>Tabbox</title>
 <para>A <code>tabbox </code>that contains the <code>tabs </code>and <code>tabpanels </code>allows developers to separate a large number of components into several groups(each group contains a <code>tab </code>and a <code>tabpanel), </code>and show one group each time, such that the user interface won't be too complicate to read. There is only one group (aka., a <code>tabpanel) </code>is visible at the same time. Once the <code>tab </code>of an invisible group is clicked, it becomes visible and the previous visible group becomes invisible.</para>
 <para>The currently selected tab component is given an additional <code>selected </code>property which is set to true. This is used to give the currently selected tab a different appearance so that it will look selected. Only one tab will have a true value for this property at a time. If none of tabs are selected, the first one is selected automatically.</para>
 <para>
@@ -22490,7 +22488,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2></sect2><sect2><sect2 id="Tabpanel"><title>Tabpanel</title>
+<para/></sect3></sect2><sect2 id="Tabpanel"><title>Tabpanel</title>
 <para>A <code>tabpanel </code>is the body of a single tab panel. You would place the content for a group of components within a tab panel. The first <code>tabpanel </code>corresponds to the first <code>tab, </code>the second <code>tabpanel </code>corresponds to the second <code>tab </code>and so on.</para>
 <para>
 <link linkend="Toolbar">
@@ -22698,7 +22696,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2></sect2><sect2><sect2 id="Tabpanels"><title>Tabpanels</title>
+<para/></sect3></sect2><sect2 id="Tabpanels"><title>Tabpanels</title>
 <para>A <code>tabpanels</code> is the container for the tab panels, i.e., a collection of tabpanel components.</para>
 <para>
 <link linkend="Toolbar">
@@ -22797,7 +22795,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2></sect2><sect2><sect2 id="Tabs"><title>Tabs</title>
+<para/></sect3></sect2><sect2 id="Tabs"><title>Tabs</title>
 <para>A <code>tabs</code> is the container for the <code>tab</code> components.</para>
 <para>
 <link linkend="Toolbar">
@@ -22896,7 +22894,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2></sect2><sect2><sect2 id="Textbox"><title>Textbox</title>
+<para/></sect3></sect2><sect2 id="Textbox"><title>Textbox</title>
 <para>A <code>textbox</code> is used to let users input text data.</para>
 <para>You colud assign <code>value, type, constraint, rows, cols </code>to a textbox by the corresponding properties. When you assigns the property <code>type </code>to a string value “password” when <code>multiline </code>is false( <code>multiline</code> will be <code>true </code>if You set rows large then 1 or sets <code>multiline </code>to true directly) then any character in this component will replace by '*'.</para>
 <para>You colud also assign a constraint value with a regular expression string or a default constraint expression(available value is “no empty”). When user change the value of textbox, will cause a validating preocess to valdate the value. If valdation fail, then a notification will poped up. </para>
@@ -23180,7 +23178,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2></sect2><sect2><sect2><title>Timebox</title>
+<para/></sect3></sect2><sect2><title>Timebox</title>
 <para>An edit box for holding a time (a java.util.Date Object , but only Hour &amp; Minute are used.</para>
 <para>
 <graphic fileref="images/timebox.png">2
@@ -23340,8 +23338,8 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2></sect2><sect2><sect2><title/>
-<para/></sect2></sect2><sect2><sect2 id="Timer"><title>Timer</title>
+<para/></sect3></sect2><sect2><title/>
+<para/></sect2><sect2 id="Timer"><title>Timer</title>
 <para>Timer is a special component that is invisible. It fires one or more org.zkoss.zk.ui.event.Event after a specified delay. </para>
 <para/>
 <para>Notice that the timer won't fire any event until it is attached to a page. </para>
@@ -23555,7 +23553,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2></sect2><sect2><sect2 id="Toolbar"><title>Toolbar</title>
+<para/></sect3></sect2><sect2 id="Toolbar"><title>Toolbar</title>
 <para>A <code>toolbar</code> is used to place a series of buttons, such as <code>toolbarbutton </code>or <code>button. </code>The toolbar buttons could be used without toolbars, so a toolbar could be used without tool buttons. However, tool buttons change their appearance if they are placed inside a toolbar.</para>
 <para>The toolbar has two orientation: <code>horizontal </code>and <code>vertical. </code>It controls how the buttons are placed.</para>
 <para>See also : <link linkend="Button">
@@ -23711,7 +23709,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2></sect2><sect2><sect2 id="Toolbarbutton"><title>Toolbarbutton</title>
+<para/></sect3></sect2><sect2 id="Toolbarbutton"><title>Toolbarbutton</title>
 <para>The behave of <code>Toolbarbutton</code> is similar to the <code>button </code>except the appearance is different. The <code>button </code>component uses HTML BUTTON tag, while <code>thetoolbarbutton </code>component uses HTML A tag.</para>
 <para>A <code>toolbarbutton </code>could be placed outside a <code>toolbar, </code>However <code>toolbarbutton</code>s change their appearance if they are placed inside a <code>toolbar. </code>
 </para>
@@ -23982,7 +23980,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2></sect2><sect2><sect2 id="Tree"><title>Tree</title>
+<para/></sect3></sect2><sect2 id="Tree"><title>Tree</title>
 <para>A <code>tree </code>consists of tree parts, the set of columns, the set of footers, and the tree body. The set of columns is defined by a number of <code>treecol </code>components, one for each column. Each column will appear as a header at the top of the tree. The second part, The set of footers is defined by a number of <code>treefooter </code>components, one for each column also. Each column will appear as a footer at the bottom of the tree. The third part, the tree body, contains the data to appear in the tree and is created with a <code>treechildren </code>component.</para>
 <para>
 <link linkend="Toolbar">
@@ -24588,7 +24586,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2></sect2><sect2><sect2 id="Treecell"><title>Treecell</title>
+<para/></sect3></sect2><sect2 id="Treecell"><title>Treecell</title>
 <para>
 <code>Treecell </code>represent one column in a <code>treerow </code>by sequencial. T<code>reecell</code> can contains any component in it, such as label, image, textbox etc.</para>
 <para>
@@ -24893,7 +24891,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2></sect2><sect2><sect2 id="Treechildren"><title>Treechildren</title>
+<para/></sect3></sect2><sect2 id="Treechildren"><title>Treechildren</title>
 <para>
 <code>Treechildren </code>contains a collection of treeitem components. It is main body of the <code>Tree </code>and it also the main body of a <code>Treeitem</code>'s children.</para>
 <para>You can change the page size of each <code>treechildren </code>instance by modifying the <code>pageSize </code>property</para>
@@ -25220,7 +25218,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2></sect2><sect2><sect2 id="Treecol"><title>Treecol</title>
+<para/></sect3></sect2><sect2 id="Treecol"><title>Treecol</title>
 <para>A <code>treecol </code>is a top column of tree, Its parent must be <code>Treecols.</code>
 </para>
 <para>
@@ -25393,7 +25391,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2></sect2><sect2><sect2 id="Treecols"><title>Treecols</title>
+<para/></sect3></sect2><sect2 id="Treecols"><title>Treecols</title>
 <para>A <code>treecols </code>is main part of tree which contains set of columns. The set of columns is defined by a number of <code>treecol </code>components. Each column will appear as a column at the top of the tree.</para>
 <para>
 <link linkend="Toolbar">
@@ -25535,7 +25533,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2></sect2><sect2><sect2 id="Treefoot"><title>Treefoot</title>
+<para/></sect3></sect2><sect2 id="Treefoot"><title>Treefoot</title>
 <para>A <code>treefoot </code>is main part of tree which contains set of footers. The set of footers is defined by a number of <code>treefooter </code>components. Each column will appear as a footer at the bottom of the tree.</para>
 <para>
 <link linkend="Toolbar">
@@ -25632,7 +25630,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2></sect2><sect2><sect2 id="Treefooter"><title>Treefooter</title>
+<para/></sect3></sect2><sect2 id="Treefooter"><title>Treefooter</title>
 <para>A <code>treefooter </code>is a bottom column of tree, Its parent must be <code>Treefoot. </code>You colud place any child in a tree footer.</para>
 <para>
 <link linkend="Toolbar">
@@ -25818,7 +25816,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2></sect2><sect2><sect2 id="Treeitem"><title>Treeitem</title>
+<para/></sect3></sect2><sect2 id="Treeitem"><title>Treeitem</title>
 <para>
 <code>Treeitem </code>contains a row of data (<code>treerow), </code>and an optional treechildren.</para>
 <para>If the component doesn't contain a <code>treechildren, </code>it is a leaf node that doesn't accept any child items.</para>
@@ -26218,7 +26216,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2></sect2><sect2><sect2 id="Treerow"><title>Treerow</title>
+<para/></sect3></sect2><sect2 id="Treerow"><title>Treerow</title>
 <para>
 <code>Treerow </code>is a single row in the <code>tree, </code>it is the main content of <code>treeitem</code>. <code>Treerow </code>can contains multiple <code>treecell</code>, each <code>treecell</code> represent one column in this row by sequencial. A <code>treecell </code>can contains any component in it, such as label, image, textbox etc. </para>
 <para>
@@ -26449,7 +26447,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2></sect2><sect2><sect2 id="Vbox"><title>Vbox</title>
+<para/></sect3></sect2><sect2 id="Vbox"><title>Vbox</title>
 <para>The vbox component is used to create a vertically oriented box. Added components will be placed underneath each other in a column.</para>
 <para/>
 <para>
@@ -26502,7 +26500,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2></sect2><sect2><sect2 id="West"><title>West</title>
+<para/></sect3></sect2><sect2 id="West"><title>West</title>
 <para>This component is a west region. The default class of CSS is specified "layout-region-west".</para>
 <para/>
 <para>
@@ -26664,7 +26662,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2></sect2><sect2><sect2 id="Window"><title>Window</title>
+<para/></sect3></sect2><sect2 id="Window"><title>Window</title>
 <para>A window is, like HTML DIV tag, used to group components. Unlike other components, a window has the following characteristics. </para>
 <itemizedlist>
 <listitem>
@@ -27373,7 +27371,7 @@
 </entry>
 </row></tbody></tgroup>
 </informaltable>
-<para/></sect3></sect2></sect2><sect1><title>Events</title><sect2 id="CheckEvent"><title>CheckEvent</title>
+<para/></sect3></sect2></sect1><sect1><title>Events</title><sect2 id="CheckEvent"><title>CheckEvent</title>
 <para>Represents an event cause by user's check a state at the client.</para><sect3><title>Class Name</title>
 <para>
 <code>org.zkoss.zk.ui.event.CheckEvent</code>
