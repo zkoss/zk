@@ -123,8 +123,8 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			//Bug 1921830: if spiltter is invalidated...
 
 		var node = this.$n(),
-			Splitter = this.$class;
-			vert = this.isVertical();
+			Splitter = this.$class,
+			vert = this.isVertical(),
 			btn = this.button = this.$n('btn');
 		node.style.cursor = this.isOpen() ?
 			vert ? "s-resize": "e-resize": "default";
