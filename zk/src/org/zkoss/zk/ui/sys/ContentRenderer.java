@@ -37,8 +37,8 @@ public interface ContentRenderer {
 	/** Renders an arbitrary object property.
 	 * What type of suppoted objects depends on the implementation.
 	 * However, the following types are always supported:
-	 * null, String, Date, the wrapper of primitives, and
-	 * an array of the above types.
+	 * null, String, Date, the wrapper of primitives,
+	 * an array of the above types, and a map of the above types.
 	 */
 	public void render(String name, Object value) throws IOException;
 	/** Renders an integer property. */

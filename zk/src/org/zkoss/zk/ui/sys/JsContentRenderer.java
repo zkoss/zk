@@ -123,6 +123,18 @@ public class JsContentRenderer implements ContentRenderer {
 			renderValue(((BigDecimal)value).toString());
 			return;
 		}
+		if (value instanceof Map) {
+			_buf.append('{');
+			boolean first = true;
+			for (Iterator it = ((Map)value).entrySet().iterator(); it.hasNext();) {
+				final Map.Entry me = (Map.Entry)it.next();
+				if (first) first = false;
+				else _buf.append(',');
+				_buf.append('\'').append(me.getKey()).append("':");
+				renderValue(me.getValue());
+			}
+			_buf.append('}');
+		}
 		//handle array
 		if (value instanceof Object[]) {
 			_buf.append('[');
