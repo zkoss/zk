@@ -15,101 +15,15 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.Upload = zk.$extends(zk.Object, {
 	sid: 0,
 	uploaders: {},
-	$init: (function() {
-		function initFileManager() {
-			if (!zul.FileManager) {
-				zPkg.load('zul.wgt,zul.wnd,zul.box', function() {
-					if (zul.FileManager)
-						return;
-					zul.FileManager = zk.$extends(zul.wgt.Popup, {
-						_files: {},
-						$init: function () {
-							this.$supers('$init', arguments);
-							this.setSclass('z-fileupload-manager');
-						},
-						bind_: function () {
-							this.$supers('bind_', arguments);
-							zWatch.unlisten({onFloatUp: this});
-							this.setFloating_(false);
-						},
-						getFileItem: function(id) {
-							return this._files[id] || zk.Widget.$(id);
-						},
-						addFile: function(uplder) {
-							var id = uplder.id,
-								filenm = uplder.filenm,
-								prog = this.getFileItem(id);
-							if (!prog) {
-								prog = new zul.wgt.Div({
-									uuid: id,
-									children: [new zul.wgt.Label({
-										value: filenm + ':'
-									}), new zul.box.Box({
-										mold: 'horizontal',
-										children: [new zul.wgt.Progressmeter({
-											id: id,
-											sclass: 'z-fileupload-progress'
-										})
-										, new zul.wgt.Div({
-											sclass: 'z-fileupload-rm',
-											listeners: {
-												onClick: function () {
-													var uuid = id.substring(0, id.indexOf('_uplder_'));
-													zul.Uploader.clearInterval(id);
-													var wgt = zk.Widget.$(uuid);
-													if (wgt) wgt._uplder.cancel(id.substring(id.lastIndexOf('_')+1, id.length));
-												}
-											}
-										})]
-									}), new zul.wgt.Label({id: id + '_total'}), new zul.wgt.Separator()]
-								});
-								this.appendChild(prog);
-								this._files[id] = prog;
-							}
-							return prog;
-						},
-						updateFile: function(uplder, val, total) {
-							var id = uplder.id,
-								prog = this.getFileItem(id);
-							if (!prog) return;
-							prog.$f(id).setValue(val);
-							prog.$f(id + '_total').setValue(total);
-						},
-						removeFile: function(uplder) {
-							var id = uplder.id,
-								prog = this.getFileItem(id);
-							if (prog) 
-								prog.detach();
-							delete this._files[id];
-							var close = true;
-							for (var p in this._files) 
-								if (!(close = false)) 
-									break;
-							
-							if (close) 
-								this.close();
-						},
-						open: function(wgt, position) {
-							this.$super('open', wgt, null, position || 'after_start', {
-								sendOnOpen: false,
-								disableMask: true
-							});
-						}
-					});
-				});
-			}
-		}
-		return function(wgt, parent, clsnm) {
-			initFileManager();
-			this.maxsize = this._parseMaxsize(clsnm);
-			this.isNative = clsnm.indexOf('native') != -1;
-			this._clsnm = (this.maxsize || this.isNative) ? clsnm.split(',')[0] : clsnm;
-			this._wgt = wgt;
-			this._parent = parent;
-			
-			this.initContent();
-		}
-	})(),
+	$init: function(wgt, parent, clsnm) {
+		this.maxsize = this._parseMaxsize(clsnm);
+		this.isNative = clsnm.indexOf('native') != -1;
+		this._clsnm = (this.maxsize || this.isNative) ? clsnm.split(',')[0] : clsnm;
+		this._wgt = wgt;
+		this._parent = parent;
+		
+		this.initContent();
+	},
 	sync: function () {
 		var wgt = this._wgt,
 			ref = wgt.$n(),
@@ -199,21 +113,22 @@ zul.Upload = zk.$extends(zk.Object, {
 	},
 	error: function (msg, uuid, sid) {
 		var wgt = zk.Widget.$(uuid);
-		if (wgt) {
-			var wnd = new zul.wnd.Window({
-				closable: true,
-				width: '400px',
-				title: 'Fail to upload!',
-				border: 'normal',
-				mode: 'modal',
-				children: [
-					new zul.wgt.Image({src: zk.ajaxURI('/web/zul/img/msgbox/warning-btn.png', {au:true})}),
-					new zul.wgt.Label({value: ' ' + msg})
-				]
+		if (wgt)
+			zPkg.load("zul.wnd", function () {
+				var wnd = new zul.wnd.Window({
+					closable: true,
+					width: '400px',
+					title: 'Fail to upload!',
+					border: 'normal',
+					mode: 'modal',
+					children: [
+						new zul.wgt.Image({src: zk.ajaxURI('/web/zul/img/msgbox/warning-btn.png', {au:true})}),
+						new zul.wgt.Label({value: ' ' + msg})
+					]
+				});
+				wgt.getPage().appendChild(wnd);
+				zul.Upload.close(uuid, sid);
 			});
-			wgt.getPage().appendChild(wnd);
-			zul.Upload.close(uuid, sid);
-		}
 	},
 	close: function (uuid, sid) {
 		var wgt = zk.Widget.$(uuid);
@@ -251,9 +166,9 @@ zul.Upload = zk.$extends(zk.Object, {
 });
 //default uploader
 zul.Uploader = zk.$extends(zk.Object, {
-	$init: function (upload, id, form, filenm) {
+	$init: function (upload, id, form, flnm) {
 		this.id = id;
-		this.filenm = filenm;
+		this.flnm = flnm;
 		this._upload = upload;
 		this._form = form;
 		this._parent = form.parentNode;
@@ -261,10 +176,10 @@ zul.Uploader = zk.$extends(zk.Object, {
 		this._wgt = upload._wgt;
 		
 		var viewer, self = this;
-		if (upload._clsnm.startsWith('true')) viewer = new zul.UploadViewer(this, filenm);
+		if (upload._clsnm.startsWith('true')) viewer = new zul.UploadViewer(this, flnm);
 		else
 			zk.$import(upload._clsnm, function (cls) {
-				viewer = new cls(self, filenm);
+				viewer = new cls(self, flnm);
 			});
 		this.viewer = viewer;
 	},
@@ -357,23 +272,116 @@ zul.Uploader = zk.$extends(zk.Object, {
 });
 // default UploadViewer
 zul.UploadViewer = zk.$extends(zk.Object, {
-	$init: function (uplder,  filenm) {
-		this._uplder = uplder;
-		if (!zul.Upload.filemanager || !zul.Upload.filemanager.desktop) {
-				if (zul.Upload.filemanager) zul.Upload.filemanager.detach();
-				zul.Upload.filemanager = new zul.FileManager();
-				uplder.getWidget().getPage().appendChild(zul.Upload.filemanager);
+	$init: (function() {
+		function addUM(uplder, flnm) {
+			var flman = zul.UploadViewer.flman;
+			if (!flman || !flman.desktop) {
+				if (flman) flman.detach();
+				flman = new zul.UploadManager();
+				uplder.getWidget().getPage().appendChild(flman);
 			}
-			zul.Upload.filemanager.removeFile(uplder);
-			zul.Upload.filemanager.addFile(uplder);
-	},
+			flman.removeFile(uplder);
+			flman.addFile(uplder);
+		}
+		function initUM(uplder, flnm) {
+			if (zul.UploadManager)
+				addUM(uplder, flnm);
+			else
+				zPkg.load('zul.wgt,zul.box', function() {
+					zul.UploadManager = zk.$extends(zul.wgt.Popup, {
+						_files: {},
+						$init: function () {
+							this.$supers('$init', arguments);
+							this.setSclass('z-fileupload-manager');
+						},
+						bind_: function () {
+							this.$supers('bind_', arguments);
+							zWatch.unlisten({onFloatUp: this});
+							this.setFloating_(false);
+						},
+						getFileItem: function(id) {
+							return this._files[id] || zk.Widget.$(id);
+						},
+						addFile: function(uplder) {
+							var id = uplder.id,
+								flnm = uplder.flnm,
+								prog = this.getFileItem(id);
+							if (!prog) {
+								prog = new zul.wgt.Div({
+									uuid: id,
+									children: [new zul.wgt.Label({
+										value: flnm + ':'
+									}), new zul.box.Box({
+										mold: 'horizontal',
+										children: [new zul.wgt.Progressmeter({
+											id: id,
+											sclass: 'z-fileupload-progress'
+										})
+										, new zul.wgt.Div({
+											sclass: 'z-fileupload-rm',
+											listeners: {
+												onClick: function () {
+													var uuid = id.substring(0, id.indexOf('_uplder_'));
+													zul.Uploader.clearInterval(id);
+													var wgt = zk.Widget.$(uuid);
+													if (wgt) wgt._uplder.cancel(id.substring(id.lastIndexOf('_')+1, id.length));
+												}
+											}
+										})]
+									}), new zul.wgt.Label({id: id + '_total'}), new zul.wgt.Separator()]
+								});
+								this.appendChild(prog);
+								this._files[id] = prog;
+							}
+							return prog;
+						},
+						updateFile: function(uplder, val, total) {
+							var id = uplder.id,
+								prog = this.getFileItem(id);
+							if (!prog) return;
+							prog.$f(id).setValue(val);
+							prog.$f(id + '_total').setValue(total);
+						},
+						removeFile: function(uplder) {
+							var id = uplder.id,
+								prog = this.getFileItem(id);
+							if (prog) 
+								prog.detach();
+							delete this._files[id];
+							var close = true;
+							for (var p in this._files) 
+								if (!(close = false)) 
+									break;
+							
+							if (close) 
+								this.close();
+						},
+						open: function(wgt, position) {
+							this.$super('open', wgt, null, position || 'after_start', {
+								sendOnOpen: false,
+								disableMask: true
+							});
+						}
+					});
+					addUM(uplder, flnm);
+				});
+		}
+		return function (uplder,  flnm) {
+			this._uplder = uplder;
+			initUM(uplder, flnm);
+		}
+	})(),
 	update: function (sent, total) {
-		if (!zul.Upload.filemanager.isOpen())
-				zul.Upload.filemanager.open(this._uplder.getWidget());
-		zul.Upload.filemanager.updateFile(this._uplder, sent, mesg.FILE_SIZE+Math.round(total/1024)+mesg.KBYTES);
+		var flman = zul.UploadViewer.flman;
+		if (flman) {
+			if (!flman.isOpen())
+					flman.open(this._uplder.getWidget());
+			flman.updateFile(this._uplder, sent, mesg.FILE_SIZE+Math.round(total/1024)+mesg.KBYTES);
+		}
 	},
 	destroy: function () {
-		if (zul.Upload.filemanager)
-			zul.Upload.filemanager.removeFile(this._uplder);
+		var flman = zul.UploadViewer.flman;
+		if (flman)
+			flman.removeFile(this._uplder);
 	}
 });

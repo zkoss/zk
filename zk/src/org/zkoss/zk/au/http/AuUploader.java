@@ -94,12 +94,10 @@ public class AuUploader implements AuExtension {
 		Desktop desktop = null;
 		try {
 			if (!isMultipartContent(request)) {
-				final String cmd = request.getParameter("cmd");
-				final String dtid = request.getParameter("dtid");
-				if ("uploadInfo".equals(cmd)) {
+				if ("uploadInfo".equals(request.getParameter("cmd"))) {
 					uuid = request.getParameter("wid");
 					sid = request.getParameter("sid");
-					desktop = ((WebAppCtrl)sess.getWebApp()).getDesktopCache(sess).getDesktop(dtid);
+					desktop = ((WebAppCtrl)sess.getWebApp()).getDesktopCache(sess).getDesktop(request.getParameter("dtid"));
 					Map precent = (Map) desktop.getAttribute(Attributes.UPLOAD_PERCENT);
 					Map size = (Map)desktop.getAttribute(Attributes.UPLOAD_SIZE);
 					final String key = uuid + '_' + sid;
@@ -150,7 +148,7 @@ public class AuUploader implements AuExtension {
 			if (ex instanceof ComponentNotFoundException) {
 				alert = Messages.get(MZk.UPDATE_OBSOLETE_PAGE, uuid);
 			} else if (ex instanceof IOFileUploadException) {
-				log.info("Stop file upload!");
+				log.debug("File upload cancelled!");
 			} else {
 				alert = handleError(ex);
 			}
