@@ -96,15 +96,47 @@ zjq.prototype = { //ZK extension
 		}
 		return this;
 	},
-	scrollIntoView: function (parent) {
+	scrollIntoView: (function () {
+		function scrlIntoView(outer, inner, info) {
+			if (outer && inner) {
+				var ooft = zk(outer).revisedOffset(),
+					ioft = info ? info.oft : zk(inner).revisedOffset(),		 
+					top = ioft[1] - ooft[1] + outer.scrollTop,
+					ih = info ? info.h : inner.offsetHeight,
+					bottom = top + ih,
+					updated;
+				//for fix the listbox(livedate) keydown select always at top
+				if (/*outer.clientHeight < inner.offsetHeight || */ outer.scrollTop > top) {
+					outer.scrollTop = top;
+					updated = true;
+				} else if (bottom > outer.clientHeight + outer.scrollTop) {
+					outer.scrollTop = !info ? bottom : bottom - (outer.clientHeight + (inner.parentNode == outer ? 0 : outer.scrollTop));
+					updated = true;
+				}
+				if (updated || !info) {
+					if (!info)
+						info = {
+							oft: ioft,
+							h: inner.offsetHeight,
+							el: inner
+						};
+					else info.oft = zk(info.el).revisedOffset();
+				}
+				outer.scrollTop = outer.scrollTop;
+				return info; 
+			}
+		}
+
+	  return function (parent) {
 		var n = this.jq[0];
 		if (n) {
 			parent = parent || document.body;
 			for (var p = n, c; (p = p.parentNode) && n != parent; n = p)
-				c = zjq._scrollIntoView(p, n, c);
+				c = scrlIntoView(p, n, c);
 		}
 		return this;
-	},
+	  };
+	})(),
 
 	sumStyles: function (areas, styles) {
 		var val = 0;
@@ -472,10 +504,22 @@ zjq.prototype = { //ZK extension
 		return [tsd.offsetWidth, tsd.offsetHeight];
 	},
 
-	dimension: function (revised) {
+	dimension: (function () {
+		function addOfsToDim(dim, revised) {
+			if (revised) {
+				var ofs = this.revisedOffset();
+				dim.left = ofs[0];
+				dim.top = ofs[1];
+			} else {
+				dim.left = this.offsetLeft();
+				dim.top = this.offsetTop();
+			}
+			return dim;
+		}
+	  return function (revised) {
 		var display = this.jq.css('display');
 		if (display != 'none' && display != null) // Safari bug
-			return this._addOfsToDim(
+			return addOfsToDim(
 				{width: this.offsetWidth(), height: this.offsetHeight()}, revised);
 
 	// All *Width and *Height properties give 0 on elements with display none,
@@ -488,31 +532,54 @@ zjq.prototype = { //ZK extension
 		st.position = 'absolute';
 		st.display = 'block';
 		try {
-			return this._addOfsToDim(
+			return addOfsToDim(
 				{width: this.offsetWidth(), height: this.offsetHeight()}, revised);
 		} finally {
 			st.display = originalDisplay;
 			st.position = originalPosition;
 			st.visibility = originalVisibility;
 		}
-	},
-	_addOfsToDim: function (dim, revised) {
-		if (revised) {
-			var ofs = this.revisedOffset();
-			dim.left = ofs[0];
-			dim.top = ofs[1];
-		} else {
-			dim.left = this.offsetLeft();
-			dim.top = this.offsetTop();
-		}
-		return dim;
-	},
+	  };
+	})(),
 
-	redoCSS: function (timeout) {
-		zjq._rdcss.push(this.jq[0]);
-		setTimeout(zjq._redoCSS, timeout >= 0 ? timeout : 100);
+	redoCSS: (function () {
+		var rdcss = [], _fixCSS,
+			fixCSS = function (el) {
+				el.className += ' ';
+				if (el.offsetHeight)
+					;
+				el.className.trim();
+			};
+		if (zk.ie) {
+			_fixCSS = fixCSS;
+			fixCSS = function (el) {
+				var zoom = el.style.zoom;
+				el.style.zoom = 1;
+				_fixCSS(el);
+				setTimeout(function() {
+					try {el.style.zoom = zoom;} catch (e) {}
+				});
+			};
+		}
+		function redoCSS0() {
+			if (rdcss.length) {
+				for (var el; el = rdcss.pop();)
+					try {
+						fixCSS(el);
+					} catch (e) {
+					}
+			
+				// just in case
+				setTimeout(redoCSS0);
+			}
+		}
+
+	  return function (timeout) {
+		rdcss.push(this.jq[0]);
+		setTimeout(redoCSS0, timeout >= 0 ? timeout : 100);
 		return this;
-	},
+	  };
+	})(),
 
 	makeVParent: function () {
 		var el = this.jq[0],
@@ -545,7 +612,22 @@ zjq.prototype = { //ZK extension
 	},
 
 	//focus/select//
-	focus: function (timeout) {
+	focus: (function () {
+		function focus0(n) {
+			try {
+				n.focus();
+			} catch (e) {
+				setTimeout(function() {
+					try {
+						n.focus();
+					} catch (e) {
+						setTimeout(function() {try {n.focus();} catch (e) {}}, 100);
+					}
+				}, 0);
+			} //IE throws exception if failed to focus in some cases
+		}
+
+	  return function (timeout) {
 		var n = this.jq[0];
 		if (!n || !n.focus) return false;
 			//ie: INPUT's focus not function
@@ -555,18 +637,31 @@ zjq.prototype = { //ZK extension
 		&& tag != 'SELECT' && tag != 'IFRAME')
 			return false;
 
-		if (timeout >= 0) setTimeout(function() {zjq._focus(n);}, timeout);
-		else zjq._focus(n);
+		if (timeout >= 0) setTimeout(function() {focus0(n);}, timeout);
+		else focus0(n);
 		return true;
-	},
-	select: function (n, timeout) {
+	  };
+	})(),
+	select: (function () {
+		function select0(n) {
+			try {
+				n.select();
+			} catch (e) {
+				setTimeout(function() {
+					try {n.select();} catch (e) {}
+				}, 0);
+			} //IE throws exception when select() in some cases
+		}
+
+	  return function (n, timeout) {
 		var n = this.jq[0];
 		if (!n || typeof n.select != 'function') return false;
 
-		if (timeout >= 0) setTimeout(function() {zjq._select(n);}, timeout);
-		else zjq._select(n);
+		if (timeout >= 0) setTimeout(function() {select0(n);}, timeout);
+		else select0(n);
 		return true;
-	},
+	  };
+	})(),
 
 	getSelectionRange: function() {
 		var inp = this.jq[0];
@@ -616,16 +711,40 @@ zjq.prototype = { //ZK extension
 	},
 
 	//selection//
-	disableSelection: function () {
+	disableSelection: (function () {
+		var disbSel = zk.gecko ? function (el) {
+			el.style.MozUserSelect = "none";
+		}: zk.safari ? function (el) {
+			el.style.KhtmlUserSelect = "none";
+		}: zk.ie ? function (el) {
+			el.onselectstart = function (evt) {
+				evt = evt || window.event;
+				var n = evt.srcElement, tag = n?n.tagName:'';
+				return (tag == "TEXTAREA" || tag == "INPUT") && (n.type == "text" || n.type == "password");
+			};
+		}: zk.$void;
+
+	  return function () {
 		return this.jq.each(function () {
-			zjq._disbSel(this);
+			disbSel(this);
 		});
-	},
-	enableSelection: function () {
+	  };
+	})(),
+	enableSelection: (function () {
+		var enbSel = zk.gecko ? function (el) {
+			el.style.MozUserSelect = "";
+		}: zk.safari ? function (el) {
+			el.style.KhtmlUserSelect = "";
+		}: zk.ie ? function (el) {
+			el.onselectstart = null;
+		}: zk.$void;
+
+	  return function () {
 		return this.jq.each(function () {
-			zjq._enbSel(this);
+			enbSel(this);
 		});
-	},
+	  };
+	})(),
 
 	setStyles: function (styles) {
 		var $ = this.jq;
@@ -813,37 +932,8 @@ zk.copy(jq, { //ZK extension to jq
 });
 
 zk.copy(zjq, { //private
-	_cleanVisi: function (n) {
+	_cleanVisi: function (n) { //override later
 		n.style.visibility = "inherit";
-	},
-	_scrollIntoView: function (outer, inner, info) {
-		if (outer && inner) {
-			var ooft = zk(outer).revisedOffset(),
-				ioft = info ? info.oft : zk(inner).revisedOffset(),		 
-				top = ioft[1] - ooft[1] + outer.scrollTop,
-				ih = info ? info.h : inner.offsetHeight,
-				bottom = top + ih,
-				updated;
-			//for fix the listbox(livedate) keydown select always at top
-			if (/*outer.clientHeight < inner.offsetHeight || */ outer.scrollTop > top) {
-				outer.scrollTop = top;
-				updated = true;
-			} else if (bottom > outer.clientHeight + outer.scrollTop) {
-				outer.scrollTop = !info ? bottom : bottom - (outer.clientHeight + (inner.parentNode == outer ? 0 : outer.scrollTop));
-				updated = true;
-			}
-			if (updated || !info) {
-				if (!info)
-					info = {
-						oft: ioft,
-						h: inner.offsetHeight,
-						el: inner
-					};
-				else info.oft = zk(info.el).revisedOffset();
-			}
-			outer.scrollTop = outer.scrollTop;
-			return info; 
-		}
 	},
 	_cmOffset: function (el) {
 		var t = 0, l = 0, operaBug;
@@ -914,68 +1004,6 @@ zk.copy(zjq, { //private
 		} while (el);
 		return [l, t];
 	},
-
-	_rdcss: [],
-	_redoCSS: function (el) {
-		if (zjq._rdcss.length) {
-			try {
-				var el;
-				while ((el = zjq._rdcss.pop())) {
-					if (el) {
-						el.className += ' ';
-						if (el.offsetHeight) 
-							;
-						el.className.trim();
-					}
-				}
-			} catch (e) {
-			}
-			
-			// just in case
-			setTimeout(zjq._redoCSS);
-		}
-	},
-
-	_focus: function (n) {
-		try {
-			n.focus();
-		} catch (e) {
-			setTimeout(function() {
-				try {
-					n.focus();
-				} catch (e) {
-					setTimeout(function() {try {n.focus();} catch (e) {}}, 100);
-				}
-			}, 0);
-		} //IE throws exception if failed to focus in some cases
-	},
-	_select: function (n) {
-		try {
-			n.select();
-		} catch (e) {
-			setTimeout(function() {
-				try {n.select();} catch (e) {}
-			}, 0);
-		} //IE throws exception when select() in some cases
-	},
-
-	_disbSel: zk.gecko ? function (el) {
-		el.style.MozUserSelect = "none";
-	}: zk.safari ? function (el) {
-		el.style.KhtmlUserSelect = "none";
-	}: zk.ie ? function (el) {
-		el.onselectstart = function (evt) {
-			var n = evt.target, tag = n.tagName;
-			return tag == "TEXTAREA" || tag == "INPUT" && (n.type == "text" || n.type == "password");
-		};
-	}: zk.$void,
-	_enbSel:  zk.gecko ? function (el) {
-		el.style.MozUserSelect = "";
-	}: zk.safari ? function (el) {
-		el.style.KhtmlUserSelect = "";
-	}: zk.ie ? function (el) {
-		el.onselectstart = null;
-	}: zk.$void,
 
 	//refer to http://www.w3schools.com/css/css_text.asp
 	_TEXT_STYLES: [

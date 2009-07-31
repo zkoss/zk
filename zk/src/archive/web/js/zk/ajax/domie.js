@@ -130,34 +130,6 @@ zk.copy(zjq, {
 	},
 	_unSkipBfUnload: function () {
 		zk.skipBfUnload = false;
-	},
-
-	//super//
-	_redoCSS: function () {
-		if (zjq._rdcss.length) {
-			try {
-				var el;
-				while ((el = zjq._rdcss.pop())) {
-					var z = el.style.zoom;
-					el.style.zoom = 1;
-					el.className += ' ';
-					if (el.offsetHeight) 
-						;
-					el.className.trim();
-					zjq._cleanCSS(el, z);
-				}
-			} catch (e) {}
-			
-			// just in case
-			setTimeout(zjq._redoCSS);
-		}
-	},
-	_cleanCSS: function(el, z) {
-		setTimeout(function() {
-			try {
-				el.style.zoom = z;
-			} catch (e) {}
-		});
 	}
 });
 
