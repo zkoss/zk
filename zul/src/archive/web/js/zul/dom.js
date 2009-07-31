@@ -81,7 +81,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 						children: getButtons(opts)
 					})
 				],
-				mode: opts.mode||'modal',
+				mode: opts.mode||'modal'
 			});
 
 			var dt = opts.desktop || zk.Desktop.$(), p;

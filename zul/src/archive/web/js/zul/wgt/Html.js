@@ -17,7 +17,7 @@ zul.wgt.Html = zk.$extends(zul.Widget, {
 	$define: {
 		content: function (v) {
 			var n = this.$n();
-			if (n) n.innerHTML = content || '';
+			if (n) n.innerHTML = v|| '';
 		}
 	}
 });
