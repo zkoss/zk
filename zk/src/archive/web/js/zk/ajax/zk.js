@@ -21,7 +21,59 @@ zk = function (sel) {
 	for (var p in src)
 		dst[p] = src[p];
 	return dst;
-})(zk, {
+})(zk, (function () {
+	var $oid = 0,
+		errcnt = 0,
+		statelesscnt = 0,
+		logmsg;
+
+	function def(nm, before, after) {
+		return function (v) {
+			if (before) v = before.apply(this, arguments);
+			var o = this[nm];
+			this[nm] = v;
+			if (after && o !== v) after.apply(this, arguments);
+			return this;
+		};
+	}
+	function showprocmk() {
+		jq(function(){showproc(true);}); //might called before doc ready
+	}
+	function showproc(mask) {
+		if (zk.processing
+		&& !jq("#zk_proc").length && !jq("#zk_showBusy").length)
+			zUtl.progressbox("zk_proc", window.mesg?mesg.PLEASE_WAIT:'Processing...', mask);
+	}
+	function toLogMsg(ars) {
+		var msg = '';
+		for (var j = 0, len = ars.length; j < len; j++) {
+			if (msg) msg += ", ";
+			var ar = ars[j];
+			if (ar && ar.$array) msg += '[' + toLogMsg(ar) + ']';
+			else msg += ar;
+		}
+		return msg;
+	}
+	function doLog() {
+		if (logmsg) {
+			var console = jq("#zk_log");
+			if (!console.length) {
+				console = document.createElement("DIV");
+				document.body.appendChild(console);
+				jq(console).replaceWith(
+	'<div id="zk_logbox" class="z-log">'
+	+'<button onclick="jq(\'#zk_logbox\').remove()">X</button><br/>'
+	+'<textarea id="zk_log" rows="10"></textarea></div>');
+				console = jq("#zk_log");
+			}
+			console = console[0];
+			console.value += logmsg;
+			console.scrollTop = console.scrollHeight;
+			logmsg = null;
+		}
+	}
+
+  return {
 	procDelay: 900,
 	tipDelay: 800,
 	resendDelay: -1,
@@ -66,7 +118,7 @@ zk = function (sel) {
 			throw 'unknown superclass';
 
 		var jclass = function() {
-			this.$oid = ++zk._$oid;
+			this.$oid = ++$oid;
 			this.$init.apply(this, arguments);
 
 			var ais = this._$ais;
@@ -126,19 +178,10 @@ zk = function (sel) {
 				before = after.length ? after[0]: null;
 				after = after.length > 1 ? after[1]: null;
 			}
-			pt['set' + nm2] = zk._def(nm1, before, after);
+			pt['set' + nm2] = def(nm1, before, after);
 			pt['get' + nm2] = pt['is' + nm2] =
 				new Function('return this.' + nm1 + ';');
 		}
-	},
-	_def: function (nm, before, after) {
-		return function (v) {
-			if (before) v = before.apply(this, arguments);
-			var o = this[nm];
-			this[nm] = v;
-			if (after && o !== v) after.apply(this, arguments);
-			return this;
-		};
 	},
 
 	$void: function () {},
@@ -168,27 +211,18 @@ zk = function (sel) {
 	//Processing//
 	startProcessing: function (timeout) {
 		zk.processing = true;
-		setTimeout(jq.isReady ? zk._showproc: zk._showprocmk, timeout > 0 ? timeout: 0);
+		setTimeout(jq.isReady ? showproc: showprocmk, timeout > 0 ? timeout: 0);
 	},
 	endProcessing: function() {
 		zk.processing = false;
 		zUtl.destroyProgressbox("zk_proc");
 	},
-	_showprocmk: function () {
-		jq(function(){zk._showproc(true);}); //might called before doc ready
-	},
-	_showproc: function (mask) {
-		if (zk.processing
-		&& !jq("#zk_proc").length && !jq("#zk_showBusy").length)
-			zUtl.progressbox("zk_proc", window.mesg?mesg.PLEASE_WAIT:'Processing...', mask);
-	},
 
 	//DEBUG//
 	error: function (msg) {
 		jq(function() {
-		if (!zk._errcnt) zk._errcnt = 1;
-		var id = "zk_err" + zk._errcnt++,
-			x = (zk._errcnt * 5) % 50, y = (zk._errcnt * 5) % 50,
+		var id = "zk_err" + errcnt++,
+			x = (errcnt * 5) % 50, y = (errcnt * 5) % 50,
 			box = document.createElement("DIV");
 		document.body.appendChild(box);
 		jq(box).replaceWith(
@@ -209,46 +243,18 @@ zk = function (sel) {
 		}
 			});
 	},
-	errorDismiss: function () {
-		for (var j = zk._errcnt; j; --j)
-			jq("#zk_err" + j).remove();
-	},
 	_sendRedraw: function () {
 		zk.errorDismiss();
 		zAu.send(new zk.Event(null, 'redraw'));
 	},
+	errorDismiss: function () {
+		for (var j = errcnt; --j >= 0;)
+			jq("#zk_err" + j).remove();
+	},
 	log: function () {
-		var msg = zk._log(arguments);
-		zk._msg = (zk._msg ? zk._msg + msg: msg) + '\n';
-		setTimeout(function(){jq(zk._log2);}, 300);
-	},
-	_log: function (ars) {
-		var msg = '';
-		for (var j = 0, len = ars.length; j < len; j++) {
-			if (msg) msg += ", ";
-			var ar = ars[j];
-			if (ar && ar.$array) msg += '[' + zk._log(ar) + ']';
-			else msg += ar;
-		}
-		return msg;
-	},
-	_log2: function () {
-		if (zk._msg) {
-			var console = jq("#zk_log");
-			if (!console.length) {
-				console = document.createElement("DIV");
-				document.body.appendChild(console);
-				jq(console).replaceWith(
-	'<div id="zk_logbox" class="z-log">'
-	+'<button onclick="jq(\'#zk_logbox\').remove()">X</button><br/>'
-	+'<textarea id="zk_log" rows="10"></textarea></div>');
-				console = jq("#zk_log");
-			}
-			console = console[0];
-			console.value += zk._msg;
-			console.scrollTop = console.scrollHeight;
-			zk._msg = null;
-		}
+		var msg = toLogMsg(arguments);
+		logmsg = (logmsg ? logmsg + msg: msg) + '\n';
+		setTimeout(function(){jq(doLog);}, 300);
 	},
 
 	ajaxURI: function (uri, opts) {
@@ -282,15 +288,15 @@ zk = function (sel) {
 	},
 	stateless: function (dtid, contextURI, updateURI) {
 		var Desktop = zk.Desktop, dt;
-		dtid = dtid || ('z_auto' + zk._ssc++);
+		dtid = dtid || ('z_auto' + statelesscnt++);
 		dt = Desktop.all[dtid];
 		if (dt && !dt.stateless) throw "Desktop conflict";
 		zk.updateURI = zk.updateURI || updateURI;
 		zk.contextURI = zk.contextURI || contextURI;
 		return dt || new Desktop(dtid, contextURI, updateURI, true);
-	},
-	_ssc: 0
-});
+	}
+  };
+})());
 
 zk.copy(String.prototype, {
 	startsWith: function (prefix) {
@@ -397,7 +403,14 @@ if (!Array.prototype.indexOf)
 })();
 
 zk.Object = function () {};
-zk.Object.prototype = {
+zk.Object.prototype = (function () {
+	function getProxy(o, f) { //used by zk.Object
+		return function () {
+				return f.apply(o, arguments);
+			};
+	}
+
+  return {
 	$init: zk.$void,
 	$afterInit: function (f) {
 		(this._$ais = this._$ais || []).unshift(f); //reverse
@@ -454,15 +467,10 @@ zk.Object.prototype = {
 		var fps = this._$proxies, fp;
 		if (!fps) this._$proxies = fps = {};
 		else if (fp = fps[f]) return fp;
-		return fps[f] = zk._proxy(this, f);
+		return fps[f] = getProxy(this, f);
 	}
-};
-
-zk._proxy = function (o, f) {
-	return function () {
-			return f.apply(o, arguments);
-		};
-};
+  };
+})();
 
 zk.Class = function () {}
 zk.Class.superclass = zk.Object;

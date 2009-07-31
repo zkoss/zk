@@ -39,7 +39,7 @@ function zkdtbg(dtid, contextURI, updateURI) {
 	var dt = zk.Desktop.$(dtid);
 	if (dt == null) {
 		dt = new zk.Desktop(dtid, contextURI, updateURI);
-		if (zk.pfmeter) zAu.pfrecv(dt, dtid);
+		if (zk.pfmeter) zAu._pfrecv(dt, dtid);
 	} else {
 		if (updateURI) dt.updateURI = updateURI;
 		if (contextURI) dt.contextURI = contextURI;
@@ -207,7 +207,7 @@ zkm = {
 		if (zk.pfmeter) {
 			var dts = zk.Desktop.all;
 			for (var dtid in dts)
-				zAu.pfdone(dts[dtid], dtid);
+				zAu._pfdone(dts[dtid], dtid);
 		}
 	},
 
@@ -232,7 +232,7 @@ zkm = {
 		zk.mounting = false;
 		zkm._afmt(zkm.mtAU0);
 
-		zAu._doCmds(); //server-push (w/ afterLoad) and pfdone
+		zAu._doCmds(); //server-push (w/ afterLoad) and _pfdone
 		zkm._afmt(zkm.mtAU0);
 	},
 	_afmt: function (fnext) {

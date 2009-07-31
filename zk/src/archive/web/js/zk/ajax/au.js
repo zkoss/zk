@@ -12,93 +12,32 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
-zAu = {
-	/** Called by mount.js when onReSize */
-	_onClientInfo: function () {
-		if (zAu._cInfoReg)
-			setTimeout(zAu._fireClientInfo, 20);
-				//we cannot pass zAu.cmd0.clientInfo directly
-				//otherwise, FF will pass 1 as the firt argument,
-				//i.e., it is equivalent to zAu.cmd0.clientInfo(1)
-	},
-	_fireClientInfo: function () {
-		zAu.cmd0.clientInfo();
-	},
+zAu = (function () {
+	var errURIs = {}, errCode,
+		cmdsQue = [], //response commands in XML
+		ajaxReq, ajaxReqInf, pendingReqInf, ajaxReqTries,
+		sendPending, ctlUuid, ctlTime, ctlCmd, responseId,
+		seqId = (zUtl.now() % 9999) + 1, //1-9999 (random init: bug 2691017)
+		doCmdFns = [],
+		pfIndex = 0; //performance meter index
 
-	//Error Handling//
-	confirmRetry: function (msgCode, msg2) {
-		var msg = mesg[msgCode];
-		return jq.confirm((msg?msg:msgCode)+'\n'+mesg.TRY_AGAIN+(msg2?"\n\n("+msg2+")":""));
-	},
-	showError: function (msgCode, msg2, cmd, ex) {
-		var msg = mesg[msgCode];
-		zk.error((msg?msg:msgCode)+'\n'+(msg2?msg2:"")+(cmd?cmd:"")+(ex?"\n"+ex.message:""));
-	},
-	getErrorURI: function (code) {
-		return zAu._eru['e' + code];
-	},
-	setErrorURI: function (code, uri) {
-		if (len > 2) {
-			for (var j = 0; j < len; j += 2)
-				zAu.setErrorURI(args[j], args[j + 1]);
-			return;
-		}
-		zAu._eru['e' + code] = uri;
-	},
-	_eru: {},
-
-	////Ajax Send////
-	processing: function () {
-		return zk.mounting || zAu._cmdsQue.length || zAu._areq || zAu._preqInf;
-	},
 	/** Checks whether to turn off the progress prompt. */
-	_ckProcessng: function () {
+	function checkProcessng() {
 		if (!zAu.processing()) {
 			zk.endProcessing();
 			zAu.doneTime = zUtl.now();
 		}
-	},
-
-	send: function (aureq, timeout) {
-		if (timeout < 0)
-			aureq.opts = zk.copy(aureq.opts, {implicit: true});
-
-		var t = aureq.target;
-		if (t) {
-			zAu._send(t.className == 'zk.Desktop' ? t: t.desktop, aureq, timeout);
-		} else {
-			var dts = zk.Desktop.all;
-			for (var dtid in dts)
-				zAu._send(dts[dtid], aureq, timeout);
-		}
-	},
-	sendAhead: function (aureq, timeout) {
-		var t = aureq.target;
-		if (t) {
-			var dt = t.className == 'zk.Desktop' ? t: t.desktop;
-			dt._aureqs.unshift(aureq);
-			zAu._send2(dt, timeout);
-		} else {
-			var dts = zk.Desktop.all;
-			for (var dtid in dts) {
-				dt._aureqs.unshift(aureq);
-				zAu._send2(dts[dtid], timeout);
-			}
-			return;
-		}
-	},
-
-	////Ajax receive////
-	_pushCmds: function (dt, req) {
+	}
+	function pushCmds(dt, req) {
 		var rt = req.responseText;
 		if (!rt) {
-			if (zk.pfmeter) zAu.pfdone(dt, zAu._pfGetIds(req));
+			if (zk.pfmeter) zAu._pfdone(dt, pfGetIds(req));
 			return false; //invalid
 		}
 
 		if (zk.pfmeter) {
 			cmds.dt = dt;
-			cmds.pfIds = zAu._pfGetIds(req);
+			cmds.pfIds = pfGetIds(req);
 		}
 
 		eval('rt='+rt);
@@ -123,13 +62,10 @@ zAu = {
 			cmds.push({cmd: cmd, data: data ? eval(data): []});
 		}
 
-		zAu._cmdsQue.push(cmds);
+		cmdsQue.push(cmds);
 		return true;
-	},
-	process: function (cmd, data) { //by server only (encoded)
-		zAu._process(cmd, data ? eval(data): []);
-	},
-	_process: function (cmd, data) { //decoded
+	}
+	function doProcess(cmd, data) { //decoded
 		//I. process commands that data[0] is not UUID
 		var fn = zAu.cmd0[cmd];
 		if (fn) {
@@ -151,71 +87,64 @@ zAu = {
 		}
 
 		zAu.showError("ILLEGAL_RESPONSE", "Unknown command: ", cmd);
-	},
-	shallIgnoreESC: function () {
-		return zAu._areq;
-	},
+	}
 
-	//ajax internal//
-	_cmdsQue: [], //response commands in XML
-	_seqId: (zUtl.now() % 9999) + 1, //1-9999 (random init: bug 2691017)
-
-	/** IE6 sometimes remains readyState==1 (reason unknown), so resend. */
-	_areqTmout: function () {
+	// IE6 sometimes remains readyState==1 (reason unknown), so resend.
+	function ajaxReqTimeout() {
 		//Note: we don't resend if readyState >= 3, since the server is already
 		//processing it
-		var req = zAu._areq, reqInf = zAu._areqInf;
+		var req = ajaxReq, reqInf = ajaxReqInf;
 		if (req && req.readyState < 3) {
-			zAu._areq = zAu._areqInf = null;
+			ajaxReq = ajaxReqInf = null;
 			try {
 				if(typeof req.abort == "function") req.abort();
 			} catch (e2) {
 			}
 			if (reqInf.tmout < 60000) reqInf.tmout += 3000;
 				//sever might be busy, so prolong next timeout
-			zAu._areqResend(reqInf);
+			ajaxReqResend(reqInf);
 		}
-	},
-	_areqResend: function (reqInf, timeout) {
-		if (zAu._seqId == reqInf.sid) {//skip if the response was recived
-			zAu._preqInf = reqInf; //store as a pending request info
-			setTimeout(zAu._areqResend2, timeout ? timeout: 0);
+	}
+	function ajaxReqResend(reqInf, timeout) {
+		if (seqId == reqInf.sid) {//skip if the response was recived
+			pendingReqInf = reqInf; //store as a pending request info
+			setTimeout(ajaxReqResend2, timeout ? timeout: 0);
 		}
-	},
-	_areqResend2: function () {
-		var reqInf = zAu._preqInf;
+	}
+	function ajaxReqResend2() {
+		var reqInf = pendingReqInf;
 		if (reqInf) {
-			zAu._preqInf = null;
-			if (zAu._seqId == reqInf.sid)
-				zAu._sendNow(reqInf);
+			pendingReqInf = null;
+			if (seqId == reqInf.sid)
+				ajaxSendNow(reqInf);
 		}
-	},
-	/** Called when the response is received from _areq. */
-	_onRespReady: function () {
+	}
+	/** Called when the response is received from ajaxReq. */
+	function onResponseReady() {
+		var req = ajaxReq, reqInf = ajaxReqInf;
 		try {
-			var req = zAu._areq, reqInf = zAu._areqInf;
 			if (req && req.readyState == 4) {
-				zAu._areq = zAu._areqInf = null;
+				ajaxReq = ajaxReqInf = null;
 				if (reqInf.tfn) clearTimeout(reqInf.tfn); //stop timer
 
-				if (zk.pfmeter) zAu.pfrecv(reqInf.dt, zAu._pfGetIds(req));
+				if (zk.pfmeter) zAu._pfrecv(reqInf.dt, pfGetIds(req));
 
 				var sid = req.getResponseHeader("ZK-SID");
 				if (req.status == 200) { //correct
-					if (sid && sid != zAu._seqId) {
-						zAu._errcode = "ZK-SID " + (sid ? "mismatch": "required");
+					if (sid && sid != seqId) {
+						errCode = "ZK-SID " + (sid ? "mismatch": "required");
 						return;
 					} //if sid null, always process (usually for error msg)
 
-					if (zAu._pushCmds(reqInf.dt, req)) { //valid response
+					if (pushCmds(reqInf.dt, req)) { //valid response
 						//advance SID to avoid receive the same response twice
-						if (sid && ++zAu._seqId > 9999) zAu._seqId = 1;
-						zAu._areqTry = 0;
-						zAu._preqInf = null;
+						if (sid && ++seqId > 9999) seqId = 1;
+						ajaxReqTries = 0;
+						pendingReqInf = null;
 					}
-				} else if (!sid || sid == zAu._seqId) { //ignore only if out-of-seq (note: 467 w/o sid)
-					zAu._errcode = req.status;
-					var eru = zAu._eru['e' + req.status];
+				} else if (!sid || sid == seqId) { //ignore only if out-of-seq (note: 467 w/o sid)
+					errCode = req.status;
+					var eru = errURIs['e' + req.status];
 					if (typeof eru == "string") {
 						zUtl.go(eru);
 					} else {
@@ -223,7 +152,7 @@ zAu = {
 					//http://msdn2.microsoft.com/en-us/library/aa385465(VS.85).aspx
 						switch (req.status) { //auto-retry for certain case
 						default:
-							if (!zAu._areqTry) break;
+							if (!ajaxReqTries) break;
 							//fall thru
 						case 12002: //server timeout
 						case 12030: //http://danweber.blogspot.com/2007/04/ie6-and-error-code-12030.html
@@ -232,23 +161,21 @@ zAu = {
 						case 12159:
 						case 13030:
 						case 503: //service unavailable
-							if (!zAu._areqTry) zAu._areqTry = 3; //two more try
-							if (--zAu._areqTry) {
-								zAu._areqResend(reqInf, 200);
+							if (!ajaxReqTries) ajaxReqTries = 3; //two more try
+							if (--ajaxReqTries) {
+								ajaxReqResend(reqInf, 200);
 								return;
 							}
 						}
 
-						if (!zAu._ignorable && !zk.unloading) {
+						if (!reqInf.ignorable && !zk.unloading) {
 							var msg = req.statusText;
 							if (zAu.confirmRetry("FAILED_TO_RESPONSE", req.status+(msg?": "+msg:""))) {
-								zAu._areqTry = 2; //one more try
-								zAu._areqResend(reqInf);
+								ajaxReqTries = 2; //one more try
+								ajaxReqResend(reqInf);
 								return;
 							}
 						}
-
-						zAu._cleanupOnFatal(zAu._ignorable);
 					}
 				}
 			}
@@ -256,7 +183,7 @@ zAu = {
 			if (!window.zAu)
 				return; //the doc has been unloaded
 
-			zAu._areq = zAu._areqInf = null;
+			ajaxReq = ajaxReqInf = null;
 			try {
 				if(req && typeof req.abort == "function") req.abort();
 			} catch (e2) {
@@ -264,62 +191,299 @@ zAu = {
 
 			//NOTE: if connection is off and req.status is accessed,
 			//Mozilla throws exception while IE returns a value
-			if (!zAu._ignorable && !zk.unloading) {
+			if (reqInf && !reqInf.ignorable && !zk.unloading) {
 				var msg = e.message;
-				zAu._errcode = "[Receive] " + msg;
-				//if (e.fileName) zAu._errcode += ", "+e.fileName;
-				//if (e.lineNumber) zAu._errcode += ", "+e.lineNumber;
+				errCode = "[Receive] " + msg;
+				//if (e.fileName) errCode += ", "+e.fileName;
+				//if (e.lineNumber) errCode += ", "+e.lineNumber;
 				if (zAu.confirmRetry("FAILED_TO_RESPONSE", (msg&&msg.indexOf("NOT_AVAILABLE")<0?msg:""))) {
-					zAu._areqResend(reqInf);
+					ajaxReqResend(reqInf);
 					return;
 				}
 			}
-			zAu._cleanupOnFatal(zAu._ignorable);
 		}
 
 		//handle pending ajax send
-		if (zAu._sendPending && !zAu._areq && !zAu._preqInf) {
-			zAu._sendPending = false;
+		if (sendPending && !ajaxReq && !pendingReqInf) {
+			sendPending = false;
 			var dts = zk.Desktop.all
 			for (var dtid in dts)
-				zAu._send2(dts[dtid], 0);
+				ajaxSend2(dts[dtid], 0);
 		}
 
 		zAu._doCmds();
-	},
+	}
 
-	_send: function (dt, aureq, timeout) {
+	function ajaxSend(dt, aureq, timeout) {
 		var clkfd = zk.clickFilterDelay;
 		if (clkfd > 0 && (aureq.opts||{}).ctl) {
 			//Don't send the same request if it is in processing
-			if (zAu._areqInf && zAu._areqInf.ctli == aureq.uuid
-			&& zAu._areqInf.ctlc == aureq.cmd)
+			if (ajaxReqInf && ajaxReqInf.ctli == aureq.uuid
+			&& ajaxReqInf.ctlc == aureq.cmd)
 				return;
 
 			var t = zUtl.now();
-			if (zAu._ctli == aureq.uuid && zAu._ctlc == aureq.cmd //Bug 1797140
-			&& t - zAu._ctlt < clkfd)
+			if (ctlUuid == aureq.uuid && ctlCmd == aureq.cmd //Bug 1797140
+			&& t - ctlTime < clkfd)
 				return; //to prevent key stroke are pressed twice (quickly)
 
 			//Note: it is still possible to queue two ctl with same uuid and cmd,
 			//if the first one was not sent yet and the second one is generated
 			//after 390ms. However, it is rare so no handle it
 
-			zAu._ctlt = t;
-			zAu._ctli = aureq.uuid;
-			zAu._ctlc = aureq.cmd;
+			ctlTime = t;
+			ctlUuid = aureq.uuid;
+			ctlCmd = aureq.cmd;
 		}
 
 		dt._aureqs.push(aureq);
 
-		zAu._send2(dt, timeout);
+		ajaxSend2(dt, timeout);
 			//Note: we don't send immediately (Bug 1593674)
-	},
-	_send2: function (dt, timeout) {
+	}
+	function ajaxSend2(dt, timeout) {
 		if (!timeout) timeout = 0;
 		if (dt && timeout >= 0)
 			setTimeout(function(){zAu.sendNow(dt);}, timeout);
+	}
+	function ajaxSendNow(reqInf) {
+		var setting = zAu.ajaxSettings,
+			req = setting.xhr(),
+			uri = shallUseQS(reqInf) ? reqInf.uri + '?' + reqInf.content: null;
+		zAu.sentTime = zUtl.now(); //used by server-push (zkex)
+		try {
+			req.onreadystatechange = onResponseReady;
+			req.open("POST", uri ? uri: reqInf.uri, true);
+			req.setRequestHeader("Content-Type", setting.contentType);
+			req.setRequestHeader("ZK-SID", reqInf.sid);
+			if (errCode) {
+				req.setRequestHeader("ZK-Error-Report", errCode);
+				errCode = null;
+			}
+
+			if (zk.pfmeter) zAu._pfsend(reqInf.dt, req);
+
+			ajaxReq = req;
+			ajaxReqInf = reqInf;
+			if (zk.resendDelay > 0)
+				ajaxReqInf.tfn = setTimeout(ajaxReqTimeout, zk.resendDelay + reqInf.tmout);
+
+			if (uri) req.send(null);
+			else req.send(reqInf.content);
+
+			if (!reqInf.implicit) zk.startProcessing(zk.procDelay); //wait a moment to avoid annoying
+		} catch (e) {
+			//handle error
+			try {
+				if(typeof req.abort == "function") req.abort();
+			} catch (e2) {
+			}
+
+			if (!reqInf.ignorable && !zk.unloading) {
+				var msg = e.message;
+				errCode = "[Send] " + msg;
+				if (zAu.confirmRetry("FAILED_TO_SEND", msg)) {
+					ajaxReqResend(reqInf);
+					return;
+				}
+			}
+		}
+	}
+	function toJSON(target, data) {
+		if (data.pageX != null && data.x == null)  {
+			var ofs = zk(target||[]).cmOffset();
+			data.x = data.pageX - ofs[0];
+			data.y = data.pageY - ofs[1];
+		}
+		return jq.toJSON(data);
+	}
+
+	//IE: use query string if possible to avoid incomplete-request problem
+	var shallUseQS = zk.ie ? function (reqInf) {
+		var s = reqInf.content, j = s.length, prev, cc;
+		if (j + reqInf.uri.length < 2000) {
+			while (j--) {
+				cc = s.charAt(j);
+				if (cc == '%' && prev >= '8') //%8x, %9x...
+					return false;
+				prev = cc;
+			}
+			return true;
+		}
+		return false;
+	}: zk.$void;
+
+	function doCmdsNow(cmds) {
+		var processed;
+		try {
+			while (cmds && cmds.length) {
+				if (zk.mounting) return false;
+
+				processed = true;
+				var cmd = cmds.shift();
+				try {
+					doProcess(cmd.cmd, cmd.data);
+				} catch (e) {
+					zAu.showError("FAILED_TO_PROCESS", null, cmd.cmd, e);
+					throw e;
+				}
+			}
+		} finally {
+			if (processed && (!cmds || !cmds.length))
+				zWatch.fire('onResponse', {timeout:0}); //use setTimeout
+		}
+		return true;
+	}
+
+	//Perfomance Meter//
+	/** Returns request IDs sent from the server separated by space. */
+	function pfGetIds(req) {
+		return req.getResponseHeader("ZK-Client-Complete");
+	}
+	function pfAddIds(dt, prop, pfIds) {
+		if (pfIds && (pfIds = pfIds.trim())) {
+			var s = pfIds + "=" + Math.round(zUtl.now());
+			if (dt[prop]) dt[prop] += ',' + s;
+			else dt[prop] = s;
+		}
+	}
+
+  return {
+	_onClientInfo: (function () { //Called by mount.js when onReSize
+		function fireClientInfo() {
+			zAu.cmd0.clientInfo();
+		}
+		return function () {
+			if (zAu._cInfoReg) setTimeout(fireClientInfo, 20);
+			//we cannot pass zAu.cmd0.clientInfo directly
+			//otherwise, FF will pass 1 as the firt argument,
+			//i.e., it is equivalent to zAu.cmd0.clientInfo(1)
+		}
+	})(),
+
+	//Error Handling//
+	confirmRetry: function (msgCode, msg2) {
+		var msg = mesg[msgCode];
+		return jq.confirm((msg?msg:msgCode)+'\n'+mesg.TRY_AGAIN+(msg2?"\n\n("+msg2+")":""));
 	},
+	showError: function (msgCode, msg2, cmd, ex) {
+		var msg = mesg[msgCode];
+		zk.error((msg?msg:msgCode)+'\n'+(msg2?msg2:"")+(cmd?cmd:"")+(ex?"\n"+ex.message:""));
+	},
+	getErrorURI: function (code) {
+		return errURIs['e' + code];
+	},
+	setErrorURI: function (code, uri) {
+		if (len > 2) {
+			for (var j = 0; j < len; j += 2)
+				zAu.setErrorURI(args[j], args[j + 1]);
+			return;
+		}
+		errURIs['e' + code] = uri;
+	},
+
+	////Ajax Send////
+	processing: function () {
+		return zk.mounting || cmdsQue.length || ajaxReq || pendingReqInf;
+	},
+
+	send: function (aureq, timeout) {
+		if (timeout < 0)
+			aureq.opts = zk.copy(aureq.opts, {implicit: true});
+
+		var t = aureq.target;
+		if (t) {
+			ajaxSend(t.className == 'zk.Desktop' ? t: t.desktop, aureq, timeout);
+		} else {
+			var dts = zk.Desktop.all;
+			for (var dtid in dts)
+				ajaxSend(dts[dtid], aureq, timeout);
+		}
+	},
+	sendAhead: function (aureq, timeout) {
+		var t = aureq.target;
+		if (t) {
+			var dt = t.className == 'zk.Desktop' ? t: t.desktop;
+			dt._aureqs.unshift(aureq);
+			ajaxSend2(dt, timeout);
+		} else {
+			var dts = zk.Desktop.all;
+			for (var dtid in dts) {
+				dt._aureqs.unshift(aureq);
+				ajaxSend2(dts[dtid], timeout);
+			}
+			return;
+		}
+	},
+
+	////Ajax////
+	process: function (cmd, data) { //by server only (encoded)
+		doProcess(cmd, data ? eval(data): []);
+	},
+	shallIgnoreESC: function () {
+		return ajaxReq;
+	},
+	_doCmds: function () { //called by mount.js, too
+		_zkmt = zUtl.now(); //used by zkm.exec
+
+		for (var fn; fn = doCmdFns.shift();)
+			fn();
+
+		var ex, j = 0, rid = responseId;
+		for (; j < cmdsQue.length; ++j) {
+			if (zk.mounting) return; //wait zkm.mtAU to call
+
+			var cmds = cmdsQue[j];
+			if (rid == cmds.rid || !rid || !cmds.rid //match
+			|| zk.Desktop._ndt > 1) { //ignore multi-desktops (risky but...)
+				cmdsQue.splice(j, 1);
+
+				var oldrid = rid;
+				if (cmds.rid) {
+					if ((rid = cmds.rid + 1) >= 1000)
+						rid = 1; //1~999
+					responseId = rid;
+				}
+
+				try {
+					if (doCmdsNow(cmds)) { //done
+						j = -1; //start over
+						if (zk.pfmeter) {
+							var fn = function () {zAu._pfdone(cmds.dt, cmds.pfIds);};
+							if (zk.mounting) doCmdFns.push(fn);
+							else fn();
+						}
+					} else { //not done yet (=zk.mounting)
+						responseId = oldrid; //restore
+						cmdsQue.splice(j, 0, cmds); //put it back
+						return; //wait zkm.mtAU to call
+					}
+				} catch (e) {
+					if (!ex) ex = e;
+					j = -1; //start over
+				}
+			}
+		}
+
+		if (cmdsQue.length) { //sequence is wrong => enforce to run if timeout
+			setTimeout(function () {
+				if (cmdsQue.length && rid == responseId) {
+					var r = cmdsQue[0].rid;
+					for (j = 1; j < cmdsQue.length; ++j) { //find min
+						var r2 = cmdsQue[j].rid,
+							v = r2 - r;
+						if (v > 500 || (v < 0 && v > -500)) r = r2;
+					}
+					responseId = r;
+					zAu._doCmds();
+				}
+			}, 3600);
+		} else
+			checkProcessng();
+
+		if (ex) throw ex;
+	},
+
 	sendNow: function (dt) {
 		var es = dt._aureqs;
 		if (es.length == 0)
@@ -330,8 +494,8 @@ zAu = {
 			return true; //wait
 		}
 
-		if (zAu._areq || zAu._preqInf) { //send ajax request one by one
-			zAu._sendPending = true;
+		if (ajaxReq || pendingReqInf) { //send ajax request one by one
+			sendPending = true;
 			return true;
 		}
 
@@ -362,7 +526,6 @@ zAu = {
 				ctlc = aureq.name;
 			}
 		}
-		zAu._ignorable = ignorable;
 
 		//Consider XML (Pros: ?, Cons: larger packet)
 		var content = "";
@@ -383,188 +546,42 @@ zAu = {
 			|| (data && data.$array))
 				data = {'':data};
 			if (data)
-				content += "&data_"+j+"="+encodeURIComponent(zAu._JSON(target, data));
+				content += "&data_"+j+"="+encodeURIComponent(toJSON(target, data));
 		}
 
 		if (content)
-			zAu._sendNow({
-				sid: zAu._seqId, uri: uri || zk.ajaxURI(null, {desktop:dt,au:true}),
+			ajaxSendNow({
+				sid: seqId, uri: uri || zk.ajaxURI(null, {desktop:dt,au:true}),
 				dt: dt, content: "dtid=" + dt.id + content,
 				ctli: ctli, ctlc: ctlc, implicit: implicit,
 				ignorable: ignorable, tmout: 0
 			});
 		return true;
 	},
-	_JSON: function (target, data) {
-		if (data.pageX != null && data.x == null)  {
-			var ofs = zk(target||[]).cmOffset();
-			data.x = data.pageX - ofs[0];
-			data.y = data.pageY - ofs[1];
-		}
-		return jq.toJSON(data);
-	},
-	_sendNow: function(reqInf) {
-		var setting = zAu.ajaxSettings,
-			req = setting.xhr(),
-			uri = zAu._useQS(reqInf) ? reqInf.uri + '?' + reqInf.content: null;
-		zAu.sentTime = zUtl.now(); //used by server-push (zkex)
-		try {
-			req.onreadystatechange = zAu._onRespReady;
-			req.open("POST", uri ? uri: reqInf.uri, true);
-			req.setRequestHeader("Content-Type", setting.contentType);
-			req.setRequestHeader("ZK-SID", reqInf.sid);
-			if (zAu._errcode) {
-				req.setRequestHeader("ZK-Error-Report", zAu._errcode);
-				delete zAu._errcode;
-			}
-
-			if (zk.pfmeter) zAu._pfsend(reqInf.dt, req);
-
-			zAu._areq = req;
-			zAu._areqInf = reqInf;
-			if (zk.resendDelay > 0)
-				zAu._areqInf.tfn = setTimeout(zAu._areqTmout, zk.resendDelay + reqInf.tmout);
-
-			if (uri) req.send(null);
-			else req.send(reqInf.content);
-
-			if (!reqInf.implicit) zk.startProcessing(zk.procDelay); //wait a moment to avoid annoying
-		} catch (e) {
-			//handle error
-			try {
-				if(typeof req.abort == "function") req.abort();
-			} catch (e2) {
-			}
-
-			if (!reqInf.ignorable && !zk.unloading) {
-				var msg = e.message;
-				zAu._errcode = "[Send] " + msg;
-				if (zAu.confirmRetry("FAILED_TO_SEND", msg)) {
-					zAu._areqResend(reqInf);
-					return;
-				}
-			}
-			zAu._cleanupOnFatal(reqInf.ignorable);
-		}
-	},
 	ajaxSettings: zk.$default({
 		global: false,
 		contentType: "application/x-www-form-urlencoded;charset=UTF-8"
 	}, jq.ajaxSettings),
 
-	//IE: use query string if possible to avoid incomplete-request problem
-	_useQS: zk.ie ? function (reqInf) {
-		var s = reqInf.content, j = s.length, prev, cc;
-		if (j + reqInf.uri.length < 2000) {
-			while (j--) {
-				cc = s.charAt(j);
-				if (cc == '%' && prev >= '8') //%8x, %9x...
-					return false;
-				prev = cc;
-			}
-			return true;
-		}
-		return false;
-	}: zk.$void,
-
-	_doCmds: function () {
-		_zkmt = zUtl.now(); //used by zkm.exec
-
-		for (var fn; fn = zAu._dcfns.shift();)
-			fn();
-
-		var ex, j = 0, que = zAu._cmdsQue, rid = zAu._resId;
-		for (; j < que.length; ++j) {
-			if (zk.mounting) return; //wait zkm.mtAU to call
-
-			var cmds = que[j];
-			if (rid == cmds.rid || !rid || !cmds.rid //match
-			|| zk.Desktop._ndt > 1) { //ignore multi-desktops (risky but...)
-				que.splice(j, 1);
-
-				var oldrid = rid;
-				if (cmds.rid) {
-					if ((rid = cmds.rid + 1) >= 1000)
-						rid = 1; //1~999
-					zAu._resId = rid;
-				}
-
-				try {
-					if (zAu._doCmds1(cmds)) { //done
-						j = -1; //start over
-						if (zk.pfmeter) {
-							var fn = function () {zAu.pfdone(cmds.dt, cmds.pfIds);};
-							if (zk.mounting) zAu._dcfns.push(fn);
-							else fn();
-						}
-					} else { //not done yet (=zk.mounting)
-						zAu._resId = oldrid; //restore
-						que.splice(j, 0, cmds); //put it back
-						return; //wait zkm.mtAU to call
-					}
-				} catch (e) {
-					if (!ex) ex = e;
-					j = -1; //start over
-				}
-			}
-		}
-
-		if (que.length) { //sequence is wrong => enforce to run if timeout
-			setTimeout(function () {
-				if (que.length && rid == zAu._resId) {
-					var r = que[0].rid;
-					for (j = 1; j < que.length; ++j) { //find min
-						var r2 = que[j].rid,
-							v = r2 - r;
-						if (v > 500 || (v < 0 && v > -500)) r = r2;
-					}
-					zAu._resId = r;
-					zAu._doCmds();
-				}
-			}, 3600);
-		} else
-			zAu._ckProcessng();
-
-		if (ex) throw ex;
+	/** Adds performance request IDs that have been processed completely.
+	 * Called by moun.js, too
+	 */
+	_pfrecv: function (dt, pfIds) {
+		pfAddIds(dt, '_pfRecvIds', pfIds);
 	},
-	_dcfns: [],
-	_doCmds1: function (cmds) {
-		var processed;
-		try {
-			while (cmds && cmds.length) {
-				if (zk.mounting) return false;
-
-				processed = true;
-				var cmd = cmds.shift();
-				try {
-					zAu._process(cmd.cmd, cmd.data);
-				} catch (e) {
-					zAu.showError("FAILED_TO_PROCESS", null, cmd.cmd, e);
-					throw e;
-				}
-			}
-		} finally {
-			if (processed && (!cmds || !cmds.length))
-				zWatch.fire('onResponse', {timeout:0}); //use setTimeout
-		}
-		return true;
+	/** Adds performance request IDs that have been processed completely.
+	 * Called by moun.js, too
+	 */
+	_pfdone: function (dt, pfIds) {
+		pfAddIds(dt, '_pfDoneIds', pfIds);
 	},
-
-	/** Cleans up if we detect obsolete or other severe errors. */
-	_cleanupOnFatal: function (ignorable) {
-		for (var uuid in zAu._metas) {
-			var meta = zAu._metas[uuid];
-			if (meta && meta.cleanupOnFatal)
-				meta.cleanupOnFatal(ignorable);
-		}
-	},
-
-	//Perfomance Meter//
-	_pfj: 0, //an index
+	/** Sets performance rquest IDs to the request's header
+	 * Called by moun.js, too
+	 */
 	_pfsend: function (dt, req, completeOnly) {
 		if (!completeOnly)
 			req.setRequestHeader("ZK-Client-Start",
-				dt.id + "-" + zAu._pfj++ + "=" + Math.round(zUtl.now()));
+				dt.id + "-" + pfIndex++ + "=" + Math.round(zUtl.now()));
 
 		var ids;
 		if (ids = dt._pfRecvIds) {
@@ -575,27 +592,9 @@ zAu = {
 			req.setRequestHeader("ZK-Client-Complete", ids);
 			dt._pfDoneIds = null;
 		}
-	},
-	/** Returns request IDs sent from the server separated by space. */
-	_pfGetIds: function (req) {
-		return req.getResponseHeader("ZK-Client-Complete");
-	},
-	/** Adds performance request IDs that have been processed completely. */
-	pfrecv: function (dt, pfIds) {
-		zAu._pfAddIds(dt, '_pfRecvIds', pfIds);
-	},
-	/** Adds performance request IDs that have been processed completely. */
-	pfdone: function (dt, pfIds) {
-		zAu._pfAddIds(dt, '_pfDoneIds', pfIds);
-	},
-	_pfAddIds: function (dt, prop, pfIds) {
-		if (pfIds && (pfIds = pfIds.trim())) {
-			var s = pfIds + "=" + Math.round(zUtl.now());
-			if (dt[prop]) dt[prop] += ',' + s;
-			else dt[prop] = s;
-		}
 	}
-};
+ };
+})();
 
 //Commands//
 zAu.cmd0 = { //no uuid at all
@@ -603,7 +602,6 @@ zAu.cmd0 = { //no uuid at all
 		zHistory.bookmark(bk);
 	},
 	obsolete: function (dt0, dt1) { //desktop timeout
-		zAu._cleanupOnFatal();
 		zk.error(dt1);
 	},
 	alert: function (msg) {
