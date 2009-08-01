@@ -570,14 +570,14 @@ zjq.prototype = { //ZK extension
 	},
 
 	dimension: (function () {
-		function addOfsToDim($el, dim, revised) {
+		function addOfsToDim($this, dim, revised) {
 			if (revised) {
-				var ofs = $el.revisedOffset();
+				var ofs = $this.revisedOffset();
 				dim.left = ofs[0];
 				dim.top = ofs[1];
 			} else {
-				dim.left = $el.offsetLeft();
-				dim.top = $el.offsetTop();
+				dim.left = $this.offsetLeft();
+				dim.top = $this.offsetTop();
 			}
 			return dim;
 		}
