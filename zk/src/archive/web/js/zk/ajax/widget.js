@@ -12,6 +12,230 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
+(function () {
+	var _binds = {}, //{uuid, wgt}: bind but no node
+		_floatings = [], //[{widget,node}]
+		_nextUuid = 0,
+		_globals = {}, //global ID space {id, wgt}
+		_domevtfnm = {}, //{evtnm, funnm}
+		_domevtfnmDesign = {}, //{evtnm, funnm}
+		_domevtnm = {onDoubleClick: 'dblclick'}, //{zk-evt-nm, dom-evt-nm}
+		_wgtcls = {}; //{clsnm, cls}
+
+	//Event Handling//
+	function _domEvtInf(wgt, evtnm, fn) { //proxy event listener
+		if (!fn) {
+			var nms = wgt.inDesign ? _domevtfnmDesign: _domevtfnm;
+			fn = nms[evtnm];
+			if (!fn) {
+				fn = '_do';
+				if (wgt.inDesign) fn += 'Design';
+				fn += evtnm.substring(2);
+				nms[evtnm] = fn;
+			}
+		} else if (wgt.inDesign)
+			fn = fn.startsWith('_do') ? '_doDesign' + fn.substring(3):
+				'doDesign' + (fn.startsWith('do') ? fn.substring(2): fn);
+
+		var f = wgt[fn];
+		if (!f) {
+			if (!wgt.inDesign)
+				throw 'Listener ' + fn + ' not found in ' + wgt.className;
+			return null;
+		}
+		var domn = _domevtnm[evtnm];
+		if (!domn)
+			domn = _domevtnm[evtnm] = evtnm.substring(2).toLowerCase();
+		return [domn, _domEvtProxy(wgt, f)];
+	}
+	function _domEvtProxy(wgt, f) {
+		var fps = wgt._$evproxs, fp;
+		if (!fps) wgt._$evproxs = fps = {};
+		else if (fp = fps[f]) return fp;
+		return fps[f] = _domEvtProxy0(wgt, f);
+	}
+	function _domEvtProxy0(wgt, f) {
+		return function (devt) {
+			var args = [], evt;
+			for (var j = arguments.length; --j > 0;)
+				args.unshift(arguments[j]);
+			args.unshift(evt = jq.event.toEvent(devt, wgt));
+
+			switch (devt.type){
+			case 'focus':
+				if (wgt.canActivate()) {
+					zk.currentFocus = wgt;
+					zWatch.fire('onFloatUp', null, wgt); //notify all
+					break;
+				}
+				return; //ignore it
+			case 'blur':
+				//due to _domMouseDown called, zk.currentFocus already corrected,
+				//so we clear it only if caused by other case
+				if (!zk._cfByMD) zk.currentFocus = null;
+				break;
+			case 'click':
+			case 'dblclick':
+			case 'mouseup': //we cannot simulate mousedown:(
+				if (zk.Draggable.ignoreClick())
+					return;
+			}
+
+			var ret = f.apply(wgt, args);
+			if (typeof ret == 'undefined') ret = evt.returnValue;
+			if (evt.domStopped) devt.stop();
+			return devt.type == 'dblclick' && typeof ret == 'undefined' ? false: ret;
+		};
+	}
+
+	function _fixBindLevel(wgt, v) {
+		wgt.bindLevel = v++;
+		for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
+			_fixBindLevel(wgt, v);
+	}
+
+	function _addIdSpace(wgt) {
+		if (wgt._fellows) wgt._fellows[wgt.id] = wgt;
+		var p = wgt.parent;
+		if (p) {
+			p = p.$o();
+			if (p) p._fellows[wgt.id] = wgt;
+		}
+	}
+	function _rmIdSpace(wgt) {
+		if (wgt._fellows) delete wgt._fellows[wgt.id];
+		var p = wgt.parent;
+		if (p) {
+			p = p.$o();
+			if (p) delete p._fellows[wgt.id];
+		}
+	}
+	function _addIdSpaceDown(wgt) {
+		var ow = wgt.parent;
+		ow = ow ? ow.$o(): null;
+		if (ow)
+			_addIdSpaceDown0(wgt, ow);
+	}
+	function _addIdSpaceDown0(wgt, owner) {
+		if (wgt.id) owner._fellows[wgt.id] = wgt;
+		for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
+			_addIdSpaceDown0(wgt, owner);
+	}
+	function _rmIdSpaceDown(wgt) {
+		var ow = wgt.parent;
+		ow = ow ? ow.$o(): null;
+		if (ow)
+			_rmIdSpaceDown0(wgt, ow);
+	}
+	function _rmIdSpaceDown0(wgt, owner) {
+		if (wgt.id) delete owner._fellows[wgt.id];
+		for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
+			_rmIdSpaceDown0(wgt, owner);
+	}
+
+	function _addBind(wgt) {
+		if (wgt.isListen('onBind'))
+			zk.afterMount(function () {
+				if (wgt.desktop) //might be unbound
+					wgt.fire('onBind');
+			});
+	}
+	function _addUnbind(wgt) {
+		if (wgt.isListen('onUnbind'))
+			zk.afterMount(function () {
+				if (!wgt.desktop) //might be bound
+					wgt.fire('onUnbind');
+			});
+	}
+
+	//Drag && Drop
+	function DD_getDrop(drag, pt, evt) {
+		var dragged = drag.control,
+			dragType = dragged._draggable;
+			//drag to itself not allowed
+		for (var wgt = evt.target; wgt && wgt != dragged; wgt = wgt.parent) {
+			var dropType = wgt._droppable;
+			if (dropType == 'true') return wgt;
+			if (dropType && dragType != "true")
+				for (var dropType = wgt._dropTypes, j = dropType.length; j--;)
+					if (dragType == dropType[j])
+						return wgt;
+		}
+	}
+	function DD_cleanLastDrop(drag) {
+		if (drag) {
+			var drop;
+			if (drop = drag._lastDrop) {
+				drag._lastDrop = null;
+				drop.dropEffect_();
+			}
+			drag._lastDropTo = null;
+		}
+	}
+	function DD_pointer(evt) {
+		return [evt.pageX + 10, evt.pageY + 5];
+	}
+	function DD_enddrag(drag, evt) {
+		DD_cleanLastDrop(drag);
+		var pt = [evt.pageX, evt.pageY],
+			wgt = DD_getDrop(drag, pt, evt);
+		if (wgt) {
+			var data = zk.copy({dragged: drag.control}, evt.data);
+			wgt.fire('onDrop', data, null, 38);
+		}
+	}
+	function DD_dragging(drag, pt, evt) {
+		var dropTo;
+		if (!evt || (dropTo = evt.domTarget) == drag._lastDropTo)
+			return;
+
+		var dropw = DD_getDrop(drag, pt, evt),
+			found = dropw && dropw == drag._lastDrop;
+		if (!found) {
+			DD_cleanLastDrop(drag); //clean _lastDrop
+			if (dropw) {
+				drag._lastDrop = dropw;
+				dropw.dropEffect_(true);
+				found = true;
+			}
+		}
+
+		var dragImg = drag._dragImg;
+		if (dragImg)
+			dragImg.className = found ? 'z-drop-allow': 'z-drop-disallow';
+
+		drag._lastDropTo = dropTo; //do it after _cleanLastDrop
+	}
+	function DD_ghosting(drag, ofs, evt) {
+		return drag.control.cloneDrag_(drag, DD_pointer(evt));
+	}
+	function DD_endghosting(drag, origin) {
+		drag.control.uncloneDrag_(drag);
+		drag._dragImg = null;
+	}
+	function DD_ghostByMessage(drag, ofs, msg) {
+		jq(document.body).append(
+			'<div id="zk_ddghost" class="z-drop-ghost" style="position:absolute;top:'
+			+ofs[1]+'px;left:'+ofs[0]+'px;"><div class="z-drop-cnt"><span id="zk_ddghost-img" class="z-drop-disallow"></span>&nbsp;'+msg+'</div></div>');
+		drag._dragImg = jq("#zk_ddghost-img")[0];
+		return jq("#zk_ddghost")[0];
+	}
+	function DD_ghostByClone(drag, ofs) {
+		var dgelm = jq(drag.node).clone()[0];
+		dgelm.id = "zk_ddghost";
+		zk.copy(dgelm.style, {
+			position: "absolute", left: ofs[0] + "px", top: ofs[1] + "px"
+		});
+		document.body.appendChild(dgelm);
+		return dgelm;
+	}
+	function DD_constraint(drag, pt, evt) {
+		return DD_pointer(evt);
+	}
+	function DD_ignoredrag(drag, pt, evt) {
+		return drag.control.ingoreDrag_(pt);
+	}
+
 zk.Widget = zk.$extends(zk.Object, {
 	_visible: true,
 	nChildren: 0,
@@ -112,7 +336,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		var f = this.$o();
 		if (f) {
 			f = f._fellows[id];
-			return f || !global || zk.spaceless ? f: zk.Widget._global[id];
+			return f || !global || zk.spaceless ? f: _globals[id];
 		}
 	},
 	getFellow: _zkf,
@@ -124,18 +348,18 @@ zk.Widget = zk.$extends(zk.Object, {
 			if (zk.spaceless && this.desktop)
 				throw 'id cannot be changed after bound'; //since there might be subnodes
 
-			var $Widget = zk.Widget, old = this.id;
+			var old = this.id;
 			if (old) {
-				if (!zk.spaceless) delete $Widget._global[id];
-				$Widget._rmIdSpace(this);
+				if (!zk.spaceless) delete _globals[id];
+				_rmIdSpace(this);
 			}
 
 			this.id = id;
 			if (zk.spaceless) this.uuid = id;
 
 			if (id) {
-				if (!zk.spaceless) $Widget._global[id] = this;
-				$Widget._addIdSpace(this);
+				if (!zk.spaceless) _globals[id] = this;
+				_addIdSpace(this);
 			}
 		}
 		return this;
@@ -202,7 +426,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 		++this.nChildren;
 
-		zk.Widget._addIdSpaceDown(child);
+		_addIdSpaceDown(child);
 
 		var dt = this.desktop;
 		if (dt) this.insertChildHTML_(child, null, dt);
@@ -237,7 +461,7 @@ zk.Widget = zk.$extends(zk.Object, {
 
 		++this.nChildren;
 
-		zk.Widget._addIdSpaceDown(child);
+		_addIdSpaceDown(child);
 
 		var dt = this.desktop;
 		if (dt) this.insertChildHTML_(child, sibling, dt);
@@ -262,7 +486,7 @@ zk.Widget = zk.$extends(zk.Object, {
 
 		--this.nChildren;
 
-		zk.Widget._rmIdSpaceDown(child);
+		_rmIdSpaceDown(child);
 
 		if (child.desktop)
 			this.removeChildHTML_(child, p);
@@ -301,7 +525,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			if (!newwgt.desktop) newwgt.desktop = this.desktop;
 			if (node) newwgt.replaceHTML(node, newwgt.desktop);
 
-			zk.Widget._fixBindLevel(newwgt, p ? p.bindLevel + 1: 0);
+			_fixBindLevel(newwgt, p ? p.bindLevel + 1: 0);
 			zWatch.fire('onBindLevelMove', null, newwgt);
 		}
 
@@ -339,7 +563,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			//Not calling unbind and bind, so handle bindLevel here
 			var v = this.bindLevel + 1;
 			if (child.bindLevel != v) {
-				zk.Widget._fixBindLevel(child, v);
+				_fixBindLevel(child, v);
 				zWatch.fire('onBindLevelMove', null, child);
 			}
 		} finally {
@@ -400,11 +624,11 @@ zk.Widget = zk.$extends(zk.Object, {
 			this.setDomVisible_(node, true);
 
 			//from parent to child
-			for (var fs = zk.Widget._floatings, j = 0, fl = fs.length; j < fl; ++j) {
-				var w = fs[j].widget;
+			for (var j = 0, fl = _floatings.length; j < fl; ++j) {
+				var w = _floatings[j].widget;
 				if (this != w && this._floatVisibleDependent(w)) {
 					zi = zi >= 0 ? ++zi: w._topZIndex();
-					var n = fs[j].node;
+					var n = _floatings[j].node;
 					if (n != w.$n()) w.setFloatZIndex_(n, zi); //only a portion
 					else w._setZIndex(zi, true);
 
@@ -416,13 +640,12 @@ zk.Widget = zk.$extends(zk.Object, {
 		} else {
 			zWatch.fireDown('onHide', null, this);
 
-			for (var fs = zk.Widget._floatings, j = fs.length,
-			bindLevel = this.bindLevel; j--;) {
-				var w = fs[j].widget;
+			for (var j = _floatings.length, bindLevel = this.bindLevel; j--;) {
+				var w = _floatings[j].widget;
 				if (bindLevel >= w.bindLevel)
 					break; //skip non-descendant (and this)
 				if (this._floatVisibleDependent(w))
-					w.setDomVisible_(fs[j].node, false, {visibility:1});
+					w.setDomVisible_(_floatings[j].node, false, {visibility:1});
 			}
 
 			this.setDomVisible_(node, false);
@@ -450,16 +673,15 @@ zk.Widget = zk.$extends(zk.Object, {
 	setTopmost: function () {
 		if (!this.desktop) return -1;
 
-		for (var wgt = this, Widget = zk.Widget; wgt; wgt = wgt.parent)
+		for (var wgt = this; wgt; wgt = wgt.parent)
 			if (wgt._floating) {
 				var zi = wgt._topZIndex();
 				wgt._setZIndex(zi, true);
 
-				for (var fs = Widget._floatings, j = 0, fl = fs.length;
-				j < fl; ++j) { //parent first
-					var w = fs[j].widget;
+				for (var j = 0, fl = _floatings.length; j < fl; ++j) { //parent first
+					var w = _floatings[j].widget;
 					if (wgt != w && zUtl.isAncestor(wgt, w) && w.isVisible()) {
-						var n = fs[j].node
+						var n = _floatings[j].node
 						if (n != w.$n()) w.setFloatZIndex_(n, ++zi); //only a portion
 						else w._setZIndex(++zi, true);
 					}
@@ -471,8 +693,8 @@ zk.Widget = zk.$extends(zk.Object, {
 	/** Returns the topmost z-index for this widget.*/
 	_topZIndex: function () {
 		var zi = 1800; // we have to start from 1800 depended on all the css files.
-		for (var fs = zk.Widget._floatings, j = fs.length; j--;) {
-			var w = fs[j].widget;
+		for (var j = _floatings.length; j--;) {
+			var w = _floatings[j].widget;
 			if (w._zIndex >= zi && !zUtl.isAncestor(this, w) && w.isVisible())
 				zi = w._zIndex + 1;
 		}
@@ -483,26 +705,25 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	setFloating_: function (floating, opts) {
 		if (this._floating != floating) {
-			var fs = zk.Widget._floatings;
 			if (floating) {
 				//parent first
 				var inf = {widget: this, node: opts && opts.node? opts.node: this.$n()},
 					bindLevel = this.bindLevel;
-				for (var j = fs.length;;) {
+				for (var j = _floatings.length;;) {
 					if (--j < 0) {
-						fs.unshift(inf);
+						_floatings.unshift(inf);
 						break;
 					}
-					if (bindLevel >= fs[j].widget.bindLevel) { //parent first
-						fs.splice(j + 1, 0, inf);
+					if (bindLevel >= _floatings[j].widget.bindLevel) { //parent first
+						_floatings.splice(j + 1, 0, inf);
 						break;
 					}
 				}
 				this._floating = true;
 			} else {
-				for (var j = fs.length; j--;)
-					if (fs[j].widget == this)
-						fs.splice(j, 1);
+				for (var j = _floatings.length; j--;)
+					if (_floatings[j].widget == this)
+						_floatings.splice(j, 1);
 				this._floating = false;
 			}
 		}
@@ -818,7 +1039,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 
 	bind_: function (desktop, skipper, after) {
-		zk.Widget._binds[this.uuid] = this;
+		_binds[this.uuid] = this;
 
 		if (!desktop) desktop = zk.Desktop.$(this.uuid);
 		this.desktop = desktop;
@@ -832,10 +1053,10 @@ zk.Widget = zk.$extends(zk.Object, {
 			if (!skipper || !skipper.skipped(this, child))
 				child.bind_(desktop, null, after); //don't pass skipper
 
-		zk.Widget._addBind(this);
+		_addBind(this);
 	},
 	unbind_: function (skipper, after) {
-		delete zk.Widget._binds[this.uuid];
+		delete _binds[this.uuid];
 
 		this._node = this.desktop = null;
 		this._subnodes = {};
@@ -848,17 +1069,16 @@ zk.Widget = zk.$extends(zk.Object, {
 
 		if (this._draggable) this.cleanDrag_();
 
-		zk.Widget._addUnbind(this);
+		_addUnbind(this);
 	},
 
 	initDrag_: function () {
-		var WDD = zk.WgtDD;
 		this._drag = new zk.Draggable(this, this.getDragNode(), {
 			starteffect: zk.$void, //see bug #1886342
-			endeffect: WDD.enddrag, change: WDD.dragging,
-			ghosting: WDD.ghosting, endghosting: WDD.endghosting,
-			constraint: WDD.constraint,
-			ignoredrag: WDD.ignoredrag,
+			endeffect: DD_enddrag, change: DD_dragging,
+			ghosting: DD_ghosting, endghosting: DD_endghosting,
+			constraint: DD_constraint,
+			ignoredrag: DD_ignoredrag,
 			zIndex: 88800
 		});
 	},
@@ -890,13 +1110,13 @@ zk.Widget = zk.$extends(zk.Object, {
 	cloneDrag_: function (drag, ofs) {
 		//See also bug 1783363 and 1766244
 
-		var WDD = zk.WgtDD, dgelm;
+		var dgelm;
 		if (this.shallDragMessage_()) {
 			var msg = this.getDragMessage_();
 			if (msg.length > 10) msg = msg.substring(0,10) + "...";
-			dgelm = WDD.ghostByMessage(drag, ofs, msg);
+			dgelm = DD_ghostByMessage(drag, ofs, msg);
 		}else {
-			dgelm = WDD.ghostByClone(drag, ofs);
+			dgelm = DD_ghostByClone(drag, ofs);
 		}
 
 		drag._orgcursor = document.body.style.cursor;
@@ -1158,13 +1378,13 @@ zk.Widget = zk.$extends(zk.Object, {
 	//DOM event handling//
 	domListen_: function (n, evtnm, fn) {
 		var inf;
-		if (inf = zk.Widget._domevti(this, evtnm, fn))
+		if (inf = _domEvtInf(this, evtnm, fn))
 			jq(n, zk).bind(inf[0], inf[1]);
 		return this;
 	},
 	domUnlisten_: function (n, evtnm, fn) {
 		var inf;
-		if (inf = zk.Widget._domevti(this, evtnm, fn))
+		if (inf = _domEvtInf(this, evtnm, fn))
 			jq(n, zk).unbind(inf[0], inf[1]);
 		return this;
 	},
@@ -1173,13 +1393,11 @@ zk.Widget = zk.$extends(zk.Object, {
 	}
 
 }, {
-	_floatings: [], //[{widget,node}]
 	$: function (n, opts) {
-		var binds = zk.Widget._binds;
 		if (typeof n == 'string') {
 			if (n.charAt(0) == '#') n = n.substring(1);
 			var j = n.indexOf('-');
-			return binds[j >= 0 ? n.substring(0, j): n];
+			return _binds[j >= 0 ? n.substring(0, j): n];
 		}
 
 		if (!n || zk.Widget.isInstance(n)) return n;
@@ -1195,7 +1413,7 @@ zk.Widget = zk.$extends(zk.Object, {
 				if (j >= 0) {
 					id = id.substring(0, j);
 					if (opts && opts.child) {
-						var wgt = binds[id];
+						var wgt = _binds[id];
 						if (wgt) {
 							var n2 = wgt.$n();
 							if (n2 && jq.isAncestor(n2, n)) return wgt;
@@ -1204,83 +1422,12 @@ zk.Widget = zk.$extends(zk.Object, {
 						continue;
 					}
 				}
-				wgt = binds[id];
+				wgt = _binds[id];
 				if (wgt) return wgt;
 			}
 			if (opts && opts.exact) break;
 		}
 		return null;
-	},
-	_binds: {}, //Map(uuid, wgt): bind but no node
-
-	//Event Handling//
-	_domevti: function (wgt, evtnm, fn) { //proxy event listener
-		if (!fn) {
-			var nms = zk.Widget[wgt.inDesign ? '_domevtfnD': '_domevtfn'];
-			fn = nms[evtnm];
-			if (!fn) {
-				fn = '_do';
-				if (wgt.inDesign) fn += 'Design';
-				fn += evtnm.substring(2);
-				nms[evtnm] = fn;
-			}
-		} else if (wgt.inDesign)
-			fn = fn.startsWith('_do') ? '_doDesign' + fn.substring(3):
-				'doDesign' + (fn.startsWith('do') ? fn.substring(2): fn);
-
-		var f = wgt[fn];
-		if (!f) {
-			if (!wgt.inDesign)
-				throw 'Listener ' + fn + ' not found in ' + wgt.className;
-			return null;
-		}
-		var domns = zk.Widget._domevtn,
-			domn = domns[evtnm];
-		if (!domn)
-			domn = domns[evtnm] = evtnm.substring(2).toLowerCase();
-		return [domn, zk.Widget._domevtproxy(wgt, f)];
-	},
-	_domevtfn: {},
-	_domevtfnD: {},
-	_domevtn: {onDoubleClick: 'dblclick'},
-	_domevtproxy: function (wgt, f) {
-		var fps = wgt._$evproxs, fp;
-		if (!fps) wgt._$evproxs = fps = {};
-		else if (fp = fps[f]) return fp;
-		return fps[f] = zk.Widget._domevtproxy0(wgt, f);
-	},
-	_domevtproxy0: function (wgt, f) {
-		return function (devt) {
-			var args = [], evt;
-			for (var j = arguments.length; --j > 0;)
-				args.unshift(arguments[j]);
-			args.unshift(evt = jq.event.toEvent(devt, wgt));
-
-			switch (devt.type){
-			case 'focus':
-				if (wgt.canActivate()) {
-					zk.currentFocus = wgt;
-					zWatch.fire('onFloatUp', null, wgt); //notify all
-					break;
-				}
-				return; //ignore it
-			case 'blur':
-				//due to _domMouseDown called, zk.currentFocus already corrected,
-				//so we clear it only if caused by other case
-				if (!zk._cfByMD) zk.currentFocus = null;
-				break;
-			case 'click':
-			case 'dblclick':
-			case 'mouseup': //we cannot simulate mousedown:(
-				if (zk.Draggable.ignoreClick())
-					return;
-			}
-
-			var ret = f.apply(wgt, args);
-			if (typeof ret == 'undefined') ret = evt.returnValue;
-			if (evt.domStopped) devt.stop();
-			return devt.type == 'dblclick' && typeof ret == 'undefined' ? false: ret;
-		};
 	},
 
 	_domMouseDown: function (wgt, fake) { //called by mount
@@ -1295,14 +1442,11 @@ zk.Widget = zk.$extends(zk.Object, {
 			if (!fake) {
 				zk.currentFocus = wgt;
 				zk._cfByMD = true;
-				setTimeout(zk.Widget._clearCFByMD, 0);
+				setTimeout(function(){zk._cfByMD = false;}, 0);
 					//turn it off later since onBlur_ needs it
 			}
 			if (wgt) zWatch.fire('onFloatUp', null, wgt); //notify all
 		}
-	},
-	_clearCFByMD: function () {
-		zk._cfByMD = false;
 	},
 
 	//uuid//
@@ -1312,100 +1456,31 @@ zk.Widget = zk.$extends(zk.Object, {
 		return j >= 0 ? uuid.substring(0, j): id;
 	},
 	nextUuid: function () {
-		return '_z_' + zk.Widget._nextUuid++;
+		return '_z_' + _nextUuid++;
 	},
-	_nextUuid: 0,
 
 	isAutoId: function (id) {
 		return !id || id.startsWith('_z_') || id.startsWith('z_');
 	},
 
-	_fixBindLevel: function (wgt, v) {
-		var $Widget = zk.Widget;
-		wgt.bindLevel = v++;
-		for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
-			$Widget._fixBindLevel(wgt, v);
-	},
-
-	_addIdSpace: function (wgt) {
-		if (wgt._fellows) wgt._fellows[wgt.id] = wgt;
-		var p = wgt.parent;
-		if (p) {
-			p = p.$o();
-			if (p) p._fellows[wgt.id] = wgt;
-		}
-	},
-	_rmIdSpace: function (wgt) {
-		if (wgt._fellows) delete wgt._fellows[wgt.id];
-		var p = wgt.parent;
-		if (p) {
-			p = p.$o();
-			if (p) delete p._fellows[wgt.id];
-		}
-	},
-	_addIdSpaceDown: function (wgt) {
-		var ow = wgt.parent;
-		ow = ow ? ow.$o(): null;
-		if (ow) {
-			var fn = zk.Widget._addIdSpaceDown0;
-			fn(wgt, ow, fn);
-		}
-	},
-	_addIdSpaceDown0: function (wgt, owner, fn) {
-		if (wgt.id) owner._fellows[wgt.id] = wgt;
-		for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
-			fn(wgt, owner, fn);
-	},
-	_rmIdSpaceDown: function (wgt) {
-		var ow = wgt.parent;
-		ow = ow ? ow.$o(): null;
-		if (ow) {
-			var fn = zk.Widget._rmIdSpaceDown0;
-			fn(wgt, ow, fn);
-		}
-	},
-	_rmIdSpaceDown0: function (wgt, owner, fn) {
-		if (wgt.id) delete owner._fellows[wgt.id];
-		for (wgt = wgt.firstChild; wgt; wgt = wgt.nextSibling)
-			fn(wgt, owner, fn);
-	},
-
-	_global: {}, //a global ID space
-
-	_addBind: function (wgt) {
-		if (wgt.isListen('onBind'))
-			zk.afterMount(function () {
-				if (wgt.desktop) //might be unbound
-					wgt.fire('onBind');
-			});
-	},
-	_addUnbind: function (wgt) {
-		if (wgt.isListen('onUnbind'))
-			zk.afterMount(function () {
-				if (!wgt.desktop) //might be bound
-					wgt.fire('onUnbind');
-			});
-	},
-
-	_wgtcs: {},
 	register: function (cls, clsnm, blankprev) {
-		var wgtcs = zk.Widget._wgtcs;
 		if (arguments.length == 1) //query
-			return wgtcs[cls];
+			return _wgtcls[cls];
 
 		cls.prototype.className = clsnm;
 		var j = clsnm.lastIndexOf('.');
 		if (j >= 0) clsnm = clsnm.substring(j + 1);
-		wgtcs[clsnm.substring(0,1).toLowerCase()+clsnm.substring(1)] = cls;
+		_wgtcls[clsnm.substring(0,1).toLowerCase()+clsnm.substring(1)] = cls;
 		if (blankprev) cls.prototype.blankPreserved = true;
 	},
 	newInstance: function (wgtnm) {
-		var cls = zk.Widget._wgtcs[wgtnm.toLowerCase()];
+		var cls = _wgtcls[wgtnm.toLowerCase()];
 		if (!cls)
 			throw 'widget not found: '+wgtnm;
 		return new cls();
 	}
 });
+})();
 
 zk.Page = zk.$extends(zk.Widget, {//unlik server, we derive from Widget!
 	_style: "width:100%;height:100%",
@@ -1592,93 +1667,3 @@ zk.RefWidget = zk.$extends(zk.Widget, {
 		//no need to call super since it is bound
 	}
 });
-
-zk.WgtDD = {
-	_getDrop: function (drag, pt, evt) {
-		var dragged = drag.control,
-			dragType = dragged._draggable;
-			//drag to itself not allowed
-		for (var wgt = evt.target; wgt && wgt != dragged; wgt = wgt.parent) {
-			var dropType = wgt._droppable;
-			if (dropType == 'true') return wgt;
-			if (dropType && dragType != "true")
-				for (var dropType = wgt._dropTypes, j = dropType.length; j--;)
-					if (dragType == dropType[j])
-						return wgt;
-		}
-	},
-	_cleanLastDrop: function (drag) {
-		if (drag) {
-			var drop;
-			if (drop = drag._lastDrop) {
-				drag._lastDrop = null;
-				drop.dropEffect_();
-			}
-			drag._lastDropTo = null;
-		}
-	},
-	_pointer: function (evt) {
-		return [evt.pageX + 10, evt.pageY + 5];
-	},
-
-	enddrag: function (drag, evt) {
-		zk.WgtDD._cleanLastDrop(drag);
-		var pt = [evt.pageX, evt.pageY],
-			wgt = zk.WgtDD._getDrop(drag, pt, evt);
-		if (wgt) {
-			var data = zk.copy({dragged: drag.control}, evt.data);
-			wgt.fire('onDrop', data, null, 38);
-		}
-	},
-	dragging: function (drag, pt, evt) {
-		var dropTo;
-		if (!evt || (dropTo = evt.domTarget) == drag._lastDropTo)
-			return;
-
-		var dropw = zk.WgtDD._getDrop(drag, pt, evt),
-			found = dropw && dropw == drag._lastDrop;
-		if (!found) {
-			zk.WgtDD._cleanLastDrop(drag); //clean _lastDrop
-			if (dropw) {
-				drag._lastDrop = dropw;
-				dropw.dropEffect_(true);
-				found = true;
-			}
-		}
-
-		var dragImg = drag._dragImg;
-		if (dragImg)
-			dragImg.className = found ? 'z-drop-allow': 'z-drop-disallow';
-
-		drag._lastDropTo = dropTo; //do it after _cleanLastDrop
-	},
-	ghosting: function (drag, ofs, evt) {
-		return drag.control.cloneDrag_(drag, zk.WgtDD._pointer(evt));
-	},
-	endghosting: function (drag, origin) {
-		drag.control.uncloneDrag_(drag);
-		drag._dragImg = null;
-	},
-	ghostByMessage: function (drag, ofs, msg) {
-		jq(document.body).append(
-			'<div id="zk_ddghost" class="z-drop-ghost" style="position:absolute;top:'
-			+ofs[1]+'px;left:'+ofs[0]+'px;"><div class="z-drop-cnt"><span id="zk_ddghost-img" class="z-drop-disallow"></span>&nbsp;'+msg+'</div></div>');
-		drag._dragImg = jq("#zk_ddghost-img")[0];
-		return jq("#zk_ddghost")[0];
-	},
-	ghostByClone: function (drag, ofs) {
-		var dgelm = jq(drag.node).clone()[0];
-		dgelm.id = "zk_ddghost";
-		zk.copy(dgelm.style, {
-			position: "absolute", left: ofs[0] + "px", top: ofs[1] + "px"
-		});
-		document.body.appendChild(dgelm);
-		return dgelm;
-	},
-	constraint: function (drag, pt, evt) {
-		return zk.WgtDD._pointer(evt);
-	},
-	ignoredrag: function (drag, pt, evt) {
-		return drag.control.ingoreDrag_(pt);
-	}
-};
