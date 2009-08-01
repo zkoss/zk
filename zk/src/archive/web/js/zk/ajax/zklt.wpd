@@ -25,7 +25,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		<script src="domopera.js"/>
 	<script>}else if(zk.safari){</script>
 		<script src="domsafari.js"/>
-	<script>}</script>
+	<script>}function zkeval(s){return eval(s)}</script>
+		<!-- Use with care (don't use local variable in s (used to enable yui compress) -->
 
 	<script src="anima.js"/>
 	<script src="drag.js"/>

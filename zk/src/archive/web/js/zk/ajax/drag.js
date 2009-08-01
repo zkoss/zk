@@ -219,18 +219,18 @@ zk.Draggable = zk.$extends(zk.Object, {
 		}
 
 		if(this.opts.zIndex) { //after ghosting
-			this.originalZ = zk.parseInt(jq(node).css('z-index'));
+			this.orgZ = zk.parseInt(jq(node).css('z-index'));
 			node.style.zIndex = this.opts.zIndex;
 		}
 
 		if(this.opts.scroll) {
 			if (this.opts.scroll == window) {
-				var where = this._getWindowScroll(this.opts.scroll);
-				this.originalScrollLeft = where.left;
-				this.originalScrollTop = where.top;
+				var where = this._getWndScroll(this.opts.scroll);
+				this.orgScrlLeft = where.left;
+				this.orgScrlTop = where.top;
 			} else {
-				this.originalScrollLeft = this.opts.scroll.scrollLeft;
-				this.originalScrollTop = this.opts.scroll.scrollTop;
+				this.orgScrlLeft = this.opts.scroll.scrollLeft;
+				this.orgScrlTop = this.opts.scroll.scrollTop;
 			}
 		}
 
@@ -270,7 +270,8 @@ zk.Draggable = zk.$extends(zk.Object, {
 
 			var p;
 			if (this.opts.scroll == window) {
-				with(this._getWindowScroll(this.opts.scroll)) { p = [ left, top, left+width, top+height ];}
+				var o = this._getWndScroll(this.opts.scroll);
+				p = [o.left, o.top, o.left + o.width, o.top + o.height];
 			} else {
 				p = zk(this.opts.scroll).viewportOffset();
 				p[0] += this.opts.scroll.scrollLeft + this._innerOfs[0];
@@ -345,7 +346,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 		}
 
 		if(this.opts.zIndex)
-			node.style.zIndex = this.originalZ;
+			node.style.zIndex = this.orgZ;
 
 		if(this.opts.endeffect) 
 			this.opts.endeffect(this, evt);
@@ -413,8 +414,8 @@ zk.Draggable = zk.$extends(zk.Object, {
 		pos[0] -= d[0]; pos[1] -= d[1];
 
 		if(this.opts.scroll && (this.opts.scroll != window && this._isScrollChild)) {
-			pos[0] -= this.opts.scroll.scrollLeft-this.originalScrollLeft;
-			pos[1] -= this.opts.scroll.scrollTop-this.originalScrollTop;
+			pos[0] -= this.opts.scroll.scrollLeft-this.orgScrlLeft;
+			pos[1] -= this.opts.scroll.scrollTop-this.orgScrlTop;
 		}
 
 		var p = [point[0]-pos[0]-this.offset[0],
@@ -476,11 +477,11 @@ zk.Draggable = zk.$extends(zk.Object, {
 			delta = current - this.lastScrolled;
 		this.lastScrolled = current;
 		if(this.opts.scroll == window) {
-			with (this._getWindowScroll(this.opts.scroll)) {
-				if (this.scrollSpeed[0] || this.scrollSpeed[1]) {
-				  var d = delta / 1000;
-				  this.opts.scroll.scrollTo( left + d*this.scrollSpeed[0], top + d*this.scrollSpeed[1] );
-				}
+			if (this.scrollSpeed[0] || this.scrollSpeed[1]) {
+				var o = this._getWndScroll(this.opts.scroll),
+					d = delta / 1000;
+				this.opts.scroll.scrollTo(o.left + d*this.scrollSpeed[0],
+					o.top + d*this.scrollSpeed[1]);
 			}
 		} else {
 			this.opts.scroll.scrollLeft += this.scrollSpeed[0] * delta / 1000;
@@ -510,26 +511,26 @@ zk.Draggable = zk.$extends(zk.Object, {
 	_updateInnerOfs: function () {
 		this._innerOfs = [jq.innerX(), jq.innerY()];
 	},
-	_getWindowScroll: function (w) {
-		var T, L, W, H;
-		with (w.document) {
-			if (w.document.documentElement && documentElement.scrollTop) {
-				T = documentElement.scrollTop;
-				L = documentElement.scrollLeft;
-			} else if (w.document.body) {
-				T = body.scrollTop;
-				L = body.scrollLeft;
-			}
-			if (w.innerWidth) {
-				W = w.innerWidth;
-				H = w.innerHeight;
-			} else if (w.document.documentElement && documentElement.clientWidth) {
-				W = documentElement.clientWidth;
-				H = documentElement.clientHeight;
-			} else {
-				W = body.offsetWidth;
-				H = body.offsetHeight
-			}
+	_getWndScroll: function (w) {
+		var T, L, W, H,
+			doc = w.document,
+			de = doc.documentElement;
+		if (de && de.scrollTop) {
+			T = de.scrollTop;
+			L = de.scrollLeft;
+		} else if (w.document.body) {
+			T = doc.body.scrollTop;
+			L = doc.body.scrollLeft;
+		}
+		if (w.innerWidth) {
+			W = w.innerWidth;
+			H = w.innerHeight;
+		} else if (de && de.clientWidth) {
+			W = de.clientWidth;
+			H = de.clientHeight;
+		} else {
+			W = doc.body.offsetWidth;
+			H = doc.body.offsetHeight
 		}
 		return {top: T, left: L, width: W, height: H};
 	}

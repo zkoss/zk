@@ -40,7 +40,8 @@ zAu = (function () {
 			cmds.pfIds = pfGetIds(req);
 		}
 
-		eval('rt='+rt);
+		rt = jq.evalJSON(rt);
+
 		var cmds = [],
 			rs = rt.rs,
 			rid = rt.rid;
@@ -59,7 +60,7 @@ zAu = (function () {
 				continue;
 			}
 
-			cmds.push({cmd: cmd, data: data ? eval(data): []});
+			cmds.push({cmd: cmd, data: data ? zkeval(data): []});
 		}
 
 		cmdsQue.push(cmds);
@@ -418,7 +419,7 @@ zAu = (function () {
 
 	////Ajax////
 	process: function (cmd, data) { //by server only (encoded)
-		doProcess(cmd, data ? eval(data): []);
+		doProcess(cmd, data ? zkeval(data): []);
 	},
 	shallIgnoreESC: function () {
 		return ajaxReq;
@@ -618,7 +619,7 @@ zAu.cmd0 = { //no uuid at all
 		document.title = dt0;
 	},
 	script: function (dt0) {
-		eval(dt0);
+		zkeval(dt0);
 	},
 	echo: function (dtid) {
 		zAu.send(new zk.Event(zk.Desktop.$(dtid), "dummy", null, {ignorable: true}));
@@ -728,7 +729,7 @@ zAu.cmd1 = {
 			wgt._replaceWgt(newwgt);
 		};
 		zk.mounting = true;
-		eval(code);
+		zkeval(code);
 	},
 	addAft: function (uuid, wgt, code, pgid) {
 		//Bug 1939059: This is a dirty fix. Refer to AuInsertBefore
@@ -739,7 +740,7 @@ zAu.cmd1 = {
 			else {
 				zAu.stub = zAu.cmd1._asBodyChild;
 				zk.mounting = true;
-				eval(code);
+				zkeval(code);
 			}
 			return;
 		}
@@ -753,7 +754,7 @@ zAu.cmd1 = {
 			zWatch.fireDown('onSize', null, child);
 		};
 		zk.mounting = true;
-		eval(code);
+		zkeval(code);
 	},
 	addBfr: function (uuid, wgt, code) {
 		zAu.stub = function (child) {
@@ -762,7 +763,7 @@ zAu.cmd1 = {
 			zWatch.fireDown('onSize', null, child);
 		};
 		zk.mounting = true;
-		eval(code);
+		zkeval(code);
 	},
 	addChd: function (uuid, wgt, code) {
 		zAu.stub = function (child) {
@@ -771,7 +772,7 @@ zAu.cmd1 = {
 			zWatch.fireDown('onSize', null, child);
 		};
 		zk.mounting = true;
-		eval(code);
+		zkeval(code);
 	},
 	_asBodyChild: function (child) {
 		jq(document.body).append(child);
