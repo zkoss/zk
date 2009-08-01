@@ -308,8 +308,8 @@ zk.copy(zkm, { //Use internally
 	push: function(w) {
 		w.children = [];
 		if (_wgts.length)
-			_wgts[0].children.push(w);
-		_wgts.unshift(w);
+			_wgts[0].children.push(w); //last child of top
+		_wgts.unshift(w); //become top
 	},
 	pop: function() {
 		var w = _wgts.shift();
