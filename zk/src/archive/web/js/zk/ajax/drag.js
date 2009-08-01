@@ -39,13 +39,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			_activedg = null;
 	}
 
-	function _cleardragging() {
-		zk.dragging = false;
-	}
-	function _clearInitEvt() {
-		_initEvt = null;
-	}
-
 	function _activate(dg, devt, pt) {
 		_timeout = setTimeout(function () { 
 			_timeout = null; 
@@ -56,7 +49,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	function _deactivate() {
 		_activedg = null;
-		setTimeout(_clearInitEvt, 0);
+		setTimeout(function(){_initEvt=null;}, 0);
 	}
 
 	function _docmousemove(devt) {
@@ -358,7 +351,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 			this.opts.endeffect(this, evt);
 
 		_deactivate(this);
-		setTimeout(_cleardragging, 0);
+		setTimeout(function(){zk.dragging=false;}, 0);
 			//we have to reset it later since event is fired later (after onmouseup)
 	},
 
