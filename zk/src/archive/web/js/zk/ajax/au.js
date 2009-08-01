@@ -425,14 +425,14 @@ zAu = (function () {
 		return ajaxReq;
 	},
 	_doCmds: function () { //called by mount.js, too
-		_zkmt = zUtl.now(); //used by zkm.exec
+		zkm.t = zUtl.now(); //used by zkm's run
 
 		for (var fn; fn = doCmdFns.shift();)
 			fn();
 
 		var ex, j = 0, rid = responseId;
 		for (; j < cmdsQue.length; ++j) {
-			if (zk.mounting) return; //wait zkm.mtAU to call
+			if (zk.mounting) return; //wait zkm's mtAU to call
 
 			var cmds = cmdsQue[j];
 			if (rid == cmds.rid || !rid || !cmds.rid //match
@@ -457,7 +457,7 @@ zAu = (function () {
 					} else { //not done yet (=zk.mounting)
 						responseId = oldrid; //restore
 						cmdsQue.splice(j, 0, cmds); //put it back
-						return; //wait zkm.mtAU to call
+						return; //wait zkm's mtAU to call
 					}
 				} catch (e) {
 					if (!ex) ex = e;

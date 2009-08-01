@@ -218,6 +218,14 @@ zk = function (sel) {
 		zUtl.destroyProgressbox("zk_proc");
 	},
 
+	disableESC: function () {
+		++zk._noESC;
+	},
+	enableESC: function () {
+		--zk._noESC;
+	},
+	_noESC: 0, //# of disableESC being called (also used by mount.js)
+
 	//DEBUG//
 	error: function (msg) {
 		jq(function() {

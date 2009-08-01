@@ -12,14 +12,15 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
-var _zkmt = zUtl.now(); //JS loaded
-
+zkm = {
+	t: zUtl.now() //when JS loaded
+};
 zkreg = zk.Widget.register; //a shortcut for WPD loader
 
 function zkblbg(binding) {
 	zk.mounting = true;
 	zkm.binding = binding;
-	var t = 390 - (zUtl.now() - _zkmt);
+	var t = 390 - (zUtl.now() - zkm.t);
 	zk.startProcessing(t > 0 ? t: 0);
 }
 
@@ -96,111 +97,87 @@ function zkmld(wgtcls, molds) {
 		ms[nm] = typeof fn == 'function' ? fn: fn[0].molds[fn[1]];
 	}		
 }
-function zkam(fn) {
-	if (zk.mounting || !jq.isReady) {
-		zkm._afMts.push(fn);
-		return true;
-	}
-	setTimeout(fn, 0);
-};
-zk.afterMount = zkam; //part of zk
 
-/** Used internally. */
-zkm = {
-	push: function(w) {
-		w.children = [];
-		if (zkm._wgts.length > 0)
-			zkm._wgts[0].children.push(w);
-		zkm._wgts.unshift(w);
-	},
-	pop: function() {
-		var w = zkm._wgts.shift();
-		if (!zkm._wgts.length) {
-			var cfi = zkm._crInf0;
-			cfi.push([zkm.curdt, w, zkm.binding]);
-			cfi.stub = zAu.stub;
-			zAu.stub = null;
-			zkm.exec(zkm.mount);
+(function () { //zkm
+	var _wgts = [],
+		_createInf0 = [], //create info
+		_createInf1 = [], //create info
+		_aftMounts = []; //afterMount funcs
+
+	zk.afterMount = function (fn) { //part of zk
+		if (zk.mounting || !jq.isReady) {
+			_aftMounts.push(fn);
+			return true;
 		}
-	},
-	top: function() {
-		return zkm._wgts[0];
-	},
-	end: function() {
-		zkm._wgts = [];
-		zkm._curdt = null;
-		zkm.binding = false;
-	},
+		setTimeout(fn, 0);
+	};
 
-	mount: function() {
+	function mount() {
 		//1. load JS
-		var cfi = zkm._crInf0;
-		for (var j = cfi.length; j--;) {
-			var inf = cfi[j];
+		for (var j = _createInf0.length; j--;) {
+			var inf = _createInf0[j];
 			if (!inf.jsLoad) {
 				inf.jsLoad = true;
-				zkm.pkgLoad(inf[1]);
-				zkm.exec(zkm.mount);
+				pkgLoad(inf[1]);
+				run(mount);
 				return;
 			}
 		}
 
 		//2. create wgt
-		var stub = cfi.stub;
+		var stub = _createInf0.stub;
 		if (stub) { //AU
-			cfi.stub = null;
-			zkm.mtAU(stub);
+			_createInf0.stub = null;
+			mtAU(stub);
 		} else { //browser loading
 			zk.bootstrapping = true;
-			jq(zkm.mtBL);
+			jq(mtBL);
 		}
-	},
+	}
 	/** mount for browser loading */
-	mtBL: function() {
+	function mtBL() {
 		if (zk.loading) {
-			zk.afterLoad(zkm.mtBL);
+			zk.afterLoad(mtBL);
 			return;
 		}
 
-		var crInf0 = zkm._crInf0,
-			inf = crInf0.shift();
+		var inf = _createInf0.shift();
 		if (inf) {
-			zkm._crInf1.push([inf[0], zkm.create(inf[0], inf[1]), inf[2]]);
+			_createInf1.push([inf[0], create(inf[0], inf[1]), inf[2]]);
 				//desktop as parent for browser loading
 	
-			if (crInf0.length)
-				return zkm.exec(zkm.mtBL);
+			if (_createInf0.length)
+				return run(mtBL);
 		}
 
-		zkm.mtBL0();
-	},
-	mtBL0: function() {
-		if (zkm._crInf0.length)
+		mtBL0();
+	}
+	function mtBL0() {
+		if (_createInf0.length)
 			return; //another page started
 
 		if (zk.loading) {
-			zk.afterLoad(zkm.mtBL0);
+			zk.afterLoad(mtBL0);
 			return;
 		}
 
-		var crInf1 = zkm._crInf1,
-			inf = crInf1.shift();
+		var inf = _createInf1.shift();
 		if (inf) {
 			var wgt = inf[1];
 			if (inf[2]) wgt.bind(inf[0]); //binding
 			else wgt.replaceHTML('#' + wgt.uuid, inf[0]);
-			return zkm.exec(zkm.mtBL0); //loop back to check if loading
+			return run(mtBL0); //loop back to check if loading
 		}
 
-		setTimeout(zkm.mtBL1, 0);
+		setTimeout(mtBL1, 0);
 			//use timeout since there might be multiple zkblbg
-	},
-	mtBL1: function () {
-		if (zkm._crInf0.length || zkm._crInf1.length)
+	}
+	function mtBL1() {
+		if (_createInf0.length || _createInf1.length)
 			return; //another page started
 
 		zk.mounting = zk.bootstrapping = false;
-		zkm._afmt(zkm.mtBL1);
+		doAfterMount(mtBL1);
 		zk.endProcessing();
 
 		zHistory.onURLChange();
@@ -209,44 +186,43 @@ zkm = {
 			for (var dtid in dts)
 				zAu._pfdone(dts[dtid], dtid);
 		}
-	},
+	}
 
 	/** mount for AU */
-	mtAU: function (stub) {
+	function mtAU(stub) {
 		if (zk.loading) {
-			zk.afterLoad(function () {zkm.mtAU(stub);});
+			zk.afterLoad(function () {mtAU(stub);});
 			return;
 		}
 
-		var crInf0 = zkm._crInf0,
-			inf = crInf0.shift();
+		var inf = _createInf0.shift();
 		if (inf) {
-			stub(zkm.create(null, inf[1]));
-			if (crInf0.length)
-				return zkm.exec(function () {zkm.mtAU(stub);}); //loop back to check if loading
+			stub(create(null, inf[1]));
+			if (_createInf0.length)
+				return run(function () {mtAU(stub);}); //loop back to check if loading
 		}
 
-		zkm.mtAU0();
-	},
-	mtAU0: function () {
+		mtAU0();
+	}
+	function mtAU0() {
 		zk.mounting = false;
-		zkm._afmt(zkm.mtAU0);
+		doAfterMount(mtAU0);
 
 		zAu._doCmds(); //server-push (w/ afterLoad) and _pfdone
-		zkm._afmt(zkm.mtAU0);
-	},
-	_afmt: function (fnext) {
-		for (var fn; fn = zkm._afMts.shift();) {
+		doAfterMount(mtAU0);
+	}
+	function doAfterMount(fnext) {
+		for (var fn; fn = _aftMounts.shift();) {
 			fn();
 			if (zk.loading) {
 				zk.afterLoad(fnext); //fn might load packages
 				return;
 			}
 		}
-	},
+	}
 
 	/** create the widget tree. */
-	create: function (parent, wginf) {
+	function create(parent, wginf) {
 		var wgt, props = wginf.props || {};
 		if (wginf.type == "#p") {
 			wgt = new zk.Page({uuid: wginf.uuid}, wginf.contained);
@@ -295,12 +271,12 @@ zkm = {
 
 		for (var j = 0, childs = wginf.children, len = childs.length;
 		j < len; ++j)
-			zkm.create(wgt, childs[j]);
+			create(wgt, childs[j]);
 		return wgt;
-	},
+	}
 
 	/** Loads package of a widget tree. */
-	pkgLoad: function (w) {
+	function pkgLoad(w) {
 		var type = w.type, i = type.lastIndexOf('.');
 		if (i >= 0)
 			zk.load(type.substring(0, i), zkm.curdt);
@@ -313,28 +289,62 @@ zkm = {
 		}
 
 		for (var children = w.children, len = children.length, j = 0; j < len;++j)
-			zkm.pkgLoad(children[j]);
-	},
+			pkgLoad(children[j]);
+	}
 
-	/** exec and delay if too busy, so progressbox has a chance to show. */
-	exec: function (fn) {
-		var t = zUtl.now(), dt = t - _zkmt;
+	/** run and delay if too busy, so progressbox has a chance to show. */
+	function run(fn) {
+		var t = zUtl.now(), dt = t - zkm.t;
 		if (dt > 300) { //huge page
-			_zkmt = t;
+			zkm.t = t;
 			dt >>= 4;
 			setTimeout(fn, dt < 35 ? dt: 35); //breathe
 				//IE optimize the display if delay is too short
 		} else
 			fn();
+	}
+
+zk.copy(zkm, { //Use internally
+	push: function(w) {
+		w.children = [];
+		if (_wgts.length)
+			_wgts[0].children.push(w);
+		_wgts.unshift(w);
 	},
+	pop: function() {
+		var w = _wgts.shift();
+		if (!_wgts.length) {
+			_createInf0.push([zkm.curdt, w, zkm.binding]);
+			_createInf0.stub = zAu.stub;
+			zAu.stub = null;
+			run(mount);
+		}
+	},
+	top: function() {
+		return _wgts[0];
+	},
+	end: function() {
+		_wgts = [];
+		zkm.curdt = null;
+		zkm.binding = false;
+	}
+});
+})(); //zkm
 
-	_wgts: [],
-	_crInf0: [], //create info
-	_crInf1: [], //create info
-	_afMts: [], //afterMount funcs
+//Event Handler//
+jq(function() {
+	var _bfUploads = [],
+		_reszInf = {},
+		_oldBfUnload;
 
-	//Event Handler//
-	_doEvt: function (wevt) {
+	zk.copy(zk, {
+		beforeUnload: function (fn, opts) { //part of zk
+			if (opts && opts.remove) _bfUploads.$remove(fn);
+			else _bfUploads.push(fn);
+		}
+	});
+
+	function _doEvt(wevt) {
 		var wgt = wevt.target,
 			post = wevt.name.substring(2) + '_';
 		if (wgt.inDesign) {
@@ -345,15 +355,15 @@ zkm = {
 
 		if (wevt.domStopped)
 			wevt.domEvent.stop();
-	},
-	docMouseDown: function (evt) {
-		zkm._eproxy(evt);
+	}
+	function docMouseDown(evt) {
+		_evtProxy(evt);
 		var wgt = zk.Widget.$(evt, {child:true});
-		zkm._docMouseDown(
+		_docMouseDown(
 			new zk.Event(wgt, 'onMouseDown', evt.mouseData(), null, evt),
 			wgt);
-	},
-	_docMouseDown: function (evt, wgt, fake) {
+	}
+	function _docMouseDown(evt, wgt, fake) {
 		zk.lastPointer[0] = evt.pageX;
 		zk.lastPointer[1] = evt.pageY;
 
@@ -364,25 +374,25 @@ zkm = {
 			zk.Widget._domMouseDown(wgt, fake); //wgt is null if mask
 
 		if (wgt)
-			zkm._doEvt(evt);
-	},
-	docMouseUp: function (evt) {
+			_doEvt(evt);
+	}
+	function docMouseUp(evt) {
 		var e = zk.Draggable.ignoreMouseUp();
 		if (e === true)
 			return; //ingore
 		if (e != null) {
-			zkm._docMouseDown(e, null, true); //simulate mousedown
-			zkm._simFocus(e.target); //simulate focus
+			_docMouseDown(e, null, true); //simulate mousedown
+			_simFocus(e.target); //simulate focus
 		}
 
-		zkm._eproxy(evt);
+		_evtProxy(evt);
 		var wgt = zk.mouseCapture;
 		if (wgt) zk.mouseCapture = null;
 		else wgt = zk.Widget.$(evt, {child:true});
 		if (wgt)
-			zkm._doEvt(new zk.Event(wgt, 'onMouseUp', evt.mouseData(), null, evt));
-	},
-	_simFocus: function (wgt) {
+			_doEvt(new zk.Event(wgt, 'onMouseUp', evt.mouseData(), null, evt));
+	}
+	function _simFocus(wgt) {
 		var cf = zk.currentFocus;
 		if (!cf || wgt == cf)
 			return;
@@ -408,9 +418,9 @@ zkm = {
 					break;
 			}
 		}
-	},
+	}
 
-	_eproxy: function (evt) { //handle proxy
+	function _evtProxy(evt) { //handle proxy
 		var n;
 		
 		// Firefox 3.5 will cause an error.
@@ -419,104 +429,104 @@ zkm = {
 			((n = evt.originalTarget) && (n = n.z$proxy))) 
 				evt.target = n;
 		} catch (e) {}
-	},
-	docMouseMove: function (evt) {
-		zkm._eproxy(evt);
+	}
+	function docMouseMove(evt) {
+		_evtProxy(evt);
 		zk.currentPointer[0] = evt.pageX;
 		zk.currentPointer[1] = evt.pageY;
 
 		var wgt = zk.mouseCapture;
 		if (!wgt) wgt = zk.Widget.$(evt, {child:true});
 		if (wgt)
-			zkm._doEvt(new zk.Event(wgt, 'onMouseMove', evt.mouseData(), null, evt));
-	},
-	docMouseOver: function (evt) {
-		zkm._eproxy(evt);
+			_doEvt(new zk.Event(wgt, 'onMouseMove', evt.mouseData(), null, evt));
+	}
+	function docMouseOver(evt) {
+		_evtProxy(evt);
 		zk.currentPointer[0] = evt.pageX;
 		zk.currentPointer[1] = evt.pageY;
 
 		var wgt = zk.Widget.$(evt, {child:true});
 		if (wgt)
-			zkm._doEvt(new zk.Event(wgt, 'onMouseOver', evt.mouseData(), null, evt));
-	},
-	docMouseOut: function (evt) {
-		zkm._eproxy(evt);
+			_doEvt(new zk.Event(wgt, 'onMouseOver', evt.mouseData(), null, evt));
+	}
+	function docMouseOut(evt) {
+		_evtProxy(evt);
 		var wgt = zk.Widget.$(evt, {child:true});
 		if (wgt)
-			zkm._doEvt(new zk.Event(wgt, 'onMouseOut', evt.mouseData(), null, evt));
-	},
-	docKeyDown: function (evt) {
-		//seems overkill: zkm._eproxy(evt);
+			_doEvt(new zk.Event(wgt, 'onMouseOut', evt.mouseData(), null, evt));
+	}
+	function docKeyDown(evt) {
+		//seems overkill: _evtProxy(evt);
 		var wgt = zk.Widget.$(evt, {child:true});
 		if (wgt) {
 			var wevt = new zk.Event(wgt, 'onKeyDown', evt.keyData(), null, evt);
-			zkm._doEvt(wevt);
+			_doEvt(wevt);
 			if (!wgt.inDesign && !wevt.stopped && wgt.afterKeyDown_)
 				wgt.afterKeyDown_(wevt);
 		}
 
 		if (evt.keyCode == 27
-		&& (zkm._noESC > 0 || zAu.shallIgnoreESC())) //Bug 1927788: prevent FF from closing connection
+		&& (zk._noESC > 0 || zAu.shallIgnoreESC())) //Bug 1927788: prevent FF from closing connection
 			return false; //eat
-	},
-	docKeyUp: function (evt) {
-		//seems overkill: zkm._eproxy(evt);
+	}
+	function docKeyUp(evt) {
+		//seems overkill: _evtProxy(evt);
 		var wgt = zk.keyCapture;
 		if (wgt) zk.keyCapture = null;
 		else wgt = zk.Widget.$(evt, {child:true});
 		if (wgt)
-			zkm._doEvt(new zk.Event(wgt, 'onKeyUp', evt.keyData(), null, evt));
-	},
-	docKeyPress: function (evt) {
-		//seems overkill: zkm._eproxy(evt);
+			_doEvt(new zk.Event(wgt, 'onKeyUp', evt.keyData(), null, evt));
+	}
+	function docKeyPress(evt) {
+		//seems overkill: _evtProxy(evt);
 		var wgt = zk.keyCapture;
 		if (!wgt) wgt = zk.Widget.$(evt, {child:true});
 		if (wgt)
-			zkm._doEvt(new zk.Event(wgt, 'onKeyPress', evt.keyData(), null, evt));
-	},
-	docClick: function (evt) {
+			_doEvt(new zk.Event(wgt, 'onKeyPress', evt.keyData(), null, evt));
+	}
+	function docClick(evt) {
 		if (zk.processing || zk.Draggable.ignoreClick()) return;
 
-		zkm._eproxy(evt);
+		_evtProxy(evt);
 		if (evt.which == 1) {
 			var wgt = zk.Widget.$(evt, {child:true});
 			if (wgt)
-				zkm._doEvt(new zk.Event(wgt, 'onClick', evt.mouseData(), {ctl:true}, evt));
+				_doEvt(new zk.Event(wgt, 'onClick', evt.mouseData(), {ctl:true}, evt));
 			//don't return anything. Otherwise, it replaces event.returnValue in IE (Bug 1541132)
 		}
-	},
-	docDblClick: function (evt) {
+	}
+	function docDblClick(evt) {
 		if (zk.processing || zk.Draggable.ignoreClick()) return;
 
-		zkm._eproxy(evt);
+		_evtProxy(evt);
 		var wgt = zk.Widget.$(evt, {child:true});
 		if (wgt) {
 			var wevt = new zk.Event(wgt, 'onDoubleClick', evt.mouseData(), {ctl:true}, evt);
-			zkm._doEvt(wevt);
+			_doEvt(wevt);
 			if (wevt.domStopped)
 				return false;
 		}
-	},
-	docCtxMenu: function (evt) {
+	}
+	function docCtxMenu(evt) {
 		if (zk.processing) return;
 
-		zkm._eproxy(evt);
+		_evtProxy(evt);
 		zk.lastPointer[0] = evt.pageX;
 		zk.lastPointer[1] = evt.pageY;
 
 		var wgt = zk.Widget.$(evt, {child:true});
 		if (wgt) {
 			var wevt = new zk.Event(wgt, 'onRightClick', evt.mouseData(), {ctl:true}, evt);
-			zkm._doEvt(wevt);
+			_doEvt(wevt);
 			if (wevt.domStopped)
 				return false;
 		}
 		return !zk.ie || evt.returnValue;
-	},
-	docScroll: function () {
+	}
+	function docScroll() {
 		zWatch.fire('onScroll'); //notify all
-	},
-	docResize: function () {
+	}
+	function docResize() {
 		if (!jq.isReady || zk.mounting)
 			return; //IE6: it sometimes fires an "extra" onResize in loading
 
@@ -529,42 +539,40 @@ zkm = {
 	//2. IE keeps sending onresize when dragging the browser's border,
 	//so we have to filter (most of) them out
 
-		var now = zUtl.now(), resz = zkm._resz;
-		if ((resz.lastTime && now < resz.lastTime) || resz._inResize)
+		var now = zUtl.now();
+		if ((_reszInf.lastTime && now < _reszInf.lastTime) || _reszInf.inResize)
 			return; //ignore resize for a while (since onSize might trigger onsize)
 
 		var delay = zk.ie ? 250: 50;
-		resz.time = now + delay - 1; //handle it later
-		setTimeout(zkm.docDidResize, delay);
-	},
-	docDidResize: function () {
-		var resz = zkm._resz;
-		if (!resz.time) return; //already handled
+		_reszInf.time = now + delay - 1; //handle it later
+		setTimeout(docDidResize, delay);
+	}
+	function docDidResize() {
+		if (!_reszInf.time) return; //already handled
 
 		var now = zUtl.now();
-		if (zk.mounting || zk.loading || now < resz.time || zk.animating()) {
-			setTimeout(zkm.docDidResize, 10);
+		if (zk.mounting || zk.loading || now < _reszInf.time || zk.animating()) {
+			setTimeout(docDidResize, 10);
 			return;
 		}
 
-		resz.time = null; //handled
-		resz.lastTime = now + 1000;
+		_reszInf.time = null; //handled
+		_reszInf.lastTime = now + 1000;
 			//ignore following for a while if processing (in slow machine)
 
 		zAu._onClientInfo();
 
-		resz._inResize = true;
+		_reszInf.inResize = true;
 		try {
 			zWatch.fire('beforeSize'); //notify all
 			zWatch.fire('onSize'); //notify all
-			resz.lastTime = zUtl.now() + 8;
+			_reszInf.lastTime = zUtl.now() + 8;
 		} finally {
-			resz._inResize = false;
+			_reszInf.inResize = false;
 		}
-	},
-	_resz: {},
+	}
 
-	docUnload: function () {
+	function docUnload() {
 		zk.unloading = true; //to disable error message
 
 		//20061109: Tom Yeh: Failed to disable Opera's cache, so it's better not
@@ -589,62 +597,46 @@ zkm = {
 			} catch (e) { //silent
 			}
 		}
-	},
-	wndBfUnload: function () {
+	}
+	function wndBfUnload() {
 		if (!zk.skipBfUnload) {
 			if (zk.confirmClose)
 				return zk.confirmClose;
 
-			for (var bfs = zkm._bfs, j = 0; j < bfs.length; ++j) {
-				var s = bfs[j]();
+			for (var j = 0; j < _bfUploads.length; ++j) {
+				var s = _bfUploads[j]();
 				if (s) return s;
 			}
 		}
 
-		if (zkm._oldBfUnload) {
-			var s = zkm._oldBfUnload.apply(window, arguments);
+		if (_oldBfUnload) {
+			var s = _oldBfUnload.apply(window, arguments);
 			if (s) return s;
 		}
 
 		zk.unloading = true; //FF3 aborts ajax before calling window.onunload
 		//Return nothing
-	},
-	_bfs: [],
-	_noESC: 0
-};
+	}
+
+	jq(document).keydown(docKeyDown)
+		.keyup(docKeyUp)
+		.keypress(docKeyPress)
+		.mousedown(docMouseDown)
+		.mouseup(docMouseUp)
+		.mousemove(docMouseMove)
+		.mouseover(docMouseOver)
+		.mouseout(docMouseOut)
+		.click(docClick)
+		.dblclick(docDblClick)
+		.bind("contextmenu", docCtxMenu);
+
+	jq(window).resize(docResize)
+		.scroll(docScroll)
+		.unload(docUnload);
+
+	_oldBfUnload = window.onbeforeunload;
+	window.onbeforeunload = wndBfUnload;
+}); //jq()
+
 zkble = zkm.end;
 zke = zkpge = zkm.pop;
-
-zk.copy(zk, {
-	beforeUnload: function (fn, opts) { //part of zk
-		if (opts && opts.remove) zkm._bfs.$remove(fn);
-		else zkm._bfs.push(fn);
-	},
-	disableESC: function () {
-		++zkm._noESC;
-	},
-	enableESC: function () {
-		--zkm._noESC;
-	}
-});
-
-jq(function() {
-	jq(document).keydown(zkm.docKeyDown)
-		.keyup(zkm.docKeyUp)
-		.keypress(zkm.docKeyPress)
-		.mousedown(zkm.docMouseDown)
-		.mouseup(zkm.docMouseUp)
-		.mousemove(zkm.docMouseMove)
-		.mouseover(zkm.docMouseOver)
-		.mouseout(zkm.docMouseOut)
-		.click(zkm.docClick)
-		.dblclick(zkm.docDblClick)
-		.bind("contextmenu", zkm.docCtxMenu);
-
-	jq(window).resize(zkm.docResize)
-		.scroll(zkm.docScroll)
-		.unload(zkm.docUnload);
-
-	zkm._oldBfUnload = window.onbeforeunload;
-	window.onbeforeunload = zkm.wndBfUnload;
-});
