@@ -22,6 +22,7 @@ August, 2009
   2828189: Fileupload won't check max-upload-size in zk.xml if ms is -1
   2827671: Serializable error with FieldComparator
   2816139: zul.xsd error in ZK 3.6.2 (with Eclipse 3.4 Ganymede)
+  2830325: FieldComparator not castable to ListItemComparator
   
 	--------
 ZK 3.6.2
