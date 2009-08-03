@@ -174,18 +174,17 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 					setTimeout(function () {aded.onResponse();}, 800);
 			}
 			
-			if (!evt._popuped && this._popup)
-				this.$supers('doClick_', arguments);	
-			else
-				this.fireX(evt);
+			this.fireX(evt);
 
 			if (!evt.stopped) {
 				var href = this._href;
 				if (href)
 					zUtl.go(href, false, this._target, "target");
+				this.$super('doClick_', evt, true);
 			}
 		}
-		//Unlike DOM, we don't proprogate to parent (so no calling $supers)
+		//Unlike DOM, we don't proprogate to parent (otherwise, onClick
+		//will fired)
 	},
 	doMouseOver_: function () {
 		if (!this._disabled)

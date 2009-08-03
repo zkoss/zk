@@ -95,11 +95,11 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 	doClick_: function(evt){
 		if (this._disabled) 
 			evt.stop(); //prevent browser default
-		else if (!evt._popuped && this._popup)
-			this.$supers('doClick_', arguments);	
-		else
+		else {
 			this.fireX(evt);
-		
-		//Unlike DOM, we don't proprogate to parent (so not call $supers)
+			if (!evt.stopped)
+				this.$supers('doClick_', evt, true);
+		}
+			//Unlike DOM, we don't proprogate to parent (so not call $supers)
 	}
 });

@@ -119,7 +119,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 	},
 
 	//super//
-	doClick_: function (evt) {
+	doClick_: function (evt, popupOnly) {
 		if (!evt._popuped) {
 			var popup = this._smartFellow(this._popup);
 			if (popup) {
@@ -133,7 +133,8 @@ zul.Widget = zk.$extends(zk.Widget, {
 				evt.stop();
 			}
 		}
-		this.$supers('doClick_', arguments);
+		if (popupOnly !== true)
+			this.$supers('doClick_', arguments);
 	},
 	doRightClick_: function (evt) {
 		if (!evt._ctxed) {

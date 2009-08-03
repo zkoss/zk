@@ -98,9 +98,13 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		-->
 	</session-config>
 
-	<!-- Turn on if you want to use the event processing thread, instead
-	of the servlet thread, to process the events.
-	Notice: It is disabled by default since ZK 5.0	-->
+	<!-- We turn on the event processing thread in zkdemo to demostrate
+	features that are available only if the eventprocessing thread is turned on.
+	However, the event processig thread is disabled by default since ZK 5.0,
+	to be complaint with Java Servlet specification. It is recommended to
+	disable if you intend to integrate Spring web flow and other sophisticated
+	frameworks.
+	-->
 	<system-config>
 		<disable-event-thread>false</disable-event-thread>
 	</system-config>
