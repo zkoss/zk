@@ -173,8 +173,11 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 				else
 					setTimeout(function () {aded.onResponse();}, 800);
 			}
-
-			this.fireX(evt);
+			
+			if (!evt._popuped && this._popup)
+				this.$supers('doClick_', arguments);	
+			else
+				this.fireX(evt);
 
 			if (!evt.stopped) {
 				var href = this._href;
