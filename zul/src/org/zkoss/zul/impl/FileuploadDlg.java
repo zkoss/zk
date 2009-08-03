@@ -18,14 +18,10 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul.impl;
 
-import java.util.List;
-import java.util.Iterator;
-
+import java.util.LinkedList;
 import org.zkoss.util.media.Media;
-import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.au.out.AuScript;
-import org.zkoss.zk.au.AuRequests;
-
+import org.zkoss.zk.ui.event.ForwardEvent;
+import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zul.Window;
 
 /**
@@ -35,63 +31,20 @@ import org.zkoss.zul.Window;
  * @author tomyeh
  */
 public class FileuploadDlg extends Window {
-	private Media[] _result;
-
+	private LinkedList _result = new LinkedList();
+	
+	/**
+	 * A forward event is used for component level only.
+	 * @since 5.0.0
+	 */
+	public void onSend(ForwardEvent evt) {
+		_result.push(((UploadEvent)evt.getOrigin()).getMedia());
+	}
+	
 	/** Returns the result.
 	 * @return an array of media (length >= 1), or null if nothing.
 	 */
 	public Media[] getResult() {
-		return _result;
-	}
-
-	public void onCancel() {
-		onClose();
-	}
-	public void onClose() {
-		response("endUpload", new AuScript(null, "zAu.endUpload()"));
-		detach();
-	}
-
-	/** Sets the result.
-	 */
-	public void setResult(Media[] result) {
-		_result = result;
-	}
-
-	public static Media[] parseResult(List result) {
-		if (result != null) {
-			//we have to filter items that user doesn't specify any file
-			for (Iterator it = result.iterator(); it.hasNext();) {
-				final Media media = (Media)it.next();
-				if (media != null && media.inMemory() && media.isBinary()) {
-					final String nm = media.getName();
-					if (nm == null || nm.length() == 0) {
-						final byte[] bs = media.getByteData();
-						if (bs == null || bs.length == 0)
-							it.remove(); //Upload is pressed without specifying a file
-					}
-				}
-			}
-
-			if (!result.isEmpty())
-				return (Media[])result.toArray(new Media[result.size()]);
-		}
-		return null;
-	}
-
-	//-- ComponentCtrl --//
-	/** Processes an AU request.
-	 *
-	 * <p>Default: in addition to what are handled by {@link XulElement#service},
-	 * it also handles updateResult.
-	 * @since 5.0.0
-	 */
-	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
-		final String cmd = request.getCommand();
-		if (cmd.equals("updateResult")) {
-			FileuploadDlg.this.setResult(
-				parseResult((List)AuRequests.getUpdateResult(request)));
-		} else
-			super.service(request, everError);
+		return _result.isEmpty() ? null : (Media[])_result.toArray(new Media[0]);
 	}
 }

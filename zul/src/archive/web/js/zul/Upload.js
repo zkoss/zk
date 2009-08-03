@@ -133,6 +133,13 @@ zul.Upload = zk.$extends(zk.Object, {
 			sid: sid
 		}));
 	},
+	isFinish: function (wgt) {
+		for (var key = (typeof wgt == 'string' ? wgt : wgt.uuid) + '_uplder_',
+				f = zul.Upload.files, i = f.length; i--;)
+			if (f[0].id.startsWith(key))
+				return false;
+		return true;
+	},
 	start: function (uplder) {
 		var files = zul.Upload.files;
 		if (uplder)
@@ -191,6 +198,7 @@ zul.Uploader = zk.$extends(zk.Object, {
 			jq.newFrame(frameId);
 		this._form.target = frameId;
 		this._form.submit();
+		this._form.style.display = "none";
 		
 		var uri = zk.ajaxURI('/upload', {desktop: wgt.desktop, au: true}),
 			dtid = wgt.desktop.id,
@@ -286,10 +294,10 @@ zul.UploadViewer = zk.$extends(zk.Object, {
 							this.$supers('$init', arguments);
 							this.setSclass('z-fileupload-manager');
 						},
-						bind_: function () {
-							this.$supers('bind_', arguments);
-							zWatch.unlisten({onFloatUp: this});
-							this.setFloating_(false);
+						onFloatUp: function(wgt){
+							if (!this.isVisible()) 
+								return;
+							this.setTopmost();
 						},
 						getFileItem: function(id) {
 							return this._files[id] || zk.Widget.$(id);
