@@ -356,13 +356,7 @@ jq(function() {
 		if (wevt.domStopped)
 			wevt.domEvent.stop();
 	}
-	function docMouseDown(evt) {
-		_evtProxy(evt);
-		var wgt = zk.Widget.$(evt, {child:true});
-		_docMouseDown(
-			new zk.Event(wgt, 'onMouseDown', evt.mouseData(), null, evt),
-			wgt);
-	}
+	
 	function _docMouseDown(evt, wgt, fake) {
 		zk.lastPointer[0] = evt.pageX;
 		zk.lastPointer[1] = evt.pageY;
@@ -376,22 +370,7 @@ jq(function() {
 		if (wgt)
 			_doEvt(evt);
 	}
-	function docMouseUp(evt) {
-		var e = zk.Draggable.ignoreMouseUp();
-		if (e === true)
-			return; //ingore
-		if (e != null) {
-			_docMouseDown(e, null, true); //simulate mousedown
-			_simFocus(e.target); //simulate focus
-		}
-
-		_evtProxy(evt);
-		var wgt = zk.mouseCapture;
-		if (wgt) zk.mouseCapture = null;
-		else wgt = zk.Widget.$(evt, {child:true});
-		if (wgt)
-			_doEvt(new zk.Event(wgt, 'onMouseUp', evt.mouseData(), null, evt));
-	}
+	
 	function _simFocus(wgt) {
 		var cf = zk.currentFocus;
 		if (!cf || wgt == cf)
@@ -419,7 +398,6 @@ jq(function() {
 			}
 		}
 	}
-
 	function _evtProxy(evt) { //handle proxy
 		var n;
 		
@@ -430,129 +408,12 @@ jq(function() {
 				evt.target = n;
 		} catch (e) {}
 	}
-	function docMouseMove(evt) {
-		_evtProxy(evt);
-		zk.currentPointer[0] = evt.pageX;
-		zk.currentPointer[1] = evt.pageY;
-
-		var wgt = zk.mouseCapture;
-		if (!wgt) wgt = zk.Widget.$(evt, {child:true});
-		if (wgt)
-			_doEvt(new zk.Event(wgt, 'onMouseMove', evt.mouseData(), null, evt));
-	}
-	function docMouseOver(evt) {
-		_evtProxy(evt);
-		zk.currentPointer[0] = evt.pageX;
-		zk.currentPointer[1] = evt.pageY;
-
-		var wgt = zk.Widget.$(evt, {child:true});
-		if (wgt)
-			_doEvt(new zk.Event(wgt, 'onMouseOver', evt.mouseData(), null, evt));
-	}
-	function docMouseOut(evt) {
-		_evtProxy(evt);
-		var wgt = zk.Widget.$(evt, {child:true});
-		if (wgt)
-			_doEvt(new zk.Event(wgt, 'onMouseOut', evt.mouseData(), null, evt));
-	}
-	function docKeyDown(evt) {
-		//seems overkill: _evtProxy(evt);
-		var wgt = zk.Widget.$(evt, {child:true});
-		if (wgt) {
-			var wevt = new zk.Event(wgt, 'onKeyDown', evt.keyData(), null, evt);
-			_doEvt(wevt);
-			if (!wgt.inDesign && !wevt.stopped && wgt.afterKeyDown_)
-				wgt.afterKeyDown_(wevt);
-		}
-
-		if (evt.keyCode == 27
-		&& (zk._noESC > 0 || zAu.shallIgnoreESC())) //Bug 1927788: prevent FF from closing connection
-			return false; //eat
-	}
-	function docKeyUp(evt) {
-		//seems overkill: _evtProxy(evt);
-		var wgt = zk.keyCapture;
-		if (wgt) zk.keyCapture = null;
-		else wgt = zk.Widget.$(evt, {child:true});
-		if (wgt)
-			_doEvt(new zk.Event(wgt, 'onKeyUp', evt.keyData(), null, evt));
-	}
-	function docKeyPress(evt) {
-		//seems overkill: _evtProxy(evt);
-		var wgt = zk.keyCapture;
-		if (!wgt) wgt = zk.Widget.$(evt, {child:true});
-		if (wgt)
-			_doEvt(new zk.Event(wgt, 'onKeyPress', evt.keyData(), null, evt));
-	}
-	function docClick(evt) {
-		if (zk.processing || zk.Draggable.ignoreClick()) return;
-
-		_evtProxy(evt);
-		if (evt.which == 1) {
-			var wgt = zk.Widget.$(evt, {child:true});
-			if (wgt)
-				_doEvt(new zk.Event(wgt, 'onClick', evt.mouseData(), {ctl:true}, evt));
-			//don't return anything. Otherwise, it replaces event.returnValue in IE (Bug 1541132)
-		}
-	}
-	function docDblClick(evt) {
-		if (zk.processing || zk.Draggable.ignoreClick()) return;
-
-		_evtProxy(evt);
-		var wgt = zk.Widget.$(evt, {child:true});
-		if (wgt) {
-			var wevt = new zk.Event(wgt, 'onDoubleClick', evt.mouseData(), {ctl:true}, evt);
-			_doEvt(wevt);
-			if (wevt.domStopped)
-				return false;
-		}
-	}
-	function docCtxMenu(evt) {
-		if (zk.processing) return;
-
-		_evtProxy(evt);
-		zk.lastPointer[0] = evt.pageX;
-		zk.lastPointer[1] = evt.pageY;
-
-		var wgt = zk.Widget.$(evt, {child:true});
-		if (wgt) {
-			var wevt = new zk.Event(wgt, 'onRightClick', evt.mouseData(), {ctl:true}, evt);
-			_doEvt(wevt);
-			if (wevt.domStopped)
-				return false;
-		}
-		return !zk.ie || evt.returnValue;
-	}
-	function docScroll() {
-		zWatch.fire('onScroll'); //notify all
-	}
-	function docResize() {
-		if (!jq.isReady || zk.mounting)
-			return; //IE6: it sometimes fires an "extra" onResize in loading
-
-	//Tom Yeh: 20051230:
-	//1. In certain case, IE will keep sending onresize (because
-	//grid/listbox may adjust size, which causes IE to send onresize again)
-	//To avoid this endless loop, we ignore onresize a while if docResize
-	//was called
-	//
-	//2. IE keeps sending onresize when dragging the browser's border,
-	//so we have to filter (most of) them out
-
-		var now = zUtl.now();
-		if ((_reszInf.lastTime && now < _reszInf.lastTime) || _reszInf.inResize)
-			return; //ignore resize for a while (since onSize might trigger onsize)
-
-		var delay = zk.ie ? 250: 50;
-		_reszInf.time = now + delay - 1; //handle it later
-		setTimeout(docDidResize, delay);
-	}
-	function docDidResize() {
+	function _docResize() {
 		if (!_reszInf.time) return; //already handled
 
 		var now = zUtl.now();
 		if (zk.mounting || zk.loading || now < _reszInf.time || zk.animating()) {
-			setTimeout(docDidResize, 10);
+			setTimeout(_docResize, 10);
 			return;
 		}
 
@@ -572,7 +433,149 @@ jq(function() {
 		}
 	}
 
-	function docUnload() {
+	jq(document)
+	.keydown(function (evt) {
+		//seems overkill: _evtProxy(evt);
+		var wgt = zk.Widget.$(evt, {child:true});
+		if (wgt) {
+			var wevt = new zk.Event(wgt, 'onKeyDown', evt.keyData(), null, evt);
+			_doEvt(wevt);
+			if (!wgt.inDesign && !wevt.stopped && wgt.afterKeyDown_)
+				wgt.afterKeyDown_(wevt);
+		}
+
+		if (evt.keyCode == 27
+		&& (zk._noESC > 0 || zAu.shallIgnoreESC())) //Bug 1927788: prevent FF from closing connection
+			return false; //eat
+	})
+	.keyup(function (evt) {
+		//seems overkill: _evtProxy(evt);
+		var wgt = zk.keyCapture;
+		if (wgt) zk.keyCapture = null;
+		else wgt = zk.Widget.$(evt, {child:true});
+		if (wgt)
+			_doEvt(new zk.Event(wgt, 'onKeyUp', evt.keyData(), null, evt));
+	})
+	.keypress(function (evt) {
+		//seems overkill: _evtProxy(evt);
+		var wgt = zk.keyCapture;
+		if (!wgt) wgt = zk.Widget.$(evt, {child:true});
+		if (wgt)
+			_doEvt(new zk.Event(wgt, 'onKeyPress', evt.keyData(), null, evt));
+	})
+	.mousedown(function (evt) {
+		_evtProxy(evt);
+		var wgt = zk.Widget.$(evt, {child:true});
+		_docMouseDown(
+			new zk.Event(wgt, 'onMouseDown', evt.mouseData(), null, evt),
+			wgt);
+	})
+	.mouseup(function (evt) {
+		var e = zk.Draggable.ignoreMouseUp();
+		if (e === true)
+			return; //ingore
+		if (e != null) {
+			_docMouseDown(e, null, true); //simulate mousedown
+			_simFocus(e.target); //simulate focus
+		}
+
+		_evtProxy(evt);
+		var wgt = zk.mouseCapture;
+		if (wgt) zk.mouseCapture = null;
+		else wgt = zk.Widget.$(evt, {child:true});
+		if (wgt)
+			_doEvt(new zk.Event(wgt, 'onMouseUp', evt.mouseData(), null, evt));
+	})
+	.mousemove(function (evt) {
+		_evtProxy(evt);
+		zk.currentPointer[0] = evt.pageX;
+		zk.currentPointer[1] = evt.pageY;
+
+		var wgt = zk.mouseCapture;
+		if (!wgt) wgt = zk.Widget.$(evt, {child:true});
+		if (wgt)
+			_doEvt(new zk.Event(wgt, 'onMouseMove', evt.mouseData(), null, evt));
+	})
+	.mouseover(function (evt) {
+		_evtProxy(evt);
+		zk.currentPointer[0] = evt.pageX;
+		zk.currentPointer[1] = evt.pageY;
+
+		var wgt = zk.Widget.$(evt, {child:true});
+		if (wgt)
+			_doEvt(new zk.Event(wgt, 'onMouseOver', evt.mouseData(), null, evt));
+	})
+	.mouseout(function (evt) {
+		_evtProxy(evt);
+		var wgt = zk.Widget.$(evt, {child:true});
+		if (wgt)
+			_doEvt(new zk.Event(wgt, 'onMouseOut', evt.mouseData(), null, evt));
+	})
+	.click(function (evt) {
+		if (zk.processing || zk.Draggable.ignoreClick()) return;
+
+		_evtProxy(evt);
+		if (evt.which == 1) {
+			var wgt = zk.Widget.$(evt, {child:true});
+			if (wgt)
+				_doEvt(new zk.Event(wgt, 'onClick', evt.mouseData(), {ctl:true}, evt));
+			//don't return anything. Otherwise, it replaces event.returnValue in IE (Bug 1541132)
+		}
+	})
+	.dblclick(function (evt) {
+		if (zk.processing || zk.Draggable.ignoreClick()) return;
+
+		_evtProxy(evt);
+		var wgt = zk.Widget.$(evt, {child:true});
+		if (wgt) {
+			var wevt = new zk.Event(wgt, 'onDoubleClick', evt.mouseData(), {ctl:true}, evt);
+			_doEvt(wevt);
+			if (wevt.domStopped)
+				return false;
+		}
+	})
+	.bind("contextmenu", function (evt) {
+		if (zk.processing) return;
+
+		_evtProxy(evt);
+		zk.lastPointer[0] = evt.pageX;
+		zk.lastPointer[1] = evt.pageY;
+
+		var wgt = zk.Widget.$(evt, {child:true});
+		if (wgt) {
+			var wevt = new zk.Event(wgt, 'onRightClick', evt.mouseData(), {ctl:true}, evt);
+			_doEvt(wevt);
+			if (wevt.domStopped)
+				return false;
+		}
+		return !zk.ie || evt.returnValue;
+	});
+
+	jq(window).resize(function () {
+		if (!jq.isReady || zk.mounting)
+			return; //IE6: it sometimes fires an "extra" onResize in loading
+
+	//Tom Yeh: 20051230:
+	//1. In certain case, IE will keep sending onresize (because
+	//grid/listbox may adjust size, which causes IE to send onresize again)
+	//To avoid this endless loop, we ignore onresize a while if this method
+	//was called
+	//
+	//2. IE keeps sending onresize when dragging the browser's border,
+	//so we have to filter (most of) them out
+
+		var now = zUtl.now();
+		if ((_reszInf.lastTime && now < _reszInf.lastTime) || _reszInf.inResize)
+			return; //ignore resize for a while (since onSize might trigger onsize)
+
+		var delay = zk.ie ? 250: 50;
+		_reszInf.time = now + delay - 1; //handle it later
+		setTimeout(_docResize, delay);
+	})
+	.scroll(function () {
+		zWatch.fire('onScroll'); //notify all
+	})
+	.unload(function () {
 		zk.unloading = true; //to disable error message
 
 		//20061109: Tom Yeh: Failed to disable Opera's cache, so it's better not
@@ -597,8 +600,10 @@ jq(function() {
 			} catch (e) { //silent
 			}
 		}
-	}
-	function wndBfUnload() {
+	});
+
+	_oldBfUnload = window.onbeforeunload;
+	window.onbeforeunload = function () {
 		if (!zk.skipBfUnload) {
 			if (zk.confirmClose)
 				return zk.confirmClose;
@@ -616,26 +621,7 @@ jq(function() {
 
 		zk.unloading = true; //FF3 aborts ajax before calling window.onunload
 		//Return nothing
-	}
-
-	jq(document).keydown(docKeyDown)
-		.keyup(docKeyUp)
-		.keypress(docKeyPress)
-		.mousedown(docMouseDown)
-		.mouseup(docMouseUp)
-		.mousemove(docMouseMove)
-		.mouseover(docMouseOver)
-		.mouseout(docMouseOut)
-		.click(docClick)
-		.dblclick(docDblClick)
-		.bind("contextmenu", docCtxMenu);
-
-	jq(window).resize(docResize)
-		.scroll(docScroll)
-		.unload(docUnload);
-
-	_oldBfUnload = window.onbeforeunload;
-	window.onbeforeunload = wndBfUnload;
+	};
 }); //jq()
 
 zkble = zkm.end;
