@@ -607,7 +607,8 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 			final boolean igcs = s.readBoolean();
 			_sortAsc = new RowComparator(this, true, igcs, false);
 		} else {
-			_sortAsc = (RowComparator)s.readObject();
+			//bug #2830325 FieldComparator not castable to ListItemComparator
+			_sortAsc = (Comparator)s.readObject();
 		}
 
 		b = s.readBoolean();
@@ -615,7 +616,8 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 			final boolean igcs = s.readBoolean();
 			_sortDsc = new RowComparator(this, false, igcs, false);
 		} else {
-			_sortDsc = (RowComparator)s.readObject();
+			//bug #2830325 FieldComparator not castable to ListItemComparator
+			_sortDsc = (Comparator)s.readObject();
 		}
 	}
 }
