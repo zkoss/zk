@@ -541,7 +541,8 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 			final boolean byval = s.readBoolean();
 			_sortAsc = new ListitemComparator(this, true, igcs, byval);
 		} else {
-			_sortAsc = (ListitemComparator)s.readObject();
+			//bug #2830325 FieldComparator not castable to ListItemComparator
+			_sortAsc = (Comparator)s.readObject();
 		}
 
 		b = s.readBoolean();
@@ -550,7 +551,8 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 			final boolean byval = s.readBoolean();
 			_sortDsc = new ListitemComparator(this, false, igcs, byval);
 		} else {
-			_sortDsc = (ListitemComparator)s.readObject();
+			//bug #2830325 FieldComparator not castable to ListItemComparator
+			_sortDsc = (Comparator)s.readObject();
 		}
 	}
 }
