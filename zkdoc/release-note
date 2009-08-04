@@ -11,6 +11,7 @@ ZK 5.0.0
   2831852: Allow developer to specify directory to load JavaScript file
   2816083: Spec change: definition in page has lower priority from class
   2816588: A way to parse app-specific configuration in zk.xml
+  2822404: Fileupload shall be a feature attachable to button, menuitem
 
 * Bugs
 
