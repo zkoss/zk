@@ -17,4 +17,6 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 apply="org.zkoss.zkdemo.test2.F2790411Composer">
 	It is correct if you saw this.
 	It is created by a working thread.
+	<separator bar="true"/>
+	${self.parent.title}
 </window>

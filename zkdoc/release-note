@@ -3,6 +3,7 @@ ZK 5.0.0
 * Features
   2817315: Support client-centric programming model
   2825713: EventQueue support application-level publish (by sever-push)
+  2822404: Fileupload shall be a feature attachable to button, menuitem
   2787713: Button automatically disable itself after clicked
   2815551: Include supports non-HTML content (by use of comment)
   2491275: ZHTML checkbox fire onCheck (in addition to onClick)
@@ -11,7 +12,6 @@ ZK 5.0.0
   2831852: Allow developer to specify directory to load JavaScript file
   2816083: Spec change: definition in page has lower priority from class
   2816588: A way to parse app-specific configuration in zk.xml
-  2822404: Fileupload shall be a feature attachable to button, menuitem
 
 * Bugs
 
@@ -85,7 +85,8 @@ August, 2009
   2827671: Serializable error with FieldComparator
   2816139: zul.xsd error in ZK 3.6.2 (with Eclipse 3.4 Ganymede)
   2830325: FieldComparator not castable to ListItemComparator
-  
+  2831915: Fail to create components in working thread if using el 
+
 	--------
 ZK 3.6.2
 June 23, 2009

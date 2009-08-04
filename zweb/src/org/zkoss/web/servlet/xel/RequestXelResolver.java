@@ -68,8 +68,6 @@ abstract public class RequestXelResolver implements VariableResolver {
 	 */
 	public RequestXelResolver(ServletContext ctx, ServletRequest request,
 	ServletResponse response) {
-		if (request == null)
-			throw new IllegalArgumentException();
 		_ctx = ctx;
 		_request = request;
 		_response = response;
@@ -119,9 +117,9 @@ abstract public class RequestXelResolver implements VariableResolver {
 		} else if ("applicationScope".equals(name)) {
 			return getApplicationScope();
 		} else if ("param".equals(name)) {
-			return new ParamMap();
+			return _request != null ? new ParamMap(): Collections.EMPTY_MAP;
 		} else if ("paramValues".equals(name)) {
-			return _request.getParameterMap();
+			return _request != null ? _request.getParameterMap(): Collections.EMPTY_MAP;
 		} else if ("header".equals(name)) {
 			if (!(_request instanceof HttpServletRequest))
 				return Collections.EMPTY_MAP;
@@ -228,6 +226,8 @@ abstract public class RequestXelResolver implements VariableResolver {
 	private Map getRequestScope() {
 		if (_reqScope != null)
 			return _reqScope;
+		if (_request == null)
+			return Collections.EMPTY_MAP;
 		return _reqScope = new AttributesMap() {
 			protected Enumeration getKeys() {
 				return _request.getAttributeNames();
