@@ -95,7 +95,7 @@ public class InterpreterServlet extends HttpServlet {
 					try {
 						url = _ctx.getResource(name);
 						if (bClsRes && url == null)
-							url = ClassWebResource.getResource(name);
+							url = ClassWebResource.getClassResource(name);
 					} catch (java.net.MalformedURLException ex) { //eat it
 					}
 				}
@@ -104,7 +104,7 @@ public class InterpreterServlet extends HttpServlet {
 			public InputStream getResourceAsStream(String name) {
 				InputStream is = _ctx.getResourceAsStream(name);
 				return !bClsRes || is != null ? is:
-					ClassWebResource.getResourceAsStream(name);
+					ClassWebResource.getClassResourceAsStream(name);
 			}
 		};
 

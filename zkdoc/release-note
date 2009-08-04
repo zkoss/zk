@@ -8,6 +8,7 @@ ZK 5.0.0
   2491275: ZHTML checkbox fire onCheck (in addition to onClick)
   2794752: Fisheye supports dynamic images
   2794753: An option to specify whether the content can be crawled
+  2831852: Allow developer to specify directory to load JavaScript file
   2816083: Spec change: definition in page has lower priority from class
   2816588: A way to parse app-specific configuration in zk.xml
 

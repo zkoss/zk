@@ -84,6 +84,8 @@ public class ClassWebResource {
 	private final Map _reqfilters = new HashMap(2);
 	/** Filers for includes. Map(String ext, FastReadArray(Filter)). */
 	private final Map _incfilters = new HashMap(2);
+	/** Additional locator. */
+	private Locator _extraloc;
 	/** Whether to debug JavaScript files. */
 	private boolean _debugJS;
 
@@ -104,16 +106,51 @@ public class ClassWebResource {
 	public static final int FILTER_INCLUDE = 0x2;
 
 	/** Returns the URL of the resource of the specified URI by searching
-	 * the class path (with {@link #PATH_PREFIX}).
+	 * only the class path (with {@link #PATH_PREFIX}).
+	 * <p>On the other hand, {@link #getResource} will search
+	 * the extra locator first ({@link #getExtraLocator}) and then
+	 * the class path.
+	 * @since 5.0.0
 	 */
-	public static URL getResource(String uri) {
+	public static URL getClassResource(String uri) {
 		return Locators.getDefault().getResource(PATH_PREFIX + fixURI(uri));
 	}
 	/** Returns the resource in a stream of the specified URI by searching
-	 * the class path (with {@link #PATH_PREFIX}).
+	 * only the class path (with {@link #PATH_PREFIX}).
+	 * <p>On the other hand, {@link #getResourceAsStream} will search
+	 * the extra locator first ({@link #getExtraLocator}) and then
+	 * the class path.
+	 * @since 5.0.0
 	 */
-	public static InputStream getResourceAsStream(String uri) {
+	public static InputStream getClassResourceAsStream(String uri) {
 		return Locators.getDefault().getResourceAsStream(PATH_PREFIX + fixURI(uri));
+	}
+	/** Returns the URL of the resource of the specified URI by searching
+	 * the extra locator, if any, and then the class path
+	 * (with {@link #PATH_PREFIX}).
+	 * <p>This method becomes non-static since 5.0.0, and it
+	 * will search the extra locator ({@link #getExtraLocator}) first.
+	 */
+	public URL getResource(String uri) {
+		uri = fixURI(uri);
+		if (_extraloc != null) {
+			final URL url = _extraloc.getResource(uri);
+			if (url != null) return url;
+		}
+		return Locators.getDefault().getResource(PATH_PREFIX + uri);
+	}
+	/** Returns the resource in a stream of the specified URI by searching
+	 * the extra locator, if any, and then, the class path (with {@link #PATH_PREFIX}).
+	 * <p>This method becomes non-static since 5.0.0, and it
+	 * will search the extra locator ({@link #getExtraLocator}) first.
+	 */
+	public InputStream getResourceAsStream(String uri) {
+		uri = fixURI(uri);
+		if (_extraloc != null) {
+			final InputStream is = _extraloc.getResourceAsStream(uri);
+			if (is != null) return is;
+		}
+		return Locators.getDefault().getResourceAsStream(PATH_PREFIX + uri);
 	}
 	private static String fixURI(String uri) {
 		int j = uri.lastIndexOf('?');
@@ -149,6 +186,24 @@ public class ClassWebResource {
 		_cwc = new CWC();
 
 		addExtendlet("dsp", new DspExtendlet());
+	}
+	/** Returns the extra locator, or null if not available.
+	 * The extra locator, if specified, has the higher priority than
+	 * the class path.
+	 * <p>Default: null.
+	 * @since 5.0.0
+	 */
+	public Locator getExtraLocator() {
+		return _extraloc;
+	}
+	/** Sets the extra locator.
+	 * The extra locator, if specified, has the higher priority than
+	 * the class path.
+	 * <p>Default: null.
+	 * @since 5.0.0
+	 */
+	public void setExtraLocator(Locator loc) {
+		_extraloc = loc;
 	}
 	/** Process the request by retrieving the path from the path info.
 	 * It invokes {@link Https#getThisPathInfo} to retrieve the path info,
@@ -548,10 +603,10 @@ public class ClassWebResource {
 				return null;
 			}
 			public URL getResource(String name) {
-				return ClassWebResource.getResource(name);
+				return ClassWebResource.this.getResource(name);
 			}
 			public InputStream getResourceAsStream(String name) {
-				return ClassWebResource.getResourceAsStream(name);
+				return ClassWebResource.this.getResourceAsStream(name);
 					//Note: it doesn't handle _debugJS
 			}
 		};
@@ -655,18 +710,18 @@ public class ClassWebResource {
 		public URL getResource(String uri) {
 			if (_debugJS && "js".equals(Servlets.getExtension(uri))) {
 				String orgpi = uri.substring(0, uri.length() - 3) + ".src.js";
-				URL url = ClassWebResource.getResource(orgpi);
+				URL url = ClassWebResource.this.getResource(orgpi);
 				if (url != null) return url;
 			}
-			return ClassWebResource.getResource(uri);
+			return ClassWebResource.this.getResource(uri);
 		}
 		public InputStream getResourceAsStream(String uri) {
 			if (_debugJS && "js".equals(Servlets.getExtension(uri))) {
 				String orgpi = uri.substring(0, uri.length() - 3) + ".src.js";
-				InputStream is = ClassWebResource.getResourceAsStream(orgpi);
+				InputStream is = ClassWebResource.this.getResourceAsStream(orgpi);
 				if (is != null) return is;
 			}
-			return ClassWebResource.getResourceAsStream(uri);
+			return ClassWebResource.this.getResourceAsStream(uri);
 		}
 	}
 	private class FilterChainImpl implements FilterChain {

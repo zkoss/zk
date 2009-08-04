@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.zkoss.lang.D;
+import org.zkoss.lang.Library;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.util.resource.Locator;
@@ -161,6 +162,11 @@ public class WebManager {
 		//after zk.xml is loaded since it depends on the configuration
 		_cwr = ClassWebResource.getInstance(_ctx, _updateURI);
 		_cwr.setCompress(new String[] {"js", "css", "html", "xml"});
+		String s = Library.getProperty("org.zkoss.web.util.resource.dir");
+		if (s != null && s.length() > 0) {
+			if (s.charAt(0) != '/') s = '/' + s;
+			_cwr.setExtraLocator(new ServletContextLocator(_ctx, null, s));
+		}
 
 		Labels.register(new ServletLabelLocator(_ctx));
 		Labels.setVariableResolver(new ServletLabelResovler());
