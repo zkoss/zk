@@ -83,12 +83,17 @@ zk.copy(zk, (function() {
 		return zk.loading;
 	}
 	function prgbox() {
-		if (zk.loading || window.dbg_progressbox) { //dbg_progressbox: debug purpose
+		if (zk.loading) {
 			var n = jq("#zk_loadprog")[0];
-			if (!n)
+			if (!n) {
+				if (!jq.isReady)
+					return setTimeout(prgbox, 10);
+						//don't use jq() since it will be queued after others
+
 				zUtl.progressbox("zk_loadprog",
 					'Loading <span id="zk_loadcnt">'+loadmsg()+'</span>',
 					true);
+			}
 		}	
 	}
 

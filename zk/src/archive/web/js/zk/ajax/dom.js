@@ -962,7 +962,7 @@ zk.copy(jq, { //ZK extension to jq
 	},
 	newStackup: function (el, id, anchor) {
 		el = jq(el||[], zk)[0];
-		var ifr = document.createElement('iframe');
+		var ifr = document.createElement("IFRAME");
 		ifr.id = id || (el ? el.id + "-ifrstk": 'z_ifrstk');
 		ifr.style.cssText = "position:absolute;overflow:hidden;filter:alpha(opacity=0)";
 		ifr.frameBorder = "no";

@@ -18,9 +18,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <html>
 	<head>
 		<title>Test Progress Bar</title>
-		<script type="text/javascript">
-			dbg_progressbox = true;
-		</script>
 	</head>
 	<body>
 		<h1>Test of Progress Bar with an Included ZK Page</h1>

@@ -179,44 +179,33 @@ zUtl = { //static methods
 			return;
 		}
 
-		var x, y;
-		try {
-			x = jq.innerX(); y = jq.innerY();
-		} catch (e) { //might not ready yet
-			x = y = 0;
-		}
-
-		var style = ' style="left:'+x+'px;top:'+y+'px"',
+		var x = jq.innerX(), y = jq.innerY(),
+			style = ' style="left:'+x+'px;top:'+y+'px"',
 			idtxt = id + '-t',
 			idmsk = id + '-m',
 			html = '<div id="'+id+'"';
 		if (mask)
 			html += '><div id="' + idmsk + '" class="z-modal-mask"'+style+'></div';
-		html += '><div id="'+idtxt+'" class="z-loading"'+style
+		jq(document.body).append(html
+			+'><div id="'+idtxt+'" class="z-loading"'+style
 			+'><div class="z-loading-indicator"><span class="z-loading-icon"></span> '
-			+msg+'</div></div></div>'
-		var n = document.createElement("DIV");
-		document.body.appendChild(n);
-		jq(n).replaceWith(html);
-		var $n = jq(id, zk);
-		n = $n[0];
-
-		var $txt = jq(idtxt, zk);
+			+msg+'</div></div></div>');
+		var $n = jq(id, zk),
+			n = $n[0],
+			$txt = jq(idtxt, zk);
 		if (mask)
 			n.z_mask = new zk.eff.FullMask({
 				mask: jq(idmsk, zk)[0],
 				zIndex: $txt.css('z-index') - 1
 			});
 
-		try {
-			if (mask && $txt.length) { //center
-				var txt = $txt[0],
-					st = txt.style;
-					st.left = jq.px((jq.innerWidth() - txt.offsetWidth) / 2 + x);
-					st.top = jq.px((jq.innerHeight() - txt.offsetHeight) / 2 + y);
-			}
-		} catch (e) { //might not ready yet
+		if (mask && $txt.length) { //center
+			var txt = $txt[0],
+				st = txt.style;
+			st.left = jq.px((jq.innerWidth() - txt.offsetWidth) / 2 + x);
+			st.top = jq.px((jq.innerHeight() - txt.offsetHeight) / 2 + y);
 		}
+
 		$n.zk.cleanVisibility();
 	},
 	destroyProgressbox: function (id) {

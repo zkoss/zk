@@ -37,7 +37,9 @@ zk = function (sel) {
 		};
 	}
 	function showprocmk() {
-		jq(function(){showproc(true);}); //might called before doc ready
+		//don't use jq() since it will be queued after others
+		if (jq.isReady) return showproc(true);
+		setTimeout(showprocmk, 10);
 	}
 	function showproc(mask) {
 		if (zk.processing
@@ -58,9 +60,7 @@ zk = function (sel) {
 		if (logmsg) {
 			var console = jq("#zk_log");
 			if (!console.length) {
-				console = document.createElement("DIV");
-				document.body.appendChild(console);
-				jq(console).replaceWith(
+				jq(document.body).append(
 	'<div id="zk_logbox" class="z-log">'
 	+'<button onclick="jq(\'#zk_logbox\').remove()">X</button><br/>'
 	+'<textarea id="zk_log" rows="10"></textarea></div>');
@@ -231,9 +231,8 @@ zk = function (sel) {
 		jq(function() {
 		var id = "zk_err" + errcnt++,
 			x = (errcnt * 5) % 50, y = (errcnt * 5) % 50,
-			box = document.createElement("DIV");
-		document.body.appendChild(box);
-		jq(box).replaceWith(
+			box;
+		jq(document.body).append(
 	'<div class="z-error" style="left:'+(jq.innerX()+x)+'px;top:'+(jq.innerY()+y)
 	+'px;" id="'+id+'"><table cellpadding="2" cellspacing="2" width="100%"><tr>'
 	+'<td align="right"><div id="'+id
