@@ -119,7 +119,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 
 		this._mask = new zk.eff.FullMask({
 			id: this.uuid + "-mask",
-			anchor: this._shadowWgt ? this._shadowWgt.getBottomElement() : null,
+			anchor: this._shadowWgt ? this._shadowWgt.getBottomElement() : this.$n(),
 				//bug 1510218: we have to make it as a sibling
 			zIndex: this._zIndex,
 			stackup: (zk.useStackup === undefined ? zk.ie6_: zk.useStackup),

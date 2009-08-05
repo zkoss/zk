@@ -25,6 +25,8 @@ mesg.GOTO_ERROR_FIELD = "Menuju field yang error";
 mesg.PLEASE_WAIT = "Diproses...";
 
 mesg.FILE_SIZE = "Ukuran File: ";
+mesg.FILE_NAME = "File name: ";
+mesg.FILE_UPLOADED = "Done!";
 mesg.KBYTES = "KB";
 
 mesg.FAILED_TO_LOAD="Failed to load ";

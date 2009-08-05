@@ -20,7 +20,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 -->
-<window title="${arg.title}" border="normal" width="360px" closable="true"
+<window title="${arg.title}" shadow="false" border="normal" width="360px" closable="true"
 use="org.zkoss.zul.impl.FileuploadDlg" xmlns:w="http://www.zkoss.org/2005/zk/client"
 	w:onClose="this.cancel()">
 	<attribute w:name="cancel">
@@ -35,16 +35,79 @@ use="org.zkoss.zul.impl.FileuploadDlg" xmlns:w="http://www.zkoss.org/2005/zk/cli
 			}
 		}
 	</attribute>
+	<attribute w:name="submit">
+		function () {
+			this.cancel();
+			zAu.send(new zk.Event(this, 'onClose', true));
+			this.detach();
+		}
+	</attribute>
+	<script><![CDATA[
+if (!zk.ModalFileViewer) {
+	zk.ModalFileViewer = zk.$extends(zk.Object, {
+		updated: null,
+		$init: function (uplder,  filenm) {
+			this._uplder = uplder;
+			var id = uplder.id,
+				self = this,
+				wgt = uplder.getWidget(),
+				uploaded = wgt.$f('uploaded'),
+				uri = zk.ajaxURI('/web/zk/img/progress2.gif', {au:true}),
+				html = '<div id="' + id + '" style="background:#F4F8FF;border: 1px solid #99AABD;font-family:'
+				+ 'tahoma,helvetica,arial,sans-serif;font-size: 11px;padding: 2px;'
+				+ 'color: #0F3B82;"><image style="float: left;" src="' + uri + '"/>'
+				+ '<a id="' + id + '-cancel" style="float: left;padding-left: 2px; color: #0366AC;'
+				+ ' font-weight: bold;cursor: pointer;">Cancel </a><div id="' + id + '-cnt">&nbsp;&nbsp;&nbsp;' + mesg.FILE_NAME + filenm
+				+ '</div><div style="padding-left: 24px">'
+				+ mesg.FILE_SIZE + '&nbsp;&nbsp;<span id="' + id + '-sent">0</span> of '
+				+ '<span id="' + id + '-total">0</span></div></div>';
+			
+			uploaded.setVisible(true);
+			jq(uploaded).append(html);
+			
+			this.viewer = jq('#'+ id)[0];
+			jq('#' + id + '-cancel').click(function() {
+				wgt.$f('submit').revert();
+				if (!self._finish) uplder.cancel();
+				else {
+					var $n = jq('#' + id),
+						index = $n.parent().children().index($n[0]);
+					zAu.send(new zk.Event(wgt.$o(), "onRemove", index));
+					jq(self.viewer).remove();
+				}
+			});
+		},
+		update: function (sent, total) {
+			jq('#'+ this._uplder.id + '-sent').html(Math.round((total/1024)*sent/100) + mesg.KBYTES);
+			if (!this.updated) {
+				this.updated = true;
+				jq('#'+ this._uplder.id + '-total').html(Math.round(total/1024)+mesg.KBYTES);
+			}
+		},
+		destroy: function (finish) {
+			if (this._finish) return;
+			this._finish = finish;
+			if (!finish) jq(this.viewer).remove();
+			else {
+				jq('#' + this._uplder.id + '-sent').parent().remove();
+				jq('#' + this._uplder.id + '-cnt').append('<span style="font-weight:bold;"> ' + mesg.FILE_UPLOADED + '</span>');
+			}
+		}
+	});
+}
+]]></script>
 	<label value="${arg.message}"/>	
-	<fileupload id="fileupload" forward="onUpload=onSend" label="${c:l('mesg:org.zkoss.zul.mesg.MZul:UPLOAD_BROWSE')}" upload="true,maxsize=${arg.maxsize}${arg.native ? ',native':''}"/>
+	<fileupload id="fileupload" forward="onUpload=onSend" label="${c:l('mesg:org.zkoss.zul.mesg.MZul:UPLOAD_BROWSE')}"
+		upload="zk.ModalFileViewer,maxsize=${arg.maxsize}${arg.native ? ',native':''}"/>
 	<separator bar="true"/>
-	<button label="${c:l('mesg:org.zkoss.zul.mesg.MZul:UPLOAD_SUBMIT')}">
+	<div id="uploaded" visible="false"></div>
+	<div id="btns"><button id="submit" label="${c:l('mesg:org.zkoss.zul.mesg.MZul:UPLOAD_SUBMIT')}">
 		<attribute w:name="onClick">
 			var f = this.$f('fileupload'),
 				self = this;
 			function t() {
 				if (zul.Upload.isFinish(f)) {
-					self.$o().cancel(true);
+					self.$o().submit();
 					clearInterval(self._tmp);
 					self._tmp = undefined;
 					return true;
@@ -53,11 +116,21 @@ use="org.zkoss.zul.impl.FileuploadDlg" xmlns:w="http://www.zkoss.org/2005/zk/cli
 			if (t()) return;
 			self._tmp = setInterval(t, 800);
 			this.setDisabled(true);
-			f.setDisabled(true);
 			this.nextSibling.setDisabled(true);
 			if (zk.ie)
-				this.$o().rerender();
+				this.$f('btns').rerender();
+		</attribute>
+		<attribute w:name="revert">
+			function () {	
+				clearInterval(this._tmp);
+				this._tmp = undefined;
+				this.setDisabled(false);
+				this.nextSibling.setDisabled(false);
+				if (zk.ie)
+					this.$f('btns').rerender();
+			}
 		</attribute>
 	</button>
 	<button label="${c:l('mesg:org.zkoss.zul.mesg.MZul:UPLOAD_CANCEL')}" w:onClick="this.$o().cancel(true)"/>
+	</div>
 </window>

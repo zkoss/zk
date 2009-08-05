@@ -25,6 +25,8 @@ GOTO_ERROR_FIELD: "Go to the wrong field",
 PLEASE_WAIT: "Processing...",
 
 FILE_SIZE: "File size: ",
+FILE_NAME: "File name: ",
+FILE_UPLOADED: "Done!",
 KBYTES: "KB",
 
 FAILED_TO_LOAD: "Failed to load ",

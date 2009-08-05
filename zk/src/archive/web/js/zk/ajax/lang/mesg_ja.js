@@ -26,6 +26,8 @@ GOTO_ERROR_FIELD: "エラーフィールドに移動します",
 PLEASE_WAIT: "ただいま処理しています",
 
 FILE_SIZE: "ファイルサイズ: ",
+FILE_NAME: "ファイル名: ",
+FILE_UPLOADED: "完了しました!",
 KBYTES: "KB",
 
 FAILED_TO_LOAD: "読み込みに失敗しました: ",

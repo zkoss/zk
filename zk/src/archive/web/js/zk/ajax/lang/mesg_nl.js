@@ -25,6 +25,8 @@ mesg.GOTO_ERROR_FIELD = "Ga naar foutief veld";
 mesg.PLEASE_WAIT = "Verwerken...";
 
 mesg.FILE_SIZE = "Bestandsgrootte: ";
+mesg.FILE_NAME = "File name: ";
+mesg.FILE_UPLOADED = "Done!";
 mesg.KBYTES = "Kb";
 
 mesg.FAILED_TO_LOAD="Het laden is mislukt ";

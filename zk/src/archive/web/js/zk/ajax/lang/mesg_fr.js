@@ -26,6 +26,8 @@ GOTO_ERROR_FIELD: "Allez sur le mauvais champ",
 PLEASE_WAIT: "Chargement...",
 
 FILE_SIZE: "Taille du fichier: ",
+FILE_NAME: "File name: ",
+FILE_UPLOADED: "Done!",
 KBYTES: "KB",
 
 FAILED_TO_LOAD: "Erreur de chargement ",

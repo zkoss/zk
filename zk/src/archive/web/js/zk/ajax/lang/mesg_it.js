@@ -25,6 +25,8 @@ mesg.GOTO_ERROR_FIELD = "Arrivato al campo sbagliato";
 mesg.PLEASE_WAIT = "Attendere...";
 
 mesg.FILE_SIZE = "Dimensione file: ";
+mesg.FILE_NAME = "File name: ";
+mesg.FILE_UPLOADED = "Done!";
 mesg.KBYTES = "KB";
 
 mesg.FAILED_TO_LOAD="Failed to load ";

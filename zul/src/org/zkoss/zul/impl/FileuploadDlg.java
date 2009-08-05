@@ -20,6 +20,8 @@ package org.zkoss.zul.impl;
 
 import java.util.LinkedList;
 import org.zkoss.util.media.Media;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.ForwardEvent;
 import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zul.Window;
@@ -33,6 +35,11 @@ import org.zkoss.zul.Window;
 public class FileuploadDlg extends Window {
 	private LinkedList _result = new LinkedList();
 	
+	public void onClose(Event evt) {
+		if (evt.getData() == null)
+			_result.clear();
+		detach();
+	}
 	/**
 	 * A forward event is used for component level only.
 	 * @since 5.0.0
@@ -46,5 +53,13 @@ public class FileuploadDlg extends Window {
 	 */
 	public Media[] getResult() {
 		return _result.isEmpty() ? null : (Media[])_result.toArray(new Media[0]);
+	}
+	
+	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
+		final String cmd = request.getCommand();
+		if (cmd.equals("onRemove")) {
+			_result.remove(((Integer)request.getData().get("")).intValue());
+		} else
+			super.service(request, everError);
 	}
 }

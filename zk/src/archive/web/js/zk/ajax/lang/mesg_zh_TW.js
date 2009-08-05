@@ -25,6 +25,8 @@ GOTO_ERROR_FIELD: "回錯誤欄",
 PLEASE_WAIT: "處理中…",
 
 FILE_SIZE: "檔案大小：",
+FILE_NAME: "檔案名稱: ",
+FILE_UPLOADED: "上傳完成!",
 KBYTES: "KB",
 
 FAILED_TO_LOAD: "無法載入：",

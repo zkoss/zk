@@ -25,6 +25,8 @@ mesg.GOTO_ERROR_FIELD = "Gå till felaktigt fält";
 mesg.PLEASE_WAIT = "Arbetar...";
 
 mesg.FILE_SIZE = "Filstorlek: ";
+mesg.FILE_NAME = "File name: ";
+mesg.FILE_UPLOADED = "Done!";
 mesg.KBYTES = "KB";
 
 mesg.FAILED_TO_LOAD = "Uppladdning misslyckades ";

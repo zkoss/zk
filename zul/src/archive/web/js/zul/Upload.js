@@ -77,10 +77,16 @@ zul.Upload = zk.$extends(zk.Object, {
 		return (this._wgt ? this._wgt.uuid : '' )+ '_uplder_' + sid; 
 	},
 	cancel: function (sid) { //cancel upload
+		this._cancel(sid);
+	},
+	finish: function (sid) {
+		this._cancel(sid, true);
+	},
+	_cancel: function (sid, finish) {
 		var key = this.getKey(sid),
 			uplder = this.uploaders[key];
 		if (uplder)
-			uplder.destroy();
+			uplder.destroy(finish);
 		delete this.uploaders[key];
 	},
 	_parseMaxsize: function (val) {
@@ -126,7 +132,7 @@ zul.Upload = zk.$extends(zk.Object, {
 	sendResult: function (uuid, contentId, sid) {
 		var wgt = zk.Widget.$(uuid);
 		if (!wgt || !wgt._uplder) return;
-		wgt._uplder.cancel(sid);
+		wgt._uplder.finish(sid);
 		zAu.send(new zk.Event(wgt.desktop, "updateResult", {
 			contentId: contentId,
 			wid: wgt.uuid,
@@ -181,8 +187,8 @@ zul.Uploader = zk.$extends(zk.Object, {
 	getWidget: function () {
 		return this._wgt;
 	},
-	destroy: function () {
-		this.end();
+	destroy: function (finish) {
+		this.end(finish);
 		if (this._form) {
 			jq(this._form.parentNode).remove();
 			jq('#' + this.id + '_ifm').remove();
@@ -265,8 +271,8 @@ zul.Uploader = zk.$extends(zk.Object, {
 		}
 		return false;
 	},
-	end: function () {
-		this.viewer.destroy();
+	end: function (finish) {
+		this.viewer.destroy(finish);
 		zul.Upload.destroy(this);
 	}
 });
