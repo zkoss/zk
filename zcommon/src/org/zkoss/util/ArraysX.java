@@ -253,8 +253,8 @@ public class ArraysX {
 	public static final Object concat(Object ary, Object ary1) {
 		int len = Array.getLength(ary) + Array.getLength(ary1);
 		
-		if (!ary.getClass().getComponentType().equals(ary1.getClass().getComponentType()))
-			throw new IllegalArgumentException("These concated array component type are different.");
+		if (!ary.getClass().getComponentType().isAssignableFrom(ary1.getClass().getComponentType()))
+			throw new IllegalArgumentException("These concated array component type are not compatible.");
 		Object dst = Array.newInstance(ary.getClass().getComponentType(), len);
 		
 		System.arraycopy(ary, 0, dst, 0, Array.getLength(ary));
