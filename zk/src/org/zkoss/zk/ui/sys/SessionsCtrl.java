@@ -50,6 +50,17 @@ public class SessionsCtrl extends Sessions {
 		return (SessionCtrl)getCurrent();
 	}
 
+	/** Update the session count.
+	 * <p>Called only internally.
+	 * @since 5.0.0
+	 */
+	public static final void updateCount(boolean inc) {
+		synchronized (SessionsCtrl.class) {
+			if (inc) ++_cnt;
+			else --_cnt;
+		}
+	}
+
 	/** Called when a servlet/portlet starts to serve a request.
 	 * It checks whether the number of concurrent requests per session
 	 * exceeds the number specified in

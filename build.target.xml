@@ -31,7 +31,9 @@ Copyright (C) 2002-2006 Potix Corporation. All Rights Reserved.
 	<mkdir dir="${out.dir}"/>
 	<available file="srcdpc" property="srcdpc.dir" value="srcdpc"/>
 	<property name="srcdpc.dir" value=""/>
-	<javac srcdir="${src.dir}:${codegen.dir}:${srcdpc.dir}" destdir="${out.dir}"
+	<available file="srcpv" property="srcpv.dir" value="srcpv"/>
+	<property name="srcpv.dir" value=""/>
+	<javac srcdir="${src.dir}:${codegen.dir}:${srcdpc.dir}:${srcpv.dir}" destdir="${out.dir}"
 	 debug="${debug}" optimize="${optimize}" encoding="UTF-8"
 	 target="${target.version}" deprecation="${deprecation}" source="${source.version}"/>
 </target>

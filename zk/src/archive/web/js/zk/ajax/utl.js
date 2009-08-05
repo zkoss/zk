@@ -179,8 +179,14 @@ zUtl = { //static methods
 			return;
 		}
 
-		var x = jq.innerX(), y = jq.innerY(),
-			style = ' style="left:'+x+'px;top:'+y+'px"',
+		var x, y;
+		try {
+			x = jq.innerX(); y = jq.innerY();
+		} catch (e) { //might not ready yet
+			x = y = 0;
+		}
+
+		var style = ' style="left:'+x+'px;top:'+y+'px"',
 			idtxt = id + '-t',
 			idmsk = id + '-m',
 			html = '<div id="'+id+'"';
@@ -202,11 +208,14 @@ zUtl = { //static methods
 				zIndex: $txt.css('z-index') - 1
 			});
 
-		if (mask && $txt.length) { //center
-			var txt = $txt[0],
-				st = txt.style;
-			st.left = jq.px((jq.innerWidth() - txt.offsetWidth) / 2 + x);
-			st.top = jq.px((jq.innerHeight() - txt.offsetHeight) / 2 + y);
+		try {
+			if (mask && $txt.length) { //center
+				var txt = $txt[0],
+					st = txt.style;
+					st.left = jq.px((jq.innerWidth() - txt.offsetWidth) / 2 + x);
+					st.top = jq.px((jq.innerHeight() - txt.offsetHeight) / 2 + y);
+			}
+		} catch (e) { //might not ready yet
 		}
 		$n.zk.cleanVisibility();
 	},

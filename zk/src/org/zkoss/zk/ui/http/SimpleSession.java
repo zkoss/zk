@@ -39,6 +39,7 @@ import org.zkoss.web.servlet.xel.AttributesMap;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.sys.SessionsCtrl;
 import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.DesktopCache;
@@ -126,6 +127,7 @@ public class SimpleSession implements Session, SessionCtrl {
 		if (wapp == null || navsess == null)
 			throw new IllegalArgumentException();
 
+		SessionsCtrl.updateCount(true);
 		_wapp = wapp;
 		_navsess = navsess;
 
@@ -356,6 +358,8 @@ public class SimpleSession implements Session, SessionCtrl {
 	}
 
 	public void onDestroyed() {
+		SessionsCtrl.updateCount(false);
+
 		_invalidated = _invalid = true;
 
 		final Configuration config = getWebApp().getConfiguration();

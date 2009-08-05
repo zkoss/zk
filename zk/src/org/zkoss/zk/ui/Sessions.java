@@ -28,8 +28,16 @@ import org.zkoss.zk.ui.sys.SessionResolver;
 public class Sessions {
 	/** Used to the store the session for the current thread. */
 	protected static final ThreadLocal _sess = new ThreadLocal();
+	protected static int _cnt;
 
 	protected Sessions() {} //prevent from instantiated
+
+	/** Returns the number of total alive session.
+	 * @since 5.0.0
+	 */
+	public static final int getCount() {
+		return _cnt;
+	}
 
 	/** Returns the session for the current thread.
 	 * It is the same as getSession(true).
