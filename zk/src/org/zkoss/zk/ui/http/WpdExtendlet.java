@@ -20,6 +20,7 @@ import java.util.LinkedList;
 import java.util.Set;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -33,7 +34,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.Exceptions;
+import org.zkoss.util.ArraysX;
 import org.zkoss.io.Files;
+import org.zkoss.json.JSONObject;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.util.IDOMs;
@@ -56,6 +59,21 @@ import org.zkoss.zk.ui.util.Configuration;
  * The extendlet to handle WPD (Widget Package Descriptor).
  *
  * <p>Note: it assumes all JavaScript files are encoded in UTF-8.
+ *
+ * <h3>Bootstrapping</h3>
+ *
+ * <p>In additions to loading, WPD allows to bootstrap a JavaScript codes
+ * by specifying a parameter called main. For example, the following link
+ *
+ *<pre><code>&lt;script type="text/javascript" src="/zkdemo/zkau/web/js/zk/ajax/zk.wpd?main=foo.Go&what=12&more=xy" charset="UTF-8">
+&lt;/script></code></pre>
+ *
+ * will cause the following to be executed
+ *
+ *<pre><code>zk.load('foo', function() {foo.Go.main({what: '123', more: 'xy'})});</code></pre>
+ *
+ * In other words, it loads the package called <code>foo</code>, and then
+ * invoke the <code>main</code> method of the <code>foo.Go</code> class.
  *
  * @author tomyeh
  * @since 5.0.0
@@ -85,6 +103,11 @@ public class WpdExtendlet extends AbstractExtendlet {
 		} finally {
 			setProvider(null);
 		}
+
+		final String main = request.getParameter("main");
+		if (main != null && main.length() > 0)
+			data = (byte[])ArraysX.concat(data,
+				outMain(main, request.getParameterMap()));
 
 		response.setContentType("text/javascript;charset=UTF-8");
 		if (data.length > 200) {
@@ -252,6 +275,33 @@ public class WpdExtendlet extends AbstractExtendlet {
 			return wc;
 		}
 		return out.toByteArray();
+	}
+	private byte[] outMain(String main, Map params)
+	throws java.io.UnsupportedEncodingException {
+		final StringBuffer sb = new StringBuffer();
+		final int j = main.lastIndexOf('.');
+		if (j >= 0)
+			sb.append("\nzk.load('")
+				.append(main.substring(0, j))
+				.append("',");
+		else
+			sb.append("\nzk.afterLoad(");
+
+		sb.append("function(){\n").append(main).append(".main(");
+
+		final Map ms = new LinkedHashMap();
+		for (Iterator it = params.entrySet().iterator(); it.hasNext();) {
+			final Map.Entry me = (Map.Entry)it.next();
+			final String nm = (String)me.getKey();
+			if (!"main".equals(nm)) {
+				final String[] vals = (String[])me.getValue();
+				ms.put(nm, vals.length == 0 ? null:
+					vals.length == 1 ? (Object)vals[0]: (Object)vals);
+			}
+		}
+
+		return sb.append(JSONObject.toJSONString(ms))
+			.append(")})").toString().getBytes("UTF-8");
 	}
 	private boolean writeResource(OutputStream out, String path,
 	String dir, boolean locate)
