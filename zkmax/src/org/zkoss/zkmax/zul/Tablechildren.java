@@ -40,7 +40,9 @@ public class Tablechildren extends XulElement implements org.zkoss.zkmax.zul.api
 	private int _colspan = 1, _rowspan = 1;
 	
 	public Tablechildren() {
-		setZclass("z-table-children");
+	}
+	public String getZclass() {
+		return _zclass == null ? "z-table-children" : _zclass;
 	}
 	
 	/** Returns number of columns to span this header.

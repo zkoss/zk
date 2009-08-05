@@ -38,7 +38,9 @@ public class Tablelayout extends XulElement implements org.zkoss.zkmax.zul.api.T
 	private int _columns = 1;
 	
 	public Tablelayout() {
-		setZclass("z-table-layout");
+	}
+	public String getZclass() {
+		return _zclass == null ? "z-table-layout" : _zclass;
 	}
 	
 	/** Sets the number of columns.
