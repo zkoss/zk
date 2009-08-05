@@ -524,6 +524,10 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (this.desktop) {
 			if (!newwgt.desktop) newwgt.desktop = this.desktop;
 			if (node) newwgt.replaceHTML(node, newwgt.desktop);
+			else {
+				this.unbind();
+				newwgt.bind();
+			}
 
 			_fixBindLevel(newwgt, p ? p.bindLevel + 1: 0);
 			zWatch.fire('onBindLevelMove', null, newwgt);
