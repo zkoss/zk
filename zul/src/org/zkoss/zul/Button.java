@@ -38,7 +38,7 @@ public class Button extends LabelImageElement implements org.zkoss.zul.api.Butto
 	private String _orient = "horizontal", _dir = "normal";
 	private String _href, _target;
 	private String _autodisable;
-	private String _upload;
+	protected String _upload;
 	private int _tabindex = -1;
 	private boolean _disabled;
 

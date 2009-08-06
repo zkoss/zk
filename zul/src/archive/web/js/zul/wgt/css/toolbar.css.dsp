@@ -7,7 +7,7 @@
 	background-image: url(${c:encodeURL('~./zul/img/common/bar-bg.png')});
 	position: relative; zoom: 1;
 }
-.z-caption .z-toolbar, .z-caption .z-toolbarbutton {
+.z-caption .z-toolbar, .z-caption .z-toolbar-anchor {
 	background: none; border: 0;
 }
 .z-toolbar-body, .z-toolbar-body span {
@@ -22,7 +22,7 @@
 .z-toolbar a:hover {
 	border-color: #f8fbff #aca899 #aca899 #f8fbff;
 }
-.z-toolbar-button {
+.z-toolbar-anchor {
 	font-family: ${fontFamilyT};
 	font-size: ${fontSizeM};
 	font-weight: normal;
@@ -77,12 +77,65 @@
 	clear: none;
 	float: right;
 }
-
-<%-- Toolbar Button--%>
+<%-- Toolbar button --%>
+.z-toolbar-button {
+	display:-moz-inline-box;
+	display: inline-block;
+	position: relative;
+	cursor: pointer;
+	margin: 0 2px;
+	vertical-align: middle;	
+	padding: 1px 0;
+	zoom: 1;
+}
+.z-toolbar-button-over {
+	border-top: 1px solid #7EAAC6;
+	border-bottom: 1px solid #7EAAC6;
+	padding: 0;
+}
+.z-toolbar-button-body {
+	position: relative;
+	margin: 0 -1px;
+	padding: 0 1px;
+	vertical-align: middle;:
+	zoom: 1;
+}
+.z-toolbar-button-over .z-toolbar-button-body {
+	border-left: 1px solid #7EAAC6;
+	border-right: 1px solid #7EAAC6;
+	padding: 0;
+}
+.z-toolbar-button-cnt {
+	padding: 2px 5px;
+	position: relative;
+	zoom: 1;
+}
+.ie .z-toolbar-button {
+	display: inline;
+}
+.ie6 .z-toolbar-button,
+.ie6 .z-toolbar-button-body,
+.ie6 .z-toolbar-button-cnt {
+	display: inline;
+	position: relative;
+}
+.ie .z-toolbar-button-body {
+	float: left;
+}
+.z-toolbar-button-disd * {
+	color:gray !important;
+	cursor:default !important;
+}
 .z-toolbar-button-disd {
+	opacity: .5;
+	-moz-opacity: .5;
+	filter: alpha(opacity=50);
+}
+<%-- Toolbar Anchor --%>
+.z-toolbar-anchor-disd {
 	color: #C5CACB !important; cursor: default!important;
 }
-.z-toolbar-button-disd:visited, .z-toolbar-button-disd:hover {
+.z-toolbar-anchor-disd:visited, .z-toolbar-anchor-disd:hover {
 	text-decoration: none !important; cursor: default !important;;
 	border-color: #D0DEF0 !important;
 }

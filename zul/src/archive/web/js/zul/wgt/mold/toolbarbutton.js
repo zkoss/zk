@@ -13,5 +13,8 @@ This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
-	out.push('<a ', this.domAttrs_(), '>', this.domContent_(), '</a>');
+	var zcls = this.getZclass();
+	out.push('<div ', this.domAttrs_(), '><div class="',
+		zcls, '-body"><div class="', zcls, '-cnt">', this.domContent_(),
+		'</div></div></div>');
 }

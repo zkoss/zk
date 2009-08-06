@@ -14,6 +14,7 @@ ZK 5.0.0
   2816083: Spec change: definition in page has lower priority from class
   2816588: A way to parse app-specific configuration in zk.xml
   2832982: Button supports Ctrl+Click if href is specified
+  2822834: Button supports toolbar mold and toolbarbutton d. from it
 
 * Bugs
 
