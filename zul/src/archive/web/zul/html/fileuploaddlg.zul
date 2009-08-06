@@ -57,7 +57,7 @@ if (!zk.ModalFileViewer) {
 				+ 'tahoma,helvetica,arial,sans-serif;font-size: 11px;padding: 2px;'
 				+ 'color: #0F3B82;"><image style="float: left;" src="' + uri + '"/>'
 				+ '<a id="' + id + '-cancel" style="float: left;padding-left: 2px; color: #0366AC;'
-				+ ' font-weight: bold;cursor: pointer;">Cancel </a><div id="' + id + '-cnt">&nbsp;&nbsp;&nbsp;' + mesg.FILE_NAME + filenm
+				+ ' font-weight: bold;cursor: pointer;">' + msgzul.UPLOAD_CANCEL + ' </a><div id="' + id + '-cnt">&nbsp;&nbsp;&nbsp;' + mesg.FILE_NAME + filenm
 				+ '</div><div style="padding-left: 24px">'
 				+ mesg.FILE_SIZE + '&nbsp;&nbsp;<span id="' + id + '-sent">0</span> of '
 				+ '<span id="' + id + '-total">0</span></div></div>';
