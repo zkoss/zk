@@ -13,6 +13,7 @@ ZK 5.0.0
   2831854: A way to run certain JavaScript codes w/o load it explicitly
   2816083: Spec change: definition in page has lower priority from class
   2816588: A way to parse app-specific configuration in zk.xml
+  2832982: Button supports Ctrl+Click if href is specified
 
 * Bugs
 
