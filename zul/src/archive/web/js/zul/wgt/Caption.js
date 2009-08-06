@@ -23,7 +23,7 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 	domContent_: function () {
 		var label = this.getLabel(),
 			img = this.getImage(),
-			title = this.parent ? this.parent.title: '';
+			title = this.parent ? this.parent._title: '';
 		if (title) label = label ? title + ' - ' + label: title;
 		label = zUtl.encodeXML(label);
 		if (!img) return label;
@@ -37,6 +37,11 @@ zul.wgt.Caption = zk.$extends(zul.LabelImageWidget, {
 		this.$supers('doClick_', arguments);
 	},
 	//private//
+	/** Whether to generate a collapsible button. */
+	_isCollapsibleVisible: function () {
+		var parent = this.parent;
+		return parent.isCollapsible && parent.isCollapsible();
+	},
 	/** Whether to generate a close button. */
 	_isCloseVisible: function () {
 		var parent = this.parent;

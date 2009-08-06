@@ -175,7 +175,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 			this.$class._rmActive(this);				
 		}
 	},
-	doMouseOver_: function (evt) { //not zk.Widget.doMouseOver_
+	doMouseOver_: function (evt) {
 		if (this.$class._isActive(this)) return;
 		if (!this.isDisabled()) {
 			if (zk.ie && this.isTopmost() && !this._uplder && !jq.isAncestor(this.$n('a'), evt.domTarget))
@@ -185,7 +185,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 			zWatch.fire('onFloatUp', null, this); //notify all
 		}
 	},
-	doMouseOut_: function (evt) { //not zk.Widget.doMouseOut_
+	doMouseOut_: function (evt) {
 		if (!this.isDisabled()) {
 			if (zk.ie) {
 				var n = this.$n('a'),

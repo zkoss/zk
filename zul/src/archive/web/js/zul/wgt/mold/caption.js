@@ -35,6 +35,9 @@ function (out) {
 		w.redraw(out);
 
 	out.push('</td>');
+	if (this._isCollapsibleVisible())
+		out.push('<td width="16"><div id="', puuid, '-exp" class="',
+				pzcls, '-tool ', pzcls, '-exp"></div></td>');
 	if (this._isMinimizeVisible())
 		out.push('<td width="16"><div id="', puuid, '-min" class="',
 				pzcls, '-tool ', pzcls, '-minimize"></div></td>');
