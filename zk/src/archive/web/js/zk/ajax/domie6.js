@@ -15,11 +15,45 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zk.copy(zjq, {
-	_afed: [], //filtered img
-	_AF_IMGLD: _zkf = 'DXImageTransform.Microsoft.AlphaImageLoader',
-	_AF_FILTER: "progid:" + _zkf + "(src='%1',sizingMethod='scale')",
+(function () {
+	var _imgFiltered = [], //filtered img
+		_IMGLD = 'DXImageTransform.Microsoft.AlphaImageLoader',
+		_FILTER = "progid:" + _IMGLD + "(src='%1',sizingMethod='scale')",
+		_inPrint;
 
+	function _onpropchange() {
+	 	if (!_inPrint && event.propertyName == "src"
+	 	&& this.src.indexOf('spacer.gif') < 0)
+	 		_fix(this);
+	}
+	function _fix(img) {
+		var ni = new Image(img.width, img.height);
+		ni.onload = function() {
+			img.width = ni.width;
+			img.height = ni.height;
+			ni = null;
+		};
+		ni.src = img.src; //store the original url (we'll put it back when it's printed)
+		img._pngSrc = img.src; //add the AlphaImageLoader thingy
+		_addFilter(img);
+	}
+	function _addFilter(img) {
+		var filter = img.filters[_IMGLD];
+		if (filter) {
+			filter.src = img.src;
+			filter.enabled = true;
+		} else {
+			img.runtimeStyle.filter = zUtl.format(_FILTER, img.src);
+			_imgFiltered.push(img);
+		}
+		img.src = zk.SPACER_URI; //remove the real image
+	}
+	function _rmFilter(img) {
+		img.src = img._pngSrc;
+		img.filters[_IMGLD].enabled = false;
+	}
+
+zk.copy(zjq, {
 	//override//
 	_alphafix: function (n) {
 		var regex = jq.IE6_ALPHAFIX;
@@ -36,41 +70,10 @@ zk.copy(zjq, {
 				k = src.lastIndexOf(';');
 			if (k >= 0) src = src.substring(0, k);
 			if (regex.test(img.src)) {
-				zjq._afFix(img);
-				jq(img).bind("propertychange", zjq._onpropchange);
+				_fix(img);
+				jq(img).bind("propertychange", _onpropchange);
 			}
 		}
-	},
-	_onpropchange: function () {
-	 	if (!zjq._afPrint && event.propertyName == "src"
-	 	&& this.src.indexOf('spacer.gif') < 0)
-	 		zjq._afFix(this);
-	},
-	_afFix: function (img) {
-		var ni = new Image(img.width, img.height);
-		ni.onload = function() {
-			img.width = ni.width;
-			img.height = ni.height;
-			ni = null;
-		};
-		ni.src = img.src; //store the original url (we'll put it back when it's printed)
-		img._pngSrc = img.src; //add the AlphaImageLoader thingy
-		zjq._addFilter(img);
-	},
-	_addFilter: function (img) {
-		var filter = img.filters[zjq._AF_IMGLD];
-		if (filter) {
-			filter.src = img.src;
-			filter.enabled = true;
-		} else {
-			img.runtimeStyle.filter = zUtl.format(zjq._AF_FILTER, img.src);
-			zjq._afed.push(img);
-		}
-		img.src = zk.SPACER_URI; //remove the real image
-	},
-	_rmFilter: function (img) {
-		img.src = img._pngSrc;
-		img.filters[zjq._AF_IMGLD].enabled = false;
 	}
 });
 
@@ -81,7 +84,7 @@ zk.override(jq.fn, zjq._fn, {
 			n = this[j];
 			if (n.tagName == 'IMG' && n._pngSrc) {
 				(nc = clone[j]).src = n._pngSrc;
-				setTimeout(function() {zjq._afFix(nc);}, 0); //we have to wait
+				setTimeout(function() {_fix(nc);}, 0); //we have to wait
 			}
 		}
 		return clone;
@@ -89,11 +92,11 @@ zk.override(jq.fn, zjq._fn, {
 });
 
 jq(window).bind("beforeprint", function() {
-		zjq._afPrint = true;
-		for (var ns = zjq._afed, i = 0, len = ns.length; i < len; i++) {
+		_inPrint = true;
+		for (var ns = _imgFiltered, i = 0, len = ns.length; i < len; i++) {
 			var n = ns[i];
 			try {
-				zjq._rmFilter(n);
+				_rmFilter(n);
 			} catch (e) {
 				ns.splice(i--, 1); //no longer avail
 				len--;
@@ -101,7 +104,9 @@ jq(window).bind("beforeprint", function() {
 		}
 	})
 	.bind("afterprint", function() {
-		for (var ns = zjq._afed, i = 0, len = ns.length; i < len; i++)
-			zjq._addFilter(ns[i]);
-		zjq._afPrint = false;
+		for (var ns = _imgFiltered, i = 0, len = ns.length; i < len; i++)
+			_addFilter(ns[i]);
+		_inPrint = false;
 	});
+
+})();

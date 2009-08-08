@@ -148,17 +148,17 @@ zul.Widget = zk.$extends(zk.Widget, {
 		this.$supers('doRightClick_', arguments);
 	},
 	doMouseOver_: function (evt) {
-		if (!evt._tiped && zTooltip.beforeBegin(this)) {
+		if (!evt._tiped && zk.eff.tooltip.beforeBegin(this)) {
 			var tip = this._smartFellow(this._tooltip);
 			if (tip) {
 				evt._tiped = true;
-				zTooltip.begin(tip, this);
+				zk.eff.tooltip.begin(tip, this);
 			}
 		}
 		this.$supers('doMouseOver_', arguments);
 	},
 	doMouseOut_: function (evt) {
-		zTooltip.end(this);
+		zk.eff.tooltip.end(this);
 		this.$supers('doMouseOut_', arguments);
 	},
 	_smartFellow: function (id) {

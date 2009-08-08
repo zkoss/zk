@@ -302,4 +302,4 @@ zk.eff.Tooltip = zk.$extends(zk.Object, {
 		}
 	}
 });
-zTooltip = new zk.eff.Tooltip();
+zk.eff.tooltip = new zk.eff.Tooltip();

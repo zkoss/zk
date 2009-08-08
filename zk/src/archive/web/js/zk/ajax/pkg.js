@@ -13,27 +13,27 @@ This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 zk.copy(zk, (function() {
-	var loaded = {'zk': true}, //loaded
-		loading = {'zk': true}, //loading (include loaded)
-		xloadings = [], //loading (exclude loaded)
-		semiLoads = [], //loaded but not inited
-		afterLoadFronts = [],
-		afterLoads = [],
-		afterPkgLoad = {}, //after pkg loaded
-		pkgdepend = {},
-		pkgver = {};
+	var _loaded = {'zk': true}, //loaded
+		_loading = {'zk': true}, //loading (include loaded)
+		_xloadings = [], //loading (exclude loaded)
+		_loadedsemis = [], //loaded but not inited
+		_afterLoadFronts = [],
+		_afterLoads = [],
+		_afterPkgLoad = {}, //after pkg loaded
+		_pkgdepend = {},
+		_pkgver = {};
 
 	function doLoad(pkg, dt) {
-		if (!pkg || loading[pkg])
-			return !zk.loading && !semiLoads.length;
+		if (!pkg || _loading[pkg])
+			return !zk.loading && !_loadedsemis.length;
 			//since pkg might be loading (-> return false)
 
-		loading[pkg] = true;
+		_loading[pkg] = true;
 
 		//We don't use e.onload since Safari doesn't support t
 		//See also Bug 1815074
 
-		xloadings.push(pkg);
+		_xloadings.push(pkg);
 		if (updCnt() == 1) {
 			zk.disableESC();
 			setTimeout(prgbox, 380);
@@ -58,7 +58,7 @@ zk.copy(zk, (function() {
 	}
 	function doEnd(afs, wait) {
 		for (var fn; fn = afs.shift();) {
-			if (updCnt() || (wait && semiLoads.length)) {
+			if (updCnt() || (wait && _loadedsemis.length)) {
 				afs.unshift(fn);
 				return;
 			}
@@ -67,14 +67,14 @@ zk.copy(zk, (function() {
 	}
 	function loadmsg() {
 		var msg = '';
-		for (var lding = xloadings, j = lding.length; --j >=0;) {
+		for (var j = _xloadings.length; --j >=0;) {
 			if (msg) msg += ', ';
-			msg += lding[j];
+			msg += _xloadings[j];
 		}
 		return msg;
 	}
 	function updCnt() {
-		zk.loading = xloadings.length;
+		zk.loading = _xloadings.length;
 		try {
 			var n = jq("#zk_loadcnt")[0];
 			if (n) n.innerHTML = loadmsg();
@@ -99,24 +99,23 @@ zk.copy(zk, (function() {
 
   return { //internal utility
 	setLoaded: function (pkg, wait) {
-		xloadings.$remove(pkg);
-		loading[pkg] = true;
+		_xloadings.$remove(pkg);
+		_loading[pkg] = true;
 
-		if (wait) semiLoads.push(pkg);
+		if (wait) _loadedsemis.push(pkg);
 		else {
-			semiLoads.$remove(pkg);
-			loaded[pkg] = true;
+			_loadedsemis.$remove(pkg);
+			_loaded[pkg] = true;
 
-			var afpk = afterPkgLoad[pkg];
+			var afpk = _afterPkgLoad[pkg];
 			if (afpk) {
-				delete afterPkgLoad[pkg];
-				var afs = afterLoadFronts;
-				afs.push.apply(afs, afpk); //add all
+				delete _afterPkgLoad[pkg];
+				_afterLoadFronts.push.apply(_afterLoadFronts, afpk); //add all
 			}
 
-			var deps = pkgdepend[pkg];
+			var deps = _pkgdepend[pkg];
 			if (deps) {
-				delete pkgdepend[pkg];
+				delete _pkgdepend[pkg];
 				for (var pn; pn = deps.unshift();)
 					zk.load(pn);
 			}
@@ -128,12 +127,12 @@ zk.copy(zk, (function() {
 				zUtl.destroyProgressbox("zk_loadprog");
 			} catch (ex) {
 			}
-			doEnd(afterLoadFronts);
-			doEnd(afterLoads, 1);
+			doEnd(_afterLoadFronts);
+			doEnd(_afterLoads, 1);
 		}
 	},
 	isLoaded: function (pkg) {
-		return loaded[pkg];
+		return _loaded[pkg];
 	},
 	load: function (pkg, dt, func) {
 		if (typeof dt == 'function')
@@ -155,18 +154,17 @@ zk.copy(zk, (function() {
 	},
 
 	getVersion: function (pkg) {
-		return pkgver[pkg];
+		return _pkgver[pkg];
 	},
 	setVersion: function (pkg, ver) {
-		pkgver[pkg] = ver;
+		_pkgver[pkg] = ver;
 	},
 	depends: function (a, b) {
 		if (a && b) //a depends on b
-			if (loaded[a]) zk.load(b);
+			if (_loaded[a]) zk.load(b);
 			else {
-				var deps = pkgdepend;
-				if (deps[a]) deps[a].push(b);
-				else deps[a] = [b];
+				if (_pkgdepend[a]) _pkgdepend[a].push(b);
+				else _pkgdepend[a] = [b];
 			}
 	},
 
@@ -176,10 +174,10 @@ zk.copy(zk, (function() {
 
 			for (var pkgs = a.split(','), j = pkgs.length; j--;) {
 				var p = pkgs[j].trim();
-				if (p && !loaded[p]) {
+				if (p && !_loaded[p]) {
 					while (j--) {
 						var p2 = pkgs[j].trim();
-						if (p2 && !loaded[p2]) { //yes, more
+						if (p2 && !_loaded[p2]) { //yes, more
 							var a1 = a, b1 = b;
 							b = function () {
 								zk.afterLoad(a1, b1, front); //check again
@@ -188,9 +186,8 @@ zk.copy(zk, (function() {
 						}
 					}
 
-					var afpk = afterPkgLoad;
-					if (afpk[p]) afpk[p].push(b);
-					else afpk[p] = [b];
+					if (_afterPkgLoad[p]) _afterPkgLoad[p].push(b);
+					else _afterPkgLoad[p] = [b];
 					return false;
 				}
 			}
@@ -199,8 +196,8 @@ zk.copy(zk, (function() {
 			a = b;
 		}
 
-		if (zk.loading || semiLoads.length) {
-			(front ? afterLoadFronts: afterLoads).push(a);
+		if (zk.loading || _loadedsemis.length) {
+			(front ? _afterLoadFronts: _afterLoads).push(a);
 			return false;
 		}
 		a();

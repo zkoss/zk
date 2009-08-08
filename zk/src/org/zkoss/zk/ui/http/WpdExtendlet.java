@@ -146,11 +146,12 @@ public class WpdExtendlet extends AbstractExtendlet {
 			if (depends != null) {
 				write(out, "zk.load('");
 				write(out, depends);
-				write(out, "',function(){var ");
-			}
-			write(out, "_z='");
+				write(out, "',");
+			} else
+				write(out, '(');
+			write(out, "function(){zk._n='");
 			write(out, name);
-			write(out, "';try{var _zkpk=zk.$package(_z,false);\n");
+			write(out, "';try{zk._p=zk.$package(zk._n,false);\n");
 		}
 
 		final Map moldInfos = new HashMap();
@@ -166,8 +167,8 @@ public class WpdExtendlet extends AbstractExtendlet {
 				}
 
 				final String wgtflnm = name + "." + wgtnm;
-				write(out, "zkreg(_zkwg=");
-				write(out, zk ? "zk.": "_zkpk.");
+				write(out, "zkreg(zk._w=");
+				write(out, zk ? "zk.": "zk._p.");
 				write(out, wgtnm);
 				write(out, ",'");
 				write(out, wgtflnm);
@@ -188,16 +189,16 @@ public class WpdExtendlet extends AbstractExtendlet {
 
 						if (first) {
 							first = false;
-							write(out, "_zkmd={};\n");
+							write(out, "zk._m={};\n");
 						}
 							
-						write(out, "_zkmd['");
+						write(out, "zk._m['");
 						write(out, mold);
 						write(out, "']=");
 
 						String[] info = (String[])moldInfos.get(uri);
 						if (info != null) { //reuse
-							write(out, "[_zkpk.");
+							write(out, "[zk._p.");
 							write(out, info[0]);
 							write(out, ",'");
 							write(out, info[1]);
@@ -213,7 +214,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 							write(out, ';');
 						}
 					}
-					if (!first) write(out, "zkmld(_zkwg,_zkmd);");
+					if (!first) write(out, "zkmld(zk._w,zk._m);");
 				} catch (Throwable ex) {
 					log.error("Failed to load molds for widget "+wgtflnm+".\nCause: "+Exceptions.getMessage(ex));
 				}
@@ -262,12 +263,13 @@ public class WpdExtendlet extends AbstractExtendlet {
 				writeAppInfo(out, wapp);
 			write(out, '}'); //end of if
 		} else {
-			write(out, "\n}finally{zk.setLoaded(_z);}");
+			write(out, "\n}finally{zk.setLoaded(zk._n);}");
 			if (depends != null) {
 				write(out, "});zk.setLoaded('");
 				write(out, name);
 				write(out, "',1);");
-			}
+			} else
+				write(out, "})();");
 		}
 
 		if (wc != null) {

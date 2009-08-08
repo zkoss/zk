@@ -425,14 +425,14 @@ zAu = (function () {
 		return ajaxReq;
 	},
 	_doCmds: function () { //called by mount.js, too
-		zkm.t = zUtl.now(); //used by zkm's run
+		zk.mnt.t = zUtl.now(); //used by zk.mnt's run
 
 		for (var fn; fn = doCmdFns.shift();)
 			fn();
 
 		var ex, j = 0, rid = responseId;
 		for (; j < cmdsQue.length; ++j) {
-			if (zk.mounting) return; //wait zkm's mtAU to call
+			if (zk.mounting) return; //wait zk.mnt's mtAU to call
 
 			var cmds = cmdsQue[j];
 			if (rid == cmds.rid || !rid || !cmds.rid //match
@@ -457,7 +457,7 @@ zAu = (function () {
 					} else { //not done yet (=zk.mounting)
 						responseId = oldrid; //restore
 						cmdsQue.splice(j, 0, cmds); //put it back
-						return; //wait zkm's mtAU to call
+						return; //wait zk.mnt's mtAU to call
 					}
 				} catch (e) {
 					if (!ex) ex = e;
@@ -600,7 +600,7 @@ zAu = (function () {
 //Commands//
 zAu.cmd0 = { //no uuid at all
 	bookmark: function (bk) {
-		zHistory.bookmark(bk);
+		zk.bmk.bookmark(bk);
 	},
 	obsolete: function (dt0, dt1) { //desktop timeout
 		zk.error(dt1);

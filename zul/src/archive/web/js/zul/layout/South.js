@@ -12,15 +12,15 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.layout.South = zk.$extends(_zkbc = zul.layout.LayoutRegion, zul.layout._South = {
+zul.layout.South = zk.$extends(_zkf = zul.layout.LayoutRegion, zul.layout._South = {
 	setWidth: zk.$void, // readonly
 	sanchor: 'b',
 
 	getPosition: function () {
 		return zul.layout.Borderlayout.SOUTH;
 	},
-	getSize: _zkbc.prototype.getHeight,
-	setSize: _zkbc.prototype.setHeight,
+	getSize: _zkf.prototype.getHeight,
+	setSize: _zkf.prototype.setHeight,
 
 	_ambit2: function (ambit, mars, split) {
 		ambit.w = mars.left + mars.right;

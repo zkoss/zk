@@ -452,11 +452,11 @@ implements org.zkoss.zul.api.Include, Includer {
 							rc.extra.write("\n-->\n");
 						rc.extra.write("</div>");
 
-						out.write("zkm.top().props.z_ea='content';");
+						out.write("zk.mnt.top().props.z_ea='content';");
 						done = true;
 					}
 					if (!done) {
-						out.write("zkm.top().props.content='");
+						out.write("zk.mnt.top().props.content='");
 						final StringBuffer sb = new StringBuffer(1024);
 						Strings.escape(sb, sw.getBuffer(), Strings.ESCAPE_JAVASCRIPT);
 						Files.write(out, sb);

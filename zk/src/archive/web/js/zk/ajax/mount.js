@@ -12,15 +12,15 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
-zkm = {
+zk.mnt = {
 	t: zUtl.now() //when JS loaded
 };
 zkreg = zk.Widget.register; //a shortcut for WPD loader
 
 function zkblbg(binding) {
 	zk.mounting = true;
-	zkm.binding = binding;
-	var t = 390 - (zUtl.now() - zkm.t);
+	zk.mnt.binding = binding;
+	var t = 390 - (zUtl.now() - zk.mnt.t);
 	zk.startProcessing(t > 0 ? t: 0);
 }
 
@@ -28,13 +28,13 @@ function zkpgbg(pguid, style, dtid, contained, contextURI, updateURI) {
 	var props = {};
 	if (style) props.style = style;
 	if (dtid) zkdtbg(dtid, contextURI, updateURI)._pguid = pguid;
-	zkm.push({type: "#p", uuid: pguid, contained: contained, props: props});
+	zk.mnt.push({type: "#p", uuid: pguid, contained: contained, props: props});
 }
 function zkbg(type, uuid, mold, props) {
-	zkm.push({type: type, uuid: uuid, mold: mold, props: props});
+	zk.mnt.push({type: type, uuid: uuid, mold: mold, props: props});
 }
 function zkb2(uuid, type, props) { //zhtml
-	zkm.push({type: type||'zhtml.Widget', uuid: uuid, props: props});
+	zk.mnt.push({type: type||'zhtml.Widget', uuid: uuid, props: props});
 }
 function zkdtbg(dtid, contextURI, updateURI) {
 	var dt = zk.Desktop.$(dtid);
@@ -45,7 +45,7 @@ function zkdtbg(dtid, contextURI, updateURI) {
 		if (updateURI) dt.updateURI = updateURI;
 		if (contextURI) dt.contextURI = contextURI;
 	}
-	zkm.curdt = dt;
+	zk.mnt.curdt = dt;
 	return dt;
 }
 
@@ -98,7 +98,7 @@ function zkmld(wgtcls, molds) {
 	}		
 }
 
-(function () { //zkm
+(function () { //zk.mnt
 	var _wgts = [],
 		_createInf0 = [], //create info
 		_createInf1 = [], //create info
@@ -180,7 +180,7 @@ function zkmld(wgtcls, molds) {
 		doAfterMount(mtBL1);
 		zk.endProcessing();
 
-		zHistory.onURLChange();
+		zk.bmk.onURLChange();
 		if (zk.pfmeter) {
 			var dts = zk.Desktop.all;
 			for (var dtid in dts)
@@ -279,7 +279,7 @@ function zkmld(wgtcls, molds) {
 	function pkgLoad(w) {
 		var type = w.type, i = type.lastIndexOf('.');
 		if (i >= 0)
-			zk.load(type.substring(0, i), zkm.curdt);
+			zk.load(type.substring(0, i), zk.mnt.curdt);
 
 		//z_pk: pkgs to load
 		var pkgs = w.z_pk;
@@ -294,9 +294,9 @@ function zkmld(wgtcls, molds) {
 
 	/** run and delay if too busy, so progressbox has a chance to show. */
 	function run(fn) {
-		var t = zUtl.now(), dt = t - zkm.t;
+		var t = zUtl.now(), dt = t - zk.mnt.t;
 		if (dt > 300) { //huge page
-			zkm.t = t;
+			zk.mnt.t = t;
 			dt >>= 4;
 			setTimeout(fn, dt < 35 ? dt: 35); //breathe
 				//IE optimize the display if delay is too short
@@ -304,7 +304,7 @@ function zkmld(wgtcls, molds) {
 			fn();
 	}
 
-zk.copy(zkm, { //Use internally
+zk.copy(zk.mnt, { //Use internally
 	push: function(w) {
 		w.children = [];
 		if (_wgts.length)
@@ -314,7 +314,7 @@ zk.copy(zkm, { //Use internally
 	pop: function() {
 		var w = _wgts.shift();
 		if (!_wgts.length) {
-			_createInf0.push([zkm.curdt, w, zkm.binding]);
+			_createInf0.push([zk.mnt.curdt, w, zk.mnt.binding]);
 			_createInf0.stub = zAu.stub;
 			zAu.stub = null;
 			run(mount);
@@ -325,11 +325,11 @@ zk.copy(zkm, { //Use internally
 	},
 	end: function() {
 		_wgts = [];
-		zkm.curdt = null;
-		zkm.binding = false;
+		zk.mnt.curdt = null;
+		zk.mnt.binding = false;
 	}
 });
-})(); //zkm
+})(); //zk.mnt
 
 //Event Handler//
 jq(function() {
@@ -624,5 +624,5 @@ jq(function() {
 	};
 }); //jq()
 
-zkble = zkm.end;
-zke = zkpge = zkm.pop;
+zkble = zk.mnt.end;
+zke = zkpge = zk.mnt.pop;

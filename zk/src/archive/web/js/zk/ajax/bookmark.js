@@ -1,4 +1,4 @@
-/* history.js
+/* bookmark.js
 
 	Purpose:
 		
@@ -12,13 +12,13 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	This program is distributed under GPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 */
-zHistory = (function () {
+zk.bmk = (function () {
 	var _curbk = "";
 
 	/** bookmark iframe */
 	var _bkIframe = zk.ie ? function (nm) {
 		//Bug 2019171: we have to create iframe frist
-		var url = zk.ajaxURI("/web/js/zk/html/history.html", {au:true,ignoreSession:true}),
+		var url = zk.ajaxURI("/web/js/zk/html/bookmark.html", {au:true,ignoreSession:true}),
 			ifr = jq('#zk_histy')[0];
 		if (!ifr) ifr = jq.newFrame('zk_histy', url);
 
@@ -37,7 +37,7 @@ zHistory = (function () {
 		if (nm != _curbk) {
 			_curbk = nm;
 			zAu.send(new zk.Event(null, "onBookmarkChange", nm), 50);
-			zHistory.onURLChange();
+			zk.bmk.onURLChange();
 		}
 	}
 	function _simplifyURL(url) {
@@ -54,7 +54,7 @@ zHistory = (function () {
 		setTimeout(checkBookmark, 0);
 			//Speed up the first check
 		setInterval(checkBookmark, 250);
-			//Though IE use history.html, timer is still required 
+			//Though IE use bookmark.html, timer is still required 
 			//because user might specify URL directly
 	});
 
@@ -66,11 +66,11 @@ zHistory = (function () {
 			var encnm = encodeURIComponent(nm);
 			location.hash = zk.safari || !encnm ? encnm: '#' + encnm;
 			_bkIframe(nm);
-			zHistory.onURLChange();
+			zk.bmk.onURLChange();
 		}
 	},
-	/** called when history.html is loaded*/
-	onHistoryLoaded: zk.ie ? function (src) {
+	/** called when bookmark.html is loaded*/
+	onIframeLoaded: zk.ie ? function (src) {
 		var j = src.indexOf('?'),
 			nm = j >= 0 ? src.substring(j + 1): '';
 		location.hash = nm ? /*zk.safari ? nm:*/ '#' + nm: '';
