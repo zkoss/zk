@@ -20,9 +20,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<script src="domopera.js" browser="opera"/>
 	<script src="domsafari.js" browser="safari"/>
 
-	<script>zk.eval=function(s){return eval(s)};zk.func=function(s){return new Function(s)}</script>
-		<!-- Use with care (don't use local variable in s (used to enable yui compress) -->
-
 	<script src="anima.js"/>
 	<script src="drag.js"/>
 	<script src="effect.js"/>

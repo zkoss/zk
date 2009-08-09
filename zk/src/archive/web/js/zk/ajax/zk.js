@@ -180,7 +180,7 @@ zk = function (sel) {
 			}
 			pt['set' + nm2] = def(nm1, before, after);
 			pt['get' + nm2] = pt['is' + nm2] =
-				zk.func('return this.' + nm1 + ';');
+				new Function('return this.' + nm1 + ';');
 		}
 	},
 

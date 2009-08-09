@@ -214,7 +214,7 @@
         };
 //Tom: don't use eval(s). Otherwise, it won't (and cann't) be compressed)
 	$.evalJSON = function (s) {
-		return (zk.func('return '+s))();
+		return (new Function('return '+s))();
 	};
 //Tom//    }
 }(jQuery));

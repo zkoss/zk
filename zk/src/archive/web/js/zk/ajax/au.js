@@ -60,7 +60,7 @@ zAu = (function () {
 				continue;
 			}
 
-			cmds.push({cmd: cmd, data: data ? zk.eval(data): []});
+			cmds.push({cmd: cmd, data: data || []});
 		}
 
 		cmdsQue.push(cmds);
@@ -75,7 +75,7 @@ zAu = (function () {
 		}
 
 		//I. process commands that require uuid
-		if (!data || !data.length) {
+		if (!data.length) {
 			zAu.showError("ILLEGAL_RESPONSE", "uuid is required for ", cmd);
 			return;
 		}
@@ -375,9 +375,9 @@ zAu = (function () {
 		return errURIs['e' + code];
 	},
 	setErrorURI: function (code, uri) {
-		if (len > 2) {
-			for (var j = 0; j < len; j += 2)
-				zAu.setErrorURI(args[j], args[j + 1]);
+		if (arguments.length == 1) {
+			for (var c in code)
+				zAu.setErrorURI(c, code[c]);
 			return;
 		}
 		errURIs['e' + code] = uri;
@@ -419,7 +419,7 @@ zAu = (function () {
 
 	////Ajax////
 	process: function (cmd, data) { //by server only (encoded)
-		doProcess(cmd, data ? zk.eval(data): []);
+		doProcess(cmd, data ? jq.evalJSON(data): []);
 	},
 	shallIgnoreESC: function () {
 		return ajaxReq;
@@ -619,7 +619,7 @@ zAu.cmd0 = { //no uuid at all
 		document.title = dt0;
 	},
 	script: function (dt0) {
-		zk.eval(dt0);
+		jq.globalEval(dt0);
 	},
 	echo: function (dtid) {
 		zAu.send(new zk.Event(zk.Desktop.$(dtid), "dummy", null, {ignorable: true}));
@@ -729,7 +729,7 @@ zAu.cmd1 = {
 			wgt._replaceWgt(newwgt);
 		};
 		zk.mounting = true;
-		zk.eval(code);
+		jq.globalEval(code);
 	},
 	addAft: function (uuid, wgt, code, pgid) {
 		//Bug 1939059: This is a dirty fix. Refer to AuInsertBefore
@@ -740,7 +740,7 @@ zAu.cmd1 = {
 			else {
 				zAu.stub = zAu.cmd1._asBodyChild;
 				zk.mounting = true;
-				zk.eval(code);
+				jq.globalEval(code);
 			}
 			return;
 		}
@@ -754,7 +754,7 @@ zAu.cmd1 = {
 			zWatch.fireDown('onSize', null, child);
 		};
 		zk.mounting = true;
-		zk.eval(code);
+		jq.globalEval(code);
 	},
 	addBfr: function (uuid, wgt, code) {
 		zAu.stub = function (child) {
@@ -763,7 +763,7 @@ zAu.cmd1 = {
 			zWatch.fireDown('onSize', null, child);
 		};
 		zk.mounting = true;
-		zk.eval(code);
+		jq.globalEval(code);
 	},
 	addChd: function (uuid, wgt, code) {
 		zAu.stub = function (child) {
@@ -772,7 +772,7 @@ zAu.cmd1 = {
 			zWatch.fireDown('onSize', null, child);
 		};
 		zk.mounting = true;
-		zk.eval(code);
+		jq.globalEval(code);
 	},
 	_asBodyChild: function (child) {
 		jq(document.body).append(child);

@@ -1277,7 +1277,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 		if (fn) {
 			inf[evt] = bklsns[evt]
-				= typeof fn != 'function' ? zk.func("var event=arguments[0];"+fn): fn;
+				= typeof fn != 'function' ? new Function("var event=arguments[0];"+fn): fn;
 			this.listen(inf);
 		}
 	},
