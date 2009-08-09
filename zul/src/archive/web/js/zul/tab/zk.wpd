@@ -11,7 +11,7 @@
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 
-<package name="zul.tab" language="xul/html">
+<package name="zul.tab" language="xul/html" depends="zul">
 	<widget name="Tabbox"/>
 	<widget name="Tabs"/>
 	<widget name="Tab"/>

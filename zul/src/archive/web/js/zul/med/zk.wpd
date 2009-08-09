@@ -11,7 +11,7 @@
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 
-<package name="zul.med" language="xul/html">
+<package name="zul.med" language="xul/html" depends="zul">
 	<widget name="Applet"/>
 	<widget name="Audio"/>
 	<widget name="Flash"/>

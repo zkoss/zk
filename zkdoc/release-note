@@ -10,6 +10,7 @@ ZK 5.0.0
   2794752: Fisheye supports dynamic images
   2794753: An option to specify whether the content can be crawled
   2831852: Allow developer to specify directory to load JavaScript file
+  2834187: A way to load client (JavaScript) packages from diff servers
   2831854: A way to run certain JavaScript codes w/o load it explicitly
   2816083: Spec change: definition in page has lower priority from class
   2816588: A way to parse app-specific configuration in zk.xml

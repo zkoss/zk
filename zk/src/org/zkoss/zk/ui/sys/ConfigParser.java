@@ -573,6 +573,12 @@ public class ConfigParser {
 		s = conf.getElementValue("debug-js", true);
 		if (s != null) config.setDebugJS(!"false".equals(s));
 
+		//client (JS) pacakges
+		for (Iterator it = conf.getElements("package").iterator();
+		it.hasNext();) {
+			config.addClientPackage(IDOMs.getRequiredElementValue((Element)it.next(), "package-name"));
+		}
+
 		//error-reload
 		for (Iterator it = conf.getElements("error-reload").iterator();
 		it.hasNext();) {

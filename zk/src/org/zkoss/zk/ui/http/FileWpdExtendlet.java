@@ -31,7 +31,7 @@ public class FileWpdExtendlet extends WpdExtendlet {
 		try {
 			final Object rawdata = parse(new FileInputStream(fl), fl.getPath());
 			return rawdata instanceof byte[] ? (byte[])rawdata:
-				((WpdContent)rawdata).toByteArray();
+				((WpdContent)rawdata).toByteArray(null);
 		} finally {
 			setProvider(null);
 		}

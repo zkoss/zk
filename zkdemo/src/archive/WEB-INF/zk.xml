@@ -340,6 +340,16 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<value>/WEB-INF/cwr</value>
 	</library-property>
 	-->
+	<!-- Defines a client package (and all of its sub-packages)
+		provided by this server.
+		It is used only if client packages might be loaded from different
+		servers, such as Ajax-as-Service.
+	<client-config>
+		<package>
+			<package-name></package-name>
+		</package>
+	</client-config>
+	-->
 
 	<!-- Uncomment it if you prefer to keep the desktops when an user browses to
 		another URL or reloads the page.

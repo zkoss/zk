@@ -117,6 +117,8 @@ public class Configuration {
 	private ThemeProvider _themeProvider;
 	/** A set of disabled theme URIs. */
 	private Set _disThemeURIs;
+	/** A list of client packages. */
+	private final FastReadArray _clientpkgs = new FastReadArray(String.class);
 	private Class _wappcls, _uiengcls, _dcpcls, _uiftycls,
 		_failmancls, _idgencls, _sesscachecls;
 	private int _dtTimeout = 3600, _sessDktMax = 15, _sessReqMax = 5,
@@ -131,7 +133,7 @@ public class Configuration {
 	private final EventInterceptors _eis = new EventInterceptors();
 	private int _evtTimeWarn = 600; //sec
 	/** A map of attributes. */
-	private final Map _attrs = new HashMap();
+	private final Map _attrs = Collections.synchronizedMap(new HashMap());
 	/** whether to use the event processing thread. */
 	private boolean _useEvtThd; //disabled by default since ZK 5
 	/** keep-across-visits. */
@@ -2041,6 +2043,31 @@ public class Configuration {
 	 */
 	public Object removeAttribute(String name) {
 		return _attrs.remove(name);
+	}
+
+	/** Adds a client (JavaScript) pacakge that is provided by this server.
+	 * <p>Default: none.
+	 * <p>If no package is defined (default), ZK Client Engine assumes
+	 * all packages coming from the server generating the HTML page.
+	 *
+	 * <p>However, it might not be true if you want to load some client
+	 * codes from different server (such as Ajax-asService).
+	 * Therefore, you have to invoke this method to add the client packages
+	 * if this server is going to provide JavaScript codes for other servers.
+	 * @since 5.0.0
+	 */
+	public void addClientPackage(String pkg) {
+		if (pkg == null || pkg.length() == 0)
+			throw new IllegalArgumentException("empty");
+		_clientpkgs.add(pkg);
+	}
+	/** Returns a readonly list of the names of the client pages
+	 * that are provided by this server
+	 *
+	 * @since 5.0.0
+	 */
+	public String[] getClientPackages() {
+		return (String[])_clientpkgs.toArray();
 	}
 
 	/** Returns the time, in seconds, to show a warning message

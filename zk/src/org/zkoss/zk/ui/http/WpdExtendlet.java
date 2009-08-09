@@ -34,9 +34,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.Exceptions;
-import org.zkoss.util.ArraysX;
 import org.zkoss.io.Files;
 import org.zkoss.json.JSONObject;
+import org.zkoss.json.JSONArray;
 import org.zkoss.idom.Element;
 import org.zkoss.idom.input.SAXBuilder;
 import org.zkoss.idom.util.IDOMs;
@@ -99,15 +99,10 @@ public class WpdExtendlet extends AbstractExtendlet {
 			}
 
 			data = rawdata instanceof byte[] ? (byte[])rawdata:
-				((WpdContent)rawdata).toByteArray();
+				((WpdContent)rawdata).toByteArray(request);
 		} finally {
 			setProvider(null);
 		}
-
-		final String main = request.getParameter("main");
-		if (main != null && main.length() > 0)
-			data = (byte[])ArraysX.concat(data,
-				outMain(main, request.getParameterMap()));
 
 		response.setContentType("text/javascript;charset=UTF-8");
 		if (data.length > 200) {
@@ -130,7 +125,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 			lang != null ? LanguageDefinition.lookup(lang): null;
 		final String dir = path.substring(0, path.lastIndexOf('/') + 1);
 		final WpdContent wc =
-			"false".equals(root.getAttributeValue("cacheable")) ?
+			zk || "false".equals(root.getAttributeValue("cacheable")) ?
 				new WpdContent(dir): null;
 
 		final ByteArrayOutputStream out = new ByteArrayOutputStream(1024*8);
@@ -261,7 +256,13 @@ public class WpdExtendlet extends AbstractExtendlet {
 			final WebApp wapp = getWebApp();
 			if (wapp != null)
 				writeAppInfo(out, wapp);
-			write(out, '}'); //end of if
+			 write(out, '}'); //end of if(window.zk)
+
+			final String[] pkgs = wapp.getConfiguration().getClientPackages();
+			if (pkgs.length > 0) {
+				 move(wc, out);
+				 wc.addHost(wapp, JSONArray.toJSONString(pkgs));
+			}
 		} else {
 			write(out, "\n}finally{zk.setLoaded(zk._n);}");
 			if (depends != null) {
@@ -277,33 +278,6 @@ public class WpdExtendlet extends AbstractExtendlet {
 			return wc;
 		}
 		return out.toByteArray();
-	}
-	private byte[] outMain(String main, Map params)
-	throws java.io.UnsupportedEncodingException {
-		final StringBuffer sb = new StringBuffer();
-		final int j = main.lastIndexOf('.');
-		if (j >= 0)
-			sb.append("\nzk.load('")
-				.append(main.substring(0, j))
-				.append("',");
-		else
-			sb.append("\nzk.afterLoad(");
-
-		sb.append("function(){\n").append(main).append(".main(");
-
-		final Map ms = new LinkedHashMap();
-		for (Iterator it = params.entrySet().iterator(); it.hasNext();) {
-			final Map.Entry me = (Map.Entry)it.next();
-			final String nm = (String)me.getKey();
-			if (!"main".equals(nm)) {
-				final String[] vals = (String[])me.getValue();
-				ms.put(nm, vals.length == 0 ? null:
-					vals.length == 1 ? (Object)vals[0]: (Object)vals);
-			}
-		}
-
-		return sb.append(JSONObject.toJSONString(ms))
-			.append(")})").toString().getBytes("UTF-8");
 	}
 	private boolean writeResource(OutputStream out, String path,
 	String dir, boolean locate)
@@ -376,68 +350,111 @@ public class WpdExtendlet extends AbstractExtendlet {
 				.append(s)
 				.append("','")
 				.append(Encodes.encodeURL(ctx, provider.request, provider.response,
-					wapp.getUpdateURI(false)))
-				.append('\'');
+					wapp.getUpdateURI(false)));
 		} else
-			sb.append("','',''");
+			sb.append("','','");
 
+		sb.append("',{");
 		for (Iterator it = LanguageDefinition.getByDeviceType("ajax").iterator();
 		it.hasNext();) {
 			final LanguageDefinition langdef = (LanguageDefinition)it.next();
 			final Set mods = langdef.getJavaScriptModules().entrySet();
-			if (!mods.isEmpty())
-				for (Iterator e = mods.iterator(); e.hasNext();) {
-					final Map.Entry me = (Map.Entry)e.next();
-					sb.append(",'").append(me.getKey())
-					  .append("','").append(me.getValue()).append('\'');
-				}
+			for (Iterator e = mods.iterator(); e.hasNext();) {
+				final Map.Entry me = (Map.Entry)e.next();
+				sb.append('\'').append(me.getKey())
+				  .append("':'").append(me.getValue()).append("',");
+			}
+			removeLast(sb, ',');
 		}
 
-		sb.append(");");
-		final int jdot = sb.length();
-
+		sb.append("},{");
 		if (WebApps.getFeature("enterprise"))
-			sb.append(",ed:'e'");
+			sb.append("ed:'e',");
 		else if (WebApps.getFeature("professional"))
-			sb.append(",ed:'p'");
+			sb.append("ed:'p',");
 
 		final Configuration config = wapp.getConfiguration();
 		int v = config.getProcessingPromptDelay();
-		if (v != 900) sb.append(",pd:").append(v);
+		if (v != 900) sb.append("pd:").append(v).append(',');
 		v = config.getTooltipDelay();
-		if (v != 800) sb.append(",td:").append(v);
+		if (v != 800) sb.append("td:").append(v).append(',');
 		v = config.getResendDelay();
-		if (v >= 0) sb.append(",rd:").append(v);
+		if (v >= 0) sb.append("rd:").append(v).append(',');
 		v = config.getClickFilterDelay();
-		if (v >= 0) sb.append(",cd:").append(v);
-		if (config.isDebugJS()) sb.append(",dj:1");
+		if (v >= 0) sb.append("cd:").append(v).append(',');
+		if (config.isDebugJS()) sb.append("dj:1,");
 		if (config.isKeepDesktopAcrossVisits())
-			sb.append(",kd:1");
+			sb.append("kd:1,");
 		if (config.getPerformanceMeter() != null)
-			sb.append(",pf:1");
-		if (sb.length() > jdot) {
-			sb.replace(jdot, jdot + 1, "zkopt({");
-			sb.append("});\n");
-		}
+			sb.append("pf:1,");
 
 		final int[] cers = config.getClientErrorReloadCodes();
 		if (cers.length > 0) {
-			final int k = sb.length();
+			sb.append("eu:{");
 			for (int j = 0; j < cers.length; ++j) {
 				final String uri = config.getClientErrorReload(cers[j]);
 				if (uri != null) {
-					if (k != sb.length()) sb.append(',');
-					sb.append(cers[j]).append(",'")
+					sb.append(cers[j]).append(":'")
 						.append(Strings.escape(uri, Strings.ESCAPE_JAVASCRIPT))
-						.append('\'');
+						.append("',");
 				}
 			}
-			if (k != sb.length()) {
-				sb.insert(k, "zAu.setErrorURI(");
-				sb.append(");\n");
+			removeLast(sb, ',');
+			sb.append("},");
+		}
+
+		removeLast(sb, ',');
+
+		sb.append("})");
+		write(out, sb.toString());
+	}
+	private static void removeLast(StringBuffer sb, char cc) {
+		if (sb.charAt(sb.length() - 1) == cc)
+			sb.setLength(sb.length() - 1); //remove last comma
+	}
+
+	private static String outMain(String main, Map params) {
+		final StringBuffer sb = new StringBuffer();
+		final int j = main.lastIndexOf('.');
+		if (j >= 0)
+			sb.append("\nzk.load('")
+				.append(main.substring(0, j))
+				.append("',");
+		else
+			sb.append("\nzk.afterLoad(");
+
+		sb.append("function(){\n").append(main).append(".main(");
+
+		final Map ms = new LinkedHashMap();
+		for (Iterator it = params.entrySet().iterator(); it.hasNext();) {
+			final Map.Entry me = (Map.Entry)it.next();
+			final String nm = (String)me.getKey();
+			if (!"main".equals(nm)) {
+				final String[] vals = (String[])me.getValue();
+				ms.put(nm, vals.length == 0 ? null:
+					vals.length == 1 ? (Object)vals[0]: (Object)vals);
 			}
 		}
-		write(out, sb.toString());
+
+		return sb.append(JSONObject.toJSONString(ms))
+			.append(")})").toString();
+	}
+	private static String outHost(HttpServletRequest request,
+	WebApp wapp, String clientPackages) {
+		final StringBuffer sb = new StringBuffer()
+			.append("zk.setHost('").append(request.getScheme())
+			.append("://").append(request.getServerName());
+		if (request.getServerPort() != 80)
+			sb.append(':').append(request.getServerPort());
+
+		String uri = request.getContextPath();
+		if (uri != null && uri.length() > 0) {
+			if (uri.charAt(0) != '/') sb.append('/');
+			sb.append(uri);
+			removeLast(sb, '/');
+		}
+		return sb.append(wapp.getUpdateURI(false)).append("',")
+			.append(clientPackages).append(");").toString();
 	}
 
 	private class WpdLoader extends ExtendletLoader {
@@ -467,15 +484,19 @@ public class WpdExtendlet extends AbstractExtendlet {
 		private void add(String jspath, String browser) {
 			_cnt.add(new String[] {jspath, browser});
 		}
-		/*package*/ byte[] toByteArray() throws ServletException, IOException {
+		private void addHost(WebApp wapp, String clientPackages) {
+			_cnt.add(new Object[] {wapp, clientPackages});
+		}
+		/*package*/ byte[] toByteArray(HttpServletRequest request) throws ServletException, IOException {
 			final ByteArrayOutputStream out = new ByteArrayOutputStream();
+			final String main = request != null ? request.getParameter("main"): null;
 			for (Iterator it = _cnt.iterator(); it.hasNext();) {
 				final Object o = it.next();
-				if (o instanceof byte[])
+				if (o instanceof byte[]) {
 					out.write((byte[])o);
-				else if (o instanceof MethodInfo)
+				} else if (o instanceof MethodInfo) {
 					write(out, (MethodInfo)o);
-				else {
+				} else if (o instanceof String[]) {
 					final String[] inf = (String[])o;
 					if (inf[1] != null) {
 						final Provider provider = getProvider();
@@ -484,8 +505,16 @@ public class WpdExtendlet extends AbstractExtendlet {
 					}
 					if (!writeResource(out, inf[0], _dir, true))
 						log.error(inf[0] + " not found");
+				} else if (o instanceof Object[]) { //host
+					if (main != null) {
+						final Object[] inf = (Object[])o;
+						write(out, outHost(request, (WebApp)inf[0], (String)inf[1]));
+					}
 				}
 			}
+
+			if (main != null && main.length() > 0)
+				write(out, outMain(main, request.getParameterMap()));
 			return out.toByteArray();
 		}
 	}

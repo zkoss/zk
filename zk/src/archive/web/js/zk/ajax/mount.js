@@ -50,18 +50,15 @@ function zkdtbg(dtid, contextURI, updateURI) {
 }
 
 //Init Only//
-function zkver() {
-	var args = arguments, len = args.length;
-	zk.version = args[0];
-	zk.build = args[1];
-	zk.contextURI = args[2];
-	zk.updateURI = args[3];
+function zkver(ver, build, ctxURI, updURI, modVers, opts) {
+	zk.version = ver;
+	zk.build = build;
+	zk.contextURI = ctxURI;
+	zk.updateURI = updURI;
 
-	for (var j = 4; j < len; j += 2)
-		zk.setVersion(args[j], args[j + 1]);
-}
+	for (var nm in modVers)
+		zk.setVersion(nm, modVers[nm]);
 
-function zkopt(opts) {
 	zk.feature = {standard: true};
 
 	for (var nm in opts) {
@@ -81,6 +78,8 @@ function zkopt(opts) {
 			case 'p':
 				zk.feature.professional = true;
 			}
+			break;
+		case 'eu': zAu.setErrorURI(val);
 		}
 	}
 }
