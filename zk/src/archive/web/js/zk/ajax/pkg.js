@@ -22,7 +22,7 @@ zk.copy(zk, (function() {
 		_afterPkgLoad = {}, //after pkg loaded
 		_pkgdepend = {},
 		_pkgver = {},
-		_pkghosts/*package host*/, _defhost/*default host*/;
+		_pkghosts = {}/*package host*/, _defhost/*default host*/;
 
 	function doLoad(pkg, dt) {
 		if (!pkg || _loading[pkg])
@@ -45,27 +45,19 @@ zk.copy(zk, (function() {
 		if (!modver) modver = zk.build;
 
 		var e = document.createElement("script"),
-			uri = pkg.replace(/\./g, '/') + "/zk.wpd", host;
+			uri = pkg.replace(/\./g, '/') + "/zk.wpd",
+			host = zk.getHost(pkg);
 		e.type = "text/javascript";
 		e.charset = "UTF-8";
 
 		if (uri.charAt(0) != '/') uri = '/' + uri;
 
-		if (_pkghosts)
-			for (var p in _pkghosts)
-				if (pkg.startsWith(p)) {
-					uri = _pkghosts[p] + "/web/js" + uri;
-					host = true;
-					break;
-				}
-
-		if (!host)
-			if (_defhost) uri = _defhost + "/web/js" + uri;
-			else {
-				if (modver) uri = "/web/_zv" + modver + "/js" + uri;
-				else uri = "/web/js" + uri;
-				uri = zk.ajaxURI(uri, {desktop:dt,au:true});
-			}
+		if (host) uri = host + "/web/js" + uri;
+		else {
+			if (modver) uri = "/web/_zv" + modver + "/js" + uri;
+			else uri = "/web/js" + uri;
+			uri = zk.ajaxURI(uri, {desktop:dt,au:true});
+		}
 
 		e.src = uri;
 		document.getElementsByTagName("HEAD")[0].appendChild(e);
@@ -218,8 +210,13 @@ zk.copy(zk, (function() {
 		a();
 		return true;
 	},
+	getHost: function (pkg) {
+		for (var p in _pkghosts)
+			if (pkg.startsWith(p))
+				return _pkghosts[p];
+		return _defhost;
+	},
 	setHost: function (host, pkgs) {
-		if (!_pkghosts) _pkghosts = {};
 		if (!_defhost)
 			for (var scs = document.getElementsByTagName("SCRIPT"), j = 0, len = scs.length;
 			j < len; ++j) {
