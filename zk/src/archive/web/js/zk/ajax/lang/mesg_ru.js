@@ -15,8 +15,6 @@ mesg.GOTO_ERROR_FIELD="Перемещение к неверному полю";
 mesg.PLEASE_WAIT="Обработка запроса...";
 
 mesg.FILE_SIZE="Размер файла: ";
-mesg.FILE_NAME = "File name: ";
-mesg.FILE_UPLOADED = "Done!";
 mesg.KBYTES="KB";
 
 mesg.FAILED_TO_LOAD="Не удалось загрузить ";

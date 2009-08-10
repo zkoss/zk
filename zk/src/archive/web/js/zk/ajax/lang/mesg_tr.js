@@ -25,8 +25,6 @@ mesg.GOTO_ERROR_FIELD = "Yanlış alana gidildi";
 mesg.PLEASE_WAIT = "Bekleyiniz...";
 
 mesg.FILE_SIZE = "Dosya boyu: ";
-mesg.FILE_NAME = "File name: ";
-mesg.FILE_UPLOADED = "Done!";
 mesg.KBYTES = "KB";
 
 mesg.FAILED_TO_LOAD = "Yükleme başarısız: ";

@@ -25,8 +25,6 @@ mesg.GOTO_ERROR_FIELD = "Ir para o campo errado";
 mesg.PLEASE_WAIT = "Processando...";
 
 mesg.FILE_SIZE = "Tamanho do arquivo: ";
-mesg.FILE_NAME = "File name: ";
-mesg.FILE_UPLOADED = "Done!";
 mesg.KBYTES = "KB";
 
 mesg.FAILED_TO_LOAD="Falhou ao carregar ";

@@ -25,8 +25,6 @@ mesg.GOTO_ERROR_FIELD = "Aneu al camp erroni";
 mesg.PLEASE_WAIT = "S'està processant...";
 
 mesg.FILE_SIZE = "Mida de l'arxiu: ";
-mesg.FILE_NAME = "File name: ";
-mesg.FILE_UPLOADED = "Done!";
 mesg.KBYTES = "KB";
 
 mesg.FAILED_TO_LOAD = "Ha fallat la càrrega ";

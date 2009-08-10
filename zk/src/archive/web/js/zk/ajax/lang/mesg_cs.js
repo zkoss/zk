@@ -25,8 +25,6 @@ mesg.GOTO_ERROR_FIELD = "Jdi na pole s chybou";
 mesg.PLEASE_WAIT = "Pracuji...";
 
 mesg.FILE_SIZE = "Velikost souboru: ";
-mesg.FILE_NAME = "File name: ";
-mesg.FILE_UPLOADED = "Done!";
 mesg.KBYTES = "KB";
 
 mesg.FAILED_TO_LOAD = "Chyba při nahrávání ";

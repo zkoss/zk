@@ -36,8 +36,6 @@ mesg.PLEASE_WAIT = "처리중...";
 mesg.VALUE_NOT_MATCHED = "콤보박스에서 적어도 하나의 값을 선택하셔야 합니다.";
  
 mesg.FILE_SIZE = "파일 크기: ";
-mesg.FILE_NAME = "File name: ";
-mesg.FILE_UPLOADED = "Done!";
 mesg.KBYTES = "KB";
  
 mesg.CANCEL="취소";

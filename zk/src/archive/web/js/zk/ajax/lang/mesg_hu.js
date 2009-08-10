@@ -25,8 +25,6 @@ mesg.GOTO_ERROR_FIELD = "Menyen a hibás bejegyzéshez";
 mesg.PLEASE_WAIT = "Feldolgozás...";
 
 mesg.FILE_SIZE = "Fajl mérete: ";
-mesg.FILE_NAME = "File name: ";
-mesg.FILE_UPLOADED = "Done!";
 mesg.KBYTES = "KB";
 
 mesg.FAILED_TO_LOAD="Betöltés nem sikerült ";

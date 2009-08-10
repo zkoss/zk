@@ -16,8 +16,6 @@ mesg.GOTO_ERROR_FIELD="اذهب الى مكان الخطأ";
 mesg.PLEASE_WAIT="من فضلك الأنتظار ...";
 
 mesg.FILE_SIZE="حجم الملف : ";
-mesg.FILE_NAME="File name: ";
-mesg.FILE_UPLOADED="Done!";
 mesg.KBYTES="كيلو بايت ";
 
 mesg.FAILED_TO_LOAD="فشل فى التحميل  ";

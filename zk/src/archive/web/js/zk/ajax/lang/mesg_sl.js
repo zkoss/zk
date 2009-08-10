@@ -25,8 +25,6 @@ mesg.GOTO_ERROR_FIELD = "Pojdite na napačno polje";
 mesg.PLEASE_WAIT = "Procesiram...";
 
 mesg.FILE_SIZE = "Velikost datoteke: ";
-mesg.FILE_NAME = "File name: ";
-mesg.FILE_UPLOADED = "Done!";
 mesg.KBYTES = "KB";
 
 mesg.FAILED_TO_LOAD="Failed to load ";

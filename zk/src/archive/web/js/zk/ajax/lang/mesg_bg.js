@@ -36,8 +36,6 @@ mesg.PLEASE_WAIT = "Зарежда се...";
 mesg.VALUE_NOT_MATCHED = "Трябва да посочите една от стойностите в падащия списък.";
 
 mesg.FILE_SIZE = "Размер на файла: ";
-mesg.FILE_NAME = "File name: ";
-mesg.FILE_UPLOADED = "Done!";
 mesg.KBYTES = "KB";
 
 mesg.CANCEL="Откажи";

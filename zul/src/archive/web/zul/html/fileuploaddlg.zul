@@ -48,16 +48,19 @@ if (!zk.ModalFileViewer) {
 		updated: null,
 		$init: function (uplder,  filenm) {
 			this._uplder = uplder;
+			filenm = filenm.replace(/\//g, '\\');
+			filenm = filenm.substring(filenm.lastIndexOf('\\') + 1, filenm.length);
+			
 			var id = uplder.id,
 				self = this,
 				wgt = uplder.getWidget(),
 				uploaded = wgt.$f('uploaded'),
 				uri = zk.ajaxURI('/web/zk/img/progress2.gif', {au:true}),
-				html = '<div id="' + id + '" style="background:#F4F8FF;border: 1px solid #99AABD;font-family:'
+				html = '<div id="' + id + '" style="min-height:16px;background:#F4F8FF;border: 1px solid #99AABD;font-family:'
 				+ 'tahoma,helvetica,arial,sans-serif;font-size: 11px;padding: 2px;'
 				+ 'color: #0F3B82;"><image style="float: left;" src="' + uri + '"/>'
-				+ '<a id="' + id + '-cancel" style="float: left;padding-left: 2px; color: #0366AC;'
-				+ ' font-weight: bold;cursor: pointer;">' + msgzul.UPLOAD_CANCEL + ' </a><div id="' + id + '-cnt">&nbsp;&nbsp;&nbsp;' + mesg.FILE_NAME + filenm
+				+ '<div id="' + id + '-cnt"><a id="' + id + '-cancel" style="float: left;padding-left: 2px; color: #0366AC;'
+				+ ' font-weight: bold;cursor: pointer;">' + msgzul.UPLOAD_CANCEL + ' </a>&nbsp;&nbsp;&nbsp;' + filenm
 				+ '</div><div style="padding-left: 24px">'
 				+ mesg.FILE_SIZE + '&nbsp;&nbsp;<span id="' + id + '-sent">0</span> of '
 				+ '<span id="' + id + '-total">0</span></div></div>';
@@ -90,7 +93,7 @@ if (!zk.ModalFileViewer) {
 			if (!finish) jq(this.viewer).remove();
 			else {
 				jq('#' + this._uplder.id + '-sent').parent().remove();
-				jq('#' + this._uplder.id + '-cnt').append('<span style="font-weight:bold;"> ' + mesg.FILE_UPLOADED + '</span>');
+				jq('#' + this._uplder.id)[0].firstChild.src = zk.ajaxURI('/web/zk/img/attachment.gif', {au:true});
 			}
 		}
 	});

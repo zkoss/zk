@@ -25,8 +25,6 @@ GOTO_ERROR_FIELD: "回错误栏",
 PLEASE_WAIT: "处理中，请稍候…",
 
 FILE_SIZE: "文件大小：",
-FILE_NAME: "文件名称: ",
-FILE_UPLOADED: "上传完成!",
 KBYTES: "KB",
 
 FAILED_TO_LOAD: "无法载入：",

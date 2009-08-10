@@ -25,8 +25,6 @@ mesg.GOTO_ERROR_FIELD = "Selectaţi câmpul greşit";
 mesg.PLEASE_WAIT = "Se procesează...";
 
 mesg.FILE_SIZE = "Dimensiune fişier: ";
-mesg.FILE_NAME = "File name: ";
-mesg.FILE_UPLOADED = "Done!";
 mesg.KBYTES = "KB";
 
 mesg.FAILED_TO_LOAD="Eşuare la încărcare ";
