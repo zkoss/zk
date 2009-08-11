@@ -36,10 +36,109 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		border: _zkf,
 		closable: _zkf,
 		sizable: _zkf,
-		maximized: _zkf,
 		maximizable: _zkf,
-		minimized: _zkf,
 		minimizable: _zkf,
+		maximized: function (maximized, fromServer) {
+			var node = this.$n();
+			if (node) {
+				var $n = zk(node),
+					isRealVisible = $n.isRealVisible();
+				if (!isRealVisible && maximized) return;
+	
+				var l, t, w, h, s = node.style, cls = this.getZclass();
+				if (maximized) {
+					jq(this.$n('max')).addClass(cls + '-maxd');
+					this._hideShadow();
+						
+					var floated = this._mode != 'embedded',
+						$op = floated ? jq(node).offsetParent() : jq(node).parent();
+					l = s.left;
+					t = s.top;
+					w = s.width;
+					h = s.height;
+	
+					// prevent the scroll bar.
+					s.top = "-10000px";
+					s.left = "-10000px";
+	
+					// Sometimes, the clientWidth/Height in IE6 is wrong.
+					var sw = zk.ie6_ && $op[0].clientWidth == 0 ? $op[0].offsetWidth - $op.zk.borderWidth() : $op[0].clientWidth,
+						sh = zk.ie6_ && $op[0].clientHeight == 0 ? $op[0].offsetHeight - $op.zk.borderHeight() : $op[0].clientHeight;
+					if (!floated) {
+						sw -= $op.zk.paddingWidth();
+						sw = $n.revisedWidth(sw);
+						sh -= $op.zk.paddingHeight();
+						sh = $n.revisedHeight(sh);
+					}
+					s.width = jq.px(sw);
+					s.height = jq.px(sh);
+					this._lastSize = {l:l, t:t, w:w, h:h};
+	
+					// restore.
+					s.top = "0";
+					s.left = "0";
+				} else {
+					var max = this.$n('max'),
+						$max = jq(max);
+					$max.removeClass(cls + "-maxd").removeClass(cls + "-maxd-over");
+					if (this._lastSize) {
+						s.left = this._lastSize.l;
+						s.top = this._lastSize.t;
+						s.width = this._lastSize.w;
+						s.height = this._lastSize.h;
+						this._lastSize = null;
+					}
+					l = s.left;
+					t = s.top;
+					w = s.width;
+					h = s.height;
+					
+					var body = this.$n('cave');
+					if (body)
+						body.style.width = body.style.height = "";
+				}
+				if (!fromServer || isRealVisible) {
+					this.fire('onMaximize', {
+						left: l,
+						top: t,
+						width: w,
+						height: h,
+						maximized: maximized,
+						fromServer: fromServer
+					});
+				}
+				if (isRealVisible) {
+					this.__maximized = true;
+					zWatch.fireDown('beforeSize', null, this);
+					zWatch.fireDown('onSize', null, this);
+				}
+			}
+		},
+		minimized: function (minimized, fromServer) {
+			if (this.isMaximized())
+				this.setMaximized(false);
+				
+			var node = this.$n();
+			if (node) {
+				var s = node.style, l = s.left, t = s.top, w = s.width, h = s.height;
+				if (minimized) {
+					zWatch.fireDown('onHide', null, this);
+					jq(node).hide();
+				} else {
+					jq(node).show();
+					zWatch.fireDown('onShow', null, this);
+				}
+				if (!fromServer) {
+					this.fire('onMinimize', {
+						left: s.left,
+						top: s.top,
+						width: s.width,
+						height: s.height,
+						minimized: minimized
+					});
+				}
+			}
+		},
 		contentStyle: _zkf,
 		contentSclass: _zkf,
 
@@ -149,6 +248,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				this._shadowWgt.destroy();
 				this._shadowWgt = null;
 			}
+		} else if (this.isMaximized() || this.isMinimized()) {
+			this._hideShadow();
 		} else if (this._shadow) {
 			if (!this._shadowWgt)
 				this._shadowWgt = new zk.eff.Shadow(this.$n(),
@@ -221,22 +322,42 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this._syncMask();
 	},
 	//watch//
-	onSize: _zkf = function () {
-		this._hideShadow();
-		if (this.isMaximized()) {
-			/** TODO 
-			 * if (this._maximized)
-				this._syncMaximized();
-			this._maximized = false; // avoid deadloop
-			*/
+	onSize: _zkf = (function() {
+		function syncMaximized (wgt) {
+			if (!wgt._lastSize) return;
+			var node = wgt.$n(),
+				floated = wgt._mode != 'embedded',
+				$op = floated ? jq(node).offsetParent() : jq(node).parent(),
+				s = node.style;
+		
+			// Sometimes, the clientWidth/Height in IE6 is wrong.
+			var sw = zk.ie6_ && $op[0].clientWidth == 0 ? $op[0].offsetWidth - $op.zk.borderWidth() : $op[0].clientWidth,
+				sh = zk.ie6_ && $op[0].clientHeight == 0 ? $op[0].offsetHeight - $op.zk.borderHeight() : $op[0].clientHeight;
+			if (!floated) {
+				sw -= $op.zk.paddingWidth();
+				sw = $op.zk.revisedWidth(sw);
+				sh -= $op.zk.paddingHeight();
+				sh = $op.zk.revisedHeight(sh);
+			}
+			
+			s.width = jq.px(sw);
+			s.height = jq.px(sh);
 		}
-		this._fixHgh();
-		this._fixWdh();
-		if (this._mode != 'embedded') {
-			this._updateDomPos();
-			this._syncShadow();
-		}
-	},
+		return function() {
+			this._hideShadow();
+			if (this.isMaximized()) {
+				if (!this.__maximized)
+					syncMaximized(this);
+				this.__maximized = false; // avoid deadloop
+			}
+			this._fixHgh();
+			this._fixWdh();
+			if (this._mode != 'embedded') {
+				this._updateDomPos();
+				this._syncShadow();
+			}
+		};
+	})(),
 	onShow: _zkf,
 	onFloatUp: function (wgt) {
 		if (!this.isVisible() || this._mode == 'embedded')
@@ -341,6 +462,16 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 
 	//super//
+	setVisible: function (visible) {
+		if (this._visible != visible) {
+			if (this.isMaximized()) {
+				this.setMaximized(false);
+			} else if (this.isMinimized()) {
+				this.setMinimized(false);
+			}
+			this.$supers('setVisible', arguments);
+		}
+	},
 	setHeight: function (height) {
 		this.$supers('setHeight', arguments);
 		if (this.desktop) {
@@ -468,12 +599,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			this.fire('onClose');
 			break;
 		case this.$n('max'):
-			// TODO
+			this.setMaximized(!this.isMaximized());
 			break;
 		case this.$n('min'):
-			// TODO 
-			// if (this.isMinimizable())
-			//	this.setMinimized(!this.isMinimized());
+			this.setMinimized(!this.isMinimized());
 			break;
 		default:
 			this.$supers('doClick_', arguments);

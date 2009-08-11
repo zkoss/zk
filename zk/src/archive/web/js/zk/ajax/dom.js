@@ -188,11 +188,23 @@ zjq.prototype = { //ZK extension
 			size -= this.sumStyles("tb", jq.margins);
 		return size < 0 ? 0: size;
 	},
+	borderWidth: function () {
+		return this.sumStyles("lr", jq.borders);
+	},
+	borderHeight: function () {
+		return this.sumStyles("tb", jq.borders);
+	},
+	paddingWidth: function () {
+		return this.sumStyles("lr", jq.paddings);
+	},
+	paddingHeight: function () {
+		return this.sumStyles("tb", jq.paddings);
+	},
 	padBorderWidth: function () {
-		return this.sumStyles("lr", jq.borders) + this.sumStyles("lr", jq.paddings);
+		return this.borderWidth() + this.paddingWidth();
 	},
 	padBorderHeight: function () {
-		return this.sumStyles("tb", jq.borders) + this.sumStyles("tb", jq.paddings);
+		return this.borderHeight() + this.paddingHeight();
 	},
 	vflexHeight: function () {
 		var el = this.jq[0],

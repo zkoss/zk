@@ -368,12 +368,15 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 	 * @param name "tbar", "bbar", and "fbar". 
 	 */
 	public boolean addToolbar(String name, Toolbar toolbar) {
+		Component refChild = null;
 		if ("tbar".equals(name)) {
 			if (_tbar != null)
 				throw new UiException("Only one top toolbar child is allowed: "+this);
+			refChild = this.getFirstChild();
 		} else if ("bbar".equals(name)) {
 			if (_bbar != null)
 				throw new UiException("Only one bottom toolbar child is allowed: "+this);
+			refChild = _fbar;
 		} else if ("fbar".equals(name)) {
 			if (_fbar != null)
 				throw new UiException("Only one foot toolbar child is allowed: "+this);
@@ -381,7 +384,7 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 			throw new UiException("Uknown toolbar: "+name);
 		}
 
-		if (super.insertBefore(toolbar, null)) {
+		if (super.insertBefore(toolbar, refChild)) {
 			if ("tbar".equals(name)) {
 				_tbar = toolbar;
 			} else if ("bbar".equals(name)) {

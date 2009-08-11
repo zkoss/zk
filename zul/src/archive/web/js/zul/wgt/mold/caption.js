@@ -37,20 +37,20 @@ function (out) {
 	out.push('</td>');
 	if (this._isCollapsibleVisible())
 		out.push('<td width="16"><div id="', puuid, '-exp" class="',
-				pzcls, '-tool ', pzcls, '-exp"></div></td>');
+				pzcls, '-icon ', pzcls, '-exp"></div></td>');
 	if (this._isMinimizeVisible())
 		out.push('<td width="16"><div id="', puuid, '-min" class="',
-				pzcls, '-tool ', pzcls, '-minimize"></div></td>');
+				pzcls, '-icon ', pzcls, '-min"></div></td>');
 	if (this._isMaximizeVisible()) {
 		out.push('<td width="16"><div id="', puuid, '-max" class="',
-				pzcls, '-tool ', pzcls, '-maximize');
+				pzcls, '-icon ', pzcls, '-max');
 		if (parent.isMaximized())
 			out.push(' ', pzcls, '-maximized');
 		out.push('"></div></td>');
 	}
 	if (this._isCloseVisible())
 		out.push('<td width="16"><div id="', puuid, '-close" class="',
-				pzcls, '-tool ', pzcls, '-close"></div></td>');
+				pzcls, '-icon ', pzcls, '-close"></div></td>');
 
 	out.push('</tr></table>');
 }
