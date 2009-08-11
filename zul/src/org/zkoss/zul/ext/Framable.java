@@ -46,5 +46,11 @@ public interface Framable {
 	 * @since 3.6.3
 	 */
 	public boolean isMaximized();
+
+	/**
+	 * Returns the title.
+	 * @since 3.6.3
+	 */
+	public String getTitle();
 }
 

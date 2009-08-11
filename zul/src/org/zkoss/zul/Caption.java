@@ -53,8 +53,8 @@ public class Caption extends LabelImageElement implements org.zkoss.zul.api.Capt
 	public String getCompoundLabel() {
 		final String label = getLabel();
 		final Component p = getParent();
-		if (p instanceof Window) {
-			final String title = ((Window)p).getTitle();
+		if (p instanceof Framable) {
+			final String title = ((Framable)p).getTitle();
 			if (title.length() > 0)
 				return label.length() > 0 ? title + " - " + label: title;
 		}
