@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- zk.wpd
+	Purpose:
+		ZK-as-Service
+	Description:
+		Use to load ZK-as-Service (ZaS) in a ZK page
+		To load ZaS in a non-ZK HTML page, use zk/ajax/zk.wpd instead
+	History:
+		Tue Aug 11 10:01:28     2009, Created by tomyeh
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+-->
+
+<package name="zk.zas" language="xul/html" cacheable="false">
+	<!-- nothing but non-cacheable -->
+</package>

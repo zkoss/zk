@@ -453,7 +453,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 			sb.append(uri);
 			removeLast(sb, '/');
 		}
-		return sb.append(wapp.getUpdateURI(false)).append("',")
+		return sb.append("','").append(wapp.getUpdateURI(false)).append("',")
 			.append(clientPackages).append(");").toString();
 	}
 

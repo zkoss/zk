@@ -22,7 +22,7 @@ zk.copy(zk, (function() {
 		_afterPkgLoad = {}, //after pkg loaded
 		_pkgdepend = {},
 		_pkgver = {},
-		_pkghosts = {}/*package host*/, _defhost/*default host*/;
+		_pkghosts = {}/*package host*/, _defhost = []/*default host*/;
 
 	function doLoad(pkg, dt) {
 		if (!pkg || _loading[pkg])
@@ -46,7 +46,7 @@ zk.copy(zk, (function() {
 
 		var e = document.createElement("script"),
 			uri = pkg.replace(/\./g, '/') + "/zk.wpd",
-			host = zk.getHost(pkg);
+			host = zk.getHost(pkg, true);
 		e.type = "text/javascript";
 		e.charset = "UTF-8";
 
@@ -210,24 +210,27 @@ zk.copy(zk, (function() {
 		a();
 		return true;
 	},
-	getHost: function (pkg) {
+	getHost: function (pkg, au) {
 		for (var p in _pkghosts)
 			if (pkg.startsWith(p))
-				return _pkghosts[p];
-		return _defhost;
+				return _pkghosts[p][au ? 1: 0];
+		return _defhost[au ? 1: 0];
 	},
-	setHost: function (host, pkgs) {
+	setHost: function (host, updURI, pkgs) {
+		var hostUpd = host + updURI;
 		if (!_defhost)
 			for (var scs = document.getElementsByTagName("SCRIPT"), j = 0, len = scs.length;
 			j < len; ++j) {
-				var e = scs[j];
-				if (e.src && e.src.startsWith(host)) {
-					_defhost = host;
-					break;
-				}
+				var src = scs[j].src;
+				if (src)
+					if (src.startsWith(host)) {
+						_defhost = [host, hostUpd];
+						break;
+					} else if (src.indexOf("/zk.wpd") >= 0)
+						break;
 			}
 		for (var j = 0; j < pkgs.length; ++j)
-			_pkghosts[pkgs[j]] = host;
+			_pkghosts[pkgs[j]] = [host, hostUpd];
 	}
   }
 })());
