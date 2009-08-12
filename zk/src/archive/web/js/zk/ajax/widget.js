@@ -1102,15 +1102,14 @@ zk.Widget = zk.$extends(zk.Object, {
 		return false;
 	},
 	dropEffect_: function (over) {
-		var n = this.$n();
-		if (n) jq(n)[over ? "addClass" : "removeClass"]("z-drag-over");
+		jq(this.$n()||[])[over ? "addClass" : "removeClass"]("z-drag-over");
 	},
 	getDragMessage_: function () {
 		var n = this.$n('real') || this.getCaveNode();
 		return n ? n.textContent || n.innerText: '';
 	},
 	shallDragMessage_: function () {
-		var tn = this.$n().tagName;
+		var tn = this.getDragNode().tagName;
 		return "TR" == tn || "TD" == tn || "TH" == tn;
 	},
 	cloneDrag_: function (drag, ofs) {
@@ -1127,13 +1126,13 @@ zk.Widget = zk.$extends(zk.Object, {
 
 		drag._orgcursor = document.body.style.cursor;
 		document.body.style.cursor = "pointer";
-		jq(this.$n()).addClass('z-dragged'); //after clone
+		jq(this.getDragNode()).addClass('z-dragged'); //after clone
 		return dgelm;
 	},
 	uncloneDrag_: function (drag) {
 		document.body.style.cursor = drag._orgcursor || '';
 
-		jq(this.$n()).removeClass('z-dragged');
+		jq(this.getDragNode()).removeClass('z-dragged');
 	},
 
 	focus: function (timeout) {
