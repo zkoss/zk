@@ -67,6 +67,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 
 		if (opts.sendOnSelect && this._lastsel != sel) {
 			this._lastsel = sel;
+			this.setValue(sel ? sel.getLabel(): '');
 			this.fire('onSelect', {items: sel?[sel]:[], reference: sel});
 		}
 	},

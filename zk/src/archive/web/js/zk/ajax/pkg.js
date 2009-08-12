@@ -218,7 +218,7 @@ zk.copy(zk, (function() {
 	},
 	setHost: function (host, updURI, pkgs) {
 		var hostUpd = host + updURI;
-		if (!_defhost)
+		if (!_defhost.length)
 			for (var scs = document.getElementsByTagName("SCRIPT"), j = 0, len = scs.length;
 			j < len; ++j) {
 				var src = scs[j].src;
