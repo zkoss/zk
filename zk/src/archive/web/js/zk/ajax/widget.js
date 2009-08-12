@@ -1077,14 +1077,14 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 
 	initDrag_: function () {
-		this._drag = new zk.Draggable(this, this.getDragNode(), {
+		this._drag = new zk.Draggable(this, this.getDragNode(), zk.copy({
 			starteffect: zk.$void, //see bug #1886342
 			endeffect: DD_enddrag, change: DD_dragging,
 			ghosting: DD_ghosting, endghosting: DD_endghosting,
 			constraint: DD_constraint,
 			ignoredrag: DD_ignoredrag,
 			zIndex: 88800
-		});
+		}, this.getDragOptions_()));
 	},
 	cleanDrag_: function () {
 		var drag = this._drag;
@@ -1095,6 +1095,8 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	getDragNode: function () {
 		return this.$n();
+	},
+	getDragOptions_: function () {
 	},
 	ingoreDrag_: function (pt) {
 		return false;
