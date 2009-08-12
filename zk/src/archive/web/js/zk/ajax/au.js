@@ -292,7 +292,7 @@ zAu = (function () {
 	}
 	function toJSON(target, data) {
 		if (data.pageX != null && data.x == null)  {
-			var ofs = zk(target||[]).cmOffset();
+			var ofs = target ? zk(target).cmOffset(): [0,0];
 			data.x = data.pageX - ofs[0];
 			data.y = data.pageY - ofs[1];
 		}
