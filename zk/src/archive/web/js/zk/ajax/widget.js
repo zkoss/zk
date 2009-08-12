@@ -133,14 +133,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			_rmIdSpaceDown0(wgt, owner);
 	}
 
-	function _addBind(wgt) {
+	function _onBind(wgt) {
 		if (wgt.isListen('onBind'))
 			zk.afterMount(function () {
 				if (wgt.desktop) //might be unbound
 					wgt.fire('onBind');
 			});
 	}
-	function _addUnbind(wgt) {
+	function _onUnbind(wgt) {
 		if (wgt.isListen('onUnbind'))
 			zk.afterMount(function () {
 				if (!wgt.desktop) //might be bound
@@ -179,10 +179,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		DD_cleanLastDrop(drag);
 		var pt = [evt.pageX, evt.pageY],
 			wgt = DD_getDrop(drag, pt, evt);
-		if (wgt) {
-			var data = zk.copy({dragged: drag.control}, evt.data);
-			wgt.fire('onDrop', data, null, 38);
-		}
+		if (wgt) wgt.onDrop_(drag, evt);
 	}
 	function DD_dragging(drag, pt, evt) {
 		var dropTo;
@@ -1057,7 +1054,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			if (!skipper || !skipper.skipped(this, child))
 				child.bind_(desktop, null, after); //don't pass skipper
 
-		_addBind(this);
+		_onBind(this);
 	},
 	unbind_: function (skipper, after) {
 		delete _binds[this.uuid];
@@ -1073,7 +1070,11 @@ zk.Widget = zk.$extends(zk.Object, {
 
 		if (this._draggable) this.cleanDrag_();
 
-		_addUnbind(this);
+		_onUnbind(this);
+	},
+	extraBind_: function (id, add) {
+		if (add == false) delete _binds[id];
+		else _binds[id] = this;
 	},
 
 	initDrag_: function () {
@@ -1111,6 +1112,10 @@ zk.Widget = zk.$extends(zk.Object, {
 	shallDragMessage_: function () {
 		var tn = this.getDragNode().tagName;
 		return "TR" == tn || "TD" == tn || "TH" == tn;
+	},
+	onDrop_: function (drag, evt) {
+		var data = zk.copy({dragged: drag.control}, evt.data);
+		this.fire('onDrop', data, null, 38);
 	},
 	cloneDrag_: function (drag, ofs) {
 		//See also bug 1783363 and 1766244
