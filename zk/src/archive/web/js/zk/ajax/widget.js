@@ -149,19 +149,38 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 
 	//Drag && Drop
-	function DD_getDrop(drag, pt, evt) {
-		var dragged = drag.control,
-			dragType = dragged._draggable;
-			//drag to itself not allowed
-		for (var wgt = evt.target; wgt && wgt != dragged; wgt = wgt.parent) {
-			var dropType = wgt._droppable;
-			if (dropType == 'true') return wgt;
-			if (dropType && dragType != "true")
-				for (var dropType = wgt._dropTypes, j = dropType.length; j--;)
-					if (dragType == dropType[j])
-						return wgt;
+	zk.DnD = { //for easy overriding
+		getDrop: function (drag, pt, evt) {
+			var dragged = drag.control,
+				dragType = dragged._draggable;
+				//drag to itself not allowed
+			for (var wgt = evt.target; wgt && wgt != dragged; wgt = wgt.parent) {
+				var dropType = wgt._droppable;
+				if (dropType == 'true') return wgt;
+				if (dropType && dragType != "true")
+					for (var dropType = wgt._dropTypes, j = dropType.length; j--;)
+						if (dragType == dropType[j])
+							return wgt;
+			}
+		},
+		ghost: function (drag, ofs, msg) {
+			if (msg != null)  {
+				jq(document.body).append(
+					'<div id="zk_ddghost" class="z-drop-ghost" style="position:absolute;top:'
+					+ofs[1]+'px;left:'+ofs[0]+'px;"><div class="z-drop-cnt"><span id="zk_ddghost-img" class="z-drop-disallow"></span>&nbsp;'+msg+'</div></div>');
+				drag._dragImg = jq("#zk_ddghost-img")[0];
+				return jq("#zk_ddghost")[0];
+			}
+
+			var dgelm = jq(drag.node).clone()[0];
+			dgelm.id = "zk_ddghost";
+			zk.copy(dgelm.style, {
+				position: "absolute", left: ofs[0] + "px", top: ofs[1] + "px"
+			});
+			document.body.appendChild(dgelm);
+			return dgelm;
 		}
-	}
+	};
 	function DD_cleanLastDrop(drag) {
 		if (drag) {
 			var drop;
@@ -178,7 +197,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function DD_enddrag(drag, evt) {
 		DD_cleanLastDrop(drag);
 		var pt = [evt.pageX, evt.pageY],
-			wgt = DD_getDrop(drag, pt, evt);
+			wgt = zk.DnD.getDrop(drag, pt, evt);
 		if (wgt) wgt.onDrop_(drag, evt);
 	}
 	function DD_dragging(drag, pt, evt) {
@@ -186,7 +205,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		if (!evt || (dropTo = evt.domTarget) == drag._lastDropTo)
 			return;
 
-		var dropw = DD_getDrop(drag, pt, evt),
+		var dropw = zk.DnD.getDrop(drag, pt, evt),
 			found = dropw && dropw == drag._lastDrop;
 		if (!found) {
 			DD_cleanLastDrop(drag); //clean _lastDrop
@@ -209,22 +228,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function DD_endghosting(drag, origin) {
 		drag.control.uncloneDrag_(drag);
 		drag._dragImg = null;
-	}
-	function DD_ghostByMessage(drag, ofs, msg) {
-		jq(document.body).append(
-			'<div id="zk_ddghost" class="z-drop-ghost" style="position:absolute;top:'
-			+ofs[1]+'px;left:'+ofs[0]+'px;"><div class="z-drop-cnt"><span id="zk_ddghost-img" class="z-drop-disallow"></span>&nbsp;'+msg+'</div></div>');
-		drag._dragImg = jq("#zk_ddghost-img")[0];
-		return jq("#zk_ddghost")[0];
-	}
-	function DD_ghostByClone(drag, ofs) {
-		var dgelm = jq(drag.node).clone()[0];
-		dgelm.id = "zk_ddghost";
-		zk.copy(dgelm.style, {
-			position: "absolute", left: ofs[0] + "px", top: ofs[1] + "px"
-		});
-		document.body.appendChild(dgelm);
-		return dgelm;
 	}
 	function DD_constraint(drag, pt, evt) {
 		return DD_pointer(evt);
@@ -1120,14 +1123,12 @@ zk.Widget = zk.$extends(zk.Object, {
 	cloneDrag_: function (drag, ofs) {
 		//See also bug 1783363 and 1766244
 
-		var dgelm;
+		var msg;
 		if (this.shallDragMessage_()) {
-			var msg = this.getDragMessage_();
+			msg = this.getDragMessage_()||'';
 			if (msg.length > 10) msg = msg.substring(0,10) + "...";
-			dgelm = DD_ghostByMessage(drag, ofs, msg);
-		}else {
-			dgelm = DD_ghostByClone(drag, ofs);
 		}
+		var dgelm = zk.DnD.ghost(drag, ofs, msg);
 
 		drag._orgcursor = document.body.style.cursor;
 		document.body.style.cursor = "pointer";
