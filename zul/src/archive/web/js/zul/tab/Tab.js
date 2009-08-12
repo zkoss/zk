@@ -79,7 +79,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		var tabbox = this.getTabbox(),
 			zcls = this.getZclass(),
 			tab = zk.Widget.$(tb);
-		if (tab._selected == toSel && notify) //notify if init tab is selected
+		if (tab.isSelected() == toSel && notify) //notify if init tab is selected
 			return;
 		if (toSel)
 			tabbox.setSelectedTab(tab);
@@ -106,7 +106,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 			}
 		if (!accd) {
 			var tabs = this.parent;
-			   if (tabs) tabs._fixWidth();
+			if (tabs) tabs._fixWidth();
 		}
 		if (notify) {
 			this.fire('onSelect', {items: [this.uuid], reference: this.uuid});
@@ -118,33 +118,32 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	 */
 	_getSelTab: function() {
 		var tabbox = this.getTabbox();
-		if (!this) return null;
+		if (!tabbox) return null;
 		if (tabbox.inAccordionMold()) {
 			var t = this._getSelTabFromTop()
-			return t.$n();
+			return t ? t.$n() : null;
 		} else {
-			var node = this;//Notice : not DOM node
-			for (node = this; node = node.nextSibling;)
-				if (node._selected)
-					return node.$n();
-			for (node = this; node = node.previousSibling;)
-				if (node._selected)
-					return node.$n();
-			if (this._selected)
+			for (var wgt = this; (wgt = wgt.nextSibling);)
+				if (wgt.isSelected())
+					return wgt.$n();
+			for (var wgt = this; (wgt = wgt.previousSibling);)
+				if (wgt.isSelected())
+					return wgt.$n();
+			if (this.isSelected())
 				return this.$n();
 		}
 		return null;
 	},
 	_getSelTabFromTop: function() {
-		var tabbox = this.getTabbox(),
-			t = tabbox.getSelectedTab();
-		return t;
+		var tabbox = this.getTabbox();
+		return tabbox ? tabbox.getSelectedTab() : null;
 	},
 	//protected
 	doClick_: function(evt) {
 		if (this._disabled)
 			return;
 		this._selTab(true);
+		this.$supers('doClick_', arguments);
 	},
 	domClass_: function (no) {
 		var scls = this.$supers('domClass_', arguments);
@@ -166,7 +165,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		var closebtn = this.$n('close'),
 			tabs = this.parent,
 			tab = this,
-			selected = this._selected;
+			selected = this.isSelected();
 		if (closebtn) {
 			this.domListen_(closebtn, "onClick", '_doCloseClick');
 			if (!closebtn.style.cursor)
@@ -179,13 +178,12 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		after.push( function () {
 			if (selected) {
 				tab._selTab(false, true);
-			} else if (tabs._init)
+			} else if (tabs._isInited())
 				tabs._scrollcheck("init");
 
 		});
 	},
 	unbind_: function () {
-		this.$supers('unbind_', arguments);
 		var closebtn = this.$n('close');
 		if (closebtn) {
 			this.domUnlisten_(closebtn, "onClick", '_doCloseClick');
@@ -193,17 +191,17 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 				this.domUnlisten_(closebtn, "onMouseOver", '_toggleBtnOver')
 					.domUnlisten_(closebtn, "onMouseOut", '_toggleBtnOver');
 		}
+		this.$supers('unbind_', arguments);
 	},
 	//event handler//
 	onClose: function () {
-		var tabbox = this.getTabbox(),
-			tab = this;
-		for (tab = this; tab = tab.nextSibling;)
+		var tabbox = this.getTabbox();
+		for (var tab = this; tab = tab.nextSibling;)
 			if (!tab.isDisabled()) {
 				tab._selTab(true);
 				return null;
 			}
-		for (tab = this; tab = tab.previousSibling;)
+		for (var tab = this; tab = tab.previousSibling;)
 			if (!tab.isDisabled()) {
 				tab._selTab(true);
 				return null;

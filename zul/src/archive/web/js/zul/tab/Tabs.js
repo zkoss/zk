@@ -15,9 +15,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 zul.tab.Tabs = zk.$extends(zul.Widget, {
-	$init: function() {
-		this.$supers('$init', arguments);
-	},
 	getTabbox: function() {
 		return this.parent ? this.parent : null;
 	},
@@ -43,7 +40,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		var zcls = this.$supers('domClass_', arguments),
 			tbx = this.getTabbox();
 		if (!no || !no.zclass) {
-			var added = tbx.isTabScroll() ? zcls + "-scroll" : "";
+			var added = tbx.isTabscroll() ? zcls + "-scroll" : "";
 			if (added) zcls += (zcls ? ' ': '') + added;
 		}
 		return zcls;
@@ -52,17 +49,25 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		this.$supers('bind_', arguments);
 		zWatch.listen({onSize: this, onShow: this});
 
-		for (var btn, key = ['right', 'left', 'down', 'up'], le = key.length; --le >= 0;)
+		for (var btn, key = ['right', 'left', 'down', 'up'], le = key.length; le--;)
 			if ((btn = this.$n(key[le])))
 				this.domListen_(btn, "onClick");
-
-		this._init = false
+		
+		// reset
+		this._inited = false;
+		
 		zk.afterMount(
 			this.proxy(function () {
 				if (this.desktop) {
-					this._scrollcheck("init");
-					this._fixHgh();
-					this._init = true;
+					var self = this;
+					function t() {
+						self._scrollcheck("init");
+						self._fixWidth();
+						self._inited = true;
+					}
+					if (this.parent.toolbar && zk.safari || zk.opera)
+						setTimeout(t, 50);
+					else t();
 				}
 			})
 		);
@@ -73,15 +78,18 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 
 		this.$supers('unbind_', arguments);
 	},
+	_isInited: function () {
+		return this._inited;
+	},
 	_scrollcheck: function(way, tb) {
 		var tbsdiv = this.$n(),
 			tabbox = this.getTabbox(),
 			tbx = tabbox.$n();
-		if (!tabbox.isRealVisible() || !tabbox.isTabScroll()) return;
+		if (!tabbox.isRealVisible() || !tabbox.isTabscroll()) return;
 		if (!tbsdiv) return;	// tabbox is delete , no need to check scroll
 		if (tabbox.isVertical()) {//vertical
-			var header =  this.$n("header"),
-				cave =  this.$n("cave"),
+			var header = this.$n("header"),
+				cave = this.$n("cave"),
 				headerOffsetHeight = header.offsetHeight,
 				headerScrollTop = header.scrollTop,
 				sel = tabbox.getSelectedTab(),
@@ -89,10 +97,11 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				cmpOffsetTop = cmp ? cmp.offsetTop : 0,
 				cmpOffsetHeight = cmp ? cmp.offsetHeight : 0,
 				childHeight = 0,
-				allTab = jq(cave).children(),
 				btnsize = this._getArrowSize();
-			for (var i = 0, count = allTab.length; i < count; i++)
-				childHeight = childHeight + allTab[i].offsetHeight;
+				
+			jq(cave).children().each(function () {
+				childHeight += this.offsetHeight;
+			});
 
 			if (tabbox._scrolling) { //already in scrolling status
 				if (tbsdiv.offsetHeight < btnsize)  return;
@@ -138,24 +147,42 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		} else if(!tabbox.inAccordionMold()) {
 			var cave = this.$n("cave"),
 				header = this.$n("header"),
-			 	allTab = jq(cave).children(),
 			 	sel = tabbox.getSelectedTab(),
 				cmp = tb ? tb : ( sel ? sel.$n() : null),
-			 	cmpOffsetLeft = cmp ? cmp.offsetLeft : null,
-				cmpOffsetWidth = cmp ? cmp.offsetWidth : null,
+			 	cmpOffsetLeft = cmp ? cmp.offsetLeft : 0,
+				cmpOffsetWidth = cmp ? cmp.offsetWidth : 0,
 				headerOffsetWidth = header.offsetWidth,
 				headerScrollLeft = header.scrollLeft,
 				childWidth = 0,
-				btnsize = this._getArrowSize();
-			for (var i = 0, count = allTab.length; i < count; i++)
-				childWidth = childWidth + zk.parseInt(allTab[i].offsetWidth);//
-
+				btnsize = this._getArrowSize(),
+				toolbar = tabbox.toolbar;
+				
+			jq(cave).children().each(function () {
+				childWidth += this.offsetWidth;
+			});
+			
+			if (toolbar)
+				toolbar = toolbar.$n();
 			if (tabbox._scrolling) { //already in scrolling status
+				if (toolbar) {
+					var outer, hgh;
+						
+					// fixed FF2's bug
+					if (zk.gecko2_) {
+						outer = toolbar.parentNode.parentNode;
+						outer.style.height = '';
+						hgh = outer.offsetHeight;
+					}
+					this.$n('right').style.right = toolbar.offsetWidth + 'px';
+					if (zk.gecko2_)
+						outer.style.height = jq.px(zk(outer).revisedHeight(hgh));
+				}
+				
 				if (tbsdiv.offsetWidth < btnsize)  return;
 				if (childWidth <= headerOffsetWidth + btnsize) {
 					tabbox._scrolling = false;
 					this._showbutton(false);
-					header.style.width = jq.px(tbx.offsetWidth);
+					header.style.width = jq.px(tbx.offsetWidth - (toolbar ? toolbar.offsetWidth : 0));
 					header.scrollLeft = 0;
 				}
 				// scroll to specific position
@@ -185,7 +212,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 					tabbox._scrolling = true;
 					this._showbutton(true);
 					var cave = this.$n("cave"),
-						temp = tabbox.offsetWidth - this._getArrowSize();//coz show button then getsize again
+						temp = tbx.offsetWidth - (toolbar ? toolbar.offsetWidth : 0) - this._getArrowSize();//coz show button then getsize again
 					cave.style.width = "5555px";
 					header.style.width = temp > 0 ? temp + "px" : "";
 					if (way == "sel") {
@@ -204,6 +231,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 			return;
 		var step,
 			header = this.$n("header");
+			
 		//the tab bigger , the scroll speed faster
 		step = move <= 60 ? 5 : eval(5 * (zk.parseInt(move / 60) + 1));
 		var run = setInterval(function() {
@@ -221,16 +249,16 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 		goscroll = function(header, to, step) {
 			switch(to){
 			case 'right':
-				header.scrollLeft = header.scrollLeft + step;
+				header.scrollLeft += step;
 				break;
 			case 'left':
-				header.scrollLeft = header.scrollLeft - step;
+				header.scrollLeft -= step;
 				break;
 			case 'up':
-				header.scrollTop = header.scrollTop - step;
+				header.scrollTop -= step;
 				break;
 			default:
-				header.scrollTop = header.scrollTop + step;
+				header.scrollTop += step;
 			}
 			header.scrollLeft = (header.scrollLeft <= 0 ? 0 : header.scrollLeft);
 			header.scrollTop = (header.scrollTop <= 0 ? 0 : header.scrollTop);
@@ -247,11 +275,11 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 	_showbutton : function(show) {
 		var tabbox = this.getTabbox(),
 			zcls = this.getZclass();
-		if (tabbox.isTabScroll()) {
+		if (tabbox.isTabscroll()) {
 			var header = this.$n("header");
 				
 			if (tabbox.isVertical()) {//vertical
-				if (show == true) {
+				if (show) {
 					jq(header).addClass(zcls + "-header-scroll");
 					jq(this.$n("down")).addClass(zcls + "-down-scroll");
 					jq(this.$n("up")).addClass(zcls + "-up-scroll");
@@ -261,7 +289,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 					jq(this.$n("up")).removeClass(zcls + "-up-scroll");
 				}				
 			}else {//horizontal
-				if (show == true) {
+				if (show) {
 					jq(header).addClass(zcls + "-header-scroll");
 					jq(this.$n("right")).addClass(zcls + "-right-scroll");
 					jq(this.$n("left")).addClass(zcls + "-left-scroll");
@@ -282,9 +310,11 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 			allTab =  jq(cave).children(),
 			scrollLength = tabbox.isVertical() ? head.scrollTop : head.scrollLeft,
 			offsetLength = tabbox.isVertical() ? head.offsetHeight : head.offsetWidth;
-	//Scroll to next right tab
+		
+		if (!allTab.length) return; // nothing to do
+		
+		//Scroll to next right tab
 		if (ele.id == this.uuid + "-right") {
-			if (!allTab.length) return; // nothing to do
 			for (var i = 0, count = allTab.length; i < count; i++) {
 				if (allTab[i].offsetLeft + allTab[i].offsetWidth > scrollLength + offsetLength) {
 					move = allTab[i].offsetLeft + allTab[i].offsetWidth - scrollLength - offsetLength;
@@ -295,7 +325,6 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				};
 			};
 		} else if (ele.id == this.uuid + "-left") {//Scroll to next left tab
-				if (!allTab.length) return; // nothing to do
 				for (var i = 0, count = allTab.length; i < count; i++) {
 					if (allTab[i].offsetLeft >= scrollLength) {
 						//if no Sibling tab no sroll
@@ -312,7 +341,6 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				this._doScroll("left", move);
 				return;
 		} else if (ele.id == this.uuid + "-up") {
-				if (!allTab.length) return; // nothing to do
 				for (var i = 0, count = allTab.length; i < count; i++) {
 					if (allTab[i].offsetTop >= scrollLength) {
 						var preli = jq(allTab[i]).prev("li")[0];
@@ -328,7 +356,6 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				this._doScroll("up", move);
 				return;
 		} else if (ele.id == this.uuid + "-down") {
-			if (!allTab.length) return; //nothing to do
 			for (var i = 0, count = allTab.length; i < count; i++) {
 				if (allTab[i].offsetTop + allTab[i].offsetHeight > scrollLength + offsetLength ) {
 					move = allTab[i].offsetTop + allTab[i].offsetHeight - scrollLength - offsetLength;
@@ -360,16 +387,26 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 				 }
 			} else if(!tabbox.inAccordionMold()) {
 				if (tbx.offsetWidth < btnsize) return;
-				if (tabbox.isTabScroll()) {
+				if (tabbox.isTabscroll()) {
+					var toolbar = tabbox.toolbar;
+					if (toolbar) toolbar = toolbar.$n();
 					if (!tbx.style.width) {
 						this._forceStyle(tbx,"w","100%");
 						this._forceStyle(tabs,"w",jq(tabs).zk.revisedWidth(tbx.offsetWidth)+ "px");
-						this._forceStyle(head,"w",(tabbox._scrolling ? tbx.offsetWidth - btnsize : jq(head).zk.revisedWidth(tbx.offsetWidth)) + "px");
+						if (tabbox._scrolling)
+							this._forceStyle(head,"w", tbx.offsetWidth - (toolbar ? toolbar.offsetWidth : 0) - btnsize + 'px');
+						else
+							this._forceStyle(head,"w",jq(head).zk.revisedWidth(tbx.offsetWidth - (toolbar ? toolbar.offsetWidth : 0)) + "px");
 					} else {
 						this._forceStyle(tabs,"w",jq(tabs).zk.revisedWidth(tbx.offsetWidth)+ "px");
 						this._forceStyle(head,"w",tabs.style.width);
-						this._forceStyle(head,"w",(tabbox._scrolling ? head.offsetWidth - btnsize : head.offsetWidth) + "px");
+						if (tabbox._scrolling)
+							this._forceStyle(head,"w", head.offsetWidth - (toolbar ? toolbar.offsetWidth : 0) - btnsize + "px");
+						else
+							this._forceStyle(head,"w",head.offsetWidth - (toolbar ? toolbar.offsetWidth : 0) + "px");
 					}
+					if (toolbar && tabbox._scrolling)
+						this.$n('right').style.right = toolbar.offsetWidth + 'px';
 				} else {
 					if (!tbx.style.width) {
 						this._forceStyle(tbx,"w",tbx.offsetWidth + "px");
@@ -417,7 +454,7 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 	},
 
 	_forceStyle: function(cmp,attr,value) {
-		if ( zk.parseInt(value) < 0 || value==null) return;
+		if (value == null || zk.parseInt(value) < 0) return;
 		switch(attr) {
 		case "h":
 			cmp.style.height = zk.ie6_ ? "0px" : ""; // recalculate for IE6

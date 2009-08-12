@@ -10,6 +10,7 @@
 .z-caption .z-toolbar, .z-caption .z-toolbar-anchor {
 	background: none; border: 0;
 }
+.z-toolbar-tabs-body, .z-toolbar-tabs-body span,
 .z-toolbar-body, .z-toolbar-body span {
 	font-size: ${fontSizeS};
 }
@@ -106,7 +107,7 @@
 	padding: 0;
 }
 .z-toolbar-button-cnt {
-	padding: 2px 5px;
+	padding: 2px 2px;
 	position: relative;
 	zoom: 1;
 }

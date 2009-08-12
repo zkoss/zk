@@ -16,8 +16,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 */
 function (out) {
 	out.push('<div ', this.domAttrs_(), '>');
-	for (var w = this.firstChild; w; w = w.nextSibling)
-		w.redraw(out);
+	if (this.tabs) this.tabs.redraw(out);
+	if (this.tabpanels) this.tabpanels.redraw(out);
 	if (this.isVertical())
 		out.push('<div class="z-clear" ></div>');
 	out.push("</div>");

@@ -31,12 +31,13 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 	},
 
 	getTabs: function () {
-		//The tabs must in index 0
-		return this.getChildAt(0);
+		return this.tabs;
 	},
 	getTabpanels: function () {
-		//The tabpanels must in index 1
-		return this.getChildAt(1);
+		return this.tabpanels;
+	},
+	getToolbar: function () {
+		return this.toolbar;
 	},
 	getZclass: function () {
 		return this._zclass == null ? "z-tabbox" +
@@ -44,9 +45,6 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 	},
 	isHorizontal: function() {
 		return "horizontal" == this.getOrient();
-	},
-	isTabScroll: function() {
-		return true == this._tabscroll;
 	},
 	isVertical: function() {
 		return "vertical" == this.getOrient();
@@ -115,6 +113,27 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 		this.$supers('unbind_', arguments);
 	},
 	//super//
+	onChildAdded_: function (child) {
+		this.$supers('onChildAdded_', arguments);
+		if (child.$instanceof(zul.wgt.Toolbar))
+			this.toolbar = child;
+		else if (child.$instanceof(zul.tab.Tabs))
+			this.tabs = child;
+		else if (child.$instanceof(zul.tab.Tabpanels)) {
+			this.tabpanels = child;
+		}
+		this.rerender();
+	},
+	onChildRemoved_: function (child) {
+		this.$supers('onChildRemoved_', arguments);
+		if (child == this.toolbar)
+			this.toolbar = null;
+		else if (child == this.tabs)
+			this.tabs = null;
+		else if (child == this.tabpanels)
+			this.tabpanels = null;
+		this.rerender();
+	},
 	setWidth: function (width) {
 		this.$supers('setWidth', arguments);
 		zWatch.fireDown('onSize', null, this);

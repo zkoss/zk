@@ -26,8 +26,9 @@ zul.wgt.Toolbar = zk.$extends(zul.Widget, {
 	// super
 	getZclass: function(){
 		var zcls = this._zclass;
-		return zcls ? zcls : "z-toolbar" +
-		(this.inPanelMold() ? "-panel" : "");
+		return zcls ? zcls : "z-toolbar"
+			+ (this.parent && zk.isLoaded('zul.tab') && this.parent.$instanceof(zul.tab.Tabbox) ? "-tabs" : "") 
+			+ (this.inPanelMold() ? "-panel" : "");
 	},
 	// protected 
 	inPanelMold: function(){

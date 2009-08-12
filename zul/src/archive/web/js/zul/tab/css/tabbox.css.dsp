@@ -51,6 +51,27 @@
 	margin: 0;
 	position: relative;
 }
+.z-toolbar-tabs {
+	overflow: hidden;
+	position: absolute;
+	padding: 2px 4px 0 4px;
+	right: 0;
+	top: 0;
+	z-index: 1;
+}
+.z-toolbar-tabs-outer .z-tabs-header {
+	padding-bottom: 1px;
+}
+.z-toolbar-tabs-outer {
+	background: #C7E3F3 repeat-x scroll 0 top;
+	background-image: url(${c:encodeURL('~./zul/img/tab/tabs-bg.png')});
+	border-bottom: 1px solid #7EAAC6;
+	overflow: hidden;
+}
+.z-tabs-scroll .z-toolbar-tabs-outer  .z-tabs-cnt,
+.z-tabs .z-toolbar-tabs-outer  .z-tabs-cnt {
+	border-bottom: 0;
+}
 .z-tabs-scroll {
 	border: 1px solid #7EAAC6;
 	background: #FAFDFE none repeat scroll 0 0;
