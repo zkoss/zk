@@ -362,17 +362,6 @@ zk.Draggable = zk.$extends(zk.Object, {
 		if(_dragging[node] || evt.which != 1)
 			return;
 
-		// abort on form elements, fixes a Firefox issue
-		var target = evt.domTarget,
-			tag = target.tagName;
-		if(tag=='INPUT' || tag=='SELECT' || tag=='OPTION' || tag=='BUTTON' || tag=='TEXTAREA')
-			return;
-
-		//Skip popup/dropdown (of combobox and others)
-		for (var n = target; n && n != node; n = n.parentNode)
-			if (jq(n).css('position') == 'absolute')
-				return;
-
 		var pt = [evt.pageX, evt.pageY];
 		if (this.opts.ignoredrag && this.opts.ignoredrag(this, pt, evt)) {
 			if (evt.domStopped) devt.stop();
