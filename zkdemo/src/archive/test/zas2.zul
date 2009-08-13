@@ -13,5 +13,7 @@ zas2.zul
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 -->
+<?script src="http://ajaxasservice-examples.appspot.com/zkau/web/js/zk/ajax/zk.wpd?main=zase.chart.example1.Main&id=stock"?>
 <window>
+	<div id="stock"/>
 </window>
