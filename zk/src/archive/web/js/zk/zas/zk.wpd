@@ -12,6 +12,5 @@
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 
-<package name="zk.zas" language="xul/html" cacheable="false">
-	<!-- nothing but non-cacheable -->
+<package name="zk.zas" language="xul/html">
 </package>

@@ -108,7 +108,8 @@ function zkmld(wgtcls, molds) {
 			_aftMounts.push(fn);
 			return true;
 		}
-		setTimeout(fn, 0);
+		if (zk.loading) zk.afterLoad(fn);
+		else setTimeout(fn, 0);
 	};
 
 	function mount() {

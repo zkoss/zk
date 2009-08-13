@@ -119,13 +119,14 @@ public class WpdExtendlet extends AbstractExtendlet {
 		final String name = IDOMs.getRequiredAttributeValue(root, "name");
 		if (name.length() == 0)
 			throw new UiException("The name attribute must be specified, "+root.getLocator());
-		final boolean zk = "zk".equals(name);
+		final boolean zk = "zk".equals(name),
+			zas = "zk.zas".equals(name);
 		final String lang = root.getAttributeValue("language");
 		final LanguageDefinition langdef = //optional
 			lang != null ? LanguageDefinition.lookup(lang): null;
 		final String dir = path.substring(0, path.lastIndexOf('/') + 1);
 		final WpdContent wc =
-			zk || "false".equals(root.getAttributeValue("cacheable")) ?
+			zk || zas || "false".equals(root.getAttributeValue("cacheable")) ?
 				new WpdContent(dir): null;
 
 		final ByteArrayOutputStream out = new ByteArrayOutputStream(1024*8);
@@ -134,7 +135,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 			write(out, "//ZK, Copyright (C) 2009 Potix Corporation. Distributed under GPL 3.0\n"
 				+ "//jQuery, Copyright (c) 2009 John Resig\n"
 				+ "if(!window.zk){");//may be loaded multiple times because specified in lang.xml
-		} else {
+		} else if (!zas) {
 			depends = root.getAttributeValue("depends");
 			if (depends != null && depends.length() == 0)
 				depends = null;
@@ -258,11 +259,9 @@ public class WpdExtendlet extends AbstractExtendlet {
 				writeAppInfo(out, wapp);
 			 write(out, '}'); //end of if(window.zk)
 
-			final String[] pkgs = wapp.getConfiguration().getClientPackages();
-			if (pkgs.length > 0) {
-				 move(wc, out);
-				 wc.addHost(wapp, JSONArray.toJSONString(pkgs));
-			}
+			writeHost(wc, out, wapp);
+		} else if (zas) {
+			writeHost(wc, out, getWebApp());
 		} else {
 			write(out, "\n}finally{zk.setLoaded(zk._n);}");
 			if (depends != null) {
@@ -278,6 +277,15 @@ public class WpdExtendlet extends AbstractExtendlet {
 			return wc;
 		}
 		return out.toByteArray();
+	}
+	private void writeHost(WpdContent wc, ByteArrayOutputStream out, WebApp wapp) {
+		if (wapp != null) {
+			final String[] pkgs = wapp.getConfiguration().getClientPackages();
+			if (pkgs.length > 0) {
+				 move(wc, out);
+				 wc.addHost(wapp, JSONArray.toJSONString(pkgs));
+			}
+		}
 	}
 	private boolean writeResource(OutputStream out, String path,
 	String dir, boolean locate)
@@ -419,11 +427,9 @@ public class WpdExtendlet extends AbstractExtendlet {
 		if (j >= 0)
 			sb.append("\nzk.load('")
 				.append(main.substring(0, j))
-				.append("',");
-		else
-			sb.append("\nzk.afterLoad(");
+				.append("',function(){");
 
-		sb.append("function(){\n").append(main).append(".main(");
+		sb.append("zk.afterMount(function(){\n").append(main).append(".main(");
 
 		final Map ms = new LinkedHashMap();
 		for (Iterator it = params.entrySet().iterator(); it.hasNext();) {
@@ -436,8 +442,11 @@ public class WpdExtendlet extends AbstractExtendlet {
 			}
 		}
 
-		return sb.append(JSONObject.toJSONString(ms))
-			.append(")})").toString();
+		sb.append(JSONObject.toJSONString(ms))
+			.append(")})");
+		if (j >= 0)
+			sb.append("})");
+		return sb.toString();
 	}
 	private static String outHost(HttpServletRequest request,
 	WebApp wapp, String clientPackages) {
