@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-zas2.zul
+aaas2.zul
 
 	Purpose:
 		
@@ -13,8 +13,8 @@ zas2.zul
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 -->
-<?script src="http://ajaxasservice-examples.appspot.com/zkau/web/js/zk/zas/zk.wpd?main=zase.chart.example1.Main&id=stock1&stock=MSFT&width=100%25&height=150px"?>
-<?script src="http://ajaxasservice-examples.appspot.com/zkau/web/js/zk/zas/zk.wpd?main=zase.chart.example1.Main&id=stock2&stock=GOOG&width=100%25&height=150px"?>
+<?script src="http://ajaxasservice-examples.appspot.com/zkau/web/js/zk/aaas/zk.wpd?main=aaase.chart.example1.Main&id=stock1&stock=MSFT&width=100%25&height=150px"?>
+<?script src="http://ajaxasservice-examples.appspot.com/zkau/web/js/zk/aaas/zk.wpd?main=aaase.chart.example1.Main&id=stock2&stock=GOOG&width=100%25&height=150px"?>
 <portallayout>
 	<portalchildren style="padding: 5px" width="40%">
 		<panel height="200px" title="Stock 1" border="normal" collapsible="true" closable="true" maximizable="true" style="margin-bottom:10px">
@@ -24,7 +24,11 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 		</panel>
 		<panel height="300px" title="foo 1" border="normal" collapsible="true" closable="true" maximizable="true" style="margin-bottom:10px">
 			<panelchildren>
-				
+			<html><![CDATA[
+<p>This page is used to test Ajax-as-a-Service with a ZK page.
+This page depends on the application running at 
+<a href="http://ajaxasservice-examples.appspot.com">http://ajaxasservice-examples.appspot.com</a></p>
+			]]></html>
 			</panelchildren>
 		</panel>
 	</portalchildren>

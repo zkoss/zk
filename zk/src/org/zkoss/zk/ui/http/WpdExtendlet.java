@@ -120,13 +120,13 @@ public class WpdExtendlet extends AbstractExtendlet {
 		if (name.length() == 0)
 			throw new UiException("The name attribute must be specified, "+root.getLocator());
 		final boolean zk = "zk".equals(name),
-			zas = "zk.zas".equals(name);
+			aaas = "zk.aaas".equals(name);
 		final String lang = root.getAttributeValue("language");
 		final LanguageDefinition langdef = //optional
 			lang != null ? LanguageDefinition.lookup(lang): null;
 		final String dir = path.substring(0, path.lastIndexOf('/') + 1);
 		final WpdContent wc =
-			zk || zas || "false".equals(root.getAttributeValue("cacheable")) ?
+			zk || aaas || "false".equals(root.getAttributeValue("cacheable")) ?
 				new WpdContent(dir): null;
 
 		final ByteArrayOutputStream out = new ByteArrayOutputStream(1024*8);
@@ -135,7 +135,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 			write(out, "//ZK, Copyright (C) 2009 Potix Corporation. Distributed under GPL 3.0\n"
 				+ "//jQuery, Copyright (c) 2009 John Resig\n"
 				+ "if(!window.zk){");//may be loaded multiple times because specified in lang.xml
-		} else if (!zas) {
+		} else if (!aaas) {
 			depends = root.getAttributeValue("depends");
 			if (depends != null && depends.length() == 0)
 				depends = null;
@@ -260,7 +260,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 			 write(out, '}'); //end of if(window.zk)
 
 			writeHost(wc, out, wapp);
-		} else if (zas) {
+		} else if (aaas) {
 			writeHost(wc, out, getWebApp());
 		} else {
 			write(out, "\n}finally{zk.setLoaded(zk._n);}");
