@@ -348,7 +348,7 @@ public class Datebox extends FormatInputElement implements
 			render(renderer, "buttonVisible", _btnVisible);
 		if (_lenient)
 			render(renderer, "lenient", _lenient);
-		
+		render(renderer, "format", getFormat());
 		render(renderer, "date", getValue());
 	}
 }

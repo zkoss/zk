@@ -245,11 +245,12 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 
 		if (!Objects.equals(_value, val)) {
 			_value = val;
-
+			
+			final String fmtval = coerceToString(_value);
 			if (_txtByClient == null
-			|| !Objects.equals(_txtByClient, coerceToString(_value))) {
+			|| !Objects.equals(_txtByClient, fmtval)) {
 				_txtByClient = null; //only once
-				smartUpdate("value", _value);
+				smartUpdate("value", fmtval);
 				//Note: we have to disable the sending back of the value
 				//Otherwise, it cause Bug 1488579's problem 3.
 				//Reason: when user set a value to correct one and set
@@ -258,13 +259,14 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 		} else if (_txtByClient != null) {
 			//value equals but formatted result might differ because
 			//our parse is more fault tolerant
-			if (!Objects.equals(_txtByClient, coerceToString(_value))) {
+			final String fmtval = coerceToString(_value);
+			if (!Objects.equals(_txtByClient, fmtval)) {
 				_txtByClient = null; //only once
-				smartUpdate("value", _value);
+				smartUpdate("value", fmtval);
 					//being sent back to the server.
 			}
 		} else if (errFound) {
-			smartUpdate("value", _value);
+			smartUpdate("value", coerceToString(_value));
 				//Bug 1876292: make sure client see the updated value
 		}
 	}
@@ -519,7 +521,7 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 		if (_errmsg != null || !Objects.equals(_value, value)) {
 			clearErrorMessage(true);
 			_value = value;
-			smartUpdate("value", _value);
+			smartUpdate("value", coerceToString(_value));
 		}
 	}
 	/** Sets the value directly.

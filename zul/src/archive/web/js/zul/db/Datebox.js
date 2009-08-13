@@ -15,127 +15,74 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 */
 zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
-	_compact: false,
 	_buttonVisible: true,
 	_lenient: true,
-	$init: function (){
-		this.$supers('$init', arguments);
-		this.$afterInit(this._init);
-	},
+	$init: (function() {
+		function initPopup () {
+			this._pop = new zul.db.CalendarPop({db:this});
+			this.appendChild(this._pop);
+		}
+		return function() {
+			this.$supers('$init', arguments);
+			this.$afterInit(initPopup);
+			this.listen({onChange: this}, -1000);
+		}
+	})(),
 	$define: {
 		buttonVisible: function () {
 			var n = this.$n('btn');
 			if (n)
 				v ? jq(n).show(): jq(n).hide();
+		},
+		format: function () {
+			if (this._pop) {
+				this._pop.setFormat(this._format);
+				if (this._value)
+					this._value = this._pop.getTime();
+			}
+			var inp = this.getInputNode();
+			if (inp)
+				inp.value = this.coerceToString_(this._value);
 		}
+	},
+	setValue: function (val) {
+		var args
+		if (val) {
+			args = [];
+			for (var j = arguments.length; --j > 0;)
+				args.unshift(arguments[j]);
+			
+			args.unshift(this.coerceFromString_(val));
+		} else
+			args = arguments;
+		this.$supers('setValue', args);
 	},
 	onSize: _zkf = function () {
 		this._auxb.fixpos();
 	},
 	onShow: _zkf,
-	onFloatUp: function (wgt) {
-		if (!zUtl.isAncestor(this, wgt))
-			this.close({sendOnOpen:true});
-	},
 	getZclass: function () {
 		var zcs = this._zclass;
-		return zcs != null ? zcs: "z-datebox";
+		return zcs ? zcs: "z-datebox";
 	},
-	getDate: function () {
-		var pop = this._pop;
-		return pop.getDate();
+	getValue: function () {
+		return this._value;
 	},
-	getDateFormat: function () {
-		//@TODO
-	},
-	setConstraint : function () {
-		//@TODO
+	getRawText: function () {
+		return this.coerceToString_(this._value);
 	},
 	setOpen: function(open) {
 		var pp = this.$n("pp");
 		if (pp) {
-			if (!jq(pp).zk.isVisible()) this.open();
-			else this.close(true);
+			if (!jq(pp).zk.isVisible()) this._pop.open();
+			else this._pop.close();
 		}
 	},
-	open: function () {
-		//this.$supers('open', arguments);
-		//@TODO
-		//zkau.closeFloats(pp); //including popups
-		//zkau._dtbox.setFloatId(pp.id);
-		var uuid = this.id,
-			db = this.$n(),
-			pp = this.$n("pp");
-		if (!db || !pp) return;
-		var zcls = this.getZclass();
-		pp.className=db.className+" "+pp.className;
-		jq(pp).removeClass(zcls);
-
-		//if (meta) meta.init();
-		//else zkau.setMeta(db, new zk.Cal(db, pp));
-
-
-		pp.style.width = pp.style.height = "auto";
-		pp.style.position = "absolute"; //just in case
-		pp.style.overflow = "auto"; //just in case
-		pp.style.display = "block";
-		pp.style.zIndex = "88000";
-		//No special child, so no need to: zk.onVisiAt(pp);
-
-		//FF: Bug 1486840
-		//IE: Bug 1766244 (after specifying position:relative to grid/tree/listbox)
-		jq(pp).zk.makeVParent();
-
-
-		if (pp.offsetHeight > 200) {
-			//pp.style.height = "200px"; commented by the bug #2796461
-			pp.style.width = "auto"; //recalc
-		} else if (pp.offsetHeight < 10) {
-			pp.style.height = "10px"; //minimal
-		}
-		if (pp.offsetWidth < db.offsetWidth) {
-			pp.style.width = db.offsetWidth + "px";
-		} else {
-			var wd = jq.innerWidth() - 20;
-			if (wd < db.offsetWidth) wd = db.offsetWidth;
-			if (pp.offsetWidth > wd) pp.style.width = wd;
-		}
-		var input = this.$n("real"),
-			dbobj = this;
-		jq(pp).zk.position(input, "after_start");
-		setTimeout(function () {
-			dbobj._reposition(uuid);
-		}, 150);
-		//IE, Opera, and Safari issue: we have to re-position again because some dimensions
-		//in Chinese language might not be correct here.
-
+	coerceFromString_: function (val) {
+		return val ? zDateFormat.parseDate(val, this.getFormat()) : val;
 	},
-	close: function (focus) {
-		var uuid = this.id,
-			db = this.$n(),
-			pp = this.$n("pp");
-
-		if (!db || !jq(pp).zk.isVisible()) return;
-		var zcls = this.getZclass();
-		if (pp._shadow) pp._shadow.hide();
-
-		pp.style.display = "none";
-		pp.className = zcls + "-pp";
-
-		jq(pp).zk.undoVParent();
-
-		//zkau._dtbox.setFloatId(null);
-		//No special child, so no need to: zk.onHideAt(pp);
-		//zkau.hideCovered();
-
-		var btn = this.$n("btn");
-		if (btn)
-			jq(btn).removeClass(zcls + "-btn-over");
-
-		if (focus)
-			//zk.asyncFocus(uuid + "!real");
-			;
-		//this.$supers('close', arguments);
+	coerceToString_: function (val) {
+		return val ? zDateFormat.formatDate(val, this.getFormat()) : '';
 	},
 	getInputNode: function () {
 		return this.$n('real');
@@ -148,8 +95,8 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			this._auxb = new zul.Auxbutton(this, btn, inp);
 			this.domListen_(btn, 'onClick', '_doBtnClick');
 		}
-		this.domListen_(inp, "onBlur", '_inpBlur');
-		zWatch.listen({onSize: this, onShow: this, onFloatUp: this});
+		zWatch.listen({onSize: this, onShow: this});
+		this._pop.setFormat(this.getFormat());
 	},
 	unbind_: function () {
 		var btn = this.$n('btn');
@@ -158,51 +105,144 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			this._auxb = null;
 			this.domUnlisten_(btn, 'onClick', '_doBtnClick');
 		}
-		zWatch.unlisten({onSize: this, onShow: this, onFloatUp: this});
+		zWatch.unlisten({onSize: this, onShow: this});
 		this.$supers('unbind_', arguments);
-	},
-	_inpBlur: function (evt) {
-		this.$supers('doBlur_', arguments);
-		this.fire('onChange', {value: this._pop._date});
-	},
-	_init : function () {
-		var pop = new zul.db.CalendarPop({db:this});
-		this._pop = pop;
-		this.appendChild(pop);
-	},
-	_reposition : function (uuid) {
-		var db = zk(uuid).jq[0];
-		if (!db) return;
-		var dbobj = zk.Widget.$(db),
-			pp = dbobj.$n("pp"),
-			input = dbobj.$n("real");
-
-		if(pp) {
-			jq(pp).zk.position(input, "after_start");
-			if (!pp._shadow)
-				pp._shadow =  new zk.eff.Shadow(pp,
-					{left: -4, right: 4, top: 2, bottom: 3, autoShow: true, stackup: (zk.useStackup === undefined ? zk.ie6Only: zk.useStackup)});
-			else
-				pp._shadow.sync();
-//			zkau.hideCovered();
-//			zk.asyncFocus(inpId);
-		}
-		return;
 	},
 	_doBtnClick: function (evt) {
 		this.setOpen();
 		evt.stop();
+	},
+	onChange: function (evt) {
+		if (this._pop)
+			this._pop._value = evt.data.value;
 	}
 });
 zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
-	$init: function (obj) {
+	$init: function () {
 		this.$supers('$init', arguments);
+		this.listen({onChange: this}, -1000);
 	},
-	_choiceData: function (evt) {
-		this.$supers('_choiceData', arguments);
+	setFormat: function (fmt) {
+		if (fmt != this._fmt) {
+			var old = this._fmt;
+			this._fmt = fmt;
+			if (this.getValue())
+				this._value = zDateFormat.formatDate(zDateFormat.parseDate(this.getValue(), old), fmt);
+		}
+	},
+	close: function (silent) {
 		var db = this.parent,
-		    input = db.$n("real");
-		input.value = this._date;
-		db.fire('onChange', {value: this._date});
+			pp = db.$n("pp");
+
+		if (!pp || !zk(pp).isVisible()) return;
+		if (this._shadow) this._shadow.hide();
+
+		var zcls = db.getZclass();
+		pp.style.display = "none";
+		pp.className = zcls + "-pp";
+
+		jq(pp).zk.undoVParent();
+		
+		var btn = this.$n("btn");
+		if (btn)
+			jq(btn).removeClass(zcls + "-btn-over");
+
+		if (!silent)
+			jq(db.getInputNode()).focus();
+	},
+	open: (function() {
+		function reposition(wgt) {
+			var db = wgt.$n();
+			if (!db) return;
+			var pp = wgt.$n("pp"),
+				inp = wgt.getInputNode();
+	
+			if(pp) {
+				zk(pp).position(inp, "after_start");
+				wgt._pop.syncShadow();
+				zk(inp).focus();
+			}
+			return;
+		}
+		return function() {
+			var wgt = this.parent,
+				db = wgt.$n(), pp = wgt.$n("pp");
+			if (!db || !pp) 
+				return;
+			var zcls = wgt.getZclass();
+			
+			pp.className = db.className + " " + pp.className;
+			jq(pp).removeClass(zcls);
+			
+			pp.style.width = pp.style.height = "auto";
+			pp.style.position = "absolute"; //just in case
+			pp.style.overflow = "auto"; //just in case
+			pp.style.display = "block";
+			pp.style.zIndex = "88000";
+			
+			//FF: Bug 1486840
+			//IE: Bug 1766244 (after specifying position:relative to grid/tree/listbox)
+			jq(pp).zk.makeVParent();
+			
+			
+			if (pp.offsetHeight > 200) {
+				//pp.style.height = "200px"; commented by the bug #2796461
+				pp.style.width = "auto"; //recalc
+			} else if (pp.offsetHeight < 10) {
+				pp.style.height = "10px"; //minimal
+			}
+			if (pp.offsetWidth < db.offsetWidth) {
+				pp.style.width = db.offsetWidth + "px";
+			} else {
+				var wd = jq.innerWidth() - 20;
+				if (wd < db.offsetWidth) 
+					wd = db.offsetWidth;
+				if (pp.offsetWidth > wd) 
+					pp.style.width = wd;
+			}
+			zk(pp).position(wgt.getInputNode(), "after_start");
+			setTimeout(function() {
+				reposition(wgt);
+			}, 150);
+			//IE, Opera, and Safari issue: we have to re-position again because some dimensions
+			//in Chinese language might not be correct here.
+		}
+	})(),
+	syncShadow: function () {
+		if (!this._shadow) {
+			this._shadow = new zk.eff.Shadow(this.parent.$n('pp'), {
+				left: -4,
+				right: 4,
+				top: 2,
+				bottom: 3,
+				autoShow: true,
+				stackup: (zk.useStackup === undefined ? zk.ie6Only : zk.useStackup)
+			});
+		} else
+			this._shadow.sync();
+	},
+	onChange: function (evt) {
+		this.parent.getInputNode().value = evt.data.value;
+		this.parent._value = this.getTime();
+		this.parent.fire(evt.name, evt.data);
+		if (this._view == 'day' && evt.data.shallClose !== false)
+			this.close();
+	},
+	onFloatUp: function (wgt) {
+		if (!zUtl.isAncestor(this.parent, wgt))
+			this.close(true);
+	},
+	bind_: function () {
+		this.$supers('bind_', arguments);
+		zWatch.listen({onFloatUp: this});
+	},
+	unbind_: function () {
+		zWatch.unlisten({onFloatUp: this});
+		
+		if (this._shadow) {
+			this._shadow.destroy();
+			this._shadow = null;
+		}
+		this.$supers('unbind_', arguments);
 	}
 });

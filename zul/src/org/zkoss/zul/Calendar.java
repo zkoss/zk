@@ -86,7 +86,7 @@ public class Calendar extends XulElement implements org.zkoss.zul.api.Calendar {
 		if (value == null) value = Dates.today();
 		if (!value.equals(_value)) {
 			_value = value;
-			smartUpdate("date", getDateFormat().format(_value));
+			smartUpdate("value", getDateFormat().format(_value));
 		}
 	}
 

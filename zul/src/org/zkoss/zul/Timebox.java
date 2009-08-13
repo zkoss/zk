@@ -139,10 +139,7 @@ public class Timebox extends InputElement implements org.zkoss.zul.api.Timebox {
 		final DateFormat df = getDateFormat();
 		return value != null ? df.format((Date)value): "";
 	}
-	public void setRawValue(Object value) {
-		super.setRawValue(value);
-		smartUpdate("value", this.coerceToString(this.getValue()));
-	}
+	
 	/** Returns the date format of the time only,
 	 *
 	 * <p>Default: it uses SimpleDateFormat to format the date.

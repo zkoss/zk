@@ -7,6 +7,7 @@
 	font-size: ${fontSizeM};
 	font-weight: normal;
 	width: 215px;
+	padding: 2px;
 }
 .z-datebox-pp .z-calendar {
 	border: 0 none;
@@ -21,8 +22,12 @@
 	position: relative;
 	width : 10px;
 	padding-bottom:10px;
+	width: 16px;
 }
-.z-calendar-left {
+.z-calendar-left, .z-calendar-right {
+	position:relative;
+}
+.z-calendar-left-icon {
 	border-right: 6px solid #656565;
 	border-top: 6px solid white;
 	border-bottom: 6px solid white;
@@ -33,8 +38,9 @@
 	cursor: pointer;
 	font-size: 0;
 	line-height: 0;
+	right: 0;
 }
-.z-calendar-right {
+.z-calendar-right-icon {
 	border-left: 6px solid #656565;
 	border-top: 6px solid white;
 	border-bottom: 6px solid white;
@@ -44,7 +50,14 @@
 	position: absolute;
 	cursor: pointer;
 	font-size: 0;
+	left: 0;
 	line-height: 0;
+}
+.z-calendar-right-icon-disd {
+	border-left: 6px solid #D9DADA;
+}
+.z-calendar-left-icon-disd {
+	border-right: 6px solid #D9DADA;
 }
 /*.z-calendar-calyear*/ 
 .z-datebox-calyear {
@@ -64,7 +77,7 @@
 }
 .z-calendar-calyear td,
 .z-calendar-calmon td {
-	padding: 9px 3px;
+	padding: 12px 3px;
 	text-align: center;
 	cursor: pointer;
 }
@@ -77,6 +90,13 @@
 	cursor: pointer; 
 	text-decoration: none;
 	-moz-user-select: none;
+}
+
+.z-calendar-calyear td a,
+.z-calendar-calyear td a:visited,
+.z-calendar-calmon td a,
+.z-calendar-calmon td a:visited {
+	font-size: ${fontSizeM};
 }
 .z-calendar-calday td {
 	padding: 3px;
@@ -100,8 +120,9 @@
 .z-calendar td.z-calendar-over-seld a {
 	color: white;
 }
-
-/*.z-calendar-caldow td,*/
+.z-calendar-caldow td {
+	text-align: center;
+}
 .z-datebox-caldow td {
 	font-size: ${fontSizeS}; color: #333; font-weight: bold;
 	padding: 1px 2px; background: #e8e8f0; text-align: center;
