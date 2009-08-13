@@ -334,10 +334,8 @@ zk.Widget = zk.$extends(zk.Object, {
 	getSpaceOwner: _zkf,
 	$f: _zkf = function (id, global) {
 		var f = this.$o();
-		if (f) {
-			f = f._fellows[id];
-			return f || !global || zk.spaceless ? f: _globals[id];
-		}
+		if (f) f = f._fellows[id];
+		return f || !global || zk.spaceless ? f: _globals[id];
 	},
 	getFellow: _zkf,
 	getId: function () {
@@ -1583,6 +1581,7 @@ zk.Desktop = zk.$extends(zk.Widget, {
 			} else if (!zkdt._dt)
 				zkdt._dt = dt;
 		}
+		return zkdt._dt;
 	}
 });
 

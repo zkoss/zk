@@ -17,9 +17,20 @@ zjq = function (jq) { //ZK extension
 };
 zk.override(jq.fn, zjq._fn = {}, {
 	init: function (sel, ctx) {
+		var cc;
+		if (typeof sel == 'string') {
+			cc = sel.charAt(0);
+			if (cc == '@' || cc == '$') {
+				var id = sel.substring(1), wgt;
+				if ((cc == '$' || !(sel=document.getElementById(id)))
+				&& (!(wgt=zk.Desktop.sync()) || !(wgt=wgt.$f(id, true))
+					|| !(sel=wgt.$n())))
+					sel = '#' + id;
+			}
+		}
 		if (ctx === zk) {
-			if (sel && typeof sel == 'string'
-			&& zUtl.isChar(sel.charAt(0), {digit:1,upper:1,lower:1,'_':1})) {
+			if (typeof sel == 'string'
+			&& zUtl.isChar(cc, {digit:1,upper:1,lower:1,'_':1})) {
 				var el = document.getElementById(sel);
 				if (!el || el.id == sel) {
 					var ret = jq(el || []);
