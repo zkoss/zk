@@ -24,7 +24,7 @@ zDateFormat = {
 	},
 	digitFixed : function (val, digits) {
 		var s = "" + val;
-		for (var j = digits - s.length; j--;)
+		for (var j = digits - s.length; --j >= 0;)
 			s = "0" + s;
 		return s;
 	},
