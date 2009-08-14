@@ -418,6 +418,7 @@ span.z-upload input {
 .zk option {
 	font-family: ${fontFamilyC};
 	font-size: ${fontSizeXS}; font-weight: normal;
+	overflow: hidden;
 }
 </c:when>
 <c:otherwise>

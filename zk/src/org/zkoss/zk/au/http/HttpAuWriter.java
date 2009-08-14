@@ -44,11 +44,22 @@ public class HttpAuWriter implements AuWriter{
 	 */
 	private JSONObject _out;
 	private JSONArray _rs;
+	private boolean _compress = true;
 
 	public HttpAuWriter() {
 	}
 
+	/** Returns whether to compress the output.
+	 * @since 3.6.3
+	 */
+	public boolean isCompress() {
+		return _compress;
+	}
+
 	//AuWriter//
+	public void setCompress(boolean compress) {
+		_compress = compress;
+	}
 	/** Opens the connection.
 	 *
 	 * <p>Default: it creates an object to store the responses.
@@ -74,7 +85,7 @@ public class HttpAuWriter implements AuWriter{
 
 		//Use OutputStream due to Bug 1528592 (Jetty 6)
 		byte[] data = getResult().getBytes("UTF-8");
-		if (data.length > 200) {
+		if (_compress && data.length > 200) {
 			byte[] bs = Https.gzip(hreq, hres, null, data);
 			if (bs != null) data = bs; //yes, browser support compress
 		}

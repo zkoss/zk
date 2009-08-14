@@ -161,7 +161,7 @@ public class WebManager {
 
 		//after zk.xml is loaded since it depends on the configuration
 		_cwr = ClassWebResource.getInstance(_ctx, _updateURI);
-		_cwr.setCompress(new String[] {"js", "css", "html", "xml"});
+		_cwr.setCompress(new String[] {"js", "css", "html", "xml", "zul"});
 		String s = Library.getProperty("org.zkoss.web.util.resource.dir");
 		if (s != null && s.length() > 0) {
 			if (s.charAt(0) != '/') s = '/' + s;

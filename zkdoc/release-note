@@ -73,6 +73,7 @@ August, 2009
   2811973: Log the event thread that takes too long to execute
   2813778: Upgrade to jython 2.5
   2817733: doModal degenerate to doHilighted if event thread disabled
+  2836829: A way to disable the compress of DHtmlUpdateServlet
 
 * Bugs
   2813877: Window resize outline miss
@@ -90,6 +91,8 @@ August, 2009
   2816139: zul.xsd error in ZK 3.6.2 (with Eclipse 3.4 Ganymede)
   2830325: FieldComparator not castable to ListItemComparator
   2831915: Fail to create components in working thread if using el 
+  2835471: Panel's title disappear if caption exist.
+  2837303: Progressmeter's height cannot be shortened 
 
 	--------
 ZK 3.6.2
