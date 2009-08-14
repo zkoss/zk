@@ -108,8 +108,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 		}
 
 		param = config.getInitParameter("compress");
-		if (param != null)
-			_compress = "true".equals(param);
+		_compress = param == null || param.length() == 0 || "true".equals(param);
 
 		_ctx = config.getServletContext();
 		_webman = WebManager.getWebManagerIfAny(_ctx);

@@ -7,6 +7,7 @@ August, 2009
   2811973: Log the event thread that takes too long to execute
   2813778: Upgrade to jython 2.5
   2817733: doModal degenerate to doHilighted if event thread disabled
+  2836829: A way to disable the compress of DHtmlUpdateServlet
 
 * Bugs
   2813877: Window resize outline miss

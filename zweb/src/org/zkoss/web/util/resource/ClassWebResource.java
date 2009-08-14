@@ -22,7 +22,9 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.net.URL;
+import java.io.OutputStream;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -38,7 +40,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.zkoss.lang.D;
 import org.zkoss.lang.Objects;
+import org.zkoss.lang.Exceptions;
 import org.zkoss.io.Files;
+import org.zkoss.io.WriterOutputStream;
 import org.zkoss.util.FastReadArray;
 import org.zkoss.util.logging.Log;
 import org.zkoss.util.media.ContentTypes;
@@ -77,7 +81,7 @@ public class ClassWebResource {
 	private final String _mappingURI;
 	private final CWC _cwc;
 	/** An array of extensions that have to be compressed (with gzip). */
-	private String[] _compressExts;
+	private Set _compressExts;
 	/** Map(String ext, Extendlet). */
 	private final Map _extlets = new HashMap(4);
 	/** Filers for requests. Map(String ext, FastReadArray(Filter)). */
@@ -375,7 +379,14 @@ public class ClassWebResource {
 	 *@since 2.4.1
 	 */
 	public void setCompress(String[] exts) {
-		_compressExts = exts != null && exts.length > 0 ? exts: null;
+		if (exts != null && exts.length > 0) {
+			final Set set = new LinkedHashSet();
+			for (int j = exts.length; --j >= 0;)
+				set.add(exts[j]);
+			_compressExts = set;
+		} else {
+			_compressExts = null;
+		}
 	}
 	/**Returns the extension that shall be compressed if the browser
 	 * supports the compression encoding (accept-encoding).
@@ -384,7 +395,9 @@ public class ClassWebResource {
 	 *@since 2.4.1
 	 */
 	public String[] getCompress() {
-		return _compressExts;
+		return _compressExts != null ?
+			(String[])_compressExts.toArray(new String[_compressExts.size()]):
+			null;
 	}
 
 	/** Returns whether to debug JavaScript files.
@@ -531,12 +544,13 @@ public class ClassWebResource {
 			is = getResourceAsStream(pi);
 		}
 
+		boolean compressed = false;
 		byte[] data;
 		if (is == null) {
 			if ("js".equals(ext)) {
 				//Don't sendError. Reason: 1) IE waits and no onerror fired
 				//2) better to debug (user will tell us what went wrong)
-				data = ("(window.zk&&zk.error?zk.error:alert)('"+pi+" not found');").getBytes();
+				data = ("(window.zk&&zk.error?zk.error:alert)('"+pi+" not found');").getBytes("UTF-8");
 					//FUTURE: zweb shall not depend on zk
 			} else {
 				if (Servlets.isIncluded(request)) log.error("Resource not found: "+pi);
@@ -547,9 +561,13 @@ public class ClassWebResource {
 			//Note: don't compress images
 			data = shallCompress(request, ext) ?
 				Https.gzip(request, response, is, extra): null;
-			if (data != null) extra = null; //extra is compressed and output
-			else data = Files.readAll(is);
+			if (data != null) { //compressed
+				compressed = true;
+				extra = null;
+			} else {
+				data = Files.readAll(is);
 				//since what is embedded in the jar is not big, so load completely
+			}
 
 			try {
 				is.close(); //just in case
@@ -561,18 +579,39 @@ public class ClassWebResource {
 		if (extra != null) len += extra.length;
 		response.setContentLength(len);
 
-		final ServletOutputStream out = response.getOutputStream();
+		OutputStream out;
+		if (Servlets.isIncluded(request)) { //usually getWriter
+			try {
+				out = new WriterOutputStream(response.getWriter(), "UTF-8");
+				//Not response.getCharacterEncoding becauses it is for "data"
+			} catch (IllegalStateException ex) {
+				try {
+					out = response.getOutputStream();
+				} catch (Throwable t) {
+					log.warning("getOutputStream: failed" + Exceptions.getMessage(t));
+					throw ex;
+				}
+			}
+		} else {
+			try {
+				out = response.getOutputStream();
+			} catch (IllegalStateException ex) {
+				if (compressed) throw ex;
+				try {
+					out = new WriterOutputStream(response.getWriter(), "UTF-8");
+				} catch (Throwable t) {
+					log.warning("getWriter: failed" + Exceptions.getMessage(t));
+					throw ex;
+				}
+			}
+		}
 		out.write(data);
 		if (extra != null) out.write(extra);
 		out.flush();
 	}
 	private boolean shallCompress(ServletRequest request, String ext) {
-		if (ext != null && _compressExts != null
-		&& !Servlets.isIncluded(request))
-			for (int j = 0; j < _compressExts.length; ++j)
-				if (ext.equals(_compressExts[j]))
-					return true;
-		return false;
+		return _compressExts != null && _compressExts.contains(ext)
+			&& !Servlets.isIncluded(request);
 	}
 
 	/**

@@ -84,6 +84,8 @@ import org.zkoss.zk.device.Device;
  * <p>Init parameters:
  *
  * <dl>
+ * <dt>compress</dt>
+ * <dd>It specifies whether to compress the output if the browser supports the compression (Accept-Encoding).</dd>
  * <dt>processor0, processor1...</dt>
  * <dd>It specifies an AU processor ({@link AuProcessor}).
  * The processor0 parameter specifies
@@ -106,6 +108,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		= "org.zkoss.zk.au.http.updateServlet";
 	private static final String ATTR_AU_PROCESSORS
 		= "org.zkoss.zk.au.http.auProcessors";
+	private boolean _compress = true;
 
 	private ServletContext _ctx;
 	private long _lastModified;
@@ -156,7 +159,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		}
 
 		//Copies au processors defined before DHtmlUpdateServlet is started
-		final WebApp wapp = WebManager.getWebManager(_ctx).getWebApp();
+		final WebManager webman = WebManager.getWebManager(_ctx);
+		final WebApp wapp = webman.getWebApp();
 		final Map procs = (Map)wapp.getAttribute(ATTR_AU_PROCESSORS);
 		if (procs != null) {
 			for (Iterator it = procs.entrySet().iterator(); it.hasNext();) {
@@ -165,6 +169,11 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			}
 			wapp.removeAttribute(ATTR_AU_PROCESSORS);
 		}
+
+		String param = config.getInitParameter("compress");
+		_compress = param == null || param.length() == 0 || "true".equals(param);
+		if (!_compress)
+			webman.getClassWebResource().setCompress(null); //disable all
 
 		if (getAuProcessor("/upload") == null) {
 			try {
@@ -479,10 +488,11 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			new ExecutionImpl(_ctx, request, response, desktop, null);
 		if (sid != null)
 			((ExecutionCtrl)exec).setRequestId(sid);
-		final AuWriter out = AuWriters.newInstance()
-			.open(request, response,
-				desktop.getDevice().isSupported(Device.RESEND) ?
-					config.getResendDelay() / 2 - 500: 0);
+		final AuWriter out = AuWriters.newInstance();
+		out.setCompress(_compress);
+		out.open(request, response,
+			desktop.getDevice().isSupported(Device.RESEND) ?
+				config.getResendDelay() / 2 - 500: 0);
 				//Note: getResendDelay() might return nonpositive
 		wappc.getUiEngine().execUpdate(exec, aureqs, out);
 

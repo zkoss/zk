@@ -44,11 +44,23 @@ public class HttpAuWriter implements AuWriter{
 	/** The writer used to generate the output to.
 	 */
 	protected StringWriter _out;
+	private boolean _compress = true;
 
 	public HttpAuWriter() {
 	}
 
+	/** Returns whether to compress the output.
+	 * @since 3.6.3
+	 */
+	public boolean isCompress() {
+		return _compress;
+	}
+
 	//AuWriter//
+	public void setCompress(boolean compress) {
+		_compress = compress;
+	}
+
 	/** Returns au to represent the response channel for AU requests.
 	 * @since 3.5.0
 	 */
@@ -88,7 +100,7 @@ public class HttpAuWriter implements AuWriter{
 	throws IOException {
 		//Use OutputStream due to Bug 1528592 (Jetty 6)
 		byte[] data = _out.toString().getBytes("UTF-8");
-		if (data.length > 200) {
+		if (_compress && data.length > 200) {
 			byte[] bs = Https.gzip(request, response, null, data);
 			if (bs != null) data = bs; //yes, browser support compress
 		}

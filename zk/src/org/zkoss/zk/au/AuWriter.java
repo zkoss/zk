@@ -33,6 +33,11 @@ import java.io.IOException;
  * @see AuWriters#setImplementationClass
  */
 public interface AuWriter {
+	/** Sets whether to compress the output with GZIP.
+	 * <p>Default: true.
+	 * @since 3.6.3
+	 */
+	public void setCompress(boolean compress);
 	/** Returns the request channel.
 	 * A channel is a kind of connections between client and server.
 	 * For example, AU is "au", while Comet is "cm".

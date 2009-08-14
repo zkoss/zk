@@ -156,7 +156,7 @@ public class WebManager {
 
 		//after zk.xml is loaded since it depends on the configuration
 		_cwr = ClassWebResource.getInstance(_ctx, _updateURI);
-		_cwr.setCompress(new String[] {"js", "css", "html", "xml"});
+		_cwr.setCompress(new String[] {"js", "css", "html", "xml", "zul"});
 
 		Labels.register(new ServletLabelLocator(_ctx));
 		Labels.setVariableResolver(new ServletLabelResovler());

@@ -134,7 +134,7 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
 		final RequestInfo ri = new RequestInfoImpl(
 			wapp, sess, desktop, request, PageDefinitions.getLocator(wapp, path));
 
-		final boolean compress = !Servlets.isIncluded(request);
+		final boolean compress = _webctx.shallCompress(request, "zul");
 		final Page page = WebManager.newPage(
 			wappc.getUiFactory(), ri, pagedef, response, path);
 		final Execution exec = new ExecutionImpl(

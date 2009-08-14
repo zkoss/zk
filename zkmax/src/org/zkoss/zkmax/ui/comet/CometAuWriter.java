@@ -41,6 +41,12 @@ import org.zkoss.zk.au.AuResponse;
 	private Writer _out;
 
 	//AuWriter//
+	/** CometAuWriter doesn't support compression.
+	 * This method has no effect.
+	 * @since 3.6.3
+	 */
+	public void setCompress(boolean compress) {
+	}
 	/** Returns au to represent the response channel for AU requests.
 	 */
 	public String getChannel() {
