@@ -46,15 +46,15 @@ zk = function (sel) {
 		&& !jq("#zk_proc").length && !jq("#zk_showBusy").length)
 			zUtl.progressbox("zk_proc", window.mesg?mesg.PLEASE_WAIT:'Processing...', mask);
 	}
-	function toLogMsg(ars) {
+	function toLogMsg(ars, isDetailed) {
 		var msg = [];
 		for (var j = 0, len = ars.length; j < len; j++) {
 			if (msg.length) msg.push(", ");
 			var ar = ars[j];
 			if (ar && ar.$array) 
-				msg.push('[' + toLogMsg(ar) + ']');
+				msg.push('[' + toLogMsg(ar, isDetailed) + ']');
 			else {
-				if (zk.log.detailed && ar && !ar.nodeType) {
+				if (isDetailed && ar && !ar.nodeType) {
 					var s = ['{\n'];
 					for (var v in ar) 
 						s.push(v, ':', ar[v], ',\n');
@@ -273,8 +273,17 @@ zk = function (sel) {
 		for (var j = errcnt; --j >= 0;)
 			jq("#zk_err" + j).remove();
 	},
-	log: function () {
-		var msg = toLogMsg(arguments);
+	log: function (detailed) {		
+		var msg = toLogMsg(
+			(detailed !== zk) ? arguments :
+				(function (args) {
+					var a = [];
+					for (var j = args.length; --j > 0;)
+						a.unshift(args[j]);
+					return a;
+				})(arguments)
+			, (detailed === zk)
+		);
 		logmsg = (logmsg ? logmsg + msg: msg) + '\n';
 		setTimeout(function(){jq(doLog);}, 300);
 	},
