@@ -81,6 +81,7 @@ import org.zkoss.zk.ui.util.Configuration;
 public class WpdExtendlet extends AbstractExtendlet {
 	public void init(ExtendletConfig config) {
 		init(config, new WpdLoader());
+		config.addCompressExtension("wpd");
 	}
 
 	public void service(HttpServletRequest request,
@@ -105,7 +106,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 		}
 
 		response.setContentType("text/javascript;charset=UTF-8");
-		if (data.length > 200) {
+		if (_webctx.shallCompress(request, "wpd") && data.length > 200) {
 			byte[] bs = Https.gzip(request, response, null, data);
 			if (bs != null) data = bs; //yes, browser support compress
 		}

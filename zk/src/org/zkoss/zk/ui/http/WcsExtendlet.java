@@ -50,6 +50,7 @@ import org.zkoss.zk.ui.metainfo.LanguageDefinition;
 public class WcsExtendlet extends AbstractExtendlet {
 	public void init(ExtendletConfig config) {
 		init(config, new WcsLoader());
+		config.addCompressExtension("wcs");
 	}
 	public void service(HttpServletRequest request,
 	HttpServletResponse response, String path, String extra)
@@ -88,7 +89,7 @@ public class WcsExtendlet extends AbstractExtendlet {
 
 		response.setContentType("text/css;charset=UTF-8");
 		byte[] data = sw.getBuffer().toString().getBytes("UTF-8");
-		if (data.length > 200) {
+		if (_webctx.shallCompress(request, "wcs") && data.length > 200) {
 			byte[] bs = Https.gzip(request, response, null, data);
 			if (bs != null) data = bs; //yes, browser support compress
 		}
