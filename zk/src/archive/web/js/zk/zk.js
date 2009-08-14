@@ -47,14 +47,29 @@ zk = function (sel) {
 			zUtl.progressbox("zk_proc", window.mesg?mesg.PLEASE_WAIT:'Processing...', mask);
 	}
 	function toLogMsg(ars) {
-		var msg = '';
+		var msg = [];
 		for (var j = 0, len = ars.length; j < len; j++) {
-			if (msg) msg += ", ";
+			if (msg.length) msg.push(", ");
 			var ar = ars[j];
-			if (ar && ar.$array) msg += '[' + toLogMsg(ar) + ']';
-			else msg += ar;
+			if (ar && ar.$array) 
+				msg.push('[' + toLogMsg(ar) + ']');
+			else {
+				if (zk.log.detailed && ar && !ar.nodeType) {
+					var s = ['{\n'];
+					for (var v in ar) 
+						s.push(v, ':', ar[v], ',\n');
+					if (s[s.length - 1] == ',\n') 
+						s.pop();
+					s.push('\n}');
+					msg.push(s.join(''));
+				} else {
+					msg.push(ar);
+					if (ar && ar.nodeType)
+						msg.push('-tagName:', ar.tagName);
+				}
+			}
 		}
-		return msg;
+		return msg.join('');
 	}
 	function doLog() {
 		if (logmsg) {
