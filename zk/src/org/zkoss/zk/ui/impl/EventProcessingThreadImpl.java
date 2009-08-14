@@ -468,10 +468,8 @@ implements EventProcessingThread {
 						Locales.setThreadLocal(_locale = null);
 						TimeZones.setThreadLocal(_timeZone = null);
 
-						if (_ex != null) {
-							if (_ceased == null) log.realCause(_ex);
-							_ex = null;
-						}
+						if (_ex != null && _ceased != null)
+							_ex = null; //avoid anoying message (Bug 2819521)
 					}
 				}
 
