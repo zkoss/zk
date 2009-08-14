@@ -11,6 +11,7 @@
 .z-caption .z-toolbar, .z-caption .z-toolbarbutton {
 	background: none; border: 0;
 }
+.z-toolbar-tabs-body, .z-toolbar-tabs-body span,
 .z-toolbar-body, .z-toolbar-body span {
 	font-size: ${fontSizeS};
 }
