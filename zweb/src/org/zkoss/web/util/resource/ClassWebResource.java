@@ -287,6 +287,13 @@ public class ClassWebResource {
 			public ExtendletContext getExtendletContext() {
 				return _cwc;
 			}
+			public void addCompressExtension(String ext) {
+				synchronized (ClassWebResource.this) {
+					if (_compressExts == null)
+						_compressExts = new LinkedHashSet();
+					_compressExts.add(ext);
+				}
+			}
 		});
 
 		ext = ext.toLowerCase();

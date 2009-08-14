@@ -30,4 +30,10 @@ public interface ExtendletConfig {
 	/** Returns the Extendlet context.
 	 */
 	public ExtendletContext getExtendletContext();
+	/** Adds an extension that shall be compressed (unless being disabled
+	 * by the client).
+	 * @param ext
+	 * @since 5.0.0
+	 */
+	public void addCompressExtension(String ext);
 }

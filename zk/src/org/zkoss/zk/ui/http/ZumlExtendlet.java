@@ -85,6 +85,8 @@ import org.zkoss.zk.ui.impl.RequestInfoImpl;
 		_cache.setLifetime(60*60*1000); //1hr
 		final int checkPeriod = loader.getCheckPeriod();
 		_cache.setCheckPeriod(checkPeriod >= 0 ? checkPeriod: 60*60*1000); //1hr
+
+		config.addCompressExtension("zul");
 	}
 	public boolean getFeature(int feature) {
 		return false; //not support ALLOW_DIRECT_INCLUDE
