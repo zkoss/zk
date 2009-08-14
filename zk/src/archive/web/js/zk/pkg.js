@@ -203,12 +203,14 @@ zk.copy(zk, (function() {
 			a = b;
 		}
 
-		if (zk.loading || _loadedsemis.length) {
-			(front ? _afterLoadFronts: _afterLoads).push(a);
-			return false;
+		if (a) {
+			if (zk.loading || _loadedsemis.length) {
+				(front ? _afterLoadFronts: _afterLoads).push(a);
+				return false;
+			}
+			a();
+			return true;
 		}
-		a();
-		return true;
 	},
 	getHost: function (pkg, au) {
 		for (var p in _pkghosts)

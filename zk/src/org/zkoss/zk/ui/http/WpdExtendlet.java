@@ -428,7 +428,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 		if (j >= 0)
 			sb.append("\nzk.load('")
 				.append(main.substring(0, j))
-				.append("',function(){");
+				.append("',function(){\n");
 
 		sb.append("zk.afterMount(function(){\n").append(main).append(".main(");
 
@@ -444,7 +444,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 		}
 
 		sb.append(JSONObject.toJSONString(ms))
-			.append(")})");
+			.append(");})");
 		if (j >= 0)
 			sb.append("})");
 		return sb.toString();

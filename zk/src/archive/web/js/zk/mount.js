@@ -104,12 +104,15 @@ function zkmld(wgtcls, molds) {
 		_aftMounts = []; //afterMount funcs
 
 	zk.afterMount = function (fn) { //part of zk
-		if (zk.mounting || !jq.isReady) {
-			_aftMounts.push(fn);
-			return true;
+		if (fn)  {
+			if (zk.loading)
+				return zk.afterLoad(fn);
+			if (!jq.isReady && !zk.mounting)
+				return jq(fn);
+			if (zk.mounting)
+				return _aftMounts.push(fn);
+			setTimeout(fn, 0);
 		}
-		if (zk.loading) zk.afterLoad(fn);
-		else setTimeout(fn, 0);
 	};
 
 	function mount() {
