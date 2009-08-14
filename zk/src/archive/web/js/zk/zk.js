@@ -54,7 +54,7 @@ zk = function (sel) {
 			if (ar && ar.$array) 
 				msg.push('[' + toLogMsg(ar, isDetailed) + ']');
 			else {
-				if (isDetailed && ar && !ar.nodeType) {
+				if (isDetailed && ar && (typeof ar == 'object') && !ar.nodeType) {
 					var s = ['{\n'];
 					for (var v in ar) 
 						s.push(v, ':', ar[v], ',\n');
