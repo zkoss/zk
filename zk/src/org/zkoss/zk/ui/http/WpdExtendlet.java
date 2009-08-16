@@ -423,14 +423,12 @@ public class WpdExtendlet extends AbstractExtendlet {
 	}
 
 	private static String outMain(String main, Map params) {
-		final StringBuffer sb = new StringBuffer();
+		final StringBuffer sb = new StringBuffer("\nzkamn('");
 		final int j = main.lastIndexOf('.');
 		if (j >= 0)
-			sb.append("\nzk.load('")
-				.append(main.substring(0, j))
-				.append("',function(){\n");
+			sb.append(main.substring(0, j));
 
-		sb.append("zk.afterMount(function(){\n").append(main).append(".main(");
+		sb.append("',function(){\n").append(main).append(".main(");
 
 		final Map ms = new LinkedHashMap();
 		for (Iterator it = params.entrySet().iterator(); it.hasNext();) {
@@ -443,10 +441,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 			}
 		}
 
-		sb.append(JSONObject.toJSONString(ms))
-			.append(");})");
-		if (j >= 0)
-			sb.append("})");
+		sb.append(JSONObject.toJSONString(ms)).append(")\n})");
 		return sb.toString();
 	}
 	private static String outHost(HttpServletRequest request,

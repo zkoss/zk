@@ -97,6 +97,14 @@ function zkmld(wgtcls, molds) {
 	}		
 }
 
+function zkamn(pkg, fn) { //for Ajax-as-a-service's main
+	zk.load(pkg, function () {
+		setTimeout(function(){
+			zk.afterMount(fn)
+		}, 20);
+	});
+}
+
 (function () { //zk.mnt
 	var _wgts = [],
 		_createInf0 = [], //create info
