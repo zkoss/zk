@@ -209,7 +209,7 @@ zk.copy(zk, (function() {
 				return false;
 			}
 			if (!jq.isReady) {
-				jq(fn);
+				jq(a);
 				return false;
 			}
 			a();
