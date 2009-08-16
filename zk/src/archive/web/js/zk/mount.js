@@ -105,10 +105,10 @@ function zkmld(wgtcls, molds) {
 
 	zk.afterMount = function (fn) { //part of zk
 		if (fn)  {
-			if (zk.loading)
-				return zk.afterLoad(fn);
 			if (zk.mounting)
 				return _aftMounts.push(fn);
+			if (zk.loading)
+				return zk.afterLoad(fn);
 			if (!jq.isReady)
 				return jq(fn);
 			setTimeout(fn, 0);
