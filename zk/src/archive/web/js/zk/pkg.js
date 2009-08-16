@@ -208,6 +208,10 @@ zk.copy(zk, (function() {
 				(front ? _afterLoadFronts: _afterLoads).push(a);
 				return false;
 			}
+			if (!jq.isReady) {
+				jq(fn);
+				return false;
+			}
 			a();
 			return true;
 		}
