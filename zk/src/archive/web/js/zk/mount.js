@@ -368,7 +368,7 @@ jq(function() {
 			wevt.domEvent.stop();
 	}
 	
-	function _docMouseDown(evt, wgt, fake) {
+	function _docMouseDown(evt, wgt, noFocusChange) {
 		zk.lastPointer[0] = evt.pageX;
 		zk.lastPointer[1] = evt.pageY;
 
@@ -376,7 +376,7 @@ jq(function() {
 
 		var target = evt.domTarget;
 		if (target != document.body && target != document.body.parentNode) //not click on scrollbar
-			zk.Widget._domMouseDown(wgt, fake); //wgt is null if mask
+			zk.Widget.mimicMouseDown_(wgt, noFocusChange); //wgt is null if mask
 
 		if (wgt)
 			_doEvt(evt);

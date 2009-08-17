@@ -70,7 +70,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				}
 				return; //ignore it
 			case 'blur':
-				//due to _domMouseDown called, zk.currentFocus already corrected,
+				//due to mimicMouseDown_ called, zk.currentFocus already corrected,
 				//so we clear it only if caused by other case
 				if (!zk._cfByMD) zk.currentFocus = null;
 				break;
@@ -1439,7 +1439,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		return null;
 	},
 
-	_domMouseDown: function (wgt, fake) { //called by mount
+	mimicMouseDown_: function (wgt, noFocusChange) { //called by mount
 		var modal = zk.currentModal;
 		if (modal && !wgt) {
 			var cf = zk.currentFocus;
@@ -1448,7 +1448,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			if (cf && zUtl.isAncestor(modal, cf)) cf.focus(0);
 			else modal.focus(0);
 		} else if (!wgt || wgt.canActivate()) {
-			if (!fake) {
+			if (!noFocusChange) {
 				zk.currentFocus = wgt;
 				zk._cfByMD = true;
 				setTimeout(function(){zk._cfByMD = false;}, 0);
