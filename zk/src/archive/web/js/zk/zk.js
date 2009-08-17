@@ -51,9 +51,13 @@ zk = function (sel) {
 		for (var j = 0, len = ars.length; j < len; j++) {
 			if (msg.length) msg.push(", ");
 			var ar = ars[j];
-			if (ar && ar.$array) 
+			if (ar && (ar.$array || ar.jquery)) //ar.zk: jq(xx)
 				msg.push('[' + toLogMsg(ar, isDetailed) + ']');
-			else if (isDetailed && ar && (typeof ar == 'object') && !ar.nodeType) {
+			else if (ar && ar.nodeType) {
+				var w = zk.Widget.$(ar);
+				if (w) msg.push(w.className.substring(w.className.lastIndexOf('.')+1), '@', w.id);
+				else msg.push(ar.tagName, '#', ar.id);
+			} else if (isDetailed && ar && (typeof ar == 'object') && !ar.nodeType) {
 				var s = ['{\n'];
 				for (var v in ar) 
 					s.push(v, ':', ar[v], ',\n');
@@ -61,11 +65,8 @@ zk = function (sel) {
 					s.pop();
 				s.push('\n}');
 				msg.push(s.join(''));
-			} else {
+			} else
 				msg.push(ar);
-				if (ar && ar.nodeType)
-					msg.push(':', ar.tagName, '#', ar.id);
-			}
 		}
 		return msg.join('');
 	}
