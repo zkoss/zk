@@ -51,7 +51,7 @@ zk = function (sel) {
 		for (var j = 0, len = ars.length; j < len; j++) {
 			if (msg.length) msg.push(", ");
 			var ar = ars[j];
-			if (ar && (ar.$array || ar.jquery)) //ar.zk: jq(xx)
+			if (ar && (ar.$array || ar.zk)) //ar.zk: jq(xx)
 				msg.push('[' + toLogMsg(ar, isDetailed) + ']');
 			else if (ar && ar.nodeType) {
 				var w = zk.Widget.$(ar);
