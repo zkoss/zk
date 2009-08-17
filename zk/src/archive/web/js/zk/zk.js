@@ -53,20 +53,18 @@ zk = function (sel) {
 			var ar = ars[j];
 			if (ar && ar.$array) 
 				msg.push('[' + toLogMsg(ar, isDetailed) + ']');
-			else {
-				if (isDetailed && ar && (typeof ar == 'object') && !ar.nodeType) {
-					var s = ['{\n'];
-					for (var v in ar) 
-						s.push(v, ':', ar[v], ',\n');
-					if (s[s.length - 1] == ',\n') 
-						s.pop();
-					s.push('\n}');
-					msg.push(s.join(''));
-				} else {
-					msg.push(ar);
-					if (ar && ar.nodeType)
-						msg.push('-tagName:', ar.tagName);
-				}
+			else if (isDetailed && ar && (typeof ar == 'object') && !ar.nodeType) {
+				var s = ['{\n'];
+				for (var v in ar) 
+					s.push(v, ':', ar[v], ',\n');
+				if (s[s.length - 1] == ',\n') 
+					s.pop();
+				s.push('\n}');
+				msg.push(s.join(''));
+			} else {
+				msg.push(ar);
+				if (ar && ar.nodeType)
+					msg.push(':', ar.tagName, '#', ar.id);
 			}
 		}
 		return msg.join('');
