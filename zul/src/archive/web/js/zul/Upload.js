@@ -63,7 +63,7 @@ zul.Upload = zk.$extends(zk.Object, {
 		jq(inp).change(zul.Upload._onchange);
 	},
 	destroy: function () {
-		jq(this._outer||[]).remove();
+		jq(this._outer).remove();
 		this._wgt = this._parent = null;
 		for (var v in this.uploaders) {
 			var uplder = this.uploaders[v];

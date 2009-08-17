@@ -40,7 +40,7 @@ zk.eff.Shadow = zk.$extends(zk.Object, {
 	},
 	destroy: function () {
 		jq(this.shadow).remove();
-		jq(this.stackup||[]).remove(); //might null
+		jq(this.stackup).remove();
 		this.node = this.shadow = this.stackup = null;
 	},
 	hide: function(){
@@ -146,7 +146,7 @@ zk.eff.FullMask = zk.$extends(zk.Object, {
 			.remove()
 		jq(window).unbind("resize", f = this.proxy(this._syncPos))
 			.unbind("scroll", f);
-		jq(this.stackup||[]).remove();
+		jq(this.stackup).remove();
 		this.mask = this.stackup = null;
 	},
 	hide: function () {
