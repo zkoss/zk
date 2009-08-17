@@ -15,7 +15,19 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zjq = function (jq) { //ZK extension
 	this.jq = jq;
 };
-zk.override(jq.fn, zjq._fn = {}, {
+(function () {
+	var jq$super = {};
+
+	function _elmOfWgt(id, ctx) {
+		var w, w2;
+		if (ctx && ctx !== zk) {
+			if (ctx.zk) ctx = ctx[0]; //jq(xx)
+			if (ctx) w = zk.Widget.$(ctx);
+		}
+		return (w2=w||zk.Desktop.sync()) && (w2=w2.$f(id, !w)) ? w2.$n(): null;
+	}
+
+zk.override(jq.fn, jq$super, {
 	init: function (sel, ctx) {
 		var cc;
 		if (typeof sel == 'string') {
@@ -23,8 +35,7 @@ zk.override(jq.fn, zjq._fn = {}, {
 			if (cc == '@' || cc == '$') {
 				var id = sel.substring(1), wgt;
 				if ((cc == '$' || !(sel=document.getElementById(id)))
-				&& (!(wgt=zk.Desktop.sync()) || !(wgt=wgt.$f(id, true))
-					|| !(sel=wgt.$n())))
+				&& !(sel=_elmOfWgt(id, ctx)))
 					sel = '#' + id;
 			}
 		}
@@ -45,13 +56,13 @@ zk.override(jq.fn, zjq._fn = {}, {
 		}
 		if (zk.Widget && zk.Widget.isInstance(sel))
 			sel = sel.$n() || '#' + sel.uuid;
-		var ret = zjq._fn.init.call(this, sel, ctx);
+		var ret = jq$super.init.call(this, sel, ctx);
 		ret.zk = new zjq(ret);
 		return ret;
 	},
 	replaceWith: function (w, desktop, skipper) {
 		if (!zk.Widget.isInstance(w))
-			return zjq._fn.replaceWith.apply(this, arguments);
+			return jq$super.replaceWith.apply(this, arguments);
 
 		var n = this[0];
 		if (n) w.replaceHTML(n, desktop, skipper);
@@ -61,21 +72,22 @@ zk.override(jq.fn, zjq._fn = {}, {
 jq.fn.init.prototype = jq.fn;
 
 jq.each(['before','after','append','prepend'], function (i, nm) {
-	zjq._fn[nm] = jq.fn[nm];
+	jq$super[nm] = jq.fn[nm];
 	jq.fn[nm] = function (w, desktop) {
 		if (!zk.Widget.isInstance(w))
-			return zjq._fn[nm].apply(this, arguments);
+			return jq$super[nm].apply(this, arguments);
 
 		if (!this.length) return this;
 		if (!zk.Desktop._ndt) zk.stateless();
 
-		var ret = zjq._fn[nm].call(this, w._redrawHTML());
+		var ret = jq$super[nm].call(this, w._redrawHTML());
 		w.bind(desktop);
 		zWatch.fireDown('beforeSize', null, w);
 		zWatch.fireDown('onSize', null, w);
 		return ret;
 	};
 });
+})();
 
 zjq.prototype = { //ZK extension
 	widget: function () {

@@ -19,7 +19,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	var _imgFiltered = [], //filtered img
 		_IMGLD = 'DXImageTransform.Microsoft.AlphaImageLoader',
 		_FILTER = "progid:" + _IMGLD + "(src='%1',sizingMethod='scale')",
-		_inPrint;
+		_inPrint,
+		jq$super = {};
 
 	function _onpropchange() {
 	 	if (!_inPrint && event.propertyName == "src"
@@ -77,9 +78,9 @@ zk.copy(zjq, {
 	}
 });
 
-zk.override(jq.fn, zjq._fn, {
+zk.override(jq.fn, jq$super, {
 	clone: function () {
-		var clone = zjq._fn.clone.apply(this, arguments), n, nc;
+		var clone = jq$super.clone.apply(this, arguments), n, nc;
 		for (var j = 0; j < this.length; ++j) {
 			n = this[j];
 			if (n.tagName == 'IMG' && n._pngSrc) {
