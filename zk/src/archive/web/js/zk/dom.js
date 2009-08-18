@@ -69,7 +69,7 @@ zk.override(jq.fn, jq$super, {
 		return this;
 	},
 	remove: function () {
-		return this.selector ? jq$super.remove.apply(this, arguments): this;
+		return this.selector || this[0] != document ? jq$super.remove.apply(this, arguments): this;
 	}
 });
 jq.fn.init.prototype = jq.fn;

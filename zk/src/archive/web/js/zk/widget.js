@@ -334,8 +334,16 @@ zk.Widget = zk.$extends(zk.Object, {
 	getSpaceOwner: _zkf,
 	$f: _zkf = function (id, global) {
 		var f = this.$o();
-		if (f) f = f._fellows[id];
-		return f || !global || zk.spaceless ? f: _globals[id];
+		for (var ids = id.split('/'), j = 0, len = ids.length; j < len; ++j) {
+			id = ids[j];
+			if (id) {
+				if (f) f = f._fellows[id];
+				if (!f && global) f = _globals[id];
+				if (!f || zk.spaceless) break;
+				global = false;
+			}
+		}
+		return f;
 	},
 	getFellow: _zkf,
 	getId: function () {

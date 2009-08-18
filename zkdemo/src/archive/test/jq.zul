@@ -19,9 +19,16 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 	</window>
 	<label id="l" value="@l: ${self.uuid}"/>
 	<separator bar="true"/>
+	<script>
+	function getId(found) {
+		found = found[0];
+		return found ? found.id: found;
+	}
+	</script>
 	<script defer="true"><![CDATA[
 	jq('@main').append(
-		"'@l': "+jq('@l')[0].id
-		+"<br/>@sub @l:"+jq('@l', jq('@sub'))[0].id);
+		"'@l': "+getId(jq('@l'))
+		+"<br/>@sub @l: "+getId(jq('@l', jq('@sub')))
+		+"<br/>@sub/l: "+getId(jq('@sub/l')));
 	]]></script>
 </window>
