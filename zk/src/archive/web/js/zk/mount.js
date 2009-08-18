@@ -383,30 +383,9 @@ jq(function() {
 	}
 	
 	function _simFocus(wgt) {
-		var cf = zk.currentFocus;
-		if (!cf || wgt == cf)
-			return;
-
-		for (var fcfn = zk.Widget.prototype.focus, focused;; wgt = wgt.parent) {
-			if (!wgt) {
-				window.blur();
-				if (cf == zk.currentFocus)
-					for (var n = cf.$n(),
-					tns = ['INPUT','A','BUTTON'], j = tns.length; --j >=0;) {
-						var ns = n.getElementsByTagName(tns[j]);
-						if (ns.length > 0) {
-							zk(ns[0]).focus();
-							break;
-						}
-					}
-				break;
-			}
-			if (!focused || wgt.focus !== fcfn) {
-				focused = true;
-				wgt.focus();
-				if (cf != zk.currentFocus)
-					break;
-			}
+		if (wgt != zk.currentFocus) {
+			window.blur();
+			wgt.focus();
 		}
 	}
 	function _evtProxy(evt) { //handle proxy
