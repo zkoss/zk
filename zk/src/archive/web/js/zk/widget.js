@@ -22,6 +22,14 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		_domevtnm = {onDoubleClick: 'dblclick'}, //{zk-evt-nm, dom-evt-nm}
 		_wgtcls = {}; //{clsnm, cls}
 
+	function hiddenByParent(w) { //such hbox/vbox or border-layout
+		var p = w.parent;
+		if (p && p.isVisible() && (p=p.$n()) && (w=w.$n()))
+			while ((w=w.vparentNode||w.parentNode) && p != w)
+				if ((w.style||{}).display == 'none')
+					return true;
+	}
+
 	//Event Handling//
 	function _domEvtInf(wgt, evtnm, fn) { //proxy event listener
 		if (!fn) {
@@ -587,11 +595,12 @@ zk.Widget = zk.$extends(zk.Object, {
 		return true;
 	},
 
-	isRealVisible: function () {
+	isRealVisible: function (opts) {
 		for (var wgt = this; wgt; wgt = wgt.parent) {
-			if (!wgt.isVisible()) return false;
-			var n = wgt.$n();
-			if (n && !zk(n).isVisible()) return false; //possible (such as in a hbox)
+			if (!wgt.isVisible() || hiddenByParent(wgt))
+				return false;
+			if (opts && opts.until == wgt)
+				break;
 		}
 		return true;
 	},
@@ -1423,7 +1432,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			n = (e?e.z$target:null) || n.target || n; //check DOM event first
 		}
 
-		for (; n; n = n.vparent||n.parentNode) {
+		for (; n; n = n.vparentNode||n.parentNode) {
 			var id = n.id;
 			if (id) {
 				var j = id.indexOf('-');

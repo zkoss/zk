@@ -54,13 +54,47 @@ zk.Event = zk.$extends(zk.Object, {
 	F1:		112
 });
 
-zWatch = {
-	_visibleEvent: {
-		onSize: true, onShow: true, onHide: true, beforeSize: true
-	},
+zWatch = (function () {
+	var _visiEvts = {onSize: true, onShow: true, onHide: true, beforeSize: true},
+		_watches = {}, //Map(watch-name, [watch objects]
+		_dirty;
+
+	function _visi0(c) {
+		var n;
+		return c.$n && (n=c.$n()) && zk(n).isRealVisible();
+	}
+	function _visible(name, c) {
+		return _visi0(c)
+			|| (name == 'onShow'
+				&& c.isVisible() && (c.$n && (n=c.$n()) && !zk(n).isVisible())
+				&& (!c.parent || _visi0(c.parent)));
+			//if c is Window, it could be visible but c.$n.display is not (due to vparentNode)
+			//OTH, if c's parent is hbox, c.$n.display is the same as visible
+	}
+	function _visibleChild(name, p, c) {
+		if (_visible(name, c))
+			for (; c; c = c.parent)
+				if (p == c) return true;
+		return false;
+	}
+	function _sync() {
+		if (!_dirty) return;
+
+		_dirty = false;
+		for (var nm in _watches) {
+			var wts = _watches[nm];
+			if (wts.length && wts[0].bindLevel != null)
+				wts.sort(_cmpLevel);
+		}
+	}
+	function _cmpLevel(a, b) {
+		return a.bindLevel - b.bindLevel;
+	}
+
+  return {
 	listen: function (infs) {
 		for (name in infs) {
-			var wts = zWatch._wts[name],
+			var wts = _watches[name],
 				o = infs[name];
 			if (wts) {
 				var bindLevel = o.bindLevel;
@@ -78,22 +112,22 @@ zWatch = {
 				} else
 					wts.push(o);
 			} else
-				wts = zWatch._wts[name] = [o];
+				wts = _watches[name] = [o];
 		}
 		return this;
 	},
 	unlisten: function (infs) {
 		for (name in infs) {
-			var wts = zWatch._wts[name];
+			var wts = _watches[name];
 			wts && wts.$remove(infs[name]);
 		}
 		return this;
 	},
 	unlistenAll: function (name) {
-		delete zWatch._wts[name];
+		delete _watches[name];
 	},
 	fire: function (name, opts, vararg) {
-		var wts = zWatch._wts[name];
+		var wts = _watches[name];
 		if (wts && wts.length) {
 			var args = [];
 			for (var j = 2, l = arguments.length; j < l;)
@@ -101,9 +135,9 @@ zWatch = {
 
 			wts = wts.$clone(); //make a copy since unlisten might happen
 			
-			if (zWatch._visibleEvent[name])
+			if (_visiEvts[name])
 				for (var j = wts.length; j--;)
-					if (!zWatch._visible(wts[j]))
+					if (!_visible(name, wts[j]))
 						wts.splice(j, 1);
 						
 			if (opts) {
@@ -132,9 +166,9 @@ zWatch = {
 		}
 	},
 	fireDown: function (name, opts, origin, vararg) {
-		var wts = zWatch._wts[name];
+		var wts = _watches[name];
 		if (wts && wts.length) {
-			zWatch._sync();
+			_sync();
 
 			var args = [origin]; //origin as 1st
 			for (var j = 3, l = arguments.length; j < l;)
@@ -146,18 +180,19 @@ zWatch = {
 				for (var j = wts.length, o; j--;) { //child first
 					o = wts[j];
 					var diff = bindLevel > o.bindLevel;
-					if (diff > 0) break;//nor ancestor, nor this (&sibling)
-					if (!diff && origin == o && zWatch._visible(o)) {
+					if (diff) break;//nor ancestor, nor this (&sibling)
+					if (origin == o && _visible(name, o)) {
 						found.unshift(o);
 						break; //found this (and no descendant ahead)
 					}
-					if (zWatch._visibleChild(origin, o)) found.unshift(o); //parent first
+					if (_visibleChild(name, origin, o))
+						found.unshift(o); //parent first
 				}
 			} else {
 				found = wts.$clone(); //make a copy since unlisten might happen
-				if (zWatch._visibleEvent[name])
+				if (_visiEvts[name])
 					for (var j = found.length; j--;)
-						if (!zWatch._visible(found[j]))
+						if (!_visible(name, found[j]))
 							found.splice(j, 1);
 			}
 
@@ -184,32 +219,9 @@ zWatch = {
 			}
 		}
 	},
-	_visible: function (c) {
-		return c.getNode && c.$n() && zk(c.$n()).isRealVisible();
-	},
-	_visibleChild: function (p, c) {
-		if (zWatch._visible(c))
-			for (; c; c = c.parent)
-				if (p == c) return true;
-		
-		return false;
-	},
 	onBindLevelMove: function () {
-		zWatch._dirty = true;
-	},
-	_sync: function () {
-		if (!zWatch._dirty) return;
-
-		zWatch._dirty = false;
-		for (var nm in zWatch._wts) {
-			var wts = zWatch._wts[nm];
-			if (wts.length && wts[0].bindLevel != null)
-				wts.sort(zWatch._cmp);
-		}
-	},
-	_cmp: function (a, b) {
-		return a.bindLevel - b.bindLevel;
-	},
-	_wts: {}
-};
+		_dirty = true;
+	}
+  };
+})();
 zWatch.listen({onBindLevelMove: zWatch});

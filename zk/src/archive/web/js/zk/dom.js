@@ -26,6 +26,9 @@ zjq = function (jq) { //ZK extension
 		}
 		return (w2=w||zk.Desktop.sync()) && (w2=w2.$f(id, !w)) ? w2.$n(): null;
 	}
+	function _isNone(jq) {
+		return !jq.selector && jq[0] === document;
+	}
 
 zk.override(jq.fn, jq$super, {
 	init: function (sel, ctx) {
@@ -69,7 +72,13 @@ zk.override(jq.fn, jq$super, {
 		return this;
 	},
 	remove: function () {
-		return this.selector || this[0] != document ? jq$super.remove.apply(this, arguments): this;
+		return _isNone(this) ? this: jq$super.remove.apply(this, arguments);
+	},
+	show: function () {
+		return _isNone(this) ? this: jq$super.show.apply(this, arguments);
+	},
+	hide: function () {
+		return _isNone(this) ? this: jq$super.hide.apply(this, arguments);
 	}
 });
 jq.fn.init.prototype = jq.fn;
@@ -687,7 +696,7 @@ zjq.prototype = { //ZK extension
 	makeVParent: function () {
 		var el = this.jq[0],
 			p = el.parentNode;
-		if (el.vparent || p == document.body) return this; //called twice or not necessary
+		if (el.vparentNode || p == document.body) return this; //called twice or not necessary
 
 		var sib = el.nextSibling,
 			agtx = el.z_vpagtx = document.createElement("SPAN");
@@ -695,16 +704,16 @@ zjq.prototype = { //ZK extension
 		if (sib) p.insertBefore(agtx, sib);
 		else p.appendChild(agtx);
 
-		el.vparent = p;
+		el.vparentNode = p;
 		document.body.appendChild(el);
 		return this;
 	},
 	undoVParent: function () {
 		var el = this.jq[0],
-			p = el.vparent;
+			p = el.vparentNode;
 		if (p) {
 			var agtx = el.z_vpagtx;
-			el.vparent = el.z_vpagtx = null;
+			el.vparentNode = el.z_vpagtx = null;
 			if (agtx) {
 				p.insertBefore(el, agtx);
 				jq(agtx).remove();
@@ -868,7 +877,7 @@ zk.copy(jq, { //ZK extension to jq
 
 	isAncestor: function (p, c) {
 		if (!p) return true;
-		for (; c; c = c.vparent||c.parentNode)
+		for (; c; c = c.vparentNode||c.parentNode)
 			if (p == c)
 				return true;
 		return false;

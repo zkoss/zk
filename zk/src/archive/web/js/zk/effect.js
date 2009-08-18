@@ -45,7 +45,7 @@ zk.eff.Shadow = zk.$extends(zk.Object, {
 	},
 	hide: function(){
 		jq(this.shadow).hide();
-		jq(this.stackup||[]).hide();
+		jq(this.stackup).hide();
 	},
 	sync: function () {
 		var node = this.node, $node = jq(node),
@@ -267,11 +267,10 @@ zk.eff.Tooltip = zk.$extends(zk.Object, {
 			this._clearClosing();
 	},
 	end: function (ref) {
-		if (this._ref == ref || this._tip == ref) {
+		if (this._ref == ref || this._tip == ref)
 			this._tmClosing =
 				setTimeout(this.proxy(this.close_), 100);
 			//don't cloes immediate since user might move from ref to toolip
-		}
 		else
 			this._clearOpening();
 	},

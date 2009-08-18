@@ -322,7 +322,16 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this._syncMask();
 	},
 	//watch//
-	onSize: _zkf = (function() {
+	onShow: function (w) {
+		if (this != w && this._mode != 'embedded' && this.isRealVisible({until: w}))
+			this.$n().style.display = '';
+		this.onSize(w);
+	},
+	onHide: function (w) {
+		if (this != w && this._mode != 'embedded' && this.isRealVisible({until: w}))
+			this.$n().style.display = 'none';
+	},
+	onSize: (function() {
 		function syncMaximized (wgt) {
 			if (!wgt._lastSize) return;
 			var node = wgt.$n(),
@@ -358,7 +367,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			}
 		};
 	})(),
-	onShow: _zkf,
 	onFloatUp: function (wgt) {
 		if (!this.isVisible() || this._mode == 'embedded')
 			return; //just in case
@@ -448,9 +456,9 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			x = zk.parseInt(node.style.left),
 			y = zk.parseInt(node.style.top);
 		if (pos == 'parent') {
-			var vparent = node.vparent;
-			if (vparent) {
-				var ofs = zk(vparent).reviseOffset();
+			var vp = node.vparentNode;
+			if (vp) {
+				var ofs = zk(vp).reviseOffset();
 				x -= ofs[0];
 				y -= ofs[1];
 			}
@@ -530,21 +538,26 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 	domStyle_: function (no) {
 		var style = this.$supers('domStyle_', arguments),
-			visible = this.isVisible();
-		if ((!no || !no.visible) && visible && this.isMinimized())
+			visible = this._dVisible();
+		if ((!no || !no.visible) && (!visible || this.isMinimized()))
 			style = 'display:none;'+style;
 		if (this._mode != 'embedded')
 			style = (visible ? "position:absolute;visibility:hidden;" : "position:absolute;")
 				+style;
 		return style;
 	},
+
+	_dVisible: function () { //test real visible
+		return this._mode != 'embedded' ? this.isRealVisible(): this.isVisible();
+	},
+
 	bind_: function () {
 		this.$supers('bind_', arguments);
 
 		var mode = this._mode;
 		zWatch.listen({onSize: this, onShow: this});
 		if (mode != 'embedded') {
-			zWatch.listen({onFloatUp: this});
+			zWatch.listen({onFloatUp: this, onHide: this});
 			this.setFloating_(true);
 
 			if (mode == 'modal' || mode == 'highlighted') this._doModal();
@@ -570,7 +583,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		}
 		
 		zk(node).undoVParent();
-		zWatch.unlisten({onFloatUp: this, onSize: this, onShow: this});
+		zWatch.unlisten({onFloatUp: this, onSize: this, onShow: this, onHide: this});
 		this.setFloating_(false);
 
 		if (zk.currentModal == this) {
