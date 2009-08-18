@@ -46,7 +46,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		}
 	},
 	setValue: function (val) {
-		var args
+		var args;
 		if (val) {
 			args = [];
 			for (var j = arguments.length; --j > 0;)
@@ -63,10 +63,7 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 	onShow: _zkf,
 	getZclass: function () {
 		var zcs = this._zclass;
-		return zcs ? zcs: "z-datebox";
-	},
-	getValue: function () {
-		return this._value;
+		return zcs != null ? zcs: "z-datebox";
 	},
 	getRawText: function () {
 		return this.coerceToString_(this._value);
