@@ -289,6 +289,7 @@ zk.eff.Tooltip = zk.$extends(zk.Object, {
 
 		var tip = this._tip;
 		if (tip) {
+			zWatch.fire('onFloatUp', null, this._ref); //notify all
 			this._tip = this._ref = null;
 			tip.close({sendOnOpen:true});
 		}
