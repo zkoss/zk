@@ -165,6 +165,8 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		}
 	},
 	onHide: function (wgt) {
+		if (this.isOpen())
+			this.close();
 		this._hideShadow();
 	},
 	bind_: function () {
