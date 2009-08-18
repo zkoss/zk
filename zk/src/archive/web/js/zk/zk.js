@@ -46,6 +46,10 @@ zk = function (sel) {
 		&& !jq("#zk_proc").length && !jq("#zk_showBusy").length)
 			zUtl.progressbox("zk_proc", window.mesg?mesg.PLEASE_WAIT:'Processing...', mask);
 	}
+	function wgt2s(w) {
+		var s = w.className.substring(w.className.lastIndexOf('.') + 1);
+		return w.id ? s + '@' + w.id: s + '#' + w.uuid;
+	}
 	function toLogMsg(ars, isDetailed) {
 		var msg = [];
 		for (var j = 0, len = ars.length; j < len; j++) {
@@ -53,9 +57,11 @@ zk = function (sel) {
 			var ar = ars[j];
 			if (ar && (ar.$array || ar.zk)) //ar.zk: jq(xx)
 				msg.push('[' + toLogMsg(ar, isDetailed) + ']');
+			else if (zk.Widget.isInstance(ar))
+				msg.push(wgt2s(ar));
 			else if (ar && ar.nodeType) {
 				var w = zk.Widget.$(ar);
-				if (w) msg.push(w.className.substring(w.className.lastIndexOf('.')+1), '@', w.id);
+				if (w) msg.push(ar.tagName, ':', wgt2s(w));
 				else msg.push(ar.tagName, '#', ar.id);
 			} else if (isDetailed && ar && (typeof ar == 'object') && !ar.nodeType) {
 				var s = ['{\n'];
@@ -66,7 +72,7 @@ zk = function (sel) {
 				s.push('\n}');
 				msg.push(s.join(''));
 			} else
-				msg.push(ar);
+				msg.push(''+ar);
 		}
 		return msg.join('');
 	}
