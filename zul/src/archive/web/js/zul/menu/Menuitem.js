@@ -176,29 +176,30 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		}
 	},
 	doMouseOver_: function (evt) {
-		if (this.$class._isActive(this)) return;
-		if (!this.isDisabled()) {
-			if (zk.ie && this.isTopmost() && !this._uplder && !jq.isAncestor(this.$n('a'), evt.domTarget))
-				return;
-
+		if (!this.$class._isActive(this) && !this.isDisabled()
+		&& (!zk.ie || !this.isTopmost() || this._uplder
+		|| jq.isAncestor(this.$n('a'), evt.domTarget))) {
 			this.$class._addActive(this);
 			zWatch.fire('onFloatUp', null, this); //notify all
 		}
+		this.$supers('doMouseOver_', arguments);
 	},
 	doMouseOut_: function (evt) {
 		if (!this.isDisabled()) {
-			if (zk.ie) {
+			var deact = !zk.ie;
+			if (!deact) {
 				var n = this.$n('a'),
 					xy = zk(n).revisedOffset(),
 					x = evt.pageX,
 					y = evt.pageY,
 					diff = this.isTopmost() ? 1 : 0;
-				if (x - diff > xy[0] && x <= xy[0] + n.offsetWidth && y - diff > xy[1] &&
-					y <= xy[1] + n.offsetHeight)
-					return; // don't deactivate;
+				deact = x - diff <= xy[0] || x > xy[0] + n.offsetWidth
+					|| y - diff <= xy[1] || y > xy[1] + n.offsetHeight;
 			}
-			this.$class._rmActive(this);
+			if (deact)
+				this.$class._rmActive(this);
 		}
+		this.$supers('doMouseOut_', arguments);
 	}
 }, {
 	_isActive: function (wgt) {

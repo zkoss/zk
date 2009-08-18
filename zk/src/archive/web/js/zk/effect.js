@@ -245,7 +245,13 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 
 zk.eff.Tooltip = zk.$extends(zk.Object, {
 	beforeBegin: function (ref) {
-		var overTip = this._tip == ref;
+		if (this._tip && !this._tip.isOpen()) { //closed by other (such as clicking on menuitem)
+			this._clearOpening();
+			this._clearClosing();
+			this._tip = this._ref = null;
+		}
+
+		var overTip = this._tip && zUtl.isAncestor(this._tip, ref);
 		if (overTip) this._clearClosing(); //not close tip if over tip
 		return !overTip;//disable tip in tip
 	},

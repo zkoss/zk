@@ -147,7 +147,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 		}
 		this.$supers('doRightClick_', arguments);
 	},
-	doMouseOver_: function (evt) {
+	doTooltipOver_: function (evt) {
 		if (!evt._tiped && zk.eff.tooltip.beforeBegin(this)) {
 			var tip = this._smartFellow(this._tooltip);
 			if (tip) {
@@ -155,10 +155,16 @@ zul.Widget = zk.$extends(zk.Widget, {
 				zk.eff.tooltip.begin(tip, this);
 			}
 		}
+	},
+	doTooltipOut_: function (evt) {
+		zk.eff.tooltip.end(this);
+	},
+	doMouseOver_: function (evt) {
+		this.doTooltipOver_(evt);
 		this.$supers('doMouseOver_', arguments);
 	},
 	doMouseOut_: function (evt) {
-		zk.eff.tooltip.end(this);
+		this.doTooltipOut_(evt);
 		this.$supers('doMouseOut_', arguments);
 	},
 	_smartFellow: function (id) {
