@@ -51,7 +51,7 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			for (var j = arguments.length; --j > 0;)
 				args.unshift(arguments[j]);
 
-			args.unshift(this.coerceFromString_(val));
+			args.unshift((typeof val == 'string') ? this.coerceFromString_(val) : val);
 		} else
 			args = arguments;
 		this.$supers('setValue', args);

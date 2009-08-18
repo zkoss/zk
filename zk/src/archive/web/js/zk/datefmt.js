@@ -28,6 +28,14 @@ zDateFormat = {
 			s = "0" + s;
 		return s;
 	},
+	_parseToken: function (token, ts, i, len) {
+		if (len < 2) len = 2;
+		if (token && token.length > len) {
+			ts[--i] = token.substring(len);
+			return token.substring(0, len);
+		}
+		return token;
+	},
 	parseDate : function (txt, fmt, strict) {
 		if (!fmt) fmt = "yyyy/MM/dd";
 		var val = new Date();
@@ -35,7 +43,13 @@ zDateFormat = {
 			m = val.getMonth(),
 			d = val.getDate(),
 			hr = val.getHours(),
-			min = val.getMinutes();
+			min = val.getMinutes(),
+			sec = val.getSeconds(),
+			aa = fmt.indexOf('a'),
+			hh = fmt.indexOf('h'),
+			KK = fmt.indexOf('K'),
+			hasAM = aa > -1,
+			hasHour1 = hasAM ? hh > -1 || KK > -1 : false;;
 
 		var	ts = [], mindex = fmt.indexOf("MMM"), aindex = fmt.indexOf("a"), ary = [];
 		for (var i = 0, j = txt.length; i < j; i++) {
@@ -123,45 +137,67 @@ zDateFormat = {
 					}
 					break;
 				case 'd':
-					if (nosep) {
-						if (len < 2) len = 2;
-						if (token && token.length > len) {
-							ts[--i] = token.substring(len);
-							token = token.substring(0, len);
-						}
-					}
+					if (nosep)
+						token = this._parseToken(token, ts, i, len);
 					d = zk.parseInt(token);
 					if (isNaN(d)) return null; //failed
 					break;
 				case 'H':
-				case 'h':
-				case 'K':
-				case 'k':
-					if (nosep) {
-						if (len < 2) len = 2;
-						if (token.length > len) {
-							ts[--i] = token.substring(len);
-							token = token.substring(0, len);
-						}
-					}
+					if (hasHour1)
+						break;
+					if (nosep)
+						token = this._parseToken(token, ts, i, len);
 					hr = zk.parseInt(token);
 					if (isNaN(hr)) return null; //failed
 					break;
+				case 'h':
+					if (!hasHour1)
+						break;
+					if (nosep)
+						token = this._parseToken(token, ts, i, len);
+					hr = zk.parseInt(token);
+					if (hr == 12)
+						hr = 0;
+					if (isNaN(hr)) return null; //failed
+					break;
+				case 'K':
+					if (!hasHour1)
+						break;
+					if (nosep)
+						token = this._parseToken(token, ts, i, len);
+					hr = zk.parseInt(token);
+					if (isNaN(hr)) return null; //failed
+					hr %= 12;
+					break;
+				case 'k':
+					if (hasHour1)
+						break;
+					if (nosep)
+						token = this._parseToken(token, ts, i, len);
+					hr = zk.parseInt(token);
+					if (hr == 24)
+						hr = 0;
+					if (isNaN(hr)) return null; //failed
+					break;					
 				case 'm':
-					if (nosep) {
-						if (len < 2) len = 2;
-						if (token.length > len) {
-							ts[--i] = token.substring(len);
-							token = token.substring(0, len);
-						}
-					}
+					if (nosep)
+						token = this._parseToken(token, ts, i, len);
 					min = zk.parseInt(token);
 					if (isNaN(min)) return null; //failed
 					break;
+				case 's':
+					if (nosep)
+						token = this._parseToken(token, ts, i, len);
+					sec = zk.parseInt(token);
+					if (isNaN(sec)) return null; //failed
+					break;
 				case 'a':
+					if (!hasHour1)
+						break;
 					var apm = txt.substring(j);
 					if(apm.startsWith(zk.APM[1])){
-						hr+=12;
+						if (hr < 12)
+							hr+=12;
 					}
 					break
 				//default: ignored
@@ -170,10 +206,10 @@ zDateFormat = {
 			}
 		}
 
-		var dt = new Date(y, m, d, hr, min);
+		var dt = new Date(y, m, d, hr, min, sec);
 		if (strict) {
 			if (dt.getFullYear() != y || dt.getMonth() != m || dt.getDate() != d ||
-				dt.getHours() != hr || dt.getMinutes() != min)
+				dt.getHours() != hr || dt.getMinutes() != min || dt.getSeconds() != sec)
 				return null; //failed
 
 			txt = txt.trim();
@@ -240,22 +276,32 @@ zDateFormat = {
 					if (len <= 2) txt += this.digitFixed(val.getHours(), len);
 					break;
 				case 'k':
-					if (len <= 2) txt += this.digitFixed(val.getHours() == 0 ? "24" : val.getHours(), len);
+					var h = val.getHours();
+					if (h == 0)
+						h = '24';
+					if (len <= 2) txt += this.digitFixed(h, len);
 					break;
 				case 'K':
-					if (len <= 2) txt += this.digitFixed(val.getHours() > 11 ? val.getHours() - 12 : val.getHours(), len);
+					if (len <= 2) txt += this.digitFixed(val.getHours() % 12, len);
 					break;
 				case 'h':
-					if (len <= 2) txt += this.digitFixed(val.getHours() > 11 ? val.getHours() - 12 : val.getHours() == 0 ? "12" : val.getHours(), len);
+					var h = val.getHours();
+					h %= 12;
+					if (h == 0)
+						h = '12';
+					if (len <= 2) txt += this.digitFixed(h, len);
 					break;
 				case 'm':
 					if (len <= 2) txt += this.digitFixed(val.getMinutes(), len);
+					break;
+				case 's':
+					if (len <= 2) txt += this.digitFixed(val.getSeconds(), len);
 					break;
 				case 'Z':
 					txt += -(val.getTimezoneOffset()/60);
 					break;
 				case 'a':
-					txt += val.getHours() > 11 ? "PM" : "AM";
+					txt += zk.APM[val.getHours() > 11 ? 1 : 0];
 					break;
 				default:
 					txt += '1';

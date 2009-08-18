@@ -128,6 +128,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		if (this._disabled) html += ' disabled="disabled"';
 		if (this._readonly) html += ' readonly="readonly"';
 		
+		var s = this.domStyle_();
+		if (s) html += ' style="' + s + '"';
 		return html;
 	},
 	_areaText: function () {
