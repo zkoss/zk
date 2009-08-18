@@ -48,6 +48,7 @@ zkTmbox.init = function (cmp) {
 	zk.listen(inp, "blur",zkTmbox._inpblur);
 	zk.listen(inp, "click",zkTmbox._inpclick);
 	zk.listen(inp, "keydown",zkTmbox._inpkeydown);
+	zk.listen(inp, "keypress", zkTmbox.onkeypress);
 
 	//event for btn
 	if(btn){
@@ -63,6 +64,9 @@ zkTmbox.init = function (cmp) {
 	}else{
 		zkTmbox._clearTime(cmp);
 	}
+};
+zkTmbox.onkeypress = function (evt) {
+	zkInpEl.ignoreKeys(evt, "0123456789" + zk.MINUS);
 };
 zkTmbox.cleanup = function (cmp) {
 	if(cmp.timerId){
