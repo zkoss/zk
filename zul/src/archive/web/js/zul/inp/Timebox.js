@@ -3,7 +3,7 @@
 	Purpose:
 		testing textbox.intbox.spinner,timebox,doublebox,longbox and decimalbox on zk5
 	Description:
-		
+
 	History:
 		Thu June 11 10:17:24     2009, Created by kindalu
 
@@ -14,62 +14,207 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 
 zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
-	POS_MIN:'1',
-	POS_HOUR:'2',
-	_value: "00:00",
-	_step: 1,
+	LEGAL_CHARS: 'ahKHksm',
+    /**Useful constant for MINUTE (m) field alignment.*/
+    MINUTE_FIELD: 1,
+    /**Useful constant for SECOND (s) field alignment.*/
+    SECOND_FIELD: 2,
+    /**Useful constant for AM_PM (a) field alignment.*/
+    AM_PM_FIELD: 3,
+    /**Useful constant for HOUR0 (H) field alignment. (Hour in day (0-23))*/
+    HOUR0_FIELD: 4,
+    /**Useful constant for HOUR1 (k) field alignment. (Hour in day (1-24))*/
+    HOUR1_FIELD: 5,
+    /**Useful constant for HOUR2 (h) field alignment. (Hour in am/pm (1-12))*/
+    HOUR2_FIELD: 6,
+    /**Useful constant for HOUR3 (K) field alignment. (Hour in am/pm (0-11))*/
+    HOUR3_FIELD: 7,
 	_buttonVisible: true,
 	$define: {
 		buttonVisible: function(v){
-			this.btn.style.display = v == 'true'? '': 'none';
+			this.$n("btn").style.display = v == 'true'? '': 'none';
 			this.onSize();
-			return;
 		},
-		value: function(v){
-			if(this.desktop){
-				if(v)
-					this._setTime(v.toString());
-				else
-					this._clearTime();
-				var real = this.inp;
-				if(real.defaultValue != real.value)
-					real.defaultValue = real.value;
+		format: function (fmt, fromServer) {
+			this._parseFormat(fmt);
+			var inp = this.getInputNode();
+			if (inp) {
+				inp.value = this.coerceToString_(this._value);
+				if (fromServer) inp.defaultValue = inp.value; //not clear error if by client app
 			}
 		}
+	},
+	setValue: function (val) {
+		var args;
+		if (val) {
+			args = [];
+			for (var j = arguments.length; --j > 0;)
+				args.unshift(arguments[j]);
+
+			args.unshift(this.coerceFromString_(val));
+		} else
+			args = arguments;
+		this.$supers('setValue', args);
+	},
+	getRawText: function () {
+		return this.coerceToString_(this._value);
+	},
+	_checkFormat: function (fmt) {
+		var error, out = [];
+		for (var i = 0, j = fmt.length; i < j; i++) {
+			var c = fmt.charAt(i);
+			switch (c) {
+			case 'K':
+			case 'h':
+			case 'H':
+			case 'k':
+			case 'm':
+			case 's':
+				if (fmt.charAt(i+1) == c)
+					i++;
+				else
+					error = true;
+				out.push(c + c);
+				break;
+			default:
+				out.push(c);
+			}
+		}
+		if (error)
+			this.showErrorMessage(zMsgFormat.format(msgzul.DATE_REQUIRED + out.join('')));
+	},
+	_parseFormat: function (fmt) {
+		this._checkFormat(fmt);
+		var index = [];
+		for (var i = 0, j = fmt.length; i < j; i++) {
+			var c = fmt.charAt(i);
+			switch (c) {
+			case 'a':
+				var len = zk.APM[0].length;
+				index.push(new zul.inp.AMPMHandler([i, i + len - 1], this.AM_PM_FIELD));
+				break;
+			case 'K':
+				var start = i,
+					end = fmt.charAt(i+1) == 'K' ? ++i : i;
+				index.push(new zul.inp.HourHandler2([start, end], this.HOUR3_FIELD));
+				break;
+			case 'h':
+				var start = i,
+					end = fmt.charAt(i+1) == 'h' ? ++i : i;
+				index.push(new zul.inp.HourHandler([start, end], this.HOUR2_FIELD));
+				break;
+			case 'H':
+				var start = i,
+					end = fmt.charAt(i+1) == 'H' ? ++i : i;
+				index.push(new zul.inp.HourInDayHandler([start, end], this.HOUR0_FIELD));
+				break;;
+			case 'k':
+				var start = i,
+					end = fmt.charAt(i+1) == 'k' ? ++i : i;
+				index.push(new zul.inp.HourInDayHandler2([start, end], this.HOUR1_FIELD));
+				break;
+			case 'm':
+				var start = i,
+					end = fmt.charAt(i+1) == 'm' ? ++i : i;
+				index.push(new zul.inp.MinuteHandler([start, end], this.MINUTE_FIELD));
+				break;
+			case 's':
+				var start = i,
+					end = fmt.charAt(i+1) == 's' ? ++i : i;
+				index.push(new zul.inp.SecondHandler([start, end], this.SECOND_FIELD));
+				break;
+			default:
+				var ary = [],
+					start = i,
+					end = i;
+
+				while ((ary.push(c)) && ++end < j) {
+					c = fmt.charAt(end);
+					if (this.LEGAL_CHARS.indexOf(c) != -1) {
+						end--;
+						break;
+					}
+				}
+				index.push({index: [start, end], format: (function (text) {
+					return function() {
+						return text;
+					};
+				})(ary.join(''))});
+				i = end;
+			}
+		}
+		for (var shift, i = 0, j = index.length; i < j; i++) {
+			if (index[i].type == this.AM_PM_FIELD) {
+				shift = index[i].index[1] - index[i].index[0];
+				if (!shift) break; // no need to shift.
+			} else if (shift) {
+				index[i].index[0] += shift;
+				index[i].index[1] += shift;
+			}
+		}
+		this._fmthdler = index;
+
+	},
+	coerceToString_: function (date) {
+		if (!this._fmthdler) return '';
+		var out = [];
+		for (var i = 0, j = this._fmthdler.length; i < j; i++)
+			out.push(this._fmthdler[i].format(date));
+		return out.join('');
+	},
+	coerceFromString_: function (val) {
+		if (!val) return null;
+		var date = new Date(),
+			hasAM, isAM, hasHour1,
+			fmt = [];
+
+		for (var i = 0, j = this._fmthdler.length; i < j; i++) {
+			if (this._fmthdler[i].type == this.AM_PM_FIELD) {
+				hasAM = true;
+				isAM = this._fmthdler[i].unformat(date, val);
+			} else if (this._fmthdler[i].type)
+				fmt.push(this._fmthdler[i]);
+		}
+		
+		if (hasAM) {
+			for (var i = 0, j = fmt.length; i < j; i++) {
+				if (fmt[i].type == this.HOUR2_FIELD || fmt[i].type == this.HOUR3_FIELD) {
+					hasHour1 = true;
+					break;
+				}
+			}
+		}
+
+		if (hasHour1) {
+			for (var i = 0, j = fmt.length; i < j; i++) {
+				if (fmt[i] != this.HOUR0_FIELD && fmt[i] != this.HOUR1_FIELD)
+					date = fmt[i].unformat(date, val, isAM);
+			}
+		} else {
+			for (var i = 0, j = fmt.length; i < j; i++) {
+				if (fmt[i] != this.HOUR2_FIELD && fmt[i].type != this.HOUR3_FIELD)
+					date = fmt[i].unformat(date, val);
+			}
+		}
+		return date;
 	},
 	getZclass: function () {
 		var zcls = this._zclass;
 		return zcls != null ? zcls: "z-timebox";
 	},
-	isButtonVisible: function(){
-		return _buttonVisible;
-	},
 	getInputNode: function(){
 		return this.$n("real");
 	},
-	coerceFromString_: function (value) {
-		if (!value) return null;
-
-		if((typeof value) == 'string' && value.length == 5 && value.indexOf(':') == 2){
-			var hrmin = value.split(":"),
-				hr = parseInt(hrmin[0]),
-				min = parseInt(hrmin[1]);
-			if(!isNaN(hr) && !isNaN(min)){
-				return value;
-			}
-		}
-		return {error: zMsgFormat.format(msgzul.DATE_REQUIRED + "HH:mm ,rather than: " + value)};
-	},
-	onSize: _zkf = function () { //from zul.fixDropBtn2
-		var btn = this.btn;
-		//note: isRealVisible handles null argument
+	onSize: _zkf = function () {
+		var btn = this.$n("btn");
 		if (zk(btn).isRealVisible() && btn.style.position != "relative") {
-			var inp = this.inp, img = btn.firstChild;
+			var inp = this.getInputNode(), img = btn.firstChild,
+				self = this;
 			if (!inp.offsetHeight || !img.offsetHeight) {
-				setTimeout(function () {this.onSize()}, 66);
+				setTimeout(function () {self.onSize()}, 66);
 				return;
 			}
-		
+
 			//Bug 1738241: don't use align="xxx"
 			var v = inp.offsetHeight - img.offsetHeight;
 			if (v !== 0) {
@@ -88,27 +233,27 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	validate: zul.inp.Intbox.validate,
 	doFocus_: _zkf = function(evt){
 		this.$supers('doFocus_', arguments);
-		sels = this._selrange();
-		this.lastPos = sels[0];
+		this._doCheckPos(this._getPos());
+		this.lastPos = this._getPos();
 	},
 	doClick_: function(evt){
+		if (evt.domTarget == this.getInputNode())
+			this._doCheckPos(this._getPos());
 		this.$supers('doClick_', arguments);
-		sels = this._selrange();
-		this.lastPos = sels[0];
 	},
-	doBlur_: function(evt){
-		this.$supers('doBlur_', arguments);
-		if(!this._check(this.inp.value)){
-			this.setTime();
+	doKeyPress_: function (evt) {
+		if (zk.opera) {
+			evt.stop();
+			return;
 		}
+		this.$supers('doKeyPress_', arguments);
 	},
 	doKeyDown_: function(evt){
-		var inp = this.inp,
-			sels = this._selrange();
+		var inp = this.getInputNode();
 		if (inp.disabled || inp.readOnly)
 			return;
-	
-		this.lastPos = sels[0];
+
+		this.lastPos = this._getPos();
 		var code = evt.keyCode;
 		switch(code){
 		case 48:case 96://0
@@ -122,29 +267,42 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		case 56:case 104://8
 		case 57:case 105://9
 			code = code - (code>=96?96:48);
-			this._setTimeDigit(code);
+			this._doType(code);
 			evt.stop();
 			return;
 		case 37://left
-			break;
+			this._doLeft();
+			evt.stop();
+			return;
 		case 38://up
-			this.onUp();
+			this._doUp();
 			evt.stop();
 			return;
 		case 39://right
-			break;
+			this._doRight();
+			evt.stop();
+			return;
 		case 40://down
-			this.onDown();
+			this._doDown();
 			evt.stop();
 			return;
 		case 46://del
-			this.clearTime();
+			this._doDel();
+			evt.stop();
+			return;
+		case 8://backspace
+			this._doBack();
 			evt.stop();
 			return;
 		case 9:
-			//zkTxbox.onupdate(inp);
+			// do nothing
 			break
-		case 13: case 27: case 35:case 36://enter,esc,tab,home,end
+		case 35://end
+		case 36://home
+			this._doCheckPos(code == 36 ? 0 : inp.value.length);
+			evt.stop();
+			return;
+		case 13: case 27://enter,esc,tab
 			break;
 		default:
 			if (!(code >= 112 && code <= 123) //F1-F12
@@ -153,309 +311,234 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		}
 		this.$supers('doKeyDown_', arguments);
 	},
-	ondropbtnup: function (evt) {
+	_dodropbtnup: function (evt) {
 		jq(this._currentbtn).removeClass(this.getZclass() + "-btn-clk");
-		this.domUnlisten_(document.body, "mouseup", "ondropbtnup");
+		this.domUnlisten_(document.body, "onMouseup", "_dodropbtnup");
 		this._currentbtn = null;
 	},
-	_btnDown: function(evt){	
-		
-		if (this.inp && !this.inp.disabled) {
-			if (this._currentbtn)
-				this.ondropbtnup(evt);
-			jq(btn).addClass(this.getZclass() + "-btn-clk");
-			this.domListen_(document.body, "mouseup", "ondropbtnup");
-			this._currentbtn = btn;
-		}
-		
-		var inp = this.inp,
-			btn = this.btn;
-		if(inp.disabled) return;
-		
-		var btn = zk.opera || zk.safari ? btn : btn.firstChild,
-			ofs = zk(btn).revisedOffset();
+	_btnDown: function(evt) {
+		var inp = this.getInputNode(),
+			btn = this.$n("btn");
+
+		if(!inp || inp.disabled) return;
+		if (this._currentbtn)
+			this._dodropbtnup(evt);
+		jq(btn).addClass(this.getZclass() + "-btn-clk");
+		this.domListen_(document.body, "onMouseup", "_dodropbtnup");
+		this._currentbtn = btn;
+
+		btn = zk.opera || zk.safari ? btn : btn.firstChild;
+			
+		var ofs = zk(btn).revisedOffset();
 		if ((evt.pageY - ofs[1]) < btn.offsetHeight / 2) { //up
-			this.onUp();
+			this._doUp();
 			this._startAutoIncProc(true);
 		} else {
-			this.onDown();
+			this._doDown();
 			this._startAutoIncProc(false);
 		}
-		
 	},
 	_btnUp: function(evt){
-		var inp = this.inp;
+		var inp = this.getInputNode();
 		if(inp.disabled || zk.dragging) return;
 
 		this._onChanging();
-		
 		this._stopAutoIncProc();
-		this._markPositionSel();
 		inp.focus();
 	},
 	_btnOut: function(evt){
-		if (this.inp && !this.inp.disabled && !zk.dragging)
-			jq(this.btn).removeClass(this.getZclass()+"-btn-over");
-			
-		var inp = this.inp;
-		if(inp.disabled || zk.dragging) return;
-
+		var inp = this.getInputNode();
+		if(!inp || inp.disabled || zk.dragging) return;
+		
+		jq(this.$n("btn")).removeClass(this.getZclass()+"-btn-over");
 		this._stopAutoIncProc();
 	},
 	_btnOver: function(evt){
-		if (this.inp && !this.inp.disabled && !zk.dragging)
-			jq(this.btn).addClass(this.getZclass()+"-btn-over");
+		if (this.getInputNode() && !this.getInputNode().disabled && !zk.dragging)
+			jq(this.$n("btn")).addClass(this.getZclass()+"-btn-over");
 	},
-	_selrange: function (){
-			var sel = zk(this.inp).getSelectionRange();
-			if(sel[0]>sel[1]){
-				var t = sel[1];
-				sel[1] = sel[0];
-				sel[0] = t;
+	_getPos: function (){
+		return zk(this.getInputNode()).getSelectionRange()[1];
+	},
+	_doCheckPos: function (pos) {
+		var inp = this.getInputNode();
+		for (var i = 0, j = this._fmthdler.length; i < j; i++) {
+			var idx = this._fmthdler[i];
+			if (idx.index[1] + 1 == pos) {
+				if (idx.type) break;// in a legal area
+				var end = i;
+				while(this._fmthdler[++end]) {
+					if (this._fmthdler[end].type) {
+						pos = this._fmthdler[end].index[0] + 1;
+						break;
+					}
+				}
+				break;
+			} else if (idx.index[0] <= pos && idx.index[1] + 1 >= pos) {
+				if (!idx.type) {
+					var end = i;
+					
+					// check if it is end
+					if (this._fmthdler[end + 1]) {
+						while (this._fmthdler[++end]) {
+							if (this._fmthdler[end].type) {
+								pos = this._fmthdler[end].index[0] + 1;
+								break;
+							}
+						}
+					} else {
+						while (this._fmthdler[--end]) {
+							if (this._fmthdler[end].type) {
+								pos = this._fmthdler[end].index[1] + 1;
+								break;
+							}
+						}
+					}
+				}  else if (idx.type == this.AM_PM_FIELD) {
+					pos = idx.index[1] + 1;
+					break;
+				} else {
+					if (idx.index[0] == pos) pos++;
+					break;// in a legal area
+				}
 			}
-			return sel;
-	},
-	_calInc: function (cmp){
-		var pos = this._checkPosition();
-		switch(pos){
-		case this.POS_MIN:
-			return 60;
-		case this.POS_HOUR:
-			return 3600;
-		default:
-			return 0;
 		}
+		zk(inp).setSelectionRange(pos, pos);
+		this.lastPos = pos;
 	},
-	onUp: function(cmp) {
-		this._increaseTime(this._calInc())
-		this._onChanging();
-		this._markPositionSel();
-	},
-	onDown: function(cmp) {
-		this._increaseTime(-this._calInc())
-		this._onChanging();
-		this._markPositionSel();
-	},
-	_clearValue: function(){
-		var real = this.inp;
-		real.value = real.defaultValue = "";
-		return true;
-	},
-	_checkPosition: function() {
-		return this.lastPos <= 2 ? this.POS_HOUR : this.POS_MIN;
-	},
-	_markPositionSel: function() {
-		var pos = this._checkPosition();
-		switch (pos) {
-		case this.POS_HOUR:
-			this._markselection(0, 2);
-			break;
-		case this.POS_MIN:
-			this._markselection(3, 5);
-			break;
-		}
-	},
-	_check: function(timestr) {
-		if (!timestr) {
-			return false;
-		}
-		var ta = timestr.split(':');
-		if (ta.length == 2) {
-			var hour = zk.parseInt(ta[0]),
-				min = zk.parseInt(ta[1]),
-				hiterr = false;
-			if (isNaN(hour) || hour > 23 || hour < 0) {
-				return false;
+	_doLeft: function () {
+		var inp = this.getInputNode(),
+			pos = this.lastPos - 1,
+			hdler = this.getTimeHandler();
+		for (var i = 0, j = this._fmthdler.length; i < j; i++) {
+			var idx = this._fmthdler[i];
+			if (idx.index[0] == pos) {
+				var end = i;
+				pos++;
+				while (this._fmthdler[--end]) {
+					if (this._fmthdler[end].type) {
+						pos = this._fmthdler[end].index[1] + 1;
+						break;
+					}
+				}
+				break;
+			} else if (idx.index[0] < pos && idx.index[1] >= pos) {
+				if (!idx.type || idx.type == this.AM_PM_FIELD) {
+					var end = i;
+					pos++;
+					while (this._fmthdler[--end]) {
+						if (this._fmthdler[end].type) {
+							pos = this._fmthdler[end].index[1] + 1;
+							break;
+						}
+					}
+				} else 
+					break;// in a legal area
 			}
-			if (isNaN(min) || min > 59 || min < 0) {
-				return false;
-			}
-			return true;
 		}
-		return false;
-	},
-	_formatFixed: function (val, digits) {
-		var s = "" + val;
-		for (var j = digits - s.length; j--;)
-			s = "0" + s;
-		return s;
-	},
-	_increaseTime: function(inc_sec) {
-		var t = this.lastTime.getTime();
-		t = t + 1000 * inc_sec * this.currentStep;
-		var date = new Date();
-		date.setTime(t);
-		var hour = date.getHours(),
-			min = date.getMinutes(),
-			newtimestr = this._formatFixed(hour, 2) + ":" + this._formatFixed(min, 2);
-	
-		this.setTime(newtimestr);
-	},
-	_setTimeDigit: function(n) {
-		var sel = this._selrange(),
-			hour = this.lastTime.getHours(),
-			min = this.lastTime.getMinutes(),
-			newpos = 0;
-		switch (sel[0]) {
-		case 0:
-			if (n > 2) {
-				hour = n;
-				newpos = 3;
-			} else {
-				hour = hour % 10 + n * 10;
-				newpos = 1;
+		if (hdler.type && hdler.type != this.AM_PM_FIELD) {
+			if (pos <= hdler.index[0] || pos > hdler.index[1] + 1) {
+				var val = inp.value, text = val.substring(hdler.index[0], hdler.index[1] + 1);
+				text = text.replace(/ /g, '0');
+				inp.value = val.substring(0, hdler.index[0]) + text + val.substring(hdler.index[1] + 1, val.length);
 			}
-			if (hour > 23)
-				return;
+		}
 
-			break;
-		case 1:
-			hour = hour - hour % 10 + n;
-			if (hour > 23)
-				return;
-			newpos = 3;
-			break;
-		case 3:
-			if (n > 5) {
-				min = n;
-			} else {
-				min = min % 10 + n * 10;
+		zk(inp).setSelectionRange(pos, pos);
+		this.lastPos = pos;
+	},
+	_doRight: function() {
+		var inp = this.getInputNode(), pos = this.lastPos + 1, hdler = this.getTimeHandler();
+		for (var i = 0, j = this._fmthdler.length; i < j; i++) {
+			var idx = this._fmthdler[i];
+			if (idx.index[1] + 2 == pos) {
+				var end = i;
+				pos--;
+				while (this._fmthdler[++end]) {
+					if (this._fmthdler[end].type) {
+						pos = this._fmthdler[end].index[0] + 1;
+						break;
+					}
+				}
+				break;
+			} else if (idx.index[0] < pos && idx.index[1] + 1 >= pos) {
+				if (!idx.type || idx.type == this.AM_PM_FIELD) {
+					var end = i;
+					pos--;
+					while (this._fmthdler[++end]) {
+						if (this._fmthdler[end].type) {
+							pos = this._fmthdler[end].index[0] + 1;
+							break;
+						}
+					}
+				} else 
+					break;// in a legal area
 			}
-			if (min > 59)
-				return;
-			newpos = 4;
-			break;
-		case 4:
-			min = min - min % 10 + n;
-			if (min > 59)
-				return;
-			newpos = 4;
-			break;
-		default:
-			return;
 		}
-		var newtimestr = this._formatFixed(hour, 2) + ":" + this._formatFixed(min, 2);
-		this.setTime(newtimestr);
-		this._markselection(newpos, newpos);
-	},
-	_setTime: function(timestr) {
-		if (this.lastTimeStr == timestr || !this._check(timestr)) {
-			return false;
-		}
-		var inp = this.inp,
-			ta = timestr.split(':'),
-			hour = zk.parseInt(ta[0]),
-			min = zk.parseInt(ta[1]),
-			newtimestr = this._formatFixed(hour, 2) + ":" + this._formatFixed(min, 2);
-	
-		this.lastTime.setHours(hour);
-		this.lastTime.setMinutes(min)
-	
-		inp.value = newtimestr;
-		this.lastTimeStr = newtimestr;
-	
-		return true;
-	},
-	setTime: function(timestr) {
-		if (this._setTime(timestr)) {
-			//mark changed, and fire changing event to server
-			this.changed = true;
-			//InputElement already handle onChange,onChanging if you inherit for InputElement and name your
-			//input to uuid!real.
-		}
-	},
-	_clearTime: function() {
-		if (!this.lastTimeStr) {
-			return false;
-		}
-		this.lastTimeStr = "";
-		this.lastTime.setHours(0);
-		this.lastTime.setMinutes(0);
-		this.inp.value = "";
-		return true;
-	},
-	clearTime: function() {
-		if (this._clearTime()) {
-			this.changed = true;
-			//fire changing event to server
-		}
-	},
-	_autoIncTimeout: function(inc_sec) {
-		this._increaseTime(inc_sec);
-		if (this.timerId) {
-			//increase Step value
-			if (this.runCount != 0 && (this.runCount % 10) == 0) {
-				this.currentStep = this.currentStep + 1;
+		if (hdler.type && hdler.type != this.AM_PM_FIELD) {
+			if (pos <= hdler.index[0] || pos > hdler.index[1] + 1) {
+				var val = inp.value, text = val.substring(hdler.index[0], hdler.index[1] + 1);
+				text = text.replace(/ /g, '0');
+				inp.value = val.substring(0, hdler.index[0]) + text + val.substring(hdler.index[1] + 1, val.length);
 			}
-			this.runCount = this.runCount + 1;
-			this._onChanging();
 		}
+		zk(inp).setSelectionRange(pos, pos);
+		
+		this.lastPos = pos;
 	},
-	_startAutoIncProc: function(isup) {
-		if (this.timerId) {
+	_doUp: function() {
+		this.getTimeHandler().increase(this, 1);
+		this._onChanging();
+	},
+	_doDown: function() {
+		this.getTimeHandler().increase(this, -1);
+		this._onChanging();
+	},
+	_doBack: function () {
+		this.getTimeHandler().deleteTime(this, true);
+	},
+	_doDel: function () {
+		this.getTimeHandler().deleteTime(this, false);
+	},
+	_doType: function (val) {
+		this.getTimeHandler().addTime(this, val);
+	},
+	getTimeHandler: function () {
+		var pos = this._getPos(),
+			lastHdler;
+		for (var i = 0, f = this._fmthdler, j = f.length; i < j; i++) {
+			if (!f[i].type) continue;
+			if (f[i].index[0] < pos && f[i].index[1] + 1 >= pos)
+				return f[i];
+			lastHdler = f[i];
+		}
+		return lastHdler;
+	},
+	_startAutoIncProc: function(up) {
+		if (this.timerId)
 			clearInterval(this.timerId);
-		}
-	
-		var inc_sec = this._calInc();
-		var widget = this;
-		if (!isup)
-			inc_sec = -inc_sec
+		var self = this,
+			fn = up ? '_doUp' : '_doDown';
 		this.timerId = setInterval(function() {
-			widget._autoIncTimeout(inc_sec)
+			self[fn]();
 		}, 300);
 	},
 	_stopAutoIncProc: function() {
-		if (this.timerId) {
+		if (this.timerId)
 			clearTimeout(this.timerId);
-		}
 		this.currentStep = this.defaultStep;
-		this.runCount = 0;
 		this.timerId = null;
 	},
-	_markselection: function(start, end) {
-		var inp = this.inp;
-		if (inp.setSelectionRange) {
-			inp.setSelectionRange(start, end);
-		} else if (inp.createTextRange) {
-			var range = inp.createTextRange();
-			if (start != end) {
-				range.moveEnd('character', end - range.text.length);
-				range.moveStart('character', start);
-			} else {
-				range.move('character', start);
-			}
-			range.select();
-		}
-	},
-	bind_: function () {//after compose
+	bind_: function () {
 		this.$supers('bind_', arguments);
-		this.lastTime = new Date();
-		this.lastTime.setHours(0);
-		this.lastTime.setMinutes(0);
-		this.lastTimeStr = "";
-		this.changed = false;
-	
-		this.currentStep = 1;
-		this.defaultStep = 1;
-		this.lastPos = 0;
-		this.runCount = 0;
-		this.timerId = null;
-		
-		var inp = this.inp = this.$n("real");
-		var btn = this.btn = this.$n("btn");
-		
-		zWatch.listen({onSize: this, onShow: this});			
+		var inp = this.getInputNode(),
+			btn = this.$n("btn");
+		zWatch.listen({onSize: this, onShow: this});
 		if(btn)
-			this.domListen_(btn, "onmousedown", "_btnDown")
-				.domListen_(btn, "onmouseup", "_btnUp")
-				.domListen_(btn, "onmouseout", "_btnOut")
-				.domListen_(btn, "mouseover", "_btnOver");
-		if(inp.value)
-			this._setTime(inp.value);
-		else
-			this._clearTime()
-			
-		this.onSize();	
+			this.domListen_(btn, "onMousedown", "_btnDown")
+				.domListen_(btn, "onMouseup", "_btnUp")
+				.domListen_(btn, "onMouseout", "_btnOut")
+				.domListen_(btn, "onMouseover", "_btnOver");
 	},
 	unbind_: function () {
 		if(this.timerId){
@@ -463,14 +546,250 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			this.timerId = null;
 		}
 		zWatch.unlisten({onSize: this, onShow: this});
-		var btn = this._btn;
-		if(btn)
-			this.domUnlisten_(btn, "onmousedown", "_btnDown")
-				.domUnlisten_(btn, "onmouseup", "_btnUp")
-				.domUnlisten_(btn, "onmouseout", "_btnOut")
-				.domUnlisten_(btn, "mouseover", "_btnOver");
-		//zkTxbox.cleanup(cmp);
+		var btn = this.$n("btn");
+		if (btn) {
+			this.domUnlisten_(btn, "onMousedown", "_btnDown")
+				.domUnlisten_(btn, "onMouseup", "_btnUp")
+				.domUnlisten_(btn, "onMouseout", "_btnOut")
+				.domUnlisten_(btn, "onMouseover", "_btnOver");
+		}
+
 		this.$supers('unbind_', arguments);
 	}
-	
+
+});
+zul.inp.TimeHandler = zk.$extends(zk.Object, {
+	maxsize: 59,
+	minsize: 0,
+	digits: 2,
+	$init: function (index, type) {
+		this.index = index;
+		this.type = type;
+	},
+	format: function (date) {
+		return '00';
+	},
+	unformat: function (date, val) {
+		return date;
+	},
+	increase: function (wgt, up) {
+		var inp = wgt.getInputNode(),
+			start = this.index[0],
+			end = this.index[1] + 1,
+			val = inp.value,
+			text = val.substring(start, end);
+
+		text = zk.parseInt(text.replace(/ /g, '0'));
+		text += up;
+		var max = this.maxsize + 1;
+		if (text < this.minsize)
+			text = this.maxsize;
+		else if (text >= max)
+			text = this.minsize;
+
+		if (/** TODO: this.digits == 2 && */text < 10) text = "0" + text;
+		inp.value = val.substring(0, start) + text + val.substring(end, val.length);
+		
+		zk(inp).setSelectionRange(start, end);
+	},
+	deleteTime: function (wgt, backspace) {
+		var inp = wgt.getInputNode(),
+			sel = zk(inp).getSelectionRange(),
+			pos = sel[1],
+			start = this.index[0],
+			end = this.index[1] + 1,
+			val = inp.value;
+		if (sel[0] != sel[1]) {
+			inp.value = val.substring(0, start) + '  ' + val.substring(end, val.length);
+			pos = end;
+		} else if (pos == start + 1) {
+			if (backspace)
+				inp.value = val.substring(0, start) + ' ' + val.substring(start + 1, val.length);
+			else {
+				inp.value = val.substring(0, start + 1) + ' ' + val.substring(start + 2, val.length);
+				pos++;
+			}
+		} else if (backspace) {
+			inp.value = val.substring(0, start) + ' ' + val.substring(start, start + 1) + val.substring(end, val.length);
+		}
+
+		zk(inp).setSelectionRange(pos, pos);
+	},
+	addTime: function (wgt, num) {
+		var inp = wgt.getInputNode(),
+			sel = zk(inp).getSelectionRange(),
+			start = this.index[0],
+			end = this.index[1] + 1,
+			val = inp.value,
+			text = val.substring(start, end);
+			
+		if (sel[1] - sel[0] > 2) {
+			sel[0] = sel[1] - 2;
+		}
+		
+		var seld = val.substring(sel[0], sel[1]);
+		if (seld) {
+			if (sel[1] - sel[0] > 1) 
+				seld = ' ' + num;
+			inp.value = val.substring(0, sel[0]) + seld + val.substring(sel[1], val.length);
+		} else {
+			var text1 = '';
+			if (sel[1] == end) {
+				if (text.startsWith(' ')) {
+					if (text.endsWith(' ')) 
+						text1 = ' ' + num;
+					else 
+						text1 = text.charAt(1) + num;
+				} else if (text.endsWith(' ')) 
+					text1 = text.charAt(0) + num;
+			} else {
+				if (text.startsWith(' ')) 
+					text1 = num + text.charAt(1);
+			}
+			if (text1 && text1 != text) {
+				if (zk.parseInt(text1) <= this.maxsize) 
+					inp.value = val.substring(0, start) + text1 + val.substring(end, val.length);
+			}
+		}
+		zk(inp).setSelectionRange(sel[1], sel[1]);
+	},
+	getText: function (val) {
+		var start = this.index[0],
+			end = this.index[1] + 1;
+		return val.substring(start, end);
+	}
+});
+zul.inp.HourInDayHandler = zk.$extends(zul.inp.TimeHandler, {
+	maxsize: 23,
+	minsize: 0,
+	format: function (date) {
+		if (!date) return '00';
+		else {
+			var h = date.getHours();
+			if (h < 10)
+				h = '0' + h;
+			return h.toString();
+		}
+	},
+	unformat: function (date, val) {
+		date.setHours(zk.parseInt(this.getText(val)));
+		return date;
+	}
+});
+zul.inp.HourInDayHandler2 = zk.$extends(zul.inp.TimeHandler, {
+	maxsize: 24,
+	minsize: 1,
+	format: function (date) {
+		if (!date) return '24';
+		else {
+			var h = date.getHours();
+			if (h == 0)
+				h = '24';
+			else if (h < 10)
+				h = '0' + h;
+			return h.toString();
+		}
+	},
+	unformat: function (date, val) {
+		var hours = zk.parseInt(this.getText(val));
+		if (hours == 24)
+			hours = 0;
+		date.setHours(hours);
+		return date;
+	}
+});
+zul.inp.HourHandler = zk.$extends(zul.inp.TimeHandler, {
+	maxsize: 12,
+	minsize: 1,
+	format: function (date) {
+		if (!date) return '12';
+		else {
+			var h = date.getHours();
+			h = (h % 12);
+			if (h == 0)
+				h = '12';
+			else if (h < 10)
+				h = '0' + h;
+			return h.toString();
+		}
+	},
+	unformat: function (date, val, am) {
+		var hours = zk.parseInt(this.getText(val));
+		if (hours == 12)
+			hours = 0;
+		date.setHours(am ? hours : hours + 12);
+		return date;
+	}
+});
+zul.inp.HourHandler2 = zk.$extends(zul.inp.TimeHandler, {
+	maxsize: 11,
+	minsize: 0,
+	format: function (date) {
+		if (!date) return '00';
+		else {
+			var h = date.getHours();
+			h = (h % 12);
+			if (h < 10)
+				h = '0' + h;
+			return h.toString();
+		}
+	},
+	unformat: function (date, val, am) {
+		var hours = zk.parseInt(this.getText(val));
+		date.setHours(am ? hours : hours + 12);
+		return date;
+	}
+});
+zul.inp.MinuteHandler = zk.$extends(zul.inp.TimeHandler, {
+	format: function (date) {
+		if (!date) return '00';
+		else {
+			var m = date.getMinutes();
+			if (m < 10)
+				m = '0' + m;
+			return m.toString();
+		}
+	},
+	unformat: function (date, val) {
+		date.setMinutes(zk.parseInt(this.getText(val)));
+		return date;
+	}
+});
+zul.inp.SecondHandler = zk.$extends(zul.inp.TimeHandler, {
+	format: function (date) {
+		if (!date) return '00';
+		else {
+			var s = date.getSeconds();
+			if (s < 10)
+				s = '0' + s;
+			return s.toString();
+		}
+	},
+	unformat: function (date, val) {
+		date.setSeconds(zk.parseInt(this.getText(val)));
+		return date;
+	}
+});
+zul.inp.AMPMHandler = zk.$extends(zul.inp.TimeHandler, {
+	format: function (date) {
+		if (!date)
+			return zk.APM[0];
+		var h = date.getHours();
+		return zk.APM[h < 12 ? 0 : 1];
+	},
+	unformat: function (date, val) {
+		return zk.APM[0] == this.getText(val);
+	},
+	deleteTime: zk.$void,
+	increase: function (wgt, up) {
+		var inp = wgt.getInputNode(),
+			start = this.index[0],
+			end = this.index[1] + 1,
+			val = inp.value,
+			text = val.substring(start, end);
+
+		text = zk.APM[0] == text ? zk.APM[1] : zk.APM[0];
+		inp.value = val.substring(0, start) + text + val.substring(end, val.length);
+		zk(inp).setSelectionRange(start, end);
+	}
 });

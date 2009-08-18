@@ -29,6 +29,7 @@ import org.zkoss.util.Locales;
 import org.zkoss.util.TimeZones;
 
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zul.impl.FormatInputElement;
 import org.zkoss.zul.impl.InputElement;
 import org.zkoss.zul.impl.Utils;
 import org.zkoss.zul.mesg.MZul;
@@ -56,19 +57,75 @@ import org.zkoss.zul.mesg.MZul;
  * @author Dennis Chen
  * @since 3.0.0
  */
-public class Timebox extends InputElement implements org.zkoss.zul.api.Timebox {
+public class Timebox extends FormatInputElement implements org.zkoss.zul.api.Timebox {
 	private TimeZone _tzone;
 	private boolean _btnVisible = true;
 	
 	public Timebox() {
 		setCols(5);
-		setMaxlength(5);
+		setFormat("HH:mm");
 	}
 	public Timebox(Date date) throws WrongValueException {
 		this();
 		setValue(date);
 	}
 
+
+
+	/** Sets the date format.
+<p>The following pattern letters are defined:
+<table border=0 cellspacing=3 cellpadding=0>
+
+     <tr bgcolor="#ccccff">
+         <th align=left>Letter
+         <th align=left>Date or Time Component
+         <th align=left>Presentation
+         <th align=left>Examples
+     <tr>
+ *     <tr bgcolor="#eeeeff">
+ *         <td><code>a</code>
+ *         <td>Am/pm marker
+ *         <td><a href="#text">Text</a>
+ *         <td><code>PM</code>
+ *     <tr>
+ *         <td><code>H</code>
+ *         <td>Hour in day (0-23)
+ *         <td><a href="#number">Number</a>
+ *         <td><code>0</code>
+ *     <tr bgcolor="#eeeeff">
+ *         <td><code>k</code>
+ *         <td>Hour in day (1-24)
+ *         <td><a href="#number">Number</a>
+ *         <td><code>24</code>
+ *     <tr>
+ *         <td><code>K</code>
+ *         <td>Hour in am/pm (0-11)
+ *         <td><a href="#number">Number</a>
+ *         <td><code>0</code>
+ *     <tr bgcolor="#eeeeff">
+ *         <td><code>h</code>
+ *         <td>Hour in am/pm (1-12)
+ *         <td><a href="#number">Number</a>
+ *         <td><code>12</code>
+ *     <tr>
+ *         <td><code>m</code>
+ *         <td>Minute in hour
+ *         <td><a href="#number">Number</a>
+ *         <td><code>30</code>
+ *     <tr bgcolor="#eeeeff">
+ *         <td><code>s</code>
+ *         <td>Second in minute
+ *         <td><a href="#number">Number</a>
+ *         <td><code>55</code>
+ </table>
+ 	@since 5.0.0
+ 	 */
+	public void setFormat(String format) throws WrongValueException {
+		if (format == null || format.length() == 0)
+			format = "HH:mm";
+		super.setFormat(format);
+	}
+	
 	/** Returns the value (in Date), might be null unless
 	 *  a constraint stops it. And, only Hour and Mintue field is effective.
 	 * @exception WrongValueException if user entered a wrong value
@@ -122,32 +179,30 @@ public class Timebox extends InputElement implements org.zkoss.zul.api.Timebox {
 		if (value == null || value.length() == 0){
 			return null;
 		}
-
-		final DateFormat df = getDateFormat();
+		final String fmt = getFormat();
+		final DateFormat df = getDateFormat(fmt);
 		final Date date;
 		try {
 			date = df.parse(value);
 		} catch (ParseException ex) {
 			throw showCustomError(
 				new WrongValueException(this, MZul.DATE_REQUIRED,
-					new Object[] {value, "HH:mm"}));
+					new Object[] {value, fmt}));
 		}
 		return date;
 	}
 	protected String coerceToString(Object value) {
-		if(value==null) return "";
-		final DateFormat df = getDateFormat();
-		return value != null ? df.format((Date)value): "";
+		final DateFormat df = getDateFormat(getFormat());
+		return value != null ? df.format((Date) value) : "";
 	}
 	
 	/** Returns the date format of the time only,
 	 *
 	 * <p>Default: it uses SimpleDateFormat to format the date.
 	 */
-	protected DateFormat getDateFormat() {
-		String fmt = "HH:mm";
+	protected DateFormat getDateFormat(String fmt) {
 		final DateFormat df = new SimpleDateFormat(fmt, Locales.getCurrent());
-		final TimeZone tz = _tzone != null ? _tzone: TimeZones.getCurrent();
+		final TimeZone tz = _tzone != null ? _tzone : TimeZones.getCurrent();
 		df.setTimeZone(tz);
 		return df;
 	}
@@ -159,8 +214,6 @@ public class Timebox extends InputElement implements org.zkoss.zul.api.Timebox {
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
 		super.renderProperties(renderer);
-		if(this.getValue()!=null)
-			render(renderer, "value", this.coerceToString(this.getValue()));
 		if(_btnVisible != true)
 			renderer.render("buttonVisible", _btnVisible);
 	}

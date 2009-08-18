@@ -26,6 +26,7 @@
 	background-repeat : no-repeat;
 	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0;
 	border-bottom: 1px solid #86A4BE;
+	overflow: hidden;
 	display:-moz-inline-box; display:inline-block;
 }
 .z-combobox-btn-over .z-combobox-img {
@@ -97,6 +98,7 @@
 	background-repeat : no-repeat;
 	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0;
 	border-bottom: 1px solid #86A4BE;
+	overflow: hidden;
 	display:-moz-inline-box; display:inline-block;
 }
 .z-bandbox-btn-over .z-bandbox-img {
@@ -146,6 +148,7 @@
 	background-repeat : no-repeat;
 	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0;
 	border-bottom: 1px solid #86A4BE;
+	overflow: hidden;
 	display:-moz-inline-box; display:inline-block;
 }
 .z-datebox-btn-over .z-datebox-img {
@@ -233,6 +236,8 @@
 	background-repeat : no-repeat;
 	vertical-align: top; cursor: pointer; width: 17px; height: 19px; border: 0;
 	border-bottom: 1px solid #86A4BE;
+	overflow: hidden;
+	display:-moz-inline-box; display:inline-block;
 }
 .z-timebox-btn-over .z-timebox-img {
 	background-position: -17px 0;

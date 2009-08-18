@@ -154,7 +154,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				this._lastChg = inp.value;
 				this._tidChg = setInterval(this.proxy(this._onChanging), 500);
 			}
-			jq(inp).addClass(this.getZclass() + '-focus');
+			jq(this.$n()).addClass(this.getZclass() + '-focus');
 		}
 	},
 	doBlur_: function (evt) {
@@ -162,8 +162,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 
 		this._stopOnChanging();
 
-		var inp = this.getInputNode();
-		jq(inp).removeClass(this.getZclass() + '-focus');
+		jq(this.$n()).removeClass(this.getZclass() + '-focus');
 		if (!zk.alerting && this.shallUpdate_(zk.currentFocus))
 			this.updateChange_();
 	},

@@ -680,8 +680,8 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {
 		super.renderProperties(renderer);
-		if (!(this instanceof Timebox))
-			render(renderer, "value", _value);
+		
+		render(renderer, "value", coerceToString(_value));
 		render(renderer, "readonly", _readonly);
 		render(renderer, "disabled", _disabled);
 		render(renderer, "name", _name);
