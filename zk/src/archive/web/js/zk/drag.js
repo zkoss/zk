@@ -127,7 +127,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 			throw "Handle required for "+control;
 
 		opts = zk.$default(opts, {
-			zIndex: 1000,
+//No default z-index (since caller, such as window, might set it)
 			scrollSensitivity: 20,
 			scrollSpeed: 15,
 			initSensitivity: 3,

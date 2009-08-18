@@ -677,12 +677,12 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			top = $top[0],
 			header = $top.nextAll('div:first')[0],
 			fakeT = jq(top).clone()[0],
-			fakeH = jq(header).clone()[0],
-			html = '<div id="zk_wndghost" class="z-window-move-ghost" style="position:absolute;top:'
+			fakeH = jq(header).clone()[0];
+		jq(document.body).prepend(
+			'<div id="zk_wndghost" class="z-window-move-ghost" style="position:absolute;top:'
 			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
 			+$el.zk.offsetWidth()+'px;height:'+$el.zk.offsetHeight()
-			+'px;z-index:'+el.style.zIndex+'"><dl></dl></div>';
-		jq(document.body).prepend(html);
+			+'px;z-index:'+el.style.zIndex+'"><dl></dl></div>');
 		dg._wndoffs = ofs;
 		el.style.visibility = "hidden";
 		var h = el.offsetHeight - top.offsetHeight - header.offsetHeight;
