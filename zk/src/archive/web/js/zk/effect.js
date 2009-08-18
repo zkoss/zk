@@ -263,14 +263,15 @@ zk.eff.Tooltip = zk.$extends(zk.Object, {
 				tip: tip, ref: ref,
 				timer: setTimeout(this.proxy(this.open_), zk.tipDelay)
 			};
-		} else
+		} else if (this._ref == ref)
 			this._clearClosing();
 	},
 	end: function (ref) {
-		if (this._ref == ref || this._tip == ref)
+		if (this._ref == ref || this._tip == ref) {
 			this._tmClosing =
 				setTimeout(this.proxy(this.close_), 100);
 			//don't cloes immediate since user might move from ref to toolip
+		}
 		else
 			this._clearOpening();
 	},
