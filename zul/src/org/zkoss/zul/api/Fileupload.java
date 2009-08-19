@@ -39,9 +39,6 @@ import org.zkoss.zk.ui.event.UploadEvent;//for javadoc
  * <p>
  * You can create it as a component and then listen to the onUpload event (
  * {@link UploadEvent}). If the cancel button is pressed or file(s) is uploaded,
- * the onClose event ({@link org.zkoss.zk.ui.event.Event}). is sent to notify
- * the application. By default, it does nothing but invalidate the component,
- * i.e., all fields are cleared.
  * 
  * <p>
  * A non-XUL extension.
