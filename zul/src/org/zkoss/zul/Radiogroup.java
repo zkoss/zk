@@ -68,7 +68,7 @@ public class Radiogroup extends XulElement implements org.zkoss.zul.api.Radiogro
 
 		if (!Objects.equals(_orient, orient)) {
 			_orient = orient;
-			invalidate();
+			smartUpdate("orient", _orient);
 		}
 	}
 
@@ -277,6 +277,8 @@ public class Radiogroup extends XulElement implements org.zkoss.zul.api.Radiogro
 		super.renderProperties(renderer);
 		if (_name != null)
 			render(renderer, "name", _name);
+		if (!"horizontal".equals(_orient))
+			render(renderer, "orient", _orient);
 	}
 	
 	//Cloneable//
