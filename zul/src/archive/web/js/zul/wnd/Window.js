@@ -42,7 +42,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			var node = this.$n();
 			if (node) {
 				var $n = zk(node),
-					isRealVisible = $n.isRealVisible();
+					isRealVisible = this.isRealVisible();
 				if (!isRealVisible && maximized) return;
 	
 				var l, t, w, h, s = node.style, cls = this.getZclass();
@@ -183,7 +183,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this._syncShadow();
 		this._updateDomPos();
 
-		if (zk(this.$n()).isRealVisible()) {
+		if (this.isRealVisible()) {
 			$n.cleanVisibility();
 			this.setTopmost();
 		}
@@ -210,7 +210,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		}
 
 		//Note: modal must be visible
-		var realVisible = $n.isRealVisible();
+		var realVisible = this.isRealVisible();
 		if (realVisible) {
 			$n.cleanVisibility();
 			this.setTopmost();
@@ -323,13 +323,17 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 	//watch//
 	onShow: function (w) {
-		if (this != w && this._mode != 'embedded' && this.isRealVisible({until: w}))
-			this.$n().style.display = '';
+		if (this != w && this._mode != 'embedded' && this.isRealVisible({until: w})) {
+			zk(this.$n()).cleanVisibility();
+			this._syncShadow();
+		}
 		this.onSize(w);
 	},
 	onHide: function (w) {
-		if (this != w && this._mode != 'embedded' && this.isRealVisible({until: w}))
-			this.$n().style.display = 'none';
+		if (this != w && this._mode != 'embedded' && this.isRealVisible({until: w})) {
+			this.$n().style.visibility = 'hidden';
+			this._syncShadow();
+		}
 	},
 	onSize: (function() {
 		function syncMaximized (wgt) {
@@ -392,41 +396,44 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			}
 	},
 	_fixWdh: zk.ie7 ? function () {
-		if (this._mode == 'embedded' || this._mode == 'popup' || !zk(this.$n()).isRealVisible()) return;
-		var n = this.$n(),
-			cave = this.$n('cave').parentNode,
-			wdh = n.style.width,
-			$n = jq(n),
-			$tl = $n.find('>div:first'),
-			tl = $tl[0],
-			hl = tl && this.$n("cap") ? $tl.nextAll('div:first')[0]: null,
-			bl = $n.find('>div:last')[0];
+		if (this._mode != 'embedded' && this._mode != 'popup' && this.isRealVisible()) {
+			var n = this.$n(),
+				cave = this.$n('cave').parentNode,
+				wdh = n.style.width,
+				$n = jq(n),
+				$tl = $n.find('>div:first'),
+				tl = $tl[0],
+				hl = tl && this.$n("cap") ? $tl.nextAll('div:first')[0]: null,
+				bl = $n.find('>div:last')[0];
 
-		if (!wdh || wdh == "auto") {
-			var $cavp = zk(cave.parentNode),
-				diff = $cavp.padBorderWidth() + $cavp.parent().padBorderWidth();
-			if (tl) tl.firstChild.style.width = jq.px(cave.offsetWidth + diff);
-			if (hl) hl.firstChild.firstChild.style.width = jq.px(cave.offsetWidth
-				- (zk(hl).padBorderWidth() + zk(hl.firstChild).padBorderWidth() - diff));
-			if (bl) bl.firstChild.style.width = jq.px(cave.offsetWidth + diff);
-		} else {
-			if (tl) tl.firstChild.style.width = "";
-			if (hl) hl.firstChild.style.width = "";
-			if (bl) bl.firstChild.style.width = "";
+			if (!wdh || wdh == "auto") {
+				var $cavp = zk(cave.parentNode),
+					diff = $cavp.padBorderWidth() + $cavp.parent().padBorderWidth();
+				if (tl) tl.firstChild.style.width = jq.px(cave.offsetWidth + diff);
+				if (hl) hl.firstChild.firstChild.style.width = jq.px(cave.offsetWidth
+					- (zk(hl).padBorderWidth() + zk(hl.firstChild).padBorderWidth() - diff));
+				if (bl) bl.firstChild.style.width = jq.px(cave.offsetWidth + diff);
+			} else {
+				if (tl) tl.firstChild.style.width = "";
+				if (hl) hl.firstChild.style.width = "";
+				if (bl) bl.firstChild.style.width = "";
+			}
 		}
 	} : zk.$void,
 	_fixHgh: function () {
-		if (!zk(this.$n()).isRealVisible()) return;
-		var n = this.$n(),
-			hgh = n.style.height,
-			cave = this.$n('cave'),
-			cvh = cave.style.height;
-		if (hgh && hgh != "auto") {
-			if (zk.ie6_) cave.style.height = "0px";
-			zk(cave).setOffsetHeight(this._offsetHeight(n));
-		} else if (cvh && cvh != "auto") {
-			if (zk.ie6_) cave.style.height = "0px";
-			cave.style.height = "";
+		if (this.isRealVisible()) {
+			var n = this.$n(),
+				hgh = n.style.height,
+				cave = this.$n('cave'),
+				cvh = cave.style.height;
+
+			if (hgh && hgh != "auto") {
+				if (zk.ie6_) cave.style.height = "0px";
+				zk(cave).setOffsetHeight(this._offsetHeight(n));
+			} else if (cvh && cvh != "auto") {
+				if (zk.ie6_) cave.style.height = "0px";
+				cave.style.height = "";
+			}
 		}
 	},
 	_offsetHeight: function (n) {
@@ -537,18 +544,12 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			this.caption = null;
 	},
 	domStyle_: function (no) {
-		var style = this.$supers('domStyle_', arguments),
-			visible = this._dVisible();
-		if ((!no || !no.visible) && (!visible || this.isMinimized()))
+		var style = this.$supers('domStyle_', arguments);
+		if ((!no || !no.visible) && this.isMinimized())
 			style = 'display:none;'+style;
 		if (this._mode != 'embedded')
-			style = (visible ? "position:absolute;visibility:hidden;" : "position:absolute;")
-				+style;
+			style = "position:absolute;visibility:hidden;"+style;
 		return style;
-	},
-
-	_dVisible: function () { //test real visible
-		return this._mode != 'embedded' ? this.isRealVisible(): this.isVisible();
 	},
 
 	bind_: function () {

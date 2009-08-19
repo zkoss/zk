@@ -644,10 +644,12 @@ zk.Widget = zk.$extends(zk.Object, {
 
 			//from parent to child
 			for (var j = 0, fl = _floatings.length; j < fl; ++j) {
-				var w = _floatings[j].widget;
-				if (this != w && this._floatVisibleDependent(w)) {
+				var w = _floatings[j].widget,
+					n = _floatings[j].node;
+				if (this == w)
+					w.setDomVisible_(n, true, {visibility:1});
+				else if (this._floatVisibleDependent(w)) {
 					zi = zi >= 0 ? ++zi: w._topZIndex();
-					var n = _floatings[j].node;
 					if (n != w.$n()) w.setFloatZIndex_(n, zi); //only a portion
 					else w._setZIndex(zi, true);
 

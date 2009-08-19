@@ -31,26 +31,32 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 				sibwgt = zk.Widget.$(sib),
 				fd = vert ? "height": "width", diff;
 			if (sib) {
-				sibwgt.setDomVisible_(sib, open); //fire onShow/onHide
+				if (!open)
+					zWatch.fireDown('onHide', null, sibwgt);
+
+				sibwgt.setDomVisible_(sib, open);
 				sibwgt.parent._fixChildDomVisible(sibwgt, open);
 
 				diff = zk.parseInt(sib.style[fd]);
 				if (!before && sibwgt && !sibwgt.nextSibling) {
 					var sp = this.$n('chdex2');
 					if (sp) {
-						sp.style.display = open ? '': 'none'; //no onShow/onHide
+						sp.style.display = open ? '': 'none';
 						diff += zk.parseInt(sp.style[fd]);
 					}
 				}
 			}
 
-			sib = before ? Splitter._next(nd): Splitter._prev(nd);
-			if (sib) {
-				diff = zk.parseInt(sib.style[fd]) + (open ? -diff: diff);
+			var sib2 = before ? Splitter._next(nd): Splitter._prev(nd);
+			if (sib2) {
+				diff = zk.parseInt(sib2.style[fd]) + (open ? -diff: diff);
 				if (diff < 0) diff = 0;
-				sib.style[fd] = diff + "px";
-				if (open) zWatch.fireDown('onSize', null, sibwgt);
+				sib2.style[fd] = diff + "px";
 			}
+			if (sib && open)
+				zWatch.fireDown('onShow', null, sibwgt);
+			if (sib2)
+				zWatch.fireDown('onSize', null, zk.Widget.$(sib2));
 
 			node.style.cursor = !open ? "default" : vert ? "s-resize": "e-resize";
 			this._fixNSDomClass();

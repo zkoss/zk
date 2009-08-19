@@ -836,7 +836,6 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 				//always makes caption as the first child
 			if (super.insertBefore(child, refChild)) {
 				_caption = (Caption)child;
-				invalidate();
 				return true;
 			}
 			return false;

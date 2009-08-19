@@ -59,17 +59,10 @@ zWatch = (function () {
 		_watches = {}, //Map(watch-name, [watch objects]
 		_dirty;
 
-	function _visi0(c) {
-		var n;
-		return c.$n && (n=c.$n()) && zk(n).isRealVisible();
-	}
 	function _visible(name, c) {
-		return _visi0(c)
-			|| (name == 'onShow'
-				&& c.isVisible() && (c.$n && (n=c.$n()) && !zk(n).isVisible())
-				&& (!c.parent || _visi0(c.parent)));
-			//if c is Window, it could be visible but c.$n.display is not (due to vparentNode)
-			//OTH, if c's parent is hbox, c.$n.display is the same as visible
+		return c.$n && (n=c.$n()) && zk(n).isRealVisible(name!='onShow');
+		//if onShow, we don't check visibility since window uses it for
+		//non-embedded window that becomes invisible because of its parent
 	}
 	function _visibleChild(name, p, c) {
 		if (_visible(name, c))
