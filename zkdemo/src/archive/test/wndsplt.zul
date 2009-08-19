@@ -21,8 +21,10 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 		${self.parent.title}
 		<window id="sub_sub" title="Overlapped of Embedded" border="normal" mode="overlapped">
 			${self.parent.title}
+			<button label="hide" onClick="sub_sub.visible = false"/>
 		</window>
+		<button label="toggle overlapped's visible" onClick="sub_sub.visible = !sub_sub.visible"/>
 	</window>
-	<button label="toggle visible" onClick="sub.visible = !sub.visible"/>
+	<button label="toggle embedded's visible" onClick="sub.visible = !sub.visible"/>
 </window>
 </hbox>
