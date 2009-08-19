@@ -182,7 +182,6 @@ public class Groupbox extends XulElement implements org.zkoss.zul.api.Groupbox {
 				//always makes caption as the first child
 			if (super.insertBefore(child, refChild)) {
 				_caption = (Caption)child;
-				invalidate();
 				return true;
 			}
 		} else {

@@ -46,10 +46,6 @@ import org.zkoss.zul.impl.FileuploadDlg;
  *
  * <p>You can create it as a component and then listen to
  * the onUpload event ({@link UploadEvent}).
- * If the cancel button is pressed or file(s) is uploaded, the onClose event
- * ({@link org.zkoss.zk.ui.event.Event}).
- * is sent to notify the application. By default, it does nothing but
- * invalidate the component, i.e., all fields are cleared.
  *
  * <p>A non-XUL extension.
  *
@@ -88,19 +84,6 @@ public class Fileupload extends Button implements org.zkoss.zul.api.Fileupload {
 	/** @deprecated As of release 5.0.0, replaced with {@link #setUpload(String)}
 	 */
 	public void setNative(boolean alwaysNative) {
-	}
-
-	/** Hanldes the onClose event which is sent when file(s) is uploaded
-	 * or when the cancel button is pressed.
-	 *
-	 * <p>By default, it simply invalidates itself, i.e.,
-	 * all fields are cleared.
-	 * If you want to do something different, you can intercept the onClose
-	 * event.
-	 * @since 2.4.0
-	 */
-	public void onClose() {
-		invalidate(); //TODO
 	}
 
 	/////Open as a Modal Dialog/////

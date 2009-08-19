@@ -156,10 +156,9 @@ public class Script extends AbstractComponent implements org.zkoss.zul.api.Scrip
 	 * @see #isDefer
 	 */
 	public void setDefer(boolean defer) {
-		if (_defer != defer) {
-			_defer = defer;
-			invalidate();
-		}
+		_defer = defer;
+		//no smart update nor invalidate, since it is meaningless if
+		//the peer widget has been created
 	}
 
 	/** Returns the content of the script element.

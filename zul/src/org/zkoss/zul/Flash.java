@@ -218,7 +218,7 @@ public class Flash extends HtmlBasedComponent implements org.zkoss.zul.api.Flash
 		if (_src != null || media != _media) {
 			_media = RepeatableMedia.getInstance(media);
 				//Use RepeatableMedia since it might be reloaded
-				//if the component is invalidated or overlapped wnd (Bug 1896797)
+				//if the component is in an overlapped wnd (Bug 1896797)
 			_src = null;
 			if (_media != null) ++_medver; //enforce browser to reload
 			smartUpdate("src", new EncodedSrc());

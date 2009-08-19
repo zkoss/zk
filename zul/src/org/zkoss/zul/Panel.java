@@ -392,7 +392,6 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 			} else if ("fbar".equals(name)) {
 				_fbar = toolbar;
 			}
-			invalidate();
 			return true;
 		}
 		return false;
@@ -510,13 +509,11 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 				//always makes caption as the first child
 			if (super.insertBefore(newChild, refChild)) {
 				_caption = (Caption)newChild;
-				invalidate();
 				return true;
 			}
 		} else if (newChild instanceof Panelchildren) {
 			if (super.insertBefore(newChild, refChild)) {
 				_panelchildren = (Panelchildren) newChild;
-				invalidate();
 				return true;
 			}
 		} else if (newChild instanceof Toolbar) {
@@ -531,7 +528,6 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 						_bbar = (Toolbar) newChild; 
 					}
 				}
-				invalidate();
 				return true;
 			}
 		} else {

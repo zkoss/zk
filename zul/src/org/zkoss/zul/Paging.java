@@ -116,7 +116,7 @@ public class Paging extends XulElement implements org.zkoss.zul.api.Paging, Pagi
 			throw new WrongValueException("Unable to set active page to "+pg+" since only "+_npg+" pages");
 		if (_actpg != pg) {
 			_actpg = pg;
-			invalidate();
+			smartUpdate("activePage", pg);
 			Events.postEvent(new PagingEvent("onPagingImpl", this, _actpg));
 				//onPagingImpl is used for implementation purpose only
 		}
