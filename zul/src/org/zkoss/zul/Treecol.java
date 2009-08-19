@@ -82,7 +82,7 @@ public class Treecol extends HeaderElement implements org.zkoss.zul.api.Treecol 
 		if (maxlength < 0) maxlength = 0;
 		if (_maxlength != maxlength) {
 			_maxlength = maxlength;
-			invalidateCells();
+			smartUpdate("maxlength", maxlength);
 		}
 	}
 
@@ -95,29 +95,6 @@ public class Treecol extends HeaderElement implements org.zkoss.zul.api.Treecol 
 			if (it.next() == this)
 				break;
 		return j;
-	}
-
-	/** Invalidates the relevant cells. */
-	private void invalidateCells() {
-		final Tree tree = getTree();
-		if (tree != null)
-			invalidateCells(tree.getTreechildren(), getColumnIndex());
-	}
-	private static void invalidateCells(Treechildren tch, int jcol) {
-		if (tch == null)
-			return;
-
-		for (Iterator it = tch.getChildren().iterator(); it.hasNext();) {
-			final Treeitem ti = (Treeitem)it.next();
-			final Treerow tr = ti.getTreerow();
-			if (tr != null) {
-				final List chs = tr.getChildren();
-				if (jcol < chs.size())
-					((Component)chs.get(jcol)).invalidate();
-			}
-
-			invalidateCells(ti.getTreechildren(), jcol); //recursive
-		}
 	}
 
 	//-- super --//

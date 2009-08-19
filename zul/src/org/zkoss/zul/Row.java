@@ -182,10 +182,6 @@ public class Row extends XulElement implements org.zkoss.zul.api.Row {
 
 			final Grid grid = getGrid();
 			if (grid != null && grid.getModel() != null)
-				if (_loaded && !grid.inPagingMold())
-					invalidate();
-					//reason: the client doesn't init (for better performance)
-					//i.e., z.skipsib is specified for unloaded items
 				smartUpdate("_loaded", _loaded);
 		}
 	}

@@ -86,7 +86,7 @@ public class Treeitem extends XulElement implements org.zkoss.zul.api.Treeitem {
 	public void setCheckable(boolean checkable) {
 		if (_checkable != checkable) {
 			_checkable = checkable;
-			invalidate();
+			smartUpdate("checkable", checkable);
 		}
 	}
 	
@@ -116,7 +116,7 @@ public class Treeitem extends XulElement implements org.zkoss.zul.api.Treeitem {
 	public void setDisabled(boolean disabled) {
 		if (_disabled != disabled) {
 			_disabled = disabled;
-			invalidate();
+			smartUpdate("disabled", disabled);
 		}
 	}
 	
@@ -442,30 +442,8 @@ public class Treeitem extends XulElement implements org.zkoss.zul.api.Treeitem {
 		if (oldp == parent)
 			return; //nothing changed
 
-		Treeitem affected = null; //what to invalidate
-		if (oldp != null) {
-			final List sibs = oldp.getChildren();
-			final int sz = sibs.size();
-			if (sz > 1 && sibs.get(sibs.size() - 1) == this)
-				affected = (Treeitem)sibs.get(sibs.size() - 2);
-				//we have to invalidate it because it will become last-child
-		}
 		final Tree oldtree = oldp != null ? getTree(): null;
-
 		super.setParent(parent);
-
-		if (affected != null && affected._treerow != null)
-			affected._treerow.invalidate(); //only the first row
-
-		if (parent != null) {
-			final List sibs = parent.getChildren();
-			final int sz = sibs.size();
-			if (sz > 1 && sibs.get(sz - 1) == this) {
-				affected = (Treeitem)sibs.get(sz - 2);
-				if (affected._treerow != null)
-					affected._treerow.invalidate(); //only the first row
-			}
-		}
 
 		//maintain the selected status
 		if (oldtree != null)
@@ -496,8 +474,6 @@ public class Treeitem extends XulElement implements org.zkoss.zul.api.Treeitem {
 		} else if (child instanceof Treechildren) {
 			if (super.insertBefore(child, refChild)) {
 				_treechildren = (Treechildren)child;
-				if (_treerow != null)
-					_treerow.invalidate();
 				return true;
 			}
 		} else {
@@ -517,19 +493,10 @@ public class Treeitem extends XulElement implements org.zkoss.zul.api.Treeitem {
 		} else if (child instanceof Treechildren) {
 			addVisibleItemCount(-_treechildren.getVisibleItemCount(), false);
 			_treechildren = null;
-			invalidate();
 		}
 		super.onChildRemoved(child);
 	}
 	
-	public void invalidate() {
-		//There is no counter-part at client if no tree row
-		//We didn't set ATTR_NO_CHILD at insertBefore, since we cannot
-		//solve the issue that a treeitem without treerow:(
-		if (_treerow != null)
-			super.invalidate();
-	}
-
 	// Returns whether the treeitem should be visited.
 	private static final boolean shallVisitTree(Tree tree, Component child) {
 		final Treeitem item = (Treeitem) child;

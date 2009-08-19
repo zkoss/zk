@@ -255,12 +255,7 @@ public class Listitem extends XulElement implements org.zkoss.zul.api.Listitem {
 
 			final Listbox listbox = getListbox();
 			if (listbox != null && listbox.getModel() != null)
-				if (_loaded && !listbox.inPagingMold())
-					invalidate();
-					//reason: the client doesn't init (for better performance)
-					//i.e., z.skipsib is specified for unloaded items
-				else
-					smartUpdate("_loaded", _loaded);
+				smartUpdate("_loaded", _loaded);
 		}
 	}
 	/** Returns whether the content of this item is loaded.
@@ -330,22 +325,6 @@ public class Listitem extends XulElement implements org.zkoss.zul.api.Listitem {
 		if (!(child instanceof Listcell))
 			throw new UiException("Unsupported child for listitem: "+child);
 		super.beforeChildAdded(child, refChild);
-	}
-	public void invalidate() {
-		if (inSelectMold()) {
-			//Both IE and Mozilla are buggy if we update options by outerHTML
-			getParent().invalidate();
-			return;
-		}
-		super.invalidate();
-	}
-	public void onChildAdded(Component child) {
-		if (inSelectMold()) invalidate(); //if HTML-select, Listcell has no client part
-		super.onChildAdded(child);
-	}
-	public void onChildRemoved(Component child) {
-		if (inSelectMold()) invalidate(); //if HTML-select, Listcell has no client part
-		super.onChildRemoved(child);
 	}
 
 	//Clone//

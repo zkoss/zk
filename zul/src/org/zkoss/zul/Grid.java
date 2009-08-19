@@ -1163,25 +1163,21 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		if (newChild instanceof Rows) {
 			if (super.insertBefore(newChild, refChild)) {
 				_rows = (Rows)newChild;
-				invalidate();
 				return true;
 			}
 		} else if (newChild instanceof Columns) {
 			if (super.insertBefore(newChild, refChild)) {
 				_cols = (Columns)newChild;
-				invalidate();
 				return true;
 			}
 		} else if (newChild instanceof Foot) {
 			if (super.insertBefore(newChild, refChild)) {
 				_foot = (Foot)newChild;
-				invalidate();
 				return true;
 			}
 		} else if (newChild instanceof Paging) {
 			if (super.insertBefore(newChild, refChild)) {
 				_pgi = _paging = (Paging)newChild;
-				invalidate();
 				return true;
 			}
 		} else {

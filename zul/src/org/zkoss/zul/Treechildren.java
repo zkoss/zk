@@ -215,17 +215,6 @@ public class Treechildren extends XulElement implements org.zkoss.zul.api.Treech
 			throw new UiException("Unsupported child for treechildren: "+child);
 		super.beforeChildAdded(child, refChild);
 	}
-	public void invalidate() {
-		final Component parent = getParent();
-		if (parent instanceof Tree) {
-			//Browser Limitation (IE/FF): we cannot update TBODY only
-			parent.invalidate();
-		} else if (!getChildren().isEmpty()) {
-		//Don't invalidate if no child at all, since there is no
-		//counter-part at the client
-			super.invalidate();
-		}
-	}
 
 	//-- Component --//
 	public String getZclass() {

@@ -264,14 +264,7 @@ public class Group extends Row implements org.zkoss.zul.api.Group {
 			throw new UnsupportedOperationException();
 		}
 	}
-	public void onChildAdded(Component child) {
-		super.onChildAdded(child);
-		invalidate();
-	}
-	public void onChildRemoved(Component child) {
-		super.onChildRemoved(child);
-		invalidate();
-	}
+
 	//Cloneable//
 	public Object clone() {
 		final Group clone = (Group)super.clone();

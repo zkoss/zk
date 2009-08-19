@@ -143,20 +143,6 @@ public class Tabs extends XulElement implements org.zkoss.zul.api.Tabs {
 		final Tabbox tabbox = getTabbox();
 		if (tabbox != null)
 			((Tab)child).addEventListener(Events.ON_SELECT, tabbox._listener);
-		//
-		if (tabbox == null || !tabbox.inAccordionMold())
-			smartUpdate("z.initscroll", true); //fixWidth
-	}
-	public void invalidate() {
-		Tabbox tabbox = getTabbox();
-		if (tabbox != null && tabbox.isVertical()) {
-			
-			// Bug 2313445 for vtabs2.dsp, it needs to put a div outside root div 
-			// to show the separator bar.
-			tabbox.invalidate();		
-		} else {
-			super.invalidate();
-		}
 	}
 
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)

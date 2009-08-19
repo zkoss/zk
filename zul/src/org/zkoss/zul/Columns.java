@@ -131,11 +131,6 @@ public class Columns extends HeadersElement implements org.zkoss.zul.api.Columns
 			smartUpdate("menupopup", mpop);
 		}
 	}
-	public void invalidate() {
-		final Grid grid = getGrid();
-		if (grid != null) grid.invalidate();
-		else super.invalidate();
-	}
 
 	/** @deprecated As of release 5.0.0, replaced with {@link #setPopup(Popup)}.
 	 */

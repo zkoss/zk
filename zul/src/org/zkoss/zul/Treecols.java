@@ -45,14 +45,6 @@ public class Treecols extends HeadersElement implements org.zkoss.zul.api.Treeco
 	}
 
 	//super//
-	public boolean setVisible(boolean visible) {
-		final boolean vis = super.setVisible(visible);
-		final Tree tree = getTree();
-		if (tree != null)
-			tree.invalidate();
-		return vis;
-	}
-
 	public String getZclass() {
 		return _zclass == null ? "z-treecols" : _zclass;
 	}
