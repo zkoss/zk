@@ -1,7 +1,7 @@
 <%@ page contentType="text/css;charset=UTF-8" %>
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 
-.z-popup {
+.z-popup, .z-popup-plain {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -79,4 +79,10 @@
 	color: #444;
 	padding: 0;
 	zoom: 1;
+}
+.z-popup-plain .z-popup-plain-tl,
+.z-popup-plain .z-popup-plain-tr,
+.z-popup-plain .z-popup-plain-bl,
+.z-popup-plain .z-popup-plain-br {
+	display: none;
 }

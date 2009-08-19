@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F36-2840108.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Aug 19 15:57:59     2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<popup id="pp">
+		<image
+			src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png" />
+		Here is popup
+	</popup>
+	<popup id="context">
+		<image
+			src="/img/Centigrade-Widget-Icons/QuestionmarkButton-16x16.png" />
+		Here is context
+	</popup>
+	<popup id="tip">
+		<image
+			src="/img/Centigrade-Widget-Icons/DisketteBlack-16x16.png"/>
+		Here is tooltip
+	</popup>
+	The following buttons should work as the same as the image.
+	<div height="50px"></div>
+	<hbox>
+		<div width="150px"></div>
+		<button id="btn" label="overlap" width="300px" height="300px" popup="pp, overlap"/>
+		<vbox>
+		<listbox mold="select" onSelect='btn.label = self.selectedItem.value != null ?
+				self.selectedItem.value : self.selectedItem.label; Events.postEvent("onCheck", check, null)'>
+			<listitem label="overlap" selected="true"/>
+			<listitem label="overlap_end" />
+			<listitem label="overlap_before" />
+			<listitem label="overlap_after" />
+			<listitem label="start_before" />
+			<listitem label="start_after" />
+			<listitem label="end_after" />
+			<listitem label="end_after" />
+			<listitem label="before_start" />
+			<listitem label="before_end" />
+			<listitem label="after_start" />
+			<listitem label="after_end" />
+			<listitem label="at_pointer" />
+			<listitem label="after_pointer" />
+			<listitem label="x: 50, y: 50" value="50, 50"/>
+		</listbox>
+		<span>
+		Action type:
+		<radiogroup id="check">
+			<attribute name="onCheck">
+				btn.setContext(null);
+				btn.setPopup(null);
+				btn.setTooltip(null);
+			if ("pupup (left-click)".equals(self.selectedItem.label)) {
+				btn.setPopup("pp, " + btn.label);
+			} else if ("tooltip (mouse-over)".equals(self.selectedItem.label)) {
+				btn.setTooltip("tip, " + btn.label);
+			} else {
+				btn.setContext("context, " + btn.label);
+			}
+			</attribute>
+			<radio label="pupup (left-click)" checked="true"/>
+			<radio label="context-menu (right-click)"/>
+			<radio label="tooltip (mouse-over)"/>
+		</radiogroup>
+		</span>
+		<span>
+		Popup's style:
+		<radiogroup>
+			<attribute name="onCheck">
+			if ("default".equals(self.selectedItem.label)) {
+				pp.zclass = tip.zclass = context.zclass = "z-popup";
+			} else {
+				pp.zclass = tip.zclass = context.zclass = "z-popup-plain";
+			}
+			</attribute>
+			<radio label="default" checked="true"/>
+			<radio label="plain" />
+		</radiogroup>
+		</span>
+		</vbox>
+	</hbox>
+	<div style="padding-top:20px">
+	<image src="/test/popup1.JPG" style="float:left"/>
+	<image src="/test/popup2.JPG" style="float:left" />
+	</div>
+</zk>

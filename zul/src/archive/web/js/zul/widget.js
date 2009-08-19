@@ -343,6 +343,16 @@ zkPop = {
 			x = offset[0];
 			y = offset[1] + 20;
 			break;
+		case "overlap_end":
+			x += dim.width - wd;
+			break; 
+		case "overlap_before":
+			y += dim.height - hgh;
+			break; 
+		case "overlap_after":
+			x += dim.width - wd;
+			y += dim.height - hgh;
+			break; 
 		default: // overlap is assumed
 			// nothing to do.
 		}

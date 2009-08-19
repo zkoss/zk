@@ -119,6 +119,7 @@ zk.addInit(function () {
 	zk.listen(document, "mousedown", zkau._onDocMousedown);
 	zk.listen(document, "mouseover", zkau._onDocMouseover);
 	zk.listen(document, "mouseout", zkau._onDocMouseout);
+	zk.listen(document, "mousemove", zkau._onDocMousemove);
 
 	zk.listen(document, "contextmenu", zkau._onDocCtxMnu);
 	zk.listen(document, "click", zkau._onDocLClick);
@@ -1295,7 +1296,8 @@ zkau._onDocLClick = function (evt) {
 		if (cmp) {
 			var ctx = getZKAttr(cmp, "pop");
 			if (ctx) {
-				ctx = zkau.getByZid(cmp, ctx);
+				var params = ctx.split(',');
+				ctx = zkau.getByZid(cmp, params[0]);
 				if (ctx && (!zkau._lastClkUuid || zkau._lastClkUuid == target.id)) {
 					var type = $type(ctx);
 					if (type) {
@@ -1303,8 +1305,11 @@ zkau._onDocLClick = function (evt) {
 
 						ctx.style.position = "absolute";
 						zk.setVParent(ctx); //FF: Bug 1486840, IE: Bug 1766244
-						zkau._autopos(ctx, Event.pointerX(evt), Event.pointerY(evt));
-						zk.eval(ctx, "context", type, cmp);
+						if (params.length == 3)
+							zkau._autopos(ctx, $int(params[1]), $int(params[2]));
+						else
+							zkau._autopos(ctx, Event.pointerX(evt), Event.pointerY(evt));
+						zk.eval(ctx, "context", type, cmp, params.length == 2 ? params[1].trim() : null);
 						if ($visible(ctx)) setZKAttr(ctx, "owner", cmp.id);
 							//bookmark owner, so closeFloats know not to close
 					}
@@ -1397,7 +1402,8 @@ zkau._onDocCtxMnu = function (evt) {
 		}
 
 		if (ctx) {
-			ctx = zkau.getByZid(cmp, ctx);
+			var params = ctx.split(',');
+			ctx = zkau.getByZid(cmp, params[0]);
 			if (ctx) {
 				var type = $type(ctx);
 				if (type) {
@@ -1405,8 +1411,11 @@ zkau._onDocCtxMnu = function (evt) {
 
 					ctx.style.position = "absolute";
 					zk.setVParent(ctx); //FF: Bug 1486840, IE: Bug 1766244
-					zkau._autopos(ctx, Event.pointerX(evt), Event.pointerY(evt));
-					zk.eval(ctx, "context", type, cmp);
+					if (params.length == 3)
+						zkau._autopos(ctx, $int(params[1]), $int(params[2]));
+					else
+						zkau._autopos(ctx, Event.pointerX(evt), Event.pointerY(evt));
+					zk.eval(ctx, "context", type, cmp, params.length == 2 ? params[1].trim() : null);
 					if ($visible(ctx)) setZKAttr(ctx, "owner", cmp.id);
 						//bookmark owner, so closeFloats know not to close
 				}
@@ -1424,6 +1433,10 @@ zkau._onDocCtxMnu = function (evt) {
 		return false;
 	}
 	return !zk.ie || evt.returnValue;
+};
+zkau._onDocMousemove = function (evt) {
+	if (zkau._tipz && !zkau._tipz.open)
+		zkau._savepos(evt);
 };
 zkau._onDocMouseover = function (evt) {
 	if (zk.progressing) return; //skip tip if in processing
@@ -1443,8 +1456,9 @@ zkau._onDocMouseover = function (evt) {
 
 	cmp = cmps[1];
 	if (cmp) {
-		var tip = getZKAttr(cmp, "tip");
-		tip = zkau.getByZid(cmp, tip);
+		var tip = getZKAttr(cmp, "tip"),
+			params = tip.split(',');
+		tip = zkau.getByZid(cmp, params[0]);
 		if (tip) {
 			var open = zkau._tipz && zkau._tipz.open;
 			if (!open || zkau._tipz.cmpId != cmp.id) {
@@ -1452,10 +1466,13 @@ zkau._onDocMouseover = function (evt) {
 					zkau._tipz.shallClose = true;
 					zkau._tryCloseTip();
 				}
+				var xy = params.length == 3 ? [$int(params[1]), $int(params[2])]:
+								[Event.pointerX(evt) + 1, Event.pointerY(evt) + 2];
 				zkau._tipz = {
 					tipId: tip.id, cmpId: cmp.id,
-					x: Event.pointerX(evt) + 1, y: Event.pointerY(evt) + 2
+					x: xy[0], y: xy[1],
 					 //Bug 1572286: position tooltip with some offset to allow
+					params: params
 				};
 				if (open) zkau._openTip(cmp.id, true);
 				else setTimeout("zkau._openTip('"+cmp.id+"')", zk_tipto);
@@ -1491,7 +1508,8 @@ zkau._onDocMouseout = function (evt) {
 	if (zkau._tipz)
 		if (zkau._tipz.open) {
 			zkau._tipz.shallClose = true;
-			setTimeout(zkau._tryCloseTip, 300);
+			if (!zk.isAncestor($e(zkau._tipz.cmpId), Event.element(evt), true))
+				setTimeout(zkau._tryCloseTip, 300);
 		} else
 			zkau._tipz = null;
 };
@@ -1563,13 +1581,13 @@ zkau._openTip = function (cmpId, enforce) {
 	//from one component to another
 		var tip = $e(zkau._tipz.tipId);
 		if (tip) {
-			var cmp = $e(cmpId);
+			var cmp = $e(cmpId),
+				params = zkau._tipz.params;
 			zkau._tipz.open = true;
-
 			tip.style.position = "absolute";
 			zk.setVParent(tip); //FF: Bug 1486840, IE: Bug 1766244
 			zkau._autopos(tip, zkau._tipz.x, zkau._tipz.y);
-			zk.eval(tip, "context", null, cmp);
+			zk.eval(tip, "context", null, cmp, params.length == 2 ? params[1].trim() : params.length == 1 ? "after_pointer" : null);
 			//not setZKAttr(... "owner") since it is OK to close
 		} else {
 			zkau._tipz = null;

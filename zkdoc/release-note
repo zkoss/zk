@@ -8,6 +8,7 @@ August, 2009
   2813778: Upgrade to jython 2.5
   2817733: doModal degenerate to doHilighted if event thread disabled
   2836829: A way to disable the compress of DHtmlUpdateServlet
+  2840108: Enhance popup, tooltip, and context can be shown by position
 
 * Bugs
   2813877: Window resize outline miss

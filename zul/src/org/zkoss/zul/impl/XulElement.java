@@ -264,6 +264,20 @@ abstract public class XulElement extends HtmlBasedComponent implements org.zkoss
 	 * the first one can reference to any of them.
 	 * And, the second one reference to the component in the same ID space
 	 * (of the label component).
+	 * 
+	 * 
+	 * <p> (since 3.6.3) the context menu can be shown by a position from {@link Popup#open(org.zkoss.zk.ui.Component, String)}
+	 * or the location of <code>x</code> and <code>y</code>, you can specify the following format:</br>
+	 * <ul>
+	 * <li><code>id, position</code></li>
+	 * <li><code>id, x, y</code></li>
+	 * <li><code>uuid(comp_uuid), position</code></li>
+	 * <li><code>uuid(comp_uuid), x, y</code></li>
+	 * </ul>
+	 * For example,
+	 * <pre>
+	 * &lt;button label="show" context="id, start_before"/>
+	 * </pre>
 	 * @see #setContext(Popup)
 	 */
 	public void setContext(String context) {
@@ -279,6 +293,7 @@ abstract public class XulElement extends HtmlBasedComponent implements org.zkoss
 	 * <code>setContext("uuid(" + popup.getUuid() + ")")</code>
 	 * @since 3.0.2
 	 * @see #setContext(String)
+	 * @see Popup#open(org.zkoss.zk.ui.Component, String)
 	 */
 	public void setContext(Popup popup) {
 		setContext(popup != null ? "uuid(" + popup.getUuid() + ")": null);
@@ -308,7 +323,21 @@ abstract public class XulElement extends HtmlBasedComponent implements org.zkoss
 	 * different ID spaces), you can specify the UUID with the following
 	 * format:<br/>
 	 * <code>uuid(comp_uuid)</code>
+	 * 
+	 * <p> (since 3.6.3) the popup can be shown by a position from {@link Popup#open(org.zkoss.zk.ui.Component, String)}
+	 * or the location of <code>x</code> and <code>y</code>, you can specify the following format:</br>
+	 * <ul>
+	 * <li><code>id, position</code></li>
+	 * <li><code>id, x, y</code></li>
+	 * <li><code>uuid(comp_uuid), position</code></li>
+	 * <li><code>uuid(comp_uuid), x, y</code></li>
+	 * </ul>
+	 * For example,
+	 * <pre>
+	 * &lt;button label="show" popup="id, start_before"/>
+	 * </pre>
 	 * @see #setPopup(Popup)
+	 * @see Popup#open(org.zkoss.zk.ui.Component, String)
 	 */
 	public void setPopup(String popup) {
 		if (!Objects.equals(_popup, popup)) {
@@ -353,7 +382,22 @@ abstract public class XulElement extends HtmlBasedComponent implements org.zkoss
 	 * different ID spaces), you can specify the UUID with the following
 	 * format:<br/>
 	 * <code>uuid(comp_uuid)</code>
+	 * 
+	 * <p> (since 3.6.3) the tooltip can be shown by a position from {@link Popup#open(org.zkoss.zk.ui.Component, String)}
+	 * or the location of <code>x</code> and <code>y</code>, you can specify the following format:</br>
+	 * <ul>
+	 * <li><code>id, position</code></li>
+	 * <li><code>id, x, y</code></li>
+	 * <li><code>uuid(comp_uuid), position</code></li>
+	 * <li><code>uuid(comp_uuid), x, y</code></li>
+	 * </ul>
+	 * For example,
+	 * <pre>
+	 * &lt;button label="show" tooltip="id, start_before"/>
+	 * </pre>
+	 * 
 	 * @see #setTooltip(Popup)
+	 * @see Popup#open(org.zkoss.zk.ui.Component, String)
 	 */
 	public void setTooltip(String tooltip) {
 		if (!Objects.equals(_tooltip, tooltip)) {

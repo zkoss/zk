@@ -115,8 +115,14 @@ public class Popup extends XulElement implements org.zkoss.zul.api.Popup {
 	 *  <li><b>start_after</b><br/> the popup appears to the left of the anchor, aligned on the bottom.</li>
 	 *  <li><b>end_before</b><br/> the popup appears to the right of the anchor, aligned on the top.</li>
 	 *  <li><b>end_after</b><br/> the popup appears to the right of the anchor, aligned on the bottom.</li>
-	 *  <li><b>overlap</b><br/> the popup overlaps the anchor, with the topleft 
+	 *  <li><b>overlap</b><br/> the popup overlaps the anchor, with the top-left 
 	 *  	corners of both the anchor and popup aligned.</li>
+	 *  <li><b>overlap_end</b><br/> the popup overlaps the anchor, with the top-right 
+	 *  	corners of both the anchor and popup aligned. (since 3.6.3)</li>
+	 *  <li><b>overlap_before</b><br/> the popup overlaps the anchor, with the bottom-left 
+	 *  	corners of both the anchor and popup aligned. (since 3.6.3)</li>
+	 *  <li><b>overlap_after</b><br/> the popup overlaps the anchor, with the bottom-right 
+	 *  	corners of both the anchor and popup aligned. (since 3.6.3)</li>
 	 *  <li><b>after_pointer</b><br/> the popup appears with the top aligned with
 	 *  	the bottom of the anchor, with the topleft corner of the popup at the horizontal position of the mouse pointer.</li>
 	 * </ul></p>
