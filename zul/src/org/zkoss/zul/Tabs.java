@@ -37,7 +37,6 @@ import org.zkoss.zul.impl.XulElement;
  * @author tomyeh
  */
 public class Tabs extends XulElement implements org.zkoss.zul.api.Tabs {
-	
 	private String _align = "start";
 	/** Returns the tabbox owns this component.
 	 * <p>It is the same as {@link #getParent}.
@@ -82,11 +81,7 @@ public class Tabs extends XulElement implements org.zkoss.zul.api.Tabs {
 
 		if (!Objects.equals(_align, align)) {
 			_align = align;
-			Tabbox tabbox = getTabbox();
-			if(!tabbox.inAccordionMold()){
-				//getTabbox().invalidate();
-				invalidate();				
-			}
+			smartUpdate("align", _align);
 		}
 	}
 	public String getZclass() {
@@ -101,13 +96,6 @@ public class Tabs extends XulElement implements org.zkoss.zul.api.Tabs {
 			throw new UiException("Wrong parent: "+parent);
 		super.beforeParentChanged(parent);
 	}
-	public void setParent(Component parent) {
-		final Tabbox oldp = (Tabbox)getParent();
-		super.setParent(parent);
-
-		invalidateIfAccordion(oldp);
-		invalidateIfAccordion((Tabbox)parent);
-	}
 	public void beforeChildAdded(Component child, Component refChild) {
 		if (!(child instanceof Tab))
 			throw new UiException("Unsupported child for tabs: "+child);
@@ -115,7 +103,6 @@ public class Tabs extends XulElement implements org.zkoss.zul.api.Tabs {
 	}
 	public boolean insertBefore(Component child, Component refChild) {
 		boolean sel = getChildren().isEmpty(), desel = false;
-		if (sel) invalidate();
 		final Tab newtab = (Tab)child;
 		if (!sel && newtab.isSelected()) {
 			newtab.setSelectedDirectly(false);	//turn off first
@@ -139,8 +126,6 @@ public class Tabs extends XulElement implements org.zkoss.zul.api.Tabs {
 							}
 						}
 				}
-
-			invalidateIfAccordion(tabbox);
 			return true;
 		}
 		return false;
@@ -173,10 +158,12 @@ public class Tabs extends XulElement implements org.zkoss.zul.api.Tabs {
 			super.invalidate();
 		}
 	}
-	/** Invalidates the tabbox if it is accordion.
-	 */
-	private static void invalidateIfAccordion(Tabbox tabbox) {
-		if (tabbox != null && tabbox.inAccordionMold())
-			tabbox.invalidate();
+
+	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
+	throws java.io.IOException {
+		super.renderProperties(renderer);
+
+		if (!"start".equals(_align))
+			render(renderer, "align", _align);
 	}
 }

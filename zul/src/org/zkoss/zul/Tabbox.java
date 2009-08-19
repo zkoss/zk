@@ -373,19 +373,16 @@ public class Tabbox extends XulElement implements org.zkoss.zul.api.Tabbox {
 				}
 
 				addTabsListeners();
-				invalidate(); //DSP might implement diff for children order
 				return true;
 			}
 		} else if (child instanceof Tabpanels) {
 			if (super.insertBefore(child, refChild)) {
 				_tabpanels = (Tabpanels) child;
-				invalidate(); //DSP might implement diff for children order
 				return true;
 			}
 		} else if (child instanceof Toolbar) {
 			if (super.insertBefore(child, refChild)) {
 				_toolbar = (Toolbar) child;
-				invalidate(); //DSP might implement diff for children order
 				return true;
 			}
 		} else {

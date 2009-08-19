@@ -467,5 +467,4 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 			break;
 		}
 	}
-
 });
