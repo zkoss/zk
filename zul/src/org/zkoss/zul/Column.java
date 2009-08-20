@@ -362,7 +362,6 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 
 		// sometimes the items at client side are out of date
 		grid.getRows().invalidate();
-		
 		return true;
 	}
 	/** Sorts the rows. If with group, each group is sorted independently.
