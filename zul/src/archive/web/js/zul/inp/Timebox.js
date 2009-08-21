@@ -30,6 +30,7 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
     /**Useful constant for HOUR3 (K) field alignment. (Hour in am/pm (0-11))*/
     HOUR3_FIELD: 7,
 	_buttonVisible: true,
+	_format: 'HH:mm',
 	$define: {
 		buttonVisible: function(v){
 			this.$n("btn").style.display = v == 'true'? '': 'none';
@@ -164,6 +165,10 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	coerceFromString_: function (val) {
 		if (!val) return null;
+		
+		if (!this._fmthdler)
+			this._parseFormat(this._format);
+		
 		var date = new Date(),
 			hasAM, isAM, hasHour1,
 			fmt = [];

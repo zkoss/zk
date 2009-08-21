@@ -62,7 +62,7 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	}
 
 	/** The value. */
-	private Object _value;
+	protected Object _value;
 	/** Used by setTextByClient() to disable sending back the value */
 	private transient String _txtByClient;
 	/** The error message. Not null if users entered a wrong data (and

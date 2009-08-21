@@ -49,7 +49,8 @@ zDateFormat = {
 			hh = fmt.indexOf('h'),
 			KK = fmt.indexOf('K'),
 			hasAM = aa > -1,
-			hasHour1 = hasAM ? hh > -1 || KK > -1 : false;;
+			hasHour1 = hasAM ? hh > -1 || KK > -1 : false,
+			isAM;
 
 		var	ts = [], mindex = fmt.indexOf("MMM"), aindex = fmt.indexOf("a"), ary = [];
 		for (var i = 0, j = txt.length; i < j; i++) {
@@ -194,11 +195,7 @@ zDateFormat = {
 				case 'a':
 					if (!hasHour1)
 						break;
-					var apm = txt.substring(j);
-					if(apm.startsWith(zk.APM[1])){
-						if (hr < 12)
-							hr+=12;
-					}
+					isAM = txt.substring(j).startsWith(zk.APM[0]);
 					break
 				//default: ignored
 				}
@@ -206,6 +203,8 @@ zDateFormat = {
 			}
 		}
 
+		if (hasHour1 && isAM === false)
+			hr += 12;
 		var dt = new Date(y, m, d, hr, min, sec);
 		if (strict) {
 			if (dt.getFullYear() != y || dt.getMonth() != m || dt.getDate() != d ||
