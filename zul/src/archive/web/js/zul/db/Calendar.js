@@ -19,7 +19,8 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	$define: {
 		value: _zkf = function() {
 			this.rerender();
-		}
+		},
+		constraint: null
 	},
 	getFormat: function () {
 		return this._fmt || "yyyy/MM/dd";
@@ -29,8 +30,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		return zcs != null ? zcs: "z-calendar";
 	},
 	today: function () {
-		var d = new Date();
-		return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+		return zUtl.today();
 	},
 	bind_: function (){
 		this.$supers('bind_', arguments);
@@ -93,6 +93,10 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 	_doMouseEffect: function (evt) {
 		var node = evt.domTarget.tagName == "TD" ? evt.domTarget : evt.domTarget.parentNode,
 			zcls = this.getZclass();
+			
+		if (jq(node).hasClass(zcls + '-disd'))
+			return;
+			
 		if (jq(node).is("."+zcls+"-seld")) {
 			jq(node).removeClass(zcls + "-over");
 			jq(node).toggleClass(zcls + "-over-seld");
@@ -116,7 +120,7 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		target = target.tagName == "TD" ? target : target.parentNode;
 		
 		var val = jq(target).attr('_dt');
-		if (target && !isNaN(val)) {
+		if (target && !jq(target).hasClass(this.getZclass() + '-disd') && !isNaN(val)) {
 			var cell = target,
 				dateobj = this.getTime();
 			switch(this._view) {
@@ -186,6 +190,22 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			this.rerender();
 		}
 	},
+	_invalid: function (y, m, v, today) {
+		var d = new Date(y, m, v, 0, 0, 0, 0);
+		switch (this._constraint) {
+		case 'no today':
+			return today - d == 0;
+			break;
+		case 'no past':
+			return (d - today) / 86400000 < 0;
+			break;
+		case 'no future':
+			return (today - d)/ 86400000 < 0;
+			break;
+		default:
+			return false;
+		}
+	},
 	_markCal : function () {
 		var	zcls = this.getZclass(),
 		 	val = this.getTime(),
@@ -194,7 +214,8 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			y = val.getFullYear(),
 			last = new Date(y, m + 1, 0).getDate(), //last date of this month
 			prev = new Date(y, m, 0).getDate(), //last date of previous month
-			v = new Date(y, m, 1).getDay()- zk.DOW_1ST;
+			v = new Date(y, m, 1).getDay()- zk.DOW_1ST,
+			today = this.today();
 		//hightlight month & year
 		for (var j = 0; j < 12; ++j) {
 			var mon = this.$n("m" + j),
@@ -238,6 +259,12 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 							jq(cell).addClass(zcls+"-seld");
 						else
 							jq(cell).removeClass(zcls+"-seld");
+							
+						if (this._invalid(y, m + monofs, v, today)) {
+							jq(cell).addClass(zcls+"-disd");
+						} else
+							jq(cell).removeClass(zcls+"-disd");
+							 
 						jq(cell).html('<a href="javascript:;">' + v + '</a>').attr('_dt', v);
 					}
 				}

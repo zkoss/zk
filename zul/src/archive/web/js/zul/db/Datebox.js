@@ -45,6 +45,13 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			var inp = this.getInputNode();
 			if (inp)
 				inp.value = this.coerceToString_(this._value);
+		},
+		constraint: function () {
+			this.$supers('setConstraint', arguments);
+			if (this._pop) {
+				this._pop.setConstraint(this._constraint);
+				this._pop.rerender();
+			}
 		}
 	},
 	setValue: function (val) {

@@ -137,9 +137,9 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 		if (val && val.getFullYear) {
 			var today = zUtl.today(),
 				val = new Date(val.getFullYear(), val.getMonth(), val.getDate());
-			if (val > today) {
+			if ((today - val)/ 86400000 < 0) {
 				if (f.NO_FUTURE) return msg || this._msgDateDenied();
-			} else if (val == today) {
+			} else if (val - today == 0) {
 				if (f.NO_TODAY) return msg || this._msgDateDenied();
 			} else
 				if (f.NO_PAST) return msg || this._msgDateDenied();
