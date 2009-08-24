@@ -76,6 +76,7 @@ August, 2009
   2813778: Upgrade to jython 2.5
   2817733: doModal degenerate to doHilighted if event thread disabled
   2836829: A way to disable the compress of DHtmlUpdateServlet
+  2840108: Enhance popup, tooltip, and context can be shown by position
 
 * Bugs
   2813877: Window resize outline miss
@@ -95,6 +96,7 @@ August, 2009
   2831915: Fail to create components in working thread if using el 
   2835471: Panel's title disappear if caption exist.
   2837303: Progressmeter's height cannot be shortened 
+  2839335: Timebox in Opera should not type non-number character
 
 	--------
 ZK 3.6.2
