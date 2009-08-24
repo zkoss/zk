@@ -121,7 +121,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	/** the # of rows to preload. */
 	private int _preloadsz = 7;
 	private String _innerWidth = "100%";
-	private boolean _fixedLayout, _vflex;
+	private boolean _fixedLayout = true, _vflex;
 	
 	static {
 		addClientEvent(Grid.class, Events.ON_RENDER, CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE);
@@ -183,7 +183,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	}
 	/**
 	 * Returns the outline of grid whether is fixed layout.
-	 * <p>Default: false.
+	 * <p>Default: true. (since 5.0.0)
 	 * <p>Note: if the "fixed-layout" attribute of component is specified, it's prior to the original value.
 	 * @since 3.0.4
 	 */
@@ -1257,7 +1257,10 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		super.renderProperties(renderer);
 		
 		render(renderer, "oddRowSclass", getOddRowSclass());
-		render(renderer, "fixedLayout", isFixedLayout());
+		
+		if (!isFixedLayout())
+			renderer.render("fixedLayout", false);
+		
 		render(renderer, "vflex", _vflex);
 		
 		if (_model != null)

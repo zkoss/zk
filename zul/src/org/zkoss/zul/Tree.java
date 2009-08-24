@@ -90,7 +90,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	private TreeModel _model;
 	private TreeitemRenderer _renderer;	
 	private transient TreeDataListener _dataListener;
-	private boolean _fixedLayout;
+	private boolean _fixedLayout = true;
 
 	private transient Paginal _pgi;
 	/** The paging controller, used only if mold = "paging" and user
@@ -407,7 +407,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	}
 	/**
 	 * Returns the outline of grid whether is fixed layout.
-	 * <p>Default: false.
+	 * <p>Default: true. (since 5.0.0)
 	 * <p>Note: if the "fixed-layout" attribute of component is specified, it's prior to the original value.
 	 * @since 3.0.4
 	 */
@@ -1825,7 +1825,8 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		render(renderer, "multiple", isMultiple());
 		render(renderer, "checkmark", isCheckmark());
 		render(renderer, "vflex", isVflex());
-		render(renderer, "fixedLayout", isFixedLayout());
+		if (!isFixedLayout())
+			renderer.render("fixedLayout", false);
 
 		if (_model != null)
 			render(renderer, "model", true);

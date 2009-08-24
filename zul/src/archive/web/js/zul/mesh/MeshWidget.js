@@ -14,6 +14,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	_pagingPosition: "bottom",
+	_fixedLayout: true,
 
 	$init: function () {
 		this.$supers('$init', arguments);

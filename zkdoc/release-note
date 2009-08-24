@@ -65,6 +65,7 @@ ZK 5.0.0
     definition (if they have the same implementation class)
   + org.zkoss.zk.au.http.AuProcessor is replaced with
     org.zkoss.zk.au.http.AuExtension
+  + By default, the fixedLayout property in Grid, Tree, and Listbox is true.
 
 	--------
 ZK 3.6.3

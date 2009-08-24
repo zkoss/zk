@@ -145,7 +145,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 	private boolean _vflex;
 	/** disable smartUpdate; usually caused by the client. */
 	private boolean _noSmartUpdate;
-	private boolean _fixedLayout;
+	private boolean _fixedLayout = true;
 	/** maintain the number of the visible item in Paging mold. */
 	private int _visibleItemCount;
 	
@@ -255,7 +255,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 	}
 	/**
 	 * Returns the outline of list box whether is fixed layout.
-	 * <p>Default: false.
+	 * <p>Default: true. (since 5.0.0)
 	 * <p>Note: if the "fixed-layout" attribute of component is specified, it's prior to the original value.
 	 * @since 3.0.4
 	 */
@@ -2446,7 +2446,10 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 				renderer.render("maxlength", getMaxlength());
 		} else {
 			render(renderer, "oddRowSclass", getOddRowSclass());
-			render(renderer, "fixedLayout", isFixedLayout());
+
+			if (!isFixedLayout())
+				renderer.render("fixedLayout", false);
+			
 			render(renderer, "vflex", _vflex);
 
 			render(renderer, "checkmark", isCheckmark());
