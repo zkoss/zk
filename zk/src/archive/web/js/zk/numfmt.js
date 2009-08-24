@@ -15,7 +15,49 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zNumFormat = {
 	format: function (fmt, val) {
 		if (!val) return '';
-		return '' + val; //TODO
+		if (!fmt) return '' + val;
+		
+		//caculate number of fixed decimals
+		var pureFmtStr = fmt.replace(/[^#.]/g, ''),
+			ind = pureFmtStr.indexOf('.'),
+			fixed = ind > 0 ? pureFmtStr.length - ind - 1 : 0,
+			valueStr = val + "";
+			
+		valueStr = (valueStr.replace(/[^0123456789.]/g, '') * 1).toFixed(fixed);
+		
+		var indFmt = fmt.indexOf('.'), indVal = valueStr.indexOf('.'), pre = suf = '';
+		
+		//pre part
+		if (indVal == -1) 
+			indVal = valueStr.length;
+		for (var i = indFmt - 1, j = indVal - 1; i >= 0 && j >= 0;) {
+			if (fmt.charAt(i) == '#') {
+				pre = valueStr.charAt(j) + pre;
+				i--;
+				j--;
+			} else {
+				pre = fmt.charAt(i) + pre;
+				i--;
+			}
+		}
+		if (j >= 0) 
+			pre = valueStr.substr(0, j + 1) + pre;
+		
+		//sufpart
+		for (var i = indFmt + 1, j = indVal + 1, fl = fmt.length, vl = valueStr.length; i < fl && j < vl; i++) {
+			if (fmt.charAt(i) == '#') {
+				suf += valueStr.charAt(j);
+				j++;
+			} else
+				suf += fmt.charAt(i);
+		}
+		if (j < valueStr.length) 
+			suf = valueStr.substr(j, valueStr.length);
+		
+		//combine
+		if (!pre) 
+			pre = "0";
+		return suf ? pre + "." + suf : pre;
 	},
 	unformat: function (fmt, val) {
 		if (!val) return {raw: val, divscale: 0};
