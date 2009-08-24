@@ -255,7 +255,8 @@ zk.eff.Tooltip = zk.$extends(zk.Object, {
 		if (overTip) this._clearClosing(); //not close tip if over tip
 		return !overTip;//disable tip in tip
 	},
-	begin: function (tip, ref) {
+	begin: function (tip, ref, params) {
+		this._params = params;
 		if (this._tip != tip) {
 			this.close_();
 
@@ -280,7 +281,11 @@ zk.eff.Tooltip = zk.$extends(zk.Object, {
 			var tip = this._tip = inf.tip,
 				ref = this._ref = inf.ref;
 			this._inf = null;
-			tip.open(ref, zk.currentPointer, null, {sendOnOpen:true});
+			var params = this._params,
+				xy = params.length == 3 ?
+							[zk.parseInt(params[1]), zk.parseInt(params[2])]
+							: zk.currentPointer;
+			tip.open(ref, xy, params.length == 2 ? params[1].trim() : params.length == 1 ? "after_pointer" : null, {sendOnOpen:true});
 		}
 	},
 	close_: function () {

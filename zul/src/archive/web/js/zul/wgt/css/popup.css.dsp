@@ -1,6 +1,6 @@
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 
-.z-popup {
+.z-popup, .z-popup-plain {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -95,3 +95,10 @@
 	background-image: url(${c:encodeURL('~./zul/img/popup/pp-cm.gif')});
 }
 </c:if>
+
+.z-popup-plain .z-popup-plain-tl,
+.z-popup-plain .z-popup-plain-tr,
+.z-popup-plain .z-popup-plain-bl,
+.z-popup-plain .z-popup-plain-br {
+	display: none;
+}

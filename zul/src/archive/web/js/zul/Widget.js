@@ -121,14 +121,18 @@ zul.Widget = zk.$extends(zk.Widget, {
 	//super//
 	doClick_: function (evt, popupOnly) {
 		if (!evt._popuped) {
-			var popup = this._smartFellow(this._popup);
+			var params = this._popup ? this._popup.split(',') : [],
+				popup = this._smartFellow(params[0]);
 			if (popup) {
 				evt._popuped = true;
 				
 				// to avoid a focus in IE, we have to pop up it later. for example, userguide/#t5
-				var self = this;
+				var self = this,
+					xy = params.length == 3 ?
+							[zk.parseInt(params[1]), zk.parseInt(params[2])]
+							: [evt.pageX, evt.pageY];
 				setTimeout(function() {
-					popup.open(self, [evt.pageX, evt.pageY], null, {sendOnOpen:true});
+					popup.open(self, xy, params.length == 2 ? params[1].trim() : null, {sendOnOpen:true});
 				}, 0);
 				evt.stop();
 			}
@@ -138,10 +142,15 @@ zul.Widget = zk.$extends(zk.Widget, {
 	},
 	doRightClick_: function (evt) {
 		if (!evt._ctxed) {
-			var ctx = this._smartFellow(this._context);
+			var params = this._context ? this._context.split(',') : [],
+				ctx = this._smartFellow(params[0]);
 			if (ctx) {
 				evt._ctxed = true;
-				ctx.open(this, [evt.pageX, evt.pageY], null, {sendOnOpen:true});
+				var xy = params.length == 3 ?
+							[zk.parseInt(params[1]), zk.parseInt(params[2])]
+							: [evt.pageX, evt.pageY];
+							
+				ctx.open(this, xy, params.length == 2 ? params[1].trim() : null, {sendOnOpen:true});
 				evt.stop(); //prevent default context menu to appear
 			}
 		}
@@ -149,10 +158,11 @@ zul.Widget = zk.$extends(zk.Widget, {
 	},
 	doTooltipOver_: function (evt) {
 		if (!evt._tiped && zk.eff.tooltip.beforeBegin(this)) {
-			var tip = this._smartFellow(this._tooltip);
+			var params = this._tooltip ? this._tooltip.split(',') : [],
+				tip = this._smartFellow(params[0]);
 			if (tip) {
 				evt._tiped = true;
-				zk.eff.tooltip.begin(tip, this);
+				zk.eff.tooltip.begin(tip, this, params);
 			}
 		}
 	},
