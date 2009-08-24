@@ -32,7 +32,7 @@ public class B2143479 implements DesktopInit {
 		final String path = desktop.getRequestPath();
 		if (path != null && path.indexOf("B30-2143479.zul") >= 0) {
 			System.out.println("sendRedirect "+path);
-			Executions.getCurrent().sendRedirect("B30-2143479-1.zul");
+			Executions.getCurrent().sendRedirect("B30-2143479_1.zul");
 			//Executions.getCurrent().forward("B30-2143479-1.zul");
 		}
 	}

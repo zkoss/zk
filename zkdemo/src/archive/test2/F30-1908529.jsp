@@ -17,4 +17,4 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 --%>
-<jsp:include page="F30-1908529-included.zhtml"/>
+<jsp:include page="F30-1908529_included.zhtml"/>

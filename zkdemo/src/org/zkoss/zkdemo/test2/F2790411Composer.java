@@ -24,7 +24,7 @@ import org.zkoss.zul.*;
 public class F2790411Composer implements org.zkoss.zk.ui.util.Composer {
 	public void doAfterCompose(Component comp) throws Exception {
 		Component child = Executions.createComponents(
-			null, "/test2/F36-2790411-sub2.zul", null)[0];
+			null, "/test2/F36-2790411_sub2.zul", null)[0];
 		comp.appendChild(child);
 	}
 }

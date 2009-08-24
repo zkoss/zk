@@ -17,7 +17,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 	<button label="create">
 		<attribute name="onClick"><![CDATA[
 		Thread thd = new org.zkoss.zkdemo.test2.F2790411Thread(
-			desktop.getWebApp(), "/test2/F36-2790411-sub.zul");
+			desktop.getWebApp(), "/test2/F36-2790411_sub.zul");
 		thd.start();
 		while (!thd.isDone())
 			Thread.sleep(200);
