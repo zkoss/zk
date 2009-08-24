@@ -20,6 +20,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <window title="Test of Style Inheritance" border="normal">
 	The first included page shall take 200px (height=200px) and the second
 	is "best-fit" (height=100%)
-	<include src="F30-1978632-inc.zul" height="200px" style="border:1px solid blue"/>
-	<include src="F30-1978632-inc.zul" style="border:1px solid blue"/>
+	<include src="F30-1978632_inc.zul" height="200px" style="border:1px solid blue"/>
+	<include src="F30-1978632_inc.zul" style="border:1px solid blue"/>
 </window>

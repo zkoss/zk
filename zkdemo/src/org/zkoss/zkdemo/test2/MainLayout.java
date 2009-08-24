@@ -397,7 +397,7 @@ public class MainLayout extends Borderlayout {
 			
 			if (n.equalsIgnoreCase(str))
 				return true;
-			else if(!name.matches("[a-zA-z0-9]*-[a-zA-z0-9-]*"))
+			else if(!name.matches("[a-zA-z0-9]*-[^_]*"))
 				return false; // unsupported file pattern
 			
 			if (reg) {

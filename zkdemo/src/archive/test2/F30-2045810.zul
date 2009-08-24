@@ -34,7 +34,7 @@
 	
 	<button label="Add new Listbox">
 		<attribute name="onClick"><![CDATA[
-			Executions.createComponents("/test2/F30-2045810-1.zul", null, null);
+			Executions.createComponents("/test2/F30-2045810_1.zul", null, null);
 		]]></attribute>
 	</button>
 </window>

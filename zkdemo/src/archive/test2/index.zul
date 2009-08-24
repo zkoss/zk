@@ -38,9 +38,9 @@ function newWindow(url){
 				if (label != null) {								
 					String number = label.substring(label.indexOf("-") + 1, label.indexOf("."));
 					if (label.startsWith("F")) {									
-						Clients.evalJavaScript("newWindow(\"http://sourceforge.net/tracker/index.php?func=detail&aid="+number+"&group_id=152762&atid=785194\")");
+						Clients.evalJavaScript("newWindow(\"https://sourceforge.net/tracker/?func=detail&aid="+number+"&group_id=152762&atid=785194\")");
 					} else if (label.startsWith("B")){
-						Clients.evalJavaScript("newWindow(\"http://sourceforge.net/tracker/index.php?func=detail&aid="+number+"&group_id=152762&atid=785191\")");
+						Clients.evalJavaScript("newWindow(\"https://sourceforge.net/tracker/?func=detail&aid="+number+"&group_id=152762&atid=785191\")");
 					}									
 				}
 			} else {

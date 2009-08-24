@@ -18,7 +18,7 @@ You shall see a modal window on top of this
 	<zscript><![CDATA[
 zoom = new HtmlMacroComponent();
 zoom.setDynamicProperty("idColumn", 123);
-zoom.setMacroURI("B30-2493245-macro.zul");
+zoom.setMacroURI("B30-2493245_macro.zul");
 zoom.setParent(main);
 zoom.afterCompose();
 	]]></zscript>
