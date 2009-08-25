@@ -218,7 +218,7 @@ import org.zkoss.lang.Objects;
 	</radiogroup>
 	<radiogroup name="W">
 		<radio label="W4"/>
-		</radiogroup>
+	</radiogroup>
 	<button label="Change orient" onClick="changeRadioOrient()"/>
 	<button label="Add label" onClick="addLabelToHbox()"/>
 	<button label="Remove label" onClick="removeLabelFromHbox()"/>
