@@ -273,7 +273,7 @@ abstract public class XulElement extends HtmlBasedComponent implements org.zkoss
 	 * <li><code>id, position=before_start</code></li>
 	 * <li><code>id, x=15, y=20</code></li>
 	 * <li><code>uuid(comp_uuid), position</code></li>
-	 * <li><code>uuid(comp_uuid), x, y</code></li>
+	 * <li><code>uuid(comp_uuid), x=15, y=20</code></li>
 	 * </ul>
 	 * For example,
 	 * <pre>
@@ -332,7 +332,7 @@ abstract public class XulElement extends HtmlBasedComponent implements org.zkoss
 	 * <li><code>id, position=before_start</code></li>
 	 * <li><code>id, x=15, y=20</code></li>
 	 * <li><code>uuid(comp_uuid), position</code></li>
-	 * <li><code>uuid(comp_uuid), x, y</code></li>
+	 * <li><code>uuid(comp_uuid), x=15, y=20</code></li>
 	 * </ul>
 	 * For example,
 	 * <pre>
@@ -395,7 +395,7 @@ abstract public class XulElement extends HtmlBasedComponent implements org.zkoss
 	 * <li><code>id, position=before_start, delay=500</code></li>
 	 * <li><code>id, x=15, y=20</code></li>
 	 * <li><code>uuid(comp_uuid2), position</code></li>
-	 * <li><code>uuid(comp_uuid), x, y</code></li>
+	 * <li><code>uuid(comp_uuid), x=15, y=20</code></li>
 	 * </ul>
 	 * For example,
 	 * <pre>
