@@ -74,7 +74,10 @@ zWatch = (function () {
 		return inf.$array ? inf[0]: inf;
 	}
 	function _fn(inf, o, name) {
-		return inf.$array ? inf[1]: o[name];
+		var fn = inf.$array ? inf[1]: o[name];
+		if (!fn)
+			throw name + ' not defined in '+(o.className || o);
+		return fn;
 	}
 	function _sync() {
 		if (!_dirty) return;
@@ -145,11 +148,8 @@ zWatch = (function () {
 					function () {
 						var inf;
 						while (inf = wts.shift()) {
-							var o = _target(inf),
-								fn = _fn(inf, o, name);
-							if (!fn)
-								throw name + ' not defined in '+(o.className || o);
-							fn.apply(o, args);
+							var o = _target(inf);
+							_fn(inf, o, name).apply(o, args);
 						}
 					}, opts.timeout);
 					return;
@@ -158,11 +158,8 @@ zWatch = (function () {
 
 			var inf;
 			while (inf = wts.shift()) {
-				var o = _target(inf),
-					fn = _fn(inf, o, name);
-				if (!fn)
-					throw name + ' not defined in '+(o.className || o);
-				fn.apply(o, args);
+				var o = _target(inf);
+				_fn(inf, o, name).apply(o, args);
 			}
 		}
 	},
@@ -203,11 +200,8 @@ zWatch = (function () {
 				function () {
 					var inf;
 					while (inf = found.shift()) {
-						var o = _target(inf),
-							fn = _fn(inf, o, name);
-						if (!fn)
-							throw name + ' not defined in '+(o.className || o);
-						fn.apply(o, args);
+						var o = _target(inf);
+						_fn(inf, o, name).apply(o, args);
 					}
 				}, opts.timeout);
 				return;
@@ -215,11 +209,8 @@ zWatch = (function () {
 
 			var inf;
 			while (inf = found.shift()) {
-				var o = _target(inf),
-					fn = _fn(inf, o, name);
-				if (!fn)
-					throw name + ' not defined in '+(o.className || o);
-				fn.apply(o, args);
+				var o = _target(inf);
+				_fn(inf, o, name).apply(o, args);
 			}
 		}
 	},
