@@ -70,18 +70,24 @@ zWatch = (function () {
 				if (p == c) return true;
 		return false;
 	}
+	function _target(inf) {
+		return inf.$array ? inf[0]: inf;
+	}
+	function _fn(inf, o, name) {
+		return inf.$array ? inf[1]: o[name];
+	}
 	function _sync() {
 		if (!_dirty) return;
 
 		_dirty = false;
 		for (var nm in _watches) {
 			var wts = _watches[nm];
-			if (wts.length && wts[0].bindLevel != null)
+			if (wts.length && _target(wts[0]).bindLevel != null)
 				wts.sort(_cmpLevel);
 		}
 	}
 	function _cmpLevel(a, b) {
-		return a.bindLevel - b.bindLevel;
+		return _target(a).bindLevel - _target(b).bindLevel;
 	}
 
   return {
@@ -90,14 +96,14 @@ zWatch = (function () {
 			var wts = _watches[name],
 				inf = infs[name];
 			if (wts) {
-				var bindLevel = (inf.$array ? inf[0]: inf).bindLevel;
+				var bindLevel = _target(inf).bindLevel;
 				if (bindLevel != null) {
 					for (var j = wts.length;;) {
 						if (--j < 0) {
 							wts.unshift(inf);
 							break;
 						}
-						if (bindLevel >= wts[j].bindLevel) { //parent first
+						if (bindLevel >= _target(wts[j]).bindLevel) { //parent first
 							wts.splice(j + 1, 0, inf);
 							break;
 						}
@@ -139,8 +145,8 @@ zWatch = (function () {
 					function () {
 						var inf;
 						while (inf = wts.shift()) {
-							var o = inf.$array ? inf[0]: inf,
-								fn = inf.$array ? inf[1]: o[name];
+							var o = _target(inf),
+								fn = _fn(inf, o, name);
 							if (!fn)
 								throw name + ' not defined in '+(o.className || o);
 							fn.apply(o, args);
@@ -152,8 +158,8 @@ zWatch = (function () {
 
 			var inf;
 			while (inf = wts.shift()) {
-				var o = inf.$array ? inf[0]: inf,
-					fn = inf.$array ? inf[1]: o[name];
+				var o = _target(inf),
+					fn = _fn(inf, o, name);
 				if (!fn)
 					throw name + ' not defined in '+(o.className || o);
 				fn.apply(o, args);
@@ -174,7 +180,7 @@ zWatch = (function () {
 				found = [];
 				for (var j = wts.length; j--;) { //child first
 					var inf = wts[j],
-						o = inf.$array ? inf[0]: inf,
+						o = _target(inf),
 						diff = bindLevel > o.bindLevel;
 					if (diff) break;//nor ancestor, nor this (&sibling)
 					if (origin == o && _visible(name, o)) {
@@ -197,8 +203,8 @@ zWatch = (function () {
 				function () {
 					var inf;
 					while (inf = found.shift()) {
-						var o = inf.$array ? inf[0]: inf,
-							fn = inf.$array ? inf[1]: o[name];
+						var o = _target(inf),
+							fn = _fn(inf, o, name);
 						if (!fn)
 							throw name + ' not defined in '+(o.className || o);
 						fn.apply(o, args);
@@ -209,8 +215,8 @@ zWatch = (function () {
 
 			var inf;
 			while (inf = found.shift()) {
-				var o = inf.$array ? inf[0]: inf,
-					fn = inf.$array ? inf[1]: o[name];
+				var o = _target(inf),
+					fn = _fn(inf, o, name);
 				if (!fn)
 					throw name + ' not defined in '+(o.className || o);
 				fn.apply(o, args);
