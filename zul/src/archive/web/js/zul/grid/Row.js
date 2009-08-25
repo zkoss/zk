@@ -182,26 +182,22 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 		this.$supers('onChildRemoved_', arguments);
 		if (child == this.detail)
 			this.detail = null;
-	}
-});
-
-/** // TODO for drag and drop
- * if (zk.gecko) {
-	zul.grid.Row.prototype.doMouseOver_ = function (evt) {
-		var target = this._getDirectChildByElement(evt.domTarget, this.$n());
-		if (target)
-			target.firstChild.style.MozUserSelect = "none";
+	},
+	doMouseOver_: function(evt) {
+		if (zk.gecko && this._draggable) {
+			var tag = evt.domTarget.tagName;
+			if (tag != "INPUT" && tag != "TEXTAREA") {
+				var n = this.$n();
+				if (n) n.firstChild.style.MozUserSelect = "none";
+			}
+		}
 		this.$supers('doMouseOver_', arguments);
-	};
-	zul.grid.Row.prototype.doMouseOut_ = function (evt) {
-		var target = this._getDirectChildByElement(evt.domTarget, this.$n());
-		if (target)
-			target.firstChild.style.MozUserSelect = "";
+	},
+	doMouseOut_: function(evt) {
+		if (zk.gecko && this._draggable) {
+			var n = this.$n();
+			if (n) n.firstChild.style.MozUserSelect = "none";
+		}
 		this.$supers('doMouseOut_', arguments);
-	};
-	zul.grid.Row.prototype._getDirectChildByElement = function (el, parent) {
-		for (;el; el = el.parentNode)
-			if (el.parentNode == parent) return el;
-		return null;
-	};
-}*/
+	},
+});

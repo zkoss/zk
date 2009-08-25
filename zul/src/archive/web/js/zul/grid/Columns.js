@@ -18,8 +18,11 @@ zul.grid.Columns = zk.$extends(zul.mesh.HeadWidget, {
 	_columnsgroup: true,
 
 	$define: {
-		columnshide: null, //TODO: postOnInitLater()?
-		columnsgroup: null, //TODO: postOnInitLater()?
+		columnshide: _zkf = function () {
+			if (this.desktop)
+				this._initColMenu();
+		},
+		columnsgroup: _zkf,
 		menupopup: function () {
 			if (this._menupopup != 'auto')
 				this._mpop = null;

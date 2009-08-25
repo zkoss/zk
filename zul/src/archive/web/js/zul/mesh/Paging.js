@@ -36,10 +36,9 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 		},
 		detailed: _zkf,
 		pageCount: _zkf, //TODO: smarter algorithm
-		activePage: _zkf, //TODO this.fire('onPagingImpl', this._activePage);
+		activePage: _zkf,
 		pageSize: function () {
 			this._updatePageNum();
-			// TODO this.fire('onPagingImpl', this._activePage);
 		},
 		autohide: function () {
 			if (this._pageCount == 1) this.rerender();
