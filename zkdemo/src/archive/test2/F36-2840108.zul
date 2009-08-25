@@ -51,7 +51,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 			<listitem label="after_end" />
 			<listitem label="at_pointer" />
 			<listitem label="after_pointer" />
-			<listitem label="x: 50, y: 50" value="50, 50"/>
+			<listitem label="x: 50, y: 50" value="x=50, y=50"/>
 		</listbox>
 		<span>
 		Action type:
@@ -63,7 +63,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 			if ("pupup (left-click)".equals(self.selectedItem.label)) {
 				btn.setPopup("pp, " + btn.label);
 			} else if ("tooltip (mouse-over)".equals(self.selectedItem.label)) {
-				btn.setTooltip("tip, " + btn.label);
+				btn.setTooltip("tip, " + btn.label + ", delay=10");
 			} else {
 				btn.setContext("context, " + btn.label);
 			}

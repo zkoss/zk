@@ -262,7 +262,7 @@ zk.eff.Tooltip = zk.$extends(zk.Object, {
 
 			this._inf = {
 				tip: tip, ref: ref,
-				timer: setTimeout(this.proxy(this.open_), zk.tipDelay)
+				timer: setTimeout(this.proxy(this.open_), params.delay !== undefined ? params.delay : zk.tipDelay)
 			};
 		} else if (this._ref == ref)
 			this._clearClosing();
@@ -282,10 +282,9 @@ zk.eff.Tooltip = zk.$extends(zk.Object, {
 				ref = this._ref = inf.ref;
 			this._inf = null;
 			var params = this._params,
-				xy = params.length == 3 ?
-							[zk.parseInt(params[1]), zk.parseInt(params[2])]
+				xy = params.x !== undefined ? [params.x, params.y]
 							: zk.currentPointer;
-			tip.open(ref, xy, params.length == 2 ? params[1].trim() : params.length == 1 ? "after_pointer" : null, {sendOnOpen:true});
+			tip.open(ref, xy, params.position ? params.position : params.x === null ? "after_pointer" : null, {sendOnOpen:true});
 		}
 	},
 	close_: function () {

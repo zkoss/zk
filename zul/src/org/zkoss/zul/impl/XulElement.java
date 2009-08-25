@@ -163,9 +163,10 @@ abstract public class XulElement extends HtmlBasedComponent implements org.zkoss
 	 * or the location of <code>x</code> and <code>y</code>, you can specify the following format:</br>
 	 * <ul>
 	 * <li><code>id, position</code></li>
-	 * <li><code>id, x, y</code></li>
+	 * <li><code>id, position=before_start</code></li>
+	 * <li><code>id, x=15, y=20</code></li>
 	 * <li><code>uuid(comp_uuid), position</code></li>
-	 * <li><code>uuid(comp_uuid), x, y</code></li>
+	 * <li><code>uuid(comp_uuid), x=15, y=20</code></li>
 	 * </ul>
 	 * For example,
 	 * <pre>
@@ -221,9 +222,10 @@ abstract public class XulElement extends HtmlBasedComponent implements org.zkoss
 	 * or the location of <code>x</code> and <code>y</code>, you can specify the following format:</br>
 	 * <ul>
 	 * <li><code>id, position</code></li>
-	 * <li><code>id, x, y</code></li>
+	 * <li><code>id, position=before_start</code></li>
+	 * <li><code>id, x=15, y=20</code></li>
 	 * <li><code>uuid(comp_uuid), position</code></li>
-	 * <li><code>uuid(comp_uuid), x, y</code></li>
+	 * <li><code>uuid(comp_uuid), x=15, y=20</code></li>
 	 * </ul>
 	 * For example,
 	 * <pre>
@@ -276,13 +278,17 @@ abstract public class XulElement extends HtmlBasedComponent implements org.zkoss
 	 * format:<br/>
 	 * <code>uuid(comp_uuid)</code>
 	 * 
-	 * <p> (since 3.6.3) the tooltip can be shown by a position from {@link Popup#open(org.zkoss.zk.ui.Component, String)}
-	 * or the location of <code>x</code> and <code>y</code>, you can specify the following format:</br>
+	 * <p> (since 3.6.3) the tooltip can be shown by a position from
+	 * {@link Popup#open(org.zkoss.zk.ui.Component, String)}
+	 * or the location of <code>x</code> and <code>y</code>, and can be specified
+	 * with a delay time (in millisecond), you can specify the following format:
+	 * </br>
 	 * <ul>
 	 * <li><code>id, position</code></li>
-	 * <li><code>id, x, y</code></li>
-	 * <li><code>uuid(comp_uuid), position</code></li>
-	 * <li><code>uuid(comp_uuid), x, y</code></li>
+	 * <li><code>id, position=before_start, delay=500</code></li>
+	 * <li><code>id, x=15, y=20</code></li>
+	 * <li><code>uuid(comp_uuid2), position</code></li>
+	 * <li><code>uuid(comp_uuid), x=15, y=20</code></li>
 	 * </ul>
 	 * For example,
 	 * <pre>

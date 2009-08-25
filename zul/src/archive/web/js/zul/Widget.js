@@ -118,21 +118,40 @@ zul.Widget = zk.$extends(zk.Widget, {
 		return this;
 	},
 
+	_parsePopParams: function (txt) {
+		var params = {},
+			ps = txt.split(',');
+		params.id = ps[0];
+		for (var len = ps.length; --len >= 1;) {
+			var key = ps[len].trim(),
+				index = key.indexOf('=');
+			if (index != -1)
+				params[key.substring(0, index)] = key.substring(index + 1, key.length).trim();
+			else
+				params.position = key.trim();
+		}
+		if (params.x)
+			params.x = zk.parseInt(params.x);
+		if (params.y)
+			params.y = zk.parseInt(params.y);
+		if (params.delay)
+			params.delay = zk.parseInt(params.delay);
+		return params;
+	},
 	//super//
 	doClick_: function (evt, popupOnly) {
 		if (!evt._popuped) {
-			var params = this._popup ? this._popup.split(',') : [],
-				popup = this._smartFellow(params[0]);
+			var params = this._popup ? this._parsePopParams(this._popup) : {},
+				popup = this._smartFellow(params.id);
 			if (popup) {
 				evt._popuped = true;
 				
 				// to avoid a focus in IE, we have to pop up it later. for example, userguide/#t5
 				var self = this,
-					xy = params.length == 3 ?
-							[zk.parseInt(params[1]), zk.parseInt(params[2])]
+					xy = params.x !== undefined ? [params.x, params.y]
 							: [evt.pageX, evt.pageY];
 				setTimeout(function() {
-					popup.open(self, xy, params.length == 2 ? params[1].trim() : null, {sendOnOpen:true});
+					popup.open(self, xy, params.position ? params.position : null, {sendOnOpen:true});
 				}, 0);
 				evt.stop();
 			}
@@ -142,15 +161,14 @@ zul.Widget = zk.$extends(zk.Widget, {
 	},
 	doRightClick_: function (evt) {
 		if (!evt._ctxed) {
-			var params = this._context ? this._context.split(',') : [],
-				ctx = this._smartFellow(params[0]);
+			var params = this._context ? this._parsePopParams(this._context) : {},
+				ctx = this._smartFellow(params.id);
 			if (ctx) {
 				evt._ctxed = true;
-				var xy = params.length == 3 ?
-							[zk.parseInt(params[1]), zk.parseInt(params[2])]
+				var xy = params.x !== undefined ? [params.x, params.y]
 							: [evt.pageX, evt.pageY];
 							
-				ctx.open(this, xy, params.length == 2 ? params[1].trim() : null, {sendOnOpen:true});
+				ctx.open(this, xy, params.position ? params.position : null, {sendOnOpen:true});
 				evt.stop(); //prevent default context menu to appear
 			}
 		}
@@ -158,8 +176,8 @@ zul.Widget = zk.$extends(zk.Widget, {
 	},
 	doTooltipOver_: function (evt) {
 		if (!evt._tiped && zk.eff.tooltip.beforeBegin(this)) {
-			var params = this._tooltip ? this._tooltip.split(',') : [],
-				tip = this._smartFellow(params[0]);
+			var params = this._tooltip ? this._parsePopParams(this._tooltip) : {},
+				tip = this._smartFellow(params.id);
 			if (tip) {
 				evt._tiped = true;
 				zk.eff.tooltip.begin(tip, this, params);
