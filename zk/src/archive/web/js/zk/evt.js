@@ -88,31 +88,31 @@ zWatch = (function () {
 	listen: function (infs) {
 		for (name in infs) {
 			var wts = _watches[name],
-				o = infs[name];
+				inf = infs[name];
 			if (wts) {
-				var bindLevel = o.bindLevel;
+				var bindLevel = (inf.$array ? inf[0]: inf).bindLevel;
 				if (bindLevel != null) {
 					for (var j = wts.length;;) {
 						if (--j < 0) {
-							wts.unshift(o);
+							wts.unshift(inf);
 							break;
 						}
 						if (bindLevel >= wts[j].bindLevel) { //parent first
-							wts.splice(j + 1, 0, o);
+							wts.splice(j + 1, 0, inf);
 							break;
 						}
 					}
 				} else
-					wts.push(o);
+					wts.push(inf);
 			} else
-				wts = _watches[name] = [o];
+				wts = _watches[name] = [inf];
 		}
 		return this;
 	},
 	unlisten: function (infs) {
 		for (name in infs) {
 			var wts = _watches[name];
-			wts && wts.$remove(infs[name]);
+			wts && wts.$remove(infs[name]); //$remove handles $array
 		}
 		return this;
 	},
@@ -137,9 +137,10 @@ zWatch = (function () {
 				if (opts.timeout >= 0) {
 					setTimeout(
 					function () {
-						var o;
-						while (o = wts.shift()) {
-							var fn = o[name];
+						var inf;
+						while (inf = wts.shift()) {
+							var o = inf.$array ? inf[0]: inf,
+								fn = inf.$array ? inf[1]: o[name];
 							if (!fn)
 								throw name + ' not defined in '+(o.className || o);
 							fn.apply(o, args);
@@ -149,9 +150,10 @@ zWatch = (function () {
 				}
 			}
 
-			var o;
-			while (o = wts.shift()) {
-				var fn = o[name];
+			var inf;
+			while (inf = wts.shift()) {
+				var o = inf.$array ? inf[0]: inf,
+					fn = inf.$array ? inf[1]: o[name];
 				if (!fn)
 					throw name + ' not defined in '+(o.className || o);
 				fn.apply(o, args);
@@ -170,16 +172,17 @@ zWatch = (function () {
 			var found, bindLevel = origin.bindLevel;
 			if (bindLevel != null) {
 				found = [];
-				for (var j = wts.length, o; j--;) { //child first
-					o = wts[j];
-					var diff = bindLevel > o.bindLevel;
+				for (var j = wts.length; j--;) { //child first
+					var inf = wts[j],
+						o = inf.$array ? inf[0]: inf,
+						diff = bindLevel > o.bindLevel;
 					if (diff) break;//nor ancestor, nor this (&sibling)
 					if (origin == o && _visible(name, o)) {
-						found.unshift(o);
+						found.unshift(inf);
 						break; //found this (and no descendant ahead)
 					}
 					if (_visibleChild(name, origin, o))
-						found.unshift(o); //parent first
+						found.unshift(inf); //parent first
 				}
 			} else {
 				found = wts.$clone(); //make a copy since unlisten might happen
@@ -192,9 +195,10 @@ zWatch = (function () {
 			if (opts && opts.timeout >= 0) {
 				setTimeout(
 				function () {
-					var o;
-					while (o = found.shift()) {
-						var fn = o[name];
+					var inf;
+					while (inf = found.shift()) {
+						var o = inf.$array ? inf[0]: inf,
+							fn = inf.$array ? inf[1]: o[name];
 						if (!fn)
 							throw name + ' not defined in '+(o.className || o);
 						fn.apply(o, args);
@@ -203,9 +207,10 @@ zWatch = (function () {
 				return;
 			}
 
-			var o;
-			while (o = found.shift()) {
-				var fn = o[name];
+			var inf;
+			while (inf = found.shift()) {
+				var o = inf.$array ? inf[0]: inf,
+					fn = inf.$array ? inf[1]: o[name];
 				if (!fn)
 					throw name + ' not defined in '+(o.className || o);
 				fn.apply(o, args);

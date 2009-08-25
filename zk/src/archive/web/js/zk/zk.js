@@ -377,9 +377,19 @@ zk.copy(Array.prototype, {
 		}
 		return false;
 	},
+	$equals: function (o) {
+		if (o && o.$array && o.length == this.length) {
+			for (var j = this.length; --j >= 0;) {
+				var e = this[j];
+				if (e != o[j] && (!e || !e.$array || !e.$equals(o[j])))
+					return false;
+			}
+			return true;
+		}
+	},
 	$remove: function (o) {
-		for (var j = 0, tl = this.length; j < tl; ++j) {
-			if (o == this[j]) {
+		for (var ary = o != null && o.$array, j = 0, tl = this.length; j < tl; ++j) {
+			if (o == this[j] || (ary && o.$equals(this[j]))) {
 				this.splice(j, 1);
 				return true;
 			}

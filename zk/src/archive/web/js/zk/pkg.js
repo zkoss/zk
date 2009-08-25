@@ -216,11 +216,11 @@ zk.copy(zk, (function() {
 			return true;
 		}
 	},
-	getHost: function (pkg, au) {
+	getHost: function (pkg, js) {
 		for (var p in _pkghosts)
 			if (pkg.startsWith(p))
-				return _pkghosts[p][au ? 1: 0];
-		return _defhost[au ? 1: 0];
+				return _pkghosts[p][js ? 1: 0];
+		return _defhost[js ? 1: 0];
 	},
 	setHost: function (host, updURI, pkgs) {
 		var hostUpd = host + updURI;
