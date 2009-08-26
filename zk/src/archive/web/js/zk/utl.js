@@ -139,7 +139,7 @@ zUtl = { //static methods
 	},
 
 	getElementValue: function (el) {
-		var txt = ""
+		var txt = "";
 		for (el = el.firstChild; el; el = el.nextSibling)
 			if (el.data) txt += el.data;
 		return txt;

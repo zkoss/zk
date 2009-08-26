@@ -251,7 +251,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 
 	_updateDrag: function (pt, evt) {
 		if(!this.dragging) {
-			var v = this.opts.initSensitivity
+			var v = this.opts.initSensitivity;
 			if (v && (pt[0] <= _initPt[0] + v
 			&& pt[0] >= _initPt[0] - v
 			&& pt[1] <= _initPt[1] + v

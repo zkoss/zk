@@ -28,11 +28,12 @@ zk = function (sel) {
 		logmsg;
 
 	function def(nm, before, after) {
-		return function (v) {
+		return function (v, opts) {
 			if (before) v = before.apply(this, arguments);
 			var o = this[nm];
 			this[nm] = v;
-			if (after && o !== v) after.apply(this, arguments);
+			if (after && (o !== v || (opts && opts.force)))
+				after.apply(this, arguments);
 			return this;
 		};
 	}

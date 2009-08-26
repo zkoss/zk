@@ -702,7 +702,7 @@ zk.Widget = zk.$extends(zk.Object, {
 				for (var j = 0, fl = _floatings.length; j < fl; ++j) { //parent first
 					var w = _floatings[j].widget;
 					if (wgt != w && zUtl.isAncestor(wgt, w) && w.isVisible()) {
-						var n = _floatings[j].node
+						var n = _floatings[j].node;
 						if (n != w.$n()) w.setFloatZIndex_(n, ++zi); //only a portion
 						else w._setZIndex(++zi, true);
 					}

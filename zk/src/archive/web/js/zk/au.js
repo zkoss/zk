@@ -207,7 +207,7 @@ zAu = (function () {
 		//handle pending ajax send
 		if (sendPending && !ajaxReq && !pendingReqInf) {
 			sendPending = false;
-			var dts = zk.Desktop.all
+			var dts = zk.Desktop.all;
 			for (var dtid in dts)
 				ajaxSend2(dts[dtid], 0);
 		}
