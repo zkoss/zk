@@ -60,6 +60,7 @@ zWatch = (function () {
 		_dirty;
 
 	function _visible(name, c) {
+		var n;
 		return c.$n && (n=c.$n()) && zk(n).isRealVisible(name!='onShow');
 		//if onShow, we don't check visibility since window uses it for
 		//non-embedded window that becomes invisible because of its parent
