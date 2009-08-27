@@ -46,6 +46,19 @@ zUtl = { //static methods
 		doc.load(url);
 		return doc;
 	},
+	parseMap: function (text, separator) {
+		var map = {};
+		if (text) {
+			var ps = text.split(separator || ',');
+			for (var len = ps.length; len--;) {
+				var key = ps[len].trim(),
+					index = key.indexOf('=');
+				if (index != -1)
+					map[key.substring(0, index)] = key.substring(index + 1, key.length).trim();
+			}
+		}
+		return map;
+	},
 	parseXML: function (text) {
 		if (typeof DOMParser != "undefined")
 			return (new DOMParser()).parseFromString(text, "text/xml");

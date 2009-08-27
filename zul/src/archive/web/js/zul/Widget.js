@@ -120,16 +120,22 @@ zul.Widget = zk.$extends(zk.Widget, {
 
 	_parsePopParams: function (txt) {
 		var params = {},
-			ps = txt.split(',');
-		params.id = ps[0];
-		for (var len = ps.length; --len >= 1;) {
-			var key = ps[len].trim(),
-				index = key.indexOf('=');
-			if (index != -1)
-				params[key.substring(0, index)] = key.substring(index + 1, key.length).trim();
-			else
-				params.position = key.trim();
-		}
+			index = txt.indexOf(','),
+			start = txt.indexOf('='),
+			t = txt;
+		if (start != -1)
+			t = txt.substring(0, txt.substring(0, start).lastIndexOf(','));
+		
+		if (index != -1) {
+			params.id = t.substring(0, index).trim();
+			var t2 = t.substring(index + 1, t.length);
+			if (t2)
+				params.position = t2.trim();				
+			
+			zk.copy(params, zUtl.parseMap(txt.substring(t.length, txt.length)));
+		} else
+			params.id = txt.trim();
+		
 		if (params.x)
 			params.x = zk.parseInt(params.x);
 		if (params.y)
