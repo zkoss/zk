@@ -18,8 +18,10 @@ ZK 5.0.0
   2822834: Button supports toolbar mold and toolbarbutton d. from it
   2839350: Timebox supports date format like "a hh:mm:ss"
   2841695: Enhance Datebox and Calendar layout
+  1832887: InputElement support in-place editing
 
 * Bugs
+  1999145: Combobox with Width of 100% Overruns
 
 * Upgrade Notes
   + Event processing thread is disabled by default. It means doModal

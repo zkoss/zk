@@ -4,6 +4,8 @@
 .z-combobox {
 	border: 0; padding: 0; margin: 0; white-space: nowrap;
 	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
+	display:-moz-inline-box; vertical-align:top;<%-- vertical-align: make it looks same in diff browsers --%>
+	display:inline-block;
 }
 
 .z-combobox-inp {
@@ -77,9 +79,12 @@
 .z-bandbox {
 	border: 0; padding: 0; margin: 0; white-space: nowrap;
 	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
+	display:-moz-inline-box; vertical-align:top;<%-- vertical-align: make it looks same in diff browsers --%>
+	display:inline-block;
 }
 
 .z-bandbox-inp {
+	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
 	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg.gif')}) repeat-x 0 0;
 	border: 1px solid #86A4BE;
 }
@@ -119,17 +124,19 @@
 	background: white; border: 1px solid #86A4BE; padding: 2px;
 	font-size: ${fontSizeS};
 }
-
 <%-- Datebox --%>
 .z-datebox {
 	border: 0; padding: 0; margin: 0; white-space: nowrap;
 	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
+	display:-moz-inline-box; vertical-align:top;<%-- vertical-align: make it looks same in diff browsers --%>
+	display:inline-block;
 }
 .z-datebox-over{
 	background: #dae7f6;
 }
 
 .z-datebox-inp {
+	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
 	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg.gif')}) repeat-x 0 0;
 	border: 1px solid #86A4BE;
 }
@@ -214,8 +221,11 @@
 .z-datebox-time-down.z-datebox-time-over {
 	border-color: #BFBFBF white white;
 }
-
 <%-- Timebox --%>
+.z-timebox {
+	display:-moz-inline-box; vertical-align:top;<%-- vertical-align: make it looks same in diff browsers --%>
+	display:inline-block;
+}
 .z-timebox-inp {
 	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg.gif')}) repeat-x 0 0;
 	border: 1px solid #86A4BE;
@@ -253,6 +263,10 @@
 	background-position: -34px 0;
 }
 <%-- Spinner --%>
+.z-spinner {
+	display:-moz-inline-box; vertical-align:top;<%-- vertical-align: make it looks same in diff browsers --%>
+	display:inline-block;
+}
 .z-spinner-inp {
 	background: #FFF url(${c:encodeURL('~./zul/img/misc/text-bg.gif')}) repeat-x 0 0;
 	border: 1px solid #86A4BE;
@@ -288,7 +302,53 @@
 .z-spinner-focus .z-spinner-btn-clk .z-spinner-img , .z-spinner-btn-clk .z-spinner-img {
 	background-position: -34px 0;
 }
+<%-- Inplace editing --%>
+.z-combobox-inplace,
+.z-bandbox-inplace,
+.z-datebox-inplace,
+.z-timebox-inplace,
+.z-spinner-inplace {
+	border: 0;
+	background: none;
+	padding-top: 1px;
+	padding-bottom: 1px;
+} 
+.z-combobox-inplace .z-combobox-inp,
+.z-bandbox-inplace .z-bandbox-inp,
+.z-datebox-inplace .z-datebox-inp,
+.z-timebox-inplace .z-timebox-inp,
+.z-spinner-inplace .z-spinner-inp {
+	padding-left: 1px;
+	padding-right: 1px;
+	border: 0;
+	background: none;
+}
+.ie .z-combobox-inplace .z-combobox-inp,
+.ie .z-bandbox-inplace .z-bandbox-inp,
+.ie .z-datebox-inplace .z-datebox-inp,
+.ie .z-timebox-inplace .z-timebox-inp,
+.ie .z-spinner-inplace .z-spinner-inp {
+	padding: 0px;
+	padding-left: 2px;
+	padding-right: 2px;
+}
 
+.ie7 .z-combobox-inplace .z-combobox-inp,
+.ie7 .z-bandbox-inplace .z-bandbox-inp,
+.ie7 .z-datebox-inplace .z-datebox-inp,
+.ie7 .z-timebox-inplace .z-timebox-inp,
+.ie7 .z-spinner-inplace .z-spinner-inp {
+	padding: 1px;
+	padding-left: 2px;
+	padding-right: 2px;
+}
+.z-combobox-inplace .z-combobox-btn,
+.z-bandbox-inplace .z-bandbox-btn,
+.z-datebox-inplace .z-datebox-btn,
+.z-timebox-inplace .z-timebox-btn,
+.z-spinner-inplace .z-spinner-btn {
+	display: none;
+}
 <%-- disable --%>
 .z-spinner-disd,
 .z-timebox-disd,
@@ -325,6 +385,19 @@
 	background: #ECEAE4;
 }
 
+ 
+.z-combobox-inplace .z-combobox-readonly,
+.z-combobox-inplace .z-combobox-text-disd,
+.z-spinner-inplace .z-spinner-readonly,
+.z-spinner-inplace .z-spinner-text-disd,
+.z-timebox-inplace .z-timebox-readonly,
+.z-timebox-inplace .z-timebox-text-disd,
+.z-datebox-inplace .z-datebox-readonly,
+.z-datebox-inplace .z-datebox-text-disd,
+.z-bandbox-inplace .z-bandbox-readonly,
+.z-bandbox-inplace .z-bandbox-text-disd {
+	background: none;
+}
 <%-- IE --%>
 <c:if test="${c:isExplorer()}">
 .z-combobox-pp .z-comboitem-inner {<%--description--%>

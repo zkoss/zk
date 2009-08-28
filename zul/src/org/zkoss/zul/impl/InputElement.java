@@ -79,7 +79,30 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	private boolean _valided;
 	/** Whether the validation is calused by {@link #isValid}. */
 	private transient boolean _checkOnly;
+	
+	private boolean _inplace;
 
+	/**
+	 * Sets to enable the inplace-editing function that the look and feel is
+	 * like a label.
+	 * @since 5.0.0 
+	 */
+	public void setInplace(boolean inplace) {
+		if (_inplace != inplace) {
+			_inplace = inplace;
+			smartUpdate("inplace", _inplace);
+		}
+	}
+	
+	/**
+	 * Returns whether enable the inplace-editing.
+	 * <p>default: false.
+	 * @since 5.0.0
+	 */
+	public boolean isInplace() {
+		return _inplace;
+	}
+	
 	/** Returns whether it is disabled.
 	 * <p>Default: false.
 	 */
@@ -685,6 +708,7 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 		render(renderer, "readonly", _readonly);
 		render(renderer, "disabled", _disabled);
 		render(renderer, "name", _name);
+		render(renderer, "inplace", _inplace);
 		if (_maxlength > 0) renderer.render("maxlength", _maxlength);
 		if (_cols > 0) renderer.render("cols", _cols);
 		if (_tabindex >= 0) renderer.render("tabindex", _tabindex);

@@ -47,6 +47,21 @@
 	background: #ECEAE4;
 }
 
+<%-- Inplace editing--%>
+.z-textbox-inplace,
+.z-decimalbox-inplace,
+.z-intbox-inplace,
+.z-longbox-inplace,
+.z-doublebox-inplace {
+	border: 0;
+	padding: 2px 1px;
+	background: none;
+}
+
+.ie .z-textbox-inplace, .ie .z-decimalbox-inplace, .ie .z-intbox-inplace,
+.ie .z-longbox-inplace, .ie .z-doublebox-inplace {
+	padding: 2px;
+}
 <%-- error box --%>
 .z-errbox {
 	font-family: ${fontFamilyC};

@@ -25,12 +25,28 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	},
 
 	onSize: _zkf = function () {
+		var width = this.getWidth();
+		if (!width || width.indexOf('%') != -1)
+			this.getInputNode().style.width = '';
+		this.syncWidth();
 		this._auxb.fixpos();
 	},
 	onShow: _zkf,
 	onFloatUp: function (wgt) {
-		if (!zUtl.isAncestor(this, wgt))
-			this.close({sendOnOpen:true});
+		if (!this.isOpen()) return;
+		if (!zUtl.isAncestor(this, wgt)) {
+			this.close({sendOnOpen: true});
+			if (this._inplace) {
+				var n = this.$n(),
+					inplace = this.getInplaceCSS();
+							
+				n.style.width = jq.px(zk(n).revisedWidth(n.offsetWidth));
+				jq(this.getInputNode()).addClass(inplace);
+				jq(n).addClass(inplace);
+				this.onSize();
+				n.style.width = this.getWidth() || '';
+			}
+		}
 	},
 
 	setOpen: function (open, opts) {
@@ -186,15 +202,71 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	getInputNode: function () {
 		return this.$n('real');
 	},
+	syncWidth: function () {
+		var node = this.$n();
+		if (!zk(node).isRealVisible())
+			return;
+		
+		if (this._buttonVisible && this._inplace) {
+			if (!node.style.width) {
+				var $n = jq(node),
+					inc = this.getInplaceCSS();
+				$n.removeClass(inc);
+				node.style.width = jq.px(zk(node).revisedWidth(node.offsetWidth));
+				$n.addClass(inc);
+			}
+		}
+		var width = zk(node).revisedWidth(node.offsetWidth),
+			btn = this.$n('btn'),
+			inp = this.getInputNode();
+		inp.style.width = jq.px(zk(inp).revisedWidth(width - (btn ? btn.offsetWidth : 0)));
+	},
+	doFocus_: function (evt) {
+		var n = this.$n();
+		if (this._inplace)
+			n.style.width = jq.px(zk(n).revisedWidth(n.offsetWidth));
+			
+		this.$supers('doFocus_', arguments);
+
+		if (this._inplace) {
+			if (jq(n).hasClass(this.getInplaceCSS())) {
+				jq(n).removeClass(this.getInplaceCSS());
+				this.onSize();
+			}
+		}
+	},
+	doBlur_: function (evt) {
+		var n = this.$n();
+		if (this._inplace && this._inplaceout) {
+			n.style.width = jq.px(zk(n).revisedWidth(n.offsetWidth));
+		}
+		this.$supers('doBlur_', arguments);
+		if (this._inplace && this._inplaceout) {
+			jq(n).addClass(this.getInplaceCSS());
+			this.onSize();
+			n.style.width = this.getWidth() || '';
+		}
+	},
+	afterKeyDown_: function (evt) {
+		if (this._inplace)
+			jq(this.$n()).toggleClass(this.getInplaceCSS(),  evt.keyCode == 13 ? null : false);
+			
+		this.$supers('afterKeyDown_', arguments);
+	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
 
 		var btn = this.$n('btn'),
 			inp = this.getInputNode();
+			
+		if (this._inplace)
+			jq(inp).addClass(this.getInplaceCSS());
+			
 		if (btn) {
 			this._auxb = new zul.Auxbutton(this, btn, inp);
 			this.domListen_(btn, 'onClick', '_doBtnClick');
 		}
+		this.syncWidth();
 		zWatch.listen({onSize: this, onShow: this, onFloatUp: this});
 	},
 	unbind_: function () {

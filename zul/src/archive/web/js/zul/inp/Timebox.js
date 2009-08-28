@@ -211,27 +211,12 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		return this.$n("real");
 	},
 	onSize: _zkf = function () {
-		var btn = this.$n("btn");
-		if (zk(btn).isRealVisible() && btn.style.position != "relative") {
-			var inp = this.getInputNode(), img = btn.firstChild,
-				self = this;
-			if (!inp.offsetHeight || !img.offsetHeight) {
-				setTimeout(function () {self.onSize()}, 66);
-				return;
-			}
-
-			//Bug 1738241: don't use align="xxx"
-			var v = inp.offsetHeight - img.offsetHeight;
-			if (v !== 0) {
-				var imghgh = zk.parseInt(jq(img).css("height")) + v;
-				img.style.height = (imghgh < 0 ? 0 : imghgh) + "px";
-			}
-
-			v = inp.offsetTop - img.offsetTop;
-			btn.style.position = "relative";
-			btn.style.top = v + "px";
-			if (zk.safari) btn.style.left = "-2px";
-		}
+		var width = this.getWidth();
+		if (!width || width.indexOf('%') != -1)
+			this.getInputNode().style.width = '';
+		this.syncWidth();
+		
+		this._auxb.fixpos();
 	},
 	onShow: _zkf,
 	onHide: zul.inp.Textbox.onHide,
@@ -247,7 +232,7 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		this.$supers('doClick_', arguments);
 	},
 	doKeyPress_: function (evt) {
-		if (zk.opera) {
+		if (zk.opera && evt.keyCode != 9) {
 			evt.stop();
 			return;
 		}
@@ -534,16 +519,75 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		this.currentStep = this.defaultStep;
 		this.timerId = null;
 	},
+	
+	syncWidth: function () {
+		var node = this.$n();
+		if (!zk(node).isRealVisible())
+			return;
+		
+		if (this._buttonVisible && this._inplace) {
+			if (!node.style.width) {
+				var $n = jq(node),
+					inc = this.getInplaceCSS();
+				$n.removeClass(inc);
+				node.style.width = jq.px(zk(node).revisedWidth(node.offsetWidth));
+				$n.addClass(inc);
+			}
+		}
+		var width = zk(node).revisedWidth(node.offsetWidth),
+			btn = this.$n('btn'),
+			inp = this.getInputNode();
+		inp.style.width = jq.px(zk(inp).revisedWidth(width - (btn ? btn.offsetWidth : 0)));
+	},
+	doFocus_: function (evt) {
+		var n = this.$n();
+		if (this._inplace)
+			n.style.width = jq.px(zk(n).revisedWidth(n.offsetWidth));
+			
+		this.$supers('doFocus_', arguments);
+
+		if (this._inplace) {
+			if (jq(n).hasClass(this.getInplaceCSS())) {
+				jq(n).removeClass(this.getInplaceCSS());
+				this.onSize();
+			}
+		}
+	},
+	doBlur_: function (evt) {
+		var n = this.$n();
+		if (this._inplace && this._inplaceout) {
+			n.style.width = jq.px(zk(n).revisedWidth(n.offsetWidth));
+		}
+		this.$supers('doBlur_', arguments);
+		if (this._inplace && this._inplaceout) {
+			jq(n).addClass(this.getInplaceCSS());
+			this.onSize();
+			n.style.width = this.getWidth() || '';
+		}
+	},
+	afterKeyDown_: function (evt) {
+		if (this._inplace)
+			jq(this.$n()).toggleClass(this.getInplaceCSS(),  evt.keyCode == 13 ? null : false);
+			
+		this.$supers('afterKeyDown_', arguments);
+	},
 	bind_: function () {
 		this.$supers('bind_', arguments);
 		var inp = this.getInputNode(),
 			btn = this.$n("btn");
 		zWatch.listen({onSize: this, onShow: this});
-		if(btn)
+		
+		if (this._inplace)
+			jq(inp).addClass(this.getInplaceCSS());
+			
+		if (btn) {
+			this._auxb = new zul.Auxbutton(this, btn, inp);
 			this.domListen_(btn, "onMousedown", "_btnDown")
 				.domListen_(btn, "onMouseup", "_btnUp")
 				.domListen_(btn, "onMouseout", "_btnOut")
 				.domListen_(btn, "onMouseover", "_btnOver");
+		}
+		this.syncWidth();
 	},
 	unbind_: function () {
 		if(this.timerId){
@@ -553,6 +597,8 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		zWatch.unlisten({onSize: this, onShow: this});
 		var btn = this.$n("btn");
 		if (btn) {
+			this._auxb.cleanup();
+			this._auxb = null;
 			this.domUnlisten_(btn, "onMousedown", "_btnDown")
 				.domUnlisten_(btn, "onMouseup", "_btnUp")
 				.domUnlisten_(btn, "onMouseout", "_btnOut")

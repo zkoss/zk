@@ -57,9 +57,14 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			var inp = this.getInputNode();
 			if (inp)
 				inp.tabIndex = tabindex;
+		},
+		inplace: function (inplace) {
+			this.rerender();
 		}
 	},
-
+	getInplaceCSS: function () {
+		return this._inplace ? this.getZclass() + '-inplace' : '';
+	},
 	select: function (start, end) {
 		zk(this.getInputNode()).setSelectionRange(start, end);
 	},
@@ -128,7 +133,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		if (this._disabled) html += ' disabled="disabled"';
 		if (this._readonly) html += ' readonly="readonly"';
 		
-		var s = this.domStyle_();
+		var s = this.domStyle_({width: true, height: true});
 		if (s) html += ' style="' + s + '"';
 		return html;
 	},
@@ -146,7 +151,15 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	getConstraint: function () {
 		return this._cst;
 	},
-
+	doMouseOut_: function () {
+		this._inplaceout = true;
+		this.$supers('doMouseOut_', arguments);
+		
+	},
+	doMouseOver_: function () {
+		this._inplaceout = false;
+		this.$supers('doMouseOut_', arguments);
+	},
 	doFocus_: function (evt) {
 		this.$supers('doFocus_', arguments);
 
@@ -156,17 +169,27 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				this._lastChg = inp.value;
 				this._tidChg = setInterval(this.proxy(this._onChanging), 500);
 			}
+			
 			jq(this.$n()).addClass(this.getZclass() + '-focus');
+			if (this._inplace) {
+				jq(this.getInputNode()).removeClass(this.getInplaceCSS());
+				if (this._inplaceout === undefined)
+					this._inplaceout = true;
+			}
 		}
 	},
 	doBlur_: function (evt) {
 		this.$supers('doBlur_', arguments);
 
 		this._stopOnChanging();
-
+		
 		jq(this.$n()).removeClass(this.getZclass() + '-focus');
 		if (!zk.alerting && this.shallUpdate_(zk.currentFocus))
 			this.updateChange_();
+		
+		if (this._inplace && this._inplaceout) {
+			jq(this.getInputNode()).addClass(this.getInplaceCSS());
+		}
 	},
 
 	_doSelect: function (evt) {
@@ -354,6 +377,9 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				sc += ' ' + zcls + '-text-disd';
 			if (this._readonly)
 				sc += ' ' + zcls + '-readonly';
+			if (this._inplace) {
+				sc += ' ' + this.getInplaceCSS();
+			}
 		}
 		return sc;
 	},
@@ -375,6 +401,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	doKeyDown_: function (evt) {
 		var keyCode = evt.keyCode;
+		if (!this._inplaceout)
+			this._inplaceout = keyCode == 9;
 		if (keyCode == 9 && !evt.altKey && !evt.ctrlKey && !evt.shiftKey
 		&& this._tabbable) {
 			var inp = this.getInputNode(),
@@ -406,6 +434,14 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		this.$supers('doKeyUp_', arguments);
 	},
 	afterKeyDown_: function (evt) {
+		if (this._inplace) {
+			if (evt.keyCode == 13) {
+				var $inp = jq(this.getInputNode()), inc = this.getInplaceCSS();
+				if ($inp.toggleClass(inc).hasClass(inc)) 
+					$inp.zk.setSelectionRange(0, $inp[0].value.length);
+			} else
+				jq(this.getInputNode()).removeClass(this.getInplaceCSS());
+		}
 		if (evt.keyCode != 13 || !this.isMultiline())
 			this.$supers('afterKeyDown_', arguments);
 	},
