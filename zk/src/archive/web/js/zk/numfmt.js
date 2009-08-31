@@ -18,25 +18,43 @@ zNumFormat = {
 		if (!fmt) return '' + val;
 		
 		//caculate number of fixed decimals
-		var pureFmtStr = fmt.replace(/[^#.]/g, ''),
+		var re = new RegExp("[^#" + zk.DECIMAL + "]", 'g'),
+			pureFmtStr = fmt.replace(re, ''),
 			ind = pureFmtStr.indexOf('.'),
-			fixed = ind > 0 ? pureFmtStr.length - ind - 1 : 0,
-			valueStr = val + "";
-			
-		valueStr = (valueStr.replace(/[^0123456789.]/g, '') * 1).toFixed(fixed);
+			fixed = ind >= 0 ? pureFmtStr.length - ind - 1 : 0,
+			valueStr = ((val + '').replace(/[^0123456789.]/g, '') * 1).toFixed(fixed);
 		
-		var indFmt = fmt.indexOf('.'), indVal = valueStr.indexOf('.'), pre = suf = '';
+		var indFmt = fmt.indexOf(zk.DECIMAL),
+			indVal = valueStr.indexOf(zk.DECIMAL),
+			pre = suf = '';
 		
 		//pre part
 		if (indVal == -1) 
 			indVal = valueStr.length;
-		for (var i = indFmt - 1, j = indVal - 1; i >= 0 && j >= 0;) {
+		if (indFmt == -1) 
+			indFmt = fmt.length;
+		
+		for (var len = indVal - fmt.replace(/[^#]/g, '').length; len--; indFmt++)
+			fmt = '#' + fmt;
+		
+		var groupDigit = indFmt - fmt.substring(0, indFmt).lastIndexOf(zk.GROUPING);
+			
+		for (var g = 1, i = indFmt - 1, j = indVal - 1; i >= 0 && j >= 0;) {
+			if (g % groupDigit == 0 && pre.charAt(0) != zk.GROUPING) {
+				pre = zk.GROUPING + pre;
+				g++;
+			}
 			if (fmt.charAt(i) == '#') {
 				pre = valueStr.charAt(j) + pre;
 				i--;
 				j--;
+				g++;
 			} else {
-				pre = fmt.charAt(i) + pre;
+				var c = fmt.charAt(i);
+				if (c != zk.GROUPING) {
+					pre = c + pre;
+					g++;
+				}
 				i--;
 			}
 		}
@@ -57,7 +75,7 @@ zNumFormat = {
 		//combine
 		if (!pre) 
 			pre = "0";
-		return suf ? pre + "." + suf : pre;
+		return suf ? pre + zk.DECIMAL + suf : pre;
 	},
 	unformat: function (fmt, val) {
 		if (!val) return {raw: val, divscale: 0};
