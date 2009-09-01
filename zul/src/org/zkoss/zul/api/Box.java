@@ -185,6 +185,7 @@ public interface Box extends org.zkoss.zul.impl.api.XulElement {
 	 * 
 	 * <p>
 	 * Default: empty.
+	 * @deprecated As of release 5.0.0, use {@link Cell} instead.
 	 */
 	public String getWidths();
 
@@ -200,6 +201,7 @@ public interface Box extends org.zkoss.zul.impl.api.XulElement {
 	 * 
 	 * <p>
 	 * Default: empty.
+	 * @deprecated As of release 5.0.0, use {@link Cell} instead.
 	 */
 	public String getHeights();
 
@@ -222,6 +224,7 @@ public interface Box extends org.zkoss.zul.impl.api.XulElement {
 	 * Another example, ",,30%" means the third cell shall occupy 30% width, and
 	 * the rest of cells don't specify any width. Of course, the real widths
 	 * depend on the interpretation of the browser.
+	 * @deprecated As of release 5.0.0, use {@link Cell} instead.
 	 */
 	public void setWidths(String widths) throws WrongValueException;
 
@@ -231,6 +234,7 @@ public interface Box extends org.zkoss.zul.impl.api.XulElement {
 	 * 
 	 * <p>
 	 * It is the same as {@link #setWidths}.
+	 * @deprecated As of release 5.0.0, use {@link Cell} instead.
 	 */
 	public void setHeights(String heights) throws WrongValueException;
 

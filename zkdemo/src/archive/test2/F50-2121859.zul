@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+F50-2121859.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Tue Sep  1 16:15:57     2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	In ZK 5.0.0, grid can now support the rowspan attribute.
+	<grid>
+		<rows>
+			<row>
+				<cell rowspan="12">2009</cell>
+				<cell rowspan="3">Q1</cell>
+				<cell>Jan</cell>
+			</row>
+			<row>
+				<cell>Feb</cell>
+			</row>
+			<row>
+				<cell>Mar</cell>
+			</row>
+			<row>
+				<cell rowspan="3">Q2</cell>
+				<cell>Apr</cell>
+			</row>
+			<row>
+				<cell>May</cell>
+			</row>
+			<row>
+				<cell>Jun</cell>
+			</row>
+			<row>
+				<cell rowspan="3">Q3</cell>
+				<cell>Jul</cell>
+			</row>
+			<row>
+				<cell>Aug</cell>
+			</row>
+			<row>
+				<cell>Sep</cell>
+			</row>
+			<row>
+				<cell rowspan="3">Q4</cell>
+				<cell>Qct</cell>
+			</row>
+			<row>
+				<cell>Nov</cell>
+			</row>
+			<row>
+				<cell>Dec</cell>
+			</row>
+		</rows>
+	</grid>
+</zk>

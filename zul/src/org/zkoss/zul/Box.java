@@ -234,6 +234,8 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 	 * <p>It is the same as {@link #getHeights}.
 	 *
 	 * <p>Default: empty.
+	 * 
+	 * @deprecated As of release 5.0.0, use {@link Cell} instead.
 	 */
 	public String getWidths() {
 		return Utils.arrayToString(_sizes);
@@ -248,6 +250,7 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 	 * <p>It is the same as {@link #getWidths}.
 	 *
 	 * <p>Default: empty.
+	 * @deprecated As of release 5.0.0, use {@link Cell} instead.
 	 */
 	public String getHeights() {
 		return getWidths();
@@ -267,6 +270,7 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 	 * 30% width, and the rest of cells don't specify any width.
 	 * Of course, the real widths depend on the interpretation of
 	 * the browser.
+	 * @deprecated As of release 5.0.0, use {@link Cell} instead.
 	 */
 	public void setWidths(String widths) throws WrongValueException {
 		final String[] sizes = Utils.stringToArray(widths, null);
@@ -279,6 +283,7 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 	 * by comma to denote the width/height of each cell in a box.
 	 *
 	 * <p>It is the same as {@link #setWidths}.
+	 * @deprecated As of release 5.0.0, use {@link Cell} instead.
 	 */
 	public void setHeights(String heights) throws WrongValueException {
 		setWidths(heights);

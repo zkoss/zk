@@ -155,6 +155,7 @@ public class Row extends XulElement implements org.zkoss.zul.api.Row {
 	/** Returns the spans, which is a list of numbers separated by comma.
 	 *
 	 * <p>Default: empty.
+	 * @deprecated As of release 5.0.0, use {@link Cell} instead.
 	 */
 	public String getSpans() {
 		return _spans;
@@ -164,6 +165,7 @@ public class Row extends XulElement implements org.zkoss.zul.api.Row {
 	 * <p>For example, "1,2,3" means the second column will span two columns
 	 * and the following column span three columns, while others occupies
 	 * one column.
+	 * @deprecated As of release 5.0.0, use {@link Cell} instead.
 	 */
 	public void setSpans(String spans) throws WrongValueException {
 		if (!Objects.equals(spans, _spans)) {

@@ -104,6 +104,8 @@ public interface Row extends org.zkoss.zul.impl.api.XulElement {
 	 * 
 	 * <p>
 	 * Default: empty.
+	 * 
+	 * @deprecated As of release 5.0.0, use {@link Cell} instead.
 	 */
 	public String getSpans();
 
@@ -114,6 +116,7 @@ public interface Row extends org.zkoss.zul.impl.api.XulElement {
 	 * For example, "1,2,3" means the second column will span two columns and
 	 * the following column span three columns, while others occupies one
 	 * column.
+	 * @deprecated As of release 5.0.0, use {@link Cell} instead.
 	 */
 	public void setSpans(String spans) throws WrongValueException;
 

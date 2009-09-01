@@ -86,17 +86,19 @@ tr.z-grid-faker, tr.z-grid-faker th, tr.z-grid-faker div {
 	padding-top: 0 !important;	padding-right: 0 !important; padding-bottom: 0 !important;padding-left: 0 !important;
 	margin-top: 0 !important; margin-right : 0 !important;margin-bottom: 0 !important;margin-left: 0 !important;
 } <%-- these above css cannot be overrided--%>
-td.z-row-inner, td.z-groupfoot-inner {
+.z-cell, td.z-row-inner, td.z-groupfoot-inner {
 	padding: 2px; overflow: hidden;
 }
 div.z-row-cnt {
 	color: black;
 }
-tr.z-row td.z-row-inner {
+tr.z-row td.z-row-inner, tr.z-row .z-cell {
 	background: white; border-top: none; border-left: 1px solid white;
 	border-right: 1px solid #CCC; border-bottom: 1px solid #DDD;
 }
-tr.z-grid-odd td.z-row-inner, tr.z-grid-odd {
+tr.z-grid-odd td.z-row-inner,
+tr.z-grid-odd .z-cell,
+tr.z-grid-odd {
 	background: #F0FAFF;
 }
 <%-- Group --%>

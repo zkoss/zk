@@ -188,7 +188,7 @@ zul.mesh.SortWidget = zk.$extends(zul.mesh.HeaderWidget, {
 					break;
 				}
 			}
-			return scls != null ? scls + ' ' + added : added;
+			return scls != null ? scls + (added ? ' ' + added : '') : added || '';
 		}
 		return scls;
 	}

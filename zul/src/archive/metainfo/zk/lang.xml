@@ -341,6 +341,15 @@ def alert(m):
 		<preserve-blank/>
 	</component>
 	<component>
+		<component-name>cell</component-name>
+		<component-class>org.zkoss.zul.Cell</component-class>
+		<widget-class>zul.wgt.Cell</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+ 			<mold-uri>mold/cell.js</mold-uri>
+		</mold>
+	</component>
+	<component>
 		<component-name>center</component-name>
 		<extends>layoutregion</extends>
 		<component-class>org.zkoss.zul.Center</component-class>

@@ -49,7 +49,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		this._fixChildDomVisible(child, child._visible);
 	},
 	_fixChildDomVisible: function (child, visible) {
-		var n = child.$n('chdex');
+		var n = this._getChdextr(child);
 		if (n) n.style.display = visible ? '': 'none';
 		n = child.$n('chdex2');
 		if (n) n.style.display = visible ? '': 'none';
@@ -62,10 +62,12 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			}
 		}
 	},
-
+	_getChdextr: function (child) {
+		return child.$n('chdex') || child.$n();
+	},
 	insertChildHTML_: function (child, before, desktop) {
 		if (before) {
-			jq(before.$n('chdex')).before(this.encloseChildHTML_(child));
+			jq(this._getChdextr(before)).before(this.encloseChildHTML_(child));
 		} else {
 			var n = this.$n(), tbs = n.tBodies;
 			if (!tbs || !tbs.length)
@@ -77,42 +79,46 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	},
 	removeChildHTML_: function (child, prevsib) {
 		this.$supers('removeChildHTML_', arguments);
-		jq(child.uuid + '-chdex', zk).remove();
+		jq(this._getChdextr(child)).remove();
 		jq(child.uuid + '-chdex2', zk).remove();
 		if (prevsib && this.lastChild == prevsib) //child is last
 			jq(prevsib.uuid + '-chdex2', zk).remove();
 	},
 	encloseChildHTML_: function (child, prefixSpace, out) {
-		var oo = [];
+		var oo = [],
+			isCell = child.$instanceof(zul.wgt.Cell);
 		if (this.isVertical()) {
 			oo.push('<tr id="', child.uuid, '-chdex"',
-				this._childOuterAttrs(child),
-				'><td', this._childInnerAttrs(child),
-				'>');
+				this._childOuterAttrs(child), '>');
+				
+			if (!isCell) 
+				oo.push('<td', this._childInnerAttrs(child), '>');
+				
 			child.redraw(oo);
-			oo.push('</td></tr>');
+			
+			if (!isCell) oo.push('</td>');
+			
+			oo.push('</tr>');
 
-			if (child.nextSibling)
-				oo.push(this._spacingHTML(child));
-			else if (prefixSpace) {
-				var pre = child.previousSibling;
-				if (pre) oo.unshift(this._spacingHTML(pre));
-			}
 		} else {
-			oo.push('<td id="', child.uuid, '-chdex"',
+			if (!isCell) {
+				oo.push('<td id="', child.uuid, '-chdex"',
 				this._childOuterAttrs(child),
 				this._childInnerAttrs(child),
 				'>');
-			child.redraw(oo);
-			oo.push('</td>');
-
-			if (child.nextSibling)
-				oo.push(this._spacingHTML(child));
-			else if (prefixSpace) {
-				var pre = child.previousSibling;
-				if (pre) oo.unshift(this._spacingHTML(pre));
 			}
+			child.redraw(oo);
+			if (!isCell)
+				oo.push('</td>');
 		}
+		
+		if (child.nextSibling)
+			oo.push(this._spacingHTML(child));
+		else if (prefixSpace) {
+			var pre = child.previousSibling;
+			if (pre) oo.unshift(this._spacingHTML(pre));
+		}
+		
 		if (!out) return oo.join('');
 
 		for (var j = 0, len = oo.length; j < len; ++j)
@@ -158,7 +164,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				//spliter's display handled in _childOuterAttrs
 
 		var v = vert ? this.getAlign(): this.getPack();
-		if (v) html += ' align="' + zul.box.Box._toHalign(v) + '"'
+		if (v) html += ' align="' + zul.box.Box._toHalign(v) + '"';
 
 		var style = '', szes = this._sizes;
 		if (szes) {

@@ -46,10 +46,24 @@ zUtl = { //static methods
 		doc.load(url);
 		return doc;
 	},
-	parseMap: function (text, separator) {
+	parseMap: function (text, separator, quote) {
 		var map = {};
 		if (text) {
 			var ps = text.split(separator || ',');
+			if (quote) {
+				var tmp = [],
+					re = new RegExp(quote, 'g'),
+					key = '', t, pair;
+				while((t = ps.shift()) !== undefined) {
+					if ((pair = (key += t).match(re)) && pair.length != 1) {
+						if (key)
+							tmp.push(key);
+						key = '';
+					} else
+						key += separator;
+				}
+				ps = tmp;
+			}
 			for (var len = ps.length; len--;) {
 				var key = ps[len].trim(),
 					index = key.indexOf('=');
@@ -302,6 +316,15 @@ zUtl = { //static methods
 			j = k + 1;
 		}
 		return list;
+	},
+	mapToString: function (map, assigner, separator) {
+		assigner = assigner || '=';
+		separator = separator || ' ';
+		var out = [];
+		for (var v in map)
+			out.push(separator, v, assigner, map[v]);
+		out[0] = '';
+		return out.join('');
 	}
 };
 })();

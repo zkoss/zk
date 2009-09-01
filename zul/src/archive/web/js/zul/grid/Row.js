@@ -81,10 +81,13 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 		var grid = this.getGrid();
 		return grid ? grid.getSclass(): sclass;
 	},
+	_getChdextr: function (child) {
+		return child.$n('chdextr') || child.$n();
+	},
 	insertChildHTML_: function (child, before, desktop) {
 		var cls = this.getGrid().isFixedLayout() ? 'z-overflow-hidden' : '';
 		if (before)
-			jq(before.$n('chdextr')).before(
+			jq(this._getChdextr(before)).before(
 				this.encloseChildHTML_({child: child, index: child.getChildIndex(),
 						zclass: this.getZclass(), cls: cls}));
 		else
@@ -96,16 +99,19 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 	},
 	removeChildHTML_: function (child, prevsib) {
 		this.$supers('removeChildHTML_', arguments);
-		jq(child.uuid + '-chdextr', zk).remove();
+		jq(this._getChdextr(child)).remove();
 	},
 	encloseChildHTML_: function (opts) {
 		var out = opts.out || [],
-			child = opts.child;
-		out.push('<td id="', child.uuid, '-chdextr"', this._childAttrs(child, opts.index),
+			child = opts.child,
+			isCell = child.$instanceof(zul.wgt.Cell);
+		if (!isCell) {
+			out.push('<td id="', child.uuid, '-chdextr"', this._childAttrs(child, opts.index),
 				'>', '<div id="', child.uuid, '-cell" class="', opts.zclass, '-cnt ',
 				opts.cls, '">');
+		}
 		child.redraw(out);
-		out.push('</div></td>');
+		if (!isCell) out.push('</div></td>');
 		if (!opts.out) return out.join('');
 	},
 	_childAttrs: function (child, index) {
