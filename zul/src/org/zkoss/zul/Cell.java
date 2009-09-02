@@ -22,7 +22,9 @@ import org.zkoss.zul.impl.XulElement;
 
 /**
  * The generic cell component to be embedded into {@link Row} or {@link Vbox}
- * or {@link Hbox} for fully control style and layout .
+ * or {@link Hbox} for fully control style and layout.
+ * 
+ * <p>Default {@link #getZclass}: z-cell.
  * @author jumperchen
  * @since 5.0.0
  */

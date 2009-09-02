@@ -213,8 +213,8 @@ div.z-log button {
 <%-- Fix float issue for CSS --%>
 .z-clear {
 	clear: both;
-	height: 1px;
-	width: 1px;
+	height: 0px;
+	width: 0px;
 	line-height: 0;
 	font-size: 0;
 	overflow: hidden;
