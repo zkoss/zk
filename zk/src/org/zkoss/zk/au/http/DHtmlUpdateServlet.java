@@ -58,13 +58,13 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.SessionsCtrl;
-import org.zkoss.zk.ui.sys.SessionResolver;
 import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
 import org.zkoss.zk.ui.sys.FailoverManager;
 import org.zkoss.zk.ui.http.ExecutionImpl;
 import org.zkoss.zk.ui.http.WebManager;
+import org.zkoss.zk.ui.http.SessionResolverImpl;
 import org.zkoss.zk.ui.http.I18Ns;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
@@ -90,8 +90,8 @@ import org.zkoss.zk.device.Device;
  * <dd>It specifies whether to compress the output if the browser supports the compression (Accept-Encoding).</dd>
  * <dt>extension0, extension1...</dt>
  * <dd>It specifies an AU extension ({@link AuExtension}).
- * The extension0 parameter specifies
- * the first AU extension, the extension1 parameter the second AU extension,
+ * The <code>extension0</code> parameter specifies
+ * the first AU extension, the <code>extension1</code> parameter the second AU extension,
  * and so on.<br/>
  * The syntax of the value is<br/>
  * <code>/prefix=class</code>
@@ -110,12 +110,12 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		= "org.zkoss.zk.au.http.updateServlet";
 	private static final String ATTR_AU_PROCESSORS
 		= "org.zkoss.zk.au.http.auProcessors";
-	private boolean _compress = true;
 
 	private ServletContext _ctx;
 	private long _lastModified;
 	/** (String name, AuExtension). */
 	private Map _aues = new HashMap(8);
+	private boolean _compress = true;
 
 	/** Returns the update servlet of the specified application, or
 	 * null if not loaded yet.
@@ -135,9 +135,28 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 //		if (log.debugable()) log.debug("Starting DHtmlUpdateServlet at "+config.getServletContext());
 		_ctx = config.getServletContext();
+		_ctx.setAttribute(ATTR_UPDATE_SERVLET, this);
 
+		final WebManager webman = WebManager.getWebManager(_ctx);
+		String param = config.getInitParameter("compress");
+		_compress = param == null || param.length() == 0 || "true".equals(param);
+		if (!_compress)
+			webman.getClassWebResource().setCompress(null); //disable all
+
+		//Copies au extensions defined before DHtmlUpdateServlet is started
+		final WebApp wapp = webman.getWebApp();
+		final Map aues = (Map)wapp.getAttribute(ATTR_AU_PROCESSORS);
+		if (aues != null) {
+			for (Iterator it = aues.entrySet().iterator(); it.hasNext();) {
+				final Map.Entry me = (Map.Entry)it.next();
+				addAuExtension((String)me.getKey(), (AuExtension)me.getValue());
+			}
+			wapp.removeAttribute(ATTR_AU_PROCESSORS);
+		}
+
+		//ZK 5: extension defined in init-param has the higher priority
 		for (int j = 0;;) {
-			String param = config.getInitParameter("extension" + j++);
+			param = config.getInitParameter("extension" + j++);
 			if (param == null) {
 				param = config.getInitParameter("processor" + j++); //backward compatible
 				if (param == null) break;
@@ -162,23 +181,6 @@ public class DHtmlUpdateServlet extends HttpServlet {
 					ex);
 			}
 		}
-
-		//Copies au extensions defined before DHtmlUpdateServlet is started
-		final WebManager webman = WebManager.getWebManager(_ctx);
-		final WebApp wapp = webman.getWebApp();
-		final Map aues = (Map)wapp.getAttribute(ATTR_AU_PROCESSORS);
-		if (aues != null) {
-			for (Iterator it = aues.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				addAuExtension((String)me.getKey(), (AuExtension)me.getValue());
-			}
-			wapp.removeAttribute(ATTR_AU_PROCESSORS);
-		}
-
-		String param = config.getInitParameter("compress");
-		_compress = param == null || param.length() == 0 || "true".equals(param);
-		if (!_compress)
-			webman.getClassWebResource().setCompress(null); //disable all
 
 		if (getAuExtension("/upload") == null) {
 			try {
@@ -206,8 +208,6 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 		if (getAuExtension("/view") == null)
 			addAuExtension("/view", new AuDynaMediar());
-
-		_ctx.setAttribute(ATTR_UPDATE_SERVLET, this);
 	}
 	public void destroy() {
 		for (Iterator it = _aues.values().iterator(); it.hasNext();) {
@@ -255,7 +255,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			synchronized (DHtmlUpdateServlet.class) {
 				upsv = DHtmlUpdateServlet.getUpdateServlet(wapp);
 				if (upsv == null) {
-					checkAuProcesor(prefix, extension);
+					checkAuExtension(prefix, extension);
 					Map aues = (Map)wapp.getAttribute(ATTR_AU_PROCESSORS);
 					if (aues == null)
 						wapp.setAttribute(ATTR_AU_PROCESSORS, aues = new HashMap(4));
@@ -285,7 +285,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	 */
 	public AuExtension addAuExtension(String prefix, AuExtension extension)
 	throws ServletException {
-		checkAuProcesor(prefix, extension);
+		checkAuExtension(prefix, extension);
 
 		if (_aues.get(prefix) ==  extension) //speed up to avoid sync
 			return extension; //nothing changed
@@ -307,7 +307,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			}
 		return old;
 	}
-	private static void checkAuProcesor(String prefix, AuExtension extension) {
+	private static void checkAuExtension(String prefix, AuExtension extension) {
 		if (prefix == null || !prefix.startsWith("/") || prefix.length() < 2
 		|| extension == null)
 			throw new IllegalArgumentException();
@@ -369,7 +369,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			final HttpSession sess =
 				shallSession(cwr, pi) ? request.getSession(false): null;
 			if (sess == null)
-				SessionsCtrl.setCurrent(new ReqSessResolver(request));
+				SessionsCtrl.setCurrent(new SessionResolverImpl(_ctx, request));
 				//it might be created later
 
 			final Object old = sess != null?
@@ -396,7 +396,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			}
 
 			if (sess == null)
-				SessionsCtrl.setCurrent(new ReqSessResolver(request));
+				SessionsCtrl.setCurrent(new SessionResolverImpl(_ctx, request));
 				//it might be created later
 
 			final Object old = sess != null?
@@ -626,14 +626,5 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		AuWriter out = AuWriters.newInstance().open(request, response, 0);
 		out.write(new AuAlert(errmsg));
 		out.close(request, response);
-	}
-	private class ReqSessResolver implements SessionResolver {
-		private final HttpServletRequest _req;
-		private ReqSessResolver(HttpServletRequest request) {
-			_req = request;
-		}
-		public Session getSession(boolean create) {
-			return WebManager.getSession(_ctx, _req, create);
-		}
 	}
 }

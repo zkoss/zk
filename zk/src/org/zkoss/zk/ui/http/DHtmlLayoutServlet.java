@@ -223,7 +223,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 				final OutputStream os = response.getOutputStream();
 					//Call it first to ensure getWrite() is not called yet
 
-				byte[] data = result.getBytes("UTF-8");
+				byte[] data = result.getBytes(wapp.getConfiguration().getResponseCharset());
 				if (data.length > 200) {
 					byte[] bs = Https.gzip(request, response, null, data);
 					if (bs != null) data = bs; //yes, browser support compress
