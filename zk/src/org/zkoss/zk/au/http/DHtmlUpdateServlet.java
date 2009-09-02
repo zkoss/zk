@@ -182,7 +182,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 
 		if (getAuExtension("/upload") == null) {
 			try {
-				addAuExtension("/upload", new AuUploader(_ctx));
+				addAuExtension("/upload", new AuUploader());
 			} catch (Throwable ex) {
 				final String msg =
 					"Make sure commons-fileupload.jar is installed.";
@@ -191,6 +191,10 @@ public class DHtmlUpdateServlet extends HttpServlet {
 				//still add /upload to generate exception when fileupload is used
 				addAuExtension("/upload",
 					new AuExtension() {
+						public void init(DHtmlUpdateServlet servlet) {
+						}
+						public void destroy() {
+						}
 						public void service(HttpServletRequest request, HttpServletResponse response, String pi)
 						throws ServletException, IOException {
 							if (Sessions.getCurrent(false) != null)
@@ -201,12 +205,29 @@ public class DHtmlUpdateServlet extends HttpServlet {
 		}
 
 		if (getAuExtension("/view") == null)
-			addAuExtension("/view", new AuDynaMediar(_ctx));
+			addAuExtension("/view", new AuDynaMediar());
 
 		_ctx.setAttribute(ATTR_UPDATE_SERVLET, this);
 	}
+	public void destroy() {
+		for (Iterator it = _aues.values().iterator(); it.hasNext();) {
+			final AuExtension aue = (AuExtension)it.next();
+			try {
+				aue.destroy();
+			} catch (Throwable ex) {
+				log.warningBriefly("Unable to stop "+aue, ex);
+			}
+		}
+	}
 	public ServletContext getServletContext() {
 		return _ctx;
+	}
+
+	/* Returns whether to compress the output.
+	 * @since 5.0.0
+	 */
+	public boolean isCompress() {
+		return _compress;
 	}
 
 	/** Returns the AU extension that is associated the specified prefix.
@@ -227,7 +248,8 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	 * @since 5.0.0
 	 */
 	public static final AuExtension
-	addAuExtension(WebApp wapp, String prefix, AuExtension extension) {
+	addAuExtension(WebApp wapp, String prefix, AuExtension extension)
+	throws ServletException {
 		DHtmlUpdateServlet upsv = DHtmlUpdateServlet.getUpdateServlet(wapp);
 		if (upsv == null) {
 			synchronized (DHtmlUpdateServlet.class) {
@@ -261,11 +283,14 @@ public class DHtmlUpdateServlet extends HttpServlet {
 	 * @see #addAuExtension(WebApp,String,AuExtension)
 	 * @since 5.0.0
 	 */
-	public AuExtension addAuExtension(String prefix, AuExtension extension) {
+	public AuExtension addAuExtension(String prefix, AuExtension extension)
+	throws ServletException {
 		checkAuProcesor(prefix, extension);
 
 		if (_aues.get(prefix) ==  extension) //speed up to avoid sync
 			return extension; //nothing changed
+
+		extension.init(this);
 
 		//To avoid using sync in doGet(), we make a copy here
 		final AuExtension old;
@@ -274,6 +299,12 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			old = (AuExtension)ps.put(prefix, extension);
 			_aues = ps;
 		}
+		if (old != null)
+			try {
+				old.destroy();
+			} catch (Throwable ex) {
+				log.warningBriefly("Unable to stop "+old, ex);
+			}
 		return old;
 	}
 	private static void checkAuProcesor(String prefix, AuExtension extension) {

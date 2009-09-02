@@ -62,10 +62,14 @@ import org.zkoss.zk.ui.http.ExecutionImpl;
 public class AuDynaMediar implements AuExtension {
 	private static final Log log = Log.lookup(AuDynaMediar.class);
 
-	private final ServletContext _ctx;
+	private ServletContext _ctx;
 
-	public AuDynaMediar(ServletContext ctx) {
-		_ctx = ctx;
+	public AuDynaMediar() {
+	}
+	public void init(DHtmlUpdateServlet servlet) {
+		_ctx = servlet.getServletContext();
+	}
+	public void destroy() {
 	}
 
 	/** Retrieves the media from {@link DynamicMedia#getMedia}.

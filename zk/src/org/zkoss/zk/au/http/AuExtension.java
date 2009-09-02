@@ -35,6 +35,17 @@ import javax.servlet.http.HttpServletResponse;
  * @since 5.0.0
  */
 public interface AuExtension {
+	/** Initializes the AU extension.
+	 * It is called when an extension is added to {@link DHtmlUpdateServlet}.
+	 */
+	public void init(DHtmlUpdateServlet servlet)
+	throws ServletException;
+	/** Destroyes the AU extension.
+	 * It is called when an extension is removed from {@link DHtmlUpdateServlet},
+	 * or when {@link DHtmlUpdateServlet} is being destroyed.
+	 */
+	public void destroy();
+
 	/** Called by ZK to process the AU request.
 	 *
 	 * <p>To retrieve the http session, use HttpServletRequest.getSession().
@@ -48,7 +59,6 @@ public interface AuExtension {
 	 * For example, if an AU processor is assoicated with "/upload", then
 	 * pi must start with "/upload". Note: it might end with other string
 	 * depending on the URI you generated to the client.
-	 * @since 5.0.0
 	 */
 	public void service(
 	HttpServletRequest request, HttpServletResponse response, String pi)

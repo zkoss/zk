@@ -72,10 +72,14 @@ import org.zkoss.zk.ui.sys.DesktopCtrl;
 public class AuUploader implements AuExtension {
 	private static final Log log = Log.lookup(AuUploader.class);
 
-	private final ServletContext _ctx;
+	private ServletContext _ctx;
 
-	public AuUploader(ServletContext ctx) {
-		_ctx = ctx;
+	public AuUploader() {
+	}
+	public void init(DHtmlUpdateServlet servlet) {
+		_ctx = servlet.getServletContext();
+	}
+	public void destroy() {
 	}
 
 	/** Processes a file uploaded from the client.
