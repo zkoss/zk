@@ -45,7 +45,7 @@ zk.copy(zk, (function() {
 		if (!modver) modver = zk.build;
 
 		var e = document.createElement("script"),
-			uri = pkg.replace(/\./g, '/') + "/zk.wpd",
+			uri = pkg + ".wpd",
 			host = zk.getHost(pkg, true);
 		e.type = "text/javascript";
 		e.charset = "UTF-8";

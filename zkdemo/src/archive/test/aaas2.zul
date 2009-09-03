@@ -13,8 +13,8 @@ aaas2.zul
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 -->
-<?script src="http://ajaxasservice-examples.appspot.com/zkau/web/js/zk/aaas/zk.wpd?main=aaase.chart.example1.Main&id=stock1&stock=MSFT&width=100%25&height=150px"?>
-<?script src="http://ajaxasservice-examples.appspot.com/zkau/web/js/zk/aaas/zk.wpd?main=aaase.chart.example1.Main&id=stock2&stock=GOOG&width=100%25&height=150px"?>
+<?script src="http://ajaxasservice-examples.appspot.com/zkau/web/js/zk.aaas.wpd?main=aaase.chart.example1.Main&id=stock1&stock=MSFT&width=100%25&height=150px"?>
+<?script src="http://ajaxasservice-examples.appspot.com/zkau/web/js/zk.aaas.wpd?main=aaase.chart.example1.Main&id=stock2&stock=GOOG&width=100%25&height=150px"?>
 <portallayout>
 	<portalchildren style="padding: 5px" width="40%">
 		<panel height="200px" title="Stock 1" border="normal" collapsible="true" closable="true" maximizable="true" style="margin-bottom:10px">

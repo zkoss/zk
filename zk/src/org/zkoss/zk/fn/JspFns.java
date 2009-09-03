@@ -123,4 +123,25 @@ public class JspFns {
 			ExecutionsCtrl.setCurrent(old);
 		}
  	}
+
+	/** Returns HTML tags to include JavaScript files of the specified
+	 * device for the current application (never null).
+	 * @since 5.0.0
+	 */
+	public static final String outDeviceJavaScripts(ServletContext ctx,
+ 	HttpServletRequest request, HttpServletResponse response,
+ 	String deviceType) {
+ 		Execution old = Executions.getCurrent();
+ 		Execution exec = new ExecutionImpl(ctx, request, response, null, null); 
+		ExecutionsCtrl.setCurrent(exec);
+ 		((ExecutionCtrl)exec).onActivate();
+		try {
+			return HtmlPageRenders.outLangJavaScripts(exec,
+				WebManager.getWebManager(ctx).getWebApp(),
+				deviceType != null ? deviceType: "ajax");
+		} finally {
+			((ExecutionCtrl)exec).onDeactivate();
+			ExecutionsCtrl.setCurrent(old);
+		}
+	}
 }

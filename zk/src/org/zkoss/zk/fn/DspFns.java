@@ -89,4 +89,20 @@ public class DspFns {
 			(HttpServletResponse)ServletFns.getCurrentResponse(),
 			deviceType);
 	}
+
+	/** Returns HTML tags to include JavaScript files of the specified
+	 * device for the current application (never null).
+	 * @since 5.0.0
+	 */
+	public static final String outDeviceJavaScripts(String deviceType) {
+		final Execution exec = Executions.getCurrent();
+ 		if (exec != null)
+			return HtmlPageRenders.outLangJavaScripts(exec, null, null);
+
+	 	return JspFns.outDeviceJavaScripts(
+			ServletFns.getCurrentServletContext(),
+			(HttpServletRequest)ServletFns.getCurrentRequest(),
+			(HttpServletResponse)ServletFns.getCurrentResponse(),
+			deviceType);
+	}
 }

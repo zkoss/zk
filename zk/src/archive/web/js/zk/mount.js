@@ -60,7 +60,9 @@ function zkver(ver, build, ctxURI, updURI, modVers, opts) {
 		zk.setVersion(nm, modVers[nm]);
 
 	zk.feature = {standard: true};
-
+	zkopt(opts);
+}
+function zkopt(opts) {
 	for (var nm in opts) {
 		var val = opts[nm];
 		switch (nm) {
@@ -356,16 +358,12 @@ jq(function() {
 	});
 
 	function _doEvt(wevt) {
-		var wgt = wevt.target,
-			post = wevt.name.substring(2) + '_';
-		if (wgt.inDesign) {
-			var f = wgt['doDesign' + post];
-			if (f) f.call(wgt, wevt);
-		} else
-			wgt['do' + post].call(wgt, wevt);
-
-		if (wevt.domStopped)
-			wevt.domEvent.stop();
+		var wgt = wevt.target;
+		if (wgt && !wgt.weavee) {
+			wgt['do' + wevt.name.substring(2) + '_'].call(wgt, wevt);
+			if (wevt.domStopped)
+				wevt.domEvent.stop();
+		}
 	}
 	
 	function _docMouseDown(evt, wgt, noFocusChange) {
@@ -378,8 +376,7 @@ jq(function() {
 		if (target != document.body && target != document.body.parentNode) //not click on scrollbar
 			zk.Widget.mimicMouseDown_(wgt, noFocusChange); //wgt is null if mask
 
-		if (wgt)
-			_doEvt(evt);
+		_doEvt(evt);
 	}
 	
 	function _simFocus(wgt) {
@@ -430,7 +427,7 @@ jq(function() {
 		if (wgt) {
 			var wevt = new zk.Event(wgt, 'onKeyDown', evt.keyData(), null, evt);
 			_doEvt(wevt);
-			if (!wgt.inDesign && !wevt.stopped && wgt.afterKeyDown_)
+			if (!wevt.stopped && wgt.afterKeyDown_)
 				wgt.afterKeyDown_(wevt);
 		}
 
@@ -443,15 +440,13 @@ jq(function() {
 		var wgt = zk.keyCapture;
 		if (wgt) zk.keyCapture = null;
 		else wgt = zk.Widget.$(evt, {child:true});
-		if (wgt)
-			_doEvt(new zk.Event(wgt, 'onKeyUp', evt.keyData(), null, evt));
+		_doEvt(new zk.Event(wgt, 'onKeyUp', evt.keyData(), null, evt));
 	})
 	.keypress(function (evt) {
 		//seems overkill: _evtProxy(evt);
 		var wgt = zk.keyCapture;
 		if (!wgt) wgt = zk.Widget.$(evt, {child:true});
-		if (wgt)
-			_doEvt(new zk.Event(wgt, 'onKeyPress', evt.keyData(), null, evt));
+		_doEvt(new zk.Event(wgt, 'onKeyPress', evt.keyData(), null, evt));
 	})
 	.mousedown(function (evt) {
 		_evtProxy(evt);
@@ -473,8 +468,7 @@ jq(function() {
 		var wgt = zk.mouseCapture;
 		if (wgt) zk.mouseCapture = null;
 		else wgt = zk.Widget.$(evt, {child:true});
-		if (wgt)
-			_doEvt(new zk.Event(wgt, 'onMouseUp', evt.mouseData(), null, evt));
+		_doEvt(new zk.Event(wgt, 'onMouseUp', evt.mouseData(), null, evt));
 	})
 	.mousemove(function (evt) {
 		_evtProxy(evt);
@@ -483,34 +477,27 @@ jq(function() {
 
 		var wgt = zk.mouseCapture;
 		if (!wgt) wgt = zk.Widget.$(evt, {child:true});
-		if (wgt)
-			_doEvt(new zk.Event(wgt, 'onMouseMove', evt.mouseData(), null, evt));
+		_doEvt(new zk.Event(wgt, 'onMouseMove', evt.mouseData(), null, evt));
 	})
 	.mouseover(function (evt) {
 		_evtProxy(evt);
 		zk.currentPointer[0] = evt.pageX;
 		zk.currentPointer[1] = evt.pageY;
 
-		var wgt = zk.Widget.$(evt, {child:true});
-		if (wgt)
-			_doEvt(new zk.Event(wgt, 'onMouseOver', evt.mouseData(), null, evt));
+		_doEvt(new zk.Event(zk.Widget.$(evt, {child:true}), 'onMouseOver', evt.mouseData(), null, evt));
 	})
 	.mouseout(function (evt) {
 		_evtProxy(evt);
-		var wgt = zk.Widget.$(evt, {child:true});
-		if (wgt)
-			_doEvt(new zk.Event(wgt, 'onMouseOut', evt.mouseData(), null, evt));
+		_doEvt(new zk.Event(zk.Widget.$(evt, {child:true}), 'onMouseOut', evt.mouseData(), null, evt));
 	})
 	.click(function (evt) {
 		if (zk.processing || zk.Draggable.ignoreClick()) return;
 
 		_evtProxy(evt);
-		if (evt.which == 1) {
-			var wgt = zk.Widget.$(evt, {child:true});
-			if (wgt)
-				_doEvt(new zk.Event(wgt, 'onClick', evt.mouseData(), {ctl:true}, evt));
+		if (evt.which == 1)
+			_doEvt(new zk.Event(zk.Widget.$(evt, {child:true}),
+				'onClick', evt.mouseData(), {ctl:true}, evt));
 			//don't return anything. Otherwise, it replaces event.returnValue in IE (Bug 1541132)
-		}
 	})
 	.dblclick(function (evt) {
 		if (zk.processing || zk.Draggable.ignoreClick()) return;

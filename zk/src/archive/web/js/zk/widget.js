@@ -18,7 +18,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		_nextUuid = 0,
 		_globals = {}, //global ID space {id, wgt}
 		_domevtfnm = {}, //{evtnm, funnm}
-		_domevtfnmDesign = {}, //{evtnm, funnm}
 		_domevtnm = {onDoubleClick: 'dblclick'}, //{zk-evt-nm, dom-evt-nm}
 		_wgtcls = {}; //{clsnm, cls}
 
@@ -32,25 +31,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 	//Event Handling//
 	function _domEvtInf(wgt, evtnm, fn) { //proxy event listener
-		if (!fn) {
-			var nms = wgt.inDesign ? _domevtfnmDesign: _domevtfnm;
-			fn = nms[evtnm];
-			if (!fn) {
-				fn = '_do';
-				if (wgt.inDesign) fn += 'Design';
-				fn += evtnm.substring(2);
-				nms[evtnm] = fn;
-			}
-		} else if (wgt.inDesign)
-			fn = fn.startsWith('_do') ? '_doDesign' + fn.substring(3):
-				'doDesign' + (fn.startsWith('do') ? fn.substring(2): fn);
+		if (!fn && !(fn = _domevtfnm[evtnm]))
+			_domevtfnm[evtnm] = fn = '_do' + evtnm.substring(2);
 
 		var f = wgt[fn];
-		if (!f) {
-			if (!wgt.inDesign)
-				throw 'Listener ' + fn + ' not found in ' + wgt.className;
-			return null;
-		}
+		if (!f)
+			throw 'Listener ' + fn + ' not found in ' + wgt.className;
+
 		var domn = _domevtnm[evtnm];
 		if (!domn)
 			domn = _domevtnm[evtnm] = evtnm.substring(2).toLowerCase();
@@ -1409,15 +1396,17 @@ zk.Widget = zk.$extends(zk.Object, {
 
 	//DOM event handling//
 	domListen_: function (n, evtnm, fn) {
-		var inf;
-		if (inf = _domEvtInf(this, evtnm, fn))
+		if (!this.weavee) {
+			var inf = _domEvtInf(this, evtnm, fn);
 			jq(n, zk).bind(inf[0], inf[1]);
+		}
 		return this;
 	},
 	domUnlisten_: function (n, evtnm, fn) {
-		var inf;
-		if (inf = _domEvtInf(this, evtnm, fn))
+		if (!this.weavee) {
+			var inf = _domEvtInf(this, evtnm, fn);
 			jq(n, zk).unbind(inf[0], inf[1]);
+		}
 		return this;
 	},
 	toJSON: function () {

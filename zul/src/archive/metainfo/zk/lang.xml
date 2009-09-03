@@ -30,8 +30,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<!-- Note: JavaScript/CSS that are listed here will be loaded no matter
 		what language is used.
 	-->
-	<javascript src="~./js/zk/zk.wpd" charset="UTF-8"/>
-	<javascript src="~./js/zul/zk.wpd" charset="UTF-8"/>
+	<javascript src="~./js/zk.wpd" charset="UTF-8"/>
+	<javascript src="~./js/zul.wpd" charset="UTF-8"/>
 
 	<stylesheet href="~./zul/css/zk.wcs" type="text/css"/>
 

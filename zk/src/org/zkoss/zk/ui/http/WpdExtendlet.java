@@ -65,7 +65,7 @@ import org.zkoss.zk.ui.util.Configuration;
  * <p>In additions to loading, WPD allows to bootstrap a JavaScript codes
  * by specifying a parameter called main. For example, the following link
  *
- *<pre><code>&lt;script type="text/javascript" src="/zkdemo/zkau/web/js/zk/ajax/zk.wpd?main=foo.Go&what=12&more=xy" charset="UTF-8">
+ *<pre><code>&lt;script type="text/javascript" src="/zkdemo/zkau/web/js/zk.wpd?main=foo.Go&what=12&more=xy" charset="UTF-8">
 &lt;/script></code></pre>
  *
  * will cause the following to be executed
@@ -472,6 +472,10 @@ public class WpdExtendlet extends AbstractExtendlet {
 		}
 		protected ExtendletContext getExtendletContext() {
 			return _webctx;
+		}
+		protected String getRealPath(String path) {
+			final int j = path.lastIndexOf(".wpd");
+			return path.substring(0, j).replace('.', '/') + "/zk" + path.substring(j);
 		}
 	}
 	/*package*/ class WpdContent {

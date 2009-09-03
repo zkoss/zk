@@ -31,6 +31,9 @@ import org.zkoss.util.resource.Loader;
  * All you have to do is to implement {@link #parse}
  * and {@link #getExtendletContext}.
  *
+ * <p>If the real path is not the same as the path specified in URL,
+ * you can override {@link #getRealPath}.
+ *
  * @author tomyeh
  * @see Extendlet
  * @since 3.0.6
@@ -42,6 +45,16 @@ abstract public class ExtendletLoader implements Loader {
 
 	protected ExtendletLoader() {
 		_checkPeriod = getInitCheckPeriod();
+	}
+
+	/** Returns the real path for the specified path.
+	 * <p>Default: return path, i.e., the path specified in URL is
+	 * the real path.
+	 * @param path the path specified in URL.
+	 * @since 5.0.0
+	 */
+	protected String getRealPath(String path) {
+		return path;
 	}
 
 	//Loader//
@@ -63,7 +76,7 @@ abstract public class ExtendletLoader implements Loader {
 	}
 	public Object load(Object src) throws Exception {
 //		if (D.ON && log.debugable()) log.debug("Parse "+src);
-		final String path = (String)src;
+		final String path = getRealPath((String)src);
 		InputStream is = null;
 		if (getCheckPeriod() >= 0) {
 			//Due to Web server might cache the result, we use URL if possible
