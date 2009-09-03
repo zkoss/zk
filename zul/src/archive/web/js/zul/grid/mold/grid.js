@@ -48,7 +48,7 @@ function (out) {
 	if (hgh) out.push(' style="height:', hgh, '"');
 	
 	out.push('><table', wdAttr, zUtl.cellps0);
-	if (this.isFixedLayout())
+	if (!this.isSizedByContent())
 		out.push(' style="table-layout:fixed;', wdStyle,'"');		
 	out.push('>');
 	

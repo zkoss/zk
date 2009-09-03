@@ -135,7 +135,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		}
 		if (this.ehead) {
 			if (tblwd) this.ehead.style.width = tblwd + 'px';
-			if (!this.isFixedLayout() && this.ebodyrows && this.ebodyrows.length)
+			if (this.isSizedByContent() && this.ebodyrows && this.ebodyrows.length)
 				this.$class._adjHeadWd(this);
 		} else if (this.efoot) {
 			if (tblwd) this.efoot.style.width = tblwd + 'px';

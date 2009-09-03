@@ -85,7 +85,7 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 		return child.$n('chdextr') || child.$n();
 	},
 	insertChildHTML_: function (child, before, desktop) {
-		var cls = this.getGrid().isFixedLayout() ? 'z-overflow-hidden' : '';
+		var cls = !this.getGrid().isSizedByContent() ? 'z-overflow-hidden' : '';
 		if (before)
 			jq(this._getChdextr(before)).before(
 				this.encloseChildHTML_({child: child, index: child.getChildIndex(),

@@ -17,7 +17,7 @@ function (out) {
 		'-cave" class="', this.getZclass() + '-cnt');
 
 	var tree = this.getTree();
-	if (tree != null && tree.isFixedLayout())
+	if (tree != null && !tree.isSizedByContent())
 		out.push(' z-overflow-hidden');
 
 	out.push('"', this.domTextStyleAttr_(), '>', this.domContent_());

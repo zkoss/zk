@@ -46,7 +46,7 @@ function (out) {
 	out.push('<div id="', uuid, '-body" class="', zcls, '-body"><table', width,
 		zUtl.cellps0);
 	
-	if (this.isFixedLayout())
+	if (!this.isSizedByContent())
 		out.push(' style="table-layout:fixed;', wdStyle,'"');
 		
 	out.push('>');

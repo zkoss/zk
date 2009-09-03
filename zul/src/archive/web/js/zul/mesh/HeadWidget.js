@@ -26,7 +26,7 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 
 	onColSize: function (evt) {
 		var owner = this.parent;
-		if (!owner.isFixedLayout()) owner.$class._adjHeadWd(owner);
+		if (owner.isSizedByContent()) owner.$class._adjHeadWd(owner);
 		owner.fire('onInnerWidth', owner.eheadtbl.style.width);
 		owner.fireOnRender(zk.gecko ? 200 : 60);
 	},
