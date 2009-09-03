@@ -15,6 +15,15 @@ it will be useful, but WITHOUT ANY WARRANTY.
 (function () {
 	var _wgtInfs = {};
 
+	function _load(nm, weavee) {
+			if (!zk.isLoaded(nm, true))
+				zk.load(nm,
+					weavee ? function () {
+						if (zk.$package(nm).$wv)
+							zk.load(nm + '.wv');
+					}: null);
+	}
+
 zk.wgt.WidgetInfo = {
 	getClassName: function (wgtnm) {
 		return _wgtInfs[wgtnm];
@@ -27,11 +36,11 @@ zk.wgt.WidgetInfo = {
 			_wgtInfs[wgtnm.substring(0,1).toLowerCase()+wgtnm.substring(1)] = clsnm;
 		}
 	},
-	loadAll: function (f) {
+	loadAll: function (f, weavee) {
 		for (var w in _wgtInfs) {
 			var clsnm = _wgtInfs[w],
 				j = clsnm.lastIndexOf('.');
-			zk.load(clsnm.substring(0, j));
+			_load(clsnm.substring(0, j), weavee);
 		}
 		if (f) zk.afterLoad(f);
 	}

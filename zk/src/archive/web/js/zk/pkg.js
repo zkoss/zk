@@ -142,8 +142,8 @@ zk.copy(zk, (function() {
 			doEnd(_afterLoads, 1);
 		}
 	},
-	isLoaded: function (pkg) {
-		return _loaded[pkg];
+	isLoaded: function (pkg, loading) {
+		return (loading && _loading[pkg]) || _loaded[pkg];
 	},
 	load: function (pkg, dt, func) {
 		if (typeof dt == 'function')

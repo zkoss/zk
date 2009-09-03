@@ -194,6 +194,9 @@ import org.zkoss.zk.ui.WebApp;
 			//Note: _webctx will handle the renaming for debugJS (.src.js)
 			return _webctx.getResourceAsStream(path);
 		}
+		URL getResource(String path) {
+			return _webctx.getResource(path);
+		}
 	}
 	/*package*/ class FileProvider extends Provider {
 		private String _parent;

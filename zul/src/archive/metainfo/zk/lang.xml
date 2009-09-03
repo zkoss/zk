@@ -124,12 +124,11 @@ def alert(m):
 	<!-- Specifies a component
 	<component>
 		<component-name>foo</component-name> //the component name
-		<component-class>Foo</component-class> //the component class
-		<widget-class>Foo</widget-class> //the widget class (at client)
+		<component-class>x.Foo</component-class> //the component class
+		<widget-class>x.Foo</widget-class> //the widget class (at client)
 
 		//Any number of molds are allowed and
 		//where mold-uri could be an expression or contain '~ctx/'
-		<widget-class>zul.med.Applet</widget-class>
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>~./foo/fool.js</mold-uri>

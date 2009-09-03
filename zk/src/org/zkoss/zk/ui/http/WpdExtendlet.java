@@ -130,6 +130,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 			zk || aaas || "false".equals(root.getAttributeValue("cacheable")) ?
 				new WpdContent(dir): null;
 
+		final Provider provider = getProvider();
 		final ByteArrayOutputStream out = new ByteArrayOutputStream(1024*8);
 		String depends = null;
 		if (zk) {
@@ -148,7 +149,10 @@ public class WpdExtendlet extends AbstractExtendlet {
 				write(out, '(');
 			write(out, "function(){zk._n='");
 			write(out, name);
-			write(out, "';try{zk._p=zk.$package(zk._n,false);\n");
+			write(out, "';try{zk._p=zk.$package(zk._n,false");
+			if (provider != null && provider.getResource(dir + "wv/zk.wpd") != null)
+				write(out, ",true");
+			write(out, ");\n");
 		}
 
 		final Map moldInfos = new HashMap();
@@ -228,11 +232,9 @@ public class WpdExtendlet extends AbstractExtendlet {
 						move(wc, out);
 						wc.add(jspath, browser);
 					} else {
-						if (browser != null) {
-							final Provider provider = getProvider();
-							if (provider != null && !Servlets.isBrowser(provider.request, browser))
-								continue;
-						}
+						if (browser != null && provider != null
+						&& !Servlets.isBrowser(provider.request, browser))
+							continue;
 						if (!writeResource(out, jspath, dir, true))
 							log.error(jspath+" not found, "+el.getLocator());
 					}
@@ -298,7 +300,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 			path = Files.normalize(dir, path);
 
 		final InputStream is =
-			(getProvider()).getResourceAsStream(path, locate);
+			getProvider().getResourceAsStream(path, locate);
 		if (is == null) {
 			write(out, "zk.log('");
 			write(out, path);
@@ -307,6 +309,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 		}
 
 		Files.copy(out, is);
+		Files.close(is);
 		write(out, '\n'); //might terminate with //
 		return true;
 	}

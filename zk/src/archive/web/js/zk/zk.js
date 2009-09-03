@@ -102,7 +102,7 @@ zk = function (sel) {
 	currentPointer: [0, 0],
 	loading: 0,
 
-	$package: function (name, end) { //end used only by WpdExtendlet
+	$package: function (name, end, wv) { //end used only by WpdExtendlet
 		for (var j = 0, ref = window;;) {
 			var k = name.indexOf('.', j),
 				nm = k >= 0 ? name.substring(j, k): name.substring(j);
@@ -110,6 +110,7 @@ zk = function (sel) {
 			if (!nxt) nxt = ref[nm] = {};
 			if (k < 0) {
 				if (end !== false) zk.setLoaded(name);
+				if (wv) nxt.$wv = true; //the wv (weeve) package is available
 				return nxt;
 			}
 			ref = nxt;
