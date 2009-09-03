@@ -164,10 +164,7 @@ public class WpdExtendlet extends AbstractExtendlet {
 				}
 
 				final String wgtflnm = name + "." + wgtnm;
-				write(out, "zkreg(zk._w=");
-				write(out, zk ? "zk.": "zk._p.");
-				write(out, wgtnm);
-				write(out, ",'");
+				write(out, "zkreg('");
 				write(out, wgtflnm);
 				write(out, '\'');
 				WidgetDefinition wgtdef = langdef != null ? langdef.getWidgetDefinitionIfAny(wgtflnm): null;
@@ -211,7 +208,12 @@ public class WpdExtendlet extends AbstractExtendlet {
 							write(out, ';');
 						}
 					}
-					if (!first) write(out, "zkmld(zk._w,zk._m);");
+					if (!first) {
+						write(out, "zkmld(");
+						write(out, zk ? "zk.": "zk._p.");
+						write(out, wgtnm);
+						write(out, ",zk._m);");
+					}
 				} catch (Throwable ex) {
 					log.error("Failed to load molds for widget "+wgtflnm+".\nCause: "+Exceptions.getMessage(ex));
 				}

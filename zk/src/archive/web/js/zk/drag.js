@@ -22,23 +22,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		_stackup, _activedg, _timeout, _initPt, _initEvt,
 		_lastPt, _lastScrlPt;
 
-	function _register(dg) {
-		if(_drags.length == 0)
-			jq(document).mouseup(_docmouseup)
-				.mousemove(_docmousemove)
-				.keypress(_dockeypress);
-		_drags.push(dg);
-	}
-	function _unregister(dg) {
-		_drags.$remove(dg);
-		if(_drags.length == 0)
-			jq(document).unbind("mouseup", _docmouseup)
-				.unbind("mousemove", _docmousemove)
-				.unbind("keypress", _dockeypress);
-		if (_activedg == dg) //just in case
-			_activedg = null;
-	}
-
 	function _activate(dg, devt, pt) {
 		_timeout = setTimeout(function () { 
 			_timeout = null; 
@@ -156,11 +139,25 @@ zk.Draggable = zk.$extends(zk.Object, {
 
 		jq(this.handle).mousedown(this.proxy(this._mousedown));
 
-		_register(this);
+		//register
+		if(_drags.length == 0)
+			jq(document).mouseup(_docmouseup)
+				.mousemove(_docmousemove)
+				.keypress(_dockeypress);
+		_drags.push(this);
 	},
 	destroy: function () {
 		jq(this.handle).unbind("mousedown", this.proxy(this._mousedown));
-		_unregister(this);
+
+		//unregister
+		_drags.$remove(this);
+		if(_drags.length == 0)
+			jq(document).unbind("mouseup", _docmouseup)
+				.unbind("mousemove", _docmousemove)
+				.unbind("keypress", _dockeypress);
+		if (_activedg == this) //just in case
+			_activedg = null;
+
 		this.node = this.control = this.handle = null;
 		this.dead = true;
 	},

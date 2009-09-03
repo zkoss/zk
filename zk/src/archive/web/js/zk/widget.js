@@ -1484,18 +1484,19 @@ zk.Widget = zk.$extends(zk.Object, {
 		return !id || id.startsWith('_z_') || id.startsWith('z_');
 	},
 
-	register: function (cls, clsnm, blankprev) {
-		if (arguments.length == 1) //query
-			return _wgtcls[cls];
-
+	register: function (clsnm, blankprev) {
+		var cls = zk.$import(clsnm);
 		cls.prototype.className = clsnm;
 		var j = clsnm.lastIndexOf('.');
 		if (j >= 0) clsnm = clsnm.substring(j + 1);
 		_wgtcls[clsnm.substring(0,1).toLowerCase()+clsnm.substring(1)] = cls;
 		if (blankprev) cls.prototype.blankPreserved = true;
 	},
+	getClass: function (wgtnm) {
+		return _wgtcls[wgtnm];
+	},
 	newInstance: function (wgtnm) {
-		var cls = _wgtcls[wgtnm.toLowerCase()];
+		var cls = _wgtcls[wgtnm];
 		if (!cls)
 			throw 'widget not found: '+wgtnm;
 		return new cls();
@@ -1523,7 +1524,7 @@ zk.Page = zk.$extends(zk.Widget, {//unlik server, we derive from Widget!
 },{
 	contained: []
 });
-zk.Widget.register(zk.Page, 'zk.Page', true);
+zk.Widget.register('zk.Page', true);
 
 zk.Desktop = zk.$extends(zk.Widget, {
 	bindLevel: 0,
