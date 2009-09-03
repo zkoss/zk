@@ -71,7 +71,10 @@ ZK 5.0.0
     definition (if they have the same implementation class)
   + org.zkoss.zk.au.http.AuProcessor is replaced with
     org.zkoss.zk.au.http.AuExtension
-  + By default, the fixedLayout property in Grid, Tree, and Listbox is true.
+  + fixedLayout property is deprecated in Grid/Listbox/Tree/. Use "sizedByContent" instead.
+    Note that if you used to set fixedLayout=true, then you shall set sizedByContent=false 
+	and if you used to set fixedLayout=false, then you shall set sizedByContent=true. By default, 
+	the sizedByContent is false (i.e. fixedLayout is true).
 
 	--------
 ZK 3.6.3
