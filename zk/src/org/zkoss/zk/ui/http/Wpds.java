@@ -15,6 +15,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 package org.zkoss.zk.ui.http;
 
 import java.util.Iterator;
+import java.util.Map;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
@@ -25,6 +27,9 @@ import org.zkoss.lang.Objects;
 import org.zkoss.util.CacheMap;
 import org.zkoss.util.Locales;
 
+import org.zkoss.zk.ui.metainfo.LanguageDefinition;
+import org.zkoss.zk.ui.metainfo.ComponentDefinition;
+
 /**
  * Utilities to used with WPD files.
  *
@@ -32,6 +37,35 @@ import org.zkoss.util.Locales;
  * @since 5.0.0
  */
 public class Wpds {
+	/** Generates all widgets in the specified language.
+	 * @param lang the language to look at
+	 * @param varnm the JavaScript variable's name to store the widget information
+	 */
+	public static String outWidgetListJavaScript(String lang, String varnm) {
+		final Map wgts = new LinkedHashMap();
+		for (Iterator it = LanguageDefinition.lookup(lang).getComponentDefinitions().iterator();
+		it.hasNext();) {
+			final ComponentDefinition compdef = (ComponentDefinition)it.next();
+			for (Iterator e = compdef.getMoldNames().iterator(); e.hasNext();) {
+				final String mold = (String)e.next();
+				final String wgtcls = compdef.getWidgetClass(mold);
+				if (wgtcls != null)
+					wgts.put(compdef.getName(), wgtcls);
+			}
+		}
+
+		final StringBuffer sb = new StringBuffer(4096)
+			.append(varnm).append("={");
+		for (Iterator it = wgts.entrySet().iterator(); it.hasNext();) {
+			final Map.Entry me = (Map.Entry)it.next();
+			sb.append('\'').append(me.getKey()).append("':'");
+			Strings.escape(sb, (String)me.getValue(), Strings.ESCAPE_JAVASCRIPT);
+			sb.append("',");
+		}
+		sb.setLength(sb.length() - 1);
+		return sb.append("};").toString();
+	}
+
 	/** Generates Locale-dependent strings in JavaScript syntax.
 	 */
 	public final static String outLocaleJavaScript() {

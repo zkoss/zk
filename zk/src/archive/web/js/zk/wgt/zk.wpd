@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- zk.wpd
+	Purpose:
+		Generates the widget information
+	Description:
+		The widget information is available in zk.wgt._all
+	History:
+		Thu Sep  3 14:23:52     2009, Created by tomyeh
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+-->
+
+<package name="zk.wgt" language="xul/html">
+	<script src="WidgetInfo.js"/>
+
+	<function class="org.zkoss.zk.ui.http.Wpds"
+		signature="java.lang.String outWidgetListJavaScript(java.lang.String,java.lang.String)"
+		arg0="xul/html" arg1="zk.wgt._all"/>
+</package>
