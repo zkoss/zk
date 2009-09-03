@@ -22,6 +22,7 @@ ZK 5.0.0
   2121859: New component: Cell
   2845947: vflex/hflex supported in every component
   2845956: vflex/hfex supports proportion and min
+  2783102: Borderlayout and flex and vflex improvement
   2849793: Replace fixedLayout with sizedByContent in Gird/Listbox/Tree
 
 * Bugs
