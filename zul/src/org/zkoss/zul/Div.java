@@ -54,7 +54,7 @@ public class Div extends XulElement implements org.zkoss.zul.api.Div {
 			smartUpdate("align", _align);
 		}
 	}
-
+	
 	//super//
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 	throws java.io.IOException {

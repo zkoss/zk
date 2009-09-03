@@ -90,7 +90,7 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	private TreeModel _model;
 	private TreeitemRenderer _renderer;	
 	private transient TreeDataListener _dataListener;
-	private boolean _fixedLayout = true;
+	private boolean _sizedByContent;
 
 	private transient Paginal _pgi;
 	/** The paging controller, used only if mold = "paging" and user
@@ -391,29 +391,51 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 	}
 	
 	/**
-	 * Sets the outline of grid whether is fixed layout.
-	 * If true, the outline of grid will be depended on browser. It means, we don't 
-	 * calculate the width of each cell. Otherwise, the outline will count on the content of body.
-	 * In other words, the outline of grid is like ZK 2.4.1 version that the header's width is only for reference.
-	 * 
-	 * <p> You can also specify the "fixed-layout" attribute of component in lang-addon.xml directly, it's a top priority. 
-	 * @since 3.0.4
+	 * @deprecated since 5.0.0, use {@link #setSizedByContent}(!fixedLayout) instead
+	 * @param fixedLayout true to outline this grid by browser
 	 */
 	public void setFixedLayout(boolean fixedLayout) {
-		if(_fixedLayout != fixedLayout) {
-			_fixedLayout = fixedLayout;
-			smartUpdate("fixedLayout", fixedLayout);
+		 setSizedByContent(!fixedLayout);
+	}
+	/**
+	 * @deprecated since 5.0.0, use !{@link #isSizedByContent} instead
+	 */
+	public boolean isFixedLayout() {
+		return !isSizedByContent();
+	}
+	
+	/**
+	 * Sets whether sizing tree grid column width by its content. Default is false, i.e.
+	 * the outline of grid is dependent on browser. It means, we don't 
+	 * calculate the width of each cell. if set to true, the outline will count on 
+	 * the content of body. In other words, the outline of grid will be like 
+	 * ZK version 2.4.1 that the header's width is only for reference.
+	 * 
+	 * <p> You can also specify the "sized-by-content" attribute of component in 
+	 * lang-addon.xml directly, it will then take higher priority.
+	 * @param byContent 
+	 * @since 5.0.0
+	 */
+	public void setSizedByContent(boolean byContent) {
+		if(_sizedByContent != byContent) {
+			_sizedByContent = byContent;
+			smartUpdate("sizedByContent", byContent);
 		}
 	}
 	/**
-	 * Returns the outline of grid whether is fixed layout.
-	 * <p>Default: true. (since 5.0.0)
-	 * <p>Note: if the "fixed-layout" attribute of component is specified, it's prior to the original value.
-	 * @since 3.0.4
+	 * Returns whether sizing tree grid column width by its content. Default is false.
+	 * <p>Note: if the "sized-by-content" attribute of component is specified, 
+	 * it's prior to the original value.
+	 * @since 5.0.0
+	 * @see #setSizedByContent
 	 */
-	public boolean isFixedLayout() {
-		final String s = (String) getAttribute("fixed-layout");
-		return s != null ? "true".equalsIgnoreCase(s) : _fixedLayout;
+	public boolean isSizedByContent() {
+		String s = (String) getAttribute("sized-by-content");
+		if (s == null) {
+			s = (String) getAttribute("fixed-layout");
+			return s != null ? !"true".equalsIgnoreCase(s) : _sizedByContent;
+		} else
+			return "true".equalsIgnoreCase(s);
 	}
 	
 	/** Returns the treecols that this tree owns (might null).

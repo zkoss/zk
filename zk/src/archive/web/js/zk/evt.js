@@ -140,7 +140,7 @@ zWatch = (function () {
 			
 			if (_visiEvts[name])
 				for (var j = wts.length; j--;)
-					if (!_visible(name, wts[j]))
+					if (!_visible(name, _target(wts[j])))
 						wts.splice(j, 1);
 						
 			if (opts) {

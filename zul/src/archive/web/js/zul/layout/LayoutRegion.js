@@ -80,7 +80,25 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 			}
 		}
 		return this;
-	},	
+	},
+	//@Override
+	setFlexSize_: function(sz) {
+		var n = this.$n('real');
+		if (sz.height !== undefined) {
+			if (sz.height !== zk.Widget.CLEAR_FLEX) {
+				var cave = this.$n('cave'),
+					hgh = cave ? (cave.offsetHeight + cave.offsetTop) : zk(n).revisedHeight(sz.height, true);   
+				n.style.height = jq.px(hgh);
+			} else
+				n.style.height = this._height ? this._height : '';
+		}
+		if (sz.width !== undefined) {
+			if (sz.width !== zk.Widget.CLEAR_FLEX)
+				n.style.width = jq.px(zk(n).revisedWidth(sz.width, true));
+			else
+				n.style.width = this._width ? this._width : '';
+		}
+	},
 	updateDomClass_: function () {
 		if (this.desktop) {
 			var real = this.$n('real');

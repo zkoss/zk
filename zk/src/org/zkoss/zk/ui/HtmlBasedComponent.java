@@ -66,6 +66,10 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	private int _zIndex = -1;
 	/** The prolog content that shall be generated before real content. */
 	private String _prolog;
+	/** The virtical flex */
+	private String _vflex;
+	/** The horizontal flex */
+	private String _hflex;
 
 	static {
 		addClientEvent(HtmlBasedComponent.class, Events.ON_CLICK, 0);
@@ -359,6 +363,85 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 		if (focus) focus();
 	}
 
+	/**
+	 * Sets vertical flexibility hint of this component. 
+	 * <p>Number flex indicates how 
+	 * this component's container distributes remaining empty space among its 
+	 * children vertically. Flexible component grow and shrink to fit their 
+	 * given space. Flexible components with larger flex values will be made 
+	 * larger than components with lower flex values, at the ratio determined by 
+	 * all flexible components. The actual flex value is not relevant unless 
+	 * there are other flexible components within the same container. Once the 
+	 * default sizes of components in a container are calculated, the remaining 
+	 * space in the container is divided among the flexible components, 
+	 * according to their flex ratios.</p>
+	 * <p>Specify a flex value of negative value, 0,
+	 * or "false" has the same effect as leaving the flex attribute out entirely. 
+	 * Specify a flex value of "true" has the same effect as a flex value of 1.</p>
+	 * <p>Special flex hint, <b>"min"</b>, indicates that the minimum space shall be
+	 * given to this flexible component to enclose all of its children components.
+	 * That is, the flexible component grow and shrink to fit its children components.</p> 
+	 * 
+	 * @param flex the vertical flex hint.
+	 * @since 5.0.0
+	 * @see #setHflex
+	 * @see #getVflex 
+	 */
+	public void setVflex(String flex) {
+		if (!Objects.equals(_vflex, flex)) {
+			_vflex = flex;
+			smartUpdate("vflex", _vflex);
+		}
+	}
+	/**
+	 * Return vertical flex hint of this component.
+	 * @return vertical flex hint of this component.
+	 * @since 5.0.0
+	 * @see #setVflex 
+	 */
+	public String getVflex() {
+		return _vflex;
+	}
+	/**
+	 * Sets horizontal flex hint of this component.
+	 * <p>Number flex indicates how 
+	 * this component's container distributes remaining empty space among its 
+	 * children horizontally. Flexible component grow and shrink to fit their 
+	 * given space. Flexible components with larger flex values will be made 
+	 * larger than components with lower flex values, at the ratio determined by 
+	 * all flexible components. The actual flex value is not relevant unless 
+	 * there are other flexible components within the same container. Once the 
+	 * default sizes of components in a container are calculated, the remaining 
+	 * space in the container is divided among the flexible components, 
+	 * according to their flex ratios.</p>
+	 * <p>Specify a flex value of negative value, 0, or "false" has the same 
+	 * effect as leaving the flex attribute out entirely. 
+	 * Specify a flex value of "true" has the same effect as a flex value of 1.</p>
+	 * <p>Special flex hint, <b>"min"</b>, indicates that the minimum space shall be
+	 * given to this flexible component to enclose all of its children components.
+	 * That is, the flexible component grow and shrink to fit its children components.</p> 
+	 * @param flex horizontal flex hint of this component.
+	 * @since 5.0.0 
+	 * @see #setVflex
+	 * @see #getHflex 
+	 */
+	public void setHflex(String flex) {
+		if (!Objects.equals(_hflex, flex)) {
+			_hflex = flex;
+			smartUpdate("hflex", _hflex);
+		}
+	}
+	
+	/**
+	 * Returns horizontal flex hint of this component.
+	 * @return horizontal flex hint of this component.
+	 * @since 5.0.0
+	 * @see #setHflex 
+	 */
+	public String getHflex() {
+		return _hflex;
+	}
+	
 	//-- rendering --//
 	/** Renders the content of this component, excluding the enclosing
 	 * tags and children.
@@ -371,6 +454,8 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 
+		render(renderer, "vflex", _vflex);
+		render(renderer, "hflex", _hflex);
 		render(renderer, "tooltiptext", _tooltiptext);
 		render(renderer, "width", _width);
 		render(renderer, "height", _height);

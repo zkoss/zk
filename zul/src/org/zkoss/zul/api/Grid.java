@@ -87,6 +87,29 @@ public interface Grid extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	public void setVflex(boolean vflex);
 
 	/**
+	 * Sets whether sizing grid column width by its content. Default is false, i.e.
+	 * the outline of grid is dependent on browser. It means, we don't 
+	 * calculate the width of each cell. If set to true, the outline will count on 
+	 * the content of body. In other words, the outline of grid will be like 
+	 * ZK version 2.4.1 that the header's width is only for reference.
+	 * 
+	 * <p> You can also specify the "sized-by-content" attribute of component in 
+	 * lang-addon.xml directly, it will then take higher priority.
+	 * @param byContent 
+	 * @since 5.0.0
+	 */
+	public void setSizedByContent(boolean byContent);
+	
+	/**
+	 * Returns whether sizing grid column width by its content. Default is false.
+	 * <p>Note: if the "sized-by-content" attribute of component is specified, 
+	 * it's prior to the original value.
+	 * @since 5.0.0
+	 * @see #setSizedByContent
+	 */
+	public boolean isSizedByContent();
+	
+	/**
 	 * Sets the outline of grid whether is fixed layout. If true, the outline of
 	 * grid will be depended on browser. It means, we don't calculate the width
 	 * of each cell. Otherwise, the outline will count on the content of body.
@@ -96,7 +119,7 @@ public interface Grid extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 * <p>
 	 * You can also specify the "fixed-layout" attribute of component in
 	 * lang-addon.xml directly, it's a top priority.
-	 * 
+	 * @deprecated since 5.0.0, use {@link #setSizedByContent}(!fixedLayout) instead
 	 */
 	public void setFixedLayout(boolean fixedLayout);
 
@@ -107,7 +130,7 @@ public interface Grid extends org.zkoss.zul.impl.api.XulElement, Paginated {
 	 * <p>
 	 * Note: if the "fixed-layout" attribute of component is specified, it's
 	 * prior to the original value.
-	 * 
+	 * @deprecated since 5.0.0, use !{@link #isSizedByContent} instead
 	 */
 	public boolean isFixedLayout();
 

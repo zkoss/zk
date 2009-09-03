@@ -57,6 +57,13 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 		zWatch.unlisten({onSize: this, onShow: this});
 		this.$supers('unbind_', arguments);
 	},
+	//@Override, region with vflex/hflex, must wait flex resolved then do resize
+	afterFixFlex_: function () {
+		//region's min vflex/hflex resolved and try the border resize
+		//@see #_resize
+		if (this._isOnSize)
+			this._resize(true);
+	},
 	resize: function () {
 		if (this.desktop)
 			this._resize();
@@ -64,6 +71,21 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 	_resize: function (isOnSize) {
 		this._isOnSize = isOnSize;
 		if (!this.isRealVisible()) return;
+
+		//make sure all regions size is resolved
+		var rs = ['north', 'south', 'west', 'east'], k = rs.length; 
+		for (var region, j = 0; j < k; ++j) {
+			region = this[rs[j]];
+			if (region && zk(region.$n()).isVisible()
+				&& ((region.isVflex() && !region.isVflexResolved_()) 
+						|| (region.isHflex() && !region.isHflexResolved_())))
+				return;	//region size unknown, border cannot _resize() now, 
+						//return and keep this._isOnSize true
+						//onSize event will be fired to region later, and region will
+						//call back to _resize() via afterFixFlex_() when it resolve
+						//itself the vflex and hflex
+		}
+
 		var el = this.$n(),
 			width = el.offsetWidth,
 			height = el.offsetHeight,
@@ -73,8 +95,7 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 				w: width,
 				h: height
 			};
-		for (var region, ambit, margin,	rs = ['north', 'south', 'west', 'east'],
-				j = 0, k = rs.length; j < k; ++j) {
+		for (var region, ambit, margin,	j = 0; j < k; ++j) {
 			region = this[rs[j]];
 			if (region && zk(region.$n()).isVisible()) {
 				ambit = region._ambit();
@@ -97,7 +118,7 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 					center.w -= ambit.ts;
 					break;
 				}
-				this._resizeWgt(region, ambit);
+				this._resizeWgt(region, ambit); //might recursive back
 			}
 		}
 		if (this.center && zk(this.center.$n()).isVisible()) {
@@ -106,7 +127,7 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 			center.y += mars.top;
 			center.w -= mars.left + mars.right;
 			center.h -= mars.top + mars.bottom;
-			this._resizeWgt(this.center, center);
+			this._resizeWgt(this.center, center); //might recursive back
 		}
 		zk(el).cleanVisibility();
 		this._isOnSize = false; // reset

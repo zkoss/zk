@@ -437,7 +437,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		}
 	},
 	_offsetHeight: function (n) {
-		var h = n.offsetHeight - 1 - this._titleHeight(n);
+		var h = n.offsetHeight - this._titleHeight(n);
 		if(this._mode != 'embedded' && this._mode != 'popup') {
 			var cave = this.$n('cave'),
 				bl = jq(n).find('>div:last')[0],

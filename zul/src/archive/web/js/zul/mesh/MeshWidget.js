@@ -14,7 +14,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	_pagingPosition: "bottom",
-	_fixedLayout: true,
 
 	$init: function () {
 		this.$supers('$init', arguments);
@@ -27,21 +26,8 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		pagingPosition: _zkf = function () {
 			this.rerender();
 		},
-		fixedLayout: _zkf,
-
-		vflex: function (vflex) {
-			var n = this.$n();
-			if (n) {
-				if (vflex) {
-					// added by Jumper for IE to get a correct offsetHeight so we need 
-					// to add this command faster than the this._calcSize() function.
-					var hgh = n.style.height;
-					if (!hgh || hgh == "auto") n.style.height = "99%"; // avoid border 1px;
-				}
-				this.onSize();
-			}
-		},
-
+		sizedByContent: _zkf,
+		
 		model: null,
 		innerWidth: function (v) {
 			if (v == null) this._innerWidth = v = "100%";
@@ -49,8 +35,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (this.ebodytbl) this.ebodytbl.style.width = v;
 			if (this.efoottbl) this.efoottbl.style.width = v;
 		}
-	},
-
+	},	
 	getPageSize: function () {
 		return this.paging.getPageSize();
 	},
@@ -243,12 +228,13 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (pgit) pgHgh += pgit.offsetHeight;
 			if (pgib) pgHgh += pgib.offsetHeight;
 		}
-		return n.offsetHeight - 2 - (this.ehead ? this.ehead.offsetHeight : 0)
+		return zk(n).revisedHeight(n.offsetHeight) - (this.ehead ? this.ehead.offsetHeight : 0)
 			- (this.efoot ? this.efoot.offsetHeight : 0) - pgHgh; // Bug #1815882 and Bug #1835369
 	},
 	/* set the height. */
 	_setHgh: function (hgh) {
 		if (this.isVflex() || (hgh && hgh != "auto" && hgh.indexOf('%') < 0)) {
+			this.ebody.style.height = ''; //allow browser adjusting to default size
 			var h = this._vflexSize(hgh); 
 			if (h < 0) h = 0;
 
@@ -309,7 +295,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 		if (this.ehead) {
 			if (tblwd) this.ehead.style.width = tblwd + 'px';
-			if (!this.isFixedLayout() && this.ebodyrows && this.ebodyrows.length)
+			if (this.isSizedByContent() && this.ebodyrows && this.ebodyrows.length)
 				this.$class._adjHeadWd(this);
 		} else if (this.efoot) {
 			if (tblwd) this.efoot.style.width = tblwd + 'px';
@@ -483,7 +469,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			}
 		}
 	
-		if (zk.opera && !wgt.isFixedLayout())
+		if (zk.opera && wgt.isSizedByContent())
 			dst.parentNode.parentNode.style.width = sum + "px";
 	
 		if (fakeRow)

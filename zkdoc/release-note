@@ -20,6 +20,9 @@ ZK 5.0.0
   2841695: Enhance Datebox and Calendar layout
   1832887: InputElement support in-place editing
   2121859: New component: Cell
+  2845947: vflex/hflex supported in every component
+  2845956: vflex/hfex supports proportion and min
+  2849793: Replace fixedLayout with sizedByContent in Gird/Listbox/Tree
 
 * Bugs
   1999145: Combobox with Width of 100% Overruns

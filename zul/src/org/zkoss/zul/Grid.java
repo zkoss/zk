@@ -121,7 +121,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	/** the # of rows to preload. */
 	private int _preloadsz = 7;
 	private String _innerWidth = "100%";
-	private boolean _fixedLayout = true, _vflex;
+	private boolean _sizedByContent, _vflex;
 	
 	static {
 		addClientEvent(Grid.class, Events.ON_RENDER, CE_DUPLICATE_IGNORE|CE_IMPORTANT|CE_NON_DEFERRABLE);
@@ -147,7 +147,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	}
 
 	/** Returns whether to grow and shrink vertical to fit their given space,
-	 * so called vertial flexibility.
+	 * so called vertical flexibility.
 	 *
 	 * <p>Default: false.
 	 * @since 3.5.0
@@ -156,7 +156,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		return _vflex;
 	}
 	/** Sets whether to grow and shrink vertical to fit their given space,
-	 * so called vertial flexibility.
+	 * so called vertical flexibility.
 	 *
 	 * @since 3.5.0
 	 */
@@ -167,29 +167,51 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		}
 	}
 	/**
-	 * Sets the outline of grid whether is fixed layout.
-	 * If true, the outline of grid will be depended on browser. It means, we don't 
-	 * calculate the width of each cell. Otherwise, the outline will count on the content of body.
-	 * In other words, the outline of grid is like ZK 2.4.1 version that the header's width is only for reference.
-	 * 
-	 * <p> You can also specify the "fixed-layout" attribute of component in lang-addon.xml directly, it's a top priority. 
-	 * @since 3.0.4
+	 * @deprecated since 5.0.0, use {@link #setSizedByContent}(!fixedLayout) instead
+	 * @param fixedLayout true to outline this grid by browser
 	 */
 	public void setFixedLayout(boolean fixedLayout) {
-		if(_fixedLayout != fixedLayout) {
-			_fixedLayout = fixedLayout;
-			smartUpdate("fixedLayout", fixedLayout);
+		 setSizedByContent(!fixedLayout);
+	}
+	/**
+	 * @deprecated since 5.0.0, use !{@link #isSizedByContent} instead
+	 */
+	public boolean isFixedLayout() {
+		return !isSizedByContent();
+	}
+	
+	/**
+	 * Sets whether sizing grid column width by its content. Default is false, i.e.
+	 * the outline of grid is dependent on browser. It means, we don't 
+	 * calculate the width of each cell. If set to true, the outline will count on 
+	 * the content of body. In other words, the outline of grid will be like 
+	 * ZK version 2.4.1 that the header's width is only for reference.
+	 * 
+	 * <p> You can also specify the "sized-by-content" attribute of component in 
+	 * lang-addon.xml directly, it will then take higher priority.
+	 * @param byContent 
+	 * @since 5.0.0
+	 */
+	public void setSizedByContent(boolean byContent) {
+		if(_sizedByContent != byContent) {
+			_sizedByContent = byContent;
+			smartUpdate("sizedByContent", byContent);
 		}
 	}
 	/**
-	 * Returns the outline of grid whether is fixed layout.
-	 * <p>Default: true. (since 5.0.0)
-	 * <p>Note: if the "fixed-layout" attribute of component is specified, it's prior to the original value.
-	 * @since 3.0.4
+	 * Returns whether sizing grid column width by its content. Default is false.
+	 * <p>Note: if the "sized-by-content" attribute of component is specified, 
+	 * it's prior to the original value.
+	 * @since 5.0.0
+	 * @see #setSizedByContent
 	 */
-	public boolean isFixedLayout() {
-		final String s = (String) getAttribute("fixed-layout");
-		return s != null ? "true".equalsIgnoreCase(s) : _fixedLayout;
+	public boolean isSizedByContent() {
+		String s = (String) getAttribute("sized-by-content");
+		if (s == null) {
+			s = (String) getAttribute("fixed-layout");
+			return s != null ? !"true".equalsIgnoreCase(s) : _sizedByContent;
+		} else
+			return "true".equalsIgnoreCase(s);
 	}
 	
 	/** Returns the rows.
