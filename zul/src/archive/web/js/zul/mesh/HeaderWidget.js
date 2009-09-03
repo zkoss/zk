@@ -19,9 +19,12 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		},
 		valign: function (v) {
 			this.updateMesh_('valign', v);
-		}
+		},
+		width: _zkf = function () {
+			this.updateMesh_();
+		},
+		height: _zkf
 	},
-
 	updateMesh_: function (nm, val) { //TODO: don't rerender
 		if (this.desktop) {
 			var wgt = this.getMeshWidget();
