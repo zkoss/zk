@@ -138,7 +138,7 @@ zkTmbox._inpblur= function(evt){
 	if (!evt) evt = window.event;
 	var cmp = $outer(Event.element(evt)),
 		inp = $real(cmp);
-	if(!zkTmbox._check(inp.value)){
+	if(zkTmbox._check(inp.value)){
 		zkTmbox.setTime(cmp,cmp.lastTimeStr);
 	}
 };
@@ -203,10 +203,13 @@ zkTmbox._inpkeydown= function(evt){
 
 zkTmbox._btnDown= function(evt){
 	if (!evt) evt = window.event;
-	var cmp = $outer(Event.element(evt)),
+	var target = Event.element(evt),
+		cmp = $outer(target),
 		inp = $real(cmp);
 	if(inp.disabled || zk.dragging) return;
-
+	
+	// bug #2829547
+	zkau.currentFocus = target;
 	var btn = zk.opera || zk.safari ? $e(cmp.id + "!btn") : zk.firstChild($e(cmp.id + "!btn"), "IMG"),
 		ofs = zk.revisedOffset(btn);
 	if ((Event.pointerY(evt) - ofs[1]) < btn.offsetHeight / 2) { //up
@@ -223,7 +226,9 @@ zkTmbox._btnUp= function(evt){
 	var cmp = $outer(Event.element(evt)),
 		inp = $real(cmp);
 	if(inp.disabled || zk.dragging) return;
-	zkTxbox.sendOnChanging(inp);
+	
+	if (zkau.asap(cmp, "onChanging"))
+		zkTxbox.sendOnChanging(inp);
 	zkTmbox._stopAutoIncProc(cmp);
 	zkTmbox._markPositionSel(cmp);
 	inp.focus();
@@ -420,7 +425,8 @@ zkTmbox._autoIncTimeout = function(cmp, inc_sec) {
 			cmp.currentStep = cmp.currentStep + 1;
 		}
 		cmp.runCount = cmp.runCount + 1;
-		zkTxbox.sendOnChanging($real(cmp));
+		if (zkau.asap(cmp, "onChanging"))
+			zkTxbox.sendOnChanging($real(cmp));
 	}
 };
 zkTmbox._startAutoIncProc = function(cmp, isup) {

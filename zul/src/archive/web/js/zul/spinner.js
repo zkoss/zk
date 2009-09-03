@@ -156,10 +156,13 @@ zkSpinner.checkValue = function(cmp){
 zkSpinner._btnDown= function(evt){
 	if (!evt) evt = window.event;
 	zul.ondropbtndown(evt);
-	var cmp = $outer(Event.element(evt)),
+	var target = Event.element(evt),
+		cmp = $outer(target),
 		inp = $real(cmp);
 	if(inp.disabled) return;
 
+	// bug #2829547
+	zkau.currentFocus = target;
 	zkSpinner.checkValue(cmp);
 
 
@@ -180,7 +183,8 @@ zkSpinner._btnUp= function(evt){
 		inp = $real(cmp);
 	if(inp.disabled) return;
 
-	zkTxbox.sendOnChanging(inp);
+	if (zkau.asap(cmp, "onChanging"))
+		zkTxbox.sendOnChanging(inp);
 
 	zkSpinner._stopAutoIncProc(cmp);
 	inp.focus();
@@ -213,7 +217,9 @@ zkSpinner._increase=function (cmp,is_add){
 
 	inp.value = result;
 
-	zkTxbox.sendOnChanging(inp);
+
+	if (zkau.asap(cmp, "onChanging"))
+		zkTxbox.sendOnChanging(inp);
 };
 
 zkSpinner._clearValue = function(cmp){
