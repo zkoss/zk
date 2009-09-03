@@ -33,13 +33,17 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	},
 	onShow: _zkf,
 	onFloatUp: function (wgt) {
-		if (!this.isOpen()) return;
+		if (!this._inplace && !this.isOpen())
+			return;
 		if (!zUtl.isAncestor(this, wgt)) {
-			this.close({sendOnOpen: true});
+			if (this.isOpen())
+				this.close({sendOnOpen: true});
 			if (this._inplace) {
 				var n = this.$n(),
 					inplace = this.getInplaceCSS();
-							
+				
+				if (jq(n).hasClass(inplace)) return;
+				
 				n.style.width = jq.px(zk(n).revisedWidth(n.offsetWidth));
 				jq(this.getInputNode()).addClass(inplace);
 				jq(n).addClass(inplace);
