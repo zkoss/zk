@@ -205,5 +205,5 @@ zul.grid.Row = zk.$extends(zul.Widget, {
 			if (n) n.firstChild.style.MozUserSelect = "none";
 		}
 		this.$supers('doMouseOut_', arguments);
-	},
+	}
 });
