@@ -427,6 +427,7 @@
 		<xs:attribute name="name" type="xs:string" use="optional" />
 		<xs:attribute name="disabled" type="booleanType" use="optional" />
 		<xs:attribute name="readonly" type="booleanType" use="optional" />
+		<xs:attribute name="inplace" type="booleanType" use="optional" />
 		<xs:attribute name="maxlength" type="intType" use="optional" />
 		<xs:attribute name="cols" type="intType" use="optional" />
 		<xs:attribute name="tabindex" type="intType" use="optional" />
@@ -478,6 +479,7 @@
 			<xs:element ref="box" />
 			<xs:element ref="button" />
 			<xs:element ref="calendar" />
+			<xs:element ref="cell" />
 			<xs:element ref="chart" />
 			<xs:element ref="checkbox" />
 			<xs:element ref="columnlayout" />
@@ -538,6 +540,7 @@
 				<xs:element ref="box" />
 				<xs:element ref="button" />
 				<xs:element ref="calendar" />
+				<xs:element ref="cell" />
 				<xs:element ref="chart" />
 				<xs:element ref="checkbox" />
 				<xs:element ref="columnlayout" />
@@ -741,6 +744,15 @@
 	<xs:complexType name="captionType" mixed="true">
 		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
 		<xs:attributeGroup ref="labelImageElementAttrGroup" />
+	</xs:complexType>
+	<xs:element name="cell" type="cellType" />
+	<xs:complexType name="cellType" mixed="true">
+		<xs:group ref="anyGroup" minOccurs="0" maxOccurs="unbounded" />
+		<xs:attributeGroup ref="xulElementAttrGroup" />
+		<xs:attribute name="colspan" type="intType" use="optional" />
+		<xs:attribute name="rowspan" type="intType" use="optional" />
+		<xs:attribute name="align" type="gridAlignAttrType" use="optional" />
+		<xs:attribute name="valign" type="valignAttrType" use="optional" />
 	</xs:complexType>
     <!-- center -->
 	<xs:element name="center" type="centerType" />
