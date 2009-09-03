@@ -96,7 +96,7 @@ zul.grid.Group = zk.$extends(zul.grid.Row, {
 				jq(w.$n())[toOpen ? "show" : "hide"]();
 	},
 	beforeParentChanged_: function (p) {
-		if (p == null) {
+		if (!p) {
 			var rows = this.parent,
 				prev = rows.hasGroup();
 				
