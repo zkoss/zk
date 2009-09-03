@@ -74,8 +74,12 @@ zk.copy(zk, (function() {
 	}
 	function loadmsg() {
 		var msg = '';
-		for (var j = _xloadings.length; --j >=0;) {
+		for (var j = _xloadings.length, k = 0; --j >=0;) {
 			if (msg) msg += ', ';
+			if (++k == 5) {
+				k = 0;
+				msg += '<br/>';
+			}
 			msg += _xloadings[j];
 		}
 		return msg;

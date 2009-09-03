@@ -15,8 +15,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 package org.zkoss.zk.ui.http;
 
 import java.util.Iterator;
-import java.util.Map;
-import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
@@ -39,31 +37,27 @@ import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 public class Wpds {
 	/** Generates all widgets in the specified language.
 	 * @param lang the language to look at
-	 * @param varnm the JavaScript variable's name to store the widget information
 	 */
-	public static String outWidgetListJavaScript(String lang, String varnm) {
-		final Map wgts = new LinkedHashMap();
+	public static String outWidgetListJavaScript(String lang) {
+		final StringBuffer sb = new StringBuffer(4096)
+			.append("zk.wgt.WidgetInfo.register([");
+
+		boolean first = true;
 		for (Iterator it = LanguageDefinition.lookup(lang).getComponentDefinitions().iterator();
 		it.hasNext();) {
 			final ComponentDefinition compdef = (ComponentDefinition)it.next();
 			for (Iterator e = compdef.getMoldNames().iterator(); e.hasNext();) {
 				final String mold = (String)e.next();
 				final String wgtcls = compdef.getWidgetClass(mold);
-				if (wgtcls != null)
-					wgts.put(compdef.getName(), wgtcls);
+				if (wgtcls != null) {
+					if (first) first = false;
+					else sb.append(',');
+					sb.append('\'').append(wgtcls).append('\'');
+				}
 			}
 		}
 
-		final StringBuffer sb = new StringBuffer(4096)
-			.append(varnm).append("={");
-		for (Iterator it = wgts.entrySet().iterator(); it.hasNext();) {
-			final Map.Entry me = (Map.Entry)it.next();
-			sb.append('\'').append(me.getKey()).append("':'");
-			Strings.escape(sb, (String)me.getValue(), Strings.ESCAPE_JAVASCRIPT);
-			sb.append("',");
-		}
-		sb.setLength(sb.length() - 1);
-		return sb.append("};").toString();
+		return sb.append("]);").toString();
 	}
 
 	/** Generates Locale-dependent strings in JavaScript syntax.

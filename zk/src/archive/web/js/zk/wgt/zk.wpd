@@ -15,6 +15,6 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 	<script src="WidgetInfo.js"/>
 
 	<function class="org.zkoss.zk.ui.http.Wpds"
-		signature="java.lang.String outWidgetListJavaScript(java.lang.String,java.lang.String)"
-		arg0="xul/html" arg1="zk.wgt._all"/>
+		signature="java.lang.String outWidgetListJavaScript(java.lang.String)"
+		arg0="xul/html"/>
 </package>
