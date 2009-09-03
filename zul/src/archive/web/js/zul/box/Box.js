@@ -49,7 +49,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		this._fixChildDomVisible(child, child._visible);
 	},
 	_fixChildDomVisible: function (child, visible) {
-		var n = this._getChdextr(child);
+		var n = this._chdextr(child);
 		if (n) n.style.display = visible ? '': 'none';
 		n = child.$n('chdex2');
 		if (n) n.style.display = visible ? '': 'none';
@@ -62,12 +62,12 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			}
 		}
 	},
-	_getChdextr: function (child) {
+	_chdextr: function (child) {
 		return child.$n('chdex') || child.$n();
 	},
 	insertChildHTML_: function (child, before, desktop) {
 		if (before) {
-			jq(this._getChdextr(before)).before(this.encloseChildHTML_(child));
+			jq(this._chdextr(before)).before(this.encloseChildHTML_(child));
 		} else {
 			var n = this.$n(), tbs = n.tBodies;
 			if (!tbs || !tbs.length)
@@ -79,7 +79,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	},
 	removeChildHTML_: function (child, prevsib) {
 		this.$supers('removeChildHTML_', arguments);
-		jq(this._getChdextr(child)).remove();
+		jq(this._chdextr(child)).remove();
 		jq(child.uuid + '-chdex2', zk).remove();
 		if (prevsib && this.lastChild == prevsib) //child is last
 			jq(prevsib.uuid + '-chdex2', zk).remove();
