@@ -1,7 +1,7 @@
 /* evt.js
 
 	Purpose:
-		DOM Event, ZK Event and ZK Watch
+		ZK Event and ZK Watch
 	Description:
 		
 	History:
