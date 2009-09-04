@@ -149,8 +149,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		}
 	}
 	function _unlistenFlex(wgt) {
-		zWatch.unlisten({onSize: [wgt, wgt._onSize], onShow: [wgt, wgt._onSize]});
-		wgt._flexListened = false;
+		if (this._flexListened) {
+			zWatch.unlisten({onSize: [wgt, wgt._onSize], onShow: [wgt, wgt._onSize]});
+			wgt._flexListened = false;
+		}
 	}
 	
 	//Drag && Drop
@@ -1122,8 +1124,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		this._nodeSolved = false;
 		this.bindLevel = -1;
 
-		if (this._flexListened)
-			_unlistenFlex(this);
+		_unlistenFlex(this);
 
 		for (var child = this.firstChild; child; child = child.nextSibling)
 			if (!skipper || !skipper.skipped(this, child))
@@ -1339,12 +1340,11 @@ zk.Widget = zk.$extends(zk.Object, {
 		jq(this.$n()||[])[over ? "addClass" : "removeClass"]("z-drag-over");
 	},
 	getDragMessage_: function () {
-		var n = this.$n('real') || this.getCaveNode();
-		return n ? n.textContent || n.innerText: '';
-	},
-	shallDragMessage_: function () {
 		var tn = this.getDragNode().tagName;
-		return "TR" == tn || "TD" == tn || "TH" == tn;
+		if ("TR" == tn || "TD" == tn || "TH" == tn) {
+			var n = this.$n('real') || this.getCaveNode();
+			return n ? n.textContent || n.innerText || '': '';
+		}
 	},
 	onDrop_: function (drag, evt) {
 		var data = zk.copy({dragged: drag.control}, evt.data);
@@ -1353,11 +1353,10 @@ zk.Widget = zk.$extends(zk.Object, {
 	cloneDrag_: function (drag, ofs) {
 		//See also bug 1783363 and 1766244
 
-		var msg;
-		if (this.shallDragMessage_()) {
-			msg = this.getDragMessage_()||'';
-			if (msg.length > 10) msg = msg.substring(0,10) + "...";
-		}
+		var msg = this.getDragMessage_();
+		if (typeof msg == 'string' && msg.length > 15)
+			msg = msg.substring(0, 15) + "...";
+
 		var dgelm = zk.DnD.ghost(drag, ofs, msg);
 
 		drag._orgcursor = document.body.style.cursor;
