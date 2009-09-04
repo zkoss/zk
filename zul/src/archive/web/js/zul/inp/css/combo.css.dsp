@@ -302,6 +302,42 @@
 .z-spinner-focus .z-spinner-btn-clk .z-spinner-img , .z-spinner-btn-clk .z-spinner-img {
 	background-position: -34px 0;
 }
+<%-- disable --%>
+.z-spinner-disd,
+.z-timebox-disd,
+.z-datebox-disd,
+.z-bandbox-disd,
+.z-comboitem-disd,
+.z-combobox-disd {
+	opacity: .6;
+	-moz-opacity: .6;
+	filter: alpha(opacity=60);
+}
+
+.z-spinner-disd, .z-spinner-disd *,
+.z-timebox-disd, .z-timebox-disd *,
+.z-datebox-disd, .z-datebox-disd *,
+.z-bandbox-disd, .z-bandbox-disd *,
+.z-comboitem-disd, .z-comboitem-disd *,
+.z-combobox-disd, .z-combobox-disd * {
+	cursor: default !important;
+	color: #AAA !important;
+}
+
+.z-timebox-disd {
+	font-family: ${fontFamilyC};
+	font-size: ${fontSizeM};
+	font-weight: normal;
+}
+.z-comboitem-readonly, .z-comboitem-text-disd,
+.z-spinner-readonly, .z-spinner-text-disd,
+.z-timebox-readonly, .z-timebox-text-disd,
+.z-datebox-readonly, .z-datebox-text-disd,
+.z-bandbox-readonly, .z-bandbox-text-disd,
+.z-combobox-readonly, .z-combobox-text-disd {
+	background: #ECEAE4;
+}
+
 <%-- Inplace editing --%>
 .z-combobox-inplace,
 .z-bandbox-inplace,
@@ -348,55 +384,6 @@
 .z-timebox-inplace .z-timebox-btn,
 .z-spinner-inplace .z-spinner-btn {
 	display: none;
-}
-<%-- disable --%>
-.z-spinner-disd,
-.z-timebox-disd,
-.z-datebox-disd,
-.z-bandbox-disd,
-.z-comboitem-disd,
-.z-combobox-disd {
-	opacity: .6;
-	-moz-opacity: .6;
-	filter: alpha(opacity=60);
-}
-
-.z-spinner-disd, .z-spinner-disd *,
-.z-timebox-disd, .z-timebox-disd *,
-.z-datebox-disd, .z-datebox-disd *,
-.z-bandbox-disd, .z-bandbox-disd *,
-.z-comboitem-disd, .z-comboitem-disd *,
-.z-combobox-disd, .z-combobox-disd * {
-	cursor: default !important;
-	color: #AAA !important;
-}
-
-.z-timebox-disd {
-	font-family: ${fontFamilyC};
-	font-size: ${fontSizeM};
-	font-weight: normal;
-}
-.z-comboitem-readonly, .z-comboitem-text-disd,
-.z-spinner-readonly, .z-spinner-text-disd,
-.z-timebox-readonly, .z-timebox-text-disd,
-.z-datebox-readonly, .z-datebox-text-disd,
-.z-bandbox-readonly, .z-bandbox-text-disd,
-.z-combobox-readonly, .z-combobox-text-disd {
-	background: #ECEAE4;
-}
-
- 
-.z-combobox-inplace .z-combobox-readonly,
-.z-combobox-inplace .z-combobox-text-disd,
-.z-spinner-inplace .z-spinner-readonly,
-.z-spinner-inplace .z-spinner-text-disd,
-.z-timebox-inplace .z-timebox-readonly,
-.z-timebox-inplace .z-timebox-text-disd,
-.z-datebox-inplace .z-datebox-readonly,
-.z-datebox-inplace .z-datebox-text-disd,
-.z-bandbox-inplace .z-bandbox-readonly,
-.z-bandbox-inplace .z-bandbox-text-disd {
-	background: none;
 }
 <%-- IE --%>
 <c:if test="${c:isExplorer()}">
