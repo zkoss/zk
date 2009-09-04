@@ -20,4 +20,5 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 	<widget name="Paging"/>	
 	<widget name="Auxhead"/>
 	<widget name="Auxheader"/>
+	<widget name="Frozen"/>
 </package>

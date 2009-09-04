@@ -112,6 +112,8 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			this.paging = child;
 		else if (child.$instanceof(zul.sel.Listfoot))
 			this.listfoot = child;
+		else if (child.$instanceof(zul.mesh.Frozen))
+			this.frozen = child;
 		this._syncStripe();
 	},
 	onChildRemoved_: function (child) {
@@ -120,6 +122,8 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			this.listhead = null;
 		else if (child == this.paging)
 			this.paging = null;
+		else if (child == this.frozen)
+			this.frozen = null;
 		else if (child == this.listfoot)
 			this.listfoot = null;
 		else {

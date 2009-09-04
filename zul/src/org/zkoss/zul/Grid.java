@@ -103,6 +103,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	private transient Rows _rows;
 	private transient Columns _cols;
 	private transient Foot _foot;
+	private transient Frozen _frozen;
 	private transient Collection _heads;
 	private String _pagingPosition = "bottom";
 	private ListModel _model;
@@ -138,6 +139,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 				if (_rows != null) --sz;
 				if (_foot != null) --sz;
 				if (_paging != null) --sz;
+				if (_frozen != null) --sz;
 				return sz;
 			}
 			public Iterator iterator() {
@@ -240,6 +242,14 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	 */
 	public Foot getFoot() {
 		return _foot;
+	}
+	
+	/**
+	 * Returns the frozen child.
+	 * @since 5.0.0
+	 */
+	public Frozen getFrozen() {
+		return _frozen;
 	}
 	/** Returns the foot.
 	 * @since 3.5.2
@@ -1165,9 +1175,9 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		} else if (newChild instanceof Columns) {
 			if (_cols != null && _cols != newChild)
 				throw new UiException("Only one columns child is allowed: "+this);
-		} else if (newChild instanceof Foot) {
-			if (_foot != null && _foot != newChild)
-				throw new UiException("Only one foot child is allowed: "+this);
+		} else if (newChild instanceof Frozen) {
+			if (_frozen != null && _frozen != newChild)
+				throw new UiException("Only one frozen child is allowed: "+this);
 		} else if (newChild instanceof Paging) {
 			if (_pgi != null)
 				throw new UiException("External paging cannot coexist with child paging");
@@ -1175,6 +1185,9 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 				throw new UiException("Only one paging is allowed: "+this);
 			if (!inPagingMold())
 				throw new UiException("The child paging is allowed only in the paging mold");
+		} else if (newChild instanceof Foot) {
+			if (_foot != null && _foot != newChild)
+				throw new UiException("Only one foot child is allowed: "+this);
 		} else if (!(newChild instanceof Auxhead)) {
 			throw new UiException("Unsupported child for grid: "+newChild);
 		}
@@ -1192,14 +1205,19 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 				_cols = (Columns)newChild;
 				return true;
 			}
-		} else if (newChild instanceof Foot) {
+		} else if (newChild instanceof Frozen) {
 			if (super.insertBefore(newChild, refChild)) {
-				_foot = (Foot)newChild;
+				_frozen = (Frozen)newChild;
 				return true;
 			}
 		} else if (newChild instanceof Paging) {
 			if (super.insertBefore(newChild, refChild)) {
 				_pgi = _paging = (Paging)newChild;
+				return true;
+			}
+		} else if (newChild instanceof Foot) {
+			if (super.insertBefore(newChild, refChild)) {
+				_foot = (Foot)newChild;
 				return true;
 			}
 		} else {
@@ -1217,6 +1235,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 
 		if (_rows == child) _rows = null;
 		else if (_cols == child) _cols = null;
+		else if (_frozen == child) _frozen = null;
 		else if (_foot == child) _foot = null;
 		else if (_paging == child) {
 			_paging = null;
@@ -1234,6 +1253,7 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		if (clone._rows != null) ++cnt;
 		if (clone._cols != null) ++cnt;
 		if (clone._foot != null) ++cnt;
+		if (clone._frozen != null) ++cnt;
 		if (clone._paging != null) ++cnt;
 		if (cnt > 0) clone.afterUnmarshal(cnt);
 
@@ -1251,11 +1271,14 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 			} else if (child instanceof Columns) {
 				_cols = (Columns)child;
 				if (--cnt == 0) break;
-			} else if (child instanceof Foot) {
-				_foot = (Foot)child;
-				if (--cnt == 0) break;
 			} else if (child instanceof Paging) {
 				_pgi = _paging = (Paging)child;
+				if (--cnt == 0) break;
+			} else if (child instanceof Frozen) {
+				_frozen = (Frozen)child;
+				if (--cnt == 0) break;
+			} else if (child instanceof Foot) {
+				_foot = (Foot)child;
 				if (--cnt == 0) break;
 			}
 		}

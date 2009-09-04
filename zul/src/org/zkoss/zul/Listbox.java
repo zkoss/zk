@@ -117,6 +117,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 	private int _rows, _jsel = -1;
 	private transient Listhead _listhead;
 	private transient Listfoot _listfoot;
+	private transient Frozen _frozen;
 	private ListModel _model;
 	private ListitemRenderer _renderer;
 	private transient ListDataListener _dataListener;
@@ -174,6 +175,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 				int sz = getChildren().size() - _hdcnt;
 				if (_listfoot != null) --sz;
 				if (_paging != null) --sz;
+				if (_frozen != null) --sz;
 				return sz;
 			}
 			/**
@@ -304,6 +306,14 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 	 */
 	public Listfoot getListfoot() {
 		return _listfoot;
+	}
+	
+	/**
+	 * Returns the frozen child.
+	 * @since 5.0.0
+	 */
+	public Frozen getFrozen() {
+		return _frozen;
 	}
 	/** Returns {@link Listfoot} belonging to this listbox, or null
 	 * if no list footers at all.
@@ -1255,6 +1265,11 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 		} else if (newChild instanceof Listhead) {
 			if (_listhead != null && _listhead != newChild)
 				throw new UiException("Only one listhead is allowed: "+this);
+		} else if (newChild instanceof Frozen) {
+			if (_frozen != null && _frozen != newChild)
+				throw new UiException("Only one frozen child is allowed: "+this);
+			if (inSelectMold())
+				log.warning("Mold select ignores frozen");
 		} else if (newChild instanceof Listfoot) {
 			if (_listfoot != null && _listfoot != newChild)
 				throw new UiException("Only one listfoot is allowed: "+this);
@@ -1437,8 +1452,18 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 					++_hdcnt; //it may be moved, not inserted
 				return true;
 			}
-		} else if (newChild instanceof Listfoot) {
+		} else if (newChild instanceof Frozen) {
 			refChild = _paging; //the last two: listfoot and paging
+			if (super.insertBefore(newChild, refChild)) {
+				invalidate();
+				_frozen = (Frozen)newChild;
+				return true;
+			}
+		} else if (newChild instanceof Listfoot) {
+			//the last two: listfoot and paging
+			if (_frozen != null)
+				refChild = _frozen;
+			else refChild = _paging;
 			if (super.insertBefore(newChild, refChild)) {
 				invalidate();
 					//we place listfoot and treeitem at different div, so...
@@ -1475,9 +1500,13 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 	private Component fixRefChildBeforeFoot(Component refChild) {
 		if (refChild == null) {
 			if (_listfoot != null) refChild = _listfoot;
+			else if (_frozen != null) refChild = _frozen;
 			else refChild = _paging;
-		} else if (refChild == _paging && _listfoot != null) {
-			refChild = _listfoot;
+		} else if (refChild == _paging) {
+			if (_listfoot != null)
+				refChild = _listfoot;
+			else
+				refChild = _frozen;
 		}
 		return refChild;
 	}
@@ -1500,6 +1529,8 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 			--_hdcnt;
 		} else if (_listfoot == child) {
 			_listfoot = null;
+		} else if (_frozen == child) {
+			_frozen = null;
 		} else if (child instanceof Listitem) {
 			//maintain items
 			final Listitem item = (Listitem)child;
@@ -2431,6 +2462,8 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 				_listhead = (Listhead)child;
 			} else if (child instanceof Listfoot) {
 				_listfoot = (Listfoot)child;
+			} else if (child instanceof Frozen) {
+				_frozen = (Frozen)child;
 			} else if (child instanceof Paging) {
 				_pgi = _paging = (Paging)child;
 			}
@@ -2611,6 +2644,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 			avail.addAll(_heads);
 			if (_listfoot != null) avail.add(_listfoot);
 			if (_paging != null) avail.add(_paging);
+			if (_frozen != null) avail.add(_frozen);
 	
 			final Paginal pgi = getPaginal();
 			int pgsz = pgi.getPageSize();

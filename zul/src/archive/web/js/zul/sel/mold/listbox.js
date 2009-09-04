@@ -76,6 +76,12 @@ function (out) {
 		out.push('</table></div>');
 	}
 
+	if (this.frozen) {
+		out.push('<div id="', uuid, '-frozen" class="', zcls, '-frozen">');
+		this.frozen.redraw(out);
+		out.push('</div>');
+	}
+	
 	if (pgpos == 'bottom' || pgpos == 'both') {
 		out.push('<div id="', uuid, '-pgib" class="', zcls, '-pgi-b">');
 		this.paging.redraw(out);

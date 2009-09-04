@@ -492,6 +492,17 @@ def alert(m):
 		<preserve-blank/>
 	</component>
 	<component>
+		<component-name>frozen</component-name>
+		<component-class>org.zkoss.zul.Frozen</component-class>
+		<widget-class>zul.mesh.Frozen</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/frozen.js</mold-uri>
+			<css-uri>css/frozen.css.dsp</css-uri>
+		</mold>
+		<preserve-blank/>
+	</component>
+	<component>
 		<component-name>grid</component-name>
 		<component-class>org.zkoss.zul.Grid</component-class>
 		<widget-class>zul.grid.Grid</widget-class>

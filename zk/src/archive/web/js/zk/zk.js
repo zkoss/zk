@@ -195,7 +195,7 @@ zk = function (sel) {
 			var nm1 = '_' + nm,
 				nm2 = nm.charAt(0).toUpperCase() + nm.substring(1),
 				pt = klass.prototype,
-				after = props[nm], before;
+				after = props[nm], before = null;
 			if (after && after.$array) {
 				before = after.length ? after[0]: null;
 				after = after.length > 1 ? after[1]: null;

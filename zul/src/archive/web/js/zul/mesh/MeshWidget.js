@@ -92,7 +92,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		this._fixHeaders();
 		if (this.ebody) {
 			this.domListen_(this.ebody, 'onScroll');
-			this.ebody.style.overflow = ''; // clear
+			this.ebody.style.overflowY = ''; // clear
 		}
 		zWatch.listen({onSize: this, onShow: this, beforeSize: this});
 	},
@@ -100,7 +100,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (this.ebody)
 			this.domUnlisten_(this.ebody, 'onScroll');
 			
-		this.ebody = this.ehead = this.efoot = this.ebodytbl
+		this.ebody = this.ehead = this.efoot = this.efrozen = this.ebodytbl
 			= this.eheadtbl = this.efoottbl = null;
 		
 		zWatch.unlisten({onSize: this, onShow: this, beforeSize: this});
@@ -133,6 +133,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				this.efoot = n;
 				this.efoottbl = jq(n).find('>table:first')[0];
 				break;
+			case this.uuid + '-frozen':
+				this.efrozen = n;
+				break;
 			}
 
 		if (this.ebody) {
@@ -156,11 +159,14 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		}
 	},
 	_doScroll: function () {
-		if (this.ehead)
-			this.ehead.scrollLeft = this.ebody.scrollLeft;
-		if (this.efoot)
-			this.efoot.scrollLeft = this.ebody.scrollLeft;
-		if (!this.paging) this.fireOnRender(zk.gecko ? 200 : 60);
+		if (!(this.fire('onScroll', this.ebody.scrollLeft).stopped)) {
+			if (this.ehead) 
+				this.ehead.scrollLeft = this.ebody.scrollLeft;
+			if (this.efoot) 
+				this.efoot.scrollLeft = this.ebody.scrollLeft;		
+		}
+		if (!this.paging) 
+			this.fireOnRender(zk.gecko ? 200 : 60);
 	},
 	_onRender: function () {
 		this._pendOnRender = false;
@@ -229,7 +235,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 			if (pgib) pgHgh += pgib.offsetHeight;
 		}
 		return zk(n).revisedHeight(n.offsetHeight) - (this.ehead ? this.ehead.offsetHeight : 0)
-			- (this.efoot ? this.efoot.offsetHeight : 0) - pgHgh; // Bug #1815882 and Bug #1835369
+			- (this.efoot ? this.efoot.offsetHeight : 0)
+			- (this.efrozen ? this.efrozen.offsetHeight : 0)
+			- pgHgh; // Bug #1815882 and Bug #1835369
 	},
 	/* set the height. */
 	_setHgh: function (hgh) {
