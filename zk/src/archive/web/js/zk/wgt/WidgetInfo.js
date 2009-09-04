@@ -15,8 +15,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 (function () {
 	var _wgtInfs = {};
 
-	function _load(pkgs, f, weavee) {
-		zk.load(pkgs.join(','), weavee ? function () {
+	function _load(pkgs, f, weave) {
+		zk.load(pkgs.join(','), weave ? function () {
 			for (var j = pkgs.length, nm; --j >= 0;)
 				if (zk.$package(nm = pkgs[j]).$wv)
 					zk.load(nm + '.wv');
@@ -37,7 +37,7 @@ zk.wgt.WidgetInfo = {
 			_wgtInfs[wgtnm.substring(0,1).toLowerCase()+wgtnm.substring(1)] = clsnm;
 		}
 	},
-	loadAll: function (f, weavee) {
+	loadAll: function (f, weave) {
 		var pkgmap = {}, pkgs = [];
 		for (var w in _wgtInfs) {
 			var clsnm = _wgtInfs[w];
@@ -45,7 +45,7 @@ zk.wgt.WidgetInfo = {
 		}
 		for (var w in pkgmap)
 			pkgs.push(w);
-		_load(pkgs, f, weavee);
+		_load(pkgs, f, weave);
 	}
 };
 

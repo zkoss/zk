@@ -359,7 +359,7 @@ jq(function() {
 
 	function _doEvt(wevt) {
 		var wgt = wevt.target;
-		if (wgt && !wgt.weavee) {
+		if (wgt && !wgt.$weave) {
 			wgt['do' + wevt.name.substring(2) + '_'].call(wgt, wevt);
 			if (wevt.domStopped)
 				wevt.domEvent.stop();

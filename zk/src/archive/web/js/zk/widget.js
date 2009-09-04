@@ -1622,14 +1622,14 @@ zk.Widget = zk.$extends(zk.Object, {
 
 	//DOM event handling//
 	domListen_: function (n, evtnm, fn) {
-		if (!this.weavee) {
+		if (!this.$weave) {
 			var inf = _domEvtInf(this, evtnm, fn);
 			jq(n, zk).bind(inf[0], inf[1]);
 		}
 		return this;
 	},
 	domUnlisten_: function (n, evtnm, fn) {
-		if (!this.weavee) {
+		if (!this.$weave) {
 			var inf = _domEvtInf(this, evtnm, fn);
 			jq(n, zk).unbind(inf[0], inf[1]);
 		}
