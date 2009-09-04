@@ -25,6 +25,9 @@ zul.sel.Listitem = zk.$extends(zul.sel.ItemWidget, {
 	setLabel: function (val) {
 		this._autoFirstCell().setLabel(val);
 	},
+	setImage: function (val) {
+		this._autoFirstCell().setImage(val);
+	},
 	_autoFirstCell: function () {
 		if (!this.firstChild)
 			this.appendChild(new zul.sel.Listcell());

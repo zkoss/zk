@@ -15,16 +15,17 @@ it will be useful, but WITHOUT ANY WARRANTY.
 (function () {
 	var _wgtInfs = {};
 
-	function _load(nm, weavee) {
-			if (!zk.isLoaded(nm, true))
-				zk.load(nm,
-					weavee ? function () {
-						if (zk.$package(nm).$wv)
-							zk.load(nm + '.wv');
-					}: null);
+	function _load(pkgs, f, weavee) {
+		zk.load(pkgs.join(','), weavee ? function () {
+			for (var j = pkgs.length, nm; --j >= 0;)
+				if (zk.$package(nm = pkgs[j]).$wv)
+					zk.load(nm + '.wv');
+			zk.afterLoad(f);
+		}: f);
 	}
 
 zk.wgt.WidgetInfo = {
+	all: _wgtInfs,
 	getClassName: function (wgtnm) {
 		return _wgtInfs[wgtnm];
 	},
@@ -37,12 +38,14 @@ zk.wgt.WidgetInfo = {
 		}
 	},
 	loadAll: function (f, weavee) {
+		var pkgmap = {}, pkgs = [];
 		for (var w in _wgtInfs) {
-			var clsnm = _wgtInfs[w],
-				j = clsnm.lastIndexOf('.');
-			_load(clsnm.substring(0, j), weavee);
+			var clsnm = _wgtInfs[w];
+			pkgmap[clsnm.substring(0, clsnm.lastIndexOf('.'))] = true;
 		}
-		if (f) zk.afterLoad(f);
+		for (var w in pkgmap)
+			pkgs.push(w);
+		_load(pkgs, f, weavee);
 	}
 };
 

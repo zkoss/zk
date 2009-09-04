@@ -12,6 +12,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 
 <package name="zul.wgt.wv" language="xul/html">
-	<script src="WDiv.js"/>
-	<script src="WLabel.js"/>
+	<script src="Caption.js"/>
+	<script src="Div.js"/>
+	<script src="Label.js"/>
 </package>

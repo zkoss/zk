@@ -13,10 +13,12 @@ This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 zk.wv.Weavee = zk.$extends(zk.Object, {
-	icon: '/web/js/zk/wv/ico/widget.gif',
-
 	$init: function (wgt) {
 		wgt.weavee = this;
 		this.widget = wgt;
 	}
+},{
+	icon: '/web/js/zk/wv/ico/widget.gif'
+	//belongs: [foo.Foo] //allowed parents
+	//contains: [foo.Foo] //allowed children
 });
