@@ -876,8 +876,8 @@ zjq.prototype = { //ZK extension
 };
 
 zk.copy(jq, { //ZK extension to jq
-	px: function (v) {
-		return Math.max(v, 0) + "px";
+	px: function (v, negativeAllowed) {
+		return (negativeAllowed?v||0:Math.max(v, 0)) + "px";
 	},
 
 	$$: function (id, subId) {
