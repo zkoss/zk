@@ -165,8 +165,8 @@ if (zk.ie) {
 /** Convert a number to px that can be used
  * @since 3.6.3
  */
-zk.px = function (v) {
-	return Math.max(v, 0) + "px";
+zk.px = function (v, negativeAllowed) {
+	return (negativeAllowed ? v || 0 : Math.max(v, 0)) + "px";
 };
 /** Returns an array to indicate the size of the text if it is placed
  * inside the element.
@@ -272,8 +272,8 @@ zk.Shadow.prototype = {
 			wd = w - opts.left + opts.right,
 			hgh = h - opts.top + opts.bottom,
 			st = shadow.style;
-		st.left = zk.px(l + opts.left);
-		st.top = zk.px(t + opts.top);
+		st.left = zk.px(l + opts.left, true);
+		st.top = zk.px(t + opts.top, true);
 		st.width = zk.px(wd);
 		st.display = "block";
 		if (zk.ie6Only) st.height = zk.px(hgh);
@@ -358,8 +358,8 @@ zk.applyMask = function (rel, message) {
 			loading.style.height = zk.px(zk.revisedSize(loading, rel.offsetHeight, true));
 		if (loading.offsetWidth > rel.offsetWidth)
 			loading.style.width = zk.px(zk.revisedSize(loading, rel.offsetWidth));
-		loading.style.top = zk.px(xy[1] + ((h - loading.offsetHeight) /2));
-		loading.style.left = zk.px(xy[0] + ((w - loading.offsetWidth) /2));
+		loading.style.top = zk.px(xy[1] + ((h - loading.offsetHeight) /2), true);
+		loading.style.left = zk.px(xy[0] + ((w - loading.offsetWidth) /2), true);
 	}
 	progbox.style.visibility = "";
 	return progbox;

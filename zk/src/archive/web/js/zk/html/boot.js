@@ -67,8 +67,8 @@ if (!window.Boot_progressbox) { //not customized
 		var el = $e("zk_loading");
 		if (center) {
 			if (el) {
-				el.style.left = zk.px((zk.innerWidth() - el.offsetWidth) / 2 + ix);
-				el.style.top = zk.px((zk.innerHeight() - el.offsetHeight) / 2 + iy);
+				el.style.left = zk.px((zk.innerWidth() - el.offsetWidth) / 2 + ix, true);
+				el.style.top = zk.px((zk.innerHeight() - el.offsetHeight) / 2 + iy, true);
 				
 				// the use is for zkau._fixOffset
 				setZKAttr(el, "x", ix);

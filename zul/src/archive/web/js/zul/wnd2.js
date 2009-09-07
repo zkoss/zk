@@ -488,8 +488,8 @@ zkWnd2.setAttr = function (cmp, nm, val) {
 					var xy = zk.revisedOffset(parent),
 						left = $int(cmp.style.left), top = $int(cmp.style.top);
 					setZKAttr(cmp, "offset", xy[0]+ "," + xy[1]);
-					cmp.style.left = zk.px(xy[0] + $int(cmp.style.left));
-					cmp.style.top = zk.px(xy[1] + $int(cmp.style.top));
+					cmp.style.left = zk.px(xy[0] + $int(cmp.style.left), true);
+					cmp.style.top = zk.px(xy[1] + $int(cmp.style.top), true);
 				}
 			}
 			zkWnd2._center(cmp, null, val);
@@ -524,9 +524,9 @@ zkWnd2.setAttr = function (cmp, nm, val) {
 				zkWnd2.hideShadow(cmp);
 				var xy = offset.split(",");
 				if (nm == "style.top") {
-					cmp.style.top = zk.px($int(xy[1]) + $int(val));
+					cmp.style.top = zk.px($int(xy[1]) + $int(val), true);
 				} else {
-					cmp.style.left = zk.px($int(xy[0]) + $int(val));
+					cmp.style.left = zk.px($int(xy[0]) + $int(val), true);
 				}
 				zkWnd2.syncShadow(cmp);
 				return true;
@@ -683,8 +683,8 @@ zkWnd2._resize = function (cmp, t, l, h, w, keys) {
 		zkau.sendOnSize(cmp, keys);
 	}
 	if (l != cmp.offsetLeft || t != cmp.offsetTop) {
-		if (l != null) cmp.style.left = zk.px(l);
-		if (t != null) cmp.style.top = zk.px(t);
+		if (l != null) cmp.style.left = zk.px(l, true);
+		if (t != null) cmp.style.top = zk.px(t, true);
 		zkau.sendOnMove(cmp, keys);
 	}
 	zkWnd2.syncShadow(cmp);
@@ -727,7 +727,7 @@ zkWnd2._draw = function (dg, pointer) {
 			h = dg.z_box.minHeight;
 		}
 		dg.element.style.height = zk.px(h);
-		dg.element.style.top = zk.px(pointer[1]);
+		dg.element.style.top = zk.px(pointer[1], true);
 	}
 	if (dg.z_dir >= 4 && dg.z_dir <= 6) {
 		var h = dg.z_box.height + pointer[1] - dg.z_box.top;
@@ -741,7 +741,7 @@ zkWnd2._draw = function (dg, pointer) {
 			w = dg.z_box.minWidth;
 		}
 		dg.element.style.width = zk.px(w);
-		dg.element.style.left = zk.px(pointer[0]);
+		dg.element.style.left = zk.px(pointer[0], true);
 	}
 	if (dg.z_dir >= 2 && dg.z_dir <= 4) {
 		var w =  dg.z_box.width + pointer[0] - dg.z_box.left;
@@ -852,8 +852,8 @@ zkWnd2._doOverpop = function (cmp, storage, replace) {
 		var xy = zk.revisedOffset(cmp.parentNode),
 			left = $int(cmp.style.left), top = $int(cmp.style.top);
 		setZKAttr(cmp, "offset", xy[0]+ "," + xy[1]);
-		cmp.style.left = zk.px(xy[0] + $int(cmp.style.left));
-		cmp.style.top = zk.px(xy[1] + $int(cmp.style.top));
+		cmp.style.left = zk.px(xy[0] + $int(cmp.style.left), true);
+		cmp.style.top = zk.px(xy[1] + $int(cmp.style.top), true);
 	}
 	if (isV) zk.setVParent(cmp);
 
@@ -915,8 +915,8 @@ zkWnd2._doModal = function (cmp, replace) {
 			var xy = zk.revisedOffset(cmp.parentNode),
 				left = $int(cmp.style.left), top = $int(cmp.style.top);
 			setZKAttr(cmp, "offset", xy[0]+ "," + xy[1]);
-			cmp.style.left = zk.px(xy[0] + $int(cmp.style.left));
-			cmp.style.top = zk.px(xy[1] + $int(cmp.style.top));
+			cmp.style.left = zk.px(xy[0] + $int(cmp.style.left), true);
+			cmp.style.top = zk.px(xy[1] + $int(cmp.style.top), true);
 		}
 		zk.setVParent(cmp);
 	}
@@ -936,7 +936,7 @@ zkWnd2._doModal = function (cmp, replace) {
 		if (y) {
 			var y1 = top - y;
 			if (y1 > 100) {
-				cmp.style.top = zk.px(top - (y1 - 100));
+				cmp.style.top = zk.px(top - (y1 - 100), true);
 			}
 		} else if (top > 100){
 			cmp.style.top = "100px";
@@ -1062,14 +1062,14 @@ zkWnd2._center = function (cmp, zi, pos) {
 		var opts = sw.opts, l = cmp.offsetLeft, t = cmp.offsetTop,
 			s = cmp.style;
 		if (pos.indexOf("left") >= 0 && opts.left < 0)
-			s.left = zk.px(l - opts.left);
+			s.left = zk.px(l - opts.left, true);
 		else if (pos.indexOf("right") >= 0 && opts.right > 0)
-			s.left = zk.px(l - opts.right);
+			s.left = zk.px(l - opts.right, true);
 
 		if (pos.indexOf("top") >= 0 && opts.top < 0)
-			s.top = zk.px(t - opts.top);
+			s.top = zk.px(t - opts.top, true);
 		else if (pos.indexOf("bottom") >= 0 && opts.bottom > 0)
-			s.top = zk.px(t - opts.bottom);
+			s.top = zk.px(t - opts.bottom, true);
 	}
 	zkau.sendOnMove(cmp);
 
@@ -1123,8 +1123,8 @@ zkWnd2._ghostmove = function (dg, ghosting, pointer) {
 	} else {
 		var org = zkau.getGhostOrgin(dg);
 		if (org) {
-			org.style.top = zk.px(org.offsetTop + dg.element.offsetTop - dg._zoffs[1]);
-			org.style.left = zk.px(org.offsetLeft + dg.element.offsetLeft - dg._zoffs[0]);
+			org.style.top = zk.px(org.offsetTop + dg.element.offsetTop - dg._zoffs[1], true);
+			org.style.left = zk.px(org.offsetLeft + dg.element.offsetLeft - dg._zoffs[0], true);
 		}
 		zkau.endGhostToDIV(dg);
 		document.body.style.cursor = "";

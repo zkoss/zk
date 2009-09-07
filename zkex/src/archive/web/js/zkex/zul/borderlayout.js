@@ -508,20 +508,20 @@ zkLayoutRegion2 = {
 	alignTo: function (from, to, region) {
 		switch (region) {
 		case "north":
-			to.style.top = zk.px(from.offsetTop + from.offsetHeight);
-			to.style.left = zk.px(from.offsetLeft);
+			to.style.top = zk.px(from.offsetTop + from.offsetHeight, true);
+			to.style.left = zk.px(from.offsetLeft, true);
 			break;
 		case "south":
-			to.style.top = zk.px(from.offsetTop - to.offsetHeight);
-			to.style.left = zk.px(from.offsetLeft);
+			to.style.top = zk.px(from.offsetTop - to.offsetHeight, true);
+			to.style.left = zk.px(from.offsetLeft, true);
 			break;
 		case "west":
-			to.style.left = zk.px(from.offsetLeft + from.offsetWidth);
-			to.style.top = zk.px(from.offsetTop);
+			to.style.left = zk.px(from.offsetLeft + from.offsetWidth, true);
+			to.style.top = zk.px(from.offsetTop, true);
 			break;
 		case "east":
-			to.style.left = zk.px(from.offsetLeft - to.offsetWidth);
-			to.style.top = zk.px(from.offsetTop);
+			to.style.left = zk.px(from.offsetLeft - to.offsetWidth, true);
+			to.style.top = zk.px(from.offsetTop, true);
 			break;
 		}
 	},

@@ -141,8 +141,8 @@ zkau._onDocScroll = function () {
 	zkau._fixOffset($e("zk_prog"), ix, iy);
 	var d = $e("zk_debugbox");
 	if (d) {
-		d.style.top = zk.px(iy + zk.innerHeight() - d.offsetHeight - 20);
-		d.style.left = zk.px(ix + zk.innerWidth() - d.offsetWidth - 20);
+		d.style.top = zk.px(iy + zk.innerHeight() - d.offsetHeight - 20, true);
+		d.style.left = zk.px(ix + zk.innerWidth() - d.offsetWidth - 20, true);
 	}
 
 	zk.onScrollAt();
@@ -151,8 +151,8 @@ zkau._fixOffset = function (el, x, y) {
 	if (!el) return;
 	var ix = $int(getZKAttr(el, "x")), iy = $int(getZKAttr(el, "y"));
 	var top = $int(el.style.top) + (y - iy), left = $int(el.style.left) + (x - ix);
-	el.style.top = zk.px(top);
-	el.style.left = zk.px(left);
+	el.style.top = zk.px(top, true);
+	el.style.left = zk.px(left, true);
 	setZKAttr(el, "x", x);
 	setZKAttr(el, "y", y);
 };
@@ -1360,8 +1360,8 @@ zkau._autopos = function (el, x, y) {
 	}
 
 	ofs = zk.toStyleOffset(el, x, y);
-	el.style.left = zk.px(ofs[0]);
-	el.style.top = zk.px(ofs[1]);
+	el.style.left = zk.px(ofs[0], true);
+	el.style.top = zk.px(ofs[1], true);
 };
 
 /** Handles the double click. */
@@ -2172,8 +2172,8 @@ zkau._ghostdrag = function (dg, ghosting, evt) {
 			var el  = dg.element.cloneNode(true);
 			el.id = "zk_ddghost";
 			el.style.position = "absolute";
-			el.style.top = zk.px(ofs[1]);
-			el.style.left = zk.px(ofs[0]);
+			el.style.top = zk.px(ofs[1], true);
+			el.style.left = zk.px(ofs[0], true);
 			document.body.appendChild(el);
 		}
 		zk.addClass(dg.element, 'z-dragged');
