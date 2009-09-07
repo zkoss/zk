@@ -1,9 +1,9 @@
 /* Combobox.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Sun Mar 29 20:52:45     2009, Created by tomyeh
 
@@ -31,15 +31,18 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		return this._findItem(val, true) ? null: mesg.VALUE_NOT_MATCHED;
 	},
 	_findItem: function (val, strict) {
+		this._findItem0(val, strict);
+	},
+	_findItem0: function (val, strict, startswith, excluding) {
 		var fchild = this.firstChild;
 		if (fchild && val) {
 			val = val.toLowerCase();
 			var sel = this._sel;
 			if (!sel || sel.parent != this) sel = fchild;
 
-			for (var item = sel;;) {
+			for (var item = excluding ? sel.nextSibling ? sel.nextSibling : fchild : sel;;) {
 				if ((!strict || !item.isDisabled()) && item.isVisible()
-				&& val == item.getLabel().toLowerCase())
+				&& (startswith ? item.getLabel().toLowerCase().startsWith(val) : val == item.getLabel().toLowerCase()))
 					return item;
 				if (!(item = item.nextSibling)) item = fchild;
 				if (item == sel) break;
@@ -127,11 +130,21 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		this._select(sel, {sendOnSelect:true});
 		evt.stop();
 	},
-	_next: function (item, bUp) {
-		if (item)
-			item = bUp ? item.previousSibling: item.nextSibling;
-		return item ? item: bUp ? this.lastChild: this.firstChild;
-	},
+	_next: (function() {
+		function getVisibleItemOnly(item, bUp, including) {
+			var next = bUp ? 'previousSibling' : 'nextSibling';
+			for (var n = including ? item : item[next]; n; n = n[next])
+				if (!n.isDisabled())
+					return n;
+			return item;
+		}
+		return function(item, bUp) {
+			if (item)
+				item = getVisibleItemOnly(item, bUp);
+			return item ? item : getVisibleItemOnly(
+					bUp ? this.lastChild : this.firstChild, bUp, true);
+		};
+	})(),
 	_select: function (sel, opts) {
 		var inp = this.getInputNode(),
 			val = inp.value = sel ? sel.getLabel(): '';
@@ -143,8 +156,28 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		var wgt = this,
 			bDel = evt.keyCode;
 		this._bDel = bDel = bDel == zk.Event.BS || bDel == zk.Event.DEL;
-		setTimeout(function () {wgt._typeahead(bDel);}, 0);
+		if (this._readonly)
+			this._matchKey(evt, evt.keyCode);
+		else
+			setTimeout(function () {wgt._typeahead(bDel);}, 0);
 			//use timeout, since, when key down, value not ready yet
+	},
+	_matchKey: function (evt, keyCode) {
+		switch (keyCode) {
+		case 35://End
+		case 36://Home
+			this._hilite2();
+			this.getInputNode().value = '';
+		case 37://Left
+		case 39://Right
+			this._updnSel(evt, keyCode == 37 || keyCode == 35);
+			break;
+		default:
+			var v = String.fromCharCode(keyCode);
+			var sel = this._findItem0(v, true, true, !!this._sel);
+			if (sel) 
+				this._select(sel, {sendOnSelect: true});
+		}
 	},
 	_typeahead: function (bDel) {
 		if (zk.currentFocus != this) return;
