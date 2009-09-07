@@ -153,6 +153,9 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 				this.onSize();
 			}
 		}
+
+		if (this._readonly && this._pop)
+			this._pop.open();
 	},
 	doBlur_: function (evt) {
 		var n = this.$n();
@@ -201,7 +204,8 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		this.$supers('unbind_', arguments);
 	},
 	_doBtnClick: function (evt) {
-		this.setOpen();
+		if (!this._disabled)
+			this.setOpen();
 		evt.stop();
 	},
 	onChange: function (evt) {

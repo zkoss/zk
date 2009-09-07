@@ -79,6 +79,7 @@ abstract public class HtmlBasedComponent extends AbstractComponent implements or
 		addClientEvent(HtmlBasedComponent.class, Events.ON_CANCEL, 0);
 		addClientEvent(HtmlBasedComponent.class, Events.ON_CTRL_KEY, 0);
 		addClientEvent(HtmlBasedComponent.class, Events.ON_DROP, 0);
+		addClientEvent(HtmlBasedComponent.class, Events.ON_SIZE, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
 	}
 
 	protected HtmlBasedComponent() {

@@ -291,8 +291,8 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		if (this.paging) {
 			var pgit = this.$n('pgit'),
 				pgib = this.$n('pgib');
-			if (pgit) h += pgit.offsetHeight;
-			if (pgib) h += pgib.offsetHeight;
+			if (pgit) hgh += pgit.offsetHeight;
+			if (pgib) hgh += pgib.offsetHeight;
 		}
 		return hgh ? hgh: defVal;
 	},

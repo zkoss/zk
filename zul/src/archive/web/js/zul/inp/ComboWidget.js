@@ -238,6 +238,9 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 				this.onSize();
 			}
 		}
+		
+		if (this._readonly && !this.isOpen())
+			this.open({focus:true,sendOnOpen:true});
 	},
 	doBlur_: function (evt) {
 		var n = this.$n();
@@ -289,8 +292,10 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		this.$supers('unbind_', arguments);
 	},
 	_doBtnClick: function (evt) {
-		if (this._open) this.close({focus:true,sendOnOpen:true});
-		else this.open({focus:true,sendOnOpen:true});
+		if (!this._disabled) {		
+			if (this._open) this.close({focus:true,sendOnOpen:true});
+			else this.open({focus:true,sendOnOpen:true});	
+		}
 		evt.stop();
 	},
 	doKeyDown_: function (evt) {

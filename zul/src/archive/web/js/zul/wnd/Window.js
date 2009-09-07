@@ -1,9 +1,9 @@
 /* Window.js
 
 	Purpose:
-		
+
 	Description:
-		
+
 	History:
 		Mon Nov 17 17:52:31     2008, Created by tomyeh
 
@@ -24,7 +24,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 
 		this.$supers('$init', arguments);
 
-		this.listen({onClose: this,	onMove: this, onZIndex: this}, -1000);
+		this.listen({onClose: this,	onMove: this, onSize: this.onSizeEvent, onZIndex: this}, -1000);
 		this._skipper = new zul.wnd.Skipper(this);
 	},
 
@@ -35,7 +35,16 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		title: _zkf,
 		border: _zkf,
 		closable: _zkf,
-		sizable: _zkf,
+		sizable: function (sizable) {
+			if (this.desktop) {
+				if (sizable)
+					this._makeSizer();
+				else if (this._sizer) {
+					this._sizer.destroy();
+					this._sizer = null;
+				}
+			}
+		},
 		maximizable: _zkf,
 		minimizable: _zkf,
 		maximized: function (maximized, fromServer) {
@@ -44,23 +53,23 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				var $n = zk(node),
 					isRealVisible = this.isRealVisible();
 				if (!isRealVisible && maximized) return;
-	
+
 				var l, t, w, h, s = node.style, cls = this.getZclass();
 				if (maximized) {
 					jq(this.$n('max')).addClass(cls + '-maxd');
 					this._hideShadow();
-						
+
 					var floated = this._mode != 'embedded',
 						$op = floated ? jq(node).offsetParent() : jq(node).parent();
 					l = s.left;
 					t = s.top;
 					w = s.width;
 					h = s.height;
-	
+
 					// prevent the scroll bar.
 					s.top = "-10000px";
 					s.left = "-10000px";
-	
+
 					// Sometimes, the clientWidth/Height in IE6 is wrong.
 					var sw = zk.ie6_ && $op[0].clientWidth == 0 ? $op[0].offsetWidth - $op.zk.borderWidth() : $op[0].clientWidth,
 						sh = zk.ie6_ && $op[0].clientHeight == 0 ? $op[0].offsetHeight - $op.zk.borderHeight() : $op[0].clientHeight;
@@ -73,7 +82,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 					s.width = jq.px(sw);
 					s.height = jq.px(sh);
 					this._lastSize = {l:l, t:t, w:w, h:h};
-	
+
 					// restore.
 					s.top = "0";
 					s.left = "0";
@@ -92,7 +101,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 					t = s.top;
 					w = s.width;
 					h = s.height;
-					
+
 					var body = this.$n('cave');
 					if (body)
 						body.style.width = body.style.height = "";
@@ -117,7 +126,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		minimized: function (minimized, fromServer) {
 			if (this.isMaximized())
 				this.setMaximized(false);
-				
+
 			var node = this.$n();
 			if (node) {
 				var s = node.style, l = s.left, t = s.top, w = s.width, h = s.height;
@@ -264,6 +273,18 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		var shadow = this._shadowWgt;
 		if (shadow) shadow.hide();
 	},
+	_makeSizer: function () {
+		if (!this._sizer) {
+			var Window = this.$class;
+			this._sizer = new zk.Draggable(this, null, {
+				stackup: true, draw: Window._drawsizing,
+				starteffect: Window._startsizing,
+				ghosting: Window._ghostsizing,
+				endghosting: Window._endghostsizing,
+				ignoredrag: Window._ignoresizing,
+				endeffect: Window._aftersizing});
+		}
+	},
 	_makeFloat: function () {
 		var handle = this.$n('cap');
 		if (handle && !this._drag) {
@@ -289,7 +310,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		zk(n).center(pos);
 		var sdw = this._shadowWgt;
 		if (pos && sdw) {
-			var opts = sdw.opts, l = n.offsetLeft, t = n.offsetTop; 
+			var opts = sdw.opts, l = n.offsetLeft, t = n.offsetTop;
 			if (pos.indexOf("left") >= 0 && opts.left < 0)
 				st.left = jq.px(l - opts.left);
 			else if (pos.indexOf("right") >= 0 && opts.right > 0)
@@ -317,6 +338,26 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this._left = evt.left;
 		this._top = evt.top;
 	},
+	onSizeEvent: function (evt) {
+		var data = evt.data,
+			node = this.$n(),
+			s = node.style;
+			
+		if (data.width != s.width) {
+			s.width = data.width;
+			this._fixWdh();
+		}	
+		if (data.height != s.height) {
+			s.height = data.height;
+			this._fixHgh();
+		}
+				
+		if (data.left != s.left || data.top != s.top) {
+			s.left = data.left;
+			s.top = data.top;
+			this._fireOnMove(evt.keys);
+		}
+	},
 	onZIndex: function (evt) {
 		this._syncShadow();
 		this._syncMask();
@@ -342,7 +383,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				floated = wgt._mode != 'embedded',
 				$op = floated ? jq(node).offsetParent() : jq(node).parent(),
 				s = node.style;
-		
+
 			// Sometimes, the clientWidth/Height in IE6 is wrong.
 			var sw = zk.ie6_ && $op[0].clientWidth == 0 ? $op[0].offsetWidth - $op.zk.borderWidth() : $op[0].clientWidth,
 				sh = zk.ie6_ && $op[0].clientHeight == 0 ? $op[0].offsetHeight - $op.zk.borderHeight() : $op[0].clientHeight;
@@ -352,7 +393,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				sh -= $op.zk.paddingHeight();
 				sh = $op.zk.revisedHeight(sh);
 			}
-			
+
 			s.width = jq.px(sw);
 			s.height = jq.px(sh);
 		}
@@ -475,7 +516,6 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			top: y + 'px'
 		}, keys), {ignorable: true});
 	},
-
 	//super//
 	setVisible: function (visible) {
 		if (this._visible != visible) {
@@ -506,6 +546,17 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			zWatch.fireDown('beforeSize', null, this);
 			zWatch.fireDown('onSize', null, this);
 		}
+	},
+	setTop: function () {
+		this._hideShadow();
+		this.$supers('setTop', arguments);
+		this._syncShadow();
+
+	},
+	setLeft: function () {
+		this._hideShadow();
+		this.$supers('setLeft', arguments);
+		this._syncShadow();
 	},
 	setDomVisible_: function () {
 		this.$supers('setDomVisible_', arguments);
@@ -564,6 +615,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			if (mode == 'modal' || mode == 'highlighted') this._doModal();
 			else this._doOverlapped();
 		}
+		
+		if (this._sizable)
+			this._makeSizer();
+		this.domListen_(this.$n(), 'onMouseOver');
 	},
 	unbind_: function () {
 		var node = this.$n();
@@ -578,11 +633,16 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			this._drag.destroy();
 			this._drag = null;
 		}
+		if (this._sizer) {
+			this._sizer.destroy();
+			this._sizer = null;
+		}
+
 		if (this._mask) {
 			this._mask.destroy();
 			this._mask = null;
 		}
-		
+
 		zk(node).undoVParent();
 		zWatch.unlisten({onFloatUp: this, onSize: this, onShow: this, onHide: this});
 		this.setFloating_(false);
@@ -606,6 +666,25 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			}
 		}
 		this.$supers('unbind_', arguments);
+	},
+	_doMouseOver: function (evt) {
+		if (this._sizer) {
+			var n = this.$n(),
+				c = this.$class._insizer(n, zk(n).revisedOffset(), evt.pageX, evt.pageY),
+				handle = this._mode == 'embedded' ? false : this.$n('cap');
+			if (c) {
+				if (this.isMaximized()) return; // unsupported this case.
+				this._backupCursor = n.style.cursor;
+				n.style.cursor = c == 1 ? 'n-resize': c == 2 ? 'ne-resize':
+					c == 3 ? 'e-resize': c == 4 ? 'se-resize':
+					c == 5 ? 's-resize': c == 6 ? 'sw-resize':
+					c == 7 ? 'w-resize': 'nw-resize';
+				if (handle) handle.style.cursor = "";
+			} else {
+				n.style.cursor = this._backupCursor;
+				if (handle) handle.style.cursor = "move";
+			}
+		}
 	},
 	doClick_: function (evt) {
 		switch (evt.domTarget) {
@@ -659,7 +738,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this.$supers('doMouseOut_', arguments);
 	}
 },{ //static
-	//drag
+	//drag move
 	_startmove: function (dg) {
 		//Bug #1568393: we have to change the percetage to the pixel.
 		var el = dg.node;
@@ -680,7 +759,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			fakeT = jq(top).clone()[0],
 			fakeH = jq(header).clone()[0];
 		jq(document.body).prepend(
-			'<div id="zk_wndghost" class="z-window-move-ghost" style="position:absolute;top:'
+			'<div id="zk_wndghost" class="' + wnd.getZclass() + '-move-ghost" style="position:absolute;top:'
 			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
 			+$el.zk.offsetWidth()+'px;height:'+$el.zk.offsetHeight()
 			+'px;z-index:'+el.style.zIndex+'"><dl></dl></div>');
@@ -710,7 +789,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			return true; //ignore special buttons
 		}
 		if (!wgt.isSizable()
-		|| (el.offsetTop + 4 < pointer[1] && el.offsetLeft + 4 < pointer[0] 
+		|| (el.offsetTop + 4 < pointer[1] && el.offsetLeft + 4 < pointer[0]
 		&& el.offsetLeft + el.offsetWidth - 4 > pointer[0]))
 			return false; //accept if not sizable or not on border
 		return true;
@@ -720,6 +799,114 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		var wgt = dg.control;
 		wgt._syncShadow();
 		wgt._fireOnMove(evt.data);
+	},
+	// drag sizing
+	_startsizing: function (dg) {
+		zWatch.fire('onFloatUp', null, dg.control); //notify all
+	},
+	_ghostsizing: function (dg, ofs, evt) {
+		var wnd = dg.control,
+			el = dg.node;
+		wnd._hideShadow();
+		var $el = jq(el);
+		jq(document.body).prepend(
+			'<div id="zk_ddghost" class="' + wnd.getZclass() + '-resize-faker"'
+			+' style="position:absolute;top:'
+			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
+			+$el.zk.offsetWidth()+'px;height:'+$el.zk.offsetHeight()
+			+'px;z-index:'+el.style.zIndex+'"><dl></dl></div>');
+		return jq('#zk_ddghost')[0];
+	},
+	_endghostsizing: function (dg, origin) {
+		var el = dg.node; //ghostvar org = zkau.getGhostOrgin(dg);
+		if (origin) {
+			dg.z_szofs = {
+				top: el.offsetTop + 'px', left: el.offsetLeft + 'px',
+				height: zk(el).revisedHeight(el.offsetHeight) + 'px',
+				width: zk(el).revisedWidth(el.offsetWidth) + 'px'
+			};
+		}
+	},
+	_insizer: function(node, ofs, x, y) {
+		var r = ofs[0] + node.offsetWidth, b = ofs[1] + node.offsetHeight;
+		if (x - ofs[0] <= 5) {
+			if (y - ofs[1] <= 5)
+				return 8;
+			else if (b - y <= 5)
+				return 6;
+			else
+				return 7;
+		} else if (r - x <= 5) {
+			if (y - ofs[1] <= 5)
+				return 2;
+			else if (b - y <= 5)
+				return 4;
+			else
+				return 3;
+		} else {
+			if (y - ofs[1] <= 5)
+				return 1;
+			else if (b - y <= 5)
+				return 5;
+		}
+	},
+	_ignoresizing: function (dg, pointer, evt) {
+		var el = dg.node,
+			wgt = dg.control;
+		if (wgt.isMaximized()) return true;
+
+		var offs = zk(el).revisedOffset(),
+			v = wgt.$class._insizer(el, offs, pointer[0], pointer[1]);
+		if (v) {
+			wgt._hideShadow();
+			dg.z_dir = v;
+			dg.z_box = {
+				top: offs[1], left: offs[0] ,height: el.offsetHeight,
+				width: el.offsetWidth, minHeight: zk.parseInt(wgt.getMinheight()),
+				minWidth: zk.parseInt(wgt.getMinwidth())
+			};
+			dg.z_orgzi = el.style.zIndex;
+			return false;
+		}
+		return true;
+	},
+	_aftersizing: function (dg, evt) {
+		var wgt = dg.control,
+			data = dg.z_szofs;
+		wgt._syncShadow();
+		wgt.fire('onSize', zk.copy(data, evt.keys), {ignorable: true});
+	},
+	_drawsizing: function(dg, pointer, evt) {
+		if (dg.z_dir == 8 || dg.z_dir <= 2) {
+			var h = dg.z_box.height + dg.z_box.top - pointer[1];
+			if (h < dg.z_box.minHeight) {
+				pointer[1] = dg.z_box.height + dg.z_box.top - dg.z_box.minHeight;
+				h = dg.z_box.minHeight;
+			}
+			dg.node.style.height = jq.px(h);
+			dg.node.style.top = pointer[1] + 'px';
+		}
+		if (dg.z_dir >= 4 && dg.z_dir <= 6) {
+			var h = dg.z_box.height + pointer[1] - dg.z_box.top;
+			if (h < dg.z_box.minHeight)
+				h = dg.z_box.minHeight;
+			dg.node.style.height = jq.px(h);
+		}
+		if (dg.z_dir >= 6 && dg.z_dir <= 8) {
+			var w = dg.z_box.width + dg.z_box.left - pointer[0];
+			if (w < dg.z_box.minWidth) {
+				pointer[0] = dg.z_box.width + dg.z_box.left - dg.z_box.minWidth;
+				w = dg.z_box.minWidth;
+			}
+			dg.node.style.width = jq.px(w);
+			dg.node.style.left = pointer[0] + 'px';
+		}
+		if (dg.z_dir >= 2 && dg.z_dir <= 4) {
+			var w = dg.z_box.width + pointer[0] - dg.z_box.left;
+			if (w < dg.z_box.minWidth)
+				w = dg.z_box.minWidth;
+			dg.node.style.width = jq.px(w);
+		}
 	}
 });
 
