@@ -1108,7 +1108,7 @@ zkWnd2._ghostmove = function (dg, ghosting, pointer) {
 			header = zk.nextSibling(top, 'DIV'),
 			fakeT = top.cloneNode(true),
 			fakeH = header.cloneNode(true),
-			html = '<div id="zk_ddghost" class="z-window-move-ghost" style="position:absolute;top:'
+			html = '<div id="zk_ddghost" class="' + getZKAttr(dg.element, "zcls") + '-move-ghost" style="position:absolute;top:'
 			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
 			+zk.offsetWidth(dg.element)+'px;height:'+zk.offsetHeight(dg.element)
 			+'px;z-index:'+dg.element.style.zIndex+'"><dl></dl></div>';

@@ -5,6 +5,7 @@
 .z-window-overlapped-resize-faker,
 .z-window-popup-resize-faker,
 .z-window-highlighted-resize-faker,
+.z-window-embedded-resize-faker,
 .z-window-resize-faker {
 	position: absolute;
 	border: 1px dashed #1854C2;
@@ -16,6 +17,10 @@
 	filter: alpha(opacity=50); <%-- IE --%>
 	opacity: .5;
 }
+.z-window-modal-move-ghost,
+.z-window-overlapped-move-ghost,
+.z-window-popup-move-ghost,
+.z-window-highlighted-move-ghost,
 .z-window-move-ghost {
 	position: absolute;
 	background: #D7E6F7;
@@ -24,6 +29,10 @@
 	opacity: .65 !important;
 	cursor: move !important;
 }
+.z-window-modal-move-ghost dl,
+.z-window-overlapped-move-ghost dl,
+.z-window-popup-move-ghost dl,
+.z-window-highlighted-move-ghost dl,
 .z-window-move-ghost dl {
 	border: 1px solid #538BA2;
 	margin: 0; padding: 0;
