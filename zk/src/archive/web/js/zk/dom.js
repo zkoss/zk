@@ -351,8 +351,8 @@ zjq.prototype = { //ZK extension
 
 		var ofs = this.toStyleOffset(x, y);
 
-		if (!skipx) el.style.left = jq.px(ofs[0]);
-		if (!skipy) el.style.top =  jq.px(ofs[1]);
+		if (!skipx) el.style.left = jq.px(ofs[0], true);
+		if (!skipy) el.style.top =  jq.px(ofs[1], true);
 		return this;
 	},
 	position: function (dim, where, opts) {
@@ -430,8 +430,8 @@ zjq.prototype = { //ZK extension
 
 		var el = this.jq[0],
 			ofs = this.toStyleOffset(x, y);
-		el.style.left = jq.px(ofs[0]);
-		el.style.top = jq.px(ofs[1]);
+		el.style.left = jq.px(ofs[0], true);
+		el.style.top = jq.px(ofs[1], true);
 		return this;
 	},
 
@@ -536,8 +536,8 @@ zjq.prototype = { //ZK extension
 		el._$orgLeft = left - parseFloat(st.left  || 0);
 		el._$orgTop = top  - parseFloat(st.top || 0);
 		st.position = 'absolute';
-		st.top = jq.px(top);
-		st.left = jq.px(left);
+		st.top = jq.px(top, true);
+		st.left = jq.px(left, true);
 		return this;
 	  };
 	})(),
@@ -550,8 +550,8 @@ zjq.prototype = { //ZK extension
 		var top  = parseFloat(st.top  || 0) - (el._$orgTop || 0),
 			left = parseFloat(st.left || 0) - (el._$orgLeft || 0);
 
-		st.top = jq.px(top);
-		st.left = jq.px(left);
+		st.top = jq.px(top, true);
+		st.left = jq.px(left, true);
 		return this;
 	},
 

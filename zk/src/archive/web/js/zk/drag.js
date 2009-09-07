@@ -431,13 +431,13 @@ zk.Draggable = zk.$extends(zk.Object, {
 		} else if (typeof this.opts.constraint == 'function') {
 			var np = this.opts.constraint(this, p, evt); //return null or [newx, newy]
 			if (np) p = np;
-			style.left = jq.px(p[0]);
-			style.top  = jq.px(p[1]);
+			style.left = jq.px(p[0], true);
+			style.top  = jq.px(p[1], true);
 		} else {
 			if((!this.opts.constraint) || (this.opts.constraint=='horizontal'))
-				style.left = jq.px(p[0]);
+				style.left = jq.px(p[0], true);
 			if((!this.opts.constraint) || (this.opts.constraint=='vertical'))
-				style.top  = jq.px(p[1]);
+				style.top  = jq.px(p[1], true);
 		}
 
 		if(style.visibility=="hidden") style.visibility = ""; // fix gecko rendering

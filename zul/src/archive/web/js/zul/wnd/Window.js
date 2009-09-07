@@ -183,8 +183,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			$n = zk(n);
 		if (!pos && !n.style.top && !n.style.left) {
 			var xy = $n.revisedOffset();
-			n.style.left = jq.px(xy[0]);
-			n.style.top = jq.px(xy[1]);
+			n.style.left = jq.px(xy[0], true);
+			n.style.top = jq.px(xy[1], true);
 		} else if (pos == "parent")
 			this._posByParent();
 
@@ -248,8 +248,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			ofs = zk(n.parentNode).revisedOffset(),
 			left = zk.parseInt(n.style.left), top = zk.parseInt(n.style.top);
 		this._offset = ofs;
-		n.style.left = jq.px(ofs[0] + zk.parseInt(n.style.left));
-		n.style.top = jq.px(ofs[1] + zk.parseInt(n.style.top));
+		n.style.left = jq.px(ofs[0] + zk.parseInt(n.style.left), true);
+		n.style.top = jq.px(ofs[1] + zk.parseInt(n.style.top), true);
 	},
 	_syncShadow: function () {
 		if (this._mode == 'embedded') {
@@ -312,13 +312,13 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		if (pos && sdw) {
 			var opts = sdw.opts, l = n.offsetLeft, t = n.offsetTop;
 			if (pos.indexOf("left") >= 0 && opts.left < 0)
-				st.left = jq.px(l - opts.left);
+				st.left = jq.px(l - opts.left, true);
 			else if (pos.indexOf("right") >= 0 && opts.right > 0)
-				st.left = jq.px(l - opts.right);
+				st.left = jq.px(l - opts.right, true);
 			if (pos.indexOf("top") >= 0 && opts.top < 0)
-				st.top = jq.px(t - opts.top);
+				st.top = jq.px(t - opts.top, true);
 			else if (pos.indexOf("bottom") >= 0 && opts.bottom > 0)
-				st.top = jq.px(t - opts.bottom);
+				st.top = jq.px(t - opts.bottom, true);
 		}
 		this._syncShadow();
 		if (ol != st.left || ot != st.top)
@@ -343,6 +343,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			node = this.$n(),
 			s = node.style;
 			
+		this._hideShadow();
 		if (data.width != s.width) {
 			s.width = data.width;
 			this._fixWdh();
@@ -357,6 +358,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			s.top = data.top;
 			this._fireOnMove(evt.keys);
 		}
+		
+		this._syncShadow();
 	},
 	onZIndex: function (evt) {
 		this._syncShadow();
@@ -774,8 +777,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 	_endghostmove: function (dg, origin) {
 		var el = dg.node; //ghost
-		origin.style.top = jq.px(origin.offsetTop + el.offsetTop - dg._wndoffs[1]);
-		origin.style.left = jq.px(origin.offsetLeft + el.offsetLeft - dg._wndoffs[0]);
+		origin.style.top = jq.px(origin.offsetTop + el.offsetTop - dg._wndoffs[1], true);
+		origin.style.left = jq.px(origin.offsetLeft + el.offsetLeft - dg._wndoffs[0], true);
 
 		document.body.style.cursor = "";
 	},
@@ -809,7 +812,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			el = dg.node;
 		wnd._hideShadow();
 		var $el = jq(el);
-		jq(document.body).prepend(
+		jq(document.body).after(
 			'<div id="zk_ddghost" class="' + wnd.getZclass() + '-resize-faker"'
 			+' style="position:absolute;top:'
 			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
@@ -873,8 +876,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	_aftersizing: function (dg, evt) {
 		var wgt = dg.control,
 			data = dg.z_szofs;
-		wgt._syncShadow();
 		wgt.fire('onSize', zk.copy(data, evt.keys), {ignorable: true});
+		dg.z_szofs = null;
 	},
 	_drawsizing: function(dg, pointer, evt) {
 		if (dg.z_dir == 8 || dg.z_dir <= 2) {

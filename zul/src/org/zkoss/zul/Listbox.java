@@ -1505,7 +1505,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 		} else if (refChild == _paging) {
 			if (_listfoot != null)
 				refChild = _listfoot;
-			else
+			else if (_frozen != null)
 				refChild = _frozen;
 		}
 		return refChild;
