@@ -14,7 +14,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 zk.copy(zk, (function() {
 	var _loaded = {'zk': true}, //loaded
-		_loading = {'zk': true}, //loading (include loaded)
 		_xloadings = [], //loading (exclude loaded)
 		_loadedsemis = [], //loaded but not inited
 		_afterLoadFronts = [],
@@ -23,6 +22,9 @@ zk.copy(zk, (function() {
 		_pkgdepend = {},
 		_pkgver = {},
 		_pkghosts = {}/*package host*/, _defhost = []/*default host*/;
+
+	if (!zk.ie) _loaded['zk.canvas'] = true;
+	var _loading = zk.copy({}, _loaded); //loading (include loaded)
 
 	function doLoad(pkg, dt) {
 		if (!pkg || _loading[pkg])
