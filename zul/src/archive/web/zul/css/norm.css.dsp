@@ -133,6 +133,9 @@ div.z-log button {
 	zoom: 1;
 	background: #E0E1E3;
 }
+.z-initing {
+	background: #E0E1E3 url(${c:encodeURL('~./zk/img/zk-mask.gif')}) repeat 0 0;
+}
 .z-loading {
 	background-color: #6eadff;
 	position: absolute;

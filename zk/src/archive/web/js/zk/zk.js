@@ -45,7 +45,7 @@ zk = function (sel) {
 	function showproc(mask) {
 		if (zk.processing
 		&& !jq("#zk_proc").length && !jq("#zk_showBusy").length)
-			zUtl.progressbox("zk_proc", window.mesg?mesg.PLEASE_WAIT:'Processing...', mask);
+			zUtl.progressbox("zk_proc", window.mesg?mesg.PLEASE_WAIT:'Processing...', mask, mask ? 'z-initing' : null);
 	}
 	function wgt2s(w) {
 		var s = w.className.substring(w.className.lastIndexOf('.') + 1);
