@@ -57,6 +57,13 @@
 	padding: 2px 1px;
 	background: none;
 }
+.opera .z-textbox-inplace,
+.opera .z-decimalbox-inplace,
+.opera .z-intbox-inplace,
+.opera .z-longbox-inplace,
+.opera .z-doublebox-inplace {
+	padding: 2px;
+}
 
 .ie .z-textbox-inplace, .ie .z-decimalbox-inplace, .ie .z-intbox-inplace,
 .ie .z-longbox-inplace, .ie .z-doublebox-inplace {

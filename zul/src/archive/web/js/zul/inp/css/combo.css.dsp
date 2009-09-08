@@ -378,6 +378,16 @@
 	padding-left: 2px;
 	padding-right: 2px;
 }
+.opera .z-combobox-inplace .z-combobox-inp,
+.opera .z-bandbox-inplace .z-bandbox-inp,
+.opera .z-datebox-inplace .z-datebox-inp,
+.opera .z-timebox-inplace .z-timebox-inp,
+.opera .z-spinner-inplace .z-spinner-inp {
+	padding: 1px;
+	padding-left: 2px;
+	padding-right: 2px;
+}
+
 .z-combobox-inplace .z-combobox-btn,
 .z-bandbox-inplace .z-bandbox-btn,
 .z-datebox-inplace .z-datebox-btn,
