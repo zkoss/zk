@@ -231,8 +231,8 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 				loading.style.height = jq.px(zk(loading).revisedHeight(h));
 			if (loading.offsetWidth > w)
 				loading.style.width = jq.px(zk(loading).revisedWidth(w));
-			loading.style.top = jq.px(xy[1] + ((h - loading.offsetHeight) /2), true);
-			loading.style.left = jq.px(xy[0] + ((w - loading.offsetWidth) /2), true);
+			loading.style.top = jq.px(xy[1] + ((h - loading.offsetHeight) /2));
+			loading.style.left = jq.px(xy[0] + ((w - loading.offsetWidth) /2));
 		}
 		
 		mask.style.visibility = "";
