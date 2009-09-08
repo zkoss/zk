@@ -329,24 +329,39 @@
 	font-size: ${fontSizeM};
 	font-weight: normal;
 }
-.z-comboitem-readonly, .z-comboitem-text-disd,
-.z-spinner-readonly, .z-spinner-text-disd,
-.z-timebox-readonly, .z-timebox-text-disd,
-.z-datebox-readonly, .z-datebox-text-disd,
-.z-bandbox-readonly, .z-bandbox-text-disd,
-.z-combobox-readonly, .z-combobox-text-disd {
+.z-comboitem-text-disd,
+.z-spinner-text-disd,
+.z-timebox-text-disd,
+.z-datebox-text-disd,
+.z-bandbox-text-disd,
+.z-combobox-text-disd {
 	background: #ECEAE4;
 }
 
-.z-spinner-readonly .z-spinner-inp ,
-.z-timebox-readonly .z-timebox-inp ,
-.z-datebox-readonly .z-datebox-inp ,
-.z-bandbox-readonly  .z-bandbox-inp ,
-.z-combobox-readonly .z-combobox-inp {
+.z-spinner-readonly,
+.z-timebox-readonly,
+.z-datebox-readonly,
+.z-bandbox-readonly,
+.z-combobox-readonly {
 	background-color: transparent;
 	background-image: url(${c:encodeURL('~./zul/img/button/readonly-bg.gif')});
 	background-position: 0 0;
 	background-repeat: repeat-x;
+	border-right-width: 0;
+	padding-right: 1px;
+}
+
+.z-spinner-focus .z-spinner-readonly,
+.z-timebox-focus .z-timebox-readonly,
+.z-datebox-focus .z-datebox-readonly,
+.z-bandbox-focus .z-bandbox-readonly,
+.z-combobox-focus .z-combobox-readonly {
+	background-color: transparent;
+	background-image: url(${c:encodeURL('~./zul/img/button/readonly-focus-bg.gif')});
+	background-position: 0 0;
+	background-repeat: repeat-x;
+	border-right-width: 0;
+	padding-right: 1px;
 }
 
 <%-- Inplace editing --%>

@@ -37,7 +37,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			var inp = this.getInputNode();
 			if (inp) {
 				inp.readOnly = readonly;
-				jq(this.$n())[readonly ? 'addClass': 'removeClass'](
+				jq(inp)[readonly ? 'addClass': 'removeClass'](
 					this.getZclass() + '-readonly');
 			}
 		},
@@ -375,8 +375,6 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		if (!no || !no.input) {
 			if (this._disabled)
 				sc += ' ' + zcls + '-text-disd';
-			if (this._readonly)
-				sc += ' ' + zcls + '-readonly';
 			if (this._inplace) {
 				sc += ' ' + this.getInplaceCSS();
 			}
@@ -386,6 +384,10 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	bind_: function () {
 		this.$supers('bind_', arguments);
 		var inp = this.getInputNode();
+		
+		if (this._readonly)
+			jq(inp).addClass(this.getZclass() + '-readonly');
+			
 		this.domListen_(inp, "onFocus", "doFocus_")
 			.domListen_(inp, "onBlur", "doBlur_")
 			.domListen_(inp, "onSelect");
