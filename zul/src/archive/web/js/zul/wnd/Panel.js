@@ -229,7 +229,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	},
 	//event handler//
 	onClose: function () {
-		if (!this.inServer) //let server handle if in server
+		if (!this.inServer || !this.isListen('onClose', {asapOnly: 1})) //let server handle if in server
 			this.parent.removeChild(this); //default: remove
 	},
 	onMove: function (evt) {
@@ -326,8 +326,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		if (zk.ie6_) zk(body).redoCSS();
 	},
 	_offsetHeight: function (n) {
-		var h = n.offsetHeight - 1;
-		h -= this._titleHeight(n);
+		var h = n.offsetHeight - this._titleHeight(n);
 		if (this.isFramable()) {
 			var body = this.panelchildren.$n(),
 				bl = jq(this.$n('body')).find(':last')[0],

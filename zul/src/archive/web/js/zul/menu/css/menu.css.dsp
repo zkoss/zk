@@ -163,6 +163,10 @@
 }
 
 <%-- define menupopup effect --%>
+.z-menu-popup-shadow {
+	-moz-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+	-webkit-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
 .z-menu-popup {
 	background:#CCE6FB repeat-y scroll 0 0;
 	border:1px solid #86A4BE;

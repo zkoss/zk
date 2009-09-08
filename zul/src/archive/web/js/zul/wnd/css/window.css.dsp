@@ -1,5 +1,16 @@
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 
+.z-window-modal-shadow,
+.z-window-overlapped-shadow,
+.z-window-popup-shadow,
+.z-window-embedded-shadow,
+.z-window-highlighted-shadow {
+	-moz-border-radius: 4px;
+	-moz-box-shadow:0px 0px 3px rgba(0, 0, 0, 0.5);
+	-webkit-border-radius: 4px;
+	-webkit-box-shadow:0px 0px 3px rgba(0, 0, 0, 0.5);
+}
+
 .z-window-modal-resize-faker,
 .z-window-overlapped-resize-faker,
 .z-window-popup-resize-faker,

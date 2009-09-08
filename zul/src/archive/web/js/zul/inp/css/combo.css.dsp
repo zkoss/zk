@@ -302,6 +302,11 @@
 .z-spinner-focus .z-spinner-btn-clk .z-spinner-img , .z-spinner-btn-clk .z-spinner-img {
 	background-position: -34px 0;
 }
+<%-- Shadow --%>
+.z-combobox-shadow, .z-bandbox-shadow, .z-datebox-shadow {
+	-moz-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+	-webkit-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
 <%-- disable --%>
 .z-spinner-disd,
 .z-timebox-disd,
@@ -385,35 +390,41 @@
 	border: 0;
 	background: none;
 }
-.ie .z-combobox-inplace .z-combobox-inp,
-.ie .z-bandbox-inplace .z-bandbox-inp,
-.ie .z-datebox-inplace .z-datebox-inp,
-.ie .z-timebox-inplace .z-timebox-inp,
-.ie .z-spinner-inplace .z-spinner-inp {
+<c:if test="${c:isExplorer()}">
+.z-combobox-inplace .z-combobox-inp,
+.z-bandbox-inplace .z-bandbox-inp,
+.z-datebox-inplace .z-datebox-inp,
+.z-timebox-inplace .z-timebox-inp,
+.z-spinner-inplace .z-spinner-inp {
 	padding: 0px;
 	padding-left: 2px;
 	padding-right: 2px;
 }
 
-.ie7 .z-combobox-inplace .z-combobox-inp,
-.ie7 .z-bandbox-inplace .z-bandbox-inp,
-.ie7 .z-datebox-inplace .z-datebox-inp,
-.ie7 .z-timebox-inplace .z-timebox-inp,
-.ie7 .z-spinner-inplace .z-spinner-inp {
+<c:if test="${c:isExplorer7()}">
+.z-combobox-inplace .z-combobox-inp,
+.z-bandbox-inplace .z-bandbox-inp,
+.z-datebox-inplace .z-datebox-inp,
+.z-timebox-inplace .z-timebox-inp,
+.z-spinner-inplace .z-spinner-inp {
 	padding: 1px;
 	padding-left: 2px;
 	padding-right: 2px;
 }
-.opera .z-combobox-inplace .z-combobox-inp,
-.opera .z-bandbox-inplace .z-bandbox-inp,
-.opera .z-datebox-inplace .z-datebox-inp,
-.opera .z-timebox-inplace .z-timebox-inp,
-.opera .z-spinner-inplace .z-spinner-inp {
-	padding: 1px;
-	padding-left: 2px;
-	padding-right: 2px;
-}
+</c:if>
 
+</c:if>
+<c:if test="${c:isOpera()}">
+.z-combobox-inplace .z-combobox-inp,
+.z-bandbox-inplace .z-bandbox-inp,
+.z-datebox-inplace .z-datebox-inp,
+.z-timebox-inplace .z-timebox-inp,
+.z-spinner-inplace .z-spinner-inp {
+	padding: 1px;
+	padding-left: 2px;
+	padding-right: 2px;
+}
+</c:if>
 .z-combobox-inplace .z-combobox-btn,
 .z-bandbox-inplace .z-bandbox-btn,
 .z-datebox-inplace .z-datebox-btn,
@@ -433,5 +444,14 @@
 span.z-combobox-btn, span.z-datebox-btn, span.z-bandbox-btn, span.z-timebox-btn,
 span.z-spinner-btn {<%-- button at the right edge --%>
 	margin: 0; padding: 0;
+}
+</c:if>
+<c:if test="${c:browser('gecko2-')}">
+.z-spinner,
+.z-timebox,
+.z-datebox,
+.z-bandbox,
+.z-combobox {
+	min-height: 18px;
 }
 </c:if>

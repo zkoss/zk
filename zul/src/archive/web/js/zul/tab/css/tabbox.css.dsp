@@ -264,9 +264,12 @@
 .z-tab-seld .z-tab-hl:hover .z-tab-hm {
 	background-position: 0 0;
 }
-.ie .z-tab-seld .z-tab-hr {
+
+<c:if test="${c:isExplorer()}">
+.z-tab-seld .z-tab-hr {
 	position: relative;
 }
+</c:if>
 <%-- Bug-2432784
 <c:if test="${c:isExplorer7()}">
 .z-tab-disd .z-tab-hl, .z-tab-disd-seld .z-tab-hl {	room: 1 }
@@ -480,9 +483,11 @@
 	position: relative;
 }
 
-.ie6 .z-tabs-ver-space {
+<c:if test="${c:browser('ie6-')}">
+.z-tabs-ver-space {
 	margin-right: -4px;
 }
+</c:if>
 .z-tabbox-ver .z-tabs-ver-header-scroll {
 	margin-top: 18px;
 	margin-bottom: 18px;
@@ -602,16 +607,19 @@
 	float: left;
 	border-left: none;
 }
-.ie6 .z-tabbox-ver .z-tabpanels-ver {
+
+<c:if test="${c:browser('ie6-')}">
+.z-tabbox-ver .z-tabpanels-ver {
 	zoom: 1;
 	float: none;!important;
 	border-left: none;
 }
+.z-tabpanels-ver {
+	border-left: none;
+}
+</c:if>
 .z-tabpanel {
 	border-top: none;
-}
-.ie6 .z-tabpanels-ver {
-	border-left: none;
 }
 .z-tabpanel-cnt { <%-- Bug 2104974 --%>
 	height: 100%;

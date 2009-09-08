@@ -111,18 +111,24 @@
 	position: relative;
 	zoom: 1;
 }
-.ie .z-toolbar-button {
+
+<c:if test="${c:isExplorer()}">
+.z-toolbar-button {
 	display: inline;
 }
-.ie6 .z-toolbar-button,
-.ie6 .z-toolbar-button-body,
-.ie6 .z-toolbar-button-cnt {
+
+<c:if test="${c:browser('ie6-')}">
+.z-toolbar-button,
+.z-toolbar-button-body,
+.z-toolbar-button-cnt {
 	display: inline;
 	position: relative;
 }
-.ie .z-toolbar-button-body {
+.z-toolbar-button-body {
 	float: left;
 }
+</c:if>
+</c:if>
 .z-toolbar-button-disd * {
 	color:gray !important;
 	cursor:default !important;

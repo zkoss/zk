@@ -16,90 +16,140 @@ This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 zk.eff = {};
-zk.eff.Shadow = zk.$extends(zk.Object, {
-	_HTML: zk.ie6Only ? '" class="z-shadow"></div>':
-		'" class="z-shadow"><div class="z-shadow-tl"><div class="z-shadow-tr"></div></div>'
-		+'<div class="z-shadow-cl"><div class="z-shadow-cr"><div class="z-shadow-cm">&#160;</div></div></div>'
-		+'<div class="z-shadow-bl"><div class="z-shadow-br"></div></div></div>',
-
-	$init: function (element, opts) {
-		opts = this.opts = zk.$default(opts, {
-			left: 4, right: 4, top: 3, bottom: 3
-		});
-		if (zk.ie6_) {
-			opts.left -= 1;
-			opts.right -= 8;
-			opts.top -= 2;
-			opts.bottom -= 6;
-		}
-
-		this.node = element;
-		var sdwid = element.id + "-sdw";
-		jq(element).before('<div id="'+sdwid+this._HTML);
-		this.shadow = jq(sdwid, zk)[0];
-	},
-	destroy: function () {
-		jq(this.shadow).remove();
-		jq(this.stackup).remove();
-		this.node = this.shadow = this.stackup = null;
-	},
-	hide: function(){
-		jq(this.shadow).hide();
-		jq(this.stackup).hide();
-	},
-	sync: function () {
-		var node = this.node, $node = jq(node),
-			shadow = this.shadow;
-		if (!node || !$node.zk.isVisible(true)) {
-			this.hide();
-			return false;
-		}
-
-		for (var c = shadow;;) {
-			if (!(c = c.nextSibling) || c.tagName) {
-				if (c != node)
-					node.parentNode.insertBefore(shadow, node);
-				break;
+if (zk.ie || zk.gecko2_ || zk.opera) {
+	zk.eff.Shadow = zk.$extends(zk.Object, {
+		_HTML: zk.ie6Only ? '" class="z-shadow"></div>':
+			'" class="z-shadow"><div class="z-shadow-tl"><div class="z-shadow-tr"></div></div>'
+			+'<div class="z-shadow-cl"><div class="z-shadow-cr"><div class="z-shadow-cm">&#160;</div></div></div>'
+			+'<div class="z-shadow-bl"><div class="z-shadow-br"></div></div></div>',
+	
+		$init: function (element, opts) {
+			opts = this.opts = zk.$default(opts, {
+				left: 4, right: 4, top: 3, bottom: 3
+			});
+			if (zk.ie6_) {
+				opts.left -= 1;
+				opts.right -= 8;
+				opts.top -= 2;
+				opts.bottom -= 6;
 			}
-		}
-		shadow.style.zIndex = zk.parseInt($node.css("zIndex"));
-
-		var opts = this.opts,
-			l = node.offsetLeft, t = node.offsetTop,
-			w = node.offsetWidth, h = node.offsetHeight,
-			wd = Math.max(0, w - opts.left + opts.right),
-			hgh = Math.max(0, h - opts.top + opts.bottom),
-			st = shadow.style;
-		st.left = jq.px(l + opts.left, true);
-		st.top = jq.px(t + opts.top, true);
-		st.width = jq.px(wd);
-		st.display = "block";
-		if (zk.ie6_) st.height = jq.px(hgh);
-		else {
-			var cns = shadow.childNodes;
-			cns[1].style.height = jq.px(hgh - cns[0].offsetHeight - cns[2].offsetHeight);
-		}
-
-		var stackup = this.stackup;
-		if(opts.stackup && node) {
-			if(!stackup)
-				stackup = this.stackup =
-					jq.newStackup(node, node.id + '-sdwstk', shadow);
-
-			st = stackup.style;
-			st.left = jq.px(l, true);
-			st.top = jq.px(t, true);
-			st.width = jq.px(w);
-			st.height = jq.px(h);
-			st.zIndex = zk.parseInt($node.css("zIndex"));
+	
+			this.node = element;
+			var sdwid = element.id + "-sdw";
+			jq(element).before('<div id="'+sdwid+this._HTML);
+			this.shadow = jq(sdwid, zk)[0];
+		},
+		destroy: function () {
+			jq(this.shadow).remove();
+			jq(this.stackup).remove();
+			this.node = this.shadow = this.stackup = null;
+		},
+		hide: function(){
+			jq(this.shadow).hide();
+			jq(this.stackup).hide();
+		},
+		sync: function () {
+			var node = this.node, $node = jq(node),
+				shadow = this.shadow;
+			if (!node || !$node.zk.isVisible(true)) {
+				this.hide();
+				return false;
+			}
+	
+			for (var c = shadow;;) {
+				if (!(c = c.nextSibling) || c.tagName) {
+					if (c != node)
+						node.parentNode.insertBefore(shadow, node);
+					break;
+				}
+			}
+			shadow.style.zIndex = zk.parseInt($node.css("zIndex"));
+	
+			var opts = this.opts,
+				l = node.offsetLeft, t = node.offsetTop,
+				w = node.offsetWidth, h = node.offsetHeight,
+				wd = Math.max(0, w - opts.left + opts.right),
+				hgh = Math.max(0, h - opts.top + opts.bottom),
+				st = shadow.style;
+			st.left = jq.px(l + opts.left, true);
+			st.top = jq.px(t + opts.top, true);
+			st.width = jq.px(wd);
 			st.display = "block";
+			if (zk.ie6_) st.height = jq.px(hgh);
+			else {
+				var cns = shadow.childNodes;
+				cns[1].style.height = jq.px(hgh - cns[0].offsetHeight - cns[2].offsetHeight);
+			}
+	
+			var stackup = this.stackup;
+			if(opts.stackup && node) {
+				if(!stackup)
+					stackup = this.stackup =
+						jq.newStackup(node, node.id + '-sdwstk', shadow);
+	
+				st = stackup.style;
+				st.left = jq.px(l, true);
+				st.top = jq.px(t, true);
+				st.width = jq.px(w);
+				st.height = jq.px(h);
+				st.zIndex = zk.parseInt($node.css("zIndex"));
+				st.display = "block";
+			}
+			return true;
+		},
+		getBottomElement: function () {
+			return this.stackup || this.shadow;
 		}
-		return true;
-	},
-	getBottomElement: function () {
-		return this.stackup || this.shadow;
-	}
-});
+	});
+} else {
+	zk.eff.Shadow = zk.$extends(zk.Object, {
+	
+		$init: function (element, opts) {
+			var wgt = zk.Widget.$(element.id);
+			jq(element).addClass(wgt.getZclass() + '-shadow');
+			this.opts = opts;
+			this.node = element;
+		},
+		destroy: function () {
+			jq(this.stackup).remove();
+			var wgt = zk.Widget.$(this.node.id);
+			jq(this.node).removeClass(wgt.getZclass() + '-shadow');
+			this.node = this.stackup = null;
+		},
+		hide: function(){
+			jq(this.stackup).hide();
+		},
+		sync: function () {
+			var node = this.node, $node = jq(node);
+			if (!node || !$node.zk.isVisible(true)) {
+				this.hide();
+				return false;
+			}
+			var opts = this.opts,
+				l = node.offsetLeft, t = node.offsetTop,
+				w = node.offsetWidth, h = node.offsetHeight,
+				stackup = this.stackup;
+				
+			if(opts.stackup && node) {
+				if(!stackup)
+					stackup = this.stackup =
+						jq.newStackup(node, node.id + '-sdwstk', node);
+	
+				st = stackup.style;
+				st.left = jq.px(l, true);
+				st.top = jq.px(t, true);
+				st.width = jq.px(w);
+				st.height = jq.px(h);
+				st.zIndex = zk.parseInt($node.css("zIndex"));
+				st.display = "block";
+			}
+			return true;
+		},
+		getBottomElement: function () {
+			return this.stackup;
+		}
+	});
+}
 
 zk.eff.FullMask = zk.$extends(zk.Object, {
 	$init: function (opts) {
