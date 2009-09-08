@@ -519,10 +519,9 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		this.currentStep = this.defaultStep;
 		this.timerId = null;
 	},
-	
 	syncWidth: function () {
 		var node = this.$n();
-		if (!zk(node).isRealVisible())
+		if (!zk(node).isRealVisible() || (!this._inplace && !node.style.width))
 			return;
 		
 		if (this._buttonVisible && this._inplace) {
@@ -530,11 +529,15 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 				var $n = jq(node),
 					inc = this.getInplaceCSS();
 				$n.removeClass(inc);
-				node.style.width = jq.px(zk(node).revisedWidth(node.offsetWidth));
+				if (zk.opera)
+					node.style.width = jq.px(zk(node).revisedWidth(node.clientWidth) + zk(node).borderWidth());
+				else
+					node.style.width = jq.px(zk(node).revisedWidth(node.offsetWidth));
 				$n.addClass(inc);
 			}
-		}
-		var width = zk(node).revisedWidth(node.offsetWidth),
+		} 
+		var width = zk.opera ? zk(node).revisedWidth(node.clientWidth) + zk(node).borderWidth()
+							 : zk(node).revisedWidth(node.offsetWidth),
 			btn = this.$n('btn'),
 			inp = this.getInputNode();
 		inp.style.width = jq.px(zk(inp).revisedWidth(width - (btn ? btn.offsetWidth : 0)));
