@@ -338,6 +338,17 @@
 	background: #ECEAE4;
 }
 
+.z-spinner-readonly .z-spinner-inp ,
+.z-timebox-readonly .z-timebox-inp ,
+.z-datebox-readonly .z-datebox-inp ,
+.z-bandbox-readonly  .z-bandbox-inp ,
+.z-combobox-readonly .z-combobox-inp {
+	background-color: transparent;
+	background-image: url(${c:encodeURL('~./zul/img/button/readonly-bg.gif')});
+	background-position: 0 0;
+	background-repeat: repeat-x;
+}
+
 <%-- Inplace editing --%>
 .z-combobox-inplace,
 .z-bandbox-inplace,

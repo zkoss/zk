@@ -37,7 +37,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			var inp = this.getInputNode();
 			if (inp) {
 				inp.readOnly = readonly;
-				jq(inp)[readonly ? 'addClass': 'removeClass'](
+				jq(this.$n())[readonly ? 'addClass': 'removeClass'](
 					this.getZclass() + '-readonly');
 			}
 		},

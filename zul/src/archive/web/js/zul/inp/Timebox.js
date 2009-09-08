@@ -352,6 +352,10 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	_doCheckPos: function (pos) {
 		var inp = this.getInputNode();
+		
+		if (!this._fmthdler)
+			this._parseFormat(this._format);
+			
 		for (var i = 0, j = this._fmthdler.length; i < j; i++) {
 			var idx = this._fmthdler[i];
 			if (idx.index[1] + 1 == pos) {
