@@ -13,7 +13,7 @@ This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
-	var _wgtInfs = {};
+	var _wgtInfs = {page: 'zk.Page'};
 
 	function _load(pkgs, f, weave) {
 		zk.load(pkgs.join(','), weave ? function () {

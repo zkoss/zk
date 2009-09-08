@@ -1084,14 +1084,14 @@ zk.Widget = zk.$extends(zk.Object, {
 		var after = [];
 		this.bind_(desktop, skipper, after);
 		for (var j = 0, len = after.length; j < len;)
-			after[j++]();
+			after[j++].call(this);
 		return this;
 	},
 	unbind: function (skipper) {
 		var after = [];
 		this.unbind_(skipper, after);
 		for (var j = 0, len = after.length; j < len;)
-			after[j++]();
+			after[j++].call(this);
 		return this;
 	},
 
@@ -1720,11 +1720,11 @@ zk.Widget = zk.$extends(zk.Object, {
 	getClass: function (wgtnm) {
 		return _wgtcls[wgtnm];
 	},
-	newInstance: function (wgtnm) {
+	newInstance: function (wgtnm, opts) {
 		var cls = _wgtcls[wgtnm];
 		if (!cls)
 			throw 'widget not found: '+wgtnm;
-		return new cls();
+		return new cls(opts);
 	},
 	CLEAR_FLEX: -100,
 	MIN_FLEX: -200
@@ -1763,21 +1763,21 @@ zk.Desktop = zk.$extends(zk.Widget, {
 		this._aureqs = [];
 		//Sever side effect: this.desktop = this;
 
-		var zkdt = zk.Desktop, dts = zkdt.all, dt = dts[dtid];
+		var Desktop = zk.Desktop, dts = Desktop.all, dt = dts[dtid];
 		if (!dt) {
 			this.uuid = this.id = dtid;
 			this.updateURI = updateURI || zk.updateURI;
 			this.contextURI = contextURI || zk.contextURI;
 			this.stateless = stateless;
 			dts[dtid] = this;
-			++zkdt._ndt;
-			if (!zkdt._dt) zkdt._dt = this; //default desktop
+			++Desktop._ndt;
+			if (!Desktop._dt) Desktop._dt = this; //default desktop
 		} else {
 			if (updateURI) dt.updateURI = updateURI;
 			if (contextURI) dt.contextURI = contextURI;
 		}
 
-		zkdt.sync();
+		Desktop.sync();
 	},
 	_exists: function () {
 		var id = this._pguid; //_pguid not assigned at beginning
@@ -1788,8 +1788,8 @@ zk.Desktop = zk.$extends(zk.Widget, {
 	setId: zk.$void
 },{
 	$: function (dtid) {
-		var zkdt = zk.Desktop, dts = zkdt.all, w;
-		if (zkdt._ndt > 1) {
+		var Desktop = zk.Desktop, dts = Desktop.all, w;
+		if (Desktop._ndt > 1) {
 			if (typeof dtid == 'string') {
 				w = dts[dtid];
 				if (w) return w;
@@ -1799,29 +1799,29 @@ zk.Desktop = zk.$extends(zk.Widget, {
 				for (; w; w = w.parent) {
 					if (w.desktop)
 						return w.desktop;
-					if (w.$instanceof(zkdt))
+					if (w.$instanceof(Desktop))
 						return w;
 				}
 		}
-		if (w = zkdt._dt) return w;
+		if (w = Desktop._dt) return w;
 		for (dtid in dts)
 			return dts[dtid];
 	},
 	all: {},
 	_ndt: 0,
 	sync: function () {
-		var zkdt = zk.Desktop, dts = zkdt.all;
-		if (zkdt._dt && !zkdt._dt._exists()) //removed
-			zkdt._dt = null;
+		var Desktop = zk.Desktop, dts = Desktop.all;
+		if (Desktop._dt && !Desktop._dt._exists()) //removed
+			Desktop._dt = null;
 		for (var dtid in dts) {
 			var dt = dts[dtid];
 			if (!dt._exists()) { //removed
 				delete dts[dtid];
-				--zkdt._ndt;
-			} else if (!zkdt._dt)
-				zkdt._dt = dt;
+				--Desktop._ndt;
+			} else if (!Desktop._dt)
+				Desktop._dt = dt;
 		}
-		return zkdt._dt;
+		return Desktop._dt;
 	}
 });
 
