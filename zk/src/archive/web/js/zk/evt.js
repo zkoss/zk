@@ -71,19 +71,21 @@ zWatch = (function () {
 					infs = this.infs,
 					args = this.args;
 				if (ref) {
-					var org = this.org;
-					if (org)
-						(new _Gun(name, _visiChildSubset(infs, ref), args, org))
-						.fire();
-					else
-						for (var j = 0, l = infs.length; j < l; ++j)
-							if (_target(inf = infs[j]) == ref) {
-								infs.splice(j, 1);
-								_invoke(name, inf, args);
-							}
+					for (var j = 0, l = infs.length; j < l; ++j)
+						if (_target(inf = infs[j]) == ref) {
+							infs.splice(j, 1);
+							_invoke(name, inf, args);
+						}
 				} else
 					while (inf = infs.shift())
 						_invoke(name, inf, args);
+			},
+			fireDown: function (ref) {
+				if (!ref || ref.bindLevel == null)
+					this.fire(ref);
+
+				(new _Gun(this.name, _visiChildSubset(this.infs, ref), this.args, this.org))
+				.fire();
 			}
 		});
 
