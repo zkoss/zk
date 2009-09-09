@@ -207,7 +207,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	getErrorMesssage: function () {
 		return this._errmsg;
 	},
-	showErrorMessage_: function (msg) {
+	wrongValue_: function (msg) {
 		this.clearErrorMessage(true, true);
 		this._markError(msg, null, true);
 	},

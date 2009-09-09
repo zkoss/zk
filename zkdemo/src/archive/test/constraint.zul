@@ -34,19 +34,19 @@ MyConstraint nes = new MyConstraint(MyConstraint.NO_NEGATIVE);
 
 public class ClientServerConstraint extends SimpleConstraint {
 	public ClientServerConstraint() {
-		super(NO_POSITIVE);
+		super(NO_NEGATIVE);
 	}
 	public void validate(Component comp, Object value)
 	throws WrongValueException {
 		super.validate(comp, value);
-		if ((value.intValue() & 1) != 0)
+		if (value != null && (value.intValue() & 1) != 0)
 			throw new WrongValueException(comp, "Only even numbers are allowed, not "+value);
 	}
 	public String getClientConstraint() {
-		return "new ClientServerConstraint('no positive');";
+		return "new ClientServerConstraint('no negative');";
 	}
 };
-ClientServerConstraint npnes = new ClientServerConstraint();
+ClientServerConstraint csc = new ClientServerConstraint();
 ]]></zscript>
 
 	<grid>
@@ -63,8 +63,8 @@ ClientServerConstraint npnes = new ClientServerConstraint();
 		<button label="set 1" onClick="i3.setValue(1)"/>
 		</row>
 		<row>
-		Client+Server (no positive, no even):
-		<intbox constraint="${npnes}"/>
+		Client+Server (no negative, no odd number):
+		<intbox constraint="${csc}"/>
 		</row>
 	</rows>
 	</grid>
