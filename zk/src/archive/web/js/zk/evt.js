@@ -57,19 +57,88 @@ zk.Event = zk.$extends(zk.Object, {
 zWatch = (function () {
 	var _visiEvts = {onSize: true, onShow: true, onHide: true, beforeSize: true},
 		_watches = {}, //Map(watch-name, [watch objects]
-		_dirty;
+		_dirty,
+		_Gun = zk.$extends(zk.Object, {
+			$init: function (name, infs, args, org) {
+				this.name = name;
+				this.infs = infs;
+				this.args = args;
+				this.org = org;
+			},
+			fire: function (ref) {
+				var inf,
+					name = this.name,
+					infs = this.infs,
+					args = this.args;
+				if (ref) {
+					var org = this.org;
+					if (org)
+						(new _Gun(name, _visiChildSubset(infs, ref), args, org))
+						.fire();
+					else
+						for (var j = 0, l = infs.length; j < l; ++j)
+							if (_target(inf = infs[j]) == ref) {
+								infs.splice(j, 1);
+								_invoke(name, inf, args);
+							}
+				} else
+					while (inf = infs.shift())
+						_invoke(name, inf, args);
+			}
+		});
 
+	function _invoke(name, inf, args) {
+		var o = _target(inf);
+		_fn(inf, o, name).apply(o, args);
+	}
+	//Returns if c is visible
 	function _visible(name, c) {
 		var n;
 		return c.$n && (n=c.$n()) && zk(n).isRealVisible(name!='onShow');
 		//if onShow, we don't check visibility since window uses it for
 		//non-embedded window that becomes invisible because of its parent
 	}
+	//Returns if c is a visible child of p
 	function _visibleChild(name, p, c) {
 		if (_visible(name, c))
 			for (; c; c = c.parent)
 				if (p == c) return true;
 		return false;
+	}
+	//Returns subset of infs that are visible childrens of p
+	function _visiChildSubset(infs, p) {
+		var bindLevel = p.bindLevel;
+		if (bindLevel == null)
+			return _visiSubset(infs);
+
+		var found = [];
+		for (var j = infs.length; j--;) { //child first
+			var inf = infs[j],
+				o = _target(inf),
+				diff = bindLevel > o.bindLevel;
+			if (diff) break;//nor ancestor, nor this (&sibling)
+			if (p == o && _visible(name, o)) {
+				found.unshift(inf);
+				break; //found this (and no descendant ahead)
+			}
+			if (_visibleChild(name, p, o))
+				found.unshift(inf); //parent first
+		}
+		return found;
+	}
+	function _visiSubset(infs) {
+		infs = infs.$clone(); //make a copy since unlisten might happen
+		if (_visiEvts[name])
+			for (var j = infs.length; j--;)
+				if (!_visible(name, _target(infs[j])))
+					infs.splice(j, 1);
+		return infs;
+	}
+	function _fire(gun, opts) {
+		if (opts && opts.timeout >= 0)
+			setTimeout(function () {gun.fire();}, opts.timeout);
+		else
+			gun.fire();
 	}
 	function _target(inf) {
 		return inf.$array ? inf[0]: inf;
@@ -129,90 +198,28 @@ zWatch = (function () {
 	unlistenAll: function (name) {
 		delete _watches[name];
 	},
-	fire: function (name, opts, vararg) {
+	fire: function (name, opts) {
 		var wts = _watches[name];
 		if (wts && wts.length) {
-			var args = [];
+			var args = [],
+				gun = new _Gun(name, _visiSubset(wts), args);
+			args.push(args);
 			for (var j = 2, l = arguments.length; j < l;)
 				args.push(arguments[j++]);
-
-			wts = wts.$clone(); //make a copy since unlisten might happen
-			
-			if (_visiEvts[name])
-				for (var j = wts.length; j--;)
-					if (!_visible(name, _target(wts[j])))
-						wts.splice(j, 1);
-						
-			if (opts) {
-				if (opts.timeout >= 0) {
-					setTimeout(
-					function () {
-						var inf;
-						while (inf = wts.shift()) {
-							var o = _target(inf);
-							_fn(inf, o, name).apply(o, args);
-						}
-					}, opts.timeout);
-					return;
-				}
-			}
-
-			var inf;
-			while (inf = wts.shift()) {
-				var o = _target(inf);
-				_fn(inf, o, name).apply(o, args);
-			}
+			_fire(gun, opts);
 		}
 	},
-	fireDown: function (name, opts, origin, vararg) {
+	fireDown: function (name, opts, org) {
 		var wts = _watches[name];
 		if (wts && wts.length) {
 			_sync();
 
-			var args = [origin]; //origin as 1st
+			var args = [org], //org as 1st
+				gun = new _Gun(name, _visiChildSubset(wts, org), args, org);
+			args.push(gun);
 			for (var j = 3, l = arguments.length; j < l;)
 				args.push(arguments[j++]);
-
-			var found, bindLevel = origin.bindLevel;
-			if (bindLevel != null) {
-				found = [];
-				for (var j = wts.length; j--;) { //child first
-					var inf = wts[j],
-						o = _target(inf),
-						diff = bindLevel > o.bindLevel;
-					if (diff) break;//nor ancestor, nor this (&sibling)
-					if (origin == o && _visible(name, o)) {
-						found.unshift(inf);
-						break; //found this (and no descendant ahead)
-					}
-					if (_visibleChild(name, origin, o))
-						found.unshift(inf); //parent first
-				}
-			} else {
-				found = wts.$clone(); //make a copy since unlisten might happen
-				if (_visiEvts[name])
-					for (var j = found.length; j--;)
-						if (!_visible(name, found[j]))
-							found.splice(j, 1);
-			}
-
-			if (opts && opts.timeout >= 0) {
-				setTimeout(
-				function () {
-					var inf;
-					while (inf = found.shift()) {
-						var o = _target(inf);
-						_fn(inf, o, name).apply(o, args);
-					}
-				}, opts.timeout);
-				return;
-			}
-
-			var inf;
-			while (inf = found.shift()) {
-				var o = _target(inf);
-				_fn(inf, o, name).apply(o, args);
-			}
+			_fire(gun, opts);
 		}
 	},
 	onBindLevelMove: function () {
