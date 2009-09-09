@@ -687,7 +687,7 @@ zAu.cmd0 = { //no uuid at all
 			var uuid = arguments[i], msg = arguments[i + 1],
 				wgt = zk.Widget.$(uuid);
 			if (wgt) {
-				if (wgt.showErrorMessage) wgt.showErrorMessage(msg);
+				if (wgt.showErrorMessage_) wgt.showErrorMessage_(msg);
 				else jq.alert(msg);
 			} else if (!uuid) //keep silent if component (of uuid) not exist (being detaced)
 				jq.alert(msg);

@@ -207,7 +207,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	getErrorMesssage: function () {
 		return this._errmsg;
 	},
-	showErrorMessage: function (msg) {
+	showErrorMessage_: function (msg) {
 		this.clearErrorMessage(true, true);
 		this._markError(msg, null, true);
 	},
@@ -230,7 +230,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	coerceToString_: function (value) {
 		return value || '';
 	},
-	_markError: function (msg, val, noOnError) { //val used only if noOnError=false
+	_markError: function (msg, val, noOnError) {
 		this._errmsg = msg;
 
 		if (this.desktop) { //err not visible if not attached
@@ -244,7 +244,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				if (!errbox) this._errbox = this.showError_(msg);
 			}
 
-			if (noOnError === false)
+			if (!noOnError)
 				this.fire('onError', {value: val, message: msg});
 		}
 	},
