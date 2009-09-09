@@ -1084,14 +1084,14 @@ zk.Widget = zk.$extends(zk.Object, {
 		var after = [];
 		this.bind_(desktop, skipper, after);
 		for (var j = 0, len = after.length; j < len;)
-			after[j++].call(this);
+			after[j++]();
 		return this;
 	},
 	unbind: function (skipper) {
 		var after = [];
 		this.unbind_(skipper, after);
 		for (var j = 0, len = after.length; j < len;)
-			after[j++].call(this);
+			after[j++]();
 		return this;
 	},
 
@@ -1733,6 +1733,7 @@ zk.Widget = zk.$extends(zk.Object, {
 
 zk.Page = zk.$extends(zk.Widget, {//unlik server, we derive from Widget!
 	_style: "width:100%;height:100%",
+	className: 'zk.Page',
 
 	$init: function (props, contained) {
 		this._fellows = {};
@@ -1741,13 +1742,12 @@ zk.Page = zk.$extends(zk.Widget, {//unlik server, we derive from Widget!
 
 		if (contained) zk.Page.contained.push(this);
 	},
-	redraw: function (out, skipper) {
-		out.push('<div id="', this.uuid, '" style="', this.getStyle(), '">');
+	redraw: function (out) {
+		out.push('<div', this.domAttrs_(), '>');
 		for (var w = this.firstChild; w; w = w.nextSibling)
-			w.redraw(out, skipper);
+			w.redraw(out);
 		out.push('</div>');
 	}
-
 },{
 	contained: []
 });
