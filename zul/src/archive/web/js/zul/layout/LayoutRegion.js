@@ -186,7 +186,7 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		this.$supers('unbind_', arguments);
 	},
 	_doScroll: function () {
-		zWatch.fireDown('onScroll', null, this);
+		zWatch.fireDown('onScroll', this);
 	},
 	_fixSplit: function () {
 		jq(this.$n('split'))[this._splittable ? 'show' : 'hide']();

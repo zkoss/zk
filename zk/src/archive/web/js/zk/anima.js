@@ -47,11 +47,11 @@ zk.copy(zjq.prototype, {
 		var aftfn = opts.afterAnima;
 		opts.afterAnima = function () {
 			if (mode == 'hide') {
-				zWatch.fireDown('onHide', null, wgt);
+				zWatch.fireDown('onHide', wgt);
 				self.jq.hide();
 			} else {
 				if (zk.ie) zk(self.jq[0]).redoCSS(); // fixed a bug of the finished animation for IE
-				zWatch.fireDown('onShow', null, wgt);
+				zWatch.fireDown('onShow', wgt);
 			}
 			if (prop) self._restoreProp(prop);
 			if (aftfn) aftfn.call(wgt, self.jq.context);

@@ -26,7 +26,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 					else zk(panel).slideUp(this, {beforeAnima: this._beforeSlideUp});
 				} else {
 					jq(node)[open ? 'removeClass': 'addClass'](this.getZclass() + "-colpsd");
-					zWatch.fireDown(open ? 'onShow': 'onHide', null, this);
+					zWatch.fireDown(open ? 'onShow': 'onHide', this);
 				}
 				if (!fromServer) this.fire('onOpen', {open:open});
 			}
@@ -82,10 +82,10 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	},
 	onShow: _zkf,
 	_afterSlideDown: function (n) {
-		zWatch.fireDown("onShow", null, this);
+		zWatch.fireDown("onShow", this);
 	},
 	_beforeSlideUp: function (n) {
-		zWatch.fireDown("onHide", null, this);
+		zWatch.fireDown("onHide", this);
 	},
 	_fixShadow: function () {
 		var sdw = this.$n('sdw');

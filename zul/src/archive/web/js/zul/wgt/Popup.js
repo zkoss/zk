@@ -150,7 +150,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 	}: zk.$void,
 	setWidth: function (width) {
 		this.$supers('setWidth', arguments);
-		zWatch.fireDown('onShow', null, this);
+		zWatch.fireDown('onShow', this);
 	},
 	prologHTML_: function (out) {
 	},

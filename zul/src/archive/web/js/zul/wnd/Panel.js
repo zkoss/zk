@@ -137,8 +137,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				}
 				if (isRealVisible) {
 					this.__maximized = true;
-					zWatch.fireDown('beforeSize', null, this);
-					zWatch.fireDown('onSize', null, this);
+					zWatch.fireDown('beforeSize', this);
+					zWatch.fireDown('onSize', this);
 				}
 			}
 		},
@@ -150,11 +150,11 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			if (node) {
 				var s = node.style, l = s.left, t = s.top, w = s.width, h = s.height;
 				if (minimized) {
-					zWatch.fireDown('onHide', null, this);
+					zWatch.fireDown('onHide', this);
 					jq(node).hide();
 				} else {
 					jq(node).show();
-					zWatch.fireDown('onShow', null, this);
+					zWatch.fireDown('onShow', this);
 				}
 				if (!fromServer) {
 					this.fire('onMinimize', {
@@ -183,15 +183,15 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	setHeight: function () {
 		this.$supers('setHeight', arguments);
 		if (this.desktop) {
-			zWatch.fireDown('beforeSize', null, this);
-			zWatch.fireDown('onSize', null, this);
+			zWatch.fireDown('beforeSize', this);
+			zWatch.fireDown('onSize', this);
 		}
 	},
 	setWidth: function () {
 		this.$supers('setWidth', arguments);
 		if (this.desktop) {
-			zWatch.fireDown('beforeSize', null, this);
-			zWatch.fireDown('onSize', null, this);
+			zWatch.fireDown('beforeSize', this);
+			zWatch.fireDown('onSize', this);
 		}
 	},
 	setTop: function () {
@@ -208,8 +208,8 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 	updateDomStyle_: function () {
 		this.$supers('updateDomStyle_', arguments);
 		if (this.desktop) {
-			zWatch.fireDown('beforeSize', null, this);
-			zWatch.fireDown('onSize', null, this);
+			zWatch.fireDown('beforeSize', this);
+			zWatch.fireDown('onSize', this);
 		}
 	},
 	addToolbar: function (name, toolbar) {
@@ -352,11 +352,11 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				jq(n).find('> div:first-child')[0].offsetHeight: 0;
 		return cap ? cap.offsetHeight + top : top;
 	},
-	onFloatUp: function (wgt) {
+	onFloatUp: function (ctl) {
 		if (!this.isVisible() || !this.isFloatable())
 			return; //just in case
 
-		for (; wgt; wgt = wgt.parent) {
+		for (var wgt = ctl.origin; wgt; wgt = wgt.parent) {
 			if (wgt == this) {
 				this.setTopmost();
 				return;
@@ -369,10 +369,10 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		return this._zclass == null ?  "z-panel" : this._zclass;
 	},
 	_afterSlideDown: function (n) {
-		zWatch.fireDown("onShow", null, this);
+		zWatch.fireDown("onShow", this);
 	},
 	_beforeSlideUp: function (n) {
-		zWatch.fireDown("onHide", null, this);
+		zWatch.fireDown("onHide", this);
 	},
 	_initFloat: function () {
 		var n = this.$n();

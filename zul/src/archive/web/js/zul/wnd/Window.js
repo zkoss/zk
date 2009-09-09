@@ -118,8 +118,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				}
 				if (isRealVisible) {
 					this.__maximized = true;
-					zWatch.fireDown('beforeSize', null, this);
-					zWatch.fireDown('onSize', null, this);
+					zWatch.fireDown('beforeSize', this);
+					zWatch.fireDown('onSize', this);
 				}
 			}
 		},
@@ -131,11 +131,11 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			if (node) {
 				var s = node.style, l = s.left, t = s.top, w = s.width, h = s.height;
 				if (minimized) {
-					zWatch.fireDown('onHide', null, this);
+					zWatch.fireDown('onHide', this);
 					jq(node).hide();
 				} else {
 					jq(node).show();
-					zWatch.fireDown('onShow', null, this);
+					zWatch.fireDown('onShow', this);
 				}
 				if (!fromServer) {
 					this.fire('onMinimize', {
@@ -366,14 +366,16 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this._syncMask();
 	},
 	//watch//
-	onShow: function (w) {
+	onShow: function (ctl) {
+		var w = ctl.origin;
 		if (this != w && this._mode != 'embedded' && this.isRealVisible({until: w})) {
 			zk(this.$n()).cleanVisibility();
 			this._syncShadow();
 		}
 		this.onSize(w);
 	},
-	onHide: function (w) {
+	onHide: function (ctl) {
+		var w = ctl.origin;
 		if (this != w && this._mode != 'embedded' && this.isRealVisible({until: w})) {
 			this.$n().style.visibility = 'hidden';
 			this._syncShadow();
@@ -415,10 +417,11 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			}
 		};
 	})(),
-	onFloatUp: function (wgt) {
+	onFloatUp: function (ctl) {
 		if (!this.isVisible() || this._mode == 'embedded')
 			return; //just in case
 
+		var wgt = ctl.origin;
 		if (this._mode == 'popup') {
 			for (var floatFound; wgt; wgt = wgt.parent) {
 				if (wgt == this) {
@@ -536,8 +539,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			this._fixHgh();
 			this._syncShadow();
 
-			zWatch.fireDown('beforeSize', null, this);
-			zWatch.fireDown('onSize', null, this); // Note: IE6 is broken, because its offsetHeight doesn't update.
+			zWatch.fireDown('beforeSize', this);
+			zWatch.fireDown('onSize', this); // Note: IE6 is broken, because its offsetHeight doesn't update.
 		}
 	},
 	setWidth: function (width) {
@@ -546,8 +549,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			this._fixWdh();
 			this._syncShadow();
 
-			zWatch.fireDown('beforeSize', null, this);
-			zWatch.fireDown('onSize', null, this);
+			zWatch.fireDown('beforeSize', this);
+			zWatch.fireDown('onSize', this);
 		}
 	},
 	setTop: function () {
@@ -749,7 +752,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			 el.style.top = el.offsetTop + "px";
 		if(el.style.left && el.style.left.indexOf("%") >= 0)
 			 el.style.left = el.offsetLeft + "px";
-		zWatch.fire('onFloatUp', null, dg.control); //notify all
+		zWatch.fire('onFloatUp', dg.control); //notify all
 	},
 	_ghostmove: function (dg, ofs, evt) {
 		var wnd = dg.control,
@@ -805,7 +808,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 	// drag sizing
 	_startsizing: function (dg) {
-		zWatch.fire('onFloatUp', null, dg.control); //notify all
+		zWatch.fire('onFloatUp', dg.control); //notify all
 	},
 	_ghostsizing: function (dg, ofs, evt) {
 		var wnd = dg.control,

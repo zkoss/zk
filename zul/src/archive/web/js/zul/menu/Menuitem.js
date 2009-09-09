@@ -180,7 +180,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		&& (!zk.ie || !this.isTopmost() || this._uplder
 		|| jq.isAncestor(this.$n('a'), evt.domTarget))) {
 			this.$class._addActive(this);
-			zWatch.fire('onFloatUp', null, this); //notify all
+			zWatch.fire('onFloatUp', this); //notify all
 		}
 		this.$supers('doMouseOver_', arguments);
 	},

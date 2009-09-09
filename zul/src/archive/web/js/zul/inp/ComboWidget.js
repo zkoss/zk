@@ -32,9 +32,10 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		this._auxb.fixpos();
 	},
 	onShow: _zkf,
-	onFloatUp: function (wgt) {
+	onFloatUp: function (ctl) {
 		if (!this._inplace && !this.isOpen())
 			return;
+		var wgt = ctl.origin;
 		if (!zUtl.isAncestor(this, wgt)) {
 			if (this.isOpen())
 				this.close({sendOnOpen: true});
@@ -70,7 +71,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			inp = this.getInputNode();
 		if (!pp) return;
 
-		zWatch.fire('onFloatUp', null, this); //notify all
+		zWatch.fire('onFloatUp', this); //notify all
 		this.setTopmost();
 
 		var ppofs = this.getPopupSize_(pp);
@@ -130,7 +131,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 			this.fire('onOpen', {open:true, value: inp.value});
 	},
 	_afterSlideDown: function (n) {
-		zWatch.fireDown("onShow", null, this);
+		zWatch.fireDown("onShow", this);
 		if (this._shadow) this._shadow.sync();
 	},
 	close: function (opts) {
@@ -154,7 +155,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 		if (opts && opts.sendOnOpen)
 			this.fire('onOpen', {open:false, value: this.getInputNode().value});
 
-		zWatch.fireDown("onHide", null, this);
+		zWatch.fireDown("onHide", this);
 	},
 	_fixsz: function (ppofs) {
 		var pp = this.$n('pp');

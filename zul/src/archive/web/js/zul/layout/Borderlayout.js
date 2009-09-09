@@ -183,8 +183,8 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 				bodyEl.style.position = "";
 			}
 			if (!this._isOnSize) {
-				zWatch.fireDown('beforeSize', null, wgt);
-				zWatch.fireDown('onSize', null, wgt);
+				zWatch.fireDown('beforeSize', wgt);
+				zWatch.fireDown('onSize', wgt);
 			}
 		}
 	},

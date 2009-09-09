@@ -35,8 +35,8 @@ zul.wnd.Panelchildren = zk.$extends(zul.Widget, {
 	updateDomStyle_: function () {
 		this.$supers('updateDomStyle_', arguments);
 		if (this.desktop) {
-			zWatch.fireDown('beforeSize', null, this.parent);
-			zWatch.fireDown('onSize', null, this.parent);
+			zWatch.fireDown('beforeSize', this.parent);
+			zWatch.fireDown('onSize', this.parent);
 		}
 	}
 });

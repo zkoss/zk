@@ -331,7 +331,7 @@ zAu = (function () {
 			}
 		} finally {
 			if (processed && (!cmds || !cmds.length))
-				zWatch.fire('onResponse', {timeout:0}); //use setTimeout
+				zWatch.fire('onResponse', null, {timeout:0}); //use setTimeout
 		}
 		return true;
 	}
@@ -502,7 +502,7 @@ zAu = (function () {
 
 		//notify watches (fckez uses it to ensure its value is sent back correctly
 		try {
-			zWatch.fire('onSend', null, implicit);
+			zWatch.fire('onSend', implicit);
 		} catch (e) {
 			zk.error(e.message);
 		}
@@ -750,8 +750,8 @@ zAu.cmd1 = {
 			p.insertBefore(child, wgt.nextSibling);
 			if (p.$instanceof(zk.Desktop))
 				zAu.cmd1._asBodyChild(child);
-			zWatch.fireDown('beforeSize', null, child);
-			zWatch.fireDown('onSize', null, child);
+			zWatch.fireDown('beforeSize', child);
+			zWatch.fireDown('onSize', child);
 		};
 		zk.mounting = true;
 		jq.globalEval(code);
@@ -759,8 +759,8 @@ zAu.cmd1 = {
 	addBfr: function (uuid, wgt, code) {
 		zAu.stub = function (child) {
 			wgt.parent.insertBefore(child, wgt);
-			zWatch.fireDown('beforeSize', null, child);
-			zWatch.fireDown('onSize', null, child);
+			zWatch.fireDown('beforeSize', child);
+			zWatch.fireDown('onSize', child);
 		};
 		zk.mounting = true;
 		jq.globalEval(code);
@@ -768,8 +768,8 @@ zAu.cmd1 = {
 	addChd: function (uuid, wgt, code) {
 		zAu.stub = function (child) {
 			wgt.appendChild(child);
-			zWatch.fireDown('beforeSize', null, child);
-			zWatch.fireDown('onSize', null, child);
+			zWatch.fireDown('beforeSize', child);
+			zWatch.fireDown('onSize', child);
 		};
 		zk.mounting = true;
 		jq.globalEval(code);

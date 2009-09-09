@@ -60,7 +60,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			case 'focus':
 				if (wgt.canActivate()) {
 					zk.currentFocus = wgt;
-					zWatch.fire('onFloatUp', null, wgt); //notify all
+					zWatch.fire('onFloatUp', wgt); //notify all
 					break;
 				}
 				return; //ignore it
@@ -351,7 +351,7 @@ zk.Widget = zk.$extends(zk.Object, {
 							_unlistenFlex(this);
 					} else
 						_listenFlex(this);
-					zWatch.fireDown('onSize', null, this.parent);
+					zWatch.fireDown('onSize', this.parent);
 				}
 			}
 		],
@@ -366,7 +366,7 @@ zk.Widget = zk.$extends(zk.Object, {
 							_unlistenFlex(this);
 					} else
 						_listenFlex(this);
-					zWatch.fireDown('onSize', null, this.parent);
+					zWatch.fireDown('onSize', this.parent);
 				}
 			}
 		]
@@ -580,7 +580,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			}
 
 			_fixBindLevel(newwgt, p ? p.bindLevel + 1: 0);
-			zWatch.fire('onBindLevelMove', null, newwgt);
+			zWatch.fire('onBindLevelMove', newwgt);
 		}
 
 		if (p) {
@@ -619,7 +619,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			var v = this.bindLevel + 1;
 			if (child.bindLevel != v) {
 				_fixBindLevel(child, v);
-				zWatch.fire('onBindLevelMove', null, child);
+				zWatch.fire('onBindLevelMove', child);
 			}
 		} finally {
 			this.desktop = dt; child.desktop = kiddt;
@@ -694,9 +694,9 @@ zk.Widget = zk.$extends(zk.Object, {
 				}
 			}
 
-			zWatch.fireDown('onShow', null, this);
+			zWatch.fireDown('onShow', this);
 		} else {
-			zWatch.fireDown('onHide', null, this);
+			zWatch.fireDown('onHide', this);
 
 			for (var j = _floatings.length, bindLevel = this.bindLevel; j--;) {
 				var w = _floatings[j].widget;
@@ -953,8 +953,8 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (cf && !zk.currentFocus) cf.focus();
 
 		if (!skipper) {
-			zWatch.fireDown('beforeSize', null, this);
-			zWatch.fireDown('onSize', null, this);
+			zWatch.fireDown('beforeSize', this);
+			zWatch.fireDown('onSize', this);
 		}
 		return this;
 	},
@@ -974,8 +974,8 @@ zk.Widget = zk.$extends(zk.Object, {
 
 						skipper.restore(this, skipInfo);
 
-						zWatch.fireDown('beforeSize', null, this);
-						zWatch.fireDown('onSize', null, this);
+						zWatch.fireDown('beforeSize', this);
+						zWatch.fireDown('onSize', this);
 						return this; //done
 					}
 				}
@@ -1692,7 +1692,7 @@ zk.Widget = zk.$extends(zk.Object, {
 				setTimeout(function(){zk._cfByMD = false;}, 0);
 					//turn it off later since onBlur_ needs it
 			}
-			if (wgt) zWatch.fire('onFloatUp', null, wgt); //notify all
+			if (wgt) zWatch.fire('onFloatUp', wgt); //notify all
 		}
 	},
 

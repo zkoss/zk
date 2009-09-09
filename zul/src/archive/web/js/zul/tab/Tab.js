@@ -98,10 +98,10 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 				var pl = accd ? panel.$n("real") : panel.$n(); //Can't use $n coz
 				if (toSel) {
 					jq(pl).show();
-					zWatch.fireDown('onShow', null, pl);
+					zWatch.fireDown('onShow', pl);
 				} else {
 					jq(pl).hide();
-					zWatch.fireDown('onHide', null, pl);
+					zWatch.fireDown('onHide', pl);
 				}
 			}
 		if (!accd) {

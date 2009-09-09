@@ -94,8 +94,8 @@ jq.each(['before','after','append','prepend'], function (i, nm) {
 
 		var ret = jq$super[nm].call(this, w._redrawHTML());
 		w.bind(desktop);
-		zWatch.fireDown('beforeSize', null, w);
-		zWatch.fireDown('onSize', null, w);
+		zWatch.fireDown('beforeSize', w);
+		zWatch.fireDown('onSize', w);
 		return ret;
 	};
 });
@@ -1090,7 +1090,7 @@ zk.copy(jq.prototype, { //Extension to jq() directly
 					if (jq.timers[i].elem === elem)
 						return true;
 				
-				zWatch.fireDown(evtnm || 'onSize', null, wgt);
+				zWatch.fireDown(evtnm || 'onSize', wgt);
 				return false;
 			});
 		}

@@ -100,7 +100,8 @@ zul.inp.Errorbox = zk.$extends(zul.wgt.Popup, {
 		out.push(zUtl.encodeXML(this.msg, {multiline:true})); //Bug 1463668: security
 		out.push('</div></div></div>');
 	},
-	onFloatUp: function (wgt) {
+	onFloatUp: function (ctl) {
+		var wgt = ctl.origin;
 		if (wgt == this) {
 			this.setTopmost();
 			return;

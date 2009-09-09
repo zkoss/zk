@@ -349,8 +349,8 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		}
 		evt.stop();
 	},
-	onFloatUp: function (wgt) {
-		if (!zUtl.isAncestor(this.parent, wgt))
+	onFloatUp: function (ctl) {
+		if (!zUtl.isAncestor(this.parent, ctl.origin))
 			this.close(true);
 	},
 	bind_: function () {

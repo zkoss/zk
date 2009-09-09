@@ -32,7 +32,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 				fd = vert ? "height": "width", diff;
 			if (sib) {
 				if (!open)
-					zWatch.fireDown('onHide', null, sibwgt);
+					zWatch.fireDown('onHide', sibwgt);
 
 				sibwgt.setDomVisible_(sib, open);
 				sibwgt.parent._fixChildDomVisible(sibwgt, open);
@@ -54,9 +54,9 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 				sib2.style[fd] = diff + "px";
 			}
 			if (sib && open)
-				zWatch.fireDown('onShow', null, sibwgt);
+				zWatch.fireDown('onShow', sibwgt);
 			if (sib2)
-				zWatch.fireDown('onSize', null, zk.Widget.$(sib2));
+				zWatch.fireDown('onSize', zk.Widget.$(sib2));
 
 			node.style.cursor = !open ? "default" : vert ? "s-resize": "e-resize";
 			this._fixNSDomClass();
@@ -326,8 +326,8 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		}
 		if (!diff) return; //nothing to do
 
-		if (run.nextwgt) zWatch.fireDown('beforeSize', null, run.nextwgt);
-		if (run.prevwgt) zWatch.fireDown('beforeSize', null, run.prevwgt);
+		if (run.nextwgt) zWatch.fireDown('beforeSize', run.nextwgt);
+		if (run.prevwgt) zWatch.fireDown('beforeSize', run.prevwgt);
 		
 		if (run.next) {
 			var s = zk.parseInt(run.next.style[fd]);
@@ -342,8 +342,8 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 			run.prev.style[fd] = s + "px";
 		}
 
-		if (run.nextwgt) zWatch.fireDown('onSize', null, run.nextwgt);
-		if (run.prevwgt) zWatch.fireDown('onSize', null, run.prevwgt);
+		if (run.nextwgt) zWatch.fireDown('onSize', run.nextwgt);
+		if (run.prevwgt) zWatch.fireDown('onSize', run.prevwgt);
 
 		Splitter._unfixLayout(flInfo);
 			//Stange (not know the cause yet): we have to put it

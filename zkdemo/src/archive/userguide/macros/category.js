@@ -15,11 +15,11 @@ userguide.Categorybar = zk.$extends(zul.wgt.Div, {
 		zWatch.unlisten({onSize: this, beforeSize: this});
 		this.$supers('unbind_', arguments);
 	},
-	beforeSize: zk.ie6_ ? function(evt){
+	beforeSize: zk.ie6_ ? function(){
 			this.$n("body").style.width = "";
 			jq(this.$n("body")).removeClass("demo-categorybar-body-scroll");
 	}: zk.$void,
-	onSize: function(evt){	
+	onSize: function(){	
 		var width = this.$n().offsetWidth;
 		//with scorll or not
 		if(width < this.childWidth){

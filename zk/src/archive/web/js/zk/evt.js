@@ -63,7 +63,7 @@ zWatch = (function () {
 				this.name = name;
 				this.infs = infs;
 				this.args = args;
-				this.org = org;
+				this.origin = org;
 			},
 			fire: function (ref) {
 				var inf,
@@ -84,7 +84,7 @@ zWatch = (function () {
 				if (!ref || ref.bindLevel == null)
 					this.fire(ref);
 
-				(new _Gun(this.name, _visiChildSubset(this.infs, ref), this.args, this.org))
+				(new _Gun(this.name, _visiChildSubset(this.infs, ref), this.args, this.origin))
 				.fire();
 			}
 		});
@@ -135,12 +135,6 @@ zWatch = (function () {
 				if (!_visible(name, _target(infs[j])))
 					infs.splice(j, 1);
 		return infs;
-	}
-	function _fire(gun, opts) {
-		if (opts && opts.timeout >= 0)
-			setTimeout(function () {gun.fire();}, opts.timeout);
-		else
-			gun.fire();
 	}
 	function _target(inf) {
 		return inf.$array ? inf[0]: inf;
@@ -200,28 +194,30 @@ zWatch = (function () {
 	unlistenAll: function (name) {
 		delete _watches[name];
 	},
-	fire: function (name, opts) {
-		var wts = _watches[name];
-		if (wts && wts.length) {
-			var args = [],
-				gun = new _Gun(name, _visiSubset(wts), args);
-			args.push(args);
-			for (var j = 2, l = arguments.length; j < l;)
-				args.push(arguments[j++]);
-			_fire(gun, opts);
-		}
+	fire: function (name, org, opts) {
+		this._fire(name, org, opts, arguments);
 	},
-	fireDown: function (name, opts, org) {
+	fireDown: function (name, org, opts) {
+		this._fire(name, org, zk.copy(opts,{down:true}), arguments);
+	},
+	_fire: function (name, org, opts, vararg) {
 		var wts = _watches[name];
 		if (wts && wts.length) {
-			_sync();
+			var down = opts && opts.down;
+			if (down) _sync();
 
-			var args = [org], //org as 1st
-				gun = new _Gun(name, _visiChildSubset(wts, org), args, org);
+			var args = [],
+				gun = new _Gun(name,
+					down ? _visiChildSubset(wts, org): _visiSubset(wts),
+					args, org);
 			args.push(gun);
-			for (var j = 3, l = arguments.length; j < l;)
-				args.push(arguments[j++]);
-			_fire(gun, opts);
+			for (var j = 3, l = vararg.length; j < l;)
+				args.push(vararg[j++]);
+
+			if (opts && opts.timeout >= 0)
+				setTimeout(function () {gun.fire();}, opts.timeout);
+			else
+				gun.fire();
 		}
 	},
 	onBindLevelMove: function () {

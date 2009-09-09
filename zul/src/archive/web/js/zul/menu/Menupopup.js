@@ -142,7 +142,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		}
 		this.close({sendOnOpen:true});
 	},
-	onShow: function (wgt) {
+	onShow: function () {
 		if (zk.ie7) {
 			var pp = this.$n();
 			if (!pp.style.width) {// Bug 2105158 and Bug 1911129
@@ -164,7 +164,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 				anc.focus();
 		}
 	},
-	onHide: function (wgt) {
+	onHide: function () {
 		if (this.isOpen())
 			this.close();
 		this._hideShadow();
@@ -221,7 +221,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 			if (w && w.$instanceof(zul.menu.Menuitem)) {
 				//{} for emulate as onClick, escape the checking data == null at serverside
 				w.doClick_(new zk.Event(w, 'onClick',{}));
-				zWatch.fire('onFloatUp', null, w); //notify all
+				zWatch.fire('onFloatUp', w); //notify all
 				this.close({sendOnOpen:true});
 			}
 			break;
