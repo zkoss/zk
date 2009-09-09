@@ -586,6 +586,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (p) {
 			p.onChildRemoved_(this);
 			p.onChildAdded_(newwgt);
+			this.parent = this.nextSibling = this.previousSibling = null;
 		}
 	},
 	beforeParentChanged_: function () {
