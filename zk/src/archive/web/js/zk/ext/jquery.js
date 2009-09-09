@@ -3787,6 +3787,7 @@ jQuery.fn.extend({
 			return this.animate( genFx("show", 3), speed, callback);
 		} else {
 			for ( var i = 0, l = this.length; i < l; i++ ){
+/* Tom Yeh, Potix, 20090909 (always hide regardless it is hidden or not)
 				var old = jQuery.data(this[i], "olddisplay");
 				
 				this[i].style.display = old || "";
@@ -3810,14 +3811,17 @@ jQuery.fn.extend({
 					
 					jQuery.data(this[i], "olddisplay", display);
 				}
+*/
+				this[i].style.display = ""; //Tom Yeh, Potix, 20090909 (always hide regardless it is hidden or not)
 			}
 
+/* Tom Yeh, Potix, 20090909 (always hide regardless it is hidden or not)
 			// Set the display of the elements in a second loop
 			// to avoid the constant reflow
 			for ( var i = 0, l = this.length; i < l; i++ ){
 				this[i].style.display = jQuery.data(this[i], "olddisplay") || "";
 			}
-			
+*/
 			return this;
 		}
 	},
@@ -3826,12 +3830,13 @@ jQuery.fn.extend({
 		if ( speed ) {
 			return this.animate( genFx("hide", 3), speed, callback);
 		} else {
+/* Tom Yeh, Potix, 20090909 (always hide regardless it is hidden or not)
 			for ( var i = 0, l = this.length; i < l; i++ ){
 				var old = jQuery.data(this[i], "olddisplay");
 				if ( !old && old !== "none" )
 					jQuery.data(this[i], "olddisplay", jQuery.css(this[i], "display"));
 			}
-
+*/
 			// Set the display of the elements in a second loop
 			// to avoid the constant reflow
 			for ( var i = 0, l = this.length; i < l; i++ ){
