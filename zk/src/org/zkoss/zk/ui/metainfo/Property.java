@@ -183,7 +183,9 @@ implements Condition, java.io.Serializable {
 		Method mtd = null;
 		Method[] mtds = null;
 		final String mtdnm = Classes.toMethodName(_name, "set");
-		if (_value != null && _value.isExpression()) {
+		if (_value == null) {
+			mtd = resolveMethod0(cls, mtdnm);
+		} else {
 			mtds = Classes.getCloseMethods(cls, mtdnm, new Class[] {null});
 			if (mtds.length == 0) {
 				if (!DynamicPropertied.class.isAssignableFrom(cls))
@@ -193,9 +195,6 @@ implements Condition, java.io.Serializable {
 				mtd = mtds[0];
 				mtds = null;
 			}
-		} else {
-		//Note: String has higher priority
-			mtd = resolveMethod0(cls, mtdnm);
 		}
 		return new Object[] {mtd, mtds};
 	}
@@ -228,31 +227,33 @@ implements Condition, java.io.Serializable {
 
 		//Note: if mtd and mtds are both null, it must be dyna-attr
 		//However, if dyna-attr, mtd or mtds might not be null
-		final Class type =
+		Class type =
 			mtd != null ? mtd.getParameterTypes()[0]: Object.class;
 		if (_value != null) _value.setExpectedType(type);
 		Object val = getValue(comp);
 
-		final Method m;
+		Method m;
 		if (mtd != null) {
 			m = mtd;
 		} else if (mtds == null) {
 			//it must be dynamic attribute
 			((DynamicPropertied)comp).setDynamicProperty(_name, val);
 			return; //done
-		} else if (val == null) { //mtds != null but val == null
-			m = mtds[0];
-			val = Classes.coerce(m.getParameterTypes()[0], val);
 		} else { //mtds != null && val != null
 			for (int j = 0; ; ++j) {
-				if (j == mtds.length) {
-					m = mtds[0];
-					val = Classes.coerce(m.getParameterTypes()[0], val);
-					break; //pick randomly
-				}
-				if (mtds[j].getParameterTypes()[0].isInstance(val)) {
+				if (j == mtds.length)
+					throw new ClassCastException("Unable to find a setter named "+_name+" that supports "+val);
+
+				type = mtds[j].getParameterTypes()[0];
+				if (type.isInstance(val)) {
 					m = mtds[j];
 					break; //found
+				}
+				try {
+					val = Classes.coerce(type, val);
+					m = mtds[j];
+					break;
+				} catch (Throwable ex) {
 				}
 			}
 		}

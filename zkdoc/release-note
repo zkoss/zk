@@ -110,6 +110,9 @@ August, 2009
   2835471: Panel's title disappear if caption exist.
   2837303: Progressmeter's height cannot be shortened 
   2839335: Timebox in Opera should not type non-number character
+  2848948: Unable to change encoding of output of ZUL other than UTF-8
+  2855933: Failed to resolve correct setter if two with the same name
+  2829547: Incorrect getValue when using spinners on multiple Timeboxes
 
 	--------
 ZK 3.6.2

@@ -1,0 +1,35 @@
+<zk>
+<zscript>
+int index = self.getParent().getParent().getChildren().indexOf(self.getParent());
+</zscript>
+<grid fixedLayout="true" oddRowSclass="myinner" onCreate='self.sclass = color[index]'>
+	<columns>
+		<column width="25px" />
+		<column width="35px" >
+			<checkbox/>
+		</column>
+		<column label="Season"/>
+		<column label="High"  align="center" sort="auto"/>
+		<column label="Low"  align="center" sort="auto"/>
+		<column label="volume" align="center" />
+	</columns>
+	<rows>
+		<row forEach="1,2,3,4">
+			<detail open="false" fulfill="onOpen=/userguide/grid/month.zul"/>
+			<checkbox label=""  width="35px" />
+			<label value="Q-${forEachStatus.index + 1}"/>
+			<label onCreate='self.value = nextPrice()'/>
+			<label onCreate='self.value = nextPrice()'/>
+			<label onCreate='self.value = random.nextInt(655360)+ ""'/>
+		</row>
+	</rows>
+	<foot>
+		<footer width="25px"/>
+		<footer label="Avg:" />
+		<footer/>
+		<footer onCreate='self.label = nextPrice()' />
+		<footer onCreate='self.label = nextPrice()' />
+		<footer onCreate='self.label = random.nextInt(655360) + ""' />
+	</foot>
+</grid>
+</zk>
