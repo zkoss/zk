@@ -84,7 +84,7 @@ zWatch = (function () {
 				if (!ref || ref.bindLevel == null)
 					this.fire(ref);
 
-				(new _Gun(this.name, _visiChildSubset(this.infs, ref), this.args, this.origin))
+				(new _Gun(this.name, _visiChildSubset(this.infs, ref, true), this.args, this.origin))
 				.fire();
 			}
 		});
@@ -108,23 +108,22 @@ zWatch = (function () {
 		return false;
 	}
 	//Returns subset of infs that are visible childrens of p
-	function _visiChildSubset(infs, p) {
-		var bindLevel = p.bindLevel;
-		if (bindLevel == null)
-			return _visiSubset(infs);
-
-		var found = [];
+	function _visiChildSubset(infs, p, remove) {
+		var found = [], bindLevel = p.bindLevel;
 		for (var j = infs.length; j--;) { //child first
 			var inf = infs[j],
 				o = _target(inf),
 				diff = bindLevel > o.bindLevel;
 			if (diff) break;//nor ancestor, nor this (&sibling)
 			if (p == o && _visible(name, o)) {
+				if (remove) infs.splice(j, 1);
 				found.unshift(inf);
 				break; //found this (and no descendant ahead)
 			}
-			if (_visibleChild(name, p, o))
+			if (_visibleChild(name, p, o)) {
+				if (remove) infs.splice(j, 1);
 				found.unshift(inf); //parent first
+			}
 		}
 		return found;
 	}
@@ -203,7 +202,7 @@ zWatch = (function () {
 	_fire: function (name, org, opts, vararg) {
 		var wts = _watches[name];
 		if (wts && wts.length) {
-			var down = opts && opts.down;
+			var down = opts && opts.down && org.bindLevel != null;
 			if (down) _sync();
 
 			var args = [],
