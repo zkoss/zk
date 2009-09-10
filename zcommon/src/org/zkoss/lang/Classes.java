@@ -1282,7 +1282,7 @@ public class Classes {
 				return null;
 			} else {
 				try {
-					return cls.newInstance();
+					return newInstance(cls, new Object[] {val});
 				} catch (Exception ex) {
 					final ClassCastException t =
 						new ClassCastException(
@@ -1335,7 +1335,7 @@ public class Classes {
 			return Objects.NULL_CHARACTER;
 		} else {
 			try {
-				return cls.newInstance();
+				return newInstance(cls, new Object[] {val});
 			} catch (Exception ex) {
 				final ClassCastException t =
 					new ClassCastException(
