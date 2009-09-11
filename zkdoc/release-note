@@ -113,6 +113,7 @@ August, 2009
   2848948: Unable to change encoding of output of ZUL other than UTF-8
   2855933: Failed to resolve correct setter if two with the same name
   2829547: Incorrect getValue when using spinners on multiple Timeboxes
+  2856700: Failed to include a page with query string in auto mode
 
 	--------
 ZK 3.6.2
