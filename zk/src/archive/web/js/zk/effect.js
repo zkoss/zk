@@ -105,26 +105,33 @@ if (zk.ie || zk.gecko2_ || zk.opera) {
 	zk.eff.Shadow = zk.$extends(zk.Object, {
 	
 		$init: function (element, opts) {
-			var wgt = zk.Widget.$(element.id);
-			jq(element).addClass(wgt.getZclass() + '-shadow');
-			this.opts = opts;
+			this.wgt = zk.Widget.$(element.id);
+			this.opts = opts || {};
 			this.node = element;
 		},
 		destroy: function () {
 			jq(this.stackup).remove();
 			var wgt = zk.Widget.$(this.node.id);
 			jq(this.node).removeClass(wgt.getZclass() + '-shadow');
-			this.node = this.stackup = null;
+			this.wgt = this.node = this.stackup = null;
 		},
 		hide: function(){
 			jq(this.stackup).hide();
+			jq(this.node).removeClass(this.wgt.getZclass() + '-shadow');
 		},
 		sync: function () {
 			var node = this.node, $node = jq(node);
 			if (!node || !$node.zk.isVisible(true)) {
+				if (this.opts.stackup && node) {
+					if (!this.stackup) 
+						this.stackup = jq.newStackup(node, node.id + '-sdwstk', node);
+				}
 				this.hide();
 				return false;
 			}
+			
+			jq(node).addClass(this.wgt.getZclass() + '-shadow');
+			
 			var opts = this.opts,
 				l = node.offsetLeft, t = node.offsetTop,
 				w = node.offsetWidth, h = node.offsetHeight,

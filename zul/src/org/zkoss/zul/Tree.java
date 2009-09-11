@@ -1847,8 +1847,8 @@ public class Tree extends XulElement implements Paginated, org.zkoss.zul.api.Tre
 		render(renderer, "multiple", isMultiple());
 		render(renderer, "checkmark", isCheckmark());
 		render(renderer, "vflex", isVflex());
-		if (!isFixedLayout())
-			renderer.render("fixedLayout", false);
+		if (isSizedByContent())
+			renderer.render("sizedByContent", true);
 
 		if (_model != null)
 			render(renderer, "model", true);

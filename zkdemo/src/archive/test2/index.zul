@@ -29,27 +29,6 @@ function newWindow(url){
 										]]></attribute>
 									</checkbox>
 									<hbox>
-										<button mold="os" label="clear" onClick='lb.setSelectedItem(null);main.getFellow("ifr").setSrc("");main.getFellow("center").title = "ZK TEST2"'/>
-										<button mold="os" label="reload" onClick='main.getFellow("center").invalidate()'/>
-										<button mold="os" label="tracker">
-		<attribute name="onClick"><![CDATA[
-			if (lb.getSelectedItem() != null) {
-				String label = lb.getSelectedItem().getLabel();
-				if (label != null) {								
-					String number = label.substring(label.indexOf("-") + 1, label.indexOf("."));
-					if (label.startsWith("F")) {									
-						Clients.evalJavaScript("newWindow(\"https://sourceforge.net/tracker/?func=detail&aid="+number+"&group_id=152762&atid=785194\")");
-					} else if (label.startsWith("B")){
-						Clients.evalJavaScript("newWindow(\"https://sourceforge.net/tracker/?func=detail&aid="+number+"&group_id=152762&atid=785191\")");
-					}									
-				}
-			} else {
-				alert("Please select a item!");
-			}
-		]]></attribute>
-										</button>
-									</hbox>
-									<hbox>
 										<combobox onCreate="self.selectedIndex=0;" readonly="true" 
 											onSelect="fnf.value = self.selectedItem.label;main.updateModel();">
 											<comboitem label="F30"/>
@@ -73,10 +52,33 @@ function newWindow(url){
 							</tabpanel>
 						</tabpanels>
 					</tabbox>
+					<vbox>
+							<hbox>
+								<button mold="os" label="clear" onClick='lb.setSelectedItem(null);main.getFellow("ifr").setSrc("");main.getFellow("center").title = "ZK TEST2"'/>
+								<button mold="os" label="reload" onClick='main.getFellow("center").invalidate()'/>
+								<button mold="os" label="tracker">
+<attribute name="onClick"><![CDATA[
+if (lb.getSelectedItem() != null) {
+	String label = lb.getSelectedItem().getLabel();
+	if (label != null) {								
+		String number = label.substring(label.indexOf("-") + 1, label.indexOf("."));
+		if (label.startsWith("F")) {									
+			Clients.evalJavaScript("newWindow(\"https://sourceforge.net/tracker/?func=detail&aid="+number+"&group_id=152762&atid=785194\")");
+		} else if (label.startsWith("B")){
+			Clients.evalJavaScript("newWindow(\"https://sourceforge.net/tracker/?func=detail&aid="+number+"&group_id=152762&atid=785191\")");
+		}									
+	}
+} else {
+	alert("Please select a item!");
+}
+]]></attribute>
+								</button>
+							</hbox>
 					<hbox>
 						<button mold="os" label="Export File Name" onClick="main.exportFileName();"/>
 						<button mold="os" label="Import File Name" onClick="main.importFileName();"/>
 					</hbox>
+					</vbox>
 					<zscript>
 					org.zkoss.zkdemo.test2.FileDateCompare asc = new org.zkoss.zkdemo.test2.FileDateCompare(true),
 						 dsc = new org.zkoss.zkdemo.test2.FileDateCompare(false);
@@ -103,8 +105,8 @@ function newWindow(url){
 		<!-- ******************** Code Panel ******************** -->
 		<window id="codeViewPanel">
 			<caption>
-				<button mold="os" label="Save" onClick=" main.saveBack()"/>
-				<button mold="os" label="Reload" onClick="main.reloadCodeView();"/>
+				<button mold="os" label="Save" onClick=" main.saveBack(); leftPanel.setOpen(false)"/>
+				<button mold="os" label="Reload" onClick="main.reloadCodeView();leftPanel.setOpen(false)"/>
 			</caption>
 			<textbox id="codeView" class="code" rows="15" width="99%">
 				<attribute name="onCreate"><![CDATA[main.codeView=self;]]></attribute>

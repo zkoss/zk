@@ -19,7 +19,7 @@ width.
 				list.add(new String[] {"name"+i, i%2==1?"Male":"Female",""+i,"addr"+i});
 			}
 		]]></zscript>
-		<listbox id="libox" width="100%" multiple="true" vflex="true">
+		<listbox id="libox" width="100%" multiple="true" vflex="true" sizedByContent="true">
 			<listhead  sizable="true">
 				<listheader label="Name" sort="auto" width="25%" image="/test2/img/coffee.gif"/>
 				<listheader label="Gender" sort="auto" width="25%" image="/test2/img/folder.gif"/>

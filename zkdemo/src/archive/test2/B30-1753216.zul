@@ -25,7 +25,7 @@ If no error occur, it is right.
 			<treerow>
 				<treecell label="Add onOpen"/>
 			</treerow>
-			<treechildren id="tch" pageSize="3">
+			<treechildren id="tch">
 			</treechildren>
 		</treeitem>
 	</treechildren>

@@ -91,6 +91,10 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		return this;
 	},
 	//-- super --//
+	getCaveNode: function () {
+		var cave = this.$n('cave');
+		return cave.lastChild || cave;
+	},
 	getZclass: function () {
 		return this._zclass == null ? "z-listbox" : this._zclass;
 	},
@@ -115,6 +119,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 		else if (child.$instanceof(zul.mesh.Frozen))
 			this.frozen = child;
 		this._syncStripe();
+		this._syncSize();
 	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
@@ -146,6 +151,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 				this._selItems.$remove(child);
 		}
 		this._syncStripe();
+		this._syncSize();
 	},
 	getHeadWidgetClass: function () {
 		return zul.sel.Listhead;

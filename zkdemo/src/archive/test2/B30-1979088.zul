@@ -23,7 +23,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 List items = new org.zkoss.zkdemo.userguide.BigList(100); //a big list of
 Integer
 </zscript>
-<button label="test" onClick='list.paging.setStyle("background:red;");'/>
+<button label="test" onClick='list.pagingChild.setStyle("background:red;");'/>
 <listbox mold="paging" id="list" pagingPosition="both">
 <listitem forEach="&#36;{items}">
 <listcell label="&#36;{each}-1"/>

@@ -152,6 +152,7 @@ org.zkoss.zul.api.Applet {
 		super.renderProperties(renderer);
 
 		render(renderer, "code", getCode());
+		render(renderer, "codebase", getCodebase());
 
 		for (Iterator it = _params.entrySet().iterator(); it.hasNext();) {
 			final Map.Entry me = (Map.Entry)it.next();

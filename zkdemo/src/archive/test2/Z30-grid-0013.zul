@@ -17,15 +17,15 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window title="test rowspan and colspan on auxheader">
-	<grid>
+	<grid SizedByContent="true">
 	<auxhead>
 		<auxheader label="A" rowspan="2" />
 		<auxheader label="B" rowspan="2" />
-		<auxheader label="C" colspan="2" />
+		<auxheader label="C" colspan="1" />
 	</auxhead>
 
 	<auxhead>
-		<auxheader label="C" colspan="2" />
+		<auxheader label="C" colspan="1" />
 	</auxhead>
 	<columns sizable="true">
 		<column label="AA" />

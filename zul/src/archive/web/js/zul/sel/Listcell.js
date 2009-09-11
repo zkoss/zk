@@ -117,7 +117,12 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 		this.$supers('doMouseOut_', arguments);
 	},
 	domAttrs_: function () {
+		var head = this.getListheader(),
+			added;
+		if (head)
+			added = head.getColAttrs();
 		return this.$supers('domAttrs_', arguments)
-			+ (this._colspan > 1 ? ' colspan="' + this._colspan + '"' : '');
+			+ (this._colspan > 1 ? ' colspan="' + this._colspan + '"' : '')
+			+ (added ? ' ' + added : '');
 	}
 });

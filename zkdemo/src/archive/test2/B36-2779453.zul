@@ -16,7 +16,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 <zk>
 Please open the item, and check some checkboxes, then close and open the item, all of the checkboxes you checked should be checked. (IE 6 Only)
 <window title="Detail demo" border="normal" width="450px">
-<grid>
+<grid sizedByContent="true">
 <columns>
 <column label=""></column>
 <column label=""></column>
@@ -25,7 +25,7 @@ Please open the item, and check some checkboxes, then close and open the item, a
 <row>
 <label value="Non detail"></label>
 <detail>
-<listbox checkmark="true" multiple="true">
+<listbox checkmark="true" multiple="true" sizedByContent="true">
 <listhead>
 <listheader label="Select All"></listheader>
 </listhead>

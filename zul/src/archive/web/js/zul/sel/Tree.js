@@ -47,6 +47,8 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 			this._fixSelectedSet();
 		} else if (child.$instanceof(zul.mesh.Paging))
 			this.paging = child;
+			
+		this._syncSize();
 	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
@@ -60,6 +62,8 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 			_sel = null;
 		} else if (child == this.paging)
 			this.paging = null;
+			
+		this._syncSize();
 	},
 	_onTreeitemAdded: function (item) {
 		this._fixNewChild(item);
@@ -74,7 +78,7 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 				this._sel = null;
 			}
 		}
-		this._onTreechildrenRemoved(item.getTreechildren());
+		this._onTreechildrenRemoved(item.treechildren);
 		if (fixSel) this._fixSelected();
 	},
 	_onTreechildrenAdded: function (tchs) {

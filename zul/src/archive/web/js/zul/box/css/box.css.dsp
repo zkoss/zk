@@ -12,6 +12,10 @@ tr.z-vbox-sep {
 .z-splitter-hor-btn-l, .z-splitter-hor-btn-r {
 	font-size:0;
 }
+.z-splitter-hor span, .z-splitter-ver span {
+	display:-moz-inline-box; vertical-align:top;<%-- vertical-align: make it looks same in diff browsers --%>
+	display:inline-block;
+}
 .z-splitter-hor-outer {
 	background: transparent repeat-y top right;
 	background-image:url(${c:encodeURL('~./zul/img/splt/splt-h-ns.png')});

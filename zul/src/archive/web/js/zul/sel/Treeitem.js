@@ -52,6 +52,9 @@ zul.sel.Treeitem = zk.$extends(zul.sel.ItemWidget, {
 			}
 		}
 	},
+	isStripeable_: function () {
+		return false;
+	},
 	getMeshWidget: _zkf = function () {
 		for (var wgt = this.parent; wgt; wgt = wgt.parent)
 			if (wgt.$instanceof(zul.sel.Tree)) return wgt;

@@ -93,8 +93,10 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (this.ebody) {
 			this.domListen_(this.ebody, 'onScroll');
 			this.ebody.style.overflowY = ''; // clear
+			if (!this.efrozen)
+				this.ebody.style.overflowX = ''; // clear
 		}
-		zWatch.listen({onSize: this, onShow: this, beforeSize: this});
+		zWatch.listen({onSize: this, onShow: this, beforeSize: this, onResponse: this});
 	},
 	unbind_: function () {
 		if (this.ebody)
@@ -103,9 +105,20 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		this.ebody = this.ehead = this.efoot = this.efrozen = this.ebodytbl
 			= this.eheadtbl = this.efoottbl = null;
 		
-		zWatch.unlisten({onSize: this, onShow: this, beforeSize: this});
+		zWatch.unlisten({onSize: this, onShow: this, beforeSize: this, onResponse: this});
 		
 		this.$supers('unbind_', arguments);
+	},
+	onResponse: function () {
+		if (this.desktop && this._shallSize) {
+			this.$n()._lastsz = null; //reset
+			this.onSize();
+		}
+	},
+	_syncSize: function () {
+		this._shallSize = true;
+		if (!this.inServer && this.desktop)
+			this.onResponse();
 	},
 	_fixHeaders: function () {
 		if (this.head && this.ehead) {

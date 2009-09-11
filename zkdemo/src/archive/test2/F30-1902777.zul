@@ -22,6 +22,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<n:ol>
 		<n:li>	You shall see the following labels to be "query-value", "arg0-value and 35</n:li>
 	</n:ol>
-	<include src="F1902777_1.zul?query=query-value"
+	<include mode="defer" src="F1902777_1.zul?query=query-value"
 		arg0="arg0-value" arg1="${i}" arg2="${mm}"/><!-- mm is null -->
 </window>

@@ -28,10 +28,10 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 
 	//called by SimpleConstraint
 	validateStrict: function (val) {
-		return this._findItem(val, true) ? null: mesg.VALUE_NOT_MATCHED;
+		return this._findItem(val, true) ? null: msgzul.VALUE_NOT_MATCHED;
 	},
 	_findItem: function (val, strict) {
-		this._findItem0(val, strict);
+		return this._findItem0(val, strict);
 	},
 	_findItem0: function (val, strict, startswith, excluding) {
 		var fchild = this.firstChild;
@@ -92,38 +92,38 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	},
 	_updnSel: function (evt, bUp) {
 		var inp = this.getInputNode(),
-			val = inp.value, sel;
+			val = inp.value, sel, looseSel;
 		if (val) {
 			val = val.toLowerCase();
-			var beg = this._sel;
+			var beg = this._sel,
+				last = this._next(null, !bUp);
 			if (!beg || beg.parent != this) beg = this._next(null, bUp);
 
 			//Note: we always assume strict when handling up/dn
 			for (var item = beg;;) {
-				if (!item.isDisabled() && item.isVisible()
-				&& val == item.getLabel().toLowerCase()) {
-					sel = item;
-					break;
+				if (!item.isDisabled() && item.isVisible()) {
+					var label = item.getLabel().toLowerCase();
+					if (val == label) {
+						sel = item;
+						break;
+					} else if (!looseSel && label.startsWith(val)) {
+						looseSel = item;
+						break;
+					}						
 				}
 				if ((item = this._next(item, bUp)) == beg)
 					break;
 			}
-
+			
+			if (!sel)
+				sel = looseSel;
+				
 			if (sel) { //exact match
 				var ofs = zk(inp).getSelectionRange();
 				if (ofs[0] == 0 && ofs[1] == val.length) //full selected
 					sel = this._next(sel, bUp); //next
-			} else {
-				for (var item = beg;;) {
-					if (!item.isDisabled() && item.isVisible()
-					&& item.getLabel().toLowerCase().startsWith(val)) {
-						sel = item;
-						break;
-					}
-					if ((item = this._next(item, bUp)) == beg)
-						break;
-				}
-			}
+			} else
+				sel = this._next(null, bUp); 
 		} else
 			sel = this._next(null, bUp);
 
@@ -136,7 +136,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			for (var n = including ? item : item[next]; n; n = n[next])
 				if (!n.isDisabled())
 					return n;
-			return item;
+			return null;
 		}
 		return function(item, bUp) {
 			if (item)

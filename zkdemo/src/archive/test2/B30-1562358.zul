@@ -19,7 +19,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 -->
 <groupbox mold="3d" width="400px"> 
 	<caption label="Groupbox With Wrong Width in IE"/>
-	<grid height="200px"> <!--workaround: style="overflow:auto"-->
+	<grid height="200px" sizedByContent="true"> <!--workaround: style="overflow:auto"-->
 		<rows>
 			<row>
 			(make sure blabla is all on one line - that is it does not

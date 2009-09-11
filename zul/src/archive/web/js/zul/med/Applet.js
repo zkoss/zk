@@ -19,10 +19,10 @@ zul.med.Applet = zk.$extends(zul.Widget, {
 	},
 
 	$define: {
-		code: function (v) {
-			var n = this.$n();
-			if (n) n.code = v || '';
-		}
+		code: _zkf = function () {
+			this.rerender();
+		},
+		codebase: _zkf
 	},
 
 	invoke: zk.ie ? function() {
@@ -50,9 +50,15 @@ zul.med.Applet = zk.$extends(zul.Widget, {
 				return;
 			}
 			try {
-				var args = [];
-				for (var j = 1; j < arguments.length;)
-					args.push(arguments[j++]);
+				var args = [],
+					arrayArg = [];
+				if (arguments.length < 3) { 
+					args.push(arguments[1]);
+				} else {
+					for (var j = 1, len = arguments.length; j < len;) 
+						arrayArg.push(arguments[j++]);
+					args.push(arrayArg);
+				}
 				func.apply(n, args);
 			} catch (e) {
 				zk.error("Failed to invoke applet's method: "+fn+'\n'+e.message);
@@ -92,7 +98,8 @@ zul.med.Applet = zk.$extends(zul.Widget, {
 	//super
 	domAttrs_: function(no){
 		return this.$supers('domAttrs_', arguments)
-				+ ' code="' + (this._code || '') + '"';
+				+ ' code="' + (this._code || '') + '"'
+				+ ' codebase="' + (this._codebase || '') + '"';
 	},
 
 	_outParamHtml: function (out) {

@@ -299,7 +299,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	},
 	_ghostsizing: function (draggable, ofs, evt) {
 		var $node = zk(draggable.node);
-		jq(document.body).prepend(
+		jq(document.body).after(
 			'<div id="zk_ddghost" style="font-size:0;line-height:0;background:#AAA;position:absolute;top:'
 			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
 			+$node.offsetWidth()+'px;height:'+$node.offsetHeight()

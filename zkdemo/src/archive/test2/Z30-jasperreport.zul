@@ -46,7 +46,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			parameters.put("ReportTitle", "Address Report");
 			parameters.put("DataFile", "CustomDataSource from java");
 			
-			report.setSrc("/userguide/misc/jasperreport.jasper");
+			report.setSrc("/userguide/data/jasperreport.jasper");
 			report.setParameters(parameters);
 			report.setDatasource(new CustomDataSource());
 			report.setType((String) format.getSelectedItem().getValue());

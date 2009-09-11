@@ -179,14 +179,13 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		}
 	},
 	doBlur_: function (evt) {
-		this.$supers('doBlur_', arguments);
-
 		this._stopOnChanging();
 		
 		jq(this.$n()).removeClass(this.getZclass() + '-focus');
-		if (!zk.alerting && this.shallUpdate_(zk.currentFocus))
+		if (!zk.alerting && this.shallUpdate_(zk.currentFocus)) {
 			this.updateChange_();
-		
+			this.$supers('doBlur_', arguments);
+		}
 		if (this._inplace && this._inplaceout) {
 			jq(this.getInputNode()).addClass(this.getInplaceCSS());
 		}

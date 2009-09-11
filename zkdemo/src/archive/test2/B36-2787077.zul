@@ -13,21 +13,6 @@ B36-2787077.zul
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 -->
-<?xml version="1.0" encoding="UTF-8"?>
-
-<!--
-B36-2782751.zul
-
-	Purpose:
-		
-	Description:
-		
-	History:
-		Thu Apr 30 11:38:33     2009, Created by jumperchen
-
-Copyright (C) 2009 Potix Corporation. All Rights Reserved.
-
--->
 <zk>
 <zscript><![CDATA[ 
 

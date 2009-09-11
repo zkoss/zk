@@ -227,6 +227,7 @@ public class Utils {
 		addLocaleJS(sb, "IGNORE", MZul.IGNORE);
 
 		addLocaleJS(sb, "UPLOAD_CANCEL", MZul.UPLOAD_CANCEL);
+		addLocaleJS(sb, "ILLEGAL_VALUE", MZul.ILLEGAL_VALUE);
 
 		int j = sb.length() - 1;
 		if (sb.charAt(j) == ',') sb.setLength(j);

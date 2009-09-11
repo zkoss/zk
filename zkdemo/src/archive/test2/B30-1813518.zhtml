@@ -1,5 +1,5 @@
 <?component name="row" class="org.zkoss.zul.Row"
-  moldURI="~./zul/html/row.dsp" style="border:1px solid blue;background:#E3EBF6; color: #333333"?>
+	style="border:1px solid blue;background:#E3EBF6; color: #333333"?>
 <html xmlns:x="http://www.zkoss.org/2005/zul"
  xmlns:zk="http://www.zkoss.org/2005/zk">
 <head>

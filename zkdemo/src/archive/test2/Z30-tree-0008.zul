@@ -10,7 +10,7 @@
 	<button label="Set height to 100px">
 		<attribute name="onClick">tree.setHeight("100px");</attribute>
 	</button>
-	<tree id="tree" height="100%" iconSclass="dottree" vflex="true">
+	<tree id="tree" height="100%" zclass="z-dottree" vflex="true">
 		<treecols sizable="true">
 			<treecol label="Name" />
 			<treecol label="Description" />

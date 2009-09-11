@@ -39,11 +39,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			<vbox spacing="1em">
 				<label value="Top N Group Options" style="font-weight: bold"/>
 				<separator bar="true"/>
-				<hbox valign="center" spacing="1em">
+				<hbox align="center" spacing="1em">
 					<label value="  "/>
 					<radiogroup id="topGroups" orient="vertical" >
 						<radio id="topGroupsAll" label="All Groups"/> 
-						<hbox valign="center">
+						<hbox align="center">
 							<intbox id="topNCount" value="10" width="50px"/>
 							<radio id="topN" label="Top N Groups" checked="true" /> 
 						</hbox>
@@ -63,7 +63,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		<vbox>
 			<vbox spacing="1em">
 				<label value="Resize Plot" style="font-weight: bold"/>
-				<hbox valign="center">
+				<hbox align="center">
 					<label value="Width"/>
 					<doublebox id="plotWidthValue" value="100.0" width="30px" />
 					<listbox id="plotWidthType" rows="1" mold="select">
@@ -71,7 +71,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 						<listitem id="plotWidthPercent" label="Percent" />
 					</listbox>
 				</hbox>
-				<hbox valign="center">
+				<hbox align="center">
 					<label value="Height"/>
 					<doublebox id="plotHeightValue" value="100.0" width="30px" />
 					<listbox id="plotHeightType" rows="1" mold="select">
@@ -96,7 +96,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 				<label value="Cumulative Plot Options" style="font-weight: bold"/>
 				<hbox>
 					<space/>
-					<hbox valign="center">
+					<hbox align="center">
 						<label value="Scale"/>
 						<listbox id="cumPlotScale" rows="1" mold="select">
 							<listitem id="cumPlotCount" label="Count" selected="true"/>
@@ -142,30 +142,30 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 					</hbox>
 				</vbox>
 				<separator bar="true"/>
-				<hbox valign="center" spacing="1em">
+				<hbox align="center" spacing="1em">
 					<label value="  "/>
 					<label value="X-Axis Plot Limits" />
 				</hbox>
 				<radiogroup id="plotLimits0" orient="vertical" >
 					<radio id="plotAxisAuto0" label="Auto Calculate" checked="true"/> 
-					<hbox valign="center">
+					<hbox align="center">
 						<radio id="percentSpecLimits0" label="% of Spec Limits" /> 
 						<doublebox id="percentSpecLimitsValue0" value="5.0" width="40px" />
 					</hbox>
-					<hbox valign="center">
+					<hbox align="center">
 						<radio id="plusMinusSigma0" label="mean +/- " /> 
 						<doublebox id="plusMinusSigmaValue0" value="3.0" width="20px" />
 						<label value="sigma"/>
 					</hbox>	
-					<hbox valign="top">
+					<hbox align="top">
 						<radio id="absoluteLimits0" label="Absolute" />
 						<vbox>
-							<hbox valign="center">
+							<hbox align="center">
 								<doublebox id="plotMin0" value="0.0" width="65px" 
 									format="##0.###E0" />
 								<label value="Low"/>
 							</hbox>
-							<hbox valign="center">
+							<hbox align="center">
 								<doublebox id="plotMax0" value="0.0" width="65px" 
 									format="##0.###E0" />
 								<label value="High"/>
@@ -188,7 +188,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 			<vbox spacing="1em">
 				<label value="Y-Axis Options" style="font-weight: bold"/>
 				<separator bar="true"/>
-				<hbox valign="center">
+				<hbox align="center">
 					<label value="  "/>
 					<label value="Scale"/>
 					<listbox id="yAxisScale" rows="1" mold="select">

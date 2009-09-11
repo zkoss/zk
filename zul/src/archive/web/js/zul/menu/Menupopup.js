@@ -102,7 +102,8 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 		}
 		this._syncShadow();
 	},
-	onFloatUp: function(wgt) {
+	onFloatUp: function(ctl) {
+		var wgt = ctl.origin;
 		if (!this.isVisible())
 			return;
 		var org = wgt;

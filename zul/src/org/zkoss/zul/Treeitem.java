@@ -211,13 +211,7 @@ public class Treeitem extends XulElement implements org.zkoss.zul.api.Treeitem {
 	 * anything.
 	 */
 	public void setValue(Object value) {
-		if (!Objects.equals(_value, value)) {
-			_value = value;
-
-			final Tree tree = getTree();
-			if (tree != null && tree.getName() != null)
-				smartUpdate("value", _value);
-		}
+		_value = value;
 	}
 
 	/** Returns whether this container is open.
@@ -591,7 +585,6 @@ public class Treeitem extends XulElement implements org.zkoss.zul.api.Treeitem {
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 		
-		render(renderer, "value", getValue());
 		render(renderer, "selected", isSelected());
 		render(renderer, "disabled", isDisabled());
 		if (!isOpen()) renderer.render("open", false);

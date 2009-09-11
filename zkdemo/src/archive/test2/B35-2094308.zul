@@ -32,11 +32,11 @@ Left:
 left.value + "px";' />
 </hbox>
 <window id="win2" border="normal" width="450px" top="50px" height="200px"
-style="overflow:visible;"
+style="overflow:visible;" mode="overlapped"
 left="50px" title="InnerWindow- top=50px, left=50px- position=parent"
 position="parent"
 onMove='msg.value = "Inner: " + event.top + "," + event.left;'>
-<window id="win3" border="normal" width="300px" top="50px"
+<window id="win3" border="normal"  mode="overlapped" width="300px" top="50px"
 onMove='msg1.value = "Nexted: " + event.top + "," + event.left;'
 left="50px" title="NestedWindow-pos=parent" position="parent">
 <button label="embed NestedWindow"

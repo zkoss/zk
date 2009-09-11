@@ -20,5 +20,5 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <zk>
 	1.Type "May/02/2008" into datebox , if no error , the bug fixed.
 	<separator />
-	format="MMM/dd/yyyy".<datebox  format="MM/dd/yyyy"/>	
+	format="MMM/dd/yyyy".<datebox  format="MMM/dd/yyyy"/>	
 </zk>

@@ -230,6 +230,7 @@ public class MainLayout extends Borderlayout {
 		t.setRows(20);
 		t.setParent(w);
 		t.setValue(sb.toString());
+		t.focus();
 		w.doModal();
 	}
 	public void importFileName() throws SuspendNotAllowedException, InterruptedException {
@@ -282,6 +283,7 @@ public class MainLayout extends Borderlayout {
 				w.detach();
 			}
 		});
+		t.focus();
 		w.doModal();
 	}
 	public void updateModelByTag() {

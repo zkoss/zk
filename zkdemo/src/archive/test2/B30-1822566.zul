@@ -37,7 +37,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 			<button label="setColumnWidth2" onClick='col1.setWidth("100px")'/>
 			<button label="setColumnWidth3" onClick='col1.setWidth("200px")'/>
 		</hbox>
-		<grid id="g1" width="400px" height="100px" >
+		<grid id="g1" width="400px" height="100px" sizedByContent="true">
 			<columns id="cols">
 				<column label="Type 50px" id="col1"  align="center" width="50px"/>
 				<column label="Content" id="col2" align="right"/>

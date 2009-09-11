@@ -33,8 +33,11 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	_format: 'HH:mm',
 	$define: {
 		buttonVisible: function(v){
-			this.$n("btn").style.display = v == 'true'? '': 'none';
-			this.onSize();
+			var n = this.$n('btn');
+			if (n) {
+				v ? jq(n).show() : jq(n).hide();
+				this.onSize();
+			}
 		},
 		format: function (fmt, fromServer) {
 			this._parseFormat(fmt);
@@ -82,10 +85,9 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			}
 		}
 		if (error)
-			this.showErrorMessage(zMsgFormat.format(msgzul.DATE_REQUIRED + out.join('')));
+			return zMsgFormat.format(msgzul.DATE_REQUIRED + out.join(''));
 	},
 	_parseFormat: function (fmt) {
-		this._checkFormat(fmt);
 		var index = [];
 		for (var i = 0, j = fmt.length; i < j; i++) {
 			var c = fmt.charAt(i);
@@ -166,6 +168,11 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	coerceFromString_: function (val) {
 		if (!val) return null;
 		
+		
+		var error;
+		if ((error = this._checkFormat(this._format))) 
+			return {error: error};
+			
 		if (!this._fmthdler)
 			this._parseFormat(this._format);
 		

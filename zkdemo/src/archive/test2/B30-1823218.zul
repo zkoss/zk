@@ -5,7 +5,7 @@
 Tree with vflex, body grows over boarder.
 Notice: This only happens when there is tree columns
 	</h:pre>
-	<window border="normal"> 
+	<window border="normal" height="300px"> 
 		<tree id="tree" width="400px" height="30%" vflex="true">
 			<treecols id="cols">
 				<treecol label="Header"/>

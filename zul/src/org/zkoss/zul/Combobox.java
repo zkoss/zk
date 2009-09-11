@@ -84,7 +84,7 @@ public class Combobox extends Textbox implements org.zkoss.zul.api.Combobox {
 	
 	static {
 		addClientEvent(Combobox.class, Events.ON_OPEN, CE_DUPLICATE_IGNORE);
-		addClientEvent(Listbox.class, Events.ON_SELECT, CE_IMPORTANT);
+		addClientEvent(Combobox.class, Events.ON_SELECT, CE_IMPORTANT);
 	}
 
 	public Combobox() {

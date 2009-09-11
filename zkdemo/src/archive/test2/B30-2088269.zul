@@ -49,7 +49,7 @@ Note: zk.xml should add the following configuration.
 </menupopup>
 <window height="50px" />
 <vbox id="vbox" spacing="1em" visible="true">
-<hbox valign="center" spacing="1em">
+<hbox align="center" spacing="1em">
 <label value=" "/>
 <radiogroup id="topGroups" orient="vertical" onCheck="test.value =
 self.getSelectedItem().getLabel()">

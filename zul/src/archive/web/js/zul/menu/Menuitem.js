@@ -169,10 +169,12 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 				for (var p = this.parent; p; p = p.parent)
 					if (p.$instanceof(zul.menu.Menupopup))
 						// if close the popup before choosing a file, the file chooser can't be triggered.
-						if (p.isOpen() && !this._uplder)							
+						if (p.isOpen() && !this._uplder && !this._popup)							
 							p.close({sendOnOpen:true});
-						
-			this.$class._rmActive(this);				
+						else break;
+										
+			this.$class._rmActive(this);
+			this.$super('doClick_', evt, true);			
 		}
 	},
 	doMouseOver_: function (evt) {

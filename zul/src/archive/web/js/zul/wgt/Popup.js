@@ -97,7 +97,8 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		var zcls = this._zclass;
 		return zcls != null ? zcls: "z-popup";
 	},
-	onFloatUp: function(wgt){
+	onFloatUp: function(ctl){
+		var wgt = ctl.origin;
 		if (!this.isVisible()) 
 			return;
 		for (var floatFound; wgt; wgt = wgt.parent) {
@@ -125,7 +126,34 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		this.setFloating_(false);
 		this.$supers('unbind_', arguments);
 	},
-	onShow: zk.ie7 ? function () {
+	onShow: function () {
+		this._fixWdh();
+		this._fixHgh();
+	},
+	_offsetHeight: function () {
+		var node = this.$n(),
+			h = node.offsetHeight - 1, 
+			tl = jq(node).find('> div:first-child')[0],
+			bl = jq(node).find('> div:last')[0],
+			n = this.getCaveNode().parentNode,
+			bd = this.$n('body');
+		
+			h -= tl.offsetHeight;
+			h -= bl.offsetHeight;
+			h -= zk(n).padBorderHeight();
+			h -= zk(bd).padBorderHeight();
+		return h;
+	},
+	_fixHgh: function () {
+		var hgh = this.$n().style.height,
+			c = this.getCaveNode();
+		if (zk.ie6_ && ((hgh && hgh != "auto" )|| c.style.height)) c.style.height = "0px";
+		if (hgh && hgh != "auto")
+			zk(c).setOffsetHeight(this._offsetHeight());
+		else 
+			c.style.height = "auto";
+	},
+	_fixWdh: zk.ie7 ? function () {
 		var node = this.$n(),
 			wdh = node.style.width,
 			cn = jq(node).children('div'),

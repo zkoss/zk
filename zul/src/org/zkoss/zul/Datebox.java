@@ -344,9 +344,9 @@ public class Datebox extends FormatInputElement implements
 	protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer)
 			throws java.io.IOException {
 		super.renderProperties(renderer);
-		if (_btnVisible)
-			render(renderer, "buttonVisible", _btnVisible);
-		if (_lenient)
-			render(renderer, "lenient", _lenient);
+		if (!_btnVisible)
+			renderer.render("buttonVisible", false);
+		if (!_lenient)
+			renderer.render("lenient", false);
 	}
 }

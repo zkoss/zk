@@ -261,7 +261,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				s.height = jq.px(sh);
 			}
 		}
-		return function() {
+		return function(ctl) {
 			this._hideShadow();
 			if (this.isMaximized()) {
 				if (!this.__maximized)
@@ -269,6 +269,12 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				this.__maximized = false; // avoid deadloop
 			}
 			this._fixWdh();
+			if (this.tbar)
+				ctl.fireDown(this.tbar);
+			if (this.bbar)
+				ctl.fireDown(this.bbar);
+			if (this.fbar)
+				ctl.fireDown(this.fbar);
 			this._fixHgh();
 			this._syncShadow();
 		};
@@ -411,8 +417,6 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 				this._shadow.destroy();
 				this._shadow = null;
 			}
-		} else if (this.isMaximized() || this.isMinimized()) {
-			this._hideShadow();
 		} else {
 			var body = this.$n('body');
 			if (body && zk(body).isRealVisible()) {
@@ -424,7 +428,10 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 						bottom: 3,
 						stackup: (zk.useStackup === undefined ? zk.ie6_: zk.useStackup)
 					});
-				this._shadow.sync();
+					
+				if (this.isMaximized() || this.isMinimized())
+					this._hideShadow();
+				else this._shadow.sync();
 			}
 		}
 	},
@@ -445,6 +452,14 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 			zWatch.listen({onFloatUp: this});
 			this.setFloating_(true);
 			this._initFloat();
+		}
+		
+		if (this.isMaximizable() && this.isMaximized()) {
+			var self = this;
+			after.push(function() {
+				self._maximized = false;
+				self.setMaximized(true, true);				
+			});
 		}
 	},
 	unbind_: function () {

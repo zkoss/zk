@@ -18,7 +18,6 @@ function (out) {
 	var uuid = this.uuid,
 		zcls = this.getZclass(),
 		tab = this.getLinkedTab(),
-		tabzcs = tab.getZclass(),
 		tabbox = this.getTabbox();
 	if (tabbox.inAccordionMold()) {//Accordion
 		out.push('<div class="', zcls, '-outer" id="', uuid, '">');

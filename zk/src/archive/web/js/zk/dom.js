@@ -755,7 +755,7 @@ zjq.prototype = { //ZK extension
 			//ie: INPUT's focus not function
 
 		var tag = n.tagName;
-		if (tag != 'BUTTON' && tag != 'INPUT' && tag != 'A'
+		if (tag != 'BUTTON' && tag != 'INPUT' && tag != 'TEXTAREA' && tag != 'A'
 		&& tag != 'SELECT' && tag != 'IFRAME')
 			return false;
 

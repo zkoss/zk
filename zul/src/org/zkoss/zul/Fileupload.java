@@ -56,7 +56,19 @@ import org.zkoss.zul.impl.FileuploadDlg;
  */
 public class Fileupload extends Button implements org.zkoss.zul.api.Fileupload { //not XulElement since not applicable
 	private static String _templ = "~./zul/html/fileuploaddlg.zul";
-
+	
+	public Fileupload() {
+		setUpload("true");
+	}
+	public Fileupload(String label) {
+		this();
+		setLabel(label);
+	}
+	public Fileupload(String label, String image) {
+		this(label);
+		setImage(image);
+	}
+	
 	/** @deprecated As of release 5.0.0, replaced with {@link #setUpload(String)}
 	 */
 	public int getMaxsize() {

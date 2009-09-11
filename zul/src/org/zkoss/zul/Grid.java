@@ -1303,8 +1303,8 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 		
 		render(renderer, "oddRowSclass", getOddRowSclass());
 		
-		if (!isFixedLayout())
-			renderer.render("fixedLayout", false);
+		if (isSizedByContent())
+			renderer.render("sizedByContent", true);
 		
 		render(renderer, "vflex", _vflex);
 		

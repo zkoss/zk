@@ -82,8 +82,8 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		<button label="2.updateFoot 1" onClick="updateFoot(f1)"/>
 		<button label="3.updateGroup 2" onClick="updateGroup(g2)"/>
 		<button label="4.updateFoot 2" onClick="updateFoot(f2)"/>
-		<button label="5.removeGroup 1" onClick="removeGroup(g1)"/>
-		<button label="6.removeFoot 1" onClick="removeFoot(f1)"/>
+		<button label="5.removeFoot 1" onClick="removeFoot(f1)"/>
+		<button label="6.removeGroup 1" onClick="removeGroup(g1)"/>
 		<button label="invalidate" onClick="gd.invalidate()"/>
 	</div>
 	<grid fixedLayout="true" id="gd">

@@ -20,7 +20,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <zk xmlns:n="http://www.zkoss.org/2005/zk/native">
 	<n:p>[Opera only]Try to click + to add uploaded files more than 5, and then the content isn't overflowed and covers the components which
 are below it. </n:p>
-	<fileupload number="-1">
+	<fileupload number="-1" label="upload">
              <attribute name="onUpload">
 		if (event.medias != null)
 		alert("total upload files:"+event.medias.length);

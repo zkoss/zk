@@ -2201,7 +2201,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				throw new UiException(MZk.ILLEGAL_REQUEST_WRONG_DATA,
 					new Object[] {data, this});
 			final List data2 = (List)data.get("");
-			Events.postEvent(new Event((String)data2.get(0), this, data2.get(1)));
+			Events.postEvent(new Event((String)data2.get(0), this, data.size() > 1 ? data2.get(1) : null));
 		} else if ("setAttr".equals(cmd)) {
 			final Map data = request.getData();
 			if (data == null)

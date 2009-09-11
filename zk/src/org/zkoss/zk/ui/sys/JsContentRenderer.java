@@ -19,6 +19,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.sys;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 import java.util.Iterator;
 import java.util.Date;
@@ -134,6 +135,16 @@ public class JsContentRenderer implements ContentRenderer {
 				renderValue(me.getValue());
 			}
 			_buf.append('}');
+		}
+		if (value instanceof List) {
+			_buf.append('[');
+			int j = 0;
+			for (Iterator it = ((List)value).iterator(); it.hasNext();j++) {
+				if (j > 0) _buf.append(',');
+				renderValue(it.next());
+			}
+			_buf.append(']');
+			return;
 		}
 		//handle array
 		if (value instanceof Object[]) {

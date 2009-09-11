@@ -257,13 +257,14 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				this._shadowWgt.destroy();
 				this._shadowWgt = null;
 			}
-		} else if (this.isMaximized() || this.isMinimized()) {
-			this._hideShadow();
 		} else if (this._shadow) {
 			if (!this._shadowWgt)
 				this._shadowWgt = new zk.eff.Shadow(this.$n(),
 					{left: -4, right: 4, top: -2, bottom: 3, stackup: true});
-			this._shadowWgt.sync();
+			if (this.isMaximized() || this.isMinimized())
+				this._hideShadow();
+			else
+				this._shadowWgt.sync();
 		}
 	},
 	_syncMask: function () {
@@ -360,6 +361,11 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		}
 		
 		this._syncShadow();
+		var self = this;
+		setTimeout(function() {
+			zWatch.fireDown('beforeSize', self);
+			zWatch.fireDown('onSize', self);
+		}, zk.ie6_ ? 800: 0);
 	},
 	onZIndex: function (evt) {
 		this._syncShadow();
@@ -609,7 +615,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		return style;
 	},
 
-	bind_: function () {
+	bind_: function (desktop, skipper, after) {
 		this.$supers('bind_', arguments);
 
 		var mode = this._mode;
@@ -625,6 +631,14 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		if (this._sizable)
 			this._makeSizer();
 		this.domListen_(this.$n(), 'onMouseOver');
+		
+		if (this.isMaximizable() && this.isMaximized()) {
+			var self = this;
+			after.push(function() {
+				self._maximized = false;
+				self.setMaximized(true, true);				
+			});
+		}
 	},
 	unbind_: function () {
 		var node = this.$n();
@@ -678,9 +692,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			var n = this.$n(),
 				c = this.$class._insizer(n, zk(n).revisedOffset(), evt.pageX, evt.pageY),
 				handle = this._mode == 'embedded' ? false : this.$n('cap');
-			if (c) {
+			if (!this.isMaximized() && c) {
 				if (this.isMaximized()) return; // unsupported this case.
-				this._backupCursor = n.style.cursor;
+				if (this._backupCursor == undefined)
+					this._backupCursor = n.style.cursor;
 				n.style.cursor = c == 1 ? 'n-resize': c == 2 ? 'ne-resize':
 					c == 3 ? 'e-resize': c == 4 ? 'se-resize':
 					c == 5 ? 's-resize': c == 6 ? 'sw-resize':

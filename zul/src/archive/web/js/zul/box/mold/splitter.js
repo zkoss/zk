@@ -14,5 +14,5 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
 	out.push('<div', this.domAttrs_(), '><span id="',
-			this.uuid, '-btn" style="display:none"></span></div>');
+			this.uuid, '-btn"></span></div>');
 }

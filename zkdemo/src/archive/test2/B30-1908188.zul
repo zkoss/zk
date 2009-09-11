@@ -34,7 +34,7 @@
 		<vbox>
 			<vbox spacing="1em">
 				<label value="Resize Plot" style="font-weight: bold"/>
-				<hbox valign="center">
+				<hbox align="center">
 					<label value="Width"/>
 					<doublebox id="plotWidthValue" value="100.0" width="30px" />
 					<listbox id="plotWidthType" rows="1" mold="select">
@@ -42,7 +42,7 @@
 						<listitem id="plotWidthPercent" label="Percent" />
 					</listbox>
 				</hbox>
-				<hbox valign="center">
+				<hbox align="center">
 					<label value="Height"/>
 					<doublebox id="plotHeightValue" value="100.0" width="30px" />
 					<listbox id="plotHeightType" rows="1" mold="select">

@@ -81,7 +81,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			this._height = height;
 			var n = this.$n();
 			if (n) {
-				 n.style.height = v || '';
+				 n.style.height = height || '';
 				this.onSize();
 			}
 		}
@@ -416,7 +416,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 		//Note: we don't handle if clicking on checkmark, since FF always
 		//toggle and it causes incosistency
 			if ((zk.gecko || zk.safari) && row.isListen('onDoubleClick')) {
-				var now = $now(), last = row._last;
+				var now = zUtl.now(), last = row._last;
 				row._last = now;
 				if (last && now - last < 900)
 					return; //ignore double-click

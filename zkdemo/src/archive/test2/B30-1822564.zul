@@ -34,7 +34,7 @@ It still doesn't work even add row after creation.
 			<button label="setColumnWidth2" onClick='col1.setWidth("100px")'/>
 			<button label="setColumnWidth3" onClick='col1.setWidth("200px")'/>
 		</div>
-		<grid id="g1" width="400px">
+		<grid id="g1" width="400px" sizedByContent="true">
 			<columns id="cols" sizable="true">
 				<column label="Type 50px" id="col1"  align="center" width="50px" style="position:relative;"/>
 				<column label="Content" id="col2" align="right"  style="position:relative;"/>

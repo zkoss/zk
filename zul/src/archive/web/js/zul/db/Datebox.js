@@ -31,10 +31,12 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		}
 	})(),
 	$define: {
-		buttonVisible: function () {
+		buttonVisible: function (v) {
 			var n = this.$n('btn');
-			if (n)
-				v ? jq(n).show(): jq(n).hide();
+			if (n) {
+				v ? jq(n).show() : jq(n).hide();
+				this.onSize();
+			}
 		},
 		format: function () {
 			if (this._pop) {
@@ -46,13 +48,18 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 			if (inp)
 				inp.value = this.coerceToString_(this._value);
 		},
-		constraint: function () {
-			this.$supers('setConstraint', arguments);
+		constraint: function (cst) {
+			if (typeof cst == 'string' && cst.charAt(0) != '['/*by server*/)
+				this._cst = new zul.inp.SimpleDateConstraint(cst);
+			else
+				this._cst = cst;
+			if (this._cst) delete this._lastRawValVld; //revalidate required
 			if (this._pop) {
 				this._pop.setConstraint(this._constraint);
 				this._pop.rerender();
 			}
-		}
+		},
+		lenient: null
 	},
 	setValue: function (val) {
 		var args;
@@ -112,7 +119,12 @@ zul.db.Datebox = zk.$extends(zul.inp.FormatWidget, {
 		}
 	},
 	coerceFromString_: function (val) {
-		return val ? zDateFormat.parseDate(val, this.getFormat()) : val;
+		if (val) {
+			var d = zDateFormat.parseDate(val, this.getFormat(), !this._lenient);
+			if (!d) return {error: zMsgFormat.format(msgzul.DATE_REQUIRED + this._format)};
+			return d;
+		} else
+			return val;
 	},
 	coerceToString_: function (val) {
 		return val ? zDateFormat.formatDate(val, this.getFormat()) : '';
@@ -320,17 +332,15 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 		}
 	})(),
 	syncShadow: function () {
-		if (!this._shadow) {
+		if (!this._shadow)
 			this._shadow = new zk.eff.Shadow(this.parent.$n('pp'), {
 				left: -4,
 				right: 4,
 				top: 2,
 				bottom: 3,
-				autoShow: true,
 				stackup: (zk.useStackup === undefined ? zk.ie6Only : zk.useStackup)
 			});
-		} else
-			this._shadow.sync();
+		this._shadow.sync();
 	},
 	onChange: function (evt) {
 		var date = this.getTime(),

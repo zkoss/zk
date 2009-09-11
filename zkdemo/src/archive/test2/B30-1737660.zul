@@ -23,6 +23,7 @@ The header cells' size should rendered correctly.
 				Listbox lb = new Listbox();
 				lb.setHeight("160px");
 				lb.setParent(winTest);
+				lb.setSizedByContent(true);
 				Listhead lhs = new Listhead();
 				lhs.setParent(lb);
 				// Draw the headings

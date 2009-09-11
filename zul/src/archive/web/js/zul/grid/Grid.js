@@ -55,6 +55,8 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 			this.paging = child;
 		else if (child.$instanceof(zul.mesh.Frozen))
 			this.frozen = child;
+			
+		this._syncSize();
 	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
@@ -68,6 +70,8 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 			this.paging = null;
 		else if (child == this.frozen)
 			this.frozen = null;
+		
+		this._syncSize();
 	},
 	insertChildHTML_: function (child, before, desktop) {
 		if (child.$instanceof(zul.grid.Rows)) {

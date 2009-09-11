@@ -62,10 +62,8 @@ zul.sel.Listgroup = zk.$extends(zul.sel.Listitem, {
 		this._open = open;
 		var img = this.$n('img'),
 			zcls = this.getZclass();
-		if (img) {
-			zDom[open ? "rmClass" : "addClass"](img, zcls + "-img-close");
-			zDom[open ? "addClass" : "rmClass"](img, zcls + "-img-open");
-		}
+		if (img)
+			jq(img)[open ? "removeClass" : "addClass"](zcls + "-img-close")[open ? "addClass" : "removeClass"](zcls + "-img-open");
 		this._openItemNow(open);
 		if (!silent)
 			this.fire('onOpen', {open: open});
@@ -75,7 +73,7 @@ zul.sel.Listgroup = zk.$extends(zul.sel.Listitem, {
 		for (var r, w = this.nextSibling; w && (!w.$instanceof(zul.sel.Listgroup) && !w.$instanceof(zul.sel.Listgroupfoot));
 				w = w.nextSibling)
 			if (w.desktop && w.isVisible())
-				zDom[toOpen ? "show" : "hide"](w.$n());
+				jq(w.$n())[toOpen ? "show" : "hide"]();
 	},
 	beforeParentChanged_: function (p) {
 		if (p == null) {
@@ -108,7 +106,7 @@ zul.sel.Listgroup = zk.$extends(zul.sel.Listitem, {
 		if (table.tBodies.length > 1) {
 			var span = 0;
 			for (var row = table.rows[0], i = row.cells.length; i--;)
-				if(zDom.isVisible(row.cells[i])) span++;
+				if(zk(row.cells[i]).isVisible()) span++;
 			for (var cells = n.cells, i = cells.length; i--;)
 				span -= cells[i].colSpan;
 			if (span > 0 && n.cells.length) n.cells[n.cells.length - 1].colSpan += span;

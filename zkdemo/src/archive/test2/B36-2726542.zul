@@ -13,7 +13,9 @@ B36-2726542.zul
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 
 -->
-<zk>
-<div id="outer" style="overflow-y: scroll; height: 200px;"> <button label="test" action='onclick:#{outer}.scrollTop=200;zk.debug("top", zk.revisedOffset(#{outer})[1])'/> <div style="height: 800px;background:red;"/> </div>
-After click the test button, you should see the message "[top] [0]".
+<zk xmlns:w="http://www.zkoss.org/2005/zk/client">
+<div id="outer" style="overflow-y: scroll; height: 200px;">
+<button label="test" w:onClick='this.$f("outer").$n().scrollTop=200;zk.log("top", zk(this.$f("outer")).revisedOffset()[1]);'/>
+<div style="height: 800px;background:red;"/> </div>
+After click the test button, you should see the message "top, 0".
 </zk>

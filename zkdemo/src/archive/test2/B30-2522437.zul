@@ -15,7 +15,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 <borderlayout>
 <center>
+<div>
 <button label='Click Me' onClick='self.desktop.invalidate()'/>
 and you shall see this page remains the same
+</div>
 </center>
 </borderlayout>

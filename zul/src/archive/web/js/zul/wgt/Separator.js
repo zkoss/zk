@@ -41,7 +41,7 @@ zul.wgt.Separator = zk.$extends(zul.Widget, {
 		var s = this.$supers('domStyle_', arguments);
 		if (!this._isPercentGecko()) return s;
 
-		var v = zk.parseInt(_spacing.substring(0, _spacing.length - 1).trim());
+		var v = zk.parseInt(this._spacing.substring(0, this._spacing.length - 1).trim());
 		if (v <= 0) return s;
 		v = v >= 2 ? (v / 2) + "%": "1%";
 

@@ -44,7 +44,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		var tabbox =  this.getTabbox(),
 			tabpanels = tabbox.getTabpanels(),
 			index = this.getIndex();
-		return tabpanels.getChildAt(index);
+		return tabpanels ? tabpanels.getChildAt(index) : null;
 	},
 	_doCloseClick : function(evt) {
 		if (!this._disabled) {

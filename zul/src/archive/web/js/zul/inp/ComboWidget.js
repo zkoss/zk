@@ -18,8 +18,10 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	$define: {
 		buttonVisible: function (v) {
 			var n = this.$n('btn');
-			if (n)
-				v ? jq(n).show(): jq(n).hide();
+			if (n) {
+				v ? jq(n).show() : jq(n).hide();
+				this.onSize();
+			}
 		},
 		autodrop: null
 	},

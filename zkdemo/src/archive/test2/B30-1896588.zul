@@ -61,7 +61,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<vbox id="vbox" spacing="1em" visible="false">
 		<label value="Please click the radio button, it must be selected immediately. (IE only)"/>
 		<separator bar="true"/>
-		<hbox valign="center" spacing="1em">
+		<hbox align="center" spacing="1em">
 			<label value="  "/>
 			<radiogroup id="topGroups" orient="vertical" >
 				<radio id="topGroupsAll" label="All Groups"/>

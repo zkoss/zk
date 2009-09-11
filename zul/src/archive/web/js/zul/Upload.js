@@ -300,7 +300,8 @@ zul.UploadViewer = zk.$extends(zk.Object, {
 							this.$supers('$init', arguments);
 							this.setSclass('z-fileupload-manager');
 						},
-						onFloatUp: function(wgt){
+						onFloatUp: function(ctl) {
+							var wgt = ctl.origin;
 							if (!this.isVisible()) 
 								return;
 							this.setTopmost();
