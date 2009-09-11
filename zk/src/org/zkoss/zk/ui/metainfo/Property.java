@@ -244,7 +244,7 @@ implements Condition, java.io.Serializable {
 			for (int j = 0; j < mtds.length; ++j) {
 				type = mtds[j].getParameterTypes()[0];
 				if (type.isInstance(val)
-				|| (val == null && String.class.equals(val))) {
+				|| (val == null && String.class.equals(type))) {
 					m = mtds[j];
 					break; //found
 				}
