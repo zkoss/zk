@@ -241,11 +241,14 @@ implements Condition, java.io.Serializable {
 			return; //done
 		} else { //mtds != null && val != null
 			//1. full match
-			for (int j = 0; j < mtds.length; ++j)
-				if (mtds[j].getParameterTypes()[0].isInstance(val)) {
+			for (int j = 0; j < mtds.length; ++j) {
+				type = mtds[j].getParameterTypes()[0];
+				if (type.isInstance(val)
+				|| (val == null && String.class.equals(val))) {
 					m = mtds[j];
 					break; //found
 				}
+			}
 
 			//2. primitive
 			if (m == null) {
