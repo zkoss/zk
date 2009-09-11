@@ -232,7 +232,7 @@ implements Condition, java.io.Serializable {
 		if (_value != null) _value.setExpectedType(type);
 		Object val = getValue(comp);
 
-		Method m;
+		Method m = null;
 		if (mtd != null) {
 			m = mtd;
 		} else if (mtds == null) {
@@ -240,24 +240,43 @@ implements Condition, java.io.Serializable {
 			((DynamicPropertied)comp).setDynamicProperty(_name, val);
 			return; //done
 		} else { //mtds != null && val != null
-			for (int j = 0; ; ++j) {
-				if (j == mtds.length)
-					throw new ClassCastException("Unable to find a setter named "+_name+" that supports "+val);
-
-				type = mtds[j].getParameterTypes()[0];
-				if (type.isInstance(val)) {
+			//1. full match
+			for (int j = 0; j < mtds.length; ++j)
+				if (mtds[j].getParameterTypes()[0].isInstance(val)) {
 					m = mtds[j];
 					break; //found
 				}
-				try {
-					val = Classes.coerce(type, val);
-					m = mtds[j];
-					break;
-				} catch (Throwable ex) {
+
+			//2. primitive
+			if (m == null) {
+				for (int j = 0; j < mtds.length; ++j) {
+					type = mtds[j].getParameterTypes()[0];
+					if (type.isPrimitive()) {
+						try {
+							val = Classes.coerce(type, val);
+							m = mtds[j];
+							break;
+						} catch (Throwable ex) {
+						}
+					}
+				}
+
+				if (m == null) {
+					//Other
+					for (int j = 0; ; ++j) {
+						if (j == mtds.length)
+							throw new ClassCastException("Unable to find a setter named "+_name+" that supports "+val);
+	
+						try {
+							val = Classes.coerce(mtds[j].getParameterTypes()[0], val);
+							m = mtds[j];
+							break;
+						} catch (Throwable ex) {
+						}
+					}
 				}
 			}
 		}
-
 		m.invoke(comp, new Object[] {val});
 	}
 
