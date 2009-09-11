@@ -91,6 +91,8 @@ import org.zkoss.zul.mesg.MZul;
  * If <code>src</code> is ended with the extension named <code>.zul</code>
  * or <code>.zhtml</code>, the <code>instant</code> mode is assumed.
  * Otherwise, the <code>defer</code> mode is assumed.
+ * Notice that if a query string is specified, the <code>defer</code> mode
+ * is assumed, too.
  *
  * <p>Notice that invoking {@link #setProgressing} or {@link #setLocalized}
  * with true will imply the <code>defer</code> mode (if the mode is <code>auto</code>).
@@ -267,9 +269,7 @@ public class Include extends XulElement implements org.zkoss.zul.api.Include {
 		boolean oldInstantMode = _instantMode;
 		if ("auto".equals(_mode)) {
 			if (_src != null && !_progressing && !_localized) {
-				final int j = _src.lastIndexOf('?');
-				final String src = j >= 0 ? _src.substring(0, j): _src;
-				_instantMode = src.endsWith(".zul") || src.endsWith(".zhtml");
+				_instantMode = _src.endsWith(".zul") || _src.endsWith(".zhtml");
 			} else
 				_instantMode = false;
 		} else
@@ -313,7 +313,9 @@ public class Include extends XulElement implements org.zkoss.zul.api.Include {
 			final Execution exec = getDesktop().getExecution();
 			final Map old = setupDynams(exec);
 			try {
-				exec.createComponents(_src, this, null);
+				final int j = _src.indexOf('?');
+				exec.createComponents(j >= 0 ? _src.substring(0, j): _src, this, null);
+					//TODO: convert query string to arg
 			} finally {
 				restoreDynams(exec, old);
 			}
