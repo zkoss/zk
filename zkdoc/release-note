@@ -79,7 +79,9 @@ ZK 5.0.0
     Note that if you used to set fixedLayout=true, then you shall set sizedByContent=false 
 	and if you used to set fixedLayout=false, then you shall set sizedByContent=true. By default, 
 	the sizedByContent is false (i.e. fixedLayout is true).
-
+  + By default, the constraint of the input elements is validated by client side, but you can specify
+	it with 'server', for example, 'no empty, server', the constraint with 'server' would be validated
+	by server side, if no error at client.
 	--------
 ZK 3.6.3
 August, 2009

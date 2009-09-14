@@ -15,5 +15,5 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 Please type the word '-' and then focus out the box, you should see a warning box.
-<textbox id="txt_test" constraint="/[a-z\\]*/"></textbox>
+<textbox id="txt_test" constraint="/[a-z\\]*/, server"></textbox>
 </zk>

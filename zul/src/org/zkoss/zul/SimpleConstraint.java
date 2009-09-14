@@ -207,6 +207,8 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 			return NO_TODAY;
 		else if (constraint.equals("strict"))
 			return STRICT;
+		else if (constraint.equals("server"))
+			return 0;
 		else if (constraint.length() > 0)
 			throw new UiException("Unknown constraint: "+constraint);
 		return 0;

@@ -61,6 +61,10 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 				}
 				var cc = cst.charAt(k);
 				if (cc == ',' || cc == ':' || cc == ';' || cc == '/') {
+					if (this._regex && j == k) {
+						j++;
+						continue;
+					}
 					s = cst.substring(j, k);
 					if (cc == ':' || cc == '/') --k;
 					break;
@@ -91,6 +95,8 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 			f.NO_TODAY = true;
 		else if (cst == "strict")
 			f.STRICT = true;
+		else if (cst == "server")
+			this.serverValidate = true;
 		else if (zk.debugJS)
 			zk.error("Unknown constraint: "+cst);
 	},
