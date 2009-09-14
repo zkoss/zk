@@ -37,7 +37,7 @@ import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.scripting.Namespaces;
+import org.zkoss.zk.ui.ext.Scopes;
 
 import org.zkoss.zul.impl.HeaderElement;
 import org.zkoss.zul.mesg.MZul;
@@ -333,7 +333,7 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 		if (grid == null || rows == null) return false;
 
 		//comparator might be zscript
-		Namespaces.beforeInterpret(this);
+		Scopes.beforeInterpret(this);
 		try {
 			final ListModel model = grid.getModel();
 			boolean isPagingMold = grid.inPagingMold();
@@ -356,7 +356,7 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 				// the wrong active page when dynamically add/remove the item (i.e. sorting).
 				// Therefore, we have to reset the correct active page.
 		} finally {
-			Namespaces.afterInterpret();
+			Scopes.afterInterpret();
 		}
 		fixDirection(grid, ascending);
 
@@ -427,7 +427,7 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 		if (grid == null) return false;
 		
 		//comparator might be zscript
-		Namespaces.beforeInterpret(this);
+		Scopes.beforeInterpret(this);
 		try {
 			final ListModel model = grid.getModel();
 			int index = grid.getColumns().getChildren().indexOf(this);
@@ -493,7 +493,7 @@ public class Column extends HeaderElement implements org.zkoss.zul.api.Column{
 					sort0(grid, cmpr); //need to sort each group
 			}
 		} finally {
-			Namespaces.afterInterpret();
+			Scopes.afterInterpret();
 		}
 
 		fixDirection(grid, ascending);

@@ -51,6 +51,7 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
+import org.zkoss.zk.ui.ext.ScopeListener;
 import org.zkoss.zk.xel.Evaluator;
 import org.zkoss.zk.ui.event.Events;
 
@@ -518,7 +519,7 @@ public class Components {
 	 * <p>The controller is a POJO file with onXxx$myid methods (the event handler 
 	 * codes). This utility method search such onXxx$myid methods and adds 
 	 * forward condition to the source myid component looked up by   
-	 * {@link Component#getVariable} of the specified component, so you 
+	 * {@link Component#getFellowOrAttribute} of the specified component, so you 
 	 * don't have to specify in zul file the "forward" attribute one by one. 
 	 * If the source component cannot be looked up or the object looked up is 
 	 * not a component, this method will log the error and ignore it.
@@ -564,7 +565,7 @@ public class Components {
 						final String srcevt = mdname.substring(0, k);
 						if ((k+1) < mdname.length()) {
 							final String srccompid = mdname.substring(k+1);
-							final Object srccomp = xcomp.getVariable(srccompid, false);
+							final Object srccomp = xcomp.getFellowOrAttribute(srccompid, false);
 							if (srccomp == null || !(srccomp instanceof Component)) {
 								if (log.debugable()) {
 									log.debug("Cannot find the associated component to forward event: "+mdname);
@@ -789,18 +790,18 @@ public class Components {
 		public void wireController(Component comp, String id) {
 			//feature #2778513, support {id}$composer name
 			final String composerid =  id + _separator + "composer";
-			if (!comp.containsVariable(composerid, true)) {
-				comp.setVariable(composerid, _controller, true);
+			if (!comp.hasFellowOrAttribute(composerid, true)) {
+				comp.setAttribute(composerid, _controller);
 			}
-			comp.setVariable(varname(id, _controller.getClass()), _controller, true);
+			comp.setAttribute(varname(id, _controller.getClass()), _controller);
 		}
 		
 		public void wireController(Page page, String id) {
 			final String composerid =  id + _separator + "composer";
-			if (!page.containsVariable(composerid)) {
-				page.setVariable(composerid, _controller);
+			if (!page.hasFellowOrAttribute(composerid, true)) {
+				page.setAttribute(composerid, _controller);
 			}
-			page.setVariable(varname(id, _controller.getClass()), _controller);
+			page.setAttribute(varname(id, _controller.getClass()), _controller);
 		}
 		
 		public void wireFellows(IdSpace idspace) {
@@ -895,12 +896,12 @@ public class Components {
 			if (x instanceof Page) {
 				final Page pg = (Page) x;
 				return pg.getZScriptVariable(fdname) != null
-					|| pg.containsVariable(fdname);
+					|| pg.hasFellowOrAttribute(fdname, false);
 			} else {
 				final Component cmp = (Component) x;
 				final Page page = getPage(cmp);
 				return (page != null && page.getZScriptVariable(cmp, fdname) != null)
-					|| cmp.containsVariable(fdname, false);
+					|| cmp.hasFellowOrAttribute(fdname, false);
 			}
 		}
 		
@@ -910,7 +911,7 @@ public class Components {
 				final Page pg = (Page) x;
 				Object arg = pg.getZScriptVariable(fdname);
 				if (arg == null) {
-					arg = pg.getVariable(fdname);
+					arg = pg.getFellowOrAttribute(fdname, false);
 				}
 				return arg;
 			} else {
@@ -918,7 +919,7 @@ public class Components {
 				final Page page = getPage(cmp);
 				Object arg = page != null ? page.getZScriptVariable(cmp, fdname): null;
 				if (arg == null) {
-					arg = cmp.getVariable(fdname, false);
+					arg = cmp.getFellowOrAttribute(fdname, false);
 				}
 				return arg;
 			}
@@ -1128,6 +1129,21 @@ public class Components {
 		public Object getAttribute(String name) {
 			return exec().getAttribute(name);
 		}
+		public boolean hasAttribute(String name) {
+			return exec().hasAttribute(name);
+		}
+		public Object getAttribute(String name, boolean local) {
+			return exec().getAttribute(name, local);
+		}
+		public boolean hasAttribute(String name, boolean local) {
+			return exec().hasAttribute(name, local);
+		}
+		public boolean addScopeListener(ScopeListener listener) {
+			return exec().addScopeListener(listener);
+		}
+		public boolean removeScopeListener(ScopeListener listener) {
+			return exec().removeScopeListener(listener);
+		}
 
 		public Map getAttributes() {
 			return exec().getAttributes();
@@ -1326,8 +1342,8 @@ public class Components {
 			exec().pushArg(arg);
 		}
 
-		public void removeAttribute(String name) {
-			exec().removeAttribute(name);
+		public Object removeAttribute(String name) {
+			return exec().removeAttribute(name);
 		}
 
 		public void sendRedirect(String uri) {
@@ -1338,8 +1354,8 @@ public class Components {
 			exec().sendRedirect(uri, target);
 		}
 
-		public void setAttribute(String name, Object value) {
-			exec().setAttribute(name, value);
+		public Object setAttribute(String name, Object value) {
+			return exec().setAttribute(name, value);
 		}
 
 		public void setVoided(boolean voided) {

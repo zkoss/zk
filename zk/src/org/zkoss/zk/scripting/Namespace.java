@@ -23,7 +23,9 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 
 /**
- * To represent the name space for storing variables.
+ * @deprecated As of release 5.0, replaced with {@link org.zkoss.zk.ui.ext.Scope}.
+ *
+ * <p>To represent the name space for storing variables.
  * There are two ways to declare variables: by zscirpt, or by
  * {@link org.zkoss.zk.ui.Component#setVariable}/
  * {@link org.zkoss.zk.ui.Page#setVariable}.

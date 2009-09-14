@@ -27,7 +27,6 @@ import java.util.Iterator;
 import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.au.AuService;
 
 /**
@@ -88,7 +87,7 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 * See {@link IdSpace} for more details.
 	 *
 	 * <p>The ID space relevant methods include {@link #getFellow},
-	 * {@link #getAttribute} and {@link #getVariable}.
+	 * {@link #getAttribute} and {@link #getFellowOrAttribute}.
 	 *
 	 * @see #getNamespace
 	 */
@@ -243,6 +242,10 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 * @since 3.0.6
 	 */
 	public Collection getFellows();
+	/** Returns whether a fellow exists in the same ID space of this component.
+	 * @since 5.0.0
+	 */
+	public boolean hasFellow(String compId);
 
 	/** Returns the next sibling, or null if it is the last child.
 	 * @since 3.0.0
@@ -338,6 +341,25 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 * {@link #REQUEST_SCOPE} or {@link #APPLICATION_SCOPE}, 
 	 */
 	public Object getAttribute(String name, int scope);
+	/** Returns if the custom attribute is associate with this component.
+	 * <p>If scope is {@link #COMPONENT_SCOPE}, it means attributes private
+	 * to this component.
+	 * <p>If scope is {@link #SPACE_SCOPE}, it means custom attributes shared
+	 * by components from the same ID space as this one's.
+	 * <p>If scope is {@link #PAGE_SCOPE}, it means custom attributes shared
+	 * by components from the same page as this one's.
+	 * <p>If scope is {@link #DESKTOP_SCOPE}, it means custom attributes shared
+	 * by components from the same desktopas this one's.
+	 *
+	 * <p>Notice that <code>null</code> is a valid value, so you can
+	 * tell if an attribute is assoicated by examining the return value
+	 * of {@link #getAttribute}.
+	 * @param scope {@link #COMPONENT_SCOPE}, {@link #SPACE_SCOPE},
+	 * {@link #PAGE_SCOPE}, {@link #DESKTOP_SCOPE}, {@link #SESSION_SCOPE},
+	 * {@link #REQUEST_SCOPE} or {@link #APPLICATION_SCOPE}, 
+	 * @since 5.0.0
+	 */
+	public boolean hasAttribute(String name, int scope);
 	/** Sets the value of the specified custom attribute in the specified scope.
 	 *
 	 * <p>Note: The attribute is removed (by {@link #removeAttribute}
@@ -382,6 +404,13 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 * {@link #COMPONENT_SCOPE}.
 	 */
 	public Object getAttribute(String name);
+	/** Returns if the custom attribute is associate with this component.
+	 * <p>Notice that <code>null</code> is a valid value, so you can
+	 * tell if an attribute is assoicated by examining the return value
+	 * of {@link #getAttribute}.
+	 * @since 5.0.0
+	 */
+	public boolean hasAttribute(String name);
 	/** Sets the custom attribute associated with this component, i.e.,
 	 * {@link #COMPONENT_SCOPE}.
 	 */
@@ -391,10 +420,50 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 */
 	public Object removeAttribute(String name);
 
-	/** Sets a variable to the namespace.
+	/** Sets the custom attribute associated with this component, or the parent
+	 * component.
+	 * @param local whether not to look up the parent component for the
+	 * existence of the attribute.<br/>
+	 * If local is false and the attribute is defined in
+	 * one of its ancestor (including page), the attribute is replaced.
+	 * Otherwise, it is the same as {@link #setAttribute(String,Object)}.
+	 * @since 5.0.0
+	 */
+	public Object setAttribute(String name, Object value, boolean local);
+	/** Removes the custom attribute associated with this component, i.e.,
+	 * {@link #COMPONENT_SCOPE}.
+	 * @param local whether not to look up the parent component for the
+	 * existence of the attribute.<br/>
+	 * If local is false and the attribute is defined in
+	 * one of its ancestor (including page), the attribute is removed.
+	 * Otherwise, it is the same as {@link #removeAttribute(String)}.
+	 * @since 5.0.0
+	 */
+	public Object removeAttribute(String name, boolean local);
+
+	/** Returns the custom attribute associated with this component,
+	 * or the fellow of this component.
 	 *
-	 * <p>This method is the same as
-	 * getNamespace().setVariable(name, value, local).
+	 * @param local whether not to look up the parent component for the
+	 * existence of the attribute.<br/>
+	 * Notice that, if local is false and this component is not an ID
+	 * space owner, it won't look at the fellow
+	 * @since 5.0.0
+	 */
+	public Object getFellowOrAttribute(String name, boolean local);
+	/** Returns if a custom attribute is associated with this component,
+	 * or the fellow of this component.
+	 *
+	 * @param local whether not to look up the parent component for the
+	 * existence of the attribute.<br/>
+	 * Notice that, if local is false and this component is not an ID
+	 * space owner, it won't look at the fellow
+	 * @since 5.0.0
+	 */
+	public boolean hasFellowOrAttribute(String name, boolean local);
+
+	/** @deprecated As of release 5.0.0, replaced with {@link #setAttribute}.
+	 * <p>Sets a variable to the namespace.
 	 *
 	 * <p>Once a variable is set thru this method, it is visible to
 	 * both the interpreter and EL.
@@ -405,30 +474,15 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 * Otherwise, it is the same as the namspace returned by the component
 	 * owning this ID space.
 	 *
-	 * <h3>When to use setVariable and setAttribute?</h3>
-	 *
-	 * <p>First, only the ID space support {@link #setVariable} and so.
-	 * Second, the variables can be referenced directly in zscript and EL
-	 * expressions, while attributes are referenced thru the scope,
-	 * such as spaceScope.
-	 * On the other hand, using attributes causes less name popultion.
-	 * In general, if you could use attributes, don't use variable.
-	 *
 	 * @param local whether not to search any of the ancestor namespace defines
 	 * the variable. If local is false and an ancesotor has defined a variable
 	 * with the same name, the variable in the ancestor is changed directly.
 	 * Otherwise, a new variable is created in the namespace containing
 	 * this component.
-	 * @see #getSpaceOwner
-	 * @see #getNamespace
 	 */
 	public void setVariable(String name, Object val, boolean local);
-	/** Returns whether the specified variable is defined.
-	 *
-	 * <p>Note: null is a valid value for variable, so this method is used
-	 * to know whether a variable is defined.
-	 * On the other hand, {@link #setAttribute} actually remove
-	 * an attribute (by {@link #removeAttribute} if value is null.
+	/** @deprecated As of release 5.0.0, replaced with {@link #hasFellowOrAttribute}.
+	 * <p>Returns whether the specified variable is defined.
 	 *
 	 * @param local whether not to search its ancestor.
 	 * If false and the current namespace doen't define the variable,
@@ -436,36 +490,23 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 * any of them has defined the specified variable.
 	 */
 	public boolean containsVariable(String name, boolean local);
-	/** Returns the value of a variable defined in the namespace,
+	/** @deprecated As of release 5.0.0, replaced with {@link #getFellowOrAttribute}.
+	 * <p>Returns the value of a variable defined in the namespace,
 	 * or null if not defined or the value is null.
 	 *
-	 * <p>This method is the same as getNamespace().getVariable(name, local).
-	 *
-	 * <h3>Differences between {@link #getVariable} and {@link Page#getZScriptVariable}</h3>
-	 *
-	 * <p>{@link #getVariable} returns only variables defined by
-	 * {@link #setVariable} (i.e., a shortcut of {@link Namespace#setVariable}).
-	 * On the other hand, {@link Page#getZScriptVariable} returns these variables
-	 * and those defined when executing zscripts.
-	 *
 	 * @param local whether not to search its ancestor.
 	 * If false and the current namespace doen't define the variable,
 	 * it searches up its ancestor (via {@link #getParent}) to see
 	 * any of them has defined the specified variable.
-	 * @see #getSpaceOwner
-	 * @see #getNamespace
 	 */
 	public Object getVariable(String name, boolean local);
-	/** Unsets a variable defined in the namespace.
-	 *
-	 * <p>This method is the same as  getNamespace().getVariable(name, local).
+	/** @deprecated As of release 5.0.0, replaced with {@link #removeAttribute}.
+	 * <p>Unsets a variable defined in the namespace.
 	 *
 	 * @param local whether not to search its ancestor.
 	 * If false and the current namespace doen't define the variable,
 	 * it searches up its ancestor (via {@link #getParent}) to see
 	 * any of them has defined the specified variable.
-	 * @see #getSpaceOwner
-	 * @see #getNamespace
 	 */
 	public void unsetVariable(String name, boolean local);
 
@@ -744,7 +785,9 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 */
 	public void invalidate();
 
-	/** Returns the namespace to store variables and functions belonging
+	/** @deprecated As of release 5.0.0, the concept of namespace
+	 * is replaced with attributes.
+	 * <p>Returns the namespace to store variables and functions belonging
 	 * to the ID space of this component.
 	 *
 	 * <p>Exactly one namespace is allocated for each ID space.
@@ -752,16 +795,8 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 * the returned namespace is the same as {@link Page#getNamespace}.
 	 * Otherwise, it is the same as the namspace returned by the component
 	 * owning this ID space.
-	 *
-	 * <p>Namspace is another part of an ID space. It holds only variables
-	 * defined thru {@link #setVariable} (and {@link Namespace#setVariable}.
-	 *
-	 * <p>Note: The namespace doesn't include any variable defined by
-	 * executing zscripts. To retrieve them, use {@link Page#getZScriptVariable}.
-	 *
-	 * @see #getSpaceOwner
 	 */
-	public Namespace getNamespace();
+	public org.zkoss.zk.scripting.Namespace getNamespace();
 
 	/** Initializes the properties (aka. members) and custom-attributes
 	 * based on what are defined in the component definition.

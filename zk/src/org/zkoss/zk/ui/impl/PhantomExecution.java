@@ -32,6 +32,7 @@ import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.ui.ext.ScopeListener;
 
 /**
  * A 'phantom' execution that is used when no request/response available.
@@ -192,14 +193,30 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 	public Object getAttribute(String name) {
 		return null;
 	}
-	public void setAttribute(String name, Object value) {
+	public boolean hasAttribute(String name) {
+		return false;
+	}
+	public Object getAttribute(String name, boolean local) {
+		return null;
+	}
+	public boolean hasAttribute(String name, boolean local) {
+		return false;
+	}
+	public Object setAttribute(String name, Object value) {
 		throw new UnsupportedOperationException();
 	}
-	public void removeAttribute(String name) {
+	public Object removeAttribute(String name) {
 		throw new UnsupportedOperationException();
 	}
 	public Map getAttributes() {
 		return Collections.EMPTY_MAP;
+	}
+
+	public boolean addScopeListener(ScopeListener listener) {
+		throw new UnsupportedOperationException();
+	}
+	public boolean removeScopeListener(ScopeListener listener) {
+		throw new UnsupportedOperationException();
 	}
 
 	public String getHeader(String name) {

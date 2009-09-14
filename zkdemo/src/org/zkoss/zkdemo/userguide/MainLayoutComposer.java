@@ -22,7 +22,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.zkoss.util.logging.Log;
 import org.zkoss.lang.reflect.FusionInvoker;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.Execution;
@@ -57,6 +59,8 @@ import org.zkoss.zul.Textbox;
  */
 public class MainLayoutComposer extends GenericForwardComposer implements
 	MainLayoutAPI, ComposerExt {
+	private static final Log log = Log.lookup(MainLayoutComposer.class);
+
 	Textbox searchBox;
 
 	Listbox itemList;
@@ -190,7 +194,7 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 		if (item == null) {
 			item = (Listitem) main.getFellow("f1");
 			setSelectedCategory(item);
-		}		
+		}
 		xcontents.setSrc(((DemoItem) item.getValue()).getFile());
 
 		itemList.selectItem(item);
@@ -306,12 +310,12 @@ public class MainLayoutComposer extends GenericForwardComposer implements
 	public void doBeforeComposeChildren(Component comp) throws Exception {
 		bindComponent(comp);
 		Object obj = FusionInvoker.newInstance(new Object[] { comp, this });
-		comp.setVariable("main", obj, true);
+		comp.setAttribute("main", obj);
 		main = (Borderlayout) comp;
 	}
 
 	public boolean doCatch(Throwable ex) throws Exception {
-		ex.printStackTrace();
+		log.error("Failed to compose "+this, ex);
 		return false;
 	}
 

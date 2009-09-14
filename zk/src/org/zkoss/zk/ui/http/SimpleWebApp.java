@@ -36,6 +36,7 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Configuration;
+import org.zkoss.zk.ui.ext.ScopeListener;
 import org.zkoss.zk.ui.impl.AbstractWebApp;
 
 /**
@@ -75,14 +76,34 @@ public class SimpleWebApp extends AbstractWebApp {
 	public Object getAttribute(String name) {
 		return _ctx.getAttribute(name);
 	}
-	public void setAttribute(String name, Object value) {
-		_ctx.setAttribute(name, value);
+	public boolean hasAttribute(String name) {
+		return getAttribute(name) != null; //Servlet limitation
 	}
-	public void removeAttribute(String name) {
+	public Object setAttribute(String name, Object value) {
+		Object old = _ctx.getAttribute(name);
+		_ctx.setAttribute(name, value);
+		return old;
+	}
+	public Object removeAttribute(String name) {
+		Object old = _ctx.getAttribute(name);
 		_ctx.removeAttribute(name);
+		return old;
 	}
 	public Map getAttributes() {
 		return _attrs;
+	}
+	public Object getAttribute(String name, boolean local) {
+		return getAttribute(name);
+	}
+	public boolean hasAttribute(String name, boolean local) {
+		return hasAttribute(name);
+	}
+
+	public boolean addScopeListener(ScopeListener listener) {
+		throw new UnsupportedOperationException(); //TODO
+	}
+	public boolean removeScopeListener(ScopeListener listener) {
+		throw new UnsupportedOperationException(); //TODO
 	}
 
 	public String getUpdateURI() {

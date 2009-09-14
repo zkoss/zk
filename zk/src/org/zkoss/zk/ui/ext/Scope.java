@@ -22,10 +22,68 @@ import java.util.Map;
  * @since 3.6.0
  */
 public interface Scope {
-	/** Returns all custom attributes associated with this object.
+	/** Returns all custom attributes associated with this object (scope).
 	 */
 	public Map getAttributes();
-	/** Returns the custom attribute associated with this object.
+	/** Returns the custom attribute associated with this object (scope).
 	 */
 	public Object getAttribute(String name);
+	/** Returns if a custom attribute is associated with this object (scope).
+	 * <p>Notice that <code>null</code> is a valid value, so you can
+	 * tell if an attribute is assoicated by examining the return value
+	 * of {@link #getAttribute}.
+	 * @since 5.0.0
+	 */
+	public boolean hasAttribute(String name);
+	/** Sets (aka., associates) the value for a custom attribute with this object (scope).
+	 * @returns the previous value associated with the attribute, if any
+	 * @since 5.0.0
+	 */
+	public Object setAttribute(String name, Object value);
+	/** Removes the attribute from the current scope if any.
+	 * @return the previous value associated with the attribute, if any,
+	 * @since 5.0.0
+	 */
+	public Object removeAttribute(String name);
+
+	/** Returns the custom attribute associated with this object.
+	 *
+	 * @param local whether not to search its ancestor scope.
+	 * If false and the current scope doen't define the variable,
+	 * it searches up its ancestor (via {@link #getParent}) to see
+	 * any of them has defined the specified variable.
+	 * Notice: for a component, the ancestor scope is the space owner.
+	 * @since 5.0.0
+	 */
+	public Object getAttribute(String name, boolean local);
+	/** Returns if a custom attribute is associated with this object.
+	 * <p>Notice that <code>null</code> is a valid value, so you can
+	 * tell if an attribute is assoicated by examining the return value
+	 * of {@link #getAttribute}.
+	 *
+	 * @param local whether not to search its ancestor scope.
+	 * If false and the current scope doen't define the variable,
+	 * it searches up its ancestor (via {@link #getParent}) to see
+	 * any of them has defined the specified variable.
+	 * Notice: for a component, the ancestor scope is the space owner.
+	 * @since 5.0.0
+	 */
+	public boolean hasAttribute(String name, boolean local);
+
+	/** Adds a listener to listen whether this scope is changed.
+	 * The listener is called when a custom attribute is added, removed, or
+	 * the parent is changed.
+	 *
+	 * @return wether the listener is added successfully.
+	 * Note: if the resolver was added before, it won't be added again
+	 * and this method returns false.
+	 * @since 5.0.0
+	 */
+	public boolean addScopeListener(ScopeListener listener);
+	/** Removes a change listener from this scope.
+	 *
+	 * @return false if listener is not added before.
+	 * @since 5.0.0
+	 */
+	public boolean removeScopeListener(ScopeListener listener);
 }

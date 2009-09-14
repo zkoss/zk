@@ -34,8 +34,7 @@ import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.scripting.Namespace;
-import org.zkoss.zk.scripting.Namespaces;
+import org.zkoss.zk.ui.ext.Scopes;
 
 import org.zkoss.zul.impl.HeaderElement;
 
@@ -372,7 +371,7 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 		if (box == null) return false;
 
 		//comparator might be zscript
-		Namespaces.beforeInterpret(this);
+		Scopes.beforeInterpret(this);
 		try {
 			final ListModel model = box.getModel();
 			boolean isPagingMold = box.inPagingMold();
@@ -394,7 +393,7 @@ public class Listheader extends HeaderElement implements org.zkoss.zul.api.Listh
 				// the wrong active page when dynamically add/remove the item (i.e. sorting).
 				// Therefore, we have to reset the correct active page.
 		} finally {
-			Namespaces.afterInterpret();
+			Scopes.afterInterpret();
 		}
 
 		//maintain

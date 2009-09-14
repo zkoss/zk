@@ -29,15 +29,15 @@ import org.zkoss.xel.Function;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.IdSpace;
+import org.zkoss.zk.ui.ext.Scope;
+import org.zkoss.zk.ui.ext.Scopes;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.scripting.Interpreter;
-import org.zkoss.zk.scripting.Namespace;
-import org.zkoss.zk.scripting.Namespaces;
-import org.zkoss.zk.scripting.NamespaceChangeListener;
 
 /**
- * A skeletal class for implementing a interpreter ({@link Interpreter}) that
- * support {@link Namespace}.
+ * A skeletal class for implementing a interpreter ({@link Interpreter}).
  *
  * <p>Derive classes usually override {@link #exec} instead of {@link #interpret};
  * In addition, don't override {@link #getVariable},
@@ -48,17 +48,17 @@ import org.zkoss.zk.scripting.NamespaceChangeListener;
  * <p>If an interpreter doesn't support hierachical scopes,
  * it can simply implement a global scope, and then use
  * {@link #getFromNamespace} to
- * retrieve variables from ZK's hierachical namespaces.
+ * retrieve variables from ZK's hierachical scopes.
  *
  * <p>If it supports hierachical scopes
  * (example: {@link org.zkoss.zk.scripting.bsh.BSHInterpreter}), it
  * can maintain a one-to-one relationship among interpreter's scopes
- * and ZK's {@link Namespace}. Thus, it can retrieve
- * the correct scope by giving ZK's {@link Namespace}, and vice versa.
- * It also has to implement {@link #get(Namespace,String)}, {@link #contains(Namespace,String)}
- * {@link #set(Namespace,String,Object)} and {@link #unset(Namespace,String)}.
+ * and ZK's {@link IdSpace}. Thus, it can retrieve
+ * the correct scope by giving ZK's {@link IdSpace}, and vice versa.
+ * It also has to implement {@link #get(Scope,String)}, {@link #contains(Scope,String)}
+ * {@link #set(Scope,String,Object)} and {@link #unset(Scope,String)}.
  *
- * <p>Whether to support hierachical namespaces is optional.
+ * <p>Whether to support hierachical scopes is optional.
  *
  * @author tomyeh
  */
@@ -70,10 +70,10 @@ abstract public class GenericInterpreter implements Interpreter {
 		public String toString() {return "undefined";}
 	};
 
-	/** A list of {@link Namespace}.
-	 * Top of it is the current one (if null, it means Namespaces.getCurrent)
+	/** A list of {@link Scope}.
+	 * Top of it is the current one (if null, it means Scopes.getCurrent)
 	 */
-	private final List _nss = new LinkedList();
+	private final List _scopes = new LinkedList();
 	private Page _owner;
 	private String _zslang;
 
@@ -103,7 +103,7 @@ abstract public class GenericInterpreter implements Interpreter {
 	 *
 	 * <p>{@link #beforeExec} is called first, before this method is invoked.
 	 *
-	 * <p>An empty (and fake) namespace is pushed so {@link #getFromNamespace}
+	 * <p>An empty (and fake) scope is pushed so {@link #getFromNamespace}
 	 * always returns null.
 	 */
 	protected Object get(String name) {
@@ -127,19 +127,19 @@ abstract public class GenericInterpreter implements Interpreter {
 	}
 
 	/** Tests whether a variable is defined in the interpreter's scope
-	 * associated with the specified namespace.
+	 * associated with the specified scope.
 	 * Optional. Implement it if the interpreter can tell the difference
 	 * between null and undefined.
 	 *
-	 * <p>By default, it tests whether {@link #get(Namespace, String)}
+	 * <p>By default, it tests whether {@link #get(Scope, String)}
 	 * returns non-null.
-	 * @since 2.4.0
+	 * @since 5.0.0
 	 */
-	protected boolean contains(Namespace ns, String name) {
-		return get(ns, name) != null;
+	protected boolean contains(Scope scope, String name) {
+		return get(scope, name) != null;
 	}
 	/** Gets the variable from the interpreter's scope associated with
-	 * the giving namespace.
+	 * the giving scope.
 	 * Optional. Implement it if you want to expose variables defined
 	 * in the interpreter to Java codes.
 	 *
@@ -150,14 +150,15 @@ abstract public class GenericInterpreter implements Interpreter {
 	 *
 	 * <p>{@link #beforeExec} is called first, before this method is invoked.
 	 *
-	 * <p>An empty (and fake) namespace is pushed so {@link #getFromNamespace}
+	 * <p>An empty (and fake) scope is pushed so {@link #getFromNamespace}
 	 * always returns null.
+	 * @since 5.0.0
 	 */
-	protected Object get(Namespace ns, String name) {
+	protected Object get(Scope scope, String name) {
 		return get(name);
 	}
 	/** Sets the variable to the interpreter's scope associated with the
-	 * giving namespace.
+	 * giving scope.
 	 * Optional. Implement it if you want to allow Java codes to define
 	 * a variable in the interpreter.
 	 *
@@ -167,9 +168,9 @@ abstract public class GenericInterpreter implements Interpreter {
 	 * <p>Default: the same as {@link #set(String, Object)}.
 	 *
 	 * <p>{@link #beforeExec} is called first, before this method is invoked.
-	 * @since 2.4.0
+	 * @since 5.0.0
 	 */
-	protected void set(Namespace ns, String name, Object value) {
+	protected void set(Scope scope, String name, Object value) {
 		set(name, value);
 	}
 	/** Removes the variable from the interpreter.
@@ -182,24 +183,26 @@ abstract public class GenericInterpreter implements Interpreter {
 	 * <p>Default: the same as {@link #unset(String)}.
 	 *
 	 * <p>{@link #beforeExec} is called first, before this method is invoked.
-	 * @since 2.4.0
+	 * @since 5.0.0
 	 */
-	protected void unset(Namespace ns, String name) {
+	protected void unset(Scope scope, String name) {
 		unset(name);
 	}
 
 	/** Called before {@link #exec}.
-	 * <p>Default: call {@link #beforeExec} and push the namespace
+	 * <p>Default: call {@link #beforeExec} and push the scope
 	 * as the active one.
+	 * @since 5.0.0
 	 */
-	protected void beforeInterpret(Namespace ns) {
+	protected void beforeInterpret(Scope scope) {
 		beforeExec();
-		push(ns); //getFromNamespace will handle null
+		push(scope); //getFromNamespace will handle null
 	}
 	/** Called after {@link #exec}.
 	 * <p>Default: call {@link #afterExec}.
+	 * @since 5.0.0
 	 */
-	protected void afterInterpret(Namespace ns) {
+	protected void afterInterpret(Scope scope) {
 		pop();
 		afterExec();
 	}
@@ -215,21 +218,40 @@ abstract public class GenericInterpreter implements Interpreter {
 	}
 
 	//utilities//
-	/** Returns the variable through namespaces and variable resolvers,
+	/** Returns the variable through scopes and variable resolvers,
 	 * or {@link #UNDEFINED} if the variable not defined.
 	 *
-	 * <p>It is usually called to search namespaces and variable resolvers,
+	 * <p>It is usually called to search scopes and variable resolvers,
 	 * when the real interpreter failed to find a variable in its own scope.
 	 *
 	 * <p>Note: We use {@link #UNDEFINED} to denote undefined since 2.4.0,
 	 * while null is a valid value.
 	 */
 	protected Object getFromNamespace(String name) {
-		final Namespace ns = getCurrent();
-		if (ns != null) {
-			Object val = ns.getVariable(name, false);
-			if (val != null || ns.containsVariable(name, false))
-				return val;
+		final Scope scope = getCurrent();
+		if (scope != null) { //null means no scope allowed!
+			final Execution exec = Executions.getCurrent();
+			if (exec != null && exec != scope) {
+				Object val = exec.getAttribute(name);
+				if (val != null /*|| exec.hasAttribute(name)*/) //request's hasAttribute same as getAttribute
+					return val;
+			}
+
+			if (scope instanceof Component) {
+				Component comp = (Component)scope;
+				Object val = comp.getFellowOrAttribute(name, false);
+				if (val != null || comp.hasFellowOrAttribute(name, false))
+					return val;
+			} else if (scope instanceof Page) {
+				Page page = (Page)scope;
+				Object val = page.getFellowOrAttribute(name, false);
+				if (val != null || page.hasFellowOrAttribute(name, false))
+					return val;
+			} else {
+				Object val = scope.getAttribute(name, false);
+				if (val != null || scope.hasAttribute(name, false))
+					return val;
+			}
 		}
 		return getImplicit(name);
 	}
@@ -245,38 +267,32 @@ abstract public class GenericInterpreter implements Interpreter {
 			final Execution exec = Executions.getCurrent();
 			if (exec != null) return exec;
 		}
-		return Namespaces.getImplicit(name, UNDEFINED);
+		return Scopes.getImplicit(name, UNDEFINED);
 	}
-	/** Returns the variable through the specified namespaces and
+	/** Returns the variable through the specified scopes and
 	 * variable resolvers, or {@link #UNDEFINED} if the variable is not
 	 * defined.
 	 *
-	 * <p>It is usually called to search namespaces and variable resolvers,
+	 * <p>It is usually called to search scopes and variable resolvers,
 	 * when the real interpreter failed to find a variable in its own scope.
 	 *
 	 * <p>This method is used with the interpreter that supports
 	 * hierachical scopes ({@link org.zkoss.zk.scripting.HierachicalAware}).
 	 *
-	 * @param ns the namespace to search from (never null).
+	 * @param scope the scope to search from (never null).
 	 * Note: if {@link #getCurrent} returns null, this method simply returns
-	 * null (i.e., ignoring ns).
-	 * @param localOnly whether to look for the current namespace only.
-	 * If false, it looks up the parent namespace, if any.
-	 * @since 3.6.0
+	 * null (i.e., ignoring scope).
+	 * @param localOnly whether to look for the current scope only.
+	 * If false, it looks up the parent scope, if any.
+	 * @since 5.0.0
 	 */
-	protected Object getFromNamespace(Namespace ns, String name, boolean localOnly) {
-		if (getCurrent() != null) {
-			Object val = ns.getVariable(name, localOnly);
-			if (val != null || ns.containsVariable(name, localOnly))
+	protected Object getFromNamespace(Scope scope, String name, boolean localOnly) {
+		if (getCurrent() != null) { //null means no scope allowed!
+			Object val = scope.getAttribute(name, localOnly);
+			if (val != null || scope.hasAttribute(name, localOnly))
 				return val;
 		}
 		return getImplicit(name);
-	}
-	/** It is a shortcut of getFromNamespace(ns, name, false).
-	 * @see #getFromNamespace(Namespace, String, boolean)
-	 */
-	protected Object getFromNamespace(Namespace ns, String name) {
-		return getFromNamespace(ns, name, false);
 	}
 
 	//Interpreter//
@@ -296,20 +312,31 @@ abstract public class GenericInterpreter implements Interpreter {
 		return _zslang;
 	}
 
-	/** Handles the namespace and then invoke {@link #exec}.
-	 * <p>Don't override this method, rather, override {@link #exec}.
+	/** @deprecated As of release 5.0.0, replaced with {@link #interpret(String, Scope}}
 	 */
-	public void interpret(String script, Namespace ns) {
+	public void interpret(String script, org.zkoss.zk.scripting.Namespace ns) {
+		Scope scope = null;
+		if (ns != null) {
+			scope = ns.getOwner();
+			if (scope == null) scope = ns.getOwnerPage();
+		}
+		interpret(script, scope);
+	}
+	/** Handles the scope and then invoke {@link #exec}.
+	 * <p>Don't override this method, rather, override {@link #exec}.
+	 * @since 5.0.0
+	 */
+	public void interpret(String script, Scope scope) {
 		final String each =
 			_owner.getLanguageDefinition().getEachTimeScript(_zslang);
 		if (each != null)
 			script = each + '\n' + script;
 
-		beforeInterpret(ns);
+		beforeInterpret(scope);
 		try {
 			exec(script);
 		} finally {
-			afterInterpret(ns);
+			afterInterpret(scope);
 		}
 	}
 	/** Returns null since retrieving class is not supported.
@@ -324,9 +351,9 @@ abstract public class GenericInterpreter implements Interpreter {
 		return null;
 	}
 	/** Returns null since retrieving methods is not supported.
-	 * @since 3.0.0
+	 * @since 5.0.0
 	 */
-	public Function getFunction(Namespace ns, String name, Class[] argTypes) {
+	public Function getFunction(Scope scope, String name, Class[] argTypes) {
 		return null;
 	}
 
@@ -338,7 +365,7 @@ abstract public class GenericInterpreter implements Interpreter {
 	public boolean containsVariable(String name) {
 		beforeExec();
 		push(Objects.UNKNOWN);
-			//don't use null since it means Namespaces#getCurrent, see below
+			//don't use null since it means Scopes#getCurrent, see below
 		try {
 			return contains(name);
 		} finally {
@@ -353,7 +380,7 @@ abstract public class GenericInterpreter implements Interpreter {
 	public Object getVariable(String name) {
 		beforeExec();
 		push(Objects.UNKNOWN);
-			//don't use null since it means Namespaces#getCurrent, see below
+			//don't use null since it means Scopes#getCurrent, see below
 		try {
 			return get(name);
 		} finally {
@@ -389,99 +416,101 @@ abstract public class GenericInterpreter implements Interpreter {
 	/** Tests whether the variable exists by using the specified name
 	 * as a reference to identify the interpreter's scope.
 	 *
-	 * <p>Deriving class shall override {@link #contains(Namespace,String)}, instead of this method.
-	 * @since 2.4.0
+	 * <p>Deriving class shall override {@link #contains(Scope,String)}, instead of this method.
+	 * @since 5.0.0
 	 */
-	public boolean containsVariable(Namespace ns, String name) {
+	public boolean containsVariable(Scope scope, String name) {
 		beforeExec();
 		push(Objects.UNKNOWN);
-			//don't use null since it means Namespaces#getCurrent, see below
+			//don't use null since it means Scopes#getCurrent, see below
 		try {
-			return contains(ns, name);
+			return contains(scope, name);
 		} finally {
 			pop();
 			afterExec();
 		}
 	}
 	/** Returns the value of a variable defined in this interpreter's
-	 * scope identified by the specified namespace.
-	 * Note: it doesn't search the specified namespace ({@link Namespace}).
+	 * scope identified by the specified scope.
+	 * Note: it doesn't search the specified scope ({@link Scope}).
 	 *
-	 * <p>Deriving class shall override {@link #get(Namespace,String)},
+	 * <p>Deriving class shall override {@link #get(Scope,String)},
 	 * instead of this method.
 	 *
 	 * <p>This method is part of {@link org.zkoss.zk.scripting.HierachicalAware}.
 	 * It is defined here to simplify the implementation of the
 	 * deriving classes, if they support the hierachical scopes.
+	 * @since 5.0.0
 	 */
-	public Object getVariable(Namespace ns, String name) {
+	public Object getVariable(Scope scope, String name) {
 		beforeExec();
 		push(Objects.UNKNOWN);
-			//don't use null since it means Namespaces#getCurrent, see below
+			//don't use null since it means Scopes#getCurrent, see below
 		try {
-			return get(ns, name);
+			return get(scope, name);
 		} finally {
 			pop();
 			afterExec();
 		}
 	}
 	/** Sets the value of a variable to this interpreter's scope
-	 * identified by the specified namespace.
+	 * identified by the specified scope.
 	 *
-	 * <p>Deriving class shall override {@link #set(Namespace,String,Object)},
+	 * <p>Deriving class shall override {@link #set(Scope,String,Object)},
 	 * instead of this method.
-	 * @since 2.4.0
+	 * @since 5.0.0
 	 */
-	public final void setVariable(Namespace ns, String name, Object value) {
+	public final void setVariable(Scope scope, String name, Object value) {
 		beforeExec();
 		try {
-			set(ns, name, value);
+			set(scope, name, value);
 		} finally {
 			afterExec();
 		}
 	}
 	/** Removes the value of a variable defined in the interpreter's
-	 * scope identified by the specified namespace.
+	 * scope identified by the specified scope.
 	 *
-	 * <p>Deriving class shall override {@link #unset(Namespace,String)}, instead of this method.
-	 * @since 2.4.0
+	 * <p>Deriving class shall override {@link #unset(Scope,String)}, instead of this method.
+	 * @since 5.0.0
 	 */
-	public final void unsetVariable(Namespace ns, String name) {
+	public final void unsetVariable(Scope scope, String name) {
 		beforeExec();
 		try {
-			unset(ns, name);
+			unset(scope, name);
 		} finally {
 			afterExec();
 		}
 	}
 
-	/** Use the specified namespace as the active namespace.
+	/** Use the specified scope as the active scope.
 	 */
-	private void push(Object ns) {
-		_nss.add(0, ns);
+	private void push(Object scope) {
+		_scopes.add(0, scope);
 	}
-	/** Remove the active namespace.
+	/** Remove the active scope.
 	 */
 	private void pop() {
-		_nss.remove(0);
+		_scopes.remove(0);
 	}
-	/** Returns the current namespace, or null if no namespace is allowed.
+	/** Returns the current scope, or null if no scope is allowed.
 	 * Note: if this method returns null, it means the interpreter shall
-	 * not search variables defined in ZK namespace.
+	 * not search variables defined in ZK scope.
 	 *
-	 * <p>This method will handle {@link Namespaces#getCurrent} automatically.
+	 * <p>This method will handle {@link Scopes#getCurrent} automatically.
+	 * @since 5.0.0
 	 */
-	protected Namespace getCurrent() {
-		if (!_nss.isEmpty()) {
-			Object o = _nss.get(0);
+	protected Scope getCurrent() {
+		if (!_scopes.isEmpty()) {
+			Object o = _scopes.get(0);
 			if (o == Objects.UNKNOWN)
-				return null; //no namespace allowed
+				return null; //no scope allowed
 			if (o != null)
-				return (Namespace)o;
-			//we assume owner's namespace if null, because zscript might
+				return (Scope)o;
+			//we assume owner's scope if null, because zscript might
 			//define a class that will be invoke thru, say, event listener
-			//In other words, interpret is not called, so ns is not specified
+			//In other words, interpret is not called, so scope is not specified
 		}
-		return Namespaces.getCurrent(_owner); //never null
+		return Scopes.getCurrent(_owner); //never null
 	}
 }

@@ -18,8 +18,10 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.scripting;
 
-/**
- * A listener used to listen whether {@link Namespace} is changed.
+/** @deprecated, As of release 5.0.0, the concept of namespace is
+ * deprecated.
+ *
+ * <p>A listener used to listen whether {@link Namespace} is changed.
  *
  * <p>To add a listener to the namespace, invoke
  * {@link Namespace#addChangeListener}.
@@ -35,7 +37,9 @@ public interface NamespaceChangeListener {
 	/** Called when a variable is removed from {@link Namespace}.
 	 */
 	public void onRemove(String name);
-	/** Called when the parent is changed.
+	/** @deprecated As of release 5.0.0, the concept of namespace is
+	 * deprecated.
+	 * <p>Called when the parent is changed.
 	 *
 	 * @param newparent the new parent.
 	 */

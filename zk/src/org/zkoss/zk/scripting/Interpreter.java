@@ -20,6 +20,7 @@ package org.zkoss.zk.scripting;
 
 import org.zkoss.xel.Function;
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.ext.Scope;
 
 /**
  * Represents an interpter that can interpret the scripting codes.
@@ -55,7 +56,11 @@ public interface Interpreter {
 	 */
 	public Object getNativeInterpreter();
 
-	/** Evaluates the script against the specified namespace.
+	/** @deprecated As of release 5.0.0, replaced with {@link #interpret(String, Scope}}
+	 * <p>Evaluates the script against the specified namespace.
+	 */
+	public void interpret(String script, Namespace ns);
+	/** Evaluates the script against the specified scope.
 	 *
 	 * <p>Implementation Note:
 	 * <ol>
@@ -63,17 +68,18 @@ public interface Interpreter {
 	 * the string returned by
 	 * {@link org.zkoss.zk.ui.metainfo.LanguageDefinition#getEachTimeScript}
 	 * if not null.</li>
-	 * <li>The implementation must use {@link Namespaces#getCurrent}
-	 * to retrieve the current namesace if the ns argument is null.
+	 * <li>The implementation must use {@link Scopes#getCurrent}
+	 * to retrieve the current namesace if the comp argument is null.
 	 *
-	 * @param ns the namspace. If null, the current namespace is assumed.
-	 * The current namespace is {@link Namespaces#getCurrent}, which
-	 * is the event target's namespace, if the thread is processing an event.
+	 * @param scope the scope as the context to interpret the script.
+	 * If null, the current scope is assumed.
+	 * The current scope is {@link Scopes#getCurrent}, which
+	 * is the event target's scope, if the thread is processing an event.
 	 * The event target is {@link org.zkoss.zk.ui.event.Event#getTarget}.
-	 * Otherwise, the current namespace is the owner page's namespace
-	 * ({@link #getOwner}.
+	 * Otherwise, the current scope is the owner page ({@link #getOwner}.
+	 * @since 5.0.0
 	 */
-	public void interpret(String script, Namespace ns);
+	public void interpret(String script, Scope scope);
 
 	/** Returns the class defined in this interpreter, or null if not found.
 	 */
@@ -88,13 +94,13 @@ public interface Interpreter {
 	public Function getFunction(String name, Class[] argTypes);
 
 	/** Tests whether the variable is defined in this interpreter.
-	 * Note: it doesn't search the namespace ({@link Namespace}).
+	 * Note: it doesn't search the attributes ({@link Scope}).
 	 *
 	 * @since 2.4.0
 	 */
 	public boolean containsVariable(String name);
 	/** Returns the value of a variable defined in this interpreter.
-	 * Note: it doesn't search the namespace ({@link Namespace}).
+	 * Note: it doesn't search the scope ({@link Scope}).
 	 */
 	public Object getVariable(String name);
 	/** Sets the value of a variable to this interpreter, as if

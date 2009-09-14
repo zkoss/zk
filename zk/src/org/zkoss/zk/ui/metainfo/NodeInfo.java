@@ -32,7 +32,7 @@ import org.zkoss.zk.xel.impl.EvaluatorRef;
  * {@link PageDefinition} and {@link ComponentInfo}.
  * The root must be an instance of {@link PageDefinition}
  * and the other nodes must be instances of {@link ComponentInfo},
- * {@link ZScript}, {@link VariablesInfo}, or {@link AttributesInfo}.
+ * {@link ZScript},  or {@link AttributesInfo}.
  *
  * <p>Note:it is not thread-safe.
  * 

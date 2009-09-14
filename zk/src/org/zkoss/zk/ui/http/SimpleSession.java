@@ -39,6 +39,7 @@ import org.zkoss.web.servlet.xel.AttributesMap;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.ext.ScopeListener;
 import org.zkoss.zk.ui.sys.SessionsCtrl;
 import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
@@ -220,7 +221,11 @@ public class SimpleSession implements Session, SessionCtrl {
 					.getAttribute(name, PortletSession.APPLICATION_SCOPE):
 				null;
 	}
-	public void setAttribute(String name, Object value) {
+	public boolean hasAttribute(String name) {
+		return getAttribute(name) != null; //Servlet limitation
+	}
+	public Object setAttribute(String name, Object value) {
+		final Object old = getAttribute(name);
 		if (!(this instanceof Serializable || this instanceof Externalizable)) {
 			final boolean bStore = value instanceof Serializable || value instanceof Externalizable;
 			synchronized (this) {
@@ -239,14 +244,33 @@ public class SimpleSession implements Session, SessionCtrl {
 		} else {
 			setAttr(name, value);
 		}
+		return old;
 	}
+	public Object getAttribute(String name, boolean local) {
+		Object val = getAttribute(name);
+		return val != null || local || _wapp == null ?
+			val: _wapp.getAttribute(name, false);
+	}
+	public boolean hasAttribute(String name, boolean local) {
+		return hasAttribute(name)
+		|| (!local && _wapp != null && _wapp.hasAttribute(name, false));
+	}
+
+	public boolean addScopeListener(ScopeListener listener) {
+		throw new UnsupportedOperationException(); //TODO
+	}
+	public boolean removeScopeListener(ScopeListener listener) {
+		throw new UnsupportedOperationException(); //TODO
+	}
+
 	private void setAttr(String name, Object value) {
 		if (_navsess instanceof HttpSession)
 			((HttpSession)_navsess).setAttribute(name, value);
 		else if (_navsess != null)
 			((PortletSession)_navsess).setAttribute(name, value, PortletSession.APPLICATION_SCOPE);
 	}
-	public void removeAttribute(String name) {
+	public Object removeAttribute(String name) {
+		Object old = getAttribute(name);
 		if (!(this instanceof Serializable || this instanceof Externalizable)) {
 			synchronized (this) {
 				rmAttr(name);
@@ -258,6 +282,7 @@ public class SimpleSession implements Session, SessionCtrl {
 		} else {
 			rmAttr(name);
 		}
+		return old;
 	}
 	private void rmAttr(String name) {
 		if (_navsess instanceof HttpSession)

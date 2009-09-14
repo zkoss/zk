@@ -15,7 +15,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 package org.zkoss.zk.scripting;
 
 /**
- * Used to notify an object stored in a namespace, when the namespace
+ * @deprecated As of release 5.0.0, use
+ * {@link org.zkoss.zk.ui.util.ComponentActivationListener}
+ * or {@link org.zkoss.zk.ui.util.PageActivationListener} instead.
+ *
+ * <p>Used to notify a variable stored in a namespace, when the namespace
  * is going to be deactivated or has been activated.
  *
  * <p>When a namespace is going to be deactivate, it checks every
@@ -28,11 +32,11 @@ package org.zkoss.zk.scripting;
  * @since 3.6.2
  */
 public interface NamespaceActivationListener {
-	/** Called when a session has just been activated
+	/** Called when a namespace has just been activated
 	 * (and its value has been deserialized).
 	 */
 	public void didActivate(Namespace ns);
-	/** Called when a session is about to be passivated
+	/** Called when a namespace is about to be passivated
 	 * (and then serialize its value).
 	 */
 	public void willPassivate(Namespace ns);

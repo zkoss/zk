@@ -147,12 +147,16 @@ public class ExecutionResolver implements VariableResolver {
 			final Page page = comp.getPage();
 			if (page != null) {
 				final Object o =
-					page.getZScriptVariable(comp.getNamespace(), name);
+					page.getZScriptVariable(comp, name);
 				if (o != null)
 					return o;
 			}
 
-			final Object o = comp.getVariable(name, false);
+			Object o = _exec.getAttribute(name);
+			if (o != null || _exec.hasAttribute(name))
+				return o;
+
+			o = comp.getFellowOrAttribute(name, false);
 			if (o != null)
 				return o;
 		} else {
@@ -168,8 +172,16 @@ public class ExecutionResolver implements VariableResolver {
 				if (o != null)
 					return o;
 
-				o = page.getVariable(name);
+				o = _exec.getAttribute(name);
+				if (o != null || _exec.hasAttribute(name))
+					return o;
+
+				o = page.getFellowOrAttribute(name, false);
 				if (o != null)
+					return o;
+			} else {
+				Object o = _exec.getAttribute(name, false);
+				if (o != null || _exec.hasAttribute(name, false))
 					return o;
 			}
 		}

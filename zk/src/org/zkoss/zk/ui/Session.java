@@ -58,11 +58,13 @@ public interface Session extends Scope {
 	 */
 	public Object getAttribute(String name);
 	/** Sets the value of the specified custom attribute.
+	 * @return the previous value if any (since ZK 5)
 	 */
-	public void setAttribute(String name, Object value);
+	public Object setAttribute(String name, Object value);
 	/** Removes the specified custom attribute.
+	 * @return the previous value if any (since ZK 5)
 	 */
-	public void removeAttribute(String name);
+	public Object removeAttribute(String name);
 
 	/** Returns a map of custom attributes associated with this session.
 	 */

@@ -72,6 +72,9 @@ import org.zkoss.zk.ui.util.Condition;
 import org.zkoss.zk.ui.util.PageSerializationListener;
 import org.zkoss.zk.ui.util.PageActivationListener;
 import org.zkoss.zk.ui.ext.Includer;
+import org.zkoss.zk.ui.ext.Scope;
+import org.zkoss.zk.ui.ext.SimpleScope;
+import org.zkoss.zk.ui.ext.ScopeListener;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.DesktopCtrl;
@@ -85,14 +88,7 @@ import org.zkoss.zk.ui.sys.IdGenerator;
 import org.zkoss.zk.ui.sys.PageRenderer;
 import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.au.out.AuSetTitle;
-import org.zkoss.zk.scripting.Interpreter;
-import org.zkoss.zk.scripting.Interpreters;
-import org.zkoss.zk.scripting.HierachicalAware;
-import org.zkoss.zk.scripting.SerializableAware;
-import org.zkoss.zk.scripting.Namespace;
-import org.zkoss.zk.scripting.NamespaceActivationListener;
-import org.zkoss.zk.scripting.InterpreterNotFoundException;
-import org.zkoss.zk.scripting.util.AbstractNamespace;
+import org.zkoss.zk.scripting.*;
 
 /**
  * An implmentation of {@link Page} and {@link PageCtrl}.
@@ -129,7 +125,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	/** A list of deferred zscript [Component parent, {@link ZScript}]. */
 	private List _zsDeferred;
 	/** A map of attributes. */
-	private transient Map _attrs;
+	private transient SimpleScope _attrs;
 	/** A map of event listener: Map(evtnm, List(EventListener)). */
 	private transient Map _listeners;
 	/** The reason to store it is PageDefinition is not serializable. */
@@ -215,8 +211,8 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	 */
 	protected void init() {
 		_ips = new LinkedHashMap(4);
-		_ns = new NS();
-		_attrs = new HashMap();
+		_ns = new NS(); //backwad compatible
+		_attrs = new SimpleScope();
 	}
 
 	/** Returns the UI engine.
@@ -301,7 +297,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			return _desktop != null ?
 				_desktop.getWebApp().getAttributes(): Collections.EMPTY_MAP;
 		case PAGE_SCOPE:
-			return _attrs;
+			return _attrs.getAttributes();
 		case REQUEST_SCOPE:
 			final Execution exec = getExecution();
 			if (exec != null) return exec.getAttributes();
@@ -313,15 +309,14 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	public Object getAttribute(String name, int scope) {
 		return getAttributes(scope).get(name);
 	}
+	public boolean hasAttribute(String name, int scope) {
+		return getAttributes(scope).containsKey(name);
+	}
 	public Object setAttribute(String name, Object value, int scope) {
-		if (value != null) {
-			final Map attrs = getAttributes(scope);
-			if (attrs == Collections.EMPTY_MAP)
-				throw new IllegalStateException("This component doesn't belong to any ID space: "+this);
-			return attrs.put(name, value);
-		} else {
-			return removeAttribute(name, scope);
-		}
+		final Map attrs = getAttributes(scope);
+		if (attrs == Collections.EMPTY_MAP)
+			throw new IllegalStateException("This component doesn't belong to any ID space: "+this);
+		return attrs.put(name, value);
 	}
 	public Object removeAttribute(String name, int scope) {
 			final Map attrs = getAttributes(scope);
@@ -331,16 +326,62 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	}
 
 	public Map getAttributes() {
-		return _attrs;
+		return _attrs.getAttributes();
 	}
 	public Object getAttribute(String name) {
-		return _attrs.get(name);
+		return _attrs.getAttribute(name);
+	}
+	public boolean hasAttribute(String name) {
+		return _attrs.hasAttribute(name);
 	}
 	public Object setAttribute(String name, Object value) {
-		return value != null ? _attrs.put(name, value): removeAttribute(name);
+		return _attrs.setAttribute(name, value);
 	}
 	public Object removeAttribute(String name) {
-		return _attrs.remove(name);
+		return _attrs.removeAttribute(name);
+	}
+	public Object getAttribute(String name, boolean local) {
+		Object val = getAttribute(name);
+		return val != null || local || hasAttribute(name) ? val:
+			_desktop != null ? _desktop.getAttribute(name, false): null;
+	}
+	public boolean hasAttribute(String name, boolean local) {
+		return hasAttribute(name)
+			|| (!local && _desktop != null && _desktop.hasAttribute(name, false));
+	}
+
+	public Object getFellowOrAttribute(String name, boolean local) {
+		Object val = _ns.vars.get(name); //backward compatible (variable first)
+		if (val != null || _ns.vars.containsKey(name))
+			return val;
+
+		val = getAttribute(name);
+		if (val != null || hasAttribute(name))
+			return val;
+
+		val = getFellowIfAny(name);
+		if (val != null)
+			return val;
+
+		val = resolveVariable(name);
+		if (val != null)
+			return val;
+
+		return !local && _desktop != null ?
+			_desktop.getAttribute(name, false): null;
+	}
+	public boolean hasFellowOrAttribute(String name, boolean local) {
+		return hasAttribute(name) || hasFellow(name)
+			|| _ns.vars.containsKey(name) //backward compatible
+			|| resolveVariable(name) != null
+			|| (!local && _desktop != null && _desktop.hasAttribute(name, false));
+	}
+
+	public boolean addScopeListener(ScopeListener listener) {
+		return _attrs.addScopeListener(listener);
+	}
+	public boolean removeScopeListener(ScopeListener listener) {
+		return _attrs.removeScopeListener(listener);
 	}
 
 	public void invalidate() {
@@ -360,15 +401,19 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			throw ex;
 		}
 	}
+	/** @deprecated As of release 5.0.0, replaced with {@link #setAttribute}. */
 	public void setVariable(String name, Object val) {
 		_ns.setVariable(name, val, true);
 	}
+	/** @deprecated As of release 5.0.0, replaced with {@link #hasAttribute}. */
 	public boolean containsVariable(String name) {
 		return _ns.containsVariable(name, true);
 	}
+	/** @deprecated As of release 5.0.0, replaced with {@link #getAttribute}. */
 	public Object getVariable(String name) {
 		return _ns.getVariable(name, true);
 	}
+	/** @deprecated As of release 5.0.0, replaced with {@link #removeAttribute}. */
 	public void unsetVariable(String name) {
 		_ns.unsetVariable(name, true);
 	}
@@ -396,24 +441,27 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		}
 		return null;
 	}
-	public Function getZScriptFunction(Namespace ns, String name, Class[] argTypes) {
+	public Function getZScriptFunction(
+	Component comp, String name, Class[] argTypes) {
 		for (Iterator it = getLoadedInterpreters().iterator();
 		it.hasNext();) {
 			final Object ip = it.next();
 			Function mtd =
 				ip instanceof HierachicalAware ?
-				((HierachicalAware)ip).getFunction(ns, name, argTypes):
+				((HierachicalAware)ip).getFunction(comp, name, argTypes):
 				((Interpreter)ip).getFunction(name, argTypes);
 			if (mtd != null)
 				return mtd;
 		}
 		return null;
 	}
-	public Function getZScriptFunction(
-	Component comp, String name, Class[] argTypes) {
-		return getZScriptFunction(comp != null ? comp.getNamespace(): null,
-			name, argTypes);
+	/** @deprecated As of release 5.0.0, replaced with
+	 * {@link getZScriptFunction(Component,String,Class[])}.
+	 */
+	public Function getZScriptFunction(org.zkoss.zk.scripting.Namespace ns, String name, Class[] argTypes) {
+		return getZScriptFunction(ns != null ? ns.getOwner(): null, name, argTypes);
 	}
+
 	public Object getZScriptVariable(String name) {
 		for (Iterator it = getLoadedInterpreters().iterator();
 		it.hasNext();) {
@@ -423,21 +471,23 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		}
 		return null;
 	}
-	public Object getZScriptVariable(Namespace ns, String name) {
+	public Object getZScriptVariable(Component comp, String name) {
 		for (Iterator it = getLoadedInterpreters().iterator();
 		it.hasNext();) {
 			final Object ip = it.next();
 			final Object val = ip instanceof HierachicalAware ?
-				((HierachicalAware)ip).getVariable(ns, name):
+				((HierachicalAware)ip).getVariable(comp, name):
 				((Interpreter)ip).getVariable(name);
 			if (val != null)
 				return val;
 		}
 		return null;
 	}
-	public Object getZScriptVariable(Component comp, String name) {
-		return getZScriptVariable(comp != null ? comp.getNamespace(): null,
-			name);
+	/** @deprecated As of release 5.0.0, replaced with
+	 * {@link getZScriptVariable(Component,String,Class[])}.
+	 */
+	public Object getZScriptVariable(org.zkoss.zk.scripting.Namespace ns, String name) {
+		return getZScriptVariable(ns != null ? ns.getOwner(): null, name);
 	}
 
 	public Object getXelVariable(String name) {
@@ -618,7 +668,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		_ips.clear();
 
 		//theorectically, the following is not necessary, but, to be safe...
-		_attrs.clear();
+		_attrs.getAttributes().clear();
 		_ips = null; //not clear since it is better to NPE than memory leak
 		_desktop = null;
 		_owner = null;
@@ -736,11 +786,28 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		_langdef.getPageRenderer().render(this, out);
 	}
 
-	public final Namespace getNamespace() {
+	/** @deprecated As of release 5.0.0, the concept of namespace is
+	 * deprecated and replaced with the attributes of a scope (such as
+	 * a page and a component).
+	 */
+	public final org.zkoss.zk.scripting.Namespace getNamespace() {
 		return _ns;
 	}
-	public void interpret(String zslang, String script, Namespace ns) {
-		getInterpreter(zslang).interpret(script, ns);
+	public void interpret(String zslang, String script, Scope scope) {
+		getInterpreter(zslang).interpret(script, scope);
+	}
+	/** @deprecated As of release 5.0.0, replaced with
+	 * {@link #interpret(String,String,Scope)}.
+	 */
+	public void interpret(String zslang, String script, org.zkoss.zk.scripting.Namespace ns) {
+		interpret(zslang, script, getScope(ns));
+	}
+	/** @deprecated
+	 */
+	private static Scope getScope(org.zkoss.zk.scripting.Namespace ns) {
+		if (ns == null) return null;
+		Scope s = ns.getOwner();
+		return s != null ? s: ns.getOwnerPage();
 	}
 	public Interpreter getInterpreter(String zslang) {
 		zslang = (zslang != null ? zslang: _zslang).toLowerCase();
@@ -752,7 +819,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 
 			final String script = _langdef.getInitScript(zslang);
 			if (script != null)
-				ip.interpret(script, _ns);
+				ip.interpret(script, this);
 
 			//evaluate deferred zscripts, if any
 			try {
@@ -805,7 +872,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 					if ((parent == null || parent.getPage() == this)
 					&& isEffective(zscript, parent)) {
 						ip.interpret(zscript.getContent(this, parent),
-							parent != null ? parent.getNamespace(): _ns);
+							parent != null ? (Scope)parent: this);
 					}
 				}
 			}
@@ -857,7 +924,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		for (Iterator it = getRoots().iterator(); it.hasNext();)
 			((ComponentCtrl)it.next()).sessionWillPassivate(this);
 
-		willPassivate(_attrs.values());
+		willPassivate(_attrs.getAttributes().values());
 
 		if (_listeners != null)
 			for (Iterator it = _listeners.values().iterator(); it.hasNext();)
@@ -869,8 +936,8 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		it.hasNext();) {
 			final Object val = _ns.getVariable((String)it.next(), true);
 			willPassivate(val);
-			if (val instanceof NamespaceActivationListener)
-				((NamespaceActivationListener)val).willPassivate(_ns);
+			if (val instanceof org.zkoss.zk.scripting.NamespaceActivationListener) //backward compatible
+				((org.zkoss.zk.scripting.NamespaceActivationListener)val).willPassivate(_ns);
 		}
 	}
 	public void sessionDidActivate(Desktop desktop) {
@@ -886,7 +953,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 
 		initVariables(); //since some variables depend on desktop
 
-		didActivate(_attrs.values());
+		didActivate(_attrs.getAttributes().values());
 
 		if (_listeners != null)
 			for (Iterator it = _listeners.values().iterator(); it.hasNext();)
@@ -898,8 +965,8 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		it.hasNext();) {
 			final Object val = _ns.getVariable((String)it.next(), true);
 			didActivate(val);
-			if (val instanceof NamespaceActivationListener)
-				((NamespaceActivationListener)val).didActivate(_ns);
+			if (val instanceof org.zkoss.zk.scripting.NamespaceActivationListener) //backward compatible
+				((org.zkoss.zk.scripting.NamespaceActivationListener)val).didActivate(_ns);
 		}
 	}
 	private void willPassivate(Collection c) {
@@ -967,8 +1034,9 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		s.writeObject(_langdef != null ? _langdef.getName(): null);
 		s.writeObject(_owner != null ? _owner.getUuid(): null);
 
-		willSerialize(_attrs.values());
-		Serializables.smartWrite(s, _attrs);
+		final Map attrs = _attrs.getAttributes();
+		willSerialize(attrs.values());
+		Serializables.smartWrite(s, attrs);
 
 		if (_listeners != null)
 			for (Iterator it = _listeners.entrySet().iterator(); it.hasNext();) {
@@ -985,7 +1053,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		Serializables.smartWrite(s, _resolvers);
 
 		//handle namespace
-		for (Iterator it = _ns._vars.entrySet().iterator(); it.hasNext();) {
+		for (Iterator it = _ns.vars.entrySet().iterator(); it.hasNext();) {
 			final Map.Entry me = (Map.Entry)it.next();
 			final String nm = (String)me.getKey();
 			final Object val = me.getValue();
@@ -1039,8 +1107,9 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		_ownerUuid = (String)s.readObject();
 			//_owner is restored later when sessionDidActivate is called
 
-		Serializables.smartRead(s, _attrs);
-		didDeserialize(_attrs.values());
+		final Map attrs = _attrs.getAttributes();
+		Serializables.smartRead(s, attrs);
+		didDeserialize(attrs.values());
 
 		for (;;) {
 			final String evtnm = (String)s.readObject();
@@ -1101,8 +1170,9 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		return "[Page "+_id+']';
 	}
 
-	private class NS extends AbstractNamespace {
-		private final Map _vars = new HashMap();
+	/** @deprecated */
+	private class NS implements Namespace {
+		private final Map vars = new HashMap(4);
 
 		//Namespace//
 		public Component getOwner() {
@@ -1112,34 +1182,43 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			return PageImpl.this;
 		}
 		public Set getVariableNames() {
-			return _vars.keySet();
+			return vars.keySet();
 		}
 		public boolean containsVariable(String name, boolean local) {
-			return _vars.containsKey(name) || hasFellow(name)
+			return vars.containsKey(name)
+				|| hasFellow(name)
 				|| resolveVariable(name) != null;
 		}
 		public Object getVariable(String name, boolean local) {
-			Object val = _vars.get(name);
-			if (val != null || _vars.containsKey(name))
+			Object val = vars.get(name);
+			if (val != null || vars.containsKey(name))
 				return val;
 
 			val = getFellowIfAny(name);
 			return val != null ? val: resolveVariable(name);
 		}
 		public void setVariable(String name, Object value, boolean local) {
-			_vars.put(name, value);
-			notifyAdd(name, value);
+			vars.put(name, value);
 		}
 		public void unsetVariable(String name, boolean local) {
-			_vars.remove(name);
-			notifyRemove(name);
+			vars.remove(name);
 		}
 
+		/** @deprecated */
 		public Namespace getParent() {
 			return null;
 		}
+		/** @deprecated */
 		public void setParent(Namespace parent) {
 			throw new UnsupportedOperationException();
+		}
+		/** @deprecated */
+		public boolean addChangeListener(NamespaceChangeListener listener) {
+			return false;
+		}
+		/** @deprecated */
+		public boolean removeChangeListener(NamespaceChangeListener listener) {
+			return false;
 		}
 	}
 }

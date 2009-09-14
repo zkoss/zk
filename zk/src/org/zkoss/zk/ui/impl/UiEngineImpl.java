@@ -53,10 +53,12 @@ import org.zkoss.zk.ui.event.*;
 import org.zkoss.zk.ui.metainfo.*;
 import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zk.ui.ext.Native;
+import org.zkoss.zk.ui.ext.Scope;
+import org.zkoss.zk.ui.ext.Scopes;
 import org.zkoss.zk.ui.ext.render.PrologAllowed;
 import org.zkoss.zk.ui.util.*;
 import org.zkoss.zk.xel.Evaluators;
-import org.zkoss.zk.scripting.*;
+import org.zkoss.zk.scripting.Interpreter;
 import org.zkoss.zk.au.*;
 import org.zkoss.zk.au.out.*;
 
@@ -735,14 +737,13 @@ public class UiEngineImpl implements UiEngine {
 				((PageCtrl)page).addDeferredZScript(comp, zscript);
 					//isEffective is handled later
 			} else if (isEffective(zscript, page, comp)) {
-				final Namespace ns = comp != null ?
-					Namespaces.beforeInterpret(comp):
-					Namespaces.beforeInterpret(page);
+				final Scope scope =
+					Scopes.beforeInterpret(comp != null ? (Scope)comp: page);
 				try {
 					page.interpret(zscript.getLanguage(),
-						zscript.getContent(page, comp), ns);
+						zscript.getContent(page, comp), scope);
 				} finally {
-					Namespaces.afterInterpret();
+					Scopes.afterInterpret();
 				}
 			}
 		} else if (meta instanceof AttributesInfo) {

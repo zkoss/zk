@@ -28,10 +28,9 @@ import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.event.*;
+import org.zkoss.zk.ui.ext.Scopes;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.au.out.AuSelect;
-import org.zkoss.zk.scripting.Namespace;
-import org.zkoss.zk.scripting.Namespaces;
 
 import org.zkoss.zul.mesg.MZul;
 import org.zkoss.zul.Constraint;
@@ -326,7 +325,7 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 		final Constraint constr = getConstraint();
 		if (constr != null) {
 			//Bug 1698190: contructor might be zscript
-			Namespaces.beforeInterpret(this);
+			Scopes.beforeInterpret(this);
 			try {
 				constr.validate(this, value);
 				if (!_checkOnly && (constr instanceof CustomConstraint)) {
@@ -342,7 +341,7 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 					((CustomConstraint)constr).showCustomError(this, ex);
 				throw ex;
 			} finally {
-				Namespaces.afterInterpret();
+				Scopes.afterInterpret();
 			}
 		}
 	}
@@ -359,13 +358,13 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 	 */
 	protected WrongValueException showCustomError(WrongValueException ex) {
 		if (_constr instanceof CustomConstraint) {
-			Namespaces.beforeInterpret(this);
+			Scopes.beforeInterpret(this);
 			try {
 				((CustomConstraint)_constr).showCustomError(this, ex);
 			} catch (Throwable t) {
 				log.realCause(t); //and ignore it
 			} finally {
-				Namespaces.afterInterpret();
+				Scopes.afterInterpret();
 			}
 		}
 		return ex;

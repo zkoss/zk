@@ -59,6 +59,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.ext.ScopeListener;
 import org.zkoss.zk.ui.impl.AbstractExecution;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinitions;
@@ -448,15 +449,39 @@ public class ExecutionImpl extends AbstractExecution {
 	public Object getAttribute(String name) {
 		return _request.getAttribute(name);
 	}
-	public void setAttribute(String name, Object value) {
-		_request.setAttribute(name, value);
+	public boolean hasAttribute(String name) {
+		return getAttribute(name) != null; //Servlet limitation
 	}
-	public void removeAttribute(String name) {
+	public Object setAttribute(String name, Object value) {
+		Object old = _request.getAttribute(name);
+		_request.setAttribute(name, value);
+		return old;
+	}
+	public Object removeAttribute(String name) {
+		Object old = _request.getAttribute(name);
 		_request.removeAttribute(name);
+		return old;
+	}
+	public Object getAttribute(String name, boolean local) {
+		Object val = getAttribute(name);
+		Desktop desktop;
+		return val != null || local || (desktop=getDesktop()) == null ?
+			val: desktop.getAttribute(name, false);
+	}
+	public boolean hasAttribute(String name, boolean local) {
+		Desktop desktop;
+		return hasAttribute(name)
+		|| (!local && (desktop=getDesktop()) != null && desktop.hasAttribute(name, false));
 	}
 
 	public Map getAttributes() {
 		return _attrs;
+	}
+	public boolean addScopeListener(ScopeListener listener) {
+		throw new UnsupportedOperationException(); //TODO
+	}
+	public boolean removeScopeListener(ScopeListener listener) {
+		throw new UnsupportedOperationException(); //TODO
 	}
 
 	public String getHeader(String name) {

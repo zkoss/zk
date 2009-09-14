@@ -19,6 +19,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui;
 
 import java.util.Collection;
+import org.zkoss.zk.ui.ext.Scope;
 
 /**
  * Implemented by a component ({@link Component}) and a page
@@ -58,7 +59,7 @@ import java.util.Collection;
  *
  * @author tomyeh
  */
-public interface IdSpace {
+public interface IdSpace extends Scope {
 	/** Returns a component of the specified ID in the same ID space.
 	 * Components in the same ID space are called fellows.
 	 *

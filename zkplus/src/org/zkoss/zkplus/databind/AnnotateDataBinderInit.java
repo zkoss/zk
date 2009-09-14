@@ -109,13 +109,13 @@ import org.zkoss.zk.ui.util.InitiatorExt;
 		boolean b = _defaultConfig != null ? Boolean.valueOf(_defaultConfig).booleanValue() : true;
 		if (_comp instanceof Component) { //a specified component instance
 			_binder = new AnnotateDataBinder(_comp, b);
-			_comp.setVariable(_name, _binder, true);
+			_comp.setAttribute(_name, _binder);
 		} else if (_compPath == null || "page".equals(_compPath)) { //page
 			_binder = new AnnotateDataBinder(page, b);
-			if (page.getVariable(_name) != null) { //already a binder on the page
+			if (page.getAttribute(_name) != null) { //already a binder on the page
 				throw new UiException("Page is already covered by another Data Binder. Cannot be covered by this Data Binder again. Page:"+page.getId());
 			} else {
-				page.setVariable(_name, _binder);
+				page.setAttribute(_name, _binder);
 			}
 		} else if (_compPath.startsWith("/")) { //absolute path
 			final Component comp = Path.getComponent(_compPath);
@@ -123,14 +123,14 @@ import org.zkoss.zk.ui.util.InitiatorExt;
 				throw new UiException("Cannot find the specified component. Absolute Path:"+_compPath);
 			}
 			_binder = new AnnotateDataBinder(comp, b);
-			comp.setVariable(_name, _binder, true);
+			comp.setAttribute(_name, _binder);
 		} else if (_compPath.startsWith("./") || _compPath.startsWith("../")) { //relative path
 			for (int j = 0; j < comps.length; ++j) {
 				final Component vroot = comps[j];
 				final Component comp = Path.getComponent(vroot.getSpaceOwner(), _compPath);
 				if (comp != null) { //found
 					_binder = new AnnotateDataBinder(comp, b);
-					comp.setVariable(_name, _binder, true);
+					comp.setAttribute(_name, _binder);
 					break;
 				}
 			}
@@ -140,7 +140,7 @@ import org.zkoss.zk.ui.util.InitiatorExt;
 		} else {
 			final Component comp = page.getFellow(_compPath);
 			_binder = new AnnotateDataBinder(comp, b);
-			comp.setVariable(_name, _binder, true);
+			comp.setAttribute(_name, _binder);
 		}
 		_binder.loadAll(); //load data bean properties into UI components
 	}

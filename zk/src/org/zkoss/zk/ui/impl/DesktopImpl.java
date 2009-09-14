@@ -58,6 +58,8 @@ import org.zkoss.zk.ui.util.DesktopSerializationListener;
 import org.zkoss.zk.ui.util.DesktopActivationListener;
 import org.zkoss.zk.ui.util.EventInterceptor;
 import org.zkoss.zk.ui.event.*;
+import org.zkoss.zk.ui.ext.SimpleScope;
+import org.zkoss.zk.ui.ext.ScopeListener;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.sys.SessionCtrl;
@@ -120,7 +122,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	/** Map (String uuid, Component comp). */
 	private transient Map _comps;
 	/** A map of attributes. */
-	private transient Map _attrs;
+	private transient SimpleScope _attrs;
 		//don't create it dynamically because PageImp._ip bind it at constructor
 	private transient Execution _exec;
 	/** Next available key. */
@@ -253,7 +255,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		_uvLock = new Object();
 		_rque = newRequestQueue();
 		_comps = new HashMap(64);
-		_attrs = new HashMap();
+		_attrs = new SimpleScope();
 	}
 	/** Updates _uuidPrefix based on _id. */
 	private void updateUuidPrefix() {
@@ -437,16 +439,43 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	}
 
 	public Map getAttributes() {
-		return _attrs;
+		return _attrs.getAttributes();
 	}
 	public Object getAttribute(String name) {
-		return _attrs.get(name);
+		return _attrs.getAttribute(name);
+	}
+	public boolean hasAttribute(String name) {
+		return _attrs.hasAttribute(name);
 	}
 	public Object setAttribute(String name, Object value) {
-		return value != null ? _attrs.put(name, value): removeAttribute(name);
+		return _attrs.setAttribute(name, value);
 	}
 	public Object removeAttribute(String name) {
-		return _attrs.remove(name);
+		return _attrs.removeAttribute(name);
+	}
+	public Object getAttribute(String name, boolean local) {
+		Object val = getAttribute(name);
+		if (val != null || local || hasAttribute(name))
+			return val;
+		if (_sess != null) return _sess.getAttribute(name, false);
+		if (_wapp != null) return _wapp.getAttribute(name, false);
+		return null;
+	}
+	public boolean hasAttribute(String name, boolean local) {
+		if (hasAttribute(name))
+			return true;
+		if (!local) {
+			if (_sess != null) return _sess.hasAttribute(name, false);
+			if (_wapp != null) return _wapp.hasAttribute(name, false);
+		}
+		return false;
+	}
+
+	public boolean addScopeListener(ScopeListener listener) {
+		return _attrs.addScopeListener(listener);
+	}
+	public boolean removeScopeListener(ScopeListener listener) {
+		return _attrs.removeScopeListener(listener);
 	}
 
 	public WebApp getWebApp() {
@@ -607,7 +636,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 		//theorectically, the following is not necessary, but, to be safe...
 		_pages.clear();
-		_attrs.clear();
+		_attrs.getAttributes().clear();
 		_comps = new HashMap(2); //not clear() since # of comps might huge
 		_meds = null;
 		_rque = null;
@@ -670,7 +699,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 
 		if (_dev != null) _dev.sessionWillPassivate(this);
 
-		willPassivate(_attrs.values());
+		willPassivate(_attrs.getAttributes().values());
 		willPassivate(_dtCleans);
 		willPassivate(_execInits);
 		willPassivate(_execCleans);
@@ -682,7 +711,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		for (Iterator it = _pages.values().iterator(); it.hasNext();)
 			((PageCtrl)it.next()).sessionDidActivate(this);
 
-		didActivate(_attrs.values());
+		didActivate(_attrs.getAttributes().values());
 		didActivate(_dtCleans);
 		didActivate(_execInits);
 		didActivate(_execCleans);
@@ -713,8 +742,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	throws java.io.IOException {
 		s.defaultWriteObject();
 
-		willSerialize(_attrs.values());
-		Serializables.smartWrite(s, _attrs);
+		final Map attrs = _attrs.getAttributes();
+		willSerialize(attrs.values());
+		Serializables.smartWrite(s, attrs);
 		willSerialize(_dtCleans);
 		Serializables.smartWrite(s, _dtCleans);
 		willSerialize(_execInits);
@@ -749,8 +779,9 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			e.hasNext();)
 				addAllComponents((Component)e.next());
 
-		Serializables.smartRead(s, _attrs);
-		didDeserialize(_attrs.values());
+		final Map attrs = _attrs.getAttributes();
+		Serializables.smartRead(s, attrs);
+		didDeserialize(attrs.values());
 		_dtCleans = (List)Serializables.smartRead(s, _dtCleans);
 		didDeserialize(_dtCleans);
 		_execInits = (List)Serializables.smartRead(s, _execInits);

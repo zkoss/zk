@@ -36,8 +36,6 @@ import org.zkoss.lang.reflect.Fields;
 import org.zkoss.util.ModificationException;
 import org.zkoss.zk.scripting.HierachicalAware;
 import org.zkoss.zk.scripting.Interpreter;
-import org.zkoss.zk.scripting.Namespace;
-import org.zkoss.zk.scripting.Namespaces;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Path;
@@ -1043,7 +1041,7 @@ public class DataBinder implements java.io.Serializable {
 			if (existsBean(beanid)) {
 				setBean(beanid, val);
 			} else if (!setZScriptVariable(comp, beanid, val)) {
-				comp.setVariable(beanid, val, false);
+				comp.setAttribute(beanid, val, false);
 			}
 			refChanged = true;
 		} else {
@@ -1189,14 +1187,13 @@ public class DataBinder implements java.io.Serializable {
 	private boolean setZScriptVariable(Component comp, String beanid, Object val) {
 		//for all loaded interperter, assign val to beanid
 		boolean found = false;
-		final Namespace ns = comp.getNamespace();
 		for(final Iterator it = comp.getPage().getLoadedInterpreters().iterator();
 		it.hasNext();) {
 			final Interpreter ip = (Interpreter) it.next();
 			if (ip instanceof HierachicalAware) {
 				final HierachicalAware ha = (HierachicalAware)ip;
-				if (ha.containsVariable(ns, beanid)) {
-					ha.setVariable(ns, beanid, val);
+				if (ha.containsVariable(comp, beanid)) {
+					ha.setVariable(comp, beanid, val);
 					found = true;
 				}
 			} else if (ip.containsVariable(beanid)) {
@@ -1232,19 +1229,17 @@ public class DataBinder implements java.io.Serializable {
 			//variable resolving
 			final Page page = comp.getPage();
 			if (page != null)
-				bean = page.getZScriptVariable(comp.getNamespace(), beanid);
+				bean = page.getZScriptVariable(comp, beanid);
 			if (bean == null) {
-				final Object self = 
-					page.getNamespace().getVariableNames().contains("self") ? 
-					page.getNamespace().getVariable("self", true) : null; 
+				final Object self = page.getAttribute("self");
 				try {
-					page.setVariable("self", comp);
-					bean = comp.getVariable(beanid, false);
+					page.setAttribute("self", comp);
+					bean = comp.getAttribute(beanid, false);
 				} finally {
 					if (self == null) {
-						page.unsetVariable("self");
+						page.removeAttribute("self");
 					} else {
-						page.setVariable("self", self);
+						page.setAttribute("self", self);
 					}
 				}
 			}

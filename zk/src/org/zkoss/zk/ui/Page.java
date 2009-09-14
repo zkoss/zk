@@ -28,7 +28,6 @@ import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.Function;
 
 import org.zkoss.zk.scripting.Interpreter;
-import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.InterpreterNotFoundException;
 import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.event.EventListener;
@@ -205,7 +204,8 @@ public interface Page extends IdSpace, Scope {
 	public static final int REQUEST_SCOPE = Component.REQUEST_SCOPE;
 
 	/** Returns all custom attributes of the specified scope.
-	 * You could reference them thru componentScope, spaceScope, pageScope,
+	 * You could reference them directly, or
+	 * thru componentScope, spaceScope, pageScope,
 	 * requestScope and desktopScope in zscript and EL.
 	 *
 	 * <p>If scope is {@link #PAGE_SCOPE}, it means custom attributes shared
@@ -226,6 +226,12 @@ public interface Page extends IdSpace, Scope {
 	 * {@link #PAGE_SCOPE}, {@link #REQUEST_SCOPE} or {@link #DESKTOP_SCOPE}.
 	 */
 	public Object getAttribute(String name, int scope);
+	/** Returns if an attribute exists.
+	 * <p>Notice that <code>null</code> is a valid value, so you need this
+	 * method to really know if an atribute is defined.
+	 * @since 5.0.0
+	 */
+	public boolean hasAttribute(String name, int scope);
 	/** Sets the value of the specified custom attribute in the specified scope.
 	 *
 	 * <p>If scope is {@link #PAGE_SCOPE}, it means custom attributes shared
@@ -253,55 +259,52 @@ public interface Page extends IdSpace, Scope {
 	/** Returns the value of the specified attribute associated with this page.
 	 */
 	public Object getAttribute(String name);
+	/** Returns if an attribute exists.
+	 * <p>Notice that <code>null</code> is a valid value, so you need this
+	 * method to really know if an atribute is defined.
+	 * @since 5.0.0
+	 */
+	public boolean hasAttribute(String name);
 	/** Sets the value of the specified custom attribute associated with this page.
-	 *
-	 * <p>Note: The attribute is removed (by {@link #removeAttribute}
-	 * if value is null, while {@link #setVariable} considers null as a legal value.
-	 *
-	 * @param value the value. If null, the attribute is removed.
+	 * @param value the value.
 	 */
 	public Object setAttribute(String name, Object value);
 	/** Removes the specified attribute custom associated with the page.
 	 */
 	public Object removeAttribute(String name);
 
-	/** Sets a variable to the namespace ({@link #getNamespace}).
+	/** Returns the custom attribute associated with this page,
+	 * or the fellow of this page.
 	 *
-	 * <p>It is the same as getNamespace().setVariable(name, value, true).
+	 * @param local whether not to look up the desktop/session for the
+	 * existence of the attribute.<br/>
+	 * @since 5.0.0
+	 */
+	public Object getFellowOrAttribute(String name, boolean local);
+	/** Returns if a custom attribute is associated with this page,
+	 * or a fellow of this page.
 	 *
-	 * @see Component#setVariable
-	 * @see Component#getNamespace
+	 * @param local whether not to look up the desktop/session for the
+	 * existence of the attribute.<br/>
+	 * @since 5.0.0
+	 */
+	public boolean hasFellowOrAttribute(String name, boolean local);
+
+	/** @deprecated As of release 5.0.0, replaced with {@link #setAttribute}.
+	 *
+	 * <p>Sets a variable to the namespace ({@link #getNamespace}).
 	 */
 	public void setVariable(String name, Object val);
-	/** Returns whether the specified variable is defined.
-	 *
-	 * <p>Note: null is a valid value for variable, so this method is used
-	 * to know whether a variable is defined.
-	 * On the other hand, {@link #setAttribute} actually remove
-	 * an attribute (by {@link #removeAttribute} if value is null.
+	/** @deprecated As of release 5.0.0, replaced with {@link #hasFellowOrAttribute}.
+	 * <p>Returns whether the specified variable is defined.
 	 */
 	public boolean containsVariable(String name);
-	/** Returns the value of a variable defined in the namespace ({@link #getNamespace}).
-	 *
-	 * <p>It is the same as getNamespace().getVariable(name, true).
-	 *
-	 * <h3>Differences between {@link #getVariable} and {@link #getZScriptVariable}</h3>
-	 *
-	 * <p>{@link #getVariable} returns only variables defined by
-	 * {@link #setVariable} (i.e., a shortcut to {@link Namespace#setVariable}).
-	 * On the other hand, {@link #getZScriptVariable} returns these variables
-	 * and those defined when executing zscripts.
-	 *
-	 * @see Component#getVariable
-	 * @see Component#getNamespace
+	/** @deprecated As of release 5.0.0, replaced with {@link #getFellowOrAttribute}.
+	 * <p>Returns the value of a variable defined in the namespace ({@link #getNamespace}).
 	 */
 	public Object getVariable(String name);
-	/** Unsets a variable from the namespace ({@link #getNamespace}).
-	 *
-	 * <p>It is the same as getNamespace().unsetVariable(name, true).
-	 *
-	 * @see Component#unsetVariable
-	 * @see Component#getNamespace
+	/** @deprecated As of release 5.0.0, replaced with {@link #removeAttribute}.
+	 * <p>Unsets a variable from the namespace ({@link #getNamespace}).
 	 */
 	public void unsetVariable(String name);
 
@@ -333,7 +336,7 @@ public interface Page extends IdSpace, Scope {
 	 */
 	public Class resolveClass(String clsnm) throws ClassNotFoundException;
 
-	/** Returns the variable of the specified name by searching
+	/** Returns the function of the specified name by searching
 	 * the loaded interpreters.
 	 *
 	 * @return the method, or null if not found
@@ -341,15 +344,11 @@ public interface Page extends IdSpace, Scope {
 	 * @since 3.0.0
 	 */
 	public Function getZScriptFunction(String name, Class[] argTypes);
-	/** Returns the variable of the specified name by searching
-	 * the logical scope of the specified namespace for all
-	 * the loaded interpreters.
+	/** @deprecated As of release 5.0.0, replaced with {@link #getZScriptFunction(Component,String,Class[])}
 	 *
-	 * <p>It is similar to {@link #getZScriptVariable(String)}, except
-	 * it uses the specified namespace as a reference to identify the
-	 * correct scope for searching the variable.
-	 * If the interpreter does NOT support hierachical scopes,
-	 * this method is the same as {@link #getZScriptVariable(String)}.
+	 * <p>Returns the function of the specified name by searching
+	 * the logical scope of the specified namespace in all
+	 * the loaded interpreters.
 	 *
 	 * @param ns the namespace used as a reference to identify the
 	 * correct scope for searching the variable.
@@ -359,12 +358,15 @@ public interface Page extends IdSpace, Scope {
 	 * @see #getLoadedInterpreters
 	 * @since 2.4.1
 	 */
-	public Function getZScriptFunction(Namespace ns, String name, Class[] argTypes);
-	/** Returns the variable of the specified name by searching
-	 * the logical scope of the namespace of the specified component
-	 * for all the loaded interpreters.
+	public Function getZScriptFunction(org.zkoss.zk.scripting.Namespace ns, String name, Class[] argTypes);
+	/** Returns the function of the specified name by searching
+	 * the logical scope of the specified component
+	 * in all the loaded interpreters.
 	 *
-	 * <p>It is a shortcut: getZScriptFunction(comp.getNamespace(), name, argTypes);
+	 * @param comp the component to start the search. If null, this
+	 * method searches only the page's attributes.
+	 * In other words, if comp is null, this method is the same as
+	 * {@link #getZScriptFunction(String, Class[])}.
 	 * @since 3.0.0
 	 */
 	public Function getZScriptFunction(Component comp, String name, Class[] argTypes);
@@ -372,38 +374,30 @@ public interface Page extends IdSpace, Scope {
 	/** Returns the value of the variable of the specified name by searching
 	 * the loaded interpreters, if any.
 	 *
-	 * <h3>Differences between {@link #getVariable} and {@link #getZScriptVariable}</h3>
-	 *
-	 * <p>{@link #getVariable} returns variables defined by
-	 * {@link #setVariable} (i.e., a shortcut to {@link Namespace#setVariable}).
-	 * On the other hand, {@link #getZScriptVariable} returns the variables
-	 * that are defined when executing zscripts.
-	 *
 	 * @return the value of the variable, or null if not found
 	 * @see #getLoadedInterpreters
 	 */
 	public Object getZScriptVariable(String name);
-	/** Returns the value of the variable of the specified name by searching
-	 * the logical scope of the specified namespace for all
-	 * the loaded interpreters, if any.
+	/** @deprecated As of release 5.0.0, replaced with
+	 * {@link #getZScriptVariable(Component, String)}.
 	 *
-	 * <p>It is similar to {@link #getZScriptVariable(String)}, except
-	 * it uses the specified namespace as a reference to identify the
-	 * correct scope for searching the variable.
-	 * If the interpreter does NOT support hierachical scopes,
-	 * this method is the same as {@link #getZScriptVariable(String)}.
+	 * <p>Returns the value of the variable of the specified name by searching
+	 * the logical scope of the specified namespace in all
+	 * the loaded interpreters, if any.
 	 *
 	 * @param ns the namespace used as a reference to identify the
 	 * correct scope for searching the variable.
 	 * It is ignored if the interpreter doesn't support hierachical scopes.
 	 * Note: this method doesn't look for any variable stored in ns.
 	 */
-	public Object getZScriptVariable(Namespace ns, String name);
+	public Object getZScriptVariable(org.zkoss.zk.scripting.Namespace ns, String name);
 	/** Returns the value of the variable of the specified name by searching
-	 * the logical scope of the namespace of the specified component
-	 * for all the loaded interpreters, if any.
+	 * the logical scope of the specified component
+	 * in all the loaded interpreters, if any.
 	 *
-	 * <p>It is a shortcut: getZScriptVariable(comp.getNamespace(), name);
+	 * @param comp the component as the context to look for the variable
+	 * defined in an interpreter. If null, the context is assumed to
+	 * be this page.
 	 * @since 3.0.0
 	 */
 	public Object getZScriptVariable(Component comp, String name);
@@ -471,13 +465,20 @@ public interface Page extends IdSpace, Scope {
 	 */
 	public void invalidate();
 
-	/** Returns the namespace used to store variables belonging to
+	/** @deprecated As of release 5.0.0, the concept of namespace is
+	 * deprecated, and please use the attributes of an ID space (such as page)
+	 * instead.
+	 *
+	 * <p>Returns the namespace used to store variables belonging to
 	 * the ID space of this page.
 	 *
 	 * @see #interpret
 	 */
-	public Namespace getNamespace();
-	/** Interpret a script of the specified scripting language against
+	public org.zkoss.zk.scripting.Namespace getNamespace();
+	/** @deprecated As of release 5.0.0, replaced with
+	 * {@link interpret(String,String,Component)}.
+	 *
+	 * <p>Interpret a script of the specified scripting language against
 	 * the specified namespace.
 	 *
 	 * @param zslang the scripting language. If null, {@link #getZScriptLanguage}
@@ -488,7 +489,20 @@ public interface Page extends IdSpace, Scope {
 	 * if the thread is processing an event.
 	 * Otherwise, the current namespace is this page's namespace
 	 */
-	public void interpret(String zslang, String script, Namespace ns);
+	public void interpret(String zslang, String script, org.zkoss.zk.scripting.Namespace ns);
+	/** Interprets a script in the sepcified scripting language in
+	 * the context of the specified scope.
+	 *
+	 * @param zslang the scripting language. If null, {@link #getZScriptLanguage}
+	 * is assumed.
+	 * @param scope the scope used as the context.
+	 * Since a component is a scope, you can pass a component as the context.
+	 * By context we mean the attribute of the scope, its space owner,
+	 * spacer owner's space owner, page and desktop will be searched.
+	  *If null, this page is assumed.
+	 * @since 5.0.0
+	 */
+	public void interpret(String zslang, String script, Scope scope);
 	/** Returns the interpreter of the specified scripting language.
 	 *
 	 * <p>The interpreter will be loaded and initialized,

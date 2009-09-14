@@ -34,6 +34,8 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Express;
+import org.zkoss.zk.ui.ext.Scope;
+import org.zkoss.zk.ui.ext.Scopes;
 import org.zkoss.zk.ui.sys.SessionsCtrl;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
@@ -42,8 +44,6 @@ import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.ComponentsCtrl;
 import org.zkoss.zk.ui.sys.EventProcessingThread;
 import org.zkoss.zk.ui.metainfo.ZScript;
-import org.zkoss.zk.scripting.Namespace;
-import org.zkoss.zk.scripting.Namespaces;
 
 /**
  * A utility class that simplify the implementation of
@@ -131,22 +131,22 @@ public class EventProcessor {
 	public void process() throws Exception {
 		//Bug 1506712: event listeners might be zscript, so we have to
 		//keep built-in variables as long as possible
-		final Namespace ns = Namespaces.beforeInterpret(_comp);
+		final Scope scope = Scopes.beforeInterpret(_comp);
 			//we have to push since process0 might invoke methods from zscript class
 		try {
-			Namespaces.setImplicit("event", _event);
+			Scopes.setImplicit("event", _event);
 
 			_event = ((DesktopCtrl)_desktop).beforeProcessEvent(_event);
 			if (_event != null) {
-				Namespaces.setImplicit("event", _event); //_event might change
-				process0(ns);
+				Scopes.setImplicit("event", _event); //_event might change
+				process0(scope);
 				((DesktopCtrl)_desktop).afterProcessEvent(_event);
 			}
 		} finally {
-			Namespaces.afterInterpret();
+			Scopes.afterInterpret();
 		}
 	}
-	private void process0(Namespace ns) throws Exception {
+	private void process0(Scope scope) throws Exception {
 		final Page page = getPage();
 		final String evtnm = _event.getName();
 
@@ -175,7 +175,7 @@ public class EventProcessor {
 		final ZScript zscript = ((ComponentCtrl)_comp).getEventHandler(evtnm);
 		if (zscript != null) {
 			page.interpret(
-				zscript.getLanguage(), zscript.getContent(page, _comp), ns);
+				zscript.getLanguage(), zscript.getContent(page, _comp), scope);
 			if (!_event.isPropagatable())
 				return; //done
 		}

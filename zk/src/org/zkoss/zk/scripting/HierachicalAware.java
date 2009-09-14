@@ -19,6 +19,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.scripting;
 
 import org.zkoss.xel.Function;
+import org.zkoss.zk.ui.ext.Scope;
 
 /**
  * An extra interface implemented by an interpreter ({@link Interpreter})
@@ -26,9 +27,9 @@ import org.zkoss.xel.Function;
  *
  * <p>By supporting the hierachical scopes we mean the interpreter
  * associates one interpreter-dependent scope with each ZK's
- * {@link Namespace}. And, variables, classes and methods defined
+ * {@link org.zkoss.zk.ui.IdSpace}. And, variables, classes and methods defined
  * in zscript are then stored in an individual scope depending on
- * the namespace when calling {@link Interpreter#interpret}.
+ * the scope when calling {@link Interpreter#interpret}.
  *
  * <p>On the other hand, if the interpreter doesn't support the hierachical
  * scopes, it maintains only one global scope and all variables, classes
@@ -39,72 +40,73 @@ import org.zkoss.xel.Function;
  */
 public interface HierachicalAware {
 	/** Tests whether a variable defined in this interpreter.
-	 * Note: it doesn't search the namespace ({@link Namespace}).
+	 * Note: it doesn't search the scope ({@link Scope}).
 	 *
 	 * <p>It is similar to {@link Interpreter#containsVariable}, except
-	 * it uses the specified namespace as a reference to identify the
+	 * it uses the specified scope as a reference to identify the
 	 * correct scope for searching the variable.
 	 *
-	 * @param ns the namespace used as a reference to identify the
+	 * @param scope the scope used as a reference to identify the
 	 * correct scope for searching the variable.
-	 * Note: this method doesn't look for any variable stored in ns.
-	 * @since 2.4.0
+	 * Note: this method doesn't look for any variable stored in scope.
+	 * @since 5.0.0
 	 */
-	public boolean containsVariable(Namespace ns, String name);
+	public boolean containsVariable(Scope scope, String name);
 	/** Returns the value of a variable defined in this interpreter's
-	 * scope identified by the specified namespace.
-	 * Note: it doesn't search the specified namespace ({@link Namespace}).
+	 * scope identified by the specified scope.
+	 * Note: it doesn't search the specified scope ({@link Scope}).
 	 *
 	 * <p>It is similar to {@link Interpreter#getVariable}, except
-	 * it uses the specified namespace as a reference to identify the
+	 * it uses the specified scope as a reference to identify the
 	 * correct scope for searching the variable.
 	 *
-	 * @param ns the namespace used as a reference to identify the
+	 * @param scope the scope used as a reference to identify the
 	 * correct scope for searching the variable.
-	 * Note: this method doesn't look for any variable stored in ns.
+	 * Note: this method doesn't look for any variable stored in scope.
+	 * @since 5.0.0
 	 */
-	public Object getVariable(Namespace ns, String name);
+	public Object getVariable(Scope scope, String name);
 	/** Sets the value of a variable to this interpreter's scope
-	 * identified by the specified namespace.
+	 * identified by the specified scope.
 	 *
 	 * <p>It is similar to {@link Interpreter#setVariable}, except
-	 * it uses the specified namespace as a reference to identify the
+	 * it uses the specified scope as a reference to identify the
 	 * correct scope for storing the variable.
 	 *
-	 * @param ns the namespace used as a reference to identify the
+	 * @param scope the scope used as a reference to identify the
 	 * correct scope for searching the variable.
-	 * Note: this method doesn't look for any variable stored in ns.
-	 * @since 2.4.0
+	 * Note: this method doesn't look for any variable stored in scope.
+	 * @since 5.0.0
 	 */
-	public void setVariable(Namespace ns, String name, Object value);
+	public void setVariable(Scope scope, String name, Object value);
 	/** Removes the value of a variable defined in the interpreter's
-	 * scope identified by the specified namespace.
+	 * scope identified by the specified scope.
 	 *
 	 * <p>It is similar to {@link Interpreter#unsetVariable}, except
-	 * it uses the specified namespace as a reference to identify the
+	 * it uses the specified scope as a reference to identify the
 	 * correct scope for removing the variable.
 	 *
-	 * @param ns the namespace used as a reference to identify the
+	 * @param scope the scope used as a reference to identify the
 	 * correct scope for searching the variable.
-	 * Note: this method doesn't look for any variable stored in ns.
-	 * @since 2.4.0
+	 * Note: this method doesn't look for any variable stored in scope.
+	 * @since 5.0.0
 	 */
-	public void unsetVariable(Namespace ns, String name);
+	public void unsetVariable(Scope scope, String name);
 
 	/** Returns the method of the specified name defined in
-	 * this interpreter's scope identified by the specified namespace,
+	 * this interpreter's scope identified by the specified scope,
 	 * or null if not defined.
 	 *
 	 * <p>It is similar to {@link Interpreter#getFunction}, except
-	 * it uses the specified namespace as a reference to identify the
+	 * it uses the specified scope as a reference to identify the
 	 * correct scope for searching the variable.
 	 *
-	 * @param ns the namespace used as a reference to identify the
+	 * @param scope the scope used as a reference to identify the
 	 * correct scope for searching the method.
-	 * Note: this method doesn't look for any variable stored in ns.
+	 * Note: this method doesn't look for any variable stored in scope.
 	 * @param argTypes the list of argument (aka., parameter) types.
 	 * If null, Class[0] is assumed.
-	 * @since 3.0.0
+	 * @since 5.0.0
 	 */
-	public Function getFunction(Namespace ns, String name, Class[] argTypes);
+	public Function getFunction(Scope scope, String name, Class[] argTypes);
 }

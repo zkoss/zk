@@ -49,4 +49,7 @@ public class DemoItem {
 	public String getLabel() {
 		return _label;
 	}	
+	public String toString() {
+		return "[DemoItem:" + _id +", "+_file+']';
+	}
 }

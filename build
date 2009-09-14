@@ -403,6 +403,11 @@ function invoke_ant
 	if [ "$tgtver" = "" ] ; then
 		tgtver=1.4
 	fi
+	deprecation=$(grep '^deprecation=' version)
+	deprecation=${deprecation#deprecation=}
+	if [ "$deprecation" = "" ] ; then
+		deprecation=on
+	fi
 
 	this_dflag=$dflag
 	dflagtmp=$(grep '^debug=' version)
@@ -447,6 +452,7 @@ function invoke_ant
 		-Dear.libs="$ear_libs" \
 		-Dproject.name="$pronm" -Dproject.version="$prjver" \
 		-Dsource.version="$srcver" -Dtarget.version="$tgtver" \
+		-Ddeprecation="$deprecation" \
 		-Dhaltonerror=$haltonerror -Dout.dir=$outdir \
 		-Ddebug=$this_dflag -Doptimize=$this_oflag ${nojc} \
 		-Dshare.javadoc.dir="$javadocdir" \

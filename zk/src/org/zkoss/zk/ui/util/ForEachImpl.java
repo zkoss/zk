@@ -31,6 +31,7 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.xel.ExValue;
 import org.zkoss.zk.xel.impl.EvaluatorRef;
 
@@ -242,8 +243,8 @@ public class ForEachImpl implements ForEach {
 		&& _it.hasNext()) {
 			++_status.index;
 			_status.each = _it.next();
-			if (_comp != null) _comp.setVariable("each", _status.each, true);
-			else _page.setVariable("each", _status.each);
+			if (_comp != null) _comp.setAttribute("each", _status.each);
+			else _page.setAttribute("each", _status.each);
 			return true;
 		}
 
@@ -253,36 +254,21 @@ public class ForEachImpl implements ForEach {
 		return false;
 	}
 	private void setupStatus() {
-		if (_comp != null) {
-			_oldEach = _comp.getVariable("each", true);
-			_status = new Status(_comp.getVariable("forEachStatus", true));
-			_comp.setVariable("forEachStatus", _status, true);
-		} else {
-			_oldEach = _page.getVariable("each");
-			_status = new Status(_page.getVariable("forEachStatus"));
-			_page.setVariable("forEachStatus", _status);
-		}
+		final Scope scope = _comp != null ? (Scope)_comp: _page;
+		_oldEach = scope.getAttribute("each", true);
+		_status = new Status(scope.getAttribute("forEachStatus", true));
+		scope.setAttribute("forEachStatus", _status);
 	}
 	private void restoreStatus() {
-		if (_comp != null) {
-			if (_status.previous != null)
-				_comp.setVariable("forEachStatus", _status.previous, true);
-			else
-				_comp.unsetVariable("forEachStatus", true);
-			if (_oldEach != null)
-				_comp.setVariable("each", _oldEach, true);
-			else
-				_comp.unsetVariable("each", true);
-		} else {
-			if (_status.previous != null)
-				_page.setVariable("forEachStatus", _status.previous);
-			else
-				_page.unsetVariable("forEachStatus");
-			if (_oldEach != null)
-				_page.setVariable("each", _oldEach);
-			else
-				_page.unsetVariable("each");
-		}
+		final Scope scope = _comp != null ? (Scope)_comp: _page;
+		if (_status.previous != null)
+			scope.setAttribute("forEachStatus", _status.previous);
+		else
+			scope.removeAttribute("forEachStatus");
+		if (_oldEach != null)
+			scope.setAttribute("each", _oldEach);
+		else
+			scope.removeAttribute("each");
 		_it = null; _status = null; //recycle (just in case)
 	}
 

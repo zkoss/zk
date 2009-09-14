@@ -858,11 +858,13 @@ public interface Execution extends Scope {
 	/** Sets the value of the specified request attribute.
 	 *
 	 * @param value the value. If null, the attribute is removed.
+	 * @return the previous value if any (since ZK5)
 	 */
-	public void setAttribute(String name, Object value);
+	public Object setAttribute(String name, Object value);
 	/** Removes the specified request attribute.
+	 * @return the previous value if any (since ZK5)
 	 */
-	public void removeAttribute(String name);
+	public Object removeAttribute(String name);
 	/** Returns a map of request attributes associated with this session.
 	 */
 	public Map getAttributes();
