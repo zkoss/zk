@@ -142,16 +142,192 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					wgt.fire('onUnbind');
 			});
 	}
+	//set minimum flex size and return it
+	function _setMinFlexSize(wgt, n, o) {
+		//find the max size of all children
+		if (o == 'height') {
+			if (wgt._vflexsize === undefined) { //cached?
+				wgt.setFlexSize_({height:'auto'});
+				var zkn = zk(n),
+					ntop = n.offsetTop,
+					noffParent = n.offsetParent,
+					pb = zkn.padBorderHeight(),
+					max = 0;
+				for (var cwgt = wgt.firstChild; cwgt; cwgt = cwgt.nextSibling) {
+					var c = cwgt.$n(),
+						sz = cwgt._vflex == 'min' && cwgt._vflexsize === undefined ? //recursive 
+							_setMinFlexSize(cwgt, c, o) : 
+							(c.offsetHeight + c.offsetTop - (c.offsetParent == noffParent ? ntop : 0) + zk(c).sumStyles("b", jq.margins));
+					if (sz > max)
+						max = sz;
+				}
+				var margin = zkn.sumStyles("tb", jq.margins),
+					sz = wgt.setFlexSize_({height:(max + pb + margin)});
+				if (sz.height >= 0)
+					wgt._vflexsize = sz.height + margin;
+			}
+			return wgt._vflexsize;
+			
+		} else if (o == 'width') {
+			if (wgt._hflexsize === undefined) { //cached?
+				wgt.setFlexSize_({width:'auto'});
+				var zkn = zk(n),
+					nleft = n.offsetLeft,
+					noffParent = n.offsetParent,
+					pb = zkn.padBorderWidth(),
+					max = 0;
+				for (var cwgt = wgt.firstChild; cwgt; cwgt = cwgt.nextSibling) {
+					var c = cwgt.$n(),
+						sz = cwgt._hflex == 'min' && cwgt._hflexsize === undefined ? //recursive
+							_setMinFlexSize(cwgt, c, o) : 
+							(c.offsetWidth + c.offsetLeft - (c.offsetParent == noffParent ? nleft : 0) + zk(c).sumStyles("r", jq.margins));
+					if (sz > max)
+						max = sz;
+				}
+				var margin = zkn.sumStyles("lr", jq.margins);
+				var sz = wgt.setFlexSize_({width:(max + pb + margin)});
+				if (sz.width >= 0)
+					wgt._hflexsize = sz.width + margin;
+			}
+			return wgt._hflexsize;
+		} else
+			return 0;
+	}
+	//fix vflex/hflex of all my sibling nodes
+	function _fixFlex() {
+		//if (zk.animating()) return; //otherwise the fixing can be wrong
+		
+		if (this._flexFixed || (!this._nvflex && !this._nhflex)) { //other vflex/hflex sibliing has done it!
+			delete this._flexFixed;
+			return;
+		}
+		this._flexFixed = true;
+		var preRight = 0,
+			preBottom = 0,
+			vtxtsz = 0,
+			htxtsz = 0,
+			pretxt = false, //pre node is a text node
+			vflexs = [],
+			vflexsz = 0,
+			hflexs = [],
+			hflexsz = 0,
+			hsp = 0,
+			vsp = 0,
+			p = this.$n().parentNode,
+			zkp = zk(p),
+			hgh = zkp.revisedHeight(p.offsetHeight),
+			wdh = zkp.revisedWidth(p.offsetWidth);
+		for (var c = p.firstChild; c; c = c.nextSibling) {
+			if (zk(c).isVisible()) {
+				//In ZK, we assume all text node is space (otherwise, it will be span enclosed)
+				if (c.nodeType === 3) { //a text node
+					if (c !== p.firstChild)
+						pretxt = true;
+					continue;
+				}
+				var zkc = zk(c),
+					offLeft = c.offsetLeft,
+					offTop = c.offsetTop;
+				if (pretxt) {
+					pretxt = false;
+					var cLeft = offLeft - zkc.sumStyles("l", jq.margins),
+						cTop = offTop - zkc.sumStyles("t", jq.margins);
+					if (cLeft > preRight)
+						htxtsz += (hsp = cLeft - preRight);
+					else if (cLeft < preRight)
+						htxtsz += hsp;
+					if (cTop > preBottom)
+						vtxtsz += (vsp = cTop - preBottom);
+					else if (cTop < preBottom)
+						vtxtsz += vsp;
+				}
+				var offhgh = zkc.offsetHeight(),
+					offwdh = offhgh > 0 ? zkc.offsetWidth() : 0; //div with zero height might have 100% width
+				preRight = offLeft + offwdh + zkc.sumStyles("r", jq.margins);
+				preBottom = offTop + offhgh + zkc.sumStyles("b", jq.margins);
+				
+				var cwgt = _binds[c.id];
+				//vertical size
+				if (cwgt && cwgt._nvflex) {
+					if (cwgt !== this)
+						cwgt._flexFixed = true; //tell other vflex siblings I have done it.
+					if (cwgt._vflex == 'min') {
+						hgh -= _setMinFlexSize(cwgt, c, 'height');
+					} else {
+						vflexs.push(cwgt);
+						vflexsz += cwgt._nvflex;
+					}
+				} else if (c.offsetHeight !== undefined){
+					hgh -= offhgh + zkc.sumStyles("tb", jq.margins);
+				}
+				
+				//horizontal size
+				if (cwgt && cwgt._nhflex) {
+					if (cwgt !== this)
+						cwgt._flexFixed = true; //tell other hflex siblings I have done it.
+					if (cwgt._hflex == 'min') {
+						wdh -= _setMinFlexSize(cwgt, c, 'width');
+					} else {
+						hflexs.push(cwgt);
+						hflexsz += cwgt._nhflex;
+					}
+				} else if (c.offsetWidth !== undefined){
+					wdh -= offwdh + zkc.sumStyles("lr", jq.margins);
+				}
+			}
+		}
+		//take out text node height/width
+		hgh -= vtxtsz;
+		wdh -= htxtsz;
+		
+		//setup the height for the vflex child
+		//avoid floating number calculation error(TODO: shall distribute error evenly)
+		var lastsz = hgh;
+		for (var j = vflexs.length - 1; j > 0; --j) {
+			var cwgt = vflexs.shift(), 
+				vsz = (cwgt._nvflex * hgh / vflexsz) | 0; //cast to integer
+			cwgt.setFlexSize_({height:vsz});
+			cwgt._vflexsize = vsz;
+			lastsz -= vsz;
+		}
+		//last one with vflex
+		if (vflexs.length) {
+			var cwgt = vflexs.shift();
+			cwgt.setFlexSize_({height:lastsz});
+			cwgt._vflexsize = lastsz;
+		}
+		
+		//setup the width for the hflex child
+		//avoid floating number calculation error(TODO: shall distribute error evenly)
+		lastsz = wdh;
+		for (var j = hflexs.length - 1; j > 0; --j) {
+			var cwgt = hflexs.shift(), //{n: node, f: hflex} 
+				hsz = (cwgt._nhflex * wdh / hflexsz) | 0; //cast to integer
+			cwgt.setFlexSize_({width:hsz});
+			cwgt._hflexsize = hsz;
+			lastsz -= hsz;
+		}
+		//last one with hflex
+		if (hflexs.length) {
+			var cwgt = hflexs.shift();
+			cwgt.setFlexSize_({width:lastsz});
+			cwgt._hflexsize = lastsz;
+		}
+		
+		//notify parent widget that all of its children with vflex is done.
+		this.parent.afterChildrenFlex_(this);
+		this._flexFixed = false;
+	}
 	function _listenFlex(wgt) {
 		if (!wgt._flexListened){
-			zWatch.listen({onSize: [wgt, wgt._onSize], onShow: [wgt, wgt._onSize]});
+			zWatch.listen({onSize: [wgt, _fixFlex], onShow: [wgt, _fixFlex]});
 			wgt._flexListened = true;
 		}
 	}
 	function _unlistenFlex(wgt) {
-		if (this._flexListened) {
-			zWatch.unlisten({onSize: [wgt, wgt._onSize], onShow: [wgt, wgt._onSize]});
-			wgt._flexListened = false;
+		if (wgt._flexListened) {
+			zWatch.unlisten({onSize: [wgt, _fixFlex], onShow: [wgt, _fixFlex]});
+			delete wgt._flexListened;
 		}
 	}
 	
@@ -289,13 +465,13 @@ zk.Widget = zk.$extends(zk.Object, {
 			this.rerender();
 		},
 		width: function (v) {
-			if (!this._hflex) {
+			if (!this._nhflex) {
 				var n = this.$n();
 				if (n) n.style.width = v || '';
 			}
 		},
 		height: function (v) {
-			if (!this._vflex) {
+			if (!this._nvflex) {
 				var n = this.$n();
 				if (n) n.style.height = v || '';
 			}
@@ -337,39 +513,36 @@ zk.Widget = zk.$extends(zk.Object, {
 				this._dropTypes = dropTypes;
 			}
 		],
-		vflex: [
-			_zkf0 = function(v) {
-				v = (true === v || 'true' == v) ? 1 : 'min' == v ? zk.Widget.MIN_FLEX : zk.parseInt(v);
-				return v < 0 && v !== zk.Widget.MIN_FLEX ? 0 : v;
-			},
-			function(v) {
-				if (_binds[this.uuid] === this) { //if already bind
-					if (v == 0) {
-						this.setFlexSize_({height: zk.Widget.CLEAR_FLEX}); //clear the height
-						delete this._vflexsize;
-						if (!this._hflex)
-							_unlistenFlex(this);
-					} else
-						_listenFlex(this);
-					zWatch.fireDown('onSize', this.parent);
-				}
+		vflex: function(v) {
+			this._nvflex = (true === v || 'true' == v) ? 1 : v == 'min' ? -65500 : zk.parseInt(v);
+			if (this._nvflex < 0 && v != 'min')
+				this._nvflex = 0;
+			if (_binds[this.uuid] === this) { //if already bind
+				if (!this._nvflex) {
+					this.setFlexSize_({height: ''}); //clear the height
+					delete this._vflexsize;
+					if (!this._nhflex)
+						_unlistenFlex(this);
+				} else
+					_listenFlex(this);
+				zWatch.fireDown('onSize', this.parent);
 			}
-		],
-		hflex: [
-			_zkf0,
-			function(v) {
-				if (_binds[this.uuid] === this) { //if already bind
-					if (v == 0) {
-						this.setFlexSize_({width: zk.Widget.CLEAR_FLEX}); //clear the width
-						delete this._hflexsize;
-						if (!this._vflex)
-							_unlistenFlex(this);
-					} else
-						_listenFlex(this);
-					zWatch.fireDown('onSize', this.parent);
-				}
+		},
+		hflex: function(v) {
+			this._nhflex = (true === v || 'true' == v) ? 1 : v == 'min' ? -65500 : zk.parseInt(v);
+			if (this._nhflex < 0 && v != 'min')
+				this._nhflex = 0; 
+			if (_binds[this.uuid] === this) { //if already bind
+				if (!this._nhflex) {
+					this.setFlexSize_({width: ''}); //clear the width
+					delete this._hflexsize;
+					if (!this._nvflex)
+						_unlistenFlex(this);
+				} else
+					_listenFlex(this);
+				zWatch.fireDown('onSize', this.parent);
 			}
-		]
+		}
 	},
 	$o: _zkf = function () {
 		for (var w = this; w; w = w.parent)
@@ -1107,7 +1280,7 @@ zk.Widget = zk.$extends(zk.Object, {
 
 		if (this._draggable) this.initDrag_();
 		
-		if (this._vflex || this._hflex)
+		if (this._nvflex || this._nhflex)
 			_listenFlex(this);
 
 		for (var child = this.firstChild; child; child = child.nextSibling)
@@ -1139,178 +1312,28 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (add == false) delete _binds[id];
 		else _binds[id] = this;
 	},
-	_onSize: function() {
-		this.fixFlex_();
-	},
-	//{width: w, height: h}, if given zk.Widget.CLEAR_FLEX, means "reset"
-	//Given calculated margin height/width (offsetHeight + margin/offsetWidth + margin),
-	//the widget shall override this method and setup proper style to change dimension
-	//default implementation simply set style.height and style.width with revisedHeight/reviseWidth.
 	setFlexSize_: function(sz) {
 		var n = this.$n();
 		if (sz.height !== undefined) {
-			if (sz.height !== zk.Widget.CLEAR_FLEX)
+			if (sz.height == 'auto')
+				n.style.height = '';
+			else if (sz.height != '')
 				n.style.height = jq.px(zk(n).revisedHeight(sz.height, true));
 			else
 				n.style.height = this._height ? this._height : '';
 		}
 		if (sz.width !== undefined) {
-			if (sz.width !== zk.Widget.CLEAR_FLEX)
+			if (sz.width == 'auto')
+				n.style.width = '';
+			else if (sz.width != '')
 				n.style.width = jq.px(zk(n).revisedWidth(sz.width, true));
 			else
 				n.style.width = this._width ? this._width : '';
 		}
+		return {height: n.offsetHeight, width: n.offsetWidth};
 	},
-	//whether a vflex="min"
-	isMinVflex_: function() {
-		return this._vflex === zk.Widget.MIN_FLEX;
-	},
-	//whether a hflex="min"
-	isMinHflex_: function() {
-		return this._hflex === zk.Widget.MIN_FLEX;
-	},
-	//whther vflex size is resolved
-	isVflexResolved_: function() {
-		return this._vflexsize !== undefined;
-	},
-	//whther hflex size is resolved
-	isHflexResolved_: function() {
-		return this._hflexsize !== undefined;
-	},
-	//set minimum flex size and return it
-	setMinFlexSize_: function(n, o) {
-		//find the max size of all children
-		if (o == 'height') {
-			if (this._vflexsize === undefined) { //cached?
-				n.style.height = '';
-				var max = n.offsetHeight;
-				if (!max || max < 0) {
-					for (var cwgt = this.firstChild; cwgt; cwgt = cwgt.nextSibling) {
-						var c = cwgt.$n(),
-							sz = cwgt.isMinVflex_() && !cwgt.isVflexResolved_() ? //recursive 
-								cwgt.setMinFlexSize_(c, o) : (c.offsetHeight + c.offsetTop);
-						if (sz > max)
-							max = sz;
-					}
-				}
-				this._vflexsize = max+zk(n).sumStyles("tb", jq.margins);
-				if (!n.offsetHeight)
-					this.setFlexSize_({height:this._vflexsize}); //minvflex setup only once
-			}
-			return this._vflexsize;
-			
-		} else if (o == 'width') {
-			if (this._hflexsize === undefined) { //cached?
-				n.style.width = '';
-				var max = n.offsetWidth;
-				if (!max || max < 0) {
-					for (var cwgt = this.firstChild; cwgt; cwgt = cwgt.nextSibling) {
-						var c = cwgt.$n(),
-							sz = cwgt.isMinHflex_() && !cwgt.isHflexResolved_() ? //recursive
-								cwgt.setMinFlexSize_(c, o) : (c.offsetWidth + c.offsetLeft);
-						if (sz > max)
-							max = sz;
-					}
-				}
-				this._hflexsize = max+zk(n).sumStyles("lr", jq.margins);
-				if (!n.offsetWidth)
-					this.setFlexSize_({width:this._hflexsize}); //minhflex setup only once
-			}
-			return this._hflexsize;
-		} else
-			return 0;
-	},
-	//callback function after children's vflex is fixed
-	afterFixFlex_: function(kid) {
+	afterChildrenFlex_: function(kid) {
 		//to be overridden
-	},
-	//fix vflex/hflex of all my sibling nodes
-	fixFlex_: function() {
-		if (zk.animating()) return; //otherwise the fixing can be wrong
-		
-		if (this._flexFixed || (!this._vflex && !this._hflex)) { //other vflex/hflex sibliing has done it!
-			this._flexFixed = false;
-			return;
-		}
-		this._flexFixed = true;
-		var vflexs = [],
-			vflexsz = 0,
-			hflexs = [],
-			hflexsz = 0,
-			p = this.$n().parentNode,
-			zkp = zk(p),
-			hgh = zkp.revisedHeight(p.offsetHeight),
-			wdh = zkp.revisedWidth(p.offsetWidth);
-		for (var c = p.firstChild; c; c = c.nextSibling) {
-			if (zk(c).isVisible()) {
-				var cwgt = _binds[c.id];
-				var zkc = zk(c);
-				//vertical size
-				if (cwgt && cwgt._vflex) {
-					if (cwgt !== this)
-						cwgt._flexFixed = true; //tell other vflex siblings I have done it.
-					if (cwgt.isMinVflex_()) { //vflex="min"
-						hgh -= cwgt.setMinFlexSize_(c, 'height');
-					} else {
-						vflexs.push(cwgt);
-						vflexsz += cwgt._vflex;
-					}
-				} else if (c.offsetHeight !== undefined){
-					hgh -= zkc.offsetHeight()+zkc.sumStyles("tb", jq.margins);
-				}
-				
-				//horizontal size
-				if (cwgt && cwgt._hflex) {
-					if (cwgt !== this)
-						cwgt._flexFixed = true; //tell other hflex siblings I have done it.
-					if (cwgt.isMinHflex_()) { //hflex="min"
-						wdh -= cwgt.setMinFlexSize_(c, 'width');
-					} else {
-						hflexs.push(cwgt);
-						hflexsz += cwgt._hflex;
-					}
-				} else if (c.offsetWidth !== undefined){
-					wdh -= zkc.offsetWidth()+zkc.sumStyles("lr", jq.margins);
-				}
-			}
-		}
-		//setup the height for the vflex child
-		//avoid floating number calculation error(TODO: shall distribute error evenly)
-		var lastsz = hgh;
-		for (var j = vflexs.length - 1; j > 0; --j) {
-			var cwgt = vflexs.shift(), 
-				vsz = (cwgt._vflex * hgh / vflexsz) | 0; //cast to integer
-			cwgt.setFlexSize_({height:vsz});
-			cwgt._vflexsize = vsz;
-			lastsz -= vsz;
-		}
-		//last one with vflex
-		if (vflexs.length) {
-			var cwgt = vflexs.shift();
-			cwgt.setFlexSize_({height:lastsz});
-			cwgt._vflexsize = lastsz;
-		}
-		
-		//setup the width for the hflex child
-		//avoid floating number calculation error(TODO: shall distribute error evenly)
-		lastsz = wdh;
-		for (var j = hflexs.length - 1; j > 0; --j) {
-			var cwgt = hflexs.shift(), //{n: node, f: hflex} 
-				hsz = (cwgt._hflex * wdh / hflexsz) | 0; //cast to integer
-			cwgt.setFlexSize_({width:hsz});
-			cwgt._hflexsize = hsz;
-			lastsz -= hsz;
-		}
-		//last one with hflex
-		if (hflexs.length) {
-			var cwgt = hflexs.shift();
-			cwgt.setFlexSize_({width:lastsz});
-			cwgt._hflexsize = lastsz;
-		}
-		
-		//notify parent widget that all of its children with vflex is done.
-		this.parent.afterFixFlex_(this);
-		this._flexFixed = false;
 	},
 	initDrag_: function () {
 		this._drag = new zk.Draggable(this, this.getDragNode(), zk.copy({
@@ -1726,9 +1749,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (!cls)
 			throw 'widget not found: '+wgtnm;
 		return new cls(opts);
-	},
-	CLEAR_FLEX: -100,
-	MIN_FLEX: -200
+	}
 });
 })();
 

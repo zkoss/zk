@@ -26,7 +26,8 @@ ZK 5.0.0
   2849793: Replace fixedLayout with sizedByContent in Gird/Listbox/Tree
   2840886: Freezing Columns on Listbox and Grid
   2853314: ZK Client Engine support canvas
-
+  1811700: XUL box model: align and pack
+  
 * Bugs
   1999145: Combobox with Width of 100% Overruns
 

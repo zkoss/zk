@@ -16,11 +16,16 @@ function (out) {
 	out.push('<table', this.domAttrs_(), zUtl.cellps0, '><tr');
 	
 	var	v = this.getAlign();
-	if (v) out.push(' valign="', zul.box.Box._toValign(v), '"');
-	out.push('>');
-
+	if (v && v != 'stretch') out.push(' valign="', zul.box.Box._toValign(v), '"');
+	out.push('><td');
+	var p = this.getPack();
+	if (p) out.push(' align="', zul.box.Box._toHalign(p), '"');
+	out.push('><table id="', this.uuid, '-real"', zUtl.cellps0, 'style="text-align:left');
+	if (v == 'stretch') out.push(';height:100%');
+	out.push('"><tr valign="top">');
+	
 	for (var w = this.firstChild; w; w = w.nextSibling)
 		this.encloseChildHTML_(w, false, out);
 
-	out.push('</tr></table>');
+	out.push('</tr></table></td></tr></table>');
 }

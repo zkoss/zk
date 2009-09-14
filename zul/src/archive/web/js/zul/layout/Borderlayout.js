@@ -58,7 +58,7 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 		this.$supers('unbind_', arguments);
 	},
 	//@Override, region with vflex/hflex, must wait flex resolved then do resize
-	afterFixFlex_: function () {
+	afterChildrenFlex_: function () {
 		//region's min vflex/hflex resolved and try the border resize
 		//@see #_resize
 		if (this._isOnSize)
@@ -77,12 +77,12 @@ zul.layout.Borderlayout = zk.$extends(zul.Widget, {
 		for (var region, j = 0; j < k; ++j) {
 			region = this[rs[j]];
 			if (region && zk(region.$n()).isVisible()
-				&& ((region.isVflex() && !region.isVflexResolved_()) 
-						|| (region.isHflex() && !region.isHflexResolved_())))
+				&& ((region._nvflex && region._vflexsize === undefined) 
+						|| (region._nhflex && region._hflexsize === undefined)))
 				return;	//region size unknown, border cannot _resize() now, 
 						//return and keep this._isOnSize true
 						//onSize event will be fired to region later, and region will
-						//call back to _resize() via afterFixFlex_() when it resolve
+						//call back to _resize() via afterChildrenFlex_() when it resolve
 						//itself the vflex and hflex
 		}
 

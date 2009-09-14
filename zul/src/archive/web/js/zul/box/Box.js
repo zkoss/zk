@@ -52,7 +52,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		var n = this._chdextr(child);
 		if (n) n.style.display = visible ? '': 'none';
 		n = child.$n('chdex2');
-		if (n) n.style.display = visible ? '': 'none';
+		if (n) n.style.display = visible && n.offsetHeight ? '': 'none';
 
 		if (this.lastChild == child) {
 			n = child.previousSibling;
@@ -88,7 +88,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		var oo = [],
 			isCell = child.$instanceof(zul.wgt.Cell);
 		if (this.isVertical()) {
-			oo.push('<tr id="', child.uuid, '-chdex"',
+			oo.push('<tr id="', child.uuid, '-chdex" valign="top"',
 				this._childOuterAttrs(child), '>');
 				
 			if (!isCell) 
@@ -146,10 +146,10 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		var html = '';
 		if (child.$instanceof(zul.box.Splitter))
 			html = ' class="' + child.getZclass() + '-outer"';
-		else if (this.isVertical()) {
+/*		else if (this.isVertical()) {
 			var v = this.getPack();
 			if (v) html = ' valign="' + zul.box.Box._toValign(v) + '"';
-		} else
+		}*/ else
 			return ''; //if hoz and not splitter, display handled in _childInnerAttrs
 
 		if (!child.isVisible()) html += ' style="display:none"';
@@ -163,8 +163,8 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			return vert ? ' class="' + child.getZclass() + '-outer-td"': '';
 				//spliter's display handled in _childOuterAttrs
 
-		var v = vert ? this.getAlign(): this.getPack();
-		if (v) html += ' align="' + zul.box.Box._toHalign(v) + '"';
+//		var v = vert ? this.getAlign(): this.getPack();
+//		if (v) html += ' align="' + zul.box.Box._toHalign(v) + '"';
 
 		var style = '', szes = this._sizes;
 		if (szes) {
@@ -206,9 +206,11 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			if (c.$instanceof($Splitter)) //whether the splitter has been dragged
 				break;
 		}
+		this._splitter = true;
 
-		var vert = this.isVertical(), node = this.$n();
-
+		var vert = this.isVertical(), node = this.$n(), real = this.$n('real');
+		real.style.height = real.style.width = '100%'; //there are splitter kids
+		
 		//Bug 1916473: with IE, we have make the whole table to fit the table
 		//since IE won't fit it even if height 100% is specified
 		if (zk.ie) {
@@ -227,9 +229,9 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		//Otherwise, the first time dragging the splitter won't be moved
 		//as expected (since style.width/height might be "")
 
-		var nd = vert ? node.rows: node.rows[0].cells,
-			total = vert ? zk(node).revisedHeight(node.offsetHeight):
-				zk(node).revisedWidth(node.offsetWidth);
+		var nd = vert ? real.rows: real.rows[0].cells,
+			total = vert ? zk(real).revisedHeight(real.offsetHeight):
+							zk(real).revisedWidth(real.offsetWidth);
 
 		for (var i = nd.length; i--;) {
 			var d = nd[i];
@@ -241,8 +243,10 @@ zul.box.Box = zk.$extends(zul.Widget, {
 						if (d.cells.length) {
 							var c = d.cells[0];
 							c.style.height = zk(c).revisedHeight(i ? diff: total) + "px";
+							d.style.height = ""; //just-in-case
+						} else {
+							d.style.height = zk(d).revisedHeight(i ? diff: total) + "px";
 						}
-						d.style.height = ""; //just-in-case
 					}
 					total -= diff;
 				} else {

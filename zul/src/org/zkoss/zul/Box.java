@@ -34,7 +34,7 @@ import org.zkoss.zul.impl.Utils;
  */
 public class Box extends XulElement implements org.zkoss.zul.api.Box {
 	private String _spacing;
-	private String _align = "start", _pack = "start";
+	private String _align = "stretch", _pack = "start";
 	/** Array of width/height for each cell. */
 	private String[] _sizes;
 

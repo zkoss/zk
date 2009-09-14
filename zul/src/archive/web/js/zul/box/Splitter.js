@@ -36,8 +36,9 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 
 				sibwgt.setDomVisible_(sib, open);
 				sibwgt.parent._fixChildDomVisible(sibwgt, open);
-
-				diff = zk.parseInt(sib.style[fd]);
+				
+				var c = vert && sib.cells.length ? sib.cells[0] : sib;
+				diff = zk.parseInt(c.style[fd]);
 				if (!before && sibwgt && !sibwgt.nextSibling) {
 					var sp = this.$n('chdex2');
 					if (sp) {
@@ -49,9 +50,10 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 
 			var sib2 = before ? Splitter._next(nd): Splitter._prev(nd);
 			if (sib2) {
-				diff = zk.parseInt(sib2.style[fd]) + (open ? -diff: diff);
+				var c = vert && sib2.cells.length ? sib2.cells[0] : sib2;
+				diff = zk.parseInt(c.style[fd]) + (open ? -diff: diff);
 				if (diff < 0) diff = 0;
-				sib2.style[fd] = diff + "px";
+				c.style[fd] = diff + "px";
 			}
 			if (sib && open)
 				zWatch.fireDown('onShow', sibwgt);
@@ -308,12 +310,13 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 	},
 	_endDrag: function (draggable) {
 		var wgt = draggable.control,
+			vert = wgt.isVertical(),
 			node = wgt.$n(),
 			Splitter = zul.box.Splitter,
 			flInfo = Splitter._fixLayout(wgt),
 			run = draggable.run, diff, fd;
 
-		if (wgt.isVertical()) {
+		if (vert) {
 			diff = run.z_point[1];
 			fd = "height";
 
@@ -329,6 +332,7 @@ zul.box.Splitter = zk.$extends(zul.Widget, {
 		if (run.nextwgt) zWatch.fireDown('beforeSize', run.nextwgt);
 		if (run.prevwgt) zWatch.fireDown('beforeSize', run.prevwgt);
 		
+		var ns = 0;
 		if (run.next) {
 			var s = zk.parseInt(run.next.style[fd]);
 			s -= diff;

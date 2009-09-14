@@ -85,19 +85,29 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	setFlexSize_: function(sz) {
 		var n = this.$n('real');
 		if (sz.height !== undefined) {
-			if (sz.height !== zk.Widget.CLEAR_FLEX) {
+			if (sz.height == 'auto')
+				n.style.height = '';
+			else if (sz.height == '')
+				n.style.height = this._height ? this._height : '';
+			else {
 				var cave = this.$n('cave'),
 					hgh = cave ? (cave.offsetHeight + cave.offsetTop) : zk(n).revisedHeight(sz.height, true);   
+				if (zk.ie) n.style.height = '';
 				n.style.height = jq.px(hgh);
-			} else
-				n.style.height = this._height ? this._height : '';
+			}
 		}
 		if (sz.width !== undefined) {
-			if (sz.width !== zk.Widget.CLEAR_FLEX)
-				n.style.width = jq.px(zk(n).revisedWidth(sz.width, true));
-			else
+			if (sz.width == 'auto')
+				n.style.width = '';
+			else if (sz.width == '')
 				n.style.width = this._width ? this._width : '';
+			else {
+				var wdh = zk(n).revisedWidth(sz.width, true);
+				if (zk.ie) n.style.width = '';
+				n.style.width = jq.px(wdh);
+			}
 		}
+		return {height: n.offsetHeight, width: n.offsetWidth};
 	},
 	updateDomClass_: function () {
 		if (this.desktop) {
