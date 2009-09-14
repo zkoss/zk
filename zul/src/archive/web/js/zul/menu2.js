@@ -398,9 +398,9 @@ zkMenuit2 = { //menuitem
 	onclick: function (evt) {
 		if (!evt) evt = window.event;
 		var el = Event.element(evt);
-		zkMenuit2._onclick(el);
+		zkMenuit2._onclick(el, evt);
 	},
-	_onclick: function (cmp) {
+	_onclick: function (cmp, evt) {
 		cmp = $parentByType(cmp, "Menuit2");
 		zkMenu2._onout(cmp, true); //Bug 1822720
 			//Bug 1852304: theorectically, popup shall not appear since 'owner'
@@ -426,6 +426,12 @@ zkMenuit2 = { //menuitem
 			if (zk.ie && zkMenu2.isTop(cmp) && cmp.id != anc.id) zk.go(anc.href, overwrite, t);
 				// Bug #1886352 and #2154611
 			//Note: we cannot eat onclick. or, <a> won't work
+			
+			if (zk.gecko3 && zkMenu2.isTop(cmp) && cmp.id != anc.id) {				
+				zk.go(anc.href, overwrite, t);
+				Event.stop(evt);
+				// Bug #2154611 we shall eat the onclick event, if it is FF3.
+			}
 		}
 		if (!getZKAttr(cmp, "pop")) // Bug 1852304
 			zkau.closeFloats(cmp); //bug 1711822: fire onClick first

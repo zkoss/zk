@@ -34,6 +34,7 @@ August, 2009
   2829547: Incorrect getValue when using spinners on multiple Timeboxes
   2856700: Failed to include a page with query string in auto mode
   2073409: Can't add groupfoot by javacode
+  2154611: Menuitem in Menubar - quirks
 
 	--------
 ZK 3.6.2
