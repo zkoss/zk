@@ -452,7 +452,9 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 			} else if (_constr instanceof ClientConstraint) {
 				final ClientConstraint cc = (ClientConstraint)_constr;
 				try {
-					smartUpdate("z_pk", cc.getClientPackages());
+					final String cpkg = cc.getClientPackages();
+					if (cpkg != null)
+						smartUpdate("z_pk", cpkg);
 
 					final String js = cc.getClientConstraint();
 					if (js != null) {
@@ -461,7 +463,7 @@ implements Constrainted, org.zkoss.zul.impl.api.InputElement {
 							smartUpdate("z_al",
 								"{constraint:function(){\nreturn "+js+";}}");
 						} else {
-							smartUpdate("constraint", js);
+							smartUpdate("constraint", js.substring(1, js.length() - 1));
 						}
 						return;
 					}

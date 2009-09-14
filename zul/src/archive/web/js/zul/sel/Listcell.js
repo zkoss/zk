@@ -24,6 +24,11 @@ zul.sel.Listcell = zk.$extends(zul.LabelImageWidget, {
 				if (n) n.colSpan = this._colspan;
 			}]
 	},
+	setLabel: function () {
+		this.$supers('setLabel', arguments);
+		if (this.desktop && this.parent.$instanceof(zul.sel.Listgroup))
+			this.parent.rerender();
+	},
 	getListbox: function () {
 		var p = this.parent;
 		return p ? p.parent: null;

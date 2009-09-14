@@ -5,14 +5,20 @@ zul.inp.SimpleSpinnerConstraint = zk.$extends(zul.inp.SimpleConstraint, {
 	},
 	parseConstraint_: function(cst){
 		var cstList = cst.replace(/ +/g,' ').split(/[, ]/),
-			len = cstList.length;
+			len = cstList.length,
+			isSpinner;
 		for(var i=0; i<len+1; i++){
-			if(cstList[i] == 'min')
-				this._min = cstList[++i]*1;
-			if(cstList[i] == 'max')
-				this._max = cstList[++i]*1;
+			if (cstList[i] == 'min') {
+				this._min = cstList[++i] * 1;
+				isSpinner = true;
+			} else if (cstList[i] == 'max') {
+				this._max = cstList[++i] * 1;
+				isSpinner = true;
+			}
 		}
-		return this.$supers('parseConstraint_', arguments);
+		if (isSpinner) return;
+		else
+			return this.$supers('parseConstraint_', arguments);
 	},
 	validate: function (wgt, val) {
 		switch (typeof val) {

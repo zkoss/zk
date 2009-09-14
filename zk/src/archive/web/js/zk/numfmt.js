@@ -34,7 +34,7 @@ zNumFormat = {
 		if (indFmt == -1) 
 			indFmt = fmt.length;
 		
-		for (var len = indVal - fmt.replace(/[^#]/g, '').length; len--; indFmt++)
+		for (var len = indVal - fmt.replace(/[^#]/g, '').length; --len >= 0; indFmt++)
 			fmt = '#' + fmt;
 		
 		var groupDigit = indFmt - fmt.substring(0, indFmt).lastIndexOf(zk.GROUPING);

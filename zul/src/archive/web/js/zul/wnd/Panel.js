@@ -126,6 +126,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 						body.style.width = body.style.height = "";
 				}
 				if (!fromServer || isRealVisible) {
+					this._visible = true;
 					this.fire('onMaximize', {
 						left: l,
 						top: t,
@@ -157,6 +158,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 					zWatch.fireDown('onShow', this);
 				}
 				if (!fromServer) {
+					this._visible = false;
 					this.fire('onMinimize', {
 						left: s.left,
 						top: s.top,
