@@ -20,7 +20,7 @@
       <checkbox label="Use 3d groupbox" checked="true" onCheck='gb.mold=self.checked? "3d": "default"'/>
     </vbox>
     <vbox>
-      <label id="report" value="Childable: ${gb.childable}, closable: ${gb.closable}, Visible: ${gb.visible}, Open:${gb.open}, Caption:${gb.caption.label}, MoldSClass:${gb.mold}, ContentSClass:${gb.contentSclass}, ContentStyle:${gb.contentStyle}"/>
+      <label id="report" value="closable: ${gb.closable}, Visible: ${gb.visible}, Open:${gb.open}, Caption:${gb.caption.label}, MoldSClass:${gb.mold}, ContentSClass:${gb.contentSclass}, ContentStyle:${gb.contentStyle}"/>
       <button label="Open or Close GroupBox" onClick="gb.setOpen(!gb.isOpen());"/>
     </vbox>
   </window>

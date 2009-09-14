@@ -548,8 +548,10 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 				if (row instanceof Group) {
 					final Group g = (Group) row;
 					if (!g.isOpen()) {
-						for (int j = 0, len = g.getItemCount(); j < len; j++)
+						for (int j = 0, len = g.getItemCount(); j < len; j++) {
 							row = (Row) row.getNextSibling();
+							avail.add(row);
+						}
 					}
 				}
 				if (row != null)
