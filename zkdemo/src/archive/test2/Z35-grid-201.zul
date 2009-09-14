@@ -48,7 +48,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		</rows>
 	</grid>
 	<vbox>
-	<button label="1.remove column1">
+	<button label="1.remove sorting of column1" onClick='col.setSortAscending(null);col.setSortDescending(null)'/>
+	<label value="the sorting button of column1 should dispear"/>
+	<button label="2.remove sorting of column2" onClick='col1.setSortAscending(null);col1.setSortDescending(null)'/>	
+	<label value="the sorting button of column2 should dispear"/>
+	<button label="3.remove column1">
 		<attribute name="onClick">
 			cols.removeChild(col);
 			r1.removeChild(lb1);
@@ -57,7 +61,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		</attribute>
 	</button>
 	<label value="the menupopup of column2 should work properly"/>
-	<button label="2.remove column2">
+	<button label="4.remove column2">
 		<attribute name="onClick">
 			cols.removeChild(col1);
 			r1.removeChild(tb1);
@@ -66,10 +70,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		</attribute>
 	</button>
 	<label value="the menupopup of column3 should work properly"/>
-	<button label="3.remove sorting of column1" onClick='col.setSortAscending(null);col.setSortDescending(null)'/>
-	<label value="the sorting button of column1 should dispear"/>
-	<button label="4.remove sorting of column2" onClick='col1.setSortAscending(null);col1.setSortDescending(null)'/>	
-	<label value="the sorting button of column2 should dispear"/>
 	</vbox>
 </window>
 				

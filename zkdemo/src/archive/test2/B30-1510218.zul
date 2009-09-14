@@ -14,6 +14,7 @@ w.setTitle("popup");
 w.setSizable(true);
 w.setStyle("overflow:visible;");
 Include inc=new Include();
+inc.setMode("defer");
 inc.setSrc("B30-1510218-2.zul");
 w.appendChild(inc);
 w.setPage(page);

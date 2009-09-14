@@ -27,6 +27,6 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 		
 		CustomDataSource ds = new CustomDataSource();
 	</zscript>
-	<jasperreport src="/userguide/misc/jasperreport.jasper"
+	<jasperreport src="/userguide/data/jasperreport.jasper"
 		parameters="${parameters}" datasource="${ds}" />
 </window>

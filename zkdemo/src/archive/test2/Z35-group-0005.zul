@@ -47,10 +47,8 @@
 			</rows>
 		</grid>	
                 <button label="add group on 0" onClick="addGroup(0);" />
-		<button label="add group on 4" onClick="addGroup(4);" />
+		<button label="add group on 3" onClick="addGroup(3);" />
 		<button label="add group on 5" onClick="addGroup(5);" />
-		<button label="add foot on 5" onClick="addGroupFoot(5);" />
-		<button label="add foot on 15" onClick="addGroupFoot(15);" />
-		<button label="add foot on 23" onClick="addGroupFoot(23);" />		
+		<button label="add foot on 5" onClick="addGroupFoot(5);" />	
 	</window>
 </zk>

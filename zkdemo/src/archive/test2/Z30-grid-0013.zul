@@ -21,11 +21,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 	<auxhead>
 		<auxheader label="A" rowspan="2" />
 		<auxheader label="B" rowspan="2" />
-		<auxheader label="C" colspan="2" />
+		<auxheader label="C" colspan="1" />
 	</auxhead>
 
 	<auxhead>
-		<auxheader label="C" colspan="2" />
+		<auxheader label="C" colspan="1" />
 	</auxhead>
 	<columns sizable="true">
 		<column label="AA" />
