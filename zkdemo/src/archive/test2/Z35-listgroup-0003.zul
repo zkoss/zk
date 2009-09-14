@@ -50,6 +50,6 @@
 		<button label="add group on 5" onClick="addGroup(5);" />	
 		<button label="add foot on 5" onClick="addGroupFoot(5);" />
 		<button label="add foot on end" onClick="addGroupFootEnd(0);" />
-		<button label="add foot on end - 1" onClick="addGroupFootEnd(1);" />
+		<button label="add foot on end - 1(should throw an error)" onClick="addGroupFootEnd(1);" />
 	</window>
 </zk>

@@ -95,8 +95,8 @@ zul.menu.Menu = zk.$extends(zul.LabelImageWidget, {
 	doClick_: function (evt) {
 		if (this.isTopmost() && !jq.isAncestor(this.$n('a'), evt.domTarget)) return;
 
-		jq(this.$n('a')).addClass(this.getZclass() + '-body-seld');
 		if (this.menupopup) {
+			jq(this.$n('a')).addClass(this.getZclass() + '-body-seld');
 			this.menupopup._shallClose = false;
 			if (this.isTopmost())
 				this.getMenubar()._lastTarget = this;
