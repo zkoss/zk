@@ -1,9 +1,8 @@
 <zk>c
 <vbox>
-<label value="1.type 11 in the spinner"/>
-<label value='2.click "set spinner constraint" button'/>
-<label value="3.click button of spinner"/>
-<label value="4.the number will be increased or decreased by 2 or it is not correct!"/>
+<label value='1.click "set spinner constraint" button'/>
+<label value="2.click button of spinner"/>
+<label value="3.the number will be increased or decreased by 2 or it is not correct!"/>
 </vbox>
 <window title="Spinner test" border="normal">
 <spinner id="sp"/>
