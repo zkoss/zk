@@ -84,6 +84,14 @@ public class Tabs extends XulElement implements org.zkoss.zul.api.Tabs {
 			smartUpdate("align", _align);
 		}
 	}
+	
+	public void invalidate() {
+		Tabbox tbox = getTabbox();
+		if (tbox != null && tbox.isVertical())
+			tbox.invalidate();
+		else
+			super.invalidate();
+	}
 	public String getZclass() {
 		if (_zclass != null) return _zclass;
 		final Tabbox tabbox = getTabbox();

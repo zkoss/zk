@@ -113,6 +113,11 @@ zul.tab.Tabbox = zk.$extends(zul.Widget, {
 		this.$supers('unbind_', arguments);
 	},
 	//super//
+	removeChildHTML_: function (child, prevsib) {
+		this.$supers('removeChildHTML_', arguments);
+		if (this.isVertical() && child.$instanceof(zul.tab.Tabs))
+			jq(child.uuid + '-line', zk).remove();
+	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
 		if (child.$instanceof(zul.wgt.Toolbar))

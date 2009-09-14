@@ -176,6 +176,17 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 				if (this._inplaceout === undefined)
 					this._inplaceout = true;
 			}
+			
+			// Bug #2280308
+			if (this._errbox) {
+				var self = this;
+				setTimeout(function () {
+					if (self._errbox)
+						self._errbox.open(self, null, "end_before", {
+							overflow: true
+						});
+				});
+			}
 		}
 	},
 	doBlur_: function (evt) {

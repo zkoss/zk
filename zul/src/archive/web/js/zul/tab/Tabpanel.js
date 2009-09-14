@@ -31,7 +31,7 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 		var tabbox =  this.getTabbox(),
 			tabs = tabbox.getTabs(),
 			index = this.getIndex();
-		return tabs.getChildAt(index);
+		return tabs ? tabs.getChildAt(index) : null;
 	},
 	getIndex:function() {
 		return this.getChildIndex();
