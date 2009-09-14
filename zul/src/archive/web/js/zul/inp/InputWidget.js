@@ -333,7 +333,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 	},
 	_onChanging: function () {
 		var inp = this.getInputNode(),
-			val = this.valueEnter__ || inp.value;
+			val = this.valueEnter_ || inp.value;
 		if (this._lastChg != val) {
 			this._lastChg = val;
 			var valsel = this.valueSel_;
@@ -435,6 +435,8 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		this.$supers('doKeyUp_', arguments);
 	},
 	afterKeyDown_: function (evt) {
+		if (evt.keyCode == 13)
+			this.valueEnter_ = null;
 		if (this._inplace) {
 			if (evt.keyCode == 13) {
 				var $inp = jq(this.getInputNode()), inc = this.getInplaceCSS();

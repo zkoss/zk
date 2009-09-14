@@ -30,10 +30,17 @@ zul.tab.Tabs = zk.$extends(zul.Widget, {
 	onShow: _zkf,
 	insertChildHTML_: function (child, before, desktop) {
 		var last = child.previousSibling;
-		if (before || !last)
+		if (before) 
 			jq(before).before(child._redrawHTML());
-		else
+		else if (last) 
 			jq(last).after(child._redrawHTML());
+		else {
+			var edge = this.$n('edge');
+			if (edge) 
+				jq(edge).before(child._redrawHTML());
+			else
+				jq(this.getCaveNode()).append(child._redrawHTML());
+		}
 		child.bind(desktop);
 	},
 	domClass_: function (no) {

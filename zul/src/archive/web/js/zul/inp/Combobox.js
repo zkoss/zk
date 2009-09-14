@@ -186,6 +186,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			val = inp.value,
 			ofs = zk(inp).getSelectionRange()
 			fchild = this.firstChild;
+		this.valueEnter_ = val;	
 		if (!val || !fchild
 		|| ofs[0] != val.length || ofs[0] != ofs[1]) //not at end
 			return this._hilite({strict:true});
