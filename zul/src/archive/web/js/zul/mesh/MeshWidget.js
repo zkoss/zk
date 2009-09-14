@@ -124,7 +124,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		if (this.head && this.ehead) {
 			var empty = true;
 			for (var w = this.head.firstChild; w; w = w.nextSibling) 
-				if (w.getLabel() || w.getImage()) {
+				if (w.getLabel() || w.getImage() || w.nChildren) {
 					empty = false;
 					break;
 				}
