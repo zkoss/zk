@@ -18,7 +18,6 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 	_pageCount: 1,
 	_activePage: 0,
 	_pageIncrement: 10,
-	_autohide: 10,
 
 	$define: { //zk.def
 		totalSize: function () {
@@ -62,6 +61,12 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 			this._pageCount = v;
 			if (this._activePage >= this._pageCount)
 				this._activePage = this._pageCount - 1;
+			if (this.desktop && this.parent) {
+				if (this.parent.getPagingPosition() == 'both')
+					this.parent.rerender();
+				else
+					this.rerender();
+			}
 		}
 	},
 	infoText_: function () {

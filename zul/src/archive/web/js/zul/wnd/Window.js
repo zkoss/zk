@@ -510,7 +510,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			$tl = jq(n).find('>div:first'), tl = $tl[0];
 		return cap ? cap.offsetHeight + tl.offsetHeight:
 			this._mode != 'embedded' && this._mode != 'popup' ?
-				$tl.nextAll('div:first')[0].offsetHeight: 0;
+				tl.offsetHeight: 0;
 	},
 
 	_fireOnMove: function (keys) {

@@ -44,6 +44,14 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	},
 
 	//super//
+	setVisible: function (visible) {
+		if (this._visible != visible) {
+			this.$supers('setVisible', arguments);
+			if (this._mold == 'trendy')
+				this.rerender();
+		}
+		return this;
+	},
 	focus: function (timeout) {
 		if (this.desktop && this.isVisible() && this.canActivate({checkOnly:true})) {
 			zk(this.$n('btn')||this.$n()).focus(timeout);

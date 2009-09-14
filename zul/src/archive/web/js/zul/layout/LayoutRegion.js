@@ -28,6 +28,10 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 		border: function (border) {
 			if (!border || '0' == border)
 				this._border = border = "none";
+				
+			if (this.desktop)
+				(this.$n('real') || {})._lastSize = null;
+				
 			this.updateDomClass_();
 		},
 		autoscroll: null
@@ -61,13 +65,19 @@ zul.layout.LayoutRegion = zk.$extends(zul.Widget, {
 	setWidth: function (width) {
 		this._width = width;
 		var real = this.$n('real');
-		if (real) real.style.width = width ? width: '';
+		if (real) {
+			real.style.width = width ? width : '';
+			real._lastSize = null;
+		}
 		return this;
 	},
 	setHeight: function (height) {
 		this._height = height;
 		var real = this.$n('real');
-		if (real) real.style.height = height ? height: '';
+		if (real) {
+			real.style.height = height ? height : '';
+			real._lastSize = null;
+		}
 		return this;
 	},
 	setVisible: function (visible) {
