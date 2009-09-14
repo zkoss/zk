@@ -258,8 +258,8 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 						int leng = index - prev[0], 
 							size = prev[1] - leng + 1;
 						prev[1] = leng;
-						_groupsInfo.add(idx, new int[]{index, size, size > 1 ? prev[2] : -1});
-						if (size > 1) prev[2] = -1; // reset groupfoot
+						_groupsInfo.add(idx, new int[]{index, size, size > 1 && prev[2] > index ? prev[2] : -1});
+						if (size > 1 && prev[2] > index) prev[2] = -1; // reset groupfoot
 					} else if (next != null) {
 						_groupsInfo.add(idx, new int[]{index, next[0] - index, -1});
 					}
@@ -269,7 +269,7 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 				final int[] g = getGroupsInfoAt(index);
 				if (g != null) {
 					g[1]++;
-					if (g[2] != -1) g[2]++;
+					if (g[2] != -1 && g[2] > index) g[2]++;
 				}
 				
 			}

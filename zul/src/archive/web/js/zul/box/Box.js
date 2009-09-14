@@ -79,7 +79,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 	},
 	removeChildHTML_: function (child, prevsib) {
 		this.$supers('removeChildHTML_', arguments);
-		jq(this._chdextr(child)).remove();
+		jq(child.uuid + '-chdex', zk).remove();
 		jq(child.uuid + '-chdex2', zk).remove();
 		if (prevsib && this.lastChild == prevsib) //child is last
 			jq(prevsib.uuid + '-chdex2', zk).remove();
