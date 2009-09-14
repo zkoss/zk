@@ -216,6 +216,10 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			}
 		}
 	},
+	enterPressed_: function (evt) {
+		this.valueEnter_ = null;
+		this.$supers('enterPressed_', arguments);
+	},
 	updateChange_: function () {
 		if (this.$supers('updateChange_', arguments)) {
 			this._hilite({sendOnSelect:true});

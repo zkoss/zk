@@ -90,7 +90,7 @@ zul.sel.Tree = zk.$extends(zul.sel.SelectWidget, {
 			if (items[j]) this._fixNewChild(items[j]);
 	},
 	_onTreechildrenRemoved: function (tchs) {
-		if (tchs == null || tchs.getParent() == this)
+		if (tchs == null || tchs.parent == this)
 			return; //already being processed by onChildRemoved
 
 		//main the selected status

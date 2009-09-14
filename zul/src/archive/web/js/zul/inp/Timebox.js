@@ -167,15 +167,15 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	coerceFromString_: function (val) {
 		if (!val) return null;
-		
-		
+
+
 		var error;
-		if ((error = this._checkFormat(this._format))) 
+		if ((error = this._checkFormat(this._format)))
 			return {error: error};
-			
+
 		if (!this._fmthdler)
 			this._parseFormat(this._format);
-		
+
 		var date = new Date(),
 			hasAM, isAM, hasHour1,
 			fmt = [];
@@ -187,7 +187,7 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			} else if (this._fmthdler[i].type)
 				fmt.push(this._fmthdler[i]);
 		}
-		
+
 		if (hasAM) {
 			for (var i = 0, j = fmt.length; i < j; i++) {
 				if (fmt[i].type == this.HOUR2_FIELD || fmt[i].type == this.HOUR3_FIELD) {
@@ -222,17 +222,12 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		if (!width || width.indexOf('%') != -1)
 			this.getInputNode().style.width = '';
 		this.syncWidth();
-		
+
 		this._auxb.fixpos();
 	},
 	onShow: _zkf,
 	onHide: zul.inp.Textbox.onHide,
 	validate: zul.inp.Intbox.validate,
-	doFocus_: _zkf = function(evt){
-		this.$supers('doFocus_', arguments);
-		this._doCheckPos(this._getPos());
-		this.lastPos = this._getPos();
-	},
 	doClick_: function(evt){
 		if (evt.domTarget == this.getInputNode())
 			this._doCheckPos(this._getPos());
@@ -325,6 +320,12 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		this._currentbtn = btn;
 
 		btn = zk.opera || zk.safari ? btn : btn.firstChild;
+
+		if (!this._fmthdler)
+			this._parseFormat(this._format);
+
+		if (!inp.value)
+			inp.value = this.coerceToString_();
 			
 		var ofs = zk(btn).revisedOffset();
 		if ((evt.pageY - ofs[1]) < btn.offsetHeight / 2) { //up
@@ -346,7 +347,7 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	_btnOut: function(evt){
 		var inp = this.getInputNode();
 		if(!inp || inp.disabled || zk.dragging) return;
-		
+
 		jq(this.$n("btn")).removeClass(this.getZclass()+"-btn-over");
 		this._stopAutoIncProc();
 	},
@@ -359,10 +360,10 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	_doCheckPos: function (pos) {
 		var inp = this.getInputNode();
-		
+
 		if (!this._fmthdler)
 			this._parseFormat(this._format);
-			
+
 		for (var i = 0, j = this._fmthdler.length; i < j; i++) {
 			var idx = this._fmthdler[i];
 			if (idx.index[1] + 1 == pos) {
@@ -378,7 +379,7 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			} else if (idx.index[0] <= pos && idx.index[1] + 1 >= pos) {
 				if (!idx.type) {
 					var end = i;
-					
+
 					// check if it is end
 					if (this._fmthdler[end + 1]) {
 						while (this._fmthdler[++end]) {
@@ -433,7 +434,7 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 							break;
 						}
 					}
-				} else 
+				} else
 					break;// in a legal area
 			}
 		}
@@ -472,7 +473,7 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 							break;
 						}
 					}
-				} else 
+				} else
 					break;// in a legal area
 			}
 		}
@@ -484,7 +485,7 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			}
 		}
 		zk(inp).setSelectionRange(pos, pos);
-		
+
 		this.lastPos = pos;
 	},
 	_doUp: function() {
@@ -534,7 +535,7 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		var node = this.$n();
 		if (!zk(node).isRealVisible() || (!this._inplace && !node.style.width))
 			return;
-		
+
 		if (this._buttonVisible && this._inplace) {
 			if (!node.style.width) {
 				var $n = jq(node),
@@ -546,7 +547,7 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 					node.style.width = jq.px(zk(node).revisedWidth(node.offsetWidth));
 				$n.addClass(inc);
 			}
-		} 
+		}
 		var width = zk.opera ? zk(node).revisedWidth(node.clientWidth) + zk(node).borderWidth()
 							 : zk(node).revisedWidth(node.offsetWidth),
 			btn = this.$n('btn'),
@@ -554,12 +555,22 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		inp.style.width = jq.px(zk(inp).revisedWidth(width - (btn ? btn.offsetWidth : 0)));
 	},
 	doFocus_: function (evt) {
-		var n = this.$n();
+		var n = this.$n(),
+			inp = this.getInputNode();
 		if (this._inplace)
 			n.style.width = jq.px(zk(n).revisedWidth(n.offsetWidth));
-			
-		this.$supers('doFocus_', arguments);
 
+		this.$supers('doFocus_', arguments);	
+
+		if (!this._fmthdler)
+			this._parseFormat(this._format);
+			
+		if (!inp.value)
+			inp.value = this.coerceToString_();
+		
+		this._doCheckPos(this._getPos());
+		this.lastPos = this._getPos();
+		
 		if (this._inplace) {
 			if (jq(n).hasClass(this.getInplaceCSS())) {
 				jq(n).removeClass(this.getInplaceCSS());
@@ -582,7 +593,7 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	afterKeyDown_: function (evt) {
 		if (this._inplace)
 			jq(this.$n()).toggleClass(this.getInplaceCSS(),  evt.keyCode == 13 ? null : false);
-			
+
 		this.$supers('afterKeyDown_', arguments);
 	},
 	bind_: function () {
@@ -590,10 +601,10 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 		var inp = this.getInputNode(),
 			btn = this.$n("btn");
 		zWatch.listen({onSize: this, onShow: this});
-		
+
 		if (this._inplace)
 			jq(inp).addClass(this.getInplaceCSS());
-			
+
 		if (btn) {
 			this._auxb = new zul.Auxbutton(this, btn, inp);
 			this.domListen_(btn, "onMousedown", "_btnDown")
@@ -654,7 +665,7 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 
 		if (/** TODO: this.digits == 2 && */text < 10) text = "0" + text;
 		inp.value = val.substring(0, start) + text + val.substring(end, val.length);
-		
+
 		zk(inp).setSelectionRange(start, end);
 	},
 	deleteTime: function (wgt, backspace) {
@@ -687,32 +698,32 @@ zul.inp.TimeHandler = zk.$extends(zk.Object, {
 			end = this.index[1] + 1,
 			val = inp.value,
 			text = val.substring(start, end);
-			
+
 		if (sel[1] - sel[0] > 2) {
 			sel[0] = sel[1] - 2;
 		}
-		
+
 		var seld = val.substring(sel[0], sel[1]);
 		if (seld) {
-			if (sel[1] - sel[0] > 1) 
+			if (sel[1] - sel[0] > 1)
 				seld = ' ' + num;
 			inp.value = val.substring(0, sel[0]) + seld + val.substring(sel[1], val.length);
 		} else {
 			var text1 = '';
 			if (sel[1] == end) {
 				if (text.startsWith(' ')) {
-					if (text.endsWith(' ')) 
+					if (text.endsWith(' '))
 						text1 = ' ' + num;
-					else 
+					else
 						text1 = text.charAt(1) + num;
-				} else if (text.endsWith(' ')) 
+				} else if (text.endsWith(' '))
 					text1 = text.charAt(0) + num;
 			} else {
-				if (text.startsWith(' ')) 
+				if (text.startsWith(' '))
 					text1 = num + text.charAt(1);
 			}
 			if (text1 && text1 != text) {
-				if (zk.parseInt(text1) <= this.maxsize) 
+				if (zk.parseInt(text1) <= this.maxsize)
 					inp.value = val.substring(0, start) + text1 + val.substring(end, val.length);
 			}
 		}

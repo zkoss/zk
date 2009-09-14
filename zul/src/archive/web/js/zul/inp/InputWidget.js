@@ -435,8 +435,6 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 		this.$supers('doKeyUp_', arguments);
 	},
 	afterKeyDown_: function (evt) {
-		if (evt.keyCode == 13)
-			this.valueEnter_ = null;
 		if (this._inplace) {
 			if (evt.keyCode == 13) {
 				var $inp = jq(this.getInputNode()), inc = this.getInplaceCSS();

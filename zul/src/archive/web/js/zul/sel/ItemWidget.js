@@ -172,6 +172,13 @@ zul.sel.ItemWidget = zk.$extends(zul.Widget, {
 		evt.stop({propagation: true});
 		this.$supers('doClick_', arguments);
 	},
+	doRightClick_: function (evt) {
+		if (this.isDisabled()) return;
+		// make sure the target is the ItemWidget
+		evt.target = this;
+		this.getMeshWidget()._doClick(evt);
+		this.$supers('doRightClick_', arguments);
+	},
 	doMouseOver_: function(evt) {
 		if (this.isDisabled()) return;
 		this._toggleEffect();
