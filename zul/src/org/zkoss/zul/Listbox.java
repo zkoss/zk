@@ -1416,12 +1416,12 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 							}
 						}
 						if (prev != null) {
-							int leng = lg.getIndex() - prev[0], 
-								size = prev[1] - leng + 1,
-								index = lg.getIndex();
+							int index = lg.getIndex(),
+								leng = index - prev[0], 
+								size = prev[1] - leng + 1;
 							prev[1] = leng;
 							_groupsInfo.add(idx, new int[]{index, size, size > 1 && prev[2] > index ? prev[2] : -1});
-							if (size > 1) prev[2] = -1; // reset listgroupfoot
+							if (size > 1 && prev[2] > index) prev[2] = -1; // reset listgroupfoot
 						} else if (next != null) {
 							_groupsInfo.add(idx, new int[]{lg.getIndex(), next[0] - lg.getIndex(), -1});
 						} 
