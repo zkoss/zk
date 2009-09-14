@@ -164,6 +164,12 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 					zUtl.go(anc.href, false, anc.target);
 					// Bug #1886352 and #2154611
 					//Note: we cannot eat onclick. or, <a> won't work
+					
+				if (zk.gecko3 && topmost && this.$n().id != anc.id) {				
+					zUtl.go(anc.href, false, anc.target);
+					evt.stop();
+					// Bug #2154611 we shall eat the onclick event, if it is FF3.
+				}
 			}
 			if (!topmost)
 				for (var p = this.parent; p; p = p.parent)
