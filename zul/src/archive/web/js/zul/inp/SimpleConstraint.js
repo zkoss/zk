@@ -18,9 +18,11 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 			this._flags = {};
 			this._init(a);
 		} else {
-			if (a) this._flags = typeof a == 'number' ? this._cvtNum(a): a;
+			this._flags = typeof a == 'number' ? this._cvtNum(a): a||{};
 			this._regex = typeof b == 'string' ? new RegExp(b): b;
 			this._errmsg = c; 
+			if (this._flags.SERVER)
+				this.serverValidate = true;
 		}
 	},
 	_init: function (cst) {
@@ -95,9 +97,10 @@ zul.inp.SimpleConstraint = zk.$extends(zk.Object, {
 			f.NO_TODAY = true;
 		else if (cst == "strict")
 			f.STRICT = true;
-		else if (cst == "server")
+		else if (cst == "server") {
+			f.SERVER = true;
 			this.serverValidate = true;
-		else if (zk.debugJS)
+		} else if (zk.debugJS)
 			zk.error("Unknown constraint: "+cst);
 	},
 	_cvtNum: function (v) { //compatible with server side

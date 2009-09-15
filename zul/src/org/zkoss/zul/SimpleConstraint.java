@@ -59,6 +59,14 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 	 * The value must match inside the data from ListModel only.
 	 */
 	public static final int STRICT = 0x0200;
+	/** Indicates this contraint requires the server validation.
+	 * It means, after the client validates the value successfully, it
+	 * will send the value to the server for further validation (by calling
+	 * {@link #validate}.
+	 * It is useful if the result of the regular expressions is different
+	 * at the client (with JavaScript) and the server 9with ava).
+	 */
+	public static final int SERVER = 0x0400;
 	/** Date in the future is not allowed. (Only date part is compared)
 	 */
 	public static final int NO_FUTURE = NO_POSITIVE;
@@ -208,7 +216,7 @@ implements Constraint, ClientConstraint, java.io.Serializable {
 		else if (constraint.equals("strict"))
 			return STRICT;
 		else if (constraint.equals("server"))
-			return 0;
+			return SERVER;
 		else if (constraint.length() > 0)
 			throw new UiException("Unknown constraint: "+constraint);
 		return 0;
