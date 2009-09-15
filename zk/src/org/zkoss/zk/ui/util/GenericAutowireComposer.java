@@ -94,7 +94,8 @@ import org.zkoss.zk.xel.Evaluator;
  * @since 3.0.6
  * @see org.zkoss.zk.ui.Components#wireFellows
  */
-abstract public class GenericAutowireComposer extends GenericComposer implements ComponentCloneListener {
+abstract public class GenericAutowireComposer extends GenericComposer
+implements ComponentCloneListener {
 	private static final String COMPOSER_CLONE = "COMPOSER_CLONE";
 	private static final String ON_CLONE_DO_AFTER_COMPOSE = "onCLONE_DO_AFTER_COMPOSE";
 	
@@ -207,16 +208,16 @@ abstract public class GenericAutowireComposer extends GenericComposer implements
 	/** Shortcut to call Messagebox.show(String).
 	 * @since 3.0.7 
 	 */
-	private static Method SHOW;
+	private static Method _alert;
 	protected void alert(String m) {
 		//zk.jar cannot depends on zul.jar; thus we call Messagebox.show() via
 		//reflection. kind of weird :-).
 		try {
-			if (SHOW == null) {
+			if (_alert == null) {
 				final Class mboxcls = Classes.forNameByThread("org.zkoss.zul.Messagebox");
-				SHOW = mboxcls.getMethod("show", new Class[] {String.class});
+				_alert = mboxcls.getMethod("show", new Class[] {String.class});
 			}
-			SHOW.invoke(null, new Object[] {m});
+			_alert.invoke(null, new Object[] {m});
 		} catch (InvocationTargetException e) {
 			throw UiException.Aide.wrap(e);
 		} catch (Exception e) {
@@ -231,7 +232,7 @@ abstract public class GenericAutowireComposer extends GenericComposer implements
 	 * @return A clone of this Composer. 
 	 * @since 3.5.2
 	 */
-	public Object clone(Component comp) {
+	public Object willClone(Component comp) {
 		try {
 			final Execution exec = Executions.getCurrent();
 			final int idcode = System.identityHashCode(comp);

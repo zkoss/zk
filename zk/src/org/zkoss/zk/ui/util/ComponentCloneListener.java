@@ -37,7 +37,7 @@ import org.zkoss.zk.ui.Component;
  * @since 2.4.0
  */
 public interface ComponentCloneListener {
-	/** Called when a component is cloned.
+	/** Called when a component is going to be cloned.
 	 * If the object is OK to be shared by the cloned and original components,
 	 * it can return itself.
 	 * If an independent instance must be created for the cloned component,
@@ -49,6 +49,7 @@ public interface ComponentCloneListener {
 	 * cloned and original components.
 	 * If other object is returned, it is used by the cloned component.
 	 * If null is returned, it is not used by the cloned component at all.
+	 * @since 5.0.0
 	 */
-	public Object clone(Component comp);
+	public Object willClone(Component comp);
 }

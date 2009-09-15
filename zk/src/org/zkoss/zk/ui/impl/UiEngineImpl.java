@@ -1878,7 +1878,7 @@ public class UiEngineImpl implements UiEngine {
 		}
 
 		//ComponentCloneListener//
-		public Object clone(Component comp) {
+		public Object willClone(Component comp) {
 			final FulfillListener clone;
 			try {
 				clone = (FulfillListener)clone();

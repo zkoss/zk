@@ -73,7 +73,7 @@ try {
 	 */
 	public static final Scope beforeInterpret(Scope scope) {
 		if (scope == null)
-			scope = new SimpleScope();
+			scope = new SimpleScope(null);
 
 		final Implicit impl = beforeInterpret0(scope);
 		impl.setImplicit("self", scope);

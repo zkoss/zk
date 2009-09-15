@@ -22,6 +22,9 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.HashMap;
 
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.util.ComponentCloneListener;
+
 /**
  * A simple implementation of {@link Scope}.
  * It supports {@link ScopeListener}, but it doesn't support
@@ -29,14 +32,23 @@ import java.util.HashMap;
  * Thus, the deriving class can override
  * {@link #getAttribute(String,Object,boolean)},
  * {@link #hasAttribute(string,Object)},
- * and invoke {@link #notifyParentChanged} if the parent is changed.
+ * and invoke {@link #notifyParentChange} if the parent is changed.
  *
  * @author tomyeh
  * @since 5.0.0
  */
 public class SimpleScope implements Scope {
+	private final Scope _owner;
 	private Map _attrs;
 	private List _listeners;
+
+	/** Constructor.
+	 * @param owner the real scope that an user can access.
+	 * If this object is the scope that an user accesses directly, pass <code>null</code>
+	 */
+	public SimpleScope(Scope owner) {
+		_owner = owner != null ? owner: this;
+	}
 
 	//Scope//
 	public Map getAttributes() {
@@ -82,39 +94,70 @@ public class SimpleScope implements Scope {
 		return _listeners != null && _listeners.remove(listener);
 	}
 
-	/** Invokes {@link ScopeListener#onAdd} for registered
+	/** Invokes {@link ScopeListener#willAdd} for registered
 	 * listeners.
 	 */
-	private void notifyAdd(String name, Object value) {
+	private void notifyWillAdd(String name, Object value) {
 		if (_listeners != null)
 			for (Iterator it = _listeners.iterator(); it.hasNext();)
-				((ScopeListener)it.next()).onAdd(name, value);
+				((ScopeListener)it.next()).willAdd(_owner, name, value);
 	}
-	/** Invokes {@link ScopeListener#onRemove} for registered
+	/** Invokes {@link ScopeListener#willRemove} for registered
 	 * listeners.
 	 */
-	private void notifyRemove(String name) {
+	private void notifyWillRemove(String name) {
 		if (_listeners != null)
 			for (Iterator it = _listeners.iterator(); it.hasNext();)
-				((ScopeListener)it.next()).onRemove(name);
+				((ScopeListener)it.next()).willRemove(_owner, name);
 	}
 	/** Invokes {@link ScopeListener#onParentChanged} for registered
 	 * listeners.
 	 *
 	 * @see #addChangeListener
 	 */
-	public void notifyParentChanged(Scope newparent) {
+	public void notifyParentChange(Scope newparent) {
 		if (_listeners != null)
 			for (Iterator it = _listeners.iterator(); it.hasNext();)
-				((ScopeListener)it.next()).onParentChanged(newparent);
+				((ScopeListener)it.next()).didParentChange(_owner, newparent);
+	}
+	/** Returns a ist of all scope listners (never null).
+	 */
+	public List getListeners() {
+		if (_listeners == null) _listeners = new LinkedList();
+		return _listeners;
 	}
 
 	//clone//
-	/** Clones this scope. */
-	public Object clone() {
-		final SimpleScope clone = new SimpleScope();
-		clone._attrs = _attrs != null ? new HashMap(_attrs): null;
-		//TODO: handle _listeners
+	/** Clones this scope.
+	 * @param owner the owner of the cloned scope.
+	 */
+	public SimpleScope clone(Scope owner) {
+		final SimpleScope clone = new SimpleScope(owner);
+		if (_attrs != null) {
+			clone._attrs = new HashMap();
+			for (Iterator it = _attrs.entrySet().iterator(); it.hasNext();) {
+				final Map.Entry me = (Map.Entry)it.next();
+				Object val = me.getValue();
+				if (val instanceof ComponentCloneListener
+				&& owner instanceof Component) {
+					val = ((ComponentCloneListener)val).willClone((Component)owner);
+					if (val == null) continue; //don't use it in clone
+				}
+				clone._attrs.put(me.getKey(), val);
+			}
+		}
+		if (_listeners != null) {
+			clone._listeners = new LinkedList();
+			for (Iterator it = _listeners.iterator(); it.hasNext();) {
+				Object val = it.next();
+				if (val instanceof ComponentCloneListener
+				&& owner instanceof Component) {
+					val = ((ComponentCloneListener)val).willClone((Component)owner);
+					if (val == null) continue; //don't use it in clone
+				}
+				clone._listeners.add(val);
+			}
+		}
 		return clone;
 	}
 
@@ -122,11 +165,11 @@ public class SimpleScope implements Scope {
 	private class Attrs extends HashMap {
 		public Object remove(Object key) {
 			if (_listeners != null && super.containsKey(key))
-				notifyRemove((String)key);
+				notifyWillRemove((String)key);
 			return super.remove(key);
 		}
 		public Object put(Object key, Object val) {
-			notifyAdd((String)key, val);
+			notifyWillAdd((String)key, val);
 			return super.put(key, val);
 		}
 		public Set entrySet() {
@@ -151,17 +194,14 @@ public class SimpleScope implements Scope {
 			public boolean add(Object o) {
 				if (_entry) {
 					final Map.Entry me = (Map.Entry)o;
-					notifyAdd((String)me.getKey(), me.getValue());
+					notifyWillAdd((String)me.getKey(), me.getValue());
 				} else
-					notifyAdd((String)o, null);
+					notifyWillAdd((String)o, null);
 				return _set.add(o);
 			}
 			public boolean remove(Object o) {
-				if (_set.remove(o)) {
-					notifyRemove((String)(_entry ? ((Map.Entry)o).getKey(): o));
-					return true;
-				}
-				return false;
+				notifyWillRemove((String)(_entry ? ((Map.Entry)o).getKey(): o));
+				return _set.remove(o);
 			}
 			public boolean contains(Object o) {
 				return _set.contains(o);
@@ -179,8 +219,9 @@ public class SimpleScope implements Scope {
 					return _last = _it.next();
 				}
 				public void remove() {
+					if (_last != null) //caller might make a mistake
+						notifyWillRemove((String)(_entry ? ((Map.Entry)_last).getKey(): _last));
 					_it.remove();
-					notifyRemove((String)(_entry ? ((Map.Entry)_last).getKey(): _last));
 				}
 			}
 		}

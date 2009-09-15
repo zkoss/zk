@@ -212,7 +212,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	protected void init() {
 		_ips = new LinkedHashMap(4);
 		_ns = new NS(); //backwad compatible
-		_attrs = new SimpleScope();
+		_attrs = new SimpleScope(this);
 	}
 
 	/** Returns the UI engine.
@@ -925,6 +925,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			((ComponentCtrl)it.next()).sessionWillPassivate(this);
 
 		willPassivate(_attrs.getAttributes().values());
+		willPassivate(_attrs.getListeners());
 
 		if (_listeners != null)
 			for (Iterator it = _listeners.values().iterator(); it.hasNext();)
@@ -954,6 +955,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		initVariables(); //since some variables depend on desktop
 
 		didActivate(_attrs.getAttributes().values());
+		didActivate(_attrs.getListeners());
 
 		if (_listeners != null)
 			for (Iterator it = _listeners.values().iterator(); it.hasNext();)
@@ -1037,6 +1039,9 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		final Map attrs = _attrs.getAttributes();
 		willSerialize(attrs.values());
 		Serializables.smartWrite(s, attrs);
+		final List lns = _attrs.getListeners();
+		willSerialize(lns);
+		Serializables.smartWrite(s, lns);
 
 		if (_listeners != null)
 			for (Iterator it = _listeners.entrySet().iterator(); it.hasNext();) {
@@ -1110,6 +1115,9 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		final Map attrs = _attrs.getAttributes();
 		Serializables.smartRead(s, attrs);
 		didDeserialize(attrs.values());
+		final List lns = _attrs.getListeners();
+		Serializables.smartRead(s, lns);
+		didDeserialize(lns);
 
 		for (;;) {
 			final String evtnm = (String)s.readObject();

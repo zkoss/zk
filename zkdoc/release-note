@@ -27,17 +27,25 @@ ZK 5.0.0
   2840886: Freezing Columns on Listbox and Grid
   2853314: ZK Client Engine support canvas
   1811700: XUL box model: align and pack
+  2858441: Merge attributes of ID space and component for space owner
+  2855804: EL/zscript read attributes directly, and deprecate Namespace
   
 * Bugs
   1999145: Combobox with Width of 100% Overruns
 
 * Upgrade Notes
+  + The attributes of the ID space of a space owner are the same
+    the component attributes.
+  + The namespace (org.zkoss.zk.scripting.Namespace) is deprecated.
+    Rather, use the attributes directly.
   + Event processing thread is disabled by default. It means doModal
     will be degenerated to doHighlighted.
     To turn it on, specify the following in zk.xml:
    	<system-config>
 		<disable-event-thread>false</disable-event-thread>
 	</system-config>
+  + The callback method of org.zkoss.zk.ui.util.ComponentCloneListener
+    is renamed to willClone
   + The signature of ClientConstraint is changed.
   + LanguageDefinition: getCompleteURI, getDesktopURI and getPageURI
     are replaced by getPageRenderer.
@@ -117,6 +125,7 @@ August, 2009
   2855933: Failed to resolve correct setter if two with the same name
   2829547: Incorrect getValue when using spinners on multiple Timeboxes
   2856700: Failed to include a page with query string in auto mode
+  2859020: ComponentActivationListener and others not called for child
 
 	--------
 ZK 3.6.2

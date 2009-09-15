@@ -255,7 +255,7 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		_uvLock = new Object();
 		_rque = newRequestQueue();
 		_comps = new HashMap(64);
-		_attrs = new SimpleScope();
+		_attrs = new SimpleScope(this);
 	}
 	/** Updates _uuidPrefix based on _id. */
 	private void updateUuidPrefix() {
@@ -700,6 +700,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		if (_dev != null) _dev.sessionWillPassivate(this);
 
 		willPassivate(_attrs.getAttributes().values());
+		willPassivate(_attrs.getListeners());
+
 		willPassivate(_dtCleans);
 		willPassivate(_execInits);
 		willPassivate(_execCleans);
@@ -712,6 +714,8 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 			((PageCtrl)it.next()).sessionDidActivate(this);
 
 		didActivate(_attrs.getAttributes().values());
+		didActivate(_attrs.getListeners());
+
 		didActivate(_dtCleans);
 		didActivate(_execInits);
 		didActivate(_execCleans);
@@ -745,6 +749,10 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		final Map attrs = _attrs.getAttributes();
 		willSerialize(attrs.values());
 		Serializables.smartWrite(s, attrs);
+		final List lns = _attrs.getListeners();
+		willSerialize(lns);
+		Serializables.smartWrite(s, lns);
+
 		willSerialize(_dtCleans);
 		Serializables.smartWrite(s, _dtCleans);
 		willSerialize(_execInits);
@@ -782,6 +790,10 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		final Map attrs = _attrs.getAttributes();
 		Serializables.smartRead(s, attrs);
 		didDeserialize(attrs.values());
+		final List lns = _attrs.getListeners();
+		Serializables.smartRead(s, lns);
+		didDeserialize(lns);
+
 		_dtCleans = (List)Serializables.smartRead(s, _dtCleans);
 		didDeserialize(_dtCleans);
 		_execInits = (List)Serializables.smartRead(s, _execInits);

@@ -56,6 +56,7 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.Macro;
 import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.ui.ext.NonFellow;
+import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.ext.SimpleScope;
 import org.zkoss.zk.ui.ext.ScopeListener;
 import org.zkoss.zk.ui.ext.render.Cropper;
@@ -275,8 +276,11 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * @param cloning whether this method is called by clone()
 	 */
 	private void init() {
+		initChildren();
+		_attrs = new SimpleScope(this);
+	}
+	private void initChildren() {
 		_apiChildren = newChildren(); 
-		_attrs = new SimpleScope();
 	}
 	/**
 	 * Creates and returns the instance for storing child components.
@@ -1028,6 +1032,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		addMoved(op, _page, newpg); //Not depends on UUID
 		setPage0(newpg); //UUID might be changed here
 
+		_attrs.notifyParentChange(_parent != null ? _parent: (Scope)_page);
 		if (idSpaceChanged) addToIdSpacesDown(this); //called after setPage
 
 		//call back UiLifeCycle
@@ -2138,12 +2143,13 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 	public void sessionWillPassivate(Page page) {
 		willPassivate(_attrs.getAttributes().values());
+		willPassivate(_attrs.getListeners());
 
 		if (_listeners != null)
 			for (Iterator it = _listeners.values().iterator(); it.hasNext();)
 				willPassivate((Collection)it.next());
 
-		if (this instanceof IdSpace) {
+		if (this instanceof IdSpace) { //backward compatible
 			for (Iterator it = _spaceInfo.ns.getVariableNames().iterator();
 			it.hasNext();) {
 				final Object val = _spaceInfo.ns.getVariable((String)it.next(), true);
@@ -2152,11 +2158,18 @@ implements Component, ComponentCtrl, java.io.Serializable {
 					((NamespaceActivationListener)val).willPassivate(_spaceInfo.ns);
 			}
 		}
+
+		for (AbstractComponent p = _first; p != null; p = p._next)
+			p.sessionWillPassivate(page); //recursive
 	}
+
 	public void sessionDidActivate(Page page) {
-		sessDidActivate0(page, this, true);
+		_page = page;
 
 		didActivate(_attrs.getAttributes().values());
+		didActivate(_attrs.getListeners());
+		if (_parent == null)
+			_attrs.notifyParentChange(_page);
 
 		if (_listeners != null)
 			for (Iterator it = _listeners.values().iterator(); it.hasNext();)
@@ -2171,25 +2184,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 					((NamespaceActivationListener)val).didActivate(_spaceInfo.ns);
 			}
 		}
-	}
-	/** 
-	 * @param pageLevelIdSpace whether this component's ID space is
-	 * at the page level.
-	 */
-	private static void sessDidActivate0(Page page,
-	AbstractComponent comp, boolean pageLevelIdSpace) {
-		comp._page = page;
 
-		//Note: we need only to fix the first-level spaceInfo.
-		//Others are handled by readObject
-		if (pageLevelIdSpace && comp._spaceInfo != null) {
-			pageLevelIdSpace = false;
-			comp._spaceInfo.ns.setParent(page.getNamespace()); //backward compatible
-		}
-
-		for (AbstractComponent p = comp._first; p != null; p = p._next) {
-			sessDidActivate0(page, p, pageLevelIdSpace); //recursive
-		}
+		for (AbstractComponent p = _first; p != null; p = p._next)
+			p.sessionDidActivate(page); //recursive
 	}
 	private void willPassivate(Collection c) {
 		if (c != null)
@@ -2197,7 +2194,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				willPassivate(it.next());
 	}
 	private void willPassivate(Object o) {
-		if (o instanceof ComponentSerializationListener)
+		if (o instanceof ComponentActivationListener)
 			((ComponentActivationListener)o).willPassivate(this);
 	}
 	private void didActivate(Collection c) {
@@ -2206,7 +2203,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				didActivate(it.next());
 	}
 	private void didActivate(Object o) {
-		if (o instanceof ComponentSerializationListener)
+		if (o instanceof ComponentActivationListener)
 			((ComponentActivationListener)o).didActivate(this);
 	}
 
@@ -2519,17 +2516,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		clone._xtrl = null; //Bug 1892396: _xtrl is an inner object so recreation is required
 
 		//1a. clone attributes
-		clone._attrs = new SimpleScope();
-		for (Iterator it = _attrs.getAttributes().entrySet().iterator();
-		it.hasNext();) {
-			final Map.Entry me = (Map.Entry)it.next();
-			Object val = me.getValue();
-			if (val instanceof ComponentCloneListener) {
-				val = ((ComponentCloneListener)val).clone(clone);
-				if (val == null) continue; //don't use it in clone
-			}
-			clone._attrs.getAttributes().put(me.getKey(), val);
-		}
+		clone._attrs = _attrs.clone(clone);
 
 		//1b. clone listeners
 		if (_listeners != null) {
@@ -2542,7 +2529,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				it2.hasNext();) {
 					Object val = it2.next();
 					if (val instanceof ComponentCloneListener) {
-						val = ((ComponentCloneListener)val).clone(clone);
+						val = ((ComponentCloneListener)val).willClone(clone);
 						if (val == null) continue; //don't use it in clone
 					}
 					list.add(val);
@@ -2563,8 +2550,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		//2. clone children (deep cloning)
 		cloneChildren(clone);
-		clone.init();
-		clone._attrs = (SimpleScope)_attrs.clone();
+		clone.initChildren();
 
 		//3. spaceinfo
 		if (clone._spaceInfo != null) {
@@ -2590,7 +2576,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		Object val = clone._ausvc;
 		if (val instanceof ComponentCloneListener)
-			clone._ausvc = (AuService)((ComponentCloneListener)val).clone(clone);
+			clone._ausvc = (AuService)((ComponentCloneListener)val).willClone(clone);
 		return clone;
 	}
 	private final void cloneSpaceInfoFrom(SpaceInfo from) {
@@ -2598,7 +2584,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			final Map.Entry me = (Map.Entry)it.next();
 			Object val = me.getValue();
 			if (val instanceof ComponentCloneListener) {
-				val = ((ComponentCloneListener)val).clone(this);
+				val = ((ComponentCloneListener)val).willClone(this);
 				if (val == null) continue; //don't use it in clone
 			}
 			this._spaceInfo.vars.put(me.getKey(), val);
@@ -2620,8 +2606,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			q = child;
 
 			child._parent = comp; //correct it
-			if (child._spaceInfo != null)
-				child._spaceInfo.ns.setParent(comp.getNamespace());
+			child._attrs.notifyParentChange(comp);
 		}
 		comp._last = q;
 	}
@@ -2658,6 +2643,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		final Map attrs = _attrs.getAttributes();
 		willSerialize(attrs.values());
 		Serializables.smartWrite(s, attrs);
+		final List lns = _attrs.getListeners();
+		willSerialize(lns);
+		Serializables.smartWrite(s, lns);
 
 		if (_listeners != null)
 			for (Iterator it = _listeners.entrySet().iterator(); it.hasNext();) {
@@ -2758,6 +2746,11 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		final Map attrs = _attrs.getAttributes();
 		Serializables.smartRead(s, attrs);
 		didDeserialize(attrs.values());
+		final List lns = _attrs.getListeners();
+		Serializables.smartRead(s, lns);
+		didDeserialize(lns);
+		if (_parent != null)
+			_attrs.notifyParentChange(_parent);
 
 		for (;;) {
 			final String evtnm = (String)s.readObject();
@@ -2869,7 +2862,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 
 		//ComponentCloneListener//
-		public Object clone(Component comp) {
+		public Object willClone(Component comp) {
 			return null; //handle by AbstractComponent.clone
 		}
 	}

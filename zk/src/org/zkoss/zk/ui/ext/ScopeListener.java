@@ -24,17 +24,20 @@ package org.zkoss.zk.ui.ext;
  * @since 5.0.0
  */
 public interface ScopeListener {
-	/** Called when a variable is set to {@link Namespace}.
+	/** Called when an attribute is going to be set to {@link Scope}.
 	 *
+	 * @param scope the scope where a new attribute is added
 	 * @param value the new value.
 	 */
-	public void onAdd(String name, Object value);
-	/** Called when a variable is removed from {@link Namespace}.
+	public void willAdd(Scope scope, String name, Object value);
+	/** Called when an attribute is going to be removed from {@link Scope}.
+	 * @param scope the scope where a new attribute is removed
 	 */
-	public void onRemove(String name);
-	/** Called when the parent is changed.
+	public void willRemove(Scope scope, String name);
+	/** Called when the parent has been changed.
 	 *
+	 * @param scope the scope whose parent is changed
 	 * @param newparent the new parent.
 	 */
-	public void onParentChanged(Scope newparent);
+	public void didParentChange(Scope scope, Scope newparent);
 }
