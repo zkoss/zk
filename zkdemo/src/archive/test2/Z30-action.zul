@@ -18,16 +18,33 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 }}IS_RIGHT
 -->
 <window title="Test of JavaScript Utilities">
+<script><![CDATA[
+var comm = {
+	getData: function (args, start) {
+		var len = args.length, data;
+		if (len > start) {
+			data = [];
+			for (var j = start; j < len; ++j)
+				data[j - start] = args[j];
+		}
+		return data;
+	},
+	sendUser: function (element) {
+		zAu.send(new zk.Event(zk.Widget.$(element), 'onUser', comm.getData(arguments, 1)));
+	},
+	sendEvent: function (element, evtnm) {
+		zAu.send(new zk.Event(zk.Widget.$(element), evtnm, comm.getData(arguments, 2)));
+	}
+};
+
+]]></script>
 	<vbox>
 You can click each link, then you should see that the label is the same as that link.
-		<html onClick='l.value = "onClick "+event.area'
-			onUser='l.value ="onUser "+org.zkoss.lang.Objects.toString(event.data)'><![CDATA[
-			<a href="javascript:;" onclick="comm.sendClick(this, 'Hi')">onClick with Hi</a>
-			<a href="javascript:;" onclick="comm.sendClick(this)">onClick with null</a>
-			<a href="javascript:;" onclick="comm.sendUser(this)">onUser with null</a>
-			<a href="javascript:;" onclick="comm.sendUser(this, 'One')">onUser with One</a>
-			<a href="javascript:;" onclick="comm.sendUser(this, 'One', 'Two')">onUser with [One, Two]</a>
-			<a href="javascript:;" onclick="comm.sendEvent(this, 'onUser', '1', '2')">onUser with [1, 2]</a>
+		<html onUser='l.value ="onUser "+org.zkoss.lang.Objects.toString(event.data)'><![CDATA[
+			<a href="javascript:;" onclick="comm.sendUser(this);">onUser with null</a>
+			<a href="javascript:;" onclick="comm.sendUser(this, 'One');">onUser with One</a>
+			<a href="javascript:;" onclick="comm.sendUser(this, 'One', 'Two');">onUser with [One, Two]</a>
+			<a href="javascript:;" onclick="comm.sendEvent(this, 'onUser', '1', '2');">onUser with [1, 2]</a>
 		]]></html>
 		<separator/>
 		<label id="l"/>

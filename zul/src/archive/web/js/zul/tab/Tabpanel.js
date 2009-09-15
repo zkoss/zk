@@ -70,10 +70,12 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 	onShow: _zkf,
 	bind_: function() {
 		this.$supers('bind_', arguments);
-		zWatch.listen({onSize: this, onShow: this});
+		if (this.getTabbox().isHorizontal())
+			zWatch.listen({onSize: this, onShow: this});
 	},
 	unbind_: function () {
-		zWatch.unlisten({onSize: this, onShow: this});
+		if (this.getTabbox().isHorizontal())
+			zWatch.unlisten({onSize: this, onShow: this});
 		this.$supers('unbind_', arguments);
 	}
 
