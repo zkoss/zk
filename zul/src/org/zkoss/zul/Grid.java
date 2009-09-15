@@ -1157,9 +1157,11 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 				} else if (_pgi != null) {
 					removePagingListener(_pgi);
 				}
+				invalidate(); //paging mold -> non-paging mold
 			} else if (inPagingMold()) { //change to paging
 				if (_pgi != null) addPagingListener(_pgi);
 				else newInternalPaging();
+				invalidate(); //non-paging mold -> paging mold
 			}
 		}
 	}

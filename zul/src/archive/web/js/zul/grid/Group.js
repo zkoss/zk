@@ -88,7 +88,7 @@ zul.grid.Group = zk.$extends(zul.grid.Row, {
 			pgmode = grid ? grid.inPagingMold() : false; 
 		if (!pgmode) this._openItemNow(open); //in page mode, the height might jump
 		if (!silent)
-			this.fire('onOpen', {open: open}, pgmode ? {toServer: true} : null);
+			this.fire('onOpen', {open: open}, {toServer: pgmode});
 				//always send since the client has to update Openable
 	},
 	_openItemNow: function (toOpen) {

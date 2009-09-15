@@ -1431,7 +1431,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 					final int[] g = getGroupsInfoAt(index);
 					if (g != null) {
 						g[1]++;
-						if (g[2] != -1 && g[2] > index) g[2]++;
+						if (g[2] != -1 && (g[2] >= index || newItem instanceof Listgroupfoot)) g[2]++;
 					}
 				}
 				afterInsert(newChild);
@@ -2369,9 +2369,11 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 				} else if (_pgi != null) {
 					removePagingListener(_pgi);
 				}
+				invalidate(); //paging mold -> non-paging mold
 			} else if (inPagingMold()) { //change to paging
 				if (_pgi != null) addPagingListener(_pgi);
 				else newInternalPaging();
+				invalidate(); //non-paging mold -> paging mold
 			}
 		}
 	}
