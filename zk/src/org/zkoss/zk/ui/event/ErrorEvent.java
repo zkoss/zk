@@ -47,7 +47,7 @@ public class ErrorEvent extends InputEvent {
 				new Object[] {data, request});
 
 		return new ErrorEvent(request.getCommand(), comp,
-			(String)data.get("value"), (String)data.get("message"));
+			String.valueOf(data.get("value")), String.valueOf(data.get("message")));
 	}
 
 	/** Constructs an error-relevant event.

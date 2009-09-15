@@ -182,18 +182,25 @@ zul.grid.Column = zk.$extends(zul.mesh.SortWidget, {
 			
 			if (pp == 'auto' && this.parent._mpop)
 				pp = this.parent._mpop;
+			else
+				pp = this.$f(this.parent._menupopup);
 
 			if (zul.menu.Menupopup.isInstance(pp)) {
 				var ofs = zk(btn).revisedOffset(),
 					asc = this.getSortAscending() != 'none',
 					desc = this.getSortDescending() != 'none';
-				pp.getAscitem().setVisible(asc);
-				pp.getDescitem().setVisible(desc);
-				if (pp.getGroupitem())
-					pp.getGroupitem().setVisible((asc || desc));
+				if (pp.$instanceof(zul.grid.ColumnMenupopup)) {
+					pp.getAscitem().setVisible(asc);
+					pp.getDescitem().setVisible(desc);
+					if (pp.getGroupitem()) 
+						pp.getGroupitem().setVisible((asc || desc));
 					
-				var sep = pp.getDescitem().nextSibling;
-				if (sep) sep.setVisible((asc || desc));
+					var sep = pp.getDescitem().nextSibling;
+					if (sep) 
+						sep.setVisible((asc || desc));
+				} else {
+					pp.listen({onOpen: [this.parent, this.parent._onMenuPopup]});
+				}
 				pp.open(btn, [ofs[0], ofs[1] + btn.offsetHeight - 4], null, {sendOnOpen: true});
 			}
 			evt.stop(); // avoid onSort event.

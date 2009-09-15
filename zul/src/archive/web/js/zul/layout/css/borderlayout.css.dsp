@@ -18,7 +18,7 @@
 	position: absolute;
 	overflow: hidden;
 	background-color: white;
-	width: 100%;
+	<%--width: 100%; display wrong in F35-2188951.zul --%>
 }
 .z-west-noborder,
 .z-center-noborder,
