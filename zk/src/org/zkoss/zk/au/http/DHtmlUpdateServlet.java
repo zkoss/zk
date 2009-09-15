@@ -66,6 +66,7 @@ import org.zkoss.zk.ui.http.ExecutionImpl;
 import org.zkoss.zk.ui.http.WebManager;
 import org.zkoss.zk.ui.http.SessionResolverImpl;
 import org.zkoss.zk.ui.http.I18Ns;
+import org.zkoss.zk.ui.impl.Attributes;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.AuWriter;
@@ -518,7 +519,7 @@ public class DHtmlUpdateServlet extends HttpServlet {
 			return;
 		}
 
-		sess.setAttribute("_z_gae_fix", new Integer(0)); //enforce GAE to write session
+		sess.setAttribute(Attributes.GAE_FIX, new Integer(0)); //enforce GAE to write session
 		((SessionCtrl)sess).notifyClientRequest(keepAlive);
 
 //		if (log.debugable()) log.debug("AU request: "+aureqs);

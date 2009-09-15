@@ -18,8 +18,10 @@ import java.util.Map;
 
 /**
  * Represents a scope of attributes.
+ *
  * @author tomyeh
  * @since 3.6.0
+ * @see org.zkoss.zk.ui.impl.SimpleScope
  */
 public interface Scope {
 	/** Returns all custom attributes associated with this object (scope).

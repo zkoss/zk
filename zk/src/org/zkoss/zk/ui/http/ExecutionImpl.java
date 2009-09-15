@@ -19,6 +19,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 package org.zkoss.zk.ui.http;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Enumeration;
@@ -70,6 +71,7 @@ import org.zkoss.zk.ui.sys.Visualizer;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.RequestInfo;
 import org.zkoss.zk.ui.impl.RequestInfoImpl;
+import org.zkoss.zk.ui.impl.ScopeListeners;
 
 /**
  * An {@link org.zkoss.zk.ui.Execution} implementation for HTTP request
@@ -85,6 +87,7 @@ public class ExecutionImpl extends AbstractExecution {
 	private final Map _attrs;
 	private MyEval _eval;
 	private ExecutionResolver _resolver;
+	private final ScopeListeners _scopeListeners = new ScopeListeners(this);
 	private boolean _voided;
 
 	/** Constructs an execution for HTTP request.
@@ -478,10 +481,15 @@ public class ExecutionImpl extends AbstractExecution {
 		return _attrs;
 	}
 	public boolean addScopeListener(ScopeListener listener) {
-		throw new UnsupportedOperationException(); //TODO
+		return _scopeListeners.addScopeListener(listener);
 	}
 	public boolean removeScopeListener(ScopeListener listener) {
-		throw new UnsupportedOperationException(); //TODO
+		return _scopeListeners.removeScopeListener(listener);
+	}
+	/** Returns all scope listeners.
+	 */
+	/*package*/ ScopeListeners getScopeListeners() {
+		return _scopeListeners;
 	}
 
 	public String getHeader(String name) {

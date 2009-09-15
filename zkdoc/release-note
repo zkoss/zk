@@ -29,6 +29,7 @@ ZK 5.0.0
   1811700: XUL box model: align and pack
   2858441: Merge attributes of ID space and component for space owner
   2855804: EL/zscript read attributes directly, and deprecate Namespace
+  2859159: A way to listen changes of attribute in session/execution/appplication
   
 * Bugs
   1999145: Combobox with Width of 100% Overruns

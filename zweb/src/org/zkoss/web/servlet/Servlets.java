@@ -203,7 +203,7 @@ public class Servlets {
 			return qstr != null ? pgpath + qstr: pgpath; //not by locale
 
 
-		final String PGPATH_CACHE = "s_pgpath_cache";
+		final String PGPATH_CACHE = "org.zkoss.web.pgpath.cache";
 		Map map = (Map)ctx.getAttribute(PGPATH_CACHE);
 		if (map == null) {
 			map = Collections.synchronizedMap( //10 min

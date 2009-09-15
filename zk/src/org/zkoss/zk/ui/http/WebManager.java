@@ -293,8 +293,24 @@ public class WebManager {
 	/*package*/ static final WebManager getWebManagerIfAny(ServletContext ctx) {
 		return (WebManager)ctx.getAttribute(ATTR_WEB_MANAGER);
 	}
+	/** Returns the Web application of the specified context.
+	 * @exception UiException if not found (i.e., not initialized
+	 * properly)
+	 * @since 5.0.0
+	 */
+	public static final WebApp getWebApp(ServletContext ctx) {
+		final WebManager webman = getWebManagerIfAny(ctx);
+		final WebApp wapp = webman != null ? webman.getWebApp(): null;
+		if (wapp == null)
+			throw new UiException("The Web application not found. Make sure <load-on-startup> is specified for "+DHtmlLayoutServlet.class.getName());
+		return wapp;
+	}
+	/*package*/ static final WebApp getWebAppIfAny(ServletContext ctx) {
+		final WebManager webman = getWebManagerIfAny(ctx);
+		return webman != null ? webman.getWebApp(): null;
+	}
 
-	/**  Returns the current session associated with this request,
+	/**  Returns the session associated with the specified request request,
 	 * or if the request does not have a session, creates one.
 	 */
 	public static final

@@ -38,6 +38,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.ext.ScopeListener;
 import org.zkoss.zk.ui.impl.AbstractWebApp;
+import org.zkoss.zk.ui.impl.ScopeListeners;
 
 /**
  * A servlet-based Web application.
@@ -46,6 +47,8 @@ import org.zkoss.zk.ui.impl.AbstractWebApp;
  */
 public class SimpleWebApp extends AbstractWebApp {
 	private ServletContext _ctx;
+	private final ScopeListeners _scopeListeners = new ScopeListeners(this);
+
 	public SimpleWebApp() {
 	}
 
@@ -100,10 +103,15 @@ public class SimpleWebApp extends AbstractWebApp {
 	}
 
 	public boolean addScopeListener(ScopeListener listener) {
-		throw new UnsupportedOperationException(); //TODO
+		return _scopeListeners.addScopeListener(listener);
 	}
 	public boolean removeScopeListener(ScopeListener listener) {
-		throw new UnsupportedOperationException(); //TODO
+		return _scopeListeners.removeScopeListener(listener);
+	}
+	/** Returns all scope listeners.
+	 */
+	/*package*/ ScopeListeners getScopeListeners() {
+		return _scopeListeners;
 	}
 
 	public String getUpdateURI() {

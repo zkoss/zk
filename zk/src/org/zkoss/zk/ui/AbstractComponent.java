@@ -57,7 +57,6 @@ import org.zkoss.zk.ui.ext.Macro;
 import org.zkoss.zk.ui.ext.RawId;
 import org.zkoss.zk.ui.ext.NonFellow;
 import org.zkoss.zk.ui.ext.Scope;
-import org.zkoss.zk.ui.ext.SimpleScope;
 import org.zkoss.zk.ui.ext.ScopeListener;
 import org.zkoss.zk.ui.ext.render.Cropper;
 import org.zkoss.zk.ui.util.ComponentSerializationListener;
@@ -89,6 +88,7 @@ import org.zkoss.zk.ui.metainfo.EventHandler;
 import org.zkoss.zk.ui.metainfo.ZScript;
 import org.zkoss.zk.ui.impl.ListenerIterator;
 import org.zkoss.zk.ui.impl.Attributes;
+import org.zkoss.zk.ui.impl.SimpleScope;
 import org.zkoss.zk.fn.ZkFns;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuResponse;
@@ -1032,7 +1032,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		addMoved(op, _page, newpg); //Not depends on UUID
 		setPage0(newpg); //UUID might be changed here
 
-		_attrs.notifyParentChange(_parent != null ? _parent: (Scope)_page);
+		_attrs.notifyParentChanged(_parent != null ? _parent: (Scope)_page);
 		if (idSpaceChanged) addToIdSpacesDown(this); //called after setPage
 
 		//call back UiLifeCycle
@@ -2169,7 +2169,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		didActivate(_attrs.getAttributes().values());
 		didActivate(_attrs.getListeners());
 		if (_parent == null)
-			_attrs.notifyParentChange(_page);
+			_attrs.notifyParentChanged(_page);
 
 		if (_listeners != null)
 			for (Iterator it = _listeners.values().iterator(); it.hasNext();)
@@ -2606,7 +2606,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			q = child;
 
 			child._parent = comp; //correct it
-			child._attrs.notifyParentChange(comp);
+			child._attrs.notifyParentChanged(comp);
 		}
 		comp._last = q;
 	}
@@ -2750,7 +2750,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		Serializables.smartRead(s, lns);
 		didDeserialize(lns);
 		if (_parent != null)
-			_attrs.notifyParentChange(_parent);
+			_attrs.notifyParentChanged(_parent);
 
 		for (;;) {
 			final String evtnm = (String)s.readObject();

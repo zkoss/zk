@@ -49,6 +49,7 @@ import org.zkoss.zk.ui.util.Configuration;
 import org.zkoss.zk.ui.util.SessionSerializationListener;
 import org.zkoss.zk.ui.util.SessionActivationListener;
 import org.zkoss.zk.ui.impl.Attributes;
+import org.zkoss.zk.ui.impl.ScopeListeners;
 
 /** A non-serializable implementation of {@link org.zkoss.zk.ui.Session}.
  * 
@@ -95,6 +96,7 @@ public class SimpleSession implements Session, SessionCtrl {
 	/** When the last client request is recieved.
 	 */
 	private long _tmLastReq = System.currentTimeMillis();
+	private final ScopeListeners _scopeListeners = new ScopeListeners(this);
 	private boolean _invalid;
 	/** Indicates if {@link #invalidateNow} was called. */
 	private boolean _invalidated;
@@ -257,10 +259,15 @@ public class SimpleSession implements Session, SessionCtrl {
 	}
 
 	public boolean addScopeListener(ScopeListener listener) {
-		throw new UnsupportedOperationException(); //TODO
+		return _scopeListeners.addScopeListener(listener);
 	}
 	public boolean removeScopeListener(ScopeListener listener) {
-		throw new UnsupportedOperationException(); //TODO
+		return _scopeListeners.removeScopeListener(listener);
+	}
+	/** Returns all scope listeners.
+	 */
+	/*package*/ ScopeListeners getScopeListeners() {
+		return _scopeListeners;
 	}
 
 	private void setAttr(String name, Object value) {

@@ -23,9 +23,13 @@ import org.zkoss.zk.ui.Desktop;
 /**
  * Used to clean up a desktop.
  *
- * <p>How this interface is used.
+ * <p>There are two ways to use this interface.
+ * <h2>First: add the listener at the run time</h2>
+ * <p>Call {@link Desktop#addListener} to register it.
+ *
+ * <h2>Second: use configuration</h2>
  * <ol>
- * <li>First, you specify a class that implements this interface
+ * <li>Specify a class that implements this interface
  * in WEB-INF/zk.xml as a listener.
  * </li>
  * <li>Then, each time ZK loader is destroying a desktop, an instnace of

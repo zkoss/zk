@@ -58,7 +58,6 @@ import org.zkoss.zk.ui.util.DesktopSerializationListener;
 import org.zkoss.zk.ui.util.DesktopActivationListener;
 import org.zkoss.zk.ui.util.EventInterceptor;
 import org.zkoss.zk.ui.event.*;
-import org.zkoss.zk.ui.ext.SimpleScope;
 import org.zkoss.zk.ui.ext.ScopeListener;
 import org.zkoss.zk.ui.ext.render.DynamicMedia;
 import org.zkoss.zk.ui.sys.PageCtrl;

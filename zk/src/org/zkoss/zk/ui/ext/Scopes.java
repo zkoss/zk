@@ -26,6 +26,7 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.impl.SimpleScope;
 
 /**
  * Utilities to manage the current scope ({@link Scope}).

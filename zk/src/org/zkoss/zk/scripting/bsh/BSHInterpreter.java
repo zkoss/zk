@@ -497,11 +497,13 @@ implements SerializableAware, HierachicalAware {
 		private NSCListener(NS bshns) {
 			_bshns = bshns;
 		}
-		public void willAdd(Scope scope, String name, Object value) {
+		public void attributeAdded(Scope scope, String name, Object value) {
 		}
-		public void willRemove(Scope scope, String name) {
+		public void attributeReplaced(Scope scope, String name, Object value) {
 		}
-		public void didParentChange(Scope scope, Scope newparent) {
+		public void attributeRemoved(Scope scope, String name) {
+		}
+		public void parentChanged(Scope scope, Scope newparent) {
 			if (newparent != null) {
 				final BSHInterpreter ip = getInterpreter(_bshns._scope);
 				_bshns.setParent(

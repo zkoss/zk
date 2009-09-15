@@ -58,6 +58,7 @@ import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.SessionCtrl;
 import org.zkoss.zk.ui.sys.SessionsCtrl;
 import org.zkoss.zk.ui.impl.RequestInfoImpl;
+import org.zkoss.zk.ui.impl.Attributes;
 
 /**
  * Used to process the request for a ZUML page. Though it is called
@@ -187,7 +188,7 @@ public class DHtmlLayoutServlet extends HttpServlet {
 		final RequestInfo ri = new RequestInfoImpl(
 			wapp, sess, desktop, request,
 			PageDefinitions.getLocator(wapp, path));
-		sess.setAttribute("_z_gae_fix", new Integer(0));
+		sess.setAttribute(Attributes.GAE_FIX, new Integer(0));
 		((SessionCtrl)sess).notifyClientRequest(true);
 
 		final boolean compress = _compress && !Servlets.isIncluded(request);

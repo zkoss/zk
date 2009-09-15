@@ -26,12 +26,12 @@ public class Attributes {
 	 * the current file upload.
 	 * It is an integer ranging from 0 to 99.
 	 */
-	public static final String UPLOAD_PERCENT = "zk_uploadPercent";
+	public static final String UPLOAD_PERCENT = "org.zkoss.zk.upload.percent";
 	/** A desktop attribute to indicate the number of bytes of the current
 	 * file upload.
 	 * It is a non-negative long.
 	 */
-	public static final String UPLOAD_SIZE = "zk_uploadSize";
+	public static final String UPLOAD_SIZE = "org.zkoss.zk.upload.size";
 
 	/** A request attribute to indicate whether "no-cache" header is
 	 * generated for the current desktop.
@@ -48,7 +48,7 @@ public class Attributes {
 	 *
 	 * @since 3.0.1
 	 */
-	public static final String NO_CACHE = "zk_desktop_no_cache";
+	public static final String NO_CACHE = "org.zkoss.zk.desktop.nocache";
 
 	/** A library property to indicate the default resend delay
 	 * (an integer in milliseconds).
@@ -83,4 +83,10 @@ public class Attributes {
 	 * @since 3.6.1
 	 */
 	public static final String ID_TO_UUID_PREFIX = "org.zkoss.zk.ui.id2uuidPrefix";
+
+	/** A special attribute set to the session to cause Google App Engine
+	 * to update attributes to the storage.
+	 * @since 5.0.0
+	 */
+	public static final String GAE_FIX = "org.zkoss.zk.gae.fix";
 }
