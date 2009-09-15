@@ -134,7 +134,11 @@ div.z-log button {
 	background: #E0E1E3;
 }
 .z-initing {
-	background: #E0E1E3 url(${c:encodeURL('~./zk/img/zk-mask.gif')}) repeat 0 0;
+	width: 60px; height: 60px;
+	position: absolute; right: 10px; bottom: 10px;
+	z-index: 32000;
+	background: transparent no-repeat center;
+	background-image: url(${c:encodeURL('~./zk/img/zkpowered.png')});
 }
 .z-loading {
 	background-color: #6eadff;

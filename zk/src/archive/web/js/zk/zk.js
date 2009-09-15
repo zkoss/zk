@@ -37,15 +37,15 @@ zk = function (sel) {
 			return this;
 		};
 	}
-	function showprocmk() {
+	function showprocinit() {
 		//don't use jq() since it will be queued after others
-		if (jq.isReady) return showproc(true);
-		setTimeout(showprocmk, 10);
+		if (jq.isReady) return showproc(true, 'z-initing');
+		setTimeout(showprocinit, 10);
 	}
-	function showproc(mask) {
+	function showproc(mask, icon) {
 		if (zk.processing
 		&& !jq("#zk_proc").length && !jq("#zk_showBusy").length)
-			zUtl.progressbox("zk_proc", window.mesg?mesg.PLEASE_WAIT:'Processing...', mask, mask ? 'z-initing' : null);
+			zUtl.progressbox("zk_proc", window.mesg?mesg.PLEASE_WAIT:'Processing...', mask, icon);
 	}
 	function wgt2s(w) {
 		var s = w.className.substring(w.className.lastIndexOf('.') + 1);
@@ -233,7 +233,7 @@ zk = function (sel) {
 	//Processing//
 	startProcessing: function (timeout) {
 		zk.processing = true;
-		setTimeout(jq.isReady ? showproc: showprocmk, timeout > 0 ? timeout: 0);
+		setTimeout(jq.isReady ? showproc: showprocinit, timeout > 0 ? timeout: 0);
 	},
 	endProcessing: function() {
 		zk.processing = false;

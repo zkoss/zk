@@ -194,7 +194,7 @@ zUtl = { //static methods
 	},
 
 	//progress//
-	progressbox: function (id, msg, mask, sclass) {
+	progressbox: function (id, msg, mask, icon) {
 		if (mask && zk.Page.contained.length) {
 			for (var c = zk.Page.contained.length, e = zk.Page.contained[--c]; e; e = zk.Page.contained[--c]) {
 				if (!e._applyMask)
@@ -212,11 +212,13 @@ zUtl = { //static methods
 			idmsk = id + '-m',
 			html = '<div id="'+id+'"';
 		if (mask)
-			html += '><div id="' + idmsk + '" class="z-modal-mask' + (sclass ? ' ' + sclass : '') +'"'+style+'></div';
-		jq(document.body).append(html
-			+'><div id="'+idtxt+'" class="z-loading"'+style
+			html += '><div id="' + idmsk + '" class="z-modal-mask"'+style+'></div';
+		html += '><div id="'+idtxt+'" class="z-loading"'+style
 			+'><div class="z-loading-indicator"><span class="z-loading-icon"></span> '
-			+msg+'</div></div></div>');
+			+msg+'</div></div>';
+		if (icon)
+			html += '<div class="' + icon + '"></div>';
+		jq(document.body).append(html + '</div>');
 		var $n = jq(id, zk),
 			n = $n[0],
 			$txt = jq(idtxt, zk);
