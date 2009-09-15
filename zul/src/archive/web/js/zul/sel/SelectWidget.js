@@ -96,6 +96,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				
 			this._calcSize();// Bug #1813722
 			this.fireOnRender(155);
+			this._shallSize = false;
 		}
 	},
 	/** Calculates the size. */
@@ -463,6 +464,9 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				return false;
 			}
 		}
+		
+		// Feature #1978624
+		evt.target = this._focusItem || this.getSelectedItem() || this;
 		this.$supers('doKeyDown_', arguments);
 	},
 	_doKeyDown: function (evt) {

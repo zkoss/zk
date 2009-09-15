@@ -77,9 +77,9 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 	},
 	domContent_: function(){
 		var label = zUtl.encodeXML(this.getLabel()), img = this.getImage();
-		if (!img) 
+		if (!img)
 			return label;
-		
+
 		img = '<img src="' + img + '" align="absmiddle" />';
 		var space = "vertical" == this.getOrient() ? '<br/>' : '&nbsp;';
 		return this.getDir() == 'reverse' ? label + space + img : img + space + label;
@@ -88,7 +88,7 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		var scls = this.$supers('domClass_', arguments);
 		if (this._disabled && (!no || !no.zclass)) {
 			var s = this.getZclass();
-			if (s) 
+			if (s)
 				scls += (scls ? ' ' : '') + s + '-disd';
 		}
 		return scls;
@@ -96,25 +96,27 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 	domAttrs_: function(no){
 		var attr = this.$supers('domAttrs_', arguments),
 			v = this.getTabindex();
-		if (v) 
+		if (v)
 			attr += ' tabIndex="' + v + '"';
 		return attr;
 	},
 	doClick_: function(evt){
-		this.fireX(evt);
+		if (!this.isDisabled()) {
+			this.fireX(evt);
 
-		if (!evt.stopped) {
-			var href = this._href;
-			if (href)
-				zUtl.go(href, false, this._target || (evt.data.ctrlKey ? '_blank' : ''));
-			this.$super('doClick_', evt, true);
+			if (!evt.stopped) {
+				var href = this._href;
+				if (href)
+					zUtl.go(href, false, this._target || (evt.data.ctrlKey ? '_blank' : ''));
+				this.$super('doClick_', evt, true);
+			}
 		}
 	},
 	doMouseOver_: function (evt) {
 		if (!this.isDisabled()) {
 			jq(this).addClass(this.getZclass() + '-over');
 			this.$supers('doMouseOver_', arguments);
-		}	
+		}
 	},
 	doMouseOut_: function (evt) {
 		if (!this.isDisabled()) {

@@ -44,7 +44,7 @@ public class Listgroup extends Listitem implements org.zkoss.zul.api.Listgroup {
 	private transient List _items;
 
 	static {
-		addClientEvent(Group.class, Events.ON_OPEN, CE_IMPORTANT);
+		addClientEvent(Listgroup.class, Events.ON_OPEN, CE_IMPORTANT);
 	}
 	
 	public Listgroup() {

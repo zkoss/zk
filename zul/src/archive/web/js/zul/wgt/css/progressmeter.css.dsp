@@ -6,6 +6,7 @@ div.z-progressmeter {
 	border:1px solid #6F9CDB;
 	text-align: left;
 	height: 17px;
+	overflow: hidden;
 }
 span.z-progressmeter-img {
 	display: -moz-inline-box;

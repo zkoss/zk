@@ -228,6 +228,7 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 				
 			this._calcSize();// Bug #1813722
 			this.fireOnRender(155);
+			this._shallSize = false;
 		}
 	},
 	onShow: _zkf,
