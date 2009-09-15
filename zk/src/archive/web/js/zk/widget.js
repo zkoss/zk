@@ -202,49 +202,45 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			return;
 		}
 		this._flexFixed = true;
-		var preRight = 0,
-			preBottom = 0,
-			vtxtsz = 0,
-			htxtsz = 0,
-			pretxt = false, //pre node is a text node
+		var pretxt = false, //pre node is a text node
+			prevflex = false, //pre node is vflex
+			prehflex = false, //pre node is hflex
 			vflexs = [],
 			vflexsz = 0,
 			hflexs = [],
 			hflexsz = 0,
-			hsp = 0,
-			vsp = 0,
 			p = this.$n().parentNode,
 			zkp = zk(p),
 			hgh = zkp.revisedHeight(p.offsetHeight),
-			wdh = zkp.revisedWidth(p.offsetWidth);
-		for (var c = p.firstChild; c; c = c.nextSibling) {
-			if (zk(c).isVisible()) {
+			wdh = zkp.revisedWidth(p.offsetWidth),
+			c = p.firstChild;
+		
+		for (; c; c = c.nextSibling)
+			if (c.nodeType != 3) break; //until not a text node
+		
+		var sameOffParent = c ? c.offsetParent === p.offsetParent : false,
+			tbp = zkp.sumStyles('t', jq.borders) + zkp.sumStyles('t', jq.paddings),
+			lbp = zkp.sumStyles('l', jq.borders) + zkp.sumStyles('l', jq.paddings),
+			segTop = sameOffParent ? (p.offsetTop + tbp) : tbp,
+			segLeft = sameOffParent ? (p.offsetLeft + lbp) : lbp,
+			segBottom = segTop,
+			segRight = segLeft;
+
+		for (; c; c = c.nextSibling) {
+			var zkc = zk(c);
+			if (zkc.isVisible()) {
 				//In ZK, we assume all text node is space (otherwise, it will be span enclosed)
 				if (c.nodeType === 3) { //a text node
-					if (c !== p.firstChild)
-						pretxt = true;
+					pretxt = true;
+					prevflex = prehflex = false;
 					continue;
 				}
-				var zkc = zk(c),
-					offLeft = c.offsetLeft,
-					offTop = c.offsetTop;
-				if (pretxt) {
-					pretxt = false;
-					var cLeft = offLeft - zkc.sumStyles("l", jq.margins),
-						cTop = offTop - zkc.sumStyles("t", jq.margins);
-					if (cLeft > preRight)
-						htxtsz += (hsp = cLeft - preRight);
-					else if (cLeft < preRight)
-						htxtsz += hsp;
-					if (cTop > preBottom)
-						vtxtsz += (vsp = cTop - preBottom);
-					else if (cTop < preBottom)
-						vtxtsz += vsp;
-				}
-				var offhgh = zkc.offsetHeight(),
-					offwdh = offhgh > 0 ? zkc.offsetWidth() : 0; //div with zero height might have 100% width
-				preRight = offLeft + offwdh + zkc.sumStyles("r", jq.margins);
-				preBottom = offTop + offhgh + zkc.sumStyles("b", jq.margins);
+				var offLeft = c.offsetLeft,
+					offTop = c.offsetTop,
+					offhgh = zkc.offsetHeight(),
+					offwdh = offhgh > 0 ? zkc.offsetWidth() : 0, //div with zero height might have 100% width
+					marginRight = offLeft + offwdh + zkc.sumStyles("r", jq.margins),
+					marginBottom = offTop + offhgh + zkc.sumStyles("b", jq.margins);
 				
 				var cwgt = _binds[c.id];
 				//vertical size
@@ -252,13 +248,30 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					if (cwgt !== this)
 						cwgt._flexFixed = true; //tell other vflex siblings I have done it.
 					if (cwgt._vflex == 'min') {
-						hgh -= _setMinFlexSize(cwgt, c, 'height');
+						_setMinFlexSize(cwgt, c, 'height');
+						//might change height in _setMinFlexSize(), so regain the value
+						offTop = c.offsetTop;
+						offhgh = zkc.offsetHeight();
+						marginBottom = offTop + offhgh + zkc.sumStyles('b', jq.margins);
+						segBottom = Math.max(segBottom, marginBottom);
+						prevflex = false;
 					} else {
+						if (pretxt) {
+							var txtmarginBottom = offTop - zkc.sumStyles('t', jq.margins);
+							segBottom = Math.max(segBottom, txtmarginBottom);
+						}
+						if (!prevflex && segBottom > segTop) {
+							hgh -= segBottom - segTop;
+						}
+						segTop = segBottom = marginBottom;
+						
 						vflexs.push(cwgt);
 						vflexsz += cwgt._nvflex;
+						prevflex = true;
 					}
-				} else if (c.offsetHeight !== undefined){
-					hgh -= offhgh + zkc.sumStyles("tb", jq.margins);
+				} else {
+					segBottom = Math.max(segBottom, marginBottom);
+					prevflex = false;
 				}
 				
 				//horizontal size
@@ -266,19 +279,41 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					if (cwgt !== this)
 						cwgt._flexFixed = true; //tell other hflex siblings I have done it.
 					if (cwgt._hflex == 'min') {
-						wdh -= _setMinFlexSize(cwgt, c, 'width');
+						_setMinFlexSize(cwgt, c, 'width');
+						//might change width in _setMinFlexSize(), so regain the value
+						offLeft = c.offsetLeft;
+						offwdh = zkc.offsetWidth();
+						marginRight = offLeft + offwdh + zkc.sumStyles('r', jq.margins);
+						segRight = Math.max(segRight, marginRight);
+						prehflex = false;
 					} else {
+						if (pretxt) {
+							var txtmarginRight = offTop - zkc.sumStyles('l', jq.margins);
+							segRight = Math.max(segRight, txtmarginRight);
+						}
+						if (!prehflex && segRight > segLeft) {
+							wdh -= segRight - segLeft;
+						}
+						segLeft = segRight = marginRight;
+						
 						hflexs.push(cwgt);
 						hflexsz += cwgt._nhflex;
+						prehflex = true;
 					}
-				} else if (c.offsetWidth !== undefined){
-					wdh -= offwdh + zkc.sumStyles("lr", jq.margins);
+				} else {
+					segRight = Math.max(segRight, marginRight);
+					prehflex = false;
 				}
+				pretxt = false;
 			}
 		}
-		//take out text node height/width
-		hgh -= vtxtsz;
-		wdh -= htxtsz;
+		
+		if (segBottom > segTop) {
+			hgh -= segBottom - segTop;
+		}
+		if (segRight > segLeft) {
+			wdh -= segRight - segLeft;
+		}
 		
 		//setup the height for the vflex child
 		//avoid floating number calculation error(TODO: shall distribute error evenly)
