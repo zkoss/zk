@@ -23,10 +23,10 @@ import java.io.Writer;
 import java.util.Iterator;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.render.ComponentRenderer;
 import org.zkoss.zk.ui.render.SmartWriter;
 import org.zkoss.zul.Menubar;
-import org.zkoss.zul.impl.LabelImageElement;
 
 /**
  * {@link Menubar}'s vertical oriented.
@@ -45,7 +45,7 @@ public class Menubar2Vertical implements ComponentRenderer {
 		wh.write("<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" id=\"").write(uuid).writeln("!cave\">");
 
 		for (Iterator it = self.getChildren().iterator(); it.hasNext();) {
-			final LabelImageElement child = (LabelImageElement)it.next();
+			final HtmlBasedComponent child = (HtmlBasedComponent)it.next();
 			wh.write("<tr id=\"").write(child.getUuid()).write("!chdextr\"");
 			wh.writeAttr("height",child.getHeight()).writeln(">");
 			child.redraw(out);
