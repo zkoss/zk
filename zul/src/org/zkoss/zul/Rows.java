@@ -305,9 +305,7 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 					_groupsInfo.remove(remove);
 					final int idx = remove[2];
 					if (idx != -1) {
-						removeChild((Component) getChildren().get(idx -1));
-							// Because the fixGroupIndex will skip the first groupinfo,
-							// we need to subtract 1 from the idx variable
+						removeChild((Component) getChildren().get(idx));
 					}
 				}
 			} else if (hasGroup()) {
@@ -548,10 +546,8 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 				if (row instanceof Group) {
 					final Group g = (Group) row;
 					if (!g.isOpen()) {
-						for (int j = 0, len = g.getItemCount(); j < len; j++) {
+						for (int j = 0, len = g.getItemCount(); j < len; j++)
 							row = (Row) row.getNextSibling();
-							avail.add(row);
-						}
 					}
 				}
 				if (row != null)
