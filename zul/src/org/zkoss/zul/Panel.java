@@ -66,12 +66,12 @@ public class Panel extends XulElement implements Framable, org.zkoss.zul.api.Pan
 	
 
 	static {
-		addClientEvent(Window.class, Events.ON_CLOSE, 0);
-		addClientEvent(Window.class, Events.ON_MOVE, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
-		addClientEvent(Window.class, Events.ON_OPEN, CE_IMPORTANT);
-		addClientEvent(Window.class, Events.ON_Z_INDEX, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
-		addClientEvent(Window.class, Events.ON_MAXIMIZE, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
-		addClientEvent(Window.class, Events.ON_MINIMIZE, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
+		addClientEvent(Panel.class, Events.ON_CLOSE, 0);
+		addClientEvent(Panel.class, Events.ON_MOVE, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
+		addClientEvent(Panel.class, Events.ON_OPEN, CE_IMPORTANT);
+		addClientEvent(Panel.class, Events.ON_Z_INDEX, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
+		addClientEvent(Panel.class, Events.ON_MAXIMIZE, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
+		addClientEvent(Panel.class, Events.ON_MINIMIZE, CE_DUPLICATE_IGNORE|CE_IMPORTANT);
 	}
 	/**
 	 * Returns whether this Panel is open.

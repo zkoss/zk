@@ -5,7 +5,7 @@
   <window title="Test Buttons in various components." border="normal" width="400px">
   Please click all buttons visible to you, make sure the buttons does not effect the current components. If found, it's a bug.
 NOTE: FF2 has a known issue with scrollbar in listbox, it doesn't update screen correctly. Please ignore this error.
-    <grid>
+    <grid sizedByContent="true">
       <columns sizable="true" width="500px">
         <column label="Type"/>
         <column label="Content"/>
@@ -39,7 +39,7 @@ NOTE: FF2 has a known issue with scrollbar in listbox, it doesn't update screen 
         </row>
       </rows>
     </grid>
-    <grid>
+    <grid sizedByContent="true">
       <columns sizable="true">
         <column label="Type"/>
         <column label="Content"/>
@@ -53,16 +53,8 @@ NOTE: FF2 has a known issue with scrollbar in listbox, it doesn't update screen 
           <label value="Type:"/>
           <hbox>
             <listbox rows="1" mold="select">
-              <listitem label="Buttons may not be supported in Select Mold.">
-                <listcell>Can you see a button?
-                          <button label="ClickMe" onClick='self.setLabel("Clicked OK.")'/>
-                </listcell>
-              </listitem>
-              <listitem label="All Files,(*.*)">
-                <listcell>
-                  <button label="ClickMe" onClick='self.setLabel("Clicked OK."); self.setImage("/test2/img/coffee.gif")'/>
-                </listcell>
-              </listitem>
+              <listitem label="Buttons may not be supported in Select Mold."/>
+              <listitem label="All Files,(*.*)"/>
             </listbox>
             <button label="ClickMe" onClick='self.setLabel("Clicked OK."); self.setImage("/test2/img/coffee.gif")'/>
           </hbox>

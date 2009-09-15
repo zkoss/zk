@@ -57,7 +57,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	bind_: function () {
 		this.$supers('bind_', arguments);
 		if (this.parent.isSizable()) this._initsz();
-		this._fixedFaker();
+		this.fixedFaker_();
 	},
 	unbind_: function () {
 		if (this._drag) {
@@ -80,7 +80,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			});
 		}
 	},
-	_fixedFaker: function () {
+	fixedFaker_: function () {
 		var n = this.$n(),
 			index = zk(n).cellIndex(),
 			owner = this.getMeshWidget();
@@ -106,7 +106,8 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			&& evt.domTarget.tagName != "INPUT") {
 			this.fire('onSort');
 			evt.stop();
-		}
+		} else
+			this.$supers('doClick_', arguments);
 	},
 	doMouseMove_: function (evt) {
 		if (zk.dragging || !this.parent.isSizable()) return;

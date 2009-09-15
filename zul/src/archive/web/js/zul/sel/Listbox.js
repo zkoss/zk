@@ -164,7 +164,7 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 			this.frozen = null;
 		else if (child == this.listfoot)
 			this.listfoot = null;
-		else {
+		else if (!child.$instanceof(zul.mesh.Auxhead)) {
 			if (child == this.firstItem) {
 				for (var p = this.firstChild, Listitem = zul.sel.Listitem;
 				p && !p.$instanceof(Listitem); p = p.nextSibling)

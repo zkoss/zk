@@ -29,6 +29,15 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 				if (this._mold != 'trendy') this.$n().disabled = v;
 				else this.rerender(); //bind and unbind required
 		},
+		image: function (v) {
+			if (this._mold == 'trendy') {
+				this.rerender();
+			} else {				
+				var n = this.getImageNode();
+				if (n) 
+					n.src = v || '';
+			}
+		},
 		tabindex: function (v) {
 			var n = this.$n();
 			if (n) (this.$n('btn') || n).tabIndex = v >= 0 ? v: '';

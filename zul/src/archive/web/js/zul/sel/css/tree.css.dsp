@@ -77,7 +77,19 @@ div.z-treefooter-cnt, div.z-treecol-cnt{
 	.z-word-wrap div.z-treecol-cnt {
 	word-wrap: break-word;
 }
-
+<%-- ZK Treecol's sizing --%>
+.z-tree-header .z-treecol.z-treecol-sizing, .z-tree-header .z-treecol.z-treecol-sizing .z-treecol-cnt {
+	cursor: e-resize;
+}
+.z-dottree-header .z-treecol.z-treecol-sizing, .z-dottree-header .z-treecol.z-treecol-sizing .z-treecol-cnt {
+	cursor: e-resize;
+}
+.z-filetree-header .z-treecol.z-treecol-sizing, .z-filetree-header .z-treecol.z-treecol-sizing .z-treecol-cnt {
+	cursor: e-resize;
+}
+.z-vfiletree-header .z-treecol.z-treecol-sizing, .z-vfiletree-header .z-treecol.z-treecol-sizing .z-treecol-cnt {
+	cursor: e-resize;
+}
 <%-- Treerow --%>
 tr.z-treerow, tr.z-treerow a, tr.z-treerow a:visited {
 	font-size: ${fontSizeM}; font-weight: normal; color: black;
