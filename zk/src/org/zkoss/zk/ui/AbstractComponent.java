@@ -1702,9 +1702,15 @@ implements Component, ComponentCtrl, java.io.Serializable {
 					((NamespaceActivationListener)val).willPassivate(_spaceInfo.ns);
 			}
 		}
+
+		for (AbstractComponent p = _first; p != null; p = p._next)
+			p.sessionWillPassivate(page); //recursive
 	}
 	public void sessionDidActivate(Page page) {
-		sessDidActivate0(page, this, true);
+		sessDidActivate(page, true);
+	}
+	public void sessDidActivate(Page page, boolean pageLevelIdSpace) {
+		_page = page;
 
 		didActivate(_attrs.values());
 
@@ -1715,6 +1721,13 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (this instanceof IdSpace) {
 			didActivate(_spaceInfo.attrs.values());
 
+			//Note: we need only to fix the first-level spaceInfo.
+			//Others are handled by readObject
+			if (pageLevelIdSpace) {
+				pageLevelIdSpace = false;
+				_spaceInfo.ns.setParent(page.getNamespace());
+			}
+
 			//Invoke NamespaceActivationListener after all loaded
 			for (Iterator it = _spaceInfo.ns.getVariableNames().iterator();
 			it.hasNext();) {
@@ -1724,33 +1737,18 @@ implements Component, ComponentCtrl, java.io.Serializable {
 					((NamespaceActivationListener)val).didActivate(_spaceInfo.ns);
 			}
 		}
-	}
-	/** 
-	 * @param pageLevelIdSpace whether this component's ID space is
-	 * at the page level.
-	 */
-	private static void sessDidActivate0(Page page,
-	AbstractComponent comp, boolean pageLevelIdSpace) {
-		comp._page = page;
 
-		//Note: we need only to fix the first-level spaceInfo.
-		//Others are handled by readObject
-		if (pageLevelIdSpace && comp._spaceInfo != null) {
-			pageLevelIdSpace = false;
-			comp._spaceInfo.ns.setParent(page.getNamespace());
-		}
-
-		for (AbstractComponent p = comp._first; p != null; p = p._next) {
-			sessDidActivate0(page, p, pageLevelIdSpace); //recursive
-		}
+		for (AbstractComponent p = _first; p != null; p = p._next)
+			p.sessDidActivate(page, pageLevelIdSpace); //recursive
 	}
+
 	private void willPassivate(Collection c) {
 		if (c != null)
 			for (Iterator it = c.iterator(); it.hasNext();)
 				willPassivate(it.next());
 	}
 	private void willPassivate(Object o) {
-		if (o instanceof ComponentSerializationListener)
+		if (o instanceof ComponentActivationListener)
 			((ComponentActivationListener)o).willPassivate(this);
 	}
 	private void didActivate(Collection c) {
@@ -1759,7 +1757,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				didActivate(it.next());
 	}
 	private void didActivate(Object o) {
-		if (o instanceof ComponentSerializationListener)
+		if (o instanceof ComponentActivationListener)
 			((ComponentActivationListener)o).didActivate(this);
 	}
 

@@ -33,6 +33,7 @@ August, 2009
   2855933: Failed to resolve correct setter if two with the same name
   2829547: Incorrect getValue when using spinners on multiple Timeboxes
   2856700: Failed to include a page with query string in auto mode
+  2859020: ComponentActivationListener and others not called for child
   2073409: Can't add groupfoot by javacode
   2154611: Menuitem in Menubar - quirks
 
