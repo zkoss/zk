@@ -425,7 +425,7 @@ zul.inp.InputWidget = zk.$extends(zul.Widget, {
 			inp.value = val;
 
 			val = sr[0] + 1;
-			$inp.setSelectionRange(inp, val, val);
+			$inp.setSelectionRange(val, val);
 
 			evt.stop();
 			return;

@@ -160,7 +160,14 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 
 		minheight: null, //TODO
 		minwidth: null, //TODO
-		shadow: null
+		shadow: function () {
+			if (this._shadow) {
+				this._syncShadow();	
+			} else if (this._shadowWgt) {
+				this._shadowWgt.destroy();
+				this._shadowWgt = null;
+			}
+		}
 	},
 
 	doOverlapped: function () {

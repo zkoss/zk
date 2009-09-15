@@ -155,7 +155,7 @@ public class Textbox extends InputElement implements org.zkoss.zul.api.Textbox{
 	public void setTabbable(boolean tabbable) {
 		if (_tabbable != tabbable) {
 			_tabbable = tabbable;
-			smartUpdate("z.tabbable", tabbable);
+			smartUpdate("tabbable", tabbable);
 		}
 	}
 
@@ -166,6 +166,7 @@ public class Textbox extends InputElement implements org.zkoss.zul.api.Textbox{
 
 		if (_multiline) renderer.render("multiline", _multiline);
 		if (_rows > 1) renderer.render("rows", _rows);
+		if (_tabbable) renderer.render("tabbable", _tabbable);
 		if (!"text".equals(_type)) renderer.render("type", _type);
 	}
 	public String getZclass() {
