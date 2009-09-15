@@ -286,6 +286,16 @@
 	font-size:1px;
 	line-height:1px;
 }
+
+.z-menubar-hor .z-menu-separator {
+	background-image: url(${c:encodeURL('~./img/dot.gif')});
+	background-position: top center; background-repeat: repeat-y;
+}
+.z-menubar-ver .z-menu-separator {
+	background-image: url(${c:encodeURL('~./img/dot.gif')});
+	background-position: center left; background-repeat: repeat-x;
+}
+
 .z-menu-popup-cnt .z-menu-separator-inner {
 	background-color:#E0E0E0;
 	border-bottom:1px solid #FFFFFF;
