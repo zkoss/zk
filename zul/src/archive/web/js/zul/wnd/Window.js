@@ -831,8 +831,9 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		var wnd = dg.control,
 			el = dg.node;
 		wnd._hideShadow();
+		wnd.setTopmost();
 		var $el = jq(el);
-		jq(document.body).after(
+		jq(document.body).append(
 			'<div id="zk_ddghost" class="' + wnd.getZclass() + '-resize-faker"'
 			+' style="position:absolute;top:'
 			+ofs[1]+'px;left:'+ofs[0]+'px;width:'
