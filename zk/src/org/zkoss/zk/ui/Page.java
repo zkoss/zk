@@ -476,7 +476,7 @@ public interface Page extends IdSpace, Scope {
 	 */
 	public org.zkoss.zk.scripting.Namespace getNamespace();
 	/** @deprecated As of release 5.0.0, replaced with
-	 * {@link interpret(String,String,Component)}.
+	 * {@link #interpret(String,String,Scope)}.
 	 *
 	 * <p>Interpret a script of the specified scripting language against
 	 * the specified namespace.

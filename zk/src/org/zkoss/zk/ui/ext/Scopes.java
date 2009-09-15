@@ -69,8 +69,9 @@ try {
 	 * {@link #setImplicit} between {@link #beforeInterpret}
 	 * and {@link #afterInterpret}.
 	 *
-	 * @param comp the component, never null.
-	 * @return the scope that owns the specified component
+	 * @param scope the scope, never null.
+	 * @return the scope used for interpretation. It is the same as the scope
+	 * parameter if it is not null. Otherwise, a temporary scope is created.
 	 */
 	public static final Scope beforeInterpret(Scope scope) {
 		if (scope == null)

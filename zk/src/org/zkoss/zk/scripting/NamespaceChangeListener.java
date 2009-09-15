@@ -18,7 +18,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.scripting;
 
-/** @deprecated, As of release 5.0.0, the concept of namespace is
+/** @deprecated As of release 5.0.0, the concept of namespace is
  * deprecated.
  *
  * <p>A listener used to listen whether {@link Namespace} is changed.

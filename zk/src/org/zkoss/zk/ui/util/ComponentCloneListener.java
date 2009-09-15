@@ -28,7 +28,7 @@ import org.zkoss.zk.ui.Component;
  * attribute ({@link Component#setAttribute})
  * and listener ({@link Component#addEventListener})
  * to see whether this interface is implemented.
- * If implemented, {@link #clone} will be called. Then, the object
+ * If implemented, {@link #willClone} will be called. Then, the object
  * can either return itself, if it can be shared by two components,
  * or clone itself, if an independent instance must be used for
  * each component.

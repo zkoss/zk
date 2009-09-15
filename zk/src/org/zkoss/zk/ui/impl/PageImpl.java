@@ -454,7 +454,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		return null;
 	}
 	/** @deprecated As of release 5.0.0, replaced with
-	 * {@link getZScriptFunction(Component,String,Class[])}.
+	 * {@link #getZScriptFunction(Component,String,Class[])}.
 	 */
 	public Function getZScriptFunction(org.zkoss.zk.scripting.Namespace ns, String name, Class[] argTypes) {
 		return getZScriptFunction(ns != null ? ns.getOwner(): null, name, argTypes);
@@ -482,7 +482,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		return null;
 	}
 	/** @deprecated As of release 5.0.0, replaced with
-	 * {@link getZScriptVariable(Component,String,Class[])}.
+	 * {@link #getZScriptVariable(Component,String)}.
 	 */
 	public Object getZScriptVariable(org.zkoss.zk.scripting.Namespace ns, String name) {
 		return getZScriptVariable(ns != null ? ns.getOwner(): null, name);
@@ -910,11 +910,11 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			((Includer)_owner).setChildPage(this);
 	}
 
-	/** @deprecated since 5.0.0 */
+	/** @deprecated As of release 5.0.0, the default parent is no longe meaningful. */
  	public Component getDefaultParent() {
  		return null;
  	}
-	/** @deprecated since 5.0.0 */
+	/** @deprecated As of release 5.0.0, the default parent is no longe meaningful. */
  	public void setDefaultParent(Component comp) {
  	}
 

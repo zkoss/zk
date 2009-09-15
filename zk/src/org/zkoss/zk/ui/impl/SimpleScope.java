@@ -31,8 +31,8 @@ import org.zkoss.zk.ui.ext.ScopeListener;
  * It supports {@link ScopeListener}, but it doesn't support
  * the concept of parent scope.
  * Thus, the deriving class can override
- * {@link #getAttribute(String,Object,boolean)},
- * {@link #hasAttribute(string,Object)},
+ * {@link #getAttribute(String,boolean)},
+ * {@link #hasAttribute(String,boolean)},
  * and invoke {@link #notifyParentChanged} if the parent is changed.
  *
  * @author tomyeh
@@ -87,10 +87,10 @@ public class SimpleScope implements Scope {
 		return _listeners.removeScopeListener(listener);
 	}
 
-	/** Invokes {@link ScopeListener#onParentChanged} for registered
+	/** Invokes {@link ScopeListener#parentChanged} for registered
 	 * listeners.
 	 *
-	 * @see #addChangeListener
+	 * @see #addScopeListener
 	 */
 	public void notifyParentChanged(Scope newparent) {
 		_listeners.notifyParentChanged(newparent);

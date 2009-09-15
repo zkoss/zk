@@ -70,7 +70,7 @@ public class ScopeListeners {
 	/** Invokes {@link ScopeListener#attributeAdded} for registered
 	 * listeners.
 	 *
-	 * @see #addChangeListener
+	 * @see #addScopeListener
 	 */
 	public void notifyAdded(String name, Object value) {
 		if (_listeners != null)
@@ -80,7 +80,7 @@ public class ScopeListeners {
 	/** Invokes {@link ScopeListener#attributeReplaced} for registered
 	 * listeners.
 	 *
-	 * @see #addChangeListener
+	 * @see #addScopeListener
 	 */
 	public void notifyReplaced(String name, Object value) {
 		if (_listeners != null)
@@ -90,17 +90,17 @@ public class ScopeListeners {
 	/** Invokes {@link ScopeListener#attributeRemoved} for registered
 	 * listeners.
 	 *
-	 * @see #addChangeListener
+	 * @see #addScopeListener
 	 */
 	public void notifyRemoved(String name) {
 		if (_listeners != null)
 			for (Iterator it = _listeners.iterator(); it.hasNext();)
 				((ScopeListener)it.next()).attributeRemoved(_owner, name);
 	}
-	/** Invokes {@link ScopeListener#onParentChanged} for registered
+	/** Invokes {@link ScopeListener#parentChanged} for registered
 	 * listeners.
 	 *
-	 * @see #addChangeListener
+	 * @see #addScopeListener
 	 */
 	public void notifyParentChanged(Scope newparent) {
 		if (_listeners != null)

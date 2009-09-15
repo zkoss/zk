@@ -38,7 +38,7 @@ public interface Scope {
 	 */
 	public boolean hasAttribute(String name);
 	/** Sets (aka., associates) the value for a custom attribute with this object (scope).
-	 * @returns the previous value associated with the attribute, if any
+	 * @return the previous value associated with the attribute, if any
 	 * @since 5.0.0
 	 */
 	public Object setAttribute(String name, Object value);
@@ -52,7 +52,7 @@ public interface Scope {
 	 *
 	 * @param local whether not to search its ancestor scope.
 	 * If false and the current scope doen't define the variable,
-	 * it searches up its ancestor (via {@link #getParent}) to see
+	 * it searches up its ancestor to see
 	 * any of them has defined the specified variable.
 	 * Notice: for a component, the ancestor scope is the space owner.
 	 * @since 5.0.0
@@ -65,7 +65,7 @@ public interface Scope {
 	 *
 	 * @param local whether not to search its ancestor scope.
 	 * If false and the current scope doen't define the variable,
-	 * it searches up its ancestor (via {@link #getParent}) to see
+	 * it searches up its ancestor to see
 	 * any of them has defined the specified variable.
 	 * Notice: for a component, the ancestor scope is the space owner.
 	 * @since 5.0.0

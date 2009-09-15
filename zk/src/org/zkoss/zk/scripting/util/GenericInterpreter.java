@@ -312,7 +312,7 @@ abstract public class GenericInterpreter implements Interpreter {
 		return _zslang;
 	}
 
-	/** @deprecated As of release 5.0.0, replaced with {@link #interpret(String, Scope}}
+	/** @deprecated As of release 5.0.0, replaced with {@link #interpret(String, Scope)}
 	 */
 	public void interpret(String script, org.zkoss.zk.scripting.Namespace ns) {
 		Scope scope = null;

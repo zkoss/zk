@@ -222,7 +222,7 @@ public class Button extends LabelImageElement implements org.zkoss.zul.api.Butto
 	 * onUpload="handle(event.media)"/&gt;</code></pre>
 	 *
 	 * <p>As shown above, after the file is uploaded, an instance of
-	 * {@link UploadEvent} is sent this component.
+	 * {@link org.zkoss.zk.ui.event.UploadEvent} is sent this component.
 	 *
 	 * <p>If you want to customize the handling of the file upload at
 	 * the client, you can specify a JavaScript class when calling

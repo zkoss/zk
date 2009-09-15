@@ -56,7 +56,7 @@ public interface Interpreter {
 	 */
 	public Object getNativeInterpreter();
 
-	/** @deprecated As of release 5.0.0, replaced with {@link #interpret(String, Scope}}
+	/** @deprecated As of release 5.0.0, replaced with {@link #interpret(String, Scope)}
 	 * <p>Evaluates the script against the specified namespace.
 	 */
 	public void interpret(String script, Namespace ns);
@@ -68,12 +68,12 @@ public interface Interpreter {
 	 * the string returned by
 	 * {@link org.zkoss.zk.ui.metainfo.LanguageDefinition#getEachTimeScript}
 	 * if not null.</li>
-	 * <li>The implementation must use {@link Scopes#getCurrent}
+	 * <li>The implementation must use {@link org.zkoss.zk.ui.ext.Scopes#getCurrent}
 	 * to retrieve the current namesace if the comp argument is null.
 	 *
 	 * @param scope the scope as the context to interpret the script.
 	 * If null, the current scope is assumed.
-	 * The current scope is {@link Scopes#getCurrent}, which
+	 * The current scope is {@link org.zkoss.zk.ui.ext.Scopes#getCurrent}, which
 	 * is the event target's scope, if the thread is processing an event.
 	 * The event target is {@link org.zkoss.zk.ui.event.Event#getTarget}.
 	 * Otherwise, the current scope is the owner page ({@link #getOwner}.

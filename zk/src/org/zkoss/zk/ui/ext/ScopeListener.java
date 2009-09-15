@@ -18,7 +18,7 @@ package org.zkoss.zk.ui.ext;
  * <p>A listener used to listen whether a scope ({@link Scope}) is changed.
  *
  * <p>To add a listener to the scope, invoke
- * {@link Scope#addChangeListener}.
+ * {@link Scope#addScopeListener}.
  * 
  * @author tomyeh
  * @since 5.0.0
