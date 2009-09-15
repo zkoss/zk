@@ -111,11 +111,15 @@ zul.wgt.Toolbarbutton = zk.$extends(zul.LabelImageWidget, {
 		}
 	},
 	doMouseOver_: function (evt) {
-		if (!this.isDisabled())
+		if (!this.isDisabled()) {
 			jq(this).addClass(this.getZclass() + '-over');
+			this.$supers('doMouseOver_', arguments);
+		}	
 	},
 	doMouseOut_: function (evt) {
-		if (!this.isDisabled())
+		if (!this.isDisabled()) {
 			jq(this).removeClass(this.getZclass() + '-over');
+			this.$supers('doMouseOut_', arguments);
+		}
 	}
 });
