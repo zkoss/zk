@@ -138,7 +138,7 @@ public class ConfigHelper {
 				for(Iterator iter = _prop.entrySet().iterator();iter.hasNext() ; ){
 					final Map.Entry setting = (Map.Entry) iter.next();
 					String strKey = (String)setting.getKey();
-					if(strKey.endsWith(".zul")){
+					if(strKey.contains(".")){
 						initServerWrapperByTarget(strKey);
 					}
 				}
