@@ -240,48 +240,97 @@ implements Condition, java.io.Serializable {
 			((DynamicPropertied)comp).setDynamicProperty(_name, val);
 			return; //done
 		} else { //mtds != null && val != null
-			//1. full match
-			for (int j = 0; j < mtds.length; ++j) {
-				type = mtds[j].getParameterTypes()[0];
-				if (type.isInstance(val)
-				|| (val == null && String.class.equals(type))) {
-					m = mtds[j];
-					break; //found
-				}
-			}
-
-			//2. primitive
-			if (m == null) {
-				for (int j = 0; j < mtds.length; ++j) {
-					type = mtds[j].getParameterTypes()[0];
-					if (type.isPrimitive()) {
-						try {
-							val = Classes.coerce(type, val);
-							m = mtds[j];
-							break;
-						} catch (Throwable ex) {
+			if ((m = findExact(mtds, val)) == null
+			&& (m = findAssignable(mtds, val)) == null
+			&& (m = findNullable(mtds, val)) == null) {
+				//primitive
+				if (val != null)
+					for (int j = 0; j < mtds.length; ++j) {
+						type = mtds[j].getParameterTypes()[0];
+						if (type.isPrimitive()) {
+							try {
+								val = Classes.coerce(type, val);
+								m = mtds[j];
+								break;
+							} catch (Throwable ex) {
+							}
 						}
 					}
-				}
 
 				if (m == null) {
-					//Other
-					for (int j = 0; ; ++j) {
-						if (j == mtds.length)
-							throw new ClassCastException("Unable to find a setter named "+_name+" that supports "+val);
-	
-						try {
-							val = Classes.coerce(mtds[j].getParameterTypes()[0], val);
-							m = mtds[j];
-							break;
-						} catch (Throwable ex) {
+					//non primitive, non string
+					Method strmtd = null;
+					for (int j = 0; j < mtds.length; ++j) {
+						type = mtds[j].getParameterTypes()[0];
+						if (String.class.equals(type)) {
+							strmtd = mtds[j];
+						} else if (!type.isPrimitive()) {
+							try {
+								val = Classes.coerce(type, val);
+								m = mtds[j];
+								break;
+							} catch (Throwable ex) {
+							}
 						}
+					}
+					if (m == null) {
+						if (strmtd != null) {
+							try {
+								val = Classes.coerce(String.class, val);
+								m = strmtd;
+							} catch (Throwable ex) {
+							}
+						}
+						if (m == null)
+							throw new ClassCastException("Unable to find a setter named "+_name+" that supports "+val);
 					}
 				}
 			}
 		}
-
 		m.invoke(comp, new Object[] {val});
+	}
+	private static Method findExact(final Method[] mtds, final Object val) {
+		if (val != null) {
+			final Class vcls = val.getClass();
+			for (int j = 0; j < mtds.length; ++j)
+				if (vcls.equals(mtds[j].getParameterTypes()[0]))
+					return mtds[j]; //found
+		}
+		return null;
+	}
+	private static Method findAssignable(final Method[] mtds, final Object val) {
+		if (val != null) {
+			//Look for the most 'extended' and isInstance class
+			Method m = null;
+			Class t = null;
+			for (int j = 0; j < mtds.length; ++j) {
+				final Class type = mtds[j].getParameterTypes()[0];
+				if (type.isInstance(val)
+				&& (t == null || t.isAssignableFrom(type))) {
+					t = type;
+					m = mtds[j];
+				}
+			}
+			return m;
+		}
+		return null;
+	}
+	private static Method findNullable(final Method[] mtds, final Object val) {
+		if (val == null) {
+			//Look for the most 'extended' class
+			Method m = null;
+			Class t = null;
+			for (int j = 0; j < mtds.length; ++j) {
+				final Class type = mtds[j].getParameterTypes()[0];
+				if (!type.isPrimitive()
+				&& (t == null || t.isAssignableFrom(type))) {
+					t = type;
+					m = mtds[j];
+				}
+			}
+			return m;
+		}
+		return null;
 	}
 
 	public boolean isEffective(Component comp) {
