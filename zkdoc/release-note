@@ -46,7 +46,7 @@ ZK 5.0.0
 		<disable-event-thread>false</disable-event-thread>
 	</system-config>
   + The callback method of org.zkoss.zk.ui.util.ComponentCloneListener
-    is renamed to willClone
+    is renamed to willClone. It is backward-compatible if not re-compile
   + The signature of ClientConstraint is changed.
   + LanguageDefinition: getCompleteURI, getDesktopURI and getPageURI
     are replaced by getPageRenderer.

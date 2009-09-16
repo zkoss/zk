@@ -14,6 +14,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zk.ui.impl;
 
+import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.AbstractSet;
 import java.util.Set;
@@ -21,7 +22,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
+import org.zkoss.lang.reflect.Fields;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.util.ComponentCloneListener;
 import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.ext.ScopeListener;
@@ -114,7 +117,7 @@ public class SimpleScope implements Scope {
 				Object val = me.getValue();
 				if (val instanceof ComponentCloneListener
 				&& owner instanceof Component) {
-					val = ((ComponentCloneListener)val).willClone((Component)owner);
+					val = willClone((Component)owner, (ComponentCloneListener)val);
 					if (val == null) continue; //don't use it in clone
 				}
 				clone._attrs.put(me.getKey(), val);
@@ -125,12 +128,26 @@ public class SimpleScope implements Scope {
 			Object val = it.next();
 			if (val instanceof ComponentCloneListener
 			&& owner instanceof Component) {
-				val = ((ComponentCloneListener)val).willClone((Component)owner);
+				val = willClone((Component)owner, ((ComponentCloneListener)val));
 				if (val == null) continue; //don't use it in clone
 			}
 			clone._listeners.addScopeListener((ScopeListener)val);
 		}
 		return clone;
+	}
+	private static final Object willClone(Component owner, ComponentCloneListener val) {
+		try {
+			return val.willClone(owner);
+		} catch (AbstractMethodError ex) { //backward compatible prior to 5.0
+			try {
+				final Method m = val.getClass().getMethod(
+					"clone", new Class[] {Component.class});
+				Fields.setAccessible(m, true);
+				return m.invoke(val, new Object[] {owner});
+			} catch (Exception t) {
+				throw UiException.Aide.wrap(t);
+			}
+		}
 	}
 
 	//Helper Class//

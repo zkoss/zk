@@ -41,6 +41,7 @@ import org.zkoss.lang.Library;
 import org.zkoss.lang.Classes;
 import org.zkoss.lang.Strings;
 import org.zkoss.lang.Objects;
+import org.zkoss.lang.reflect.Fields;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
 import org.zkoss.io.PrintWriterX;
@@ -2529,7 +2530,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				it2.hasNext();) {
 					Object val = it2.next();
 					if (val instanceof ComponentCloneListener) {
-						val = ((ComponentCloneListener)val).willClone(clone);
+						val = clone.willClone((ComponentCloneListener)val);
 						if (val == null) continue; //don't use it in clone
 					}
 					list.add(val);
@@ -2576,15 +2577,29 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		Object val = clone._ausvc;
 		if (val instanceof ComponentCloneListener)
-			clone._ausvc = (AuService)((ComponentCloneListener)val).willClone(clone);
+			clone._ausvc = (AuService)clone.willClone((ComponentCloneListener)val);
 		return clone;
+	}
+	private final Object willClone(ComponentCloneListener val) {
+		try {
+			return val.willClone(this);
+		} catch (AbstractMethodError ex) { //backward compatible prior to 5.0
+			try {
+				final Method m = val.getClass().getMethod(
+					"clone", new Class[] {Component.class});
+				Fields.setAccessible(m, true);
+				return m.invoke(val, new Object[] {this});
+			} catch (Exception t) {
+				throw UiException.Aide.wrap(t);
+			}
+		}
 	}
 	private final void cloneSpaceInfoFrom(SpaceInfo from) {
 		for (Iterator it = from.vars.entrySet().iterator(); it.hasNext();) {
 			final Map.Entry me = (Map.Entry)it.next();
 			Object val = me.getValue();
 			if (val instanceof ComponentCloneListener) {
-				val = ((ComponentCloneListener)val).willClone(this);
+				val = this.willClone((ComponentCloneListener)val);
 				if (val == null) continue; //don't use it in clone
 			}
 			this._spaceInfo.vars.put(me.getKey(), val);

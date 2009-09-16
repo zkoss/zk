@@ -37,16 +37,21 @@ public class F2859159 {
 			}
 		});
 	}
+	private void show(String msg) {
+		final Execution exec = Executions.getCurrent();
+		if (exec != null && exec.getDesktop() == _inf.getDesktop())
+			new Label(msg).setParent(_inf);
+	}
 	public void init(Session sess) {
 		sess.addScopeListener(_sessListener = new ScopeListener() {
 			public void attributeAdded(Scope scope, String name, Object value) {
-				new Label("sess added: "+name+"="+value).setParent(_inf);
+				show("sess added: "+name+"="+value);
 			}
 			public void attributeReplaced(Scope scope, String name, Object value) {
-				new Label("sess replaced: "+name+"="+value).setParent(_inf);
+				show("sess replaced: "+name+"="+value);
 			}
 			public void attributeRemoved(Scope scope, String name) {
-				new Label("sess removed: "+name).setParent(_inf);
+				show("sess removed: "+name);
 			}
 			public void parentChanged(Scope scope, Scope newparent) {
 			}
@@ -55,13 +60,13 @@ public class F2859159 {
 	public void init(WebApp app) {
 		app.addScopeListener(_appListener = new ScopeListener() {
 			public void attributeAdded(Scope scope, String name, Object value) {
-				new Label("app added: "+name+"="+value).setParent(_inf);
+				show("app added: "+name+"="+value);
 			}
 			public void attributeReplaced(Scope scope, String name, Object value) {
-				new Label("app replaced: "+name+"="+value).setParent(_inf);
+				show("app replaced: "+name+"="+value);
 			}
 			public void attributeRemoved(Scope scope, String name) {
-				new Label("app removed: "+name).setParent(_inf);
+				show("app removed: "+name);
 			}
 			public void parentChanged(Scope scope, Scope newparent) {
 			}
@@ -70,13 +75,13 @@ public class F2859159 {
 	public void init(Execution exec) {
 		exec.addScopeListener(new ScopeListener() {
 			public void attributeAdded(Scope scope, String name, Object value) {
-				new Label("req added: "+name+"="+value).setParent(_inf);
+				show("req added: "+name+"="+value);
 			}
 			public void attributeReplaced(Scope scope, String name, Object value) {
-				new Label("req replaced: "+name+"="+value).setParent(_inf);
+				show("req replaced: "+name+"="+value);
 			}
 			public void attributeRemoved(Scope scope, String name) {
-				new Label("req removed: "+name).setParent(_inf);
+				show("req removed: "+name);
 			}
 			public void parentChanged(Scope scope, Scope newparent) {
 			}
