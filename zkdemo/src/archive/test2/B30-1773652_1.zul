@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B30-1773652_1.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Wed Sep 16 15:37:27     2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<?init zscript="abc.zs"?>
+<window>
+	abc.zs doesn't exist and it shall show up a more readable message(File not found: abc.zs)
+	<zscript src="def.zs"/>
+</window>

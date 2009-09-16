@@ -92,9 +92,9 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		this._fixHeaders();
 		if (this.ebody) {
 			this.domListen_(this.ebody, 'onScroll');
-			this.ebody.style.overflowY = ''; // clear
-			if (!this.efrozen)
-				this.ebody.style.overflowX = ''; // clear
+			this.ebody.style.overflow = ''; // clear
+			if (this.efrozen)
+				this.ebody.style.overflowX = 'hidden'; // keep to hide
 		}
 		zWatch.listen({onSize: this, onShow: this, beforeSize: this, onResponse: this});
 	},
