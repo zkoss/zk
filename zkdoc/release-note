@@ -33,6 +33,7 @@ ZK 5.0.0
   
 * Bugs
   1999145: Combobox with Width of 100% Overruns
+  2859776: Decimalbox/Doublebox shall not enforce defaultFormat  
 
 * Upgrade Notes
   + The attributes of the ID space of a space owner are the same
@@ -127,7 +128,7 @@ August, 2009
   2829547: Incorrect getValue when using spinners on multiple Timeboxes
   2856700: Failed to include a page with query string in auto mode
   2859020: ComponentActivationListener and others not called for child
-
+  
 	--------
 ZK 3.6.2
 June 23, 2009

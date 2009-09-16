@@ -137,6 +137,7 @@ public class Decimalbox extends NumberInputElement implements org.zkoss.zul.api.
 		}
 	}
 	protected String coerceToString(Object value) {
-		return formatNumber(value, "0.##########");
+		return value != null && getFormat() == null ?
+				value.toString(): formatNumber(value, null);
 	}
 }
