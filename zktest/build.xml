@@ -6,12 +6,16 @@
 	<property name="report.dir" value="report/" />
 	
 	<target name="clean">
-		<delete dir="${classes.dir}" />
+		<delete dir="${build.dir}" />
 		<mkdir dir="${classes.dir}" />
 		<delete dir="${report.dir}" />
 		<mkdir dir="${report.dir}" />
 	</target>
-	<target name="compile" >
+	<target name="init">
+		<mkdir dir="${classes.dir}"/>
+		<mkdir dir="${report.dir}" />
+	</target>
+	<target name="compile" depends="init">
 		<!-- local project jars -->
 		<patternset id="lib.includes.compile">
 			<include name="*.jar" />

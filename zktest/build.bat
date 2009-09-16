@@ -23,7 +23,7 @@ echo ^>     [Error] Cannot found enviroument attribute : ANT_HOME
 echo               Must point at your Java Development Kit installation.
 goto end
 :run
-ant compile
+@cmd /K ant compile
 
 :end
 cd %CURRENT_DIR% 
