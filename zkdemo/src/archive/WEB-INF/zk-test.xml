@@ -13,6 +13,11 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 
 <zk>
+	<!--  ZK Test ID Generator -->
+	<system-config>
+		<id-generator-class>org.zkoss.zkdemo.test2.ZKTestIdGenerator</id-generator-class>
+	</system-config>
+	
 	<!-- Used to test the performance meter -->
 	<listener>
 		<listener-class>org.zkoss.zkdemo.test.PerformanceMeter</listener-class>
