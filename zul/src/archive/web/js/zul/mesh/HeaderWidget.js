@@ -218,8 +218,13 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			width: wd + "px"
 		}, evt.data), null, 0);
 		
+		var mesh = wgt.getMeshWidget();
+		
+		// bug #2799258 in IE, we have to force to recalculate the size.
+		mesh.$n()._lastsz = null;
+		
 		// bug #2799258
-		zWatch.fireDown('onSize', wgt.getMeshWidget());
+		zWatch.fireDown('onSize', mesh);
 	},
 
 	redraw: function (out) {
