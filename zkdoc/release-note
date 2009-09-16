@@ -37,7 +37,8 @@ August, 2009
   2073409: Can't add groupfoot by javacode
   2154611: Menuitem in Menubar - quirks
   2859075: Menuseparator with vertial menubar fails in zkmax
-
+  2859747: Label inside Column should be sorted as well.
+  
 	--------
 ZK 3.6.2
 June 23, 2009
