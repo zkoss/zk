@@ -41,10 +41,11 @@ public class FileuploadDlg extends Window {
 		detach();
 	}
 	/**
-	 * A forward event is used for component level only.
+	 * Called when a file is received.
+	 * It is used only for component development.
 	 * @since 5.0.0
 	 */
-	public void onSend(ForwardEvent evt) {
+	public void onUpload(ForwardEvent evt) {
 		_result.add(((UploadEvent)evt.getOrigin()).getMedia());
 	}
 	

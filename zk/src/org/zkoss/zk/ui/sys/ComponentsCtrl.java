@@ -234,9 +234,10 @@ public class ComponentsCtrl {
 	}
 	private static final
 	void applyForward0(Component comp, String orgEvent, String cond) {
-		final int len;
+		int len;
 		if (cond == null || (len = cond.length()) == 0)
-			return;
+			len = (cond = orgEvent).length();
+			//if condition not specified, assume same as orgEvent (to space owenr)
 
 		Object data = null;
 		for (int j = 0; j < len; ++j) {

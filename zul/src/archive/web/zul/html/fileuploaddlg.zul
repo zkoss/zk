@@ -100,7 +100,7 @@ if (!zk.ModalFileViewer) {
 }
 ]]></script>
 	<label value="${arg.message}"/>	
-	<fileupload id="fileupload" forward="onUpload=onSend" label="${c:l('mesg:org.zkoss.zul.mesg.MZul:UPLOAD_BROWSE')}"
+	<fileupload id="fileupload" forward="onUpload=" label="${c:l('mesg:org.zkoss.zul.mesg.MZul:UPLOAD_BROWSE')}"
 		upload="zk.ModalFileViewer,maxsize=${arg.maxsize}${arg.native ? ',native':''}"/>
 	<separator bar="true"/>
 	<div id="uploaded" visible="false"></div>
