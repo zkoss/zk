@@ -45,7 +45,7 @@ public class FileuploadDlg extends Window {
 	 * @since 5.0.0
 	 */
 	public void onSend(ForwardEvent evt) {
-		_result.push(((UploadEvent)evt.getOrigin()).getMedia());
+		_result.add(((UploadEvent)evt.getOrigin()).getMedia());
 	}
 	
 	/** Returns the result.
