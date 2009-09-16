@@ -65,7 +65,10 @@ zul.sel.Listbox = zk.$extends(zul.sel.SelectWidget, {
 	onResponse: function () {
 		if (this.desktop && this._shallStripe) {
 			this.stripe();
-			this.onSize();
+			if (this._shallSize)
+				this.$supers('onResponse', arguments);
+			else
+				this.onSize();
 		}
 	},
 	_syncStripe: function () {

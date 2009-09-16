@@ -102,7 +102,8 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		return t;
 	},
 	doClick_: function (evt) {
-		if (!zk.dragging && zk.Widget.$(evt.domTarget) == this && this.isSortable_() 
+		var wgt = zk.Widget.$(evt.domTarget);
+		if (!zk.dragging && (wgt == this || wgt.$instanceof(zul.wgt.Label)) && this.isSortable_() 
 			&& evt.domTarget.tagName != "INPUT") {
 			this.fire('onSort');
 			evt.stop();
