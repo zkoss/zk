@@ -27,7 +27,7 @@ import com.thoughtworks.selenium.Selenium;
 public class B30_1455584Test extends ZKTestCase{
 
 	private String _target="B30-1455584.zul";
-	private String _testComp="zk_comp_4";
+	private String _testComp= getCompId(4);
 	private List<Selenium> _browsers;
 	private String _url;
 	

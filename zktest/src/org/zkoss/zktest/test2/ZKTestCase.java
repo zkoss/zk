@@ -27,7 +27,10 @@ import com.thoughtworks.selenium.Selenium;
  *
  */
 public class ZKTestCase extends SeleneseTestCase {
-
+	/**
+	 * The prefix is depended on what the ID generator is.
+	 */
+	private static String PREFIX = "zk_comp_";
 	private HashMap<String, BrowserWrapper> _map;
 
 	public ZKTestCase() {
@@ -42,6 +45,10 @@ public class ZKTestCase extends SeleneseTestCase {
 
 	}
 
+	protected final static String getCompId(int number) {
+		return PREFIX + number;
+	}
+	
 	protected List<Selenium> getBrowsers(String target) {
 		return _map.get(target).getBrowsers();
 	}

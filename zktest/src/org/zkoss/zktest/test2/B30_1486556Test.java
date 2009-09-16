@@ -43,8 +43,8 @@ public class B30_1486556Test extends ZKTestCase{
 	
 	@Test(expected=AssertionError.class)
 	public void test1() throws IOException, Exception{
-		String inputComp="zk_comp_4";
-		String clickComp="zk_comp_2";
+		String inputComp= getCompId(4);
+		String clickComp= getCompId(2);
 		
 		for(Selenium browser : _browsers){
 			try{
