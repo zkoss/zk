@@ -38,6 +38,10 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 		<crawlable>true</crawlable>
 	</system-config>
 	-->
+	<!--  ZK Test ID Generator -->
+	<system-config>
+		<id-generator-class>org.zkoss.zkdemo.test2.ZKTestIdGenerator</id-generator-class>
+	</system-config>
 	<!--
 	<log>
 		<description>[Optional] Monitor i3-log.conf and register a handler for the specified log-base</description>
