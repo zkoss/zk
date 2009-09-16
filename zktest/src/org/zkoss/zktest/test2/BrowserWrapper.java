@@ -14,7 +14,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zktest.test2;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.thoughtworks.selenium.Selenium;
@@ -24,7 +24,7 @@ import com.thoughtworks.selenium.Selenium;
  *
  */
 public class BrowserWrapper {
-	List<Selenium> _browsers = new ArrayList<Selenium>();
+	List<Selenium> _browsers = new LinkedList<Selenium>();
 	private String _testUrl;
 	
 	public BrowserWrapper(String url){
