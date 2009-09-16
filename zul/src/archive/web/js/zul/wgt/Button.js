@@ -104,7 +104,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			zk(this.$n('box')).disableSelection();
 
 			n = this.$n('btn');
-			if (zk.ie) zWatch.listen({onSize: this, onShow: this});
+			if (this._upload || zk.ie) zWatch.listen({onSize: this, onShow: this});
 		}
 
 		this.domListen_(n, "onFocus", "doFocus_")
@@ -121,7 +121,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			this.domUnlisten_(n, "onFocus", "doFocus_")
 				.domUnlisten_(n, "onBlur", "doBlur_");
 		}
-		if (zk.ie && trendy)
+		if (this._upload || (zk.ie && trendy))
 			zWatch.unlisten({onSize: this, onShow: this});
 
 		this.$supers('unbind_', arguments);
@@ -148,7 +148,12 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 				cellHgh - zk.parseInt(jq(box.rows[2].cells[0]).css('height')));
 			}
 		}
-	} : zk.$void,
+		if (this._uplder)
+			this._uplder.sync();
+	} : function () {
+		if (this._uplder)
+			this._uplder.sync();
+	},
 	onShow: _zkf,
 	doFocus_: function (evt) {
 		if (this._mold == 'trendy')
