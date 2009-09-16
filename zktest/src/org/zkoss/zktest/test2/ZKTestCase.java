@@ -56,6 +56,10 @@ public class ZKTestCase extends SeleneseTestCase {
 	protected String getUrl(String target) {
 		return _map.get(target).getUrl();
 	}
+	
+	protected CompPos getCompPos(Selenium browser, String compId){
+		return new CompPos(browser, compId);
+	}
 
 	public void setUp() {
 	}

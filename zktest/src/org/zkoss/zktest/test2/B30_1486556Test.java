@@ -23,8 +23,8 @@ import com.thoughtworks.selenium.Selenium;
 
 /**
  * 
- * @author sam
- *
+ * @author sam : Need javascript, postpone this test
+ * 			
  */
 public class B30_1486556Test extends ZKTestCase{
 	private String _target="B30-1486556.zul";
@@ -42,7 +42,7 @@ public class B30_1486556Test extends ZKTestCase{
 	
 	
 	@Test(expected=AssertionError.class)
-	public void test1() throws IOException, Exception{
+	public void test1(){
 		String inputComp= getCompId(4);
 		String clickComp= getCompId(2);
 		
