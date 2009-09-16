@@ -17,11 +17,12 @@ function (out) {
 	
 	var	v = this.getAlign();
 	if (v && v != 'stretch') out.push(' valign="', zul.box.Box._toValign(v), '"');
-	out.push('><td');
+	out.push('><td style="height:100%;width:100%"');
 	var p = this.getPack();
-	if (p) out.push(' align="', zul.box.Box._toHalign(p), '"');
+	if (p && p != 'stretch') out.push(' align="', zul.box.Box._toHalign(p), '"');
 	out.push('><table id="', this.uuid, '-real"', zUtl.cellps0, 'style="text-align:left');
 	if (v == 'stretch') out.push(';height:100%');
+	if (p == 'stretch') out.push(';width:100%');
 	out.push('"><tr valign="top">');
 	
 	for (var w = this.firstChild; w; w = w.nextSibling)

@@ -15,12 +15,21 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 zul.box.Box = zk.$extends(zul.Widget, {
 	_mold: 'vertical',
 	_align: 'start',
-	_pack: 'start',
+	_pack: 'stretch',
 
 	$define: {
-		align: _zkf = function () {
-			this.rerender(); //TODO: a better algoithm
-		},
+		align: [
+		    function(v) {
+		    	if (v == 'stretch')
+		    		this._bindAlign();
+		    	else
+		    		this._unbindAlign();
+		    	return v;
+		    },
+		    _zkf = function () {
+		    	this.rerender(); //TODO: a better algoithm
+		    }
+		],
 		pack: _zkf,
 		spacing: _zkf
 	},
@@ -146,10 +155,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		var html = '';
 		if (child.$instanceof(zul.box.Splitter))
 			html = ' class="' + child.getZclass() + '-outer"';
-/*		else if (this.isVertical()) {
-			var v = this.getPack();
-			if (v) html = ' valign="' + zul.box.Box._toValign(v) + '"';
-		}*/ else
+		else
 			return ''; //if hoz and not splitter, display handled in _childInnerAttrs
 
 		if (!child.isVisible()) html += ' style="display:none"';
@@ -162,9 +168,6 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		if (child.$instanceof($Splitter))
 			return vert ? ' class="' + child.getZclass() + '-outer-td"': '';
 				//spliter's display handled in _childOuterAttrs
-
-//		var v = vert ? this.getAlign(): this.getPack();
-//		if (v) html += ' align="' + zul.box.Box._toHalign(v) + '"';
 
 		var style = '', szes = this._sizes;
 		if (szes) {
@@ -190,23 +193,57 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			zWatch.listen({onSize: this, onShow: this, onHide: this});
 		}
 	},
+	bind_: function() {
+		this.$supers('bind_', arguments);
+		if (this._align == 'stretch')
+			this._bindAlign();
+	},
 	unbind_: function () {
 		if (this._watchBound) {
 			this._watchBound = false;
 			zWatch.unlisten({onSize: this, onShow: this, onHide: this});
 		}
-
+		this._unbindAlign();
 		this.$supers('unbind_', arguments);
 	},
+	_bindAlign: function() {
+		if (!this._watchAlign) {
+			this._watchAlign = true;
+			zWatch.listen({onSize: [this, this._fixAlign], onShow: [this, this._fixAlign], onHide: [this, this._fixAlign]});
+		}
+	},
+	_unbindAlign: function() {
+		if (!this._watchAlign) {
+			zWatch.unlisten({onSize: [this, this._fixAlign], onShow: [this, this._fixAlign], onHide: [this, this._fixAlign]});
+			delete this._watchAlign;
+		}
+	},
+	_fixAlign: function () {
+		if (this._align == 'stretch') {
+			var vert = this.isVertical(),
+				tdsz = 0;
+			for(var child = this.firstChild; child; child = child.nextSibling) {
+				if (child.isVisible()) {
+					var c = child.$n();
+					if (!tdsz) {
+						var td = c.parentNode;
+						tdsz = vert ? zk(td).revisedWidth(td.offsetWidth) : zk(td).revisedHeight(td.offsetHeight);
+					}
+					if (vert)
+						c.style.width = zk(c).revisedHeight(tdsz, true) + 'px';
+					else
+						c.style.height = zk(c).revisedHeight(tdsz, true) + 'px';
+				}
+			}
+		}
+	},
 	onSize: _zkf = function () {
-
 		var $Splitter = zul.box.Splitter;
 		for (var c = this.firstChild;; c = c.nextSibling) {
 			if (!c) return; //no splitter
 			if (c.$instanceof($Splitter)) //whether the splitter has been dragged
 				break;
 		}
-		this._splitter = true;
 
 		var vert = this.isVertical(), node = this.$n(), real = this.$n('real');
 		real.style.height = real.style.width = '100%'; //there are splitter kids
@@ -215,7 +252,6 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		//Bug 1916473: with IE, we have make the whole table to fit the table
 		//since IE won't fit it even if height 100% is specified
 		if (zk.ie) {
-			real.parentNode.style.height = '100%'; //there are splitter kids
 			var p = node.parentNode;
 			if (p.tagName == "TD") {
 				var nm = vert ? "height": "width",

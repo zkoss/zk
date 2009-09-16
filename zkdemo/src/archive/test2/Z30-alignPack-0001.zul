@@ -7,7 +7,7 @@
 		table.hbox{ 
 			border: solid red 1px; }
 	</style>
-	<hbox sclass="hbox" id="hb" pack="start" align="start" height="90px"
+	<hbox sclass="hbox" id="hb" height="90px"
 		width="90px">
 		<textbox height="30px" width="30px" />
 	</hbox>
@@ -18,7 +18,8 @@
 		<attribute name="onCheck">
 			hb.setPack(self.selectedItem.label);
 		</attribute>
-		<radio checked="true" label="start" />
+		<radio checked="true" label="stretch" />
+		<radio label="start" />
 		<radio label="center" />
 		<radio label="end" />
 	</radiogroup>
@@ -29,6 +30,7 @@
 		<attribute name="onCheck">
 			hb.setAlign(self.selectedItem.label);
 		</attribute>
+		<radio label="stretch" />
 		<radio checked="true" label="start" />
 		<radio label="center" />
 		<radio label="end" />
@@ -37,7 +39,7 @@
 	
 	<separator bar="true"/>
 	
-	<hbox sclass="hbox" id="hb2" pack="start" align="start" height="90px"
+	<hbox sclass="hbox" id="hb2" height="90px"
 		width="270px">
 		<textbox height="30px" width="30px" />
 		<textbox height="30px" width="30px" />
@@ -49,7 +51,8 @@
 		<attribute name="onCheck">
 			hb2.setPack(self.selectedItem.label);
 		</attribute>
-		<radio checked="true" label="start" />
+		<radio checked="true" label="stretch" />
+		<radio label="start" />
 		<radio label="center" />
 		<radio label="end" />
 	</radiogroup>
@@ -60,6 +63,7 @@
 		<attribute name="onCheck">
 			hb2.setAlign(self.selectedItem.label);
 		</attribute>
+		<radio label="stretch" />
 		<radio checked="true" label="start" />
 		<radio label="center" />
 		<radio label="end" />

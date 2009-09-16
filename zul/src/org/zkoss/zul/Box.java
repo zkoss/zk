@@ -34,7 +34,7 @@ import org.zkoss.zul.impl.Utils;
  */
 public class Box extends XulElement implements org.zkoss.zul.api.Box {
 	private String _spacing;
-	private String _align = "stretch", _pack = "start";
+	private String _align = "start", _pack = "stretch";
 	/** Array of width/height for each cell. */
 	private String[] _sizes;
 
@@ -137,7 +137,7 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 	 * when the size of the box is larger than the total size of the children. For
 	 * boxes that have horizontal orientation, it specifies how its children will
 	 * be aligned vertically. For boxes that have vertical orientation, it is used
-	 * to specify how its children are algined horizontally. The pack attribute
+	 * to specify how its children are aligned horizontally. The pack attribute
 	 * ({@link #getPack}) is
 	 * related to the alignment but is used to specify the position in the
 	 * opposite direction.
@@ -154,6 +154,8 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 	 * <dd>Child elements are placed on the right or bottom edge of the box. If
 	 * the box is larger than the total size of the children, the extra space is
 	 * placed on the left or top side.</dd>
+	 * <dt>stretch(since 5.0)</dt>
+	 * <dd>Child elements are stretched to fill the box.</dd>
 	 * </dl>
 	 *
 	 * @since 3.0.0
@@ -162,10 +164,10 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 		return _align;
 	}
 	/** Sets the alignment of cells of this box in the 'opposite' direction
-	 * (<i>null</i>, start, center, end).
+	 * (<i>start</i>, center, end, stretch).
 	 *
 	 * @param align the alignment in the 'opposite' direction.
-	 * Allowed values: start, center, end.
+	 * Allowed values: start, center, end, stretch.
 	 * If empty or null, the browser's default is used
 	 * (IE center and FF left, if vertical).
 	 * @since 3.0.0
@@ -178,9 +180,9 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 		}
 	}
 	/** Returns the alignment of cells of this box
-	 * (<i>null</i>, start, center, end).
+	 * (start, center, end, <i>stretch</i>).
 	 *
-	 * <p>Default: null.
+	 * <p>Default: stretch.
 	 *
 	 * <p>The pack attribute specifies where child elements of the box are placed
 	 * when the box is larger that the size of the children. For boxes with
@@ -191,10 +193,13 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 	 * the position in the opposite direction.
 	 *
 	 * <dl>
+	 * <dt>stretch(since 5.0)</dt>
+	 * <dd>Child elements are aligned evenly starting from the left or top edge of
+	 * the box.</dd>
 	 * <dt>start</dt>
 	 * <dd>Child elements are aligned starting from the left or top edge of
 	 * the box. If the box is larger than the total size of the children, the
-	 * extra space is placed on the right or bottom side.</dd>
+	 * Extra space is placed on the right or bottom side.</dd>
 	 * <dt>center</dt>
 	 * <dd>Extra space is split equally along each side of the child
 	 * elements, resulting in the children being placed in the center of the box.</dd>
@@ -210,9 +215,9 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 		return _pack;
 	}
 	/** Sets the alignment of cells of this box
-	 * (<i>null</i>, start, center, end).
+	 * (<i>stretch</i>, start, center, end).
 	 *
-	 * @param pack the alignment. Allowed values: start, center, end.
+	 * @param pack the alignment. Allowed values: stretch, start, center, end.
 	 * If empty or null, the browser's default is used.
 	 * @since 3.0.0
 	 */
@@ -298,7 +303,7 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 		render(renderer, "_sizes", _sizes);
 
 		if (!"start".equals(_align)) render(renderer, "align", _align);
-		if (!"start".equals(_pack)) render(renderer, "pack", _pack);
+		if (!"stretch".equals(_pack)) render(renderer, "pack", _pack);
 	}
 	public String getZclass() {
 		return _zclass == null ? isVertical() ? "z-vbox" : "z-hbox" : _zclass;

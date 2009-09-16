@@ -13,25 +13,26 @@ This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 zk.BigDecimal = zk.$extends(zk.Object, {
-	_prec: 0,
+	_precision: 0,
 	$define: {
-		prec: null
+		precision: null
 	},
 	$init: function (value) {
 		value = value ? '' + value: '0';
 		var j = value.lastIndexOf('.');
 		if (j >= 0) {
 			value = value.substring(0, j) + value.substring(j + 1);
-			this._prec = value.length - j;
+			this._precision = value.length - j;
+			this._dot = true;
 		}
 		this._value = value;
 	},
-	toInternalString: function() {
-		var j = this._value.length - this._prec;
-		return this._value.substring(0, j) + '.' + this._value.substring(j);
-	},
 	toString: function() {
-		var j = this._value.length - this._prec;
-		return this._value.substring(0, j) + zk.DECIMAL + this._value.substring(j);
+		var j = this._value.length - this._precision;
+		return this._value.substring(0, j) + (this._dot ? '.' + this._value.substring(j) : '');
+	},
+	toLocaleString: function() {
+		var j = this._value.length - this._precision;
+		return this._value.substring(0, j) + (this._precision ? zk.DECIMAL + this._value.substring(j) : '');
 	}
 });
