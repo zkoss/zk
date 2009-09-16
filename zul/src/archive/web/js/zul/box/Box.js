@@ -211,9 +211,11 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		var vert = this.isVertical(), node = this.$n(), real = this.$n('real');
 		real.style.height = real.style.width = '100%'; //there are splitter kids
 		
+		
 		//Bug 1916473: with IE, we have make the whole table to fit the table
 		//since IE won't fit it even if height 100% is specified
 		if (zk.ie) {
+			real.parentNode.style.height = '100%'; //there are splitter kids
 			var p = node.parentNode;
 			if (p.tagName == "TD") {
 				var nm = vert ? "height": "width",
