@@ -45,7 +45,7 @@ public class ZKTestCase extends SeleneseTestCase {
 
 	}
 
-	protected final static String getCompId(int number) {
+	protected final static String uuid(int number) {
 		return PREFIX + number;
 	}
 	

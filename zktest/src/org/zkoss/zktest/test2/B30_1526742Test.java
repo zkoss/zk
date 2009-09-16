@@ -6,7 +6,7 @@
 	Description:
 		
 	History:
-		2009/9/16 ¤U¤È3:40:42 , Created by sam
+		2009/9/16 ï¿½Uï¿½ï¿½3:40:42 , Created by sam
 }}IS_NOTE
 
 Copyright (C) 2009 Potix Corporation. All Rights Reserved.
@@ -42,9 +42,9 @@ public class B30_1526742Test extends ZKTestCase{
 	
 	@Test(expected=AssertionError.class)
 	public void test1(){
-		String compParent = getCompId(2);
-		String compId1 = getCompId(3);
-		String compId2 = getCompId(5);
+		String compParent = uuid(2);
+		String compId1 = uuid(3);
+		String compId2 = uuid(5);
 		
 		for(Selenium browser : _browsers){
 			try{

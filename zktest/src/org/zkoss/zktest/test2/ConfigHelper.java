@@ -125,7 +125,7 @@ public class ConfigHelper {
 		InputStream in = null;
 		if(_prop == null){
 			try{
-				in = new FileInputStream("config.properties");
+				in = ClassLoader.getSystemResourceAsStream("config.properties");
 				_prop = new Properties();
 				_prop.load(in);
 					

@@ -29,6 +29,10 @@
 		<javac srcdir="${source.dir}" destdir="${classes.dir}"
 			classpath="${libs.compile}" includes="**/*.java" debug="true">
 		</javac>
+		
+		<copy todir="${classes.dir}" preservelastmodified="yes">
+			<fileset dir="${source.dir}" includes="config.properties"/>
+		</copy>
 	</target>
 	<target name="junit" depends="compile">
 		<junit printsummary="on" fork="true" haltonfailure="false"
