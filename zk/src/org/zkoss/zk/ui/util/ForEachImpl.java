@@ -243,8 +243,7 @@ public class ForEachImpl implements ForEach {
 		&& _it.hasNext()) {
 			++_status.index;
 			_status.each = _it.next();
-			if (_comp != null) _comp.setAttribute("each", _status.each);
-			else _page.setAttribute("each", _status.each);
+			getScope().setAttribute("each", _status.each);
 			return true;
 		}
 
@@ -254,13 +253,13 @@ public class ForEachImpl implements ForEach {
 		return false;
 	}
 	private void setupStatus() {
-		final Scope scope = _comp != null ? (Scope)_comp: _page;
-		_oldEach = scope.getAttribute("each", true);
-		_status = new Status(scope.getAttribute("forEachStatus", true));
+		final Scope scope = getScope();
+		_oldEach = scope.getAttribute("each", false);
+		_status = new Status(scope.getAttribute("forEachStatus", false));
 		scope.setAttribute("forEachStatus", _status);
 	}
 	private void restoreStatus() {
-		final Scope scope = _comp != null ? (Scope)_comp: _page;
+		final Scope scope = getScope();
 		if (_status.previous != null)
 			scope.setAttribute("forEachStatus", _status.previous);
 		else
@@ -270,6 +269,9 @@ public class ForEachImpl implements ForEach {
 		else
 			scope.removeAttribute("each");
 		_it = null; _status = null; //recycle (just in case)
+	}
+	private Scope getScope() {
+		return _comp != null ? (Scope)_comp: _page;
 	}
 
 	private void prepare(Object o, final int begin) {
