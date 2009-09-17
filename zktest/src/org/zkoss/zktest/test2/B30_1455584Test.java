@@ -16,6 +16,7 @@ package org.zkoss.zktest.test2;
 
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import com.thoughtworks.selenium.Selenium;
@@ -27,44 +28,37 @@ import com.thoughtworks.selenium.Selenium;
 public class B30_1455584Test extends ZKTestCase{
 
 	private String _target="B30-1455584.zul";
-	private String _testComp= uuid(4);
 	private List<Selenium> _browsers;
 	private String _url;
 	
-	public B30_1455584Test(){
-		super();
+	
+	@Override
+	@Before
+	public void setUp(){
 		_browsers = getBrowsers(_target);
 		_url = getUrl(_target);
 	}
-	
 
 	@Test(expected=AssertionError.class)
 	public void test1(){
-
+		String testComp= uuid(4);
 		for(Selenium browser : _browsers){
-			try{
 				browser.start();
 				try{	
 					browser.open(_url);
-					Thread.sleep(1000);
-					String strClickBefor = browser.getText(_testComp);
-					
-					browser.focus(_testComp);
-					Thread.sleep(1000);
-					browser.click(_testComp);
-					Thread.sleep(1000);
-					
-					String strClickAfter = browser.getText(_testComp);
+					String strClickBefor = browser.getText(testComp);
+						
+					browser.focus(testComp);
+					browser.click(testComp);
+						
+					String strClickAfter = browser.getText(testComp);
 					assertNotEquals(strClickBefor, strClickAfter);
-					
+						
 					browser.close();
-					Thread.sleep(1000);
-				}catch(InterruptedException e){	}
-			}finally{
-				browser.stop();
-			}
+				}finally{
+					browser.stop();
+				}
 		}
 	}
 	
-
 }

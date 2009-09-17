@@ -20,6 +20,7 @@ package org.zkoss.zktest.test2;
 
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import com.thoughtworks.selenium.Selenium;
@@ -34,8 +35,10 @@ public class B30_1526742Test extends ZKTestCase{
 	private List<Selenium> _browsers;
 	private String _url;
 	
-	public B30_1526742Test(){
-		super();
+	
+	@Override
+	@Before
+	public void setUp(){
 		_browsers = getBrowsers(_target);
 		_url = getUrl(_target);
 	}
@@ -49,22 +52,17 @@ public class B30_1526742Test extends ZKTestCase{
 		for(Selenium browser : _browsers){
 			try{
 				browser.start();
-				try{
-					browser.open(_url);
-					Thread.sleep(1000);
+				browser.open(_url);
 					
-					int totalWidth = getCompPos(browser, compParent).getWidth();
+				int totalWidth = browser.getElementWidth(compParent).intValue();
+				int comp1Right = browser.getElementPositionLeft(compId1).intValue() + browser.getElementWidth(compId1).intValue();
+				int comp2Left = browser.getElementPositionLeft(compId2).intValue();
+				int diff = comp2Left - comp1Right;	
 					
-					int comp1Right = getCompPos(browser, compId1).getRight();
-					int comp2Left = getCompPos(browser, compId2).getLeft();
-					int diff = comp2Left - comp1Right;
+				//comp1 and comp2 has about 20% space
+				assertTrue( (totalWidth*0.2 - diff) < 50 );
 					
-					//comp1 and comp2 has about 20% space
-					assertTrue( (totalWidth*0.2 - diff) < 50 );
-					
-					browser.close();
-						
-				}catch(InterruptedException e){ }
+				browser.close();
 			}finally{
 				browser.stop();
 			}

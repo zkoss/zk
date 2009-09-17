@@ -24,7 +24,11 @@ import com.thoughtworks.selenium.Selenium;
  *
  */
 public class BrowserWrapper {
-	List<Selenium> _browsers = new LinkedList<Selenium>();
+	
+	
+	private List<Selenium> _browsers = new LinkedList<Selenium>();
+	private List<String> _browserTypes = new LinkedList<String>();
+	
 	private String _testUrl;
 	
 	public BrowserWrapper(String url){
@@ -39,11 +43,16 @@ public class BrowserWrapper {
 		return _testUrl;
 	}
 	
-	public void addBrowser(Selenium browser){
+	public void addBrowser(String browserType, Selenium browser){
 		_browsers.add(browser);
+		_browserTypes.add(browserType);
 	}
 	
 	public List<Selenium> getBrowsers(){
 		return _browsers;
+	}
+	
+	public List<String> getBrowserTypes(){
+		return _browserTypes;
 	}
 }

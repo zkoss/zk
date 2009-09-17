@@ -51,6 +51,7 @@ public class B30_1721809Test extends ZKTestCase {
 		try {
 			for (Selenium browser : _browsers) {
 				try {
+//					new ZSelenium(browser).open()
 					browser.start();
 					browser.open(_url);
 					Thread.sleep(2000);

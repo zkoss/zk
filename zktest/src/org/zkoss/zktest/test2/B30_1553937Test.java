@@ -20,6 +20,8 @@ package org.zkoss.zktest.test2;
 
 import java.util.List;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.thoughtworks.selenium.Selenium;
@@ -34,35 +36,40 @@ public class B30_1553937Test extends ZKTestCase{
 	private List<Selenium> _browsers;
 	private String _url;
 	
-	public B30_1553937Test(){
-		super();
+	@Override
+	@Before
+	public void setUp(){
+		
 		_browsers = getBrowsers(_target);
 		_url = getUrl(_target);
-	}
+	}			
 	
 	@Test(expected=AssertionError.class)
 	public void test1(){
 		
 		String comp1 = uuid(4);
 		String comp2 = uuid(7);
-		
-		for(Selenium browser : _browsers){
+		for(Selenium browser : _browsers){	
 			try{
 				browser.start();
-				try{
-					browser.open(_url);
-					Thread.sleep(2000);
-					
-//					int comp1Right = getCompPos(browser, comp1).getRight();
-//					int comp2Left = getCompPos()
-					
-				}catch(InterruptedException e){	}
+				browser.open(_url);
+				int comp1Top = browser.getElementPositionTop(comp1).intValue();
+				int comp2Top = browser.getElementPositionTop(comp2).intValue();
+				//	comp2 should beside comp1
+				assertTrue( Math.abs(comp1Top - comp2Top) < 10 );
+						
+				browser.close();
 				
 			}finally{
 				browser.stop();
-			}
+			}	
 		}
-		
+	}
+	
+	@Override
+	@After
+	public void tearDown(){
+
 	}
 	
 }

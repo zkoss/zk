@@ -17,58 +17,53 @@ package org.zkoss.zktest.test2;
 import java.io.IOException;
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import com.thoughtworks.selenium.Selenium;
 
 /**
  * 
- * @author sam : Need javascript, postpone this test
+ * @author sam
  * 			
  */
 public class B30_1486556Test extends ZKTestCase{
 	private String _target="B30-1486556.zul";
 
-	
 	private List<Selenium> _browsers;
 	private String _url;
 	
-	public B30_1486556Test(){
-		super();
+	@Override
+	@Before
+	public void setUp(){
 		_browsers = getBrowsers(_target);
 		_url = getUrl(_target);
-		
 	}
-	
 	
 	@Test(expected=AssertionError.class)
 	public void test1(){
 		String inputComp= uuid(4);
 		String clickComp= uuid(2);
-		
+		String buttonComp = uuid(5);
 		for(Selenium browser : _browsers){
 			try{
-				browser.start();
-				try{		
-					browser.open(_url);
-					Thread.sleep(1000);
+				browser.start();	
+				browser.open(_url);
+				browser.windowFocus();
 					
-					browser.focus(inputComp);
-					Thread.sleep(1000);
-					
-					browser.mouseDown(inputComp);
-					Thread.sleep(1000);
-					browser.mouseOut(inputComp);
-					Thread.sleep(1000);
-					
-					browser.mouseDown(clickComp);
-					Thread.sleep(1000);
-					browser.mouseOut(clickComp);
-					Thread.sleep(1000);
-					
-					browser.close();
-				}catch(InterruptedException e){
-				}
+				browser.focus(inputComp);
+				browser.fireEvent(inputComp, "blur");				
+				assertTrue("true".equals(browser.getEval("jq('#zk_comp_4').hasClass('z-textbox-text-invalid')")));
+				
+				//Test case 2 
+				browser.refresh();
+				browser.windowFocus();
+				browser.focus(inputComp);
+				browser.click(buttonComp);
+				assertTrue("true".equals(browser.getEval("jq('#zk_comp_4').hasClass('z-textbox-text-invalid')")));
+				
+				browser.close();
+				break;
 			}finally{
 				browser.stop();
 			}

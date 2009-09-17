@@ -37,6 +37,7 @@ public class ConfigHelper {
 	private static int _port;
 	private static String _browserURL;
 	private static String _interURL;
+	private static String _delaySpeed;
 	private static Properties _prop;
 
 	/**
@@ -58,6 +59,21 @@ public class ConfigHelper {
 	private static HashMap<String, BrowserWrapper> _browserTester=new HashMap<String, BrowserWrapper>();
 	
 	
+	public static String getHost(){
+		return _host;
+	}
+	
+	public static int getPort(){
+		return _port;
+	}
+	public static String getOpenUrl(){
+		return _browserURL;
+	}
+	public static String getDelaySpeed(){
+		return _delaySpeed;
+	}
+	
+	
 	public static HashMap<String, BrowserWrapper> getServerWrapperMap() throws Exception, IOException{
 		initIfNeed();
 		return _browserTester;
@@ -70,7 +86,7 @@ public class ConfigHelper {
 			String strBrowser = testBrowserType.next();
 			if(testBrowsers.contains(strBrowser)){
 				BrowserWrapper wrapper = getServerWrapper(target);
-				wrapper.addBrowser(getBrowserFromHolder(strBrowser));
+				wrapper.addBrowser( _browserNameMap.get(strBrowser), getBrowserFromHolder(strBrowser));
 			}
 		}
 		return _browserTester;
@@ -78,7 +94,7 @@ public class ConfigHelper {
 	/**
 	 * 
 	 * @param key : target , example : "B30-XXXXXX.zul"
-	 * @return value : ServerWrapper obj
+	 * @return value : BrowserWrapper obj
 	 */
 	private static BrowserWrapper getServerWrapper(String target){
 		BrowserWrapper wrapper = _browserTester.get(target);
@@ -101,6 +117,7 @@ public class ConfigHelper {
 		Selenium browser = _browserHolder.get(key);
 		if(browser == null){
 			browser = new DefaultSelenium(_host, _port, _browserNameMap.get(key), _browserURL);
+			browser.setSpeed(getDelaySpeed());
 			_browserHolder.put(key, browser);
 		}
 		return browser;
@@ -133,6 +150,7 @@ public class ConfigHelper {
 				_port = Integer.parseInt(_prop.getProperty("serverPort"));
 				_browserURL = _prop.getProperty("browserURL");
 				_interURL = _prop.getProperty("interURL");
+				_delaySpeed = _prop.getProperty("delaySpeed");
 				
 				
 				for(Iterator iter = _prop.entrySet().iterator();iter.hasNext() ; ){
