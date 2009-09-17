@@ -75,11 +75,11 @@ public class SimpleScope implements Scope {
 	}
 
 	/** The same as getAttribute(name). */
-	public Object getAttribute(String name, boolean local) {
+	public Object getAttribute(String name, boolean recurse) {
 		return getAttribute(name);
 	}
 	/** The same as hasAttribute(name). */
-	public boolean hasAttribute(String name, boolean local) {
+	public boolean hasAttribute(String name, boolean recurse) {
 		return hasAttribute(name);
 	}
 

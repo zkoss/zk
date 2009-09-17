@@ -254,8 +254,8 @@ public class ForEachImpl implements ForEach {
 	}
 	private void setupStatus() {
 		final Scope scope = getScope();
-		_oldEach = scope.getAttribute("each", false);
-		_status = new Status(scope.getAttribute("forEachStatus", false));
+		_oldEach = scope.getAttribute("each", true);
+		_status = new Status(scope.getAttribute("forEachStatus", true));
 		scope.setAttribute("forEachStatus", _status);
 	}
 	private void restoreStatus() {

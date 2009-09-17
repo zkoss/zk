@@ -50,27 +50,27 @@ public interface Scope {
 
 	/** Returns the custom attribute associated with this object.
 	 *
-	 * @param local whether not to search its ancestor scope.
-	 * If false and the current scope doen't define the variable,
+	 * @param recurse whether to search its ancestor scope.
+	 * If true and the current scope doen't define the attribute,
 	 * it searches up its ancestor to see
-	 * any of them has defined the specified variable.
+	 * any of them has defined the specified attribute.
 	 * Notice: for a component, the ancestor scope is the space owner.
 	 * @since 5.0.0
 	 */
-	public Object getAttribute(String name, boolean local);
+	public Object getAttribute(String name, boolean recurse);
 	/** Returns if a custom attribute is associated with this object.
 	 * <p>Notice that <code>null</code> is a valid value, so you can
 	 * tell if an attribute is assoicated by examining the return value
 	 * of {@link #getAttribute}.
 	 *
-	 * @param local whether not to search its ancestor scope.
-	 * If false and the current scope doen't define the variable,
+	 * @param recurse whether to search its ancestor scope.
+	 * If true and the current scope doen't define the attribute,
 	 * it searches up its ancestor to see
-	 * any of them has defined the specified variable.
+	 * any of them has defined the specified attribute.
 	 * Notice: for a component, the ancestor scope is the space owner.
 	 * @since 5.0.0
 	 */
-	public boolean hasAttribute(String name, boolean local);
+	public boolean hasAttribute(String name, boolean recurse);
 
 	/** Adds a listener to listen whether this scope is changed.
 	 * The listener is called when a custom attribute is added, removed, or

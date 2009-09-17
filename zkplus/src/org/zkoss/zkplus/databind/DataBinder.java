@@ -1041,7 +1041,7 @@ public class DataBinder implements java.io.Serializable {
 			if (existsBean(beanid)) {
 				setBean(beanid, val);
 			} else if (!setZScriptVariable(comp, beanid, val)) {
-				comp.setAttribute(beanid, val, false);
+				comp.setAttribute(beanid, val, true);
 			}
 			refChanged = true;
 		} else {
@@ -1234,7 +1234,7 @@ public class DataBinder implements java.io.Serializable {
 				final Object self = page.getAttribute("self");
 				try {
 					page.setAttribute("self", comp);
-					bean = comp.getAttribute(beanid, false);
+					bean = comp.getAttribute(beanid, true);
 				} finally {
 					if (self == null) {
 						page.removeAttribute("self");

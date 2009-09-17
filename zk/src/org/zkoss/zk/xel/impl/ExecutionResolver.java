@@ -156,7 +156,7 @@ public class ExecutionResolver implements VariableResolver {
 			if (o != null || _exec.hasAttribute(name))
 				return o;
 
-			o = comp.getFellowOrAttribute(name, false);
+			o = comp.getFellowOrAttribute(name, true);
 			if (o != null)
 				return o;
 		} else {
@@ -176,12 +176,12 @@ public class ExecutionResolver implements VariableResolver {
 				if (o != null || _exec.hasAttribute(name))
 					return o;
 
-				o = page.getFellowOrAttribute(name, false);
+				o = page.getFellowOrAttribute(name, true);
 				if (o != null)
 					return o;
 			} else {
-				Object o = _exec.getAttribute(name, false);
-				if (o != null || _exec.hasAttribute(name, false))
+				Object o = _exec.getAttribute(name, true);
+				if (o != null || _exec.hasAttribute(name, true))
 					return o;
 			}
 		}

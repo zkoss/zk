@@ -422,45 +422,45 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 
 	/** Sets the custom attribute associated with this component, or the parent
 	 * component.
-	 * @param local whether not to look up the parent component for the
+	 * @param recurse whether to look up the parent component for the
 	 * existence of the attribute.<br/>
-	 * If local is false and the attribute is defined in
+	 * If recurse is true and the attribute is defined in
 	 * one of its ancestor (including page), the attribute is replaced.
 	 * Otherwise, it is the same as {@link #setAttribute(String,Object)}.
 	 * @since 5.0.0
 	 */
-	public Object setAttribute(String name, Object value, boolean local);
+	public Object setAttribute(String name, Object value, boolean recurse);
 	/** Removes the custom attribute associated with this component, i.e.,
 	 * {@link #COMPONENT_SCOPE}.
-	 * @param local whether not to look up the parent component for the
+	 * @param recurse whether to look up the parent component for the
 	 * existence of the attribute.<br/>
-	 * If local is false and the attribute is defined in
+	 * If recurse is true and the attribute is defined in
 	 * one of its ancestor (including page), the attribute is removed.
 	 * Otherwise, it is the same as {@link #removeAttribute(String)}.
 	 * @since 5.0.0
 	 */
-	public Object removeAttribute(String name, boolean local);
+	public Object removeAttribute(String name, boolean recurse);
 
 	/** Returns the custom attribute associated with this component,
 	 * or the fellow of this component.
 	 *
-	 * @param local whether not to look up the parent component for the
+	 * @param recurse whether to look up the parent component for the
 	 * existence of the attribute.<br/>
-	 * Notice that, if local is false and this component is not an ID
+	 * Notice that, if recurse is true and this component is not an ID
 	 * space owner, it won't look at the fellow
 	 * @since 5.0.0
 	 */
-	public Object getFellowOrAttribute(String name, boolean local);
+	public Object getFellowOrAttribute(String name, boolean recurse);
 	/** Returns if a custom attribute is associated with this component,
 	 * or the fellow of this component.
 	 *
-	 * @param local whether not to look up the parent component for the
+	 * @param recurse whether to look up the parent component for the
 	 * existence of the attribute.<br/>
-	 * Notice that, if local is false and this component is not an ID
+	 * Notice that, if recurse is true and this component is not an ID
 	 * space owner, it won't look at the fellow
 	 * @since 5.0.0
 	 */
-	public boolean hasFellowOrAttribute(String name, boolean local);
+	public boolean hasFellowOrAttribute(String name, boolean recurse);
 
 	/** @deprecated As of release 5.0.0, replaced with {@link #setAttribute}.
 	 * <p>Sets a variable to the namespace.

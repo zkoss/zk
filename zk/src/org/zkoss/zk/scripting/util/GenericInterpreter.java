@@ -239,17 +239,17 @@ abstract public class GenericInterpreter implements Interpreter {
 
 			if (scope instanceof Component) {
 				Component comp = (Component)scope;
-				Object val = comp.getFellowOrAttribute(name, false);
-				if (val != null || comp.hasFellowOrAttribute(name, false))
+				Object val = comp.getFellowOrAttribute(name, true);
+				if (val != null || comp.hasFellowOrAttribute(name, true))
 					return val;
 			} else if (scope instanceof Page) {
 				Page page = (Page)scope;
-				Object val = page.getFellowOrAttribute(name, false);
-				if (val != null || page.hasFellowOrAttribute(name, false))
+				Object val = page.getFellowOrAttribute(name, true);
+				if (val != null || page.hasFellowOrAttribute(name, true))
 					return val;
 			} else {
-				Object val = scope.getAttribute(name, false);
-				if (val != null || scope.hasAttribute(name, false))
+				Object val = scope.getAttribute(name, true);
+				if (val != null || scope.hasAttribute(name, true))
 					return val;
 			}
 		}
@@ -282,14 +282,13 @@ abstract public class GenericInterpreter implements Interpreter {
 	 * @param scope the scope to search from (never null).
 	 * Note: if {@link #getCurrent} returns null, this method simply returns
 	 * null (i.e., ignoring scope).
-	 * @param localOnly whether to look for the current scope only.
-	 * If false, it looks up the parent scope, if any.
+	 * @param recurse whether to look for the parent scope, if any.
 	 * @since 5.0.0
 	 */
-	protected Object getFromNamespace(Scope scope, String name, boolean localOnly) {
+	protected Object getFromNamespace(Scope scope, String name, boolean recurse) {
 		if (getCurrent() != null) { //null means no scope allowed!
-			Object val = scope.getAttribute(name, localOnly);
-			if (val != null || scope.hasAttribute(name, localOnly))
+			Object val = scope.getAttribute(name, recurse);
+			if (val != null || scope.hasAttribute(name, recurse))
 				return val;
 		}
 		return getImplicit(name);

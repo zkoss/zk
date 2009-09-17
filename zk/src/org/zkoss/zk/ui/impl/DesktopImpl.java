@@ -452,20 +452,20 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 	public Object removeAttribute(String name) {
 		return _attrs.removeAttribute(name);
 	}
-	public Object getAttribute(String name, boolean local) {
+	public Object getAttribute(String name, boolean recurse) {
 		Object val = getAttribute(name);
-		if (val != null || local || hasAttribute(name))
+		if (val != null || !recurse || hasAttribute(name))
 			return val;
-		if (_sess != null) return _sess.getAttribute(name, false);
-		if (_wapp != null) return _wapp.getAttribute(name, false);
+		if (_sess != null) return _sess.getAttribute(name, true);
+		if (_wapp != null) return _wapp.getAttribute(name, true);
 		return null;
 	}
-	public boolean hasAttribute(String name, boolean local) {
+	public boolean hasAttribute(String name, boolean recurse) {
 		if (hasAttribute(name))
 			return true;
-		if (!local) {
-			if (_sess != null) return _sess.hasAttribute(name, false);
-			if (_wapp != null) return _wapp.hasAttribute(name, false);
+		if (recurse) {
+			if (_sess != null) return _sess.hasAttribute(name, true);
+			if (_wapp != null) return _wapp.hasAttribute(name, true);
 		}
 		return false;
 	}

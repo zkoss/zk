@@ -338,17 +338,17 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	public Object removeAttribute(String name) {
 		return _attrs.removeAttribute(name);
 	}
-	public Object getAttribute(String name, boolean local) {
+	public Object getAttribute(String name, boolean recurse) {
 		Object val = getAttribute(name);
-		return val != null || local || hasAttribute(name) ? val:
-			_desktop != null ? _desktop.getAttribute(name, false): null;
+		return val != null || !recurse || hasAttribute(name) ? val:
+			_desktop != null ? _desktop.getAttribute(name, true): null;
 	}
-	public boolean hasAttribute(String name, boolean local) {
+	public boolean hasAttribute(String name, boolean recurse) {
 		return hasAttribute(name)
-			|| (!local && _desktop != null && _desktop.hasAttribute(name, false));
+			|| (recurse && _desktop != null && _desktop.hasAttribute(name, true));
 	}
 
-	public Object getFellowOrAttribute(String name, boolean local) {
+	public Object getFellowOrAttribute(String name, boolean recurse) {
 		Object val = _ns.vars.get(name); //backward compatible (variable first)
 		if (val != null || _ns.vars.containsKey(name))
 			return val;
@@ -365,14 +365,14 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		if (val != null)
 			return val;
 
-		return !local && _desktop != null ?
-			_desktop.getAttribute(name, false): null;
+		return recurse && _desktop != null ?
+			_desktop.getAttribute(name, true): null;
 	}
-	public boolean hasFellowOrAttribute(String name, boolean local) {
+	public boolean hasFellowOrAttribute(String name, boolean recurse) {
 		return hasAttribute(name) || hasFellow(name)
 			|| _ns.vars.containsKey(name) //backward compatible
 			|| resolveVariable(name) != null
-			|| (!local && _desktop != null && _desktop.hasAttribute(name, false));
+			|| (recurse && _desktop != null && _desktop.hasAttribute(name, true));
 	}
 
 	public boolean addScopeListener(ScopeListener listener) {
@@ -994,9 +994,9 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	public ComponentDefinitionMap getComponentDefinitionMap() {
 		return _compdefs;
 	}
-	public ComponentDefinition getComponentDefinition(String name, boolean recur) {
+	public ComponentDefinition getComponentDefinition(String name, boolean recurse) {
 		final ComponentDefinition compdef = _compdefs.get(name);
-		if (!recur || compdef != null)
+		if (!recurse || compdef != null)
 			return compdef;
 
 		try {
@@ -1005,9 +1005,9 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		}
 		return null;
 	}
-	public ComponentDefinition getComponentDefinition(Class cls, boolean recur) {
+	public ComponentDefinition getComponentDefinition(Class cls, boolean recurse) {
 		final ComponentDefinition compdef = _compdefs.get(cls);
-		if (!recur || compdef != null)
+		if (!recurse || compdef != null)
 			return compdef;
 
 		try {

@@ -586,7 +586,7 @@ public class Components {
 						final String srcevt = mdname.substring(0, k);
 						if ((k+1) < mdname.length()) {
 							final String srccompid = mdname.substring(k+1);
-							final Object srccomp = xcomp.getFellowOrAttribute(srccompid, false);
+							final Object srccomp = xcomp.getFellowOrAttribute(srccompid, true);
 							if (srccomp == null || !(srccomp instanceof Component)) {
 								if (log.debugable()) {
 									log.debug("Cannot find the associated component to forward event: "+mdname);
@@ -811,7 +811,7 @@ public class Components {
 		public void wireController(Component comp, String id) {
 			//feature #2778513, support {id}$composer name
 			final String composerid =  id + _separator + "composer";
-			if (!comp.hasFellowOrAttribute(composerid, true)) {
+			if (!comp.hasFellowOrAttribute(composerid, false)) {
 				comp.setAttribute(composerid, _controller);
 			}
 			comp.setAttribute(varname(id, _controller.getClass()), _controller);
@@ -819,7 +819,7 @@ public class Components {
 		
 		public void wireController(Page page, String id) {
 			final String composerid =  id + _separator + "composer";
-			if (!page.hasFellowOrAttribute(composerid, true)) {
+			if (!page.hasFellowOrAttribute(composerid, false)) {
 				page.setAttribute(composerid, _controller);
 			}
 			page.setAttribute(varname(id, _controller.getClass()), _controller);
@@ -917,12 +917,12 @@ public class Components {
 			if (x instanceof Page) {
 				final Page pg = (Page) x;
 				return pg.getZScriptVariable(fdname) != null
-					|| pg.hasFellowOrAttribute(fdname, false);
+					|| pg.hasFellowOrAttribute(fdname, true);
 			} else {
 				final Component cmp = (Component) x;
 				final Page page = getPage(cmp);
 				return (page != null && page.getZScriptVariable(cmp, fdname) != null)
-					|| cmp.hasFellowOrAttribute(fdname, false);
+					|| cmp.hasFellowOrAttribute(fdname, true);
 			}
 		}
 		
@@ -932,7 +932,7 @@ public class Components {
 				final Page pg = (Page) x;
 				Object arg = pg.getZScriptVariable(fdname);
 				if (arg == null) {
-					arg = pg.getFellowOrAttribute(fdname, false);
+					arg = pg.getFellowOrAttribute(fdname, true);
 				}
 				return arg;
 			} else {
@@ -940,7 +940,7 @@ public class Components {
 				final Page page = getPage(cmp);
 				Object arg = page != null ? page.getZScriptVariable(cmp, fdname): null;
 				if (arg == null) {
-					arg = cmp.getFellowOrAttribute(fdname, false);
+					arg = cmp.getFellowOrAttribute(fdname, true);
 				}
 				return arg;
 			}
@@ -1153,11 +1153,11 @@ public class Components {
 		public boolean hasAttribute(String name) {
 			return exec().hasAttribute(name);
 		}
-		public Object getAttribute(String name, boolean local) {
-			return exec().getAttribute(name, local);
+		public Object getAttribute(String name, boolean recurse) {
+			return exec().getAttribute(name, recurse);
 		}
-		public boolean hasAttribute(String name, boolean local) {
-			return exec().hasAttribute(name, local);
+		public boolean hasAttribute(String name, boolean recurse) {
+			return exec().hasAttribute(name, recurse);
 		}
 		public boolean addScopeListener(ScopeListener listener) {
 			return exec().addScopeListener(listener);

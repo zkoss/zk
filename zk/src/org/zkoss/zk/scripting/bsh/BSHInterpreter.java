@@ -284,7 +284,7 @@ implements SerializableAware, HierachicalAware {
 		if (scope == null || scope == getOwner())
 			return _bshns;
 
-		NSWrap nsw = (NSWrap)scope.getAttribute(VAR_NSW, true);
+		NSWrap nsw = (NSWrap)scope.getAttribute(VAR_NSW);
 		if (nsw != null)
 			return nsw.unwrap(scope);
 
@@ -303,7 +303,7 @@ implements SerializableAware, HierachicalAware {
 	/** Prepares the namespace for detached components. */
 	private static NameSpace prepareDetachedNS(Scope scope) {
 		scope = getIdSpace(scope);
-		NSWrap nsw = (NSWrap)scope.getAttribute(VAR_NSW, true);
+		NSWrap nsw = (NSWrap)scope.getAttribute(VAR_NSW);
 		if (nsw != null)
 			return nsw.unwrap(scope);
 
@@ -439,8 +439,8 @@ implements SerializableAware, HierachicalAware {
 			}
 
 			final Page page = getOwner();
-			Object val = page.getFellowOrAttribute(name, false); //page/desktop/session
-			return  val != null || page.hasFellowOrAttribute(name, false) ?
+			Object val = page.getFellowOrAttribute(name, true); //page/desktop/session
+			return  val != null || page.hasFellowOrAttribute(name, true) ?
 				val: getImplicit(name); 
 		}
 		public void loadDefaultImports() {
@@ -487,8 +487,8 @@ implements SerializableAware, HierachicalAware {
 
 			Component comp = (Component)_scope;
 			//local-only since getVariableImpl will look up its parent
-			Object val = comp.getFellowOrAttribute(name, true);
-			return val != null || comp.hasFellowOrAttribute(name, true) ?
+			Object val = comp.getFellowOrAttribute(name, false);
+			return val != null || comp.hasFellowOrAttribute(name, false) ?
 				val: getImplicit(name); 
 		}
 	}

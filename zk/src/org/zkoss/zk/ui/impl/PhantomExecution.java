@@ -196,10 +196,10 @@ import org.zkoss.zk.ui.ext.ScopeListener;
 	public boolean hasAttribute(String name) {
 		return false;
 	}
-	public Object getAttribute(String name, boolean local) {
+	public Object getAttribute(String name, boolean recurse) {
 		return null;
 	}
-	public boolean hasAttribute(String name, boolean local) {
+	public boolean hasAttribute(String name, boolean recurse) {
 		return false;
 	}
 	public Object setAttribute(String name, Object value) {

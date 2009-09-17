@@ -276,19 +276,19 @@ public interface Page extends IdSpace, Scope {
 	/** Returns the custom attribute associated with this page,
 	 * or the fellow of this page.
 	 *
-	 * @param local whether not to look up the desktop/session for the
+	 * @param recurse whether to look up the desktop/session for the
 	 * existence of the attribute.<br/>
 	 * @since 5.0.0
 	 */
-	public Object getFellowOrAttribute(String name, boolean local);
+	public Object getFellowOrAttribute(String name, boolean recurse);
 	/** Returns if a custom attribute is associated with this page,
 	 * or a fellow of this page.
 	 *
-	 * @param local whether not to look up the desktop/session for the
+	 * @param recurse whether to look up the desktop/session for the
 	 * existence of the attribute.<br/>
 	 * @since 5.0.0
 	 */
-	public boolean hasFellowOrAttribute(String name, boolean local);
+	public boolean hasFellowOrAttribute(String name, boolean recurse);
 
 	/** @deprecated As of release 5.0.0, replaced with {@link #setAttribute}.
 	 *
@@ -620,9 +620,9 @@ public interface Page extends IdSpace, Scope {
 	 * this method doesn't throw ComponentNotFoundException if not found.
 	 * It just returns null.
 	 *
-	 * @param recur whether to look up the component from {@link #getLanguageDefinition}
+	 * @param recurse whether to look up the component from {@link #getLanguageDefinition}
 	 */
-	public ComponentDefinition getComponentDefinition(String name, boolean recur);
+	public ComponentDefinition getComponentDefinition(String name, boolean recurse);
 	/** Returns the component definition of the specified class, or null
 	 * if not found.
 	 *
@@ -630,7 +630,7 @@ public interface Page extends IdSpace, Scope {
 	 * this method doesn't throw ComponentNotFoundException if not found.
 	 * It just returns null.
 	 *
-	 * @param recur whether to look up the component from {@link #getLanguageDefinition}
+	 * @param recurse whether to look up the component from {@link #getLanguageDefinition}
 	 */
-	public ComponentDefinition getComponentDefinition(Class cls, boolean recur);
+	public ComponentDefinition getComponentDefinition(Class cls, boolean recurse);
 }

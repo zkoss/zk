@@ -248,14 +248,14 @@ public class SimpleSession implements Session, SessionCtrl {
 		}
 		return old;
 	}
-	public Object getAttribute(String name, boolean local) {
+	public Object getAttribute(String name, boolean recurse) {
 		Object val = getAttribute(name);
-		return val != null || local || _wapp == null ?
-			val: _wapp.getAttribute(name, false);
+		return val != null || !recurse || _wapp == null ?
+			val: _wapp.getAttribute(name, true);
 	}
-	public boolean hasAttribute(String name, boolean local) {
+	public boolean hasAttribute(String name, boolean recurse) {
 		return hasAttribute(name)
-		|| (!local && _wapp != null && _wapp.hasAttribute(name, false));
+		|| (recurse && _wapp != null && _wapp.hasAttribute(name, true));
 	}
 
 	public boolean addScopeListener(ScopeListener listener) {

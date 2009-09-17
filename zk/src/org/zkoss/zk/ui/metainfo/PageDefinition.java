@@ -671,11 +671,11 @@ public class PageDefinition extends NodeInfo {
 	 * this method doesn't throw ComponentNotFoundException if not found.
 	 * It just returns null.
 	 *
-	 * @param recur whether to look up the component from {@link #getLanguageDefinition}
+	 * @param recurse whether to look up the component from {@link #getLanguageDefinition}
 	 */
-	public ComponentDefinition getComponentDefinition(String name, boolean recur) {
+	public ComponentDefinition getComponentDefinition(String name, boolean recurse) {
 		final ComponentDefinition compdef = _compdefs.get(name);
-		if (!recur || compdef != null)
+		if (!recurse || compdef != null)
 			return compdef;
 
 		try {
@@ -691,11 +691,11 @@ public class PageDefinition extends NodeInfo {
 	 * this method doesn't throw ComponentNotFoundException if not found.
 	 * It just returns null.
 	 *
-	 * @param recur whether to look up the component from {@link #getLanguageDefinition}
+	 * @param recurse whether to look up the component from {@link #getLanguageDefinition}
 	 */
-	public ComponentDefinition getComponentDefinition(Class cls, boolean recur) {
+	public ComponentDefinition getComponentDefinition(Class cls, boolean recurse) {
 		final ComponentDefinition compdef = _compdefs.get(cls);
-		if (!recur || compdef != null)
+		if (!recurse || compdef != null)
 			return compdef;
 
 		try {

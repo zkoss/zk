@@ -860,31 +860,31 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return _attrs.removeAttribute(name);
 	}
 	
-	public Object getAttribute(String name, boolean local) {
+	public Object getAttribute(String name, boolean recurse) {
 		Object val = getAttribute(name);
-		if (val != null || local || hasAttribute(name))
+		if (val != null || !recurse || hasAttribute(name))
 			return val;
 
 		if (_parent != null)
-			return _parent.getAttribute(name, false);
+			return _parent.getAttribute(name, true);
 		if (_page != null)
-			return _page.getAttribute(name, false);
+			return _page.getAttribute(name, true);
 		return null;
 	}
-	public boolean hasAttribute(String name, boolean local) {
+	public boolean hasAttribute(String name, boolean recurse) {
 		if (hasAttribute(name))
 			return true;
 
-		if (!local) {
+		if (recurse) {
 			if (_parent != null)
-				return _parent.hasAttribute(name, false);
+				return _parent.hasAttribute(name, true);
 			if (_page != null)
-				return _page.hasAttribute(name, false);
+				return _page.hasAttribute(name, true);
 		}
 		return false;
 	}
 
-	public Object getFellowOrAttribute(String name, boolean local) {
+	public Object getFellowOrAttribute(String name, boolean recurse) {
 		if (this instanceof IdSpace) {
 			Object val = _spaceInfo.vars.get(name); //backward compatible (variable first)
 			if (val != null || _spaceInfo.vars.containsKey(name))
@@ -901,31 +901,31 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				return val;
 		}
 
-		if (!local) {
+		if (recurse) {
 			if (_parent != null)
-				return _parent.getFellowOrAttribute(name, false);
+				return _parent.getFellowOrAttribute(name, true);
 			if (_page != null)
-				return _page.getFellowOrAttribute(name, false);
+				return _page.getFellowOrAttribute(name, true);
 		}
 		return null;
 	}
-	public boolean hasFellowOrAttribute(String name, boolean local) {
+	public boolean hasFellowOrAttribute(String name, boolean recurse) {
 		if (hasAttribute(name)
 		|| (this instanceof IdSpace && (hasFellow(name)
 			|| _spaceInfo.vars.containsKey(name)))) //backward compatible
 			return true;
 
-		if (!local) {
+		if (recurse) {
 			if (_parent != null)
-				return _parent.hasFellowOrAttribute(name, false);
+				return _parent.hasFellowOrAttribute(name, true);
 			if (_page != null)
-				return _page.hasFellowOrAttribute(name, false);
+				return _page.hasFellowOrAttribute(name, true);
 		}
 		return false;
 	}
 
-	public Object setAttribute(String name, Object value, boolean local) {
-		if (!local) {
+	public Object setAttribute(String name, Object value, boolean recurse) {
+		if (recurse) {
 			for (Component p = this; (p = p.getParent()) != null;)
 				if (p.hasAttribute(name))
 					return p.setAttribute(name, value);
@@ -934,8 +934,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 		return setAttribute(name, value);
 	}
-	public Object removeAttribute(String name, boolean local) {
-		if (!local) {
+	public Object removeAttribute(String name, boolean recurse) {
+		if (recurse) {
 			for (Component p = this; (p = p.getParent()) != null;)
 				if (p.hasAttribute(name))
 					return p.removeAttribute(name);

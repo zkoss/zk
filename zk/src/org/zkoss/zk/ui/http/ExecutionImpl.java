@@ -465,16 +465,16 @@ public class ExecutionImpl extends AbstractExecution {
 		_request.removeAttribute(name);
 		return old;
 	}
-	public Object getAttribute(String name, boolean local) {
+	public Object getAttribute(String name, boolean recurse) {
 		Object val = getAttribute(name);
 		Desktop desktop;
-		return val != null || local || (desktop=getDesktop()) == null ?
-			val: desktop.getAttribute(name, false);
+		return val != null || !recurse || (desktop=getDesktop()) == null ?
+			val: desktop.getAttribute(name, true);
 	}
-	public boolean hasAttribute(String name, boolean local) {
+	public boolean hasAttribute(String name, boolean recurse) {
 		Desktop desktop;
 		return hasAttribute(name)
-		|| (!local && (desktop=getDesktop()) != null && desktop.hasAttribute(name, false));
+		|| (recurse && (desktop=getDesktop()) != null && desktop.hasAttribute(name, true));
 	}
 
 	public Map getAttributes() {
