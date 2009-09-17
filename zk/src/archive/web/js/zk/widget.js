@@ -30,6 +30,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 
 	//Event Handling//
+	function _cloneEvt(evt, target) {
+		return new zk.Event(target, evt.name, evt.data, evt.opts, evt.domEvent);
+	}
 	function _domEvtInf(wgt, evtnm, fn) { //proxy event listener
 		if (!fn && !(fn = _domevtfnm[evtnm]))
 			_domevtfnm[evtnm] = fn = '_do' + evtnm.substring(2);
@@ -1483,7 +1486,8 @@ zk.Widget = zk.$extends(zk.Object, {
 			var toServer = evt.opts && evt.opts.toServer;
 			if (toServer || (this.inServer && this.desktop)) {
 				if (evt.opts.sendAhead) {
-					zAu.sendAhead(evt, timeout >= 0 ? timeout : 38);
+					zAu.sendAhead(_cloneEvt(evt, this), timeout >= 0 ? timeout : 38);
+					//since evt will be used later, we have to make a copy and use this as target
 				} else {
 					var asap = toServer || this._asaps[evtnm];
 					if (asap == null) {
@@ -1495,7 +1499,8 @@ zk.Widget = zk.$extends(zk.Object, {
 						}
 					}
 					if (asap != null) //true or false
-						zAu.send(evt, asap ? timeout >= 0 ? timeout : 38 : -1);
+						zAu.send(_cloneEvt(evt, this), asap ? timeout >= 0 ? timeout : 38 : -1);
+						//since evt will be used later, we have to make a copy and use this as target
 				}
 			}
 		}
