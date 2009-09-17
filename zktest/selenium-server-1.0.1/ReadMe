@@ -1,0 +1,5 @@
+﻿1. Add the zselenium.js into the RemoteRunner.html that it will be loaded at the Selenium's server.
+2. Unzip the selenium-server.jar
+3. Copy RemoteRunner.html under selenium-server.jar\core\
+4. Copy zselenium.js under selenium-server.jar\core\scripts\
+5. Zip the selenium-server.jar

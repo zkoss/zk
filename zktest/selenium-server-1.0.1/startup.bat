@@ -1,1 +1,1 @@
-java -jar selenium-server.jar
+@cmd /K java -jar selenium-server.jar
