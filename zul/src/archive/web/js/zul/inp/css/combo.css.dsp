@@ -4,7 +4,7 @@
 .z-combobox {
 	border: 0; padding: 0; margin: 0; white-space: nowrap;
 	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
-	display:-moz-inline-box; vertical-align:top;<%-- vertical-align: make it looks same in diff browsers --%>
+	display:-moz-inline-box;
 	display:inline-block;
 }
 
@@ -79,7 +79,7 @@
 .z-bandbox {
 	border: 0; padding: 0; margin: 0; white-space: nowrap;
 	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
-	display:-moz-inline-box; vertical-align:top;<%-- vertical-align: make it looks same in diff browsers --%>
+	display:-moz-inline-box;
 	display:inline-block;
 }
 
@@ -128,7 +128,7 @@
 .z-datebox {
 	border: 0; padding: 0; margin: 0; white-space: nowrap;
 	font-family: ${fontFamilyC};font-size: ${fontSizeM}; font-weight: normal;
-	display:-moz-inline-box; vertical-align:top;<%-- vertical-align: make it looks same in diff browsers --%>
+	display:-moz-inline-box;
 	display:inline-block;
 }
 .z-datebox-over{
@@ -223,7 +223,7 @@
 }
 <%-- Timebox --%>
 .z-timebox {
-	display:-moz-inline-box; vertical-align:top;<%-- vertical-align: make it looks same in diff browsers --%>
+	display:-moz-inline-box;
 	display:inline-block;
 }
 .z-timebox-inp {
@@ -264,7 +264,7 @@
 }
 <%-- Spinner --%>
 .z-spinner {
-	display:-moz-inline-box; vertical-align:top;<%-- vertical-align: make it looks same in diff browsers --%>
+	display:-moz-inline-box;
 	display:inline-block;
 }
 .z-spinner-inp {
