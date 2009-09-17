@@ -22,7 +22,7 @@ zul.inp.Intbox = zk.$extends(zul.inp.FormatWidget, {
 		var info = zNumFormat.unformat(this._format, value),
 			val = parseInt(info.raw);
 		
-		if (info.raw != ''+val)
+		if (info.raw != ''+val && info.raw != '+'+val)
 			return {error: zMsgFormat.format(msgzul.INTEGER_REQUIRED, value)};
 		if (val > 2147483647 || val < -2147483648)
 			return {error: zMsgFormat.format(msgzul.OUT_OF_RANGE+'(−2147483648 - 2147483647)')};

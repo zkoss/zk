@@ -149,7 +149,11 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		var inp = this.getInputNode(),
 			val = inp.value = sel ? sel.getLabel(): '';
 		if (val)
-			zk(inp).setSelectionRange(0, val.length)
+			zk(inp).setSelectionRange(0, val.length);
+		
+		// check whether it should fire onChange or not,
+		// but we need to skip a loop from this.updateChange_()
+		this.$super('updateChange_');
 		this._hilite2(sel, opts);
 	},
 	otherPressed_: function (evt) {

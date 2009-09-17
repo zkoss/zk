@@ -18,7 +18,7 @@ zul.inp.Decimalbox = zk.$extends(zul.inp.FormatWidget, {
 
 		var info = zNumFormat.unformat(this._format, value),
 			val = new zk.BigDecimal(info.raw);
-		if (info.raw != val.toString() && info.raw.indexOf('e') < 0) //unable to handle 1e2
+		if (info.raw != val.toString() && info.raw != '+'+val && info.raw.indexOf('e') < 0) //unable to handle 1e2
 			return {error: zMsgFormat.format(msgzul.NUMBER_REQUIRED, value)};
 		if (info.divscale) val.setPrecision(val.getPrecision() + info.divscale);
 		return val;
