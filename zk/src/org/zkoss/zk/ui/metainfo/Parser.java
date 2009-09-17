@@ -385,6 +385,9 @@ public class Parser {
 		if (macroURI == null) macroURI = (String)params.remove("macro-uri"); //backward compatible (2.4.x)
 		final String extds = (String)params.remove("extends");
 		final String clsnm = (String)params.remove("class");
+		final String lang = (String)params.remove("language");
+		final LanguageDefinition langdef = lang != null && lang.length() > 0 ?
+			LanguageDefinition.lookup(lang): pgdef.getLanguageDefinition();
 		ComponentDefinition compdef;
 		if (macroURI != null) {
 			//if (D.ON && log.finerable()) log.finer("macro component definition: "+name);
@@ -396,7 +399,7 @@ public class Parser {
 				//the impl class before creating an instance of macro
 
 			final boolean bInline = "true".equals(inline);
-			compdef = pgdef.getLanguageDefinition().getMacroDefinition(
+			compdef = langdef.getMacroDefinition(
 				name, toAbsoluteURI(macroURI, false), bInline, pgdef);
 			if (!isEmpty(clsnm)) {
 				if (bInline)
@@ -409,8 +412,7 @@ public class Parser {
 			//if (D.ON && log.finerable()) log.finer("Override component definition: "+name);
 
 			noEL("extends", extds, pi);
-			final ComponentDefinition ref = pgdef.getLanguageDefinition()
-				.getComponentDefinition(extds);
+			final ComponentDefinition ref = langdef.getComponentDefinition(extds);
 			if (ref.isMacro())
 				throw new UiException("Unable to extend from a macro component, "+pi.getLocator());
 
