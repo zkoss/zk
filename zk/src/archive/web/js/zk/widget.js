@@ -273,8 +273,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 						prevflex = true;
 					}
 				} else {
+					if (prevflex) { //in ie6, sometimes kid1.offTop > kid2.offTop 
+						if (zk.ie6_) segTop = segBottom = Math.min(offTop, segTop);
+						prevflex = false;
+					}
 					segBottom = Math.max(segBottom, marginBottom);
-					prevflex = false;
 				}
 				
 				//horizontal size
