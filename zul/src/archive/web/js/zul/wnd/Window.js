@@ -260,7 +260,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		n.style.left = jq.px(ofs[0] + zk.parseInt(n.style.left), true);
 		n.style.top = jq.px(ofs[1] + zk.parseInt(n.style.top), true);
 	},
-	_syncShadow: function () {
+	_syncShadow: _zkf = function () {
 		if (this._mode == 'embedded') {
 			if (this._shadowWgt) {
 				this._shadowWgt.destroy();
@@ -276,6 +276,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				this._shadowWgt.sync();
 		}
 	},
+	zsync: _zkf, //used with zsync
 	_syncMask: function () {
 		if (this._mask && this._shadowWgt) this._mask.sync(this._shadowWgt.getBottomElement());
 	},
@@ -648,10 +649,15 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				self.setMaximized(true, true);				
 			});
 		}
+
+		if (this._mode != 'embedded' && (zk.ie || zk.opera || zk.gecko2_))
+			jq.zsync(this); //sync shadow if it is implemented with div
 	},
 	unbind_: function () {
 		var node = this.$n();
 		node.style.visibility = 'hidden'; //avoid unpleasant effect
+
+		if (zk.ie || zk.opera || zk.gecko2_) jq.zsync(this, false);
 
 		//we don't check this._mode here since it might be already changed
 		if (this._shadowWgt) {

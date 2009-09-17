@@ -381,7 +381,7 @@ zk.copy(Array.prototype, {
 	},
 	$equals: function (o) {
 		if (o && o.$array && o.length == this.length) {
-			for (var j = this.length; --j >= 0;) {
+			for (var j = this.length; j--;) {
 				var e = this[j];
 				if (e != o[j] && (!e || !e.$array || !e.$equals(o[j])))
 					return false;

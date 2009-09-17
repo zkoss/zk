@@ -157,6 +157,32 @@ zWatch = (function () {
 	function _cmpLevel(a, b) {
 		return _target(a).bindLevel - _target(b).bindLevel;
 	}
+	function _zsync(name) {
+		if (name == 'onSize' || name == 'onShow' || name == 'onHide')
+			jq.zsync();
+	}
+	function _fire(name, org, opts, vararg) {
+		var wts = _watches[name];
+		if (wts && wts.length) {
+			var down = opts && opts.down && org.bindLevel != null;
+			if (down) _sync();
+
+			var args = [],
+				gun = new _Gun(name,
+					down ? _visiChildSubset(wts, org): _visiSubset(wts),
+					args, org);
+			args.push(gun);
+			for (var j = 3, l = vararg.length; j < l;)
+				args.push(vararg[j++]);
+
+			if (opts && opts.timeout >= 0)
+				setTimeout(function () {gun.fire();_zsync(name);}, opts.timeout);
+			else {
+				gun.fire();
+				_zsync(name);
+			}
+		}
+	}
 
   return {
 	listen: function (infs) {
@@ -194,30 +220,10 @@ zWatch = (function () {
 		delete _watches[name];
 	},
 	fire: function (name, org, opts) {
-		this._fire(name, org, opts, arguments);
+		_fire(name, org, opts, arguments);
 	},
 	fireDown: function (name, org, opts) {
-		this._fire(name, org, zk.copy(opts,{down:true}), arguments);
-	},
-	_fire: function (name, org, opts, vararg) {
-		var wts = _watches[name];
-		if (wts && wts.length) {
-			var down = opts && opts.down && org.bindLevel != null;
-			if (down) _sync();
-
-			var args = [],
-				gun = new _Gun(name,
-					down ? _visiChildSubset(wts, org): _visiSubset(wts),
-					args, org);
-			args.push(gun);
-			for (var j = 3, l = vararg.length; j < l;)
-				args.push(vararg[j++]);
-
-			if (opts && opts.timeout >= 0)
-				setTimeout(function () {gun.fire();}, opts.timeout);
-			else
-				gun.fire();
-		}
+		_fire(name, org, zk.copy(opts,{down:true}), arguments);
 	},
 	onBindLevelMove: function () {
 		_dirty = true;

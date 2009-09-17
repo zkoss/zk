@@ -16,7 +16,16 @@ zjq = function (jq) { //ZK extension
 	this.jq = jq;
 };
 (function () {
-	var jq$super = {};
+	var jq$super = {},
+		//refer to http://www.w3schools.com/css/css_text.asp
+		_txtStyles = [
+			'font-family', 'font-size', 'font-weight', 'font-style',
+			'letter-spacing', 'line-height', 'text-align', 'text-decoration',
+			'text-indent', 'text-shadow', 'text-transform', 'text-overflow',
+			'direction', 'word-spacing', 'white-space'],
+		_txtStyles2 = ["color", "background-color", "background"],
+		_zsyncs = [],
+		_pendzsync = 0;
 
 	function _elmOfWgt(id, ctx) {
 		var w, w2;
@@ -28,6 +37,21 @@ zjq = function (jq) { //ZK extension
 	}
 	function _isNone(jq) {
 		return !jq.selector && jq[0] === document;
+	}
+	function _ofsParent(el) {
+		if (el.offsetParent) return el.offsetParent;
+		if (el == document.body) return el;
+
+		while ((el = el.parentNode) && el != document.body)
+			if (el.style && jq(el).css('position') != 'static') //in IE, style might not be available
+				return el;
+
+		return document.body;
+	}
+	function _zsync() {
+		if (--_pendzsync <= 0)
+			for (var j = _zsyncs.length; j--;)
+				_zsyncs[j].zsync();
 	}
 
 zk.override(jq.fn, jq$super, {
@@ -99,7 +123,6 @@ jq.each(['before','after','append','prepend'], function (i, nm) {
 		return ret;
 	};
 });
-})();
 
 zjq.prototype = { //ZK extension
 	widget: function () {
@@ -481,7 +504,7 @@ zjq.prototype = { //ZK extension
 					l += el.offsetLeft || 0;
 					//Bug 1721158: In FF, el.offsetParent is null in this case
 					el = zk.gecko && el != document.body ?
-						zjq._ofsParent(el): el.offsetParent;
+						_ofsParent(el): el.offsetParent;
 				}
 			} while (el);
 			return [l, t];
@@ -516,7 +539,7 @@ zjq.prototype = { //ZK extension
 				l += el.offsetLeft || 0;
 				//Bug 1721158: In FF, el.offsetParent is null in this case
 				el = zk.gecko && el != document.body ?
-					zjq._ofsParent(el): el.offsetParent;
+					_ofsParent(el): el.offsetParent;
 				if (el) {
 					if(el.tagName=='BODY') break;
 					var p = jq(el).css('position');
@@ -617,7 +640,7 @@ zjq.prototype = { //ZK extension
 			document.body.appendChild(tsd);
 		}
 
-		for (var ss = zjq._TEXT_STYLES, j = ss.length; j--;) {
+		for (var ss = _txtStyles, j = ss.length; j--;) {
 			var nm = ss[j].$camel();
 			tsd.style[nm] = jq(el).css(nm);
 		}
@@ -968,8 +991,8 @@ zk.copy(jq, { //ZK extension to jq
 					var s = k >= 0 ? style.substring(j, k): style.substring(j),
 						l = s.indexOf(':'),
 						nm = l < 0 ? s.trim(): s.substring(0, l).trim();
-					if (nm && (zjq._TEXT_STYLES.$contains(nm)
-					|| zjq._TEXT_STYLES2.$contains(nm)
+					if (nm && (_txtStyles.$contains(nm)
+					|| _txtStyles2.$contains(nm)
 					|| (plus && plus.$contains(nm))))
 						ts += s + ';';
 				}
@@ -978,8 +1001,7 @@ zk.copy(jq, { //ZK extension to jq
 
 		var ts = {};
 		for (var nm in style)
-			if (zjq._TEXT_STYLES.$contains(nm)
-			|| zjq._TEXT_STYLES2.$contains(nm)
+			if (_txtStyles.$contains(nm) || _txtStyles2.$contains(nm)
 			|| (plus && plus.$contains(nm)))
 				ts[nm] = style[nm];
 		return ts;
@@ -1052,48 +1074,26 @@ zk.copy(jq, { //ZK extension to jq
 		} finally {
 			try {zk.alerting = false;} catch (e) {} //doc might be unloaded
 		}
+	},
+	zsync: function () {
+		var args = arguments, len = args.length, j = 0;
+		if (!len) {
+			++_pendzsync;
+			setTimeout(_zsync, 50);
+		} else {
+			if (args[len - 1] === false) //remove
+				for (--len; j < len; j++)
+					_zsyncs.$remove(args[j]);
+			else
+				for (; j < len; j++)
+					_zsyncs.unshift(args[j]);
+		}
 	}
 });
 
 zk.copy(zjq, { //private
 	_cleanVisi: function (n) { //override later
 		n.style.visibility = "inherit";
-	},
-	_ofsParent: function (el) {
-		if (el.offsetParent) return el.offsetParent;
-		if (el == document.body) return el;
-
-		while ((el = el.parentNode) && el != document.body)
-			if (el.style && jq(el).css('position') != 'static') //in IE, style might not be available
-				return el;
-
-		return document.body;
-	},
-
-	//refer to http://www.w3schools.com/css/css_text.asp
-	_TEXT_STYLES: [
-		'font-family', 'font-size', 'font-weight', 'font-style',
-		'letter-spacing', 'line-height', 'text-align', 'text-decoration',
-		'text-indent', 'text-shadow', 'text-transform', 'text-overflow',
-		'direction', 'word-spacing', 'white-space'],
-	_TEXT_STYLES2: ["color", "background-color", "background"]
-});
-
-zk.copy(jq.prototype, { //Extension to jq() directly
-	zsync: function (evtnm) {
-		var wgt = this.zk.widget()[0];
-		if (wgt) {
-			var elem = this[0];
-			jq.timers.push(
-			function () {
-				for (var i = jq.timers.length; i--;)
-					if (jq.timers[i].elem === elem)
-						return true;
-				
-				zWatch.fireDown(evtnm || 'onSize', wgt);
-				return false;
-			});
-		}
 	}
 });
 
@@ -1162,3 +1162,4 @@ zk.copy(jq.event, {
 		return new zk.Event(target, 'on' + type, data, opts, evt);
 	}
 });
+})();
