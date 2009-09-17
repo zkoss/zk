@@ -35,7 +35,7 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 	},
 	onShow: _zkf,
 	onFloatUp: function (ctl) {
-		if (!this._inplace && !this.isOpen())
+		if (jq(this.$n('pp')).is(':animated') || (!this._inplace && !this.isOpen()))
 			return;
 		var wgt = ctl.origin;
 		if (!zUtl.isAncestor(this, wgt)) {
@@ -245,9 +245,9 @@ zul.inp.ComboWidget = zk.$extends(zul.inp.InputWidget, {
 				this.onSize();
 			}
 		}
-		
-		if (this._readonly && !this.isOpen())
+		if (!this._shallClose && this._readonly && !this.isOpen())
 			this.open({focus:true,sendOnOpen:true});
+		this._shallClose = false;
 	},
 	doBlur_: function (evt) {
 		var n = this.$n();
