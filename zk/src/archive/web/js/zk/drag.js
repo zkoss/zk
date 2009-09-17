@@ -369,7 +369,7 @@ zk.Draggable = zk.$extends(zk.Object, {
 		this.offset = [pt[0] - pos[0], pt[1] - pos[1]];
 
 		_activate(this, devt, pt);
-		devt.stop();
+		devt.stop({propagation: true});
 	},
 	_keypress: function (devt) {
 		if(devt.keyCode == 27) {
