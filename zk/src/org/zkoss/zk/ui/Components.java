@@ -40,20 +40,23 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
-import org.zkoss.idom.Document;
 import org.zkoss.lang.Classes;
+import org.zkoss.idom.Document;
 import org.zkoss.util.CollectionsX;
 import org.zkoss.util.logging.Log;
 import org.zkoss.xel.VariableResolver;
 
 import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.metainfo.LanguageDefinition;
+import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.ext.ScopeListener;
 import org.zkoss.zk.xel.Evaluator;
-import org.zkoss.zk.ui.event.Events;
 
 /**
  * Utilities to access {@link Component}.
@@ -156,13 +159,31 @@ public class Components {
 	}
 
 	/** Removes all children of the specified component.
+	 * It is the same as <code>comp.getChildren().clear()</code>.
 	 */
 	public static void removeAllChildren(Component comp) {
-		final List children = comp.getChildren();
-		if (children.isEmpty()) return;
+		comp.getChildren().clear();
+	}
 
-		for (Iterator it = new ArrayList(children).iterator(); it.hasNext();)
-			((Component)it.next()).setParent(null); //detach
+	/** Returns the component definition of the specified class in all
+	 * language of the specified device, or null if not found
+	 *
+	 * @param deviceType the device type ({@link org.zkoss.zk.device.Device}),
+	 * such as ajax. It cannot be null.
+	 * @param cls the implementation class of the component.
+	 * @since 5.0.0
+	 */
+	public static final ComponentDefinition
+	getDefinitionByDeviceType(String deviceType, Class cls) {
+		for (Iterator it = LanguageDefinition.getByDeviceType(deviceType).iterator();
+		it.hasNext();) {
+			final LanguageDefinition ld = (LanguageDefinition)it.next();
+			try {
+				return ld.getComponentDefinition(cls);
+			} catch (DefinitionNotFoundException ex) { //ignore
+			}
+		}
+		return null;
 	}
 
 	/** Returns whether this component is real visible (all its parents

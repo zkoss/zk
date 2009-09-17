@@ -198,7 +198,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				addSharedAnnotationMap(_def.getAnnotationMap());
 			}
 		} else {
-			_def = lookupDefinition(exec, getClass());
+			_def = getDefinition(exec, getClass());
 			if (_def != null)
 				addSharedAnnotationMap(_def.getAnnotationMap());
 			else {
@@ -219,8 +219,11 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 //		if (D.ON && log.debugable()) log.debug("Create comp: "+this);
 	}
+	/** Returns the component definition of the specified class, or null
+	 * if not found.
+	 */
 	private static final
-	ComponentDefinition lookupDefinition(Execution exec, Class cls) {
+	ComponentDefinition getDefinition(Execution exec, Class cls) {
 		if (exec != null) {
 			final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 			final PageDefinition pgdef = execCtrl.getCurrentPageDefinition();
@@ -233,7 +236,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				return compdef; //already from langdef (not from pgdef)
 
 			final ComponentDefinition compdef2 =
-				lookupDefinitionByDeviceType(exec.getDesktop().getDeviceType(), cls);
+				Components.getDefinitionByDeviceType(exec.getDesktop().getDeviceType(), cls);
 			return compdef != null && (compdef2 == null ||
 			!Objects.equals(compdef.getImplementationClass(), compdef2.getImplementationClass())) ?
 				compdef: compdef2; //Feature 2816083: use compdef2 if same class
@@ -241,26 +244,14 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		for (Iterator it = LanguageDefinition.getDeviceTypes().iterator(); it.hasNext();) {
 			final ComponentDefinition compdef =
-				lookupDefinitionByDeviceType((String)it.next(), cls);
+				Components.getDefinitionByDeviceType((String)it.next(), cls);
 			if (compdef != null)
 				return compdef;
 		}
 		return null;
 	}
-	private static final ComponentDefinition
-	lookupDefinitionByDeviceType(String deviceType, Class cls) {
-		for (Iterator it = LanguageDefinition.getByDeviceType(deviceType).iterator();
-		it.hasNext();) {
-			final LanguageDefinition ld = (LanguageDefinition)it.next();
-			try {
-				return ld.getComponentDefinition(cls);
-			} catch (DefinitionNotFoundException ex) { //ignore
-			}
-		}
-		return null;
-	}
 	private final ComponentDefinition
-	lookupDefinitionByDeviceType(String deviceType, String name) {
+	getDefinitionByDeviceType(String deviceType, String name) {
 		for (Iterator it = LanguageDefinition.getByDeviceType(deviceType).iterator();
 		it.hasNext();) {
 			final LanguageDefinition ld = (LanguageDefinition)it.next();
@@ -2015,7 +2006,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				pgdef != null ? pgdef.getComponentDefinition(name, true):
 				page != null ? 	page.getComponentDefinition(name, true): null;
 			if (compdef == null)
-				compdef = lookupDefinitionByDeviceType(exec.getDesktop().getDeviceType(), name);
+				compdef = getDefinitionByDeviceType(exec.getDesktop().getDeviceType(), name);
 			if (compdef != null) {
 				setDefinition(compdef);
 				return;
@@ -2023,7 +2014,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		} else {
 			for (Iterator it = LanguageDefinition.getDeviceTypes().iterator(); it.hasNext();) {
 				final ComponentDefinition compdef =
-					lookupDefinitionByDeviceType((String)it.next(), name);
+					getDefinitionByDeviceType((String)it.next(), name);
 				if (compdef != null) {
 					setDefinition(compdef);
 					return;

@@ -57,6 +57,7 @@ import org.zkoss.xel.util.MethodFunction;
 import org.zkoss.web.servlet.Servlets;
 	
 import org.zkoss.zk.ui.WebApp;
+import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Events;
@@ -386,7 +387,7 @@ public class Parser {
 		final String extds = (String)params.remove("extends");
 		final String clsnm = (String)params.remove("class");
 		final String lang = (String)params.remove("language");
-		final LanguageDefinition langdef = lang != null && lang.length() > 0 ?
+		final LanguageDefinition langdef = lang != null ?
 			LanguageDefinition.lookup(lang): pgdef.getLanguageDefinition();
 		ComponentDefinition compdef;
 		if (macroURI != null) {
@@ -408,32 +409,52 @@ public class Parser {
 				compdef.setImplementationClass(clsnm);
 					//Resolve later since might defined in zscript
 			}
-		} else if (extds != null) { //extends
-			//if (D.ON && log.finerable()) log.finer("Override component definition: "+name);
-
-			noEL("extends", extds, pi);
-			final ComponentDefinition ref = langdef.getComponentDefinition(extds);
-			if (ref.isMacro())
-				throw new UiException("Unable to extend from a macro component, "+pi.getLocator());
-
-			compdef = ref.clone(null, name);
-			if (!isEmpty(clsnm)) {
-				noEL("class", clsnm, pi);
-				compdef.setImplementationClass(clsnm);
-					//Resolve later since might defined in zscript
-			}
 		} else {
-			//if (D.ON && log.finerable()) log.finer("Add component definition: name="+name);
+			ComponentDefinition ref = null;
+			if (extds != null) { //extends
+				//if (D.ON && log.finerable()) log.finer("Override component definition: "+name);
 
-			noELnorEmpty("class", clsnm, pi);
+				noEL("extends", extds, pi);
+				ref = langdef.getComponentDefinition(extds);
+			} else {
+				try {
+					final Class cls = Classes.forNameByThread(clsnm);
+					if (lang != null) {
+						ref = langdef.getComponentDefinition(cls);
+							//throw exception if not found
+					} else {
+						ref = pgdef.getComponentDefinition(cls, true);
+						if (ref == null) //return null if not found
+							ref = Components.getDefinitionByDeviceType(
+								langdef.getDeviceType(), cls);
+					}
+				} catch (Throwable ex) {//ignore
+				}
+			}
 
-			final ComponentDefinitionImpl cdi =
-				new ComponentDefinitionImpl(null, pgdef, name, (Class)null);
-			cdi.setCurrentDirectory(getLocator().getDirectory());
-				//mold URI requires it
-			compdef = cdi;
-			compdef.setImplementationClass(clsnm);
-				//Resolve later since might be defined in zscript
+			if (ref != null) {
+				if (ref.isMacro())
+					throw new UiException("Unable to extend from a macro component, "+pi.getLocator());
+
+				compdef = ref.clone(null, name);
+				if (!isEmpty(clsnm)) {
+					noEL("class", clsnm, pi);
+					compdef.setImplementationClass(clsnm);
+						//Resolve later since might defined in zscript
+				}
+			} else {
+				//if (D.ON && log.finerable()) log.finer("Add component definition: name="+name);
+
+				noELnorEmpty("class", clsnm, pi);
+
+				final ComponentDefinitionImpl cdi =
+					new ComponentDefinitionImpl(null, pgdef, name, (Class)null);
+				cdi.setCurrentDirectory(getLocator().getDirectory());
+					//mold URI requires it
+				compdef = cdi;
+				compdef.setImplementationClass(clsnm);
+					//Resolve later since might be defined in zscript
+			}
 		}
 
 		String wgtnm = (String)params.remove("widgetClass");
