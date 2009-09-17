@@ -45,33 +45,37 @@ zul.grid.Grid = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	onChildAdded_: function (child) {
 		this.$supers('onChildAdded_', arguments);
-		if (child.$instanceof(zul.grid.Rows))
+		var isRows;
+		if (child.$instanceof(zul.grid.Rows)) {
 			this.rows = child;
-		else if (child.$instanceof(zul.grid.Columns))
+			isRows = true;
+		} else if (child.$instanceof(zul.grid.Columns)) 
 			this.columns = child;
-		else if (child.$instanceof(zul.grid.Foot))
+		else if (child.$instanceof(zul.grid.Foot)) 
 			this.foot = child;
-		else if (child.$instanceof(zul.mesh.Paging))
+		else if (child.$instanceof(zul.mesh.Paging)) 
 			this.paging = child;
-		else if (child.$instanceof(zul.mesh.Frozen))
+		else if (child.$instanceof(zul.mesh.Frozen)) 
 			this.frozen = child;
 			
-		this._syncSize();
+		if (!isRows) this._syncSize();
 	},
 	onChildRemoved_: function (child) {
 		this.$supers('onChildRemoved_', arguments);
-		if (child == this.rows)
+		var isRows;
+		if (child == this.rows) {
 			this.rows = null;
-		else if (child == this.columns)
+			isRows = true;
+		} else if (child == this.columns) 
 			this.columns = null;
-		else if (child == this.foot)
+		else if (child == this.foot) 
 			this.foot = null;
-		else if (child == this.paging)
+		else if (child == this.paging) 
 			this.paging = null;
-		else if (child == this.frozen)
+		else if (child == this.frozen) 
 			this.frozen = null;
 		
-		this._syncSize();
+		if (!isRows) this._syncSize();
 	},
 	insertChildHTML_: function (child, before, desktop) {
 		if (child.$instanceof(zul.grid.Rows)) {

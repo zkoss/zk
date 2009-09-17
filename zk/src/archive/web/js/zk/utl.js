@@ -267,7 +267,7 @@ zUtl = { //static methods
 				if (j > 0) {
 					var qs = url.substring(j + 1);
 					url = url.substring(0, j);
-					zk.queryToHiddens(frm, qs);
+					jq.queryToHiddens(frm, qs);
 				}
 				frm.name = "go";
 				frm.action = url;

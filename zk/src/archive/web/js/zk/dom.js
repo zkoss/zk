@@ -1057,7 +1057,33 @@ zk.copy(jq, { //ZK extension to jq
 		}
 		return ifr;
 	},
-
+	queryToHiddens: function (frm, qs) {
+		for(var j = 0;;) {
+			var k = qs.indexOf('=', j);
+			var l = qs.indexOf('&', j);
+	
+			var nm, val;
+			if (k < 0 || (k > l && l >= 0)) { //no value part
+				nm = l >= 0 ? qs.substring(j, l): qs.substring(j);
+				val = "";
+			} else {
+				nm = qs.substring(j, k);
+				val = l >= 0 ? qs.substring(k + 1, l): qs.substring(k + 1);
+			}
+			jq.newHidden(nm, val, frm);
+	
+			if (l < 0) return; //done
+			j = l + 1;
+		}
+	},
+	newHidden: function (nm, val, parent) {
+		var inp = document.createElement("INPUT");
+		inp.type = "hidden";
+		inp.name = nm;
+		inp.value = val;
+		if (parent) parent.appendChild(inp);
+		return inp;
+	},
 	//dialog//
 	confirm: function (msg) {
 		zk.alerting = true;
