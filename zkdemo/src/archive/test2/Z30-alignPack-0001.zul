@@ -14,12 +14,16 @@
 	<vbox>
 	<hbox>
 	PACK:
-	<radiogroup>
+	<radiogroup id="grp1">
 		<attribute name="onCheck">
-			hb.setPack(self.selectedItem.label);
+			hb.setPack((sck1.isChecked() ? sck1.label + "," : "") + grp1.selectedItem.label);
 		</attribute>
-		<radio checked="true" label="stretch" />
-		<radio label="start" />
+		<checkbox id="sck1" checked="true" label="stretch" >
+			<attribute name="onCheck">
+			hb.setPack((sck1.isChecked() ? sck1.label + "," : "") + grp1.selectedItem.label);
+			</attribute>
+		</checkbox>
+		<radio checked="true" label="start" />
 		<radio label="center" />
 		<radio label="end" />
 	</radiogroup>
@@ -47,12 +51,16 @@
 	</hbox>
 	<hbox>
 	PACK:
-	<radiogroup>
+	<radiogroup id="grp2">
 		<attribute name="onCheck">
-			hb2.setPack(self.selectedItem.label);
+			hb2.setPack((sck2.isChecked() ? sck2.label + "," : "") + grp2.selectedItem.label);
 		</attribute>
-		<radio checked="true" label="stretch" />
-		<radio label="start" />
+		<checkbox id="sck2" checked="true" label="stretch" >
+			<attribute name="onCheck">
+				hb2.setPack((sck2.isChecked() ? sck2.label + "," : "") + grp2.selectedItem.label);
+			</attribute>
+		</checkbox>
+		<radio checked="true" label="start" />
 		<radio label="center" />
 		<radio label="end" />
 	</radiogroup>

@@ -179,10 +179,10 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 			smartUpdate("align", _align);
 		}
 	}
-	/** Returns the alignment of cells of this box
-	 * (start, center, end, <i>stretch</i>).
+	/** Returns the pack alignment of cells of this box
+	 * (start, center, end) plus an indication <i>stretch</i> option.
 	 *
-	 * <p>Default: stretch.
+	 * <p>Default: stretch, start.
 	 *
 	 * <p>The pack attribute specifies where child elements of the box are placed
 	 * when the box is larger that the size of the children. For boxes with
@@ -191,11 +191,8 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 	 * the position of children vertically. The align attribute 
 	 * ({@link #getAlign})is used to specify
 	 * the position in the opposite direction.
-	 *
+	 * 
 	 * <dl>
-	 * <dt>stretch(since 5.0)</dt>
-	 * <dd>Child elements are aligned evenly starting from the left or top edge of
-	 * the box.</dd>
 	 * <dt>start</dt>
 	 * <dd>Child elements are aligned starting from the left or top edge of
 	 * the box. If the box is larger than the total size of the children, the
@@ -207,6 +204,20 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 	 * <dd>Child elements are placed on the right or bottom edge of the box. If
 	 * the box is larger than the total size of the children, the extra space is
 	 * placed on the left or top side.</dd>
+	 * <dt>stretch(since 5.0)</dt>
+	 * <dd>This is an indication option in addition to the (start, center, end) options.
+	 * When add this extra option in the pack attribute, the Extra space is placed
+	 * proportionally and evenly along each child elements. If you specify 
+	 * "stretch,start", then the Extra proportionally and evenly allocated space 
+	 * for each child is placed on the right or bottom side of the child. 
+	 * If you specify "stretch,center", then the Extra proportionally and evenly 
+	 * allocated space for each child is split equally along each side of the
+	 * child. If you specify "stretch,end", then the Extra proportionally and 
+	 * evenly allocated space for each child is placed on the left or top side of 
+	 * the child. Note that if there are {@link Splitter} child inside this Box, then 
+	 * it implies the stretch pack attribute; no matter you specify "stretch" in 
+	 * pack attribute or not. If given null or simply "stretch" to this pack
+	 * attribute then it is the same as "stretch,start"</dd> 
 	 * </dl>
 	 *
 	 * @since 3.0.0
@@ -215,11 +226,12 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 		return _pack;
 	}
 	/** Sets the alignment of cells of this box
-	 * (<i>stretch</i>, start, center, end).
+	 * (start, center, end) plus an <i>stretch</i> option.
 	 *
-	 * @param pack the alignment. Allowed values: stretch, start, center, end.
-	 * If empty or null, the browser's default is used.
+	 * @param pack the alignment. Allowed values: (start, center, end) plus an 
+	 * <i>stretch</i> option. If empty or null, it defaults to "stretch,start".
 	 * @since 3.0.0
+	 * @see #getPack()
 	 */
 	public void setPack(String pack) {
 		if (pack != null && pack.length() == 0) pack = null;

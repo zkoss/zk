@@ -13,10 +13,17 @@ This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
+	delete this._splitterKid; 
+	for (var w = this.firstChild; w; w = w.nextSibling)
+		if (w.$instanceof(zul.box.Splitter)) {
+			this._splitterKid = true;
+			break;
+		}
+	this._configPack();
+	
 	out.push('<table', this.domAttrs_(), zUtl.cellps0, '><tr');
 	
-	var	p = this.getPack();
-	if (p && p != 'stretch') out.push(' valign="', zul.box.Box._toValign(p), '"');
+	if (!this._isStretchPack() && this._pack2) out.push(' valign="', zul.box.Box._toValign(this._pack2), '"');
 	out.push('><td style="width:100%');
 	//IE need to set height, or the table height will shrink to as high as inner table
 	//FF2 should not set this, or the td will stretch the parent table height.
@@ -28,7 +35,7 @@ function (out) {
 	if (v && v != 'stretch') out.push(' align="', zul.box.Box._toHalign(v), '"');
 	out.push('><table id="', this.uuid, '-real"', zUtl.cellps0, 'style="text-align:left');
 	if (v == 'stretch') out.push(';width:100%');
-	if (p == 'stretch') out.push(';height:100%');
+	if (this._isStretchPack()) out.push(';height:100%');
 	out.push('">');
 
 	for (var w = this.firstChild; w; w = w.nextSibling)

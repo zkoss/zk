@@ -13,6 +13,14 @@ This program is distributed under GPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
 function (out) {
+	delete this._splitterKid; 
+	for (var w = this.firstChild; w; w = w.nextSibling)
+		if (w.$instanceof(zul.box.Splitter)) {
+			this._splitterKid = true;
+			break;
+		}
+	this._configPack();
+	
 	out.push('<table', this.domAttrs_(), zUtl.cellps0, '><tr');
 	
 	var	v = this.getAlign();
@@ -21,12 +29,12 @@ function (out) {
 	//FF3 is OK to set or not set
 	out.push('><td style="width:100%;height:100%"');
 	
-	var p = this.getPack();
-	if (p && p != 'stretch') out.push(' align="', zul.box.Box._toHalign(p), '"');
+	if (!this._isStretchPack() && this._pack2) out.push(' align="', zul.box.Box._toHalign(this._pack2), '"');
 	out.push('><table id="', this.uuid, '-real"', zUtl.cellps0, 'style="text-align:left');
 	if (v == 'stretch') out.push(';height:100%');
-	if (p == 'stretch') out.push(';width:100%');
-	out.push('"><tr valign="top">');
+	if (this._isStretchPack()) out.push(';width:100%');
+	
+	out.push('"><tr valign="', this._isStretchPack() && v && v != 'stretch'? zul.box.Box._toValign(v) : 'top', '">');
 	
 	for (var w = this.firstChild; w; w = w.nextSibling)
 		this.encloseChildHTML_(w, false, out);

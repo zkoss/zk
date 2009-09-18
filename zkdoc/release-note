@@ -33,6 +33,7 @@ ZK 5.0.0
   2859867: forward="onX=" shall be shortcut of forward="onX=onX"
   2860482: A way to specify language for component definition (<?component?>)
   2848804: Readonly combobox supports selection by keystrokes
+  2861283: hbox/vbox pack attribute supports stretch option
   
 * Bugs
   1999145: Combobox with Width of 100% Overruns

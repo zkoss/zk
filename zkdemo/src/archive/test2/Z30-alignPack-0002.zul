@@ -14,12 +14,16 @@
 	</vbox>
 	<hbox>
 	PACK:
-	<radiogroup>
+	<radiogroup id="grp1">
 		<attribute name="onCheck">
-			vb.setPack(self.selectedItem.label);
+			vb.setPack((sck1.isChecked() ? sck1.label + "," : "") + grp1.selectedItem.label);
 		</attribute>
-		<radio checked="true" label="stretch" />
-		<radio label="start" />
+		<checkbox id="sck1" checked="true" label="stretch" >
+			<attribute name="onCheck">
+				vb.setPack((sck1.isChecked() ? sck1.label + "," : "") + grp1.selectedItem.label);
+			</attribute>
+		</checkbox>
+		<radio checked="true" label="start" />
 		<radio label="center" />
 		<radio label="end" />
 	</radiogroup>
@@ -47,12 +51,16 @@
 	</vbox>
 	<hbox>
 	PACK:
-	<radiogroup>
+	<radiogroup id="grp2">
 		<attribute name="onCheck">
-			vb2.setPack(self.selectedItem.label);
+			vb2.setPack((sck2.isChecked() ? sck2.label + "," : "") + grp2.selectedItem.label);
 		</attribute>
-		<radio checked="true" label="stretch" />
-		<radio label="start" />
+		<checkbox id="sck2" checked="true" label="stretch">
+			<attribute name="onCheck">
+				vb2.setPack((sck2.isChecked() ? sck2.label + "," : "") + grp2.selectedItem.label);
+			</attribute>
+		</checkbox>
+		<radio checked="true" label="start" />
 		<radio label="center" />
 		<radio label="end" />
 	</radiogroup>
