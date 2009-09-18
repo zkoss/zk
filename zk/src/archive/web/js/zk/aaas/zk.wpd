@@ -2,10 +2,10 @@
 
 <!-- zk.wpd
 	Purpose:
-		ZK-as-Service
+		Ajax-as-a-Service
 	Description:
-		Use to load ZK-as-Service (ZaS) in a ZK page
-		To load ZaS in a non-ZK HTML page, use zk/ajax/zk.wpd instead
+		Use to load Ajax-as-a-Service (AaaS) in a ZK page
+		To load AaaS in a non-ZK HTML page, use zk.wpd instead
 	History:
 		Tue Aug 11 10:01:28     2009, Created by tomyeh
 
