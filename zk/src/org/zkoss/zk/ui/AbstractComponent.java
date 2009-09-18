@@ -201,16 +201,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			_def = getDefinition(exec, getClass());
 			if (_def != null)
 				addSharedAnnotationMap(_def.getAnnotationMap());
-			else {
-				if (this instanceof Macro)
-					log.warning(
-						"Component definition not found for the macro "+this.getClass()
-						+". Current page definition: "
-						+(exec != null ? ""+((ExecutionCtrl)exec).getCurrentPageDefinition(): "n/a")
-						+". Current page: "
-						+(exec != null ? ""+((ExecutionCtrl)exec).getCurrentPage(): "n/a"));
+			else
 				_def = ComponentsCtrl.DUMMY;
-			}
 		}
 
 		init();

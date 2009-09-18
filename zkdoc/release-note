@@ -69,8 +69,6 @@ ZK 5.0.0
   + org.zkoss.zul.theme.enableZKPrefix is deprecated.
     Use the library properties, such as org.zkoss.zul.theme.fontSizeM,
     to use the same font for ZK and non-ZK content
-  + org.zkoss.zk.MacroNoDefinitionAllowed is deprecated.
-    A dummy macro definition is used instead.
   + org.zkoss.zul.Style's dynamic is deprecated since it is decided
     automatically
   + org.zkoss.zul.Applet and Iframe extends from HtmlBasedComponent
@@ -95,6 +93,7 @@ ZK 5.0.0
   + By default, the constraint of the input elements is validated by client side, but you can specify
 	it with 'server', for example, 'no empty, server', the constraint with 'server' would be validated
 	by server side, if no error at client.
+
 	--------
 ZK 3.6.3
 August, 2009
