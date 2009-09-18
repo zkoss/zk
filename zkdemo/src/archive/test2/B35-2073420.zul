@@ -32,7 +32,7 @@ new String[]{"15","[zk1 - Help] RE: SelectedItemConverter Question","2008/4/28 1
 
 void updateGroup(Group g1){
 g1.getChildren().clear();
-new Image(/test2/img/inet.png).setParent(g1);
+new Image("/test2/img/inet.png").setParent(g1);
 new Label("group 1").setParent(g1);
 Menubar mb = new Menubar();
 mb.setParent(g1);
@@ -44,7 +44,7 @@ g1.setSpans("1,1,2");
 
 void updateFoot(Groupfoot f1){
 f1.getChildren().clear();
-new Image(/test2/img/inet.png).setParent(f1);
+new Image("/test2/img/inet.png").setParent(f1);
 new Label("group 1").setParent(f1);
 Menubar mb = new Menubar();
 mb.setParent(f1);

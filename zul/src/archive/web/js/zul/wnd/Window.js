@@ -471,7 +471,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 
 			if (!wdh || wdh == "auto") {
 				var $cavp = zk(cave.parentNode),
-					diff = $cavp.padBorderWidth() + $cavp.parent().padBorderWidth();
+					diff = $cavp.padBorderWidth() + zk(cave.parentNode.parentNode).padBorderWidth();
 				if (tl) tl.firstChild.style.width = jq.px(cave.offsetWidth + diff);
 				if (hl) hl.firstChild.firstChild.style.width = jq.px(cave.offsetWidth
 					- (zk(hl).padBorderWidth() + zk(hl.firstChild).padBorderWidth() - diff));

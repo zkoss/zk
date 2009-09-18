@@ -72,10 +72,14 @@ zul.sel.Listgroup = zk.$extends(zul.sel.Listitem, {
 				//always send since the client has to update Openable
 	},
 	_openItemNow: function (toOpen) {
-		for (var r, w = this.nextSibling; w && (!w.$instanceof(zul.sel.Listgroup) && !w.$instanceof(zul.sel.Listgroupfoot));
-				w = w.nextSibling)
-			if (w.desktop && w.isVisible())
-				jq(w.$n())[toOpen ? "show" : "hide"]();
+		var w = this.$n();
+		if (w) {
+			for (var r, w = w.nextSibling; w && (r = zk.Widget.$(w)) && !zul.sel.Listgroup.isInstance(r) &&
+					!zul.sel.Listgroupfoot.isInstance(r); w = w.nextSibling) {
+				if (r.desktop && r.isVisible())
+					jq(w)[toOpen ? "show" : "hide"]();
+			}
+		}
 	},
 	beforeParentChanged_: function (p) {
 		if (p == null) {

@@ -92,10 +92,14 @@ zul.grid.Group = zk.$extends(zul.grid.Row, {
 				//always send since the client has to update Openable
 	},
 	_openItemNow: function (toOpen) {
-		for (var r, w = this.nextSibling; w && (!w.$instanceof(zul.grid.Group) && !w.$instanceof(zul.grid.Groupfoot));
-				w = w.nextSibling)
-			if (w.desktop && w.isVisible())
-				jq(w.$n())[toOpen ? "show" : "hide"]();
+		var w = this.$n();
+		if (w) {
+			for (var r, w = w.nextSibling; w && (r = zk.Widget.$(w)) && !zul.grid.Group.isInstance(r) &&
+					!zul.grid.Groupfoot.isInstance(r); w = w.nextSibling) {
+				if (r.desktop && r.isVisible())
+					jq(w)[toOpen ? "show" : "hide"]();
+			}
+		}
 	},
 	beforeParentChanged_: function (p) {
 		if (!p) {
