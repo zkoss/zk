@@ -26,7 +26,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 <listitem label="Listitem"/>
 </listbox>
 <button label="After click me, Listgroupfoot should be replaced" onClick='if (lgf != lb.getLastChild()) lb.insertBefore(lgf, null); else lb.insertBefore(lgf, lg2);'/>
-<button label="After click me, Listgroup and Listgroupfoot should be removed" onClick='lg.detach(); lg2.detach();'/>
+<button label="After click me, Listgroup and Listgroupfoot should be removed" onClick='lg.detach(); lg2.detach(); lgf.detach()'/>
 <grid width="200px">
 <rows id="rs">
 <group label="Group" id="g"/>

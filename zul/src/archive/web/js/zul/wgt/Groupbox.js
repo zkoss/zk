@@ -19,7 +19,7 @@ zul.wgt.Groupbox = zk.$extends(zul.Widget, {
 	$define: { //zk.def
 		open: function (open, fromServer) {
 			var node = this.$n();
-			if (node) {
+			if (node && this._closable) {
 				var panel = this.$n('panel');
 				if (panel) { //!legend
 					if (open) zk(panel).slideDown(this, {afterAnima: this._afterSlideDown});

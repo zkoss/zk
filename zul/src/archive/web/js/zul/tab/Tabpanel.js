@@ -74,8 +74,7 @@ zul.tab.Tabpanel = zk.$extends(zul.Widget, {
 			zWatch.listen({onSize: this, onShow: this});
 	},
 	unbind_: function () {
-		if (this.getTabbox().isHorizontal())
-			zWatch.unlisten({onSize: this, onShow: this});
+		zWatch.unlisten({onSize: this, onShow: this});
 		this.$supers('unbind_', arguments);
 	}
 
