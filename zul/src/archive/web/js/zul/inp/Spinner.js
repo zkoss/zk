@@ -151,8 +151,12 @@ zul.inp.Spinner = zk.$extends(zul.inp.FormatWidget, {
 		if(inp.disabled) return;
 
 		this._onChanging();
-		
 		this._stopAutoIncProc();
+		
+		if (zk.ie) {
+			var len = inp.value.length;
+			zk(inp).setSelectionRange(len, len);
+		}
 		inp.focus();
 	},
 	_btnOut: function(evt){

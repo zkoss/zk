@@ -335,6 +335,9 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			this._doDown();
 			this._startAutoIncProc(false);
 		}
+		
+		// cache it for IE
+		this._lastPos = this._getPos();
 	},
 	_btnUp: function(evt){
 		var inp = this.getInputNode();
@@ -342,6 +345,10 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 
 		this._onChanging();
 		this._stopAutoIncProc();
+		
+		if (zk.ie && this._lastPos)
+			zk(inp).setSelectionRange(this._lastPos, this._lastPos);
+
 		inp.focus();
 	},
 	_btnOut: function(evt){
@@ -629,7 +636,7 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 				.domUnlisten_(btn, "onMouseout", "_btnOut")
 				.domUnlisten_(btn, "onMouseover", "_btnOver");
 		}
-
+		
 		this.$supers('unbind_', arguments);
 	}
 
