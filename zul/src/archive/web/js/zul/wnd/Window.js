@@ -108,6 +108,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				}
 				if (!fromServer || isRealVisible) {
 					this._visible = true;
+					this._syncMask();
 					this.fire('onMaximize', {
 						left: l,
 						top: t,
@@ -140,6 +141,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				}
 				if (!fromServer) {
 					this._visible = false;
+					this._syncShadow();
+					this._syncMask();
 					this.fire('onMinimize', {
 						left: s.left,
 						top: s.top,

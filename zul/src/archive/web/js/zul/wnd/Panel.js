@@ -442,7 +442,7 @@ zul.wnd.Panel = zk.$extends(zul.Widget, {
 		if (shadow) shadow.hide();
 	},
 	//super//
-	bind_: function () {
+	bind_: function (desktop, skipper, after) {
 		this.$supers('bind_', arguments);
 
 		zWatch.listen({onSize: this, onShow: this, onHide: this});
