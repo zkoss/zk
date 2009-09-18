@@ -2758,9 +2758,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (o instanceof ComponentSerializationListener)
 			((ComponentSerializationListener)o).didDeserialize(this);
 	}
-	private static boolean isVariableSerializable(String name, Object value) {
-		return !(value instanceof Component);
-	}
 
 	/** Used to forward events (for the forward conditions).
 	 */

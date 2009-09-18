@@ -110,10 +110,20 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</system-config>
 	
 	<!-- Turn on the following if you want to use ZK with a clustering server
+		or cloud environment (such as Google App Engine)
 	<system-config>
 		<disable-event-thread/>
 		<ui-factory-class>org.zkoss.zk.ui.http.SerializableUiFactory</ui-factory-class>
 	</system-config>
+	-->
+	<!-- Disable the serialization of BeanShell methods
+		Default: enable
+		Disable it if Google App Engine is used since it cannot serialize
+		BeanShell method correctly
+	<library-property>
+		<name>org.zkoss.zk.scripting.bsh.method.serializable</name>
+		<value>false</value>
+	</library-property>
 	-->
 	<!-- Turn on the following if you want to cache all desktops in a global
 	cache, rather than one for each session

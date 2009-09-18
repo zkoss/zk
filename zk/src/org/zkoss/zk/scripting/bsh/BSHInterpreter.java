@@ -41,6 +41,7 @@ import bsh.UtilEvalError;
 
 import org.zkoss.lang.D;
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.Library;
 import org.zkoss.lang.reflect.Fields;
 import org.zkoss.xel.Function;
 import org.zkoss.util.logging.Log;
@@ -537,6 +538,8 @@ implements SerializableAware, HierachicalAware {
 					final Object val = ns.getVariable(nm, false);
 					if ((val == null || (val instanceof Serializable)
 						|| (val instanceof Externalizable))
+					&& !(val instanceof Component)
+					&& isVariableSerializable(nm)
 					&& (filter == null || filter.accept(nm, val))) {
 						s.writeObject(nm);
 						s.writeObject(val);
@@ -551,30 +554,33 @@ implements SerializableAware, HierachicalAware {
 		s.writeObject(null); //denote end-of-vars
 
 		//2. methods
-		final BshMethod[] mtds = ns.getMethods();
-		for (int j = mtds != null ? mtds.length: 0; --j >= 0;) {
-			final String nm = mtds[j].getName();
-			if (filter == null || filter.accept(nm, mtds[j])) {
-				//hack BeanShell 2.0b4 which cannot be serialized correctly
-				Field f = null;
-				boolean acs = false;
-				try {
-					f = Classes.getAnyField(BshMethod.class, "declaringNameSpace");
-					acs = f.isAccessible();
-					Fields.setAccessible(f, true);
-					final Object old = f.get(mtds[j]);
+		if (shallSerializeMethod()) {
+			final BshMethod[] mtds = ns.getMethods();
+			for (int j = mtds != null ? mtds.length: 0; --j >= 0;) {
+				final String nm = mtds[j].getName();
+				if (isMethodSerializable(nm)
+				&& (filter == null || filter.accept(nm, mtds[j]))) {
+					//hack BeanShell 2.0b4 which cannot be serialized correctly
+					Field f = null;
+					boolean acs = false;
 					try {
-						f.set(mtds[j], null);
-						s.writeObject(mtds[j]);
+						f = Classes.getAnyField(BshMethod.class, "declaringNameSpace");
+						acs = f.isAccessible();
+						Fields.setAccessible(f, true);
+						final Object old = f.get(mtds[j]);
+						try {
+							f.set(mtds[j], null);
+							s.writeObject(mtds[j]);
+						} finally {
+							f.set(mtds[j], old);
+						}
+					} catch (IOException ex) {
+						throw ex;
+					} catch (Throwable ex) {
+						log.warning("Ignored failure to write "+nm, ex);
 					} finally {
-						f.set(mtds[j], old);
+						if (f != null) Fields.setAccessible(f, acs);
 					}
-				} catch (IOException ex) {
-					throw ex;
-				} catch (Throwable ex) {
-					log.warning("Ignored failure to write "+nm, ex);
-				} finally {
-					if (f != null) Fields.setAccessible(f, acs);
 				}
 			}
 		}
@@ -627,6 +633,27 @@ implements SerializableAware, HierachicalAware {
 		}
 		s.writeObject(null); //denote end-of-cls
 	}
+	private static boolean isVariableSerializable(String name) {
+		//we have to filter out them since BeanShell will store variables
+		//that was accessed (by getFromScope)
+		for (int j = _nonSerNames.length; --j >= 0;)
+			if (_nonSerNames[j].equals(name))
+				return false;
+		return true;
+	}
+	private static final String[] _nonSerNames = {
+		"log", "page", "desktop", "pageScope", "desktopScope",
+		"applicationScope", "requestScope", "spaceOwner",
+		"session", "sessionScope", "execution"
+	};
+	private static boolean isMethodSerializable(String name) {
+		return !"alert".equals(name);
+	}
+	private static boolean shallSerializeMethod() {
+		final String s = Library.getProperty("org.zkoss.zk.scripting.bsh.method.serializable");
+		return s == null || !"false".equals(s);
+	}
+
 	/*package*/ static void read(NameSpace ns, ObjectInputStream s)
 	throws IOException {
 		for (;;) {

@@ -1053,13 +1053,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			if (ip instanceof SerializableAware) {
 				s.writeObject((String)me.getKey()); //zslang
 
-				((SerializableAware)ip).write(s,
-					new SerializableAware.Filter() {
-						public boolean accept(String name, Object value) {
-							return isVariableSerializable(name, value)
-							&& (value == null || value instanceof java.io.Serializable || value instanceof java.io.Externalizable);
-						}
-					});
+				((SerializableAware)ip).write(s, null);
 			}
 		}
 		s.writeObject(null); //denote end-of-interpreters
@@ -1122,9 +1116,6 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	private void didDeserialize(Object o) {
 		if (o instanceof PageSerializationListener)
 			((PageSerializationListener)o).didDeserialize(this);
-	}
-	private static boolean isVariableSerializable(String name, Object value) {
-		return !"alert".equals(name) && !(value instanceof Component);
 	}
 
 	//-- Object --//
