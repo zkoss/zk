@@ -19,12 +19,12 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 -->
 <zk>
 If you can use keyboard to up/down each item, that is correct.
-<listbox width="250px">
+<listbox width="250px" focus="true">
 	<listhead>
 		<listheader visible="false" label="Name" sort="auto" />
 		<listheader label="Gender" sort="auto" />
 	</listhead>
-	<listitem>
+	<listitem selected="true">
 		<listcell label="Mary" />
 		<listcell label="female" />
 	</listitem>
