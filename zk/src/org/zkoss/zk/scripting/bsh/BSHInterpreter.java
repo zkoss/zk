@@ -533,13 +533,13 @@ implements SerializableAware, HierachicalAware {
 		final String[] vars = ns.getVariableNames();
 		for (int j = vars != null ? vars.length: 0; --j >= 0;) {
 			final String nm = vars[j];
-			if (nm != null && !"bsh".equals(nm)) {
+			if (nm != null && !"bsh".equals(nm)
+			&& isVariableSerializable(nm)) {
 				try {
 					final Object val = ns.getVariable(nm, false);
 					if ((val == null || (val instanceof Serializable)
 						|| (val instanceof Externalizable))
 					&& !(val instanceof Component)
-					&& isVariableSerializable(nm)
 					&& (filter == null || filter.accept(nm, val))) {
 						s.writeObject(nm);
 						s.writeObject(val);
