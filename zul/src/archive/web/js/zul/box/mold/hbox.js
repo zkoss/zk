@@ -17,7 +17,10 @@ function (out) {
 	
 	var	v = this.getAlign();
 	if (v && v != 'stretch') out.push(' valign="', zul.box.Box._toValign(v), '"');
-	out.push('><td style="height:100%;width:100%"');
+	//IE && FF2 need to set height, or the table height will shrink to as high as inner table.
+	//FF3 is OK to set or not set
+	out.push('><td style="width:100%;height:100%"');
+	
 	var p = this.getPack();
 	if (p && p != 'stretch') out.push(' align="', zul.box.Box._toHalign(p), '"');
 	out.push('><table id="', this.uuid, '-real"', zUtl.cellps0, 'style="text-align:left');

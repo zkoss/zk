@@ -221,9 +221,16 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		for (; c; c = c.nextSibling)
 			if (c.nodeType != 3) break; //until not a text node
 		
+		//ie6 must set parent div to 'relative' or the kid div's offsetTop is not correct
+		var oldPos;
+		if (zk.ie6_ && p.tagName == 'DIV') {
+			oldPos = p.style.position;
+			p.style.position = 'relative';
+		}
+		
 		var sameOffParent = c ? c.offsetParent === p.offsetParent : false,
-			tbp = zkp.sumStyles('t', jq.borders) + zkp.sumStyles('t', jq.paddings),
-			lbp = zkp.sumStyles('l', jq.borders) + zkp.sumStyles('l', jq.paddings),
+			tbp = zkp.sumStyles('t', jq.borders),
+			lbp = zkp.sumStyles('l', jq.borders),
 			segTop = sameOffParent ? (p.offsetTop + tbp) : tbp,
 			segLeft = sameOffParent ? (p.offsetLeft + lbp) : lbp,
 			segBottom = segTop,
@@ -238,10 +245,10 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					prevflex = prehflex = false;
 					continue;
 				}
-				var offLeft = c.offsetLeft,
-					offTop = c.offsetTop,
-					offhgh = zkc.offsetHeight(),
+				var offhgh = zkc.offsetHeight(),
 					offwdh = offhgh > 0 ? zkc.offsetWidth() : 0, //div with zero height might have 100% width
+					offTop = c.offsetTop,
+					offLeft = c.offsetLeft,
 					marginRight = offLeft + offwdh + zkc.sumStyles("r", jq.margins),
 					marginBottom = offTop + offhgh + zkc.sumStyles("b", jq.margins);
 				
@@ -273,11 +280,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 						prevflex = true;
 					}
 				} else {
-					if (prevflex) { //in ie6, sometimes kid1.offTop > kid2.offTop 
-						if (zk.ie6_) segTop = segBottom = Math.min(offTop, segTop);
-						prevflex = false;
-					}
 					segBottom = Math.max(segBottom, marginBottom);
+					prevflex = false;
 				}
 				
 				//horizontal size
@@ -313,7 +317,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				pretxt = false;
 			}
 		}
-		
+
+		if (zk.ie6_ && p.tagName == 'DIV') {
+			p.style.position = oldPos;
+		}
+
 		if (segBottom > segTop) {
 			hgh -= segBottom - segTop;
 		}

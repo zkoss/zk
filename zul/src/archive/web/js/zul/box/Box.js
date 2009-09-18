@@ -230,7 +230,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 						tdsz = vert ? zk(td).revisedWidth(td.offsetWidth) : zk(td).revisedHeight(td.offsetHeight);
 					}
 					if (vert)
-						c.style.width = zk(c).revisedHeight(tdsz, true) + 'px';
+						c.style.width = zk(c).revisedWidth(tdsz, true) + 'px';
 					else
 						c.style.height = zk(c).revisedHeight(tdsz, true) + 'px';
 				}
