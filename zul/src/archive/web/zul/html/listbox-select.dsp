@@ -20,6 +20,8 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:set var="self" value="${requestScope.arg.self}"/>
 <select id="${self.uuid}" z.type="zul.sel.Lisel"${self.outerAttrs}${self.innerAttrs}>
 	<c:forEach var="item" items="${self.items}">
-	<option id="${item.uuid}"${item.outerAttrs}${item.innerAttrs}><c:out value="${item.label}" maxlength="${self.maxlength}"/></option>
+		<c:if test="${item.visible}">
+			<option id="${item.uuid}"${item.outerAttrs}${item.innerAttrs}><c:out value="${item.label}" maxlength="${self.maxlength}"/></option>
+		</c:if>
 	</c:forEach><%-- for better performance, we don't use z:redraw --%>
 </select>

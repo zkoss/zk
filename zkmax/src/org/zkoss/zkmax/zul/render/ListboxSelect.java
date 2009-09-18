@@ -46,10 +46,14 @@ public class ListboxSelect implements ComponentRenderer {
 
 		for (Iterator it = self.getItems().iterator(); it.hasNext();) {
 			final Listitem item = (Listitem)it.next();
-			wh.write("<option id=\"").write(item.getUuid()).write("\"")
-				.write(item.getOuterAttrs()).write(item.getInnerAttrs()).write(">");
-			new Out(item.getLabel()).setMaxlength(self.getMaxlength()).render(out);
-			wh.writeln("</option>");
+			if (item.isVisible()) {
+				wh.write("<option id=\"").write(item.getUuid()).write("\"")
+						.write(item.getOuterAttrs())
+						.write(item.getInnerAttrs()).write(">");
+				new Out(item.getLabel()).setMaxlength(self.getMaxlength())
+						.render(out);
+				wh.writeln("</option>");
+			}
 		}
 
 		wh.write("</select>");

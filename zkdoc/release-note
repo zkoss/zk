@@ -39,6 +39,7 @@ August, 2009
   2493245: zscript failed badly if macro's setMacroURI before setParent
   2859075: Menuseparator with vertial menubar fails in zkmax
   2859747: Label inside Column should be sorted as well.
+  2861272: Listitem can't be invisible in IE, Chrome, and Opera
   
 	--------
 ZK 3.6.2
