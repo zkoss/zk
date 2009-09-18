@@ -75,6 +75,17 @@ import org.zkoss.zk.scripting.HierachicalAware;
  * to prepare the proper scope, before calling any method defined in
  * zscript.
  *
+ * <h2>How serialization work?</p>
+ *
+ * <p>First, all NameSpace objects have to serialize. Second,
+ * the top-level namespace (GlobalNS) is wrapped with NSWrap, which
+ * is not serializable. It is serialized when {@link SerializableAware#write}
+ * is called (trigged by PageImpl's write).
+ *
+ * <p>On the other hand, all non-top-level namespaces (NS) are wrapped with
+ * NSWrapSR which is serializable, so they are serialized with
+ * the attributes of a ID space owner being serialized.
+ *
  * @author tomyeh
  */
 public class BSHInterpreter extends GenericInterpreter
@@ -749,7 +760,7 @@ implements SerializableAware, HierachicalAware {
 /*package*/ class NSWrap {
 	protected NameSpace _bshns;
 	/*package*/ static NSWrap getInstance(NameSpace ns) {
-		if (ns instanceof BSHInterpreter.NS) return new NSWrapX(ns);
+		if (ns instanceof BSHInterpreter.NS) return new NSWrapSR(ns);
 		return new NSWrap(ns);
 	}
 	protected NSWrap(NameSpace ns) {
@@ -762,15 +773,15 @@ implements SerializableAware, HierachicalAware {
 		return _bshns;
 	}
 }
-/*package*/ class NSWrapX extends NSWrap implements Serializable {
+/*package*/ class NSWrapSR extends NSWrap implements Serializable {
 	private static final Log log = BSHInterpreter.log;
 	private Map _vars;
 	private List _mtds, _clses, _pkgs;
 
-	/*package*/ NSWrapX(NameSpace ns) {
+	/*package*/ NSWrapSR(NameSpace ns) {
 		super(ns);
 	}
-	public NSWrapX() {
+	public NSWrapSR() {
 	}
 	/** Returns the associated NameSpace. */
 	public NameSpace unwrap(Scope scope) {
