@@ -43,7 +43,41 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 			if (this._pageCount == 1) this.rerender();
 		}
 	},
-
+	setStyle: function () {
+		this.$supers('setStyle', arguments);
+		if (this.isBothPaging())
+			this.parent.rerender();
+	},
+	setSclass: function () {
+		this.$supers('setSclass', arguments);
+		if (this.isBothPaging())
+			this.parent.rerender();		
+	},
+	setWidth: function () {
+		this.$supers('setWidth', arguments);
+		if (this.isBothPaging())
+			this.parent.rerender();		
+	},
+	setHeight: function () {
+		this.$supers('setHeight', arguments);
+		if (this.isBothPaging())
+			this.parent.rerender();		
+	},
+	setLeft: function () {
+		this.$supers('setLeft', arguments);
+		if (this.isBothPaging())
+			this.parent.rerender();		
+	},
+	setTop: function () {
+		this.$supers('setTop', arguments);
+		if (this.isBothPaging())
+			this.parent.rerender();		
+	},
+	setTooltiptext: function () {
+		this.$supers('setTooltiptext', arguments);
+		if (this.isBothPaging())
+			this.parent.rerender();		
+	},
 	replaceHTML: function () {
 		if (this.isBothPaging())
 			this.parent.rerender();
@@ -62,7 +96,7 @@ zul.mesh.Paging = zk.$extends(zul.Widget, {
 			if (this._activePage >= this._pageCount)
 				this._activePage = this._pageCount - 1;
 			if (this.desktop && this.parent) {
-				if (this.parent.getPagingPosition() == 'both')
+				if (this.isBothPaging())
 					this.parent.rerender();
 				else
 					this.rerender();

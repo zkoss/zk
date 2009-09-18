@@ -24,6 +24,13 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		}
 	},
 
+	removeChildHTML_: function (child, prevsib) {
+		this.$supers('removeChildHTML_', arguments);
+		if (!this.$instanceof(zul.mesh.Auxhead))
+			for (var faker, fs = child.$class._faker, i = fs.length; i--;)
+				jq(child.uuid + '-' + fs[i], zk).remove();
+	},
+	
 	onColSize: function (evt) {
 		var owner = this.parent;
 		if (owner.isSizedByContent()) owner.$class._adjHeadWd(owner);

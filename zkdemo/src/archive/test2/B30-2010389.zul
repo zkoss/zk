@@ -61,7 +61,7 @@ public class Order {
     <attribute name="onClick">
       selected = orders.get(6);
 
-      AnnotateDataBinder binder = page.getVariable("binder");
+      AnnotateDataBinder binder = page.getAttribute("binder");
       binder.loadAll();
     </attribute>
   </button>

@@ -142,7 +142,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			if (item)
 				item = getVisibleItemOnly(item, bUp);
 			return item ? item : getVisibleItemOnly(
-					bUp ? this.lastChild : this.firstChild, bUp, true);
+					bUp ? this.firstChild : this.lastChild, !bUp, true);
 		};
 	})(),
 	_select: function (sel, opts) {

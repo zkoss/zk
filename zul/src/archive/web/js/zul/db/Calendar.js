@@ -203,6 +203,23 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			return (today - d)/ 86400000 < 0;
 			break;
 		default:
+			if (this._constraint) {
+				if (this._constraint.startsWith("before")) {
+					var before = zDateFormat.parseDate(this._constraint.substring(6), 'yyyyMMdd');
+					before.setHours(0);
+					before.setMinutes(0);
+					before.setSeconds(0);
+					before.setMilliseconds(0);
+					return (before - d) / 86400000 < 0;
+				} else if (this._constraint.startsWith("after")) {
+					var after = zDateFormat.parseDate(this._constraint.substring(5), 'yyyyMMdd');
+					after.setHours(0);
+					after.setMinutes(0);
+					after.setSeconds(0);
+					after.setMilliseconds(0);
+					return (d - after) / 86400000 < 0;
+				}
+			}
 			return false;
 		}
 	},

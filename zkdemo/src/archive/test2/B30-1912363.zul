@@ -30,7 +30,7 @@ Then, the error message shall show up (error if not)
 <ol>
 <li>Type in anything, say "nn"</li>
 <li>Click the dropdown button</li>
-<li>Click an invalid date (then the popup shall close up)</li>
+<li>Click an invalid date (before 20080312), then the popup shall close up</li>
 <li>Click anywhere other than datebox to change focus</li>
 </ol>
 Then, the error message shall show up (error if not)

@@ -379,6 +379,14 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 	_setView: function (val) {
 		this.parent._tm.setVisible(val == 'day');
 		this.$supers('_setView', arguments);
+	},
+	_choiceData: function (evt) {
+		var target = evt.domTarget;
+		target = target.tagName == "TD" ? target : target.parentNode;
+		if (target && jq(target).hasClass(this.getZclass() + '-disd')) {
+			this.close();
+		} else
+			this.$supers('_choiceData', arguments);
 	}
 });
 zul.db.CalendarTime = zk.$extends(zul.inp.Timebox, {
