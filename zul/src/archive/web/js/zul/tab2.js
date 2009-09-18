@@ -153,7 +153,9 @@ zkTab2 = {
 		if (!zkTabbox2._isAccord(tbx)) { //if delete tab , need scroll back !
 		zk.addCleanupLater(function () {
 			zkTabs2.scrollcheck(tabs.id, "cln", cmp);
+				tbx = $e(getZKAttr(cmp, "box"));
 				if (zkTabbox2._isVert(tbx)) {
+					tabs = $outer(cmp.parentNode);
 					zkTabs2._fixHgh(tbx, tabs);
 				}
 			}, false, tabs.id + "Tabbox2");
