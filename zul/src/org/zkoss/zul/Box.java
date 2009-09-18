@@ -205,7 +205,7 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 	 * the box is larger than the total size of the children, the extra space is
 	 * placed on the left or top side.</dd>
 	 * <dt>stretch(since 5.0)</dt>
-	 * <dd>This is an indication option in addition to the (start, center, end) options.
+	 * <dd>This is an extra option in addition to the (start, center, end) options.
 	 * When add this extra option in the pack attribute, the Extra space is placed
 	 * proportionally and evenly along each child elements. If you specify 
 	 * "stretch,start", then the Extra proportionally and evenly allocated space 
@@ -214,10 +214,11 @@ public class Box extends XulElement implements org.zkoss.zul.api.Box {
 	 * allocated space for each child is split equally along each side of the
 	 * child. If you specify "stretch,end", then the Extra proportionally and 
 	 * evenly allocated space for each child is placed on the left or top side of 
-	 * the child. Note that if there are {@link Splitter} child inside this Box, then 
-	 * it implies the stretch pack attribute; no matter you specify "stretch" in 
-	 * pack attribute or not. If given null or simply "stretch" to this pack
-	 * attribute then it is the same as "stretch,start"</dd> 
+	 * the child. Note that if there are {@link Splitter} child inside this Box, 
+	 * then this Box behaves as if the pack attribute has been set the "stretch"
+	 * option; no matter you really specify "stretch" in pack attribute or not. 
+	 * If given null or simply "stretch" to this pack attribute then it is the 
+	 * same as "stretch,start"</dd> 
 	 * </dl>
 	 *
 	 * @since 3.0.0
