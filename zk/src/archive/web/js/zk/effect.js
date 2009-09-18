@@ -111,8 +111,7 @@ if (zk.ie || zk.gecko2_ || zk.opera) {
 		},
 		destroy: function () {
 			jq(this.stackup).remove();
-			var wgt = zk.Widget.$(this.node.id);
-			jq(this.node).removeClass(wgt.getZclass() + '-shadow');
+			jq(this.node).removeClass(this.wgt.getZclass() + '-shadow');
 			this.wgt = this.node = this.stackup = null;
 		},
 		hide: function(){

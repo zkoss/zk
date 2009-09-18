@@ -23,6 +23,7 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 		closable: _zkf = function() {
 			this.rerender();
 		},
+		image: _zkf,
 		disabled: _zkf,
 		selected: function(selected) {
 			if (this.$n())
