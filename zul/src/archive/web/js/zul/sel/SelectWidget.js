@@ -20,8 +20,11 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 	},
 	$define: {
 		rows: function (rows) {
-			if (this.desktop)
+			var n = this.$n();
+			if (n) {
+				n._lastsz = null;
 				this.onSize();
+			}
 		},
 		checkmark: function (checkmark) {
 			if (this.desktop)
@@ -81,7 +84,7 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			this._height = height;
 			var n = this.$n();
 			if (n) {
-				 n.style.height = height || '';
+				n.style.height = height || '';
 				this.onSize();
 			}
 		}
