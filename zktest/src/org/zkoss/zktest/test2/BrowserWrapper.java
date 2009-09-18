@@ -25,7 +25,6 @@ import com.thoughtworks.selenium.Selenium;
  */
 public class BrowserWrapper {
 	
-	
 	private List<Selenium> _browsers = new LinkedList<Selenium>();
 	private List<String> _browserTypes = new LinkedList<String>();
 	
@@ -44,15 +43,24 @@ public class BrowserWrapper {
 	}
 	
 	public void addBrowser(String browserType, Selenium browser){
+		if(browserType == null || browser == null)
+			throw new NullPointerException("BrowserWrapper addBrowser : Browser is NULL");
+		
 		_browsers.add(browser);
 		_browserTypes.add(browserType);
 	}
 	
 	public List<Selenium> getBrowsers(){
+		if(_browsers == null || _browsers.size() == 0)
+			throw new NullPointerException("Selenium list Null, please check config property file for testing browser");
+		
 		return _browsers;
 	}
 	
 	public List<String> getBrowserTypes(){
+		if(_browserTypes == null || _browserTypes.size() == 0)
+			throw new NullPointerException("Selenium list Null, please check config property file for testing browser");
+			
 		return _browserTypes;
 	}
 }
