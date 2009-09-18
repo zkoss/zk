@@ -319,7 +319,6 @@ zk.Selectable.prototype = {
 			}
 		}
 		if (lastrow) {
-			zk.log(lastrow.childNodes[1].firstChild.innerHTML +" "+ lastrow.id);
 			if (ctrl) this.focus(lastrow);
 			else this.select(lastrow, zkau.getKeys(evt));
 			this._syncFocus(lastrow);
