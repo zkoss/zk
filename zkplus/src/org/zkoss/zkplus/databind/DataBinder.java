@@ -43,6 +43,7 @@ import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.metainfo.Annotation;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zul.Combobox;
@@ -1041,7 +1042,12 @@ public class DataBinder implements java.io.Serializable {
 			if (existsBean(beanid)) {
 				setBean(beanid, val);
 			} else if (!setZScriptVariable(comp, beanid, val)) {
-				comp.setAttribute(beanid, val, true);
+				final Object owner = comp.getSpaceOwner();
+				if (owner instanceof Page) {
+					((Page)owner).setAttribute(beanid, val);
+				} else {
+					((Component)owner).setAttribute(beanid, val, true);
+				}
 			}
 			refChanged = true;
 		} else {
