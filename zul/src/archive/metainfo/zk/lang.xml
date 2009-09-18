@@ -550,6 +550,11 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 			<mold-uri>~./zul/html/longbox.dsp</mold-uri>
 		</mold>
 	</component>
+	<component><!-- Feature 2493161 -->
+		<component-name>macro</component-name>
+		<component-class>org.zkoss.zk.ui.HtmlMacroComponent</component-class>
+		<macro-uri>~./zul/html/macro.zul</macro-uri>
+	</component>
 	<component>
 		<component-name>menu</component-name>
 		<component-class>org.zkoss.zul.Menu</component-class>

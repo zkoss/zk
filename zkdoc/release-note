@@ -36,6 +36,7 @@ August, 2009
   2859020: ComponentActivationListener and others not called for child
   2073409: Can't add groupfoot by javacode
   2154611: Menuitem in Menubar - quirks
+  2493245: zscript failed badly if macro's setMacroURI before setParent
   2859075: Menuseparator with vertial menubar fails in zkmax
   2859747: Label inside Column should be sorted as well.
   

@@ -188,15 +188,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			_def = lookupDefinition(exec, getClass());
 			if (_def != null)
 				addSharedAnnotationMap(_def.getAnnotationMap());
-			else if ((this instanceof Macro)
-			&& Library.getProperty("org.zkoss.zk.MacroNoDefinitionAllowed") == null)
-				//3.0.3: check addition prop to allow user to maintain backward compatibility
-				throw new DefinitionNotFoundException(
-					"Component definition not found for the macro "+this.getClass()
-					+". Current page definition: "
-					+(exec != null ? ""+((ExecutionCtrl)exec).getCurrentPageDefinition(): "n/a")
-					+". Current page: "
-					+(exec != null ? ""+((ExecutionCtrl)exec).getCurrentPage(): "n/a"));
 			else
 				_def = ComponentsCtrl.DUMMY;
 		}
