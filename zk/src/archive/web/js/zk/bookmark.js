@@ -18,7 +18,7 @@ zk.bmk = (function () {
 	/** bookmark iframe */
 	var _bkIframe = zk.ie ? function (nm) {
 		//Bug 2019171: we have to create iframe frist
-		var url = zk.ajaxURI("/web/js/zk/html/bookmark.html", {au:true,ignoreSession:true}),
+		var url = zk.ajaxURI("/web/js/zk/bookmark.html", {au:true,ignoreSession:true}),
 			ifr = jq('#zk_histy')[0];
 		if (!ifr) ifr = jq.newFrame('zk_histy', url);
 
