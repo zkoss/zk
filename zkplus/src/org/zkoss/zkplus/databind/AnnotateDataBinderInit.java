@@ -79,11 +79,18 @@ import org.zkoss.zk.ui.util.InitiatorExt;
 		// do nothing
 	}
 	public void doInit(Page page, Map args) {
-		Object arg0 = args.get("root");
-		if (arg0 == null) {
-			arg0 = args.get("arg0"); //backward compatible
+		boolean hasArg0 = args.containsKey("root");
+
+		Object arg0 = null;
+		if (hasArg0) {
+			arg0 = args.get("root");
+		} else {
+			hasArg0 = args.containsKey("arg0");
+			if (hasArg0) {
+				arg0 = args.get("arg0"); //backward compatible
+			}
 		}
-		if (arg0 != null) {
+		if (hasArg0) {
 			if (arg0 instanceof String) {
 				_compPath = (String) arg0;
 			} else if (arg0 instanceof Component) {

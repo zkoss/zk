@@ -131,7 +131,8 @@ August, 2009
   2829547: Incorrect getValue when using spinners on multiple Timeboxes
   2856700: Failed to include a page with query string in auto mode
   2859020: ComponentActivationListener and others not called for child
-  
+  2861323: AnnotateDataBinderInit shall throw exception if arg0 is null
+
 	--------
 ZK 3.6.2
 June 23, 2009
