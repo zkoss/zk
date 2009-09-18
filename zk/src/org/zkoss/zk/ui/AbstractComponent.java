@@ -885,12 +885,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	public Object getFellowOrAttribute(String name, boolean recurse) {
-		if (this instanceof IdSpace) {
-			Object val = _spaceInfo.vars.get(name); //backward compatible (variable first)
-			if (val != null || _spaceInfo.vars.containsKey(name))
-				return val;
-		}
-
 		Object val = getAttribute(name);
 		if (val != null || hasAttribute(name))
 			return val;
@@ -899,6 +893,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			val = getFellowIfAny(name);
 			if (val != null)
 				return val;
+			if ("spaceScope".equals(name))
+				return AbstractComponent.this._attrs;
+			if ("spaceOwner".equals(name))
+				return AbstractComponent.this;
 		}
 
 		if (recurse) {
@@ -911,8 +909,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 	public boolean hasFellowOrAttribute(String name, boolean recurse) {
 		if (hasAttribute(name)
-		|| (this instanceof IdSpace && (hasFellow(name)
-			|| _spaceInfo.vars.containsKey(name)))) //backward compatible
+		|| (this instanceof IdSpace && hasFellow(name)))
 			return true;
 
 		if (recurse) {
@@ -2141,11 +2138,11 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			for (Iterator it = _listeners.values().iterator(); it.hasNext();)
 				willPassivate((Collection)it.next());
 
-		if (this instanceof IdSpace) { //backward compatible
-			for (Iterator it = _spaceInfo.ns.getVariableNames().iterator();
+		if (this instanceof IdSpace) {
+		//backward compatible (we store variables in attributes)
+			for (Iterator it = _attrs.getAttributes().values().iterator();
 			it.hasNext();) {
-				final Object val = _spaceInfo.ns.getVariable((String)it.next(), true);
-				willPassivate(val);
+				final Object val = it.next();
 				if (val instanceof NamespaceActivationListener) //backward compatible
 					((NamespaceActivationListener)val).willPassivate(_spaceInfo.ns);
 			}
@@ -2168,10 +2165,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				didActivate((Collection)it.next());
 
 		if (this instanceof IdSpace) {
-			for (Iterator it = _spaceInfo.ns.getVariableNames().iterator();
+		//backward compatible (we store variables in attributes)
+			for (Iterator it = _attrs.getAttributes().values().iterator();
 			it.hasNext();) {
-				final Object val = _spaceInfo.ns.getVariable((String)it.next(), true);
-				didActivate(val);
+				final Object val = it.next();
 				if (val instanceof NamespaceActivationListener) //backward compatible
 					((NamespaceActivationListener)val).didActivate(_spaceInfo.ns);
 			}
@@ -2334,68 +2331,52 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 	/** Holds info shared of the same ID space. */
 	private class SpaceInfo {
-		private NS ns;
+		private NS ns = new NS();
 		/** A map of ((String id, Component fellow). */
 		private Map fellows = new HashMap(32);
-		/** deprecated (for backward compatible). */
-		private final Map vars = new HashMap(4);
-
-		private SpaceInfo() {
-			ns = new NS();
-			init();
+	}
+	/** @deprecated */
+	private class NS implements Namespace {
+		//Namespace//
+		public Component getOwner() {
+			return AbstractComponent.this;
 		}
-		private void init() {
-			ns.setVariable("spaceScope", AbstractComponent.this._attrs, true);
-			ns.setVariable("spaceOwner", AbstractComponent.this, true);
+		public Page getOwnerPage() {
+			return AbstractComponent.this._page;
+		}
+		public Set getVariableNames() {
+			return _attrs.getAttributes().keySet();
+		}
+		public boolean containsVariable(String name, boolean local) {
+			return hasFellowOrAttribute(name, !local);
+		}
+		public Object getVariable(String name, boolean local) {
+			return getFellowOrAttribute(name, !local);
+		}
+		public void setVariable(String name, Object value, boolean local) {
+			setAttribute(name, value, !local);
+		}
+		public void unsetVariable(String name, boolean local) {
+			removeAttribute(name, !local);
+		}
+
+		/** @deprecated */
+		public Namespace getParent() {
+			final IdSpace owner = getSpaceOwnerOfParent(AbstractComponent.this);
+			return owner instanceof Component ? ((Component)owner).getNamespace():
+				owner instanceof Page ? ((Page)owner).getNamespace(): null;
 		}
 		/** @deprecated */
-		private class NS implements Namespace {
-			//Namespace//
-			public Component getOwner() {
-				return AbstractComponent.this;
-			}
-			public Page getOwnerPage() {
-				return AbstractComponent.this._page;
-			}
-			public Set getVariableNames() {
-				return vars.keySet();
-			}
-			public boolean containsVariable(String name, boolean local) {
-				return vars.containsKey(name) || hasFellow(name);
-			}
-			public Object getVariable(String name, boolean local) {
-				Object val = vars.get(name);
-				if (val != null || vars.containsKey(name))
-					return val;
-
-				val = getFellowIfAny(name);
-				return val != null ? val: null;
-			}
-			public void setVariable(String name, Object value, boolean local) {
-				vars.put(name, value);
-			}
-			public void unsetVariable(String name, boolean local) {
-				vars.remove(name);
-			}
-
-			/** @deprecated */
-			public Namespace getParent() {
-				final IdSpace owner = getSpaceOwnerOfParent(AbstractComponent.this);
-				return owner instanceof Component ? ((Component)owner).getNamespace():
-					owner instanceof Page ? ((Page)owner).getNamespace(): null;
-			}
-			/** @deprecated */
-			public void setParent(Namespace parent) {
-				throw new UnsupportedOperationException();
-			}
-			/** @deprecated */
-			public boolean addChangeListener(NamespaceChangeListener listener) {
-				return false;
-			}
-			/** @deprecated */
-			public boolean removeChangeListener(NamespaceChangeListener listener) {
-				return false;
-			}
+		public void setParent(Namespace parent) {
+			throw new UnsupportedOperationException();
+		}
+		/** @deprecated */
+		public boolean addChangeListener(NamespaceChangeListener listener) {
+			return false;
+		}
+		/** @deprecated */
+		public boolean removeChangeListener(NamespaceChangeListener listener) {
+			return false;
 		}
 	}
 
@@ -2586,16 +2567,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 	}
 	private final void cloneSpaceInfoFrom(SpaceInfo from) {
-		for (Iterator it = from.vars.entrySet().iterator(); it.hasNext();) {
-			final Map.Entry me = (Map.Entry)it.next();
-			Object val = me.getValue();
-			if (val instanceof ComponentCloneListener) {
-				val = this.willClone((ComponentCloneListener)val);
-				if (val == null) continue; //don't use it in clone
-			}
-			this._spaceInfo.vars.put(me.getKey(), val);
-		}
-
 		//rebuild ID space by binding itself and all children
 		if (!ComponentsCtrl.isAutoId(getIdDirectly(this)))
 			this.bindToIdSpace(this);
@@ -2663,24 +2634,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				Serializables.smartWrite(s, ls);
 			}
 		s.writeObject(null);
-
-		//store _spaceInfo
-		if (this instanceof IdSpace) {
-			//write _spaceInfo.ns (only variables that are not fellows)
-			for (Iterator it = _spaceInfo.ns.getVariableNames().iterator();
-			it.hasNext();) {
-				final String nm = (String)it.next();
-				final Object val = _spaceInfo.ns.getVariable(nm, true);
-				willSerialize(val); //always called even if not serializable
-
-				if (isVariableSerializable(nm, val)
-				&& (val instanceof java.io.Serializable || val instanceof java.io.Externalizable)) {
-					s.writeObject(nm);
-					s.writeObject(val);
-				}
-			}
-			s.writeObject(null); //denote end-of-namespace
-		}
 
 		//write _forwards
 		if (_forwards != null) {
@@ -2777,16 +2730,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				bindToIdSpace(this);
 			for (AbstractComponent ac = _first; ac != null; ac = ac._next)
 				addToIdSpacesDown(ac, this);
-
-			//_spaceInfo.ns
-			for (;;) {
-				final String nm = (String)s.readObject();
-				if (nm == null) break; //no more
-
-				Object val = s.readObject();
-				_spaceInfo.ns.setVariable(nm, val, true);
-				didDeserialize(val);
-			}
 		}
 
 		//restore _forwards
@@ -2816,8 +2759,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			((ComponentSerializationListener)o).didDeserialize(this);
 	}
 	private static boolean isVariableSerializable(String name, Object value) {
-		return !"spaceScope".equals(name) && !"spaceOwner".equals(name)
-			&& !(value instanceof Component);
+		return !(value instanceof Component);
 	}
 
 	/** Used to forward events (for the forward conditions).

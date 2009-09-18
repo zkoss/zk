@@ -60,7 +60,11 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 
 		void exposeItems(Base b) { 
 			_wdBundleItems.clear();
+<<<<<<< .mine
+			_wdBundleItems.addAll(b.items); 
+=======
 			_wdBundleItems.addAll(b.items);
+>>>>>>> .r12477
 			testwin.getAttribute("binder", true).loadAll(); 
 		}
 

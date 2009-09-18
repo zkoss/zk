@@ -29,7 +29,7 @@ import org.zkoss.zk.ui.util.InitiatorExt;
  * <p>This initiator class do following things:</p>
  * <ol>
  * <li>New an {@link AnnotateDataBinder} instance.</li>
- * <li>Set the AnnotateDataBinder instance as a variable with the name as specified in 
+ * <li>Set the AnnotateDataBinder instance as a custom attribute with the name as specified in 
  * arg2 (default to "binder") and store it in the component as specified in arg0 "component-path".(if arg0 is not 
  * specified, use Page instead.)</li>
  * <li>call {@link AnnotateDataBinder#loadAll()} in to {@link #doAfterCompose(Page)} and
