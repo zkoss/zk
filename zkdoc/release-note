@@ -40,7 +40,8 @@ August, 2009
   2859075: Menuseparator with vertial menubar fails in zkmax
   2859747: Label inside Column should be sorted as well.
   2861272: Listitem can't be invisible in IE, Chrome, and Opera
-  
+  2861323: AnnotateDataBinderInit shall throw exception if arg0 is null
+
 	--------
 ZK 3.6.2
 June 23, 2009
