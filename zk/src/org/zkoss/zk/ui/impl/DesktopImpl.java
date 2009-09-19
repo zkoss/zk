@@ -469,6 +469,31 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 		}
 		return false;
 	}
+	public Object setAttribute(String name, Object value, boolean recurse) {
+		if (recurse && !hasAttribute(name)) {
+			if (_sess != null) {
+				if (_sess.hasAttribute(name, true))
+					return _sess.setAttribute(name, value, true);
+			} else if (_wapp != null) {
+				if (_wapp.hasAttribute(name, true))
+					return _wapp.setAttribute(name, value, true);
+			}
+		}
+		return setAttribute(name, value);
+	}
+	public Object removeAttribute(String name, boolean recurse) {
+		if (recurse && !hasAttribute(name)) {
+			if (_sess != null) {
+				if (_sess.hasAttribute(name, true))
+					return _sess.removeAttribute(name, true);
+			} else if (_wapp != null) {
+				if (_wapp.hasAttribute(name, true))
+					return _wapp.removeAttribute(name, true);
+			}
+			return null;
+		}
+		return removeAttribute(name);
+	}
 
 	public boolean addScopeListener(ScopeListener listener) {
 		return _attrs.addScopeListener(listener);

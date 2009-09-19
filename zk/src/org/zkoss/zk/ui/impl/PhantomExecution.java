@@ -33,6 +33,7 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.ext.ScopeListener;
+import org.zkoss.zk.ui.impl.SimpleScope;
 
 /**
  * A 'phantom' execution that is used when no request/response available.
@@ -41,6 +42,7 @@ import org.zkoss.zk.ui.ext.ScopeListener;
  * @author tomyeh
  */
 /*package*/ class PhantomExecution extends AbstractExecution {
+	private final SimpleScope _scope = new SimpleScope(this);
 	private boolean _voided;
 
 	public PhantomExecution(Desktop desktop) {
@@ -191,32 +193,26 @@ import org.zkoss.zk.ui.ext.ScopeListener;
 		return null;
 	}
 	public Object getAttribute(String name) {
-		return null;
+		return _scope.getAttribute(name);
 	}
 	public boolean hasAttribute(String name) {
-		return false;
-	}
-	public Object getAttribute(String name, boolean recurse) {
-		return null;
-	}
-	public boolean hasAttribute(String name, boolean recurse) {
-		return false;
+		return _scope.hasAttribute(name);
 	}
 	public Object setAttribute(String name, Object value) {
-		throw new UnsupportedOperationException();
+		return _scope.setAttribute(name, value);
 	}
 	public Object removeAttribute(String name) {
-		throw new UnsupportedOperationException();
+		return _scope.removeAttribute(name);
 	}
 	public Map getAttributes() {
-		return Collections.EMPTY_MAP;
+		return _scope.getAttributes();
 	}
 
 	public boolean addScopeListener(ScopeListener listener) {
-		throw new UnsupportedOperationException();
+		return _scope.addScopeListener(listener);
 	}
 	public boolean removeScopeListener(ScopeListener listener) {
-		throw new UnsupportedOperationException();
+		return _scope.removeScopeListener(listener);
 	}
 
 	public String getHeader(String name) {

@@ -347,6 +347,25 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		return hasAttribute(name)
 			|| (recurse && _desktop != null && _desktop.hasAttribute(name, true));
 	}
+	public Object setAttribute(String name, Object value, boolean recurse) {
+		if (recurse && !hasAttribute(name)) {
+			if (_desktop != null) {
+				if (_desktop.hasAttribute(name, true))
+					return _desktop.setAttribute(name, value, true);
+			}
+		}
+		return setAttribute(name, value);
+	}
+	public Object removeAttribute(String name, boolean recurse) {
+		if (recurse && !hasAttribute(name)) {
+			if (_desktop != null) {
+				if (_desktop.hasAttribute(name, true))
+					return _desktop.removeAttribute(name, true);
+			}
+			return null;
+		}
+		return removeAttribute(name);
+	}
 
 	public Object getFellowOrAttribute(String name, boolean recurse) {
 		Object val = getAttribute(name);

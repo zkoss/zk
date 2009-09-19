@@ -257,6 +257,25 @@ public class SimpleSession implements Session, SessionCtrl {
 		return hasAttribute(name)
 		|| (recurse && _wapp != null && _wapp.hasAttribute(name, true));
 	}
+	public Object setAttribute(String name, Object value, boolean recurse) {
+		if (recurse && !hasAttribute(name)) {
+			if (_wapp != null) {
+				if (_wapp.hasAttribute(name, true))
+					return _wapp.setAttribute(name, value, true);
+			}
+		}
+		return setAttribute(name, value);
+	}
+	public Object removeAttribute(String name, boolean recurse) {
+		if (recurse && !hasAttribute(name)) {
+			if (_wapp != null) {
+				if (_wapp.hasAttribute(name, true))
+					return _wapp.removeAttribute(name, true);
+			}
+			return null;
+		}
+		return removeAttribute(name);
+	}
 
 	public boolean addScopeListener(ScopeListener listener) {
 		return _scopeListeners.addScopeListener(listener);

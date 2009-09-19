@@ -95,12 +95,6 @@ public class SimpleWebApp extends AbstractWebApp {
 	public Map getAttributes() {
 		return _attrs;
 	}
-	public Object getAttribute(String name, boolean recurse) {
-		return getAttribute(name);
-	}
-	public boolean hasAttribute(String name, boolean recurse) {
-		return hasAttribute(name);
-	}
 
 	public boolean addScopeListener(ScopeListener listener) {
 		return _scopeListeners.addScopeListener(listener);

@@ -96,6 +96,19 @@ abstract public class AbstractWebApp implements WebApp, WebAppCtrl {
 		return _config;
 	}
 
+	public Object getAttribute(String name, boolean recurse) {
+		return getAttribute(name);
+	}
+	public boolean hasAttribute(String name, boolean recurse) {
+		return hasAttribute(name);
+	}
+	public Object setAttribute(String name, Object value, boolean recurse) {
+		return setAttribute(name, value);
+	}
+	public Object removeAttribute(String name, boolean recurse) {
+		return removeAttribute(name);
+	}
+
 	//WebAppCtrl//
 	public void init(Object context, Configuration config) {
 		if (_config != null)

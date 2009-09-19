@@ -420,27 +420,6 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 */
 	public Object removeAttribute(String name);
 
-	/** Sets the custom attribute associated with this component, or the parent
-	 * component.
-	 * @param recurse whether to look up the parent component for the
-	 * existence of the attribute.<br/>
-	 * If recurse is true and the attribute is defined in
-	 * one of its ancestor (including page), the attribute is replaced.
-	 * Otherwise, it is the same as {@link #setAttribute(String,Object)}.
-	 * @since 5.0.0
-	 */
-	public Object setAttribute(String name, Object value, boolean recurse);
-	/** Removes the custom attribute associated with this component, i.e.,
-	 * {@link #COMPONENT_SCOPE}.
-	 * @param recurse whether to look up the parent component for the
-	 * existence of the attribute.<br/>
-	 * If recurse is true and the attribute is defined in
-	 * one of its ancestor (including page), the attribute is removed.
-	 * Otherwise, it is the same as {@link #removeAttribute(String)}.
-	 * @since 5.0.0
-	 */
-	public Object removeAttribute(String name, boolean recurse);
-
 	/** Returns the custom attribute associated with this component,
 	 * or the fellow of this component.
 	 *

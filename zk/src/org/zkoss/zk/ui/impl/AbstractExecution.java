@@ -119,6 +119,39 @@ abstract public class AbstractExecution implements Execution, ExecutionCtrl {
 	}
 
 	//-- ExecutionCtrl --//
+	public Object getAttribute(String name, boolean recurse) {
+		Object val = getAttribute(name);
+		Desktop desktop;
+		return val != null || !recurse || (desktop=getDesktop()) == null ?
+			val: desktop.getAttribute(name, true);
+	}
+	public boolean hasAttribute(String name, boolean recurse) {
+		Desktop desktop;
+		return hasAttribute(name)
+		|| (recurse && (desktop=getDesktop()) != null && desktop.hasAttribute(name, true));
+	}
+	public Object setAttribute(String name, Object value, boolean recurse) {
+		if (recurse && !hasAttribute(name)) {
+			Desktop desktop = getDesktop();
+			if (desktop != null) {
+				if (desktop.hasAttribute(name, true))
+					return desktop.setAttribute(name, value, true);
+			}
+		}
+		return setAttribute(name, value);
+	}
+	public Object removeAttribute(String name, boolean recurse) {
+		if (recurse && !hasAttribute(name)) {
+			Desktop desktop = getDesktop();
+			if (desktop != null) {
+				if (desktop.hasAttribute(name, true))
+					return desktop.removeAttribute(name, true);
+			}
+			return null;
+		}
+		return removeAttribute(name);
+	}
+
 	public final Page getCurrentPage() {
 		if (_curpage != null)
 			return _curpage;

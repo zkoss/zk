@@ -1159,6 +1159,12 @@ public class Components {
 		public boolean hasAttribute(String name, boolean recurse) {
 			return exec().hasAttribute(name, recurse);
 		}
+		public Object setAttribute(String name, Object value, boolean recurse) {
+			return exec().setAttribute(name, value, recurse);
+		}
+		public Object removeAttribute(String name, boolean recurse) {
+			return exec().removeAttribute(name, recurse);
+		}
 		public boolean addScopeListener(ScopeListener listener) {
 			return exec().addScopeListener(listener);
 		}

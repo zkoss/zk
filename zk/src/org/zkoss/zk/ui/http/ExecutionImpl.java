@@ -465,17 +465,6 @@ public class ExecutionImpl extends AbstractExecution {
 		_request.removeAttribute(name);
 		return old;
 	}
-	public Object getAttribute(String name, boolean recurse) {
-		Object val = getAttribute(name);
-		Desktop desktop;
-		return val != null || !recurse || (desktop=getDesktop()) == null ?
-			val: desktop.getAttribute(name, true);
-	}
-	public boolean hasAttribute(String name, boolean recurse) {
-		Desktop desktop;
-		return hasAttribute(name)
-		|| (recurse && (desktop=getDesktop()) != null && desktop.hasAttribute(name, true));
-	}
 
 	public Map getAttributes() {
 		return _attrs;

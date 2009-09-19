@@ -82,6 +82,14 @@ public class SimpleScope implements Scope {
 	public boolean hasAttribute(String name, boolean recurse) {
 		return hasAttribute(name);
 	}
+	/** The same as setAttribute(name, value). */
+	public Object setAttribute(String name, Object value, boolean recurse) {
+		return setAttribute(name, value);
+	}
+	/** The same as removeAttribute(name). */
+	public Object removeAttribute(String name, boolean recurse) {
+		return removeAttribute(name);
+	}
 
 	public boolean addScopeListener(ScopeListener listener) {
 		return _listeners.addScopeListener(listener);

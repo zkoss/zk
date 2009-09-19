@@ -875,6 +875,31 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		}
 		return false;
 	}
+	public Object setAttribute(String name, Object value, boolean recurse) {
+		if (recurse && !hasAttribute(name)) {
+			if (_parent != null) {
+				if (_parent.hasAttribute(name, true))
+					return _parent.setAttribute(name, value, true);
+			} else if (_page != null) {
+				if (_page.hasAttribute(name, true))
+					return _page.setAttribute(name, value, true);
+			}
+		}
+		return setAttribute(name, value);
+	}
+	public Object removeAttribute(String name, boolean recurse) {
+		if (recurse && !hasAttribute(name)) {
+			if (_parent != null) {
+				if (_parent.hasAttribute(name, true))
+					return _parent.removeAttribute(name, true);
+			} else if (_page != null) {
+				if (_page.hasAttribute(name, true))
+					return _page.removeAttribute(name, true);
+			}
+			return null;
+		}
+		return removeAttribute(name);
+	}
 
 	public Object getFellowOrAttribute(String name, boolean recurse) {
 		Object val = getAttribute(name);
@@ -911,27 +936,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				return _page.hasFellowOrAttribute(name, true);
 		}
 		return false;
-	}
-
-	public Object setAttribute(String name, Object value, boolean recurse) {
-		if (recurse) {
-			for (Component p = this; (p = p.getParent()) != null;)
-				if (p.hasAttribute(name))
-					return p.setAttribute(name, value);
-			if (_page != null && _page.hasAttribute(name))
-				return _page.setAttribute(name, value);
-		}
-		return setAttribute(name, value);
-	}
-	public Object removeAttribute(String name, boolean recurse) {
-		if (recurse) {
-			for (Component p = this; (p = p.getParent()) != null;)
-				if (p.hasAttribute(name))
-					return p.removeAttribute(name);
-			if (_page != null && _page.hasAttribute(name))
-				return _page.removeAttribute(name);
-		}
-		return removeAttribute(name);
 	}
 
 	public boolean addScopeListener(ScopeListener listener) {

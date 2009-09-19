@@ -54,7 +54,6 @@ public interface Scope {
 	 * If true and the current scope doen't define the attribute,
 	 * it searches up its ancestor to see
 	 * any of them has defined the specified attribute.
-	 * Notice: for a component, the ancestor scope is the space owner.
 	 * @since 5.0.0
 	 */
 	public Object getAttribute(String name, boolean recurse);
@@ -67,10 +66,28 @@ public interface Scope {
 	 * If true and the current scope doen't define the attribute,
 	 * it searches up its ancestor to see
 	 * any of them has defined the specified attribute.
-	 * Notice: for a component, the ancestor scope is the space owner.
 	 * @since 5.0.0
 	 */
 	public boolean hasAttribute(String name, boolean recurse);
+	/** Sets the custom attribute associated with this scope, or the parent
+	 * scope.
+	 * @param recurse whether to look up the parent scope for the
+	 * existence of the attribute.<br/>
+	 * If recurse is true and the attribute is defined in
+	 * one of its ancestor (including page), the attribute is replaced.
+	 * Otherwise, it is the same as {@link #setAttribute(String,Object)}.
+	 * @since 5.0.0
+	 */
+	public Object setAttribute(String name, Object value, boolean recurse);
+	/** Removes the custom attribute associated with this scope.
+	 * @param recurse whether to look up the parent scope for the
+	 * existence of the attribute.<br/>
+	 * If recurse is true and the attribute is defined in
+	 * one of its ancestor (including page), the attribute is removed.
+	 * Otherwise, it is the same as {@link #removeAttribute(String)}.
+	 * @since 5.0.0
+	 */
+	public Object removeAttribute(String name, boolean recurse);
 
 	/** Adds a listener to listen whether this scope is changed.
 	 * The listener is called when a custom attribute is added, removed, or
