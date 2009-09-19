@@ -1,6 +1,5 @@
 /*	Primitives.java
 
-{{IS_NOTE
 
 	Purpose:
 	Description:
@@ -8,12 +7,11 @@
 		2002/3/25, Henri Chen: Created.
 		2003/4/17, Tom M. Yeh: Moves primitive relevant utilities from Classes
 
-}}IS_NOTE
 
 Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */

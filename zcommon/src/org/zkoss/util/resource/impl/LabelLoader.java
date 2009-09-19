@@ -1,13 +1,11 @@
 /* LabelLoader.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Mon Jun 12 13:05:05     2006, Created by tomyeh
-}}IS_NOTE
 
 Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 

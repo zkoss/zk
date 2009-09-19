@@ -1,18 +1,16 @@
 /* Listgroup.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Apr 23, 2008 10:34:35 AM , Created by jumperchen
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */

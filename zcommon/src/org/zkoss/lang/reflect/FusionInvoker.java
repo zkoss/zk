@@ -1,6 +1,5 @@
 /* FusionInvoker.java
 
-{{IS_NOTE
 
 	Purpose: 
 
@@ -8,12 +7,11 @@
 
 	History:
 		Tue Nov 4 14:45:31     2008, Created by Flyworld
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
  */

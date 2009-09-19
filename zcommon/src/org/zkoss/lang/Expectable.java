@@ -1,17 +1,15 @@
 /* Expectable.java
 
-{{IS_NOTE
 
 	Purpose: 
 	Description: 
 	History:
 	2002/04/18 18:24:22, Create, Tom M. Yeh.
-}}IS_NOTE
 
 Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */

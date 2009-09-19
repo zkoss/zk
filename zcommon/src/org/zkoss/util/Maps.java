@@ -1,18 +1,16 @@
 /* Maps.java
 
-{{IS_NOTE
 
 	Purpose: Utilities for Map
 	Description: 
 	History:
 	 2001/4/25, Tom M. Yeh: Created.
 
-}}IS_NOTE
 
 Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */

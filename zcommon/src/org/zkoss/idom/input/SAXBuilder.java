@@ -1,17 +1,15 @@
 /* SAXBuilder.java
 
-{{IS_NOTE
 
 	Purpose: 
 	Description: 
 	History:
 	2001/10/25 13:21:14, Create, Tom M. Yeh.
-}}IS_NOTE
 
 Copyright (C) 2001 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */

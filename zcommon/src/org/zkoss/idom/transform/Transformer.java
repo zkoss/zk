@@ -1,6 +1,5 @@
 /* Transformer.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
@@ -9,12 +8,11 @@
 		Mon May 13 17:31:01  2002, Created by andrewho
 		May 19 2003, Modified by tomyeh to make API more complete
 		and let developer know about Source and Result
-}}IS_NOTE
 
 Copyright (C) 2002 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */

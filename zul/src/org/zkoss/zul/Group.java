@@ -1,18 +1,16 @@
 /* Group.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Apr 25, 2008 4:15:11 PM , Created by jumperchen
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */

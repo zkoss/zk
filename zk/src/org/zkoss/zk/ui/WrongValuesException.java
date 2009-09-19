@@ -1,18 +1,16 @@
 /* WrongValuesException.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Oct 16, 2008 10:33:27 AM , Created by jumperchen
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 2.0 in the hope that
+	This program is distributed under LGPL Version 2.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */

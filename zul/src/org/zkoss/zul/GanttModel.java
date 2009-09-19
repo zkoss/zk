@@ -1,18 +1,16 @@
 /* GanttModel.java
 
-{{IS_NOTE
 	Purpose:
 		
 	Description:
 		
 	History:
 		Apr 30, 2008 2:01:47 PM, Created by henrichen
-}}IS_NOTE
 
 Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 
 {{IS_RIGHT
-	This program is distributed under GPL Version 3.0 in the hope that
+	This program is distributed under LGPL Version 3.0 in the hope that
 	it will be useful, but WITHOUT ANY WARRANTY.
 }}IS_RIGHT
 */
