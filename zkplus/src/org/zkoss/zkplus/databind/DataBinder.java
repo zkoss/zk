@@ -1042,7 +1042,7 @@ public class DataBinder implements java.io.Serializable {
 			if (existsBean(beanid)) {
 				setBean(beanid, val);
 			} else if (!setZScriptVariable(comp, beanid, val)) {
-				((Scope)comp.getSpaceOwner()).setAttribute(beanid, val, true);
+				comp.getSpaceOwner().setAttribute(beanid, val, true);
 			}
 			refChanged = true;
 		} else {
