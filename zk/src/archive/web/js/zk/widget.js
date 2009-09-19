@@ -383,17 +383,11 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	//Drag && Drop
 	zk.DnD = { //for easy overriding
 		getDrop: function (drag, pt, evt) {
-			var dragged = drag.control,
-				dragType = dragged._draggable;
+			var dragged = drag.control;
 				//drag to itself not allowed
-			for (var wgt = evt.target; wgt && wgt != dragged; wgt = wgt.parent) {
-				var dropType = wgt._droppable;
-				if (dropType == 'true') return wgt;
-				if (dropType && dragType != "true")
-					for (var dropType = wgt._dropTypes, j = dropType.length; j--;)
-						if (dragType == dropType[j])
-							return wgt;
-			}
+			for (var wgt = evt.target; wgt && wgt != dragged; wgt = wgt.parent)
+				if (wgt.canDrop(dragged))
+					return wgt;
 		},
 		ghost: function (drag, ofs, msg) {
 			if (msg != null)  {
@@ -1408,6 +1402,16 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	ingoreDrag_: function (pt) {
 		return false;
+	},
+	canDrop: function (dragged) {
+		var dropType = this._droppable,
+			dragType = dragged._draggable;
+		if (dropType == 'true') return true;
+		if (dropType && dragType != "true")
+			for (var dropTypes = this._dropTypes, j = dropTypes.length; j--;)
+				if (dragType == dropTypes[j])
+					return this;
+		return false
 	},
 	dropEffect_: function (over) {
 		jq(this.$n()||[])[over ? "addClass" : "removeClass"]("z-drag-over");
