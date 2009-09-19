@@ -383,11 +383,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	//Drag && Drop
 	zk.DnD = { //for easy overriding
 		getDrop: function (drag, pt, evt) {
-			var dragged = drag.control;
-				//drag to itself not allowed
-			for (var wgt = evt.target; wgt && wgt != dragged; wgt = wgt.parent)
-				if (wgt.canDrop(dragged))
-					return wgt;
+			var wgt = evt.target;
+			return wgt ? wgt.getDrop(drag.control): null;
 		},
 		ghost: function (drag, ofs, msg) {
 			if (msg != null)  {
@@ -1403,15 +1400,17 @@ zk.Widget = zk.$extends(zk.Object, {
 	ingoreDrag_: function (pt) {
 		return false;
 	},
-	canDrop: function (dragged) {
-		var dropType = this._droppable,
-			dragType = dragged._draggable;
-		if (dropType == 'true') return true;
-		if (dropType && dragType != "true")
-			for (var dropTypes = this._dropTypes, j = dropTypes.length; j--;)
-				if (dragType == dropTypes[j])
-					return this;
-		return false
+	getDrop: function (dragged) {
+		if (this != dragged) {
+			var dropType = this._droppable,
+				dragType = dragged._draggable;
+			if (dropType == 'true') return this;
+			if (dropType && dragType != "true")
+				for (var dropTypes = this._dropTypes, j = dropTypes.length; j--;)
+					if (dragType == dropTypes[j])
+						return this;
+		}
+		return this.parent ? this.parent.getDrop(dragged): null;
 	},
 	dropEffect_: function (over) {
 		jq(this.$n()||[])[over ? "addClass" : "removeClass"]("z-drag-over");
