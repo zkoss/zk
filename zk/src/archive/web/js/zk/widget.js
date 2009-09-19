@@ -384,7 +384,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	zk.DnD = { //for easy overriding
 		getDrop: function (drag, pt, evt) {
 			var wgt = evt.target;
-			return wgt ? wgt.getDrop(drag.control): null;
+			return wgt ? wgt.getDrop_(drag.control): null;
 		},
 		ghost: function (drag, ofs, msg) {
 			if (msg != null)  {
@@ -1400,7 +1400,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	ingoreDrag_: function (pt) {
 		return false;
 	},
-	getDrop: function (dragged) {
+	getDrop_: function (dragged) {
 		if (this != dragged) {
 			var dropType = this._droppable,
 				dragType = dragged._draggable;
@@ -1410,7 +1410,7 @@ zk.Widget = zk.$extends(zk.Object, {
 					if (dragType == dropTypes[j])
 						return this;
 		}
-		return this.parent ? this.parent.getDrop(dragged): null;
+		return this.parent ? this.parent.getDrop_(dragged): null;
 	},
 	dropEffect_: function (over) {
 		jq(this.$n()||[])[over ? "addClass" : "removeClass"]("z-drag-over");
