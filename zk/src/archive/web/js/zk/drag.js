@@ -48,7 +48,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 
 		_lastPt = pt;
 		_activedg._updateDrag(pt, evt);
-		if (evt.domStopped) devt.stop();
+		devt.stop();
+			//test/dragdrop.zul: it seems less stall-dragging when dragging
+			//IMG (but still happens if dragging fast)
 	}
 	function _docmouseup(devt) {
 		if(_timeout) { 
