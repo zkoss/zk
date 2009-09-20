@@ -272,32 +272,40 @@ public interface Page extends IdSpace, Scope {
 	public Object removeAttribute(String name);
 
 	/** Returns the custom attribute associated with this page,
-	 * or the fellow of this page.
+	 * or the fellow of this page; or null if no found.
+	 *
+	 * <p>Notice that if no custom attribute or fellow is found,
+	 * this method will check for any variable defined in
+	 * the variable resolver ({@link #addVariableResolver}).
 	 *
 	 * @param recurse whether to look up the desktop/session for the
-	 * existence of the attribute.<br/>
+	 * existence of the attribute.
 	 * @since 5.0.0
 	 */
-	public Object getFellowOrAttribute(String name, boolean recurse);
+	public Object getAttributeOrFellow(String name, boolean recurse);
 	/** Returns if a custom attribute is associated with this page,
 	 * or a fellow of this page.
 	 *
+	 * <p>Notice that if no custom attribute or fellow is found,
+	 * this method will check for any variable defined in
+	 * the variable resolver ({@link #addVariableResolver}).
+	 *
 	 * @param recurse whether to look up the desktop/session for the
-	 * existence of the attribute.<br/>
+	 * existence of the attribute.
 	 * @since 5.0.0
 	 */
-	public boolean hasFellowOrAttribute(String name, boolean recurse);
+	public boolean hasAttributeOrFellow(String name, boolean recurse);
 
 	/** @deprecated As of release 5.0.0, replaced with {@link #setAttribute}.
 	 *
 	 * <p>Sets a variable to the namespace ({@link #getNamespace}).
 	 */
 	public void setVariable(String name, Object val);
-	/** @deprecated As of release 5.0.0, replaced with {@link #hasFellowOrAttribute}.
+	/** @deprecated As of release 5.0.0, replaced with {@link #hasAttributeOrFellow}.
 	 * <p>Returns whether the specified variable is defined.
 	 */
 	public boolean containsVariable(String name);
-	/** @deprecated As of release 5.0.0, replaced with {@link #getFellowOrAttribute}.
+	/** @deprecated As of release 5.0.0, replaced with {@link #getAttributeOrFellow}.
 	 * <p>Returns the value of a variable defined in the namespace ({@link #getNamespace}).
 	 */
 	public Object getVariable(String name);

@@ -689,14 +689,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		final IdSpace idspace = getSpaceOwner();
 		return idspace != null && idspace.hasFellow(compId);
 	}
-	public Component getFellow(String compId) {
+	public Component getFellow(String compId)
+	throws ComponentNotFoundException {
 		if (this instanceof IdSpace) {
 			final Component comp = (Component)_spaceInfo.fellows.get(compId);
 			if (comp == null)
-				if (compId != null && ComponentsCtrl.isAutoId(compId))
-					throw new ComponentNotFoundException(MZk.AUTO_ID_NOT_LOCATABLE, compId);
-				else
-					throw new ComponentNotFoundException("Fellow component not found: "+compId);
+				throw newNotFoundException(compId);
 			return comp;
 		}
 
@@ -704,6 +702,12 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		if (idspace == null)
 			throw new ComponentNotFoundException("This component doesn't belong to any ID space: "+this);
 		return idspace.getFellow(compId);
+	}
+	private static ComponentNotFoundException newNotFoundException(String compId) {
+		if (compId != null && ComponentsCtrl.isAutoId(compId))
+			return new ComponentNotFoundException(MZk.AUTO_ID_NOT_LOCATABLE, compId);
+		else
+			return new ComponentNotFoundException("Fellow component not found: "+compId);
 	}
 	public Component getFellowIfAny(String compId) {
 		if (this instanceof IdSpace)
@@ -718,6 +722,27 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		final IdSpace idspace = getSpaceOwner();
 		return idspace == null ? Collections.EMPTY_LIST: idspace.getFellows();
+	}
+	public Component getFellow(String compId, boolean recurse)
+	throws ComponentNotFoundException {
+		final Component comp = getFellowIfAny(compId, recurse);
+		if (comp == null)
+			throw newNotFoundException(compId);
+		return comp;
+	}
+	public Component getFellowIfAny(String compId, boolean recurse) {
+		if (!recurse)
+			return getFellowIfAny(compId);
+
+		for (IdSpace idspace = getSpaceOwner(); idspace != null;) {
+			Component f = idspace.getFellowIfAny(compId);
+			if (f != null) return f;
+			idspace = Components.getParentIdSpace(idspace);
+		}
+		return null;
+	}
+	public boolean hasFellow(String compId, boolean recurse) {
+		return getFellowIfAny(compId, recurse) != null;
 	}
 
 	public Component getNextSibling() {
@@ -899,7 +924,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		return removeAttribute(name);
 	}
 
-	public Object getFellowOrAttribute(String name, boolean recurse) {
+	public Object getAttributeOrFellow(String name, boolean recurse) {
 		Object val = getAttribute(name);
 		if (val != null || hasAttribute(name))
 			return val;
@@ -916,22 +941,22 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		if (recurse) {
 			if (_parent != null)
-				return _parent.getFellowOrAttribute(name, true);
+				return _parent.getAttributeOrFellow(name, true);
 			if (_page != null)
-				return _page.getFellowOrAttribute(name, true);
+				return _page.getAttributeOrFellow(name, true);
 		}
 		return null;
 	}
-	public boolean hasFellowOrAttribute(String name, boolean recurse) {
+	public boolean hasAttributeOrFellow(String name, boolean recurse) {
 		if (hasAttribute(name)
 		|| (this instanceof IdSpace && hasFellow(name)))
 			return true;
 
 		if (recurse) {
 			if (_parent != null)
-				return _parent.hasFellowOrAttribute(name, true);
+				return _parent.hasAttributeOrFellow(name, true);
 			if (_page != null)
-				return _page.hasFellowOrAttribute(name, true);
+				return _page.hasAttributeOrFellow(name, true);
 		}
 		return false;
 	}
@@ -2342,10 +2367,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			return _attrs.getAttributes().keySet();
 		}
 		public boolean containsVariable(String name, boolean local) {
-			return hasFellowOrAttribute(name, !local);
+			return hasAttributeOrFellow(name, !local);
 		}
 		public Object getVariable(String name, boolean local) {
-			return getFellowOrAttribute(name, !local);
+			return getAttributeOrFellow(name, !local);
 		}
 		public void setVariable(String name, Object value, boolean local) {
 			setAttribute(name, value, !local);

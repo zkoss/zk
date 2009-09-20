@@ -69,7 +69,8 @@ implements Page, PageCtrl, java.io.Serializable {
 	public boolean hasFellow(String compId) {
 		return _fellows.containsKey(compId);
 	}
-	public Component getFellow(String compId) {
+	public Component getFellow(String compId)
+	throws ComponentNotFoundException {
 		final Component comp = (Component)_fellows.get(compId);
 		if (comp == null)
 			if (compId != null && ComponentsCtrl.isAutoId(compId))
@@ -83,6 +84,28 @@ implements Page, PageCtrl, java.io.Serializable {
 	}
 	public Collection getFellows() {
 		return Collections.unmodifiableCollection(_fellows.values());
+	}
+	/** The same as {@link #getFellow(String)}.
+	 * In other words, the recurse parameter is not applicable.
+	 * @since 5.0.0
+	 */
+	public Component getFellow(String compId, boolean recurse)
+	throws ComponentNotFoundException {
+		return getFellow(compId);
+	}
+	/** The same as {@link #getFellowIfAny(String)}.
+	 * In other words, the recurse parameter is not applicable.
+	 * @since 5.0.0
+	 */
+	public Component getFellowIfAny(String compId, boolean recurse) {
+		return getFellowIfAny(compId);
+	}
+	/** The same as {@link #hasFellow(String)}.
+	 * In other words, the recurse parameter is not applicable.
+	 * @since 5.0.0
+	 */
+	public boolean hasFellow(String compId, boolean recurse) {
+		return hasFellow(compId);
 	}
 
 	//PageCtrl//

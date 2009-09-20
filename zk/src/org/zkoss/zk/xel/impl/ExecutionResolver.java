@@ -138,7 +138,7 @@ public class ExecutionResolver implements VariableResolver {
 			if (o != null || _exec.hasAttribute(name))
 				return o;
 
-			o = comp.getFellowOrAttribute(name, true);
+			o = comp.getAttributeOrFellow(name, true);
 			if (o != null)
 				return o;
 		} else {
@@ -158,7 +158,7 @@ public class ExecutionResolver implements VariableResolver {
 				if (o != null || _exec.hasAttribute(name))
 					return o;
 
-				o = page.getFellowOrAttribute(name, true);
+				o = page.getAttributeOrFellow(name, true);
 				if (o != null)
 					return o;
 			} else {

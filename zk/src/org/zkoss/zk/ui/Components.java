@@ -65,6 +65,18 @@ public class Components {
 	private static final Log log = Log.lookup(Components.class);
 	protected Components() {}
 
+	/** Returns the parent of the ID space, or null if not found.
+	 * @since 5.0.0
+	 */
+	public static IdSpace getParentIdSpace(IdSpace idspace) {
+		if (idspace instanceof Component) {
+			final Component c = (Component)idspace;
+			final Component p = c.getParent();
+			return p != null ? p.getSpaceOwner(): c.getPage();
+		}
+		return null;
+	}
+
 	/** Sorts the components in the list.
 	 *
 	 * <p>Note: you cannot use {@link Collections#sort} to sort
@@ -538,7 +550,7 @@ public class Components {
 	 * <p>The controller is a POJO file with onXxx$myid methods (the event handler 
 	 * codes). This utility method search such onXxx$myid methods and adds 
 	 * forward condition to the source myid component looked up by   
-	 * {@link Component#getFellowOrAttribute} of the specified component, so you 
+	 * {@link Component#getAttributeOrFellow} of the specified component, so you 
 	 * don't have to specify in zul file the "forward" attribute one by one. 
 	 * If the source component cannot be looked up or the object looked up is 
 	 * not a component, this method will log the error and ignore it.
@@ -584,7 +596,7 @@ public class Components {
 						final String srcevt = mdname.substring(0, k);
 						if ((k+1) < mdname.length()) {
 							final String srccompid = mdname.substring(k+1);
-							final Object srccomp = xcomp.getFellowOrAttribute(srccompid, true);
+							final Object srccomp = xcomp.getAttributeOrFellow(srccompid, true);
 							if (srccomp == null || !(srccomp instanceof Component)) {
 								if (log.debugable()) {
 									log.debug("Cannot find the associated component to forward event: "+mdname);
@@ -809,7 +821,7 @@ public class Components {
 		public void wireController(Component comp, String id) {
 			//feature #2778513, support {id}$composer name
 			final String composerid =  id + _separator + "composer";
-			if (!comp.hasFellowOrAttribute(composerid, false)) {
+			if (!comp.hasAttributeOrFellow(composerid, false)) {
 				comp.setAttribute(composerid, _controller);
 			}
 			comp.setAttribute(varname(id, _controller.getClass()), _controller);
@@ -817,7 +829,7 @@ public class Components {
 		
 		public void wireController(Page page, String id) {
 			final String composerid =  id + _separator + "composer";
-			if (!page.hasFellowOrAttribute(composerid, false)) {
+			if (!page.hasAttributeOrFellow(composerid, false)) {
 				page.setAttribute(composerid, _controller);
 			}
 			page.setAttribute(varname(id, _controller.getClass()), _controller);
@@ -915,12 +927,12 @@ public class Components {
 			if (x instanceof Page) {
 				final Page pg = (Page) x;
 				return pg.getZScriptVariable(fdname) != null
-					|| pg.hasFellowOrAttribute(fdname, true);
+					|| pg.hasAttributeOrFellow(fdname, true);
 			} else {
 				final Component cmp = (Component) x;
 				final Page page = getPage(cmp);
 				return (page != null && page.getZScriptVariable(cmp, fdname) != null)
-					|| cmp.hasFellowOrAttribute(fdname, true);
+					|| cmp.hasAttributeOrFellow(fdname, true);
 			}
 		}
 		
@@ -930,7 +942,7 @@ public class Components {
 				final Page pg = (Page) x;
 				Object arg = pg.getZScriptVariable(fdname);
 				if (arg == null) {
-					arg = pg.getFellowOrAttribute(fdname, true);
+					arg = pg.getAttributeOrFellow(fdname, true);
 				}
 				return arg;
 			} else {
@@ -938,7 +950,7 @@ public class Components {
 				final Page page = getPage(cmp);
 				Object arg = page != null ? page.getZScriptVariable(cmp, fdname): null;
 				if (arg == null) {
-					arg = cmp.getFellowOrAttribute(fdname, true);
+					arg = cmp.getAttributeOrFellow(fdname, true);
 				}
 				return arg;
 			}

@@ -98,11 +98,13 @@ public interface Namespace {
 	 * @return wether the resolver is added successfully.
 	 * Note: if the resolver was added before, it won't be added again
 	 * and this method returns false.
+	 * @deprecated
 	 */
 	public boolean addChangeListener(NamespaceChangeListener listener);
 	/** Removes a change listener from this namespace.
 	 *
 	 * @return false if resolved is not added before.
+	 * @deprecated
 	 */
 	public boolean removeChangeListener(NamespaceChangeListener listener);
 }

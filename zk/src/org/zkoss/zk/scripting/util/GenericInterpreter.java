@@ -237,13 +237,13 @@ abstract public class GenericInterpreter implements Interpreter {
 
 			if (scope instanceof Component) {
 				Component comp = (Component)scope;
-				Object val = comp.getFellowOrAttribute(name, true);
-				if (val != null || comp.hasFellowOrAttribute(name, true))
+				Object val = comp.getAttributeOrFellow(name, true);
+				if (val != null || comp.hasAttributeOrFellow(name, true))
 					return val;
 			} else if (scope instanceof Page) {
 				Page page = (Page)scope;
-				Object val = page.getFellowOrAttribute(name, true);
-				if (val != null || page.hasFellowOrAttribute(name, true))
+				Object val = page.getAttributeOrFellow(name, true);
+				if (val != null || page.hasAttributeOrFellow(name, true))
 					return val;
 			} else {
 				Object val = scope.getAttribute(name, true);

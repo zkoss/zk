@@ -365,7 +365,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		return removeAttribute(name);
 	}
 
-	public Object getFellowOrAttribute(String name, boolean recurse) {
+	public Object getAttributeOrFellow(String name, boolean recurse) {
 		Object val = getAttribute(name);
 		if (val != null || hasAttribute(name))
 			return val;
@@ -381,7 +381,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		return recurse && _desktop != null ?
 			_desktop.getAttribute(name, true): null;
 	}
-	public boolean hasFellowOrAttribute(String name, boolean recurse) {
+	public boolean hasAttributeOrFellow(String name, boolean recurse) {
 		return hasAttribute(name) || hasFellow(name)
 			|| resolveVariable(name) != null
 			|| (recurse && _desktop != null && _desktop.hasAttribute(name, true));
@@ -1153,10 +1153,10 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			return _attrs.getAttributes().keySet();
 		}
 		public boolean containsVariable(String name, boolean local) {
-			return hasFellowOrAttribute(name, !local);
+			return hasAttributeOrFellow(name, !local);
 		}
 		public Object getVariable(String name, boolean local) {
-			return getFellowOrAttribute(name, !local);
+			return getAttributeOrFellow(name, !local);
 		}
 		public void setVariable(String name, Object value, boolean local) {
 			setAttribute(name, value);

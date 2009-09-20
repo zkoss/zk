@@ -34,10 +34,12 @@ package org.zkoss.zk.scripting;
 public interface NamespaceActivationListener {
 	/** Called when a namespace has just been activated
 	 * (and its value has been deserialized).
+	 * @deprecated
 	 */
 	public void didActivate(Namespace ns);
 	/** Called when a namespace is about to be passivated
 	 * (and then serialize its value).
+	 * @deprecated
 	 */
 	public void willPassivate(Namespace ns);
 }

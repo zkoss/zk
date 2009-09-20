@@ -85,7 +85,7 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 * See {@link IdSpace} for more details.
 	 *
 	 * <p>The ID space relevant methods include {@link #getFellow},
-	 * {@link #getAttribute} and {@link #getFellowOrAttribute}.
+	 * {@link #getAttribute} and {@link #getAttributeOrFellow}.
 	 *
 	 * @see #getNamespace
 	 */
@@ -244,6 +244,41 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 * @since 5.0.0
 	 */
 	public boolean hasFellow(String compId);
+	/** Returns a component of the specified ID in the same ID space.
+	 * It is the same as getSpaceOwner().getFellow(id, recurse);
+	 *
+	 * <p>Unlike {@link #getFellowIfAny(String, boolean)}, it throws {@link ComponentNotFoundException}
+	 * if not found.
+	 *
+	 * @exception ComponentNotFoundException is thrown if
+	 * this component doesn't belong to any ID space
+	 * @param recurse whether to look up the parent ID space for the
+	 * existence of the fellow
+	 * @since 5.0.0
+	 */
+	public Component getFellow(String id, boolean recurse)
+	throws ComponentNotFoundException;
+	/** Returns a component of the specified ID in the same ID space, or null
+	 * if not found.
+	 * It is the same as getSpaceOwner().getFellowIfAny(id, recurse);
+	 *
+	 * <p>Unlike {@link #getFellow(String, boolean)}, it returns null
+	 * if not found.
+	 *
+	 * @param recurse whether to look up the parent ID space for the
+	 * existence of the fellow
+	 * @since 5.0.0
+	 */
+	public Component getFellowIfAny(String id, boolean recurse);
+	/** Returns whether there is a fellow named with the specified component ID
+	 * in the same ID space as this component.
+	 * It is the same as getSpaceOwner().hasFellow(id, recurse);
+	 *
+	 * @param recurse whether to look up the parent ID space for the
+	 * existence of the fellow
+	 * @since 5.0.0
+	 */
+	public boolean hasFellow(String id, boolean recurse);
 
 	/** Returns the next sibling, or null if it is the last child.
 	 * @since 3.0.0
@@ -419,25 +454,35 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	public Object removeAttribute(String name);
 
 	/** Returns the custom attribute associated with this component,
-	 * or the fellow of this component.
+	 * or the fellow of this component; or null if not found.
 	 *
 	 * @param recurse whether to look up the parent component for the
 	 * existence of the attribute.<br/>
-	 * Notice that, if recurse is true and this component is not an ID
-	 * space owner, it won't look at the fellow
+	 * Notice that, if recurse is false and this component is not an ID
+	 * space owner, it won't look at the fellow.<br/>
+	 * If recurse is true, it will look up all parents, page, desktop,
+	 * session and application until found. If any of them is a space owner,
+	 * the fellows will be searched.
+	 * Since {@link Page#getAttributeOrFellow} will be called, if necessary,
+	 * so the page's variable resolvers will be searched.
 	 * @since 5.0.0
 	 */
-	public Object getFellowOrAttribute(String name, boolean recurse);
+	public Object getAttributeOrFellow(String name, boolean recurse);
 	/** Returns if a custom attribute is associated with this component,
 	 * or the fellow of this component.
 	 *
 	 * @param recurse whether to look up the parent component for the
 	 * existence of the attribute.<br/>
-	 * Notice that, if recurse is true and this component is not an ID
-	 * space owner, it won't look at the fellow
+	 * Notice that, if recurse is false and this component is not an ID
+	 * space owner, it won't look at the fellow.<br/>
+	 * If recurse is true, it will look up all parents, page, desktop,
+	 * session and application until found. If any of them is a space owner,
+	 * the fellows will be searched.
+	 * Since {@link Page#getAttributeOrFellow} will be called, if necessary,
+	 * so the page's variable resolvers will be searched.
 	 * @since 5.0.0
 	 */
-	public boolean hasFellowOrAttribute(String name, boolean recurse);
+	public boolean hasAttributeOrFellow(String name, boolean recurse);
 
 	/** @deprecated As of release 5.0.0, replaced with {@link #setAttribute}.
 	 * <p>Sets a variable to the namespace.
@@ -458,7 +503,7 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 * this component.
 	 */
 	public void setVariable(String name, Object val, boolean local);
-	/** @deprecated As of release 5.0.0, replaced with {@link #hasFellowOrAttribute}.
+	/** @deprecated As of release 5.0.0, replaced with {@link #hasAttributeOrFellow}.
 	 * <p>Returns whether the specified variable is defined.
 	 *
 	 * @param local whether not to search its ancestor.
@@ -467,7 +512,7 @@ public interface Component extends Scope, java.io.Serializable, Cloneable {
 	 * any of them has defined the specified variable.
 	 */
 	public boolean containsVariable(String name, boolean local);
-	/** @deprecated As of release 5.0.0, replaced with {@link #getFellowOrAttribute}.
+	/** @deprecated As of release 5.0.0, replaced with {@link #getAttributeOrFellow}.
 	 * <p>Returns the value of a variable defined in the namespace,
 	 * or null if not defined or the value is null.
 	 *

@@ -449,8 +449,8 @@ implements SerializableAware, HierachicalAware {
 			}
 
 			final Page page = getOwner();
-			Object val = page.getFellowOrAttribute(name, true); //page/desktop/session
-			return  val != null || page.hasFellowOrAttribute(name, true) ?
+			Object val = page.getAttributeOrFellow(name, true); //page/desktop/session
+			return  val != null || page.hasAttributeOrFellow(name, true) ?
 				val: getImplicit(name); 
 		}
 		public void loadDefaultImports() {
@@ -497,8 +497,8 @@ implements SerializableAware, HierachicalAware {
 
 			Component comp = (Component)_scope;
 			//local-only since getVariableImpl will look up its parent
-			Object val = comp.getFellowOrAttribute(name, false);
-			return val != null || comp.hasFellowOrAttribute(name, false) ?
+			Object val = comp.getAttributeOrFellow(name, false);
+			return val != null || comp.hasAttributeOrFellow(name, false) ?
 				val: getImplicit(name); 
 		}
 	}
