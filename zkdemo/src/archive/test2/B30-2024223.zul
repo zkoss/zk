@@ -3,7 +3,7 @@
 <html><![CDATA[
 <p>
 1. You shall see a button "Click Me!".<br/>
-2. Click the button, and you shall see an error window popup: "arg0 has to be String, Component, or Page: null".<br/>
+2. Click the button, and you shall see an error window popup: "arg0/root has to be String, Component, or Page: null".<br/>
 3. Done.<br/>
 </p>
 ]]></html>

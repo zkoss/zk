@@ -44,6 +44,17 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		jq(this.bdfaker).remove();
 		jq(this.ftfaker).remove();
 		this.$supers('unbind_', arguments);
+	},
+	beforeChildrenFlex_: function(hwgt) { //avoid unnecessary zk.Widget#_fixFlex()
+		return !this._inAfterChildrenFlex && !this.parent._flexRerender; 
+	},
+	afterChildrenFlex_: function (hwgt) { //hflex in HeaderWidget
+		this._inAfterChildrenFlex = true;
+		try {
+			hwgt.updateMesh_(); //might recursive back #beforeChildrenFlex_()
+		} finally {
+			delete this._inAfterChildrenFlex;
+		}
 	}
 },{ //static
 	redraw: function (out) {

@@ -166,7 +166,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				}
 				var margin = zkn.sumStyles("tb", jq.margins),
 					sz = wgt.setFlexSize_({height:(max + pb + margin)});
-				if (sz.height >= 0)
+				if (sz && sz.height >= 0)
 					wgt._vflexsize = sz.height + margin;
 			}
 			return wgt._vflexsize;
@@ -189,7 +189,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				}
 				var margin = zkn.sumStyles("lr", jq.margins);
 				var sz = wgt.setFlexSize_({width:(max + pb + margin)});
-				if (sz.width >= 0)
+				if (sz && sz.width >= 0)
 					wgt._hflexsize = sz.width + margin;
 			}
 			return wgt._hflexsize;
@@ -198,13 +198,17 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	}
 	//fix vflex/hflex of all my sibling nodes
 	function _fixFlex() {
-		//if (zk.animating()) return; //otherwise the fixing can be wrong
+		if (!this.parent.beforeChildrenFlex_(this)) { //don't do fixflex if return false
+			return;
+		}
 		
 		if (this._flexFixed || (!this._nvflex && !this._nhflex)) { //other vflex/hflex sibliing has done it!
 			delete this._flexFixed;
 			return;
 		}
+		
 		this._flexFixed = true;
+		
 		var pretxt = false, //pre node is a text node
 			prevflex = false, //pre node is vflex
 			prehflex = false, //pre node is hflex
@@ -1371,6 +1375,10 @@ zk.Widget = zk.$extends(zk.Object, {
 				n.style.width = this._width ? this._width : '';
 		}
 		return {height: n.offsetHeight, width: n.offsetWidth};
+	},
+	beforeChildrenFlex_: function(kid) {
+		//to be overridden
+		return true; //return true to continue children flex fixing
 	},
 	afterChildrenFlex_: function(kid) {
 		//to be overridden

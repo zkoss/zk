@@ -28,8 +28,49 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	updateMesh_: function (nm, val) { //TODO: don't rerender
 		if (this.desktop) {
 			var wgt = this.getMeshWidget();
-			if (wgt) wgt.rerender();
+			if (wgt) {
+				if (wgt._inUpdateMesh) {//recursive back, cannot rerender now; avoid endless loop
+					wgt._flexRerender = true; //mark to do rerender later
+					return;
+				}
+				wgt._inUpdateMesh = true;
+				try {
+					if (!this.parent._inAfterChildrenFlex) { //reset all hflex columns
+						for(var kid = this.parent.firstChild; kid; kid = kid.nextSibling)
+							delete kid._hflexWidth;
+					}
+					wgt.rerender(); //might recursive back via HeadWidget#afterChildrenFlex_()
+					if (wgt._flexRerender) {//was mark to do rerender in #updateMesh_()
+						try {
+							wgt.rerender();
+						} finally {
+							delete wgt._flexRerender;
+						}
+					}
+				} finally {
+					delete wgt._inUpdateMesh;
+				}
+			}
 		}
+	},
+	setFlexSize_: function (sz) { //TODO: if updateMesh_ will not rerender
+		if (sz.width !== undefined && sz.width != 'auto' && sz.width != '') {
+			//remember the value in _hflexWidth and use it when rerender(@see #domStyle_)
+			//for faker column, so don't use revisedWidth().
+			this._hflexWidth = jq.px(sz.width);
+			return {width: sz.width};
+		} else
+			return this.$supers('setFlexSize_', arguments);
+	},
+	domStyle_: function (no) {
+		var style = '';
+		if (this._hflexWidth) { //handle hflex
+			style = 'width:'+ this._hflexWidth+';';
+			
+			if (no) no.width = true;
+			else no = {width:true};
+		}
+		return style + this.$super('domStyle_', no);
 	},
 	getMeshWidget: function () {
 		return this.parent ? this.parent.parent : null;
