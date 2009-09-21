@@ -12,15 +12,15 @@
 		 border: solid black 1px;
 		}
 	</style>
-		<hbox pack="center" align="center" height="486px" width="486px" sclass="hbox">
+		<hbox pack="stretch,center" align="center" height="486px" width="486px" sclass="hbox">
 			IN HBOX
-			<vbox pack="center" align="center" height="162px" sclass="vbox"
+			<vbox pack="stretch,center" align="center" height="162px" sclass="vbox"
 				width="162px">IN VBOX
-				<hbox pack="center" align="center" height="54px" sclass="hbox"
+				<hbox pack="stretch,center" align="center" height="54px" sclass="hbox"
 					width="54px">IN HBOX
-					<vbox pack="center" align="center" height="18px" sclass="vbox"
+					<vbox pack="stretch,center" align="center" height="18px" sclass="vbox"
 						width="18px">IN VBOX
-						<hbox pack="center" align="center" height="6px" sclass="hbox"
+						<hbox pack="stretch,center" align="center" height="6px" sclass="hbox"
 							width="6px">IN HBOX
 							<textbox height="2px" width="2px" />
 						</hbox>
