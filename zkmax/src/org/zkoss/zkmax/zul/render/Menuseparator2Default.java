@@ -37,9 +37,11 @@ public class Menuseparator2Default implements ComponentRenderer {
 		final SmartWriter wh = new SmartWriter(out);
 		final Menuseparator self = (Menuseparator)comp;
 		final String uuid = self.getUuid();
-		wh.write("<li id=\"").write(uuid).write("\" z.type=\"Menusp2\"");
+		final String tagnm = self.isPopup() ? "li" : "td";
+		
+		wh.write("<").write(tagnm).write(" id=\"").write(uuid).write("\" z.type=\"Menusp2\"");
 		wh.write(self.getOuterAttrs()).write(self.getInnerAttrs()).writeln(">");
 		wh.writeln("<span class=\"").write(self.getZclass()).write("-inner\">&nbsp;</span>");
-		wh.writeln("</li>");
+		wh.writeln("</").write(tagnm).write(">");
 	}
 }
