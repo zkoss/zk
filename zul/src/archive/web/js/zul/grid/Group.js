@@ -123,6 +123,11 @@ zul.grid.Group = zk.$extends(zul.grid.Row, {
 			else this._openItemNow(true, true);
 		}
 	},
+	onChildAdded_: function (child) {
+		this.$supers('onChildAdded_', arguments);
+		if (this.firstChild == child)
+			this.rerender();
+	},
 	bind_: function () {		
 		this.$supers('bind_', arguments);
 		var n = this.$n(),

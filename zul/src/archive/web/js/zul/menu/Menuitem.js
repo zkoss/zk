@@ -25,7 +25,7 @@ zul.menu.Menuitem = zk.$extends(zul.LabelImageWidget, {
 		checked: function (checked) {
 			if (checked)
 				this._checkmark = checked;
-			var n = this.$n();
+			var n = this.$n('a');
 			if (n && !this.isTopmost() && !this.getImage()) {
 				var zcls = this.getZclass(),
 					$n = jq(n);

@@ -196,16 +196,18 @@ zul.tab.Tab = zk.$extends(zul.LabelImageWidget, {
 	},
 	//event handler//
 	onClose: function () {
-		var tabbox = this.getTabbox();
-		for (var tab = this; tab = tab.nextSibling;)
-			if (!tab.isDisabled()) {
-				tab._selTab(true);
-				return null;
-			}
-		for (var tab = this; tab = tab.previousSibling;)
-			if (!tab.isDisabled()) {
-				tab._selTab(true);
-				return null;
-			}
+		if (this.isSelected()) {
+			var tabbox = this.getTabbox();
+			for (var tab = this; tab = tab.nextSibling;) 
+				if (!tab.isDisabled()) {
+					tab._selTab(true);
+					return null;
+				}
+			for (var tab = this; tab = tab.previousSibling;) 
+				if (!tab.isDisabled()) {
+					tab._selTab(true);
+					return null;
+				}
+		}
 	}
 });

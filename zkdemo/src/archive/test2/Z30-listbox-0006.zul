@@ -17,7 +17,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 -->
 <window>
 Both H and V scroll
-<listbox rows="4" width="80px">
+<listbox rows="4" width="80px" sizedByContent="true">
 	<listhead>
 		<listheader width="50px" label="Population"/>
 		<listheader label="%"/>

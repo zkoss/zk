@@ -603,10 +603,6 @@
 	padding: 5px;
 	zoom: 1;
 }
-.z-tabbox-ver .z-tabpanels-ver {
-	float: left;
-	border-left: none;
-}
 
 <c:if test="${c:browser('ie6-')}">
 .z-tabbox-ver .z-tabpanels-ver {

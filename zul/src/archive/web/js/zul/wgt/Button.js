@@ -53,6 +53,22 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 	},
 
 	//super//
+	updateDomClass_: function () {
+		if (this.desktop) {
+			var n = this._mold == 'trendy' ? this.$n('box') : this.$n();
+			if (n) n.className = this.domClass_();
+		}
+	},
+	updateDomStyle_: function () {
+		if (this.desktop) {
+			var n = this._mold == 'trendy' ? this.$n('box') : this.$n();
+			var s = jq.parseStyle(this.domStyle_());
+			zk(n).setStyles(s);
+
+			n = this.getTextNode();
+			if (n) zk(n).css(jq.filterTextStyle(s));
+		}
+	},
 	setVisible: function (visible) {
 		if (this._visible != visible) {
 			this.$supers('setVisible', arguments);

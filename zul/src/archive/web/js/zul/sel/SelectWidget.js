@@ -471,10 +471,18 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 				return false;
 			}
 		}
-		
+		var tag = evt.domTarget.tagName;
+		if (!zk.gecko3 || (tag != "INPUT" && tag != "TEXTAREA"))
+			zk(this.$n()).disableSelection();
+			
 		// Feature #1978624
 		evt.target = this._focusItem || this.getSelectedItem() || this;
 		this.$supers('doKeyDown_', arguments);
+	},
+	doKeyUp_: function (evt) {
+		zk(this.$n()).enableSelection();
+		evt.stop({propagation: true});
+		this.$supers('doKeyUp_', arguments);
 	},
 	_doKeyDown: function (evt) {
 		if (zAu.processing() || this._shallIgnoreEvent(evt))
