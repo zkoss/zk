@@ -6,12 +6,11 @@ If you see "false", it is correct; otherwise, it is not correct:
 
 <zscript>
 	win.setVariable("abc", "Hello", false); //abc inside the win's namespace
-	final org.zkoss.zk.scripting.Namespace ns = win.getNamespace();
 	for(final Iterator it = win.getPage().getLoadedInterpreters().iterator(); it.hasNext();) {
 		final org.zkoss.zk.scripting.Interpreter ip = (org.zkoss.zk.scripting.Interpreter) it.next();
 		if (ip instanceof org.zkoss.zk.scripting.HierachicalAware) {
 			final org.zkoss.zk.scripting.HierachicalAware ha = (org.zkoss.zk.scripting.HierachicalAware)ip;
-			if (ha.containsVariable(ns, "abc")) {
+			if (ha.containsVariable(win, "abc")) {
 				lbl.setValue("true");
 				break;
 			}
