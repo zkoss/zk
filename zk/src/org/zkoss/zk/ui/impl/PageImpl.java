@@ -52,7 +52,6 @@ import org.zkoss.zk.ui.Richlet;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.IdSpace;
-import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
@@ -516,8 +515,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 					return o;
 			}
 		}
-
-		return Components.getImplicit(this, name);
+		return null;
 	}
 	public boolean addVariableResolver(VariableResolver resolver) {
 		if (resolver == null)

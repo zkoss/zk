@@ -261,10 +261,6 @@ abstract public class GenericInterpreter implements Interpreter {
 	 * @since 3.6.0
 	 */
 	protected static Object getImplicit(String name) {
-		if ("execution".equals(name)) {
-			final Execution exec = Executions.getCurrent();
-			if (exec != null) return exec;
-		}
 		return Scopes.getImplicit(name, UNDEFINED);
 	}
 	/** Returns the variable through the specified scopes and

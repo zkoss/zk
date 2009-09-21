@@ -19,13 +19,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Iterator;
+import java.util.Collection;
 
 import org.zkoss.util.logging.Log;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.sys.ExecutionCtrl;
 import org.zkoss.zk.ui.impl.SimpleScope;
 
 /**
@@ -118,6 +121,10 @@ try {
 	}
 	/** Returns the implict object.
 	 *
+	 * <p>It searches the implicit object stored with {@link #setImplicit},
+	 * and also searches the system implicity objects by use of
+	 * {@link Components#getImplicit(Page, Component, String)}.
+	 *
 	 * @param name the variable to retrieve
 	 * @param defValue the default vale that is used if the implicit
 	 * object is not defined.
@@ -126,7 +133,14 @@ try {
 		final List implicits = (List)_implicits.get();
 		if (implicits != null && !implicits.isEmpty()) //in case: beforeInterpret not called
 			return ((Implicit)implicits.get(0)).getImplicit(name, defValue);
-		return defValue;
+
+		Object val = getSysImplicit(name);
+		return val != null ? val: defValue;
+	}
+	private static Object getSysImplicit(String name) {
+		final Object val = getCurrent(null);
+		return  val instanceof Component ? Components.getImplicit((Component)val, name):
+			val instanceof Page ? Components.getImplicit((Page)val, name): null;
 	}
 
 	/** Returns the current scope.
@@ -136,12 +150,33 @@ try {
 	 *
 	 * <p>This method is used only to implement {@link org.zkoss.zk.scripting.Interpreter}.
 	 * You rarely need to access it other than implementing an interpreter.
+	 *
+	 * @param page the page. It is used if {@link #beforeInterpret}
+	 * is not called before. If null, the current page ({@link ExecutionCtrl#getCurrentPage}
+	 * is assumed.
 	 */
 	public static final Scope getCurrent(Page page) {
 		final List nss = (List)_scopes.get();
 		final Scope scope =
 			nss != null && !nss.isEmpty() ? (Scope)nss.get(0): null;
-		return scope != null ? scope: page;
+		if (scope != null)
+			return scope;
+
+		if (page == null) {
+			final Execution exec = Executions.getCurrent();
+			if (exec != null) {
+				page = ((ExecutionCtrl)exec).getCurrentPage();
+				if (page == null) {
+					final Desktop dt = exec.getDesktop();
+					if (dt != null) { //just in case
+						final Collection pgs = dt.getPages();
+						if (pgs != null && !pgs.isEmpty())
+							return (Page)pgs.iterator().next();
+					}
+				}
+			}
+		}
+		return page;
 	}
 	/** Pushes the specified scope as the current scope.
 	 *
@@ -169,8 +204,11 @@ try {
 			_vars.put(name, value);
 		}
 		private Object getImplicit(String name, Object defValue) {
-			final Object o = _vars.get(name);
-			return o != null || _vars.containsKey(name) ? o: defValue;
+			Object val = _vars.get(name);
+			if (val != null || _vars.containsKey(name))
+				return val;
+			val = getSysImplicit(name);
+			return val != null ? val: defValue;
 		}
 	}
 }

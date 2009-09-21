@@ -654,12 +654,18 @@ public class Components {
 	/** Retuns the implicit object of the specified name, or null
 	 * if not found.
 	 *
+	 * <p>Notice that it does check for the current scope
+	 * ({@link org.zkoss.zk.ui.ext.Scopes#getCurrent}).
+	 * Rather, {@link org.zkoss.zk.ui.ext.Scopes#getImplicit}
+	 * depends on this method.
+	 *
 	 * @param page the page. If page is null and comp is not,
 	 * comp.getPage() is assumed
+	 * @see org.zkoss.zk.ui.ext.Scopes#getImplicit
 	 * @since 5.0.0
 	 */
 	public static
-	Object getImplicit(Component comp, Page page, String name) {
+	Object getImplicit(Page page, Component comp, String name) {
 		if (comp != null && page == null)
 			page = getPage(comp);
 
@@ -722,19 +728,19 @@ public class Components {
 	}
 	/** Retuns the implicit object of the specified name, or null
 	 * if not found.
-	 * <p>It is the same as getImplicit(comp, null, name).
+	 * <p>It is the same as getImplicit(null, comp, name).
 	 * @since 3.6.0
 	 */
 	public static Object getImplicit(Component comp, String name) {
-		return getImplicit(comp, null, name);
+		return getImplicit(null, comp, name);
 	}
 	/** Retuns the implicit object of the specified name, or null
 	 * if not found.
-	 * <p>It is the same as getImplicit(null, page, name).
+	 * <p>It is the same as getImplicit(page, null, name).
 	 * @since 3.6.0
 	 */
 	public static Object getImplicit(Page page, String name) {
-		return getImplicit(null, page, name);
+		return getImplicit(page, null, name);
 	}
 
 	private static Desktop getDesktop(Component comp) {
