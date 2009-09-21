@@ -26,16 +26,20 @@ zul.med.Applet = zk.$extends(zul.Widget, {
 	},
 
 	invoke: zk.ie ? function() {
-		var n = this.$n();
-		if (n && arguments.length >= 1) {
-			var expr = "n." + arguments[0] + '(';
-			for (var j = 1; j < arguments.length;) {
+		var n = this.$n(),
+			len = arguments.length;
+		if (n && len >= 1) {
+			var single = len < 3,
+				begin = single ? '(' : '([',
+				end = single ? ')' : '])',
+				expr = "n." + arguments[0] + begin;
+			for (var j = 1; j < len;) {
 				if (j != 1) expr += ',';
 				var s = arguments[j++];
 				expr += '"' + (s ? s.replace('"', '\\"'): '') + '"';
 			}
 			try {
-				eval(expr + ')');
+				eval(expr + end);
 			} catch (e) {
 				zk.error("Failed to invoke applet's method: "+expr+'\n'+e.message);
 			}
@@ -52,8 +56,9 @@ zul.med.Applet = zk.$extends(zul.Widget, {
 			try {
 				var args = [],
 					arrayArg = [];
-				if (arguments.length < 3) { 
-					args.push(arguments[1]);
+				if (arguments.length < 3) {
+					if (arguments[1]) 
+						args.push(arguments[1]);
 				} else {
 					for (var j = 1, len = arguments.length; j < len;) 
 						arrayArg.push(arguments[j++]);

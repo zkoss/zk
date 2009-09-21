@@ -258,7 +258,9 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			var h = n.style.height;
 			if (!h || h == "auto") {
 				h = zk.gecko ? this.ebody.offsetHeight - this.ebody.clientHeight : this.ebody.offsetWidth - this.ebody.clientWidth;
-				if (h > 11)
+				
+				// Bug #2805177, we have to check the clientWidth first.
+				if ((zk.gecko || this.ebody.clientWidth) && h > 11)
 					this.ebody.style.height = hgh + jq.scrollbarWidth() + "px";
 			}
 		} else {
@@ -277,7 +279,9 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			// bug #2799258
 			if (!hgh || hgh == "auto") {
 				hgh = this.ebody.offsetWidth - this.ebody.clientWidth;
-				if (hgh > 11)
+				
+				// Bug #2805177, we have to check the clientWidth first.
+				if (this.ebody.clientWidth && hgh > 11)
 					this.ebody.style.height = this.ebody.offsetHeight + jq.scrollbarWidth() + "px";
 			}
 		}

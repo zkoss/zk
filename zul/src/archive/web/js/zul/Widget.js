@@ -171,10 +171,14 @@ zul.Widget = zk.$extends(zk.Widget, {
 				ctx = this._smartFellow(params.id);
 			if (ctx) {
 				evt._ctxed = true;
-				var xy = params.x !== undefined ? [params.x, params.y]
+				
+				// to avoid a focus in IE, we have to pop up it later. for example, userguide/#t5
+				var self = this,
+					xy = params.x !== undefined ? [params.x, params.y]
 							: [evt.pageX, evt.pageY];
-							
-				ctx.open(this, xy, params.position ? params.position : null, {sendOnOpen:true});
+				setTimeout(function() {
+					ctx.open(this, xy, params.position ? params.position : null, {sendOnOpen:true});
+				}, 0);
 				evt.stop(); //prevent default context menu to appear
 			}
 		}
