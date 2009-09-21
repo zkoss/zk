@@ -21,9 +21,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	</head>
 	<body>
 		<h1>Test of Progress Bar with an Included ZK Page</h1>
-		<p>You shall see the progress bar only appear in the following box.</p>
+		<p>You shall see the progress bar only appear in the following boxes.</p>
+		<% response.flushBuffer(); %>
 		<jsp:include page="F30-1977343_inc.zul"/>
 		<p>This is another part of the JSP page (container).</p>
-		<jsp:include page="F30-1977343_inc.zul"/>
+		<jsp:include page="F30-1977343_inc.zul?pause=true"/>
 	</body>
 </html>

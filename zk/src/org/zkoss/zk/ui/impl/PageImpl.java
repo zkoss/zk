@@ -52,6 +52,7 @@ import org.zkoss.zk.ui.Richlet;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.IdSpace;
+import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Execution;
@@ -106,7 +107,6 @@ import org.zkoss.zk.scripting.*;
  */
 public class PageImpl extends AbstractPage implements java.io.Serializable {
 	private static final Log log = Log.lookup(PageImpl.class);
-	private static final Log _zklog = Log.lookup("org.zkoss.zk.log");
     private static final long serialVersionUID = 20081026L;
 
 	/** The component that includes this page, or null if not included. */
@@ -517,26 +517,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			}
 		}
 
-		if ("log".equals(name)) return _zklog;
-		if ("page".equals(name)) return this;
-		if ("pageScope".equals(name)) return getAttributes();
-		if ("requestScope".equals(name)) return REQUEST_ATTRS;
-		if ("execution".equals(name)) return Executions.getCurrent();
-		if ("spaceOwner".equals(name)) return this;
-
-		if (_desktop != null) {
-			if ("desktop".equals(name)) return _desktop;
-			if ("desktopScope".equals(name)) return _desktop.getAttributes();
-			final WebApp wapp = _desktop.getWebApp();
-			if ("application".equals(name)) return wapp;
-			if ("applicationScope".equals(name)) return wapp.getAttributes();
-			final Session sess = _desktop.getSession();
-			if ("session".equals(name)) return sess;
-			if ("sessionScope".equals(name))
-				return sess != null ? sess.getAttributes(): Collections.EMPTY_MAP;
-		}
-
-		return null;
+		return Components.getImplicit(this, name);
 	}
 	public boolean addVariableResolver(VariableResolver resolver) {
 		if (resolver == null)

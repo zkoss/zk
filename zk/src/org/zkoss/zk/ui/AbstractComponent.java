@@ -938,6 +938,15 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			if ("spaceOwner".equals(name))
 				return AbstractComponent.this;
 		}
+		if ("componentScope".equals(name))
+			return AbstractComponent.this._attrs;
+		if ("self".equals(name))
+			return AbstractComponent.this;
+		if (_page == null) {
+			val = Components.getImplicit(this, name);
+			if (val != null)
+				return val;
+		}
 
 		if (recurse) {
 			if (_parent != null)

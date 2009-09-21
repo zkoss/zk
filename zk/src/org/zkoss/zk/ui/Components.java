@@ -53,6 +53,7 @@ import org.zkoss.zk.ui.metainfo.ComponentDefinition;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.metainfo.DefinitionNotFoundException;
 import org.zkoss.zk.ui.sys.ExecutionCtrl;
+import org.zkoss.zk.ui.ext.Scope;
 import org.zkoss.zk.ui.ext.ScopeListener;
 import org.zkoss.zk.xel.Evaluator;
 
@@ -63,6 +64,8 @@ import org.zkoss.zk.xel.Evaluator;
  */
 public class Components {
 	private static final Log log = Log.lookup(Components.class);
+	private static final Log _zklog = Log.lookup("org.zkoss.zk.log");
+
 	protected Components() {}
 
 	/** Returns the parent of the ID space, or null if not found.
@@ -648,58 +651,92 @@ public class Components {
 		IMPLICIT_NAMES.add("param");
 	}
 	
-	/** Internal Use only. 
-	 * @since 3.6.0
+	/** Retuns the implicit object of the specified name, or null
+	 * if not found.
+	 *
+	 * @param page the page. If page is null and comp is not,
+	 * comp.getPage() is assumed
+	 * @since 5.0.0
 	 */
-	public static Object getImplicit(Component comp, String fdname) {
-		//initialize implicit objects
-		if ("self".equals(fdname))
-			return comp;
-		if ("spaceOwner".equals(fdname))
-			return comp.getSpaceOwner();
-		if ("page".equals(fdname))
-			return getPage(comp);
-		if ("desktop".equals(fdname))
-			return getDesktop(comp);
-		if ("session".equals(fdname))
-			return getSession(comp);
-		if ("application".equals(fdname))
-			return getWebApp(comp);
-		if ("componentScope".equals(fdname))
-			return comp.getAttributes();
-		if ("spaceScope".equals(fdname)) {
-			final IdSpace spaceOwner = comp.getSpaceOwner();
-			return spaceOwner instanceof Page ? ((Page)spaceOwner).getAttributes():
-				spaceOwner instanceof Component ? ((Component)spaceOwner).getAttributes():
-					Collections.EMPTY_MAP;
+	public static
+	Object getImplicit(Component comp, Page page, String name) {
+		if (comp != null && page == null)
+			page = getPage(comp);
+
+		if ("log".equals(name))
+			return _zklog;
+		if ("self".equals(name))
+			return comp != null ? comp: (Object)page;
+		if ("spaceOwner".equals(name))
+			return comp != null ? comp.getSpaceOwner(): (Object)page;
+		if ("page".equals(name))
+			return page;
+		if ("desktop".equals(name))
+			return comp != null ? getDesktop(comp): page.getDesktop();
+		if ("session".equals(name))
+			return comp != null ? getSession(comp): page.getDesktop().getSession();
+		if ("application".equals(name))
+			return comp != null ? getWebApp(comp): page.getDesktop().getWebApp();
+		if ("componentScope".equals(name))
+			return comp != null ? comp.getAttributes(): Collections.EMPTY_MAP;
+		if ("spaceScope".equals(name)) {
+			final Scope scope = comp != null ? (Scope)comp.getSpaceOwner(): (Scope)page;
+			return scope != null ? scope.getAttributes(): Collections.EMPTY_MAP;
 		}
-		if ("pageScope".equals(fdname)) {
-			final Page page = getPage(comp);
+		if ("pageScope".equals(name))
 			return page != null ? page.getAttributes(): Collections.EMPTY_MAP;
-		}
-		if ("desktopScope".equals(fdname)) {
-			final Desktop dt = getDesktop(comp);
+		if ("desktopScope".equals(name)) {
+			final Desktop dt = comp != null ? getDesktop(comp): page.getDesktop();
 			return dt != null ? dt.getAttributes(): Collections.EMPTY_MAP;
 		}
-		if ("sessionScope".equals(fdname)) {
-			final Session sess = getSession(comp);
+		if ("sessionScope".equals(name)) {
+			final Session sess = comp != null ? getSession(comp): page.getDesktop().getSession();
 			return sess != null ? sess.getAttributes(): Collections.EMPTY_MAP;
 		}
-		if ("applicationScope".equals(fdname)) {
-			final WebApp app = getWebApp(comp);
+		if ("applicationScope".equals(name)) {
+			final WebApp app = comp != null ? getWebApp(comp): page.getDesktop().getWebApp();
 			return app != null ? app.getAttributes(): Collections.EMPTY_MAP;
 		}
-		if ("requestScope".equals(fdname))
-			return REQUEST_SCOPE_PROXY;
-		if ("execution".equals(fdname))
-			return EXECUTION_PROXY;
-		if ("arg".equals(fdname))
-			return ARG_PROXY;
-		if ("param".equals(fdname))
-			return PARAM_PROXY;
+		if ("requestScope".equals(name)) {
+			final Execution exec = Executions.getCurrent();
+			return exec != null ?
+				new org.zkoss.web.servlet.xel.RequestScope(
+					(javax.servlet.ServletRequest)exec.getNativeRequest()):
+				Collections.EMPTY_MAP;
+		}
+		if ("execution".equals(name))
+			return Executions.getCurrent();
+		if ("arg".equals(name)) {
+			final Execution exec = Executions.getCurrent();
+			return exec != null ? exec.getArg(): Collections.EMPTY_MAP;
+		}
+		if ("param".equals(name)) {
+			final Execution exec = Executions.getCurrent();
+			return exec != null ?
+				new org.zkoss.web.servlet.xel.ParameterMap(
+					(javax.servlet.ServletRequest)exec.getNativeRequest()):
+				Collections.EMPTY_MAP;
+		}
 		//20090314, Henri Chen: No way to suppport "event" with an event proxy becuase org.zkoss.zk.Event is not an interface
 		return null;
 	}
+	/** Retuns the implicit object of the specified name, or null
+	 * if not found.
+	 * <p>It is the same as getImplicit(comp, null, name).
+	 * @since 3.6.0
+	 */
+	public static Object getImplicit(Component comp, String name) {
+		return getImplicit(comp, null, name);
+	}
+	/** Retuns the implicit object of the specified name, or null
+	 * if not found.
+	 * <p>It is the same as getImplicit(null, page, name).
+	 * @since 3.6.0
+	 */
+	public static Object getImplicit(Page page, String name) {
+		return getImplicit(null, page, name);
+	}
+
 	private static Desktop getDesktop(Component comp) {
 		final Desktop dt = comp.getDesktop();
 		if (dt != null) return dt;
@@ -730,47 +767,6 @@ public class Components {
 					return (Page)pgs.iterator().next();
 			}
 		}
-		return null;
-	}
-
-	/** Internal Use only. 
-	 * @since 3.6.0
-	 */
-	public static Object getImplicit(Page page, String fdname) {
-		//initialize implicit objects
-		if ("self".equals(fdname))
-			return page;
-		if ("spaceOwner".equals(fdname))
-			return page;
-		if ("page".equals(fdname))
-			return page;
-		if ("desktop".equals(fdname))
-			return page.getDesktop();
-		if ("session".equals(fdname))
-			return page.getDesktop().getSession();
-		if ("application".equals(fdname))
-			return page.getDesktop().getWebApp();
-		if ("componentScope".equals(fdname))
-			return new HashMap(0);
-		if ("spaceScope".equals(fdname))
-			return page.getAttributes();
-		if ("pageScope".equals(fdname))
-			return page.getAttributes();
-		if ("desktopScope".equals(fdname))
-			return page.getDesktop().getAttributes();
-		if ("sessionScope".equals(fdname))
-			return page.getDesktop().getSession().getAttributes();
-		if ("applicationScope".equals(fdname))
-			return page.getDesktop().getWebApp().getAttributes();
-		if ("requestScope".equals(fdname))
-			return REQUEST_SCOPE_PROXY;
-		if ("execution".equals(fdname))
-			return EXECUTION_PROXY;
-		if ("arg".equals(fdname))
-			return EXECUTION_PROXY.getArg();
-		if ("param".equals(fdname))
-			return PARAM_PROXY;
-		//20090314, Henri Chen: No way to suppport "event" with an event proxy becuase org.zkoss.zk.Event is not an interface
 		return null;
 	}
 	
@@ -1054,432 +1050,13 @@ public class Components {
 		
 		private Object myGetImplicit(Object x, String fdname) {
 			return x instanceof Page ?
-				getImplicit((Page)x, fdname) : getImplicit((Component)x, fdname);
+				getImplicit((Page)x, fdname) :
+				getImplicit((Component)x, fdname);
 		}
 		private String varname(String id, Class cls) {
 			final String clsname = cls.getName();
 			int j = clsname.lastIndexOf('.');
 			return id + _separator + (j >= 0 ? clsname.substring(j+1) : clsname);
-		}
-	}
-	/** Execution Proxy */
-	public static final Exec EXECUTION_PROXY = new Exec();
-	
-	/** Request Scope Proxy */
-	public static final RequestScope REQUEST_SCOPE_PROXY = new RequestScope();
-	
-	/** Arg Proxy */
-	public static final Arg ARG_PROXY = new Arg();
-	
-	/** Param Proxy */
-	public static final Param PARAM_PROXY = new Param();
-
-	//Proxy to read current execution
-	private static class Exec implements Execution {
-		private static final Execution exec() {
-			return Executions.getCurrent();
-		}
-		
-		public void addAuResponse(String key, AuResponse response) {
-			exec().addAuResponse(key, response);
-		}
-
-		public Component createComponents(PageDefinition pagedef,
-				Component parent, Map arg) {
-			return exec().createComponents(pagedef, parent, arg);
-		}
-
-		public Component createComponents(String uri, Component parent, Map arg) {
-			return exec().createComponents(uri, parent, arg);
-		}
-
-		public Component[] createComponents(PageDefinition pagedef, Map arg) {
-			return exec().createComponents(pagedef, arg);
-		}
-
-		public Component[] createComponents(String uri, Map arg) {
-			return exec().createComponents(uri, arg);
-		}
-
-		public Component createComponentsDirectly(String content,
-				String extension, Component parent, Map arg) {
-			return exec().createComponentsDirectly(content, extension, parent, arg);
-		}
-
-		public Component createComponentsDirectly(Document content,
-				String extension, Component parent, Map arg) {
-			return exec().createComponentsDirectly(content, extension, parent, arg);
-		}
-
-		public Component createComponentsDirectly(Reader reader,
-				String extension, Component parent, Map arg) throws IOException {
-			return exec().createComponentsDirectly(reader, extension, parent, arg);
-		}
-
-		public Component[] createComponentsDirectly(String content,
-				String extension, Map arg) {
-			return exec().createComponentsDirectly(content, extension, arg);
-		}
-
-		public Component[] createComponentsDirectly(Document content,
-				String extension, Map arg) {
-			return exec().createComponentsDirectly(content, extension, arg);
-		}
-
-		public Component[] createComponentsDirectly(Reader reader,
-				String extension, Map arg) throws IOException {
-			return exec().createComponentsDirectly(reader, extension, arg);
-		}
-
-		public String encodeURL(String uri) {
-			return exec().encodeURL(uri);
-		}
-
-		public Object evaluate(Component comp, String expr, Class expectedType) {
-			return exec().evaluate(comp, expr, expectedType);
-		}
-
-		public Object evaluate(Page page, String expr, Class expectedType) {
-			return exec().evaluate(page, expr, expectedType);
-		}
-
-		public void forward(Writer writer, String page, Map params, int mode)
-				throws IOException {
-			exec().forward(writer, page, params, mode);
-			
-		}
-
-		public void forward(String page) throws IOException {
-			exec().forward(page);
-		}
-
-		public Map getArg() {
-			return exec().getArg();
-		}
-
-		public Object getAttribute(String name) {
-			return exec().getAttribute(name);
-		}
-		public boolean hasAttribute(String name) {
-			return exec().hasAttribute(name);
-		}
-		public Object getAttribute(String name, boolean recurse) {
-			return exec().getAttribute(name, recurse);
-		}
-		public boolean hasAttribute(String name, boolean recurse) {
-			return exec().hasAttribute(name, recurse);
-		}
-		public Object setAttribute(String name, Object value, boolean recurse) {
-			return exec().setAttribute(name, value, recurse);
-		}
-		public Object removeAttribute(String name, boolean recurse) {
-			return exec().removeAttribute(name, recurse);
-		}
-		public boolean addScopeListener(ScopeListener listener) {
-			return exec().addScopeListener(listener);
-		}
-		public boolean removeScopeListener(ScopeListener listener) {
-			return exec().removeScopeListener(listener);
-		}
-
-		public Map getAttributes() {
-			return exec().getAttributes();
-		}
-
-		public String getContextPath() {
-			return exec().getContextPath();
-		}
-
-		public Desktop getDesktop() {
-			return exec().getDesktop();
-		}
-
-		public Evaluator getEvaluator(Page page, Class expfcls) {
-			return exec().getEvaluator(page, expfcls);
-		}
-
-		public Evaluator getEvaluator(Component comp, Class expfcls) {
-			return exec().getEvaluator(comp, expfcls);
-		}
-
-		public String getLocalAddr() {
-			return exec().getLocalAddr();
-		}
-
-		public String getLocalName() {
-			return exec().getLocalName();
-		}
-
-		public int getLocalPort() {
-			return exec().getLocalPort();
-		}
-
-		public Object getNativeRequest() {
-			return exec().getNativeRequest();
-		}
-
-		public Object getNativeResponse() {
-			return exec().getNativeResponse();
-		}
-
-		public PageDefinition getPageDefinition(String uri) {
-			return exec().getPageDefinition(uri);
-		}
-
-		public PageDefinition getPageDefinitionDirectly(String content,
-				String extension) {
-			return exec().getPageDefinitionDirectly(content, extension);
-		}
-
-		public PageDefinition getPageDefinitionDirectly(Document content,
-				String extension) {
-			return exec().getPageDefinitionDirectly(content, extension);
-		}
-
-		public PageDefinition getPageDefinitionDirectly(Reader reader,
-				String extension) throws IOException {
-			return exec().getPageDefinitionDirectly(reader, extension);
-		}
-
-		public String getParameter(String name) {
-			return exec().getParameter(name);
-		}
-
-		public Map getParameterMap() {
-			return exec().getParameterMap();
-		}
-
-		public String[] getParameterValues(String name) {
-			return exec().getParameterValues(name);
-		}
-
-		public String getRemoteAddr() {
-			return exec().getRemoteAddr();
-		}
-
-		public String getRemoteHost() {
-			return exec().getRemoteHost();
-		}
-
-		public String getRemoteUser() {
-			return exec().getRemoteUser();
-		}
-
-		public String getServerName() {
-			return exec().getServerName();
-		}
-
-		public int getServerPort() {
-			return exec().getServerPort();
-		}
-
-		public String getScheme() {
-			return exec().getScheme();
-		}
-
-		public String getUserAgent() {
-			return exec().getUserAgent();
-		}
-
-		public Principal getUserPrincipal() {
-			return exec().getUserPrincipal();
-		}
-
-		public VariableResolver getVariableResolver() {
-			return exec().getVariableResolver();
-		}
-
-		public void include(Writer writer, String page, Map params, int mode)
-				throws IOException {
-			exec().include(writer, page, params, mode);
-			
-		}
-
-		public void include(String page) throws IOException {
-			exec().include(page);
-		}
-
-		public boolean isAsyncUpdate(Page page) {
-			return exec().isAsyncUpdate(page);
-		}
-
-		public boolean isBrowser() {
-			return exec().isBrowser();
-		}
-		public boolean isBrowser(String type) {
-			return exec().isBrowser(type);
-		}
-
-		public boolean isExplorer() {
-			return exec().isExplorer();
-		}
-
-		public boolean isExplorer7() {
-			return exec().isExplorer7();
-		}
-		
-		public boolean isOpera() {
-			return exec().isOpera();
-		}
-
-		public boolean isForwarded() {
-			return exec().isForwarded();
-		}
-
-		public boolean isGecko() {
-			return exec().isGecko();
-		}
-		public boolean isGecko3() {
-			return exec().isGecko3();
-		}
-
-		public boolean isHilDevice() {
-			return exec().isHilDevice();
-		}
-
-		public boolean isIncluded() {
-			return exec().isIncluded();
-		}
-
-		/** @deprecated As of release 5.0.0, MIL is no longer supported.
-		 */
-		public boolean isMilDevice() {
-			return exec().isMilDevice();
-		}
-
-		public boolean isRobot() {
-			return exec().isRobot();
-		}
-
-		public boolean isSafari() {
-			return exec().isSafari();
-		}
-
-		public boolean isUserInRole(String role) {
-			return exec().isUserInRole(role);
-		}
-
-		public boolean isVoided() {
-			return exec().isVoided();
-		}
-
-		public void popArg() {
-			exec().popArg();
-		}
-
-		public void postEvent(Event evt) {
-			exec().postEvent(evt);
-		}
-
-		public void postEvent(int priority, Event evt) {
-			exec().postEvent(priority, evt);
-		}
-
-		public void pushArg(Map arg) {
-			exec().pushArg(arg);
-		}
-
-		public Object removeAttribute(String name) {
-			return exec().removeAttribute(name);
-		}
-
-		public void sendRedirect(String uri) {
-			exec().sendRedirect(uri);
-		}
-
-		public void sendRedirect(String uri, String target) {
-			exec().sendRedirect(uri, target);
-		}
-
-		public Object setAttribute(String name, Object value) {
-			return exec().setAttribute(name, value);
-		}
-
-		public void setVoided(boolean voided) {
-			exec().setVoided(voided);
-		}
-
-		public String toAbsoluteURI(String uri, boolean skipInclude) {
-			return exec().toAbsoluteURI(uri, skipInclude);
-		}
-
-		public void addResponseHeader(String name, String value) {
-			exec().addResponseHeader(name, value);
-		}
-
-		public boolean containsResponseHeader(String name) {
-			return exec().containsResponseHeader(name);
-		}
-
-		public String getHeader(String name) {
-			return exec().getHeader(name);
-		}
-
-		public Iterator getHeaderNames() {
-			return exec().getHeaderNames();
-		}
-
-		public Iterator getHeaders(String name) {
-			return exec().getHeaders(name);
-		}
-
-		public void setResponseHeader(String name, String value) {
-			exec().setResponseHeader(name, value);
-		}
-	}
-
-	//Proxy to read current requestScope
-	private static class RequestScope implements Map {
-		protected Map req() {
-			return Executions.getCurrent().getAttributes();
-		}
-		public void clear() {
-			req().clear();
-		}
-		public boolean containsKey(Object key) {
-			return req().containsKey(key);
-		}
-		public boolean containsValue(Object value) {
-			return req().containsValue(value);
-		}
-		public Set entrySet() {
-			return req().entrySet();
-		}
-		public Object get(Object key) {
-			return req().get(key);
-		}
-		public boolean isEmpty() {
-			return req().isEmpty();
-		}
-		public Set keySet() {
-			return req().keySet();
-		}
-		public Object put(Object key, Object value) {
-			return req().put(key, value);
-		}
-		public void putAll(Map arg0) {
-			req().putAll(arg0);
-		}
-		public Object remove(Object key) {
-			return req().remove(key);
-		}
-		public int size() {
-			return req().size();
-		}
-		public Collection values() {
-			return req().values();
-		}
-	}
-	
-	private static class Arg extends RequestScope {
-		protected Map req() {
-			return Executions.getCurrent().getArg();
-		}
-	}
-	
-	private static class Param extends RequestScope {
-		protected Map req() {
-			return Executions.getCurrent().getParameterMap();
 		}
 	}
 }

@@ -1,0 +1,9 @@
+<zk>
+	You shall see "yes yes" below, when browse test2/B36-2863287.zul?what=yes
+	<separator bar="true"/>
+	<label id="i"/>
+	${param.what}
+	<zscript>
+	i.value = "" + param.get("what");
+	</zscript>
+</zk>

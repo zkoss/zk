@@ -115,7 +115,7 @@ abstract public class RequestXelResolver implements VariableResolver {
 		} else if ("applicationScope".equals(name)) {
 			return getApplicationScope();
 		} else if ("param".equals(name)) {
-			return _request != null ? new ParamMap(): Collections.EMPTY_MAP;
+			return _request != null ? new ParameterMap(_request): Collections.EMPTY_MAP;
 		} else if ("paramValues".equals(name)) {
 			return _request != null ? _request.getParameterMap(): Collections.EMPTY_MAP;
 		} else if ("header".equals(name)) {
@@ -226,20 +226,7 @@ abstract public class RequestXelResolver implements VariableResolver {
 			return _reqScope;
 		if (_request == null)
 			return Collections.EMPTY_MAP;
-		return _reqScope = new AttributesMap() {
-			protected Enumeration getKeys() {
-				return _request.getAttributeNames();
-			}
-			protected Object getValue(String key) {
-				return _request.getAttribute(key);
-			}
-			protected void setValue(String key, Object val) {
-				_request.setAttribute(key, val);
-			}
-			protected void removeValue(String key) {
-				_request.removeAttribute(key);
-			}
-		};
+		return _reqScope = new RequestScope(_request);
 	}
 	private Map getSessionScope() {
 		if (_sessScope != null)
@@ -283,46 +270,6 @@ abstract public class RequestXelResolver implements VariableResolver {
 		};
 	}
 
-	/** Used to access attributes of request, session and context. */
-	private class ParamMap extends StringKeysMap {
-		private Set _entries;
-		public Set entrySet() {
-			if (_entries == null) {
-				_entries = new AbstractSet() {
-					public int size() {
-						return ParamMap.this.size();
-					}
-					public boolean contains(Object o) {
-						return ParamMap.this.containsKey(o);
-					}
-					public Iterator iterator() {
-						return new EntryIter();
-					}
-				};
-			}
-			return _entries;
-		}
-
-		public int size() {
-			return _request.getParameterMap().size();
-		}
-		public boolean containsKey(Object key) {
-			return _request.getParameterMap().containsKey(key);
-		}
-
-		protected Object getValue(String key) {
-			return _request.getParameter(key);
-		}
-		protected Enumeration getKeys() {
-			return _request.getParameterNames();
-		}
-		protected void setValue(String key, Object value) {
-			throw new UnsupportedOperationException("readonly");
-		}
-		protected void removeValue(String key) {
-			throw new UnsupportedOperationException("readonly");
-		}
-	} //ParamMap
 	/** An implemnetation of PageContext. */
 	private class PageContextImpl implements PageContext {
 		public ServletRequest getRequest() {
