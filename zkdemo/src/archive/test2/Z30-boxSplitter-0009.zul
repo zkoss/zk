@@ -4,7 +4,7 @@
 	<n:p><n:strong>ALIGN: </n:strong>It means horizontal position.</n:p>
 	<window border="normal" height="500px" width="500px">
 		<vbox sclass="b" id="vb" pack="start" align="start"
- width="100%" height="100%">
+ width="100%" height="400px">
 			<textbox height="30px" width="30px" />
 			<splitter />
 			<textbox height="30px" width="30px" />
