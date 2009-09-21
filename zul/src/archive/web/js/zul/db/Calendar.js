@@ -20,7 +20,43 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 		value: _zkf = function() {
 			this.rerender();
 		},
-		constraint: null
+		constraint: function() {
+			var constraint = this._constraint || '';
+			if (constraint.startsWith("between")) {
+				var j = constraint.indexOf("and", 7);
+				if (j < 0 && zk.debugJS) 
+					zk.error('Unknown constraint: ' + constraint);
+				this._beg = zDateFormat.parseDate(constraint.substring(7, j), 'yyyyMMdd');
+				this._end = zDateFormat.parseDate(constraint.substring(j + 3), 'yyyyMMdd');
+				if (this._beg.getTime() > this._end.getTime()) {
+					var d = this._beg;
+					this._beg = this._end;
+					this._end = d;
+				}
+				
+				this._beg.setHours(0);
+				this._beg.setMinutes(0);
+				this._beg.setSeconds(0);
+				this._beg.setMilliseconds(0);
+				
+				this._end.setHours(0);
+				this._end.setMinutes(0);
+				this._end.setSeconds(0);
+				this._end.setMilliseconds(0);
+			} else if (constraint.startsWith("before")) {
+				this._end = zDateFormat.parseDate(constraint.substring(6), 'yyyyMMdd');
+				this._end.setHours(0);
+				this._end.setMinutes(0);
+				this._end.setSeconds(0);
+				this._end.setMilliseconds(0);
+			} else if (constraint.startsWith("after")) {
+				this._beg = zDateFormat.parseDate(constraint.substring(5), 'yyyyMMdd');
+				this._beg.setHours(0);
+				this._beg.setMinutes(0);
+				this._beg.setSeconds(0);
+				this._beg.setMilliseconds(0);
+			}
+		}
 	},
 	getFormat: function () {
 		return this._fmt || "yyyy/MM/dd";
@@ -203,24 +239,12 @@ zul.db.Calendar = zk.$extends(zul.Widget, {
 			return (today - d)/ 86400000 < 0;
 			break;
 		default:
-			if (this._constraint) {
-				if (this._constraint.startsWith("before")) {
-					var before = zDateFormat.parseDate(this._constraint.substring(6), 'yyyyMMdd');
-					before.setHours(0);
-					before.setMinutes(0);
-					before.setSeconds(0);
-					before.setMilliseconds(0);
-					return (before - d) / 86400000 < 0;
-				} else if (this._constraint.startsWith("after")) {
-					var after = zDateFormat.parseDate(this._constraint.substring(5), 'yyyyMMdd');
-					after.setHours(0);
-					after.setMinutes(0);
-					after.setSeconds(0);
-					after.setMilliseconds(0);
-					return (d - after) / 86400000 < 0;
-				}
-			}
-			return false;
+			var result = false;
+			if (this._beg && (result = (d - this._beg) / 86400000 < 0))
+				return result;
+			if (this._end && (result = (this._end - d) / 86400000 < 0))
+				return result;
+			return result;
 		}
 	},
 	_markCal : function () {

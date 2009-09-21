@@ -350,13 +350,14 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 			oldDate.setMonth(date.getMonth());
 			oldDate.setDate(date.getDate());
 		} else
-			this.parent.setValue(date);
+			this.parent._value = date;
 		this.parent.getInputNode().value = evt.data.value = this.parent.getRawText();
 		this.parent.fire(evt.name, evt.data);
 		if (this._view == 'day' && evt.data.shallClose !== false) {
 			this.close();
 			this.parent._inplaceout = true;
 		}
+		this.parent.focus();
 		evt.stop();
 	},
 	onFloatUp: function (ctl) {
@@ -402,13 +403,14 @@ zul.db.CalendarTime = zk.$extends(zul.inp.Timebox, {
 			oldDate.setMinutes(date.getMinutes());
 			oldDate.setSeconds(date.getSeconds());
 		} else
-			this.parent.setValue(date);
+			this.parent._value = date;
 		this.parent.getInputNode().value = evt.data.value = this.parent.getRawText();
 		this.parent.fire(evt.name, evt.data);
 		if (this._view == 'day' && evt.data.shallClose !== false) {
 			this.close();
 			this.parent._inplaceout = true;
 		}
+		this.parent.focus();
 		evt.stop();
 	}
 });
