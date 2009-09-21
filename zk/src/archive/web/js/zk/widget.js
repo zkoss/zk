@@ -1464,7 +1464,6 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (this.isVisible() && this.canActivate({checkOnly:true})
 		&& (node = this.$n())) {
 			if (zk(node).focus(timeout)) {
-				zk.currentFocus = this;
 				this.setTopmost();
 				return true;
 			}
