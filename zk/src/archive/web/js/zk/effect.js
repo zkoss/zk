@@ -258,7 +258,7 @@ zk.eff.Mask = zk.$extends(zk.Object, {
 		opts = opts || {};
 		var $anchor = zk(opts.anchor);
 		
-		if (!$anchor.length || !$anchor.isRealVisible(true)) return; //nothing do to.
+		if (!$anchor.jq.length || !$anchor.isRealVisible(true)) return; //nothing do to.
 		
 		var maskId = opts.id || 'z_applymask',
 			progbox = jq(maskId, zk)[0];
