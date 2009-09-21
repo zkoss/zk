@@ -245,8 +245,9 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 			stackup: (zk.useStackup === undefined ? zk.ie6_: zk.useStackup),
 			visible: realVisible});
 
-		if (realVisible)
+		if (realVisible) {
 			this._prevmodal = zk.currentModal;
+			zk.currentModal = this;
 			this._prevfocus = zk.currentFocus;
 
 			//au's focus uses wgt.focus(0), so we have to delay a bit (Z30-focus.zul)
@@ -255,6 +256,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 				if (!zUtl.isAncestor(wnd, zk.currentFocus))
 					wnd.focus();
 			}, 0);
+		}
 
 		this._makeFloat();
 	},
