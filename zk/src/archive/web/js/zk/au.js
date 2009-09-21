@@ -782,7 +782,8 @@ zAu.cmd1 = {
 			wgt.detach();
 	},
 	focus: function (uuid, wgt) {
-		wgt.focus(0); //wgt.focus() failed in FF
+		if (wgt)
+			wgt.focus(0); //wgt.focus() failed in FF
 	},
 	select: function (uuid, wgt, s, e) {
 		if (wgt.select) wgt.select(s, e);
