@@ -531,7 +531,7 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		if (pos == 'parent') {
 			var vp = node.vparentNode;
 			if (vp) {
-				var ofs = zk(vp).reviseOffset();
+				var ofs = zk(vp).revisedOffset();
 				x -= ofs[0];
 				y -= ofs[1];
 			}
