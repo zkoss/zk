@@ -5,7 +5,7 @@
 <![CDATA[
 <ol>
 <li>You shall see A B C D and a button "save"</li>
-<li>Press the "save" button, you shall see E F C D and button "save"</li>
+<li>Press the "save" button, you shall see E D C D and button "save"</li>
 <li>Done</li>
 </ol>
 ]]>

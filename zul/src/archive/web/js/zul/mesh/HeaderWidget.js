@@ -144,12 +144,15 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 	},
 	doClick_: function (evt) {
 		var wgt = zk.Widget.$(evt.domTarget);
-		if (!zk.dragging && (wgt == this || wgt.$instanceof(zul.wgt.Label)) && this.isSortable_() 
-			&& evt.domTarget.tagName != "INPUT") {
+		if (!zk.dragging && (wgt == this || wgt.$instanceof(zul.wgt.Label)) && this.isSortable_() &&
+				evt.domTarget.tagName != "INPUT") {
 			this.fire('onSort');
 			evt.stop();
-		} else
+		} else {
+			if (evt.domTarget.tagName == "INPUT")
+				evt.stop({propagation: true});
 			this.$supers('doClick_', arguments);
+		}
 	},
 	doMouseMove_: function (evt) {
 		if (zk.dragging || !this.parent.isSizable()) return;

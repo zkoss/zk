@@ -563,7 +563,8 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	doFocus_: function (evt) {
 		var n = this.$n(),
-			inp = this.getInputNode();
+			inp = this.getInputNode(),
+			selrng = zk(inp).getSelectionRange();
 		if (this._inplace)
 			n.style.width = jq.px(zk(n).revisedWidth(n.offsetWidth));
 
@@ -574,10 +575,14 @@ zul.inp.Timebox = zk.$extends(zul.inp.FormatWidget, {
 			
 		if (!inp.value)
 			inp.value = this.coerceToString_();
-		
+
 		this._doCheckPos(this._getPos());
-		this.lastPos = this._getPos();
 		
+		// Bug 2688620
+		if (selrng[0] !== selrng[1]) {
+			zk(inp).setSelectionRange(selrng[0], selrng[1]);
+			this.lastPos = selrng[1];
+		}
 		if (this._inplace) {
 			if (jq(n).hasClass(this.getInplaceCSS())) {
 				jq(n).removeClass(this.getInplaceCSS());

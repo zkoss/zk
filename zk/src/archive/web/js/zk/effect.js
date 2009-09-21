@@ -18,7 +18,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zk.eff = {};
 if (zk.ie || zk.gecko2_ || zk.opera) {
 	zk.eff.Shadow = zk.$extends(zk.Object, {
-		_HTML: zk.ie6Only ? '" class="z-shadow"></div>':
+		_HTML: zk.ie6_ ? '" class="z-shadow"></div>':
 			'" class="z-shadow"><div class="z-shadow-tl"><div class="z-shadow-tr"></div></div>'
 			+'<div class="z-shadow-cl"><div class="z-shadow-cr"><div class="z-shadow-cm">&#160;</div></div></div>'
 			+'<div class="z-shadow-bl"><div class="z-shadow-br"></div></div></div>',

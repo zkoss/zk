@@ -338,7 +338,7 @@ zul.db.CalendarPop = zk.$extends(zul.db.Calendar, {
 				right: 4,
 				top: 2,
 				bottom: 3,
-				stackup: (zk.useStackup === undefined ? zk.ie6Only : zk.useStackup)
+				stackup: (zk.useStackup === undefined ? zk.ie6_ : zk.useStackup)
 			});
 		this._shadow.sync();
 	},

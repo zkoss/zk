@@ -27,9 +27,9 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<separator/>
 	2. Click the "change customized menu" button, and then see the column's menu whether it is changed.
 	<menupopup id="editPopup">
-        <menuitem label="Group" image="~./zul/img/grid/grouping.gif"/>
-        <menuitem label="Sort Ascending" image="~./zul/img/grid/hd-asc.gif"/>
-        <menuitem label="Sort Descending" image="~./zul/img/grid/hd-desc.gif"/>
+        <menuitem label="Group" image="~./zul/img/grid/menu-group.png"/>
+        <menuitem label="Sort Ascending" image="~./zul/img/grid/menu-arrowup.png"/>
+        <menuitem label="Sort Descending" image="~./zul/img/grid/menu-arrowdown.png"/>
 	</menupopup>
 	<button label="change customized menu" onClick='cols.menupopup="editPopup"'/>
 	<grid>

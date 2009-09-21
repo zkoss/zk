@@ -31,7 +31,7 @@ zDateFormat = {
 	_parseToken: function (token, ts, i, len) {
 		if (len < 2) len = 2;
 		if (token && token.length > len) {
-			ts[--i] = token.substring(len);
+			ts[i] = token.substring(len);
 			return token.substring(0, len);
 		}
 		return token;
@@ -139,7 +139,7 @@ zDateFormat = {
 					break;
 				case 'd':
 					if (nosep)
-						token = this._parseToken(token, ts, i, len);
+						token = this._parseToken(token, ts, --i, len);
 					d = zk.parseInt(token);
 					if (isNaN(d)) return null; //failed
 					break;
@@ -147,7 +147,7 @@ zDateFormat = {
 					if (hasHour1)
 						break;
 					if (nosep)
-						token = this._parseToken(token, ts, i, len);
+						token = this._parseToken(token, ts, --i, len);
 					hr = zk.parseInt(token);
 					if (isNaN(hr)) return null; //failed
 					break;
@@ -155,7 +155,7 @@ zDateFormat = {
 					if (!hasHour1)
 						break;
 					if (nosep)
-						token = this._parseToken(token, ts, i, len);
+						token = this._parseToken(token, ts, --i, len);
 					hr = zk.parseInt(token);
 					if (hr == 12)
 						hr = 0;
@@ -165,7 +165,7 @@ zDateFormat = {
 					if (!hasHour1)
 						break;
 					if (nosep)
-						token = this._parseToken(token, ts, i, len);
+						token = this._parseToken(token, ts, --i, len);
 					hr = zk.parseInt(token);
 					if (isNaN(hr)) return null; //failed
 					hr %= 12;
@@ -174,7 +174,7 @@ zDateFormat = {
 					if (hasHour1)
 						break;
 					if (nosep)
-						token = this._parseToken(token, ts, i, len);
+						token = this._parseToken(token, ts, --i, len);
 					hr = zk.parseInt(token);
 					if (hr == 24)
 						hr = 0;
@@ -182,13 +182,13 @@ zDateFormat = {
 					break;					
 				case 'm':
 					if (nosep)
-						token = this._parseToken(token, ts, i, len);
+						token = this._parseToken(token, ts, --i, len);
 					min = zk.parseInt(token);
 					if (isNaN(min)) return null; //failed
 					break;
 				case 's':
 					if (nosep)
-						token = this._parseToken(token, ts, i, len);
+						token = this._parseToken(token, ts, --i, len);
 					sec = zk.parseInt(token);
 					if (isNaN(sec)) return null; //failed
 					break;
