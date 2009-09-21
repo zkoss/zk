@@ -1178,6 +1178,11 @@ zk.Widget = zk.$extends(zk.Object, {
 	_redrawHTML: function (skipper) {
 		var out = [];
 		this.redraw(out, skipper);
+		if (this.prolog && out[0] == this.prolog)
+			out[0] = '';
+			//Don't generate this.prolog if it is the one to re-render;
+			//otherwise, prolog will be generated twice if invalidated
+			//test: <div> <button onClick="self.invalidate()"/></div>
 		return out.join('');
 	},
 	rerender: function (skipper) {
