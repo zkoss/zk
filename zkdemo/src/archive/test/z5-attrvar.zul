@@ -39,7 +39,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 	<button label="groovy:alert" onClick='groovy:alert(s+", "+c+", "+a+" and "+b)'>
 		<custom-attributes c="c3"/>
 	</button>
-	<button label="groovy:update" onClick='groovy:l.value = s+", "+c+", "+a+" and "+b'>
+	<button label="groovy:update" onClick='groovy:l.value = s+", "+c+", "+a+" and "+b+":"+main.title'>
 		<custom-attributes c="c4"/>
 	</button>
 </window>
