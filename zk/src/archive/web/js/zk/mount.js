@@ -29,6 +29,7 @@ function zkpgbg(pguid, style, dtid, contained, contextURI, updateURI) {
 	if (style) props.style = style;
 	if (dtid) zkdtbg(dtid, contextURI, updateURI)._pguid = pguid;
 	zk.mnt.push({type: "#p", uuid: pguid, contained: contained, props: props});
+	zk.mnt.pgbg = !contained; //used by showprocinit in zk.js
 }
 function zkbg(type, uuid, mold, props) {
 	zk.mnt.push({type: type, uuid: uuid, mold: mold, props: props});

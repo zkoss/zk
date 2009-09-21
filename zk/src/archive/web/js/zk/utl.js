@@ -200,6 +200,7 @@ zUtl = { //static methods
 				if (!e._applyMask)
 					e._applyMask = new zk.eff.Mask({
 						id: e.uuid + "-mask",
+						message: msg,
 						anchor: e.$n()
 					});
 			}

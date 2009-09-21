@@ -38,9 +38,12 @@ zk = function (sel) {
 		};
 	}
 	function showprocinit() {
-		//don't use jq() since it will be queued after others
-		if (jq.isReady) return showproc(true, 'z-initing');
-		setTimeout(showprocinit, 10);
+		//1. don't use jq() since it will be queued after others
+		//2. zk.mnt.pgbg: pgbg() is called with a non-contained page; see mount.js
+		if (jq.isReady||zk.mnt.pgbg||zk.Page.contained.length)
+			showproc(true, 'z-initing');
+		else
+			setTimeout(showprocinit, 10);
 	}
 	function showproc(mask, icon) {
 		if (zk.processing

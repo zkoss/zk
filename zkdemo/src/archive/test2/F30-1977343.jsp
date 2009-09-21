@@ -21,9 +21,10 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	</head>
 	<body>
 		<h1>Test of Progress Bar with an Included ZK Page</h1>
-		<p>You shall see the progress bar only appear in the following boxes.</p>
-		<% response.flushBuffer(); %>
+		<p><span onclick="zUtl.progressbox('zk_test', 'busy now...', true)" style="border:1px solid black">Click here</span>
+		and you shall see the progress bar only appear in the following boxes.</p>
 		<jsp:include page="F30-1977343_inc.zul"/>
+		<% response.flushBuffer(); %>
 		<p>This is another part of the JSP page (container).</p>
 		<jsp:include page="F30-1977343_inc.zul?pause=true"/>
 	</body>
