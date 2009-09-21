@@ -25,7 +25,8 @@ zjq = function (jq) { //ZK extension
 			'direction', 'word-spacing', 'white-space'],
 		_txtStyles2 = ["color", "background-color", "background"],
 		_zsyncs = [],
-		_pendzsync = 0;
+		_pendzsync = 0,
+		_sbwDiv; //scrollbarWidth
 
 	function _elmOfWgt(id, ctx) {
 		var w, w2;
@@ -52,6 +53,151 @@ zjq = function (jq) { //ZK extension
 		if (--_pendzsync <= 0)
 			for (var j = _zsyncs.length; j--;)
 				_zsyncs[j].zsync();
+	}
+	function _focus(n) {
+		var w = zk.Widget.$(n);
+		if (w) zk.currentFocus = w;
+		try {
+			n.focus();
+		} catch (e) {
+			setTimeout(function() {
+				try {
+					n.focus();
+				} catch (e) {
+					setTimeout(function() {try {n.focus();} catch (e) {}}, 100);
+				}
+			}, 0);
+		} //IE throws exception if failed to focus in some cases
+	}
+	function _select(n) {
+		try {
+			n.select();
+		} catch (e) {
+			setTimeout(function() {
+				try {n.select();} catch (e) {}
+			}, 0);
+		} //IE throws exception when select() in some cases
+	}
+
+	var _disbSel, _enbSel;
+	_disbSel = zk.gecko ?
+			[function (el) {el.style.MozUserSelect = "none";},
+			 function (el) {el.style.MozUserSelect = "";}]:
+		zk.safari ?
+			[function (el) {el.style.KhtmlUserSelect = "none";},
+			 function (el) {el.style.KhtmlUserSelect = "";}]:
+		zk.ie ?
+			[function (el) {
+				el.onselectstart = function (evt) {
+					evt = evt || window.event;
+					var n = evt.srcElement, tag = n ? n.tagName: '';
+					return (tag == "TEXTAREA" || tag == "INPUT") && (n.type == "text" || n.type == "password");
+				};
+			 },
+			 function (el) {el.onselectstart = null;}]:
+			[zk.$void, zk.$void];
+	_enbSel = _disbSel[1];
+	_disbSel = _disbSel[0];
+
+	function _scrlIntoView(outer, inner, info) {
+		if (outer && inner) {
+			var ooft = zk(outer).revisedOffset(),
+				ioft = info ? info.oft : zk(inner).revisedOffset(),		 
+				top = ioft[1] - ooft[1] + outer.scrollTop,
+				ih = info ? info.h : inner.offsetHeight,
+				bottom = top + ih,
+				updated;
+			//for fix the listbox(livedate) keydown select always at top
+			if (/*outer.clientHeight < inner.offsetHeight || */ outer.scrollTop > top) {
+				outer.scrollTop = top;
+				updated = true;
+			} else if (bottom > outer.clientHeight + outer.scrollTop) {
+				outer.scrollTop = !info ? bottom : bottom - (outer.clientHeight + (inner.parentNode == outer ? 0 : outer.scrollTop));
+				updated = true;
+			}
+			if (updated || !info) {
+				if (!info)
+					info = {
+						oft: ioft,
+						h: inner.offsetHeight,
+						el: inner
+					};
+				else info.oft = zk(info.el).revisedOffset();
+			}
+			outer.scrollTop = outer.scrollTop;
+			return info; 
+		}
+	}
+
+	function _cmOffset(el) {
+		var t = 0, l = 0, operaBug;
+		//Fix gecko difference, the offset of gecko excludes its border-width when its CSS position is relative or absolute
+		if (zk.gecko) {
+			var p = el.parentNode;
+			while (p && p != document.body) {
+				var $p = jq(p),
+					style = $p.css("position");
+				if (style == "relative" || style == "absolute") {
+					t += zk.parseInt($p.css("border-top-width"));
+					l += zk.parseInt($p.css("border-left-width"));
+				}
+				p = p.offsetParent;
+			}
+		}
+
+		do {
+			//Bug 1577880: fix originated from http://dev.rubyonrails.org/ticket/4843
+			var $el = jq(el);
+			if ($el.css("position") == 'fixed') {
+				t += zk.innerY() + el.offsetTop;
+				l += zk.innerX() + el.offsetLeft;
+				break;
+			} else {
+				//Fix opera bug. If the parent of "INPUT" or "SPAN" is "DIV"
+				// and the scrollTop of "DIV" is more than 0, the offsetTop of "INPUT" or "SPAN" always is wrong.
+				if (zk.opera) {
+					if (operaBug && el.nodeName == "DIV" && el.scrollTop != 0)
+						t += el.scrollTop || 0;
+					operaBug = el.nodeName == "SPAN" || el.nodeName == "INPUT";
+				}
+				t += el.offsetTop || 0;
+				l += el.offsetLeft || 0;
+				//Bug 1721158: In FF, el.offsetParent is null in this case
+				el = zk.gecko && el != document.body ?
+					_ofsParent(el): el.offsetParent;
+			}
+		} while (el);
+		return [l, t];
+	}
+	function _posOffset(el) {
+		if (zk.safari && el.tagName === "TR" && el.cells.length)
+			el = el.cells[0];
+
+		var t = 0, l = 0;
+		do {
+			t += el.offsetTop  || 0;
+			l += el.offsetLeft || 0;
+			//Bug 1721158: In FF, el.offsetParent is null in this case
+			el = zk.gecko && el != document.body ?
+				_ofsParent(el): el.offsetParent;
+			if (el) {
+				if(el.tagName=='BODY') break;
+				var p = jq(el).css('position');
+				if (p == 'relative' || p == 'absolute') break;
+			}
+		} while (el);
+		return [l, t];
+	}
+	function _addOfsToDim($this, dim, revised) {
+		if (revised) {
+			var ofs = $this.revisedOffset();
+			dim.left = ofs[0];
+			dim.top = ofs[1];
+		} else {
+			dim.left = $this.offsetLeft();
+			dim.top = $this.offsetTop();
+		}
+		return dim;
 	}
 
 zk.override(jq.fn, jq$super, {
@@ -154,47 +300,15 @@ zjq.prototype = { //ZK extension
 		}
 		return this;
 	},
-	scrollIntoView: (function () {
-		function scrlIntoView(outer, inner, info) {
-			if (outer && inner) {
-				var ooft = zk(outer).revisedOffset(),
-					ioft = info ? info.oft : zk(inner).revisedOffset(),		 
-					top = ioft[1] - ooft[1] + outer.scrollTop,
-					ih = info ? info.h : inner.offsetHeight,
-					bottom = top + ih,
-					updated;
-				//for fix the listbox(livedate) keydown select always at top
-				if (/*outer.clientHeight < inner.offsetHeight || */ outer.scrollTop > top) {
-					outer.scrollTop = top;
-					updated = true;
-				} else if (bottom > outer.clientHeight + outer.scrollTop) {
-					outer.scrollTop = !info ? bottom : bottom - (outer.clientHeight + (inner.parentNode == outer ? 0 : outer.scrollTop));
-					updated = true;
-				}
-				if (updated || !info) {
-					if (!info)
-						info = {
-							oft: ioft,
-							h: inner.offsetHeight,
-							el: inner
-						};
-					else info.oft = zk(info.el).revisedOffset();
-				}
-				outer.scrollTop = outer.scrollTop;
-				return info; 
-			}
-		}
-
-	  return function (parent) {
+	scrollIntoView: function (parent) {
 		var n = this.jq[0];
 		if (n) {
 			parent = parent || document.body;
 			for (var p = n, c; (p = p.parentNode) && n != parent; n = p)
-				c = scrlIntoView(p, n, c);
+				c = _scrlIntoView(p, n, c);
 		}
 		return this;
-	  };
-	})(),
+	},
 
 	sumStyles: function (areas, styles) {
 		var val = 0;
@@ -468,49 +582,7 @@ zjq.prototype = { //ZK extension
 		} while (el);
 		return [l, t];
 	},
-	cmOffset: (function () {
-		function cmOffset0(el) {
-			var t = 0, l = 0, operaBug;
-			//Fix gecko difference, the offset of gecko excludes its border-width when its CSS position is relative or absolute
-			if (zk.gecko) {
-				var p = el.parentNode;
-				while (p && p != document.body) {
-					var $p = jq(p),
-						style = $p.css("position");
-					if (style == "relative" || style == "absolute") {
-						t += zk.parseInt($p.css("border-top-width"));
-						l += zk.parseInt($p.css("border-left-width"));
-					}
-					p = p.offsetParent;
-				}
-			}
-
-			do {
-				//Bug 1577880: fix originated from http://dev.rubyonrails.org/ticket/4843
-				var $el = jq(el);
-				if ($el.css("position") == 'fixed') {
-					t += zk.innerY() + el.offsetTop;
-					l += zk.innerX() + el.offsetLeft;
-					break;
-				} else {
-					//Fix opera bug. If the parent of "INPUT" or "SPAN" is "DIV"
-					// and the scrollTop of "DIV" is more than 0, the offsetTop of "INPUT" or "SPAN" always is wrong.
-					if (zk.opera) {
-						if (operaBug && el.nodeName == "DIV" && el.scrollTop != 0)
-							t += el.scrollTop || 0;
-						operaBug = el.nodeName == "SPAN" || el.nodeName == "INPUT";
-					}
-					t += el.offsetTop || 0;
-					l += el.offsetLeft || 0;
-					//Bug 1721158: In FF, el.offsetParent is null in this case
-					el = zk.gecko && el != document.body ?
-						_ofsParent(el): el.offsetParent;
-				}
-			} while (el);
-			return [l, t];
-		}
-
-	  return function () {
+	cmOffset: function () {
 		//fix safari's bug: TR has no offsetXxx
 		var el = this.jq[0];
 		if (zk.safari && el.tagName === "TR" && el.cells.length)
@@ -519,41 +591,19 @@ zjq.prototype = { //ZK extension
 		//fix gecko and safari's bug: if not visible before, offset is wrong
 		if (!(zk.gecko || zk.safari)
 		|| this.isVisible() || this.offsetWidth())
-			return cmOffset0(el);
+			return _cmOffset(el);
 
 		el.style.display = "";
-		var ofs = cmOffset0(el);
+		var ofs = _cmOffset(el);
 		el.style.display = "none";
 		return ofs;
-	  };
-	})(),
+	},
 
-	absolutize: (function () {
-		function posOffset(el) {
-			if (zk.safari && el.tagName === "TR" && el.cells.length)
-				el = el.cells[0];
-
-			var t = 0, l = 0;
-			do {
-				t += el.offsetTop  || 0;
-				l += el.offsetLeft || 0;
-				//Bug 1721158: In FF, el.offsetParent is null in this case
-				el = zk.gecko && el != document.body ?
-					_ofsParent(el): el.offsetParent;
-				if (el) {
-					if(el.tagName=='BODY') break;
-					var p = jq(el).css('position');
-					if (p == 'relative' || p == 'absolute') break;
-				}
-			} while (el);
-			return [l, t];
-		}
-
-	  return function() {
+	absolutize: function() {
 		var el = this.jq[0];
 		if (el.style.position == 'absolute') return this;
 
-		var offsets = posOffset(el),
+		var offsets = _posOffset(el),
 			left = offsets[0], top = offsets[1],
 			st = el.style;
 		el._$orgLeft = left - parseFloat(st.left  || 0);
@@ -562,8 +612,7 @@ zjq.prototype = { //ZK extension
 		st.top = jq.px(top, true);
 		st.left = jq.px(left, true);
 		return this;
-	  };
-	})(),
+	},
 	relativize: function() {
 		var el = this.jq[0];
 		if (el.style.position == 'relative') return this;
@@ -649,22 +698,10 @@ zjq.prototype = { //ZK extension
 		return [tsd.offsetWidth, tsd.offsetHeight];
 	},
 
-	dimension: (function () {
-		function addOfsToDim($this, dim, revised) {
-			if (revised) {
-				var ofs = $this.revisedOffset();
-				dim.left = ofs[0];
-				dim.top = ofs[1];
-			} else {
-				dim.left = $this.offsetLeft();
-				dim.top = $this.offsetTop();
-			}
-			return dim;
-		}
-	  return function (revised) {
+	dimension: function (revised) {
 		var display = this.jq.css('display');
 		if (display != 'none' && display != null) // Safari bug
-			return addOfsToDim(this,
+			return _addOfsToDim(this,
 				{width: this.offsetWidth(), height: this.offsetHeight()}, revised);
 
 	// All *Width and *Height properties give 0 on elements with display none,
@@ -677,15 +714,14 @@ zjq.prototype = { //ZK extension
 		st.position = 'absolute';
 		st.display = 'block';
 		try {
-			return addOfsToDim(this,
+			return _addOfsToDim(this,
 				{width: this.offsetWidth(), height: this.offsetHeight()}, revised);
 		} finally {
 			st.display = originalDisplay;
 			st.position = originalPosition;
 			st.visibility = originalVisibility;
 		}
-	  };
-	})(),
+	},
 
 	redoCSS: (function () {
 		var rdcss = [], _fixCSS,
@@ -757,22 +793,7 @@ zjq.prototype = { //ZK extension
 	},
 
 	//focus/select//
-	focus: (function () {
-		function focus0(n) {
-			try {
-				n.focus();
-			} catch (e) {
-				setTimeout(function() {
-					try {
-						n.focus();
-					} catch (e) {
-						setTimeout(function() {try {n.focus();} catch (e) {}}, 100);
-					}
-				}, 0);
-			} //IE throws exception if failed to focus in some cases
-		}
-
-	  return function (timeout) {
+	focus: function (timeout) {
 		var n = this.jq[0];
 		if (!n || !n.focus) return false;
 			//ie: INPUT's focus not function
@@ -782,31 +803,18 @@ zjq.prototype = { //ZK extension
 		&& tag != 'SELECT' && tag != 'IFRAME')
 			return false;
 
-		if (timeout >= 0) setTimeout(function() {focus0(n);}, timeout);
-		else focus0(n);
+		if (timeout >= 0) setTimeout(function() {_focus(n);}, timeout);
+		else _focus(n);
 		return true;
-	  };
-	})(),
-	select: (function () {
-		function select0(n) {
-			try {
-				n.select();
-			} catch (e) {
-				setTimeout(function() {
-					try {n.select();} catch (e) {}
-				}, 0);
-			} //IE throws exception when select() in some cases
-		}
-
-	  return function (n, timeout) {
+	},
+	select: function (n, timeout) {
 		var n = this.jq[0];
 		if (!n || typeof n.select != 'function') return false;
 
-		if (timeout >= 0) setTimeout(function() {select0(n);}, timeout);
-		else select0(n);
+		if (timeout >= 0) setTimeout(function() {_select(n);}, timeout);
+		else _select(n);
 		return true;
-	  };
-	})(),
+	},
 
 	getSelectionRange: function() {
 		var inp = this.jq[0];
@@ -856,40 +864,12 @@ zjq.prototype = { //ZK extension
 	},
 
 	//selection//
-	disableSelection: (function () {
-		var disbSel = zk.gecko ? function (el) {
-			el.style.MozUserSelect = "none";
-		}: zk.safari ? function (el) {
-			el.style.KhtmlUserSelect = "none";
-		}: zk.ie ? function (el) {
-			el.onselectstart = function (evt) {
-				evt = evt || window.event;
-				var n = evt.srcElement, tag = n?n.tagName:'';
-				return (tag == "TEXTAREA" || tag == "INPUT") && (n.type == "text" || n.type == "password");
-			};
-		}: zk.$void;
-
-	  return function () {
-		return this.jq.each(function () {
-			disbSel(this);
-		});
-	  };
-	})(),
-	enableSelection: (function () {
-		var enbSel = zk.gecko ? function (el) {
-			el.style.MozUserSelect = "";
-		}: zk.safari ? function (el) {
-			el.style.KhtmlUserSelect = "";
-		}: zk.ie ? function (el) {
-			el.onselectstart = null;
-		}: zk.$void;
-
-	  return function () {
-		return this.jq.each(function () {
-			enbSel(this);
-		});
-	  };
-	})(),
+	disableSelection: function () {
+		return this.jq.each(function () {_disbSel(this);});
+	},
+	enableSelection: function () {
+		return this.jq.each(function () {_enbSel(this);});
+	},
 
 	setStyles: function (styles) {
 		var $ = this.jq;
@@ -948,17 +928,14 @@ zk.copy(jq, { //ZK extension to jq
 	borders: {l: "border-left-width", r: "border-right-width", t: "border-top-width", b: "border-bottom-width"},
 	paddings: {l: "padding-left", r: "padding-right", t: "padding-top", b: "padding-bottom"},
 
-	scrollbarWidth: (function () {
-		var sbwDiv;
-	  return function () {
-		if (!sbwDiv) {
-			sbwDiv = document.createElement("DIV");
-			sbwDiv.style.cssText = "top:-1000px;left:-1000px;position:absolute;visibility:hidden;border:none;width:50px;height:50px;overflow:scroll;";
-			document.body.appendChild(sbwDiv);
+	scrollbarWidth: function () {
+		if (!_sbwDiv) {
+			_sbwDiv = document.createElement("DIV");
+			_sbwDiv.style.cssText = "top:-1000px;left:-1000px;position:absolute;visibility:hidden;border:none;width:50px;height:50px;overflow:scroll;";
+			document.body.appendChild(_sbwDiv);
 		}
-		return sbwDiv.offsetWidth - sbwDiv.clientWidth;
-	  };
-	})(),
+		return _sbwDiv.offsetWidth - _sbwDiv.clientWidth;
+	},
 	isOverlapped: function (ofs1, dim1, ofs2, dim2) {
 		var o1x1 = ofs1[0], o1x2 = dim1[0] + o1x1,
 			o1y1 = ofs1[1], o1y2 = dim1[1] + o1y1;
