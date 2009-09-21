@@ -27,11 +27,11 @@ zk.BigDecimal = zk.$extends(zk.Object, {
 		}
 		this._value = value;
 	},
-	toString: function() {
+	$toString: function() { //toString is reserved keyword for IE
 		var j = this._value.length - this._precision;
 		return this._value.substring(0, j) + (this._dot ? '.' + this._value.substring(j) : '');
 	},
-	toLocaleString: function() {
+	$toLocaleString: function() { //toLocaleString is reserved keyword for IE
 		var j = this._value.length - this._precision;
 		return this._value.substring(0, j) + (this._precision ? zk.DECIMAL + this._value.substring(j) : '');
 	}
