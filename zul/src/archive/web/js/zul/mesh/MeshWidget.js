@@ -213,9 +213,16 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 		// IE6 needs to reset the width of each sub node if the width is a percentage
 		var wd = zk.ie6_ ? this.getWidth() : this.$n().style.width;
 		if (!wd || wd == "auto" || wd.indexOf('%') >= 0) {
-			if (this.ebody) this.ebody.style.width = "";
-			if (this.ehead) this.ehead.style.width = "";
-			if (this.efoot) this.efoot.style.width = "";
+			var n = this.$n();
+			if (n._lastsz && n._lastsz.height == n.offsetHeight && n._lastsz.width == n.offsetWidth)
+				return; //do nothing.
+				
+			if (this.ebody) 
+				this.ebody.style.width = "";
+			if (this.ehead) 
+				this.ehead.style.width = "";
+			if (this.efoot) 
+				this.efoot.style.width = "";
 		}
 	},
 	onSize: _zkf = function () {
