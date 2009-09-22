@@ -50,7 +50,7 @@
 		</grid>
 		<hbox>Index: <intbox id="rn" value="0"/></hbox>
 		<button label="add group at index" onClick="addGroup(rn.value);" />
-		<button label="add foot at index(must be the end of group)" onClick="addGroupFoot(rn.value);" />
+		<button label="add foot at index(must be the end of group)" onClick="rn.value = rs.children.size();addGroupFoot(rn.value);" />
 		<button label="remove child at index" onClick="removeChild(rn.value);" />
 		<button onClick="rs.getChildren().clear();" label="Any time clear() wont cause exceptions" />		
 	</window>
