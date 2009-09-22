@@ -34,6 +34,7 @@ ZK 5.0.0
   2860482: A way to specify language for component definition (<?component?>)
   2848804: Readonly combobox supports selection by keystrokes
   2861283: hbox/vbox pack attribute supports stretch option
+  2822395: Adds component for HTML A, rather than overuse toolbarbutton
   
 * Bugs
   1999145: Combobox with Width of 100% Overruns

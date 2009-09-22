@@ -28,13 +28,10 @@ import org.zkoss.zk.ui.Component;
  * is not null, the onClick handler is ignored and this element is degenerated
  * to HTML's A tag.
  * <p>Default {@link #getZclass}: z-toolbar-button.(since 3.5.0)
- * <p>If {@link #getMold()} is <code>anchor</code> mold,
- * {@link #getZclass}: z-toolbar-anchor.(since 5.0.0)
  *
  * @author tomyeh
  */
 public class Toolbarbutton extends Button implements org.zkoss.zul.api.Toolbarbutton {
-	private String _mold = null;
 	public Toolbarbutton() {
 	}
 	public Toolbarbutton(String label) {
@@ -56,19 +53,6 @@ public class Toolbarbutton extends Button implements org.zkoss.zul.api.Toolbarbu
 	
 	// super
 	public String getZclass() {
-		return _zclass == null ? 
-					"default".equals(getMold()) ? "z-toolbar-button" : "z-toolbar-anchor"
-					: _zclass;
-	}
-	public void setMold(String mold) {
-		super.setMold(mold);
-		_mold = mold;
-	}
-	
-	public String getMold() {
-		if (_mold != null)
-			return super.getMold();
-		Component parent = getParent();
-		return parent != null && parent instanceof Toolbar ? "default" : "anchor";
+		return _zclass == null ? "z-toolbar-button" : _zclass;
 	}
 }

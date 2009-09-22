@@ -7,7 +7,7 @@
 	background-image: url(${c:encodeURL('~./zul/img/common/bar-bg.png')});
 	position: relative; zoom: 1;
 }
-.z-caption .z-toolbar, .z-caption .z-toolbar-anchor {
+.z-caption .z-toolbar {
 	background: none; border: 0;
 }
 .z-toolbar-tabs-body, .z-toolbar-tabs-body span,
@@ -22,11 +22,6 @@
 }
 .z-toolbar a:hover {
 	border-color: #f8fbff #aca899 #aca899 #f8fbff;
-}
-.z-toolbar-anchor {
-	font-family: ${fontFamilyT};
-	font-size: ${fontSizeM};
-	font-weight: normal;
 }
 .z-caption .z-toolbar a:hover {
 	text-decoration: underline;
@@ -110,6 +105,9 @@
 	padding: 2px 2px;
 	position: relative;
 	zoom: 1;
+	font-family: ${fontFamilyT};
+	font-size: ${fontSizeM};
+	font-weight: normal;
 }
 
 <c:if test="${c:isExplorer()}">
@@ -137,12 +135,4 @@
 	opacity: .5;
 	-moz-opacity: .5;
 	filter: alpha(opacity=50);
-}
-<%-- Toolbar Anchor --%>
-.z-toolbar-anchor-disd {
-	color: #C5CACB !important; cursor: default!important;
-}
-.z-toolbar-anchor-disd:visited, .z-toolbar-anchor-disd:hover {
-	text-decoration: none !important; cursor: default !important;;
-	border-color: #D0DEF0 !important;
 }

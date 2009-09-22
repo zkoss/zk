@@ -1,4 +1,4 @@
-/* Anchor.js
+/* A.js
 
 	Purpose:
 		
@@ -12,8 +12,7 @@ Copyright (C) 2009 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 2.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.wgt.Anchor = zk.$extends(zul.LabelImageWidget, {
-	_orient: "horizontal",
+zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 	_dir: "normal",
 	_tabindex: -1,
 
@@ -25,7 +24,6 @@ zul.wgt.Anchor = zk.$extends(zul.LabelImageWidget, {
 			var n = this.$n();
 			if (n) n.innerHTML = this.domContent_();
 		},
-		orient: _zkf,
 		href: function (v) {
 			var n = this.$n();
 			if (n) n.href = v || '';
@@ -43,7 +41,7 @@ zul.wgt.Anchor = zk.$extends(zul.LabelImageWidget, {
 	// super//
 	getZclass: function(){
 		var zcls = this._zclass;
-		return zcls ? zcls : "z-toolbar-anchor";
+		return zcls ? zcls : "z-anchor";
 	},
 
 	bind_: function(){
@@ -67,8 +65,7 @@ zul.wgt.Anchor = zk.$extends(zul.LabelImageWidget, {
 			return label;
 		
 		img = '<img src="' + img + '" align="absmiddle" />';
-		var space = "vertical" == this.getOrient() ? '<br/>' : '';
-		return this.getDir() == 'reverse' ? label + space + img : img + space + label;
+		return this.getDir() == 'reverse' ? label + img : img + label;
 	},
 	domClass_: function(no){
 		var scls = this.$supers('domClass_', arguments);

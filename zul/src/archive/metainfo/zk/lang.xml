@@ -194,6 +194,17 @@ def alert(m):
 	</component>
 
 	<component>
+		<component-name>a</component-name>
+		<component-class>org.zkoss.zul.A</component-class>
+		<widget-class>zul.wgt.A</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/a.js</mold-uri>
+			<css-uri>css/a.css.dsp</css-uri>
+		</mold>
+	</component>
+
+	<component>
 		<component-name>applet</component-name>
 		<component-class>org.zkoss.zul.Applet</component-class>
 		<widget-class>zul.med.Applet</widget-class>
@@ -1059,11 +1070,6 @@ def alert(m):
 			<mold-name>default</mold-name>
 			<mold-uri>mold/toolbarbutton.js</mold-uri>
 			<css-uri>css/toolbar.css.dsp</css-uri>
-		</mold>
-		<mold>
-			<mold-name>anchor</mold-name>
-			<widget-class>zul.wgt.Anchor</widget-class>
-			<mold-uri>mold/anchor.js</mold-uri>
 		</mold>
 	</component>
 	<component>
