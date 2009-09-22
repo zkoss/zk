@@ -95,7 +95,13 @@ ZK 5.0.0
   + By default, the constraint of the input elements is validated by client side, but you can specify
 	it with 'server', for example, 'no empty, server', the constraint with 'server' would be validated
 	by server side, if no error at client.
-
+  + The meaning of hbox/vbox pack property is changed to follow XUL's spec. That is, "start" means 
+    extra space is placed on the right/top side of the hbox/vbox, "center" means extra space is 
+	splitted equally and placed on two sides(left and right/top and bottom of the hbox/vbox), 
+	"end" means extra space is placed on the left/bottom of the hbox/vbox. If you would like the 
+	hbox/vbox behaves just like in old version, you can add a "stretch" option on pack property to 
+	make it backward compatible. i.e. "stretch,start", "stretch,center", or "stretch,end".
+  
 	--------
 ZK 3.6.3
 August, 2009
