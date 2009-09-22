@@ -141,7 +141,7 @@ if (zk.ie || zk.gecko2_ || zk.opera) {
 					stackup = this.stackup =
 						jq.newStackup(node, node.id + '-sdwstk', node);
 	
-				st = stackup.style;
+				var st = stackup.style;
 				st.left = jq.px(l, true);
 				st.top = jq.px(t, true);
 				st.width = jq.px(w);
