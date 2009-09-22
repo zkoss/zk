@@ -189,7 +189,7 @@ implements DynamicPropertied, RawId {
 	public boolean setVisible(boolean visible) {
 		final boolean old = super.setVisible(visible);
 		if (old != visible) {
-			final String style = (String)getDynamicProperty("style");
+			final String style = getStyle();
 			if (visible) {
 				if (style != null) {
 					final int j = HTMLs.getSubstyleIndex(style, "display");
@@ -288,7 +288,7 @@ implements DynamicPropertied, RawId {
 			for (Iterator it = _props.entrySet().iterator(); it.hasNext();) {
 				final Map.Entry me = (Map.Entry)it.next();
 				sb.append(' ').append(me.getKey()).append("=\"")
-					.append(XMLs.encodeAttribute((String)me.getValue()))
+					.append(XMLs.encodeAttribute(Objects.toString(me.getValue())))
 					.append('"');
 			}
 		}
