@@ -26,6 +26,7 @@ zjq = function (jq) { //ZK extension
 		_txtStyles2 = ["color", "background-color", "background"],
 		_zsyncs = [],
 		_pendzsync = 0,
+		_vpId = 0, //id for virtual parent's reference node
 		_sbwDiv; //scrollbarWidth
 
 	function _elmOfWgt(id, ctx) {
@@ -762,32 +763,49 @@ zjq.prototype = { //ZK extension
 	  };
 	})(),
 
+	vparentNode: function () {
+		var el = this.jq[0];
+		if (el) {
+			var v = el.z_vp; //might be empty
+			if (v) return jq('#' + v)[0];
+			v = el.z_vpagt;
+			if (v && (v = jq('#' +v)[0]))
+				return v.parentNode;
+		}
+	},
 	makeVParent: function () {
 		var el = this.jq[0],
 			p = el.parentNode;
-		if (el.vparentNode || p == document.body) return this; //called twice or not necessary
+		if (el.z_vp || el.z_vpagt || p == document.body)
+			return this; //called twice or not necessary
 
 		var sib = el.nextSibling,
-			agtx = el.z_vpagtx = document.createElement("SPAN");
-		agtx.style.display = "none";
-		if (sib) p.insertBefore(agtx, sib);
-		else p.appendChild(agtx);
+			agt = document.createElement("SPAN");
+		agt.id = el.z_vpagt = '_z_vpagt' + _vpId ++;
+		agt.style.display = "none";
+		if (sib) p.insertBefore(agt, sib);
+		else p.appendChild(agt);
 
-		el.vparentNode = p;
+		el.z_vp = p.id; //might be empty
 		document.body.appendChild(el);
 		return this;
 	},
 	undoVParent: function () {
-		var el = this.jq[0],
-			p = el.vparentNode;
-		if (p) {
-			var agtx = el.z_vpagtx;
-			el.vparentNode = el.z_vpagtx = null;
-			if (agtx) {
-				p.insertBefore(el, agtx);
-				jq(agtx).remove();
-			} else
-				p.appendChild(el);
+		var el = this.jq[0];
+		if (el.z_vp || el.z_vpagt) {
+			var p = el.z_vp,
+				agt = el.z_vpagt,
+				$agt = jq('#' + agt);
+			el.z_vp = el.z_vpagt = null;
+			agt = $agt[0];
+
+			p = p ? jq('#' + p)[0]: agt ? agt.parentNode: null;
+			if (p)
+				if (agt) {
+					p.insertBefore(el, agt);
+					$agt.remove();
+				} else
+					p.appendChild(el);
 		}
 		return this;
 	},
@@ -890,7 +908,7 @@ zk.copy(jq, { //ZK extension to jq
 
 	isAncestor: function (p, c) {
 		if (!p) return true;
-		for (; c; c = c.vparentNode||c.parentNode)
+		for (; c; c = zk(c).vparentNode()||c.parentNode)
 			if (p == c)
 				return true;
 		return false;

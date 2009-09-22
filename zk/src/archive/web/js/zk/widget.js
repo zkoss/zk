@@ -24,7 +24,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 	function hiddenByParent(w) { //such hbox/vbox or border-layout
 		var p = w.parent;
 		if (p && p.isVisible() && (p=p.$n()) && (w=w.$n()))
-			while ((w=w.vparentNode||w.parentNode) && p != w)
+			while ((w=zk(w).vparentNode()||w.parentNode) && p != w)
 				if ((w.style||{}).display == 'none')
 					return true;
 	}
@@ -1742,7 +1742,7 @@ zk.Widget = zk.$extends(zk.Object, {
 			n = (e?e.z$target:null) || n.target || n; //check DOM event first
 		}
 
-		for (; n; n = n.vparentNode||n.parentNode) {
+		for (; n; n = zk(n).vparentNode()||n.parentNode) {
 			var id = n.id;
 			if (id) {
 				var j = id.indexOf('-');
