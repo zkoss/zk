@@ -371,9 +371,9 @@ zk.Draggable = zk.$extends(zk.Object, {
 		this.offset = [pt[0] - pos[0], pt[1] - pos[1]];
 
 		_activate(this, devt, pt);
-		if (!zk.ie6_) devt.stop();
+		if (!zk.ie) devt.stop();
 			//test/dragdrop.zul
-			//IE6: if stop, onclick won't be fired in IE6 (unable to select)
+			//IE: if stop, onclick won't be fired in IE (unable to select)
 			//FF3: if not stop, IMG cannot be dragged
 			//Opera: if not stop, 'easy' to become selecting text
 	},

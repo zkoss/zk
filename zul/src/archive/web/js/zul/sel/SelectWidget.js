@@ -257,10 +257,23 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			// bug #2799258
 			var h = n.style.height;
 			if (!h || h == "auto") {
-				h = zk.gecko ? this.ebody.offsetHeight - this.ebody.clientHeight : this.ebody.offsetWidth - this.ebody.clientWidth;
+				
+				// Bug #2129992 somethings the size of the offsetHeight in IE6,
+				// IE7, and IE7 in compatible mode is wrong.
+				if (zk.ie && !zk.ie8 && this.ebodytbl) {
+					var ow = this.ebody.offsetWidth,
+						cw = this.ebody.clientWidth,
+						w = ow - cw;
+					if (cw && w > 11) {
+						if (ow == this.ebodytbl.offsetWidth)
+							this.ebodytbl.style.width = jq.px(zk(this.ebodytbl).revisedWidth(this.ebodytbl.offsetWidth - w));
+					}
+				}
+				
+				h = this.ebody.offsetHeight - this.ebody.clientHeight;
 				
 				// Bug #2805177, we have to check the clientWidth first.
-				if ((zk.gecko || this.ebody.clientWidth) && h > 11)
+				if (this.ebody.clientHeight && h > 11)
 					this.ebody.style.height = hgh + jq.scrollbarWidth() + "px";
 			}
 		} else {
@@ -278,10 +291,10 @@ zul.sel.SelectWidget = zk.$extends(zul.mesh.MeshWidget, {
 			
 			// bug #2799258
 			if (!hgh || hgh == "auto") {
-				hgh = this.ebody.offsetWidth - this.ebody.clientWidth;
+				hgh = this.ebody.offsetHeight - this.ebody.clientHeight;
 				
 				// Bug #2805177, we have to check the clientWidth first.
-				if (this.ebody.clientWidth && hgh > 11)
+				if (this.ebody.clientHeight && hgh > 11)
 					this.ebody.style.height = this.ebody.offsetHeight + jq.scrollbarWidth() + "px";
 			}
 		}

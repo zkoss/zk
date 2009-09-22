@@ -23,7 +23,12 @@ zul.utl.Iframe = zk.$extends(zul.Widget, {
 		scrolling: function (v) {
 			if (!v) this._scrolling = v = "auto";
 			var n = this.$n();
-			if (n) n.scrolling = v;
+			if (n) {
+				if (zk.ie)
+					this.rerender();
+				else
+					n.scrolling = v;
+			}
 		},
 		align: function (v) {
 			var n = this.$n();

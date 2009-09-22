@@ -158,7 +158,7 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 			wdh = node.style.width,
 			cn = jq(node).children('div'),
 			fir = cn[0],
-			last = cn[1],
+			last = cn[cn.length - 1],
 			n = this.$n('cave').parentNode;
 		
 		if (!wdh || wdh == "auto") { //Popup will disappear when width is null in IE 

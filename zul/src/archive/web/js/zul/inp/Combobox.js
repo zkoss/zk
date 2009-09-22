@@ -25,7 +25,23 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 			this._repos = false;
 		}
 	},
-
+	setValue: function (val) {
+		this.$supers('setValue', arguments);
+		this._reIndex();
+	},
+	_reIndex: function () {
+		var value = this.getValue();
+		if (!this._sel || value != this._sel.getLabel()) {
+			this._sel = null;
+			this._lastsel = null;
+			for (var w = this.firstChild; w; w = w.nextSibling) {
+				if (value == w.getLabel()) {
+					this._sel = w;
+					break;
+				}	
+			}
+		}
+	},
 	//called by SimpleConstraint
 	validateStrict: function (val) {
 		return this._findItem(val, true) ? null: msgzul.VALUE_NOT_MATCHED;
@@ -232,7 +248,7 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 	},
 	unbind_: function () {
 		this._hilite2();
-		this._lastsel = null;
+		this._sel = this._lastsel = null;
 		this.$supers('unbind_', arguments);
 	},
 	getZclass: function () {

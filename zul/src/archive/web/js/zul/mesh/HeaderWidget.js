@@ -185,7 +185,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 		
 		ofs[1] = of[1];
 		ofs[0] += zk(n).offsetWidth();
-		jq(document.body).prepend(
+		jq(document.body).append(
 			'<div id="zk_hdghost" style="position:absolute;top:'
 			+ofs[1]+'px;left:'+ofs[0]+'px;width:3px;height:'+zk(el.parentNode.parentNode).offsetHeight()
 			+'px;background:darkgray"></div>');
