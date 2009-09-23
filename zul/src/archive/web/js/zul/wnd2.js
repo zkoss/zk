@@ -900,8 +900,9 @@ zkWnd2.shallVParent = function (el) {
 /** Makes the window as modal. */
 zkWnd2._doModal = function (cmp, replace) {
 	if (!getZKAttr(cmp, "conshow")) {
-		var onshow = getZKAttr(cmp, "aos") || "appear";
-		if (onshow != "z_none")
+		var onshow = getZKAttr(cmp, "aos");
+			//3.6.3 default: nothing (since appear has memory leak)
+		if (onshow && onshow != "z_none")
 			setZKAttr(cmp, "conshow", "anima." + onshow + "($e('"+cmp.id+"'));");
 	}
 	//center component
@@ -1018,7 +1019,6 @@ zkWnd2._endModal = function (uuid, replace) {
 	if (zkau._modals.length == 0) {
 		zk.unlisten(window, "resize", zkWnd2._onMoveMask);
 		zk.unlisten(window, "scroll", zkWnd2._onMoveMask);
-		window.onscroll = null;
 		zk.restoreDisabled();
 	} else {
 		var lastid = zkau._modals[zkau._modals.length - 1];

@@ -1241,7 +1241,7 @@ zkau._onUnload = function () {
 	}
 
 	if (zkau._oldUnload) zkau._oldUnload.apply(window, arguments);
-	zk.unlistenAll();
+	zk._unlistenAll();
 };
 /** Handles window.onbeforeunload. */
 zkau._onBfUnload = function () {

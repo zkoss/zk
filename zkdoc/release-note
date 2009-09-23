@@ -1,6 +1,6 @@
 	--------
 ZK 3.6.3
-August, 2009
+October, 2009
 * Features
   2821761: Tabbox support extra tabs to display other cmps on the bar
   2813737: Support new "dial" chart	
@@ -11,6 +11,7 @@ August, 2009
   2840108: Enhance popup, tooltip, and context can be shown by position
 
 * Bugs
+  2862085: IE 6,7,8 memory leak in modal dialog demo
   2813877: Window resize outline miss
   2814504: Failed to update treeitem (paging) if its parent is cropped
   2817260: Configuration.getResendDelay not inited correctly if zkmax

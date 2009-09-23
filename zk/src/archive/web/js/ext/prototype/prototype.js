@@ -879,12 +879,25 @@ Element.Methods = {
     return element;
   },
 
-  remove: function(element) {
-    element = z$(element);
+  remove: function(el) {
+    el = z$(el);
     //Tom Yeh, Potix: fix memory leak
-    zk.unlistenAll(element, true); //it invokes zk.unAll
-    element.parentNode.removeChild(element);
-    return element;
+    zk.cleanAll(el, true);
+    if (zk.ie) {
+		var gcid = '_z_lkgc',
+			gc = document.getElementById(gcid);
+		if (!gc) {
+			gc = document.createElement('div');
+			gc.id = gcid;
+			gc.style.display = 'none';
+			document.body.appendChild(gc);
+		}
+
+		gc.appendChild(el);
+		gc.innerHTML = '';
+	} else
+	    el.parentNode.removeChild(el);
+    return el;
   },
 
 /* Tom M. Yeh, Potix: remove unused codes

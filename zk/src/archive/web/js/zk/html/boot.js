@@ -191,10 +191,8 @@ zk.un = function (cmp, evtnm, fn) {
 };
 /**
  * Removes all listeners for the specified component
- * @param {Object} cmp an ID or a zk component
- * @since 3.5.0
  */
-zk.unAll = function (cmp) {
+zk._unAll = function (cmp) {
 	var ls = zk.find(cmp);
 	for (var evtnm in ls) {
 		var fns = ls[evtnm];
@@ -287,6 +285,7 @@ if (zk.ie) { //Bug 1741959: avoid memory leaks
 	};
 	function _ltid(el) {
 		return el.id || (el == document ? '_doc_': el == window ? '_win_':
+			el == document.body ? '_bdy_':
 			el.nodeType == 1 ? (el.id = '_z_ltaid' + _ltaidc++): '');
 	}
 	function _unlistenNow(ls) {
@@ -315,23 +314,14 @@ if (zk.ie) { //Bug 1741959: avoid memory leaks
 	/** Unlisten events associated with the specified ID.
 	 * Bug 1741959: IE meory leaks
 	 */
-	zk.unlistenAll = function (el, recurse) {
+	zk._unlistenAll = function (el) {
 		if (el) {
-			if (recurse) {
-				zk.unlistenAll(el);
-				for (el = el.firstChild; el; el = el.nextSibling)
-					if (el.nodeType == 1)
-						zk.unlistenAll(el);
-				return;
-			}
-
 			var id = _ltid(el),
 				ls = _ltns[id];
 			if (ls) {
 				delete _ltns[id];
 				_unlistenNow(ls);
 			}
-			zk.unAll(el);
 		} else {
 			for (var id in _ltns) {
 				var ls = _ltns[id];
@@ -345,8 +335,23 @@ if (zk.ie) { //Bug 1741959: avoid memory leaks
   })();
 } else {
 	/** No function if not IE. */
-	zk.unlistenAll = zk.voidf;
+	zk._unlistenAll = zk.voidf;
 }
+
+/** clean up a node and all its descendants
+ * @since 3.6.3
+ */
+zk.cleanAll = function (el, recurse) {
+	if (recurse) {
+		zk._unlistenAll(el);
+		for (el = el.firstChild; el; el = el.nextSibling)
+			if (el.nodeType == 1)
+				zk.cleanAll(el);
+		return;
+	}
+	zk._unlistenAll(el);
+	zk._unAll(el);
+};
 
 /** disable ESC to prevent user from pressing ESC to stop loading */
 zk.disableESC = function () {
@@ -1316,8 +1321,7 @@ zk._cleanupAt = function (n) {
 		zk._bfszcmps.remove(n);
 		zk._scrlcmps.remove(n);
 	}
-	zk.unlistenAll(n); //Bug 1741959: memory leaks
-		//bug #2313106 zk.unAll() must be called (but unlistenAll implies unAll)
+	zk.cleanAll(n); //Bug 1741959: memory leaks; bug #2313106
 	
 	for (n = n.firstChild; n; n = n.nextSibling)
 		if (n.nodeType == 1) zk._cleanupAt(n); //recursive for child component

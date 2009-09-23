@@ -1171,7 +1171,7 @@ zk.insertHTMLAfter = function (el, html) {
 zk.setInnerHTML = function (el, html) {
 	for (var n = el.firstChild; n; n = n.nextSibling)
 		if (n.nodeType == 1)
-			zk.unlistenAll(n, true); //it invokes zk.unAll
+			zk.cleanAll(n, true);
 
 	if (zk.ie || zk.opera) {
 		var tn = $tag(el);
@@ -1202,7 +1202,7 @@ zk.setInnerHTML = function (el, html) {
 /** Sets the outer HTML.
  */
 zk.setOuterHTML = function (el, html) {
-	zk.unlistenAll(el, true); //it invokes zk.unAll
+	zk.cleanAll(el, true);
 
 	var p = el.parentNode, prev = el.previousSibling, nxt = el.nextSibling;
 	if (zk.ie || zk.opera) {
