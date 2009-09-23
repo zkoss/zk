@@ -889,8 +889,9 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 		if (clkattrs != null) sb.append(clkattrs);
 			//though widget.js handles onclick (if 3d), it is useful
 			//to support onClick for groupbox
-		final String aos = getDefaultActionOnShow() != null ? getDefaultActionOnShow() 
-				: getDesktop().getWebApp().getConfiguration()
+		String aos = getDefaultActionOnShow();
+		if (aos == null)
+			aos = getDesktop().getWebApp().getConfiguration()
 					.getPreference("org.zkoss.zul.Window.defaultActionOnShow", null);
 		if (aos != null)
 			HTMLs.appendAttribute(sb, "z.aos", aos.length() == 0 ?  "z_none" : aos);
