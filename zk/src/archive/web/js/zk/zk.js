@@ -75,8 +75,13 @@ zk = function (sel) {
 					s.pop();
 				s.push('\n}');
 				msg.push(s.join(''));
+			} else if (typeof ar == 'function') {
+				var s = '' + ar,
+					m = s.indexOf('{'),
+					k = m < 0 ? s.indexOf('\n'): -1;
+				msg.push(s.substring(0, m > 0 ? m: k > 0 ? k: s.length));
 			} else
-				msg.push(''+ar);
+				msg.push('' + ar);
 		}
 		return msg.join('');
 	}

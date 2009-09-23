@@ -84,7 +84,7 @@ zWatch = (function () {
 				if (!ref || ref.bindLevel == null)
 					this.fire(ref);
 
-				(new _Gun(this.name, _visiChildSubset(this.infs, ref, true), this.args, this.origin))
+				(new _Gun(this.name, _visiChildSubset(this.name, this.infs, ref, true), this.args, this.origin))
 				.fire();
 			}
 		});
@@ -108,7 +108,7 @@ zWatch = (function () {
 		return false;
 	}
 	//Returns subset of infs that are visible childrens of p
-	function _visiChildSubset(infs, p, remove) {
+	function _visiChildSubset(name, infs, p, remove) {
 		var found = [], bindLevel = p.bindLevel;
 		for (var j = infs.length; j--;) { //child first
 			var inf = infs[j],
@@ -127,7 +127,7 @@ zWatch = (function () {
 		}
 		return found;
 	}
-	function _visiSubset(infs) {
+	function _visiSubset(name, infs) {
 		infs = infs.$clone(); //make a copy since unlisten might happen
 		if (_visiEvts[name])
 			for (var j = infs.length; j--;)
@@ -169,7 +169,7 @@ zWatch = (function () {
 
 			var args = [],
 				gun = new _Gun(name,
-					down ? _visiChildSubset(wts, org): _visiSubset(wts),
+					down ? _visiChildSubset(name, wts, org): _visiSubset(name, wts),
 					args, org);
 			args.push(gun);
 			for (var j = 3, l = vararg.length; j < l;)
