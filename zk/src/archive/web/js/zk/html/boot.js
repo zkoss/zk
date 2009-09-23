@@ -194,7 +194,15 @@ zk.un = function (cmp, evtnm, fn) {
  * @param {Object} cmp an ID or a zk component
  * @since 3.5.0
  */
-zk.unAll = function (cmp) {
+zk.unAll = function (cmp, recurse) {
+	if (recurse) {
+		zk.unAll(cmp);
+		for (cmp = cmp.firstChild; cmp; cmp = cmp.nextSibling)
+			if (cmp.nodeType == 1)
+				zk.unAll(cmp);
+		return;
+	}
+
 	var ls = zk.find(cmp);
 	for (var evtnm in ls) {
 		var fns = ls[evtnm];
@@ -271,38 +279,42 @@ zk.unlisten = function (el, evtnm, fn) {
 };
 
 if (zk.ie) { //Bug 1741959: avoid memory leaks
-	zk._ltns = {} // map(el, [evtnm, fn])
+  (function () {
+	var _ltns = {}, // map(el, [evtnm, fn])
+		_unlisten = zk.unlisten,
+		_listen = zk.listen,
+		_ltaidc = 0; //count of auto-id
 
-	zk._listen = zk.listen;
 	zk.listen = function (el, evtnm, fn) {
-		zk._listen(el, evtnm, fn);
+		_listen(el, evtnm, fn);
 
-		var id = _zklnid(el),
-			ls = zk._ltns[id];
-		if (!ls) zk._ltns[id] = ls = [];
+		var id = _ltid(el),
+			ls = _ltns[id];
+		if (!ls) _ltns[id] = ls = [];
 		ls.push([el, evtnm, fn]);
 	};
-	function _zklnid(el) {
-		return el.id || _zkAnyPid(el)
-		|| (el == document ? '_doc_': el == window ? '_win_': el);
+	function _ltid(el) {
+		return el.id || (el == document ? '_doc_': el == window ? '_win_':
+			el.nodeType == 1 ? (el.id = '_z_ltaid' + _ltaidc++): '');
 	}
-	function _zkAnyPid(el) {
-		while (el = el.parentNode) {
-			var id = el.id;
-			if (id) return id;
+	function _unlistenNow(ls) {
+		for (var j = ls.length; j--;) {
+			try {
+				_unlisten(ls[j][0], ls[j][1], ls[j][2]);
+			} catch (e) { //ignore
+			}
 		}
+		ls.length = 0;
 	}
 
-	zk._unlisten = zk.unlisten;
 	zk.unlisten = function (el, evtnm, fn) {
-		zk._unlisten(el, evtnm, fn);
+		_unlisten(el, evtnm, fn);
 
-		var id = _zklnid(el);
-		for (var ls = zk._ltns[id], j = ls ? ls.length: 0, inf; j--;) {
+		for (var id = _ltid(el), ls = _ltns[id], j = ls ? ls.length: 0, inf; j--;) {
 			inf = ls[j];
 			if (el == inf[0] && evtnm == inf[1] && fn == inf[2]) {
-				ls.splice(j, 1);
-				if (!ls.length) delete zk._ltns[id];
+				if (ls.length <= 1) delete _ltns[id];
+				else ls.splice(j, 1);
 				break;
 			}
 		}
@@ -311,34 +323,33 @@ if (zk.ie) { //Bug 1741959: avoid memory leaks
 	/** Unlisten events associated with the specified ID.
 	 * Bug 1741959: IE meory leaks
 	 */
-	zk.unlistenAll = function (el) {
+	zk.unlistenAll = function (el, recurse) {
 		if (el) {
-			var id = _zklnid(el),
-				ls = zk._ltns[id];
+			if (recurse) {
+				zk.unlistenAll(el);
+				for (el = el.firstChild; el; el = el.nextSibling)
+					if (el.nodeType == 1)
+							zk.unlistenAll(el);
+				return;
+			}
+
+			var id = _ltid(el),
+				ls = _ltns[id];
 			if (ls) {
-				delete zk._ltns[id];
-				zk._unlitenNow(ls);
+				delete _ltns[id];
+				_unlistenNow(ls);
 			}
 		} else {
-			for (var id in zk._ltns) {
-				var ls = zk._ltns[id];
+			for (var id in _ltns) {
+				var ls = _ltns[id];
 				if (ls) {
-					delete zk._ltns[id];
-					zk._unlitenNow(ls);
+					delete _ltns[id];
+					_unlistenNow(ls);
 				}
 			}
 		}
 	};
-	zk._unlitenNow = function (ls) {
-		for (var inf; inf = ls.shift();) {
-			try {
-				zk._unlisten(inf[0], inf[1], inf[2]);
-			} catch (e) { //ignore
-				if (zk.debugJS)
-					throw e;
-			}
-		}
-	};
+  })();
 } else {
 	/** No function if not IE. */
 	zk.unlistenAll = zk.voidf;

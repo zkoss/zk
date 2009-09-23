@@ -1169,6 +1169,12 @@ zk.insertHTMLAfter = function (el, html) {
 /** Sets the inner HTML.
  */
 zk.setInnerHTML = function (el, html) {
+	for (var n = el.firstChild; n; n = n.nextSibling)
+		if (n.nodeType == 1) {
+			zk.unlistenAll(n, true);
+			zk.unAll(n, true);
+		}
+
 	if (zk.ie || zk.opera) {
 		var tn = $tag(el);
 		if (tn == "TR" || tn == "TABLE" || tn == "TBODY" || tn == "THEAD"
@@ -1198,7 +1204,9 @@ zk.setInnerHTML = function (el, html) {
 /** Sets the outer HTML.
  */
 zk.setOuterHTML = function (el, html) {
-	//NOTE: Safari doesn't support __defineSetter__
+	zk.unlistenAll(el, true);
+	zk.unAll(el, true);
+
 	var p = el.parentNode, prev = el.previousSibling, nxt = el.nextSibling;
 	if (zk.ie || zk.opera) {
 		var tn = $tag(el);
