@@ -44,27 +44,17 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	    <rows>
 	        <row>
 	            <label value="text1: " />
-	            <textbox>
-	                <attribute w:name="onFocus">
-	                    jq(this.$f('help1')).fadeIn();
-	                </attribute>
-	                <attribute w:name="onBlur">
-	                    jq(this.$f('help1')).fadeOut();
-	                </attribute>
-	            </textbox>
+	            <textbox
+	            	w:onFocus="jq(this.$f('help1')).fadeIn()"
+					w:onBlur="jq(this.$f('help1')).fadeOut()"/>
 	            <label id="help1" visible="false"
 					value="This is help for text1." />
 	        </row>
 	        <row>
 	            <label value="text2: " />
-	            <textbox>
-	                <attribute w:name="onFocus">
-	                    jq(this.$f('help2')).fadeIn();
-	                </attribute>
-	                <attribute w:name="onBlur">
-	                    jq(this.$f('help2')).fadeOut();
-	                </attribute>
-	            </textbox>
+	            <textbox
+	            	w:onFocus="jq(this.$f('help2')).fadeIn()"
+					w:onBlur="jq(this.$f('help2')).fadeOut()"/>
 	            <label id="help2" visible="false"
 					value="This is help for text2." />
 	        </row>
