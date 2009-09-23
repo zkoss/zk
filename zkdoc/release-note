@@ -119,6 +119,7 @@ August, 2009
   2840108: Enhance popup, tooltip, and context can be shown by position
 
 * Bugs
+  2862085: IE 6,7,8 memory leak in modal dialog demo
   2813877: Window resize outline miss
   2814504: Failed to update treeitem (paging) if its parent is cropped
   2817260: Configuration.getResendDelay not inited correctly if zkmax
@@ -142,7 +143,11 @@ August, 2009
   2829547: Incorrect getValue when using spinners on multiple Timeboxes
   2856700: Failed to include a page with query string in auto mode
   2859020: ComponentActivationListener and others not called for child
-  2861323: AnnotateDataBinderInit shall throw exception if arg0 is null
+  2073409: Can't add groupfoot by javacode
+  2154611: Menuitem in Menubar - quirks
+  2493245: zscript failed badly if macro's setMacroURI before setParent
+  2859075: Menuseparator with vertial menubar fails in zkmax
+  2859747: Label inside Column should be sorted as well.
 
 	--------
 ZK 3.6.2
