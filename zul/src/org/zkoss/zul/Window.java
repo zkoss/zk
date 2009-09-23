@@ -324,23 +324,10 @@ public class Window extends XulElement implements org.zkoss.zul.api.Window {
 	 * "org.zkoss.zul.Window.defaultActionOnShow", if any. For example,
 	 * <pre>&lt;preference&gt;
      *   &lt;name&gt;org.zkoss.zul.Window.defaultActionOnShow&lt;/name&gt;
-     *   &lt;value&gt;moveDown&lt;/value&gt;
+     *   &lt;value&gt;slideDown&lt;/value&gt;
 	 * &lt;/preference&gt;</pre>
-	 *  Otherwise, the animating 
-	 * effect is depended on component itself.</p>
-	 * <p>In JavaScript, the property will match the same function name with the
-	 * prefix "anima.". For example, if the property is "moveDown", the function name
-	 * should be "anima.moveDown" accordingly.</p>
-	 * <p><strong>Node:</strong> The method is available in modal mode only. And if 
-	 * the onshow command of client-side action has been assigned on the 
-	 * component, its priority is higher than this method.<br/>
-	 * For example, 
-	 * <pre>action="onshow:anima.appear(#{self});"</pre>
-	 * </p>
 	 * 
-	 * @param onshow the function name in JavaScript. You could use the following
-	 * animations, e.g. "moveDown", "moveRight", "moveDiagonal", "appear", 
-	 * "slideDown", and so forth.
+	 * @param onshow the action to take when showing up a window
 	 * @since 3.0.2
 	 */
 	public static void setDefaultActionOnShow(String onshow) {
