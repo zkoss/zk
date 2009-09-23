@@ -406,34 +406,34 @@ if [ "$target" == "official" ]; then
 	done
 
 	cd /tmp/zk/doc
-	cp -rP $htmldocdir/devref $htmldocdir/devguide $htmldocdir/devref-single $htmldocdir/devguide-single $htmldocdir/styleguide $htmldocdir/styleguide-single .
+	#cp -rP $htmldocdir/devref $htmldocdir/devguide $htmldocdir/devref-single $htmldocdir/devguide-single $htmldocdir/styleguide $htmldocdir/styleguide-single .
 	#cp -rP $htmldocdir/devref $htmldocdir/devguide $htmldocdir/devref-single $htmldocdir/devguide-single $htmldocdir/styleguide $htmldocdir/styleguide-single .
 	find -name .svn | xargs rm -rf
 
-	echo Output zk-devref-$ver.zip
-	mv devref zk-devref-$ver
-	zip -qr9 zk-devref-$ver.zip zk-devref-$ver
-	rm -rf zk-devref-$ver
+	#echo Output zk-devref-$ver.zip
+	#mv devref zk-devref-$ver
+	#zip -qr9 zk-devref-$ver.zip zk-devref-$ver
+	#rm -rf zk-devref-$ver
 
-	echo Output zk-devguide-$ver.zip
-	mv devguide zk-devguide-$ver
-	zip -qr9 zk-devguide-$ver.zip zk-devguide-$ver
-	rm -rf zk-devguide-$ver
+	#echo Output zk-devguide-$ver.zip
+	#mv devguide zk-devguide-$ver
+	#zip -qr9 zk-devguide-$ver.zip zk-devguide-$ver
+	#rm -rf zk-devguide-$ver
 
 	#echo Output zk-styleguide-$ver.zip
 	#mv styleguide zk-styleguide-$ver
 	#zip -qr9 zk-styleguide-$ver.zip zk-styleguide-$ver
 	#rm -rf zk-styleguide-$ver
 
-	echo Output zk-devref-single-$ver.zip
-	mv devref-single zk-devref-single-$ver
-	zip -qr9 zk-devref-single-$ver.zip zk-devref-single-$ver
-	rm -rf zk-devref-single-$ver
+	#echo Output zk-devref-single-$ver.zip
+	#mv devref-single zk-devref-single-$ver
+	#zip -qr9 zk-devref-single-$ver.zip zk-devref-single-$ver
+	#rm -rf zk-devref-single-$ver
 
-	echo Output zk-devguide-single-$ver.zip
-	mv devguide-single zk-devguide-single-$ver
-	zip -qr9 zk-devguide-single-$ver.zip zk-devguide-single-$ver
-	rm -rf zk-devguide-single-$ver
+	#echo Output zk-devguide-single-$ver.zip
+	#mv devguide-single zk-devguide-single-$ver
+	#zip -qr9 zk-devguide-single-$ver.zip zk-devguide-single-$ver
+	#rm -rf zk-devguide-single-$ver
 
 	#echo Output zk-styleguide-single-$ver.zip
 	#mv styleguide-single zk-styleguide-single-$ver
@@ -446,8 +446,8 @@ elif [ "$target" == "daily" ]; then
 
 	cd $maindir
 	cp zkdoc/*/ZK-quickstart*.pdf /tmp/zk/$docnm
-	cp -rp zkdoc/devguide/*.odt zkdoc/devguide/images /tmp/zk/$docnm/devguide
-	cp -rp zkdoc/devref/*.odt zkdoc/devref/images /tmp/zk/$docnm/devref
+	#cp -rp zkdoc/devguide/*.odt zkdoc/devguide/images /tmp/zk/$docnm/devguide
+	#cp -rp zkdoc/devref/*.odt zkdoc/devref/images /tmp/zk/$docnm/devref
 	#cp -rp zkdoc/styleguide/ZK-styleguide.pdf /tmp/zk/$docnm/styleguide
 	cp zkdoc/release-note zkdoc/COPYING /tmp/zk/$docnm
 	cd /tmp/zk

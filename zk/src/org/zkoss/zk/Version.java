@@ -30,5 +30,5 @@ public class Version {
 	 * It is the same as {@link org.zkoss.zk.ui.WebApp#getVersion}.
 	 * @since 3.0.0
 	 */
-	public static final String RELEASE = "5.0.0-FL";
+	public static final String RELEASE = "5.0.0-RC";
 }
