@@ -1,5 +1,6 @@
 	--------
 ZK 5.0.0
+September, 2009
 * Features
   2817315: Support client-centric programming model
   2825713: EventQueue support application-level publish (by sever-push)
@@ -108,7 +109,7 @@ ZK 5.0.0
   
 	--------
 ZK 3.6.3
-August, 2009
+October, 2009
 * Features
   2821761: Tabbox support extra tabs to display other cmps on the bar
   2813737: Support new "dial" chart	
