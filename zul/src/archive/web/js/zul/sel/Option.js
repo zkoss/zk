@@ -20,6 +20,13 @@ zul.sel.Option = zk.$extends(zul.Widget, {
 		},
 		value: null
 	},
+	setVisible: function (visible) {
+		if (this._visible != visible) {
+			this._visible = visible;
+			if (this.desktop)
+				this.parent.rerender();
+		}
+	},
 	setSelected: function (selected) {
 		if (this._selected != selected) {
 			if (this.parent)
