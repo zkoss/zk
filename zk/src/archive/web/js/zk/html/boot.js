@@ -272,7 +272,6 @@ zk.unlisten = function (el, evtnm, fn) {
 
 if (zk.ie) { //Bug 1741959: avoid memory leaks
 	zk._ltns = {} // map(el, [evtnm, fn])
-	zk._unltns = []; //array of [el, [evtnm, fn]]
 
 	zk._listen = zk.listen;
 	zk.listen = function (el, evtnm, fn) {
@@ -299,7 +298,7 @@ if (zk.ie) { //Bug 1741959: avoid memory leaks
 		zk._unlisten(el, evtnm, fn);
 
 		var id = _zklnid(el);
-		for (var ls = zk._ltns[id], j = ls ? ls.length: 0, inf; --j >= 0;) {
+		for (var ls = zk._ltns[id], j = ls ? ls.length: 0, inf; j--;) {
 			inf = ls[j];
 			if (el == inf[0] && evtnm == inf[1] && fn == inf[2]) {
 				ls.splice(j, 1);
@@ -317,29 +316,20 @@ if (zk.ie) { //Bug 1741959: avoid memory leaks
 			var id = _zklnid(el),
 				ls = zk._ltns[id];
 			if (ls) {
-				zk._unltns.push(ls);
 				delete zk._ltns[id];
-				setTimeout(zk._unlistenOne, 2000 + 8000*Math.random());
-					//Note: the performance is not good, so delay 2~10s
+				zk._unlitenNow(ls);
 			}
 		} else {
-			while (zk._unlistenOne())
-				;
-
 			for (var id in zk._ltns) {
 				var ls = zk._ltns[id];
 				if (ls) {
 					delete zk._ltns[id];
-					zk._unlistenNode(ls);
+					zk._unlitenNow(ls);
 				}
 			}
 		}
 	};
-	zk._unlistenOne = function () {
-		var ls = zk._unltns.shift();
-		return ls && !zk._unlistenNode(ls);
-	};
-	zk._unlistenNode = function (ls) {
+	zk._unlitenNow = function (ls) {
 		for (var inf; inf = ls.shift();) {
 			try {
 				zk._unlisten(inf[0], inf[1], inf[2]);
@@ -1322,7 +1312,7 @@ zk._cleanupAt = function (n) {
 		zk._bfszcmps.remove(n);
 		zk._scrlcmps.remove(n);
 	}
-	if (n.id) zk.unlistenAll(n); //Bug 1741959: memory leaks
+	zk.unlistenAll(n); //Bug 1741959: memory leaks
 	zk.unAll(n); //bug #2313106 whatever it is, we shall invoke zk.unAll()
 	
 	for (n = n.firstChild; n; n = n.nextSibling)
