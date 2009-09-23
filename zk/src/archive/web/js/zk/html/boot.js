@@ -194,15 +194,7 @@ zk.un = function (cmp, evtnm, fn) {
  * @param {Object} cmp an ID or a zk component
  * @since 3.5.0
  */
-zk.unAll = function (cmp, recurse) {
-	if (recurse) {
-		zk.unAll(cmp);
-		for (cmp = cmp.firstChild; cmp; cmp = cmp.nextSibling)
-			if (cmp.nodeType == 1)
-				zk.unAll(cmp);
-		return;
-	}
-
+zk.unAll = function (cmp) {
 	var ls = zk.find(cmp);
 	for (var evtnm in ls) {
 		var fns = ls[evtnm];
@@ -329,7 +321,7 @@ if (zk.ie) { //Bug 1741959: avoid memory leaks
 				zk.unlistenAll(el);
 				for (el = el.firstChild; el; el = el.nextSibling)
 					if (el.nodeType == 1)
-							zk.unlistenAll(el);
+						zk.unlistenAll(el);
 				return;
 			}
 
@@ -339,6 +331,7 @@ if (zk.ie) { //Bug 1741959: avoid memory leaks
 				delete _ltns[id];
 				_unlistenNow(ls);
 			}
+			zk.unAll(el);
 		} else {
 			for (var id in _ltns) {
 				var ls = _ltns[id];
@@ -1324,7 +1317,7 @@ zk._cleanupAt = function (n) {
 		zk._scrlcmps.remove(n);
 	}
 	zk.unlistenAll(n); //Bug 1741959: memory leaks
-	zk.unAll(n); //bug #2313106 whatever it is, we shall invoke zk.unAll()
+		//bug #2313106 zk.unAll() must be called (but unlistenAll implies unAll)
 	
 	for (n = n.firstChild; n; n = n.nextSibling)
 		if (n.nodeType == 1) zk._cleanupAt(n); //recursive for child component

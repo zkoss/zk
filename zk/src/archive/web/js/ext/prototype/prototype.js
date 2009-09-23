@@ -882,8 +882,7 @@ Element.Methods = {
   remove: function(element) {
     element = z$(element);
     //Tom Yeh, Potix: fix memory leak
-    zk.unlistenAll(element, true);
-    zk.unAll(element, true);
+    zk.unlistenAll(element, true); //it invokes zk.unAll
     element.parentNode.removeChild(element);
     return element;
   },
