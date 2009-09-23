@@ -616,6 +616,12 @@ var	exclude = /z-?index|font-?weight|opacity|zoom|line-?height/i,
 	toString = Object.prototype.toString;
 
 jQuery.extend({
+	//Tom Yeh, Potix, 20090923, remove overrideable
+	_zrm: function (el) {
+		if (el.parentNode)
+			el.parentNode.removeChild( el );
+	},
+
 	noConflict: function( deep ) {
 		window.$ = _$;
 
@@ -1243,8 +1249,11 @@ jQuery.each({
 				jQuery.event.remove(this);
 				jQuery.removeData(this);
 			});
-			if (this.parentNode)
-				this.parentNode.removeChild( this );
+			//Tom Yeh, Potix, 20090923, remove overrideable
+			//when upgrade jquery, check if jquery has fixed it
+			jQuery._zrm(this);
+//			if (this.parentNode)
+//				this.parentNode.removeChild( this );
 		}
 	},
 
@@ -1254,7 +1263,9 @@ jQuery.each({
 
 		// Remove any remaining nodes
 		while ( this.firstChild )
-			this.removeChild( this.firstChild );
+			//Tom Yeh, Potix, 20090923, remove overrideable
+			jQuery._zrm(this.firstChild);
+//			this.removeChild( this.firstChild );
 	}
 }, function(name, fn){
 	jQuery.fn[ name ] = function(){
