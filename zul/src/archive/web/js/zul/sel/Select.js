@@ -149,5 +149,9 @@ zul.sel.Select = zk.$extends(zul.Widget, {
 				return; //not change or unnecessary.
 			this._doChange(evt);
 		} else this.$supers('doKeyUp_', arguments);
-	}
+	},
+	onChildAdded_: _zkf = function (/*child*/) {
+		if (zk.ie) this.rerender();
+	},
+	onChildRemoved_: _zkf
 });
