@@ -45,9 +45,10 @@ public class BrowserWrapper {
 	public void addBrowser(String browserType, Selenium browser){
 		if(browserType == null || browser == null)
 			throw new NullPointerException("BrowserWrapper addBrowser : Browser is NULL");
-		
-		_browsers.add(browser);
-		_browserTypes.add(browserType);
+		if(!_browsers.contains(browser))
+			_browsers.add(browser);
+		if(!_browserTypes.contains(browserType))
+			_browserTypes.add(browserType);
 	}
 	
 	public List<Selenium> getBrowsers(){

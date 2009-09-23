@@ -14,12 +14,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 package org.zkoss.zktest.test2;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -33,9 +34,10 @@ import com.thoughtworks.selenium.Selenium;
  */
 public class ConfigHelper {
 	
-
-	private final static String[] BROWSER_NAMES = new String[]{"firefox", "chrome", "safari", "opera", "iexplore"}; 	
+	private final static String[] BROWSER_NAMES = new String[]{"firefox", "chrome", "safari", "opera", "iexplore"}; 
 	private final static String[] PORTABLE_BROWSERS = new String[]{"firefox"};
+	private final static String ALL_BROWSERS = "All";
+	private static List<String> _allBrowsers = new LinkedList<String>();
 	private static String _host;
 	private static int _port;
 	private static String _browserURL;
@@ -57,9 +59,9 @@ public class ConfigHelper {
 
 	/**
 	 * key : test target ("B30-XXXXXX.zul")
-	 * value : ServerWrapper
+	 * value : BrowserWrapper
 	 */
-	private static HashMap<String, BrowserWrapper> _browserTester=new HashMap<String, BrowserWrapper>();
+	private static HashMap<String, BrowserWrapper> _browserWrapper=new HashMap<String, BrowserWrapper>();
 	
 	
 	public static String getHost(){
@@ -79,20 +81,31 @@ public class ConfigHelper {
 	
 	public static HashMap<String, BrowserWrapper> getServerWrapperMap() throws Exception, IOException{
 		initIfNeed();
-		return _browserTester;
+		return _browserWrapper;
 	}
 	private static HashMap<String, BrowserWrapper> initServerWrapperByTarget(String target) throws FileNotFoundException, IOException{
 		String[] testBrowsers = getTestBrowsersFromConfig(target).split(",");
 		
 		for(String browser : testBrowsers){
 			String strBrowserKey = browser.trim();
+			if(ALL_BROWSERS.equals(strBrowserKey)){
+				addAllBrowsers(target);
+				continue;
+			}
+			
 			String strBrowser = _browserNameMap.get(strBrowserKey);
 			if(strBrowser != null){
 				BrowserWrapper wrapper = getServerWrapper(target);
 				wrapper.addBrowser( _browserNameMap.get(strBrowserKey), getBrowserFromHolder(strBrowserKey));
 			}		
 		}
-		return _browserTester;
+		return _browserWrapper;
+	}
+	private static void addAllBrowsers(String target){
+		BrowserWrapper wrapper = getServerWrapper(target);
+		for(String browserKey : _allBrowsers){
+			wrapper.addBrowser(_browserNameMap.get(browserKey), getBrowserFromHolder(browserKey));
+		}
 	}
 	/**
 	 * 
@@ -100,10 +113,10 @@ public class ConfigHelper {
 	 * @return value : BrowserWrapper obj
 	 */
 	private static BrowserWrapper getServerWrapper(String target){
-		BrowserWrapper wrapper = _browserTester.get(target);
+		BrowserWrapper wrapper = _browserWrapper.get(target);
 		if(wrapper == null){
 			wrapper = new BrowserWrapper(getTestUrl(target));
-			_browserTester.put(target, wrapper);
+			_browserWrapper.put(target, wrapper);
 		}
 		return wrapper;
 	}
@@ -182,6 +195,14 @@ public class ConfigHelper {
 					if(isBrowserSetting(strKey)){
 						addBrowserNameSetting(strKey, (String)setting.getValue());
 						continue;
+					}
+				}
+				
+				String[] allBrowsers = _prop.getProperty(ALL_BROWSERS).split(",");
+				for(String browser : allBrowsers){
+					String browserKey = browser.trim();
+					if(_browserNameMap.containsKey(browserKey)){
+						_allBrowsers.add(browserKey);
 					}
 				}
 				
