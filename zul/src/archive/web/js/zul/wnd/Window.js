@@ -204,11 +204,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 		this._syncShadow();
 		this._updateDomPos();
 
-		if (this.isRealVisible()) {
+		if (this.isRealVisible())
 			$n.cleanVisibility();
-			this.setTopmost();
-		}
 
+		this.setTopmost();
 		this._makeFloat();
 	},
 	_doModal: function () {
@@ -232,11 +231,10 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 
 		//Note: modal must be visible
 		var realVisible = this.isRealVisible();
-		if (realVisible) {
+		if (realVisible)
 			$n.cleanVisibility();
-			this.setTopmost();
-		}
 
+		this.setTopmost();
 		this._mask = new zk.eff.FullMask({
 			id: this.uuid + "-mask",
 			anchor: this._shadowWgt ? this._shadowWgt.getBottomElement() : this.$n(),
@@ -393,7 +391,8 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	//watch//
 	onShow: function (ctl) {
 		var w = ctl.origin;
-		if (this != w && this._mode != 'embedded' && this.isRealVisible({until: w})) {
+		if (this != w && this._mode != 'embedded'
+		&& this.isRealVisible({until: w, dom: true})) {
 			zk(this.$n()).cleanVisibility();
 			this._syncShadow();
 		}
@@ -401,7 +400,12 @@ zul.wnd.Window = zk.$extends(zul.Widget, {
 	},
 	onHide: function (ctl) {
 		var w = ctl.origin;
-		if (this != w && this._mode != 'embedded' && this.isRealVisible({until: w})) {
+		if (this != w && this._mode != 'embedded'
+		&& this.isRealVisible({until: w, dom: true})) {
+		//Note: dom:true, since isVisible might be wrong when onHide is called.
+		//For example, tab sets selected and then fire onHide, and tabpanel's
+		//isVisible returns false (since unselected). Thus, it is better to
+		//count on DOM only
 			this.$n().style.visibility = 'hidden';
 			this._syncShadow();
 		}

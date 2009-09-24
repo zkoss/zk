@@ -850,8 +850,14 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 
 	isRealVisible: function (opts) {
+		var dom = opts && opts.dom;
 		for (var wgt = this; wgt; wgt = wgt.parent) {
-			if (!wgt.isVisible() || hiddenByParent(wgt))
+			if (dom) {
+				if (!zk(wgt.$n()).isVisible())
+					return false;
+			} else if (!wgt.isVisible())
+				return false;
+			if (hiddenByParent(wgt))
 				return false;
 			if (opts && opts.until == wgt)
 				break;
