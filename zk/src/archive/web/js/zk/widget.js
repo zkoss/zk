@@ -677,10 +677,8 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (oldpt != this)
 			child.beforeParentChanged_(this);
 
-		if (oldpt) {
-			if (this._moveChild(child)) return true; //done
+		if (oldpt)
 			oldpt.removeChild(child);
-		}
 
 		child.parent = this;
 		var p = this.lastChild;
@@ -711,10 +709,8 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (child.parent != this)
 			child.beforeParentChanged_(this);
 
-		if (child.parent) {
-			if (this._moveChild(child, sibling)) return true;
+		if (child.parent)
 			child.parent.removeChild(child);
-		}
 
 		child.parent = this;
 		var p = sibling.previousSibling;
@@ -788,6 +784,9 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (s) s.previousSibling = newwgt;
 		else if (p) p.lastChild = newwgt;
 
+		_rmIdSpaceDown(this);
+		_addIdSpaceDown(newwgt);
+
 		if (this.desktop) {
 			if (!newwgt.desktop) newwgt.desktop = this.desktop;
 			if (node) newwgt.replaceHTML(node, newwgt.desktop);
@@ -803,50 +802,13 @@ zk.Widget = zk.$extends(zk.Object, {
 		if (p) {
 			p.onChildRemoved_(this);
 			p.onChildAdded_(newwgt);
-			this.parent = this.nextSibling = this.previousSibling = null;
 		}
+		//avoid memory leak
+		this.parent = this.nextSibling = this.previousSibling
+			= this._node = this._nodeSolved = null;
+		this._subnodes = {};
 	},
 	beforeParentChanged_: function () {
-	},
-	domMovable_: function () {
-		return true;
-	},
-	_moveChild: function (child, moveBefore) {
-		if (child._floating || !child.domMovable_() || !this.domMovable_()
-		|| !this.desktop || !child.desktop)
-			return false;
-
-		var beforeNode = null;
-		if (moveBefore && !(beforeNode = moveBefore.$n()))
-			return false;
-
-		var node = this.$n(), kidnode = child.$n(),
-			dt = this.desktop, kiddt = child.desktop,
-			oldpt = child.parent, cave = this.getCaveNode();
-		child._node = this._node = child.desktop = this.desktop = null; //avoid bind_ and unbind_
-		try {
-			oldpt.removeChild(child);
-			this.insertBefore(child, moveBefore);
-
-			kidnode.parentNode.removeChild(kidnode); //don't use jq().remove()
-
-			(cave || node).insertBefore(kidnode, beforeNode);
-			
-			//Not calling unbind and bind, so handle bindLevel here
-			var v = this.bindLevel + 1;
-			if (child.bindLevel != v) {
-				_fixBindLevel(child, v);
-				zWatch.fire('onBindLevelMove', child);
-			}
-		} finally {
-			this.desktop = dt; child.desktop = kiddt;
-			this._node = node; child._node = kidnode;
-		}
-
-		oldpt.onChildRemoved_(child);
-		this.onChildAdded_(child);
-			//they are called if parent is the same
-		return true;
 	},
 
 	isRealVisible: function (opts) {
@@ -2008,6 +1970,9 @@ zk.RefWidget = zk.$extends(zk.Widget, {
 		if (q) q.previousSibling = w;
 		else if (p) p.lastChild = w;
 
+		this.parent = this.nextSibling = this.previousSibling = null;
+
+		_addIdSpaceDown(w);
 		//no need to call super since it is bound
 	}
 });
