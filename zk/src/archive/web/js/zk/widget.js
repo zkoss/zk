@@ -218,8 +218,9 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			hflexsz = 0,
 			p = this.$n().parentNode,
 			zkp = zk(p),
-			hgh = zkp.revisedHeight(p.offsetHeight),
-			wdh = zkp.revisedWidth(p.offsetWidth),
+			psz = this.getParentSize_(p),
+			hgh = psz.height,
+			wdh = psz.width,
 			c = p.firstChild;
 		
 		for (; c; c = c.nextSibling)
@@ -231,7 +232,6 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			oldPos = p.style.position;
 			p.style.position = 'relative';
 		}
-		
 		var sameOffParent = c ? c.offsetParent === p.offsetParent : false,
 			tbp = zkp.sumStyles('t', jq.borders),
 			lbp = zkp.sumStyles('l', jq.borders),
@@ -255,7 +255,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 					offLeft = c.offsetLeft,
 					marginRight = offLeft + offwdh + zkc.sumStyles("r", jq.margins),
 					marginBottom = offTop + offhgh + zkc.sumStyles("b", jq.margins);
-				
+					
 				var cwgt = _binds[c.id];
 				//vertical size
 				if (cwgt && cwgt._nvflex) {
@@ -322,7 +322,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 			}
 		}
 
-		if (zk.ie6_ && p.tagName == 'DIV') {
+		if (zk.ie6_ && p.tagName == 'DIV') { //ie6, restore to orignial position style
 			p.style.position = oldPos;
 		}
 
@@ -335,7 +335,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		
 		//setup the height for the vflex child
 		//avoid floating number calculation error(TODO: shall distribute error evenly)
-		var lastsz = hgh;
+		var lastsz = hgh > 0 ? hgh : 0;
 		for (var j = vflexs.length - 1; j > 0; --j) {
 			var cwgt = vflexs.shift(), 
 				vsz = (cwgt._nvflex * hgh / vflexsz) | 0; //cast to integer
@@ -352,7 +352,7 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		
 		//setup the width for the hflex child
 		//avoid floating number calculation error(TODO: shall distribute error evenly)
-		lastsz = wdh;
+		lastsz = wdh > 0 ? wdh : 0;
 		for (var j = hflexs.length - 1; j > 0; --j) {
 			var cwgt = hflexs.shift(), //{n: node, f: hflex} 
 				hsz = (cwgt._nhflex * wdh / hflexsz) | 0; //cast to integer
@@ -1355,6 +1355,14 @@ zk.Widget = zk.$extends(zk.Object, {
 	},
 	afterChildrenFlex_: function(kid) {
 		//to be overridden
+	},
+	getParentSize_: function(p) {
+		//to be overridden
+		var zkp = zk(p);
+		return zkp ? {height: zkp.revisedHeight(p.offsetHeight), width: zkp.revisedWidth(p.offsetWidth)} : {};
+	},
+	fixFlex_: function() {
+		_fixFlex.apply(this);
 	},
 	initDrag_: function () {
 		this._drag = new zk.Draggable(this, this.getDragNode(), zk.copy({

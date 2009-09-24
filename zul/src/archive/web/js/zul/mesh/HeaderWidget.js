@@ -53,7 +53,7 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			}
 		}
 	},
-	setFlexSize_: function (sz) { //TODO: if updateMesh_ will not rerender
+	setFlexSize_: function (sz) { //TODO: if updateMesh_ is not implemented with rerender
 		if (sz.width !== undefined && sz.width != 'auto' && sz.width != '') {
 			//remember the value in _hflexWidth and use it when rerender(@see #domStyle_)
 			//for faker column, so don't use revisedWidth().
@@ -61,6 +61,15 @@ zul.mesh.HeaderWidget = zk.$extends(zul.LabelImageWidget, {
 			return {width: sz.width};
 		} else
 			return this.$supers('setFlexSize_', arguments);
+	},
+	getParentSize_: function (p) {
+		var wgt = this.getMeshWidget();
+		if (zk(wgt.ehead).isVisible()) 
+			return this.$supers('getParentSize_', arguments);
+		else {
+			var xp = wgt.$n();
+			return {height: 0, width: zk(xp).revisedWidth(xp.offsetWidth)};
+		}
 	},
 	domStyle_: function (no) {
 		var style = '';

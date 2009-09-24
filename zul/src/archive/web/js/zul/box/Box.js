@@ -133,6 +133,158 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		for (var j = 0, len = oo.length; j < len; ++j)
 			out.push(oo[j]);
 	},
+	_getBoxSize: function () {
+		var	vert = this.isVertical(),
+			k = -1,
+			szes = this._sizes;
+		for (var kid = this.firstChild; kid; kid = kid.nextSibling) {
+			if (szes && !kid.$instanceof(zul.box.Splitter) && !kid.$instanceof(zul.wgt.Cell))
+				++k;
+			if (vert && kid._nvflex) {
+				kid.setFlexSize_({height:''});
+				var chdex = kid.$n('chdex');
+				if (chdex) chdex.style.height = szes && k < szes.length ? szes[k] : '';
+			} else if (!vert && kid._nhflex) {
+				kid.setFlexSize_({width:''});
+				var chdex = kid.$n('chdex');
+				if (chdex) chdex.style.width = szes && k < szes.length ? szes[k] : '';
+			}
+		}
+		var p = this.$n(),
+			zkp = zk(p);
+		return zkp ? {height: zkp.revisedHeight(p.offsetHeight), width: zkp.revisedWidth(p.offsetWidth)} : {};
+	},
+	beforeChildrenFlex_: function(child) {
+		if (child._flexFixed || (!child._nvflex && !child._nhflex)) { //other vflex/hflex sibliing has done it!
+			delete child._flexFixed;
+			return false;
+		}
+		
+		child._flexFixed = true;
+		
+		var	vert = this.isVertical(),
+			vflexs = [],
+			vflexsz = vert ? 0 : 1,
+			hflexs = [],
+			hflexsz = !vert ? 0 : 1,
+			p = child.$n('chdex').parentNode,
+			zkp = zk(p),
+			psz = this._getBoxSize(),
+			hgh = psz.height,
+			wdh = psz.width,
+			xc = p.firstChild,
+			k = -1,
+			szes = this._sizes;
+		
+		for (; xc; xc = xc.nextSibling) {
+			var c = xc.id && xc.id.endsWith('-chdex') ? vert ? xc.firstChild.firstChild : xc.firstChild : xc,
+				zkc = zk(c),
+				fixedSize = false;
+			if (zkc.isVisible()) {
+				var j = c.id ? c.id.indexOf('-') : 1,
+						cwgt = j < 0 ? zk.Widget.$(c.id) : null;
+
+				if (szes && cwgt && !cwgt.$instanceof(zul.box.Splitter) && !cwgt.$instanceof(zul.wgt.Cell)) {
+					++k;
+					if (k < szes.length && szes[k] && ((vert && !cwgt._nvflex) || (!vert && !cwgt._nhflex))) {
+						c = xc;
+						zkc = zk(c);
+						fixedSize = szes[k].endsWith('px');
+					}
+				}
+				var offhgh = fixedSize && vert ? zk.parseInt(szes[k]) : 
+						zk.ie && xc.id && xc.id.endsWith('-chdex2') && xc.style.height && xc.style.height.endsWith('px') ? 
+						zk.parseInt(xc.style.height) : zkc.offsetHeight(),
+					offwdh = fixedSize && !vert ? zk.parseInt(szes[k]) : zkc.offsetWidth(),
+					cwdh = offwdh + zkc.sumStyles("lr", jq.margins),
+					chgh = offhgh + zkc.sumStyles("tb", jq.margins);
+				
+				//vertical size
+				if (cwgt && cwgt._nvflex) {
+					if (cwgt !== child)
+						cwgt._flexFixed = true; //tell other vflex siblings I have done it.
+					if (cwgt._vflex == 'min')
+						_setMinFlexSize(cwgt, c, 'height');
+					else {
+						vflexs.push(cwgt);
+						if (vert) vflexsz += cwgt._nvflex;
+					}
+				} else if (vert) hgh -= chgh;
+				
+				//horizontal size
+				if (cwgt && cwgt._nhflex) {
+					if (cwgt !== child)
+						cwgt._flexFixed = true; //tell other hflex siblings I have done it.
+					if (cwgt._hflex == 'min')
+						_setMinFlexSize(cwgt, c, 'width');
+					else {
+						hflexs.push(cwgt);
+						if (!vert) hflexsz += cwgt._nhflex;
+					}
+				} else if (!vert) wdh -= cwdh;
+			}
+		}
+
+		//setup the height for the vflex child
+		//avoid floating number calculation error(TODO: shall distribute error evenly)
+		var lastsz = hgh > 0 ? hgh : 0;
+		for (var j = vflexs.length - 1; j > 0; --j) {
+			var cwgt = vflexs.shift(), 
+				vsz = (cwgt._nvflex * hgh / vflexsz) | 0, //cast to integer
+				offtop = cwgt.$n().offsetTop,
+				isz = vsz - ((zk.ie && offtop > 0) ? (offtop * 2) : 0); 
+			cwgt.setFlexSize_({height:isz});
+			cwgt._vflexsize = vsz;
+			if (!cwgt.$instanceof(zul.wgt.Cell)) {
+				var chdex = cwgt.$n('chdex');
+				chdex.style.height = jq.px(zk(chdex).revisedHeight(vsz, true));
+			}
+			if (vert) lastsz -= vsz;
+		}
+		//last one with vflex
+		if (vflexs.length) {
+			var cwgt = vflexs.shift(),
+				offtop = cwgt.$n().offsetTop,
+				isz = lastsz - ((zk.ie && offtop > 0) ? (offtop * 2) : 0);
+			cwgt.setFlexSize_({height:isz});
+			cwgt._vflexsize = lastsz;
+			if (!cwgt.$instanceof(zul.wgt.Cell)) {
+				var chdex = cwgt.$n('chdex');
+				chdex.style.height = jq.px(zk(chdex).revisedHeight(lastsz, true));
+			}
+		}
+		
+		//setup the width for the hflex child
+		//avoid floating number calculation error(TODO: shall distribute error evenly)
+		lastsz = wdh > 0 ? wdh : 0;
+		for (var j = hflexs.length - 1; j > 0; --j) {
+			var cwgt = hflexs.shift(), //{n: node, f: hflex} 
+				hsz = (cwgt._nhflex * wdh / hflexsz) | 0; //cast to integer
+			cwgt.setFlexSize_({width:hsz});
+			cwgt._hflexsize = hsz;
+			if (!cwgt.$instanceof(zul.wgt.Cell)) {
+				var chdex = cwgt.$n('chdex');
+				chdex.style.width = jq.px(zk(chdex).revisedWidth(hsz, true));
+			}
+			if (!vert) lastsz -= hsz;
+		}
+		//last one with hflex
+		if (hflexs.length) {
+			var cwgt = hflexs.shift();
+			cwgt.setFlexSize_({width:lastsz});
+			cwgt._hflexsize = lastsz;
+			if (!cwgt.$instanceof(zul.wgt.Cell)) {
+				var chdex = cwgt.$n('chdex');
+				chdex.style.width = jq.px(zk(chdex).revisedWidth(lastsz, true));
+			}
+		}
+		
+		//notify all of children with xflex is done.
+		child.parent.afterChildrenFlex_(child);
+		child._flexFixed = false;
+		
+		return false; //to skip original _fixFlex
+	},
 	_spacingHTML: function (child) {
 		var oo = [],
 			spacing = this._spacing,
@@ -192,7 +344,8 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			}
 		}
 
-		if (!vert && !child.isVisible()) style += ';display:none';
+		if (!vert && !child.isVisible()) style += style ? ';display:none' : 'display:none';
+		if (!vert) style += style ? ';height:100%' : 'height:100%';
 		return style ? html + ' style="' + style + '"': html;
 	},
 	_isStretchPack: function() {
@@ -246,7 +399,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 					if (vert)
 						c.style.width = zk(c).revisedWidth(tdsz, true) + 'px';
 					else
-						c.style.height = zk(c).revisedHeight(tdsz, true) + 'px';
+						c.style.height = zk(c).revisedHeight(tdsz - ((zk.ie && c.offsetTop > 0) ? (c.offsetTop * 2) : 0), true) + 'px';
 				}
 			}
 		}
@@ -275,7 +428,11 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		
 		//Bug 1916473: with IE, we have make the whole table to fit the table
 		//since IE won't fit it even if height 100% is specified
-		if (zk.ie) {
+	
+		//20090924, Henri: the original bug fix seems fail the zkdemo/test/splitter.zul
+		//in IE7/IE8 (cannot drag splitter to left in IE7/8). I try another fix 
+		//by changing hbox chdex style(TD) to have height:100% and it works!
+/*		if (zk.ie) {
 			var p = node.parentNode;
 			if (p.tagName == "TD") {
 				var nm = vert ? "height": "width",
@@ -286,7 +443,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				}
 			}
 		}
-
+*/
 		//Note: we have to assign width/height fisrt
 		//Otherwise, the first time dragging the splitter won't be moved
 		//as expected (since style.width/height might be "")

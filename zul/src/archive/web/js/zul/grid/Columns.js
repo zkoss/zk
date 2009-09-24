@@ -37,7 +37,7 @@ zul.grid.Columns = zk.$extends(zul.mesh.HeadWidget, {
 			if (this.parent)
 				this.parent.rerender();
 			else 
-				this.$superts('rerender', arguments);
+				this.$supers('rerender', arguments);
 		}
 		return this;
 	},

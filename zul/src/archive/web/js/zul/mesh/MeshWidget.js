@@ -123,12 +123,20 @@ zul.mesh.MeshWidget = zk.$extends(zul.Widget, {
 	_fixHeaders: function () {
 		if (this.head && this.ehead) {
 			var empty = true;
-			for (var w = this.head.firstChild; w; w = w.nextSibling) 
+			var flex = false;
+			for (var w = this.head.firstChild; w; w = w.nextSibling) {
+				if (!flex && w._nhflex) flex = true;
 				if (w.getLabel() || w.getImage() || w.nChildren) {
 					empty = false;
 					break;
 				}
+			}
 			this.ehead.style.display = empty ? 'none' : '';
+			
+			//onSize is not fired to empty header when loading page, so we have to simulate it here
+			if (empty && flex) 
+				for (var w = this.head.firstChild; w; w = w.nextSibling)
+					if (w._nhflex) w.fixFlex_();
 		}
 	},
 	_bindDomNode: function () {
