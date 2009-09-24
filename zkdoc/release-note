@@ -90,7 +90,7 @@ September, 2009
     in ZK 3.6.x called the trendy mold.
   + When instantiating a component manually, the component definition
     will be resolved from the language definition first, and then page
-    definition (if they have the same implementation class)
+    definition if the definition in a page does not specify a class.
   + org.zkoss.zk.au.http.AuProcessor is replaced with
     org.zkoss.zk.au.http.AuExtension
   + fixedLayout property is deprecated in Grid/Listbox/Tree/. Use "sizedByContent" instead.
