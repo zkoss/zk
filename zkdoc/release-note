@@ -68,6 +68,9 @@ September, 2009
   + disable-behind-modal is deprecated (always false)
   + PageCtrl: addRoot, removeRoot, moveRoot, addFellow and removeFellow
     are removed
+  + toolbarbutton is revised to look better in toolbar. Meanwhile,
+    a new component called a is introduced for generate HTML A tag.
+    Use it instead of toolbarbutton if HTML A is what you want
   + The client-side action has been replaced with the custom JavaScript
   	events.
   + Overlapped window in overlapped won't be cropped
