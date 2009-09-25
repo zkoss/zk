@@ -40,8 +40,9 @@ public interface ClientConstraint {
 	 *  return "new foo.MyValidator()";
 	 *}</code></pre>
 	 *
-	 * <p>Instead of code snippet, it can return a String instance if
-	 * the validator is zul.inp.SimpleConstraint.
+	 * <p>Instead of return the snippet of JavaScript codes, it can return
+	 * an instance of JavaScript string (enclosed with quotatio),
+	 * if the validator is zul.inp.SimpleConstraint.
 	 *
 	 * <p>For example,
 	 * <pre><code>String getClientConstraint() {

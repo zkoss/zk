@@ -133,8 +133,7 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 			if (!inf.jsLoad) {
 				inf.jsLoad = true;
 				pkgLoad(inf[1]);
-				run(mount);
-				return;
+				return run(mount);
 			}
 		}
 
