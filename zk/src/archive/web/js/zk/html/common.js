@@ -1413,7 +1413,7 @@ if (zk.ie || zk.opera) {
 		}
 
 		//get the correct node
-		var el = document.createElement('DIV');
+		var el = document.createElement('DIV'), div = el;
 		el.innerHTML = html;
 		while (--level >= 0)
 			el = el.firstChild;
@@ -1429,6 +1429,7 @@ if (zk.ie || zk.opera) {
 				ns.push(n);
 			el.removeChild(n);
 		}
+		zk.remove(div);
 		return ns;
 	};
 }

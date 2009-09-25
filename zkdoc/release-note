@@ -12,6 +12,7 @@ October, 2009
 
 * Bugs
   2862085: IE 6,7,8 memory leak in modal dialog demo
+  2801721: Memory leak - Grid control
   2813877: Window resize outline miss
   2814504: Failed to update treeitem (paging) if its parent is cropped
   2817260: Configuration.getResendDelay not inited correctly if zkmax
