@@ -23,7 +23,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 		_domevtnm = {onDoubleClick: 'dblclick'}, //{zk-evt-nm, dom-evt-nm}
 		_wgtcls = {}; //{clsnm, cls}
 
-	function hiddenByParent(w) { //such hbox/vbox or border-layout
+	//such as child of hbox/vbox or border-layout
+	function hiddenByParent(w) {
 		var p = w.parent;
 		if (p && p.isVisible() && (p=p.$n()) && (w=w.$n()))
 			while ((w=zk(w).vparentNode()||w.parentNode) && p != w)
@@ -39,6 +40,13 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				_binds = zk.copy({}, _binds);
 			}
 		};
+
+	//Check if el is a prolog
+	function _isProlog(el) {
+		var txt;
+		return el && el.nodeType == 3 //textnode
+			&& (txt=el.nodeValue) && !txt.trim().length;
+	}
 
 	//Event Handling//
 	function _cloneEvt(evt, target) {
@@ -1215,9 +1223,11 @@ zk.Widget = zk.$extends(zk.Object, {
 				}
 			}
 
-		if (bfn)
+		if (bfn) {
+			var sib = bfn.previousSibling;
+			if (_isProlog(sib)) bfn = sib;
 			jq(bfn).before(child._redrawHTML());
-		else
+		} else
 			jq(ben).append(child._redrawHTML());
 		child.bind(desktop);
 	},
@@ -1244,7 +1254,12 @@ zk.Widget = zk.$extends(zk.Object, {
 			zk.currentFocus = null;
 
 		var n = child.$n();
-		if (!n) child._prepareRemove(n = []);
+		if (n) {
+			var sib = n.previousSibling;
+			if (child.prolog && _isProlog(sib))
+				jq(sib).remove();
+		} else
+			child._prepareRemove(n = []);
 
 		child.unbind();
 
