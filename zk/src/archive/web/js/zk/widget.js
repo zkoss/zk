@@ -14,6 +14,8 @@ it will be useful, but WITHOUT ANY WARRANTY.
 */
 (function () {
 	var _binds = {}, //{uuid, wgt}: bind but no node
+		_fixBindMem = zk.$void, //fix IE memory leak
+		_bindcnt = 0,
 		_floatings = [], //[{widget,node}]
 		_nextUuid = 0,
 		_globals = {}, //global ID space {id, wgt}
@@ -28,6 +30,15 @@ it will be useful, but WITHOUT ANY WARRANTY.
 				if ((w.style||{}).display == 'none')
 					return true;
 	}
+
+	//IE doesn't free _binds (when delete _binds[x]); so clean it up
+	if (zk.ie)
+		_fixBindMem = function () {	
+			if (++_bindcnt > 2000) {
+				_bindcnt = 0;
+				_binds = zk.copy({}, _binds);
+			}
+		};
 
 	//Event Handling//
 	function _cloneEvt(evt, target) {
@@ -1309,6 +1320,7 @@ zk.Widget = zk.$extends(zk.Object, {
 
 	unbind_: function (skipper, after) {
 		delete _binds[this.uuid];
+		_fixBindMem();
 
 		this._node = this.desktop = null;
 		this._subnodes = {};
