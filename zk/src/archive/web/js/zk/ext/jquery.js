@@ -2180,6 +2180,7 @@ if ( document.documentElement.compareDocumentPosition ) {
 
 //Tom Yeh, Potix, 20090925: avoid memory leak
 	jQuery.zrm(form);
+	form = null;
 	//root.removeChild( form );
 })();
 
@@ -2221,6 +2222,9 @@ if ( document.documentElement.compareDocumentPosition ) {
 			return elem.getAttribute("href", 2);
 		};
 	}
+//Tom Yeh, Potix, 20090925: avoid memory leak
+	jQuery.zrm(div);
+	div = null;
 })();
 
 if ( document.querySelectorAll ) (function(){
@@ -2230,8 +2234,14 @@ if ( document.querySelectorAll ) (function(){
 	// Safari can't handle uppercase or unicode characters when
 	// in quirks mode.
 	if ( div.querySelectorAll && div.querySelectorAll(".TEST").length === 0 ) {
+//Tom Yeh, Potix, 20090925: avoid memory leak
+		jQuery.zrm(div);
+		div = null;
 		return;
 	}
+//Tom Yeh, Potix, 20090925: avoid memory leak
+	jQuery.zrm(div);
+	div = null;
 	
 	Sizzle = function(query, context, extra, seed){
 		context = context || document;
@@ -2258,14 +2268,25 @@ if ( document.getElementsByClassName && document.documentElement.getElementsByCl
 	div.innerHTML = "<div class='test e'></div><div class='test'></div>";
 
 	// Opera can't find a second classname (in 9.6)
-	if ( div.getElementsByClassName("e").length === 0 )
+	if ( div.getElementsByClassName("e").length === 0 ) {
+//Tom Yeh, Potix, 20090925: avoid memory leak
+		jQuery.zrm(div);
+		div = null;
 		return;
+	}
 
 	// Safari caches class attributes, doesn't catch changes (in 3.2)
 	div.lastChild.className = "e";
 
-	if ( div.getElementsByClassName("e").length === 1 )
+	if ( div.getElementsByClassName("e").length === 1 ) {
+//Tom Yeh, Potix, 20090925: avoid memory leak
+		jQuery.zrm(div);
+		div = null;
 		return;
+	}
+//Tom Yeh, Potix, 20090925: avoid memory leak
+	jQuery.zrm(div);
+	div = null;
 
 	Expr.order.splice(1, 0, "CLASS");
 	Expr.find.CLASS = function(match, context, isXML) {
@@ -3151,6 +3172,9 @@ jQuery( window ).bind( 'unload', function(){
 
 	// Can't get basic test support
 	if ( !all || !all.length || !a ) {
+//Tom Yeh, Potix, 20090925: avoid memory leak
+		jQuery.zrm(div);
+		root = all = a = div = script = null;
 		return;
 	}
 
@@ -3221,10 +3245,11 @@ jQuery( window ).bind( 'unload', function(){
 		var d;
 		(d = div.cloneNode(true)).fireEvent("onclick");
 		jQuery.zrm(d);
+		d = null
 	}
 //Tom Yeh, Potix, 20090925: avoid memory leak
 	jQuery.zrm(div);
-	div = script = null;
+	root = all = a = div = script = null;
 })();
 	// Figure out if the W3C box model works as expected
 	// document.body must exist before we can do this
@@ -3237,6 +3262,7 @@ jQuery( window ).bind( 'unload', function(){
 //Tom Yeh, Potix, 20090925: avoid memory leak
 		jQuery.zrm(div);
 		div.style.display = 'none';
+		div = null;
 //		document.body.removeChild( div ).style.display = 'none';
 	});
 //Tom Yeh, Potix, 20090925
