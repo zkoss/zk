@@ -19,7 +19,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 -->
 <window>
 	<vbox>
-	<div>Welcome to <toolbarbutton href="userguide/" label="ZK Demo"/>.</div>
-	<div><toolbarbutton href="http://www.zkoss.org" label="ZK"/> is up and running.</div>
+	<div>Welcome to <a href="userguide/" label="ZK Demo"/>.</div>
+	<div><a href="http://www.zkoss.org" label="ZK"/> is up and running.</div>
 	</vbox>
 </window>

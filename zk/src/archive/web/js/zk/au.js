@@ -619,7 +619,7 @@ zAu.cmd0 = { //no uuid at all
 		document.title = dt0;
 	},
 	script: function (dt0) {
-		jq.globalEval(dt0);
+		$eval(dt0);
 	},
 	echo: function (dtid) {
 		zAu.send(new zk.Event(zk.Desktop.$(dtid), "dummy", null, {ignorable: true}));
@@ -729,7 +729,7 @@ zAu.cmd1 = {
 			wgt._replaceWgt(newwgt);
 		};
 		zk.mounting = true;
-		jq.globalEval(code);
+		$eval(code);
 	},
 	addAft: function (uuid, wgt, code, pgid) {
 		//Bug 1939059: This is a dirty fix. Refer to AuInsertBefore
@@ -740,7 +740,7 @@ zAu.cmd1 = {
 			else {
 				zAu.stub = zAu.cmd1._asBodyChild;
 				zk.mounting = true;
-				jq.globalEval(code);
+				$eval(code);
 			}
 			return;
 		}
@@ -754,7 +754,7 @@ zAu.cmd1 = {
 			zWatch.fireDown('onSize', child);
 		};
 		zk.mounting = true;
-		jq.globalEval(code);
+		$eval(code);
 	},
 	addBfr: function (uuid, wgt, code) {
 		zAu.stub = function (child) {
@@ -763,7 +763,7 @@ zAu.cmd1 = {
 			zWatch.fireDown('onSize', child);
 		};
 		zk.mounting = true;
-		jq.globalEval(code);
+		$eval(code);
 	},
 	addChd: function (uuid, wgt, code) {
 		zAu.stub = function (child) {
@@ -772,7 +772,7 @@ zAu.cmd1 = {
 			zWatch.fireDown('onSize', child);
 		};
 		zk.mounting = true;
-		jq.globalEval(code);
+		$eval(code);
 	},
 	_asBodyChild: function (child) {
 		jq(document.body).append(child);

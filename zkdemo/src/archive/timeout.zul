@@ -22,7 +22,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 The page or component you request is no longer available.
 This is normally caused by timeout, opening too many Web pages, or rebooting
 the server.
-	<div style="margin-top: 10px">Continue cruising <toolbarbutton href="userguide" label="ZK Demo"/>
-	or <toolbarbutton href="http://www.zkoss.org" label="ZK Home"/>.</div>
+	<div style="margin-top: 10px">Continue cruising <a href="userguide" label="ZK Demo"/>
+	or <a href="http://www.zkoss.org" label="ZK Home"/>.</div>
 	</vbox>
 </window>

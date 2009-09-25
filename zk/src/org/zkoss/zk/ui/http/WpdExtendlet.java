@@ -136,7 +136,10 @@ public class WpdExtendlet extends AbstractExtendlet {
 		if (zk) {
 			write(out, "//ZK, Copyright 2009 Potix Corporation. Distributed under LGPL 3.0\n"
 				+ "//jQuery, Copyright 2009 John Resig\n"
-				+ "if(!window.zk){");//may be loaded multiple times because specified in lang.xml
+				+ "function $eval(s){return eval(s);}"
+					//jq.globalEval() seems have memory leak problem, so use eval()
+				+ "if(!window.zk){");
+					//may be loaded multiple times because specified in lang.xml
 		} else if (!aaas) {
 			depends = root.getAttributeValue("depends");
 			if (depends != null && depends.length() == 0)

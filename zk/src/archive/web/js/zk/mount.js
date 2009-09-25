@@ -301,7 +301,7 @@ function zkamn(pkg, fn) { //for Ajax-as-a-service's main
 			zk.load(pkgs);
 		}
 
-		for (var children = w.children, len = children.length, j = 0; j < len;++j)
+		for (var children = w.children, j = children.length; j--;)
 			pkgLoad(children[j]);
 	}
 
