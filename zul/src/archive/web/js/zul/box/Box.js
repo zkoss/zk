@@ -133,21 +133,29 @@ zul.box.Box = zk.$extends(zul.Widget, {
 		for (var j = 0, len = oo.length; j < len; ++j)
 			out.push(oo[j]);
 	},
-	_getBoxSize: function () {
+	_resetBoxSize: function () {
 		var	vert = this.isVertical(),
 			k = -1,
 			szes = this._sizes;
-		for (var kid = this.firstChild; kid; kid = kid.nextSibling) {
-			if (szes && !kid.$instanceof(zul.box.Splitter) && !kid.$instanceof(zul.wgt.Cell))
-				++k;
-			if (vert && kid._nvflex) {
-				kid.setFlexSize_({height:''});
-				var chdex = kid.$n('chdex');
-				if (chdex) chdex.style.height = szes && k < szes.length ? szes[k] : '';
-			} else if (!vert && kid._nhflex) {
-				kid.setFlexSize_({width:''});
-				var chdex = kid.$n('chdex');
-				if (chdex) chdex.style.width = szes && k < szes.length ? szes[k] : '';
+		if (vert) {
+			for (var kid = this.firstChild; kid; kid = kid.nextSibling) {
+				if (szes && !kid.$instanceof(zul.box.Splitter) && !kid.$instanceof(zul.wgt.Cell))
+					++k;
+				if (kid._nvflex) {
+					kid.setFlexSize_({height:''});
+					var chdex = kid.$n('chdex');
+					if (chdex) chdex.style.height = szes && k < szes.length ? szes[k] : '';
+				}
+			}
+		} else {
+			for (var kid = this.firstChild; kid; kid = kid.nextSibling) {
+				if (szes && !kid.$instanceof(zul.box.Splitter) && !kid.$instanceof(zul.wgt.Cell))
+					++k;
+				if (kid._nhflex) {
+					kid.setFlexSize_({width:''});
+					var chdex = kid.$n('chdex');
+					if (chdex) chdex.style.width = szes && k < szes.length ? szes[k] : '';
+				}
 			}
 		}
 		var p = this.$n(),
@@ -169,7 +177,7 @@ zul.box.Box = zk.$extends(zul.Widget, {
 			hflexsz = !vert ? 0 : 1,
 			p = child.$n('chdex').parentNode,
 			zkp = zk(p),
-			psz = this._getBoxSize(),
+			psz = this._resetBoxSize(),
 			hgh = psz.height,
 			wdh = psz.width,
 			xc = p.firstChild,

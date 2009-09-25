@@ -17,8 +17,10 @@ zul.inp.Doublebox = zk.$extends(zul.inp.FormatWidget, {
 		if (!value) return null;
 
 		var info = zNumFormat.unformat(this._format, value),
-			val = parseFloat(info.raw);
-		if (info.raw != ''+val && info.raw != '+'+val && info.raw.indexOf('e') < 0) //unable to handle 1e2
+			val = parseFloat(info.raw),
+			len = info.raw.length;
+			rawcc = info.raw.substring(len-1, len);
+		if (info.raw != ''+val+(rawcc == '.' ? rawcc : '') && info.raw != '+'+val && info.raw.indexOf('e') < 0) //unable to handle 1e2
 			return {error: zMsgFormat.format(msgzul.NUMBER_REQUIRED, value)};
 
 		if (info.divscale) val = val / Math.pow(10, info.divscale);

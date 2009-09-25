@@ -106,7 +106,7 @@ September, 2009
 	by server side, if no error at client.
   + The meaning of hbox/vbox pack property is changed to follow XUL's spec. That is, "start" means 
     extra space is placed on the right/bottom side of the hbox/vbox, "center" means extra space is 
-	splitted equally and placed on two sides(left and right/top and bottom of the hbox/vbox), 
+	split equally and placed on two sides(left and right/top and bottom of the hbox/vbox), 
 	"end" means extra space is placed on the left/top of the hbox/vbox. If you would like the 
 	hbox/vbox behaves just like in old version, you can add a "stretch" option on pack property to 
 	make it backward compatible. i.e. "stretch,start", "stretch,center", or "stretch,end".
