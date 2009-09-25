@@ -197,6 +197,7 @@ def alert(m):
 		<component-name>a</component-name>
 		<component-class>org.zkoss.zul.A</component-class>
 		<widget-class>zul.wgt.A</widget-class>
+		<text-as>label</text-as><!-- treat text within the element as the label property -->
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/a.js</mold-uri>
@@ -284,6 +285,7 @@ def alert(m):
 		<component-name>button</component-name>
 		<component-class>org.zkoss.zul.Button</component-class>
 		<widget-class>zul.wgt.Button</widget-class>
+		<text-as>label</text-as><!-- treat text within the element as the label property -->
 		<mold>
 			<mold-name>default</mold-name>
 			<mold-uri>mold/button-os.js</mold-uri>
