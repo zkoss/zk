@@ -617,7 +617,7 @@ var	exclude = /z-?index|font-?weight|opacity|zoom|line-?height/i,
 
 jQuery.extend({
 	//Tom Yeh, Potix, 20090923, remove overrideable
-	_zrm: function (el) {
+	zrm: function (el) {
 		if (el.parentNode)
 			el.parentNode.removeChild( el );
 	},
@@ -865,7 +865,7 @@ jQuery.extend({
 				return [ context.createElement( match[1] ) ];
 		}
 
-		var ret = [], scripts = [], div = context.createElement("div");
+		var ret = [], scripts = [], divp = context.createElement("div"), div; //Tom Yeh, 20090924: bug fix: div is temp
 
 		jQuery.each(elems, function(i, elem){
 			if ( typeof elem === "number" )
@@ -914,7 +914,7 @@ jQuery.extend({
 					[ 0, "", "" ];
 
 				// Go to html and back, then peel off extra wrappers
-				div.innerHTML = wrap[1] + elem + wrap[2];
+				(div = divp).innerHTML = wrap[1] + elem + wrap[2]; //Tom Yeh, 20090924: div is temp
 
 				// Move to the right depth
 				while ( wrap[0]-- )
@@ -935,15 +935,21 @@ jQuery.extend({
 
 					for ( var j = tbody.length - 1; j >= 0 ; --j )
 						if ( jQuery.nodeName( tbody[ j ], "tbody" ) && !tbody[ j ].childNodes.length )
-							tbody[ j ].parentNode.removeChild( tbody[ j ] );
+//Tom Yeh, Potix, 20090924: avoid memory leak
+							jQuery.zrm(tbody[j]);
+//							tbody[ j ].parentNode.removeChild( tbody[ j ] );
 
 					}
 
 				// IE completely kills leading whitespace when innerHTML is used
 				if ( !jQuery.support.leadingWhitespace && /^\s/.test( elem ) )
 					div.insertBefore( context.createTextNode( elem.match(/^\s*/)[0] ), div.firstChild );
-				
-				elem = jQuery.makeArray( div.childNodes );
+//Tom Yeh, Potix, 20090924: avoid memory leak
+				elem = [];
+				var c;
+				while (c = div.firstChild)
+					elem.push(div.removeChild(c));
+//				elem = jQuery.makeArray( div.childNodes );
 			}
 
 			if ( elem.nodeType )
@@ -952,6 +958,12 @@ jQuery.extend({
 				ret = jQuery.merge( ret, elem );
 
 		});
+
+//Tom Yeh, Potix, 20090924: avoid memory leak
+		if (divp) {
+			jQuery.zrm(divp);
+			divp = div = null;
+		}
 
 		if ( fragment ) {
 			for ( var i = 0; ret[i]; i++ ) {
@@ -1251,7 +1263,7 @@ jQuery.each({
 			});
 			//Tom Yeh, Potix, 20090923, remove overrideable
 			//when upgrade jquery, check if jquery has fixed it
-			jQuery._zrm(this);
+			jQuery.zrm(this);
 //			if (this.parentNode)
 //				this.parentNode.removeChild( this );
 		}
@@ -1264,7 +1276,7 @@ jQuery.each({
 		// Remove any remaining nodes
 		while ( this.firstChild )
 			//Tom Yeh, Potix, 20090923, remove overrideable
-			jQuery._zrm(this.firstChild);
+			jQuery.zrm(this.firstChild);
 //			this.removeChild( this.firstChild );
 	}
 }, function(name, fn){
@@ -2166,7 +2178,9 @@ if ( document.documentElement.compareDocumentPosition ) {
 		};
 	}
 
-	root.removeChild( form );
+//Tom Yeh, Potix, 20090925: avoid memory leak
+	jQuery.zrm(form);
+	//root.removeChild( form );
 })();
 
 (function(){
@@ -3203,9 +3217,15 @@ jQuery( window ).bind( 'unload', function(){
 			jQuery.support.noCloneEvent = false;
 			div.detachEvent("onclick", arguments.callee);
 		});
-		div.cloneNode(true).fireEvent("onclick");
+//Tom Yeh, Potix, 20090925: avoid memory leak
+		var d;
+		(d = div.cloneNode(true)).fireEvent("onclick");
+		jQuery.zrm(d);
 	}
-
+//Tom Yeh, Potix, 20090925: avoid memory leak
+	jQuery.zrm(div);
+	div = script = null;
+})();
 	// Figure out if the W3C box model works as expected
 	// document.body must exist before we can do this
 	jQuery(function(){
@@ -3214,9 +3234,13 @@ jQuery( window ).bind( 'unload', function(){
 
 		document.body.appendChild( div );
 		jQuery.boxModel = jQuery.support.boxModel = div.offsetWidth === 2;
-		document.body.removeChild( div ).style.display = 'none';
+//Tom Yeh, Potix, 20090925: avoid memory leak
+		jQuery.zrm(div);
+		div.style.display = 'none';
+//		document.body.removeChild( div ).style.display = 'none';
 	});
-})();
+//Tom Yeh, Potix, 20090925
+//})();
 
 var styleFloat = jQuery.support.cssFloat ? "cssFloat" : "styleFloat";
 
@@ -4257,7 +4281,9 @@ jQuery.offset = {
 		this.doesNotIncludeMarginInBodyOffset = (body.offsetTop === 0);
 		body.style.marginTop = bodyMarginTop;
 
-		body.removeChild(container);
+//Tom Yeh, Potix, 20090925: avoid memeory leak
+		jQuery.zrm(container);
+//		body.removeChild(container);
 		this.initialized = true;
 	},
 

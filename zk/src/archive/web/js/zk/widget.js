@@ -1131,7 +1131,7 @@ zk.Widget = zk.$extends(zk.Object, {
 		else {
 			var oldwgt = zk.Widget.$(n, {exact:true});
 			if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
-			jq(n).replaceWith(this._redrawHTML(skipper));
+			jq(n).replaceWith(this._redrawHTML(skipper, true));
 			this.bind(desktop, skipper);
 		}
 
@@ -1143,10 +1143,10 @@ zk.Widget = zk.$extends(zk.Object, {
 		}
 		return this;
 	},
-	_redrawHTML: function (skipper) {
+	_redrawHTML: function (skipper, noprolog) {
 		var out = [];
 		this.redraw(out, skipper);
-		if (this.prolog && out[0] == this.prolog)
+		if (noprolog && this.prolog && out[0] == this.prolog)
 			out[0] = '';
 			//Don't generate this.prolog if it is the one to re-render;
 			//otherwise, prolog will be generated twice if invalidated
@@ -1178,7 +1178,7 @@ zk.Widget = zk.$extends(zk.Object, {
 	replaceChildHTML_: function (child, n, desktop, skipper) {
 		var oldwgt = zk.Widget.$(n, {exact:true});
 		if (oldwgt) oldwgt.unbind(skipper); //unbind first (w/o removal)
-		jq(n).replaceWith(child._redrawHTML(skipper));
+		jq(n).replaceWith(child._redrawHTML(skipper, true));
 		child.bind(desktop, skipper);
 	},
 	insertChildHTML_: function (child, before, desktop) {
