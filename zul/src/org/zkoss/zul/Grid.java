@@ -1301,7 +1301,8 @@ public class Grid extends XulElement implements Paginated, org.zkoss.zul.api.Gri
 	throws java.io.IOException {
 		super.renderProperties(renderer);
 		
-		render(renderer, "oddRowSclass", getOddRowSclass());
+		if (_scOddRow != null )
+			render(renderer, "oddRowSclass", _scOddRow);
 		
 		if (isSizedByContent())
 			renderer.render("sizedByContent", true);
