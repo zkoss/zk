@@ -35,12 +35,6 @@ body {
 <%-- paragraphs --%>
 img {border: 0;}
 
-<%-- DSP --%>
-a.gamma {color: #000; text-decoration: none;}
-a.gamma:hover {color: #000; text-decoration: underline;}
-tr.gamma {background: #F4F4F4;}
-td.gamma {background: #F4F4F4;}
-
 <%-- ZK JavaScript debug box --%>
 div.z-error {
 	position:absolute; z-index:99000;

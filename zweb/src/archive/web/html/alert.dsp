@@ -25,7 +25,7 @@ Copyright (C) 2005 Potix Corporation. All Rights Reserved.
 <c:set var="arg" value="${param}" if="${empty arg}"/>
 <c:choose>
 <c:when test="${arg.px_alert_type=='error'}">
- <h:box color="red" caption="${c:l('error')}">
+ <h:box color="#f08080" caption="${c:l('error')}">
 <pre><c:out value="${arg.px_alert}"/></pre>
  </h:box>
 </c:when>
