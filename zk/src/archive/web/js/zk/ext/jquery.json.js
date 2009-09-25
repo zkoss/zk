@@ -212,9 +212,9 @@
 
             return str('', {'': value});
         };
-//Tom: don't use eval(s). Otherwise, it won't (and cann't) be compressed)
+//Tom: don't use eval(s) directly, since it won't (and cann't) be compressed)
 	$.evalJSON = function (s) {
-		return (new Function('return '+s))();
+		return $eval("(" + s + ")"); //return (new Function('return '+s))();
 	};
 //Tom//    }
 }(jQuery));
