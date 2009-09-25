@@ -45,6 +45,20 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 		jq(this.ftfaker).remove();
 		this.$supers('unbind_', arguments);
 	},
+	onChildAdded_: function (child) {
+		this.$supers('onChildAdded_', arguments);
+		if (this.desktop) {
+			if (this.parent._fixHeaders())
+				this.parent.onSize();
+		}
+	},
+	onChildRemove: function () {
+		this.$supers('onChildAdded_', arguments);
+		if (this.desktop) {
+			if (this.parent._fixHeaders())
+				this.parent.onSize();
+		}
+	},
 	beforeChildrenFlex_: function(hwgt) { //avoid unnecessary zk.Widget#_fixFlex()
 		return !this._inAfterChildrenFlex && !this.parent._flexRerender; 
 	},
