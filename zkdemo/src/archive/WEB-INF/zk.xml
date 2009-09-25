@@ -45,6 +45,14 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</log>
 	-->
 
+	<!-- Turn on the following if you want to use the trendy mold as default
+		for all buttons.
+	-->
+	<library-property>
+		<name>org.zkoss.zul.Button.mold</name>
+		<value>trendy</value>
+	</library-property>
+
 	<!-- Turn on the following if want to use the defer mode as the default,
 		which is compatible to 3.x
 	<library-property>
@@ -53,10 +61,11 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	</library-property>
 	-->
 
-	<!-- Turn on if you want to use language addons.	-->
+	<!-- Turn on if you want to use language addons.
 	<language-config>
 		<addon-uri>/WEB-INF/lang-addon.xml</addon-uri>
 	</language-config>
+	-->
 
 	<!-- Turn on if you want to ignore the consecutive click events,
 	if it happens too close to the previous one, or the server is still

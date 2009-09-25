@@ -5,7 +5,10 @@ September, 2009
   2817315: Support client-centric programming model
   2825713: EventQueue support application-level publish (by sever-push)
   2822404: Fileupload shall be a feature attachable to button, menuitem
+  2822395: Adds component for HTML A, rather than overuse toolbarbutton
   2787713: Button automatically disable itself after clicked
+  2848804: Readonly combobox supports selection by keystrokes
+  2866325: A simple way to change the default mold
   2815551: Include supports non-HTML content (by use of comment)
   2491275: ZHTML checkbox fire onCheck (in addition to onClick)
   2794752: Fisheye supports dynamic images
@@ -33,9 +36,7 @@ September, 2009
   2859159: A way to listen changes of attribute in session/execution/appplication
   2859867: forward="onX=" shall be shortcut of forward="onX=onX"
   2860482: A way to specify language for component definition (<?component?>)
-  2848804: Readonly combobox supports selection by keystrokes
   2861283: hbox/vbox pack attribute supports stretch option
-  2822395: Adds component for HTML A, rather than overuse toolbarbutton
   
 * Bugs
   1999145: Combobox with Width of 100% Overruns

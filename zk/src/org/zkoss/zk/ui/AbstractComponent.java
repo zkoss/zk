@@ -114,8 +114,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	private String _id;
 	private String _uuid;
 	private transient ComponentDefinition _def;
-	/** The mold (default: "default"). */
-	private String _mold = "default";
+	/** The mold. */
+	private String _mold;
 	/** The info of the ID space, or null if IdSpace is NOT implemented. */
 	private transient SpaceInfo _spaceInfo;
 	private transient SimpleScope _attrs;
@@ -181,6 +181,8 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	 * @since 3.0.7 (becomes public)
 	 */
 	public AbstractComponent() {
+		_mold = getDefaultMold(getClass());
+
 		final Execution exec = Executions.getCurrent();
 
 		final Object curInfo = ComponentsCtrl.getCurrentInfo();
@@ -1528,7 +1530,20 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	}
 
 	/** Returns the mold used to render this component.
-	 * Default: "default"
+	 * <p>Default: "default"
+	 * <p>Since 5.0, the default can be overriden by specify a library property.
+	 * For example, if the component's class name is org.zkoss.zul.Button,
+	 * then you can override the default mold by specifying the property
+	 * called "org.zkoss.zul.Button.mold" with the mold you want
+	 * in zk.xml. For example,
+<pre><code>&lt;library-property>
+  &lt;name>org.zkoss.zul.Button.mold&lt;/name>
+  &lt;value>trendy&lt;/value>
+&lt;/library-property></code></pre>
+	 * <p>Notice that it doesn't affect the deriving classes. If you want
+	 * to change the deriving class's default mold, you have to specify
+	 * them explicity in zk.xml, too.
+	 *
 	 */
 	public String getMold() {
 		return _mold;
@@ -2855,5 +2870,9 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			}
 		}
 		return null;
+	}
+
+	private static String getDefaultMold(Class klass) {
+		return Library.getProperty(klass.getName() + ".mold", "default");
 	}
 }
