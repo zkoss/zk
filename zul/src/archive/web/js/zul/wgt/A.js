@@ -41,7 +41,7 @@ zul.wgt.A = zk.$extends(zul.LabelImageWidget, {
 	// super//
 	getZclass: function(){
 		var zcls = this._zclass;
-		return zcls ? zcls : "z-anchor";
+		return zcls ? zcls : "z-a";
 	},
 
 	bind_: function(){

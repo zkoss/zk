@@ -24,7 +24,7 @@ import org.zkoss.zul.impl.LabelImageElement;
 
 /**
  * The same as HTML A tag.
- * <p>Default {@link #getZclass}: z-anchor.
+ * <p>Default {@link #getZclass}: z-a.
  * @author jumperchen
  * @since 5.0.0
  */
@@ -167,7 +167,7 @@ public class A extends LabelImageElement implements org.zkoss.zul.api.A {
 		return false;
 	}
 	public String getZclass() {
-		return _zclass != null ? _zclass: "z-anchor";
+		return _zclass != null ? _zclass: "z-a";
 	}
 
 	private class EncodedHref implements org.zkoss.zk.ui.util.DeferredValue {
