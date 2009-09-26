@@ -616,12 +616,6 @@ var	exclude = /z-?index|font-?weight|opacity|zoom|line-?height/i,
 	toString = Object.prototype.toString;
 
 jQuery.extend({
-	//Tom Yeh, Potix, 20090923, remove overrideable
-	zrm: function (el) {
-		if (el.parentNode)
-			el.parentNode.removeChild( el );
-	},
-
 	noConflict: function( deep ) {
 		window.$ = _$;
 
@@ -936,7 +930,7 @@ jQuery.extend({
 					for ( var j = tbody.length - 1; j >= 0 ; --j )
 						if ( jQuery.nodeName( tbody[ j ], "tbody" ) && !tbody[ j ].childNodes.length )
 //Tom Yeh, Potix, 20090924: avoid memory leak
-							jQuery.zrm(tbody[j]);
+							zrm(tbody[j]);
 //							tbody[ j ].parentNode.removeChild( tbody[ j ] );
 
 					}
@@ -961,7 +955,7 @@ jQuery.extend({
 
 //Tom Yeh, Potix, 20090924: avoid memory leak
 		if (divp) {
-			jQuery.zrm(divp);
+			zrm(divp);
 			divp = div = null;
 		}
 
@@ -1192,6 +1186,42 @@ jQuery.browser = {
 	mozilla: /mozilla/.test( userAgent ) && !/(compatible|webkit)/.test( userAgent )
 };
 
+//Tom Yeh, Potix, 20090923, remove overrideable
+//refer http://kossovsky.net/index.php/2009/07/ie-memory-leak-jquery-garbage-collector/
+var zrm = function (el) {
+		if (el.parentNode)
+			el.parentNode.removeChild(el);
+	}, _zrmgc, _zrm, _zrms;
+if (jQuery.browser.msie) {
+	_zrms = [];
+	_zrmgc = zrm;
+	zrm = function (el) {
+		if (document.body) {
+			var gcid = '_z_iegc';
+			_zrmgc = document.getElementById(gcid);
+			if (!_zrmgc) {
+				_zrmgc = document.createElement('div');
+				_zrmgc.id = gcid;
+				_zrmgc.style.display = 'none';
+				document.body.appendChild(_zrmgc);
+			}
+
+			zrm = _zrm;
+			for (var j = _zrms.length; j--;)
+				zrm(_zrms[j]);
+			_zrms = null;
+			return zrm(el);
+		}
+		_zrmgc(el);
+		_zrms.push(el);
+	};
+	_zrm =  function (el) {
+		_zrmgc.appendChild(el);
+		_zrmgc.innerHTML = "";
+	};	
+}
+	
+
 jQuery.each({
 	parent: function(elem){return elem.parentNode;},
 	parents: function(elem){return jQuery.dir(elem,"parentNode");},
@@ -1263,7 +1293,7 @@ jQuery.each({
 			});
 			//Tom Yeh, Potix, 20090923, remove overrideable
 			//when upgrade jquery, check if jquery has fixed it
-			jQuery.zrm(this);
+			zrm(this);
 //			if (this.parentNode)
 //				this.parentNode.removeChild( this );
 		}
@@ -1276,7 +1306,7 @@ jQuery.each({
 		// Remove any remaining nodes
 		while ( this.firstChild )
 			//Tom Yeh, Potix, 20090923, remove overrideable
-			jQuery.zrm(this.firstChild);
+			zrm(this.firstChild);
 //			this.removeChild( this.firstChild );
 	}
 }, function(name, fn){
@@ -2179,8 +2209,8 @@ if ( document.documentElement.compareDocumentPosition ) {
 	}
 
 //Tom Yeh, Potix, 20090925: avoid memory leak
-	jQuery.zrm(form);
-	form = null;
+	zrm(form);
+	root = form = null;
 	//root.removeChild( form );
 })();
 
@@ -2223,7 +2253,7 @@ if ( document.documentElement.compareDocumentPosition ) {
 		};
 	}
 //Tom Yeh, Potix, 20090925: avoid memory leak
-	jQuery.zrm(div);
+	zrm(div);
 	div = null;
 })();
 
@@ -2235,12 +2265,12 @@ if ( document.querySelectorAll ) (function(){
 	// in quirks mode.
 	if ( div.querySelectorAll && div.querySelectorAll(".TEST").length === 0 ) {
 //Tom Yeh, Potix, 20090925: avoid memory leak
-		jQuery.zrm(div);
+		zrm(div);
 		div = null;
 		return;
 	}
 //Tom Yeh, Potix, 20090925: avoid memory leak
-	jQuery.zrm(div);
+	zrm(div);
 	div = null;
 	
 	Sizzle = function(query, context, extra, seed){
@@ -2270,7 +2300,7 @@ if ( document.getElementsByClassName && document.documentElement.getElementsByCl
 	// Opera can't find a second classname (in 9.6)
 	if ( div.getElementsByClassName("e").length === 0 ) {
 //Tom Yeh, Potix, 20090925: avoid memory leak
-		jQuery.zrm(div);
+		zrm(div);
 		div = null;
 		return;
 	}
@@ -2280,12 +2310,12 @@ if ( document.getElementsByClassName && document.documentElement.getElementsByCl
 
 	if ( div.getElementsByClassName("e").length === 1 ) {
 //Tom Yeh, Potix, 20090925: avoid memory leak
-		jQuery.zrm(div);
+		zrm(div);
 		div = null;
 		return;
 	}
 //Tom Yeh, Potix, 20090925: avoid memory leak
-	jQuery.zrm(div);
+	zrm(div);
 	div = null;
 
 	Expr.order.splice(1, 0, "CLASS");
@@ -3154,6 +3184,9 @@ jQuery( window ).bind( 'unload', function(){
 		// Skip the window
 		if ( id != 1 && jQuery.cache[ id ].handle )
 			jQuery.event.remove( jQuery.cache[ id ].handle.elem );
+
+	//Tom Yeh, Potix, 20090925: avoid memory leak
+	_zrmgc = defaultView = null;
 }); 
 (function(){
 
@@ -3173,7 +3206,7 @@ jQuery( window ).bind( 'unload', function(){
 	// Can't get basic test support
 	if ( !all || !all.length || !a ) {
 //Tom Yeh, Potix, 20090925: avoid memory leak
-		jQuery.zrm(div);
+		zrm(div);
 		root = all = a = div = script = null;
 		return;
 	}
@@ -3244,11 +3277,11 @@ jQuery( window ).bind( 'unload', function(){
 //Tom Yeh, Potix, 20090925: avoid memory leak
 		var d;
 		(d = div.cloneNode(true)).fireEvent("onclick");
-		jQuery.zrm(d);
+		zrm(d);
 		d = null
 	}
 //Tom Yeh, Potix, 20090925: avoid memory leak
-	jQuery.zrm(div);
+	zrm(div);
 	root = all = a = div = script = null;
 })();
 	// Figure out if the W3C box model works as expected
@@ -3260,8 +3293,7 @@ jQuery( window ).bind( 'unload', function(){
 		document.body.appendChild( div );
 		jQuery.boxModel = jQuery.support.boxModel = div.offsetWidth === 2;
 //Tom Yeh, Potix, 20090925: avoid memory leak
-		jQuery.zrm(div);
-		div.style.display = 'none';
+		zrm(div);
 		div = null;
 //		document.body.removeChild( div ).style.display = 'none';
 	});
@@ -4308,7 +4340,7 @@ jQuery.offset = {
 		body.style.marginTop = bodyMarginTop;
 
 //Tom Yeh, Potix, 20090925: avoid memeory leak
-		jQuery.zrm(container);
+		zrm(container);
 //		body.removeChild(container);
 		this.initialized = true;
 	},

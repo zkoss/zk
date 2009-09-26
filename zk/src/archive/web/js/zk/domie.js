@@ -124,18 +124,3 @@ zk.override(jq.event, zjq._evt = {}, {
 		return evt;
 	}
 });
-
-jq.zrm = function (el) { //override remove (see jquery.js)
-	//refer http://kossovsky.net/index.php/2009/07/ie-memory-leak-jquery-garbage-collector/
-	var gcid = '_z_lkgc',
-		gc = document.getElementById(gcid);
-	if (!gc) {
-		gc = document.createElement('div');
-		gc.id = gcid;
-		gc.style.display = 'none';
-		document.body.appendChild(gc);
-	}
-	
-	gc.appendChild(el);
-	gc.innerHTML = '';
-};
