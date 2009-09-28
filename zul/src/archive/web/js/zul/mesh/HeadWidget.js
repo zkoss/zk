@@ -52,8 +52,8 @@ zul.mesh.HeadWidget = zk.$extends(zul.Widget, {
 				this.parent.onSize();
 		}
 	},
-	onChildRemove: function () {
-		this.$supers('onChildRemove', arguments);
+	onChildRemoved_: function () {
+		this.$supers('onChildRemoved_', arguments);
 		if (this.desktop) {
 			if (this.parent._fixHeaders())
 				this.parent.onSize();
