@@ -114,7 +114,10 @@ zul.Upload = zk.$extends(zk.Object, {
 				+ (upload.isNative ? '&native=true' : ''),
 			form = n.form;
 		form.action = action;
-		jq(form.parentNode).remove();
+		
+		// we don't use jq().remove() in this case, because we have to use its reference.
+		var p = form.parentNode;
+		p.parentNode.removeChild(p);
 		n._ctrl._start(form, n.value);		
 	},
 	error: function (msg, uuid, sid) {

@@ -43,7 +43,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	
 	<audio id="audio" height="40" />
 	<separator />
-	<fileupload id="fileupload"/>
+	<fileupload id="fileupload" label="Upload"/>
 	<separator />
 	<button label="Play">
 	<attribute name="onClick">{
