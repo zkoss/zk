@@ -121,10 +121,10 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	mkdir -p /tmp/zk/$srcnm/dist/src
 	mkdir -p /tmp/zk/$srcnm/doc
 	chmod -R 755 $maindir
-	echo Prepare ${srcnm}.tar.gz
+	echo Prepare ${srcnm}.zip
 	
 	if [ "$target" == "official" ] ; then
-		echo ${profsrcnm}.tar.gz ${entsrcnm}.tar.gz
+		echo Prepare ${profsrcnm}.zip ${entsrcnm}.zip
 		mkdir -p /tmp/zk/$profsrcnm/dist/src
 		mkdir -p /tmp/zk/$profsrcnm/doc
 		mkdir -p /tmp/zk/$entsrcnm/dist/src
@@ -151,10 +151,10 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	fi
 	
 	cp zkdoc/COPYING zkdoc/release-note zkdoc/how-to-build-zk /tmp/zk/$srcnm/doc
-	
+		
 	if [ "$target" == "official" ] ; then
-		cp cmldoc/license.txt zkdoc/release-note zkdoc/how-to-build-zk /tmp/zk/$profsrcnm/doc
-		cp cmldoc/license.txt zkdoc/release-note zkdoc/how-to-build-zk /tmp/zk/$entsrcnm/doc
+		cp cmldoc/LICENSE zkdoc/release-note zkdoc/how-to-build-zk /tmp/zk/$profsrcnm/doc
+		cp cmldoc/LICENSE zkdoc/release-note zkdoc/how-to-build-zk /tmp/zk/$entsrcnm/doc
 	fi
 	
 	cd /tmp/zk/$srcnm
@@ -245,16 +245,16 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 		find ! -name "zkex-sources.jar" ! -name "zml-sources.jar" |xargs  -i  cp {} /tmp/zk/$srcnm/dist/src
 		
 		cd /tmp/zk
-		echo Output ${srcnm}.tar.gz ${profsrcnm}.tar.gz ${entsrcnm}.tar.gz
-		tar zcf ${srcnm}.tar.gz $srcnm
-		tar zcf ${profsrcnm}.tar.gz $profsrcnm
-		tar zcf ${entsrcnm}.tar.gz $entsrcnm
+		echo Output ${srcnm}.zip ${profsrcnm}.zip ${entsrcnm}.zip
+		zip -qr9 ${srcnm}.zip $srcnm
+		zip -qr9 ${profsrcnm}.zip $profsrcnm
+		zip -qr9 ${entsrcnm}.zip $entsrcnm
 	else
 		mv -f /tmp/zk/*-sources.jar /tmp/zk/$srcnm/dist/src
 		
 		cd /tmp/zk
-		echo Output ${srcnm}.tar.gz
-		tar zcf ${srcnm}.tar.gz $srcnm
+		echo Output ${srcnm}.zip
+		zip -qr9 ${srcnm}.zip $srcnm
 	fi
 	
 	#Prepare the binary release
@@ -296,8 +296,8 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 		cp dist/lib/zkex.jar dist/lib/zkmax.jar dist/lib/zml.jar /tmp/zk/$binnm/dist/lib/
 	fi
 	cp dist/lib/fckez.jar dist/lib/gmapsz.jar /tmp/zk/$binnm/dist/lib/zkforge
-	cp dist/lib/timelinez.jar /tmp/zk/$binnm/dist/lib/zkforge
-	cp dist/lib/timeplotz.jar /tmp/zk/$binnm/dist/lib/zkforge
+	#cp dist/lib/timelinez.jar /tmp/zk/$binnm/dist/lib/zkforge
+	#cp dist/lib/timeplotz.jar /tmp/zk/$binnm/dist/lib/zkforge
 	chmod 644 /tmp/zk/$binnm/dist/lib/*.jar
 	chmod 644 /tmp/zk/$binnm/dist/lib/*/*.jar
 
@@ -306,14 +306,28 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	#cp -rp zul/src/archive/web/WEB-INF/tld/zul /tmp/zk/$binnm/dist/WEB-INF/tld
 
 	cp zul/src/archive/metainfo/xml/*.xsd /tmp/zk/$binnm/dist/xsd
-	cp zkdoc/release-note zkdoc/COPYING /tmp/zk/$binnm/doc
+	cp zkdoc/release-note /tmp/zk/$binnm/doc
+	
+	if [ "$target" == "daily" ] ; then
+		cp zkdoc/COPYING /tmp/zk/$binnm/doc
+	fi
+	
 	chmod 644 /tmp/zk/$binnm/dist/xsd/*.xsd /tmp/zk/$binnm/doc/release-note /tmp/zk/$binnm/doc/COPYING
 
 	if [ "$target" == "official" ] ; then
-		cp cmldoc/license.txt /tmp/zk/$binnm/doc
-		chmod 644  /tmp/zk/$binnm/doc/license.txt
+		cp cmldoc/LICENSE /tmp/zk/$binnm/doc
+		chmod 644  /tmp/zk/$binnm/doc/LICENSE
 	fi
-	
+
+	cd $maindir/zkdoc
+	for f in */ZK-quickstart*.pdf ; do  
+		fn=${f%.pdf}
+		cp $f /tmp/zk/$binnm/doc/${fn#**/}-$ver.pdf
+	done
+
+	cd /tmp/zk/$binnm/doc
+	find -name .svn | xargs rm -rf
+		
 	cd /tmp/zk/$binnm/dist/WEB-INF/tld
 	find -name .svn | xargs rm -rf
 
@@ -393,7 +407,7 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	
 		#Ouput ${profnm}
 		cd $binnm/dist/lib/ext
-		rm -rf js.jar groovy.jar jruby.jar jython.jar mvel.jar ognl.jar
+		rm -rf mvel.jar ognl.jar
 
 		cd ..
 		rm zkmax.jar
@@ -405,10 +419,9 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 
 		mv $binnm $profnm
 		
-		if [ "$target" == "official" ] ; then
-			echo Output ${profnm}.tar.gz
-			tar zcf ${profnm}.tar.gz $profnm
-		fi
+		echo Output ${profnm}.tar.gz
+		tar zcf ${profnm}.tar.gz $profnm
+		
 		echo Output ${profnm}.zip
 		zip -qr9 ${profnm}.zip $profnm
 
@@ -422,19 +435,20 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 		rm zkex.jar
 
 		cd zkforge
-		rm fckez.jar
 		rm timelinez.jar
 		rm timeplotz.jar
 
 		cd /tmp/zk
 		
-		rm $profnm/doc/license.txt
+		rm $profnm/doc/LICENSE
 		
 		mv $profnm $stdnm
-		if [ "$target" == "official" ] ; then
-			echo Output ${stdnm}.tar.gz
-			tar zcf ${stdnm}.tar.gz $stdnm
-		fi
+		
+		cp $maindir/zkdoc/COPYING /tmp/zk/$stdnm/doc
+		
+		echo Output ${stdnm}.tar.gz
+		tar zcf ${stdnm}.tar.gz $stdnm
+		
 		echo Output ${stdnm}.zip
 		zip -qr9 ${stdnm}.zip $stdnm
 		
@@ -442,7 +456,6 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	fi
 
 	rm -rf $binnm
-
 
 	#Prepare the java doc
 	cd $javadocdir
@@ -462,10 +475,22 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	#cp -rp zkdemo/codegen/archive/* /tmp/zk/$demonm/zkdemo/WebContent
 	cp -rp zkdemo/src/org/* /tmp/zk/$demonm/zkdemo/src/org
 	cp -rp MyApp/src/archive/* /tmp/zk/$demonm/MyApp/WebContent
-	cp zkdoc/COPYING zkdoc/release-note /tmp/zk/$demonm/doc
+	cp cmldoc/LICENSE zkdoc/release-note /tmp/zk/$demonm/doc
 
 	cp dist/lib/zkdemo.war /tmp/zk/$demonm/zkdemo-min.war
 
+
+	cd zkdoc
+	for f in */ZK-quickstart*.pdf ; do  
+		fn=${f%.pdf}
+		cp $f /tmp/zk/$demonm/doc/${fn#**/}-$ver.pdf
+	done
+
+	cd /tmp/zk/$demonm/doc
+	find -name .svn | xargs rm -rf
+	
+	cd $maindir
+	
 	if [ "$target" == "official" ] ; then
 		mv dist/lib/zkdemos.ear /tmp/zk/$demonm/zkdemos-min.ear
 		mv dist/lib/zkdemos-all.ear /tmp/zk/$demonm/zkdemos.ear
@@ -479,70 +504,4 @@ if [ "$target" == "official" ] || [ "$target" == "daily" ] ; then
 	echo Output ${demonm}.zip
 	zip -qr9 ${demonm}.zip $demonm
 	rm -rf $demonm
-fi
-
-#Prepare the doc
-if [ "$target" == "official" ]; then
-	cd $maindir
-	$maindir/bin/javadoc "$javadocdir/ZK"
-	mkdir -p /tmp/zk/doc
-
-	cd $maindir/zkdoc
-	for f in */ZK-quickstart*.pdf ; do  
-		fn=${f%.pdf}
-		cp $f /tmp/zk/doc/${fn#**/}-$ver.pdf
-	done
-
-	cd /tmp/zk/doc
-	#cp -rP $htmldocdir/devref $htmldocdir/devguide $htmldocdir/devref-single $htmldocdir/devguide-single $htmldocdir/styleguide $htmldocdir/styleguide-single .
-	#cp -rP $htmldocdir/devref $htmldocdir/devguide $htmldocdir/devref-single $htmldocdir/devguide-single $htmldocdir/styleguide $htmldocdir/styleguide-single .
-	find -name .svn | xargs rm -rf
-
-	#echo Output zk-devref-$ver.zip
-	#mv devref zk-devref-$ver
-	#zip -qr9 zk-devref-$ver.zip zk-devref-$ver
-	#rm -rf zk-devref-$ver
-
-	#echo Output zk-devguide-$ver.zip
-	#mv devguide zk-devguide-$ver
-	#zip -qr9 zk-devguide-$ver.zip zk-devguide-$ver
-	#rm -rf zk-devguide-$ver
-
-	#echo Output zk-styleguide-$ver.zip
-	#mv styleguide zk-styleguide-$ver
-	#zip -qr9 zk-styleguide-$ver.zip zk-styleguide-$ver
-	#rm -rf zk-styleguide-$ver
-
-	#echo Output zk-devref-single-$ver.zip
-	#mv devref-single zk-devref-single-$ver
-	#zip -qr9 zk-devref-single-$ver.zip zk-devref-single-$ver
-	#rm -rf zk-devref-single-$ver
-
-	#echo Output zk-devguide-single-$ver.zip
-	#mv devguide-single zk-devguide-single-$ver
-	#zip -qr9 zk-devguide-single-$ver.zip zk-devguide-single-$ver
-	#rm -rf zk-devguide-single-$ver
-
-	#echo Output zk-styleguide-single-$ver.zip
-	#mv styleguide-single zk-styleguide-single-$ver
-	#zip -qr9 zk-styleguide-single-$ver.zip zk-styleguide-single-$ver
-	#rm -rf zk-styleguide-single-$ver
-elif [ "$target" == "daily" ]; then
-	mkdir -p /tmp/zk/$docnm
-	
-	#mkdir -p /tmp/zk/$docnm/devref
-	#mkdir -p /tmp/zk/$docnm/styleguide
-
-	cd $maindir
-	cp zkdoc/*/ZK-quickstart*.pdf /tmp/zk/$docnm
-	#cp -rp zkdoc/devguide/*.odt zkdoc/devguide/images /tmp/zk/$docnm/devguide
-	#cp -rp zkdoc/devref/*.odt zkdoc/devref/images /tmp/zk/$docnm/devref
-	#cp -rp zkdoc/styleguide/ZK-styleguide.pdf /tmp/zk/$docnm/styleguide
-	cp zkdoc/release-note zkdoc/COPYING /tmp/zk/$docnm
-	cd /tmp/zk
-	find -name .svn | xargs rm -rf
-
-	echo Ouput ${docnm}.zip
-	zip -qr9 ${docnm}.zip $docnm
-	rm -rf $docnm
 fi
