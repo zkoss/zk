@@ -2503,8 +2503,7 @@ public class Listbox extends XulElement implements Paginated, org.zkoss.zul.api.
 			if (_maxlength > 0)
 				renderer.render("maxlength", getMaxlength());
 		} else {
-			if (_scOddRow != null )
-				render(renderer, "oddRowSclass", _scOddRow);
+			render(renderer, "oddRowSclass", _scOddRow);
 
 			if (isSizedByContent())
 				renderer.render("sizedByContent", true);
