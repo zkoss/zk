@@ -536,6 +536,14 @@ public class DesktopImpl implements Desktop, DesktopCtrl, java.io.Serializable {
 				if (((AuService)it.next()).service(request, everError))
 					return; //done
 
+		final Component comp = request.getComponent();
+		if (comp != null) {
+			final AuService svc = comp.getAuService();
+			if (svc == null || !svc.service(request, everError))
+				((ComponentCtrl)comp).service(request, everError);
+			return; //done (it's comp's job to handle it)
+		}
+
 		final String cmd = request.getCommand();
 		if (Events.ON_BOOKMARK_CHANGE.equals(cmd)) {
 			BookmarkEvent evt = BookmarkEvent.getBookmarkEvent(request);

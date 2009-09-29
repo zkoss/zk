@@ -331,18 +331,6 @@ public class ComponentsCtrl {
 	/** A map of (Pair(Class,String evtnm), Method). */
 	private static Cache _evtmtds = new ThreadLocalCache();
 
-	/** Invokes the component to service the request.
-	 * <p>It first check {@link Component#getAuService}, and then
-	 * invoke {@link ComponentCtrl#service}.
-	 * @since 5.0.0
-	 */	
-	public static
-	void service(Component comp, AuRequest request, boolean everError) {
-		final AuService svc = comp.getAuService();
-		if (svc == null || !svc.service(request, everError))
-			((ComponentCtrl)comp).service(request, everError);
-	}
-
 	/** Represents a dummy definition. */
 	public static final ComponentDefinition DUMMY =
 	new ComponentDefinition() {

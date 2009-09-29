@@ -343,7 +343,7 @@ public interface ComponentCtrl {
 	/** Handles an AU request.
 	 *
 	 * <p>Notice: don't invoke this method directly. Rather, invoke
-	 * {@link ComponentsCtrl#service} instead.
+	 * {@link DesktopCtrl#service} instead.
 	 * This method is designed to be overriden.
 	 *
 	 * <p>To send reponses to the client, use

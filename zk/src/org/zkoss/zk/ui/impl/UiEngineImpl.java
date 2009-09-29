@@ -1205,12 +1205,7 @@ public class UiEngineImpl implements UiEngine {
 
 		final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 		execCtrl.setCurrentPage(request.getPage());
-		final Component comp = request.getComponent();
-		if (comp != null) {
-			ComponentsCtrl.service(comp, request, everError);
-		} else {
-			((DesktopCtrl)request.getDesktop()).service(request, everError);
-		}
+		((DesktopCtrl)request.getDesktop()).service(request, everError);
 	}
 	/** Processing the event and stores result into UiVisualizer. */
 	private void process(Desktop desktop, Event event) {

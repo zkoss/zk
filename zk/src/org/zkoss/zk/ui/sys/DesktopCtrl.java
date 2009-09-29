@@ -367,18 +367,31 @@ if (c.isEmpty()) {
 	public void deactivateServerPush();
 
 	/** Processes an AU request.
+	 * If {@link AuRequest#getComponent} is not nul
+	 * Notice that not only the requests for a deskop but also the requests
+	 * for any component in the deskop will go thru this method.
 	 *
-	 * <p>To override the default processing, register an AU request process
-	 * by invoking {@link Desktop#addListener}.
+	 * <p>To override the default processing, register an AU request service
+	 * {@link org.zkoss.zk.au.AuService} by invoking {@link Desktop#addListener}.
 	 *
-	 * <p>Default: it invokes the registered AU request processor
-	 * ({@link Desktop#addListener}) one-by-one, until
-	 * the first one returns true.
-	 * If none of them returns true, it handles special requests, including
-	 * onBookmarkChange, onURIChange and onClientInfo.
-	 * If the request is not one of above, it converts the request to
+	 * <ol>
+	 * <li>This method first invokes the registered AU request service
+	 * ({@link org.zkoss.zk.au.AuService}) one-by-one, until
+	 * the first one returns true.</li>
+	 * <li>If none of them returns true or no AU service at all,
+	 * it checks if the request is targeting a component
+	 * (i.e., {@link AuRequest#getComponent} is not null).</li>
+	 * <li>If it is targeting a component, it invokes
+	 * {@link ComponentCtrl#service} to handle the service.</li>
+	 * <li>If it is not targeting a component (i.e., targeting to
+	 * this desktop), it handles as follows.
+	 * <ul>
+	 * <li>It handles the recognized requests, including
+	 * onBookmarkChange, onURIChange and onClientInfo.</li>
+	 * <li>If the request is not one of above, it converts the request to
 	 * an event (by {@link Event#getEvent}) and then posts the event
-	 * (by {@link Events#postEvent}).
+	 * (by {@link Events#postEvent}).</li></ul></li>
+	 * </ol>
 	 *
 	 * <p>To send reponses to the client, use
 	 * {@link org.zkoss.zk.ui.AbstractComponent#smartUpdate},
