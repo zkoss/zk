@@ -189,9 +189,9 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 			var ul = this.$n('cave');
 			if (ul.childNodes.length) { // Bug 2784736
 				pp.style.width = ul.offsetWidth + zk(pp).padBorderWidth() + "px";
-				zWatch.unlisten({onResponse: this});
 			}
 		}
+		this.$supers('onResponse', arguments);
 	},
 	doKeyDown_: function (evt) {
 		var w = this._currentChild(),
