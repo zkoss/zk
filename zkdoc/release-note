@@ -122,6 +122,7 @@ October, 2009
   2817733: doModal degenerate to doHilighted if event thread disabled
   2836829: A way to disable the compress of DHtmlUpdateServlet
   2840108: Enhance popup, tooltip, and context can be shown by position
+  2870478: Chart shall support setting Font
 
 * Bugs
   2862085: IE 6,7,8 memory leak in modal dialog demo

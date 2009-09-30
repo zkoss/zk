@@ -103,7 +103,7 @@ public class DialModelScale implements Serializable {
 	 * @param text text annotation(subtitle) of this scale.
 	 */
 	public void setText(String text) {
-		if (Objects.equals(text, _text)) {
+		if (!Objects.equals(text, _text)) {
 			_text = text;
 			fireEvent(ChartDataEvent.CHANGED);
 		}
@@ -121,7 +121,7 @@ public class DialModelScale implements Serializable {
 	 * @param font the text annotation font.
 	 */
 	public void setTextFont(Font font) {
-		if (Objects.equals(font, _textFont)) {
+		if (!Objects.equals(font, _textFont)) {
 			_textFont = font;
 			fireEvent(ChartDataEvent.CHANGED);
 		}
@@ -159,7 +159,7 @@ public class DialModelScale implements Serializable {
 	 * @param font the value font.
 	 */
 	public void setValueFont(Font font) {
-		if (Objects.equals(font, _valueFont)) {
+		if (!Objects.equals(font, _valueFont)) {
 			_valueFont = font;
 			fireEvent(ChartDataEvent.CHANGED);
 		}
@@ -291,7 +291,7 @@ public class DialModelScale implements Serializable {
 	 * @param font the tick label font.
 	 */
 	public void setTickFont(Font font) {
-		if (Objects.equals(font, _tickFont)) {
+		if (!Objects.equals(font, _tickFont)) {
 			_tickFont = font;
 			fireEvent(ChartDataEvent.CHANGED);
 		}
