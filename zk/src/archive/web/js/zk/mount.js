@@ -408,7 +408,7 @@ jq(function() {
 		_reszInf.lastTime = now + 1000;
 			//ignore following for a while if processing (in slow machine)
 
-		zAu._onClientInfo();
+		if (!zk.light) zAu._onClientInfo();
 
 		_reszInf.inResize = true;
 		try {
@@ -432,7 +432,7 @@ jq(function() {
 		}
 
 		if (evt.keyCode == 27
-		&& (zk._noESC > 0 || zAu.shallIgnoreESC())) //Bug 1927788: prevent FF from closing connection
+		&& (zk._noESC > 0 || (!zk.light && zAu.shallIgnoreESC()))) //Bug 1927788: prevent FF from closing connection
 			return false; //eat
 	})
 	.keyup(function (evt) {
@@ -560,7 +560,7 @@ jq(function() {
 		//Good news: Opera preserves the most udpated content, when BACK to
 		//a cached page, its content. OTOH, IE/FF/Safari cannot.
 		//Note: Safari won't send rmDesktop when onunload is called
-		var bRmDesktop = !zk.opera && !zk.keepDesktop;
+		var bRmDesktop = !zk.opera && !zk.keepDesktop && !zk.light;
 		if (bRmDesktop || zk.pfmeter) {
 			try {
 				var dts = zk.Desktop.all;

@@ -115,8 +115,9 @@ zk.copy(zk, (function() {
 		_xloadings.$remove(pkg);
 		_loading[pkg] = true;
 
-		if (wait) _loadedsemis.push(pkg);
-		else {
+		if (wait) {
+			if (!_loaded[pkg]) _loadedsemis.push(pkg);
+		} else {
 			_loadedsemis.$remove(pkg);
 			_loaded[pkg] = true;
 
@@ -214,11 +215,7 @@ zk.copy(zk, (function() {
 				(front ? _afterLoadFronts: _afterLoads).push(a);
 				return false;
 			}
-			if (!jq.isReady) {
-				jq(a);
-				return false;
-			}
-			a();
+			a(); //note: we cannot use jq(a); otherwise, user cannot use it embedded script (test: zk light's helloword.html)
 			return true;
 		}
 	},

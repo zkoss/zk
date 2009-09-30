@@ -213,9 +213,11 @@ public class Lighter {
 			String s = (String)ci.vars.get(cnt);
 			if (s != null)
 				out.write(s);
-			else if (isFormula(cnt)) //formula
+			else if (isFormula(cnt)) { //formula
 				out.write('?'); //mark error
-			else
+				out.write(cnt);
+				out.write('?');
+			} else
 				throw new IOException(ci.message("Unknown EL, ${"+ cnt+"}"));
 			return;
 		}
@@ -260,7 +262,7 @@ public class Lighter {
 		} else if ("choose".equals(nm) || "when".equals(nm) || "otherwise".equals(nm)
 		|| "if".equals(nm) || "set".equals(nm)) {
 			out.write("//?");
-			out.write(nm);
+			out.write(cnt);
 		} else
 			throw new IOException(ci.message("Unknown <c:"+nm));
 	}
