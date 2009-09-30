@@ -177,7 +177,7 @@ zul.Widget = zk.$extends(zk.Widget, {
 					xy = params.x !== undefined ? [params.x, params.y]
 							: [evt.pageX, evt.pageY];
 				setTimeout(function() {
-					ctx.open(self, xy, params.position ? params.position : null, {sendOnOpen:true});
+					ctx.open(self, xy, params.position ? params.position : null, {sendOnOpen:true}); //Bug #2870620
 				}, 0);
 				evt.stop(); //prevent default context menu to appear
 			}

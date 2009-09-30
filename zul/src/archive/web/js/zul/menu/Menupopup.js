@@ -191,7 +191,7 @@ zul.menu.Menupopup = zk.$extends(zul.wgt.Popup, {
 				pp.style.width = ul.offsetWidth + zk(pp).padBorderWidth() + "px";
 			}
 		}
-		this.$supers('onResponse', arguments);
+		this.$supers('onResponse', arguments); //Bug #2870616
 	},
 	doKeyDown_: function (evt) {
 		var w = this._currentChild(),
