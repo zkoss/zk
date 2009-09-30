@@ -142,9 +142,12 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				if (szes && !kid.$instanceof(zul.box.Splitter) && !kid.$instanceof(zul.wgt.Cell))
 					++k;
 				if (kid._nvflex) {
-					kid.setFlexSize_({height:''});
+					kid.setFlexSize_({height:'', width:''});
 					var chdex = kid.$n('chdex');
-					if (chdex) chdex.style.height = szes && k < szes.length ? szes[k] : '';
+					if (chdex) {
+						chdex.style.height = szes && k < szes.length ? szes[k] : '';
+						chdex.style.width = '';
+					}
 				}
 			}
 		} else {
@@ -152,9 +155,12 @@ zul.box.Box = zk.$extends(zul.Widget, {
 				if (szes && !kid.$instanceof(zul.box.Splitter) && !kid.$instanceof(zul.wgt.Cell))
 					++k;
 				if (kid._nhflex) {
-					kid.setFlexSize_({width:''});
+					kid.setFlexSize_({height:'', width:''});
 					var chdex = kid.$n('chdex');
-					if (chdex) chdex.style.width = szes && k < szes.length ? szes[k] : '';
+					if (chdex) {
+						chdex.style.width = szes && k < szes.length ? szes[k] : '';
+						chdex.style.height = '';
+					}
 				}
 			}
 		}

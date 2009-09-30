@@ -255,6 +255,27 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			if (zk.ie && this._uplder) zk(this.$n('btn')).focus(30);
 		}
 		this.$supers('doMouseUp_', arguments);
+	},
+	setFlexSize_: function(sz) {
+		var n = this.$n(),
+			box = this.$n('box') || n;
+		if (sz.height !== undefined) {
+			if (sz.height == 'auto')
+				box.style.height = '';
+			else if (sz.height != '')
+				box.style.height = jq.px(zk(n).revisedHeight(sz.height, true));
+			else
+				box.style.height = this._height ? this._height : '';
+		}
+		if (sz.width !== undefined) {
+			if (sz.width == 'auto')
+				box.style.width = '';
+			else if (sz.width != '')
+				box.style.width = jq.px(zk(n).revisedWidth(sz.width, true));
+			else
+				box.style.width = this._width ? this._width : '';
+		}
+		return {height: n.offsetHeight, width: n.offsetWidth};
 	}
 });
 //handle autodisabled buttons
