@@ -23,7 +23,6 @@ zk = function (sel) {
 	return dst;
 })(zk, (function () {
 	var $oid = 0,
-		errcnt = 0,
 		statelesscnt = 0,
 		logmsg;
 
@@ -258,35 +257,10 @@ zk = function (sel) {
 
 	//DEBUG//
 	error: function (msg) {
-		jq(function() {
-		var id = "zk_err" + errcnt++,
-			x = (errcnt * 5) % 50, y = (errcnt * 5) % 50,
-			box;
-		jq(document.body).append(
-	'<div class="z-error" style="left:'+(jq.innerX()+x)+'px;top:'+(jq.innerY()+y)
-	+'px;" id="'+id+'"><table cellpadding="2" cellspacing="2" width="100%"><tr>'
-	+'<td align="right"><div id="'+id
-	+'-p"><span class="btn" onclick="zk._sendRedraw()">redraw</span>&nbsp;'
-	+'<span class="btn" onclick="jq(\'#'+id+'\').remove()">close</span></div></td></tr>'
-	+'<tr valign="top"><td class="z-error-msg">'+zUtl.encodeXML(msg, {multiline:true}) //Bug 1463668: security
-	+'</td></tr></table></div>');
-
-		try {
-			new zk.Draggable(null, box = jq(id, zk)[0], {
-				handle: jq(id+'-p', zk)[0], zIndex: box.style.zIndex,
-				starteffect: zk.$void, starteffect: zk.$void,
-				endeffect: zk.$void});
-		} catch (e) {
-		}
-			});
-	},
-	_sendRedraw: function () {
-		zk.errorDismiss();
-		zAu.send(new zk.Event(null, 'redraw'));
+		new zk.eff.Error(msg);
 	},
 	errorDismiss: function () {
-		for (var j = errcnt; --j >= 0;)
-			jq("#zk_err" + j).remove();
+		zk.eff.Error.closeAll();
 	},
 	log: function (detailed) {		
 		var msg = toLogMsg(

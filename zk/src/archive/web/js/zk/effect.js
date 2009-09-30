@@ -369,3 +369,63 @@ zk.eff.Tooltip = zk.$extends(zk.Object, {
 	}
 });
 zk.eff.tooltip = new zk.eff.Tooltip();
+
+(function() {
+	var _errs = [],
+		_errcnt = 0;
+
+zk.eff.Error = zk.$extends(zk.Object, {
+	$init: function (msg) {
+		var id = "zk_err" + _errcnt++,
+			$id = '#' + id;
+			x = (_errcnt * 5) % 50, y = (_errcnt * 5) % 50,
+			html =
+	'<div class="z-error" style="left:'+(jq.innerX()+x)+'px;top:'+(jq.innerY()+y)
+	+'px;" id="'+id+'"><table cellpadding="2" cellspacing="2" width="100%"><tr>'
+	+'<td align="right"><div id="'+id+'-p">';
+	if (!zk.light)
+		html += '<span class="btn" onclick="zk.eff.Error._redraw()">redraw</span>&nbsp;';
+	html += '<span class="btn" onclick="zk.eff.Error._close(\''+id+'\')">close</span></div></td></tr>'
+	+'<tr valign="top"><td class="z-error-msg">'+zUtl.encodeXML(msg, {multiline:true}) //Bug 1463668: security
+	+'</td></tr></table></div>';
+		jq(document.body).append(html);
+
+		this.id = id;
+		_errs.push(this);
+
+		try {
+			var n;
+			this.dg = new zk.Draggable(null, n = jq($id)[0], {
+				handle: jq($id + '-p')[0], zIndex: n.style.zIndex,
+				starteffect: zk.$void, starteffect: zk.$void,
+				endeffect: zk.$void});
+		} catch (e) {
+		}
+	},
+	destroy: function () {
+		_errs.$remove(this);
+		if (this.dg) this.dg.destroy();
+		jq('#' + this.id).remove();
+	}
+},{
+	_redraw: function () {
+		zk.errorDismiss();
+		zAu.send(new zk.Event(null, 'redraw'));
+	},
+	_close: function (id) {
+		for (var j = _errs.length; j--;) {
+			var e = _errs[j];
+			if (e.id == id) {
+				_errs.splice(j, 1);
+				e.destroy();
+				return;
+			}
+		}
+	},
+	closeAll: function () {
+		for (var j = _errs.length; j--;)
+			_errs[j].destroy();
+		_errs = [];
+	}
+});
+})();
