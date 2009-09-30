@@ -396,7 +396,7 @@
 .z-datebox-inplace .z-datebox-inp,
 .z-timebox-inplace .z-timebox-inp,
 .z-spinner-inplace .z-spinner-inp {
-	padding: 0px;
+	padding: 0;
 	padding-left: 2px;
 	padding-right: 2px;
 }

@@ -80,13 +80,13 @@
 }
 .z-tabs-header {
 	width: 100%;
-	margin: 0px;
+	margin: 0;
 	position: relative;
 	overflow: hidden;
 	zoom: 1;
 }
 .z-tabs-header .z-clear {
-	height: 0px;
+	height: 0;
 }
 .z-tabs-scroll .z-tabs-cnt {
 	background: #C7E3F3 repeat-x scroll 0 top;

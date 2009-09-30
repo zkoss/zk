@@ -92,7 +92,7 @@
 	background-repeat: no-repeat;
 	cursor: pointer; border: 0;
 	padding-right: 17px;
-	background-position: right 0px;
+	background-position: right 0;
 }
 .z-arrow-d {
 	background-image: url(${c:encodeURL('~./zul/img/misc/arrowD.png')});

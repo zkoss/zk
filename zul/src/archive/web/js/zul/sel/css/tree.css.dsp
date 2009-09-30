@@ -40,7 +40,7 @@ tr.z-vfiletree-faker, tr.z-vfiletree-faker th, tr.z-vfiletree-faker div {
 	border-top: 0 !important; border-right : 0 !important;border-bottom: 0 !important;border-left: 0 !important;
 	padding-top: 0 !important;	padding-right: 0 !important; padding-bottom: 0 !important;padding-left: 0 !important;
 	margin-top: 0 !important; margin-right : 0 !important;margin-bottom: 0 !important;margin-left: 0 !important;
-	height: 0px !important;
+	height: 0 !important;
 }
 <%-- these above css cannot be overrided--%>
 <%-- tree icons --%>
@@ -57,10 +57,10 @@ span.z-tree-root-close, span.z-tree-tee-close, span.z-tree-last-close {
 	background-image: url(${c:encodeURL('~./zul/img/common/toggle.gif')});
 }
 span.z-tree-root-open, span.z-tree-tee-open, span.z-tree-last-open {
-	background-position: 0px -18px;
+	background-position: 0 -18px;
 }
 span.z-tree-root-close, span.z-tree-tee-close, span.z-tree-last-close {
-	background-position: 0px 0px;
+	background-position: 0 0;
 }
 
 <%-- Treecol, Treefooter, and Treecell--%>
@@ -163,10 +163,10 @@ span.z-dottree-root-open, span.z-dottree-root-close{
 	background-image: url(${c:encodeURL('~./zul/img/tree/dot-toggle.gif')});
 }
 span.z-dottree-root-open {
-	background-position: 0px 0px;
+	background-position: 0 0;
 }
 span.z-dottree-root-close {
-	background-position: 0px -18px;
+	background-position: 0 -18px;
 }
 span.z-dottree-tee-open {
 	background-image: url(${c:encodeURL('~./zul/img/tree/tee-open.gif')});
@@ -236,11 +236,11 @@ span.z-filetree-ico,span.z-filetree-firstspacer {
 }
 span.z-filetree-root-open, span.z-filetree-root-close,
 span.z-filetree-root-open, span.z-filetree-tee-open, span.z-filetree-last-open {
-	background-position: 0px 0px;
+	background-position: 0 0;
 }
 span.z-filetree-root-close, span.z-filetree-tee-close,
 span.z-filetree-last-close, span.z-filetree-firstspacer {
-	background-position: 0px -18px;
+	background-position: 0 -18px;
 }
 span.z-filetree-tee, span.z-filetree-last {
 	background-image: url(${c:encodeURL('~./zul/img/tree/entity.gif')});
@@ -292,11 +292,11 @@ span.z-vfiletree-ico,span.z-vfiletree-firstspacer {
 }
 span.z-vfiletree-root-open, span.z-vfiletree-root-close,
 span.z-vfiletree-root-open, span.z-vfiletree-tee-open, span.z-vfiletree-last-open {
-	background-position: 0px 0px;
+	background-position: 0 0;
 }
 span.z-vfiletree-root-close, span.z-vfiletree-tee-close,
 span.z-vfiletree-last-close, span.z-vfiletree-firstspacer {
-	background-position: 0px -18px;
+	background-position: 0 -18px;
 }
 span.z-vfiletree-tee, span.z-vfiletree-last {
 	background-image: url(${c:encodeURL('~./zul/img/tree/ventity.png')});

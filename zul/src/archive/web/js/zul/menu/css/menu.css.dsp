@@ -17,7 +17,7 @@
 .z-menubar-hor,.z-menubar-ver {
 	position : relative;
 	display: block;
-	padding : 2px 0px;
+	padding : 2px 0;
 	border-bottom : 1px solid #B1CBD5;
 	background: #CEE7F5 repeat-x 0 center;
 	background-image: url(${c:encodeURL('~./zul/img/common/bar-bg.png')});
@@ -67,31 +67,31 @@
 	display:block;
 	min-height:16px;
 	padding-right: 3px;
-	padding-left:0px;
+	padding-left:0;
 	background: transparent no-repeat right -14px;
 	background-image:url(${c:encodeURL('~./zul/img/menu/btn-arrow.gif')});
 }
 .z-menubar-ver .z-menu-body .z-menu-inner-m div {
-	background-position: right 0px;
+	background-position: right 0;
 }
 .z-menu-item-body .z-menu-item-inner-m div {
 	background-color:transparent;
 	display:block;
 	min-height:16px;
-	padding-right:0px;
-	padding-left:0px;
+	padding-right:0;
+	padding-left:0;
 }
 
 .z-menu-inner-m .z-menu-btn,
 .z-menu-item-inner-m .z-menu-item-btn{
 	background:transparent none no-repeat scroll 0 2px;
-	border:0px none;
+	border:0 none;
 	cursor:pointer;
-	margin:0px;
+	margin:0;
 	min-height:13px;
 	outline-color:-moz-use-text-color;
 	outline-style:none;
-	outline-width:0px;
+	outline-width:0;
 	overflow:visible;
 	width:auto;
 	padding-left:2px; <%--button has default padding, reset it--%>
@@ -109,7 +109,7 @@
 .z-menu-item-body-img .z-menu-item-inner-m .z-menu-item-btn,
 .z-menu-item-body-text .z-menu-item-inner-m .z-menu-item-btn{
 	padding-left:12px;
-	padding-right:0px;
+	padding-right:0;
 }
 
 
@@ -119,7 +119,7 @@
 }
 .z-menu-item-body-img .z-menu-item-inner-m .z-menu-item-btn,
 .z-menu-item-body-text .z-menu-item-inner-m .z-menu-item-btn{
-	padding-right:0px;
+	padding-right:0;
 }
 </c:if>
 
@@ -194,8 +194,8 @@
 .z-menu-popup .z-menu-popup-cnt{
 	background:transparent none repeat scroll 0 0;
 	border:0 none;
-	padding:0px;
-	margin:0px !important;
+	padding:0;
+	margin:0 !important;
 }
 
 <%-- define menu & menuitem in menupopup --%>
@@ -227,7 +227,7 @@
 .z-menu-popup-cnt .z-menu .z-menu-img,
 .z-menu-popup-cnt .z-menu-item .z-menu-item-img {
 	background-position:center center;
-	border:0px;
+	border:0;
 	height: 100%;
 	display:-moz-inline-box;
 	vertical-align: top;

@@ -17,4 +17,5 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 	<script src="LabelImageWidget.js"/>
 
 	<script src="Auxbutton.js"/>
+	<script src="Upload.js"/>
 </package>

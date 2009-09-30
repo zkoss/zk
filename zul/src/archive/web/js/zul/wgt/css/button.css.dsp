@@ -66,7 +66,7 @@ span.z-button {
 }
 .z-button .z-button-tr {
 	background-repeat: no-repeat;
-	background-position: -3px 0px;
+	background-position: -3px 0;
 	width: 3px; height: 3px; padding: 0; margin: 0;
 }
 .z-button .z-button-cl {
@@ -85,12 +85,12 @@ span.z-button {
 }
 .z-button .z-button-cr {
 	background-repeat: no-repeat;
-	background-position: -3px 0px;
+	background-position: -3px 0;
 	width: 3px;  padding: 0; margin: 0;
 }
 .z-button .z-button-bl {
 	background-repeat: no-repeat;
-	background-position: 0px -3px;
+	background-position: 0 -3px;
 	width: 3px; height: 3px;  padding: 0; margin: 0;
 }
 .z-button .z-button-bm {
@@ -115,13 +115,13 @@ span.z-button {
 	background-position:-9px 0;
 }
 .z-button-over .z-button-cl {
-	background-position:-6px 0px;
+	background-position:-6px 0;
 }
 .z-button-over .z-button-cm {
   background-position:0 -500px;
 }
 .z-button-over .z-button-cr {
-	background-position:-9px 0px;
+	background-position:-9px 0;
 }
 .z-button-over .z-button-bl {
 	background-position:-6px -3px;
@@ -134,19 +134,19 @@ span.z-button {
 }
 <%-- focus --%>
 .z-button-focus .z-button-tl {
-	background-position:-12px 0px;
+	background-position:-12px 0;
 }
 .z-button-focus .z-button-tm {
 	background-position:0 -12px;
 }
 .z-button-focus .z-button-tr {
-	background-position:-15px 0px;
+	background-position:-15px 0;
 }
 .z-button-focus .z-button-cl {
-	background-position:-12px 0px;
+	background-position:-12px 0;
 }
 .z-button-focus .z-button-cr {
-	background-position:-15px 0px;
+	background-position:-15px 0;
 }
 .z-button-focus .z-button-bl {
 	background-position:-12px -3px;
@@ -159,13 +159,13 @@ span.z-button {
 }
 <%-- click --%>
 .z-button-clk .z-button-tl {
-	background-position:-6px 0px;
+	background-position:-6px 0;
 }
 .z-button-clk .z-button-tm{
 	background-position:0 -18px;
 }
 .z-button-clk .z-button-tr {
-	background-position:-9px 0px;
+	background-position:-9px 0;
 }
 .z-button-clk .z-button-bl {
 	background-position:-6px -3px;
@@ -177,13 +177,13 @@ span.z-button {
 	background-position:-9px -3px;
 }
 .z-button-clk .z-button-cl {
-	background-position:-6px 0px;
+	background-position:-6px 0;
 }
 .z-button-clk .z-button-cm {
 	background-position:0 -1000px;
 }
 .z-button-clk .z-button-cr {
-	background-position:-9px 0px;
+	background-position:-9px 0;
 }
 <%-- os mold --%>
 .z-button-os {

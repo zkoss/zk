@@ -94,14 +94,14 @@
 .z-slider-sphere-ver-btn-over,
 .z-slider-ver-btn-over,
 .z-slider-scale-btn-over {
-	background-position: -15px 0px;
+	background-position: -15px 0;
 }
 .z-slider-hor-btn-drag,
 .z-slider-sphere-hor-btn-drag,
 .z-slider-sphere-ver-btn-drag,
 .z-slider-ver-btn-drag,
 .z-slider-scale-btn-drag {
-	background-position: -30px 0px;
+	background-position: -30px 0;
 }
 
 .z-slider-pp {

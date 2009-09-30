@@ -194,7 +194,7 @@ import org.zkoss.zk.ui.WebApp;
 			//Note: _webctx will handle the renaming for debugJS (.src.js)
 			return _webctx.getResourceAsStream(path);
 		}
-		URL getResource(String path) {
+		URL getResource(String path) throws IOException {
 			return _webctx.getResource(path);
 		}
 	}
@@ -206,14 +206,22 @@ import org.zkoss.zk.ui.WebApp;
 		}
 		InputStream getResourceAsStream(String path, boolean locate)
 		throws IOException {
-			if (isDebugJS()) {
-				final int j = path.lastIndexOf('.');
-				if (j >= 0)
-					path = 	path.substring(0, j) + ".src" + path.substring(j);
-			}
+			path = getRealPath(path);
 			final File file = new File(_parent, path);
 			return locate ? new FileInputStream(Files.locate(file.getPath())):
 				new FileInputStream(file);
+		}
+		URL getResource(String path) throws IOException {
+			path = getRealPath(path);
+			return new File(_parent, path).toURL();
+		}
+		private String getRealPath(String path) {
+			if (isDebugJS()) {
+				final int j = path.lastIndexOf('.');
+				if (j >= 0)
+					return path.substring(0, j) + ".src" + path.substring(j);
+			}
+			return path;
 		}
 	}
 }

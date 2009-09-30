@@ -1,9 +1,9 @@
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 .z-panel-shadow {
 	-moz-border-radius: 4px;
-	-moz-box-shadow:0px 0px 3px rgba(0, 0, 0, 0.5);
+	-moz-box-shadow:0 0 3px rgba(0, 0, 0, 0.5);
 	-webkit-border-radius: 4px;
-	-webkit-box-shadow:0px 0px 3px rgba(0, 0, 0, 0.5);
+	-webkit-box-shadow:0 0 3px rgba(0, 0, 0, 0.5);
 }
 <%-- Top Left --%>
 .z-panel-tl {

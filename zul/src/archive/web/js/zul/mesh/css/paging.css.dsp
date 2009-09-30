@@ -98,8 +98,8 @@
 	outline-style:none;
 	outline-width:0;
 	overflow:visible;
-	padding-left:0px;
-	padding-right:0px;
+	padding-left:0;
+	padding-right:0;
 	width:auto;
 }
 

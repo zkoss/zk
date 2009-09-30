@@ -28,7 +28,7 @@ html, body {height:100%}
 
 <c:if test="${empty c:property('org.zkoss.zul.theme.browserDefault')}">
 body {
-	margin: 0px; padding: 0px 5px;
+	margin: 0; padding: 0 5px;
 }
 </c:if>
 
@@ -74,7 +74,7 @@ div.z-log button {
 }
 .z-debug-domtree .z-debug-domtree-body {
 	border: 1px solid #999884;
-	border-top: 0px;
+	border-top: 0;
 }
 .z-debug-domtree-close {
 	overflow: hidden; width: 15px; height: 15px; float: right; cursor: pointer;
@@ -214,8 +214,8 @@ div.z-log button {
 <%-- Fix float issue for CSS --%>
 .z-clear {
 	clear: both;
-	height: 0px;
-	width: 0px;
+	height: 0;
+	width: 0;
 	line-height: 0;
 	font-size: 0;
 	overflow: hidden;
@@ -341,7 +341,7 @@ div.z-drop-cnt {
 <%-- Focus Anchor --%>
 .z-focus-a {
 	position: absolute;
-	left: 0px; top: 0px;
+	left: 0; top: 0;
 	padding: 0 !important;
 	margin: 0 !important;
 	border: 0 !important;

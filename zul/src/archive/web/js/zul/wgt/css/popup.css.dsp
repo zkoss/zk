@@ -33,7 +33,7 @@
 	zoom:1;
 }
 .z-popup .z-popup-cm {
-	background: #EDF6FC repeat-x 0 0px;
+	background: #EDF6FC repeat-x 0 0;
 	background-image: url(${c:encodeURL('~./zul/img/popup/pp-cm.png')});
 	padding:4px 10px;
 	overflow: hidden;

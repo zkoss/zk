@@ -67,7 +67,7 @@ div.z-listfooter-cnt, div.z-listheader-cnt {
 }
 <%-- faker uses only --%>
 tr.z-listbox-faker, tr.z-listbox-faker th, tr.z-listbox-faker div {
-	height: 0px !important;
+	height: 0 !important;
 	border-top: 0 !important; border-right : 0 !important;border-bottom: 0 !important;border-left: 0 !important;
 	padding-top: 0 !important;	padding-right: 0 !important; padding-bottom: 0 !important;padding-left: 0 !important;
 	margin-top: 0 !important; margin-right : 0 !important;margin-bottom: 0 !important;margin-left: 0 !important;
@@ -134,10 +134,10 @@ td.z-listgroup-inner div.z-listcell-cnt {
 	vertical-align: top; cursor: pointer; border: 0;
 }
 .z-listgroup-img-open {
-	background-position: 0px -18px;
+	background-position: 0 -18px;
 }
 .z-listgroup-img-close {
-	background-position: 0px 0px;
+	background-position: 0 0;
 }
 <%-- Listgroupfoot --%>
 .z-listgroupfoot{

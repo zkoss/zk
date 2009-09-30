@@ -393,6 +393,11 @@ if (c.isEmpty()) {
 	 * (by {@link Events#postEvent}).</li></ul></li>
 	 * </ol>
 	 *
+	 * <p>Notice that the registered AU request service
+	 * ({@link org.zkoss.zk.au.AuService}) will be called, no matter
+	 * the request is targeting a component or a desktop.
+	 * And, it can 'intercept' or 'filter' it by returning false.
+	 *
 	 * <p>To send reponses to the client, use
 	 * {@link org.zkoss.zk.ui.AbstractComponent#smartUpdate},
 	 * {@link org.zkoss.zk.ui.AbstractComponent#response}
