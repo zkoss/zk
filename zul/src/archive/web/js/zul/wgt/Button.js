@@ -256,7 +256,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 		}
 		this.$supers('doMouseUp_', arguments);
 	},
-	setFlexSize_: function(sz) {
+	setFlexSize_: function(sz) { //Bug #2870652
 		var n = this.$n(),
 			box = this.$n('box') || n;
 		if (sz.height !== undefined) {
