@@ -18,8 +18,6 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zul;
 
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
@@ -33,7 +31,7 @@ import org.zkoss.lang.Classes;
 import org.zkoss.lang.Objects;
 import org.zkoss.lang.Strings;
 
-import java.lang.reflect.InvocationTargetException;
+import java.awt.Font;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -172,7 +170,15 @@ public class Chart extends Imagemap implements org.zkoss.zul.api.Chart {
 	
 	//chart engine
 	private ChartEngine _engine; //chart engine. model and engine is related
-
+	
+	//chart Font
+	private Font _titleFont; //chart's title font
+	private Font _legendFont; //chart's lengend font
+	private Font _xAxisTickFont; //chart's x axis tick number font
+	private Font _xAxisFont; //chart's x axis font
+	private Font _yAxisTickFont; //chart's y axis tick number font
+	private Font _yAxisFont; //chart's y axis font
+	
 	public Chart() {
 		init();
 		setWidth("500px");
@@ -213,7 +219,6 @@ public class Chart extends Imagemap implements org.zkoss.zul.api.Chart {
 						throw new UiException("chart must specify height");
 						
 					try {
-						final String title = getTitle();
 						final AImage image = new AImage("chart"+new Date().getTime(), getEngine().drawChart(Chart.this));
 						setContent(image);
 					} catch(java.io.IOException ex) {
@@ -640,6 +645,158 @@ public class Chart extends Imagemap implements org.zkoss.zul.api.Chart {
 		smartDrawChart();
 	}
 
+	/**
+	 * Returns  the title font of this chart. If you saw squares rather than correct
+	 * words in title, check whether the default title font supports your
+	 * characters (e.g. Chinese). You probably have to set this font accordingly.
+	 * @return the title font
+	 */
+	public Font getTitleFont() {
+		return _titleFont;
+	}
+
+	/**
+	 * Sets the title font of this chart. If you saw squares rather than correct
+	 * words in title, check whether the default title font supports your
+	 * characters (e.g. Chinese). You probably have to set this font accordingly.
+	 * @param font the title font of this chart 
+	 */
+	public void setTitleFont(Font font) {
+		if (Objects.equals(font, _titleFont)) {
+			return;
+		}
+		_titleFont = font;
+		smartDrawChart();
+	}
+
+	/**
+	 * Returns the legend font of this chart. If you saw squares rather than correct
+	 * words in legend, check whether the default legend font supports your
+	 * characters (e.g. Chinese). You probably have to set this font accordingly.
+	 * @return the title font
+	 */
+	public Font getLegendFont() {
+		return _legendFont;
+	}
+
+	/**
+	 * Sets the legend font of this chart. If you saw squares rather than correct
+	 * words in legend, check whether the default legend font supports your
+	 * characters (e.g. Chinese). You probably have to set this font accordingly.
+	 * @param font the legend font of this chart 
+	 */
+	public void setLegendFont(Font font) {
+		if (Objects.equals(_legendFont, font)) {
+			return;
+		}
+		_legendFont = font;
+		smartDrawChart();
+	}
+
+	/**
+	 * Returns the tick number font of x axis of this chart. If you saw squares 
+	 * rather than correct words in x axis tick, check whether the default x axis 
+	 * tick font supports your characters (e.g. Chinese). You probably 
+	 * have to set this font accordingly.
+	 * @return the tick number font of x axis of this chart 
+	 */
+	public Font getXAxisTickFont() {
+		return _xAxisTickFont;
+	}
+
+	/**
+	 * Sets the tick number font of x axis of this chart. If you saw squares 
+	 * rather than correct words in x axis tick, check whether the default x axis 
+	 * tick font supports your characters (e.g. Chinese). You probably 
+	 * have to set this font accordingly.
+	 * @param axisTickFont the tick number font of x axis of this chart 
+	 */
+	public void setXAxisTickFont(Font axisTickFont) {
+		if (Objects.equals(_xAxisTickFont, axisTickFont)) {
+			return;
+		}
+		_xAxisTickFont = axisTickFont;
+		smartDrawChart();
+	}
+
+	/**
+	 * Returns the label font of x axis of this chart. If you saw squares 
+	 * rather than correct words in x axis label, check whether the default x axis 
+	 * label font supports your characters (e.g. Chinese). You probably 
+	 * have to set this font accordingly.
+	 * @return the label font of x axis of this chart 
+	 */
+	public Font getXAxisFont() {
+		return _xAxisFont;
+	}
+
+	/**
+	 * Sets the label font of x axis of this chart. If you saw squares 
+	 * rather than correct words in x axis label, check whether the default x axis 
+	 * label font supports your characters (e.g. Chinese). You probably 
+	 * have to set this font accordingly.
+	 * @param axisFont the label font of x axis of this chart 
+	 */
+	public void setXAxisFont(Font axisFont) {
+		if (Objects.equals(_xAxisFont, axisFont)) {
+			return;
+		}
+		_xAxisFont = axisFont;
+		smartDrawChart();
+	}
+
+	/**
+	 * Returns the tick number font of y axis of this chart. If you saw squares 
+	 * rather than correct words in y axis tick, check whether the default y axis 
+	 * tick font supports your characters (e.g. Chinese). You probably 
+	 * have to set this font accordingly.
+	 * @return the tick number font of y axis of this chart 
+	 */
+	public Font getYAxisTickFont() {
+		return _yAxisTickFont;
+	}
+
+	/**
+	 * Sets the tick number font of y axis of this chart. If you saw squares 
+	 * rather than correct words in y axis tick, check whether the default y axis 
+	 * tick font supports your characters (e.g. Chinese). You probably 
+	 * have to set this font accordingly.
+	 * @param axisTickFont the tick number font of y axis of this chart 
+	 */
+	public void setYAxisTickFont(Font axisTickFont) {
+		if (Objects.equals(_yAxisTickFont, axisTickFont)) {
+			return;
+		}
+		_yAxisTickFont = axisTickFont;
+		smartDrawChart();
+	}
+
+	/**
+	 * Returns the label font of y axis of this chart. If you saw squares 
+	 * rather than correct words in y axis label, check whether the default y axis 
+	 * label font supports your characters (e.g. Chinese). You probably 
+	 * have to set this font accordingly.
+	 * @return the label font of y axis of this chart 
+	 */
+	public Font getYAxisFont() {
+		return _yAxisFont;
+	}
+
+	/**
+	 * Sets the label font of y axis of this chart. If you saw squares 
+	 * rather than correct words in y axis label, check whether the default y axis 
+	 * label font supports your characters (e.g. Chinese). You probably 
+	 * have to set this font accordingly.
+	 * @param axisFont the tick number font of y axis of this chart 
+	 */
+	public void setYAxisFont(Font axisFont) {
+		if (Objects.equals(_yAxisFont, axisFont)) {
+			return;
+		}
+		_yAxisFont = axisFont;
+		smartDrawChart();
+	}
+	
 	/** Sets the model by use of a class name.
 	 * It creates an instance automatically.
 	 */

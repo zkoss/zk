@@ -53,6 +53,7 @@ import org.jfree.chart.entity.TickLabelEntity;
 import org.jfree.chart.entity.TitleEntity;
 import org.jfree.chart.entity.XYItemEntity;
 import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.PolarPlot;
@@ -348,18 +349,85 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 	            jfchart.setBackgroundPaint(new Color(paneRGB[0], paneRGB[1], paneRGB[2], chart.getPaneAlpha()));
 	        }
 	        
+	        //since 3.6.3, JFreeChart 1.0.13 change default fonts which does not support Chinese, allow
+	        //developer to set font.
+	        
+	        //title font
+	        final Font tfont = chart.getTitleFont();
+	        if (tfont != null) { 
+	        	jfchart.getTitle().setFont(tfont);
+	        }
+	        
+	        //legend font
+	        final Font lfont = chart.getLegendFont();
+	        if (lfont != null) {
+	        	jfchart.getLegend().setItemFont(lfont);
+	        }
+	        
 	        //since 3.6.1, use JFreeChart 1.0.13. Make it appear like previous version(background, grid lines)
-	        if (plot instanceof CategoryPlot) {
+	        if (plot instanceof PiePlot) {
+	        	final PiePlot pplot = (PiePlot) plot;
+	        	//Label font
+	        	final Font xlbfont = chart.getXAxisFont();
+	        	if (xlbfont != null) {
+	        		pplot.setLabelFont(xlbfont);
+	        	}
+	        } else if (plot instanceof CategoryPlot) {
 	        	final CategoryPlot cplot = (CategoryPlot) plot;
 	        	cplot.setRangeGridlinePaint(new Color(0xc0, 0xc0, 0xc0));
+	        	
+	        	//Domain axis(x axis)
+	        	final Font xlbfont = chart.getXAxisFont();
+	        	final Font xtkfont = chart.getXAxisTickFont();
+	        	if (xlbfont != null) {
+	        		cplot.getDomainAxis().setLabelFont(xlbfont);
+	        	}
+	        	if (xtkfont != null) {
+	        		cplot.getDomainAxis().setTickLabelFont(xtkfont);
+	        	}
+	        	
+	        	//Range axis(y axis)
+	        	final Font ylbfont = chart.getYAxisFont();
+	        	final Font ytkfont = chart.getYAxisTickFont();
+	        	if (ylbfont != null) {
+	        		cplot.getRangeAxis().setLabelFont(ylbfont);
+	        	}
+	        	if (ytkfont != null) {
+	        		cplot.getRangeAxis().setTickLabelFont(ytkfont);
+	        	}
 	        } else if (plot instanceof XYPlot) {
 	        	final XYPlot xyplot = (XYPlot) plot;
 	        	xyplot.setRangeGridlinePaint(Color.LIGHT_GRAY);
 	        	xyplot.setDomainGridlinePaint(Color.LIGHT_GRAY);
+	        	
+	        	//Domain axis(x axis)
+	        	final Font xlbfont = chart.getXAxisFont();
+	        	final Font xtkfont = chart.getXAxisTickFont();
+	        	if (xlbfont != null) {
+	        		xyplot.getDomainAxis().setLabelFont(xlbfont);
+	        	}
+	        	if (xtkfont != null) {
+	        		xyplot.getDomainAxis().setTickLabelFont(xtkfont);
+	        	}
+	        	
+	        	//Range axis(y axis)
+	        	final Font ylbfont = chart.getYAxisFont();
+	        	final Font ytkfont = chart.getYAxisTickFont();
+	        	if (ylbfont != null) {
+	        		xyplot.getRangeAxis().setLabelFont(ylbfont);
+	        	}
+	        	if (ytkfont != null) {
+	        		xyplot.getRangeAxis().setTickLabelFont(ytkfont);
+	        	}
 	        } else if (plot instanceof PolarPlot) {
 	        	final PolarPlot pplot = (PolarPlot) plot;
 	        	pplot.setAngleGridlinePaint(Color.LIGHT_GRAY);
 	        	pplot.setRadiusGridlinePaint(Color.LIGHT_GRAY);
+	        	
+	        	final Font xlbfont = chart.getXAxisFont();
+	        	if (xlbfont != null) {
+	        		pplot.setAngleLabelFont(xlbfont);
+	        	}
 	        }
 		}
 		
@@ -1774,20 +1842,8 @@ public class JFreeChartEngine implements ChartEngine, java.io.Serializable {
 	 */
 	private class Dial extends ChartImpl {
 		public void render(Chart chart, Area area, ChartEntity info) {
-/*			System.out.println("dial info:"+info);
-			if (info instanceof LegendItemEntity) {
-				area.setAttribute("entity", "LEGEND");
-				Integer seq = (Integer)chart.getAttribute("LEGEND_SEQ");
-				seq = seq == null ? new Integer(0) : new Integer(seq.intValue()+1);
-				chart.setAttribute("LEGEND_SEQ", seq);
-				decodeLegendInfo(area, (LegendItemEntity)info, chart);
-			} else {
-				area.setAttribute("entity", "TITLE");
-				if (chart.isShowTooltiptext()) {
-					area.setTooltiptext(chart.getTitle());
-				}
-			}
-*/		}
+			//do nothing
+		}
 		
 		public JFreeChart createChart(Chart chart) {
 			final ChartModel model0 = (ChartModel) chart.getModel();
