@@ -28,7 +28,7 @@ zul.inp.Doublebox = zk.$extends(zul.inp.FormatWidget, {
 	},
 	coerceToString_: function(value) {
 		var fmt = this._format;
-		return value != null ? fmt ? zNumFormat.format(fmt, value) : '' + value : null;
+		return value != null ? fmt ? zNumFormat.format(fmt, value) : '' + value : '';
 	},
 	getZclass: function () {
 		var zcs = this._zclass;
