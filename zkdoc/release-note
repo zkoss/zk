@@ -1,6 +1,6 @@
 	--------
 ZK 5.0.0
-September, 2009
+November, 2009
 * Features
   2817315: Support client-centric programming model
   2825713: EventQueue support application-level publish (by sever-push)
@@ -37,7 +37,9 @@ September, 2009
   2859867: forward="onX=" shall be shortcut of forward="onX=onX"
   2860482: A way to specify language for component definition (<?component?>)
   2861283: hbox/vbox pack attribute supports stretch option
-  
+
+* RC Bugs
+
 * Bugs
   1999145: Combobox with Width of 100% Overruns
   2859776: Decimalbox/Doublebox shall not enforce defaultFormat  
