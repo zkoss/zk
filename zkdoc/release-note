@@ -132,9 +132,10 @@ October, 2009
   2836829: A way to disable the compress of DHtmlUpdateServlet
   2840108: Enhance popup, tooltip, and context can be shown by position
   2870478: Chart shall support setting Font
-
+  
 * Bugs
   2862085: IE 6,7,8 memory leak in modal dialog demo
+  2801721: Memory leak - Grid control
   2813877: Window resize outline miss
   2814504: Failed to update treeitem (paging) if its parent is cropped
   2817260: Configuration.getResendDelay not inited correctly if zkmax
@@ -163,6 +164,9 @@ October, 2009
   2493245: zscript failed badly if macro's setMacroURI before setParent
   2859075: Menuseparator with vertial menubar fails in zkmax
   2859747: Label inside Column should be sorted as well.
+  2861272: Listitem can't be invisible in IE, Chrome, and Opera
+  2861323: AnnotateDataBinderInit shall throw exception if arg0 is null
+  2871112: Extends compoonent definition to diff name and class error
 
 	--------
 ZK 3.6.2
