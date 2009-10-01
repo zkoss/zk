@@ -39,7 +39,12 @@ November, 2009
   2861283: hbox/vbox pack attribute supports stretch option
 
 * RC Bugs
-
+  2870616: Unclosed progress mask on opening menupopup
+  2870620: No menupopup onOpen reference when right click gmaps
+  2870652: Button(mold == trendy) is not resized with hflex/vflex
+  2870663: No value doublebox/decimalbox show 'null'
+  2871082: Menuitem's href shall resolved as servlet-context relative
+  
 * Bugs
   1999145: Combobox with Width of 100% Overruns
   2859776: Decimalbox/Doublebox shall not enforce defaultFormat  

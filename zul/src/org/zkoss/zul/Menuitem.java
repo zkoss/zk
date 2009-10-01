@@ -20,6 +20,7 @@ import org.zkoss.lang.Objects;
 
 import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.*;
@@ -161,7 +162,7 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zul.api.Men
 			href = null;
 		if (!Objects.equals(_href, href)) {
 			_href = href;
-			smartUpdate("href", href);
+			smartUpdate("href", new EncodedHref()); //Bug #2871082
 		}
 	}
 
@@ -244,6 +245,13 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zul.api.Men
 		}
 	}
 
+	//Bug #2871082
+	private String getEncodedHref() {
+		final Desktop dt = getDesktop();
+		return _href != null && dt != null ? dt.getExecution().encodeURL(_href): null;
+			//if desktop is null, it doesn't belong to any execution
+	}
+	
 	//-- Component --//
 	public void beforeParentChanged(Component parent) {
 		if (parent != null && !(parent instanceof Menupopup)
@@ -264,7 +272,7 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zul.api.Men
 		if (_disabled) render(renderer, "disabled", _disabled);
 		if (_checked) render(renderer, "checked", _checked);
 		if (_autocheck) render(renderer, "autocheck", _autocheck);
-		if (_href != null) render(renderer, "href", _href);
+		if (_href != null) render(renderer, "href", getEncodedHref()); //Bug #2871082
 		if (_target != null) render(renderer, "target", _target);
 		render(renderer, "upload", _upload);
 		render(renderer, "value", _value);
@@ -286,5 +294,12 @@ public class Menuitem extends LabelImageElement implements org.zkoss.zul.api.Men
 			Events.postEvent(evt);
 		} else
 			super.service(request, everError);
+	}
+
+	//Bug #2871082
+	private class EncodedHref implements org.zkoss.zk.ui.util.DeferredValue {
+		public Object getValue() {
+			return getEncodedHref();
+		}
 	}
 }
