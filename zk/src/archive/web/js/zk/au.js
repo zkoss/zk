@@ -315,12 +315,10 @@ zAu = (function () {
 	}: zk.$void;
 
 	function doCmdsNow(cmds) {
-		var processed = cmds && !cmds.length; //Bug #2871135, no command so deemed as processed
 		try {
 			while (cmds && cmds.length) {
 				if (zk.mounting) return false;
 
-				processed = true;
 				var cmd = cmds.shift();
 				try {
 					doProcess(cmd.cmd, cmd.data);
@@ -330,7 +328,8 @@ zAu = (function () {
 				}
 			}
 		} finally {
-			if (processed && (!cmds || !cmds.length))
+		//Bug #2871135, always fire since the client might send back empty
+			if (!cmds || !cmds.length)
 				zWatch.fire('onResponse', null, {timeout:0}); //use setTimeout
 		}
 		return true;
