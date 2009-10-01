@@ -700,7 +700,7 @@ zAu.cmd0 = { //no uuid at all
 			else {
 				n = zk(id).jq[0];
 				if (n && n.submit) {
-					zEvt.fire(n, 'submit');
+					jq.event.fire(n, 'submit');
 					n.submit();
 				}
 			}
@@ -733,7 +733,7 @@ zAu.cmd1 = {
 	addAft: function (uuid, wgt, code, pgid) {
 		//Bug 1939059: This is a dirty fix. Refer to AuInsertBefore
 		//Format: comp-uuid:pg-uuid (if native root)
-		if (!wgt && pgid) {
+		if ((!wgt || !wgt.$n()) && pgid) {
 			wgt = zk.Widget.$(pgid);
 			if (wgt) zAu.cmd1.addChd(pgid, wgt, code);
 			else {

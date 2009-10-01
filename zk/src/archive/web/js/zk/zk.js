@@ -161,8 +161,7 @@ zk = function (sel) {
 		var thispt = jclass.prototype,
 			superpt = superclass.prototype,
 			define = members['$define'];
-		if (typeof define != 'undefined')
-			delete members['$define'];
+		delete members['$define'];
 		zk.copy(thispt, superpt); //inherit non-static
 		zk.copy(thispt, members);
 
@@ -177,7 +176,7 @@ zk = function (sel) {
 		jclass.$class = zk.Class;
 		jclass.superclass = superclass;
 
-		if (define) zk.define(jclass, define);
+		zk.define(jclass, define);
 
 		return jclass;
 	},

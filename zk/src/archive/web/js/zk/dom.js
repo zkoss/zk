@@ -1145,6 +1145,13 @@ zk.copy(jq.Event.prototype, { //ZK extension to jQuery.Event
 });
 
 zk.copy(jq.event, {
+	fire: document.createEvent ? function (el, evtnm) {
+		var evt = document.createEvent('HTMLEvents');
+		evt.initEvent(evtnm, false, false);
+		el.dispatchEvent(evt);
+	}: function (el, evtnm) {
+		el.fireEvent('on' + evtnm);
+	},
 	stop: function (evt) {
 		evt.stop();
 	},

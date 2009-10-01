@@ -62,14 +62,15 @@ zhtml.Widget = zk.$extends(zk.Native, {
 	},
 	doClick_: function (wevt) {
 		var n = this.$n();
-		if (n.tagName != 'INPUT')
-			this.$supers('doClick_', arguments);
-		else if (!n.disabled) {
-			if (n.type == 'checkbox' || n.type == 'radio')
-				this._doCheck();
-				//continue to fire onClick_ for backward compatibility
-			this.fireX(wevt); //no propagation
-		}
+		if (n)
+			if (n.tagName != 'INPUT')
+				this.$supers('doClick_', arguments);
+			else if (!n.disabled) {
+				if (n.type == 'checkbox' || n.type == 'radio')
+					this._doCheck();
+					//continue to fire onClick_ for backward compatibility
+				this.fireX(wevt); //no propagation
+			}
 	},
 	_doCheck: function (timeout) {
 		var n = this.$n();
