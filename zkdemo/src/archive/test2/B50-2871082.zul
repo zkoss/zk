@@ -1,0 +1,21 @@
+<window>
+<html><![CDATA[
+<p>menuitem's href shall resolved as servlet-context relative (related to application name)</p>
+<ol>
+   <li>You show see a menu item "Test"</li>
+   <li>Click to open the submenu. You shall see "href1", and "href2" two menu items.</li>
+   <li>Move your mouse to "href1" and see browser's status bar. You shall see "http://www.zkoss.org/". If not, it is a bug.</li>
+   <li>Move your mouse to "href2" and see browser's status bar. You shall see String ends with "/zkdemo/test2/test.zul". If not, it is a bug.</li>
+   
+   
+</ol>
+]]></html>
+<menubar id="menubar" width="200px">
+	<menu label="Test">
+		<menupopup>
+			<menuitem label="href1" href="http://www.zkoss.org"/>
+			<menuitem label="href2" href="/test2/test.zul"/>
+		</menupopup>
+	</menu>
+</menubar>
+</window>

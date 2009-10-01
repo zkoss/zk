@@ -263,7 +263,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			if (sz.height == 'auto')
 				box.style.height = '';
 			else if (sz.height != '')
-				box.style.height = jq.px(zk(n).revisedHeight(sz.height, true));
+				box.style.height = jq.px(this._mold == 'trendy' ? zk(n).revisedHeight(sz.height, true) : sz.height);
 			else
 				box.style.height = this._height ? this._height : '';
 		}
@@ -271,7 +271,7 @@ zul.wgt.Button = zk.$extends(zul.LabelImageWidget, {
 			if (sz.width == 'auto')
 				box.style.width = '';
 			else if (sz.width != '')
-				box.style.width = jq.px(zk(n).revisedWidth(sz.width, true));
+				box.style.width = jq.px(this._mold == 'trendy' ? zk(n).revisedWidth(sz.width, true) : sz.width);
 			else
 				box.style.width = this._width ? this._width : '';
 		}

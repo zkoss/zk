@@ -31,6 +31,9 @@ zul.wgt.Popup = zk.$extends(zul.Widget, {
 		this.setTopmost();
 		
 		if ((!opts || !opts.disableMask) && this.isListen("onOpen", {asapOnly:true})) {
+			//Racing? Previous onResponse has not been fired and user triggers open again
+			if (this.mask) this.mask.destroy(); 
+			
 			// use a progress bar to hide the popup
 			this.mask = new zk.eff.Mask({
 				id: this.uuid + "-mask",

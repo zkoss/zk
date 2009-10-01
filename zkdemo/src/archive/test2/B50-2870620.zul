@@ -1,0 +1,37 @@
+<window>
+	<zscript><![CDATA[
+		String sn = Executions.getCurrent().getServerName();
+		int sp = Executions.getCurrent().getServerPort();
+		String gkey = null;
+		if (sn.indexOf("www.potix.com") >= 0) { // http://www.potix.com/
+			gkey="ABQIAAAAmGxmYR57XDAbAumS9tV5fxRYCo_4ZGj_-54kHesWSk0nMkbs4xTpq0zo9O75_ZqvsSLGY2YkC7jjNg";
+		} else if (sn.indexOf("www.zkoss.org") >= 0) { // http://www.zkoss.org/
+			gkey="ABQIAAAAmGxmYR57XDAbAumS9tV5fxQXyylOlR69a1vFTcUcpV6DXdesOBSMEHfkewcSzwEwBT7UzVx8ep8vjA";
+		} else if (sn.indexOf("localhost") >= 0) { //localhost
+			if (sp == 80) // http://localhost/
+				gkey="ABQIAAAAmGxmYR57XDAbAumS9tV5fxT2yXp_ZAY8_ufC3CFXhHIE1NvwkxRUITTZ-rzsyEVih16Hn3ApyUpSkA";
+			else if (sp == 8080) // http://localhost:8080
+				gkey="ABQIAAAAmGxmYR57XDAbAumS9tV5fxTwM0brOpm-All5BF6PoaKBxRWWERSynObNOWSyMNmLGAMZAO1WkDUubA";
+			else if (sp == 7799)
+				gkey="ABQIAAAAmGxmYR57XDAbAumS9tV5fxTT6-Op-9nAQgn7qnDG0QjE8aldaBRU1BQK2ADNWCt1BR2yg4ghOM6YIA";
+		}
+	]]></zscript>
+	<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=${gkey}"
+	type="text/javascript" unless="${empty gkey}"/>
+	<html><![CDATA[
+	<ol>
+	<li>You shall see the google map.</li>
+	<li>Right click on the google map</li>
+	<li>You shall see a menu popup and "<Gmaps mymap>" appear under the gmaps</li>
+	<li>If you saw 'null' show under gmaps instead, it is a bug.</li>
+	<li>done</li>
+	</ol>
+	]]></html>
+	<menupopup id="mypop" onOpen='if (event.isOpen()) mylabel.value= ""+event.reference'>
+		<menuitem label="New" onClick="alert(self.label)" />
+		<menuitem label="Open" onClick="alert(self.label)" />
+		<menuitem label="Save" onClick="alert(self.label)" />
+	</menupopup>
+	<gmaps id="mymap" width="300px" height="200px" context="mypop"/>
+	<label id="mylabel"/>
+</window>

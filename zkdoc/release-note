@@ -46,6 +46,7 @@ November, 2009
   2871082: Menuitem's href shall resolved as servlet-context relative
   2871080: ZHTML Text shall not encode & or <
   2871100: The default zclass of toolbarbutton shall be z-toolbarbutton
+  2871135: Unclosed progress mask on opening popup
   
 * Bugs
   1999145: Combobox with Width of 100% Overruns

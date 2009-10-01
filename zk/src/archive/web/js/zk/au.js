@@ -315,7 +315,7 @@ zAu = (function () {
 	}: zk.$void;
 
 	function doCmdsNow(cmds) {
-		var processed;
+		var processed = cmds && !cmds.length; //Bug #2871135, no command so deemed as processed
 		try {
 			while (cmds && cmds.length) {
 				if (zk.mounting) return false;
