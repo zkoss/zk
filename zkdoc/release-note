@@ -44,6 +44,7 @@ November, 2009
   2870652: Button(mold == trendy) is not resized with hflex/vflex
   2870663: No value doublebox/decimalbox show 'null'
   2871082: Menuitem's href shall resolved as servlet-context relative
+  2871080: ZHTML Text shall not encode & or <
   
 * Bugs
   1999145: Combobox with Width of 100% Overruns

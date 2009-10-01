@@ -23,11 +23,11 @@ zhtml.Text = zk.$extends(zhtml.Widget, {
 	/** Sets the value of this label.
 	 */
 	setValue: function(value) {
-		if (!value) value = '';
+		value = value || '';
 		if (this._value != value) {
 			this._value = value;
 			var n = this.$n();
-			if (n) n.innerHTML = zUtl.encodeXML(value);
+			if (n) n.innerHTML = value; //don't encode (bug 2871080)
 		}
 	},
 
@@ -35,7 +35,7 @@ zhtml.Text = zk.$extends(zhtml.Widget, {
 		var attrs = this.domAttrs_({id:1}),
 			span = attrs || !zk.Widget.isAutoId(this.uuid);
 		if (span) out.push('<span', ' id="', this.uuid, '"', attrs, '>');
-		out.push(zUtl.encodeXML(this._value));
+		out.push(this._value); //don't encode (bug 2871080)
 		if (span) out.push('</span>');
 	}
 });
