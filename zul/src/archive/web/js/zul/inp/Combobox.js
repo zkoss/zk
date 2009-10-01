@@ -19,6 +19,8 @@ zul.inp.Combobox = zk.$extends(zul.inp.ComboWidget, {
 		autocomplete: null,
 		repos: function () {
 			if (this.desktop) {
+				var n = this.getInputNode();
+				n.value = this.valueEnter_ != null ? this.valueEnter_ : this._value || '';
 				this._typeahead(this._bDel);
 				this._bDel = null;
 			}
