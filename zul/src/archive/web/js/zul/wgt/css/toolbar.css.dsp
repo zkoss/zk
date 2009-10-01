@@ -73,8 +73,8 @@
 	clear: none;
 	float: right;
 }
-<%-- Toolbar button --%>
-.z-toolbar-button {
+<%-- Toolbarbutton --%>
+.z-toolbarbutton {
 	display:-moz-inline-box;
 	display: inline-block;
 	position: relative;
@@ -84,24 +84,24 @@
 	padding: 1px 0;
 	zoom: 1;
 }
-.z-toolbar-button-over {
+.z-toolbarbutton-over {
 	border-top: 1px solid #7EAAC6;
 	border-bottom: 1px solid #7EAAC6;
 	padding: 0;
 }
-.z-toolbar-button-body {
+.z-toolbarbutton-body {
 	position: relative;
 	margin: 0 -1px;
 	padding: 0 1px;
 	vertical-align: middle;:
 	zoom: 1;
 }
-.z-toolbar-button-over .z-toolbar-button-body {
+.z-toolbarbutton-over .z-toolbarbutton-body {
 	border-left: 1px solid #7EAAC6;
 	border-right: 1px solid #7EAAC6;
 	padding: 0;
 }
-.z-toolbar-button-cnt {
+.z-toolbarbutton-cnt {
 	padding: 2px 2px;
 	position: relative;
 	zoom: 1;
@@ -111,27 +111,27 @@
 }
 
 <c:if test="${c:isExplorer()}">
-.z-toolbar-button {
+.z-toolbarbutton {
 	display: inline;
 }
 
 <c:if test="${c:browser('ie6-')}">
-.z-toolbar-button,
-.z-toolbar-button-body,
-.z-toolbar-button-cnt {
+.z-toolbarbutton,
+.z-toolbarbutton-body,
+.z-toolbarbutton-cnt {
 	display: inline;
 	position: relative;
 }
-.z-toolbar-button-body {
+.z-toolbarbutton-body {
 	float: left;
 }
 </c:if>
 </c:if>
-.z-toolbar-button-disd * {
+.z-toolbarbutton-disd * {
 	color:gray !important;
 	cursor:default !important;
 }
-.z-toolbar-button-disd {
+.z-toolbarbutton-disd {
 	opacity: .5;
 	-moz-opacity: .5;
 	filter: alpha(opacity=50);

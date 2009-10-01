@@ -20,14 +20,13 @@ import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 
 /**
- * A tool button.
- *
- * <p>The default CSS class is "z-toolbar-button".
+ * A toolbar button.
  *
  * <p>Non-xul extension: Toolbarbutton supports {@link #getHref}. If {@link #getHref}
  * is not null, the onClick handler is ignored and this element is degenerated
  * to HTML's A tag.
- * <p>Default {@link #getZclass}: z-toolbar-button.(since 3.5.0)
+ *
+ * <p>Default {@link #getZclass}: z-toolbarbutton.(since 5.0.0)
  *
  * @author tomyeh
  */
@@ -53,6 +52,6 @@ public class Toolbarbutton extends Button implements org.zkoss.zul.api.Toolbarbu
 	
 	// super
 	public String getZclass() {
-		return _zclass == null ? "z-toolbar-button" : _zclass;
+		return _zclass == null ? "z-toolbarbutton" : _zclass;
 	}
 }
