@@ -18,13 +18,15 @@ package org.zkoss.zul;
 
 /**
  * A west region of a border layout.
- * <p>Default {@link #getZclass}: z-west.(since 3.5.0)
+ * <p>Default {@link #getZclass}: z-west.
  * 
+ * <p>Default: {@link #getCmargins()} is "0,3,3,0"</p>
  * @author jumperchen
  * @since 5.0.0
  */
 public class West extends LayoutRegion implements org.zkoss.zul.api.West {
 	public West() {
+		setCmargins("0,3,3,0");
 	}
 
 	/**

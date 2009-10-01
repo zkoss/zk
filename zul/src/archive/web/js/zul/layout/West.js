@@ -15,7 +15,12 @@ it will be useful, but WITHOUT ANY WARRANTY.
 zul.layout.West = zk.$extends(_zkf = zul.layout.LayoutRegion, zul.layout._West = {
 	setHeight: zk.$void, // readonly
 	sanchor: 'l',
-
+	
+	$init: function () {
+		this.$supers('$init', arguments);
+		this.setCmargins("0,3,3,0");
+	},
+	
 	getPosition: function () {
 		return zul.layout.Borderlayout.WEST;
 	},

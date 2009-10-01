@@ -112,4 +112,95 @@ public interface LayoutRegion extends org.zkoss.zul.impl.api.XulElement {
 	 * {@link UnsupportedOperationException}.
 	 */
 	public String getSize();
+
+	/**
+	 * Returns the title.
+	 * <p>
+	 * Default: null.
+	 */
+	public String getTitle();
+
+	/**
+	 * Sets the title.
+	 */
+	public void setTitle(String title);
+	/**
+	 * Returns whether enable the split functionality.
+	 * <p>
+	 * Default: false.
+	 */
+	public boolean isSplittable();
+
+	/**
+	 * Sets whether enable the split functionality.
+	 */
+	public void setSplittable(boolean splittable);
+
+	/**
+	 * Sets the maximum size of the resizing element.
+	 */
+	public void setMaxsize(int maxsize);
+
+	/**
+	 * Returns the maximum size of the resizing element.
+	 * <p>
+	 * Default: 2000.
+	 */
+	public int getMaxsize();
+
+	/**
+	 * Sets the minimum size of the resizing element.
+	 */
+	public void setMinsize(int minsize);
+
+	/**
+	 * Returns the minimum size of the resizing element.
+	 * <p>
+	 * Default: 0.
+	 */
+	public int getMinsize();
+
+	/**
+	 * Returns the collapsed margins, which is a list of numbers separated by
+	 * comma.
+	 * 
+	 * <p>
+	 * Default: "5,5,5,5".
+	 */
+	public String getCmargins();
+
+	/**
+	 * Sets the collapsed margins for the element "0,1,2,3" that direction is
+	 * "top,left,right,bottom"
+	 */
+	public void setCmargins(String cmargins);
+
+	/**
+	 * Returns whether set the initial display to collapse.
+	 * <p>
+	 * Default: false.
+	 */
+	public boolean isCollapsible();
+
+	/**
+	 * Sets whether set the initial display to collapse.
+	 * 
+	 * <p>
+	 * It only applied when {@link #getTitle()} is not null. (since 3.5.0)
+	 */
+	public void setCollapsible(boolean collapsible);
+
+	/**
+	 * Returns whether it is opne (i.e., not collapsed. Meaningful only if
+	 * {@link #isCollapsible} is not false.
+	 * <p>
+	 * Default: true.
+	 */
+	public boolean isOpen();
+
+	/**
+	 * Opens or collapses the splitter. Meaningful only if
+	 * {@link #isCollapsible} is not false.
+	 */
+	public void setOpen(boolean open);
 }

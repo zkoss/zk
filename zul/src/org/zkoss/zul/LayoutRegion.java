@@ -19,11 +19,15 @@ package org.zkoss.zul;
 import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.UiException;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.OpenEvent;
 import org.zkoss.zul.impl.XulElement;
 import org.zkoss.zul.impl.Utils;
 
 /**
  * A layout region in a border layout.
+ * <p>
+ * Events:<br/> onOpen, onSize.<br/>
  * 
  * @author jumperchen
  * @since 5.0.0
@@ -34,6 +38,19 @@ public abstract class LayoutRegion extends XulElement implements org.zkoss.zul.a
 	private int[] _margins = new int[] { 0, 0, 0, 0 };
 	private boolean _flex;
 	private boolean _autoscroll;
+
+	private String _title = null;	
+	private int _maxsize = 2000;
+	private int _minsize = 0;
+	private int[] _cmargins = new int[] { 5, 5, 5, 5 };
+	private boolean _splittable;
+	private boolean _collapsible;
+	private boolean _open = true;
+
+	static {
+		addClientEvent(LayoutRegion.class, Events.ON_OPEN, CE_IMPORTANT);
+		addClientEvent(LayoutRegion.class, Events.ON_SIZE, CE_IMPORTANT|CE_DUPLICATE_IGNORE);
+	}
 
 	public LayoutRegion() {
 	}
@@ -165,6 +182,146 @@ public abstract class LayoutRegion extends XulElement implements org.zkoss.zul.a
 	 */
 	abstract public String getSize();
 	
+
+	/** 
+	 * Returns the title.
+	 * <p>Default: null.
+	 */
+	public String getTitle() {
+		return _title;
+	}
+	
+	/**
+	 * Sets the title.
+	 */
+	public void setTitle(String title) {
+		if (!Objects.equals(_title, title)) {
+			_title = title;
+			smartUpdate("title", _title);
+		}
+	}
+
+	/**
+	 * Returns whether enable the split functionality.
+	 * <p>
+	 * Default: false.
+	 */
+	public boolean isSplittable() {
+		return _splittable;
+	}
+
+	/**
+	 * Sets whether enable the split functionality.
+	 */
+	public void setSplittable(boolean splittable) {
+		if (_splittable != splittable) {
+			_splittable = splittable;
+			smartUpdate("splittable", _splittable);
+		}
+	}
+
+	/**
+	 * Sets the maximum size of the resizing element.
+	 */
+	public void setMaxsize(int maxsize) {
+		if (_maxsize != maxsize) {
+			_maxsize = maxsize;
+			smartUpdate("maxsize", _maxsize);
+		}
+	}
+
+	/**
+	 * Returns the maximum size of the resizing element.
+	 * <p>
+	 * Default: 2000.
+	 */
+	public int getMaxsize() {
+		return _maxsize;
+	}
+
+	/**
+	 * Sets the minimum size of the resizing element.
+	 */
+	public void setMinsize(int minsize) {
+		if (_minsize != minsize) {
+			_minsize = minsize;
+			smartUpdate("minsize", minsize);
+		}
+	}
+
+	/**
+	 * Returns the minimum size of the resizing element.
+	 * <p>
+	 * Default: 0.
+	 */
+	public int getMinsize() {
+		return _minsize;
+	}
+
+	/**
+	 * Returns the collapsed margins, which is a list of numbers separated by comma.
+	 * 
+	 * <p>
+	 * Default: "5,5,5,5".
+	 */
+	public String getCmargins() {
+		return Utils.intsToString(_cmargins);
+	}
+
+	/**
+	 * Sets the collapsed margins for the element "0,1,2,3" that direction is
+	 * "top,left,right,bottom"
+	 */
+	public void setCmargins(String cmargins) {
+		final int[] imargins = Utils.stringToInts(cmargins, 0);
+		if (!Objects.equals(imargins, _cmargins)) {
+			_cmargins = imargins;
+			smartUpdate("imargins", getCmargins());
+		}
+	}
+
+	/**
+	 * Returns whether set the initial display to collapse.
+	 * <p>
+	 * Default: false.
+	 */
+	public boolean isCollapsible() {
+		return _collapsible;
+	}
+
+	/**
+	 * Sets whether set the initial display to collapse.
+	 * 
+	 * <p>It only applied when {@link #getTitle()} is not null. (since 3.5.0)
+	 */
+	public void setCollapsible(boolean collapsible) {
+		if (collapsible != _collapsible) {
+			_collapsible = collapsible;
+			smartUpdate("collapsible", _collapsible);
+		}
+	}
+
+	/**
+	 * Returns whether it is open (i.e., not collapsed. Meaningful only if
+	 * {@link #isCollapsible} is not false.
+	 * <p>
+	 * Default: true.
+	 */
+	public boolean isOpen() {
+		return _open;
+	}
+
+	/**
+	 * Opens or collapses the splitter. Meaningful only if
+	 * {@link #isCollapsible} is not false.
+	 */
+	public void setOpen(boolean open) {
+		if (_open != open) {
+			_open = open;
+			smartUpdate("open", open);
+		}
+	}
+	
 	public String getZclass() {
 		return _zclass == null ? "z-" + getPosition() : _zclass;
 	}
@@ -190,5 +347,35 @@ public abstract class LayoutRegion extends XulElement implements org.zkoss.zul.a
 		render(renderer, "autoscroll", _autoscroll);
 		if (_margins[0] != 0 || _margins[1] != 0 || _margins[2] != 0 || _margins[3] != 0)
 			render(renderer, "margins", getMargins());
+
+		render(renderer, "title", _title);
+
+		if (_maxsize != 2000)
+			renderer.render("maxsize", _maxsize);
+		if (_minsize != 0)
+			renderer.render("minsize", _minsize);
+
+		render(renderer, "splittable", _splittable);
+		render(renderer, "collapsible", _collapsible);
+
+		render(renderer, "cmargins", getCmargins());
+			//always generate since different region might have different default
+		if (!_open)
+			renderer.render("open", _open);
+	}
+	
+	/** Processes an AU request.
+	 *
+	 * <p>Default: in addition to what are handled by {@link org.zkoss.zul.LayoutRegion#service},
+	 * it also handles onOpen.
+	 */
+	public void service(org.zkoss.zk.au.AuRequest request, boolean everError) {
+		final String cmd = request.getCommand();
+		if (cmd.equals(Events.ON_OPEN)) {
+			OpenEvent evt = OpenEvent.getOpenEvent(request);
+			_open = evt.isOpen();
+			Events.postEvent(evt);
+		} else
+			super.service(request, everError);
 	}
 }

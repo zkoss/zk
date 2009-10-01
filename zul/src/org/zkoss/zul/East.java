@@ -20,11 +20,13 @@ package org.zkoss.zul;
  * An east region of a border layout.
  * <p>Default {@link #getZclass}: z-east.(since 3.5.0)
  * 
+ * <p>Default: {@link #getCmargins()} is "0,3,3,0"</p>
  * @author jumperchen
  * @since 5.0.0
  */
 public class East extends LayoutRegion implements org.zkoss.zul.api.East {
 	public East() {
+		setCmargins("0,3,3,0");
 	}
 
 	/**

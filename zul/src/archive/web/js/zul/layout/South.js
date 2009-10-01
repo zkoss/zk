@@ -12,7 +12,7 @@ Copyright (C) 2008 Potix Corporation. All Rights Reserved.
 This program is distributed under LGPL Version 3.0 in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 */
-zul.layout.South = zk.$extends(_zkf = zul.layout.LayoutRegion, zul.layout._South = {
+zul.layout.South = zk.$extends(_zkf = zul.layout.LayoutRegion, {
 	setWidth: zk.$void, // readonly
 	sanchor: 'b',
 
