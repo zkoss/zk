@@ -208,9 +208,9 @@ public class HtmlPageRenders {
 
 		sb.append("\n<!-- ZK ").append(wapp.getVersion());
 		if (WebApps.getFeature("enterprise"))
-			sb.append('e');
+			sb.append(" ENT");
 		else if (WebApps.getFeature("professional"))
-			sb.append('p');
+			sb.append(" PRO");
 		sb.append(' ').append(wapp.getBuild())
 			.append(" -->\n");
 
