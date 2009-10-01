@@ -106,7 +106,7 @@
 	position: relative;
 	zoom: 1;
 	font-family: ${fontFamilyT};
-	font-size: ${fontSizeM};
+	font-size: ${fontSizeS};
 	font-weight: normal;
 }
 
