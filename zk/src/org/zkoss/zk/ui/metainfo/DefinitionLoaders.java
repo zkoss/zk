@@ -377,13 +377,13 @@ public class DefinitionLoaders {
 
 				compdef.setDeclarationURL(url);
 				langdef.addComponentDefinition(compdef);
-			} else if (el.getElement("extends") != null) { //override
-				if (log.finerable()) log.finer("Override component definition: "+name);
+			} else if (el.getElement("extends") != null) { //extends
+				if (log.finerable()) log.finer("Extends component definition: "+name);
 
 				final String extnm = el.getElementValue("extends", true);
 				final ComponentDefinition ref = langdef.getComponentDefinitionIfAny(extnm);
 				if (ref == null) {
-					log.warning("Component "+name+" ignored. Reason: override a non-existent component "+extnm+".\n"+el.getLocator());
+					log.warning("Component "+name+" ignored. Reason: extends a non-existent component "+extnm+".\n"+el.getLocator());
 						//not throw exception since the derived component might be
 						//ignored due to class-not-found
 					continue;
@@ -398,13 +398,15 @@ public class DefinitionLoaders {
 					compdef = (ComponentDefinitionImpl)
 						ref.clone(ref.getLanguageDefinition(), name);
 					compdef.setDeclarationURL(url);
-					langdef.addComponentDefinition(compdef);
 				}
 
 				if (cls != null)
 					compdef.setImplementationClass(cls);
 				else if (clsnm != null)
 					compdef.setImplementationClass(clsnm);
+
+				langdef.addComponentDefinition(compdef);
+					//Note: setImplementationClass before addComponentDefinition
 			} else {
 				if (log.finerable()) log.finer("Add component definition: name="+name);
 

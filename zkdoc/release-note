@@ -44,6 +44,7 @@ October, 2009
   2859747: Label inside Column should be sorted as well.
   2861272: Listitem can't be invisible in IE, Chrome, and Opera
   2861323: AnnotateDataBinderInit shall throw exception if arg0 is null
+  2871112: Extends compoonent definition to diff name and class error
 
 	--------
 ZK 3.6.2

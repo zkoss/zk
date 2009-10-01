@@ -19,6 +19,7 @@ div
 </div>
 <window id="w" title="Hello" border="normal">
 window
+<button label="invalidate wnd" onClick="spaceOwner.invalidate()"/>
 </window>
 <button label="invalid window" onClick="w.invalidate()" mold="os"/>
 <button label="invalid div" onClick="d.invalidate()" mold="os"/>
