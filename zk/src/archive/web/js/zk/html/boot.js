@@ -286,7 +286,11 @@ if (zk.ie) { //Bug 1741959: avoid memory leaks
 	function _ltid(el) {
 		return el.id || (el == document ? '_doc_': el == window ? '_win_':
 			el == document.body ? '_bdy_':
-			el.nodeType == 1 ? (el.id = '_z_ltaid' + _ltaidc++): '');
+			el.nodeType == 1 ? (el.id = _ltid2(el)): '');
+	}
+	function _ltid2(el) {
+		var id = $uuid(el);
+		return (id ? id + '!': '_z_') + 'ltaid' + _ltaidc++;
 	}
 	function _unlistenNow(ls) {
 		for (var j = ls.length; j--;) {
