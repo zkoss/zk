@@ -183,7 +183,7 @@ public class Parser {
 		//3. resolve imports
 		if (!imports.isEmpty()) {
 			final RequestInfo ri =
-				new RequestInfoImpl(_wapp, null, null, null, _locator);
+				new RequestInfoImpl(_wapp, null, null, null, getLocator());
 			final UiFactory uf = ((WebAppCtrl)_wapp).getUiFactory();
 			for (Iterator it = imports.iterator(); it.hasNext();) {
 				final String[] imprt = (String[])it.next();
