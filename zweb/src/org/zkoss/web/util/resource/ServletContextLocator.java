@@ -41,11 +41,11 @@ public class ServletContextLocator implements Locator {
 	 * It must be null, empty, or starts with /.
 	 */
 	public ServletContextLocator(ServletContext ctx, String dir) {
-		this(ctx, null, dir);
+		this(ctx, dir, null);
 	}
 	/** Constructor.
 	 * For example, if prefix is "/WEB-INF/cwr", then getResource("/abc") will
-	 * look for "/WEB-INF/cwr/abc".
+	 * look for "/WEB-INF/cwr/abc" first, and then "/abc".
 	 *
 	 * <p>Another example, if prefix is "/WEB-INF/cwr" and dir is "/subdir",
 	 * then getResource("abc") will look for "/WEB-INF/cwr/subdir/abc".
@@ -93,11 +93,11 @@ public class ServletContextLocator implements Locator {
 		return _ctx;
 	}
 
-	private String fixName(String name) {
+	private String fixName(String name, boolean prefix) {
 		name = name.length() > 0 && name.charAt(0) != '/' ?
 			_dir != null ? _dir + name:
-				_prefix != null ? '/' + name: name: name;
-		return _prefix != null ? _prefix + name: name;
+				prefix && _prefix != null ? '/' + name: name: name;
+		return prefix && _prefix != null ? _prefix + name: name;
 	}
 
 	//-- Locator --//
@@ -106,13 +106,17 @@ public class ServletContextLocator implements Locator {
 	}
 	public URL getResource(String name) {
 		try {
-			return _ctx.getResource(fixName(name));
+			URL url = _ctx.getResource(fixName(name, true));
+			return url == null && _prefix != null ?
+				_ctx.getResource(fixName(name, false)): url;
 		} catch (java.net.MalformedURLException ex) {
 			throw new SystemException(ex);
 		}
 	}
 	public InputStream getResourceAsStream(String name) {
-		return _ctx.getResourceAsStream(fixName(name));
+		InputStream is = _ctx.getResourceAsStream(fixName(name, true));
+		return is == null && _prefix != null ?
+			_ctx.getResourceAsStream(fixName(name, false)): is;
 	}
 
 	//-- Object --//

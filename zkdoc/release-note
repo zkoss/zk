@@ -47,6 +47,7 @@ November, 2009
   2871080: ZHTML Text shall not encode & or <
   2871100: The default zclass of toolbarbutton shall be z-toolbarbutton
   2871135: Unclosed progress mask on opening popup
+  2871627: zscript failed to load a zscript file if w/ absolute path
   
 * Bugs
   1999145: Combobox with Width of 100% Overruns
