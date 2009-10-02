@@ -113,10 +113,12 @@ zk = function (sel) {
 		for (var j = 0, ref = window;;) {
 			var k = name.indexOf('.', j),
 				nm = k >= 0 ? name.substring(j, k): name.substring(j);
-			var nxt = ref[nm];
-			if (!nxt) nxt = ref[nm] = {};
+			var nxt = ref[nm], newpkg;
+			if (newpkg = !nxt) nxt = ref[nm] = {};
 			if (k < 0) {
-				if (end !== false) zk.setLoaded(name);
+				if (newpkg && end !== false) zk.setLoaded(name);
+					//if $package(x, false) was called, zk.setLoaded won't be called
+					//i.e., zk.setLoaded has to be called explicitly
 				if (wv) nxt.$wv = true; //the wv (weeve) package is available
 				return nxt;
 			}

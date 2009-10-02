@@ -979,10 +979,6 @@ public class UiEngineImpl implements UiEngine {
 				//and we have the chance to optimize them
 				try {
 					process(exec, request, !errs.isEmpty());
-				} catch (ComponentNotFoundException ex) {
-					//possible because the previous might remove some comp
-					//so ignore it
-//					if (log.finable()) log.fine("Component not found: "+request);
 				} catch (Throwable ex) {
 					handleError(ex, uv, errs);
 					//we don't skip request to avoid mis-match between c/s
