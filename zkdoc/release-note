@@ -121,6 +121,8 @@ November, 2009
 	"end" means extra space is placed on the left/top of the hbox/vbox. If you would like the 
 	hbox/vbox behaves just like in old version, you can add a "stretch" option on pack property to 
 	make it backward compatible. i.e. "stretch,start", "stretch,center", or "stretch,end".
+  + When the value specified in custom-attributes starts with "@{" and ends with "}",
+    it is considered as an annotation.
   
 	--------
 ZK 3.6.3

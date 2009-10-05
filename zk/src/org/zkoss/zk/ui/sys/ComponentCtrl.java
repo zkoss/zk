@@ -228,6 +228,21 @@ public interface ComponentCtrl {
 	/** Returns the annotation associated with the definition of the specified
 	 * property, or null if not available.
 	 *
+	 * <p>Notice that the property is not limited the 'real' property.
+	 * For example, the following statement is correct though
+	 * <code>button</code> doesn't have <code>setFoo</code> method.
+	 * And, you can retrieve it by use of this method (<code>getAnnotation("foo", "default")</code>)
+	 *
+	 * <pre><code>&lt;button foo="@{value=123}"/&gt;</code></pre>
+	 *
+	 * <p>Furthermore, you can declare it as <code>custom-attribute</code>
+	  (since ZK 5.0).
+	 * For example, the following is equivalent to the above.
+	 *
+	 * <pre><code>&lt;button>
+	 *  &lt;custom-attribute foo="@{value=123}"&gt;
+	 *&lt;/button></code></pre>
+	 *
 	 * @param annotName the annotation name
 	 * @param propName the property name, e.g., "value".
 	 * @exception IllegalArgumentException if propName is null or empty

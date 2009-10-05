@@ -33,7 +33,9 @@ xmlns:h="http://www.w3.org/1999/xhtml">
 	<textbox id="t4" value="@{mark(color='blue',shape='round')}"/>
 	<textbox id="t5" value="@{selected.item}"/>
 	<textbox id="t6" value="@{first second(color='blue',round) third forth(ab) (cd='cd')}"/>
-	<textbox id="t7" value="@{bind(_var='person')}" self="@{each='person'}" rows="@{rows}"/>
+	<textbox id="t7" value="@{bind(_var='person')}" self="@{each='person'}" rows="@{rows}">
+		<custom-attributes foo="@{custom(attr='found')}"/>
+	</textbox>
 	<h:a href="@{html(good)}"/>
 	<zscript>
 	void dump(StringBuffer sb, Component comp) {

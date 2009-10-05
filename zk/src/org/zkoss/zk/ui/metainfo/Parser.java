@@ -833,15 +833,10 @@ public class Parser {
 					if (!"xmlns".equals(attPref)
 					&& !("xmlns".equals(attnm) && "".equals(attPref))
 					&& !"http://www.w3.org/2001/XMLSchema-instance".equals(attURI)) {
-						final int len = attval.length();
-						if (len >= 3 && attval.charAt(0) == '@'
-						&& attval.charAt(1) == '{' && attval.charAt(len-1) == '}') { //annotation
+						if (isAttrAnnot(attval)) { //annotation
 							if (attrAnnHelper == null)
 								attrAnnHelper = new AnnotationHelper();
-							attrAnnHelper.addByCompoundValue(
-								attval.substring(2, len -1));
-							attrAnnHelper.applyAnnotations(compInfo,
-								"self".equals(attnm) ? null: attnm, true);
+							applyAttrAnnot(attrAnnHelper, compInfo, attnm, attval, true);
 						} else {
 							addAttribute(compInfo, attrns, attnm, attval, null,
 								attr.getLocator());
@@ -863,6 +858,18 @@ public class Parser {
 			&& !compInfo.getChildren().isEmpty())
 				optimizeNativeInfos((NativeInfo)compInfo);
 		}
+	}
+	private static boolean isAttrAnnot(String val) {
+		final int len = val.length();
+		return len >= 3 && val.charAt(0) == '@'
+			&& val.charAt(1) == '{' && val.charAt(len-1) == '}';
+	}
+	private static void applyAttrAnnot(AnnotationHelper attrAnnHelper,
+	ComponentInfo compInfo, String nm, String val, boolean selfAllowed) {
+		attrAnnHelper.addByCompoundValue(
+			val.substring(2, val.length() -1));
+		attrAnnHelper.applyAnnotations(compInfo,
+			selfAllowed && "self".equals(nm) ? null: nm, true);
 	}
 	private void warnWrongZkAttr(Attribute attr) {
 		log.warning("Attribute "+attr.getName()+" ignored in <zk>, "+attr.getLocator());
@@ -976,10 +983,11 @@ public class Parser {
 		if (parent instanceof PageDefinition)
 			throw new UiException("custom-attributes must be used under a component, "+el.getLocator());
 		if (annHelper.clear())
-			log.warning("Annotations are ignored since <custom-attribute> doesn't support them, "+el.getLocator());
+			log.warning("Annotations are ignored since <custom-attributes> doesn't support them, "+el.getLocator());
 
 		String ifc = null, unless = null, scope = null, composite = null;
 		final Map attrs = new HashMap();
+		AnnotationHelper attrAnnHelper = null;
 		for (Iterator it = el.getAttributeItems().iterator();
 		it.hasNext();) {
 			final Attribute attr = (Attribute)it.next();
@@ -996,6 +1004,11 @@ public class Parser {
 				composite = attval;
 			} else if ("forEach".equals(attnm) && isZkElementAttr(langdef, attrns)) {
 				throw new UiException("forEach not applicable to <custom-attributes>, "+el.getLocator());
+			} else if (isAttrAnnot(attval) && parent instanceof ComponentInfo) {
+				if (attrAnnHelper == null)
+					attrAnnHelper = new AnnotationHelper();
+				applyAttrAnnot(attrAnnHelper, (ComponentInfo)parent,
+					attnm, attval, false);
 			} else {
 				attrs.put(attnm, attval);
 			}
