@@ -282,6 +282,8 @@ public class Listitem extends XulElement implements org.zkoss.zul.api.Listitem {
 			smartUpdate("visible", visible);
 			final Listbox listbox = (Listbox) getParent();
 			if (listbox != null) {
+				if (listbox.inSelectMold())
+					listbox.invalidate();
 				final Listgroup g = listbox.getListgroupAt(getIndex());
 				if (g == null || g.isOpen())
 					listbox.addVisibleItemCount(visible ? 1 : -1);
@@ -291,10 +293,19 @@ public class Listitem extends XulElement implements org.zkoss.zul.api.Listitem {
 	}
 
 	protected void smartUpdate(String name, Object value) { //make it accessible in this package
-		super.smartUpdate(name, value);
+		Listbox box = getListbox();
+		if (isVisible() || box == null || !box.inSelectMold())
+			super.smartUpdate(name, value);
 	}
 	protected void smartUpdate(String name, boolean value) { //make it accessible in this package
-		super.smartUpdate(name, value);
+		Listbox box = getListbox();
+		if (isVisible() || box == null || !box.inSelectMold())
+			super.smartUpdate(name, value);
+	}
+	protected void smartUpdate(String name, int value) {
+		Listbox box = getListbox();
+		if (isVisible() || box == null || !box.inSelectMold())
+			super.smartUpdate(name, value);
 	}
 	
 	public String getMold() {

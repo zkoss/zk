@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+B36-2801721.zul
+
+	Purpose:
+		
+	Description:
+		
+	History:
+		Fri Sep 25 14:20:21     2009, Created by jumperchen
+
+Copyright (C) 2009 Potix Corporation. All Rights Reserved.
+
+-->
+<zk>
+	<zscript>
+ class WinView extends Window {
+	static int i = 0;
+	
+	 class rowRenderer implements RowRenderer{ 
+		 public void render(Row row, java.lang.Object data) {
+			Vector _data = (Vector)data;
+			
+			for (Enumeration e = _data.elements(); e.hasMoreElements();) {
+				Object o = e.nextElement();
+				if (o instanceof String) {
+					new Label((String)o).setParent(row); 
+				} else if (o instanceof Integer){
+					new Label(((Integer)o).toString()).setParent(row); 
+				}
+			}
+		}
+	 }
+
+	 void renderGrid() {
+		Grid g = (Grid) getFellow("datagrid");
+		Vector v = new Vector();
+		Vector v1 = new Vector();
+		v1.add(new Integer(++i));v1.add(new Integer(++i));v1.add(new Integer(++i));v1.add(new Integer(++i));v1.add(new Integer(++i));
+		Vector v2 = new Vector();
+		v2.add(new Integer(++i));v2.add(new Integer(++i));v2.add(new Integer(++i));v2.add(new Integer(++i));v2.add(new Integer(++i));
+		v.add(v1);
+		v.add(v2);
+		
+		if (g.getRowRenderer() == null) {
+			g.setRowRenderer(new rowRenderer());
+		}
+
+		if (g.getModel() == null) {
+			g.setModel(new ListModelList(v));
+		} else {
+			ListModelList lml = (ListModelList) g.getModel();
+			lml.clear();
+			lml.addAll(v);
+		}
+	}
+}
+		</zscript>
+If you run the case, please use the <toolbarbutton href="http://home.orange.nl/jsrosman/" target="_blank" label="sIEve tool"/> to see the memory leak in IE.
+	<window title="Monitor" border="normal" id="win" use="WinView" width="100%" height="80%">
+			<timer id="timer" delay="500" repeats="true">
+				<attribute name="onTimer">
+						win.renderGrid();
+				</attribute>
+			</timer>
+			<vbox spacing="3" align="center" height="100%" width="100%">
+				<grid id="datagrid" />
+			</vbox>
+	</window>
+</zk>
