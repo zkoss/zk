@@ -19,8 +19,7 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 -->
 <vbox id="vb">
 <window id="w" title="Test of Forward Conditions" border="normal"
-onOK='alert(self.uuid+": onOk")'
-onCancel='alert(self.uuid+": onCancel")'>
+onOK='alert(self+": onOk")' onCancel='alert(self+": onCancel")'>
 	<window title="Inner" border="normal">
 		<button label="OK" forward="...onOK"/>
 		<button label="Cancel" forward="...onCancel"/>
