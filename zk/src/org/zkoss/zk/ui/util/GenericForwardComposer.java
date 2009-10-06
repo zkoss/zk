@@ -69,6 +69,9 @@ import org.zkoss.zk.ui.Components;
  * @see org.zkoss.zk.ui.Components#addForwards
  */
 abstract public class GenericForwardComposer extends GenericAutowireComposer {
+	private static final long serialVersionUID = 20091006115726L;
+	private boolean _inActivate;
+	
 	protected GenericForwardComposer() {
 	}
 	/** Constructor with a custom separator.
@@ -92,6 +95,19 @@ abstract public class GenericForwardComposer extends GenericAutowireComposer {
 		
 		//add forward condtions to the components as defined in this composer
 		//onXxx$myid
-		Components.addForwards(comp, this, _separator);
+		if (!_inActivate) { //Bug# 2873329. If in didActivate(), don't addForwards again
+			Components.addForwards(comp, this, _separator);
+		}
+	}
+	
+	//Bug# 2873329 GeneircForwardComposer add extra forwards
+	public void didActivate(Component comp) {
+		boolean old = _inActivate;
+		_inActivate = true;
+		try {
+			super.didActivate(comp); //which will call back to doAfterCompose()
+		} finally {
+			_inActivate = old;
+		}
 	}
 }

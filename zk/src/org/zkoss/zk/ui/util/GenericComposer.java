@@ -16,17 +16,13 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.util;
 
-import java.lang.reflect.Method;
-
+import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.GenericEventListener;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
-import org.zkoss.zk.ui.util.Composer;
-import org.zkoss.zk.ui.util.ComposerExt;
-import org.zkoss.zk.ui.util.ComponentActivationListener;
 
 /**
  * <p>An abstract composer that you can extend and write intuitive onXxx event handler methods;
@@ -72,6 +68,11 @@ import org.zkoss.zk.ui.util.ComponentActivationListener;
 abstract public class GenericComposer extends GenericEventListener
 implements Composer, ComposerExt, ComponentActivationListener,
 java.io.Serializable {
+	private static final long serialVersionUID = 20091006115555L;
+	private String _applied; //id of the applied component (for serialization back)
+	private transient boolean _everWillPassivate; //Bug #2873310. willPassivate only once
+	private transient boolean _everDidActivate; //Bug #2873310. didActivate only once
+	
 	/**
 	 * Registers onXxx events to the supervised component; a subclass that override
 	 * this method should remember to call super.doAfterCompose(comp) or it will not 
@@ -79,6 +80,7 @@ java.io.Serializable {
 	 */
 	public void doAfterCompose(Component comp) throws Exception {
 		//bind this GenericEventListener to the supervised component
+		_applied = comp.getId();
 		bindComponent(comp);
 	}
 
@@ -109,17 +111,30 @@ java.io.Serializable {
 
 	//ScopeActivationListener//
 	/** Called when the component is going to passivate this object.
-	 * Default: does nothing.
+	 * Default: (since 3.6.3) unregister onXxx listeners of the applied component.
 	 */
 	public void willPassivate(Component comp) {
+		//Bug #2873327. Unregister listener when session passivate
+		if (comp != null && Objects.equals(_applied, comp.getId())) {
+			if (_everWillPassivate) return; //Bug #2873310. willPassivate only once
+			_everWillPassivate = true;
+
+			unbindComponent(comp);
+		}
 	}
+	
 	/** Called when the component has activated this object back.
 	 * Default: invokes {@link #doAfterCompose}.
 	 * @since 3.6.2
 	 */
 	public void didActivate(Component comp) {
 		try {
-			doAfterCompose(comp);
+			if (comp != null && Objects.equals(_applied, comp.getId())) {
+				if (_everDidActivate) return; //Bug #2873310. didActivate only once
+				_everDidActivate = true;
+
+				doAfterCompose(comp);
+			}
 		} catch (Throwable ex) {
 			throw UiException.Aide.wrap(ex);
 		}
