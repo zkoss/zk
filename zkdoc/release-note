@@ -46,6 +46,8 @@ October, 2009
   2861323: AnnotateDataBinderInit shall throw exception if arg0 is null
   2871112: Extends compoonent definition to diff name and class error
   2872183: Horrible IO-Performance with RepeatableInputStream
+  2872890: ZK JSP Native component can't be serialized
+  2872889: ZK JSP  Component definition not found when activate session
 
 	--------
 ZK 3.6.2
