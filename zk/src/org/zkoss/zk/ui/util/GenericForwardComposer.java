@@ -113,5 +113,4 @@ abstract public class GenericForwardComposer extends GenericAutowireComposer {
 			_inActivate = old;
 		}
 	}
-
 }

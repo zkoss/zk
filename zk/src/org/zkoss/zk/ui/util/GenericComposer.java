@@ -22,6 +22,7 @@ import org.zkoss.zk.scripting.Namespace;
 import org.zkoss.zk.scripting.NamespaceActivationListener;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
+import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.GenericEventListener;
@@ -72,7 +73,7 @@ abstract public class GenericComposer extends GenericEventListener
 implements Composer, ComposerExt, NamespaceActivationListener,
 java.io.Serializable {
 	private static final long serialVersionUID = 20091006115555L;
-	private String _applied; //id of the applied component (for serialization back)
+	private String _applied; //uuid of the applied component (for serialization back)
 	private transient boolean _everWillPassivate; //Bug #2873310. willPassivate only once
 	private transient boolean _everDidActivate; //Bug #2873310. didActivate only once
 	
@@ -83,7 +84,7 @@ java.io.Serializable {
 	 */
 	public void doAfterCompose(Component comp) throws Exception {
 		//bind this GenericEventListener to the supervised component
-		_applied = comp.getId();
+		_applied = comp.getUuid();
 		bindComponent(comp);
 	}
 
@@ -114,16 +115,22 @@ java.io.Serializable {
 
 	//NamespaceActivationListener//
 	/** Called when a namespace is going to passivate this object.
-	 * Default: unregister onXxx listeners of the applied component.
+	 * Default: (since 3.6.3) unregister onXxx listeners of the applied component.
 	 */
 	public void willPassivate(Namespace ns) {
 		//Bug #2873327. Unregister listener when session passivate
-		if (_everWillPassivate) return; //Bug #2873310. willPassivate only once
-		_everWillPassivate = true;
+		final Component owner = ns.getOwner();
+		if (owner != null) {
+			final Desktop dt = owner.getDesktop();
+			if (dt != null) {
+				final Component comp = (Component) dt.getComponentByUuidIfAny(_applied);
+				if (comp != null) {
+					if (_everWillPassivate) return; //Bug #2873310. willPassivate only once
+					_everWillPassivate = true;
 
-		final Component comp = (Component) ns.getVariable(_applied, true);
-		if (comp != null) {
-			unbindComponent(comp);
+					unbindComponent(comp);
+				}
+			}
 		}
 	}
 	/** Called when a namespace has activated this object back.
@@ -131,13 +138,19 @@ java.io.Serializable {
 	 * @since 3.6.2
 	 */
 	public void didActivate(Namespace ns) {
-		if (_everDidActivate) return; //Bug #2873310. didActivate only once
-		_everDidActivate = true;
-
 		try {
-			final Component comp = (Component) ns.getVariable(_applied, true);
-			if (comp != null) {
-				doAfterCompose(comp);
+			final Component owner = ns.getOwner();
+			if (owner != null) {
+				final Desktop dt = owner.getDesktop();
+				if (dt != null) {
+					final Component comp = (Component) dt.getComponentByUuidIfAny(_applied);
+					if (comp != null) {
+						if (_everDidActivate) return; //Bug #2873310. didActivate only once
+						_everDidActivate = true;
+						
+						doAfterCompose(comp);
+					}
+				}
 			}
 		} catch (Throwable ex) {
 			throw UiException.Aide.wrap(ex);
