@@ -21,6 +21,7 @@ package org.zkoss.image;
 import java.io.File;
 import java.io.InputStream;
 import java.io.FileInputStream;
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.Reader;
 import java.io.IOException;
@@ -93,7 +94,7 @@ public class AImage implements Image, java.io.Serializable {
 	/** Constructs an image with a file.
 	 */
 	public AImage(File file) throws IOException {
-		this(file.getName(), new FileInputStream(file));
+		this(file.getName(), new BufferedInputStream(new FileInputStream(file)));
 	}
 	/** Constructs an image with an URL.
 	 */
