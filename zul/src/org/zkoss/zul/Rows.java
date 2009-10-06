@@ -279,7 +279,7 @@ public class Rows extends XulElement implements org.zkoss.zul.api.Rows {
 				final int[] g = getGroupsInfoAt(index);
 				if (g != null) {
 					g[1]++;
-					if (g[2] != -1 && g[2] > index) g[2]++;
+					if (g[2] != -1 && (g[2] >= index || newItem instanceof Groupfoot)) g[2]++;
 				}
 				
 			}
