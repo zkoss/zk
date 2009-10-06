@@ -19,6 +19,7 @@ package org.zkoss.sound;
 import java.io.File;
 import java.io.InputStream;
 import java.io.FileInputStream;
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.Reader;
 import java.io.IOException;
@@ -239,8 +240,12 @@ public class AAudio implements Audio {
 	 */
 	public InputStream getStreamData() {
 		try {
-			if (_url != null) return _url.openStream();
-			if (_file != null) return new FileInputStream(_file);
+			if (_url != null) {
+				InputStream is = _url.openStream();
+				return is != null ? new BufferedInputStream(is): null;
+			}
+			if (_file != null)
+				return new BufferedInputStream(new FileInputStream(_file));
 		} catch (java.io.IOException ex) {
 			throw new SystemException("Unable to read "
 				+(_url != null ? _url.toString(): _file.toString()), ex);

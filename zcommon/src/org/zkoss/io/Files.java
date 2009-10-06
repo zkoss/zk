@@ -25,6 +25,7 @@ import java.io.Writer;
 import java.io.Reader;
 import java.io.ByteArrayOutputStream;
 import java.io.StringWriter;
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.FileNotFoundException;
@@ -260,7 +261,7 @@ public class Files {
 			}
 		}
 
-		copy(dst, new FileInputStream(src));
+		copy(dst, new BufferedInputStream(new FileInputStream(src)));
 
 		if ((flags & CP_PRESERVE) != 0) {
 			dst.setLastModified(src.lastModified());
