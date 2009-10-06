@@ -1491,8 +1491,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 					final Object[] fwd = (Object[])it.next();
 					if (Objects.equals(fwd[1], targetEvent)
 					&& (Objects.equals(fwd[0], target)
-					|| (target instanceof Component && fwd[0] instanceof String
-					&& Objects.equals(Components.pathToComponent((String)fwd[0], this), target)))) { //found
+					|| Objects.equals(resolveForwardTarget(fwd[0]), target))) { //found
 						it.remove(); //remove it
 
 						if (fwds.isEmpty()) { //no more event
@@ -1506,6 +1505,43 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			}
 		}
 		return false;
+	}
+	private Component resolveForwardTarget(Object fwd) {
+		if (!(fwd instanceof String))
+			return (Component)fwd;
+
+		String fid = (String)fwd;
+		if (!fid.startsWith("u="))
+			return Components.pathToComponent(fid, this);
+
+		fid = fid.substring(2);
+		final Desktop dt = getDesktop();
+		if (dt != null)
+			return dt.getComponentByUuid(fid);
+
+		Component comp = this;
+		for (;;) { //search up to the root first
+			if (Objects.equals(fid, comp.getUuid()))
+				return comp;
+			Component p = comp.getParent();
+			if (p == null)
+				break;
+			comp = p;
+		}
+				
+		comp = searchByUuid(comp, fid);
+		if (comp == null)
+			throw new ComponentNotFoundException("UUID not found: "+fid);
+		return comp;
+	}
+	private static Component searchByUuid(Component comp, String uuid) {
+		if (Objects.equals(uuid, comp.getUuid()))
+			return comp;
+		for (comp = comp.getFirstChild(); comp != null; comp = comp.getNextSibling()) {
+			final Component c = searchByUuid(comp, uuid);
+			if (c != null) return c;
+		}
+		return null;
 	}
 
 	public Namespace getNamespace() {
@@ -2136,10 +2172,20 @@ implements Component, ComponentCtrl, java.io.Serializable {
 					final Object[] fwd = (Object[])e.next();
 					if (fwd[0] instanceof Component) {
 						final Component fc = (Component)fwd[0];
-						if (fc.getDesktop() == null)
-							continue; //detached; no need to write
-						s.writeObject(Components.componentToPath(fc, this));
-							//store target as string
+						if (!Objects.equals(fc.getDesktop(), getDesktop()))
+							continue; //not same desktop(such as detach): no need to write
+
+						//store target as string
+						String fid = null;
+						if (getDesktop() == null) {
+							try {
+								fid = Components.componentToPath(fc, this);
+							} catch (Throwable ex) {
+							}
+						}
+						if (fid == null)
+							fid = "u=" + fc.getUuid();
+						s.writeObject(fid);
 					} else {
 						s.writeObject(fwd[0]);
 					}
@@ -2254,7 +2300,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			while (--sz >= 0)
 				addForward0(orgEvent, s.readObject(),
 					(String)s.readObject(), s.readObject());
-					//Note: we don't call Components.pathToComponent here
+					//Note: we don't call resolveForwardTarget here
 					//since the parent doesn't deserialized completely
 					//Rather, we handle it until the event is received
 		}
@@ -2291,12 +2337,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				for (Iterator it = new ArrayList((List)info[1]).iterator();
 				it.hasNext();) {
 					final Object[] fwd = (Object[])it.next();
-					Component target =
-						fwd[0] instanceof String ?
-							Components.pathToComponent(
-								(String)fwd[0], AbstractComponent.this):
-							(Component)fwd[0];
-
+					Component target = resolveForwardTarget(fwd[0]);
 					if (target == null) {
 						final IdSpace owner = getSpaceOwner();
 						if (owner instanceof Component) {

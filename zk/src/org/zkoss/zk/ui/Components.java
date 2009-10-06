@@ -141,6 +141,22 @@ public class Components {
 		for (; j < ary.length; ++j)
 			list.add(from + j, ary[j]);
 	}
+
+	/** Returns the root component of the specified one.
+	 * Notice that it could return <code>comp</code>, if it is already
+	 * a root component (or it is null).
+	 * @since 3.6.3
+	 */
+	public static Component getRoot(Component comp) {
+		if (comp == null)
+			return null;
+		for (;;) {
+			final Component p = comp.getParent();
+			if (p == null) return comp;
+			comp = p;
+		}
+	}
+
 	/** Tests whether node1 is an ancessor of node 2.
 	 * If node1 and node2 is the same, true is returned.
 	 */
