@@ -120,6 +120,9 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 		exec.setAttribute(ATTR_RENDER_CONTEXT, rc);
 		HtmlPageRenders.setContentType(exec, page);
 
+		write(out, HtmlPageRenders.outFirstLine(page)); //might null
+		write(out, HtmlPageRenders.outDocType(page)); //might null
+
 		for (Iterator it = page.getRoots().iterator(); it.hasNext();)
 			((ComponentCtrl)it.next()).redraw(out);
 
