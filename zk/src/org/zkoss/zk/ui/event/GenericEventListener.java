@@ -120,6 +120,23 @@ abstract public class GenericEventListener implements EventListener {
 	}
 
 	/**
+	 * A convenient method that help you remove this event listener from the
+	 * specified target component. This is a counter method of the {@link #bindComponent(Component)}
+	 * method.
+	 *
+	 * @param comp the target component to remove this event listener.
+	 * @since 3.6.3
+	 */
+	public void unbindComponent(Component comp) {
+		final Method [] metds = getController().getClass().getMethods();
+		for(int i=0; i < metds.length; i ++){
+			final String evtnm = metds[i].getName();
+			if (Events.isValid(evtnm))
+				comp.removeEventListener(evtnm, this);
+		}		
+	}
+
+	/**
 	 * Returns the controller that really implement the 
 	 * onXxx methods (default to this). It is intended to be overrode;
 	 * you shall not have to call this method directly.

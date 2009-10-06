@@ -47,8 +47,11 @@ October, 2009
   2871112: Extends compoonent definition to diff name and class error
   2872183: Horrible IO-Performance with RepeatableInputStream
   2872890: ZK JSP Native component can't be serialized
-  2872889: ZK JSP  Component definition not found when activate session
+  2872889: ZK JSP Component definition not found when activate session
   2873256: Sessions.getCurrent null when ComponentActivationListener called
+  2873310: GenericComposer call willPassivate/didActivate many times
+  2873327: GenericComposer register extra onXxx$id listeners
+  2873329: GeneircForwardComposer add extra forwards
 
 	--------
 ZK 3.6.2

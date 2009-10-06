@@ -95,6 +95,7 @@ import org.zkoss.zk.xel.Evaluator;
  * @see org.zkoss.zk.ui.Components#wireFellows
  */
 abstract public class GenericAutowireComposer extends GenericComposer implements ComponentCloneListener {
+	private static final long serialVersionUID = 20091006115726L;
 	private static final String COMPOSER_CLONE = "COMPOSER_CLONE";
 	private static final String ON_CLONE_DO_AFTER_COMPOSE = "onCLONE_DO_AFTER_COMPOSE";
 	

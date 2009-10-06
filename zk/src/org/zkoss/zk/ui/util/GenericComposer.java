@@ -18,18 +18,14 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.util;
 
-import java.lang.reflect.Method;
-
+import org.zkoss.zk.scripting.Namespace;
+import org.zkoss.zk.scripting.NamespaceActivationListener;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.GenericEventListener;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
-import org.zkoss.zk.ui.util.Composer;
-import org.zkoss.zk.ui.util.ComposerExt;
-import org.zkoss.zk.scripting.Namespace;
-import org.zkoss.zk.scripting.NamespaceActivationListener;
 
 /**
  * <p>An abstract composer that you can extend and write intuitive onXxx event handler methods;
@@ -75,6 +71,11 @@ import org.zkoss.zk.scripting.NamespaceActivationListener;
 abstract public class GenericComposer extends GenericEventListener
 implements Composer, ComposerExt, NamespaceActivationListener,
 java.io.Serializable {
+	private static final long serialVersionUID = 20091006115555L;
+	private String _applied; //id of the applied component (for serialization back)
+	private transient boolean _everWillPassivate; //Bug #2873310. willPassivate only once
+	private transient boolean _everDidActivate; //Bug #2873310. didActivate only once
+	
 	/**
 	 * Registers onXxx events to the supervised component; a subclass that override
 	 * this method should remember to call super.doAfterCompose(comp) or it will not 
@@ -82,6 +83,7 @@ java.io.Serializable {
 	 */
 	public void doAfterCompose(Component comp) throws Exception {
 		//bind this GenericEventListener to the supervised component
+		_applied = comp.getId();
 		bindComponent(comp);
 	}
 
@@ -112,17 +114,31 @@ java.io.Serializable {
 
 	//NamespaceActivationListener//
 	/** Called when a namespace is going to passivate this object.
-	 * Default: does nothing.
+	 * Default: unregister onXxx listeners of the applied component.
 	 */
 	public void willPassivate(Namespace ns) {
+		//Bug #2873327. Unregister listener when session passivate
+		if (_everWillPassivate) return; //Bug #2873310. willPassivate only once
+		_everWillPassivate = true;
+
+		final Component comp = (Component) ns.getVariable(_applied, true);
+		if (comp != null) {
+			unbindComponent(comp);
+		}
 	}
 	/** Called when a namespace has activated this object back.
 	 * Default: invokes {@link #doAfterCompose}.
 	 * @since 3.6.2
 	 */
 	public void didActivate(Namespace ns) {
+		if (_everDidActivate) return; //Bug #2873310. didActivate only once
+		_everDidActivate = true;
+
 		try {
-			doAfterCompose(ns.getOwner());
+			final Component comp = (Component) ns.getVariable(_applied, true);
+			if (comp != null) {
+				doAfterCompose(comp);
+			}
 		} catch (Throwable ex) {
 			throw UiException.Aide.wrap(ex);
 		}
