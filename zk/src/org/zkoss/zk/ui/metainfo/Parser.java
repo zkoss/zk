@@ -950,7 +950,7 @@ public class Parser {
 		if (parent instanceof PageDefinition)
 			throw new UiException("custom-attributes must be used under a component, "+el.getLocator());
 		if (annHelper.clear())
-			log.warning("Annotations are ignored since <custom-attribute> doesn't support them, "+el.getLocator());
+			log.warning("Annotations are ignored since <custom-attributes> doesn't support them, "+el.getLocator());
 
 		String ifc = null, unless = null, scope = null, composite = null;
 		final Map attrs = new HashMap();
