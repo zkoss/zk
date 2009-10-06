@@ -257,7 +257,12 @@ public class Files {
 			}
 		}
 
-		copy(dst, new BufferedInputStream(new FileInputStream(src)));
+		InputStream is = new BufferedInputStream(new FileInputStream(src));
+		try {
+			copy(dst, is);
+		} finally {
+			close(is);
+		}
 
 		if ((flags & CP_PRESERVE) != 0) {
 			dst.setLastModified(src.lastModified());
