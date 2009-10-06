@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.FileInputStream;
+import java.io.BufferedInputStream;
 import java.io.OutputStream;
 import java.io.StringWriter;
 import java.io.IOException;
@@ -190,7 +191,7 @@ public class InterpreterServlet extends HttpServlet {
 		//-- super --//
 		protected Object parse(String path, File file, Object extra)
 		throws Exception {
-			final FileInputStream is = new FileInputStream(file);
+			final InputStream is = new BufferedInputStream(new FileInputStream(file));
 			try {
 				return parse0(is, Interpreter.getContentType(file.getName()));
 			} catch (Exception ex) {
@@ -201,12 +202,13 @@ public class InterpreterServlet extends HttpServlet {
 						+"\n"+Exceptions.getBriefStackTrace(ex));
 				return null; //as non-existent
 			} finally {
-				try {is.close();} catch (Throwable ex) {}
+				Files.close(is);
 			}
 		}
 		protected Object parse(String path, URL url, Object extra)
 		throws Exception {
-			final InputStream is = url.openStream();
+			InputStream is = url.openStream();
+			if (is != null) is = new BufferedInputStream(is);
 			try {
 				return parse0(is,
 					Interpreter.getContentType(url.getPath()));
@@ -217,7 +219,7 @@ public class InterpreterServlet extends HttpServlet {
 					log.error("Failed to parse "+url+"\nCause: "+Exceptions.getMessage(ex));
 				return null; //as non-existent
 			} finally {
-				try {is.close();} catch (Throwable ex) {}
+				Files.close(is);
 			}
 		}
 		private Object parse0(InputStream is, String ctype) throws Exception {

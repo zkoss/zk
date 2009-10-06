@@ -21,6 +21,7 @@ package org.zkoss.web.util.resource;
 import java.io.File;
 import java.io.InputStream;
 import java.io.FileInputStream;
+import java.io.BufferedInputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 
@@ -183,20 +184,21 @@ public class ResourceCaches {
 		//-- super --//
 		protected Object parse(String path, File file, Object extra)
 		throws Exception {
-			final InputStream is = new FileInputStream(file);
+			final InputStream is = new BufferedInputStream(new FileInputStream(file));
 			try {
 				return readAll(is);
 			} finally {
-				try {is.close();} catch (Throwable ex) {}
+				Files.close(is);
 			}
 		}
 		protected Object parse(String path, URL url, Object extra)
 		throws Exception {
-			final InputStream is = url.openStream();
+			InputStream is = url.openStream();
+			if (is != null) is = new BufferedInputStream(is);
 			try {
 				return readAll(is);
 			} finally {
-				try {is.close();} catch (Throwable ex) {}
+				Files.close(is);
 			}
 		}
 		private String readAll(InputStream is) throws Exception {
