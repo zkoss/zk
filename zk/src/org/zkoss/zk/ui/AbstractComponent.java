@@ -2676,10 +2676,15 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				s.writeInt(fwds.size());
 				for (Iterator e = fwds.iterator(); e.hasNext();) {
 					final Object[] fwd = (Object[])e.next();
-					s.writeObject( //store target as string
-						fwd[0] instanceof Component ?
-							Components.componentToPath((Component)fwd[0], this):
-							fwd[0]);
+					if (fwd[0] instanceof Component) {
+						final Component fc = (Component)fwd[0];
+						if (fc.getDesktop() == null)
+							continue; //detached; no need to write
+						s.writeObject(Components.componentToPath(fc, this));
+							//store target as string
+					} else {
+						s.writeObject(fwd[0]);
+					}
 					s.writeObject(fwd[1]); //target event
 					s.writeObject(fwd[2]); //forward data
 				}

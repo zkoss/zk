@@ -40,6 +40,7 @@ import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.ext.ScopeListener;
 import org.zkoss.zk.ui.sys.SessionsCtrl;
 import org.zkoss.zk.ui.sys.SessionCtrl;
+import org.zkoss.zk.ui.sys.SessionsCtrl;
 import org.zkoss.zk.ui.sys.WebAppCtrl;
 import org.zkoss.zk.ui.sys.DesktopCache;
 import org.zkoss.zk.ui.util.Monitor;
@@ -479,11 +480,17 @@ public class SimpleSession implements Session, SessionCtrl {
 	 * the session
 	 */
 	protected void sessionWillPassivate() {
-		((WebAppCtrl)_wapp).sessionWillPassivate(this);
+		final Session old = SessionsCtrl.getCurrent(); //shall be null; just in case
+		SessionsCtrl.setCurrent(this);
+		try {
+			((WebAppCtrl)_wapp).sessionWillPassivate(this);
 
-		for (Enumeration en = getAttrNames(); en.hasMoreElements();) {
-			final String nm = (String)en.nextElement();
-			willPassivate(getAttribute(nm));
+			for (Enumeration en = getAttrNames(); en.hasMoreElements();) {
+				final String nm = (String)en.nextElement();
+				willPassivate(getAttribute(nm));
+			}
+		} finally {
+			SessionsCtrl.setCurrent(old);
 		}
 	}
 	/** Used by the deriving class to post-process a session after
@@ -495,21 +502,27 @@ public class SimpleSession implements Session, SessionCtrl {
 		//Note: in Tomcat, servlet is activated later, so we have to
 		//add listener to WebManager instead of process now
 
-		_navsess = hsess;
-		WebManager.addActivationListener(
-			hsess.getServletContext(),
-				//FUTURE: getServletContext only in Servlet 2.3 or later
-			new WebManagerActivationListener() {
-				public void didActivate(WebManager webman) {
-					_wapp = webman.getWebApp();
-					((WebAppCtrl)_wapp)
-						.sessionDidActivate(SimpleSession.this);
-				}
-			});
+		final Session old = SessionsCtrl.getCurrent(); //shall be null; just in case
+		SessionsCtrl.setCurrent(this);
+		try {
+			_navsess = hsess;
+			WebManager.addActivationListener(
+				hsess.getServletContext(),
+					//FUTURE: getServletContext only in Servlet 2.3 or later
+				new WebManagerActivationListener() {
+					public void didActivate(WebManager webman) {
+						_wapp = webman.getWebApp();
+						((WebAppCtrl)_wapp)
+							.sessionDidActivate(SimpleSession.this);
+					}
+				});
 
-		for (Enumeration en = getAttrNames(); en.hasMoreElements();) {
-			final String nm = (String)en.nextElement();
-			didActivate(getAttribute(nm));
+			for (Enumeration en = getAttrNames(); en.hasMoreElements();) {
+				final String nm = (String)en.nextElement();
+				didActivate(getAttribute(nm));
+			}
+		} finally {
+			SessionsCtrl.setCurrent(old);
 		}
 	}
 	private void willPassivate(Object o) {
