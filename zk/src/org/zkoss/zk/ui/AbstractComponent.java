@@ -2162,14 +2162,25 @@ implements Component, ComponentCtrl, java.io.Serializable {
 
 		//read definition
 		Object def = s.readObject();
-		if (def == null) {
-			_def = ComponentsCtrl.DUMMY;
-		} else if (def instanceof String) {
-			LanguageDefinition langdef = LanguageDefinition.lookup((String)def);
-			_def = langdef.getComponentDefinition((String)s.readObject());
+		if (def instanceof String) {
+			LanguageDefinition langdef = null;
+			try {
+				langdef = LanguageDefinition.lookup((String)def);
+			} catch (DefinitionNotFoundException ex) {
+			} 
+			if (langdef != null) {
+				_def = langdef.getComponentDefinitionIfAny((String)s.readObject());
+				//don't throw exception since some might not be associated
+				//with a definition (e.g., JSP's native and page components)
+			} else {
+				s.readObject(); //ignore the component name
+				_def = null;
+			}
 		} else {
 			_def = (ComponentDefinition)def;
 		}
+		if (_def == null)
+			_def = ComponentsCtrl.DUMMY;
 
 		//read children
 		for (AbstractComponent q = null;;) {
