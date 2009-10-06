@@ -69,7 +69,7 @@ abstract public class GenericComposer extends GenericEventListener
 implements Composer, ComposerExt, ComponentActivationListener,
 java.io.Serializable {
 	private static final long serialVersionUID = 20091006115555L;
-	private String _applied; //id of the applied component (for serialization back)
+	private String _applied; //uuid of the applied component (for serialization back)
 	private transient boolean _everWillPassivate; //Bug #2873310. willPassivate only once
 	private transient boolean _everDidActivate; //Bug #2873310. didActivate only once
 	
@@ -80,7 +80,7 @@ java.io.Serializable {
 	 */
 	public void doAfterCompose(Component comp) throws Exception {
 		//bind this GenericEventListener to the supervised component
-		_applied = comp.getId();
+		_applied = comp.getUuid();
 		bindComponent(comp);
 	}
 
@@ -115,7 +115,7 @@ java.io.Serializable {
 	 */
 	public void willPassivate(Component comp) {
 		//Bug #2873327. Unregister listener when session passivate
-		if (comp != null && Objects.equals(_applied, comp.getId())) {
+		if (comp != null && Objects.equals(_applied, comp.getUuid())) {
 			if (_everWillPassivate) return; //Bug #2873310. willPassivate only once
 			_everWillPassivate = true;
 
@@ -129,7 +129,7 @@ java.io.Serializable {
 	 */
 	public void didActivate(Component comp) {
 		try {
-			if (comp != null && Objects.equals(_applied, comp.getId())) {
+			if (comp != null && Objects.equals(_applied, comp.getUuid())) {
 				if (_everDidActivate) return; //Bug #2873310. didActivate only once
 				_everDidActivate = true;
 
