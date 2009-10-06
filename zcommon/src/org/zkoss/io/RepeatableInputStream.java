@@ -18,6 +18,8 @@
  */
 package org.zkoss.io;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -185,7 +187,7 @@ public class RepeatableInputStream extends InputStream implements Repeatable {
 					f.mkdir();
 				_f = File.createTempFile("zk.io", ".zk.io", f);
 				final byte[] bs = ((ByteArrayOutputStream)_out).toByteArray();
-				_out = new FileOutputStream(_f);
+				_out = new BufferedOutputStream(new FileOutputStream(_f));
 				_out.write(bs);
 			} catch (Throwable ex) {
 				log.warning("Ingored: failed to buffer to a file, "+_f+"\nCause: "+ex.getMessage());
@@ -224,7 +226,7 @@ public class RepeatableInputStream extends InputStream implements Repeatable {
 			return b;
 		} else {
 			if (_in == null)
-				_in = new FileInputStream(_f); //_f must be non-null
+				_in = new BufferedInputStream(new FileInputStream(_f)); //_f must be non-null
 
 			return _in.read();
 		}
@@ -310,7 +312,7 @@ implements Repeatable {
 
 	public int read() throws IOException {
 		if (_in == null)
-			_in = new FileInputStream(_file);
+			_in = new BufferedInputStream(new FileInputStream(_file));
 		return _in.read();
 	}
 	/** Closes the current access, and the next call of {@link #read}
@@ -342,6 +344,7 @@ implements Repeatable {
 		if (_in == null) {
 			_in = _url.openStream();
 			if (_in == null) throw new FileNotFoundException(_url.toExternalForm());
+			_in = new BufferedInputStream(_in);
 		}
 		return _in.read();
 	}
