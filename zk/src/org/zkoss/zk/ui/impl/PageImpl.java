@@ -735,8 +735,12 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 
 	public void redraw(Writer out)
 	throws IOException {
+		String ctl;
 		final Execution exec = getExecution();
-		if (!exec.isAsyncUpdate(null) && !exec.isIncluded()) {
+		final boolean au = exec.isAsyncUpdate(null);
+		if (!au && !exec.isIncluded()
+		&& ((ctl=(String)exec.getAttribute(Attributes.ATTR_PAGE_REDRAW_CONTROL)) == null
+			|| "desktop".equals(ctl))) {
 //FUTURE: Consider if config.isKeepDesktopAcrossVisits() implies cacheable
 //Why yes: the client doesn't need to ask the server for updated content
 //Why no: browsers seems fail to handle DHTML correctly (when BACK to
@@ -744,34 +748,37 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 			final boolean cacheable =
 				_cacheable != null ?  _cacheable.booleanValue():
 					_desktop.getDevice().isCacheable();
-			final ExecutionCtrl execCtrl = (ExecutionCtrl)exec;
 			if (!cacheable) {
 				//Bug 1520444
-				execCtrl.setHeader("Pragma", "no-cache");
-				execCtrl.addHeader("Cache-Control", "no-cache");
-				execCtrl.addHeader("Cache-Control", "no-store");
-				//execCtrl.addHeader("Cache-Control", "private");
-				//execCtrl.addHeader("Cache-Control", "max-age=0");
-				//execCtrl.addHeader("Cache-Control", "s-maxage=0");
-				//execCtrl.addHeader("Cache-Control", "must-revalidate");
-				//execCtrl.addHeader("Cache-Control", "proxy-revalidate");
-				//execCtrl.addHeader("Cache-Control", "post-check=0");
-				//execCtrl.addHeader("Cache-Control", "pre-check=0");
-				execCtrl.setHeader("Expires", "-1");
+				exec.setResponseHeader("Pragma", "no-cache");
+				exec.addResponseHeader("Cache-Control", "no-cache");
+				exec.addResponseHeader("Cache-Control", "no-store");
+				//exec.addResponseHeader("Cache-Control", "private");
+				//exec.addResponseHeader("Cache-Control", "max-age=0");
+				//exec.addResponseHeader("Cache-Control", "s-maxage=0");
+				//exec.addResponseHeader("Cache-Control", "must-revalidate");
+				//exec.addResponseHeader("Cache-Control", "proxy-revalidate");
+				//exec.addResponseHeader("Cache-Control", "post-check=0");
+				//exec.addResponseHeader("Cache-Control", "pre-check=0");
+				exec.setResponseHeader("Expires", "-1");
 
 				exec.setAttribute(Attributes.NO_CACHE, Boolean.TRUE);
 				//so HtmlPageRenderers.outLangJavaScripts generates JS's keepDesktop correctly
 			}
-
-			//a temporary solution before IE8 really mature
-			try {
-				if (exec.isBrowser("ie8"))
-					execCtrl.setHeader("X-UA-Compatible", "IE=EmulateIE7");
-			} catch (Throwable ex) { //ignore (it might not be allowed)
-			}
 		}
 
-		_langdef.getPageRenderer().render(this, out);
+		//a temporary solution before IE8 really mature
+		if (!au)
+			try {
+				if (exec.isBrowser("ie8") && !exec.containsResponseHeader("X-UA-Compatible"))
+					exec.setResponseHeader("X-UA-Compatible", "IE=EmulateIE7");
+			} catch (Throwable ex) { //ignore (it might not be allowed)
+			}
+
+		final PageRenderer renderer = (PageRenderer)
+			exec.getAttribute(Attributes.ATTR_PAGE_RENDERER);
+		(renderer != null ? renderer: _langdef.getPageRenderer())
+			.render(this, out);
 	}
 
 	/** @deprecated As of release 5.0.0, the concept of namespace is

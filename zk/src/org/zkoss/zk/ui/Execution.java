@@ -894,12 +894,19 @@ public interface Execution extends Scope {
 
 	/** Sets a response header with the give name and value.
 	 * If the header had already been set, the new value overwrites the previous one.
+	 *
+	 * @param value the additional header value If it contains octet string,
+	 * it should be encoded according to RFC 2047
+	 * (http://www.ietf.org/rfc/rfc2047.txt).
 	 * @since 3.5.0
 	 * @see #containsResponseHeader
 	 */
 	public void setResponseHeader(String name, String value);
 	/** Adds a response header with the give name and value.
 	 *  This method allows response headers to have multiple values.
+	 * @param value the additional header value If it contains octet string,
+	 * it should be encoded according to RFC 2047
+	 * (http://www.ietf.org/rfc/rfc2047.txt).
 	 * @since 3.5.0
 	 */
 	public void addResponseHeader(String name, String value);

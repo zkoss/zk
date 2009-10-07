@@ -27,6 +27,7 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.sys.ComponentCtrl;
 import org.zkoss.zk.ui.sys.HtmlPageRenders;
+import org.zkoss.zk.ui.impl.Attributes;
 
 /**
  * The page render for ZUL pages.
@@ -38,7 +39,7 @@ public class PageRenderer implements org.zkoss.zk.ui.sys.PageRenderer {
 	public void render(Page page, Writer out) throws IOException {
 		final Execution exec = Executions.getCurrent();
 		final String ctl =
-			(String)exec.getAttribute(PageCtrl.ATTR_REDRAW_CONTROL);
+			(String)exec.getAttribute(Attributes.ATTR_PAGE_REDRAW_CONTROL);
 		boolean au = exec.isAsyncUpdate(null);
 		if (!au && (page.isComplete() || "complete".equals(ctl))) {
 			renderComplete(exec, page, out);

@@ -383,6 +383,11 @@ public class ComponentsCtrl {
 		public void addMold(String name, String widgetClass) {
 			throw new UnsupportedOperationException();
 		}
+		/** @deprecated
+		 */
+		public void addMold(String name, String moldURI, String z2cURI) {
+			throw new UnsupportedOperationException();
+		}
 		public String getWidgetClass(String moldName) {
 			return null;
 		}

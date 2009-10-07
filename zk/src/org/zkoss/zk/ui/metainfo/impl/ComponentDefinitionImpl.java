@@ -446,6 +446,14 @@ implements ComponentDefinition, java.io.Serializable {
 
 		_molds.put(name, widgetClass);
 	}
+	/** @deprecated As of release 5.0.0, replaced with {@link #addMold(String,String)}
+	 * and {@link WidgetDefinition#addMold}.
+	 * <p>It always throws UnsupportedOperationException.
+	 */
+	public void addMold(String name, String moldURI, String z2cURI) {
+		throw new UnsupportedOperationException();
+	}
+
 	public boolean hasMold(String name) {
 		return _molds != null && _molds.containsKey(name);
 	}

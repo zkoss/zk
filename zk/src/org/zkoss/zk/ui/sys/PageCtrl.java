@@ -35,23 +35,9 @@ import org.zkoss.zk.ui.metainfo.ZScript;
  * @author tomyeh
  */
 public interface PageCtrl {
-	/** The execution attribute used to control how to {@link #redraw}
-	 * a page. By default, the page draws the desktop with the page if
-	 * necessary (such as the top-level page and not being included).
-	 * If you prefer to draw the page only, you can set the value to
-	 * <code>page</code>.
-	 * If you prefer to draw the desktop with the page, you can set the
-	 * vallue to <code>desktop</code>.
-	 * If the page already has everything that the client expects such
-	 * as the HTML and BODY tags, you can set the value to <code>complete</code>.
-	 *
-	 * <p>Note: if {@link Page#isComplete} is true, it has the same effect
-	 * of setting {@link #ATTR_REDRAW_CONTROL} to <code>complete</code>.
-	 * 
-	 * <p>Default: null (means auto).
-	 * @since 5.0.0
+	/** @deprecated As of release 5.0.0, replaced with {@link org.zkoss.zk.ui.impl.Attributes#ATTR_PAGE_REDRAW_CONTROL}.
 	 */
-	public static final String ATTR_REDRAW_CONTROL = "org.zkoss.zk.ui.page.redrawCtrl";
+	public static final String ATTR_REDRAW_BY_INCLUDE = "org.zkoss.zk.ui.redrawByInclude";
 
 	/** Pre-initializes this page.
 	 * It initializes {@link org.zkoss.zk.ui.Page#getDesktop},
@@ -188,8 +174,9 @@ public interface PageCtrl {
 
 	/** Redraws the whole page into the specified output.
 	 *
-	 * <p>You could use {@link #ATTR_REDRAW_CONTROL} to control
-	 * how to render manually.
+	 * <p>You could use {@link org.zkoss.zk.ui.impl.Attributes#ATTR_PAGE_REDRAW_CONTROL}
+	 * and/or {@link org.zkoss.zk.ui.impl.Attributes#ATTR_PAGE_RENDERER}
+	 * to control how to render manually.
 	 *
 	 * @since 5.0.0
 	 */

@@ -138,6 +138,8 @@ October, 2009
   2836829: A way to disable the compress of DHtmlUpdateServlet
   2840108: Enhance popup, tooltip, and context can be shown by position
   2870478: Chart shall support setting Font
+  2873957: menubar in horizontal support scrollable functionality
+  2873954: menu support onClick
   
 * Bugs
   2862085: IE 6,7,8 memory leak in modal dialog demo
@@ -183,7 +185,7 @@ October, 2009
   2873365: Failed to serialize if the forward target has no ID assigned
   2873905: GenericComposer shall not call doAfterCompose in didActivate
   2823591: ZK 3.6.2 selectedItem throws Exception  
-  
+
 	--------
 ZK 3.6.2
 June 23, 2009

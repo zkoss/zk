@@ -16,6 +16,8 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.scripting;
 
+import java.util.Map;
+
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.ext.Scopes;
@@ -39,6 +41,25 @@ public class Namespaces {
 	/** @deprecated As of release 5.0, replaced with {@link Scopes}.
 	 */
 	public static final void afterInterpret() {
+	}
+
+	/** @deprecated As of release 3.6.1, it is replaced with {@link #beforeInterpret(Component)}.
+	 */
+	public static final Namespace beforeInterpret(Map backup, Component comp,
+	boolean pushNS) {
+		return beforeInterpret(comp);
+	}
+	/** @deprecated As of release 3.6.1, it is replaced with {@link #beforeInterpret(Page)}.
+	 */
+	public static final Namespace beforeInterpret(Map backup, Page page,
+	boolean pushNS) {
+		return beforeInterpret(page);
+	}
+	/** @deprecated As of release 3.6.1, it is replaced with {@link #afterInterpret}.
+	 */
+	public static final void afterInterpret(Map backup, Namespace ns,
+	boolean popNS) {
+		afterInterpret();
 	}
 
 	/** @deprecated As of release 5.0, replaced with {@link Scopes}.

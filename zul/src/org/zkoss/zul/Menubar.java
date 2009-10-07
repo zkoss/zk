@@ -21,6 +21,7 @@ import java.io.IOException;
 import org.zkoss.lang.JVMs;
 import org.zkoss.lang.Objects;
 
+import org.zkoss.xml.HTMLs;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.UiException;
@@ -39,6 +40,7 @@ import org.zkoss.zul.impl.XulElement;
 public class Menubar extends XulElement implements org.zkoss.zul.api.Menubar {
 	private boolean _autodrop;
 	private String _orient = "horizontal";
+	private boolean _scrollable = false;
 
 	public Menubar() {
 	}
@@ -66,6 +68,42 @@ public class Menubar extends XulElement implements org.zkoss.zul.api.Menubar {
 		if (!Objects.equals(_orient, orient)) {
 			_orient = orient;
 			smartUpdate("orient", _orient);
+		}
+	}
+	
+	/**
+	 * Returns whether it is a horizontal .
+	 * @since 3.6.3
+	 */
+	public boolean isHorizontal() {
+		return "horizontal".equals(getOrient());
+	}
+
+	/**
+	 * Returns whether it is a vertical .
+	 * @since 3.6.3
+	 */
+	public boolean isVertical() {
+		return "vertical".equals(getOrient());
+	}
+	
+	/**
+	 * Returns whether the menubar scrolling is enabled. 
+	 * <p>Default: false.
+	 * @since 3.6.3
+	 */
+	public boolean isScrollable(){
+		return _scrollable;
+	}
+	
+	/**
+	 * Sets whether to enable the menubar scrolling
+	 * @since 3.6.3
+	 */
+	public void setScrollable(boolean scrollable){
+		if (isHorizontal() && _scrollable != scrollable) {
+			_scrollable = scrollable;
+			smartUpdate("scrollable", scrollable);
 		}
 	}
 
