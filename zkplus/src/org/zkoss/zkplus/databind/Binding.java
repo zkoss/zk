@@ -393,8 +393,8 @@ public class Binding implements java.io.Serializable {
  				} else {
  					throw UiException.Aide.wrap(ex);
  				}
-			} else {
-				throw UiException.Aide.wrap(ex);
+			} else { //Feature# 2855116. Save into component custom-attribute(also a variable in ZK5).
+				comp.setAttribute(_attr, bean);
 			}
 		} catch (ModificationException ex) {
 			throw UiException.Aide.wrap(ex);
@@ -452,6 +452,8 @@ public class Binding implements java.io.Serializable {
  				} else {
  					throw UiException.Aide.wrap(ex);
  				}
+			} else if (comp.getAttributes().containsKey(_attr)) { //Feature #2855116. Get value from component custom-attribute(also a variable in ZK5).
+				rawval = comp.getAttribute(_attr);
 			} else {
 				throw UiException.Aide.wrap(ex);
 			}
