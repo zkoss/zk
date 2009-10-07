@@ -103,7 +103,7 @@ import org.zkoss.zk.scripting.util.SimpleNamespace;
 public class AbstractComponent
 implements Component, ComponentCtrl, java.io.Serializable {
 //	private static final Log log = Log.lookup(AbstractComponent.class);
-    private static final long serialVersionUID = 20070920L;
+    private static final long serialVersionUID = 20091007L;
 
 	/*package*/ transient Page _page;
 	private String _id;
@@ -156,7 +156,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/** A map of forward conditions:
 	 * Map(String orgEvt, [listener, List([target or targetPath,targetEvent])]).
 	 */
-	private transient Map _forwards;
+	private Map _forwards;
 	/** Whether _annots is shared with other components. */
 	private transient boolean _annotsShared;
 	/** Whether _evthds is shared with other components. */
@@ -1490,8 +1490,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				for (Iterator it = fwds.iterator(); it.hasNext();) {
 					final Object[] fwd = (Object[])it.next();
 					if (Objects.equals(fwd[1], targetEvent)
-					&& (Objects.equals(fwd[0], target)
-					|| Objects.equals(resolveForwardTarget(fwd[0]), target))) { //found
+					&& Objects.equals(fwd[0], target)) { //found
 						it.remove(); //remove it
 
 						if (fwds.isEmpty()) { //no more event
@@ -1505,43 +1504,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			}
 		}
 		return false;
-	}
-	private Component resolveForwardTarget(Object fwd) {
-		if (!(fwd instanceof String))
-			return (Component)fwd;
-
-		String fid = (String)fwd;
-		if (!fid.startsWith("u="))
-			return Components.pathToComponent(fid, this);
-
-		fid = fid.substring(2);
-		final Desktop dt = getDesktop();
-		if (dt != null)
-			return dt.getComponentByUuid(fid);
-
-		Component comp = this;
-		for (;;) { //search up to the root first
-			if (Objects.equals(fid, comp.getUuid()))
-				return comp;
-			Component p = comp.getParent();
-			if (p == null)
-				break;
-			comp = p;
-		}
-				
-		comp = searchByUuid(comp, fid);
-		if (comp == null)
-			throw new ComponentNotFoundException("UUID not found: "+fid);
-		return comp;
-	}
-	private static Component searchByUuid(Component comp, String uuid) {
-		if (Objects.equals(uuid, comp.getUuid()))
-			return comp;
-		for (comp = comp.getFirstChild(); comp != null; comp = comp.getNextSibling()) {
-			final Component c = searchByUuid(comp, uuid);
-			if (c != null) return c;
-		}
-		return null;
 	}
 
 	public Namespace getNamespace() {
@@ -2158,43 +2120,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 			}
 			s.writeObject(null); //denote end-of-namespace
 		}
-
-		//write _forwards
-		if (_forwards != null) {
-			for (Iterator it = _forwards.entrySet().iterator(); it.hasNext();) {
-				final Map.Entry me = (Map.Entry)it.next();
-				s.writeObject(me.getKey()); //original event
-
-				final Object[] info = (Object[])me.getValue();
-				final List fwds = (List)info[1];
-				s.writeInt(fwds.size());
-				for (Iterator e = fwds.iterator(); e.hasNext();) {
-					final Object[] fwd = (Object[])e.next();
-					if (fwd[0] instanceof Component) {
-						final Component fc = (Component)fwd[0];
-						if (!Objects.equals(fc.getDesktop(), getDesktop()))
-							continue; //not same desktop(such as detach): no need to write
-
-						//store target as string
-						String fid = null;
-						if (getDesktop() == null) {
-							try {
-								fid = Components.componentToPath(fc, this);
-							} catch (Throwable ex) {
-							}
-						}
-						if (fid == null)
-							fid = "u=" + fc.getUuid();
-						s.writeObject(fid);
-					} else {
-						s.writeObject(fwd[0]);
-					}
-					s.writeObject(fwd[1]); //target event
-					s.writeObject(fwd[2]); //forward data
-				}
-			}
-		}
-		s.writeObject(null);
 	}
 	private void willSerialize(Collection c) {
 		if (c != null)
@@ -2289,21 +2214,6 @@ implements Component, ComponentCtrl, java.io.Serializable {
 				didDeserialize(val);
 			}
 		}
-
-		//restore _forwards
-		for (;;) {
-			final String orgEvent = (String)s.readObject();
-			if (orgEvent == null)
-				break;
-
-			int sz = s.readInt();
-			while (--sz >= 0)
-				addForward0(orgEvent, s.readObject(),
-					(String)s.readObject(), s.readObject());
-					//Note: we don't call resolveForwardTarget here
-					//since the parent doesn't deserialized completely
-					//Rather, we handle it until the event is received
-		}
 	}
 	private void didDeserialize(Collection c) {
 		if (c != null)
@@ -2365,6 +2275,10 @@ implements Component, ComponentCtrl, java.io.Serializable {
 		public Object clone(Component comp) {
 			return null; //handle by AbstractComponent.clone
 		}
+	}
+	private Component resolveForwardTarget(Object fwd) {
+		return fwd instanceof String ?
+			Components.pathToComponent((String)fwd, this): (Component)fwd;
 	}
 
 	private static final String NONE = "";
