@@ -2232,7 +2232,7 @@ implements Component, ComponentCtrl, java.io.Serializable {
 	/** Used to forward events (for the forward conditions).
 	 */
 	private class ForwardListener
-	implements EventListener, ComponentCloneListener {
+	implements EventListener, ComponentCloneListener, java.io.Serializable {
 	//Note: it is not serializable since it is handled by
 	//AbstractComponent.writeObject
 
