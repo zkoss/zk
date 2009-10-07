@@ -1229,18 +1229,19 @@ public class DataBinder implements java.io.Serializable {
 			//VariableResolver would need such "self" information when doing
 			//variable resolving
 			final Page page = comp.getPage();
-			if (page != null)
+			if (page != null) { //Bug #2823591, try to "load" into a detached(no page) component and NPE
 				bean = page.getZScriptVariable(comp, beanid);
-			if (bean == null) {
-				final Object self = page.getAttribute("self");
-				try {
-					page.setAttribute("self", comp);
-					bean = comp.getAttributeOrFellow(beanid, true);
-				} finally {
-					if (self == null) {
-						page.removeAttribute("self");
-					} else {
-						page.setAttribute("self", self);
+				if (bean == null) {
+					final Object self = page.getAttribute("self");
+					try {
+						page.setAttribute("self", comp);
+						bean = comp.getAttributeOrFellow(beanid, true);
+					} finally {
+						if (self == null) {
+							page.removeAttribute("self");
+						} else {
+							page.setAttribute("self", self);
+						}
 					}
 				}
 			}
