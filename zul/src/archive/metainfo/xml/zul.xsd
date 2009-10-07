@@ -1534,6 +1534,7 @@
 		<xs:attributeGroup ref="xulElementAttrGroup" />
 		<xs:attribute name="orient" type="orientAttrType" use="optional" />
 		<xs:attribute name="autodrop" type="booleanType" use="optional" />
+		<xs:attribute name="scrollable" type="booleanType" use="optional" />
 		<xs:attributeGroup ref="rootAttrGroup" />
 	</xs:complexType>
     <!-- menuitem -->
