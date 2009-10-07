@@ -28,6 +28,7 @@ import java.util.Set;
 
 import org.zkoss.idom.Document;
 import org.zkoss.lang.Classes;
+import org.zkoss.lang.Objects;
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.ui.Component;
@@ -258,6 +259,16 @@ implements ComponentCloneListener {
 			final GenericAutowireComposer composerClone = (GenericAutowireComposer) event.getData(); 
 			composerClone.doAfterCompose(clone);
 			clone.removeEventListener(ON_CLONE_DO_AFTER_COMPOSE, this);
+		}
+	}
+	
+	public void didActivate(Component comp) {
+		//wire variables to reference fields (include implicit objects)
+		if (comp != null && Objects.equals(comp.getUuid(), _applied)) {
+			super.didActivate(comp);
+			if (self == null) { //Bug #2873310. didActivate only once
+				Components.wireVariables(comp, this, _separator);
+			}
 		}
 	}
 }

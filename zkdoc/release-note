@@ -181,7 +181,8 @@ October, 2009
   2873327: GenericComposer register extra onXxx$id listeners
   2873329: GeneircForwardComposer add extra forwards
   2873365: Failed to serialize if the forward target has no ID assigned
-
+  2873905: GenericComposer shall not call doAfterCompose in didActivate
+  
 	--------
 ZK 3.6.2
 June 23, 2009

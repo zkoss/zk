@@ -16,11 +16,9 @@ Copyright (C) 2007 Potix Corporation. All Rights Reserved.
 */
 package org.zkoss.zk.ui.util;
 
-import org.zkoss.lang.Objects;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
 import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.GenericEventListener;
 import org.zkoss.zk.ui.metainfo.ComponentInfo;
 
@@ -69,9 +67,7 @@ abstract public class GenericComposer extends GenericEventListener
 implements Composer, ComposerExt, ComponentActivationListener,
 java.io.Serializable {
 	private static final long serialVersionUID = 20091006115555L;
-	private String _applied; //uuid of the applied component (for serialization back)
-	private transient boolean _everWillPassivate; //Bug #2873310. willPassivate only once
-	private transient boolean _everDidActivate; //Bug #2873310. didActivate only once
+	protected String _applied; //uuid of the applied component (for serialization back)
 	
 	/**
 	 * Registers onXxx events to the supervised component; a subclass that override
@@ -111,32 +107,19 @@ java.io.Serializable {
 
 	//ScopeActivationListener//
 	/** Called when the component is going to passivate this object.
-	 * Default: (since 3.6.3) unregister onXxx listeners of the applied component.
+	 * Default: do nothing
 	 */
 	public void willPassivate(Component comp) {
-		//Bug #2873327. Unregister listener when session passivate
-		if (comp != null && Objects.equals(_applied, comp.getUuid())) {
-			if (_everWillPassivate) return; //Bug #2873310. willPassivate only once
-			_everWillPassivate = true;
-
-			unbindComponent(comp);
-		}
+		//do nothing
 	}
 	
 	/** Called when the component has activated this object back.
-	 * Default: invokes {@link #doAfterCompose}.
+	 * Default: (since 3.6.3) do nothing.
 	 * @since 3.6.2
 	 */
 	public void didActivate(Component comp) {
-		try {
-			if (comp != null && Objects.equals(_applied, comp.getUuid())) {
-				if (_everDidActivate) return; //Bug #2873310. didActivate only once
-				_everDidActivate = true;
-
-				doAfterCompose(comp);
-			}
-		} catch (Throwable ex) {
-			throw UiException.Aide.wrap(ex);
-		}
+		//Bug #2873905 shall not call doAfterCompose in didActivate
+		//Bug #2873329 GeneircForwardComposer add extra forwards
+		//do nothing
 	}
 }
